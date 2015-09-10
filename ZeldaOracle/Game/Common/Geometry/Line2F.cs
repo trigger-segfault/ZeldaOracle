@@ -8,21 +8,18 @@ using Microsoft.Xna.Framework.Content;
 
 namespace ZeldaOracle.Common.Geometry {
 /** <summary>
- * The 2D double precision line with numerous operations and functions.
+ * The 2D floating precision line with numerous operations and functions.
  * </summary> */
-public struct Line2F : IShape2F {
+public struct Line2F {
 
 	//========== CONSTANTS ===========
-	#region Constants
 
 	/** <summary> Returns a line positioned at (0, 0). </summary> */
 	public static Line2F Zero {
 		get { return new Line2F(); }
 	}
 
-	#endregion
 	//=========== MEMBERS ============
-	#region Members
 
 	/** <summary> The first endpoint of the line. </summary> */
 	[ContentSerializerIgnore]
@@ -31,22 +28,20 @@ public struct Line2F : IShape2F {
 	[ContentSerializerIgnore]
 	public Vector2F End2;
 
-	#endregion
 	//========= CONSTRUCTORS =========
-	#region Constructors
 
 	/** <summary> Constructs a line with the specified endpoints. </summary> */
-	public Line2F(double x1, double y1, double x2, double y2) {
+	public Line2F(float x1, float y1, float x2, float y2) {
 		this.End1	= new Vector2F(x1, y1);
 		this.End2	= new Vector2F(x2, y2);
 	}
 	/** <summary> Constructs a line with the specified endpoints. </summary> */
-	public Line2F(Vector2F end1, double x2, double y2) {
+	public Line2F(Vector2F end1, float x2, float y2) {
 		this.End1	= end1;
 		this.End2	= new Vector2F(x2, y2);
 	}
 	/** <summary> Constructs a line with the specified endpoints. </summary> */
-	public Line2F(double x1, double y1, Vector2F end2) {
+	public Line2F(float x1, float y1, Vector2F end2) {
 		this.End1	= new Vector2F(x1, y1);
 		this.End2	= end2;
 	}
@@ -56,7 +51,7 @@ public struct Line2F : IShape2F {
 		this.End2	= end2;
 	}
 	/** <summary> Constructs a line with the specified position and size. </summary> */
-	public Line2F(double x, double y, double width, double height, bool asSize) {
+	public Line2F(float x, float y, float width, float height, bool asSize) {
 		if (!asSize) {
 			this.End1	= new Vector2F(x, y);
 			this.End2	= new Vector2F(x + width, y + height);
@@ -67,7 +62,7 @@ public struct Line2F : IShape2F {
 		}
 	}
 	/** <summary> Constructs a line with the specified position and size. </summary> */
-	public Line2F(Vector2F point, double width, double height, bool asSize) {
+	public Line2F(Vector2F point, float width, float height, bool asSize) {
 		if (!asSize) {
 			this.End1	= point;
 			this.End2	= point + new Vector2F(width, height);
@@ -78,7 +73,7 @@ public struct Line2F : IShape2F {
 		}
 	}
 	/** <summary> Constructs a line with the specified position and size. </summary> */
-	public Line2F(double x, double y, Vector2F size, bool asSize) {
+	public Line2F(float x, float y, Vector2F size, bool asSize) {
 		if (!asSize) {
 			this.End1	= new Vector2F(x, y);
 			this.End2	= new Vector2F(x, y) + size;
@@ -100,7 +95,7 @@ public struct Line2F : IShape2F {
 		}
 	}
 	/** <summary> Constructs a line with the specified size. </summary> */
-	public Line2F(double width, double height) {
+	public Line2F(float width, float height) {
 		this.End1	= Vector2F.Zero;
 		this.End2	= new Vector2F(width, height);
 	}
@@ -115,9 +110,7 @@ public struct Line2F : IShape2F {
 		this.End2	= l.End2;
 	}
 
-	#endregion
 	//=========== GENERAL ============
-	#region General
 
 	/** <summary> Outputs a string representing this line as ((x1, y1), (x2, y2)). </summary> */
 	public override string ToString() {
@@ -125,8 +118,6 @@ public struct Line2F : IShape2F {
 	}
 	/** <summary> Outputs a string representing this line as ((x1, y1), (x2, y2)). </summary> */
 	public string ToString(IFormatProvider provider) {
-		// TODO: Write formatting for Vector2D.ToString(format).
-
 		return "(" + End1.ToString(provider) + ", " + End2.ToString(provider) + ")";
 	}
 	/** <summary> Outputs a string representing this line as ((x1, y1), (x2, y2)). </summary> */
@@ -148,11 +139,7 @@ public struct Line2F : IShape2F {
 		return base.GetHashCode();
 	}
 
-	#endregion
 	//========== OPERATORS ===========
-	#region Operators
-	//--------------------------------
-	#region Unary Arithmetic
 
 	public static Line2F operator +(Line2F l) {
 		return l;
@@ -167,36 +154,23 @@ public struct Line2F : IShape2F {
 		return new Line2F(--l.End1, --l.End2);
 	}
 
-	#endregion
 	//--------------------------------
-	#region Binary Arithmetic
 
 	public static Line2F operator +(Line2F l, Vector2F v) {
 		return new Line2F(l.End1 + v, l.End2 + v);
 	}
-	public static Line2F operator +(Line2F l, double d) {
-		return new Line2F(l.End1 + d, l.End2 + d);
+	public static Line2F operator +(Line2F l, float f) {
+		return new Line2F(l.End1 + f, l.End2 + f);
 	}
 
 	public static Line2F operator -(Line2F l, Vector2F v) {
 		return new Line2F(l.End1 - v, l.End2 - v);
 	}
-	public static Line2F operator -(Line2F l, double d) {
-		return new Line2F(l.End1 - d, l.End2 - d);
+	public static Line2F operator -(Line2F l, float f) {
+		return new Line2F(l.End1 - f, l.End2 - f);
 	}
 
-	/** <summary> Translates the line by the specified distance. </summary> */
-	public IShape2F Translate(Vector2F v) {
-		return this + v;
-	}
-	/** <summary> Translates the line by the specified distance. </summary> */
-	public IShape2F Translate(double d) {
-		return this + d;
-	}
-
-	#endregion
 	//--------------------------------
-	#region Binary Logic
 
 	public static bool operator ==(Line2F l1, Line2F l2) {
 		return (l1.End1 == l2.End1 && l1.End2 == l2.End2);
@@ -205,43 +179,37 @@ public struct Line2F : IShape2F {
 		return (l1.End1 != l2.End1 || l1.End2 != l2.End2);
 	}
 
-	#endregion
 	//--------------------------------
-	#region Conversion
 
-	/*public static implicit operator Line2D(Line2I l) {
+	/*public static implicit operator Line2F(Line2I l) {
 		return new Line2D(l.End1, l.End2);
 	}*/
 
-	/*public static explicit operator Line2I(Line2D l) {
+	/*public static explicit operator Line2I(Line2F l) {
 		return new Line2I((Point2I)l.End1, (Point2I)l.End2);
 	}*/
 
-	#endregion
-	//--------------------------------
-	#endregion
 	//========== PROPERTIES ==========
-	#region Properties
-	//--------------------------------
-	#region Dimensions
+
+	// Dimensions
 
 	/** <summary> Gets or sets the x position of the first endpoint. </summary> */
-	public double X1 {
+	public float X1 {
 		get { return End1.X; }
 		set { End1.X = value; }
 	}
 	/** <summary> Gets or sets the y position of the first endpoint. </summary> */
-	public double Y1 {
+	public float Y1 {
 		get { return End1.Y; }
 		set { End1.Y = value; }
 	}
 	/** <summary> Gets or sets the x position of the second endpoint. </summary> */
-	public double X2 {
+	public float X2 {
 		get { return End2.X; }
 		set { End2.X = value; }
 	}
 	/** <summary> Gets or sets the y position of the second endpoint. </summary> */
-	public double Y2 {
+	public float Y2 {
 		get { return End2.Y; }
 		set { End2.Y = value; }
 	}
@@ -253,13 +221,13 @@ public struct Line2F : IShape2F {
 	}
 	/** <summary> Gets or sets the width of the line. </summary> */
 	[ContentSerializerIgnore]
-	public double Width {
+	public float Width {
 		get { return End2.X - End1.X; }
 		set { End2.X = End1.X + value; }
 	}
 	/** <summary> Gets or sets the height of the line. </summary> */
 	[ContentSerializerIgnore]
-	public double Height {
+	public float Height {
 		get { return End2.Y - End1.Y; }
 		set { End2.Y = End1.Y + value; }
 	}
@@ -268,13 +236,13 @@ public struct Line2F : IShape2F {
 	public Vector2F this[int endpoint] {
 		get {
 			if (endpoint < 0 || endpoint > 1)
-				throw new System.IndexOutOfRangeException("Line2D[endpointIndex] must be either 0 or 1.");
+				throw new System.IndexOutOfRangeException("Line2F[endpointIndex] must be either 0 or 1.");
 			else
 				return (endpoint == 0 ? End1 : End2);
 		}
 		set {
 			if (endpoint < 0 || endpoint > 1)
-				throw new System.IndexOutOfRangeException("Line2D[endpointIndex] must be either 0 or 1.");
+				throw new System.IndexOutOfRangeException("Line2F[endpointIndex] must be either 0 or 1.");
 			else if (endpoint == 0)
 				End1 = value;
 			else
@@ -282,13 +250,11 @@ public struct Line2F : IShape2F {
 		}
 	}
 
-	#endregion
-	//--------------------------------
-	#region Line
+	// Line
 
 	/** <summary> Gets or sets the direction of the line. </summary> */
 	[ContentSerializerIgnore]
-	public double Direction {
+	public float Direction {
 		get {
 			return End1.DirectionTo(End2);
 		}
@@ -298,12 +264,12 @@ public struct Line2F : IShape2F {
 	}
 	/** <summary> Gets or sets the length of the line. </summary> */
 	[ContentSerializerIgnore]
-	public double Length {
+	public float Length {
 		get {
 			return End1.DistanceTo(End2);
 		}
 		set {
-			double oldLength = End1.DistanceTo(End2);
+			float oldLength = End1.DistanceTo(End2);
 			End2 = End1 + new Vector2F(value, Direction, true);
 		}
 	}
@@ -324,9 +290,7 @@ public struct Line2F : IShape2F {
 		get { return new Line2F(End1, End1 + Size.Perpendicular); }
 	}
 	
-	#endregion
-	//--------------------------------
-	#region Shape
+	// Shape
 
 	/** <summary> Returns true if the line is empty. </summary> */
 	public bool IsEmpty {
@@ -350,11 +314,11 @@ public struct Line2F : IShape2F {
 	}
 
 	/** <summary> Gets the area of the line. </summary> */
-	public double Area {
-		get { return 0.0; }
+	public float Area {
+		get { return 0.0f; }
 	}
 	/** <summary> Gets the perimeter of the line. </summary> */
-	public double Perimeter {
+	public float Perimeter {
 		get { return End1.DistanceTo(End2); }
 	}
 
@@ -375,14 +339,10 @@ public struct Line2F : IShape2F {
 		get { return new Line2F[] { this }; }
 	}
 
-	#endregion
-	//--------------------------------
-	#endregion
 	//========= CALCULATIONS =========
-	#region Calculations
 
 	/** <summary> Returns the point on the line based on its length. </summary> */
-	public Vector2F PositionAt(double length, bool asRatio = false) {
+	public Vector2F PositionAt(float length, bool asRatio = false) {
 		return End1 + Size * (asRatio ? length : (length / Length));
 	}
 	/** <summary> Returns the line with swapped endpoints. </summary> */
@@ -390,9 +350,7 @@ public struct Line2F : IShape2F {
 		return new Line2F(End2, End1);
 	}
 
-	#endregion
 	//========= INTERACTION ==========
-	#region Interaction
 
 	/** <summary> Returns true if the specified point is on the line. </summary> */
 	public bool IsPointOnLine(Vector2F v) {
@@ -444,7 +402,7 @@ public struct Line2F : IShape2F {
 			if (l.IsVertical)
 				return new Vector2F(l.X1, this.Y1);
 			
-			double xi = l.X2 - ((l.Y2 - this.Y1) * (l.Width / l.Height));
+			float xi = l.X2 - ((l.Y2 - this.Y1) * (l.Width / l.Height));
 			return new Vector2F(xi, this.Y1);
 		}
 		else if (IsVertical) {
@@ -453,20 +411,20 @@ public struct Line2F : IShape2F {
 			if (l.IsHorizontal)
 				return new Vector2F(this.X1, l.Y1);
 			
-			double yi = l.Y2 - ((l.X2 - this.X1) * (l.Height / l.Width));
+			float yi = l.Y2 - ((l.X2 - this.X1) * (l.Height / l.Width));
 			return new Vector2F(this.X1, yi);
 		}
 		else if (l.IsHorizontal || l.IsVertical) {
 			return l.PointOfIntersectionEndless(this);
 		}
 		
-		double det = (this.Width * l.Height) - (this.Height * l.Width);
+		float det = (this.Width * l.Height) - (this.Height * l.Width);
 		
 		if (det == 0)
 			return null;
 		
-		double d1 = ((this.X1 * this.Y2) - (this.Y1 * this.X2));
-		double d2 = ((l.X1 * l.Y2) - (l.Y1 * l.X2));
+		float d1 = ((this.X1 * this.Y2) - (this.Y1 * this.X2));
+		float d2 = ((l.X1 * l.Y2) - (l.Y1 * l.X2));
 		
 		return new Vector2F(-((d1 *  l.Width) - (d2 *  this.Width)) / det,
 							-((d1 * l.Height) - (d2 * this.Height)) / det);
@@ -475,7 +433,7 @@ public struct Line2F : IShape2F {
 	public Vector2F? PointOfIntersection(Line2F l) {
 		Vector2F? point = PointOfIntersectionEndless(l);
 		
-		double epsilon = 0.0;
+		float epsilon = 0.0f;
 
 		if (point != null) {
 			if (point.Value + epsilon < Min || point.Value + epsilon < l.Min)
@@ -486,22 +444,10 @@ public struct Line2F : IShape2F {
 		return point;
 	}
 
-	#endregion
 	//=========== CONTAINS ===========
-	#region Contains
 
 	/** <summary> Returns true if the specified vector is inside this line. </summary> */
 	public bool Contains(Vector2F point) {
-		return false;
-	}
-	/** <summary> Returns true if the specified shape is inside this line. </summary> */
-	public bool Contains(IShape2F shape) {
-		if (shape is Line2F)
-			return Contains((Line2F)shape);
-		if (shape is Rectangle2F)
-			return Contains((Rectangle2F)shape);
-		if (shape is Polygon2F)
-			return Contains((Polygon2F)shape);
 		return false;
 	}
 	/** <summary> Returns true if the specified line is inside this line. </summary> */
@@ -512,28 +458,12 @@ public struct Line2F : IShape2F {
 	public bool Contains(Rectangle2F rect) {
 		return false;
 	}
-	/** <summary> Returns true if the specified polygon is inside this line. </summary> */
-	public bool Contains(Polygon2F poly) {
-		return false;
-	}
 
-	#endregion
 	//========== COLLISION ===========
-	#region Collision
 
 	/** <summary> Returns true if the specified vector is colliding with this line. </summary> */
 	public bool Colliding(Vector2F point) {
 		return IsPointOnLine(point);
-	}
-	/** <summary> Returns true if the specified shape is colliding with this line. </summary> */
-	public bool Colliding(IShape2F shape) {
-		if (shape is Line2F)
-			return Colliding((Line2F)shape);
-		if (shape is Rectangle2F)
-			return Colliding((Rectangle2F)shape);
-		if (shape is Polygon2F)
-			return Colliding((Polygon2F)shape);
-		return false;
 	}
 	/** <summary> Returns true if the specified line is colliding with this line. </summary> */
 	public bool Colliding(Line2F line) {
@@ -559,21 +489,6 @@ public struct Line2F : IShape2F {
 		}
 		return false;
 	}
-	/** <summary> Returns true if the specified polygon is colliding with this line. </summary> */
-	public bool Colliding(Polygon2F poly) {
-		if (IsEmpty || poly.IsEmpty)
-			return false;
-		if (!Bounds.Colliding(poly.Bounds) && !IsStraight)
-			return false;
-		if (poly.Contains(End1))
-			return true;
-		foreach (Line2F l in poly.Lines) {
-			if (Colliding(l))
-				return true;
-		}
-		return false;
-	}
 
-	#endregion
 }
 } // End namespace

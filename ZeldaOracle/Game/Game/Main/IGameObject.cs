@@ -20,6 +20,7 @@ using Keyboard		= ZeldaOracle.Common.Input.Keyboard;
 using Mouse			= ZeldaOracle.Common.Input.Mouse;
 using Buttons		= ZeldaOracle.Common.Input.Buttons;
 using MouseButtons	= ZeldaOracle.Common.Input.MouseButtons;
+using ZeldaOracle.Game.Worlds;
 
 namespace GameFramework.MyGame.Main {
 /** <summary>
@@ -42,9 +43,9 @@ public interface IGameObject {
 	#region Containment
 
 	/** <summary> Gets the class managing the XNA framework. </summary> */
-	GameBase GameBase { get; }
+	//GameBase GameBase { get; }
 	/** <summary> Gets the class managing the game. </summary> */
-	GameManager Game { get; }
+	//GameManager Game { get; }
 	/** <summary> Gets the room that contains the object. </summary> */
 	Room Room { get; }
 

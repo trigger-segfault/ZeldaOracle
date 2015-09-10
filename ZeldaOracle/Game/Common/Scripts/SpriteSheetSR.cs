@@ -131,7 +131,7 @@ public class SpriteSheetSR : ScriptReader {
 			if (args.Count >= 1 && args[0] == "center")
 				defaultOriginCenter = true;
 			else
-				defaultOrigin = new Vector2F(Double.Parse(args[0]), Double.Parse(args[1]));
+				defaultOrigin = new Vector2F(Single.Parse(args[0]), Single.Parse(args[1]));
 		}
 
 		// Define a new sprite in the sheet.
@@ -141,12 +141,12 @@ public class SpriteSheetSR : ScriptReader {
 			Vector2F origin = defaultOrigin;
 			if (args.Count >= 10 && args[9] != "default") {
 				if (args[9] == "center")
-					origin = new Vector2F(Double.Parse(args[3]), Double.Parse(args[4])) / 2.0;
+					origin = new Vector2F(Single.Parse(args[3]), Single.Parse(args[4])) / 2.0f;
 				else if (args.Count >= 11)
-					origin = new Vector2F(Double.Parse(args[9]), Double.Parse(args[10]));
+					origin = new Vector2F(Single.Parse(args[9]), Single.Parse(args[10]));
 			}
 			else if (defaultOriginCenter)  {
-				origin = new Vector2F(Double.Parse(args[3]), Double.Parse(args[4])) / 2.0;
+				origin = new Vector2F(Single.Parse(args[3]), Single.Parse(args[4])) / 2.0f;
 			}
 
 			sheet.AddSprite(args[0],  // Name

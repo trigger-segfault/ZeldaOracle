@@ -109,7 +109,7 @@ public class Sprite {
 		AlignOrigin(0.5f, 0.5f);
 	}
 	/** <summary> Aligns the origin of the sprite. </summary> */
-	public void AlignOrigin(double x, double y) {
+	public void AlignOrigin(float x, float y) {
 		origin.X = sourceSize.X * x;
 		origin.Y = sourceSize.Y * y;
 	}

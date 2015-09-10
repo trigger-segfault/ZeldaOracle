@@ -470,7 +470,7 @@ public class DebugMenu {
 			menuRect.Width = itemWidth * item.Items.Count;
 			menuRect.Height = itemHeight;
 		}
-		g.DrawRectangle(menuRect, 1.0, colorOutline);
+		g.DrawRectangle(menuRect, 1.0f, colorOutline);
 
 		// Draw background.
 		menuRect.Inflate(-1, -1);

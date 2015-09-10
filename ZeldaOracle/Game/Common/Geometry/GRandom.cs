@@ -10,34 +10,21 @@ namespace ZeldaOracle.Common.Geometry {
 * </summary> */
 public static class GRandom {
 	
-	//========== CONSTANTS ===========
-	#region Constants
-
-	#endregion
 	//========== VARIABLES ===========
-	#region Variables
 
 	/** <summary> The class used to randomly generate numbers. </summary> */
 	private static Random random = new Random();
 
-	#endregion
-	//========== PROPERTIES ==========
-	#region Properties
-
-	#endregion
 	//============ RANDOM ============
-	#region Random
-	//--------------------------------
-	#region Seed
+	
+	// Seed
 
 	/** <summary> Sets the new seed of the random number generator. </summary> */
 	public static void SetSeed(int seed) {
 		random = new Random(seed);
 	}
 	
-	#endregion
-	//--------------------------------
-	#region Bool
+	// Bool
 
 	/** <summary> Returns true or false at random. </summary> */
 	public static bool NextBool() {
@@ -52,18 +39,14 @@ public static class GRandom {
 		return (ratio == 0.0d ? false : random.NextDouble() <= ratio);
 	}
 
-	#endregion
-	//--------------------------------
-	#region Data
+	// Data
 
 	/** <summary> Fills the array with random bytes. </summary> */
 	public static void NextBytes(byte[] data) {
 		random.NextBytes(data);
 	}
 
-	#endregion
-	//--------------------------------
-	#region Byte
+	// Byte
 
 	/** <summary> Returns a nonnegative random byte. </summary> */
 	public static byte NextByte() {
@@ -78,9 +61,7 @@ public static class GRandom {
 		return (byte)random.Next(minValue, maxValue);
 	}
 
-	#endregion
-	//--------------------------------
-	#region SByte
+	// SByte
 
 	/** <summary> Returns a nonnegative random signed byte. </summary> */
 	public static sbyte NextSByte() {
@@ -95,9 +76,7 @@ public static class GRandom {
 		return (sbyte)random.Next(minValue, maxValue);
 	}
 
-	#endregion
-	//--------------------------------
-	#region Integer
+	// Integer
 
 	/** <summary> Returns a nonnegative random integer. </summary> */
 	public static int NextInt() {
@@ -112,9 +91,7 @@ public static class GRandom {
 		return random.Next(minValue, maxValue);
 	}
 
-	#endregion
-	//--------------------------------
-	#region Float
+	// Float
 
 	/** <summary> Returns a random float between 0 and 1. </summary> */
 	public static float NextFloat() {
@@ -129,9 +106,7 @@ public static class GRandom {
 		return minValue + (float)random.NextDouble() * (maxValue - minValue);
 	}
 
-	#endregion
-	//--------------------------------
-	#region Double
+	// Double
 
 	/** <summary> Returns a random double between 0 and 1. </summary> */
 	public static double NextDouble() {
@@ -150,30 +125,26 @@ public static class GRandom {
 		return range.Min + random.NextDouble() * (range.Max - range.Min);
 	}
 
-	#endregion
-	//--------------------------------
-	#region Vector
+	// Vector
 
 	/** <summary> Returns a random vector between (0, 0) and (1, 1). </summary> */
 	public static Vector2F NextVector() {
-		return new Vector2F(random.NextDouble(), random.NextDouble());
+		return new Vector2F((float)random.NextDouble(), (float)random.NextDouble());
 	}
 	/** <summary> Returns a nonnegative random vector less than or equal to the specified maximum. </summary> */
-	public static Vector2F NextVector(double maxValue) {
-		return new Vector2F(random.NextDouble() * maxValue, random.NextDouble() * maxValue);
+	public static Vector2F NextVector(float maxValue) {
+		return new Vector2F((float)random.NextDouble() * maxValue, (float)random.NextDouble() * maxValue);
 	}
 	/** <summary> Returns a nonnegative random vector less than or equal to the specified maximum. </summary> */
-	public static Vector2F NextVector(double maxX, double maxY) {
-		return new Vector2F(random.NextDouble() * maxX, random.NextDouble() * maxY);
+	public static Vector2F NextVector(float maxX, float maxY) {
+		return new Vector2F((float)random.NextDouble() * maxX, (float)random.NextDouble() * maxY);
 	}
 	/** <summary> Returns a nonnegative random vector less than or equal to the specified maximum. </summary> */
 	public static Vector2F NextVector(Vector2F maxPoint) {
-		return new Vector2F(random.NextDouble(), random.NextDouble()) * maxPoint;
+		return new Vector2F((float)random.NextDouble(), (float)random.NextDouble()) * maxPoint;
 	}
 
-	#endregion
-	//--------------------------------
-	#region Point
+	// Point
 
 	/** <summary> Returns a random point. </summary> */
 	public static Point2I NextPoint() {
@@ -192,8 +163,5 @@ public static class GRandom {
 		return new Point2I(random.Next(maxPoint.X), random.Next(maxPoint.Y));
 	}
 
-	#endregion
-	//--------------------------------
-	#endregion
 }
 } // End namespace

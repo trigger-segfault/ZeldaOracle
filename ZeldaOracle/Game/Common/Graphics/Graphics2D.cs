@@ -136,11 +136,11 @@ public class Graphics2D {
 		Vector2F stringSize = font.MeasureString(text);
 		bool intAlign = (alignment & Align.Int) != 0;
 		if (((alignment & Align.Left) != 0) == ((alignment & Align.Right) != 0))
-			position.X -= (intAlign ? (int)(stringSize.X / 2.0) : (stringSize.X / 2.0));
+			position.X -= (intAlign ? (int)(stringSize.X / 2.0f) : (stringSize.X / 2.0f));
 		else if ((alignment & Align.Right) != 0)
 			position.X -= stringSize.X;
 		if (((alignment & Align.Top) != 0) == ((alignment & Align.Bottom) != 0))
-			position.Y -=(intAlign ? (int)(stringSize.Y / 2.0) : (stringSize.Y / 2.0));
+			position.Y -=(intAlign ? (int)(stringSize.Y / 2.0f) : (stringSize.Y / 2.0f));
 		else if ((alignment & Align.Bottom) != 0)
 			position.Y -= stringSize.Y;
 
@@ -256,15 +256,15 @@ public class Graphics2D {
 	#region Vector Graphics
 
 	/** <summary> Draws the specified line. </summary> */
-	public void DrawLine(Line2F line, double thickness, Color color, double depth = 0.0) {
-		DrawImage(white1x1, line.Center + 0.5, new Vector2F(0.5, 0.5), new Vector2F((line.Length + thickness), thickness), line.Direction, color, SpriteEffects.None, depth);
+	public void DrawLine(Line2F line, float thickness, Color color, float depth = 0.0f) {
+		DrawImage(white1x1, line.Center + 0.5f, new Vector2F(0.5f, 0.5f), new Vector2F((line.Length + thickness), thickness), line.Direction, color, SpriteEffects.None, depth);
 	}
 	/** <summary> Draws the specified rectangle. </summary> */
-	public void DrawRectangle(Rectangle2F rect, double thickness, Color color, double depth = 0.0) {
-		DrawLine(new Line2F(rect.Point, rect.Point + new Vector2F(rect.Width - 1, 0.0)), thickness, color, depth);
-		DrawLine(new Line2F(rect.Point, rect.Point + new Vector2F(0.0, rect.Height - 1)), thickness, color, depth);
-		DrawLine(new Line2F(rect.Point + rect.Size - 1, rect.Point + new Vector2F(rect.Width - 1, 0.0)), thickness, color, depth);
-		DrawLine(new Line2F(rect.Point + rect.Size - 1, rect.Point + new Vector2F(0.0, rect.Height - 1)), thickness, color, depth);
+	public void DrawRectangle(Rectangle2F rect, float thickness, Color color, float depth = 0.0f) {
+		DrawLine(new Line2F(rect.Point, rect.Point + new Vector2F(rect.Width - 1, 0.0f)), thickness, color, depth);
+		DrawLine(new Line2F(rect.Point, rect.Point + new Vector2F(0.0f, rect.Height - 1)), thickness, color, depth);
+		DrawLine(new Line2F(rect.Point + rect.Size - 1, rect.Point + new Vector2F(rect.Width - 1, 0.0f)), thickness, color, depth);
+		DrawLine(new Line2F(rect.Point + rect.Size - 1, rect.Point + new Vector2F(0.0f, rect.Height - 1)), thickness, color, depth);
 	}
 	/** <summary> Draws the specified filled rectangle. </summary> */
 	public void FillRectangle(Rectangle2F rect, Color color, double depth = 0.0) {
@@ -294,7 +294,7 @@ public class Graphics2D {
 	#region Settings
 
 	/** <summary> Translates the origin of the graphics object. </summary> */
-	public void Translate(double x, double y) {
+	public void Translate(float x, float y) {
 		translation += new Vector2F(x, y);
 	}
 	/** <summary> Translates the origin of the graphics object. </summary> */

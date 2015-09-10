@@ -9,12 +9,11 @@ using Microsoft.Xna.Framework.Content;
 
 namespace ZeldaOracle.Common.Geometry {
 /** <summary>
- * The 2D double precision vector with numerous operations and functions.
+ * The 2D floating precision vector with numerous operations and functions.
  * </summary> */
 public struct Vector2F {
 
 	//========== CONSTANTS ===========
-	#region Constants
 
 	/** <summary> Returns a vector positioned at (0, 0). </summary> */
 	public static Vector2F Zero {
@@ -22,29 +21,25 @@ public struct Vector2F {
 	}
 	/** <summary> Returns a vector positioned at (1, 1). </summary> */
 	public static Vector2F One {
-		get { return new Vector2F(1.0, 1.0); }
+		get { return new Vector2F(1.0f, 1.0f); }
 	}
 
-	#endregion
 	//=========== MEMBERS ============
-	#region Members
-
+	
 	/** <summary> The x coordinate of the vector. </summary> */
-	public double X;
+	public float X;
 	/** <summary> The y coordinate of the vector. </summary> */
-	public double Y;
+	public float Y;
 
-	#endregion
 	//========= CONSTRUCTORS =========
-	#region Constructors
 
 	/** <summary> Constructs a vector positioned at the specified coordinates. </summary> */
-	public Vector2F(double x, double y) {
+	public Vector2F(float x, float y) {
 		this.X	= x;
 		this.Y	= y;
 	}
 	/** <summary> Constructs a vector positioned at the specified polar coordinates. </summary> */
-	public Vector2F(double length, double direction, bool asPolar) {
+	public Vector2F(float length, float direction, bool asPolar) {
 		if (!asPolar) {
 			this.X	= length;
 			this.Y	= direction;
@@ -55,7 +50,7 @@ public struct Vector2F {
 		}
 	}
 	/** <summary> Constructs a vector positioned at the specified coordinates. </summary> */
-	public Vector2F(double xy) {
+	public Vector2F(float xy) {
 		this.X	= xy;
 		this.Y	= xy;
 	}
@@ -65,9 +60,7 @@ public struct Vector2F {
 		this.Y	= v.Y;
 	}
 
-	#endregion
 	//=========== GENERAL ============
-	#region General
 
 	/** <summary> Outputs a string representing this vector as (x, y). </summary> */
 	public override string ToString() {
@@ -75,8 +68,6 @@ public struct Vector2F {
 	}
 	/** <summary> Outputs a string representing this vector as (x, y). </summary> */
 	public string ToString(IFormatProvider provider) {
-		// TODO: Write formatting for Vector2D.ToString(format).
-
 		return "(" + X.ToString(provider) + ", " + Y.ToString(provider) + ")";
 	}
 	/** <summary> Outputs a string representing this vector as (x, y). </summary> */
@@ -122,8 +113,8 @@ public struct Vector2F {
 				string strY = text.Substring(commaPos + 1);
 
 				try {
-					value.X = Double.Parse(strX);
-					value.Y = Double.Parse(strY);
+					value.X = Single.Parse(strX);
+					value.Y = Single.Parse(strY);
 				} catch (FormatException e) {
 					throw e;
 				} catch (ArgumentNullException e) {
@@ -143,11 +134,7 @@ public struct Vector2F {
 		return value;
 	}
 
-	#endregion
 	//========== OPERATORS ===========
-	#region Operators
-	//--------------------------------
-	#region Unary Arithmetic
 
 	public static Vector2F operator +(Vector2F v) {
 		return v;
@@ -162,127 +149,121 @@ public struct Vector2F {
 		return new Vector2F(--v.X, --v.Y);
 	}
 
-	#endregion
 	//--------------------------------
-	#region Binary Arithmetic
 
 	public static Vector2F operator +(Vector2F v1, Vector2F v2) {
 		return new Vector2F(v1.X + v2.X, v1.Y + v2.Y);
 	}
-	public static Vector2F operator +(double d1, Vector2F v2) {
-		return new Vector2F(d1 + v2.X, d1 + v2.Y);
+	public static Vector2F operator +(float f1, Vector2F v2) {
+		return new Vector2F(f1 + v2.X, f1 + v2.Y);
 	}
-	public static Vector2F operator +(Vector2F v1, double d2) {
-		return new Vector2F(v1.X + d2, v1.Y + d2);
+	public static Vector2F operator +(Vector2F v1, float f2) {
+		return new Vector2F(v1.X + f2, v1.Y + f2);
 	}
 
 	public static Vector2F operator -(Vector2F v1, Vector2F v2) {
 		return new Vector2F(v1.X - v2.X, v1.Y - v2.Y);
 	}
-	public static Vector2F operator -(double d1, Vector2F v2) {
-		return new Vector2F(d1 - v2.X, d1 - v2.Y);
+	public static Vector2F operator -(float f1, Vector2F v2) {
+		return new Vector2F(f1 - v2.X, f1 - v2.Y);
 	}
-	public static Vector2F operator -(Vector2F v1, double d2) {
-		return new Vector2F(v1.X - d2, v1.Y - d2);
+	public static Vector2F operator -(Vector2F v1, float f2) {
+		return new Vector2F(v1.X - f2, v1.Y - f2);
 	}
 
 	public static Vector2F operator *(Vector2F v1, Vector2F v2) {
 		return new Vector2F(v1.X * v2.X, v1.Y * v2.Y);
 	}
-	public static Vector2F operator *(double d1, Vector2F v2) {
-		return new Vector2F(d1 * v2.X, d1 * v2.Y);
+	public static Vector2F operator *(float f1, Vector2F v2) {
+		return new Vector2F(f1 * v2.X, f1 * v2.Y);
 	}
-	public static Vector2F operator *(Vector2F v1, double d2) {
-		return new Vector2F(v1.X * d2, v1.Y * d2);
+	public static Vector2F operator *(Vector2F v1, float f2) {
+		return new Vector2F(v1.X * f2, v1.Y * f2);
 	}
 
 	public static Vector2F operator /(Vector2F v1, Vector2F v2) {
 		return new Vector2F(v1.X / v2.X, v1.Y / v2.Y);
 	}
-	public static Vector2F operator /(double d1, Vector2F v2) {
-		return new Vector2F(d1 / v2.X, d1 / v2.Y);
+	public static Vector2F operator /(float f1, Vector2F v2) {
+		return new Vector2F(f1 / v2.X, f1 / v2.Y);
 	}
-	public static Vector2F operator /(Vector2F v1, double d2) {
-		return new Vector2F(v1.X / d2, v1.Y / d2);
+	public static Vector2F operator /(Vector2F v1, float f2) {
+		return new Vector2F(v1.X / f2, v1.Y / f2);
 	}
 
 	public static Vector2F operator %(Vector2F v1, Vector2F v2) {
 		return new Vector2F(v1.X % v2.X, v1.Y % v2.Y);
 	}
-	public static Vector2F operator %(double d1, Vector2F v2) {
-		return new Vector2F(d1 % v2.X, d1 % v2.Y);
+	public static Vector2F operator %(float f1, Vector2F v2) {
+		return new Vector2F(f1 % v2.X, f1 % v2.Y);
 	}
-	public static Vector2F operator %(Vector2F v1, double d2) {
-		return new Vector2F(v1.X % d2, v1.Y % d2);
+	public static Vector2F operator %(Vector2F v1, float f2) {
+		return new Vector2F(v1.X % f2, v1.Y % f2);
 	}
 
-	#endregion
 	//--------------------------------
-	#region Binary Logic
 
 	public static bool operator ==(Vector2F v1, Vector2F v2) {
 		return (v1.X == v2.X && v1.Y == v2.Y);
 	}
-	public static bool operator ==(double d1, Vector2F v2) {
-		return (d1 == v2.X && d1 == v2.Y);
+	public static bool operator ==(float f1, Vector2F v2) {
+		return (f1 == v2.X && f1 == v2.Y);
 	}
-	public static bool operator ==(Vector2F v1, double d2) {
-		return (v1.X == d2 && v1.Y == d2);
+	public static bool operator ==(Vector2F v1, float f2) {
+		return (v1.X == f2 && v1.Y == f2);
 	}
 
 	public static bool operator !=(Vector2F v1, Vector2F v2) {
 		return (v1.X != v2.X || v1.Y != v2.Y);
 	}
-	public static bool operator !=(double d1, Vector2F v2) {
-		return (d1 != v2.X || d1 != v2.Y);
+	public static bool operator !=(float f1, Vector2F v2) {
+		return (f1 != v2.X || f1 != v2.Y);
 	}
-	public static bool operator !=(Vector2F v1, double d2) {
-		return (v1.X != d2 || v1.Y != d2);
+	public static bool operator !=(Vector2F v1, float f2) {
+		return (v1.X != f2 || v1.Y != f2);
 	}
 
 	public static bool operator <(Vector2F v1, Vector2F v2) {
 		return (v1.X < v2.X && v1.Y < v2.Y);
 	}
-	public static bool operator <(double d1, Vector2F v2) {
-		return (d1 < v2.X && d1 < v2.Y);
+	public static bool operator <(float f1, Vector2F v2) {
+		return (f1 < v2.X && f1 < v2.Y);
 	}
-	public static bool operator <(Vector2F v1, double d2) {
-		return (v1.X < d2 && v1.Y < d2);
+	public static bool operator <(Vector2F v1, float f2) {
+		return (v1.X < f2 && v1.Y < f2);
 	}
 
 	public static bool operator >(Vector2F v1, Vector2F v2) {
 		return (v1.X > v2.X && v1.Y > v2.Y);
 	}
-	public static bool operator >(double d1, Vector2F v2) {
-		return (d1 > v2.X && d1 > v2.Y);
+	public static bool operator >(float f1, Vector2F v2) {
+		return (f1 > v2.X && f1 > v2.Y);
 	}
-	public static bool operator >(Vector2F v1, double d2) {
-		return (v1.X > d2 && v1.Y > d2);
+	public static bool operator >(Vector2F v1, float f2) {
+		return (v1.X > f2 && v1.Y > f2);
 	}
 
 	public static bool operator <=(Vector2F v1, Vector2F v2) {
 		return (v1.X <= v2.X && v1.Y <= v2.Y);
 	}
-	public static bool operator <=(double d1, Vector2F v2) {
-		return (d1 <= v2.X && d1 <= v2.Y);
+	public static bool operator <=(float f1, Vector2F v2) {
+		return (f1 <= v2.X && f1 <= v2.Y);
 	}
-	public static bool operator <=(Vector2F v1, double d2) {
-		return (v1.X <= d2 && v1.Y <= d2);
+	public static bool operator <=(Vector2F v1, float f2) {
+		return (v1.X <= f2 && v1.Y <= f2);
 	}
 
 	public static bool operator >=(Vector2F v1, Vector2F v2) {
 		return (v1.X >= v2.X && v1.Y >= v2.Y);
 	}
-	public static bool operator >=(double d1, Vector2F v2) {
-		return (d1 >= v2.X && d1 >= v2.Y);
+	public static bool operator >=(float f1, Vector2F v2) {
+		return (f1 >= v2.X && f1 >= v2.Y);
 	}
-	public static bool operator >=(Vector2F v1, double d2) {
-		return (v1.X >= d2 && v1.Y >= d2);
+	public static bool operator >=(Vector2F v1, float f2) {
+		return (v1.X >= f2 && v1.Y >= f2);
 	}
 
-	#endregion
 	//--------------------------------
-	#region Conversion
 
 	public static implicit operator Vector2F(Vector2 v) {
 		return new Vector2F(v.X, v.Y);
@@ -293,12 +274,12 @@ public struct Vector2F {
 	public static implicit operator Vector2F(Point p) {
 		return new Vector2F(p.X, p.Y);
 	}
-	public static explicit operator Vector2F(double d) {
-		return new Vector2F(d);
+	public static explicit operator Vector2F(float f) {
+		return new Vector2F(f);
 	}
 
 	public static explicit operator Vector2(Vector2F v) {
-		return new Vector2((float)v.X, (float)v.Y);
+		return new Vector2(v.X, v.Y);
 	}
 	public static explicit operator Point2I(Vector2F v) {
 		return new Point2I((int)v.X, (int)v.Y);
@@ -307,63 +288,59 @@ public struct Vector2F {
 		return new Point((int)v.X, (int)v.Y);
 	}
 
-	#endregion
-	//--------------------------------
-	#endregion
 	//========== PROPERTIES ==========
-	#region Properties
 
 	/** <summary> Gets or sets the direction of the vector. </summary> */
 	[ContentSerializerIgnore]
-	public double Direction {
+	public float Direction {
 		get {
 			if (X == 0 && Y == 0)
-				return 0.0;
+				return 0.0f;
 			return GMath.Atan2(Y, X);
 		}
 		set {
-			double length = GMath.Sqrt((X * X) + (Y * Y));
+			float length = GMath.Sqrt((X * X) + (Y * Y));
 			X = length * GMath.Cos(value);
 			Y = length * GMath.Sin(value);
 		}
 	}
 	/** <summary> Gets or sets the length of the vector. </summary> */
 	[ContentSerializerIgnore]
-	public double Length {
+	public float Length {
 		get {
 			return GMath.Sqrt((X * X) + (Y * Y));
 		}
 		set {
-			double oldLength = Length;
+			float oldLength = Length;
 			if (oldLength > 0) {
 				X *= value / oldLength;
 				Y *= value / oldLength;
 			}
 			else {
 				X = value;
-				Y = 0.0;
+				Y = 0.0f;
 			}
 		}
 	}
 	/** <summary> Gets the squared length of the vector. </summary> */
 	[ContentSerializerIgnore]
-	public double LengthSquared {
+	public float LengthSquared {
 		get {
 			return ((X * X) + (Y * Y));
 		}
 	}
 	/** <summary> Gets or sets the x or y coordinate from the index. </summary> */
 	[ContentSerializerIgnore]
-	public double this[int coordinate] {
+	public float this[int coordinate] {
 		get {
 			if (coordinate < 0 || coordinate > 1)
-				throw new System.IndexOutOfRangeException("Vector2D[coordinateIndex] must be either 0 or 1.");
+				throw new System.IndexOutOfRangeException("Vector2F[coordinateIndex] must be either 0 or 1.");
 			else
 				return (coordinate == 0 ? X : Y);
 		}
 		set {
 			if (coordinate < 0 || coordinate > 1)
-				throw new System.IndexOutOfRangeException("Vector2D[coordinateIndex] must be either 0 or 1.");
+				throw new System.IndexOutOfRangeException("Vector2F[coordinateIndex] must be either 0 or 1.");
 			else if (coordinate == 0)
 				X = value;
 			else
@@ -376,12 +353,12 @@ public struct Vector2F {
 	}
 	/** <summary> Returns the inverse of the vector. </summary> */
 	public Vector2F Inverse {
-		get { return new Vector2F((X == 0 ? 0.0 : 1.0 / X), (Y == 0 ? 0.0 : 1.0 / Y)); }
+		get { return new Vector2F((X == 0 ? 0.0f : 1.0f / X), (Y == 0 ? 0.0f : 1.0f / Y)); }
 	}
 	/** <summary> Returns the normalized vector. </summary> */
 	public Vector2F Normalized {
 		get {
-			double length = GMath.Sqrt((X * X) + (Y * Y));
+			float length = GMath.Sqrt((X * X) + (Y * Y));
 			if (length > 0)
 				return new Vector2F(X / length, Y / length);
 			return Vector2F.Zero;
@@ -392,45 +369,43 @@ public struct Vector2F {
 		get { return new Vector2F(-Y, X); }
 	}
 
-	#endregion
 	//========= CALCULATIONS =========
-	#region Calculations
 
 	/** <summary> Returns the dot product of this vector with another. </summary> */
-	public double Dot(double x, double y) {
+	public float Dot(float x, float y) {
 		return ((X * x) + (Y * y));
 	}
 	/** <summary> Returns the dot product of this vector with another. </summary> */
-	public double Dot(Vector2F v) {
+	public float Dot(Vector2F v) {
 		return ((X * v.X) + (Y * v.Y));
 	}
 
 	/** <summary> Returns the distance between this vector and another. </summary> */
-	public double DistanceTo(double x, double y) {
+	public float DistanceTo(float x, float y) {
 		return (new Vector2F(x, y) - this).Length;
 	}
 	/** <summary> Returns the distance between this vector to another. </summary> */
-	public double DistanceTo(Vector2F v) {
+	public float DistanceTo(Vector2F v) {
 		return (v - this).Length;
 	}
 	/** <summary> Returns the direction from this vector to another. </summary> */
-	public double DirectionTo(double x, double y) {
+	public float DirectionTo(float x, float y) {
 		return (new Vector2F(x, y) - this).Direction;
 	}
 	/** <summary> Returns the direction from this vector to another. </summary> */
-	public double DirectionTo(Vector2F v) {
+	public float DirectionTo(Vector2F v) {
 		return (v - this).Direction;
 	}
 	/** <summary> Returns the angle between this vector and another. </summary> */
-	public double AngleBetween(double x, double y) {
+	public float AngleBetween(float x, float y) {
 		return GMath.Plusdir3(new Vector2F(x, y).Direction - Direction);
 	}
 	/** <summary> Returns the angle between this vector and another. </summary> */
-	public double AngleBetween(Vector2F v) {
+	public float AngleBetween(Vector2F v) {
 		return GMath.Plusdir3(v.Direction - Direction);
 	}
 	/** <summary> Returns the shortest distance from this point to the specified line. </summary> */
-	public double DistanceToLine(Line2F l) {
+	public float DistanceToLine(Line2F l) {
 		return DistanceTo(ClosestPointOnLine(l));
 	}
 	/** <summary> Returns the closest point on the specified line. </summary> */
@@ -438,31 +413,31 @@ public struct Vector2F {
 		if (l.IsEmpty)
 			return l.End1;
 
-		double dot2 = l.Size.Dot(l.Size);
-		double dotp = l.Size.Dot(this - l.End1);
-		double t = GMath.Clamp(dotp / dot2, 0.0, 1.0);
+		float dot2 = l.Size.Dot(l.Size);
+		float dotp = l.Size.Dot(this - l.End1);
+		float t = GMath.Clamp(dotp / dot2, 0.0f, 1.0f);
 
 		return l.End1 + l.Size * t;
 	}
 
 	/** <summary> Returns the scalar projection on this vector and angle. </summary> */
-	public double ScalarProjection(double angle) {
+	public float ScalarProjection(float angle) {
 		return (Length * GMath.Cos(Direction - angle));
 	}
 	/** <summary> Returns the scalar projection on this vector and another. </summary> */
-	public double ScalarProjection(double x, double y) {
+	public float ScalarProjection(float x, float y) {
 		return (Length * GMath.Cos(Direction - new Vector2F(x, y).Direction));
 	}
 	/** <summary> Returns the scalar projection on this vector and another. </summary> */
-	public double ScalarProjection(Vector2F v) {
+	public float ScalarProjection(Vector2F v) {
 		return (Length * GMath.Cos(Direction - v.Direction));
 	}
 	/** <summary> Returns the projection of this vector on an angle. </summary> */
-	public Vector2F ProjectionOn(double angle) {
+	public Vector2F ProjectionOn(float angle) {
 		return new Vector2F(ScalarProjection(angle), angle);
 	}
 	/** <summary> Returns the projection of this vector on another. </summary> */
-	public Vector2F ProjectionOn(double x, double y) {
+	public Vector2F ProjectionOn(float x, float y) {
 		return new Vector2F(ScalarProjection(x, y), new Vector2F(x, y).Direction);
 	}
 	/** <summary> Returns the projection of this vector on another. </summary> */
@@ -470,11 +445,11 @@ public struct Vector2F {
 		return new Vector2F(ScalarProjection(v), v.Direction);
 	}
 	/** <summary> Returns the rejection of this vector on an angle. </summary> */
-	public Vector2F RejectionOn(double angle) {
+	public Vector2F RejectionOn(float angle) {
 		return (this - ProjectionOn(angle));
 	}
 	/** <summary> Returns the rejection of this vector on another. </summary> */
-	public Vector2F RejectionOn(double x, double y) {
+	public Vector2F RejectionOn(float x, float y) {
 		return (this - ProjectionOn(x, y));
 	}
 	/** <summary> Returns the rejection of this vector on another. </summary> */
@@ -482,6 +457,5 @@ public struct Vector2F {
 		return (this - ProjectionOn(v));
 	}
 
-	#endregion
 }
 } // End namespace

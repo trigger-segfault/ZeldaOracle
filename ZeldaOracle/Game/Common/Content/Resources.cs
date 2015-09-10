@@ -14,7 +14,7 @@ using XnaPlaylist = Microsoft.Xna.Framework.Media.Playlist;
 
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Graphics.Particles;
+//using ZeldaOracle.Common.Graphics.Particles;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Common.Translation;
 using Song = ZeldaOracle.Common.Audio.Song;
@@ -79,11 +79,11 @@ public class Resources {
 
 	// Particles
 	/** <summary> The collection of loaded particle types. </summary> */
-	private static Dictionary<string, ParticleType> particleTypes;
+	//private static Dictionary<string, ParticleType> particleTypes;
 	/** <summary> The collection of loaded particle emitters. </summary> */
-	private static Dictionary<string, ParticleEmitter> particleEmitters;
+	//private static Dictionary<string, ParticleEmitter> particleEmitters;
 	/** <summary> The collection of loaded particle effect types. </summary> */
-	public static Dictionary<string, ParticleEffectType> particleEffects;
+	//public static Dictionary<string, ParticleEffectType> particleEffects;
 
 	// Sounds
 	/** <summary> The collection of loaded sound effects. </summary> */
@@ -121,9 +121,9 @@ public class Resources {
 		textureLoader		= new TextureLoader(graphicsDevice);
 
 		// Particles
-		particleTypes		= new Dictionary<string, ParticleType>();
-		particleEmitters	= new Dictionary<string, ParticleEmitter>();
-		particleEffects		= new Dictionary<string, ParticleEffectType>();
+		//particleTypes		= new Dictionary<string, ParticleType>();
+		//particleEmitters	= new Dictionary<string, ParticleEmitter>();
+		//particleEffects		= new Dictionary<string, ParticleEffectType>();
 
 		// Sounds
 		sounds				= new Dictionary<string, Sound>();
@@ -170,29 +170,29 @@ public class Resources {
 	#region Particles
 
 	/** <summary> Gets the particle type with the specified name. </summary> */
-	public static ParticleType GetParticleType(string name) {
+	/*public static ParticleType GetParticleType(string name) {
 		return particleTypes[name];
-	}
+	}*/
 	/** <summary> Returns true if a particle type with the specified name exists. </summary> */
-	public static bool ParticleTypeExists(string name) {
+	/*public static bool ParticleTypeExists(string name) {
 		return particleTypes.ContainsKey(name);
-	}
+	}*/
 	/** <summary> Gets the particle emitter with the specified name. </summary> */
-	public static ParticleEmitter GetParticleEmitter(string name) {
+	/*public static ParticleEmitter GetParticleEmitter(string name) {
 		return particleEmitters[name];
-	}
+	}*/
 	/** <summary> Returns true if a particle emitter with the specified name exists. </summary> */
-	public static bool ParticleEmitterExists(string name) {
+	/*public static bool ParticleEmitterExists(string name) {
 		return particleEmitters.ContainsKey(name);
-	}
+	}*/
 	/** <summary> Gets the particle effect type with the specified name. </summary> */
-	public static ParticleEffectType GetParticleEffect(string name) {
+	/*public static ParticleEffectType GetParticleEffect(string name) {
 		return particleEffects[name];
-	}
+	}*/
 	/** <summary> Returns true if a particle effect type with the specified name exists. </summary> */
-	public static bool ParticleEffectExists(string name) {
+	/*public static bool ParticleEffectExists(string name) {
 		return particleEffects.ContainsKey(name);
-	}
+	}*/
 
 	#endregion
 	//--------------------------------
@@ -284,9 +284,9 @@ public class Resources {
 	#region Particles
 
 	/** <summary> Loads/compiles particles, emitter, and effects from a script file. </summary> */
-	public static void LoadParticles(string assetName) {
+	/*public static void LoadParticles(string assetName) {
 		LoadScript(assetName, new ParticleSR());
-	}
+	}*/
 
 	#endregion
 	//--------------------------------
@@ -350,7 +350,7 @@ public class Resources {
 		}
 	}
 	/** <summary> Loads a script file with the given encoding and script reader object. </summary> */
-	public static void SaveScript(string assetName, ParticleSW sw, Encoding encoding) {
+	/*public static void SaveScript(string assetName, ParticleSW sw, Encoding encoding) {
 		try {
 			StreamWriter writer = new StreamWriter(contentManager.RootDirectory + "/" + assetName);
 			sw.WriteScript(writer);
@@ -359,7 +359,7 @@ public class Resources {
 		catch (FileNotFoundException) {
 			Console.WriteLine("Error saving file \"" + assetName + "\"");
 		}
-	}
+	}*/
 
 	#endregion
 	//============ ADDING ============
@@ -377,31 +377,31 @@ public class Resources {
 	#region Particles
 
 	/** <summary> Adds the specified particle type. </summary> */
-	public static void AddParticleType(ParticleType particleType) {
+	/*public static void AddParticleType(ParticleType particleType) {
 		particleTypes.Add(particleType.Name, particleType);
-	}
+	}*/
 	/** <summary> Adds the specified particle emitter. </summary> */
-	public static void AddParticleEmitter(ParticleEmitter particleEmitter) {
+	/*public static void AddParticleEmitter(ParticleEmitter particleEmitter) {
 		particleEmitters.Add(particleEmitter.Name, particleEmitter);
-	}
+	}*/
 	/** <summary> Adds the specified particle effect type. </summary> */
-	public static void AddParticleEffect(ParticleEffectType particleEffect) {
+	/*public static void AddParticleEffect(ParticleEffectType particleEffect) {
 		particleEffects.Add(particleEffect.Name, particleEffect);
-	}
+	}*/
 	/** <summary> Removes the specified particle type. </summary> */
-	public static void RemoveParticleType(ParticleType particleType) {
+	/*public static void RemoveParticleType(ParticleType particleType) {
 		particleTypes.Remove(particleType.Name);
-	}
+	}*/
 	/** <summary> Removes the specified particle emitter. </summary> */
-	public static void RemoveParticleEmitter(ParticleEmitter particleEmitter) {
+	/*public static void RemoveParticleEmitter(ParticleEmitter particleEmitter) {
 		particleEmitters.Remove(particleEmitter.Name);
-	}
+	}*/
 	/** <summary> Removes the specified particle effect type. </summary> */
-	public static void RemoveParticleEffect(ParticleEffectType particleEffect) {
+	/*public static void RemoveParticleEffect(ParticleEffectType particleEffect) {
 		particleEffects.Remove(particleEffect.Name);
-	}
+	}*/
 	/** <summary> Renames the specified particle type. </summary> */
-	public static void RenameParticleType(string oldName, string newName) {
+	/*public static void RenameParticleType(string oldName, string newName) {
 		//particleTypes;
 		particleTypes[oldName].Name = newName;
 		ParticleType[] types = ParticleTypes;
@@ -411,9 +411,9 @@ public class Resources {
 		for (int i = 0; i < types.Length; i++) {
 			particleTypes.Add(types[i].Name, types[i]);
 		}
-	}
+	}*/
 	/** <summary> Renames the specified particle emitter. </summary> */
-	public static void RenameParticleEmitter(string oldName, string newName) {
+	/*public static void RenameParticleEmitter(string oldName, string newName) {
 		//particleTypes;
 		particleEmitters[oldName].Name = newName;
 		ParticleEmitter[] types = ParticleEmitters;
@@ -423,9 +423,9 @@ public class Resources {
 		for (int i = 0; i < types.Length; i++) {
 			particleEmitters.Add(types[i].Name, types[i]);
 		}
-	}
+	}*/
 	/** <summary> Renames the specified particle effect. </summary> */
-	public static void RenameParticleEffect(string oldName, string newName) {
+	/*public static void RenameParticleEffect(string oldName, string newName) {
 		//particleTypes;
 		particleEffects[oldName].Name = newName;
 		ParticleEffectType[] types = ParticleEffects;
@@ -435,7 +435,7 @@ public class Resources {
 		for (int i = 0; i < types.Length; i++) {
 			particleEffects.Add(types[i].Name, types[i]);
 		}
-	}
+	}*/
 
 	#endregion
 	//--------------------------------
@@ -475,29 +475,29 @@ public class Resources {
 		get { return languages; }
 	}
 	/** <summary> Gets the list of particle types. </summary> */
-	public static ParticleType[] ParticleTypes {
+	/*public static ParticleType[] ParticleTypes {
 		get {
 			ParticleType[] types = new ParticleType[particleTypes.Count];
 			particleTypes.Values.CopyTo(types, 0);
 			return types;
 		}
-	}
+	}*/
 	/** <summary> Gets the list of particle emitters. </summary> */
-	public static ParticleEmitter[] ParticleEmitters {
+	/*public static ParticleEmitter[] ParticleEmitters {
 		get {
 			ParticleEmitter[] emitters = new ParticleEmitter[particleEmitters.Count];
 			particleEmitters.Values.CopyTo(emitters, 0);
 			return emitters;
 		}
-	}
+	}*/
 	/** <summary> Gets the list of particle effect types. </summary> */
-	public static ParticleEffectType[] ParticleEffects {
+	/*public static ParticleEffectType[] ParticleEffects {
 		get {
 			ParticleEffectType[] effects = new ParticleEffectType[particleEffects.Count];
 			particleEffects.Values.CopyTo(effects, 0);
 			return effects;
 		}
-	}
+	}*/
 	/** <summary> Gets the list of sprite sheets. </summary> */
 	public static SpriteSheet[] SpriteSheets {
 		get {
@@ -507,17 +507,17 @@ public class Resources {
 		}
 	}
 	/** <summary> Gets the number of particle types. </summary> */
-	public static int ParticleTypeCount {
+	/*public static int ParticleTypeCount {
 		get { return particleTypes.Count; }
-	}
+	}*/
 	/** <summary> Gets the number of particle emitters. </summary> */
-	public static int ParticleEmitterCount {
+	/*public static int ParticleEmitterCount {
 		get { return particleEmitters.Count; }
-	}
+	}*/
 	/** <summary> Gets the number of particle effect types. </summary> */
-	public static int ParticleEffectCount {
+	/*public static int ParticleEffectCount {
 		get { return particleEffects.Count; }
-	}
+	}*/
 	/** <summary> Gets the number of sprite sheets. </summary> */
 	public static int SpriteSheetCount {
 		get { return spriteSheets.Count; }

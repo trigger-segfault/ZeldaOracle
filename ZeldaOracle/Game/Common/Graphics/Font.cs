@@ -99,11 +99,11 @@ public class Font {
 		Rectangle2F stringBounds = new Rectangle2F(Vector2F.Zero, spriteFont.MeasureString(text));
 		bool intAlign = (alignment & Align.Int) != 0;
 		if (((alignment & Align.Left) != 0) == ((alignment & Align.Right) != 0))
-			stringBounds.X -= (intAlign ? (int)(stringBounds.Width / 2.0) : (stringBounds.Width / 2.0));
+			stringBounds.X -= (intAlign ? (int)(stringBounds.Width / 2.0f) : (stringBounds.Width / 2.0f));
 		else if ((alignment & Align.Right) != 0)
 			stringBounds.X -= stringBounds.Width;
 		if (((alignment & Align.Top) != 0) == ((alignment & Align.Bottom) != 0))
-			stringBounds.Y -= (intAlign ? (int)(stringBounds.Height / 2.0) : (stringBounds.Height / 2.0));
+			stringBounds.Y -= (intAlign ? (int)(stringBounds.Height / 2.0f) : (stringBounds.Height / 2.0f));
 		else if ((alignment & Align.Bottom) != 0)
 			stringBounds.Y -= stringBounds.Height;
 		return stringBounds;

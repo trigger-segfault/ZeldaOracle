@@ -13,7 +13,6 @@ namespace ZeldaOracle.Common.Geometry {
 public struct Point2I {
 
 	//========== CONSTANTS ===========
-	#region Constants
 
 	/** <summary> Returns a point positioned at (0, 0). </summary> */
 	public static Point2I Zero {
@@ -24,18 +23,14 @@ public struct Point2I {
 		get { return new Point2I(1, 1); }
 	}
 
-	#endregion
 	//=========== MEMBERS ============
-	#region Members
 
 	/** <summary> The x coordinate of the point. </summary> */
 	public int X;
 	/** <summary> The y coordinate of the point. </summary> */
 	public int Y;
 
-	#endregion
 	//========= CONSTRUCTORS =========
-	#region Constructors
 
 	/** <summary> Constructs a point positioned at the specified coordinates. </summary> */
 	public Point2I(int x, int y) {
@@ -58,9 +53,7 @@ public struct Point2I {
 		this.Y	= (int)v.Y;
 	}
 
-	#endregion
 	//=========== GENERAL ============
-	#region General
 
 	/** <summary> Outputs a string representing this point as (x, y). </summary> */
 	public override string ToString() {
@@ -130,11 +123,7 @@ public struct Point2I {
 		return value;
 	}
 
-	#endregion
 	//========== OPERATORS ===========
-	#region Operators
-	//--------------------------------
-	#region Unary Arithmetic
 
 	public static Point2I operator +(Point2I p) {
 		return p;
@@ -149,9 +138,7 @@ public struct Point2I {
 		return new Point2I(--p.X, --p.Y);
 	}
 
-	#endregion
 	//--------------------------------
-	#region Binary Arithmetic
 
 	public static Point2I operator +(Point2I p1, Point2I p2) {
 		return new Point2I(p1.X + p2.X, p1.Y + p2.Y);
@@ -203,9 +190,7 @@ public struct Point2I {
 		return new Point2I(p1.X % i2, p1.Y % i2);
 	}
 
-	#endregion
 	//--------------------------------
-	#region Binary Logic
 
 	public static bool operator ==(Point2I p1, Point2I p2) {
 		return (p1.X == p2.X && p1.Y == p2.Y);
@@ -267,9 +252,7 @@ public struct Point2I {
 		return (p1.X >= i2 && p1.Y >= i2);
 	}
 
-	#endregion
 	//--------------------------------
-	#region Conversion
 
 	public static implicit operator Point2I(Point p) {
 		return new Point2I(p.X, p.Y);
@@ -285,34 +268,30 @@ public struct Point2I {
 		return new Vector2((float)p.X, (float)p.Y);
 	}
 
-	#endregion
-	//--------------------------------
-	#endregion
 	//========== PROPERTIES ==========
-	#region Properties
 
 	/** <summary> Gets or sets the direction of the point. </summary> */
 	[ContentSerializerIgnore]
-	public double Direction {
+	public float Direction {
 		get {
 			if (X == 0 && Y == 0)
-				return 0.0;
+				return 0.0f;
 			return GMath.Atan2(Y, X);
 		}
 		set {
-			double length = GMath.Sqrt((X * X) + (Y * Y));
+			float length = GMath.Sqrt((X * X) + (Y * Y));
 			X = (int)(length * GMath.Cos(value));
 			Y = (int)(length * GMath.Sin(value));
 		}
 	}
 	/** <summary> Gets or sets the length of the point. </summary> */
 	[ContentSerializerIgnore]
-	public double Length {
+	public float Length {
 		get {
 			return GMath.Sqrt((X * X) + (Y * Y));
 		}
 		set {
-			double oldLength = GMath.Sqrt((X * X) + (Y * Y));
+			float oldLength = GMath.Sqrt((X * X) + (Y * Y));
 			if (oldLength > 0) {
 				X = (int)(X * (value / oldLength));
 				Y = (int)(Y * (value / oldLength));
@@ -328,13 +307,13 @@ public struct Point2I {
 	public int this[int coordinate] {
 		get {
 			if (coordinate < 0 || coordinate > 1)
-				throw new System.IndexOutOfRangeException("Point2D[coordinateIndex] must be either 0 or 1.");
+				throw new System.IndexOutOfRangeException("Point2I[coordinateIndex] must be either 0 or 1.");
 			else
 				return (coordinate == 0 ? X : Y);
 		}
 		set {
 			if (coordinate < 0 || coordinate > 1)
-				throw new System.IndexOutOfRangeException("Point2D[coordinateIndex] must be either 0 or 1.");
+				throw new System.IndexOutOfRangeException("Point2I[coordinateIndex] must be either 0 or 1.");
 			else if (coordinate == 0)
 				X = value;
 			else
@@ -350,6 +329,5 @@ public struct Point2I {
 		get { return new Point2I(-Y, X); }
 	}
 
-	#endregion
 }
 } // End namespace

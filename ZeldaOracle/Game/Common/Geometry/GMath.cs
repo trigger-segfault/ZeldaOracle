@@ -11,7 +11,6 @@ namespace ZeldaOracle.Common.Geometry {
 public static class GMath {
 	
 	//========== CONSTANTS ===========
-	#region Constants
 
 	/** <summary> Represents the ratio of the circumference of a circle to its diameter, specified by the constant, π. </summary> */
 	public const double Pi = 3.14159265358979323846;
@@ -35,16 +34,12 @@ public static class GMath {
 		get { return (usingDegrees ? 360.0 : Pi * 2.0); }
 	}
 
-	#endregion
 	//========== VARIABLES ===========
-	#region Variables
 
 	/** <summary> If true, all trigonometric functions will use degrees instead of radians. </summary> */
 	private static bool usingDegrees = true;
 
-	#endregion
 	//========== PROPERTIES ==========
-	#region Properties
 
 	/** <summary> Sets if all trigonometric functions will use degrees instead of radians. </summary> */
 	public static bool UsingDegrees {
@@ -52,11 +47,9 @@ public static class GMath {
 		set { usingDegrees = value; }
 	}
 
-	#endregion
 	//============ BASIC =============
-	#region Basic
-	//--------------------------------
-	#region Max
+	
+	// Max
 
 	/** <summary> Returns the larger of the two specified numbers. </summary> */
 	public static byte Max(byte a, byte b) {
@@ -108,15 +101,15 @@ public static class GMath {
 		return new Vector2F(Math.Max(a.X, b.X), Math.Max(a.Y, b.Y));
 	}
 	/** <summary> Returns the larger coordinates of the two specified vectors. </summary> */
-	public static Vector2F Max(double aX, double aY, Vector2F b) {
+	public static Vector2F Max(float aX, float aY, Vector2F b) {
 		return new Vector2F(Math.Max(aX, b.X), Math.Max(aY, b.Y));
 	}
 	/** <summary> Returns the larger coordinates of the two specified vectors. </summary> */
-	public static Vector2F Max(Vector2F a, double bX, double bY) {
+	public static Vector2F Max(Vector2F a, float bX, float bY) {
 		return new Vector2F(Math.Max(a.X, bX), Math.Max(a.Y, bY));
 	}
 	/** <summary> Returns the larger coordinates of the two specified vectors. </summary> */
-	public static Vector2F Max(double aX, double aY, double bX, double bY) {
+	public static Vector2F Max(float aX, float aY, float bX, float bY) {
 		return new Vector2F(Math.Max(aX, bX), Math.Max(aY, bY));
 	}
 
@@ -137,9 +130,7 @@ public static class GMath {
 		return new Point2I(Math.Max(aX, bX), Math.Max(aY, bY));
 	}
 
-	#endregion
-	//--------------------------------
-	#region Min
+	// Min
 
 	/** <summary> Returns the larger of the two specified numbers. </summary> */
 	public static byte Min(byte a, byte b) {
@@ -191,15 +182,15 @@ public static class GMath {
 		return new Vector2F(Math.Min(a.X, b.X), Math.Min(a.Y, b.Y));
 	}
 	/** <summary> Returns the smallest coordinates of the two specified vectors. </summary> */
-	public static Vector2F Min(double aX, double aY, Vector2F b) {
+	public static Vector2F Min(float aX, float aY, Vector2F b) {
 		return new Vector2F(Math.Min(aX, b.X), Math.Min(aY, b.Y));
 	}
 	/** <summary> Returns the smallest coordinates of the two specified vectors. </summary> */
-	public static Vector2F Min(Vector2F a, double bX, double bY) {
+	public static Vector2F Min(Vector2F a, float bX, float bY) {
 		return new Vector2F(Math.Min(a.X, bX), Math.Min(a.Y, bY));
 	}
 	/** <summary> Returns the smallest coordinates of the two specified vectors. </summary> */
-	public static Vector2F Min(double aX, double aY, double bX, double bY) {
+	public static Vector2F Min(float aX, float aY, float bX, float bY) {
 		return new Vector2F(Math.Min(aX, bX), Math.Min(aY, bY));
 	}
 	
@@ -220,9 +211,7 @@ public static class GMath {
 		return new Point2I(Math.Min(aX, bX), Math.Min(aY, bY));
 	}
 
-	#endregion
-	//--------------------------------
-	#region Clamp
+	// Clamp
 
 	/** <summary> Restricts the value to be within the specified range. </summary> */
 	public static byte Clamp(byte value, byte min, byte max) {
@@ -274,15 +263,15 @@ public static class GMath {
 		return new Vector2F(Math.Max(min.X, Math.Min(max.X, value.X)), Math.Max(min.Y, Math.Min(max.Y, value.Y)));
 	}
 	/** <summary> Restricts the vector to be within the specified range. </summary> */
-	public static Vector2F Clamp(Vector2F value, double minX, double minY, Vector2F max) {
+	public static Vector2F Clamp(Vector2F value, float minX, float minY, Vector2F max) {
 		return new Vector2F(Math.Max(minX, Math.Min(max.X, value.X)), Math.Max(minY, Math.Min(max.Y, value.Y)));
 	}
 	/** <summary> Restricts the vector to be within the specified range. </summary> */
-	public static Vector2F Clamp(Vector2F value, Vector2F min, double maxX, double maxY) {
+	public static Vector2F Clamp(Vector2F value, Vector2F min, float maxX, float maxY) {
 		return new Vector2F(Math.Max(min.X, Math.Min(maxX, value.X)), Math.Max(min.Y, Math.Min(maxY, value.Y)));
 	}
 	/** <summary> Restricts the vector to be within the specified range. </summary> */
-	public static Vector2F Clamp(Vector2F value, double minX, double minY, double maxX, double maxY) {
+	public static Vector2F Clamp(Vector2F value, float minX, float minY, float maxX, float maxY) {
 		return new Vector2F(Math.Max(minX, Math.Min(maxX, value.X)), Math.Max(minY, Math.Min(maxY, value.Y)));
 	}
 
@@ -303,9 +292,7 @@ public static class GMath {
 		return new Point2I(Math.Max(minX, Math.Min(maxX, value.X)), Math.Max(minY, Math.Min(maxY, value.Y)));
 	}
 
-	#endregion
-	//--------------------------------
-	#region Sign
+	// Sign
 
 	/** <summary> Returns a value indicating the sign of the specified number. </summary> */
 	public static sbyte Sign(sbyte a) {
@@ -341,7 +328,7 @@ public static class GMath {
 		return new Vector2F(Math.Sign(a.X), Math.Sign(a.Y));
 	}
 	/** <summary> Returns the coordinates indicating the sign of the specified vector. </summary> */
-	public static Vector2F Sign(double aX, double aY) {
+	public static Vector2F Sign(float aX, float aY) {
 		return new Vector2F(Math.Sign(aX), Math.Sign(aY));
 	}
 
@@ -354,9 +341,7 @@ public static class GMath {
 		return new Point2I(Math.Sign(aX), Math.Sign(aY));
 	}
 
-	#endregion
-	//--------------------------------
-	#region Abs
+	// Abs
 
 	/** <summary> Returns the absolute value of the specified number. </summary> */
 	public static sbyte Abs(sbyte a) {
@@ -392,7 +377,7 @@ public static class GMath {
 		return new Vector2F(Math.Abs(a.X), Math.Abs(a.Y));
 	}
 	/** <summary> Returns the absolute coordinates of the specified vector. </summary> */
-	public static Vector2F Abs(double aX, double aY) {
+	public static Vector2F Abs(float aX, float aY) {
 		return new Vector2F(Math.Abs(aX), Math.Abs(aY));
 	}
 
@@ -405,9 +390,7 @@ public static class GMath {
 		return new Point2I(Math.Abs(aX), Math.Abs(aY));
 	}
 
-	#endregion
-	//--------------------------------
-	#region Plusmod
+	// Plusmod
 
 	/** <summary> Returns the positive modulus of the specified number. </summary> */
 	public static sbyte Plusmod(sbyte a, sbyte mod) {
@@ -446,7 +429,7 @@ public static class GMath {
 	}
 
 	/** <summary> Returns the positive modulus coordinates of the specified vector. </summary> */
-	public static Vector2F Plusmod(Vector2F a, double mod) {
+	public static Vector2F Plusmod(Vector2F a, float mod) {
 		Vector2F value = a % mod;
 		return new Vector2F(value.X < 0.0d ? value.X + mod : value.X,
 							value.Y < 0.0d ? value.Y + mod : value.Y);
@@ -470,9 +453,7 @@ public static class GMath {
 							value.Y < 0 ? value.Y + mod.Y : value.Y);
 	}
 
-	#endregion
-	//--------------------------------
-	#region IsInt
+	// IsInt
 
 	/** <summary> Returns true if the specified number is an integer. </summary> */
 	public static bool IsInt(float a) {
@@ -492,17 +473,13 @@ public static class GMath {
 		return ((a.X % 1 == 0) && (a.Y % 1 == 0));
 	}
 	/** <summary> Returns true if the specified coordinates are integers. </summary> */
-	public static bool IsInt(double aX, double aY) {
+	public static bool IsInt(float aX, float aY) {
 		return ((aX % 1 == 0) && (aY % 1 == 0));
 	}
 
-	#endregion
-	//--------------------------------
-	#endregion
 	//=========== ROUNDING ===========
-	#region Rounding
-	//--------------------------------
-	#region Floor
+	
+	// Floor
 
 	/** <summary> Returns the largest integer less than or equal to the specified number. </summary> */
 	public static float Floor(float a) {
@@ -539,20 +516,18 @@ public static class GMath {
 
 	/** <summary> Returns the largest point less than or equal to the specified vector. </summary> */
 	public static Vector2F Floor(Vector2F a) {
-		return new Vector2F(Math.Floor(a.X), Math.Floor(a.Y));
+		return new Vector2F((float)Math.Floor(a.X), (float)Math.Floor(a.Y));
 	}
 	/** <summary> Returns the largest point less than or equal to the specified vector, with the base unit. </summary> */
-	public static Vector2F Floor(Vector2F a, double unit) {
-		return new Vector2F(Math.Floor(a.X / unit) * unit, Math.Floor(a.Y / unit) * unit);
+	public static Vector2F Floor(Vector2F a, float unit) {
+		return new Vector2F((float)Math.Floor(a.X / unit) * unit, (float)Math.Floor(a.Y / unit) * unit);
 	}
 	/** <summary> Returns the largest point less than or equal to the specified vector, with the base unit. </summary> */
 	public static Vector2F Floor(Vector2F a, Vector2F unit) {
-		return new Vector2F(Math.Floor(a.X / unit.X) * unit.X, Math.Floor(a.Y / unit.Y) * unit.Y);
+		return new Vector2F((float)Math.Floor(a.X / unit.X) * unit.X, (float)Math.Floor(a.Y / unit.Y) * unit.Y);
 	}
 
-	#endregion
-	//--------------------------------
-	#region Ceiling
+	// Ceiling
 
 	/** <summary> Returns the smallest integer greater than or equal to the specified number. </summary> */
 	public static float Ceiling(float a) {
@@ -589,20 +564,18 @@ public static class GMath {
 
 	/** <summary> Returns the smallest point greater than or equal to the specified vector. </summary> */
 	public static Vector2F Ceiling(Vector2F a) {
-		return new Vector2F(Math.Ceiling(a.X), Math.Ceiling(a.Y));
+		return new Vector2F((float)Math.Ceiling(a.X), (float)Math.Ceiling(a.Y));
 	}
 	/** <summary> Returns the smallest point greater than or equal to the specified vector, with the base unit. </summary> */
-	public static Vector2F Ceiling(Vector2F a, double unit) {
-		return new Vector2F(Math.Ceiling(a.X / unit) * unit, Math.Ceiling(a.Y / unit) * unit);
+	public static Vector2F Ceiling(Vector2F a, float unit) {
+		return new Vector2F((float)Math.Ceiling(a.X / unit) * unit, (float)Math.Ceiling(a.Y / unit) * unit);
 	}
 	/** <summary> Returns the smallest point greater than or equal to the specified vector, with the base unit. </summary> */
 	public static Vector2F Ceiling(Vector2F a, Vector2F unit) {
-		return new Vector2F(Math.Ceiling(a.X / unit.X) * unit.X, Math.Ceiling(a.Y / unit.Y) * unit.Y);
+		return new Vector2F((float)Math.Ceiling(a.X / unit.X) * unit.X, (float)Math.Ceiling(a.Y / unit.Y) * unit.Y);
 	}
 	
-	#endregion
-	//--------------------------------
-	#region Round
+	// Round
 
 	/** <summary> Rounds the specified number to the nearest integral value. </summary> */
 	public static float Round(float a) {
@@ -631,20 +604,18 @@ public static class GMath {
 
 	/** <summary> Rounds the specified vector to the nearest integral coordinates. </summary> */
 	public static Vector2F Round(Vector2F a) {
-		return new Vector2F(Math.Round(a.X), Math.Round(a.Y));
+		return new Vector2F((float)Math.Round(a.X), (float)Math.Round(a.Y));
 	}
 	/** <summary> Rounds the specified vector to the nearest integral coordinates, with the base unit. </summary> */
-	public static Vector2F Round(Vector2F a, double unit) {
-		return new Vector2F(Math.Round(a.X / unit) * unit, Math.Round(a.Y / unit) * unit);
+	public static Vector2F Round(Vector2F a, float unit) {
+		return new Vector2F((float)Math.Round(a.X / unit) * unit, (float)Math.Round(a.Y / unit) * unit);
 	}
 	/** <summary> Rounds the specified vector to the nearest integral coordinates, with the base unit. </summary> */
 	public static Vector2F Round(Vector2F a, Vector2F unit) {
-		return new Vector2F(Math.Round(a.X / unit.X) * unit.X, Math.Round(a.Y / unit.Y) * unit.Y);
+		return new Vector2F((float)Math.Round(a.X / unit.X) * unit.X, (float)Math.Round(a.Y / unit.Y) * unit.Y);
 	}
 
-	#endregion
-	//--------------------------------
-	#region Truncate
+	// Truncate
 
 	/** <summary> Rounds the specified value to the nearest integer towards zero. </summary> */
 	public static float Truncate(float a) {
@@ -704,36 +675,34 @@ public static class GMath {
 	/** <summary> Rounds the specified vector to the nearest point towards zero. </summary> */
 	public static Vector2F Truncate(Vector2F a) {
 		#if WINDOWS
-		return new Vector2F(Math.Truncate(a.X), Math.Truncate(a.Y));
+		return new Vector2F((float)Math.Truncate(a.X), (float)Math.Truncate(a.Y));
 		#else
-		return new Vector2D(a.X > 0.0d ? Math.Floor(a.X) : Math.Ceiling(a.X),
-							a.Y > 0.0d ? Math.Floor(a.Y) : Math.Ceiling(a.Y));
-		#endif
+		return new Vector2D(a.X > 0.0f ? (float)Math.Floor(a.X) : (float)Math.Ceiling(a.X),
+							a.Y > 0.0f ? (float)Math.Floor(a.Y) : (float)Math.Ceiling(a.Y));
+#endif
 	}
 	/** <summary> Rounds the specified vector to the nearest point towards zero, with the base unit. </summary> */
-	public static Vector2F Truncate(Vector2F a, double unit) {
+	public static Vector2F Truncate(Vector2F a, float unit) {
 		#if WINDOWS
-		return new Vector2F(Math.Truncate(a.X / unit) * unit,
-							Math.Truncate(a.Y / unit) * unit);
+		return new Vector2F((float)Math.Truncate(a.X / unit) * unit,
+							(float)Math.Truncate(a.Y / unit) * unit);
 		#else
-		return new Vector2D(a.X > 0.0d ? Math.Floor(a.X / unit) * unit : Math.Ceiling(a.X / unit) * unit,
-							a.Y > 0.0d ? Math.Floor(a.Y / unit) * unit : Math.Ceiling(a.Y / unit) * unit);
-		#endif
+		return new Vector2D(a.X > 0.0f ? (float)Math.Floor(a.X / unit) * unit : (float)Math.Ceiling(a.X / unit) * unit,
+							a.Y > 0.0f ? (float)Math.Floor(a.Y / unit) * unit : (float)Math.Ceiling(a.Y / unit) * unit);
+#endif
 	}
 	/** <summary> Rounds the specified vector to the nearest point towards zero, with the base unit. </summary> */
 	public static Vector2F Truncate(Vector2F a, Vector2F unit) {
 		#if WINDOWS
-		return new Vector2F(Math.Truncate(a.X / unit.X) * unit.X,
-							Math.Truncate(a.Y / unit.Y) * unit.Y);
+		return new Vector2F((float)Math.Truncate(a.X / unit.X) * unit.X,
+							(float)Math.Truncate(a.Y / unit.Y) * unit.Y);
 		#else
-		return new Vector2D(a.X > 0.0d ? Math.Floor(a.X / unit.X) * unit.X : Math.Ceiling(a.X / unit.X) * unit.X,
-							a.Y > 0.0d ? Math.Floor(a.Y / unit.Y) * unit.Y : Math.Ceiling(a.Y / unit.Y) * unit.Y);
-		#endif
+		return new Vector2D(a.X > 0.0f ? (float)Math.Floor(a.X / unit.X) * unit.X : (float)Math.Ceiling(a.X / unit.X) * unit.X,
+							a.Y > 0.0f ? (float)Math.Floor(a.Y / unit.Y) * unit.Y : (float)Math.Ceiling(a.Y / unit.Y) * unit.Y);
+#endif
 	}
 	
-	#endregion
-	//--------------------------------
-	#region Atruncate
+	// Atruncate
 
 	/** <summary> Rounds the specified value to the farthest integer from zero. </summary> */
 	public static float Atruncate(float a) {
@@ -771,27 +740,23 @@ public static class GMath {
 
 	/** <summary> Rounds the specified vector to the farthest point from zero. </summary> */
 	public static Vector2F Atruncate(Vector2F a) {
-		return new Vector2F(a.X < 0.0d ? Math.Floor(a.X) : Math.Ceiling(a.X),
-							a.Y < 0.0d ? Math.Floor(a.Y) : Math.Ceiling(a.Y));
+		return new Vector2F(a.X < 0.0f ? (float)Math.Floor(a.X) : (float)Math.Ceiling(a.X),
+							a.Y < 0.0f ? (float)Math.Floor(a.Y) : (float)Math.Ceiling(a.Y));
 	}
 	/** <summary> Rounds the specified vector to the farthest point from zero, with the base unit. </summary> */
-	public static Vector2F Atruncate(Vector2F a, double unit) {
-		return new Vector2F(a.X < 0.0d ? Math.Floor(a.X / unit) * unit : Math.Ceiling(a.X / unit) * unit,
-							a.Y < 0.0d ? Math.Floor(a.Y / unit) * unit : Math.Ceiling(a.Y / unit) * unit);
+	public static Vector2F Atruncate(Vector2F a, float unit) {
+		return new Vector2F(a.X < 0.0f ? (float)Math.Floor(a.X / unit) * unit : (float)Math.Ceiling(a.X / unit) * unit,
+							a.Y < 0.0f ? (float)Math.Floor(a.Y / unit) * unit : (float)Math.Ceiling(a.Y / unit) * unit);
 	}
 	/** <summary> Rounds the specified vector to the farthest point from zero, with the base unit. </summary> */
 	public static Vector2F Atruncate(Vector2F a, Vector2F unit) {
-		return new Vector2F(a.X < 0.0d ? Math.Floor(a.X / unit.X) * unit.X : Math.Ceiling(a.X / unit.X) * unit.X,
-							a.Y < 0.0d ? Math.Floor(a.Y / unit.Y) * unit.Y : Math.Ceiling(a.Y / unit.Y) * unit.Y);
+		return new Vector2F(a.X < 0.0f ? (float)Math.Floor(a.X / unit.X) * unit.X : (float)Math.Ceiling(a.X / unit.X) * unit.X,
+							a.Y < 0.0f ? (float)Math.Floor(a.Y / unit.Y) * unit.Y : (float)Math.Ceiling(a.Y / unit.Y) * unit.Y);
 	}
 
-	#endregion
-	//--------------------------------
-	#endregion
 	//========== EXPONENTS ===========
-	#region Exponents
-	//--------------------------------
-	#region Pow
+	
+	// Pow
 
 	/** <summary> Returns the specified number raised to the specified power. </summary> */
 	public static int Pow(int x, int y) {
@@ -819,12 +784,12 @@ public static class GMath {
 	}
 
 	/** <summary> Returns the specified vector raised to the specified power. </summary> */
-	public static Vector2F Pow(Vector2F x, double y) {
-		return new Vector2F(Math.Pow(x.X, y), Math.Pow(x.Y, y));
+	public static Vector2F Pow(Vector2F x, float y) {
+		return new Vector2F((float)Math.Pow(x.X, y), (float)Math.Pow(x.Y, y));
 	}
 	/** <summary> Returns the specified vector raised to the specified power. </summary> */
 	public static Vector2F Pow(Vector2F x, Vector2F y) {
-		return new Vector2F(Math.Pow(x.X, y.X), Math.Pow(x.Y, y.Y));
+		return new Vector2F((float)Math.Pow(x.X, y.X), (float)Math.Pow(x.Y, y.Y));
 	}
 	/** <summary> Returns the specified point raised to the specified power. </summary> */
 	public static Point2I Pow(Point2I x, int y) {
@@ -835,9 +800,7 @@ public static class GMath {
 		return new Point2I((int)Math.Pow(x.X, y.X), (int)Math.Pow(x.Y, y.Y));
 	}
 
-	#endregion
-	//--------------------------------
-	#region Root
+	// Root
 
 	/** <summary> Returns a specified number lowered to the specified root. </summary> */
 	public static float Root(float x, float y) {
@@ -849,17 +812,15 @@ public static class GMath {
 	}
 
 	/** <summary> Returns a specified vector lowered to the specified root. </summary> */
-	public static Vector2F Root(Vector2F x, double y) {
-		return new Vector2F(Math.Pow(x.X, 1.0d / y), Math.Pow(x.Y, 1.0d / y));
+	public static Vector2F Root(Vector2F x, float y) {
+		return new Vector2F((float)Math.Pow(x.X, 1.0d / y), (float)Math.Pow(x.Y, 1.0d / y));
 	}
 	/** <summary> Returns a specified vector lowered to the specified root. </summary> */
 	public static Vector2F Root(Vector2F x, Vector2F y) {
-		return new Vector2F(Math.Pow(x.X, 1.0d / y.X), Math.Pow(x.Y, 1.0d / y.Y));
+		return new Vector2F((float)Math.Pow(x.X, 1.0d / y.X), (float)Math.Pow(x.Y, 1.0d / y.Y));
 	}
 
-	#endregion
-	//--------------------------------
-	#region Sqrt
+	// Sqrt
 
 	/** <summary> Returns the square root of a specified number. </summary> */
 	public static float Sqrt(float x) {
@@ -872,12 +833,10 @@ public static class GMath {
 
 	/** <summary> Returns the square root of a specified vector. </summary> */
 	public static Vector2F Sqrt(Vector2F x) {
-		return new Vector2F(Math.Sqrt(x.X), Math.Sqrt(x.Y));
+		return new Vector2F((float)Math.Sqrt(x.X), (float)Math.Sqrt(x.Y));
 	}
 
-	#endregion
-	//--------------------------------
-	#region Cbrt
+	// Cbrt
 
 	/** <summary> Returns the cube root of a specified number. </summary> */
 	public static float Cbrt(float x) {
@@ -890,12 +849,10 @@ public static class GMath {
 
 	/** <summary> Returns the cube root of a specified vector. </summary> */
 	public static Vector2F Cbrt(Vector2F x) {
-		return new Vector2F(Math.Pow(x.X, 1.0d / 3.0d), Math.Pow(x.Y, 1.0d / 3.0d));
+		return new Vector2F((float)Math.Pow(x.X, 1.0f / 3.0f), (float)Math.Pow(x.Y, 1.0f / 3.0f));
 	}
 
-	#endregion
-	//--------------------------------
-	#region Exp
+	// Exp
 
 	/** <summary> Returns e raised to the specified power. </summary> */
 	public static float Exp(float x) {
@@ -908,16 +865,12 @@ public static class GMath {
 
 	/** <summary> Returns e raised to the specified power coordinates. </summary> */
 	public static Vector2F Exp(Vector2F x) {
-		return new Vector2F(Math.Exp(x.X), Math.Exp(x.Y));
+		return new Vector2F((float)Math.Exp(x.X), (float)Math.Exp(x.Y));
 	}
 
-	#endregion
-	//--------------------------------
-	#endregion
 	//========== LOGARITHM ===========
-	#region Logarithm
-	//--------------------------------
-	#region Log e
+	
+	// Log e
 
 	/** <summary> Returns the natural (base e) logarithm of the specified number. </summary> */
 	public static float Log(float d) {
@@ -930,12 +883,10 @@ public static class GMath {
 
 	/** <summary> Returns the natural (base e) logarithm of the specified vector. </summary> */
 	public static Vector2F Log(Vector2F d) {
-		return new Vector2F(Math.Log(d.X), Math.Log(d.Y));
+		return new Vector2F((float)Math.Log(d.X), (float)Math.Log(d.Y));
 	}
 
-	#endregion
-	//--------------------------------
-	#region Log (base)
+	// Log (base)
 
 	/** <summary> Returns the specified base logarithm of the specified number. </summary> */
 	public static float Log(float a, float newBase) {
@@ -947,17 +898,15 @@ public static class GMath {
 	}
 
 	/** <summary> Returns the specified base logarithm of the specified vector. </summary> */
-	public static Vector2F Log(Vector2F a, double newBase) {
-		return new Vector2F(Math.Log(a.X, newBase), Math.Log(a.Y, newBase));
+	public static Vector2F Log(Vector2F a, float newBase) {
+		return new Vector2F((float)Math.Log(a.X, newBase), (float)Math.Log(a.Y, newBase));
 	}
 	/** <summary> Returns the specified base logarithm of the specified vector. </summary> */
 	public static Vector2F Log(Vector2F a, Vector2F newBase) {
-		return new Vector2F(Math.Log(a.X, newBase.X), Math.Log(a.Y, newBase.Y));
+		return new Vector2F((float)Math.Log(a.X, newBase.X), (float)Math.Log(a.Y, newBase.Y));
 	}
 
-	#endregion
-	//--------------------------------
-	#region Log 10
+	// Log 10
 
 	/** <summary> Returns the base 10 logarithm of the specified number. </summary> */
 	public static float Log10(float d) {
@@ -970,16 +919,12 @@ public static class GMath {
 
 	/** <summary> Returns the base 10 logarithm of the specified vector. </summary> */
 	public static Vector2F Log10(Vector2F d) {
-		return new Vector2F(Math.Log10(d.X), Math.Log10(d.Y));
+		return new Vector2F((float)Math.Log10(d.X), (float)Math.Log10(d.Y));
 	}
 
-	#endregion
-	//--------------------------------
-	#endregion
 	//============ ANGLES ============
-	#region Angles
-	//--------------------------------
-	#region Convert Angle
+	
+	// Convert Angle
 
 	/** <summary> Converts the given angle into degrees if UsingDegrees is true. </summary> */
 	public static float ConvertToDegrees(float angle) {
@@ -1014,9 +959,7 @@ public static class GMath {
 		return angle / 180.0 * Pi;
 	}
 
-	#endregion
-	//--------------------------------
-	#region Modulus Angle
+	// Modulus Angle
 
 	/** <summary> Returns the absolute angle as (0, 360]. </summary> */
 	public static float Plusdir(float angle) {
@@ -1069,13 +1012,9 @@ public static class GMath {
 		return dir;
 	}
 
-	#endregion
-	//--------------------------------
-	#endregion
 	//========= TRIGONOMETRY =========
-	#region Trigonometry
-	//--------------------------------
-	#region Trigonometric
+	
+	//Trigonometric
 
 	/** <summary> Returns the sine of the specified angle. </summary> */
 	public static float Sin(float a) {
@@ -1102,9 +1041,7 @@ public static class GMath {
 		return Math.Tan(ConvertToRadians(a));
 	}
 
-	#endregion
-	//--------------------------------
-	#region Arc Trigonometric
+	// Arc Trigonometric
 
 	/** <summary> Returns the angle whose sine is the specified number. </summary> */
 	public static float Asin(float d) {
@@ -1142,9 +1079,7 @@ public static class GMath {
 		return ConvertToDegrees(Math.Atan2(y, x));
 	}
 
-	#endregion
-	//--------------------------------
-	#region Hyperbolic
+	// Hyperbolic
 
 	/** <summary> Returns the hyperbolic sine of the specified angle. </summary> */
 	public static float Sinh(float a) {
@@ -1173,8 +1108,5 @@ public static class GMath {
 		return Math.Tanh(a);
 	}
 
-	#endregion
-	//--------------------------------
-	#endregion
 }
 } // End namespace

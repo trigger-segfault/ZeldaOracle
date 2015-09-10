@@ -114,7 +114,7 @@ public static class Mouse {
 
 			// Update the mouse position
 			mousePosLast		= mousePos;
-			mousePos			= (new Vector2F(XnaMouse.GetState().X, XnaMouse.GetState().Y) - mouseOffset) / gameScale;
+			mousePos			= (new Vector2F(XnaMouse.GetState().X, XnaMouse.GetState().Y) - mouseOffset) / (float)gameScale;
 		}
 	}
 	/** <summary> Resets all the button states. </summary> */
@@ -286,21 +286,21 @@ public static class Mouse {
 
 	/** <summary> Gets the mouse position. </summary> */
 	public static Vector2F GetPosition() {
-		return mousePos / gameScale;
+		return mousePos / (float)gameScale;
 	}
 	/** <summary> Gets the last mouse position. </summary> */
 	public static Vector2F GetPositionLast() {
-		return mousePosLast / gameScale;
+		return mousePosLast / (float)gameScale;
 	}
 	/** <summary> Gets the distance the mouse moved. </summary> */
 	public static Vector2F GetDistance() {
-		return (mousePos - mousePosLast) / gameScale;
+		return (mousePos - mousePosLast) / (float)gameScale;
 	}
 	/** <summary> Sets the mouse position. </summary> */
 	public static void SetPosition(Vector2F position) {
-		XnaMouse.SetPosition((int)(position.X * gameScale), (int)(position.Y * gameScale));
-		mousePosLast = (position - (mousePos - mousePosLast)) * gameScale;
-		mousePos = position * gameScale;
+		XnaMouse.SetPosition((int)(position.X * gameScale), (int)(position.Y * (float)gameScale));
+		mousePosLast = (position - (mousePos - mousePosLast)) * (float)gameScale;
+		mousePos = position * (float)gameScale;
 	}
 	/** <summary> Returns true if the mouse was moved. </summary> */
 	public static bool IsMouseMoved() {

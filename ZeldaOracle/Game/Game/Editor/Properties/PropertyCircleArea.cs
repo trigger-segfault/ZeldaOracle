@@ -39,7 +39,7 @@ public class PropertyCircleArea :  PropertyStruct {
 		: base(false) {
 
 		this.propCenter	= (PropertyVector2D)AddProperty(new PropertyVector2D("Center", false, Vector2F.Zero, Vector2F.Zero, action));
-		this.propRadius	= (PropertyDouble)AddProperty(new PropertyDouble("Radius", 0.0, 0.0, new RangeF(0.0, Double.PositiveInfinity), action));
+		this.propRadius	= (PropertyDouble)AddProperty(new PropertyDouble("Radius", 0.0, 0.0, new RangeF(0.0f, Double.PositiveInfinity), action));
 		this.propEdge	= (PropertyBool)AddProperty(new PropertyBool("Edge Only", false, false, action));
 	}
 
