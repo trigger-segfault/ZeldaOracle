@@ -39,47 +39,43 @@ using GameFramework.MyGame.Editor;
 using GameFramework.MyGame.Editor.Properties;
 
 namespace GameFramework.MyGame.Main {
-/** <summary>
- * The class that manages the framework of the game.
- * </summary> */
+
+// The class that manages the framework of the game.
 public class GameManager {
 	
 	//========== CONSTANTS ===========
-	#region Constants
 
-	/** <summary> The name of the game. </summary> */
+	// The name of the game.
 	public const string GameName	= "ReEntry";
 
-	#endregion
 	//=========== MEMBERS ============
-	#region Members
-
-	// Containment
-	/** <summary> The base game running the XNA framework. </summary> */
+	
+	// Containment:
+	// The base game running the XNA framework.
 	private GameBase gameBase;
 
-	// Game
-	/** <summary> The current room the game is in. </summary> */
+	// Game:
+	// The current room the game is in.
 	private Room room;
-	/** <summary> The next room the game will switch to. </summary> */
+	// The next room the game will switch to.
 	private Room roomNext;
-	/** <summary> The list of rooms in the game. </summary> */
+	// The list of rooms in the game.
 	private List<Room> rooms;
-	/** <summary> The menu currently displaying in the game. </summary> */
+	// The menu currently displaying in the game.
 	protected Menu menu;
-	/** <summary> The next menu to be opened in the game. </summary> */
+	// The next menu to be opened in the game.
 	protected Menu menuNext;
-	/** <summary> The game scale used to alter screen size and mouse properties. </summary> */
+	// The game scale used to alter screen size and mouse properties.
 	public double gameScale;
 
-	// Other
-	/** <summary> The index of the current language. </summary> */
+	// Other:
+	// The index of the current language.
 	private int language;
 
-	// Debug
-	/** <summary> True if the game is in debug mode. </summary> */
+	// Debug:
+	// True if the game is in debug mode.
 	private bool debugMode;
-	/** <summary> The debug controller for the game. </summary> */
+	// The debug controller for the game.
 	private DebugController debugController;
 
 
@@ -92,11 +88,11 @@ public class GameManager {
 	public Vector2F effectPos;
 
 
-	#endregion
-	//========= CONSTRUCTORS =========
-	#region Constructors
+	//-----------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------
 
-	/** <summary> Constructs the default game manager. </summary> */
+	// Constructs the default game manager.
 	public GameManager() {
 		this.gameBase		= null;
 
@@ -110,7 +106,8 @@ public class GameManager {
 		this.debugMode		= false;
 		this.gameScale		= 1;
 	}
-	/** <summary> Initializes the game manager. </summary> */
+
+	// Initializes the game manager.
 	public void Initialize(GameBase gameBase) {
 		this.gameBase		= gameBase;
 
@@ -130,10 +127,8 @@ public class GameManager {
 		this.gameBase		= null;
 	}
 
-	#endregion
 	//=========== CONTENT ============
-	#region Content
-
+	
 	/** <summary> Called to load game manager content. </summary> */
 	public void LoadContent(ContentManager content) {
 
@@ -250,100 +245,14 @@ public class GameManager {
 		grid.AddProperty(group);*/
 
 	}
+
 	/** <summary> Called to unload game manager content. </summary> */
 	public void UnloadContent(ContentManager content) {
 
 	}
 
-	#endregion
-	//========== PROPERTIES ==========
-	#region Properties
-	//--------------------------------
-	#region Containment
 
-	/** <summary> Gets the base game running the XNA framework. </summary> */
-	public GameBase GameBase {
-		get { return gameBase; }
-	}
-	/** <summary> Returns true if the game is running in windows. </summary> */
-	public bool IsWindows {
-		get { return gameBase.IsWindows; }
-	}
-	/** <summary> Returns true if the game is running on the Xbox 360. </summary> */
-	public bool IsXbox {
-		get { return gameBase.IsXbox; }
-	}
-
-	#endregion
-	//--------------------------------
-	#region Information
-
-	/** <summary> Gets the current framerate of the game. </summary> */
-	public double FPS {
-		get { return gameBase.FPS; }
-	}
-	/** <summary> Gets or sets if the game is in fullscreen mode. </summary> */
-	public bool IsFullScreen {
-		get { return gameBase.IsFullScreen; }
-		set { gameBase.IsFullScreen = value; }
-	}
-	/** <summary> Gets the true size of the screen. </summary> */
-	public Point2I ScreenSize {
-		get {
-			return new Point2I(gameBase.GraphicsDevice.Viewport.Width,
-							   gameBase.GraphicsDevice.Viewport.Height);
-		}
-	}
-	/** <summary> Gets the size of the screen based on the game scale. </summary> */
-	public Point2I GameScreenSize {
-		get {
-			return (Point2I)GMath.Ceiling(new Vector2F(gameBase.GraphicsDevice.Viewport.Width,
-													   gameBase.GraphicsDevice.Viewport.Height) / gameScale);
-		}
-	}
-	/** <summary> Gets or sets the draw scale of the game. </summary> */
-	public double GameScale {
-		get { return gameScale; }
-		set { gameScale = GMath.Max(0.1, value); }
-	}
-
-	#endregion
-	//--------------------------------
-	#region Game
-
-	/** <summary> Gets the current room the game is in. </summary> */
-	public Room Room {
-		get { return room; }
-	}
-	/** <summary> Gets the list of rooms in the game. </summary> */
-	public List<Room> Rooms {
-		get { return rooms; }
-	}
-	/** <summary> Gets or sets the current language of the game. </summary> */
-	public int Language {
-		get { return language; }
-		set { language = GMath.Max(0, value); }
-	}
-
-	#endregion
-	//--------------------------------
-	#region Debug
-
-	/** <summary> Gets or sets if the game is in debug mode. </summary> */
-	public bool DebugMode {
-		get { return debugMode; }
-		set { debugMode = value; }
-	}
-	/** <summary> Gets the debug controller of the game. </summary> */
-	public DebugController DebugController {
-		get { return debugController; }
-	}
-
-	#endregion
-	//--------------------------------
-	#endregion
 	//=========== UPDATING ===========
-	#region Updating
 
 	/** <summary> Called every step to update the game. </summary> */
 	public void Update() {
@@ -701,17 +610,14 @@ public class GameManager {
 		}
 	}
 
-	#endregion
+
 	//=========== GAMEPLAY ===========
-	#region Gameplay
 
 	public void Exit() {
 		gameBase.Exit();
 	}
 
-	#endregion
 	//=========== DRAWING ============
-	#region Drawing
 
 	/** <summary> Called every step to draw the game. </summary> */
 	public void Draw(Graphics2D g) {
@@ -771,10 +677,8 @@ public class GameManager {
 		}
 	}
 
-	#endregion
 	//========== MANAGEMENT ==========
-	#region Management
-
+	
 	/** <summary> Called when the screen has been resized. </summary> */
 	public void ScreenResized() {
 		/*if (ScreenSize.Y < 740)
@@ -813,10 +717,8 @@ public class GameManager {
 		menuNext = null;
 	}
 
-	#endregion
 	//============ ROOMS =============
-	#region Rooms
-
+	
 	/** <summary> Clears all the rooms from the game. </summary> */
 	public void ClearRooms() {
 		while (rooms.Count > 0) {
@@ -882,6 +784,80 @@ public class GameManager {
 		return false;
 	}
 
-	#endregion
+	
+	//========== PROPERTIES ==========
+
+	/** <summary> Gets the base game running the XNA framework. </summary> */
+	public GameBase GameBase {
+		get { return gameBase; }
+	}
+	/** <summary> Returns true if the game is running in windows. </summary> */
+	public bool IsWindows {
+		get { return gameBase.IsWindows; }
+	}
+	/** <summary> Returns true if the game is running on the Xbox 360. </summary> */
+	public bool IsXbox {
+		get { return gameBase.IsXbox; }
+	}
+
+	//--------------------------------
+
+	/** <summary> Gets the current framerate of the game. </summary> */
+	public double FPS {
+		get { return gameBase.FPS; }
+	}
+	/** <summary> Gets or sets if the game is in fullscreen mode. </summary> */
+	public bool IsFullScreen {
+		get { return gameBase.IsFullScreen; }
+		set { gameBase.IsFullScreen = value; }
+	}
+	/** <summary> Gets the true size of the screen. </summary> */
+	public Point2I ScreenSize {
+		get {
+			return new Point2I(gameBase.GraphicsDevice.Viewport.Width,
+							   gameBase.GraphicsDevice.Viewport.Height);
+		}
+	}
+	/** <summary> Gets the size of the screen based on the game scale. </summary> */
+	public Point2I GameScreenSize {
+		get {
+			return (Point2I)GMath.Ceiling(new Vector2F(gameBase.GraphicsDevice.Viewport.Width,
+													   gameBase.GraphicsDevice.Viewport.Height) / gameScale);
+		}
+	}
+	/** <summary> Gets or sets the draw scale of the game. </summary> */
+	public double GameScale {
+		get { return gameScale; }
+		set { gameScale = GMath.Max(0.1, value); }
+	}
+
+	//--------------------------------
+
+	/** <summary> Gets the current room the game is in. </summary> */
+	public Room Room {
+		get { return room; }
+	}
+	/** <summary> Gets the list of rooms in the game. </summary> */
+	public List<Room> Rooms {
+		get { return rooms; }
+	}
+	/** <summary> Gets or sets the current language of the game. </summary> */
+	public int Language {
+		get { return language; }
+		set { language = GMath.Max(0, value); }
+	}
+
+	//--------------------------------
+	
+	/** <summary> Gets or sets if the game is in debug mode. </summary> */
+	public bool DebugMode {
+		get { return debugMode; }
+		set { debugMode = value; }
+	}
+	/** <summary> Gets the debug controller of the game. </summary> */
+	public DebugController DebugController {
+		get { return debugController; }
+	}
+
 }
 } // End namespace
