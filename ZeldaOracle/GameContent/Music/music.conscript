@@ -1,0 +1,26 @@
+
+@music
+@volume 1.0
+@pitch 0.0
+@pan 0.0
+@muted false
+@song "crush" "Crush" "Immersion" "Pendulum" 1.0 0.0 0.0
+@song "immunize" "Immunize" "Immersion" "Pendulum" 1.0 0.0 0.0
+@song "the_vulture" "The Vulture" "Immersion" "Pendulum" 1.0 0.0 0.0
+
+@song "defection" "Defection" "Newgrounds Audio" "ParagonX9" 1.0 0.0 0.0
+@song "hyperioxx" "HyperioxX" "Newgrounds Audio" "ParagonX9" 1.0 0.0 0.0
+
+@song "ladder_to_the_sky" "Ladder to the Sky" "Antigravity" "zircon" 1.0 0.0 0.0
+
+@song "zombies_ate_my_neighbours" "Zombies Ate My Neighbours" "The Science Project" "Schoolboy" 1.0 0.0 0.0
+@end
+
+@playlist "playlist1"
+@loop true
+@song "crush"
+@song "immunize"
+@song "the_vulture"
+@end
+
+

@@ -1,0 +1,13 @@
+
+@spritesheet "sheet_debug_menu"
+@size 64 64
+@origin 0 0
+@sprite "checkbox_disabled" 18 0 16 16 0 0 16 16 default
+@sprite "checkbox_enabled" 18 18 16 16 0 0 16 16 default
+@sprite "radiobutton_disabled" 0 0 16 16 0 0 16 16 default
+@sprite "radiobutton_enabled" 0 18 16 16 0 0 16 16 default
+@sprite "dropdown" 36 0 16 16 0 0 16 16 default
+@sprite "submenu_arrow" 22 36 6 11 6 2 16 16 default
+@sprite "plusbutton" 0 36 9 9 0 0 16 16 default
+@sprite "minusbutton" 11 36 9 9 0 0 16 16 default
+@end

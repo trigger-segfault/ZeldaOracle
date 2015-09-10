@@ -17,6 +17,18 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Ignore
+
+ZeldaOracle/Game/bin
+ZeldaOracle/Game/obj
+
+ZeldaOracle/GameContent/bin
+ZeldaOracle/GameContent/obj
+
+Resources/
+
+*.suo
+
 # =========================
 # Operating System Files
 # =========================

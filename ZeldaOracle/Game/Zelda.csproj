@@ -1,0 +1,291 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{899DAEC0-CF01-4B30-A6E4-A0DB613978BD}</ProjectGuid>
+    <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZeldaOracle</RootNamespace>
+    <AssemblyName>Particle Editor</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
+    <XnaPlatform>Windows</XnaPlatform>
+    <XnaProfile>HiDef</XnaProfile>
+    <XnaCrossPlatformGroupID>29897e00-93f9-4090-bb53-143c6ebcd2cb</XnaCrossPlatformGroupID>
+    <XnaOutputType>Game</XnaOutputType>
+    <ApplicationIcon>Game.ico</ApplicationIcon>
+    <Thumbnail>GameThumbnail.png</Thumbnail>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\x86\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+    <XnaCompressContent>false</XnaCompressContent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x86\Release</OutputPath>
+    <DefineConstants>TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+    <XnaCompressContent>true</XnaCompressContent>
+    <LangVersion>default</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Video, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Avatar, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Net, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Storage, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="mscorlib">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Net">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\Audio\AudioSystem.cs" />
+    <Compile Include="Common\Audio\Playlist.cs" />
+    <Compile Include="Common\Audio\Song.cs" />
+    <Compile Include="Common\Audio\Sound.cs" />
+    <Compile Include="Common\Audio\SoundGroup.cs" />
+    <Compile Include="Common\Audio\SoundInstance.cs" />
+    <Compile Include="Common\Content\Resources.cs" />
+    <Compile Include="Common\Content\TextureLoader.cs" />
+    <Compile Include="Common\Debug\DebugControllerBase.cs" />
+    <Compile Include="Common\Debug\DebugMenu.cs" />
+    <Compile Include="Common\Debug\DebugMenuItem.cs" />
+    <Compile Include="Common\Debug\RadioButtonMenuItem.cs" />
+    <Compile Include="Common\Debug\ToggleMenuItem.cs" />
+    <Compile Include="Common\Geometry\Align.cs" />
+    <Compile Include="Common\Geometry\GMath.cs" />
+    <Compile Include="Common\Geometry\GRandom.cs" />
+    <Compile Include="Common\Geometry\IShape2F.cs" />
+    <Compile Include="Common\Geometry\Line2F.cs" />
+    <Compile Include="Common\Geometry\Point2I.cs" />
+    <Compile Include="Common\Geometry\Polygon2F.cs" />
+    <Compile Include="Common\Geometry\RangeF.cs" />
+    <Compile Include="Common\Geometry\RangeI.cs" />
+    <Compile Include="Common\Geometry\Rectangle2F.cs" />
+    <Compile Include="Common\Geometry\Rectangle2I.cs" />
+    <Compile Include="Common\Geometry\Vector2F.cs" />
+    <None Include="Common\Graphics\Animation.cs" />
+    <Compile Include="Common\Graphics\Color.cs" />
+    <Compile Include="Common\Graphics\Drawable.cs" />
+    <Compile Include="Common\Graphics\DrawMode.cs" />
+    <Compile Include="Common\Graphics\Font.cs" />
+    <Compile Include="Common\Graphics\ForegroundPalette.cs" />
+    <None Include="Common\Graphics\Frame.cs" />
+    <Compile Include="Common\Graphics\Graphics2D.cs" />
+    <Compile Include="Common\Graphics\Image.cs" />
+    <Compile Include="Common\Graphics\Palette.cs" />
+    <Compile Include="Common\Graphics\Particles\Areas\CircleArea.cs" />
+    <Compile Include="Common\Graphics\Particles\Areas\EmitterArea.cs" />
+    <Compile Include="Common\Graphics\Particles\Areas\LineArea.cs" />
+    <Compile Include="Common\Graphics\Particles\Areas\PointArea.cs" />
+    <Compile Include="Common\Graphics\Particles\Areas\RectArea.cs" />
+    <Compile Include="Common\Graphics\Particles\Particle.cs" />
+    <Compile Include="Common\Graphics\Particles\ParticleEffect.cs" />
+    <Compile Include="Common\Graphics\Particles\ParticleEffectAction.cs" />
+    <Compile Include="Common\Graphics\Particles\ParticleEffectType.cs" />
+    <Compile Include="Common\Graphics\Particles\ParticleEmitter.cs" />
+    <Compile Include="Common\Graphics\Particles\ParticleSystem.cs" />
+    <Compile Include="Common\Graphics\Particles\ParticleType.cs" />
+    <Compile Include="Common\Graphics\Sprite.cs" />
+    <Compile Include="Common\Graphics\SpriteSheet.cs" />
+    <Compile Include="Common\Input\AnalogStick.cs" />
+    <Compile Include="Common\Input\Buttons.cs" />
+    <Compile Include="Common\Input\Controls\Button.cs" />
+    <Compile Include="Common\Input\Controls\ComboControl.cs" />
+    <Compile Include="Common\Input\Controls\Control.cs" />
+    <Compile Include="Common\Input\Controls\HotKey.cs" />
+    <Compile Include="Common\Input\Controls\Key.cs" />
+    <Compile Include="Common\Input\Controls\MouseButton.cs" />
+    <Compile Include="Common\Input\DisableState.cs" />
+    <Compile Include="Common\Input\GamePad.cs" />
+    <Compile Include="Common\Input\InputControl.cs" />
+    <Compile Include="Common\Input\InputState.cs" />
+    <Compile Include="Common\Input\Keyboard.cs" />
+    <Compile Include="Common\Input\KeyboardTyping.cs" />
+    <Compile Include="Common\Input\Keys.cs" />
+    <Compile Include="Common\Input\Mouse.cs" />
+    <Compile Include="Common\Input\MouseButtons.cs" />
+    <Compile Include="Common\Input\Trigger.cs" />
+    <Compile Include="Common\Scripts\LanguageSR.cs" />
+    <Compile Include="Common\Scripts\ParticleSR.cs" />
+    <Compile Include="Common\Scripts\ParticleSW.cs" />
+    <Compile Include="Common\Scripts\PlaylistSR.cs" />
+    <Compile Include="Common\Scripts\ScriptReader.cs" />
+    <Compile Include="Common\Scripts\SoundGroupSR.cs" />
+    <Compile Include="Common\Scripts\SpriteSheetSR.cs" />
+    <Compile Include="Common\Translation\Language.cs" />
+    <Compile Include="Game\Control\View.cs" />
+    <Compile Include="Game\Control\ZeldaGame.cs" />
+    <Compile Include="Game\Debug\DebugController.cs" />
+    <Compile Include="Game\Editor\EffectPropertyGrid.cs" />
+    <Compile Include="Game\Editor\EmitterPropertyGrid.cs" />
+    <Compile Include="Game\Editor\ParticlePropertyGridBase.cs" />
+    <Compile Include="Game\Editor\ParticlePropertyGrid.cs" />
+    <Compile Include="Game\Editor\Properties\PropertySpriteList.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyEffectList.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyEmitterList.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyParticleList.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyEffectAction.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyPointArea.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyLineArea.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyRectArea.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyBool.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyCircleArea.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyComboStruct.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyCombo.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyList.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyRangeD.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyColor.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyVector2D.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyPoint2I.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyStruct.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyGroup.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyDouble.cs" />
+    <Compile Include="Game\Editor\PropertyGrid.cs" />
+    <Compile Include="Game\Editor\Properties\PropertyInt.cs" />
+    <Compile Include="Game\Editor\Properties\Property.cs" />
+    <Compile Include="Game\Main\Entity.cs" />
+    <Compile Include="Game\Main\GameBase.cs" />
+    <Compile Include="Game\Main\GameData.cs" />
+    <Compile Include="Game\Main\GameManager.cs" />
+    <Compile Include="Game\Main\IGameObject.cs" />
+    <Compile Include="Game\Main\Menu.cs" />
+    <Compile Include="Game\Main\Program.cs" />
+    <Compile Include="Game\Main\Room.cs" />
+    <Compile Include="Game\Main\Tile.cs" />
+    <Compile Include="Game\Players\Player.cs" />
+    <Compile Include="Game\Worlds\Room.cs" />
+    <Compile Include="Game\Worlds\Level.cs" />
+    <Compile Include="Game\Worlds\World.cs" />
+    <Compile Include="Game\Worlds\Zone.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Game.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="GameThumbnail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GameContent\ZeldaContent.contentproj">
+      <Name>ZeldaContent</Name>
+      <XnaReferenceType>Content</XnaReferenceType>
+      <Project>{67B9D68E-33D3-4346-8B69-E9D32EB96EB8}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 4.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Common\Collision\" />
+    <Folder Include="Editor\" />
+    <Folder Include="Game\Control\Menu\" />
+    <Folder Include="Game\Entities\" />
+    <Folder Include="Game\Rooms\" />
+    <Folder Include="Game\Tiles\" />
+    <Folder Include="Game\Worlds\Tiles\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
+  <!--
+      To modify your build process, add your task inside one of the targets below and uncomment it. 
+      Other similar extension points exist, see Microsoft.Common.targets.
+      <Target Name="BeforeBuild">
+      </Target>
+      <Target Name="AfterBuild">
+      </Target>
+    -->
+</Project>
