@@ -1,17 +1,7 @@
 Content\Fonts\font_debug_menu.xnb
 Content\Fonts\font_debug_menu_bold_2.xnb
 Content\SpriteSheets\sheet_debug_menu.xnb
-Content\SpriteSheets\sheet_gamepad_arrows.xnb
-Content\SpriteSheets\sheet_gamepad_controls.xnb
 Content\Fonts\font_debug_menu_2.xnb
 Content\Fonts\font_debug_menu_bold.xnb
-Content\Images\Palette.xnb
-Content\SpriteSheets\custom_sheets.conscript
 Content\SpriteSheets\sheet_debug_menu.conscript
-Content\SpriteSheets\sheet_gamepad.conscript
-Content\SpriteSheets\sheet_particles.conscript
-Content\SpriteSheets\sheet_particles.png
-Content\SpriteSheets\sheet_background.png
-Content\SpriteSheets\sheet_entities.png
-Content\Particles\particle_data.conscript
 Game.ico

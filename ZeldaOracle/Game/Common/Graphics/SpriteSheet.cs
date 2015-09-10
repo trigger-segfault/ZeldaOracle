@@ -98,7 +98,7 @@ public class SpriteSheet {
 	/** <summary> Adds a sprite with the given information to the sheet. </summary> */
 	public Sprite AddSprite(string name, int frameX, int frameY, int frameWidth,
 							int frameHeight, int offsetX, int offsetY, int sourceWidth,
-							int sourceHeight, double originX, double originY) {
+							int sourceHeight, float originX, float originY) {
 		Sprite sprite     = new Sprite();
 		sprite.Name       = name;
 		sprite.Sheet      = this;
@@ -111,10 +111,10 @@ public class SpriteSheet {
 	}
 	/** <summary> Centers the origins of all sprites in the sheet. </summary> */
 	public void CenterOrigins() {
-		AlignOrigins(0.5, 0.5);
+		AlignOrigins(0.5f, 0.5f);
 	}
 	/** <summary> Aligns the origins of all sprites in the sheet. </summary> */
-	public void AlignOrigins(double xPos, double yPos) {
+	public void AlignOrigins(float xPos, float yPos) {
 		for (int i = 0; i < sprites.Count; ++i)
 			sprites[i].AlignOrigin(xPos, yPos);
 	}

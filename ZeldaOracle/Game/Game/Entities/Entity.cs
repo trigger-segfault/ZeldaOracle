@@ -9,6 +9,8 @@ using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 
+using ZeldaOracle.Game.Worlds;
+
 namespace GameFramework.MyGame.Main {
 /** <summary>
  * The main class for entity objects in the room.
@@ -38,11 +40,11 @@ public class Entity : IGameObject {
 	/** <summary> The velocity the entity travels each update. </summary> */
 	public Vector2F Velocity;
 	/** <summary> The last direction the entity was facing. </summary> */
-	private double lastDirection;
+	private float lastDirection;
 
 	// Collision
 	/** <summary> The collision shape of the entity. </summary> */
-	public IShape2F CollisionShape;
+	public Rectangle2F CollisionShape;
 	/** <summary> True if this entity should be checked for collisions. </summary> */
 	private bool collidable;
 
@@ -73,7 +75,7 @@ public class Entity : IGameObject {
 		// Movement
 		this.Position		= Vector2F.Zero;
 		this.Velocity		= Vector2F.Zero;
-		this.lastDirection	= 0.0;
+		this.lastDirection	= 0.0f;
 
 		// Collision
 		this.CollisionShape	= Rectangle2F.Zero;
@@ -132,13 +134,13 @@ public class Entity : IGameObject {
 	#region Containment
 
 	/** <summary> Gets the class managing the XNA framework. </summary> */
-	public GameBase GameBase {
-		get { return room.GameBase; }
-	}
+	//public GameBase GameBase {
+	//	get { return room.GameBase; }
+	//}
 	/** <summary> Gets the class managing the game. </summary> */
-	public GameManager Game {
-		get { return room.Game; }
-	}
+	//public GameManager Game {
+	//	get { return room.Game; }
+	//}
 	/** <summary> Gets the room that contains this entity. </summary> */
 	public Room Room {
 		get { return room; }
@@ -171,32 +173,32 @@ public class Entity : IGameObject {
 	#region Movement
 
 	/** <summary> Gets or sets the x position of the entity. </summary> */
-	public double X {
+	public float X {
 		get { return Position.X; }
 		set { Position.X = value; }
 	}
 	/** <summary> Gets or sets the y position of the entity. </summary> */
-	public double Y {
+	public float Y {
 		get { return Position.Y; }
 		set { Position.Y = value; }
 	}
 	/** <summary> Gets or sets the horizontal speed of the entity. </summary> */
-	public double HSpeed {
+	public float HSpeed {
 		get { return Velocity.X; }
 		set { Velocity.X = value; }
 	}
 	/** <summary> Gets or sets the vertical speed of the entity. </summary> */
-	public double VSpeed {
+	public float VSpeed {
 		get { return Velocity.Y; }
 		set { Velocity.Y = value; }
 	}
 	/** <summary> Gets or sets the direction the entity is moving in. </summary> */
-	public double Direction {
+	public float Direction {
 		get { return (Velocity.IsZero ? lastDirection : Velocity.Direction); }
 		set { Velocity.Direction = value; }
 	}
 	/** <summary> Gets or sets the speed of the entity. </summary> */
-	public double Speed {
+	public float Speed {
 		get { return Velocity.Length; }
 		set { Velocity.Length = value; }
 	}
@@ -214,9 +216,9 @@ public class Entity : IGameObject {
 		get { return CollisionShape.Bounds + Position; }
 	}
 	/** <summary> Gets the collision shape of the entity. </summary> */
-	public IShape2F Shape {
-		get { return CollisionShape.Translate(Position); }
-	}
+	//public Rectangle2F Shape {
+	//	get { return CollisionShape.Translate(Position); }
+	//}
 	/** <summary> Gets the center of the entity's shape. </summary> */
 	public Vector2F Center {
 		get { return CollisionShape.Center + Position; }
@@ -263,12 +265,6 @@ public class Entity : IGameObject {
 	//========= INFORMATION ==========
 	#region Information
 	
-	/** <summary> Returns the collision shape of the entity. </summary> */
-	public virtual IShape2F GetShape() {
-		return CollisionShape.Translate(Position);
-
-		// NOTE: Override this function
-	}
 	/** <summary> Returns the collision bounds of the entity. </summary> */
 	public virtual Rectangle2F GetBounds() {
 		return CollisionShape.Bounds + Position;

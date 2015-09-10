@@ -15,7 +15,7 @@ public class AnalogStick {
 	//========== CONSTANTS ===========
 
 	/** <summary> The dead zone for the directional controls. </summary> */
-	private static Vector2F DirectionDeadZone		= new Vector2F(0.83, 0.83);
+	private static Vector2F DirectionDeadZone		= new Vector2F(0.83f, 0.83f);
 
 	//=========== MEMBERS ============
 

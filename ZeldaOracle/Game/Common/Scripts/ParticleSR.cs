@@ -233,31 +233,31 @@ public class ParticleSR : ScriptReader {
 
 			// Direction.
 			else if (command == "dir_init") {
-				particle.InitialDirectionOffset = new RangeF(ConvertToDegrees(Double.Parse(args[0])), ConvertToDegrees(Double.Parse(args[1])));
+				particle.InitialDirectionOffset = new RangeF(ConvertToDegrees(Single.Parse(args[0])), ConvertToDegrees(Single.Parse(args[1])));
 			}
 			else if (command == "dir_increase") {
-				particle.DirectionIncrease = new RangeF(ConvertToDegrees(Double.Parse(args[0])), ConvertToDegrees(Double.Parse(args[1])));
+				particle.DirectionIncrease = new RangeF(ConvertToDegrees(Single.Parse(args[0])), ConvertToDegrees(Single.Parse(args[1])));
 			}
 			else if (command == "dir_friction") {
-				particle.DirectionFriction = new RangeF(Double.Parse(args[0]), Double.Parse(args[1]));
+				particle.DirectionFriction = new RangeF(Single.Parse(args[0]), Single.Parse(args[1]));
 			}
 			else if (command == "gravity") {
-				particle.Gravity = new Vector2F(Double.Parse(args[0]), Double.Parse(args[1]));
+				particle.Gravity = new Vector2F(Single.Parse(args[0]), Single.Parse(args[1]));
 			}
 
 			// Rotation.
 			else if (command == "rot_init") {
-				particle.InitialRotation = new RangeF(ConvertToDegrees(Double.Parse(args[0])), ConvertToDegrees(Double.Parse(args[1])));
+				particle.InitialRotation = new RangeF(ConvertToDegrees(Single.Parse(args[0])), ConvertToDegrees(Single.Parse(args[1])));
 				particle.RotateFromDirection = Boolean.Parse(args[2]);
 			}
 			else if (command == "rot_increase") {
-				particle.RotationSpeed = new RangeF(ConvertToDegrees(Double.Parse(args[0])), ConvertToDegrees(Double.Parse(args[1])));
+				particle.RotationSpeed = new RangeF(ConvertToDegrees(Single.Parse(args[0])), ConvertToDegrees(Single.Parse(args[1])));
 			}
 			else if (command == "rot_friction") {
 				particle.RotationFriction = Double.Parse(args[0]);
 			}
 			else if (command == "rot_jitter") {
-				particle.RotationJitter = ConvertToDegrees(Double.Parse(args[0]));
+				particle.RotationJitter = ConvertToDegrees(Single.Parse(args[0]));
 			}
 
 			// Sprites and Color.
@@ -322,19 +322,19 @@ public class ParticleSR : ScriptReader {
 			else if (command == "origin") {
 				emitter.IsOriginBasedDirection = true;
 				emitter.Origin = new Vector2F(
-					Double.Parse(args[0]),
-					Double.Parse(args[1]));
+					Single.Parse(args[0]),
+					Single.Parse(args[1]));
 				emitter.IsSpeedScaledByDistance = Boolean.Parse(args[2]);
 			}
 			else if (command == "speed") {
 				emitter.Speed = new RangeF(
-					Double.Parse(args[0]),
-					Double.Parse(args[1]));
+					Single.Parse(args[0]),
+					Single.Parse(args[1]));
 			}
 			else if (command == "direction") {
 				emitter.Direction = new Vector2F(
-					Double.Parse(args[0]),
-					Double.Parse(args[1]));
+					Single.Parse(args[0]),
+					Single.Parse(args[1]));
 			}
 		}
 

@@ -7,42 +7,37 @@ using Microsoft.Xna.Framework.Content;
 
 namespace ZeldaOracle.Common.Geometry {
 /** <summary>
- * The double precision range between a min and a max.
+ * The floating precision range between a min and a max.
  * </summary> */
 public struct RangeF {
 
 	//========== CONSTANTS ===========
-	#region Constants
 
 	/** <summary> Returns a range positioned at (0 - 0). </summary> */
 	public static RangeF Zero {
 		get { return new RangeF(); }
 	}
-	/** <summary> Returns a range positioned at (Int.Min - Int.Max). </summary> */
+	/** <summary> Returns a range positioned at (Float.Min - Float.Max). </summary> */
 	public static RangeF Full {
-		get { return new RangeF(Double.NegativeInfinity, Double.PositiveInfinity); }
+		get { return new RangeF(Single.NegativeInfinity, Single.PositiveInfinity); }
 	}
 
-	#endregion
 	//=========== MEMBERS ============
-	#region Members
 	
 	/** <summary> The minimum value in the range. </summary> */
-	public double Min;
+	public float Min;
 	/** <summary> The maximum value in the range. </summary> */
-	public double Max;
+	public float Max;
 
-	#endregion
 	//========= CONSTRUCTORS =========
-	#region Constructors
 
 	/** <summary> Constructs a range between the 2 values. </summary> */
-	public RangeF(double min, double max) {
+	public RangeF(float min, float max) {
 		this.Min	= min;
 		this.Max	= max;
 	}
 	/** <summary> Constructs a range with a single value. </summary> */
-	public RangeF(double single) {
+	public RangeF(float single) {
 		this.Min	= single;
 		this.Max	= single;
 	}
@@ -52,9 +47,7 @@ public struct RangeF {
 		this.Max	= r.Max;
 	}
 
-	#endregion
 	//=========== GENERAL ============
-	#region General
 
 	/** <summary> Outputs a string representing this range as (min - max). </summary> */
 	public override string ToString() {
@@ -62,8 +55,6 @@ public struct RangeF {
 	}
 	/** <summary> Outputs a string representing this range as (min - max). </summary> */
 	public string ToString(IFormatProvider provider) {
-		// TODO: Write formatting for RangeD.ToString(format).
-
 		return "(" + Min.ToString(provider) + ", " + Max.ToString(provider) + ")";
 	}
 	/** <summary> Outputs a string representing this range as (min - max). </summary> */
@@ -85,70 +76,47 @@ public struct RangeF {
 		return base.GetHashCode();
 	}
 
-	#endregion
 	//========== OPERATORS ===========
-	#region Operators
-	//--------------------------------
-	#region Unary Arithmetic
-
-	
-	#endregion
-	//--------------------------------
-	#region Binary Arithmetic
-
-
-	#endregion
-	//--------------------------------
-	#region Binary Logic
 
 	public static bool operator ==(RangeF r1, RangeF r2) {
 		return (r1.Min == r2.Min && r1.Max == r2.Max);
 	}
-	public static bool operator ==(double d1, RangeF r2) {
-		return (d1 == r2.Min && d1 == r2.Max);
+	public static bool operator ==(float f1, RangeF r2) {
+		return (f1 == r2.Min && f1 == r2.Max);
 	}
-	public static bool operator ==(RangeF r1, double d2) {
-		return (r1.Min == d2 && r1.Max == d2);
+	public static bool operator ==(RangeF r1, float f2) {
+		return (r1.Min == f2 && r1.Max == f2);
 	}
 
 	public static bool operator !=(RangeF r1, RangeF r2) {
 		return (r1.Min != r2.Min || r1.Max != r2.Max);
 	}
-	public static bool operator !=(double d1, RangeF r2) {
-		return (d1 != r2.Min || d1 != r2.Max);
+	public static bool operator !=(float f1, RangeF r2) {
+		return (f1 != r2.Min || f1 != r2.Max);
 	}
-	public static bool operator !=(RangeF r1, double d2) {
-		return (r1.Min != d2 || r1.Max != d2);
+	public static bool operator !=(RangeF r1, float f2) {
+		return (r1.Min != f2 || r1.Max != f2);
 	}
 
-	#endregion
-	//--------------------------------
-	#region Conversion
-
-
-	#endregion
-	//--------------------------------
-	#endregion
 	//========== PROPERTIES ==========
-	#region Properties
 
 	/** <summary> Gets the range between the min and max values. </summary> */
 	[ContentSerializerIgnore]
-	public double Range {
+	public float Range {
 		get { return Max - Min; }
 	}
 	/** <summary> Gets or sets the min or max coordinate from the index. </summary> */
 	[ContentSerializerIgnore]
-	public double this[int index] {
+	public float this[int index] {
 		get {
 			if (index < 0 || index > 1)
-				throw new System.IndexOutOfRangeException("RangeD[index] must be either 0 or 1.");
+				throw new System.IndexOutOfRangeException("RangeF[index] must be either 0 or 1.");
 			else
 				return (index == 0 ? Min : Max);
 		}
 		set {
 			if (index < 0 || index > 1)
-				throw new System.IndexOutOfRangeException("RangeD[index] must be either 0 or 1.");
+				throw new System.IndexOutOfRangeException("RangeF[index] must be either 0 or 1.");
 			else if (index == 0)
 				Min = value;
 			else
@@ -164,16 +132,13 @@ public struct RangeF {
 		get { return (Min == Max); }
 	}
 
-	#endregion
 	//=========== CONTAINS ===========
-	#region Contains
 
 	/** <summary> Returns true if the specified value is inside this range. </summary> */
-	public bool Contains(double value) {
+	public bool Contains(float value) {
 		return ((value >= Min) &&
 				(value <=  Max));
 	}
 
-	#endregion
 }
 } // End namespace

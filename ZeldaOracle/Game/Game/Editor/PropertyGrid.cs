@@ -13,7 +13,7 @@ using ZeldaOracle.Common.Scripts;
 
 using GameFramework.MyGame.Debug;
 using GameFramework.MyGame.Main;
-using GameFramework.MyGame.Editor.Properties;
+//using GameFramework.MyGame.Editor.Properties;
 
 namespace GameFramework.MyGame.Editor {
 /** <summary>

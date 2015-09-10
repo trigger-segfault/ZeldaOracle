@@ -13,16 +13,13 @@ namespace ZeldaOracle.Common.Geometry {
 public struct Rectangle2I {
 
 	//========== CONSTANTS ===========
-	#region Constants
 
 	/** <summary> Returns an empty rectangle. </summary> */
 	public static Rectangle2I Zero {
 		get { return new Rectangle2I(); }
 	}
 
-	#endregion
 	//=========== MEMBERS ============
-	#region Members
 
 	/** <summary> The position of the rectangle. </summary> */
 	[ContentSerializerIgnore]
@@ -31,9 +28,7 @@ public struct Rectangle2I {
 	[ContentSerializerIgnore]
 	public Point2I Size;
 
-	#endregion
 	//========= CONSTRUCTORS =========
-	#region Constructors
 
 	/** <summary> Constructs a rectangle with the specified position and size. </summary> */
 	public Rectangle2I(int x, int y, int width, int height) {
@@ -76,9 +71,7 @@ public struct Rectangle2I {
 		this.Size	= r.Size;
 	}
 
-	#endregion
 	//=========== GENERAL ============
-	#region General
 
 	/** <summary> Outputs a string representing this rectangle. </summary> */
 	public override string ToString() {
@@ -86,8 +79,6 @@ public struct Rectangle2I {
 	}
 	/** <summary> Outputs a string representing this rectangle. </summary> */
 	public string ToString(IFormatProvider provider) {
-		// TODO: Write formatting for Rectangle2I.ToString(format).
-
 		return "((" + X + "," + Y + "), (" + Width + "x" + Height + "))";
 	}
 	/** <summary> Outputs a string representing this rectangle. </summary> */
@@ -109,11 +100,7 @@ public struct Rectangle2I {
 		return base.GetHashCode();
 	}
 
-	#endregion
 	//========== OPERATORS ===========
-	#region Operators
-	//--------------------------------
-	#region Unary Arithmetic
 
 	public static Rectangle2I operator +(Rectangle2I r) {
 		return r;
@@ -128,9 +115,7 @@ public struct Rectangle2I {
 		return new Rectangle2I(--r.Point, r.Size);
 	}
 
-	#endregion
 	//--------------------------------
-	#region Binary Arithmetic
 
 	public static Rectangle2I operator +(Rectangle2I r, Point2I p) {
 		return new Rectangle2I(r.Point + p, r.Size);
@@ -164,9 +149,7 @@ public struct Rectangle2I {
 		return new Rectangle2I(r.Point, r.Size % i);
 	}
 
-	#endregion
 	//--------------------------------
-	#region Binary Logic
 
 	public static bool operator ==(Rectangle2I r1, Rectangle2I r2) {
 		return (r1.Point == r2.Point && r1.Size == r2.Size);
@@ -175,9 +158,7 @@ public struct Rectangle2I {
 		return (r1.Point != r2.Point || r1.Size != r2.Size);
 	}
 
-	#endregion
 	//--------------------------------
-	#region Conversion
 
 	public static implicit operator Rectangle2I(Rectangle r) {
 		return new Rectangle2I(r.X, r.Y, r.Width, r.Height);
@@ -187,13 +168,9 @@ public struct Rectangle2I {
 		return new Rectangle(r.Point.X, r.Point.Y, r.Size.X, r.Size.Y);
 	}
 
-	#endregion
-	//--------------------------------
-	#endregion
 	//========== PROPERTIES ==========
-	#region Properties
-	//--------------------------------
-	#region Dimensions
+	
+	// Dimensions
 
 	/** <summary> Gets or sets the x position of the rectangle. </summary> */
 	public int X {
@@ -216,16 +193,14 @@ public struct Rectangle2I {
 		set { Size.Y = value; }
 	}
 
-	#endregion
-	//--------------------------------
-	#region Shape
+	// Shape
 
 	/** <summary> Returns true if the rectangle has a size of zero. </summary> */
 	public bool IsEmpty {
 		get { return Size.IsZero; }
 	}
 	/** <summary> Gets the center of the rectangle. </summary> */
-	public Vector2F Center {
+	public Point2I Center {
 		get { return Point + Size / 2; }
 	}
 	/** <summary> Gets the bounding box of the rectangle. </summary> */
@@ -250,11 +225,7 @@ public struct Rectangle2I {
 		get { return GMath.Abs(Size.X * 2) + GMath.Abs(Size.Y * 2); }
 	}
 
-	#endregion
-	//--------------------------------
-	#endregion
 	//========= CALCULATIONS =========
-	#region Calculations
 
 	/** <summary> Returns a rectangle with the corners stretched out by the specified amount. </summary> */
 	public Rectangle2I Inflated(Point2I amount) {
@@ -277,9 +248,7 @@ public struct Rectangle2I {
 		Size.Y += y * 2;
 	}
 
-	#endregion
 	//=========== CONTAINS ===========
-	#region Contains
 
 	/** <summary> Returns true if the specified vector is inside this rectangle. </summary> */
 	public bool Contains(Point2I point) {
@@ -294,9 +263,7 @@ public struct Rectangle2I {
 				(rect.Max <= Max));
 	}
 
-	#endregion
 	//========== COLLISION ===========
-	#region Collision
 
 	/** <summary> Returns true if the specified vector is colliding with this rectangle. </summary> */
 	public bool Colliding(Point2I point) {
@@ -311,6 +278,5 @@ public struct Rectangle2I {
 				(rect.Max > Min));
 	}
 
-	#endregion
 }
 } // End namespace

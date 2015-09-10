@@ -66,9 +66,9 @@ public class Drawable {
 			Vector2F drawOrigin = (sprite.Origin + origin) - sprite.Offset;
 
 			if (FlipHorizontally)
-				position.X += (2.0 * drawOrigin.X) - sprite.FrameRect.Width;
+				position.X += (2.0f * drawOrigin.X) - sprite.FrameRect.Width;
 			if (FlipVertically)
-				position.Y += (2.0 * drawOrigin.Y) - sprite.FrameRect.Height;
+				position.Y += (2.0f * drawOrigin.Y) - sprite.FrameRect.Height;
 
 			g.DrawImage(sprite.Sheet.Image, position, sprite.FrameRect, drawOrigin, (Vector2F)scale, rotation, color, spriteEffects, depth);
 		}

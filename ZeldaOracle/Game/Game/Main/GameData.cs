@@ -9,7 +9,7 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 
-using ZeldaOracle.Common.Graphics.Particles;
+//using ZeldaOracle.Common.Graphics.Particles;
 using ZeldaOracle.Common.Scripts;
 using System.IO;
 //using ParticleGame.Project.Particles;
@@ -88,7 +88,7 @@ class GameData {
 			writer.Write(writer.NewLine);
 		}
 
-		Image p = Resources.LoadImage("Images/ColorPal");
+		//Image p = Resources.LoadImage("Images/ColorPal");
 
 
 
@@ -104,14 +104,14 @@ class GameData {
 
 		SheetDebugMenu			= Resources.LoadSpriteSheet(Resources.SpriteSheetDirectory + "sheet_debug_menu.conscript");
 
-		Resources.LoadSpriteSheets(Resources.SpriteSheetDirectory + "sheet_gamepad.conscript");
-		SheetGamePadControls	= Resources.GetSpriteSheet("sheet_gamepad_controls");
-		SheetGamePadArrows		= Resources.GetSpriteSheet("sheet_gamepad_arrows");
+		//Resources.LoadSpriteSheets(Resources.SpriteSheetDirectory + "sheet_gamepad.conscript");
+		//SheetGamePadControls	= Resources.GetSpriteSheet("sheet_gamepad_controls");
+		//SheetGamePadArrows		= Resources.GetSpriteSheet("sheet_gamepad_arrows");
 
 		Resources.LoadSpriteSheets(Resources.SpriteSheetDirectory + "sheet_particles.conscript");
-		Resources.LoadSpriteSheets(Resources.SpriteSheetDirectory + "custom_sheets.conscript");
-		ParticleSR.UsingDegrees = true;
-		Resources.LoadParticles(Resources.ParticleDirectory + "particle_data.conscript");
+		//Resources.LoadSpriteSheets(Resources.SpriteSheetDirectory + "custom_sheets.conscript");
+		//ParticleSR.UsingDegrees = true;
+		//Resources.LoadParticles(Resources.ParticleDirectory + "particle_data.conscript");
 		//ParticleSR.UsingDegrees = false;
 		//Resources.LoadParticles(Resources.ParticleDirectory + "particle_data_before.conscript");
 	}

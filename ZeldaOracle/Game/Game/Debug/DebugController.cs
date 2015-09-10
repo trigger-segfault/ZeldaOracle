@@ -20,7 +20,7 @@ using Keyboard		= ZeldaOracle.Common.Input.Keyboard;
 using Keys			= ZeldaOracle.Common.Input.Keys;
 
 using GameFramework.MyGame.Main;
-using ZeldaOracle.Common.Graphics.Particles;
+//using ZeldaOracle.Common.Graphics.Particles;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Scripts;
 using System.IO;
@@ -63,7 +63,7 @@ public class DebugController : DebugControllerBase {
 		this.nextStep		= false;
 
 		
-		RadioButtonGroup drawModeGroup = new RadioButtonGroup();
+		/*RadioButtonGroup drawModeGroup = new RadioButtonGroup();
 		RadioButtonGroup groupGameSpeed = new RadioButtonGroup();
 
 		// GAME.
@@ -96,7 +96,7 @@ public class DebugController : DebugControllerBase {
 				}
 				Resources.SaveScript("Particles/particle_data_" + index.ToString() + ".conscript", new ParticleSW(), Encoding.Default);
 			});
-		menuGame.AddItem("Quit", new HotKey(Keys.W, true), delegate() { game.Exit(); });
+		menuGame.AddItem("Quit", new HotKey(Keys.W, true), delegate() { game.Exit(); });*/
 
 		// PLAYER.
 		/*DebugMenuItem menuPlayer = menu.Root.AddItem("Player");
@@ -231,7 +231,7 @@ public class DebugController : DebugControllerBase {
 
 		List<string> items = new List<string>();
 
-		if (gamePaused)
+		/*if (gamePaused)
 			items.Add("Paused");
 		items.Add("Current Effect: " + game.effectType.Name);
 		items.Add(game.grid.typeName + " Type name: " + game.grid.name);
@@ -251,9 +251,9 @@ public class DebugController : DebugControllerBase {
 			items.Add("RMB - Set Effect Location");
 			items.Add("RMB2 - Edit Selected Type");
 			items.Add("F2/MMB - Open Debug Menu");
-		}
+		}*/
 
-		if (items.Count > 0) {
+		/*if (items.Count > 0) {
 			int itemWidth  = 460;
 			int itemHeight = 20;
 			int menuPadding = 4;
@@ -281,7 +281,7 @@ public class DebugController : DebugControllerBase {
 				else
 					g.DrawString(DebugMenuFont, items[i], new Point2I(r.Min.X + textOffset, (int)r.Center.Y), Align.Left | Align.Int, colorText);
 			}
-		}
+		}*/
 	}
 
 	#endregion

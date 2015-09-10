@@ -12,7 +12,6 @@ namespace ZeldaOracle.Common.Geometry {
 public struct RangeI {
 
 	//========== CONSTANTS ===========
-	#region Constants
 
 	/** <summary> Returns a range positioned at (0 - 0). </summary> */
 	public static RangeI Zero {
@@ -23,18 +22,14 @@ public struct RangeI {
 		get { return new RangeI(Int32.MinValue, Int32.MaxValue); }
 	}
 
-	#endregion
 	//=========== MEMBERS ============
-	#region Members
 
 	/** <summary> The minimum value in the range. </summary> */
 	public int Min;
 	/** <summary> The maximum value in the range. </summary> */
 	public int Max;
 
-	#endregion
 	//========= CONSTRUCTORS =========
-	#region Constructors
 
 	/** <summary> Constructs a range between the 2 values. </summary> */
 	public RangeI(int min, int max) {
@@ -52,9 +47,7 @@ public struct RangeI {
 		this.Max	= r.Max;
 	}
 
-	#endregion
 	//=========== GENERAL ============
-	#region General
 
 	/** <summary> Outputs a string representing this range as (min - max). </summary> */
 	public override string ToString() {
@@ -62,8 +55,6 @@ public struct RangeI {
 	}
 	/** <summary> Outputs a string representing this range as (min - max). </summary> */
 	public string ToString(IFormatProvider provider) {
-		// TODO: Write formatting for RangeD.ToString(format).
-
 		return "(" + Min.ToString(provider) + ", " + Max.ToString(provider) + ")";
 	}
 	/** <summary> Outputs a string representing this range as (min - max). </summary> */
@@ -85,21 +76,7 @@ public struct RangeI {
 		return base.GetHashCode();
 	}
 
-	#endregion
 	//========== OPERATORS ===========
-	#region Operators
-	//--------------------------------
-	#region Unary Arithmetic
-
-
-	#endregion
-	//--------------------------------
-	#region Binary Arithmetic
-
-
-	#endregion
-	//--------------------------------
-	#region Binary Logic
 
 	public static bool operator ==(RangeI r1, RangeI r2) {
 		return (r1.Min == r2.Min && r1.Max == r2.Max);
@@ -121,16 +98,7 @@ public struct RangeI {
 		return (r1.Min != i2 || r1.Max != i2);
 	}
 
-	#endregion
-	//--------------------------------
-	#region Conversion
-
-
-	#endregion
-	//--------------------------------
-	#endregion
 	//========== PROPERTIES ==========
-	#region Properties
 
 	/** <summary> Gets the range between the min and max values. </summary> */
 	[ContentSerializerIgnore]
@@ -142,13 +110,13 @@ public struct RangeI {
 	public int this[int index] {
 		get {
 			if (index < 0 || index > 1)
-				throw new System.IndexOutOfRangeException("RangeD[index] must be either 0 or 1.");
+				throw new System.IndexOutOfRangeException("RangeI[index] must be either 0 or 1.");
 			else
 				return (index == 0 ? Min : Max);
 		}
 		set {
 			if (index < 0 || index > 1)
-				throw new System.IndexOutOfRangeException("RangeD[index] must be either 0 or 1.");
+				throw new System.IndexOutOfRangeException("RangeI[index] must be either 0 or 1.");
 			else if (index == 0)
 				Min = value;
 			else
@@ -164,9 +132,7 @@ public struct RangeI {
 		get { return (Min == Max); }
 	}
 
-	#endregion
 	//=========== CONTAINS ===========
-	#region Contains
 
 	/** <summary> Returns true if the specified value is inside this range. </summary> */
 	public bool Contains(int value) {
@@ -174,6 +140,5 @@ public struct RangeI {
 				(value <=  Max));
 	}
 
-	#endregion
 }
 } // End namespace
