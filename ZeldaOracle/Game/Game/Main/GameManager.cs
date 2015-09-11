@@ -259,12 +259,6 @@ public class GameManager {
 		g.SetRenderTarget(GameData.RenderTargetDebug);
 		g.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
 		g.Clear(Color.Transparent);
-		if (Mouse.IsButtonDown(MouseButtons.Right) && debugController.showParticlePos) {
-			int stretch = 8;
-			Vector2F mousePos = Mouse.GetPosition();
-			g.DrawLine(new Line2F(mousePos - new Vector2F(stretch, 0), mousePos + new Vector2F(stretch, 0)), 1, Color.White);
-			g.DrawLine(new Line2F(mousePos - new Vector2F(0, stretch), mousePos + new Vector2F(0, stretch)), 1, Color.White);
-		}
 		debugController.Draw(g);
 		//prop.Draw(g, new Point2I(ScreenSize.X - Property<int>.Width, ScreenSize.Y / 2));
 		g.End();
