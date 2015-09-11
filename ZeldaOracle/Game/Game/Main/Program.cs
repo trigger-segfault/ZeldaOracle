@@ -1,26 +1,23 @@
 using System;
+using ZeldaOracle.Game.Control;
 
-namespace GameFramework.MyGame.Main {
-#if WINDOWS || XBOX
-/** <summary>
- * A static class for the entry point of the program.
- * </summary> */
-static class Program {
+namespace ZeldaOracle.Game.Main {
 
-	//========= ENTRY POINT ==========
-	#region Entry Point
+	#if WINDOWS || XBOX
 
-	/** <summary> The entry point of the program. </summary> */
-	static void Main(string[] args) {
+	// A static class for the entry point of the program.
+	static class Program {
 
-		// Creates and runs the game
-		using (GameBase game = new GameBase())
-		{
-			game.Run();
+		// The entry point of the program.
+		static void Main(string[] args) {
+
+			// Creates and runs the game.
+			using (ZeldaGame game = new ZeldaGame())
+			{
+				game.Run();
+			}
 		}
 	}
+	#endif
 
-	#endregion
-}
-#endif
 } // End namespace

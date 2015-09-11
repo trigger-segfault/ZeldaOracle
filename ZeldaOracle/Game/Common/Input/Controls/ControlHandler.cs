@@ -7,7 +7,7 @@ namespace ZeldaOracle.Common.Input.Controls {
 /** <summary>
  * An abstract control class.
  * </summary> */
-public abstract class Control {
+public abstract class ControlHandler {
 
 	//========== PROPERTIES ==========
 	#region Properties

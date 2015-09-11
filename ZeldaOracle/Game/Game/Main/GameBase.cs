@@ -31,7 +31,7 @@ using Keys			= ZeldaOracle.Common.Input.Keys;
 using Buttons		= ZeldaOracle.Common.Input.Buttons;
 using MouseButtons	= ZeldaOracle.Common.Input.MouseButtons;
 
-namespace GameFramework.MyGame.Main {
+namespace ZeldaOracle.Game.Main {
 
 // The class that manages the XNA aspects of the game.
 public class GameBase : XnaGame {
@@ -68,7 +68,7 @@ public class GameBase : XnaGame {
 
 	
 	//-----------------------------------------------------------------------------
-	// Accessors.
+	// Initialization
 	//-----------------------------------------------------------------------------
 
 	// Constructs the game base class.
@@ -78,9 +78,9 @@ public class GameBase : XnaGame {
 		this.spriteBatch			= null;
 		this.Content.RootDirectory	= "Content";
 		this.fullScreen				= false;
-		this.windowSize				= new Point2I(1024, 800);
+		this.windowSize				= new Point2I(160 * 4, 144 * 4);
 		this.windowSizeChanged		= false;
-
+		
 		// Game
 		this.game					= null;
 		this.screenShotRequested	= false;
@@ -108,7 +108,7 @@ public class GameBase : XnaGame {
 	// and initialize them as well.
 	protected override void Initialize() {
 		Console.WriteLine("Begin Initialize");
-
+		
 		// Create and initialize the game.
 		this.game = new GameManager();
 		this.game.Initialize(this);
@@ -184,7 +184,7 @@ public class GameBase : XnaGame {
 	// checking for collisions, gathering input, and playing audio.
 	protected override void Update(GameTime gameTime) {
 
-		// Update the fullscreen mode
+		// Update the fullscreen mode.
 		UpdateFullScreen();
 
 		if (windowSizeChanged) {
@@ -192,10 +192,10 @@ public class GameBase : XnaGame {
 			windowSizeChanged = false;
 		}
 
-		// Update the frame rate
+		// Update the frame rate.
 		UpdateFrameRate(gameTime);
 
-		// Update the listeners
+		// Update the listeners.
 		if (Form.Focused) {
 			Keyboard.Enable();
 			GamePad.Enable();
@@ -211,12 +211,12 @@ public class GameBase : XnaGame {
 		}
 		AudioSystem.Update(gameTime);
 
-		// Update the game logic
-		game.Update();
+		// Update the game logic.
+		game.Update((float) gameTime.ElapsedGameTime.TotalSeconds);
 
 		base.Update(gameTime);
 
-		// Update screenshot requests
+		// Update screenshot requests.
 		UpdateScreenShot();
 
 		//windowSizeChanged = false;

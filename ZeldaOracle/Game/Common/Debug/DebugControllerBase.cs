@@ -26,11 +26,11 @@ public class DebugControllerBase {
 	/** <summary> True if the game is paused. </summary> */
 	protected bool gamePaused;
 	/** <summary> The key for opening the debug menu. </summary> */
-	private Control menuKey;
+	private ControlHandler menuKey;
 	/** <summary> The mouse button for opening the debug menu. </summary> */
-	private Control menuMouseButton;
+	private ControlHandler menuMouseButton;
 	/** <summary> The gamepad button for opening the debug menu. </summary> */
-	private Control menuButton;
+	private ControlHandler menuButton;
 
 	#endregion
 	//========= CONSTRUCTORS =========
@@ -47,17 +47,17 @@ public class DebugControllerBase {
 	#region Properties
 
 	/** <summary> Gets or sets the key for opening the debug menu. </summary> */
-	public Control DebugMenuKey {
+	public ControlHandler DebugMenuKey {
 		get { return menuKey; }
 		set { menuKey = value; }
 	}
 	/** <summary> Gets or sets the mouse button for opening the debug menu. </summary> */
-	public Control DebugMenuMouseButton {
+	public ControlHandler DebugMenuMouseButton {
 		get { return menuMouseButton; }
 		set { menuMouseButton = value; }
 	}
 	/** <summary> Gets or sets the gamepad button for opening the debug menu. </summary> */
-	public Control DebugMenuButton {
+	public ControlHandler DebugMenuButton {
 		get { return menuButton; }
 		set { menuButton = value; }
 	}
