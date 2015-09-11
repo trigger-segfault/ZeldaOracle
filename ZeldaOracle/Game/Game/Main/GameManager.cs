@@ -39,9 +39,8 @@ using GameFramework.MyGame.Debug;
 //using GameFramework.MyGame.Editor.Properties;
 
 namespace GameFramework.MyGame.Main {
-/** <summary>
- * The class that manages the framework of the game.
- * </summary> */
+
+// The class that manages the framework of the game.
 public class GameManager {
 	
 	//========== CONSTANTS ===========
@@ -57,16 +56,17 @@ public class GameManager {
 
 	// Game
 	/** <summary> The game scale used to alter screen size and mouse properties. </summary> */
+
 	public double gameScale;
 
-	// Other
-	/** <summary> The index of the current language. </summary> */
+	// Other:
+	// The index of the current language.
 	private int language;
 
-	// Debug
-	/** <summary> True if the game is in debug mode. </summary> */
+	// Debug:
+	// True if the game is in debug mode.
 	private bool debugMode;
-	/** <summary> The debug controller for the game. </summary> */
+	// The debug controller for the game.
 	private DebugController debugController;
 
 
@@ -77,9 +77,12 @@ public class GameManager {
 
 	//public Vector2F effectPos;
 
-	//========= CONSTRUCTORS =========
+	
+	//-----------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------
 
-	/** <summary> Constructs the default game manager. </summary> */
+	// Constructs the default game manager.
 	public GameManager() {
 		this.gameBase		= null;
 
@@ -87,7 +90,8 @@ public class GameManager {
 		this.debugMode		= false;
 		this.gameScale		= 1;
 	}
-	/** <summary> Initializes the game manager. </summary> */
+
+	// Initializes the game manager.
 	public void Initialize(GameBase gameBase) {
 		this.gameBase		= gameBase;
 
@@ -95,7 +99,8 @@ public class GameManager {
 
 		ScreenResized();
 	}
-	/** <summary> Uninitializes the game manager. </summary> */
+
+	// Uninitializes the game manager.
 	public void Uninitialize() {
 
 		this.gameBase		= null;
@@ -103,9 +108,8 @@ public class GameManager {
 
 	//=========== CONTENT ============
 
-	/** <summary> Called to load game manager content. </summary> */
+	// Called to load game manager content.
 	public void LoadContent(ContentManager content) {
-
 
 		GameData.Initialize();
 
@@ -116,9 +120,9 @@ public class GameManager {
 		this.debugController.DebugMenuFont = GameData.FontDebugMenu;
 		this.debugController.DebugMenuFontBold = GameData.FontDebugMenuBold;
 		this.debugController.DebugMenuSprites = GameData.SheetDebugMenu;
-
 	}
-	/** <summary> Called to unload game manager content. </summary> */
+
+	// Called to unload game manager content.
 	public void UnloadContent(ContentManager content) {
 
 	}
@@ -127,45 +131,48 @@ public class GameManager {
 	
 	// Containment
 
-	/** <summary> Gets the base game running the XNA framework. </summary> */
+	// Gets the base game running the XNA framework.
 	public GameBase GameBase {
 		get { return gameBase; }
 	}
-	/** <summary> Returns true if the game is running in windows. </summary> */
+
+	// Returns true if the game is running in windows.
 	public bool IsWindows {
 		get { return gameBase.IsWindows; }
 	}
-	/** <summary> Returns true if the game is running on the Xbox 360. </summary> */
+
+	// Returns true if the game is running on the Xbox 360.
 	public bool IsXbox {
 		get { return gameBase.IsXbox; }
 	}
 
 	// Information
 
-	/** <summary> Gets the current framerate of the game. </summary> */
+	//  Gets the current framerate of the game.
 	public double FPS {
 		get { return gameBase.FPS; }
 	}
-	/** <summary> Gets or sets if the game is in fullscreen mode. </summary> */
+	// Gets or sets if the game is in fullscreen mode.
 	public bool IsFullScreen {
 		get { return gameBase.IsFullScreen; }
 		set { gameBase.IsFullScreen = value; }
 	}
-	/** <summary> Gets the true size of the screen. </summary> */
+
+	// Gets the true size of the screen.
 	public Point2I ScreenSize {
 		get {
 			return new Point2I(gameBase.GraphicsDevice.Viewport.Width,
 							   gameBase.GraphicsDevice.Viewport.Height);
 		}
 	}
-	/** <summary> Gets the size of the screen based on the game scale. </summary> */
+	//  Gets the size of the screen based on the game scale.
 	public Point2I GameScreenSize {
 		get {
 			return (Point2I)GMath.Ceiling(new Vector2F(gameBase.GraphicsDevice.Viewport.Width,
 													   gameBase.GraphicsDevice.Viewport.Height) / (float)gameScale);
 		}
 	}
-	/** <summary> Gets or sets the draw scale of the game. </summary> */
+	// Gets or sets the draw scale of the game.
 	public double GameScale {
 		get { return gameScale; }
 		set { gameScale = GMath.Max(0.1, value); }
@@ -173,19 +180,21 @@ public class GameManager {
 
 	// Debug
 
-	/** <summary> Gets or sets if the game is in debug mode. </summary> */
+	// Gets or sets if the game is in debug mode.
 	public bool DebugMode {
 		get { return debugMode; }
 		set { debugMode = value; }
 	}
-	/** <summary> Gets the debug controller of the game. </summary> */
+
+	// Gets the debug controller of the game.
 	public DebugController DebugController {
 		get { return debugController; }
 	}
 
+
 	//=========== UPDATING ===========
 
-	/** <summary> Called every step to update the game. </summary> */
+	// Called every step to update the game.
 	public void Update() {
 
 		/*if (Keyboard.IsKeyPressed(Keys.F11) && IsWindows) {
@@ -240,7 +249,7 @@ public class GameManager {
 
 	//=========== DRAWING ============
 
-	/** <summary> Called every step to draw the game. </summary> */
+	// Called every step to draw the game.
 	public void Draw(Graphics2D g) {
 
 		g.SetRenderTarget(GameData.RenderTargetGame);
@@ -269,11 +278,9 @@ public class GameManager {
 		g.DrawImage(GameData.RenderTargetGame, Vector2F.Zero, Vector2F.Zero, (Vector2F)gameScale, 0.0);
 		g.DrawImage(GameData.RenderTargetDebug, Vector2F.Zero);
 		g.End();
-
-
-		
 	}
-	/** <summary> Called every step to draw the debug information if debug mode is enabled. </summary> */
+
+	// Called every step to draw the debug information if debug mode is enabled.
 	private void DrawDebugInfo(Graphics2D g) {
 		if (debugMode) {
 			g.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
@@ -293,7 +300,7 @@ public class GameManager {
 
 	//========== MANAGEMENT ==========
 
-	/** <summary> Called when the screen has been resized. </summary> */
+	// Called when the screen has been resized.
 	public void ScreenResized() {
 		/*if (ScreenSize.Y < 740)
 			gameScale = 1.0;

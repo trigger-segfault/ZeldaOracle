@@ -32,54 +32,46 @@ using Buttons		= ZeldaOracle.Common.Input.Buttons;
 using MouseButtons	= ZeldaOracle.Common.Input.MouseButtons;
 
 namespace GameFramework.MyGame.Main {
-/** <summary>
- * The class that manages the XNA aspects of the game.
- * </summary> */
+
+// The class that manages the XNA aspects of the game.
 public class GameBase : XnaGame {
 
-	//========== CONSTANTS ===========
-	#region Constants
-
-	#endregion
-	//=========== MEMBERS ============
-	#region Members
-
-	// Graphics
-	/** <summary> The graphics manager. </summary> */
+	// Graphics:
+	// The graphics manager.
 	private GraphicsDeviceManager graphics;
-	/** <summary> The sprite batch to draw to. </summary> */
+	// The sprite batch to draw to.
 	private SpriteBatch spriteBatch;
-	/** <summary> True if the game is in fullscreen mode. </summary> */
+	// True if the game is in fullscreen mode.
 	private bool fullScreen;
-	/** <summary> The current size of the non-fullscreen window. </summary> */
+	// The current size of the non-fullscreen window.
 	private Point2I windowSize;
-	/** <summary> True if the window size has been changed. </summary> */
+	// True if the window size has been changed.
 	private bool windowSizeChanged;
 
-	// Game
-	/** <summary> The instance of the game manager class. </summary> */
+	// Game:
+	// The instance of the game manager class.
 	private GameManager game;
-	/** <summary> True if a screenshot was requested. </summary> */
+	// True if a screenshot was requested.
 	private bool screenShotRequested;
-	/** <summary> The name of the requested screenshot. </summary> */
+	// The name of the requested screenshot.
 	private string screenShotName;
-	/** <summary> True if the game has finished starting up. </summary> */
+	// True if the game has finished starting up.
 	private bool started;
 
-	// Frame Rate
-	/** <summary> The total number of frames passed since the last frame rate check. </summary> */
+	// Frame Rate:
+	// The total number of frames passed since the last frame rate check.
 	private int totalFrames;
-	/** <summary> The amount of time passed since the last frame rate check. </summary> */
+	// The amount of time passed since the last frame rate check.
 	private double elapsedTime;
-	/** <summary> The current frame rate of the game. </summary> */
+	// The current frame rate of the game.
 	private double fps;
 
+	
+	//-----------------------------------------------------------------------------
+	// Accessors.
+	//-----------------------------------------------------------------------------
 
-	#endregion
-	//========= CONSTRUCTORS =========
-	#region Constructors
-
-	/** <summary> Constructs the game base class. </summary> */
+	// Constructs the game base class.
 	public GameBase() {
 		// Graphics
 		this.graphics				= new GraphicsDeviceManager(this);
@@ -108,18 +100,16 @@ public class GameBase : XnaGame {
 		this.graphics.PreferredBackBufferHeight	= windowSize.Y;
 		Form.Icon = new Icon("Game.ico");
 		Form.MinimumSize = new System.Drawing.Size(32, 32);
-
 	}
-	/** <summary>
-	 * Allows the game to perform any initialization it needs to before starting to run.
-	 * This is where it can query for any required services and load any non-graphic
-	 * related content.  Calling base.Initialize will enumerate through any components
-	 * and initialize them as well.
-	 * </summary> */
+
+	// Allows the game to perform any initialization it needs to before starting to run.
+	// This is where it can query for any required services and load any non-graphic
+	// related content.  Calling base.Initialize will enumerate through any components
+	// and initialize them as well.
 	protected override void Initialize() {
 		Console.WriteLine("Begin Initialize");
 
-		// Create and initialize the game
+		// Create and initialize the game.
 		this.game = new GameManager();
 		this.game.Initialize(this);
 
@@ -131,39 +121,36 @@ public class GameBase : XnaGame {
 		Mouse.Initialize();
 		GamePad.Initialize();
 
-
-		this.Window.ClientSizeChanged			+= OnClientSizeChanged;
+		this.Window.ClientSizeChanged += OnClientSizeChanged;
 
 		Console.WriteLine("End Initialize");
 	}
+	
 
-	#endregion
-	//=========== CONTENT ============
-	#region Content
+	//-----------------------------------------------------------------------------
+	// Content
+	//-----------------------------------------------------------------------------
 
-	/** <summary>
-	 * LoadContent will be called once per game and is the place to load
-	 * all of your content.
-	 * </summary> */
+	// LoadContent will be called once per game and is the place to load
+	// all of your content.
 	protected override void LoadContent() {
 		Console.WriteLine("Begin Load Content");
 
 		// Create a new SpriteBatch, which can be used to draw textures.
-		this.spriteBatch	= new SpriteBatch(GraphicsDevice);
+		spriteBatch = new SpriteBatch(GraphicsDevice);
 
 		AudioSystem.Initialize();
 		Resources.Initialize(Content, GraphicsDevice);
 
-		this.game.LoadContent(Content);
+		game.LoadContent(Content);
 
 		base.LoadContent();
 
 		Console.WriteLine("End Load Content");
 	}
-	/** <summary>
-	 * UnloadContent will be called once per game and is the place to unload
-	 * all content.
-	 * </summary> */
+
+	// UnloadContent will be called once per game and is the place to unload
+	// all content.
 	protected override void UnloadContent() {
 		System.Console.WriteLine("Begin Unload Content");
 
@@ -176,80 +163,25 @@ public class GameBase : XnaGame {
 
 		System.Console.WriteLine("End Unload Content");
 	}
+	
 
-	#endregion
-	//========== PROPERTIES ==========
-	#region Properties
+	//-----------------------------------------------------------------------------
+	// Events
+	//-----------------------------------------------------------------------------
 
-	/** <summary> Returns true if the game is running on Windows. </summary> */
-	public bool IsWindows {
-		get {
-			#if WINDOWS
-			return true;
-			#else
-			return false;
-			#endif
-		}
-	}
-	/** <summary> Returns true if the game is running on the Xbox 360. </summary> */
-	public bool IsXbox {
-		get {
-			#if XBOX
-			return true;
-			#else
-			return false;
-			#endif
-		}
-	}
-	/** <summary> The current frame rate of the game. </summary> */
-	public double FPS {
-		get { return fps; }
-	}
-	/** <summary> Gets or sets if the game should be in fullscreen. </summary> */
-	public bool IsFullScreen {
-		get { return fullScreen; }
-		set {
-			#if WINDOWS
-			fullScreen = value;
-			#endif
-		}
-	}
-	#if WINDOWS
-	/** <summary> Gets the Windows form of the XNA game. </summary> */
-	public Form Form {
-		get {
-			#if WINDOWS
-			return (Form)Form.FromHandle(Window.Handle);
-			#else
-			return null;
-			#endif
-		}
-	}
-	#endif
-
-	#endregion
-	//============ EVENTS ============
-	#region Events
-	//--------------------------------
-	#region Game Window
-
-	/** <summary> Called when the window has been manually resized. </summary> */
+	// Called when the window has been manually resized.
 	private void OnClientSizeChanged(object sender, EventArgs e) {
 		Console.WriteLine("OnClientSizeChanged");
 		windowSizeChanged = true;
 	}
 
-	#endregion
-	//--------------------------------
-	#endregion
-	//=========== UPDATING ===========
-	#region Updating
 
-	/** <summary>
-	 * Allows the game to run logic such as updating the world,
-	 * checking for collisions, gathering input, and playing audio.
-	 * </summary>
-	 * <param name="gameTime">Provides a snapshot of timing values.</param> */
+	//-----------------------------------------------------------------------------
+	// Updating
+	//-----------------------------------------------------------------------------
+
+	// Allows the game to run logic such as updating the world,
+	// checking for collisions, gathering input, and playing audio.
 	protected override void Update(GameTime gameTime) {
 
 		// Update the fullscreen mode
@@ -289,7 +221,8 @@ public class GameBase : XnaGame {
 
 		//windowSizeChanged = false;
 	}
-	/** <summary> Called every step to update the frame rate. </summary> */
+
+	// Called every step to update the frame rate.
 	protected void UpdateFrameRate(GameTime gameTime) {
 
 		// FPS Counter from:
@@ -301,7 +234,8 @@ public class GameBase : XnaGame {
 			elapsedTime	= 0.0;
 		}
 	}
-	/** <summary> Called every step to update the fullscreen toggle. </summary> */
+
+	// Called every step to update the fullscreen toggle.
 	protected void UpdateFullScreen() {
 
 		#if WINDOWS
@@ -338,23 +272,21 @@ public class GameBase : XnaGame {
 		}
 		#endif
 	}
-	/** <summary> Called every step to update the screenshot requests. </summary> */
-	protected void UpdateScreenShot() {
 
+	// Called every step to update the screenshot requests.
+	protected void UpdateScreenShot() {
 		if (screenShotRequested) {
 			screenShotRequested = false;
 			SaveScreenShot();
 		}
 	}
 
-	#endregion
-	//=========== DRAWING ============
-	#region Drawing
 
-	/** <summary>
-	 * This is called when the game should draw itself.
-	 * </summary>
-	 * <param name="gameTime">Provides a snapshot of timing values.</param> */
+	//-----------------------------------------------------------------------------
+	// Drawing
+	//-----------------------------------------------------------------------------
+
+	// This is called when the game should draw itself.
 	protected override void Draw(GameTime gameTime) {
 
 		GraphicsDevice.Clear(Color.Black);
@@ -368,21 +300,24 @@ public class GameBase : XnaGame {
 
 		base.Draw(gameTime);
 	}
-	/** <summary> Called every step to update the frame rate during the draw step. </summary> */
+
+	// Called every step to update the frame rate during the draw step.
 	protected void DrawUpdatedFrameRate(GameTime gameTime) {
 		totalFrames++;
 	}
 
-	#endregion
-	//========== MANAGEMENT ==========
-	#region Management
 
-	/** <summary> Requests a screen shot to be taken at the end of the step. </summary> */
+	//-----------------------------------------------------------------------------
+	// Management
+	//-----------------------------------------------------------------------------
+
+	// Requests a screen shot to be taken at the end of the step.
 	public void TakeScreenShot(string fileName = "") {
 		screenShotRequested = true;
 		screenShotName		= fileName;
 	}
-	/** <summary> Takes a screenshot of the game and saves it as a png. </summary> */
+
+	// Takes a screenshot of the game and saves it as a png.
 	private void SaveScreenShot() {
 		// Screenshot function taken from http://clifton.me/screenshot-xna-csharp/
 		#if WINDOWS
@@ -432,6 +367,60 @@ public class GameBase : XnaGame {
 		#endif
 	}
 
-	#endregion
+	
+	//-----------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------
+
+	// Returns true if the game is running on Windows.
+	public bool IsWindows {
+		get {
+			#if WINDOWS
+			return true;
+			#else
+			return false;
+			#endif
+		}
+	}
+
+	// Returns true if the game is running on the Xbox 360.
+	public bool IsXbox {
+		get {
+			#if XBOX
+			return true;
+			#else
+			return false;
+			#endif
+		}
+	}
+
+	// The current frame rate of the game.
+	public double FPS {
+		get { return fps; }
+	}
+
+	// Gets or sets if the game should be in fullscreen.
+	public bool IsFullScreen {
+		get { return fullScreen; }
+		set {
+			#if WINDOWS
+			fullScreen = value;
+			#endif
+		}
+	}
+
+	#if WINDOWS
+	// Gets the Windows form of the XNA game.
+	public Form Form {
+		get {
+			#if WINDOWS
+			return (Form)Form.FromHandle(Window.Handle);
+			#else
+			return null;
+			#endif
+		}
+	}
+	#endif
+
 }
 } // End namespace

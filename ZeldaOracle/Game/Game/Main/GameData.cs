@@ -60,7 +60,7 @@ class GameData {
 
 	/** <summary> Loads the images. </summary> */
 	private static void LoadImages() {
-
+		/*
 		Image palette = Resources.LoadImage("Images/Palette");
 
 		List<Color> colors = new List<Color>();
@@ -93,6 +93,7 @@ class GameData {
 
 
 		writer.Close();
+		*/
 	}
 
 	#endregion
