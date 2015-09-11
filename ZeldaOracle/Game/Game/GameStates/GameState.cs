@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaOracle.Game.GameStates {
 	
@@ -24,11 +25,11 @@ namespace ZeldaOracle.Game.GameStates {
 
 		public virtual void OnBegin() {}
 
-		public virtual void OnEnd()   {}
+		public virtual void OnEnd() {}
 
 		public virtual void Update(float timeDelta) {}
 
-		public virtual void Draw(float timeDelta) {}
+		public virtual void Draw(Graphics2D g) {}
 
 
 		//-----------------------------------------------------------------------------

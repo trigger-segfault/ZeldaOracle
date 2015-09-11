@@ -14,7 +14,7 @@ using ZeldaOracle.Common.Scripts;
 using System.IO;
 //using ParticleGame.Project.Particles;
 
-namespace GameFramework.MyGame.Main {
+namespace ZeldaOracle.Game.Main {
 /** <summary>
  * A static class for storing links to all game content.
  * </summary> */
@@ -60,6 +60,9 @@ class GameData {
 
 	/** <summary> Loads the images. </summary> */
 	private static void LoadImages() {
+
+		Resources.LoadImage("Images/sheet_player");
+
 		/*
 		Image palette = Resources.LoadImage("Images/Palette");
 
@@ -171,57 +174,225 @@ class GameData {
 	#endregion
 	//--------------------------------
 	#endregion
+
 	//========== GAME DATA ===========
-	#region Game Data
-	//--------------------------------
-	#region Images
 
-	public static Image ImageSMG2Logo;
+	//-----------------------------------------------------------------------------
+	// Images
+	//-----------------------------------------------------------------------------
 
-	#endregion
-	//--------------------------------
-	#region Sprite Sheets
+
+	//-----------------------------------------------------------------------------
+	// Sprite Sheets
+	//-----------------------------------------------------------------------------
 
 	public static SpriteSheet SheetDebugMenu;
 	public static SpriteSheet SheetGamePadControls;
 	public static SpriteSheet SheetGamePadArrows;
 
-	#endregion
-	//--------------------------------
-	#region Fonts
+	public static SpriteSheet SHEET_PLAYER;
+	public static SpriteSheet SHEET_PLAYER_HURT;
+	public static SpriteSheet SHEET_MONSTERS;
+	public static SpriteSheet SHEET_MONSTERS_HURT;
+	
+	
+	//-----------------------------------------------------------------------------
+	// Sprites
+	//-----------------------------------------------------------------------------
+	
+	// Effects.
+	public static Sprite SPR_SHADOW;
+
+	// Special Background tiles.
+	public static Sprite SPR_TILE_DEFAULT;	// The default ground background tile.
+	public static Sprite SPR_TILE_DUG;		// A hole in the ground created by a shovel.
+
+	// Object tiles.
+	public static Sprite SPR_BUSH;
+	public static Sprite SPR_CRYSTAL;
+	public static Sprite SPR_POT;
+	public static Sprite SPR_ROCK;
+	public static Sprite SPR_DIAMOND_ROCK;
+	public static Sprite SPR_SIGN;
+	public static Sprite SPR_GRASS;
+	public static Sprite SPR_MOVABLE_BLOCK;
+	public static Sprite SPR_BOMBABLE_BLOCK;
+	public static Sprite SPR_LOCKED_BLOCK;
+	public static Sprite SPR_CHEST;
+	public static Sprite SPR_CHEST_OPEN;
+	public static Sprite SPR_DIRT_PILE;
+	public static Sprite SPR_BURNABLE_TREE;
+	public static Sprite SPR_CACTUS;
+	public static Sprite SPR_BUTTON_UP;
+	public static Sprite SPR_BUTTON_DOWN;
+	public static Sprite SPR_LEVER_LEFT;
+	public static Sprite SPR_LEVER_RIGHT;
+	public static Sprite SPR_LANTERN_UNLIT;
+	public static Sprite SPR_EYE_STATUE;
+	public static Sprite SPR_BRIDGE_H;
+	public static Sprite SPR_BRIDGE_V;
+	public static Sprite SPR_COLOR_CUBE_SLOT;
+	public static Sprite SPR_CRACKED_FLOOR;
+	public static Sprite SPR_PIT;
+	public static Sprite SPR_PLANT;
+	public static Sprite SPR_ARMOS_STATUE;
+
+	// Item Icons.
+	public static Sprite SPR_ITEM_ICON_SWORD_1;
+	public static Sprite SPR_ITEM_ICON_SWORD_2;
+	public static Sprite SPR_ITEM_ICON_SWORD_3;
+	public static Sprite SPR_ITEM_ICON_SHIELD_1;
+	public static Sprite SPR_ITEM_ICON_SHIELD_2;
+	public static Sprite SPR_ITEM_ICON_SHIELD_3;
+	public static Sprite SPR_ITEM_ICON_SATCHEL;
+	public static Sprite SPR_ITEM_ICON_SATCHEL_EQUIPPED;
+	public static Sprite SPR_ITEM_ICON_SEED_SHOOTER;
+	public static Sprite SPR_ITEM_ICON_SEED_SHOOTER_EQUIPPED;
+	public static Sprite SPR_ITEM_ICON_SLINGSHOT_1;
+	public static Sprite SPR_ITEM_ICON_SLINGSHOT_2;
+	public static Sprite SPR_ITEM_ICON_SLINGSHOT_2_EQUIPPED;
+	public static Sprite SPR_ITEM_ICON_BOMB;
+	public static Sprite SPR_ITEM_ICON_BOMBCHEW;
+	public static Sprite SPR_ITEM_ICON_SHOVEL;
+	public static Sprite SPR_ITEM_ICON_BRACELET;
+	public static Sprite SPR_ITEM_ICON_POWER_GLOVES;
+	public static Sprite SPR_ITEM_ICON_FEATHER;
+	public static Sprite SPR_ITEM_ICON_CAPE;
+	public static Sprite SPR_ITEM_ICON_BOOMERANG_1;
+	public static Sprite SPR_ITEM_ICON_BOOMERANG_2;
+	public static Sprite SPR_ITEM_ICON_SWITCH_HOOK_1;
+	public static Sprite SPR_ITEM_ICON_SWITCH_HOOK_2;
+	public static Sprite SPR_ITEM_ICON_MAGNET_GLOVES_BLUE;
+	public static Sprite SPR_ITEM_ICON_MAGNET_GLOVES_RED;
+	public static Sprite SPR_ITEM_ICON_CANE;
+	public static Sprite SPR_ITEM_ICON_FIRE_ROD;
+	public static Sprite SPR_ITEM_ICON_OCARINA;
+	public static Sprite SPR_ITEM_ICON_BOW;
+	
+	// HUD Sprites.
+	public static Sprite SPR_HUD_BRACKET_LEFT;
+	public static Sprite SPR_HUD_BRACKET_LEFT_A;
+	public static Sprite SPR_HUD_BRACKET_LEFT_B;
+	public static Sprite SPR_HUD_BRACKET_RIGHT;
+	public static Sprite SPR_HUD_BRACKET_RIGHT_A;
+	public static Sprite SPR_HUD_BRACKET_RIGHT_B;
+	public static Sprite SPR_HUD_BRACKET_LEFT_RIGHT;
+	public static Sprite SPR_HUD_HEART_0;
+	public static Sprite SPR_HUD_HEART_1;
+	public static Sprite SPR_HUD_HEART_2;
+	public static Sprite SPR_HUD_HEART_3;
+	public static Sprite SPR_HUD_HEART_4;
+	public static Sprite SPR_HUD_RUPEE;
+	public static Sprite SPR_HUD_ORE_CHUNK;
+	public static Sprite SPR_HUD_KEY;
+
+	
+	//-----------------------------------------------------------------------------
+	// Animations
+	//-----------------------------------------------------------------------------
+
+	// Tile animations.
+	public static Animation ANIM_WATER;
+	public static Animation ANIM_OCEAN;
+	public static Animation ANIM_OCEAN_SHORE;
+	public static Animation ANIM_FLOWERS;
+	public static Animation ANIM_WATERFALL;
+	public static Animation ANIM_WATERFALL_BOTTOM;
+	public static Animation ANIM_WATERFALL_TOP;
+	public static Animation ANIM_WATER_DEEP;
+	public static Animation ANIM_PUDDLE;
+	public static Animation ANIM_LANTERN;
+	public static Animation ANIM_LAVAFALL;
+	public static Animation ANIM_LAVAFALL_BOTTOM;
+	public static Animation ANIM_LAVAFALL_TOP;
+	
+	// Player animations.
+	public static Animation ANIM_PLAYER_DEFAULT;
+	public static Animation ANIM_PLAYER_HOLD;
+	public static Animation ANIM_PLAYER_SHIELD;
+	public static Animation ANIM_PLAYER_SHIELD_BLOCK;
+	public static Animation ANIM_PLAYER_SHIELD_LARGE;
+	public static Animation ANIM_PLAYER_SHIELD_LARGE_BLOCK;
+	public static Animation ANIM_PLAYER_SWIM;
+	public static Animation ANIM_PLAYER_PUSH;
+	public static Animation ANIM_PLAYER_GRAB;
+	public static Animation ANIM_PLAYER_PULL;
+	public static Animation ANIM_PLAYER_DIG;
+	public static Animation ANIM_PLAYER_THROW;
+	public static Animation ANIM_PLAYER_SWING;
+	public static Animation ANIM_PLAYER_SWING_BIG;
+	public static Animation ANIM_PLAYER_STAB;
+	public static Animation ANIM_PLAYER_SPIN_SWORD;
+	public static Animation ANIM_PLAYER_AIM;
+	public static Animation ANIM_PLAYER_JUMP;
+	public static Animation ANIM_PLAYER_DIVE;
+	public static Animation ANIM_PLAYER_DIE;
+	public static Animation ANIM_PLAYER_FALL;
+	public static Animation ANIM_PLAYER_DROWN;
+	
+	// Projectile animations.
+	public static Animation ANIM_PROJECTILE_PLAYER_ARROW;
+	public static Animation ANIM_PROJECTILE_PLAYER_ARROW_CRASH;
+	
+	// Effect animations.
+	public static Animation ANIM_EFFECT_DIRT;
+	
+
+	//-----------------------------------------------------------------------------
+	// Collision Models.
+	//-----------------------------------------------------------------------------
+	/*
+	public static CollisionModel MODEL_BLOCK;
+	public static CollisionModel MODEL_EDGE_E;
+	public static CollisionModel MODEL_EDGE_N;
+	public static CollisionModel MODEL_EDGE_W;
+	public static CollisionModel MODEL_EDGE_S;
+	public static CollisionModel MODEL_DOORWAY;
+	public static CollisionModel MODEL_CORNER_NE;
+	public static CollisionModel MODEL_CORNER_NW;
+	public static CollisionModel MODEL_CORNER_SW;
+	public static CollisionModel MODEL_CORNER_SE;
+	public static CollisionModel MODEL_INSIDE_CORNER_NE;
+	public static CollisionModel MODEL_INSIDE_CORNER_NW;
+	public static CollisionModel MODEL_INSIDE_CORNER_SW;
+	public static CollisionModel MODEL_INSIDE_CORNER_SE;
+	public static CollisionModel MODEL_BRIDGE_H_TOP;
+	public static CollisionModel MODEL_BRIDGE_H_BOTTOM;
+	public static CollisionModel MODEL_BRIDGE_H;
+	public static CollisionModel MODEL_BRIDGE_V_LEFT;
+	public static CollisionModel MODEL_BRIDGE_V_RIGHT;
+	public static CollisionModel MODEL_BRIDGE_V;
+	*/
+	
+	//-----------------------------------------------------------------------------
+	// Fonts
+	//-----------------------------------------------------------------------------
 
 	public static Font FontDebugMenu;
 	public static Font FontDebugMenuBold;
 
-	#endregion
-	//--------------------------------
-	#region Shaders
+	
+	//-----------------------------------------------------------------------------
+	// Shaders
+	//-----------------------------------------------------------------------------
+	
 
+	//-----------------------------------------------------------------------------
+	// Sound Effects
+	//-----------------------------------------------------------------------------
+	
 
-	#endregion
-	//--------------------------------
-	#region Sound Effects
+	//-----------------------------------------------------------------------------
+	// Music
+	//-----------------------------------------------------------------------------
+	
 
-
-	#endregion
-	//--------------------------------
-	#region Music
-
-
-	#endregion
-	//--------------------------------
-	#region Languages
-
-
-	#endregion
-	//--------------------------------
-	#region Render Targets
+	//-----------------------------------------------------------------------------
+	// Render Targets
+	//-----------------------------------------------------------------------------
 
 	public static RenderTarget2D RenderTargetGame;
 	public static RenderTarget2D RenderTargetDebug;
 
-	#endregion
-	//--------------------------------
-	#endregion
 }
 } // end namespace

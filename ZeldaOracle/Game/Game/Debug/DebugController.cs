@@ -19,7 +19,7 @@ using Color			= ZeldaOracle.Common.Graphics.Color;
 using Keyboard		= ZeldaOracle.Common.Input.Keyboard;
 using Keys			= ZeldaOracle.Common.Input.Keys;
 
-using GameFramework.MyGame.Main;
+using ZeldaOracle.Game.Main;
 //using ZeldaOracle.Common.Graphics.Particles;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Scripts;

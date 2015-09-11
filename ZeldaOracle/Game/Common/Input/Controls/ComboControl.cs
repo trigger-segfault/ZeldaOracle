@@ -7,13 +7,13 @@ namespace ZeldaOracle.Common.Input.Controls {
 /** <summary>
  * A control class for holding down multiple inputs.
  * </summary> */
-public class ComboControl : Control {
+public class ComboControl : ControlHandler {
 
 	//=========== MEMBERS ============
 	#region Members
 
 	/** <summary> The list of controls to be held down. </summary> */
-	public Control[] Controls;
+	public ControlHandler[] Controls;
 
 	#endregion
 	//========= CONSTRUCTORS =========
@@ -21,10 +21,10 @@ public class ComboControl : Control {
 
 	/** <summary> Constructs the default control combo. </summary> */
 	public ComboControl() {
-		this.Controls		= new Control[0];
+		this.Controls		= new ControlHandler[0];
 	}
 	/** <summary> Constructs a control combo with the specified controls. </summary> */
-	public ComboControl(Control[] controls) {
+	public ComboControl(ControlHandler[] controls) {
 		this.Controls		= controls;
 	}
 

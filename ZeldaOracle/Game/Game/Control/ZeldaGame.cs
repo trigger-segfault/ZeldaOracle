@@ -2,14 +2,40 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaOracle.Game.Players;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.Control {
-	public class ZeldaGame {
+	public class ZeldaGame : GameBase {
 
-		private Player player;
-		private World world;
-		private View view;
+
+
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
+
+		public ZeldaGame() {
+
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden methods
+		//-----------------------------------------------------------------------------
+
+		protected override void Initialize()
+		{
+			base.Initialize();
+		}
+
+		protected override void Update(Microsoft.Xna.Framework.GameTime gameTime)
+		{
+			base.Update(gameTime);
+		}
+
+		protected override void Draw(Microsoft.Xna.Framework.GameTime gameTime)
+		{
+			base.Draw(gameTime);
+		}
 	}
 }

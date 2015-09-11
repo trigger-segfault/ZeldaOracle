@@ -22,7 +22,7 @@ using Buttons		= ZeldaOracle.Common.Input.Buttons;
 using MouseButtons	= ZeldaOracle.Common.Input.MouseButtons;
 using ZeldaOracle.Game.Worlds;
 
-namespace GameFramework.MyGame.Main {
+namespace ZeldaOracle.Game.Main {
 /** <summary>
  * The interface for all objects in rooms.
  * </summary> */
