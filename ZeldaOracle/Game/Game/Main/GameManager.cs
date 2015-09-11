@@ -69,15 +69,6 @@ public class GameManager {
 	// The debug controller for the game.
 	private DebugController debugController;
 
-
-	//public ParticleSystem particleSystem;
-
-	//public ParticleEffectType effectType;
-	public int effectIndex;
-
-	//public Vector2F effectPos;
-
-	
 	//-----------------------------------------------------------------------------
 	// Constructors
 	//-----------------------------------------------------------------------------
