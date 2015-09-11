@@ -146,18 +146,6 @@
     <Compile Include="Common\Graphics\Graphics2D.cs" />
     <Compile Include="Common\Graphics\Image.cs" />
     <Compile Include="Common\Graphics\Palette.cs" />
-    <None Include="Common\Graphics\Particles\Areas\CircleArea.cs" />
-    <None Include="Common\Graphics\Particles\Areas\EmitterArea.cs" />
-    <None Include="Common\Graphics\Particles\Areas\LineArea.cs" />
-    <None Include="Common\Graphics\Particles\Areas\PointArea.cs" />
-    <None Include="Common\Graphics\Particles\Areas\RectArea.cs" />
-    <None Include="Common\Graphics\Particles\Particle.cs" />
-    <None Include="Common\Graphics\Particles\ParticleEffect.cs" />
-    <None Include="Common\Graphics\Particles\ParticleEffectAction.cs" />
-    <None Include="Common\Graphics\Particles\ParticleEffectType.cs" />
-    <None Include="Common\Graphics\Particles\ParticleEmitter.cs" />
-    <None Include="Common\Graphics\Particles\ParticleSystem.cs" />
-    <None Include="Common\Graphics\Particles\ParticleType.cs" />
     <Compile Include="Common\Graphics\Sprite.cs" />
     <Compile Include="Common\Graphics\SpriteSheet.cs" />
     <Compile Include="Common\Input\AnalogStick.cs" />
@@ -179,8 +167,6 @@
     <Compile Include="Common\Input\MouseButtons.cs" />
     <Compile Include="Common\Input\Trigger.cs" />
     <Compile Include="Common\Scripts\LanguageSR.cs" />
-    <None Include="Common\Scripts\ParticleSR.cs" />
-    <None Include="Common\Scripts\ParticleSW.cs" />
     <Compile Include="Common\Scripts\PlaylistSR.cs" />
     <Compile Include="Common\Scripts\ScriptReader.cs" />
     <Compile Include="Common\Scripts\SoundGroupSR.cs" />
