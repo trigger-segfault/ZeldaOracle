@@ -11,11 +11,11 @@ using ZeldaOracle.Common.Graphics;
 
 using ZeldaOracle.Game.Worlds;
 
-namespace GameFramework.MyGame.Main {
+namespace ZeldaOracle.Game.Entities {
 /** <summary>
  * The main class for entity objects in the room.
  * </summary> */
-public class Entity : IGameObject {
+public class Entity {
 
 	//========== CONSTANTS ===========
 	#region Constants

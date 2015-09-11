@@ -186,6 +186,7 @@
     <Compile Include="Common\Scripts\SoundGroupSR.cs" />
     <Compile Include="Common\Scripts\SpriteSheetSR.cs" />
     <Compile Include="Common\Translation\Language.cs" />
+    <Compile Include="Game\Control\RoomControl.cs" />
     <Compile Include="Game\Control\View.cs" />
     <Compile Include="Game\Control\ZeldaGame.cs" />
     <Compile Include="Game\Debug\DebugController.cs" />
@@ -217,6 +218,7 @@
     <None Include="Game\Editor\Properties\PropertyInt.cs" />
     <None Include="Game\Editor\Properties\Property.cs" />
     <Compile Include="Game\Entities\Entity.cs" />
+    <Compile Include="Game\GameStates\GameState.cs" />
     <Compile Include="Game\Main\GameBase.cs" />
     <Compile Include="Game\Main\GameData.cs" />
     <Compile Include="Game\Main\GameManager.cs" />
