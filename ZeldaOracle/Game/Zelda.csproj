@@ -157,7 +157,6 @@
     <Compile Include="Common\Input\Controls\Button.cs" />
     <Compile Include="Common\Input\Controls\ComboControl.cs" />
     <Compile Include="Common\Input\Controls\ControlHandler.cs" />
-    <Compile Include="Common\Input\Controls\ControlSet.cs" />
     <Compile Include="Common\Input\Controls\GameControl.cs" />
     <Compile Include="Common\Input\Controls\HotKey.cs" />
     <Compile Include="Common\Input\Controls\Key.cs" />
@@ -213,6 +212,12 @@
     <Compile Include="Game\Entities\Entity.cs" />
     <Compile Include="Game\GameStates\GameState.cs" />
     <Compile Include="Game\GameStates\GameStateStack.cs" />
+    <Compile Include="Game\Items\Ammo.cs" />
+    <Compile Include="Game\Items\Equipment\ItemBombBag.cs" />
+    <Compile Include="Game\Items\Equipment\ItemWallet.cs" />
+    <Compile Include="Game\Items\Inventory.cs" />
+    <Compile Include="Game\Items\Item.cs" />
+    <Compile Include="Game\Items\Weapons\ItemBombs.cs" />
     <Compile Include="Game\Main\Controls.cs" />
     <Compile Include="Game\Main\GameBase.cs" />
     <Compile Include="Game\Main\GameData.cs" />
@@ -267,6 +272,8 @@
     <Folder Include="Common\Collision\" />
     <Folder Include="Editor\" />
     <Folder Include="Game\Control\Menu\" />
+    <Folder Include="Game\Items\Ammo\" />
+    <Folder Include="Game\Items\KeyItems\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
