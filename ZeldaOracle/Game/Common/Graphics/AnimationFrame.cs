@@ -7,23 +7,25 @@ using ZeldaOracle.Common.Geometry;
 namespace ZeldaOracle.Common.Graphics {
 	
 	public struct AnimationFrame {
-		int			startTime;		// Start time in ticks.
-		int			duration;		// Duration in ticks.
-		Image		image;
-		Rectangle2I	sourceRect;
-		Point2I		drawOffset;
+		private int		startTime;	// Start time in ticks.
+		private int		duration;	// Duration in ticks.
+		private Sprite	sprite;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 		
+		public AnimationFrame(int startTime, int duration, Sprite sprite) {
+			this.startTime	= startTime;
+			this.duration	= duration;
+			this.sprite		= sprite;
+		}
+
 		public AnimationFrame(int startTime, int duration, Image image, Rectangle2I sourceRect, Point2I drawOffset) {
 			this.startTime	= startTime;
 			this.duration	= duration;
-			this.image		= image;
-			this.sourceRect	= sourceRect;
-			this.drawOffset	= drawOffset;
+			this.sprite		= new Sprite(image, sourceRect, drawOffset);
 		}
 
 		
@@ -41,19 +43,24 @@ namespace ZeldaOracle.Common.Graphics {
 			set { duration = value; }
 		}
 		
+		public Sprite Sprite {
+			get { return sprite; }
+			set { sprite = value; }
+		}
+		
 		public Image Image {
-			get { return image; }
-			set { image = value; }
+			get { return sprite.Image; }
+			set { sprite.Image = value; }
 		}
 		
 		public Rectangle2I SourceRect {
-			get { return sourceRect; }
-			set { sourceRect = value; }
+			get { return sprite.SourceRect; }
+			set { sprite.SourceRect = value; }
 		}
 		
 		public Point2I DrawOffset {
-			get { return drawOffset; }
-			set { drawOffset = value; }
+			get { return sprite.DrawOffset; }
+			set { sprite.DrawOffset = value; }
 		}
 	}
 }

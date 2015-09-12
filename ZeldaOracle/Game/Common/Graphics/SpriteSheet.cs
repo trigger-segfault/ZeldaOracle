@@ -23,7 +23,7 @@ public class SpriteSheet {
 	/** <summary> The name identifier of the sprite sheet. </summary> */
 	private string name;
 	/** <summary> The list of sprites in the sprite sheet. </summary> */
-	private List<Sprite> sprites;
+	private List<SpriteEx> sprites;
 	/** <summary> The image of the sprite sheet. </summary> */
 	private Image image;
 
@@ -35,15 +35,15 @@ public class SpriteSheet {
 	public SpriteSheet(string name, Image image) {
 		this.name		= name;
 		this.image		= image;
-		this.sprites	= new List<Sprite>();
+		this.sprites	= new List<SpriteEx>();
 	}
 	/** <summary> Constructs the default sprite sheet. </summary> */
 	public SpriteSheet(string name, Image image, SpriteSheet template) {
 		this.name		= name;
 		this.image		= image;
-		this.sprites	= new List<Sprite>();
+		this.sprites	= new List<SpriteEx>();
 		for (int i = 0; i < template.Count; ++i)
-			AddSprite(new Sprite(template[i]));
+			AddSprite(new SpriteEx(template[i]));
 	}
 
 	#endregion
@@ -60,13 +60,13 @@ public class SpriteSheet {
 	}
 
 	/** <summary> Gets the sprite stored at the given index. </summary> */
-	public Sprite this[int i] {
+	public SpriteEx this[int i] {
 		get { return sprites[i]; }
 		set { sprites[i] = value; }
 	}
 
 	/** <summary> Gets the sprite with the given name. </summary> */
-	public Sprite this[string name] {
+	public SpriteEx this[string name] {
 		get {
 			for (int i = 0; i < sprites.Count; ++i) {
 				if (sprites[i].Name.Equals(name))
@@ -81,7 +81,7 @@ public class SpriteSheet {
 		get { return image; }
 	}
 	/** <summary> Gets the list of sprites. </summary> */
-	public List<Sprite> Sprites {
+	public List<SpriteEx> Sprites {
 		get { return sprites; }
 	}
 
@@ -90,16 +90,16 @@ public class SpriteSheet {
 	#region Sprites
 
 	/** <summary> Adds the specified sprite to the sheet. </summary> */
-	public Sprite AddSprite(Sprite sprite) {
+	public SpriteEx AddSprite(SpriteEx sprite) {
 		sprites.Add(sprite);
 		sprite.Sheet = this;
 		return sprite;
 	}
 	/** <summary> Adds a sprite with the given information to the sheet. </summary> */
-	public Sprite AddSprite(string name, int frameX, int frameY, int frameWidth,
+	public SpriteEx AddSprite(string name, int frameX, int frameY, int frameWidth,
 							int frameHeight, int offsetX, int offsetY, int sourceWidth,
 							int sourceHeight, float originX, float originY) {
-		Sprite sprite     = new Sprite();
+		SpriteEx sprite     = new SpriteEx();
 		sprite.Name       = name;
 		sprite.Sheet      = this;
 		sprite.FrameRect  = new Rectangle2I(frameX, frameY, frameWidth, frameHeight);
@@ -129,7 +129,7 @@ public class SpriteSheet {
 				offsetY + ((spriteHeight + spacing) * y),
 				spriteWidth, spriteHeight);
 			Vector2F origin = new Vector2F(originX, originY);
-			AddSprite(new Sprite("", this, rect, origin));
+			AddSprite(new SpriteEx("", this, rect, origin));
 		}
 	}
 
@@ -161,11 +161,11 @@ public class SpriteSheet {
 		return strip;
 	}*/
 	/** <summary> Finds the sprite with the name matching the regular expression. </summary> */
-	public Sprite FindSprite(string regex) {
+	public SpriteEx FindSprite(string regex) {
 		return FindSprite(regex, RegexOptions.None);
 	}
 	/** <summary> Finds the sprite with the name matching the regular expression. </summary> */
-	public Sprite FindSprite(string regex, RegexOptions options) {
+	public SpriteEx FindSprite(string regex, RegexOptions options) {
 		for (int i = 0; i < sprites.Count; ++i) {
 			if (Regex.IsMatch(sprites[i].Name, regex, options))
 				return sprites[i];
@@ -173,12 +173,12 @@ public class SpriteSheet {
 		return null;
 	}
 	/** <summary> Finds the sprites with the names matching the regular expression. </summary> */
-	public List<Sprite> FindSprites(string regex) {
+	public List<SpriteEx> FindSprites(string regex) {
 		return FindSprites(regex, RegexOptions.None);
 	}
 	/** <summary> Finds the sprites with the names matching the regular expression. </summary> */
-	public List<Sprite> FindSprites(string regex, RegexOptions options) {
-		List<Sprite> results = new List<Sprite>();
+	public List<SpriteEx> FindSprites(string regex, RegexOptions options) {
+		List<SpriteEx> results = new List<SpriteEx>();
 		for (int i = 0; i < sprites.Count; ++i) {
 			if (Regex.IsMatch(sprites[i].Name, regex, options))
 				results.Add(sprites[i]);

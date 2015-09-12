@@ -139,6 +139,7 @@
     <None Include="Common\Graphics\AnimationOld.cs" />
     <Compile Include="Common\Graphics\Animation.cs" />
     <Compile Include="Common\Graphics\AnimationFrame.cs" />
+    <Compile Include="Common\Graphics\AnimationPlayer.cs" />
     <Compile Include="Common\Graphics\Color.cs" />
     <Compile Include="Common\Graphics\Drawable.cs" />
     <Compile Include="Common\Graphics\DrawMode.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Common\Graphics\Image.cs" />
     <Compile Include="Common\Graphics\Palette.cs" />
     <Compile Include="Common\Graphics\Sprite.cs" />
+    <Compile Include="Common\Graphics\SpriteEx.cs" />
     <Compile Include="Common\Graphics\SpriteSheet.cs" />
     <Compile Include="Common\Input\AnalogStick.cs" />
     <Compile Include="Common\Input\Buttons.cs" />
@@ -215,6 +217,7 @@
     <Compile Include="Game\Main\IGameObject.cs" />
     <Compile Include="Game\Main\Program.cs" />
     <Compile Include="Game\Entities\Players\Player.cs" />
+    <Compile Include="Game\Tiles\Tile.cs" />
     <Compile Include="Game\Worlds\Room.cs" />
     <Compile Include="Game\Worlds\Level.cs" />
     <Compile Include="Game\Worlds\World.cs" />
@@ -260,7 +263,6 @@
     <Folder Include="Common\Collision\" />
     <Folder Include="Editor\" />
     <Folder Include="Game\Control\Menu\" />
-    <Folder Include="Game\Tiles\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
