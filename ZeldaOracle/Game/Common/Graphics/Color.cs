@@ -267,6 +267,14 @@ public struct Color {
 	public static bool operator !=(Color a, Color b) {
 		return (a.r != b.r || a.g != b.g || a.b != b.b || a.a != b.a);
 	}
+	public static Color operator *(Color a, float scalar) {
+		return new Color(
+			GMath.Clamp((a.r / 255.0f) * scalar, 0.0f, 1.0f) * 255,
+			GMath.Clamp((a.g / 255.0f) * scalar, 0.0f, 1.0f) * 255,
+			GMath.Clamp((a.b / 255.0f) * scalar, 0.0f, 1.0f) * 255,
+			GMath.Clamp((a.a / 255.0f) * scalar, 0.0f, 1.0f) * 255);
+
+	}
 
 	#endregion
 	//========== PROPERTIES ==========

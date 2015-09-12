@@ -35,10 +35,12 @@ namespace ZeldaOracle.Game.Tiles {
 
 			// TODO: needs to instantiate other tile sub-class types.
 			
-			tile.Flags			= data.Flags;
-			tile.Sprite			= data.Sprite;
-			tile.CollisionModel	= data.CollisionModel;
-			tile.Size			= data.Size;
+			tile.Tileset			= this;
+			tile.TileSheetLocation	= sheetLocation;
+			tile.Flags				= data.Flags;
+			tile.Sprite				= data.Sprite;
+			tile.CollisionModel		= data.CollisionModel;
+			tile.Size				= data.Size;
 			tile.AnimationPlayer.Animation = data.Animation;
 
 			return tile;

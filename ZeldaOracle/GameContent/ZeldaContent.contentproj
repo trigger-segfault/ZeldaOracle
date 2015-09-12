@@ -63,6 +63,7 @@
     <Folder Include="Languages\" />
     <Folder Include="Particles\" />
     <Folder Include="Shaders\" />
+    <Folder Include="Tilesets\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Fonts\font_debug_menu.spritefont">
