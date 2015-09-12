@@ -212,6 +212,7 @@
     <None Include="Game\Editor\Properties\Property.cs" />
     <Compile Include="Game\Entities\Entity.cs" />
     <Compile Include="Game\GameStates\GameState.cs" />
+    <Compile Include="Game\GameStates\GameStateQueue.cs" />
     <Compile Include="Game\GameStates\GameStateStack.cs" />
     <Compile Include="Game\GameStates\StateScreenFade.cs" />
     <Compile Include="Game\Items\Ammo.cs" />

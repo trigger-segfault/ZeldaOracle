@@ -117,10 +117,15 @@ public class GameManager {
 	//-----------------------------------------------------------------------------
 	// Game state management
 	//-----------------------------------------------------------------------------
-	
+
 	// Push a new game-state onto the stack and begin it.
 	public void PushGameState(GameState state) {
 		gameStateStack.Push(state);
+	}
+	
+	// Push a queue of game states.
+	public void QueueGameStates(params GameState[] states) {
+		PushGameState(new GameStateQueue(states));
 	}
 	
 	// End the top-most game state in the stack.
@@ -182,8 +187,12 @@ public class GameManager {
 			GameBase.TakeScreenShot();
 		}
 		
+		// DEBUG: Fade the screen out and in.
 		if (Keyboard.IsKeyPressed(Keys.F)) {
-			PushGameState(new StateScreenFade(Color.Black, 1.0f, FadeType.FadeOut));
+			QueueGameStates(
+				new StateScreenFade(Color.Black, 0.5f, FadeType.FadeOut),
+				new StateScreenFade(Color.Black, 0.5f, FadeType.FadeIn)
+			);
 		}
 
 		/*
