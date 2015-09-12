@@ -12,8 +12,7 @@ namespace ZeldaOracle.Game.Main {
 		static void Main(string[] args) {
 
 			// Creates and runs the game.
-			using (ZeldaGame game = new ZeldaGame())
-			{
+			using (GameBase game = new GameBase()) {
 				game.Run();
 			}
 		}

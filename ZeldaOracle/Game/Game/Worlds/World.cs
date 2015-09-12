@@ -8,5 +8,28 @@ namespace ZeldaOracle.Game.Worlds {
 
 		private List<Level> levels;
 		private int currentLevel;
+
+		
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
+
+		public World() {
+			levels = new List<Level>();
+			currentLevel = 0;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+		
+		public Level CurrentLevel {
+			get { return levels[currentLevel]; }
+		}
+
+		public List<Level> Levels {
+			get { return levels; }
+		}
 	}
 }
