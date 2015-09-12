@@ -115,6 +115,18 @@ namespace ZeldaOracle.Game.Entities {
 			get { return position; }
 			set { position = value; }
 		}
+
+		// Gets or sets the x-position of the entity.
+		public float X {
+			get { return position.X; }
+			set { position.X = value; }
+		}
+
+		// Gets or sets the y-position of the entity.
+		public float Y {
+			get { return position.Y; }
+			set { position.Y = value; }
+		}
 	
 		// Gets or sets the entity's z-position.
 		public float ZPosition {

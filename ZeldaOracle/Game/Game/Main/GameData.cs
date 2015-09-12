@@ -63,6 +63,10 @@ class GameData {
 
 		Resources.LoadImage("Images/sheet_player");
 
+		// TEMP: Create some player animations.
+
+		//ANIM_PLAYER_DEFAULT.
+		
 		/*
 		Image palette = Resources.LoadImage("Images/Palette");
 
@@ -201,90 +205,90 @@ class GameData {
 	//-----------------------------------------------------------------------------
 	
 	// Effects.
-	public static Sprite SPR_SHADOW;
+	public static SpriteEx SPR_SHADOW;
 
 	// Special Background tiles.
-	public static Sprite SPR_TILE_DEFAULT;	// The default ground background tile.
-	public static Sprite SPR_TILE_DUG;		// A hole in the ground created by a shovel.
-
+	public static SpriteEx SPR_TILE_DEFAULT;	// The default ground background tile.
+	public static SpriteEx SPR_TILE_DUG;		// A hole in the ground created by a shovel.
+	
 	// Object tiles.
-	public static Sprite SPR_BUSH;
-	public static Sprite SPR_CRYSTAL;
-	public static Sprite SPR_POT;
-	public static Sprite SPR_ROCK;
-	public static Sprite SPR_DIAMOND_ROCK;
-	public static Sprite SPR_SIGN;
-	public static Sprite SPR_GRASS;
-	public static Sprite SPR_MOVABLE_BLOCK;
-	public static Sprite SPR_BOMBABLE_BLOCK;
-	public static Sprite SPR_LOCKED_BLOCK;
-	public static Sprite SPR_CHEST;
-	public static Sprite SPR_CHEST_OPEN;
-	public static Sprite SPR_DIRT_PILE;
-	public static Sprite SPR_BURNABLE_TREE;
-	public static Sprite SPR_CACTUS;
-	public static Sprite SPR_BUTTON_UP;
-	public static Sprite SPR_BUTTON_DOWN;
-	public static Sprite SPR_LEVER_LEFT;
-	public static Sprite SPR_LEVER_RIGHT;
-	public static Sprite SPR_LANTERN_UNLIT;
-	public static Sprite SPR_EYE_STATUE;
-	public static Sprite SPR_BRIDGE_H;
-	public static Sprite SPR_BRIDGE_V;
-	public static Sprite SPR_COLOR_CUBE_SLOT;
-	public static Sprite SPR_CRACKED_FLOOR;
-	public static Sprite SPR_PIT;
-	public static Sprite SPR_PLANT;
-	public static Sprite SPR_ARMOS_STATUE;
+	public static SpriteEx SPR_BUSH;
+	public static SpriteEx SPR_CRYSTAL;
+	public static SpriteEx SPR_POT;
+	public static SpriteEx SPR_ROCK;
+	public static SpriteEx SPR_DIAMOND_ROCK;
+	public static SpriteEx SPR_SIGN;
+	public static SpriteEx SPR_GRASS;
+	public static SpriteEx SPR_MOVABLE_BLOCK;
+	public static SpriteEx SPR_BOMBABLE_BLOCK;
+	public static SpriteEx SPR_LOCKED_BLOCK;
+	public static SpriteEx SPR_CHEST;
+	public static SpriteEx SPR_CHEST_OPEN;
+	public static SpriteEx SPR_DIRT_PILE;
+	public static SpriteEx SPR_BURNABLE_TREE;
+	public static SpriteEx SPR_CACTUS;
+	public static SpriteEx SPR_BUTTON_UP;
+	public static SpriteEx SPR_BUTTON_DOWN;
+	public static SpriteEx SPR_LEVER_LEFT;
+	public static SpriteEx SPR_LEVER_RIGHT;
+	public static SpriteEx SPR_LANTERN_UNLIT;
+	public static SpriteEx SPR_EYE_STATUE;
+	public static SpriteEx SPR_BRIDGE_H;
+	public static SpriteEx SPR_BRIDGE_V;
+	public static SpriteEx SPR_COLOR_CUBE_SLOT;
+	public static SpriteEx SPR_CRACKED_FLOOR;
+	public static SpriteEx SPR_PIT;
+	public static SpriteEx SPR_PLANT;
+	public static SpriteEx SPR_ARMOS_STATUE;
 
 	// Item Icons.
-	public static Sprite SPR_ITEM_ICON_SWORD_1;
-	public static Sprite SPR_ITEM_ICON_SWORD_2;
-	public static Sprite SPR_ITEM_ICON_SWORD_3;
-	public static Sprite SPR_ITEM_ICON_SHIELD_1;
-	public static Sprite SPR_ITEM_ICON_SHIELD_2;
-	public static Sprite SPR_ITEM_ICON_SHIELD_3;
-	public static Sprite SPR_ITEM_ICON_SATCHEL;
-	public static Sprite SPR_ITEM_ICON_SATCHEL_EQUIPPED;
-	public static Sprite SPR_ITEM_ICON_SEED_SHOOTER;
-	public static Sprite SPR_ITEM_ICON_SEED_SHOOTER_EQUIPPED;
-	public static Sprite SPR_ITEM_ICON_SLINGSHOT_1;
-	public static Sprite SPR_ITEM_ICON_SLINGSHOT_2;
-	public static Sprite SPR_ITEM_ICON_SLINGSHOT_2_EQUIPPED;
-	public static Sprite SPR_ITEM_ICON_BOMB;
-	public static Sprite SPR_ITEM_ICON_BOMBCHEW;
-	public static Sprite SPR_ITEM_ICON_SHOVEL;
-	public static Sprite SPR_ITEM_ICON_BRACELET;
-	public static Sprite SPR_ITEM_ICON_POWER_GLOVES;
-	public static Sprite SPR_ITEM_ICON_FEATHER;
-	public static Sprite SPR_ITEM_ICON_CAPE;
-	public static Sprite SPR_ITEM_ICON_BOOMERANG_1;
-	public static Sprite SPR_ITEM_ICON_BOOMERANG_2;
-	public static Sprite SPR_ITEM_ICON_SWITCH_HOOK_1;
-	public static Sprite SPR_ITEM_ICON_SWITCH_HOOK_2;
-	public static Sprite SPR_ITEM_ICON_MAGNET_GLOVES_BLUE;
-	public static Sprite SPR_ITEM_ICON_MAGNET_GLOVES_RED;
-	public static Sprite SPR_ITEM_ICON_CANE;
-	public static Sprite SPR_ITEM_ICON_FIRE_ROD;
-	public static Sprite SPR_ITEM_ICON_OCARINA;
-	public static Sprite SPR_ITEM_ICON_BOW;
+	public static SpriteEx SPR_ITEM_ICON_SWORD_1;
+	public static SpriteEx SPR_ITEM_ICON_SWORD_2;
+	public static SpriteEx SPR_ITEM_ICON_SWORD_3;
+	public static SpriteEx SPR_ITEM_ICON_SHIELD_1;
+	public static SpriteEx SPR_ITEM_ICON_SHIELD_2;
+	public static SpriteEx SPR_ITEM_ICON_SHIELD_3;
+	public static SpriteEx SPR_ITEM_ICON_SATCHEL;
+	public static SpriteEx SPR_ITEM_ICON_SATCHEL_EQUIPPED;
+	public static SpriteEx SPR_ITEM_ICON_SEED_SHOOTER;
+	public static SpriteEx SPR_ITEM_ICON_SEED_SHOOTER_EQUIPPED;
+	public static SpriteEx SPR_ITEM_ICON_SLINGSHOT_1;
+	public static SpriteEx SPR_ITEM_ICON_SLINGSHOT_2;
+	public static SpriteEx SPR_ITEM_ICON_SLINGSHOT_2_EQUIPPED;
+	public static SpriteEx SPR_ITEM_ICON_BOMB;
+	public static SpriteEx SPR_ITEM_ICON_BOMBCHEW;
+	public static SpriteEx SPR_ITEM_ICON_SHOVEL;
+	public static SpriteEx SPR_ITEM_ICON_BRACELET;
+	public static SpriteEx SPR_ITEM_ICON_POWER_GLOVES;
+	public static SpriteEx SPR_ITEM_ICON_FEATHER;
+	public static SpriteEx SPR_ITEM_ICON_CAPE;
+	public static SpriteEx SPR_ITEM_ICON_BOOMERANG_1;
+	public static SpriteEx SPR_ITEM_ICON_BOOMERANG_2;
+	public static SpriteEx SPR_ITEM_ICON_SWITCH_HOOK_1;
+	public static SpriteEx SPR_ITEM_ICON_SWITCH_HOOK_2;
+	public static SpriteEx SPR_ITEM_ICON_MAGNET_GLOVES_BLUE;
+	public static SpriteEx SPR_ITEM_ICON_MAGNET_GLOVES_RED;
+	public static SpriteEx SPR_ITEM_ICON_CANE;
+	public static SpriteEx SPR_ITEM_ICON_FIRE_ROD;
+	public static SpriteEx SPR_ITEM_ICON_OCARINA;
+	public static SpriteEx SPR_ITEM_ICON_BOW;
 	
 	// HUD Sprites.
-	public static Sprite SPR_HUD_BRACKET_LEFT;
-	public static Sprite SPR_HUD_BRACKET_LEFT_A;
-	public static Sprite SPR_HUD_BRACKET_LEFT_B;
-	public static Sprite SPR_HUD_BRACKET_RIGHT;
-	public static Sprite SPR_HUD_BRACKET_RIGHT_A;
-	public static Sprite SPR_HUD_BRACKET_RIGHT_B;
-	public static Sprite SPR_HUD_BRACKET_LEFT_RIGHT;
-	public static Sprite SPR_HUD_HEART_0;
-	public static Sprite SPR_HUD_HEART_1;
-	public static Sprite SPR_HUD_HEART_2;
-	public static Sprite SPR_HUD_HEART_3;
-	public static Sprite SPR_HUD_HEART_4;
-	public static Sprite SPR_HUD_RUPEE;
-	public static Sprite SPR_HUD_ORE_CHUNK;
-	public static Sprite SPR_HUD_KEY;
+	public static SpriteEx SPR_HUD_BRACKET_LEFT;
+	public static SpriteEx SPR_HUD_BRACKET_LEFT_A;
+	public static SpriteEx SPR_HUD_BRACKET_LEFT_B;
+	public static SpriteEx SPR_HUD_BRACKET_RIGHT;
+	public static SpriteEx SPR_HUD_BRACKET_RIGHT_A;
+	public static SpriteEx SPR_HUD_BRACKET_RIGHT_B;
+	public static SpriteEx SPR_HUD_BRACKET_LEFT_RIGHT;
+	public static SpriteEx SPR_HUD_HEART_0;
+	public static SpriteEx SPR_HUD_HEART_1;
+	public static SpriteEx SPR_HUD_HEART_2;
+	public static SpriteEx SPR_HUD_HEART_3;
+	public static SpriteEx SPR_HUD_HEART_4;
+	public static SpriteEx SPR_HUD_RUPEE;
+	public static SpriteEx SPR_HUD_ORE_CHUNK;
+	public static SpriteEx SPR_HUD_KEY;
 
 	
 	//-----------------------------------------------------------------------------

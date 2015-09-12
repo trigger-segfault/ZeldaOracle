@@ -527,7 +527,7 @@ public class DebugMenu {
 			// Draw toggle check.
 			if (subItem is ToggleMenuItem) {
 				bool enabled = ((ToggleMenuItem)subItem).IsEnabled;
-				Sprite spr = debugMenuSprites["checkbox_disabled"];
+				SpriteEx spr = debugMenuSprites["checkbox_disabled"];
 				if (enabled)
 					spr = debugMenuSprites["checkbox_enabled"];
 				if (subItem is RadioButtonMenuItem) {
@@ -535,12 +535,12 @@ public class DebugMenu {
 					if (enabled)
 						spr = debugMenuSprites["radiobutton_enabled"];
 				}
-				g.DrawSprite(spr, new Vector2F(r.Min.X + 6, r.Min.Y + 6), colorText);
+				g.DrawSpriteEx(spr, new Vector2F(r.Min.X + 6, r.Min.Y + 6), colorText);
 			}
 
 			// Draw submenu arrow.
 			if (item != menu && subItem.Items.Count > 0) {
-				g.DrawSprite(debugMenuSprites["submenu_arrow"], new Vector2F(r.Max.X - 18, r.Min.Y + 6), colorArrow);
+				g.DrawSpriteEx(debugMenuSprites["submenu_arrow"], new Vector2F(r.Max.X - 18, r.Min.Y + 6), colorArrow);
 			}
 
 			// Draw nested menu.
