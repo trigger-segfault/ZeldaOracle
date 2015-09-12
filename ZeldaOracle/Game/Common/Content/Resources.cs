@@ -71,7 +71,7 @@ public class Resources {
 	/** <summary> The collection of loaded fonts. </summary> */
 	private static Dictionary<string, Font> fonts;
 	/** <summary> The collection of loaded sprite sheets. </summary> */
-	private static Dictionary<string, SpriteSheet> spriteSheets;
+	private static Dictionary<string, SpriteAtlas> spriteSheets;
 	/** <summary> The collection of loaded effects. </summary> */
 	private static Dictionary<string, Effect> shaders;
 	/** <summary> The texture loader for loading images from file. </summary> */
@@ -116,7 +116,7 @@ public class Resources {
 		// Graphics
 		images				= new Dictionary<string, Image>();
 		fonts				= new Dictionary<string, Font>();
-		spriteSheets		= new Dictionary<string, SpriteSheet>();
+		spriteSheets		= new Dictionary<string, SpriteAtlas>();
 		shaders				= new Dictionary<string, Effect>();
 		textureLoader		= new TextureLoader(graphicsDevice);
 
@@ -153,7 +153,7 @@ public class Resources {
 		return fonts[name];
 	}
 	/** <summary> Gets the sprite sheet with the specified name. </summary> */
-	public static SpriteSheet GetSpriteSheet(string name) {
+	public static SpriteAtlas GetSpriteSheet(string name) {
 		return spriteSheets[name];
 	}
 	/** <summary> Returns true if a sprite sheet with the specified name exists. </summary> */
@@ -269,7 +269,7 @@ public class Resources {
 		return resource;
 	}
 	/** <summary> Loads a single sprite sheet from a script file. </summary> */
-	public static SpriteSheet LoadSpriteSheet(string assetName) {
+	public static SpriteAtlas LoadSpriteSheet(string assetName) {
 		SpriteSheetSR script = new SpriteSheetSR();
 		LoadScript(assetName, script);
 		return script.Sheet;
@@ -368,7 +368,7 @@ public class Resources {
 	#region Graphics
 
 	/** <summary> Adds the specified sprite sheet. </summary> */
-	public static void AddSpriteSheet(SpriteSheet sheet) {
+	public static void AddSpriteSheet(SpriteAtlas sheet) {
 		spriteSheets.Add(sheet.Name, sheet);
 	}
 
@@ -499,9 +499,9 @@ public class Resources {
 		}
 	}*/
 	/** <summary> Gets the list of sprite sheets. </summary> */
-	public static SpriteSheet[] SpriteSheets {
+	public static SpriteAtlas[] SpriteSheets {
 		get {
-			SpriteSheet[] sheets = new SpriteSheet[spriteSheets.Count];
+			SpriteAtlas[] sheets = new SpriteAtlas[spriteSheets.Count];
 			spriteSheets.Values.CopyTo(sheets, 0);
 			return sheets;
 		}

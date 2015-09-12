@@ -19,7 +19,7 @@ namespace ZeldaOracle.Common.Graphics {
 		// The name identifier of the sprite.
 		private string name;
 		// The sprite sheet containing this sprite.
-		private SpriteSheet sheet;
+		private SpriteAtlas sheet;
 		// The compacted rectangle of where this sprite is on the sprite sheet.
 		private Rectangle2I frameRect;
 		// The sheet-independent, preffered size of the sprite.
@@ -45,7 +45,7 @@ namespace ZeldaOracle.Common.Graphics {
 		}
 
 		// Constructs the default sprite.
-		public SpriteEx(string name, SpriteSheet sheet, Rectangle2I sourceRect, Vector2F origin) {
+		public SpriteEx(string name, SpriteAtlas sheet, Rectangle2I sourceRect, Vector2F origin) {
 			this.name		= name;
 			this.sheet		= sheet;
 			this.frameRect	= sourceRect;
@@ -143,7 +143,7 @@ namespace ZeldaOracle.Common.Graphics {
 			set { name = value; }
 		}
 		// The sprite sheet containing this sprite.
-		public SpriteSheet Sheet {
+		public SpriteAtlas Sheet {
 			get { return sheet; }
 			set { sheet = value; }
 		}

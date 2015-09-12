@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.GameStates {
 	
 	public abstract class GameState {
-		
+
+		protected GameManager gameManager;
 		private bool isActive;
 
 		
@@ -36,8 +38,9 @@ namespace ZeldaOracle.Game.GameStates {
 		// Accessors
 		//-----------------------------------------------------------------------------
 
-		public void Begin() {
+		public void Begin(GameManager gameManager) {
 			if (!isActive) {
+				this.gameManager = gameManager;
 				isActive = true;
 				OnBegin();
 			}
@@ -57,6 +60,11 @@ namespace ZeldaOracle.Game.GameStates {
 
 		public bool IsActive {
 			get { return isActive; }
+		}
+
+		public GameManager GameManager {
+			get { return gameManager; }
+			set { gameManager = value; }
 		}
 	}
 }

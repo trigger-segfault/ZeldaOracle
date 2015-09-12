@@ -18,7 +18,22 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
+
+		public Sprite(SpriteSheet sheet, int sx, int sy)  :
+			this(sheet, sx, sy, 0, 0)
+		{
+		}
 		
+		public Sprite(SpriteSheet sheet, int sx, int sy, int dx, int dy) {
+			this.image		= sheet.Image;
+			this.sourceRect	= new Rectangle2I(
+				sheet.Offset.X + (sx * (sheet.CellSize.X + sheet.Spacing.X)),
+				sheet.Offset.Y + (sy * (sheet.CellSize.Y + sheet.Spacing.Y)),
+				sheet.CellSize.X, sheet.CellSize.Y);
+			this.drawOffset = new Point2I(dx, dy);
+			this.nextPart = null;
+		}
+
 		public Sprite(Image image, int sx, int sy, int sw, int sh) :
 			this(image, sx, sy, sw, sh, 0, 0)
 		{
@@ -41,6 +56,15 @@ namespace ZeldaOracle.Common.Graphics {
 			this.sourceRect	= sourceRect;
 			this.drawOffset	= drawOffset;
 			this.nextPart	= null;
+		}
+
+		public Sprite(Sprite copy) {
+			this.image		= copy.image;
+			this.sourceRect	= copy.sourceRect;
+			this.drawOffset	= copy.drawOffset;
+			this.nextPart	= null;
+			if (copy.nextPart != null)
+				this.nextPart = new Sprite(copy.nextPart); // This is recursive.
 		}
 		
 		

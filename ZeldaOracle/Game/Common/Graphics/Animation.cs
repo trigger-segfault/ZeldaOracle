@@ -65,5 +65,10 @@ namespace ZeldaOracle.Common.Graphics {
 			get { return loops; }
 			set { loops = value; }
 		}
+
+		public bool IsLooped {
+			get { return (loops < 0); }
+			set { loops = (value ? -1 : 0);; }
+		}
 	}
 }

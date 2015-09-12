@@ -156,11 +156,11 @@ namespace ZeldaOracle.Game.Control {
 			player = new Player();
 			player.Initialize(this);
 			entities.Add(player);
-			player.X = 10;
-			player.Y = 10;
+			player.X = 48;
+			player.Y = 32;
 
 			// Setup the room.
-			roomLocation = Point2I.Zero;
+			roomLocation = new Point2I(2, 1);
 			BeginRoom(level.GetRoom(roomLocation));
 
 		}

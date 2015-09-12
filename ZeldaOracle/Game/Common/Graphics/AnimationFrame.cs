@@ -28,6 +28,12 @@ namespace ZeldaOracle.Common.Graphics {
 			this.sprite		= new Sprite(image, sourceRect, drawOffset);
 		}
 
+		public AnimationFrame(AnimationFrame copy) {
+			this.startTime	= copy.startTime;
+			this.duration	= copy.duration;
+			this.sprite		= new Sprite(copy.sprite);
+		}
+
 		
 		//-----------------------------------------------------------------------------
 		// Properties

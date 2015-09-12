@@ -152,6 +152,7 @@
     <Compile Include="Common\Graphics\Palette.cs" />
     <Compile Include="Common\Graphics\Sprite.cs" />
     <Compile Include="Common\Graphics\SpriteEx.cs" />
+    <Compile Include="Common\Graphics\SpriteAtlas.cs" />
     <Compile Include="Common\Graphics\SpriteSheet.cs" />
     <Compile Include="Common\Input\Controls\AnalogStick.cs" />
     <Compile Include="Common\Input\Buttons.cs" />
@@ -212,7 +213,9 @@
     <None Include="Game\Editor\Properties\Property.cs" />
     <Compile Include="Game\Entities\Entity.cs" />
     <Compile Include="Game\GameStates\GameState.cs" />
+    <Compile Include="Game\GameStates\GameStateQueue.cs" />
     <Compile Include="Game\GameStates\GameStateStack.cs" />
+    <Compile Include="Game\GameStates\StateScreenFade.cs" />
     <Compile Include="Game\Items\Ammo.cs" />
     <Compile Include="Game\Items\Equipment\ItemBombBag.cs" />
     <Compile Include="Game\Items\Equipment\ItemWallet.cs" />
@@ -226,6 +229,7 @@
     <Compile Include="Game\GameSettings.cs" />
     <Compile Include="Game\Main\Program.cs" />
     <Compile Include="Game\Entities\Players\Player.cs" />
+    <Compile Include="Game\Main\ResourceBuilders\AnimationBuilder.cs" />
     <Compile Include="Game\Tiles\Tile.cs" />
     <Compile Include="Game\Tiles\TileData.cs" />
     <Compile Include="Game\Tiles\Tileset.cs" />
