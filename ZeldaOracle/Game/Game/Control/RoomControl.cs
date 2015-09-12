@@ -21,10 +21,9 @@ namespace ZeldaOracle.Game.Control {
 		private Level			level;
 		private Room			room;
 		private Point2I			roomLocation;
-		private Player			player;
+		private Player			player;			// The player entity.
 		private List<Entity>	entities;
 		private Tile[,,]		tiles;
-
 
 
 		//-----------------------------------------------------------------------------
@@ -43,7 +42,7 @@ namespace ZeldaOracle.Game.Control {
 
 
 		//-----------------------------------------------------------------------------
-		// Test
+		// Temp Loading
 		//-----------------------------------------------------------------------------
 
 		public Level LoadLevel(string filename) {
@@ -76,15 +75,16 @@ namespace ZeldaOracle.Game.Control {
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
 					tilesetIndex = bin.ReadByte();
-					Tileset tileset = GameData.TILESET_DEFAULT;
 
 					if (tilesetIndex > 0) {
-						tilesetSourceX = bin.ReadByte(); 
+						Tileset tileset = GameData.TILESETS[tilesetIndex - 1];
+						tilesetSourceX = bin.ReadByte();
 						tilesetSourceY = bin.ReadByte();
 						room.TileData[x, y, 0] = tileset.TileData[tilesetSourceX, tilesetSourceY];
 					}
 					else {
 						// Only use default tiles on bottom layer.
+						Tileset tileset = GameData.TILESET_DEFAULT;
 						room.TileData[x, y, 0] = tileset.TileData[tileset.DefaultTile.X, tileset.DefaultTile.Y];
 					}
 					
@@ -99,10 +99,15 @@ namespace ZeldaOracle.Game.Control {
 		// Initialization
 		//-----------------------------------------------------------------------------
 
-		public void SetupRoom(Room room) {
+		public void BeginRoom(Room room) {
 			this.room = room;
 
-			// Create the tile grid.
+			// Clear all entities from the old room (except for the player).
+			entities.Clear();
+			if (player != null)
+				entities.Add(player);
+
+			// Create the new tile grid.
 			tiles = new Tile[room.Width, room.Height, room.LayerCount];
 			for (int x = 0; x < room.Width; x++) {
 				for (int y = 0; y < room.Height; y++) {
@@ -113,14 +118,27 @@ namespace ZeldaOracle.Game.Control {
 							tiles[x, y, i] = null;
 						}
 						else {
-							tiles[x, y, i] = data.Tileset.CreateTile(data.SheetLocation);
-							tiles[x, y, i].Location = new Point2I(x, y);
-							tiles[x, y, i].Layer = i;
-							tiles[x, y, i].Initialize(this);
+							Tile t = data.Tileset.CreateTile(data.SheetLocation);
+							t.Location = new Point2I(x, y);
+							t.Layer = i;
+							t.Initialize(this);
+							tiles[x, y, i] = t;
 						}
 					}
 				}
 			}
+			
+			// Initialize the tiles.
+			for (int x = 0; x < room.Width; x++) {
+				for (int y = 0; y < room.Height; y++) {
+					for (int i = 0; i < room.LayerCount; i++) {
+						Tile t = tiles[x, y, i];
+						if (t != null)
+							t.Initialize(this);
+					}
+				}
+			}
+
 
 		}
 
@@ -134,13 +152,16 @@ namespace ZeldaOracle.Game.Control {
 			// Load test level/room.
 			level = LoadLevel("Content/Worlds/test_level.zwd");
 
-			// Setup the room.
-			SetupRoom(level.Rooms[2, 1]);
-
 			// Create the player.
 			player = new Player();
 			player.Initialize(this);
 			entities.Add(player);
+			player.X = 10;
+			player.Y = 10;
+
+			// Setup the room.
+			roomLocation = Point2I.Zero;
+			BeginRoom(level.GetRoom(roomLocation));
 
 		}
 		
@@ -153,7 +174,12 @@ namespace ZeldaOracle.Game.Control {
 
 			// Update entities.
 			for (int i = 0; i < entities.Count; ++i) {
-				entities[i].Update(timeDelta);
+				if (entities[i].IsAlive) {
+					entities[i].Update(timeDelta);
+				}
+				if (!entities[i].IsAlive) {
+					entities.RemoveAt(i--);
+				}
 			}
 			
 			// Update tiles.
@@ -166,6 +192,37 @@ namespace ZeldaOracle.Game.Control {
 					}
 				}
 			}
+
+			// Room transitions.
+			if (player.X < 0) {
+				roomLocation.X -= 1;
+				if (roomLocation.X < 0)
+					roomLocation.X = level.Width - 1;
+				BeginRoom(level.GetRoom(roomLocation));
+				player.X += room.Width * GameSettings.TILE_SIZE;
+			}
+			else if (player.Y < 0) {
+				roomLocation.Y -= 1;
+				if (roomLocation.Y < 0)
+					roomLocation.Y = level.Height - 1;
+				BeginRoom(level.GetRoom(roomLocation));
+				player.Y += room.Height * GameSettings.TILE_SIZE;
+			}
+			else if (player.X >= room.Width * GameSettings.TILE_SIZE) {
+				roomLocation.X += 1;
+				if (roomLocation.X >= level.Width)
+					roomLocation.X = 0;
+				BeginRoom(level.GetRoom(roomLocation));
+				player.X -= room.Width * GameSettings.TILE_SIZE;
+			}
+			else if (player.Y >= room.Height * GameSettings.TILE_SIZE) {
+				roomLocation.Y += 1;
+				if (roomLocation.Y >= level.Height)
+					roomLocation.Y = 0;
+				BeginRoom(level.GetRoom(roomLocation));
+				player.Y -= room.Height * GameSettings.TILE_SIZE;
+			}
+
 		}
 
 		public override void Draw(Graphics2D g) {

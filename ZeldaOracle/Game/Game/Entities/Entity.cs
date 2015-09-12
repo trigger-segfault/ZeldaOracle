@@ -57,6 +57,7 @@ namespace ZeldaOracle.Game.Entities {
 		// Initializes the entity and sets up containment variables.
 		public void Initialize(RoomControl control) {
 			this.control = control;
+			this.isAlive = true;
 			Initialize();
 		}
 
@@ -97,6 +98,11 @@ namespace ZeldaOracle.Game.Entities {
 		// Returns true if the entity has been initialized.
 		public bool IsInitialized {
 			get { return (control != null); }
+		}
+
+		// Returns true if the entity is not alive.
+		public bool IsDestroyed {
+			get { return !isAlive; }
 		}
 
 		// Returns true if the entity is still alive.

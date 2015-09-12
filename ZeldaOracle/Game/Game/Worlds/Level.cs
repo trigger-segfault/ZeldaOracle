@@ -27,6 +27,15 @@ namespace ZeldaOracle.Game.Worlds {
 
 
 		//-----------------------------------------------------------------------------
+		// Accessors
+		//-----------------------------------------------------------------------------
+
+		public Room GetRoom(Point2I location) {
+			return rooms[location.X, location.Y];
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Mutators
 		//-----------------------------------------------------------------------------
 
@@ -68,6 +77,21 @@ namespace ZeldaOracle.Game.Worlds {
 		public Point2I RoomSize {
 			get { return roomSize; }
 			set { roomSize = value; }
+		}
+		
+		public Point2I Dimensions {
+			get { return dimensions; }
+			set { dimensions = value; }
+		}
+		
+		public int Width {
+			get { return dimensions.X; }
+			set { dimensions.X = value; }
+		}
+		
+		public int Height {
+			get { return dimensions.Y; }
+			set { dimensions.Y = value; }
 		}
 	}
 }
