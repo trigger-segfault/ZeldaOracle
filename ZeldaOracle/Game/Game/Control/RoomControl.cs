@@ -75,26 +75,19 @@ namespace ZeldaOracle.Game.Control {
 			// Read the tile data.
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
-					TileData data = new TileData();
-					room.TileData[x, y, 0] = data;
-
-					data.Flags = TileFlags.Default;
-
 					tilesetIndex = bin.ReadByte();
+					Tileset tileset = GameData.TILESET_DEFAULT;
 
 					if (tilesetIndex > 0) {
 						tilesetSourceX = bin.ReadByte(); 
 						tilesetSourceY = bin.ReadByte();
-						data.SheetLocation = new Point2I(tilesetSourceX, tilesetSourceY);
+						room.TileData[x, y, 0] = tileset.TileData[tilesetSourceX, tilesetSourceY];
 					}
 					else {
-						data.SheetLocation = new Point2I(1, 24);
+						// Only use default tiles on bottom layer.
+						room.TileData[x, y, 0] = tileset.TileData[tileset.DefaultTile.X, tileset.DefaultTile.Y];
 					}
 					
-					data.Sprite = new Sprite(GameData.IMAGE_TILESET, 
-						data.SheetLocation.X * 17,
-						data.SheetLocation.Y * 17,
-						16, 16, 0, 0);
 				}
 			}
 
@@ -120,8 +113,10 @@ namespace ZeldaOracle.Game.Control {
 							tiles[x, y, i] = null;
 						}
 						else {
-							tiles[x, y, i] = new Tile(data, x, y, i);
-							tiles[x, y, i].Initialize(this, data);
+							tiles[x, y, i] = data.Tileset.CreateTile(data.SheetLocation);
+							tiles[x, y, i].Location = new Point2I(x, y);
+							tiles[x, y, i].Layer = i;
+							tiles[x, y, i].Initialize(this);
 						}
 					}
 				}

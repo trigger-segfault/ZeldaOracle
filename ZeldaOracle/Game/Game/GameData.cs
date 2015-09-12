@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Tiles;
 
 //using ZeldaOracle.Common.Graphics.Particles;
 using ZeldaOracle.Common.Scripts;
@@ -66,10 +67,6 @@ class GameData {
 
 		// TEMP: Create some player animations.
 
-		//ANIM_PLAYER_DEFAULT.
-		
-		
-		
 		Animation[] anim = new Animation[8];
 
 		
@@ -86,39 +83,22 @@ class GameData {
 		}
 		ANIM_PLAYER_DEFAULT = anim[0];
 
-		/*
-		Image palette = Resources.LoadImage("Images/Palette");
+		// TEMP: Create a tileset.
+		TILESET_DEFAULT = new Tileset(21, 36);
+		TILESET_DEFAULT.DefaultTile = new Point2I(1, 25);
 
-		List<Color> colors = new List<Color>();
-
-		int index = 0;
-		Color[] colorData = new Color[palette.Width * palette.Height];
-		palette.Texture.GetData<Color>(colorData);
-
-		StreamWriter writer = new StreamWriter("Palette.txt");
-
-		int[,] colorIndexes = new int[32, 12];
-		int[,] colorRows = new int[32, 12];
-
-		for (int i = 0; i < 18; i++) {
-			for (int j = 0; j < 12; j++) {
-				Color color = colorData[PointIndex(i * 13, (11 - j) * 10)];
-				writer.Write("Color.FromAarg(" + color.A + ", " + color.R + ", " + color.G +"),");
-				index++;
-				if ((j + 1) % 4 != 0)
-					writer.Write(" ");
-				else
-					writer.Write(writer.NewLine);
+		for (int x = 0; x < TILESET_DEFAULT.Width; x++) {
+			for (int y = 0; y < TILESET_DEFAULT.Height; y++) {
+				TileData data = new TileData();
+				data.Tileset		= TILESET_DEFAULT;
+				data.SheetLocation	= new Point2I(x, y);
+				data.Sprite			= new Sprite(IMAGE_TILESET, new Rectangle2I(x * 17, y * 17, 16, 16), Point2I.Zero);
+				TILESET_DEFAULT.TileData[x, y] = data;
 			}
-			writer.Write(writer.NewLine);
 		}
 
-		//Image p = Resources.LoadImage("Images/ColorPal");
-
-
-
-		writer.Close();
-		*/
+		TILESETS = new Tileset[] { TILESET_DEFAULT };
+		
 	}
 
 	#endregion
@@ -200,6 +180,13 @@ class GameData {
 	//========== GAME DATA ===========
 
 	#pragma warning disable 169, 649 // The field 'example' is never used.
+	
+	//-----------------------------------------------------------------------------
+	// Tilesets
+	//-----------------------------------------------------------------------------
+
+	public static Tileset TILESET_DEFAULT;
+	public static Tileset[] TILESETS;
 
 	//-----------------------------------------------------------------------------
 	// Images

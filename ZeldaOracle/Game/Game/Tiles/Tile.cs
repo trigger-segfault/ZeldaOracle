@@ -53,13 +53,13 @@ namespace ZeldaOracle.Game.Tiles {
 		private AnimationPlayer	animationPlayer;
 
 		private Point2I			tileSheetLoc;	// TODO: this doesn't mean anything yet
-		//private Tileset*		tileset;
+		private Tileset			tileset;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
-
+		
 		public Tile() {
 			location		= Point2I.Zero;
 			layer			= 0;
@@ -87,17 +87,9 @@ namespace ZeldaOracle.Game.Tiles {
 			this.animationPlayer.Animation = data.Animation;
 		}
 		
-		public void Initialize(RoomControl control, TileData data) {
-			this.control		= control;
-			this.flags			= data.Flags;
-			this.sprite			= data.Sprite;
-			this.collisionModel	= data.CollisionModel;
-			this.size			= data.Size;
-
-			// TODO: needs to instantiate other class types.
-
-			if (data.Animation != null)
-				animationPlayer.Play(data.Animation);
+		public void Initialize(RoomControl control) {
+			this.control = control;
+			this.animationPlayer.Play();
 		}
 		
 
@@ -129,6 +121,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Returns the room control this entity belongs to.
 		public RoomControl RoomControl {
 			get { return control; }
+			set { control = value; }
 		}
 
 		public Vector2F Position {
@@ -143,6 +136,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public Point2I Location {
 			get { return location; }
 			set { location = value; }
+		}
+		
+		public int Layer {
+			get { return layer; }
+			set { layer = value; }
 		}
 
 		public Point2I Size {
@@ -173,6 +171,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public AnimationPlayer AnimationPlayer {
 			get { return animationPlayer; }
 			set { animationPlayer = value; }
+		}
+
+		public CollisionModel CollisionModel {
+			get { return collisionModel; }
+			set { collisionModel = value; }
 		}
 	}
 }

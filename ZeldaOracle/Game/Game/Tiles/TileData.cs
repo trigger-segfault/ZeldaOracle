@@ -13,14 +13,14 @@ namespace ZeldaOracle.Game.Tiles {
 
 		private Type			type;
 		private TileFlags		flags;
+		private Point2I			size;
 		private Sprite			sprite;
 		private Animation		animation;
 		private CollisionModel	collisionModel;
-		private Point2I			sheetLocation;
-		private Point2I			size;
+		private Point2I			sheetLocation;	// Location on the tileset.
+		private Tileset			tileset;
 
 		// TODO: Properties
-		// TODO: Tileset?
 
 
 		//-----------------------------------------------------------------------------
@@ -29,12 +29,13 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public TileData() {
 			type			= null;
+			size			= Point2I.One;
 			flags			= TileFlags.Default;
 			sprite			= null;
 			animation		= null;
 			collisionModel	= null;
 			sheetLocation	= Point2I.Zero;
-			size			= Point2I.One;
+			tileset			= null;
 		}
 
 
@@ -45,6 +46,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public Type Type {
 			get { return type; }
 			set { type = value; }
+		}
+		
+		public Point2I Size {
+			get { return size; }
+			set { size = value; }
 		}
 
 		public TileFlags Flags {
@@ -72,9 +78,9 @@ namespace ZeldaOracle.Game.Tiles {
 			set { sheetLocation = value; }
 		}
 		
-		public Point2I Size {
-			get { return size; }
-			set { size = value; }
+		public Tileset Tileset {
+			get { return tileset; }
+			set { tileset = value; }
 		}
 		
 	}

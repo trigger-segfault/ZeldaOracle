@@ -18,18 +18,28 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
-
-		public Sprite(Image image, Rectangle2I sourceRect, Point2I drawOffset) {
-			this.image		= image;
-			this.sourceRect	= sourceRect;
-			this.drawOffset	= drawOffset;
-			this.nextPart	= null;
+		
+		public Sprite(Image image, int sx, int sy, int sw, int sh) :
+			this(image, sx, sy, sw, sh, 0, 0)
+		{
 		}
 
 		public Sprite(Image image, int sx, int sy, int sw, int sh, int dx, int dy) {
 			this.image		= image;
 			this.sourceRect	= new Rectangle2I(sx, sy, sw, sh);
 			this.drawOffset	= new Point2I(dx, dy);
+			this.nextPart	= null;
+		}
+
+		public Sprite(Image image, Rectangle2I sourceRect) :
+			this(image, sourceRect, Point2I.Zero)
+		{
+		}
+
+		public Sprite(Image image, Rectangle2I sourceRect, Point2I drawOffset) {
+			this.image		= image;
+			this.sourceRect	= sourceRect;
+			this.drawOffset	= drawOffset;
 			this.nextPart	= null;
 		}
 		
