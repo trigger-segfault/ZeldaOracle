@@ -76,7 +76,7 @@ public class DebugMenu {
 	/** <summary> The bold font used for the menu text. </summary> */
 	internal Font debugMenuFontBold;
 	/** <summary> The sprite sheet used for the menu items. </summary> */
-	internal SpriteSheet debugMenuSprites;
+	internal SpriteAtlas debugMenuSprites;
 
 	#endregion
 	//========= CONSTRUCTORS =========

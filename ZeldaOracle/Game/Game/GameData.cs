@@ -69,6 +69,9 @@ class GameData {
 
 		Animation[] anim = new Animation[8];
 
+
+
+
 		
 		// Create player default animation (walk).
 		for (int dir = 0; dir < 4; dir++) {
@@ -198,14 +201,14 @@ class GameData {
 	// Sprite Sheets
 	//-----------------------------------------------------------------------------
 
-	public static SpriteSheet SheetDebugMenu;
-	public static SpriteSheet SheetGamePadControls;
-	public static SpriteSheet SheetGamePadArrows;
+	public static SpriteAtlas SheetDebugMenu;
+	public static SpriteAtlas SheetGamePadControls;
+	public static SpriteAtlas SheetGamePadArrows;
 	
-	public static SpriteSheet SHEET_PLAYER;
-	public static SpriteSheet SHEET_PLAYER_HURT;
-	public static SpriteSheet SHEET_MONSTERS;
-	public static SpriteSheet SHEET_MONSTERS_HURT;
+	public static SpriteAtlas SHEET_PLAYER;
+	public static SpriteAtlas SHEET_PLAYER_HURT;
+	public static SpriteAtlas SHEET_MONSTERS;
+	public static SpriteAtlas SHEET_MONSTERS_HURT;
 	
 	
 	//-----------------------------------------------------------------------------
