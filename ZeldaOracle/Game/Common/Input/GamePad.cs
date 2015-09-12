@@ -9,6 +9,7 @@ using XnaGamePad	= Microsoft.Xna.Framework.Input.GamePad;
 using XnaButtons	= Microsoft.Xna.Framework.Input.Buttons;
 using XnaPlayer		= Microsoft.Xna.Framework.PlayerIndex;
 
+using ZeldaOracle.Common.Input.Controls;
 using ZeldaOracle.Common.Geometry;
 using GamePad		= ZeldaOracle.Common.Input.GamePad;
 
