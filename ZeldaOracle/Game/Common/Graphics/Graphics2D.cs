@@ -11,45 +11,38 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Content;
 
 namespace ZeldaOracle.Common.Graphics {
-/** <summary>
- * The 2D graphics object class for simplifying drawing.
- * </summary> */
+
+// The 2D graphics object class for simplifying drawing.
 public class Graphics2D {
 
-	//========== CONSTANTS ===========
-	#region Constants
-
-	#endregion
-	//=========== MEMBERS ============
-	#region Members
-
-	// Containment
-	/** <summary> The sprite batch of the graphics object. </summary> */
+	// Containment:
+	// The sprite batch of the graphics object.
 	private SpriteBatch spriteBatch;
-	/** <summary> The previous render targets of the graphics object. </summary> */
+	// The previous render targets of the graphics object.
 	private Stack<RenderTargetBinding[]> preivousRenderTargets;
 
-	// Drawing Settings
-	/** <summary> The current translated position of the graphics object. </summary> */
+	// Drawing Settings:
+	// The current translated position of the graphics object.
 	private Vector2F translation;
-	/** <summary> True if the graphics translation will be taken into account. </summary> */
+	// True if the graphics translation will be taken into account.
 	private bool useTranslation;
-	/** <summary> True if all draws will use integer precision. </summary> */
+	// True if all draws will use integer precision.
 	private bool useIntPrecision;
 
-	// Vector Graphics
-	/** <summary> A white 1x1 texture used for drawing vector graphics. </summary> */
+	// Vector Graphics:
+	// A white 1x1 texture used for drawing vector graphics.
 	private Texture2D white1x1;
-	/** <summary> A white 2x2 texture used for drawing vector graphics. </summary> */
+	// A white 2x2 texture used for drawing vector graphics.
 	private Texture2D white2x2;
 
 	private XnaColor drawingColor;
 
-	#endregion
-	//========= CONSTRUCTORS =========
-	#region Constructors
+	
+	//-----------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------
 
-	/** <summary> Constructs a 2D graphics object containing the sprite batch. </summary> */
+	// Constructs a 2D graphics object containing the sprite batch.
 	public Graphics2D(SpriteBatch spriteBatch) {
 		// Containment
 		this.spriteBatch			= spriteBatch;
@@ -68,62 +61,60 @@ public class Graphics2D {
 
 		this.drawingColor			= XnaColor.White;
 	}
+	
 
-	#endregion
-	//========== OPERATORS ===========
-	#region Operators
+	//-----------------------------------------------------------------------------
+	// Operators
+	//-----------------------------------------------------------------------------
 
+	// Cast to a SpriteBatch.
 	public static explicit operator SpriteBatch(Graphics2D graphics) {
 		return graphics.spriteBatch;
 	}
 
-	#endregion
-	//========== PROPERTIES ==========
-	#region Properties
-	//--------------------------------
-	#region Containment
+	
+	//-----------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------
 
-	/** <summary> Gets the sprite batch of the graphics object. </summary> */
+	// Containment.
+
+	// Gets the sprite batch of the graphics object.
 	public SpriteBatch SpriteBatch {
 		get { return spriteBatch; }
 	}
-	/** <summary> Gets the graphics device of the graphics object. </summary> */
+	// Gets the graphics device of the graphics object.
 	public GraphicsDevice GraphicsDevice {
 		get { return spriteBatch.GraphicsDevice; }
 	}
-	/** <summary> Returns true if the sprite batch has been disposed. </summary> */
+	// Returns true if the sprite batch has been disposed.
 	public bool IsDisposed {
 		get { return spriteBatch.IsDisposed; }
 	}
 
-	#endregion
-	//--------------------------------
-	#region Drawing Settings
+	//Drawing Settings.
 
-	/** <summary> Gets the current translation of the graphics object. </summary> */
+	// Gets the current translation of the graphics object.
 	public Vector2F Translation {
 		get { return translation; }
 	}
-	/** <summary> Gets or sets if the translation is used. </summary> */
+	// Gets or sets if the translation is used.
 	public bool UseTranslation {
 		get { return useTranslation; }
 		set { useTranslation = value; }
 	}
-	/** <summary> Gets or sets if integer precision is used with translations. </summary> */
+	// Gets or sets if integer precision is used with translations.
 	public bool UseIntegerPrecision {
 		get { return useIntPrecision; }
 		set { useIntPrecision = value; }
 	}
 
-	#endregion
-	//--------------------------------
-	#endregion
-	//=========== DRAWING ============
-	#region Drawing
-	//--------------------------------
-	#region Private
+	
+	//-----------------------------------------------------------------------------
+	// Drawing Internal
+	//-----------------------------------------------------------------------------
 
-	/** <summary> Translates the position based on the translation and precision settings. </summary> */
+	// Translates the position based on the translation and precision settings.
 	private Vector2 NewPos(Vector2F position) {
 		if (useTranslation)
 			return (UseIntegerPrecision ? (Vector2)GMath.Floor(position + translation) : (Vector2)(position + translation));
@@ -131,7 +122,7 @@ public class Graphics2D {
 			return (Vector2)position;
 	}
 
-	/** <summary> Translates the position of the string based on the translation and precision settings. </summary> */
+	// Translates the position of the string based on the translation and precision settings.
 	private Vector2 NewStringPos(Vector2F position, SpriteFont font, string text, Align alignment) {
 		Vector2F stringSize = font.MeasureString(text);
 		bool intAlign = (alignment & Align.Int) != 0;
@@ -149,14 +140,14 @@ public class Graphics2D {
 		else
 			return (Vector2)position;
 	}
-	/** <summary> Translates the rectangle based on the translation and precision settings. </summary> */
+	// Translates the rectangle based on the translation and precision settings.
 	private Rectangle NewRect(Rectangle2F destinationRect) {
 		if (useTranslation)
 			return (Rectangle)(destinationRect + translation);
 		else
 			return (Rectangle)destinationRect;
 	}
-	/** <summary> Translates the rectangle based on the translation and precision settings. </summary> */
+	// Translates the rectangle based on the translation and precision settings.
 	private Rectangle NewRect(Vector2F position, Vector2F size) {
 		Rectangle2F destinationRect = new Rectangle2F(position, size);
 		if (useTranslation)
@@ -165,179 +156,244 @@ public class Graphics2D {
 			return (Rectangle)destinationRect;
 	}
 
-	#endregion
-	//--------------------------------
-	#region Image Drawing
+	
+	//-----------------------------------------------------------------------------
+	// Image Drawing
+	//-----------------------------------------------------------------------------
 
-	/** <summary> Draws the image at the specified position. </summary> */
+	// Draws the image at the specified position.
 	public void DrawImage(Texture2D texture, Vector2F position) {
 		spriteBatch.Draw(texture, NewPos(position), XnaColor.White);
 	}
-	/** <summary> Draws the image at the specified position. </summary> */
+	// Draws the image at the specified position.
 	public void DrawImage(Texture2D texture, Vector2F position, Color color, double depth = 0.0) {
 		spriteBatch.Draw(texture, NewPos(position), null, color, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, (float)depth);
 	}
-	/** <summary> Draws the image at the specified position. </summary> */
+	// Draws the image at the specified position.
 	public void DrawImage(Texture2D texture, Vector2F position, Vector2F origin, Vector2F scale, double rotation, Color? color = null, SpriteEffects flipEffect = SpriteEffects.None, double depth = 0.0) {
 		spriteBatch.Draw(texture, NewPos(position), null, color ?? XnaColor.White, (float)GMath.ConvertToRadians(rotation), (Vector2)origin, (Vector2)scale, flipEffect, (float)depth);
 	}
-	/** <summary> Draws the image at the specified region. </summary> */
+	// Draws the image at the specified region.
 	public void DrawImage(Texture2D texture, Rectangle2F destinationRect, Vector2F origin, double rotation, Color? color = null, SpriteEffects flipEffect = SpriteEffects.None, double depth = 0.0) {
 		spriteBatch.Draw(texture, NewRect(destinationRect), null, color ?? XnaColor.White, (float)GMath.ConvertToRadians(rotation), (Vector2)origin, flipEffect, (float)depth);
 	}
 
-	/** <summary> Draws part of the image at the specified position. </summary> */
+	// Draws part of the image at the specified position.
 	public void DrawImage(Texture2D texture, Vector2F position, Rectangle2F sourceRect) {
 		spriteBatch.Draw(texture, NewPos(position), (Rectangle)sourceRect, XnaColor.White);
 	}
-	/** <summary> Draws part of the image at the specified position. </summary> */
+	// Draws part of the image at the specified position.
 	public void DrawImage(Texture2D texture, Vector2F position, Rectangle2F sourceRect, Color color, double depth = 0.0) {
 		spriteBatch.Draw(texture, NewPos(position), (Rectangle)sourceRect, color, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, (float)depth);
 	}
-	/** <summary> Draws part of the image at the specified position. </summary> */
+	// Draws part of the image at the specified position.
 	public void DrawImage(Texture2D texture, Vector2F position, Rectangle2F sourceRect, Vector2F origin, Vector2F scale, double rotation, Color? color = null, SpriteEffects flipEffect = SpriteEffects.None, double depth = 0.0) {
 		spriteBatch.Draw(texture, NewPos(position), (Rectangle)sourceRect, color ?? XnaColor.White, (float)GMath.ConvertToRadians(rotation), (Vector2)origin, (Vector2)scale, flipEffect, (float)depth);
 	}
-	/** <summary> Draws part of the image at the specified region. </summary> */
+	// Draws part of the image at the specified region.
 	public void DrawImage(Texture2D texture, Rectangle2F destinationRect, Rectangle2F sourceRect, Vector2F origin, double rotation, Color? color = null, SpriteEffects flipEffect = SpriteEffects.None, double depth = 0.0) {
 		spriteBatch.Draw(texture, NewRect(destinationRect), (Rectangle)sourceRect, color ?? XnaColor.White, (float)GMath.ConvertToRadians(rotation), (Vector2)origin, flipEffect, (float)depth);
 	}
 
-	#endregion
-	//--------------------------------
-	#region Sprite Drawing
 
-	/** <summary> Draws the sprite at the specified position. </summary> */
+	//-----------------------------------------------------------------------------
+	// Sprite drawing
+	//-----------------------------------------------------------------------------
+
+	public void DrawSprite(Sprite sprite, float x, float y) {
+		DrawSprite(sprite, new Vector2F(x, y));
+	}
+
 	public void DrawSprite(Sprite sprite, Vector2F position) {
+		spriteBatch.Draw(sprite.Image, NewPos(position), (Rectangle) sprite.SourceRect,
+			XnaColor.White, 0.0f, (Vector2) sprite.DrawOffset, 1.0f, SpriteEffects.None, 0.0f);
+	}
+
+	
+
+	//-----------------------------------------------------------------------------
+	// OLD Sprite drawing
+	//-----------------------------------------------------------------------------
+
+	// Draws the sprite at the specified position.
+	public void DrawSpriteEx(SpriteEx sprite, Vector2F position) {
 		/*spriteBatch.Draw(sprite.Sheet.Image, NewRect(position, sprite.SourceSize), (Rectangle)sprite.FrameRect,
 			XnaColor.White, 0.0f, (Vector2)(-sprite.Offset), SpriteEffects.None, 0.0f);*/
 		spriteBatch.Draw(sprite.Sheet.Image, NewPos(position), (Rectangle)sprite.FrameRect,
 			XnaColor.White, 0.0f, (Vector2)(-sprite.Offset), 1.0f, SpriteEffects.None, 0.0f);
 	}
-	/** <summary> Draws the sprite at the specified position. </summary> */
-	public void DrawSprite(Sprite sprite, Vector2F position, Color color, double depth = 0.0) {
+
+	// Draws the sprite at the specified position.
+	public void DrawSpriteEx(SpriteEx sprite, Vector2F position, Color color, double depth = 0.0) {
 		/*spriteBatch.Draw(sprite.Sheet.Image, NewRect(position, sprite.SourceSize), (Rectangle)sprite.FrameRect,
 			color, 0.0f, (Vector2)(-sprite.Offset), SpriteEffects.None, (float)depth);*/
 		spriteBatch.Draw(sprite.Sheet.Image, NewPos(position), (Rectangle)sprite.FrameRect,
 			color, 0.0f, (Vector2)(-sprite.Offset), 1.0f, SpriteEffects.None, (float)depth);
 	}
-	/** <summary> Draws the sprite at the specified position. </summary> */
-	public void DrawSprite(Sprite sprite, Vector2F position, Vector2F origin, Vector2F scale, double rotation, Color color, SpriteEffects flipEffect = SpriteEffects.None, double depth = 0.0) {
+
+	// Draws the sprite at the specified position.
+	public void DrawSpriteEx(SpriteEx sprite, Vector2F position, Vector2F origin, Vector2F scale, double rotation, Color color, SpriteEffects flipEffect = SpriteEffects.None, double depth = 0.0) {
 		/*spriteBatch.Draw(sprite.Sheet.Image, NewRect(position, scale * sprite.SourceSize), (Rectangle)sprite.FrameRect,
 			color, (float)GMath.ConvertToRadians(rotation), (Vector2)(origin - sprite.Offset), flipEffect, (float)depth);*/
 		spriteBatch.Draw(sprite.Sheet.Image, NewPos(position), (Rectangle)sprite.FrameRect,
 			color, (float)GMath.ConvertToRadians(rotation), (Vector2)(origin - sprite.Offset), (Vector2)scale, flipEffect, (float)depth);
 	}
-	/** <summary> Draws the sprite at the specified region. </summary> */
-	public void DrawSprite(Sprite sprite, Rectangle2F destinationRect, Vector2F origin, double rotation, Color color, SpriteEffects flipEffect = SpriteEffects.None, double depth = 0.0) {
+
+	// Draws the sprite at the specified region.
+	public void DrawSpriteEx(SpriteEx sprite, Rectangle2F destinationRect, Vector2F origin, double rotation, Color color, SpriteEffects flipEffect = SpriteEffects.None, double depth = 0.0) {
 		spriteBatch.Draw(sprite.Sheet.Image, NewRect(destinationRect), (Rectangle)sprite.FrameRect,
 			color, (float)GMath.ConvertToRadians(rotation), (Vector2)(origin - sprite.Offset), flipEffect, (float)depth);
 	}
 
-	#endregion
-	//--------------------------------
-	#region String Drawing
 
-	/** <summary> Draws the string at the specified position. </summary> */
+	//-----------------------------------------------------------------------------
+	// Animation drawing
+	//-----------------------------------------------------------------------------
+	
+	// Draw an animation during at the given time stamp and position.
+	public void DrawAnimation(Animation animation, float time, Vector2F position) {
+		DrawAnimation(animation, time, position.X, position.Y);
+	}
+
+	// Draw an animation during at the given time stamp and position.
+	public void DrawAnimation(Animation animation, float time, float x, float y) {
+		x = GMath.Round(x); 
+		y = GMath.Round(y);
+
+		for (int i = 0; i < animation.Frames.Count; ++i) {
+			AnimationFrame frame = animation.Frames[i];
+			if (time < frame.StartTime)
+				return;
+			if (time < frame.StartTime + frame.Duration || (time >= animation.Duration && frame.StartTime + frame.Duration == animation.Duration))
+				DrawSprite(frame.Sprite, x, y);
+		}
+	}
+	
+
+	//-----------------------------------------------------------------------------
+	// Text Drawing
+	//-----------------------------------------------------------------------------
+
+	// Draws the string at the specified position.
 	public void DrawString(SpriteFont font, string text, Vector2F position, Align alignment, Color color) {
 		spriteBatch.DrawString(font, text, NewStringPos(position, font, text, alignment), (XnaColor)color);
 	}
-	/** <summary> Draws the string at the specified position. </summary> */
-	public void DrawString(SpriteFont font, string text, Vector2F position, Align alignment, Color color, Vector2F origin, double rotation, double scale, SpriteEffects flipEffect = SpriteEffects.None, double depth = 0.0) {
-		spriteBatch.DrawString(font, text, NewStringPos(position, font, text, alignment), (XnaColor)color, (float)rotation, (Vector2)origin, (float)scale, flipEffect, (float)depth);
+
+	// Draws the string at the specified position.
+	public void DrawString(SpriteFont font, string text, Vector2F position, Align alignment,
+		Color color, Vector2F origin, double rotation, double scale, SpriteEffects flipEffect = SpriteEffects.None, double depth = 0.0)
+	{
+		spriteBatch.DrawString(font, text, NewStringPos(position, font, text, alignment),
+			(XnaColor)color, (float)rotation, (Vector2)origin, (float)scale, flipEffect, (float)depth);
 	}
-	/** <summary> Draws the string at the specified position. </summary> */
-	public void DrawString(SpriteFont font, string text, Vector2F position, Align alignment, Color color, Vector2F origin, double rotation, Vector2F scale, SpriteEffects flipEffect = SpriteEffects.None, double depth = 0.0) {
+
+	// Draws the string at the specified position.
+	public void DrawString(SpriteFont font, string text, Vector2F position, Align alignment,
+			Color color, Vector2F origin, double rotation, Vector2F scale,
+			SpriteEffects flipEffect = SpriteEffects.None, double depth = 0.0)
+	{
 		spriteBatch.DrawString(font, text, NewStringPos(position, font, text, alignment), (XnaColor)color, (float)rotation, (Vector2)origin, (Vector2)scale, flipEffect, (float)depth);
 	}
 
-	#endregion
-	//--------------------------------
-	#region Vector Graphics
+	
+	//-----------------------------------------------------------------------------
+	// Vector graphics.
+	//-----------------------------------------------------------------------------
 
-	/** <summary> Draws the specified line. </summary> */
+	// Draws the specified line.
 	public void DrawLine(Line2F line, float thickness, Color color, float depth = 0.0f) {
-		DrawImage(white1x1, line.Center + 0.5f, new Vector2F(0.5f, 0.5f), new Vector2F((line.Length + thickness), thickness), line.Direction, color, SpriteEffects.None, depth);
+		DrawImage(white1x1, line.Center + 0.5f, new Vector2F(0.5f, 0.5f),
+			new Vector2F((line.Length + thickness), thickness), 
+			line.Direction, color, SpriteEffects.None, depth);
 	}
-	/** <summary> Draws the specified rectangle. </summary> */
+
+	// Draws the specified rectangle.
 	public void DrawRectangle(Rectangle2F rect, float thickness, Color color, float depth = 0.0f) {
 		DrawLine(new Line2F(rect.Point, rect.Point + new Vector2F(rect.Width - 1, 0.0f)), thickness, color, depth);
 		DrawLine(new Line2F(rect.Point, rect.Point + new Vector2F(0.0f, rect.Height - 1)), thickness, color, depth);
 		DrawLine(new Line2F(rect.Point + rect.Size - 1, rect.Point + new Vector2F(rect.Width - 1, 0.0f)), thickness, color, depth);
 		DrawLine(new Line2F(rect.Point + rect.Size - 1, rect.Point + new Vector2F(0.0f, rect.Height - 1)), thickness, color, depth);
 	}
-	/** <summary> Draws the specified filled rectangle. </summary> */
+
+	// Draws the specified filled rectangle.
 	public void FillRectangle(Rectangle2F rect, Color color, double depth = 0.0) {
 		DrawImage(white1x1, rect, Vector2F.Zero, 0.0, color, SpriteEffects.None, depth);
 		//DrawImage(white1x1, rect.Center + 0.5, new Vector2D(0.5, 0.5), rect.Size, 0, color, SpriteEffects.None, depth);
 	}
+	
 
-	#endregion
-	//--------------------------------
-	#region Misc Drawing
+	//-----------------------------------------------------------------------------
+	// Misc. Drawing
+	//-----------------------------------------------------------------------------
 
-	/** <summary> Clears the render target to black. </summary> */
+	// Clears the render target to black.
 	public void Clear() {
 		spriteBatch.GraphicsDevice.Clear(XnaColor.Black);
 	}
-	/** <summary> Clears the render target. </summary> */
+
+	// Clears the render target.
 	public void Clear(Color color) {
 		spriteBatch.GraphicsDevice.Clear(color);
 	}
 
-	#endregion
-	//--------------------------------
-	#endregion
-	//========== MANAGEMENT ==========
-	#region Management
-	//--------------------------------
-	#region Settings
 
-	/** <summary> Translates the origin of the graphics object. </summary> */
+	//-----------------------------------------------------------------------------
+	// Settings
+	//-----------------------------------------------------------------------------
+
+	// Translates the origin of the graphics object.
 	public void Translate(float x, float y) {
 		translation += new Vector2F(x, y);
 	}
-	/** <summary> Translates the origin of the graphics object. </summary> */
+
+	// Translates the origin of the graphics object.
 	public void Translate(Vector2F distance) {
 		translation += distance;
 	}
-	/** <summary> Resets the translation of the graphics object. </summary> */
+
+	// Resets the translation of the graphics object.
 	public void ResetTranslation() {
 		translation = Vector2F.Zero;
 	}
+	
 
-	#endregion
-	//--------------------------------
-	#region Begin/End
+	//-----------------------------------------------------------------------------
+	// Begin/End
+	//-----------------------------------------------------------------------------
 
-	/** <summary> Begins the drawing to the sprite batch. </summary> */
+	// Begins the drawing to the sprite batch.
 	public void Begin() {
 		spriteBatch.Begin();
 	}
-	/** <summary> Begins the drawing to the sprite batch. </summary> */
+
+	// Begins the drawing to the sprite batch.
 	public void Begin(BlendState blendState) {
 		spriteBatch.Begin(SpriteSortMode.Deferred, blendState);
 	}
-	/** <summary> Begins the drawing to the sprite batch. </summary> */
+
+	// Begins the drawing to the sprite batch.
 	public void Begin(SpriteSortMode sortMode, BlendState blendState) {
 		spriteBatch.Begin(sortMode, blendState);
 	}
-	/** <summary> Begins the drawing to the sprite batch. </summary> */
+
+	// Begins the drawing to the sprite batch.
 	public void Begin(DrawMode mode) {
 		spriteBatch.Begin(mode.SortMode, mode.BlendState,
 			mode.SamplerState, mode.DepthStencilState,
 			mode.RasterizerState, mode.Effect, mode.Transform);
 	}
-	/** <summary> Ends the drawing to the sprite batch. </summary> */
+
+	// Ends the drawing to the sprite batch.
 	public void End() {
 		spriteBatch.End();
 	}
+	
 
-	#endregion
-	//--------------------------------
-	#region Render Target
+	//-----------------------------------------------------------------------------
+	// Render Targets
+	//-----------------------------------------------------------------------------
 
-	/** <summary> Sets the render target to draw to. </summary> */
+	// Sets the render target to draw to.
 	public void SetRenderTarget(RenderTarget2D renderTarget) {
 		if (renderTarget != null)
 			preivousRenderTargets.Push(spriteBatch.GraphicsDevice.GetRenderTargets());
@@ -345,22 +401,21 @@ public class Graphics2D {
 			preivousRenderTargets.Clear();
 		spriteBatch.GraphicsDevice.SetRenderTarget(renderTarget);
 	}
-	/** <summary> Resets the render target back to the previous one. </summary> */
+
+	// Resets the render target back to the previous one.
 	public void ResetRenderTarget() {
 		spriteBatch.GraphicsDevice.SetRenderTargets(preivousRenderTargets.Pop());
 	}
+	
 
-	#endregion
-	//--------------------------------
-	#region Dispose
+	//-----------------------------------------------------------------------------
+	// Disposal
+	//-----------------------------------------------------------------------------
 
-	/** <summary> Immediately releases the unmanaged resources used by the sprite batch. </summary> */
+	// Immediately releases the unmanaged resources used by the sprite batch.
 	public void Dispose() {
 		spriteBatch.Dispose();
 	}
 
-	#endregion
-	//--------------------------------
-	#endregion
 }
 } // End namespace

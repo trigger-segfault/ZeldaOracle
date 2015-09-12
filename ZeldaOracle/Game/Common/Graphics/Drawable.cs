@@ -10,7 +10,7 @@ using ZeldaOracle.Common.Geometry;
 namespace ZeldaOracle.Common.Graphics {
 public class Drawable {
 
-	protected Sprite	sprite;
+	protected SpriteEx	sprite;
 	protected double	depth;
 	protected Color		color;
 	protected Vector2F	origin;
@@ -27,15 +27,15 @@ public class Drawable {
 		this(null, Color.White) {
 	}
 
-	public Drawable(Sprite sprite, double depth = 0):
+	public Drawable(SpriteEx sprite, double depth = 0):
 		this(sprite, Color.White, depth) {
 	}
 
-	public Drawable(Sprite sprite, Color color, double depth = 0) :
+	public Drawable(SpriteEx sprite, Color color, double depth = 0) :
 		this(sprite, color, Vector2F.Zero, depth) {
 	}
 
-	public Drawable(Sprite sprite, Color color, Vector2F origin, double depth = 0) {
+	public Drawable(SpriteEx sprite, Color color, Vector2F origin, double depth = 0) {
 		this.sprite        = sprite;
 		this.color         = color;
 		this.depth         = depth;
@@ -78,7 +78,7 @@ public class Drawable {
 
 	// ================== PROPERTIES =================== //
 
-	public Sprite Sprite {
+	public SpriteEx Sprite {
 		get { return sprite; }
 		set { sprite = value; }
 	}
