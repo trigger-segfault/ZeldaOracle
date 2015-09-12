@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 using ZeldaOracle.Common.Geometry;
 
-namespace ZeldaOracle.Common.Input {
+namespace ZeldaOracle.Common.Input.Controls {
 /** <summary>
  * A class to store analog stick data.
  * </summary> */

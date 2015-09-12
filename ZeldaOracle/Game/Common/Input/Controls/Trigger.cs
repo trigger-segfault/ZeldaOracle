@@ -4,7 +4,7 @@ using System.Linq;
 
 using ZeldaOracle.Common.Geometry;
 
-namespace ZeldaOracle.Common.Input {
+namespace ZeldaOracle.Common.Input.Controls {
 /** <summary>
  * A class to store trigger data.
  * </summary> */

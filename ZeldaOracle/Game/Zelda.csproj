@@ -152,11 +152,13 @@
     <Compile Include="Common\Graphics\Sprite.cs" />
     <Compile Include="Common\Graphics\SpriteEx.cs" />
     <Compile Include="Common\Graphics\SpriteSheet.cs" />
-    <Compile Include="Common\Input\AnalogStick.cs" />
+    <Compile Include="Common\Input\Controls\AnalogStick.cs" />
     <Compile Include="Common\Input\Buttons.cs" />
     <Compile Include="Common\Input\Controls\Button.cs" />
     <Compile Include="Common\Input\Controls\ComboControl.cs" />
     <Compile Include="Common\Input\Controls\ControlHandler.cs" />
+    <Compile Include="Common\Input\Controls\ControlSet.cs" />
+    <Compile Include="Common\Input\Controls\GameControl.cs" />
     <Compile Include="Common\Input\Controls\HotKey.cs" />
     <Compile Include="Common\Input\Controls\Key.cs" />
     <Compile Include="Common\Input\Controls\MouseButton.cs" />
@@ -164,12 +166,13 @@
     <Compile Include="Common\Input\GamePad.cs" />
     <Compile Include="Common\Input\InputControl.cs" />
     <Compile Include="Common\Input\InputState.cs" />
+    <Compile Include="Common\Input\InputType.cs" />
     <Compile Include="Common\Input\Keyboard.cs" />
     <Compile Include="Common\Input\KeyboardTyping.cs" />
     <Compile Include="Common\Input\Keys.cs" />
     <Compile Include="Common\Input\Mouse.cs" />
     <Compile Include="Common\Input\MouseButtons.cs" />
-    <Compile Include="Common\Input\Trigger.cs" />
+    <Compile Include="Common\Input\Controls\Trigger.cs" />
     <Compile Include="Common\Scripts\LanguageSR.cs" />
     <Compile Include="Common\Scripts\PlaylistSR.cs" />
     <Compile Include="Common\Scripts\ScriptReader.cs" />
@@ -210,6 +213,7 @@
     <Compile Include="Game\Entities\Entity.cs" />
     <Compile Include="Game\GameStates\GameState.cs" />
     <Compile Include="Game\GameStates\GameStateStack.cs" />
+    <Compile Include="Game\Main\Controls.cs" />
     <Compile Include="Game\Main\GameBase.cs" />
     <Compile Include="Game\Main\GameData.cs" />
     <Compile Include="Game\Main\GameManager.cs" />

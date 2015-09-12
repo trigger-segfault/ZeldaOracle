@@ -76,6 +76,7 @@ public class GameManager {
 	public void Initialize(GameBase gameBase) {
 		this.gameBase = gameBase;
 
+		Controls.Initialize();
 		ScreenResized();
 	}
 
