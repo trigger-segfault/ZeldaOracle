@@ -62,40 +62,71 @@ class GameData {
 
 	/** <summary> Loads the images. </summary> */
 	private static void LoadImages() {
+		animationBuilder = new AnimationBuilder();
 
 		Image sheetPlayer = Resources.LoadImage("Images/sheet_player");
+		Image imageZoneGridSmall = Resources.LoadImage("Images/zoneset");
 		IMAGE_TILESET = Resources.LoadImage("Images/tileset");
 
-		SHEET_PLAYER = new SpriteSheet(sheetPlayer, new Point2I(16, 16), Point2I.Zero, Point2I.One);
+		SHEET_PLAYER = new SpriteSheet(sheetPlayer, 16, 16, 0, 0, 1, 1);
+		SpriteSheet sheetZone = new SpriteSheet(imageZoneGridSmall, 16, 16, 0, 0, 1, 1);
+		SpriteSheet sheetZoneSmall = new SpriteSheet(imageZoneGridSmall, 8, 8, 187, 0, 1, 1);
 
 		// TEMP: Create some player animations.
 
-		Animation[] anim = new Animation[8];
 
+		// TILE ANIMATIONS:
+		animationBuilder.SetSheet(sheetZone);
+		BuildAnim(ANIM_LANTERN)			.AddFrameStrip(16, 1, 8, 4);
 
-
-
+		animationBuilder.SetSheet(sheetZoneSmall);
+		BuildAnim(ANIM_WATER)			.AddFrameStrip(16, 0, 4, 4).MakeQuad();
+		BuildAnim(ANIM_WATER_DEEP)		.AddFrameStrip(16, 0, 5, 4).MakeQuad();
+		BuildAnim(ANIM_WATERFALL)		.AddFrameStrip(8, 0, 6, 4).MakeQuad();
+		BuildAnim(ANIM_LAVAFALL)		.AddFrameStrip(8, 0, 8, 4).MakeQuad();
+		BuildAnim(ANIM_PUDDLE)			.AddFrameStrip(16, 4,10, 3).AddFrame(16, 5,10).MakeQuad();
+		BuildAnim(ANIM_WATERFALL_BOTTOM).InsertFrameStrip(0, 8, 0,6, 4, 0,0)
+										.InsertFrameStrip(0, 8, 0,6, 4, 8,0)
+										.InsertFrameStrip(0, 8, 0,7, 4, 0,8)
+										.InsertFrameStrip(0, 8, 0,7, 4, 8,8);
+		BuildAnim(ANIM_LAVAFALL_BOTTOM)	.InsertFrameStrip(0, 8, 0,8, 4, 0,0)
+										.InsertFrameStrip(0, 8, 0,8, 4, 8,0)
+										.InsertFrameStrip(0, 8, 0,9, 4, 0,8)
+										.InsertFrameStrip(0, 8, 0,9, 4, 8,8);
+		BuildAnim(ANIM_FLOWERS)			.InsertFrameStrip(0, 16,  4,9, 4, 0,0)
+										.InsertFrameStrip(0, 16,  4,9, 4, 8,8)
+										.InsertFrame(0, 64, 7,10, 8,0)
+										.InsertFrame(0, 64, 7,10, 0,8);
+		BuildAnim(ANIM_OCEAN)			.InsertFrameStrip(0, 16, 4,4, 4, 0,0, 0,1)
+										.InsertFrameStrip(0, 16, 5,4, 4, 8,0, 0,1)
+										.InsertFrameStrip(0, 16, 4,4, 4, 0,8, 0,1)
+										.InsertFrameStrip(0, 16, 5,4, 4, 8,8, 0,1);
+		BuildAnim(ANIM_OCEAN_SHORE)		.InsertFrameStrip(0, 16, 6,4, 4, 0,0, 0,1)
+										.InsertFrameStrip(0, 16, 7,4, 4, 8,0, 0,1)
+										.InsertFrameStrip(0, 16, 4,4, 4, 0,8, 0,1)
+										.InsertFrameStrip(0, 16, 5,4, 4, 8,8, 0,1);
 		
-		// Create player default animation (walk).
-		animationBuilder = new AnimationBuilder();
-
+		// PLAYER ANIMATIONS:
 		animationBuilder.SetSheet(SHEET_PLAYER);
-		ANIM_PLAYER_DEFAULT = new Animation();
-		BuildAnim(ANIM_PLAYER_DEFAULT).AddFrameStrip(8, 0,0, 2).Offset(-8, -16).SetLooped(true).MakeDynamic(4, 2,0);
+		BuildAnim(ANIM_PLAYER_DEFAULT)			.AddFrameStrip(8, 0,0, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
+		BuildAnim(ANIM_PLAYER_SHIELD)			.AddFrameStrip(8, 0,1, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
+		BuildAnim(ANIM_PLAYER_SHIELD_BLOCK)		.AddFrameStrip(8, 0,2, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
+		BuildAnim(ANIM_PLAYER_HOLD)				.AddFrameStrip(8, 0,5, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
+		BuildAnim(ANIM_PLAYER_PUSH)				.AddFrameStrip(8, 0,6, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
+		BuildAnim(ANIM_PLAYER_PULL)				.AddFrameStrip(8, 0,7, 2).Offset(-8, -16).SetLooped(false).MakeDynamic(4, 2,0);
+		BuildAnim(ANIM_PLAYER_DIG)				.AddFrame(8, 0,9).AddFrame(16, 1,9).Offset(-8, -16).SetLooped(false).MakeDynamic(4, 2,0);
+		BuildAnim(ANIM_PLAYER_THROW)			.AddFrame(9, 0,4).Offset(-8, -16).SetLooped(false).MakeDynamic(4, 2,0);
+		BuildAnim(ANIM_PLAYER_FALL).AddFrame(16, 1, 20, 0, 0).AddFrame(10, 2, 20, 0, 0).AddFrame(11, 3, 20, 0, 0).Offset(-8, -16).SetLooped(false);
+		BuildAnim(ANIM_PLAYER_SHIELD_LARGE)			.AddFrameStrip(8, 0,3, 2).Offset(-8, -16).CreateSubStrip()
+													.AddFrameStrip(8, 2,1, 2).Offset(-8, -16).MakeDynamic(3, 2,0);
+		BuildAnim(ANIM_PLAYER_SHIELD_LARGE_BLOCK)	.AddFrameStrip(8, 0,2, 2).Offset(-8, -16).MakeDynamic(3, 2,0)
+													.CreateSubStrip().AddFrameStrip(8, 2,3, 2).Offset(-8, -16);
+		BuildAnim(ANIM_PLAYER_JUMP)
+			.AddFrame(9, 0, 11).AddFrame(9, 1, 11).AddFrame(6, 2, 11).AddFrame(6, 1, 0).Offset(-8, -16).SetLooped(false).CreateSubStrip()
+			.AddFrame(9, 3, 11).AddFrame(9, 4, 11).AddFrame(6, 5, 11).AddFrame(6, 3, 0).Offset(-8, -16).SetLooped(false).CreateSubStrip()
+			.AddFrame(9, 0, 12).AddFrame(9, 1, 12).AddFrame(6, 2, 12).AddFrame(6, 5, 0).Offset(-8, -16).SetLooped(false).CreateSubStrip()
+			.AddFrame(9, 3, 12).AddFrame(9, 4, 12).AddFrame(6, 5, 12).AddFrame(6, 7, 0).Offset(-8, -16).SetLooped(false).CreateSubStrip();
 
-		/*
-		for (int dir = 0; dir < 4; dir++) {
-			anim[dir] = new Animation();
-			anim[dir].LoopCount = -1;
-			if (dir > 0)
-				anim[dir - 1].NextStrip = anim[dir];
-			for (int i = 0; i < 2; i++) {
-				anim[dir].AddFrame(new AnimationFrame(i * 8, 8, sheetPlayer,
-					new Rectangle2I((dir * 17 * 2) + (i * 17), 0, 16, 16), new Point2I(0, 0)));
-			}
-		}
-		ANIM_PLAYER_DEFAULT = anim[0];
-		*/
 
 		// TEMP: Create a tileset.
 		TILESET_DEFAULT = new Tileset(21, 36);
@@ -110,6 +141,16 @@ class GameData {
 				TILESET_DEFAULT.TileData[x, y] = data;
 			}
 		}
+		// Animations.
+		TILESET_DEFAULT.TileData[ 1, 15].Animation = ANIM_WATER;
+		TILESET_DEFAULT.TileData[ 2, 15].Animation = ANIM_WATER_DEEP;
+		TILESET_DEFAULT.TileData[ 1, 14].Animation = ANIM_OCEAN;
+		TILESET_DEFAULT.TileData[ 2, 14].Animation = ANIM_OCEAN_SHORE;
+		TILESET_DEFAULT.TileData[ 1, 16].Animation = ANIM_PUDDLE;
+		TILESET_DEFAULT.TileData[ 0, 14].Animation = ANIM_WATERFALL_TOP;
+		TILESET_DEFAULT.TileData[ 0, 15].Animation = ANIM_WATERFALL;
+		TILESET_DEFAULT.TileData[ 0, 16].Animation = ANIM_WATERFALL_BOTTOM;
+		TILESET_DEFAULT.TileData[ 3, 23].Animation = ANIM_FLOWERS;
 
 		TILESETS = new Tileset[] { TILESET_DEFAULT };
 		
@@ -318,50 +359,50 @@ class GameData {
 	//-----------------------------------------------------------------------------
 
 	// Tile animations.
-	public static Animation ANIM_WATER;
-	public static Animation ANIM_OCEAN;
-	public static Animation ANIM_OCEAN_SHORE;
-	public static Animation ANIM_FLOWERS;
-	public static Animation ANIM_WATERFALL;
-	public static Animation ANIM_WATERFALL_BOTTOM;
-	public static Animation ANIM_WATERFALL_TOP;
-	public static Animation ANIM_WATER_DEEP;
-	public static Animation ANIM_PUDDLE;
-	public static Animation ANIM_LANTERN;
-	public static Animation ANIM_LAVAFALL;
-	public static Animation ANIM_LAVAFALL_BOTTOM;
-	public static Animation ANIM_LAVAFALL_TOP;
+	public static Animation ANIM_WATER						= new Animation();
+	public static Animation ANIM_OCEAN						= new Animation();
+	public static Animation ANIM_OCEAN_SHORE				= new Animation();
+	public static Animation ANIM_FLOWERS					= new Animation();
+	public static Animation ANIM_WATERFALL					= new Animation();
+	public static Animation ANIM_WATERFALL_BOTTOM			= new Animation();
+	public static Animation ANIM_WATERFALL_TOP				= new Animation();
+	public static Animation ANIM_WATER_DEEP					= new Animation();
+	public static Animation ANIM_PUDDLE						= new Animation();
+	public static Animation ANIM_LANTERN					= new Animation();
+	public static Animation ANIM_LAVAFALL					= new Animation();
+	public static Animation ANIM_LAVAFALL_BOTTOM			= new Animation();
+	public static Animation ANIM_LAVAFALL_TOP				= new Animation();
 	
 	// Player animations.
-	public static Animation ANIM_PLAYER_DEFAULT;
-	public static Animation ANIM_PLAYER_HOLD;
-	public static Animation ANIM_PLAYER_SHIELD;
-	public static Animation ANIM_PLAYER_SHIELD_BLOCK;
-	public static Animation ANIM_PLAYER_SHIELD_LARGE;
-	public static Animation ANIM_PLAYER_SHIELD_LARGE_BLOCK;
-	public static Animation ANIM_PLAYER_SWIM;
-	public static Animation ANIM_PLAYER_PUSH;
-	public static Animation ANIM_PLAYER_GRAB;
-	public static Animation ANIM_PLAYER_PULL;
-	public static Animation ANIM_PLAYER_DIG;
-	public static Animation ANIM_PLAYER_THROW;
-	public static Animation ANIM_PLAYER_SWING;
-	public static Animation ANIM_PLAYER_SWING_BIG;
-	public static Animation ANIM_PLAYER_STAB;
-	public static Animation ANIM_PLAYER_SPIN_SWORD;
-	public static Animation ANIM_PLAYER_AIM;
-	public static Animation ANIM_PLAYER_JUMP;
-	public static Animation ANIM_PLAYER_DIVE;
-	public static Animation ANIM_PLAYER_DIE;
-	public static Animation ANIM_PLAYER_FALL;
-	public static Animation ANIM_PLAYER_DROWN;
+	public static Animation ANIM_PLAYER_DEFAULT				= new Animation();
+	public static Animation ANIM_PLAYER_HOLD				= new Animation();
+	public static Animation ANIM_PLAYER_SHIELD				= new Animation();
+	public static Animation ANIM_PLAYER_SHIELD_BLOCK		= new Animation();
+	public static Animation ANIM_PLAYER_SHIELD_LARGE		= new Animation();
+	public static Animation ANIM_PLAYER_SHIELD_LARGE_BLOCK	= new Animation();
+	public static Animation ANIM_PLAYER_SWIM				= new Animation();
+	public static Animation ANIM_PLAYER_PUSH				= new Animation();
+	public static Animation ANIM_PLAYER_GRAB				= new Animation();
+	public static Animation ANIM_PLAYER_PULL				= new Animation();
+	public static Animation ANIM_PLAYER_DIG					= new Animation();
+	public static Animation ANIM_PLAYER_THROW				= new Animation();
+	public static Animation ANIM_PLAYER_SWING				= new Animation();
+	public static Animation ANIM_PLAYER_SWING_BIG			= new Animation();
+	public static Animation ANIM_PLAYER_STAB				= new Animation();
+	public static Animation ANIM_PLAYER_SPIN_SWORD			= new Animation();
+	public static Animation ANIM_PLAYER_AIM					= new Animation();
+	public static Animation ANIM_PLAYER_JUMP				= new Animation();
+	public static Animation ANIM_PLAYER_DIVE				= new Animation();
+	public static Animation ANIM_PLAYER_DIE					= new Animation();
+	public static Animation ANIM_PLAYER_FALL				= new Animation();
+	public static Animation ANIM_PLAYER_DROWN				= new Animation();
 	
 	// Projectile animations.
-	public static Animation ANIM_PROJECTILE_PLAYER_ARROW;
-	public static Animation ANIM_PROJECTILE_PLAYER_ARROW_CRASH;
+	public static Animation ANIM_PROJECTILE_PLAYER_ARROW		= new Animation();
+	public static Animation ANIM_PROJECTILE_PLAYER_ARROW_CRASH	= new Animation();
 	
 	// Effect animations.
-	public static Animation ANIM_EFFECT_DIRT;
+	public static Animation ANIM_EFFECT_DIRT	= new Animation();
 	
 
 	//-----------------------------------------------------------------------------

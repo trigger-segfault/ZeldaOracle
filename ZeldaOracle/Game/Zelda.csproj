@@ -181,7 +181,6 @@
     <Compile Include="Common\Scripts\SpriteSheetSR.cs" />
     <Compile Include="Common\Translation\Language.cs" />
     <Compile Include="Game\Control\RoomControl.cs" />
-    <Compile Include="Game\Control\TileGrid.cs" />
     <Compile Include="Game\Control\View.cs" />
     <Compile Include="Game\Debug\DebugController.cs" />
     <None Include="Game\Editor\EffectPropertyGrid.cs" />

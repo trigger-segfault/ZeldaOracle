@@ -55,8 +55,6 @@ public class GameBase : XnaGame {
 	private bool screenShotRequested;
 	// The name of the requested screenshot.
 	private string screenShotName;
-	// True if the game has finished starting up.
-	private bool started;
 
 	// Frame Rate:
 	// The total number of frames passed since the last frame rate check.
@@ -85,7 +83,6 @@ public class GameBase : XnaGame {
 		this.game					= null;
 		this.screenShotRequested	= false;
 		this.screenShotName			= "";
-		this.started				= false;
 
 		// Frame Rate
 		this.totalFrames			= 0;
