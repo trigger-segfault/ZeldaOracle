@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities;
+using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
-using ZeldaOracle.Game.Players;
+using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Control {
 
-	// Handles the main zelda gameplay within a room.
+	// Handles the main Zelda gameplay within a room.
 	public class RoomControl : GameState {
 
 		private World	world;
@@ -40,7 +41,9 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin() {
-			
+			player = new Player();
+			player.Initialize(this);
+			entities.Add(player);
 		}
 		
 		public override void OnEnd() {
@@ -48,11 +51,26 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public override void Update(float timeDelta) {
+			// TODO: Check for opening pause menu or map screens.
 
+			// Update entities.
+			for (int i = 0; i < entities.Count; ++i) {
+				entities[i].Update(timeDelta);
+			}
+
+			// TODO: Update tiles.
 		}
 
-		public override void Draw(float timeDelta) {
+		public override void Draw(Graphics2D g) {
+			// TODO: Draw tiles.
+			// TODO: Draw entities.
+			
+			// Draw entities.
+			for (int i = 0; i < entities.Count; ++i) {
+				entities[i].Draw(g);
+			}
 
+			// TODO: Draw HUD.
 		}
 
 		
@@ -60,18 +78,22 @@ namespace ZeldaOracle.Game.Control {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		// The world context of the game.
 		public World World {
 			get { return world; }
 		}
 
+		// The current level that contains the room the player is in.
 		public Level Level {
 			get { return level; }
 		}
 
+		// The current room the player is in.
 		public Room Room {
 			get { return room; }
 		}
 
+		// The player entity (NOTE: this can be null)
 		public Player Player {
 			get { return player; }
 		}

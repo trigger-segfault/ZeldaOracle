@@ -60,7 +60,6 @@
   <ItemGroup>
     <Folder Include="Animations\" />
     <Folder Include="Data\" />
-    <Folder Include="Images\" />
     <Folder Include="Languages\" />
     <Folder Include="Particles\" />
     <Folder Include="Shaders\" />
@@ -128,6 +127,13 @@
       <Name>font_debug_menu_bold</Name>
       <Importer>TextureImporter</Importer>
       <Processor>FontTextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\sheet_player.png">
+      <Name>sheet_player</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

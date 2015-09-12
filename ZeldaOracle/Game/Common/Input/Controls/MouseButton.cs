@@ -13,7 +13,7 @@ using ZeldaOracle.Common.Input;
 using Mouse		= ZeldaOracle.Common.Input.Mouse;
 
 namespace ZeldaOracle.Common.Input.Controls {
-public class MouseButton : Control {
+public class MouseButton : ControlHandler {
 
 	public MouseButtons ButtonCode;
 	public bool DoubleClick;

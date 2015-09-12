@@ -13,7 +13,7 @@ using ZeldaOracle.Common.Input;
 using GamePad		= ZeldaOracle.Common.Input.GamePad;
 
 namespace ZeldaOracle.Common.Input.Controls {
-public class Button : Control {
+public class Button : ControlHandler {
 
 	public Buttons ButtonCode;
 	public int Player;

@@ -15,7 +15,7 @@ using Keyboard		= ZeldaOracle.Common.Input.Keyboard;
 using Keys			= ZeldaOracle.Common.Input.Keys;
 
 namespace ZeldaOracle.Common.Input.Controls {
-public class HotKey : Control {
+public class HotKey : ControlHandler {
 
 	//=========== MEMBERS ============
 	#region Members

@@ -15,7 +15,7 @@ using Keyboard		= ZeldaOracle.Common.Input.Keyboard;
 using Keys			= ZeldaOracle.Common.Input.Keys;
 
 namespace ZeldaOracle.Common.Input.Controls {
-public class Key : Control {
+public class Key : ControlHandler {
 
 	public Keys KeyCode; 
 
