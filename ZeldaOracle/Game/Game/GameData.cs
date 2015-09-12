@@ -14,7 +14,7 @@ using ZeldaOracle.Common.Scripts;
 using System.IO;
 //using ParticleGame.Project.Particles;
 
-namespace ZeldaOracle.Game.Main {
+namespace ZeldaOracle.Game {
 /** <summary>
  * A static class for storing links to all game content.
  * </summary> */
@@ -61,17 +61,35 @@ class GameData {
 	/** <summary> Loads the images. </summary> */
 	private static void LoadImages() {
 
-		Resources.LoadImage("Images/sheet_player");
+		Image sheetPlayer = Resources.LoadImage("Images/sheet_player");
+		IMAGE_TILESET = Resources.LoadImage("Images/tileset");
 
 		// TEMP: Create some player animations.
 
 		//ANIM_PLAYER_DEFAULT.
 		
+		
+		
+		Animation[] anim = new Animation[8];
+
+		
+		// Create player default animation (walk).
+		for (int dir = 0; dir < 4; dir++) {
+			anim[dir] = new Animation();
+			anim[dir].LoopCount = -1;
+			if (dir > 0)
+				anim[dir - 1].NextStrip = anim[dir];
+			for (int i = 0; i < 2; i++) {
+				anim[dir].AddFrame(new AnimationFrame(i * 8, 8, sheetPlayer,
+					new Rectangle2I((dir * 17 * 2) + (i * 17), 0, 16, 16), new Point2I(0, 0)));
+			}
+		}
+		ANIM_PLAYER_DEFAULT = anim[0];
+
 		/*
 		Image palette = Resources.LoadImage("Images/Palette");
 
 		List<Color> colors = new List<Color>();
-
 
 		int index = 0;
 		Color[] colorData = new Color[palette.Width * palette.Height];
@@ -181,10 +199,13 @@ class GameData {
 
 	//========== GAME DATA ===========
 
+	#pragma warning disable 169, 649 // The field 'example' is never used.
+
 	//-----------------------------------------------------------------------------
 	// Images
 	//-----------------------------------------------------------------------------
 
+	public static Image IMAGE_TILESET;
 
 	//-----------------------------------------------------------------------------
 	// Sprite Sheets
@@ -193,7 +214,7 @@ class GameData {
 	public static SpriteSheet SheetDebugMenu;
 	public static SpriteSheet SheetGamePadControls;
 	public static SpriteSheet SheetGamePadArrows;
-
+	
 	public static SpriteSheet SHEET_PLAYER;
 	public static SpriteSheet SHEET_PLAYER_HURT;
 	public static SpriteSheet SHEET_MONSTERS;
@@ -397,6 +418,9 @@ class GameData {
 
 	public static RenderTarget2D RenderTargetGame;
 	public static RenderTarget2D RenderTargetDebug;
+
+	
+#pragma warning restore 169, 649 // The field 'example' is never used.
 
 }
 } // end namespace

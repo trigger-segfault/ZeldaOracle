@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 
-namespace ZeldaOracle.Game.Main
+namespace ZeldaOracle.Game
 {
 	class GameSettings
 	{
@@ -20,5 +20,10 @@ namespace ZeldaOracle.Game.Main
 		public const float		PLAYER_MOVE_SPEED		= 64;	// Pixels per second.
 		public const float		PLAYER_JUMP_SPEED		= 108;
 		public const float		GRAVITY_ACCELERATION	= 450;
+		
+		public static readonly Point2I	ROOM_SIZE_SMALL	= new Point2I(10, 8);
+		public static readonly Point2I	ROOM_SIZE_LARGE	= new Point2I(15, 11);
+
+		public const int		DEFAULT_TILE_LAYER_COUNT = 2;
 	}
 }
