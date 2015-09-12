@@ -205,8 +205,10 @@ public class Graphics2D {
 	}
 
 	public void DrawSprite(Sprite sprite, Vector2F position) {
-		spriteBatch.Draw(sprite.Image, NewPos(position), (Rectangle) sprite.SourceRect,
-			XnaColor.White, 0.0f, (Vector2) sprite.DrawOffset, 1.0f, SpriteEffects.None, 0.0f);
+		for (Sprite part = sprite; part != null; part = part.NextPart) {
+			spriteBatch.Draw(part.Image, NewPos(position), (Rectangle) part.SourceRect,
+				XnaColor.White, 0.0f, (Vector2) part.DrawOffset, 1.0f, SpriteEffects.None, 0.0f);
+		}
 	}
 
 	

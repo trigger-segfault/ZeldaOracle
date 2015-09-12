@@ -2,61 +2,94 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Main;
+using ZeldaOracle.Game.Control;
 
 namespace ZeldaOracle.Game.Tiles {
 	
 	[Flags]
-	public enum TileFlags
-	{
-		TILE_DISABLED		= 0x1,		// Tile is disabled.
-		TILE_SOLID			= 0x2,		// Solid tiles obstruct movement.
-		TILE_DIGGABLE		= 0x4,		// Can be dug with a shovel.
-		TILE_STAIRS			= 0x8,		// Stairs slow movement speed.
-		TILE_LADDER			= 0x10,		// A climbable ladder disables items, and makes you face away from the screen.
-		TILE_ICE			= 0x20,		// Slippery surface.
-		TILE_HOLE			= 0x40,		// Endless pit that objects can fall in.
-		TILE_WATER			= 0x80,		// Swimmable water.
-		TILE_LAVA			= 0x100,	// Hot lava.
-		TILE_LEDGE			= 0x200,	// Ledge that the player can jump off.
-		TILE_NOT_COVERABLE	= 0x400,	// Tile can't be covered by movable blocks.
-		TILE_MOVABLE		= 0x800,	// Tile can be pushed around.
-		TILE_PICKUPABLE		= 0x1000,	// Tile can be picked up and carried.
-		TILE_BURNABLE		= 0x2000,	// Destroyed by fire.
-		TILE_CUTTABLE		= 0x4000,	// Destroyed by sword.
-		TILE_BOMBABLE		= 0x8000,	// Destroyed by bomb explosions.
-		TILE_BOOMERANGABLE	= 0x10000,	// Destroyed by boomerang.
-		TILE_SWITCHABLE		= 0x20000,	// Can be switched with using the Switch Hook
-		TILE_SWITCH_STAYS	= 0x40000,	// Won't be destroyed when switched using the Switch Hook.
-		TILE_HALF_SOLID		= 0x80000,	// Obstructs movement, but some projectiles can pass over the tile.
+	public enum TileFlags {
+		Disabled		= 0x1,		// Tile is disabled.
+		Solid			= 0x2,		// Solid tiles obstruct movement.
+		Diggable		= 0x4,		// Can be dug with a shovel.
+		Stairs			= 0x8,		// Stairs slow movement speed.
+		Ladder			= 0x10,		// A climbable ladder disables items, and makes you face away from the screen.
+		Ice				= 0x20,		// Slippery surface.
+		Hole			= 0x40,		// Endless pit that objects can fall in.
+		Water			= 0x80,		// Swimmable water.
+		Lava			= 0x100,	// Hot lava.
+		Ledge			= 0x200,	// Ledge that the player can jump off.
+		NotCoverable	= 0x400,	// Tile can't be covered by movable blocks.
+		Movable			= 0x800,	// Tile can be pushed around.
+		Pickupable		= 0x1000,	// Tile can be picked up and carried.
+		Burnable		= 0x2000,	// Destroyed by fire.
+		Cuttable		= 0x4000,	// Destroyed by sword.
+		Bombable		= 0x8000,	// Destroyed by bomb explosions.
+		Boomerangable	= 0x10000,	// Destroyed by boomerang.
+		Switchable		= 0x20000,	// Can be switched with using the Switch Hook
+		SwitchStays		= 0x40000,	// Won't be destroyed when switched using the Switch Hook.
+		HalfSolid		= 0x80000,	// Obstructs movement, but some projectiles can pass over the tile.
 
-		TILE_NULL_FLAG		= 0x10000,	// This special flags indicates that the tile is NULL.
+		NullFlag		= 0x10000,	// This special flags indicates that the tile is NULL.
 
-		TILE_DEFAULT_FLAGS = TILE_DIGGABLE, // Default tile flags (assumes a typical ground tile).
+		Default			= Diggable, // Default tile flags (assumes a typical ground tile).
 	};
 
 
 	public class Tile {
+		private RoomControl		control;
 		private Point2I			location;		// The tile location.
+		private int				layer;			// The layer this tile is in.
 		private Vector2F		offset;			// Offset in pixels from its tile location.
-		private Point2I			tileSheetLoc;	// TODO: this doesn't mean anything yet
-		private Point2I			size;
-	
+		private Point2I			size;			// How many tile spaces this tile occupies.
+
 		private TileFlags		flags;
+		private CollisionModel	collisionModel;
 		private Sprite			sprite;
+
 		private AnimationPlayer	animationPlayer;
-		//private CollisionModel*	collisionModel;
-		//private Tileset*		tileset;
+
+		private Point2I			tileSheetLoc;	// TODO: this doesn't mean anything yet
+		private Tileset			tileset;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
-
+		
 		public Tile() {
+			location		= Point2I.Zero;
+			layer			= 0;
+			offset			= Point2I.Zero;
+			size			= Point2I.One;
+			flags			= TileFlags.Default;
+			sprite			= null;
+			animationPlayer	= new AnimationPlayer();
 
+		}
+		
+		public Tile(TileData data, int x, int y, int layer) :
+			this(data, new Point2I(x, y), layer)
+		{
+		}
+		
+		public Tile(TileData data, Point2I location, int layer) :
+			this()
+		{
+			this.location		= location;
+			this.layer			= layer;
+			this.flags			= data.Flags;
+			this.sprite			= data.Sprite;
+			this.collisionModel	= data.CollisionModel;
+			this.animationPlayer.Animation = data.Animation;
+		}
+		
+		public void Initialize(RoomControl control) {
+			this.control = control;
+			this.animationPlayer.Play();
 		}
 		
 
@@ -84,10 +117,15 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
+		
+		// Returns the room control this entity belongs to.
+		public RoomControl RoomControl {
+			get { return control; }
+			set { control = value; }
+		}
 
 		public Vector2F Position {
 			get { return (location * GameSettings.TILE_SIZE) + offset; }
-			set { offset = value - (location * GameSettings.TILE_SIZE); }
 		}
 
 		public Vector2F Offset {
@@ -98,6 +136,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public Point2I Location {
 			get { return location; }
 			set { location = value; }
+		}
+		
+		public int Layer {
+			get { return layer; }
+			set { layer = value; }
 		}
 
 		public Point2I Size {
@@ -122,12 +165,17 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public Sprite Sprite {
 			get { return sprite; }
-			set { Sprite = value; }
+			set { sprite = value; }
 		}
 
 		public AnimationPlayer AnimationPlayer {
 			get { return animationPlayer; }
 			set { animationPlayer = value; }
+		}
+
+		public CollisionModel CollisionModel {
+			get { return collisionModel; }
+			set { collisionModel = value; }
 		}
 	}
 }

@@ -8,26 +8,39 @@ namespace ZeldaOracle.Common.Graphics {
 
 	// TODO: Multi-sprites. Probably as a linked list here
 
-	public struct Sprite {
+	public class Sprite {
 		private Image		image;
 		private Rectangle2I	sourceRect;
 		private Point2I		drawOffset;
+		private Sprite		nextPart;	// For compound sprites (made up of multiple sub-sprites).
 		
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
-
-		public Sprite(Image image, Rectangle2I sourceRect, Point2I drawOffset) {
-			this.image		= image;
-			this.sourceRect	= sourceRect;
-			this.drawOffset	= drawOffset;
+		
+		public Sprite(Image image, int sx, int sy, int sw, int sh) :
+			this(image, sx, sy, sw, sh, 0, 0)
+		{
 		}
 
 		public Sprite(Image image, int sx, int sy, int sw, int sh, int dx, int dy) {
 			this.image		= image;
 			this.sourceRect	= new Rectangle2I(sx, sy, sw, sh);
 			this.drawOffset	= new Point2I(dx, dy);
+			this.nextPart	= null;
+		}
+
+		public Sprite(Image image, Rectangle2I sourceRect) :
+			this(image, sourceRect, Point2I.Zero)
+		{
+		}
+
+		public Sprite(Image image, Rectangle2I sourceRect, Point2I drawOffset) {
+			this.image		= image;
+			this.sourceRect	= sourceRect;
+			this.drawOffset	= drawOffset;
+			this.nextPart	= null;
 		}
 		
 		
@@ -48,6 +61,11 @@ namespace ZeldaOracle.Common.Graphics {
 		public Point2I DrawOffset {
 			get { return drawOffset; }
 			set { drawOffset = value; }
+		}
+		
+		public Sprite NextPart {
+			get { return nextPart; }
+			set { nextPart = value; }
 		}
 	}
 }

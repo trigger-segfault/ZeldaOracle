@@ -8,13 +8,14 @@ using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Tiles;
 
 //using ZeldaOracle.Common.Graphics.Particles;
 using ZeldaOracle.Common.Scripts;
 using System.IO;
 //using ParticleGame.Project.Particles;
 
-namespace ZeldaOracle.Game.Main {
+namespace ZeldaOracle.Game {
 /** <summary>
  * A static class for storing links to all game content.
  * </summary> */
@@ -61,46 +62,43 @@ class GameData {
 	/** <summary> Loads the images. </summary> */
 	private static void LoadImages() {
 
-		Resources.LoadImage("Images/sheet_player");
+		Image sheetPlayer = Resources.LoadImage("Images/sheet_player");
+		IMAGE_TILESET = Resources.LoadImage("Images/tileset");
 
 		// TEMP: Create some player animations.
 
-		//ANIM_PLAYER_DEFAULT.
+		Animation[] anim = new Animation[8];
+
 		
-		/*
-		Image palette = Resources.LoadImage("Images/Palette");
-
-		List<Color> colors = new List<Color>();
-
-
-		int index = 0;
-		Color[] colorData = new Color[palette.Width * palette.Height];
-		palette.Texture.GetData<Color>(colorData);
-
-		StreamWriter writer = new StreamWriter("Palette.txt");
-
-		int[,] colorIndexes = new int[32, 12];
-		int[,] colorRows = new int[32, 12];
-
-		for (int i = 0; i < 18; i++) {
-			for (int j = 0; j < 12; j++) {
-				Color color = colorData[PointIndex(i * 13, (11 - j) * 10)];
-				writer.Write("Color.FromAarg(" + color.A + ", " + color.R + ", " + color.G +"),");
-				index++;
-				if ((j + 1) % 4 != 0)
-					writer.Write(" ");
-				else
-					writer.Write(writer.NewLine);
+		// Create player default animation (walk).
+		for (int dir = 0; dir < 4; dir++) {
+			anim[dir] = new Animation();
+			anim[dir].LoopCount = -1;
+			if (dir > 0)
+				anim[dir - 1].NextStrip = anim[dir];
+			for (int i = 0; i < 2; i++) {
+				anim[dir].AddFrame(new AnimationFrame(i * 8, 8, sheetPlayer,
+					new Rectangle2I((dir * 17 * 2) + (i * 17), 0, 16, 16), new Point2I(0, 0)));
 			}
-			writer.Write(writer.NewLine);
+		}
+		ANIM_PLAYER_DEFAULT = anim[0];
+
+		// TEMP: Create a tileset.
+		TILESET_DEFAULT = new Tileset(21, 36);
+		TILESET_DEFAULT.DefaultTile = new Point2I(1, 25);
+
+		for (int x = 0; x < TILESET_DEFAULT.Width; x++) {
+			for (int y = 0; y < TILESET_DEFAULT.Height; y++) {
+				TileData data = new TileData();
+				data.Tileset		= TILESET_DEFAULT;
+				data.SheetLocation	= new Point2I(x, y);
+				data.Sprite			= new Sprite(IMAGE_TILESET, new Rectangle2I(x * 17, y * 17, 16, 16), Point2I.Zero);
+				TILESET_DEFAULT.TileData[x, y] = data;
+			}
 		}
 
-		//Image p = Resources.LoadImage("Images/ColorPal");
-
-
-
-		writer.Close();
-		*/
+		TILESETS = new Tileset[] { TILESET_DEFAULT };
+		
 	}
 
 	#endregion
@@ -181,10 +179,20 @@ class GameData {
 
 	//========== GAME DATA ===========
 
+	#pragma warning disable 169, 649 // The field 'example' is never used.
+	
+	//-----------------------------------------------------------------------------
+	// Tilesets
+	//-----------------------------------------------------------------------------
+
+	public static Tileset TILESET_DEFAULT;
+	public static Tileset[] TILESETS;
+
 	//-----------------------------------------------------------------------------
 	// Images
 	//-----------------------------------------------------------------------------
 
+	public static Image IMAGE_TILESET;
 
 	//-----------------------------------------------------------------------------
 	// Sprite Sheets
@@ -193,7 +201,7 @@ class GameData {
 	public static SpriteSheet SheetDebugMenu;
 	public static SpriteSheet SheetGamePadControls;
 	public static SpriteSheet SheetGamePadArrows;
-
+	
 	public static SpriteSheet SHEET_PLAYER;
 	public static SpriteSheet SHEET_PLAYER_HURT;
 	public static SpriteSheet SHEET_MONSTERS;
@@ -397,6 +405,9 @@ class GameData {
 
 	public static RenderTarget2D RenderTargetGame;
 	public static RenderTarget2D RenderTargetDebug;
+
+	
+#pragma warning restore 169, 649 // The field 'example' is never used.
 
 }
 } // end namespace

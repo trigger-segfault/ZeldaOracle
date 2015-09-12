@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Graphics {
 
+	// TODO: Handle playing sprites.
 	public class AnimationPlayer {
 		private Animation	animation;		// The animation to play.
 		private Animation	subStrip;		// The actual sub-animation-strip that's playing.
