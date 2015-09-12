@@ -16,6 +16,7 @@ namespace ZeldaOracle.Game
 		public const int		VIEW_HEIGHT		= 128;
 		public static readonly Point2I	SCREEN_SIZE		= new Point2I(SCREEN_WIDTH, SCREEN_HEIGHT);
 		public static readonly Point2I	VIEW_SIZE		= new Point2I(VIEW_WIDTH, VIEW_HEIGHT);
+		public static readonly Rectangle2I	SCREEN_BOUNDS	= new Rectangle2I(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 		public const float		PLAYER_MOVE_SPEED		= 64;	// Pixels per second.
 		public const float		PLAYER_JUMP_SPEED		= 108;

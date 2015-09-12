@@ -177,5 +177,15 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return collisionModel; }
 			set { collisionModel = value; }
 		}
+
+		public Tileset Tileset {
+			get { return tileset; }
+			set { tileset = value; }
+		}
+
+		public Point2I TileSheetLocation {
+			get { return tileSheetLoc; }
+			set { tileSheetLoc = value; }
+		}
 	}
 }

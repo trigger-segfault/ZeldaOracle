@@ -20,10 +20,10 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Debug;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-//using ZeldaOracle.Common.Graphics.Particles;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Common.Input.Controls;
 using ZeldaOracle.Common.Scripts;
+using ZeldaOracle.Game.GameStates;
 using GamePad		= ZeldaOracle.Common.Input.GamePad;
 using Keyboard		= ZeldaOracle.Common.Input.Keyboard;
 using Mouse			= ZeldaOracle.Common.Input.Mouse;
@@ -36,8 +36,7 @@ using Playlist		= ZeldaOracle.Common.Audio.Playlist;
 
 using GameFramework.MyGame.Debug;
 using ZeldaOracle.Game.Control;
-//using GameFramework.MyGame.Editor;
-//using GameFramework.MyGame.Editor.Properties;
+
 
 namespace ZeldaOracle.Game.Main {
 
@@ -52,13 +51,13 @@ public class GameManager {
 
 	private RoomControl roomControl; // TODO: replace this with a game-state stack
 	
+	private GameStateStack gameStateStack;
 	
 
 	//-----------------------------------------------------------------------------
 	// Constants
 	//-----------------------------------------------------------------------------
 	
-	// The name of the game.
 	public const string GameName = "ZeldaOracle";
 	
 
@@ -66,10 +65,9 @@ public class GameManager {
 	// Constructors
 	//-----------------------------------------------------------------------------
 
-	// Constructs the default game manager.
 	public GameManager() {
-		gameBase	= null;
-		gameScale	= 4;
+		gameBase		= null;
+		gameScale		= 4;
 	}
 
 	// Initializes the game manager.
@@ -95,10 +93,10 @@ public class GameManager {
 	public void LoadContent(ContentManager content) {
 		GameData.Initialize();
 
-
-
-		roomControl	= new RoomControl();
-		roomControl.Begin();
+		// Begin the game state stack with a RoomControl.
+		roomControl		= new RoomControl();
+		gameStateStack	= new GameStateStack(roomControl);
+		gameStateStack.Begin(this);
 	}
 
 	// Called to unload game manager content.
@@ -114,7 +112,33 @@ public class GameManager {
 	public void Exit() {
 		gameBase.Exit();
 	}
+
 	
+	//-----------------------------------------------------------------------------
+	// Game state management
+	//-----------------------------------------------------------------------------
+
+	// Push a new game-state onto the stack and begin it.
+	public void PushGameState(GameState state) {
+		gameStateStack.Push(state);
+	}
+	
+	// Push a queue of game states.
+	public void QueueGameStates(params GameState[] states) {
+		PushGameState(new GameStateQueue(states));
+	}
+	
+	// End the top-most game state in the stack.
+	public void PopGameState() {
+		gameStateStack.Pop();
+	}
+	
+	// End the given number of states in the stack from the top down.
+	public void PopGameStates(int amount) {
+		gameStateStack.Pop(amount);
+	}
+
+
 	//-----------------------------------------------------------------------------
 	// Management
 	//-----------------------------------------------------------------------------
@@ -162,6 +186,14 @@ public class GameManager {
 			(GamePad.IsButtonDown(Buttons.RightShoulder) && GamePad.IsButtonPressed(Buttons.LeftShoulder))) {
 			GameBase.TakeScreenShot();
 		}
+		
+		// DEBUG: Fade the screen out and in.
+		if (Keyboard.IsKeyPressed(Keys.F)) {
+			QueueGameStates(
+				new StateScreenFade(Color.Black, 0.5f, FadeType.FadeOut),
+				new StateScreenFade(Color.Black, 0.5f, FadeType.FadeIn)
+			);
+		}
 
 		/*
 		// Toggle debug mode
@@ -183,7 +215,7 @@ public class GameManager {
 		}*/
 
 		// Update the game-state stack.
-		roomControl.Update(timeDelta);
+		gameStateStack.Update(timeDelta);
 	}
 	
 	
@@ -203,7 +235,7 @@ public class GameManager {
 		g.SetRenderTarget(GameData.RenderTargetGame);
 		g.Begin(drawMode);
 		g.Clear(Color.Black);
-		roomControl.Draw(g);
+		gameStateStack.Draw(g);
 		g.End();
 
 		// Draw the buffer to the screen scaled.

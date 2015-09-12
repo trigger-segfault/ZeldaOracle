@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-
 using Microsoft.Xna.Framework.Graphics;
-
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles;
-
-//using ZeldaOracle.Common.Graphics.Particles;
+using ZeldaOracle.Game.Main.ResourceBuilders;
 using ZeldaOracle.Common.Scripts;
-using System.IO;
-//using ParticleGame.Project.Particles;
 
 namespace ZeldaOracle.Game {
-/** <summary>
- * A static class for storing links to all game content.
- * </summary> */
+
+// A static class for storing links to all game content.
 class GameData {
+
+	private static AnimationBuilder animationBuilder;
 
 	//=========== LOADING ============
 	#region Loading
@@ -58,6 +55,10 @@ class GameData {
 	private static int PointIndex(int x, int y) {
 		return 234 * y + x;
 	}
+	
+	private static AnimationBuilder BuildAnim(Animation animation) {
+		return animationBuilder.Begin(animation);
+	}
 
 	/** <summary> Loads the images. </summary> */
 	private static void LoadImages() {
@@ -65,12 +66,24 @@ class GameData {
 		Image sheetPlayer = Resources.LoadImage("Images/sheet_player");
 		IMAGE_TILESET = Resources.LoadImage("Images/tileset");
 
+		SHEET_PLAYER = new SpriteSheet(sheetPlayer, new Point2I(16, 16), Point2I.Zero, Point2I.One);
+
 		// TEMP: Create some player animations.
 
 		Animation[] anim = new Animation[8];
 
+
+
+
 		
 		// Create player default animation (walk).
+		animationBuilder = new AnimationBuilder();
+
+		animationBuilder.SetSheet(SHEET_PLAYER);
+		ANIM_PLAYER_DEFAULT = new Animation();
+		BuildAnim(ANIM_PLAYER_DEFAULT).AddFrameStrip(8, 0,0, 2).Offset(-8, -16).SetLooped(true).MakeDynamic(4, 2,0);
+
+		/*
 		for (int dir = 0; dir < 4; dir++) {
 			anim[dir] = new Animation();
 			anim[dir].LoopCount = -1;
@@ -82,6 +95,7 @@ class GameData {
 			}
 		}
 		ANIM_PLAYER_DEFAULT = anim[0];
+		*/
 
 		// TEMP: Create a tileset.
 		TILESET_DEFAULT = new Tileset(21, 36);
@@ -198,9 +212,9 @@ class GameData {
 	// Sprite Sheets
 	//-----------------------------------------------------------------------------
 
-	public static SpriteSheet SheetDebugMenu;
-	public static SpriteSheet SheetGamePadControls;
-	public static SpriteSheet SheetGamePadArrows;
+	public static SpriteAtlas SheetDebugMenu;
+	public static SpriteAtlas SheetGamePadControls;
+	public static SpriteAtlas SheetGamePadArrows;
 	
 	public static SpriteSheet SHEET_PLAYER;
 	public static SpriteSheet SHEET_PLAYER_HURT;

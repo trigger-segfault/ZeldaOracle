@@ -43,11 +43,11 @@ public class SpriteSheetSR : ScriptReader {
 	#region Members
 
 	/** <summary> The current sprite sheet being created. </summary> */
-	private SpriteSheet sheet;
+	private SpriteAtlas sheet;
 	/** <summary> The current sprite sheet grid settings being used. </summary> */
 	private SpriteGrid grid;
 	/** <summary> The last loaded sprite sheet. </summary> */
-	private SpriteSheet finalSheet;
+	private SpriteAtlas finalSheet;
 	/** <summary> The default origin used for sprites. </summary> */
 	private Vector2F defaultOrigin;
 	/** <summary> True if the default sprite origin should be centered. </summary> */
@@ -58,7 +58,7 @@ public class SpriteSheetSR : ScriptReader {
 	#region Properties
 
 	/** <summary> Gets the last loaded sprite sheet. </summary> */
-	public SpriteSheet Sheet {
+	public SpriteAtlas Sheet {
 		get { return finalSheet; }
 	}
 
@@ -92,7 +92,7 @@ public class SpriteSheetSR : ScriptReader {
 			else {
 				image = Resources.LoadImage(Resources.SpriteSheetDirectory + args[0]);
 			}
-			sheet = new SpriteSheet(args[0], image);
+			sheet = new SpriteAtlas(args[0], image);
 			finalSheet = sheet;
 			Resources.AddSpriteSheet(sheet);
 		}

@@ -72,7 +72,7 @@ public class DebugControllerBase {
 		set { menu.debugMenuFontBold = value; }
 	}
 	/** <summary> Gets or sets the sprite sheet for the debug menu. </summary> */
-	public SpriteSheet DebugMenuSprites {
+	public SpriteAtlas DebugMenuSprites {
 		get { return menu.debugMenuSprites; }
 		set { menu.debugMenuSprites = value; }
 	}
