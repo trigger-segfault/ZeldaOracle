@@ -39,6 +39,15 @@ namespace ZeldaOracle.Game.Control {
 			roomLocation	= Point2I.Zero;
 			entities		= new List<Entity>();
 		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Accessors
+		//-----------------------------------------------------------------------------
+
+		public Tile GetTile(int x, int y, int layer) {
+			return tiles[x, y, layer];
+		}
 
 
 		//-----------------------------------------------------------------------------

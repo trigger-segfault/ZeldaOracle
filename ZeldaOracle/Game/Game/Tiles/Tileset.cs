@@ -76,7 +76,7 @@ namespace ZeldaOracle.Game.Tiles {
 						{
 						case 'S':
 							data.Flags |= TileFlags.Solid;
-							//TODO: data.collisionModelIndex = MODEL_BLOCK;
+							data.CollisionModel = GameData.MODEL_BLOCK;
 							break;
 						case 'L': data.Flags |= TileFlags.Ledge;		break;
 						case 'G': data.Flags |= TileFlags.Diggable;		break;

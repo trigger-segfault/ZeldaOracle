@@ -326,7 +326,8 @@ namespace ZeldaOracle.Game {
 					TILESET_OVERWORLD.TileData[x, y] = data;
 				}
 			}
-			// Animations.
+			TILESET_OVERWORLD.LoadConfig("Content/Tilesets/overworld.txt");
+			// Animations
 			TILESET_OVERWORLD.TileData[ 1, 15].Animation = ANIM_WATER;
 			TILESET_OVERWORLD.TileData[ 2, 15].Animation = ANIM_WATER_DEEP;
 			TILESET_OVERWORLD.TileData[ 1, 14].Animation = ANIM_OCEAN;
@@ -353,6 +354,43 @@ namespace ZeldaOracle.Game {
 			TILESET_OVERWORLD.TileData[15, 19].CollisionModel = MODEL_DOORWAY;
 			TILESET_OVERWORLD.TileData[12, 18].CollisionModel = MODEL_CORNER_NW;
 			TILESET_OVERWORLD.TileData[13, 18].CollisionModel = MODEL_CORNER_NE;
+			TILESET_OVERWORLD.TileData[0, 17].CollisionModel = MODEL_CORNER_NW;
+			// Ledges
+			TILESET_OVERWORLD.TileData[1, 17].CollisionModel = MODEL_EDGE_N;
+			TILESET_OVERWORLD.TileData[2, 17].CollisionModel = MODEL_CORNER_NE;
+			TILESET_OVERWORLD.TileData[4, 17].CollisionModel = MODEL_CORNER_NW;
+			TILESET_OVERWORLD.TileData[5, 17].CollisionModel = MODEL_EDGE_N;
+			TILESET_OVERWORLD.TileData[6, 17].CollisionModel = MODEL_CORNER_NE;
+			TILESET_OVERWORLD.TileData[0, 18].CollisionModel = MODEL_EDGE_W;
+			TILESET_OVERWORLD.TileData[2, 18].CollisionModel = MODEL_EDGE_E;
+			TILESET_OVERWORLD.TileData[3, 18].CollisionModel = MODEL_EDGE_E;
+			TILESET_OVERWORLD.TileData[4, 18].CollisionModel = MODEL_EDGE_W;
+			TILESET_OVERWORLD.TileData[6, 18].CollisionModel = MODEL_EDGE_E;
+			TILESET_OVERWORLD.TileData[7, 18].CollisionModel = MODEL_EDGE_E;
+			TILESET_OVERWORLD.TileData[0, 19].CollisionModel = MODEL_CORNER_SW;
+			TILESET_OVERWORLD.TileData[1, 19].CollisionModel = MODEL_EDGE_S;
+			TILESET_OVERWORLD.TileData[2, 19].CollisionModel = MODEL_CORNER_SE;
+			TILESET_OVERWORLD.TileData[3, 19].CollisionModel = MODEL_EDGE_W;
+			TILESET_OVERWORLD.TileData[4, 19].CollisionModel = MODEL_CORNER_SW;
+			TILESET_OVERWORLD.TileData[5, 19].CollisionModel = MODEL_EDGE_S;
+			TILESET_OVERWORLD.TileData[6, 19].CollisionModel = MODEL_CORNER_SE;
+			TILESET_OVERWORLD.TileData[7, 19].CollisionModel = MODEL_EDGE_W;
+			TILESET_OVERWORLD.TileData[0, 20].CollisionModel = MODEL_CORNER_NW;
+			TILESET_OVERWORLD.TileData[1, 20].CollisionModel = MODEL_CORNER_NE;
+			TILESET_OVERWORLD.TileData[2, 20].CollisionModel = MODEL_INSIDE_CORNER_SE;
+			TILESET_OVERWORLD.TileData[3, 20].CollisionModel = MODEL_INSIDE_CORNER_SW;
+			TILESET_OVERWORLD.TileData[4, 20].CollisionModel = MODEL_CORNER_NW;
+			TILESET_OVERWORLD.TileData[5, 20].CollisionModel = MODEL_CORNER_NE;
+			TILESET_OVERWORLD.TileData[6, 20].CollisionModel = MODEL_INSIDE_CORNER_SE;
+			TILESET_OVERWORLD.TileData[7, 20].CollisionModel = MODEL_INSIDE_CORNER_SW;
+			TILESET_OVERWORLD.TileData[0, 21].CollisionModel = MODEL_CORNER_SW;
+			TILESET_OVERWORLD.TileData[1, 21].CollisionModel = MODEL_CORNER_SE;
+			TILESET_OVERWORLD.TileData[2, 21].CollisionModel = MODEL_INSIDE_CORNER_NE;
+			TILESET_OVERWORLD.TileData[3, 21].CollisionModel = MODEL_INSIDE_CORNER_NW;
+			TILESET_OVERWORLD.TileData[4, 21].CollisionModel = MODEL_CORNER_SW;
+			TILESET_OVERWORLD.TileData[5, 21].CollisionModel = MODEL_CORNER_SE;
+			TILESET_OVERWORLD.TileData[6, 21].CollisionModel = MODEL_INSIDE_CORNER_NE;
+			TILESET_OVERWORLD.TileData[7, 21].CollisionModel = MODEL_INSIDE_CORNER_NW;
 
 			TILESETS = new Tileset[] { TILESET_OVERWORLD };
 		}

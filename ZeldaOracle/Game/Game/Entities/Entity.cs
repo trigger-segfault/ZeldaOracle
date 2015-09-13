@@ -12,6 +12,7 @@ using ZeldaOracle.Game.Worlds;
 namespace ZeldaOracle.Game.Entities {
 
 	// Flags for certain entity properties.
+	// Some of these are physics related.
 	[Flags]
 	public enum EntityFlags {
 		None					= 0,
@@ -29,17 +30,19 @@ namespace ZeldaOracle.Game.Entities {
 		HalfSolidPassable		= 0x800,	// The entity can pass over half-solids.
 		DynamicDepth			= 0x1000,	// The entity has dynamic depth.
 		Dead					= 0x2000,	// The entity is dead and no longer exists.
+		AutoDodge				= 0x4000,	// Will move out of the way when colliding the edges of objects.
 	};
 
 
 	// The main class for entity objects in the room.
 	public abstract class Entity {
 
-		private RoomControl		control;
-		private bool			isAlive;
-		protected EntityFlags	flags;
-		protected Vector2F		position;
-		protected float			zPosition;
+		private RoomControl			control;
+		private bool				isAlive;
+		protected EntityFlags		flags;
+		protected Vector2F			position;
+		protected float				zPosition;
+		protected PhysicsComponent	physics;
 
 
 		//-----------------------------------------------------------------------------
@@ -52,6 +55,7 @@ namespace ZeldaOracle.Game.Entities {
 			isAlive		= false;
 			position	= Vector2F.Zero;
 			zPosition	= 0.0f;
+			physics		= new PhysicsComponent(this);
 		}
 
 		// Initializes the entity and sets up containment variables.
@@ -73,7 +77,9 @@ namespace ZeldaOracle.Game.Entities {
 		public virtual void Uninitialize() {}
 	
 		// Called every step to update the entity.
-		public virtual void Update(float timeDelta) {}
+		public virtual void Update(float ticks) {
+			physics.Update(ticks);
+		}
 
 		// Called every step to draw the entity.
 		public virtual void Draw(Graphics2D g) {}
@@ -83,9 +89,21 @@ namespace ZeldaOracle.Game.Entities {
 
 		// Called when the entity leaves the room.
 		public virtual void OnLeaveRoom() {}
-
+		
 
 	
+		//-----------------------------------------------------------------------------
+		// Management
+		//-----------------------------------------------------------------------------
+
+		public void Destroy() {
+			if (isAlive) {
+				isAlive = false;
+				// TODO: OnDestroy()
+			}
+		}
+	
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------

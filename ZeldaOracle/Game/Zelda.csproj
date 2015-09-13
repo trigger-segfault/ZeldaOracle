@@ -128,6 +128,7 @@
     <Compile Include="Common\Debug\RadioButtonMenuItem.cs" />
     <Compile Include="Common\Debug\ToggleMenuItem.cs" />
     <Compile Include="Common\Geometry\Align.cs" />
+    <Compile Include="Common\Geometry\Direction.cs" />
     <Compile Include="Common\Geometry\GMath.cs" />
     <Compile Include="Common\Geometry\GRandom.cs" />
     <Compile Include="Common\Geometry\Line2F.cs" />
@@ -211,6 +212,7 @@
     <None Include="Game\Editor\Properties\PropertyInt.cs" />
     <None Include="Game\Editor\Properties\Property.cs" />
     <Compile Include="Game\Entities\Entity.cs" />
+    <Compile Include="Game\Entities\PhysicsComponent.cs" />
     <Compile Include="Game\GameStates\GameState.cs" />
     <Compile Include="Game\GameStates\GameStateQueue.cs" />
     <Compile Include="Game\GameStates\GameStateStack.cs" />

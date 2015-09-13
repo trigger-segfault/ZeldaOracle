@@ -11,11 +11,68 @@ using ZeldaOracle.Game.Main;
 namespace ZeldaOracle.Game.Entities.Players {
 	
 	public class Player : Entity {
-		private AnimationPlayer animationPlayer;
+
+		private AnimationPlayer	animationPlayer;		
+		private Keys[]			moveKeys;
+		private bool[]			moveAxes;
+		private bool			isMoving;
+		private int				direction;
+		private int				angle;
+		private int				pushTimer;
+		private float			moveSpeedScale;
+		private float			moveSpeed;
+
+
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
 
 		public Player() {
+			moveKeys		= new Keys[4];
+			moveAxes		= new bool[] { false, false };
 			animationPlayer = new AnimationPlayer();
+			direction		= Direction.Down;
+			pushTimer		= 0;
+			isMoving		= false;
+			moveSpeed		= GameSettings.PLAYER_MOVE_SPEED;
+			moveSpeedScale	= 1.0f;
+			flags			|= EntityFlags.CollideWorld;
+
+			moveKeys[Direction.Up]		= Keys.Up;
+			moveKeys[Direction.Down]	= Keys.Down;
+			moveKeys[Direction.Left]	= Keys.Left;
+			moveKeys[Direction.Right]	= Keys.Right;
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Movement
+		//-----------------------------------------------------------------------------
+		
+		private bool CheckMoveKey(int dir) {
+			
+			if (Keyboard.IsKeyDown(moveKeys[dir])) {
+				isMoving = true;
+			
+				if (!moveAxes[(dir + 1) % 2])
+					moveAxes[dir % 2] = true;
+				if (moveAxes[dir % 2]) {
+					angle = dir * 2;
+					direction   = dir;
+			
+					if (Keyboard.IsKeyDown(moveKeys[(dir + 1) % 4])) 
+						angle = (angle + 1) % 8;
+					if (Keyboard.IsKeyDown(moveKeys[(dir + 3) % 4]))
+						angle = (angle + 7) % 8;
+				}
+				return true;
+			}
+			return false;
+		}
+
+		//-----------------------------------------------------------------------------
+		// Overridden methods
+		//-----------------------------------------------------------------------------
 		
 		public override void Initialize() {
 			// Play the default player animation.
@@ -23,35 +80,37 @@ namespace ZeldaOracle.Game.Entities.Players {
 			animationPlayer.SubStripIndex = 0;
 		}
 
-		public override void Update(float timeDelta) {
+		public override void Update(float ticks) {
+			
+			// Check movement keys.
+			isMoving = false;
+			if (!CheckMoveKey(Direction.Left) && !CheckMoveKey(Direction.Right))
+				moveAxes[0] = false;	// x-axis
+			if (!CheckMoveKey(Direction.Down) && !CheckMoveKey(Direction.Up))
+				moveAxes[1] = false;	// y-axis
 
-			Vector2F moveDir = new Vector2F();
-			if (Keyboard.IsKeyDown(Keys.Right)) {
-				moveDir.X = 1;
-				animationPlayer.SubStripIndex = 0;
-			}
-			if (Keyboard.IsKeyDown(Keys.Left)) {
-				moveDir.X = -1;
-				animationPlayer.SubStripIndex = 2;
-			}
-			if (Keyboard.IsKeyDown(Keys.Down)) {
-				moveDir.Y = 1;
-				animationPlayer.SubStripIndex = 3;
-			}
-			if (Keyboard.IsKeyDown(Keys.Up)) {
-				moveDir.Y = -1;
-				animationPlayer.SubStripIndex = 1;
-			}
-			if (moveDir.Length > 0.001f) {
-				moveDir = moveDir.Normalized;
-				position += moveDir * timeDelta * GameSettings.PLAYER_MOVE_SPEED;
+			// Update motion.
+			if (isMoving) {
+				float a = (angle / 8.0f) * (float) GMath.Pi * 2.0f;
+				Vector2F motion = new Vector2F((float) Math.Cos(a), -(float) Math.Sin(a));
+				physics.Velocity = motion * moveSpeed;
 				animationPlayer.IsPlaying = true;
 			}
 			else {
-				animationPlayer.IsPlaying = false;
+				physics.Velocity = Vector2F.Zero;
 			}
-			
-			animationPlayer.Update(timeDelta);
+
+			// Update animations
+			if (isMoving && !animationPlayer.IsPlaying)
+				animationPlayer.Play();
+			if (!isMoving && animationPlayer.IsPlaying)
+				animationPlayer.Stop();
+
+			animationPlayer.SubStripIndex = direction;
+			animationPlayer.Update(ticks);
+
+			// Update superclass.
+			base.Update(ticks);
 		}
 
 		public override void Draw(Common.Graphics.Graphics2D g) {

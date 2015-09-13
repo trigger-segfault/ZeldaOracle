@@ -18,9 +18,9 @@ namespace ZeldaOracle.Game
 		public static readonly Point2I	VIEW_SIZE		= new Point2I(VIEW_WIDTH, VIEW_HEIGHT);
 		public static readonly Rectangle2I	SCREEN_BOUNDS	= new Rectangle2I(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-		public const float		PLAYER_MOVE_SPEED		= 64;	// Pixels per second.
-		public const float		PLAYER_JUMP_SPEED		= 108;
-		public const float		GRAVITY_ACCELERATION	= 450;
+		public const float		PLAYER_MOVE_SPEED		= 1;		// Pixels per second.
+		public const float		PLAYER_JUMP_SPEED		= 1.8f;
+		public const float		DEFAULT_GRAVITY			= 0.125f;	// Default gravity acceleration in pixels per frame^2
 		
 		public static readonly Point2I	ROOM_SIZE_SMALL	= new Point2I(10, 8);
 		public static readonly Point2I	ROOM_SIZE_LARGE	= new Point2I(15, 11);
