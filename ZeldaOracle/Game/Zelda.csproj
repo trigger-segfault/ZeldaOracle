@@ -232,6 +232,7 @@
     <Compile Include="Game\Entities\Players\Player.cs" />
     <Compile Include="Game\Main\ResourceBuilders\AnimationBuilder.cs" />
     <Compile Include="Game\Main\ResourceBuilders\SpriteBuilder.cs" />
+    <Compile Include="Game\Main\ResourceBuilders\TilesetBuilder.cs" />
     <Compile Include="Game\Tiles\Tile.cs" />
     <Compile Include="Game\Tiles\TileData.cs" />
     <Compile Include="Game\Tiles\Tileset.cs" />

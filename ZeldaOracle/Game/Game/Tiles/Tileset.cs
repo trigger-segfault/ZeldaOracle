@@ -130,5 +130,9 @@ namespace ZeldaOracle.Game.Tiles {
 			set { defaultTile = value; }
 		}
 
+		public SpriteSheet SpriteSheet {
+			get { return sheet; }
+			set { sheet = value; }
+		}
 	}
 }
