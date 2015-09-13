@@ -16,21 +16,14 @@ namespace ZeldaOracle.Common.Graphics {
  * </summary> */
 public class Font {
 
-	//========== CONSTANTS ===========
-	#region Constants
-
-	#endregion
 	//=========== MEMBERS ============
-	#region Members
 	
 	/** <summary> The sprite font of the font. </summary> */
 	private SpriteFont spriteFont;
 	/** <summary> The file path of the font. </summary> */
 	private string filePath;
 
-	#endregion
 	//========= CONSTRUCTORS =========
-	#region Constructors
 
 	/** <summary> Constructs a font with the specified sprite font. </summary> */
 	public Font(SpriteFont spriteFont, string filePath = "") {
@@ -46,19 +39,15 @@ public class Font {
 		this.filePath		= filePath;
 	}
 
-	#endregion
 	//========== OPERATORS ===========
-	#region Operators
 
 	public static implicit operator SpriteFont(Font font) {
 		return font.spriteFont;
 	}
 
-	#endregion
 	//========== PROPERTIES ==========
-	#region Properties
-	//--------------------------------
-	#region Dimensions
+	
+	// Dimensions
 
 	/** <summary> Gets or sets the spacing of the font characters. </summary> */
 	public double CharacterSpacing {
@@ -71,9 +60,7 @@ public class Font {
 		set { spriteFont.LineSpacing = (int)value; }
 	}
 
-	#endregion
-	//--------------------------------
-	#region Information
+	// Information
 
 	/** <summary> Gets the sprite font of the font. </summary> */
 	public SpriteFont SpriteFont {
@@ -84,11 +71,7 @@ public class Font {
 		get { return filePath; }
 	}
 
-	#endregion
-	//--------------------------------
-	#endregion
 	//========== MANAGEMENT ==========
-	#region Management
 	
 	/** <summary> Returns the width and height of a string. </summary> */
 	public Vector2F MeasureString(string text) {
@@ -114,6 +97,5 @@ public class Font {
 			spriteFont = content.Load<SpriteFont>(filePath);
 	}
 
-	#endregion
 }
 } // End namespace

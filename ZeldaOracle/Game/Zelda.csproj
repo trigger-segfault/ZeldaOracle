@@ -147,6 +147,7 @@
     <Compile Include="Common\Graphics\Font.cs" />
     <Compile Include="Common\Graphics\ForegroundPalette.cs" />
     <None Include="Common\Graphics\Frame.cs" />
+    <Compile Include="Common\Graphics\GameFont.cs" />
     <Compile Include="Common\Graphics\Graphics2D.cs" />
     <Compile Include="Common\Graphics\Image.cs" />
     <Compile Include="Common\Graphics\Palette.cs" />
