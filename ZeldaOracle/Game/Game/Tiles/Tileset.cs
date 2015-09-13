@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 using Microsoft.Xna.Framework;
 
 namespace ZeldaOracle.Game.Tiles {
@@ -12,7 +13,7 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		private TileData[,]	tileData;
 		private Point2I		size;
-		//private GridSheet	sheet;
+		private SpriteSheet	sheet;
 		private Point2I		defaultTile;
 
 
@@ -20,7 +21,8 @@ namespace ZeldaOracle.Game.Tiles {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public Tileset(int width, int height) {
+		public Tileset(SpriteSheet sheet, int width, int height) {
+			this.sheet			= sheet;
 			this.size			= new Point2I(width, height);
 			this.defaultTile	= Point2I.Zero;
 			this.tileData		= new TileData[width, height];

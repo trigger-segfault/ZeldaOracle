@@ -84,7 +84,7 @@ namespace ZeldaOracle.Game.Control {
 					}
 					else {
 						// Only use default tiles on bottom layer.
-						Tileset tileset = GameData.TILESET_DEFAULT;
+						Tileset tileset = GameData.TILESET_OVERWORLD;
 						room.TileData[x, y, 0] = tileset.TileData[tileset.DefaultTile.X, tileset.DefaultTile.Y];
 					}
 					

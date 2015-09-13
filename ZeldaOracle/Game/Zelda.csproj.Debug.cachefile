@@ -7,6 +7,9 @@ Content\Images\sheet_player.xnb
 Content\Images\tileset.xnb
 Content\Images\sheet_player_items.xnb
 Content\Images\zoneset.xnb
+Content\Images\sheet_icons_thin.xnb
+Content\Images\sheet_effects.xnb
+Content\Images\sheet_menu_small.xnb
 Content\SpriteSheets\sheet_debug_menu.conscript
 Content\Worlds\test_level.zwd
 Content\Tilesets\overworld.txt
