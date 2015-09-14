@@ -62,6 +62,7 @@ namespace ZeldaOracle.Game.GameStates {
 
 		public bool IsActive {
 			get { return isActive; }
+			set { isActive = value; }
 		}
 
 		public bool IsVisible {

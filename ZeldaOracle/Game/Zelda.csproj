@@ -183,6 +183,7 @@
     <Compile Include="Common\Scripts\SpriteSheetSR.cs" />
     <Compile Include="Common\Translation\Language.cs" />
     <Compile Include="Common\Translation\StringCodes.cs" />
+    <Compile Include="Game\Control\HUD.cs" />
     <Compile Include="Game\Control\Message.cs" />
     <Compile Include="Game\Control\RoomControl.cs" />
     <Compile Include="Game\GameStates\StateTextReader.cs" />
@@ -215,11 +216,14 @@
     <None Include="Game\Editor\PropertyGrid.cs" />
     <None Include="Game\Editor\Properties\PropertyInt.cs" />
     <None Include="Game\Editor\Properties\Property.cs" />
+    <Compile Include="Game\Entities\Effects\Effect.cs" />
     <Compile Include="Game\Entities\Entity.cs" />
     <Compile Include="Game\Entities\PhysicsComponent.cs" />
+    <Compile Include="Game\Entities\Players\Unit.cs" />
     <Compile Include="Game\GameStates\GameState.cs" />
     <Compile Include="Game\GameStates\GameStateQueue.cs" />
     <Compile Include="Game\GameStates\GameStateStack.cs" />
+    <Compile Include="Game\GameStates\StateDummy.cs" />
     <Compile Include="Game\GameStates\StateScreenFade.cs" />
     <Compile Include="Game\GameStates\Transitions\RoomTransition.cs" />
     <Compile Include="Game\GameStates\Transitions\TransitionPush.cs" />

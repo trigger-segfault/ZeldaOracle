@@ -117,13 +117,8 @@ namespace ZeldaOracle.Game.Main.ResourceBuilders
 			return this;
 		}
 
-		public AnimationBuilder SetLoops(int numLoops) {
-			animation.LoopCount = numLoops;
-			return this;
-		}
-
-		public AnimationBuilder SetLooped(bool isLooped) {
-			animation.IsLooped = isLooped;
+		public AnimationBuilder SetLoopMode(LoopMode loopMode) {
+			animation.LoopMode = loopMode;
 			return this;
 		}
 
@@ -165,7 +160,7 @@ namespace ZeldaOracle.Game.Main.ResourceBuilders
 			for (int i = 1; i < numSubStrips; i++) {
 				subStrip.NextStrip = new Animation();
 				subStrip = subStrip.NextStrip;
-				subStrip.LoopCount = animation.LoopCount;
+				subStrip.LoopMode = animation.LoopMode;
 
 				for (int j = 0; j < animation.Frames.Count; j++) {
 					AnimationFrame frame = new AnimationFrame(animation.Frames[j]);

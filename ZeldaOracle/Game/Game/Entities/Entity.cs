@@ -78,7 +78,10 @@ namespace ZeldaOracle.Game.Entities {
 	
 		// Called every step to update the entity.
 		public virtual void Update(float ticks) {
-			physics.Update(ticks);
+
+			// Update the physics component.
+			if (physics != null)
+				physics.Update(ticks);
 		}
 
 		// Called every step to draw the entity.
@@ -111,6 +114,7 @@ namespace ZeldaOracle.Game.Entities {
 		// Returns the room control this entity belongs to.
 		public RoomControl RoomControl {
 			get { return control; }
+			set { control = value; }
 		}
 
 		// Returns true if the entity has been initialized.
@@ -157,5 +161,12 @@ namespace ZeldaOracle.Game.Entities {
 			get { return zPosition; }
 			set { zPosition = value; }
 		}
+	
+		// Gets or sets the entity's physics component.
+		public PhysicsComponent Physics {
+			get { return physics; }
+			set { physics = value; }
+		}
+
 	}
 } // End namespace

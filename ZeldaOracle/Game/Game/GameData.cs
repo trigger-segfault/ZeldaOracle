@@ -82,7 +82,7 @@ class GameData {
 
 			Image imageZoneset		= Resources.LoadImage("Images/zoneset");
 			Image imageSheetPlayer	= Resources.LoadImage("Images/sheet_player");
-			Image imageMenuSmall	= Resources.LoadImage("Images/sheet_menu_small");
+			Image imageMenuSmall	= Resources.LoadImage("Images/UI/menu_small");
 			Image imageIconsThin	= Resources.LoadImage("Images/sheet_icons_thin");
 			Image imageEffects		= Resources.LoadImage("Images/sheet_effects");
 
@@ -90,7 +90,7 @@ class GameData {
 			SHEET_ZONESET_SMALL	= new SpriteSheet(imageZoneset, 8, 8, 187, 0, 1, 1);
 
 			SHEET_PLAYER		= new SpriteSheet(imageSheetPlayer, 16, 16, 0, 0, 1, 1);
-			SHEET_MENU_SMALL	= new SpriteSheet(imageMenuSmall, 8, 8, 0, 0, 1, 1);
+			SHEET_MENU_SMALL	= new SpriteSheet(imageMenuSmall, 8, 8, 18, 18, 1, 1);
 			SHEET_ICONS_THIN	= new SpriteSheet(imageIconsThin, 8, 16, 0, 0, 1, 1);
 			SHEET_EFFECTS		= new SpriteSheet(imageEffects, 16, 16, 0, 0, 1, 1);
 
@@ -193,6 +193,8 @@ class GameData {
 			BuildSprite(SPR_ITEM_ICON_OCARINA,					12, 1);
 			BuildSprite(SPR_ITEM_ICON_BOW,						13, 1);
 			spriteBuilder.SpriteSheet = SHEET_MENU_SMALL;
+			BuildSprite(SPR_HUD_BACKGROUND,				2, 4);
+			BuildSprite(SPR_HUD_BACKGROUND_INVENTORY,	3, 4);
 			BuildSprite(SPR_HUD_BRACKET_LEFT,		0,2).AddPart(0,3, 0,8);
 			BuildSprite(SPR_HUD_BRACKET_RIGHT,		1,2).AddPart(1,3, 0,8);
 			BuildSprite(SPR_HUD_BRACKET_LEFT_RIGHT,	2,2).AddPart(2,3, 0,8);
@@ -262,19 +264,19 @@ class GameData {
 			BuildAnim(ANIM_PLAYER_SHIELD_BLOCK)		.AddFrameStrip(6, 0,2, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_HOLD)				.AddFrameStrip(6, 0,5, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_PUSH)				.AddFrameStrip(6, 0,6, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_PULL)				.AddFrameStrip(6, 0,7, 2).Offset(-8, -16).SetLooped(false).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_DIG)				.AddFrame(8, 0,9).AddFrame(16, 1,9).Offset(-8, -16).SetLooped(false).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_THROW)			.AddFrame(9, 0,4).Offset(-8, -16).SetLooped(false).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_FALL).AddFrame(16, 1, 20, 0, 0).AddFrame(10, 2, 20, 0, 0).AddFrame(11, 3, 20, 0, 0).Offset(-8, -16).SetLooped(false);
+			BuildAnim(ANIM_PLAYER_PULL)				.AddFrameStrip(6, 0,7, 2).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_DIG)				.AddFrame(8, 0,9).AddFrame(16, 1,9).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_THROW)			.AddFrame(9, 0,4).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_FALL).AddFrame(16, 1, 20, 0, 0).AddFrame(10, 2, 20, 0, 0).AddFrame(11, 3, 20, 0, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp);
 			BuildAnim(ANIM_PLAYER_SHIELD_LARGE)			.AddFrameStrip(6, 0,3, 2).Offset(-8, -16).CreateSubStrip()
 														.AddFrameStrip(6, 2,1, 2).Offset(-8, -16).MakeDynamic(3, 2,0);
 			BuildAnim(ANIM_PLAYER_SHIELD_LARGE_BLOCK)	.AddFrameStrip(6, 0,2, 2).Offset(-8, -16).MakeDynamic(3, 2,0)
 														.CreateSubStrip().AddFrameStrip(6, 2,3, 2).Offset(-8, -16);
 			BuildAnim(ANIM_PLAYER_JUMP)
-				.AddFrame(9, 0, 11).AddFrame(9, 1, 11).AddFrame(6, 2, 11).AddFrame(6, 1, 0).Offset(-8, -16).SetLooped(false).CreateSubStrip()
-				.AddFrame(9, 3, 11).AddFrame(9, 4, 11).AddFrame(6, 5, 11).AddFrame(6, 3, 0).Offset(-8, -16).SetLooped(false).CreateSubStrip()
-				.AddFrame(9, 0, 12).AddFrame(9, 1, 12).AddFrame(6, 2, 12).AddFrame(6, 5, 0).Offset(-8, -16).SetLooped(false).CreateSubStrip()
-				.AddFrame(9, 3, 12).AddFrame(9, 4, 12).AddFrame(6, 5, 12).AddFrame(6, 7, 0).Offset(-8, -16).SetLooped(false).CreateSubStrip();
+				.AddFrame(9, 0, 11).AddFrame(9, 1, 11).AddFrame(6, 2, 11).AddFrame(6, 1, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
+				.AddFrame(9, 3, 11).AddFrame(9, 4, 11).AddFrame(6, 5, 11).AddFrame(6, 3, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
+				.AddFrame(9, 0, 12).AddFrame(9, 1, 12).AddFrame(6, 2, 12).AddFrame(6, 5, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
+				.AddFrame(9, 3, 12).AddFrame(9, 4, 12).AddFrame(6, 5, 12).AddFrame(6, 7, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip();
 
 	}
 
@@ -570,6 +572,8 @@ class GameData {
 		public static Sprite SPR_HUD_RUPEE				= new Sprite();
 		public static Sprite SPR_HUD_ORE_CHUNK			= new Sprite();
 		public static Sprite SPR_HUD_KEY				= new Sprite();
+		public static Sprite SPR_HUD_BACKGROUND				= new Sprite();	// The lighter version when the inventory is closed.
+		public static Sprite SPR_HUD_BACKGROUND_INVENTORY	= new Sprite();	// The darker version that when the inventory is opened.
 
 	
 	//-----------------------------------------------------------------------------

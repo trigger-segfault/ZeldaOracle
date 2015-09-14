@@ -10,7 +10,7 @@ using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.Entities.Players {
 	
-	public class Player : Entity {
+	public class Player : Unit {
 
 		private AnimationPlayer	animationPlayer;		
 		private Keys[]			moveKeys;
@@ -75,6 +75,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 		
 		public override void Initialize() {
+			base.Initialize();
+
 			// Play the default player animation.
 			animationPlayer.Play(GameData.ANIM_PLAYER_DEFAULT);
 			animationPlayer.SubStripIndex = 0;

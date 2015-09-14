@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Particle Editor")]
-[assembly: AssemblyProduct("Particle Editor")]
-[assembly: AssemblyDescription("An editor for particles using the .conscript format.")]
-[assembly: AssemblyCompany("Trigger Games")]
-[assembly: AssemblyCopyright("Copyright © Robert Jordan 2014")]
+[assembly: AssemblyTitle("Zelda")]
+[assembly: AssemblyProduct("Zelda")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

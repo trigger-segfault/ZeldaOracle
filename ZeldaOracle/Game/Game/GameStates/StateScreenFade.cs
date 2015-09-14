@@ -51,8 +51,8 @@ namespace ZeldaOracle.Game.GameStates {
 			float opacity = timer / duration;
 			if (type == FadeType.FadeIn)
 				opacity = 1.0f - opacity;
-			Color c = color;
-			c.A = (byte) (255.0f * opacity);
+			Color c = color * opacity;
+			//c.A = (byte) (255.0f * opacity);
 			g.FillRectangle(GameSettings.SCREEN_BOUNDS, c);
 		}
 	}

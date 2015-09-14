@@ -44,16 +44,12 @@ namespace ZeldaOracle.Game.Main {
 // The class that manages the framework of the game.
 public class GameManager {
 	
-	// The base game running the XNA framework.
-	private GameBase gameBase;
+	private GameBase		gameBase;			// The base game running the XNA framework.
+	public int				gameScale;			// The game scale used to alter screen size and mouse properties.
+	private RoomControl		roomControl;		// TODO: replace this with a game-state stack
+	private GameStateStack	gameStateStack;
+	private HUD				hud;
 
-	// The game scale used to alter screen size and mouse properties.
-	public double gameScale;
-
-	private RoomControl roomControl; // TODO: replace this with a game-state stack
-	
-	private GameStateStack gameStateStack;
-	
 
 	//-----------------------------------------------------------------------------
 	// Constants
@@ -67,13 +63,15 @@ public class GameManager {
 	//-----------------------------------------------------------------------------
 
 	public GameManager() {
-		gameBase		= null;
-		gameScale		= 4;
+		gameBase = null;
+		gameScale = 4;
 	}
 
 	// Initializes the game manager.
 	public void Initialize(GameBase gameBase) {
 		this.gameBase = gameBase;
+
+		hud = new HUD(this);
 
 		StringCodes.Initialize();
 		Controls.Initialize();
@@ -97,8 +95,10 @@ public class GameManager {
 
 		// Begin the game state stack with a RoomControl.
 		roomControl		= new RoomControl();
-		gameStateStack	= new GameStateStack(roomControl);
+		gameStateStack	= new GameStateStack(new StateDummy(), roomControl);
 		gameStateStack.Begin(this);
+
+		roomControl.BeginTestWorld();
 	}
 
 	// Called to unload game manager content.
@@ -199,7 +199,7 @@ public class GameManager {
 		if (Keyboard.IsKeyPressed(Keys.G)) {
 			Message message = new Message("I was a <red>hero<red> to broken robots 'cause I was one of them, but how can I sing about being damaged if I'm not?<p> That's like <green>Christina Aguilera<green> singing Spanish. Ooh, wait! That's it! I'll fake it!");
 			QueueGameStates(
-				new ZeldaOracle.Game.Control.TextReader(message)
+				new StateTextReader(message)
 			);
 		}
 
@@ -236,7 +236,7 @@ public class GameManager {
 		
 		DrawMode drawMode = new DrawMode();
 		drawMode.SortMode = SpriteSortMode.Deferred;
-		drawMode.BlendState = BlendState.NonPremultiplied;
+		drawMode.BlendState = BlendState.AlphaBlend;
 		drawMode.SamplerState = SamplerState.PointClamp;
 
 		// Render the game-state stack to a buffer.
@@ -245,7 +245,7 @@ public class GameManager {
 		g.Clear(Color.Black);
 		gameStateStack.Draw(g);
 		g.End();
-
+		
 		// Draw the buffer to the screen scaled.
 		g.SetRenderTarget(null);
 		g.ResetTranslation();
@@ -257,7 +257,7 @@ public class GameManager {
 
 	// Called every step to draw the debug information if debug mode is enabled.
 	private void DrawDebugInfo(Graphics2D g) {
-
+		
 	}
 
 	
@@ -309,9 +309,13 @@ public class GameManager {
 		}
 	}
 	// Gets or sets the draw scale of the game.
-	public double GameScale {
+	public int GameScale {
 		get { return gameScale; }
-		set { gameScale = GMath.Max(0.1, value); }
+		set { gameScale = GMath.Max(1, value); }
+	}
+
+	public HUD HUD {
+		get { return hud; }
 	}
 
 }

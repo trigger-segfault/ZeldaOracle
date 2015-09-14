@@ -212,6 +212,16 @@ public class Graphics2D {
 		}
 	}
 
+	public void DrawSprite(Sprite sprite, Rectangle2F destination) {
+		for (Sprite part = sprite; part != null; part = part.NextPart) {
+			destination.Point = NewPos(destination.Point) + (Vector2F) part.DrawOffset;
+			spriteBatch.Draw(part.Image, (Rectangle) destination, (Rectangle) part.SourceRect, XnaColor.White);
+			//spriteBatch.Draw(part.Image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
+			//	XnaColor.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.0f);
+		}
+	}
+
+
 	
 
 	//-----------------------------------------------------------------------------
