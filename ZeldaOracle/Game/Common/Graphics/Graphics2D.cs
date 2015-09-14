@@ -9,6 +9,7 @@ using XnaColor		= Microsoft.Xna.Framework.Color;
 
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Content;
+using ZeldaOracle.Common.Translation;
 
 namespace ZeldaOracle.Common.Graphics {
 
@@ -283,21 +284,51 @@ public class Graphics2D {
 
 	// Draws the string at the specified position.
 	public void DrawString(SpriteFont font, string text, Vector2F position, Align alignment,
-		Color color, Vector2F origin, double rotation, double scale, SpriteEffects flipEffect = SpriteEffects.None, double depth = 0.0)
+		Color color, Vector2F origin, double rotation, double scale, SpriteEffects flipEffect = SpriteEffects.None, float depth = 0.0f)
 	{
 		spriteBatch.DrawString(font, text, NewStringPos(position, font, text, alignment),
-			(XnaColor)color, (float)rotation, (Vector2)origin, (float)scale, flipEffect, (float)depth);
+			(XnaColor)color, (float)rotation, (Vector2)origin, (float)scale, flipEffect, depth);
 	}
 
 	// Draws the string at the specified position.
 	public void DrawString(SpriteFont font, string text, Vector2F position, Align alignment,
 			Color color, Vector2F origin, double rotation, Vector2F scale,
-			SpriteEffects flipEffect = SpriteEffects.None, double depth = 0.0)
+			SpriteEffects flipEffect = SpriteEffects.None, float depth = 0.0f)
 	{
-		spriteBatch.DrawString(font, text, NewStringPos(position, font, text, alignment), (XnaColor)color, (float)rotation, (Vector2)origin, (Vector2)scale, flipEffect, (float)depth);
+		spriteBatch.DrawString(font, text, NewStringPos(position, font, text, alignment), (XnaColor)color, (float)rotation, (Vector2)origin, (Vector2)scale, flipEffect, depth);
 	}
 
-	
+	public void DrawGameString(GameFont font, string text, Point2I position, Color color, float depth = 0.0f) {
+		DrawFormattedGameString(font, StringCodes.FormatText(text), position, color, depth);
+	}
+	public void DrawWrappedGameString(GameFont font, string text, int width, Point2I position, Color color, float depth = 0.0f) {
+		WrappedString wrappedString = font.MeasureWrappedString(text, width);
+		for (int i = 0; i < wrappedString.Lines.Length; i++) {
+			DrawFormattedGameString(font, wrappedString.Lines[i], position + new Point2I(0, font.LineSpacing * i), color, depth);
+		}
+	}
+	public void DrawFormattedGameString(GameFont font, FormattedString formattedString, Point2I position, Color color, float depth = 0.0f) {
+		for (int i = 0; i < formattedString.Text.Length; i++) {
+			spriteBatch.Draw(
+				font.SpriteSheet.Image,
+				(Rectangle)new Rectangle2I(
+					position.X + i * (font.CharacterSize.X + font.CharacterSpacing),
+					position.Y,
+					font.CharacterSize.X,
+					font.CharacterSize.Y
+				),
+				(Rectangle)new Rectangle2I(
+					font.SpriteSheet.Offset.X + ((int)formattedString.Text[i] % 16) * (font.SpriteSheet.CellSize.X + font.SpriteSheet.Spacing.X),
+					font.SpriteSheet.Offset.Y + ((int)formattedString.Text[i] / 16) * (font.SpriteSheet.CellSize.Y + font.SpriteSheet.Spacing.Y),
+					font.SpriteSheet.CellSize.X,
+					font.SpriteSheet.CellSize.Y
+				),
+				(formattedString.Colors[i] == Color.Black ? color : formattedString.Colors[i]), 0.0f, Vector2.Zero, SpriteEffects.None, depth
+			);
+		}
+	}
+
+
 	//-----------------------------------------------------------------------------
 	// Vector graphics.
 	//-----------------------------------------------------------------------------

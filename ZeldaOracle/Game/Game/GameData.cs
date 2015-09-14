@@ -14,10 +14,10 @@ using ZeldaOracle.Game.Main.ResourceBuilders;
 
 namespace ZeldaOracle.Game {
 
-	// A static class for storing links to all game content.
-	class GameData {
+// A static class for storing links to all game content.
+class GameData {
 
-		private static AnimationBuilder animationBuilder;
+	private static AnimationBuilder animationBuilder;
 
 
 		//-----------------------------------------------------------------------------
@@ -25,14 +25,14 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		// Initializes and loads the game content.
-		public static void Initialize() {
+	public static void Initialize() {
 			
-			Console.WriteLine("Loading Images");
-			LoadImages();
+		Console.WriteLine("Loading Images");
+		LoadImages();
 
-			Console.WriteLine("Loading Sprite Sheets");
-			LoadSpriteSheets();
-			
+		Console.WriteLine("Loading Sprite Sheets");
+		LoadSpriteSheets();
+
 			Console.WriteLine("Loading Sprites");
 			LoadSprites();
 			
@@ -45,47 +45,47 @@ namespace ZeldaOracle.Game {
 			Console.WriteLine("Loading Tilesets");
 			LoadTilesets();
 
-			Console.WriteLine("Loading Fonts");
-			LoadFonts();
+		Console.WriteLine("Loading Fonts");
+		LoadFonts();
 
-			Console.WriteLine("Loading Shaders");
-			LoadShaders();
+		Console.WriteLine("Loading Shaders");
+		LoadShaders();
 
-			Console.WriteLine("Loading Sound Effects");
-			LoadSounds();
+		Console.WriteLine("Loading Sound Effects");
+		LoadSounds();
 
-			Console.WriteLine("Loading Music");
-			LoadMusic();
+		Console.WriteLine("Loading Music");
+		LoadMusic();
 
-		}
+	}
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Image Loading
 		//-----------------------------------------------------------------------------
 		
-		private static int PointIndex(int x, int y) {
+	private static int PointIndex(int x, int y) {
 			return ((234 * y) + x);
-		}
-
+	}
+	
 		// Loads the images.
 		private static void LoadImages() {
 
-		}
-		
+	}
+
 		//-----------------------------------------------------------------------------
 		// Sprite Sheet Loading
 		//-----------------------------------------------------------------------------
 
 		// Loads the sprite sheets.
 		private static void LoadSpriteSheets() {
-			
+
 			Image imageZoneset		= Resources.LoadImage("Images/zoneset");
 			Image imageSheetPlayer	= Resources.LoadImage("Images/sheet_player");
 			Image imageMenuSmall	= Resources.LoadImage("Images/sheet_menu_small");
 			Image imageIconsThin	= Resources.LoadImage("Images/sheet_icons_thin");
 			Image imageEffects		= Resources.LoadImage("Images/sheet_effects");
-			
+
 			SHEET_ZONESET_LARGE	= new SpriteSheet(imageZoneset, 16, 16, 0, 0, 1, 1);
 			SHEET_ZONESET_SMALL	= new SpriteSheet(imageZoneset, 8, 8, 187, 0, 1, 1);
 
@@ -107,17 +107,17 @@ namespace ZeldaOracle.Game {
 			//ParticleSR.UsingDegrees = false;
 			//Resources.LoadParticles(Resources.ParticleDirectory + "particle_data_before.conscript");
 		}
-		
+
 		
 		//-----------------------------------------------------------------------------
 		// Sprite Loading
 		//-----------------------------------------------------------------------------
-		
+
 		private static SpriteBuilder spriteBuilder;
-		
+
 		private static SpriteBuilder BuildSprite(Sprite sprite, int sheetX, int sheetY) {
 			return BuildSprite(sprite, sheetX, sheetY, 0, 0);
-		}
+			}
 
 		private static SpriteBuilder BuildSprite(Sprite sprite, int sheetX, int sheetY, int offsetX, int offsetY) {
 			sprite.Set(new Sprite(spriteBuilder.SpriteSheet, sheetX, sheetY, offsetX, offsetY));
@@ -208,7 +208,7 @@ namespace ZeldaOracle.Game {
 			BuildSprite(SPR_HUD_RUPEE,		0, 1);
 			BuildSprite(SPR_HUD_ORE_CHUNK,	1, 1);
 			BuildSprite(SPR_HUD_KEY,		2, 1);
-		}
+			}
 		
 		
 		//-----------------------------------------------------------------------------
@@ -219,10 +219,10 @@ namespace ZeldaOracle.Game {
 			animationBuilder.Begin(animation);
 			return animationBuilder;
 		}
-		
+
 		private static void LoadAnimations() {
 			animationBuilder = new AnimationBuilder();
-			
+		
 			
 			// TILE ANIMATIONS:
 			animationBuilder.SetSheet(SHEET_ZONESET_LARGE);
@@ -276,13 +276,13 @@ namespace ZeldaOracle.Game {
 				.AddFrame(9, 0, 12).AddFrame(9, 1, 12).AddFrame(6, 2, 12).AddFrame(6, 5, 0).Offset(-8, -16).SetLooped(false).CreateSubStrip()
 				.AddFrame(9, 3, 12).AddFrame(9, 4, 12).AddFrame(6, 5, 12).AddFrame(6, 7, 0).Offset(-8, -16).SetLooped(false).CreateSubStrip();
 
-		}
-		
-		
+	}
+
+
 		//-----------------------------------------------------------------------------
 		// Collision Models Loading
 		//-----------------------------------------------------------------------------
-		
+
 		private static void LoadCollisionModels() {
 			MODEL_BLOCK				= new CollisionModel().AddBox( 0,  0, 16, 16);
 			MODEL_EDGE_E			= new CollisionModel().AddBox( 8,  0,  8, 16);
@@ -305,7 +305,7 @@ namespace ZeldaOracle.Game {
 			MODEL_BRIDGE_V_RIGHT	= new CollisionModel().AddBox(12,  0,  4, 16);
 			MODEL_BRIDGE_V			= new CollisionModel().AddBox( 0,  0,  4, 16);
 		}
-		
+
 		
 		//-----------------------------------------------------------------------------
 		// Tliesets Loading
@@ -395,7 +395,7 @@ namespace ZeldaOracle.Game {
 			BuildTile( 7, 21).SetSolidModel(MODEL_INSIDE_CORNER_NW);
 
 			TILESETS = new Tileset[] { TILESET_OVERWORLD };
-		}
+	}
 
 		
 		//-----------------------------------------------------------------------------
@@ -403,11 +403,13 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		// Loads the fonts.
-		private static void LoadFonts() {
+	private static void LoadFonts() {
 
-			FontDebugMenu = Resources.LoadFont("Fonts/font_debug_menu");
-			FontDebugMenuBold = Resources.LoadFont("Fonts/font_debug_menu_bold");
-		}
+		FontDebugMenu = Resources.LoadFont("Fonts/font_debug_menu");
+		FontDebugMenuBold = Resources.LoadFont("Fonts/font_debug_menu_bold");
+		Image fontLargeSheet = Resources.LoadImage("Images/UI/font_large");
+		FONT_LARGE = new GameFont(new SpriteSheet(fontLargeSheet, new Point2I(8, 12), Point2I.One, Point2I.One), new Point2I(8, 12), 0, 14);
+	}
 
 		
 		//-----------------------------------------------------------------------------
@@ -415,82 +417,82 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		// Loads the shaders.
-		private static void LoadShaders() {
+	private static void LoadShaders() {
 
-		}
-		
+	}
+
 
 		//-----------------------------------------------------------------------------
 		// Sound Effects Loading
 		//-----------------------------------------------------------------------------
 
 		// Loads the sound effects.
-		private static void LoadSounds() {
+	private static void LoadSounds() {
 
 
-			//Resources.LoadSoundGroups(Resources.SoundDirectory + "sounds.conscript");
+		//Resources.LoadSoundGroups(Resources.SoundDirectory + "sounds.conscript");
 
-		}
-		
+	}
+
 
 		//-----------------------------------------------------------------------------
 		// Music Loading
 		//-----------------------------------------------------------------------------
 
 		// Loads the music.
-		private static void LoadMusic() {
+	private static void LoadMusic() {
 
-			//Resources.LoadPlaylists(Resources.MusicDirectory + "music.conscript");
-		}
+		//Resources.LoadPlaylists(Resources.MusicDirectory + "music.conscript");
+	}
 
-
-		//-----------------------------------------------------------------------------
-		// Tilesets
-		//-----------------------------------------------------------------------------
+	
+	//-----------------------------------------------------------------------------
+	// Tilesets
+	//-----------------------------------------------------------------------------
 
 		public static Tileset TILESET_OVERWORLD;
-		public static Tileset[] TILESETS;
+	public static Tileset[] TILESETS;
 
 
-		//-----------------------------------------------------------------------------
-		// Images
-		//-----------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+	// Images
+	//-----------------------------------------------------------------------------
 
 
-		//-----------------------------------------------------------------------------
-		// Sprite Sheets
-		//-----------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+	// Sprite Sheets
+	//-----------------------------------------------------------------------------
 
-		public static SpriteAtlas SheetDebugMenu;
-		public static SpriteAtlas SheetGamePadControls;
-		public static SpriteAtlas SheetGamePadArrows;
-
+	public static SpriteAtlas SheetDebugMenu;
+	public static SpriteAtlas SheetGamePadControls;
+	public static SpriteAtlas SheetGamePadArrows;
+	
 		public static SpriteSheet SHEET_MENU_SMALL;
 		public static SpriteSheet SHEET_ICONS_THIN;
 		public static SpriteSheet SHEET_EFFECTS;
 
-		public static SpriteSheet SHEET_PLAYER;
-		public static SpriteSheet SHEET_PLAYER_HURT;
-		public static SpriteSheet SHEET_MONSTERS;
-		public static SpriteSheet SHEET_MONSTERS_HURT;
-		
+	public static SpriteSheet SHEET_PLAYER;
+	public static SpriteSheet SHEET_PLAYER_HURT;
+	public static SpriteSheet SHEET_MONSTERS;
+	public static SpriteSheet SHEET_MONSTERS_HURT;
+	
 		public static SpriteSheet SHEET_ZONESET_LARGE;
 		public static SpriteSheet SHEET_ZONESET_SMALL;
 		public static SpriteSheet SHEET_TILESET_OVERWORLD;
 	
 	
-		//-----------------------------------------------------------------------------
-		// Sprites
-		//-----------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+	// Sprites
+	//-----------------------------------------------------------------------------
 	
-		// Effects.
+	// Effects.
 		public static Sprite SPR_SHADOW	= new Sprite();
 
-		// Special Background tiles.
+	// Special Background tiles.
 		public static Sprite SPR_TILE_DEFAULT	= new Sprite();	// The default ground background tile.
 		public static Sprite SPR_TILE_DUG		= new Sprite();		// A hole in the ground created by a shovel.
 	
-		// Object tiles.
+	// Object tiles.
 		public static Sprite SPR_BUSH				= new Sprite();
 		public static Sprite SPR_CRYSTAL			= new Sprite();
 		public static Sprite SPR_POT				= new Sprite();
@@ -520,7 +522,7 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_PLANT				= new Sprite();
 		public static Sprite SPR_ARMOS_STATUE		= new Sprite();
 
-		// Item Icons.
+	// Item Icons.
 		public static Sprite SPR_ITEM_ICON_SWORD_1				= new Sprite();
 		public static Sprite SPR_ITEM_ICON_SWORD_2				= new Sprite();
 		public static Sprite SPR_ITEM_ICON_SWORD_3				= new Sprite();
@@ -552,7 +554,7 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_ITEM_ICON_OCARINA				= new Sprite();
 		public static Sprite SPR_ITEM_ICON_BOW					= new Sprite();
 	
-		// HUD Sprites.
+	// HUD Sprites.
 		public static Sprite SPR_HUD_BRACKET_LEFT		= new Sprite();
 		public static Sprite SPR_HUD_BRACKET_LEFT_A		= new Sprite();
 		public static Sprite SPR_HUD_BRACKET_LEFT_B		= new Sprite();
@@ -570,11 +572,11 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_HUD_KEY				= new Sprite();
 
 	
-		//-----------------------------------------------------------------------------
-		// Animations
-		//-----------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+	// Animations
+	//-----------------------------------------------------------------------------
 
-		// Tile animations.
+	// Tile animations.
 		public static Animation ANIM_WATER						= new Animation();
 		public static Animation ANIM_OCEAN						= new Animation();
 		public static Animation ANIM_OCEAN_SHORE				= new Animation();
@@ -589,7 +591,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_LAVAFALL_BOTTOM			= new Animation();
 		public static Animation ANIM_LAVAFALL_TOP				= new Animation();
 	
-		// Player animations.
+	// Player animations.
 		public static Animation ANIM_PLAYER_DEFAULT				= new Animation();
 		public static Animation ANIM_PLAYER_HOLD				= new Animation();
 		public static Animation ANIM_PLAYER_SHIELD				= new Animation();
@@ -613,69 +615,70 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PLAYER_FALL				= new Animation();
 		public static Animation ANIM_PLAYER_DROWN				= new Animation();
 	
-		// Projectile animations.
+	// Projectile animations.
 		public static Animation ANIM_PROJECTILE_PLAYER_ARROW		= new Animation();
 		public static Animation ANIM_PROJECTILE_PLAYER_ARROW_CRASH	= new Animation();
 	
-		// Effect animations.
+	// Effect animations.
 		public static Animation ANIM_EFFECT_DIRT	= new Animation();
 	
+	public static GameFont FONT_LARGE;
 
-		//-----------------------------------------------------------------------------
-		// Collision Models.
-		//-----------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+	// Collision Models.
+	//-----------------------------------------------------------------------------
 	
-		public static CollisionModel MODEL_BLOCK;
-		public static CollisionModel MODEL_EDGE_E;
-		public static CollisionModel MODEL_EDGE_N;
-		public static CollisionModel MODEL_EDGE_W;
-		public static CollisionModel MODEL_EDGE_S;
-		public static CollisionModel MODEL_DOORWAY;
-		public static CollisionModel MODEL_CORNER_NE;
-		public static CollisionModel MODEL_CORNER_NW;
-		public static CollisionModel MODEL_CORNER_SW;
-		public static CollisionModel MODEL_CORNER_SE;
-		public static CollisionModel MODEL_INSIDE_CORNER_NE;
-		public static CollisionModel MODEL_INSIDE_CORNER_NW;
-		public static CollisionModel MODEL_INSIDE_CORNER_SW;
-		public static CollisionModel MODEL_INSIDE_CORNER_SE;
-		public static CollisionModel MODEL_BRIDGE_H_TOP;
-		public static CollisionModel MODEL_BRIDGE_H_BOTTOM;
-		public static CollisionModel MODEL_BRIDGE_H;
-		public static CollisionModel MODEL_BRIDGE_V_LEFT;
-		public static CollisionModel MODEL_BRIDGE_V_RIGHT;
-		public static CollisionModel MODEL_BRIDGE_V;
+	public static CollisionModel MODEL_BLOCK;
+	public static CollisionModel MODEL_EDGE_E;
+	public static CollisionModel MODEL_EDGE_N;
+	public static CollisionModel MODEL_EDGE_W;
+	public static CollisionModel MODEL_EDGE_S;
+	public static CollisionModel MODEL_DOORWAY;
+	public static CollisionModel MODEL_CORNER_NE;
+	public static CollisionModel MODEL_CORNER_NW;
+	public static CollisionModel MODEL_CORNER_SW;
+	public static CollisionModel MODEL_CORNER_SE;
+	public static CollisionModel MODEL_INSIDE_CORNER_NE;
+	public static CollisionModel MODEL_INSIDE_CORNER_NW;
+	public static CollisionModel MODEL_INSIDE_CORNER_SW;
+	public static CollisionModel MODEL_INSIDE_CORNER_SE;
+	public static CollisionModel MODEL_BRIDGE_H_TOP;
+	public static CollisionModel MODEL_BRIDGE_H_BOTTOM;
+	public static CollisionModel MODEL_BRIDGE_H;
+	public static CollisionModel MODEL_BRIDGE_V_LEFT;
+	public static CollisionModel MODEL_BRIDGE_V_RIGHT;
+	public static CollisionModel MODEL_BRIDGE_V;
 	
 	
-		//-----------------------------------------------------------------------------
-		// Fonts
-		//-----------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+	// Fonts
+	//-----------------------------------------------------------------------------
 
-		public static Font FontDebugMenu;
-		public static Font FontDebugMenuBold;
+	public static Font FontDebugMenu;
+	public static Font FontDebugMenuBold;
 
 	
-		//-----------------------------------------------------------------------------
-		// Shaders
-		//-----------------------------------------------------------------------------
-	
-
-		//-----------------------------------------------------------------------------
-		// Sound Effects
-		//-----------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+	// Shaders
+	//-----------------------------------------------------------------------------
 	
 
-		//-----------------------------------------------------------------------------
-		// Music
-		//-----------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+	// Sound Effects
+	//-----------------------------------------------------------------------------
 	
 
-		//-----------------------------------------------------------------------------
-		// Render Targets
-		//-----------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+	// Music
+	//-----------------------------------------------------------------------------
+	
 
-		public static RenderTarget2D RenderTargetGame;
-		public static RenderTarget2D RenderTargetDebug;
+	//-----------------------------------------------------------------------------
+	// Render Targets
+	//-----------------------------------------------------------------------------
 
-	}
+	public static RenderTarget2D RenderTargetGame;
+	public static RenderTarget2D RenderTargetDebug;
+
+}
 } // end namespace

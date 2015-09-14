@@ -36,6 +36,7 @@ using Playlist		= ZeldaOracle.Common.Audio.Playlist;
 
 using GameFramework.MyGame.Debug;
 using ZeldaOracle.Game.Control;
+using ZeldaOracle.Common.Translation;
 
 
 namespace ZeldaOracle.Game.Main {
@@ -74,6 +75,7 @@ public class GameManager {
 	public void Initialize(GameBase gameBase) {
 		this.gameBase = gameBase;
 
+		StringCodes.Initialize();
 		Controls.Initialize();
 		ScreenResized();
 	}
@@ -236,6 +238,9 @@ public class GameManager {
 		g.Begin(drawMode);
 		g.Clear(Color.Black);
 		gameStateStack.Draw(g);
+		//FormattedString fString = StringCodes.FormatText("Hello <red><rupee>900 World<red>!");
+		//g.DrawFormattedGameString(GameData.FONT_LARGE, fString, Point2I.One, Color.Black);
+		g.DrawWrappedGameString(GameData.FONT_LARGE, "Hello <red><rupee>900 World<red>!, How now <green>brown<green> cow. ABCDEFG Come play with me Link<!!>.", 140, Point2I.One, Color.Black);
 		g.End();
 
 		// Draw the buffer to the screen scaled.
