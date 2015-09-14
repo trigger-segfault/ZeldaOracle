@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Translation;
 
 namespace ZeldaOracle.Common.Graphics {
 
-	public struct WrappedString {
-		public string[] Lines;
-		public int[] LineLengths;
-		public Rectangle2I Bounds;
-	}
 
 	/** <summary>
 	 * An font containing a sprite font.
@@ -26,9 +22,6 @@ namespace ZeldaOracle.Common.Graphics {
 		private int characterSpacing;
 		private int lineSpacing;
 
-		private Dictionary<string, Color> colorCodes;
-		private Dictionary<string, string> letterCodes;
-
 		//========= CONSTRUCTORS =========
 
 		/** <summary> Constructs a font with the specified sprite font. </summary> */
@@ -41,6 +34,10 @@ namespace ZeldaOracle.Common.Graphics {
 
 		//========== PROPERTIES ==========
 
+		/** <summary> Gets the sprite sheet of the font </summary> */
+		public SpriteSheet SpriteSheet {
+			get { return spriteSheet; }
+		}
 		/** <summary> Gets or sets the size of the font characters. </summary> */
 		public Point2I CharacterSize {
 			get { return characterSize; }
@@ -60,7 +57,9 @@ namespace ZeldaOracle.Common.Graphics {
 		//========== MANAGEMENT ==========
 
 		public WrappedString MeasureWrappedString(string text, int width) {
-			List<string> lines = new List<string>();
+			List<FormattedString> lines = new List<FormattedString>();
+			List<Color> lineColors = new List<Color>();
+			List<Color> wordColors = new List<Color>();
 			List<int> lineLengths = new List<int>();
 			int currentLine = 0;
 			int currentCharacter = 0;
@@ -69,39 +68,51 @@ namespace ZeldaOracle.Common.Graphics {
 			int wordLength = 0;
 			int wordLineCount = 0;
 			string word = "";
+			bool firstChar = true;
+			FormattedString formattedString = StringCodes.FormatText(text);
 
-
-			while (currentCharacter < text.Length) {
-				lines.Add("");
+			while (currentCharacter < formattedString.Text.Length) {
+				lines.Add(new FormattedString());
 				lineLengths.Add(0);
 
-				// Remove starting spaces.
-				while (text[currentCharacter] == ' ') {
+				// Remove starting spaces in the line.
+				while (formattedString.Text[currentCharacter] == ' ') {
 					currentCharacter++;
 				}
 
 				wordStart = currentCharacter;
-				word = "" + text[currentCharacter];
-				wordLength = characterSize.X;
-				currentCharacter++;
-
-				while (lineLengths[currentLine] + characterSpacing + characterSize.X <= width) {
-					if (currentCharacter >= text.Length || text[currentCharacter] == ' ') {
-						lines[currentLine] += (wordLineCount > 0 ? " " : "") + word;
-						lineLengths[currentLine] += wordLength;
-						wordLineCount++;
-						currentCharacter++;
-						wordStart = currentCharacter;
-						break;
-					}
-					word += text[currentCharacter];
-					wordLength += characterSpacing + characterSize.X;
-					currentCharacter++;
-				}
-				currentCharacter = wordStart;
+				word = "";
+				wordLength = 0;
 				wordLineCount = 0;
-			}
+				firstChar = true;
+				lineColors.Clear();
 
+				do {
+					if (currentCharacter >= formattedString.Text.Length || formattedString.Text[currentCharacter] == ' ') {
+						lines[currentLine].Text += (wordLineCount > 0 ? " " : "") + word;
+						lineLengths[currentLine] += (wordLineCount > 0 ? (characterSpacing + characterSize.X) : 0) + wordLength;
+						if (wordLineCount > 0)
+							lineColors.Add(Color.Black);
+						lineColors.AddRange(wordColors);
+						wordColors.Clear();
+						wordLineCount++;
+						wordStart = currentCharacter + 1;
+						word = "";
+					}
+					else {
+						word += formattedString.Text[currentCharacter];
+						wordLength += (firstChar ? 0 : characterSpacing) + characterSize.X;
+						wordColors.Add(formattedString.Colors[currentCharacter]);
+						firstChar = false;
+					}
+					currentCharacter++;
+				} while (lineLengths[currentLine] + wordLength + characterSpacing + characterSize.X <= width ||
+					(currentCharacter < formattedString.Text.Length && formattedString.Text[currentCharacter] == '<'));
+
+				currentCharacter = wordStart;
+				lines[currentLine].Colors = lineColors.ToArray();
+				currentLine++;
+			}
 
 			WrappedString wrappedString = new WrappedString();
 			wrappedString.Lines = lines.ToArray();

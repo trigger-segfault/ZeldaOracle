@@ -145,6 +145,8 @@ class GameData {
 
 		FontDebugMenu = Resources.LoadFont("Fonts/font_debug_menu");
 		FontDebugMenuBold = Resources.LoadFont("Fonts/font_debug_menu_bold");
+		Image fontLargeSheet = Resources.LoadImage("Images/UI/font_large");
+		FONT_LARGE = new GameFont(new SpriteSheet(fontLargeSheet, new Point2I(8, 12), Point2I.One, Point2I.One), new Point2I(8, 12), 0, 14);
 	}
 
 	#endregion
@@ -362,7 +364,8 @@ class GameData {
 	
 	// Effect animations.
 	public static Animation ANIM_EFFECT_DIRT;
-	
+
+	public static GameFont FONT_LARGE;
 
 	//-----------------------------------------------------------------------------
 	// Collision Models.
