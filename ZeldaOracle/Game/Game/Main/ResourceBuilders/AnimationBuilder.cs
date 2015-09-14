@@ -143,14 +143,14 @@ namespace ZeldaOracle.Game.Main.ResourceBuilders
 			AnimationFrame[] frames = new AnimationFrame[numFrames];
 
 			for (int i = 0; i < numFrames; ++i)
-				frames[i] = animation.Frames[i];
+				frames[i] = new AnimationFrame(animation.Frames[i]);
 
 			for (int i = 0; i < numFrames; ++i) {
 				for (int x = 0; x < 2; ++x) {
 					for (int y = 0; y < 2; ++y) {
 						if (x > 0 || y > 0) {
 							frames[i].Sprite.DrawOffset = new Point2I(8 * x, 8 * y);
-							animation.AddFrame(frames[i]);
+							animation.AddFrame(new AnimationFrame(frames[i]));
 						}
 					}
 				}

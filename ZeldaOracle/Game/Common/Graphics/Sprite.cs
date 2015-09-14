@@ -18,7 +18,14 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
-
+		
+		public Sprite() {
+			image		= null;
+			sourceRect	= Rectangle2I.Zero;
+ 			drawOffset	= Point2I.Zero;
+			nextPart	= null;
+		}
+		
 		public Sprite(SpriteSheet sheet, int sx, int sy)  :
 			this(sheet, sx, sy, 0, 0)
 		{
@@ -66,7 +73,21 @@ namespace ZeldaOracle.Common.Graphics {
 			if (copy.nextPart != null)
 				this.nextPart = new Sprite(copy.nextPart); // This is recursive.
 		}
+
 		
+		//-----------------------------------------------------------------------------
+		// Mutators
+		//-----------------------------------------------------------------------------
+		
+		public void Set(Sprite copy) {
+			this.image		= copy.image;
+			this.sourceRect	= copy.sourceRect;
+			this.drawOffset	= copy.drawOffset;
+			this.nextPart	= null;
+			if (copy.nextPart != null)
+				this.nextPart.Set(copy.nextPart); // This is recursive.
+		}
+
 		
 		//-----------------------------------------------------------------------------
 		// Properties

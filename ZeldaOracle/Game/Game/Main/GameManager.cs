@@ -190,8 +190,8 @@ public class GameManager {
 		// DEBUG: Fade the screen out and in.
 		if (Keyboard.IsKeyPressed(Keys.F)) {
 			QueueGameStates(
-				new StateScreenFade(Color.Black, 0.5f, FadeType.FadeOut),
-				new StateScreenFade(Color.Black, 0.5f, FadeType.FadeIn)
+				new StateScreenFade(Color.Black, 30, FadeType.FadeOut),
+				new StateScreenFade(Color.Black, 30, FadeType.FadeIn)
 			);
 		}
 
@@ -215,7 +215,7 @@ public class GameManager {
 		}*/
 
 		// Update the game-state stack.
-		gameStateStack.Update(timeDelta);
+		gameStateStack.Update(1); // 1 tick
 	}
 	
 	

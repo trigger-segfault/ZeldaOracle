@@ -263,6 +263,16 @@ public struct Rectangle2F {
 			};
 		}
 	}
+	
+	public float	Left		{ get { return Point.X; } }
+	public float	Top			{ get { return Point.Y; } }
+	public float	Right		{ get { return Point.X + Size.X; } }
+	public float	Bottom		{ get { return Point.Y + Size.Y; } }
+	public Vector2F	TopRight	{ get { return new Vector2F(Right, Top); } }
+	public Vector2F	TopLeft		{ get { return new Vector2F(Left,  Top); } }
+	public Vector2F	BottomRight	{ get { return new Vector2F(Right, Bottom); } }
+	public Vector2F	BottomLeft	{ get { return new Vector2F(Left,  Bottom); } }
+
 
 	//========= CALCULATIONS =========
 
@@ -351,6 +361,53 @@ public struct Rectangle2F {
 		return ((rect.Min < Max) &&
 				(rect.Max > Min));
 	}
+
+    // Return whether this and another rectangle are intersecting.
+    public bool Intersects(Rectangle2F other) {
+		if (IsEmpty || other.IsEmpty)
+			return false;
+		return !(other.Left - Right >= 0 || other.Top - Bottom >= 0 ||
+		         Left - other.Right >= 0 || Top - other.Bottom >= 0);
+    }
+
+
+	//-----------------------------------------------------------------------------
+	// Static methods
+	//-----------------------------------------------------------------------------
+        
+	// Return the intersection between two rectangles.
+	// Returns the Empty rect if there is no intersection.
+	public static Rectangle2F Intersect(Rectangle2F r1, Rectangle2F r2) {
+		float x1 = Math.Max(r1.Left,   r2.Left);
+		float y1 = Math.Max(r1.Top,    r2.Top);
+		float x2 = Math.Min(r1.Right,  r2.Right);
+		float y2 = Math.Min(r1.Bottom, r2.Bottom);
+		if (x2 > x1 && y2 > y1)
+			return new Rectangle2F(x1, y1, x2 - x1, y2 - y1);
+		return Rectangle2F.Zero;
+	}
+        
+	// Creates a new rectangle that exactly contains two other rectangles.
+	public static Rectangle2F Union(Rectangle2F r1, Rectangle2F r2) {
+		float x1 = Math.Min(r1.Left,   r2.Left);
+		float y1 = Math.Min(r1.Top,    r2.Top);
+		float x2 = Math.Max(r1.Right,  r2.Right);
+		float y2 = Math.Max(r1.Bottom, r2.Bottom);
+		return new Rectangle2F(x1, y1, x2 - x1, y2 - y1);
+	}
+        
+    // Creates a copy of a rectangle translated by an amount.
+    public static Rectangle2F Translate(Rectangle2F r, float x, float y) {
+        r.Point.X += x;
+		r.Point.Y += y;
+        return r;
+    }
+
+    // Creates a copy of a rectangle translated by an amount.
+    public static Rectangle2F Translate(Rectangle2F r, Vector2F amount) {
+        r.Point += amount;
+        return r;
+    }
 
 }
 } // End namespace

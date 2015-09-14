@@ -29,8 +29,14 @@ namespace ZeldaOracle.Game.Worlds {
 		//-----------------------------------------------------------------------------
 		// Accessors
 		//-----------------------------------------------------------------------------
+		
+		public bool ContainsRoom(Point2I location) {
+			return (location.X >= 0 && location.Y >= 0 && location.X < dimensions.X && location.Y < dimensions.Y);
+		}
 
 		public Room GetRoom(Point2I location) {
+			if (!ContainsRoom(location))
+				return null;
 			return rooms[location.X, location.Y];
 		}
 

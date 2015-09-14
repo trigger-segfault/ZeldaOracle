@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
+using ZeldaOracle.Game.GameStates.Transitions;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
@@ -38,6 +39,15 @@ namespace ZeldaOracle.Game.Control {
 			tiles			= null;
 			roomLocation	= Point2I.Zero;
 			entities		= new List<Entity>();
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Accessors
+		//-----------------------------------------------------------------------------
+
+		public Tile GetTile(int x, int y, int layer) {
+			return tiles[x, y, layer];
 		}
 
 
@@ -84,7 +94,7 @@ namespace ZeldaOracle.Game.Control {
 					}
 					else {
 						// Only use default tiles on bottom layer.
-						Tileset tileset = GameData.TILESET_DEFAULT;
+						Tileset tileset = GameData.TILESET_OVERWORLD;
 						room.TileData[x, y, 0] = tileset.TileData[tileset.DefaultTile.X, tileset.DefaultTile.Y];
 					}
 					
@@ -140,6 +150,16 @@ namespace ZeldaOracle.Game.Control {
 			}
 
 
+		}
+		
+		public void EnterAdjacentRoom(int direction) {
+			Point2I relative = Direction.ToPoint(direction);
+			Point2I nextLocation = roomLocation + relative;
+			if (!level.ContainsRoom(nextLocation))
+				return;
+			Room nextRoom = level.GetRoom(nextLocation);
+			
+			//new TransitionPush(this, 
 		}
 
 

@@ -20,7 +20,7 @@ namespace ZeldaOracle.Common.Graphics {
 		public Animation() {
 			frames		= new List<AnimationFrame>();
 			duration	= 0;
-			loops		= 0;
+			loops		= -1;
 			nextStrip	= null;
 		}
 
