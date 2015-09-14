@@ -308,15 +308,21 @@ public class Graphics2D {
 		spriteBatch.DrawString(font, text, NewStringPos(position, font, text, alignment), (XnaColor)color, (float)rotation, (Vector2)origin, (Vector2)scale, flipEffect, depth);
 	}
 
+	// Draws a game string at the specified position
 	public void DrawGameString(GameFont font, string text, Point2I position, Color color, float depth = 0.0f) {
 		DrawFormattedGameString(font, StringCodes.FormatText(text), position, color, depth);
 	}
+	// Draws a wrapped game string at the specified position
 	public void DrawWrappedGameString(GameFont font, string text, int width, Point2I position, Color color, float depth = 0.0f) {
-		WrappedString wrappedString = font.MeasureWrappedString(text, width);
+		DrawFormattedWrappedGameString(font, font.MeasureWrappedString(text, width), width, position, color, depth);
+	}
+	// Draws a formatted wrapped game string at the specified position
+	public void DrawFormattedWrappedGameString(GameFont font, WrappedString wrappedString, int width, Point2I position, Color color, float depth = 0.0f) {
 		for (int i = 0; i < wrappedString.Lines.Length; i++) {
 			DrawFormattedGameString(font, wrappedString.Lines[i], position + new Point2I(0, font.LineSpacing * i), color, depth);
 		}
 	}
+	// Draws a formatted game string at the specified position
 	public void DrawFormattedGameString(GameFont font, FormattedString formattedString, Point2I position, Color color, float depth = 0.0f) {
 		for (int i = 0; i < formattedString.Text.Length; i++) {
 			spriteBatch.Draw(

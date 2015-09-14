@@ -196,6 +196,12 @@ public class GameManager {
 				new StateScreenFade(Color.Black, 30, FadeType.FadeIn)
 			);
 		}
+		if (Keyboard.IsKeyPressed(Keys.G)) {
+			Message message = new Message("I was a <red>hero<red> to broken robots 'cause I was one of them, but how can I sing about being damaged if I'm not?<p> That's like <green>Christina Aguilera<green> singing Spanish. Ooh, wait! That's it! I'll fake it!");
+			QueueGameStates(
+				new StateTextReader(message)
+			);
+		}
 
 		/*
 		// Toggle debug mode
@@ -238,9 +244,6 @@ public class GameManager {
 		g.Begin(drawMode);
 		g.Clear(Color.Black);
 		gameStateStack.Draw(g);
-		//FormattedString fString = StringCodes.FormatText("Hello <red><rupee>900 World<red>!");
-		//g.DrawFormattedGameString(GameData.FONT_LARGE, fString, Point2I.One, Color.Black);
-		//g.DrawWrappedGameString(GameData.FONT_LARGE, "Hello <red><rupee>900 World<red>!, How now <green>brown<green> cow. ABCDEFG Come play with me Link<!!>.", 140, Point2I.One, Color.Black);
 		g.End();
 		
 		// Draw the buffer to the screen scaled.

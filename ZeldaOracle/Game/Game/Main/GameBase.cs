@@ -91,7 +91,7 @@ public class GameBase : XnaGame {
 
 		// Setup
 		this.IsMouseVisible					= true;
-		this.Window.AllowUserResizing		= true;
+		this.Window.AllowUserResizing		= false;
 		this.graphics.PreferMultiSampling	= true;
 		this.graphics.PreferredBackBufferWidth	= windowSize.X;
 		this.graphics.PreferredBackBufferHeight	= windowSize.Y;

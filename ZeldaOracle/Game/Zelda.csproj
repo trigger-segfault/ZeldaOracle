@@ -184,7 +184,9 @@
     <Compile Include="Common\Translation\Language.cs" />
     <Compile Include="Common\Translation\StringCodes.cs" />
     <Compile Include="Game\Control\HUD.cs" />
+    <Compile Include="Game\Control\Message.cs" />
     <Compile Include="Game\Control\RoomControl.cs" />
+    <Compile Include="Game\GameStates\StateTextReader.cs" />
     <Compile Include="Game\Control\View.cs" />
     <Compile Include="Game\Debug\DebugController.cs" />
     <None Include="Game\Editor\EffectPropertyGrid.cs" />
