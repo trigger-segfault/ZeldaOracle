@@ -23,17 +23,35 @@ public struct Color {
 	public static Color White {
 		get { return new Color(255, 255, 255, 255); }
 	}
+
 	/** <summary> R:0 G:0 B:0 A:255. </summary> */
 	public static Color Black {
 		get { return new Color(0, 0, 0, 255); }
 	}
+
 	/** <summary> R:255 G:255 B:255 A:0. </summary> */
 	public static Color TransparentWhite {
 		get { return new Color(255, 255, 255, 0); }
 	}
+
 	/** <summary> R:0 G:0 B:0 A:0. </summary> */
 	public static Color Transparent {
 		get { return new Color(0, 0, 0, 0); }
+	}
+
+	// R:255 G:0 B:0 A:255.
+	public static Color Red {
+		get { return new Color(255, 0, 0); }
+	}
+
+	// R:0 G:255 B:0 A:255.
+	public static Color Green {
+		get { return new Color(0, 255, 0); }
+	}
+
+	// R:0 G:0 B:255 A:255.
+	public static Color Blue {
+		get { return new Color(0, 0, 255); }
 	}
 
 	#endregion
@@ -269,11 +287,10 @@ public struct Color {
 	}
 	public static Color operator *(Color a, float scalar) {
 		return new Color(
-			GMath.Clamp((a.r / 255.0f) * scalar, 0.0f, 1.0f) * 255,
-			GMath.Clamp((a.g / 255.0f) * scalar, 0.0f, 1.0f) * 255,
-			GMath.Clamp((a.b / 255.0f) * scalar, 0.0f, 1.0f) * 255,
-			GMath.Clamp((a.a / 255.0f) * scalar, 0.0f, 1.0f) * 255);
-
+			(byte) (GMath.Clamp((a.r / 255.0f) * scalar, 0.0f, 1.0f) * 255),
+			(byte) (GMath.Clamp((a.g / 255.0f) * scalar, 0.0f, 1.0f) * 255),
+			(byte) (GMath.Clamp((a.b / 255.0f) * scalar, 0.0f, 1.0f) * 255),
+			(byte) (GMath.Clamp((a.a / 255.0f) * scalar, 0.0f, 1.0f) * 255));
 	}
 
 	#endregion

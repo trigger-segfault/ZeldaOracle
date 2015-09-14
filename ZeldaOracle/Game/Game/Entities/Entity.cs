@@ -111,6 +111,7 @@ namespace ZeldaOracle.Game.Entities {
 		// Returns the room control this entity belongs to.
 		public RoomControl RoomControl {
 			get { return control; }
+			set { control = value; }
 		}
 
 		// Returns true if the entity has been initialized.

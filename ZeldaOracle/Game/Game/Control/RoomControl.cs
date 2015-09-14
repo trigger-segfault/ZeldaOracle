@@ -158,16 +158,32 @@ namespace ZeldaOracle.Game.Control {
 			if (!level.ContainsRoom(nextLocation))
 				return;
 			Room nextRoom = level.GetRoom(nextLocation);
+
+			RoomControl newControl = new RoomControl();
+			newControl.gameManager	= gameManager;
+			newControl.world		= world;
+			newControl.level		= level;
+			newControl.room			= nextRoom;
+			newControl.roomLocation	= nextLocation;
+			newControl.player		= player;
+			newControl.BeginRoom(nextRoom);
+			entities.Remove(player);
 			
-			//new TransitionPush(this, 
+			player.RoomControl = newControl;
+			player.Position -= relative * nextRoom.Size * GameSettings.TILE_SIZE;
+			//player.Position += relative * GameSettings.TILE_SIZE;
+
+			TransitionPush transition = new TransitionPush(this, newControl, direction);
+			gameManager.PopGameState();
+			gameManager.PushGameState(transition);
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
-
-		public override void OnBegin() {
+		
+		public void BeginTestWorld() {
 
 			// Load test level/room.
 			level = LoadLevel("Content/Worlds/test_level.zwd");
@@ -182,6 +198,10 @@ namespace ZeldaOracle.Game.Control {
 			// Setup the room.
 			roomLocation = new Point2I(2, 1);
 			BeginRoom(level.GetRoom(roomLocation));
+
+		}
+
+		public override void OnBegin() {
 
 		}
 		
@@ -214,7 +234,27 @@ namespace ZeldaOracle.Game.Control {
 			}
 
 			// Room transitions.
+			if (player.X < 6) {
+				player.X = 6;
+				EnterAdjacentRoom(Direction.Left);
+			}
+			else if (player.Y < 14) {
+				player.Y = 14;
+				EnterAdjacentRoom(Direction.Up);
+			}
+			else if (player.X > room.Width * GameSettings.TILE_SIZE - 6) {
+				player.X = room.Width * GameSettings.TILE_SIZE - 6;
+				EnterAdjacentRoom(Direction.Right);
+			}
+			else if (player.Y > room.Height * GameSettings.TILE_SIZE + 1) {
+				player.Y = room.Height * GameSettings.TILE_SIZE + 1;
+				EnterAdjacentRoom(Direction.Down);
+			}
+
+			/*
 			if (player.X < 0) {
+				EnterAdjacentRoom(Direction.Left);
+
 				roomLocation.X -= 1;
 				if (roomLocation.X < 0)
 					roomLocation.X = level.Width - 1;
@@ -242,10 +282,12 @@ namespace ZeldaOracle.Game.Control {
 				BeginRoom(level.GetRoom(roomLocation));
 				player.Y -= room.Height * GameSettings.TILE_SIZE;
 			}
-
+			*/
 		}
 
 		public override void Draw(Graphics2D g) {
+			g.Translate(0, 16);
+
 			// Draw tiles.
 			for (int x = 0; x < room.Width; x++) {
 				for (int y = 0; y < room.Height; y++) {
@@ -261,8 +303,13 @@ namespace ZeldaOracle.Game.Control {
 			for (int i = 0; i < entities.Count; ++i) {
 				entities[i].Draw(g);
 			}
+			
+			g.Translate(0, -16);
+			
+			g.ResetTranslation();
 
-			// TODO: Draw HUD.
+			// Draw HUD.
+			gameManager.HUD.Draw(g);
 		}
 
 		

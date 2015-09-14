@@ -183,6 +183,7 @@
     <Compile Include="Common\Scripts\SpriteSheetSR.cs" />
     <Compile Include="Common\Translation\Language.cs" />
     <Compile Include="Common\Translation\StringCodes.cs" />
+    <Compile Include="Game\Control\HUD.cs" />
     <Compile Include="Game\Control\RoomControl.cs" />
     <Compile Include="Game\Control\View.cs" />
     <Compile Include="Game\Debug\DebugController.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="Game\GameStates\GameState.cs" />
     <Compile Include="Game\GameStates\GameStateQueue.cs" />
     <Compile Include="Game\GameStates\GameStateStack.cs" />
+    <Compile Include="Game\GameStates\StateDummy.cs" />
     <Compile Include="Game\GameStates\StateScreenFade.cs" />
     <Compile Include="Game\GameStates\Transitions\RoomTransition.cs" />
     <Compile Include="Game\GameStates\Transitions\TransitionPush.cs" />
