@@ -71,12 +71,21 @@ namespace ZeldaOracle.Common.Graphics {
 		public void Update(float ticks) {
 			if (isPlaying && subStrip != null) {
 				timer += ticks;
-				if (subStrip.LoopCount < 0 && timer >= subStrip.Duration) {
+				
+				if (subStrip.LoopMode == LoopMode.Reset && timer >= subStrip.Duration) {
+					Stop();
+				}
+				else if (subStrip.LoopMode == LoopMode.Repeat && timer >= subStrip.Duration) {
+					// Loop back to the beginning.
 					if (subStrip.Duration > 0)
 						timer %= subStrip.Duration;
 					else
 						timer = 0.0f;
-				}		
+				}
+				else if (subStrip.LoopMode == LoopMode.Reset && timer > subStrip.Duration) {
+					// Hang on the last frame.
+					timer = subStrip.Duration;
+				}	
 			}
 		}
 		
@@ -111,9 +120,9 @@ namespace ZeldaOracle.Common.Graphics {
 		// Returns true if the animation is done playing.
 		public bool IsDone {
 			get {
-				if (subStrip == null || !isPlaying || subStrip.LoopCount < 0)
+				if (subStrip == null || !isPlaying || subStrip.LoopMode == LoopMode.Repeat)
 					return false;
-				return (timer >= subStrip.Duration * (subStrip.LoopCount + 1));
+				return (timer >= subStrip.Duration);
 			}
 		}
 
@@ -144,10 +153,14 @@ namespace ZeldaOracle.Common.Graphics {
 					else {
 						subStrip = GetSubStrip(subStripIndex);
 
-						if (subStrip.LoopCount == 0 && timer > subStrip.Duration) {
+						if (subStrip.LoopMode == LoopMode.Clamp && timer > subStrip.Duration) {
 							timer = subStrip.Duration;
 						}
-						else if (subStrip.LoopCount < 0 && timer >= subStrip.Duration) {
+						if (subStrip.LoopMode == LoopMode.Reset && timer >= subStrip.Duration) {
+							timer = 0;
+							isPlaying = false;
+						}
+						else if (subStrip.LoopMode == LoopMode.Repeat && timer >= subStrip.Duration) {
 							if (subStrip.Duration > 0)
 								timer %= subStrip.Duration;
 							else

@@ -17,13 +17,10 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		private const int	TRANSITION_SPEED			= 4;		// Pixels per tick
 		private const float	TRANSITION_PLAYER_HSPEED	= 0.38f;	// Pixels per tick
 		private const float	TRANSITION_PLAYER_VSPEED	= 0.5f;		// Pixels per tick
-
-		private RoomControl roomOld;
-		private RoomControl roomNew;
+		
 		private int timer;
 		private int distance;
 		private int direction;
-		private Player player;
 
 
 		//-----------------------------------------------------------------------------
@@ -31,11 +28,9 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		//-----------------------------------------------------------------------------
 
 		public TransitionPush(RoomControl roomOld, RoomControl roomNew, int direction) :
-			base()
+			base(roomOld, roomNew)
 		{
-			this.roomOld	= roomOld;
-			this.roomNew	= roomNew;
-			this.direction	= direction;
+			this.direction = direction;
 		}
 
 		
@@ -44,9 +39,10 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin() {
+			base.OnBegin();
+
 			timer		= 0;
 			distance	= 0;
-			player		= roomOld.Player;
 		}
 
 		public override void Update(float ticks) {

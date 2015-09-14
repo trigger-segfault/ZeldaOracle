@@ -153,12 +153,14 @@ namespace ZeldaOracle.Game.Control {
 		}
 		
 		public void EnterAdjacentRoom(int direction) {
+			// Find the adjacent room.
 			Point2I relative = Direction.ToPoint(direction);
 			Point2I nextLocation = roomLocation + relative;
 			if (!level.ContainsRoom(nextLocation))
 				return;
 			Room nextRoom = level.GetRoom(nextLocation);
 
+			// Setup the new room control.
 			RoomControl newControl = new RoomControl();
 			newControl.gameManager	= gameManager;
 			newControl.world		= world;
@@ -169,10 +171,11 @@ namespace ZeldaOracle.Game.Control {
 			newControl.BeginRoom(nextRoom);
 			entities.Remove(player);
 			
+			// Move the player to the new room.
 			player.RoomControl = newControl;
 			player.Position -= relative * nextRoom.Size * GameSettings.TILE_SIZE;
-			//player.Position += relative * GameSettings.TILE_SIZE;
-
+			
+			// Play the transition.
 			TransitionPush transition = new TransitionPush(this, newControl, direction);
 			gameManager.PopGameState();
 			gameManager.PushGameState(transition);
@@ -198,7 +201,6 @@ namespace ZeldaOracle.Game.Control {
 			// Setup the room.
 			roomLocation = new Point2I(2, 1);
 			BeginRoom(level.GetRoom(roomLocation));
-
 		}
 
 		public override void OnBegin() {
@@ -250,39 +252,6 @@ namespace ZeldaOracle.Game.Control {
 				player.Y = room.Height * GameSettings.TILE_SIZE + 1;
 				EnterAdjacentRoom(Direction.Down);
 			}
-
-			/*
-			if (player.X < 0) {
-				EnterAdjacentRoom(Direction.Left);
-
-				roomLocation.X -= 1;
-				if (roomLocation.X < 0)
-					roomLocation.X = level.Width - 1;
-				BeginRoom(level.GetRoom(roomLocation));
-				player.X += room.Width * GameSettings.TILE_SIZE;
-			}
-			else if (player.Y < 0) {
-				roomLocation.Y -= 1;
-				if (roomLocation.Y < 0)
-					roomLocation.Y = level.Height - 1;
-				BeginRoom(level.GetRoom(roomLocation));
-				player.Y += room.Height * GameSettings.TILE_SIZE;
-			}
-			else if (player.X >= room.Width * GameSettings.TILE_SIZE) {
-				roomLocation.X += 1;
-				if (roomLocation.X >= level.Width)
-					roomLocation.X = 0;
-				BeginRoom(level.GetRoom(roomLocation));
-				player.X -= room.Width * GameSettings.TILE_SIZE;
-			}
-			else if (player.Y >= room.Height * GameSettings.TILE_SIZE) {
-				roomLocation.Y += 1;
-				if (roomLocation.Y >= level.Height)
-					roomLocation.Y = 0;
-				BeginRoom(level.GetRoom(roomLocation));
-				player.Y -= room.Height * GameSettings.TILE_SIZE;
-			}
-			*/
 		}
 
 		public override void Draw(Graphics2D g) {
