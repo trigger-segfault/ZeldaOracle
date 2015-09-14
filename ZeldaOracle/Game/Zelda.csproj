@@ -128,6 +128,7 @@
     <Compile Include="Common\Debug\RadioButtonMenuItem.cs" />
     <Compile Include="Common\Debug\ToggleMenuItem.cs" />
     <Compile Include="Common\Geometry\Align.cs" />
+    <Compile Include="Common\Geometry\Direction.cs" />
     <Compile Include="Common\Geometry\GMath.cs" />
     <Compile Include="Common\Geometry\GRandom.cs" />
     <Compile Include="Common\Geometry\Line2F.cs" />
@@ -182,7 +183,6 @@
     <Compile Include="Common\Scripts\SpriteSheetSR.cs" />
     <Compile Include="Common\Translation\Language.cs" />
     <Compile Include="Game\Control\RoomControl.cs" />
-    <Compile Include="Game\Control\TileGrid.cs" />
     <Compile Include="Game\Control\View.cs" />
     <Compile Include="Game\Debug\DebugController.cs" />
     <None Include="Game\Editor\EffectPropertyGrid.cs" />
@@ -213,10 +213,13 @@
     <None Include="Game\Editor\Properties\PropertyInt.cs" />
     <None Include="Game\Editor\Properties\Property.cs" />
     <Compile Include="Game\Entities\Entity.cs" />
+    <Compile Include="Game\Entities\PhysicsComponent.cs" />
     <Compile Include="Game\GameStates\GameState.cs" />
     <Compile Include="Game\GameStates\GameStateQueue.cs" />
     <Compile Include="Game\GameStates\GameStateStack.cs" />
     <Compile Include="Game\GameStates\StateScreenFade.cs" />
+    <Compile Include="Game\GameStates\Transitions\RoomTransition.cs" />
+    <Compile Include="Game\GameStates\Transitions\TransitionPush.cs" />
     <Compile Include="Game\Items\Ammo.cs" />
     <Compile Include="Game\Items\Equipment\ItemBombBag.cs" />
     <Compile Include="Game\Items\Equipment\ItemWallet.cs" />
@@ -231,6 +234,8 @@
     <Compile Include="Game\Main\Program.cs" />
     <Compile Include="Game\Entities\Players\Player.cs" />
     <Compile Include="Game\Main\ResourceBuilders\AnimationBuilder.cs" />
+    <Compile Include="Game\Main\ResourceBuilders\SpriteBuilder.cs" />
+    <Compile Include="Game\Main\ResourceBuilders\TilesetBuilder.cs" />
     <Compile Include="Game\Tiles\Tile.cs" />
     <Compile Include="Game\Tiles\TileData.cs" />
     <Compile Include="Game\Tiles\Tileset.cs" />

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 using Microsoft.Xna.Framework;
 
 namespace ZeldaOracle.Game.Tiles {
@@ -12,7 +13,7 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		private TileData[,]	tileData;
 		private Point2I		size;
-		//private GridSheet	sheet;
+		private SpriteSheet	sheet;
 		private Point2I		defaultTile;
 
 
@@ -20,7 +21,8 @@ namespace ZeldaOracle.Game.Tiles {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public Tileset(int width, int height) {
+		public Tileset(SpriteSheet sheet, int width, int height) {
+			this.sheet			= sheet;
 			this.size			= new Point2I(width, height);
 			this.defaultTile	= Point2I.Zero;
 			this.tileData		= new TileData[width, height];
@@ -58,7 +60,17 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public void LoadConfig(string filename) {
-
+			// Create default tile data.
+			for (int x = 0; x < size.X; x++) {
+				for (int y = 0; y < size.Y; y++) {
+					tileData[x, y] = new TileData();
+					tileData[x, y].Tileset			= this;
+					tileData[x, y].SheetLocation	= new Point2I(x, y);
+					tileData[x, y].Sprite			= new Sprite(sheet, x, y, 0, 0);
+				}
+			}
+			
+			// Read the character grid.
 			try {
 				Stream stream = TitleContainer.OpenStream(filename);
 				StreamReader reader = new StreamReader(stream, Encoding.ASCII);
@@ -70,24 +82,23 @@ namespace ZeldaOracle.Game.Tiles {
 						TileData data = tileData[x, y];
 						char c = line[x];
 
-						switch (c)
-						{
-						case 'S':
-							data.Flags |= TileFlags.Solid;
-							//TODO: data.collisionModelIndex = MODEL_BLOCK;
-							break;
-						case 'L': data.Flags |= TileFlags.Ledge;		break;
-						case 'G': data.Flags |= TileFlags.Diggable;		break;
-						case 'H': data.Flags |= TileFlags.Hole;			break;
-						case 'V': data.Flags |= TileFlags.Lava;			break;
-						case 'W': data.Flags |= TileFlags.Water;		break;
-						case 'I': data.Flags |= TileFlags.Ice;			break;
-						case 'R': data.Flags |= TileFlags.Stairs;		break;
-						case 'D': data.Flags |= TileFlags.Ladder;		break;
-						case 'A': data.Flags |= TileFlags.HalfSolid;	break;
-						//case 'O': data.flags |= TILE_OCEAN;		break;
-						//case 'F': data.flags |= TILE_WATERFALL;	break;
-						//case 'P': data.flags |= TILE_PUDDLE;		break;
+						switch (c) {
+							case 'S':
+								data.Flags |= TileFlags.Solid;
+								data.CollisionModel = GameData.MODEL_BLOCK;
+								break;
+							case 'L': data.Flags |= TileFlags.Ledge;		break;
+							case 'G': data.Flags |= TileFlags.Diggable;		break;
+							case 'H': data.Flags |= TileFlags.Hole;			break;
+							case 'V': data.Flags |= TileFlags.Lava;			break;
+							case 'W': data.Flags |= TileFlags.Water;		break;
+							case 'I': data.Flags |= TileFlags.Ice;			break;
+							case 'R': data.Flags |= TileFlags.Stairs;		break;
+							case 'D': data.Flags |= TileFlags.Ladder;		break;
+							case 'A': data.Flags |= TileFlags.HalfSolid;	break;
+							//case 'O': data.flags |= TILE_OCEAN;		break;
+							//case 'F': data.flags |= TILE_WATERFALL;	break;
+							//case 'P': data.flags |= TILE_PUDDLE;		break;
 						}
 					}
 
@@ -128,5 +139,9 @@ namespace ZeldaOracle.Game.Tiles {
 			set { defaultTile = value; }
 		}
 
+		public SpriteSheet SpriteSheet {
+			get { return sheet; }
+			set { sheet = value; }
+		}
 	}
 }

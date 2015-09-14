@@ -67,10 +67,10 @@ namespace ZeldaOracle.Common.Graphics {
 			Pause(false);
 		}
 
-		// Update the animation over the elapsed time in seconds.
-		public void Update(float timeDelta) {
+		// Update the animation over the elapsed frames.
+		public void Update(float ticks) {
 			if (isPlaying && subStrip != null) {
-				timer += timeDelta * 60.0f;
+				timer += ticks;
 				if (subStrip.LoopCount < 0 && timer >= subStrip.Duration) {
 					if (subStrip.Duration > 0)
 						timer %= subStrip.Duration;

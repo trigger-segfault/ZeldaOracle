@@ -111,6 +111,15 @@ namespace ZeldaOracle.Game.Tiles {
 				// Draw as a sprite.
 				g.DrawSprite(sprite, Position);
 			}
+
+			// DEBUG: Draw the collision model in a transparent red.
+			if (collisionModel != null) {
+				for (int i = 0; i < collisionModel.Boxes.Count; i++) {
+					Rectangle2F r = collisionModel.Boxes[i];
+					r.Point += Position;
+					g.FillRectangle(r, new Color(255, 0, 0, 128));
+				}
+			}
 		}
 
 
