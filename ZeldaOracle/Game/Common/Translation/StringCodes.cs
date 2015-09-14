@@ -7,20 +7,21 @@ using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaOracle.Common.Translation {
 
-	// The string code types available
+	// The string code types available.
 	public enum StringCodeType {
 		None = 0,
 		Color = 1,
 		String = 2,
-		Variable = 3
+		Paragraph = 3,
+		Variable = 4
 	}
 
-	// A string with formatted codes and color positions
+	// A string with formatted codes and color positions.
 	public class FormattedString {
 
-		// The formatted string text
+		// The formatted string text.
 		public String Text;
-		//The colors of each character
+		// The colors of each character.
 		public Color[] Colors;
 
 		public FormattedString() {
@@ -29,14 +30,14 @@ namespace ZeldaOracle.Common.Translation {
 		}
 	}
 
-	// A string formatted and wrapped into multiple lines
+	// A string formatted and wrapped into multiple lines.
 	public class WrappedString {
 
-		// The formatted lines of the wrapped string
+		// The formatted lines of the wrapped string.
 		public FormattedString[] Lines;
-		// The lengths of each line
+		// The lengths of each line.
 		public int[] LineLengths;
-		// The bounds of the entire wrapped string
+		// The bounds of the entire wrapped string.
 		public Rectangle2I Bounds;
 
 		public WrappedString() {
@@ -50,6 +51,8 @@ namespace ZeldaOracle.Common.Translation {
 
 		private static Dictionary<string, Color> colorCodes;
 		private static Dictionary<string, string> stringCodes;
+
+		public const char ParagraphCharacter = (char)128;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -92,6 +95,7 @@ namespace ZeldaOracle.Common.Translation {
 			StringCodes.stringCodes.Add("up2", "" + (char)30);
 			StringCodes.stringCodes.Add("down2", "" + (char)31);
 			StringCodes.stringCodes.Add("<", "<");
+			StringCodes.stringCodes.Add("n", "\n");
 		}
 
 		//-----------------------------------------------------------------------------
@@ -106,6 +110,8 @@ namespace ZeldaOracle.Common.Translation {
 				return StringCodeType.String;
 			else if (code.StartsWith("var:"))
 				return StringCodeType.Variable;
+			else if (code == "p")
+				return StringCodeType.Paragraph;
 			return StringCodeType.None;
 		}
 
@@ -144,14 +150,19 @@ namespace ZeldaOracle.Common.Translation {
 				else if (inCode) {
 					if (text[currentCharacter] == '>') {
 						// End string code
-						if (StringCodes.GetStringCodeType(currentCode) != StringCodeType.Color) {
+						StringCodeType codeType = StringCodes.GetStringCodeType(currentCode);
+						if (codeType == StringCodeType.String || codeType == StringCodeType.Variable) {
 							string stringCode = StringCodes.GetStringCode(currentCode);
 							formattedString.Text += stringCode;
 							for (int i = 0; i < stringCode.Length; i++) {
 								colors.Add(currentColor);
 							}
 						}
-						else {
+						else if (codeType == StringCodeType.Paragraph) {
+							formattedString.Text += ParagraphCharacter;
+							colors.Add(Color.Black);
+						}
+						else if (codeType == StringCodeType.Color) {
 							Color colorCode = StringCodes.GetStringColor(currentCode);
 							if (colorCode == currentColor)
 								currentColor = Color.Black;

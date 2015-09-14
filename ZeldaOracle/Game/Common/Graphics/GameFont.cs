@@ -86,18 +86,29 @@ namespace ZeldaOracle.Common.Graphics {
 				wordLineCount = 0;
 				firstChar = true;
 				lineColors.Clear();
+				wordColors.Clear();
 
 				do {
-					if (currentCharacter >= formattedString.Text.Length || formattedString.Text[currentCharacter] == ' ') {
+					if (currentCharacter >= formattedString.Text.Length || formattedString.Text[currentCharacter] == ' ' ||
+						formattedString.Text[currentCharacter] == StringCodes.ParagraphCharacter) {
+
 						lines[currentLine].Text += (wordLineCount > 0 ? " " : "") + word;
 						lineLengths[currentLine] += (wordLineCount > 0 ? (characterSpacing + characterSize.X) : 0) + wordLength;
 						if (wordLineCount > 0)
 							lineColors.Add(Color.Black);
 						lineColors.AddRange(wordColors);
+
 						wordColors.Clear();
 						wordLineCount++;
+						wordLength = 0;
 						wordStart = currentCharacter + 1;
 						word = "";
+						if (currentCharacter < formattedString.Text.Length && formattedString.Text[currentCharacter] == StringCodes.ParagraphCharacter) {
+							lines[currentLine].Text += StringCodes.ParagraphCharacter;
+							lineColors.Add(Color.Black);
+							currentCharacter++;
+							break;
+						}
 					}
 					else {
 						word += formattedString.Text[currentCharacter];
@@ -106,8 +117,7 @@ namespace ZeldaOracle.Common.Graphics {
 						firstChar = false;
 					}
 					currentCharacter++;
-				} while (lineLengths[currentLine] + wordLength + characterSpacing + characterSize.X <= width ||
-					(currentCharacter < formattedString.Text.Length && formattedString.Text[currentCharacter] == '<'));
+				} while (lineLengths[currentLine] + wordLength + characterSpacing + characterSize.X <= width);
 
 				currentCharacter = wordStart;
 				lines[currentLine].Colors = lineColors.ToArray();
