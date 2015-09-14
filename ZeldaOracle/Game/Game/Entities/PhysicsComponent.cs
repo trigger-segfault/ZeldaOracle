@@ -191,5 +191,10 @@ namespace ZeldaOracle.Game.Entities {
 			get { return velocity; }
 			set { velocity = value; }
 		}
+
+		public float ZVelocity {
+			get { return zVelocity; }
+			set { zVelocity = value; }
+		}
 	}
 }

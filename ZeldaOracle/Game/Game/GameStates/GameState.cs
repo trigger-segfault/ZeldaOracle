@@ -11,6 +11,7 @@ namespace ZeldaOracle.Game.GameStates {
 
 		protected GameManager gameManager;
 		private bool isActive;
+		private bool isVisible;
 
 		
 		//-----------------------------------------------------------------------------
@@ -19,6 +20,7 @@ namespace ZeldaOracle.Game.GameStates {
 
 		public GameState() {
 			isActive = false;
+			isVisible = true;
 		}
 
 		//-----------------------------------------------------------------------------
@@ -60,6 +62,11 @@ namespace ZeldaOracle.Game.GameStates {
 
 		public bool IsActive {
 			get { return isActive; }
+		}
+
+		public bool IsVisible {
+			get { return isVisible; }
+			set { isVisible = value; }
 		}
 
 		public GameManager GameManager {

@@ -36,7 +36,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			isMoving		= false;
 			moveSpeed		= GameSettings.PLAYER_MOVE_SPEED;
 			moveSpeedScale	= 1.0f;
-			flags			|= EntityFlags.CollideWorld;
+			flags			|= EntityFlags.CollideWorld | EntityFlags.HasGravity;
 
 			moveKeys[Direction.Up]		= Keys.Up;
 			moveKeys[Direction.Down]	= Keys.Down;
@@ -82,6 +82,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public override void Update(float ticks) {
 			
+			// DEBUG: Press space to jump.
+			if (Keyboard.IsKeyPressed(Keys.Space))
+				physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
+
 			// Check movement keys.
 			isMoving = false;
 			if (!CheckMoveKey(Direction.Left) && !CheckMoveKey(Direction.Right))
@@ -114,7 +118,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public override void Draw(Common.Graphics.Graphics2D g) {
-			g.DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, position.X, position.Y);
+			if (zPosition > 1) {
+				g.DrawSprite(GameData.SPR_SHADOW, position.X, position.Y - 3);
+			}
+			g.DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, position.X, position.Y - zPosition);
+
 		}
 	}
 }

@@ -60,7 +60,17 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public void LoadConfig(string filename) {
-
+			// Create default tile data.
+			for (int x = 0; x < size.X; x++) {
+				for (int y = 0; y < size.Y; y++) {
+					tileData[x, y] = new TileData();
+					tileData[x, y].Tileset			= this;
+					tileData[x, y].SheetLocation	= new Point2I(x, y);
+					tileData[x, y].Sprite			= new Sprite(sheet, x, y, 0, 0);
+				}
+			}
+			
+			// Read the character grid.
 			try {
 				Stream stream = TitleContainer.OpenStream(filename);
 				StreamReader reader = new StreamReader(stream, Encoding.ASCII);
@@ -72,24 +82,23 @@ namespace ZeldaOracle.Game.Tiles {
 						TileData data = tileData[x, y];
 						char c = line[x];
 
-						switch (c)
-						{
-						case 'S':
-							data.Flags |= TileFlags.Solid;
-							data.CollisionModel = GameData.MODEL_BLOCK;
-							break;
-						case 'L': data.Flags |= TileFlags.Ledge;		break;
-						case 'G': data.Flags |= TileFlags.Diggable;		break;
-						case 'H': data.Flags |= TileFlags.Hole;			break;
-						case 'V': data.Flags |= TileFlags.Lava;			break;
-						case 'W': data.Flags |= TileFlags.Water;		break;
-						case 'I': data.Flags |= TileFlags.Ice;			break;
-						case 'R': data.Flags |= TileFlags.Stairs;		break;
-						case 'D': data.Flags |= TileFlags.Ladder;		break;
-						case 'A': data.Flags |= TileFlags.HalfSolid;	break;
-						//case 'O': data.flags |= TILE_OCEAN;		break;
-						//case 'F': data.flags |= TILE_WATERFALL;	break;
-						//case 'P': data.flags |= TILE_PUDDLE;		break;
+						switch (c) {
+							case 'S':
+								data.Flags |= TileFlags.Solid;
+								data.CollisionModel = GameData.MODEL_BLOCK;
+								break;
+							case 'L': data.Flags |= TileFlags.Ledge;		break;
+							case 'G': data.Flags |= TileFlags.Diggable;		break;
+							case 'H': data.Flags |= TileFlags.Hole;			break;
+							case 'V': data.Flags |= TileFlags.Lava;			break;
+							case 'W': data.Flags |= TileFlags.Water;		break;
+							case 'I': data.Flags |= TileFlags.Ice;			break;
+							case 'R': data.Flags |= TileFlags.Stairs;		break;
+							case 'D': data.Flags |= TileFlags.Ladder;		break;
+							case 'A': data.Flags |= TileFlags.HalfSolid;	break;
+							//case 'O': data.flags |= TILE_OCEAN;		break;
+							//case 'F': data.flags |= TILE_WATERFALL;	break;
+							//case 'P': data.flags |= TILE_PUDDLE;		break;
 						}
 					}
 

@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
+using ZeldaOracle.Game.GameStates.Transitions;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
@@ -149,6 +150,16 @@ namespace ZeldaOracle.Game.Control {
 			}
 
 
+		}
+		
+		public void EnterAdjacentRoom(int direction) {
+			Point2I relative = Direction.ToPoint(direction);
+			Point2I nextLocation = roomLocation + relative;
+			if (!level.ContainsRoom(nextLocation))
+				return;
+			Room nextRoom = level.GetRoom(nextLocation);
+			
+			//new TransitionPush(this, 
 		}
 
 

@@ -90,9 +90,9 @@ namespace ZeldaOracle.Game {
 			SHEET_ZONESET_SMALL	= new SpriteSheet(imageZoneset, 8, 8, 187, 0, 1, 1);
 
 			SHEET_PLAYER		= new SpriteSheet(imageSheetPlayer, 16, 16, 0, 0, 1, 1);
-			SHEET_MENU_SMALL	= new SpriteSheet(imageZoneset, 8, 8, 0, 0, 1, 1);
-			SHEET_ICONS_THIN	= new SpriteSheet(imageZoneset, 8, 16, 0, 0, 1, 1);
-			SHEET_EFFECTS		= new SpriteSheet(imageZoneset, 16, 16, 0, 0, 1, 1);
+			SHEET_MENU_SMALL	= new SpriteSheet(imageMenuSmall, 8, 8, 0, 0, 1, 1);
+			SHEET_ICONS_THIN	= new SpriteSheet(imageIconsThin, 8, 16, 0, 0, 1, 1);
+			SHEET_EFFECTS		= new SpriteSheet(imageEffects, 16, 16, 0, 0, 1, 1);
 
 			SheetDebugMenu = Resources.LoadSpriteSheet(Resources.SpriteSheetDirectory + "sheet_debug_menu.conscript");
 
@@ -257,19 +257,19 @@ namespace ZeldaOracle.Game {
 		
 			// PLAYER ANIMATIONS:
 			animationBuilder.SetSheet(SHEET_PLAYER);
-			BuildAnim(ANIM_PLAYER_DEFAULT)			.AddFrameStrip(8, 0,0, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_SHIELD)			.AddFrameStrip(8, 0,1, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_SHIELD_BLOCK)		.AddFrameStrip(8, 0,2, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_HOLD)				.AddFrameStrip(8, 0,5, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_PUSH)				.AddFrameStrip(8, 0,6, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_PULL)				.AddFrameStrip(8, 0,7, 2).Offset(-8, -16).SetLooped(false).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_DEFAULT)			.AddFrameStrip(6, 0,0, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_SHIELD)			.AddFrameStrip(6, 0,1, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_SHIELD_BLOCK)		.AddFrameStrip(6, 0,2, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_HOLD)				.AddFrameStrip(6, 0,5, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_PUSH)				.AddFrameStrip(6, 0,6, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_PULL)				.AddFrameStrip(6, 0,7, 2).Offset(-8, -16).SetLooped(false).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_DIG)				.AddFrame(8, 0,9).AddFrame(16, 1,9).Offset(-8, -16).SetLooped(false).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_THROW)			.AddFrame(9, 0,4).Offset(-8, -16).SetLooped(false).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_FALL).AddFrame(16, 1, 20, 0, 0).AddFrame(10, 2, 20, 0, 0).AddFrame(11, 3, 20, 0, 0).Offset(-8, -16).SetLooped(false);
-			BuildAnim(ANIM_PLAYER_SHIELD_LARGE)			.AddFrameStrip(8, 0,3, 2).Offset(-8, -16).CreateSubStrip()
-														.AddFrameStrip(8, 2,1, 2).Offset(-8, -16).MakeDynamic(3, 2,0);
-			BuildAnim(ANIM_PLAYER_SHIELD_LARGE_BLOCK)	.AddFrameStrip(8, 0,2, 2).Offset(-8, -16).MakeDynamic(3, 2,0)
-														.CreateSubStrip().AddFrameStrip(8, 2,3, 2).Offset(-8, -16);
+			BuildAnim(ANIM_PLAYER_SHIELD_LARGE)			.AddFrameStrip(6, 0,3, 2).Offset(-8, -16).CreateSubStrip()
+														.AddFrameStrip(6, 2,1, 2).Offset(-8, -16).MakeDynamic(3, 2,0);
+			BuildAnim(ANIM_PLAYER_SHIELD_LARGE_BLOCK)	.AddFrameStrip(6, 0,2, 2).Offset(-8, -16).MakeDynamic(3, 2,0)
+														.CreateSubStrip().AddFrameStrip(6, 2,3, 2).Offset(-8, -16);
 			BuildAnim(ANIM_PLAYER_JUMP)
 				.AddFrame(9, 0, 11).AddFrame(9, 1, 11).AddFrame(6, 2, 11).AddFrame(6, 1, 0).Offset(-8, -16).SetLooped(false).CreateSubStrip()
 				.AddFrame(9, 3, 11).AddFrame(9, 4, 11).AddFrame(6, 5, 11).AddFrame(6, 3, 0).Offset(-8, -16).SetLooped(false).CreateSubStrip()
@@ -324,17 +324,8 @@ namespace ZeldaOracle.Game {
 			// OVERWORLD TILESET:
 			SpriteSheet sheetOverworld = new SpriteSheet(Resources.LoadImage("Images/tileset"), 16, 16, 0, 0, 1, 1);
 			TILESET_OVERWORLD = new Tileset(sheetOverworld, 21, 36);
-			TILESET_OVERWORLD.DefaultTile = new Point2I(1, 25);
-			for (int x = 0; x < TILESET_OVERWORLD.Width; x++) {
-				for (int y = 0; y < TILESET_OVERWORLD.Height; y++) {
-					TileData data = new TileData();
-					data.Tileset		= TILESET_OVERWORLD;
-					data.SheetLocation	= new Point2I(x, y);
-					data.Sprite			= new Sprite(sheetOverworld, x, y, 0, 0);
-					TILESET_OVERWORLD.TileData[x, y] = data;
-				}
-			}
 			TILESET_OVERWORLD.LoadConfig("Content/Tilesets/overworld.txt");
+			TILESET_OVERWORLD.DefaultTile = new Point2I(1, 25);
 			tilesetBuilder.Tileset = TILESET_OVERWORLD;
 			
 			// Animations.
@@ -453,15 +444,13 @@ namespace ZeldaOracle.Game {
 		}
 
 
-
-		#pragma warning disable 169, 649 // The field 'example' is never used.
-	
 		//-----------------------------------------------------------------------------
 		// Tilesets
 		//-----------------------------------------------------------------------------
 
 		public static Tileset TILESET_OVERWORLD;
 		public static Tileset[] TILESETS;
+
 
 		//-----------------------------------------------------------------------------
 		// Images
@@ -687,9 +676,6 @@ namespace ZeldaOracle.Game {
 
 		public static RenderTarget2D RenderTargetGame;
 		public static RenderTarget2D RenderTargetDebug;
-
-	
-	#pragma warning restore 169, 649 // The field 'example' is never used.
 
 	}
 } // end namespace
