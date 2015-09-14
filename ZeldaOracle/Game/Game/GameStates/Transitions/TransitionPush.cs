@@ -51,7 +51,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			int maxDistance = GameSettings.VIEW_SIZE[direction % 2];
 
 			float playerSpeed = TRANSITION_PLAYER_HSPEED;
-			if (direction % 2 == 1)
+			if (Direction.IsVertical(direction))
 				playerSpeed = TRANSITION_PLAYER_VSPEED;
 
 			timer += 1;

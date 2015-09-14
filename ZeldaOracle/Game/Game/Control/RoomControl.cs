@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities;
@@ -48,6 +49,16 @@ namespace ZeldaOracle.Game.Control {
 
 		public Tile GetTile(int x, int y, int layer) {
 			return tiles[x, y, layer];
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Manipulation
+		//-----------------------------------------------------------------------------
+		
+		public void SpawnEntity(Entity e) {
+			e.Initialize(this);
+			entities.Add(e);
 		}
 
 
@@ -215,10 +226,14 @@ namespace ZeldaOracle.Game.Control {
 			// TODO: Check for opening pause menu or map screens.
 
 			// Update entities.
-			for (int i = 0; i < entities.Count; ++i) {
+			int entityCount = entities.Count;
+			for (int i = 0; i < entityCount; i++) {
 				if (entities[i].IsAlive) {
 					entities[i].Update(timeDelta);
 				}
+			}
+			// Remove destroyed entities
+			for (int i = 0; i < entities.Count; i++) {
 				if (!entities[i].IsAlive) {
 					entities.RemoveAt(i--);
 				}
@@ -255,6 +270,8 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public override void Draw(Graphics2D g) {
+
+			// Draw the room.
 			g.Translate(0, 16);
 
 			// Draw tiles.
@@ -269,15 +286,22 @@ namespace ZeldaOracle.Game.Control {
 			}
 			
 			// Draw entities.
+			DrawMode drawMode = new DrawMode();
+			drawMode.BlendState = BlendState.AlphaBlend;
+			drawMode.SortMode	= SpriteSortMode.BackToFront;
+			drawMode.SamplerState = SamplerState.PointClamp;
+			
+			g.End();
+			g.Begin(drawMode);
 			for (int i = 0; i < entities.Count; ++i) {
 				entities[i].Draw(g);
 			}
 			
-			g.Translate(0, -16);
-			
-			g.ResetTranslation();
-
 			// Draw HUD.
+			drawMode.SortMode = SpriteSortMode.Deferred;
+			g.End();
+			g.Begin(drawMode);
+			g.ResetTranslation();
 			gameManager.HUD.Draw(g);
 		}
 

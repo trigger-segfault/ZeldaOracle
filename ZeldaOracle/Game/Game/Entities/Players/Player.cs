@@ -7,12 +7,12 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Game.Main;
+using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Entities.Players {
 	
 	public class Player : Unit {
-
-		private AnimationPlayer	animationPlayer;		
+	
 		private Keys[]			moveKeys;
 		private bool[]			moveAxes;
 		private bool			isMoving;
@@ -30,7 +30,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public Player() {
 			moveKeys		= new Keys[4];
 			moveAxes		= new bool[] { false, false };
-			animationPlayer = new AnimationPlayer();
 			direction		= Direction.Down;
 			pushTimer		= 0;
 			isMoving		= false;
@@ -58,7 +57,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 					moveAxes[dir % 2] = true;
 				if (moveAxes[dir % 2]) {
 					angle = dir * 2;
-					direction   = dir;
+					direction = dir;
 			
 					if (Keyboard.IsKeyDown(moveKeys[(dir + 1) % 4])) 
 						angle = (angle + 1) % 8;
@@ -78,8 +77,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			base.Initialize();
 
 			// Play the default player animation.
-			animationPlayer.Play(GameData.ANIM_PLAYER_DEFAULT);
-			animationPlayer.SubStripIndex = 0;
+			Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
 		}
 
 		public override void Update(float ticks) {
@@ -87,6 +85,19 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// DEBUG: Press space to jump.
 			if (Keyboard.IsKeyPressed(Keys.Space))
 				physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
+
+			// DEBUG: Press A to shoot an arrow.
+			if (Keyboard.IsKeyPressed(Keys.A)) {
+				
+				Projectile projectile = new Projectile();
+				projectile.Position = position;
+				projectile.ZPosition = 10;
+				projectile.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SHIELD_LARGE_BLOCK);
+				projectile.Graphics.SubStripIndex = Direction.Down;
+
+
+				RoomControl.SpawnEntity(projectile);
+			}
 
 			// Check movement keys.
 			isMoving = false;
@@ -100,31 +111,25 @@ namespace ZeldaOracle.Game.Entities.Players {
 				float a = (angle / 8.0f) * (float) GMath.Pi * 2.0f;
 				Vector2F motion = new Vector2F((float) Math.Cos(a), -(float) Math.Sin(a));
 				physics.Velocity = motion * moveSpeed;
-				animationPlayer.IsPlaying = true;
 			}
 			else {
 				physics.Velocity = Vector2F.Zero;
 			}
 
 			// Update animations
-			if (isMoving && !animationPlayer.IsPlaying)
-				animationPlayer.Play();
-			if (!isMoving && animationPlayer.IsPlaying)
-				animationPlayer.Stop();
+			if (isMoving && !Graphics.IsAnimationPlaying)
+				Graphics.PlayAnimation();
+			if (!isMoving && Graphics.IsAnimationPlaying)
+				Graphics.StopAnimation();
 
-			animationPlayer.SubStripIndex = direction;
-			animationPlayer.Update(ticks);
+			Graphics.SubStripIndex = direction;
 
 			// Update superclass.
 			base.Update(ticks);
 		}
 
 		public override void Draw(Common.Graphics.Graphics2D g) {
-			if (zPosition > 1) {
-				g.DrawSprite(GameData.SPR_SHADOW, position.X, position.Y - 3);
-			}
-			g.DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, position.X, position.Y - zPosition);
-
+			base.Draw(g);
 		}
 	}
 }

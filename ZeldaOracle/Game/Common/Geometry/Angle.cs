@@ -5,36 +5,43 @@ using System.Text;
 
 namespace ZeldaOracle.Common.Geometry {
 
+	public static class Angle {
 
-	public static class Direction {
-		
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
 
-		public const int Count	= 4;
-
-		public const int Right	= 0;
-		public const int Up		= 1;
-		public const int Left	= 2;
-		public const int Down	= 3;
-
-		public const int East	= 0;
-		public const int North	= 1;
-		public const int West	= 2;
-		public const int South	= 3;
+		public const int AngleCount	= 8;
 		
+		public const int Right		= 0;
+		public const int UpRight	= 1;
+		public const int Up			= 2;
+		public const int UpLeft		= 3;
+		public const int Left		= 4;
+		public const int DownLeft	= 5;
+		public const int Down		= 6;
+		public const int DownRight	= 7;
 		
+		public const int East		= 0;
+		public const int NorthEast	= 1;
+		public const int North		= 2;
+		public const int NorthWest	= 3;
+		public const int West		= 4;
+		public const int SouthWest	= 5;
+		public const int South		= 6;
+		public const int SouthEast	= 7;
+
+
 		//-----------------------------------------------------------------------------
 		// Methods
 		//-----------------------------------------------------------------------------
-		
-		public static bool IsHorizontal(int direction) {
-			return (direction % 2 == 0);
+
+		public static bool IsHorizontal(int angle) {
+			return (angle % 4 == 0);
 		}
 		
-		public static bool IsVertical(int direction) {
-			return (direction % 2 == 1);
+		public static bool IsVertical(int angle) {
+			return (angle % 4 == 2);
 		}
 
 		public static Point2I ToPoint(int direction) {
@@ -46,10 +53,6 @@ namespace ZeldaOracle.Common.Geometry {
 			else if (direction == Left)
 				return new Point2I(-1, 0);
 			return new Point2I(0, 1);
-		}
-
-		public static int ToAngle(int direction) {
-			return (direction * 2);
 		}
 	}
 }

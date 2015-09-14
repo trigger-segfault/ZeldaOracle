@@ -8,14 +8,33 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities {
+	
+	[Flags]
+	public enum PhysicsFlags {
+		None					= 0,
+		Solid					= 0x1,		// Entity is solid.
+		HasGravity				= 0x2,		// The entity is affected by gravity.
+		CollideWorld			= 0x4,		// Collide with solids
+		CollideRoomEdge			= 0x8,		// Colide with the edges of rooms.
+		ReboundSolid			= 0x10,		// Rebound off of solids.
+		ReboundRoomEdge			= 0x20,		// Rebound off of room edges.
+		Bounces					= 0x40,		// The entity bounces when it falls to the ground.
+		DestroyedOutsideRoom	= 0x80,		// The entity is destroyed when it is outside of the room.
+		DestroyedInHoles		= 0x100,		// The entity gets destroyed in holes.
+		LedgePassable			= 0x200,	// The entity can pass over ledges.
+		HalfSolidPassable		= 0x400,	// The entity can pass over half-solids.
+		AutoDodge				= 0x800,	// Will move out of the way when colliding the edges of objects.
+	}
 
 	public class PhysicsComponent {
 
+		private int			flags;
 		private Entity		entity;			// The entity this component belongs to.
 		private Vector2F	velocity;		// XY-Velocity in pixels per frame.
 		private float		zVelocity;		// Z-Velocity in pixels per frame.
 		private float		gravity;		// Gravity in pixels per frame^2
 		private Rectangle2F collisionBox;	// The collision box used to collide with things
+		private bool		isEnabled;
 
 
 		//-----------------------------------------------------------------------------
@@ -28,6 +47,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.zVelocity		= 0.0f;
 			this.collisionBox	= new Rectangle2F(-4, -10, 8, 9); // TEMP: player collision box.
 			this.gravity		= GameSettings.DEFAULT_GRAVITY;
+			this.isEnabled		= false;
 		}
 		
 		
@@ -195,6 +215,11 @@ namespace ZeldaOracle.Game.Entities {
 		public float ZVelocity {
 			get { return zVelocity; }
 			set { zVelocity = value; }
+		}
+
+		public bool IsEnabled {
+			get { return isEnabled; }
+			set { isEnabled = value; }
 		}
 	}
 }

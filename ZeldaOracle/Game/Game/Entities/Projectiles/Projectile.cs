@@ -2,40 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaOracle.Common.Content;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Input;
-using ZeldaOracle.Game.Main;
 
-namespace ZeldaOracle.Game.Entities.Players {
-
-	// NOTE: These will probably be changed
-	[Flags]
-	public enum UnitFlags {
-		Hurt,
-		Bumpable,
-		InGrass,
-		Passable,
-		FallInHoles,
-	}
-
+namespace ZeldaOracle.Game.Entities.Projectiles {
 	
-	public class Unit : Entity {
+	public class Projectile : Entity {
 
-		private int health;
-		private int healthMax;
+		private int		angle;
+		private Entity	owner;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 		
-		public Unit() {
+		public Projectile() {
 			EnablePhysics();
 
-			health		= 1;
-			healthMax	= 1;
+			angle = 0;
+			owner = null;
 		}
 
 
@@ -60,14 +44,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public int Health {
-			get { return health; }
-			set { health = value; }
+		private int Angle {
+			get { return angle; }
+			set { angle = value; }
 		}
-		
-		public int MaxHealth {
-			get { return healthMax; }
-			set { healthMax = value; }
+
+		private Entity Owner {
+			get { return owner; }
+			set { owner = value; }
 		}
 	}
 }
