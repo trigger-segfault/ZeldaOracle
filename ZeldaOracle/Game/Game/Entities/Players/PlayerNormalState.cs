@@ -12,6 +12,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Control;
+using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Players {
 	public class PlayerNormalState : PlayerState {
@@ -124,14 +125,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Update pushing.
 			CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
 			if (collisionInfo.Type == CollisionType.Tile) {
+				Tile tile = collisionInfo.Tile;
 				player.Graphics.AnimationPlayer.Animation = GameData.ANIM_PLAYER_PUSH;
 				pushTimer++;
-				if (pushTimer > 30) {
-					
-					Message message = new Message("Oof! It's heavy!");
-					player.RoomControl.GameManager.QueueGameStates(
-						new StateTextReader(message)
-					);
+				if (pushTimer > 30 && tile.Flags.HasFlag(TileFlags.Movable)) {
+					tile.Push(player.Direction);
+					//Message message = new Message("Oof! It's heavy!");
+					//player.RoomControl.GameManager.PushGameState(new StateTextReader(message));
 					pushTimer = 0;
 				}
 			}

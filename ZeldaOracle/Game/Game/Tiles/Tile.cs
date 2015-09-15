@@ -94,6 +94,33 @@ namespace ZeldaOracle.Game.Tiles {
 		
 
 		//-----------------------------------------------------------------------------
+		// Interaction
+		//-----------------------------------------------------------------------------
+		
+		public bool Push(int direction) {
+			Point2I newLocation = location + Directions.ToPoint(direction);
+
+			// Make sure there are no obstructions.
+			int newLayer = -1;
+			for (int i = 0; i < RoomControl.Room.LayerCount; i++) {
+				Tile t = RoomControl.GetTile(newLocation.X, newLocation.Y, i);
+				if (t != null && (t.Flags.HasFlag(TileFlags.Solid) || t.Flags.HasFlag(TileFlags.NotCoverable)))
+					return false;
+				if (t == null && newLayer != layer)
+					newLayer = i;
+			}
+
+			// Not enough layers to place this tile.
+			if (newLayer < 0)
+				return false;
+
+			// Move the tile to the new location.
+			RoomControl.MoveTile(this, newLocation, newLayer);
+			return true;
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Simulation
 		//-----------------------------------------------------------------------------
 
@@ -123,7 +150,25 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 			*/
 		}
+		
 
+		//-----------------------------------------------------------------------------
+		// Static methods
+		//-----------------------------------------------------------------------------
+
+		public static Tile CreateTile(TileData data) {
+			Tile tile = new Tile();
+
+			tile.Tileset			= data.Tileset;
+			tile.TileSheetLocation	= data.SheetLocation;
+			tile.Flags				= data.Flags;
+			tile.Sprite				= data.Sprite;
+			tile.CollisionModel		= data.CollisionModel;
+			tile.Size				= data.Size;
+			tile.AnimationPlayer.Animation = data.Animation;
+
+			return tile;
+		}
 
 		//-----------------------------------------------------------------------------
 		// Properties

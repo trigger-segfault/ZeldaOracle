@@ -48,6 +48,13 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 		// Accessors
 		//-----------------------------------------------------------------------------
+		
+		public void MoveTile(Tile tile, Point2I newLocation, int newLayer) {
+			tiles[tile.Location.X, tile.Location.Y, tile.Layer] = null;
+			tiles[newLocation.X, newLocation.Y, newLayer] = tile;
+			tile.Location = newLocation;
+			tile.Layer = newLayer;
+		}
 
 		public Tile GetTile(int x, int y, int layer) {
 			return tiles[x, y, layer];
@@ -141,7 +148,8 @@ namespace ZeldaOracle.Game.Control {
 							tiles[x, y, i] = null;
 						}
 						else {
-							Tile t = data.Tileset.CreateTile(data.SheetLocation);
+							//Tile t = data.Tileset.CreateTile(data.SheetLocation);
+							Tile t = Tile.CreateTile(data);
 							t.Location = new Point2I(x, y);
 							t.Layer = i;
 							t.Initialize(this);
@@ -213,7 +221,14 @@ namespace ZeldaOracle.Game.Control {
 
 			// Setup the room.
 			roomLocation = new Point2I(2, 1);
-			BeginRoom(level.GetRoom(roomLocation));
+
+			Room r = level.GetRoom(roomLocation);
+			TileData td = new TileData();
+			td.Sprite = new Sprite(GameData.SHEET_ZONESET_LARGE, 2, 0);
+			td.CollisionModel = GameData.MODEL_BLOCK;
+			td.Flags |= TileFlags.Solid | TileFlags.Movable;
+			r.TileData[4, 4, 1] = td;
+			BeginRoom(r);
 		}
 
 		public override void OnBegin() {
