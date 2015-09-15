@@ -176,13 +176,16 @@
     <Compile Include="Common\Input\Mouse.cs" />
     <Compile Include="Common\Input\MouseButtons.cs" />
     <Compile Include="Common\Input\Controls\Trigger.cs" />
+    <Compile Include="Common\Scripts\GameFontSR.cs" />
     <Compile Include="Common\Scripts\LanguageSR.cs" />
     <Compile Include="Common\Scripts\PlaylistSR.cs" />
     <Compile Include="Common\Scripts\ScriptReader.cs" />
     <Compile Include="Common\Scripts\SoundGroupSR.cs" />
     <Compile Include="Common\Scripts\SpriteSheetSR.cs" />
     <Compile Include="Common\Translation\Language.cs" />
-    <Compile Include="Common\Translation\StringCodes.cs" />
+    <Compile Include="Common\Translation\LetterString.cs" />
+    <Compile Include="Common\Translation\FormatCodes.cs" />
+    <Compile Include="Common\Translation\WrappedLetterString.cs" />
     <Compile Include="Game\Control\HUD.cs" />
     <Compile Include="Game\Control\Message.cs" />
     <Compile Include="Game\Control\RoomControl.cs" />
