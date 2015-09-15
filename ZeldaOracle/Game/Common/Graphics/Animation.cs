@@ -5,7 +5,6 @@ using System.Text;
 
 namespace ZeldaOracle.Common.Graphics {
 	
-
 	// Modes for how looping should be handled for an animation.
 	public enum LoopMode {
 		Clamp,	// Remain on the last frame when completed.
@@ -16,10 +15,14 @@ namespace ZeldaOracle.Common.Graphics {
 
 	public class Animation {
 
-		private List<AnimationFrame> frames; // The list of frames.
-		private int			duration; // Duratin in ticks.
-		private Animation	nextStrip;	// This creates a linked list of animations for its variations (like for different directions).
-		private LoopMode	loopMode;	// How looping should be handled.
+		// The list of frames.
+		private List<AnimationFrame> frames;
+		// Duratin in ticks.
+		private int duration;
+		// This creates a linked list of animations for its variations (like for different directions).
+		private Animation nextStrip;
+		// How looping should be handled.
+		private LoopMode loopMode;
 
 
 		//-----------------------------------------------------------------------------
@@ -27,10 +30,10 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 
 		public Animation() {
-			frames		= new List<AnimationFrame>();
-			duration	= 0;
-			nextStrip	= null;
-			loopMode	= LoopMode.Repeat;
+			this.frames		= new List<AnimationFrame>();
+			this.duration	= 0;
+			this.nextStrip	= null;
+			this.loopMode	= LoopMode.Repeat;
 		}
 
 
@@ -54,6 +57,10 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
+
+		public AnimationFrame this[int index] {
+			get { return frames[index]; }
+		}
 
 		public int Duration {
 			get { return duration; }

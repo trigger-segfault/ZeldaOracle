@@ -7,9 +7,12 @@ using ZeldaOracle.Common.Geometry;
 namespace ZeldaOracle.Common.Graphics {
 	
 	public struct AnimationFrame {
-		private int		startTime;	// Start time in ticks.
-		private int		duration;	// Duration in ticks.
-		private Sprite	sprite;
+		// Start time in ticks.
+		private int startTime;
+		// Duration in ticks.
+		private int duration;
+		// The sprite used in the frame.
+		private Sprite sprite;
 
 
 		//-----------------------------------------------------------------------------
@@ -48,7 +51,7 @@ namespace ZeldaOracle.Common.Graphics {
 			get { return duration; }
 			set { duration = value; }
 		}
-		
+
 		public Sprite Sprite {
 			get { return sprite; }
 			set { sprite = value; }

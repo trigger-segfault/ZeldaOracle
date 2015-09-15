@@ -221,44 +221,6 @@ public class Graphics2D {
 		}
 	}
 
-
-	
-
-	//-----------------------------------------------------------------------------
-	// OLD Sprite drawing
-	//-----------------------------------------------------------------------------
-
-	// Draws the sprite at the specified position.
-	public void DrawSpriteEx(SpriteEx sprite, Vector2F position) {
-		/*spriteBatch.Draw(sprite.Sheet.Image, NewRect(position, sprite.SourceSize), (Rectangle)sprite.FrameRect,
-			XnaColor.White, 0.0f, (Vector2)(-sprite.Offset), SpriteEffects.None, 0.0f);*/
-		spriteBatch.Draw(sprite.Sheet.Image, NewPos(position), (Rectangle)sprite.FrameRect,
-			XnaColor.White, 0.0f, (Vector2)(-sprite.Offset), 1.0f, SpriteEffects.None, 0.0f);
-	}
-
-	// Draws the sprite at the specified position.
-	public void DrawSpriteEx(SpriteEx sprite, Vector2F position, Color color, double depth = 0.0) {
-		/*spriteBatch.Draw(sprite.Sheet.Image, NewRect(position, sprite.SourceSize), (Rectangle)sprite.FrameRect,
-			color, 0.0f, (Vector2)(-sprite.Offset), SpriteEffects.None, (float)depth);*/
-		spriteBatch.Draw(sprite.Sheet.Image, NewPos(position), (Rectangle)sprite.FrameRect,
-			color, 0.0f, (Vector2)(-sprite.Offset), 1.0f, SpriteEffects.None, (float)depth);
-	}
-
-	// Draws the sprite at the specified position.
-	public void DrawSpriteEx(SpriteEx sprite, Vector2F position, Vector2F origin, Vector2F scale, double rotation, Color color, SpriteEffects flipEffect = SpriteEffects.None, double depth = 0.0) {
-		/*spriteBatch.Draw(sprite.Sheet.Image, NewRect(position, scale * sprite.SourceSize), (Rectangle)sprite.FrameRect,
-			color, (float)GMath.ConvertToRadians(rotation), (Vector2)(origin - sprite.Offset), flipEffect, (float)depth);*/
-		spriteBatch.Draw(sprite.Sheet.Image, NewPos(position), (Rectangle)sprite.FrameRect,
-			color, (float)GMath.ConvertToRadians(rotation), (Vector2)(origin - sprite.Offset), (Vector2)scale, flipEffect, (float)depth);
-	}
-
-	// Draws the sprite at the specified region.
-	public void DrawSpriteEx(SpriteEx sprite, Rectangle2F destinationRect, Vector2F origin, double rotation, Color color, SpriteEffects flipEffect = SpriteEffects.None, double depth = 0.0) {
-		spriteBatch.Draw(sprite.Sheet.Image, NewRect(destinationRect), (Rectangle)sprite.FrameRect,
-			color, (float)GMath.ConvertToRadians(rotation), (Vector2)(origin - sprite.Offset), flipEffect, (float)depth);
-	}
-
-
 	//-----------------------------------------------------------------------------
 	// Animation drawing
 	//-----------------------------------------------------------------------------
@@ -288,12 +250,12 @@ public class Graphics2D {
 	//-----------------------------------------------------------------------------
 
 	// Draws the string at the specified position.
-	public void DrawString(SpriteFont font, string text, Vector2F position, Align alignment, Color color) {
+	public void DrawRealString(SpriteFont font, string text, Vector2F position, Align alignment, Color color) {
 		spriteBatch.DrawString(font, text, NewStringPos(position, font, text, alignment), (XnaColor)color);
 	}
 
 	// Draws the string at the specified position.
-	public void DrawString(SpriteFont font, string text, Vector2F position, Align alignment,
+	public void DrawRealString(SpriteFont font, string text, Vector2F position, Align alignment,
 		Color color, Vector2F origin, double rotation, double scale, SpriteEffects flipEffect = SpriteEffects.None, float depth = 0.0f)
 	{
 		spriteBatch.DrawString(font, text, NewStringPos(position, font, text, alignment),
@@ -301,7 +263,7 @@ public class Graphics2D {
 	}
 
 	// Draws the string at the specified position.
-	public void DrawString(SpriteFont font, string text, Vector2F position, Align alignment,
+	public void DrawRealString(SpriteFont font, string text, Vector2F position, Align alignment,
 			Color color, Vector2F origin, double rotation, Vector2F scale,
 			SpriteEffects flipEffect = SpriteEffects.None, float depth = 0.0f)
 	{

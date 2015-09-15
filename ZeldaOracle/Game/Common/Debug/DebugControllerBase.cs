@@ -62,20 +62,20 @@ public class DebugControllerBase {
 		set { menuButton = value; }
 	}
 	/** <summary> Gets or sets the font for the debug menu. </summary> */
-	public Font DebugMenuFont {
+	public RealFont DebugMenuFont {
 		get { return menu.debugMenuFont; }
 		set { menu.debugMenuFont = value; }
 	}
 	/** <summary> Gets or sets the bold font for the debug menu. </summary> */
-	public Font DebugMenuFontBold {
+	public RealFont DebugMenuFontBold {
 		get { return menu.debugMenuFontBold; }
 		set { menu.debugMenuFontBold = value; }
 	}
 	/** <summary> Gets or sets the sprite sheet for the debug menu. </summary> */
-	public SpriteAtlas DebugMenuSprites {
+	/*public SpriteAtlas DebugMenuSprites {
 		get { return menu.debugMenuSprites; }
 		set { menu.debugMenuSprites = value; }
-	}
+	}*/
 	/** <summary> Returns true if the game is paused. </summary> */
 	public bool IsGamePaused {
 		get { return gamePaused; }
