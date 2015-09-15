@@ -12,45 +12,87 @@ namespace ZeldaOracle.Game.Entities {
 	[Flags]
 	public enum PhysicsFlags {
 		None					= 0,
-		Solid					= 0x1,		// Entity is solid.
+		Solid					= 0x1,		// The entity is solid (other entities can collide with this one).
 		HasGravity				= 0x2,		// The entity is affected by gravity.
-		CollideWorld			= 0x4,		// Collide with solids
-		CollideRoomEdge			= 0x8,		// Colide with the edges of rooms.
+		CollideWorld			= 0x4,		// Collide with solid tiles.
+		CollideRoomEdge			= 0x8,		// Colide with the edges of the room.
 		ReboundSolid			= 0x10,		// Rebound off of solids.
 		ReboundRoomEdge			= 0x20,		// Rebound off of room edges.
-		Bounces					= 0x40,		// The entity bounces when it falls to the ground.
+		Bounces					= 0x40,		// The entity bounces when it hits the ground.
 		DestroyedOutsideRoom	= 0x80,		// The entity is destroyed when it is outside of the room.
-		DestroyedInHoles		= 0x100,		// The entity gets destroyed in holes.
+		DestroyedInHoles		= 0x100,	// The entity gets destroyed in holes.
 		LedgePassable			= 0x200,	// The entity can pass over ledges.
-		HalfSolidPassable		= 0x400,	// The entity can pass over half-solids.
-		AutoDodge				= 0x800,	// Will move out of the way when colliding the edges of objects.
+		HalfSolidPassable		= 0x400,	// The entity can pass over half-solids (railings).
+		AutoDodge				= 0x800,	// Will move out of the way when colliding with the edges of objects.
 	}
 
 	public class PhysicsComponent {
 
-		private int			flags;
-		private Entity		entity;			// The entity this component belongs to.
-		private Vector2F	velocity;		// XY-Velocity in pixels per frame.
-		private float		zVelocity;		// Z-Velocity in pixels per frame.
-		private float		gravity;		// Gravity in pixels per frame^2
-		private Rectangle2F collisionBox;	// The collision box used to collide with things
-		private bool		isEnabled;
+		[Flags]
+		private enum StateFlags {
+			None				= 0,
+			Colliding			= 0x1,		// The entity is colliding.
+			CollidingRight		= 0x2,		// Colliding with something to the right.
+			CollidingUp			= 0x4,		// Colliding with something up.
+			CollidingLeft		= 0x8,		// Colliding with something to the left.
+			CollidingDown		= 0x10,		// Colliding with something down.
+			LedgePassing		= 0x20,		// The entity is passing over a ledge.
+			HalfSolidPassing	= 0x40,		// The entity is passing over a half-solid tile.
+		}
+
+		private bool			isEnabled;		// Are physics enabled for the entity?
+		private PhysicsFlags	flags;
+		private Entity			entity;			// The entity this component belongs to.
+		private Vector2F		velocity;		// XY-Velocity in pixels per frame.
+		private float			zVelocity;		// Z-Velocity in pixels per frame.
+		private float			gravity;		// Gravity in pixels per frame^2
+		private Rectangle2F		collisionBox;	// The collision box used to collide with things
+		private StateFlags		stateFlags;		// Flags for the physics state of the entity (is it colliding?)
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
+		// By default, physics are disabled.
 		public PhysicsComponent(Entity entity) {
+			this.isEnabled		= false;
+			this.flags			= PhysicsFlags.None;
+			this.stateFlags		= StateFlags.None;
 			this.entity			= entity;
 			this.velocity		= Vector2F.Zero;
 			this.zVelocity		= 0.0f;
-			this.collisionBox	= new Rectangle2F(-4, -10, 8, 9); // TEMP: player collision box.
+			this.collisionBox	= new Rectangle2F(-4, -10, 8, 9); // TEMP: this is the player collision box.
 			this.gravity		= GameSettings.DEFAULT_GRAVITY;
-			this.isEnabled		= false;
 		}
 		
 		
+		//-----------------------------------------------------------------------------
+		// Accessors
+		//-----------------------------------------------------------------------------
+		
+		public bool HasFlags(PhysicsFlags flags) {
+			return ((this.flags & flags) == flags);
+		}
+
+		// Returns true if the entity is colliding in the given direction.
+		public bool IsCollidingDirection(int direction) {
+			return stateFlags.HasFlag((StateFlags) ((int) StateFlags.CollidingRight << direction));
+		}
+
+		
+		//-----------------------------------------------------------------------------
+		// Mutators
+		//-----------------------------------------------------------------------------
+		
+		public void SetFlags(PhysicsFlags flagsToSet, bool enabled) {
+			if (enabled)
+				flags |= flagsToSet;
+			else
+				flags &= ~flagsToSet;
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Simulation
 		//-----------------------------------------------------------------------------
@@ -62,7 +104,7 @@ namespace ZeldaOracle.Game.Entities {
 				entity.ZPosition += zVelocity * ticks;
 
 				// Apply gravity.
-				if (entity.Flags.HasFlag(EntityFlags.HasGravity))
+				if (HasFlags(PhysicsFlags.HasGravity))
 					zVelocity -= gravity * ticks;
 
 				if (entity.ZPosition <= 0.0f)
@@ -75,16 +117,22 @@ namespace ZeldaOracle.Game.Entities {
 				zVelocity = 0.0f;
 
 			// Check world collisions.
-			if (entity.Flags.HasFlag(EntityFlags.CollideWorld))
+			if (HasFlags(PhysicsFlags.CollideWorld))
 				CheckCollisions(ticks);
 	
 			// Apply velocity.
 			entity.Position += velocity * ticks;
+			
+			// Collide with room edges.
+			if (HasFlags(PhysicsFlags.CollideRoomEdge))
+				CheckRoomEdgeCollisions();
 
 			// Check if outside room.
-			Rectangle2F bounds = new Rectangle2F(Vector2F.Zero, entity.RoomControl.Room.Size * GameSettings.TILE_SIZE);
-			if (!bounds.Contains(entity.Position) && entity.Flags.HasFlag(EntityFlags.DestroyedOutsideRoom))
+			if (HasFlags(PhysicsFlags.DestroyedOutsideRoom) &&
+				!entity.RoomControl.RoomBounds.Contains(entity.Position))
+			{
 				entity.Destroy();
+			}
 		}
 
 		
@@ -92,10 +140,41 @@ namespace ZeldaOracle.Game.Entities {
 		// Collisions
 		//-----------------------------------------------------------------------------
 
+		// This should be called after applying velocity.
+		public void CheckRoomEdgeCollisions() {
+			Rectangle2F roomBounds = entity.RoomControl.RoomBounds;
+			Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position);
+
+			if (myBox.Left < roomBounds.Left) {
+				stateFlags |= StateFlags.Colliding | StateFlags.CollidingLeft;
+				entity.X = roomBounds.Left - collisionBox.Left;
+				velocity.X = 0;
+			}
+			else if (myBox.Right > roomBounds.Right) {
+				stateFlags |= StateFlags.Colliding | StateFlags.CollidingRight;
+				entity.X = roomBounds.Right - collisionBox.Right;
+				velocity.X = 0;
+			}
+			if (myBox.Top < roomBounds.Top) {
+				stateFlags |= StateFlags.Colliding | StateFlags.CollidingUp;
+				entity.Y = roomBounds.Top - collisionBox.Top;
+				velocity.Y = 0;
+			}
+			else if (myBox.Bottom > roomBounds.Bottom) {
+				stateFlags |= StateFlags.Colliding | StateFlags.CollidingDown;
+				entity.Y = roomBounds.Bottom - collisionBox.Bottom;
+				velocity.Y = 0;
+			}
+		}
+
 		public void CheckCollisions(float ticks) {
 			Room room = entity.RoomControl.Room;
-			Vector2F pos = entity.Position;
 
+			// Remove collision state flags.
+			stateFlags &= ~(StateFlags.Colliding | StateFlags.CollidingLeft |
+				StateFlags.CollidingRight | StateFlags.CollidingUp | StateFlags.CollidingDown);
+
+			// Find the rectangular area of nearby tiles to collide with.
 			Rectangle2F myBox = collisionBox;
 			myBox.Point += entity.Position;
 			myBox.Inflate(2, 2);
@@ -104,9 +183,6 @@ namespace ZeldaOracle.Game.Entities {
 			myBox2.Point += entity.Position + (velocity * ticks);
 			myBox2.Inflate(2, 2);
 			myBox = Rectangle2F.Union(myBox, myBox2);
-
-			//Util::removeFlags(&m_stateFlags, PHYS_STATE_COLLIDING | PHYS_STATE_COLLIDING_LEFT |
-			//	PHYS_STATE_COLLIDING_RIGHT | PHYS_STATE_COLLIDING_UP | PHYS_STATE_COLLIDING_DOWN);
 	
 			int x1 = (int) (myBox.Left   / (float) GameSettings.TILE_SIZE);
 			int y1 = (int) (myBox.Top    / (float) GameSettings.TILE_SIZE);
@@ -135,8 +211,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 		
 
-		private bool ResolveCollision(float ticks, int axis, Vector2F modelPos, CollisionModel model)
-		{
+		private bool ResolveCollision(float ticks, int axis, Vector2F modelPos, CollisionModel model) {
 			bool collide = false;
 			for (int i = 0; i < model.Boxes.Count; ++i) {
 				if (ResolveCollision(ticks, axis, Rectangle2F.Translate((Rectangle2F) model.Boxes[i], modelPos)))
@@ -145,47 +220,41 @@ namespace ZeldaOracle.Game.Entities {
 			return collide;
 		}
 
-		private bool ResolveCollision(float ticks, int axis, Rectangle2F block)
-		{
-			Vector2F pos = entity.Position;
+		private bool ResolveCollision(float ticks, int axis, Rectangle2F block) {
 			bool collide = false;
 
 			if (axis == 0) { // AXIS_0
-				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, pos.X + (velocity.X * ticks), pos.Y);
+				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.X + (velocity.X * ticks), entity.Y);
 				if (myBox.Intersects(block)) {
 					collide = true;
-					//stateFlags |= PHYS_STATE_COLLIDING;
+					stateFlags |= StateFlags.Colliding;
 					velocity.X = 0.0f;
 
 					if (myBox.Center.X < block.Center.X) {
-						pos.X = block.Left - collisionBox.Right;
-						//stateFlags |= PHYS_STATE_COLLIDING_RIGHT;
+						entity.X = block.Left - collisionBox.Right;
+						stateFlags |= StateFlags.CollidingRight;
 					}
 					else {
-						pos.X = block.Right - collisionBox.Left;
-						//stateFlags |= PHYS_STATE_COLLIDING_LEFT;
+						entity.X = block.Right - collisionBox.Left;
+						stateFlags |= StateFlags.CollidingLeft;
 					}
-			
-					entity.Position = pos;
 				}
 			}
 			else if (axis == 1) { // AXIS_Y
-				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, pos + (velocity * ticks));
+				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position + (velocity * ticks));
 				if (myBox.Intersects(block)) {
 					collide = true;
-					//stateFlags |= PHYS_STATE_COLLIDING;
+					stateFlags |= StateFlags.Colliding;
 					velocity.Y = 0.0f;
 
 					if (myBox.Center.Y < block.Center.Y) {
-						pos.Y = block.Top - collisionBox.Bottom;
-						//stateFlags |= PHYS_STATE_COLLIDING_DOWN;
+						entity.Y = block.Top - collisionBox.Bottom;
+						stateFlags |= StateFlags.CollidingDown;
 					}
 					else {
-						pos.Y = block.Bottom - collisionBox.Top;
-						//stateFlags |= PHYS_STATE_COLLIDING_UP;
+						entity.Y = block.Bottom - collisionBox.Top;
+						stateFlags |= StateFlags.CollidingUp;
 					}
-					
-					entity.Position = pos;
 				}
 			}
 
@@ -196,15 +265,15 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
-		public float Gravity {
-			get { return gravity; }
-			set { gravity = value; }
-		}
 
 		public Entity Entity {
 			get { return entity; }
 			set { entity = value; }
+		}
+
+		public bool IsEnabled {
+			get { return isEnabled; }
+			set { isEnabled = value; }
 		}
 
 		public Vector2F Velocity {
@@ -216,10 +285,83 @@ namespace ZeldaOracle.Game.Entities {
 			get { return zVelocity; }
 			set { zVelocity = value; }
 		}
+		
+		public float Gravity {
+			get { return gravity; }
+			set { gravity = value; }
+		}
 
-		public bool IsEnabled {
-			get { return isEnabled; }
-			set { isEnabled = value; }
+		public Rectangle2F CollisionBox {
+			get { return collisionBox; }
+			set { collisionBox = value; }
+		}
+		
+		public bool IsColliding {
+			get { return stateFlags.HasFlag(StateFlags.Colliding); }
+		}
+
+		public PhysicsFlags Flags {
+			get { return flags; }
+			set { flags = value; }
+		}
+
+		// Flags:
+		
+		public bool IsSolid {
+			get { return HasFlags(PhysicsFlags.Solid); }
+			set { SetFlags(PhysicsFlags.Solid, value); }
+		}
+		
+		public bool HasGravity {
+			get { return HasFlags(PhysicsFlags.HasGravity); }
+			set { SetFlags(PhysicsFlags.HasGravity, value); }
+		}
+		public bool CollideWithWorld {
+			get { return HasFlags(PhysicsFlags.CollideWorld); }
+			set { SetFlags(PhysicsFlags.CollideWorld, value); }
+		}
+		
+		public bool CollideWithRoomEdge {
+			get { return HasFlags(PhysicsFlags.CollideRoomEdge); }
+			set { SetFlags(PhysicsFlags.CollideRoomEdge, value); }
+		}
+		public bool ReboundSolid {
+			get { return HasFlags(PhysicsFlags.ReboundSolid); }
+			set { SetFlags(PhysicsFlags.ReboundSolid, value); }
+		}
+		
+		public bool ReboundRoomEdge {
+			get { return HasFlags(PhysicsFlags.ReboundRoomEdge); }
+			set { SetFlags(PhysicsFlags.ReboundRoomEdge, value); }
+		}
+		public bool Bounces {
+			get { return HasFlags(PhysicsFlags.Bounces); }
+			set { SetFlags(PhysicsFlags.Bounces, value); }
+		}
+		
+		public bool DestroyedOutsideRoom {
+			get { return HasFlags(PhysicsFlags.DestroyedOutsideRoom); }
+			set { SetFlags(PhysicsFlags.DestroyedOutsideRoom, value); }
+		}
+		
+		public bool DestroyedInHoles {
+			get { return HasFlags(PhysicsFlags.DestroyedInHoles); }
+			set { SetFlags(PhysicsFlags.DestroyedInHoles, value); }
+		}
+		
+		public bool LedgePassable {
+			get { return HasFlags(PhysicsFlags.LedgePassable); }
+			set { SetFlags(PhysicsFlags.LedgePassable, value); }
+		}
+		
+		public bool HalfSolidPassable {
+			get { return HasFlags(PhysicsFlags.HalfSolidPassable); }
+			set { SetFlags(PhysicsFlags.HalfSolidPassable, value); }
+		}
+		
+		public bool AutoDodges {
+			get { return HasFlags(PhysicsFlags.AutoDodge); }
+			set { SetFlags(PhysicsFlags.AutoDodge, value); }
 		}
 	}
 }

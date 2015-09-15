@@ -244,8 +244,12 @@ public class GameManager {
 		g.Begin(drawMode);
 		g.Clear(Color.Black);
 		gameStateStack.Draw(g);
+
+		g.ResetTranslation();
+		g.DrawGameString(GameData.FONT_LARGE, "Entities: " + roomControl.Entities.Count, new Point2I(4, 4), Color.Black);
+
 		g.End();
-		
+
 		// Draw the buffer to the screen scaled.
 		g.SetRenderTarget(null);
 		g.ResetTranslation();

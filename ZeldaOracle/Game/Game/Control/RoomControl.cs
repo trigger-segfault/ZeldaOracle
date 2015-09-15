@@ -227,12 +227,16 @@ namespace ZeldaOracle.Game.Control {
 
 			// Update entities.
 			int entityCount = entities.Count;
-			for (int i = 0; i < entityCount; i++) {
-				if (entities[i].IsAlive) {
+			for (int i = 0; i < entities.Count; i++) {
+				if (entities[i].IsAlive && i < entityCount) {
 					entities[i].Update(timeDelta);
 				}
+				else if (entities[i].IsAlive && i >= entityCount) {
+					// For entities spawned this frame, only update their graphics component.
+					entities[i].Graphics.Update(timeDelta);
+				}
 			}
-			// Remove destroyed entities
+			// Remove destroyed entities.
 			for (int i = 0; i < entities.Count; i++) {
 				if (!entities[i].IsAlive) {
 					entities.RemoveAt(i--);
@@ -328,6 +332,15 @@ namespace ZeldaOracle.Game.Control {
 		// The player entity (NOTE: this can be null)
 		public Player Player {
 			get { return player; }
+		}
+
+		// Get the size of the room in pixels.
+		public Rectangle2I RoomBounds {
+			get { return new Rectangle2I(Point2I.Zero, room.Size * GameSettings.TILE_SIZE); }
+		}
+
+		public List<Entity> Entities {
+			get { return entities; }
 		}
 	}
 }

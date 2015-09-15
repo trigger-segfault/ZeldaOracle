@@ -260,18 +260,28 @@ namespace ZeldaOracle.Common.Geometry {
 
 		//=========== CONTAINS ===========
 
-		/** <summary> Returns true if the specified vector is inside this rectangle. </summary> */
+		// Returns true if the specified vector is inside this rectangle.
 		public bool Contains(Point2I point) {
 			return ((point <  Max) &&
 					(point >= Min));
 		}
-		/** <summary> Returns true if the specified rectangle is inside this rectangle. </summary> */
+		
+		// Returns true if the specified vector is inside this rectangle.
+		public bool Contains(Vector2F point) {
+			return (point.X >= Left &&
+					point.Y >= Top &&
+					point.X < Right &&
+					point.Y < Bottom);
+		}
+
+		// Returns true if the specified rectangle is inside this rectangle.
 		public bool Contains(Rectangle2I rect) {
 			if (IsEmpty || rect.IsEmpty)
 				return false;
 			return ((rect.Min >= Min) &&
 					(rect.Max <= Max));
 		}
+
 
 		//========== COLLISION ===========
 

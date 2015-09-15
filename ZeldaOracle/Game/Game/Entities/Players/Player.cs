@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Game.Main;
+using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Entities.Players {
@@ -28,15 +29,20 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 
 		public Player() {
-			moveKeys		= new Keys[4];
+			moveKeys = new Keys[4];
 			moveAxes		= new bool[] { false, false };
 			direction		= Direction.Down;
+			angle			= Direction.ToAngle(direction);
 			pushTimer		= 0;
 			isMoving		= false;
 			moveSpeed		= GameSettings.PLAYER_MOVE_SPEED;
 			moveSpeedScale	= 1.0f;
-			flags			|= EntityFlags.CollideWorld | EntityFlags.HasGravity;
 
+			// Physics.
+			Physics.CollideWithWorld = true;
+			Physics.HasGravity = true;
+
+			// Controls.
 			moveKeys[Direction.Up]		= Keys.Up;
 			moveKeys[Direction.Down]	= Keys.Down;
 			moveKeys[Direction.Left]	= Keys.Left;
@@ -69,6 +75,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			return false;
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
@@ -86,15 +93,44 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (Keyboard.IsKeyPressed(Keys.Space))
 				physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
 
-			// DEBUG: Press A to shoot an arrow.
-			if (Keyboard.IsKeyPressed(Keys.A)) {
-				
+			// DEBUG: Press Z to shoot an arrow.
+			if (Keyboard.IsKeyPressed(Keys.Z)) {
 				Projectile projectile = new Projectile();
-				projectile.Position = position;
-				projectile.ZPosition = 10;
-				projectile.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SHIELD_LARGE_BLOCK);
-				projectile.Graphics.SubStripIndex = Direction.Down;
+				
+				// General
+				projectile.Position			= new Vector2F(position.X, position.Y - 8) + (Angle.ToVector(angle) * 8.0f);
+				projectile.Angle			= angle;
+				projectile.Physics.Velocity	= Angle.ToVector(angle) * 3.0f;
+				projectile.Owner			= this;
 
+				// Graphics.
+				projectile.Graphics.SubStripIndex = angle;
+				projectile.Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_PLAYER_ARROW);
+
+				// Physics.
+				projectile.Physics.CollisionBox	= new Rectangle2F(-2, -2, 4, 4);
+				projectile.EnablePhysics(PhysicsFlags.CollideWorld | PhysicsFlags.LedgePassable |
+									PhysicsFlags.HalfSolidPassable | PhysicsFlags.DestroyedOutsideRoom);
+
+				// Crash event.
+				Vector2F v = projectile.Physics.Velocity;
+				projectile.EventCollision += delegate() {
+					// Create crash effect.
+					Effect effect = new Effect();
+					effect.Position = projectile.Position;
+					effect.CreateDestroyTimer(32);
+					
+					effect.Physics.Velocity		= -(v.Normalized) * 0.25f;
+					effect.Physics.ZVelocity	= 1;
+					effect.Physics.Gravity		= 0.07f;
+					effect.EnablePhysics(PhysicsFlags.HasGravity);
+					
+					effect.Graphics.IsShadowVisible = false;
+					effect.Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_PLAYER_ARROW_CRASH);
+
+					RoomControl.SpawnEntity(effect);
+					projectile.Destroy();
+				};
 
 				RoomControl.SpawnEntity(projectile);
 			}

@@ -85,6 +85,7 @@ class GameData {
 			Image imageMenuSmall	= Resources.LoadImage("Images/UI/menu_small");
 			Image imageIconsThin	= Resources.LoadImage("Images/sheet_icons_thin");
 			Image imageEffects		= Resources.LoadImage("Images/sheet_effects");
+			Image imagePlayerItems	= Resources.LoadImage("Images/sheet_player_items");
 
 			SHEET_ZONESET_LARGE	= new SpriteSheet(imageZoneset, 16, 16, 0, 0, 1, 1);
 			SHEET_ZONESET_SMALL	= new SpriteSheet(imageZoneset, 8, 8, 187, 0, 1, 1);
@@ -93,6 +94,7 @@ class GameData {
 			SHEET_MENU_SMALL	= new SpriteSheet(imageMenuSmall, 8, 8, 18, 18, 1, 1);
 			SHEET_ICONS_THIN	= new SpriteSheet(imageIconsThin, 8, 16, 0, 0, 1, 1);
 			SHEET_EFFECTS		= new SpriteSheet(imageEffects, 16, 16, 0, 0, 1, 1);
+			SHEET_PLAYER_ITEMS	= new SpriteSheet(imagePlayerItems, 16, 16, 0, 0, 1, 1);
 
 			SheetDebugMenu = Resources.LoadSpriteSheet(Resources.SpriteSheetDirectory + "sheet_debug_menu.conscript");
 
@@ -278,7 +280,20 @@ class GameData {
 				.AddFrame(9, 0, 12).AddFrame(9, 1, 12).AddFrame(6, 2, 12).AddFrame(6, 5, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
 				.AddFrame(9, 3, 12).AddFrame(9, 4, 12).AddFrame(6, 5, 12).AddFrame(6, 7, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip();
 
-	}
+			
+			// PROJECTILE ANIMATIONS:
+			animationBuilder.SpriteSheet = SHEET_PLAYER_ITEMS;
+			BuildAnim(ANIM_PROJECTILE_PLAYER_ARROW).AddFrame(1, 0,11).Offset(-8, -8).MakeDynamic(8, 1,0);
+			BuildAnim(ANIM_PROJECTILE_PLAYER_ARROW_CRASH).AddFrameStrip(6, 0, 11,4, -8,-8, 2,0);
+
+			// EFFECT ANIMATIONS:
+			animationBuilder.SpriteSheet = SHEET_EFFECTS;
+			BuildAnim(ANIM_EFFECT_DIRT)
+				.AddFrame(1, 5,0, -14,-12).AddPart(1, 5,0, -10,-6).SetLoopMode(LoopMode.Repeat).CreateSubStrip()
+				.AddFrame(1, 4,0, -8,-10).AddPart(1, 5,0, -8,-8).CreateSubStrip()
+				.AddFrame(1, 4,0, -2,-12).AddPart(1, 4,0, -6,-6).CreateSubStrip()
+				.AddFrame(1, 4,0, -8,-8).AddPart(1, 5,0, -8,-10);
+		}
 
 
 		//-----------------------------------------------------------------------------
@@ -477,6 +492,7 @@ class GameData {
 	public static SpriteSheet SHEET_PLAYER_HURT;
 	public static SpriteSheet SHEET_MONSTERS;
 	public static SpriteSheet SHEET_MONSTERS_HURT;
+	public static SpriteSheet SHEET_PLAYER_ITEMS;
 	
 		public static SpriteSheet SHEET_ZONESET_LARGE;
 		public static SpriteSheet SHEET_ZONESET_SMALL;

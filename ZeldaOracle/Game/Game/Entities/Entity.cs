@@ -43,7 +43,6 @@ namespace ZeldaOracle.Game.Entities {
 
 		private RoomControl			control;
 		private bool				isAlive;
-		protected EntityFlags		flags;
 		protected Vector2F			position;
 		protected float				zPosition;
 		protected PhysicsComponent	physics;
@@ -55,7 +54,6 @@ namespace ZeldaOracle.Game.Entities {
 
 		public Entity() {
 			control		= null;
-			flags		= EntityFlags.None;
 			isAlive		= false;
 			position	= Vector2F.Zero;
 			zPosition	= 0.0f;
@@ -76,7 +74,6 @@ namespace ZeldaOracle.Game.Entities {
 	
 		// Called every step to update the entity.
 		public virtual void Update(float ticks) {
-
 			// Update the physics component.
 			if (physics.IsEnabled)
 				physics.Update(ticks);
@@ -115,8 +112,9 @@ namespace ZeldaOracle.Game.Entities {
 			}
 		}
 
-		public void EnablePhysics() {
+		public void EnablePhysics(PhysicsFlags flags = PhysicsFlags.None) {
 			physics.IsEnabled = true;
+			physics.Flags |= flags;
 		}
 
 		public void DisablePhysics() {
@@ -147,12 +145,6 @@ namespace ZeldaOracle.Game.Entities {
 		// Returns true if the entity is still alive.
 		public bool IsAlive {
 			get { return isAlive; }
-		}
-	
-		// Gets or sets the flags.
-		public EntityFlags Flags {
-			get { return flags; }
-			set { flags = value; }
 		}
 
 		// Gets or sets the position of the entity.

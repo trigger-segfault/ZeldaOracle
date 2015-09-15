@@ -138,6 +138,7 @@
     <Compile Include="Common\Geometry\RangeI.cs" />
     <Compile Include="Common\Geometry\Rectangle2F.cs" />
     <Compile Include="Common\Geometry\Rectangle2I.cs" />
+    <Compile Include="Common\Geometry\Util.cs" />
     <Compile Include="Common\Geometry\Vector2F.cs" />
     <None Include="Common\Graphics\AnimationOld.cs" />
     <Compile Include="Common\Graphics\Animation.cs" />

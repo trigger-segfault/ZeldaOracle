@@ -5,10 +5,13 @@ using System.Text;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
 	
+	public delegate void CollisionResponse();
+
 	public class Projectile : Entity {
 
 		private int		angle;
 		private Entity	owner;
+		private event CollisionResponse eventCollision;
 
 
 		//-----------------------------------------------------------------------------
@@ -32,7 +35,13 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public override void Update(float ticks) {
+
 			base.Update(ticks);
+
+			// Check if collided.
+			if (physics.IsColliding && eventCollision != null) {
+				eventCollision();
+			}
 		}
 
 		public override void Draw(Common.Graphics.Graphics2D g) {
@@ -44,14 +53,19 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		private int Angle {
+		public int Angle {
 			get { return angle; }
 			set { angle = value; }
 		}
 
-		private Entity Owner {
+		public Entity Owner {
 			get { return owner; }
 			set { owner = value; }
+		}
+
+		public event CollisionResponse EventCollision {
+			add { eventCollision += value; }
+			remove { eventCollision -= value; }
 		}
 	}
 }

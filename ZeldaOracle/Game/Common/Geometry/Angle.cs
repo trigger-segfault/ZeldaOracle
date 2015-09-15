@@ -44,15 +44,18 @@ namespace ZeldaOracle.Common.Geometry {
 			return (angle % 4 == 2);
 		}
 
-		public static Point2I ToPoint(int direction) {
-			direction = direction % 4;
-			if (direction == Right)
-				return new Point2I(1, 0);
-			else if (direction == Up)
-				return new Point2I(0, -1);
-			else if (direction == Left)
-				return new Point2I(-1, 0);
-			return new Point2I(0, 1);
+		// Return a normalized vector representing the given angle.
+		public static Vector2F ToVector(int angle) {
+			Vector2F vec = Vector2F.Zero;
+			if (angle % 8 == SouthEast || angle % 8 == East || angle % 8 == NorthEast)
+				vec.X = 1;
+			else if (angle % 8 >= NorthWest && angle % 8 <= SouthWest)
+				vec.X = -1;
+			if (angle % 8 >= NorthEast && angle % 8 <= NorthWest)
+				vec.Y = -1;
+			else if (angle % 8 >= SouthWest && angle % 8 <= SouthEast)
+				vec.Y = 1;
+			return vec.Normalized;
 		}
 	}
 }

@@ -64,9 +64,10 @@ namespace ZeldaOracle.Game.Entities
 			//       [???      ][Entities ][???      ][Shadows][???      ]
 
 			// Draw the shadow.
+			// TODO: Shadow draw offset.
 			if (isShadowVisible && entity.ZPosition > 1) {
 				float shadowDepth = 0.9f;
-				g.DrawSprite(GameData.SPR_SHADOW, Entity.Position.X, Entity.Position.Y - 3, shadowDepth);
+				g.DrawSprite(GameData.SPR_SHADOW, Entity.Position.X, Entity.Position.Y, shadowDepth);
 			}
 
 			// Draw the animation.
@@ -93,6 +94,10 @@ namespace ZeldaOracle.Game.Entities
 		public bool IsAnimationPlaying {
 			get { return animationPlayer.IsPlaying; }
 			set { animationPlayer.IsPlaying = value; }
+		}
+
+		public bool IsAnimationDone {
+			get { return animationPlayer.IsDone; }
 		}
 
 		public bool IsShadowVisible {
