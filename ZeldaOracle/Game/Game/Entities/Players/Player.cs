@@ -27,6 +27,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private Item[]			equippedItems; // TODO: move this to somewhere else.
 		private bool			isBusy;
 
+		private PlayerState		state;
+		private PlayerNormalState stateNormal;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -56,31 +59,21 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// DEBUG: equip a bow item.
 			equippedItems[0] = new ItemBow();
+
+			state = null;
+			stateNormal = new PlayerNormalState();
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Movement
+		// Player states
 		//-----------------------------------------------------------------------------
-		
-		private bool CheckMoveKey(int dir) {
-			if (Keyboard.IsKeyDown(moveKeys[dir])) {
-				isMoving = true;
-			
-				if (!moveAxes[(dir + 1) % 2])
-					moveAxes[dir % 2] = true;
-				if (moveAxes[dir % 2]) {
-					angle = dir * 2;
-					direction = dir;
-			
-					if (Keyboard.IsKeyDown(moveKeys[(dir + 1) % 4])) 
-						angle = (angle + 1) % 8;
-					if (Keyboard.IsKeyDown(moveKeys[(dir + 3) % 4]))
-						angle = (angle + 7) % 8;
-				}
-				return true;
-			}
-			return false;
+
+		public void BeginState(PlayerState state) {
+			if (this.state != null)
+				this.state.End();
+			state.Begin(this);
+			this.state = state;
 		}
 
 
@@ -93,46 +86,23 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Play the default player animation.
 			Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
+
+			BeginState(stateNormal);
 		}
 
-		public override void Update(float ticks) {
-			if (!isBusy) {
-				// Check movement keys.
-				isMoving = false;
-				if (!CheckMoveKey(Directions.Left) && !CheckMoveKey(Directions.Right))
-					moveAxes[0] = false;	// x-axis
-				if (!CheckMoveKey(Directions.Down) && !CheckMoveKey(Directions.Up))
-					moveAxes[1] = false;	// y-axis
-			
-				// Update motion.
-				if (isMoving) {
-					float a = (angle / 8.0f) * (float) GMath.Pi * 2.0f;
-					Vector2F motion = new Vector2F((float) Math.Cos(a), -(float) Math.Sin(a));
-					physics.Velocity = motion * moveSpeed;
-				}
-				else {
-					physics.Velocity = Vector2F.Zero;
-				}
-			}
-
-			// Update equipped items.
+		public void UpdateEquippedItems() {
 			for (int i = 0; i < equippedItems.Length; i++) {
 				if (equippedItems[i] != null) {
 					equippedItems[i].Player = this;
 					equippedItems[i].Update();
 				}
 			}
+		}
 
-			if (isBusy) {
+		public override void Update(float ticks) {
 
-			}
-			else {
-				// Update animations
-				if (isMoving && !Graphics.IsAnimationPlaying)
-					Graphics.PlayAnimation();
-				if (!isMoving && Graphics.IsAnimationPlaying)
-					Graphics.StopAnimation();
-			}
+			// Update the current player state.
+			state.Update();
 
 			Graphics.SubStripIndex = direction;
 
@@ -151,15 +121,21 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public int Angle {
 			get { return angle; }
+			set { angle = value; }
 		}
 		
 		public int Direction {
 			get { return direction; }
+			set { direction = value; }
 		}
 		
 		public bool IsBusy {
 			get { return isBusy; }
 			set { isBusy = value; }
+		}
+		
+		public PlayerNormalState NormalState {
+			get { return stateNormal; }
 		}
 	}
 }

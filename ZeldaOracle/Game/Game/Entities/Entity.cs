@@ -183,5 +183,9 @@ namespace ZeldaOracle.Game.Entities {
 			set { graphics = value; graphics.Entity = this; }
 		}
 
+		public bool IsInAir {
+			get { return (zPosition > 0 || (physics.IsEnabled && physics.ZVelocity > 0)); }
+		}
+
 	}
 } // End namespace

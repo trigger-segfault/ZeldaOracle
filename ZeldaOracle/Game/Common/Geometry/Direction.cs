@@ -48,6 +48,17 @@ namespace ZeldaOracle.Common.Geometry {
 			return new Point2I(0, 1);
 		}
 
+		public static Vector2F ToVector(int direction) {
+			direction = direction % 4;
+			if (direction == Right)
+				return new Vector2F(1.0f, 0.0f);
+			else if (direction == Up)
+				return new Vector2F(0.0f, -1.0f);
+			else if (direction == Left)
+				return new Vector2F(-1.0f, 0.0f);
+			return new Vector2F(0.0f, 1.0f);
+		}
+
 		public static int ToAngle(int direction) {
 			return (direction * 2);
 		}

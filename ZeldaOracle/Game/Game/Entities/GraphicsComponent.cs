@@ -104,5 +104,10 @@ namespace ZeldaOracle.Game.Entities
 			get { return isShadowVisible;  }
 			set { isShadowVisible = value; }
 		}
+
+		public AnimationPlayer AnimationPlayer {
+			get { return animationPlayer;  }
+			set { animationPlayer = value; }
+		}
 	}
 }

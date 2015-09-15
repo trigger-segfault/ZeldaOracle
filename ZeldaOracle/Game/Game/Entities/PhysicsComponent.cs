@@ -46,8 +46,10 @@ namespace ZeldaOracle.Game.Entities {
 		private Vector2F		velocity;		// XY-Velocity in pixels per frame.
 		private float			zVelocity;		// Z-Velocity in pixels per frame.
 		private float			gravity;		// Gravity in pixels per frame^2
-		private Rectangle2F		collisionBox;	// The collision box used to collide with things
+		private Rectangle2F		collisionBox;	// The collision box used to collide with solid objects
+		private Rectangle2F		softCollisionBox;	// The collision box used to collide with items, monsters, room edges, etc.
 		private StateFlags		stateFlags;		// Flags for the physics state of the entity (is it colliding?)
+		private CollisionInfo[] collisionInfo;
 
 
 		//-----------------------------------------------------------------------------
@@ -62,8 +64,14 @@ namespace ZeldaOracle.Game.Entities {
 			this.entity			= entity;
 			this.velocity		= Vector2F.Zero;
 			this.zVelocity		= 0.0f;
-			this.collisionBox	= new Rectangle2F(-4, -10, 8, 9); // TEMP: this is the player collision box.
 			this.gravity		= GameSettings.DEFAULT_GRAVITY;
+			this.collisionBox	= new Rectangle2F(-4, -10, 8, 9);		// TEMP: this is the player collision box.
+			this.softCollisionBox = new Rectangle2F(-6, -14, 12, 14);	// TEMP: this is the player collision box.
+
+			this.collisionInfo	= new CollisionInfo[Directions.Count];
+			for (int i = 0; i < Directions.Count; i++)
+				collisionInfo[i] .Clear();
+
 		}
 		
 		
@@ -125,7 +133,7 @@ namespace ZeldaOracle.Game.Entities {
 			
 			// Collide with room edges.
 			if (HasFlags(PhysicsFlags.CollideRoomEdge))
-				CheckRoomEdgeCollisions();
+				CheckRoomEdgeCollisions(softCollisionBox); // TODO: this should default to hard collision-box.
 
 			// Check if outside room.
 			if (HasFlags(PhysicsFlags.DestroyedOutsideRoom) &&
@@ -141,7 +149,7 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		// This should be called after applying velocity.
-		public void CheckRoomEdgeCollisions() {
+		public void CheckRoomEdgeCollisions(Rectangle2F collisionBox) {
 			Rectangle2F roomBounds = entity.RoomControl.RoomBounds;
 			Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position);
 
@@ -173,6 +181,8 @@ namespace ZeldaOracle.Game.Entities {
 			// Remove collision state flags.
 			stateFlags &= ~(StateFlags.Colliding | StateFlags.CollidingLeft |
 				StateFlags.CollidingRight | StateFlags.CollidingUp | StateFlags.CollidingDown);
+			for (int i = 0; i < Directions.Count; i++)
+				collisionInfo[i].Clear();
 
 			// Find the rectangular area of nearby tiles to collide with.
 			Rectangle2F myBox = collisionBox;
@@ -202,7 +212,7 @@ namespace ZeldaOracle.Game.Entities {
 							Tile t = entity.RoomControl.GetTile(x, y, i);
 
 							if (t != null && t.Flags.HasFlag(TileFlags.Solid) && t.CollisionModel != null) {
-								ResolveCollision(ticks, axis, new Vector2F(x, y) * GameSettings.TILE_SIZE, t.CollisionModel);
+								ResolveCollision(ticks, axis, t, new Vector2F(x, y) * GameSettings.TILE_SIZE, t.CollisionModel);
 							}
 						}
 					}
@@ -211,16 +221,16 @@ namespace ZeldaOracle.Game.Entities {
 		}
 		
 
-		private bool ResolveCollision(float ticks, int axis, Vector2F modelPos, CollisionModel model) {
+		private bool ResolveCollision(float ticks, int axis, Tile tile, Vector2F modelPos, CollisionModel model) {
 			bool collide = false;
 			for (int i = 0; i < model.Boxes.Count; ++i) {
-				if (ResolveCollision(ticks, axis, Rectangle2F.Translate((Rectangle2F) model.Boxes[i], modelPos)))
+				if (ResolveCollision(ticks, axis, tile, Rectangle2F.Translate((Rectangle2F) model.Boxes[i], modelPos)))
 					collide = true;
 			}
 			return collide;
 		}
 
-		private bool ResolveCollision(float ticks, int axis, Rectangle2F block) {
+		private bool ResolveCollision(float ticks, int axis, Tile tile, Rectangle2F block) {
 			bool collide = false;
 
 			if (axis == 0) { // AXIS_0
@@ -233,10 +243,12 @@ namespace ZeldaOracle.Game.Entities {
 					if (myBox.Center.X < block.Center.X) {
 						entity.X = block.Left - collisionBox.Right;
 						stateFlags |= StateFlags.CollidingRight;
+						collisionInfo[Directions.Right].SetTileCollision(tile);
 					}
 					else {
 						entity.X = block.Right - collisionBox.Left;
 						stateFlags |= StateFlags.CollidingLeft;
+						collisionInfo[Directions.Left].SetTileCollision(tile);
 					}
 				}
 			}
@@ -250,10 +262,12 @@ namespace ZeldaOracle.Game.Entities {
 					if (myBox.Center.Y < block.Center.Y) {
 						entity.Y = block.Top - collisionBox.Bottom;
 						stateFlags |= StateFlags.CollidingDown;
+						collisionInfo[Directions.Down].SetTileCollision(tile);
 					}
 					else {
 						entity.Y = block.Bottom - collisionBox.Top;
 						stateFlags |= StateFlags.CollidingUp;
+						collisionInfo[Directions.Up].SetTileCollision(tile);
 					}
 				}
 			}
@@ -294,6 +308,10 @@ namespace ZeldaOracle.Game.Entities {
 		public Rectangle2F CollisionBox {
 			get { return collisionBox; }
 			set { collisionBox = value; }
+		}
+		
+		public CollisionInfo[] CollisionInfo {
+			get { return collisionInfo; }
 		}
 		
 		public bool IsColliding {

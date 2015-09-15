@@ -11,7 +11,7 @@ namespace ZeldaOracle.Game.Items {
 
 	public abstract class PlayerItem {
 		
-		protected Inventory inventory;
+		protected Inventory		inventory;
 		protected Player		player;
 
 		protected string		id;

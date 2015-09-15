@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Input;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Effects;
+using ZeldaOracle.Game.Entities.Players;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemBow : Item {
@@ -54,13 +55,14 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			Projectile projectile = new Projectile();
 				
 			// General
-			projectile.Position			= new Vector2F(Player.X, Player.Y - 8) + (Angles.ToVector(Player.Angle) * 8.0f);
-			projectile.Angle			= Player.Angle;
-			projectile.Physics.Velocity	= Angles.ToVector(Player.Angle) * 3.0f;
+			projectile.Position			= new Vector2F(Player.X, Player.Y - 8) + (Directions.ToVector(Player.Direction) * 8.0f);
+			projectile.Angle			= Directions.ToAngle(player.Direction);
+			//projectile.Physics.Velocity	= Angles.ToVector(Player.Angle) * 3.0f;
+			projectile.Physics.Velocity	= Directions.ToVector(Player.Direction) * 3.0f;
 			projectile.Owner			= Player;
 
 			// Graphics.
-			projectile.Graphics.SubStripIndex = Player.Angle;
+			projectile.Graphics.SubStripIndex = projectile.Angle;
 			projectile.Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_PLAYER_ARROW);
 
 			// Physics.
@@ -89,6 +91,9 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			};
 
 			RoomControl.SpawnEntity(projectile);
+
+			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
+			player.BeginState(new PlayerBusyState(10));
 		}
 		
 		// Update the item.
