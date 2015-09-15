@@ -70,20 +70,14 @@ public class Resources {
 	private static Dictionary<string, Image> images;
 	/** <summary> The collection of loaded fonts. </summary> */
 	private static Dictionary<string, Font> fonts;
+	/** <summary> The collection of loaded game fonts. </summary> */
+	private static Dictionary<string, GameFont> gameFonts;
 	/** <summary> The collection of loaded sprite sheets. </summary> */
 	private static Dictionary<string, SpriteAtlas> spriteSheets;
 	/** <summary> The collection of loaded effects. </summary> */
 	private static Dictionary<string, Effect> shaders;
 	/** <summary> The texture loader for loading images from file. </summary> */
 	private static TextureLoader textureLoader;
-
-	// Particles
-	/** <summary> The collection of loaded particle types. </summary> */
-	//private static Dictionary<string, ParticleType> particleTypes;
-	/** <summary> The collection of loaded particle emitters. </summary> */
-	//private static Dictionary<string, ParticleEmitter> particleEmitters;
-	/** <summary> The collection of loaded particle effect types. </summary> */
-	//public static Dictionary<string, ParticleEffectType> particleEffects;
 
 	// Sounds
 	/** <summary> The collection of loaded sound effects. </summary> */
@@ -116,14 +110,10 @@ public class Resources {
 		// Graphics
 		images				= new Dictionary<string, Image>();
 		fonts				= new Dictionary<string, Font>();
+		gameFonts			= new Dictionary<string, GameFont>();
 		spriteSheets		= new Dictionary<string, SpriteAtlas>();
 		shaders				= new Dictionary<string, Effect>();
 		textureLoader		= new TextureLoader(graphicsDevice);
-
-		// Particles
-		//particleTypes		= new Dictionary<string, ParticleType>();
-		//particleEmitters	= new Dictionary<string, ParticleEmitter>();
-		//particleEffects		= new Dictionary<string, ParticleEffectType>();
 
 		// Sounds
 		sounds				= new Dictionary<string, Sound>();
@@ -152,6 +142,10 @@ public class Resources {
 	public static Font GetFont(string name) {
 		return fonts[name];
 	}
+	/** <summary> Gets the game font with the specified name. </summary> */
+	public static GameFont GetGameFont(string name) {
+		return gameFonts[name];
+	}
 	/** <summary> Gets the sprite sheet with the specified name. </summary> */
 	public static SpriteAtlas GetSpriteSheet(string name) {
 		return spriteSheets[name];
@@ -164,35 +158,6 @@ public class Resources {
 	public static Effect GetShader(string name) {
 		return shaders[name];
 	}
-
-	#endregion
-	//--------------------------------
-	#region Particles
-
-	/** <summary> Gets the particle type with the specified name. </summary> */
-	/*public static ParticleType GetParticleType(string name) {
-		return particleTypes[name];
-	}*/
-	/** <summary> Returns true if a particle type with the specified name exists. </summary> */
-	/*public static bool ParticleTypeExists(string name) {
-		return particleTypes.ContainsKey(name);
-	}*/
-	/** <summary> Gets the particle emitter with the specified name. </summary> */
-	/*public static ParticleEmitter GetParticleEmitter(string name) {
-		return particleEmitters[name];
-	}*/
-	/** <summary> Returns true if a particle emitter with the specified name exists. </summary> */
-	/*public static bool ParticleEmitterExists(string name) {
-		return particleEmitters.ContainsKey(name);
-	}*/
-	/** <summary> Gets the particle effect type with the specified name. </summary> */
-	/*public static ParticleEffectType GetParticleEffect(string name) {
-		return particleEffects[name];
-	}*/
-	/** <summary> Returns true if a particle effect type with the specified name exists. </summary> */
-	/*public static bool ParticleEffectExists(string name) {
-		return particleEffects.ContainsKey(name);
-	}*/
 
 	#endregion
 	//--------------------------------
@@ -281,15 +246,6 @@ public class Resources {
 
 	#endregion
 	//--------------------------------
-	#region Particles
-
-	/** <summary> Loads/compiles particles, emitter, and effects from a script file. </summary> */
-	/*public static void LoadParticles(string assetName) {
-		LoadScript(assetName, new ParticleSR());
-	}*/
-
-	#endregion
-	//--------------------------------
 	#region Sounds
 
 	/** <summary> Loads a sound effect. </summary> */
@@ -349,17 +305,6 @@ public class Resources {
 			Console.WriteLine("Error loading file \"" + assetName + "\"");
 		}
 	}
-	/** <summary> Loads a script file with the given encoding and script reader object. </summary> */
-	/*public static void SaveScript(string assetName, ParticleSW sw, Encoding encoding) {
-		try {
-			StreamWriter writer = new StreamWriter(contentManager.RootDirectory + "/" + assetName);
-			sw.WriteScript(writer);
-			writer.Close();
-		}
-		catch (FileNotFoundException) {
-			Console.WriteLine("Error saving file \"" + assetName + "\"");
-		}
-	}*/
 
 	#endregion
 	//============ ADDING ============
@@ -370,6 +315,10 @@ public class Resources {
 	/** <summary> Adds the specified sprite sheet. </summary> */
 	public static void AddSpriteSheet(SpriteAtlas sheet) {
 		spriteSheets.Add(sheet.Name, sheet);
+	}
+	/** <summary> Adds the specified game font. </summary> */
+	public static void AddGameFont(GameFont font) {
+		//gameFonts.Add(font.Name, font);
 	}
 
 	#endregion

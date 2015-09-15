@@ -9,46 +9,55 @@ using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.Control {
-	public enum TextReaderState {
-		WritingLine,
-		PushingLine,
-		PressToContinue,
-		PressToEndParagraph,
-		Finished
-	}
 
-
+	// A game state for displaying a message box
 	public class StateTextReader : GameState {
 
-		private Message message;
-		private WrappedString lines;
-		private int timer;
-		private int linesPerWindow;
-		private int windowLinesLeft;
-		private int windowLine;
-		private int currentLine;
-		private int currentChar;
-		private TextReaderState state;
+		// The states the text reader can be in.
+		private enum TextReaderState {
+			WritingLine,
+			PushingLine,
+			PressToContinue,
+			PressToEndParagraph,
+			Finished
+		}
 
+		// The game message with text and questions.
+		private Message message;
+		// The wrapped and formatted lines.
+		private WrappedLetterString wrappedString;
+		// The timer for the transitions.
+		private int timer;
+		// The number of lines to use for this window.
+		private int linesPerWindow;
+		// The lines left before the next set of lines is in the message box.
+		private int windowLinesLeft;
+		// The current window line of the line being written.
+		private int windowLine;
+		// The current line in the wrapped string.
+		private int currentLine;
+		// The current character of the current line.
+		private int currentChar;
+		// The current state of the text reader.
+		private TextReaderState state;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public StateTextReader(Message message) {
+		// Constructs a text reader with the specified message
+		public StateTextReader(Message message, int linesPerWindow = 2) {
 			this.message = message;
-			this.lines = GameData.FONT_LARGE.MeasureWrappedString(message.Text, 128);
+			this.wrappedString = GameData.FONT_LARGE.WrapString(message.Text, 128);
 			this.timer = 0;
 
-
-			this.linesPerWindow = 4;
+			this.linesPerWindow = linesPerWindow;
 			this.windowLinesLeft = this.linesPerWindow;
 			this.windowLine = 0;
 			this.currentLine = 0;
 			this.currentChar = 0;
 			this.state = TextReaderState.WritingLine;
 		}
-
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
@@ -61,22 +70,22 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public override void Update(float timeDelta) {
-			if (timer > 0) {
+			if (timer > 0 && (state != TextReaderState.WritingLine || (!Controls.A.IsPressed() && !Controls.B.IsPressed()))) {
 				timer -= 1;
 			}
 			else {
 				switch (state) {
 				case TextReaderState.WritingLine:
 					currentChar++;
-					if (Controls.A.IsPressed() || Controls.B.IsPressed()) {
-						currentChar = lines.Lines[currentLine].Text.Length;
-					}
-					if (currentChar >= lines.Lines[currentLine].Text.Length) {
+					if (Controls.A.IsPressed() || Controls.B.IsPressed())
+						currentChar = wrappedString.Lines[currentLine].Length;
+
+					if (currentChar >= wrappedString.Lines[currentLine].Length) {
 						windowLinesLeft--;
-						if (currentLine + 1 == lines.Lines.Length) {
+						if (currentLine + 1 == wrappedString.NumLines) {
 							state = TextReaderState.Finished;
 						}
-						else if (lines.Lines[currentLine].Text[lines.Lines[currentLine].Text.Length - 1] == StringCodes.ParagraphCharacter) {
+						else if (wrappedString.Lines[currentLine].EndsWith(FormatCodes.ParagraphCharacter)) {
 							state = TextReaderState.PressToEndParagraph;
 						}
 						else if (windowLinesLeft == 0) {
@@ -104,7 +113,7 @@ namespace ZeldaOracle.Game.Control {
 					break;
 
 				case TextReaderState.PressToContinue:
-					if (Controls.A.IsPressed()) {
+					if (Controls.A.IsPressed() || Controls.B.IsPressed()) {
 						state = TextReaderState.PushingLine;
 						timer = 4;
 						windowLinesLeft = linesPerWindow;
@@ -113,7 +122,7 @@ namespace ZeldaOracle.Game.Control {
 					}
 					break;
 				case TextReaderState.PressToEndParagraph:
-					if (Controls.A.IsPressed()) {
+					if (Controls.A.IsPressed() || Controls.B.IsPressed()) {
 						state = TextReaderState.WritingLine;
 						windowLinesLeft = linesPerWindow;
 						currentChar = 0;
@@ -122,6 +131,7 @@ namespace ZeldaOracle.Game.Control {
 					}
 					break;
 				case TextReaderState.Finished:
+					// TODO: Switch to any key
 					if (Controls.A.IsPressed())
 						End();
 					break;
@@ -135,14 +145,11 @@ namespace ZeldaOracle.Game.Control {
 
 			for (int i = 0; i < windowLine; i++) {
 				if (state == TextReaderState.PushingLine && timer >= 2)
-					g.DrawFormattedGameString(GameData.FONT_LARGE, lines.Lines[currentLine - windowLine + i], pos + new Point2I(8, 6 + 16 * i + 8), new Color(248, 208, 136));
+					g.DrawLetterString(GameData.FONT_LARGE, wrappedString.Lines[currentLine - windowLine + i], pos + new Point2I(8, 6 + 16 * i + 8), new Color(248, 208, 136));
 				else
-					g.DrawFormattedGameString(GameData.FONT_LARGE, lines.Lines[currentLine - windowLine + i], pos + new Point2I(8, 6 + 16 * i), new Color(248, 208, 136));
+					g.DrawLetterString(GameData.FONT_LARGE, wrappedString.Lines[currentLine - windowLine + i], pos + new Point2I(8, 6 + 16 * i), new Color(248, 208, 136));
 			}
-			string oldText = lines.Lines[currentLine].Text;
-			lines.Lines[currentLine].Text = lines.Lines[currentLine].Text.Substring(0, currentChar);
-			g.DrawFormattedGameString(GameData.FONT_LARGE, lines.Lines[currentLine], pos + new Point2I(8, 6 + 16 * windowLine), new Color(248, 208, 136));
-			lines.Lines[currentLine].Text = oldText;
+			g.DrawLetterString(GameData.FONT_LARGE, wrappedString.Lines[currentLine].Substring(0, currentChar), pos + new Point2I(8, 6 + 16 * windowLine), new Color(248, 208, 136));
 		}
 
 	}
