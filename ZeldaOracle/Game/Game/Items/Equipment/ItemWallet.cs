@@ -32,26 +32,31 @@ namespace ZeldaOracle.Game.Items.Equipment {
 
 			inventory.AddAmmo(new Ammo("rupees", "Rupees", 0, 99));
 		}
+
 		// Called when the item's level is changed.
 		public override void OnLevelUp() {
 			int[] maxAmounts = {99, 300, 999};
 			inventory.GetAmmo("rupees").MaxAmount = maxAmounts[level];
 		}
+
 		// Called when the item has been obtained.
 		public override void OnObtained() {
-			inventory.GetAmmo("rupees").Obtained = true;
+			inventory.GetAmmo("rupees").IsObtained = true;
 		}
+
 		// Called when the item has been unobtained.
 		public override void OnUnobtained() {
-			inventory.GetAmmo("rupees").Obtained = false;
+			inventory.GetAmmo("rupees").IsObtained = false;
 		}
+
 		// Called when the item has been stolen.
 		public override void OnStolen() {
-			inventory.GetAmmo("rupees").Stolen = true;
+			inventory.GetAmmo("rupees").IsStolen = true;
 		}
+
 		// Called when the stolen item has been returned.
 		public override void OnReturned() {
-			inventory.GetAmmo("rupees").Stolen = false;
+			inventory.GetAmmo("rupees").IsStolen = false;
 		}
 
 	}

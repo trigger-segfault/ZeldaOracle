@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ZeldaOracle.Common.Geometry {
 
-	public static class Angle {
+	public static class Angles {
 
 		//-----------------------------------------------------------------------------
 		// Constants

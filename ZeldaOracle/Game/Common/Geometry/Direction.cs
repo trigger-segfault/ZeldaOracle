@@ -6,7 +6,7 @@ using System.Text;
 namespace ZeldaOracle.Common.Geometry {
 
 
-	public static class Direction {
+	public static class Directions {
 		
 		//-----------------------------------------------------------------------------
 		// Constants

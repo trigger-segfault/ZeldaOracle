@@ -16,6 +16,8 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Control {
 
+	// TODO: There should be a clas above room control.
+
 	// Handles the main Zelda gameplay within a room.
 	public class RoomControl : GameState {
 
@@ -165,7 +167,7 @@ namespace ZeldaOracle.Game.Control {
 		
 		public void EnterAdjacentRoom(int direction) {
 			// Find the adjacent room.
-			Point2I relative = Direction.ToPoint(direction);
+			Point2I relative = Directions.ToPoint(direction);
 			Point2I nextLocation = roomLocation + relative;
 			if (!level.ContainsRoom(nextLocation))
 				return;
@@ -257,19 +259,19 @@ namespace ZeldaOracle.Game.Control {
 			// Room transitions.
 			if (player.X < 6) {
 				player.X = 6;
-				EnterAdjacentRoom(Direction.Left);
+				EnterAdjacentRoom(Directions.Left);
 			}
 			else if (player.Y < 14) {
 				player.Y = 14;
-				EnterAdjacentRoom(Direction.Up);
+				EnterAdjacentRoom(Directions.Up);
 			}
 			else if (player.X > room.Width * GameSettings.TILE_SIZE - 6) {
 				player.X = room.Width * GameSettings.TILE_SIZE - 6;
-				EnterAdjacentRoom(Direction.Right);
+				EnterAdjacentRoom(Directions.Right);
 			}
 			else if (player.Y > room.Height * GameSettings.TILE_SIZE + 1) {
 				player.Y = room.Height * GameSettings.TILE_SIZE + 1;
-				EnterAdjacentRoom(Direction.Down);
+				EnterAdjacentRoom(Directions.Down);
 			}
 		}
 
