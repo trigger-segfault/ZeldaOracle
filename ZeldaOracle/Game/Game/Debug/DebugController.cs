@@ -10,7 +10,6 @@ using XnaColor		= Microsoft.Xna.Framework.Color;
 using XnaKeyboard	= Microsoft.Xna.Framework.Input.Keyboard;
 using XnaKeys		= Microsoft.Xna.Framework.Input.Keys;
 
-using ZeldaOracle.Common.Debug;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Input;

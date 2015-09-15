@@ -14,7 +14,7 @@ namespace ZeldaOracle.Common.Graphics {
 /** <summary>
  * An font containing a sprite font.
  * </summary> */
-public class Font {
+public class RealFont {
 
 	//=========== MEMBERS ============
 	
@@ -26,12 +26,12 @@ public class Font {
 	//========= CONSTRUCTORS =========
 
 	/** <summary> Constructs a font with the specified sprite font. </summary> */
-	public Font(SpriteFont spriteFont, string filePath = "") {
+	public RealFont(SpriteFont spriteFont, string filePath = "") {
 		this.spriteFont		= spriteFont;
 		this.filePath		= filePath;
 	}
 	/** <summary> Load a font from the specified file path. </summary> */
-	public Font(ContentManager content, string filePath) {
+	public RealFont(ContentManager content, string filePath) {
 		if (filePath.Length != 0)
 			this.spriteFont	= content.Load<SpriteFont>(filePath);
 		else
@@ -41,7 +41,7 @@ public class Font {
 
 	//========== OPERATORS ===========
 
-	public static implicit operator SpriteFont(Font font) {
+	public static implicit operator SpriteFont(RealFont font) {
 		return font.spriteFont;
 	}
 

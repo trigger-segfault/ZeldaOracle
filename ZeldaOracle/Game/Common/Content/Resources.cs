@@ -38,12 +38,10 @@ public class Resources {
 	public const string FontDirectory = "Fonts/";
 	/** <summary> The directory for storing sprite sheets. </summary> */
 	public const string SpriteSheetDirectory = "SpriteSheets/";
+	/** <summary> The directory for storing animations. </summary> */
+	public const string AnimationDirectory = "Animations/";
 	/** <summary> The directory for storing shaders. </summary> */
 	public const string ShaderDirectory = "Shaders/";
-
-	// Particles
-	/** <summary> The directory for storing particles. </summary> */
-	public const string ParticleDirectory = "Particles/";
 
 	// Sounds
 	/** <summary> The directory for storing sounds. </summary> */
@@ -68,13 +66,17 @@ public class Resources {
 	// Graphics
 	/** <summary> The collection of loaded images. </summary> */
 	private static Dictionary<string, Image> images;
-	/** <summary> The collection of loaded fonts. </summary> */
-	private static Dictionary<string, Font> fonts;
+	/** <summary> The collection of loaded real fonts. </summary> */
+	private static Dictionary<string, RealFont> realFonts;
 	/** <summary> The collection of loaded game fonts. </summary> */
 	private static Dictionary<string, GameFont> gameFonts;
 	/** <summary> The collection of loaded sprite sheets. </summary> */
-	private static Dictionary<string, SpriteAtlas> spriteSheets;
-	/** <summary> The collection of loaded effects. </summary> */
+	private static Dictionary<string, SpriteSheet> spriteSheets;
+	/** <summary> The collection of loaded sprites. </summary> */
+	private static Dictionary<string, Sprite> sprites;
+	/** <summary> The collection of loaded animations. </summary> */
+	private static Dictionary<string, Animation> animations;
+	/** <summary> The collection of loaded shaders. </summary> */
 	private static Dictionary<string, Effect> shaders;
 	/** <summary> The texture loader for loading images from file. </summary> */
 	private static TextureLoader textureLoader;
@@ -109,9 +111,11 @@ public class Resources {
 
 		// Graphics
 		images				= new Dictionary<string, Image>();
-		fonts				= new Dictionary<string, Font>();
+		realFonts			= new Dictionary<string, RealFont>();
 		gameFonts			= new Dictionary<string, GameFont>();
-		spriteSheets		= new Dictionary<string, SpriteAtlas>();
+		spriteSheets		= new Dictionary<string, SpriteSheet>();
+		sprites				= new Dictionary<string, Sprite>();
+		animations			= new Dictionary<string, Animation>();
 		shaders				= new Dictionary<string, Effect>();
 		textureLoader		= new TextureLoader(graphicsDevice);
 
@@ -138,25 +142,57 @@ public class Resources {
 	public static Image GetImage(string name) {
 		return images[name];
 	}
-	/** <summary> Gets the font with the specified name. </summary> */
-	public static Font GetFont(string name) {
-		return fonts[name];
+	/** <summary> Returns true if an image with the specified name exists. </summary> */
+	public static bool ImageExists(string name) {
+		return images.ContainsKey(name);
+	}
+	/** <summary> Gets the real font with the specified name. </summary> */
+	public static RealFont GetRealFont(string name) {
+		return realFonts[name];
+	}
+	/** <summary> Returns true if a real font with the specified name exists. </summary> */
+	public static bool RealFontExists(string name) {
+		return realFonts.ContainsKey(name);
 	}
 	/** <summary> Gets the game font with the specified name. </summary> */
 	public static GameFont GetGameFont(string name) {
 		return gameFonts[name];
 	}
+	/** <summary> Returns true if a game font with the specified name exists. </summary> */
+	public static bool GameFontExists(string name) {
+		return gameFonts.ContainsKey(name);
+	}
 	/** <summary> Gets the sprite sheet with the specified name. </summary> */
-	public static SpriteAtlas GetSpriteSheet(string name) {
+	public static SpriteSheet GetSpriteSheet(string name) {
 		return spriteSheets[name];
 	}
 	/** <summary> Returns true if a sprite sheet with the specified name exists. </summary> */
 	public static bool SpriteSheetExists(string name) {
 		return spriteSheets.ContainsKey(name);
 	}
+	/** <summary> Gets the sprite with the specified name. </summary> */
+	public static Sprite GetSprite(string name) {
+		return sprites[name];
+	}
+	/** <summary> Returns true if a sprite with the specified name exists. </summary> */
+	public static bool SpriteExists(string name) {
+		return sprites.ContainsKey(name);
+	}
+	/** <summary> Gets the animation with the specified name. </summary> */
+	public static Animation GetAnimation(string name) {
+		return animations[name];
+	}
+	/** <summary> Returns true if an animation with the specified name exists. </summary> */
+	public static bool AnimationExists(string name) {
+		return animations.ContainsKey(name);
+	}
 	/** <summary> Gets the shader with the specified name. </summary> */
 	public static Effect GetShader(string name) {
 		return shaders[name];
+	}
+	/** <summary> Returns true if a shader with the specified name exists. </summary> */
+	public static bool ShaderExists(string name) {
+		return shaders.ContainsKey(name);
 	}
 
 	#endregion
@@ -212,18 +248,15 @@ public class Resources {
 	public static Image LoadImageFromFile(string assetName) {
 		string name = assetName.Substring(assetName.IndexOf('/') + 1);
 		name = name.Substring(0, name.LastIndexOf('.'));
-		//FileStream stream = new FileStream(contentManager.RootDirectory + "/" + assetName, FileMode.Open);
-		//Image resource = new Image(Texture2D.FromStream(graphicsDevice, stream), name);
 		Image resource = new Image(textureLoader.FromFile(contentManager.RootDirectory + "/" + assetName), name);
-		//stream.Close();
 		images.Add(name, resource);
 		return resource;
 	}
-	/** <summary> Loads the font with the specified asset name. </summary> */
-	public static Font LoadFont(string assetName) {
+	/** <summary> Loads the real font with the specified asset name. </summary> */
+	public static RealFont LoadRealFont(string assetName) {
 		string name = assetName.Substring(assetName.IndexOf('/') + 1);
-		Font resource = new Font(contentManager.Load<SpriteFont>(assetName), name);
-		fonts.Add(name, resource);
+		RealFont resource = new RealFont(contentManager.Load<SpriteFont>(assetName), name);
+		realFonts.Add(name, resource);
 		return resource;
 	}
 	/** <summary> Loads a shader (Effect). </summary> */
@@ -234,7 +267,7 @@ public class Resources {
 		return resource;
 	}
 	/** <summary> Loads a single sprite sheet from a script file. </summary> */
-	public static SpriteAtlas LoadSpriteSheet(string assetName) {
+	public static SpriteSheet LoadSpriteSheet(string assetName) {
 		SpriteSheetSR script = new SpriteSheetSR();
 		LoadScript(assetName, script);
 		return script.Sheet;
@@ -242,6 +275,20 @@ public class Resources {
 	/** <summary> Loads/compiles sprite sheets from a script file. </summary> */
 	public static void LoadSpriteSheets(string assetName) {
 		LoadScript(assetName, new SpriteSheetSR());
+	}
+	/** <summary> Loads the game font with the specified asset name. </summary> */
+	public static GameFont LoadGameFont(string assetName) {
+		GameFontSR script = new GameFontSR();
+		LoadScript(assetName, script);
+		return script.Font;
+	}
+	/** <summary> Loads/compiles game fonts from a script file. </summary> */
+	public static void LoadGameFonts(string assetName) {
+		LoadScript(assetName, new GameFontSR());
+	}
+	/** <summary> Loads/compiles animations from a script file. </summary> */
+	public static void LoadAnimations(string assetName) {
+		LoadScript(assetName, new AnimationSR());
 	}
 
 	#endregion
@@ -313,78 +360,21 @@ public class Resources {
 	#region Graphics
 
 	/** <summary> Adds the specified sprite sheet. </summary> */
-	public static void AddSpriteSheet(SpriteAtlas sheet) {
-		spriteSheets.Add(sheet.Name, sheet);
+	public static void AddSpriteSheet(string assetName, SpriteSheet sheet) {
+		spriteSheets.Add(assetName, sheet);
+	}
+	/** <summary> Adds the specified sprite. </summary> */
+	public static void AddSprite(string assetName, Sprite sprite) {
+		sprites.Add(assetName, sprite);
 	}
 	/** <summary> Adds the specified game font. </summary> */
-	public static void AddGameFont(GameFont font) {
-		//gameFonts.Add(font.Name, font);
+	public static void AddGameFont(string assetName, GameFont font) {
+		gameFonts.Add(assetName, font);
 	}
-
-	#endregion
-	//--------------------------------
-	#region Particles
-
-	/** <summary> Adds the specified particle type. </summary> */
-	/*public static void AddParticleType(ParticleType particleType) {
-		particleTypes.Add(particleType.Name, particleType);
-	}*/
-	/** <summary> Adds the specified particle emitter. </summary> */
-	/*public static void AddParticleEmitter(ParticleEmitter particleEmitter) {
-		particleEmitters.Add(particleEmitter.Name, particleEmitter);
-	}*/
-	/** <summary> Adds the specified particle effect type. </summary> */
-	/*public static void AddParticleEffect(ParticleEffectType particleEffect) {
-		particleEffects.Add(particleEffect.Name, particleEffect);
-	}*/
-	/** <summary> Removes the specified particle type. </summary> */
-	/*public static void RemoveParticleType(ParticleType particleType) {
-		particleTypes.Remove(particleType.Name);
-	}*/
-	/** <summary> Removes the specified particle emitter. </summary> */
-	/*public static void RemoveParticleEmitter(ParticleEmitter particleEmitter) {
-		particleEmitters.Remove(particleEmitter.Name);
-	}*/
-	/** <summary> Removes the specified particle effect type. </summary> */
-	/*public static void RemoveParticleEffect(ParticleEffectType particleEffect) {
-		particleEffects.Remove(particleEffect.Name);
-	}*/
-	/** <summary> Renames the specified particle type. </summary> */
-	/*public static void RenameParticleType(string oldName, string newName) {
-		//particleTypes;
-		particleTypes[oldName].Name = newName;
-		ParticleType[] types = ParticleTypes;
-
-		particleTypes.Clear();
-
-		for (int i = 0; i < types.Length; i++) {
-			particleTypes.Add(types[i].Name, types[i]);
-		}
-	}*/
-	/** <summary> Renames the specified particle emitter. </summary> */
-	/*public static void RenameParticleEmitter(string oldName, string newName) {
-		//particleTypes;
-		particleEmitters[oldName].Name = newName;
-		ParticleEmitter[] types = ParticleEmitters;
-
-		particleEmitters.Clear();
-
-		for (int i = 0; i < types.Length; i++) {
-			particleEmitters.Add(types[i].Name, types[i]);
-		}
-	}*/
-	/** <summary> Renames the specified particle effect. </summary> */
-	/*public static void RenameParticleEffect(string oldName, string newName) {
-		//particleTypes;
-		particleEffects[oldName].Name = newName;
-		ParticleEffectType[] types = ParticleEffects;
-
-		particleEffects.Clear();
-
-		for (int i = 0; i < types.Length; i++) {
-			particleEffects.Add(types[i].Name, types[i]);
-		}
-	}*/
+	/** <summary> Adds the specified animation. </summary> */
+	public static void AddAnimation(string assetName, Animation animation) {
+		animations.Add(assetName, animation);
+	}
 
 	#endregion
 	//--------------------------------
@@ -423,50 +413,14 @@ public class Resources {
 	public static List<Language> Languages {
 		get { return languages; }
 	}
-	/** <summary> Gets the list of particle types. </summary> */
-	/*public static ParticleType[] ParticleTypes {
-		get {
-			ParticleType[] types = new ParticleType[particleTypes.Count];
-			particleTypes.Values.CopyTo(types, 0);
-			return types;
-		}
-	}*/
-	/** <summary> Gets the list of particle emitters. </summary> */
-	/*public static ParticleEmitter[] ParticleEmitters {
-		get {
-			ParticleEmitter[] emitters = new ParticleEmitter[particleEmitters.Count];
-			particleEmitters.Values.CopyTo(emitters, 0);
-			return emitters;
-		}
-	}*/
-	/** <summary> Gets the list of particle effect types. </summary> */
-	/*public static ParticleEffectType[] ParticleEffects {
-		get {
-			ParticleEffectType[] effects = new ParticleEffectType[particleEffects.Count];
-			particleEffects.Values.CopyTo(effects, 0);
-			return effects;
-		}
-	}*/
 	/** <summary> Gets the list of sprite sheets. </summary> */
-	public static SpriteAtlas[] SpriteSheets {
+	public static SpriteSheet[] SpriteSheets {
 		get {
-			SpriteAtlas[] sheets = new SpriteAtlas[spriteSheets.Count];
+			SpriteSheet[] sheets = new SpriteSheet[spriteSheets.Count];
 			spriteSheets.Values.CopyTo(sheets, 0);
 			return sheets;
 		}
 	}
-	/** <summary> Gets the number of particle types. </summary> */
-	/*public static int ParticleTypeCount {
-		get { return particleTypes.Count; }
-	}*/
-	/** <summary> Gets the number of particle emitters. </summary> */
-	/*public static int ParticleEmitterCount {
-		get { return particleEmitters.Count; }
-	}*/
-	/** <summary> Gets the number of particle effect types. </summary> */
-	/*public static int ParticleEffectCount {
-		get { return particleEffects.Count; }
-	}*/
 	/** <summary> Gets the number of sprite sheets. </summary> */
 	public static int SpriteSheetCount {
 		get { return spriteSheets.Count; }

@@ -72,11 +72,11 @@ public class DebugMenu {
 	private bool open;
 
 	/** <summary> The font used for the menu text. </summary> */
-	internal Font debugMenuFont;
+	internal RealFont debugMenuFont;
 	/** <summary> The bold font used for the menu text. </summary> */
-	internal Font debugMenuFontBold;
+	internal RealFont debugMenuFontBold;
 	/** <summary> The sprite sheet used for the menu items. </summary> */
-	internal SpriteAtlas debugMenuSprites;
+	//internal SpriteAtlas debugMenuSprites;
 
 	#endregion
 	//========= CONSTRUCTORS =========
@@ -521,8 +521,8 @@ public class DebugMenu {
 			// Draw text label.
 			string text   = subItem.Text;
 			string hotkey = subItem.HotKey.Name;
-			g.DrawString(debugMenuFont, text, new Point2I(r.Min.X + textOffset, (int)r.Center.Y), Align.Left | Align.Int, colorText);
-			g.DrawString(debugMenuFont, hotkey, new Point2I(r.Min.X + hotkeyOffset, (int)r.Center.Y), Align.Left | Align.Int, colorHotkey);
+			g.DrawRealString(debugMenuFont, text, new Point2I(r.Min.X + textOffset, (int)r.Center.Y), Align.Left | Align.Int, colorText);
+			g.DrawRealString(debugMenuFont, hotkey, new Point2I(r.Min.X + hotkeyOffset, (int)r.Center.Y), Align.Left | Align.Int, colorHotkey);
 
 			// Draw toggle check.
 			if (subItem is ToggleMenuItem) {

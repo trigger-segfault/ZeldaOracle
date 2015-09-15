@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Zelda")]
-[assembly: AssemblyProduct("Zelda")]
+[assembly: AssemblyTitle("The Legend of Zelda - Oracle Engine")]
+[assembly: AssemblyProduct("The Legend of Zelda - Oracle Engine")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCopyright("© Robert Jordan and David Jordan 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

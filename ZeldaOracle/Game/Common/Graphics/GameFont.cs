@@ -24,7 +24,15 @@ namespace ZeldaOracle.Common.Graphics {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		// Constructs a font with the specified sprite font.
+		// Constructs a font with the specified sprite sheet.
+		public GameFont(SpriteSheet spriteSheet) {
+			this.spriteSheet		= spriteSheet;
+			this.charactersPerRow	= 0;
+			this.characterSpacing	= 0;
+			this.lineSpacing		= 0;
+		}
+
+		// Constructs a font with the specified sprite sheet.
 		public GameFont(SpriteSheet spriteSheet, int charactersPerRow, int characterSpacing, int lineSpacing) {
 			this.spriteSheet		= spriteSheet;
 			this.charactersPerRow	= charactersPerRow;
