@@ -73,7 +73,7 @@ public class GameManager {
 
 		hud = new HUD(this);
 
-		StringCodes.Initialize();
+		FormatCodes.Initialize();
 		Controls.Initialize();
 		ScreenResized();
 	}

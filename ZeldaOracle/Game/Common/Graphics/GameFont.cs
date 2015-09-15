@@ -7,127 +7,124 @@ using ZeldaOracle.Common.Translation;
 
 namespace ZeldaOracle.Common.Graphics {
 
-
-	/** <summary>
-	 * An font containing a sprite font.
-	 * </summary> */
+	// A zelda sprite font
 	public class GameFont {
 
-		//=========== MEMBERS ============
-
-		/** <summary> The sprite sheet of the font. </summary> */
+		// The sprite sheet of the font.
 		private SpriteSheet spriteSheet;
 
-		private Point2I characterSize;
+		// The number of characters in each row in the sprite sheet.
+		private int charactersPerRow;
+		// The spacing between characters.
 		private int characterSpacing;
+		// The spacing between lines.
 		private int lineSpacing;
 
-		//========= CONSTRUCTORS =========
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
 
-		/** <summary> Constructs a font with the specified sprite font. </summary> */
-		public GameFont(SpriteSheet spriteSheet, Point2I characterSize, int characterSpacing, int lineSpacing) {
+		// Constructs a font with the specified sprite font.
+		public GameFont(SpriteSheet spriteSheet, int charactersPerRow, int characterSpacing, int lineSpacing) {
 			this.spriteSheet		= spriteSheet;
-			this.characterSize		= characterSize;
+			this.charactersPerRow	= charactersPerRow;
 			this.characterSpacing	= characterSpacing;
 			this.lineSpacing		= lineSpacing;
 		}
 
-		//========== PROPERTIES ==========
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
 
-		/** <summary> Gets the sprite sheet of the font </summary> */
+		// Gets the sprite sheet of the font.
 		public SpriteSheet SpriteSheet {
 			get { return spriteSheet; }
 		}
-		/** <summary> Gets or sets the size of the font characters. </summary> */
-		public Point2I CharacterSize {
-			get { return characterSize; }
-			set { CharacterSize = value; }
+		// Gets or sets the characters per row.
+		public int CharactersPerRow {
+			get { return charactersPerRow; }
+			set { charactersPerRow = value; }
 		}
-		/** <summary> Gets or sets the spacing of the font characters. </summary> */
+		// Gets or sets the spacing of the font characters.
 		public int CharacterSpacing {
 			get { return characterSpacing; }
 			set { characterSpacing = value; }
 		}
-		/** <summary> Gets or sets the vertical distance (in pixels) between the base lines of two consecutive lines of text. </summary> */
+		// Gets or sets the vertical distance (in pixels) between the base lines of two consecutive lines of text.
 		public int LineSpacing {
 			get { return lineSpacing; }
 			set { lineSpacing = value; }
 		}
 
-		//========== MANAGEMENT ==========
+		//-----------------------------------------------------------------------------
+		// Strings
+		//-----------------------------------------------------------------------------
 
-		public WrappedString MeasureWrappedString(string text, int width) {
-			List<FormattedString> lines = new List<FormattedString>();
-			List<Color> lineColors = new List<Color>();
-			List<Color> wordColors = new List<Color>();
+		// Returns the wrapped and formatted string of the text.
+		public WrappedLetterString WrapString(string text, int width) {
+			List<LetterString> lines = new List<LetterString>();
 			List<int> lineLengths = new List<int>();
 			int currentLine = 0;
 			int currentCharacter = 0;
 
+			LetterString word = new LetterString();
 			int wordStart = 0;
 			int wordLength = 0;
 			int wordLineCount = 0;
-			string word = "";
 			bool firstChar = true;
-			FormattedString formattedString = StringCodes.FormatText(text);
 
-			while (currentCharacter < formattedString.Text.Length) {
-				lines.Add(new FormattedString());
+			LetterString letterString = FormatCodes.FormatString(text);
+
+			while (currentCharacter < letterString.Length) {
+				lines.Add(new LetterString());
 				lineLengths.Add(0);
 
 				// Remove starting spaces in the line.
-				while (formattedString.Text[currentCharacter] == ' ') {
+				while (letterString[currentCharacter].Char == ' ') {
 					currentCharacter++;
 				}
 
 				wordStart = currentCharacter;
-				word = "";
+				word.Clear();
 				wordLength = 0;
 				wordLineCount = 0;
 				firstChar = true;
-				lineColors.Clear();
-				wordColors.Clear();
 
 				do {
-					if (currentCharacter >= formattedString.Text.Length || formattedString.Text[currentCharacter] == ' ' ||
-						formattedString.Text[currentCharacter] == StringCodes.ParagraphCharacter) {
+					if (currentCharacter >= letterString.Length || letterString[currentCharacter].Char == ' ' ||
+						letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter) {
 
-						lines[currentLine].Text += (wordLineCount > 0 ? " " : "") + word;
-						lineLengths[currentLine] += (wordLineCount > 0 ? (characterSpacing + characterSize.X) : 0) + wordLength;
 						if (wordLineCount > 0)
-							lineColors.Add(Color.Black);
-						lineColors.AddRange(wordColors);
+							lines[currentLine].Add(' ');
+						lines[currentLine].AddRange(word);
+						lineLengths[currentLine] += (wordLineCount > 0 ? (characterSpacing + spriteSheet.CellSize.X) : 0) + wordLength;
 
-						wordColors.Clear();
 						wordLineCount++;
 						wordLength = 0;
 						wordStart = currentCharacter + 1;
-						word = "";
-						if (currentCharacter < formattedString.Text.Length && formattedString.Text[currentCharacter] == StringCodes.ParagraphCharacter) {
-							lines[currentLine].Text += StringCodes.ParagraphCharacter;
-							lineColors.Add(Color.Black);
+						word.Clear();
+						if (currentCharacter < letterString.Length && letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter) {
+							lines[currentLine].Add(letterString[currentCharacter]);
 							currentCharacter++;
 							break;
 						}
 					}
 					else {
-						word += formattedString.Text[currentCharacter];
-						wordLength += (firstChar ? 0 : characterSpacing) + characterSize.X;
-						wordColors.Add(formattedString.Colors[currentCharacter]);
+						word.Add(letterString[currentCharacter]);
+						wordLength += (firstChar ? 0 : characterSpacing) + spriteSheet.CellSize.X;
 						firstChar = false;
 					}
 					currentCharacter++;
-				} while (lineLengths[currentLine] + wordLength + characterSpacing + characterSize.X <= width);
+				} while (lineLengths[currentLine] + wordLength + characterSpacing + spriteSheet.CellSize.X <= width);
 
 				currentCharacter = wordStart;
-				lines[currentLine].Colors = lineColors.ToArray();
 				currentLine++;
 			}
 
-			WrappedString wrappedString = new WrappedString();
+			WrappedLetterString wrappedString = new WrappedLetterString();
 			wrappedString.Lines = lines.ToArray();
 			wrappedString.LineLengths = lineLengths.ToArray();
-			wrappedString.Bounds = new Rectangle2I(width, (lines.Count - 1) * lineSpacing + characterSize.Y);
+			wrappedString.Bounds = new Rectangle2I(width, (lines.Count - 1) * lineSpacing + spriteSheet.CellSize.Y);
 			return wrappedString;
 		}
 

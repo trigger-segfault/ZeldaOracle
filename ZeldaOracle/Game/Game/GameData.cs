@@ -425,7 +425,9 @@ class GameData {
 		FontDebugMenu = Resources.LoadFont("Fonts/font_debug_menu");
 		FontDebugMenuBold = Resources.LoadFont("Fonts/font_debug_menu_bold");
 		Image fontLargeSheet = Resources.LoadImage("Images/UI/font_large");
-		FONT_LARGE = new GameFont(new SpriteSheet(fontLargeSheet, new Point2I(8, 12), Point2I.One, Point2I.One), new Point2I(8, 12), 0, 14);
+		FONT_LARGE = new GameFont(new SpriteSheet(fontLargeSheet, new Point2I(8, 12), Point2I.One, Point2I.One), 16, 0, 16);
+		Image fontSmallSheet = Resources.LoadImage("Images/UI/font_small");
+		FONT_SMALL = new GameFont(new SpriteSheet(fontSmallSheet, new Point2I(8, 8), Point2I.One, Point2I.One), 16, 0, 0);
 	}
 
 		
@@ -642,7 +644,6 @@ class GameData {
 	// Effect animations.
 		public static Animation ANIM_EFFECT_DIRT	= new Animation();
 	
-	public static GameFont FONT_LARGE;
 
 	//-----------------------------------------------------------------------------
 	// Collision Models.
@@ -676,6 +677,8 @@ class GameData {
 
 	public static Font FontDebugMenu;
 	public static Font FontDebugMenuBold;
+	public static GameFont FONT_LARGE;
+	public static GameFont FONT_SMALL;
 
 	
 	//-----------------------------------------------------------------------------
