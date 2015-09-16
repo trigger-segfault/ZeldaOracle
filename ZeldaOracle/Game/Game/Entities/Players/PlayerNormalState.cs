@@ -124,12 +124,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Update pushing.
 			CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
-			if (collisionInfo.Type == CollisionType.Tile) {
+			if (collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
 				Tile tile = collisionInfo.Tile;
 				player.Graphics.AnimationPlayer.Animation = GameData.ANIM_PLAYER_PUSH;
 				pushTimer++;
-				if (pushTimer > 30 && tile.Flags.HasFlag(TileFlags.Movable)) {
-					tile.Push(player.Direction);
+				if (pushTimer > 20 && tile.Flags.HasFlag(TileFlags.Movable)) {
+					tile.Push(player.Direction, 1.0f);
 					//Message message = new Message("Oof! It's heavy!");
 					//player.RoomControl.GameManager.PushGameState(new StateTextReader(message));
 					pushTimer = 0;

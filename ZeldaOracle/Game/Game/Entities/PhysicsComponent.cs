@@ -202,6 +202,7 @@ namespace ZeldaOracle.Game.Entities {
 			Rectangle2I area;
 			area.Point	= (Point2I) (myBox.TopLeft / (float) GameSettings.TILE_SIZE);
 			area.Size	= ((Point2I) (myBox.BottomRight / (float) GameSettings.TILE_SIZE)) + Point2I.One - area.Point;
+			area.Inflate(1, 1);
 			area = Rectangle2I.Intersect(area, new Rectangle2I(Point2I.Zero, room.Size));
 
 			// Collide with nearby solid tiles HORIZONTALLY and then VERTICALLY.
@@ -212,7 +213,7 @@ namespace ZeldaOracle.Game.Entities {
 							Tile t = entity.RoomControl.GetTile(x, y, i);
 
 							if (t != null && t.Flags.HasFlag(TileFlags.Solid) && t.CollisionModel != null) {
-								ResolveCollision(ticks, axis, t, new Vector2F(x, y) * GameSettings.TILE_SIZE, t.CollisionModel);
+								ResolveCollision(ticks, axis, t, t.Position, t.CollisionModel);
 							}
 						}
 					}

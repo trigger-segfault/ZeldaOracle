@@ -16,7 +16,14 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
-		
+
+		public SpriteSheet(Image image) {
+			this.image		= image;
+			this.cellSize	= Point2I.Zero;
+			this.offset		= Point2I.Zero;
+			this.spacing	= Point2I.Zero;
+		}
+
 		public SpriteSheet(Image image, Point2I cellSize, Point2I offset, Point2I spacing) {
 			this.image		= image;
 			this.cellSize	= cellSize;

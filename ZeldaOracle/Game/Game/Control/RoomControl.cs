@@ -65,9 +65,21 @@ namespace ZeldaOracle.Game.Control {
 		// Manipulation
 		//-----------------------------------------------------------------------------
 		
+		// Use this for spawning entites at runtime.
 		public void SpawnEntity(Entity e) {
 			e.Initialize(this);
 			entities.Add(e);
+		}
+		
+		// Use this for placing tiles at runtime.
+		public void PlaceTile(Tile tile, Point2I location, int layer) {
+			PlaceTile(tile, location.X, location.Y, layer);
+		}
+
+		// Use this for placing tiles at runtime.
+		public void PlaceTile(Tile tile, int x, int y, int layer) {
+			tile.Initialize(this);
+			tiles[x, y, layer] = tile;
 		}
 
 
@@ -148,8 +160,11 @@ namespace ZeldaOracle.Game.Control {
 							tiles[x, y, i] = null;
 						}
 						else {
-							//Tile t = data.Tileset.CreateTile(data.SheetLocation);
-							Tile t = Tile.CreateTile(data);
+							Tile t;
+							if (data.Tileset != null)
+								t = data.Tileset.CreateTile(data.SheetLocation);
+							else 
+								t = Tile.CreateTile(data);
 							t.Location = new Point2I(x, y);
 							t.Layer = i;
 							t.Initialize(this);
@@ -221,13 +236,15 @@ namespace ZeldaOracle.Game.Control {
 
 			// Setup the room.
 			roomLocation = new Point2I(2, 1);
-
 			Room r = level.GetRoom(roomLocation);
+			
 			TileData td = new TileData();
-			td.Sprite = new Sprite(GameData.SHEET_ZONESET_LARGE, 2, 0);
-			td.CollisionModel = GameData.MODEL_BLOCK;
+			td.Sprite = new Sprite(GameData.SHEET_ZONESET_LARGE, 1, 9);
 			td.Flags |= TileFlags.Solid | TileFlags.Movable;
+			td.CollisionModel = GameData.MODEL_BLOCK;
+			
 			r.TileData[4, 4, 1] = td;
+
 			BeginRoom(r);
 		}
 
@@ -261,9 +278,9 @@ namespace ZeldaOracle.Game.Control {
 			}
 			
 			// Update tiles.
-			for (int x = 0; x < room.Width; x++) {
-				for (int y = 0; y < room.Height; y++) {
-					for (int i = 0; i < room.LayerCount; i++) {
+			for (int i = 0; i < room.LayerCount; i++) {
+				for (int x = 0; x < room.Width; x++) {
+					for (int y = 0; y < room.Height; y++) {
 						Tile t = tiles[x, y, i];
 						if (t != null)
 							t.Update(timeDelta);
@@ -296,9 +313,9 @@ namespace ZeldaOracle.Game.Control {
 			g.Translate(0, 16);
 
 			// Draw tiles.
-			for (int x = 0; x < room.Width; x++) {
-				for (int y = 0; y < room.Height; y++) {
-					for (int i = 0; i < room.LayerCount; i++) {
+			for (int i = 0; i < room.LayerCount; i++) {
+				for (int x = 0; x < room.Width; x++) {
+					for (int y = 0; y < room.Height; y++) {
 						Tile t = tiles[x, y, i];
 						if (t != null)
 							t.Draw(g);

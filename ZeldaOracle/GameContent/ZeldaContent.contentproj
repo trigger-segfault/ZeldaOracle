@@ -70,6 +70,10 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
+    <None Include="Fonts\fonts.conscript">
+      <Name>fonts</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Music\music.conscript">
       <Name>music_script</Name>
     </None>
@@ -168,12 +172,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Images\UI\font_large.png">
+    <Compile Include="Fonts\font_large.png">
       <Name>font_large</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\UI\font_small.png">
+    <Compile Include="Fonts\font_small.png">
       <Name>font_small</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

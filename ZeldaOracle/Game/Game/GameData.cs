@@ -96,7 +96,7 @@ class GameData {
 			SHEET_EFFECTS		= new SpriteSheet(imageEffects, 16, 16, 0, 0, 1, 1);
 			SHEET_PLAYER_ITEMS	= new SpriteSheet(imagePlayerItems, 16, 16, 0, 0, 1, 1);
 
-			SheetDebugMenu = Resources.LoadSpriteSheet(Resources.SpriteSheetDirectory + "sheet_debug_menu.conscript");
+			//SheetDebugMenu = Resources.LoadSpriteSheet(Resources.SpriteSheetDirectory + "sheet_debug_menu.conscript");
 
 			//Resources.LoadSpriteSheets(Resources.SpriteSheetDirectory + "sheet_gamepad.conscript");
 			//SheetGamePadControls	= Resources.GetSpriteSheet("sheet_gamepad_controls");
@@ -422,12 +422,10 @@ class GameData {
 		// Loads the fonts.
 	private static void LoadFonts() {
 
-		FontDebugMenu = Resources.LoadFont("Fonts/font_debug_menu");
-		FontDebugMenuBold = Resources.LoadFont("Fonts/font_debug_menu_bold");
-		Image fontLargeSheet = Resources.LoadImage("Images/UI/font_large");
-		FONT_LARGE = new GameFont(new SpriteSheet(fontLargeSheet, new Point2I(8, 12), Point2I.One, Point2I.One), 16, 0, 16);
-		Image fontSmallSheet = Resources.LoadImage("Images/UI/font_small");
-		FONT_SMALL = new GameFont(new SpriteSheet(fontSmallSheet, new Point2I(8, 8), Point2I.One, Point2I.One), 16, 0, 0);
+		Resources.LoadGameFonts("Fonts/fonts.conscript");
+
+		FONT_LARGE = Resources.GetGameFont("font_large");
+		FONT_SMALL = Resources.GetGameFont("font_small");
 	}
 
 		
@@ -482,10 +480,6 @@ class GameData {
 	// Sprite Sheets
 	//-----------------------------------------------------------------------------
 
-	public static SpriteAtlas SheetDebugMenu;
-	public static SpriteAtlas SheetGamePadControls;
-	public static SpriteAtlas SheetGamePadArrows;
-	
 		public static SpriteSheet SHEET_MENU_SMALL;
 		public static SpriteSheet SHEET_ICONS_THIN;
 		public static SpriteSheet SHEET_EFFECTS;
@@ -675,8 +669,8 @@ class GameData {
 	// Fonts
 	//-----------------------------------------------------------------------------
 
-	public static Font FontDebugMenu;
-	public static Font FontDebugMenuBold;
+	public static RealFont FontDebugMenu;
+	public static RealFont FontDebugMenuBold;
 	public static GameFont FONT_LARGE;
 	public static GameFont FONT_SMALL;
 

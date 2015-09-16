@@ -11,9 +11,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaOracle.Common.Scripts {
-/** <summary>
- * Used for grid-based sprite sheets
- * </summary> */
+// Used for grid-based sprite sheets.
 public class SpriteGrid {
 	public int spriteWidth;
 	public int spriteHeight;
@@ -22,7 +20,7 @@ public class SpriteGrid {
 	public int offsetX;
 	public int offsetY;
 }
-/** <summary>
+/*
  * Script reader for sprite sheets. The script can contain
  * information for multiple sprite sheets with corresponding
  * images in the content folder.
@@ -30,56 +28,66 @@ public class SpriteGrid {
  * FORMAT:
  *
  * @spritesheet [name]
- * @size [width] [height]
- * @sprite [frame_x] [frame_y] [frame_width] [frame_height] [offset_x] [offset_y] [source_width] [source_height]
+ * @grid [cell_width] [cell_height] [cell_spacing_x] [cell_spacing_y] [offset_x] [offset_y]
+ * 
+ * @sprite [name]
+ * @next [x_index] [y_index] [offset_x] [offset_y]
+ * @next [x_index] [y_index] [offset_x] [offset_y]
+ * 
+ * @sprite [name]
+ * @next [x_index] [y_index] [offset_x] [offset_y]
+ * 
  * @end
  *
  * Note: All declared sprites must be within the
  * @spritesheet and @end commands.
- * </summary> */
+ */
 public class SpriteSheetSR : ScriptReader {
 
-	//=========== MEMBERS ============
-	#region Members
+	// The current sprite sheet being created.
+	private SpriteSheet sheet;
+	// The last loaded sprite sheet.
+	private SpriteSheet finalSheet;
+	// The current sprite being created.
+	private Sprite sprite;
+	// The current sprite's name
+	private string spriteName;
+	// The default origin used for sprites.
+	private Point2I defaultDrawOffset;
+	// True if the default sprite origin should be centered.
+	private bool defaultDrawOffsetCenter;
 
-	/** <summary> The current sprite sheet being created. </summary> */
-	private SpriteAtlas sheet;
-	/** <summary> The current sprite sheet grid settings being used. </summary> */
-	private SpriteGrid grid;
-	/** <summary> The last loaded sprite sheet. </summary> */
-	private SpriteAtlas finalSheet;
-	/** <summary> The default origin used for sprites. </summary> */
-	private Vector2F defaultOrigin;
-	/** <summary> True if the default sprite origin should be centered. </summary> */
-	private bool defaultOriginCenter;
+	//-----------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------
 
-	#endregion
-	//========== PROPERTIES ==========
-	#region Properties
-
-	/** <summary> Gets the last loaded sprite sheet. </summary> */
-	public SpriteAtlas Sheet {
+	// Gets the last loaded sprite sheet.
+	public SpriteSheet Sheet {
 		get { return finalSheet; }
 	}
+	
+	//-----------------------------------------------------------------------------
+	// Override
+	//-----------------------------------------------------------------------------
 
-	#endregion
-	//=========== OVERRIDE ===========
-	#region Override
-
-	/** <summary> Begins reading the script. </summary> */
+	// Begins reading the script.
 	protected override void BeginReading() {
-		sheet				= null;
-		grid				= null;
-		finalSheet			= null;
-		defaultOrigin		= Vector2F.Zero;
-		defaultOriginCenter	= false;
+		sheet					= null;
+		finalSheet				= null;
+		sprite					= null;
+		spriteName				= "";
+		defaultDrawOffset		= Point2I.Zero;
+		defaultDrawOffsetCenter	= false;
 	}
-	/** <summary> Ends reading the script. </summary> */
+
+	// Ends reading the script.
 	protected override void EndReading() {
-		sheet				= null;
-		grid				= null;
+		sheet					= null;
+		sprite					= null;
+		spriteName				= "";
 	}
-	/** <summary> Reads a line in the script as a command. </summary> */
+
+	// Reads a line in the script as a command.
 	protected override bool ReadCommand(string command, List<string> args) {
 		// Create a new sprite sheet to then define sprites for.
 		// @spritesheet [sheetName]
@@ -92,36 +100,27 @@ public class SpriteSheetSR : ScriptReader {
 			else {
 				image = Resources.LoadImage(Resources.SpriteSheetDirectory + args[0]);
 			}
-			sheet = new SpriteAtlas(args[0], image);
+			sheet = new SpriteSheet(image);
 			finalSheet = sheet;
-			Resources.AddSpriteSheet(sheet);
+			Resources.AddSpriteSheet(args[0], sheet);
 		}
 
 		// Create a new sprite grid to then define grid sprites for.
-		// @grid [sprWidth] [sprHeight] [sepX] [sepY] [offsetX] [offsetY]
+		// @grid [cell_width] [cell_height] [cell_spacing_x] [cell_spacing_y] [offset_x] [offset_y]
 		if (command == "grid") {
-			grid = new SpriteGrid();
-			grid.spriteWidth  = Int32.Parse(args[0]);
-			grid.spriteHeight = Int32.Parse(args[1]);
-			grid.spacingX     = Int32.Parse(args[2]);
-			grid.spacingY     = Int32.Parse(args[3]);
-			grid.offsetX      = Int32.Parse(args[4]);
-			grid.offsetY      = Int32.Parse(args[5]);
+			sheet.CellSize = new Point2I(Int32.Parse(args[0]), Int32.Parse(args[1]));
+			sheet.Spacing = new Point2I(Int32.Parse(args[2]), Int32.Parse(args[3]));
+			sheet.Offset = new Point2I(Int32.Parse(args[4]), Int32.Parse(args[5]));
 		}
 
 		// Finish creating the current sprite sheet.
 		// @end
 		else if (command == "end") {
-			sheet = null;
-			grid = null;
-			defaultOrigin = Vector2F.Zero;
-			defaultOriginCenter = false;
-		}
-
-		// Set the size of the sprite sheet's texture.
-		// @size [width] [height]
-		else if (command == "size") {
-			// (This command is currently unnecessary)
+			sheet					= null;
+			sprite					= null;
+			spriteName				= "";
+			defaultDrawOffset		= Point2I.Zero;
+			defaultDrawOffsetCenter	= false;
 		}
 
 		// Set the default origin of each sprite.
@@ -129,49 +128,43 @@ public class SpriteSheetSR : ScriptReader {
 		// origin can be [x] [y], or center
 		else if (command == "origin") {
 			if (args.Count >= 1 && args[0] == "center")
-				defaultOriginCenter = true;
+				defaultDrawOffsetCenter = true;
 			else
-				defaultOrigin = new Vector2F(Single.Parse(args[0]), Single.Parse(args[1]));
+				defaultDrawOffset = new Point2I(Int32.Parse(args[0]), Int32.Parse(args[1]));
 		}
-
+			
 		// Define a new sprite in the sheet.
-		// @sprite [name] [frameX] [frameY] [frameWidth] [frameHeight] [offsetX] [offsetY] [sourceWidth] [sourceHeight] [originX] [originY]
-		// origin can be [x] [y], center, or default
+		// @sprite [spriteName]
 		else if (command == "sprite") {
-			Vector2F origin = defaultOrigin;
-			if (args.Count >= 10 && args[9] != "default") {
-				if (args[9] == "center")
-					origin = new Vector2F(Single.Parse(args[3]), Single.Parse(args[4])) / 2.0f;
-				else if (args.Count >= 11)
-					origin = new Vector2F(Single.Parse(args[9]), Single.Parse(args[10]));
-			}
-			else if (defaultOriginCenter)  {
-				origin = new Vector2F(Single.Parse(args[3]), Single.Parse(args[4])) / 2.0f;
-			}
-
-			sheet.AddSprite(args[0],  // Name
-				Int32.Parse(args[1]), // Frame X
-				Int32.Parse(args[2]), // Frame Y
-				Int32.Parse(args[3]), // Frame Width
-				Int32.Parse(args[4]), // Frame Height
-				Int32.Parse(args[5]), // Offset X
-				Int32.Parse(args[6]), // Offset Y
-				Int32.Parse(args[7]), // Source Width
-				Int32.Parse(args[8]), // Source Height
-				origin.X, // Origin X
-				origin.Y  // Origin Y
-			);
+			sprite = null;
+			spriteName = args[0];
 		}
 
-		// Define a new sprite in the sheet from a grid.
-		// @gridsprite [locX] [locY] [name]
-		else if (command == "gridsprite") {
-			sheet.AddSprite(args[2],  // Name
-				grid.offsetX + (grid.spriteWidth  + grid.spacingX) * Int32.Parse(args[0]), // Frame X
-				grid.offsetY + (grid.spriteHeight + grid.spacingY) * Int32.Parse(args[1]), // Frame Y
-				grid.spriteWidth, grid.spriteHeight, 0, 0,
-				grid.spriteWidth, grid.spriteHeight, 0, 0
-			);
+		// Define the next part of the sprite.
+		// @next [x_index] [y_index] [offset_x] [offset_y]
+		// draw offset can be [x] [y], center, or default
+		else if (command == "next") {
+			Point2I drawOffset = defaultDrawOffset;
+			if (args.Count >= 3 && args[2] != "default") {
+				if (args[2] == "center")
+					drawOffset = new Point2I(sheet.CellSize.X, sheet.CellSize.Y) / 2;
+				else if (args.Count >= 4)
+					drawOffset = new Point2I(Int32.Parse(args[2]), Int32.Parse(args[3]));
+			}
+			else if (defaultDrawOffsetCenter) {
+				drawOffset = new Point2I(sheet.CellSize.X, sheet.CellSize.Y) / 2;
+			}
+
+			if (sprite == null) {
+				if (spriteName != "") {
+					sprite = new Sprite(sheet, new Point2I(Int32.Parse(args[0]), Int32.Parse(args[1])), drawOffset);
+					Resources.AddSprite(args[0], sprite);
+				}
+			}
+			else {
+				sprite.NextPart = new Sprite(sheet, new Point2I(Int32.Parse(args[0]), Int32.Parse(args[1])), drawOffset);
+				sprite = sprite.NextPart;
+			}
 		}
 
 		// Invalid command
@@ -182,6 +175,5 @@ public class SpriteSheetSR : ScriptReader {
 		return true;
 	}
 
-	#endregion
 }
 } // end namespace

@@ -54,6 +54,9 @@ namespace ZeldaOracle.Game.Tiles {
 
 		private Point2I			tileSheetLoc;	// TODO: this doesn't mean anything yet
 		private Tileset			tileset;
+		private Point2I			moveDirection;
+		private bool			isMoving;
+		private float			movementSpeed;
 
 
 		//-----------------------------------------------------------------------------
@@ -68,7 +71,7 @@ namespace ZeldaOracle.Game.Tiles {
 			flags			= TileFlags.Default;
 			sprite			= null;
 			animationPlayer	= new AnimationPlayer();
-
+			isMoving		= false;
 		}
 		
 		public Tile(TileData data, int x, int y, int layer) :
@@ -97,10 +100,12 @@ namespace ZeldaOracle.Game.Tiles {
 		// Interaction
 		//-----------------------------------------------------------------------------
 		
-		public bool Push(int direction) {
-			Point2I newLocation = location + Directions.ToPoint(direction);
+		public bool Push(int direction, float movementSpeed) {
+			if (isMoving)
+				return false;
 
 			// Make sure there are no obstructions.
+			Point2I newLocation = location + Directions.ToPoint(direction);
 			int newLayer = -1;
 			for (int i = 0; i < RoomControl.Room.LayerCount; i++) {
 				Tile t = RoomControl.GetTile(newLocation.X, newLocation.Y, i);
@@ -115,6 +120,10 @@ namespace ZeldaOracle.Game.Tiles {
 				return false;
 
 			// Move the tile to the new location.
+			isMoving = true;
+			this.movementSpeed = movementSpeed;
+			moveDirection = Directions.ToPoint(direction);
+			offset  = -Directions.ToVector(direction) * GameSettings.TILE_SIZE;
 			RoomControl.MoveTile(this, newLocation, newLayer);
 			return true;
 		}
@@ -125,6 +134,15 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public void Update(float timeDelta) {
+			if (isMoving) {
+				if (offset.LengthSquared > 0.0f) {
+					offset += (Vector2F) moveDirection * movementSpeed;
+					if (offset.LengthSquared == 0.0f) {
+						offset = Vector2F.Zero;
+						isMoving = false;
+					}
+				}
+			}
 			animationPlayer.Update(timeDelta);
 		}
 
@@ -169,6 +187,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 			return tile;
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -242,6 +261,10 @@ namespace ZeldaOracle.Game.Tiles {
 		public Point2I TileSheetLocation {
 			get { return tileSheetLoc; }
 			set { tileSheetLoc = value; }
+		}
+
+		public bool IsMoving {
+			get { return isMoving; }
 		}
 	}
 }
