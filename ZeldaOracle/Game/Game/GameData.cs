@@ -71,6 +71,7 @@ class GameData {
 		// Loads the images.
 		private static void LoadImages() {
 
+			Resources.LoadImage("Images/UI/menu_weapons_b");
 	}
 
 		//-----------------------------------------------------------------------------

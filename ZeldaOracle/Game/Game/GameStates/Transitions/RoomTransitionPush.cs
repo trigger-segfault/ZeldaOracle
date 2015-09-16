@@ -12,7 +12,7 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.GameStates.Transitions {
 	
-	public class TransitionPush : RoomTransition {
+	public class RoomTransitionPush : RoomTransition {
 		private const int	TRANSITION_DELAY			= 8;		// Ticks
 		private const int	TRANSITION_SPEED			= 4;		// Pixels per tick
 		private const float	TRANSITION_PLAYER_HSPEED	= 0.38f;	// Pixels per tick
@@ -27,7 +27,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public TransitionPush(RoomControl roomOld, RoomControl roomNew, int direction) :
+		public RoomTransitionPush(RoomControl roomOld, RoomControl roomNew, int direction) :
 			base(roomOld, roomNew)
 		{
 			this.direction = direction;

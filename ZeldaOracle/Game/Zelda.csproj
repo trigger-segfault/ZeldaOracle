@@ -182,6 +182,8 @@
     <Compile Include="Common\Translation\FormatCodes.cs" />
     <Compile Include="Common\Translation\WrappedLetterString.cs" />
     <Compile Include="Game\Control\HUD.cs" />
+    <Compile Include="Game\Control\Menus\Menu.cs" />
+    <Compile Include="Game\Control\Menus\MenuInventory.cs" />
     <Compile Include="Game\Control\Message.cs" />
     <Compile Include="Game\Control\RoomControl.cs" />
     <Compile Include="Game\Entities\CollisionInfo.cs" />
@@ -231,9 +233,10 @@
     <Compile Include="Game\GameStates\GameStateQueue.cs" />
     <Compile Include="Game\GameStates\GameStateStack.cs" />
     <Compile Include="Game\GameStates\StateDummy.cs" />
-    <Compile Include="Game\GameStates\StateScreenFade.cs" />
+    <Compile Include="Game\GameStates\Transitions\MenuTransitionPush.cs" />
+    <Compile Include="Game\GameStates\Transitions\TransitionFade.cs" />
     <Compile Include="Game\GameStates\Transitions\RoomTransition.cs" />
-    <Compile Include="Game\GameStates\Transitions\TransitionPush.cs" />
+    <Compile Include="Game\GameStates\Transitions\RoomTransitionPush.cs" />
     <Compile Include="Game\Items\Ammo.cs" />
     <Compile Include="Game\Items\Equipment\ItemBombBag.cs" />
     <Compile Include="Game\Items\Equipment\ItemWallet.cs" />
@@ -299,7 +302,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Editor\" />
-    <Folder Include="Game\Control\Menu\" />
     <Folder Include="Game\Items\Ammo\" />
     <Folder Include="Game\Items\KeyItems\" />
   </ItemGroup>

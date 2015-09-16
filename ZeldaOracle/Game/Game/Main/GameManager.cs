@@ -35,6 +35,7 @@ using Playlist		= ZeldaOracle.Common.Audio.Playlist;
 
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Common.Translation;
+using ZeldaOracle.Game.Control.Menus;
 
 
 namespace ZeldaOracle.Game.Main {
@@ -48,6 +49,9 @@ public class GameManager {
 	private GameStateStack	gameStateStack;
 	private HUD				hud;
 	private int				elapsedTicks;		// The number of ticks since the start of the game.
+
+	public MenuInventory menu1;
+	public MenuInventory menu2;
 
 
 	//-----------------------------------------------------------------------------
@@ -100,6 +104,11 @@ public class GameManager {
 		gameStateStack.Begin(this);
 
 		roomControl.BeginTestWorld();
+
+		menu1 = new MenuInventory(this);
+		menu2 = new MenuInventory(this);
+		menu1.NextMenu = menu2;
+		menu2.NextMenu = menu1;
 	}
 
 	// Called to unload game manager content.
@@ -192,10 +201,10 @@ public class GameManager {
 		
 		// DEBUG: Fade the screen out and in.
 		if (Keyboard.IsKeyPressed(Keys.F)) {
-			QueueGameStates(
+			/*QueueGameStates(
 				new StateScreenFade(Color.Black, 30, FadeType.FadeOut),
 				new StateScreenFade(Color.Black, 30, FadeType.FadeIn)
-			);
+			);*/
 		}
 		if (Keyboard.IsKeyPressed(Keys.G)) {
 			Message message = new Message("I was a <red>hero<red> to broken robots 'cause I was one of them, but how can I sing about being damaged if I'm not?<p> That's like <green>Christina Aguilera<green> singing Spanish. Ooh, wait! That's it! I'll fake it!");
@@ -318,6 +327,9 @@ public class GameManager {
 
 	public HUD HUD {
 		get { return hud; }
+	}
+	public RoomControl RoomControl {
+		get { return roomControl; }
 	}
 
 	public int ElapsedTicks {
