@@ -13,8 +13,6 @@ using ZeldaOracle.Game.Entities.Players;
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemBow : Item {
 
-		private int timer;
-
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -33,33 +31,18 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		// Called when the item is switched to.
-		public override void OnStart() {
-			timer = 0;
-		}
-
-		// Called when the item is put away.
-		public override void OnEnd() {
-
-		}
-
-		// Immediately interrupt this item (ex: if the player falls in a hole).
-		public override void Interrupt() {
-
-		}
-
 		// Called when the items button is pressed (A or B).
 		public override void OnButtonPress() {
-			// Shoot!
+			// Shoot an arrow!
 			
 			Projectile projectile = new Projectile();
 				
 			// General
-			projectile.Position			= new Vector2F(Player.X, Player.Y - 8) + (Directions.ToVector(Player.Direction) * 8.0f);
-			projectile.Angle			= Directions.ToAngle(player.Direction);
-			//projectile.Physics.Velocity	= Angles.ToVector(Player.Angle) * 3.0f;
-			projectile.Physics.Velocity	= Directions.ToVector(Player.Direction) * 3.0f;
 			projectile.Owner			= Player;
+			projectile.Position			= new Vector2F(Player.X, Player.Y - 8) + (Directions.ToVector(Player.Direction) * 8.0f);
+			projectile.ZPosition		= player.ZPosition;
+			projectile.Angle			= Directions.ToAngle(player.Direction);
+			projectile.Physics.Velocity	= Directions.ToVector(Player.Direction) * 3.0f;
 
 			// Graphics.
 			projectile.Graphics.SubStripIndex = projectile.Angle;
@@ -95,18 +78,6 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 			player.BeginState(new PlayerBusyState(10));
 		}
-		
-		// Update the item.
-		public override void Update() {
-			if (Keyboard.IsKeyPressed(Keys.Z))
-				OnButtonPress();
-			// Update shooting.
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
 
 	}
 }

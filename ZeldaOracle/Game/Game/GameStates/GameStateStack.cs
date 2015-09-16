@@ -104,13 +104,13 @@ namespace ZeldaOracle.Game.GameStates {
 			DeleteInactiveStates();
         }
 
-        public override void Update(float timeDelta) {
+        public override void Update() {
 			DeleteInactiveStates();
 			if (!IsActive)
 				return;
 
 			// Only update the top state.
-			states.Last().Update(timeDelta);
+			states.Last().Update();
 
 			DeleteInactiveStates();
         }

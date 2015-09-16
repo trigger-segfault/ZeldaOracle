@@ -34,9 +34,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			base.Initialize();
 		}
 
-		public override void Update(float ticks) {
+		public override void Update() {
 
-			base.Update(ticks);
+			base.Update();
 
 			// Check if collided.
 			if (physics.IsColliding && eventCollision != null) {

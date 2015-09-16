@@ -73,13 +73,13 @@ namespace ZeldaOracle.Game.Entities {
 		public virtual void Uninitialize() {}
 	
 		// Called every step to update the entity.
-		public virtual void Update(float ticks) {
+		public virtual void Update() {
 			// Update the physics component.
 			if (physics.IsEnabled)
-				physics.Update(ticks);
+				physics.Update();
 
 			// Update the graphics component.
-			graphics.Update(ticks);
+			graphics.Update();
 		}
 
 		// Called every step to draw the entity.

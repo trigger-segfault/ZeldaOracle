@@ -60,10 +60,10 @@ namespace ZeldaOracle.Game.GameStates {
                 End();
         }
 
-        public override void Update(float timeDelta) {
+        public override void Update() {
             if (CurrentState != null)
             {
-                CurrentState.Update(timeDelta);
+                CurrentState.Update();
                 if (!CurrentState.IsActive)
                     NextState();
             }

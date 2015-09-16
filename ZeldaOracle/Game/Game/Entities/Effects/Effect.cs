@@ -45,8 +45,8 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			base.Initialize();
 		}
 
-		public override void Update(float ticks) {
-			base.Update(ticks);
+		public override void Update() {
+			base.Update();
 
 			if (destroyOnAnimationComplete && Graphics.IsAnimationDone)
 				Destroy();

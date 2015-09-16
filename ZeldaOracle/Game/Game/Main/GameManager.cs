@@ -221,7 +221,7 @@ public class GameManager {
 		}*/
 
 		// Update the game-state stack.
-		gameStateStack.Update(1); // 1 tick
+		gameStateStack.Update(); // 1 tick
 	}
 	
 	

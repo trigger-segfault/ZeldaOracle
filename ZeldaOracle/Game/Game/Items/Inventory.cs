@@ -6,8 +6,9 @@ using System.Text;
 namespace ZeldaOracle.Game.Items {
 	public class Inventory {
 
-		private List<Item> items;
-		private List<Ammo> ammo;
+		private List<Item>		items;
+		private List<Ammo>		ammo;
+		private PlayerItem[]	equippedPlayerItems;
 
 
 		//-----------------------------------------------------------------------------
@@ -15,14 +16,26 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 
 		public Inventory() {
-			this.items	= new List<Item>();
-			this.ammo	= new List<Ammo>();
+			items	= new List<Item>();
+			ammo	= new List<Ammo>();
+			equippedPlayerItems = new PlayerItem[2];
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Items
 		//-----------------------------------------------------------------------------
+
+		// Equip a player item into the given slot (slot 0 (A) or 1 (B))
+		public void EquipPlayerItem(PlayerItem item, int slot) {
+			if (item.IsTwoHanded) {
+				equippedPlayerItems[0] = item;
+				equippedPlayerItems[1] = item;
+			}
+			else {
+				equippedPlayerItems[slot] = item;
+			}
+		}
 
 		// Adds the item to the list
 		public void AddItem(Item item) {

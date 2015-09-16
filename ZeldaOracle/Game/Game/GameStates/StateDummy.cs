@@ -13,7 +13,7 @@ namespace ZeldaOracle.Game.GameStates {
 		
 		public override void OnBegin() {}
 		
-		public override void Update(float ticks) {}
+		public override void Update() {}
 		
 		public override void Draw(Graphics2D g) {}
 	}

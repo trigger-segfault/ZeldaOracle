@@ -47,8 +47,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			base.Initialize();
 		}
 
-		public override void Update(float ticks) {
-			base.Update(ticks);
+		public override void Update() {
+			base.Update();
 		}
 
 		public override void Draw(Common.Graphics.Graphics2D g) {

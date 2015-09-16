@@ -68,9 +68,9 @@ namespace ZeldaOracle.Common.Graphics {
 		}
 
 		// Update the animation over the elapsed frames.
-		public void Update(float ticks) {
+		public void Update() {
 			if (isPlaying && subStrip != null) {
-				timer += ticks;
+				timer += 1;
 				
 				if (subStrip.LoopMode == LoopMode.Reset && timer >= subStrip.Duration) {
 					Stop();

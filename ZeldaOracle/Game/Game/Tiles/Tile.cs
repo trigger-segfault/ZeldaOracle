@@ -103,9 +103,13 @@ namespace ZeldaOracle.Game.Tiles {
 		public bool Push(int direction, float movementSpeed) {
 			if (isMoving)
 				return false;
+			
+			// Make sure were not pushing out of bounds.
+			Point2I newLocation = location + Directions.ToPoint(direction);
+			if (!RoomControl.IsTileInBounds(newLocation))
+				return false;
 
 			// Make sure there are no obstructions.
-			Point2I newLocation = location + Directions.ToPoint(direction);
 			int newLayer = -1;
 			for (int i = 0; i < RoomControl.Room.LayerCount; i++) {
 				Tile t = RoomControl.GetTile(newLocation.X, newLocation.Y, i);
@@ -133,7 +137,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Simulation
 		//-----------------------------------------------------------------------------
 
-		public void Update(float timeDelta) {
+		public void Update() {
 			if (isMoving) {
 				if (offset.LengthSquared > 0.0f) {
 					offset += (Vector2F) moveDirection * movementSpeed;
@@ -143,7 +147,7 @@ namespace ZeldaOracle.Game.Tiles {
 					}
 				}
 			}
-			animationPlayer.Update(timeDelta);
+			animationPlayer.Update();
 		}
 
 		public void Draw(Graphics2D g) {

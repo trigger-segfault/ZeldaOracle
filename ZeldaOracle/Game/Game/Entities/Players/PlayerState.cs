@@ -53,5 +53,10 @@ namespace ZeldaOracle.Game.Entities.Players
 			get { return player; }
 			set { player = value; }
 		}
+
+		public bool IsActive {
+			get { return isActive; }
+			set { isActive = value; }
+		}
 	}
 }

@@ -16,16 +16,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 	
 	public class Player : Unit {
 	
-		private Keys[]			moveKeys;
-		private bool[]			moveAxes;
-		private bool			isMoving;
 		private int				direction;
 		private int				angle;
-		private int				pushTimer;
-		private float			moveSpeedScale;
-		private float			moveSpeed;
 		private Item[]			equippedItems; // TODO: move this to somewhere else.
-		private bool			isBusy;
 
 		private PlayerState		state;
 		private PlayerNormalState stateNormal;
@@ -35,33 +28,23 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public Player() {
-			moveKeys = new Keys[4];
-			moveAxes		= new bool[] { false, false };
+		public Player() : base() {
 			direction		= Directions.Down;
 			angle			= Directions.ToAngle(direction);
-			pushTimer		= 0;
-			isMoving		= false;
-			moveSpeed		= GameSettings.PLAYER_MOVE_SPEED;
-			moveSpeedScale	= 1.0f;
 			equippedItems	= new Item[2] { null, null };
-			isBusy			= false;
 
 			// Physics.
 			Physics.CollideWithWorld = true;
 			Physics.HasGravity = true;
-
-			// Controls.
-			moveKeys[Directions.Up]		= Keys.Up;
-			moveKeys[Directions.Down]	= Keys.Down;
-			moveKeys[Directions.Left]	= Keys.Left;
-			moveKeys[Directions.Right]	= Keys.Right;
 
 			// DEBUG: equip a bow item.
 			equippedItems[0] = new ItemBow();
 
 			state = null;
 			stateNormal = new PlayerNormalState();
+			
+
+			Graphics.ShadowDrawOffset = new Point2I(0, -2);
 		}
 
 
@@ -94,12 +77,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 			for (int i = 0; i < equippedItems.Length; i++) {
 				if (equippedItems[i] != null) {
 					equippedItems[i].Player = this;
-					equippedItems[i].Update();
+					if (i == 0 && Controls.A.IsPressed())
+						equippedItems[i].OnButtonPress();
+					else if (i == 1 && Controls.B.IsPressed())
+						equippedItems[i].OnButtonPress();
+					//equippedItems[i].Update();
 				}
 			}
 		}
 
-		public override void Update(float ticks) {
+		public override void Update() {
 
 			// Update the current player state.
 			state.Update();
@@ -107,7 +94,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Graphics.SubStripIndex = direction;
 
 			// Update superclass.
-			base.Update(ticks);
+			base.Update();
 		}
 
 		public override void Draw(Graphics2D g) {
@@ -127,11 +114,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public int Direction {
 			get { return direction; }
 			set { direction = value; }
-		}
-		
-		public bool IsBusy {
-			get { return isBusy; }
-			set { isBusy = value; }
 		}
 		
 		public PlayerNormalState NormalState {

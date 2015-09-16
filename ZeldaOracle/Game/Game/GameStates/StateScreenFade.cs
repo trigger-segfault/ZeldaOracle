@@ -41,8 +41,8 @@ namespace ZeldaOracle.Game.GameStates {
 			timer = 0.0f;
 		}
 
-		public override void Update(float timeDelta) {
-			timer += timeDelta;
+		public override void Update() {
+			timer++;
 			if (timer >= duration)
 				End();
 		}
