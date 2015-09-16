@@ -42,23 +42,23 @@ namespace ZeldaOracle.Game.Items.Equipment {
 		}
 		// Called when the item has been obtained.
 		public override void OnObtained() {
-			inventory.GetAmmo("ammo_bombs").Obtained = true;
-			inventory.GetItem("item_bombs").Obtained = true;
+			inventory.GetAmmo("ammo_bombs").IsObtained = true;
+			inventory.GetItem("item_bombs").IsObtained = true;
 		}
 		// Called when the item has been unobtained.
 		public override void OnUnobtained() {
-			inventory.GetAmmo("ammo_bombs").Obtained = false;
-			inventory.GetItem("item_bombs").Obtained = false;
+			inventory.GetAmmo("ammo_bombs").IsObtained = false;
+			inventory.GetItem("item_bombs").IsObtained = false;
 		}
 		// Called when the item has been stolen.
 		public override void OnStolen() {
-			inventory.GetAmmo("ammo_bombs").Stolen = true;
-			inventory.GetItem("item_bombs").Stolen = true;
+			inventory.GetAmmo("ammo_bombs").IsStolen = true;
+			inventory.GetItem("item_bombs").IsStolen = true;
 		}
 		// Called when the stolen item has been returned.
 		public override void OnReturned() {
-			inventory.GetAmmo("ammo_bombs").Stolen = false;
-			inventory.GetItem("item_bombs").Stolen = false;
+			inventory.GetAmmo("ammo_bombs").IsStolen = false;
+			inventory.GetItem("item_bombs").IsStolen = false;
 		}
 
 	}

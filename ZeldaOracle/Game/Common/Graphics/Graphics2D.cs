@@ -201,23 +201,22 @@ public class Graphics2D {
 	// Sprite drawing
 	//-----------------------------------------------------------------------------
 
-	public void DrawSprite(Sprite sprite, float x, float y) {
-		DrawSprite(sprite, new Vector2F(x, y));
+	public void DrawSprite(Sprite sprite, float x, float y, float depth = 0.0f) {
+		DrawSprite(sprite, new Vector2F(x, y), depth);
 	}
 
-	public void DrawSprite(Sprite sprite, Vector2F position) {
+	public void DrawSprite(Sprite sprite, Vector2F position, float depth = 0.0f) {
 		for (Sprite part = sprite; part != null; part = part.NextPart) {
 			spriteBatch.Draw(part.Image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
-				XnaColor.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.0f);
+				XnaColor.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
 		}
 	}
 
-	public void DrawSprite(Sprite sprite, Rectangle2F destination) {
+	public void DrawSprite(Sprite sprite, Rectangle2F destination, float depth = 0.0f) {
 		for (Sprite part = sprite; part != null; part = part.NextPart) {
 			destination.Point = NewPos(destination.Point) + (Vector2F) part.DrawOffset;
-			spriteBatch.Draw(part.Image, (Rectangle) destination, (Rectangle) part.SourceRect, XnaColor.White);
-			//spriteBatch.Draw(part.Image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
-			//	XnaColor.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.0f);
+			spriteBatch.Draw(part.Image, (Rectangle) destination, (Rectangle) part.SourceRect,
+				XnaColor.White, 0.0f, Vector2.Zero, SpriteEffects.None, depth);
 		}
 	}
 
@@ -226,12 +225,12 @@ public class Graphics2D {
 	//-----------------------------------------------------------------------------
 	
 	// Draw an animation during at the given time stamp and position.
-	public void DrawAnimation(Animation animation, float time, Vector2F position) {
-		DrawAnimation(animation, time, position.X, position.Y);
+	public void DrawAnimation(Animation animation, float time, Vector2F position, float depth = 0.0f) {
+		DrawAnimation(animation, time, position.X, position.Y, depth);
 	}
 
 	// Draw an animation during at the given time stamp and position.
-	public void DrawAnimation(Animation animation, float time, float x, float y) {
+	public void DrawAnimation(Animation animation, float time, float x, float y, float depth = 0.0f) {
 		x = GMath.Round(x); 
 		y = GMath.Round(y);
 
@@ -240,7 +239,7 @@ public class Graphics2D {
 			if (time < frame.StartTime)
 				return;
 			if (time < frame.StartTime + frame.Duration || (time >= animation.Duration && frame.StartTime + frame.Duration == animation.Duration))
-				DrawSprite(frame.Sprite, x, y);
+				DrawSprite(frame.Sprite, x, y, depth);
 		}
 	}
 	

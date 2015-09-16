@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities;
@@ -14,6 +15,8 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Control {
+
+	// TODO: There should be a clas above room control.
 
 	// Handles the main Zelda gameplay within a room.
 	public class RoomControl : GameState {
@@ -45,9 +48,38 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 		// Accessors
 		//-----------------------------------------------------------------------------
+		
+		public void MoveTile(Tile tile, Point2I newLocation, int newLayer) {
+			tiles[tile.Location.X, tile.Location.Y, tile.Layer] = null;
+			tiles[newLocation.X, newLocation.Y, newLayer] = tile;
+			tile.Location = newLocation;
+			tile.Layer = newLayer;
+		}
 
 		public Tile GetTile(int x, int y, int layer) {
 			return tiles[x, y, layer];
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Manipulation
+		//-----------------------------------------------------------------------------
+		
+		// Use this for spawning entites at runtime.
+		public void SpawnEntity(Entity e) {
+			e.Initialize(this);
+			entities.Add(e);
+		}
+		
+		// Use this for placing tiles at runtime.
+		public void PlaceTile(Tile tile, Point2I location, int layer) {
+			PlaceTile(tile, location.X, location.Y, layer);
+		}
+
+		// Use this for placing tiles at runtime.
+		public void PlaceTile(Tile tile, int x, int y, int layer) {
+			tile.Initialize(this);
+			tiles[x, y, layer] = tile;
 		}
 
 
@@ -128,7 +160,11 @@ namespace ZeldaOracle.Game.Control {
 							tiles[x, y, i] = null;
 						}
 						else {
-							Tile t = data.Tileset.CreateTile(data.SheetLocation);
+							Tile t;
+							if (data.Tileset != null)
+								t = data.Tileset.CreateTile(data.SheetLocation);
+							else 
+								t = Tile.CreateTile(data);
 							t.Location = new Point2I(x, y);
 							t.Layer = i;
 							t.Initialize(this);
@@ -154,7 +190,7 @@ namespace ZeldaOracle.Game.Control {
 		
 		public void EnterAdjacentRoom(int direction) {
 			// Find the adjacent room.
-			Point2I relative = Direction.ToPoint(direction);
+			Point2I relative = Directions.ToPoint(direction);
 			Point2I nextLocation = roomLocation + relative;
 			if (!level.ContainsRoom(nextLocation))
 				return;
@@ -200,7 +236,16 @@ namespace ZeldaOracle.Game.Control {
 
 			// Setup the room.
 			roomLocation = new Point2I(2, 1);
-			BeginRoom(level.GetRoom(roomLocation));
+			Room r = level.GetRoom(roomLocation);
+			
+			TileData td = new TileData();
+			td.Sprite = new Sprite(GameData.SHEET_ZONESET_LARGE, 1, 9);
+			td.Flags |= TileFlags.Solid | TileFlags.Movable;
+			td.CollisionModel = GameData.MODEL_BLOCK;
+			
+			r.TileData[4, 4, 1] = td;
+
+			BeginRoom(r);
 		}
 
 		public override void OnBegin() {
@@ -215,19 +260,27 @@ namespace ZeldaOracle.Game.Control {
 			// TODO: Check for opening pause menu or map screens.
 
 			// Update entities.
-			for (int i = 0; i < entities.Count; ++i) {
-				if (entities[i].IsAlive) {
+			int entityCount = entities.Count;
+			for (int i = 0; i < entities.Count; i++) {
+				if (entities[i].IsAlive && i < entityCount) {
 					entities[i].Update(timeDelta);
 				}
+				else if (entities[i].IsAlive && i >= entityCount) {
+					// For entities spawned this frame, only update their graphics component.
+					entities[i].Graphics.Update(timeDelta);
+				}
+			}
+			// Remove destroyed entities.
+			for (int i = 0; i < entities.Count; i++) {
 				if (!entities[i].IsAlive) {
 					entities.RemoveAt(i--);
 				}
 			}
 			
 			// Update tiles.
-			for (int x = 0; x < room.Width; x++) {
-				for (int y = 0; y < room.Height; y++) {
-					for (int i = 0; i < room.LayerCount; i++) {
+			for (int i = 0; i < room.LayerCount; i++) {
+				for (int x = 0; x < room.Width; x++) {
+					for (int y = 0; y < room.Height; y++) {
 						Tile t = tiles[x, y, i];
 						if (t != null)
 							t.Update(timeDelta);
@@ -238,29 +291,31 @@ namespace ZeldaOracle.Game.Control {
 			// Room transitions.
 			if (player.X < 6) {
 				player.X = 6;
-				EnterAdjacentRoom(Direction.Left);
+				EnterAdjacentRoom(Directions.Left);
 			}
 			else if (player.Y < 14) {
 				player.Y = 14;
-				EnterAdjacentRoom(Direction.Up);
+				EnterAdjacentRoom(Directions.Up);
 			}
 			else if (player.X > room.Width * GameSettings.TILE_SIZE - 6) {
 				player.X = room.Width * GameSettings.TILE_SIZE - 6;
-				EnterAdjacentRoom(Direction.Right);
+				EnterAdjacentRoom(Directions.Right);
 			}
 			else if (player.Y > room.Height * GameSettings.TILE_SIZE + 1) {
 				player.Y = room.Height * GameSettings.TILE_SIZE + 1;
-				EnterAdjacentRoom(Direction.Down);
+				EnterAdjacentRoom(Directions.Down);
 			}
 		}
 
 		public override void Draw(Graphics2D g) {
+
+			// Draw the room.
 			g.Translate(0, 16);
 
 			// Draw tiles.
-			for (int x = 0; x < room.Width; x++) {
-				for (int y = 0; y < room.Height; y++) {
-					for (int i = 0; i < room.LayerCount; i++) {
+			for (int i = 0; i < room.LayerCount; i++) {
+				for (int x = 0; x < room.Width; x++) {
+					for (int y = 0; y < room.Height; y++) {
 						Tile t = tiles[x, y, i];
 						if (t != null)
 							t.Draw(g);
@@ -269,15 +324,22 @@ namespace ZeldaOracle.Game.Control {
 			}
 			
 			// Draw entities.
+			DrawMode drawMode = new DrawMode();
+			drawMode.BlendState = BlendState.AlphaBlend;
+			drawMode.SortMode	= SpriteSortMode.BackToFront;
+			drawMode.SamplerState = SamplerState.PointClamp;
+			
+			g.End();
+			g.Begin(drawMode);
 			for (int i = 0; i < entities.Count; ++i) {
 				entities[i].Draw(g);
 			}
 			
-			g.Translate(0, -16);
-			
-			g.ResetTranslation();
-
 			// Draw HUD.
+			drawMode.SortMode = SpriteSortMode.Deferred;
+			g.End();
+			g.Begin(drawMode);
+			g.ResetTranslation();
 			gameManager.HUD.Draw(g);
 		}
 
@@ -304,6 +366,15 @@ namespace ZeldaOracle.Game.Control {
 		// The player entity (NOTE: this can be null)
 		public Player Player {
 			get { return player; }
+		}
+
+		// Get the size of the room in pixels.
+		public Rectangle2I RoomBounds {
+			get { return new Rectangle2I(Point2I.Zero, room.Size * GameSettings.TILE_SIZE); }
+		}
+
+		public List<Entity> Entities {
+			get { return entities; }
 		}
 	}
 }

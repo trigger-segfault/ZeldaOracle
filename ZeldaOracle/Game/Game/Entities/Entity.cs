@@ -16,21 +16,25 @@ namespace ZeldaOracle.Game.Entities {
 	[Flags]
 	public enum EntityFlags {
 		None					= 0,
+		Dead					= 0x2000,	// The entity is dead and no longer exists.
+
+		// Physics
+		DestroyedOutsideRoom	= 0x40,		// The entity is destroyed when it is outside of the room.
+		DestroyedInHoles		= 0x20,		// The entity gets destroyed in holes.
 		Solid					= 0x1,		// Entity is solid.
-		CollideWorld			= 0x2,		// Collide with solids
+		HasGravity				= 0x80,		// The entity is affected by gravity.
 		CollideRoomEdge			= 0x4,		// Colide with the edges of rooms.
 		ReboundSolid			= 0x8,		// Rebound off of solids.
 		ReboundRoomEdge			= 0x10,		// Rebound off of room edges.
-		DestroyedInHoles		= 0x20,		// The entity gets destroyed in holes.
-		DestroyedOutsideRoom	= 0x40,		// The entity is destroyed when it is outside of the room.
-		HasGravity				= 0x80,		// The entity is affected by gravity.
+		CollideWorld			= 0x2,		// Collide with solids
 		Bounces					= 0x100,	// The entity bounces when it falls to the ground.
-		ShadowVisible			= 0x200,	// A shadows is visible for the entity.
-		LedgePassable			= 0x400,	// The entity can pass over ledges.
-		HalfSolidPassable		= 0x800,	// The entity can pass over half-solids.
-		DynamicDepth			= 0x1000,	// The entity has dynamic depth.
-		Dead					= 0x2000,	// The entity is dead and no longer exists.
 		AutoDodge				= 0x4000,	// Will move out of the way when colliding the edges of objects.
+		HalfSolidPassable		= 0x800,	// The entity can pass over half-solids.
+		LedgePassable			= 0x400,	// The entity can pass over ledges.
+
+		// Graphics.
+		DynamicDepth			= 0x1000,	// The entity has dynamic depth.
+		ShadowVisible			= 0x200,	// A shadows is visible for the entity.
 	};
 
 
@@ -39,11 +43,10 @@ namespace ZeldaOracle.Game.Entities {
 
 		private RoomControl			control;
 		private bool				isAlive;
-		protected EntityFlags		flags;
 		protected Vector2F			position;
 		protected float				zPosition;
 		protected PhysicsComponent	physics;
-
+		protected GraphicsComponent	graphics;
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -51,18 +54,11 @@ namespace ZeldaOracle.Game.Entities {
 
 		public Entity() {
 			control		= null;
-			flags		= EntityFlags.None;
 			isAlive		= false;
 			position	= Vector2F.Zero;
 			zPosition	= 0.0f;
 			physics		= new PhysicsComponent(this);
-		}
-
-		// Initializes the entity and sets up containment variables.
-		public void Initialize(RoomControl control) {
-			this.control = control;
-			this.isAlive = true;
-			Initialize();
+			graphics	= new GraphicsComponent(this);
 		}
 
 
@@ -78,14 +74,18 @@ namespace ZeldaOracle.Game.Entities {
 	
 		// Called every step to update the entity.
 		public virtual void Update(float ticks) {
-
 			// Update the physics component.
-			if (physics != null)
+			if (physics.IsEnabled)
 				physics.Update(ticks);
+
+			// Update the graphics component.
+			graphics.Update(ticks);
 		}
 
 		// Called every step to draw the entity.
-		public virtual void Draw(Graphics2D g) {}
+		public virtual void Draw(Graphics2D g) {
+			graphics.Draw(g);
+		}
 
 		// Called when the entity enters the room.
 		public virtual void OnEnterRoom() {}
@@ -93,17 +93,32 @@ namespace ZeldaOracle.Game.Entities {
 		// Called when the entity leaves the room.
 		public virtual void OnLeaveRoom() {}
 		
-
 	
 		//-----------------------------------------------------------------------------
 		// Management
 		//-----------------------------------------------------------------------------
+
+		// Initializes the entity and sets up containment variables.
+		public void Initialize(RoomControl control) {
+			this.control = control;
+			this.isAlive = true;
+			Initialize();
+		}
 
 		public void Destroy() {
 			if (isAlive) {
 				isAlive = false;
 				// TODO: OnDestroy()
 			}
+		}
+
+		public void EnablePhysics(PhysicsFlags flags = PhysicsFlags.None) {
+			physics.IsEnabled = true;
+			physics.Flags |= flags;
+		}
+
+		public void DisablePhysics() {
+			physics.IsEnabled = false;
 		}
 	
 
@@ -130,12 +145,6 @@ namespace ZeldaOracle.Game.Entities {
 		// Returns true if the entity is still alive.
 		public bool IsAlive {
 			get { return isAlive; }
-		}
-	
-		// Gets or sets the flags.
-		public EntityFlags Flags {
-			get { return flags; }
-			set { flags = value; }
 		}
 
 		// Gets or sets the position of the entity.
@@ -165,7 +174,17 @@ namespace ZeldaOracle.Game.Entities {
 		// Gets or sets the entity's physics component.
 		public PhysicsComponent Physics {
 			get { return physics; }
-			set { physics = value; }
+			set { physics = value; physics.Entity = this; }
+		}
+	
+		// Gets or sets the entity's graphics component.
+		public GraphicsComponent Graphics {
+			get { return graphics; }
+			set { graphics = value; graphics.Entity = this; }
+		}
+
+		public bool IsInAir {
+			get { return (zPosition > 0 || (physics.IsEnabled && physics.ZVelocity > 0)); }
 		}
 
 	}

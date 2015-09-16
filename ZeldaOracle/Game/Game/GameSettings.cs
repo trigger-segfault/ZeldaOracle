@@ -4,6 +4,20 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 
+
+/*
+ *	GAME TODO LIST:
+ *		- Sync room animations to a global timer
+ *		- 
+ * 
+ * 
+ *	DEBUG KEYS:
+ *		- F: Play a fade game-state.
+ *		- G: Read text.
+ *		- V: (When reading text) skip to next line.
+ *		- Z: Fire an arrow.
+*/
+
 namespace ZeldaOracle.Game
 {
 	class GameSettings

@@ -132,7 +132,8 @@ namespace ZeldaOracle.Game.Control {
 					break;
 				case TextReaderState.Finished:
 					// TODO: Switch to any key
-					if (Controls.A.IsPressed())
+					if (Controls.A.IsPressed() || Controls.B.IsPressed() ||
+						Controls.Start.IsPressed() || Controls.Select.IsPressed())
 						End();
 					break;
 				}

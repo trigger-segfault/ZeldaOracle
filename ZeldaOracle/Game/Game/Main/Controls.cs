@@ -37,10 +37,10 @@ namespace ZeldaOracle.Game.Main {
 			Controls.right			= new GameControl(Keys.Right);
 			Controls.analogMovement	= new GameControl(Buttons.LeftStick);
 
-			Controls.a				= new GameControl(Keys.V);
-			Controls.b				= new GameControl(Keys.C);
-			Controls.x				= new GameControl(Keys.X);
-			Controls.y				= new GameControl(Keys.Z);
+			Controls.a				= new GameControl(Keys.X);
+			Controls.b				= new GameControl(Keys.Z);
+			Controls.x				= new GameControl(Keys.A);
+			Controls.y				= new GameControl(Keys.S);
 
 			Controls.start			= new GameControl(Keys.Enter);
 			Controls.select			= new GameControl(Keys.Backslash);

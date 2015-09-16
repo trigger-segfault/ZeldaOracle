@@ -7,12 +7,15 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Game.Main;
+using ZeldaOracle.Game.Entities.Effects;
+using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Items;
+using ZeldaOracle.Game.Items.Weapons;
 
 namespace ZeldaOracle.Game.Entities.Players {
 	
 	public class Player : Unit {
-
-		private AnimationPlayer	animationPlayer;		
+	
 		private Keys[]			moveKeys;
 		private bool[]			moveAxes;
 		private bool			isMoving;
@@ -21,6 +24,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private int				pushTimer;
 		private float			moveSpeedScale;
 		private float			moveSpeed;
+		private Item[]			equippedItems; // TODO: move this to somewhere else.
+		private bool			isBusy;
+
+		private PlayerState		state;
+		private PlayerNormalState stateNormal;
 
 
 		//-----------------------------------------------------------------------------
@@ -28,47 +36,46 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 
 		public Player() {
-			moveKeys		= new Keys[4];
+			moveKeys = new Keys[4];
 			moveAxes		= new bool[] { false, false };
-			animationPlayer = new AnimationPlayer();
-			direction		= Direction.Down;
+			direction		= Directions.Down;
+			angle			= Directions.ToAngle(direction);
 			pushTimer		= 0;
 			isMoving		= false;
 			moveSpeed		= GameSettings.PLAYER_MOVE_SPEED;
 			moveSpeedScale	= 1.0f;
-			flags			|= EntityFlags.CollideWorld | EntityFlags.HasGravity;
+			equippedItems	= new Item[2] { null, null };
+			isBusy			= false;
 
-			moveKeys[Direction.Up]		= Keys.Up;
-			moveKeys[Direction.Down]	= Keys.Down;
-			moveKeys[Direction.Left]	= Keys.Left;
-			moveKeys[Direction.Right]	= Keys.Right;
+			// Physics.
+			Physics.CollideWithWorld = true;
+			Physics.HasGravity = true;
+
+			// Controls.
+			moveKeys[Directions.Up]		= Keys.Up;
+			moveKeys[Directions.Down]	= Keys.Down;
+			moveKeys[Directions.Left]	= Keys.Left;
+			moveKeys[Directions.Right]	= Keys.Right;
+
+			// DEBUG: equip a bow item.
+			equippedItems[0] = new ItemBow();
+
+			state = null;
+			stateNormal = new PlayerNormalState();
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Movement
+		// Player states
 		//-----------------------------------------------------------------------------
-		
-		private bool CheckMoveKey(int dir) {
-			
-			if (Keyboard.IsKeyDown(moveKeys[dir])) {
-				isMoving = true;
-			
-				if (!moveAxes[(dir + 1) % 2])
-					moveAxes[dir % 2] = true;
-				if (moveAxes[dir % 2]) {
-					angle = dir * 2;
-					direction   = dir;
-			
-					if (Keyboard.IsKeyDown(moveKeys[(dir + 1) % 4])) 
-						angle = (angle + 1) % 8;
-					if (Keyboard.IsKeyDown(moveKeys[(dir + 3) % 4]))
-						angle = (angle + 7) % 8;
-				}
-				return true;
-			}
-			return false;
+
+		public void BeginState(PlayerState state) {
+			if (this.state != null)
+				this.state.End();
+			state.Begin(this);
+			this.state = state;
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
@@ -78,53 +85,57 @@ namespace ZeldaOracle.Game.Entities.Players {
 			base.Initialize();
 
 			// Play the default player animation.
-			animationPlayer.Play(GameData.ANIM_PLAYER_DEFAULT);
-			animationPlayer.SubStripIndex = 0;
+			Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
+
+			BeginState(stateNormal);
+		}
+
+		public void UpdateEquippedItems() {
+			for (int i = 0; i < equippedItems.Length; i++) {
+				if (equippedItems[i] != null) {
+					equippedItems[i].Player = this;
+					equippedItems[i].Update();
+				}
+			}
 		}
 
 		public override void Update(float ticks) {
-			
-			// DEBUG: Press space to jump.
-			if (Keyboard.IsKeyPressed(Keys.Space))
-				physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
 
-			// Check movement keys.
-			isMoving = false;
-			if (!CheckMoveKey(Direction.Left) && !CheckMoveKey(Direction.Right))
-				moveAxes[0] = false;	// x-axis
-			if (!CheckMoveKey(Direction.Down) && !CheckMoveKey(Direction.Up))
-				moveAxes[1] = false;	// y-axis
+			// Update the current player state.
+			state.Update();
 
-			// Update motion.
-			if (isMoving) {
-				float a = (angle / 8.0f) * (float) GMath.Pi * 2.0f;
-				Vector2F motion = new Vector2F((float) Math.Cos(a), -(float) Math.Sin(a));
-				physics.Velocity = motion * moveSpeed;
-				animationPlayer.IsPlaying = true;
-			}
-			else {
-				physics.Velocity = Vector2F.Zero;
-			}
-
-			// Update animations
-			if (isMoving && !animationPlayer.IsPlaying)
-				animationPlayer.Play();
-			if (!isMoving && animationPlayer.IsPlaying)
-				animationPlayer.Stop();
-
-			animationPlayer.SubStripIndex = direction;
-			animationPlayer.Update(ticks);
+			Graphics.SubStripIndex = direction;
 
 			// Update superclass.
 			base.Update(ticks);
 		}
 
-		public override void Draw(Common.Graphics.Graphics2D g) {
-			if (zPosition > 1) {
-				g.DrawSprite(GameData.SPR_SHADOW, position.X, position.Y - 3);
-			}
-			g.DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, position.X, position.Y - zPosition);
+		public override void Draw(Graphics2D g) {
+			base.Draw(g);
+		}
 
+		
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public int Angle {
+			get { return angle; }
+			set { angle = value; }
+		}
+		
+		public int Direction {
+			get { return direction; }
+			set { direction = value; }
+		}
+		
+		public bool IsBusy {
+			get { return isBusy; }
+			set { isBusy = value; }
+		}
+		
+		public PlayerNormalState NormalState {
+			get { return stateNormal; }
 		}
 	}
 }

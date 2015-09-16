@@ -51,14 +51,14 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			int maxDistance = GameSettings.VIEW_SIZE[direction % 2];
 
 			float playerSpeed = TRANSITION_PLAYER_HSPEED;
-			if (direction % 2 == 1)
+			if (Directions.IsVertical(direction))
 				playerSpeed = TRANSITION_PLAYER_VSPEED;
 
 			timer += 1;
 			if (timer > delay) {
 				distance += speed;
 				
-				player.Position += (Vector2F) Direction.ToPoint(direction) * playerSpeed;
+				player.Position += (Vector2F) Directions.ToPoint(direction) * playerSpeed;
 
 				if (distance >= maxDistance) {
 					gameManager.PopGameState();
@@ -70,8 +70,8 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 
 		public override void Draw(Graphics2D g) {
 
-			Point2I panNew = -(Direction.ToPoint(direction) * distance);
-			Point2I panOld = Direction.ToPoint(direction) * GameSettings.VIEW_SIZE;
+			Point2I panNew = -(Directions.ToPoint(direction) * distance);
+			Point2I panOld = Directions.ToPoint(direction) * GameSettings.VIEW_SIZE;
 
 			g.Translate(panNew);
 			roomOld.Draw(g);

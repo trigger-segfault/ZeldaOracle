@@ -38,10 +38,12 @@ namespace ZeldaOracle.Game.Items {
 		public string ID {
 			get { return id; }
 		}
+
 		// Gets the name of the ammo
 		public string Name {
 			get { return name; }
 		}
+
 		// Gets or sets the current amount of the ammo
 		public int Amount {
 			get { return amount; }
@@ -50,6 +52,7 @@ namespace ZeldaOracle.Game.Items {
 					amount = GMath.Clamp(value, 0, maxAmount);
 			}
 		}
+
 		// Gets or sets the max amount of the ammo
 		public int MaxAmount {
 			get { return maxAmount; }
@@ -59,13 +62,15 @@ namespace ZeldaOracle.Game.Items {
 					amount = maxAmount;
 			}
 		}
+
 		// Gets or sets if the ammo has been obtained
-		public bool Obtained {
+		public bool IsObtained {
 			get { return obtained; }
 			set { obtained = value; }
 		}
+
 		// Gets or sets if the ammo has been stolen
-		public bool Stolen {
+		public bool IsStolen {
 			get { return stolen; }
 			set { stolen = value; }
 		}

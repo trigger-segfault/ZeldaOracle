@@ -8,9 +8,11 @@ using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Control;
 
 namespace ZeldaOracle.Game.Items {
-	public abstract class Item {
 
-		protected Inventory inventory;
+	public abstract class PlayerItem {
+		
+		protected Inventory		inventory;
+		protected Player		player;
 
 		protected string		id;
 		protected string[]		name;
@@ -23,15 +25,14 @@ namespace ZeldaOracle.Game.Items {
 		protected bool			isObtained;
 		protected bool			isStolen;
 
-		protected Player		player;
-
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		protected Item() {
+		public PlayerItem() {
 			this.inventory		= null;
+			this.player			= null;
 			this.id				= "";
 			this.name			= new string[] { "" };
 			this.description	= new string[] { "" };

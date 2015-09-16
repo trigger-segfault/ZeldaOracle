@@ -128,6 +128,7 @@
     <None Include="Common\Debug\RadioButtonMenuItem.cs" />
     <None Include="Common\Debug\ToggleMenuItem.cs" />
     <Compile Include="Common\Geometry\Align.cs" />
+    <Compile Include="Common\Geometry\Angle.cs" />
     <Compile Include="Common\Geometry\Direction.cs" />
     <Compile Include="Common\Geometry\GMath.cs" />
     <Compile Include="Common\Geometry\GRandom.cs" />
@@ -183,6 +184,12 @@
     <Compile Include="Game\Control\HUD.cs" />
     <Compile Include="Game\Control\Message.cs" />
     <Compile Include="Game\Control\RoomControl.cs" />
+    <Compile Include="Game\Entities\CollisionInfo.cs" />
+    <Compile Include="Game\Entities\GraphicsComponent.cs" />
+    <Compile Include="Game\Entities\Players\PlayerBusyState.cs" />
+    <Compile Include="Game\Entities\Players\PlayerNormalState.cs" />
+    <Compile Include="Game\Entities\Players\PlayerState.cs" />
+    <Compile Include="Game\Entities\Projectiles\Projectile.cs" />
     <Compile Include="Game\GameStates\StateTextReader.cs" />
     <Compile Include="Game\Control\View.cs" />
     <None Include="Game\Debug\DebugController.cs" />
@@ -229,7 +236,9 @@
     <Compile Include="Game\Items\Equipment\ItemWallet.cs" />
     <Compile Include="Game\Items\Inventory.cs" />
     <Compile Include="Game\Items\Item.cs" />
+    <Compile Include="Game\Items\PlayerItem.cs" />
     <Compile Include="Game\Items\Weapons\ItemBombs.cs" />
+    <Compile Include="Game\Items\Weapons\ItemBow.cs" />
     <Compile Include="Game\Main\Controls.cs" />
     <Compile Include="Game\Main\GameBase.cs" />
     <Compile Include="Game\GameData.cs" />

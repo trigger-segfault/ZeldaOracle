@@ -243,7 +243,7 @@ public class GameManager {
 		g.Clear(Color.Black);
 		gameStateStack.Draw(g);
 		g.End();
-		
+
 		// Draw the buffer to the screen scaled.
 		g.SetRenderTarget(null);
 		g.ResetTranslation();

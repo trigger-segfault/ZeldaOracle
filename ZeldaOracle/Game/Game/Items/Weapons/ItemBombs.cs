@@ -11,7 +11,7 @@ namespace ZeldaOracle.Game.Items {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		protected ItemBombs() : base() {
+		public ItemBombs() : base() {
 			this.id = "item_bombs";
 			this.name = new string[] { "Bombs" };
 			this.description = new string[] { "Very explosive." };
@@ -19,20 +19,26 @@ namespace ZeldaOracle.Game.Items {
 			this.currentAmmo = 0;
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Virtual
 		//-----------------------------------------------------------------------------
 
 		// Called when the item is switched to.
 		public override void OnStart() { }
+
 		// Called when the item is put away.
 		public override void OnEnd() { }
+
 		// Immediately interrupt this item (ex: if link falls in a hole).
 		public override void Interrupt() { }
+
 		// Draws under link's sprite.
 		public override void DrawUnder() { }
+
 		// Draws over link's sprite.
 		public override void DrawOver() { }
+
 		// Called when the item is added to the inventory list
 		public override void OnAdded(Inventory inventory) {
 			base.OnAdded(inventory);
@@ -43,24 +49,30 @@ namespace ZeldaOracle.Game.Items {
 			else
 				inventory.AddAmmo(this.ammo[0]);
 		}
+
 		// Called when the item's level is changed.
 		public override void OnLevelUp() { }
+
 		// Called when the item has been obtained.
 		public override void OnObtained() {
-			inventory.GetItem("item_bomb_bag").Obtained = true;
+			inventory.GetItem("item_bomb_bag").IsObtained = true;
 		}
+
 		// Called when the item has been unobtained.
 		public override void OnUnobtained() {
-			inventory.GetItem("item_bomb_bag").Obtained = false;
+			inventory.GetItem("item_bomb_bag").IsObtained = false;
 		}
+
 		// Called when the item has been stolen.
 		public override void OnStolen() {
-			inventory.GetItem("item_bomb_bag").Stolen = true;
+			inventory.GetItem("item_bomb_bag").IsStolen = true;
 		}
+
 		// Called when the stolen item has been returned.
 		public override void OnReturned() {
-			inventory.GetItem("item_bomb_bag").Stolen = false;
+			inventory.GetItem("item_bomb_bag").IsStolen = false;
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
