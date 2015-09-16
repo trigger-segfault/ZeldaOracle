@@ -25,6 +25,8 @@ namespace ZeldaOracle.Game.Items {
 
 		protected Player		player;
 
+		// Usable when jumping, in minecart,
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor

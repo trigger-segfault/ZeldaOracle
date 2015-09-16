@@ -187,8 +187,11 @@
     <Compile Include="Game\Entities\CollisionInfo.cs" />
     <Compile Include="Game\Entities\GraphicsComponent.cs" />
     <Compile Include="Game\Entities\Players\PlayerBusyState.cs" />
+    <Compile Include="Game\Entities\Players\PlayerJumpState.cs" />
+    <Compile Include="Game\Entities\Players\PlayerMovableState.cs" />
     <Compile Include="Game\Entities\Players\PlayerNormalState.cs" />
     <Compile Include="Game\Entities\Players\PlayerState.cs" />
+    <Compile Include="Game\Entities\Players\PlayerSwimState.cs" />
     <Compile Include="Game\Entities\Projectiles\Projectile.cs" />
     <Compile Include="Game\GameStates\StateTextReader.cs" />
     <Compile Include="Game\Control\View.cs" />

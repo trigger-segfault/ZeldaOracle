@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
+using ZeldaOracle.Game.Tiles;
 
 
 //States:
@@ -35,8 +36,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private int				angle;
 		private Item[]			equippedItems; // TODO: move this to somewhere else.
 
-		private PlayerState		state;
-		private PlayerNormalState stateNormal;
+		private PlayerState			state;
+		private PlayerNormalState	stateNormal;
+		private PlayerJumpState		stateJump;
+		private PlayerSwimState		stateSwim;
+		private bool			syncAnimationWithDirection;
 
 
 		//-----------------------------------------------------------------------------
@@ -47,6 +51,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			direction		= Directions.Down;
 			angle			= Directions.ToAngle(direction);
 			equippedItems	= new Item[2] { null, null };
+			syncAnimationWithDirection		= true;
 
 			// Physics.
 			Physics.CollideWithWorld = true;
@@ -56,8 +61,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 			equippedItems[0] = new ItemBow();
 			equippedItems[1] = new ItemFeather();
 
-			state = null;
-			stateNormal = new PlayerNormalState();
+			state		= null;
+			stateNormal	= new PlayerNormalState();
+			stateJump	= new PlayerJumpState();
+			stateSwim	= new PlayerSwimState();
 			
 
 			Graphics.ShadowDrawOffset = new Point2I(0, -2);
@@ -69,15 +76,45 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 
 		public void Jump() {
-			if (state is PlayerNormalState)
-				((PlayerNormalState) state).Jump();
+			if (state is PlayerNormalState) {
+				BeginState(stateJump);
+			}
+				//((PlayerNormalState) state).Jump();
 		}
 
-		public void BeginState(PlayerState state) {
-			if (this.state != null)
-				this.state.End();
-			state.Begin(this);
-			this.state = state;
+		public void BeginState(PlayerState newState) {
+			if (state != newState) {
+				if (state != null)
+					state.End();
+				newState.Begin(this);
+				state = newState;
+			}
+		}
+
+		private void CheckTiles() {
+			if (IsOnGround) {
+				Point2I origin = (Point2I) position - new Point2I(0, 2);
+				Point2I location = origin / new Point2I(GameSettings.TILE_SIZE, GameSettings.TILE_SIZE);
+				if (!RoomControl.IsTileInBounds(location))
+					return;
+
+				for (int i = 0; i < RoomControl.Room.LayerCount; i++) {
+					Tile tile = RoomControl.GetTile(location, i);
+					if (tile != null) {
+					
+						if (state != stateSwim && tile.Flags.HasFlag(TileFlags.Water)) {
+							BeginState(stateSwim);
+							
+							// Create a splash effect.
+							Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH);
+							splash.Position = position - new Vector2F(0, 4);
+							RoomControl.SpawnEntity(splash);
+
+							return;
+						}
+					}
+				}
+			}
 		}
 
 
@@ -92,6 +129,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
 
 			BeginState(stateNormal);
+			//BeginState(new PlayerSwimState());
 		}
 
 		public void UpdateEquippedItems() {
@@ -109,10 +147,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public override void Update() {
 
+			CheckTiles();
+
 			// Update the current player state.
 			state.Update();
 
-			Graphics.SubStripIndex = direction;
+			if (syncAnimationWithDirection)
+				Graphics.SubStripIndex = direction;
 
 			// Update superclass.
 			base.Update();
@@ -137,8 +178,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 			set { direction = value; }
 		}
 		
+		public bool SyncAnimationWithDirection {
+			get { return syncAnimationWithDirection; }
+			set { syncAnimationWithDirection = value; }
+		}
+		
 		public PlayerNormalState NormalState {
 			get { return stateNormal; }
+		}
+		
+		public PlayerJumpState JumpState {
+			get { return stateJump; }
 		}
 	}
 }

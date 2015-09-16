@@ -299,6 +299,7 @@ namespace ZeldaOracle.Game.Control {
 			}
 
 			// Room transitions.
+			// TODO: Only transition if the correct arrow key is down.
 			if (player.X < 6) {
 				player.X = 6;
 				EnterAdjacentRoom(Directions.Left);

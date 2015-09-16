@@ -74,7 +74,8 @@ namespace ZeldaOracle.Game.Entities
 			// Draw the animation.
 			float depth = 0.6f - 0.3f * (entity.Position.Y / (float) (entity.RoomControl.Room.Height * GameSettings.TILE_SIZE));
 			Vector2F drawPosition = Entity.Position - new Vector2F(0, Entity.ZPosition);
-			g.DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, drawPosition, depth);
+			if (animationPlayer.SubStrip != null)
+				g.DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, drawPosition, depth);
 		}
 
 		

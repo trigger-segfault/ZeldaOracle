@@ -24,6 +24,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		public Effect(Animation animation) {
 			destroyTimer = -1;
 			destroyOnAnimationComplete = true;
+			Graphics.PlayAnimation(animation);
 		}
 
 

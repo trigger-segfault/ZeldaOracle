@@ -35,7 +35,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		NullFlag		= 0x10000,	// This special flags indicates that the tile is NULL.
 
-		Default			= Diggable, // Default tile flags (assumes a typical ground tile).
+		Default			= 0x0, // Default tile flags (assumes a typical ground tile).
 	};
 
 
@@ -165,8 +165,8 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 
 			// DEBUG: Draw the collision model in a transparent red.
-			if (collisionModel != null)
-				g.DrawCollisionModel(collisionModel, Position, Color.Red * 0.5f);
+			//if (collisionModel != null)
+			//	g.DrawCollisionModel(collisionModel, Position, Color.Red * 0.5f);
 		}
 		
 
