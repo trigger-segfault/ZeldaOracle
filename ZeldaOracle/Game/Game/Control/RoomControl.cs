@@ -13,6 +13,7 @@ using ZeldaOracle.Game.GameStates.Transitions;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Game.Control.Menus;
 
 namespace ZeldaOracle.Game.Control {
 
@@ -212,7 +213,7 @@ namespace ZeldaOracle.Game.Control {
 			player.Position -= relative * nextRoom.Size * GameSettings.TILE_SIZE;
 			
 			// Play the transition.
-			TransitionPush transition = new TransitionPush(this, newControl, direction);
+			RoomTransitionPush transition = new RoomTransitionPush(this, newControl, direction);
 			gameManager.PopGameState();
 			gameManager.PushGameState(transition);
 		}
@@ -304,6 +305,13 @@ namespace ZeldaOracle.Game.Control {
 			else if (player.Y > room.Height * GameSettings.TILE_SIZE + 1) {
 				player.Y = room.Height * GameSettings.TILE_SIZE + 1;
 				EnterAdjacentRoom(Directions.Down);
+			}
+
+			if (Controls.Start.IsPressed()) {
+				gameManager.QueueGameStates(
+					new TransitionFade(Color.White, 30, this, gameManager.menu1),
+					gameManager.menu1
+				);
 			}
 		}
 
