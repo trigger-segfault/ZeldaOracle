@@ -187,5 +187,9 @@ namespace ZeldaOracle.Game.Entities {
 			get { return (zPosition > 0 || (physics.IsEnabled && physics.ZVelocity > 0)); }
 		}
 
+		public bool IsOnGround {
+			get { return !IsInAir; }
+		}
+
 	}
 } // End namespace

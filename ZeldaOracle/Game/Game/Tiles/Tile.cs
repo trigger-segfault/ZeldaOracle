@@ -90,11 +90,6 @@ namespace ZeldaOracle.Game.Tiles {
 			this.animationPlayer.Animation = data.Animation;
 		}
 		
-		public void Initialize(RoomControl control) {
-			this.control = control;
-			this.animationPlayer.Play();
-		}
-		
 
 		//-----------------------------------------------------------------------------
 		// Interaction
@@ -136,8 +131,14 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		// Simulation
 		//-----------------------------------------------------------------------------
+		
+		public void Initialize(RoomControl control) {
+			this.control = control;
+			this.animationPlayer.Play();
+		}
 
 		public void Update() {
+			// Update movement (after pushed).
 			if (isMoving) {
 				if (offset.LengthSquared > 0.0f) {
 					offset += (Vector2F) moveDirection * movementSpeed;
@@ -147,6 +148,8 @@ namespace ZeldaOracle.Game.Tiles {
 					}
 				}
 			}
+
+			// Update the animation.
 			animationPlayer.Update();
 		}
 
@@ -161,16 +164,9 @@ namespace ZeldaOracle.Game.Tiles {
 				g.DrawSprite(sprite, Position);
 			}
 
-			/*
 			// DEBUG: Draw the collision model in a transparent red.
-			if (collisionModel != null) {
-				for (int i = 0; i < collisionModel.Boxes.Count; i++) {
-					Rectangle2F r = collisionModel.Boxes[i];
-					r.Point += Position;
-					g.FillRectangle(r, Color.Red * 0.5f);
-				}
-			}
-			*/
+			if (collisionModel != null)
+				g.DrawCollisionModel(collisionModel, Position, Color.Red * 0.5f);
 		}
 		
 

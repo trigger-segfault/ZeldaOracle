@@ -56,6 +56,10 @@ namespace ZeldaOracle.Game.Control {
 			tile.Layer = newLayer;
 		}
 
+		public Tile GetTile(Point2I location, int layer) {
+			return tiles[location.X, location.Y, layer];
+		}
+
 		public Tile GetTile(int x, int y, int layer) {
 			return tiles[x, y, layer];
 		}
@@ -249,7 +253,7 @@ namespace ZeldaOracle.Game.Control {
 			td.Sprite = new Sprite(GameData.SHEET_ZONESET_LARGE, 1, 9);
 			td.Flags |= TileFlags.Solid | TileFlags.Movable;
 			td.CollisionModel = GameData.MODEL_BLOCK;
-			r.TileData[4, 4, 1] = td;
+			r.TileData[3, 5, 1] = td;
 
 			BeginRoom(r);
 		}

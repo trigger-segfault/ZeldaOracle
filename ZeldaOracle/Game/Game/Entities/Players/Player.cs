@@ -12,6 +12,21 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 
+
+//States:
+//	- None (movement, item control)
+//-------------------------------------
+//	- Minecart (item control)
+//	- Carrying Item (movement, throw)
+//	- Swimming (movement, diving)
+//-------------------------------------
+//	- Ledge Jump
+//	- Busy
+//	- [SwitchHook]
+//	- [SwingingItem]
+//	- Die
+
+
 namespace ZeldaOracle.Game.Entities.Players {
 	
 	public class Player : Unit {
@@ -39,6 +54,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// DEBUG: equip a bow item.
 			equippedItems[0] = new ItemBow();
+			equippedItems[1] = new ItemFeather();
 
 			state = null;
 			stateNormal = new PlayerNormalState();
@@ -51,6 +67,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 		// Player states
 		//-----------------------------------------------------------------------------
+
+		public void Jump() {
+			if (state is PlayerNormalState)
+				((PlayerNormalState) state).Jump();
+		}
 
 		public void BeginState(PlayerState state) {
 			if (this.state != null)

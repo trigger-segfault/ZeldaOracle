@@ -9,6 +9,7 @@ using XnaColor		= Microsoft.Xna.Framework.Color;
 
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Content;
+using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Common.Translation;
 
 namespace ZeldaOracle.Common.Graphics {
@@ -307,7 +308,7 @@ public class Graphics2D {
 
 
 	//-----------------------------------------------------------------------------
-	// Vector graphics.
+	// Vector graphics
 	//-----------------------------------------------------------------------------
 
 	// Draws the specified line.
@@ -331,6 +332,17 @@ public class Graphics2D {
 		//DrawImage(white1x1, rect.Center + 0.5, new Vector2D(0.5, 0.5), rect.Size, 0, color, SpriteEffects.None, depth);
 	}
 	
+
+	//-----------------------------------------------------------------------------
+	// Debug drawing
+	//-----------------------------------------------------------------------------
+	
+	// Draw a collision model as a solid color.
+	public void DrawCollisionModel(CollisionModel model, Vector2F position, Color color) {
+		for (int i = 0; i < model.Boxes.Count; i++)
+			FillRectangle(Rectangle2F.Translate(model.Boxes[i], position), color);
+	}
+
 
 	//-----------------------------------------------------------------------------
 	// Misc. Drawing
