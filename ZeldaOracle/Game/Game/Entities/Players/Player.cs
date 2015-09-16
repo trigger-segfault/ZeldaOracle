@@ -11,57 +11,63 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
+using ZeldaOracle.Game.Tiles;
+
+
+//States:
+//	- None (movement, item control)
+//-------------------------------------
+//	- Minecart (item control)
+//	- Carrying Item (movement, throw)
+//	- Swimming (movement, diving)
+//-------------------------------------
+//	- Ledge Jump
+//	- Busy
+//	- [SwitchHook]
+//	- [SwingingItem]
+//	- Die
+
 
 namespace ZeldaOracle.Game.Entities.Players {
 	
 	public class Player : Unit {
 	
-		private Keys[]			moveKeys;
-		private bool[]			moveAxes;
-		private bool			isMoving;
 		private int				direction;
 		private int				angle;
-		private int				pushTimer;
-		private float			moveSpeedScale;
-		private float			moveSpeed;
 		private Item[]			equippedItems; // TODO: move this to somewhere else.
-		private bool			isBusy;
 
-		private PlayerState		state;
-		private PlayerNormalState stateNormal;
+		private PlayerState			state;
+		private PlayerNormalState	stateNormal;
+		private PlayerJumpState		stateJump;
+		private PlayerSwimState		stateSwim;
+		private bool			syncAnimationWithDirection;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public Player() {
-			moveKeys = new Keys[4];
-			moveAxes		= new bool[] { false, false };
+		public Player() : base() {
 			direction		= Directions.Down;
 			angle			= Directions.ToAngle(direction);
-			pushTimer		= 0;
-			isMoving		= false;
-			moveSpeed		= GameSettings.PLAYER_MOVE_SPEED;
-			moveSpeedScale	= 1.0f;
 			equippedItems	= new Item[2] { null, null };
-			isBusy			= false;
+			syncAnimationWithDirection		= true;
 
 			// Physics.
 			Physics.CollideWithWorld = true;
 			Physics.HasGravity = true;
 
-			// Controls.
-			moveKeys[Directions.Up]		= Keys.Up;
-			moveKeys[Directions.Down]	= Keys.Down;
-			moveKeys[Directions.Left]	= Keys.Left;
-			moveKeys[Directions.Right]	= Keys.Right;
-
 			// DEBUG: equip a bow item.
 			equippedItems[0] = new ItemBow();
+			equippedItems[1] = new ItemFeather();
 
-			state = null;
-			stateNormal = new PlayerNormalState();
+			state		= null;
+			stateNormal	= new PlayerNormalState();
+			stateJump	= new PlayerJumpState();
+			stateSwim	= new PlayerSwimState();
+			
+
+			Graphics.ShadowDrawOffset = new Point2I(0, -2);
 		}
 
 
@@ -69,11 +75,46 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Player states
 		//-----------------------------------------------------------------------------
 
-		public void BeginState(PlayerState state) {
-			if (this.state != null)
-				this.state.End();
-			state.Begin(this);
-			this.state = state;
+		public void Jump() {
+			if (state is PlayerNormalState) {
+				BeginState(stateJump);
+			}
+				//((PlayerNormalState) state).Jump();
+		}
+
+		public void BeginState(PlayerState newState) {
+			if (state != newState) {
+				if (state != null)
+					state.End();
+				newState.Begin(this);
+				state = newState;
+			}
+		}
+
+		private void CheckTiles() {
+			if (IsOnGround) {
+				Point2I origin = (Point2I) position - new Point2I(0, 2);
+				Point2I location = origin / new Point2I(GameSettings.TILE_SIZE, GameSettings.TILE_SIZE);
+				if (!RoomControl.IsTileInBounds(location))
+					return;
+
+				for (int i = 0; i < RoomControl.Room.LayerCount; i++) {
+					Tile tile = RoomControl.GetTile(location, i);
+					if (tile != null) {
+					
+						if (state != stateSwim && tile.Flags.HasFlag(TileFlags.Water)) {
+							BeginState(stateSwim);
+							
+							// Create a splash effect.
+							Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH);
+							splash.Position = position - new Vector2F(0, 4);
+							RoomControl.SpawnEntity(splash);
+
+							return;
+						}
+					}
+				}
+			}
 		}
 
 
@@ -88,26 +129,34 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
 
 			BeginState(stateNormal);
+			//BeginState(new PlayerSwimState());
 		}
 
 		public void UpdateEquippedItems() {
 			for (int i = 0; i < equippedItems.Length; i++) {
 				if (equippedItems[i] != null) {
 					equippedItems[i].Player = this;
-					equippedItems[i].Update();
+					if (i == 0 && Controls.A.IsPressed())
+						equippedItems[i].OnButtonPress();
+					else if (i == 1 && Controls.B.IsPressed())
+						equippedItems[i].OnButtonPress();
+					//equippedItems[i].Update();
 				}
 			}
 		}
 
-		public override void Update(float ticks) {
+		public override void Update() {
+
+			CheckTiles();
 
 			// Update the current player state.
 			state.Update();
 
-			Graphics.SubStripIndex = direction;
+			if (syncAnimationWithDirection)
+				Graphics.SubStripIndex = direction;
 
 			// Update superclass.
-			base.Update(ticks);
+			base.Update();
 		}
 
 		public override void Draw(Graphics2D g) {
@@ -129,13 +178,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 			set { direction = value; }
 		}
 		
-		public bool IsBusy {
-			get { return isBusy; }
-			set { isBusy = value; }
+		public bool SyncAnimationWithDirection {
+			get { return syncAnimationWithDirection; }
+			set { syncAnimationWithDirection = value; }
 		}
 		
 		public PlayerNormalState NormalState {
 			get { return stateNormal; }
+		}
+		
+		public PlayerJumpState JumpState {
+			get { return stateJump; }
 		}
 	}
 }

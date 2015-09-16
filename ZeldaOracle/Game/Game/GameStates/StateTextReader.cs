@@ -69,7 +69,7 @@ namespace ZeldaOracle.Game.Control {
 			windowLinesLeft = linesPerWindow;
 		}
 
-		public override void Update(float timeDelta) {
+		public override void Update() {
 			if (timer > 0 && (state != TextReaderState.WritingLine || (!Controls.A.IsPressed() && !Controls.B.IsPressed()))) {
 				timer -= 1;
 			}

@@ -17,7 +17,7 @@ namespace ZeldaOracle.Game.Entities
 		private int				subStripIndex;
 		private bool			isShadowVisible;
 		private bool			hasDynamicDepth;
-
+		private Point2I			shadowDrawOffset;
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -28,6 +28,7 @@ namespace ZeldaOracle.Game.Entities
 			this.animationPlayer	= new AnimationPlayer();
 			this.subStripIndex		= 0;
 			this.isShadowVisible	= true;
+			this.shadowDrawOffset	= Point2I.Zero;
 		}
 		
 
@@ -52,9 +53,9 @@ namespace ZeldaOracle.Game.Entities
 		// Update/Draw
 		//-----------------------------------------------------------------------------
 
-		public void Update(float ticks) {
+		public void Update() {
 			animationPlayer.SubStripIndex = subStripIndex;
-			animationPlayer.Update(ticks);
+			animationPlayer.Update();
 		}
 
 		public void Draw(Graphics2D g) {
@@ -67,13 +68,14 @@ namespace ZeldaOracle.Game.Entities
 			// TODO: Shadow draw offset.
 			if (isShadowVisible && entity.ZPosition > 1) {
 				float shadowDepth = 0.9f;
-				g.DrawSprite(GameData.SPR_SHADOW, Entity.Position.X, Entity.Position.Y, shadowDepth);
+				g.DrawSprite(GameData.SPR_SHADOW, Entity.Position + shadowDrawOffset, shadowDepth);
 			}
 
 			// Draw the animation.
 			float depth = 0.6f - 0.3f * (entity.Position.Y / (float) (entity.RoomControl.Room.Height * GameSettings.TILE_SIZE));
 			Vector2F drawPosition = Entity.Position - new Vector2F(0, Entity.ZPosition);
-			g.DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, drawPosition, depth);
+			if (animationPlayer.SubStrip != null)
+				g.DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, drawPosition, depth);
 		}
 
 		
@@ -108,6 +110,11 @@ namespace ZeldaOracle.Game.Entities
 		public AnimationPlayer AnimationPlayer {
 			get { return animationPlayer;  }
 			set { animationPlayer = value; }
+		}
+
+		public Point2I ShadowDrawOffset {
+			get { return shadowDrawOffset;  }
+			set { shadowDrawOffset = value; }
 		}
 	}
 }

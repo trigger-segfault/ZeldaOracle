@@ -267,6 +267,10 @@ class GameData {
 			BuildAnim(ANIM_PLAYER_SHIELD_BLOCK)		.AddFrameStrip(6, 0,2, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_HOLD)				.AddFrameStrip(6, 0,5, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_PUSH)				.AddFrameStrip(6, 0,6, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
+
+			BuildAnim(ANIM_PLAYER_SWIM)				.AddFrameStrip(6, 0,13, 2).Offset(-8, -16 + 2).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_DIVE)				.AddFrame(16, 0,21, 0,4).AddFrame(16, 1,21, 0,4).Offset(-8, -16).MakeDynamic(4, 0,0); // TODO: this shouldn't be dynamic.
+
 			BuildAnim(ANIM_PLAYER_PULL)				.AddFrameStrip(6, 0,7, 2).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_DIG)				.AddFrame(8, 0,9).AddFrame(16, 1,9).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_THROW)			.AddFrame(9, 0,4).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
@@ -275,6 +279,8 @@ class GameData {
 														.AddFrameStrip(6, 2,1, 2).Offset(-8, -16).MakeDynamic(3, 2,0);
 			BuildAnim(ANIM_PLAYER_SHIELD_LARGE_BLOCK)	.AddFrameStrip(6, 0,2, 2).Offset(-8, -16).MakeDynamic(3, 2,0)
 														.CreateSubStrip().AddFrameStrip(6, 2,3, 2).Offset(-8, -16);
+
+
 			BuildAnim(ANIM_PLAYER_JUMP)
 				.AddFrame(9, 0, 11).AddFrame(9, 1, 11).AddFrame(6, 2, 11).AddFrame(6, 1, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
 				.AddFrame(9, 3, 11).AddFrame(9, 4, 11).AddFrame(6, 5, 11).AddFrame(6, 3, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
@@ -294,6 +300,11 @@ class GameData {
 				.AddFrame(1, 4,0, -8,-10).AddPart(1, 5,0, -8,-8).CreateSubStrip()
 				.AddFrame(1, 4,0, -2,-12).AddPart(1, 4,0, -6,-6).CreateSubStrip()
 				.AddFrame(1, 4,0, -8,-8).AddPart(1, 5,0, -8,-10);
+
+			BuildAnim(ANIM_EFFECT_WATER_SPLASH).SetLoopMode(LoopMode.Clamp)
+				.AddFrame(4, 2,2, -8, -11).AddPart(4, 3,2, -8, -11)
+				.AddFrame(4, 2,2, -10, -13).AddPart(4, 3,2, -6, -13)
+				.AddFrame(4, 2,2, -12, -15).AddPart(4, 3,2, -4, -15);
 		}
 
 
@@ -637,7 +648,9 @@ class GameData {
 		public static Animation ANIM_PROJECTILE_PLAYER_ARROW_CRASH	= new Animation();
 	
 	// Effect animations.
-		public static Animation ANIM_EFFECT_DIRT	= new Animation();
+		public static Animation ANIM_EFFECT_DIRT			= new Animation();
+		public static Animation ANIM_EFFECT_WATER_SPLASH	= new Animation();
+		public static Animation ANIM_EFFECT_LAVA_SPLASH		= new Animation();
 	
 
 	//-----------------------------------------------------------------------------

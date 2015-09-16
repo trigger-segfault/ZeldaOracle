@@ -19,6 +19,7 @@ namespace ZeldaOracle.Game.Items {
 		protected string[]		description;
 		protected int			level;
 		protected int			maxLevel;
+		protected bool			isTwoHanded;
 
 		protected int			currentAmmo;
 		protected Ammo[]		ammo;
@@ -42,6 +43,7 @@ namespace ZeldaOracle.Game.Items {
 			this.ammo			= null;
 			this.isObtained		= false;
 			this.isStolen		= false;
+			this.isTwoHanded	= false;
 		}
 
 
@@ -117,6 +119,11 @@ namespace ZeldaOracle.Game.Items {
 		// Gets the description of the item
 		public virtual string Description {
 			get { return description[level]; }
+		}
+
+		// Does the item take up two slots?
+		public bool IsTwoHanded {
+			get { return isTwoHanded; }
 		}
 
 		// Gets the level of the item

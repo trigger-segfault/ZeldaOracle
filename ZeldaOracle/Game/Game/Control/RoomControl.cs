@@ -57,8 +57,18 @@ namespace ZeldaOracle.Game.Control {
 			tile.Layer = newLayer;
 		}
 
+		public Tile GetTile(Point2I location, int layer) {
+			return tiles[location.X, location.Y, layer];
+		}
+
 		public Tile GetTile(int x, int y, int layer) {
 			return tiles[x, y, layer];
+		}
+		
+		public bool IsTileInBounds(Point2I location, int layer = 0) {
+			return (location.X >= 0 && location.X < room.Width &&
+					location.Y >= 0 && location.Y < room.Height &&
+					layer >= 0 && layer < room.LayerCount);
 		}
 
 
@@ -239,12 +249,12 @@ namespace ZeldaOracle.Game.Control {
 			roomLocation = new Point2I(2, 1);
 			Room r = level.GetRoom(roomLocation);
 			
+			// Create a movable block tile.
 			TileData td = new TileData();
 			td.Sprite = new Sprite(GameData.SHEET_ZONESET_LARGE, 1, 9);
 			td.Flags |= TileFlags.Solid | TileFlags.Movable;
 			td.CollisionModel = GameData.MODEL_BLOCK;
-			
-			r.TileData[4, 4, 1] = td;
+			r.TileData[3, 5, 1] = td;
 
 			BeginRoom(r);
 		}
@@ -257,18 +267,18 @@ namespace ZeldaOracle.Game.Control {
 			
 		}
 
-		public override void Update(float timeDelta) {
+		public override void Update() {
 			// TODO: Check for opening pause menu or map screens.
 
 			// Update entities.
 			int entityCount = entities.Count;
 			for (int i = 0; i < entities.Count; i++) {
 				if (entities[i].IsAlive && i < entityCount) {
-					entities[i].Update(timeDelta);
+					entities[i].Update();
 				}
 				else if (entities[i].IsAlive && i >= entityCount) {
 					// For entities spawned this frame, only update their graphics component.
-					entities[i].Graphics.Update(timeDelta);
+					entities[i].Graphics.Update();
 				}
 			}
 			// Remove destroyed entities.
@@ -284,12 +294,13 @@ namespace ZeldaOracle.Game.Control {
 					for (int y = 0; y < room.Height; y++) {
 						Tile t = tiles[x, y, i];
 						if (t != null)
-							t.Update(timeDelta);
+							t.Update();
 					}
 				}
 			}
 
 			// Room transitions.
+			// TODO: Only transition if the correct arrow key is down.
 			if (player.X < 6) {
 				player.X = 6;
 				EnterAdjacentRoom(Directions.Left);

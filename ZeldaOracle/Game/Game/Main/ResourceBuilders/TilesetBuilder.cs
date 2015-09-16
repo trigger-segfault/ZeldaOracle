@@ -29,7 +29,9 @@ namespace ZeldaOracle.Game.Main.ResourceBuilders {
 		//-----------------------------------------------------------------------------
 
 		public TilesetBuilder Begin(int tileX, int tileY) {
-			tileData = new TileData();
+			tileData = tileset.TileData[tileX, tileY];
+			if (tileData == null)
+				tileData = new TileData();
 
 			tileData.SheetLocation = new Point2I(tileX, tileY);
 			tileData.Tileset = tileset;

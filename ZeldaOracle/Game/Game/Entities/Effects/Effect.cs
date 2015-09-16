@@ -24,6 +24,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		public Effect(Animation animation) {
 			destroyTimer = -1;
 			destroyOnAnimationComplete = true;
+			Graphics.PlayAnimation(animation);
 		}
 
 
@@ -45,8 +46,8 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			base.Initialize();
 		}
 
-		public override void Update(float ticks) {
-			base.Update(ticks);
+		public override void Update() {
+			base.Update();
 
 			if (destroyOnAnimationComplete && Graphics.IsAnimationDone)
 				Destroy();

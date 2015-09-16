@@ -15,35 +15,19 @@ using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Players {
-	public class PlayerNormalState : PlayerState {
+	public class PlayerNormalState : PlayerMovableState {
 		
-		private Keys[]	moveKeys;
-		private bool[]	moveAxes;
-		private bool	isMoving;
-		//private int		direction;
-		//private int		angle;
 		private int		pushTimer;
-		private float	moveSpeedScale;
-		private float	moveSpeed;
+		private bool	isOnIce;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public PlayerNormalState() : base() {
-			moveKeys		= new Keys[4];
-			moveAxes		= new bool[] { false, false };
-			pushTimer		= 0;
-			isMoving		= false;
-			moveSpeed		= GameSettings.PLAYER_MOVE_SPEED;
-			moveSpeedScale	= 1.0f;
-
-			// Controls.
-			moveKeys[Directions.Up]		= Keys.Up;
-			moveKeys[Directions.Down]	= Keys.Down;
-			moveKeys[Directions.Left]	= Keys.Left;
-			moveKeys[Directions.Right]	= Keys.Right;
+		public PlayerNormalState() {
+			pushTimer	= 0;
+			isOnIce		= false;
 		}
 		
 		
@@ -51,43 +35,37 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Internal
 		//-----------------------------------------------------------------------------
 
-		public void UpdateMoveControls() {
-			// Check movement keys.
-			isMoving = false;
-			if (!CheckMoveKey(Directions.Left) && !CheckMoveKey(Directions.Right))
-				moveAxes[0] = false;	// x-axis
-			if (!CheckMoveKey(Directions.Down) && !CheckMoveKey(Directions.Up))
-				moveAxes[1] = false;	// y-axis
-			
-			// Update motion.
-			if (isMoving) {
-				float a = (Player.Angle / 8.0f) * (float) GMath.Pi * 2.0f;
-				Vector2F motion = new Vector2F((float) Math.Cos(a), -(float) Math.Sin(a));
-				Player.Physics.Velocity = motion * moveSpeed;
-			}
-			else {
-				Player.Physics.Velocity = Vector2F.Zero;
+		public void Jump() {
+			if (player.IsOnGround) {
+				player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
+				player.BeginState(new PlayerJumpState());
 			}
 		}
-		
-		private bool CheckMoveKey(int dir) {
-			if (Keyboard.IsKeyDown(moveKeys[dir])) {
-				isMoving = true;
-			
-				if (!moveAxes[(dir + 1) % 2])
-					moveAxes[dir % 2] = true;
-				if (moveAxes[dir % 2]) {
-					Player.Angle = dir * 2;
-					Player.Direction = dir;
-			
-					if (Keyboard.IsKeyDown(moveKeys[(dir + 1) % 4])) 
-						Player.Angle = (Player.Angle + 1) % 8;
-					if (Keyboard.IsKeyDown(moveKeys[(dir + 3) % 4]))
-						Player.Angle = (Player.Angle + 7) % 8;
+
+		public void CheckTiles() {
+			isOnIce = false;
+			moveSpeedScale = 1.0f;
+
+			Point2I origin = (Point2I) player.Position - new Point2I(0, 2);
+			Point2I location = origin / new Point2I(GameSettings.TILE_SIZE, GameSettings.TILE_SIZE);
+			if (!player.RoomControl.IsTileInBounds(location))
+				return;
+
+			for (int i = 0; i < player.RoomControl.Room.LayerCount; i++) {
+				Tile tile = player.RoomControl.GetTile(location, i);
+				if (tile != null) {
+					
+					if (tile.Flags.HasFlag(TileFlags.Stairs)) {
+						moveSpeedScale = 0.5f;
+					}
+					if (tile.Flags.HasFlag(TileFlags.Ice)) {
+						isOnIce = true;
+					}
 				}
-				return true;
 			}
-			return false;
+
+			isSlippery = isOnIce;
 		}
 
 
@@ -96,32 +74,44 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin() {
-			pushTimer		= 0;
-			isMoving		= false;
-			player.Angle	= Directions.ToAngle(player.Direction);
+			base.OnBegin();
+
+			pushTimer	= 0;
+			isOnIce		= false;
+			
+			// Movement settings.
+			allowMovementControl	= true;
+			moveSpeed				= 1.0f;
+			moveSpeedScale			= 1.0f;
+			isSlippery				= false;
+			acceleration			= 0.1f;
+			deceleration			= 0.05f;
+			minSpeed				= 0.05f;
+			autoAccelerate			= false;
+			directionSnapCount		= 16;
+
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
 		}
 		
 		public override void OnEnd() {
 			pushTimer		= 0;
-			isMoving		= false;
-			player.Angle	= Directions.ToAngle(player.Direction);
-			Player.Physics.Velocity = Vector2F.Zero;
 			Player.Graphics.StopAnimation();
+			base.OnEnd();
 		}
 
 		public override void Update() {
-			if (Keyboard.IsKeyPressed(Keys.Space))
-				player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
+			CheckTiles();
+			if (!IsActive)
+				return;
 
-			UpdateMoveControls();
+			base.Update();
 
 			// Update animations
 			if (isMoving && !Player.Graphics.IsAnimationPlaying)
 				Player.Graphics.PlayAnimation();
 			if (!isMoving && Player.Graphics.IsAnimationPlaying)
 				Player.Graphics.StopAnimation();
-
+			
 			// Update pushing.
 			CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
 			if (collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
@@ -136,13 +126,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 				}
 			}
 			else {
-				player.Graphics.AnimationPlayer.Animation = GameData.ANIM_PLAYER_DEFAULT;
 				pushTimer = 0;
+				player.Graphics.AnimationPlayer.Animation = GameData.ANIM_PLAYER_DEFAULT;
 			}
 			
+			// Update items.
 			Player.UpdateEquippedItems();
 
-			player.Physics.SetFlags(PhysicsFlags.CollideRoomEdge, !isMoving || player.IsInAir);
+			//player.Physics.SetFlags(PhysicsFlags.CollideRoomEdge, !isMoving || player.IsInAir);
 		}
 
 
@@ -150,8 +141,5 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public bool IsJumping {
-			get { return player.IsInAir; }
-		}
 	}
 }

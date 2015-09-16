@@ -39,7 +39,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			player = roomOld.Player;
 		}
 
-		public override void Update(float timeDelta) {
+		public override void Update() {
 
 		}
 

@@ -25,7 +25,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 
 		}
 
-		public override void Update(float ticks) {
+		public override void Update() {
 			if (Controls.Start.IsPressed()) {
 				gameManager.PopGameState();
 				//gameManager.PushGameState(new StateScreenFade(Color.White, 30, this, gameManager.RoomControl));

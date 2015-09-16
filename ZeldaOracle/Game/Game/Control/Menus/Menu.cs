@@ -30,7 +30,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 
 		}
 		
-		public override void Update(float ticks) {
+		public override void Update() {
 
 		}
 		

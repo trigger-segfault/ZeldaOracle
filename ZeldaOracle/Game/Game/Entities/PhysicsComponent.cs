@@ -105,15 +105,15 @@ namespace ZeldaOracle.Game.Entities {
 		// Simulation
 		//-----------------------------------------------------------------------------
 
-		public void Update(float ticks) {
+		public void Update() {
 
 			// Handle Z position.
 			if (entity.ZPosition > 0.0f || zVelocity != 0.0f) {
-				entity.ZPosition += zVelocity * ticks;
+				entity.ZPosition += zVelocity;
 
 				// Apply gravity.
 				if (HasFlags(PhysicsFlags.HasGravity))
-					zVelocity -= gravity * ticks;
+					zVelocity -= gravity;
 
 				if (entity.ZPosition <= 0.0f)
 				{
@@ -126,10 +126,10 @@ namespace ZeldaOracle.Game.Entities {
 
 			// Check world collisions.
 			if (HasFlags(PhysicsFlags.CollideWorld))
-				CheckCollisions(ticks);
+				CheckCollisions();
 	
 			// Apply velocity.
-			entity.Position += velocity * ticks;
+			entity.Position += velocity;
 			
 			// Collide with room edges.
 			if (HasFlags(PhysicsFlags.CollideRoomEdge))
@@ -175,7 +175,7 @@ namespace ZeldaOracle.Game.Entities {
 			}
 		}
 
-		public void CheckCollisions(float ticks) {
+		public void CheckCollisions() {
 			Room room = entity.RoomControl.Room;
 
 			// Remove collision state flags.
@@ -190,7 +190,7 @@ namespace ZeldaOracle.Game.Entities {
 			myBox.Inflate(2, 2);
 	
 			Rectangle2F myBox2 = collisionBox;
-			myBox2.Point += entity.Position + (velocity * ticks);
+			myBox2.Point += entity.Position + velocity;
 			myBox2.Inflate(2, 2);
 			myBox = Rectangle2F.Union(myBox, myBox2);
 	
@@ -213,7 +213,7 @@ namespace ZeldaOracle.Game.Entities {
 							Tile t = entity.RoomControl.GetTile(x, y, i);
 
 							if (t != null && t.Flags.HasFlag(TileFlags.Solid) && t.CollisionModel != null) {
-								ResolveCollision(ticks, axis, t, t.Position, t.CollisionModel);
+								ResolveCollision(axis, t, t.Position, t.CollisionModel);
 							}
 						}
 					}
@@ -222,20 +222,20 @@ namespace ZeldaOracle.Game.Entities {
 		}
 		
 
-		private bool ResolveCollision(float ticks, int axis, Tile tile, Vector2F modelPos, CollisionModel model) {
+		private bool ResolveCollision(int axis, Tile tile, Vector2F modelPos, CollisionModel model) {
 			bool collide = false;
 			for (int i = 0; i < model.Boxes.Count; ++i) {
-				if (ResolveCollision(ticks, axis, tile, Rectangle2F.Translate((Rectangle2F) model.Boxes[i], modelPos)))
+				if (ResolveCollision(axis, tile, Rectangle2F.Translate((Rectangle2F) model.Boxes[i], modelPos)))
 					collide = true;
 			}
 			return collide;
 		}
 
-		private bool ResolveCollision(float ticks, int axis, Tile tile, Rectangle2F block) {
+		private bool ResolveCollision(int axis, Tile tile, Rectangle2F block) {
 			bool collide = false;
 
 			if (axis == 0) { // AXIS_0
-				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.X + (velocity.X * ticks), entity.Y);
+				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.X + velocity.X, entity.Y);
 				if (myBox.Intersects(block)) {
 					collide = true;
 					stateFlags |= StateFlags.Colliding;
@@ -254,7 +254,7 @@ namespace ZeldaOracle.Game.Entities {
 				}
 			}
 			else if (axis == 1) { // AXIS_Y
-				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position + (velocity * ticks));
+				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position + velocity);
 				if (myBox.Intersects(block)) {
 					collide = true;
 					stateFlags |= StateFlags.Colliding;

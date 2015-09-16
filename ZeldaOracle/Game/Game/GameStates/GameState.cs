@@ -31,7 +31,7 @@ namespace ZeldaOracle.Game.GameStates {
 
 		public virtual void OnEnd() {}
 
-		public virtual void Update(float timeDelta) {}
+		public virtual void Update() {}
 
 		public virtual void Draw(Graphics2D g) {}
 

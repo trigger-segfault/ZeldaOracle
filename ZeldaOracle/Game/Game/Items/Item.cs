@@ -25,6 +25,8 @@ namespace ZeldaOracle.Game.Items {
 
 		protected Player		player;
 
+		// Usable when jumping, in minecart,
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -57,7 +59,7 @@ namespace ZeldaOracle.Game.Items {
 		// Immediately interrupt this item (ex: if the player falls in a hole).
 		public virtual void Interrupt() { }
 
-		// Called when the items button is pressed (A or B)
+		// Called when the items button is pressed (A or B).
 		public virtual void OnButtonPress() {}
 		
 		// Update the item.

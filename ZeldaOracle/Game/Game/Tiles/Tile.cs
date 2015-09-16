@@ -35,7 +35,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		NullFlag		= 0x10000,	// This special flags indicates that the tile is NULL.
 
-		Default			= Diggable, // Default tile flags (assumes a typical ground tile).
+		Default			= 0x0, // Default tile flags (assumes a typical ground tile).
 	};
 
 
@@ -90,11 +90,6 @@ namespace ZeldaOracle.Game.Tiles {
 			this.animationPlayer.Animation = data.Animation;
 		}
 		
-		public void Initialize(RoomControl control) {
-			this.control = control;
-			this.animationPlayer.Play();
-		}
-		
 
 		//-----------------------------------------------------------------------------
 		// Interaction
@@ -103,9 +98,13 @@ namespace ZeldaOracle.Game.Tiles {
 		public bool Push(int direction, float movementSpeed) {
 			if (isMoving)
 				return false;
+			
+			// Make sure were not pushing out of bounds.
+			Point2I newLocation = location + Directions.ToPoint(direction);
+			if (!RoomControl.IsTileInBounds(newLocation))
+				return false;
 
 			// Make sure there are no obstructions.
-			Point2I newLocation = location + Directions.ToPoint(direction);
 			int newLayer = -1;
 			for (int i = 0; i < RoomControl.Room.LayerCount; i++) {
 				Tile t = RoomControl.GetTile(newLocation.X, newLocation.Y, i);
@@ -132,8 +131,14 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		// Simulation
 		//-----------------------------------------------------------------------------
+		
+		public void Initialize(RoomControl control) {
+			this.control = control;
+			this.animationPlayer.Play();
+		}
 
-		public void Update(float timeDelta) {
+		public void Update() {
+			// Update movement (after pushed).
 			if (isMoving) {
 				if (offset.LengthSquared > 0.0f) {
 					offset += (Vector2F) moveDirection * movementSpeed;
@@ -143,7 +148,9 @@ namespace ZeldaOracle.Game.Tiles {
 					}
 				}
 			}
-			animationPlayer.Update(timeDelta);
+
+			// Update the animation.
+			animationPlayer.Update();
 		}
 
 		public void Draw(Graphics2D g) {
@@ -157,16 +164,9 @@ namespace ZeldaOracle.Game.Tiles {
 				g.DrawSprite(sprite, Position);
 			}
 
-			/*
 			// DEBUG: Draw the collision model in a transparent red.
-			if (collisionModel != null) {
-				for (int i = 0; i < collisionModel.Boxes.Count; i++) {
-					Rectangle2F r = collisionModel.Boxes[i];
-					r.Point += Position;
-					g.FillRectangle(r, Color.Red * 0.5f);
-				}
-			}
-			*/
+			//if (collisionModel != null)
+			//	g.DrawCollisionModel(collisionModel, Position, Color.Red * 0.5f);
 		}
 		
 

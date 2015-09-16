@@ -48,6 +48,7 @@ public class GameManager {
 	private RoomControl		roomControl;		// TODO: replace this with a game-state stack
 	private GameStateStack	gameStateStack;
 	private HUD				hud;
+	private int				elapsedTicks;		// The number of ticks since the start of the game.
 
 	public MenuInventory menu1;
 	public MenuInventory menu2;
@@ -72,6 +73,8 @@ public class GameManager {
 	// Initializes the game manager.
 	public void Initialize(GameBase gameBase) {
 		this.gameBase = gameBase;
+
+		elapsedTicks = 0;
 
 		hud = new HUD(this);
 
@@ -230,7 +233,8 @@ public class GameManager {
 		}*/
 
 		// Update the game-state stack.
-		gameStateStack.Update(1); // 1 tick
+		gameStateStack.Update();
+		elapsedTicks++;
 	}
 	
 	
@@ -326,6 +330,10 @@ public class GameManager {
 	}
 	public RoomControl RoomControl {
 		get { return roomControl; }
+	}
+
+	public int ElapsedTicks {
+		get { return elapsedTicks; }
 	}
 
 }
