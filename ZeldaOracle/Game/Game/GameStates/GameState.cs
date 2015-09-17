@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.GameStates {
@@ -73,6 +74,10 @@ namespace ZeldaOracle.Game.GameStates {
 		public GameManager GameManager {
 			get { return gameManager; }
 			set { gameManager = value; }
+		}
+
+		public GameControl GameControl {
+			get { return gameManager.GameControl; }
 		}
 	}
 }

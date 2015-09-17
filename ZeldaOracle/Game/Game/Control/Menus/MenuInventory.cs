@@ -27,12 +27,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 
 		public override void Update() {
 			if (Controls.Start.IsPressed()) {
-				gameManager.PopGameState();
-				//gameManager.PushGameState(new StateScreenFade(Color.White, 30, this, gameManager.RoomControl));
-				gameManager.QueueGameStates(
-					new TransitionFade(Color.White, 30, this, gameManager.RoomControl),
-					gameManager.RoomControl
-				);
+				GameControl.CloseMenu(this);
 			}
 			if (Controls.Select.IsPressed()) {
 				gameManager.PopGameState();
@@ -44,7 +39,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 			g.Translate(0, 16);
 			g.DrawImage(background, Point2I.Zero);
 			g.ResetTranslation();
-			gameManager.HUD.Draw(g);
+			GameControl.HUD.Draw(g, true);
 		}
 
 	}

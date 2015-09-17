@@ -94,11 +94,11 @@ public class SpriteSheetSR : ScriptReader {
 		if (command == "spritesheet") {
 			Image image = null;
 			if (args[0].EndsWith(".png")) {
-				image = Resources.LoadImageFromFile(Resources.SpriteSheetDirectory + args[0]);
+				image = Resources.LoadImageFromFile(Resources.ImageDirectory + args[0]);
 				args[0] = args[0].Substring(0, args[0].LastIndexOf('.'));
 			}
 			else {
-				image = Resources.LoadImage(Resources.SpriteSheetDirectory + args[0]);
+				image = Resources.LoadImage(Resources.ImageDirectory + args[0]);
 			}
 			sheet = new SpriteSheet(image);
 			finalSheet = sheet;

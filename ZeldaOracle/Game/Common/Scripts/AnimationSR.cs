@@ -65,14 +65,6 @@ public class AnimationSR : ScriptReader {
 		// Create a new animation.
 		// @animation [animationName]
 		if (command == "animation") {
-			Image image = null;
-			if (args[0].EndsWith(".png")) {
-				image = Resources.LoadImageFromFile(Resources.FontDirectory + args[0]);
-				args[0] = args[0].Substring(0, args[0].LastIndexOf('.'));
-			}
-			else {
-				image = Resources.LoadImage(Resources.FontDirectory + args[0]);
-			}
 			animation = new Animation();
 			finalAnimation = animation;
 			Resources.AddAnimation(args[0], animation);

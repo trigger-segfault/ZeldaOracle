@@ -57,11 +57,11 @@ public class GameFontSR : ScriptReader {
 		if (command == "font") {
 			Image image = null;
 			if (args[0].EndsWith(".png")) {
-				image = Resources.LoadImageFromFile(Resources.FontDirectory + args[0]);
+				image = Resources.LoadImageFromFile(Resources.ImageDirectory + args[0]);
 				args[0] = args[0].Substring(0, args[0].LastIndexOf('.'));
 			}
 			else {
-				image = Resources.LoadImage(Resources.FontDirectory + args[0]);
+				image = Resources.LoadImage(Resources.ImageDirectory + args[0]);
 			}
 			SpriteSheet sheet = new SpriteSheet(image, Point2I.One, Point2I.Zero, Point2I.Zero);
 			font = new GameFont(sheet, 1, 0, 1);

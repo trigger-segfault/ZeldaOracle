@@ -80,6 +80,10 @@
     <None Include="Sounds\sounds.conscript">
       <Name>sounds_script</Name>
     </None>
+    <None Include="SpriteSheets\menu_elements.conscript">
+      <Name>menu_elements</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="SpriteSheets\sheet_debug_menu.conscript">
       <Name>sheet_debug_menu_script</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -176,12 +180,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fonts\font_large.png">
+    <Compile Include="Images\Fonts\font_large.png">
       <Name>font_large</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Fonts\font_small.png">
+    <Compile Include="Images\Fonts\font_small.png">
       <Name>font_small</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -229,6 +233,28 @@
   <ItemGroup>
     <Compile Include="Images\UI\menu_weapons_b.png">
       <Name>menu_weapons_b</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\UI\items_large_light.png">
+      <Name>items_large_light</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\UI\items_small_light.png">
+      <Name>items_small_light</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\UI\menu_large_light.png">
+      <Name>menu_large_light</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\UI\menu_small_light.png">
+      <Name>menu_small_light</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
