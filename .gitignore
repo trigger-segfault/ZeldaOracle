@@ -19,6 +19,8 @@ $RECYCLE.BIN/
 
 # Ignore
 
+*.cachefile
+
 ZeldaOracle/Game/bin
 ZeldaOracle/Game/obj
 
