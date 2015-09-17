@@ -15,7 +15,7 @@ namespace ZeldaOracle.Game.Main {
 		private static GameHotkey down;
 		private static GameHotkey left;
 		private static GameHotkey right;
-		private static GameHotkey analogMovement;
+		private static AnalogStick analogMovement;
 		private static GameHotkey[] arrows;
 
 		private static GameHotkey a;
@@ -38,7 +38,7 @@ namespace ZeldaOracle.Game.Main {
 			Controls.down			= new GameHotkey(Keys.Down);
 			Controls.left			= new GameHotkey(Keys.Left);
 			Controls.right			= new GameHotkey(Keys.Right);
-			Controls.analogMovement	= new GameHotkey(Buttons.LeftStick);
+			Controls.analogMovement	= GamePad.GetStick(Buttons.LeftStick);
 			
 			Controls.arrows = new GameHotkey[4];
 			Controls.arrows[Directions.Up]		= Controls.up;
@@ -65,6 +65,17 @@ namespace ZeldaOracle.Game.Main {
 			return arrows[direction].Button;
 		}
 
+		// Gets the analog direction controls
+		public static bool GetAnalogDirection(int direction) {
+			switch (direction) {
+			case Directions.Right:	return analogMovement.Position.X > 0f;
+			case Directions.Down:	return analogMovement.Position.Y > 0f;
+			case Directions.Left:	return analogMovement.Position.X < 0f;
+			case Directions.Up:		return analogMovement.Position.Y < 0f;
+			}
+			return false;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -88,7 +99,7 @@ namespace ZeldaOracle.Game.Main {
 		}
 		// Gets the analog movement control
 		public static AnalogStick AnalogMovement {
-			get { return analogMovement.Stick; }
+			get { return analogMovement; }
 		}
 
 		// Gets the A button

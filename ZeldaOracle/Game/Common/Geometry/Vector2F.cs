@@ -296,7 +296,7 @@ public struct Vector2F {
 		get {
 			if (X == 0 && Y == 0)
 				return 0.0f;
-			return GMath.Atan2(Y, X);
+			return GMath.Plusdir(GMath.Atan2(Y, X));
 		}
 		set {
 			float length = GMath.Sqrt((X * X) + (Y * Y));
@@ -390,11 +390,11 @@ public struct Vector2F {
 	}
 	/** <summary> Returns the direction from this vector to another. </summary> */
 	public float DirectionTo(float x, float y) {
-		return (new Vector2F(x, y) - this).Direction;
+		return GMath.Plusdir((new Vector2F(x, y) - this).Direction);
 	}
 	/** <summary> Returns the direction from this vector to another. </summary> */
 	public float DirectionTo(Vector2F v) {
-		return (v - this).Direction;
+		return GMath.Plusdir((v - this).Direction);
 	}
 	/** <summary> Returns the angle between this vector and another. </summary> */
 	public float AngleBetween(float x, float y) {
