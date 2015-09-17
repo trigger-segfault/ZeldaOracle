@@ -35,7 +35,8 @@ namespace ZeldaOracle.Game
 		public const float		PLAYER_MOVE_SPEED		= 1;		// Pixels per second.
 		public const float		PLAYER_JUMP_SPEED		= 1.8f;
 		public const float		DEFAULT_GRAVITY			= 0.125f;	// Default gravity acceleration in pixels per frame^2
-		
+		public const float		DEFAULT_MAX_FALL_SPEED	= 4.0f;
+
 		public static readonly Point2I	ROOM_SIZE_SMALL	= new Point2I(10, 8);
 		public static readonly Point2I	ROOM_SIZE_LARGE	= new Point2I(15, 11);
 

@@ -9,11 +9,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private int timer;
 		private int duration;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public PlayerBusyState(int duration) : base() {
+		public PlayerBusyState(int duration) {
 			this.duration = duration;
 		}
 		

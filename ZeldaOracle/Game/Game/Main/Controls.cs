@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Common.Input.Controls;
+using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Game.Main {
 
@@ -15,6 +16,7 @@ namespace ZeldaOracle.Game.Main {
 		private static GameControl left;
 		private static GameControl right;
 		private static GameControl analogMovement;
+		private static GameControl[] arrows;
 
 		private static GameControl a;
 		private static GameControl b;
@@ -23,6 +25,7 @@ namespace ZeldaOracle.Game.Main {
 
 		private static GameControl start;
 		private static GameControl select;
+
 
 
 		//-----------------------------------------------------------------------------
@@ -36,6 +39,12 @@ namespace ZeldaOracle.Game.Main {
 			Controls.left			= new GameControl(Keys.Left);
 			Controls.right			= new GameControl(Keys.Right);
 			Controls.analogMovement	= new GameControl(Buttons.LeftStick);
+			
+			Controls.arrows = new GameControl[4];
+			Controls.arrows[Directions.Up]		= Controls.up;
+			Controls.arrows[Directions.Down]	= Controls.down;
+			Controls.arrows[Directions.Left]	= Controls.left;
+			Controls.arrows[Directions.Right]	= Controls.right;
 
 			Controls.a				= new GameControl(Keys.X);
 			Controls.b				= new GameControl(Keys.Z);
@@ -44,6 +53,16 @@ namespace ZeldaOracle.Game.Main {
 
 			Controls.start			= new GameControl(Keys.Enter);
 			Controls.select			= new GameControl(Keys.Backslash);
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Accessors
+		//-----------------------------------------------------------------------------
+
+		// Gets the arrow controls
+		public static InputControl GetArrowControl(int direction) {
+			return arrows[direction].Button;
 		}
 
 
@@ -97,5 +116,6 @@ namespace ZeldaOracle.Game.Main {
 		public static InputControl Select {
 			get { return select.Button; }
 		}
+		
 	}
 }

@@ -29,7 +29,7 @@ namespace ZeldaOracle.Game.Control {
 		private Player			player;			// The player entity.
 		private List<Entity>	entities;
 		private Tile[,,]		tiles;
-
+		
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -221,7 +221,7 @@ namespace ZeldaOracle.Game.Control {
 			// Move the player to the new room.
 			player.RoomControl = newControl;
 			player.Position -= relative * nextRoom.Size * GameSettings.TILE_SIZE;
-			
+
 			// Play the transition.
 			RoomTransitionPush transition = new RoomTransitionPush(this, newControl, direction);
 			gameManager.PopGameState();
@@ -237,6 +237,7 @@ namespace ZeldaOracle.Game.Control {
 
 			// Load test level/room.
 			level = LoadLevel("Content/Worlds/test_level.zwd");
+			//level = LoadLevel("Content/Worlds/ledge_jump_world.zwd");
 
 			// Create the player.
 			player = new Player();
@@ -254,7 +255,7 @@ namespace ZeldaOracle.Game.Control {
 			td.Sprite = new Sprite(GameData.SHEET_ZONESET_LARGE, 1, 9);
 			td.Flags |= TileFlags.Solid | TileFlags.Movable;
 			td.CollisionModel = GameData.MODEL_BLOCK;
-			r.TileData[3, 5, 1] = td;
+			r.TileData[2, 5, 1] = td;
 
 			BeginRoom(r);
 		}
@@ -268,8 +269,6 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public override void Update() {
-			// TODO: Check for opening pause menu or map screens.
-
 			// Update entities.
 			int entityCount = entities.Count;
 			for (int i = 0; i < entities.Count; i++) {
@@ -281,6 +280,7 @@ namespace ZeldaOracle.Game.Control {
 					entities[i].Graphics.Update();
 				}
 			}
+
 			// Remove destroyed entities.
 			for (int i = 0; i < entities.Count; i++) {
 				if (!entities[i].IsAlive) {
@@ -299,25 +299,19 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 
-			// Room transitions.
-			// TODO: Only transition if the correct arrow key is down.
-			if (player.X < 6) {
-				player.X = 6;
-				EnterAdjacentRoom(Directions.Left);
-			}
-			else if (player.Y < 14) {
-				player.Y = 14;
-				EnterAdjacentRoom(Directions.Up);
-			}
-			else if (player.X > room.Width * GameSettings.TILE_SIZE - 6) {
-				player.X = room.Width * GameSettings.TILE_SIZE - 6;
-				EnterAdjacentRoom(Directions.Right);
-			}
-			else if (player.Y > room.Height * GameSettings.TILE_SIZE + 1) {
-				player.Y = room.Height * GameSettings.TILE_SIZE + 1;
-				EnterAdjacentRoom(Directions.Down);
+			// Detect room transitions.
+			for (int direction = 0; direction < Directions.Count; direction++) {
+				CollisionInfo info = player.Physics.CollisionInfo[direction];
+
+				if (info.Type == CollisionType.RoomEdge &&
+					(Controls.GetArrowControl(direction).IsDown() || player.AutoRoomTransition))
+				{
+					EnterAdjacentRoom(direction);
+					break;
+				}
 			}
 
+			// [Start] Open inventory.
 			if (Controls.Start.IsPressed()) {
 				gameManager.QueueGameStates(
 					new TransitionFade(Color.White, 30, this, gameManager.menu1),
@@ -387,13 +381,19 @@ namespace ZeldaOracle.Game.Control {
 			get { return player; }
 		}
 
+		// Get the list of entities.
+		public List<Entity> Entities {
+			get { return entities; }
+		}
+
 		// Get the size of the room in pixels.
 		public Rectangle2I RoomBounds {
 			get { return new Rectangle2I(Point2I.Zero, room.Size * GameSettings.TILE_SIZE); }
 		}
 
-		public List<Entity> Entities {
-			get { return entities; }
+		// Get the room's location within the level.
+		public Point2I RoomLocation {
+			get { return roomLocation; }
 		}
 	}
 }

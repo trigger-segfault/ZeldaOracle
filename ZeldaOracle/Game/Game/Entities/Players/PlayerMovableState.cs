@@ -38,7 +38,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public PlayerMovableState() : base() {
+		public PlayerMovableState() {
 			// Internal.
 			moveAxes	= new bool[] { false, false };
 			motion		= Vector2F.Zero;

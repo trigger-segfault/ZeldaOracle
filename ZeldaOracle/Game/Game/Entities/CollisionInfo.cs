@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities {
@@ -21,6 +22,8 @@ namespace ZeldaOracle.Game.Entities {
 		// The object we are colliding with. This is null for room-edge collisions.
 		private object solidObject;
 		
+		// The direction of the collision impact (from the entity's perspective).
+		private int direction;
 		
 		
 		//-----------------------------------------------------------------------------
@@ -28,18 +31,27 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 		
 		public void Clear() {
-			type = CollisionType.None;
-			solidObject = null;
+			type		= CollisionType.None;
+			solidObject	= null;
+			direction	= Directions.Right;
 		}
 
-		public void SetTileCollision(Tile t) {
-			type = CollisionType.Tile;
-			solidObject = t;
+		public void SetTileCollision(Tile tile, int direction) {
+			this.type			= CollisionType.Tile;
+			this.solidObject	= tile;
+			this.direction		= direction;
 		}
 		
-		public void SetEntityCollision(Entity e) {
-			type = CollisionType.Entity;
-			solidObject = e;
+		public void SetEntityCollision(Entity entity, int direction) {
+			this.type			= CollisionType.Entity;
+			this.solidObject	= entity;
+			this.direction		= direction;
+		}
+		
+		public void SetRoomEdgeCollision(int direction) {
+			this.type			= CollisionType.RoomEdge;
+			this.solidObject	= null;
+			this.direction		= direction;
 		}
 
 
@@ -49,6 +61,11 @@ namespace ZeldaOracle.Game.Entities {
 
 		public bool IsColliding {
 			get { return (type != CollisionType.None); }
+		}
+		
+		public int Direction {
+			get { return direction; }
+			set { direction = value; }
 		}
 
 		public CollisionType Type {
