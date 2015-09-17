@@ -300,7 +300,7 @@ namespace ZeldaOracle.Game.Control {
 				CollisionInfo info = player.Physics.CollisionInfo[direction];
 
 				if (info.Type == CollisionType.RoomEdge &&
-					(Controls.GetArrowControl(direction).IsDown() || player.AutoRoomTransition))
+					(Controls.GetArrowControl(direction).IsDown() || Controls.GetAnalogDirection(direction) || player.AutoRoomTransition))
 				{
 					EnterAdjacentRoom(direction);
 					break;

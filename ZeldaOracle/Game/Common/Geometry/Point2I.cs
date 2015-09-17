@@ -276,7 +276,7 @@ public struct Point2I {
 		get {
 			if (X == 0 && Y == 0)
 				return 0.0f;
-			return GMath.Atan2(Y, X);
+			return GMath.Plusdir(GMath.Atan2(Y, X));
 		}
 		set {
 			float length = GMath.Sqrt((X * X) + (Y * Y));

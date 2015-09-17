@@ -13,10 +13,14 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Common.Input.Controls;
 
 namespace ZeldaOracle.Game.Entities.Players {
 	public class PlayerMovableState : PlayerState {
 
+		private AnalogStick analogStick;
+		private float		analogAngle;
+		private bool		analogMode;				// True if the analog stick is active.
 		private Keys[]		moveKeys;				// The 4 movement keys for each direction.
 		private bool[]		moveAxes;				// Which axes the player is moving on.
 		protected bool		isMoving;				// Is the player holding down a movement key?
@@ -48,6 +52,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			isMoving	= false;
 
 			// Controls.
+			analogStick = GamePad.GetStick(Buttons.LeftStick);
+			analogAngle = 0.0f;
 			moveKeys = new Keys[4];
 			moveKeys[Directions.Up]		= Keys.Up;
 			moveKeys[Directions.Down]	= Keys.Down;
@@ -55,6 +61,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			moveKeys[Directions.Right]	= Keys.Right;
 
 			// Movement settings.
+			analogMode				= false;
 			allowMovementControl	= true;
 			moveAngle				= Angles.South;
 			moveSpeed				= GameSettings.PLAYER_MOVE_SPEED; // 0.5f for swimming, 1.5f for sprinting.
@@ -76,11 +83,23 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private void UpdateMoveControls() {
 			isMoving = false;
 
-			// Check movement keys.
-			if (!CheckMoveKey(Directions.Left) && !CheckMoveKey(Directions.Right))
-				moveAxes[0] = false;	// x-axis
-			if (!CheckMoveKey(Directions.Down) && !CheckMoveKey(Directions.Up))
-				moveAxes[1] = false;	// y-axis
+			// Check analog stick.
+			if (!analogStick.Position.IsZero) {
+				analogMode = true;
+
+				analogAngle = analogStick.Position.Direction;
+
+				CheckAnalogStick();
+			}
+			else {
+				analogMode = false;
+
+				// Check movement keys.
+				if (!CheckMoveKey(Directions.Left) && !CheckMoveKey(Directions.Right))
+					moveAxes[0] = false;	// x-axis
+				if (!CheckMoveKey(Directions.Down) && !CheckMoveKey(Directions.Up))
+					moveAxes[1] = false;	// y-axis
+			}
 
 			// Don't auto-dodge collisions when moving at an angle.
 			player.Physics.SetFlags(PhysicsFlags.AutoDodge,
@@ -95,6 +114,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 				float scaledSpeed = moveSpeed * moveSpeedScale;
 				Vector2F keyMotion = Angles.ToVector(moveAngle) * scaledSpeed; // The velocity we want to move at.
+				if (analogMode)
+					keyMotion = analogStick.Position * scaledSpeed;
 
 				// Update acceleration-based motion.
 				if (isSlippery) {
@@ -159,7 +180,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Poll the movement key for the given direction, returning true if
 		// it is down. This also manages the strafing behavior of movement.
 		private bool CheckMoveKey(int dir) {
-			if (Keyboard.IsKeyDown(moveKeys[dir])) {
+			if (Keyboard.IsKeyDown(moveKeys[dir]) || analogMode) {
 				isMoving = true;
 			
 				if (!moveAxes[(dir + 1) % 2])
@@ -174,13 +195,25 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 					// Don't affect the facing direction when strafing
 					if (!strafing) {
-						Player.Direction = dir;
-						Player.Angle = dir * 2;
+						if (!analogMode) {
+							Player.Direction = dir;
+							Player.Angle = dir * 2;
 
-						if (Keyboard.IsKeyDown(moveKeys[(dir + 1) % 4]))
-							Player.Angle = (Player.Angle + 1) % 8;
-						if (Keyboard.IsKeyDown(moveKeys[(dir + 3) % 4]))
-							Player.Angle = (Player.Angle + 7) % 8;
+							if (Keyboard.IsKeyDown(moveKeys[(dir + 1) % 4]))
+								Player.Angle = (Player.Angle + 1) % 8;
+							if (Keyboard.IsKeyDown(moveKeys[(dir + 3) % 4]))
+								Player.Angle = (Player.Angle + 7) % 8;
+						}
+						else {
+							if ((analogAngle >= 0f && analogAngle <= 45f) || (analogAngle >= 315f && analogAngle <= 360f))
+								player.Direction = Directions.Right;
+							else if (analogAngle >= 45f && analogAngle <= 135f)
+								player.Direction = Directions.South;
+							else if (analogAngle >= 135f && analogAngle <= 225f)
+								player.Direction = Directions.Left;
+							else
+								player.Direction = Directions.North;
+						}
 					}
 				}
 				return true;
@@ -188,6 +221,44 @@ namespace ZeldaOracle.Game.Entities.Players {
 			return false;
 		}
 
+		// Poll the movement key for the given direction, returning true if
+		// it is down. This also manages the strafing behavior of movement.
+		private void CheckAnalogStick() {
+			isMoving = true;
+
+			// Don't affect the facing direction when strafing
+			if (!strafing) {
+				moveAxes[0] = true;
+				moveAxes[1] = true;
+
+
+				if (analogAngle <= 45f || analogAngle >= 315f)
+					player.Direction = Directions.East;
+				else if (analogAngle <= 135f)
+					player.Direction = Directions.South;
+				else if (analogAngle <= 225f)
+					player.Direction = Directions.West;
+				else
+					player.Direction = Directions.North;
+
+				if (analogAngle <= 22.5f || analogAngle >= 337.5f)
+					player.Angle = Angles.East;
+				else if (analogAngle <= 67.5f)
+					player.Angle = Angles.SouthEast;
+				else if (analogAngle <= 112.5f)
+					player.Angle = Angles.South;
+				else if (analogAngle <= 157.5f)
+					player.Angle = Angles.SouthWest;
+				else if (analogAngle <= 202.5f)
+					player.Angle = Angles.West;
+				else if (analogAngle <= 247.5f)
+					player.Angle = Angles.NorthWest;
+				else if (analogAngle <= 292.5f)
+					player.Angle = Angles.North;
+				else
+					player.Angle = Angles.NorthEast;
+			}
+		}
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods

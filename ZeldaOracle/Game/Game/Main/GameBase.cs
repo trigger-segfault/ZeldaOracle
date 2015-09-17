@@ -105,18 +105,18 @@ public class GameBase : XnaGame {
 	// and initialize them as well.
 	protected override void Initialize() {
 		Console.WriteLine("Begin Initialize");
-		
-		// Create and initialize the game.
-		this.game = new GameManager();
-		this.game.Initialize(this);
-
-		base.Initialize();
 
 		Console.WriteLine("Initializing Input");
 		EventInput.Initialize(Window);
 		Keyboard.Initialize();
 		Mouse.Initialize();
 		GamePad.Initialize();
+
+		// Create and initialize the game.
+		this.game = new GameManager();
+		this.game.Initialize(this);
+
+		base.Initialize();
 
 		this.Window.ClientSizeChanged += OnClientSizeChanged;
 
