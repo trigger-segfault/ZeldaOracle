@@ -84,7 +84,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			moveSpeed				= 1.0f;
 			moveSpeedScale			= 1.0f;
 			isSlippery				= false;
-			acceleration			= 0.1f;
+			acceleration			= 0.02f;
 			deceleration			= 0.05f;
 			minSpeed				= 0.05f;
 			autoAccelerate			= false;

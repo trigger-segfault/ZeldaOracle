@@ -55,7 +55,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			allowMovementControl	= true;
 			moveSpeed				= GameSettings.PLAYER_MOVE_SPEED; // 0.5f for swimming, 1.5f for sprinting.
 			moveSpeedScale			= 1.0f;
-			acceleration			= 0.08f; // 0.08f for ice/swimming, 0.1f for jumping
+			acceleration			= 0.08f; // 0.02f for ice, 0.08f for swimming, 0.1f for jumping
 			deceleration			= 0.05f;
 			minSpeed				= 0.05f;
 			isSlippery				= false;
