@@ -23,6 +23,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private Vector2F	motion;					// The vector that's driving the player's velocity.
 		private Vector2F	velocityPrev;			// The player's velocity on the previous frame.
 
+		protected int		moveAngle;				// The angle the player is moving in.
 		protected float		moveSpeed;				// The top-speed for movement.
 		protected float		moveSpeedScale;			// Scales the movement speed to create the actual top-speed.
 		protected bool		isSlippery;				// Is the movement acceleration-based?
@@ -32,6 +33,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		protected bool		autoAccelerate;			// Should the player still accelerate without holding down a movement key?
 		protected int		directionSnapCount;		// The number of intervals movement directions should snap to for acceleration-based movement.
 		protected bool		allowMovementControl;	// Is the player allowed to control his movement?
+
+		protected bool		strafing;				// The player can only face one direction.
 
 
 		//-----------------------------------------------------------------------------
@@ -53,6 +56,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Movement settings.
 			allowMovementControl	= true;
+			moveAngle				= Angles.South;
 			moveSpeed				= GameSettings.PLAYER_MOVE_SPEED; // 0.5f for swimming, 1.5f for sprinting.
 			moveSpeedScale			= 1.0f;
 			acceleration			= 0.08f; // 0.08f for ice/swimming, 0.1f for jumping
@@ -61,6 +65,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			isSlippery				= false;
 			autoAccelerate			= false;
 			directionSnapCount		= 0;	// 8 for swimming/jumping, 16 for ice.
+			strafing				= false;
 		}
 		
 		
@@ -79,15 +84,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Don't auto-dodge collisions when moving at an angle.
 			player.Physics.SetFlags(PhysicsFlags.AutoDodge,
-				Angles.IsHorizontal(player.Angle) || Angles.IsVertical(player.Angle));
+				Angles.IsHorizontal(moveAngle) || Angles.IsVertical(moveAngle));
 
 			// Update movement or acceleration.
 			if (allowMovementControl && (isMoving || (autoAccelerate && isSlippery))) {
-				if (!isMoving)
+				if (!isMoving) {
 					player.Angle = Directions.ToAngle(player.Direction);
+					moveAngle = Directions.ToAngle(player.Direction);
+				}
 
 				float scaledSpeed = moveSpeed * moveSpeedScale;
-				Vector2F keyMotion = Angles.ToVector(Player.Angle) * scaledSpeed; // The velocity we want to move at.
+				Vector2F keyMotion = Angles.ToVector(moveAngle) * scaledSpeed; // The velocity we want to move at.
 
 				// Update acceleration-based motion.
 				if (isSlippery) {
@@ -158,13 +165,23 @@ namespace ZeldaOracle.Game.Entities.Players {
 				if (!moveAxes[(dir + 1) % 2])
 					moveAxes[dir % 2] = true;
 				if (moveAxes[dir % 2]) {
-					Player.Direction = dir;
-					Player.Angle = dir * 2;
-			
-					if (Keyboard.IsKeyDown(moveKeys[(dir + 1) % 4])) 
-						Player.Angle = (Player.Angle + 1) % 8;
+					moveAngle = dir * 2;
+
+					if (Keyboard.IsKeyDown(moveKeys[(dir + 1) % 4]))
+						moveAngle = (moveAngle + 1) % 8;
 					if (Keyboard.IsKeyDown(moveKeys[(dir + 3) % 4]))
-						Player.Angle = (Player.Angle + 7) % 8;
+						moveAngle = (moveAngle + 7) % 8;
+
+					// Don't affect the facing direction when strafing
+					if (!strafing) {
+						Player.Direction = dir;
+						Player.Angle = dir * 2;
+
+						if (Keyboard.IsKeyDown(moveKeys[(dir + 1) % 4]))
+							Player.Angle = (Player.Angle + 1) % 8;
+						if (Keyboard.IsKeyDown(moveKeys[(dir + 3) % 4]))
+							Player.Angle = (Player.Angle + 7) % 8;
+					}
 				}
 				return true;
 			}
