@@ -88,18 +88,18 @@ public static class Mouse {
 	#region Updating
 
 	/** <summary> Simplifies the updating procedure for each button. </summary> */
-	private static void UpdateButton(double time, MouseButtons mouseButton, ButtonState buttonState) {
+	private static void UpdateButton(int time, MouseButtons mouseButton, ButtonState buttonState) {
 		buttons[(int)mouseButton].Update(time, buttonState == ButtonState.Pressed, false, rawButtonDoubleClick[(int)mouseButton], rawButtonClick[(int)mouseButton]);
 	}
 	/** <summary> Called every step to update the mouse button states. </summary> */
 	public static void Update(GameTime gameTime, Vector2F mouseOffset) {
 		// Update each of the buttons
-		UpdateButton((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, MouseButtons.None,		ButtonState.Released);
-		UpdateButton((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, MouseButtons.Left, XnaMouse.GetState().LeftButton);
-		UpdateButton((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, MouseButtons.Middle, XnaMouse.GetState().MiddleButton);
-		UpdateButton((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, MouseButtons.Right, XnaMouse.GetState().RightButton);
-		UpdateButton((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, MouseButtons.XButton1, XnaMouse.GetState().XButton1);
-		UpdateButton((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, MouseButtons.XButton2, XnaMouse.GetState().XButton2);
+		UpdateButton(1, MouseButtons.None,		ButtonState.Released);
+		UpdateButton(1, MouseButtons.Left, XnaMouse.GetState().LeftButton);
+		UpdateButton(1, MouseButtons.Middle, XnaMouse.GetState().MiddleButton);
+		UpdateButton(1, MouseButtons.Right, XnaMouse.GetState().RightButton);
+		UpdateButton(1, MouseButtons.XButton1, XnaMouse.GetState().XButton1);
+		UpdateButton(1, MouseButtons.XButton2, XnaMouse.GetState().XButton2);
 
 		for (int i = 0; i < NumButtons; i++) {
 			rawButtonDoubleClick[i]	= false;

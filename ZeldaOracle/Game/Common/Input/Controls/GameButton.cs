@@ -5,7 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Input.Controls {
-	public class GameHotkey {
+	public class GameButton {
 
 		private Keys keyCode;
 		private MouseButtons mouseCode;
@@ -17,34 +17,29 @@ namespace ZeldaOracle.Common.Input.Controls {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public GameHotkey() {
+		public GameButton() {
 			this.keyCode = Keys.None;
 			this.mouseCode = MouseButtons.None;
 			this.buttonCode = Buttons.None;
 			this.inputType = InputType.None;
 		}
-		public GameHotkey(Keys keyCode) {
+		public GameButton(Keys keyCode) {
 			this.keyCode = keyCode;
 			this.mouseCode = MouseButtons.None;
 			this.buttonCode = Buttons.None;
 			this.inputType = InputType.Key;
 		}
-		public GameHotkey(MouseButtons mouseCode) {
+		public GameButton(MouseButtons mouseCode) {
 			this.keyCode = Keys.None;
 			this.mouseCode = mouseCode;
 			this.buttonCode = Buttons.None;
 			this.inputType = InputType.MouseButton;
 		}
-		public GameHotkey(Buttons buttonCode) {
+		public GameButton(Buttons buttonCode) {
 			this.keyCode = Keys.None;
 			this.mouseCode = MouseButtons.None;
 			this.buttonCode = buttonCode;
-			if (buttonCode == Buttons.LeftTrigger || buttonCode == Buttons.RightTrigger)
-				this.inputType = InputType.Trigger;
-			else if (buttonCode == Buttons.LeftStick || buttonCode == Buttons.RightStick)
-				this.inputType = InputType.Stick;
-			else
-				this.inputType = InputType.Button;
+			this.inputType = InputType.Button;
 		}
 
 
@@ -52,22 +47,6 @@ namespace ZeldaOracle.Common.Input.Controls {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		// Gets the analog stick if it is the active control
-		public AnalogStick Stick {
-			get {
-				if (inputType == InputType.Stick)
-					return GamePad.GetStick(buttonCode, 0);
-				return null;
-			}
-		}
-		// Gets the trigger if it is the active control
-		public Trigger Trigger {
-			get {
-				if (inputType == InputType.Trigger)
-					return GamePad.GetTrigger(buttonCode, 0);
-				return null;
-			}
-		}
 		// Gets the button if it is the active control
 		public InputControl Button {
 			get {
@@ -85,26 +64,22 @@ namespace ZeldaOracle.Common.Input.Controls {
 		// Operators
 		//-----------------------------------------------------------------------------
 
-		public static bool operator ==(GameHotkey c1, GameHotkey c2) {
+		public static bool operator ==(GameButton c1, GameButton c2) {
 			if (c1.inputType == c2.inputType) {
 				switch (c1.inputType) {
 				case InputType.Key:				return c1.keyCode == c2.keyCode;
 				case InputType.MouseButton:		return c1.mouseCode == c2.mouseCode;
-				case InputType.Button:
-				case InputType.Trigger:
-				case InputType.Stick:			return c1.buttonCode == c2.buttonCode;
+				case InputType.Button:			return c1.buttonCode == c2.buttonCode;	
 				}
 			}
 			return false;
 		}
-		public static bool operator !=(GameHotkey c1, GameHotkey c2) {
+		public static bool operator !=(GameButton c1, GameButton c2) {
 			if (c1.inputType == c2.inputType) {
 				switch (c1.inputType) {
 				case InputType.Key:				return c1.keyCode != c2.keyCode;
 				case InputType.MouseButton:		return c1.mouseCode != c2.mouseCode;
-				case InputType.Button:
-				case InputType.Trigger:
-				case InputType.Stick:			return c1.buttonCode != c2.buttonCode;
+				case InputType.Button:			return c1.buttonCode != c2.buttonCode;		
 				}
 			}
 			return true;

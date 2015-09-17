@@ -55,7 +55,7 @@ public class Trigger {
 	//=========== UPDATING ===========
 
 	/** <summary> Called every step to update the control state. </summary> */
-	public void Update(double time, double pressure) {
+	public void Update(int time, double pressure) {
 		// Apply the dead zone to the position
 		if (pressure <= deadZone) {
 			pressure = 0.0;
