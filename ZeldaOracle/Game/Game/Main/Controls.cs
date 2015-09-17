@@ -11,20 +11,20 @@ namespace ZeldaOracle.Game.Main {
 	// The controls for the game
 	public class Controls {
 
-		private static GameControl up;
-		private static GameControl down;
-		private static GameControl left;
-		private static GameControl right;
-		private static GameControl analogMovement;
-		private static GameControl[] arrows;
+		private static GameHotkey up;
+		private static GameHotkey down;
+		private static GameHotkey left;
+		private static GameHotkey right;
+		private static GameHotkey analogMovement;
+		private static GameHotkey[] arrows;
 
-		private static GameControl a;
-		private static GameControl b;
-		private static GameControl x;
-		private static GameControl y;
+		private static GameHotkey a;
+		private static GameHotkey b;
+		private static GameHotkey x;
+		private static GameHotkey y;
 
-		private static GameControl start;
-		private static GameControl select;
+		private static GameHotkey start;
+		private static GameHotkey select;
 
 
 
@@ -34,25 +34,25 @@ namespace ZeldaOracle.Game.Main {
 
 		// Initializes the controls for the game
 		public static void Initialize() {
-			Controls.up				= new GameControl(Keys.Up);
-			Controls.down			= new GameControl(Keys.Down);
-			Controls.left			= new GameControl(Keys.Left);
-			Controls.right			= new GameControl(Keys.Right);
-			Controls.analogMovement	= new GameControl(Buttons.LeftStick);
+			Controls.up				= new GameHotkey(Keys.Up);
+			Controls.down			= new GameHotkey(Keys.Down);
+			Controls.left			= new GameHotkey(Keys.Left);
+			Controls.right			= new GameHotkey(Keys.Right);
+			Controls.analogMovement	= new GameHotkey(Buttons.LeftStick);
 			
-			Controls.arrows = new GameControl[4];
+			Controls.arrows = new GameHotkey[4];
 			Controls.arrows[Directions.Up]		= Controls.up;
 			Controls.arrows[Directions.Down]	= Controls.down;
 			Controls.arrows[Directions.Left]	= Controls.left;
 			Controls.arrows[Directions.Right]	= Controls.right;
 
-			Controls.a				= new GameControl(Keys.X);
-			Controls.b				= new GameControl(Keys.Z);
-			Controls.x				= new GameControl(Keys.A);
-			Controls.y				= new GameControl(Keys.S);
+			Controls.a				= new GameHotkey(Keys.X);
+			Controls.b				= new GameHotkey(Keys.Z);
+			Controls.x				= new GameHotkey(Keys.A);
+			Controls.y				= new GameHotkey(Keys.S);
 
-			Controls.start			= new GameControl(Keys.Enter);
-			Controls.select			= new GameControl(Keys.Backslash);
+			Controls.start			= new GameHotkey(Keys.Enter);
+			Controls.select			= new GameHotkey(Keys.Backslash);
 		}
 		
 

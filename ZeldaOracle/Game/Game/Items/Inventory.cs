@@ -2,23 +2,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Game.Control;
 
 namespace ZeldaOracle.Game.Items {
 	public class Inventory {
 
-		private List<Item>		items;
-		private List<Ammo>		ammo;
-		private PlayerItem[]	equippedPlayerItems;
+		// The game control for the current game session.
+		private GameControl gameControl;
+		// The list of items in the game.
+		private List<Item> items;
+		// The list of ammos in the game.
+		private List<Ammo> ammo;
+		// The player's equip slots.
+		private PlayerItem[] equippedItems;
 
+		//-----------------------------------------------------------------------------
+		// Constants
+		//-----------------------------------------------------------------------------
+
+		// The number of slots to equip player items.
+		public const int NumEquipSlots = 2;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public Inventory() {
-			items	= new List<Item>();
-			ammo	= new List<Ammo>();
-			equippedPlayerItems = new PlayerItem[2];
+		public Inventory(GameControl gameControl) {
+			this.gameControl	= gameControl;
+			this.items			= new List<Item>();
+			this.ammo			= new List<Ammo>();
+			this.equippedItems	= new PlayerItem[NumEquipSlots];
 		}
 
 
@@ -29,11 +42,11 @@ namespace ZeldaOracle.Game.Items {
 		// Equip a player item into the given slot (slot 0 (A) or 1 (B))
 		public void EquipPlayerItem(PlayerItem item, int slot) {
 			if (item.IsTwoHanded) {
-				equippedPlayerItems[0] = item;
-				equippedPlayerItems[1] = item;
+				equippedItems[0] = item;
+				equippedItems[1] = item;
 			}
 			else {
-				equippedPlayerItems[slot] = item;
+				equippedItems[slot] = item;
 			}
 		}
 

@@ -1,10 +1,10 @@
 
-@font "font_large"
+@font "Fonts/font_large"
 @grid 8 12  1 1  1 1
 @spacing 0 16 16
 @end
 
-@font "font_small"
+@font "Fonts/font_small"
 @grid 8 8  1 1  1 1
 @spacing 0 12 16
 @end

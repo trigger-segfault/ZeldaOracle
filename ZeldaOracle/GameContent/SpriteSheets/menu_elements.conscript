@@ -1,0 +1,16 @@
+
+@spritesheet "UI/menu_small"
+@grid 8 8  1 1  18 18
+@end
+
+@spritesheet "UI/menu_small_light"
+@grid 8 8  1 1  18 18
+@end
+
+@spritesheet "UI/menu_large"
+@grid 16 16  1 1  18 18
+@end
+
+@spritesheet "UI/menu_large_light"
+@grid 16 16  1 1  18 18
+@end

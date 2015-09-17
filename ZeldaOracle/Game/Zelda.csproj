@@ -155,7 +155,7 @@
     <Compile Include="Common\Input\Controls\Button.cs" />
     <Compile Include="Common\Input\Controls\ComboControl.cs" />
     <Compile Include="Common\Input\Controls\ControlHandler.cs" />
-    <Compile Include="Common\Input\Controls\GameControl.cs" />
+    <Compile Include="Common\Input\Controls\GameHotkey.cs" />
     <Compile Include="Common\Input\Controls\HotKey.cs" />
     <Compile Include="Common\Input\Controls\Key.cs" />
     <Compile Include="Common\Input\Controls\MouseButton.cs" />
@@ -181,6 +181,7 @@
     <Compile Include="Common\Translation\LetterString.cs" />
     <Compile Include="Common\Translation\FormatCodes.cs" />
     <Compile Include="Common\Translation\WrappedLetterString.cs" />
+    <Compile Include="Game\Control\GameControl.cs" />
     <Compile Include="Game\Control\HUD.cs" />
     <Compile Include="Game\Control\Menus\Menu.cs" />
     <Compile Include="Game\Control\Menus\MenuInventory.cs" />

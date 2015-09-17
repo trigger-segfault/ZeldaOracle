@@ -142,7 +142,10 @@ namespace ZeldaOracle.Game.Control {
 
 		public override void Draw(Graphics2D g) {
 			Point2I pos = new Point2I(8, 24);
-			g.FillRectangle(new Rectangle2F(8, 24, 144, 8 + 16 * linesPerWindow), Color.Black);
+			if (GameControl.Player.Y < ((GameSettings.VIEW_HEIGHT) / 2 + 1))
+				pos.Y = 96;
+			// TODO: Apply Player position based on view
+			g.FillRectangle(new Rectangle2I(pos, new Point2I(144, 8 + 16 * linesPerWindow)), Color.Black);
 
 			for (int i = 0; i < windowLine; i++) {
 				if (state == TextReaderState.PushingLine && timer >= 2)

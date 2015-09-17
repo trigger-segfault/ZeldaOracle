@@ -5,7 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Input.Controls {
-	public class GameControl {
+	public class GameHotkey {
 
 		private Keys keyCode;
 		private MouseButtons mouseCode;
@@ -17,25 +17,25 @@ namespace ZeldaOracle.Common.Input.Controls {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public GameControl() {
+		public GameHotkey() {
 			this.keyCode = Keys.None;
 			this.mouseCode = MouseButtons.None;
 			this.buttonCode = Buttons.None;
 			this.inputType = InputType.None;
 		}
-		public GameControl(Keys keyCode) {
+		public GameHotkey(Keys keyCode) {
 			this.keyCode = keyCode;
 			this.mouseCode = MouseButtons.None;
 			this.buttonCode = Buttons.None;
 			this.inputType = InputType.Key;
 		}
-		public GameControl(MouseButtons mouseCode) {
+		public GameHotkey(MouseButtons mouseCode) {
 			this.keyCode = Keys.None;
 			this.mouseCode = mouseCode;
 			this.buttonCode = Buttons.None;
 			this.inputType = InputType.MouseButton;
 		}
-		public GameControl(Buttons buttonCode) {
+		public GameHotkey(Buttons buttonCode) {
 			this.keyCode = Keys.None;
 			this.mouseCode = MouseButtons.None;
 			this.buttonCode = buttonCode;
@@ -85,7 +85,7 @@ namespace ZeldaOracle.Common.Input.Controls {
 		// Operators
 		//-----------------------------------------------------------------------------
 
-		public static bool operator ==(GameControl c1, GameControl c2) {
+		public static bool operator ==(GameHotkey c1, GameHotkey c2) {
 			if (c1.inputType == c2.inputType) {
 				switch (c1.inputType) {
 				case InputType.Key:				return c1.keyCode == c2.keyCode;
@@ -97,7 +97,7 @@ namespace ZeldaOracle.Common.Input.Controls {
 			}
 			return false;
 		}
-		public static bool operator !=(GameControl c1, GameControl c2) {
+		public static bool operator !=(GameHotkey c1, GameHotkey c2) {
 			if (c1.inputType == c2.inputType) {
 				switch (c1.inputType) {
 				case InputType.Key:				return c1.keyCode != c2.keyCode;
