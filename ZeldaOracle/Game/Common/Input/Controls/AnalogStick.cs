@@ -12,11 +12,6 @@ namespace ZeldaOracle.Common.Input.Controls {
  * </summary> */
 public class AnalogStick {
 
-	//========== CONSTANTS ===========
-
-	/** <summary> The dead zone for the directional controls. </summary> */
-	private static Vector2F DirectionDeadZone		= new Vector2F(0.83f, 0.83f);
-
 	//=========== MEMBERS ============
 
 	/** <summary> The 4 directional controls. </summary> */
@@ -27,15 +22,18 @@ public class AnalogStick {
 	private Vector2F position;
 	/** <summary> The dead zone of the analog stick. </summary> */
 	private double deadZone;
+	/** <summary> The dead zone for the directional controls. </summary> */
+	private Vector2F directionDeadZone		= new Vector2F(0.83f, 0.83f);
 
 	//========= CONSTRUCTORS =========
 
 	/** <summary> Constructs the default control. </summary> */
 	public AnalogStick() {
-		this.directions		= new InputControl[4];
-		this.disabledState	= DisableState.Enabled;
-		this.position		= Vector2F.Zero;
-		this.deadZone		= 0.28;
+		this.directions			= new InputControl[4];
+		this.disabledState		= DisableState.Enabled;
+		this.position			= Vector2F.Zero;
+		this.deadZone			= 0.28;
+		this.directionDeadZone	= new Vector2F(0.83f, 0.83f);
 
 		for (int i = 0; i < 4; i++)
 			this.directions[i] = new InputControl();
@@ -51,6 +49,11 @@ public class AnalogStick {
 	public double DeadZone {
 		get { return deadZone; }
 		set { deadZone = GMath.Max(0.0, GMath.Min(1.0, GMath.Abs(value))); }
+	}
+	/** <summary> The dead zone for the directional controls. </summary> */
+	public Vector2F DirectionDeadZone {
+		get { return directionDeadZone; }
+		set { directionDeadZone = value; }
 	}
 	/** <summary> The right control of the analog stick. </summary> */
 	public InputControl Right {
@@ -72,7 +75,7 @@ public class AnalogStick {
 	//=========== UPDATING ===========
 
 	/** <summary> Called every step to update the control state. </summary> */
-	public void Update(double time, Vector2F position) {
+	public void Update(int time, Vector2F position) {
 		// Apply the dead zone to the position
 		if (position.Length <= deadZone) {
 			position = Vector2F.Zero;

@@ -155,10 +155,11 @@
     <Compile Include="Common\Input\Controls\Button.cs" />
     <Compile Include="Common\Input\Controls\ComboControl.cs" />
     <Compile Include="Common\Input\Controls\ControlHandler.cs" />
-    <Compile Include="Common\Input\Controls\GameControl.cs" />
+    <Compile Include="Common\Input\Controls\GameButton.cs" />
     <Compile Include="Common\Input\Controls\HotKey.cs" />
     <Compile Include="Common\Input\Controls\Key.cs" />
     <Compile Include="Common\Input\Controls\MouseButton.cs" />
+    <Compile Include="Common\Input\Controls\MultiGameButton.cs" />
     <Compile Include="Common\Input\DisableState.cs" />
     <Compile Include="Common\Input\GamePad.cs" />
     <Compile Include="Common\Input\InputControl.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="Common\Translation\LetterString.cs" />
     <Compile Include="Common\Translation\FormatCodes.cs" />
     <Compile Include="Common\Translation\WrappedLetterString.cs" />
+    <Compile Include="Game\Control\GameControl.cs" />
     <Compile Include="Game\Control\HUD.cs" />
     <Compile Include="Game\Control\Menus\Menu.cs" />
     <Compile Include="Game\Control\Menus\MenuInventory.cs" />
@@ -188,6 +190,7 @@
     <Compile Include="Game\Control\RoomControl.cs" />
     <Compile Include="Game\Entities\CollisionInfo.cs" />
     <Compile Include="Game\Entities\GraphicsComponent.cs" />
+    <Compile Include="Game\Entities\Players\PlayerLadderState.cs" />
     <Compile Include="Game\Entities\Players\PlayerBusyState.cs" />
     <Compile Include="Game\Entities\Players\PlayerJumpState.cs" />
     <Compile Include="Game\Entities\Players\PlayerLedgeJumpState.cs" />

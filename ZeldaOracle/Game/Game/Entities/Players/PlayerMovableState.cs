@@ -13,25 +13,32 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Common.Input.Controls;
 
 namespace ZeldaOracle.Game.Entities.Players {
 	public class PlayerMovableState : PlayerState {
 
-		private Keys[]		moveKeys;				// The 4 movement keys for each direction.
-		private bool[]		moveAxes;				// Which axes the player is moving on.
-		protected bool		isMoving;				// Is the player holding down a movement key?
-		private Vector2F	motion;					// The vector that's driving the player's velocity.
-		private Vector2F	velocityPrev;			// The player's velocity on the previous frame.
+		private AnalogStick		analogStick;
+		private float			analogAngle;
+		private bool			analogMode;				// True if the analog stick is active.
+		private InputControl[]	moveButtons;			// The 4 movement controls for each direction.
+		private bool[]			moveAxes;				// Which axes the player is moving on.
+		protected bool			isMoving;				// Is the player holding down a movement key?
+		private Vector2F		motion;					// The vector that's driving the player's velocity.
+		private Vector2F		velocityPrev;			// The player's velocity on the previous frame.
 
-		protected float		moveSpeed;				// The top-speed for movement.
-		protected float		moveSpeedScale;			// Scales the movement speed to create the actual top-speed.
-		protected bool		isSlippery;				// Is the movement acceleration-based?
-		protected float		acceleration;			// Acceleration when moving.
-		protected float		deceleration;			// Deceleration when not moving.
-		protected float		minSpeed;				// Minimum speed threshhold used to jump back to zero when decelerating.
-		protected bool		autoAccelerate;			// Should the player still accelerate without holding down a movement key?
-		protected int		directionSnapCount;		// The number of intervals movement directions should snap to for acceleration-based movement.
-		protected bool		allowMovementControl;	// Is the player allowed to control his movement?
+		protected int			moveAngle;				// The angle the player is moving in.
+		protected float			moveSpeed;				// The top-speed for movement.
+		protected float			moveSpeedScale;			// Scales the movement speed to create the actual top-speed.
+		protected bool			isSlippery;				// Is the movement acceleration-based?
+		protected float			acceleration;			// Acceleration when moving.
+		protected float			deceleration;			// Deceleration when not moving.
+		protected float			minSpeed;				// Minimum speed threshhold used to jump back to zero when decelerating.
+		protected bool			autoAccelerate;			// Should the player still accelerate without holding down a movement key?
+		protected int			directionSnapCount;		// The number of intervals movement directions should snap to for acceleration-based movement.
+		protected bool			allowMovementControl;	// Is the player allowed to control his movement?
+
+		protected bool			strafing;				// The player can only face one direction.
 
 
 		//-----------------------------------------------------------------------------
@@ -45,14 +52,18 @@ namespace ZeldaOracle.Game.Entities.Players {
 			isMoving	= false;
 
 			// Controls.
-			moveKeys = new Keys[4];
-			moveKeys[Directions.Up]		= Keys.Up;
-			moveKeys[Directions.Down]	= Keys.Down;
-			moveKeys[Directions.Left]	= Keys.Left;
-			moveKeys[Directions.Right]	= Keys.Right;
+			analogStick = GamePad.GetStick(Buttons.LeftStick);
+			analogAngle = 0.0f;
+			moveButtons = new InputControl[4];
+			moveButtons[Directions.Up]		= Controls.Up;
+			moveButtons[Directions.Down]	= Controls.Down;
+			moveButtons[Directions.Left]	= Controls.Left;
+			moveButtons[Directions.Right]	= Controls.Right;
 
 			// Movement settings.
+			analogMode				= false;
 			allowMovementControl	= true;
+			moveAngle				= Angles.South;
 			moveSpeed				= GameSettings.PLAYER_MOVE_SPEED; // 0.5f for swimming, 1.5f for sprinting.
 			moveSpeedScale			= 1.0f;
 			acceleration			= 0.08f; // 0.02f for ice, 0.08f for swimming, 0.1f for jumping
@@ -61,6 +72,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			isSlippery				= false;
 			autoAccelerate			= false;
 			directionSnapCount		= 0;	// 8 for swimming/jumping, 16 for ice.
+			strafing				= false;
 		}
 		
 		
@@ -71,23 +83,39 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private void UpdateMoveControls() {
 			isMoving = false;
 
-			// Check movement keys.
-			if (!CheckMoveKey(Directions.Left) && !CheckMoveKey(Directions.Right))
-				moveAxes[0] = false;	// x-axis
-			if (!CheckMoveKey(Directions.Down) && !CheckMoveKey(Directions.Up))
-				moveAxes[1] = false;	// y-axis
+			// Check analog stick.
+			if (!analogStick.Position.IsZero) {
+				analogMode = true;
+
+				analogAngle = analogStick.Position.Direction;
+
+				CheckAnalogStick();
+			}
+			else {
+				analogMode = false;
+
+				// Check movement keys.
+				if (!CheckMoveKey(Directions.Left) && !CheckMoveKey(Directions.Right))
+					moveAxes[0] = false;	// x-axis
+				if (!CheckMoveKey(Directions.Down) && !CheckMoveKey(Directions.Up))
+					moveAxes[1] = false;	// y-axis
+			}
 
 			// Don't auto-dodge collisions when moving at an angle.
 			player.Physics.SetFlags(PhysicsFlags.AutoDodge,
-				Angles.IsHorizontal(player.Angle) || Angles.IsVertical(player.Angle));
+				Angles.IsHorizontal(moveAngle) || Angles.IsVertical(moveAngle));
 
 			// Update movement or acceleration.
 			if (allowMovementControl && (isMoving || (autoAccelerate && isSlippery))) {
-				if (!isMoving)
+				if (!isMoving) {
 					player.Angle = Directions.ToAngle(player.Direction);
+					moveAngle = Directions.ToAngle(player.Direction);
+				}
 
 				float scaledSpeed = moveSpeed * moveSpeedScale;
-				Vector2F keyMotion = Angles.ToVector(Player.Angle) * scaledSpeed; // The velocity we want to move at.
+				Vector2F keyMotion = Angles.ToVector(moveAngle) * scaledSpeed; // The velocity we want to move at.
+				if (analogMode)
+					keyMotion = analogStick.Position * scaledSpeed;
 
 				// Update acceleration-based motion.
 				if (isSlippery) {
@@ -152,25 +180,85 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Poll the movement key for the given direction, returning true if
 		// it is down. This also manages the strafing behavior of movement.
 		private bool CheckMoveKey(int dir) {
-			if (Keyboard.IsKeyDown(moveKeys[dir])) {
+			if (moveButtons[dir].IsDown() || analogMode) {
 				isMoving = true;
 			
 				if (!moveAxes[(dir + 1) % 2])
 					moveAxes[dir % 2] = true;
 				if (moveAxes[dir % 2]) {
-					Player.Direction = dir;
-					Player.Angle = dir * 2;
-			
-					if (Keyboard.IsKeyDown(moveKeys[(dir + 1) % 4])) 
-						Player.Angle = (Player.Angle + 1) % 8;
-					if (Keyboard.IsKeyDown(moveKeys[(dir + 3) % 4]))
-						Player.Angle = (Player.Angle + 7) % 8;
+					moveAngle = dir * 2;
+
+					if (moveButtons[(dir + 1) % 4].IsDown())
+						moveAngle = (moveAngle + 1) % 8;
+					if (moveButtons[(dir + 3) % 4].IsDown())
+						moveAngle = (moveAngle + 7) % 8;
+
+					// Don't affect the facing direction when strafing
+					if (!strafing) {
+						if (!analogMode) {
+							Player.Direction = dir;
+							Player.Angle = dir * 2;
+
+							if (moveButtons[(dir + 1) % 4].IsDown())
+								Player.Angle = (Player.Angle + 1) % 8;
+							if (moveButtons[(dir + 3) % 4].IsDown())
+								Player.Angle = (Player.Angle + 7) % 8;
+						}
+						else {
+							if ((analogAngle >= 0f && analogAngle <= 45f) || (analogAngle >= 315f && analogAngle <= 360f))
+								player.Direction = Directions.Right;
+							else if (analogAngle >= 45f && analogAngle <= 135f)
+								player.Direction = Directions.South;
+							else if (analogAngle >= 135f && analogAngle <= 225f)
+								player.Direction = Directions.Left;
+							else
+								player.Direction = Directions.North;
+						}
+					}
 				}
 				return true;
 			}
 			return false;
 		}
 
+		// Poll the movement key for the given direction, returning true if
+		// it is down. This also manages the strafing behavior of movement.
+		private void CheckAnalogStick() {
+			isMoving = true;
+
+			// Don't affect the facing direction when strafing
+			if (!strafing) {
+				moveAxes[0] = true;
+				moveAxes[1] = true;
+
+
+				if (analogAngle <= 45f || analogAngle >= 315f)
+					player.Direction = Directions.East;
+				else if (analogAngle <= 135f)
+					player.Direction = Directions.South;
+				else if (analogAngle <= 225f)
+					player.Direction = Directions.West;
+				else
+					player.Direction = Directions.North;
+
+				if (analogAngle <= 22.5f || analogAngle >= 337.5f)
+					player.Angle = Angles.East;
+				else if (analogAngle <= 67.5f)
+					player.Angle = Angles.SouthEast;
+				else if (analogAngle <= 112.5f)
+					player.Angle = Angles.South;
+				else if (analogAngle <= 157.5f)
+					player.Angle = Angles.SouthWest;
+				else if (analogAngle <= 202.5f)
+					player.Angle = Angles.West;
+				else if (analogAngle <= 247.5f)
+					player.Angle = Angles.NorthWest;
+				else if (analogAngle <= 292.5f)
+					player.Angle = Angles.North;
+				else
+					player.Angle = Angles.NorthEast;
+			}
+		}
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods

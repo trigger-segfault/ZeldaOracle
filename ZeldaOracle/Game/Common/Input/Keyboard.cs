@@ -87,7 +87,7 @@ public static class Keyboard {
 	public static void Update(GameTime gameTime) {
 		// Update each of the keys
 		for (int i = 0; i < NumKeys; i++) {
-			keys[i].Update((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, XnaKeyboard.GetState().IsKeyDown((XnaKeys)i), rawKeyTyped[i]);
+			keys[i].Update(1, XnaKeyboard.GetState().IsKeyDown((XnaKeys)i), rawKeyTyped[i]);
 
 			rawKeyTyped[i] = false;
 		}

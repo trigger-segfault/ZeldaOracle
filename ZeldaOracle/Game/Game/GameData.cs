@@ -83,7 +83,6 @@ class GameData {
 
 			Image imageZoneset		= Resources.LoadImage("Images/zoneset");
 			Image imageSheetPlayer	= Resources.LoadImage("Images/sheet_player");
-			Image imageMenuSmall	= Resources.LoadImage("Images/UI/menu_small");
 			Image imageIconsThin	= Resources.LoadImage("Images/sheet_icons_thin");
 			Image imageEffects		= Resources.LoadImage("Images/sheet_effects");
 			Image imagePlayerItems	= Resources.LoadImage("Images/sheet_player_items");
@@ -92,10 +91,17 @@ class GameData {
 			SHEET_ZONESET_SMALL	= new SpriteSheet(imageZoneset, 8, 8, 187, 0, 1, 1);
 
 			SHEET_PLAYER		= new SpriteSheet(imageSheetPlayer, 16, 16, 0, 0, 1, 1);
-			SHEET_MENU_SMALL	= new SpriteSheet(imageMenuSmall, 8, 8, 18, 18, 1, 1);
 			SHEET_ICONS_THIN	= new SpriteSheet(imageIconsThin, 8, 16, 0, 0, 1, 1);
 			SHEET_EFFECTS		= new SpriteSheet(imageEffects, 16, 16, 0, 0, 1, 1);
 			SHEET_PLAYER_ITEMS	= new SpriteSheet(imagePlayerItems, 16, 16, 0, 0, 1, 1);
+
+
+			Resources.LoadSpriteSheets("SpriteSheets/menu_elements.conscript");
+
+			SHEET_MENU_SMALL = Resources.GetSpriteSheet("UI/menu_small");
+			SHEET_MENU_LARGE = Resources.GetSpriteSheet("UI/menu_large");
+			SHEET_MENU_SMALL_LIGHT = Resources.GetSpriteSheet("UI/menu_small_light");
+			SHEET_MENU_LARGE_LIGHT = Resources.GetSpriteSheet("UI/menu_large_light");
 
 			//SheetDebugMenu = Resources.LoadSpriteSheet(Resources.SpriteSheetDirectory + "sheet_debug_menu.conscript");
 
@@ -441,8 +447,8 @@ class GameData {
 
 		Resources.LoadGameFonts("Fonts/fonts.conscript");
 
-		FONT_LARGE = Resources.GetGameFont("font_large");
-		FONT_SMALL = Resources.GetGameFont("font_small");
+		FONT_LARGE = Resources.GetGameFont("Fonts/font_large");
+		FONT_SMALL = Resources.GetGameFont("Fonts/font_small");
 	}
 
 		
@@ -497,7 +503,15 @@ class GameData {
 	// Sprite Sheets
 	//-----------------------------------------------------------------------------
 
-		public static SpriteSheet SHEET_MENU_SMALL;
+	public static SpriteSheet SHEET_MENU_SMALL;
+	public static SpriteSheet SHEET_MENU_LARGE;
+	public static SpriteSheet SHEET_MENU_SMALL_LIGHT;
+	public static SpriteSheet SHEET_MENU_LARGE_LIGHT;
+	public static SpriteSheet SHEET_ITEMS_SMALL;
+	public static SpriteSheet SHEET_ITEMS_LARGE;
+	public static SpriteSheet SHEET_ITEMS_SMALL_LIGHT;
+	public static SpriteSheet SHEET_ITEMS_LARGE_LIGHT;
+
 		public static SpriteSheet SHEET_ICONS_THIN;
 		public static SpriteSheet SHEET_EFFECTS;
 

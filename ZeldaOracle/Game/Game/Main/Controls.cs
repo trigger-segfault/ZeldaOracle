@@ -11,21 +11,16 @@ namespace ZeldaOracle.Game.Main {
 	// The controls for the game
 	public class Controls {
 
-		private static GameControl up;
-		private static GameControl down;
-		private static GameControl left;
-		private static GameControl right;
-		private static GameControl analogMovement;
-		private static GameControl[] arrows;
+		private static MultiGameButton[] arrows;
+		private static AnalogStick analogMovement;
 
-		private static GameControl a;
-		private static GameControl b;
-		private static GameControl x;
-		private static GameControl y;
+		private static MultiGameButton a;
+		private static MultiGameButton b;
+		private static MultiGameButton x;
+		private static MultiGameButton y;
 
-		private static GameControl start;
-		private static GameControl select;
-
+		private static MultiGameButton start;
+		private static MultiGameButton select;
 
 
 		//-----------------------------------------------------------------------------
@@ -34,27 +29,41 @@ namespace ZeldaOracle.Game.Main {
 
 		// Initializes the controls for the game
 		public static void Initialize() {
-			Controls.up				= new GameControl(Keys.Up);
-			Controls.down			= new GameControl(Keys.Down);
-			Controls.left			= new GameControl(Keys.Left);
-			Controls.right			= new GameControl(Keys.Right);
-			Controls.analogMovement	= new GameControl(Buttons.LeftStick);
-			
-			Controls.arrows = new GameControl[4];
-			Controls.arrows[Directions.Up]		= Controls.up;
-			Controls.arrows[Directions.Down]	= Controls.down;
-			Controls.arrows[Directions.Left]	= Controls.left;
-			Controls.arrows[Directions.Right]	= Controls.right;
 
-			Controls.a				= new GameControl(Keys.X);
-			Controls.b				= new GameControl(Keys.Z);
-			Controls.x				= new GameControl(Keys.A);
-			Controls.y				= new GameControl(Keys.S);
+			Controls.arrows = new MultiGameButton[4];
+			Controls.arrows[Directions.Up]		= new MultiGameButton(new GameButton(Keys.Up), new GameButton(Buttons.LeftStickUp));
+			Controls.arrows[Directions.Down]	= new MultiGameButton(new GameButton(Keys.Down), new GameButton(Buttons.LeftStickDown));
+			Controls.arrows[Directions.Left]	= new MultiGameButton(new GameButton(Keys.Left), new GameButton(Buttons.LeftStickLeft));
+			Controls.arrows[Directions.Right]	= new MultiGameButton(new GameButton(Keys.Right), new GameButton(Buttons.LeftStickRight));
 
-			Controls.start			= new GameControl(Keys.Enter);
-			Controls.select			= new GameControl(Keys.Backslash);
+			Controls.analogMovement	= GamePad.GetStick(Buttons.LeftStick);
+
+			Controls.a				= new MultiGameButton(new GameButton(Keys.X), new GameButton(Buttons.A));
+			Controls.b				= new MultiGameButton(new GameButton(Keys.Z), new GameButton(Buttons.B));
+			Controls.x				= new MultiGameButton(new GameButton(Keys.S), new GameButton(Buttons.X));
+			Controls.y				= new MultiGameButton(new GameButton(Keys.A), new GameButton(Buttons.Y));
+
+			Controls.start			= new MultiGameButton(new GameButton(Keys.Enter), new GameButton(Buttons.Start));
+			Controls.select			= new MultiGameButton(new GameButton(Keys.Backslash), new GameButton(Buttons.Back));
 		}
-		
+
+		//-----------------------------------------------------------------------------
+		// Updating
+		//-----------------------------------------------------------------------------
+
+		public static void Update() {
+			for (int i = 0; i < 4; i++) {
+				arrows[i].Update();
+			}
+
+			a.Update();
+			b.Update();
+			x.Update();
+			y.Update();
+
+			start.Update();
+			select.Update();
+		}
 
 		//-----------------------------------------------------------------------------
 		// Accessors
@@ -65,6 +74,17 @@ namespace ZeldaOracle.Game.Main {
 			return arrows[direction].Button;
 		}
 
+		// Gets the analog direction controls
+		public static bool GetAnalogDirection(int direction) {
+			switch (direction) {
+			case Directions.Right:	return analogMovement.Position.X > 0f;
+			case Directions.Down:	return analogMovement.Position.Y > 0f;
+			case Directions.Left:	return analogMovement.Position.X < 0f;
+			case Directions.Up:		return analogMovement.Position.Y < 0f;
+			}
+			return false;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -72,23 +92,23 @@ namespace ZeldaOracle.Game.Main {
 
 		// Gets the up button
 		public static InputControl Up {
-			get { return up.Button; }
+			get { return arrows[Directions.Up].Button; }
 		}
 		// Gets the down button
 		public static InputControl Down {
-			get { return down.Button; }
+			get { return arrows[Directions.Down].Button; }
 		}
 		// Gets the left button
 		public static InputControl Left {
-			get { return left.Button; }
+			get { return arrows[Directions.Left].Button; }
 		}
 		// Gets the right button
 		public static InputControl Right {
-			get { return right.Button; }
+			get { return arrows[Directions.Right].Button; }
 		}
 		// Gets the analog movement control
 		public static AnalogStick AnalogMovement {
-			get { return analogMovement.Stick; }
+			get { return analogMovement; }
 		}
 
 		// Gets the A button

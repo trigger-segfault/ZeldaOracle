@@ -14,15 +14,13 @@ using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Control.Menus;
+using ZeldaOracle.Common.Input;
 
 namespace ZeldaOracle.Game.Control {
-
-	// TODO: There should be a clas above room control.
 
 	// Handles the main Zelda gameplay within a room.
 	public class RoomControl : GameState {
 
-		private World			world;
 		private Level			level;
 		private Room			room;
 		private Point2I			roomLocation;
@@ -36,7 +34,6 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		public RoomControl() {
-			world			= null;
 			level			= null;
 			room			= null;
 			player			= null;
@@ -210,7 +207,6 @@ namespace ZeldaOracle.Game.Control {
 			// Setup the new room control.
 			RoomControl newControl = new RoomControl();
 			newControl.gameManager	= gameManager;
-			newControl.world		= world;
 			newControl.level		= level;
 			newControl.room			= nextRoom;
 			newControl.roomLocation	= nextLocation;
@@ -261,7 +257,7 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public override void OnBegin() {
-
+			GameControl.RoomControl = this;
 		}
 		
 		public override void OnEnd() {
@@ -304,7 +300,7 @@ namespace ZeldaOracle.Game.Control {
 				CollisionInfo info = player.Physics.CollisionInfo[direction];
 
 				if (info.Type == CollisionType.RoomEdge &&
-					(Controls.GetArrowControl(direction).IsDown() || player.AutoRoomTransition))
+					(Controls.GetArrowControl(direction).IsDown() || Controls.GetAnalogDirection(direction) || player.AutoRoomTransition))
 				{
 					EnterAdjacentRoom(direction);
 					break;
@@ -313,10 +309,10 @@ namespace ZeldaOracle.Game.Control {
 
 			// [Start] Open inventory.
 			if (Controls.Start.IsPressed()) {
-				gameManager.QueueGameStates(
-					new TransitionFade(Color.White, 30, this, gameManager.menu1),
-					gameManager.menu1
-				);
+				GameControl.OpenMenu(GameControl.MenuInventory);
+			}
+			if (Keyboard.IsKeyPressed(Keys.G)) {
+				GameControl.DisplayMessage("I was a <red>hero<red> to broken robots 'cause I was one of them, but how can I sing about being damaged if I'm not?<p> That's like <green>Christina Aguilera<green> singing Spanish. Ooh, wait! That's it! I'll fake it!");
 			}
 		}
 
@@ -353,7 +349,7 @@ namespace ZeldaOracle.Game.Control {
 			g.End();
 			g.Begin(drawMode);
 			g.ResetTranslation();
-			gameManager.HUD.Draw(g);
+			GameControl.HUD.Draw(g, false);
 		}
 
 		
@@ -361,9 +357,8 @@ namespace ZeldaOracle.Game.Control {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		// The world context of the game.
-		public World World {
-			get { return world; }
+		public GameControl GameControl {
+			get { return gameManager.GameControl; }
 		}
 
 		// The current level that contains the room the player is in.

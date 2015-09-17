@@ -22,10 +22,8 @@ namespace ZeldaOracle.Game.GameStates {
 		private FadeType type;
 		// Color to fade to/from.
 		private Color color;
-		// The old game state to transition from.
-		private GameState oldState;
-		// The new game state to transition to.
-		private GameState newState;
+		// The game state to transition with.
+		private GameState gameState;
 
 
 
@@ -33,15 +31,14 @@ namespace ZeldaOracle.Game.GameStates {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public TransitionFade(Color color, int duration, GameState oldState, GameState newState) :
+		public TransitionFade(Color color, int duration, FadeType type, GameState gameState) :
 			base()
 		{
 			this.duration	= duration;
 			this.timer		= 0;
-			this.type		= FadeType.FadeOut;
+			this.type		= type;
 			this.color		= color;
-			this.oldState	= oldState;
-			this.newState	= newState;
+			this.gameState	= gameState;
 		}
 
 		
@@ -55,15 +52,8 @@ namespace ZeldaOracle.Game.GameStates {
 
 		public override void Update() {
 			timer++;
-			if (timer >= duration) {
-				if (type == FadeType.FadeOut) {
-					type = FadeType.FadeIn;
-					timer = 0;
-				}
-				else {
-					End();
-				}
-			}
+			if (timer >= duration)
+				End();
 		}
 
 		public override void Draw(Graphics2D g) {
@@ -72,12 +62,8 @@ namespace ZeldaOracle.Game.GameStates {
 				opacity = 1.0f - opacity;
 			Color c = color * opacity;
 			//c.A = (byte) (255.0f * opacity);
-			if (type == FadeType.FadeOut) {
-				oldState.Draw(g);
-			}
-			else {
-				newState.Draw(g);
-			}
+			gameState.Draw(g);
+
 			g.FillRectangle(GameSettings.SCREEN_BOUNDS, c);
 		}
 	}
