@@ -15,19 +15,15 @@ using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Players {
-	public class PlayerNormalState : PlayerMovableState {
-		
-		private int		pushTimer;
-		private bool	isOnIce;
+	public class PlayerLadderState : PlayerMovableState {
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public PlayerNormalState() {
-			pushTimer	= 0;
-			isOnIce		= false;
+		public PlayerLadderState() {
+			moveSpeedScale = 0.5f;
 		}
 		
 		
@@ -35,17 +31,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Internal
 		//-----------------------------------------------------------------------------
 
-		public void Jump() {
-			if (player.IsOnGround) {
-				player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
-				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
-				player.BeginState(new PlayerJumpState());
-			}
-		}
-
 		public void CheckTiles() {
-			isOnIce = false;
-			moveSpeedScale = 1.0f;
+			bool onLadder = false;
 
 			Point2I origin = (Point2I) player.Position - new Point2I(0, 2);
 			Point2I location = origin / new Point2I(GameSettings.TILE_SIZE, GameSettings.TILE_SIZE);
@@ -56,19 +43,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 				Tile tile = player.RoomControl.GetTile(location, i);
 				if (tile != null) {
 					
-					if (tile.Flags.HasFlag(TileFlags.Stairs)) {
-						moveSpeedScale = 0.5f;
-					}
-					if (tile.Flags.HasFlag(TileFlags.Ice)) {
-						isOnIce = true;
-					}
 					if (tile.Flags.HasFlag(TileFlags.Ladder)) {
-						player.BeginState(player.LadderState);
+						onLadder = true;
 					}
 				}
 			}
-
-			isSlippery = isOnIce;
+			if (!onLadder) {
+				player.BeginState(Player.NormalState);
+			}
 		}
 
 
@@ -79,12 +61,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public override void OnBegin() {
 			base.OnBegin();
 
-			pushTimer	= 0;
-			isOnIce		= false;
-			
 			// Movement settings.
 			allowMovementControl	= true;
-			moveSpeed				= 1.0f;
+			moveSpeed				= 0.5f;
 			moveSpeedScale			= 1.0f;
 			isSlippery				= false;
 			acceleration			= 0.1f;
@@ -92,17 +71,20 @@ namespace ZeldaOracle.Game.Entities.Players {
 			minSpeed				= 0.05f;
 			autoAccelerate			= false;
 			directionSnapCount		= 16;
+			strafing				= true;
 
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
 		}
 		
 		public override void OnEnd() {
-			pushTimer		= 0;
 			Player.Graphics.StopAnimation();
+			strafing				= false;
 			base.OnEnd();
 		}
 
 		public override void Update() {
+			player.Direction = Directions.Up;
+			player.Angle = Angles.Up;
 			CheckTiles();
 			if (!IsActive)
 				return;
@@ -130,27 +112,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 					player.BeginState(player.LedgeJumpState);
 					return;
 				}
-				else {
-					player.Graphics.AnimationPlayer.Animation = GameData.ANIM_PLAYER_PUSH;
-					pushTimer++;
-
-					if (pushTimer > 20 && tile.Flags.HasFlag(TileFlags.Movable)) {
-						tile.Push(player.Direction, 1.0f);
-						//Message message = new Message("Oof! It's heavy!");
-						//player.RoomControl.GameManager.PushGameState(new StateTextReader(message));
-						pushTimer = 0;
-					}
-				}
 			}
 			else {
-				pushTimer = 0;
 				player.Graphics.AnimationPlayer.Animation = GameData.ANIM_PLAYER_DEFAULT;
 			}
 			
 			// Update items.
-			Player.UpdateEquippedItems();
-
-			//player.Physics.SetFlags(PhysicsFlags.CollideRoomEdge, !isMoving || player.IsInAir);
+			//Player.UpdateEquippedItems();
+			// TODO: Handle holding sheild on ladder
 		}
 
 

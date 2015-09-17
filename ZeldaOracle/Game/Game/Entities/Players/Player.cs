@@ -45,6 +45,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerJumpState			stateJump;
 		private PlayerSwimState			stateSwim;
 		private PlayerLedgeJumpState	stateLedgeJump;
+		private PlayerLadderState		stateLadder;
 
 
 
@@ -74,6 +75,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateJump		= new PlayerJumpState();
 			stateSwim		= new PlayerSwimState();
 			stateLedgeJump	= new PlayerLedgeJumpState();
+			stateLadder		= new PlayerLadderState();
 			
 
 			Graphics.ShadowDrawOffset = new Point2I(0, -2);
@@ -232,6 +234,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		
 		public PlayerLedgeJumpState LedgeJumpState {
 			get { return stateLedgeJump; }
+		}
+
+		public PlayerLadderState LadderState {
+			get { return stateLadder; }
 		}
 	}
 }

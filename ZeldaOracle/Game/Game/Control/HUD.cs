@@ -60,7 +60,7 @@ namespace ZeldaOracle.Game.Control {
 
 				// item1.Draw(g, new Point2I(16, 0));
 			}
-			else if (gameControl.IsAdvancedGame) {
+			else if (!gameControl.IsAdvancedGame) {
 				// B bracket
 				g.DrawSprite(bR, new Point2I(0, 0));
 				g.DrawSprite(eBR, new Point2I(0, 8));
