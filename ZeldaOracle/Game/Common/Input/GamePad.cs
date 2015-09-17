@@ -79,6 +79,7 @@ public static class GamePad {
 			buttons[i, (int)Buttons.DPadDown]			= sticks[i, (int)Buttons.DPad].Down;
 			buttons[i, (int)Buttons.DPadLeft]			= sticks[i, (int)Buttons.DPad].Left;
 			buttons[i, (int)Buttons.DPadUp]				= sticks[i, (int)Buttons.DPad].Up;
+			sticks[i, (int)Buttons.DPad].DirectionDeadZone	= Vector2F.Zero;
 
 			buttons[i, (int)Buttons.LeftTriggerButton]	= triggers[i, (int)Buttons.LeftTrigger].Button;
 			buttons[i, (int)Buttons.RightTriggerButton]	= triggers[i, (int)Buttons.RightTrigger].Button;
@@ -101,19 +102,19 @@ public static class GamePad {
 
 		for (int i = 0; i < 4; i++) {
 			XnaPlayer player = (XnaPlayer)i;
-			buttons[i, (int)Buttons.A].Update((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.A));
-			buttons[i, (int)Buttons.B].Update((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.B));
-			buttons[i, (int)Buttons.X].Update((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.X));
-			buttons[i, (int)Buttons.Y].Update((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.Y));
+			buttons[i, (int)Buttons.A].Update(1, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.A));
+			buttons[i, (int)Buttons.B].Update(1, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.B));
+			buttons[i, (int)Buttons.X].Update(1, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.X));
+			buttons[i, (int)Buttons.Y].Update(1, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.Y));
 
-			buttons[i, (int)Buttons.Start].Update((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.Start));
-			buttons[i, (int)Buttons.Back].Update((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.Back));
+			buttons[i, (int)Buttons.Start].Update(1, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.Start));
+			buttons[i, (int)Buttons.Back].Update(1, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.Back));
 
-			buttons[i, (int)Buttons.Home].Update((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.BigButton));
-			buttons[i, (int)Buttons.LeftShoulder].Update((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.LeftShoulder));
-			buttons[i, (int)Buttons.RightShoulder].Update((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.RightShoulder));
-			buttons[i, (int)Buttons.LeftStickButton].Update((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.LeftStick));
-			buttons[i, (int)Buttons.RightStickButton].Update((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.RightStick));
+			buttons[i, (int)Buttons.Home].Update(1, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.BigButton));
+			buttons[i, (int)Buttons.LeftShoulder].Update(1, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.LeftShoulder));
+			buttons[i, (int)Buttons.RightShoulder].Update(1, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.RightShoulder));
+			buttons[i, (int)Buttons.LeftStickButton].Update(1, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.LeftStick));
+			buttons[i, (int)Buttons.RightStickButton].Update(1, XnaGamePad.GetState(player).IsButtonDown(XnaButtons.RightStick));
 
 			Vector2F dPad = Vector2F.Zero;
 			if (XnaGamePad.GetState(player).IsButtonDown(XnaButtons.DPadRight))
@@ -124,27 +125,27 @@ public static class GamePad {
 				dPad.X = -1;
 			if (XnaGamePad.GetState(player).IsButtonDown(XnaButtons.DPadUp))
 				dPad.Y = -1;
-			if (dPad.X != 0.0 && dPad.Y != 0.0) {
-				dPad.X /= (float)Math.Sqrt(2.0f);
-				dPad.Y /= (float)Math.Sqrt(2.0f);
+			if (dPad.X != 0.0f && dPad.Y != 0.0f) {
+				dPad.X /= GMath.Sqrt(2.0f);
+				dPad.Y /= GMath.Sqrt(2.0f);
 			}
-			sticks[i, (int)Buttons.DPad].Update((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, dPad);
+			sticks[i, (int)Buttons.DPad].Update(1, dPad);
 
 			Vector2F stick = Vector2F.Zero;
 
 			stick = XnaGamePad.GetState(player).ThumbSticks.Left;
 			stick.Y *= -1;
-			sticks[i, (int)Buttons.LeftStick].Update((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, stick);
+			sticks[i, (int)Buttons.LeftStick].Update(1, stick);
 
 			stick = XnaGamePad.GetState(player).ThumbSticks.Right;
 			stick.Y *= -1;
-			sticks[i, (int)Buttons.RightStick].Update((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, stick);
+			sticks[i, (int)Buttons.RightStick].Update(1, stick);
 
 
 			float trigger = XnaGamePad.GetState(player).Triggers.Left;
-			triggers[i, (int)Buttons.LeftTrigger].Update((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, trigger);
+			triggers[i, (int)Buttons.LeftTrigger].Update(1, trigger);
 			trigger = XnaGamePad.GetState(player).Triggers.Right;
-			triggers[i, (int)Buttons.RightTrigger].Update((double)gameTime.ElapsedGameTime.Milliseconds / 1000.0, trigger);
+			triggers[i, (int)Buttons.RightTrigger].Update(1, trigger);
 		}
 	}
 	/** <summary> Resets all the button states. </summary> */

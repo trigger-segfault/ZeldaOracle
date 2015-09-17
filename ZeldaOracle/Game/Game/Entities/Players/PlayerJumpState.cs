@@ -37,7 +37,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			deceleration			= 0.00f;
 			minSpeed				= 0.05f;
 			autoAccelerate			= false;
-			directionSnapCount		= 8;
+			directionSnapCount		= 32;
 		}
 		
 

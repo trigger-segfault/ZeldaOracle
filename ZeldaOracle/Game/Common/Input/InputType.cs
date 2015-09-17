@@ -9,8 +9,6 @@ namespace ZeldaOracle.Common.Input {
 		None = 0,
 		Key = 1,
 		MouseButton = 2,
-		Button = 3,
-		Trigger = 4,
-		Stick = 5
+		Button = 3
 	}
 }

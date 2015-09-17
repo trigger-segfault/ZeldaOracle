@@ -18,27 +18,27 @@ using ZeldaOracle.Common.Input.Controls;
 namespace ZeldaOracle.Game.Entities.Players {
 	public class PlayerMovableState : PlayerState {
 
-		private AnalogStick analogStick;
-		private float		analogAngle;
-		private bool		analogMode;				// True if the analog stick is active.
-		private Keys[]		moveKeys;				// The 4 movement keys for each direction.
-		private bool[]		moveAxes;				// Which axes the player is moving on.
-		protected bool		isMoving;				// Is the player holding down a movement key?
-		private Vector2F	motion;					// The vector that's driving the player's velocity.
-		private Vector2F	velocityPrev;			// The player's velocity on the previous frame.
+		private AnalogStick		analogStick;
+		private float			analogAngle;
+		private bool			analogMode;				// True if the analog stick is active.
+		private InputControl[]	moveButtons;			// The 4 movement controls for each direction.
+		private bool[]			moveAxes;				// Which axes the player is moving on.
+		protected bool			isMoving;				// Is the player holding down a movement key?
+		private Vector2F		motion;					// The vector that's driving the player's velocity.
+		private Vector2F		velocityPrev;			// The player's velocity on the previous frame.
 
-		protected int		moveAngle;				// The angle the player is moving in.
-		protected float		moveSpeed;				// The top-speed for movement.
-		protected float		moveSpeedScale;			// Scales the movement speed to create the actual top-speed.
-		protected bool		isSlippery;				// Is the movement acceleration-based?
-		protected float		acceleration;			// Acceleration when moving.
-		protected float		deceleration;			// Deceleration when not moving.
-		protected float		minSpeed;				// Minimum speed threshhold used to jump back to zero when decelerating.
-		protected bool		autoAccelerate;			// Should the player still accelerate without holding down a movement key?
-		protected int		directionSnapCount;		// The number of intervals movement directions should snap to for acceleration-based movement.
-		protected bool		allowMovementControl;	// Is the player allowed to control his movement?
+		protected int			moveAngle;				// The angle the player is moving in.
+		protected float			moveSpeed;				// The top-speed for movement.
+		protected float			moveSpeedScale;			// Scales the movement speed to create the actual top-speed.
+		protected bool			isSlippery;				// Is the movement acceleration-based?
+		protected float			acceleration;			// Acceleration when moving.
+		protected float			deceleration;			// Deceleration when not moving.
+		protected float			minSpeed;				// Minimum speed threshhold used to jump back to zero when decelerating.
+		protected bool			autoAccelerate;			// Should the player still accelerate without holding down a movement key?
+		protected int			directionSnapCount;		// The number of intervals movement directions should snap to for acceleration-based movement.
+		protected bool			allowMovementControl;	// Is the player allowed to control his movement?
 
-		protected bool		strafing;				// The player can only face one direction.
+		protected bool			strafing;				// The player can only face one direction.
 
 
 		//-----------------------------------------------------------------------------
@@ -54,11 +54,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Controls.
 			analogStick = GamePad.GetStick(Buttons.LeftStick);
 			analogAngle = 0.0f;
-			moveKeys = new Keys[4];
-			moveKeys[Directions.Up]		= Keys.Up;
-			moveKeys[Directions.Down]	= Keys.Down;
-			moveKeys[Directions.Left]	= Keys.Left;
-			moveKeys[Directions.Right]	= Keys.Right;
+			moveButtons = new InputControl[4];
+			moveButtons[Directions.Up]		= Controls.Up;
+			moveButtons[Directions.Down]	= Controls.Down;
+			moveButtons[Directions.Left]	= Controls.Left;
+			moveButtons[Directions.Right]	= Controls.Right;
 
 			// Movement settings.
 			analogMode				= false;
@@ -180,7 +180,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Poll the movement key for the given direction, returning true if
 		// it is down. This also manages the strafing behavior of movement.
 		private bool CheckMoveKey(int dir) {
-			if (Keyboard.IsKeyDown(moveKeys[dir]) || analogMode) {
+			if (moveButtons[dir].IsDown() || analogMode) {
 				isMoving = true;
 			
 				if (!moveAxes[(dir + 1) % 2])
@@ -188,9 +188,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 				if (moveAxes[dir % 2]) {
 					moveAngle = dir * 2;
 
-					if (Keyboard.IsKeyDown(moveKeys[(dir + 1) % 4]))
+					if (moveButtons[(dir + 1) % 4].IsDown())
 						moveAngle = (moveAngle + 1) % 8;
-					if (Keyboard.IsKeyDown(moveKeys[(dir + 3) % 4]))
+					if (moveButtons[(dir + 3) % 4].IsDown())
 						moveAngle = (moveAngle + 7) % 8;
 
 					// Don't affect the facing direction when strafing
@@ -199,9 +199,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 							Player.Direction = dir;
 							Player.Angle = dir * 2;
 
-							if (Keyboard.IsKeyDown(moveKeys[(dir + 1) % 4]))
+							if (moveButtons[(dir + 1) % 4].IsDown())
 								Player.Angle = (Player.Angle + 1) % 8;
-							if (Keyboard.IsKeyDown(moveKeys[(dir + 3) % 4]))
+							if (moveButtons[(dir + 3) % 4].IsDown())
 								Player.Angle = (Player.Angle + 7) % 8;
 						}
 						else {

@@ -11,17 +11,17 @@ public class InputControl {
 	//=========== MEMBERS ============
 
 	/** <summary> The pressed state of the control. </summary> */
-	private InputState state;
+	protected InputState state;
 	/** <summary> The disabled state of the control. </summary> */
-	private DisableState disabledState;
+	protected DisableState disabledState;
 	/** <summary> True if the control was double clicked. </summary> */
-	private bool doubleClicked;
+	protected bool doubleClicked;
 	/** <summary> True if the control was clicked. </summary> */
-	private bool clicked;
+	protected bool clicked;
 	/** <summary> True if the control was typed. </summary> */
-	private bool typed;
+	protected bool typed;
 	/** <summary> The time the key has been held for since being pressed, or released. </summary> */
-	private double holdTime;
+	protected int holdTime;
 
 	//========= CONSTRUCTORS =========
 
@@ -32,20 +32,20 @@ public class InputControl {
 		this.doubleClicked	= false;
 		this.clicked		= false;
 		this.typed			= false;
-		this.holdTime		= 0.0;
+		this.holdTime		= 0;
 	}
 
 	//========== PROPERTIES ==========
 
 	/** <summary> The time the key has been held for since being pressed, or released. </summary> */
-	public double HoldTime {
+	public int HoldTime {
 		get { return holdTime; }
 	}
 
 	//=========== UPDATING ===========
 
 	/** <summary> Called every step to update the control state. </summary> */
-	public void Update(double time, bool down, bool typed = false, bool doubleClicked = false, bool clicked = false) {
+	public void Update(int time, bool down, bool typed = false, bool doubleClicked = false, bool clicked = false) {
 		// Update the duration of the control state
 		holdTime += time;
 

@@ -155,10 +155,11 @@
     <Compile Include="Common\Input\Controls\Button.cs" />
     <Compile Include="Common\Input\Controls\ComboControl.cs" />
     <Compile Include="Common\Input\Controls\ControlHandler.cs" />
-    <Compile Include="Common\Input\Controls\GameHotkey.cs" />
+    <Compile Include="Common\Input\Controls\GameButton.cs" />
     <Compile Include="Common\Input\Controls\HotKey.cs" />
     <Compile Include="Common\Input\Controls\Key.cs" />
     <Compile Include="Common\Input\Controls\MouseButton.cs" />
+    <Compile Include="Common\Input\Controls\MultiGameButton.cs" />
     <Compile Include="Common\Input\DisableState.cs" />
     <Compile Include="Common\Input\GamePad.cs" />
     <Compile Include="Common\Input\InputControl.cs" />

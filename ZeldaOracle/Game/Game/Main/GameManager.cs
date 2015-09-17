@@ -167,7 +167,7 @@ namespace ZeldaOracle.Game.Main {
 			//prop.Update(1.0 / 60.0, new Point2I(ScreenSize.X - Property<int>.Width, ScreenSize.Y / 2));
 
 			// Update the menu
-
+			Controls.Update();
 			// Check for screenshot requests
 			if (Keyboard.IsKeyPressed(Keys.F12)) {
 				GameBase.TakeScreenShot();
