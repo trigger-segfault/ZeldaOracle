@@ -92,9 +92,14 @@ public class GameBase : XnaGame {
 		// Setup
 		this.IsMouseVisible					= true;
 		this.Window.AllowUserResizing		= false;
+		this.Window.AllowUserResizing		= true;
 		this.graphics.PreferMultiSampling	= true;
 		this.graphics.PreferredBackBufferWidth	= windowSize.X;
 		this.graphics.PreferredBackBufferHeight	= windowSize.Y;
+		//this.graphics.DeviceReset				+= OnGraphicsDeviceReset;
+		//this.graphics.DeviceResetting			+= delegate(object sender, EventArgs e) {
+		//	Console.WriteLine("Resetting");
+		//};
 		Form.Icon = new Icon("Game.ico");
 		Form.MinimumSize = new System.Drawing.Size(32, 32);
 	}
@@ -107,18 +112,19 @@ public class GameBase : XnaGame {
 		Console.WriteLine("Begin Initialize");
 
 		Console.WriteLine("Initializing Input");
-		EventInput.Initialize(Window);
+		//EventInput.Initialize(Window);
 		Keyboard.Initialize();
 		Mouse.Initialize();
 		GamePad.Initialize();
-
-		// Create and initialize the game.
-		this.game = new GameManager();
-		this.game.Initialize(this);
+	
+		game = new GameManager();
 
 		base.Initialize();
 
-		this.Window.ClientSizeChanged += OnClientSizeChanged;
+		// Create and initialize the game.
+		game.Initialize(this);
+
+		Window.ClientSizeChanged += OnClientSizeChanged;
 
 		Console.WriteLine("End Initialize");
 	}
@@ -170,7 +176,21 @@ public class GameBase : XnaGame {
 	private void OnClientSizeChanged(object sender, EventArgs e) {
 		Console.WriteLine("OnClientSizeChanged");
 		windowSizeChanged = true;
+		/*
+		if (Window.ClientBounds.Width > 0 && Window.ClientBounds.Height > 0)
+		{
+			graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
+			graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
+
+			//XCameraManager.UpdateViewports(myGraphics.GraphicsDevice.Viewport);
+		}
+		*/
+		game.OnGraphicsDeviceReset(sender, e);
 	}
+	
+    public void OnGraphicsDeviceReset(object sender, EventArgs e) {
+		game.OnGraphicsDeviceReset(sender, e);
+    }
 
 
 	//-----------------------------------------------------------------------------
@@ -285,7 +305,6 @@ public class GameBase : XnaGame {
 
 	// This is called when the game should draw itself.
 	protected override void Draw(GameTime gameTime) {
-
 		GraphicsDevice.Clear(Color.Black);
 
 		// Update the frame rate

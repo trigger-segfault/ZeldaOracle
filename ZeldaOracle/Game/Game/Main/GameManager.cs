@@ -76,6 +76,12 @@ namespace ZeldaOracle.Game.Main {
 			FormatCodes.Initialize();
 			Controls.Initialize();
 			ScreenResized();
+
+			// Begin the game state stack with a RoomControl.
+			gameStateStack	= new GameStateStack(new StateDummy());
+			gameStateStack.Begin(this);
+			gameControl		= new GameControl(this);
+			gameControl.StartGame();
 		}
 
 		// Uninitializes the game manager.
@@ -92,18 +98,25 @@ namespace ZeldaOracle.Game.Main {
 		// Called to load game manager content.
 		public void LoadContent(ContentManager content) {
 			GameData.Initialize();
-
-			// Begin the game state stack with a RoomControl.
-			gameStateStack	= new GameStateStack(new StateDummy());
-			gameStateStack.Begin(this);
-			gameControl		= new GameControl(this);
-			gameControl.StartGame();
 		}
 
 		// Called to unload game manager content.
 		public void UnloadContent(ContentManager content) {
 		
 		}
+
+        public void OnGraphicsDeviceReset(object sender, EventArgs e) {
+			/*
+			Point2I targetSize = ScreenSize;
+			//if (GameData.RenderTargetGame != null)
+			//	GameData.RenderTargetGame.Dispose();
+			GameData.RenderTargetGame = new RenderTarget2D(gameBase.GraphicsDevice, ScreenSize.X, ScreenSize.Y);
+
+			if (GameData.RenderTargetDebug != null)
+				GameData.RenderTargetDebug.Dispose();
+			GameData.RenderTargetDebug = new RenderTarget2D(gameBase.GraphicsDevice, ScreenSize.X, ScreenSize.Y);
+			*/
+        }
 
 	
 		//-----------------------------------------------------------------------------
@@ -147,12 +160,12 @@ namespace ZeldaOracle.Game.Main {
 		// Called when the screen has been resized.
 		public void ScreenResized() {
 			Point2I targetSize = ScreenSize;
-			if (GameData.RenderTargetGame != null)
-				GameData.RenderTargetGame.Dispose();
+			//if (GameData.RenderTargetGame != null)
+			//	GameData.RenderTargetGame.Dispose();
 			GameData.RenderTargetGame	= new RenderTarget2D(gameBase.GraphicsDevice, ScreenSize.X, ScreenSize.Y);
 
-			if (GameData.RenderTargetDebug != null)
-				GameData.RenderTargetDebug.Dispose();
+			//if (GameData.RenderTargetDebug != null)
+			//	GameData.RenderTargetDebug.Dispose();
 			GameData.RenderTargetDebug	= new RenderTarget2D(gameBase.GraphicsDevice, ScreenSize.X, ScreenSize.Y);
 		}
 
@@ -165,7 +178,10 @@ namespace ZeldaOracle.Game.Main {
 		public void Update(float timeDelta) {
 
 			//prop.Update(1.0 / 60.0, new Point2I(ScreenSize.X - Property<int>.Width, ScreenSize.Y / 2));
-
+			
+			if (Keyboard.IsKeyPressed(Keys.F4)) {
+				GameBase.IsFullScreen = !GameBase.IsFullScreen;
+			}
 			// Update the menu
 			Controls.Update();
 			// Check for screenshot requests
