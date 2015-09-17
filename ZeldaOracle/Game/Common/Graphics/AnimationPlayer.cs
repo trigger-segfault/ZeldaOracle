@@ -100,7 +100,7 @@ namespace ZeldaOracle.Common.Graphics {
 			for (i = 0; subStrip != null && i < index; i++)
 				subStrip = subStrip.NextStrip;
 
-			if (i != index)
+			if (i != index || subStrip == null)
 				return animation; // The index doesn't exist.
 			return subStrip;
 		}

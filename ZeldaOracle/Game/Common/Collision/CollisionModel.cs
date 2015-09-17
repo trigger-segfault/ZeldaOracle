@@ -66,6 +66,25 @@ namespace ZeldaOracle.Common.Collision {
 
 
 		//-----------------------------------------------------------------------------
+		// Static methods
+		//-----------------------------------------------------------------------------
+
+		public static bool Intersecting(CollisionModel model,
+										Vector2F modelPosition,
+										Rectangle2F box,
+										Vector2F boxPosition)
+		{
+			Rectangle2F boxTranslated = Rectangle2F.Translate(box, boxPosition - modelPosition);
+			for (int i = 0; i < model.boxes.Count; i++) {
+				Rectangle2F modelBox = model.boxes[i];
+				if (boxTranslated.Intersects(modelBox))
+					return true;
+			}
+			return false;
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 

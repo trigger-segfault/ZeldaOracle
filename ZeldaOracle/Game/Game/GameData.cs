@@ -269,7 +269,7 @@ class GameData {
 			BuildAnim(ANIM_PLAYER_PUSH)				.AddFrameStrip(6, 0,6, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
 
 			BuildAnim(ANIM_PLAYER_SWIM)				.AddFrameStrip(6, 0,13, 2).Offset(-8, -16 + 2).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_DIVE)				.AddFrame(16, 0,21, 0,4).AddFrame(16, 1,21, 0,4).Offset(-8, -16).MakeDynamic(4, 0,0); // TODO: this shouldn't be dynamic.
+			BuildAnim(ANIM_PLAYER_DIVE)				.AddFrame(16, 0,21, 0,4).AddFrame(16, 1,21, 0,4).Offset(-8, -16);
 
 			BuildAnim(ANIM_PLAYER_PULL)				.AddFrameStrip(6, 0,7, 2).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_DIG)				.AddFrame(8, 0,9).AddFrame(16, 1,9).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
@@ -356,7 +356,7 @@ class GameData {
 			TILESET_OVERWORLD.LoadConfig("Content/Tilesets/overworld.txt");
 			TILESET_OVERWORLD.DefaultTile = new Point2I(1, 25);
 			tilesetBuilder.Tileset = TILESET_OVERWORLD;
-			
+
 			// Animations.
 			BuildTile( 1, 15).SetAnim(ANIM_WATER);
 			BuildTile( 2, 15).SetAnim(ANIM_WATER_DEEP);
@@ -386,26 +386,27 @@ class GameData {
 			BuildTile(15, 19).SetSolidModel(MODEL_DOORWAY);
 			BuildTile(12, 18).SetSolidModel(MODEL_CORNER_NW);
 			BuildTile(13, 18).SetSolidModel(MODEL_CORNER_NE);
-			// Ledges
-			BuildTile( 1, 17).SetSolidModel(MODEL_EDGE_N);
+			// Irregular Ledges
+			BuildTile( 0, 17).SetSolidModel(MODEL_CORNER_NW);
+			BuildTile( 1, 17).SetSolidModel(MODEL_EDGE_N).AddFlags(TileFlags.Ledge);
 			BuildTile( 2, 17).SetSolidModel(MODEL_CORNER_NE);
 			BuildTile( 4, 17).SetSolidModel(MODEL_CORNER_NW);
-			BuildTile( 5, 17).SetSolidModel(MODEL_EDGE_N);
+			BuildTile( 5, 17).SetSolidModel(MODEL_EDGE_N).AddFlags(TileFlags.Ledge);
 			BuildTile( 6, 17).SetSolidModel(MODEL_CORNER_NE);
-			BuildTile( 0, 18).SetSolidModel(MODEL_EDGE_W);
-			BuildTile( 2, 18).SetSolidModel(MODEL_EDGE_E);
-			BuildTile( 3, 18).SetSolidModel(MODEL_EDGE_E);
-			BuildTile( 4, 18).SetSolidModel(MODEL_EDGE_W);
-			BuildTile( 6, 18).SetSolidModel(MODEL_EDGE_E);
-			BuildTile( 7, 18).SetSolidModel(MODEL_EDGE_E);
+			BuildTile( 0, 18).SetSolidModel(MODEL_EDGE_W).AddFlags(TileFlags.Ledge);
+			BuildTile( 2, 18).SetSolidModel(MODEL_EDGE_E).AddFlags(TileFlags.Ledge);
+			BuildTile( 3, 18).SetSolidModel(MODEL_EDGE_E).AddFlags(TileFlags.Ledge);
+			BuildTile( 4, 18).SetSolidModel(MODEL_EDGE_W).AddFlags(TileFlags.Ledge);
+			BuildTile( 6, 18).SetSolidModel(MODEL_EDGE_E).AddFlags(TileFlags.Ledge);
+			BuildTile( 7, 18).SetSolidModel(MODEL_EDGE_E).AddFlags(TileFlags.Ledge);
 			BuildTile( 0, 19).SetSolidModel(MODEL_CORNER_SW);
-			BuildTile( 1, 19).SetSolidModel(MODEL_EDGE_S);
+			BuildTile( 1, 19).SetSolidModel(MODEL_EDGE_S).AddFlags(TileFlags.Ledge);
 			BuildTile( 2, 19).SetSolidModel(MODEL_CORNER_SE);
-			BuildTile( 3, 19).SetSolidModel(MODEL_EDGE_W);
+			BuildTile( 3, 19).SetSolidModel(MODEL_EDGE_W).AddFlags(TileFlags.Ledge);
 			BuildTile( 4, 19).SetSolidModel(MODEL_CORNER_SW);
-			BuildTile( 5, 19).SetSolidModel(MODEL_EDGE_S);
+			BuildTile( 5, 19).SetSolidModel(MODEL_EDGE_S).AddFlags(TileFlags.Ledge);
 			BuildTile( 6, 19).SetSolidModel(MODEL_CORNER_SE);
-			BuildTile( 7, 19).SetSolidModel(MODEL_EDGE_W);
+			BuildTile( 7, 19).SetSolidModel(MODEL_EDGE_W).AddFlags(TileFlags.Ledge);
 			BuildTile( 0, 20).SetSolidModel(MODEL_CORNER_NW);
 			BuildTile( 1, 20).SetSolidModel(MODEL_CORNER_NE);
 			BuildTile( 2, 20).SetSolidModel(MODEL_INSIDE_CORNER_SE);
@@ -422,6 +423,10 @@ class GameData {
 			BuildTile( 5, 21).SetSolidModel(MODEL_CORNER_SE);
 			BuildTile( 6, 21).SetSolidModel(MODEL_INSIDE_CORNER_NE);
 			BuildTile( 7, 21).SetSolidModel(MODEL_INSIDE_CORNER_NW);
+			
+			
+			// Ledges.
+			BuildTile( 1,  3).AddFlags(TileFlags.Ledge);
 
 			TILESETS = new Tileset[] { TILESET_OVERWORLD };
 	}

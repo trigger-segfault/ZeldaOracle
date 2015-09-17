@@ -87,6 +87,10 @@ namespace ZeldaOracle.Game.Tiles {
 								data.Flags |= TileFlags.Solid;
 								data.CollisionModel = GameData.MODEL_BLOCK;
 								break;
+							case 'F':
+								data.Flags |= TileFlags.Waterfall | TileFlags.Solid | TileFlags.Ledge;
+								data.CollisionModel = GameData.MODEL_BLOCK;
+								break;
 							case 'L': data.Flags |= TileFlags.Ledge;		break;
 							case 'G': data.Flags |= TileFlags.Diggable;		break;
 							case 'H': data.Flags |= TileFlags.Hole;			break;
@@ -96,9 +100,8 @@ namespace ZeldaOracle.Game.Tiles {
 							case 'R': data.Flags |= TileFlags.Stairs;		break;
 							case 'D': data.Flags |= TileFlags.Ladder;		break;
 							case 'A': data.Flags |= TileFlags.HalfSolid;	break;
-							//case 'O': data.flags |= TILE_OCEAN;		break;
-							//case 'F': data.flags |= TILE_WATERFALL;	break;
-							//case 'P': data.flags |= TILE_PUDDLE;		break;
+							case 'P': data.Flags |= TileFlags.Puddle;		break;
+							case 'O': data.Flags |= TileFlags.Water | TileFlags.Ocean; break;
 						}
 					}
 

@@ -50,6 +50,7 @@ namespace ZeldaOracle.Game.Entities {
 		private Rectangle2F		softCollisionBox;	// The collision box used to collide with items, monsters, room edges, etc.
 		private StateFlags		stateFlags;		// Flags for the physics state of the entity (is it colliding?)
 		private CollisionInfo[] collisionInfo;
+		private float			maxFallSpeed;
 
 
 		//-----------------------------------------------------------------------------
@@ -65,6 +66,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.velocity		= Vector2F.Zero;
 			this.zVelocity		= 0.0f;
 			this.gravity		= GameSettings.DEFAULT_GRAVITY;
+			this.maxFallSpeed	= GameSettings.DEFAULT_MAX_FALL_SPEED;
 			this.collisionBox	= new Rectangle2F(-4, -10, 8, 9);		// TEMP: this is the player collision box.
 			this.softCollisionBox = new Rectangle2F(-6, -14, 12, 14);	// TEMP: this is the player collision box.
 
@@ -107,13 +109,22 @@ namespace ZeldaOracle.Game.Entities {
 
 		public void Update() {
 
+			// Remove collision state flags.
+			stateFlags &= ~(StateFlags.Colliding | StateFlags.CollidingLeft |
+				StateFlags.CollidingRight | StateFlags.CollidingUp | StateFlags.CollidingDown);
+			for (int i = 0; i < Directions.Count; i++)
+				collisionInfo[i].Clear();
+
 			// Handle Z position.
 			if (entity.ZPosition > 0.0f || zVelocity != 0.0f) {
 				entity.ZPosition += zVelocity;
 
 				// Apply gravity.
-				if (HasFlags(PhysicsFlags.HasGravity))
+				if (HasFlags(PhysicsFlags.HasGravity)) {
 					zVelocity -= gravity;
+					if (zVelocity < -maxFallSpeed && maxFallSpeed >= 0)
+						zVelocity = -maxFallSpeed;
+				}
 
 				if (entity.ZPosition <= 0.0f)
 				{
@@ -145,6 +156,49 @@ namespace ZeldaOracle.Game.Entities {
 
 		
 		//-----------------------------------------------------------------------------
+		// Collision polls
+		//-----------------------------------------------------------------------------
+		
+		public bool IsPlaceMeetingSolid(Vector2F position, Rectangle2F collisionBox) {
+			Room room = entity.RoomControl.Room;
+			
+			// Find the rectangular area of nearby tiles to collide with.
+			Rectangle2F myBox = collisionBox;
+			myBox.Point += position;
+			myBox.Inflate(2, 2);
+	
+			int x1 = (int) (myBox.Left   / (float) GameSettings.TILE_SIZE);
+			int y1 = (int) (myBox.Top    / (float) GameSettings.TILE_SIZE);
+			int x2 = (int) (myBox.Right  / (float) GameSettings.TILE_SIZE) + 1;
+			int y2 = (int) (myBox.Bottom / (float) GameSettings.TILE_SIZE) + 1;
+
+			Rectangle2I area;
+			area.Point	= (Point2I) (myBox.TopLeft / (float) GameSettings.TILE_SIZE);
+			area.Size	= ((Point2I) (myBox.BottomRight / (float) GameSettings.TILE_SIZE)) + Point2I.One - area.Point;
+			area.Inflate(1, 1);
+			area = Rectangle2I.Intersect(area, new Rectangle2I(Point2I.Zero, room.Size));
+
+			
+			myBox.Inflate(-2, -2);
+
+			for (int x = area.Left; x < area.Right; ++x) {
+				for (int y = area.Top; y < area.Bottom; ++y) {
+					for (int i = 0; i < room.LayerCount; ++i) {
+						Tile t = entity.RoomControl.GetTile(x, y, i);
+
+						if (t != null && t.Flags.HasFlag(TileFlags.Solid) && t.CollisionModel != null) {
+							if (CollisionModel.Intersecting(t.CollisionModel, t.Position, collisionBox, position))
+								return true;
+						}
+					}
+				}
+			}
+
+			return false;
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Collisions
 		//-----------------------------------------------------------------------------
 
@@ -157,32 +211,30 @@ namespace ZeldaOracle.Game.Entities {
 				stateFlags |= StateFlags.Colliding | StateFlags.CollidingLeft;
 				entity.X = roomBounds.Left - collisionBox.Left;
 				velocity.X = 0;
+				collisionInfo[Directions.Left].SetRoomEdgeCollision(Directions.Left);
 			}
 			else if (myBox.Right > roomBounds.Right) {
 				stateFlags |= StateFlags.Colliding | StateFlags.CollidingRight;
 				entity.X = roomBounds.Right - collisionBox.Right;
 				velocity.X = 0;
+				collisionInfo[Directions.Right].SetRoomEdgeCollision(Directions.Right);
 			}
 			if (myBox.Top < roomBounds.Top) {
 				stateFlags |= StateFlags.Colliding | StateFlags.CollidingUp;
 				entity.Y = roomBounds.Top - collisionBox.Top;
 				velocity.Y = 0;
+				collisionInfo[Directions.Up].SetRoomEdgeCollision(Directions.Up);
 			}
 			else if (myBox.Bottom > roomBounds.Bottom) {
 				stateFlags |= StateFlags.Colliding | StateFlags.CollidingDown;
 				entity.Y = roomBounds.Bottom - collisionBox.Bottom;
 				velocity.Y = 0;
+				collisionInfo[Directions.Down].SetRoomEdgeCollision(Directions.Down);
 			}
 		}
 
 		public void CheckCollisions() {
 			Room room = entity.RoomControl.Room;
-
-			// Remove collision state flags.
-			stateFlags &= ~(StateFlags.Colliding | StateFlags.CollidingLeft |
-				StateFlags.CollidingRight | StateFlags.CollidingUp | StateFlags.CollidingDown);
-			for (int i = 0; i < Directions.Count; i++)
-				collisionInfo[i].Clear();
 
 			// Find the rectangular area of nearby tiles to collide with.
 			Rectangle2F myBox = collisionBox;
@@ -244,12 +296,12 @@ namespace ZeldaOracle.Game.Entities {
 					if (myBox.Center.X < block.Center.X) {
 						entity.X = block.Left - collisionBox.Right;
 						stateFlags |= StateFlags.CollidingRight;
-						collisionInfo[Directions.Right].SetTileCollision(tile);
+						collisionInfo[Directions.Right].SetTileCollision(tile, Directions.Right);
 					}
 					else {
 						entity.X = block.Right - collisionBox.Left;
 						stateFlags |= StateFlags.CollidingLeft;
-						collisionInfo[Directions.Left].SetTileCollision(tile);
+						collisionInfo[Directions.Left].SetTileCollision(tile, Directions.Left);
 					}
 				}
 			}
@@ -263,12 +315,12 @@ namespace ZeldaOracle.Game.Entities {
 					if (myBox.Center.Y < block.Center.Y) {
 						entity.Y = block.Top - collisionBox.Bottom;
 						stateFlags |= StateFlags.CollidingDown;
-						collisionInfo[Directions.Down].SetTileCollision(tile);
+						collisionInfo[Directions.Down].SetTileCollision(tile, Directions.Down);
 					}
 					else {
 						entity.Y = block.Bottom - collisionBox.Top;
 						stateFlags |= StateFlags.CollidingUp;
-						collisionInfo[Directions.Up].SetTileCollision(tile);
+						collisionInfo[Directions.Up].SetTileCollision(tile, Directions.Up);
 					}
 				}
 			}
@@ -344,6 +396,7 @@ namespace ZeldaOracle.Game.Entities {
 			get { return HasFlags(PhysicsFlags.CollideRoomEdge); }
 			set { SetFlags(PhysicsFlags.CollideRoomEdge, value); }
 		}
+
 		public bool ReboundSolid {
 			get { return HasFlags(PhysicsFlags.ReboundSolid); }
 			set { SetFlags(PhysicsFlags.ReboundSolid, value); }

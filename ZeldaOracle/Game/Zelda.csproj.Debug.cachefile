@@ -19,6 +19,7 @@ Content\Fonts\font_small.xnb
 Content\Images\UI\menu_weapons_b.xnb
 Content\Fonts\fonts.conscript
 Content\SpriteSheets\sheet_debug_menu.conscript
+Content\Worlds\ledge_jump_world.zwd
 Content\Worlds\test_level.zwd
 Content\Tilesets\overworld.txt
 Game.ico
