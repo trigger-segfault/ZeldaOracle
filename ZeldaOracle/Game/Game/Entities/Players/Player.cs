@@ -68,6 +68,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			
 
 			Graphics.ShadowDrawOffset = new Point2I(0, -2);
+			Health = 4 * 3;
+			MaxHealth = 4 * 3;
 		}
 
 
