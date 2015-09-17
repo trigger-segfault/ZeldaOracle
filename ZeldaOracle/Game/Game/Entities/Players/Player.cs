@@ -35,36 +35,45 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private int				direction;
 		private int				angle;
 		private Item[]			equippedItems; // TODO: move this to somewhere else.
+		private bool			syncAnimationWithDirection; // TODO: better name for this.
+		private bool			checkGroundTiles;
+		private bool			autoRoomTransition; // The player doesn't need to be moving to transition.
+		private Vector2F		roomEnterPosition; // The position the player was at when he entered the room.
 
-		private PlayerState			state;
-		private PlayerNormalState	stateNormal;
-		private PlayerJumpState		stateJump;
-		private PlayerSwimState		stateSwim;
-		private bool			syncAnimationWithDirection;
+		private PlayerState				state;
+		private PlayerNormalState		stateNormal;
+		private PlayerJumpState			stateJump;
+		private PlayerSwimState			stateSwim;
+		private PlayerLedgeJumpState	stateLedgeJump;
+
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public Player() : base() {
+		public Player() {
 			direction		= Directions.Down;
 			angle			= Directions.ToAngle(direction);
 			equippedItems	= new Item[2] { null, null };
-			syncAnimationWithDirection		= true;
+			syncAnimationWithDirection = true;
+			checkGroundTiles	= true;
+			autoRoomTransition	= false;
 
 			// Physics.
 			Physics.CollideWithWorld = true;
 			Physics.HasGravity = true;
+			Physics.CollideWithRoomEdge = true;
 
 			// DEBUG: equip a bow item.
 			equippedItems[0] = new ItemBow();
 			equippedItems[1] = new ItemFeather();
 
-			state		= null;
-			stateNormal	= new PlayerNormalState();
-			stateJump	= new PlayerJumpState();
-			stateSwim	= new PlayerSwimState();
+			state			= null;
+			stateNormal		= new PlayerNormalState();
+			stateJump		= new PlayerJumpState();
+			stateSwim		= new PlayerSwimState();
+			stateLedgeJump	= new PlayerLedgeJumpState();
 			
 
 			Graphics.ShadowDrawOffset = new Point2I(0, -2);
@@ -117,6 +126,19 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 		}
 
+		public void UpdateEquippedItems() {
+			for (int i = 0; i < equippedItems.Length; i++) {
+				if (equippedItems[i] != null) {
+					equippedItems[i].Player = this;
+					if (i == 0 && Controls.A.IsPressed())
+						equippedItems[i].OnButtonPress();
+					else if (i == 1 && Controls.B.IsPressed())
+						equippedItems[i].OnButtonPress();
+					//equippedItems[i].Update();
+				}
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
@@ -132,22 +154,18 @@ namespace ZeldaOracle.Game.Entities.Players {
 			//BeginState(new PlayerSwimState());
 		}
 
-		public void UpdateEquippedItems() {
-			for (int i = 0; i < equippedItems.Length; i++) {
-				if (equippedItems[i] != null) {
-					equippedItems[i].Player = this;
-					if (i == 0 && Controls.A.IsPressed())
-						equippedItems[i].OnButtonPress();
-					else if (i == 1 && Controls.B.IsPressed())
-						equippedItems[i].OnButtonPress();
-					//equippedItems[i].Update();
-				}
-			}
+		public override void OnEnterRoom() {
+			state.OnEnterRoom();
+		}
+
+		public override void OnLeaveRoom() {
+			state.OnLeaveRoom();
 		}
 
 		public override void Update() {
 
-			CheckTiles();
+			if (checkGroundTiles)
+				CheckTiles();
 
 			// Update the current player state.
 			state.Update();
@@ -183,12 +201,35 @@ namespace ZeldaOracle.Game.Entities.Players {
 			set { syncAnimationWithDirection = value; }
 		}
 		
+		public bool CheckGroundTiles {
+			get { return checkGroundTiles; }
+			set { checkGroundTiles = value; }
+		}
+		
+		public bool AutoRoomTransition {
+			get { return autoRoomTransition; }
+			set { autoRoomTransition = value; }
+		}
+		
+		public Vector2F RoomEnterPosition {
+			get { return roomEnterPosition; }
+			set { roomEnterPosition = value; }
+		}
+		
 		public PlayerNormalState NormalState {
 			get { return stateNormal; }
 		}
 		
+		public PlayerSwimState SwimState {
+			get { return stateSwim; }
+		}
+		
 		public PlayerJumpState JumpState {
 			get { return stateJump; }
+		}
+		
+		public PlayerLedgeJumpState LedgeJumpState {
+			get { return stateLedgeJump; }
 		}
 	}
 }

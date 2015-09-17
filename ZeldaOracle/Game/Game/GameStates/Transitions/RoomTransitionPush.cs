@@ -61,8 +61,10 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 				player.Position += (Vector2F) Directions.ToPoint(direction) * playerSpeed;
 
 				if (distance >= maxDistance) {
+					player.RoomEnterPosition = player.Position;
 					gameManager.PopGameState();
 					gameManager.PushGameState(roomNew);
+					player.OnEnterRoom();
 				}
 			}
 		}

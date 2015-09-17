@@ -121,6 +121,23 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 
 			base.Update();
+			
+			// Check for ledge jumping (ledges/waterfalls)
+			CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
+			if (isMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
+				Tile tile = collisionInfo.Tile;
+				
+				// TODO: Code duplication. (here and in normal state)
+				if (tile.Flags.HasFlag(TileFlags.Ledge) &&
+					player.Direction == tile.LedgeDirection &&
+					collisionInfo.Direction == tile.LedgeDirection)
+				{
+					// Ledge jump!
+					player.LedgeJumpState.LedgeBeginTile = tile;
+					player.BeginState(player.LedgeJumpState);
+					return;
+				}
+			}
 
 			CheckTiles();
 		}

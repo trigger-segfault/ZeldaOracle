@@ -32,8 +32,11 @@ namespace ZeldaOracle.Game.Tiles {
 		Switchable		= 0x20000,	// Can be switched with using the Switch Hook
 		SwitchStays		= 0x40000,	// Won't be destroyed when switched using the Switch Hook.
 		HalfSolid		= 0x80000,	// Obstructs movement, but some projectiles can pass over the tile.
+		Ocean			= 0x100000,
+		Puddle			= 0x200000,
+		Waterfall		= 0x400000,
 
-		NullFlag		= 0x10000,	// This special flags indicates that the tile is NULL.
+		NullFlag		= 0x800000,	// This special flags indicates that the tile is NULL.
 
 		Default			= 0x0, // Default tile flags (assumes a typical ground tile).
 	};
@@ -265,6 +268,20 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public bool IsMoving {
 			get { return isMoving; }
+		}
+
+		public int LedgeDirection {
+			get {
+				if (collisionModel == GameData.MODEL_EDGE_W)
+					return Directions.West;
+				if (collisionModel == GameData.MODEL_EDGE_E)
+					return Directions.East;
+				if (collisionModel == GameData.MODEL_EDGE_N)
+					return Directions.North;
+				if (collisionModel == GameData.MODEL_EDGE_S)
+					return Directions.South;
+				return Directions.South;
+			}
 		}
 	}
 }

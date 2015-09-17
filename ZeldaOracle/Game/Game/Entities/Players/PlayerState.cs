@@ -10,8 +10,8 @@ namespace ZeldaOracle.Game.Entities.Players
 		//public delegate void UpdateMethod();
 		//private event UpdateMethod updateMethod;
 		
-		protected Player player;
-		private bool isActive;
+		private bool		isActive;
+		protected Player	player;
 
 
 		//-----------------------------------------------------------------------------
@@ -24,7 +24,22 @@ namespace ZeldaOracle.Game.Entities.Players
 
 
 		//-----------------------------------------------------------------------------
-		// Methods
+		// Virtual methods
+		//-----------------------------------------------------------------------------
+		
+		public virtual void OnBegin() {}
+		
+		public virtual void OnEnd() {}
+		
+		public virtual void OnEnterRoom() {}
+
+		public virtual void OnLeaveRoom() {}
+
+		public virtual void Update() {}
+
+
+		//-----------------------------------------------------------------------------
+		// Begin/end
 		//-----------------------------------------------------------------------------
 
 		public void Begin(Player player) {
@@ -37,12 +52,6 @@ namespace ZeldaOracle.Game.Entities.Players
 			this.isActive = false;
 			OnEnd();
 		}
-		
-		public virtual void OnBegin() {}
-		
-		public virtual void OnEnd() {}
-
-		public virtual void Update() {}
 
 
 		//-----------------------------------------------------------------------------
