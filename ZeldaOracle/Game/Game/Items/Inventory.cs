@@ -167,6 +167,8 @@ namespace ZeldaOracle.Game.Items {
 		public void FillAllAmmo() {
 			foreach (Ammo ammo in this.ammo) {
 				ammo.Amount = ammo.MaxAmount;
+				if (ammo.ID == "rupees")
+					gameControl.HUD.DynamicRupees = ammo.Amount;
 			}
 		}
 
@@ -174,6 +176,8 @@ namespace ZeldaOracle.Game.Items {
 		public void EmptyAllAmmo() {
 			foreach (Ammo ammo in this.ammo) {
 				ammo.Amount = 0;
+				if (ammo.ID == "rupees")
+					gameControl.HUD.DynamicRupees = ammo.Amount;
 			}
 		}
 

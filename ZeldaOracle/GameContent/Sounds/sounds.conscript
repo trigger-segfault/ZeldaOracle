@@ -6,7 +6,16 @@
 @muted false
 @end
 
+@group "Pickups"
+@sound "Pickups/get_heart" 1.0 0.0 0.0 false
+@sound "Pickups/get_rupee" 1.0 0.0 0.0 false
+@sound "Pickups/get_rupee_loop" 1.0 0.0 0.0 false
+@end
+
 @group "UI"
-@sound "UI/get_rupee" 1.0 0.0 0.0 false
-@sound "UI/get_rupee_loop" 1.0 0.0 0.0 false
+@sound "UI/menu_open" 1.0 0.0 0.0 false
+@sound "UI/menu_close" 1.0 0.0 0.0 false
+@sound "UI/menu_next" 1.0 0.0 0.0 false
+@sound "UI/menu_cursor_move" 1.0 0.0 0.0 false
+@sound "UI/menu_select" 1.0 0.0 0.0 false
 @end

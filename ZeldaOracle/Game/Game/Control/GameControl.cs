@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Game.Entities.Players;
@@ -82,6 +83,7 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public void OpenMenu(Menu menu) {
+			AudioSystem.PlaySound("UI/menu_open");
 			gameManager.QueueGameStates(
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, roomControl),
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, menu),
@@ -89,6 +91,7 @@ namespace ZeldaOracle.Game.Control {
 			);
 		}
 		public void CloseMenu(Menu menu) {
+			AudioSystem.PlaySound("UI/menu_close");
 			gameManager.PopGameState();
 			gameManager.QueueGameStates(
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, menu),
