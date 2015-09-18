@@ -13,10 +13,14 @@ namespace ZeldaOracle.Game.Control {
 	
 	public class HUD {
 
+		// The game control containing this HUD.
 		private GameControl gameControl;
-
+		// Used to slowly increment rupee count.
 		private int dynamicRupees;
-		private SoundInstance rupeeSound;
+		// Used to slowly increment player health.
+		private int dynamicHealth;
+		// Used to update the health positively at a slower pace.
+		private int healthTimer;
 
 
 		//-----------------------------------------------------------------------------
@@ -26,7 +30,8 @@ namespace ZeldaOracle.Game.Control {
 		public HUD(GameControl gameControl) {
 			this.gameControl	= gameControl;
 			this.dynamicRupees	= 0;
-			this.rupeeSound		= null;
+			this.dynamicHealth	= 3 * 4;
+			this.healthTimer	= 0;
 		}
 
 
@@ -34,35 +39,59 @@ namespace ZeldaOracle.Game.Control {
 		// Updating
 		//-----------------------------------------------------------------------------
 
+		// Updates the rupees and player life incrementation.
 		public void Update() {
 			int rupees = Inventory.GetAmmo("rupees").Amount;
+			int health = gameControl.Player.Health;
+
+			// Update dynamic rupees.
 			if (dynamicRupees < rupees) {
 				dynamicRupees++;
 				if (dynamicRupees < rupees) {
-					if (rupeeSound == null || !rupeeSound.IsPlaying) {
-						rupeeSound = Resources.RootSoundGroup.GetSound("UI/get_rupee_loop").Play(true);
+					if (!AudioSystem.GetSound("Pickups/get_rupee_loop").IsPlaying) {
+						AudioSystem.PlaySound("Pickups/get_rupee_loop", true);
 					}
 				}
 				else {
-					if (rupeeSound != null && rupeeSound.IsPlaying) {
-						rupeeSound.Stop();
+					if (AudioSystem.GetSound("Pickups/get_rupee_loop").IsPlaying) {
+						AudioSystem.StopSound("Pickups/get_rupee_loop");
 					}
-					rupeeSound = Resources.RootSoundGroup.GetSound("UI/get_rupee").Play();
+					AudioSystem.PlaySound("Pickups/get_rupee");
 				}
 			}
 			else if (dynamicRupees > rupees) {
 				dynamicRupees--;
 				if (dynamicRupees > rupees) {
-					if (rupeeSound == null || !rupeeSound.IsPlaying) {
-						rupeeSound = Resources.RootSoundGroup.GetSound("UI/get_rupee_loop").Play(true);
+					if (!AudioSystem.GetSound("Pickups/get_rupee_loop").IsPlaying) {
+						AudioSystem.PlaySound("Pickups/get_rupee_loop", true);
 					}
 				}
 				else {
-					if (rupeeSound != null && rupeeSound.IsPlaying) {
-						rupeeSound.Stop();
+					if (AudioSystem.GetSound("Pickups/get_rupee_loop").IsPlaying) {
+						AudioSystem.StopSound("Pickups/get_rupee_loop");
 					}
-					rupeeSound = Resources.RootSoundGroup.GetSound("UI/get_rupee").Play();
+					AudioSystem.PlaySound("Pickups/get_rupee");
 				}
+			}
+
+			// Update dynamic health.
+			if (dynamicHealth < health) {
+				if (healthTimer < 3) {
+					healthTimer++;
+				}
+				else {
+					healthTimer = 0;
+					dynamicHealth++;
+					if (dynamicHealth % 4 == 0) {
+						AudioSystem.PlaySound("Pickups/get_heart");
+					}
+				}
+			}
+			else if (dynamicHealth > health) {
+				dynamicHealth--;
+			}
+			else {
+				healthTimer = 0;
 			}
 		}
 
@@ -174,7 +203,7 @@ namespace ZeldaOracle.Game.Control {
 				new Sprite(sheetMenuSmall, new Point2I(4, 0))
 			};
 			for (int i = 0; i < gameControl.Player.MaxHealth / 4; i++) {
-				int fullness = GMath.Clamp(gameControl.Player.Health, 0, 4);
+				int fullness = GMath.Clamp(dynamicHealth - i * 4, 0, 4);
 				if (!gameControl.IsAdvancedGame)
 					g.DrawSprite(hearts[fullness], new Point2I(104 + (i % 7) * 8, (i / 7) * 8));
 				else
@@ -188,13 +217,20 @@ namespace ZeldaOracle.Game.Control {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		// Gets the player's inventory.
 		public Inventory Inventory {
 			get { return gameControl.Inventory; }
 		}
 
+		// Gets or sets the dynamic rupee count for the HUD.
 		public int DynamicRupees {
 			get { return dynamicRupees; }
 			set { dynamicRupees = value; }
+		}
+		// Gets or sets the dynamic health count for the HUD.
+		public int DynamicHealth {
+			get { return dynamicHealth; }
+			set { dynamicHealth = value; }
 		}
 	}
 }
