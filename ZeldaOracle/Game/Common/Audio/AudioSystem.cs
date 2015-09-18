@@ -385,6 +385,10 @@ public static class AudioSystem {
 	public static SoundInstance PlaySound(string name, bool looped, double volume, double pitch = 0.0, double pan = 0.0, bool muted = false) {
 		return Resources.RootSoundGroup.GetSound(name).Play(looped, volume, pitch, pan, muted);
 	}
+	/** <summary> Stops the sound effect with the specified name. </summary> */
+	public static void StopSound(string name) {
+		Resources.RootSoundGroup.GetSound(name).Stop();
+	}
 
 	#endregion
 	//========== MANAGEMENT ==========
@@ -397,6 +401,10 @@ public static class AudioSystem {
 	//--------------------------------
 	#region Sounds
 
+	/** <summary> Gets the sound effect with the specified name. </summary> */
+	public static Sound GetSound(string name) {
+		return Resources.RootSoundGroup.GetSound(name);
+	}
 
 	#endregion
 	//--------------------------------

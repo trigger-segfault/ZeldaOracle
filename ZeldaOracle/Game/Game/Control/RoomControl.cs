@@ -339,6 +339,13 @@ namespace ZeldaOracle.Game.Control {
 			if (Keyboard.IsKeyPressed(Keys.Delete)) {
 				GameControl.Inventory.EmptyAllAmmo();
 			}
+			if (Keyboard.IsKeyPressed(Keys.Home)) {
+				GameControl.Player.MaxHealth = 4 * 14;
+				GameControl.Player.Health = GameControl.Player.MaxHealth;
+			}
+			if (Keyboard.IsKeyPressed(Keys.End)) {
+				GameControl.Player.Health = 4 * 3;
+			}
 			GameControl.HUD.Update();
 		}
 

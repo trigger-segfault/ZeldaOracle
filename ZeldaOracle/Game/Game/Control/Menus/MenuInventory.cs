@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
@@ -30,6 +31,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 				GameControl.CloseMenu(this);
 			}
 			if (Controls.Select.IsPressed()) {
+				AudioSystem.PlaySound("UI/menu_next");
 				gameManager.PopGameState();
 				gameManager.PushGameState(new MenuTransitionPush(this, NextMenu, Directions.East));
 			}
