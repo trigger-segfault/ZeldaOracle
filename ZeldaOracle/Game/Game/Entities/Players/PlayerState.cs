@@ -12,6 +12,7 @@ namespace ZeldaOracle.Game.Entities.Players
 		
 		private bool		isActive;
 		protected Player	player;
+		protected bool		isNaturalState; // Is this a state that is caused by the environment?
 
 
 		//-----------------------------------------------------------------------------
@@ -20,6 +21,7 @@ namespace ZeldaOracle.Game.Entities.Players
 
 		public PlayerState() {
 			isActive = false;
+			isNaturalState = false;
 		}
 
 
@@ -66,6 +68,11 @@ namespace ZeldaOracle.Game.Entities.Players
 		public bool IsActive {
 			get { return isActive; }
 			set { isActive = value; }
+		}
+
+		public bool IsNaturalState {
+			get { return isNaturalState; }
+			set { isNaturalState = value; }
 		}
 	}
 }
