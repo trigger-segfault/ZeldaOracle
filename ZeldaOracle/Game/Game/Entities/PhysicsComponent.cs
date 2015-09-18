@@ -414,7 +414,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsInPuddle {
-			get { return IsOnGround && topTileFlags.HasFlag(TileFlags.Grass); }
+			get { return IsOnGround && topTileFlags.HasFlag(TileFlags.Puddle); }
 		}
 
 		public bool IsInHole {

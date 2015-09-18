@@ -184,6 +184,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 					if (newLength >= scaledSpeed)
 						motion.Length = scaledSpeed;
 
+					// TODO: For jumping, sideways motion should be accelerated somehow.
+
 					// TODO: what does this do again?
 					if (Math.Abs(newLength - (motion + (keyMotion * 0.08f)).Length) < mode.Acceleration * 2.0f) {
 						motion += keyMotion * 0.04f;

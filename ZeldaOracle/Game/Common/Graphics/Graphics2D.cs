@@ -227,6 +227,12 @@ public class Graphics2D {
 	
 	// Draw an animation during at the given time stamp and position.
 	public void DrawAnimation(Animation animation, float time, Vector2F position, float depth = 0.0f) {
+		if (animation.LoopMode == LoopMode.Repeat) {
+			if (animation.Duration == 0)
+				time = 0;
+			else
+				time %= animation.Duration;
+			}
 		DrawAnimation(animation, time, position.X, position.Y, depth);
 	}
 

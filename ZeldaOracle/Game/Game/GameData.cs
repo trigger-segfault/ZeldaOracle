@@ -306,11 +306,18 @@ class GameData {
 				.AddFrame(1, 4,0, -8,-10).AddPart(1, 5,0, -8,-8).CreateSubStrip()
 				.AddFrame(1, 4,0, -2,-12).AddPart(1, 4,0, -6,-6).CreateSubStrip()
 				.AddFrame(1, 4,0, -8,-8).AddPart(1, 5,0, -8,-10);
-
 			BuildAnim(ANIM_EFFECT_WATER_SPLASH).SetLoopMode(LoopMode.Clamp)
 				.AddFrame(4, 2,2, -8, -11).AddPart(4, 3,2, -8, -11)
 				.AddFrame(4, 2,2, -10, -13).AddPart(4, 3,2, -6, -13)
 				.AddFrame(4, 2,2, -12, -15).AddPart(4, 3,2, -4, -15);
+			BuildAnim(ANIM_EFFECT_RIPPLES)
+				.AddFrame(8, 4,2, -5,-5).AddPart(8, 5,2, -11,-5)
+				.AddFrame(8, 4,2, -6,-5).AddPart(8, 5,2, -10,-5)
+				.AddFrame(8, 4,2, -7,-4).AddPart(8, 5,2, -9,-4)
+				.AddFrame(8, 4,2, -8,-3).AddPart(8, 5,2, -8,-3).Offset(0, -6);
+			BuildAnim(ANIM_EFFECT_GRASS)
+				.AddFrame(6, 6,0, -4,1).AddPart(6, 6,0, 2,1)
+				.AddFrame(6, 7,0, -4,1).AddPart(6, 7,0, 2,1).Offset(-8, -14);
 		}
 
 
@@ -683,6 +690,8 @@ class GameData {
 		public static Animation ANIM_EFFECT_DIRT			= new Animation();
 		public static Animation ANIM_EFFECT_WATER_SPLASH	= new Animation();
 		public static Animation ANIM_EFFECT_LAVA_SPLASH		= new Animation();
+		public static Animation ANIM_EFFECT_RIPPLES			= new Animation();
+		public static Animation ANIM_EFFECT_GRASS			= new Animation();
 	
 
 	//-----------------------------------------------------------------------------

@@ -265,6 +265,7 @@
     <Compile Include="Game\Tiles\TileData.cs" />
     <Compile Include="Game\Tiles\TileFlags.cs" />
     <Compile Include="Game\Tiles\Tileset.cs" />
+    <Compile Include="Game\Tiles\Custom\TileSign.cs" />
     <Compile Include="Game\Worlds\Room.cs" />
     <Compile Include="Game\Worlds\Level.cs" />
     <Compile Include="Game\Worlds\World.cs" />

@@ -134,6 +134,11 @@ namespace ZeldaOracle.Game.Entities {
 			get { return control; }
 			set { control = value; }
 		}
+		
+		// Returns the game control of the current game.
+		public GameControl GameControl {
+			get { return control.GameControl; }
+		}
 
 		// Returns true if the entity has been initialized.
 		public bool IsInitialized {
