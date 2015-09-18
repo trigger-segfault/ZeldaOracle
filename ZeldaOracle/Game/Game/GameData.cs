@@ -103,18 +103,13 @@ class GameData {
 			SHEET_MENU_SMALL_LIGHT = Resources.GetSpriteSheet("UI/menu_small_light");
 			SHEET_MENU_LARGE_LIGHT = Resources.GetSpriteSheet("UI/menu_large_light");
 
-			//SheetDebugMenu = Resources.LoadSpriteSheet(Resources.SpriteSheetDirectory + "sheet_debug_menu.conscript");
+			Resources.LoadSpriteSheets("SpriteSheets/items.conscript");
 
-			//Resources.LoadSpriteSheets(Resources.SpriteSheetDirectory + "sheet_gamepad.conscript");
-			//SheetGamePadControls	= Resources.GetSpriteSheet("sheet_gamepad_controls");
-			//SheetGamePadArrows		= Resources.GetSpriteSheet("sheet_gamepad_arrows");
+			SHEET_ITEMS_SMALL = Resources.GetSpriteSheet("Items/items_small");
+			SHEET_ITEMS_LARGE = Resources.GetSpriteSheet("Items/items_large");
+			SHEET_ITEMS_SMALL_LIGHT = Resources.GetSpriteSheet("Items/items_small_light");
+			SHEET_ITEMS_LARGE_LIGHT = Resources.GetSpriteSheet("Items/items_large_light");
 
-			//Resources.LoadSpriteSheets(Resources.SpriteSheetDirectory + "sheet_particles.conscript");
-			//Resources.LoadSpriteSheets(Resources.SpriteSheetDirectory + "custom_sheets.conscript");
-			//ParticleSR.UsingDegrees = true;
-			//Resources.LoadParticles(Resources.ParticleDirectory + "particle_data.conscript");
-			//ParticleSR.UsingDegrees = false;
-			//Resources.LoadParticles(Resources.ParticleDirectory + "particle_data_before.conscript");
 		}
 
 		
@@ -483,7 +478,7 @@ class GameData {
 	private static void LoadSounds() {
 
 
-		//Resources.LoadSoundGroups(Resources.SoundDirectory + "sounds.conscript");
+		Resources.LoadSoundGroups(Resources.SoundDirectory + "sounds.conscript");
 
 	}
 

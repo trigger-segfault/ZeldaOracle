@@ -245,9 +245,11 @@
     <Compile Include="Game\Items\Ammo.cs" />
     <Compile Include="Game\Items\Equipment\ItemBombBag.cs" />
     <Compile Include="Game\Items\Equipment\ItemWallet.cs" />
+    <Compile Include="Game\Items\EquippableItem.cs" />
     <Compile Include="Game\Items\Inventory.cs" />
     <Compile Include="Game\Items\Item.cs" />
-    <Compile Include="Game\Items\PlayerItem.cs" />
+    <Compile Include="Game\Items\ItemFlags.cs" />
+    <Compile Include="Game\Items\UsableItem.cs" />
     <Compile Include="Game\Items\Weapons\ItemBombs.cs" />
     <Compile Include="Game\Items\Weapons\ItemBow.cs" />
     <Compile Include="Game\Items\Weapons\ItemFeather.cs" />

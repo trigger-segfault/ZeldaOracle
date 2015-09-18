@@ -62,7 +62,7 @@ public class SoundGroupSR : ScriptReader {
 				group = Resources.RootSoundGroup;
 			}
 			else {
-				group = new SoundGroup(args[0].Substring(args[0].LastIndexOf('.') + 1));
+				group = new SoundGroup(args[0].Substring(args[0].LastIndexOf('/') + 1));
 				Resources.RootSoundGroup.AddGroup(args[0], group);
 			}
 		}

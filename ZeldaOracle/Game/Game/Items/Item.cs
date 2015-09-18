@@ -6,11 +6,13 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Control;
+using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaOracle.Game.Items {
 	public abstract class Item {
 
 		protected Inventory inventory;
+		protected Player player;
 
 		protected string		id;
 		protected string[]		name;
@@ -23,9 +25,8 @@ namespace ZeldaOracle.Game.Items {
 		protected bool			isObtained;
 		protected bool			isStolen;
 
-		protected Player		player;
-
-		// Usable when jumping, in minecart,
+		protected Sprite		sprite;
+		protected Sprite		spriteLight;
 
 
 		//-----------------------------------------------------------------------------
@@ -43,6 +44,8 @@ namespace ZeldaOracle.Game.Items {
 			this.ammo			= null;
 			this.isObtained		= false;
 			this.isStolen		= false;
+			this.sprite			= null;
+			this.spriteLight	= null;
 		}
 
 
@@ -50,28 +53,8 @@ namespace ZeldaOracle.Game.Items {
 		// Virtual
 		//-----------------------------------------------------------------------------
 
-		// Called when the item is switched to.
-		public virtual void OnStart() { }
 
-		// Called when the item is put away.
-		public virtual void OnEnd() { }
-
-		// Immediately interrupt this item (ex: if the player falls in a hole).
-		public virtual void Interrupt() { }
-
-		// Called when the items button is pressed (A or B).
-		public virtual void OnButtonPress() {}
-		
-		// Update the item.
-		public virtual void Update() { }
-
-		// Draws under link's sprite.
-		public virtual void DrawUnder() { }
-
-		// Draws over link's sprite.
-		public virtual void DrawOver() { }
-
-		// Called when the item is added to the inventory list
+		// Called when the item is added to the inventory list.
 		public virtual void OnAdded(Inventory inventory) {
 			this.inventory = inventory;
 		}
@@ -91,36 +74,63 @@ namespace ZeldaOracle.Game.Items {
 		// Called when the stolen item has been returned.
 		public virtual void OnReturned() { }
 
+		// Draws the item inside the inventory.
+		public virtual void DrawInInventory(Graphics2D g, Point2I position, bool light) {
+			g.DrawSprite(light ? spriteLight : sprite, position);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Drawing
+		//-----------------------------------------------------------------------------
+
+		protected void DrawSprite(Graphics2D g, Point2I position, bool light) {
+			g.DrawSprite(light ? spriteLight : sprite, position);
+		}
+
+		protected void DrawAmmo(Graphics2D g, Point2I position, bool light) {
+			g.DrawString(GameData.FONT_SMALL, ammo[currentAmmo].Amount.ToString("00"), position + new Point2I(8, 8), light ? new Color(16, 16, 16) : Color.Black);
+		}
+
+		protected void DrawLevel(Graphics2D g, Point2I position, bool light) {
+			SpriteSheet sheetMenuSmall = (light ? GameData.SHEET_MENU_SMALL_LIGHT : GameData.SHEET_MENU_SMALL);
+			Sprite levelSprite = new Sprite(sheetMenuSmall, 2, 1);
+			g.DrawSprite(levelSprite, position + new Point2I(8, 8));
+			g.DrawString(GameData.FONT_SMALL, (level + 1).ToString(), position + new Point2I(16, 8), light ? new Color(16, 16, 16) : Color.Black);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 		
+		// Gets the player.
 		public Player Player {
 			get { return player; }
 			set { player = value; }
 		}
 
+		// Gets the current room control.
 		public RoomControl RoomControl {
 			get { return player.RoomControl; }
 		}
 
-		// Gets the id of the item
+		// Gets the id of the item.
 		public string ID {
 			get { return id; }
 		}
 
-		// Gets the name of the item
+		// Gets the name of the item.
 		public virtual string Name {
 			get { return name[level]; }
 		}
 
-		// Gets the description of the item
+		// Gets the description of the item.
 		public virtual string Description {
 			get { return description[level]; }
 		}
 
-		// Gets the level of the item
+		// Gets the level of the item.
 		public int Level {
 			get { return level; }
 			set {
@@ -131,12 +141,12 @@ namespace ZeldaOracle.Game.Items {
 			}
 		}
 
-		// Gets the highest item level
+		// Gets the highest item level.
 		public int MaxLevel {
 			get { return maxLevel; }
 		}
 
-		// Gets if the item has been obtained
+		// Gets if the item has been obtained.
 		public bool IsObtained {
 			get { return isObtained; }
 			set {
@@ -150,7 +160,7 @@ namespace ZeldaOracle.Game.Items {
 			}
 		}
 
-		// Gets if the item has been stolen
+		// Gets if the item has been stolen.
 		public bool IsStolen {
 			get { return isStolen; }
 			set {
