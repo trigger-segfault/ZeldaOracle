@@ -190,6 +190,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		// Returns the inventory of the player.
+		public Inventory Inventory {
+			get { return GameControl.Inventory; }
+		}
+
 		public int Angle {
 			get { return angle; }
 			set { angle = value; }
@@ -220,6 +225,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			set { roomEnterPosition = value; }
 		}
 		
+		// Player states
+
 		public PlayerNormalState NormalState {
 			get { return stateNormal; }
 		}
