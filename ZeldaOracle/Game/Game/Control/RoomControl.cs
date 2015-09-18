@@ -47,25 +47,40 @@ namespace ZeldaOracle.Game.Control {
 		// Accessors
 		//-----------------------------------------------------------------------------
 		
+		// Return the tile at the given location (can return null).
+		public Tile GetTile(Point2I location, int layer) {
+			return tiles[location.X, location.Y, layer];
+		}
+
+		// Return the tile at the given location (can return null).
+		public Tile GetTile(int x, int y, int layer) {
+			return tiles[x, y, layer];
+		}
+		
+		// Return true if the given tile location is inside the room.
+		public bool IsTileInBounds(Point2I location, int layer = 0) {
+			return (location.X >= 0 && location.X < room.Width &&
+					location.Y >= 0 && location.Y < room.Height &&
+					layer >= 0 && layer < room.LayerCount);
+		}
+
+		// Return the tile location that the given position in pixels is situated in.
+		public Point2I GetTileLocation(Vector2F position) {
+			return (Point2I) (position / GameSettings.TILE_SIZE);
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Mutators
+		//-----------------------------------------------------------------------------
+		
+		
+		// Move the given tile to a new location.
 		public void MoveTile(Tile tile, Point2I newLocation, int newLayer) {
 			tiles[tile.Location.X, tile.Location.Y, tile.Layer] = null;
 			tiles[newLocation.X, newLocation.Y, newLayer] = tile;
 			tile.Location = newLocation;
 			tile.Layer = newLayer;
-		}
-
-		public Tile GetTile(Point2I location, int layer) {
-			return tiles[location.X, location.Y, layer];
-		}
-
-		public Tile GetTile(int x, int y, int layer) {
-			return tiles[x, y, layer];
-		}
-		
-		public bool IsTileInBounds(Point2I location, int layer = 0) {
-			return (location.X >= 0 && location.X < room.Width &&
-					location.Y >= 0 && location.Y < room.Height &&
-					layer >= 0 && layer < room.LayerCount);
 		}
 
 
@@ -222,6 +237,7 @@ namespace ZeldaOracle.Game.Control {
 			RoomTransitionPush transition = new RoomTransitionPush(this, newControl, direction);
 			gameManager.PopGameState();
 			gameManager.PushGameState(transition);
+			GameControl.RoomControl = newControl;
 		}
 
 
@@ -296,14 +312,16 @@ namespace ZeldaOracle.Game.Control {
 			}
 
 			// Detect room transitions.
-			for (int direction = 0; direction < Directions.Count; direction++) {
-				CollisionInfo info = player.Physics.CollisionInfo[direction];
+			if (player.AllowRoomTransition) {
+				for (int direction = 0; direction < Directions.Count; direction++) {
+					CollisionInfo info = player.Physics.CollisionInfo[direction];
 
-				if (info.Type == CollisionType.RoomEdge &&
-					(Controls.GetArrowControl(direction).IsDown() || Controls.GetAnalogDirection(direction) || player.AutoRoomTransition))
-				{
-					EnterAdjacentRoom(direction);
-					break;
+					if (info.Type == CollisionType.RoomEdge &&
+						(Controls.GetArrowControl(direction).IsDown() || Controls.GetAnalogDirection(direction) || player.AutoRoomTransition))
+					{
+						EnterAdjacentRoom(direction);
+						break;
+					}
 				}
 			}
 

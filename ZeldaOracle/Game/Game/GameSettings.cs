@@ -7,9 +7,11 @@ using ZeldaOracle.Common.Geometry;
 
 /*
  *	GAME TODO LIST:
- *		- Sync room animations to a global timer
- *		- 
- * 
+ *		- Sync room animations & shadow/puddle to a global timer
+ *		- Work out depth for things (Player submerge should be behind all things)
+ *		- Player
+ *			- Rename direction to FaceDirection
+ *			- Merge MoveAngle and Angle (they are the same thing)
  * 
  *	DEBUG KEYS:
  *		- F: Play a fade game-state.

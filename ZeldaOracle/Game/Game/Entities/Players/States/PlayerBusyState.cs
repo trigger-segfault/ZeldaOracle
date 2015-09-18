@@ -26,26 +26,20 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public override void OnBegin() {
 			base.OnBegin();
 			timer = duration;
-			if (player.IsOnGround)
-				player.Physics.Velocity = Vector2F.Zero;
+			player.Movement.AllowMovementControl = false;
 		}
 		
 		public override void OnEnd() {
+			player.Movement.AllowMovementControl = true;
 			base.OnEnd();
 		}
 
 		public override void Update() {
 			base.Update();
 
-			if (player.IsOnGround)
-				player.Physics.Velocity = Vector2F.Zero;
-
 			timer--;
 			if (timer <= 0) {
-				if (player.IsOnGround)
-					player.BeginState(player.NormalState);
-				else
-					player.BeginState(player.JumpState);
+				player.BeginNormalState();
 			}
 		}
 	}

@@ -47,6 +47,8 @@ namespace ZeldaOracle.Game.Entities {
 		protected float				zPosition;
 		protected PhysicsComponent	physics;
 		protected GraphicsComponent	graphics;
+		protected Point2I			originOffset;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -54,11 +56,12 @@ namespace ZeldaOracle.Game.Entities {
 
 		public Entity() {
 			roomControl		= null;
-			isAlive		= false;
-			position	= Vector2F.Zero;
-			zPosition	= 0.0f;
-			physics		= new PhysicsComponent(this);
-			graphics	= new GraphicsComponent(this);
+			isAlive			= false;
+			position		= Vector2F.Zero;
+			zPosition		= 0.0f;
+			physics			= new PhysicsComponent(this);
+			graphics		= new GraphicsComponent(this);
+			originOffset	= Point2I.Zero;
 		}
 
 
@@ -189,11 +192,20 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsInAir {
-			get { return (zPosition > 0 || (physics.IsEnabled && physics.ZVelocity > 0)); }
+			get { return (zPosition > 0.0f || (physics.IsEnabled && physics.ZVelocity > 0.0f)); }
 		}
 
 		public bool IsOnGround {
 			get { return !IsInAir; }
+		}
+
+		public Vector2F Origin {
+			get { return (position + originOffset); }
+		}
+
+		public Point2I OriginOffset {
+			get { return originOffset; }
+			set { originOffset = value; }
 		}
 
 	}

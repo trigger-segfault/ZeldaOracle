@@ -32,13 +32,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 	
 	public class Player : Unit {
 	
-		private int				direction;
 		private int				angle;
 		private Item[]			equippedItems; // TODO: move this to somewhere else.
 		private bool			syncAnimationWithDirection; // TODO: better name for this.
 		private bool			checkGroundTiles;
+		private bool			allowRoomTransition; // Is the player allowed to transition between rooms?
 		private bool			autoRoomTransition; // The player doesn't need to be moving to transition.
 		private Vector2F		roomEnterPosition; // The position the player was at when he entered the room.
+		private PlayerMoveComponent		movement;
 
 		private PlayerState				state;
 		private PlayerNormalState		stateNormal;
@@ -48,39 +49,45 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerLadderState		stateLadder;
 
 
-
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
 		public Player() {
-			direction		= Directions.Down;
-			angle			= Directions.ToAngle(direction);
-			equippedItems	= new Item[2] { null, null };
-			syncAnimationWithDirection = true;
+			direction			= Directions.Down;
+			angle				= Directions.ToAngle(direction);
+			equippedItems		= new Item[2] { null, null };
 			checkGroundTiles	= true;
 			autoRoomTransition	= false;
+			allowRoomTransition	= true;
+			syncAnimationWithDirection = true;
+
+			movement = new PlayerMoveComponent(this);
+
+			// Unit properties.
+			originOffset	= new Point2I(0, -2);
+			Health			= 4 * 3;
+			MaxHealth		= 4 * 3;
 
 			// Physics.
 			Physics.CollideWithWorld = true;
 			Physics.HasGravity = true;
 			Physics.CollideWithRoomEdge = true;
 
-			// DEBUG: equip a bow item.
-			equippedItems[0] = new ItemBow();
-			equippedItems[1] = new ItemFeather();
+			// Graphics.
+			Graphics.ShadowDrawOffset = originOffset;
 
+			// Create the basic player states.
 			state			= null;
 			stateNormal		= new PlayerNormalState();
 			stateJump		= new PlayerJumpState();
 			stateSwim		= new PlayerSwimState();
-			stateLedgeJump	= new PlayerLedgeJumpState();
 			stateLadder		= new PlayerLadderState();
+			stateLedgeJump	= new PlayerLedgeJumpState();
 			
-
-			Graphics.ShadowDrawOffset = new Point2I(0, -2);
-			Health = 4 * 3;
-			MaxHealth = 4 * 3;
+			// DEBUG: equip a bow item.
+			equippedItems[0] = new ItemBow();
+			equippedItems[1] = new ItemFeather();
 		}
 
 
@@ -104,7 +111,25 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 		}
 
+		// Return the player state that the player wants to be in
+		// based on his current position.
+		public PlayerState GetDesiredNaturalState() {
+			if (IsInAir)
+				return stateJump;
+			else if (physics.IsInWater)
+				return stateSwim;
+			else if (physics.IsOnLadder)
+				return stateLadder;
+			else
+				return stateNormal;
+		}
+
+		public void BeginNormalState() {
+			BeginState(GetDesiredNaturalState());
+		}
+
 		private void CheckTiles() {
+			/*
 			if (IsOnGround) {
 				Point2I origin = (Point2I) position - new Point2I(0, 2);
 				Point2I location = origin / new Point2I(GameSettings.TILE_SIZE, GameSettings.TILE_SIZE);
@@ -128,6 +153,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 					}
 				}
 			}
+			*/
 		}
 
 		public void UpdateEquippedItems() {
@@ -171,7 +197,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (checkGroundTiles)
 				CheckTiles();
 
+			movement.Update();
+
 			// Update the current player state.
+			PlayerState desiredNaturalState = GetDesiredNaturalState();
+			if (state.IsNaturalState && state != desiredNaturalState)
+				BeginState(desiredNaturalState);
 			state.Update();
 
 			if (syncAnimationWithDirection)
@@ -195,6 +226,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return GameControl.Inventory; }
 		}
 
+		public int MoveAngle {
+			get { return movement.MoveAngle; }
+		}
+
+		public int MoveDirection {
+			get { return movement.MoveDirection; }
+		}
+
 		public int Angle {
 			get { return angle; }
 			set { angle = value; }
@@ -203,6 +242,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public int Direction {
 			get { return direction; }
 			set { direction = value; }
+		}
+		
+		public PlayerMoveComponent Movement {
+			get { return movement; }
+			set { movement = value; }
+		}
+		
+		public bool AllowRoomTransition {
+			get { return allowRoomTransition; }
+			set { allowRoomTransition = value; }
 		}
 		
 		public bool SyncAnimationWithDirection {

@@ -10,38 +10,6 @@ using ZeldaOracle.Game.Control;
 
 namespace ZeldaOracle.Game.Tiles {
 	
-	[Flags]
-	public enum TileFlags {
-		Disabled		= 0x1,		// Tile is disabled.
-		Solid			= 0x2,		// Solid tiles obstruct movement.
-		Diggable		= 0x4,		// Can be dug with a shovel.
-		Stairs			= 0x8,		// Stairs slow movement speed.
-		Ladder			= 0x10,		// A climbable ladder disables items, and makes you face away from the screen.
-		Ice				= 0x20,		// Slippery surface.
-		Hole			= 0x40,		// Endless pit that objects can fall in.
-		Water			= 0x80,		// Swimmable water.
-		Lava			= 0x100,	// Hot lava.
-		Ledge			= 0x200,	// Ledge that the player can jump off.
-		NotCoverable	= 0x400,	// Tile can't be covered by movable blocks.
-		Movable			= 0x800,	// Tile can be pushed around.
-		Pickupable		= 0x1000,	// Tile can be picked up and carried.
-		Burnable		= 0x2000,	// Destroyed by fire.
-		Cuttable		= 0x4000,	// Destroyed by sword.
-		Bombable		= 0x8000,	// Destroyed by bomb explosions.
-		Boomerangable	= 0x10000,	// Destroyed by boomerang.
-		Switchable		= 0x20000,	// Can be switched with using the Switch Hook
-		SwitchStays		= 0x40000,	// Won't be destroyed when switched using the Switch Hook.
-		HalfSolid		= 0x80000,	// Obstructs movement, but some projectiles can pass over the tile.
-		Ocean			= 0x100000,
-		Puddle			= 0x200000,
-		Waterfall		= 0x400000,
-
-		NullFlag		= 0x800000,	// This special flags indicates that the tile is NULL.
-
-		Default			= 0x0, // Default tile flags (assumes a typical ground tile).
-	};
-
-
 	public class Tile {
 		private RoomControl		control;
 		private Point2I			location;		// The tile location.
