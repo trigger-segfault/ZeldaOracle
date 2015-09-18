@@ -221,6 +221,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		public int MoveAngle {
+			get { return movement.MoveAngle; }
+		}
+		
+		public int MoveDirection {
+			get { return movement.MoveDirection; }
+		}
+
 		public int Angle {
 			get { return angle; }
 			set { angle = value; }

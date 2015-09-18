@@ -35,6 +35,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private Vector2F			motion;					// The vector that's driving the player's velocity.
 		private Vector2F			velocityPrev;			// The player's velocity on the previous frame.
 		private int					moveAngle;				// The angle the player is moving in.
+		private int					moveDirection;			// The direction that the player wants to face.
 
 		// Movement modes.
 		private PlayerMovementMode	mode;
@@ -107,7 +108,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			moveModeAir.Acceleration			= 0.1f;
 			moveModeAir.Deceleration			= 0.0f;
 			moveModeAir.MinSpeed				= 0.05f;
-			moveModeAir.DirectionSnapCount		= 32;
+			moveModeAir.DirectionSnapCount		= 8;//32;
 			
 			// Water/swim movement.
 			moveModeWater = new PlayerMovementMode();
@@ -133,19 +134,23 @@ namespace ZeldaOracle.Game.Entities.Players {
 			analogMode	= !analogStick.Position.IsZero;
 
 			// Check movement input.
-			if (allowMovementControl) {
-				if (analogMode) {
-					// Check analog stick.
-					analogAngle = analogStick.Position.Direction;
-					CheckAnalogStick();
-				}
-				else {
-					// Check movement keys.
-					if (!CheckMoveKey(Directions.Left) && !CheckMoveKey(Directions.Right))
-						moveAxes[0] = false;	// x-axis
-					if (!CheckMoveKey(Directions.Up) && !CheckMoveKey(Directions.Down))
-						moveAxes[1] = false;	// y-axis
-				}
+			if (analogMode) {
+				// Check analog stick.
+				analogAngle = analogStick.Position.Direction;
+				CheckAnalogStick();
+			}
+			else {
+				// Check movement keys.
+				if (!CheckMoveKey(Directions.Left) && !CheckMoveKey(Directions.Right))
+					moveAxes[0] = false;	// x-axis
+				if (!CheckMoveKey(Directions.Up) && !CheckMoveKey(Directions.Down))
+					moveAxes[1] = false;	// y-axis
+			}
+				
+			// Don't affect the facing direction when strafing
+			if (!mode.IsStrafing && isMoving) {
+				player.Angle = moveAngle;
+				player.Direction = moveDirection;
 			}
 
 			// Don't auto-dodge collisions when moving at an angle.
@@ -227,29 +232,21 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Poll the movement key for the given direction, returning true if
 		// it is down. This also manages the strafing behavior of movement.
 		private bool CheckMoveKey(int dir) {
-			if (moveButtons[dir].IsDown() || analogMode) {
-				isMoving = true;
+			if (moveButtons[dir].IsDown()) {
+				if (allowMovementControl)
+					isMoving = true;
 			
 				if (!moveAxes[(dir + 1) % 2])
 					moveAxes[dir % 2] = true;
+
 				if (moveAxes[dir % 2]) {
+					moveDirection = dir;
 					moveAngle = dir * 2;
 
 					if (moveButtons[(dir + 1) % 4].IsDown())
 						moveAngle = (moveAngle + 1) % 8;
 					if (moveButtons[(dir + 3) % 4].IsDown())
 						moveAngle = (moveAngle + 7) % 8;
-
-					// Don't affect the facing direction when strafing
-					if (!mode.IsStrafing) {
-						player.Direction = dir;
-						player.Angle = dir * 2;
-
-						if (moveButtons[(dir + 1) % 4].IsDown())
-							player.Angle = (player.Angle + 1) % 8;
-						if (moveButtons[(dir + 3) % 4].IsDown())
-							player.Angle = (player.Angle + 7) % 8;
-					}
 				}
 				return true;
 			}
@@ -258,17 +255,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		// Update player direction angle angle from analog controls.
 		private void CheckAnalogStick() {
-			isMoving = true;
-
-			// Don't affect the facing direction when strafing.
-			if (!mode.IsStrafing) {
-				moveAxes[0]			= true;
-				moveAxes[1]			= true;
-				player.Direction	= (int) GMath.Round(analogAngle / 90.0f) % Directions.Count;
-				player.Angle		= (int) GMath.Round(analogAngle / 45.0f) % Angles.AngleCount;
-				player.Direction	= Directions.FlipVertical(player.Direction);
-				player.Angle		= Angles.FlipVertical(player.Angle);
-			}
+			if (allowMovementControl)
+				isMoving = true;
+			
+			moveAxes[0]		= true;
+			moveAxes[1]		= true;
+			moveDirection	= (int) GMath.Round(analogAngle / 90.0f) % Directions.Count;
+			moveAngle		= (int) GMath.Round(analogAngle / 45.0f) % Angles.AngleCount;
+			moveDirection	= Directions.FlipVertical(moveDirection);
+			moveAngle		= Angles.FlipVertical(player.Angle);
 		}
 
 
@@ -294,12 +289,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 			velocityPrev = player.Physics.Velocity;
 			
 			// Check for ledge jumping (ledges/waterfalls)
-			CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
+			CollisionInfo collisionInfo = player.Physics.CollisionInfo[moveDirection];
 			if (mode.CanLedgeJump && isMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
 				Tile tile = collisionInfo.Tile;
 				
 				if (tile.Flags.HasFlag(TileFlags.Ledge) &&
-					player.Direction == tile.LedgeDirection &&
+					moveDirection == tile.LedgeDirection &&
 					collisionInfo.Direction == tile.LedgeDirection)
 				{
 					// Ledge jump!
@@ -332,6 +327,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 		
 		public bool IsMoving {
 			get { return isMoving; }
+		}
+		
+		public int MoveDirection {
+			get { return moveDirection; }
+		}
+		
+		public int MoveAngle {
+			get { return moveAngle; }
 		}
 	}
 }
