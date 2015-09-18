@@ -7,6 +7,8 @@ using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.Items;
+using ZeldaOracle.Game.Items.Equipment;
+using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Worlds;
 
@@ -57,7 +59,16 @@ namespace ZeldaOracle.Game.Control {
 			roomTicks = 0;
 
 			hud = new HUD(this);
+
 			inventory = new Inventory(this);
+			inventory.AddItem(new ItemFeather());
+			inventory.AddItem(new ItemBow());
+			inventory.AddItem(new ItemWallet(2));
+			inventory.EquipUsableItem((UsableItem)inventory.GetItem("item_bow"), 0);
+			inventory.EquipUsableItem((UsableItem)inventory.GetItem("item_feather"), 1);
+
+			hud = new HUD(this);
+
 			// TODO: Load world here.
 			roomControl		= new RoomControl();
 			gameManager.PushGameState(roomControl);

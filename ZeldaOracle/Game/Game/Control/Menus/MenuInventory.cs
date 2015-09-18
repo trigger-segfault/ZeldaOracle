@@ -33,6 +33,8 @@ namespace ZeldaOracle.Game.Control.Menus {
 				gameManager.PopGameState();
 				gameManager.PushGameState(new MenuTransitionPush(this, NextMenu, Directions.East));
 			}
+
+			GameControl.HUD.Update();
 		}
 
 		public override void Draw(Graphics2D g) {

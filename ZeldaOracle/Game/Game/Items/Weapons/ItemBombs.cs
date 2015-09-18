@@ -5,7 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Game.Items {
-	public abstract class ItemBombs : Item {
+	public abstract class ItemBombs : UsableItem {
 
 		//-----------------------------------------------------------------------------
 		// Constructor

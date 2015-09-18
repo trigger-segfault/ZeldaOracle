@@ -41,7 +41,7 @@ namespace ZeldaOracle.Game.Entities {
 	// The main class for entity objects in the room.
 	public abstract class Entity {
 
-		private RoomControl			control;
+		private RoomControl			roomControl;
 		private bool				isAlive;
 		protected Vector2F			position;
 		protected float				zPosition;
@@ -55,7 +55,7 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public Entity() {
-			control			= null;
+			roomControl		= null;
 			isAlive			= false;
 			position		= Vector2F.Zero;
 			zPosition		= 0.0f;
@@ -103,7 +103,7 @@ namespace ZeldaOracle.Game.Entities {
 
 		// Initializes the entity and sets up containment variables.
 		public void Initialize(RoomControl control) {
-			this.control = control;
+			this.roomControl = control;
 			this.isAlive = true;
 			Initialize();
 		}
@@ -129,20 +129,20 @@ namespace ZeldaOracle.Game.Entities {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		// Returns the game control this entity belongs to.
+		public GameControl GameControl {
+			get { return roomControl.GameControl; }
+		}
+
 		// Returns the room control this entity belongs to.
 		public RoomControl RoomControl {
-			get { return control; }
-			set { control = value; }
-		}
-		
-		// Returns the game control of the current game.
-		public GameControl GameControl {
-			get { return control.GameControl; }
+			get { return roomControl; }
+			set { roomControl = value; }
 		}
 
 		// Returns true if the entity has been initialized.
 		public bool IsInitialized {
-			get { return (control != null); }
+			get { return (roomControl != null); }
 		}
 
 		// Returns true if the entity is not alive.

@@ -60,6 +60,8 @@
   <ItemGroup>
     <Folder Include="Animations\" />
     <Folder Include="Data\" />
+    <Folder Include="Images\Effects\" />
+    <Folder Include="Images\Units\Player\" />
     <Folder Include="Languages\" />
     <Folder Include="Particles\" />
     <Folder Include="Shaders\" />
@@ -79,6 +81,11 @@
     </None>
     <None Include="Sounds\sounds.conscript">
       <Name>sounds_script</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SpriteSheets\items.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>items</Name>
     </None>
     <None Include="SpriteSheets\menu_elements.conscript">
       <Name>menu_elements</Name>
@@ -190,12 +197,12 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\UI\items_large.png">
+    <Compile Include="Images\Items\items_large.png">
       <Name>items_large</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\UI\items_small.png">
+    <Compile Include="Images\Items\items_small.png">
       <Name>items_small</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -238,12 +245,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Images\UI\items_large_light.png">
+    <Compile Include="Images\Items\items_large_light.png">
       <Name>items_large_light</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\UI\items_small_light.png">
+    <Compile Include="Images\Items\items_small_light.png">
       <Name>items_small_light</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -257,6 +264,37 @@
       <Name>menu_small_light</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\sheet_player_blue.png">
+      <Name>sheet_player_blue</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\sheet_player_hurt.png">
+      <Name>sheet_player_hurt</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\sheet_player_red.png">
+      <Name>sheet_player_red</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\UI\get_rupee.wav">
+      <Name>get_rupee</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\UI\get_rupee_loop.wav">
+      <Name>get_rupee_loop</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

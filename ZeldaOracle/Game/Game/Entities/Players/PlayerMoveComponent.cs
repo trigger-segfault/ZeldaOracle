@@ -23,7 +23,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private bool				allowMovementControl;	// Is the player allowed to control his movement?
 		private bool				autoAccelerate;			// Should the player still accelerate without holding down a movement key?
 		private float				moveSpeedScale;			// Scales the movement speed to create the actual top-speed.
-
+		
 		// Internal
 		private Player				player;
 		private AnalogStick			analogStick;
@@ -101,6 +101,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			
 			// Air/jump movement.
 			moveModeAir = new PlayerMovementMode();
+			moveModeAir.IsStrafing				= true;
 			moveModeAir.MoveSpeed				= 1.0f;
 			moveModeAir.CanLedgeJump			= false;
 			moveModeAir.CanRoomChange			= false;
@@ -337,6 +338,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		
 		public int MoveAngle {
 			get { return moveAngle; }
+		}
+		
+		public PlayerMovementMode MoveMode {
+			get { return mode; }
 		}
 	}
 }

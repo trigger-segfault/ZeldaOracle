@@ -62,6 +62,7 @@ public class SoundInstance {
 		//this.soundInstance.Pan		= (float)GMath.Clamp(this.sound.Group.GroupPan + this.pan, -1.0, 1.0);
 		//this.soundInstance.IsLooped	= this.looped;
 
+		this.soundInstance.IsLooped = looped;
 		if (this.sound.Group.GroupMuted || this.muted)
 			this.soundInstance.Volume	= 0.0f;
 	}
@@ -105,10 +106,9 @@ public class SoundInstance {
 		get { return muted; }
 		set { muted = value; Update(); }
 	}
-	/** <summary> Gets or sets if the sound is looped. </summary> */
+	/** <summary> Gets if the sound is looped. </summary> */
 	public bool IsLooped {
 		get { return looped; }
-		set { looped = value; Update(); }
 	}
 
 	#endregion

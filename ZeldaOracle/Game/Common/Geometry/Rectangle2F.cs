@@ -276,6 +276,16 @@ public struct Rectangle2F {
 
 	//========= CALCULATIONS =========
 
+	public float GetEdge(int direction) {
+		if (direction == Directions.Right)
+			return Right;
+		if (direction == Directions.Left)
+			return Left;
+		if (direction == Directions.Up)
+			return Top;
+		return Bottom;
+	}
+
 	/** <summary> Returns the point on the rectangle based on the its perimeter. </summary> */
 	public Vector2F PositionAt(float length, bool asRatio = false) {
 		if (asRatio)

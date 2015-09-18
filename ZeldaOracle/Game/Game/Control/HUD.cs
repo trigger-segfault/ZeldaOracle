@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.Control {
@@ -12,20 +15,62 @@ namespace ZeldaOracle.Game.Control {
 
 		private GameControl gameControl;
 
+		private int dynamicRupees;
+		private SoundInstance rupeeSound;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public HUD(GameControl gameControl) {
-			this.gameControl = gameControl;
+			this.gameControl	= gameControl;
+			this.dynamicRupees	= 0;
+			this.rupeeSound		= null;
 		}
 
-		
+
+		//-----------------------------------------------------------------------------
+		// Updating
+		//-----------------------------------------------------------------------------
+
+		public void Update() {
+			int rupees = Inventory.GetAmmo("rupees").Amount;
+			if (dynamicRupees < rupees) {
+				dynamicRupees++;
+				if (dynamicRupees < rupees) {
+					if (rupeeSound == null || !rupeeSound.IsPlaying) {
+						rupeeSound = Resources.RootSoundGroup.GetSound("UI/get_rupee_loop").Play(true);
+					}
+				}
+				else {
+					if (rupeeSound != null && rupeeSound.IsPlaying) {
+						rupeeSound.Stop();
+					}
+					rupeeSound = Resources.RootSoundGroup.GetSound("UI/get_rupee").Play();
+				}
+			}
+			else if (dynamicRupees > rupees) {
+				dynamicRupees--;
+				if (dynamicRupees > rupees) {
+					if (rupeeSound == null || !rupeeSound.IsPlaying) {
+						rupeeSound = Resources.RootSoundGroup.GetSound("UI/get_rupee_loop").Play(true);
+					}
+				}
+				else {
+					if (rupeeSound != null && rupeeSound.IsPlaying) {
+						rupeeSound.Stop();
+					}
+					rupeeSound = Resources.RootSoundGroup.GetSound("UI/get_rupee").Play();
+				}
+			}
+		}
+
 		//-----------------------------------------------------------------------------
 		// Drawing
 		//-----------------------------------------------------------------------------
 
+		// Draws the HUD.
 		public void Draw(Graphics2D g, bool light) {
 			SpriteSheet sheetMenuSmall = (light ? GameData.SHEET_MENU_SMALL_LIGHT : GameData.SHEET_MENU_SMALL);
 			Sprite background = new Sprite(sheetMenuSmall, new Point2I(2, 4));
@@ -36,8 +81,9 @@ namespace ZeldaOracle.Game.Control {
 			DrawRupees(g, light);
 			DrawHearts(g, light);
 		}
+
+		// Draws the equipped usable items.
 		private void DrawItems(Graphics2D g, bool light) {
-			bool twoHandedEquipped = false; //gameControl.Inventory.IsTwoHandedEquipped
 			SpriteSheet sheetMenuSmall = (light ? GameData.SHEET_MENU_SMALL_LIGHT : GameData.SHEET_MENU_SMALL);
 			Sprite aR = new Sprite(sheetMenuSmall, new Point2I(7, 0));
 			Sprite aL = new Sprite(sheetMenuSmall, new Point2I(8, 0));
@@ -50,7 +96,7 @@ namespace ZeldaOracle.Game.Control {
 			Sprite eTM = new Sprite(sheetMenuSmall, new Point2I(11, 0));
 			Sprite eBM = new Sprite(sheetMenuSmall, new Point2I(11, 1));
 
-			if (twoHandedEquipped) {
+			if (Inventory.IsTwoHandedEquipped) {
 				// B bracket side
 				g.DrawSprite(bR, new Point2I(8, 0));
 				g.DrawSprite(eBR, new Point2I(8, 8));
@@ -58,7 +104,7 @@ namespace ZeldaOracle.Game.Control {
 				g.DrawSprite(aL, new Point2I(56, 0));
 				g.DrawSprite(eBL, new Point2I(56, 8));
 
-				// item1.Draw(g, new Point2I(16, 0));
+				Inventory.EquippedUsableItems[0].DrawInInventory(g, new Point2I(16, 0), light);
 			}
 			else if (!gameControl.IsAdvancedGame) {
 				// B bracket
@@ -72,8 +118,10 @@ namespace ZeldaOracle.Game.Control {
 				g.DrawSprite(eTL, new Point2I(72, 0));
 				g.DrawSprite(eBL, new Point2I(72, 8));
 
-				// item1.Draw(g, new Point2I(8, 0));
-				// item1.Draw(g, new Point2I(48, 0));
+				if (Inventory.EquippedUsableItems[1] != null)
+					Inventory.EquippedUsableItems[1].DrawInInventory(g, new Point2I(8, 0), light);
+				if (Inventory.EquippedUsableItems[0] != null)
+					Inventory.EquippedUsableItems[0].DrawInInventory(g, new Point2I(48, 0), light);
 			}
 			else {
 				// B bracket side
@@ -86,18 +134,20 @@ namespace ZeldaOracle.Game.Control {
 				g.DrawSprite(aL, new Point2I(64, 0));
 				g.DrawSprite(eBL, new Point2I(64, 8));
 
-				// item1.Draw(g, new Point2I(8, 0));
-				// item1.Draw(g, new Point2I(40, 0));
+				if (Inventory.EquippedUsableItems[1] != null)
+					Inventory.EquippedUsableItems[1].DrawInInventory(g, new Point2I(8, 0), light);
+				if (Inventory.EquippedUsableItems[0] != null)
+					Inventory.EquippedUsableItems[0].DrawInInventory(g, new Point2I(40, 0), light);
 			}
 		}
 
+		// Draws the ruppes and dungeon keys.
 		private void DrawRupees(Graphics2D g, bool light) {
 			SpriteSheet sheetMenuSmall = (light ? GameData.SHEET_MENU_SMALL_LIGHT : GameData.SHEET_MENU_SMALL);
 			Color black = (light ? new Color(16, 16, 16) : Color.Black);
 			bool inDungeon = false;
 			int advancedOffset = (gameControl.IsAdvancedGame ? 8 : 0);
 			int numKeys = 0;
-			int numRupees = 0;
 			Sprite rupee = new Sprite(sheetMenuSmall, new Point2I(0, 2));
 			Sprite ore = new Sprite(sheetMenuSmall, new Point2I(1, 2));
 			Sprite key = new Sprite(sheetMenuSmall, new Point2I(0, 1));
@@ -110,8 +160,10 @@ namespace ZeldaOracle.Game.Control {
 			else {
 				g.DrawSprite(rupee, new Point2I(80 - advancedOffset, 0));
 			}
-			g.DrawString(GameData.FONT_SMALL, numRupees.ToString("000"), new Point2I(80 - advancedOffset, 8), black);
+			g.DrawString(GameData.FONT_SMALL, dynamicRupees.ToString("000"), new Point2I(80 - advancedOffset, 8), black);
 		}
+
+		// Draws the player's life.
 		private void DrawHearts(Graphics2D g, bool light) {
 			SpriteSheet sheetMenuSmall = (light ? GameData.SHEET_MENU_SMALL_LIGHT : GameData.SHEET_MENU_SMALL);
 			Sprite[] hearts = new Sprite[]{
@@ -132,11 +184,17 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 
-
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		public Inventory Inventory {
+			get { return gameControl.Inventory; }
+		}
 
+		public int DynamicRupees {
+			get { return dynamicRupees; }
+			set { dynamicRupees = value; }
+		}
 	}
 }
