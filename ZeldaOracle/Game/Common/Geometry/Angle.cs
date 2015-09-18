@@ -43,6 +43,16 @@ namespace ZeldaOracle.Common.Geometry {
 		public static bool IsVertical(int angle) {
 			return (angle % 4 == 2);
 		}
+		
+		// Return the given direction flipped horizontally over the y-axis.
+		public static int FlipHorizontal(int angle) {
+			return (Angles.West + Angles.AngleCount - angle) % Angles.AngleCount;
+		}
+		
+		// Return the given direction flipped vertically over the x-axis.
+		public static int FlipVertical(int angle) {
+			return (AngleCount - angle) % AngleCount;
+		}
 
 		// Return a normalized vector representing the given angle.
 		public static Vector2F ToVector(int angle) {

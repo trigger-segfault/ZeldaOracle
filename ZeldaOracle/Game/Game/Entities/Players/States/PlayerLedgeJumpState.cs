@@ -136,7 +136,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// If done, return to the normal player state.
 			if (isDone) {
 				player.Physics.Velocity = Vector2F.Zero;
-				player.BeginState(player.NormalState);
+				player.BeginNormalState();
 			}
 		}
 

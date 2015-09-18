@@ -22,9 +22,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 	
 	public class Unit : Entity {
-
-		private int health;
-		private int healthMax;
+		
+		protected int	direction;
+		protected int	health;
+		protected int	healthMax;
 
 
 		//-----------------------------------------------------------------------------
@@ -36,6 +37,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			health		= 1;
 			healthMax	= 1;
+			direction	= Directions.Right;
 		}
 
 

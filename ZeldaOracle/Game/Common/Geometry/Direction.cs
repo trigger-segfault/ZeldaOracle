@@ -28,13 +28,23 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 		// Methods
 		//-----------------------------------------------------------------------------
-		
+
 		public static bool IsHorizontal(int direction) {
 			return (direction % 2 == 0);
 		}
 		
 		public static bool IsVertical(int direction) {
 			return (direction % 2 == 1);
+		}
+		
+		// Return the given direction flipped horizontally over the y-axis.
+		public static int FlipHorizontal(int direction) {
+			return (Directions.West + Directions.Count - direction) % Directions.Count;
+		}
+		
+		// Return the given direction flipped vertically over the x-axis.
+		public static int FlipVertical(int direction) {
+			return (Directions.Count - direction) % Directions.Count;
 		}
 
 		public static Point2I ToPoint(int direction) {

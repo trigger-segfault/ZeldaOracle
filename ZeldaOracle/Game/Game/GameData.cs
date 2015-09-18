@@ -392,6 +392,19 @@ class GameData {
 			BuildTile(15, 19).SetSolidModel(MODEL_DOORWAY);
 			BuildTile(12, 18).SetSolidModel(MODEL_CORNER_NW);
 			BuildTile(13, 18).SetSolidModel(MODEL_CORNER_NE);
+			// Bridges
+			BuildTile(15, 12).SetSolidModel(MODEL_BRIDGE_V_LEFT);
+			BuildTile(17, 12).SetSolidModel(MODEL_BRIDGE_V_RIGHT);
+			BuildTile(18, 12).SetSolidModel(MODEL_BRIDGE_V);
+			BuildTile(15, 13).SetSolidModel(MODEL_BRIDGE_V_LEFT);
+			BuildTile(17, 13).SetSolidModel(MODEL_BRIDGE_V_RIGHT);
+			BuildTile(18, 13).SetSolidModel(MODEL_BRIDGE_V);
+			BuildTile(19, 10).SetSolidModel(MODEL_BRIDGE_H);
+			BuildTile(19, 11).SetSolidModel(MODEL_BRIDGE_H_TOP);
+			BuildTile(19, 13).SetSolidModel(MODEL_BRIDGE_H_BOTTOM);
+			BuildTile(20, 10).SetSolidModel(MODEL_BRIDGE_H);
+			BuildTile(20, 11).SetSolidModel(MODEL_BRIDGE_H_TOP);
+			BuildTile(20, 13).SetSolidModel(MODEL_BRIDGE_H_BOTTOM);
 			// Irregular Ledges
 			BuildTile( 0, 17).SetSolidModel(MODEL_CORNER_NW);
 			BuildTile( 1, 17).SetSolidModel(MODEL_EDGE_N).AddFlags(TileFlags.Ledge);
