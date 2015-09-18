@@ -178,7 +178,7 @@ public class SoundGroup {
 	/** <summary> Gets the specified subgroup. </summary> */
 	public SoundGroup GetGroup(string group) {
 		if (group.Length != 0) {
-			int index = group.IndexOf('.');
+			int index = group.IndexOf('/');
 			if (index == -1) {
 				if (groups.ContainsKey(group))
 					return groups[group];
@@ -192,7 +192,7 @@ public class SoundGroup {
 	/** <summary> Returns true if the specified group exists. </summary> */
 	public bool GroupExists(string group) {
 		if (group.Length != 0) {
-			int index = group.IndexOf('.');
+			int index = group.IndexOf('/');
 			if (index == -1) {
 				return groups.ContainsKey(group);
 			}
@@ -206,7 +206,7 @@ public class SoundGroup {
 	/** <summary> Adds a subgroup to the sound group. </summary> */
 	public void AddGroup(string group, double volume = 1.0, double pitch = 0.0, double pan = 0.0, bool muted = false) {
 		if (group.Length != 0) {
-			int index = group.IndexOf('.');
+			int index = group.IndexOf('/');
 			if (index == -1) {
 				groups.Add(group, new SoundGroup(this, group, volume, pitch, pan, muted));
 			}
@@ -218,7 +218,7 @@ public class SoundGroup {
 	/** <summary> Adds a subgroup to the sound group. </summary> */
 	public void AddGroup(string groupName, SoundGroup group) {
 		if (groupName.Length != 0) {
-			int index = groupName.IndexOf('.');
+			int index = groupName.IndexOf('/');
 			if (index == -1) {
 				group.name = groupName;
 				group.parent = this;
@@ -237,7 +237,7 @@ public class SoundGroup {
 	/** <summary> Gets the sound from the specified subgroup. </summary> */
 	public Sound GetSound(string sound) {
 		if (sound.Length != 0) {
-			int index = sound.IndexOf('.');
+			int index = sound.IndexOf('/');
 			if (index == -1) {
 				if (sounds.ContainsKey(sound))
 					return sounds[sound];
@@ -251,7 +251,7 @@ public class SoundGroup {
 	/** <summary> Returns true if the specified sound exists. </summary> */
 	public bool SoundExists(string sound) {
 		if (sound.Length != 0) {
-			int index = sound.IndexOf('.');
+			int index = sound.IndexOf('/');
 			if (index == -1) {
 				return sounds.ContainsKey(sound);
 			}
@@ -264,7 +264,7 @@ public class SoundGroup {
 	/** <summary> Adds a sound to the sound group. </summary> */
 	public void AddSound(string sound, SoundEffect soundEffect, string fileName, double volume = 1.0, double pitch = 0.0, double pan = 0.0, bool muted = false) {
 		if (sound.Length != 0) {
-			int index = sound.IndexOf('.');
+			int index = sound.IndexOf('/');
 			if (index == -1) {
 				sounds.Add(sound, new Sound(soundEffect, fileName, this, sound, volume, pitch, pan, muted));
 			}

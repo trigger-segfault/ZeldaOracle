@@ -11,19 +11,21 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
 
 namespace ZeldaOracle.Game.Items.Weapons {
-	public class ItemBow : Item {
 
+	public class ItemBow : UsableItem {
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public ItemBow() : base() {
-			id			= "item_bow";
-			name		= new string[] { "Wooden Bow" };
-			description	= new string[] { "Weapon of a marksman." };
-			maxLevel	= 0;
-			currentAmmo	= 0;
+			this.id				= "item_bow";
+			this.name			= new string[] { "Wooden Bow" };
+			this.description	= new string[] { "Weapon of a marksman." };
+			this.maxLevel		= 0;
+			this.currentAmmo	= 0;
+			this.sprite			= new Sprite(GameData.SHEET_ITEMS_SMALL, 13, 1);
+			this.spriteLight	= new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 13, 1);
 		}
 
 
@@ -34,6 +36,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Called when the items button is pressed (A or B).
 		public override void OnButtonPress() {
 			// Shoot an arrow!
+			if (ammo[currentAmmo].IsEmpty)
+				return;
 			
 			Projectile projectile = new Projectile();
 				
@@ -76,10 +80,26 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			};
 
 			RoomControl.SpawnEntity(projectile);
+			ammo[currentAmmo].Amount--;
 
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 			player.BeginState(new PlayerBusyState(10));
 		}
 
+		// Called when the item is added to the inventory list.
+		public override void OnAdded(Inventory inventory) {
+			base.OnAdded(inventory);
+
+			this.currentAmmo = 0;
+			this.ammo = new Ammo[] { new Ammo("ammo_arrows", "Arrows", 30, 30) };
+			this.ammo[0].IsObtained = true;
+			inventory.AddAmmo(this.ammo[0]);
+		}
+
+		// Draws the item inside the inventory.
+		public override void DrawInInventory(Graphics2D g, Point2I position, bool light) {
+			DrawSprite(g, position, light);
+			DrawAmmo(g, position, light);
+		}
 	}
 }

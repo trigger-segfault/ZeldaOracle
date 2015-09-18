@@ -14,7 +14,7 @@ namespace ZeldaOracle.Game.Items {
 		// The list of ammos in the game.
 		private List<Ammo> ammo;
 		// The player's equip slots.
-		private PlayerItem[] equippedItems;
+		private UsableItem[] equippedUsableItems;
 
 		//-----------------------------------------------------------------------------
 		// Constants
@@ -28,10 +28,10 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 
 		public Inventory(GameControl gameControl) {
-			this.gameControl	= gameControl;
-			this.items			= new List<Item>();
-			this.ammo			= new List<Ammo>();
-			this.equippedItems	= new PlayerItem[NumEquipSlots];
+			this.gameControl			= gameControl;
+			this.items					= new List<Item>();
+			this.ammo					= new List<Ammo>();
+			this.equippedUsableItems	= new UsableItem[NumEquipSlots];
 		}
 
 
@@ -39,20 +39,41 @@ namespace ZeldaOracle.Game.Items {
 		// Items
 		//-----------------------------------------------------------------------------
 
-		// Equip a player item into the given slot (slot 0 (A) or 1 (B))
-		public void EquipPlayerItem(PlayerItem item, int slot) {
-			if (item.IsTwoHanded) {
-				equippedItems[0] = item;
-				equippedItems[1] = item;
+		// Equip a usable item into the given slot (slot 0 (A) or 1 (B)).
+		public void EquipUsableItem(Item item, int slot) {
+			UsableItem usableItem = item as UsableItem;
+			if (usableItem.HasFlag(ItemFlags.TwoHanded)) {
+				// Unequip the current items.
+				if (equippedUsableItems[0] != null)
+					equippedUsableItems[0].Unequip();
+				if (equippedUsableItems[1] != null)
+					equippedUsableItems[1].Unequip();
+
+				equippedUsableItems[0] = usableItem;
+				equippedUsableItems[1] = usableItem;
 			}
 			else {
-				equippedItems[slot] = item;
+				// Unequip the current item.
+				if (equippedUsableItems[slot] != null)
+					equippedUsableItems[slot].Unequip();
+
+				equippedUsableItems[slot] = usableItem;
 			}
+
+			// Equip the new item.
+			if (usableItem != null)
+				usableItem.Equip();
+		}
+
+		// Equips a non-usable item.
+		public void EquipEquippableItem(Item item) {
+			EquippableItem equippableItem = item as EquippableItem;
 		}
 
 		// Adds the item to the list
 		public void AddItem(Item item) {
 			this.items.Add(item);
+			item.OnAdded(this);
 		}
 
 		// Gets the item at the specified index
@@ -101,12 +122,12 @@ namespace ZeldaOracle.Game.Items {
 		// Ammo
 		//-----------------------------------------------------------------------------
 
-		// Adds the ammo type to the list
+		// Adds the ammo type to the list.
 		public void AddAmmo(Ammo ammo) {
 			this.ammo.Add(ammo);
 		}
 
-		// Gets the ammo class with the specified id
+		// Gets the ammo class with the specified id.
 		public Ammo GetAmmo(string id) {
 			foreach (Ammo ammo in this.ammo) {
 				if (ammo.ID == id)
@@ -115,7 +136,7 @@ namespace ZeldaOracle.Game.Items {
 			return null;
 		}
 
-		// Checks if the ammo exists
+		// Checks if the ammo exists.
 		public bool AmmoExists(string id) {
 			foreach (Ammo ammo in this.ammo) {
 				if (ammo.ID == id)
@@ -124,7 +145,7 @@ namespace ZeldaOracle.Game.Items {
 			return false;
 		}
 
-		// Checks if the ammo has been obtained
+		// Checks if the ammo has been obtained.
 		public bool IsAmmoObtained(string id) {
 			foreach (Ammo ammo in this.ammo) {
 				if (ammo.ID == id)
@@ -133,13 +154,42 @@ namespace ZeldaOracle.Game.Items {
 			return false;
 		}
 
-		// Checks if the ammo has been obtained and is not stolen
+		// Checks if the ammo has been obtained and is not stolen.
 		public bool IsAmmoAvailable(string id) {
 			foreach (Ammo ammo in this.ammo) {
 				if (ammo.ID == id)
 					return ammo.IsObtained && !ammo.IsStolen;
 			}
 			return false;
+		}
+
+		// Fills all the ammo in the player's inventory.
+		public void FillAllAmmo() {
+			foreach (Ammo ammo in this.ammo) {
+				ammo.Amount = ammo.MaxAmount;
+			}
+		}
+
+		// Empties all the ammo from the player's inventory.
+		public void EmptyAllAmmo() {
+			foreach (Ammo ammo in this.ammo) {
+				ammo.Amount = 0;
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		// Gets the equipped usable items list.
+		public UsableItem[] EquippedUsableItems {
+			get { return equippedUsableItems; }
+		}
+
+		// Gets if a two handed weapon is equipped.
+		public bool IsTwoHandedEquipped {
+			get { return (equippedUsableItems[0] != null ? equippedUsableItems[0].HasFlag(ItemFlags.TwoHanded) : false); }
 		}
 	}
 }

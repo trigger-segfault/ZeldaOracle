@@ -10,7 +10,7 @@ namespace ZeldaOracle.Game.Items.Equipment {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemWallet() : base() {
+		public ItemWallet(int level = 0) : base() {
 			this.id = "item_wallet";
 			this.name = new string[] { "Child's Wallet", "Adult's Wallet", "Giant's Wallet" };
 			this.description = new string[] {
@@ -18,6 +18,7 @@ namespace ZeldaOracle.Game.Items.Equipment {
 				"Allows you to carry 300 rupees!",
 				"Allows you to carry a whopping 999 rupees!"
 			};
+			this.level = level;
 			this.maxLevel = 2;
 		}
 
@@ -29,8 +30,11 @@ namespace ZeldaOracle.Game.Items.Equipment {
 		// Called when the item is added to the inventory list
 		public override void OnAdded(Inventory inventory) {
 			base.OnAdded(inventory);
+			int[] maxAmounts = { 99, 300, 999 };
 
-			inventory.AddAmmo(new Ammo("rupees", "Rupees", 0, 99));
+			Ammo rupees = new Ammo("rupees", "Rupees", 0, maxAmounts[level]);
+			rupees.IsObtained = true;
+			inventory.AddAmmo(rupees);
 		}
 
 		// Called when the item's level is changed.

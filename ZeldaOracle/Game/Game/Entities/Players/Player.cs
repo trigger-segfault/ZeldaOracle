@@ -33,7 +33,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 	public class Player : Unit {
 	
 		private int				angle;
-		private Item[]			equippedItems; // TODO: move this to somewhere else.
+		//private UsableItem[]	equippedItems; // TODO: move this to somewhere else.
 		private bool			syncAnimationWithDirection; // TODO: better name for this.
 		private bool			checkGroundTiles;
 		private bool			allowRoomTransition; // Is the player allowed to transition between rooms?
@@ -56,7 +56,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public Player() {
 			direction			= Directions.Down;
 			angle				= Directions.ToAngle(direction);
-			equippedItems		= new Item[2] { null, null };
 			checkGroundTiles	= true;
 			autoRoomTransition	= false;
 			allowRoomTransition	= true;
@@ -84,10 +83,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateSwim		= new PlayerSwimState();
 			stateLadder		= new PlayerLadderState();
 			stateLedgeJump	= new PlayerLedgeJumpState();
-			
-			// DEBUG: equip a bow item.
-			equippedItems[0] = new ItemBow();
-			equippedItems[1] = new ItemFeather();
 		}
 
 
@@ -157,13 +152,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public void UpdateEquippedItems() {
-			for (int i = 0; i < equippedItems.Length; i++) {
-				if (equippedItems[i] != null) {
-					equippedItems[i].Player = this;
+			for (int i = 0; i < EquippedUsableItems.Length; i++) {
+				if (EquippedUsableItems[i] != null) {
+					EquippedUsableItems[i].Player = this;
 					if (i == 0 && Controls.A.IsPressed())
-						equippedItems[i].OnButtonPress();
+						EquippedUsableItems[i].OnButtonPress();
 					else if (i == 1 && Controls.B.IsPressed())
-						equippedItems[i].OnButtonPress();
+						EquippedUsableItems[i].OnButtonPress();
 					//equippedItems[i].Update();
 				}
 			}
@@ -224,6 +219,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Returns the inventory of the player.
 		public Inventory Inventory {
 			get { return GameControl.Inventory; }
+		}
+
+		public UsableItem[] EquippedUsableItems {
+			get { return Inventory.EquippedUsableItems; }
 		}
 
 		public int MoveAngle {

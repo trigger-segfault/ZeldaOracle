@@ -15,6 +15,7 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Common.Input;
+using ZeldaOracle.Common.Content;
 
 namespace ZeldaOracle.Game.Control {
 
@@ -332,6 +333,13 @@ namespace ZeldaOracle.Game.Control {
 			if (Keyboard.IsKeyPressed(Keys.G)) {
 				GameControl.DisplayMessage("I was a <red>hero<red> to broken robots 'cause I was one of them, but how can I sing about being damaged if I'm not?<p> That's like <green>Christina Aguilera<green> singing Spanish. Ooh, wait! That's it! I'll fake it!");
 			}
+			if (Keyboard.IsKeyPressed(Keys.Insert)) {
+				GameControl.Inventory.FillAllAmmo();
+			}
+			if (Keyboard.IsKeyPressed(Keys.Delete)) {
+				GameControl.Inventory.EmptyAllAmmo();
+			}
+			GameControl.HUD.Update();
 		}
 
 		public override void Draw(Graphics2D g) {

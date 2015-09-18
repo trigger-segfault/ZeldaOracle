@@ -6,19 +6,7 @@
 @muted false
 @end
 
-@group "player"
-@sound "Player/laser" 1.0 0.0 0.0 false
-@sound "Player/death" 1.0 0.0 0.0 false
-@sound "Player/respawn" 1.0 0.0 0.0 false
-@end
-
-@group "level"
-@end
-
-@group "bosses"
-
-@end
-
-@group "bosses.ms_sam"
-
+@group "UI"
+@sound "UI/get_rupee" 1.0 0.0 0.0 false
+@sound "UI/get_rupee_loop" 1.0 0.0 0.0 false
 @end
