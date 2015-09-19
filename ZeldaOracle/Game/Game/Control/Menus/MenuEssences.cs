@@ -13,7 +13,7 @@ using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.Control.Menus {
 
-	public class MenuEssences : PlayerMenu {
+	public class MenuEssences : InventoryMenu {
 
 		//-----------------------------------------------------------------------------
 		// Constructors

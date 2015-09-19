@@ -13,13 +13,13 @@ using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.Control.Menus {
 
-	public class MenuInventory : PlayerMenu {
+	public class MenuWeapons : InventoryMenu {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public MenuInventory(GameManager gameManager)
+		public MenuWeapons(GameManager gameManager)
 			: base(gameManager) {
 			this.backgroundSprite = Resources.GetImage("UI/menu_weapons_a");
 
@@ -75,11 +75,27 @@ namespace ZeldaOracle.Game.Control.Menus {
 					GameControl.Inventory.EquipUsableItem(selectedItem, slot);
 					currentSlotGroup.CurrentSlot.SlotItem = null;
 				}
+				ResetDescription();
 			}
 		}
 
 		public override void Draw(Graphics2D g) {
 			base.Draw(g);
+		}
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+
+		public Slot NextAvailableSlot {
+			get {
+				for (int i = 0; i < currentSlotGroup.NumSlots; i++) {
+					if (currentSlotGroup.GetSlotAt(i).SlotItem == null)
+						return currentSlotGroup.GetSlotAt(i);
+				}
+				return null;
+			}
 		}
 	}
 }

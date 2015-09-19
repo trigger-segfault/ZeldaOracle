@@ -71,9 +71,12 @@ namespace ZeldaOracle.Game.Items {
 		}
 
 		// Adds the item to the list
-		public void AddItem(Item item) {
+		public Item AddItem(Item item, bool obtain) {
 			this.items.Add(item);
 			item.OnAdded(this);
+			if (obtain)
+				ObtainItem(item);
+			return item;
 		}
 
 		// Gets the item at the specified index
@@ -117,14 +120,27 @@ namespace ZeldaOracle.Game.Items {
 			return false;
 		}
 
+		public void ObtainItem(Item item) {
+			item.IsObtained = true;
+			if (item is UsableItem) {
+				if (equippedUsableItems[0] == null)
+					EquipUsableItem(item, 0);
+				else if (equippedUsableItems[1] == null)
+					EquipUsableItem(item, 1);
+				else
+					gameControl.MenuWeapons.NextAvailableSlot.SlotItem = item;
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Ammo
 		//-----------------------------------------------------------------------------
 
 		// Adds the ammo type to the list.
-		public void AddAmmo(Ammo ammo) {
+		public Ammo AddAmmo(Ammo ammo) {
 			this.ammo.Add(ammo);
+			return ammo;
 		}
 
 		// Gets the ammo class with the specified id.
