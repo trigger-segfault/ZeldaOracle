@@ -329,7 +329,7 @@ namespace ZeldaOracle.Game.Control {
 
 			// [Start] Open inventory.
 			if (Controls.Start.IsPressed()) {
-				GameControl.OpenMenu(GameControl.MenuInventory);
+				GameControl.OpenMenu(GameControl.MenuWeapons);
 			}
 			if (Keyboard.IsKeyPressed(Keys.G)) {
 				GameControl.DisplayMessage("I was a <red>hero<red> to broken robots 'cause I was one of them, but how can I sing about being damaged if I'm not?<p> That's like <green>Christina Aguilera<green> singing Spanish. Ooh, wait! That's it! I'll fake it!");
