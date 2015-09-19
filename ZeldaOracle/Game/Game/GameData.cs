@@ -14,10 +14,10 @@ using ZeldaOracle.Game.Main.ResourceBuilders;
 
 namespace ZeldaOracle.Game {
 
-// A static class for storing links to all game content.
-class GameData {
+	// A static class for storing links to all game content.
+	public class GameData {
 
-	private static AnimationBuilder animationBuilder;
+		private static AnimationBuilder animationBuilder;
 
 
 		//-----------------------------------------------------------------------------
@@ -25,13 +25,13 @@ class GameData {
 		//-----------------------------------------------------------------------------
 
 		// Initializes and loads the game content.
-	public static void Initialize() {
+		public static void Initialize() {
 			
-		Console.WriteLine("Loading Images");
-		LoadImages();
+			Console.WriteLine("Loading Images");
+			LoadImages();
 
-		Console.WriteLine("Loading Sprite Sheets");
-		LoadSpriteSheets();
+			Console.WriteLine("Loading Sprite Sheets");
+			LoadSpriteSheets();
 
 			Console.WriteLine("Loading Sprites");
 			LoadSprites();
@@ -45,34 +45,33 @@ class GameData {
 			Console.WriteLine("Loading Tilesets");
 			LoadTilesets();
 
-		Console.WriteLine("Loading Fonts");
-		LoadFonts();
+			Console.WriteLine("Loading Fonts");
+			LoadFonts();
 
-		Console.WriteLine("Loading Shaders");
-		LoadShaders();
+			Console.WriteLine("Loading Shaders");
+			LoadShaders();
 
-		Console.WriteLine("Loading Sound Effects");
-		LoadSounds();
+			Console.WriteLine("Loading Sound Effects");
+			LoadSounds();
 
-		Console.WriteLine("Loading Music");
-		LoadMusic();
+			Console.WriteLine("Loading Music");
+			LoadMusic();
 
-	}
+		}
 
 
 		//-----------------------------------------------------------------------------
 		// Image Loading
 		//-----------------------------------------------------------------------------
 		
-	private static int PointIndex(int x, int y) {
+		private static int PointIndex(int x, int y) {
 			return ((234 * y) + x);
-	}
+		}
 	
 		// Loads the images.
 		private static void LoadImages() {
-
 			Resources.LoadImage("Images/UI/menu_weapons_b");
-	}
+		}
 
 		//-----------------------------------------------------------------------------
 		// Sprite Sheet Loading
@@ -121,7 +120,7 @@ class GameData {
 
 		private static SpriteBuilder BuildSprite(Sprite sprite, int sheetX, int sheetY) {
 			return BuildSprite(sprite, sheetX, sheetY, 0, 0);
-			}
+		}
 
 		private static SpriteBuilder BuildSprite(Sprite sprite, int sheetX, int sheetY, int offsetX, int offsetY) {
 			sprite.Set(new Sprite(spriteBuilder.SpriteSheet, sheetX, sheetY, offsetX, offsetY));
@@ -214,7 +213,7 @@ class GameData {
 			BuildSprite(SPR_HUD_RUPEE,		0, 1);
 			BuildSprite(SPR_HUD_ORE_CHUNK,	1, 1);
 			BuildSprite(SPR_HUD_KEY,		2, 1);
-			}
+		}
 		
 		
 		//-----------------------------------------------------------------------------
@@ -272,6 +271,7 @@ class GameData {
 			BuildAnim(ANIM_PLAYER_SWIM)				.AddFrameStrip(6, 0,13, 2).Offset(-8, -16 + 2).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_DIVE)				.AddFrame(16, 0,21, 0,4).AddFrame(16, 1,21, 0,4).Offset(-8, -16);
 
+			//BuildAnim(ANIM_PLAYER_PULL)				.AddFrameStrip(6, 0,7, 2).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_PULL)				.AddFrameStrip(6, 0,7, 2).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_DIG)				.AddFrame(8, 0,9).AddFrame(16, 1,9).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_THROW)			.AddFrame(9, 0,4).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
@@ -280,7 +280,14 @@ class GameData {
 														.AddFrameStrip(6, 2,1, 2).Offset(-8, -16).MakeDynamic(3, 2,0);
 			BuildAnim(ANIM_PLAYER_SHIELD_LARGE_BLOCK)	.AddFrameStrip(6, 0,2, 2).Offset(-8, -16).MakeDynamic(3, 2,0)
 														.CreateSubStrip().AddFrameStrip(6, 2,3, 2).Offset(-8, -16);
+			
+			//BuildAnim(ANIM_PLAYER_PULL).AddFrameStrip(6, 0,7, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
 
+			//BuildAnim(ANIM_PLAYER_GRAB).AddFrame(1, 0,7, 0,0).Offset(-8, 16).MakeDynamic(4, 2,0);
+			//BuildAnim(ANIM_PLAYER_PULL).AddFrame(1, 1,7).Offset(-8, 16).MakeDynamic(4, 2,0);
+			//ANIM_PLAYER_PULL.Frames[0].DrawOffset += new Point2I(-4, 0);
+			//ANIM_PLAYER_PULL.NextStrip.Frames[0].DrawOffset += new Point2I(0, 2);
+			//ANIM_PLAYER_PULL.NextStrip.NextStrip.Frames[0].DrawOffset += new Point2I(4, 0);
 
 			BuildAnim(ANIM_PLAYER_JUMP)
 				.AddFrame(9, 0, 11).AddFrame(9, 1, 11).AddFrame(6, 2, 11).AddFrame(6, 1, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()

@@ -37,7 +37,7 @@ namespace ZeldaOracle.Game.Entities {
 		private float			maxFallSpeed;
 		private Rectangle2F		collisionBox;		// The "hard" collision box, used to collide with solid entities/tiles.
 		private Rectangle2F		softCollisionBox;	// The "soft" collision box, used to collide with items, monsters, room edges, etc.
-		private int				collisionDodgeDistance; // The maximum distance allowed to dodge collisions.
+		private int				autoDodgeDistance; // The maximum distance allowed to dodge collisions.
 
 		private bool			isColliding;
 		private CollisionInfo[] collisionInfo;
@@ -64,7 +64,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.topTileFlags		= TileFlags.None;
 			this.allTileFlags		= TileFlags.None;
 			this.isColliding		= false;
-			this.collisionDodgeDistance	= 6;
+			this.autoDodgeDistance	= 6;
 
 			this.collisionInfo	= new CollisionInfo[Directions.Count];
 			for (int i = 0; i < Directions.Count; i++)
@@ -221,6 +221,54 @@ namespace ZeldaOracle.Game.Entities {
 			return false;
 		}
 
+		public bool IsPlaceMeetingTile(Vector2F position, Tile tile) {
+			if (CanCollideWithTile(tile)) {
+				return CollisionModel.Intersecting(tile.CollisionModel, tile.Position, collisionBox, position);
+			}
+			return false;
+		}
+		
+		// Return true if the entity would collide with a solid object using the
+		// given collision box if it were placed at the given position.
+
+		public delegate bool TileIterationFunction(Tile tile);
+
+		public void IterateMeetingTiles(Vector2F position, Rectangle2F collisionBox, TileIterationFunction iterationFunction) {
+			Room room = entity.RoomControl.Room;
+			
+			// Find the rectangular area of nearby tiles to collide with.
+			Rectangle2F myBox = collisionBox;
+			myBox.Point += position;
+			myBox.Inflate(2, 2);
+	
+			int x1 = (int) (myBox.Left   / (float) GameSettings.TILE_SIZE);
+			int y1 = (int) (myBox.Top    / (float) GameSettings.TILE_SIZE);
+			int x2 = (int) (myBox.Right  / (float) GameSettings.TILE_SIZE) + 1;
+			int y2 = (int) (myBox.Bottom / (float) GameSettings.TILE_SIZE) + 1;
+
+			Rectangle2I area;
+			area.Point	= (Point2I) (myBox.TopLeft / (float) GameSettings.TILE_SIZE);
+			area.Size	= ((Point2I) (myBox.BottomRight / (float) GameSettings.TILE_SIZE)) + Point2I.One - area.Point;
+			area.Inflate(1, 1);
+			area = Rectangle2I.Intersect(area, new Rectangle2I(Point2I.Zero, room.Size));
+
+			myBox.Inflate(-2, -2);
+
+			bool isDone = false;
+			for (int x = area.Left; x < area.Right && !isDone; x++) {
+				for (int y = area.Top; y < area.Bottom; y++) {
+					for (int i = 0; i < room.LayerCount; i++) {
+						Tile t = entity.RoomControl.GetTile(x, y, i);
+						if (CanCollideWithTile(t)) {
+							if (CollisionModel.Intersecting(t.CollisionModel, t.Position, collisionBox, position)) {
+								isDone = iterationFunction(t);
+							}
+						}
+					}
+				}
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Collisions
@@ -351,8 +399,8 @@ namespace ZeldaOracle.Game.Entities {
 			return result;
 		}
 
-		private bool CanDodgeCollision(Rectangle2F block, int direction) {
-			float		dodgeDist	= collisionDodgeDistance;
+		public bool CanDodgeCollision(Rectangle2F block, int direction) {
+			float		dodgeDist	= autoDodgeDistance;
 			Rectangle2F	objBox		= Rectangle2F.Translate(collisionBox, entity.Position);
 			Vector2F	pos			= entity.Position;
 			Vector2F	dirVect		= Directions.ToVector(direction);
@@ -376,7 +424,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		private bool PerformCollisionDodge(Rectangle2F block, int direction) {
-			float		dodgeDist	= collisionDodgeDistance;
+			float		dodgeDist	= autoDodgeDistance;
 			Rectangle2F	objBox		= Rectangle2F.Translate(collisionBox, entity.Position);
 			Vector2F	pos			= entity.Position;
 			Vector2F	dirVect		= Directions.ToVector(direction);
@@ -400,7 +448,7 @@ namespace ZeldaOracle.Game.Entities {
 			return false;
 		}
 		
-		private bool IsInLineWithRect(Rectangle2F block, int direction, int minDistanceFromEdge) {
+		public bool IsInLineWithRect(Rectangle2F block, int direction, int minDistanceFromEdge) {
 			Rectangle2F objBox = Rectangle2F.Translate(collisionBox, entity.Position);
 			for (int side = 0; side < 2; side++) {
 				int sideDir = (direction + (side == 0 ? 1 : 3)) % 4;
@@ -449,13 +497,17 @@ namespace ZeldaOracle.Game.Entities {
 			get { return !IsInAir; }
 		}
 		
-		public int CollisionDodgeDistance {
-			get { return collisionDodgeDistance; }
-			set { collisionDodgeDistance = value; }
+		public int AutoDodgeDistance {
+			get { return autoDodgeDistance; }
+			set { autoDodgeDistance = value; }
 		}
 
 
 		// Collision info.
+
+		public Rectangle2F PositionedCollisionBox {
+			get { return Rectangle2F.Translate(collisionBox, entity.Position); }
+		}
 
 		public Rectangle2F CollisionBox {
 			get { return collisionBox; }

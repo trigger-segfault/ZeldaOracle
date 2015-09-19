@@ -271,7 +271,7 @@ namespace ZeldaOracle.Game.Control {
 			td.Sprite = new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 0);
 			td.Flags |= TileFlags.Solid | TileFlags.Pickupable | TileFlags.Burnable | TileFlags.Movable;
 			td.CollisionModel = GameData.MODEL_BLOCK;
-			r.TileData[1, 2, 1] = td;
+			r.TileData[2, 3, 1] = td;
 			
 			// Create a movable block tile.
 			td = new TileData();
@@ -285,7 +285,7 @@ namespace ZeldaOracle.Game.Control {
 			td.Sprite = new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 3);
 			td.Flags |= TileFlags.Grass;
 			r.TileData[2, 2, 1] = td;
-			r.TileData[2, 3, 1] = td;
+			//r.TileData[2, 3, 1] = td;
 			r.TileData[2, 4, 1] = td;
 			r.TileData[3, 4, 1] = td;
 			r.TileData[4, 5, 1] = td;

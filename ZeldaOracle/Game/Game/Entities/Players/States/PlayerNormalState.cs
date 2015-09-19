@@ -93,6 +93,26 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Check for tile interactions (like signs).
 			//player.Physics.
 			//player.Physics.IsPlaceMeetingSolid
+			
+			if (Keyboard.IsKeyPressed(Keys.Space)) {
+				for (int i = 0; i < player.FrontTiles.Length; i++) {
+					Tile tile = player.FrontTiles[i];
+					if (tile != null) {
+						Rectangle2F myBox = player.Physics.PositionedCollisionBox;
+						Rectangle2F tileBox = new Rectangle2F(tile.Position, new Vector2F(16, 16));
+
+						Vector2F dispMin = myBox.Max - tileBox.Min;
+						Vector2F dispMax = tileBox.Max - myBox.Min;
+
+						int sideAxis = (player.Direction + 1) % 2;
+						float distance = Math.Min(dispMin[sideAxis], dispMax[sideAxis]);
+
+						if (distance > player.Physics.AutoDodgeDistance) {
+							tile.OnAction(player.Direction);
+						}
+					}
+				}
+			}
 
 			// Update items.
 			Player.UpdateEquippedItems();

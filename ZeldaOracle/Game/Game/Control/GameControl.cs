@@ -64,8 +64,10 @@ namespace ZeldaOracle.Game.Control {
 			inventory = new Inventory(this);
 			inventory.AddItem(new ItemFeather());
 			inventory.AddItem(new ItemBow());
+			inventory.AddItem(new ItemBracelet());
 			inventory.AddItem(new ItemWallet(2));
-			inventory.EquipUsableItem((UsableItem)inventory.GetItem("item_bow"), 0);
+			//inventory.EquipUsableItem((UsableItem)inventory.GetItem("item_bow"), 0);
+			inventory.EquipUsableItem((UsableItem)inventory.GetItem("item_bracelet"), 0);
 			inventory.EquipUsableItem((UsableItem)inventory.GetItem("item_feather"), 1);
 
 			hud = new HUD(this);

@@ -190,6 +190,7 @@
     <Compile Include="Game\Control\RoomControl.cs" />
     <Compile Include="Game\Entities\CollisionInfo.cs" />
     <Compile Include="Game\Entities\GraphicsComponent.cs" />
+    <Compile Include="Game\Entities\Players\States\PlayerGrabState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerLadderState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerBusyState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerJumpState.cs" />
@@ -252,6 +253,7 @@
     <Compile Include="Game\Items\UsableItem.cs" />
     <Compile Include="Game\Items\Weapons\ItemBombs.cs" />
     <Compile Include="Game\Items\Weapons\ItemBow.cs" />
+    <Compile Include="Game\Items\Weapons\ItemBracelet.cs" />
     <Compile Include="Game\Items\Weapons\ItemFeather.cs" />
     <Compile Include="Game\Main\Controls.cs" />
     <Compile Include="Game\Main\GameBase.cs" />

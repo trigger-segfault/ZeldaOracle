@@ -48,6 +48,7 @@ namespace ZeldaOracle.Game.Entities {
 		protected PhysicsComponent	physics;
 		protected GraphicsComponent	graphics;
 		protected Point2I			originOffset;
+		protected Point2I			centerOffset;
 
 
 		//-----------------------------------------------------------------------------
@@ -62,6 +63,7 @@ namespace ZeldaOracle.Game.Entities {
 			physics			= new PhysicsComponent(this);
 			graphics		= new GraphicsComponent(this);
 			originOffset	= Point2I.Zero;
+			centerOffset	= new Point2I(8, 8);
 		}
 
 
@@ -201,6 +203,10 @@ namespace ZeldaOracle.Game.Entities {
 
 		public Vector2F Origin {
 			get { return (position + originOffset); }
+		}
+
+		public Vector2F Center {
+			get { return position + centerOffset; }
 		}
 
 		public Point2I OriginOffset {
