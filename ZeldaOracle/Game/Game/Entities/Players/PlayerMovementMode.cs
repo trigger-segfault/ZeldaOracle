@@ -19,7 +19,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private float	deceleration;			// Deceleration when not moving.
 		private float	minSpeed;				// Minimum speed threshhold used to jump back to zero when decelerating.
 		private int		directionSnapCount;		// The number of intervals movement directions should snap to for acceleration-based movement.
-
+		
 		
 		//-----------------------------------------------------------------------------
 		// Properties

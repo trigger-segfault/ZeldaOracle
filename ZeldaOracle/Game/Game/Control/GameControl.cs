@@ -30,6 +30,8 @@ namespace ZeldaOracle.Game.Control {
 		private Menu menuKeyItems;
 		private Menu menuEssences;
 
+		private int roomTicks; // The total number of ticks elapsed (used for animation.
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -55,6 +57,10 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		public void StartGame() {
+			roomTicks = 0;
+
+			hud = new HUD(this);
+
 			inventory = new Inventory(this);
 			inventory.AddItem(new ItemFeather());
 			inventory.AddItem(new ItemBow());
@@ -145,6 +151,11 @@ namespace ZeldaOracle.Game.Control {
 		// The player inventory menu.
 		public Menu MenuInventory {
 			get { return menuInventory; }
+		}
+
+		public int RoomTicks {
+			get { return roomTicks; }
+			set { roomTicks = value; }
 		}
 	}
 }

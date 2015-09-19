@@ -249,8 +249,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 		
 		public bool AllowRoomTransition {
-			get { return allowRoomTransition; }
-			set { allowRoomTransition = value; }
+			get { return movement.MoveMode.CanRoomChange; }
 		}
 		
 		public bool SyncAnimationWithDirection {

@@ -43,22 +43,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 			else {
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
 			}
-
-			player.AllowRoomTransition			= false;
-			player.SyncAnimationWithDirection	= false;
 		}
 		
 		public override void OnEnd() {
-			player.AllowRoomTransition			= true;
-			player.SyncAnimationWithDirection	= true;
 			base.OnEnd();
 		}
 
 		public override void Update() {
+			base.Update();
+
 			// Only allow movement control on the descent.
 			player.Movement.AllowMovementControl = (player.Physics.ZVelocity < 0.1f);
-
-			base.Update();
 
 			// Update items
 			Player.UpdateEquippedItems();
