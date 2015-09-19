@@ -285,12 +285,12 @@ public class Graphics2D {
 		for (int i = 0; i < letterString.Length; i++) {
 			spriteBatch.Draw(
 				font.SpriteSheet.Image,
-				(Rectangle)new Rectangle2I(
+				NewRect(new Rectangle2I(
 					position.X + i * (font.SpriteSheet.CellSize.X + font.CharacterSpacing),
 					position.Y,
 					font.SpriteSheet.CellSize.X,
 					font.SpriteSheet.CellSize.Y
-				),
+				)),
 				(Rectangle)new Rectangle2I(
 					font.SpriteSheet.Offset.X + ((int)letterString[i].Char % font.CharactersPerRow) * (font.SpriteSheet.CellSize.X + font.SpriteSheet.Spacing.X),
 					font.SpriteSheet.Offset.Y + ((int)letterString[i].Char / font.CharactersPerRow) * (font.SpriteSheet.CellSize.Y + font.SpriteSheet.Spacing.Y),

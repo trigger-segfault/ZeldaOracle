@@ -26,7 +26,6 @@ namespace ZeldaOracle.Game.GameStates {
 		private GameState gameState;
 
 
-
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
@@ -64,6 +63,8 @@ namespace ZeldaOracle.Game.GameStates {
 			//c.A = (byte) (255.0f * opacity);
 			gameState.Draw(g);
 
+
+			g.ResetTranslation();
 			g.FillRectangle(GameSettings.SCREEN_BOUNDS, c);
 		}
 	}

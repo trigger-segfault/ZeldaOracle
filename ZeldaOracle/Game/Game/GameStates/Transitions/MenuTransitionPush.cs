@@ -70,11 +70,14 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 
 			g.Translate(panNew);
 			menuOld.Draw(g);
+			g.ResetTranslation();
 			
 			g.Translate(panNew);
 			g.Translate(panOld);
 			menuNew.Draw(g);
 
+			g.ResetTranslation();
+			GameControl.HUD.Draw(g, true);
 		}
 
 	}

@@ -13,36 +13,50 @@ using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.Control.Menus {
 
-	public class MenuInventory : PlayerMenu {
+	public class MenuKeyItems : PlayerMenu {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public MenuInventory(GameManager gameManager)
+		public MenuKeyItems(GameManager gameManager)
 			: base(gameManager) {
-			this.backgroundSprite = Resources.GetImage("UI/menu_weapons_a");
+			this.backgroundSprite = Resources.GetImage("UI/menu_key_items_a");
 
 			SlotGroup group = new SlotGroup();
 			currentSlotGroup = group;
 			this.slotGroups.Add(group);
-			Slot[,] slots = new Slot[4, 4];
+			Slot[,] slots = new Slot[5, 4];
+			Slot ringBagSlot = null;
 
-			Point2I gridSize = new Point2I(4, 4);
+
+			Point2I gridSize = new Point2I(5, 4);
 
 			for (int y = 0; y < gridSize.Y; y++) {
 				for (int x = 0; x < gridSize.X; x++) {
-					slots[x, y] = group.AddSlot(new Point2I(24 + 32 * x, 8 + 24 * y), 24);
+					if (y == gridSize.Y - 1) {
+						if (x == 0)
+							ringBagSlot = group.AddSlot(new Point2I(12, 80), 16);
+						slots[x, y] = group.AddSlot(new Point2I(32 + 24 * x, 80), 16);
+					}
+					else {
+						slots[x, y] = group.AddSlot(new Point2I(24 + 24 * x, 8 + 24 * y), (x == (gridSize.X - 1) ? 24 : 16));
+						group.GetSlotAt(group.NumSlots - 1);
+					}
 				}
 			}
 			for (int y = 0; y < gridSize.Y; y++) {
 				for (int x = 0; x < gridSize.X; x++) {
-					if (x == 0)
+					if (x == 0 && y == gridSize.Y - 1)
+						slots[x, y].SetConnection(Directions.Left, ringBagSlot);
+					else if (x == 0)
 						slots[x, y].SetConnection(Directions.Left, slots[gridSize.X - 1, (y + gridSize.Y - 1) % gridSize.Y]);
 					else
 						slots[x, y].SetConnection(Directions.Left, slots[x - 1, y]);
 
-					if (x == gridSize.X - 1)
+					if (x == gridSize.X - 1 && y == gridSize.Y - 2)
+						slots[x, y].SetConnection(Directions.Right, ringBagSlot);
+					else if (x == gridSize.X - 1)
 						slots[x, y].SetConnection(Directions.Right, slots[0, (y + 1) % gridSize.Y]);
 					else
 						slots[x, y].SetConnection(Directions.Right, slots[x + 1, y]);
@@ -51,6 +65,11 @@ namespace ZeldaOracle.Game.Control.Menus {
 					slots[x, y].SetConnection(Directions.Down, slots[x, (y + 1) % gridSize.Y]);
 				}
 			}
+
+			ringBagSlot.SetConnection(Directions.Left, slots[gridSize.X - 1, gridSize.Y - 2]);
+			ringBagSlot.SetConnection(Directions.Right, slots[0, gridSize.Y - 1]);
+			ringBagSlot.SetConnection(Directions.Up, slots[0, gridSize.Y - 2]);
+			ringBagSlot.SetConnection(Directions.Down, slots[0, 0]);
 		}
 
 
@@ -61,19 +80,12 @@ namespace ZeldaOracle.Game.Control.Menus {
 		public override void Update() {
 			base.Update();
 
-			// Equip weapons.
-			if (Controls.A.IsPressed() || Controls.B.IsPressed()) {
-				int slot = (Controls.A.IsPressed() ? 0 : 1);
-				AudioSystem.PlaySound("UI/menu_select");
-				UsableItem selectedItem = currentSlotGroup.CurrentSlot.SlotItem as UsableItem;
-				if (GameControl.Inventory.EquippedUsableItems[slot] != null) {
-					UsableItem placeholder = GameControl.Inventory.EquippedUsableItems[slot];
-					GameControl.Inventory.EquipUsableItem(selectedItem, slot);
-					currentSlotGroup.CurrentSlot.SlotItem = placeholder;
-				}
-				else {
-					GameControl.Inventory.EquipUsableItem(selectedItem, slot);
-					currentSlotGroup.CurrentSlot.SlotItem = null;
+			// Equip equipment.
+			if (Controls.A.IsPressed()) {
+				if (currentSlotGroup.CurrentSlotIndex >= currentSlotGroup.NumSlots - 6) {
+					AudioSystem.PlaySound("UI/menu_select");
+					EquippableItem selectedItem = currentSlotGroup.CurrentSlot.SlotItem as EquippableItem;
+					GameControl.Inventory.EquipEquippableItem(selectedItem);
 				}
 			}
 		}

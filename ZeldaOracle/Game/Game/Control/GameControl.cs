@@ -27,8 +27,8 @@ namespace ZeldaOracle.Game.Control {
 		private bool advancedGame;
 
 		private MenuInventory menuInventory;
-		private Menu menuKeyItems;
-		private Menu menuEssences;
+		private MenuKeyItems menuKeyItems;
+		private MenuEssences menuEssences;
 
 		private int roomTicks; // The total number of ticks elapsed (used for animation.
 
@@ -76,8 +76,17 @@ namespace ZeldaOracle.Game.Control {
 
 			roomControl.BeginTestWorld();
 			player = roomControl.Player;
-			menuInventory = new MenuInventory(gameManager);
-			menuInventory.NextMenu = menuInventory;
+			menuInventory	= new MenuInventory(gameManager);
+			menuKeyItems	= new MenuKeyItems(gameManager);
+			menuEssences	= new MenuEssences(gameManager);
+			menuInventory.PreviousMenu = menuEssences;
+			menuInventory.NextMenu = menuKeyItems;
+			menuKeyItems.PreviousMenu = menuInventory;
+			menuKeyItems.NextMenu = menuEssences;
+			menuEssences.PreviousMenu = menuKeyItems;
+			menuEssences.NextMenu = menuInventory;
+
+			AudioSystem.PlaySong("overworld", true);
 		}
 
 		public void DisplayMessage(Message message) {
