@@ -63,6 +63,14 @@ namespace ZeldaOracle.Game.Tiles {
 		
 
 		//-----------------------------------------------------------------------------
+		// Virtual methods
+		//-----------------------------------------------------------------------------
+		
+		// Called when the player presses A on this tile, when facing the given direction.
+		public virtual void OnAction(int direction) {}
+
+
+		//-----------------------------------------------------------------------------
 		// Interaction
 		//-----------------------------------------------------------------------------
 		
@@ -128,7 +136,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 			if (animationPlayer.SubStrip != null) {
 				// Draw as an animation.
-				g.DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, Position);
+				//g.DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, Position);
+				g.DrawAnimation(animationPlayer.SubStrip, RoomControl.GameControl.RoomTicks, Position);
 			}
 			else {
 				// Draw as a sprite.
@@ -146,7 +155,11 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public static Tile CreateTile(TileData data) {
-			Tile tile = new Tile();
+			Tile tile;
+			if (data.Type == null)
+				tile = new Tile();
+			else
+				tile = (Tile) data.Type.GetConstructor(Type.EmptyTypes).Invoke(null);
 
 			tile.Tileset			= data.Tileset;
 			tile.TileSheetLocation	= data.SheetLocation;

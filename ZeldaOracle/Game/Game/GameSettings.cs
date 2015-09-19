@@ -7,7 +7,6 @@ using ZeldaOracle.Common.Geometry;
 
 /*
  *	GAME TODO LIST:
- *		- Sync room animations & shadow/puddle to a global timer
  *		- Work out depth for things (Player submerge should be behind all things)
  *		- Player
  *			- Rename direction to FaceDirection
@@ -42,6 +41,6 @@ namespace ZeldaOracle.Game
 		public static readonly Point2I	ROOM_SIZE_SMALL	= new Point2I(10, 8);
 		public static readonly Point2I	ROOM_SIZE_LARGE	= new Point2I(15, 11);
 
-		public const int		DEFAULT_TILE_LAYER_COUNT = 2;
+		public const int		DEFAULT_TILE_LAYER_COUNT = 3;
 	}
 }

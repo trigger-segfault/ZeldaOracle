@@ -89,10 +89,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 				player.Graphics.AnimationPlayer.Animation = GameData.ANIM_PLAYER_DEFAULT;
 			}
 			
+			
+			// Check for tile interactions (like signs).
+			//player.Physics.
+			//player.Physics.IsPlaceMeetingSolid
+
 			// Update items.
 			Player.UpdateEquippedItems();
-
-			//player.Physics.SetFlags(PhysicsFlags.CollideRoomEdge, !isMoving || player.IsInAir);
 		}
 
 

@@ -44,7 +44,13 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public Tile CreateTile(Point2I sheetLocation) {
 			TileData data = tileData[sheetLocation.X, sheetLocation.Y];
-			Tile tile = new Tile();
+
+			Tile tile;
+			if (data.Type == null)
+				tile = new Tile();
+			else
+				tile = (Tile) data.Type.GetConstructor(Type.EmptyTypes).Invoke(null);
+
 
 			// TODO: needs to instantiate other tile sub-class types.
 			

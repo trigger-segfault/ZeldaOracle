@@ -176,7 +176,6 @@ namespace ZeldaOracle.Game.Main {
 
 		// Called every step to update the game.
 		public void Update(float timeDelta) {
-
 			//prop.Update(1.0 / 60.0, new Point2I(ScreenSize.X - Property<int>.Width, ScreenSize.Y / 2));
 			
 			if (Keyboard.IsKeyPressed(Keys.F4)) {

@@ -37,11 +37,13 @@ namespace ZeldaOracle.Game.Entities {
 		private float			maxFallSpeed;
 		private Rectangle2F		collisionBox;		// The "hard" collision box, used to collide with solid entities/tiles.
 		private Rectangle2F		softCollisionBox;	// The "soft" collision box, used to collide with items, monsters, room edges, etc.
+		private int				collisionDodgeDistance; // The maximum distance allowed to dodge collisions.
 
 		private bool			isColliding;
 		private CollisionInfo[] collisionInfo;
 		private TileFlags		topTileFlags;		// The flags for the top-most tile the entity is located over.
 		private TileFlags		allTileFlags;		// The group of flags for all the tiles the entity is located over.
+
 
 
 		//-----------------------------------------------------------------------------
@@ -62,6 +64,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.topTileFlags		= TileFlags.None;
 			this.allTileFlags		= TileFlags.None;
 			this.isColliding		= false;
+			this.collisionDodgeDistance	= 6;
 
 			this.collisionInfo	= new CollisionInfo[Directions.Count];
 			for (int i = 0; i < Directions.Count; i++)
@@ -315,11 +318,13 @@ namespace ZeldaOracle.Game.Entities {
 
 					if (myBox.Center.X < block.Center.X) {
 						entity.X = block.Left - collisionBox.Right;
-						collisionInfo[Directions.Right].SetTileCollision(tile, Directions.Right);
+						if (!HasFlags(PhysicsFlags.AutoDodge) || !PerformCollisionDodge(block, Directions.Right))
+							collisionInfo[Directions.Right].SetTileCollision(tile, Directions.Right);
 					}
 					else {
 						entity.X = block.Right - collisionBox.Left;
-						collisionInfo[Directions.Left].SetTileCollision(tile, Directions.Left);
+						if (!HasFlags(PhysicsFlags.AutoDodge) || !PerformCollisionDodge(block, Directions.Left))
+							collisionInfo[Directions.Left].SetTileCollision(tile, Directions.Left);
 					}
 				}
 			}
@@ -332,16 +337,78 @@ namespace ZeldaOracle.Game.Entities {
 
 					if (myBox.Center.Y < block.Center.Y) {
 						entity.Y = block.Top - collisionBox.Bottom;
-						collisionInfo[Directions.Down].SetTileCollision(tile, Directions.Down);
+						if (!HasFlags(PhysicsFlags.AutoDodge) || !PerformCollisionDodge(block, Directions.Down))
+							collisionInfo[Directions.Down].SetTileCollision(tile, Directions.Down);
 					}
 					else {
 						entity.Y = block.Bottom - collisionBox.Top;
-						collisionInfo[Directions.Up].SetTileCollision(tile, Directions.Up);
+						if (!HasFlags(PhysicsFlags.AutoDodge) || !PerformCollisionDodge(block, Directions.Up))
+							collisionInfo[Directions.Up].SetTileCollision(tile, Directions.Up);
 					}
 				}
 			}
 
 			return result;
+		}
+
+		private bool CanDodgeCollision(Rectangle2F block, int direction) {
+			float		dodgeDist	= collisionDodgeDistance;
+			Rectangle2F	objBox		= Rectangle2F.Translate(collisionBox, entity.Position);
+			Vector2F	pos			= entity.Position;
+			Vector2F	dirVect		= Directions.ToVector(direction);
+
+			for (int side = 0; side < 2; side++) {
+				int moveDir		= (direction + (side == 0 ? 1 : 3)) % 4;
+				float distance	= Math.Abs(objBox.GetEdge((moveDir + 2) % 4) - block.GetEdge(moveDir));
+
+				if (distance <= dodgeDist) {
+					Vector2F checkPos	= pos + dirVect + (Directions.ToVector(moveDir) * distance);
+					Vector2F gotoPos	= GMath.Round(pos) + Directions.ToVector(moveDir);
+
+					if (!IsPlaceMeetingSolid(checkPos, collisionBox) &&
+						!IsPlaceMeetingSolid(gotoPos, collisionBox))
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		private bool PerformCollisionDodge(Rectangle2F block, int direction) {
+			float		dodgeDist	= collisionDodgeDistance;
+			Rectangle2F	objBox		= Rectangle2F.Translate(collisionBox, entity.Position);
+			Vector2F	pos			= entity.Position;
+			Vector2F	dirVect		= Directions.ToVector(direction);
+
+			for (int side = 0; side < 2; side++) {
+				int moveDir		= (direction + (side == 0 ? 1 : 3)) % 4;
+				float distance	= Math.Abs(objBox.GetEdge((moveDir + 2) % 4) - block.GetEdge(moveDir));
+
+				if (distance <= dodgeDist) {
+					Vector2F checkPos	= pos + dirVect + (Directions.ToVector(moveDir) * distance);
+					Vector2F gotoPos	= GMath.Round(pos) + Directions.ToVector(moveDir);
+
+					if (!IsPlaceMeetingSolid(checkPos, collisionBox) &&
+						!IsPlaceMeetingSolid(gotoPos, collisionBox))
+					{
+						entity.Position = gotoPos;
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+		
+		private bool IsInLineWithRect(Rectangle2F block, int direction, int minDistanceFromEdge) {
+			Rectangle2F objBox = Rectangle2F.Translate(collisionBox, entity.Position);
+			for (int side = 0; side < 2; side++) {
+				int sideDir = (direction + (side == 0 ? 1 : 3)) % 4;
+				float distance = Math.Abs(objBox.GetEdge((sideDir + 2) % 4) - block.GetEdge(sideDir));
+				if (distance < minDistanceFromEdge)
+					return false;
+			}
+			return true;
 		}
 
 
@@ -381,6 +448,11 @@ namespace ZeldaOracle.Game.Entities {
 		public bool IsOnGround {
 			get { return !IsInAir; }
 		}
+		
+		public int CollisionDodgeDistance {
+			get { return collisionDodgeDistance; }
+			set { collisionDodgeDistance = value; }
+		}
 
 
 		// Collision info.
@@ -414,7 +486,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsInPuddle {
-			get { return IsOnGround && topTileFlags.HasFlag(TileFlags.Grass); }
+			get { return IsOnGround && topTileFlags.HasFlag(TileFlags.Puddle); }
 		}
 
 		public bool IsInHole {
