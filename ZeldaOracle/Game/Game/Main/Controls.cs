@@ -90,6 +90,16 @@ namespace ZeldaOracle.Game.Main {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		public static InputControl[] Arrows {
+			get {
+				InputControl[] arrows = new InputControl[4];
+				for (int i = 0; i < 4; i++) {
+					arrows[i] = Controls.arrows[i].Button;
+				}
+				return arrows;
+			}
+		}
+
 		// Gets the up button
 		public static InputControl Up {
 			get { return arrows[Directions.Up].Button; }

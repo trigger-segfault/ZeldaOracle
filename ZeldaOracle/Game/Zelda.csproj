@@ -184,8 +184,15 @@
     <Compile Include="Common\Translation\WrappedLetterString.cs" />
     <Compile Include="Game\Control\GameControl.cs" />
     <Compile Include="Game\Control\HUD.cs" />
+    <Compile Include="Game\Control\Menus\MenuEssences.cs" />
+    <Compile Include="Game\Control\Menus\MenuKeyItems.cs" />
+    <Compile Include="Game\Control\Menus\ISlotItem.cs" />
     <Compile Include="Game\Control\Menus\Menu.cs" />
     <Compile Include="Game\Control\Menus\MenuInventory.cs" />
+    <Compile Include="Game\Control\Menus\PlayerMenu.cs" />
+    <Compile Include="Game\Control\Menus\Slot.cs" />
+    <Compile Include="Game\Control\Menus\ISlotConnection.cs" />
+    <Compile Include="Game\Control\Menus\SlotGroup.cs" />
     <Compile Include="Game\Control\Message.cs" />
     <Compile Include="Game\Control\RoomControl.cs" />
     <Compile Include="Game\Entities\CollisionInfo.cs" />

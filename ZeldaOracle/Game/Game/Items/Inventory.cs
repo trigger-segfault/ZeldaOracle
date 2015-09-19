@@ -42,7 +42,7 @@ namespace ZeldaOracle.Game.Items {
 		// Equip a usable item into the given slot (slot 0 (A) or 1 (B)).
 		public void EquipUsableItem(Item item, int slot) {
 			UsableItem usableItem = item as UsableItem;
-			if (usableItem.HasFlag(ItemFlags.TwoHanded)) {
+			if (usableItem != null && usableItem.HasFlag(ItemFlags.TwoHanded)) {
 				// Unequip the current items.
 				if (equippedUsableItems[0] != null)
 					equippedUsableItems[0].Unequip();
@@ -167,8 +167,8 @@ namespace ZeldaOracle.Game.Items {
 		public void FillAllAmmo() {
 			foreach (Ammo ammo in this.ammo) {
 				ammo.Amount = ammo.MaxAmount;
-				if (ammo.ID == "rupees")
-					gameControl.HUD.DynamicRupees = ammo.Amount;
+				//if (ammo.ID == "rupees")
+				//	gameControl.HUD.DynamicRupees = ammo.Amount;
 			}
 		}
 
@@ -176,8 +176,8 @@ namespace ZeldaOracle.Game.Items {
 		public void EmptyAllAmmo() {
 			foreach (Ammo ammo in this.ammo) {
 				ammo.Amount = 0;
-				if (ammo.ID == "rupees")
-					gameControl.HUD.DynamicRupees = ammo.Amount;
+				//if (ammo.ID == "rupees")
+				//	gameControl.HUD.DynamicRupees = ammo.Amount;
 			}
 		}
 
