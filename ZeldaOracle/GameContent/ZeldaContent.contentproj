@@ -78,6 +78,7 @@
     </None>
     <None Include="Music\music.conscript">
       <Name>music_script</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sounds\sounds.conscript">
       <Name>sounds_script</Name>
@@ -356,6 +357,20 @@
       <Name>menu_weapons_a</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Music\overworld_intro.wav">
+      <Name>overworld_intro</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Music\overworld.wav">
+      <Name>overworld</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SongProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

@@ -16,6 +16,7 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Common.Content;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Control {
 
@@ -347,6 +348,8 @@ namespace ZeldaOracle.Game.Control {
 				GameControl.Player.Health = 4 * 3;
 			}
 			GameControl.HUD.Update();
+
+			//if (AudioSystem.CurrentSong
 		}
 
 		public override void Draw(Graphics2D g) {

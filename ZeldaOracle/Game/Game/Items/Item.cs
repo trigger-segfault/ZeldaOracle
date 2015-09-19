@@ -7,9 +7,10 @@ using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Control.Menus;
 
 namespace ZeldaOracle.Game.Items {
-	public abstract class Item {
+	public abstract class Item : ISlotItem {
 
 		protected Inventory inventory;
 		protected Player player;
@@ -77,6 +78,10 @@ namespace ZeldaOracle.Game.Items {
 		// Draws the item inside the inventory.
 		public virtual void DrawInInventory(Graphics2D g, Point2I position, bool light) {
 			g.DrawSprite(light ? spriteLight : sprite, position);
+		}
+		// Draws the item inside the inventory.
+		public void DrawSlot(Graphics2D g, Point2I position, bool light) {
+			DrawInInventory(g, position, light);
 		}
 
 

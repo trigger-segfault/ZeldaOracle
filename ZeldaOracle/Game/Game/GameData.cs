@@ -69,9 +69,14 @@ class GameData {
 	}
 	
 		// Loads the images.
-		private static void LoadImages() {
+	private static void LoadImages() {
 
-			Resources.LoadImage("Images/UI/menu_weapons_b");
+		Resources.LoadImage("Images/UI/menu_weapons_a");
+		Resources.LoadImage("Images/UI/menu_weapons_b");
+		Resources.LoadImage("Images/UI/menu_key_items_a");
+		Resources.LoadImage("Images/UI/menu_key_items_b");
+		Resources.LoadImage("Images/UI/menu_essences_a");
+		Resources.LoadImage("Images/UI/menu_essences_b");
 	}
 
 		//-----------------------------------------------------------------------------
@@ -490,7 +495,7 @@ class GameData {
 		// Loads the music.
 	private static void LoadMusic() {
 
-		//Resources.LoadPlaylists(Resources.MusicDirectory + "music.conscript");
+		Resources.LoadPlaylists(Resources.MusicDirectory + "music.conscript");
 	}
 
 	
