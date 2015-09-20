@@ -26,7 +26,7 @@ namespace ZeldaOracle.Game.Control {
 		private Inventory inventory;
 		private bool advancedGame;
 
-		private MenuInventory menuInventory;
+		private MenuWeapons menuWeapons;
 		private MenuKeyItems menuKeyItems;
 		private MenuEssences menuEssences;
 
@@ -46,7 +46,7 @@ namespace ZeldaOracle.Game.Control {
 			this.inventory		= null;
 			this.advancedGame	= false;
 
-			this.menuInventory	= null;
+			this.menuWeapons	= null;
 			this.menuKeyItems	= null;
 			this.menuEssences	= null;
 		}
@@ -57,18 +57,24 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		public void StartGame() {
+			menuWeapons	= new MenuWeapons(gameManager);
+			menuKeyItems	= new MenuKeyItems(gameManager);
+			menuEssences	= new MenuEssences(gameManager);
+			menuWeapons.PreviousMenu = menuEssences;
+			menuWeapons.NextMenu = menuKeyItems;
+			menuKeyItems.PreviousMenu = menuWeapons;
+			menuKeyItems.NextMenu = menuEssences;
+			menuEssences.PreviousMenu = menuKeyItems;
+			menuEssences.NextMenu = menuWeapons;
+
 			roomTicks = 0;
 
-			hud = new HUD(this);
-
 			inventory = new Inventory(this);
-			inventory.AddItem(new ItemFeather());
-			inventory.AddItem(new ItemBow());
-			inventory.AddItem(new ItemBracelet());
-			inventory.AddItem(new ItemWallet(2));
-			//inventory.EquipUsableItem((UsableItem)inventory.GetItem("item_bow"), 0);
-			inventory.EquipUsableItem((UsableItem)inventory.GetItem("item_bracelet"), 0);
-			inventory.EquipUsableItem((UsableItem)inventory.GetItem("item_feather"), 1);
+			inventory.AddItem(new ItemWallet(2), true);
+			inventory.AddItem(new ItemBow(), true);
+			inventory.AddItem(new ItemFeather(), true);
+			inventory.AddItem(new ItemBracelet(), true);
+			//inventory.AddItem(new ItemBombs(), true);
 
 			hud = new HUD(this);
 
@@ -78,15 +84,6 @@ namespace ZeldaOracle.Game.Control {
 
 			roomControl.BeginTestWorld();
 			player = roomControl.Player;
-			menuInventory	= new MenuInventory(gameManager);
-			menuKeyItems	= new MenuKeyItems(gameManager);
-			menuEssences	= new MenuEssences(gameManager);
-			menuInventory.PreviousMenu = menuEssences;
-			menuInventory.NextMenu = menuKeyItems;
-			menuKeyItems.PreviousMenu = menuInventory;
-			menuKeyItems.NextMenu = menuEssences;
-			menuEssences.PreviousMenu = menuKeyItems;
-			menuEssences.NextMenu = menuInventory;
 
 			AudioSystem.PlaySong("overworld", true);
 		}
@@ -159,9 +156,19 @@ namespace ZeldaOracle.Game.Control {
 			set { advancedGame = value; }
 		}
 
-		// The player inventory menu.
-		public Menu MenuInventory {
-			get { return menuInventory; }
+		// The player weapons menu.
+		public MenuWeapons MenuWeapons {
+			get { return menuWeapons; }
+		}
+
+		// The player key items menu.
+		public MenuKeyItems MenuKeyItems {
+			get { return menuKeyItems; }
+		}
+
+		// The player essences menu.
+		public MenuEssences MenuEssences {
+			get { return menuEssences; }
 		}
 
 		public int RoomTicks {

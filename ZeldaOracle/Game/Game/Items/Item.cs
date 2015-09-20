@@ -76,12 +76,8 @@ namespace ZeldaOracle.Game.Items {
 		public virtual void OnReturned() { }
 
 		// Draws the item inside the inventory.
-		public virtual void DrawInInventory(Graphics2D g, Point2I position, bool light) {
-			g.DrawSprite(light ? spriteLight : sprite, position);
-		}
-		// Draws the item inside the inventory.
-		public void DrawSlot(Graphics2D g, Point2I position, bool light) {
-			DrawInInventory(g, position, light);
+		public virtual void DrawSlot(Graphics2D g, Point2I position, bool light) {
+			DrawSprite(g, position, light);
 		}
 
 

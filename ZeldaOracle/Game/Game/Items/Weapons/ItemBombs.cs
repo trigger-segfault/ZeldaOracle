@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaOracle.Game.Items {
-	public abstract class ItemBombs : UsableItem {
+	public class ItemBombs : UsableItem {
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -17,6 +18,8 @@ namespace ZeldaOracle.Game.Items {
 			this.description = new string[] { "Very explosive." };
 			this.maxLevel = 0;
 			this.currentAmmo = 0;
+			this.sprite = new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0));
+			this.spriteLight = new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(13, 0));
 		}
 
 
@@ -78,5 +81,10 @@ namespace ZeldaOracle.Game.Items {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		// Draws the item inside the inventory.
+		public override void DrawSlot(Graphics2D g, Point2I position, bool light) {
+			DrawSprite(g, position, light);
+			DrawAmmo(g, position, light);
+		}
 	}
 }

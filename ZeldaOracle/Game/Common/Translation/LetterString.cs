@@ -378,5 +378,9 @@ namespace ZeldaOracle.Common.Translation {
 				return colors;
 			}
 		}
+		// Gets if the letter string is empty.
+		public bool IsEmpty {
+			get { return (letters.Count == 0); }
+		}
 	}
 }
