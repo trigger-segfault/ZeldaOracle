@@ -230,6 +230,12 @@ public class GameBase : XnaGame {
 		// Update the game logic.
 		game.Update((float) gameTime.ElapsedGameTime.TotalSeconds);
 
+		// DEBUG: Hold 1 to speed up the game.
+		if (Keyboard.IsKeyDown(Keys.D1)) {
+			for (int i = 1; i < 16; i++)
+				game.Update((float) gameTime.ElapsedGameTime.TotalSeconds);
+		}
+
 		base.Update(gameTime);
 
 		// Update screenshot requests.

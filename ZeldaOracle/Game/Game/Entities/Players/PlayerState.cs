@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaOracle.Game.Entities.Players
 {
@@ -29,6 +30,12 @@ namespace ZeldaOracle.Game.Entities.Players
 		// Virtual methods
 		//-----------------------------------------------------------------------------
 		
+		public virtual bool RequestStateChange(PlayerState newState) {
+			if (!isNaturalState && newState.isNaturalState)
+				return false;
+			return true;
+		}
+
 		public virtual void OnBegin() {}
 		
 		public virtual void OnEnd() {}
@@ -38,6 +45,8 @@ namespace ZeldaOracle.Game.Entities.Players
 		public virtual void OnLeaveRoom() {}
 
 		public virtual void Update() {}
+		
+		public virtual void DrawOver(Graphics2D g) {}
 
 
 		//-----------------------------------------------------------------------------

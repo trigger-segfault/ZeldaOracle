@@ -15,10 +15,14 @@ namespace ZeldaOracle.Game.Tiles {
 		private TileFlags		flags;
 		private Point2I			size;
 		private Sprite			sprite;
+		private Sprite			spriteAsObject;
 		private Animation		animation;
+		private Animation		breakAnimation;	// The animation to play when the tile is broken.
 		private CollisionModel	collisionModel;
 		private Point2I			sheetLocation;	// Location on the tileset.
 		private Tileset			tileset;
+
+
 
 		// TODO: Properties
 
@@ -32,10 +36,21 @@ namespace ZeldaOracle.Game.Tiles {
 			size			= Point2I.One;
 			flags			= TileFlags.Default;
 			sprite			= null;
+			spriteAsObject	= null;
 			animation		= null;
+			breakAnimation	= null;
 			collisionModel	= null;
 			sheetLocation	= Point2I.Zero;
 			tileset			= null;
+		}
+		
+		public TileData(TileFlags flags) : this() {
+			this.flags = flags;
+		}
+		
+		public TileData(Type type, TileFlags flags) : this() {
+			this.type	= type;
+			this.flags	= flags;
 		}
 
 
@@ -63,9 +78,19 @@ namespace ZeldaOracle.Game.Tiles {
 			set { sprite = value; }
 		}
 
+		public Sprite SpriteAsObject {
+			get { return spriteAsObject; }
+			set { spriteAsObject = value; }
+		}
+
 		public Animation Animation {
 			get { return animation; }
 			set { animation = value; }
+		}
+
+		public Animation BreakAnimation {
+			get { return breakAnimation; }
+			set { breakAnimation = value; }
 		}
 
 		public CollisionModel CollisionModel {

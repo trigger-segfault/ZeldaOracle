@@ -40,6 +40,9 @@ namespace ZeldaOracle.Game.Items {
 		// Immediately interrupt this item (ex: if the player falls in a hole).
 		public virtual void Interrupt() { }
 
+		// Called when the items button is down (A or B).
+		public virtual void OnButtonDown() {}
+		
 		// Called when the items button is pressed (A or B).
 		public virtual void OnButtonPress() {}
 		

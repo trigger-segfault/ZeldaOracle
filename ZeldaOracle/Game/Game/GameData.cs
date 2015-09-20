@@ -14,10 +14,10 @@ using ZeldaOracle.Game.Main.ResourceBuilders;
 
 namespace ZeldaOracle.Game {
 
-// A static class for storing links to all game content.
-class GameData {
+	// A static class for storing links to all game content.
+	public class GameData {
 
-	private static AnimationBuilder animationBuilder;
+		private static AnimationBuilder animationBuilder;
 
 
 		//-----------------------------------------------------------------------------
@@ -25,13 +25,13 @@ class GameData {
 		//-----------------------------------------------------------------------------
 
 		// Initializes and loads the game content.
-	public static void Initialize() {
+		public static void Initialize() {
 			
-		Console.WriteLine("Loading Images");
-		LoadImages();
+			Console.WriteLine("Loading Images");
+			LoadImages();
 
-		Console.WriteLine("Loading Sprite Sheets");
-		LoadSpriteSheets();
+			Console.WriteLine("Loading Sprite Sheets");
+			LoadSpriteSheets();
 
 			Console.WriteLine("Loading Sprites");
 			LoadSprites();
@@ -45,39 +45,39 @@ class GameData {
 			Console.WriteLine("Loading Tilesets");
 			LoadTilesets();
 
-		Console.WriteLine("Loading Fonts");
-		LoadFonts();
+			Console.WriteLine("Loading Fonts");
+			LoadFonts();
 
-		Console.WriteLine("Loading Shaders");
-		LoadShaders();
+			Console.WriteLine("Loading Shaders");
+			LoadShaders();
 
-		Console.WriteLine("Loading Sound Effects");
-		LoadSounds();
+			Console.WriteLine("Loading Sound Effects");
+			LoadSounds();
 
-		Console.WriteLine("Loading Music");
-		LoadMusic();
+			Console.WriteLine("Loading Music");
+			LoadMusic();
 
-	}
+		}
 
 
 		//-----------------------------------------------------------------------------
 		// Image Loading
 		//-----------------------------------------------------------------------------
 		
-	private static int PointIndex(int x, int y) {
+		private static int PointIndex(int x, int y) {
 			return ((234 * y) + x);
-	}
+		}
 	
 		// Loads the images.
-	private static void LoadImages() {
+		private static void LoadImages() {
 
-		Resources.LoadImage("Images/UI/menu_weapons_a");
-		Resources.LoadImage("Images/UI/menu_weapons_b");
-		Resources.LoadImage("Images/UI/menu_key_items_a");
-		Resources.LoadImage("Images/UI/menu_key_items_b");
-		Resources.LoadImage("Images/UI/menu_essences_a");
-		Resources.LoadImage("Images/UI/menu_essences_b");
-	}
+			Resources.LoadImage("Images/UI/menu_weapons_a");
+			Resources.LoadImage("Images/UI/menu_weapons_b");
+			Resources.LoadImage("Images/UI/menu_key_items_a");
+			Resources.LoadImage("Images/UI/menu_key_items_b");
+			Resources.LoadImage("Images/UI/menu_essences_a");
+			Resources.LoadImage("Images/UI/menu_essences_b");
+		}
 
 		//-----------------------------------------------------------------------------
 		// Sprite Sheet Loading
@@ -126,7 +126,7 @@ class GameData {
 
 		private static SpriteBuilder BuildSprite(Sprite sprite, int sheetX, int sheetY) {
 			return BuildSprite(sprite, sheetX, sheetY, 0, 0);
-			}
+		}
 
 		private static SpriteBuilder BuildSprite(Sprite sprite, int sheetX, int sheetY, int offsetX, int offsetY) {
 			sprite.Set(new Sprite(spriteBuilder.SpriteSheet, sheetX, sheetY, offsetX, offsetY));
@@ -219,7 +219,7 @@ class GameData {
 			BuildSprite(SPR_HUD_RUPEE,		0, 1);
 			BuildSprite(SPR_HUD_ORE_CHUNK,	1, 1);
 			BuildSprite(SPR_HUD_KEY,		2, 1);
-			}
+		}
 		
 		
 		//-----------------------------------------------------------------------------
@@ -271,22 +271,28 @@ class GameData {
 			BuildAnim(ANIM_PLAYER_DEFAULT)			.AddFrameStrip(6, 0,0, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_SHIELD)			.AddFrameStrip(6, 0,1, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_SHIELD_BLOCK)		.AddFrameStrip(6, 0,2, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_HOLD)				.AddFrameStrip(6, 0,5, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_CARRY)			.AddFrameStrip(6, 0,5, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_PUSH)				.AddFrameStrip(6, 0,6, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
 
 			BuildAnim(ANIM_PLAYER_SWIM)				.AddFrameStrip(6, 0,13, 2).Offset(-8, -16 + 2).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_DIVE)				.AddFrame(16, 0,21, 0,4).AddFrame(16, 1,21, 0,4).Offset(-8, -16);
 
-			BuildAnim(ANIM_PLAYER_PULL)				.AddFrameStrip(6, 0,7, 2).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
+			//BuildAnim(ANIM_PLAYER_PULL)				.AddFrameStrip(6, 0,7, 2).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_DIG)				.AddFrame(8, 0,9).AddFrame(16, 1,9).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_THROW)			.AddFrame(9, 0,4).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_FALL).AddFrame(16, 1, 20, 0, 0).AddFrame(10, 2, 20, 0, 0).AddFrame(11, 3, 20, 0, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp);
 			BuildAnim(ANIM_PLAYER_SHIELD_LARGE)			.AddFrameStrip(6, 0,3, 2).Offset(-8, -16).CreateSubStrip()
 														.AddFrameStrip(6, 2,1, 2).Offset(-8, -16).MakeDynamic(3, 2,0);
-			BuildAnim(ANIM_PLAYER_SHIELD_LARGE_BLOCK)	.AddFrameStrip(6, 0,2, 2).Offset(-8, -16).MakeDynamic(3, 2,0)
-														.CreateSubStrip().AddFrameStrip(6, 2,3, 2).Offset(-8, -16);
+			BuildAnim(ANIM_PLAYER_SHIELD_LARGE_BLOCK)	.AddFrameStrip(6, 0,2, 2).Offset(-8, -16).MakeDynamic(3, 2,0);
+			
+			BuildAnim(ANIM_PLAYER_GRAB).AddFrame(1, 0,7, 0,0).Offset(-8, -16).MakeDynamic(4, 2,0);
 
-
+			BuildAnim(ANIM_PLAYER_PULL)
+				.AddFrame(1, 1,7, -4,0).Offset(-8, -16).CreateSubStrip()
+				.AddFrame(1, 3,7, 0,2).Offset(-8, -16).CreateSubStrip()
+				.AddFrame(1, 5,7, 4,0).Offset(-8, -16).CreateSubStrip()
+				.AddFrame(1, 7,7, 0,-1).Offset(-8, -16);
+			
 			BuildAnim(ANIM_PLAYER_SWING)
 				.AddFrame(3, 4, 8, 0, 0).AddFrame(3, 0, 4, 0, 0).AddFrame(8, 0, 4, 4, 0).AddFrame(3, 0, 4, 0, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
 				.AddFrame(3, 3, 8, 0, 0).AddFrame(3, 2, 4, 0, 0).AddFrame(8, 2, 4, 0, -4).AddFrame(3, 2, 4, 0, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
@@ -365,6 +371,19 @@ class GameData {
 			BuildAnim(ANIM_EFFECT_GRASS)
 				.AddFrame(6, 6,0, -4,1).AddPart(6, 6,0, 2,1)
 				.AddFrame(6, 7,0, -4,1).AddPart(6, 7,0, 2,1).Offset(-8, -14);
+
+			BuildAnim(ANIM_EFFECT_ROCK_BREAK).SetLoopMode(LoopMode.Reset)
+				.AddFrame(4, 2,0, -4,5).AddPart(4, 2,0, 5,-6).AddPart(4, 2,0, -6,4).AddPart(4, 2,0, 4,3)
+				.AddFrame(4, 2,0, -6,-6).AddPart(4, 2,0, 7,-7).AddPart(4, 2,0, -7,5).AddPart(4, 2,0, 6,4)
+				.AddFrame(4, 2,0, -7,-7).AddPart(4, 2,0, 9,-8).AddPart(4, 2,0, -9,6).AddPart(4, 2,0, 8,5)
+				.AddFrame(4, 2,0, -9,-5).AddPart(4, 2,0, 11,-6).AddPart(4, 2,0, -11,8).AddPart(4, 2,0, 10,7);
+
+			BuildAnim(ANIM_EFFECT_SIGN_BREAK).SetLoopMode(LoopMode.Reset)
+				.AddFrame(4, 3,0, -4,5).AddPart(4, 3,0, 5,-6).AddPart(4, 3,0, -6,4).AddPart(4, 3,0, 4,3)
+				.AddFrame(4, 3,0, -6,-6).AddPart(4, 3,0, 7,-7).AddPart(4, 3,0, -7,5).AddPart(4, 3,0, 6,4)
+				.AddFrame(4, 3,0, -7,-7).AddPart(4, 3,0, 9,-8).AddPart(4, 3,0, -9,6).AddPart(4, 3,0, 8,5)
+				.AddFrame(4, 3,0, -9,-5).AddPart(4, 3,0, 11,-6).AddPart(4, 3,0, -11,8).AddPart(4, 3,0, 10,7);
+
 		}
 
 
@@ -707,7 +726,7 @@ class GameData {
 	
 	// Player animations.
 		public static Animation ANIM_PLAYER_DEFAULT				= new Animation();
-		public static Animation ANIM_PLAYER_HOLD				= new Animation();
+		public static Animation ANIM_PLAYER_CARRY				= new Animation();
 		public static Animation ANIM_PLAYER_SHIELD				= new Animation();
 		public static Animation ANIM_PLAYER_SHIELD_BLOCK		= new Animation();
 		public static Animation ANIM_PLAYER_SHIELD_LARGE		= new Animation();
@@ -745,6 +764,8 @@ class GameData {
 		public static Animation ANIM_EFFECT_LAVA_SPLASH		= new Animation();
 		public static Animation ANIM_EFFECT_RIPPLES			= new Animation();
 		public static Animation ANIM_EFFECT_GRASS			= new Animation();
+		public static Animation ANIM_EFFECT_ROCK_BREAK		= new Animation();
+		public static Animation ANIM_EFFECT_SIGN_BREAK		= new Animation();
 	
 
 	//-----------------------------------------------------------------------------

@@ -54,6 +54,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// TEMPORARY: Change tool drawing to something else
 		public AnimationPlayer			toolAnimation;
 
+		private Tile[]					frontTiles; // A list of tiles directly in front of the player.
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -67,10 +69,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 			allowRoomTransition	= true;
 			syncAnimationWithDirection = true;
 
+			frontTiles = new Tile[2];
+
 			movement = new PlayerMoveComponent(this);
 
 			// Unit properties.
 			originOffset	= new Point2I(0, -2);
+			centerOffset	= new Point2I(0, -8);
 			Health			= 4 * 3;
 			MaxHealth		= 4 * 3;
 
@@ -133,41 +138,43 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		private void CheckTiles() {
-			/*
-			if (IsOnGround) {
-				Point2I origin = (Point2I) position - new Point2I(0, 2);
-				Point2I location = origin / new Point2I(GameSettings.TILE_SIZE, GameSettings.TILE_SIZE);
-				if (!RoomControl.IsTileInBounds(location))
-					return;
+			Vector2F checkPosition = position + Directions.ToVector(direction);
+			Rectangle2F myBox = physics.PositionedCollisionBox;
+			int index = 0;
+			for (int i = 0; i < frontTiles.Length; i++)
+				frontTiles[i] = null;
 
-				for (int i = 0; i < RoomControl.Room.LayerCount; i++) {
-					Tile tile = RoomControl.GetTile(location, i);
-					if (tile != null) {
-					
-						if (state != stateSwim && tile.Flags.HasFlag(TileFlags.Water)) {
-							BeginState(stateSwim);
-							
-							// Create a splash effect.
-							Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH);
-							splash.Position = position - new Vector2F(0, 4);
-							RoomControl.SpawnEntity(splash);
+			
 
-							return;
-						}
-					}
+			physics.IterateMeetingTiles(checkPosition, physics.CollisionBox, delegate(Tile tile) {
+				Rectangle2F tileRect = new Rectangle2F(tile.Position, tile.Size * GameSettings.TILE_SIZE);
+				if (!physics.IsPlaceMeetingTile(position, tile) &&
+					!physics.CanDodgeCollision(tileRect, direction))
+				{
+					frontTiles[index++] = tile;
+					if (index >= frontTiles.Length)
+						return true;
 				}
-			}
-			*/
+				return false;
+			});
+
 		}
 
 		public void UpdateEquippedItems() {
 			for (int i = 0; i < EquippedUsableItems.Length; i++) {
 				if (EquippedUsableItems[i] != null) {
 					EquippedUsableItems[i].Player = this;
+
 					if (i == 0 && Controls.A.IsPressed())
 						EquippedUsableItems[i].OnButtonPress();
 					else if (i == 1 && Controls.B.IsPressed())
 						EquippedUsableItems[i].OnButtonPress();
+
+					if (i == 0 && Controls.A.IsDown())
+						EquippedUsableItems[i].OnButtonDown();
+					else if (i == 1 && Controls.B.IsDown())
+						EquippedUsableItems[i].OnButtonDown();
+
 					//equippedItems[i].Update();
 				}
 			}
@@ -198,14 +205,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public override void Update() {
 
-			if (checkGroundTiles)
-				CheckTiles();
+			CheckTiles();
 
 			movement.Update();
 
 			// Update the current player state.
 			PlayerState desiredNaturalState = GetDesiredNaturalState();
-			if (state.IsNaturalState && state != desiredNaturalState)
+			//if (state.IsNaturalState && state != desiredNaturalState)
+				//BeginState(desiredNaturalState);
+			if (state != desiredNaturalState && state.RequestStateChange(desiredNaturalState))
 				BeginState(desiredNaturalState);
 			state.Update();
 
@@ -225,6 +233,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				g.DrawAnimation(toolAnimation, position, 0.3f);
 
 			base.Draw(g);
+			state.DrawOver(g);
 		}
 
 		
@@ -288,7 +297,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 			set { roomEnterPosition = value; }
 		}
 		
+		public Tile[] FrontTiles {
+			get { return frontTiles; }
+		}
+		
 		// Player states
+
+		public PlayerState CurrentState {
+			get { return state; }
+		}
 
 		public PlayerNormalState NormalState {
 			get { return stateNormal; }

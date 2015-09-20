@@ -198,6 +198,7 @@
     <Compile Include="Game\Control\RoomControl.cs" />
     <Compile Include="Game\Entities\CollisionInfo.cs" />
     <Compile Include="Game\Entities\GraphicsComponent.cs" />
+    <Compile Include="Game\Entities\Players\States\PlayerGrabState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerHoldSwordState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerLadderState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerBusyState.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Game\Entities\Players\States\PlayerLedgeJumpState.cs" />
     <Compile Include="Game\Entities\Players\PlayerMoveComponent.cs" />
     <Compile Include="Game\Entities\Players\PlayerMovementMode.cs" />
+    <Compile Include="Game\Entities\Players\States\PlayerCarryState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerNormalState.cs" />
     <Compile Include="Game\Entities\Players\PlayerState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSwimState.cs" />
@@ -281,6 +283,7 @@
     <Compile Include="Game\Items\Weapons\ItemBigSword.cs" />
     <Compile Include="Game\Items\Weapons\ItemBombs.cs" />
     <Compile Include="Game\Items\Weapons\ItemBow.cs" />
+    <Compile Include="Game\Items\Weapons\ItemBracelet.cs" />
     <Compile Include="Game\Items\Weapons\ItemFeather.cs" />
     <Compile Include="Game\Items\Weapons\ItemOcarina.cs" />
     <Compile Include="Game\Control\Controls.cs" />

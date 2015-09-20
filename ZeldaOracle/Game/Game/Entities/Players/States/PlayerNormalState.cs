@@ -63,6 +63,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void Update() {
 			base.Update();
 
+			Tile actionTile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
+
 			// Update animations
 			if (player.Movement.IsMoving && !Player.Graphics.IsAnimationPlaying)
 				Player.Graphics.PlayAnimation();
@@ -71,14 +73,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			
 			// Update pushing.
 			CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
-
-			if (player.Movement.IsMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
-				Tile tile = collisionInfo.Tile;
+			if (actionTile != null && player.Movement.IsMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
 				player.Graphics.AnimationPlayer.Animation = GameData.ANIM_PLAYER_PUSH;
 				pushTimer++;
 
-				if (pushTimer > 20 && tile.Flags.HasFlag(TileFlags.Movable)) {
-					tile.Push(player.Direction, 1.0f);
+				if (pushTimer > 20 && actionTile.Flags.HasFlag(TileFlags.Movable)) {
+					actionTile.Push(player.Direction, 1.0f);
 					//Message message = new Message("Oof! It's heavy!");
 					//player.RoomControl.GameManager.PushGameState(new StateTextReader(message));
 					pushTimer = 0;
@@ -89,12 +89,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				player.Graphics.AnimationPlayer.Animation = GameData.ANIM_PLAYER_DEFAULT;
 			}
 			
-			
-			// Check for tile interactions (like signs).
-			//player.Physics.
-			//player.Physics.IsPlaceMeetingSolid
+			// Check for tile press interactions.
+			if (Keyboard.IsKeyPressed(Keys.Space) && actionTile != null) {
+				actionTile.OnAction(player.Direction);
+			}
 
-			// Update items.
+			// Update player weapon items.
 			Player.UpdateEquippedItems();
 		}
 

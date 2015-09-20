@@ -51,7 +51,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void Update() {
 			base.Update();
-
+			
 			// Only allow movement control on the descent.
 			player.Movement.AllowMovementControl = (player.Physics.ZVelocity < 0.1f);
 

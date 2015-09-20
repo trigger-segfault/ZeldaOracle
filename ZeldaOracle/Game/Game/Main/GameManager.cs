@@ -50,6 +50,7 @@ namespace ZeldaOracle.Game.Main {
 		private int				elapsedTicks;		// The number of ticks since the start of the game.
 		private bool			debugMode;
 
+
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
@@ -76,6 +77,8 @@ namespace ZeldaOracle.Game.Main {
 			FormatCodes.Initialize();
 			Controls.Initialize();
 			ScreenResized();
+
+			AudioSystem.MasterVolume = 0.1f;
 
 			// Begin the game state stack with a RoomControl.
 			gameStateStack	= new GameStateStack(new StateDummy());
@@ -159,14 +162,8 @@ namespace ZeldaOracle.Game.Main {
 
 		// Called when the screen has been resized.
 		public void ScreenResized() {
-			Point2I targetSize = ScreenSize;
-			//if (GameData.RenderTargetGame != null)
-			//	GameData.RenderTargetGame.Dispose();
-			GameData.RenderTargetGame	= new RenderTarget2D(gameBase.GraphicsDevice, ScreenSize.X, ScreenSize.Y);
-
-			//if (GameData.RenderTargetDebug != null)
-			//	GameData.RenderTargetDebug.Dispose();
-			GameData.RenderTargetDebug	= new RenderTarget2D(gameBase.GraphicsDevice, ScreenSize.X, ScreenSize.Y);
+			GameData.RenderTargetGame = new RenderTarget2D(gameBase.GraphicsDevice, ScreenSize.X, ScreenSize.Y);
+			GameData.RenderTargetDebug = new RenderTarget2D(gameBase.GraphicsDevice, ScreenSize.X, ScreenSize.Y);
 		}
 
 
