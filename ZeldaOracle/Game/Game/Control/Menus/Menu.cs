@@ -56,7 +56,8 @@ namespace ZeldaOracle.Game.Control.Menus {
 				g.Translate(0, 16);
 			}
 			g.DrawImage(backgroundSprite, Point2I.Zero);
-			DrawSlotCursor(g, currentSlotGroup.CurrentSlot);
+			if (currentSlotGroup != null)
+				DrawSlotCursor(g, currentSlotGroup.CurrentSlot);
 			for (int i = 0; i < slotGroups.Count; i++) {
 				slotGroups[i].Draw(g);
 			}
@@ -83,10 +84,8 @@ namespace ZeldaOracle.Game.Control.Menus {
 		public void UpdateSlotTraversal() {
 			if (currentSlotGroup != null) {
 				for (int i = 0; i < 4; i++) {
-					if (Controls.Arrows[i].IsPressed()) {
+					if (Controls.Arrows[i].IsPressed())
 						NextSlot(i);
-						AudioSystem.PlaySound("UI/menu_cursor_move");
-					}
 				}
 			}
 		}
@@ -94,22 +93,21 @@ namespace ZeldaOracle.Game.Control.Menus {
 		public void NextSlot(int direction) {
 			ISlotConnection connection = currentSlotGroup.CurrentSlot.GetConnectionAt(direction);
 
-			if (connection is Slot) {
-				Slot slot = connection as Slot;
-				slot.Select();
-				if (slot.Disabled) {
-					NextSlot(direction);
-					return;
+			if (connection != null) {
+				if (connection is Slot) {
+					Slot slot = connection as Slot;
+					slot.Select();
+					if (slot.Disabled) {
+						NextSlot(direction);
+						return;
+					}
+					AudioSystem.PlaySound("UI/menu_cursor_move");
+				}
+				else if (connection is SlotGroup) {
+					currentSlotGroup = (connection as SlotGroup);
+					AudioSystem.PlaySound("UI/menu_cursor_move");
 				}
 			}
-			else if (connection is SlotGroup)
-				currentSlotGroup = (connection as SlotGroup);
-
-			InitSlot();
-		}
-
-		public void InitSlot() {
-
 		}
 	}
 }

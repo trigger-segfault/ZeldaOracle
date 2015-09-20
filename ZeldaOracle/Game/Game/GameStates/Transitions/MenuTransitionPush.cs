@@ -48,7 +48,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 
 		public override void Update() {
 			int delay = 0;
-			int speed = 8;
+			int speed = 12;
 			int maxDistance = GameSettings.VIEW_SIZE[direction % 2];
 
 			timer++;

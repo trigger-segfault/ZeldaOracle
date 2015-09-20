@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace ZeldaOracle.Game.Items {
-	public class EquippableItem : Item {
+	public class ItemEquipment : Item {
 
 		protected bool equipped;
 
@@ -12,7 +12,7 @@ namespace ZeldaOracle.Game.Items {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public EquippableItem() : base() {
+		public ItemEquipment() : base() {
 			this.equipped = false;
 		}
 

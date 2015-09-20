@@ -221,8 +221,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return GameControl.Inventory; }
 		}
 
-		public UsableItem[] EquippedUsableItems {
-			get { return Inventory.EquippedUsableItems; }
+		public ItemWeapon[] EquippedUsableItems {
+			get { return Inventory.EquippedWeapons; }
 		}
 
 		public int MoveAngle {
