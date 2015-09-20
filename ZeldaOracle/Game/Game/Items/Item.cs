@@ -26,9 +26,17 @@ namespace ZeldaOracle.Game.Items {
 		protected bool			isObtained;
 		protected bool			isStolen;
 
-		protected Sprite		sprite;
-		protected Sprite		spriteLight;
+		protected Sprite[]		sprite;
+		protected Sprite[]		spriteLight;
 
+
+		//-----------------------------------------------------------------------------
+		// Constants
+		//-----------------------------------------------------------------------------
+
+		public const int Level1 = 0;
+		public const int Level2 = 1;
+		public const int Level3 = 2;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -39,8 +47,8 @@ namespace ZeldaOracle.Game.Items {
 			this.id				= "";
 			this.name			= new string[] { "" };
 			this.description	= new string[] { "" };
-			this.level			= 0;
-			this.maxLevel		= 0;
+			this.level			= Item.Level1;
+			this.maxLevel		= Item.Level1;
 			this.currentAmmo	= -1;
 			this.ammo			= null;
 			this.isObtained		= false;
@@ -53,7 +61,6 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 		// Virtual
 		//-----------------------------------------------------------------------------
-
 
 		// Called when the item is added to the inventory list.
 		public virtual void OnAdded(Inventory inventory) {
@@ -86,7 +93,7 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 
 		protected void DrawSprite(Graphics2D g, Point2I position, bool light) {
-			g.DrawSprite(light ? spriteLight : sprite, position);
+			g.DrawSprite(light ? spriteLight[level] : sprite[level], position);
 		}
 
 		protected void DrawAmmo(Graphics2D g, Point2I position, bool light) {
@@ -100,6 +107,14 @@ namespace ZeldaOracle.Game.Items {
 			g.DrawString(GameData.FONT_SMALL, (level + 1).ToString(), position + new Point2I(16, 8), light ? new Color(16, 16, 16) : Color.Black);
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Ammo
+		//-----------------------------------------------------------------------------
+
+		public Ammo GetAmmoAt(int index) {
+			return ammo[index];
+		}
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -175,5 +190,17 @@ namespace ZeldaOracle.Game.Items {
 			}
 		}
 
+		public int NumAmmos {
+			get {
+				if (ammo != null)
+					return ammo.Length;
+				return 0;
+			}
+		}
+
+		public int CurrentAmmo {
+			get { return currentAmmo; }
+			set { currentAmmo = GMath.Clamp(value, 0, ammo.Length - 1); }
+		}
 	}
 }

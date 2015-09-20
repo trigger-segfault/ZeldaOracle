@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Input;
 using ZeldaOracle.Game.Control;
+using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.Items {
 	public class Inventory {
@@ -14,7 +16,10 @@ namespace ZeldaOracle.Game.Items {
 		// The list of ammos in the game.
 		private List<Ammo> ammo;
 		// The player's equip slots.
-		private UsableItem[] equippedUsableItems;
+		private ItemWeapon[] equippedWeapons;
+
+		private int piecesOfHeart;
+
 
 		//-----------------------------------------------------------------------------
 		// Constants
@@ -23,15 +28,18 @@ namespace ZeldaOracle.Game.Items {
 		// The number of slots to equip player items.
 		public const int NumEquipSlots = 2;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public Inventory(GameControl gameControl) {
-			this.gameControl			= gameControl;
-			this.items					= new List<Item>();
-			this.ammo					= new List<Ammo>();
-			this.equippedUsableItems	= new UsableItem[NumEquipSlots];
+			this.gameControl		= gameControl;
+			this.items				= new List<Item>();
+			this.ammo				= new List<Ammo>();
+			this.equippedWeapons	= new ItemWeapon[NumEquipSlots];
+
+			this.piecesOfHeart		= 0;
 		}
 
 
@@ -39,39 +47,55 @@ namespace ZeldaOracle.Game.Items {
 		// Items
 		//-----------------------------------------------------------------------------
 
-		// Equip a usable item into the given slot (slot 0 (A) or 1 (B)).
-		public void EquipUsableItem(Item item, int slot) {
-			UsableItem usableItem = item as UsableItem;
-			if (usableItem != null && usableItem.HasFlag(ItemFlags.TwoHanded)) {
-				// Unequip the current items.
-				if (equippedUsableItems[0] != null)
-					equippedUsableItems[0].Unequip();
-				if (equippedUsableItems[1] != null)
-					equippedUsableItems[1].Unequip();
+		public InputControl GetSlotButton(int slot) {
+			return (slot == 0 ? Controls.A : Controls.B);
+		}
 
-				equippedUsableItems[0] = usableItem;
-				equippedUsableItems[1] = usableItem;
+		// Equip a weapon into the given slot (slot 0 (A) or 1 (B)).
+		public void EquipWeapon(Item item, int slot) {
+			ItemWeapon weapon = item as ItemWeapon;
+			if (weapon != null && weapon.HasFlag(ItemFlags.TwoHanded)) {
+				// Unequip the current items.
+				if (equippedWeapons[0] != null)
+					equippedWeapons[0].Unequip();
+				if (equippedWeapons[1] != null)
+					equippedWeapons[1].Unequip();
+
+				equippedWeapons[0] = weapon;
+				equippedWeapons[1] = weapon;
 			}
 			else {
 				// Unequip the current item.
-				if (equippedUsableItems[slot] != null)
-					equippedUsableItems[slot].Unequip();
+				if (equippedWeapons[slot] != null) {
+					if (equippedWeapons[slot].HasFlag(ItemFlags.TwoHanded))
+						equippedWeapons[1 - slot] = null;
+					equippedWeapons[slot].Unequip();
+				}
 
-				equippedUsableItems[slot] = usableItem;
+				equippedWeapons[slot] = weapon;
 			}
 
 			// Equip the new item.
-			if (usableItem != null)
-				usableItem.Equip();
+			if (weapon != null) {
+				weapon.CurrentEquipSlot = slot;
+				weapon.Equip();
+			}
 		}
 
 		// Equips a non-usable item.
-		public void EquipEquippableItem(Item item) {
-			EquippableItem equippableItem = item as EquippableItem;
+		public void EquipEquipment(Item item) {
+			ItemEquipment equippableItem = item as ItemEquipment;
 		}
 
 		// Adds the item to the list
 		public Item AddItem(Item item, bool obtain) {
+			foreach (Item item2 in items) {
+				if (item2.ID == item.ID) {
+					if (obtain)
+						ObtainItem(item2);
+					return item2;
+				}
+			}
 			this.items.Add(item);
 			item.OnAdded(this);
 			if (obtain)
@@ -121,14 +145,40 @@ namespace ZeldaOracle.Game.Items {
 		}
 
 		public void ObtainItem(Item item) {
-			item.IsObtained = true;
-			if (item is UsableItem) {
-				if (equippedUsableItems[0] == null)
-					EquipUsableItem(item, 0);
-				else if (equippedUsableItems[1] == null)
-					EquipUsableItem(item, 1);
-				else
-					gameControl.MenuWeapons.NextAvailableSlot.SlotItem = item;
+			if (!item.IsObtained) {
+				item.IsObtained = true;
+				item.OnObtained();
+				if (item is ItemWeapon) {
+					if (equippedWeapons[0] == null)
+						EquipWeapon(item, 0);
+					else if (equippedWeapons[1] == null)
+						EquipWeapon(item, 1);
+					else
+						gameControl.MenuWeapons.NextAvailableSlot.SlotItem = item;
+				}
+				else if (item is ItemSecondary) {
+					ItemSecondary secondary = item as ItemSecondary;
+					gameControl.MenuSecondaryItems.GetSecondarySlotAt(secondary.SecondarySlot).SlotItem = item;
+				}
+				else if (item is ItemEssence) {
+					ItemEssence essence = item as ItemEssence;
+					gameControl.MenuEssences.GetEssenceSlotAt(essence.EssenceSlot).SlotItem = item;
+				}
+			}
+		}
+
+		public void UnobtainItem(Item item) {
+			if (item.IsObtained) {
+				item.IsObtained = false;
+				item.OnUnobtained();
+				if (item is ItemWeapon) {
+					if (equippedWeapons[0] == item)
+						EquipWeapon(null, 0);
+					else if (equippedWeapons[1] == item)
+						EquipWeapon(null, 1);
+					else
+						gameControl.MenuWeapons.NextAvailableSlot.SlotItem = item;
+				}
 			}
 		}
 
@@ -138,8 +188,17 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 
 		// Adds the ammo type to the list.
-		public Ammo AddAmmo(Ammo ammo) {
+		public Ammo AddAmmo(Ammo ammo, bool obtain) {
+			foreach (Ammo ammo2 in this.ammo) {
+				if (ammo2.ID == ammo.ID) {
+					if (obtain)
+						ObtainAmmo(ammo2);
+					return ammo2;
+				}
+			}
 			this.ammo.Add(ammo);
+			if (obtain)
+				ObtainAmmo(ammo);
 			return ammo;
 		}
 
@@ -183,8 +242,9 @@ namespace ZeldaOracle.Game.Items {
 		public void FillAllAmmo() {
 			foreach (Ammo ammo in this.ammo) {
 				ammo.Amount = ammo.MaxAmount;
-				//if (ammo.ID == "rupees")
-				//	gameControl.HUD.DynamicRupees = ammo.Amount;
+				// Prevent rupee spamming sound.
+				if (ammo.ID == "rupees")
+					gameControl.HUD.DynamicRupees = ammo.Amount;
 			}
 		}
 
@@ -192,8 +252,15 @@ namespace ZeldaOracle.Game.Items {
 		public void EmptyAllAmmo() {
 			foreach (Ammo ammo in this.ammo) {
 				ammo.Amount = 0;
-				//if (ammo.ID == "rupees")
-				//	gameControl.HUD.DynamicRupees = ammo.Amount;
+				// Prevent rupee spamming sound.
+				if (ammo.ID == "rupees")
+					gameControl.HUD.DynamicRupees = ammo.Amount;
+			}
+		}
+
+		public void ObtainAmmo(Ammo ammo) {
+			if (!ammo.IsObtained) {
+				ammo.IsObtained = true;
 			}
 		}
 
@@ -202,14 +269,19 @@ namespace ZeldaOracle.Game.Items {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		// Gets the equipped usable items list.
-		public UsableItem[] EquippedUsableItems {
-			get { return equippedUsableItems; }
+		// Gets the equipped weapons list.
+		public ItemWeapon[] EquippedWeapons {
+			get { return equippedWeapons; }
 		}
 
 		// Gets if a two handed weapon is equipped.
 		public bool IsTwoHandedEquipped {
-			get { return (equippedUsableItems[0] != null ? equippedUsableItems[0].HasFlag(ItemFlags.TwoHanded) : false); }
+			get { return (equippedWeapons[0] != null ? equippedWeapons[0].HasFlag(ItemFlags.TwoHanded) : false); }
+		}
+
+		public int PiecesOfHeart {
+			get { return piecesOfHeart; }
+			set { piecesOfHeart = value; }
 		}
 	}
 }

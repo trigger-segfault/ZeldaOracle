@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaOracle.Game.Items.Equipment {
 	public class ItemWallet : Item {
@@ -18,8 +20,8 @@ namespace ZeldaOracle.Game.Items.Equipment {
 				"Allows you to carry 300 rupees!",
 				"Allows you to carry a whopping 999 rupees!"
 			};
-			this.level = level;
-			this.maxLevel = 2;
+			this.level = GMath.Clamp(level, Item.Level1, Item.Level3);
+			this.maxLevel = Item.Level3;
 		}
 
 
@@ -32,9 +34,15 @@ namespace ZeldaOracle.Game.Items.Equipment {
 			base.OnAdded(inventory);
 			int[] maxAmounts = { 99, 300, 999 };
 
-			Ammo rupees = new Ammo("rupees", "Rupees", 0, maxAmounts[level]);
-			rupees.IsObtained = true;
-			inventory.AddAmmo(rupees);
+			inventory.AddAmmo(
+				new Ammo(
+					"rupees", "Rupees", "A currency.",
+					new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(5, 3)),
+					new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(5, 3)),
+					0, maxAmounts[level]
+				),
+				false
+			);
 		}
 
 		// Called when the item's level is changed.
@@ -45,7 +53,7 @@ namespace ZeldaOracle.Game.Items.Equipment {
 
 		// Called when the item has been obtained.
 		public override void OnObtained() {
-			inventory.GetAmmo("rupees").IsObtained = true;
+			inventory.ObtainAmmo(inventory.GetAmmo("rupees"));
 		}
 
 		// Called when the item has been unobtained.

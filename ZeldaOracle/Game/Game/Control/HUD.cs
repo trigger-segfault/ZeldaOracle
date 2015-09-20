@@ -133,7 +133,7 @@ namespace ZeldaOracle.Game.Control {
 				g.DrawSprite(aL, new Point2I(56, 0));
 				g.DrawSprite(eBL, new Point2I(56, 8));
 
-				Inventory.EquippedUsableItems[0].DrawSlot(g, new Point2I(16, 0), light);
+				Inventory.EquippedWeapons[0].DrawSlot(g, new Point2I(16, 0), light);
 			}
 			else if (!gameControl.IsAdvancedGame) {
 				// B bracket
@@ -147,10 +147,10 @@ namespace ZeldaOracle.Game.Control {
 				g.DrawSprite(eTL, new Point2I(72, 0));
 				g.DrawSprite(eBL, new Point2I(72, 8));
 
-				if (Inventory.EquippedUsableItems[1] != null)
-					Inventory.EquippedUsableItems[1].DrawSlot(g, new Point2I(8, 0), light);
-				if (Inventory.EquippedUsableItems[0] != null)
-					Inventory.EquippedUsableItems[0].DrawSlot(g, new Point2I(48, 0), light);
+				if (Inventory.EquippedWeapons[1] != null)
+					Inventory.EquippedWeapons[1].DrawSlot(g, new Point2I(8, 0), light);
+				if (Inventory.EquippedWeapons[0] != null)
+					Inventory.EquippedWeapons[0].DrawSlot(g, new Point2I(48, 0), light);
 			}
 			else {
 				// B bracket side
@@ -163,10 +163,10 @@ namespace ZeldaOracle.Game.Control {
 				g.DrawSprite(aL, new Point2I(64, 0));
 				g.DrawSprite(eBL, new Point2I(64, 8));
 
-				if (Inventory.EquippedUsableItems[1] != null)
-					Inventory.EquippedUsableItems[1].DrawSlot(g, new Point2I(8, 0), light);
-				if (Inventory.EquippedUsableItems[0] != null)
-					Inventory.EquippedUsableItems[0].DrawSlot(g, new Point2I(40, 0), light);
+				if (Inventory.EquippedWeapons[1] != null)
+					Inventory.EquippedWeapons[1].DrawSlot(g, new Point2I(8, 0), light);
+				if (Inventory.EquippedWeapons[0] != null)
+					Inventory.EquippedWeapons[0].DrawSlot(g, new Point2I(40, 0), light);
 			}
 		}
 

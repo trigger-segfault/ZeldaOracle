@@ -5,8 +5,10 @@ using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Input;
 using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Game.GameStates.Transitions;
+using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.Control.Menus {
@@ -19,6 +21,8 @@ namespace ZeldaOracle.Game.Control.Menus {
 		private int textTimer;
 		private int textStart;
 		private LetterString description;
+
+		protected bool inSubMenu;
 
 
 		//-----------------------------------------------------------------------------
@@ -34,6 +38,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 			this.textPosition	= 0;
 			this.textTimer		= 0;
 			this.textStart		= 0;
+			this.inSubMenu		= false;
 		}
 
 
@@ -49,22 +54,34 @@ namespace ZeldaOracle.Game.Control.Menus {
 
 		public override void Update() {
 			base.Update();
-			if (Controls.Start.IsPressed()) {
-				GameControl.CloseMenu(this);
+			if (!inSubMenu) {
+				if (Controls.Start.IsPressed()) {
+					GameControl.CloseMenu(this);
+				}
+				if (Controls.Select.IsPressed()) {
+					AudioSystem.PlaySound("UI/menu_next");
+					gameManager.PopGameState();
+					gameManager.PushGameState(new MenuTransitionPush(this, nextMenu, Directions.East));
+				}
 			}
-			if (Controls.Select.IsPressed()) {
-				AudioSystem.PlaySound("UI/menu_next");
-				gameManager.PopGameState();
-				gameManager.PushGameState(new MenuTransitionPush(this, nextMenu, Directions.East));
-			}
-
 
 			UpdateDescription();
 
-			for (int i = 0; i < 4; i++) {
-				if (Controls.Arrows[i].IsPressed()) {
-					ResetDescription();
-					break;
+			if (!inSubMenu) {
+				// DEBUG: Level up items
+				if (Keyboard.IsKeyPressed(Keys.L)) {
+					if (currentSlotGroup.CurrentSlot.SlotItem is Item) {
+						Item item = currentSlotGroup.CurrentSlot.SlotItem as Item;
+						item.Level = (item.Level + 1) % (item.MaxLevel + 1);
+						ResetDescription();
+					}
+				}
+
+				for (int i = 0; i < 4; i++) {
+					if (Controls.Arrows[i].IsPressed()) {
+						ResetDescription();
+						break;
+					}
 				}
 			}
 		}
@@ -149,6 +166,23 @@ namespace ZeldaOracle.Game.Control.Menus {
 			else
 				g.DrawLetterString(GameData.FONT_LARGE, text, new Point2I(16, 108), new Color(16, 40, 88));
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Slots
+		//-----------------------------------------------------------------------------
+
+		public Slot GetSlotWithItem(ISlotItem item) {
+			for (int i = 0; i < slotGroups.Count; i++) {
+				for (int j = 0; j < slotGroups[i].NumSlots; j++) {
+					if (slotGroups[i].GetSlotAt(j).SlotItem == item) {
+						return slotGroups[i].GetSlotAt(j);
+					}
+				}
+			}
+			return null;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties

@@ -4,31 +4,46 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Control.Menus;
 
 namespace ZeldaOracle.Game.Items {
-	public class Ammo {
+	public class Ammo : ISlotItem {
 
-		private string id;
-		private string name;
+		protected string id;
+		protected string name;
+		protected string description;
 		private int amount;
 		private int maxAmount;
 		private bool isObtained;
 		protected bool isStolen;
+		protected Sprite sprite;
+		protected Sprite spriteLight;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public Ammo(string id, string name, int amount, int maxAmount) {
-			this.id = id;
-			this.name = name;
-			this.amount = amount;
-			this.maxAmount = maxAmount;
-			this.isObtained = false;
-			this.isStolen = false;
+		public Ammo(string id, string name, string description, Sprite sprite, Sprite spriteLight, int amount, int maxAmount) {
+			this.id				= id;
+			this.name			= name;
+			this.description	= description;
+			this.amount			= amount;
+			this.maxAmount		= maxAmount;
+			this.sprite			= sprite;
+			this.spriteLight	= spriteLight;
+			this.isObtained		= false;
+			this.isStolen		= false;
 		}
 
+		//-----------------------------------------------------------------------------
+		// Virtual
+		//-----------------------------------------------------------------------------
+
+		// Draws the item inside the inventory.
+		public virtual void DrawSlot(Graphics2D g, Point2I position, bool light) {
+			g.DrawSprite(light ? spriteLight : sprite, position);
+		}
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -42,6 +57,11 @@ namespace ZeldaOracle.Game.Items {
 		// Gets the name of the ammo.
 		public string Name {
 			get { return name; }
+		}
+
+		// Gets the description of the ammo.
+		public string Description {
+			get { return description; }
 		}
 
 		// Gets or sets the current amount of the ammo.
@@ -78,6 +98,14 @@ namespace ZeldaOracle.Game.Items {
 		// Gets if the ammo is out.
 		public bool IsEmpty {
 			get { return amount == 0; }
+		}
+
+		public Sprite Sprite {
+			get { return sprite; }
+		}
+
+		public Sprite SpriteLight {
+			get { return spriteLight; }
 		}
 	}
 }

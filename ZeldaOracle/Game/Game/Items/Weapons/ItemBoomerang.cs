@@ -11,26 +11,27 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
 
 namespace ZeldaOracle.Game.Items.Weapons {
-	public class ItemFeather : ItemWeapon {
+	public class ItemBoomerang : ItemWeapon {
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemFeather(int level = 0) : base() {
-			this.id				= "item_feather";
-			this.name			= new string[] { "Roc's Feather", "Roc's Cape" };
-			this.description	= new string[] { "A nice lift.", "A wing-riding cape." };
-			this.level			= level;
+		public ItemBoomerang()
+			: base() {
+			this.id				= "item_boomerang";
+			this.name			= new string[] { "Boomerang", "Magic Boomerang" };
+			this.description	= new string[] { "Always comes back to you.", "A remote-control weapon." };
+			this.level			= 0;
 			this.maxLevel		= Item.Level2;
 			this.sprite			= new Sprite[] {
-				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(2, 1)),
-				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(3, 1))
+				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(4, 1)),
+				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(5, 1))
 			};
 			this.spriteLight	= new Sprite[] {
-				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(2, 1)),
-				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(3, 1))
+				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(4, 1)),
+				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(5, 1))
 			};
 		}
 
@@ -39,9 +40,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		// Jump/deploy cape.
 		public override void OnButtonPress() {
-			Player.Jump();
+			
 		}
 
 		// Draws the item inside the inventory.

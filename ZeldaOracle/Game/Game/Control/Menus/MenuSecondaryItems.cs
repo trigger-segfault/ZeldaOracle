@@ -13,13 +13,13 @@ using ZeldaOracle.Game.Main;
 
 namespace ZeldaOracle.Game.Control.Menus {
 
-	public class MenuKeyItems : InventoryMenu {
+	public class MenuSecondaryItems : InventoryMenu {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public MenuKeyItems(GameManager gameManager)
+		public MenuSecondaryItems(GameManager gameManager)
 			: base(gameManager) {
 			this.backgroundSprite = Resources.GetImage("UI/menu_key_items_a");
 
@@ -84,14 +84,23 @@ namespace ZeldaOracle.Game.Control.Menus {
 			if (Controls.A.IsPressed()) {
 				if (currentSlotGroup.CurrentSlotIndex >= currentSlotGroup.NumSlots - 6) {
 					AudioSystem.PlaySound("UI/menu_select");
-					EquippableItem selectedItem = currentSlotGroup.CurrentSlot.SlotItem as EquippableItem;
-					GameControl.Inventory.EquipEquippableItem(selectedItem);
+					ItemEquipment selectedItem = currentSlotGroup.CurrentSlot.SlotItem as ItemEquipment;
+					GameControl.Inventory.EquipEquipment(selectedItem);
 				}
 			}
 		}
 
 		public override void Draw(Graphics2D g) {
 			base.Draw(g);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Slots
+		//-----------------------------------------------------------------------------
+
+		public Slot GetSecondarySlotAt(Point2I index) {
+			return slotGroups[0].GetSlotAt(index.X + index.Y * 5);
 		}
 	}
 }

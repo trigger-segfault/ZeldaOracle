@@ -184,8 +184,9 @@
     <Compile Include="Common\Translation\WrappedLetterString.cs" />
     <Compile Include="Game\Control\GameControl.cs" />
     <Compile Include="Game\Control\HUD.cs" />
+    <Compile Include="Game\Control\Menus\CustomSlotItem.cs" />
     <Compile Include="Game\Control\Menus\MenuEssences.cs" />
-    <Compile Include="Game\Control\Menus\MenuKeyItems.cs" />
+    <Compile Include="Game\Control\Menus\MenuSecondaryItems.cs" />
     <Compile Include="Game\Control\Menus\ISlotItem.cs" />
     <Compile Include="Game\Control\Menus\Menu.cs" />
     <Compile Include="Game\Control\Menus\MenuWeapons.cs" />
@@ -250,17 +251,37 @@
     <Compile Include="Game\GameStates\Transitions\RoomTransition.cs" />
     <Compile Include="Game\GameStates\Transitions\RoomTransitionPush.cs" />
     <Compile Include="Game\Items\Ammo.cs" />
-    <Compile Include="Game\Items\Equipment\ItemBombBag.cs" />
+    <Compile Include="Game\Items\Ammos\AmmoSatchelSeeds.cs" />
+    <Compile Include="Game\Items\ItemSecondary.cs" />
     <Compile Include="Game\Items\Equipment\ItemWallet.cs" />
-    <Compile Include="Game\Items\EquippableItem.cs" />
+    <Compile Include="Game\Items\Essences\ItemEssence8.cs" />
+    <Compile Include="Game\Items\Essences\ItemEssence7.cs" />
+    <Compile Include="Game\Items\Essences\ItemEssence6.cs" />
+    <Compile Include="Game\Items\Essences\ItemEssence5.cs" />
+    <Compile Include="Game\Items\Essences\ItemEssence4.cs" />
+    <Compile Include="Game\Items\Essences\ItemEssence3.cs" />
+    <Compile Include="Game\Items\Essences\ItemEssence1.cs" />
+    <Compile Include="Game\Items\Essences\ItemEssence2.cs" />
+    <Compile Include="Game\Items\ItemEquipment.cs" />
     <Compile Include="Game\Items\Inventory.cs" />
     <Compile Include="Game\Items\Item.cs" />
+    <Compile Include="Game\Items\ItemEssence.cs" />
     <Compile Include="Game\Items\ItemFlags.cs" />
-    <Compile Include="Game\Items\UsableItem.cs" />
+    <Compile Include="Game\Items\ItemWeapon.cs" />
+    <Compile Include="Game\Items\SecondaryItems\ItemMembersCard.cs" />
+    <Compile Include="Game\Items\SecondaryItems\ItemEssenceSeed.cs" />
+    <Compile Include="Game\Items\SecondaryItems\ItemMagicPotion.cs" />
+    <Compile Include="Game\Items\SecondaryItems\ItemFlippers.cs" />
+    <Compile Include="Game\Items\Weapons\ItemSeedSatchel.cs" />
+    <Compile Include="Game\Items\Weapons\ItemBoomerang.cs" />
+    <Compile Include="Game\Items\Weapons\ItemShield.cs" />
+    <Compile Include="Game\Items\Weapons\ItemSword.cs" />
+    <Compile Include="Game\Items\Weapons\ItemBigSword.cs" />
     <Compile Include="Game\Items\Weapons\ItemBombs.cs" />
     <Compile Include="Game\Items\Weapons\ItemBow.cs" />
     <Compile Include="Game\Items\Weapons\ItemFeather.cs" />
-    <Compile Include="Game\Main\Controls.cs" />
+    <Compile Include="Game\Items\Weapons\ItemOcarina.cs" />
+    <Compile Include="Game\Control\Controls.cs" />
     <Compile Include="Game\Main\GameBase.cs" />
     <Compile Include="Game\GameData.cs" />
     <Compile Include="Game\Main\GameManager.cs" />
@@ -318,8 +339,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Editor\" />
-    <Folder Include="Game\Items\Ammo\" />
-    <Folder Include="Game\Items\KeyItems\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

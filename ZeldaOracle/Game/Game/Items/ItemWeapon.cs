@@ -9,17 +9,20 @@ using ZeldaOracle.Game.Control;
 
 namespace ZeldaOracle.Game.Items {
 
-	public abstract class UsableItem : EquippableItem {
+	public abstract class ItemWeapon : ItemEquipment {
 
 		// The flags describing the item.
 		protected ItemFlags flags;
+
+		private int equipSlot;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public UsableItem() : base() {
-			this.flags	= ItemFlags.None;
+		public ItemWeapon() : base() {
+			this.flags		= ItemFlags.None;
+			this.equipSlot	= 0;
 		}
 
 
@@ -67,5 +70,9 @@ namespace ZeldaOracle.Game.Items {
 			set { flags = value; }
 		}
 
+		public int CurrentEquipSlot {
+			get { return equipSlot; }
+			set { equipSlot = value; }
+		}
 	}
 }
