@@ -97,6 +97,9 @@ namespace ZeldaOracle.Game.Entities {
 
 		// Called when the entity leaves the room.
 		public virtual void OnLeaveRoom() {}
+
+		// Called when the entity lands on the ground.
+		public virtual void OnLand() {}
 		
 	
 		//-----------------------------------------------------------------------------
@@ -203,6 +206,7 @@ namespace ZeldaOracle.Game.Entities {
 
 		public Vector2F Origin {
 			get { return (position + originOffset); }
+			set { position = value - originOffset; }
 		}
 
 		public Vector2F Center {

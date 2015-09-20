@@ -63,6 +63,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public override void Update() {
 			base.Update();
 
+			Tile actionTile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
+
 			// Update animations
 			if (player.Movement.IsMoving && !Player.Graphics.IsAnimationPlaying)
 				Player.Graphics.PlayAnimation();
@@ -71,14 +73,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 			
 			// Update pushing.
 			CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
-
-			if (player.Movement.IsMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
-				Tile tile = collisionInfo.Tile;
+			if (actionTile != null && player.Movement.IsMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
 				player.Graphics.AnimationPlayer.Animation = GameData.ANIM_PLAYER_PUSH;
 				pushTimer++;
 
-				if (pushTimer > 20 && tile.Flags.HasFlag(TileFlags.Movable)) {
-					tile.Push(player.Direction, 1.0f);
+				if (pushTimer > 20 && actionTile.Flags.HasFlag(TileFlags.Movable)) {
+					actionTile.Push(player.Direction, 1.0f);
 					//Message message = new Message("Oof! It's heavy!");
 					//player.RoomControl.GameManager.PushGameState(new StateTextReader(message));
 					pushTimer = 0;
@@ -89,32 +89,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 				player.Graphics.AnimationPlayer.Animation = GameData.ANIM_PLAYER_DEFAULT;
 			}
 			
-			
-			// Check for tile interactions (like signs).
-			//player.Physics.
-			//player.Physics.IsPlaceMeetingSolid
-			
-			if (Keyboard.IsKeyPressed(Keys.Space)) {
-				for (int i = 0; i < player.FrontTiles.Length; i++) {
-					Tile tile = player.FrontTiles[i];
-					if (tile != null) {
-						Rectangle2F myBox = player.Physics.PositionedCollisionBox;
-						Rectangle2F tileBox = new Rectangle2F(tile.Position, new Vector2F(16, 16));
-
-						Vector2F dispMin = myBox.Max - tileBox.Min;
-						Vector2F dispMax = tileBox.Max - myBox.Min;
-
-						int sideAxis = (player.Direction + 1) % 2;
-						float distance = Math.Min(dispMin[sideAxis], dispMax[sideAxis]);
-
-						if (distance > player.Physics.AutoDodgeDistance) {
-							tile.OnAction(player.Direction);
-						}
-					}
-				}
+			// Check for tile press interactions.
+			if (Keyboard.IsKeyPressed(Keys.Space) && actionTile != null) {
+				actionTile.OnAction(player.Direction);
 			}
 
-			// Update items.
+			// Update player weapon items.
 			Player.UpdateEquippedItems();
 		}
 

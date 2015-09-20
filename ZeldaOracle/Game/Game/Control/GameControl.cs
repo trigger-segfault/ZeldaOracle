@@ -9,6 +9,8 @@ using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Equipment;
+using ZeldaOracle.Game.Items.Essences;
+using ZeldaOracle.Game.Items.KeyItems;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Worlds;
@@ -27,7 +29,7 @@ namespace ZeldaOracle.Game.Control {
 		private bool advancedGame;
 
 		private MenuWeapons menuWeapons;
-		private MenuKeyItems menuKeyItems;
+		private MenuSecondaryItems menuSecondaryItems;
 		private MenuEssences menuEssences;
 
 		private int roomTicks; // The total number of ticks elapsed (used for animation.
@@ -47,7 +49,7 @@ namespace ZeldaOracle.Game.Control {
 			this.advancedGame	= false;
 
 			this.menuWeapons	= null;
-			this.menuKeyItems	= null;
+			this.menuSecondaryItems	= null;
 			this.menuEssences	= null;
 		}
 
@@ -58,13 +60,13 @@ namespace ZeldaOracle.Game.Control {
 
 		public void StartGame() {
 			menuWeapons	= new MenuWeapons(gameManager);
-			menuKeyItems	= new MenuKeyItems(gameManager);
+			menuSecondaryItems	= new MenuSecondaryItems(gameManager);
 			menuEssences	= new MenuEssences(gameManager);
 			menuWeapons.PreviousMenu = menuEssences;
-			menuWeapons.NextMenu = menuKeyItems;
-			menuKeyItems.PreviousMenu = menuWeapons;
-			menuKeyItems.NextMenu = menuEssences;
-			menuEssences.PreviousMenu = menuKeyItems;
+			menuWeapons.NextMenu = menuSecondaryItems;
+			menuSecondaryItems.PreviousMenu = menuWeapons;
+			menuSecondaryItems.NextMenu = menuEssences;
+			menuEssences.PreviousMenu = menuSecondaryItems;
 			menuEssences.NextMenu = menuWeapons;
 
 			roomTicks = 0;
@@ -74,7 +76,30 @@ namespace ZeldaOracle.Game.Control {
 			inventory.AddItem(new ItemBracelet(), true);
 			inventory.AddItem(new ItemFeather(), true);
 			inventory.AddItem(new ItemBow(), true);
-			//inventory.AddItem(new ItemBombs(), true);
+			inventory.AddItem(new ItemEssence1(), true);
+			inventory.AddItem(new ItemEssence2(), true);
+			inventory.AddItem(new ItemEssence3(), true);
+			inventory.AddItem(new ItemEssence4(), true);
+			inventory.AddItem(new ItemEssence5(), true);
+			inventory.AddItem(new ItemEssence6(), true);
+			inventory.AddItem(new ItemEssence7(), true);
+			inventory.AddItem(new ItemEssence8(), true);
+			inventory.AddItem(new ItemFlippers(), true);
+			inventory.AddItem(new ItemMagicPotion(), true);
+			inventory.AddItem(new ItemEssenceSeed(), true);
+			inventory.AddItem(new ItemBombs(), true);
+			inventory.AddItem(new ItemOcarina(), true);
+			inventory.AddItem(new ItemBigSword(), true);
+			inventory.AddItem(new ItemMembersCard(), true);
+			inventory.AddItem(new ItemSword(), true);
+			inventory.AddItem(new ItemShield(), true);
+			inventory.AddItem(new ItemBoomerang(), true);
+			inventory.AddItem(new ItemSeedSatchel(), true);
+
+			inventory.ObtainAmmo(inventory.GetAmmo("ammo_scent_seeds"));
+			inventory.ObtainAmmo(inventory.GetAmmo("ammo_pegasus_seeds"));
+			inventory.ObtainAmmo(inventory.GetAmmo("ammo_gale_seeds"));
+			inventory.ObtainAmmo(inventory.GetAmmo("ammo_mystery_seeds"));
 
 			hud = new HUD(this);
 
@@ -162,8 +187,8 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		// The player key items menu.
-		public MenuKeyItems MenuKeyItems {
-			get { return menuKeyItems; }
+		public MenuSecondaryItems MenuSecondaryItems {
+			get { return menuSecondaryItems; }
 		}
 
 		// The player essences menu.

@@ -11,7 +11,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		private int		angle;
 		private Entity	owner;
-		private event CollisionResponse eventCollision;
+		private event Action eventCollision;
+		private event Action eventLand;
 
 
 		//-----------------------------------------------------------------------------
@@ -21,6 +22,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public Projectile() {
 			EnablePhysics();
 
+			eventCollision = null;
+			eventLand = null;
 			angle = 0;
 			owner = null;
 		}
@@ -29,7 +32,12 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
-		
+
+		public override void OnLand() {
+			if (eventLand != null)
+				eventLand();
+		}
+
 		public override void Initialize() {
 			base.Initialize();
 		}
@@ -63,9 +71,14 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			set { owner = value; }
 		}
 
-		public event CollisionResponse EventCollision {
+		public event Action EventCollision {
 			add { eventCollision += value; }
 			remove { eventCollision -= value; }
+		}
+
+		public event Action EventLand {
+			add { eventLand += value; }
+			remove { eventLand -= value; }
 		}
 	}
 }

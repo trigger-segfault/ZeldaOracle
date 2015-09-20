@@ -278,7 +278,6 @@ namespace ZeldaOracle.Game {
 			BuildAnim(ANIM_PLAYER_DIVE)				.AddFrame(16, 0,21, 0,4).AddFrame(16, 1,21, 0,4).Offset(-8, -16);
 
 			//BuildAnim(ANIM_PLAYER_PULL)				.AddFrameStrip(6, 0,7, 2).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_PULL)				.AddFrameStrip(6, 0,7, 2).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_DIG)				.AddFrame(8, 0,9).AddFrame(16, 1,9).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_THROW)			.AddFrame(9, 0,4).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_FALL).AddFrame(16, 1, 20, 0, 0).AddFrame(10, 2, 20, 0, 0).AddFrame(11, 3, 20, 0, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp);
@@ -289,17 +288,25 @@ namespace ZeldaOracle.Game {
 			
 			//BuildAnim(ANIM_PLAYER_PULL).AddFrameStrip(6, 0,7, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
 
-			//BuildAnim(ANIM_PLAYER_GRAB).AddFrame(1, 0,7, 0,0).Offset(-8, 16).MakeDynamic(4, 2,0);
-			//BuildAnim(ANIM_PLAYER_PULL).AddFrame(1, 1,7).Offset(-8, 16).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_GRAB).AddFrame(1, 0,7, 0,0).Offset(-8, -16).MakeDynamic(4, 2,0);
+			//BuildAnim(ANIM_PLAYER_GRAB).AddFrame(1, 0,7, 0,0).Offset(-8, -16).MakeDynamic(4, 2,0);
+			//BuildAnim(ANIM_PLAYER_PULL)				.AddFrameStrip(6, 0,7, 2).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
+			
+			BuildAnim(ANIM_PLAYER_PULL)
+				.AddFrame(1, 1,7, -4,0).Offset(-8, -16).CreateSubStrip()
+				.AddFrame(1, 3,7, 0,2).Offset(-8, -16).CreateSubStrip()
+				.AddFrame(1, 5,7, 4,0).Offset(-8, -16).CreateSubStrip()
+				.AddFrame(1, 7,7, 0,-1).Offset(-8, -16);
+			
 			//ANIM_PLAYER_PULL.Frames[0].DrawOffset += new Point2I(-4, 0);
 			//ANIM_PLAYER_PULL.NextStrip.Frames[0].DrawOffset += new Point2I(0, 2);
 			//ANIM_PLAYER_PULL.NextStrip.NextStrip.Frames[0].DrawOffset += new Point2I(4, 0);
-
+			
 			BuildAnim(ANIM_PLAYER_JUMP)
 				.AddFrame(9, 0, 11).AddFrame(9, 1, 11).AddFrame(6, 2, 11).AddFrame(6, 1, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
 				.AddFrame(9, 3, 11).AddFrame(9, 4, 11).AddFrame(6, 5, 11).AddFrame(6, 3, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
 				.AddFrame(9, 0, 12).AddFrame(9, 1, 12).AddFrame(6, 2, 12).AddFrame(6, 5, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
-				.AddFrame(9, 3, 12).AddFrame(9, 4, 12).AddFrame(6, 5, 12).AddFrame(6, 7, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip();
+				.AddFrame(9, 3, 12).AddFrame(9, 4, 12).AddFrame(6, 5, 12).AddFrame(6, 7, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp);
 
 			
 			// PROJECTILE ANIMATIONS:
@@ -326,6 +333,19 @@ namespace ZeldaOracle.Game {
 			BuildAnim(ANIM_EFFECT_GRASS)
 				.AddFrame(6, 6,0, -4,1).AddPart(6, 6,0, 2,1)
 				.AddFrame(6, 7,0, -4,1).AddPart(6, 7,0, 2,1).Offset(-8, -14);
+
+			BuildAnim(ANIM_EFFECT_ROCK_BREAK).SetLoopMode(LoopMode.Reset)
+				.AddFrame(4, 2,0, -4,5).AddPart(4, 2,0, 5,-6).AddPart(4, 2,0, -6,4).AddPart(4, 2,0, 4,3)
+				.AddFrame(4, 2,0, -6,-6).AddPart(4, 2,0, 7,-7).AddPart(4, 2,0, -7,5).AddPart(4, 2,0, 6,4)
+				.AddFrame(4, 2,0, -7,-7).AddPart(4, 2,0, 9,-8).AddPart(4, 2,0, -9,6).AddPart(4, 2,0, 8,5)
+				.AddFrame(4, 2,0, -9,-5).AddPart(4, 2,0, 11,-6).AddPart(4, 2,0, -11,8).AddPart(4, 2,0, 10,7);
+
+			BuildAnim(ANIM_EFFECT_SIGN_BREAK).SetLoopMode(LoopMode.Reset)
+				.AddFrame(4, 3,0, -4,5).AddPart(4, 3,0, 5,-6).AddPart(4, 3,0, -6,4).AddPart(4, 3,0, 4,3)
+				.AddFrame(4, 3,0, -6,-6).AddPart(4, 3,0, 7,-7).AddPart(4, 3,0, -7,5).AddPart(4, 3,0, 6,4)
+				.AddFrame(4, 3,0, -7,-7).AddPart(4, 3,0, 9,-8).AddPart(4, 3,0, -9,6).AddPart(4, 3,0, 8,5)
+				.AddFrame(4, 3,0, -9,-5).AddPart(4, 3,0, 11,-6).AddPart(4, 3,0, -11,8).AddPart(4, 3,0, 10,7);
+
 		}
 
 
@@ -700,6 +720,8 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_EFFECT_LAVA_SPLASH		= new Animation();
 		public static Animation ANIM_EFFECT_RIPPLES			= new Animation();
 		public static Animation ANIM_EFFECT_GRASS			= new Animation();
+		public static Animation ANIM_EFFECT_ROCK_BREAK		= new Animation();
+		public static Animation ANIM_EFFECT_SIGN_BREAK		= new Animation();
 	
 
 	//-----------------------------------------------------------------------------

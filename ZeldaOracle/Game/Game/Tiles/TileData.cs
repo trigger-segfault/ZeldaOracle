@@ -43,6 +43,15 @@ namespace ZeldaOracle.Game.Tiles {
 			sheetLocation	= Point2I.Zero;
 			tileset			= null;
 		}
+		
+		public TileData(TileFlags flags) : this() {
+			this.flags = flags;
+		}
+		
+		public TileData(Type type, TileFlags flags) : this() {
+			this.type	= type;
+			this.flags	= flags;
+		}
 
 
 		//-----------------------------------------------------------------------------

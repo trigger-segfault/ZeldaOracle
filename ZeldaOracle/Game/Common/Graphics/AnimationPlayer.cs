@@ -73,7 +73,7 @@ namespace ZeldaOracle.Common.Graphics {
 				timer += 1;
 				
 				if (subStrip.LoopMode == LoopMode.Reset && timer >= subStrip.Duration) {
-					Stop();
+					//Stop();
 				}
 				else if (subStrip.LoopMode == LoopMode.Repeat && timer >= subStrip.Duration) {
 					// Loop back to the beginning.

@@ -232,7 +232,9 @@ public class Graphics2D {
 				time = 0;
 			else
 				time %= animation.Duration;
-			}
+		}
+		else if (animation.LoopMode == LoopMode.Reset && time >= animation.Duration)
+			time = 0;
 		DrawAnimation(animation, time, position.X, position.Y, depth);
 	}
 

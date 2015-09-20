@@ -30,6 +30,12 @@ namespace ZeldaOracle.Game.Entities.Players
 		// Virtual methods
 		//-----------------------------------------------------------------------------
 		
+		public virtual bool RequestStateChange(PlayerState newState) {
+			if (!isNaturalState && newState.isNaturalState)
+				return false;
+			return true;
+		}
+
 		public virtual void OnBegin() {}
 		
 		public virtual void OnEnd() {}

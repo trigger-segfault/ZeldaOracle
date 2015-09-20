@@ -12,7 +12,7 @@ using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Items.Weapons {
-	public class ItemBracelet : UsableItem {
+	public class ItemBracelet : ItemWeapon {
 
 		private PlayerGrabState grabState;
 
@@ -26,9 +26,15 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.name			= new string[] { "Power Bracelet", "Power Gloves" };
 			this.description	= new string[] { "A strength booster.", "Used to lift large objects." };
 			this.level			= level;
-			this.maxLevel		= 2;
-			this.sprite			= new Sprite(GameData.SHEET_ITEMS_SMALL, 0, 1);
-			this.spriteLight	= new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 0, 1);
+			this.maxLevel		= 1;
+			this.sprite			= new Sprite[] {
+				new Sprite(GameData.SHEET_ITEMS_SMALL, 0, 1),
+				new Sprite(GameData.SHEET_ITEMS_SMALL, 1, 1)
+			};
+			this.spriteLight	= new Sprite[] {
+				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 0, 1),
+				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 1, 1)
+			};
 			this.grabState		= new PlayerGrabState();
 		}
 
@@ -68,34 +74,11 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		
 		// Grab, pull, and pickup objects.
 		public override void OnButtonDown() {
-			float minDist = 0;
-			Tile grabTile = null;
-
-			// If multiple tiles, pick the closer one.
-			for (int i = 0; i < player.FrontTiles.Length; i++) {
-				Tile tile = player.FrontTiles[i];
-
-				if (tile != null) {
-					Vector2F disp = tile.Center - Player.Center;
-
-					int axis = (player.Direction + 1) % 2;
-					float dist = Math.Abs(disp[axis]);
-
-					if (grabTile == null || dist < minDist) {
-						grabTile = tile;
-						minDist = dist;
-					}
-				}
-			}
-
-			//if (grabTile != null && player.CurrentState != grabState) {
-			//	player.BeginState(grabState);
-			//	player.BeginState(grabState);
-			//}
-
-			if (grabTile != null && !(player.CurrentState is PlayerCarryState)) {
-				player.BeginState(new PlayerCarryState(grabTile));
-				RoomControl.RemoveTile(grabTile);
+			// Check for a tile to grab.
+			Tile grabTile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
+			if (grabTile != null && player.CurrentState != grabState) {
+				grabState.BraceletEquipSlot = CurrentEquipSlot;
+				player.BeginState(grabState);
 			}
 		}
 

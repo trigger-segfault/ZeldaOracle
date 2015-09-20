@@ -273,26 +273,23 @@ namespace ZeldaOracle.Game.Control {
 			TileData td;
 
 			// Create a Sign tile
-			td = new TileData();
-			td.Type = typeof(TileSign);
-			td.Sprite = new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 0);
-			td.SpriteAsObject = new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 1);
-			td.Flags |= TileFlags.Solid | TileFlags.Pickupable | TileFlags.Burnable | TileFlags.Movable;
-			td.CollisionModel = GameData.MODEL_BLOCK;
+			td					= new TileData(typeof(TileSign), TileFlags.Solid | TileFlags.Pickupable | TileFlags.Burnable | TileFlags.Movable);
+			td.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 0);
+			td.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 1);
+			td.BreakAnimation	= GameData.ANIM_EFFECT_SIGN_BREAK;
+			td.CollisionModel	= GameData.MODEL_BLOCK;
 			r.TileData[2, 3, 1] = td;
 			
 			// Create a movable block tile.
-			td = new TileData();
-			td.Sprite = new Sprite(GameData.SHEET_ZONESET_LARGE, 1, 9);
-			td.SpriteAsObject = new Sprite(GameData.SHEET_ZONESET_LARGE, 2, 9);
-			td.Flags |= TileFlags.Solid | TileFlags.Movable;
-			td.CollisionModel = GameData.MODEL_BLOCK;
+			td					= new TileData(TileFlags.Solid | TileFlags.Movable);
+			td.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 1, 9);
+			td.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 2, 9);
+			td.CollisionModel	= GameData.MODEL_BLOCK;
 			r.TileData[2, 5, 1] = td;
 			
 			// Create a grass tile.
-			td = new TileData();
-			td.Sprite = new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 3);
-			td.Flags |= TileFlags.Grass;
+			td					= new TileData(TileFlags.Grass);
+			td.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 3);
 			r.TileData[2, 2, 1] = td;
 			//r.TileData[2, 3, 1] = td;
 			r.TileData[2, 4, 1] = td;

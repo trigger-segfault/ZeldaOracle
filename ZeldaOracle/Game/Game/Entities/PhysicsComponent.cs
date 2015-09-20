@@ -44,6 +44,7 @@ namespace ZeldaOracle.Game.Entities {
 		private TileFlags		topTileFlags;		// The flags for the top-most tile the entity is located over.
 		private TileFlags		allTileFlags;		// The group of flags for all the tiles the entity is located over.
 
+		private bool			hasLanded;
 
 
 		//-----------------------------------------------------------------------------
@@ -65,6 +66,8 @@ namespace ZeldaOracle.Game.Entities {
 			this.allTileFlags		= TileFlags.None;
 			this.isColliding		= false;
 			this.autoDodgeDistance	= 6;
+
+			this.hasLanded = false;
 
 			this.collisionInfo	= new CollisionInfo[Directions.Count];
 			for (int i = 0; i < Directions.Count; i++)
@@ -95,6 +98,7 @@ namespace ZeldaOracle.Game.Entities {
 
 		public void Update() {
 			// Remove collision state flags.
+			hasLanded = false;
 			isColliding = false;
 			for (int i = 0; i < Directions.Count; i++)
 				collisionInfo[i].Clear();
@@ -117,9 +121,12 @@ namespace ZeldaOracle.Game.Entities {
 
 			// Check if outside room.
 			if (HasFlags(PhysicsFlags.DestroyedOutsideRoom) &&
-				!entity.RoomControl.RoomBounds.Contains(entity.Position))
+				!entity.RoomControl.RoomBounds.Contains(entity.Origin))
 			{
 				entity.Destroy();
+			}
+			else if (hasLanded) {
+				entity.OnLand();
 			}
 		}
 
@@ -158,6 +165,7 @@ namespace ZeldaOracle.Game.Entities {
 				if (entity.ZPosition <= 0.0f) {
 					entity.ZPosition = 0.0f;
 					zVelocity = 0.0f;
+					hasLanded = true;
 				}
 			}
 			else
@@ -267,6 +275,26 @@ namespace ZeldaOracle.Game.Entities {
 					}
 				}
 			}
+		}
+		
+		public Tile GetMeetingSolidTile(Vector2F position, int direction) {
+			Vector2F checkPos = position + Directions.ToPoint(direction);
+			Point2I location = entity.RoomControl.GetTileLocation(entity.Center) + 
+				Directions.ToPoint(direction);
+			if (!entity.RoomControl.IsTileInBounds(location))
+				return null;
+
+			for (int i = 0; i < entity.RoomControl.Room.LayerCount; i++) {
+				Tile tile = entity.RoomControl.GetTile(location, i);
+
+				if (CanCollideWithTile(tile) && CollisionModel.Intersecting(
+					tile.CollisionModel, tile.Position, collisionBox, checkPos) &&
+					!CanDodgeCollision(tile, direction))
+				{
+					return tile;
+				}
+			}
+			return null;
 		}
 
 
@@ -399,6 +427,17 @@ namespace ZeldaOracle.Game.Entities {
 			return result;
 		}
 
+		public bool CanDodgeCollision(Tile tile, int direction) {
+			if (!CanCollideWithTile(tile))
+				return false;
+			for (int i = 0; i < tile.CollisionModel.Boxes.Count; i++) {
+				if (CanDodgeCollision(Rectangle2F.Translate(tile.CollisionModel.Boxes[i], tile.Position), direction)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
 		public bool CanDodgeCollision(Rectangle2F block, int direction) {
 			float		dodgeDist	= autoDodgeDistance;
 			Rectangle2F	objBox		= Rectangle2F.Translate(collisionBox, entity.Position);
@@ -512,6 +551,11 @@ namespace ZeldaOracle.Game.Entities {
 		public Rectangle2F CollisionBox {
 			get { return collisionBox; }
 			set { collisionBox = value; }
+		}
+
+		public Rectangle2F SoftCollisionBox {
+			get { return softCollisionBox; }
+			set { softCollisionBox = value; }
 		}
 		
 		public CollisionInfo[] CollisionInfo {

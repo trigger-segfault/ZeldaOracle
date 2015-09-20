@@ -6,7 +6,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaOracle.Game.Items {
-	public class ItemBombs : UsableItem {
+	public class ItemBombs : ItemWeapon {
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -14,12 +14,20 @@ namespace ZeldaOracle.Game.Items {
 
 		public ItemBombs() : base() {
 			this.id = "item_bombs";
-			this.name = new string[] { "Bombs" };
-			this.description = new string[] { "Very explosive." };
-			this.maxLevel = 0;
+			this.name = new string[] { "Bombs", "Bombs", "Bombs" };
+			this.description = new string[] { "Very explosive.", "Very explosive.", "Very explosive." };
+			this.maxLevel = Item.Level3;
 			this.currentAmmo = 0;
-			this.sprite = new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0));
-			this.spriteLight = new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(13, 0));
+			this.sprite = new Sprite[] {
+				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0)),
+				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0)),
+				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0))
+			};
+			this.spriteLight = new Sprite[] {
+				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(13, 0)),
+				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(13, 0)),
+				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(13, 0))
+			};
 		}
 
 
@@ -45,35 +53,47 @@ namespace ZeldaOracle.Game.Items {
 		// Called when the item is added to the inventory list
 		public override void OnAdded(Inventory inventory) {
 			base.OnAdded(inventory);
+			int[] maxAmounts = { 10, 20, 30 };
 
-			this.ammo = new Ammo[] { new Ammo("ammo_bombs", "Bombs", 10, 10) };
-			if (inventory.AmmoExists("ammo_bombs"))
-				this.ammo[0] = inventory.GetAmmo("ammo_bombs");
-			else
-				inventory.AddAmmo(this.ammo[0]);
+			this.currentAmmo = 0;
+			this.ammo = new Ammo[] {
+				inventory.AddAmmo(
+					new Ammo(
+						"ammo_bombs", "Bombs", "Very explosive.",
+						new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0)),
+						new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(13, 0)),
+						maxAmounts[level], maxAmounts[level]
+					),
+					false
+				)
+			};
 		}
 
 		// Called when the item's level is changed.
-		public override void OnLevelUp() { }
+		public override void OnLevelUp() {
+			int[] maxAmounts = { 10, 20, 30 };
+			inventory.GetAmmo("ammo_bombs").MaxAmount = maxAmounts[level];
+			inventory.GetAmmo("ammo_bombs").Amount = maxAmounts[level];
+		}
 
 		// Called when the item has been obtained.
 		public override void OnObtained() {
-			inventory.GetItem("item_bomb_bag").IsObtained = true;
+			inventory.ObtainAmmo(inventory.GetAmmo("ammo_bombs"));
 		}
 
 		// Called when the item has been unobtained.
 		public override void OnUnobtained() {
-			inventory.GetItem("item_bomb_bag").IsObtained = false;
+
 		}
 
 		// Called when the item has been stolen.
 		public override void OnStolen() {
-			inventory.GetItem("item_bomb_bag").IsStolen = true;
+
 		}
 
 		// Called when the stolen item has been returned.
 		public override void OnReturned() {
-			inventory.GetItem("item_bomb_bag").IsStolen = false;
+
 		}
 
 

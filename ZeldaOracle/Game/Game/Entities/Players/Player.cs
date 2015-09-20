@@ -202,7 +202,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Update the current player state.
 			PlayerState desiredNaturalState = GetDesiredNaturalState();
-			if (state.IsNaturalState && state != desiredNaturalState)
+			//if (state.IsNaturalState && state != desiredNaturalState)
+				//BeginState(desiredNaturalState);
+			if (state != desiredNaturalState && state.RequestStateChange(desiredNaturalState))
 				BeginState(desiredNaturalState);
 			state.Update();
 
@@ -228,8 +230,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return GameControl.Inventory; }
 		}
 
-		public UsableItem[] EquippedUsableItems {
-			get { return Inventory.EquippedUsableItems; }
+		public ItemWeapon[] EquippedUsableItems {
+			get { return Inventory.EquippedWeapons; }
 		}
 
 		public int MoveAngle {
