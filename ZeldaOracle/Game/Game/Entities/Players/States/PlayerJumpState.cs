@@ -15,7 +15,7 @@ using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
 
-namespace ZeldaOracle.Game.Entities.Players {
+namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerJumpState : PlayerState {
 
 

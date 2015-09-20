@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 
-namespace ZeldaOracle.Game.Entities.Players {
+namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerBusyState : PlayerState {
 		private int timer;
 		private int duration;

@@ -12,6 +12,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Entities.Players.States;
 
 
 //States:
@@ -47,6 +48,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerSwimState			stateSwim;
 		private PlayerLedgeJumpState	stateLedgeJump;
 		private PlayerLadderState		stateLadder;
+		private PlayerSwingState		stateSwing;
+		private PlayerHoldSwordState	stateHoldSword;
+
+		// TEMPORARY: Change tool drawing to something else
+		public AnimationPlayer			toolAnimation;
 
 
 		//-----------------------------------------------------------------------------
@@ -83,6 +89,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateSwim		= new PlayerSwimState();
 			stateLadder		= new PlayerLadderState();
 			stateLedgeJump	= new PlayerLedgeJumpState();
+			stateSwing		= new PlayerSwingState();
+			stateHoldSword	= new PlayerHoldSwordState();
+
+			toolAnimation	= new AnimationPlayer();
 		}
 
 
@@ -94,7 +104,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (state is PlayerNormalState) {
 				BeginState(stateJump);
 			}
-				//((PlayerNormalState) state).Jump();
 		}
 
 		public void BeginState(PlayerState newState) {
@@ -203,11 +212,18 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (syncAnimationWithDirection)
 				Graphics.SubStripIndex = direction;
 
+			// TEMPORARY: Change tool drawing to something else
+			toolAnimation.Update();
+
 			// Update superclass.
 			base.Update();
 		}
 
 		public override void Draw(Graphics2D g) {
+			// TEMPORARY: Change tool drawing to something else
+			if (toolAnimation.Animation != null)
+				g.DrawAnimation(toolAnimation, position, 0.3f);
+
 			base.Draw(g);
 		}
 
@@ -292,6 +308,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerLadderState LadderState {
 			get { return stateLadder; }
+		}
+
+		public PlayerSwingState SwingState {
+			get { return stateSwing; }
+		}
+
+		public PlayerHoldSwordState HoldSwordState {
+			get { return stateHoldSword; }
 		}
 	}
 }

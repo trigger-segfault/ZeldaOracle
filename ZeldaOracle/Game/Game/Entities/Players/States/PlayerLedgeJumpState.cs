@@ -7,7 +7,7 @@ using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
 
-namespace ZeldaOracle.Game.Entities.Players {
+namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerLedgeJumpState : PlayerState {
 		
 		private Vector2F	velocity;
