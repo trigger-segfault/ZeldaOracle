@@ -215,6 +215,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public override void Draw(Graphics2D g) {
 			base.Draw(g);
+			state.DrawOver(g);
 		}
 
 		

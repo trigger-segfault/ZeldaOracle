@@ -71,9 +71,9 @@ namespace ZeldaOracle.Game.Control {
 
 			inventory = new Inventory(this);
 			inventory.AddItem(new ItemWallet(2), true);
-			inventory.AddItem(new ItemBow(), true);
-			inventory.AddItem(new ItemFeather(), true);
 			inventory.AddItem(new ItemBracelet(), true);
+			inventory.AddItem(new ItemFeather(), true);
+			inventory.AddItem(new ItemBow(), true);
 			//inventory.AddItem(new ItemBombs(), true);
 
 			hud = new HUD(this);
@@ -84,8 +84,8 @@ namespace ZeldaOracle.Game.Control {
 
 			roomControl.BeginTestWorld();
 			player = roomControl.Player;
-
-			AudioSystem.PlaySong("overworld", true);
+			
+			//AudioSystem.PlaySong("overworld", true);
 		}
 
 		public void DisplayMessage(Message message) {

@@ -12,6 +12,7 @@ namespace ZeldaOracle.Game.Entities
 {
 	public class GraphicsComponent {
 		
+		private	Point2I			drawOffset;
 		private Entity			entity;				// The entity this component belongs to.
 		private AnimationPlayer	animationPlayer;
 		private int				subStripIndex;
@@ -21,6 +22,7 @@ namespace ZeldaOracle.Game.Entities
 		private bool			isShadowVisible;
 		private Point2I			shadowDrawOffset;
 		private int				grassAnimationTicks;
+		private Sprite			sprite;
 
 
 		//-----------------------------------------------------------------------------
@@ -30,13 +32,14 @@ namespace ZeldaOracle.Game.Entities
 		public GraphicsComponent(Entity entity) {
 			this.entity				= entity;
 			this.animationPlayer	= new AnimationPlayer();
+			this.sprite				= null;
 			this.subStripIndex		= 0;
 			this.isShadowVisible	= true;
 			this.shadowDrawOffset	= Point2I.Zero;
 			this.isGrassEffectVisible	= true;
 			this.isRipplesEffectVisible	= true;
-
 			this.grassAnimationTicks	= 0;
+			this.drawOffset				= new Point2I();
 		}
 		
 
@@ -46,6 +49,11 @@ namespace ZeldaOracle.Game.Entities
 
 		public void PlayAnimation() {
 			animationPlayer.Play();
+		}
+		
+		public void PlaySprite(Sprite sprite) {
+			this.sprite = sprite;
+			animationPlayer.Animation = null;
 		}
 		
 		public void PlayAnimation(Animation animation) {
@@ -73,8 +81,6 @@ namespace ZeldaOracle.Game.Entities
 		public void Draw(Graphics2D g) {
 			// Depth ranges:
 
-			
-
 			// Front [0.0 - 0.3][0.3 - 0.6][0.6 - 0.9][0.9    ][0.9 - 1.0] Back
 			//       [???      ][Entities ][???      ][Shadows][???      ]
 
@@ -88,11 +94,13 @@ namespace ZeldaOracle.Game.Entities
 				g.DrawSprite(GameData.SPR_SHADOW, Entity.Position + shadowDrawOffset, shadowDepth);
 			}
 
-			// Draw the animation.
+			// Draw the sprite/animation.
 			float depth = 0.6f - 0.3f * (entity.Position.Y / (float) (entity.RoomControl.Room.Height * GameSettings.TILE_SIZE));
 			Vector2F drawPosition = Entity.Position - new Vector2F(0, Entity.ZPosition);
 			if (animationPlayer.SubStrip != null)
-				g.DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, drawPosition, depth);
+				g.DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, drawPosition + drawOffset, depth);
+			else if (sprite != null)
+				g.DrawSprite(sprite, drawPosition + drawOffset, depth);
 			
 			// Draw the ripples effect.
 			if (isRipplesEffectVisible && entity.Physics.IsInPuddle)
@@ -150,6 +158,11 @@ namespace ZeldaOracle.Game.Entities
 		public Point2I ShadowDrawOffset {
 			get { return shadowDrawOffset;  }
 			set { shadowDrawOffset = value; }
+		}
+
+		public Point2I DrawOffset {
+			get { return drawOffset;  }
+			set { drawOffset = value; }
 		}
 	}
 }

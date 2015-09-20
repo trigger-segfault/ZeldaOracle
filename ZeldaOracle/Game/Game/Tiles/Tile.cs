@@ -12,6 +12,7 @@ namespace ZeldaOracle.Game.Tiles {
 	
 	public class Tile {
 		private RoomControl		control;
+
 		private Point2I			location;		// The tile location.
 		private int				layer;			// The layer this tile is in.
 		private Vector2F		offset;			// Offset in pixels from its tile location.
@@ -20,11 +21,16 @@ namespace ZeldaOracle.Game.Tiles {
 		private TileFlags		flags;
 		private CollisionModel	collisionModel;
 		private Sprite			sprite;
+		private Sprite			spriteAsObject;	// The sprite for the tile if it were picked up, pushed, etc.
+
+		private Animation		breakAnimation;	// The animation to play when the tile is broken.
 
 		private AnimationPlayer	animationPlayer;
 
-		private Point2I			tileSheetLoc;	// TODO: this doesn't mean anything yet
+		private Point2I			tileSheetLoc;
 		private Tileset			tileset;
+
+		// Movement state.
 		private Point2I			moveDirection;
 		private bool			isMoving;
 		private float			movementSpeed;
@@ -141,7 +147,10 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 			else {
 				// Draw as a sprite.
-				g.DrawSprite(sprite, Position);
+				Sprite spr = sprite;
+				if (isMoving && spriteAsObject != null)
+					spr = spriteAsObject;
+				g.DrawSprite(spr, Position);
 			}
 
 			// DEBUG: Draw the collision model in a transparent red.
@@ -156,18 +165,22 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public static Tile CreateTile(TileData data) {
 			Tile tile;
+
+			// Construct the tile.
 			if (data.Type == null)
 				tile = new Tile();
 			else
 				tile = (Tile) data.Type.GetConstructor(Type.EmptyTypes).Invoke(null);
 
-			tile.Tileset			= data.Tileset;
-			tile.TileSheetLocation	= data.SheetLocation;
-			tile.Flags				= data.Flags;
-			tile.Sprite				= data.Sprite;
-			tile.CollisionModel		= data.CollisionModel;
-			tile.Size				= data.Size;
-			tile.AnimationPlayer.Animation = data.Animation;
+			tile.tileset			= data.Tileset;
+			tile.tileSheetLoc		= data.SheetLocation;
+			tile.flags				= data.Flags;
+			tile.sprite				= data.Sprite;
+			tile.spriteAsObject		= data.SpriteAsObject;
+			tile.breakAnimation		= data.BreakAnimation;
+			tile.collisionModel		= data.CollisionModel;
+			tile.size				= data.Size;
+			tile.animationPlayer.Animation = data.Animation;
 
 			return tile;
 		}
@@ -229,6 +242,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public Sprite Sprite {
 			get { return sprite; }
 			set { sprite = value; }
+		}
+
+		public Sprite SpriteAsObject {
+			get { return spriteAsObject; }
+			set { spriteAsObject = value; }
 		}
 
 		public AnimationPlayer AnimationPlayer {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaOracle.Game.Entities.Players
 {
@@ -38,6 +39,8 @@ namespace ZeldaOracle.Game.Entities.Players
 		public virtual void OnLeaveRoom() {}
 
 		public virtual void Update() {}
+		
+		public virtual void DrawOver(Graphics2D g) {}
 
 
 		//-----------------------------------------------------------------------------

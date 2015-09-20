@@ -271,7 +271,7 @@ namespace ZeldaOracle.Game {
 			BuildAnim(ANIM_PLAYER_DEFAULT)			.AddFrameStrip(6, 0,0, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_SHIELD)			.AddFrameStrip(6, 0,1, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_SHIELD_BLOCK)		.AddFrameStrip(6, 0,2, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_HOLD)				.AddFrameStrip(6, 0,5, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_CARRY)			.AddFrameStrip(6, 0,5, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_PUSH)				.AddFrameStrip(6, 0,6, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
 
 			BuildAnim(ANIM_PLAYER_SWIM)				.AddFrameStrip(6, 0,13, 2).Offset(-8, -16 + 2).MakeDynamic(4, 2,0);
@@ -668,7 +668,7 @@ namespace ZeldaOracle.Game {
 	
 	// Player animations.
 		public static Animation ANIM_PLAYER_DEFAULT				= new Animation();
-		public static Animation ANIM_PLAYER_HOLD				= new Animation();
+		public static Animation ANIM_PLAYER_CARRY				= new Animation();
 		public static Animation ANIM_PLAYER_SHIELD				= new Animation();
 		public static Animation ANIM_PLAYER_SHIELD_BLOCK		= new Animation();
 		public static Animation ANIM_PLAYER_SHIELD_LARGE		= new Animation();

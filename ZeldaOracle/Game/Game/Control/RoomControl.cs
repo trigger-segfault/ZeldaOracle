@@ -107,6 +107,12 @@ namespace ZeldaOracle.Game.Control {
 			tiles[x, y, layer] = tile;
 		}
 
+		// Use this for placing tiles at runtime.
+		public void RemoveTile(Tile tile) {
+			// TODO: OnRemove?
+			tiles[tile.Location.X, tile.Location.Y, tile.Layer] = null;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Temp Loading
@@ -270,6 +276,7 @@ namespace ZeldaOracle.Game.Control {
 			td = new TileData();
 			td.Type = typeof(TileSign);
 			td.Sprite = new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 0);
+			td.SpriteAsObject = new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 1);
 			td.Flags |= TileFlags.Solid | TileFlags.Pickupable | TileFlags.Burnable | TileFlags.Movable;
 			td.CollisionModel = GameData.MODEL_BLOCK;
 			r.TileData[2, 3, 1] = td;
@@ -277,6 +284,7 @@ namespace ZeldaOracle.Game.Control {
 			// Create a movable block tile.
 			td = new TileData();
 			td.Sprite = new Sprite(GameData.SHEET_ZONESET_LARGE, 1, 9);
+			td.SpriteAsObject = new Sprite(GameData.SHEET_ZONESET_LARGE, 2, 9);
 			td.Flags |= TileFlags.Solid | TileFlags.Movable;
 			td.CollisionModel = GameData.MODEL_BLOCK;
 			r.TileData[2, 5, 1] = td;

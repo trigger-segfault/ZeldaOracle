@@ -14,6 +14,8 @@ using ZeldaOracle.Game.Tiles;
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemBracelet : UsableItem {
 
+		private PlayerGrabState grabState;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -27,6 +29,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.maxLevel		= 2;
 			this.sprite			= new Sprite(GameData.SHEET_ITEMS_SMALL, 0, 1);
 			this.spriteLight	= new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 0, 1);
+			this.grabState		= new PlayerGrabState();
 		}
 
 
@@ -85,8 +88,14 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				}
 			}
 
-			if (grabTile != null && !(player.CurrentState is PlayerGrabState)) {
-				player.BeginState(new PlayerGrabState());
+			//if (grabTile != null && player.CurrentState != grabState) {
+			//	player.BeginState(grabState);
+			//	player.BeginState(grabState);
+			//}
+
+			if (grabTile != null && !(player.CurrentState is PlayerCarryState)) {
+				player.BeginState(new PlayerCarryState(grabTile));
+				RoomControl.RemoveTile(grabTile);
 			}
 		}
 

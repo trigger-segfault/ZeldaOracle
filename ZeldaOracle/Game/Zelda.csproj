@@ -204,6 +204,7 @@
     <Compile Include="Game\Entities\Players\States\PlayerLedgeJumpState.cs" />
     <Compile Include="Game\Entities\Players\PlayerMoveComponent.cs" />
     <Compile Include="Game\Entities\Players\PlayerMovementMode.cs" />
+    <Compile Include="Game\Entities\Players\States\PlayerCarryState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerNormalState.cs" />
     <Compile Include="Game\Entities\Players\PlayerState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSwimState.cs" />
