@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Control;
+using ZeldaOracle.Common.Input;
 
 namespace ZeldaOracle.Game.Items {
 
@@ -73,6 +74,10 @@ namespace ZeldaOracle.Game.Items {
 		public int CurrentEquipSlot {
 			get { return equipSlot; }
 			set { equipSlot = value; }
+		}
+
+		public InputControl CurrentControl {
+			get { return inventory.GetSlotButton(equipSlot); }
 		}
 	}
 }

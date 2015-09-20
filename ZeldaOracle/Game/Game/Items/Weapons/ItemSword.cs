@@ -41,5 +41,33 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			DrawSprite(g, position, light);
 			DrawLevel(g, position, light);
 		}
+
+		// Called when the item is switched to.
+		public override void OnStart() { }
+
+		// Called when the item is put away.
+		public override void OnEnd() { }
+
+		// Immediately interrupt this item (ex: if the player falls in a hole).
+		public override void Interrupt() { }
+
+		// Called when the items button is pressed (A or B).
+		public override void OnButtonPress() {
+			player.SwingState.NextState = player.HoldSwordState;
+			player.SwingState.EquipSlot = CurrentEquipSlot;
+			player.SwingState.WeaponAnimation = GameData.ANIM_SWORD_SWING;
+			player.HoldSwordState.EquipSlot = CurrentEquipSlot;
+			player.HoldSwordState.WeaponAnimation = GameData.ANIM_SWORD_HOLD;
+			player.BeginState(player.SwingState);
+		}
+
+		// Update the item.
+		public override void Update() { }
+
+		// Draws under link's sprite.
+		public override void DrawUnder() { }
+
+		// Draws over link's sprite.
+		public override void DrawOver() { }
 	}
 }
