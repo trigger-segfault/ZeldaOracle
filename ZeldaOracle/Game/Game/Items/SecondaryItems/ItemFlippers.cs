@@ -16,7 +16,7 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 		public ItemFlippers() {
 			this.id = "item_flippers";
 			this.name = new string[] { "Zora's Flippers", "Mermaid Suit" };
-			this.description = new string[] { "Hit the beach.", "The skin of the mythical beast" };
+			this.description = new string[] { "Hit the beach.", "The skin of the mythical beast." };
 			this.maxLevel = Item.Level2;
 			this.slot = new Point2I(0, 0);
 			this.sprite = new Sprite[] {

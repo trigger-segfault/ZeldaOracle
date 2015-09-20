@@ -227,19 +227,17 @@ public class Graphics2D {
 	
 	// Draw an animation during at the given time stamp and position.
 	public void DrawAnimation(Animation animation, float time, Vector2F position, float depth = 0.0f) {
+		DrawAnimation(animation, time, position.X, position.Y, depth);
+	}
+
+	// Draw an animation during at the given time stamp and position.
+	public void DrawAnimation(Animation animation, float time, float x, float y, float depth = 0.0f) {
 		if (animation.LoopMode == LoopMode.Repeat) {
 			if (animation.Duration == 0)
 				time = 0;
 			else
 				time %= animation.Duration;
 		}
-		else if (animation.LoopMode == LoopMode.Reset && time >= animation.Duration)
-			time = 0;
-		DrawAnimation(animation, time, position.X, position.Y, depth);
-	}
-
-	// Draw an animation during at the given time stamp and position.
-	public void DrawAnimation(Animation animation, float time, float x, float y, float depth = 0.0f) {
 		x = GMath.Round(x); 
 		y = GMath.Round(y);
 
@@ -250,6 +248,10 @@ public class Graphics2D {
 			if (time < frame.StartTime + frame.Duration || (time >= animation.Duration && frame.StartTime + frame.Duration == animation.Duration))
 				DrawSprite(frame.Sprite, x, y, depth);
 		}
+	}
+
+	public void DrawAnimation(AnimationPlayer animationPlayer, Vector2F position, float depth = 0.0f) {
+		DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, position, depth);
 	}
 	
 
