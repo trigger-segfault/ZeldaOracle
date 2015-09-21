@@ -56,6 +56,8 @@ public class GameBase : XnaGame {
 	// The name of the requested screenshot.
 	private string screenShotName;
 
+	private int slowTimer;
+
 	// Frame Rate:
 	// The total number of frames passed since the last frame rate check.
 	private int totalFrames;
@@ -95,10 +97,7 @@ public class GameBase : XnaGame {
 		this.graphics.PreferMultiSampling	= true;
 		this.graphics.PreferredBackBufferWidth	= windowSize.X;
 		this.graphics.PreferredBackBufferHeight	= windowSize.Y;
-		//this.graphics.DeviceReset				+= OnGraphicsDeviceReset;
-		//this.graphics.DeviceResetting			+= delegate(object sender, EventArgs e) {
-		//	Console.WriteLine("Resetting");
-		//};
+		
 		Form.Icon = new Icon("Game.ico");
 		Form.MinimumSize = new System.Drawing.Size(32, 32);
 	}
@@ -111,7 +110,6 @@ public class GameBase : XnaGame {
 		Console.WriteLine("Begin Initialize");
 
 		Console.WriteLine("Initializing Input");
-		//EventInput.Initialize(Window);
 		Keyboard.Initialize();
 		Mouse.Initialize();
 		GamePad.Initialize();
@@ -144,7 +142,7 @@ public class GameBase : XnaGame {
 		AudioSystem.Initialize();
 		Resources.Initialize(Content, GraphicsDevice);
 
-		game.LoadContent(Content);
+		game.LoadContent(Content, this);
 
 		base.LoadContent();
 
@@ -156,7 +154,7 @@ public class GameBase : XnaGame {
 	protected override void UnloadContent() {
 		System.Console.WriteLine("Begin Unload Content");
 
-		//AudioSystem.Uninitialize();
+		AudioSystem.Uninitialize();
 		//Resources.Uninitialize();
 
 		this.game.UnloadContent(Content);
@@ -184,12 +182,7 @@ public class GameBase : XnaGame {
 			//XCameraManager.UpdateViewports(myGraphics.GraphicsDevice.Viewport);
 		}
 		*/
-		game.OnGraphicsDeviceReset(sender, e);
 	}
-	
-    public void OnGraphicsDeviceReset(object sender, EventArgs e) {
-		game.OnGraphicsDeviceReset(sender, e);
-    }
 
 
 	//-----------------------------------------------------------------------------
@@ -199,7 +192,7 @@ public class GameBase : XnaGame {
 	// Allows the game to run logic such as updating the world,
 	// checking for collisions, gathering input, and playing audio.
 	protected override void Update(GameTime gameTime) {
-
+		
 		// Update the fullscreen mode.
 		UpdateFullScreen();
 
@@ -228,12 +221,24 @@ public class GameBase : XnaGame {
 		AudioSystem.Update(gameTime);
 
 		// Update the game logic.
-		game.Update((float) gameTime.ElapsedGameTime.TotalSeconds);
+		//game.Update((float) gameTime.ElapsedGameTime.TotalSeconds);
 
 		// DEBUG: Hold 1 to speed up the game.
 		if (Keyboard.IsKeyDown(Keys.D1)) {
-			for (int i = 1; i < 16; i++)
-				game.Update((float) gameTime.ElapsedGameTime.TotalSeconds);
+			for (int i = 0; i < 16; i++)
+				game.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+		}
+		// DEBUG: Hold 2 to slow down the game.
+		else if (Keyboard.IsKeyDown(Keys.D2)) {
+			slowTimer++;
+			if (slowTimer >= 10) {
+				slowTimer = 0;
+				game.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+			}
+		}
+		else {
+			// Update the game logic.
+			game.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 		}
 
 		base.Update(gameTime);
@@ -318,7 +323,6 @@ public class GameBase : XnaGame {
 		// Render the game
 		Graphics2D g = new Graphics2D(spriteBatch);
 		game.Draw(g);
-
 		base.Draw(gameTime);
 	}
 

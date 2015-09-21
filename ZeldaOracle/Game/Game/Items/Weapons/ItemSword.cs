@@ -58,6 +58,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			player.SwingState.WeaponAnimation = GameData.ANIM_SWORD_SWING;
 			player.HoldSwordState.EquipSlot = CurrentEquipSlot;
 			player.HoldSwordState.WeaponAnimation = GameData.ANIM_SWORD_HOLD;
+			player.SpinSwordState.WeaponAnimation = GameData.ANIM_SWORD_SPIN;
 			player.BeginState(player.SwingState);
 		}
 

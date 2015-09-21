@@ -305,6 +305,13 @@ namespace ZeldaOracle.Game {
 				.AddFrame(9, 0, 12).AddFrame(9, 1, 12).AddFrame(6, 2, 12).AddFrame(6, 5, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
 				.AddFrame(9, 3, 12).AddFrame(9, 4, 12).AddFrame(6, 5, 12).AddFrame(6, 7, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp);
 
+
+			BuildAnim(ANIM_PLAYER_SPIN)
+				.AddFrame(5, 0, 4, 3, 0).AddFrame(5, 6, 4, 0, 3).AddFrame(5, 4, 4, -3, 0).AddFrame(5, 2, 4, 0, -3).AddFrame(3, 0, 4, 3, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
+				.AddFrame(5, 2, 4, 0, -3).AddFrame(3, 0, 4, 3, 0).AddFrame(5, 6, 4, 0, 3).AddFrame(5, 4, 4, -3, 0).AddFrame(5, 2, 4, 0, -3).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
+				.AddFrame(5, 4, 4, -3, 0).AddFrame(5, 2, 4, 0, -3).AddFrame(3, 0, 4, 3, 0).AddFrame(5, 6, 4, 0, 3).AddFrame(5, 4, 4, -3, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
+				.AddFrame(5, 6, 4, 0, 3).AddFrame(5, 4, 4, -3, 0).AddFrame(5, 2, 4, 0, -3).AddFrame(3, 0, 4, 3, 0).AddFrame(5, 6, 4, 0, 3).Offset(-8, -16).SetLoopMode(LoopMode.Clamp);
+
 			// WEAPON ANIMATIONS:
 			animationBuilder.SpriteSheet = SHEET_PLAYER_ITEMS;
 
@@ -327,25 +334,17 @@ namespace ZeldaOracle.Game {
 				.AddFrame(3, 4, 0, -15, 2).AddFrame(3, 5, 0, -13, 15).AddFrame(8, 6, 0, 3, 20).AddFrame(3, 6, 0, 3, 14).Offset(-8, -16).SetLoopMode(LoopMode.Clamp);
 
 			BuildAnim(ANIM_SWORD_SPIN)
-				.AddFrame(3, 0, 0, 19, 4).AddFrame(2, 7, 0, 16, 16).AddFrame(3, 6, 0, 3, 19).AddFrame(2, 5, 0, -13, 15)
-				.AddFrame(3, 4, 0, -19, 4).AddFrame(2, 3, 0, -13, -13).AddFrame(3, 2, 0, -4, -19).AddFrame(2, 1, 0, 16, -16)
-				.AddFrame(3, 0, 0, 19, 4).Offset(-8, -16);
+				.AddFrame(3, 0, 0, 19, 4).AddFrame(2, 7, 0, 16, 16).AddFrame(3, 6, 0, 3, 19).AddFrame(2, 5, 0, -13, 15).AddFrame(3, 4, 0, -19, 4).AddFrame(2, 3, 0, -13, -13)
+				.AddFrame(3, 2, 0, -4, -19).AddFrame(2, 1, 0, 16, -16).AddFrame(3, 0, 0, 19, 4).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
 
-			/*for (int i = 0; i < 4; i++) {
-				for (int j = 0; j < 5; j++) {
-					int x = ((i - j + 8) % 4) * 2;
-					PLAYER_SPIN_SWORD.getVariant(i).addFrame(j < 4 ? 5 : 3,
-							new Point(x, 4),
-							new Vector(Direction.lengthVector(4, x / 2)));
-				}
-				if (i > 0) {
-					for (int j = 0; j < 9; j++) {
-						int index = (((4 - i) * 2) + j) % 8;
-						BuildAnim(ANIM_SWORD_SPIN[i]).AddFrame(ANIM_SWORD_SPIN[i].
-								SWORD_SPIN.getVariant(0).getFrame(index));
-					}
-				}
-			}*/
+				.AddFrame(3, 2, 0, -4, -19).AddFrame(2, 1, 0, 16, -16).AddFrame(3, 0, 0, 19, 4).AddFrame(2, 7, 0, 16, 16).AddFrame(3, 6, 0, 3, 19).AddFrame(2, 5, 0, -13, 15)
+				.AddFrame(3, 4, 0, -19, 4).AddFrame(2, 3, 0, -13, -13).AddFrame(3, 2, 0, -4, -19).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
+
+				.AddFrame(3, 4, 0, -19, 4).AddFrame(2, 3, 0, -13, -13).AddFrame(3, 2, 0, -4, -19).AddFrame(2, 1, 0, 16, -16).AddFrame(3, 0, 0, 19, 4).AddFrame(2, 7, 0, 16, 16)
+				.AddFrame(3, 6, 0, 3, 19).AddFrame(2, 5, 0, -13, 15).AddFrame(3, 4, 0, -19, 4).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
+
+				.AddFrame(3, 6, 0, 3, 19).AddFrame(2, 5, 0, -13, 15).AddFrame(3, 4, 0, -19, 4).AddFrame(2, 3, 0, -13, -13).AddFrame(3, 2, 0, -4, -19).AddFrame(2, 1, 0, 16, -16)
+				.AddFrame(3, 0, 0, 19, 4).AddFrame(2, 7, 0, 16, 16).AddFrame(3, 6, 0, 3, 19).Offset(-8, -16).SetLoopMode(LoopMode.Clamp);
 
 			// PROJECTILE ANIMATIONS:
 			animationBuilder.SpriteSheet = SHEET_PLAYER_ITEMS;
@@ -740,7 +739,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PLAYER_SWING				= new Animation();
 		public static Animation ANIM_PLAYER_SWING_BIG			= new Animation();
 		public static Animation ANIM_PLAYER_STAB				= new Animation();
-		public static Animation ANIM_PLAYER_SPIN_SWORD			= new Animation();
+		public static Animation ANIM_PLAYER_SPIN			= new Animation();
 		public static Animation ANIM_PLAYER_AIM					= new Animation();
 		public static Animation ANIM_PLAYER_JUMP				= new Animation();
 		public static Animation ANIM_PLAYER_DIVE				= new Animation();

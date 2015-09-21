@@ -50,6 +50,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerLadderState		stateLadder;
 		private PlayerSwingState		stateSwing;
 		private PlayerHoldSwordState	stateHoldSword;
+		private PlayerSpinSwordState	stateSpinSword;
 
 		// TEMPORARY: Change tool drawing to something else
 		public AnimationPlayer			toolAnimation;
@@ -96,6 +97,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateLedgeJump	= new PlayerLedgeJumpState();
 			stateSwing		= new PlayerSwingState();
 			stateHoldSword	= new PlayerHoldSwordState();
+			stateSpinSword	= new PlayerSpinSwordState();
 
 			toolAnimation	= new AnimationPlayer();
 		}
@@ -230,7 +232,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public override void Draw(Graphics2D g) {
 			// TEMPORARY: Change tool drawing to something else
 			if (toolAnimation.Animation != null)
-				g.DrawAnimation(toolAnimation, position, 0.3f);
+				g.DrawAnimation(toolAnimation, position - new Vector2F(0, ZPosition), 0.3f);
 
 			base.Draw(g);
 			state.DrawOver(g);
@@ -333,6 +335,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerHoldSwordState HoldSwordState {
 			get { return stateHoldSword; }
+		}
+
+		public PlayerSpinSwordState SpinSwordState {
+			get { return stateSpinSword; }
 		}
 	}
 }

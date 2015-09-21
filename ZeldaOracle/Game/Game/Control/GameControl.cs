@@ -121,6 +121,14 @@ namespace ZeldaOracle.Game.Control {
 			gameManager.PushGameState(new StateTextReader(new Message(text)));
 		}
 
+		public void OpenMenu(Menu currentMenu, Menu menu) {
+			gameManager.PopGameState();
+			gameManager.QueueGameStates(
+				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, currentMenu),
+				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, menu),
+				menu
+			);
+		}
 		public void OpenMenu(Menu menu) {
 			AudioSystem.PlaySound("UI/menu_open");
 			gameManager.QueueGameStates(
