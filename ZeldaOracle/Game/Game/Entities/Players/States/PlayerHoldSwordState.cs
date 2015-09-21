@@ -51,6 +51,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 			else {
 				player.BeginNormalState();
+				Console.WriteLine(player.CurrentState == this);
+				chargeTimer = 0;
 			}
 		}
 		
@@ -61,9 +63,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void Update() {
 			base.Update();
-
-			if (!IsActive)
-				return;
 
 			player.Direction = direction;
 			player.Angle = Directions.ToAngle(direction);
@@ -81,7 +80,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			if (player.GameControl.Inventory.GetSlotButton(equipSlot).IsUp()) {
 				if (chargeTimer >= ChargeTime) {
-					player.BeginNormalState();
+					player.BeginState(player.SpinSwordState);
 				}
 				else {
 					player.BeginNormalState();

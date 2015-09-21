@@ -120,6 +120,15 @@ namespace ZeldaOracle.Game.GameStates {
             for (int i = 0; i < states.Count; ++i) {
 				states[i].Draw(g);
             }
-        }
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public override GameState CurrentGameState {
+			get { return states.Last().CurrentGameState; }
+		}
 	}
 }

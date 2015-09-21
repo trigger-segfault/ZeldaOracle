@@ -81,12 +81,16 @@ namespace ZeldaOracle.Game.GameStates {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-        public GameState CurrentState {
+        private GameState CurrentState {
             get {
                 if (stateIndex >= states.Count)
                     return null;
                 return states[stateIndex];
             }
         }
+
+		public override GameState CurrentGameState {
+			get { return CurrentState.CurrentGameState; }
+		}
 	}
 }

@@ -99,27 +99,18 @@ namespace ZeldaOracle.Game.Main {
 		//-----------------------------------------------------------------------------
 
 		// Called to load game manager content.
-		public void LoadContent(ContentManager content) {
+		public void LoadContent(ContentManager content, GameBase gameBase) {
+			this.gameBase = gameBase;
 			GameData.Initialize();
+
+			// Setup the render targets
+			GameData.RenderTargetGame = new RenderTarget2D(gameBase.GraphicsDevice, GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT);
 		}
 
 		// Called to unload game manager content.
 		public void UnloadContent(ContentManager content) {
 		
 		}
-
-        public void OnGraphicsDeviceReset(object sender, EventArgs e) {
-			/*
-			Point2I targetSize = ScreenSize;
-			//if (GameData.RenderTargetGame != null)
-			//	GameData.RenderTargetGame.Dispose();
-			GameData.RenderTargetGame = new RenderTarget2D(gameBase.GraphicsDevice, ScreenSize.X, ScreenSize.Y);
-
-			if (GameData.RenderTargetDebug != null)
-				GameData.RenderTargetDebug.Dispose();
-			GameData.RenderTargetDebug = new RenderTarget2D(gameBase.GraphicsDevice, ScreenSize.X, ScreenSize.Y);
-			*/
-        }
 
 	
 		//-----------------------------------------------------------------------------
@@ -162,8 +153,7 @@ namespace ZeldaOracle.Game.Main {
 
 		// Called when the screen has been resized.
 		public void ScreenResized() {
-			GameData.RenderTargetGame = new RenderTarget2D(gameBase.GraphicsDevice, ScreenSize.X, ScreenSize.Y);
-			GameData.RenderTargetDebug = new RenderTarget2D(gameBase.GraphicsDevice, ScreenSize.X, ScreenSize.Y);
+
 		}
 
 
@@ -180,14 +170,6 @@ namespace ZeldaOracle.Game.Main {
 			}
 			// Update the menu
 			Controls.Update();
-			// Check for screenshot requests
-			if (Keyboard.IsKeyPressed(Keys.F12)) {
-				GameBase.TakeScreenShot();
-			}
-			else if ((GamePad.IsButtonDown(Buttons.LeftShoulder) && GamePad.IsButtonPressed(Buttons.RightShoulder)) ||
-				(GamePad.IsButtonDown(Buttons.RightShoulder) && GamePad.IsButtonPressed(Buttons.LeftShoulder))) {
-				GameBase.TakeScreenShot();
-			}
 
 			// Toggle debug mode
 			if (Keyboard.IsKeyPressed(Keys.F2) || (GamePad.IsButtonDown(Buttons.Back) && GamePad.IsButtonPressed(Buttons.RightStickButton))) {
@@ -206,7 +188,7 @@ namespace ZeldaOracle.Game.Main {
 
 		// Called every step to draw the game.
 		public void Draw(Graphics2D g) {
-		
+
 			DrawMode drawMode = new DrawMode();
 			drawMode.SortMode = SpriteSortMode.Deferred;
 			drawMode.BlendState = BlendState.AlphaBlend;
@@ -224,13 +206,7 @@ namespace ZeldaOracle.Game.Main {
 			g.ResetTranslation();
 			g.Begin(drawMode);
 			g.DrawImage(GameData.RenderTargetGame, Vector2F.Zero, Vector2F.Zero, (Vector2F) gameScale, 0.0);
-			g.DrawImage(GameData.RenderTargetDebug, Vector2F.Zero);
 			g.End();
-		}
-
-		// Called every step to draw the debug information if debug mode is enabled.
-		private void DrawDebugInfo(Graphics2D g) {
-		
 		}
 
 	
@@ -284,8 +260,8 @@ namespace ZeldaOracle.Game.Main {
 		//  Gets the size of the screen based on the game scale.
 		public Point2I GameScreenSize {
 			get {
-				return (Point2I)GMath.Ceiling(new Vector2F(gameBase.GraphicsDevice.Viewport.Width,
-														   gameBase.GraphicsDevice.Viewport.Height) / (float)gameScale);
+				return new Point2I(gameBase.GraphicsDevice.Viewport.Width,
+								   gameBase.GraphicsDevice.Viewport.Height) / gameScale;
 			}
 		}
 		// Gets or sets the draw scale of the game.
@@ -300,6 +276,10 @@ namespace ZeldaOracle.Game.Main {
 
 		public int ElapsedTicks {
 			get { return elapsedTicks; }
+		}
+
+		public GameState CurrentGameState {
+			get { return gameStateStack.CurrentGameState; }
 		}
 
 	}

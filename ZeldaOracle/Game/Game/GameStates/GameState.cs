@@ -79,5 +79,9 @@ namespace ZeldaOracle.Game.GameStates {
 		public GameControl GameControl {
 			get { return gameManager.GameControl; }
 		}
+
+		public virtual GameState CurrentGameState {
+			get { return this; }
+		}
 	}
 }
