@@ -45,6 +45,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void Update() {
 			base.Update();
+
+			// Reset the swing
 			if (player.GameControl.Inventory.GetSlotButton(equipSlot).IsPressed()) {
 				for (int i = 0; i < 4; i++) {
 					if (Controls.Arrows[i].IsDown()) {
@@ -56,9 +58,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				player.Graphics.PlayAnimation();
 				player.toolAnimation.Play();
 			}
-			if (player.Graphics.IsAnimationDone) {
+
+			// End the swing
+			if (player.Graphics.IsAnimationDone)
 				player.BeginState(nextState);
-			}
 		}
 
 		//-----------------------------------------------------------------------------
