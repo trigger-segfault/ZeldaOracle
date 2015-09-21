@@ -48,16 +48,18 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			if (ammo[currentAmmo].IsEmpty)
 				return;
 			
+			player.Direction = player.UseDirection;
+
 			Projectile projectile = new Projectile();
 				
 			// General
 			projectile.Owner			= Player;
-			projectile.Position			= new Vector2F(Player.X, Player.Y - 8) + (Directions.ToVector(Player.MoveDirection) * 8.0f);
+			projectile.Position			= new Vector2F(Player.X, Player.Y - 8) + (Directions.ToVector(Player.Direction) * 8.0f);
 			projectile.ZPosition		= player.ZPosition;
-			projectile.Angle			= Directions.ToAngle(player.MoveDirection);
-			projectile.Physics.Velocity	= Directions.ToVector(Player.MoveDirection) * 3.0f;
+			projectile.Angle			= Directions.ToAngle(player.Direction);
+			projectile.Physics.Velocity	= Directions.ToVector(Player.Direction) * 3.0f;
 
-			player.Direction = player.MoveDirection;
+			player.Direction = player.Direction;
 
 			// Graphics.
 			projectile.Graphics.SubStripIndex = projectile.Angle;

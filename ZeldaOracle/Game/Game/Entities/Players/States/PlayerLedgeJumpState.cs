@@ -36,7 +36,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			direction = ledgeBeginTile.LedgeDirection;
 
 			// TODO: player.passable = true;
-			player.CheckGroundTiles			= false;
 			player.AutoRoomTransition		= true;
 			player.Physics.CollideWithWorld = false;
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
@@ -86,7 +85,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd() {
-			player.CheckGroundTiles			= true;
 			player.AutoRoomTransition		= false;
 			player.Physics.CollideWithWorld = true;
 			base.OnEnd();

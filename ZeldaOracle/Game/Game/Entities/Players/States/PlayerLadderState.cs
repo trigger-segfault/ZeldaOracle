@@ -47,7 +47,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			
 			// Always face up when on a ladder.
 			player.Direction = Directions.Up;
-			player.Angle = Angles.Up;
 
 			// Update animations
 			if (player.Movement.IsMoving && !Player.Graphics.IsAnimationPlaying)

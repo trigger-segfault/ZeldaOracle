@@ -103,12 +103,12 @@ namespace ZeldaOracle.Game.Entities
 				g.DrawSprite(sprite, drawPosition + drawOffset, depth);
 			
 			// Draw the ripples effect.
-			if (isRipplesEffectVisible && entity.Physics.IsInPuddle)
+			if (isRipplesEffectVisible && entity.Physics.IsEnabled && entity.Physics.IsInPuddle)
 				g.DrawAnimation(GameData.ANIM_EFFECT_RIPPLES, entity.GameControl.RoomTicks, entity.Origin, ripplesDepth);
 			
 			// Draw the grass effect.
-			if (isGrassEffectVisible && entity.Physics.IsInGrass)
-				g.DrawAnimation(GameData.ANIM_EFFECT_GRASS, grassAnimationTicks, entity.Origin, ripplesDepth);
+			if (isGrassEffectVisible && entity.Physics.IsEnabled &&entity.Physics.IsInGrass)
+				g.DrawAnimation(GameData.ANIM_EFFECT_GRASS, grassAnimationTicks, entity.Origin, grassDepth);
 		}
 
 		

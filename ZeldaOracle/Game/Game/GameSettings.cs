@@ -8,12 +8,14 @@ using ZeldaOracle.Common.Geometry;
 /*
  *	GAME TODO LIST:
  *		- Work out depth for things (Player submerge should be behind all things)
- *		- Player
+ *		- Player:
  *			- Rename direction to FaceDirection
  *			- Merge MoveAngle and Angle (they are the same thing)
+ *		- Graphics:
+ *			- Round draw positions (in Graphics2D) to avoid pixel bleeding.
  * 
  *	DEBUG KEYS:
- *		- F: Play a fade game-state.
+ *		- 1: Speed up the game.
  *		- G: Read text.
  *		- V: (When reading text) skip to next line.
  *		- Z: Fire an arrow.

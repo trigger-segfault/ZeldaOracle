@@ -63,7 +63,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			base.Update();
 
 			player.Direction = direction;
-			player.Angle = Directions.ToAngle(direction);
 
 			if (player.Movement.IsMoving && !Player.Graphics.IsAnimationPlaying)
 				Player.Graphics.PlayAnimation();

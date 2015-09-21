@@ -23,9 +23,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 	
 	public class Unit : Entity {
 		
-		protected int	direction;
-		protected int	health;
-		protected int	healthMax;
+		// The direction the unit is facing.
+		protected int direction;
+
+		protected int health;
+
+		protected int healthMax;
 
 
 		//-----------------------------------------------------------------------------

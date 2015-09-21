@@ -67,5 +67,11 @@ namespace ZeldaOracle.Common.Geometry {
 				vec.Y = 1;
 			return vec.Normalized;
 		}
+
+		public static int CombineAxisDirections(int directionH, int directionV) {
+			if (directionH == Directions.Left)
+				return (directionV == Directions.Up ? Angles.UpLeft : Angles.DownLeft);
+			return (directionV == Directions.Up ? Angles.UpRight : Angles.DownRight);
+		}
 	}
 }

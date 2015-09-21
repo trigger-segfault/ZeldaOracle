@@ -34,6 +34,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.AllowMovementControl = false;
 			player.toolAnimation.Animation = weaponAnimation;
 			player.toolAnimation.SubStripIndex = player.Direction;
+			player.Direction = player.UseDirection;
 			player.toolAnimation.Play();
 		}
 		
@@ -48,12 +49,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Reset the swing
 			if (player.GameControl.Inventory.GetSlotButton(equipSlot).IsPressed()) {
-				for (int i = 0; i < 4; i++) {
-					if (Controls.Arrows[i].IsDown()) {
-						player.Direction = i;
-						player.Angle = Directions.ToAngle(i);
-					}
-				}
+				player.Direction = player.UseDirection;
 				player.toolAnimation.SubStripIndex = player.Direction;
 				player.Graphics.PlayAnimation();
 				player.toolAnimation.Play();
