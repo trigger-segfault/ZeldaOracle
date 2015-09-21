@@ -117,8 +117,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (state != newState) {
 				if (state != null)
 					state.End();
-				newState.Begin(this);
 				state = newState;
+				newState.Begin(this);
 			}
 		}
 
@@ -232,7 +232,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public override void Draw(Graphics2D g) {
 			// TEMPORARY: Change tool drawing to something else
 			if (toolAnimation.Animation != null)
-				g.DrawAnimation(toolAnimation, position - new Vector2F(0, ZPosition), 0.3f);
+				g.DrawAnimation(toolAnimation, position - new Vector2F(0, ZPosition), 0.6f);
 
 			base.Draw(g);
 			state.DrawOver(g);

@@ -51,8 +51,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 			else {
 				player.BeginNormalState();
-				Console.WriteLine(player.CurrentState == this);
-				chargeTimer = 0;
 			}
 		}
 		
@@ -79,12 +77,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 
 			if (player.GameControl.Inventory.GetSlotButton(equipSlot).IsUp()) {
-				if (chargeTimer >= ChargeTime) {
+				if (chargeTimer >= ChargeTime)
 					player.BeginState(player.SpinSwordState);
-				}
-				else {
+				else
 					player.BeginNormalState();
-				}
 			}
 		}
 
