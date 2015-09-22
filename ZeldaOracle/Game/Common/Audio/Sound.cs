@@ -25,8 +25,6 @@ public class Sound {
 	// Containment
 	/** <summary> The sound effect class contained by this sound. </summary> */
 	private SoundEffect soundEffect;
-	/** <summary> The group containing the sound effect. </summary> */
-	internal SoundGroup group;
 	/** <summary> The name of the sound effect. </summary> */
 	internal string name;
 	/** <summary> The file path of the sound. </summary> */
@@ -34,11 +32,11 @@ public class Sound {
 
 	// Settings
 	/** <summary> The default volume of the sound effect. </summary> */
-	private double volume;
+	private float volume;
 	/** <summary> The default pitch of the sound effect. </summary> */
-	private double pitch;
+	private float pitch;
 	/** <summary> The default pan of the sound effect. </summary> */
-	private double pan;
+	private float pan;
 	/** <summary> True if the sound effect is muted. </summary> */
 	private bool muted;
 
@@ -51,27 +49,9 @@ public class Sound {
 	#region Constructors
 
 	/** <summary> Constructs the default sound. </summary> */
-	public Sound(SoundEffect soundEffect, string filePath, string name, double volume = 1.0, double pitch = 0.0, double pan = 0.0, bool muted = false) {
+	public Sound(SoundEffect soundEffect, string filePath, string name, float volume = 1.0f, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
 		// Containment
 		this.soundEffect	= soundEffect;
-		this.group			= null;
-		this.name			= name;
-		this.filePath		= filePath;
-
-		// Settings
-		this.volume			= volume;
-		this.pitch			= pitch;
-		this.pan			= pan;
-		this.muted			= muted;
-
-		// Sound Instances
-		this.sounds			= new List<SoundInstance>();
-	}
-	/** <summary> Constructs the default sound. </summary> */
-	public Sound(SoundEffect soundEffect, string filePath, SoundGroup group, string name, double volume = 1.0, double pitch = 0.0, double pan = 0.0, bool muted = false) {
-		// Containment
-		this.soundEffect	= soundEffect;
-		this.group			= group;
 		this.name			= name;
 		this.filePath		= filePath;
 
@@ -91,10 +71,6 @@ public class Sound {
 	//--------------------------------
 	#region Information
 
-	/** <summary> Gets the sound group containing this sound. </summary> */
-	public SoundGroup Group {
-		get { return group; }
-	}
 	/** <summary> Gets the sound effect contained by this sound. </summary> */
 	public SoundEffect SoundEffect {
 		get { return soundEffect; }
@@ -121,24 +97,24 @@ public class Sound {
 	#region Settings
 
 	/** <summary> Gets or sets the default volume of the sound between 0 and 1. </summary> */
-	public double Volume {
+	public float Volume {
 		get { return volume; }
-		set { volume = GMath.Clamp(value, 0.0, 1.0); UpdateSounds(); }
+		set { volume = GMath.Clamp(value, 0.0f, 1.0f); UpdateSoundInstances(); }
 	}
 	/** <summary> Gets or sets the default pitch of the sound between -1 and 1. </summary> */
-	public double Pitch {
+	public float Pitch {
 		get { return pitch; }
-		set { pitch = GMath.Clamp(value, -1.0, 1.0); UpdateSounds(); }
+		set { pitch = GMath.Clamp(value, -1.0f, 1.0f); UpdateSoundInstances(); }
 	}
 	/** <summary> Gets or sets the default pan of the sound between -1 and 1. </summary> */
-	public double Pan {
+	public float Pan {
 		get { return pan; }
-		set { pan = GMath.Clamp(value, -1.0, 1.0); UpdateSounds(); }
+		set { pan = GMath.Clamp(value, -1.0f, 1.0f); UpdateSoundInstances(); }
 	}
 	/** <summary> Gets or sets if the sound is muted. </summary> */
 	public bool IsMuted {
 		get { return muted; }
-		set { muted = value; UpdateSounds(); }
+		set { muted = value; UpdateSoundInstances(); }
 	}
 
 	#endregion
@@ -194,7 +170,7 @@ public class Sound {
 		}
 	}
 	/** <summary> Updates the sound instances. </summary> */
-	internal void UpdateSounds() {
+	internal void UpdateSoundInstances() {
 		for (int i = 0; i < sounds.Count; i++) {
 			sounds[i].Update();
 		}
@@ -213,7 +189,7 @@ public class Sound {
 		return soundInstance;
 	}
 	/** <summary> Plays the sound. </summary> */
-	public SoundInstance Play(bool looped, double volume, double pitch = 0.0, double pan = 0.0, bool muted = false) {
+	public SoundInstance Play(bool looped, float volume, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
 		SoundInstance soundInstance = new SoundInstance(soundEffect.CreateInstance(), this, looped, volume, pitch, pan, muted);
 		soundInstance.Play();
 		sounds.Add(soundInstance);

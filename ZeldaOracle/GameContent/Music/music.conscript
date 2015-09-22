@@ -1,12 +1,5 @@
 
 @music
-@volume 1.0
-@pitch 0.0
-@pan 0.0
-@muted false
-@song "overworld" "Overworld" "" "" 1.0 0.0 0.0
-@song "overworld_intro" "Overworld Intro" "" "" 1.0 0.0 0.0
+@song "overworld" 1.0 0.0 0.0
+@song "overworld_intro" 1.0 0.0 0.0
 @end
-
-
-

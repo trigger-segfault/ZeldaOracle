@@ -580,7 +580,7 @@ namespace ZeldaOracle.Game {
 	private static void LoadSounds() {
 
 
-		Resources.LoadSoundGroups(Resources.SoundDirectory + "sounds.conscript");
+		Resources.LoadSounds(Resources.SoundDirectory + "sounds.conscript");
 
 	}
 
@@ -592,7 +592,7 @@ namespace ZeldaOracle.Game {
 		// Loads the music.
 	private static void LoadMusic() {
 
-		Resources.LoadPlaylists(Resources.MusicDirectory + "music.conscript");
+		Resources.LoadMusic(Resources.MusicDirectory + "music.conscript");
 	}
 
 	

@@ -88,8 +88,6 @@ public class Resources {
 	private static Dictionary<string, Song> songs;
 	/** <summary> The collection of loaded playlists. </summary> */
 	private static Dictionary<string, Playlist> playlists;
-	/** <summary> The root sound group. </summary> */
-	private static SoundGroup soundGroup;
 
 	// Languages
 	/** <summary> The collection of loaded languages. </summary> */
@@ -123,7 +121,6 @@ public class Resources {
 		sounds				= new Dictionary<string, Sound>();
 		songs				= new Dictionary<string, Song>();
 		playlists			= new Dictionary<string, Playlist>();
-		soundGroup			= new SoundGroup("root");
 
 		// Languages
 		languages			= new List<Language>();
@@ -210,10 +207,6 @@ public class Resources {
 	/** <summary> Gets the playlist with the specified name. </summary> */
 	public static Playlist GetPlaylist(string name) {
 		return playlists[name];
-	}
-	/** <summary> Gets the sound group with the specified name. </summary> */
-	public static SoundGroup GetSoundGroup(string name) {
-		return soundGroup.GetGroup(name);
 	}
 
 	#endregion
@@ -305,17 +298,17 @@ public class Resources {
 	/** <summary> Loads a song. </summary> */
 	public static Song LoadSong(string assetName) {
 		string name = assetName.Substring(assetName.IndexOf('/') + 1);
-		Song resource = new Song(contentManager.Load<XnaSong>(assetName), assetName, name);
+		Song resource = new Song(contentManager.Load<SoundEffect>(assetName), assetName, name);
 		songs.Add(name, resource);
 		return resource;
 	}
-	/** <summary> Loads a sound groups file. </summary> */
-	public static void LoadSoundGroups(string assetName) {
-		LoadScript(assetName, new SoundGroupSR());
+	/** <summary> Loads a sounds file. </summary> */
+	public static void LoadSounds(string assetName) {
+		LoadScript(assetName, new SoundsSR());
 	}
-	/** <summary> Loads a playlists file. </summary> */
-	public static void LoadPlaylists(string assetName) {
-		LoadScript(assetName, new PlaylistSR());
+	/** <summary> Loads a music file. </summary> */
+	public static void LoadMusic(string assetName) {
+		LoadScript(assetName, new MusicSR());
 	}
 
 	#endregion
@@ -380,11 +373,6 @@ public class Resources {
 	//--------------------------------
 	#region Sounds
 
-	/** <summary> Adds the specified playlist. </summary> */
-	public static void AddPlaylist(Playlist playlist) {
-		playlists.Add(playlist.Name, playlist);
-	}
-
 	#endregion
 	//--------------------------------
 	#region Languages
@@ -405,9 +393,9 @@ public class Resources {
 		get { return verboseOutput; }
 		set { verboseOutput = value; }
 	}
-	/** <summary> Gets the root sound group. </summary> */
-	public static SoundGroup RootSoundGroup {
-		get { return soundGroup; }
+	/** <summary> Gets the dictionary of sounds. </summary> */
+	public static Dictionary<string, Sound> Sounds {
+		get { return sounds; }
 	}
 	/** <summary> Gets the list of langauges. </summary> */
 	public static List<Language> Languages {

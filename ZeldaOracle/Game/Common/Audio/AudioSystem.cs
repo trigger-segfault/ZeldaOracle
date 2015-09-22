@@ -32,37 +32,34 @@ public static class AudioSystem {
 	// Containment
 	/** <summary> The current song playing. </summary> */
 	private static Song currentSong;
-	/** <summary> The current playlist. </summary> */
-	private static Playlist playlist;
-
-	// Visualization
-	/** <summary> The visualization data for the currently playing song. </summary> */
-	private static VisualizationData visData	= null;
-	/** <summary> The power of the current position in the song. </summary> */
-	private static double visPower;
 
 	// Playback
 	/** <summary> The master volume of the game. </summary> */
-	private static double masterVolume;
+	private static float masterVolume;
 	/** <summary> The master pitch of the game. </summary> */
-	private static double masterPitch;
+	private static float masterPitch;
 	/** <summary> The master pan of the game. </summary> */
-	private static double masterPan;
+	private static float masterPan;
 	/** <summary> True if the game is muted. </summary> */
 	private static bool masterMuted;
 
+	/** <summary> The volume of the game sounds. </summary> */
+	private static float soundVolume;
+	/** <summary> The pitch of the game sounds. </summary> */
+	private static float soundPitch;
+	/** <summary> The pan of the game sounds. </summary> */
+	private static float soundPan;
+	/** <summary> True if the game sounds are muted. </summary> */
+	private static bool soundMuted;
+
 	/** <summary> The volume of the game music. </summary> */
-	private static double musicVolume;
+	private static float musicVolume;
 	/** <summary> The pitch of the game music. </summary> */
-	private static double musicPitch;
+	private static float musicPitch;
 	/** <summary> The pan of the game music. </summary> */
-	private static double musicPan;
+	private static float musicPan;
 	/** <summary> True if the game music is muted. </summary> */
 	private static bool musicMuted;
-	/** <summary> True if the music has started playing. </summary> */
-	private static bool musicStarted;
-	/** <summary> The playback state of the media player. </summary> */
-	private static MediaState mediaPlayerState;
 
 	#endregion
 	//========= CONSTRUCTORS =========
@@ -72,41 +69,26 @@ public static class AudioSystem {
 	public static void Initialize() {
 		// Containment
 		currentSong			= null;
-		playlist			= null;
-
-		// Visualization
-		visData				= new VisualizationData();
-		visPower			= 0.0;
 
 		// Playback
-		masterVolume		= 1.0;
-		masterPitch			= 0.0;
-		masterPan			= 0.0;
+		masterVolume		= 1.0f;
+		masterPitch			= 0.0f;
+		masterPan			= 0.0f;
 		masterMuted			= false;
-		musicVolume			= 1.0;
-		musicPitch			= 0.0;
-		musicPan			= 0.0;
+
+		soundVolume			= 1.0f;
+		soundPitch			= 0.0f;
+		soundPan			= 0.0f;
+		soundMuted			= false;
+
+		musicVolume			= 1.0f;
+		musicPitch			= 0.0f;
+		musicPan			= 0.0f;
 		musicMuted			= false;
-
-		musicStarted		= false;
-		mediaPlayerState	= MediaState.Stopped;
-
-		// Setup
-		MediaPlayer.IsVisualizationEnabled	= true;
-
-		// Events
-		MediaPlayer.MediaStateChanged	+= OnMediaStateChanged;// new EventHandler<EventArgs>((sender, e) => { mediaPlayerState = MediaPlayer.State; });
 	}
 	/** <summary> Uninitializes the audio manager. </summary> */
 	public static void Uninitialize() {
-		MediaPlayer.Stop();
 		//sounds.Stop();
-
-		// Events
-		MediaPlayer.MediaStateChanged	-= OnMediaStateChanged;
-
-		// Visualization
-		visData			= null;
 
 		// Containment
 		currentSong		= null;
@@ -116,48 +98,31 @@ public static class AudioSystem {
 	//========== PROPERTIES ==========
 	#region Properties
 	//--------------------------------
-	#region Visualization
-
-	/** <summary> Gets the list of sample data from the currently playing song. </summary> */
-	public static float[] Samples {
-		get { return visData.Samples.ToArray(); }
-	}
-	/** <summary> Gets the list of frequency data from the currently playing song. </summary> */
-	public static float[] Frequencies {
-		get { return visData.Frequencies.ToArray(); }
-	}
-	/** <summary> Gets the power of the currently playing song. </summary> */
-	public static double VisPower {
-		get { return visPower; }
-	}
-
-	#endregion
-	//--------------------------------
 	#region Settings
 
 	/** <summary> Gets or sets the master volume of the game between 0 and 1. </summary> */
-	public static double MasterVolume {
+	public static float MasterVolume {
 		get { return masterVolume; }
 		set {
-			masterVolume = value;
+			masterVolume = GMath.Clamp(value, 0.0f, 1.0f);
 			UpdateSounds();
 			UpdateMusic();
 		}
 	}
 	/** <summary> Gets or sets the master pitch of the game between -1 and 1. </summary> */
-	public static double MasterPitch {
+	public static float MasterPitch {
 		get { return masterPitch; }
 		set {
-			masterPitch = value;
+			masterPitch = GMath.Clamp(value, -1.0f, 1.0f);
 			UpdateSounds();
 			UpdateMusic();
 		}
 	}
 	/** <summary> Gets or sets the master pan of the game between -1 and 1. </summary> */
-	public static double MasterPan {
+	public static float MasterPan {
 		get { return masterPan; }
 		set {
-			masterPan = value;
+			masterPan = GMath.Clamp(value, -1.0f, 1.0f);
 			UpdateSounds();
 			UpdateMusic();
 		}
@@ -173,52 +138,67 @@ public static class AudioSystem {
 	}
 
 	/** <summary> Gets or sets the default volume of the sound between 0 and 1. </summary> */
-	public static double SoundVolume {
-		get { return Resources.RootSoundGroup.Volume; }
-		set { Resources.RootSoundGroup.Volume = value; }
+	public static float SoundVolume {
+		get { return soundVolume; }
+		set {
+			soundVolume = GMath.Clamp(value, 0.0f, 1.0f);
+			UpdateSounds();
+			UpdateMusic();
+		}
 	}
 	/** <summary> Gets or sets the default pitch of the sound between -1 and 1. </summary> */
-	public static double SoundPitch {
-		get { return Resources.RootSoundGroup.Pitch; }
-		set { Resources.RootSoundGroup.Pitch = value; }
+	public static float SoundPitch {
+		get { return soundPitch; }
+		set {
+			soundPitch = GMath.Clamp(value, -1.0f, 1.0f);
+			UpdateSounds();
+			UpdateMusic();
+		}
 	}
 	/** <summary> Gets or sets the default pan of the sound between -1 and 1. </summary> */
-	public static double SoundPan {
-		get { return Resources.RootSoundGroup.Pan; }
-		set { Resources.RootSoundGroup.Pan = value; }
+	public static float SoundPan {
+		get { return soundPan; }
+		set {
+			soundPan = GMath.Clamp(value, -1.0f, 1.0f);
+			UpdateSounds();
+			UpdateMusic();
+		}
 	}
 	/** <summary> Gets or sets if the default sound will be muted. </summary> */
-	public static bool SoundIsMuted {
-		get { return Resources.RootSoundGroup.IsMuted; }
-		set { Resources.RootSoundGroup.IsMuted = value; }
+	public static bool IsSoundMuted {
+		get { return soundMuted; }
+		set {
+			soundMuted = value;
+			UpdateMusic();
+		}
 	}
 
 	/** <summary> Gets or sets the default volume of the sound between 0 and 1. </summary> */
-	public static double MusicVolume {
+	public static float MusicVolume {
 		get { return musicVolume; }
 		set {
-			musicVolume = value;
+			musicVolume = GMath.Clamp(value, 0.0f, 1.0f);
 			UpdateMusic();
 		}
 	}
 	/** <summary> Gets or sets the default pitch of the sound between -1 and 1. </summary> */
-	public static double MusicPitch {
+	public static float MusicPitch {
 		get { return musicPitch; }
 		set {
-			musicPitch = value;
+			musicPitch = GMath.Clamp(value, -1.0f, 1.0f);
 			UpdateMusic();
 		}
 	}
 	/** <summary> Gets or sets the default pan of the sound between -1 and 1. </summary> */
-	public static double MusicPan {
+	public static float MusicPan {
 		get { return musicPan; }
 		set {
-			musicPan = value;
+			musicPan = GMath.Clamp(value, -1.0f, 1.0f);
 			UpdateMusic();
 		}
 	}
 	/** <summary> Gets or sets if the default sound will be muted. </summary> */
-	public static bool MusicIsMuted {
+	public static bool IsMusicMuted {
 		get { return musicMuted; }
 		set {
 			musicMuted = value;
@@ -234,77 +214,44 @@ public static class AudioSystem {
 	public static Song CurrentSong {
 		get { return currentSong; }
 	}
-	/** <summary> Gets the current playlist playing. </summary> */
-	public static Playlist Playlist {
-		get { return playlist; }
-	}
 	/** <summary> Returns true if the music in the game is playing. </summary> */
 	public static bool IsMusicPlaying {
-		get { return mediaPlayerState == MediaState.Playing; }
+		get {
+			if (currentSong != null)
+				return currentSong.IsPlaying;
+			return false;
+		}
 	}
 	/** <summary> Returns true if the music in the game is paused. </summary> */
 	public static bool IsMusicPaused {
-		get { return mediaPlayerState == MediaState.Paused; }
+		get {
+			if (currentSong != null)
+				return currentSong.IsPaused;
+			return false;
+		}
 	}
 	/** <summary> Returns true if the music in the game is stopped. </summary> */
 	public static bool IsMusicStopped {
-		get { return mediaPlayerState == MediaState.Stopped; }
+		get {
+			if (currentSong != null)
+				return currentSong.IsStopped;
+			return true;
+		}
 	}
 
 	#endregion
 	//--------------------------------
 	#endregion
-	//============ EVENTS ============
-	#region Events
-
-	/** <summary> Called when the media state has been changed. </summary> */
-	public static void OnMediaStateChanged(object sender, EventArgs e) {
-		mediaPlayerState = MediaPlayer.State;
-	}
-
-	#endregion
 	//=========== UPDATING ===========
 	#region Updating
 	/** <summary> Called every step to update the audio manager. </summary> */
 	public static void Update(GameTime gameTime) {
+		if (currentSong != null)
+			currentSong.UpdateSoundInstance();
 
-		// Update the current song and playlist
-		if (IsMusicStopped && playlist != null && !musicStarted) {
-			if (playlist.NumSongs > 0) {
-				if (playlist.CurrentIndex + 1 == playlist.NumSongs && playlist.Loop) {
-					if (playlist.Shuffle)
-						playlist.ShuffleSongs();
-					playlist.CurrentIndex = 0;
-					currentSong = playlist[0];
-					MediaPlayer.Play(currentSong.BaseSong);
-					UpdateMusic();
-				}
-				else if (playlist.CurrentIndex + 1 < playlist.NumSongs && playlist.Autoplay) {
-					playlist.CurrentIndex++;
-					currentSong = playlist[playlist.CurrentIndex];
-					MediaPlayer.Play(currentSong.BaseSong);
-					UpdateMusic();
-				}
-			}
+		foreach (KeyValuePair<string, Sound> entry in Resources.Sounds) {
+			entry.Value.Update();
 		}
-		else if (musicStarted) {
-			if (!IsMusicStopped)
-				musicStarted = false;
-		}
-		
-
-		// Load the visualization data
-		//MediaPlayer.GetVisualizationData(visData);
-		Resources.RootSoundGroup.Update();
-
-		visPower = 0;
-
-		/*float[] samples = Samples;
-
-		for (int i = 0; i < samples.Length; i++) {
-			visPower += GMath.Abs(samples[i]);
-		}
-		visPower /= (double)samples.Length;*/
 	}
 
 
@@ -312,124 +259,104 @@ public static class AudioSystem {
 	//=========== PLAYBACK ===========
 	#region Playback
 
-	/** <summary> Plays the song with the specified name. </summary> */
-	public static void PlaySong(string name, bool looped = false) {
-		if (currentSong == Resources.GetSong(name) && mediaPlayerState == MediaState.Playing)
-			return;
-		if (mediaPlayerState != MediaState.Stopped)
-			MediaPlayer.Stop();
+	/** <summary> Plays the specified song. </summary> */
+	public static void PlaySong(Song song, bool looped = true) {
+		if (currentSong != null)
+			currentSong.Stop();
 
-		playlist = new Playlist("", false, true, looped);
-		playlist.AddSong(name);
-		playlist.CurrentIndex = 0;
-		currentSong = Resources.GetSong(name);
-		MediaPlayer.Play(currentSong.BaseSong);
-		UpdateMusic();
-		musicStarted = true;
+		currentSong = song;
+		song.Play(looped);
+	}
+	/** <summary> Plays the specified song. </summary> */
+	public static void PlaySong(Song song, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f) {
+		if (currentSong != null)
+			currentSong.Stop();
+
+		currentSong = song;
+		song.Play(looped, volume, pitch, pan);
 	}
 	/** <summary> Plays the song with the specified name. </summary> */
-	public static void PlaySong(string name, bool looped, double volume, double pitch = 0.0, double pan = 0.0) {
-		if (currentSong == Resources.GetSong(name) && mediaPlayerState == MediaState.Playing)
-			return;
-		if (mediaPlayerState != MediaState.Stopped)
-			MediaPlayer.Stop();
-
-		playlist = new Playlist("", false, true, looped, volume, pitch, pan);
-		playlist.AddSong(name);
-		playlist.CurrentIndex = 0;
-		currentSong = Resources.GetSong(name);
-		MediaPlayer.Play(currentSong.BaseSong);
-		UpdateMusic();
-		musicStarted = true;
+	public static void PlaySong(string name, bool looped = true) {
+		PlaySong(Resources.GetSong(name), looped);
 	}
-	/** <summary> Starts playling the specified playlist. </summary> */
-	public static void StartPlaylist(Playlist playlist) {
-		if (mediaPlayerState != MediaState.Stopped)
-			MediaPlayer.Stop();
-
-		AudioSystem.playlist	= playlist;
-		if (playlist.NumSongs > 0) {
-			if (playlist.Shuffle)
-				playlist.ShuffleSongs();
-			playlist.CurrentIndex = 0;
-			currentSong = playlist[0];
-			MediaPlayer.Play(currentSong.BaseSong);
-			UpdateMusic();
-		}
-		else {
-			currentSong = null;
-		}
-		musicStarted = true;
+	/** <summary> Plays the song with the specified name. </summary> */
+	public static void PlaySong(string name, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f) {
+		PlaySong(Resources.GetSong(name), looped, volume, pitch, pan);
 	}
-	/** <summary> Starts the next song in the playlist. </summary> */
-	public static void NextSong() {
-		if (mediaPlayerState != MediaState.Stopped)
-			MediaPlayer.Stop();
 
-		if (playlist.NumSongs > 0) {
-			playlist.CurrentIndex = (playlist.CurrentIndex + 1) % playlist.NumSongs;
-			currentSong = playlist[playlist.CurrentIndex];
-			MediaPlayer.Play(currentSong.BaseSong);
-			UpdateMusic();
-		}
-		else {
-			currentSong = null;
-		}
-		musicStarted = true;
+	/** <summary> Plays the specified sound effect. </summary> */
+	public static SoundInstance PlaySound(Sound sound, bool looped = false) {
+		return sound.Play(looped);
+	}
+	/** <summary> Plays the specified sound effect. </summary> */
+	public static SoundInstance PlaySound(Sound sound, bool looped, float volume = 1.0f, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
+		return sound.Play(looped, volume, pitch, pan, muted);
 	}
 	/** <summary> Plays the sound effect with the specified name. </summary> */
 	public static SoundInstance PlaySound(string name, bool looped = false) {
-		return Resources.RootSoundGroup.GetSound(name).Play(looped);
+		return PlaySound(Resources.GetSound(name), looped);
 	}
 	/** <summary> Plays the sound effect with the specified name. </summary> */
-	public static SoundInstance PlaySound(string name, bool looped, double volume, double pitch = 0.0, double pan = 0.0, bool muted = false) {
-		return Resources.RootSoundGroup.GetSound(name).Play(looped, volume, pitch, pan, muted);
+	public static SoundInstance PlaySound(string name, bool looped, float volume = 1.0f, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
+		return PlaySound(Resources.GetSound(name), looped, volume, pitch, pan, muted);
+	}
+
+	/** <summary> Plays the specified sound effect. </summary> */
+	public static SoundInstance PlayRandomSound(params Sound[] soundList) {
+		return PlaySound(soundList[GRandom.NextInt(soundList.Length)]);
+	}
+	/** <summary> Plays the specified sound effect. </summary> */
+	public static SoundInstance PlayRandomSound(params string[] soundList) {
+		return PlaySound(soundList[GRandom.NextInt(soundList.Length)]);
+	}
+
+	/** <summary> Stops the specified sound effect. </summary> */
+	public static void StopSound(Sound sound) {
+		sound.Stop();
 	}
 	/** <summary> Stops the sound effect with the specified name. </summary> */
 	public static void StopSound(string name) {
-		Resources.RootSoundGroup.GetSound(name).Stop();
+		StopSound(Resources.GetSound(name));
+	}
+
+	/** <summary> Returns true if the sound with the specified name is playing. </summary> */
+	public static bool IsSoundPlaying(Sound sound) {
+		return sound.IsPlaying;
+	}
+	/** <summary> Returns true if the sound with the specified name is playing. </summary> */
+	public static bool IsSoundPlaying(string name) {
+		return IsSoundPlaying(Resources.GetSound(name));
 	}
 
 	#endregion
 	//========== MANAGEMENT ==========
 	#region Management
 	//--------------------------------
-	#region Sound Groups
-
-
-	#endregion
-	//--------------------------------
-	#region Sounds
-
-	/** <summary> Gets the sound effect with the specified name. </summary> */
-	public static Sound GetSound(string name) {
-		return Resources.RootSoundGroup.GetSound(name);
-	}
-
-	#endregion
-	//--------------------------------
-	#region Songs
-
-
-	#endregion
-	//--------------------------------
 	#region Sound Playback
 
-	/** <summary> Updates the sound instances. </summary> */
+	/** <summary> Updates the sounds. </summary> */
 	internal static void UpdateSounds() {
-		Resources.RootSoundGroup.UpdateSounds();
+		foreach (KeyValuePair<string, Sound> entry in Resources.Sounds) {
+			entry.Value.UpdateSoundInstances();
+		}
 	}
 	/** <summary> Stops every sound in the group. </summary> */
 	public static void StopAllSounds() {
-		Resources.RootSoundGroup.Stop();
+		foreach (KeyValuePair<string, Sound> entry in Resources.Sounds) {
+			entry.Value.Stop();
+		}
 	}
 	/** <summary> Pauses every sound in the group. </summary> */
 	public static void PauseAllSounds() {
-		Resources.RootSoundGroup.Pause();
+		foreach (KeyValuePair<string, Sound> entry in Resources.Sounds) {
+			entry.Value.Pause();
+		}
 	}
 	/** <summary> Resumes every sound in the group. </summary> */
 	public static void ResumeAllSounds() {
-		Resources.RootSoundGroup.Resume();
+		foreach (KeyValuePair<string, Sound> entry in Resources.Sounds) {
+			entry.Value.Resume();
+		}
 	}
 
 	#endregion
@@ -438,26 +365,23 @@ public static class AudioSystem {
 
 	/** <summary> Updates the music. </summary> */
 	internal static void UpdateMusic() {
-		if (!IsMusicStopped && currentSong != null && playlist != null)
-			MediaPlayer.Volume = (float)(masterVolume * musicVolume * playlist.Volume * currentSong.Volume);
-		//else if (!IsMusicStopped && currentSong != null)
-		//	MediaPlayer.Volume = (float)(masterVolume * musicVolume * currentSong.Volume);
+		if (currentSong != null)
+			currentSong.UpdateSoundInstance();
 	}
 	/** <summary> Pauses the current playing song. </summary> */
 	public static void PauseMusic() {
-		if (mediaPlayerState == MediaState.Playing)
-			MediaPlayer.Pause();
+		if (currentSong != null)
+			currentSong.Pause();
 	}
 	/** <summary> Resumes the current playing song. </summary> */
 	public static void ResumeMusic() {
-		if (mediaPlayerState == MediaState.Paused)
-			MediaPlayer.Resume();
+		if (currentSong != null)
+			currentSong.Pause();
 	}
 	/** <summary> Stops the current song. </summary> */
 	public static void StopMusic() {
-		if (mediaPlayerState != MediaState.Stopped)
-			MediaPlayer.Stop();
-		musicStarted = false;
+		if (currentSong != null)
+			currentSong.Stop();
 	}
 
 	#endregion
