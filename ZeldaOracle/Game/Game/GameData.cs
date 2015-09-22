@@ -88,6 +88,9 @@ namespace ZeldaOracle.Game {
 
 			Image imageZoneset		= Resources.LoadImage("Images/zoneset");
 			Image imageSheetPlayer	= Resources.LoadImage("Images/sheet_player");
+			Image imageSheetPlayerRed	= Resources.LoadImage("Images/sheet_player_red");
+			Image imageSheetPlayerBlue	= Resources.LoadImage("Images/sheet_player_blue");
+			Image imageSheetPlayerHurt	= Resources.LoadImage("Images/sheet_player_hurt");
 			Image imageIconsThin	= Resources.LoadImage("Images/sheet_icons_thin");
 			Image imageEffects		= Resources.LoadImage("Images/sheet_effects");
 			Image imagePlayerItems	= Resources.LoadImage("Images/sheet_player_items");
@@ -96,6 +99,9 @@ namespace ZeldaOracle.Game {
 			SHEET_ZONESET_SMALL	= new SpriteSheet(imageZoneset, 8, 8, 187, 0, 1, 1);
 
 			SHEET_PLAYER		= new SpriteSheet(imageSheetPlayer, 16, 16, 0, 0, 1, 1);
+			SHEET_PLAYER_RED	= new SpriteSheet(imageSheetPlayerRed, 16, 16, 0, 0, 1, 1);
+			SHEET_PLAYER_BLUE	= new SpriteSheet(imageSheetPlayerBlue, 16, 16, 0, 0, 1, 1);
+			SHEET_PLAYER_HURT	= new SpriteSheet(imageSheetPlayerHurt, 16, 16, 0, 0, 1, 1);
 			SHEET_ICONS_THIN	= new SpriteSheet(imageIconsThin, 8, 16, 0, 0, 1, 1);
 			SHEET_EFFECTS		= new SpriteSheet(imageEffects, 16, 16, 0, 0, 1, 1);
 			SHEET_PLAYER_ITEMS	= new SpriteSheet(imagePlayerItems, 16, 16, 0, 0, 1, 1);
@@ -626,6 +632,8 @@ namespace ZeldaOracle.Game {
 		public static SpriteSheet SHEET_EFFECTS;
 
 	public static SpriteSheet SHEET_PLAYER;
+	public static SpriteSheet SHEET_PLAYER_RED;
+	public static SpriteSheet SHEET_PLAYER_BLUE;
 	public static SpriteSheet SHEET_PLAYER_HURT;
 	public static SpriteSheet SHEET_MONSTERS;
 	public static SpriteSheet SHEET_MONSTERS_HURT;

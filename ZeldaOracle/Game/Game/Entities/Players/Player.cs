@@ -64,6 +64,18 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		private bool isItemButtonPressDisabled;
 
+		private PlayerSwimmingSkills swimmingSkills;
+
+		private PlayerTunics tunic;
+
+		private int invincibleTimer;
+
+
+		//-----------------------------------------------------------------------------
+		// Constants
+		//-----------------------------------------------------------------------------
+
+		private const int InvincibleDuration = 25;
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -84,6 +96,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 			centerOffset	= new Point2I(0, -8);
 			Health			= 4 * 3;
 			MaxHealth		= 4 * 3;
+			swimmingSkills	= PlayerSwimmingSkills.CantSwim;
+			invincibleTimer	= 0;
+			tunic			= PlayerTunics.GreenTunic;
 
 			// Physics.
 			Physics.CollideWithWorld = true;
@@ -146,6 +161,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 			BeginState(GetDesiredNaturalState());
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Interaction
+		//-----------------------------------------------------------------------------
+
+		public void Hurt(int damage) {
+			health = GMath.Max(0, health - damage);
+			invincibleTimer = InvincibleDuration;
+		}
 
 		//-----------------------------------------------------------------------------
 		// Items
@@ -253,6 +277,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public override void Update() {
 			isItemButtonPressDisabled = false;
 
+			if (invincibleTimer > 0)
+				invincibleTimer--;
+
 			movement.Update();
 			UpdateUseDirections();
 			
@@ -275,6 +302,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			if (syncAnimationWithDirection)
 				Graphics.SubStripIndex = direction;
+
+			if (invincibleTimer != 0 && (invincibleTimer + 1) % 8 < 4) {
+				Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER_HURT);
+			}
+			else {
+				switch (tunic) {
+				case PlayerTunics.GreenTunic: Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER); break;
+				case PlayerTunics.RedTunic: Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER_RED); break;
+				case PlayerTunics.BlueTunic: Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER_BLUE); break;
+				}
+			}
 
 			// Update superclass.
 			base.Update();
@@ -346,6 +384,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public Vector2F RoomEnterPosition {
 			get { return roomEnterPosition; }
 			set { roomEnterPosition = value; }
+		}
+
+		public PlayerSwimmingSkills SwimmingSkills {
+			get { return swimmingSkills; }
+			set { swimmingSkills = value; }
+		}
+
+		public PlayerTunics Tunic {
+			get { return tunic; }
+			set { tunic = value; }
 		}
 		
 		// Player states

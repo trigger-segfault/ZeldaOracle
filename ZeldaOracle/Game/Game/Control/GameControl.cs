@@ -59,6 +59,15 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		public void StartGame() {
+
+			// TODO: Load world here.
+			roomControl		= new RoomControl();
+			gameManager.PushGameState(roomControl);
+
+			roomControl.BeginTestWorld();
+			player = roomControl.Player;
+
+
 			menuWeapons	= new MenuWeapons(gameManager);
 			menuSecondaryItems	= new MenuSecondaryItems(gameManager);
 			menuEssences	= new MenuEssences(gameManager);
@@ -103,14 +112,8 @@ namespace ZeldaOracle.Game.Control {
 
 			hud = new HUD(this);
 
-			// TODO: Load world here.
-			roomControl		= new RoomControl();
-			gameManager.PushGameState(roomControl);
-
-			roomControl.BeginTestWorld();
-			player = roomControl.Player;
-			
-			AudioSystem.PlaySong("overworld", true);
+			//AudioSystem.PlaySong("overworld", true);
+			AudioSystem.MasterVolume = 0.1f;
 		}
 
 		public void DisplayMessage(Message message) {

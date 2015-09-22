@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Entities.Players;
 
 namespace ZeldaOracle.Game.Items.KeyItems {
 	public class ItemFlippers : ItemSecondary {
@@ -29,5 +30,40 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 			};
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Virtual
+		//-----------------------------------------------------------------------------
+
+		// Called when the item's level is changed.
+		public virtual void OnLevelUp() {
+			Player.SwimmingSkills |= PlayerSwimmingSkills.CanSwimInWater;
+			if (level == Item.Level2)
+				Player.SwimmingSkills |= PlayerSwimmingSkills.CanSwimInOcean;
+		}
+
+		// Called when the item has been obtained.
+		public virtual void OnObtained() {
+			Player.SwimmingSkills |= PlayerSwimmingSkills.CanSwimInWater;
+			if (level == Item.Level2)
+				Player.SwimmingSkills |= PlayerSwimmingSkills.CanSwimInOcean;
+		}
+
+		// Called when the item has been unobtained.
+		public virtual void OnUnobtained() {
+			Player.SwimmingSkills &= ~(PlayerSwimmingSkills.CanSwimInWater | PlayerSwimmingSkills.CanSwimInOcean);
+		}
+
+		// Called when the item has been stolen.
+		public virtual void OnStolen() {
+			Player.SwimmingSkills &= ~(PlayerSwimmingSkills.CanSwimInWater | PlayerSwimmingSkills.CanSwimInOcean);
+		}
+
+		// Called when the stolen item has been returned.
+		public virtual void OnReturned() {
+			Player.SwimmingSkills |= PlayerSwimmingSkills.CanSwimInWater;
+			if (level == Item.Level2)
+				Player.SwimmingSkills |= PlayerSwimmingSkills.CanSwimInOcean;
+		}
 	}
 }
