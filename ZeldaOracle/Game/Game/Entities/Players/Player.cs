@@ -32,17 +32,24 @@ using ZeldaOracle.Game.Entities.Players.States;
 namespace ZeldaOracle.Game.Entities.Players {
 	
 	public class Player : Unit {
-	
-		private int				angle;
-		//private UsableItem[]	equippedItems; // TODO: move this to somewhere else.
-		private bool			syncAnimationWithDirection; // TODO: better name for this.
-		private bool			checkGroundTiles;
-		private bool			allowRoomTransition; // Is the player allowed to transition between rooms?
-		private bool			autoRoomTransition; // The player doesn't need to be moving to transition.
-		private Vector2F		roomEnterPosition; // The position the player was at when he entered the room.
-		private PlayerMoveComponent		movement;
 
-		private PlayerState				state;
+		// The current direction that the player wants to face to use items.
+		private int useDirection;
+		// The current angle that the player wants face to use items.
+		private int useAngle;
+		// TODO: better name for this.
+		private bool syncAnimationWithDirection;
+		// Is the player allowed to transition between rooms?
+		private bool allowRoomTransition;
+		// The player doesn't need to be moving to transition.
+		private bool autoRoomTransition;
+		// The position the player was at when he entered the room.
+		private Vector2F roomEnterPosition;
+		// The current player state.
+		private PlayerState state;
+		// The movement component for the player.
+		private PlayerMoveComponent movement;
+
 		private PlayerNormalState		stateNormal;
 		private PlayerJumpState			stateJump;
 		private PlayerSwimState			stateSwim;
@@ -52,10 +59,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerHoldSwordState	stateHoldSword;
 		private PlayerSpinSwordState	stateSpinSword;
 
-		// TEMPORARY: Change tool drawing to something else
-		public AnimationPlayer			toolAnimation;
+		// TEMP: Change tool drawing to something else
+		public AnimationPlayer toolAnimation;
 
-		private Tile[]					frontTiles; // A list of tiles directly in front of the player.
+		private bool isItemButtonPressDisabled;
 
 
 		//-----------------------------------------------------------------------------
@@ -64,14 +71,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public Player() {
 			direction			= Directions.Down;
-			angle				= Directions.ToAngle(direction);
-			checkGroundTiles	= true;
+			useDirection		= 0;
+			useAngle			= 0;
 			autoRoomTransition	= false;
 			allowRoomTransition	= true;
-			syncAnimationWithDirection = true;
-
-			frontTiles = new Tile[2];
-
+			syncAnimationWithDirection	= true;
+			isItemButtonPressDisabled	= false;
 			movement = new PlayerMoveComponent(this);
 
 			// Unit properties.
@@ -113,6 +118,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 		}
 
+		// Begin the given player state.
 		public void BeginState(PlayerState newState) {
 			if (state != newState) {
 				if (state != null)
@@ -135,50 +141,93 @@ namespace ZeldaOracle.Game.Entities.Players {
 				return stateNormal;
 		}
 
+		// Begin the desired natural state.
 		public void BeginNormalState() {
 			BeginState(GetDesiredNaturalState());
 		}
 
-		private void CheckTiles() {
-			Vector2F checkPosition = position + Directions.ToVector(direction);
-			Rectangle2F myBox = physics.PositionedCollisionBox;
-			int index = 0;
-			for (int i = 0; i < frontTiles.Length; i++)
-				frontTiles[i] = null;
 
-			
+		//-----------------------------------------------------------------------------
+		// Items
+		//-----------------------------------------------------------------------------
 
-			physics.IterateMeetingTiles(checkPosition, physics.CollisionBox, delegate(Tile tile) {
-				Rectangle2F tileRect = new Rectangle2F(tile.Position, tile.Size * GameSettings.TILE_SIZE);
-				if (!physics.IsPlaceMeetingTile(position, tile) &&
-					!physics.CanDodgeCollision(tileRect, direction))
-				{
-					frontTiles[index++] = tile;
-					if (index >= frontTiles.Length)
-						return true;
-				}
-				return false;
-			});
-
-		}
-
+		// Update items by checking if their buttons are pressed.
 		public void UpdateEquippedItems() {
 			for (int i = 0; i < EquippedUsableItems.Length; i++) {
 				if (EquippedUsableItems[i] != null) {
 					EquippedUsableItems[i].Player = this;
 
-					if (i == 0 && Controls.A.IsPressed())
-						EquippedUsableItems[i].OnButtonPress();
-					else if (i == 1 && Controls.B.IsPressed())
-						EquippedUsableItems[i].OnButtonPress();
+					if (!isItemButtonPressDisabled) {
+						if (i == 0 && Controls.A.IsPressed())
+							EquippedUsableItems[i].OnButtonPress();
+						else if (i == 1 && Controls.B.IsPressed())
+							EquippedUsableItems[i].OnButtonPress();
 
-					if (i == 0 && Controls.A.IsDown())
-						EquippedUsableItems[i].OnButtonDown();
-					else if (i == 1 && Controls.B.IsDown())
-						EquippedUsableItems[i].OnButtonDown();
-
+						if (i == 0 && Controls.A.IsDown())
+							EquippedUsableItems[i].OnButtonDown();
+						else if (i == 1 && Controls.B.IsDown())
+							EquippedUsableItems[i].OnButtonDown();
+					}
 					//equippedItems[i].Update();
 				}
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Internal
+		//-----------------------------------------------------------------------------
+
+		private void UpdateUseDirections() {
+			int controlDirection = -1;
+			int controlAngle = -1;
+			
+			// Find control direction.
+			// Arrow priority: Left > Up > Right > Down
+			if (Controls.Left.IsDown())
+				controlDirection = Directions.Left;
+			else if (Controls.Up.IsDown())
+				controlDirection = Directions.Up;
+			else if (Controls.Right.IsDown())
+				controlDirection = Directions.Right;
+			else if (Controls.Down.IsDown())
+				controlDirection = Directions.Down;
+
+			// Find control angle.
+			// Arrow priority: Left > Right, Up > Down
+			if (Controls.Up.IsDown()) {
+				if (Controls.Left.IsDown())
+					controlAngle = Angles.UpLeft;
+				else if (Controls.Right.IsDown())
+					controlAngle = Angles.UpRight;
+				else
+					controlAngle = Angles.Up;
+			}
+			else if (Controls.Down.IsDown()) {
+				if (Controls.Left.IsDown())
+					controlAngle = Angles.DownLeft;
+				else if (Controls.Right.IsDown())
+					controlAngle = Angles.DownRight;
+				else
+					controlAngle = Angles.Down;
+			}
+			else if (Controls.Left.IsDown())
+				controlAngle = Angles.Left;
+			else if (Controls.Right.IsDown())
+				controlAngle = Angles.Right;
+
+			// Determine use angle/direction.
+			if (movement.IsMoving && !movement.IsStrafing) {
+				useAngle		= movement.MoveAngle;
+				useDirection	= movement.MoveDirection;
+			}
+			else if (controlAngle >= 0) {
+				useAngle		= controlAngle;
+				useDirection	= controlDirection;
+			}
+			else {
+				useAngle		= Directions.ToAngle(direction);
+				useDirection	= direction;
 			}
 		}
 
@@ -190,11 +239,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public override void Initialize() {
 			base.Initialize();
 
-			// Play the default player animation.
-			Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
-
 			BeginState(stateNormal);
-			//BeginState(new PlayerSwimState());
 		}
 
 		public override void OnEnterRoom() {
@@ -206,24 +251,30 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public override void Update() {
-
-			CheckTiles();
+			isItemButtonPressDisabled = false;
 
 			movement.Update();
+			UpdateUseDirections();
+			
+			// Check for tile press interactions.
+			Tile actionTile = physics.GetMeetingSolidTile(position, direction);
+			if (actionTile != null && Controls.A.IsPressed()) {
+				if (actionTile.OnAction(direction))
+					isItemButtonPressDisabled = true;
+				// TODO: player stops pushing when reading a sign.
+			}
 
 			// Update the current player state.
 			PlayerState desiredNaturalState = GetDesiredNaturalState();
-			//if (state.IsNaturalState && state != desiredNaturalState)
-				//BeginState(desiredNaturalState);
 			if (state != desiredNaturalState && state.RequestStateChange(desiredNaturalState))
 				BeginState(desiredNaturalState);
 			state.Update();
 
-			if (syncAnimationWithDirection)
-				Graphics.SubStripIndex = direction;
-
 			// TEMPORARY: Change tool drawing to something else
 			toolAnimation.Update();
+
+			if (syncAnimationWithDirection)
+				Graphics.SubStripIndex = direction;
 
 			// Update superclass.
 			base.Update();
@@ -259,15 +310,18 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public int MoveDirection {
 			get { return movement.MoveDirection; }
 		}
-
-		public int Angle {
-			get { return angle; }
-			set { angle = value; }
-		}
 		
 		public int Direction {
 			get { return direction; }
 			set { direction = value; }
+		}
+
+		public int UseAngle {
+			get { return useAngle; }
+		}
+		
+		public int UseDirection {
+			get { return useDirection; }
 		}
 		
 		public PlayerMoveComponent Movement {
@@ -284,11 +338,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			set { syncAnimationWithDirection = value; }
 		}
 		
-		public bool CheckGroundTiles {
-			get { return checkGroundTiles; }
-			set { checkGroundTiles = value; }
-		}
-		
 		public bool AutoRoomTransition {
 			get { return autoRoomTransition; }
 			set { autoRoomTransition = value; }
@@ -297,10 +346,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public Vector2F RoomEnterPosition {
 			get { return roomEnterPosition; }
 			set { roomEnterPosition = value; }
-		}
-		
-		public Tile[] FrontTiles {
-			get { return frontTiles; }
 		}
 		
 		// Player states

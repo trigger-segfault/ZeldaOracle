@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Main;
+using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerHoldSwordState : PlayerState {
@@ -14,12 +15,15 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private int equipSlot;
 		private int chargeTimer;
 		private int direction;
+		private bool isStabbing;
+
 
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
 
 		private const int ChargeTime = 40;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -40,6 +44,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void OnBegin() {
 			base.OnBegin();
+
+			isStabbing = false;
+
 			if (player.GameControl.Inventory.GetSlotButton(equipSlot).IsDown()) {
 				chargeTimer = 0;
 				player.Movement.AllowMovementControl = true;
@@ -63,26 +70,55 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			base.Update();
 
 			player.Direction = direction;
-			player.Angle = Directions.ToAngle(direction);
 
-			if (player.Movement.IsMoving && !Player.Graphics.IsAnimationPlaying)
-				Player.Graphics.PlayAnimation();
-			if (!player.Movement.IsMoving && Player.Graphics.IsAnimationPlaying)
-				Player.Graphics.StopAnimation();
-
-			chargeTimer++;
-			if (chargeTimer == ChargeTime) {
-				player.toolAnimation.Animation = GameData.ANIM_SWORD_CHARGED;
-				// Play charge sound.
+			if (isStabbing) {
+				if (player.Graphics.IsAnimationDone) {
+					isStabbing = false;
+					chargeTimer = 0;
+					player.Movement.AllowMovementControl = true;
+					player.toolAnimation.Animation = weaponAnimation;
+					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
+					if (player.GameControl.Inventory.GetSlotButton(equipSlot).IsUp())
+						player.BeginNormalState();
+				}
 			}
+			else {
+				// Handle move/stand animations.
+				if (player.Movement.IsMoving && !Player.Graphics.IsAnimationPlaying)
+					Player.Graphics.PlayAnimation();
+				if (!player.Movement.IsMoving && Player.Graphics.IsAnimationPlaying)
+					Player.Graphics.StopAnimation();
 
-			if (player.GameControl.Inventory.GetSlotButton(equipSlot).IsUp()) {
-				if (chargeTimer >= ChargeTime)
-					player.BeginState(player.SpinSwordState);
-				else
-					player.BeginNormalState();
+				// Charge up the sword.
+				chargeTimer++;
+				 if (chargeTimer == ChargeTime) {
+					player.toolAnimation.Animation = GameData.ANIM_SWORD_CHARGED;
+					// Play charge sound.
+				}
+			
+				// Check for tiles to stab.
+				CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
+				Tile tile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
+				if (tile != null && player.Movement.IsMoving && collisionInfo.Type == CollisionType.Tile) {
+					isStabbing = true;
+					chargeTimer = 0;
+					player.Movement.AllowMovementControl = false;
+					player.toolAnimation.Play(GameData.ANIM_SWORD_STAB);
+					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_STAB);
+					if (player.IsOnGround)
+						tile.OnSwordHit();
+				}
+
+				// Release the sword button (spin if charged).
+				else if (player.GameControl.Inventory.GetSlotButton(equipSlot).IsUp()) {
+					if (chargeTimer >= ChargeTime)
+						player.BeginState(player.SpinSwordState);
+					else
+						player.BeginNormalState();
+				}
 			}
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties

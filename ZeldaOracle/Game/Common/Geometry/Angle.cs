@@ -67,5 +67,25 @@ namespace ZeldaOracle.Common.Geometry {
 				vec.Y = 1;
 			return vec.Normalized;
 		}
+
+		// Return a point the given angle.
+		public static Point2I ToPoint(int angle) {
+			Point2I point = Point2I.Zero;
+			if (angle % 8 == SouthEast || angle % 8 == East || angle % 8 == NorthEast)
+				point.X = 1;
+			else if (angle % 8 >= NorthWest && angle % 8 <= SouthWest)
+				point.X = -1;
+			if (angle % 8 >= NorthEast && angle % 8 <= NorthWest)
+				point.Y = -1;
+			else if (angle % 8 >= SouthWest && angle % 8 <= SouthEast)
+				point.Y = 1;
+			return point;
+		}
+
+		public static int CombineAxisDirections(int directionH, int directionV) {
+			if (directionH == Directions.Left)
+				return (directionV == Directions.Up ? Angles.UpLeft : Angles.DownLeft);
+			return (directionV == Directions.Up ? Angles.UpRight : Angles.DownRight);
+		}
 	}
 }

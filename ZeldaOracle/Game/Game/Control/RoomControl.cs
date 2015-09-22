@@ -96,6 +96,13 @@ namespace ZeldaOracle.Game.Control {
 			entities.Add(e);
 		}
 		
+		// Use this for spawning entites at a position at runtime.
+		public void SpawnEntity(Entity e, Vector2F position) {
+			e.Initialize(this);
+			e.Position = position;
+			entities.Add(e);
+		}
+		
 		// Use this for placing tiles at runtime.
 		public void PlaceTile(Tile tile, Point2I location, int layer) {
 			PlaceTile(tile, location.X, location.Y, layer);
@@ -270,41 +277,67 @@ namespace ZeldaOracle.Game.Control {
 			roomLocation = new Point2I(2, 1);
 			Room r = level.GetRoom(roomLocation);
 			
-			TileData td;
-
 			// Create a Sign tile
-			td					= new TileData(typeof(TileSign), TileFlags.Solid | TileFlags.Pickupable | TileFlags.Burnable | TileFlags.Movable);
-			td.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 0);
-			td.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 1);
-			td.BreakAnimation	= GameData.ANIM_EFFECT_SIGN_BREAK;
-			td.CollisionModel	= GameData.MODEL_BLOCK;
-			r.TileData[2, 3, 1] = td;
+			TileData tdSign = new TileData(typeof(TileSign), TileFlags.Solid | TileFlags.Pickupable |
+				TileFlags.Burnable | TileFlags.Cuttable);
+			tdSign.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 0);
+			tdSign.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 1);
+			tdSign.BreakAnimation	= GameData.ANIM_EFFECT_SIGN_BREAK;
+			tdSign.CollisionModel	= GameData.MODEL_BLOCK;
+			r.TileData[2, 3, 1] = tdSign;
 			
 			// Create a movable block tile.
-			td					= new TileData(TileFlags.Solid | TileFlags.Movable);
-			td.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 1, 9);
-			td.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 2, 9);
-			td.CollisionModel	= GameData.MODEL_BLOCK;
-			r.TileData[2, 5, 1] = td;
+			TileData tdBlock		= new TileData(TileFlags.Solid | TileFlags.Movable);
+			tdBlock.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 1, 9);
+			tdBlock.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 2, 9);
+			tdBlock.CollisionModel	= GameData.MODEL_BLOCK;
+			r.TileData[2, 5, 1] = tdBlock;
+			
+			// Create a bush tile.
+			TileData tdBush		= new TileData(TileFlags.Solid | TileFlags.Pickupable |
+									TileFlags.Burnable | TileFlags.Switchable | TileFlags.Cuttable);
+			tdBush.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 0);
+			tdBush.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 1);
+			tdBush.BreakAnimation	= GameData.ANIM_EFFECT_LEAVES;
+			tdBush.CollisionModel	= GameData.MODEL_BLOCK;
+			r.TileData[1, 1, 1] = tdBush;
+			
+			// Create a pot tile.
+			TileData tdPot		= new TileData(TileFlags.Solid | TileFlags.Pickupable |
+									TileFlags.Cuttable | TileFlags.Switchable | TileFlags.Movable);
+			tdPot.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 2, 0);
+			tdPot.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 2, 1);
+			tdPot.BreakAnimation	= GameData.ANIM_EFFECT_ROCK_BREAK;
+			tdPot.CollisionModel	= GameData.MODEL_BLOCK;
+			r.TileData[1, 2, 1] = tdPot;
+			
+			// Create a rock tile.
+			TileData tdRock			= new TileData(TileFlags.Solid | TileFlags.Pickupable);
+			tdRock.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 3, 0);
+			tdRock.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 3, 1);
+			tdRock.BreakAnimation	= GameData.ANIM_EFFECT_ROCK_BREAK;
+			tdRock.CollisionModel	= GameData.MODEL_BLOCK;
+			r.TileData[2, 1, 1] = tdRock;
 			
 			// Create a grass tile.
-			td					= new TileData(TileFlags.Grass);
-			td.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 3);
-			r.TileData[2, 2, 1] = td;
+			TileData tdGrass		= new TileData(TileFlags.Grass | TileFlags.Cuttable | TileFlags.Burnable | TileFlags.Bombable);
+			tdGrass.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 3);
+			tdGrass.BreakAnimation	= GameData.ANIM_EFFECT_GRASS_LEAVES;
+			r.TileData[2, 2, 1] = tdGrass;
 			//r.TileData[2, 3, 1] = td;
-			r.TileData[2, 4, 1] = td;
-			r.TileData[3, 4, 1] = td;
-			r.TileData[4, 5, 1] = td;
-			r.TileData[3, 6, 1] = td;
-			r.TileData[4, 6, 1] = td;
-			r.TileData[5, 6, 1] = td;
-			r.TileData[4, 7, 1] = td;
-			r.TileData[5, 7, 1] = td;
-			r.TileData[6, 7, 1] = td;
-			r.TileData[7, 7, 1] = td;
-			r.TileData[7, 2, 1] = td;
-			r.TileData[8, 2, 1] = td;
-			r.TileData[8, 3, 1] = td;
+			r.TileData[2, 4, 1] = tdGrass;
+			r.TileData[3, 4, 1] = tdGrass;
+			r.TileData[4, 5, 1] = tdGrass;
+			r.TileData[3, 6, 1] = tdGrass;
+			r.TileData[4, 6, 1] = tdGrass;
+			r.TileData[5, 6, 1] = tdGrass;
+			r.TileData[4, 7, 1] = tdGrass;
+			r.TileData[5, 7, 1] = tdGrass;
+			r.TileData[6, 7, 1] = tdGrass;
+			r.TileData[7, 7, 1] = tdGrass;
+			r.TileData[7, 2, 1] = tdGrass;
+			r.TileData[8, 2, 1] = tdGrass;
+			r.TileData[8, 3, 1] = tdGrass;
 
 			BeginRoom(r);
 		}

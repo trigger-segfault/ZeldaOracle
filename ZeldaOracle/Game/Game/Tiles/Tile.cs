@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Control;
+using ZeldaOracle.Game.Entities.Effects;
 
 namespace ZeldaOracle.Game.Tiles {
 	
@@ -73,7 +74,8 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		// Called when the player presses A on this tile, when facing the given direction.
-		public virtual void OnAction(int direction) {}
+		// Return true if player controls should be disabled for the rest of the frame.
+		public virtual bool OnAction(int direction) { return false; }
 
 
 		//-----------------------------------------------------------------------------
@@ -107,9 +109,16 @@ namespace ZeldaOracle.Game.Tiles {
 			isMoving = true;
 			this.movementSpeed = movementSpeed;
 			moveDirection = Directions.ToPoint(direction);
-			offset  = -Directions.ToVector(direction) * GameSettings.TILE_SIZE;
+			offset = -Directions.ToVector(direction) * GameSettings.TILE_SIZE;
 			RoomControl.MoveTile(this, newLocation, newLayer);
 			return true;
+		}
+		
+		public virtual void OnSwordHit() {
+			if (!isMoving && flags.HasFlag(TileFlags.Cuttable)) {
+				RoomControl.SpawnEntity(new Effect(breakAnimation), Position);
+				RoomControl.RemoveTile(this);
+			}
 		}
 
 
@@ -242,6 +251,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public Sprite Sprite {
 			get { return sprite; }
 			set { sprite = value; }
+		}
+
+		public Animation BreakAnimation {
+			get { return breakAnimation; }
+			set { breakAnimation = value; }
 		}
 
 		public Sprite SpriteAsObject {

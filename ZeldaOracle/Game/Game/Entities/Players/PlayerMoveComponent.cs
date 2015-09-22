@@ -150,7 +150,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 				
 			// Don't affect the facing direction when strafing
 			if (!mode.IsStrafing && isMoving) {
-				player.Angle = moveAngle;
 				player.Direction = moveDirection;
 			}
 
@@ -161,7 +160,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Update movement or acceleration.
 			if (allowMovementControl && (isMoving || (autoAccelerate && mode.IsSlippery))) {
 				if (!isMoving) {
-					player.Angle = Directions.ToAngle(player.Direction);
 					moveAngle = Directions.ToAngle(player.Direction);
 				}
 
@@ -264,9 +262,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			moveAxes[0]		= true;
 			moveAxes[1]		= true;
 			moveDirection	= (int) GMath.Round(analogAngle / 90.0f) % Directions.Count;
-			moveAngle		= (int) GMath.Round(analogAngle / 45.0f) % Angles.AngleCount;
 			moveDirection	= Directions.FlipVertical(moveDirection);
-			moveAngle		= Angles.FlipVertical(player.Angle);
 		}
 
 
@@ -326,6 +322,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public float MoveSpeedScale {
 			get { return moveSpeedScale; }
 			set { moveSpeedScale = value; }
+		}
+		
+		public bool IsStrafing {
+			get { return mode.IsStrafing; }
 		}
 		
 		public bool IsMoving {

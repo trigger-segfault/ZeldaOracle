@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemSword : ItemWeapon {

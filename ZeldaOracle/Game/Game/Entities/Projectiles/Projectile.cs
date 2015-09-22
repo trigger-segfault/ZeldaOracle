@@ -26,6 +26,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			eventLand = null;
 			angle = 0;
 			owner = null;
+
+			Graphics.IsRipplesEffectVisible = false;
+			Graphics.IsGrassEffectVisible = false;
 		}
 
 

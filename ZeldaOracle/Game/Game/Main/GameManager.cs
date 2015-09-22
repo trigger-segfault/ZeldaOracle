@@ -188,6 +188,7 @@ namespace ZeldaOracle.Game.Main {
 
 		// Called every step to draw the game.
 		public void Draw(Graphics2D g) {
+			g.UseIntegerPrecision = true;
 
 			DrawMode drawMode = new DrawMode();
 			drawMode.SortMode = SpriteSortMode.Deferred;

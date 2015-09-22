@@ -8,21 +8,24 @@ using ZeldaOracle.Common.Geometry;
 /*
  *	GAME TODO LIST:
  *		- Work out depth for things (Player submerge should be behind all things)
- *		- Player
- *			- Rename direction to FaceDirection
- *			- Merge MoveAngle and Angle (they are the same thing)
- * 
+ *		- Work out position/origin/center confusions.
+ *		- Player:
+ *			- 
+ *		- Graphics:
+ *			- Drawing sprites/animations with different sprite sheets (player hurt, different zones, menu light/dark)
+ *		- Resources:
+ *			- Define animations in a file
+ *		- Properties
+ *		
  *	DEBUG KEYS:
- *		- F: Play a fade game-state.
+ *		- 1: Speed up the game.
  *		- G: Read text.
  *		- V: (When reading text) skip to next line.
  *		- Z: Fire an arrow.
 */
 
-namespace ZeldaOracle.Game
-{
-	class GameSettings
-	{
+namespace ZeldaOracle.Game {
+	class GameSettings {
 
 		public const int		TILE_SIZE		= 16;	// Tile size in texels.
 		public const int		SCREEN_WIDTH	= 160;

@@ -22,6 +22,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private bool isPickingUp; // Is the pickup animation playing?
 		private int pickupTimer;
 		private Point2I objectDrawOffset;
+		
+		// TODO: Can't ledge jump when carrying.
+		// TODO: Change carry tile to an entity that can optionally be updated (bombs).
 
 
 		//-----------------------------------------------------------------------------
@@ -67,7 +70,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Vector2F v = projectile.Physics.Velocity;
 			Action landAction = delegate() {
 				// Create crash effect.
-				Effect effect = new Effect(GameData.ANIM_EFFECT_SIGN_BREAK);
+				Effect effect = new Effect(carryTile.BreakAnimation);
 				effect.Position = projectile.Position;
 				projectile.RoomControl.SpawnEntity(effect);
 				projectile.Destroy();
