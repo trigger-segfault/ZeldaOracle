@@ -22,6 +22,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private bool isPickingUp; // Is the pickup animation playing?
 		private int pickupTimer;
 		private Point2I objectDrawOffset;
+		
+		// TODO: Can't ledge jump when carrying.
+		// TODO: Change carry tile to an entity that can optionally be updated (bombs).
 
 
 		//-----------------------------------------------------------------------------

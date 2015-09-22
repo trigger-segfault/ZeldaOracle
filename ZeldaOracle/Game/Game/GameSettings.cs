@@ -12,11 +12,11 @@ using ZeldaOracle.Common.Geometry;
  *		- Player:
  *			- 
  *		- Graphics:
- *			- Round draw positions (in Graphics2D) to avoid pixel bleeding.
  *			- Drawing sprites/animations with different sprite sheets (player hurt, different zones, menu light/dark)
  *		- Resources:
  *			- Define animations in a file
- *			
+ *		- Properties
+ *		
  *	DEBUG KEYS:
  *		- 1: Speed up the game.
  *		- G: Read text.
@@ -24,10 +24,8 @@ using ZeldaOracle.Common.Geometry;
  *		- Z: Fire an arrow.
 */
 
-namespace ZeldaOracle.Game
-{
-	class GameSettings
-	{
+namespace ZeldaOracle.Game {
+	class GameSettings {
 
 		public const int		TILE_SIZE		= 16;	// Tile size in texels.
 		public const int		SCREEN_WIDTH	= 160;

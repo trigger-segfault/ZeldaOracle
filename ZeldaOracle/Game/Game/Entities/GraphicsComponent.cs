@@ -89,7 +89,6 @@ namespace ZeldaOracle.Game.Entities
 			float grassDepth	= 0.28f;
 
 			// Draw the shadow.
-			// TODO: Shadow draw offset.
 			if (isShadowVisible && entity.ZPosition > 1 && entity.GameControl.RoomTicks % 2 == 0) {
 				g.DrawSprite(GameData.SPR_SHADOW, Entity.Position + shadowDrawOffset, shadowDepth);
 			}
