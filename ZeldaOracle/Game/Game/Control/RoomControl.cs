@@ -419,7 +419,22 @@ namespace ZeldaOracle.Game.Control {
 			}
 			GameControl.HUD.Update();
 
-			//if (AudioSystem.CurrentSong
+			if (Keyboard.IsKeyPressed(Keys.T)) {
+				switch (player.Tunic) {
+				case PlayerTunics.GreenTunic: player.Tunic = PlayerTunics.RedTunic; break;
+				case PlayerTunics.RedTunic: player.Tunic = PlayerTunics.BlueTunic; break;
+				case PlayerTunics.BlueTunic: player.Tunic = PlayerTunics.GreenTunic; break;
+				}
+			}
+			if (Keyboard.IsKeyPressed(Keys.H)) {
+				player.Hurt(0);
+			}
+			if (Keyboard.IsKeyPressed(Keys.M)) {
+				AudioSystem.PlaySong("overworld");
+			}
+			if (Keyboard.IsKeyPressed(Keys.N)) {
+				AudioSystem.MasterVolume = 1.0f;
+			}
 		}
 
 		public override void Draw(Graphics2D g) {

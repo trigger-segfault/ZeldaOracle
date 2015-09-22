@@ -53,6 +53,15 @@ namespace ZeldaOracle.Common.Graphics {
 			AddFrame(new AnimationFrame(startTime, duration, sprite));
 		}
 
+		public void SwitchSpriteSheet(SpriteSheet sheet) {
+			foreach (AnimationFrame frame in frames) {
+				Sprite sprite = frame.Sprite;
+				while (sprite != null) {
+					sprite.Image = sheet.Image;
+					sprite = sprite.NextPart;
+				}
+			}
+		}
 
 		//-----------------------------------------------------------------------------
 		// Properties

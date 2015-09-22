@@ -105,6 +105,7 @@ public static class AudioSystem {
 		get { return masterVolume; }
 		set {
 			masterVolume = GMath.Clamp(value, 0.0f, 1.0f);
+			SoundEffect.MasterVolume = masterVolume;
 			UpdateSounds();
 			UpdateMusic();
 		}
