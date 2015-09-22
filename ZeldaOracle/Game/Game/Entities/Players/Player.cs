@@ -257,11 +257,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 			UpdateUseDirections();
 			
 			// Check for tile press interactions.
-			Tile actionTile = physics.GetMeetingSolidTile(position, direction);
-			if (actionTile != null && Controls.A.IsPressed()) {
-				if (actionTile.OnAction(direction))
-					isItemButtonPressDisabled = true;
-				// TODO: player stops pushing when reading a sign.
+			if (IsOnGround) {
+				Tile actionTile = physics.GetMeetingSolidTile(position, direction);
+				if (actionTile != null && Controls.A.IsPressed()) {
+					if (actionTile.OnAction(direction))
+						isItemButtonPressDisabled = true;
+					// TODO: player stops pushing when reading a sign.
+				}
 			}
 
 			// Update the current player state.

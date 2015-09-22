@@ -110,7 +110,8 @@ namespace ZeldaOracle.Game.Control {
 			roomControl.BeginTestWorld();
 			player = roomControl.Player;
 			
-			AudioSystem.PlaySong("overworld", true);
+			AudioSystem.MasterVolume = 0.01f;
+			//AudioSystem.PlaySong("overworld", true);
 		}
 
 		public void DisplayMessage(Message message) {
