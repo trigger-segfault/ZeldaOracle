@@ -90,9 +90,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 			
 			// Check for tile press interactions.
-			if (Keyboard.IsKeyPressed(Keys.Space) && actionTile != null) {
-				actionTile.OnAction(player.Direction);
-			}
+			//if (Keyboard.IsKeyPressed(Keys.Space) && actionTile != null) {
+			//	actionTile.OnAction(player.Direction);
+			//}
 
 			// Update player weapon items.
 			Player.UpdateEquippedItems();

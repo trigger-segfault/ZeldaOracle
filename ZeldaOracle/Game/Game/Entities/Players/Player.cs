@@ -62,6 +62,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// TEMP: Change tool drawing to something else
 		public AnimationPlayer toolAnimation;
 
+		private bool isItemButtonPressDisabled;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -73,7 +75,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			useAngle			= 0;
 			autoRoomTransition	= false;
 			allowRoomTransition	= true;
-			syncAnimationWithDirection = true;
+			syncAnimationWithDirection	= true;
+			isItemButtonPressDisabled	= false;
 			movement = new PlayerMoveComponent(this);
 
 			// Unit properties.
@@ -154,16 +157,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 				if (EquippedUsableItems[i] != null) {
 					EquippedUsableItems[i].Player = this;
 
-					if (i == 0 && Controls.A.IsPressed())
-						EquippedUsableItems[i].OnButtonPress();
-					else if (i == 1 && Controls.B.IsPressed())
-						EquippedUsableItems[i].OnButtonPress();
+					if (!isItemButtonPressDisabled) {
+						if (i == 0 && Controls.A.IsPressed())
+							EquippedUsableItems[i].OnButtonPress();
+						else if (i == 1 && Controls.B.IsPressed())
+							EquippedUsableItems[i].OnButtonPress();
 
-					if (i == 0 && Controls.A.IsDown())
-						EquippedUsableItems[i].OnButtonDown();
-					else if (i == 1 && Controls.B.IsDown())
-						EquippedUsableItems[i].OnButtonDown();
-
+						if (i == 0 && Controls.A.IsDown())
+							EquippedUsableItems[i].OnButtonDown();
+						else if (i == 1 && Controls.B.IsDown())
+							EquippedUsableItems[i].OnButtonDown();
+					}
 					//equippedItems[i].Update();
 				}
 			}
@@ -247,8 +251,18 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public override void Update() {
+			isItemButtonPressDisabled = false;
+
 			movement.Update();
 			UpdateUseDirections();
+			
+			// Check for tile press interactions.
+			Tile actionTile = physics.GetMeetingSolidTile(position, direction);
+			if (actionTile != null && Controls.A.IsPressed()) {
+				if (actionTile.OnAction(direction))
+					isItemButtonPressDisabled = true;
+				// TODO: player stops pushing when reading a sign.
+			}
 
 			// Update the current player state.
 			PlayerState desiredNaturalState = GetDesiredNaturalState();

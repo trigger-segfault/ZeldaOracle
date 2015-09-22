@@ -96,6 +96,13 @@ namespace ZeldaOracle.Game.Control {
 			entities.Add(e);
 		}
 		
+		// Use this for spawning entites at a position at runtime.
+		public void SpawnEntity(Entity e, Vector2F position) {
+			e.Initialize(this);
+			e.Position = position;
+			entities.Add(e);
+		}
+		
 		// Use this for placing tiles at runtime.
 		public void PlaceTile(Tile tile, Point2I location, int layer) {
 			PlaceTile(tile, location.X, location.Y, layer);
@@ -273,7 +280,8 @@ namespace ZeldaOracle.Game.Control {
 			TileData td;
 
 			// Create a Sign tile
-			td					= new TileData(typeof(TileSign), TileFlags.Solid | TileFlags.Pickupable | TileFlags.Burnable | TileFlags.Movable);
+			td					= new TileData(typeof(TileSign), TileFlags.Solid | TileFlags.Pickupable |
+									TileFlags.Burnable | TileFlags.Movable | TileFlags.Cuttable);
 			td.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 0);
 			td.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 1);
 			td.BreakAnimation	= GameData.ANIM_EFFECT_SIGN_BREAK;
@@ -287,9 +295,19 @@ namespace ZeldaOracle.Game.Control {
 			td.CollisionModel	= GameData.MODEL_BLOCK;
 			r.TileData[2, 5, 1] = td;
 			
+			// Create a bush tile.
+			td					= new TileData(TileFlags.Solid | TileFlags.Pickupable |
+									TileFlags.Burnable | TileFlags.Switchable | TileFlags.Cuttable);
+			td.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 0);
+			td.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 1);
+			td.BreakAnimation	= GameData.ANIM_EFFECT_LEAVES;
+			td.CollisionModel	= GameData.MODEL_BLOCK;
+			r.TileData[1, 1, 1] = td;
+			
 			// Create a grass tile.
-			td					= new TileData(TileFlags.Grass);
+			td					= new TileData(TileFlags.Grass | TileFlags.Cuttable | TileFlags.Burnable | TileFlags.Bombable);
 			td.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 3);
+			td.BreakAnimation	= GameData.ANIM_EFFECT_GRASS_LEAVES;
 			r.TileData[2, 2, 1] = td;
 			//r.TileData[2, 3, 1] = td;
 			r.TileData[2, 4, 1] = td;

@@ -67,7 +67,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Vector2F v = projectile.Physics.Velocity;
 			Action landAction = delegate() {
 				// Create crash effect.
-				Effect effect = new Effect(GameData.ANIM_EFFECT_SIGN_BREAK);
+				Effect effect = new Effect(carryTile.BreakAnimation);
 				effect.Position = projectile.Position;
 				projectile.RoomControl.SpawnEntity(effect);
 				projectile.Destroy();

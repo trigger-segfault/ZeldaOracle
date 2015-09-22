@@ -8,12 +8,15 @@ using ZeldaOracle.Common.Geometry;
 /*
  *	GAME TODO LIST:
  *		- Work out depth for things (Player submerge should be behind all things)
+ *		- Work out position/origin/center confusions.
  *		- Player:
- *			- Rename direction to FaceDirection
- *			- Merge MoveAngle and Angle (they are the same thing)
+ *			- 
  *		- Graphics:
  *			- Round draw positions (in Graphics2D) to avoid pixel bleeding.
- * 
+ *			- Drawing sprites/animations with different sprite sheets (player hurt, different zones, menu light/dark)
+ *		- Resources:
+ *			- Define animations in a file
+ *			
  *	DEBUG KEYS:
  *		- 1: Speed up the game.
  *		- G: Read text.
