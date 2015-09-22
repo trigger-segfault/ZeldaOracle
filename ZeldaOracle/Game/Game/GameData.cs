@@ -86,19 +86,26 @@ namespace ZeldaOracle.Game {
 		// Loads the sprite sheets.
 		private static void LoadSpriteSheets() {
 
-			Image imageZoneset		= Resources.LoadImage("Images/zoneset");
-			Image imageSheetPlayer	= Resources.LoadImage("Images/sheet_player");
-			Image imageIconsThin	= Resources.LoadImage("Images/sheet_icons_thin");
-			Image imageEffects		= Resources.LoadImage("Images/sheet_effects");
-			Image imagePlayerItems	= Resources.LoadImage("Images/sheet_player_items");
+			Image imageZoneset			= Resources.LoadImage("Images/zoneset");
+			Image imageSheetPlayer		= Resources.LoadImage("Images/sheet_player");
+			Image imageSheetPlayerRed	= Resources.LoadImage("Images/sheet_player_red");
+			Image imageSheetPlayerBlue	= Resources.LoadImage("Images/sheet_player_blue");
+			Image imageSheetPlayerHurt	= Resources.LoadImage("Images/sheet_player_hurt");
+			Image imageIconsThin		= Resources.LoadImage("Images/sheet_icons_thin");
+			Image imageEffects			= Resources.LoadImage("Images/Effects/basic_effects");
+			Image imageColorEffects		= Resources.LoadImage("Images/Effects/color_effects");
+			Image imagePlayerItems		= Resources.LoadImage("Images/sheet_player_items");
 
 			SHEET_ZONESET_LARGE	= new SpriteSheet(imageZoneset, 16, 16, 0, 0, 1, 1);
 			SHEET_ZONESET_SMALL	= new SpriteSheet(imageZoneset, 8, 8, 187, 0, 1, 1);
 
-			SHEET_PLAYER		= new SpriteSheet(imageSheetPlayer, 16, 16, 0, 0, 1, 1);
-			SHEET_ICONS_THIN	= new SpriteSheet(imageIconsThin, 8, 16, 0, 0, 1, 1);
-			SHEET_EFFECTS		= new SpriteSheet(imageEffects, 16, 16, 0, 0, 1, 1);
-			SHEET_PLAYER_ITEMS	= new SpriteSheet(imagePlayerItems, 16, 16, 0, 0, 1, 1);
+			SHEET_PLAYER		= new SpriteSheet(imageSheetPlayer,		16, 16, 0, 0, 1, 1);
+			SHEET_PLAYER_RED	= new SpriteSheet(imageSheetPlayerRed,	16, 16, 0, 0, 1, 1);
+			SHEET_PLAYER_BLUE	= new SpriteSheet(imageSheetPlayerBlue,	16, 16, 0, 0, 1, 1);
+			SHEET_PLAYER_HURT	= new SpriteSheet(imageSheetPlayerHurt,	16, 16, 0, 0, 1, 1);
+			SHEET_EFFECTS		= new SpriteSheet(imageEffects,			16, 16, 0, 0, 1, 1);
+			SHEET_COLOR_EFFECTS	= new SpriteSheet(imageColorEffects,	16, 16, 0, 0, 1, 1);
+			SHEET_PLAYER_ITEMS	= new SpriteSheet(imagePlayerItems,		16, 16, 0, 0, 1, 1);
 
 
 			Resources.LoadSpriteSheets("SpriteSheets/menu_elements.conscript");
@@ -168,9 +175,11 @@ namespace ZeldaOracle.Game {
 			BuildSprite(SPR_COLOR_CUBE_SLOT,7, 9);
 			BuildSprite(SPR_CRACKED_FLOOR,	8, 9);
 			BuildSprite(SPR_PIT,			9, 9);
+
 			spriteBuilder.SpriteSheet = SHEET_EFFECTS;
 			BuildSprite(SPR_SHADOW, 0, 0, -8, -8);
-			spriteBuilder.SpriteSheet = SHEET_ICONS_THIN;
+
+			spriteBuilder.SpriteSheet = SHEET_ITEMS_SMALL;
 			BuildSprite(SPR_ITEM_ICON_SWORD_1,					0, 0);
 			BuildSprite(SPR_ITEM_ICON_SWORD_2,					1, 0);
 			BuildSprite(SPR_ITEM_ICON_SWORD_3,					2, 0);
@@ -201,6 +210,7 @@ namespace ZeldaOracle.Game {
 			BuildSprite(SPR_ITEM_ICON_FIRE_ROD,					11, 1);
 			BuildSprite(SPR_ITEM_ICON_OCARINA,					12, 1);
 			BuildSprite(SPR_ITEM_ICON_BOW,						13, 1);
+
 			spriteBuilder.SpriteSheet = SHEET_MENU_SMALL;
 			BuildSprite(SPR_HUD_BACKGROUND,				2, 4);
 			BuildSprite(SPR_HUD_BACKGROUND_INVENTORY,	3, 4);
@@ -349,6 +359,7 @@ namespace ZeldaOracle.Game {
 			animationBuilder.SpriteSheet = SHEET_PLAYER_ITEMS;
 			BuildAnim(ANIM_PROJECTILE_PLAYER_ARROW).AddFrame(1, 0,11).Offset(-8, -8).MakeDynamic(8, 1,0);
 			BuildAnim(ANIM_PROJECTILE_PLAYER_ARROW_CRASH).AddFrameStrip(6, 0, 11,4, -8,-8, 2,0);
+			BuildAnim(ANIM_ITEM_BOMB).AddFrame(4, 2,8, 0,0).AddFrame(4, 3,8, 0,0);
 
 			// EFFECT ANIMATIONS:
 			animationBuilder.SpriteSheet = SHEET_EFFECTS;
@@ -407,7 +418,16 @@ namespace ZeldaOracle.Game {
 					.AddFrame(1, 2,1, 8,11)	.AddPart(1, 2,1, 9,2)	.AddPart(1, 2,1, -5,-11)	.AddPart(1, 0,1, -10,5)	.AddDelay(1)
 				.AddFrame(1, 2,1, 8,9)	.AddPart(1, 2,1, 9,3)	.AddPart(1, 2,1, -7,-12)	.AddPart(1, 0,1, -13,-1).AddDelay(1)
 					.AddFrame(1, 2,1, 8,9)	.AddPart(1, 2,1, 9,3)	.AddPart(1, 2,1, -7,-12)	.AddPart(1, 0,1, -13,-1);
-
+			
+			// COLOR EFFECT ANIMATIONS:
+			animationBuilder.SpriteSheet = SHEET_COLOR_EFFECTS;
+			BuildAnim(ANIM_EFFECT_BOMB_EXPLOSION).SetLoopMode(LoopMode.Reset)
+				.AddFrame(4, 0,0)
+				.AddFrame(4, 0,16)
+				.AddFrame(3, 0,0)
+				.AddFrame(7, 0,0, -6,-6).AddPart(7, 0,0, 6,-6).AddPart(7, 0,0, -6,2).AddPart(7, 0,0, 6,2)
+				.AddFrame(8, 6,1, -8,-8).AddPart(8, 7,1, 8,-8).AddPart(8, 6,2, -8,8).AddPart(8, 7,2, 8,8)
+				.AddFrame(9, 1,0, -8,-8).AddPart(9, 1,0, 8,-8).AddPart(9, 1,0, -8,8).AddPart(9, 1,0, 8,8);
 		}
 
 
@@ -567,9 +587,9 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		// Loads the shaders.
-	private static void LoadShaders() {
+		private static void LoadShaders() {
 
-	}
+		}
 
 
 		//-----------------------------------------------------------------------------
@@ -577,12 +597,12 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		// Loads the sound effects.
-	private static void LoadSounds() {
+		private static void LoadSounds() {
 
 
-		Resources.LoadSounds(Resources.SoundDirectory + "sounds.conscript");
+			Resources.LoadSounds(Resources.SoundDirectory + "sounds.conscript");
 
-	}
+		}
 
 
 		//-----------------------------------------------------------------------------
@@ -590,46 +610,48 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		// Loads the music.
-	private static void LoadMusic() {
+		private static void LoadMusic() {
 
-		Resources.LoadMusic(Resources.MusicDirectory + "music.conscript");
-	}
+			Resources.LoadMusic(Resources.MusicDirectory + "music.conscript");
+		}
 
 	
-	//-----------------------------------------------------------------------------
-	// Tilesets
-	//-----------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------
+		// Tilesets
+		//-----------------------------------------------------------------------------
 
 		public static Tileset TILESET_OVERWORLD;
-	public static Tileset[] TILESETS;
+		public static Tileset[] TILESETS;
 
 
-	//-----------------------------------------------------------------------------
-	// Images
-	//-----------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------
+		// Images
+		//-----------------------------------------------------------------------------
 
 
-	//-----------------------------------------------------------------------------
-	// Sprite Sheets
-	//-----------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------
+		// Sprite Sheets
+		//-----------------------------------------------------------------------------
 
-	public static SpriteSheet SHEET_MENU_SMALL;
-	public static SpriteSheet SHEET_MENU_LARGE;
-	public static SpriteSheet SHEET_MENU_SMALL_LIGHT;
-	public static SpriteSheet SHEET_MENU_LARGE_LIGHT;
-	public static SpriteSheet SHEET_ITEMS_SMALL;
-	public static SpriteSheet SHEET_ITEMS_LARGE;
-	public static SpriteSheet SHEET_ITEMS_SMALL_LIGHT;
-	public static SpriteSheet SHEET_ITEMS_LARGE_LIGHT;
+		public static SpriteSheet SHEET_MENU_SMALL;
+		public static SpriteSheet SHEET_MENU_LARGE;
+		public static SpriteSheet SHEET_MENU_SMALL_LIGHT;
+		public static SpriteSheet SHEET_MENU_LARGE_LIGHT;
+		public static SpriteSheet SHEET_ITEMS_SMALL;
+		public static SpriteSheet SHEET_ITEMS_LARGE;
+		public static SpriteSheet SHEET_ITEMS_SMALL_LIGHT;
+		public static SpriteSheet SHEET_ITEMS_LARGE_LIGHT;
 
-		public static SpriteSheet SHEET_ICONS_THIN;
 		public static SpriteSheet SHEET_EFFECTS;
+		public static SpriteSheet SHEET_COLOR_EFFECTS;
 
-	public static SpriteSheet SHEET_PLAYER;
-	public static SpriteSheet SHEET_PLAYER_HURT;
-	public static SpriteSheet SHEET_MONSTERS;
-	public static SpriteSheet SHEET_MONSTERS_HURT;
-	public static SpriteSheet SHEET_PLAYER_ITEMS;
+		public static SpriteSheet SHEET_PLAYER;
+		public static SpriteSheet SHEET_PLAYER_RED;
+		public static SpriteSheet SHEET_PLAYER_BLUE;
+		public static SpriteSheet SHEET_PLAYER_HURT;
+		public static SpriteSheet SHEET_MONSTERS;
+		public static SpriteSheet SHEET_MONSTERS_HURT;
+		public static SpriteSheet SHEET_PLAYER_ITEMS;
 	
 		public static SpriteSheet SHEET_ZONESET_LARGE;
 		public static SpriteSheet SHEET_ZONESET_SMALL;
@@ -678,6 +700,12 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_ARMOS_STATUE		= new Sprite();
 
 	// Item Icons.
+		public static Sprite SPR_ITEM_SEED_EMBER				= new Sprite();
+		public static Sprite SPR_ITEM_SEED_SCENT				= new Sprite();
+		public static Sprite SPR_ITEM_SEED_PEGASUS				= new Sprite();
+		public static Sprite SPR_ITEM_SEED_GALE					= new Sprite();
+		public static Sprite SPR_ITEM_SEED_MYSTERY				= new Sprite();
+
 		public static Sprite SPR_ITEM_ICON_SWORD_1				= new Sprite();
 		public static Sprite SPR_ITEM_ICON_SWORD_2				= new Sprite();
 		public static Sprite SPR_ITEM_ICON_SWORD_3				= new Sprite();
@@ -733,7 +761,7 @@ namespace ZeldaOracle.Game {
 	// Animations
 	//-----------------------------------------------------------------------------
 
-	// Tile animations.
+		// Tile animations.
 		public static Animation ANIM_WATER						= new Animation();
 		public static Animation ANIM_OCEAN						= new Animation();
 		public static Animation ANIM_OCEAN_SHORE				= new Animation();
@@ -748,7 +776,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_LAVAFALL_BOTTOM			= new Animation();
 		public static Animation ANIM_LAVAFALL_TOP				= new Animation();
 	
-	// Player animations.
+		// Player animations.
 		public static Animation ANIM_PLAYER_DEFAULT				= new Animation();
 		public static Animation ANIM_PLAYER_CARRY				= new Animation();
 		public static Animation ANIM_PLAYER_SHIELD				= new Animation();
@@ -779,20 +807,23 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_SWORD_SPIN					= new Animation();
 		public static Animation ANIM_SWORD_STAB					= new Animation();
 
-	// Projectile animations.
+		// Projectile animations.
+		public static Animation ANIM_ITEM_BOMB						= new Animation();
 		public static Animation ANIM_PROJECTILE_PLAYER_ARROW		= new Animation();
 		public static Animation ANIM_PROJECTILE_PLAYER_ARROW_CRASH	= new Animation();
 	
-	// Effect animations.
-		public static Animation ANIM_EFFECT_DIRT			= new Animation();
-		public static Animation ANIM_EFFECT_WATER_SPLASH	= new Animation();
-		public static Animation ANIM_EFFECT_LAVA_SPLASH		= new Animation();
-		public static Animation ANIM_EFFECT_RIPPLES			= new Animation();
-		public static Animation ANIM_EFFECT_GRASS			= new Animation();
-		public static Animation ANIM_EFFECT_ROCK_BREAK		= new Animation();
-		public static Animation ANIM_EFFECT_SIGN_BREAK		= new Animation();
-		public static Animation ANIM_EFFECT_LEAVES			= new Animation();
-		public static Animation ANIM_EFFECT_GRASS_LEAVES	= new Animation();
+		// Effect animations.
+		public static Animation ANIM_EFFECT_DIRT				= new Animation();
+		public static Animation ANIM_EFFECT_WATER_SPLASH		= new Animation();
+		public static Animation ANIM_EFFECT_LAVA_SPLASH			= new Animation();
+		public static Animation ANIM_EFFECT_RIPPLES				= new Animation();
+		public static Animation ANIM_EFFECT_GRASS				= new Animation();
+		public static Animation ANIM_EFFECT_ROCK_BREAK			= new Animation();
+		public static Animation ANIM_EFFECT_SIGN_BREAK			= new Animation();
+		public static Animation ANIM_EFFECT_LEAVES				= new Animation();
+		public static Animation ANIM_EFFECT_GRASS_LEAVES		= new Animation();
+		public static Animation ANIM_EFFECT_BOMB_EXPLOSION		= new Animation();
+		public static Animation ANIM_EFFECT_MONSTER_EXPLOSION	= new Animation();
 	
 
 	//-----------------------------------------------------------------------------

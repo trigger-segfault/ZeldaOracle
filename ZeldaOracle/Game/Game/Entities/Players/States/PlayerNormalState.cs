@@ -77,11 +77,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				player.Graphics.AnimationPlayer.Animation = GameData.ANIM_PLAYER_PUSH;
 				pushTimer++;
 
-				if (pushTimer > 20 && actionTile.Flags.HasFlag(TileFlags.Movable)) {
-					actionTile.Push(player.Direction, 1.0f);
-					//Message message = new Message("Oof! It's heavy!");
-					//player.RoomControl.GameManager.PushGameState(new StateTextReader(message));
-					pushTimer = 0;
+				if (pushTimer > actionTile.PushDelay && actionTile.Flags.HasFlag(TileFlags.Movable)) {
+					if (actionTile.OnPush(player.Direction, 1.0f))
+						pushTimer = 0;
 				}
 			}
 			else {

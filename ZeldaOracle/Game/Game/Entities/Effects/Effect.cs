@@ -18,12 +18,17 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		public Effect() {
 			destroyTimer = -1;
 			destroyOnAnimationComplete = false;
+
+			Graphics.IsShadowVisible		= false;
+			Graphics.IsGrassEffectVisible	= false;
+			Graphics.IsRipplesEffectVisible	= false;
 		}
 		
 		// Create an effect that plays an animation and then dissapears
-		public Effect(Animation animation) {
+		public Effect(Animation animation) : this() {
 			destroyTimer = -1;
 			destroyOnAnimationComplete = true;
+
 			Graphics.PlayAnimation(animation);
 		}
 

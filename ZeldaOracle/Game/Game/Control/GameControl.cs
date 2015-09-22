@@ -59,6 +59,15 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		public void StartGame() {
+
+			// TODO: Load world here.
+			roomControl		= new RoomControl();
+			gameManager.PushGameState(roomControl);
+
+			roomControl.BeginTestWorld();
+			player = roomControl.Player;
+
+
 			menuWeapons	= new MenuWeapons(gameManager);
 			menuSecondaryItems	= new MenuSecondaryItems(gameManager);
 			menuEssences	= new MenuEssences(gameManager);
@@ -102,7 +111,7 @@ namespace ZeldaOracle.Game.Control {
 			inventory.ObtainAmmo(inventory.GetAmmo("ammo_mystery_seeds"));
 
 			hud = new HUD(this);
-
+			
 			// TODO: Load world here.
 			roomControl		= new RoomControl();
 			gameManager.PushGameState(roomControl);
@@ -112,6 +121,7 @@ namespace ZeldaOracle.Game.Control {
 			
 			AudioSystem.MasterVolume = 0.01f;
 			//AudioSystem.PlaySong("overworld", true);
+
 		}
 
 		public void DisplayMessage(Message message) {

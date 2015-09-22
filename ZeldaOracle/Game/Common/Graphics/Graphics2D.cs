@@ -60,7 +60,7 @@ public class Graphics2D {
 		this.white2x2				= new Texture2D(spriteBatch.GraphicsDevice, 2, 2);
 		this.white1x1.SetData(new Color[] { Color.White });
 		this.white2x2.SetData(new Color[] { Color.White, Color.White, Color.White, Color.White });
-
+		
 		this.drawingColor			= XnaColor.White;
 	}
 	
@@ -119,7 +119,7 @@ public class Graphics2D {
 	// Translates the position based on the translation and precision settings.
 	private Vector2 NewPos(Vector2F position) {
 		if (useTranslation)
-			return (UseIntegerPrecision ? (Vector2)GMath.Floor(position + translation) : (Vector2)(position + translation));
+			return (UseIntegerPrecision ? (Vector2) GMath.Round(position + translation) : (Vector2)(position + translation));
 		else
 			return (Vector2)position;
 	}
