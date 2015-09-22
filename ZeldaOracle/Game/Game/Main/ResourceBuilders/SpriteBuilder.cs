@@ -68,6 +68,11 @@ namespace ZeldaOracle.Game.Main.ResourceBuilders {
 			return this;
 		}
 		
+		public SpriteBuilder SetSize(int width, int height) {
+			sprite.SourceRect = new Rectangle2I(sprite.SourceRect.Point, new Point2I(width, height));
+			return this;
+		}
+		
 		public SpriteBuilder Offset(int x, int y) {
 			for (Sprite spr = spriteBegin; spr != null; spr = spr.NextPart) {
 				spr.DrawOffset += new Point2I(x, y);

@@ -111,9 +111,17 @@ namespace ZeldaOracle.Game.Control {
 			inventory.ObtainAmmo(inventory.GetAmmo("ammo_mystery_seeds"));
 
 			hud = new HUD(this);
+			
+			// TODO: Load world here.
+			roomControl		= new RoomControl();
+			gameManager.PushGameState(roomControl);
 
+			roomControl.BeginTestWorld();
+			player = roomControl.Player;
+			
+			AudioSystem.MasterVolume = 0.01f;
 			//AudioSystem.PlaySong("overworld", true);
-			AudioSystem.MasterVolume = 0.1f;
+
 		}
 
 		public void DisplayMessage(Message message) {

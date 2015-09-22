@@ -38,9 +38,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public Unit() {
 			EnablePhysics();
 
-			health		= 1;
-			healthMax	= 1;
-			direction	= Directions.Right;
+			health			= 1;
+			healthMax		= 1;
+			direction		= Directions.Right;
+			centerOffset	= new Point2I(8, 8);
 		}
 
 
