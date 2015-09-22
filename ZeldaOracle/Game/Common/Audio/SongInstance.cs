@@ -11,9 +11,9 @@ using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Audio {
 /** <summary>
- * A structure for storing a sound effect instance.
+ * A structure for storing a sound effect instance for a song.
  * </summary> */
-public class SoundInstance {
+public class SongInstance {
 
 	//========== CONSTANTS ===========
 	#region Constants
@@ -25,8 +25,8 @@ public class SoundInstance {
 	// Containment
 	/** <summary> The sound effect instance class contained by this sound. </summary> */
 	private SoundEffectInstance soundInstance;
-	/** <summary> The sound class of the sound instance. </summary> */
-	private Sound sound;
+	/** <summary> The song class of the sound instance. </summary> */
+	private Song song;
 
 	// Settings
 	/** <summary> The default volume of the sound effect. </summary> */
@@ -45,10 +45,10 @@ public class SoundInstance {
 	#region Constructors
 
 	/** <summary> Constructs the default sound. </summary> */
-	public SoundInstance(SoundEffectInstance soundInstance, Sound sound, bool looped = false, float volume = 1.0f, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
+	public SongInstance(SoundEffectInstance soundInstance, Song song, bool looped = false, float volume = 1.0f, float pitch = 0.0f, float pan = 0.0f) {
 		// Containment
 		this.soundInstance	= soundInstance;
-		this.sound			= sound;
+		this.song			= song;
 
 		// Settings
 		this.volume			= GMath.Clamp(volume, 0.0f, 1.0f);
@@ -57,12 +57,12 @@ public class SoundInstance {
 		this.muted			= false;
 		this.looped			= looped;
 
-		this.soundInstance.Volume	= GMath.Clamp(AudioSystem.SoundVolume * volume, 0.0f, 1.0f);
-		this.soundInstance.Pitch	= GMath.Clamp(AudioSystem.MasterPitch + AudioSystem.SoundPitch + pitch, -1.0f, 1.0f);
-		this.soundInstance.Pan		= GMath.Clamp(AudioSystem.MasterPan + AudioSystem.SoundPan + pan, -1.0f, 1.0f);
+		this.soundInstance.Volume	= GMath.Clamp(AudioSystem.MusicVolume * volume, 0.0f, 1.0f);
+		this.soundInstance.Pitch	= GMath.Clamp(AudioSystem.MasterPitch + AudioSystem.MusicPitch + pitch, -1.0f, 1.0f);
+		this.soundInstance.Pan		= GMath.Clamp(AudioSystem.MasterPan + AudioSystem.MusicPan + pan, -1.0f, 1.0f);
 		this.soundInstance.IsLooped	= this.looped;
 
-		if (AudioSystem.IsMasterMuted || AudioSystem.IsSoundMuted || this.muted)
+		if (AudioSystem.IsMasterMuted || AudioSystem.IsMusicMuted || this.muted)
 			this.soundInstance.Volume	= 0.0f;
 	}
 
@@ -76,9 +76,9 @@ public class SoundInstance {
 	public SoundEffectInstance SoundEffectInstance {
 		get { return soundInstance; }
 	}
-	/** <summary> Gets the sound containing this sound instance. </summary> */
-	public Sound Sound {
-		get { return sound; }
+	/** <summary> Gets the song containing this sound instance. </summary> */
+	public Song Song {
+		get { return song; }
 	}
 
 	#endregion
@@ -137,11 +137,11 @@ public class SoundInstance {
 
 	/** <summary> Updates the sound. </summary> */
 	internal void Update() {
-		soundInstance.Volume	= GMath.Clamp(AudioSystem.SoundVolume * volume, 0.0f, 1.0f);
-		soundInstance.Pitch		= GMath.Clamp(AudioSystem.MasterPitch + AudioSystem.SoundPitch + pitch, -1.0f, 1.0f);
-		soundInstance.Pan		= GMath.Clamp(AudioSystem.MasterPan + AudioSystem.SoundPan + pan, -1.0f, 1.0f);
+		soundInstance.Volume	= GMath.Clamp(AudioSystem.MusicVolume * volume, 0.0f, 1.0f);
+		soundInstance.Pitch		= GMath.Clamp(AudioSystem.MasterPitch + AudioSystem.MusicPitch + pitch, -1.0f, 1.0f);
+		soundInstance.Pan		= GMath.Clamp(AudioSystem.MasterPan + AudioSystem.MusicPan + pan, -1.0f, 1.0f);
 
-		if (AudioSystem.IsMasterMuted || AudioSystem.IsSoundMuted || this.muted)
+		if (AudioSystem.IsMasterMuted || AudioSystem.IsMusicMuted || this.muted)
 			soundInstance.Volume	= 0.0f;
 	}
 	/** <summary> Plays the sound. </summary> */

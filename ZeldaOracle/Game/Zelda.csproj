@@ -114,10 +114,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Audio\AudioSystem.cs" />
+    <Compile Include="Common\Audio\SongInstance.cs" />
     <Compile Include="Common\Audio\Playlist.cs" />
     <Compile Include="Common\Audio\Song.cs" />
     <Compile Include="Common\Audio\Sound.cs" />
-    <Compile Include="Common\Audio\SoundGroup.cs" />
     <Compile Include="Common\Audio\SoundInstance.cs" />
     <Compile Include="Common\Collision\CollisionModel.cs" />
     <Compile Include="Common\Content\Resources.cs" />
@@ -174,9 +174,9 @@
     <Compile Include="Common\Scripts\AnimationSR.cs" />
     <Compile Include="Common\Scripts\GameFontSR.cs" />
     <Compile Include="Common\Scripts\LanguageSR.cs" />
-    <Compile Include="Common\Scripts\PlaylistSR.cs" />
+    <Compile Include="Common\Scripts\MusicSR.cs" />
     <Compile Include="Common\Scripts\ScriptReader.cs" />
-    <Compile Include="Common\Scripts\SoundGroupSR.cs" />
+    <Compile Include="Common\Scripts\SoundsSR.cs" />
     <Compile Include="Common\Scripts\SpriteSheetSR.cs" />
     <Compile Include="Common\Translation\Language.cs" />
     <Compile Include="Common\Translation\LetterString.cs" />

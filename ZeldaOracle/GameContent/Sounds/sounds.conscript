@@ -1,21 +1,17 @@
 
-@group root
-@volume 1.0
-@pitch 0.0
-@pan 0.0
-@muted false
-@end
+@sounds "Pickups"
 
-@group "Pickups"
 @sound "Pickups/get_heart" 1.0 0.0 0.0 false
 @sound "Pickups/get_rupee" 1.0 0.0 0.0 false
 @sound "Pickups/get_rupee_loop" 1.0 0.0 0.0 false
-@end
 
-@group "UI"
 @sound "UI/menu_open" 1.0 0.0 0.0 false
 @sound "UI/menu_close" 1.0 0.0 0.0 false
 @sound "UI/menu_next" 1.0 0.0 0.0 false
 @sound "UI/menu_cursor_move" 1.0 0.0 0.0 false
 @sound "UI/menu_select" 1.0 0.0 0.0 false
+
+@sound "Items/slash_1" 1.0 0.0 0.0 false
+@sound "Items/slash_2" 1.0 0.0 0.0 false
+@sound "Items/slash_3" 1.0 0.0 0.0 false
 @end

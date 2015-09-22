@@ -48,12 +48,12 @@ namespace ZeldaOracle.Game.Control {
 			if (dynamicRupees < rupees) {
 				dynamicRupees++;
 				if (dynamicRupees < rupees) {
-					if (!AudioSystem.GetSound("Pickups/get_rupee_loop").IsPlaying) {
+					if (!AudioSystem.IsSoundPlaying("Pickups/get_rupee_loop")) {
 						AudioSystem.PlaySound("Pickups/get_rupee_loop", true);
 					}
 				}
 				else {
-					if (AudioSystem.GetSound("Pickups/get_rupee_loop").IsPlaying) {
+					if (AudioSystem.IsSoundPlaying("Pickups/get_rupee_loop")) {
 						AudioSystem.StopSound("Pickups/get_rupee_loop");
 					}
 					AudioSystem.PlaySound("Pickups/get_rupee");
@@ -62,12 +62,12 @@ namespace ZeldaOracle.Game.Control {
 			else if (dynamicRupees > rupees) {
 				dynamicRupees--;
 				if (dynamicRupees > rupees) {
-					if (!AudioSystem.GetSound("Pickups/get_rupee_loop").IsPlaying) {
+					if (!AudioSystem.IsSoundPlaying("Pickups/get_rupee_loop")) {
 						AudioSystem.PlaySound("Pickups/get_rupee_loop", true);
 					}
 				}
 				else {
-					if (AudioSystem.GetSound("Pickups/get_rupee_loop").IsPlaying) {
+					if (AudioSystem.IsSoundPlaying("Pickups/get_rupee_loop")) {
 						AudioSystem.StopSound("Pickups/get_rupee_loop");
 					}
 					AudioSystem.PlaySound("Pickups/get_rupee");

@@ -10,6 +10,7 @@ using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerSwingState : PlayerState {
@@ -69,6 +70,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.toolAnimation.Play();
 			
 			hasPeaked = false;
+
+			AudioSystem.PlayRandomSound("Items/slash_1", "Items/slash_2", "Items/slash_3");
 		}
 		
 		public override void OnEnd() {
@@ -90,6 +93,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				player.toolAnimation.SubStripIndex = player.Direction;
 				player.Graphics.PlayAnimation();
 				player.toolAnimation.Play();
+				AudioSystem.PlayRandomSound("Items/slash_1", "Items/slash_2", "Items/slash_3");
 			}
 
 			// End the swing
