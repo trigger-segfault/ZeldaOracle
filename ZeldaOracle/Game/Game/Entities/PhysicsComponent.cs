@@ -208,6 +208,13 @@ namespace ZeldaOracle.Game.Entities {
 			return true;
 		}
 
+		// Is it possible for the entity to collide with the given tile?
+		public bool CanCollideWithEntity(Entity other) {
+			if (other == null || !other.Physics.IsEnabled)
+				return false;
+			return true;
+		}
+
 		// Returns true if the entity is colliding in the given direction.
 		public bool IsCollidingDirection(int direction) {
 			return collisionInfo[direction].IsColliding;
@@ -251,6 +258,7 @@ namespace ZeldaOracle.Game.Entities {
 			return false;
 		}
 
+		// Return true if the entity would collide with a tile if it were at the given position.
 		public bool IsPlaceMeetingTile(Vector2F position, Tile tile) {
 			if (CanCollideWithTile(tile)) {
 				return CollisionModel.Intersecting(tile.CollisionModel, tile.Position, collisionBox, position);
@@ -258,47 +266,7 @@ namespace ZeldaOracle.Game.Entities {
 			return false;
 		}
 		
-		// Return true if the entity would collide with a solid object using the
-		// given collision box if it were placed at the given position.
-
-		public delegate bool TileIterationFunction(Tile tile);
-
-		public void IterateMeetingTiles(Vector2F position, Rectangle2F collisionBox, TileIterationFunction iterationFunction) {
-			Room room = entity.RoomControl.Room;
-			
-			// Find the rectangular area of nearby tiles to collide with.
-			Rectangle2F myBox = collisionBox;
-			myBox.Point += position;
-			myBox.Inflate(2, 2);
-	
-			int x1 = (int) (myBox.Left   / (float) GameSettings.TILE_SIZE);
-			int y1 = (int) (myBox.Top    / (float) GameSettings.TILE_SIZE);
-			int x2 = (int) (myBox.Right  / (float) GameSettings.TILE_SIZE) + 1;
-			int y2 = (int) (myBox.Bottom / (float) GameSettings.TILE_SIZE) + 1;
-
-			Rectangle2I area;
-			area.Point	= (Point2I) (myBox.TopLeft / (float) GameSettings.TILE_SIZE);
-			area.Size	= ((Point2I) (myBox.BottomRight / (float) GameSettings.TILE_SIZE)) + Point2I.One - area.Point;
-			area.Inflate(1, 1);
-			area = Rectangle2I.Intersect(area, new Rectangle2I(Point2I.Zero, room.Size));
-
-			myBox.Inflate(-2, -2);
-
-			bool isDone = false;
-			for (int x = area.Left; x < area.Right && !isDone; x++) {
-				for (int y = area.Top; y < area.Bottom; y++) {
-					for (int i = 0; i < room.LayerCount; i++) {
-						Tile t = entity.RoomControl.GetTile(x, y, i);
-						if (CanCollideWithTile(t)) {
-							if (CollisionModel.Intersecting(t.CollisionModel, t.Position, collisionBox, position)) {
-								isDone = iterationFunction(t);
-							}
-						}
-					}
-				}
-			}
-		}
-		
+		// Return the solid tile that the entity is facing towards if it were at the given position.
 		public Tile GetMeetingSolidTile(Vector2F position, int direction) {
 			Vector2F checkPos = position + Directions.ToPoint(direction);
 			Point2I location = entity.RoomControl.GetTileLocation(entity.Center) + 
@@ -317,6 +285,18 @@ namespace ZeldaOracle.Game.Entities {
 				}
 			}
 			return null;
+		}
+
+		public bool IsSoftMeetingEntity(Entity other, int maxZDistance = 10) {
+			if (CanCollideWithEntity(other) && GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
+				return PositionedSoftCollisionBox.Intersects(other.Physics.PositionedSoftCollisionBox);
+			return false;
+		}
+
+		public bool IsHardMeetingEntity(Entity other) {
+			if (CanCollideWithEntity(other))
+				return PositionedCollisionBox.Intersects(other.Physics.PositionedCollisionBox);
+			return false;
 		}
 
 
@@ -355,63 +335,45 @@ namespace ZeldaOracle.Game.Entities {
 			}
 		}
 
+		// Check collisions with tiles.
 		public void CheckCollisions() {
-			Room room = entity.RoomControl.Room;
-
 			// Find the rectangular area of nearby tiles to collide with.
-			Rectangle2F myBox = collisionBox;
-			myBox.Point += entity.Position;
-			myBox.Inflate(2, 2);
-	
-			Rectangle2F myBox2 = collisionBox;
-			myBox2.Point += entity.Position + velocity;
-			myBox2.Inflate(2, 2);
+			Rectangle2F myBox = PositionedCollisionBox;
+			Rectangle2F myBox2 = Rectangle2F.Translate(myBox, velocity);
 			myBox = Rectangle2F.Union(myBox, myBox2);
-	
-			int x1 = (int) (myBox.Left   / (float) GameSettings.TILE_SIZE);
-			int y1 = (int) (myBox.Top    / (float) GameSettings.TILE_SIZE);
-			int x2 = (int) (myBox.Right  / (float) GameSettings.TILE_SIZE) + 1;
-			int y2 = (int) (myBox.Bottom / (float) GameSettings.TILE_SIZE) + 1;
-
-			Rectangle2I area;
-			area.Point	= (Point2I) (myBox.TopLeft / (float) GameSettings.TILE_SIZE);
-			area.Size	= ((Point2I) (myBox.BottomRight / (float) GameSettings.TILE_SIZE)) + Point2I.One - area.Point;
-			area.Inflate(1, 1);
-			area = Rectangle2I.Intersect(area, new Rectangle2I(Point2I.Zero, room.Size));
+			myBox.Inflate(2, 2);
 
 			// Collide with nearby solid tiles HORIZONTALLY and then VERTICALLY.
+			Rectangle2I area = entity.RoomControl.GetTileAreaFromRect(myBox, 1);
+			Room room = entity.RoomControl.Room;
 			for (int axis = 0; axis < 2; ++axis) {
 				for (int x = area.Left; x < area.Right; ++x) {
 					for (int y = area.Top; y < area.Bottom; ++y) {
 						for (int i = 0; i < room.LayerCount; ++i) {
 							Tile t = entity.RoomControl.GetTile(x, y, i);
-							if (CanCollideWithTile(t)) {
+							if (CanCollideWithTile(t))
 								ResolveCollision(axis, t, t.Position, t.CollisionModel);
-							}
 						}
 					}
 				}
 			}
 		}
 		
-
 		private bool ResolveCollision(int axis, Tile tile, Vector2F modelPos, CollisionModel model) {
 			bool collide = false;
 			for (int i = 0; i < model.Boxes.Count; ++i) {
-				if (ResolveCollision(axis, tile, Rectangle2F.Translate((Rectangle2F) model.Boxes[i], modelPos)))
+				Rectangle2F box = Rectangle2F.Translate((Rectangle2F) model.Boxes[i], modelPos);
+				if (ResolveCollision(axis, tile, box))
 					collide = true;
 			}
 			return collide;
 		}
 
 		private bool ResolveCollision(int axis, Tile tile, Rectangle2F block) {
-			bool result = false;
-
 			if (axis == 0) { // X-Axis
 				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.X + velocity.X, entity.Y);
 				if (myBox.Intersects(block)) {
 					isColliding	= true;
-					result		= true;
 					velocity.X	= 0.0f;
 
 					if (myBox.Center.X < block.Center.X) {
@@ -424,13 +386,13 @@ namespace ZeldaOracle.Game.Entities {
 						if (!HasFlags(PhysicsFlags.AutoDodge) || !PerformCollisionDodge(block, Directions.Left))
 							collisionInfo[Directions.Left].SetTileCollision(tile, Directions.Left);
 					}
+					return true;
 				}
 			}
 			else if (axis == 1) { // Y-Axis
 				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position + velocity);
 				if (myBox.Intersects(block)) {
 					isColliding	= true;
-					result		= true;
 					velocity.Y	= 0.0f;
 
 					if (myBox.Center.Y < block.Center.Y) {
@@ -443,10 +405,10 @@ namespace ZeldaOracle.Game.Entities {
 						if (!HasFlags(PhysicsFlags.AutoDodge) || !PerformCollisionDodge(block, Directions.Up))
 							collisionInfo[Directions.Up].SetTileCollision(tile, Directions.Up);
 					}
+					return true;
 				}
 			}
-
-			return result;
+			return false;
 		}
 
 		public bool CanDodgeCollision(Tile tile, int direction) {
@@ -508,17 +470,6 @@ namespace ZeldaOracle.Game.Entities {
 			}
 			return false;
 		}
-		
-		public bool IsInLineWithRect(Rectangle2F block, int direction, int minDistanceFromEdge) {
-			Rectangle2F objBox = Rectangle2F.Translate(collisionBox, entity.Position);
-			for (int side = 0; side < 2; side++) {
-				int sideDir = (direction + (side == 0 ? 1 : 3)) % 4;
-				float distance = Math.Abs(objBox.GetEdge((sideDir + 2) % 4) - block.GetEdge(sideDir));
-				if (distance < minDistanceFromEdge)
-					return false;
-			}
-			return true;
-		}
 
 
 		//-----------------------------------------------------------------------------
@@ -568,6 +519,10 @@ namespace ZeldaOracle.Game.Entities {
 
 		public Rectangle2F PositionedCollisionBox {
 			get { return Rectangle2F.Translate(collisionBox, entity.Position); }
+		}
+		
+		public Rectangle2F PositionedSoftCollisionBox {
+			get { return Rectangle2F.Translate(softCollisionBox, entity.Position); }
 		}
 
 		public Rectangle2F CollisionBox {

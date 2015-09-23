@@ -52,12 +52,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				Rectangle2I area = RoomControl.GetTileAreaFromRect(tileExplodeArea);
 				for (int x = area.Left; x < area.Right; x++) {
 					for (int y = area.Top; y < area.Bottom; y++) {
-						for (int i = 0; i < RoomControl.Room.LayerCount; i++) {
-							Tile tile = RoomControl.GetTile(x, y, i);
-							Rectangle2F tileRect = new Rectangle2F(x * 16, y * 16, 16, 16);
-							if (tile != null && tileRect.Intersects(tileExplodeArea))
-								tile.OnBombExplode();
-						}
+						Tile tile = RoomControl.GetTopTile(x, y);
+						Rectangle2F tileRect = new Rectangle2F(x * 16, y * 16, 16, 16);
+						if (tile != null && tileRect.Intersects(tileExplodeArea))
+							tile.OnBombExplode();
 					}
 				}
 			}

@@ -8,9 +8,9 @@ using ZeldaOracle.Common.Graphics;
 namespace ZeldaOracle.Game.Main.ResourceBuilders
 {
 	public class AnimationBuilder {
-		private Animation animation;
-		private SpriteSheet sheet;
-		
+		private Animation	animation;
+		private SpriteSheet	sheet;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -111,6 +111,18 @@ namespace ZeldaOracle.Game.Main.ResourceBuilders
 		//-----------------------------------------------------------------------------
 		// Midifications
 		//-----------------------------------------------------------------------------
+
+		public AnimationBuilder RepeatPreviousFrames(int numFrames, int numRepeats) {
+			int start = animation.Frames.Count - numFrames;
+			for (int i = 0; i < numRepeats; i++) {
+				for (int j = 0; j < numFrames; j++) {
+					AnimationFrame frame = new AnimationFrame(animation.Frames[start + j]);
+					frame.StartTime = animation.Duration;
+					animation.AddFrame(frame);
+				}
+			}
+			return this;
+		}
 
 		public AnimationBuilder SetDuration(int duration) {
 			animation.Duration = duration;

@@ -7,8 +7,9 @@ using ZeldaOracle.Common.Graphics;
 namespace ZeldaOracle.Game.Entities.Effects {
 	
 	public class Effect : Entity {
-		private int destroyTimer;
-		private bool destroyOnAnimationComplete;
+		private int		destroyTimer;
+		protected bool	destroyOnAnimationComplete;
+		protected int	fadeDelay;
 
 
 		//-----------------------------------------------------------------------------
@@ -17,6 +18,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		
 		public Effect() {
 			destroyTimer = -1;
+			fadeDelay = -1;
 			destroyOnAnimationComplete = false;
 
 			Graphics.IsShadowVisible		= false;
@@ -38,8 +40,9 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		//-----------------------------------------------------------------------------
 
 		// Setup a timer so that the effect destroys itself after the given number of ticks.
-		public void CreateDestroyTimer(int ticks) {
-			destroyTimer = ticks;
+		public void CreateDestroyTimer(int ticks, int fadeDelay = -1) {
+			this.destroyTimer = ticks;
+			this.fadeDelay = fadeDelay;
 		}
 
 
@@ -60,6 +63,8 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			// Update the destroy timer.
 			if (destroyTimer >= 0) {
 				destroyTimer--;
+				if (fadeDelay > 0 && destroyTimer == fadeDelay)
+					graphics.IsFlickering = true;
 				if (destroyTimer <= 0)
 					Destroy();
 			}

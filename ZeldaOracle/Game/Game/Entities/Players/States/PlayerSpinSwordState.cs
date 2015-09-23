@@ -30,12 +30,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			Point2I location = player.RoomControl.GetTileLocation(position);
 
 			if (player.RoomControl.IsTileInBounds(location)) {
-				for (int i = 0; i < player.RoomControl.Room.LayerCount; i++) {
-					Tile tile = player.RoomControl.GetTile(location, i);
-					if (tile != null) {
-						tile.OnSwordHit();
-					}
-				}
+				Tile tile = player.RoomControl.GetTopTile(location);
+				if (tile != null)
+					tile.OnSwordHit();
 			}
 		}
 

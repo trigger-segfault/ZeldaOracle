@@ -62,14 +62,12 @@ namespace ZeldaOracle.Game.Entities {
 			if (timer == reward.Duration) {
 				Destroy();
 			}
-			else if (timer >= reward.FadeDuration) {
-				Graphics.IsVisible = (timer - reward.FadeDuration) % 2 == 0;
-			}
+			else if (timer == reward.FadeDuration)
+				graphics.IsFlickering = true;
 
-			if ((GameControl.Player.Physics.SoftCollisionBox + GameControl.Player.Position).Colliding(Physics.CollisionBox + Position) &&
-				GMath.Abs(GameControl.Player.ZPosition - ZPosition) < 10) {
+			// Check for colliding with the player.
+			if (physics.IsSoftMeetingEntity(GameControl.Player, 9))
 				Collect();
-			}
 		}
 
 		//-----------------------------------------------------------------------------

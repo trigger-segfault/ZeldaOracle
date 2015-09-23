@@ -198,6 +198,8 @@
     <Compile Include="Game\Control\RoomControl.cs" />
     <Compile Include="Game\Entities\Collectibles\Collectible.cs" />
     <Compile Include="Game\Entities\CollisionInfo.cs" />
+    <Compile Include="Game\Entities\Effects\Fire.cs" />
+    <Compile Include="Game\Entities\Effects\ScentPod.cs" />
     <Compile Include="Game\Entities\GraphicsComponent.cs" />
     <Compile Include="Game\Entities\Players\PlayerSwimmingSkills.cs" />
     <Compile Include="Game\Entities\Players\PlayerTunics.cs" />
@@ -218,6 +220,7 @@
     <Compile Include="Game\Entities\Projectiles\Bomb.cs" />
     <Compile Include="Game\Entities\Projectiles\CarriedTile.cs" />
     <Compile Include="Game\Entities\Projectiles\Projectile.cs" />
+    <Compile Include="Game\Entities\Projectiles\Seed.cs" />
     <Compile Include="Game\GameStates\StateTextReader.cs" />
     <Compile Include="Game\Control\View.cs" />
     <None Include="Game\Debug\DebugController.cs" />
@@ -306,6 +309,8 @@
     <Compile Include="Game\Main\ResourceBuilders\AnimationBuilder.cs" />
     <Compile Include="Game\Main\ResourceBuilders\SpriteBuilder.cs" />
     <Compile Include="Game\Main\ResourceBuilders\TilesetBuilder.cs" />
+    <Compile Include="Game\Tiles\Custom\TileOwl.cs" />
+    <Compile Include="Game\Tiles\Custom\TileLantern.cs" />
     <Compile Include="Game\Tiles\Tile.cs" />
     <Compile Include="Game\Tiles\TileData.cs" />
     <Compile Include="Game\Tiles\TileFlags.cs" />

@@ -95,9 +95,11 @@ namespace ZeldaOracle.Game {
 			Image imageEffects			= Resources.LoadImage("Images/Effects/basic_effects");
 			Image imageColorEffects		= Resources.LoadImage("Images/Effects/color_effects");
 			Image imagePlayerItems		= Resources.LoadImage("Images/sheet_player_items");
+			Image imageGeneralTiles		= Resources.LoadImage("Images/general_tiles");
 
-			SHEET_ZONESET_LARGE	= new SpriteSheet(imageZoneset, 16, 16, 0, 0, 1, 1);
-			SHEET_ZONESET_SMALL	= new SpriteSheet(imageZoneset, 8, 8, 187, 0, 1, 1);
+			SHEET_ZONESET_LARGE	= new SpriteSheet(imageZoneset,			16, 16, 0, 0, 1, 1);
+			SHEET_ZONESET_SMALL	= new SpriteSheet(imageZoneset,			8, 8, 187, 0, 1, 1);
+			SHEET_GENERAL_TILES	= new SpriteSheet(imageGeneralTiles,	16, 16, 0, 0, 1, 1);
 
 			SHEET_PLAYER		= new SpriteSheet(imageSheetPlayer,		16, 16, 0, 0, 1, 1);
 			SHEET_PLAYER_RED	= new SpriteSheet(imageSheetPlayerRed,	16, 16, 0, 0, 1, 1);
@@ -176,6 +178,10 @@ namespace ZeldaOracle.Game {
 			BuildSprite(SPR_CRACKED_FLOOR,	8, 9);
 			BuildSprite(SPR_PIT,			9, 9);
 
+			spriteBuilder.SpriteSheet = SHEET_GENERAL_TILES;
+			BuildSprite(SPR_OWL, 0, 0);
+			BuildSprite(SPR_OWL_ACTIVATED, 1,0, -8,0).AddPart(2,0, 8,0);
+
 			spriteBuilder.SpriteSheet = SHEET_EFFECTS;
 			BuildSprite(SPR_SHADOW, 0, 0, -8, -8);
 
@@ -210,6 +216,12 @@ namespace ZeldaOracle.Game {
 			BuildSprite(SPR_ITEM_ICON_FIRE_ROD,					11, 1);
 			BuildSprite(SPR_ITEM_ICON_OCARINA,					12, 1);
 			BuildSprite(SPR_ITEM_ICON_BOW,						13, 1);
+			BuildSprite(SPR_ITEM_SEED_EMBER,					0, 3).SetSize(8, 8);
+			BuildSprite(SPR_ITEM_SEED_SCENT,					1, 3).SetSize(8, 8);
+			BuildSprite(SPR_ITEM_SEED_PEGASUS,					2, 3).SetSize(8, 8);
+			BuildSprite(SPR_ITEM_SEED_GALE,						3, 3).SetSize(8, 8);
+			BuildSprite(SPR_ITEM_SEED_MYSTERY,					4, 3).SetSize(8, 8);
+			SPR_ITEM_SEEDS = new Sprite[] { SPR_ITEM_SEED_EMBER, SPR_ITEM_SEED_SCENT, SPR_ITEM_SEED_PEGASUS, SPR_ITEM_SEED_GALE, SPR_ITEM_SEED_MYSTERY };
 
 			spriteBuilder.SpriteSheet = SHEET_MENU_SMALL;
 			BuildSprite(SPR_HUD_BACKGROUND,				2, 4);
@@ -275,6 +287,7 @@ namespace ZeldaOracle.Game {
 											.InsertFrameStrip(0, 16, 7,4, 4, 8,0, 0,1)
 											.InsertFrameStrip(0, 16, 4,4, 4, 0,8, 0,1)
 											.InsertFrameStrip(0, 16, 5,4, 4, 8,8, 0,1);
+			
 		
 			// PLAYER ANIMATIONS:
 			animationBuilder.SetSheet(SHEET_PLAYER);
@@ -355,7 +368,7 @@ namespace ZeldaOracle.Game {
 				.AddFrame(6, 4,0, -20,4).AddFrame(8, 4,0, -14,4).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
 				.AddFrame(6, 6,0, 3,20).AddFrame(8, 6,0, 3,14).Offset(-8, -16).SetLoopMode(LoopMode.Clamp);
 			
-			// PROJECTILE ANIMATIONS:
+			// PROJECTILE & ITEM ANIMATIONS:
 			animationBuilder.SpriteSheet = SHEET_PLAYER_ITEMS;
 			BuildAnim(ANIM_PROJECTILE_PLAYER_ARROW).AddFrame(1, 0,11).Offset(-8, -8).MakeDynamic(8, 1,0);
 			BuildAnim(ANIM_PROJECTILE_PLAYER_ARROW_CRASH).AddFrameStrip(6, 0, 11,4, -8,-8, 2,0);
@@ -399,7 +412,8 @@ namespace ZeldaOracle.Game {
 				.AddFrame(4, 2,1, 5,2)	.AddPart(4, 3,1, 6,9)	.AddPart(4, 2,1, -5,-10)	.AddPart(4, 0,1, -10,9)
 				.AddFrame(4, 2,1, 8,11)	.AddPart(4, 2,1, 9,2)	.AddPart(4, 2,1, -5,-11)	.AddPart(4, 0,1, -10,5)
 				.AddFrame(4, 2,1, 8,9)	.AddPart(4, 2,1, 9,3)	.AddPart(4, 2,1, -7,-12)	.AddPart(4, 0,1, -13,-1);
-			
+			BuildAnim(ANIM_ITEM_SCENT_POD).AddFrame(8, 0,2).AddFrame(8, 1,2);
+
 			// TODO: Flicker function in animation builder.
 			BuildAnim(ANIM_EFFECT_GRASS_LEAVES).SetLoopMode(LoopMode.Reset).AddDelay(1)
 				.AddFrame(1, 0,1, 2,-1)	.AddPart(1, 1,1, -8,-4)	.AddPart(1, 0,1, 0,-5)		.AddPart(1, 0,1, 6,-5)	.AddDelay(1)
@@ -428,6 +442,35 @@ namespace ZeldaOracle.Game {
 				.AddFrame(7, 0,0, -6,-6).AddPart(7, 0,0, 6,-6).AddPart(7, 0,0, -6,2).AddPart(7, 0,0, 6,2)
 				.AddFrame(8, 6,1, -8,-8).AddPart(8, 7,1, 8,-8).AddPart(8, 6,2, -8,8).AddPart(8, 7,2, 8,8)
 				.AddFrame(9, 1,0, -8,-8).AddPart(9, 1,0, 8,-8).AddPart(9, 1,0, -8,8).AddPart(9, 1,0, 8,8);
+			BuildAnim(ANIM_EFFECT_SEED_SCENT)
+				.AddFrame(3, 8,12).AddFrame(3, 6,12).AddFrame(3, 7,12);
+			BuildAnim(ANIM_EFFECT_SEED_PEGASUS).SetLoopMode(LoopMode.Reset)
+				.AddFrame(3, 3,4).AddFrame(3, 0,4).AddFrame(3, 1,4);
+			BuildAnim(ANIM_EFFECT_SEED_MYSTERY).SetLoopMode(LoopMode.Reset)
+				.AddFrame(3, 3,8).AddFrame(3, 0,8).AddFrame(3, 1,8); // PegasusSeedEffect.ShiftSourcePositions(0, 4);
+			BuildAnim(ANIM_EFFECT_SEED_EMBER).SetLoopMode(LoopMode.Reset)
+				.AddFrame(2, 1,3)
+				.AddFrame(2, 1,2).AddFrame(2, 1,17).AddFrame(2, 1,1).RepeatPreviousFrames(3, 9)
+				.AddFrame(2, 1,2);
+
+			BuildAnim(ANIM_EFFECT_SEED_GALE);
+			for (int i = 0; i < 29; i++) {
+				int y = 1 + (((5 - (i % 4)) % 4) * 4);
+				animationBuilder.AddFrame(1, ((i % 6) < 3 ? 4 : 5), y);
+			}
+
+			BuildAnim(ANIM_EFFECT_PEGASUS_DUST).SetLoopMode(LoopMode.Reset)
+							.AddFrame(1, 5, 12, -12, -10).AddPart(1, 5, 12,  -4, -10)
+							
+							.AddFrame(1, 8,  9, -14,  -7).AddPart(1, 8, 10, -10, -11).AddPart(1, 8,  9, -1, -7).AddPart(1, 8, 10, -5, -11)
+							.AddFrame(1, 8,  6, -14,  -7).AddPart(1, 8,  5, -10, -11).AddPart(1, 8,  6, -1, -7).AddPart(1, 8,  5, -5, -11)
+							.AddFrame(1, 8,  1, -13,  -7).AddPart(1, 8,  2, -10, -11).AddPart(1, 8,  1, -1, -7).AddPart(1, 8,  2, -6, -11)
+
+							.AddFrame(1, 8, 14, -17,  -5).AddPart(1, 8, 13, -12,  -9).AddPart(1, 8, 14,  2, -5).AddPart(1, 8, 13, -3,  -9)
+							.AddFrame(1, 8,  9, -17,  -5).AddPart(1, 8, 10, -12,  -9).AddPart(1, 8,  9, -4, -5).AddPart(1, 8, 10, -3,  -9);
+			
+			BuildAnim(ANIM_EFFECT_OWL_SPARKLE).SetLoopMode(LoopMode.Reset)
+				.AddFrame(9, 9,8).AddFrame(18, 9,9).AddFrame(9, 9,10).AddFrame(9, 9,11).Offset(-8, -8);
 		}
 
 
@@ -656,6 +699,7 @@ namespace ZeldaOracle.Game {
 		public static SpriteSheet SHEET_ZONESET_LARGE;
 		public static SpriteSheet SHEET_ZONESET_SMALL;
 		public static SpriteSheet SHEET_TILESET_OVERWORLD;
+		public static SpriteSheet SHEET_GENERAL_TILES;
 	
 	
 	//-----------------------------------------------------------------------------
@@ -698,6 +742,8 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_PIT				= new Sprite();
 		public static Sprite SPR_PLANT				= new Sprite();
 		public static Sprite SPR_ARMOS_STATUE		= new Sprite();
+		public static Sprite SPR_OWL				= new Sprite();
+		public static Sprite SPR_OWL_ACTIVATED		= new Sprite();
 
 	// Item Icons.
 		public static Sprite SPR_ITEM_SEED_EMBER				= new Sprite();
@@ -705,6 +751,7 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_ITEM_SEED_PEGASUS				= new Sprite();
 		public static Sprite SPR_ITEM_SEED_GALE					= new Sprite();
 		public static Sprite SPR_ITEM_SEED_MYSTERY				= new Sprite();
+		public static Sprite[] SPR_ITEM_SEEDS;
 
 		public static Sprite SPR_ITEM_ICON_SWORD_1				= new Sprite();
 		public static Sprite SPR_ITEM_ICON_SWORD_2				= new Sprite();
@@ -822,9 +869,19 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_EFFECT_SIGN_BREAK			= new Animation();
 		public static Animation ANIM_EFFECT_LEAVES				= new Animation();
 		public static Animation ANIM_EFFECT_GRASS_LEAVES		= new Animation();
+		
+		// Color effect animations.
 		public static Animation ANIM_EFFECT_BOMB_EXPLOSION		= new Animation();
 		public static Animation ANIM_EFFECT_MONSTER_EXPLOSION	= new Animation();
-	
+		public static Animation ANIM_EFFECT_SEED_EMBER			= new Animation();
+		public static Animation ANIM_EFFECT_SEED_SCENT			= new Animation();
+		public static Animation ANIM_EFFECT_SEED_PEGASUS		= new Animation();
+		public static Animation ANIM_EFFECT_SEED_GALE			= new Animation();
+		public static Animation ANIM_EFFECT_SEED_MYSTERY		= new Animation();
+		public static Animation ANIM_EFFECT_PEGASUS_DUST		= new Animation(); // The dust the player sprinkles over himself when using a pegasus seed.
+		public static Animation ANIM_EFFECT_OWL_SPARKLE			= new Animation();
+		public static Animation ANIM_ITEM_SCENT_POD				= new Animation();
+
 
 	//-----------------------------------------------------------------------------
 	// Collision Models.

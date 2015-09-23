@@ -24,6 +24,10 @@ namespace ZeldaOracle.Game.Entities
 		private Point2I			shadowDrawOffset;
 		private int				grassAnimationTicks;
 		private Sprite			sprite;
+		private bool			isFlickering;
+		private int				flickerAlternateDelay;
+		private int				flickerTimer;
+		private bool			flickerIsVisible;
 
 
 		//-----------------------------------------------------------------------------
@@ -31,17 +35,21 @@ namespace ZeldaOracle.Game.Entities
 		//-----------------------------------------------------------------------------
 
 		public GraphicsComponent(Entity entity) {
-			this.entity				= entity;
-			this.animationPlayer	= new AnimationPlayer();
-			this.sprite				= null;
-			this.subStripIndex		= 0;
-			this.isVisible			= true;
-			this.isShadowVisible	= true;
-			this.shadowDrawOffset	= Point2I.Zero;
+			this.entity					= entity;
+			this.animationPlayer		= new AnimationPlayer();
+			this.sprite					= null;
+			this.subStripIndex			= 0;
+			this.isVisible				= true;
+			this.isShadowVisible		= true;
+			this.shadowDrawOffset		= Point2I.Zero;
 			this.isGrassEffectVisible	= true;
 			this.isRipplesEffectVisible	= true;
 			this.grassAnimationTicks	= 0;
 			this.drawOffset				= new Point2I();
+			this.isFlickering			= false;
+			this.flickerAlternateDelay	= 2;
+			this.flickerTimer			= 0;
+			this.flickerIsVisible		= true;
 		}
 		
 
@@ -75,6 +83,18 @@ namespace ZeldaOracle.Game.Entities
 			animationPlayer.SubStripIndex = subStripIndex;
 			animationPlayer.Update();
 			
+			if (isFlickering) {
+				flickerTimer++;
+				if (flickerTimer >= flickerAlternateDelay) {
+					flickerIsVisible = !flickerIsVisible;
+					flickerTimer = 0;
+				}
+			}
+			else {
+				flickerTimer = 0;
+				flickerIsVisible = true;
+			}
+
 			if (isGrassEffectVisible && entity.Physics.IsInGrass && entity.Physics.Velocity.Length > 0.1f) {
 				grassAnimationTicks += 1;
 			}
@@ -83,7 +103,7 @@ namespace ZeldaOracle.Game.Entities
 		public void Draw(Graphics2D g) {
 			// Depth ranges:
 
-			if (!isVisible)
+			if (!isVisible || (isFlickering && !flickerIsVisible))
 				return;
 
 			// Front [0.0 - 0.3][0.3 - 0.6][0.6 - 0.9][0.9    ][0.9 - 1.0] Back
@@ -157,6 +177,22 @@ namespace ZeldaOracle.Game.Entities
 		public bool IsRipplesEffectVisible {
 			get { return isRipplesEffectVisible;  }
 			set { isRipplesEffectVisible = value; }
+		}
+
+		public bool IsFlickering {
+			get { return isFlickering;  }
+			set {
+				if (!isFlickering && value) {
+					flickerTimer = 0;
+					flickerIsVisible = false;
+				}
+				isFlickering = value;
+			}
+		}
+
+		public int FlickerAlternateDelay {
+			get { return flickerAlternateDelay;  }
+			set { flickerAlternateDelay = value; }
 		}
 
 		public AnimationPlayer AnimationPlayer {

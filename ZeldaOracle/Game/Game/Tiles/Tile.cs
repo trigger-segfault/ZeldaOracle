@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Effects;
+using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 	
@@ -82,6 +83,8 @@ namespace ZeldaOracle.Game.Tiles {
 		// Virtual methods
 		//-----------------------------------------------------------------------------
 		
+		public virtual void OnSeedHit(Seed seed) {}
+
 		// Called when the player presses A on this tile, when facing the given direction.
 		// Return true if player controls should be disabled for the rest of the frame.
 		public virtual bool OnAction(int direction) { return false; }
@@ -98,6 +101,13 @@ namespace ZeldaOracle.Game.Tiles {
 		public virtual void OnBombExplode() {
 			if (!isMoving && flags.HasFlag(TileFlags.Bombable)) {
 				RoomControl.SpawnEntity(new Effect(breakAnimation), Position);
+				RoomControl.RemoveTile(this);
+			}
+		}
+
+		// Called when the tile is burned by a fire.
+		public virtual void OnBurn() {
+			if (!isMoving && flags.HasFlag(TileFlags.Burnable)) {
 				RoomControl.RemoveTile(this);
 			}
 		}
@@ -143,9 +153,12 @@ namespace ZeldaOracle.Game.Tiles {
 		public void Initialize(RoomControl control) {
 			this.control = control;
 			this.animationPlayer.Play();
+			Initialize();
 		}
 
-		public void Update() {
+		public virtual void Initialize() {}
+
+		public virtual void Update() {
 			// Update movement (after pushed).
 			if (isMoving) {
 				if (offset.LengthSquared > 0.0f) {
@@ -161,7 +174,7 @@ namespace ZeldaOracle.Game.Tiles {
 			animationPlayer.Update();
 		}
 
-		public void Draw(Graphics2D g) {
+		public virtual void Draw(Graphics2D g) {
 
 			if (animationPlayer.SubStrip != null) {
 				// Draw as an animation.
