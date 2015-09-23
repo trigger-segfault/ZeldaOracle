@@ -196,6 +196,7 @@
     <Compile Include="Game\Control\Menus\SlotGroup.cs" />
     <Compile Include="Game\Control\Message.cs" />
     <Compile Include="Game\Control\RoomControl.cs" />
+    <Compile Include="Game\Entities\Collectibles\Collectible.cs" />
     <Compile Include="Game\Entities\CollisionInfo.cs" />
     <Compile Include="Game\Entities\Effects\Fire.cs" />
     <Compile Include="Game\Entities\GraphicsComponent.cs" />
@@ -279,10 +280,14 @@
     <Compile Include="Game\Items\ItemEssence.cs" />
     <Compile Include="Game\Items\ItemFlags.cs" />
     <Compile Include="Game\Items\ItemWeapon.cs" />
+    <Compile Include="Game\Items\Rewards\Reward.cs" />
+    <Compile Include="Game\Items\Rewards\RewardRupee.cs" />
     <Compile Include="Game\Items\SecondaryItems\ItemMembersCard.cs" />
     <Compile Include="Game\Items\SecondaryItems\ItemEssenceSeed.cs" />
     <Compile Include="Game\Items\SecondaryItems\ItemMagicPotion.cs" />
     <Compile Include="Game\Items\SecondaryItems\ItemFlippers.cs" />
+    <Compile Include="Game\Items\Weapons\ItemSlingshot.cs" />
+    <Compile Include="Game\Items\Weapons\ItemSeedShooter.cs" />
     <Compile Include="Game\Items\Weapons\ItemSeedSatchel.cs" />
     <Compile Include="Game\Items\Weapons\ItemBoomerang.cs" />
     <Compile Include="Game\Items\Weapons\ItemShield.cs" />

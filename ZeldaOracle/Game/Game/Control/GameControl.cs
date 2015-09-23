@@ -104,6 +104,8 @@ namespace ZeldaOracle.Game.Control {
 			inventory.AddItem(new ItemShield(), true);
 			inventory.AddItem(new ItemBoomerang(), true);
 			inventory.AddItem(new ItemSeedSatchel(), true);
+			inventory.AddItem(new ItemSeedShooter(), true);
+			inventory.AddItem(new ItemSlingshot(), true);
 
 			inventory.ObtainAmmo(inventory.GetAmmo("ammo_scent_seeds"));
 			inventory.ObtainAmmo(inventory.GetAmmo("ammo_pegasus_seeds"));

@@ -17,6 +17,7 @@ using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Control {
 
@@ -451,6 +452,19 @@ namespace ZeldaOracle.Game.Control {
 			}
 			if (Keyboard.IsKeyPressed(Keys.N)) {
 				AudioSystem.MasterVolume = 1.0f;
+			}
+			if (Keyboard.IsKeyPressed(Keys.R) || Keyboard.IsKeyPressed(Keys.E)) {
+				int sprite = Keyboard.IsKeyPressed(Keys.E) ? 6 : 5;
+				int amount = Keyboard.IsKeyPressed(Keys.E) ? 5 : 1;
+				Reward reward = new RewardRupee(
+					"rupee_" + amount.ToString(), amount,
+					new Sprite(GameData.SHEET_ITEMS_SMALL, sprite, 3, -5, -15),
+					new Rectangle2I(-6, -10, 9, 9)
+				);
+				Collectible collectible = new Collectible(reward);
+				collectible.ZPosition = 100;
+				collectible.Position = player.Position;
+				SpawnEntity(collectible);
 			}
 		}
 

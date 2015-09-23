@@ -17,6 +17,7 @@ namespace ZeldaOracle.Game.Entities
 		private AnimationPlayer	animationPlayer;
 		private int				subStripIndex;
 		private bool			hasDynamicDepth;
+		private	bool			isVisible;
 		private bool			isGrassEffectVisible;
 		private bool			isRipplesEffectVisible;
 		private bool			isShadowVisible;
@@ -34,6 +35,7 @@ namespace ZeldaOracle.Game.Entities
 			this.animationPlayer	= new AnimationPlayer();
 			this.sprite				= null;
 			this.subStripIndex		= 0;
+			this.isVisible			= true;
 			this.isShadowVisible	= true;
 			this.shadowDrawOffset	= Point2I.Zero;
 			this.isGrassEffectVisible	= true;
@@ -80,6 +82,9 @@ namespace ZeldaOracle.Game.Entities
 
 		public void Draw(Graphics2D g) {
 			// Depth ranges:
+
+			if (!isVisible)
+				return;
 
 			// Front [0.0 - 0.3][0.3 - 0.6][0.6 - 0.9][0.9    ][0.9 - 1.0] Back
 			//       [???      ][Entities ][???      ][Shadows][???      ]
@@ -132,6 +137,11 @@ namespace ZeldaOracle.Game.Entities
 
 		public bool IsAnimationDone {
 			get { return animationPlayer.IsDone; }
+		}
+
+		public bool IsVisible {
+			get { return isVisible; }
+			set { isVisible = value; }
 		}
 
 		public bool IsShadowVisible {
