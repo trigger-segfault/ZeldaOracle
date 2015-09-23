@@ -372,10 +372,10 @@ namespace ZeldaOracle.Game.Control {
 			// Update entities.
 			int entityCount = entities.Count;
 			for (int i = 0; i < entities.Count; i++) {
-				if (entities[i].IsAlive && i < entityCount) {
+				if (entities[i].IsAlive && entities[i].IsInRoom && i < entityCount) {
 					entities[i].Update();
 				}
-				else if (entities[i].IsAlive && i >= entityCount) {
+				else if (entities[i].IsAlive && entities[i].IsInRoom && i >= entityCount) {
 					// For entities spawned this frame, only update their graphics component.
 					entities[i].Graphics.Update();
 				}
@@ -383,7 +383,8 @@ namespace ZeldaOracle.Game.Control {
 
 			// Remove destroyed entities.
 			for (int i = 0; i < entities.Count; i++) {
-				if (!entities[i].IsAlive) {
+				
+				if (!entities[i].IsAlive || !entities[i].IsInRoom) {
 					entities.RemoveAt(i--);
 				}
 			}

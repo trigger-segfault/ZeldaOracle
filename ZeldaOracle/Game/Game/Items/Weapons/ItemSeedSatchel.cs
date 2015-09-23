@@ -9,6 +9,7 @@ using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Game.Items.Ammos;
 
 namespace ZeldaOracle.Game.Items.Weapons {
@@ -19,8 +20,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemSeedSatchel()
-			: base() {
+		public ItemSeedSatchel() : base() {
 			this.id				= "item_seed_satchel";
 			this.name			= new string[] { "Seed Satchel", "Seed Satchel", "Seed Satchel" };
 			this.description	= new string[] { "A bag for carrying seeds.", "A bag for carrying seeds.", "A bag for carrying seeds." };
@@ -40,12 +40,43 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 
 		//-----------------------------------------------------------------------------
+		// Internal methods
+		//-----------------------------------------------------------------------------
+
+		private Seed DropSeed(SeedType type) {
+			return ThrowSeed(type);
+		}
+		
+		private Seed ThrowSeed(SeedType type) {
+			Seed seed = new Seed(SeedType.Ember);
+
+			Vector2F velocity = Directions.ToVector(player.Direction);
+			Vector2F pos = player.Origin + (velocity * 4.0f);
+			player.RoomControl.SpawnEntity(seed, pos, player.ZPosition + 6);
+			seed.Physics.Velocity = velocity * 0.75f;
+			
+			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
+			player.BeginState(new PlayerBusyState(10));
+
+			return seed;
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
 		// Called when the items button is pressed (A or B).
 		public override void OnButtonPress() {
-			
+			string ammoID = ammo[currentAmmo].ID;
+
+			if (ammoID == "ammo_ember_seeds") {
+				ThrowSeed(SeedType.Ember);
+				
+			}
+			else if (ammoID == "ammo_scent_seeds") {
+
+			}
 		}
 
 		// Called when the item is added to the inventory list.

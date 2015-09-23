@@ -210,6 +210,12 @@ namespace ZeldaOracle.Game {
 			BuildSprite(SPR_ITEM_ICON_FIRE_ROD,					11, 1);
 			BuildSprite(SPR_ITEM_ICON_OCARINA,					12, 1);
 			BuildSprite(SPR_ITEM_ICON_BOW,						13, 1);
+			BuildSprite(SPR_ITEM_SEED_EMBER,					0, 3).SetSize(8, 8);
+			BuildSprite(SPR_ITEM_SEED_SCENT,					1, 3).SetSize(8, 8);
+			BuildSprite(SPR_ITEM_SEED_PEGASUS,					2, 3).SetSize(8, 8);
+			BuildSprite(SPR_ITEM_SEED_GALE,						3, 3).SetSize(8, 8);
+			BuildSprite(SPR_ITEM_SEED_MYSTERY,					4, 3).SetSize(8, 8);
+			SPR_ITEM_SEEDS = new Sprite[] { SPR_ITEM_SEED_EMBER, SPR_ITEM_SEED_SCENT, SPR_ITEM_SEED_PEGASUS, SPR_ITEM_SEED_GALE, SPR_ITEM_SEED_MYSTERY };
 
 			spriteBuilder.SpriteSheet = SHEET_MENU_SMALL;
 			BuildSprite(SPR_HUD_BACKGROUND,				2, 4);
@@ -428,6 +434,27 @@ namespace ZeldaOracle.Game {
 				.AddFrame(7, 0,0, -6,-6).AddPart(7, 0,0, 6,-6).AddPart(7, 0,0, -6,2).AddPart(7, 0,0, 6,2)
 				.AddFrame(8, 6,1, -8,-8).AddPart(8, 7,1, 8,-8).AddPart(8, 6,2, -8,8).AddPart(8, 7,2, 8,8)
 				.AddFrame(9, 1,0, -8,-8).AddPart(9, 1,0, 8,-8).AddPart(9, 1,0, -8,8).AddPart(9, 1,0, 8,8);
+			
+			BuildAnim(ANIM_EFFECT_SEED_SCENT).AddFrame(3, 8,12).AddFrame(3, 6,12).AddFrame(3, 7,12);
+			BuildAnim(ANIM_EFFECT_SEED_PEGASUS).AddFrame(3, 3,4).AddFrame(3, 0,4).AddFrame(3, 1,4);
+			BuildAnim(ANIM_EFFECT_SEED_MYSTERY).AddFrame(3, 3,8).AddFrame(3, 0,8).AddFrame(3, 1,8); // PegasusSeedEffect.ShiftSourcePositions(0, 4);
+			BuildAnim(ANIM_EFFECT_SEED_EMBER).SetLoopMode(LoopMode.Reset)
+				.AddFrame(2, 1,3)
+				.AddFrame(2, 1,2).AddFrame(2, 1,17).AddFrame(2, 1,1).RepeatPreviousFrames(3, 9)
+				.AddFrame(2, 1,2);
+
+			//EFFECT_GALE = new Animation();
+			//for (int i = 0; i < 4 * 3; i++) {
+			//	int y = 1 + (((5 - (i % 4)) % 4) * 4);
+			//	EFFECT_GALE.addFrame(1, ((i % 6) < 3 ? 4 : 5), y);
+			//}
+			//EFFECT_GALE.createFlicker();
+
+			//EFFECT_GALE_SEED = new Animation();
+			//for (int i = 0; i < 29; i++) {
+			//	int y = 1 + (((5 - (i % 4)) % 4) * 4);
+			//	EFFECT_GALE_SEED.addFrame(1, ((i % 6) < 3 ? 4 : 5), y);
+			//}
 		}
 
 
@@ -705,6 +732,7 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_ITEM_SEED_PEGASUS				= new Sprite();
 		public static Sprite SPR_ITEM_SEED_GALE					= new Sprite();
 		public static Sprite SPR_ITEM_SEED_MYSTERY				= new Sprite();
+		public static Sprite[] SPR_ITEM_SEEDS;
 
 		public static Sprite SPR_ITEM_ICON_SWORD_1				= new Sprite();
 		public static Sprite SPR_ITEM_ICON_SWORD_2				= new Sprite();
@@ -822,9 +850,18 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_EFFECT_SIGN_BREAK			= new Animation();
 		public static Animation ANIM_EFFECT_LEAVES				= new Animation();
 		public static Animation ANIM_EFFECT_GRASS_LEAVES		= new Animation();
+		
+		// Color effect animations.
 		public static Animation ANIM_EFFECT_BOMB_EXPLOSION		= new Animation();
 		public static Animation ANIM_EFFECT_MONSTER_EXPLOSION	= new Animation();
-	
+		public static Animation ANIM_EFFECT_SEED_EMBER			= new Animation();
+		public static Animation ANIM_EFFECT_SEED_SCENT			= new Animation();
+		public static Animation ANIM_EFFECT_SEED_PEGASUS		= new Animation();
+		public static Animation ANIM_EFFECT_SEED_GALE			= new Animation();
+		public static Animation ANIM_EFFECT_SEED_MYSTERY		= new Animation();
+		public static Animation ANIM_EFFECT_PEGASUS_DUST		= new Animation(); // The dust the player sprinkles over himself when using a pegasus seed.
+		public static Animation ANIM_ITEM_SCENT_POD				= new Animation();
+
 
 	//-----------------------------------------------------------------------------
 	// Collision Models.

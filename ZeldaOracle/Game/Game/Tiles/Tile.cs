@@ -102,6 +102,13 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
+		// Called when the tile is burned by a fire.
+		public virtual void OnBurn() {
+			if (!isMoving && flags.HasFlag(TileFlags.Burnable)) {
+				RoomControl.RemoveTile(this);
+			}
+		}
+
 		// Called when the player wants to push the tile.
 		public virtual bool OnPush(int direction, float movementSpeed) {
 			if (isMoving)

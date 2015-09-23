@@ -44,6 +44,7 @@ namespace ZeldaOracle.Game.Entities {
 		private RoomControl			roomControl;
 		private	bool				isInitialized;
 		private bool				isAlive;
+		private bool				isInRoom;
 
 		protected Vector2F			position;
 		protected float				zPosition;
@@ -60,6 +61,7 @@ namespace ZeldaOracle.Game.Entities {
 		public Entity() {
 			roomControl		= null;
 			isAlive			= false;
+			isInRoom		= false;
 			isInitialized	= false;
 			position		= Vector2F.Zero;
 			zPosition		= 0.0f;
@@ -106,6 +108,9 @@ namespace ZeldaOracle.Game.Entities {
 
 		// Special update method for when the entity is being carried.
 		public virtual void UpdateCarrying() {}
+
+		// Called immediately after the entity is destroyed.
+		public virtual void OnDestroy() {}
 		
 	
 		//-----------------------------------------------------------------------------
@@ -116,6 +121,7 @@ namespace ZeldaOracle.Game.Entities {
 		public void Initialize(RoomControl control) {
 			this.roomControl	= control;
 			this.isAlive		= true;
+			this.isInRoom		= true;
 
 			if (!isInitialized) {
 				isInitialized = true;
@@ -123,10 +129,15 @@ namespace ZeldaOracle.Game.Entities {
 			}
 		}
 
+		public void RemoveFromRoom() {
+			isInRoom = false;
+		}
+
 		public void Destroy() {
 			if (isAlive) {
 				isAlive = false;
-				// TODO: OnDestroy()
+				isInRoom = false;
+				OnDestroy();
 			}
 		}
 
@@ -168,6 +179,11 @@ namespace ZeldaOracle.Game.Entities {
 		// Returns true if the entity is still alive.
 		public bool IsAlive {
 			get { return isAlive; }
+		}
+
+		// Returns true if the entity is being handled by RoomControl.
+		public bool IsInRoom {
+			get { return isInRoom; }
 		}
 
 		// Gets or sets the position of the entity.

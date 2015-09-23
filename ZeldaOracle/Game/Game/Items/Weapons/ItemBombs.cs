@@ -10,6 +10,9 @@ using ZeldaOracle.Game.Entities.Players.States;
 
 namespace ZeldaOracle.Game.Items {
 	public class ItemBombs : ItemWeapon {
+		
+		private Bomb bombEntity;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -50,7 +53,16 @@ namespace ZeldaOracle.Game.Items {
 		public override void OnButtonPress() {
 			// TODO: pickup nearby bomb entities.
 
-			player.BeginState(new PlayerCarryState(new Bomb()));
+			if (bombEntity == null || bombEntity.IsDestroyed) {
+				bombEntity = new Bomb();
+				player.BeginState(new PlayerCarryState(bombEntity));
+			}
+			else {
+				if (player.Physics.IsSoftMeetingEntity(bombEntity)) {
+					player.BeginState(new PlayerCarryState(bombEntity));
+					bombEntity.RemoveFromRoom();
+				}
+			}
 		}
 
 		// Draws under link's sprite.
