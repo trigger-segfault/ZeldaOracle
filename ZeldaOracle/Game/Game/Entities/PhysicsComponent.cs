@@ -287,15 +287,15 @@ namespace ZeldaOracle.Game.Entities {
 			return null;
 		}
 
-		public bool IsSoftMeetingEntity(Entity entity) {
-			if (CanCollideWithEntity(entity))
-				return PositionedSoftCollisionBox.Intersects(entity.Physics.PositionedSoftCollisionBox);
+		public bool IsSoftMeetingEntity(Entity other, int maxZDistance = 10) {
+			if (CanCollideWithEntity(other) && GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
+				return PositionedSoftCollisionBox.Intersects(other.Physics.PositionedSoftCollisionBox);
 			return false;
 		}
 
-		public bool IsHardMeetingEntity(Entity entity) {
-			if (CanCollideWithEntity(entity))
-				return PositionedCollisionBox.Intersects(entity.Physics.PositionedCollisionBox);
+		public bool IsHardMeetingEntity(Entity other) {
+			if (CanCollideWithEntity(other))
+				return PositionedCollisionBox.Intersects(other.Physics.PositionedCollisionBox);
 			return false;
 		}
 
@@ -370,13 +370,10 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		private bool ResolveCollision(int axis, Tile tile, Rectangle2F block) {
-			bool result = false;
-
 			if (axis == 0) { // X-Axis
 				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.X + velocity.X, entity.Y);
 				if (myBox.Intersects(block)) {
 					isColliding	= true;
-					result		= true;
 					velocity.X	= 0.0f;
 
 					if (myBox.Center.X < block.Center.X) {
@@ -389,13 +386,13 @@ namespace ZeldaOracle.Game.Entities {
 						if (!HasFlags(PhysicsFlags.AutoDodge) || !PerformCollisionDodge(block, Directions.Left))
 							collisionInfo[Directions.Left].SetTileCollision(tile, Directions.Left);
 					}
+					return true;
 				}
 			}
 			else if (axis == 1) { // Y-Axis
 				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position + velocity);
 				if (myBox.Intersects(block)) {
 					isColliding	= true;
-					result		= true;
 					velocity.Y	= 0.0f;
 
 					if (myBox.Center.Y < block.Center.Y) {
@@ -408,10 +405,10 @@ namespace ZeldaOracle.Game.Entities {
 						if (!HasFlags(PhysicsFlags.AutoDodge) || !PerformCollisionDodge(block, Directions.Up))
 							collisionInfo[Directions.Up].SetTileCollision(tile, Directions.Up);
 					}
+					return true;
 				}
 			}
-
-			return result;
+			return false;
 		}
 
 		public bool CanDodgeCollision(Tile tile, int direction) {
@@ -472,17 +469,6 @@ namespace ZeldaOracle.Game.Entities {
 				}
 			}
 			return false;
-		}
-		
-		public bool IsInLineWithRect(Rectangle2F block, int direction, int minDistanceFromEdge) {
-			Rectangle2F objBox = Rectangle2F.Translate(collisionBox, entity.Position);
-			for (int side = 0; side < 2; side++) {
-				int sideDir = (direction + (side == 0 ? 1 : 3)) % 4;
-				float distance = Math.Abs(objBox.GetEdge((sideDir + 2) % 4) - block.GetEdge(sideDir));
-				if (distance < minDistanceFromEdge)
-					return false;
-			}
-			return true;
 		}
 
 

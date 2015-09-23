@@ -7,17 +7,15 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Effects {
-	public class Fire : Effect {
-
+	public class ScentPod : Effect {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public Fire() :
-			base(GameData.ANIM_EFFECT_SEED_EMBER)
-		{
+		public ScentPod() {
 			graphics.DrawOffset = new Point2I(-8, -8);
+			CreateDestroyTimer(240, 60);
 		}
 		
 
@@ -27,22 +25,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		
 		public override void Initialize() {
 			base.Initialize();
-		}
-
-		public override void OnDestroy() {
-			// Burn tiles.
-			Point2I location = RoomControl.GetTileLocation(position);
-			
-			if (RoomControl.IsTileInBounds(location)) {
-				Tile tile = RoomControl.GetTopTile(location);
-				if (tile != null)
-					tile.OnBurn();
-			}
-		}
-
-		public override void Update() {
-			base.Update();
-			// TODO: collide with monsters.
+			graphics.PlayAnimation(GameData.ANIM_ITEM_SCENT_POD);
 		}
 	}
 }

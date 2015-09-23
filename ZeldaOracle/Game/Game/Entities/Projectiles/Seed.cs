@@ -47,7 +47,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 2);
 			Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 2);
-			graphics.DrawOffset			= new Point2I(-6, -4);
+			graphics.DrawOffset			= new Point2I(-4, -6);
 			centerOffset				= new Point2I(0, -2);
 		}
 
@@ -62,20 +62,29 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		//-----------------------------------------------------------------------------
 
 		public override void OnLand() {
-			// Create seed effect: fire, pod, gale, mystery
+			// Notify the tile of the seed hitting it.
+			Point2I location = RoomControl.GetTileLocation(position);
+			Tile tile = RoomControl.GetTopTile(location);
+			if (tile != null) {
+				tile.OnSeedHit(this);
+				if (IsDestroyed)
+					return;
+			}
 
+			// Create the seed's effect.
 			if (type == SeedType.Ember) {
 				RoomControl.SpawnEntity(new Fire(), Center);
 			}
 			else if (type == SeedType.Scent) {
-
+				RoomControl.SpawnEntity(new ScentPod(), Center);
 			}
 			else if (type == SeedType.Mystery) {
-
+				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_SEED_MYSTERY), Center - new Point2I(8, 8));
 			}
 			else if (type == SeedType.Gale) {
-
+				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_SEED_GALE), Center - new Point2I(8, 8));
 			}
+
 			Destroy();
 		}
 
@@ -87,6 +96,15 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		public override void Update() {
 			base.Update();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public SeedType Type {
+			get { return type; }
 		}
 	}
 }

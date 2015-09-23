@@ -44,11 +44,15 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		//-----------------------------------------------------------------------------
 
 		private Seed DropSeed(SeedType type) {
-			return ThrowSeed(type);
+			Seed seed = ThrowSeed(type);
+			seed.Position = player.Center;
+			seed.Physics.Velocity = Vector2F.Zero;
+			seed.Physics.ZVelocity = 0.0f;
+			return seed;
 		}
 		
 		private Seed ThrowSeed(SeedType type) {
-			Seed seed = new Seed(SeedType.Ember);
+			Seed seed = new Seed(type);
 
 			Vector2F velocity = Directions.ToVector(player.Direction);
 			Vector2F pos = player.Origin + (velocity * 4.0f);
@@ -72,10 +76,19 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 			if (ammoID == "ammo_ember_seeds") {
 				ThrowSeed(SeedType.Ember);
-				
 			}
 			else if (ammoID == "ammo_scent_seeds") {
-
+				ThrowSeed(SeedType.Scent);
+			}
+			else if (ammoID == "ammo_pegasus_seeds") {
+				// TODO: start sprinting.
+				player.RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_PEGASUS_DUST), player.Center - new Point2I(0, 8));
+			}
+			else if (ammoID == "ammo_gale_seeds") {
+				DropSeed(SeedType.Gale);
+			}
+			else if (ammoID == "ammo_mystery_seeds") {
+				ThrowSeed(SeedType.Mystery);
 			}
 		}
 

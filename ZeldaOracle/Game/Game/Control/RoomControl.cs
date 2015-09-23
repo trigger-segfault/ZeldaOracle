@@ -59,6 +59,24 @@ namespace ZeldaOracle.Game.Control {
 		public Tile GetTile(int x, int y, int layer) {
 			return tiles[x, y, layer];
 		}
+
+		// Return the tile at the given location that's on the highest layer.
+		public Tile GetTopTile(int x, int y) {
+			for (int i = room.LayerCount - 1; i >= 0; i--) {
+				if (tiles[x, y, i] != null)
+					return tiles[x, y, i];
+			}
+			return null;
+		}
+
+		// Return the tile at the given location that's on the highest layer.
+		public Tile GetTopTile(Point2I location) {
+			for (int i = room.LayerCount - 1; i >= 0; i--) {
+				if (tiles[location.X, location.Y, i] != null)
+					return tiles[location.X, location.Y, i];
+			}
+			return null;
+		}
 		
 		// Return true if the given tile location is inside the room.
 		public bool IsTileInBounds(Point2I location, int layer = 0) {
@@ -294,6 +312,16 @@ namespace ZeldaOracle.Game.Control {
 			roomLocation = new Point2I(2, 1);
 			Room r = level.GetRoom(roomLocation);
 			
+			// Create an owl tile.
+			TileData tdOwl			= new TileData(typeof(TileOwl), TileFlags.Solid);
+			tdOwl.Sprite			= GameData.SPR_OWL;
+			tdOwl.CollisionModel	= GameData.MODEL_BLOCK;
+			
+			// Create a lantern tile.
+			TileData tdLantern			= new TileData(typeof(TileLantern), TileFlags.Solid);
+			tdLantern.Sprite			= GameData.SPR_LANTERN_UNLIT;
+			tdLantern.CollisionModel	= GameData.MODEL_BLOCK;
+			
 			// Create a Sign tile
 			TileData tdSign = new TileData(typeof(TileSign), TileFlags.Solid | TileFlags.Pickupable |
 				TileFlags.Burnable | TileFlags.Cuttable);
@@ -301,14 +329,12 @@ namespace ZeldaOracle.Game.Control {
 			tdSign.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 1);
 			tdSign.BreakAnimation	= GameData.ANIM_EFFECT_SIGN_BREAK;
 			tdSign.CollisionModel	= GameData.MODEL_BLOCK;
-			r.TileData[2, 3, 1] = tdSign;
 			
 			// Create a movable block tile.
 			TileData tdBlock		= new TileData(TileFlags.Solid | TileFlags.Movable);
 			tdBlock.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 1, 9);
 			tdBlock.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 2, 9);
 			tdBlock.CollisionModel	= GameData.MODEL_BLOCK;
-			r.TileData[2, 5, 1] = tdBlock;
 			
 			// Create a bush tile.
 			TileData tdBush		= new TileData(TileFlags.Solid | TileFlags.Pickupable | TileFlags.Bombable |
@@ -317,7 +343,6 @@ namespace ZeldaOracle.Game.Control {
 			tdBush.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 1);
 			tdBush.BreakAnimation	= GameData.ANIM_EFFECT_LEAVES;
 			tdBush.CollisionModel	= GameData.MODEL_BLOCK;
-			r.TileData[1, 1, 1] = tdBush;
 			
 			// Create a pot tile.
 			TileData tdPot		= new TileData(TileFlags.Solid | TileFlags.Pickupable |
@@ -326,7 +351,6 @@ namespace ZeldaOracle.Game.Control {
 			tdPot.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 2, 1);
 			tdPot.BreakAnimation	= GameData.ANIM_EFFECT_ROCK_BREAK;
 			tdPot.CollisionModel	= GameData.MODEL_BLOCK;
-			r.TileData[1, 2, 1] = tdPot;
 			
 			// Create a rock tile.
 			TileData tdRock			= new TileData(TileFlags.Solid | TileFlags.Pickupable);
@@ -334,12 +358,20 @@ namespace ZeldaOracle.Game.Control {
 			tdRock.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 3, 1);
 			tdRock.BreakAnimation	= GameData.ANIM_EFFECT_ROCK_BREAK;
 			tdRock.CollisionModel	= GameData.MODEL_BLOCK;
-			r.TileData[2, 1, 1] = tdRock;
 			
 			// Create a grass tile.
 			TileData tdGrass		= new TileData(TileFlags.Grass | TileFlags.Cuttable | TileFlags.Burnable | TileFlags.Bombable);
 			tdGrass.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 3);
 			tdGrass.BreakAnimation	= GameData.ANIM_EFFECT_GRASS_LEAVES;
+
+			//r.TileData[2, 1, 1] = tdLantern;
+			r.TileData[2, 1, 1] = tdOwl;
+			r.TileData[2, 3, 1] = tdSign;
+			r.TileData[2, 5, 1] = tdBlock;
+			r.TileData[1, 1, 1] = tdBush;
+			r.TileData[1, 2, 1] = tdPot;
+			//r.TileData[2, 1, 1] = tdRock;
+
 			r.TileData[2, 2, 1] = tdGrass;
 			//r.TileData[2, 3, 1] = td;
 			r.TileData[2, 4, 1] = tdGrass;
@@ -378,7 +410,8 @@ namespace ZeldaOracle.Game.Control {
 				}
 				else if (entities[i].IsAlive && entities[i].IsInRoom && i >= entityCount) {
 					// For entities spawned this frame, only update their graphics component.
-					entities[i].Graphics.Update();
+					entities[i].Graphics.AnimationPlayer.SubStripIndex = entities[i].Graphics.SubStripIndex;
+					//entities[i].Graphics.Update();
 				}
 			}
 
