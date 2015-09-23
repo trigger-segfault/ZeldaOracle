@@ -307,10 +307,6 @@ namespace ZeldaOracle.Game.Control {
 			entities.Add(player);
 			player.X = 48;
 			player.Y = 32;
-
-			// Setup the room.
-			roomLocation = new Point2I(2, 1);
-			Room r = level.GetRoom(roomLocation);
 			
 			// Create an owl tile.
 			TileData tdOwl			= new TileData(typeof(TileOwl), TileFlags.Solid);
@@ -324,7 +320,7 @@ namespace ZeldaOracle.Game.Control {
 			
 			// Create a Sign tile
 			TileData tdSign = new TileData(typeof(TileSign), TileFlags.Solid | TileFlags.Pickupable |
-				TileFlags.Burnable | TileFlags.Cuttable);
+				TileFlags.Burnable | TileFlags.Cuttable | TileFlags.Switchable);
 			tdSign.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 0);
 			tdSign.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 1);
 			tdSign.BreakAnimation	= GameData.ANIM_EFFECT_SIGN_BREAK;
@@ -335,6 +331,12 @@ namespace ZeldaOracle.Game.Control {
 			tdBlock.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 1, 9);
 			tdBlock.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 2, 9);
 			tdBlock.CollisionModel	= GameData.MODEL_BLOCK;
+			
+			// Create a diamond rock tile.
+			TileData tdDiamond		= new TileData(TileFlags.Solid | TileFlags.Switchable | TileFlags.SwitchStays);
+			tdDiamond.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 4, 0);
+			tdDiamond.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 4, 1);
+			tdDiamond.CollisionModel	= GameData.MODEL_BLOCK;
 			
 			// Create a bush tile.
 			TileData tdBush		= new TileData(TileFlags.Solid | TileFlags.Pickupable | TileFlags.Bombable |
@@ -363,17 +365,15 @@ namespace ZeldaOracle.Game.Control {
 			TileData tdGrass		= new TileData(TileFlags.Grass | TileFlags.Cuttable | TileFlags.Burnable | TileFlags.Bombable);
 			tdGrass.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 3);
 			tdGrass.BreakAnimation	= GameData.ANIM_EFFECT_GRASS_LEAVES;
-
-			//r.TileData[2, 1, 1] = tdLantern;
-			r.TileData[2, 1, 1] = tdOwl;
-			r.TileData[2, 3, 1] = tdSign;
+			
+			
+			// Setup the rooms.
+			Room r = level.GetRoom(new Point2I(2, 1));
+			r.TileData[8, 1, 1] = tdOwl;
+			r.TileData[1, 1, 1] = tdSign;
 			r.TileData[2, 5, 1] = tdBlock;
-			r.TileData[1, 1, 1] = tdBush;
-			r.TileData[1, 2, 1] = tdPot;
-			//r.TileData[2, 1, 1] = tdRock;
-
 			r.TileData[2, 2, 1] = tdGrass;
-			//r.TileData[2, 3, 1] = td;
+			r.TileData[2, 3, 1] = tdGrass;
 			r.TileData[2, 4, 1] = tdGrass;
 			r.TileData[3, 4, 1] = tdGrass;
 			r.TileData[4, 5, 1] = tdGrass;
@@ -387,8 +387,28 @@ namespace ZeldaOracle.Game.Control {
 			r.TileData[7, 2, 1] = tdGrass;
 			r.TileData[8, 2, 1] = tdGrass;
 			r.TileData[8, 3, 1] = tdGrass;
+			
+			r = level.GetRoom(new Point2I(1, 1));
+			r.TileData[1, 1, 1] = tdDiamond;
+			r.TileData[2, 2, 1] = tdDiamond;
+			r.TileData[2, 4, 1] = tdDiamond;
+			r.TileData[8, 2, 1] = tdPot;
+			
+			r = level.GetRoom(new Point2I(3, 0));
+			r.TileData[3, 2, 1] = tdLantern;
 
-			BeginRoom(r);
+			r = level.GetRoom(new Point2I(1, 0));
+			r.TileData[8, 2, 1] = tdRock;
+
+			r = level.GetRoom(new Point2I(2, 0));
+			for (int x = 1; x < 8; x++) {
+				for (int y = 2; y < 6; y++) {
+					r.TileData[x, y, 1] = tdBush;
+				}
+			}
+			
+			roomLocation = new Point2I(2, 1);
+			BeginRoom(level.GetRoom(roomLocation));
 		}
 
 		public override void OnBegin() {
