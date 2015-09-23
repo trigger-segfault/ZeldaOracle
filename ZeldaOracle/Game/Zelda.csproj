@@ -282,6 +282,7 @@
     <Compile Include="Game\Items\ItemFlags.cs" />
     <Compile Include="Game\Items\ItemWeapon.cs" />
     <Compile Include="Game\Items\Rewards\Reward.cs" />
+    <Compile Include="Game\Items\Rewards\RewardManager.cs" />
     <Compile Include="Game\Items\Rewards\RewardRupee.cs" />
     <Compile Include="Game\Items\SecondaryItems\ItemMembersCard.cs" />
     <Compile Include="Game\Items\SecondaryItems\ItemEssenceSeed.cs" />
