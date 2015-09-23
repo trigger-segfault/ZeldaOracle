@@ -68,12 +68,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public int Health {
 			get { return health; }
-			set { health = value; }
+			set { health = GMath.Clamp(value, 0, healthMax); }
 		}
 		
 		public int MaxHealth {
 			get { return healthMax; }
-			set { healthMax = value; }
+			set { healthMax = GMath.Max(value, 0); }
 		}
 	}
 }

@@ -36,6 +36,15 @@ namespace ZeldaOracle.Common.Graphics {
 			this.loopMode	= LoopMode.Repeat;
 		}
 
+		public Animation(Sprite sprite) {
+			this.frames		= new List<AnimationFrame>();
+			this.duration	= 0;
+			this.nextStrip	= null;
+			this.loopMode	= LoopMode.Repeat;
+
+			this.frames.Add(new AnimationFrame(0, 0, sprite));
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Mutators
