@@ -61,6 +61,8 @@ namespace ZeldaOracle.Common.Graphics {
 					sprite = sprite.NextPart;
 				}
 			}
+			if (nextStrip != null)
+				nextStrip.SwitchSpriteSheet(sheet);
 		}
 
 		//-----------------------------------------------------------------------------
