@@ -70,6 +70,14 @@ namespace ZeldaOracle.Game.Control {
 		public Point2I GetTileLocation(Vector2F position) {
 			return (Point2I) (position / GameSettings.TILE_SIZE);
 		}
+
+		public Rectangle2I GetTileAreaFromRect(Rectangle2F rect, int inflateAmount = 0) {
+			Rectangle2I area;
+			area.Point	= (Point2I) (rect.TopLeft / (float) GameSettings.TILE_SIZE);
+			area.Size	= ((Point2I) (rect.BottomRight / (float) GameSettings.TILE_SIZE)) + Point2I.One - area.Point;
+			area.Inflate(inflateAmount, inflateAmount);
+			return Rectangle2I.Intersect(area, new Rectangle2I(Point2I.Zero, room.Size));
+		}
 		
 
 		//-----------------------------------------------------------------------------
@@ -100,6 +108,14 @@ namespace ZeldaOracle.Game.Control {
 		public void SpawnEntity(Entity e, Vector2F position) {
 			e.Initialize(this);
 			e.Position = position;
+			entities.Add(e);
+		}
+		
+		// Use this for spawning entites at a position at runtime.
+		public void SpawnEntity(Entity e, Vector2F position, float zPosition) {
+			e.Initialize(this);
+			e.Position = position;
+			e.ZPosition = zPosition;
 			entities.Add(e);
 		}
 		
@@ -294,7 +310,7 @@ namespace ZeldaOracle.Game.Control {
 			r.TileData[2, 5, 1] = tdBlock;
 			
 			// Create a bush tile.
-			TileData tdBush		= new TileData(TileFlags.Solid | TileFlags.Pickupable |
+			TileData tdBush		= new TileData(TileFlags.Solid | TileFlags.Pickupable | TileFlags.Bombable |
 									TileFlags.Burnable | TileFlags.Switchable | TileFlags.Cuttable);
 			tdBush.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 0);
 			tdBush.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 1);

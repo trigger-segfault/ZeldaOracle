@@ -13,26 +13,39 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Entities.Players.States;
 
-namespace ZeldaOracle.Game.Entities.Players {
+namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerCarryState : PlayerState {
 		
-		private Tile carryTile;
 		private bool isPickingUp; // Is the pickup animation playing?
 		private int pickupTimer;
 		private Point2I objectDrawOffset;
+
+		private Entity carryObject;
+		private int throwDuration; // How many ticks the player waits when throwing.
+		private int pickupFrame1Duration;
+		private int pickupFrame2Duration;
 		
-		// TODO: Can't ledge jump when carrying.
-		// TODO: Change carry tile to an entity that can optionally be updated (bombs).
+		// TODO: Can't ledge jump while carrying.
+		// TODO: Fall in water while carrying.
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
+		
+		public PlayerCarryState(Entity carryObject) {
+			this.carryObject			= carryObject;
+			this.throwDuration			= 8;
+			this.pickupFrame1Duration	= 4;
+			this.pickupFrame2Duration	= 4;
+		}
 
 		public PlayerCarryState(Tile carryTile) {
-			this.carryTile = carryTile;
+			this.carryObject			= new CarriedTile(carryTile);
+			this.throwDuration			= 2;
+			this.pickupFrame1Duration	= 6;
+			this.pickupFrame2Duration	= 4;
 		}
 
 		
@@ -40,58 +53,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Internal methods.
 		//-----------------------------------------------------------------------------
 		
-		public Entity DropObject() {
-			Projectile projectile = new Projectile();
-			
-			Vector2F pos = player.Position - new Point2I(8, 32 - 3);
-
-			// General
-			projectile.Owner		= Player;
-			projectile.OriginOffset = new Point2I(8, 14);
-			projectile.Origin		= Player.Origin + new Vector2F(0, 1);
-			projectile.ZPosition	= player.ZPosition + 12;
-			projectile.Angle		= Directions.ToAngle(player.MoveDirection);
-
-			player.Direction = player.MoveDirection;
-
-			// Graphics.
-			projectile.Graphics.PlaySprite(carryTile.SpriteAsObject);
-			//projectile.Graphics.DrawOffset = new Point2I(-8, -14);
-			projectile.Graphics.ShadowDrawOffset = projectile.OriginOffset;
-
-			// Physics.
-			projectile.Physics.HasGravity		= true;
-			projectile.Physics.CollisionBox		= new Rectangle2F(-2, -2, 4, 4) + new Vector2F(8, 8);
-			projectile.Physics.SoftCollisionBox	= new Rectangle2F(-2, -2, 4, 4) + new Vector2F(8, 8);
-			projectile.EnablePhysics(PhysicsFlags.CollideWorld | PhysicsFlags.LedgePassable |
-								PhysicsFlags.HalfSolidPassable | PhysicsFlags.DestroyedOutsideRoom);
-
-			// Crash event.
-			Vector2F v = projectile.Physics.Velocity;
-			Action landAction = delegate() {
-				// Create crash effect.
-				Effect effect = new Effect(carryTile.BreakAnimation);
-				effect.Position = projectile.Position;
-				projectile.RoomControl.SpawnEntity(effect);
-				projectile.Destroy();
-			};
-			projectile.EventCollision += landAction;
-			projectile.EventLand += landAction;
-
-			player.RoomControl.SpawnEntity(projectile);
-				
-
+		public void DropObject() {
+			player.RoomControl.SpawnEntity(carryObject, player.Origin, 16);
+			player.BeginState(new PlayerBusyState(throwDuration));
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
-			player.BeginState(new PlayerBusyState(4));
-
-			return projectile;
 		}
 
-		public Entity ThrowObject() {
-			Entity obj = DropObject();
-			obj.Physics.ZVelocity = 1.0f;
-			obj.Physics.Velocity = Directions.ToVector(Player.MoveDirection) * 1.5f;
-			return obj;
+		public void ThrowObject() {
+			DropObject();
+			carryObject.Physics.ZVelocity = 1.0f;
+			carryObject.Physics.Velocity = Directions.ToVector(Player.MoveDirection) * 1.5f;
 		}
 
 
@@ -102,7 +73,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public override void OnBegin() {
 			base.OnBegin();
 			
-			objectDrawOffset = new Point2I(-8, -16);
+			carryObject.Initialize(player.RoomControl);
+			
+			objectDrawOffset = new Point2I(0, -3);
 			objectDrawOffset += Directions.ToPoint(player.Direction) * 8;
 			pickupTimer = 0;
 			isPickingUp = true;
@@ -131,25 +104,34 @@ namespace ZeldaOracle.Game.Entities.Players {
 				pickupTimer++;
 				
 				// Handle the 2 frames of picking up.
-				if (pickupTimer > 10) {
-					objectDrawOffset = new Point2I(-8, -29);
-					isPickingUp = false;
-					player.Movement.AllowMovementControl = true;
-					Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CARRY);
+				if (pickupTimer < pickupFrame1Duration) {
+					objectDrawOffset = new Point2I(0, -2);
+					objectDrawOffset += Directions.ToPoint(player.Direction) * 8;
+					Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
 				}
-				else if (pickupTimer > 6) {
-					objectDrawOffset = new Point2I(-8, -24);
+				else if (pickupTimer < pickupFrame1Duration + pickupFrame2Duration) {
+					objectDrawOffset = new Point2I(0, -10);
 					objectDrawOffset += Directions.ToPoint(player.Direction) * 2;
 					Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_GRAB);
 				}
 				else {
-					objectDrawOffset = new Point2I(-8, -16);
-					objectDrawOffset += Directions.ToPoint(player.Direction) * 8;
-					Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
+					objectDrawOffset = new Point2I(0, -15);
+					isPickingUp = false;
+					player.Movement.AllowMovementControl = true;
+					Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CARRY);
 				}
 			}
 			else {
-				// Update animations
+				// Update the carried object.
+				carryObject.Position = player.Origin;
+				carryObject.ZPosition = player.ZPosition + 16;
+				carryObject.UpdateCarrying();
+				if (carryObject.IsDestroyed) {
+					player.BeginNormalState();
+					return;
+				}
+
+				// Update animations.
 				if (player.Movement.IsMoving && !Player.Graphics.IsAnimationPlaying)
 					Player.Graphics.PlayAnimation();
 				if (!player.Movement.IsMoving && Player.Graphics.IsAnimationPlaying)
@@ -166,20 +148,22 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 		
 		public override void DrawOver(Graphics2D g) {
-			// Draw the object.
-			if (carryTile.SpriteAsObject != null) {
-				Vector2F pos = player.Position + objectDrawOffset;
+			Vector2F pos = player.Position + objectDrawOffset + carryObject.Graphics.DrawOffset;
+			pos.Y -= player.ZPosition;
 
-				// Handle head bobbing when the player is moving horizontally.
-				if (!isPickingUp &&
-					(player.Direction == Directions.Left || player.Direction == Directions.Right)
-						&& player.Graphics.AnimationPlayer.PlaybackTime < 6)
-				{
-					pos.Y -= 1;
-				}
-
-				g.DrawSprite(carryTile.SpriteAsObject, pos);
+			// Handle head bobbing when the player is moving horizontally.
+			if (!isPickingUp &&
+				(player.Direction == Directions.Left || player.Direction == Directions.Right)
+					&& player.Graphics.AnimationPlayer.PlaybackTime >= 6)
+			{
+				pos.Y += 1;
 			}
+
+			// Draw the object.
+			if (carryObject.Graphics.AnimationPlayer.SubStrip != null)
+				g.DrawAnimation(carryObject.Graphics.AnimationPlayer.SubStrip, carryObject.Graphics.AnimationPlayer.PlaybackTime, pos, 0.0f);
+			else if (carryObject.Graphics.Sprite != null)
+				g.DrawSprite(carryObject.Graphics.Sprite, pos, 0.0f);
 		}
 
 

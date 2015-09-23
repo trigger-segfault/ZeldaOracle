@@ -214,6 +214,8 @@
     <Compile Include="Game\Entities\Players\PlayerState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSwimState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSwingState.cs" />
+    <Compile Include="Game\Entities\Projectiles\Bomb.cs" />
+    <Compile Include="Game\Entities\Projectiles\CarriedTile.cs" />
     <Compile Include="Game\Entities\Projectiles\Projectile.cs" />
     <Compile Include="Game\GameStates\StateTextReader.cs" />
     <Compile Include="Game\Control\View.cs" />

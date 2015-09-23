@@ -42,7 +42,9 @@ namespace ZeldaOracle.Game.Entities {
 	public abstract class Entity {
 
 		private RoomControl			roomControl;
+		private	bool				isInitialized;
 		private bool				isAlive;
+
 		protected Vector2F			position;
 		protected float				zPosition;
 		protected PhysicsComponent	physics;
@@ -58,12 +60,13 @@ namespace ZeldaOracle.Game.Entities {
 		public Entity() {
 			roomControl		= null;
 			isAlive			= false;
+			isInitialized	= false;
 			position		= Vector2F.Zero;
 			zPosition		= 0.0f;
 			physics			= new PhysicsComponent(this);
 			graphics		= new GraphicsComponent(this);
 			originOffset	= Point2I.Zero;
-			centerOffset	= new Point2I(8, 8);
+			centerOffset	= Point2I.Zero;
 		}
 
 
@@ -100,6 +103,9 @@ namespace ZeldaOracle.Game.Entities {
 
 		// Called when the entity lands on the ground.
 		public virtual void OnLand() {}
+
+		// Special update method for when the entity is being carried.
+		public virtual void UpdateCarrying() {}
 		
 	
 		//-----------------------------------------------------------------------------
@@ -108,9 +114,13 @@ namespace ZeldaOracle.Game.Entities {
 
 		// Initializes the entity and sets up containment variables.
 		public void Initialize(RoomControl control) {
-			this.roomControl = control;
-			this.isAlive = true;
-			Initialize();
+			this.roomControl	= control;
+			this.isAlive		= true;
+
+			if (!isInitialized) {
+				isInitialized = true;
+				Initialize();
+			}
 		}
 
 		public void Destroy() {
@@ -209,14 +219,13 @@ namespace ZeldaOracle.Game.Entities {
 			set { position = value - originOffset; }
 		}
 
-		public Vector2F Center {
-			get { return position + centerOffset; }
-		}
-
 		public Point2I OriginOffset {
 			get { return originOffset; }
 			set { originOffset = value; }
 		}
 
+		public Vector2F Center {
+			get { return position + centerOffset; }
+		}
 	}
 } // End namespace

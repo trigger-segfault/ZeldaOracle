@@ -154,6 +154,11 @@ namespace ZeldaOracle.Game.Entities
 			set { animationPlayer = value; }
 		}
 
+		public Sprite Sprite {
+			get { return sprite;  }
+			set { sprite = value; }
+		}
+
 		public Point2I ShadowDrawOffset {
 			get { return shadowDrawOffset;  }
 			set { shadowDrawOffset = value; }

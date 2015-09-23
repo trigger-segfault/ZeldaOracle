@@ -163,13 +163,35 @@ namespace ZeldaOracle.Game.Entities {
 
 				// Land on the ground.
 				if (entity.ZPosition <= 0.0f) {
-					entity.ZPosition = 0.0f;
-					zVelocity = 0.0f;
 					hasLanded = true;
+					if (HasFlags(PhysicsFlags.Bounces)) {
+						Bounce();
+					}
+					else {
+						entity.ZPosition = 0.0f;
+						zVelocity = 0.0f;
+					}
 				}
 			}
 			else
 				zVelocity = 0.0f;
+		}
+		
+		private void Bounce() {
+			if (zVelocity < -1.0f) {
+				entity.ZPosition = 0.1f;
+				zVelocity = -zVelocity * 0.5f;
+			}
+			else {
+				zVelocity = 0;
+				velocity = Vector2F.Zero;
+			}
+			//Sounds.play(soundBounce);
+
+			if (velocity.Length > 0.25)
+				velocity *= 0.5f;
+			else
+				velocity = Vector2F.Zero;
 		}
 
 		

@@ -60,7 +60,6 @@
   <ItemGroup>
     <Folder Include="Animations\" />
     <Folder Include="Data\" />
-    <Folder Include="Images\Effects\" />
     <Folder Include="Images\Units\Player\" />
     <Folder Include="Languages\" />
     <Folder Include="Particles\" />
@@ -225,13 +224,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Images\sheet_effects.png">
-      <Name>sheet_effects</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Images\sheet_menu_small.png">
       <Name>sheet_menu_small</Name>
       <Importer>TextureImporter</Importer>
@@ -388,6 +380,18 @@
       <Name>slash_3</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\Effects\basic_effects.png">
+      <Name>basic_effects</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Effects\color_effects.png">
+      <Name>color_effects</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

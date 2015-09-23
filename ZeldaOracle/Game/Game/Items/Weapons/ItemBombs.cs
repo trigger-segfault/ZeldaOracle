@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Entities;
+using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Entities.Players.States;
 
 namespace ZeldaOracle.Game.Items {
 	public class ItemBombs : ItemWeapon {
@@ -43,6 +46,12 @@ namespace ZeldaOracle.Game.Items {
 
 		// Immediately interrupt this item (ex: if link falls in a hole).
 		public override void Interrupt() { }
+
+		public override void OnButtonPress() {
+			// TODO: pickup nearby bomb entities.
+
+			player.BeginState(new PlayerCarryState(new Bomb()));
+		}
 
 		// Draws under link's sprite.
 		public override void DrawUnder() { }

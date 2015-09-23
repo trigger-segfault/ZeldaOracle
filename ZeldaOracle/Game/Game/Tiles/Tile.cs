@@ -11,25 +11,33 @@ using ZeldaOracle.Game.Entities.Effects;
 
 namespace ZeldaOracle.Game.Tiles {
 	
+	public enum SwordHitType {
+		Normal,
+		Stab,
+		Charged
+	}
+
 	public class Tile {
 		private RoomControl		control;
 
 		private Point2I			location;		// The tile location.
 		private int				layer;			// The layer this tile is in.
-		private Vector2F		offset;			// Offset in pixels from its tile location.
-		private Point2I			size;			// How many tile spaces this tile occupies.
+		private Vector2F		offset;			// Offset in pixels from its tile location (used for movement).
+		private Point2I			size;			// How many tile spaces this tile occupies. NOTE: this isn't supported yet.
 
 		private TileFlags		flags;
 		private CollisionModel	collisionModel;
 		private Sprite			sprite;
 		private Sprite			spriteAsObject;	// The sprite for the tile if it were picked up, pushed, etc.
-
 		private Animation		breakAnimation;	// The animation to play when the tile is broken.
+
 
 		private AnimationPlayer	animationPlayer;
 
 		private Point2I			tileSheetLoc;
 		private Tileset			tileset;
+
+		private int				pushDelay;
 
 		// Movement state.
 		private Point2I			moveDirection;
@@ -50,6 +58,7 @@ namespace ZeldaOracle.Game.Tiles {
 			sprite			= null;
 			animationPlayer	= new AnimationPlayer();
 			isMoving		= false;
+			pushDelay		= 20;
 		}
 		
 		public Tile(TileData data, int x, int y, int layer) :
@@ -76,13 +85,25 @@ namespace ZeldaOracle.Game.Tiles {
 		// Called when the player presses A on this tile, when facing the given direction.
 		// Return true if player controls should be disabled for the rest of the frame.
 		public virtual bool OnAction(int direction) { return false; }
-
-
-		//-----------------------------------------------------------------------------
-		// Interaction
-		//-----------------------------------------------------------------------------
 		
-		public bool Push(int direction, float movementSpeed) {
+		// Called when the player hits this tile with the sword.
+		public virtual void OnSwordHit() {
+			if (!isMoving && flags.HasFlag(TileFlags.Cuttable)) {
+				RoomControl.SpawnEntity(new Effect(breakAnimation), Position);
+				RoomControl.RemoveTile(this);
+			}
+		}
+
+		// Called when the player hits this tile with the sword.
+		public virtual void OnBombExplode() {
+			if (!isMoving && flags.HasFlag(TileFlags.Bombable)) {
+				RoomControl.SpawnEntity(new Effect(breakAnimation), Position);
+				RoomControl.RemoveTile(this);
+			}
+		}
+
+		// Called when the player wants to push the tile.
+		public virtual bool OnPush(int direction, float movementSpeed) {
 			if (isMoving)
 				return false;
 			
@@ -112,13 +133,6 @@ namespace ZeldaOracle.Game.Tiles {
 			offset = -Directions.ToVector(direction) * GameSettings.TILE_SIZE;
 			RoomControl.MoveTile(this, newLocation, newLayer);
 			return true;
-		}
-		
-		public virtual void OnSwordHit() {
-			if (!isMoving && flags.HasFlag(TileFlags.Cuttable)) {
-				RoomControl.SpawnEntity(new Effect(breakAnimation), Position);
-				RoomControl.RemoveTile(this);
-			}
 		}
 
 
@@ -281,6 +295,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public Point2I TileSheetLocation {
 			get { return tileSheetLoc; }
 			set { tileSheetLoc = value; }
+		}
+
+		public int PushDelay {
+			get { return pushDelay; }
+			set { pushDelay = value; }
 		}
 
 		public bool IsMoving {

@@ -7,7 +7,7 @@ using ZeldaOracle.Common.Input;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
 
-namespace ZeldaOracle.Game.Entities.Players {
+namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerGrabState : PlayerState {
 		private int timer;
 		private int duration;
