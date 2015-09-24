@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Equipment;
 using ZeldaOracle.Game.Items.Essences;
 using ZeldaOracle.Game.Items.KeyItems;
+using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Worlds;
@@ -26,6 +27,7 @@ namespace ZeldaOracle.Game.Control {
 		private Player player;
 		private HUD hud;
 		private Inventory inventory;
+		private RewardManager rewardManager;
 		private bool advancedGame;
 
 		private MenuWeapons menuWeapons;
@@ -46,6 +48,7 @@ namespace ZeldaOracle.Game.Control {
 			this.player			= null;
 			this.hud			= null;
 			this.inventory		= null;
+			this.rewardManager	= null;
 			this.advancedGame	= false;
 
 			this.menuWeapons	= null;
@@ -113,7 +116,16 @@ namespace ZeldaOracle.Game.Control {
 			inventory.ObtainAmmo(inventory.GetAmmo("ammo_mystery_seeds"));
 
 			hud = new HUD(this);
-			
+
+			rewardManager = new RewardManager(this);
+
+			rewardManager.AddReward(new RewardRupee("rupee_1", 1, new Sprite(GameData.SHEET_ITEMS_SMALL, 5, 3, -5, -15)));
+			rewardManager.AddReward(new RewardRupee("rupee_5", 5, new Sprite(GameData.SHEET_ITEMS_SMALL, 6, 3, -5, -15)));
+			rewardManager.AddReward(new RewardRupee("rupee_20", 20, new Sprite(GameData.SHEET_ITEMS_SMALL, 7, 3, -5, -15)));
+			rewardManager.AddReward(new RewardRupee("rupee_30", 30, new Sprite(GameData.SHEET_ITEMS_SMALL, 7, 3, -5, -15)));
+			rewardManager.AddReward(new RewardRupee("rupee_100", 100, new Sprite(GameData.SHEET_ITEMS_LARGE, 0, 3, -9, -15)));
+			rewardManager.AddReward(new RewardRupee("rupee_200", 200, new Sprite(GameData.SHEET_ITEMS_LARGE, 1, 3, -9, -15)));
+
 			// TODO: Load world here.
 			roomControl		= new RoomControl();
 			gameManager.PushGameState(roomControl);
@@ -220,6 +232,10 @@ namespace ZeldaOracle.Game.Control {
 		public int RoomTicks {
 			get { return roomTicks; }
 			set { roomTicks = value; }
+		}
+
+		public RewardManager RewardManager {
+			get { return rewardManager; }
 		}
 	}
 }

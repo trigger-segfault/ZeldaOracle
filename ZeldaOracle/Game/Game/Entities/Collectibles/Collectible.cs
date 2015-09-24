@@ -62,11 +62,11 @@ namespace ZeldaOracle.Game.Entities {
 			if (timer == reward.Duration) {
 				Destroy();
 			}
-			else if (timer == reward.FadeDuration)
+			else if (timer == reward.FadeTime)
 				graphics.IsFlickering = true;
 
 			// Check for colliding with the player.
-			if (physics.IsSoftMeetingEntity(GameControl.Player, 9))
+			if (physics.IsSoftMeetingEntity(GameControl.Player, 9) && timer >= reward.PickupableTime)
 				Collect();
 		}
 

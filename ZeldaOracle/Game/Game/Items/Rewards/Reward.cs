@@ -11,7 +11,8 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		protected string id;
 		protected int duration;
-		protected int fadeDuration;
+		protected int fadeTime;
+		protected int pickupableTime;
 		protected Animation animation;
 		protected Rectangle2I collisionBox;
 		protected bool isCollectibleWithItems;
@@ -29,7 +30,8 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		public Reward() {
 			this.id				= "";
 			this.duration		= -1;
-			this.fadeDuration	= -1;
+			this.fadeTime		= -1;
+			this.pickupableTime	= 0;
 			this.animation		= null;
 			this.collisionBox	= Rectangle2I.Zero;
 			this.isCollectibleWithItems	= false;
@@ -55,8 +57,12 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			get { return duration; }
 		}
 
-		public int FadeDuration {
-			get { return fadeDuration; }
+		public int FadeTime {
+			get { return fadeTime; }
+		}
+
+		public int PickupableTime {
+			get { return pickupableTime; }
 		}
 
 		public Animation Animation {

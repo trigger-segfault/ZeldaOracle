@@ -94,6 +94,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (!isMoving && flags.HasFlag(TileFlags.Cuttable)) {
 				RoomControl.SpawnEntity(new Effect(breakAnimation), Position);
 				RoomControl.RemoveTile(this);
+				RoomControl.GameControl.RewardManager.SpawnCollectibleFromBreakableTile("rupee_1", (Point2I)Position + new Point2I(8, 15));
 			}
 		}
 

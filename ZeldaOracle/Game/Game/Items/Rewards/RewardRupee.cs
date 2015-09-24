@@ -22,21 +22,23 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RewardRupee(string id, int amount, Sprite sprite, Rectangle2I collisionBox) {
+		public RewardRupee(string id, int amount, Sprite sprite) {
 			this.id				= id;
 			this.duration		= 513;
-			this.fadeDuration	= 400;
+			this.fadeTime		= 400;
+			this.pickupableTime	= 12;
 			this.animation		= new Animation(sprite);
-			this.collisionBox	= collisionBox;
+			this.collisionBox	= new Rectangle2I(-6, -10, 9, 9);
 			this.amount			= amount;
 			this.isCollectibleWithItems	= true;
 		}
-		public RewardRupee(string id, int amount, Animation animation, Rectangle2I collisionBox) {
+		public RewardRupee(string id, int amount, Animation animation) {
 			this.id				= id;
 			this.duration		= 513;
-			this.fadeDuration	= 400;
+			this.fadeTime		= 400;
+			this.pickupableTime	= 12;
 			this.animation		= animation;
-			this.collisionBox	= collisionBox;
+			this.collisionBox	= new Rectangle2I(-6, -10, 9, 9);
 			this.amount			= amount;
 			this.isCollectibleWithItems	= true;
 		}
