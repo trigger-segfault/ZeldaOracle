@@ -8,7 +8,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control;
 
 namespace ZeldaOracle.Game.Items.Rewards {
-	public class RewardRupee : Reward {
+	public class RewardRecoveryHeart : Reward {
 
 		protected int amount;
 
@@ -16,7 +16,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RewardRupee(string id, int amount, string message, Sprite sprite) {
+		public RewardRecoveryHeart(string id, int amount, string message, Sprite sprite) {
 			this.id				= id;
 			this.animation		= new Animation(sprite);
 			this.message		= message;
@@ -26,24 +26,16 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 			this.amount			= amount;
 		}
-		public RewardRupee(string id, int amount, string message, Animation animation) {
-			this.id				= id;
-			this.animation		= animation;
-			this.message		= message;
-			this.hasDuration	= true;
-			this.holdType		= RewardHoldTypes.Raise;
-			this.isCollectibleWithItems	= true;
-		}
 
 		//-----------------------------------------------------------------------------
 		// Virtual methods
 		//-----------------------------------------------------------------------------
 
 		public override void OnCollect(GameControl gameControl) {
-			if (gameControl.HUD.DynamicRupees >= gameControl.Inventory.GetAmmo("rupees").MaxAmount)
-				AudioSystem.PlaySound("Pickups/get_rupee");
+			if (gameControl.HUD.DynamicHealth >= gameControl.Player.MaxHealth)
+				AudioSystem.PlaySound("Pickups/get_heart");
 
-			gameControl.Inventory.GetAmmo("rupees").Amount += amount;
+			gameControl.Player.Health += amount * 4;
 		}
 
 		//-----------------------------------------------------------------------------

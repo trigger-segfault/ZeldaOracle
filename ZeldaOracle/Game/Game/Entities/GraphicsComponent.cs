@@ -22,6 +22,8 @@ namespace ZeldaOracle.Game.Entities
 		private bool			isGrassEffectVisible;
 		private bool			isRipplesEffectVisible;
 		private bool			isShadowVisible;
+		private Point2I			grassDrawOffset;
+		private Point2I			ripplesDrawOffset;
 		private Point2I			shadowDrawOffset;
 		private int				grassAnimationTicks;
 		private Sprite			sprite;
@@ -29,6 +31,9 @@ namespace ZeldaOracle.Game.Entities
 		private int				flickerAlternateDelay;
 		private int				flickerTimer;
 		private bool			flickerIsVisible;
+
+
+		private static bool		drawCollisionBoxes	= false;
 
 
 		//-----------------------------------------------------------------------------
@@ -42,11 +47,13 @@ namespace ZeldaOracle.Game.Entities
 			this.subStripIndex			= 0;
 			this.isVisible				= true;
 			this.isShadowVisible		= true;
+			this.grassDrawOffset		= Point2I.Zero;
+			this.ripplesDrawOffset		= Point2I.Zero;
 			this.shadowDrawOffset		= Point2I.Zero;
 			this.isGrassEffectVisible	= true;
 			this.isRipplesEffectVisible	= true;
 			this.grassAnimationTicks	= 0;
-			this.drawOffset				= new Point2I();
+			this.drawOffset				= Point2I.Zero;
 			this.isFlickering			= false;
 			this.flickerAlternateDelay	= 2;
 			this.flickerTimer			= 0;
@@ -138,11 +145,17 @@ namespace ZeldaOracle.Game.Entities
 			
 			// Draw the ripples effect.
 			if (isRipplesEffectVisible && entity.Physics.IsEnabled && entity.Physics.IsInPuddle)
-				g.DrawAnimation(GameData.ANIM_EFFECT_RIPPLES, entity.GameControl.RoomTicks, entity.Origin, ripplesDepth);
+				g.DrawAnimation(GameData.ANIM_EFFECT_RIPPLES, entity.GameControl.RoomTicks, entity.Origin + ripplesDrawOffset, ripplesDepth);
 			
 			// Draw the grass effect.
 			if (isGrassEffectVisible && entity.Physics.IsEnabled &&entity.Physics.IsInGrass)
-				g.DrawAnimation(GameData.ANIM_EFFECT_GRASS, grassAnimationTicks, entity.Origin, grassDepth);
+				g.DrawAnimation(GameData.ANIM_EFFECT_GRASS, grassAnimationTicks, entity.Origin + grassDrawOffset, grassDepth);
+
+			if (drawCollisionBoxes) {
+				g.FillRectangle(entity.Physics.SoftCollisionBox + entity.Position, new Color(0, 0, 255, 150), depth - 0.0001f);
+				g.FillRectangle(entity.Physics.CollisionBox + entity.Position, new Color(255, 0, 0, 150), depth - 0.0002f);
+				g.FillRectangle(new Rectangle2F(entity.Origin, Vector2F.One), Color.White, depth - 0.0003f);
+			}
 		}
 
 		
@@ -215,6 +228,16 @@ namespace ZeldaOracle.Game.Entities
 			set { sprite = value; }
 		}
 
+		public Point2I GrassDrawOffset {
+			get { return grassDrawOffset; }
+			set { grassDrawOffset = value; }
+		}
+
+		public Point2I RipplesDrawOffset {
+			get { return ripplesDrawOffset; }
+			set { ripplesDrawOffset = value; }
+		}
+
 		public Point2I ShadowDrawOffset {
 			get { return shadowDrawOffset;  }
 			set { shadowDrawOffset = value; }
@@ -223,6 +246,11 @@ namespace ZeldaOracle.Game.Entities
 		public Point2I DrawOffset {
 			get { return drawOffset;  }
 			set { drawOffset = value; }
+		}
+
+		public static bool DrawCollisionBoxes {
+			get { return drawCollisionBoxes; }
+			set { drawCollisionBoxes = value; }
 		}
 	}
 }

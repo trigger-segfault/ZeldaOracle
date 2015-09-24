@@ -10,11 +10,11 @@ namespace ZeldaOracle.Game.Items.Rewards {
 	public class Reward {
 
 		protected string id;
-		protected int duration;
-		protected int fadeDuration;
 		protected Animation animation;
-		protected Rectangle2I collisionBox;
+		protected string message;
+		protected bool hasDuration;
 		protected bool isCollectibleWithItems;
+		protected RewardHoldTypes holdType;
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -22,10 +22,9 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		public Reward() {
 			this.id				= "";
-			this.duration		= -1;
-			this.fadeDuration	= -1;
 			this.animation		= null;
-			this.collisionBox	= Rectangle2I.Zero;
+			this.message		= "";
+			this.hasDuration	= false;
 			this.isCollectibleWithItems	= false;
 		}
 
@@ -45,24 +44,24 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			get { return id; }
 		}
 
-		public int Duration {
-			get { return duration; }
-		}
-
-		public int FadeDuration {
-			get { return fadeDuration; }
-		}
-
 		public Animation Animation {
 			get { return animation; }
 		}
 
-		public Rectangle2I CollisionBox {
-			get { return collisionBox; }
+		public string Message {
+			get { return message; }
+		}
+
+		public bool HasDuration {
+			get { return hasDuration; }
 		}
 
 		public bool IsCollectibleWithItems {
 			get { return isCollectibleWithItems; }
+		}
+
+		public RewardHoldTypes HoldType {
+			get { return holdType; }
 		}
 	}
 }

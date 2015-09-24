@@ -60,7 +60,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.gravity			= GameSettings.DEFAULT_GRAVITY;
 			this.maxFallSpeed		= GameSettings.DEFAULT_MAX_FALL_SPEED;
 			this.collisionBox		= new Rectangle2F(-4, -10, 8, 9);		// TEMPORARY: this is the player collision box.
-			this.softCollisionBox	= new Rectangle2F(-6, -14, 12, 14);	// TEMPORARY: this is the player collision box.
+			this.softCollisionBox	= new Rectangle2F(-6, -14, 12, 13);	// TEMPORARY: this is the player collision box.
 			this.topTileFlags		= TileFlags.None;
 			this.allTileFlags		= TileFlags.None;
 			this.isColliding		= false;

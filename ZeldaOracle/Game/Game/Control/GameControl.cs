@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Equipment;
 using ZeldaOracle.Game.Items.Essences;
 using ZeldaOracle.Game.Items.KeyItems;
+using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Worlds;
@@ -26,6 +27,7 @@ namespace ZeldaOracle.Game.Control {
 		private Player player;
 		private HUD hud;
 		private Inventory inventory;
+		private RewardManager rewardManager;
 		private bool advancedGame;
 
 		private MenuWeapons menuWeapons;
@@ -46,6 +48,7 @@ namespace ZeldaOracle.Game.Control {
 			this.player			= null;
 			this.hud			= null;
 			this.inventory		= null;
+			this.rewardManager	= null;
 			this.advancedGame	= false;
 
 			this.menuWeapons	= null;
@@ -113,7 +116,71 @@ namespace ZeldaOracle.Game.Control {
 			inventory.ObtainAmmo(inventory.GetAmmo("ammo_mystery_seeds"));
 
 			hud = new HUD(this);
-			
+
+			rewardManager = new RewardManager(this);
+
+			rewardManager.AddReward(new RewardRupee("rupees_1", 1,
+				"You got<n><red>1 Rupee<red>!<n>That's terrible.",
+				new Sprite(GameData.SHEET_ITEMS_SMALL, 5, 3, -4, -9)));
+
+			rewardManager.AddReward(new RewardRupee("rupees_5", 5,
+				"You got<n><red>5 Rupees<red>!<n>That's nice.",
+				new Sprite(GameData.SHEET_ITEMS_SMALL, 6, 3, -4, -9)));
+
+			rewardManager.AddReward(new RewardRupee("rupees_20", 20,
+				"You got<n><red>20 Rupees<red>!<n>That's nice.",
+				new Sprite(GameData.SHEET_ITEMS_SMALL, 7, 3, -4, -9)));
+
+			rewardManager.AddReward(new RewardRupee("rupees_30", 30,
+				"You got<n><red>30 Rupees<red>!<n>That's nice.",
+				new Sprite(GameData.SHEET_ITEMS_SMALL, 7, 3, -4, -9)));
+
+			rewardManager.AddReward(new RewardRupee("rupees_50", 50,
+				"You got<n><red>50 Rupees<red>!<n>That's nice.",
+				new Sprite(GameData.SHEET_ITEMS_SMALL, 7, 3, -4, -9)));
+
+			rewardManager.AddReward(new RewardRupee("rupees_100", 100,
+				"You got<n><red>100 Rupees<red>!<n>That's nice.",
+				new Sprite(GameData.SHEET_ITEMS_LARGE, 0, 3, -8, -9)));
+
+			rewardManager.AddReward(new RewardRupee("rupees_200", 200,
+				"You got<n><red>200 Rupees<red>!<n>That's nice.",
+				new Sprite(GameData.SHEET_ITEMS_LARGE, 1, 3, -8, -9)));
+
+			rewardManager.AddReward(new RewardRecoveryHeart("hearts_1", 1,
+				"You got a<n><red>Recovery Heart<red>!",
+				new Sprite(GameData.SHEET_ITEMS_SMALL, 13, 3, -4, -6)));
+
+			rewardManager.AddReward(new RewardAmmo("ammo_ember_seeds_5", "ammo_ember_seeds", 5,
+				"You got<n><red>5 Ember Seeds<red>!",
+				new Sprite(GameData.SHEET_ITEMS_SMALL, 0, 3, -4, -1)));
+
+			rewardManager.AddReward(new RewardAmmo("ammo_scent_seeds_5", "ammo_scent_seeds", 5,
+				"You got<n><red>5 Scent Seeds<red>!",
+				new Sprite(GameData.SHEET_ITEMS_SMALL, 1, 3, -4, -1)));
+
+			rewardManager.AddReward(new RewardAmmo("ammo_pegasus_seeds_5", "ammo_pegasus_seeds", 5,
+				"You got<n><red>5 Pegasus Seeds<red>!",
+				new Sprite(GameData.SHEET_ITEMS_SMALL, 2, 3, -4, -1)));
+
+			rewardManager.AddReward(new RewardAmmo("ammo_gale_seeds_5", "ammo_gale_seeds", 5,
+				"You got<n><red>5 Gale Seeds<red>!",
+				new Sprite(GameData.SHEET_ITEMS_SMALL, 3, 3, -4, -1)));
+
+			rewardManager.AddReward(new RewardAmmo("ammo_mystery_seeds_5", "ammo_mystery_seeds", 5,
+				"You got<n><red>5 Mystery Seeds<red>!",
+				new Sprite(GameData.SHEET_ITEMS_SMALL, 4, 3, -4, -1)));
+
+			rewardManager.AddReward(new RewardAmmo("ammo_bombs_5", "ammo_bombs", 5,
+				"You got<n><red>5 Bombs<red>!",
+				new Sprite(GameData.SHEET_ITEMS_SMALL, 13, 0, -4, -8)));
+
+
+			rewardManager.AddReward(new RewardAmmo("ammo_arrows_5", "ammo_arrows", 5,
+				"You got<n><red>5 Arrows<red>!",
+				new Sprite(GameData.SHEET_ITEMS_SMALL, 15, 1, -4, -10)));
+
+
 			// TODO: Load world here.
 			roomControl		= new RoomControl();
 			gameManager.PushGameState(roomControl);
@@ -220,6 +287,10 @@ namespace ZeldaOracle.Game.Control {
 		public int RoomTicks {
 			get { return roomTicks; }
 			set { roomTicks = value; }
+		}
+
+		public RewardManager RewardManager {
+			get { return rewardManager; }
 		}
 	}
 }

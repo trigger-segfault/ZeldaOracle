@@ -145,7 +145,7 @@ public class Graphics2D {
 	// Translates the rectangle based on the translation and precision settings.
 	private Rectangle NewRect(Rectangle2F destinationRect) {
 		if (useTranslation)
-			return (Rectangle)(destinationRect + translation);
+			return (UseIntegerPrecision ? (Rectangle)new Rectangle2F(GMath.Round(destinationRect.Point + translation), GMath.Round(destinationRect.Size)) : (Rectangle)(destinationRect + translation));
 		else
 			return (Rectangle)destinationRect;
 	}
@@ -153,7 +153,7 @@ public class Graphics2D {
 	private Rectangle NewRect(Vector2F position, Vector2F size) {
 		Rectangle2F destinationRect = new Rectangle2F(position, size);
 		if (useTranslation)
-			return (Rectangle)(destinationRect + translation);
+			return (UseIntegerPrecision ? (Rectangle)new Rectangle2F(GMath.Round(destinationRect.Point + translation), GMath.Round(destinationRect.Size + translation)) : (Rectangle)(destinationRect + translation));
 		else
 			return (Rectangle)destinationRect;
 	}
