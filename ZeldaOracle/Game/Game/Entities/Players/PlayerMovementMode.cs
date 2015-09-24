@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ZeldaOracle.Game.Entities.Players {
 
-	public class PlayerMovementMode {
+	public class PlayerMotionType {
 
 		// Movement control.
 		private float	moveSpeed;				// The top-speed for movement.

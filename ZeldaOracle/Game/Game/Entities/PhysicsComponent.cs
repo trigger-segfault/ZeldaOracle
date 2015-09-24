@@ -41,10 +41,9 @@ namespace ZeldaOracle.Game.Entities {
 
 		private bool			isColliding;
 		private CollisionInfo[] collisionInfo;
+		private bool			hasLanded;
 		private TileFlags		topTileFlags;		// The flags for the top-most tile the entity is located over.
 		private TileFlags		allTileFlags;		// The group of flags for all the tiles the entity is located over.
-
-		private bool			hasLanded;
 
 
 		//-----------------------------------------------------------------------------
@@ -53,25 +52,25 @@ namespace ZeldaOracle.Game.Entities {
 
 		// By default, physics are disabled.
 		public PhysicsComponent(Entity entity) {
-			this.isEnabled		= false;
-			this.flags			= PhysicsFlags.None;
-			this.entity			= entity;
-			this.velocity		= Vector2F.Zero;
-			this.zVelocity		= 0.0f;
-			this.gravity		= GameSettings.DEFAULT_GRAVITY;
-			this.maxFallSpeed	= GameSettings.DEFAULT_MAX_FALL_SPEED;
-			this.collisionBox	= new Rectangle2F(-4, -10, 8, 9);		// TEMP: this is the player collision box.
-			this.softCollisionBox = new Rectangle2F(-6, -14, 12, 14);	// TEMP: this is the player collision box.
+			this.isEnabled			= false;
+			this.flags				= PhysicsFlags.None;
+			this.entity				= entity;
+			this.velocity			= Vector2F.Zero;
+			this.zVelocity			= 0.0f;
+			this.gravity			= GameSettings.DEFAULT_GRAVITY;
+			this.maxFallSpeed		= GameSettings.DEFAULT_MAX_FALL_SPEED;
+			this.collisionBox		= new Rectangle2F(-4, -10, 8, 9);		// TEMPORARY: this is the player collision box.
+			this.softCollisionBox	= new Rectangle2F(-6, -14, 12, 14);	// TEMPORARY: this is the player collision box.
 			this.topTileFlags		= TileFlags.None;
 			this.allTileFlags		= TileFlags.None;
 			this.isColliding		= false;
 			this.autoDodgeDistance	= 6;
 
-			this.hasLanded = false;
+			this.hasLanded			= false;
 
-			this.collisionInfo	= new CollisionInfo[Directions.Count];
+			this.collisionInfo = new CollisionInfo[Directions.Count];
 			for (int i = 0; i < Directions.Count; i++)
-				collisionInfo[i] .Clear();
+				collisionInfo[i].Clear();
 
 		}
 		
@@ -105,6 +104,8 @@ namespace ZeldaOracle.Game.Entities {
 
 			// Handle Z position.
 			UpdateZVelocity();
+			if (entity.IsDestroyed)
+				return;
 
 			// Check world collisions.
 			if (HasFlags(PhysicsFlags.CollideWorld))
@@ -124,8 +125,23 @@ namespace ZeldaOracle.Game.Entities {
 				!entity.RoomControl.RoomBounds.Contains(entity.Origin))
 			{
 				entity.Destroy();
+				return;
 			}
-			else if (hasLanded) {
+			
+			if (IsInHole) {
+				entity.OnFallInHole();
+			}
+			else if (IsInWater) {
+				entity.OnFallInWater();
+			}
+			else if (IsInLava) {
+				entity.OnFallInLava();
+			}
+
+			if (entity.IsDestroyed)
+				return;
+			
+			if (hasLanded) {
 				entity.OnLand();
 			}
 		}
@@ -178,6 +194,19 @@ namespace ZeldaOracle.Game.Entities {
 		}
 		
 		private void Bounce() {
+			if (IsInHole) {
+				entity.OnFallInHole();
+			}
+			else if (IsInWater) {
+				entity.OnFallInWater();
+			}
+			else if (IsInLava) {
+				entity.OnFallInLava();
+			}
+			if (entity.IsDestroyed)
+				return;
+
+
 			if (zVelocity < -1.0f) {
 				entity.ZPosition = 0.1f;
 				zVelocity = -zVelocity * 0.5f;

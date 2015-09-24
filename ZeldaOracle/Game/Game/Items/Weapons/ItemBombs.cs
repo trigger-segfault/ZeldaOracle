@@ -18,18 +18,21 @@ namespace ZeldaOracle.Game.Items {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemBombs() : base() {
-			this.id = "item_bombs";
-			this.name = new string[] { "Bombs", "Bombs", "Bombs" };
-			this.description = new string[] { "Very explosive.", "Very explosive.", "Very explosive." };
-			this.maxLevel = Item.Level3;
-			this.currentAmmo = 0;
-			this.sprite = new Sprite[] {
+		public ItemBombs() {
+			this.id				= "item_bombs";
+			this.name			= new string[] { "Bombs", "Bombs", "Bombs" };
+			this.description	= new string[] { "Very explosive.", "Very explosive.", "Very explosive." };
+			this.maxLevel		= Item.Level3;
+			this.currentAmmo	= 0;
+			
+			this.flags			= ItemFlags.None;
+
+			sprite = new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0)),
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0)),
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0))
 			};
-			this.spriteLight = new Sprite[] {
+			spriteLight = new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(13, 0)),
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(13, 0)),
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(13, 0))

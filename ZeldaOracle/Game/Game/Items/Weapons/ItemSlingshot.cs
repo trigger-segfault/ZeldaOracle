@@ -19,18 +19,19 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemSlingshot()
-			: base() {
+		public ItemSlingshot() {
 			this.id				= "item_slingshot";
 			this.name			= new string[] { "Slingshot", "Hyper Slingshot" };
 			this.description	= new string[] { "Used to shoot seeds.", "Shoots in 3 directions." };
 			this.maxLevel		= Item.Level2;
 			this.currentAmmo	= 0;
-			this.sprite			= new Sprite[] {
+			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping;
+
+			sprite			= new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, 10, 0),
 				new Sprite(GameData.SHEET_ITEMS_SMALL, 11, 0)
 			};
-			this.spriteLight	= new Sprite[] {
+			spriteLight	= new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 10, 0),
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 11, 0)
 			};

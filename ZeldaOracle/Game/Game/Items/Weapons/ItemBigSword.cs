@@ -12,14 +12,13 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemBigSword()
-			: base() {
+		public ItemBigSword() {
 			this.id				= "item_biggoron_sword";
 			this.name			= new string[] { "Biggoron's Sword" };
 			this.description	= new string[] { "A powerful, two-handed sword." };
 			this.sprite			= new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(8, 0)) };
 			this.spriteLight	= new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE_LIGHT, new Point2I(8, 0)) };
-			this.flags |= ItemFlags.TwoHanded;
+			this.flags			= ItemFlags.TwoHanded | ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping;
 		}
 
 

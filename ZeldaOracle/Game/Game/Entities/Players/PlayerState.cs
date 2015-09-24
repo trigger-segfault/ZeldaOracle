@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Entities.Players.States;
 
 namespace ZeldaOracle.Game.Entities.Players
 {
@@ -31,14 +32,14 @@ namespace ZeldaOracle.Game.Entities.Players
 		//-----------------------------------------------------------------------------
 		
 		public virtual bool RequestStateChange(PlayerState newState) {
-			if (!isNaturalState && newState.isNaturalState)
+			if (!isNaturalState && newState is PlayerNormalState)
 				return false;
 			return true;
 		}
 
-		public virtual void OnBegin() {}
+		public virtual void OnBegin(PlayerState previousState) {}
 		
-		public virtual void OnEnd() {}
+		public virtual void OnEnd(PlayerState newState) {}
 		
 		public virtual void OnEnterRoom() {}
 
@@ -53,15 +54,15 @@ namespace ZeldaOracle.Game.Entities.Players
 		// Begin/end
 		//-----------------------------------------------------------------------------
 
-		public void Begin(Player player) {
+		public void Begin(Player player, PlayerState previousState) {
 			this.player = player;
 			this.isActive = true;
-			OnBegin();
+			OnBegin(previousState);
 		}
 
-		public void End() {
+		public void End(PlayerState newState) {
 			this.isActive = false;
-			OnEnd();
+			OnEnd(newState);
 		}
 
 

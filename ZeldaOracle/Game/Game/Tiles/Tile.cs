@@ -12,14 +12,8 @@ using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 	
-	public enum SwordHitType {
-		Normal,
-		Stab,
-		Charged
-	}
-
 	public class Tile {
-		private RoomControl		control;
+		private RoomControl		roomControl;
 
 		private Point2I			location;		// The tile location.
 		private int				layer;			// The layer this tile is in.
@@ -61,21 +55,16 @@ namespace ZeldaOracle.Game.Tiles {
 			isMoving		= false;
 			pushDelay		= 20;
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Initialization
+		//-----------------------------------------------------------------------------
 		
-		public Tile(TileData data, int x, int y, int layer) :
-			this(data, new Point2I(x, y), layer)
-		{
-		}
-		
-		public Tile(TileData data, Point2I location, int layer) :
-			this()
-		{
-			this.location		= location;
-			this.layer			= layer;
-			this.flags			= data.Flags;
-			this.sprite			= data.Sprite;
-			this.collisionModel	= data.CollisionModel;
-			this.animationPlayer.Animation = data.Animation;
+		public void Initialize(RoomControl control) {
+			this.roomControl = control;
+			this.animationPlayer.Play();
+			Initialize();
 		}
 		
 
@@ -83,6 +72,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Virtual methods
 		//-----------------------------------------------------------------------------
 		
+		// Called when a seed of the given type hits this tile.
 		public virtual void OnSeedHit(Seed seed) {}
 
 		// Called when the player presses A on this tile, when facing the given direction.
@@ -92,7 +82,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Called when the player hits this tile with the sword.
 		public virtual void OnSwordHit() {
 			if (!isMoving && flags.HasFlag(TileFlags.Cuttable)) {
-				RoomControl.SpawnEntity(new Effect(breakAnimation), Position);
+				RoomControl.SpawnEntity(new Effect(breakAnimation), Center);
 				RoomControl.RemoveTile(this);
 				RoomControl.GameControl.RewardManager.SpawnCollectibleFromBreakableTile("rupee_1", (Point2I)Position + new Point2I(8, 15));
 			}
@@ -101,7 +91,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Called when the player hits this tile with the sword.
 		public virtual void OnBombExplode() {
 			if (!isMoving && flags.HasFlag(TileFlags.Bombable)) {
-				RoomControl.SpawnEntity(new Effect(breakAnimation), Position);
+				RoomControl.SpawnEntity(new Effect(breakAnimation), Center);
 				RoomControl.RemoveTile(this);
 			}
 		}
@@ -150,12 +140,6 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		// Simulation
 		//-----------------------------------------------------------------------------
-		
-		public void Initialize(RoomControl control) {
-			this.control = control;
-			this.animationPlayer.Play();
-			Initialize();
-		}
 
 		public virtual void Initialize() {}
 
@@ -179,7 +163,6 @@ namespace ZeldaOracle.Game.Tiles {
 
 			if (animationPlayer.SubStrip != null) {
 				// Draw as an animation.
-				//g.DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, Position);
 				g.DrawAnimation(animationPlayer.SubStrip, RoomControl.GameControl.RoomTicks, Position);
 			}
 			else {
@@ -189,10 +172,6 @@ namespace ZeldaOracle.Game.Tiles {
 					spr = spriteAsObject;
 				g.DrawSprite(spr, Position);
 			}
-
-			// DEBUG: Draw the collision model in a transparent red.
-			//if (collisionModel != null)
-			//	g.DrawCollisionModel(collisionModel, Position, Color.Red * 0.5f);
 		}
 		
 
@@ -200,6 +179,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Static methods
 		//-----------------------------------------------------------------------------
 
+		// Instantiate a tile from the given tile-data.
 		public static Tile CreateTile(TileData data) {
 			Tile tile;
 
@@ -229,8 +209,8 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		// Returns the room control this entity belongs to.
 		public RoomControl RoomControl {
-			get { return control; }
-			set { control = value; }
+			get { return roomControl; }
+			set { roomControl = value; }
 		}
 
 		public Vector2F Position {

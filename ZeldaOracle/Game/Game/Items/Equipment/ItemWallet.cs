@@ -12,7 +12,7 @@ namespace ZeldaOracle.Game.Items.Equipment {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemWallet(int level = 0) : base() {
+		public ItemWallet(int level = 0) {
 			this.id = "item_wallet";
 			this.name = new string[] { "Child's Wallet", "Adult's Wallet", "Giant's Wallet" };
 			this.description = new string[] {

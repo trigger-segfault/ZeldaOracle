@@ -199,6 +199,7 @@
     <Compile Include="Game\Entities\Collectibles\Collectible.cs" />
     <Compile Include="Game\Entities\CollisionInfo.cs" />
     <Compile Include="Game\Entities\Effects\Fire.cs" />
+    <Compile Include="Game\Entities\Effects\EffectFallingObject.cs" />
     <Compile Include="Game\Entities\Effects\ScentPod.cs" />
     <Compile Include="Game\Entities\GraphicsComponent.cs" />
     <Compile Include="Game\Entities\Players\PlayerSwimmingSkills.cs" />
@@ -208,7 +209,6 @@
     <Compile Include="Game\Entities\Players\States\PlayerHoldSwordState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerLadderState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerBusyState.cs" />
-    <Compile Include="Game\Entities\Players\States\PlayerJumpState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerLedgeJumpState.cs" />
     <Compile Include="Game\Entities\Players\PlayerMoveComponent.cs" />
     <Compile Include="Game\Entities\Players\PlayerMovementMode.cs" />

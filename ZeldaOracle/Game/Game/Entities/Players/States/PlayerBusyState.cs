@@ -23,15 +23,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnBegin() {
-			base.OnBegin();
+		public override void OnBegin(PlayerState previousState) {
 			timer = duration;
-			player.Movement.AllowMovementControl = false;
+			player.Movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
 		}
 		
-		public override void OnEnd() {
-			player.Movement.AllowMovementControl = true;
-			base.OnEnd();
+		public override void OnEnd(PlayerState newState) {
+			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 		}
 
 		public override void Update() {

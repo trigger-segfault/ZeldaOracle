@@ -44,32 +44,30 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnBegin() {
-			base.OnBegin();
-			player.Movement.AllowMovementControl = false;
+		public override void OnBegin(PlayerState previousState) {
+			player.Movement.CanJump = false;
+			player.Movement.MoveCondition = PlayerMoveCondition.NoControl;
 
 			timer = 0;
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_GRAB);
 			player.Graphics.AnimationPlayer.Pause();
 		}
 		
-		public override void OnEnd() {
-			player.Movement.AllowMovementControl = true;
-			base.OnEnd();
+		public override void OnEnd(PlayerState newState) {
+			player.Movement.CanJump = true;
+			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 		}
 
 		public override void Update() {
 			base.Update();
 
-			InputControl grabButton = (equipSlot == 0 ? Controls.A : Controls.B);
+			InputControl grabButton = player.Inventory.GetSlotButton(equipSlot);
 			InputControl pullButton = Controls.Arrows[(player.Direction + 2) % 4];
 
 			if (!grabButton.IsDown()) {
 				player.BeginNormalState();
 			}
 			else if (pullButton.IsDown()) {
-				player.Graphics.AnimationPlayer.PlaybackTime = GameData.ANIM_PLAYER_PULL.Duration;
-				//player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
 				timer++;
 				if (timer > 10) {
@@ -78,7 +76,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 			else {
 				timer = 0;
-				player.Graphics.AnimationPlayer.PlaybackTime = 0;
 				player.Graphics.AnimationPlayer.Stop();
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_GRAB);
 			}

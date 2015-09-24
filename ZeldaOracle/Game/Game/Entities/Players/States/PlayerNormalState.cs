@@ -28,72 +28,50 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			isNaturalState	= true;
 			pushTimer		= 0;
 		}
-		
-		
-		//-----------------------------------------------------------------------------
-		// Internal
-		//-----------------------------------------------------------------------------
-
-		public void Jump() {
-			if (player.IsOnGround) {
-				player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
-				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
-				player.BeginState(new PlayerJumpState());
-			}
-		}
 
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnBegin() {
-			base.OnBegin();
+		public override bool RequestStateChange(PlayerState newState) {
+			return true;
+		}
 
+		public override void OnBegin(PlayerState previousState) {
 			pushTimer = 0;
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
 		}
 		
-		public override void OnEnd() {
+		public override void OnEnd(PlayerState newState) {
 			pushTimer = 0;
-			Player.Graphics.StopAnimation();
-			base.OnEnd();
 		}
 
 		public override void Update() {
 			base.Update();
 
-			Tile actionTile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
-
-			// Update animations
-			if (player.Movement.IsMoving && !Player.Graphics.IsAnimationPlaying)
-				Player.Graphics.PlayAnimation();
-			if (!player.Movement.IsMoving && Player.Graphics.IsAnimationPlaying)
-				Player.Graphics.StopAnimation();
-			
-			// Update pushing.
-			CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
-			if (actionTile != null && player.Movement.IsMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
-				player.Graphics.AnimationPlayer.Animation = GameData.ANIM_PLAYER_PUSH;
-				pushTimer++;
-
-				if (pushTimer > actionTile.PushDelay && actionTile.Flags.HasFlag(TileFlags.Movable)) {
-					if (actionTile.OnPush(player.Direction, 1.0f))
-						pushTimer = 0;
-				}
+			if (player.IsInAir) {
+				// TODO: play jump animation at remembering the frame.
 			}
 			else {
-				pushTimer = 0;
-				player.Graphics.AnimationPlayer.Animation = GameData.ANIM_PLAYER_DEFAULT;
-			}
-			
-			// Check for tile press interactions.
-			//if (Keyboard.IsKeyPressed(Keys.Space) && actionTile != null) {
-			//	actionTile.OnAction(player.Direction);
-			//}
+				// Update pushing.
+				Tile actionTile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
+				CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
 
-			// Update player weapon items.
-			Player.UpdateEquippedItems();
+				if (actionTile != null && player.Movement.IsMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
+					player.Graphics.AnimationPlayer.Animation = GameData.ANIM_PLAYER_PUSH;
+					pushTimer++;
+
+					if (pushTimer > actionTile.PushDelay && actionTile.Flags.HasFlag(TileFlags.Movable)) {
+						if (actionTile.OnPush(player.Direction, 1.0f))
+							pushTimer = 0;
+					}
+				}
+				else {
+					pushTimer = 0;
+					player.Graphics.AnimationPlayer.Animation = GameData.ANIM_PLAYER_DEFAULT;
+				}
+			}
 		}
 
 

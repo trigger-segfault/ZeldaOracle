@@ -65,6 +65,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 					gameManager.PopGameState();
 					gameManager.PushGameState(roomNew);
 					player.OnEnterRoom();
+					roomOld.DestroyRoom();
 				}
 			}
 		}

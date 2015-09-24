@@ -16,8 +16,7 @@ namespace ZeldaOracle.Game.Entities {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public Collectible(Reward reward)
-			: base() {
+		public Collectible(Reward reward) {
 			EnablePhysics(PhysicsFlags.Bounces |
 				PhysicsFlags.HasGravity |
 				PhysicsFlags.DestroyedOutsideRoom |

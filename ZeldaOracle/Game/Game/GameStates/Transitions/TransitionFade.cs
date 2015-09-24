@@ -30,9 +30,7 @@ namespace ZeldaOracle.Game.GameStates {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public TransitionFade(Color color, int duration, FadeType type, GameState gameState) :
-			base()
-		{
+		public TransitionFade(Color color, int duration, FadeType type, GameState gameState) {
 			this.duration	= duration;
 			this.timer		= 0;
 			this.type		= type;
