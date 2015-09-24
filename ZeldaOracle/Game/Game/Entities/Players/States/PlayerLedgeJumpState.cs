@@ -15,6 +15,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private bool		ledgeExtendsToNextRoom;
 		private bool		hasRoomChanged;
 		private int			direction;
+		private bool		isHoldingSword;
 
 
 		//-----------------------------------------------------------------------------
@@ -23,6 +24,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public PlayerLedgeJumpState() {
 			ledgeBeginTile = null;
+			isHoldingSword = false;
 		}
 		
 
@@ -30,15 +32,27 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnBegin() {
-			base.OnBegin();
+		public override void OnBegin(PlayerState previousState) {
 
 			direction = ledgeBeginTile.LedgeDirection;
 
 			// TODO: player.passable = true;
 			player.AutoRoomTransition		= true;
+			player.Movement.IsStrafing		= true;
+			player.Movement.MoveCondition	= PlayerMoveCondition.NoControl;
 			player.Physics.CollideWithWorld = false;
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
+			
+			// The player can hold his sword while ledge jumping.
+			isHoldingSword = (previousState == player.HoldSwordState);
+
+			if (isHoldingSword) {
+				isHoldingSword = true;
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
+			}
+			else {
+				player.Direction = direction;
+			}
 
 			// Find the landing position, calculating the move distance in pixels.
 			Vector2F pos = player.Position + Directions.ToVector(direction);
@@ -82,15 +96,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			
 			player.Physics.Velocity = velocity;
 			player.Position += velocity;
-			
-			player.Movement.MoveCondition = PlayerMoveCondition.NoControl;
 		}
 		
-		public override void OnEnd() {
+		public override void OnEnd(PlayerState newState) {
 			player.AutoRoomTransition		= false;
 			player.Physics.CollideWithWorld = true;
+			player.Movement.IsStrafing		= false;
 			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
-			base.OnEnd();
 		}
 
 		public override void OnEnterRoom() {
@@ -137,7 +149,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// If done, return to the normal player state.
 			if (isDone) {
 				player.Physics.Velocity = Vector2F.Zero;
-				player.BeginNormalState();
+				if (isHoldingSword)
+					player.BeginState(player.HoldSwordState);
+				else
+					player.BeginNormalState();
 			}
 		}
 

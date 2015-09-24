@@ -30,6 +30,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private bool				autoAccelerate;			// Should the player still accelerate without holding down a movement key?
 		private float				moveSpeedScale;			// Scales the movement speed to create the actual top-speed.
 		private PlayerMoveCondition	moveCondition;			// What are the conditions in which the player can move?
+		private bool				canLedgeJump;
+		private bool				canJump;
+		private bool				isStrafing;
 
 		// Internal
 		private Player				player;
@@ -65,6 +68,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 			autoAccelerate			= false;
 			moveSpeedScale			= 1.0f;
 			moveCondition			= PlayerMoveCondition.FreeMovement;
+			canLedgeJump			= true;
+			canJump					= true;
+			isStrafing				= false;
 
 			// Internal.
 			allowMovementControl	= true;
@@ -136,7 +142,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		
 		
 		//-----------------------------------------------------------------------------
-		// Movement.
+		// Movement
 		//-----------------------------------------------------------------------------
 		
 		public void Jump() {
@@ -179,7 +185,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 				
 			// Don't affect the facing direction when strafing
-			if (!mode.IsStrafing && isMoving) {
+			if (!isStrafing && !mode.IsStrafing && isMoving) {
 				player.Direction = moveDirection;
 			}
 
@@ -259,7 +265,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 				}
 			}
 			
-			if (player.IsOnGround && player.Graphics.AnimationPlayer.Animation == GameData.ANIM_PLAYER_DEFAULT) {
+			// Update movement animation.
+			if (player.IsOnGround &&
+				(player.Graphics.AnimationPlayer.Animation == GameData.ANIM_PLAYER_DEFAULT ||
+				player.Graphics.AnimationPlayer.Animation == GameData.ANIM_PLAYER_CARRY))
+			{
 				if (isMoving && !player.Graphics.IsAnimationPlaying)
 					player.Graphics.PlayAnimation();
 				if (!isMoving && player.Graphics.IsAnimationPlaying)
@@ -326,7 +336,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			
 			// Check for ledge jumping (ledges/waterfalls)
 			CollisionInfo collisionInfo = player.Physics.CollisionInfo[moveDirection];
-			if (mode.CanLedgeJump && isMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
+			if (canLedgeJump && mode.CanLedgeJump && isMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
 				Tile tile = collisionInfo.Tile;
 				
 				if (tile.Flags.HasFlag(TileFlags.Ledge) &&
@@ -355,9 +365,20 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return moveSpeedScale; }
 			set { moveSpeedScale = value; }
 		}
+
+		public bool CanLedgeJump {
+			get { return canLedgeJump; }
+			set { canLedgeJump = value; }
+		}
+		
+		public bool CanJump {
+			get { return canJump; }
+			set { canJump = value; }
+		}
 		
 		public bool IsStrafing {
-			get { return mode.IsStrafing; }
+			get { return isStrafing; }
+			set { isStrafing = value; }
 		}
 		
 		public bool IsMoving {

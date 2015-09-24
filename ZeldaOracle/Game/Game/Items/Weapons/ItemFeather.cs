@@ -42,12 +42,24 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		//-----------------------------------------------------------------------------
 
 		public override bool IsUsable() {
-			return player.CanJump;
+			return player.Movement.CanJump;
+		}
+
+		// Deploy cape.
+		public override void OnButtonDown() {
+			if (level == ItemWeapon.Level2) {
+				// TODO: deploy cape.
+			}
 		}
 
 		// Jump/deploy cape.
 		public override void OnButtonPress() {
-			Player.Jump();
+			if (player.IsOnGround) {
+				Player.Movement.Jump();
+			}
+			else if (level == ItemWeapon.Level2) {
+				// TODO: deploy cape.
+			}
 		}
 
 		// Draws the item inside the inventory.

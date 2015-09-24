@@ -37,33 +37,69 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			this.direction			= Directions.Right;
 		}
 		
+		
+		//-----------------------------------------------------------------------------
+		// Internal methods
+		//-----------------------------------------------------------------------------
+
+		private void StabTile(Tile tile) {
+			isStabbing	= true;
+			chargeTimer	= 0;
+			player.Movement.MoveCondition = PlayerMoveCondition.NoControl; // TODO: allows sideways movement for stabbing.
+			player.toolAnimation.Play(GameData.ANIM_SWORD_STAB);
+			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_STAB);
+			if (player.IsOnGround)
+				tile.OnSwordHit();
+		}
+		
+		private void EndStab() {
+			isStabbing	= false;
+			chargeTimer	= 0;
+			player.Movement.MoveCondition	= PlayerMoveCondition.FreeMovement;
+			player.toolAnimation.Animation	= weaponAnimation;
+			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
+			if (player.GameControl.Inventory.GetSlotButton(equipSlot).IsUp())
+				player.BeginNormalState();
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnBegin() {
-			base.OnBegin();
-
+		public override void OnBegin(PlayerState previousState) {
 			isStabbing = false;
+			
+			// The player can hold his sword while ledge jumping.
+
+			if (!(previousState is PlayerLedgeJumpState))
+				chargeTimer = 0;
 
 			if (player.GameControl.Inventory.GetSlotButton(equipSlot).IsDown()) {
-				chargeTimer = 0;
-				player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
+				player.Movement.IsStrafing		= true;
+				player.Movement.MoveCondition	= PlayerMoveCondition.FreeMovement;
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
-				player.toolAnimation.Animation = weaponAnimation;
 				player.toolAnimation.SubStripIndex = player.Direction;
 				player.toolAnimation.Play();
 				direction = Player.Direction;
+				if (!(previousState is PlayerLedgeJumpState))
+					player.toolAnimation.Animation = weaponAnimation;
 			}
 			else {
-				player.BeginNormalState();
+				if (chargeTimer >= ChargeTime)
+					player.BeginState(player.SpinSwordState);
+				else
+					player.BeginNormalState();
 			}
 		}
 		
-		public override void OnEnd() {
-			player.toolAnimation.Animation = null;
-			base.OnEnd();
+		public override void OnEnd(PlayerState newState) {
+			player.Movement.IsStrafing		= false;
+			player.Movement.MoveCondition	= PlayerMoveCondition.FreeMovement;
+			
+			// The player can hold his sword while ledge jumping.
+			if (!(newState is PlayerLedgeJumpState))
+				player.toolAnimation.Animation = null;
 		}
 
 		public override void Update() {
@@ -72,42 +108,22 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Direction = direction;
 
 			if (isStabbing) {
-				if (player.Graphics.IsAnimationDone) {
-					isStabbing = false;
-					chargeTimer = 0;
-					player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
-					player.toolAnimation.Animation = weaponAnimation;
-					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
-					if (player.GameControl.Inventory.GetSlotButton(equipSlot).IsUp())
-						player.BeginNormalState();
-				}
+				if (player.Graphics.IsAnimationDone)
+					EndStab();
 			}
 			else {
-				// Handle move/stand animations.
-				//if (player.Movement.IsMoving && !Player.Graphics.IsAnimationPlaying)
-				//	Player.Graphics.PlayAnimation();
-				//if (!player.Movement.IsMoving && Player.Graphics.IsAnimationPlaying)
-				//	Player.Graphics.StopAnimation();
-
 				// Charge up the sword.
 				chargeTimer++;
 				 if (chargeTimer == ChargeTime) {
 					player.toolAnimation.Animation = GameData.ANIM_SWORD_CHARGED;
-					// Play charge sound.
+					// TODO: play charge sound.
 				}
 			
 				// Check for tiles to stab.
 				CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
 				Tile tile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
-				if (tile != null && player.Movement.IsMoving && collisionInfo.Type == CollisionType.Tile) {
-					isStabbing = true;
-					chargeTimer = 0;
-					player.Movement.MoveCondition = PlayerMoveCondition.NoControl; // Allows sideways movement
-					player.toolAnimation.Play(GameData.ANIM_SWORD_STAB);
-					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_STAB);
-					if (player.IsOnGround)
-						tile.OnSwordHit();
-				}
+				if (tile != null && player.Movement.IsMoving && collisionInfo.Type == CollisionType.Tile)
+					StabTile(tile);
 
 				// Release the sword button (spin if charged).
 				else if (player.GameControl.Inventory.GetSlotButton(equipSlot).IsUp()) {

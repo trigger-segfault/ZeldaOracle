@@ -53,14 +53,16 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Internal methods.
 		//-----------------------------------------------------------------------------
 		
-		public void DropObject() {
+		public void DropObject(bool enterBusyState = true) {
 			player.RoomControl.SpawnEntity(carryObject, player.Origin, 16);
-			player.BeginState(new PlayerBusyState(throwDuration));
-			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
+			if (enterBusyState) {
+				player.BeginState(new PlayerBusyState(throwDuration));
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
+			}
 		}
 
-		public void ThrowObject() {
-			DropObject();
+		public void ThrowObject(bool enterBusyState = true) {
+			DropObject(enterBusyState);
 			carryObject.Physics.ZVelocity = 1.0f;
 			carryObject.Physics.Velocity = Directions.ToVector(Player.MoveDirection) * 1.5f;
 		}
@@ -69,32 +71,27 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
-
-		public override void OnBegin() {
-			base.OnBegin();
-			
+		
+		public override void OnBegin(PlayerState previousState) {
 			carryObject.Initialize(player.RoomControl);
-			
+
 			objectDrawOffset = new Point2I(0, -3);
 			objectDrawOffset += Directions.ToPoint(player.Direction) * 8;
 			pickupTimer = 0;
 			isPickingUp = true;
-			player.CanJump = false;
-			player.Movement.MoveCondition = PlayerMoveCondition.NoControl;
+			player.Movement.CanJump			= false;
+			player.Movement.CanLedgeJump	= false;
+			player.Movement.MoveCondition	= PlayerMoveCondition.NoControl;
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
 		}
 		
-		public override void OnEnd() {
-			player.CanJump = true;
-			base.OnEnd();
-		}
-		
-		public override bool RequestStateChange(PlayerState newState) {
+		public override void OnEnd(PlayerState newState) {
+			player.Movement.CanJump			= true;
+			player.Movement.CanLedgeJump	= true;
+			
 			if (newState is PlayerSwimState || newState is PlayerLadderState) {
-				DropObject();
-				return true;
+				DropObject(false);
 			}
-			return base.RequestStateChange(newState);
 		}
 
 		public override void Update() {
@@ -132,12 +129,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					return;
 				}
 
-				// Update animations.
-				//if (player.Movement.IsMoving && !Player.Graphics.IsAnimationPlaying)
-				//	Player.Graphics.PlayAnimation();
-				//if (!player.Movement.IsMoving && Player.Graphics.IsAnimationPlaying)
-				//	Player.Graphics.StopAnimation();
-			
 				// Check for button press to throw/drop.
 				if (Controls.A.IsPressed() || Controls.B.IsPressed()) {
 					if (player.Movement.IsMoving)

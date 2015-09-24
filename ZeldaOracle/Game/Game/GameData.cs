@@ -411,7 +411,8 @@ namespace ZeldaOracle.Game {
 				.AddFrame(4, 3,1, 4,7)	.AddPart(4, 3,1, 3,1)	.AddPart(4, 3,1, -5,-10)	.AddPart(4, 1,1, -7,5)
 				.AddFrame(4, 2,1, 5,2)	.AddPart(4, 3,1, 6,9)	.AddPart(4, 2,1, -5,-10)	.AddPart(4, 0,1, -10,9)
 				.AddFrame(4, 2,1, 8,11)	.AddPart(4, 2,1, 9,2)	.AddPart(4, 2,1, -5,-11)	.AddPart(4, 0,1, -10,5)
-				.AddFrame(4, 2,1, 8,9)	.AddPart(4, 2,1, 9,3)	.AddPart(4, 2,1, -7,-12)	.AddPart(4, 0,1, -13,-1);
+				.AddFrame(4, 2,1, 8,9)	.AddPart(4, 2,1, 9,3)	.AddPart(4, 2,1, -7,-12)	.AddPart(4, 0,1, -13,-1)
+				.Offset(-8, -8);
 			BuildAnim(ANIM_ITEM_SCENT_POD).AddFrame(8, 0,2).AddFrame(8, 1,2);
 
 			// TODO: Flicker function in animation builder.
@@ -431,7 +432,8 @@ namespace ZeldaOracle.Game {
 				.AddFrame(1, 2,1, 8,11)	.AddPart(1, 2,1, 9,2)	.AddPart(1, 2,1, -5,-11)	.AddPart(1, 0,1, -10,5)	.AddDelay(1)
 					.AddFrame(1, 2,1, 8,11)	.AddPart(1, 2,1, 9,2)	.AddPart(1, 2,1, -5,-11)	.AddPart(1, 0,1, -10,5)	.AddDelay(1)
 				.AddFrame(1, 2,1, 8,9)	.AddPart(1, 2,1, 9,3)	.AddPart(1, 2,1, -7,-12)	.AddPart(1, 0,1, -13,-1).AddDelay(1)
-					.AddFrame(1, 2,1, 8,9)	.AddPart(1, 2,1, 9,3)	.AddPart(1, 2,1, -7,-12)	.AddPart(1, 0,1, -13,-1);
+					.AddFrame(1, 2,1, 8,9)	.AddPart(1, 2,1, 9,3)	.AddPart(1, 2,1, -7,-12)	.AddPart(1, 0,1, -13,-1)
+				.Offset(-8, -8);
 			
 			// COLOR EFFECT ANIMATIONS:
 			animationBuilder.SpriteSheet = SHEET_COLOR_EFFECTS;

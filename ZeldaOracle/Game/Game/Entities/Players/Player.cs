@@ -47,10 +47,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private Vector2F roomEnterPosition;
 		// The current player state.
 		private PlayerState state;
+		// The previous player state.
+		private PlayerState previousState;
 		// The movement component for the player.
 		private PlayerMoveComponent movement;
 
-		private bool canJump;
 
 		private PlayerNormalState		stateNormal;
 		private PlayerSwimState			stateSwim;
@@ -91,7 +92,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			syncAnimationWithDirection	= true;
 			isItemButtonPressDisabled	= false;
 			movement = new PlayerMoveComponent(this);
-			canJump = true;
 
 			// Unit properties.
 			originOffset	= new Point2I(0, -2);
@@ -128,30 +128,22 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Player states
 		//-----------------------------------------------------------------------------
 
-		public void Jump() {
-			//if (state is PlayerNormalState) {
-			//	BeginState(stateJump);
-			//}
-			movement.Jump();
-		}
-
 		// Begin the given player state.
 		public void BeginState(PlayerState newState) {
 			if (state != newState) {
-				if (state != null)
-					state.End();
+				if (state != null) {
+					state.End(newState);
+				}
+				previousState = state;
 				state = newState;
-				newState.Begin(this);
+				newState.Begin(this, previousState);
 			}
 		}
 
 		// Return the player state that the player wants to be in
 		// based on his current position.
 		public PlayerState GetDesiredNaturalState() {
-			//if (IsInAir)
-			//	return stateJump;
-			//else
-				if (physics.IsInWater)
+			if (physics.IsInWater)
 				return stateSwim;
 			else if (physics.IsOnLadder)
 				return stateLadder;
@@ -264,6 +256,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			base.Initialize();
 
 			BeginState(stateNormal);
+			previousState = stateNormal;
 		}
 
 		public override void OnEnterRoom() {
@@ -399,15 +392,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 			set { tunic = value; }
 		}
 		
-		public bool CanJump {
-			get { return canJump; }
-			set { canJump = value; }
-		}
-		
 		// Player states
 
 		public PlayerState CurrentState {
 			get { return state; }
+		}
+
+		public PlayerState PreviousState {
+			get { return previousState; }
 		}
 
 		public PlayerNormalState NormalState {

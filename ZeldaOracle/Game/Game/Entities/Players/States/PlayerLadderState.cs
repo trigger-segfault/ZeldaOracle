@@ -31,16 +31,18 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnBegin() {
-			base.OnBegin();
-			player.CanJump = false;
+		public override bool RequestStateChange(PlayerState newState) {
+			return true;
+		}
+
+		public override void OnBegin(PlayerState previousState) {
+			player.Movement.CanJump = false;
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
 		}
 		
-		public override void OnEnd() {
-			player.CanJump = true;
+		public override void OnEnd(PlayerState newState) {
+			player.Movement.CanJump = true;
 			Player.Graphics.StopAnimation();
-			base.OnEnd();
 		}
 
 		public override void Update() {
@@ -48,16 +50,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			
 			// Always face up when on a ladder.
 			player.Direction = Directions.Up;
-
-			// Update animations
-			//if (player.Movement.IsMoving && !Player.Graphics.IsAnimationPlaying)
-			//	Player.Graphics.PlayAnimation();
-			//if (!player.Movement.IsMoving && Player.Graphics.IsAnimationPlaying)
-			//	Player.Graphics.StopAnimation();
-			
-			// Update items.
-			//Player.UpdateEquippedItems();
-			// TODO: Handle holding sheild on ladder
 		}
 
 
