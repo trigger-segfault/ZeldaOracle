@@ -12,7 +12,7 @@ namespace ZeldaOracle.Game.Items {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemEquipment() : base() {
+		public ItemEquipment() {
 			this.equipped = false;
 		}
 

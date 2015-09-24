@@ -33,11 +33,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void OnBegin() {
 			base.OnBegin();
-
+			player.CanJump = false;
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
 		}
 		
 		public override void OnEnd() {
+			player.CanJump = true;
 			Player.Graphics.StopAnimation();
 			base.OnEnd();
 		}
@@ -49,10 +50,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Direction = Directions.Up;
 
 			// Update animations
-			if (player.Movement.IsMoving && !Player.Graphics.IsAnimationPlaying)
-				Player.Graphics.PlayAnimation();
-			if (!player.Movement.IsMoving && Player.Graphics.IsAnimationPlaying)
-				Player.Graphics.StopAnimation();
+			//if (player.Movement.IsMoving && !Player.Graphics.IsAnimationPlaying)
+			//	Player.Graphics.PlayAnimation();
+			//if (!player.Movement.IsMoving && Player.Graphics.IsAnimationPlaying)
+			//	Player.Graphics.StopAnimation();
 			
 			// Update items.
 			//Player.UpdateEquippedItems();

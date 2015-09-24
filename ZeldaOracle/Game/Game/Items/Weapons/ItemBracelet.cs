@@ -22,21 +22,24 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemBracelet(int level = 0) : base() {
+		public ItemBracelet(int level = 0) {
 			this.id				= "item_bracelet";
 			this.name			= new string[] { "Power Bracelet", "Power Gloves" };
 			this.description	= new string[] { "A strength booster.", "Used to lift large objects." };
 			this.level			= level;
 			this.maxLevel		= 1;
-			this.sprite			= new Sprite[] {
+			this.flags			= ItemFlags.None;
+
+			sprite = new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, 0, 1),
 				new Sprite(GameData.SHEET_ITEMS_SMALL, 1, 1)
 			};
-			this.spriteLight	= new Sprite[] {
+			spriteLight = new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 0, 1),
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 1, 1)
 			};
-			this.grabState		= new PlayerGrabState();
+
+			grabState = new PlayerGrabState();
 		}
 
 

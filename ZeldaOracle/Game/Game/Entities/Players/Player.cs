@@ -50,8 +50,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// The movement component for the player.
 		private PlayerMoveComponent movement;
 
+		private bool canJump;
+
 		private PlayerNormalState		stateNormal;
-		private PlayerJumpState			stateJump;
 		private PlayerSwimState			stateSwim;
 		private PlayerLedgeJumpState	stateLedgeJump;
 		private PlayerLadderState		stateLadder;
@@ -59,7 +60,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerHoldSwordState	stateHoldSword;
 		private PlayerSpinSwordState	stateSpinSword;
 
-		// TEMP: Change tool drawing to something else
+		// TEMPORARY: Change tool drawing to something else
 		public AnimationPlayer toolAnimation;
 
 		private bool isItemButtonPressDisabled;
@@ -90,6 +91,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			syncAnimationWithDirection	= true;
 			isItemButtonPressDisabled	= false;
 			movement = new PlayerMoveComponent(this);
+			canJump = true;
 
 			// Unit properties.
 			originOffset	= new Point2I(0, -2);
@@ -111,7 +113,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Create the basic player states.
 			state			= null;
 			stateNormal		= new PlayerNormalState();
-			stateJump		= new PlayerJumpState();
 			stateSwim		= new PlayerSwimState();
 			stateLadder		= new PlayerLadderState();
 			stateLedgeJump	= new PlayerLedgeJumpState();
@@ -128,9 +129,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 
 		public void Jump() {
-			if (state is PlayerNormalState) {
-				BeginState(stateJump);
-			}
+			//if (state is PlayerNormalState) {
+			//	BeginState(stateJump);
+			//}
+			movement.Jump();
 		}
 
 		// Begin the given player state.
@@ -146,9 +148,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Return the player state that the player wants to be in
 		// based on his current position.
 		public PlayerState GetDesiredNaturalState() {
-			if (IsInAir)
-				return stateJump;
-			else if (physics.IsInWater)
+			//if (IsInAir)
+			//	return stateJump;
+			//else
+				if (physics.IsInWater)
 				return stateSwim;
 			else if (physics.IsOnLadder)
 				return stateLadder;
@@ -171,6 +174,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			invincibleTimer = InvincibleDuration;
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Items
 		//-----------------------------------------------------------------------------
@@ -178,19 +182,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Update items by checking if their buttons are pressed.
 		public void UpdateEquippedItems() {
 			for (int i = 0; i < EquippedUsableItems.Length; i++) {
-				if (EquippedUsableItems[i] != null) {
-					EquippedUsableItems[i].Player = this;
+				ItemWeapon item = EquippedUsableItems[i];
+				if (item != null) {
+					item.Player = this;
 
-					if (!isItemButtonPressDisabled) {
-						if (i == 0 && Controls.A.IsPressed())
-							EquippedUsableItems[i].OnButtonPress();
-						else if (i == 1 && Controls.B.IsPressed())
-							EquippedUsableItems[i].OnButtonPress();
-
-						if (i == 0 && Controls.A.IsDown())
-							EquippedUsableItems[i].OnButtonDown();
-						else if (i == 1 && Controls.B.IsDown())
-							EquippedUsableItems[i].OnButtonDown();
+					if (!isItemButtonPressDisabled && item.IsUsable()) {
+						if (Inventory.GetSlotButton(i).IsPressed())
+							item.OnButtonPress();
+						if (Inventory.GetSlotButton(i).IsDown())
+							item.OnButtonDown();
 					}
 					//equippedItems[i].Update();
 				}
@@ -218,7 +218,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				controlDirection = Directions.Down;
 
 			// Find control angle.
-			// Arrow priority: Left > Right, Up > Down
+			// Arrow priorities: Left > Right, Up > Down
 			if (Controls.Up.IsDown()) {
 				if (Controls.Left.IsDown())
 					controlAngle = Angles.UpLeft;
@@ -289,7 +289,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				if (actionTile != null && Controls.A.IsPressed()) {
 					if (actionTile.OnAction(direction))
 						isItemButtonPressDisabled = true;
-					// TODO: player stops pushing when reading a sign.
+					// TODO: player stops pushing when reading text.
 				}
 			}
 
@@ -298,6 +298,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (state != desiredNaturalState && state.RequestStateChange(desiredNaturalState))
 				BeginState(desiredNaturalState);
 			state.Update();
+			UpdateEquippedItems();
 
 			// TEMPORARY: Change tool drawing to something else
 			toolAnimation.Update();
@@ -398,6 +399,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 			set { tunic = value; }
 		}
 		
+		public bool CanJump {
+			get { return canJump; }
+			set { canJump = value; }
+		}
+		
 		// Player states
 
 		public PlayerState CurrentState {
@@ -411,11 +417,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public PlayerSwimState SwimState {
 			get { return stateSwim; }
 		}
-		
-		public PlayerJumpState JumpState {
-			get { return stateJump; }
-		}
-		
+
 		public PlayerLedgeJumpState LedgeJumpState {
 			get { return stateLedgeJump; }
 		}

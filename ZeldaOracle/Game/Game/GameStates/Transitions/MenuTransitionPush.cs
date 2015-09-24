@@ -28,7 +28,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public MenuTransitionPush(Menu menuOld, Menu menuNew, int direction) : base() {
+		public MenuTransitionPush(Menu menuOld, Menu menuNew, int direction) {
 			this.direction	= direction;
 			this.menuOld	= menuOld;
 			this.menuNew	= menuNew;

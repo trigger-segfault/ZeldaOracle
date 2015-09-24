@@ -79,13 +79,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			objectDrawOffset += Directions.ToPoint(player.Direction) * 8;
 			pickupTimer = 0;
 			isPickingUp = true;
-			player.Movement.AllowMovementControl = false;
+			player.CanJump = false;
+			player.Movement.MoveCondition = PlayerMoveCondition.NoControl;
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
 		}
 		
 		public override void OnEnd() {
-			Player.Graphics.StopAnimation();
-
+			player.CanJump = true;
 			base.OnEnd();
 		}
 		
@@ -117,14 +117,15 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				else {
 					objectDrawOffset = new Point2I(0, -15);
 					isPickingUp = false;
-					player.Movement.AllowMovementControl = true;
+					player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 					Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CARRY);
 				}
 			}
 			else {
 				// Update the carried object.
-				carryObject.Position = player.Origin;
-				carryObject.ZPosition = player.ZPosition + 16;
+				carryObject.RoomControl	= player.RoomControl;
+				carryObject.Position	= player.Origin;
+				carryObject.ZPosition	= player.ZPosition + 16;
 				carryObject.UpdateCarrying();
 				if (carryObject.IsDestroyed) {
 					player.BeginNormalState();
@@ -132,10 +133,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				}
 
 				// Update animations.
-				if (player.Movement.IsMoving && !Player.Graphics.IsAnimationPlaying)
-					Player.Graphics.PlayAnimation();
-				if (!player.Movement.IsMoving && Player.Graphics.IsAnimationPlaying)
-					Player.Graphics.StopAnimation();
+				//if (player.Movement.IsMoving && !Player.Graphics.IsAnimationPlaying)
+				//	Player.Graphics.PlayAnimation();
+				//if (!player.Movement.IsMoving && Player.Graphics.IsAnimationPlaying)
+				//	Player.Graphics.StopAnimation();
 			
 				// Check for button press to throw/drop.
 				if (Controls.A.IsPressed() || Controls.B.IsPressed()) {

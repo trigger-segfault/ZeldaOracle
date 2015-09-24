@@ -61,7 +61,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			base.OnBegin();
 			player.Direction = player.UseDirection;
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SWING);
-			player.Movement.AllowMovementControl = false;
+			player.Movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
 			player.toolAnimation.Animation = weaponAnimation;
 			player.toolAnimation.SubStripIndex = player.Direction;
 			player.toolAnimation.Play();
@@ -72,7 +72,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd() {
-			player.Movement.AllowMovementControl = true;
+			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 			player.toolAnimation.Animation = null;
 			base.OnEnd();
 		}

@@ -49,7 +49,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			if (player.GameControl.Inventory.GetSlotButton(equipSlot).IsDown()) {
 				chargeTimer = 0;
-				player.Movement.AllowMovementControl = true;
+				player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
 				player.toolAnimation.Animation = weaponAnimation;
 				player.toolAnimation.SubStripIndex = player.Direction;
@@ -75,7 +75,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				if (player.Graphics.IsAnimationDone) {
 					isStabbing = false;
 					chargeTimer = 0;
-					player.Movement.AllowMovementControl = true;
+					player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 					player.toolAnimation.Animation = weaponAnimation;
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
 					if (player.GameControl.Inventory.GetSlotButton(equipSlot).IsUp())
@@ -84,10 +84,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 			else {
 				// Handle move/stand animations.
-				if (player.Movement.IsMoving && !Player.Graphics.IsAnimationPlaying)
-					Player.Graphics.PlayAnimation();
-				if (!player.Movement.IsMoving && Player.Graphics.IsAnimationPlaying)
-					Player.Graphics.StopAnimation();
+				//if (player.Movement.IsMoving && !Player.Graphics.IsAnimationPlaying)
+				//	Player.Graphics.PlayAnimation();
+				//if (!player.Movement.IsMoving && Player.Graphics.IsAnimationPlaying)
+				//	Player.Graphics.StopAnimation();
 
 				// Charge up the sword.
 				chargeTimer++;
@@ -102,7 +102,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				if (tile != null && player.Movement.IsMoving && collisionInfo.Type == CollisionType.Tile) {
 					isStabbing = true;
 					chargeTimer = 0;
-					player.Movement.AllowMovementControl = false;
+					player.Movement.MoveCondition = PlayerMoveCondition.NoControl; // Allows sideways movement
 					player.toolAnimation.Play(GameData.ANIM_SWORD_STAB);
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_STAB);
 					if (player.IsOnGround)

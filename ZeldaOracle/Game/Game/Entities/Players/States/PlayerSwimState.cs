@@ -41,7 +41,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void OnBegin() {
 			base.OnBegin();
-
+			
+			player.CanJump = false;
 			player.Movement.MoveSpeedScale = 1.0f;
 			player.Movement.AutoAccelerate = false;
 
@@ -56,6 +57,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		
 		public override void OnEnd() {
 			isSubmerged = false;
+			player.CanJump = true;
 			player.Movement.MoveSpeedScale = 1.0f;
 			player.Movement.AutoAccelerate = false;
 			base.OnEnd();

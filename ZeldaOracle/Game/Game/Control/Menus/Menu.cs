@@ -25,8 +25,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public Menu(GameManager gameManager)
-			: base() {
+		public Menu(GameManager gameManager) {
 			this.gameManager = gameManager;
 			this.backgroundSprite = null;
 			this.currentSlotGroup = null;

@@ -22,9 +22,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RoomTransition(RoomControl roomOld, RoomControl roomNew) :
-			base()
-		{
+		public RoomTransition(RoomControl roomOld, RoomControl roomNew) {
 			this.roomOld	= roomOld;
 			this.roomNew	= roomNew;
 			this.player		= roomOld.Player;

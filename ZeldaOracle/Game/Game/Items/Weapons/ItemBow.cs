@@ -19,18 +19,20 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemBow() : base() {
+		public ItemBow() {
 			this.id				= "item_bow";
 			this.name			= new string[] { "Wooden Bow", "Wooden Bow", "Wooden Bow" };
 			this.description	= new string[] { "Weapon of a marksman.", "Weapon of a marksman.", "Weapon of a marksman." };
 			this.maxLevel		= Item.Level3;
 			this.currentAmmo	= 0;
-			this.sprite			= new Sprite[] {
+			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword;
+
+			sprite = new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, 13, 1),
 				new Sprite(GameData.SHEET_ITEMS_SMALL, 13, 1),
 				new Sprite(GameData.SHEET_ITEMS_SMALL, 13, 1)
 			};
-			this.spriteLight	= new Sprite[] {
+			spriteLight	= new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 13, 1),
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 13, 1),
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 13, 1)

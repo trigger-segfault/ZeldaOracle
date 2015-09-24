@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control;
+using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Entities {
@@ -106,6 +105,30 @@ namespace ZeldaOracle.Game.Entities {
 		// Called when the entity lands on the ground.
 		public virtual void OnLand() {}
 
+		// Called when the entity falls in a hole.
+		public virtual void OnFallInHole() {
+			if (physics.DestroyedInHoles) {
+				RoomControl.SpawnEntity(new EffectFallingObject(), position);
+				Destroy();
+			}
+		}
+		
+		// Called when the entity falls in water.
+		public virtual void OnFallInWater() {
+			if (physics.DestroyedInHoles) {
+				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_WATER_SPLASH), position);
+				Destroy();
+			}
+		}
+		
+		// Called when the entity falls in lava.
+		public virtual void OnFallInLava() {
+			if (physics.DestroyedInHoles) {
+				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH), position);
+				Destroy();
+			}
+		}
+
 		// Special update method for when the entity is being carried.
 		public virtual void UpdateCarrying() {}
 
@@ -174,11 +197,13 @@ namespace ZeldaOracle.Game.Entities {
 		// Returns true if the entity is not alive.
 		public bool IsDestroyed {
 			get { return !isAlive; }
+			set { isAlive = !value; }
 		}
 
 		// Returns true if the entity is still alive.
 		public bool IsAlive {
 			get { return isAlive; }
+			set { isAlive = value; }
 		}
 
 		// Returns true if the entity is being handled by RoomControl.

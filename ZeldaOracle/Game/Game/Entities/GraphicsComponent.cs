@@ -78,6 +78,10 @@ namespace ZeldaOracle.Game.Entities
 		//-----------------------------------------------------------------------------
 		// Update/Draw
 		//-----------------------------------------------------------------------------
+		
+		public void SyncAnimation() {
+			animationPlayer.SubStripIndex = subStripIndex;
+		}
 
 		public void Update() {
 			animationPlayer.SubStripIndex = subStripIndex;

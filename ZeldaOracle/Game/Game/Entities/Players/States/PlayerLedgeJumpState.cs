@@ -82,11 +82,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			
 			player.Physics.Velocity = velocity;
 			player.Position += velocity;
+			
+			player.Movement.MoveCondition = PlayerMoveCondition.NoControl;
 		}
 		
 		public override void OnEnd() {
 			player.AutoRoomTransition		= false;
 			player.Physics.CollideWithWorld = true;
+			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 			base.OnEnd();
 		}
 

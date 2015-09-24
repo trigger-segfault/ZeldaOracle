@@ -27,7 +27,7 @@ namespace ZeldaOracle.Game.Control {
 		private Level			level;
 		private Room			room;
 		private Point2I			roomLocation;
-		private Player			player;			// The player entity.
+		private Player			player;
 		private List<Entity>	entities;
 		private Tile[,,]		tiles;
 		
@@ -125,16 +125,16 @@ namespace ZeldaOracle.Game.Control {
 		
 		// Use this for spawning entites at a position at runtime.
 		public void SpawnEntity(Entity e, Vector2F position) {
-			e.Initialize(this);
 			e.Position = position;
+			e.Initialize(this);
 			entities.Add(e);
 		}
 		
 		// Use this for spawning entites at a position at runtime.
 		public void SpawnEntity(Entity e, Vector2F position, float zPosition) {
-			e.Initialize(this);
 			e.Position = position;
 			e.ZPosition = zPosition;
+			e.Initialize(this);
 			entities.Add(e);
 		}
 		
@@ -257,8 +257,14 @@ namespace ZeldaOracle.Game.Control {
 					}
 				}
 			}
+		}
 
-
+		public void DestroyRoom() {
+			// Set all entities to destroyed (except the player).
+			for (int i = 0; i < entities.Count; i++) {
+				if (entities[i] != player)
+					entities[i].IsDestroyed = true;
+			}
 		}
 		
 		public void EnterAdjacentRoom(int direction) {
@@ -430,14 +436,12 @@ namespace ZeldaOracle.Game.Control {
 				}
 				else if (entities[i].IsAlive && entities[i].IsInRoom && i >= entityCount) {
 					// For entities spawned this frame, only update their graphics component.
-					entities[i].Graphics.AnimationPlayer.SubStripIndex = entities[i].Graphics.SubStripIndex;
-					//entities[i].Graphics.Update();
+					entities[i].Graphics.SyncAnimation();
 				}
 			}
 
 			// Remove destroyed entities.
 			for (int i = 0; i < entities.Count; i++) {
-				
 				if (!entities[i].IsAlive || !entities[i].IsInRoom) {
 					entities.RemoveAt(i--);
 				}
@@ -472,6 +476,10 @@ namespace ZeldaOracle.Game.Control {
 			if (Controls.Start.IsPressed()) {
 				GameControl.OpenMenu(GameControl.MenuWeapons);
 			}
+
+
+			// DEBUG KEYS:
+
 			if (Keyboard.IsKeyPressed(Keys.G)) {
 				GameControl.DisplayMessage("I was a <red>hero<red> to broken robots 'cause I was one of them, but how can I sing about being damaged if I'm not?<p> That's like <green>Christina Aguilera<green> singing Spanish. Ooh, wait! That's it! I'll fake it!");
 			}
@@ -561,10 +569,6 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
-		public GameControl GameControl {
-			get { return gameManager.GameControl; }
-		}
 
 		// The current level that contains the room the player is in.
 		public Level Level {

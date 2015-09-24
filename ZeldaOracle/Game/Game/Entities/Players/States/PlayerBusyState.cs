@@ -26,11 +26,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnBegin() {
 			base.OnBegin();
 			timer = duration;
-			player.Movement.AllowMovementControl = false;
+			player.Movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
 		}
 		
 		public override void OnEnd() {
-			player.Movement.AllowMovementControl = true;
+			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 			base.OnEnd();
 		}
 

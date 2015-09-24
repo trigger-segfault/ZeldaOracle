@@ -9,7 +9,7 @@ namespace ZeldaOracle.Game.GameStates {
 	// This is just a hack around empty game-state stacks.
 	public class StateDummy : GameState {
 
-		public StateDummy() : base() {}
+		public StateDummy() {}
 		
 		public override void OnBegin() {}
 		

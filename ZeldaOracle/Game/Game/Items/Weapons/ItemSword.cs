@@ -14,18 +14,19 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemSword()
-			: base() {
+		public ItemSword() {
 			this.id				= "item_sword";
 			this.name			= new string[] { "Wooden Sword", "Noble Sword", "Master Sword" };
 			this.description	= new string[] { "A hero's blade.", "A sacred blade.", "The blade of legends." };
 			this.maxLevel		= Item.Level3;
-			this.sprite			= new Sprite[] {
+			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword;
+
+			sprite = new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(0, 0)),
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(1, 0)),
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(2, 0))
 			};
-			this.spriteLight	= new Sprite[] {
+			spriteLight = new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(0, 0)),
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(1, 0)),
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(2, 0))

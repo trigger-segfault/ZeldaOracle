@@ -18,17 +18,19 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemFeather(int level = 0) : base() {
+		public ItemFeather(int level = 0) {
 			this.id				= "item_feather";
 			this.name			= new string[] { "Roc's Feather", "Roc's Cape" };
 			this.description	= new string[] { "A nice lift.", "A wing-riding cape." };
 			this.level			= level;
 			this.maxLevel		= Item.Level2;
-			this.sprite			= new Sprite[] {
+			this.flags			= ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword;
+
+			sprite			= new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(2, 1)),
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(3, 1))
 			};
-			this.spriteLight	= new Sprite[] {
+			spriteLight	= new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(2, 1)),
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(3, 1))
 			};
@@ -38,6 +40,10 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
+
+		public override bool IsUsable() {
+			return player.CanJump;
+		}
 
 		// Jump/deploy cape.
 		public override void OnButtonPress() {

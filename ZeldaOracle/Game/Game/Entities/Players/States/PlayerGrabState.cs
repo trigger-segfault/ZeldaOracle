@@ -46,7 +46,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void OnBegin() {
 			base.OnBegin();
-			player.Movement.AllowMovementControl = false;
+			player.CanJump = false;
+			player.Movement.MoveCondition = PlayerMoveCondition.NoControl;
 
 			timer = 0;
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_GRAB);
@@ -54,7 +55,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd() {
-			player.Movement.AllowMovementControl = true;
+			player.CanJump = true;
+			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 			base.OnEnd();
 		}
 
