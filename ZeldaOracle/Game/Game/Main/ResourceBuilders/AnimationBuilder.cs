@@ -37,6 +37,11 @@ namespace ZeldaOracle.Game.Main.ResourceBuilders
 			return this;
 		}
 
+		public AnimationBuilder BeginNull() {
+			animation = null;
+			return this;
+		}
+
 		public Animation End()
 		{
 			Animation temp = animation;
@@ -102,8 +107,13 @@ namespace ZeldaOracle.Game.Main.ResourceBuilders
 		}
 
 		public AnimationBuilder CreateSubStrip() {
-			animation.NextStrip = new Animation();
-			animation = animation.NextStrip;
+			if (animation == null) {
+				animation = new Animation();
+			}
+			else {
+				animation.NextStrip = new Animation();
+				animation = animation.NextStrip;
+			}
 			return this;
 		}
 

@@ -58,7 +58,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Animations\" />
     <Folder Include="Data\" />
     <Folder Include="Images\Units\Player\" />
     <Folder Include="Languages\" />
@@ -71,6 +70,10 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
+    <None Include="Animations\animations.conscript">
+      <Name>animations</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Fonts\fonts.conscript">
       <Name>fonts</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

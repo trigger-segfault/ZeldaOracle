@@ -281,7 +281,7 @@ public class Resources {
 	}
 	/** <summary> Loads/compiles animations from a script file. </summary> */
 	public static void LoadAnimations(string assetName) {
-		LoadScript(assetName, new AnimationSR());
+		//LoadScript(assetName, new AnimationSR());
 	}
 
 	#endregion

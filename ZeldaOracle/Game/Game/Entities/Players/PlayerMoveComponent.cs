@@ -149,7 +149,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (player.IsOnGround) {
 				player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
 				if (player.CurrentState is PlayerNormalState)
-					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
+					player.Graphics.PlayAnimation("player_jump");
 			}
 			else {
 				if (player.CurrentState is PlayerNormalState)

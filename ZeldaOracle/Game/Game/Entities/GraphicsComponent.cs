@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Collision;
+using ZeldaOracle.Common.Content;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
 
@@ -68,6 +69,11 @@ namespace ZeldaOracle.Game.Entities
 		
 		public void PlayAnimation(Animation animation) {
 			animationPlayer.Play(animation);
+		}
+		
+		public void PlayAnimation(string animationName) {
+			Animation anim = Resources.GetAnimation(animationName);
+			PlayAnimation(anim);
 		}
 		
 		public void StopAnimation() {

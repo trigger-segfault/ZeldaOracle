@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Common.Content;
@@ -26,7 +27,7 @@ namespace ZeldaOracle.Game {
 
 		// Initializes and loads the game content.
 		public static void Initialize() {
-			
+
 			Console.WriteLine("Loading Images");
 			LoadImages();
 
@@ -57,6 +58,21 @@ namespace ZeldaOracle.Game {
 			Console.WriteLine("Loading Music");
 			LoadMusic();
 
+
+			string assetName = "Animations/animations.conscript";
+			
+			Console.WriteLine("READING SCRIPT " + assetName);
+			AnimationSR sr = new AnimationSR();
+
+			try {
+				Stream stream = TitleContainer.OpenStream("Content/" + assetName);
+				StreamReader reader = new StreamReader(stream, Encoding.Default);
+				sr.ReadScript(reader);
+				stream.Close();
+			}
+			catch (FileNotFoundException) {
+				Console.WriteLine("Error loading file \"" + assetName + "\"");
+			}
 		}
 
 
@@ -291,46 +307,46 @@ namespace ZeldaOracle.Game {
 		
 			// PLAYER ANIMATIONS:
 			animationBuilder.SetSheet(SHEET_PLAYER);
-			BuildAnim(ANIM_PLAYER_DEFAULT)			.AddFrameStrip(6, 0,0, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_SHIELD)			.AddFrameStrip(6, 0,1, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_SHIELD_BLOCK)		.AddFrameStrip(6, 0,2, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_CARRY)			.AddFrameStrip(6, 0,5, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_PUSH)				.AddFrameStrip(6, 0,6, 2).Offset(-8, -16).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_SWIM)				.AddFrameStrip(6, 0,13, 2).Offset(-8, -16 + 2).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_DIVE)				.AddFrame(16, 0,21, 0,4).AddFrame(16, 1,21, 0,4).Offset(-8, -16);
-			BuildAnim(ANIM_PLAYER_GRAB)				.AddFrame(1, 0,7, 0,0).Offset(-8, -16).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_DIG)				.AddFrame(8, 0,9).AddFrame(16, 1,9).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_THROW)			.AddFrame(9, 0,4).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_FALL).AddFrame(16, 1, 20, 0, 0).AddFrame(10, 2, 20, 0, 0).AddFrame(11, 3, 20, 0, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp);
-			BuildAnim(ANIM_PLAYER_SHIELD_LARGE)			.AddFrameStrip(6, 0,3, 2).Offset(-8, -16).CreateSubStrip()
-														.AddFrameStrip(6, 2,1, 2).Offset(-8, -16).MakeDynamic(3, 2,0);
-			BuildAnim(ANIM_PLAYER_SHIELD_LARGE_BLOCK)	.AddFrameStrip(6, 0,2, 2).Offset(-8, -16).MakeDynamic(3, 2,0);
+			BuildAnim(ANIM_PLAYER_DEFAULT)			.AddFrameStrip(6, 0,0, 2).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_SHIELD)			.AddFrameStrip(6, 0,1, 2).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_SHIELD_BLOCK)		.AddFrameStrip(6, 0,2, 2).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_CARRY)			.AddFrameStrip(6, 0,5, 2).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_PUSH)				.AddFrameStrip(6, 0,6, 2).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_SWIM)				.AddFrameStrip(6, 0,13, 2).Offset(0, 2).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_DIVE)				.AddFrame(16, 0,21, 0,4).AddFrame(16, 1,21, 0,4);
+			BuildAnim(ANIM_PLAYER_GRAB)				.AddFrame(1, 0,7, 0,0).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_DIG)				.AddFrame(8, 0,9).AddFrame(16, 1,9).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_THROW)			.AddFrame(9, 0,4).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
+			BuildAnim(ANIM_PLAYER_FALL).AddFrame(16, 1, 20, 0, 0).AddFrame(10, 2, 20, 0, 0).AddFrame(11, 3, 20, 0, 0).SetLoopMode(LoopMode.Clamp);
+			BuildAnim(ANIM_PLAYER_SHIELD_LARGE)			.AddFrameStrip(6, 0,3, 2).CreateSubStrip()
+														.AddFrameStrip(6, 2,1, 2).MakeDynamic(3, 2,0);
+			BuildAnim(ANIM_PLAYER_SHIELD_LARGE_BLOCK)	.AddFrameStrip(6, 0,2, 2).MakeDynamic(3, 2,0);
 			BuildAnim(ANIM_PLAYER_PULL)
-				.AddFrame(1, 1,7, -4,0).Offset(-8, -16).CreateSubStrip()
-				.AddFrame(1, 3,7, 0,2).Offset(-8, -16).CreateSubStrip()
-				.AddFrame(1, 5,7, 4,0).Offset(-8, -16).CreateSubStrip()
-				.AddFrame(1, 7,7, 0,-1).Offset(-8, -16);
+				.AddFrame(1, 1,7, -4,0).CreateSubStrip()
+				.AddFrame(1, 3,7, 0,2).CreateSubStrip()
+				.AddFrame(1, 5,7, 4,0).CreateSubStrip()
+				.AddFrame(1, 7,7, 0,-1);
 			BuildAnim(ANIM_PLAYER_JUMP)
-				.AddFrame(9, 0, 11).AddFrame(9, 1, 11).AddFrame(6, 2, 11).AddFrame(6, 1, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
-				.AddFrame(9, 3, 11).AddFrame(9, 4, 11).AddFrame(6, 5, 11).AddFrame(6, 3, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
-				.AddFrame(9, 0, 12).AddFrame(9, 1, 12).AddFrame(6, 2, 12).AddFrame(6, 5, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
-				.AddFrame(9, 3, 12).AddFrame(9, 4, 12).AddFrame(6, 5, 12).AddFrame(6, 7, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp);
+				.AddFrame(9, 0, 11).AddFrame(9, 1, 11).AddFrame(6, 2, 11).AddFrame(6, 1, 0).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
+				.AddFrame(9, 3, 11).AddFrame(9, 4, 11).AddFrame(6, 5, 11).AddFrame(6, 3, 0).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
+				.AddFrame(9, 0, 12).AddFrame(9, 1, 12).AddFrame(6, 2, 12).AddFrame(6, 5, 0).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
+				.AddFrame(9, 3, 12).AddFrame(9, 4, 12).AddFrame(6, 5, 12).AddFrame(6, 7, 0).SetLoopMode(LoopMode.Clamp);
 			BuildAnim(ANIM_PLAYER_SWING)
-				.AddFrame(3, 4, 8, 0, 0).AddFrame(3, 0, 4, 0, 0).AddFrame(8, 0, 4, 4, 0).AddFrame(3, 0, 4, 0, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
-				.AddFrame(3, 3, 8, 0, 0).AddFrame(3, 2, 4, 0, 0).AddFrame(8, 2, 4, 0, -4).AddFrame(3, 2, 4, 0, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
-				.AddFrame(3, 2, 8, 0, 0).AddFrame(3, 4, 4, 0, 0).AddFrame(8, 4, 4, -4, 0).AddFrame(3, 4, 4, 0, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
-				.AddFrame(3, 1, 8, 0, 0).AddFrame(3, 6, 4, 0, 0).AddFrame(8, 6, 4, 0, 4).AddFrame(3, 6, 4, 0, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp);
+				.AddFrame(3, 4, 8, 0, 0).AddFrame(3, 0, 4, 0, 0).AddFrame(8, 0, 4, 4, 0).AddFrame(3, 0, 4, 0, 0).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
+				.AddFrame(3, 3, 8, 0, 0).AddFrame(3, 2, 4, 0, 0).AddFrame(8, 2, 4, 0, -4).AddFrame(3, 2, 4, 0, 0).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
+				.AddFrame(3, 2, 8, 0, 0).AddFrame(3, 4, 4, 0, 0).AddFrame(8, 4, 4, -4, 0).AddFrame(3, 4, 4, 0, 0).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
+				.AddFrame(3, 1, 8, 0, 0).AddFrame(3, 6, 4, 0, 0).AddFrame(8, 6, 4, 0, 4).AddFrame(3, 6, 4, 0, 0).SetLoopMode(LoopMode.Clamp);
 			BuildAnim(ANIM_PLAYER_SPIN)
-				.AddFrame(5, 0, 4, 3, 0).AddFrame(5, 6, 4, 0, 3).AddFrame(5, 4, 4, -3, 0).AddFrame(5, 2, 4, 0, -3).AddFrame(3, 0, 4, 3, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
-				.AddFrame(5, 2, 4, 0, -3).AddFrame(3, 0, 4, 3, 0).AddFrame(5, 6, 4, 0, 3).AddFrame(5, 4, 4, -3, 0).AddFrame(5, 2, 4, 0, -3).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
-				.AddFrame(5, 4, 4, -3, 0).AddFrame(5, 2, 4, 0, -3).AddFrame(3, 0, 4, 3, 0).AddFrame(5, 6, 4, 0, 3).AddFrame(5, 4, 4, -3, 0).Offset(-8, -16).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
-				.AddFrame(5, 6, 4, 0, 3).AddFrame(5, 4, 4, -3, 0).AddFrame(5, 2, 4, 0, -3).AddFrame(3, 0, 4, 3, 0).AddFrame(5, 6, 4, 0, 3).Offset(-8, -16).SetLoopMode(LoopMode.Clamp);
+				.AddFrame(5, 0, 4, 3, 0).AddFrame(5, 6, 4, 0, 3).AddFrame(5, 4, 4, -3, 0).AddFrame(5, 2, 4, 0, -3).AddFrame(3, 0, 4, 3, 0).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
+				.AddFrame(5, 2, 4, 0, -3).AddFrame(3, 0, 4, 3, 0).AddFrame(5, 6, 4, 0, 3).AddFrame(5, 4, 4, -3, 0).AddFrame(5, 2, 4, 0, -3).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
+				.AddFrame(5, 4, 4, -3, 0).AddFrame(5, 2, 4, 0, -3).AddFrame(3, 0, 4, 3, 0).AddFrame(5, 6, 4, 0, 3).AddFrame(5, 4, 4, -3, 0).SetLoopMode(LoopMode.Clamp).CreateSubStrip()
+				.AddFrame(5, 6, 4, 0, 3).AddFrame(5, 4, 4, -3, 0).AddFrame(5, 2, 4, 0, -3).AddFrame(3, 0, 4, 3, 0).AddFrame(5, 6, 4, 0, 3).SetLoopMode(LoopMode.Clamp);
 			
 			BuildAnim(ANIM_PLAYER_STAB)
-				.AddFrame(6, 0,4, 4,0).AddFrame(7, 0, 4, 0, 0).AddFrame(1, 1, 0, 0, 0).Offset(-8, -16).SetLoopMode(LoopMode.Reset).CreateSubStrip()
-				.AddFrame(6, 2,4, 0,-4).AddFrame(7, 2, 4, 0, 0).AddFrame(1, 3, 0, 0, 0).Offset(-8, -16).SetLoopMode(LoopMode.Reset).CreateSubStrip()
-				.AddFrame(6, 4,4, -4,0).AddFrame(7, 4, 4, 0, 0).AddFrame(1, 5, 0, 0, 0).Offset(-8, -16).SetLoopMode(LoopMode.Reset).CreateSubStrip()
-				.AddFrame(6, 6,4, 0,4).AddFrame(7, 6, 4, 0, 0).AddFrame(1, 7, 0, 0, 0).Offset(-8, -16).SetLoopMode(LoopMode.Reset);
+				.AddFrame(6, 0,4, 4,0).AddFrame(7, 0, 4, 0, 0).AddFrame(1, 1, 0, 0, 0).SetLoopMode(LoopMode.Reset).CreateSubStrip()
+				.AddFrame(6, 2,4, 0,-4).AddFrame(7, 2, 4, 0, 0).AddFrame(1, 3, 0, 0, 0).SetLoopMode(LoopMode.Reset).CreateSubStrip()
+				.AddFrame(6, 4,4, -4,0).AddFrame(7, 4, 4, 0, 0).AddFrame(1, 5, 0, 0, 0).SetLoopMode(LoopMode.Reset).CreateSubStrip()
+				.AddFrame(6, 6,4, 0,4).AddFrame(7, 6, 4, 0, 0).AddFrame(1, 7, 0, 0, 0).SetLoopMode(LoopMode.Reset);
 
 			// WEAPON ANIMATIONS:
 			animationBuilder.SpriteSheet = SHEET_PLAYER_ITEMS;
