@@ -1,0 +1,39 @@
+
+
+SHEET_ZONESET_LARGE	= new SpriteSheet(imageZoneset,			16, 16, 0, 0, 1, 1);
+SHEET_ZONESET_SMALL	= new SpriteSheet(imageZoneset,			8, 8, 187, 0, 1, 1);
+SHEET_GENERAL_TILES	= new SpriteSheet(imageGeneralTiles,	16, 16, 0, 0, 1, 1);
+
+SHEET_PLAYER		= new SpriteSheet(imageSheetPlayer,		16, 16, 0, 0, 1, 1);
+SHEET_PLAYER_RED	= new SpriteSheet(imageSheetPlayerRed,	16, 16, 0, 0, 1, 1);
+SHEET_PLAYER_BLUE	= new SpriteSheet(imageSheetPlayerBlue,	16, 16, 0, 0, 1, 1);
+SHEET_PLAYER_HURT	= new SpriteSheet(imageSheetPlayerHurt,	16, 16, 0, 0, 1, 1);
+SHEET_EFFECTS		= new SpriteSheet(imageEffects,			16, 16, 0, 0, 1, 1);
+SHEET_COLOR_EFFECTS	= new SpriteSheet(imageColorEffects,	16, 16, 0, 0, 1, 1);
+SHEET_PLAYER_ITEMS	= new SpriteSheet(imagePlayerItems,		16, 16, 0, 0, 1, 1);
+
+
+@spritesheet "player"
+@grid 16 16  1 1  0 0
+@end
+@spritesheet "player_red"
+@grid 16 16  1 1  0 0
+@end
+@spritesheet "player_blue"
+@grid 16 16  1 1  0 0
+@end
+@spritesheet "player_hurt"
+@grid 16 16  1 1  0 0
+@end
+
+@spritesheet ""
+@grid 16 16  1 1  0 0
+@end
+
+@spritesheet "Items/items_large"
+@grid 16 16  1 1  18 18
+@end
+
+@spritesheet "Items/items_large_light"
+@grid 16 16  1 1  18 18
+@end

@@ -53,7 +53,6 @@ namespace ZeldaOracle.Common.Scripts {
 			// BEGIN/END.
 
 			AddCommand("Anim", delegate(CommandParam parameters) {
-				Console.Write("Animation " + parameters.GetString(0));
 				animationName = parameters.GetString(0);
 				animationBuilder.BeginNull();
 				animation = null;

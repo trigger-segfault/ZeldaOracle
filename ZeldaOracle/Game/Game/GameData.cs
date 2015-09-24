@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Collision;
@@ -57,22 +58,6 @@ namespace ZeldaOracle.Game {
 
 			Console.WriteLine("Loading Music");
 			LoadMusic();
-
-
-			string assetName = "Animations/animations.conscript";
-			
-			Console.WriteLine("READING SCRIPT " + assetName);
-			AnimationSR sr = new AnimationSR();
-
-			try {
-				Stream stream = TitleContainer.OpenStream("Content/" + assetName);
-				StreamReader reader = new StreamReader(stream, Encoding.Default);
-				sr.ReadScript(reader);
-				stream.Close();
-			}
-			catch (FileNotFoundException) {
-				Console.WriteLine("Error loading file \"" + assetName + "\"");
-			}
 		}
 
 
@@ -134,12 +119,12 @@ namespace ZeldaOracle.Game {
 			SHEET_MENU_LARGE_LIGHT = Resources.GetSpriteSheet("UI/menu_large_light");
 
 			Resources.LoadSpriteSheets("SpriteSheets/items.conscript");
+			Resources.LoadSpriteSheets("SpriteSheets/sprite_sheets.conscript");
 
 			SHEET_ITEMS_SMALL = Resources.GetSpriteSheet("Items/items_small");
 			SHEET_ITEMS_LARGE = Resources.GetSpriteSheet("Items/items_large");
 			SHEET_ITEMS_SMALL_LIGHT = Resources.GetSpriteSheet("Items/items_small_light");
 			SHEET_ITEMS_LARGE_LIGHT = Resources.GetSpriteSheet("Items/items_large_light");
-
 		}
 
 		
@@ -270,42 +255,59 @@ namespace ZeldaOracle.Game {
 		}
 
 		private static void LoadAnimations() {
+			string assetName = "Animations/animations.conscript";
+			
+			Console.WriteLine("READING SCRIPT " + assetName);
+			AnimationSR sr = new AnimationSR();
+
+			try {
+				Stream stream = TitleContainer.OpenStream("Content/" + assetName);
+				StreamReader reader = new StreamReader(stream, Encoding.Default);
+				sr.ReadScript(reader);
+				stream.Close();
+			}
+			catch (FileNotFoundException) {
+				Console.WriteLine("Error loading file \"" + assetName + "\"");
+			}
+
+
 			animationBuilder = new AnimationBuilder();
 		
 			
 			// TILE ANIMATIONS:
 			animationBuilder.SetSheet(SHEET_ZONESET_LARGE);
-			BuildAnim(ANIM_LANTERN)			.AddFrameStrip(16, 1, 8, 4);
+			BuildAnim(ANIM_TILE_LANTERN)			.AddFrameStrip(16, 1, 8, 4);
 
 			animationBuilder.SetSheet(SHEET_ZONESET_SMALL);
-			BuildAnim(ANIM_WATER)			.AddFrameStrip(16, 0, 4, 4).MakeQuad();
-			BuildAnim(ANIM_WATER_DEEP)		.AddFrameStrip(16, 0, 5, 4).MakeQuad();
-			BuildAnim(ANIM_WATERFALL)		.AddFrameStrip(8, 0, 6, 4).MakeQuad();
-			BuildAnim(ANIM_LAVAFALL)		.AddFrameStrip(8, 0, 8, 4).MakeQuad();
-			BuildAnim(ANIM_PUDDLE)			.AddFrameStrip(16, 4,10, 3).AddFrame(16, 5,10).MakeQuad();
-			BuildAnim(ANIM_WATERFALL_BOTTOM).InsertFrameStrip(0, 8, 0,6, 4, 0,0)
+			BuildAnim(ANIM_TILE_WATER)			.AddFrameStrip(16, 0, 4, 4).MakeQuad();
+			BuildAnim(ANIM_TILE_WATER_DEEP)		.AddFrameStrip(16, 0, 5, 4).MakeQuad();
+			BuildAnim(ANIM_TILE_WATERFALL)		.AddFrameStrip(8, 0, 6, 4).MakeQuad();
+			BuildAnim(ANIM_TILE_LAVAFALL)		.AddFrameStrip(8, 0, 8, 4).MakeQuad();
+			BuildAnim(ANIM_TILE_PUDDLE)			.AddFrameStrip(16, 4,10, 3).AddFrame(16, 5,10).MakeQuad();
+			BuildAnim(ANIM_TILE_WATERFALL_BOTTOM).InsertFrameStrip(0, 8, 0,6, 4, 0,0)
 											.InsertFrameStrip(0, 8, 0,6, 4, 8,0)
 											.InsertFrameStrip(0, 8, 0,7, 4, 0,8)
 											.InsertFrameStrip(0, 8, 0,7, 4, 8,8);
-			BuildAnim(ANIM_LAVAFALL_BOTTOM)	.InsertFrameStrip(0, 8, 0,8, 4, 0,0)
+			BuildAnim(ANIM_TILE_LAVAFALL_BOTTOM)	.InsertFrameStrip(0, 8, 0,8, 4, 0,0)
 											.InsertFrameStrip(0, 8, 0,8, 4, 8,0)
 											.InsertFrameStrip(0, 8, 0,9, 4, 0,8)
 											.InsertFrameStrip(0, 8, 0,9, 4, 8,8);
-			BuildAnim(ANIM_FLOWERS)			.InsertFrameStrip(0, 16,  4,9, 4, 0,0)
+			BuildAnim(ANIM_TILE_FLOWERS)			.InsertFrameStrip(0, 16,  4,9, 4, 0,0)
 											.InsertFrameStrip(0, 16,  4,9, 4, 8,8)
 											.InsertFrame(0, 64, 7,10, 8,0)
 											.InsertFrame(0, 64, 7,10, 0,8);
-			BuildAnim(ANIM_OCEAN)			.InsertFrameStrip(0, 16, 4,4, 4, 0,0, 0,1)
+			BuildAnim(ANIM_TILE_OCEAN)			.InsertFrameStrip(0, 16, 4,4, 4, 0,0, 0,1)
 											.InsertFrameStrip(0, 16, 5,4, 4, 8,0, 0,1)
 											.InsertFrameStrip(0, 16, 4,4, 4, 0,8, 0,1)
 											.InsertFrameStrip(0, 16, 5,4, 4, 8,8, 0,1);
-			BuildAnim(ANIM_OCEAN_SHORE)		.InsertFrameStrip(0, 16, 6,4, 4, 0,0, 0,1)
+			BuildAnim(ANIM_TILE_OCEAN_SHORE)		.InsertFrameStrip(0, 16, 6,4, 4, 0,0, 0,1)
 											.InsertFrameStrip(0, 16, 7,4, 4, 8,0, 0,1)
 											.InsertFrameStrip(0, 16, 4,4, 4, 0,8, 0,1)
 											.InsertFrameStrip(0, 16, 5,4, 4, 8,8, 0,1);
 			
 		
 			// PLAYER ANIMATIONS:
+			/*
 			animationBuilder.SetSheet(SHEET_PLAYER);
 			BuildAnim(ANIM_PLAYER_DEFAULT)			.AddFrameStrip(6, 0,0, 2).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_SHIELD)			.AddFrameStrip(6, 0,1, 2).MakeDynamic(4, 2,0);
@@ -313,7 +315,7 @@ namespace ZeldaOracle.Game {
 			BuildAnim(ANIM_PLAYER_CARRY)			.AddFrameStrip(6, 0,5, 2).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_PUSH)				.AddFrameStrip(6, 0,6, 2).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_SWIM)				.AddFrameStrip(6, 0,13, 2).Offset(0, 2).MakeDynamic(4, 2,0);
-			BuildAnim(ANIM_PLAYER_DIVE)				.AddFrame(16, 0,21, 0,4).AddFrame(16, 1,21, 0,4);
+			BuildAnim(ANIM_PLAYER_SUBMERGED)		.AddFrame(16, 0,21, 0,4).AddFrame(16, 1,21, 0,4);
 			BuildAnim(ANIM_PLAYER_GRAB)				.AddFrame(1, 0,7, 0,0).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_DIG)				.AddFrame(8, 0,9).AddFrame(16, 1,9).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
 			BuildAnim(ANIM_PLAYER_THROW)			.AddFrame(9, 0,4).SetLoopMode(LoopMode.Clamp).MakeDynamic(4, 2,0);
@@ -347,6 +349,7 @@ namespace ZeldaOracle.Game {
 				.AddFrame(6, 2,4, 0,-4).AddFrame(7, 2, 4, 0, 0).AddFrame(1, 3, 0, 0, 0).SetLoopMode(LoopMode.Reset).CreateSubStrip()
 				.AddFrame(6, 4,4, -4,0).AddFrame(7, 4, 4, 0, 0).AddFrame(1, 5, 0, 0, 0).SetLoopMode(LoopMode.Reset).CreateSubStrip()
 				.AddFrame(6, 6,4, 0,4).AddFrame(7, 6, 4, 0, 0).AddFrame(1, 7, 0, 0, 0).SetLoopMode(LoopMode.Reset);
+			*/
 
 			// WEAPON ANIMATIONS:
 			animationBuilder.SpriteSheet = SHEET_PLAYER_ITEMS;
@@ -493,6 +496,39 @@ namespace ZeldaOracle.Game {
 				.AddFrame(9, 9,8).AddFrame(18, 9,9).AddFrame(9, 9,10).AddFrame(9, 9,11).Offset(-8, -8);
 			BuildAnim(ANIM_EFFECT_FALLING_OBJECT).SetLoopMode(LoopMode.Reset)
 				.AddFrame(8, 3,12).AddFrame(12, 4,12).AddFrame(13, 5,12).Offset(-8, -8);
+
+			
+			
+			
+
+			
+			Console.WriteLine("===================================");
+			Console.WriteLine("CREATING LIST OF MEMBERS:");
+			Console.WriteLine("===================================");
+
+			FieldInfo[] fields = typeof(GameData).GetFields();
+			for (int i = 0; i < fields.Length; i++) {
+				FieldInfo field = fields[i];
+				string name = field.Name.ToLower();
+
+				// Sprites.
+				//if (field.FieldType == typeof(Sprite)) {
+				//	name = name.Remove(0, "SPR_".Length);
+				//	if (Resources.SpriteExists(name)) {
+				//		field.SetValue(null, Resources.GetSprite(name));
+				//		Console.WriteLine(" - " + name);
+				//	}
+				//}
+
+				// Animations.
+				if (field.FieldType == typeof(Animation)) {
+					name = name.Remove(0, "ANIM_".Length);
+					if (Resources.AnimationExists(name)) {
+						field.SetValue(null, Resources.GetAnimation(name));
+						Console.WriteLine(" - " + name);
+					}
+				}
+			}
 		}
 
 
@@ -546,15 +582,15 @@ namespace ZeldaOracle.Game {
 			tilesetBuilder.Tileset = TILESET_OVERWORLD;
 
 			// Animations.
-			BuildTile( 1, 15).SetAnim(ANIM_WATER);
-			BuildTile( 2, 15).SetAnim(ANIM_WATER_DEEP);
-			BuildTile( 1, 14).SetAnim(ANIM_OCEAN);
-			BuildTile( 2, 14).SetAnim(ANIM_OCEAN_SHORE);
-			BuildTile( 1, 16).SetAnim(ANIM_PUDDLE);
-			BuildTile( 0, 14).SetAnim(ANIM_WATERFALL_TOP);
-			BuildTile( 0, 15).SetAnim(ANIM_WATERFALL);
-			BuildTile( 0, 16).SetAnim(ANIM_WATERFALL_BOTTOM);
-			BuildTile( 3, 23).SetAnim(ANIM_FLOWERS);
+			BuildTile( 1, 15).SetAnim(ANIM_TILE_WATER);
+			BuildTile( 2, 15).SetAnim(ANIM_TILE_WATER_DEEP);
+			BuildTile( 1, 14).SetAnim(ANIM_TILE_OCEAN);
+			BuildTile( 2, 14).SetAnim(ANIM_TILE_OCEAN_SHORE);
+			BuildTile( 1, 16).SetAnim(ANIM_TILE_PUDDLE);
+			BuildTile( 0, 14).SetAnim(ANIM_TILE_WATERFALL_TOP);
+			BuildTile( 0, 15).SetAnim(ANIM_TILE_WATERFALL);
+			BuildTile( 0, 16).SetAnim(ANIM_TILE_WATERFALL_BOTTOM);
+			BuildTile( 3, 23).SetAnim(ANIM_TILE_FLOWERS);
 			// Cave entrances
 			BuildTile( 1,  4).SetSolidModel(MODEL_EDGE_N); 
 			BuildTile( 0,  5).SetSolidModel(MODEL_EDGE_N);
@@ -831,19 +867,19 @@ namespace ZeldaOracle.Game {
 	//-----------------------------------------------------------------------------
 
 		// Tile animations.
-		public static Animation ANIM_WATER						= new Animation();
-		public static Animation ANIM_OCEAN						= new Animation();
-		public static Animation ANIM_OCEAN_SHORE				= new Animation();
-		public static Animation ANIM_FLOWERS					= new Animation();
-		public static Animation ANIM_WATERFALL					= new Animation();
-		public static Animation ANIM_WATERFALL_BOTTOM			= new Animation();
-		public static Animation ANIM_WATERFALL_TOP				= new Animation();
-		public static Animation ANIM_WATER_DEEP					= new Animation();
-		public static Animation ANIM_PUDDLE						= new Animation();
-		public static Animation ANIM_LANTERN					= new Animation();
-		public static Animation ANIM_LAVAFALL					= new Animation();
-		public static Animation ANIM_LAVAFALL_BOTTOM			= new Animation();
-		public static Animation ANIM_LAVAFALL_TOP				= new Animation();
+		public static Animation ANIM_TILE_WATER					= new Animation();
+		public static Animation ANIM_TILE_OCEAN					= new Animation();
+		public static Animation ANIM_TILE_OCEAN_SHORE			= new Animation();
+		public static Animation ANIM_TILE_FLOWERS				= new Animation();
+		public static Animation ANIM_TILE_WATERFALL				= new Animation();
+		public static Animation ANIM_TILE_WATERFALL_BOTTOM		= new Animation();
+		public static Animation ANIM_TILE_WATERFALL_TOP			= new Animation();
+		public static Animation ANIM_TILE_WATER_DEEP			= new Animation();
+		public static Animation ANIM_TILE_PUDDLE				= new Animation();
+		public static Animation ANIM_TILE_LANTERN				= new Animation();
+		public static Animation ANIM_TILE_LAVAFALL				= new Animation();
+		public static Animation ANIM_TILE_LAVAFALL_BOTTOM		= new Animation();
+		public static Animation ANIM_TILE_LAVAFALL_TOP			= new Animation();
 	
 		// Player animations.
 		public static Animation ANIM_PLAYER_DEFAULT				= new Animation();
@@ -864,7 +900,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PLAYER_SPIN				= new Animation();
 		public static Animation ANIM_PLAYER_AIM					= new Animation();
 		public static Animation ANIM_PLAYER_JUMP				= new Animation();
-		public static Animation ANIM_PLAYER_DIVE				= new Animation();
+		public static Animation ANIM_PLAYER_SUBMERGED			= new Animation();
 		public static Animation ANIM_PLAYER_DIE					= new Animation();
 		public static Animation ANIM_PLAYER_FALL				= new Animation();
 		public static Animation ANIM_PLAYER_DROWN				= new Animation();

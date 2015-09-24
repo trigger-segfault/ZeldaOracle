@@ -64,9 +64,9 @@ ANIM player_jump;
 
 ANIM player_swing;
 	SUBSTRIP clamp; ADD frame, 3, (4, 8); ADD frame, 3, (0, 4); ADD frame, 8, (0, 4), ( 4,  0); ADD frame, 3, (0, 4);
-	SUBSTRIP clamp; ADD frame, 3, (3, 8); ADD frame, 3, (2, 4); ADD frame, 8, (2, 4), ( 0, -4); ADD frame, 3, (0, 4);
-	SUBSTRIP clamp; ADD frame, 3, (2, 8); ADD frame, 3, (4, 4); ADD frame, 8, (4, 4), (-4,  0); ADD frame, 3, (0, 4);
-	SUBSTRIP clamp; ADD frame, 3, (1, 8); ADD frame, 3, (6, 4); ADD frame, 8, (6, 4), ( 0,  4); ADD frame, 3, (0, 4); END;
+	SUBSTRIP clamp; ADD frame, 3, (3, 8); ADD frame, 3, (2, 4); ADD frame, 8, (2, 4), ( 0, -4); ADD frame, 3, (2, 4);
+	SUBSTRIP clamp; ADD frame, 3, (2, 8); ADD frame, 3, (4, 4); ADD frame, 8, (4, 4), (-4,  0); ADD frame, 3, (4, 4);
+	SUBSTRIP clamp; ADD frame, 3, (1, 8); ADD frame, 3, (6, 4); ADD frame, 8, (6, 4), ( 0,  4); ADD frame, 3, (6, 4); END;
 ANIM player_spin;
 	SUBSTRIP clamp; ADD frame, 5, (0, 4), ( 3,  0); ADD frame, 5, (6, 4), ( 0,  3); ADD frame, 5, (4, 4), (-3,  0); ADD frame, 5, (2, 4), ( 0, -3); ADD frame, 3, (0, 4), ( 3,  0);
 	SUBSTRIP clamp; ADD frame, 5, (2, 4), ( 0, -3); ADD frame, 3, (0, 4), ( 3,  0); ADD frame, 5, (6, 4), ( 0,  3); ADD frame, 5, (4, 4), (-3,  0); ADD frame, 5, (2, 4), ( 0, -3);
