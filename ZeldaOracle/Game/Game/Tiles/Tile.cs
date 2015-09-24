@@ -84,7 +84,12 @@ namespace ZeldaOracle.Game.Tiles {
 			if (!isMoving && flags.HasFlag(TileFlags.Cuttable)) {
 				RoomControl.SpawnEntity(new Effect(breakAnimation), Center);
 				RoomControl.RemoveTile(this);
-				RoomControl.GameControl.RewardManager.SpawnCollectibleFromBreakableTile("rupee_1", (Point2I)Position + new Point2I(8, 15));
+				string[] drops = {
+					"rupees_1", "rupees_5", "hearts_1",
+					"ammo_ember_seeds_5", "ammo_scent_seeds_5", "ammo_pegasus_seeds_5", "ammo_gale_seeds_5", "ammo_mystery_seeds_5",
+					"ammo_bombs_5", "ammo_arrows_5"
+				 };
+				RoomControl.GameControl.RewardManager.SpawnCollectibleFromBreakableTile(drops[GRandom.NextInt(drops.Length)], (Point2I)Center);
 			}
 		}
 

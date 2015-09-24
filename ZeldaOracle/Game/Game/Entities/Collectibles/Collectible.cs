@@ -10,7 +10,16 @@ namespace ZeldaOracle.Game.Entities {
 	public class Collectible : Entity {
 
 		protected Reward reward;
+		protected bool showMessage;
 		protected int timer;
+
+		//-----------------------------------------------------------------------------
+		// Constants
+		//-----------------------------------------------------------------------------
+
+		private const int Duration = 513;
+		private const int FadeTime = 400;
+		private const int PickupableTime = 12;
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -25,8 +34,9 @@ namespace ZeldaOracle.Game.Entities {
 				PhysicsFlags.LedgePassable |
 				PhysicsFlags.DestroyedInHoles);
 
-			this.reward					= reward;
-			this.timer					= 0;
+			this.reward			= reward;
+			this.showMessage	= false;
+			this.timer			= 0;
 		}
 
 		//-----------------------------------------------------------------------------
@@ -35,6 +45,9 @@ namespace ZeldaOracle.Game.Entities {
 
 		public void Collect() {
 			Destroy();
+			if (showMessage) {
+				GameControl.DisplayMessage(new Control.Message(reward.Message));
+			}
 			reward.OnCollect(GameControl);
 		}
 
@@ -45,27 +58,34 @@ namespace ZeldaOracle.Game.Entities {
 		public override void Initialize() {
 			base.Initialize();
 			
-			timer		= 0;
+			timer								= 0;
+
+			Graphics.AnimationPlayer.Animation	= reward.Animation;
 			Graphics.IsGrassEffectVisible		= true;
 			Graphics.IsRipplesEffectVisible		= true;
 			Graphics.IsShadowVisible			= true;
-			Graphics.AnimationPlayer.Animation	= reward.Animation;
+			Graphics.GrassDrawOffset			= new Point2I(0, 5);
+			Graphics.RipplesDrawOffset			= new Point2I(0, 6);
+			Graphics.ShadowDrawOffset			= new Point2I(0, 5);
 
-			Physics.CollisionBox				= reward.CollisionBox;
+			Physics.CollisionBox				= new Rectangle2I(-4, -4, 8, 8);
+			Physics.SoftCollisionBox			= new Rectangle2I(-5, -4, 9, 8);
 		}
 
 		public override void Update() {
 			base.Update();
 
 			timer++;
-			if (timer == reward.Duration) {
-				Destroy();
+			if (reward.HasDuration) {
+				if (timer == Duration) {
+					Destroy();
+				}
+				else if (timer == FadeTime)
+					graphics.IsFlickering = true;
 			}
-			else if (timer == reward.FadeTime)
-				graphics.IsFlickering = true;
 
 			// Check for colliding with the player.
-			if (physics.IsSoftMeetingEntity(GameControl.Player, 9) && timer >= reward.PickupableTime)
+			if (physics.IsSoftMeetingEntity(GameControl.Player, 9) && timer >= PickupableTime)
 				Collect();
 		}
 
@@ -75,6 +95,11 @@ namespace ZeldaOracle.Game.Entities {
 
 		public Reward Reward {
 			get { return reward; }
+		}
+
+		public bool ShowMessage {
+			get { return showMessage; }
+			set { showMessage = value; }
 		}
 	}
 }

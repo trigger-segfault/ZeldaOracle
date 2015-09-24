@@ -8,15 +8,16 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control;
 
 namespace ZeldaOracle.Game.Items.Rewards {
-	public class RewardRupee : Reward {
+	public class RewardAmmo : Reward {
 
+		protected string ammoID;
 		protected int amount;
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RewardRupee(string id, int amount, string message, Sprite sprite) {
+		public RewardAmmo(string id, string ammoID, int amount, string message, Sprite sprite) {
 			this.id				= id;
 			this.animation		= new Animation(sprite);
 			this.message		= message;
@@ -24,15 +25,19 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			this.holdType		= RewardHoldTypes.Raise;
 			this.isCollectibleWithItems	= true;
 
+			this.ammoID			= ammoID;
 			this.amount			= amount;
 		}
-		public RewardRupee(string id, int amount, string message, Animation animation) {
+		public RewardAmmo(string id, string ammoID, int amount, string message, Animation animation) {
 			this.id				= id;
 			this.animation		= animation;
 			this.message		= message;
 			this.hasDuration	= true;
 			this.holdType		= RewardHoldTypes.Raise;
 			this.isCollectibleWithItems	= true;
+
+			this.ammoID			= ammoID;
+			this.amount			= amount;
 		}
 
 		//-----------------------------------------------------------------------------
@@ -40,10 +45,9 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		//-----------------------------------------------------------------------------
 
 		public override void OnCollect(GameControl gameControl) {
-			if (gameControl.HUD.DynamicRupees >= gameControl.Inventory.GetAmmo("rupees").MaxAmount)
-				AudioSystem.PlaySound("Pickups/get_rupee");
+			//AudioSystem.PlaySound("Pickups/get_ammo");
 
-			gameControl.Inventory.GetAmmo("rupees").Amount += amount;
+			gameControl.Inventory.GetAmmo(ammoID).Amount += amount;
 		}
 
 		//-----------------------------------------------------------------------------

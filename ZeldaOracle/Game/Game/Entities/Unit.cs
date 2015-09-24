@@ -8,7 +8,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Game.Main;
 
-namespace ZeldaOracle.Game.Entities.Players {
+namespace ZeldaOracle.Game.Entities {
 
 	// NOTE: These will probably be changed
 	[Flags]
