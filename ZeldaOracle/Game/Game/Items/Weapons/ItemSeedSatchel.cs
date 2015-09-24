@@ -20,18 +20,20 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemSeedSatchel() : base() {
+		public ItemSeedSatchel() {
 			this.id				= "item_seed_satchel";
 			this.name			= new string[] { "Seed Satchel", "Seed Satchel", "Seed Satchel" };
 			this.description	= new string[] { "A bag for carrying seeds.", "A bag for carrying seeds.", "A bag for carrying seeds." };
 			this.maxLevel		= Item.Level3;
 			this.currentAmmo	= 0;
-			this.sprite			= new Sprite[] {
+			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword;
+
+			sprite = new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, 6, 0),
 				new Sprite(GameData.SHEET_ITEMS_SMALL, 6, 0),
 				new Sprite(GameData.SHEET_ITEMS_SMALL, 6, 0)
 			};
-			this.spriteLight	= new Sprite[] {
+			spriteLight = new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 6, 0),
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 6, 0),
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 6, 0)

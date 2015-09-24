@@ -47,7 +47,7 @@ public class DebugController : DebugControllerBase {
 	#region Constructors
 
 	/** <summary> Constructs the game debugger. </summary> */
-	public DebugController(GameManager game) : base() {
+	public DebugController(GameManager game) {
 
 		this.game = game;
 

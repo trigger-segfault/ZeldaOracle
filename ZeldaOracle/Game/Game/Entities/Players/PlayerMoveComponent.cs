@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Entities.Effects;
+using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
@@ -16,18 +17,28 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Input.Controls;
 
 namespace ZeldaOracle.Game.Entities.Players {
-
+	
+	public enum PlayerMoveCondition {
+		FreeMovement,	// Freely control movement
+		OnlyInAir,		// Only control his movement in air.
+		NoControl,		// No movement control.
+	}
+	
 	public class PlayerMoveComponent {
 		
 		// Settings.
-		private bool				allowMovementControl;	// Is the player allowed to control his movement?
 		private bool				autoAccelerate;			// Should the player still accelerate without holding down a movement key?
 		private float				moveSpeedScale;			// Scales the movement speed to create the actual top-speed.
-		
+		private PlayerMoveCondition	moveCondition;			// What are the conditions in which the player can move?
+		private bool				canLedgeJump;
+		private bool				canJump;
+		private bool				isStrafing;
+
 		// Internal
 		private Player				player;
 		private AnalogStick			analogStick;
 		private float				analogAngle;
+		private bool				allowMovementControl;	// Is the player allowed to control his movement?
 		private bool				analogMode;				// True if the analog stick is active.
 		private InputControl[]		moveButtons;			// The 4 movement controls for each direction.
 		private bool[]				moveAxes;				// Which axes the player is moving on.
@@ -38,12 +49,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private int					moveDirection;			// The direction that the player wants to face.
 
 		// Movement modes.
-		private PlayerMovementMode	mode;
-		private PlayerMovementMode	moveModeNormal;		// For regular walking.
-		private PlayerMovementMode	moveModeSlow;		// For climbing ladders and stairs.
-		private PlayerMovementMode	moveModeIce;		// For walking on ice.
-		private PlayerMovementMode	moveModeAir;		// For jumping
-		private PlayerMovementMode	moveModeWater;		// For swimming.
+		private PlayerMotionType	mode;
+		private PlayerMotionType	moveModeNormal;		// For regular walking.
+		private PlayerMotionType	moveModeSlow;		// For climbing ladders and stairs.
+		private PlayerMotionType	moveModeIce;		// For walking on ice.
+		private PlayerMotionType	moveModeAir;		// For jumping
+		private PlayerMotionType	moveModeWater;		// For swimming.
 
 
 		//-----------------------------------------------------------------------------
@@ -54,17 +65,21 @@ namespace ZeldaOracle.Game.Entities.Players {
 			this.player = player;
 
 			// Default settings.
-			allowMovementControl	= true;
 			autoAccelerate			= false;
 			moveSpeedScale			= 1.0f;
+			moveCondition			= PlayerMoveCondition.FreeMovement;
+			canLedgeJump			= true;
+			canJump					= true;
+			isStrafing				= false;
 
 			// Internal.
-			moveAxes		= new bool[] { false, false };
-			motion			= Vector2F.Zero;
-			isMoving		= false;
-			velocityPrev	= Vector2F.Zero;
-			moveAngle		= Angles.South;
-			mode			= new PlayerMovementMode();
+			allowMovementControl	= true;
+			moveAxes				= new bool[] { false, false };
+			motion					= Vector2F.Zero;
+			isMoving				= false;
+			velocityPrev			= Vector2F.Zero;
+			moveAngle				= Angles.South;
+			mode					= new PlayerMotionType();
 
 			// Controls.
 			analogMode		= false;
@@ -77,19 +92,19 @@ namespace ZeldaOracle.Game.Entities.Players {
 			moveButtons[Directions.Right]	= Controls.Right;
 
 			// Normal movement.
-			moveModeNormal = new PlayerMovementMode();
+			moveModeNormal = new PlayerMotionType();
 			moveModeNormal.MoveSpeed			= 1.0f;
 			moveModeNormal.CanLedgeJump			= true;
 			moveModeNormal.CanRoomChange		= true;
 			
 			// Slow movement.
-			moveModeSlow = new PlayerMovementMode();
+			moveModeSlow = new PlayerMotionType();
 			moveModeSlow.MoveSpeed				= 0.5f;
 			moveModeSlow.CanLedgeJump			= true;
 			moveModeSlow.CanRoomChange			= true;
 			
 			// Ice movement.
-			moveModeIce = new PlayerMovementMode();
+			moveModeIce = new PlayerMotionType();
 			moveModeIce.MoveSpeed				= 1.0f;
 			moveModeIce.CanLedgeJump			= true;
 			moveModeIce.CanRoomChange			= true;
@@ -100,7 +115,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			moveModeIce.DirectionSnapCount		= 32;
 			
 			// Air/jump movement.
-			moveModeAir = new PlayerMovementMode();
+			moveModeAir = new PlayerMotionType();
 			moveModeAir.IsStrafing				= true;
 			moveModeAir.MoveSpeed				= 1.0f;
 			moveModeAir.CanLedgeJump			= false;
@@ -112,7 +127,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			moveModeAir.DirectionSnapCount		= 8;//32;
 			
 			// Water/swim movement.
-			moveModeWater = new PlayerMovementMode();
+			moveModeWater = new PlayerMotionType();
 			moveModeWater.MoveSpeed				= 0.5f;
 			moveModeWater.CanLedgeJump			= true;
 			moveModeWater.CanRoomChange			= true;
@@ -127,12 +142,33 @@ namespace ZeldaOracle.Game.Entities.Players {
 		
 		
 		//-----------------------------------------------------------------------------
-		// Movement.
+		// Movement
 		//-----------------------------------------------------------------------------
 		
+		public void Jump() {
+			if (player.IsOnGround) {
+				player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
+				if (player.CurrentState is PlayerNormalState)
+					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
+			}
+			else {
+				if (player.CurrentState is PlayerNormalState)
+					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
+			}
+		}
+
 		private void UpdateMoveControls() {
 			isMoving	= false;
 			analogMode	= !analogStick.Position.IsZero;
+			
+			// Check if the player is allowed to control his motion.
+			allowMovementControl = true;
+			if (moveCondition == PlayerMoveCondition.NoControl)
+				allowMovementControl = false;
+			else if (moveCondition == PlayerMoveCondition.OnlyInAir && player.IsOnGround)
+				allowMovementControl = false;
+			else if (player.IsInAir && player.Physics.ZVelocity >= 0.1f)
+				allowMovementControl = false;
 
 			// Check movement input.
 			if (analogMode) {
@@ -149,7 +185,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 				
 			// Don't affect the facing direction when strafing
-			if (!mode.IsStrafing && isMoving) {
+			if (!isStrafing && !mode.IsStrafing && isMoving) {
 				player.Direction = moveDirection;
 			}
 
@@ -158,7 +194,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				Angles.IsHorizontal(moveAngle) || Angles.IsVertical(moveAngle));
 
 			// Update movement or acceleration.
-			if (allowMovementControl && (isMoving || (autoAccelerate && mode.IsSlippery))) {
+			if (allowMovementControl && (isMoving || autoAccelerate)) {
 				if (!isMoving) {
 					moveAngle = Directions.ToAngle(player.Direction);
 				}
@@ -228,6 +264,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 					player.Physics.Velocity = Vector2F.Zero;
 				}
 			}
+			
+			// Update movement animation.
+			if (player.IsOnGround &&
+				(player.Graphics.AnimationPlayer.Animation == GameData.ANIM_PLAYER_DEFAULT ||
+				player.Graphics.AnimationPlayer.Animation == GameData.ANIM_PLAYER_CARRY))
+			{
+				if (isMoving && !player.Graphics.IsAnimationPlaying)
+					player.Graphics.PlayAnimation();
+				if (!isMoving && player.Graphics.IsAnimationPlaying)
+					player.Graphics.StopAnimation();
+			}
 		}
 		
 		// Poll the movement key for the given direction, returning true if
@@ -289,7 +336,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			
 			// Check for ledge jumping (ledges/waterfalls)
 			CollisionInfo collisionInfo = player.Physics.CollisionInfo[moveDirection];
-			if (mode.CanLedgeJump && isMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
+			if (canLedgeJump && mode.CanLedgeJump && isMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
 				Tile tile = collisionInfo.Tile;
 				
 				if (tile.Flags.HasFlag(TileFlags.Ledge) &&
@@ -309,11 +356,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public bool AllowMovementControl {
-			get { return allowMovementControl; }
-			set { allowMovementControl = value; }
-		}
-		
 		public bool AutoAccelerate {
 			get { return autoAccelerate; }
 			set { autoAccelerate = value; }
@@ -323,9 +365,20 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return moveSpeedScale; }
 			set { moveSpeedScale = value; }
 		}
+
+		public bool CanLedgeJump {
+			get { return canLedgeJump; }
+			set { canLedgeJump = value; }
+		}
+		
+		public bool CanJump {
+			get { return canJump; }
+			set { canJump = value; }
+		}
 		
 		public bool IsStrafing {
-			get { return mode.IsStrafing; }
+			get { return isStrafing; }
+			set { isStrafing = value; }
 		}
 		
 		public bool IsMoving {
@@ -340,8 +393,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return moveAngle; }
 		}
 		
-		public PlayerMovementMode MoveMode {
+		public PlayerMotionType MoveMode {
 			get { return mode; }
+		}
+		
+		public PlayerMoveCondition MoveCondition {
+			get { return moveCondition; }
+			set { moveCondition = value; }
 		}
 	}
 }

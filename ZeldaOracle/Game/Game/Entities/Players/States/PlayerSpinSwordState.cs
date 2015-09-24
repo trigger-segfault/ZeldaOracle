@@ -49,19 +49,17 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnBegin() {
-			base.OnBegin();
-			player.Movement.AllowMovementControl = false;
+		public override void OnBegin(PlayerState previousState) {
+			player.Movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SPIN);
 			player.toolAnimation.Animation = weaponAnimation;
 			player.toolAnimation.SubStripIndex = player.Direction;
 			player.toolAnimation.Play();
 		}
 		
-		public override void OnEnd() {
+		public override void OnEnd(PlayerState newState) {
 			player.toolAnimation.Animation = null;
-			player.Movement.AllowMovementControl = true;
-			base.OnEnd();
+			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 		}
 
 		public override void Update() {

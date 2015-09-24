@@ -19,14 +19,14 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemSeedShooter()
-			: base() {
+		public ItemSeedShooter() {
 			this.id				= "item_seed_shooter";
 			this.name			= new string[] { "Seed Shooter" };
 			this.description	= new string[] { "Used to bounce seeds around." };
 			this.currentAmmo	= 0;
 			this.sprite			= new Sprite[] { new Sprite(GameData.SHEET_ITEMS_SMALL, 8, 0) };
 			this.spriteLight	= new Sprite[] { new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 8, 0) };
+			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping;
 		}
 
 

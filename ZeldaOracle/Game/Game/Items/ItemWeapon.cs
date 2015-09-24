@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Common.Input;
 
@@ -21,7 +22,7 @@ namespace ZeldaOracle.Game.Items {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemWeapon() : base() {
+		public ItemWeapon() {
 			this.flags		= ItemFlags.None;
 			this.equipSlot	= 0;
 		}
@@ -30,6 +31,17 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 		// Virtual
 		//-----------------------------------------------------------------------------
+
+		public virtual bool IsUsable() {
+			if (player.IsInAir && !flags.HasFlag(ItemFlags.UsableWhileJumping))
+				return false;
+			if (((player.CurrentState is PlayerHoldSwordState) ||
+				(player.CurrentState is PlayerSwingState) ||
+				(player.CurrentState is PlayerSpinSwordState)) &&
+				flags.HasFlag(ItemFlags.UsableWithSword))
+				return true;
+			return (player.CurrentState is PlayerNormalState);
+		}
 
 		// Called when the item is switched to.
 		public virtual void OnStart() { }
@@ -55,6 +67,7 @@ namespace ZeldaOracle.Game.Items {
 		// Draws over link's sprite.
 		public virtual void DrawOver() { }
 		
+
 		//-----------------------------------------------------------------------------
 		// Accessors
 		//-----------------------------------------------------------------------------
@@ -63,6 +76,7 @@ namespace ZeldaOracle.Game.Items {
 		public bool HasFlag(ItemFlags flags) {
 			return this.flags.HasFlag(flags);
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties

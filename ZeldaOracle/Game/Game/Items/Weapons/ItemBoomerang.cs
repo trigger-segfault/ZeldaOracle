@@ -18,18 +18,19 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemBoomerang()
-			: base() {
+		public ItemBoomerang() {
 			this.id				= "item_boomerang";
 			this.name			= new string[] { "Boomerang", "Magic Boomerang" };
 			this.description	= new string[] { "Always comes back to you.", "A remote-control weapon." };
 			this.level			= 0;
 			this.maxLevel		= Item.Level2;
-			this.sprite			= new Sprite[] {
+			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword;
+
+			sprite = new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(4, 1)),
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(5, 1))
 			};
-			this.spriteLight	= new Sprite[] {
+			spriteLight	= new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(4, 1)),
 				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(5, 1))
 			};

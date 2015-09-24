@@ -53,11 +53,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 
 		//-----------------------------------------------------------------------------
-		// Internal methods
-		//-----------------------------------------------------------------------------
-
-
-		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
@@ -79,10 +74,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				RoomControl.SpawnEntity(new ScentPod(), Center);
 			}
 			else if (type == SeedType.Mystery) {
-				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_SEED_MYSTERY), Center - new Point2I(8, 8));
+				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_SEED_MYSTERY), Center);
 			}
 			else if (type == SeedType.Gale) {
-				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_SEED_GALE), Center - new Point2I(8, 8));
+				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_SEED_GALE), Center);
 			}
 
 			Destroy();
@@ -90,12 +85,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		public override void Initialize() {
 			base.Initialize();
-
 			Graphics.PlaySprite(GameData.SPR_ITEM_SEEDS[(int) type]);
-		}
-
-		public override void Update() {
-			base.Update();
 		}
 
 

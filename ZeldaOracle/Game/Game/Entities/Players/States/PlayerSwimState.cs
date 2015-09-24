@@ -39,9 +39,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnBegin() {
-			base.OnBegin();
+		public override bool RequestStateChange(PlayerState newState) {
+			return true;
+		}
 
+		public override void OnBegin(PlayerState previousState) {
+			player.Movement.CanJump = false;
 			player.Movement.MoveSpeedScale = 1.0f;
 			player.Movement.AutoAccelerate = false;
 
@@ -54,11 +57,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.RoomControl.SpawnEntity(splash);
 		}
 		
-		public override void OnEnd() {
+		public override void OnEnd(PlayerState newState) {
 			isSubmerged = false;
+			player.Movement.CanJump = true;
 			player.Movement.MoveSpeedScale = 1.0f;
 			player.Movement.AutoAccelerate = false;
-			base.OnEnd();
 		}
 
 		public override void Update() {

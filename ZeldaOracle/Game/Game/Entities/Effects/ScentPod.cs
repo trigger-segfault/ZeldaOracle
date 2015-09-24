@@ -14,7 +14,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		//-----------------------------------------------------------------------------
 
 		public ScentPod() {
-			graphics.DrawOffset = new Point2I(-8, -8);
+			graphics.DrawOffset = new Point2I(-8, -12);
 			CreateDestroyTimer(240, 60);
 		}
 		

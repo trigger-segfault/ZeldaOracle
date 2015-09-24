@@ -7,15 +7,17 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Effects {
-	public class Fire : Effect {
+	public class EffectFallingObject : Effect {
+
+		private Vector2F holeCenterPosition;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public Fire() :
-			base(GameData.ANIM_EFFECT_SEED_EMBER)
+		public EffectFallingObject() :
+			base(GameData.ANIM_EFFECT_FALLING_OBJECT)
 		{
 		}
 		
@@ -26,22 +28,21 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		
 		public override void Initialize() {
 			base.Initialize();
-		}
 
-		public override void OnDestroy() {
-			// Burn tiles.
+			// Find the center position of the hole tile.
 			Point2I location = RoomControl.GetTileLocation(position);
-			
-			if (RoomControl.IsTileInBounds(location)) {
-				Tile tile = RoomControl.GetTopTile(location);
-				if (tile != null)
-					tile.OnBurn();
-			}
+			holeCenterPosition = (Vector2F) location + new Vector2F(0.5f, 0.5f);
+			holeCenterPosition *= GameSettings.TILE_SIZE;
 		}
 
 		public override void Update() {
 			base.Update();
-			// TODO: collide with monsters.
+
+			// Move towards the center of the hole.
+			if (Math.Abs(position.X - holeCenterPosition.X) > 0.5f)
+				position.X += 0.5f * Math.Sign(holeCenterPosition.X - position.X);
+			if (Math.Abs(position.Y - holeCenterPosition.Y) > 0.5f)
+				position.Y += 0.5f * Math.Sign(holeCenterPosition.Y - position.Y);
 		}
 	}
 }
