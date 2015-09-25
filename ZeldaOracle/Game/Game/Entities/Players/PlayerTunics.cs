@@ -6,8 +6,8 @@ using System.Text;
 namespace ZeldaOracle.Game.Entities.Players {
 	public enum PlayerTunics {
 
-		GreenTunic = 0,
-		RedTunic = 1,
-		BlueTunic = 2
+		GreenTunic	= 0,
+		RedTunic	= 1,
+		BlueTunic	= 2
 	}
 }
