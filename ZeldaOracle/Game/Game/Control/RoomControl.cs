@@ -316,12 +316,12 @@ namespace ZeldaOracle.Game.Control {
 			
 			// Create an owl tile.
 			TileData tdOwl			= new TileData(typeof(TileOwl), TileFlags.Solid);
-			tdOwl.Sprite			= GameData.SPR_OWL;
+			tdOwl.Sprite			= GameData.SPR_TILE_OWL;
 			tdOwl.CollisionModel	= GameData.MODEL_BLOCK;
 			
 			// Create a lantern tile.
 			TileData tdLantern			= new TileData(typeof(TileLantern), TileFlags.Solid);
-			tdLantern.Sprite			= GameData.SPR_LANTERN_UNLIT;
+			tdLantern.Sprite			= GameData.SPR_TILE_LANTERN_UNLIT;
 			tdLantern.CollisionModel	= GameData.MODEL_BLOCK;
 			
 			// Create a Sign tile

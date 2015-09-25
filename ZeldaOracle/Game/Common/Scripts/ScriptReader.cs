@@ -18,11 +18,11 @@ abstract public class ScriptReader {
 	#region Abstract
 
 	/** <summary> Begins reading the script. </summary> */
-	abstract protected void BeginReading();
+	protected virtual void BeginReading() {}
 	/** <summary> Ends reading the script. </summary> */
-	abstract protected void EndReading();
+	protected virtual void EndReading() {}
 	/** <summary> Reads a line in the script as a command. </summary> */
-	abstract protected bool ReadCommand(string command, List<string> args);
+	protected virtual bool ReadCommand(string command, List<string> args) { return false; }
 
 	#endregion
 	//=========== PARSING ============
@@ -93,7 +93,7 @@ abstract public class ScriptReader {
 		}
 	}
 	/** <summary> Parse and interpret the given text stream as a script, line by line. </summary> */
-	public void ReadScript(StreamReader reader) {
+	public virtual void ReadScript(StreamReader reader) {
 		BeginReading();
 		while (!reader.EndOfStream)
 			ReadLine(reader.ReadLine());

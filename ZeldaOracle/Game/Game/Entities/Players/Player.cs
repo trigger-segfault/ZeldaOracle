@@ -109,6 +109,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Graphics.
 			Graphics.ShadowDrawOffset = originOffset;
+			Graphics.DrawOffset = new Point2I(-8, -16);
 
 			// Create the basic player states.
 			state			= null;

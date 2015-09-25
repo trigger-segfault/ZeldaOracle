@@ -42,7 +42,7 @@ public class SpriteGrid {
  * Note: All declared sprites must be within the
  * @spritesheet and @end commands.
  */
-public class SpriteSheetSR : ScriptReader {
+public class SpriteSheetSROld : ScriptReader {
 
 	// The current sprite sheet being created.
 	private SpriteSheet sheet;
@@ -90,19 +90,32 @@ public class SpriteSheetSR : ScriptReader {
 	// Reads a line in the script as a command.
 	protected override bool ReadCommand(string command, List<string> args) {
 		// Create a new sprite sheet to then define sprites for.
-		// @spritesheet [sheetName]
+		// @spritesheet [sheetName/imagePath]
+		// @spritesheet [sheetName] [imagePath]
 		if (command == "spritesheet") {
+			string imagePath = args[args.Count - 1];
+			string sheetName = imagePath;
 			Image image = null;
-			if (args[0].EndsWith(".png")) {
-				image = Resources.LoadImageFromFile(Resources.ImageDirectory + args[0]);
-				args[0] = args[0].Substring(0, args[0].LastIndexOf('.'));
+
+			if (Resources.ImageExists(imagePath)) {			
+				image = Resources.GetImage(imagePath);
 			}
 			else {
-				image = Resources.LoadImage(Resources.ImageDirectory + args[0]);
+				if (imagePath.EndsWith(".png")) {
+					sheetName = imagePath.Substring(0, imagePath.LastIndexOf('.'));
+					image = Resources.LoadImageFromFile(Resources.ImageDirectory + imagePath);
+				}
+				else {
+					image = Resources.LoadImage(Resources.ImageDirectory + imagePath);
+				}
 			}
+
+			if (args.Count == 2)
+				sheetName = args[0];
+
 			sheet = new SpriteSheet(image);
 			finalSheet = sheet;
-			Resources.AddSpriteSheet(args[0], sheet);
+			Resources.AddSpriteSheet(sheetName, sheet);
 		}
 
 		// Create a new sprite grid to then define grid sprites for.

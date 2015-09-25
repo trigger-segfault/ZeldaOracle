@@ -101,6 +101,7 @@ namespace ZeldaOracle.Game.Main {
 		// Called to load game manager content.
 		public void LoadContent(ContentManager content, GameBase gameBase) {
 			this.gameBase = gameBase;
+			
 			GameData.Initialize();
 
 			// Setup the render targets

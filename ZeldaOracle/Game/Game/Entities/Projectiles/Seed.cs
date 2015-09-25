@@ -77,7 +77,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_SEED_MYSTERY), Center);
 			}
 			else if (type == SeedType.Gale) {
-				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_SEED_GALE), Center);
+				RoomControl.SpawnEntity(new EffectGale(), Center);
 			}
 
 			Destroy();
