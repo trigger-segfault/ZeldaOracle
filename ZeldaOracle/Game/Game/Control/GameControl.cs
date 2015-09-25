@@ -63,13 +63,8 @@ namespace ZeldaOracle.Game.Control {
 
 		public void StartGame() {
 
-			// TODO: Load world here.
-			roomControl		= new RoomControl();
-			gameManager.PushGameState(roomControl);
-
-			roomControl.BeginTestWorld();
-			player = roomControl.Player;
-
+			// Setup the player beforehand so certain classes such as the HUD can reference it
+			player = new Player();
 
 			menuWeapons	= new MenuWeapons(gameManager);
 			menuSecondaryItems	= new MenuSecondaryItems(gameManager);
@@ -116,6 +111,7 @@ namespace ZeldaOracle.Game.Control {
 			inventory.ObtainAmmo(inventory.GetAmmo("ammo_mystery_seeds"));
 
 			hud = new HUD(this);
+			hud.DynamicHealth = player.Health;
 
 			rewardManager = new RewardManager(this);
 
@@ -146,6 +142,14 @@ namespace ZeldaOracle.Game.Control {
 			rewardManager.AddReward(new RewardRupee("rupees_200", 200,
 				"You got<n><red>200 Rupees<red>!<n>That's nice.",
 				new Sprite(GameData.SHEET_ITEMS_LARGE, 1, 3, -8, -9)));
+
+			rewardManager.AddReward(new RewardItem("item_flippers_1", "item_flippers", Item.Level1, RewardHoldTypes.TwoHands,
+				"You got <red>Zora's Flippers<red>! You can now go for a swim! Press A to swim, B to dive!",
+				new Sprite(GameData.SHEET_ITEMS_LARGE, 6, 1, -8, -8)));
+
+			rewardManager.AddReward(new RewardItem("item_sword_1", "item_sword", Item.Level1, RewardHoldTypes.OneHand,
+				"You got a Hero's <red>Wooden Sword<red>! Hold A or B to charge it up, then release it for a spin attack!",
+				new Sprite(GameData.SHEET_ITEMS_SMALL, 0, 0, -4, -8)));
 
 			rewardManager.AddReward(new RewardRecoveryHeart("hearts_1", 1,
 				"You got a<n><red>Recovery Heart<red>!",
@@ -185,11 +189,9 @@ namespace ZeldaOracle.Game.Control {
 			roomControl		= new RoomControl();
 			gameManager.PushGameState(roomControl);
 
-			roomControl.BeginTestWorld();
-			player = roomControl.Player;
+			roomControl.BeginTestWorld(player);
 			
 			AudioSystem.MasterVolume = 0.01f;
-			//AudioSystem.PlaySong("overworld", true);
 
 		}
 

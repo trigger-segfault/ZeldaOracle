@@ -8,20 +8,15 @@ using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Tiles.Custom {
-	public class TileChest : Tile {
+	public class TileReward : Tile {
 
 		private Reward reward;
-		private bool opened;
-		private Sprite openedSprite;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public TileChest() {
-			this.Sprite = new Sprite(GameData.SHEET_ZONESET_LARGE, 9, 8);
-			this.opened	= false;
-			this.openedSprite = new Sprite(GameData.SHEET_ZONESET_LARGE, 10, 8);
+		public TileReward() {
 		}
 
 
@@ -31,23 +26,31 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		
 		// Called when the player presses A on this tile, when facing the given direction.
 		public override bool OnAction(int direction) {
-			if (!opened) {
-				if (direction == Directions.Up) {
-					RoomControl.GameManager.PushGameState(new StateReward(reward, (Point2I)Position));
-					opened = true;
-					Sprite = openedSprite;
-					// Play chest open sound
-				}
-				else
-					RoomControl.GameControl.DisplayMessage("You won't open from this side!");
-				return true;
-			}
-			return false;
+			RoomControl.GameManager.PushGameState(new StateReward(reward));
+			RoomControl.RemoveTile(this);
+			return true;
 		}
+
 
 		public override void Initialize() {
 			base.Initialize();
-			this.reward = RoomControl.GameControl.RewardManager.GetReward("item_sword_1");
+			this.reward = RoomControl.GameControl.RewardManager.GetReward("item_flippers_1");
+			AnimationPlayer.Animation = RoomControl.GameControl.RewardManager.GetReward("item_flippers_1").Animation;
+		}
+
+		public override void Draw(Graphics2D g) {
+
+			if (AnimationPlayer.SubStrip != null) {
+				// Draw as an animation.
+				g.DrawAnimation(AnimationPlayer.SubStrip, RoomControl.GameControl.RoomTicks, Position + GameSettings.TILE_SIZE / 2);
+			}
+			else {
+				// Draw as a sprite.
+				Sprite spr = Sprite;
+				if (IsMoving && SpriteAsObject != null)
+					spr = SpriteAsObject;
+				g.DrawSprite(spr, Position);
+			}
 		}
 
 	}

@@ -96,7 +96,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			ammo[currentAmmo].Amount--;
 
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
-			player.BeginState(new PlayerBusyState(10));
+			player.BeginBusyState(10);
 		}
 
 		// Called when the item is added to the inventory list.

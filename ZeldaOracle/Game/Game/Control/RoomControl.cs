@@ -18,6 +18,7 @@ using ZeldaOracle.Common.Input;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Items.Rewards;
+using ZeldaOracle.Game.Tiles.Custom;
 
 namespace ZeldaOracle.Game.Control {
 
@@ -301,14 +302,14 @@ namespace ZeldaOracle.Game.Control {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 		
-		public void BeginTestWorld() {
+		public void BeginTestWorld(Player player) {
 
 			// Load test level/room.
 			level = LoadLevel("Content/Worlds/test_level.zwd");
 			//level = LoadLevel("Content/Worlds/ledge_jump_world.zwd");
 
 			// Create the player.
-			player = new Player();
+			this.player = player;
 			player.Initialize(this);
 			entities.Add(player);
 			player.X = 48;
@@ -371,11 +372,21 @@ namespace ZeldaOracle.Game.Control {
 			TileData tdGrass		= new TileData(TileFlags.Grass | TileFlags.Cuttable | TileFlags.Burnable | TileFlags.Bombable);
 			tdGrass.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 3);
 			tdGrass.BreakAnimation	= GameData.ANIM_EFFECT_GRASS_LEAVES;
-			
+
+			TileData tdChest		= new TileData(typeof(TileChest), TileFlags.Solid);
+			tdChest.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 9, 8);
+			tdChest.CollisionModel	= GameData.MODEL_BLOCK;
+
+			TileData tdReward		= new TileData(typeof(TileReward), TileFlags.Solid);
+			tdReward.CollisionModel	= GameData.MODEL_BLOCK;
+
+
 			
 			// Setup the rooms.
 			Room r = level.GetRoom(new Point2I(2, 1));
 			r.TileData[8, 1, 1] = tdOwl;
+			r.TileData[7, 1, 1] = tdChest;
+			r.TileData[6, 3, 1] = tdReward;
 			r.TileData[1, 1, 1] = tdSign;
 			r.TileData[2, 5, 1] = tdBlock;
 			r.TileData[2, 2, 1] = tdGrass;
