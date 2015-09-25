@@ -517,7 +517,7 @@ namespace ZeldaOracle.Game.Control {
 			if (Keyboard.IsKeyPressed(Keys.R)) {
 				int[] rupees = { 1, 5, 20, 100, 200 };//, 5, 20, 100, 200 };
 				int rupee = GRandom.NextInt(rupees.Length);
-				Collectible collectible = GameControl.RewardManager.SpawnCollectible("rupee_" + rupees[rupee].ToString());
+				Collectible collectible = GameControl.RewardManager.SpawnCollectible("rupees_" + rupees[rupee].ToString());
 				collectible.Position = player.Position;
 				collectible.ZPosition = 100;
 			}
@@ -525,17 +525,17 @@ namespace ZeldaOracle.Game.Control {
 				GraphicsComponent.DrawCollisionBoxes = !GraphicsComponent.DrawCollisionBoxes;
 			}
 			if (Keyboard.IsKeyPressed(Keys.K)) {
-				Collectible collectible = GameControl.RewardManager.SpawnCollectible("heart_1");
+				Collectible collectible = GameControl.RewardManager.SpawnCollectible("hearts_1");
 				collectible.Position = player.Position;
 				collectible.ZPosition = 100;
 			}
 			if (Keyboard.IsKeyPressed(Keys.B)) {
-				Collectible collectible = GameControl.RewardManager.SpawnCollectible("ammo_bomb_5");
+				Collectible collectible = GameControl.RewardManager.SpawnCollectible("ammo_bombs_5");
 				collectible.Position = player.Position;
 				collectible.ZPosition = 100;
 			}
 			if (Keyboard.IsKeyPressed(Keys.J)) {
-				Collectible collectible = GameControl.RewardManager.SpawnCollectible("ammo_arrow_5");
+				Collectible collectible = GameControl.RewardManager.SpawnCollectible("ammo_arrows_5");
 				collectible.Position = player.Position;
 				collectible.ZPosition = 100;
 			}
