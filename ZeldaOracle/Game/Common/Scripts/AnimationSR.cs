@@ -46,7 +46,8 @@ namespace ZeldaOracle.Common.Scripts {
 			// SPRITE SHEET.
 
 			AddCommand("SpriteSheet", delegate(CommandParam parameters) {
-				
+				SpriteSheet sheet = Resources.GetSpriteSheet(parameters.GetString(0));
+				animationBuilder.SpriteSheet = sheet;
 			});
 
 			
@@ -63,7 +64,6 @@ namespace ZeldaOracle.Common.Scripts {
 					Resources.AddAnimation(animationName, animation);
 				}
 			});
-
 			AddCommand("SubStrip", delegate(CommandParam parameters) {
 				LoopMode loopMode = LoopMode.Repeat;
 				if (parameters.GetString(0) == "reset")
@@ -79,6 +79,15 @@ namespace ZeldaOracle.Common.Scripts {
 				animationBuilder.SetLoopMode(loopMode);
 				if (animation == null)
 					animation = animationBuilder.Animation;
+			});
+			AddCommand("Clone", delegate(CommandParam parameters) {
+				if (Resources.AnimationExists(parameters.GetString(0))) {
+					animationBuilder.CreateClone(Resources.GetAnimation(parameters.GetString(0)));
+					animation = animationBuilder.Animation;
+				}
+				else {
+					// ERROR: can't clone nonexistant animation.
+				}
 			});
 
 			
@@ -98,6 +107,14 @@ namespace ZeldaOracle.Common.Scripts {
 				}
 				else if (parameters.GetString(0) == "frame") {
 					animationBuilder.AddFrame(
+						parameters.GetInt(1),
+						parameters.GetPoint(2).X,
+						parameters.GetPoint(2).Y,
+						parameters.GetPoint(3, Point2I.Zero).X,
+						parameters.GetPoint(3, Point2I.Zero).Y);
+				}
+				else if (parameters.GetString(0) == "part") {
+					animationBuilder.AddPart(
 						parameters.GetInt(1),
 						parameters.GetPoint(2).X,
 						parameters.GetPoint(2).Y,
@@ -150,6 +167,19 @@ namespace ZeldaOracle.Common.Scripts {
 					parameters.GetPoint(0).X,
 					parameters.GetPoint(0).Y);
 			});
+			AddCommand("Flicker", delegate(CommandParam parameters) {
+				// FLICKER <alternateDelay> <on/off>
+
+				bool startOn = true;
+				if (parameters.GetString(1) == "on")
+					startOn = true;
+				else if (parameters.GetString(1) == "off")
+					startOn = false;
+				else
+					;// ERROR: unknown value.
+
+				animationBuilder.MakeFlicker(parameters.GetInt(0), startOn);
+			});
 		}
 
 		// Begins reading the script.
@@ -157,7 +187,6 @@ namespace ZeldaOracle.Common.Scripts {
 			animation = null;
 			animationName = "";
 			animationBuilder.SpriteSheet = null;
-			animationBuilder.SpriteSheet = GameData.SHEET_ZONESET_LARGE;
 		}
 
 		// Ends reading the script.

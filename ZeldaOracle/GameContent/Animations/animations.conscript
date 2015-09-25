@@ -1,30 +1,63 @@
 
+##HELP me;
 
 #==============================================================
-# Tile Animations
+# Large Tile Animations
+#==============================================================
+
+SPRITESHEET "zoneset_large";
+
+ANIM tile_lantern; SUBSTRIP repeat;
+	ADD strip, 16, 4, (1, 8); END;
+
+
+#==============================================================
+# Small Tile Animations
 #==============================================================
 
 SPRITESHEET "zoneset_small";
 
-#TEST, array, (0, 2, ((3, 1, 4), 0, (1, 2))), 34, (1, 2), (), 2
-
-ANIM "tile_water"; SUBSTRIP loop;
-ADD strip, 16, 4, (0, 4), (0, 0), (1, 0);
-MAKEQUAD;
-END;
-
-ANIM "tile_puddle"; SUBSTRIP loop;
-ADD strip, 16, 3, (4, 10);
-ADD frame, 16, (5, 10);
-MAKEQUAD;
-END;
-
-ANIM "tile_flowers"; SUBSTRIP loop;
-INSERT strip, 0, 16, 4, (4, 9), (0, 0);
-INSERT strip, 0, 16, 4, (4, 9), (8, 8);
-INSERT frame, 0, 64, (7, 10), (8, 0);
-INSERT frame, 0, 64, (7, 10), (0, 8);
-END;
+ANIM tile_water; SUBSTRIP repeat;
+	ADD strip, 16, 4, (0, 4), (0, 0), (1, 0);
+	MAKEQUAD; END;
+ANIM tile_water_deep; SUBSTRIP repeat;
+	ADD strip, 16, 4, (0, 5);
+	MAKEQUAD; END;
+ANIM tile_waterfall; SUBSTRIP repeat;
+	ADD strip,  8, 4, (0, 6);
+	MAKEQUAD; END;
+ANIM tile_lavafall; SUBSTRIP repeat;
+	ADD strip, 8, 4, (0, 8);
+	MAKEQUAD; END;
+ANIM tile_puddle; SUBSTRIP repeat;
+	ADD strip, 16, 3, (4, 10);
+	ADD frame, 16, (5, 10);
+	MAKEQUAD; END;
+ANIM tile_waterfall_bottom; SUBSTRIP repeat;
+	INSERT strip, 0, 8, 4, (0, 6), (0,0);
+	INSERT strip, 0, 8, 4, (0, 6), (8,0);
+	INSERT strip, 0, 8, 4, (0, 7), (0,8);
+	INSERT strip, 0, 8, 4, (0, 7), (8,8); END;
+ANIM tile_lavafall_bottom; SUBSTRIP repeat;
+	INSERT strip, 0, 8, 4, (0, 8), (0,0);
+	INSERT strip, 0, 8, 4, (0, 8), (8,0);
+	INSERT strip, 0, 8, 4, (0, 9), (0,8);
+	INSERT strip, 0, 8, 4, (0, 9), (8,8); END;
+ANIM tile_flowers; SUBSTRIP repeat;
+	INSERT strip, 0, 16, 4, (4, 9), (0, 0);
+	INSERT strip, 0, 16, 4, (4, 9), (8, 8);
+	INSERT frame, 0, 64, (7, 10), (8, 0);
+	INSERT frame, 0, 64, (7, 10), (0, 8); END;
+ANIM tile_ocean; SUBSTRIP repeat;
+	INSERT strip, 0, 16, 4, (4, 4), (0, 0), (0, 1);
+	INSERT strip, 0, 16, 4, (5, 4), (8, 0), (0, 1);
+	INSERT strip, 0, 16, 4, (4, 4), (0, 8), (0, 1);
+	INSERT strip, 0, 16, 4, (5, 4), (8, 8), (0, 1); END;
+ANIM tile_ocean_shore; SUBSTRIP repeat;
+	INSERT strip, 0, 16, 4, (6, 4), (0, 0), (0, 1);
+	INSERT strip, 0, 16, 4, (7, 4), (8, 0), (0, 1);
+	INSERT strip, 0, 16, 4, (4, 4), (0, 8), (0, 1);
+	INSERT strip, 0, 16, 4, (5, 4), (8, 8), (0, 1); END;
 
 
 #==============================================================
@@ -33,21 +66,46 @@ END;
 
 SPRITESHEET "player";
 
-ANIM player_default;		SUBSTRIP repeat; ADD strip, 6, 2, (0, 0); MAKEDYNAMIC 4, (2, 0); END;
-ANIM player_shield;			SUBSTRIP repeat; ADD strip, 6, 2, (0, 1); MAKEDYNAMIC 4, (2, 0); END;
-ANIM player_shield_block;	SUBSTRIP repeat; ADD strip, 6, 2, (0, 2); MAKEDYNAMIC 4, (2, 0); END;
-ANIM player_carry;			SUBSTRIP repeat; ADD strip, 6, 2, (0, 5); MAKEDYNAMIC 4, (2, 0); END;
-ANIM player_push;			SUBSTRIP repeat; ADD strip, 6, 2, (0, 6); MAKEDYNAMIC 4, (2, 0); END;
-ANIM player_swim;			SUBSTRIP repeat; ADD strip, 6, 2, (0, 13); MAKEDYNAMIC 4, (2, 0); OFFSET (0, 2); END;
-ANIM player_submerged;		SUBSTRIP repeat; ADD frame, 16, (0, 21), (0, 4); ADD frame, 16, (1, 21), (0, 4); END;
-ANIM player_grab;			SUBSTRIP repeat; ADD frame, 1, (0, 7); MAKEDYNAMIC 4, (2, 0); END;
-ANIM player_dig;			SUBSTRIP clamp;  ADD frame, 8, (0, 9); ADD frame, 16, (1, 9); MAKEDYNAMIC 4, (2, 0); END;
-ANIM player_throw;			SUBSTRIP repeat; ADD frame, 1, (0, 4); MAKEDYNAMIC 4, (2, 0); END;
-ANIM player_fall;			SUBSTRIP clamp;  ADD frame, 16, (1, 20); ADD frame, 10, (2, 20); ADD frame, 11, (3, 20); END;
-
+ANIM player_default; SUBSTRIP repeat;
+	ADD strip, 6, 2, (0, 0);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_shield; SUBSTRIP repeat;
+	ADD strip, 6, 2, (0, 1);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_shield_block; SUBSTRIP repeat;
+	ADD strip, 6, 2, (0, 2);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_carry; SUBSTRIP repeat;
+	ADD strip, 6, 2, (0, 5);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_push; SUBSTRIP repeat;
+	ADD strip, 6, 2, (0, 6);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_swim; SUBSTRIP repeat;
+	ADD strip, 6, 2, (0, 13);
+	MAKEDYNAMIC 4, (2, 0);
+	OFFSET (0, 2); END;
+ANIM player_submerged; SUBSTRIP repeat;
+	ADD frame, 16, (0, 21), (0, 4);
+	ADD frame, 16, (1, 21), (0, 4); END;
+ANIM player_grab; SUBSTRIP repeat;
+	ADD frame, 1, (0, 7);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_dig; SUBSTRIP clamp;
+	ADD frame, 8, (0, 9);
+	ADD frame, 16, (1, 9);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_throw; SUBSTRIP repeat;
+	ADD frame, 1, (0, 4);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_fall; SUBSTRIP clamp;
+	ADD frame, 16, (1, 20);
+	ADD frame, 10, (2, 20);
+	ADD frame, 11, (3, 20); END;
 ANIM player_shield_large;
 	SUBSTRIP repeat; ADD strip, 6, 2, (0, 3);
-	SUBSTRIP repeat; ADD strip, 6, 2, (2, 1); MAKEDYNAMIC 3, (2, 0); END;
+	SUBSTRIP repeat; ADD strip, 6, 2, (2, 1);
+	MAKEDYNAMIC 3, (2, 0); END;
 ANIM player_shield_block_large;
 	SUBSTRIP repeat; ADD strip, 6, 2, (0, 2); MAKEDYNAMIC 3, (2, 0);
 	SUBSTRIP repeat; ADD strip, 6, 2, (2, 3); END;
@@ -61,7 +119,6 @@ ANIM player_jump;
 	SUBSTRIP clamp; ADD frame, 9, (3, 11); ADD frame, 9, (4, 11); ADD frame, 6, (5, 11); ADD frame, 6, (3, 0);
 	SUBSTRIP clamp; ADD frame, 9, (0, 12); ADD frame, 9, (1, 12); ADD frame, 6, (2, 12); ADD frame, 6, (5, 0);
 	SUBSTRIP clamp; ADD frame, 9, (3, 12); ADD frame, 9, (4, 12); ADD frame, 6, (5, 12); ADD frame, 6, (7, 0); END;
-
 ANIM player_swing;
 	SUBSTRIP clamp; ADD frame, 3, (4, 8); ADD frame, 3, (0, 4); ADD frame, 8, (0, 4), ( 4,  0); ADD frame, 3, (0, 4);
 	SUBSTRIP clamp; ADD frame, 3, (3, 8); ADD frame, 3, (2, 4); ADD frame, 8, (2, 4), ( 0, -4); ADD frame, 3, (2, 4);
@@ -79,12 +136,122 @@ ANIM player_stab;
 	SUBSTRIP reset; ADD frame, 6, (6, 4), ( 0,  4); ADD frame, 7, (6, 4); ADD frame, 1, (7, 0); END;
 
 
+#==============================================================
+# Player Item Animations
+#==============================================================
+
+SPRITESHEET "player_items";
+
+ANIM sword_hold;
+	SUBSTRIP repeat; ADD frame, 4, (0, 0), ( 12,   4); OFFSET (-8, -16);
+	SUBSTRIP repeat; ADD frame, 4, (2, 0), ( -4, -12); OFFSET (-8, -16);
+	SUBSTRIP repeat; ADD frame, 4, (4, 0), (-12,   4); OFFSET (-8, -16);
+	SUBSTRIP repeat; ADD frame, 4, (6, 0), (  3,  14); OFFSET (-8, -16); END;
+ANIM sword_charged;
+	SUBSTRIP repeat; ADD frame, 4, (0, 1), ( 12,   4); ADD frame, 4, (0, 0), ( 12,   4); OFFSET (-8, -16);
+	SUBSTRIP repeat; ADD frame, 4, (1, 1), ( -4, -12); ADD frame, 4, (2, 0), ( -4, -12); OFFSET (-8, -16);
+	SUBSTRIP repeat; ADD frame, 4, (2, 1), (-12,   4); ADD frame, 4, (4, 0), (-12,   4); OFFSET (-8, -16);
+	SUBSTRIP repeat; ADD frame, 4, (3, 1), (  3,  14); ADD frame, 4, (6, 0), (  3,  14); OFFSET (-8, -16); END;
+ANIM sword_swing;
+	SUBSTRIP clamp;  ADD frame, 3, (2, 0), (  0, -16); ADD frame, 3, (1, 0), ( 13, -13); ADD frame, 8, (0, 0), ( 20,   4); ADD frame, 3, (0, 0), ( 12,   4); OFFSET (-8, -16);
+	SUBSTRIP clamp;  ADD frame, 3, (0, 0), ( 16,   0); ADD frame, 3, (1, 0), ( 13, -13); ADD frame, 8, (2, 0), ( -4, -20); ADD frame, 3, (2, 0), ( -4, -12); OFFSET (-8, -16);
+	SUBSTRIP clamp;  ADD frame, 3, (2, 0), (  0, -16); ADD frame, 3, (3, 0), (-13, -13); ADD frame, 8, (4, 0), (-20,   4); ADD frame, 3, (4, 0), (-12,   4); OFFSET (-8, -16);
+	SUBSTRIP clamp;  ADD frame, 3, (4, 0), (-15,   2); ADD frame, 3, (5, 0), (-13,  15); ADD frame, 8, (6, 0), (  3,  20); ADD frame, 3, (6, 0), (  3,  14); OFFSET (-8, -16); END;
+ANIM sword_spin;
+	SUBSTRIP clamp;  ADD frame, 3, (0, 0), ( 19,   4); ADD frame, 2, (7, 0), ( 16,  16); ADD frame, 3, (6, 0), (  3,  19); ADD frame, 2, (5, 0), (-13,  15); ADD frame, 3, (4, 0), (-19,   4);
+					 ADD frame, 2, (3, 0), (-13, -13); ADD frame, 3, (2, 0), ( -4, -19); ADD frame, 2, (1, 0), ( 16, -16); ADD frame, 3, (0, 0), ( 19,   4);
+					 OFFSET (-8, -16);
+	SUBSTRIP clamp;  ADD frame, 3, (2, 0), ( -4, -19); ADD frame, 2, (1, 0), ( 16, -16); ADD frame, 3, (0, 0), ( 19,   4); ADD frame, 2, (7, 0), ( 16,  16); ADD frame, 3, (6, 0), (  3,  19);
+					 ADD frame, 2, (5, 0), (-13,  15); ADD frame, 3, (4, 0), (-19,   4); ADD frame, 2, (3, 0), (-13, -13); ADD frame, 3, (2, 0), ( -4, -19);
+					 OFFSET (-8, -16);
+	SUBSTRIP clamp;  ADD frame, 3, (4, 0), (-19,   4); ADD frame, 2, (3, 0), (-13, -13); ADD frame, 3, (2, 0), ( -4, -19); ADD frame, 2, (1, 0), ( 16, -16); ADD frame, 3, (0, 0), ( 19,   4);
+					 ADD frame, 2, (7, 0), ( 16,  16); ADD frame, 3, (6, 0), (  3,  19); ADD frame, 2, (5, 0), (-13,  15); ADD frame, 3, (4, 0), (-19,   4);
+					 OFFSET (-8, -16);
+	SUBSTRIP clamp;  ADD frame, 3, (6, 0), (  3,  19); ADD frame, 2, (5, 0), (-13,  15); ADD frame, 3, (4, 0), (-19,   4); ADD frame, 2, (3, 0), (-13, -13); ADD frame, 3, (2, 0), ( -4, -19);
+					 ADD frame, 2, (1, 0), ( 16, -16); ADD frame, 3, (0, 0), ( 19,   4); ADD frame, 2, (7, 0), ( 16,  16); ADD frame, 3, (6, 0), (  3,  19);
+					 OFFSET (-8, -16); END;
+ANIM sword_stab;
+	SUBSTRIP clamp;  ADD frame, 6, (0, 0), ( 20,   4); ADD frame, 8, (0, 0), ( 12,   4); OFFSET (-8, -16);
+	SUBSTRIP clamp;  ADD frame, 6, (2, 0), ( -4, -20); ADD frame, 8, (2, 0), ( -4, -12); OFFSET (-8, -16);
+	SUBSTRIP clamp;  ADD frame, 6, (4, 0), (-20,   4); ADD frame, 8, (4, 0), (-14,   4); OFFSET (-8, -16);
+	SUBSTRIP clamp;  ADD frame, 6, (6, 0), (  3,  20); ADD frame, 8, (6, 0), (  3,  14); OFFSET (-8, -16); END;
+
+
+#==============================================================
+# Projectile + Item Animations
+#==============================================================
+
+SPRITESHEET "player_items";
+
+ANIM projectile_player_arrow; SUBSTRIP repeat;
+	ADD frame, 1, (0, 11), (-8, -8);
+	MAKEDYNAMIC 8, (1, 0);
+	END;
+ANIM projectile_player_arrow_crash; SUBSTRIP reset;
+	ADD strip, 6, 4, (0, 11), (-8, -8), (2, 0);
+	END;
+ANIM item_bomb; SUBSTRIP repeat;
+	ADD frame, 4, (2, 8);
+	ADD frame, 4, (3, 8);
+	END;
+
 
 #==============================================================
 # Effect Animations
 #==============================================================
 
-SPRITESHEET "effects";
+SPRITESHEET "basic_effects";
+
+ANIM effect_dirt;
+	SUBSTRIP reset;  ADD frame, 1, (5,0), (-14, -12); ADD part, 1, (5, 0), (-10,  -6);
+	SUBSTRIP reset;  ADD frame, 1, (4,0), ( -8, -10); ADD part, 1, (5, 0), ( -8,  -8);
+	SUBSTRIP reset;  ADD frame, 1, (4,0), ( -2, -12); ADD part, 1, (4, 0), ( -6,  -6);
+	SUBSTRIP reset;  ADD frame, 1, (4,0), ( -8,  -8); ADD part, 1, (5, 0), ( -8, -10);
+	END;
+ANIM effect_water_splash; SUBSTRIP reset;
+	ADD frame, 4, (2,2), ( -8, -11); ADD part, 4, (3, 2), ( -8, -11);
+	ADD frame, 4, (2,2), (-10, -13); ADD part, 4, (3, 2), ( -6, -13);
+	ADD frame, 4, (2,2), (-12, -15); ADD part, 4, (3, 2), ( -4, -15);
+	END;
+ANIM effect_ripples; SUBSTRIP repeat;
+	ADD frame, 8, (4,2), ( -5,  -5); ADD part, 8, (5, 2), (-11,  -5);
+	ADD frame, 8, (4,2), ( -6,  -5); ADD part, 8, (5, 2), (-10,  -5);
+	ADD frame, 8, (4,2), ( -7,  -4); ADD part, 8, (5, 2), ( -9,  -4);
+	ADD frame, 8, (4,2), ( -8,  -3); ADD part, 8, (5, 2), ( -8,  -3);
+	OFFSET (0, -6); END;
+ANIM effect_grass; SUBSTRIP repeat;
+	ADD frame, 6, (6,0), ( -4,   1); ADD part, 6, (6, 0), (  2,   1);
+	ADD frame, 6, (7,0), ( -4,   1); ADD part, 6, (7, 0), (  2,   1);
+	OFFSET (-8, -14); END;
+ANIM effect_rock_break; SUBSTRIP reset;
+	ADD frame, 4, (2,0), ( -4,   5); ADD part, 4, (2, 0), (  5,  -6); ADD part, 4, (2, 0), ( -6,   4); ADD part, 4, (2, 0), (  4,   3);
+	ADD frame, 4, (2,0), ( -6,  -6); ADD part, 4, (2, 0), (  7,  -7); ADD part, 4, (2, 0), ( -7,   5); ADD part, 4, (2, 0), (  6,   4);
+	ADD frame, 4, (2,0), ( -7,  -7); ADD part, 4, (2, 0), (  9,  -8); ADD part, 4, (2, 0), ( -9,   6); ADD part, 4, (2, 0), (  8,   5);
+	ADD frame, 4, (2,0), ( -9,  -5); ADD part, 4, (2, 0), ( 11,  -6); ADD part, 4, (2, 0), (-11,   8); ADD part, 4, (2, 0), ( 10,   7);
+	OFFSET (-8, -8); END;
+ANIM effect_sign_break; SUBSTRIP reset;
+	ADD frame, 4, (3,0), ( -4,   5); ADD part, 4, (3, 0), (  5,  -6); ADD part, 4, (3, 0), ( -6,   4); ADD part, 4, (3, 0), (  4,   3);
+	ADD frame, 4, (3,0), ( -6,  -6); ADD part, 4, (3, 0), (  7,  -7); ADD part, 4, (3, 0), ( -7,   5); ADD part, 4, (3, 0), (  6,   4);
+	ADD frame, 4, (3,0), ( -7,  -7); ADD part, 4, (3, 0), (  9,  -8); ADD part, 4, (3, 0), ( -9,   6); ADD part, 4, (3, 0), (  8,   5);
+	ADD frame, 4, (3,0), ( -9,  -5); ADD part, 4, (3, 0), ( 11,  -6); ADD part, 4, (3, 0), (-11,   8); ADD part, 4, (3, 0), ( 10,   7);
+	OFFSET (-8, -8); END;
+ANIM effect_leaves; SUBSTRIP reset;
+	ADD frame, 4, (0,1), (  2,  -1); ADD part, 4, (1, 1), ( -8,  -4); ADD part, 4, (0, 1), (  0,  -5); ADD part, 4, (0, 1), (  6,  -5);
+	ADD frame, 4, (2,1), (  2,   3); ADD part, 4, (3, 1), (  3,  -3); ADD part, 4, (1, 1), (  0,  -4); ADD part, 4, (0, 1), ( -5,  -4);
+	ADD frame, 4, (3,1), (  5,   5); ADD part, 4, (3, 1), (  2,  -1); ADD part, 4, (1, 1), (  0,  -5); ADD part, 4, (3, 1), ( -2,  -5);
+	ADD frame, 4, (3,1), (  5,   5); ADD part, 4, (3, 1), ( -1,   5); ADD part, 4, (3, 1), (  3,  -3); ADD part, 4, (1, 1), ( -1,  -9);
+	ADD frame, 4, (3,1), (  4,   7); ADD part, 4, (3, 1), (  3,   1); ADD part, 4, (3, 1), ( -5, -10); ADD part, 4, (1, 1), ( -7,   5);
+	ADD frame, 4, (2,1), (  5,   2); ADD part, 4, (3, 1), (  6,   9); ADD part, 4, (2, 1), ( -5, -10); ADD part, 4, (0, 1), (-10,   9);
+	ADD frame, 4, (2,1), (  8,  11); ADD part, 4, (2, 1), (  9,   2); ADD part, 4, (2, 1), ( -5, -11); ADD part, 4, (0, 1), (-10,   5);
+	ADD frame, 4, (2,1), (  8,   9); ADD part, 4, (2, 1), (  9,   3); ADD part, 4, (2, 1), ( -7, -12); ADD part, 4, (0, 1), (-13,  -1);
+	OFFSET (-8, -8); END;
+ANIM effect_grass_leaves; CLONE effect_leaves;
+	FLICKER 1, on;
+	END;
+ANIM item_scent_pod; SUBSTRIP repeat;
+	ADD frame, 8, (0, 2);
+	ADD frame, 8, (1, 2);
+	END;
 
 
 #==============================================================
@@ -94,4 +261,51 @@ SPRITESHEET "effects";
 SPRITESHEET "color_effects";
 
 
+ANIM effect_bomb_explosion; SUBSTRIP reset;
+	ADD frame, 4, (0,  0);
+	ADD frame, 4, (0, 16);
+	ADD frame, 3, (0,  0);
+	ADD frame, 7, (0,  0), (-6, -6); ADD part, 7, (0,0), (6, -6); ADD part, 7, (0, 0), (-6, 2); ADD part, 7, (0, 0), (6, 2);
+	ADD frame, 8, (6,  1), (-8, -8); ADD part, 8, (7,1), (8, -8); ADD part, 8, (6, 2), (-8, 8); ADD part, 8, (7, 2), (8, 8);
+	ADD frame, 9, (1,  0), (-8, -8); ADD part, 9, (1,0), (8, -8); ADD part, 9, (1, 0), (-8, 8); ADD part, 9, (1, 0), (8, 8); END;
+ANIM effect_seed_scent; SUBSTRIP reset;
+	ADD frame, 3, (8, 12);
+	ADD frame, 3, (6, 12);
+	ADD frame, 3, (7, 12);
+	OFFSET (-8, -8); END;
+ANIM effect_seed_pegasus; SUBSTRIP reset;
+	ADD frame, 3, (3, 4);
+	ADD frame, 3, (0, 4);
+	ADD frame, 3, (1, 4);
+	OFFSET (-8, -8); END;
+ANIM effect_seed_mystery; SUBSTRIP reset; ### PegasusSeedEffect.ShiftSourcePositions(0, 4);
+	ADD frame, 3, (3, 8);
+	ADD frame, 3, (0, 8);
+	ADD frame, 3, (1, 8);
+	OFFSET (-8, -8); END;
+ANIM effect_seed_ember; SUBSTRIP reset;
+	ADD frame, 2, (1, 3);
+	ADD frame, 2, (1, 2); ADD frame, 2, (1, 17); ADD frame, 2, (1, 1); ### RepeatPreviousFrames 3, 9;
+	ADD frame, 2, (1, 2);
+	OFFSET (-8, -8); END;
 
+## TODO: effect_seed_gale
+
+ANIM effect_pegasus_dust; SUBSTRIP reset;
+	ADD frame, 1, (5, 12), (-12, -10); ADD part, 1, (5, 12),  (-4, -10);
+	ADD frame, 1, (8,  9), (-14,  -7); ADD part, 1, (8, 10), (-10, -11); ADD part, 1, (8,  9), (-1, -7); ADD part, 1, (8, 10), (-5, -11);
+	ADD frame, 1, (8,  6), (-14,  -7); ADD part, 1, (8,  5), (-10, -11); ADD part, 1, (8,  6), (-1, -7); ADD part, 1, (8,  5), (-5, -11);
+	ADD frame, 1, (8,  1), (-13,  -7); ADD part, 1, (8,  2), (-10, -11); ADD part, 1, (8,  1), (-1, -7); ADD part, 1, (8,  2), (-6, -11);
+	ADD frame, 1, (8, 14), (-17,  -5); ADD part, 1, (8, 13), (-12,  -9); ADD part, 1, (8, 14), ( 2, -5); ADD part, 1, (8, 13), (-3,  -9);
+	ADD frame, 1, (8,  9), (-17,  -5); ADD part, 1, (8, 10), (-12,  -9); ADD part  1, (8,  9), (-4, -5); ADD part, 1, (8, 10), (-3,  -9); END;
+ANIM effect_owl_sparkle; SUBSTRIP reset;
+	ADD frame, 9, (9,  8);
+	ADD frame, 18, (9,  9);
+	ADD frame,  9, (9, 10);
+	ADD frame, 9, (9, 11);
+	OFFSET (-8, -8); END;
+ANIM effect_falling_object; SUBSTRIP reset;
+	ADD frame, 8, (3, 12);
+	ADD frame, 12, (4, 12);
+	ADD frame, 13, (5, 12);
+	OFFSET (-8, -8); END;

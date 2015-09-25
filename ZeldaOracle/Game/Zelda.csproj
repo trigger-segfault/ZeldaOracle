@@ -179,7 +179,8 @@
     <Compile Include="Common\Scripts\NewScriptReader.cs" />
     <Compile Include="Common\Scripts\ScriptReader.cs" />
     <Compile Include="Common\Scripts\SoundsSR.cs" />
-    <Compile Include="Common\Scripts\SpriteSheetSR.cs" />
+    <Compile Include="Common\Scripts\SpriteSheetSROld.cs" />
+    <Compile Include="Common\Scripts\SpritesSR.cs" />
     <Compile Include="Common\Translation\Language.cs" />
     <Compile Include="Common\Translation\LetterString.cs" />
     <Compile Include="Common\Translation\FormatCodes.cs" />
@@ -200,6 +201,7 @@
     <Compile Include="Game\Control\RoomControl.cs" />
     <Compile Include="Game\Entities\Collectibles\Collectible.cs" />
     <Compile Include="Game\Entities\CollisionInfo.cs" />
+    <Compile Include="Game\Entities\Effects\EffectGale.cs" />
     <Compile Include="Game\Entities\Effects\Fire.cs" />
     <Compile Include="Game\Entities\Effects\EffectFallingObject.cs" />
     <Compile Include="Game\Entities\Effects\ScentPod.cs" />

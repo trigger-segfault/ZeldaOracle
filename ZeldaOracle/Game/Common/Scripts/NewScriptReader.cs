@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-
 using ZeldaOracle.Common.Content;
 
 namespace ZeldaOracle.Common.Scripts {
@@ -32,12 +31,46 @@ namespace ZeldaOracle.Common.Scripts {
 	 * is meant to be implemented to be able to
 	 * interpret text files written in a certain syntax.
 	 * </summary> */
-	public class NewScriptReader {
+	public class NewScriptReader : ScriptReader {
+
+		// A helpful exception class for throwing script errors.
+		public class ParseException : LoadContentException {
+			private string	fileName;
+			private int		lineNumber;
+			private int		columnNumber;
+			private string	line;
+
+
+			public ParseException(string message, string fileName, string line, int lineNumber, int columnNumber) :
+				base(message)
+			{
+				this.fileName		= fileName;
+				this.line			= line;
+				this.lineNumber		= lineNumber;
+				this.columnNumber	= columnNumber;
+			}
+
+			public override void PrintMessage() {
+				// Display the error message.
+				Console.WriteLine("------------------------------------------------------------------");
+				Console.WriteLine("Error in '" + fileName + "' at Line " + 
+					lineNumber + ", Column " + columnNumber + ":");
+				Console.WriteLine(Message);
+
+				// Display the line of the script.
+				Console.WriteLine(line);
+				for (int i = 1; i < columnNumber; i++)
+					Console.Write(' ');
+				Console.WriteLine('^');
+				Console.WriteLine("------------------------------------------------------------------");
+			}
+		}
 
 		private int lineIndex;
 		private int charIndex;
 		private string word;
 		private string line;
+		private string fileName;
 
 		private List<ScriptCommand> commands;
 
@@ -92,16 +125,7 @@ namespace ZeldaOracle.Common.Scripts {
 		}
 
 		private void ThrowParseError(string message, bool showCarret = true) {
-			
-			Console.WriteLine("Error in 'animations.conscript' at Line " + (lineIndex + 1) + ", Column " + (charIndex + 1) + ":");
-			Console.WriteLine(message);
-
-			Console.WriteLine(line);
-			if (showCarret) {
-				for (int i = 0; i < charIndex; i++)
-					Console.Write(' ');
-				Console.WriteLine('^');
-			}
+			throw new ParseException(message, fileName, line, lineIndex + 1, charIndex + 1);
 		}
 
 
@@ -145,12 +169,14 @@ namespace ZeldaOracle.Common.Scripts {
 		}
 
 		protected void CompleteStatement() {
-
 			if (parameterRoot.Children != null) {
 				string commandName = parameterRoot.Children.Str;
 				parameterRoot.Children = parameterRoot.Children.NextParam;
 				parameterRoot.Count--;
-				ReadCommand(commandName, parameterRoot);
+
+				if (!ReadCommand(commandName, parameterRoot)) {
+					ThrowParseError(commandName + " is not a valid command", false);
+				}
 			}
 
 			//PrintParementers(parameterRoot);
@@ -257,13 +283,17 @@ namespace ZeldaOracle.Common.Scripts {
 			// Make sure quotes are closed and statements are ended.
 			if (quotes)
 				ThrowParseError("Expected \"");
-			//else if (words.Count > 0 || word.Length > 0)
-			//	ThrowParseError("Expected ;");
+			else if (parameterRoot.Count > 0 || word.Length > 0)
+				ThrowParseError("Expected ;");
 		}
 		
 		// Parse and interpret the given text stream as a script, line by line.
-		public void ReadScript(StreamReader reader) {
+		public override void ReadScript(StreamReader reader) {
+			fileName = "animations.conscript";
+
 			BeginReading();
+			
+			// Read all lines.
 			lineIndex = 0;
 			while (!reader.EndOfStream) {
 				line = reader.ReadLine();

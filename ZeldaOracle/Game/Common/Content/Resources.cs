@@ -21,12 +21,24 @@ using Song = ZeldaOracle.Common.Audio.Song;
 using Playlist = ZeldaOracle.Common.Audio.Playlist;
 
 namespace ZeldaOracle.Common.Content {
+
+	public class LoadContentException : Exception {
+		public LoadContentException(string message) :
+			base(message) {
+		}
+
+		public virtual void PrintMessage() {
+			Console.WriteLine(Message);
+		}
+	}
+
 /** <summary>
  * The Resources class serves as a resource manager.
  * It has methods to load in resources from the game
  * content and stores them in key/value maps.
  * </summary> */
 public class Resources {
+
 
 	//========== CONSTANTS ===========
 	#region Constants
@@ -261,13 +273,13 @@ public class Resources {
 	}
 	/** <summary> Loads a single sprite sheet from a script file. </summary> */
 	public static SpriteSheet LoadSpriteSheet(string assetName) {
-		SpriteSheetSR script = new SpriteSheetSR();
+		SpriteSheetSROld script = new SpriteSheetSROld();
 		LoadScript(assetName, script);
 		return script.Sheet;
 	}
 	/** <summary> Loads/compiles sprite sheets from a script file. </summary> */
 	public static void LoadSpriteSheets(string assetName) {
-		LoadScript(assetName, new SpriteSheetSR());
+		LoadScript(assetName, new SpritesSR());
 	}
 	/** <summary> Loads the game font with the specified asset name. </summary> */
 	public static GameFont LoadGameFont(string assetName) {
@@ -281,7 +293,7 @@ public class Resources {
 	}
 	/** <summary> Loads/compiles animations from a script file. </summary> */
 	public static void LoadAnimations(string assetName) {
-		//LoadScript(assetName, new AnimationSR());
+		LoadScript(assetName, new AnimationSR());
 	}
 
 	#endregion

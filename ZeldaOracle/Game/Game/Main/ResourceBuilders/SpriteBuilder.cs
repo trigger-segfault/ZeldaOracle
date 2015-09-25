@@ -89,5 +89,10 @@ namespace ZeldaOracle.Game.Main.ResourceBuilders {
 			get { return sheet; }
 			set { sheet = value; }
 		}
+
+		public Sprite Sprite {
+			get { return sprite; }
+			set { sprite = value; }
+		}
 	}
 }

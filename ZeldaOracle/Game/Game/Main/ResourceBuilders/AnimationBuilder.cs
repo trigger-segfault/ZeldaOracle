@@ -174,6 +174,40 @@ namespace ZeldaOracle.Game.Main.ResourceBuilders
 			}
 			return this;
 		}
+		
+		public AnimationBuilder MakeFlicker(int alternateDelayTicks, bool startOn = true) {
+
+			Animation newAnimation = new Animation();
+
+			for (int i = 0; i < animation.Frames.Count; i++)  {
+				AnimationFrame frame = animation.Frames[i];
+				
+				int beginSection	= frame.StartTime / (alternateDelayTicks * 2);
+				int endSection		= frame.EndTime / (alternateDelayTicks * 2);
+				if (frame.EndTime % (alternateDelayTicks * 2) == 0)
+					endSection--;
+
+				for (int section = beginSection; section <= endSection; section++) {
+					int t = section * alternateDelayTicks * 2;
+
+					if (frame.StartTime < t + alternateDelayTicks && frame.EndTime > t) {
+						AnimationFrame newFrame = new AnimationFrame();
+						newFrame.Sprite		= frame.Sprite;
+						newFrame.StartTime	= Math.Max(frame.StartTime, t);
+						newFrame.Duration	= Math.Min(frame.EndTime, t + alternateDelayTicks) - newFrame.StartTime;
+						newAnimation.AddFrame(newFrame);
+					}
+				}
+			}
+
+			animation.Frames = newAnimation.Frames;
+			return this;
+		}
+
+		public AnimationBuilder CreateClone(Animation reference) {
+			animation = new Animation(reference);
+			return this;
+		}
 
 		public AnimationBuilder MakeDynamic(int numSubStrips, int offsetX, int offsetY) {
 			Animation subStrip = animation;

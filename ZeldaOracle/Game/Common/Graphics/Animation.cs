@@ -45,6 +45,18 @@ namespace ZeldaOracle.Common.Graphics {
 			this.frames.Add(new AnimationFrame(0, 0, sprite));
 		}
 
+		public Animation(Animation copy) {
+			frames		= new List<AnimationFrame>();
+			nextStrip	= null;
+			duration	= copy.duration;
+			loopMode	= copy.loopMode;
+
+			for (int i = 0; i < copy.frames.Count; i++)
+				frames.Add(new AnimationFrame(copy.frames[i]));
+			if (copy.nextStrip != null)
+				nextStrip = new Animation(copy.nextStrip);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Mutators

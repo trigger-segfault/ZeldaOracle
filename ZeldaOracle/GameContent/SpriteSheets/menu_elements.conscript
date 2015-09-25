@@ -1,4 +1,8 @@
 
+
+### !!! EVERYTHING IS NOW MOVED TO "sprites.conscript"
+
+
 @spritesheet "UI/menu_small"
 @grid 8 8  1 1  18 18
 @end
