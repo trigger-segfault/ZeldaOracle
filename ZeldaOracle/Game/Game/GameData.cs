@@ -56,6 +56,52 @@ namespace ZeldaOracle.Game {
 
 
 		//-----------------------------------------------------------------------------
+		// Internal
+		//-----------------------------------------------------------------------------
+
+		// Assign static fields from their corresponding loaded resources.
+		private static void IntegrateResources<T>(string prefix) {
+			FieldInfo[] fields = typeof(GameData).GetFields();
+
+			// Assign static fields from their corresponding loaded resources.
+			for (int i = 0; i < fields.Length; i++) {
+				FieldInfo field = fields[i];
+				string name = field.Name.ToLower();
+				
+				if (field.FieldType == typeof(T) && field.Name.StartsWith(prefix)) {
+					name = name.Remove(0, prefix.Length);
+
+					if (Resources.ExistsResource<T>(name))
+						field.SetValue(null, Resources.GetResource<T>(name));
+					else if (field.GetValue(null) != null)
+						Console.WriteLine("** WARNING: " + name + " is built programatically.");
+					else 
+						Console.WriteLine("** WARNING: " + name + " is never defined.");
+				}
+			}
+			
+			// Loop through resource dictionary.
+			// Find any resources that don't have corresponding fields in GameData.
+			Dictionary<string, T> dictionary = Resources.GetResourceDictionary<T>();
+			foreach (KeyValuePair<string, T> entry in dictionary) {
+				string name = prefix.ToLower() + entry.Key;
+				T resource = entry.Value;
+
+				FieldInfo matchingField = null;
+				for (int i = 0; i < fields.Length; i++) {
+					FieldInfo field = fields[i];
+					if (field.FieldType == typeof(T) && String.Compare(field.Name, name, true) == 0) {
+						matchingField = field;
+						break;
+					}
+				}
+				if (matchingField == null)
+					Console.WriteLine("** WARNING: Resource \"" + name + "\" does not have a corresponding field.");
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Image Loading
 		//-----------------------------------------------------------------------------
 		
@@ -76,42 +122,10 @@ namespace ZeldaOracle.Game {
 
 		// Loads the sprites and sprite-sheets.
 		private static void LoadSprites() {
-			
 			Resources.LoadSpriteSheets("SpriteSheets/sprites.conscript");
-
-			// Assign static fields from their corresponding loaded resources.
-			FieldInfo[] fields = typeof(GameData).GetFields();
-			for (int i = 0; i < fields.Length; i++) {
-				FieldInfo field = fields[i];
-				string name = field.Name.ToLower();
-				
-				// Sprite Sheets.
-				if (field.FieldType == typeof(SpriteSheet)) {
-					name = name.Remove(0, "SHEET_".Length);
-					if (Resources.SpriteSheetExists(name)) {
-						field.SetValue(null, Resources.GetSpriteSheet(name));
-						//Console.WriteLine(" - SHEET: " + name);
-					}
-					else if (field.GetValue(null) != null)
-						Console.WriteLine("WARNING: " + name + " is built programatically");
-					else 
-						Console.WriteLine("WARNING: " + name + " is never defined");
-				}
-
-				// Sprites.
-				if (field.FieldType == typeof(Sprite)) {
-					name = name.Remove(0, "SPR_".Length);
-					if (Resources.SpriteExists(name)) {
-						field.SetValue(null, Resources.GetSprite(name));
-						//Console.WriteLine(" - SPR: " + name);
-					}
-					else if (field.GetValue(null) != null)
-						Console.WriteLine("WARNING: " + name + " is built programatically");
-					else 
-						Console.WriteLine("WARNING: " + name + " is never defined");
-				}
-			}
-
+			IntegrateResources<SpriteSheet>("SHEET_");
+			IntegrateResources<Sprite>("SPR_");
+			
 			// TEMPORARY: Create seed sprite array here.
 			SPR_ITEM_SEEDS = new Sprite[] {
 				SPR_ITEM_SEED_EMBER,
@@ -138,24 +152,8 @@ namespace ZeldaOracle.Game {
 				ANIM_EFFECT_SEED_GALE.AddFrame(i, 1, new Sprite(
 					GameData.SHEET_COLOR_EFFECTS, ((i % 6) < 3 ? 4 : 5), y, -8, -8));
 			}
-
-			// Assign static fields from their corresponding loaded resources.
-			FieldInfo[] fields = typeof(GameData).GetFields();
-			for (int i = 0; i < fields.Length; i++) {
-				FieldInfo field = fields[i];
-				string name = field.Name.ToLower();
-
-				// Animations.
-				if (field.FieldType == typeof(Animation)) {
-					name = name.Remove(0, "ANIM_".Length);
-					if (Resources.AnimationExists(name))
-						field.SetValue(null, Resources.GetAnimation(name));
-					else if (field.GetValue(null) != null)
-						Console.WriteLine("WARNING: " + name + " is built programatically");
-					else 
-						Console.WriteLine("WARNING: " + name + " is never defined");
-				}
-			}
+			
+			IntegrateResources<Animation>("ANIM_");
 		}
 
 
@@ -596,8 +594,6 @@ namespace ZeldaOracle.Game {
 		// Fonts
 		//-----------------------------------------------------------------------------
 
-		public static RealFont FontDebugMenu;
-		public static RealFont FontDebugMenuBold;
 		public static GameFont FONT_LARGE;
 		public static GameFont FONT_SMALL;
 
