@@ -9,93 +9,195 @@ using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game;
+using ZeldaOracle.Game.Main.ResourceBuilders;
 
 namespace ZeldaOracle.Common.Scripts {
-/** <summary>
- * Script reader for sprite sheets. The script can contain
- * information for multiple sprite sheets with corresponding
- * images in the content folder.
- *
- * FORMAT:
- *
- * @font [name]
- * @grid [char_width] [char_height] [char_spacing_x] [char_spacing_y] [offset_x] [offset_y]
- * @end
- *
- * Note: All declared sprites must be within the
- * @spritesheet and @end commands.
- * </summary> */
-public class AnimationSR : ScriptReader {
+	/** <summary>
+	 * Script reader for sprite sheets. The script can contain
+	 * information for multiple sprite sheets with corresponding
+	 * images in the content folder.
+	 *
+	 * FORMAT:
+	 *
+	 * @font [name]
+	 * @grid [char_width] [char_height] [char_spacing_x] [char_spacing_y] [offset_x] [offset_y]
+	 * @end
+	 *
+	 * Note: All declared sprites must be within the
+	 * @spritesheet and @end commands.
+	 * </summary>
+	 */
+	public class AnimationSR : NewScriptReader {
 
-	//=========== MEMBERS ============
-	#region Members
+		private AnimationBuilder animationBuilder;
+		private Animation animation;
+		private string animationName;
 
-	/** <summary> The current animation being created. </summary> */
-	private Animation animation;
-	/** <summary> The last loaded sprite sheet. </summary> */
-	private Animation finalAnimation;
 
-	private AnimationFrame frame;
+		//-----------------------------------------------------------------------------
+		// Override
+		//-----------------------------------------------------------------------------
 
-	#endregion
-	//========== PROPERTIES ==========
-	#region Properties
+		public AnimationSR() {
+			animationBuilder = new AnimationBuilder();
 
-	/** <summary> Gets the last loaded animation. </summary> */
-	public Animation Animation {
-		get { return finalAnimation; }
-	}
+			
+			// SPRITE SHEET.
 
-	#endregion
-	//=========== OVERRIDE ===========
-	#region Override
+			AddCommand("SpriteSheet", delegate(CommandParam parameters) {
+				SpriteSheet sheet = Resources.GetSpriteSheet(parameters.GetString(0));
+				animationBuilder.SpriteSheet = sheet;
+			});
 
-	/** <summary> Begins reading the script. </summary> */
-	protected override void BeginReading() {
-		animation			= null;
-		finalAnimation		= null;
-		//frame				= null;
-	}
-	/** <summary> Ends reading the script. </summary> */
-	protected override void EndReading() {
-		animation			= null;
-	}
-	/** <summary> Reads a line in the script as a command. </summary> */
-	protected override bool ReadCommand(string command, List<string> args) {
-		// Create a new animation.
-		// @animation [animationName]
-		if (command == "animation") {
-			animation = new Animation();
-			finalAnimation = animation;
-			Resources.AddAnimation(args[0], animation);
+			
+			// BEGIN/END.
+
+			AddCommand("Anim", delegate(CommandParam parameters) {
+				animationName = parameters.GetString(0);
+				animationBuilder.BeginNull();
+				animation = null;
+			});
+			AddCommand("End", delegate(CommandParam parameters) {
+				if (animation != null) {
+					animationBuilder.End();
+					Resources.AddAnimation(animationName, animation);
+				}
+			});
+			AddCommand("SubStrip", delegate(CommandParam parameters) {
+				LoopMode loopMode = LoopMode.Repeat;
+				if (parameters.GetString(0) == "reset")
+					loopMode = LoopMode.Reset;
+				else if (parameters.GetString(0) == "repeat" || parameters.GetString(0) == "loop")
+					loopMode = LoopMode.Repeat;
+				else if (parameters.GetString(0) == "clamp")
+					loopMode = LoopMode.Clamp;
+				else
+					; // ERROR: unknown loop mode
+
+				animationBuilder.CreateSubStrip();
+				animationBuilder.SetLoopMode(loopMode);
+				if (animation == null)
+					animation = animationBuilder.Animation;
+			});
+			AddCommand("Clone", delegate(CommandParam parameters) {
+				if (Resources.AnimationExists(parameters.GetString(0))) {
+					animationBuilder.CreateClone(Resources.GetAnimation(parameters.GetString(0)));
+					animation = animationBuilder.Animation;
+				}
+				else {
+					// ERROR: can't clone nonexistant animation.
+				}
+			});
+
+			
+			// FRAME BUILDING.
+			
+			AddCommand("Add", delegate(CommandParam parameters) {
+				if (parameters.GetString(0) == "strip") {
+					animationBuilder.AddFrameStrip(
+						parameters.GetInt(1),
+						parameters.GetPoint(3).X,
+						parameters.GetPoint(3).Y,
+						parameters.GetInt(2),
+						parameters.GetPoint(4, Point2I.Zero).X,
+						parameters.GetPoint(4, Point2I.Zero).Y,
+						parameters.GetPoint(5, new Point2I(1, 0)).X,
+						parameters.GetPoint(5, new Point2I(1, 0)).Y);
+				}
+				else if (parameters.GetString(0) == "frame") {
+					animationBuilder.AddFrame(
+						parameters.GetInt(1),
+						parameters.GetPoint(2).X,
+						parameters.GetPoint(2).Y,
+						parameters.GetPoint(3, Point2I.Zero).X,
+						parameters.GetPoint(3, Point2I.Zero).Y);
+				}
+				else if (parameters.GetString(0) == "part") {
+					animationBuilder.AddPart(
+						parameters.GetInt(1),
+						parameters.GetPoint(2).X,
+						parameters.GetPoint(2).Y,
+						parameters.GetPoint(3, Point2I.Zero).X,
+						parameters.GetPoint(3, Point2I.Zero).Y);
+				}
+				else
+					; // ERROR: Unknown.
+			});
+			AddCommand("Insert", delegate(CommandParam parameters) {
+				if (parameters.GetString(0) == "strip") {
+					animationBuilder.InsertFrameStrip(
+						parameters.GetInt(1),
+						parameters.GetInt(2),
+						parameters.GetPoint(4).X,
+						parameters.GetPoint(4).Y,
+						parameters.GetInt(3),
+						parameters.GetPoint(5, Point2I.Zero).X,
+						parameters.GetPoint(5, Point2I.Zero).Y,
+						parameters.GetPoint(6, new Point2I(1, 0)).X,
+						parameters.GetPoint(6, new Point2I(1, 0)).Y);
+				}
+				else if (parameters.GetString(0) == "frame") {
+					animationBuilder.InsertFrame(
+						parameters.GetInt(1),
+						parameters.GetInt(2),
+						parameters.GetPoint(3).X,
+						parameters.GetPoint(3).Y,
+						parameters.GetPoint(4, Point2I.Zero).X,
+						parameters.GetPoint(4, Point2I.Zero).Y);
+				}
+				else
+					; // ERROR: Unknown.
+			});
+			
+
+			// MODIFICATIONS.
+
+			AddCommand("MakeQuad", delegate(CommandParam parameters) {
+				animationBuilder.MakeQuad();
+			});
+			AddCommand("MakeDynamic", delegate(CommandParam parameters) {
+				animationBuilder.MakeDynamic(
+					parameters.GetInt(0), 
+					parameters.GetPoint(1).X,
+					parameters.GetPoint(1).Y);
+			});
+			AddCommand("Offset", delegate(CommandParam parameters) {
+				animationBuilder.Offset(
+					parameters.GetPoint(0).X,
+					parameters.GetPoint(0).Y);
+			});
+			AddCommand("Flicker", delegate(CommandParam parameters) {
+				// FLICKER <alternateDelay> <on/off>
+
+				bool startOn = true;
+				if (parameters.GetString(1) == "on")
+					startOn = true;
+				else if (parameters.GetString(1) == "off")
+					startOn = false;
+				else
+					;// ERROR: unknown value.
+
+				animationBuilder.MakeFlicker(parameters.GetInt(0), startOn);
+			});
 		}
 
-		// Create a new sprite grid to then define grid sprites for.
-		// @grid [sprWidth] [sprHeight] [sepX] [sepY] [offsetX] [offsetY]
-		if (command == "grid") {
-			/*grid = new SpriteGrid();
-			grid.spriteWidth  = Int32.Parse(args[0]);
-			grid.spriteHeight = Int32.Parse(args[1]);
-			grid.spacingX     = Int32.Parse(args[2]);
-			grid.spacingY     = Int32.Parse(args[3]);
-			grid.offsetX      = Int32.Parse(args[4]);
-			grid.offsetY      = Int32.Parse(args[5]);*/
+		// Begins reading the script.
+		protected override void BeginReading() {
+			animation = null;
+			animationName = "";
+			animationBuilder.SpriteSheet = null;
 		}
 
-		// Finish creating the current sprite sheet.
-		// @end
-		else if (command == "end") {
+		// Ends reading the script.
+		protected override void EndReading() {
 			animation = null;
 		}
 
-		// Invalid command
-		else {
-			return false;
-		}
 
-		return true;
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
 	}
-
-	#endregion
-}
 } // end namespace

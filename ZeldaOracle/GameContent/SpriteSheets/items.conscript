@@ -1,4 +1,8 @@
 
+
+### !!! EVERYTHING IS NOW MOVED TO "sprites.conscript"
+
+
 @spritesheet "Items/items_small"
 @grid 8 16  1 1  18 18
 @end

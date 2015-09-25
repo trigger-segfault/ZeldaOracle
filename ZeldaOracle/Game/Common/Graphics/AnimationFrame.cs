@@ -47,6 +47,10 @@ namespace ZeldaOracle.Common.Graphics {
 			set { startTime = value; }
 		}
 		
+		public int EndTime {
+			get { return (startTime + duration); }
+		}
+		
 		public int Duration {
 			get { return duration; }
 			set { duration = value; }

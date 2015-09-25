@@ -40,9 +40,10 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		//-----------------------------------------------------------------------------
 
 		// Setup a timer so that the effect destroys itself after the given number of ticks.
-		public void CreateDestroyTimer(int ticks, int fadeDelay = -1) {
+		public void CreateDestroyTimer(int ticks, int fadeDelay = -1, int flickerAlternateDelay = 2) {
 			this.destroyTimer = ticks;
 			this.fadeDelay = fadeDelay;
+			Graphics.FlickerAlternateDelay = flickerAlternateDelay;
 		}
 
 

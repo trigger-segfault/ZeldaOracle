@@ -58,9 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Animations\" />
     <Folder Include="Data\" />
-    <Folder Include="Images\Units\Player\" />
     <Folder Include="Languages\" />
     <Folder Include="Particles\" />
     <Folder Include="Shaders\" />
@@ -71,6 +69,10 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
+    <None Include="Animations\animations.conscript">
+      <Name>animations</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Fonts\fonts.conscript">
       <Name>fonts</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -81,6 +83,10 @@
     </None>
     <None Include="Sounds\sounds.conscript">
       <Name>sounds_script</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SpriteSheets\sprites.conscript">
+      <Name>sprites</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="SpriteSheets\items.conscript">
@@ -153,22 +159,22 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Images\sheet_player.png">
-      <Name>sheet_player</Name>
+    <Compile Include="Images\Units\Player\player.png">
+      <Name>player</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Images\tileset.png">
+    <Compile Include="Images\Tiles\tileset.png">
       <Name>tileset</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Images\sheet_player_items.png">
-      <Name>sheet_player_items</Name>
+    <Compile Include="Images\player_items.png">
+      <Name>player_items</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -180,7 +186,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Images\zoneset.png">
+    <Compile Include="Images\Tiles\zoneset.png">
       <Name>zoneset</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -260,18 +266,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Images\sheet_player_blue.png">
-      <Name>sheet_player_blue</Name>
+    <Compile Include="Images\Units\Player\player_blue.png">
+      <Name>player_blue</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\sheet_player_hurt.png">
-      <Name>sheet_player_hurt</Name>
+    <Compile Include="Images\Units\Player\player_hurt.png">
+      <Name>player_hurt</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\sheet_player_red.png">
-      <Name>sheet_player_red</Name>
+    <Compile Include="Images\Units\Player\player_red.png">
+      <Name>player_red</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -395,7 +401,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Images\general_tiles.png">
+    <Compile Include="Images\Tiles\general_tiles.png">
       <Name>general_tiles</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

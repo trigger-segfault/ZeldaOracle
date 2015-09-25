@@ -66,14 +66,14 @@ namespace ZeldaOracle.Game.Tiles {
 				}
 
 				if (timer == 49) {
-					Sprite = GameData.SPR_OWL_ACTIVATED;
+					Sprite = GameData.SPR_TILE_OWL_ACTIVATED;
 				}
 				if (timer == 58) {
 					RoomControl.GameControl.DisplayMessage("Beware!!!");
 				}
 				if (timer > 80) {
 					isActivated = false;
-					Sprite = GameData.SPR_OWL;
+					Sprite = GameData.SPR_TILE_OWL;
 				}
 			}
 		}

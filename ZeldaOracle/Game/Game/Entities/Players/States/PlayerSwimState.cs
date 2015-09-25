@@ -89,7 +89,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			else if (Controls.B.IsPressed()) {
 				isSubmerged = true;
 				submergedTimer = submergedDuration;
-				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DIVE);
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SUBMERGED);
 
 				// Create a splash effect.
 				Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH);

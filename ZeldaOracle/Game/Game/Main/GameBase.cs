@@ -66,6 +66,8 @@ public class GameBase : XnaGame {
 	// The current frame rate of the game.
 	private double fps;
 
+	private bool isContentLoaded;
+
 	
 	//-----------------------------------------------------------------------------
 	// Initialization
@@ -80,7 +82,8 @@ public class GameBase : XnaGame {
 		this.fullScreen				= false;
 		this.windowSize				= new Point2I(160 * 4, 144 * 4);
 		this.windowSizeChanged		= false;
-		
+		this.isContentLoaded		= true;
+
 		// Game
 		this.game					= null;
 		this.screenShotRequested	= false;
@@ -115,8 +118,14 @@ public class GameBase : XnaGame {
 		GamePad.Initialize();
 	
 		game = new GameManager();
-
+		
 		base.Initialize();
+
+		if (!isContentLoaded) {
+			// BAD STUFF.
+			Exit();
+			return;
+		}
 
 		// Create and initialize the game.
 		game.Initialize(this);
@@ -134,19 +143,28 @@ public class GameBase : XnaGame {
 	// LoadContent will be called once per game and is the place to load
 	// all of your content.
 	protected override void LoadContent() {
-		Console.WriteLine("Begin Load Content");
+		isContentLoaded = false;
 
-		// Create a new SpriteBatch, which can be used to draw textures.
-		spriteBatch = new SpriteBatch(GraphicsDevice);
+		try {
+			Console.WriteLine("Begin Load Content");
 
-		AudioSystem.Initialize();
-		Resources.Initialize(Content, GraphicsDevice);
+			// Create a new SpriteBatch, which can be used to draw textures.
+			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-		game.LoadContent(Content, this);
+			AudioSystem.Initialize();
+			Resources.Initialize(Content, GraphicsDevice);
 
-		base.LoadContent();
+			game.LoadContent(Content, this);
 
-		Console.WriteLine("End Load Content");
+			base.LoadContent();
+
+			Console.WriteLine("End Load Content");
+			isContentLoaded = true;
+		}
+		catch (LoadContentException e) {
+			//Console.WriteLine("LOAD CONTENT EXCEPTION: " + e.Message);
+			e.PrintMessage();
+		}
 	}
 
 	// UnloadContent will be called once per game and is the place to unload
@@ -157,7 +175,7 @@ public class GameBase : XnaGame {
 		AudioSystem.Uninitialize();
 		//Resources.Uninitialize();
 
-		this.game.UnloadContent(Content);
+		game.UnloadContent(Content);
 
 		base.UnloadContent();
 
@@ -192,7 +210,11 @@ public class GameBase : XnaGame {
 	// Allows the game to run logic such as updating the world,
 	// checking for collisions, gathering input, and playing audio.
 	protected override void Update(GameTime gameTime) {
-		
+		if (!isContentLoaded) {
+			Exit();
+			return;
+		}
+
 		// Update the fullscreen mode.
 		UpdateFullScreen();
 

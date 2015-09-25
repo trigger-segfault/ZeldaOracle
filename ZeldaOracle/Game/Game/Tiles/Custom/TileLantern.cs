@@ -29,7 +29,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (!isLit) {
 				isLit = true;
 				Sprite = null;
-				AnimationPlayer.Play(GameData.ANIM_LANTERN);
+				AnimationPlayer.Play(GameData.ANIM_TILE_LANTERN);
 			}
 		}
 
@@ -37,7 +37,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (isLit) {
 				isLit = false;
 				AnimationPlayer.Animation = null;
-				Sprite = GameData.SPR_LANTERN_UNLIT;
+				Sprite = GameData.SPR_TILE_LANTERN_UNLIT;
 			}
 		}
 
