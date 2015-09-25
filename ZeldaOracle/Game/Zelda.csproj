@@ -226,8 +226,12 @@
     <Compile Include="Game\Entities\Projectiles\CarriedTile.cs" />
     <Compile Include="Game\Entities\Projectiles\Projectile.cs" />
     <Compile Include="Game\Entities\Projectiles\Seed.cs" />
-    <Compile Include="Game\GameStates\StateReward.cs" />
-    <Compile Include="Game\GameStates\StateTextReader.cs" />
+    <Compile Include="Game\GameStates\RoomStates\RoomStateNormal.cs" />
+    <Compile Include="Game\GameStates\RoomStates\RoomStateQueue.cs" />
+    <Compile Include="Game\GameStates\RoomStates\RoomStateStack.cs" />
+    <Compile Include="Game\GameStates\RoomStates\RoomState.cs" />
+    <Compile Include="Game\GameStates\RoomStates\RoomStateReward.cs" />
+    <Compile Include="Game\GameStates\RoomStates\RoomStateTextReader.cs" />
     <Compile Include="Game\Control\View.cs" />
     <None Include="Game\Debug\DebugController.cs" />
     <None Include="Game\Editor\EffectPropertyGrid.cs" />

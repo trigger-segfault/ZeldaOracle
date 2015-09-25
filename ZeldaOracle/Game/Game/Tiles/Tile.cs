@@ -159,6 +159,9 @@ namespace ZeldaOracle.Game.Tiles {
 					}
 				}
 			}
+		}
+
+		public virtual void UpdateGraphics() {
 
 			// Update the animation.
 			animationPlayer.Update();
