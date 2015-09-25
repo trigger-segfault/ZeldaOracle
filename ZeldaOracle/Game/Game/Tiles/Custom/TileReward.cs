@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.GameStates;
+using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Tiles.Custom {
@@ -26,7 +27,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		
 		// Called when the player presses A on this tile, when facing the given direction.
 		public override bool OnAction(int direction) {
-			RoomControl.GameManager.PushGameState(new StateReward(reward));
+			RoomControl.GameControl.PushRoomState(new RoomStateReward(reward));
 			RoomControl.RemoveTile(this);
 			return true;
 		}

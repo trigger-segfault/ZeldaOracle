@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
+using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Equipment;
 using ZeldaOracle.Game.Items.Essences;
@@ -29,12 +30,15 @@ namespace ZeldaOracle.Game.Control {
 		private Inventory inventory;
 		private RewardManager rewardManager;
 		private bool advancedGame;
+		private int roomTicks; // The total number of ticks elapsed (used for animation.
+		private RoomStateStack roomStateStack;
+		private bool updateRoom;
+		private bool animateRoom;
 
+		// Menus
 		private MenuWeapons menuWeapons;
 		private MenuSecondaryItems menuSecondaryItems;
 		private MenuEssences menuEssences;
-
-		private int roomTicks; // The total number of ticks elapsed (used for animation.
 
 
 		//-----------------------------------------------------------------------------
@@ -43,6 +47,7 @@ namespace ZeldaOracle.Game.Control {
 
 		public GameControl(GameManager gameManager) {
 			this.gameManager	= gameManager;
+			this.roomStateStack	= null;
 			this.roomControl	= null;
 			this.world			= null;
 			this.player			= null;
@@ -50,6 +55,8 @@ namespace ZeldaOracle.Game.Control {
 			this.inventory		= null;
 			this.rewardManager	= null;
 			this.advancedGame	= false;
+			this.updateRoom		= true;
+			this.animateRoom	= true;
 
 			this.menuWeapons	= null;
 			this.menuSecondaryItems	= null;
@@ -190,17 +197,21 @@ namespace ZeldaOracle.Game.Control {
 			gameManager.PushGameState(roomControl);
 
 			roomControl.BeginTestWorld(player);
-			
+
+			roomStateStack = new RoomStateStack(new RoomStateNormal());
+			roomStateStack.Begin(this);
+
+
 			AudioSystem.MasterVolume = 0.01f;
 
 		}
 
 		public void DisplayMessage(Message message) {
-			gameManager.PushGameState(new StateTextReader(message));
+			PushRoomState(new RoomStateTextReader(message));
 		}
 
 		public void DisplayMessage(string text) {
-			gameManager.PushGameState(new StateTextReader(new Message(text)));
+			PushRoomState(new RoomStateTextReader(new Message(text)));
 		}
 
 		public void OpenMenu(Menu currentMenu, Menu menu) {
@@ -229,6 +240,37 @@ namespace ZeldaOracle.Game.Control {
 			);
 		}
 
+		//-----------------------------------------------------------------------------
+		// Room state management
+		//-----------------------------------------------------------------------------
+
+		public void UpdateRoomState() {
+			roomStateStack.Update();
+		}
+
+		public void DrawRoomState(Graphics2D g) {
+			roomStateStack.Draw(g);
+		}
+
+		// Push a new room-state onto the stack and begin it.
+		public void PushRoomState(RoomState state) {
+			roomStateStack.Push(state);
+		}
+
+		// Push a queue of room states.
+		public void QueueRoomStates(params RoomState[] states) {
+			PushRoomState(new RoomStateQueue(states));
+		}
+
+		// End the top-most room state in the stack.
+		public void PopRoomState() {
+			roomStateStack.Pop();
+		}
+
+		// End the given number of states in the stack from the top down.
+		public void PopRoomStates(int amount) {
+			roomStateStack.Pop(amount);
+		}
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -293,6 +335,20 @@ namespace ZeldaOracle.Game.Control {
 
 		public RewardManager RewardManager {
 			get { return rewardManager; }
+		}
+
+		public bool UpdateRoom {
+			get { return updateRoom; }
+			set { updateRoom = value; }
+		}
+
+		public bool AnimateRoom {
+			get { return animateRoom; }
+			set { animateRoom = value; }
+		}
+
+		public RoomState CurrentRoomState {
+			get { return roomStateStack.CurrentRoomState; }
 		}
 	}
 }

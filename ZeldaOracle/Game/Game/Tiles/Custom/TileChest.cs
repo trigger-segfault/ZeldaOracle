@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.GameStates;
+using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Tiles.Custom {
@@ -33,7 +34,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		public override bool OnAction(int direction) {
 			if (!opened) {
 				if (direction == Directions.Up) {
-					RoomControl.GameManager.PushGameState(new StateReward(reward, (Point2I)Position));
+					RoomControl.GameControl.PushRoomState(new RoomStateReward(reward, (Point2I)Position));
 					opened = true;
 					Sprite = openedSprite;
 					// Play chest open sound

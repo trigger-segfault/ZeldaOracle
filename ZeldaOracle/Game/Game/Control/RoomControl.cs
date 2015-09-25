@@ -19,6 +19,7 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Tiles.Custom;
+using ZeldaOracle.Game.GameStates.RoomStates;
 
 namespace ZeldaOracle.Game.Control {
 
@@ -439,11 +440,18 @@ namespace ZeldaOracle.Game.Control {
 		public override void Update() {
 			GameControl.RoomTicks++;
 
+			RoomState roomState = GameControl.CurrentRoomState;
+			GameControl.UpdateRoom = roomState.UpdateRoom;
+			GameControl.AnimateRoom = roomState.AnimateRoom;
+
 			// Update entities.
 			int entityCount = entities.Count;
 			for (int i = 0; i < entities.Count; i++) {
 				if (entities[i].IsAlive && entities[i].IsInRoom && i < entityCount) {
-					entities[i].Update();
+					if (GameControl.UpdateRoom)
+						entities[i].Update();
+					if (GameControl.AnimateRoom)
+						entities[i].UpdateGraphics();
 				}
 				else if (entities[i].IsAlive && entities[i].IsInRoom && i >= entityCount) {
 					// For entities spawned this frame, only update their graphics component.
@@ -463,8 +471,12 @@ namespace ZeldaOracle.Game.Control {
 				for (int x = 0; x < room.Width; x++) {
 					for (int y = 0; y < room.Height; y++) {
 						Tile t = tiles[x, y, i];
-						if (t != null)
-							t.Update();
+						if (t != null) {
+							if (GameControl.UpdateRoom)
+								t.Update();
+							if (GameControl.AnimateRoom)
+								t.UpdateGraphics();
+						}
 					}
 				}
 			}
@@ -483,72 +495,77 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 
-			// [Start] Open inventory.
-			if (Controls.Start.IsPressed()) {
-				GameControl.OpenMenu(GameControl.MenuWeapons);
-			}
-
-
-			// DEBUG KEYS:
-
-			if (Keyboard.IsKeyPressed(Keys.G)) {
-				GameControl.DisplayMessage("I was a <red>hero<red> to broken robots 'cause I was one of them, but how can I sing about being damaged if I'm not?<p> That's like <green>Christina Aguilera<green> singing Spanish. Ooh, wait! That's it! I'll fake it!");
-			}
-			if (Keyboard.IsKeyPressed(Keys.Insert)) {
-				GameControl.Inventory.FillAllAmmo();
-			}
-			if (Keyboard.IsKeyPressed(Keys.Delete)) {
-				GameControl.Inventory.EmptyAllAmmo();
-			}
-			if (Keyboard.IsKeyPressed(Keys.Home)) {
-				GameControl.Player.MaxHealth = 4 * 14;
-				GameControl.Player.Health = GameControl.Player.MaxHealth;
-			}
-			if (Keyboard.IsKeyPressed(Keys.End)) {
-				GameControl.Player.Health = 4 * 3;
-			}
 			GameControl.HUD.Update();
 
-			if (Keyboard.IsKeyPressed(Keys.T)) {
-				switch (player.Tunic) {
-				case PlayerTunics.GreenTunic: player.Tunic = PlayerTunics.RedTunic; break;
-				case PlayerTunics.RedTunic: player.Tunic = PlayerTunics.BlueTunic; break;
-				case PlayerTunics.BlueTunic: player.Tunic = PlayerTunics.GreenTunic; break;
+			GameControl.UpdateRoomState();
+
+			if (GameControl.UpdateRoom) {
+				// [Start] Open inventory.
+				if (Controls.Start.IsPressed()) {
+					GameControl.OpenMenu(GameControl.MenuWeapons);
 				}
-			}
-			if (Keyboard.IsKeyPressed(Keys.H)) {
-				player.Hurt(0);
-			}
-			if (Keyboard.IsKeyPressed(Keys.M)) {
-				AudioSystem.PlaySong("overworld");
-			}
-			if (Keyboard.IsKeyPressed(Keys.N)) {
-				AudioSystem.MasterVolume = 1.0f;
-			}
-			if (Keyboard.IsKeyPressed(Keys.R)) {
-				int[] rupees = { 1, 5, 20, 100, 200 };//, 5, 20, 100, 200 };
-				int rupee = GRandom.NextInt(rupees.Length);
-				Collectible collectible = GameControl.RewardManager.SpawnCollectible("rupees_" + rupees[rupee].ToString());
-				collectible.Position = player.Position;
-				collectible.ZPosition = 100;
-			}
-			if (Keyboard.IsKeyPressed(Keys.Y)) {
-				GraphicsComponent.DrawCollisionBoxes = !GraphicsComponent.DrawCollisionBoxes;
-			}
-			if (Keyboard.IsKeyPressed(Keys.K)) {
-				Collectible collectible = GameControl.RewardManager.SpawnCollectible("hearts_1");
-				collectible.Position = player.Position;
-				collectible.ZPosition = 100;
-			}
-			if (Keyboard.IsKeyPressed(Keys.B)) {
-				Collectible collectible = GameControl.RewardManager.SpawnCollectible("ammo_bombs_5");
-				collectible.Position = player.Position;
-				collectible.ZPosition = 100;
-			}
-			if (Keyboard.IsKeyPressed(Keys.J)) {
-				Collectible collectible = GameControl.RewardManager.SpawnCollectible("ammo_arrows_5");
-				collectible.Position = player.Position;
-				collectible.ZPosition = 100;
+
+
+				// DEBUG KEYS:
+
+				if (Keyboard.IsKeyPressed(Keys.G)) {
+					GameControl.DisplayMessage("I was a <red>hero<red> to broken robots 'cause I was one of them, but how can I sing about being damaged if I'm not?<p> That's like <green>Christina Aguilera<green> singing Spanish. Ooh, wait! That's it! I'll fake it!");
+				}
+				if (Keyboard.IsKeyPressed(Keys.Insert)) {
+					GameControl.Inventory.FillAllAmmo();
+				}
+				if (Keyboard.IsKeyPressed(Keys.Delete)) {
+					GameControl.Inventory.EmptyAllAmmo();
+				}
+				if (Keyboard.IsKeyPressed(Keys.Home)) {
+					GameControl.Player.MaxHealth = 4 * 14;
+					GameControl.Player.Health = GameControl.Player.MaxHealth;
+				}
+				if (Keyboard.IsKeyPressed(Keys.End)) {
+					GameControl.Player.Health = 4 * 3;
+				}
+
+				if (Keyboard.IsKeyPressed(Keys.T)) {
+					switch (player.Tunic) {
+					case PlayerTunics.GreenTunic: player.Tunic = PlayerTunics.RedTunic; break;
+					case PlayerTunics.RedTunic: player.Tunic = PlayerTunics.BlueTunic; break;
+					case PlayerTunics.BlueTunic: player.Tunic = PlayerTunics.GreenTunic; break;
+					}
+				}
+				if (Keyboard.IsKeyPressed(Keys.H)) {
+					player.Hurt(0);
+				}
+				if (Keyboard.IsKeyPressed(Keys.M)) {
+					AudioSystem.PlaySong("overworld");
+				}
+				if (Keyboard.IsKeyPressed(Keys.N)) {
+					AudioSystem.MasterVolume = 1.0f;
+				}
+				if (Keyboard.IsKeyPressed(Keys.R)) {
+					int[] rupees = { 1, 5, 20, 100, 200 };//, 5, 20, 100, 200 };
+					int rupee = GRandom.NextInt(rupees.Length);
+					Collectible collectible = GameControl.RewardManager.SpawnCollectible("rupees_" + rupees[rupee].ToString());
+					collectible.Position = player.Position;
+					collectible.ZPosition = 100;
+				}
+				if (Keyboard.IsKeyPressed(Keys.Y)) {
+					GraphicsComponent.DrawCollisionBoxes = !GraphicsComponent.DrawCollisionBoxes;
+				}
+				if (Keyboard.IsKeyPressed(Keys.K)) {
+					Collectible collectible = GameControl.RewardManager.SpawnCollectible("hearts_1");
+					collectible.Position = player.Position;
+					collectible.ZPosition = 100;
+				}
+				if (Keyboard.IsKeyPressed(Keys.B)) {
+					Collectible collectible = GameControl.RewardManager.SpawnCollectible("ammo_bombs_5");
+					collectible.Position = player.Position;
+					collectible.ZPosition = 100;
+				}
+				if (Keyboard.IsKeyPressed(Keys.J)) {
+					Collectible collectible = GameControl.RewardManager.SpawnCollectible("ammo_arrows_5");
+					collectible.Position = player.Position;
+					collectible.ZPosition = 100;
+				}
 			}
 		}
 
@@ -579,13 +596,15 @@ namespace ZeldaOracle.Game.Control {
 			for (int i = 0; i < entities.Count; ++i) {
 				entities[i].Draw(g);
 			}
-			
+
 			// Draw HUD.
 			drawMode.SortMode = SpriteSortMode.Deferred;
 			g.End();
 			g.Begin(drawMode);
 			g.ResetTranslation();
 			GameControl.HUD.Draw(g, false);
+
+			GameControl.DrawRoomState(g);
 		}
 
 		

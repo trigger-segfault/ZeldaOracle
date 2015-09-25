@@ -31,6 +31,7 @@ namespace ZeldaOracle.Game.Entities
 		private int				flickerAlternateDelay;
 		private int				flickerTimer;
 		private bool			flickerIsVisible;
+		private bool			isAnimatedWhenPaused;
 
 
 		private static bool		drawCollisionBoxes	= false;
@@ -58,6 +59,7 @@ namespace ZeldaOracle.Game.Entities
 			this.flickerAlternateDelay	= 2;
 			this.flickerTimer			= 0;
 			this.flickerIsVisible		= true;
+			this.isAnimatedWhenPaused	= false;
 		}
 		
 
@@ -97,23 +99,25 @@ namespace ZeldaOracle.Game.Entities
 		}
 
 		public void Update() {
-			animationPlayer.SubStripIndex = subStripIndex;
-			animationPlayer.Update();
-			
-			if (isFlickering) {
-				flickerTimer++;
-				if (flickerTimer >= flickerAlternateDelay) {
-					flickerIsVisible = !flickerIsVisible;
-					flickerTimer = 0;
-				}
-			}
-			else {
-				flickerTimer = 0;
-				flickerIsVisible = true;
-			}
+			if ((entity.GameControl.UpdateRoom || isAnimatedWhenPaused) && entity.GameControl.AnimateRoom) {
+				animationPlayer.SubStripIndex = subStripIndex;
+				animationPlayer.Update();
 
-			if (isGrassEffectVisible && entity.Physics.IsInGrass && entity.Physics.Velocity.Length > 0.1f) {
-				grassAnimationTicks += 1;
+				if (isFlickering) {
+					flickerTimer++;
+					if (flickerTimer >= flickerAlternateDelay) {
+						flickerIsVisible = !flickerIsVisible;
+						flickerTimer = 0;
+					}
+				}
+				else {
+					flickerTimer = 0;
+					flickerIsVisible = true;
+				}
+
+				if (isGrassEffectVisible && entity.Physics.IsInGrass && entity.Physics.Velocity.Length > 0.1f) {
+					grassAnimationTicks += 1;
+				}
 			}
 		}
 
@@ -216,6 +220,11 @@ namespace ZeldaOracle.Game.Entities
 		public int FlickerAlternateDelay {
 			get { return flickerAlternateDelay;  }
 			set { flickerAlternateDelay = value; }
+		}
+
+		public bool IsAnimatedWhenPaused {
+			get { return isAnimatedWhenPaused; }
+			set { isAnimatedWhenPaused = value; }
 		}
 
 		public AnimationPlayer AnimationPlayer {
