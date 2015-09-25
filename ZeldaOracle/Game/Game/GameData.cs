@@ -526,6 +526,8 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PLAYER_DIE;
 		public static Animation ANIM_PLAYER_FALL;
 		public static Animation ANIM_PLAYER_DROWN;
+		public static Animation ANIM_PLAYER_RAISE_ONE_HAND;
+		public static Animation ANIM_PLAYER_RAISE_TWO_HANDS;
 
 		// Weapon animations.
 		public static Animation ANIM_SWORD_HOLD;

@@ -54,6 +54,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 
 		private PlayerNormalState		stateNormal;
+		private PlayerBusyState			stateBusy;
 		private PlayerSwimState			stateSwim;
 		private PlayerLedgeJumpState	stateLedgeJump;
 		private PlayerLadderState		stateLadder;
@@ -114,6 +115,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Create the basic player states.
 			state			= null;
 			stateNormal		= new PlayerNormalState();
+			stateBusy		= new PlayerBusyState();
 			stateSwim		= new PlayerSwimState();
 			stateLadder		= new PlayerLadderState();
 			stateLedgeJump	= new PlayerLedgeJumpState();
@@ -150,6 +152,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 				return stateLadder;
 			else
 				return stateNormal;
+		}
+
+		// Begin the busy state with the specified duration.
+		public void BeginBusyState(int duration) {
+			stateBusy.Duration = duration;
+			BeginState(stateBusy);
 		}
 
 		// Begin the desired natural state.
@@ -406,7 +414,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public PlayerNormalState NormalState {
 			get { return stateNormal; }
 		}
-		
+
+		public PlayerBusyState BusyState {
+			get { return stateBusy; }
+		}
+
 		public PlayerSwimState SwimState {
 			get { return stateSwim; }
 		}

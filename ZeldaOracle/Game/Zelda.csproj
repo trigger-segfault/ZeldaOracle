@@ -226,6 +226,7 @@
     <Compile Include="Game\Entities\Projectiles\CarriedTile.cs" />
     <Compile Include="Game\Entities\Projectiles\Projectile.cs" />
     <Compile Include="Game\Entities\Projectiles\Seed.cs" />
+    <Compile Include="Game\GameStates\StateReward.cs" />
     <Compile Include="Game\GameStates\StateTextReader.cs" />
     <Compile Include="Game\Control\View.cs" />
     <None Include="Game\Debug\DebugController.cs" />
@@ -286,6 +287,7 @@
     <Compile Include="Game\Items\ItemEssence.cs" />
     <Compile Include="Game\Items\ItemFlags.cs" />
     <Compile Include="Game\Items\ItemWeapon.cs" />
+    <Compile Include="Game\Items\Rewards\RewardItem.cs" />
     <Compile Include="Game\Items\Rewards\RewardAmmo.cs" />
     <Compile Include="Game\Items\Rewards\RewardRecoveryHeart.cs" />
     <Compile Include="Game\Items\Rewards\Reward.cs" />
@@ -318,6 +320,8 @@
     <Compile Include="Game\Main\ResourceBuilders\AnimationBuilder.cs" />
     <Compile Include="Game\Main\ResourceBuilders\SpriteBuilder.cs" />
     <Compile Include="Game\Main\ResourceBuilders\TilesetBuilder.cs" />
+    <Compile Include="Game\Tiles\Custom\TileReward.cs" />
+    <Compile Include="Game\Tiles\Custom\TileChest.cs" />
     <Compile Include="Game\Tiles\Custom\TileOwl.cs" />
     <Compile Include="Game\Tiles\Custom\TileLantern.cs" />
     <Compile Include="Game\Tiles\Tile.cs" />

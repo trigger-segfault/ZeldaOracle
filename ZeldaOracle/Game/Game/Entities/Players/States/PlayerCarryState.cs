@@ -56,7 +56,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public void DropObject(bool enterBusyState = true) {
 			player.RoomControl.SpawnEntity(carryObject, player.Origin, 16);
 			if (enterBusyState) {
-				player.BeginState(new PlayerBusyState(throwDuration));
+				player.BeginBusyState(throwDuration);
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 			}
 		}

@@ -62,7 +62,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			seed.Physics.Velocity = velocity * 0.75f;
 			
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
-			player.BeginState(new PlayerBusyState(10));
+			player.BeginBusyState(10);
 
 			return seed;
 		}
@@ -171,7 +171,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Called when the item has been obtained.
 		public override void OnObtained() {
 			inventory.ObtainAmmo(this.ammo[0]);
-			this.ammo[0].Amount = 10;
+			this.ammo[0].Amount = 20;
 		}
 
 		// Called when the item has been unobtained.
