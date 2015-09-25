@@ -9,6 +9,7 @@ using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles {
 	
@@ -165,7 +166,8 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public virtual void Draw(Graphics2D g) {
-
+			// TODO: zone.
+			
 			if (animationPlayer.SubStrip != null) {
 				// Draw as an animation.
 				g.DrawAnimation(animationPlayer.SubStrip, RoomControl.GameControl.RoomTicks, Position);
@@ -216,6 +218,10 @@ namespace ZeldaOracle.Game.Tiles {
 		public RoomControl RoomControl {
 			get { return roomControl; }
 			set { roomControl = value; }
+		}
+
+		public Zone Zone {
+			get { return roomControl.Room.Zone; }
 		}
 
 		public Vector2F Position {

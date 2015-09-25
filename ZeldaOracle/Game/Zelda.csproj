@@ -180,6 +180,7 @@
     <Compile Include="Common\Scripts\ScriptReader.cs" />
     <Compile Include="Common\Scripts\SoundsSR.cs" />
     <Compile Include="Common\Scripts\SpriteSheetSROld.cs" />
+    <Compile Include="Common\Scripts\ImagesSR.cs" />
     <Compile Include="Common\Scripts\SpritesSR.cs" />
     <Compile Include="Common\Translation\Language.cs" />
     <Compile Include="Common\Translation\LetterString.cs" />

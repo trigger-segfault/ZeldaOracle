@@ -1,0 +1,74 @@
+
+
+#==============================================================
+# Menu
+#==============================================================
+
+IMAGE menu_small;
+	VARIANT dark  "UI/menu_small";
+	VARIANT light "UI/menu_small_light";
+	END;
+IMAGE menu_large;
+	VARIANT dark  "UI/menu_large";
+	VARIANT light "UI/menu_large_light";
+	END;
+	
+
+#==============================================================
+# Items
+#==============================================================
+
+IMAGE items_small;
+	VARIANT dark  "Items/items_small";
+	VARIANT light "Items/items_small_light";
+	END;
+IMAGE items_large;
+	VARIANT dark  "Items/items_large";
+	VARIANT light "Items/items_large_light";
+	END;
+	
+
+#==============================================================
+# Tilesets
+#==============================================================
+
+IMAGE zoneset;
+	VARIANT summer		"Tiles/zoneset";
+#	VARIANT summer		"Tiles/zoneset_summer";
+#	VARIANT forest		"Tiles/zoneset_forest";
+#	VARIANT interior	"Tiles/zoneset_interior";
+#	VARIANT dungeon_1	"Tiles/zoneset_dungeon_1";
+#	VARIANT dungeon_2	"Tiles/zoneset_dungeon_2";
+	END;
+IMAGE tileset_overworld;
+	VARIANT summer		"Tiles/tileset";
+#	VARIANT summer		"Tiles/overworld_summer";
+#	VARIANT forest		"Tiles/overworld_forest";
+	END;
+	
+
+#==============================================================
+# Entities
+#==============================================================
+
+IMAGE player;
+	VARIANT green	"player_items";
+	#VARIANT green	"Units/Player/player";
+	VARIANT red		"Units/Player/player_red";
+	VARIANT blue	"Units/Player/player_blue";
+	VARIANT hurt	"Units/Player/player_hurt";
+	END;
+
+#IMAGE basic_monsters;
+#	VARIANT normal	"Units/Monsters/basic_monsters";
+#	VARIANT hurt	"Units/Monsters/basic_monsters_hurt";
+#	END;
+
+#IMAGE color_monsters;
+#	VARIANT red		"Units/Monsters/monsters_red";
+#	VARIANT blue	"Units/Monsters/monsters_blue";
+#	VARIANT green	"Units/Monsters/monsters_green";
+#	VARIANT yellow	"Units/Monsters/monsters_yellow";
+#	VARIANT hurt	"Units/Monsters/monsters_hurt";
+#	END;
+

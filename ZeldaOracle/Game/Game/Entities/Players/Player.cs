@@ -301,13 +301,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 				Graphics.SubStripIndex = direction;
 
 			if (invincibleTimer != 0 && (invincibleTimer + 1) % 8 < 4) {
-				Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER_HURT);
+				//Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER_HURT);
+				Graphics.ImageVariantName = "hurt";
 			}
 			else {
 				switch (tunic) {
-				case PlayerTunics.GreenTunic: Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER); break;
-				case PlayerTunics.RedTunic: Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER_RED); break;
-				case PlayerTunics.BlueTunic: Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER_BLUE); break;
+				case PlayerTunics.GreenTunic:	Graphics.ImageVariantName = "green"; break;
+				case PlayerTunics.RedTunic:		Graphics.ImageVariantName = "red"; break;
+				case PlayerTunics.BlueTunic:	Graphics.ImageVariantName = "blue"; break;
+				//case PlayerTunics.GreenTunic: Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER); break;
+				//case PlayerTunics.RedTunic: Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER_RED); break;
+				//case PlayerTunics.BlueTunic: Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER_BLUE); break;
 				}
 			}
 

@@ -85,6 +85,10 @@
       <Name>sounds_script</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Images\images.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>images</Name>
+    </None>
     <None Include="SpriteSheets\sprites.conscript">
       <Name>sprites</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

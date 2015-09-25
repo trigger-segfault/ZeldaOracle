@@ -107,6 +107,8 @@ namespace ZeldaOracle.Game {
 		
 		// Loads the images.
 		private static void LoadImages() {
+			Resources.LoadImagesFromScript("Images/images.conscript");
+
 			Resources.LoadImage("Images/UI/menu_weapons_a");
 			Resources.LoadImage("Images/UI/menu_weapons_b");
 			Resources.LoadImage("Images/UI/menu_key_items_a");

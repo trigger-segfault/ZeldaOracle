@@ -32,6 +32,8 @@ namespace ZeldaOracle.Game.Entities
 		private int				flickerTimer;
 		private bool			flickerIsVisible;
 
+		private string			imageVariantName;
+
 
 		private static bool		drawCollisionBoxes	= false;
 
@@ -58,6 +60,7 @@ namespace ZeldaOracle.Game.Entities
 			this.flickerAlternateDelay	= 2;
 			this.flickerTimer			= 0;
 			this.flickerIsVisible		= true;
+			this.imageVariantName		= String.Empty;
 		}
 		
 
@@ -139,9 +142,9 @@ namespace ZeldaOracle.Game.Entities
 			float depth = 0.6f - 0.3f * (entity.Origin.Y / (float) (entity.RoomControl.Room.Height * GameSettings.TILE_SIZE));
 			Vector2F drawPosition = Entity.Position - new Vector2F(0, Entity.ZPosition);
 			if (animationPlayer.SubStrip != null)
-				g.DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, drawPosition + drawOffset, depth);
+				g.DrawAnimation(animationPlayer.SubStrip, imageVariantName, animationPlayer.PlaybackTime, drawPosition + drawOffset, depth);
 			else if (sprite != null)
-				g.DrawSprite(sprite, drawPosition + drawOffset, depth);
+				g.DrawSprite(sprite, imageVariantName, drawPosition + drawOffset, depth);
 			
 			// Draw the ripples effect.
 			if (isRipplesEffectVisible && entity.Physics.IsEnabled && entity.Physics.IsInPuddle)
@@ -248,6 +251,12 @@ namespace ZeldaOracle.Game.Entities
 			set { drawOffset = value; }
 		}
 
+		public string ImageVariantName {
+			get { return imageVariantName; }
+			set { imageVariantName = value; }
+		}
+
+		// DEBUG: draw collision boxes.
 		public static bool DrawCollisionBoxes {
 			get { return drawCollisionBoxes; }
 			set { drawCollisionBoxes = value; }
