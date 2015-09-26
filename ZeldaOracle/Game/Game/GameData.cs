@@ -565,6 +565,7 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_HUD_KEY;
 		public static Sprite SPR_HUD_X;
 		public static Sprite SPR_HUD_LEVEL;
+		public static Sprite SPR_HUD_TEXT_NEXT_ARROW;
 		
 		public static Sprite[] SPR_HUD_HEARTS;
 

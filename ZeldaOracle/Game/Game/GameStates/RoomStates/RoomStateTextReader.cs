@@ -41,6 +41,15 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		private int currentChar;
 		// The current state of the text reader.
 		private TextReaderState state;
+		// The timer used to update the arrow sprite.
+		private int arrowTimer;
+
+		//-----------------------------------------------------------------------------
+		// Constants
+		//-----------------------------------------------------------------------------
+
+		// The default color used by the text reader.
+		private readonly Color TextColor = new Color(248, 208, 136);
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -48,19 +57,20 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 
 		// Constructs a text reader with the specified message
 		public RoomStateTextReader(Message message, int linesPerWindow = 2) {
-			this.updateRoom = false;
-			this.animateRoom = true;
+			this.updateRoom			= false;
+			this.animateRoom		= true;
 
-			this.message = message;
-			this.wrappedString = GameData.FONT_LARGE.WrapString(message.Text, 128);
-			this.timer = 0;
+			this.message			= message;
+			this.wrappedString		= GameData.FONT_LARGE.WrapString(message.Text, 128);
+			this.timer				= 0;
+			this.arrowTimer			= 0;
 
-			this.linesPerWindow = linesPerWindow;
-			this.windowLinesLeft = this.linesPerWindow;
-			this.windowLine = 0;
-			this.currentLine = 0;
-			this.currentChar = 0;
-			this.state = TextReaderState.WritingLine;
+			this.linesPerWindow		= linesPerWindow;
+			this.windowLinesLeft	= this.linesPerWindow;
+			this.windowLine			= 0;
+			this.currentLine		= 0;
+			this.currentChar		= 0;
+			this.state				= TextReaderState.WritingLine;
 		}
 
 		//-----------------------------------------------------------------------------
@@ -91,9 +101,11 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 						}
 						else if (wrappedString.Lines[currentLine].EndsWith(FormatCodes.ParagraphCharacter)) {
 							state = TextReaderState.PressToEndParagraph;
+							arrowTimer = 0;
 						}
 						else if (windowLinesLeft == 0) {
 							state = TextReaderState.PressToContinue;
+							arrowTimer = 0;
 						}
 						else if (windowLine + 1 < linesPerWindow) {
 							windowLine++;
@@ -117,6 +129,9 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 					break;
 
 				case TextReaderState.PressToContinue:
+					arrowTimer++;
+					if (arrowTimer == 32)
+						arrowTimer = 0;
 					if (Controls.A.IsPressed() || Controls.B.IsPressed()) {
 						state = TextReaderState.PushingLine;
 						timer = 4;
@@ -126,6 +141,9 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 					}
 					break;
 				case TextReaderState.PressToEndParagraph:
+					arrowTimer++;
+					if (arrowTimer == 32)
+						arrowTimer = 0;
 					if (Controls.A.IsPressed() || Controls.B.IsPressed()) {
 						state = TextReaderState.WritingLine;
 						windowLinesLeft = linesPerWindow;
@@ -146,18 +164,24 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 
 		public override void Draw(Graphics2D g) {
 			Point2I pos = new Point2I(8, 24);
-			if (GameControl.Player.Y < ((GameSettings.VIEW_HEIGHT) / 2 + 1))
+			if (GameControl.Player.Y < ((GameSettings.VIEW_HEIGHT) / 2 + 8))
 				pos.Y = 96;
 			// TODO: Apply Player position based on view
 			g.FillRectangle(new Rectangle2I(pos, new Point2I(144, 8 + 16 * linesPerWindow)), Color.Black);
 
+			// Draw the finished writting lines.
 			for (int i = 0; i < windowLine; i++) {
 				if (state == TextReaderState.PushingLine && timer >= 2)
-					g.DrawLetterString(GameData.FONT_LARGE, wrappedString.Lines[currentLine - windowLine + i], pos + new Point2I(8, 6 + 16 * i + 8), new Color(248, 208, 136));
+					g.DrawLetterString(GameData.FONT_LARGE, wrappedString.Lines[currentLine - windowLine + i], pos + new Point2I(8, 6 + 16 * i + 8), TextColor);
 				else
-					g.DrawLetterString(GameData.FONT_LARGE, wrappedString.Lines[currentLine - windowLine + i], pos + new Point2I(8, 6 + 16 * i), new Color(248, 208, 136));
+					g.DrawLetterString(GameData.FONT_LARGE, wrappedString.Lines[currentLine - windowLine + i], pos + new Point2I(8, 6 + 16 * i), TextColor);
 			}
-			g.DrawLetterString(GameData.FONT_LARGE, wrappedString.Lines[currentLine].Substring(0, currentChar), pos + new Point2I(8, 6 + 16 * windowLine), new Color(248, 208, 136));
+			// Draw the currently writting line.
+			g.DrawLetterString(GameData.FONT_LARGE, wrappedString.Lines[currentLine].Substring(0, currentChar), pos + new Point2I(8, 6 + 16 * windowLine), TextColor);
+
+			// Draw the next line arrow.
+			if ((state == TextReaderState.PressToContinue || state ==  TextReaderState.PressToEndParagraph) && arrowTimer >= 16)
+				g.DrawSprite(GameData.SPR_HUD_TEXT_NEXT_ARROW, pos + new Point2I(136, 16 * linesPerWindow));
 		}
 
 	}
