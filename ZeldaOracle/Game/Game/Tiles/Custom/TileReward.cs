@@ -11,48 +11,44 @@ using ZeldaOracle.Game.Items.Rewards;
 namespace ZeldaOracle.Game.Tiles.Custom {
 	public class TileReward : Tile {
 
-		private Reward reward;
-
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public TileReward() {
-		}
+		public TileReward() { }
 
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
-		
-		// Called when the player presses A on this tile, when facing the given direction.
-		public override bool OnAction(int direction) {
-			RoomControl.GameControl.PushRoomState(new RoomStateReward(reward));
-			RoomControl.RemoveTile(this);
-			return true;
-		}
 
+		// Called when the player touches any part of the tile area.
+		public override void OnTouch() {
+
+			// Give the player with the reward.
+			string rewardName = properties.GetString("reward", "rupees_1");
+			Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
+			RoomControl.GameControl.PushRoomState(new RoomStateReward(reward));
+
+			// Remove the now-useless tile.
+			RoomControl.RemoveTile(this);
+		}
 
 		public override void Initialize() {
 			base.Initialize();
 			
+			// Change the sprite to the reward.
 			string rewardName = properties.GetString("reward", "rupees_1");
-			reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
+			Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
 			AnimationPlayer.Animation = reward.Animation;
 		}
 
 		public override void Draw(Graphics2D g) {
 
+			// Draw the reward at the center.
 			if (AnimationPlayer.SubStrip != null) {
 				// Draw as an animation.
 				g.DrawAnimation(AnimationPlayer.SubStrip, RoomControl.GameControl.RoomTicks, Position + GameSettings.TILE_SIZE / 2);
-			}
-			else {
-				// Draw as a sprite.
-				Sprite spr = Sprite;
-				if (IsMoving && SpriteAsObject != null)
-					spr = SpriteAsObject;
-				g.DrawSprite(spr, Position);
 			}
 		}
 

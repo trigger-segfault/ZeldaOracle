@@ -392,7 +392,7 @@ namespace ZeldaOracle.Game.Control {
 
 			// Create a reward tile.
 			TileData tdReward		= new TileData(typeof(TileReward), TileFlags.Solid);
-			tdReward.CollisionModel	= GameData.MODEL_BLOCK;
+			tdReward.CollisionModel	= GameData.MODEL_CENTER;
 			tdReward.Properties.Set("reward", "item_flippers_1");
 
 			// Setup the rooms.
