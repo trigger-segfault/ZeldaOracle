@@ -322,9 +322,9 @@
     <Compile Include="Game\GameSettings.cs" />
     <Compile Include="Game\Main\Program.cs" />
     <Compile Include="Game\Entities\Players\Player.cs" />
-    <Compile Include="Game\Main\ResourceBuilders\AnimationBuilder.cs" />
-    <Compile Include="Game\Main\ResourceBuilders\SpriteBuilder.cs" />
-    <Compile Include="Game\Main\ResourceBuilders\TilesetBuilder.cs" />
+    <Compile Include="Common\Content\ResourceBuilders\AnimationBuilder.cs" />
+    <Compile Include="Common\Content\ResourceBuilders\SpriteBuilder.cs" />
+    <Compile Include="Common\Content\ResourceBuilders\TilesetBuilder.cs" />
     <Compile Include="Game\Tiles\Custom\TileReward.cs" />
     <Compile Include="Game\Tiles\Custom\TileChest.cs" />
     <Compile Include="Game\Tiles\Custom\TileOwl.cs" />

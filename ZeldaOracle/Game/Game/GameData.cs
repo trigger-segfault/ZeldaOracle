@@ -8,11 +8,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Common.Content;
+using ZeldaOracle.Common.Content.ResourceBuilders;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Main.ResourceBuilders;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game {
