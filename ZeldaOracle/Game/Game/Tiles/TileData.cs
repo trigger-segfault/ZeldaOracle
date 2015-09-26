@@ -6,6 +6,7 @@ using System.Reflection;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Collision;
+using ZeldaOracle.Common.Properties;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -21,10 +22,7 @@ namespace ZeldaOracle.Game.Tiles {
 		private CollisionModel	collisionModel;
 		private Point2I			sheetLocation;	// Location on the tileset.
 		private Tileset			tileset;
-
-
-
-		// TODO: Properties
+		private Properties		properties;
 
 
 		//-----------------------------------------------------------------------------
@@ -42,6 +40,7 @@ namespace ZeldaOracle.Game.Tiles {
 			collisionModel	= null;
 			sheetLocation	= Point2I.Zero;
 			tileset			= null;
+			properties		= new Properties();
 		}
 		
 		public TileData(TileFlags flags) : this() {
@@ -107,6 +106,9 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return tileset; }
 			set { tileset = value; }
 		}
-		
+
+		public Properties Properties {
+			get { return properties; }
+		}
 	}
 }

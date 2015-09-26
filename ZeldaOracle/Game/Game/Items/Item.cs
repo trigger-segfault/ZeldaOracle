@@ -12,8 +12,8 @@ using ZeldaOracle.Game.Control.Menus;
 namespace ZeldaOracle.Game.Items {
 	public abstract class Item : ISlotItem {
 
-		protected Inventory inventory;
-		protected Player player;
+		protected Inventory		inventory;
+		protected Player		player;
 
 		protected string		id;
 		protected string[]		name;
@@ -27,7 +27,6 @@ namespace ZeldaOracle.Game.Items {
 		protected bool			isStolen;
 
 		protected Sprite[]		sprite;
-		protected Sprite[]		spriteLight;
 
 
 		//-----------------------------------------------------------------------------
@@ -37,6 +36,7 @@ namespace ZeldaOracle.Game.Items {
 		public const int Level1 = 0;
 		public const int Level2 = 1;
 		public const int Level3 = 2;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -54,7 +54,6 @@ namespace ZeldaOracle.Game.Items {
 			this.isObtained		= false;
 			this.isStolen		= false;
 			this.sprite			= null;
-			this.spriteLight	= null;
 		}
 
 
@@ -83,8 +82,8 @@ namespace ZeldaOracle.Game.Items {
 		public virtual void OnReturned() { }
 
 		// Draws the item inside the inventory.
-		public virtual void DrawSlot(Graphics2D g, Point2I position, bool light) {
-			DrawSprite(g, position, light);
+		public virtual void DrawSlot(Graphics2D g, Point2I position, int lightOrDark) {
+			DrawSprite(g, position, lightOrDark);
 		}
 
 
@@ -92,19 +91,19 @@ namespace ZeldaOracle.Game.Items {
 		// Drawing
 		//-----------------------------------------------------------------------------
 
-		protected void DrawSprite(Graphics2D g, Point2I position, bool light) {
-			g.DrawSprite(light ? spriteLight[level] : sprite[level], position);
+		protected virtual void DrawSprite(Graphics2D g, Point2I position, int lightOrDark) {
+			g.DrawSprite(sprite[level], lightOrDark, position);
 		}
 
-		protected void DrawAmmo(Graphics2D g, Point2I position, bool light) {
-			g.DrawString(GameData.FONT_SMALL, ammo[currentAmmo].Amount.ToString("00"), position + new Point2I(8, 8), light ? new Color(16, 16, 16) : Color.Black);
+		protected virtual void DrawAmmo(Graphics2D g, Point2I position, int lightOrDark) {
+			Color color = (lightOrDark == GameData.VARIANT_LIGHT ? new Color(16, 16, 16) : Color.Black);
+			g.DrawString(GameData.FONT_SMALL, ammo[currentAmmo].Amount.ToString("00"), position + new Point2I(8, 8), color);
 		}
 
-		protected void DrawLevel(Graphics2D g, Point2I position, bool light) {
-			SpriteSheet sheetMenuSmall = (light ? GameData.SHEET_MENU_SMALL_LIGHT : GameData.SHEET_MENU_SMALL);
-			Sprite levelSprite = new Sprite(sheetMenuSmall, 2, 1);
-			g.DrawSprite(levelSprite, position + new Point2I(8, 8));
-			g.DrawString(GameData.FONT_SMALL, (level + 1).ToString(), position + new Point2I(16, 8), light ? new Color(16, 16, 16) : Color.Black);
+		protected virtual void DrawLevel(Graphics2D g, Point2I position, int lightOrDark) {
+			Color color = (lightOrDark == GameData.VARIANT_LIGHT ? new Color(16, 16, 16) : Color.Black);
+			g.DrawSprite(GameData.SPR_HUD_LEVEL, lightOrDark, position + new Point2I(8, 8));
+			g.DrawString(GameData.FONT_SMALL, (level + 1).ToString(), position + new Point2I(16, 8), color);
 		}
 
 

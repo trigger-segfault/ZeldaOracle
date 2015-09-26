@@ -201,9 +201,22 @@ public class Graphics2D {
 	//-----------------------------------------------------------------------------
 	// Sprite drawing
 	//-----------------------------------------------------------------------------
+	
+
+	public void DrawSprite(Sprite sprite, int variantID, Vector2F position, float depth = 0.0f) {
+		for (Sprite part = sprite; part != null; part = part.NextPart) {
+			Image image = sprite.Image.GetVariant(variantID);
+			spriteBatch.Draw(image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
+				XnaColor.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
+		}
+	}
 
 	public void DrawSprite(Sprite sprite, float x, float y, float depth = 0.0f) {
 		DrawSprite(sprite, new Vector2F(x, y), depth);
+	}
+
+	public void DrawSprite(Sprite sprite, int variantID, float x, float y, float depth = 0.0f) {
+		DrawSprite(sprite, variantID, new Vector2F(x, y), depth);
 	}
 
 	public void DrawSprite(Sprite sprite, Vector2F position, float depth = 0.0f) {
@@ -214,9 +227,14 @@ public class Graphics2D {
 	}
 
 	public void DrawSprite(Sprite sprite, Rectangle2F destination, float depth = 0.0f) {
+		DrawSprite(sprite, 0, destination, depth);
+	}
+
+	public void DrawSprite(Sprite sprite, int variantID, Rectangle2F destination, float depth = 0.0f) {
 		for (Sprite part = sprite; part != null; part = part.NextPart) {
+			Image image = sprite.Image.GetVariant(variantID);
 			destination.Point = NewPos(destination.Point) + (Vector2F) part.DrawOffset;
-			spriteBatch.Draw(part.Image, (Rectangle) destination, (Rectangle) part.SourceRect,
+			spriteBatch.Draw(image, (Rectangle) destination, (Rectangle) part.SourceRect,
 				XnaColor.White, 0.0f, Vector2.Zero, SpriteEffects.None, depth);
 		}
 	}
@@ -232,6 +250,16 @@ public class Graphics2D {
 
 	// Draw an animation during at the given time stamp and position.
 	public void DrawAnimation(Animation animation, float time, float x, float y, float depth = 0.0f) {
+		DrawAnimation(animation, 0, time, x, y, depth);
+	}
+	
+	// Draw an animation during at the given time stamp and position.
+	public void DrawAnimation(Animation animation, int variantID, float time, Vector2F position, float depth = 0.0f) {
+		DrawAnimation(animation, variantID, time, position.X, position.Y, depth);
+	}
+
+	// Draw an animation during at the given time stamp and position.
+	public void DrawAnimation(Animation animation, int variantID, float time, float x, float y, float depth = 0.0f) {
 		if (animation.LoopMode == LoopMode.Repeat) {
 			if (animation.Duration == 0)
 				time = 0;
@@ -246,7 +274,7 @@ public class Graphics2D {
 			if (time < frame.StartTime)
 				return;
 			if (time < frame.StartTime + frame.Duration || (time >= animation.Duration && frame.StartTime + frame.Duration == animation.Duration))
-				DrawSprite(frame.Sprite, x, y, depth);
+				DrawSprite(frame.Sprite, variantID, x, y, depth);
 		}
 	}
 

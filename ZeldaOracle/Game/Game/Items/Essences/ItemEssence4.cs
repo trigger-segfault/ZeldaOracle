@@ -18,7 +18,6 @@ namespace ZeldaOracle.Game.Items.Essences {
 			this.description = new string[] { "It reignights a hero's passion deep in wavering hearts." };
 			this.slot = 3;
 			this.sprite = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(11, 7)) };
-			this.spriteLight = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE_LIGHT, new Point2I(11, 7)) };
 		}
 
 	}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
@@ -54,7 +55,11 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public override void Initialize() {
-			isLit = false;
+			isLit = properties.GetBoolean("lit", false);
+
+			if (isLit) {
+				AnimationPlayer.Play(GameData.ANIM_TILE_LANTERN);
+			}
 		}
 	}
 }

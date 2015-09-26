@@ -26,13 +26,9 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.maxLevel		= Item.Level2;
 			this.flags			= ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword;
 
-			sprite			= new Sprite[] {
+			sprite = new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(2, 1)),
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(3, 1))
-			};
-			spriteLight	= new Sprite[] {
-				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(2, 1)),
-				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(3, 1))
 			};
 		}
 
@@ -63,9 +59,9 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		}
 
 		// Draws the item inside the inventory.
-		public override void DrawSlot(Graphics2D g, Point2I position, bool light) {
-			DrawSprite(g, position, light);
-			DrawLevel(g, position, light);
+		public override void DrawSlot(Graphics2D g, Point2I position, int lightOrDark) {
+			DrawSprite(g, position, lightOrDark);
+			DrawLevel(g, position, lightOrDark);
 		}
 
 	}

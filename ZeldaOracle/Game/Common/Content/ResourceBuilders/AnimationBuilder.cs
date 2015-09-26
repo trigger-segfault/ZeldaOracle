@@ -5,8 +5,8 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 
-namespace ZeldaOracle.Game.Main.ResourceBuilders
-{
+namespace ZeldaOracle.Common.Content.ResourceBuilders {
+
 	public class AnimationBuilder {
 		private Animation	animation;
 		private SpriteSheet	sheet;

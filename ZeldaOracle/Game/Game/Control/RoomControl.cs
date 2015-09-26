@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
@@ -207,6 +208,8 @@ namespace ZeldaOracle.Game.Control {
 					
 				}
 			}
+			
+			room.Zone = GameData.ZONE_GRAVEYARD;
 
 			return room;
 		}
@@ -316,73 +319,82 @@ namespace ZeldaOracle.Game.Control {
 			player.X = 48;
 			player.Y = 32;
 			
-			// Create an owl tile.
-			TileData tdOwl			= new TileData(typeof(TileOwl), TileFlags.Solid);
-			tdOwl.Sprite			= GameData.SPR_TILE_OWL;
-			tdOwl.CollisionModel	= GameData.MODEL_BLOCK;
-			
-			// Create a lantern tile.
-			TileData tdLantern			= new TileData(typeof(TileLantern), TileFlags.Solid);
-			tdLantern.Sprite			= GameData.SPR_TILE_LANTERN_UNLIT;
-			tdLantern.CollisionModel	= GameData.MODEL_BLOCK;
-			
-			// Create a Sign tile
-			TileData tdSign = new TileData(typeof(TileSign), TileFlags.Solid | TileFlags.Pickupable |
-				TileFlags.Burnable | TileFlags.Cuttable | TileFlags.Switchable);
-			tdSign.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 0);
-			tdSign.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 1);
-			tdSign.BreakAnimation	= GameData.ANIM_EFFECT_SIGN_BREAK;
-			tdSign.CollisionModel	= GameData.MODEL_BLOCK;
-			
 			// Create a movable block tile.
 			TileData tdBlock		= new TileData(TileFlags.Solid | TileFlags.Movable);
-			tdBlock.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 1, 9);
-			tdBlock.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 2, 9);
+			tdBlock.Sprite			= GameData.SPR_TILE_MOVABLE_BLOCK;
+			tdBlock.SpriteAsObject	= GameData.SPR_TILE_MOVABLE_BLOCK_ASOBJECT;
 			tdBlock.CollisionModel	= GameData.MODEL_BLOCK;
 			
 			// Create a diamond rock tile.
-			TileData tdDiamond		= new TileData(TileFlags.Solid | TileFlags.Switchable | TileFlags.SwitchStays);
-			tdDiamond.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 4, 0);
-			tdDiamond.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 4, 1);
+			TileData tdDiamond			= new TileData(TileFlags.Solid | TileFlags.Switchable | TileFlags.SwitchStays);
+			tdDiamond.Sprite			= GameData.SPR_TILE_DIAMOND_ROCK;
+			tdDiamond.SpriteAsObject	= GameData.SPR_TILE_DIAMOND_ROCK_ASOBJECT;
 			tdDiamond.CollisionModel	= GameData.MODEL_BLOCK;
 			
 			// Create a bush tile.
 			TileData tdBush		= new TileData(TileFlags.Solid | TileFlags.Pickupable | TileFlags.Bombable |
 									TileFlags.Burnable | TileFlags.Switchable | TileFlags.Cuttable);
-			tdBush.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 0);
-			tdBush.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 1);
+			tdBush.Sprite			= GameData.SPR_TILE_BUSH;
+			tdBush.SpriteAsObject	= GameData.SPR_TILE_BUSH_ASOBJECT;
 			tdBush.BreakAnimation	= GameData.ANIM_EFFECT_LEAVES;
 			tdBush.CollisionModel	= GameData.MODEL_BLOCK;
 			
 			// Create a pot tile.
 			TileData tdPot		= new TileData(TileFlags.Solid | TileFlags.Pickupable |
 									TileFlags.Cuttable | TileFlags.Switchable | TileFlags.Movable);
-			tdPot.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 2, 0);
-			tdPot.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 2, 1);
+			tdPot.Sprite			= GameData.SPR_TILE_POT;
+			tdPot.SpriteAsObject	= GameData.SPR_TILE_POT_ASOBJECT;
 			tdPot.BreakAnimation	= GameData.ANIM_EFFECT_ROCK_BREAK;
 			tdPot.CollisionModel	= GameData.MODEL_BLOCK;
 			
 			// Create a rock tile.
 			TileData tdRock			= new TileData(TileFlags.Solid | TileFlags.Pickupable);
-			tdRock.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 3, 0);
-			tdRock.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 3, 1);
+			tdRock.Sprite			= GameData.SPR_TILE_ROCK;
+			tdRock.SpriteAsObject	= GameData.SPR_TILE_ROCK_ASOBJECT;
 			tdRock.BreakAnimation	= GameData.ANIM_EFFECT_ROCK_BREAK;
 			tdRock.CollisionModel	= GameData.MODEL_BLOCK;
 			
 			// Create a grass tile.
 			TileData tdGrass		= new TileData(TileFlags.Grass | TileFlags.Cuttable | TileFlags.Burnable | TileFlags.Bombable);
-			tdGrass.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 3);
+			tdGrass.Sprite			= GameData.SPR_TILE_GRASS;
 			tdGrass.BreakAnimation	= GameData.ANIM_EFFECT_GRASS_LEAVES;
+			
+			// Create an owl tile.
+			TileData tdOwl			= new TileData(typeof(TileOwl), TileFlags.Solid);
+			tdOwl.Sprite			= GameData.SPR_TILE_OWL;
+			tdOwl.CollisionModel	= GameData.MODEL_BLOCK;
+			tdOwl.Properties.Set("text", "<green>Beware!!!<green>");
+			
+			// Create a lantern tile.
+			TileData tdLantern			= new TileData(typeof(TileLantern), TileFlags.Solid);
+			tdLantern.Sprite			= GameData.SPR_TILE_LANTERN_UNLIT;
+			tdLantern.CollisionModel	= GameData.MODEL_BLOCK;
+			tdLantern.Properties.Set("lit", true);
 
+			// Create a Sign tile
+			TileData tdSign = new TileData(typeof(TileSign), TileFlags.Solid | TileFlags.Pickupable |
+				TileFlags.Burnable | TileFlags.Cuttable | TileFlags.Switchable);
+			tdSign.Sprite			= GameData.SPR_TILE_SIGN;
+			tdSign.SpriteAsObject	= GameData.SPR_TILE_SIGN_ASOBJECT;
+			tdSign.BreakAnimation	= GameData.ANIM_EFFECT_SIGN_BREAK;
+			tdSign.CollisionModel	= GameData.MODEL_BLOCK;
+			tdSign.Properties.Set("text", "Hello, World!");
+			tdSign.Properties.Add(Property.CreateList("list",
+					Property.CreateString("1", "one"),
+					Property.CreateString("2", "two"),
+					Property.CreateString("3", "three")));
+
+			// Create a chest tile.
 			TileData tdChest		= new TileData(typeof(TileChest), TileFlags.Solid);
-			tdChest.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 9, 8);
+			tdChest.Sprite			= GameData.SPR_TILE_CHEST;
 			tdChest.CollisionModel	= GameData.MODEL_BLOCK;
+			tdChest.Properties.Set("reward", "rupees_1");
 
+			// Create a reward tile.
 			TileData tdReward		= new TileData(typeof(TileReward), TileFlags.Solid);
 			tdReward.CollisionModel	= GameData.MODEL_BLOCK;
+			tdReward.Properties.Set("reward", "item_flippers_1");
 
-
-			
 			// Setup the rooms.
 			Room r = level.GetRoom(new Point2I(2, 1));
 			r.TileData[8, 1, 1] = tdOwl;
@@ -422,6 +434,20 @@ namespace ZeldaOracle.Game.Control {
 			for (int x = 1; x < 8; x++) {
 				for (int y = 2; y < 6; y++) {
 					r.TileData[x, y, 1] = tdBush;
+				}
+			}
+
+			// Set the rooms to random zones.
+			Random random = new Random();
+			for (int x = 0; x < level.Width; x++) {
+				for (int y = 0; y < level.Height; y++) {
+					int index = random.Next(0, 3);
+					Zone zone = GameData.ZONE_SUMMER;
+					if (index == 1)
+						zone = GameData.ZONE_GRAVEYARD;
+					else if (index == 2)
+						zone = GameData.ZONE_FOREST;
+					level.GetRoom(new Point2I(x, y)).Zone = zone;
 				}
 			}
 			
@@ -586,21 +612,15 @@ namespace ZeldaOracle.Game.Control {
 			}
 			
 			// Draw entities.
-			DrawMode drawMode = new DrawMode();
-			drawMode.BlendState = BlendState.AlphaBlend;
-			drawMode.SortMode	= SpriteSortMode.BackToFront;
-			drawMode.SamplerState = SamplerState.PointClamp;
-			
 			g.End();
-			g.Begin(drawMode);
+			g.Begin(GameSettings.DRAW_MODE_BACK_TO_FRONT);
 			for (int i = 0; i < entities.Count; ++i) {
 				entities[i].Draw(g);
 			}
 
 			// Draw HUD.
-			drawMode.SortMode = SpriteSortMode.Deferred;
 			g.End();
-			g.Begin(drawMode);
+			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 			g.ResetTranslation();
 			GameControl.HUD.Draw(g, false);
 

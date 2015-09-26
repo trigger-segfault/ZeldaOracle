@@ -35,8 +35,10 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 
 		public override void Initialize() {
 			base.Initialize();
-			this.reward = RoomControl.GameControl.RewardManager.GetReward("item_flippers_1");
-			AnimationPlayer.Animation = RoomControl.GameControl.RewardManager.GetReward("item_flippers_1").Animation;
+			
+			string rewardName = properties.GetString("reward", "rupees_1");
+			reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
+			AnimationPlayer.Animation = reward.Animation;
 		}
 
 		public override void Draw(Graphics2D g) {

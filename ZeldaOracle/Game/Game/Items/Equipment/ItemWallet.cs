@@ -38,7 +38,6 @@ namespace ZeldaOracle.Game.Items.Equipment {
 				new Ammo(
 					"rupees", "Rupees", "A currency.",
 					new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(5, 3)),
-					new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(5, 3)),
 					0, maxAmounts[level]
 				),
 				false

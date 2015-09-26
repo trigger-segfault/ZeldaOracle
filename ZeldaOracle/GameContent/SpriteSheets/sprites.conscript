@@ -1,28 +1,30 @@
 
 
+
 #==============================================================
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET "UI/menu_small",		(8, 8), (1, 1), (18, 18); END;
-SPRITESHEET "UI/menu_small_light",	(8, 8), (1, 1), (18, 18); END;
-SPRITESHEET "UI/menu_large",		(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET "UI/menu_large_light",	(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "menu_small",		(8, 8), (1, 1), (18, 18); END;
+SPRITESHEET "menu_large",		(16, 16), (1, 1), (18, 18); END;
 
-SPRITESHEET "Items/items_small",		(8, 16), (1, 1), (18, 18); END;
-SPRITESHEET "Items/items_small_light",	(8, 16), (1, 1), (18, 18); END;
-SPRITESHEET "Items/items_large",		(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET "Items/items_large_light",	(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "items_small",		(8, 16), (1, 1), (18, 18); END;
+SPRITESHEET "items_large",		(16, 16), (1, 1), (18, 18); END;
 
-SPRITESHEET "Tiles/tileset",		(16, 16), (1, 1), (0, 0); END;
+
+SPRITESHEET "menu_small_light",	"UI/menu_small_light"		(8, 8), (1, 1), (18, 18); END;
+SPRITESHEET "menu_large_light",	"UI/menu_large_light"		(16, 16), (1, 1), (18, 18); END;
+
+SPRITESHEET "items_small_light",	"Items/items_small_light"	(8, 16), (1, 1), (18, 18); END;
+SPRITESHEET "items_large_light",	"Items/items_large_light"	(16, 16), (1, 1), (18, 18); END;
+
+
+SPRITESHEET "tileset_overworld",	(16, 16), (1, 1), (0, 0); END;
 SPRITESHEET "Tiles/general_tiles",	(16, 16), (1, 1), (0, 0); END;
-SPRITESHEET "Tiles/zoneset_large", "Tiles/zoneset", (16, 16), (1, 1), (0, 0); END;
-SPRITESHEET "Tiles/zoneset_small", "Tiles/zoneset", (8, 8), (1, 1), (187, 0); END;
+SPRITESHEET "Tiles/zoneset_large", "zoneset", (16, 16), (1, 1), (0, 0); END;
+SPRITESHEET "Tiles/zoneset_small", "zoneset", (8, 8), (1, 1), (187, 0); END;
 
-SPRITESHEET "Units/Player/player",		(16, 16), (1, 1), (0, 0); END;
-SPRITESHEET "Units/Player/player_red",	(16, 16), (1, 1), (0, 0); END;
-SPRITESHEET "Units/Player/player_blue",	(16, 16), (1, 1), (0, 0); END;
-SPRITESHEET "Units/Player/player_hurt",	(16, 16), (1, 1), (0, 0); END;
+SPRITESHEET "player",					(16, 16), (1, 1), (0, 0); END;
 
 SPRITESHEET "Effects/basic_effects",	(16, 16), (1, 1), (0, 0); END;
 SPRITESHEET "Effects/color_effects",	(16, 16), (1, 1), (0, 0); END;
@@ -35,35 +37,42 @@ SPRITESHEET "player_items",				(16, 16), (1, 1), (0, 0); END;
 
 SPRITESHEET "zoneset_large";
 
-SPRITE tile_default,			(0, 2); END;
-SPRITE tile_dug,				(1, 3); END;
-SPRITE tile_bush,				(0, 0); END;
-SPRITE tile_crystal,			(1, 0); END;
-SPRITE tile_pot,				(2, 0); END;
-SPRITE tile_rock,				(3, 0); END;
-SPRITE tile_diamond_rock,		(4, 0); END;
-SPRITE tile_sign,				(5, 0); END;
-SPRITE tile_burnable_tree,		(6, 2); END;
-SPRITE tile_dirt_pile,			(6, 3); END;
-SPRITE tile_grass,				(0, 3); END;
-SPRITE tile_cactus,				(5, 3); END;
-SPRITE tile_armos_statue,		(8, 1); END;
-SPRITE tile_lantern_unlit,		(0, 8); END;
-SPRITE tile_lever_left,			(5, 8); END;
-SPRITE tile_lever_right,		(6, 8); END;
-SPRITE tile_button_up,			(7, 8); END;
-SPRITE tile_button_down,		(8, 8); END;
-SPRITE tile_chest,				(9, 8); END;
-SPRITE tile_chest_open,			(10, 8); END;
-SPRITE tile_bombable_block,		(0, 9); END;
-SPRITE tile_movable_block,		(1, 9); END;
-SPRITE tile_locked_block,		(3, 9); END;
-SPRITE tile_eye_statue,			(4, 9); END;
-SPRITE tile_bridge_h,			(5, 9); END;
-SPRITE tile_bridge_v,			(6, 9); END;
-SPRITE tile_color_cube_slot,	(7, 9); END;
-SPRITE tile_cracked_floor,		(8, 9); END;
-SPRITE tile_pit,				(9, 9); END;
+SPRITE tile_default,				(0, 2); END;
+SPRITE tile_dug,					(1, 3); END;
+SPRITE tile_bush,					(0, 0); END;
+SPRITE tile_bush_asobject,			(0, 1); END;
+SPRITE tile_crystal,				(1, 0); END;
+SPRITE tile_crystal_asobject,		(1, 1); END;
+SPRITE tile_pot,					(2, 0); END;
+SPRITE tile_pot_asobject			(2, 1); END;
+SPRITE tile_rock,					(3, 0); END;
+SPRITE tile_rock_asobject,			(3, 1); END;
+SPRITE tile_diamond_rock,			(4, 0); END;
+SPRITE tile_diamond_rock_asobject,	(4, 1); END;
+SPRITE tile_sign,					(5, 0); END;
+SPRITE tile_sign_asobject,			(5, 1); END;
+SPRITE tile_burnable_tree,			(6, 2); END;
+SPRITE tile_dirt_pile,				(6, 3); END;
+SPRITE tile_grass,					(0, 3); END;
+SPRITE tile_cactus,					(5, 3); END;
+SPRITE tile_armos_statue,			(8, 1); END;
+SPRITE tile_lantern_unlit,			(0, 8); END;
+SPRITE tile_lever_left,				(5, 8); END;
+SPRITE tile_lever_right,			(6, 8); END;
+SPRITE tile_button_up,				(7, 8); END;
+SPRITE tile_button_down,			(8, 8); END;
+SPRITE tile_chest,					(9, 8); END;
+SPRITE tile_chest_open,				(10, 8); END;
+SPRITE tile_bombable_block,			(0, 9); END;
+SPRITE tile_movable_block,			(1, 9); END;
+SPRITE tile_movable_block_asobject,	(2, 9); END;
+SPRITE tile_locked_block,			(3, 9); END;
+SPRITE tile_eye_statue,				(4, 9); END;
+SPRITE tile_bridge_h,				(5, 9); END;
+SPRITE tile_bridge_v,				(6, 9); END;
+SPRITE tile_color_cube_slot,		(7, 9); END;
+SPRITE tile_cracked_floor,			(8, 9); END;
+SPRITE tile_pit,					(9, 9); END;
 
 
 #==============================================================
@@ -97,13 +106,13 @@ SPRITE item_icon_sword_3,					(2, 0); END;
 SPRITE item_icon_shield_1,					(3, 0); END;
 SPRITE item_icon_shield_2,					(4, 0); END;
 SPRITE item_icon_shield_3,					(5, 0); END;
-SPRITE item_icon_satchel,					(6, 0); END;
-SPRITE item_icon_satchel_equipped,			(7, 0); END;
-SPRITE item_icon_seed_shooter,				(8, 0); END;
-SPRITE item_icon_seed_shooter_equipped,		(9, 0); END;
+SPRITE item_icon_satchel_equipped,			(6, 0); END;
+SPRITE item_icon_satchel,					(7, 0); END;
+SPRITE item_icon_seed_shooter_equipped,		(8, 0); END;
+SPRITE item_icon_seed_shooter,				(9, 0); END;
 SPRITE item_icon_slingshot_1,				(10, 0); END;
-SPRITE item_icon_slingshot_2,				(11, 0); END;
-SPRITE item_icon_slingshot_2_equipped,		(12, 0); END;
+SPRITE item_icon_slingshot_2_equipped,		(11, 0); END;
+SPRITE item_icon_slingshot_2,				(12, 0); END;
 SPRITE item_icon_bomb,						(13, 0); END;
 SPRITE item_icon_bombchew,					(14, 0); END;
 SPRITE item_icon_shovel,					(15, 0); END;
@@ -127,6 +136,11 @@ SPRITE item_seed_pegasus,					(2, 3); SIZE (8, 8); END;
 SPRITE item_seed_gale,						(3, 3); SIZE (8, 8); END;
 SPRITE item_seed_mystery,					(4, 3); SIZE (8, 8); END;
 
+SPRITESHEET "items_large";
+
+SPRITE item_icon_biggoron_sword,			(8, 0); END;
+SPRITE item_icon_biggoron_sword_equipped,	(9, 0); ADD (10, 0), (16, 0); END;
+
 
 #==============================================================
 # HUD Sprites
@@ -135,20 +149,22 @@ SPRITE item_seed_mystery,					(4, 3); SIZE (8, 8); END;
 SPRITESHEET "menu_small";
 
 SPRITE hud_background,				(2, 4); END;
-SPRITE hud_background_inventory,	(3, 4); END;
-SPRITE hud_bracket_left,			(0, 2); ADD (0, 3), (0, 8); END;
-SPRITE hud_bracket_right,			(1, 2); ADD (1, 3), (0, 8); END;
-SPRITE hud_bracket_left_right,		(2, 2); ADD (2, 3), (0, 8); END;
-SPRITE hud_bracket_left_a,			(3, 2); ADD (0, 3), (0, 8); END;
-SPRITE hud_bracket_left_b,			(3, 3); ADD (0, 3), (0, 8); END;
-SPRITE hud_bracket_right_a,			(4, 2); ADD (1, 3), (0, 8); END;
-SPRITE hud_bracket_right_b,			(4, 3); ADD (1, 3), (0, 8); END;
+SPRITE hud_background_inventory,	(2, 4); END;
+SPRITE hud_bracket_left,			(9, 0); ADD (9, 1), (0, 8); END;
+SPRITE hud_bracket_right,			(10, 0); ADD (10, 1), (0, 8); END;
+SPRITE hud_bracket_left_right,		(11, 0); ADD (11, 1), (0, 8); END;
+SPRITE hud_bracket_left_a,			(7, 0); ADD (9, 1), (0, 8); END;
+SPRITE hud_bracket_left_b,			(7, 1); ADD (9, 1), (0, 8); END;
+SPRITE hud_bracket_right_a,			(8, 0); ADD (10, 1), (0, 8); END;
+SPRITE hud_bracket_right_b,			(8, 1); ADD (10, 1), (0, 8); END;
 SPRITE hud_heart_0,					(0, 0); END;
 SPRITE hud_heart_1,					(1, 0); END;
 SPRITE hud_heart_2,					(2, 0); END;
 SPRITE hud_heart_3,					(3, 0); END;
 SPRITE hud_heart_4,					(4, 0); END;
-SPRITE hud_rupee,					(0, 1); END;
-SPRITE hud_ore_chunk,				(1, 1); END;
-SPRITE hud_key,						(2, 1); END;
+SPRITE hud_rupee,					(0, 2); END;
+SPRITE hud_ore_chunk,				(1, 2); END;
+SPRITE hud_key,						(0, 1); END;
+SPRITE hud_x,						(1, 1); END;
+SPRITE hud_level,					(2, 1); END;
 

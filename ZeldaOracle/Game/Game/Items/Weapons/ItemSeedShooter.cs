@@ -24,8 +24,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.name			= new string[] { "Seed Shooter" };
 			this.description	= new string[] { "Used to bounce seeds around." };
 			this.currentAmmo	= 0;
-			this.sprite			= new Sprite[] { new Sprite(GameData.SHEET_ITEMS_SMALL, 8, 0) };
-			this.spriteLight	= new Sprite[] { new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 8, 0) };
+			this.sprite			= new Sprite[] { GameData.SPR_ITEM_ICON_SEED_SHOOTER };
+			this.spriteEquipped	= new Sprite[] { GameData.SPR_ITEM_ICON_SEED_SHOOTER_EQUIPPED };
 			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping;
 		}
 
@@ -51,7 +51,6 @@ namespace ZeldaOracle.Game.Items.Weapons {
 					new AmmoSatchelSeeds(
 						"ammo_ember_seeds", "Ember Seeds", "A burst of fire!",
 						new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(0, 3)),
-						new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(0, 3)),
 						0, maxAmounts[level]
 					),
 					false
@@ -60,7 +59,6 @@ namespace ZeldaOracle.Game.Items.Weapons {
 					new AmmoSatchelSeeds(
 						"ammo_scent_seeds", "Scent Seeds", "An aromatic blast!",
 						new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(1, 3)),
-						new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(1, 3)),
 						0, maxAmounts[level]
 					),
 					false
@@ -69,7 +67,6 @@ namespace ZeldaOracle.Game.Items.Weapons {
 					new AmmoSatchelSeeds(
 						"ammo_pegasus_seeds", "Pegasus Seeds", "Steals speed?",
 						new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(2, 3)),
-						new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(2, 3)),
 						0, maxAmounts[level]
 					),
 					false
@@ -78,7 +75,6 @@ namespace ZeldaOracle.Game.Items.Weapons {
 					new AmmoSatchelSeeds(
 						"ammo_gale_seeds", "Gale Seeds", "A mighty blow!",
 						new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(3, 3)),
-						new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(3, 3)),
 						0, maxAmounts[level]
 					),
 					false
@@ -87,7 +83,6 @@ namespace ZeldaOracle.Game.Items.Weapons {
 					new AmmoSatchelSeeds(
 						"ammo_mystery_seeds", "Mystery Seeds", "A producer of unknown effects.",
 						new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(4, 3)),
-						new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(4, 3)),
 						0, maxAmounts[level]
 					),
 					false
@@ -96,10 +91,10 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		}
 
 		// Draws the item inside the inventory.
-		public override void DrawSlot(Graphics2D g, Point2I position, bool light) {
-			DrawSprite(g, position, light);
-			DrawAmmo(g, position, light);
-			g.DrawSprite(light ? ammo[currentAmmo].SpriteLight : ammo[currentAmmo].Sprite, position + new Point2I(8, 0));
+		public override void DrawSlot(Graphics2D g, Point2I position, int lightOrDark) {
+			DrawSprite(g, position, lightOrDark);
+			DrawAmmo(g, position, lightOrDark);
+			g.DrawSprite(ammo[currentAmmo].Sprite, lightOrDark, position + new Point2I(8, 0));
 		}
 
 		// Called when the item's level is changed.

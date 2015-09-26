@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.Items.Rewards;
@@ -15,14 +16,15 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		private bool opened;
 		private Sprite openedSprite;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public TileChest() {
-			this.Sprite = new Sprite(GameData.SHEET_ZONESET_LARGE, 9, 8);
-			this.opened	= false;
-			this.openedSprite = new Sprite(GameData.SHEET_ZONESET_LARGE, 10, 8);
+			Sprite			= GameData.SPR_TILE_CHEST;
+			opened			= false;
+			openedSprite	= GameData.SPR_TILE_CHEST_OPEN;
 		}
 
 
@@ -37,10 +39,11 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 					RoomControl.GameControl.PushRoomState(new RoomStateReward(reward, (Point2I)Position));
 					opened = true;
 					Sprite = openedSprite;
-					// Play chest open sound
+					// TODO: Play chest open sound
 				}
-				else
-					RoomControl.GameControl.DisplayMessage("You won't open from this side!");
+				else {
+					RoomControl.GameControl.DisplayMessage("It won't open from this side!");
+				}
 				return true;
 			}
 			return false;
@@ -48,7 +51,8 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 
 		public override void Initialize() {
 			base.Initialize();
-			this.reward = RoomControl.GameControl.RewardManager.GetReward("item_sword_1");
+			string rewardName = properties.GetString("reward", "rupees_1");
+			reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
 		}
 
 	}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Players.States;
@@ -17,6 +18,7 @@ namespace ZeldaOracle.Game.Items {
 		protected ItemFlags flags;
 
 		private int equipSlot;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -75,6 +77,18 @@ namespace ZeldaOracle.Game.Items {
 		// Gets if the item has the specified flags.
 		public bool HasFlag(ItemFlags flags) {
 			return this.flags.HasFlag(flags);
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Overridden methods
+		//-----------------------------------------------------------------------------
+		
+		// Draws the item inside the inventory.
+		public override void DrawSlot(Graphics2D g, Point2I position, int lightOrDark) {
+			DrawSprite(g, position, lightOrDark);
+			if (maxLevel > Item.Level1)
+				DrawLevel(g, position, lightOrDark);
 		}
 
 

@@ -19,7 +19,6 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 			this.description = new string[] { "Fill your hearts!" };
 			this.slot = new Point2I(1, 0);
 			this.sprite = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(6, 3)) };
-			this.spriteLight = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE_LIGHT, new Point2I(6, 3)) };
 		}
 
 	}

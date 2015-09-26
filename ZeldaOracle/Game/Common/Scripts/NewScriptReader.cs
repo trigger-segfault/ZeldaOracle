@@ -288,8 +288,8 @@ namespace ZeldaOracle.Common.Scripts {
 		}
 		
 		// Parse and interpret the given text stream as a script, line by line.
-		public override void ReadScript(StreamReader reader) {
-			fileName = "animations.conscript";
+		public override void ReadScript(StreamReader reader, string path) {
+			this.fileName = path;
 
 			BeginReading();
 			

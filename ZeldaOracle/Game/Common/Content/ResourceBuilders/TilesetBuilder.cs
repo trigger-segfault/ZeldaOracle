@@ -7,7 +7,8 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles;
 
-namespace ZeldaOracle.Game.Main.ResourceBuilders {
+namespace ZeldaOracle.Common.Content.ResourceBuilders {
+
 	public class TilesetBuilder {
 		
 		public Tileset	tileset;

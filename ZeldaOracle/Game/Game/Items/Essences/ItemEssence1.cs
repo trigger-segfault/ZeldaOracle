@@ -18,7 +18,6 @@ namespace ZeldaOracle.Game.Items.Essences {
 			this.description = new string[] { "It speaks across time to the heart!" };
 			this.slot = 0;
 			this.sprite = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(8, 7)) };
-			this.spriteLight = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE_LIGHT, new Point2I(8, 7)) };
 		}
 
 	}

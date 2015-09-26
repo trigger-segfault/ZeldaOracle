@@ -17,21 +17,19 @@ namespace ZeldaOracle.Game.Items {
 		private bool isObtained;
 		protected bool isStolen;
 		protected Sprite sprite;
-		protected Sprite spriteLight;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public Ammo(string id, string name, string description, Sprite sprite, Sprite spriteLight, int amount, int maxAmount) {
+		public Ammo(string id, string name, string description, Sprite sprite, int amount, int maxAmount) {
 			this.id				= id;
 			this.name			= name;
 			this.description	= description;
 			this.amount			= amount;
 			this.maxAmount		= maxAmount;
 			this.sprite			= sprite;
-			this.spriteLight	= spriteLight;
 			this.isObtained		= false;
 			this.isStolen		= false;
 		}
@@ -41,8 +39,8 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 
 		// Draws the item inside the inventory.
-		public virtual void DrawSlot(Graphics2D g, Point2I position, bool light) {
-			g.DrawSprite(light ? spriteLight : sprite, position);
+		public virtual void DrawSlot(Graphics2D g, Point2I position, int lightOrDark) {
+			g.DrawSprite(sprite, lightOrDark, position);
 		}
 
 		//-----------------------------------------------------------------------------
@@ -102,10 +100,6 @@ namespace ZeldaOracle.Game.Items {
 
 		public Sprite Sprite {
 			get { return sprite; }
-		}
-
-		public Sprite SpriteLight {
-			get { return spriteLight; }
 		}
 	}
 }

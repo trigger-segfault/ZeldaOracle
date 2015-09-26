@@ -93,7 +93,7 @@ abstract public class ScriptReader {
 		}
 	}
 	/** <summary> Parse and interpret the given text stream as a script, line by line. </summary> */
-	public virtual void ReadScript(StreamReader reader) {
+	public virtual void ReadScript(StreamReader reader, string path) {
 		BeginReading();
 		while (!reader.EndOfStream)
 			ReadLine(reader.ReadLine());

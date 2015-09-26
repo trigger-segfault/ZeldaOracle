@@ -24,10 +24,6 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 				new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(6, 1)),
 				new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(7, 1))
 			};
-			this.spriteLight = new Sprite[] {
-				new Sprite(GameData.SHEET_ITEMS_LARGE_LIGHT, new Point2I(6, 1)),
-				new Sprite(GameData.SHEET_ITEMS_LARGE_LIGHT, new Point2I(7, 1))
-			};
 		}
 
 
