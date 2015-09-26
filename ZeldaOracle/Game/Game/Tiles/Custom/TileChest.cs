@@ -40,7 +40,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 					// Play chest open sound
 				}
 				else
-					RoomControl.GameControl.DisplayMessage("You won't open from this side!");
+					RoomControl.GameControl.DisplayMessage("It won't open from this side!");
 				return true;
 			}
 			return false;
