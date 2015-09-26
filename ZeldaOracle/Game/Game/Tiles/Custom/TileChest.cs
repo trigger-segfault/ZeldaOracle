@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.Items.Rewards;
@@ -40,8 +41,9 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 					Sprite = openedSprite;
 					// TODO: Play chest open sound
 				}
-				else
+				else {
 					RoomControl.GameControl.DisplayMessage("It won't open from this side!");
+				}
 				return true;
 			}
 			return false;
@@ -49,7 +51,8 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 
 		public override void Initialize() {
 			base.Initialize();
-			reward = RoomControl.GameControl.RewardManager.GetReward("item_sword_1");
+			string rewardName = properties.GetString("reward", "rupees_1");
+			reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
 		}
 
 	}

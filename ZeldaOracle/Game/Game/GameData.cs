@@ -11,6 +11,7 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Content.ResourceBuilders;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
@@ -258,8 +259,6 @@ namespace ZeldaOracle.Game {
 			tilesetBuilder = new TilesetBuilder();
 
 			// OVERWORLD TILESET:
-			//SpriteSheet sheetOverworld = Resources.GetSpriteSheet("tileset");
-
 			TILESET_OVERWORLD = new Tileset(GameData.SHEET_TILESET_OVERWORLD, 21, 36);
 			TILESET_OVERWORLD.LoadConfig("Content/Tilesets/overworld.txt");
 			TILESET_OVERWORLD.DefaultTile = new Point2I(1, 25);

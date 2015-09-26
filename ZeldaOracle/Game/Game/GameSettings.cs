@@ -48,6 +48,8 @@ namespace ZeldaOracle.Game {
 
 		public const int		DEFAULT_TILE_LAYER_COUNT = 3;
 
+		public const string TEXT_UNDEFINED = "<red>undefined<red>";
+
 
 		//-----------------------------------------------------------------------------
 		// Draw modes

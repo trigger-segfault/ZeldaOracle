@@ -93,14 +93,6 @@
       <Name>sprites</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="SpriteSheets\items.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>items</Name>
-    </None>
-    <None Include="SpriteSheets\menu_elements.conscript">
-      <Name>menu_elements</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="SpriteSheets\sheet_debug_menu.conscript">
       <Name>sheet_debug_menu_script</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -243,28 +235,6 @@
   <ItemGroup>
     <Compile Include="Images\UI\menu_weapons_b.png">
       <Name>menu_weapons_b</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Items\items_large_light.png">
-      <Name>items_large_light</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Items\items_small_light.png">
-      <Name>items_small_light</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\UI\menu_large_light.png">
-      <Name>menu_large_light</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\UI\menu_small_light.png">
-      <Name>menu_small_light</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -438,6 +408,30 @@
   <ItemGroup>
     <Compile Include="Images\Tiles\zoneset_interior.png">
       <Name>zoneset_interior</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\Items\items_large_light.png">
+      <Name>items_large_light</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Items\items_small_light.png">
+      <Name>items_small_light</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\UI\menu_large_light.png">
+      <Name>menu_large_light</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\UI\menu_small_light.png">
+      <Name>menu_small_light</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

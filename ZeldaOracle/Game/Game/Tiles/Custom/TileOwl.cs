@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
 
@@ -70,7 +71,8 @@ namespace ZeldaOracle.Game.Tiles {
 					Sprite = GameData.SPR_TILE_OWL_ACTIVATED;
 				}
 				if (timer == 58) {
-					RoomControl.GameControl.DisplayMessage("Beware!!!");
+					string text = properties.GetString("text", GameSettings.TEXT_UNDEFINED);
+					RoomControl.GameControl.DisplayMessage(text);
 				}
 				if (timer > 80) {
 					isActivated = false;

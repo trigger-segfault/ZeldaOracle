@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Effects;
@@ -40,6 +41,8 @@ namespace ZeldaOracle.Game.Tiles {
 		private bool			isMoving;
 		private float			movementSpeed;
 
+		protected Properties	properties;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -55,6 +58,7 @@ namespace ZeldaOracle.Game.Tiles {
 			animationPlayer	= new AnimationPlayer();
 			isMoving		= false;
 			pushDelay		= 20;
+			properties		= new Properties();
 		}
 
 
@@ -207,6 +211,7 @@ namespace ZeldaOracle.Game.Tiles {
 			tile.collisionModel		= data.CollisionModel;
 			tile.size				= data.Size;
 			tile.animationPlayer.Animation = data.Animation;
+			tile.properties.Merge(data.Properties, true);
 
 			return tile;
 		}
@@ -325,6 +330,10 @@ namespace ZeldaOracle.Game.Tiles {
 					return Directions.South;
 				return Directions.South;
 			}
+		}
+
+		public Properties Properties {
+			get { return properties; }
 		}
 	}
 }

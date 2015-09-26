@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
@@ -318,24 +319,6 @@ namespace ZeldaOracle.Game.Control {
 			player.X = 48;
 			player.Y = 32;
 			
-			// Create an owl tile.
-			TileData tdOwl			= new TileData(typeof(TileOwl), TileFlags.Solid);
-			tdOwl.Sprite			= GameData.SPR_TILE_OWL;
-			tdOwl.CollisionModel	= GameData.MODEL_BLOCK;
-			
-			// Create a lantern tile.
-			TileData tdLantern			= new TileData(typeof(TileLantern), TileFlags.Solid);
-			tdLantern.Sprite			= GameData.SPR_TILE_LANTERN_UNLIT;
-			tdLantern.CollisionModel	= GameData.MODEL_BLOCK;
-			
-			// Create a Sign tile
-			TileData tdSign = new TileData(typeof(TileSign), TileFlags.Solid | TileFlags.Pickupable |
-				TileFlags.Burnable | TileFlags.Cuttable | TileFlags.Switchable);
-			tdSign.Sprite			= GameData.SPR_TILE_SIGN;
-			tdSign.SpriteAsObject	= GameData.SPR_TILE_SIGN_ASOBJECT;
-			tdSign.BreakAnimation	= GameData.ANIM_EFFECT_SIGN_BREAK;
-			tdSign.CollisionModel	= GameData.MODEL_BLOCK;
-			
 			// Create a movable block tile.
 			TileData tdBlock		= new TileData(TileFlags.Solid | TileFlags.Movable);
 			tdBlock.Sprite			= GameData.SPR_TILE_MOVABLE_BLOCK;
@@ -375,13 +358,42 @@ namespace ZeldaOracle.Game.Control {
 			TileData tdGrass		= new TileData(TileFlags.Grass | TileFlags.Cuttable | TileFlags.Burnable | TileFlags.Bombable);
 			tdGrass.Sprite			= GameData.SPR_TILE_GRASS;
 			tdGrass.BreakAnimation	= GameData.ANIM_EFFECT_GRASS_LEAVES;
+			
+			// Create an owl tile.
+			TileData tdOwl			= new TileData(typeof(TileOwl), TileFlags.Solid);
+			tdOwl.Sprite			= GameData.SPR_TILE_OWL;
+			tdOwl.CollisionModel	= GameData.MODEL_BLOCK;
+			tdOwl.Properties.Set("text", "<green>Beware!!!<green>");
+			
+			// Create a lantern tile.
+			TileData tdLantern			= new TileData(typeof(TileLantern), TileFlags.Solid);
+			tdLantern.Sprite			= GameData.SPR_TILE_LANTERN_UNLIT;
+			tdLantern.CollisionModel	= GameData.MODEL_BLOCK;
+			tdLantern.Properties.Set("lit", true);
 
+			// Create a Sign tile
+			TileData tdSign = new TileData(typeof(TileSign), TileFlags.Solid | TileFlags.Pickupable |
+				TileFlags.Burnable | TileFlags.Cuttable | TileFlags.Switchable);
+			tdSign.Sprite			= GameData.SPR_TILE_SIGN;
+			tdSign.SpriteAsObject	= GameData.SPR_TILE_SIGN_ASOBJECT;
+			tdSign.BreakAnimation	= GameData.ANIM_EFFECT_SIGN_BREAK;
+			tdSign.CollisionModel	= GameData.MODEL_BLOCK;
+			tdSign.Properties.Set("text", "Hello, World!");
+			tdSign.Properties.Add(Property.CreateList("list",
+					Property.CreateString("1", "one"),
+					Property.CreateString("2", "two"),
+					Property.CreateString("3", "three")));
+
+			// Create a chest tile.
 			TileData tdChest		= new TileData(typeof(TileChest), TileFlags.Solid);
 			tdChest.Sprite			= GameData.SPR_TILE_CHEST;
 			tdChest.CollisionModel	= GameData.MODEL_BLOCK;
+			tdChest.Properties.Set("reward", "rupees_1");
 
+			// Create a reward tile.
 			TileData tdReward		= new TileData(typeof(TileReward), TileFlags.Solid);
 			tdReward.CollisionModel	= GameData.MODEL_BLOCK;
+			tdReward.Properties.Set("reward", "item_flippers_1");
 
 			// Setup the rooms.
 			Room r = level.GetRoom(new Point2I(2, 1));
