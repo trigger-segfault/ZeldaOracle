@@ -8,11 +8,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Common.Content;
+using ZeldaOracle.Common.Content.ResourceBuilders;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Main.ResourceBuilders;
+using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game {
 
@@ -38,6 +40,9 @@ namespace ZeldaOracle.Game {
 			Console.WriteLine("Loading Collision Models");
 			LoadCollisionModels();
 			
+			Console.WriteLine("Loading Zones");
+			LoadZones();
+
 			Console.WriteLine("Loading Tilesets");
 			LoadTilesets();
 
@@ -107,12 +112,48 @@ namespace ZeldaOracle.Game {
 		
 		// Loads the images.
 		private static void LoadImages() {
+			Resources.LoadImagesFromScript("Images/images.conscript");
+
 			Resources.LoadImage("Images/UI/menu_weapons_a");
 			Resources.LoadImage("Images/UI/menu_weapons_b");
 			Resources.LoadImage("Images/UI/menu_key_items_a");
 			Resources.LoadImage("Images/UI/menu_key_items_b");
 			Resources.LoadImage("Images/UI/menu_essences_a");
 			Resources.LoadImage("Images/UI/menu_essences_b");
+
+
+			// Set the variant IDs for images with variants.
+			FieldInfo[] fields = typeof(GameData).GetFields();
+			Dictionary<string, Image> dictionary = Resources.GetResourceDictionary<Image>();
+			string prefix = "VARIANT_";
+
+			foreach (KeyValuePair<string, Image> entry in dictionary) {
+				Image image = entry.Value;
+
+				if (image.HasVariants || image.VariantName != "") {
+					while (image != null) {
+						string name = prefix.ToLower() + image.VariantName;
+						
+						// Find the matching variant constant for this name.
+						FieldInfo matchingField = null;
+						for (int i = 0; i < fields.Length; i++) {
+							FieldInfo field = fields[i];
+							if (field.Name.StartsWith(prefix) && field.FieldType == typeof(int) && String.Compare(field.Name, name, true) == 0) {
+								matchingField = field;
+								break;
+							}
+						}
+
+						if (matchingField != null)
+							image.VariantID = (int) matchingField.GetValue(null);
+						else
+							Console.WriteLine("** WARNING: Uknown variant \"" + image.VariantName + "\".");
+
+						image = image.NextVariant;
+					}
+				}
+			}
+
 		}
 
 
@@ -133,6 +174,13 @@ namespace ZeldaOracle.Game {
 				SPR_ITEM_SEED_PEGASUS,
 				SPR_ITEM_SEED_GALE,
 				SPR_ITEM_SEED_MYSTERY
+			};
+			SPR_HUD_HEARTS = new Sprite[] {
+				SPR_HUD_HEART_0,
+				SPR_HUD_HEART_1,
+				SPR_HUD_HEART_2,
+				SPR_HUD_HEART_3,
+				SPR_HUD_HEART_4,
 			};
 		}
 
@@ -186,6 +234,17 @@ namespace ZeldaOracle.Game {
 
 		
 		//-----------------------------------------------------------------------------
+		// Zone Loading
+		//-----------------------------------------------------------------------------
+
+		private static void LoadZones() {
+			ZONE_SUMMER		= new Zone("summer",	"Summer",		VARIANT_SUMMER);
+			ZONE_FOREST		= new Zone("forest",	"Forest",		VARIANT_FOREST);
+			ZONE_GRAVEYARD	= new Zone("graveyard",	"Graveyard",	VARIANT_GRAVEYARD);
+			ZONE_INTERIOR	= new Zone("interior",	"Interior",		VARIANT_INTERIOR);
+		}
+		
+		//-----------------------------------------------------------------------------
 		// Tliesets Loading
 		//-----------------------------------------------------------------------------
 
@@ -200,9 +259,7 @@ namespace ZeldaOracle.Game {
 			tilesetBuilder = new TilesetBuilder();
 
 			// OVERWORLD TILESET:
-			SpriteSheet sheetOverworld = Resources.GetSpriteSheet("tileset");
-
-			TILESET_OVERWORLD = new Tileset(sheetOverworld, 21, 36);
+			TILESET_OVERWORLD = new Tileset(GameData.SHEET_TILESET_OVERWORLD, 21, 36);
 			TILESET_OVERWORLD.LoadConfig("Content/Tilesets/overworld.txt");
 			TILESET_OVERWORLD.DefaultTile = new Point2I(1, 25);
 			tilesetBuilder.Tileset = TILESET_OVERWORLD;
@@ -349,8 +406,21 @@ namespace ZeldaOracle.Game {
 
 
 		//-----------------------------------------------------------------------------
-		// Images
+		// Images & Image Variants
 		//-----------------------------------------------------------------------------
+		
+		public static int VARIANT_NONE		= 0;
+		public static int VARIANT_DARK		= 1;
+		public static int VARIANT_LIGHT		= 2;
+		public static int VARIANT_RED		= 3;
+		public static int VARIANT_BLUE		= 4;
+		public static int VARIANT_GREEN		= 5;
+		public static int VARIANT_YELLOW	= 6;
+		public static int VARIANT_HURT		= 7;
+		public static int VARIANT_SUMMER	= 8;
+		public static int VARIANT_FOREST	= 9;
+		public static int VARIANT_GRAVEYARD	= 10;
+		public static int VARIANT_INTERIOR	= 11;
 
 
 		//-----------------------------------------------------------------------------
@@ -379,7 +449,7 @@ namespace ZeldaOracle.Game {
 	
 		public static SpriteSheet SHEET_ZONESET_LARGE;
 		public static SpriteSheet SHEET_ZONESET_SMALL;
-		public static SpriteSheet SHEET_TILESET;
+		public static SpriteSheet SHEET_TILESET_OVERWORLD;
 		public static SpriteSheet SHEET_GENERAL_TILES;
 	
 	
@@ -396,13 +466,20 @@ namespace ZeldaOracle.Game {
 	
 		// Object tiles.
 		public static Sprite SPR_TILE_BUSH;
+		public static Sprite SPR_TILE_BUSH_ASOBJECT;
 		public static Sprite SPR_TILE_CRYSTAL;
+		public static Sprite SPR_TILE_CRYSTAL_ASOBJECT;
 		public static Sprite SPR_TILE_POT;
+		public static Sprite SPR_TILE_POT_ASOBJECT;
 		public static Sprite SPR_TILE_ROCK;
+		public static Sprite SPR_TILE_ROCK_ASOBJECT;
 		public static Sprite SPR_TILE_DIAMOND_ROCK;
+		public static Sprite SPR_TILE_DIAMOND_ROCK_ASOBJECT;
 		public static Sprite SPR_TILE_SIGN;
+		public static Sprite SPR_TILE_SIGN_ASOBJECT;
 		public static Sprite SPR_TILE_GRASS;
 		public static Sprite SPR_TILE_MOVABLE_BLOCK;
+		public static Sprite SPR_TILE_MOVABLE_BLOCK_ASOBJECT;
 		public static Sprite SPR_TILE_BOMBABLE_BLOCK;
 		public static Sprite SPR_TILE_LOCKED_BLOCK;
 		public static Sprite SPR_TILE_CHEST;
@@ -432,6 +509,9 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_ITEM_SEED_GALE;
 		public static Sprite SPR_ITEM_SEED_MYSTERY;
 		public static Sprite[] SPR_ITEM_SEEDS;
+		
+		public static Sprite SPR_ITEM_ICON_BIGGORON_SWORD;
+		public static Sprite SPR_ITEM_ICON_BIGGORON_SWORD_EQUIPPED;
 
 		public static Sprite SPR_ITEM_ICON_SWORD_1;
 		public static Sprite SPR_ITEM_ICON_SWORD_2;
@@ -465,6 +545,7 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_ITEM_ICON_BOW;
 	
 		// HUD Sprites.
+		public static Sprite SPR_HUD_BACKGROUND;
 		public static Sprite SPR_HUD_BRACKET_LEFT;
 		public static Sprite SPR_HUD_BRACKET_LEFT_A;
 		public static Sprite SPR_HUD_BRACKET_LEFT_B;
@@ -480,8 +561,10 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_HUD_RUPEE;
 		public static Sprite SPR_HUD_ORE_CHUNK;
 		public static Sprite SPR_HUD_KEY;
-		public static Sprite SPR_HUD_BACKGROUND;			// The lighter version when the inventory is closed.
-		public static Sprite SPR_HUD_BACKGROUND_INVENTORY;	// The darker version that when the inventory is opened.
+		public static Sprite SPR_HUD_X;
+		public static Sprite SPR_HUD_LEVEL;
+		
+		public static Sprite[] SPR_HUD_HEARTS;
 
 	
 		//-----------------------------------------------------------------------------
@@ -590,7 +673,18 @@ namespace ZeldaOracle.Game {
 		public static CollisionModel MODEL_BRIDGE_V_LEFT;
 		public static CollisionModel MODEL_BRIDGE_V_RIGHT;
 		public static CollisionModel MODEL_BRIDGE_V;
+
 	
+		//-----------------------------------------------------------------------------
+		// Zones
+		//-----------------------------------------------------------------------------
+		
+		public static Zone ZONE_SUMMER;
+		public static Zone ZONE_FOREST;
+		public static Zone ZONE_GRAVEYARD;
+		public static Zone ZONE_INTERIOR;
+
+
 	
 		//-----------------------------------------------------------------------------
 		// Fonts
@@ -620,6 +714,7 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		public static RenderTarget2D RenderTargetGame;
+		public static RenderTarget2D RenderTargetGameTemp;
 		public static RenderTarget2D RenderTargetDebug;
 
 	}

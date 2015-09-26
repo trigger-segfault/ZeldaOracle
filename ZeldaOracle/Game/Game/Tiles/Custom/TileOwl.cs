@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
-using ZeldaOracle.Game.Main.ResourceBuilders;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -60,7 +60,9 @@ namespace ZeldaOracle.Game.Tiles {
 				
 				// Create a sparkle every 8 ticks.
 				if (timer % 8 == 1 && sparkleIndex < sparklePositions.Length) {
-					RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_OWL_SPARKLE),
+					Effect effect = new Effect(GameData.ANIM_EFFECT_OWL_SPARKLE);
+					effect.Graphics.IsAnimatedWhenPaused = true;
+					RoomControl.SpawnEntity(effect,
 						Position + sparklePositions[sparkleIndex]);
 					sparkleIndex++;
 				}
@@ -69,7 +71,8 @@ namespace ZeldaOracle.Game.Tiles {
 					Sprite = GameData.SPR_TILE_OWL_ACTIVATED;
 				}
 				if (timer == 58) {
-					RoomControl.GameControl.DisplayMessage("Beware!!!");
+					string text = properties.GetString("text", GameSettings.TEXT_UNDEFINED);
+					RoomControl.GameControl.DisplayMessage(text);
 				}
 				if (timer > 80) {
 					isActivated = false;

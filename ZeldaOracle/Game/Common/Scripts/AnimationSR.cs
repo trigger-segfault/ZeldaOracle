@@ -7,10 +7,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using ZeldaOracle.Common.Content;
+using ZeldaOracle.Common.Content.ResourceBuilders;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game;
-using ZeldaOracle.Game.Main.ResourceBuilders;
 
 namespace ZeldaOracle.Common.Scripts {
 	/** <summary>

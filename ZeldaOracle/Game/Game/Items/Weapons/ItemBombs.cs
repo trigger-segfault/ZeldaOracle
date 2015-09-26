@@ -32,11 +32,6 @@ namespace ZeldaOracle.Game.Items {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0)),
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0))
 			};
-			spriteLight = new Sprite[] {
-				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(13, 0)),
-				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(13, 0)),
-				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(13, 0))
-			};
 		}
 
 
@@ -44,35 +39,20 @@ namespace ZeldaOracle.Game.Items {
 		// Virtual
 		//-----------------------------------------------------------------------------
 
-		// Called when the item is switched to.
-		public override void OnStart() { }
-
-		// Called when the item is put away.
-		public override void OnEnd() { }
-
-		// Immediately interrupt this item (ex: if link falls in a hole).
-		public override void Interrupt() { }
-
 		public override void OnButtonPress() {
-			// TODO: pickup nearby bomb entities.
-
 			if (bombEntity == null || bombEntity.IsDestroyed) {
+				// Conjure a new bomb.
 				bombEntity = new Bomb();
 				player.BeginState(new PlayerCarryState(bombEntity));
 			}
 			else {
+				// Pickup a bomb from the ground.
 				if (player.Physics.IsSoftMeetingEntity(bombEntity)) {
 					player.BeginState(new PlayerCarryState(bombEntity));
 					bombEntity.RemoveFromRoom();
 				}
 			}
 		}
-
-		// Draws under link's sprite.
-		public override void DrawUnder() { }
-
-		// Draws over link's sprite.
-		public override void DrawOver() { }
 
 		// Called when the item is added to the inventory list
 		public override void OnAdded(Inventory inventory) {
@@ -85,7 +65,6 @@ namespace ZeldaOracle.Game.Items {
 					new Ammo(
 						"ammo_bombs", "Bombs", "Very explosive.",
 						new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0)),
-						new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(13, 0)),
 						maxAmounts[level], maxAmounts[level]
 					),
 					false
@@ -105,30 +84,15 @@ namespace ZeldaOracle.Game.Items {
 			inventory.ObtainAmmo(inventory.GetAmmo("ammo_bombs"));
 		}
 
-		// Called when the item has been unobtained.
-		public override void OnUnobtained() {
-
-		}
-
-		// Called when the item has been stolen.
-		public override void OnStolen() {
-
-		}
-
-		// Called when the stolen item has been returned.
-		public override void OnReturned() {
-
-		}
-
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
 		// Draws the item inside the inventory.
-		public override void DrawSlot(Graphics2D g, Point2I position, bool light) {
-			DrawSprite(g, position, light);
-			DrawAmmo(g, position, light);
+		public override void DrawSlot(Graphics2D g, Point2I position, int lightOrDark) {
+			DrawSprite(g, position, lightOrDark);
+			DrawAmmo(g, position, lightOrDark);
 		}
 	}
 }

@@ -171,6 +171,8 @@
     <Compile Include="Common\Input\Mouse.cs" />
     <Compile Include="Common\Input\MouseButtons.cs" />
     <Compile Include="Common\Input\Controls\Trigger.cs" />
+    <Compile Include="Common\Properties\Properties.cs" />
+    <Compile Include="Common\Properties\Property.cs" />
     <Compile Include="Common\Scripts\AnimationSR.cs" />
     <Compile Include="Common\Scripts\CommandParam.cs" />
     <Compile Include="Common\Scripts\GameFontSR.cs" />
@@ -180,6 +182,7 @@
     <Compile Include="Common\Scripts\ScriptReader.cs" />
     <Compile Include="Common\Scripts\SoundsSR.cs" />
     <Compile Include="Common\Scripts\SpriteSheetSROld.cs" />
+    <Compile Include="Common\Scripts\ImagesSR.cs" />
     <Compile Include="Common\Scripts\SpritesSR.cs" />
     <Compile Include="Common\Translation\Language.cs" />
     <Compile Include="Common\Translation\LetterString.cs" />
@@ -321,9 +324,9 @@
     <Compile Include="Game\GameSettings.cs" />
     <Compile Include="Game\Main\Program.cs" />
     <Compile Include="Game\Entities\Players\Player.cs" />
-    <Compile Include="Game\Main\ResourceBuilders\AnimationBuilder.cs" />
-    <Compile Include="Game\Main\ResourceBuilders\SpriteBuilder.cs" />
-    <Compile Include="Game\Main\ResourceBuilders\TilesetBuilder.cs" />
+    <Compile Include="Common\Content\ResourceBuilders\AnimationBuilder.cs" />
+    <Compile Include="Common\Content\ResourceBuilders\SpriteBuilder.cs" />
+    <Compile Include="Common\Content\ResourceBuilders\TilesetBuilder.cs" />
     <Compile Include="Game\Tiles\Custom\TileReward.cs" />
     <Compile Include="Game\Tiles\Custom\TileChest.cs" />
     <Compile Include="Game\Tiles\Custom\TileOwl.cs" />

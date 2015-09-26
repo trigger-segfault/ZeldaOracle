@@ -39,8 +39,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private int useAngle;
 		// TODO: better name for this.
 		private bool syncAnimationWithDirection;
-		// Is the player allowed to transition between rooms?
-		private bool allowRoomTransition;
 		// The player doesn't need to be moving to transition.
 		private bool autoRoomTransition;
 		// The position the player was at when he entered the room.
@@ -89,7 +87,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			useDirection		= 0;
 			useAngle			= 0;
 			autoRoomTransition	= false;
-			allowRoomTransition	= true;
 			syncAnimationWithDirection	= true;
 			isItemButtonPressDisabled	= false;
 			movement = new PlayerMoveComponent(this);
@@ -307,15 +304,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			if (syncAnimationWithDirection)
 				Graphics.SubStripIndex = direction;
-
+			
+			// Set image variant based on tunic and hurt timer.
 			if (invincibleTimer != 0 && (invincibleTimer + 1) % 8 < 4) {
-				Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER_HURT);
+				Graphics.ImageVariant = GameData.VARIANT_HURT;
 			}
 			else {
 				switch (tunic) {
-				case PlayerTunics.GreenTunic: Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER); break;
-				case PlayerTunics.RedTunic: Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER_RED); break;
-				case PlayerTunics.BlueTunic: Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER_BLUE); break;
+				case PlayerTunics.GreenTunic:	Graphics.ImageVariant = GameData.VARIANT_GREEN;	break;
+				case PlayerTunics.RedTunic:		Graphics.ImageVariant = GameData.VARIANT_RED;	break;
+				case PlayerTunics.BlueTunic:	Graphics.ImageVariant = GameData.VARIANT_BLUE;	break;
 				}
 			}
 

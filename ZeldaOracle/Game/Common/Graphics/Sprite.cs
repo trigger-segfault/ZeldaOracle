@@ -10,11 +10,11 @@ namespace ZeldaOracle.Common.Graphics {
 	public class Sprite {
 
 		// The image used by the sprite.
-		private Image		image;
+		private Image image;
 		// The source rectangle of the sprite.
-		private Rectangle2I	sourceRect;
+		private Rectangle2I sourceRect;
 		// The draw offset of the sprite.
-		private Point2I		drawOffset;
+		private Point2I drawOffset;
 		// For compound sprites (made up of multiple sub-sprites).
 		private Sprite nextPart;
 		

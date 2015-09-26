@@ -73,15 +73,15 @@ namespace ZeldaOracle.Game.Control {
 			// Setup the player beforehand so certain classes such as the HUD can reference it
 			player = new Player();
 
-			menuWeapons	= new MenuWeapons(gameManager);
-			menuSecondaryItems	= new MenuSecondaryItems(gameManager);
-			menuEssences	= new MenuEssences(gameManager);
-			menuWeapons.PreviousMenu = menuEssences;
-			menuWeapons.NextMenu = menuSecondaryItems;
-			menuSecondaryItems.PreviousMenu = menuWeapons;
-			menuSecondaryItems.NextMenu = menuEssences;
-			menuEssences.PreviousMenu = menuSecondaryItems;
-			menuEssences.NextMenu = menuWeapons;
+			menuWeapons						= new MenuWeapons(gameManager);
+			menuSecondaryItems				= new MenuSecondaryItems(gameManager);
+			menuEssences					= new MenuEssences(gameManager);
+			menuWeapons.PreviousMenu		= menuEssences;
+			menuWeapons.NextMenu			= menuSecondaryItems;
+			menuSecondaryItems.PreviousMenu	= menuWeapons;
+			menuSecondaryItems.NextMenu		= menuEssences;
+			menuEssences.PreviousMenu		= menuSecondaryItems;
+			menuEssences.NextMenu			= menuWeapons;
 
 			roomTicks = 0;
 
@@ -186,7 +186,6 @@ namespace ZeldaOracle.Game.Control {
 				"You got<n><red>5 Bombs<red>!",
 				new Sprite(GameData.SHEET_ITEMS_SMALL, 13, 0, -4, -8)));
 
-
 			rewardManager.AddReward(new RewardAmmo("ammo_arrows_5", "ammo_arrows", 5,
 				"You got<n><red>5 Arrows<red>!",
 				new Sprite(GameData.SHEET_ITEMS_SMALL, 15, 1, -4, -10)));
@@ -202,8 +201,7 @@ namespace ZeldaOracle.Game.Control {
 			roomStateStack.Begin(this);
 
 
-			AudioSystem.MasterVolume = 0.01f;
-
+			AudioSystem.MasterVolume = 0.06f;
 		}
 
 		public void DisplayMessage(Message message) {

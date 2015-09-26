@@ -5,10 +5,12 @@ using System.Text;
 using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles {
 	
@@ -39,6 +41,8 @@ namespace ZeldaOracle.Game.Tiles {
 		private bool			isMoving;
 		private float			movementSpeed;
 
+		protected Properties	properties;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -54,6 +58,7 @@ namespace ZeldaOracle.Game.Tiles {
 			animationPlayer	= new AnimationPlayer();
 			isMoving		= false;
 			pushDelay		= 20;
+			properties		= new Properties();
 		}
 
 
@@ -168,17 +173,17 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public virtual void Draw(Graphics2D g) {
-
 			if (animationPlayer.SubStrip != null) {
 				// Draw as an animation.
-				g.DrawAnimation(animationPlayer.SubStrip, RoomControl.GameControl.RoomTicks, Position);
+				g.DrawAnimation(animationPlayer.SubStrip, Zone.ImageVariantID,
+					RoomControl.GameControl.RoomTicks, Position);
 			}
 			else {
 				// Draw as a sprite.
 				Sprite spr = sprite;
 				if (isMoving && spriteAsObject != null)
 					spr = spriteAsObject;
-				g.DrawSprite(spr, Position);
+				g.DrawSprite(spr, Zone.ImageVariantID, Position);
 			}
 		}
 		
@@ -206,6 +211,7 @@ namespace ZeldaOracle.Game.Tiles {
 			tile.collisionModel		= data.CollisionModel;
 			tile.size				= data.Size;
 			tile.animationPlayer.Animation = data.Animation;
+			tile.properties.Merge(data.Properties, true);
 
 			return tile;
 		}
@@ -219,6 +225,10 @@ namespace ZeldaOracle.Game.Tiles {
 		public RoomControl RoomControl {
 			get { return roomControl; }
 			set { roomControl = value; }
+		}
+
+		public Zone Zone {
+			get { return roomControl.Room.Zone; }
 		}
 
 		public Vector2F Position {
@@ -320,6 +330,10 @@ namespace ZeldaOracle.Game.Tiles {
 					return Directions.South;
 				return Directions.South;
 			}
+		}
+
+		public Properties Properties {
+			get { return properties; }
 		}
 	}
 }

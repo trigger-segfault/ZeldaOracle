@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Properties;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -15,10 +16,14 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		// Called when the player presses A on this tile, when facing the given direction.
 		public override bool OnAction(int direction) {
+			string text = "";
+
 			if (direction == Directions.Up)
-				RoomControl.GameControl.DisplayMessage("It's so hard to cook meals for morning, noon, and night!");
+				text = properties.GetString("text", GameSettings.TEXT_UNDEFINED);
 			else
-				RoomControl.GameControl.DisplayMessage("You can't read it from here!");
+				text = "You can't read it from here!";
+
+			RoomControl.GameControl.DisplayMessage(text);
 			return true;
 		}
 

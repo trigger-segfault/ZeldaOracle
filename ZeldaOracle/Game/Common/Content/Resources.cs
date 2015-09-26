@@ -304,19 +304,21 @@ namespace ZeldaOracle.Common.Content {
 		//-----------------------------------------------------------------------------
 
 		// Loads the image with the specified asset name.
-		public static Image LoadImage(string assetName) {
+		public static Image LoadImage(string assetName, bool addToRegistry = true) {
 			string name = assetName.Substring(assetName.IndexOf('/') + 1);
 			Image resource = new Image(contentManager.Load<Texture2D>(assetName), name);
-			images.Add(name, resource);
+			if (addToRegistry)
+				images.Add(name, resource);
 			return resource;
 		}
 
 		// Loads the image with the specified asset name.
-		public static Image LoadImageFromFile(string assetName) {
+		public static Image LoadImageFromFile(string assetName, bool addToRegistry = true) {
 			string name = assetName.Substring(assetName.IndexOf('/') + 1);
 			name = name.Substring(0, name.LastIndexOf('.'));
 			Image resource = new Image(textureLoader.FromFile(contentManager.RootDirectory + "/" + assetName), name);
-			images.Add(name, resource);
+			if (addToRegistry)
+				images.Add(name, resource);
 			return resource;
 		}
 
@@ -346,6 +348,11 @@ namespace ZeldaOracle.Common.Content {
 		// Loads/compiles sprite sheets from a script file.
 		public static void LoadSpriteSheets(string assetName) {
 			LoadScript(assetName, new SpritesSR());
+		}
+
+		// Loads/compiles images from a script file.
+		public static void LoadImagesFromScript(string assetName) {
+			LoadScript(assetName, new ImagesSR());
 		}
 
 		// Loads the game font with the specified asset name.
@@ -414,7 +421,7 @@ namespace ZeldaOracle.Common.Content {
 			try {
 				Stream stream = TitleContainer.OpenStream(contentManager.RootDirectory + "/" + assetName);
 				StreamReader reader = new StreamReader(stream, encoding);
-				sr.ReadScript(reader);
+				sr.ReadScript(reader, assetName);
 				stream.Close();
 			}
 			catch (FileNotFoundException) {
@@ -426,6 +433,11 @@ namespace ZeldaOracle.Common.Content {
 		//-----------------------------------------------------------------------------
 		// Resource Adding.
 		//-----------------------------------------------------------------------------
+		
+		// Adds the specified animation.
+		public static void AddImage(string assetName, Image image) {
+			images.Add(assetName, image);
+		}
 
 		// Adds the specified sprite sheet.
 		public static void AddSpriteSheet(string assetName, SpriteSheet sheet) {
@@ -456,6 +468,11 @@ namespace ZeldaOracle.Common.Content {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
+
+		// Gets the content manager.
+		public static ContentManager ContentManager {
+			get { return contentManager; }
+		}
 
 		// Gets or sets if the resource manager should output load information to the console.
 		public static bool VerboseOutput {

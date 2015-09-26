@@ -34,10 +34,6 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, 0, 1),
 				new Sprite(GameData.SHEET_ITEMS_SMALL, 1, 1)
 			};
-			spriteLight = new Sprite[] {
-				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 0, 1),
-				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 1, 1)
-			};
 
 			grabState = new PlayerGrabState();
 		}
@@ -84,13 +80,6 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				grabState.BraceletEquipSlot = CurrentEquipSlot;
 				player.BeginState(grabState);
 			}
-		}
-
-		// Draws the item inside the inventory.
-		public override void DrawSlot(Graphics2D g, Point2I position, bool light) {
-			DrawSprite(g, position, light);
-			DrawSprite(g, position, light);
-			DrawLevel(g, position, light);
 		}
 	}
 }

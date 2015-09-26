@@ -18,7 +18,6 @@ namespace ZeldaOracle.Game.Items.Essences {
 			this.description = new string[] { "The song of the sea forms a wave that carries heros into adventure." };
 			this.slot = 6;
 			this.sprite = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(2, 8)) };
-			this.spriteLight = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE_LIGHT, new Point2I(2, 8)) };
 		}
 
 	}
