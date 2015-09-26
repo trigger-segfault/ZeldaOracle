@@ -22,9 +22,6 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		//-----------------------------------------------------------------------------
 
 		public TileChest() {
-			Sprite			= GameData.SPR_TILE_CHEST;
-			opened			= false;
-			openedSprite	= GameData.SPR_TILE_CHEST_OPEN;
 		}
 
 
@@ -40,6 +37,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 					opened = true;
 					Sprite = openedSprite;
 					// TODO: Play chest open sound
+					BaseProperties.Set("opened", true);
 				}
 				else {
 					RoomControl.GameControl.DisplayMessage("It won't open from this side!");
@@ -51,8 +49,17 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 
 		public override void Initialize() {
 			base.Initialize();
+
 			string rewardName = properties.GetString("reward", "rupees_1");
 			reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
+			
+			opened = Properties.GetBoolean("opened", false);
+			openedSprite = GameData.SPR_TILE_CHEST_OPEN;
+
+			if (opened)
+				Sprite = openedSprite;
+			else
+				Sprite = GameData.SPR_TILE_CHEST;
 		}
 
 	}
