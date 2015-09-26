@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerBusyState : PlayerState {
+
 		private int timer;
 		private int duration;
 
@@ -14,8 +15,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public PlayerBusyState(int duration) {
-			this.duration = duration;
+		public PlayerBusyState() {
+			this.timer		= 0;
+			this.duration	= 0;
 		}
 		
 
@@ -39,6 +41,15 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			if (timer <= 0) {
 				player.BeginNormalState();
 			}
+		}
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public int Duration {
+			get { return duration; }
+			set { duration = value; }
 		}
 	}
 }

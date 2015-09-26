@@ -32,11 +32,6 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, 13, 1),
 				new Sprite(GameData.SHEET_ITEMS_SMALL, 13, 1)
 			};
-			spriteLight	= new Sprite[] {
-				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 13, 1),
-				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 13, 1),
-				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, 13, 1)
-			};
 		}
 
 
@@ -96,7 +91,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			ammo[currentAmmo].Amount--;
 
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
-			player.BeginState(new PlayerBusyState(10));
+			player.BeginBusyState(10);
 		}
 
 		// Called when the item is added to the inventory list.
@@ -110,7 +105,6 @@ namespace ZeldaOracle.Game.Items.Weapons {
 					new Ammo(
 						"ammo_arrows", "Arrows", "A standard arrow.",
 						new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(15, 1)),
-						new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(15, 1)),
 						maxAmounts[level], maxAmounts[level]
 					),
 					false
@@ -119,9 +113,9 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		}
 
 		// Draws the item inside the inventory.
-		public override void DrawSlot(Graphics2D g, Point2I position, bool light) {
-			DrawSprite(g, position, light);
-			DrawAmmo(g, position, light);
+		public override void DrawSlot(Graphics2D g, Point2I position, int lightOrDark) {
+			DrawSprite(g, position, lightOrDark);
+			DrawAmmo(g, position, lightOrDark);
 		}
 
 		// Called when the item's level is changed.

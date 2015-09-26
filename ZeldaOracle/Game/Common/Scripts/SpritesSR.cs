@@ -43,7 +43,7 @@ namespace ZeldaOracle.Common.Scripts {
 						imagePath = parameters.GetString(1);
 						i = 2;
 					}
-
+					
 					if (Resources.ImageExists(imagePath))
 						image = Resources.GetImage(imagePath);
 					else

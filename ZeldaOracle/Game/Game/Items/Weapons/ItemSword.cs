@@ -26,23 +26,12 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(1, 0)),
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(2, 0))
 			};
-			spriteLight = new Sprite[] {
-				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(0, 0)),
-				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(1, 0)),
-				new Sprite(GameData.SHEET_ITEMS_SMALL_LIGHT, new Point2I(2, 0))
-			};
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
-
-		// Draws the item inside the inventory.
-		public override void DrawSlot(Graphics2D g, Point2I position, bool light) {
-			DrawSprite(g, position, light);
-			DrawLevel(g, position, light);
-		}
 
 		// Called when the item is switched to.
 		public override void OnStart() { }

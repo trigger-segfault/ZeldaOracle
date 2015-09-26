@@ -53,6 +53,10 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			return rewards[reward.ID];
 		}
 
+		public Reward GetReward(string id) {
+			return rewards[id];
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties

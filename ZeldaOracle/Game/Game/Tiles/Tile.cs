@@ -160,24 +160,26 @@ namespace ZeldaOracle.Game.Tiles {
 					}
 				}
 			}
+		}
+
+		public virtual void UpdateGraphics() {
 
 			// Update the animation.
 			animationPlayer.Update();
 		}
 
 		public virtual void Draw(Graphics2D g) {
-			// TODO: zone.
-			
 			if (animationPlayer.SubStrip != null) {
 				// Draw as an animation.
-				g.DrawAnimation(animationPlayer.SubStrip, RoomControl.GameControl.RoomTicks, Position);
+				g.DrawAnimation(animationPlayer.SubStrip, Zone.ImageVariantID,
+					RoomControl.GameControl.RoomTicks, Position);
 			}
 			else {
 				// Draw as a sprite.
 				Sprite spr = sprite;
 				if (isMoving && spriteAsObject != null)
 					spr = spriteAsObject;
-				g.DrawSprite(spr, Position);
+				g.DrawSprite(spr, Zone.ImageVariantID, Position);
 			}
 		}
 		

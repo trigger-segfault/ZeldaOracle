@@ -5,13 +5,14 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Translation;
+using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.Main;
 
-namespace ZeldaOracle.Game.Control {
+namespace ZeldaOracle.Game.GameStates.RoomStates {
 
 	// A game state for displaying a message box
-	public class StateTextReader : GameState {
+	public class RoomStateTextReader : RoomState {
 
 		// The states the text reader can be in.
 		private enum TextReaderState {
@@ -46,7 +47,10 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		// Constructs a text reader with the specified message
-		public StateTextReader(Message message, int linesPerWindow = 2) {
+		public RoomStateTextReader(Message message, int linesPerWindow = 2) {
+			this.updateRoom = false;
+			this.animateRoom = true;
+
 			this.message = message;
 			this.wrappedString = GameData.FONT_LARGE.WrapString(message.Text, 128);
 			this.timer = 0;

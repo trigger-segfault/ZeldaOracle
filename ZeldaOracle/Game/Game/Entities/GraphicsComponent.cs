@@ -31,8 +31,9 @@ namespace ZeldaOracle.Game.Entities
 		private int				flickerAlternateDelay;
 		private int				flickerTimer;
 		private bool			flickerIsVisible;
+		private bool			isAnimatedWhenPaused;
 
-		private string			imageVariantName;
+		private int				imageVariant;
 
 
 		private static bool		drawCollisionBoxes	= false;
@@ -60,7 +61,8 @@ namespace ZeldaOracle.Game.Entities
 			this.flickerAlternateDelay	= 2;
 			this.flickerTimer			= 0;
 			this.flickerIsVisible		= true;
-			this.imageVariantName		= String.Empty;
+			this.imageVariant			= GameData.VARIANT_NONE;
+			this.isAnimatedWhenPaused	= false;
 		}
 		
 
@@ -100,23 +102,25 @@ namespace ZeldaOracle.Game.Entities
 		}
 
 		public void Update() {
-			animationPlayer.SubStripIndex = subStripIndex;
-			animationPlayer.Update();
-			
-			if (isFlickering) {
-				flickerTimer++;
-				if (flickerTimer >= flickerAlternateDelay) {
-					flickerIsVisible = !flickerIsVisible;
-					flickerTimer = 0;
-				}
-			}
-			else {
-				flickerTimer = 0;
-				flickerIsVisible = true;
-			}
+			if ((entity.GameControl.UpdateRoom || isAnimatedWhenPaused) && entity.GameControl.AnimateRoom) {
+				animationPlayer.SubStripIndex = subStripIndex;
+				animationPlayer.Update();
 
-			if (isGrassEffectVisible && entity.Physics.IsInGrass && entity.Physics.Velocity.Length > 0.1f) {
-				grassAnimationTicks += 1;
+				if (isFlickering) {
+					flickerTimer++;
+					if (flickerTimer >= flickerAlternateDelay) {
+						flickerIsVisible = !flickerIsVisible;
+						flickerTimer = 0;
+					}
+				}
+				else {
+					flickerTimer = 0;
+					flickerIsVisible = true;
+				}
+
+				if (isGrassEffectVisible && entity.Physics.IsInGrass && entity.Physics.Velocity.Length > 0.1f) {
+					grassAnimationTicks += 1;
+				}
 			}
 		}
 
@@ -142,9 +146,9 @@ namespace ZeldaOracle.Game.Entities
 			float depth = 0.6f - 0.3f * (entity.Origin.Y / (float) (entity.RoomControl.Room.Height * GameSettings.TILE_SIZE));
 			Vector2F drawPosition = Entity.Position - new Vector2F(0, Entity.ZPosition);
 			if (animationPlayer.SubStrip != null)
-				g.DrawAnimation(animationPlayer.SubStrip, imageVariantName, animationPlayer.PlaybackTime, drawPosition + drawOffset, depth);
+				g.DrawAnimation(animationPlayer.SubStrip, imageVariant, animationPlayer.PlaybackTime, drawPosition + drawOffset, depth);
 			else if (sprite != null)
-				g.DrawSprite(sprite, imageVariantName, drawPosition + drawOffset, depth);
+				g.DrawSprite(sprite, imageVariant, drawPosition + drawOffset, depth);
 			
 			// Draw the ripples effect.
 			if (isRipplesEffectVisible && entity.Physics.IsEnabled && entity.Physics.IsInPuddle)
@@ -221,6 +225,11 @@ namespace ZeldaOracle.Game.Entities
 			set { flickerAlternateDelay = value; }
 		}
 
+		public bool IsAnimatedWhenPaused {
+			get { return isAnimatedWhenPaused; }
+			set { isAnimatedWhenPaused = value; }
+		}
+
 		public AnimationPlayer AnimationPlayer {
 			get { return animationPlayer;  }
 			set { animationPlayer = value; }
@@ -251,9 +260,9 @@ namespace ZeldaOracle.Game.Entities
 			set { drawOffset = value; }
 		}
 
-		public string ImageVariantName {
-			get { return imageVariantName; }
-			set { imageVariantName = value; }
+		public int ImageVariant {
+			get { return imageVariant; }
+			set { imageVariant = value; }
 		}
 
 		// DEBUG: draw collision boxes.

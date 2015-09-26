@@ -39,8 +39,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private int useAngle;
 		// TODO: better name for this.
 		private bool syncAnimationWithDirection;
-		// Is the player allowed to transition between rooms?
-		private bool allowRoomTransition;
 		// The player doesn't need to be moving to transition.
 		private bool autoRoomTransition;
 		// The position the player was at when he entered the room.
@@ -54,6 +52,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 
 		private PlayerNormalState		stateNormal;
+		private PlayerBusyState			stateBusy;
 		private PlayerSwimState			stateSwim;
 		private PlayerLedgeJumpState	stateLedgeJump;
 		private PlayerLadderState		stateLadder;
@@ -88,7 +87,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			useDirection		= 0;
 			useAngle			= 0;
 			autoRoomTransition	= false;
-			allowRoomTransition	= true;
 			syncAnimationWithDirection	= true;
 			isItemButtonPressDisabled	= false;
 			movement = new PlayerMoveComponent(this);
@@ -114,6 +112,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Create the basic player states.
 			state			= null;
 			stateNormal		= new PlayerNormalState();
+			stateBusy		= new PlayerBusyState();
 			stateSwim		= new PlayerSwimState();
 			stateLadder		= new PlayerLadderState();
 			stateLedgeJump	= new PlayerLedgeJumpState();
@@ -150,6 +149,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 				return stateLadder;
 			else
 				return stateNormal;
+		}
+
+		// Begin the busy state with the specified duration.
+		public void BeginBusyState(int duration) {
+			stateBusy.Duration = duration;
+			BeginState(stateBusy);
 		}
 
 		// Begin the desired natural state.
@@ -299,19 +304,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			if (syncAnimationWithDirection)
 				Graphics.SubStripIndex = direction;
-
+			
+			// Set image variant based on tunic and hurt timer.
 			if (invincibleTimer != 0 && (invincibleTimer + 1) % 8 < 4) {
-				//Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER_HURT);
-				Graphics.ImageVariantName = "hurt";
+				Graphics.ImageVariant = GameData.VARIANT_HURT;
 			}
 			else {
 				switch (tunic) {
-				case PlayerTunics.GreenTunic:	Graphics.ImageVariantName = "green"; break;
-				case PlayerTunics.RedTunic:		Graphics.ImageVariantName = "red"; break;
-				case PlayerTunics.BlueTunic:	Graphics.ImageVariantName = "blue"; break;
-				//case PlayerTunics.GreenTunic: Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER); break;
-				//case PlayerTunics.RedTunic: Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER_RED); break;
-				//case PlayerTunics.BlueTunic: Graphics.AnimationPlayer.Animation.SwitchSpriteSheet(GameData.SHEET_PLAYER_BLUE); break;
+				case PlayerTunics.GreenTunic:	Graphics.ImageVariant = GameData.VARIANT_GREEN;	break;
+				case PlayerTunics.RedTunic:		Graphics.ImageVariant = GameData.VARIANT_RED;	break;
+				case PlayerTunics.BlueTunic:	Graphics.ImageVariant = GameData.VARIANT_BLUE;	break;
 				}
 			}
 
@@ -410,7 +412,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public PlayerNormalState NormalState {
 			get { return stateNormal; }
 		}
-		
+
+		public PlayerBusyState BusyState {
+			get { return stateBusy; }
+		}
+
 		public PlayerSwimState SwimState {
 			get { return stateSwim; }
 		}

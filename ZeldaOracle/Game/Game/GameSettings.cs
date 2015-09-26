@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 
 
 /*
@@ -45,5 +47,22 @@ namespace ZeldaOracle.Game {
 		public static readonly Point2I	ROOM_SIZE_LARGE	= new Point2I(15, 11);
 
 		public const int		DEFAULT_TILE_LAYER_COUNT = 3;
+
+
+		//-----------------------------------------------------------------------------
+		// Draw modes
+		//-----------------------------------------------------------------------------
+
+		public static DrawMode DRAW_MODE_DEFAULT = new DrawMode() {
+			BlendState		= BlendState.AlphaBlend,
+			SortMode		= SpriteSortMode.Deferred,
+			SamplerState	= SamplerState.PointClamp
+		};
+
+		public static DrawMode DRAW_MODE_BACK_TO_FRONT = new DrawMode() {
+			BlendState		= BlendState.AlphaBlend,
+			SortMode		= SpriteSortMode.BackToFront,
+			SamplerState	= SamplerState.PointClamp
+		};
 	}
 }

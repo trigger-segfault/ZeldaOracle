@@ -18,6 +18,8 @@ using ZeldaOracle.Common.Input;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Items.Rewards;
+using ZeldaOracle.Game.Tiles.Custom;
+using ZeldaOracle.Game.GameStates.RoomStates;
 
 namespace ZeldaOracle.Game.Control {
 
@@ -205,6 +207,8 @@ namespace ZeldaOracle.Game.Control {
 					
 				}
 			}
+			
+			room.Zone = GameData.ZONE_GRAVEYARD;
 
 			return room;
 		}
@@ -301,14 +305,14 @@ namespace ZeldaOracle.Game.Control {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 		
-		public void BeginTestWorld() {
+		public void BeginTestWorld(Player player) {
 
 			// Load test level/room.
 			level = LoadLevel("Content/Worlds/test_level.zwd");
 			//level = LoadLevel("Content/Worlds/ledge_jump_world.zwd");
 
 			// Create the player.
-			player = new Player();
+			this.player = player;
 			player.Initialize(this);
 			entities.Add(player);
 			player.X = 48;
@@ -327,55 +331,63 @@ namespace ZeldaOracle.Game.Control {
 			// Create a Sign tile
 			TileData tdSign = new TileData(typeof(TileSign), TileFlags.Solid | TileFlags.Pickupable |
 				TileFlags.Burnable | TileFlags.Cuttable | TileFlags.Switchable);
-			tdSign.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 0);
-			tdSign.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 5, 1);
+			tdSign.Sprite			= GameData.SPR_TILE_SIGN;
+			tdSign.SpriteAsObject	= GameData.SPR_TILE_SIGN_ASOBJECT;
 			tdSign.BreakAnimation	= GameData.ANIM_EFFECT_SIGN_BREAK;
 			tdSign.CollisionModel	= GameData.MODEL_BLOCK;
 			
 			// Create a movable block tile.
 			TileData tdBlock		= new TileData(TileFlags.Solid | TileFlags.Movable);
-			tdBlock.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 1, 9);
-			tdBlock.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 2, 9);
+			tdBlock.Sprite			= GameData.SPR_TILE_MOVABLE_BLOCK;
+			tdBlock.SpriteAsObject	= GameData.SPR_TILE_MOVABLE_BLOCK_ASOBJECT;
 			tdBlock.CollisionModel	= GameData.MODEL_BLOCK;
 			
 			// Create a diamond rock tile.
-			TileData tdDiamond		= new TileData(TileFlags.Solid | TileFlags.Switchable | TileFlags.SwitchStays);
-			tdDiamond.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 4, 0);
-			tdDiamond.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 4, 1);
+			TileData tdDiamond			= new TileData(TileFlags.Solid | TileFlags.Switchable | TileFlags.SwitchStays);
+			tdDiamond.Sprite			= GameData.SPR_TILE_DIAMOND_ROCK;
+			tdDiamond.SpriteAsObject	= GameData.SPR_TILE_DIAMOND_ROCK_ASOBJECT;
 			tdDiamond.CollisionModel	= GameData.MODEL_BLOCK;
 			
 			// Create a bush tile.
 			TileData tdBush		= new TileData(TileFlags.Solid | TileFlags.Pickupable | TileFlags.Bombable |
 									TileFlags.Burnable | TileFlags.Switchable | TileFlags.Cuttable);
-			tdBush.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 0);
-			tdBush.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 1);
+			tdBush.Sprite			= GameData.SPR_TILE_BUSH;
+			tdBush.SpriteAsObject	= GameData.SPR_TILE_BUSH_ASOBJECT;
 			tdBush.BreakAnimation	= GameData.ANIM_EFFECT_LEAVES;
 			tdBush.CollisionModel	= GameData.MODEL_BLOCK;
 			
 			// Create a pot tile.
 			TileData tdPot		= new TileData(TileFlags.Solid | TileFlags.Pickupable |
 									TileFlags.Cuttable | TileFlags.Switchable | TileFlags.Movable);
-			tdPot.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 2, 0);
-			tdPot.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 2, 1);
+			tdPot.Sprite			= GameData.SPR_TILE_POT;
+			tdPot.SpriteAsObject	= GameData.SPR_TILE_POT_ASOBJECT;
 			tdPot.BreakAnimation	= GameData.ANIM_EFFECT_ROCK_BREAK;
 			tdPot.CollisionModel	= GameData.MODEL_BLOCK;
 			
 			// Create a rock tile.
 			TileData tdRock			= new TileData(TileFlags.Solid | TileFlags.Pickupable);
-			tdRock.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 3, 0);
-			tdRock.SpriteAsObject	= new Sprite(GameData.SHEET_ZONESET_LARGE, 3, 1);
+			tdRock.Sprite			= GameData.SPR_TILE_ROCK;
+			tdRock.SpriteAsObject	= GameData.SPR_TILE_ROCK_ASOBJECT;
 			tdRock.BreakAnimation	= GameData.ANIM_EFFECT_ROCK_BREAK;
 			tdRock.CollisionModel	= GameData.MODEL_BLOCK;
 			
 			// Create a grass tile.
 			TileData tdGrass		= new TileData(TileFlags.Grass | TileFlags.Cuttable | TileFlags.Burnable | TileFlags.Bombable);
-			tdGrass.Sprite			= new Sprite(GameData.SHEET_ZONESET_LARGE, 0, 3);
+			tdGrass.Sprite			= GameData.SPR_TILE_GRASS;
 			tdGrass.BreakAnimation	= GameData.ANIM_EFFECT_GRASS_LEAVES;
-			
-			
+
+			TileData tdChest		= new TileData(typeof(TileChest), TileFlags.Solid);
+			tdChest.Sprite			= GameData.SPR_TILE_CHEST;
+			tdChest.CollisionModel	= GameData.MODEL_BLOCK;
+
+			TileData tdReward		= new TileData(typeof(TileReward), TileFlags.Solid);
+			tdReward.CollisionModel	= GameData.MODEL_BLOCK;
+
 			// Setup the rooms.
 			Room r = level.GetRoom(new Point2I(2, 1));
 			r.TileData[8, 1, 1] = tdOwl;
+			r.TileData[7, 1, 1] = tdChest;
+			r.TileData[6, 3, 1] = tdReward;
 			r.TileData[1, 1, 1] = tdSign;
 			r.TileData[2, 5, 1] = tdBlock;
 			r.TileData[2, 2, 1] = tdGrass;
@@ -412,6 +424,20 @@ namespace ZeldaOracle.Game.Control {
 					r.TileData[x, y, 1] = tdBush;
 				}
 			}
+
+			// Set the rooms to random zones.
+			Random random = new Random();
+			for (int x = 0; x < level.Width; x++) {
+				for (int y = 0; y < level.Height; y++) {
+					int index = random.Next(0, 3);
+					Zone zone = GameData.ZONE_SUMMER;
+					if (index == 1)
+						zone = GameData.ZONE_GRAVEYARD;
+					else if (index == 2)
+						zone = GameData.ZONE_FOREST;
+					level.GetRoom(new Point2I(x, y)).Zone = zone;
+				}
+			}
 			
 			roomLocation = new Point2I(2, 1);
 			BeginRoom(level.GetRoom(roomLocation));
@@ -428,11 +454,18 @@ namespace ZeldaOracle.Game.Control {
 		public override void Update() {
 			GameControl.RoomTicks++;
 
+			RoomState roomState = GameControl.CurrentRoomState;
+			GameControl.UpdateRoom = roomState.UpdateRoom;
+			GameControl.AnimateRoom = roomState.AnimateRoom;
+
 			// Update entities.
 			int entityCount = entities.Count;
 			for (int i = 0; i < entities.Count; i++) {
 				if (entities[i].IsAlive && entities[i].IsInRoom && i < entityCount) {
-					entities[i].Update();
+					if (GameControl.UpdateRoom)
+						entities[i].Update();
+					if (GameControl.AnimateRoom)
+						entities[i].UpdateGraphics();
 				}
 				else if (entities[i].IsAlive && entities[i].IsInRoom && i >= entityCount) {
 					// For entities spawned this frame, only update their graphics component.
@@ -452,8 +485,12 @@ namespace ZeldaOracle.Game.Control {
 				for (int x = 0; x < room.Width; x++) {
 					for (int y = 0; y < room.Height; y++) {
 						Tile t = tiles[x, y, i];
-						if (t != null)
-							t.Update();
+						if (t != null) {
+							if (GameControl.UpdateRoom)
+								t.Update();
+							if (GameControl.AnimateRoom)
+								t.UpdateGraphics();
+						}
 					}
 				}
 			}
@@ -472,72 +509,77 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 
-			// [Start] Open inventory.
-			if (Controls.Start.IsPressed()) {
-				GameControl.OpenMenu(GameControl.MenuWeapons);
-			}
-
-
-			// DEBUG KEYS:
-
-			if (Keyboard.IsKeyPressed(Keys.G)) {
-				GameControl.DisplayMessage("I was a <red>hero<red> to broken robots 'cause I was one of them, but how can I sing about being damaged if I'm not?<p> That's like <green>Christina Aguilera<green> singing Spanish. Ooh, wait! That's it! I'll fake it!");
-			}
-			if (Keyboard.IsKeyPressed(Keys.Insert)) {
-				GameControl.Inventory.FillAllAmmo();
-			}
-			if (Keyboard.IsKeyPressed(Keys.Delete)) {
-				GameControl.Inventory.EmptyAllAmmo();
-			}
-			if (Keyboard.IsKeyPressed(Keys.Home)) {
-				GameControl.Player.MaxHealth = 4 * 14;
-				GameControl.Player.Health = GameControl.Player.MaxHealth;
-			}
-			if (Keyboard.IsKeyPressed(Keys.End)) {
-				GameControl.Player.Health = 4 * 3;
-			}
 			GameControl.HUD.Update();
 
-			if (Keyboard.IsKeyPressed(Keys.T)) {
-				switch (player.Tunic) {
-				case PlayerTunics.GreenTunic: player.Tunic = PlayerTunics.RedTunic; break;
-				case PlayerTunics.RedTunic: player.Tunic = PlayerTunics.BlueTunic; break;
-				case PlayerTunics.BlueTunic: player.Tunic = PlayerTunics.GreenTunic; break;
+			GameControl.UpdateRoomState();
+
+			if (GameControl.UpdateRoom) {
+				// [Start] Open inventory.
+				if (Controls.Start.IsPressed()) {
+					GameControl.OpenMenu(GameControl.MenuWeapons);
 				}
-			}
-			if (Keyboard.IsKeyPressed(Keys.H)) {
-				player.Hurt(0);
-			}
-			if (Keyboard.IsKeyPressed(Keys.M)) {
-				AudioSystem.PlaySong("overworld");
-			}
-			if (Keyboard.IsKeyPressed(Keys.N)) {
-				AudioSystem.MasterVolume = 1.0f;
-			}
-			if (Keyboard.IsKeyPressed(Keys.R)) {
-				int[] rupees = { 1, 5, 20, 100, 200 };//, 5, 20, 100, 200 };
-				int rupee = GRandom.NextInt(rupees.Length);
-				Collectible collectible = GameControl.RewardManager.SpawnCollectible("rupee_" + rupees[rupee].ToString());
-				collectible.Position = player.Position;
-				collectible.ZPosition = 100;
-			}
-			if (Keyboard.IsKeyPressed(Keys.Y)) {
-				GraphicsComponent.DrawCollisionBoxes = !GraphicsComponent.DrawCollisionBoxes;
-			}
-			if (Keyboard.IsKeyPressed(Keys.K)) {
-				Collectible collectible = GameControl.RewardManager.SpawnCollectible("heart_1");
-				collectible.Position = player.Position;
-				collectible.ZPosition = 100;
-			}
-			if (Keyboard.IsKeyPressed(Keys.B)) {
-				Collectible collectible = GameControl.RewardManager.SpawnCollectible("ammo_bomb_5");
-				collectible.Position = player.Position;
-				collectible.ZPosition = 100;
-			}
-			if (Keyboard.IsKeyPressed(Keys.J)) {
-				Collectible collectible = GameControl.RewardManager.SpawnCollectible("ammo_arrow_5");
-				collectible.Position = player.Position;
-				collectible.ZPosition = 100;
+
+
+				// DEBUG KEYS:
+
+				if (Keyboard.IsKeyPressed(Keys.G)) {
+					GameControl.DisplayMessage("I was a <red>hero<red> to broken robots 'cause I was one of them, but how can I sing about being damaged if I'm not?<p> That's like <green>Christina Aguilera<green> singing Spanish. Ooh, wait! That's it! I'll fake it!");
+				}
+				if (Keyboard.IsKeyPressed(Keys.Insert)) {
+					GameControl.Inventory.FillAllAmmo();
+				}
+				if (Keyboard.IsKeyPressed(Keys.Delete)) {
+					GameControl.Inventory.EmptyAllAmmo();
+				}
+				if (Keyboard.IsKeyPressed(Keys.Home)) {
+					GameControl.Player.MaxHealth = 4 * 14;
+					GameControl.Player.Health = GameControl.Player.MaxHealth;
+				}
+				if (Keyboard.IsKeyPressed(Keys.End)) {
+					GameControl.Player.Health = 4 * 3;
+				}
+
+				if (Keyboard.IsKeyPressed(Keys.T)) {
+					switch (player.Tunic) {
+					case PlayerTunics.GreenTunic: player.Tunic = PlayerTunics.RedTunic; break;
+					case PlayerTunics.RedTunic: player.Tunic = PlayerTunics.BlueTunic; break;
+					case PlayerTunics.BlueTunic: player.Tunic = PlayerTunics.GreenTunic; break;
+					}
+				}
+				if (Keyboard.IsKeyPressed(Keys.H)) {
+					player.Hurt(0);
+				}
+				if (Keyboard.IsKeyPressed(Keys.M)) {
+					AudioSystem.PlaySong("overworld");
+				}
+				if (Keyboard.IsKeyPressed(Keys.N)) {
+					AudioSystem.MasterVolume = 1.0f;
+				}
+				if (Keyboard.IsKeyPressed(Keys.R)) {
+					int[] rupees = { 1, 5, 20, 100, 200 };//, 5, 20, 100, 200 };
+					int rupee = GRandom.NextInt(rupees.Length);
+					Collectible collectible = GameControl.RewardManager.SpawnCollectible("rupees_" + rupees[rupee].ToString());
+					collectible.Position = player.Position;
+					collectible.ZPosition = 100;
+				}
+				if (Keyboard.IsKeyPressed(Keys.Y)) {
+					GraphicsComponent.DrawCollisionBoxes = !GraphicsComponent.DrawCollisionBoxes;
+				}
+				if (Keyboard.IsKeyPressed(Keys.K)) {
+					Collectible collectible = GameControl.RewardManager.SpawnCollectible("hearts_1");
+					collectible.Position = player.Position;
+					collectible.ZPosition = 100;
+				}
+				if (Keyboard.IsKeyPressed(Keys.B)) {
+					Collectible collectible = GameControl.RewardManager.SpawnCollectible("ammo_bombs_5");
+					collectible.Position = player.Position;
+					collectible.ZPosition = 100;
+				}
+				if (Keyboard.IsKeyPressed(Keys.J)) {
+					Collectible collectible = GameControl.RewardManager.SpawnCollectible("ammo_arrows_5");
+					collectible.Position = player.Position;
+					collectible.ZPosition = 100;
+				}
 			}
 		}
 
@@ -558,23 +600,19 @@ namespace ZeldaOracle.Game.Control {
 			}
 			
 			// Draw entities.
-			DrawMode drawMode = new DrawMode();
-			drawMode.BlendState = BlendState.AlphaBlend;
-			drawMode.SortMode	= SpriteSortMode.BackToFront;
-			drawMode.SamplerState = SamplerState.PointClamp;
-			
 			g.End();
-			g.Begin(drawMode);
+			g.Begin(GameSettings.DRAW_MODE_BACK_TO_FRONT);
 			for (int i = 0; i < entities.Count; ++i) {
 				entities[i].Draw(g);
 			}
-			
+
 			// Draw HUD.
-			drawMode.SortMode = SpriteSortMode.Deferred;
 			g.End();
-			g.Begin(drawMode);
+			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 			g.ResetTranslation();
 			GameControl.HUD.Draw(g, false);
+
+			GameControl.DrawRoomState(g);
 		}
 
 		

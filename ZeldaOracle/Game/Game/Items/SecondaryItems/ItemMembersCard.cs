@@ -19,7 +19,6 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 			this.description = new string[] { "Opens the door!" };
 			this.slot = new Point2I(1, 1);
 			this.sprite = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(7, 7)) };
-			this.spriteLight = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE_LIGHT, new Point2I(7, 7)) };
 		}
 
 	}

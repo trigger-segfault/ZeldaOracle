@@ -26,8 +26,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private int pickupFrame1Duration;
 		private int pickupFrame2Duration;
 		
-		// TODO: Can't ledge jump while carrying.
-		// TODO: Fall in water while carrying.
 
 
 		//-----------------------------------------------------------------------------
@@ -46,6 +44,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			this.throwDuration			= 2;
 			this.pickupFrame1Duration	= 6;
 			this.pickupFrame2Duration	= 4;
+			this.carryObject.Graphics.ImageVariant = carryTile.Zone.ImageVariantID;
 		}
 
 		
@@ -56,7 +55,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public void DropObject(bool enterBusyState = true) {
 			player.RoomControl.SpawnEntity(carryObject, player.Origin, 16);
 			if (enterBusyState) {
-				player.BeginState(new PlayerBusyState(throwDuration));
+				player.BeginBusyState(throwDuration);
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 			}
 		}
@@ -75,7 +74,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnBegin(PlayerState previousState) {
 			carryObject.Initialize(player.RoomControl);
 
-			objectDrawOffset = new Point2I(0, -3);
+			objectDrawOffset = new Point2I(0, -2);
 			objectDrawOffset += Directions.ToPoint(player.Direction) * 8;
 			pickupTimer = 0;
 			isPickingUp = true;
@@ -152,10 +151,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 
 			// Draw the object.
-			if (carryObject.Graphics.AnimationPlayer.SubStrip != null)
-				g.DrawAnimation(carryObject.Graphics.AnimationPlayer.SubStrip, carryObject.Graphics.AnimationPlayer.PlaybackTime, pos, 0.0f);
+			if (carryObject.Graphics.AnimationPlayer.SubStrip != null) {
+				g.DrawAnimation(carryObject.Graphics.AnimationPlayer.SubStrip, carryObject.Graphics.ImageVariant,
+					carryObject.Graphics.AnimationPlayer.PlaybackTime, pos, 0.0f);
+			}
 			else if (carryObject.Graphics.Sprite != null)
-				g.DrawSprite(carryObject.Graphics.Sprite, pos, 0.0f);
+				g.DrawSprite(carryObject.Graphics.Sprite, carryObject.Graphics.ImageVariant, pos, 0.0f);
 		}
 
 

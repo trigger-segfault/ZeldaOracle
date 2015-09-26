@@ -22,6 +22,8 @@ namespace ZeldaOracle.Common.Graphics {
 		private string filePath;
 		// The name of this particular image variant.
 		private string variantName;
+		// The id of this particular image variant.
+		private int variantID;
 		// A pointer to the next variant for the image.
 		private Image nextVariant;
 
@@ -34,6 +36,7 @@ namespace ZeldaOracle.Common.Graphics {
 			this.texture		= null;
 			this.filePath		= "";
 			this.variantName	= "";
+			this.variantID		= 0;
 			this.nextVariant	= null;
 		}
 
@@ -42,6 +45,7 @@ namespace ZeldaOracle.Common.Graphics {
 			this.texture		= texture;
 			this.filePath		= filePath;
 			this.variantName	= "";
+			this.variantID		= 0;
 			this.nextVariant	= null;
 		}
 
@@ -53,6 +57,7 @@ namespace ZeldaOracle.Common.Graphics {
 				this.texture	= null;
 			this.filePath		= filePath;
 			this.variantName	= "";
+			this.variantID		= 0;
 			this.nextVariant	= null;
 		}
 
@@ -61,6 +66,7 @@ namespace ZeldaOracle.Common.Graphics {
 			this.texture		= new Texture2D(graphicsDevice, width, height);
 			this.filePath		= "";
 			this.variantName	= "";
+			this.variantID		= 0;
 			this.nextVariant	= null;
 		}
 
@@ -69,6 +75,7 @@ namespace ZeldaOracle.Common.Graphics {
 			this.texture		= new Texture2D(graphicsDevice, size.X, size.Y);
 			this.filePath		= "";
 			this.variantName	= "";
+			this.variantID		= 0;
 			this.nextVariant	= null;
 		}
 
@@ -77,6 +84,7 @@ namespace ZeldaOracle.Common.Graphics {
 			this.texture		= new Texture2D(graphicsDevice, width, height, mipMap, format);
 			this.filePath		= "";
 			this.variantName	= "";
+			this.variantID		= 0;
 			this.nextVariant	= null;
 		}
 
@@ -85,6 +93,7 @@ namespace ZeldaOracle.Common.Graphics {
 			this.texture		= new Texture2D(graphicsDevice, size.X, size.Y, mipMap, format);
 			this.filePath		= "";
 			this.variantName	= "";
+			this.variantID		= 0;
 			this.nextVariant	= null;
 		}
 
@@ -92,6 +101,19 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 		// Accessors
 		//-----------------------------------------------------------------------------
+		
+		// Return the variant for this image with the given id.
+		public Image GetVariant(int variantID) {
+			if (variantID == 0)
+				return this;
+			Image image = this;
+			while (image != null) {
+				if (image.variantID == variantID)
+					return image;
+				image = image.nextVariant;
+			}
+			return this;
+		}
 
 		// Return the variant for this image with the given name.
 		public Image GetVariant(string variantName) {
@@ -101,7 +123,7 @@ namespace ZeldaOracle.Common.Graphics {
 					return image;
 				image = image.nextVariant;
 			}
-			return null;
+			return this;
 		}
 
 
@@ -175,6 +197,12 @@ namespace ZeldaOracle.Common.Graphics {
 		public string VariantName {
 			get { return variantName; }
 			set { variantName = value; }
+		}
+
+		// Gets the id of this particular image variant.
+		public int VariantID {
+			get { return variantID; }
+			set { variantID = value; }
 		}
 
 		// Gets the next varient for this image.

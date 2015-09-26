@@ -18,7 +18,6 @@ namespace ZeldaOracle.Game.Items.Essences {
 			this.description = new string[] { "A proud spirit that remains stalwart in trying times." };
 			this.slot = 5;
 			this.sprite = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(1, 8)) };
-			this.spriteLight = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE_LIGHT, new Point2I(1, 8)) };
 		}
 
 	}

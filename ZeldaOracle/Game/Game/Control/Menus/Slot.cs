@@ -75,7 +75,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 		// Draws the slot and its item.
 		public void Draw(Graphics2D g) {
 			if (item != null) {
-				item.DrawSlot(g, position, true);
+				item.DrawSlot(g, position, GameData.VARIANT_LIGHT);
 			}
 		}
 

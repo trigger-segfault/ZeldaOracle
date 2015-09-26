@@ -86,6 +86,10 @@ namespace ZeldaOracle.Game.Entities {
 			// Update the physics component.
 			if (physics.IsEnabled)
 				physics.Update();
+		}
+
+		// Called every step to update the entity's gaphics.
+		public virtual void UpdateGraphics() {
 
 			// Update the graphics component.
 			graphics.Update();

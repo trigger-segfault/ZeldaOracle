@@ -106,6 +106,7 @@ namespace ZeldaOracle.Game.Main {
 
 			// Setup the render targets
 			GameData.RenderTargetGame = new RenderTarget2D(gameBase.GraphicsDevice, GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT);
+			GameData.RenderTargetGameTemp = new RenderTarget2D(gameBase.GraphicsDevice, GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT);
 		}
 
 		// Called to unload game manager content.
@@ -190,15 +191,10 @@ namespace ZeldaOracle.Game.Main {
 		// Called every step to draw the game.
 		public void Draw(Graphics2D g) {
 			g.UseIntegerPrecision = true;
-
-			DrawMode drawMode = new DrawMode();
-			drawMode.SortMode = SpriteSortMode.Deferred;
-			drawMode.BlendState = BlendState.AlphaBlend;
-			drawMode.SamplerState = SamplerState.PointClamp;
-
+			
 			// Render the game-state stack to a buffer.
 			g.SetRenderTarget(GameData.RenderTargetGame);
-			g.Begin(drawMode);
+			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 			g.Clear(Color.Black);
 			gameStateStack.Draw(g);
 			g.End();
@@ -206,7 +202,7 @@ namespace ZeldaOracle.Game.Main {
 			// Draw the buffer to the screen scaled.
 			g.SetRenderTarget(null);
 			g.ResetTranslation();
-			g.Begin(drawMode);
+			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 			g.DrawImage(GameData.RenderTargetGame, Vector2F.Zero, Vector2F.Zero, (Vector2F) gameScale, 0.0);
 			g.End();
 		}

@@ -22,8 +22,6 @@ namespace ZeldaOracle.Game.Tiles {
 		private Point2I			sheetLocation;	// Location on the tileset.
 		private Tileset			tileset;
 
-
-
 		// TODO: Properties
 
 

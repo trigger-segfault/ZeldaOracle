@@ -6,7 +6,6 @@ using System.Text;
 namespace ZeldaOracle.Game.Items.Rewards {
 	public enum RewardHoldTypes {
 
-		None,
 		Raise,
 		OneHand,
 		TwoHands
