@@ -12,17 +12,11 @@ using ZeldaOracle.Game.Items.Rewards;
 namespace ZeldaOracle.Game.Tiles.Custom {
 	public class TileChest : Tile {
 
-		private Reward reward;
-		private bool opened;
-		private Sprite openedSprite;
-
-
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public TileChest() {
-		}
+		public TileChest() { }
 
 
 		//-----------------------------------------------------------------------------
@@ -31,13 +25,14 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		
 		// Called when the player presses A on this tile, when facing the given direction.
 		public override bool OnAction(int direction) {
-			if (!opened) {
+			if (!Properties.GetBoolean("looted", false)) {
 				if (direction == Directions.Up) {
+					string rewardName = Properties.GetString("reward", "rupees_1");
+					Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
 					RoomControl.GameControl.PushRoomState(new RoomStateReward(reward, (Point2I)Position));
-					opened = true;
-					Sprite = openedSprite;
+					Sprite = GameData.SPR_TILE_CHEST_OPEN;
 					// TODO: Play chest open sound
-					BaseProperties.Set("opened", true);
+					BaseProperties.Set("looted", true);
 				}
 				else {
 					RoomControl.GameControl.DisplayMessage("It won't open from this side!");
@@ -50,14 +45,9 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		public override void Initialize() {
 			base.Initialize();
 
-			string rewardName = properties.GetString("reward", "rupees_1");
-			reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
-			
-			opened = Properties.GetBoolean("opened", false);
-			openedSprite = GameData.SPR_TILE_CHEST_OPEN;
-
-			if (opened)
-				Sprite = openedSprite;
+			// TODO: Make open sprite a property
+			if (Properties.GetBoolean("looted", false))
+				Sprite = GameData.SPR_TILE_CHEST_OPEN;
 			else
 				Sprite = GameData.SPR_TILE_CHEST;
 		}

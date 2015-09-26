@@ -167,4 +167,5 @@ SPRITE hud_ore_chunk,				(1, 2); END;
 SPRITE hud_key,						(0, 1); END;
 SPRITE hud_x,						(1, 1); END;
 SPRITE hud_level,					(2, 1); END;
+SPRITE hud_text_next_arrow,			(4, 4); END;
 
