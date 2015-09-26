@@ -88,6 +88,11 @@ namespace ZeldaOracle.Common.Collision {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		public Rectangle2I this[int index] {
+			get { return boxes[index]; }
+			set { boxes[index] = value; }
+		}
+
 		public List<Rectangle2I> Boxes {
 			get { return boxes; }
 			set { boxes = value; CalcBounds(); }
@@ -95,6 +100,10 @@ namespace ZeldaOracle.Common.Collision {
 		
 		public Rectangle2I Bounds {
 			get { return bounds; }
+		}
+
+		public int BoxCount {
+			get { return boxes.Count; }
 		}
 	}
 }
