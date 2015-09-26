@@ -230,6 +230,8 @@ namespace ZeldaOracle.Game {
 			MODEL_BRIDGE_V_LEFT		= new CollisionModel().AddBox( 0,  0,  4, 16);
 			MODEL_BRIDGE_V_RIGHT	= new CollisionModel().AddBox(12,  0,  4, 16);
 			MODEL_BRIDGE_V			= new CollisionModel().AddBox( 0,  0,  4, 16).AddBox(12,  0,  4, 16);
+
+			MODEL_CENTER			= new CollisionModel().AddBox( 4,  4,  8,  8);
 		}
 
 		
@@ -652,7 +654,7 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 		// Collision Models.
 		//-----------------------------------------------------------------------------
-	
+
 		public static CollisionModel MODEL_BLOCK;
 		public static CollisionModel MODEL_EDGE_E;
 		public static CollisionModel MODEL_EDGE_N;
@@ -673,6 +675,7 @@ namespace ZeldaOracle.Game {
 		public static CollisionModel MODEL_BRIDGE_V_LEFT;
 		public static CollisionModel MODEL_BRIDGE_V_RIGHT;
 		public static CollisionModel MODEL_BRIDGE_V;
+		public static CollisionModel MODEL_CENTER;
 
 	
 		//-----------------------------------------------------------------------------

@@ -299,6 +299,32 @@ namespace ZeldaOracle.Game.Entities.Players {
 			state.Update();
 			UpdateEquippedItems();
 
+			Rectangle2I tiles = RoomControl.GetTileAreaFromRect(physics.PositionedCollisionBox);
+			for (int x = tiles.Left; x < tiles.Right; x++) {
+				for (int y = tiles.Top; y < tiles.Bottom; y++) {
+					for (int layer = 0; layer < RoomControl.Room.LayerCount; layer++) {
+						Tile tile = RoomControl.GetTile(new Point2I(x, y), layer);
+						if (tile != null)
+							tile.OnTouch();
+					}
+				}
+			}
+
+			tiles = RoomControl.GetTileAreaFromRect(physics.PositionedCollisionBox, 1);
+			for (int x = tiles.Left; x < tiles.Right; x++) {
+				for (int y = tiles.Top; y < tiles.Bottom; y++) {
+					for (int layer = 0; layer < RoomControl.Room.LayerCount; layer++) {
+						Tile tile = RoomControl.GetTile(new Point2I(x, y), layer);
+						if (tile != null) {
+							for (int i = 0; i < tile.CollisionModel.BoxCount; i++) {
+								if (((Rectangle2F)tile.CollisionModel[i] + tile.Position).Colliding(physics.PositionedCollisionBox.Inflated(1, 1)))
+									tile.OnCollide();
+							}
+						}
+					}
+				}
+			}
+
 			// TEMPORARY: Change tool drawing to something else
 			toolAnimation.Update();
 

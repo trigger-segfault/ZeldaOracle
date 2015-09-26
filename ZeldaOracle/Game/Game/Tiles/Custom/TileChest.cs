@@ -44,8 +44,6 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 				else {
 					RoomControl.GameControl.DisplayMessage("It won't open from this side!");
 				}
-				else
-					RoomControl.GameControl.DisplayMessage("You won't open from this side!");
 				return true;
 			}
 			return false;
