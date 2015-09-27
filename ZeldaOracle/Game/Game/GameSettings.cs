@@ -27,7 +27,7 @@ using ZeldaOracle.Common.Graphics;
 */
 
 namespace ZeldaOracle.Game {
-	class GameSettings {
+	public class GameSettings {
 
 		public const int		TILE_SIZE		= 16;	// Tile size in texels.
 		public const int		SCREEN_WIDTH	= 160;
