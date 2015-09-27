@@ -100,6 +100,10 @@
       <Name>sheet_debug_menu_script</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Worlds\big_interiors.zwd">
+      <Name>big_interiors</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Worlds\interiors.zwd">
       <Name>interiors</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

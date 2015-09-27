@@ -145,6 +145,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Movement
 		//-----------------------------------------------------------------------------
 		
+		public void StopMotion() {
+			player.Physics.Velocity = Vector2F.Zero;
+			motion = Vector2F.Zero;
+		}
+
 		public void Jump() {
 			if (player.IsOnGround) {
 				player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;

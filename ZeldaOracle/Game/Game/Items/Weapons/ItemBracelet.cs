@@ -79,6 +79,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			if (grabTile != null && player.CurrentState != grabState) {
 				grabState.BraceletEquipSlot = CurrentEquipSlot;
 				player.BeginState(grabState);
+				player.Movement.StopMotion();
 			}
 		}
 	}
