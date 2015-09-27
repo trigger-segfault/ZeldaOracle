@@ -17,7 +17,7 @@ namespace ZeldaOracle.Game.Items.Essences {
 			this.name = new string[] { "Lonely Peak" };
 			this.description = new string[] { "A proud spirit that remains stalwart in trying times." };
 			this.slot = 5;
-			this.sprite = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(1, 8)) };
+			this.sprite = new Sprite[] { GameData.SPR_ITEM_ICON_ESSENCE_6 };
 		}
 
 	}

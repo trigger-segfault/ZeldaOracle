@@ -17,7 +17,7 @@ namespace ZeldaOracle.Game.Items.Essences {
 			this.name = new string[] { "Falling Star" };
 			this.description = new string[] { "Its eternal light acts as guide to the other essences." };
 			this.slot = 7;
-			this.sprite = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(3, 8)) };
+			this.sprite = new Sprite[] { GameData.SPR_ITEM_ICON_ESSENCE_8 };
 		}
 
 	}

@@ -37,6 +37,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.reward			= reward;
 			this.showMessage	= false;
 			this.timer			= 0;
+			this.Graphics.DrawOffset	= new Point2I(-8, -8);
 		}
 
 		//-----------------------------------------------------------------------------
@@ -100,6 +101,10 @@ namespace ZeldaOracle.Game.Entities {
 		public bool ShowMessage {
 			get { return showMessage; }
 			set { showMessage = value; }
+		}
+
+		public bool IsPickupable {
+			get { return timer >= PickupableTime; }
 		}
 	}
 }

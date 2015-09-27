@@ -18,7 +18,7 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 			this.name = new string[] { "Maku Seed" };
 			this.description = new string[] { "Evil-cleansing sacred seed." };
 			this.slot = new Point2I(3, 0);
-			this.sprite = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(0, 9)) };
+			this.sprite = new Sprite[] { GameData.SPR_ITEM_ICON_ESSENCE_SEED };
 		}
 
 	}
