@@ -13,9 +13,12 @@ using XnaSong = Microsoft.Xna.Framework.Media.Song;
 using XnaPlaylist = Microsoft.Xna.Framework.Media.Playlist;
 
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Common.Translation;
+using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Worlds;
 using Song = ZeldaOracle.Common.Audio.Song;
 using Playlist = ZeldaOracle.Common.Audio.Playlist;
 
@@ -66,6 +69,10 @@ namespace ZeldaOracle.Common.Content {
 		private static Dictionary<string, Effect> shaders;
 		// The texture loader for loading images from file.
 		private static TextureLoader textureLoader;
+		
+		private static Dictionary<string, CollisionModel> collisionModels;
+		private static Dictionary<string, Tileset> tilesets;
+		private static Dictionary<string, Zone> zones;
 
 		// SOUNDS:
 		// The collection of loaded sound effects.
@@ -139,21 +146,28 @@ namespace ZeldaOracle.Common.Content {
 			// Languages
 			languages			= new List<Language>();
 
+			collisionModels		= new Dictionary<string, CollisionModel>();
+			tilesets			= new Dictionary<string, Tileset>();
+			zones				= new Dictionary<string, Zone>();
+
 			// Settings
 			verboseOutput		= false;
 
 			// Setup the resource dictionary lookup map.
 			resourceDictionaries = new Dictionary<Type, object>();
-			resourceDictionaries[typeof(Image)]			= images;
-			resourceDictionaries[typeof(RealFont)]		= realFonts;
-			resourceDictionaries[typeof(GameFont)]		= gameFonts;
-			resourceDictionaries[typeof(SpriteSheet)]	= spriteSheets;
-			resourceDictionaries[typeof(Sprite)]		= sprites;
-			resourceDictionaries[typeof(Animation)]		= animations;
-			resourceDictionaries[typeof(Effect)]		= shaders;
-			resourceDictionaries[typeof(Sound)]			= sounds;
-			resourceDictionaries[typeof(Song)]			= songs;
-			resourceDictionaries[typeof(Playlist)]		= playlists;
+			resourceDictionaries[typeof(Image)]				= images;
+			resourceDictionaries[typeof(RealFont)]			= realFonts;
+			resourceDictionaries[typeof(GameFont)]			= gameFonts;
+			resourceDictionaries[typeof(SpriteSheet)]		= spriteSheets;
+			resourceDictionaries[typeof(Sprite)]			= sprites;
+			resourceDictionaries[typeof(Animation)]			= animations;
+			resourceDictionaries[typeof(Effect)]			= shaders;
+			resourceDictionaries[typeof(Sound)]				= sounds;
+			resourceDictionaries[typeof(Song)]				= songs;
+			resourceDictionaries[typeof(Playlist)]			= playlists;
+			resourceDictionaries[typeof(CollisionModel)]	= collisionModels;
+			resourceDictionaries[typeof(Tileset)]			= tilesets;
+			resourceDictionaries[typeof(Zone)]				= zones;
 		}
 
 	
@@ -370,6 +384,11 @@ namespace ZeldaOracle.Common.Content {
 		// Loads/compiles animations from a script file.
 		public static void LoadAnimations(string assetName) {
 			LoadScript(assetName, new AnimationSR());
+		}
+
+		// Loads/compiles animations from a script file.
+		public static void LoadCollisionModels(string assetName) {
+			LoadScript(assetName, new CollisionModelSR());
 		}
 
 		// Loads a sound effect.

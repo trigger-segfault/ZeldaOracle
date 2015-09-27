@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Geometry;
@@ -188,6 +189,7 @@ namespace ZeldaOracle.Game.Control {
 			height = bin.ReadByte();
 			level.RoomSize = new Point2I(width, height);
 			Room room = new Room(level, locX, locY);
+			room.Zone = GameData.ZONE_SUMMER;
 
 			// Read the tile data.
 			for (int y = 0; y < height; y++) {
@@ -208,8 +210,6 @@ namespace ZeldaOracle.Game.Control {
 					
 				}
 			}
-			
-			room.Zone = GameData.ZONE_GRAVEYARD;
 
 			return room;
 		}
@@ -220,12 +220,16 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		public void BeginRoom(Room room) {
-			this.room = room;
+			this.room			= room;
+			this.roomLocation	= room.Location;
+			this.level			= room.Level;
 
 			// Clear all entities from the old room (except for the player).
 			entities.Clear();
-			if (player != null)
+			if (player != null) {
+				player.Initialize(this);
 				entities.Add(player);
+			}
 
 			// Create the new tile grid.
 			tiles = new Tile[room.Width, room.Height, room.LayerCount];
@@ -310,7 +314,7 @@ namespace ZeldaOracle.Game.Control {
 
 			// Load test level/room.
 			level = LoadLevel("Content/Worlds/test_level.zwd");
-			//level = LoadLevel("Content/Worlds/ledge_jump_world.zwd");
+			//level = LoadLevel("Content/Worlds/interiors.zwd");
 
 			// Create the player.
 			this.player = player;
@@ -363,7 +367,7 @@ namespace ZeldaOracle.Game.Control {
 			TileData tdOwl			= new TileData(typeof(TileOwl), TileFlags.Solid);
 			tdOwl.Sprite			= GameData.SPR_TILE_OWL;
 			tdOwl.CollisionModel	= GameData.MODEL_BLOCK;
-			tdOwl.Properties.Set("text", "<green>Beware!!!<green>");
+			tdOwl.Properties.Set("text", "You have been spooked by the <blue>Spooky Owl<blue>!");
 			
 			// Create a lantern tile.
 			TileData tdLantern			= new TileData(typeof(TileLantern), TileFlags.Solid);
@@ -390,17 +394,37 @@ namespace ZeldaOracle.Game.Control {
 			tdChest.CollisionModel	= GameData.MODEL_BLOCK;
 			tdChest.Properties.Set("reward", "rupees_1");
 
-			// Create a reward tile.
+			// Create a reward tile (flippers).
 			TileData tdFlippers		= new TileData(typeof(TileReward), TileFlags.Solid);
 			tdFlippers.CollisionModel	= GameData.MODEL_CENTER;
 			tdFlippers.Properties.Set("reward", "item_flippers_1");
-
+			
+			// Create a reward tile (heart piece).
 			TileData tdHeartPiece		= new TileData(typeof(TileReward), TileFlags.Solid);
 			tdHeartPiece.CollisionModel	= GameData.MODEL_CENTER;
 			tdHeartPiece.Properties.Set("reward", "heart_piece");
 
+			/*
+			Room r;
+			r = level.GetRoom(new Point2I(2, 1));
+			r.Zone = GameData.ZONE_INTERIOR;
+			r.TileData[1, 2, 1] = tdPot;
+			r.TileData[1, 3, 1] = tdPot;
+			r.TileData[5, 1, 1] = tdPot;
+			r = level.GetRoom(new Point2I(3, 1));
+			r.Zone = GameData.ZONE_INTERIOR;
+			r.TileData[8, 1, 1] = tdChest;
+			r.TileData[8, 2, 1] = tdPot;
+			r.TileData[4, 6, 1] = tdPot;
+			r.TileData[5, 6, 1] = tdPot;
+			r.TileData[6, 6, 1] = tdPot;
+			r.TileData[7, 6, 1] = tdPot;
+			r.TileData[8, 6, 1] = tdPot;
+			*/
+
 			// Setup the rooms.
-			Room r = level.GetRoom(new Point2I(2, 1));
+			Room r;
+			r = level.GetRoom(new Point2I(2, 1));
 			r.TileData[8, 1, 1] = tdOwl;
 			r.TileData[7, 1, 1] = tdChest;
 			r.TileData[6, 3, 1] = tdFlippers;
@@ -443,7 +467,7 @@ namespace ZeldaOracle.Game.Control {
 			}
 
 			// Set the rooms to random zones.
-			Random random = new Random();
+			/*Random random = new Random();
 			for (int x = 0; x < level.Width; x++) {
 				for (int y = 0; y < level.Height; y++) {
 					int index = random.Next(0, 3);
@@ -454,8 +478,24 @@ namespace ZeldaOracle.Game.Control {
 						zone = GameData.ZONE_FOREST;
 					level.GetRoom(new Point2I(x, y)).Zone = zone;
 				}
-			}
+			}*/
 			
+			{
+				WorldFile worldFile = new WorldFile();
+				World world = new World();
+				world.StartLevelIndex = 0;
+				world.StartRoomLocation = new Point2I(2, 1);
+				world.StartTileLocation = new Point2I(3, 2);
+				world.Levels.Add(level);
+				level.Name = "Level 1";
+				worldFile.Save("Content/Worlds/temp_world.zwd", world);
+			}
+			{
+				WorldFile worldFile = new WorldFile();
+				World world = worldFile.Load("Content/Worlds/temp_world.zwd");
+				level = world.Levels[0];
+			}
+
 			roomLocation = new Point2I(2, 1);
 			BeginRoom(level.GetRoom(roomLocation));
 		}
@@ -572,7 +612,7 @@ namespace ZeldaOracle.Game.Control {
 				if (Keyboard.IsKeyPressed(Keys.N)) {
 					AudioSystem.MasterVolume = 1.0f;
 				}
-				if (Keyboard.IsKeyPressed(Keys.R)) {
+				if (Keyboard.IsKeyPressed(Keys.Q)) {
 					int[] rupees = { 1, 5, 20, 100, 200 };//, 5, 20, 100, 200 };
 					int rupee = GRandom.NextInt(rupees.Length);
 					Collectible collectible = GameControl.RewardManager.SpawnCollectible("rupees_" + rupees[rupee].ToString());
@@ -650,6 +690,7 @@ namespace ZeldaOracle.Game.Control {
 		// The player entity (NOTE: this can be null)
 		public Player Player {
 			get { return player; }
+			set { player = value; }
 		}
 
 		// Get the list of entities.

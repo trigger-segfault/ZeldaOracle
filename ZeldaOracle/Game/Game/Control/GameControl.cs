@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Game.Entities.Players;
@@ -69,12 +70,14 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		public void StartGame() {
+			roomTicks = 0;
 
 			roomTicks = 0;
 
 			// Setup the player beforehand so certain classes such as the HUD can reference it
 			player = new Player();
 
+			inventory						= new Inventory(this);
 			menuWeapons						= new MenuWeapons(gameManager);
 			menuSecondaryItems				= new MenuSecondaryItems(gameManager);
 			menuEssences					= new MenuEssences(gameManager);
@@ -84,38 +87,40 @@ namespace ZeldaOracle.Game.Control {
 			menuSecondaryItems.NextMenu		= menuEssences;
 			menuEssences.PreviousMenu		= menuSecondaryItems;
 			menuEssences.NextMenu			= menuWeapons;
-
-			inventory = new Inventory(this);
-			inventory.AddItem(new ItemWallet(2), true);
-			inventory.AddItem(new ItemBracelet(), true);
-			inventory.AddItem(new ItemFeather(), true);
-			inventory.AddItem(new ItemBow(), true);
-			inventory.AddItem(new ItemEssence1(), true);
-			inventory.AddItem(new ItemEssence2(), true);
-			inventory.AddItem(new ItemEssence3(), true);
-			inventory.AddItem(new ItemEssence4(), true);
-			inventory.AddItem(new ItemEssence5(), true);
-			inventory.AddItem(new ItemEssence6(), true);
-			inventory.AddItem(new ItemEssence7(), true);
-			inventory.AddItem(new ItemEssence8(), true);
-			inventory.AddItem(new ItemFlippers(), true);
-			inventory.AddItem(new ItemMagicPotion(), true);
-			inventory.AddItem(new ItemEssenceSeed(), true);
-			inventory.AddItem(new ItemBombs(), true);
-			inventory.AddItem(new ItemOcarina(), true);
-			inventory.AddItem(new ItemBigSword(), true);
-			inventory.AddItem(new ItemMembersCard(), true);
-			inventory.AddItem(new ItemSword(), true);
-			inventory.AddItem(new ItemShield(), true);
-			inventory.AddItem(new ItemBoomerang(), true);
-			inventory.AddItem(new ItemSeedSatchel(), true);
-			inventory.AddItem(new ItemSeedShooter(), true);
-			inventory.AddItem(new ItemSlingshot(), true);
-
-			inventory.ObtainAmmo(inventory.GetAmmo("ammo_scent_seeds"));
-			inventory.ObtainAmmo(inventory.GetAmmo("ammo_pegasus_seeds"));
-			inventory.ObtainAmmo(inventory.GetAmmo("ammo_gale_seeds"));
-			inventory.ObtainAmmo(inventory.GetAmmo("ammo_mystery_seeds"));
+			
+			inventory.AddItems(true,
+				new ItemWallet(),
+				new ItemSword(),
+				new ItemBracelet(),
+				new ItemFeather(),
+				new ItemBow(),
+				new ItemEssence1(),
+				new ItemEssence2(),
+				new ItemEssence3(),
+				new ItemEssence4(),
+				new ItemEssence5(),
+				new ItemEssence6(),
+				new ItemEssence7(),
+				new ItemEssence8(),
+				new ItemFlippers(),
+				new ItemMagicPotion(),
+				new ItemEssenceSeed(),
+				new ItemBombs(),
+				new ItemOcarina(),
+				new ItemBigSword(),
+				new ItemMembersCard(),
+				new ItemSword(),
+				new ItemShield(),
+				new ItemBoomerang(),
+				new ItemSeedSatchel(),
+				new ItemSeedShooter(),
+				new ItemSlingshot());
+			
+			inventory.ObtainAmmo("ammo_scent_seeds");
+			inventory.ObtainAmmo("ammo_pegasus_seeds");
+			inventory.ObtainAmmo("ammo_gale_seeds");
+			inventory.ObtainAmmo("ammo_mystery_seeds");
+			inventory.ObtainItem("item_seed_satchel");
 
 			hud = new HUD(this);
 			hud.DynamicHealth = player.Health;
@@ -202,16 +207,24 @@ namespace ZeldaOracle.Game.Control {
 				"You got<n><red>5 Arrows<red>!",
 				GameData.SPR_REWARD_SEED_EMBER));
 
+			//roomControl.BeginTestWorld(player);
 
-			// TODO: Load world here.
-			roomControl		= new RoomControl();
+			// Create the room control.
+			roomControl = new RoomControl();
 			gameManager.PushGameState(roomControl);
 
 			roomControl.BeginTestWorld(player);
+			/*
+			// Load the world.
+			WorldFile worldFile = new WorldFile();
+			world = worldFile.Load("Content/Worlds/temp_world.zwd");
+			player.Position = world.StartTileLocation * GameSettings.TILE_SIZE;
+			roomControl.Player = player;
+			roomControl.BeginRoom(world.StartRoom);*/
 
+			// Begin the room state.
 			roomStateStack = new RoomStateStack(new RoomStateNormal());
 			roomStateStack.Begin(this);
-
 
 			AudioSystem.MasterVolume = 0.06f;
 		}

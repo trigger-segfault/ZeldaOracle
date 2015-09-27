@@ -24,14 +24,15 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 
 		// Called when the player touches any part of the tile area.
 		public override void OnTouch() {
-
-			// Give the player the reward.
-			string rewardName = Properties.GetString("reward", "rupees_1");
-			Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
-			RoomControl.GameControl.PushRoomState(new RoomStateReward(reward));
-			BaseProperties.Set("looted", true);
-			// Remove the useless tile.
-			RoomControl.RemoveTile(this);
+			if (RoomControl.Player.IsOnGround) {
+				// Give the player the reward.
+				string rewardName = Properties.GetString("reward", "rupees_1");
+				Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
+				RoomControl.GameControl.PushRoomState(new RoomStateReward(reward));
+				BaseProperties.Set("looted", true);
+				// Remove the useless tile.
+				RoomControl.RemoveTile(this);
+			}
 		}
 
 		public override void Initialize() {

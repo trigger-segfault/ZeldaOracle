@@ -86,6 +86,13 @@ namespace ZeldaOracle.Game.Items {
 		public void EquipEquipment(Item item) {
 			ItemEquipment equippableItem = item as ItemEquipment;
 		}
+		
+
+		// Adds multiple item to the list
+		public void AddItems(bool obtain, params Item[] items) {
+			for (int i = 0; i < items.Length; i++)
+				AddItem(items[i], obtain);
+		}
 
 		// Adds the item to the list
 		public Item AddItem(Item item, bool obtain) {
@@ -142,6 +149,10 @@ namespace ZeldaOracle.Game.Items {
 					return item.IsObtained && !item.IsStolen;
 			}
 			return false;
+		}
+
+		public void ObtainItem(string id) {
+			ObtainItem(GetItem(id));
 		}
 
 		public void ObtainItem(Item item) {
@@ -256,6 +267,10 @@ namespace ZeldaOracle.Game.Items {
 				if (ammo.ID == "rupees")
 					gameControl.HUD.DynamicRupees = ammo.Amount;
 			}
+		}
+
+		public void ObtainAmmo(string id) {
+			ObtainAmmo(GetAmmo(id));
 		}
 
 		public void ObtainAmmo(Ammo ammo) {

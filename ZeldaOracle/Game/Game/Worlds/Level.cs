@@ -9,6 +9,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private string	name;
 		private World	world;
 		private Point2I roomSize;	// The size in tiles of each room in the level.
+		private int		roomLayerCount; // The number of tile layers for each room in the level.
 		private Point2I dimensions;	// The dimensions of the grid of rooms.
 		private Room[,] rooms;		// The grid of rooms.
 		
@@ -21,6 +22,7 @@ namespace ZeldaOracle.Game.Worlds {
 			this.name		= "";
 			this.world		= null;
 			this.roomSize	= roomSize;
+			this.roomLayerCount = 3;
 
 			Resize(new Point2I(width, height));
 		}
@@ -32,6 +34,10 @@ namespace ZeldaOracle.Game.Worlds {
 		
 		public bool ContainsRoom(Point2I location) {
 			return (location.X >= 0 && location.Y >= 0 && location.X < dimensions.X && location.Y < dimensions.Y);
+		}
+
+		public Room GetRoom(int x, int y) {
+			return GetRoom(new Point2I(x, y));
 		}
 
 		public Room GetRoom(Point2I location) {
@@ -98,6 +104,21 @@ namespace ZeldaOracle.Game.Worlds {
 		public int Height {
 			get { return dimensions.Y; }
 			set { dimensions.Y = value; }
+		}
+		
+		public int RoomWidth {
+			get { return roomSize.X; }
+			set { roomSize.X = value; }
+		}
+		
+		public int RoomHeight {
+			get { return roomSize.Y; }
+			set { roomSize.Y = value; }
+		}
+		
+		public int RoomLayerCount {
+			get { return roomLayerCount; }
+			set { roomLayerCount = value; }
 		}
 	}
 }

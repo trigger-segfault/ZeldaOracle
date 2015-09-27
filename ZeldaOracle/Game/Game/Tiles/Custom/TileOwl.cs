@@ -48,6 +48,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void Initialize() {
 			isActivated = false;
+			Sprite = GameData.SPR_TILE_OWL;
 		}
 
 		public override void Update() {

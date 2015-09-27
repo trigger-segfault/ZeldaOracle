@@ -130,5 +130,9 @@ namespace ZeldaOracle.Game.GameStates {
 		public override GameState CurrentGameState {
 			get { return states.Last().CurrentGameState; }
 		}
+
+		public int Count {
+			get { return states.Count; }
+		}
 	}
 }
