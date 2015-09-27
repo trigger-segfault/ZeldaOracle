@@ -619,8 +619,12 @@ namespace ZeldaOracle.Game.Entities {
 			get { return topTileFlags.HasFlag(TileFlags.HalfSolid); }
 		}
 
-		public bool IsOverLedge {
-			get { return topTileFlags.HasFlag(TileFlags.Ledge); }
+		public bool IsOverLedge {			
+			get { return (
+				topTileFlags.HasFlag(TileFlags.LedgeRight) ||
+				topTileFlags.HasFlag(TileFlags.LedgeUp) ||
+				topTileFlags.HasFlag(TileFlags.LedgeLeft) ||
+				topTileFlags.HasFlag(TileFlags.LedgeDown)); }
 		}
 
 

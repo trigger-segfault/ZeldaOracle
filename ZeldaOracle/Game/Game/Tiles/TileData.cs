@@ -25,7 +25,7 @@ namespace ZeldaOracle.Game.Tiles {
 		private Properties		properties;
 		private Properties		modifiedProperties; // Properties modified by a game state.
 
-
+		
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
@@ -111,6 +111,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public Properties Properties {
 			get { return properties; }
+			set { properties = value; }
 		}
 
 		public Properties ModifiedProperties {

@@ -1,0 +1,28 @@
+
+#==============================================================
+# Collision Models
+#==============================================================
+
+MODEL block;			ADD  0,  0, 16, 16; END;
+MODEL edge_e;			ADD  8,  0,  8, 16; END;
+MODEL edge_n;			ADD  0,  0, 16,  7; END;
+MODEL edge_w;			ADD  0,  0,  8, 16; END;
+MODEL edge_s;			ADD  0,  8, 16,  8; END;
+MODEL doorway;			ADD  0,  0, 16,  6; END;
+MODEL corner_ne;		ADD  8,  0,  8, 16; ADD 0, 0, 8, 7; END;
+MODEL corner_nw;		ADD  0,  0,  8,  8; ADD 8, 0, 8, 7; END;
+MODEL corner_sw;		ADD  0,  8, 16,  8; ADD 0, 0, 8, 8; END;
+MODEL corner_se;		ADD  0,  8, 16,  0; ADD 8, 0, 8, 8; END;
+MODEL inside_corner_ne;	ADD  8,  0,  8,  7; END;
+MODEL inside_corner_nw;	ADD  0,  0,  8,  7; END;
+MODEL inside_corner_sw;	ADD  0,  8,  8,  8; END;
+MODEL inside_corner_se;	ADD  8,  8,  8,  8; END;
+MODEL bridge_h_top;		ADD  0,  0, 16,  4; END;
+MODEL bridge_h_bottom;	ADD  0, 13, 16,  3; END;
+MODEL bridge_h;			ADD  0,  0, 16,  4; ADD  0, 13, 16,  3; END;
+MODEL bridge_v_left;	ADD  0,  0,  4, 16; END;
+MODEL bridge_v_right;	ADD 12,  0,  4, 16; END;
+MODEL bridge_v;			ADD  0,  0,  4, 16; ADD 12,  0,  4, 16; END;
+MODEL center;			ADD  4,  4,  8,  8; END;
+
+

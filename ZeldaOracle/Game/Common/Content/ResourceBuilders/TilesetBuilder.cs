@@ -5,14 +5,15 @@ using System.Text;
 using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Common.Content.ResourceBuilders {
 
 	public class TilesetBuilder {
 		
-		public Tileset	tileset;
-		public TileData	tileData;
+		private Tileset		tileset;
+		private TileData	tileData;
 
 
 		//-----------------------------------------------------------------------------
@@ -64,6 +65,12 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 			return this;
 		}
 		
+		public TilesetBuilder CreateLedge(CollisionModel model, int ledgeDirection) {
+			tileData.CollisionModel = model;
+			tileData.Flags |= TileFlags.Solid | (TileFlags) ((int) TileFlags.LedgeRight << ledgeDirection);
+			return this;
+		}
+		
 		public TilesetBuilder SetAnim(Animation animation) {
 			tileData.Animation = animation;
 			return this;
@@ -92,6 +99,11 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 		public Tileset Tileset {
 			get { return tileset; }
 			set { tileset = value; }
+		}
+		
+		public TileData TileData {
+			get { return tileData; }
+			set { tileData = value; }
 		}
 	}
 }

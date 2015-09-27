@@ -20,6 +20,7 @@ SPRITESHEET "items_large_light",	"Items/items_large_light"	(16, 16), (1, 1), (18
 
 
 SPRITESHEET "tileset_overworld",	(16, 16), (1, 1), (0, 0); END;
+SPRITESHEET "Tiles/tileset_interior",	(16, 16), (1, 1), (0, 0); END;
 SPRITESHEET "Tiles/general_tiles",	(16, 16), (1, 1), (0, 0); END;
 SPRITESHEET "Tiles/zoneset_large", "zoneset", (16, 16), (1, 1), (0, 0); END;
 SPRITESHEET "Tiles/zoneset_small", "zoneset", (8, 8), (1, 1), (187, 0); END;

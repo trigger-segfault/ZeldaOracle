@@ -120,6 +120,7 @@
     <Compile Include="Common\Audio\Sound.cs" />
     <Compile Include="Common\Audio\SoundInstance.cs" />
     <Compile Include="Common\Collision\CollisionModel.cs" />
+    <Compile Include="Common\Content\Resource.cs" />
     <Compile Include="Common\Content\Resources.cs" />
     <Compile Include="Common\Content\TextureLoader.cs" />
     <None Include="Common\Debug\DebugControllerBase.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="Common\Scripts\AnimationSR.cs" />
     <Compile Include="Common\Scripts\CommandParam.cs" />
     <Compile Include="Common\Scripts\GameFontSR.cs" />
+    <Compile Include="Common\Scripts\CollisionModelSR.cs" />
     <Compile Include="Common\Scripts\LanguageSR.cs" />
     <Compile Include="Common\Scripts\MusicSR.cs" />
     <Compile Include="Common\Scripts\NewScriptReader.cs" />
@@ -339,6 +341,7 @@
     <Compile Include="Game\Worlds\Room.cs" />
     <Compile Include="Game\Worlds\Level.cs" />
     <Compile Include="Game\Worlds\World.cs" />
+    <Compile Include="Game\Worlds\WorldFile.cs" />
     <Compile Include="Game\Worlds\Zone.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

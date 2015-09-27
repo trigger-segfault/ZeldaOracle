@@ -339,7 +339,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (canLedgeJump && mode.CanLedgeJump && isMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
 				Tile tile = collisionInfo.Tile;
 				
-				if (tile.Flags.HasFlag(TileFlags.Ledge) &&
+				if (tile.IsLedge &&
 					moveDirection == tile.LedgeDirection &&
 					collisionInfo.Direction == tile.LedgeDirection)
 				{

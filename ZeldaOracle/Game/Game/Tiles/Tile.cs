@@ -39,6 +39,7 @@ namespace ZeldaOracle.Game.Tiles {
 		private int				pushDelay;		// Number of ticks of pushing before the player can move this tile.
 		protected Properties	properties;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
@@ -324,17 +325,23 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return isMoving; }
 		}
 
+		public bool IsLedge {
+			get { return (
+				flags.HasFlag(TileFlags.LedgeRight) ||
+				flags.HasFlag(TileFlags.LedgeUp) ||
+				flags.HasFlag(TileFlags.LedgeLeft) ||
+				flags.HasFlag(TileFlags.LedgeDown)); }
+		}
+
 		public int LedgeDirection {
 			get {
-				if (collisionModel == GameData.MODEL_EDGE_W)
-					return Directions.West;
-				if (collisionModel == GameData.MODEL_EDGE_E)
-					return Directions.East;
-				if (collisionModel == GameData.MODEL_EDGE_N)
-					return Directions.North;
-				if (collisionModel == GameData.MODEL_EDGE_S)
-					return Directions.South;
-				return Directions.South;
+				if (flags.HasFlag(TileFlags.LedgeRight))
+					return Directions.Right;
+				if (flags.HasFlag(TileFlags.LedgeUp))
+					return Directions.Up;
+				if (flags.HasFlag(TileFlags.LedgeLeft))
+					return Directions.Left;
+				return Directions.Down;
 			}
 		}
 

@@ -210,28 +210,8 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		private static void LoadCollisionModels() {
-			MODEL_BLOCK				= new CollisionModel().AddBox( 0,  0, 16, 16);
-			MODEL_EDGE_E			= new CollisionModel().AddBox( 8,  0,  8, 16);
-			MODEL_EDGE_N			= new CollisionModel().AddBox( 0,  0, 16,  7);
-			MODEL_EDGE_W			= new CollisionModel().AddBox( 0,  0,  8, 16);
-			MODEL_EDGE_S			= new CollisionModel().AddBox( 0,  8, 16,  8);
-			MODEL_DOORWAY			= new CollisionModel().AddBox( 0,  0, 16,  6);
-			MODEL_CORNER_NE			= new CollisionModel().AddBox( 8,  0,  8, 16).AddBox(0, 0, 8, 7);
-			MODEL_CORNER_NW			= new CollisionModel().AddBox( 0,  0,  8,  8).AddBox(8, 0, 8, 7);
-			MODEL_CORNER_SW			= new CollisionModel().AddBox( 0,  8, 16,  8).AddBox(0, 0, 8, 8);
-			MODEL_CORNER_SE			= new CollisionModel().AddBox( 0,  8, 16,  0).AddBox(8, 0, 8, 8);
-			MODEL_INSIDE_CORNER_NE	= new CollisionModel().AddBox( 8,  0,  8,  7);
-			MODEL_INSIDE_CORNER_NW	= new CollisionModel().AddBox( 0,  0,  8,  7);
-			MODEL_INSIDE_CORNER_SW	= new CollisionModel().AddBox( 0,  8,  8,  8);
-			MODEL_INSIDE_CORNER_SE	= new CollisionModel().AddBox( 8,  8,  8,  8);
-			MODEL_BRIDGE_H_TOP		= new CollisionModel().AddBox( 0,  0, 16,  4);
-			MODEL_BRIDGE_H_BOTTOM	= new CollisionModel().AddBox( 0, 13, 16,  3);
-			MODEL_BRIDGE_H			= new CollisionModel().AddBox( 0,  0, 16,  4).AddBox( 0, 13, 16,  3);
-			MODEL_BRIDGE_V_LEFT		= new CollisionModel().AddBox( 0,  0,  4, 16);
-			MODEL_BRIDGE_V_RIGHT	= new CollisionModel().AddBox(12,  0,  4, 16);
-			MODEL_BRIDGE_V			= new CollisionModel().AddBox( 0,  0,  4, 16).AddBox(12,  0,  4, 16);
-
-			MODEL_CENTER			= new CollisionModel().AddBox( 4,  4,  8,  8);
+			Resources.LoadCollisionModels("Data/collision_models.conscript");
+			IntegrateResources<CollisionModel>("MODEL_");
 		}
 
 		
@@ -244,6 +224,11 @@ namespace ZeldaOracle.Game {
 			ZONE_FOREST		= new Zone("forest",	"Forest",		VARIANT_FOREST);
 			ZONE_GRAVEYARD	= new Zone("graveyard",	"Graveyard",	VARIANT_GRAVEYARD);
 			ZONE_INTERIOR	= new Zone("interior",	"Interior",		VARIANT_INTERIOR);
+
+			Resources.AddResource("summer",		ZONE_SUMMER);
+			Resources.AddResource("forest",		ZONE_FOREST);
+			Resources.AddResource("graveyard",	ZONE_GRAVEYARD);
+			Resources.AddResource("interior",	ZONE_INTERIOR);
 		}
 		
 		//-----------------------------------------------------------------------------
@@ -261,10 +246,12 @@ namespace ZeldaOracle.Game {
 			tilesetBuilder = new TilesetBuilder();
 
 			// OVERWORLD TILESET:
-			TILESET_OVERWORLD = new Tileset(GameData.SHEET_TILESET_OVERWORLD, 21, 36);
+			TILESET_OVERWORLD = new Tileset("overworld", GameData.SHEET_TILESET_OVERWORLD, 21, 36);
 			TILESET_OVERWORLD.LoadConfig("Content/Tilesets/overworld.txt");
 			TILESET_OVERWORLD.DefaultTile = new Point2I(1, 25);
 			tilesetBuilder.Tileset = TILESET_OVERWORLD;
+
+			Resources.AddResource(TILESET_OVERWORLD.ID, TILESET_OVERWORLD);
 
 			// Animations.
 			BuildTile( 1, 15).SetAnim(ANIM_TILE_WATER);
@@ -310,25 +297,25 @@ namespace ZeldaOracle.Game {
 			BuildTile(20, 13).SetSolidModel(MODEL_BRIDGE_H_BOTTOM);
 			// Irregular Ledges
 			BuildTile( 0, 17).SetSolidModel(MODEL_CORNER_NW);
-			BuildTile( 1, 17).SetSolidModel(MODEL_EDGE_N).AddFlags(TileFlags.Ledge);
+			BuildTile( 1, 17).CreateLedge(MODEL_EDGE_N, Directions.Down);
 			BuildTile( 2, 17).SetSolidModel(MODEL_CORNER_NE);
 			BuildTile( 4, 17).SetSolidModel(MODEL_CORNER_NW);
-			BuildTile( 5, 17).SetSolidModel(MODEL_EDGE_N).AddFlags(TileFlags.Ledge);
+			BuildTile( 5, 17).CreateLedge(MODEL_EDGE_N, Directions.Down);
 			BuildTile( 6, 17).SetSolidModel(MODEL_CORNER_NE);
-			BuildTile( 0, 18).SetSolidModel(MODEL_EDGE_W).AddFlags(TileFlags.Ledge);
-			BuildTile( 2, 18).SetSolidModel(MODEL_EDGE_E).AddFlags(TileFlags.Ledge);
-			BuildTile( 3, 18).SetSolidModel(MODEL_EDGE_E).AddFlags(TileFlags.Ledge);
-			BuildTile( 4, 18).SetSolidModel(MODEL_EDGE_W).AddFlags(TileFlags.Ledge);
-			BuildTile( 6, 18).SetSolidModel(MODEL_EDGE_E).AddFlags(TileFlags.Ledge);
-			BuildTile( 7, 18).SetSolidModel(MODEL_EDGE_E).AddFlags(TileFlags.Ledge);
+			BuildTile( 0, 18).CreateLedge(MODEL_EDGE_W, Directions.Down);
+			BuildTile( 2, 18).CreateLedge(MODEL_EDGE_E, Directions.Down);
+			BuildTile( 3, 18).CreateLedge(MODEL_EDGE_E, Directions.Down);
+			BuildTile( 4, 18).CreateLedge(MODEL_EDGE_W, Directions.Down);
+			BuildTile( 6, 18).CreateLedge(MODEL_EDGE_E, Directions.Down);
+			BuildTile( 7, 18).CreateLedge(MODEL_EDGE_E, Directions.Down);
 			BuildTile( 0, 19).SetSolidModel(MODEL_CORNER_SW);
-			BuildTile( 1, 19).SetSolidModel(MODEL_EDGE_S).AddFlags(TileFlags.Ledge);
+			BuildTile( 1, 19).CreateLedge(MODEL_EDGE_S, Directions.Down);
 			BuildTile( 2, 19).SetSolidModel(MODEL_CORNER_SE);
-			BuildTile( 3, 19).SetSolidModel(MODEL_EDGE_W).AddFlags(TileFlags.Ledge);
+			BuildTile( 3, 19).CreateLedge(MODEL_EDGE_W, Directions.Down);
 			BuildTile( 4, 19).SetSolidModel(MODEL_CORNER_SW);
-			BuildTile( 5, 19).SetSolidModel(MODEL_EDGE_S).AddFlags(TileFlags.Ledge);
+			BuildTile( 5, 19).CreateLedge(MODEL_EDGE_S, Directions.Down);
 			BuildTile( 6, 19).SetSolidModel(MODEL_CORNER_SE);
-			BuildTile( 7, 19).SetSolidModel(MODEL_EDGE_W).AddFlags(TileFlags.Ledge);
+			BuildTile( 7, 19).CreateLedge(MODEL_EDGE_W, Directions.Down);
 			BuildTile( 0, 20).SetSolidModel(MODEL_CORNER_NW);
 			BuildTile( 1, 20).SetSolidModel(MODEL_CORNER_NE);
 			BuildTile( 2, 20).SetSolidModel(MODEL_INSIDE_CORNER_SE);
@@ -346,11 +333,68 @@ namespace ZeldaOracle.Game {
 			BuildTile( 6, 21).SetSolidModel(MODEL_INSIDE_CORNER_NE);
 			BuildTile( 7, 21).SetSolidModel(MODEL_INSIDE_CORNER_NW);
 			
-			
 			// Ledges.
-			BuildTile( 1,  3).AddFlags(TileFlags.Ledge);
+			BuildTile( 1,  3).CreateLedge(MODEL_BLOCK, Directions.Down);
 
-			TILESETS = new Tileset[] { TILESET_OVERWORLD };
+			
+			// INTERIOR TILESET:
+			TILESET_INTERIOR = new Tileset("interior", GameData.SHEET_TILESET_INTERIOR, 10, 15);
+			TILESET_INTERIOR.LoadConfig("Content/Tilesets/interior.txt");
+			TILESET_INTERIOR.DefaultTile = new Point2I(4, 1);
+			tilesetBuilder.Tileset = TILESET_INTERIOR;
+
+			Resources.AddResource(TILESET_INTERIOR.ID, TILESET_INTERIOR);
+
+			// Animations.
+			BuildTile( 7,  9).SetAnim(ANIM_TILE_LANTERN);
+			BuildTile( 4,  4).SetAnim(ANIM_TILE_WATER);
+			BuildTile( 4,  3).SetAnim(ANIM_TILE_PUDDLE);
+			BuildTile( 3,  4).SetAnim(ANIM_TILE_WATERFALL);
+			BuildTile( 3,  5).SetAnim(ANIM_TILE_WATERFALL_BOTTOM);
+
+			BuildTile(1, 0).CreateLedge(MODEL_BLOCK, Directions.Up);
+			BuildTile(0, 1).CreateLedge(MODEL_BLOCK, Directions.Left);
+			BuildTile(2, 1).CreateLedge(MODEL_BLOCK, Directions.Right);
+			BuildTile(1, 2).CreateLedge(MODEL_BLOCK, Directions.Down);
+			//setModelLedge(1, 0, MODEL_BLOCK, Direction.NORTH);
+			//setModelLedge(0, 1, MODEL_BLOCK, Direction.WEST);
+			//setModelLedge(2, 1, MODEL_BLOCK, Direction.EAST);
+			//setModelLedge(1, 2, MODEL_BLOCK, Direction.SOUTH);
+			// setModel(6, 1, MODEL_EDGE_N); // Cave
+			// setModel(7, 1, MODEL_EDGE_S); // Cave
+			// setModel(8, 1, MODEL_EDGE_W); // Cave
+			// setModel(9, 1, MODEL_EDGE_E); // Cave
+
+			BuildTile(8, 2).SetSolidModel(MODEL_DOORWAY); // stairs down
+			BuildTile(9, 2).SetSolidModel(MODEL_DOORWAY); // stairs up
+
+			BuildTile(9, 3).SetSolidModel(MODEL_EDGE_N); // fireplace
+			BuildTile(8, 4).SetSolidModel(MODEL_EDGE_N); // fireplace Post
+			BuildTile(8, 5).SetSolidModel(MODEL_EDGE_W); // entrance left
+			BuildTile(9, 5).SetSolidModel(MODEL_EDGE_E); // entrance right
+
+			BuildTile(4, 8).SetSolidModel(MODEL_EDGE_N); // bookshelves
+			BuildTile(5, 8).SetSolidModel(MODEL_EDGE_N); // drawers
+			BuildTile(6, 8).SetSolidModel(MODEL_EDGE_N); // shelves
+
+			for (int i = 0; i < 3; i++) {
+				int x = i * 3;
+				BuildTile(x + 0, 10).SetSolidModel(MODEL_CORNER_NW);
+				BuildTile(x + 1, 10).SetSolidModel(MODEL_EDGE_N);
+				BuildTile(x + 2, 10).SetSolidModel(MODEL_CORNER_NE);
+				BuildTile(x + 0, 11).SetSolidModel(MODEL_EDGE_W);
+				BuildTile(x + 2, 11).SetSolidModel(MODEL_EDGE_E);
+				BuildTile(x + 0, 12).SetSolidModel(MODEL_CORNER_SW);
+				BuildTile(x + 1, 12).SetSolidModel(MODEL_EDGE_S);
+				BuildTile(x + 2, 12).SetSolidModel(MODEL_CORNER_SE);
+				BuildTile(x + 0, 13).SetSolidModel(MODEL_INSIDE_CORNER_NW);
+				BuildTile(x + 1, 13).SetSolidModel(MODEL_INSIDE_CORNER_NE);
+				BuildTile(x + 0, 14).SetSolidModel(MODEL_INSIDE_CORNER_SW);
+				BuildTile(x + 1, 14).SetSolidModel(MODEL_INSIDE_CORNER_SE);
+			}
+
+
+			TILESETS = new Tileset[] { TILESET_OVERWORLD, TILESET_INTERIOR };
 		}
 
 		
@@ -404,6 +448,7 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		public static Tileset TILESET_OVERWORLD;
+		public static Tileset TILESET_INTERIOR;
 		public static Tileset[] TILESETS;
 
 
@@ -452,6 +497,7 @@ namespace ZeldaOracle.Game {
 		public static SpriteSheet SHEET_ZONESET_LARGE;
 		public static SpriteSheet SHEET_ZONESET_SMALL;
 		public static SpriteSheet SHEET_TILESET_OVERWORLD;
+		public static SpriteSheet SHEET_TILESET_INTERIOR;
 		public static SpriteSheet SHEET_GENERAL_TILES;
 	
 	

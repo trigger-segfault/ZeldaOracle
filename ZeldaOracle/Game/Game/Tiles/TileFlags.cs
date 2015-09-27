@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 
 namespace ZeldaOracle.Game.Tiles {
-
+	
 	[Flags]
-	public enum TileFlags {
+	public enum TileFlags : ulong {
 		None			= 0,
 		Disabled		= 0x1,			// Tile is disabled.
 
@@ -16,7 +16,7 @@ namespace ZeldaOracle.Game.Tiles {
 		NotCoverable	= 0x8,			// Tile can't be covered by movable blocks.
 		
 		// Environmental.
-		Ledge			= 0x10,			// Ledge that the player can jump off.
+		//Ledge			= 0x10,			// Ledge that the player can jump off.
 		Ice				= 0x20,			// Slippery surface.
 		Stairs			= 0x40,			// Stairs slow movement speed.
 		Ladder			= 0x80,			// A climbable ladder disables items, and makes you face away from the screen.
@@ -39,6 +39,11 @@ namespace ZeldaOracle.Game.Tiles {
 		SwitchStays		= 0x400000,		// Won't be destroyed when switched using the Switch Hook.
 		Diggable		= 0x8000000,	// Can be dug with a shovel.
 		
+		LedgeRight		= 0x10000000,
+		LedgeUp			= 0x20000000,
+		LedgeLeft		= 0x40000000,
+		LedgeDown		= 0x80000000,
+
 		Default			= 0,			// Default tile flags.
 	}
 }

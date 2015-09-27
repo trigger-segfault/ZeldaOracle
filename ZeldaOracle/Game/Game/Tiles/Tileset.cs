@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using Microsoft.Xna.Framework;
@@ -11,6 +12,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 	public class Tileset {
 		
+		private string		id;
 		private TileData[,]	tileData;
 		private Point2I		size;
 		private SpriteSheet	sheet;
@@ -21,7 +23,8 @@ namespace ZeldaOracle.Game.Tiles {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public Tileset(SpriteSheet sheet, int width, int height) {
+		public Tileset(string id, SpriteSheet sheet, int width, int height) {
+			this.id				= id;
 			this.sheet			= sheet;
 			this.size			= new Point2I(width, height);
 			this.defaultTile	= Point2I.Zero;
@@ -76,10 +79,9 @@ namespace ZeldaOracle.Game.Tiles {
 								data.CollisionModel = GameData.MODEL_BLOCK;
 								break;
 							case 'F':
-								data.Flags |= TileFlags.Waterfall | TileFlags.Solid | TileFlags.Ledge;
+								data.Flags |= TileFlags.Waterfall | TileFlags.Solid | TileFlags.LedgeDown;
 								data.CollisionModel = GameData.MODEL_BLOCK;
 								break;
-							case 'L': data.Flags |= TileFlags.Ledge;		break;
 							case 'G': data.Flags |= TileFlags.Diggable;		break;
 							case 'H': data.Flags |= TileFlags.Hole;			break;
 							case 'V': data.Flags |= TileFlags.Lava;			break;
@@ -105,6 +107,11 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
+		
+		public string ID {
+			get { return id; }
+			set { id = value; }
+		}
 
 		public TileData[,] TileData {
 			get { return tileData; }
