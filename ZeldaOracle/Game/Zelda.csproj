@@ -296,6 +296,8 @@
     <Compile Include="Game\Items\ItemEssence.cs" />
     <Compile Include="Game\Items\ItemFlags.cs" />
     <Compile Include="Game\Items\ItemWeapon.cs" />
+    <Compile Include="Game\Items\Rewards\RewardHeartContainer.cs" />
+    <Compile Include="Game\Items\Rewards\RewardHeartPiece.cs" />
     <Compile Include="Game\Items\Rewards\RewardItem.cs" />
     <Compile Include="Game\Items\Rewards\RewardAmmo.cs" />
     <Compile Include="Game\Items\Rewards\RewardRecoveryHeart.cs" />

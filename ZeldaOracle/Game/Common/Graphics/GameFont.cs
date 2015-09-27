@@ -100,8 +100,8 @@ namespace ZeldaOracle.Common.Graphics {
 
 				do {
 					if (currentCharacter >= letterString.Length || letterString[currentCharacter].Char == ' ' ||
-						letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter) {
-
+						letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter || letterString[currentCharacter].Char == '\n')
+					{
 						if (wordLineCount > 0)
 							lines[currentLine].Add(' ');
 						lines[currentLine].AddRange(word);
@@ -111,8 +111,11 @@ namespace ZeldaOracle.Common.Graphics {
 						wordLength = 0;
 						wordStart = currentCharacter + 1;
 						word.Clear();
-						if (currentCharacter < letterString.Length && letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter) {
-							lines[currentLine].Add(letterString[currentCharacter]);
+						if (currentCharacter < letterString.Length &&
+							(letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter || letterString[currentCharacter].Char == '\n'))
+						{
+							if (letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter)
+								lines[currentLine].Add(letterString[currentCharacter]);
 							currentCharacter++;
 							break;
 						}

@@ -320,6 +320,14 @@ public static class AudioSystem {
 		StopSound(Resources.GetSound(name));
 	}
 
+	/** <summary> Returns true if the song with the specified name is playing. </summary> */
+	public static bool IsSongPlaying(Song song) {
+		return song.IsPlaying;
+	}
+	/** <summary> Returns true if the song with the specified name is playing. </summary> */
+	public static bool IsSongPlaying(string name) {
+		return IsSongPlaying(Resources.GetSong(name));
+	}
 	/** <summary> Returns true if the sound with the specified name is playing. </summary> */
 	public static bool IsSoundPlaying(Sound sound) {
 		return sound.IsPlaying;

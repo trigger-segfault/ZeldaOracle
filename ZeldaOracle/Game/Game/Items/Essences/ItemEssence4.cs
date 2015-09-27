@@ -17,7 +17,7 @@ namespace ZeldaOracle.Game.Items.Essences {
 			this.name = new string[] { "Burning Flame" };
 			this.description = new string[] { "It reignights a hero's passion deep in wavering hearts." };
 			this.slot = 3;
-			this.sprite = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(11, 7)) };
+			this.sprite = new Sprite[] { GameData.SPR_ITEM_ICON_ESSENCE_4 };
 		}
 
 	}

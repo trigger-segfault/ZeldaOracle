@@ -18,7 +18,7 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 			this.name = new string[] { "Magic Potion" };
 			this.description = new string[] { "Fill your hearts!" };
 			this.slot = new Point2I(1, 0);
-			this.sprite = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(6, 3)) };
+			this.sprite = new Sprite[] { GameData.SPR_ITEM_ICON_MAGIC_POTION };
 		}
 
 	}
