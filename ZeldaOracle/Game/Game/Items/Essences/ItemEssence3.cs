@@ -17,7 +17,7 @@ namespace ZeldaOracle.Game.Items.Essences {
 			this.name = new string[] { "Echoing Howl" };
 			this.description = new string[] { "It echoes far across plains to speak to insolent hearts." };
 			this.slot = 2;
-			this.sprite = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(10, 7)) };
+			this.sprite = new Sprite[] { GameData.SPR_ITEM_ICON_ESSENCE_3 };
 		}
 
 	}

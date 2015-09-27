@@ -391,17 +391,22 @@ namespace ZeldaOracle.Game.Control {
 			tdChest.Properties.Set("reward", "rupees_1");
 
 			// Create a reward tile.
-			TileData tdReward		= new TileData(typeof(TileReward), TileFlags.Solid);
-			tdReward.CollisionModel	= GameData.MODEL_CENTER;
-			tdReward.Properties.Set("reward", "item_flippers_1");
+			TileData tdFlippers		= new TileData(typeof(TileReward), TileFlags.Solid);
+			tdFlippers.CollisionModel	= GameData.MODEL_CENTER;
+			tdFlippers.Properties.Set("reward", "item_flippers_1");
+
+			TileData tdHeartPiece		= new TileData(typeof(TileReward), TileFlags.Solid);
+			tdHeartPiece.CollisionModel	= GameData.MODEL_CENTER;
+			tdHeartPiece.Properties.Set("reward", "heart_piece");
 
 			// Setup the rooms.
 			Room r = level.GetRoom(new Point2I(2, 1));
 			r.TileData[8, 1, 1] = tdOwl;
 			r.TileData[7, 1, 1] = tdChest;
-			r.TileData[6, 3, 1] = tdReward;
+			r.TileData[6, 3, 1] = tdFlippers;
 			r.TileData[1, 1, 1] = tdSign;
 			r.TileData[2, 5, 1] = tdBlock;
+			r.TileData[2, 6, 1] = tdHeartPiece;
 			r.TileData[2, 2, 1] = tdGrass;
 			r.TileData[2, 3, 1] = tdGrass;
 			r.TileData[2, 4, 1] = tdGrass;

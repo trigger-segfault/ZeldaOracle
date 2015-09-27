@@ -87,14 +87,14 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			g.Translate(0, 16);
 
 			if (reward.HoldType == RewardHoldTypes.Raise && useChest) {
-				g.DrawAnimation(animationPlayer, chestPosition + new Point2I(8, -(timer + 2) / 4), 0.3f);
+				g.DrawAnimation(animationPlayer, chestPosition + new Point2I(0, -8 - (timer + 2) / 4), 0.3f);
 			}
 			else if (timer >= (useChest ? RaiseDuration : NonChestDuration)) {
 				if (reward.HoldType == RewardHoldTypes.TwoHands) {
-					g.DrawAnimation(animationPlayer, GameControl.Player.Position + new Point2I(0, -23), 0.3f);
+					g.DrawAnimation(animationPlayer, GameControl.Player.Position + new Point2I(-8, -31), 0.3f);
 				}
 				else if (reward.HoldType == RewardHoldTypes.OneHand) {
-					g.DrawAnimation(animationPlayer, GameControl.Player.Position + new Point2I(-4, -22), 0.3f);
+					g.DrawAnimation(animationPlayer, GameControl.Player.Position + new Point2I(-12, -30), 0.3f);
 				}
 			}
 

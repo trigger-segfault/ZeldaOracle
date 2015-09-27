@@ -48,14 +48,5 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			}
 		}
 
-		public override void Draw(Graphics2D g) {
-
-			// Draw the reward at the center.
-			if (AnimationPlayer.SubStrip != null) {
-				// Draw as an animation.
-				g.DrawAnimation(AnimationPlayer.SubStrip, RoomControl.GameControl.RoomTicks, Position + GameSettings.TILE_SIZE / 2);
-			}
-		}
-
 	}
 }

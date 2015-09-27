@@ -109,7 +109,7 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 		// Image Loading
 		//-----------------------------------------------------------------------------
-		
+
 		// Loads the images.
 		private static void LoadImages() {
 			Resources.LoadImagesFromScript("Images/images.conscript");
@@ -182,13 +182,27 @@ namespace ZeldaOracle.Game {
 				SPR_HUD_HEART_3,
 				SPR_HUD_HEART_4,
 			};
+
+			SPR_HUD_HEART_PIECES_EMPTY = new Sprite[] {
+				SPR_HUD_HEART_PIECES_EMPTY_TOP_LEFT,
+				SPR_HUD_HEART_PIECES_EMPTY_BOTTOM_LEFT,
+				SPR_HUD_HEART_PIECES_EMPTY_BOTTOM_RIGHT,
+				SPR_HUD_HEART_PIECES_EMPTY_TOP_RIGHT
+			};
+
+			SPR_HUD_HEART_PIECES_FULL = new Sprite[] {
+				SPR_HUD_HEART_PIECES_FULL_TOP_LEFT,
+				SPR_HUD_HEART_PIECES_FULL_BOTTOM_LEFT,
+				SPR_HUD_HEART_PIECES_FULL_BOTTOM_RIGHT,
+				SPR_HUD_HEART_PIECES_FULL_TOP_RIGHT
+			};
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Animations Loading
 		//-----------------------------------------------------------------------------
-	
+
 		private static void LoadAnimations() {
 			Resources.LoadAnimations("Animations/animations.conscript");
 
@@ -204,7 +218,7 @@ namespace ZeldaOracle.Game {
 			IntegrateResources<Animation>("ANIM_");
 		}
 
-
+		
 		//-----------------------------------------------------------------------------
 		// Collision Models Loading
 		//-----------------------------------------------------------------------------
@@ -234,7 +248,7 @@ namespace ZeldaOracle.Game {
 			MODEL_CENTER			= new CollisionModel().AddBox( 4,  4,  8,  8);
 		}
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Zone Loading
 		//-----------------------------------------------------------------------------
@@ -245,7 +259,7 @@ namespace ZeldaOracle.Game {
 			ZONE_GRAVEYARD	= new Zone("graveyard",	"Graveyard",	VARIANT_GRAVEYARD);
 			ZONE_INTERIOR	= new Zone("interior",	"Interior",		VARIANT_INTERIOR);
 		}
-		
+
 		//-----------------------------------------------------------------------------
 		// Tliesets Loading
 		//-----------------------------------------------------------------------------
@@ -353,7 +367,7 @@ namespace ZeldaOracle.Game {
 			TILESETS = new Tileset[] { TILESET_OVERWORLD };
 		}
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Font Loading
 		//-----------------------------------------------------------------------------
@@ -367,7 +381,7 @@ namespace ZeldaOracle.Game {
 			FONT_SMALL = Resources.GetGameFont("Fonts/font_small");
 		}
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Shader Loading
 		//-----------------------------------------------------------------------------
@@ -398,7 +412,7 @@ namespace ZeldaOracle.Game {
 			Resources.LoadMusic(Resources.MusicDirectory + "music.conscript");
 		}
 
-	
+
 		//-----------------------------------------------------------------------------
 		// Tilesets
 		//-----------------------------------------------------------------------------
@@ -410,7 +424,7 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 		// Images & Image Variants
 		//-----------------------------------------------------------------------------
-		
+
 		public static int VARIANT_NONE		= 0;
 		public static int VARIANT_DARK		= 1;
 		public static int VARIANT_LIGHT		= 2;
@@ -453,12 +467,12 @@ namespace ZeldaOracle.Game {
 		public static SpriteSheet SHEET_ZONESET_SMALL;
 		public static SpriteSheet SHEET_TILESET_OVERWORLD;
 		public static SpriteSheet SHEET_GENERAL_TILES;
-	
-	
+
+
 		//-----------------------------------------------------------------------------
 		// Sprites
 		//-----------------------------------------------------------------------------
-	
+
 		// Effects.
 		public static Sprite SPR_SHADOW;
 
@@ -545,6 +559,36 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_ITEM_ICON_FIRE_ROD;
 		public static Sprite SPR_ITEM_ICON_OCARINA;
 		public static Sprite SPR_ITEM_ICON_BOW;
+		public static Sprite SPR_ITEM_ICON_FLIPPERS_1;
+		public static Sprite SPR_ITEM_ICON_FLIPPERS_2;
+		public static Sprite SPR_ITEM_ICON_MAGIC_POTION;
+		public static Sprite SPR_ITEM_ICON_MEMBERS_CARD;
+		public static Sprite SPR_ITEM_ICON_ESSENCE_SEED;
+		public static Sprite SPR_ITEM_ICON_ESSENCE_1;
+		public static Sprite SPR_ITEM_ICON_ESSENCE_2;
+		public static Sprite SPR_ITEM_ICON_ESSENCE_3;
+		public static Sprite SPR_ITEM_ICON_ESSENCE_4;
+		public static Sprite SPR_ITEM_ICON_ESSENCE_5;
+		public static Sprite SPR_ITEM_ICON_ESSENCE_6;
+		public static Sprite SPR_ITEM_ICON_ESSENCE_7;
+		public static Sprite SPR_ITEM_ICON_ESSENCE_8;
+
+		// Reward Icons.
+		public static Sprite SPR_REWARD_RUPEE_GREEN;
+		public static Sprite SPR_REWARD_RUPEE_RED;
+		public static Sprite SPR_REWARD_RUPEE_BLUE;
+		public static Sprite SPR_REWARD_RUPEE_BIG_BLUE;
+		public static Sprite SPR_REWARD_RUPEE_BIG_RED;
+		public static Sprite SPR_REWARD_HEART;
+		public static Sprite SPR_REWARD_HEARTS_3;
+		public static Sprite SPR_REWARD_SEED_EMBER;
+		public static Sprite SPR_REWARD_SEED_SCENT;
+		public static Sprite SPR_REWARD_SEED_PEGASUS;
+		public static Sprite SPR_REWARD_SEED_GALE;
+		public static Sprite SPR_REWARD_SEED_MYSTERY;
+		public static Sprite SPR_REWARD_HEART_PIECE;
+		public static Sprite SPR_REWARD_HEART_CONTAINER;
+		public static Sprite SPR_REWARD_HARP;
 	
 		// HUD Sprites.
 		public static Sprite SPR_HUD_BACKGROUND;
@@ -566,10 +610,22 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_HUD_X;
 		public static Sprite SPR_HUD_LEVEL;
 		public static Sprite SPR_HUD_TEXT_NEXT_ARROW;
-		
-		public static Sprite[] SPR_HUD_HEARTS;
 
-	
+		public static Sprite SPR_HUD_HEART_PIECES_EMPTY_TOP_LEFT;
+		public static Sprite SPR_HUD_HEART_PIECES_EMPTY_TOP_RIGHT;
+		public static Sprite SPR_HUD_HEART_PIECES_EMPTY_BOTTOM_LEFT;
+		public static Sprite SPR_HUD_HEART_PIECES_EMPTY_BOTTOM_RIGHT;
+		public static Sprite SPR_HUD_HEART_PIECES_FULL_TOP_LEFT;
+		public static Sprite SPR_HUD_HEART_PIECES_FULL_TOP_RIGHT;
+		public static Sprite SPR_HUD_HEART_PIECES_FULL_BOTTOM_LEFT;
+		public static Sprite SPR_HUD_HEART_PIECES_FULL_BOTTOM_RIGHT;
+		public static Sprite SPR_HUD_SAVE_BUTTON;
+
+		public static Sprite[] SPR_HUD_HEARTS;
+		public static Sprite[] SPR_HUD_HEART_PIECES_EMPTY;
+		public static Sprite[] SPR_HUD_HEART_PIECES_FULL;
+
+
 		//-----------------------------------------------------------------------------
 		// Animations
 		//-----------------------------------------------------------------------------
@@ -678,18 +734,17 @@ namespace ZeldaOracle.Game {
 		public static CollisionModel MODEL_BRIDGE_V;
 		public static CollisionModel MODEL_CENTER;
 
-	
+
 		//-----------------------------------------------------------------------------
 		// Zones
 		//-----------------------------------------------------------------------------
-		
+
 		public static Zone ZONE_SUMMER;
 		public static Zone ZONE_FOREST;
 		public static Zone ZONE_GRAVEYARD;
 		public static Zone ZONE_INTERIOR;
 
 
-	
 		//-----------------------------------------------------------------------------
 		// Fonts
 		//-----------------------------------------------------------------------------
@@ -697,21 +752,24 @@ namespace ZeldaOracle.Game {
 		public static GameFont FONT_LARGE;
 		public static GameFont FONT_SMALL;
 
-	
+
 		//-----------------------------------------------------------------------------
 		// Shaders
 		//-----------------------------------------------------------------------------
-	
+		
+
 
 		//-----------------------------------------------------------------------------
 		// Sound Effects
 		//-----------------------------------------------------------------------------
-	
+		
+
 
 		//-----------------------------------------------------------------------------
 		// Music
 		//-----------------------------------------------------------------------------
-	
+		
+
 
 		//-----------------------------------------------------------------------------
 		// Render Targets
@@ -720,6 +778,7 @@ namespace ZeldaOracle.Game {
 		public static RenderTarget2D RenderTargetGame;
 		public static RenderTarget2D RenderTargetGameTemp;
 		public static RenderTarget2D RenderTargetDebug;
+
 
 	}
 }

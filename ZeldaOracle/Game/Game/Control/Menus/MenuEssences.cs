@@ -59,9 +59,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 			group2.GetSlotAt(0).SlotItem = new CustomSlotItem("Pieces of Heart", "4 more makes a Heart Container.", null);
 
 			group2.AddSlot(new Point2I(112, 80), 32);
-			Sprite saveSprite = new Sprite(GameData.SHEET_MENU_LARGE_LIGHT, new Point2I(5, 2));
-			saveSprite.NextPart = new Sprite(GameData.SHEET_MENU_LARGE_LIGHT, new Point2I(6, 2), new Point2I(16, 0));
-			group2.GetSlotAt(1).SlotItem = new CustomSlotItem("Save Screen", "Go to the Save Screen.", saveSprite);
+			group2.GetSlotAt(1).SlotItem = new CustomSlotItem("Save Screen", "Go to the Save Screen.", GameData.SPR_HUD_SAVE_BUTTON);
 
 			for (int i = 0; i < 2; i++) {
 				group2.GetSlotAt(i).SetConnection(Directions.Up, group2.GetSlotAt((i + 1) % 2));
@@ -105,25 +103,12 @@ namespace ZeldaOracle.Game.Control.Menus {
 		//-----------------------------------------------------------------------------
 
 		public void DrawHeartPieces(Graphics2D g) {
-			Sprite[] empty = new Sprite[] {
-				new Sprite(GameData.SHEET_MENU_LARGE_LIGHT, new Point2I(0, 0)),
-				new Sprite(GameData.SHEET_MENU_LARGE_LIGHT, new Point2I(0, 1), new Point2I(0, 16)),
-				new Sprite(GameData.SHEET_MENU_LARGE_LIGHT, new Point2I(1, 1), new Point2I(16, 16)),
-				new Sprite(GameData.SHEET_MENU_LARGE_LIGHT, new Point2I(1, 0), new Point2I(16, 0))
-			};
-
-			Sprite[] full = new Sprite[] {
-				new Sprite(GameData.SHEET_MENU_LARGE_LIGHT, new Point2I(0, 2)),
-				new Sprite(GameData.SHEET_MENU_LARGE_LIGHT, new Point2I(0, 3), new Point2I(0, 16)),
-				new Sprite(GameData.SHEET_MENU_LARGE_LIGHT, new Point2I(1, 3), new Point2I(16, 16)),
-				new Sprite(GameData.SHEET_MENU_LARGE_LIGHT, new Point2I(1, 2), new Point2I(16, 0))
-			};
 
 			for (int i = 0; i < 4; i++) {
 				if (i < GameControl.Inventory.PiecesOfHeart)
-					g.DrawSprite(full[i], new Point2I(112, 8));
+					g.DrawSprite(GameData.SPR_HUD_HEART_PIECES_FULL[i], new Point2I(112, 8));
 				else
-					g.DrawSprite(empty[i], new Point2I(112, 8));
+					g.DrawSprite(GameData.SPR_HUD_HEART_PIECES_EMPTY[i], new Point2I(112, 8));
 			}
 
 			g.DrawString(GameData.FONT_SMALL, GameControl.Inventory.PiecesOfHeart.ToString() + "/4", new Point2I(120, 40), new Color(16, 16, 16));

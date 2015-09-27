@@ -21,8 +21,8 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 			this.maxLevel = Item.Level2;
 			this.slot = new Point2I(0, 0);
 			this.sprite = new Sprite[] {
-				new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(6, 1)),
-				new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(7, 1))
+				GameData.SPR_ITEM_ICON_FLIPPERS_1,
+				GameData.SPR_ITEM_ICON_FLIPPERS_2
 			};
 		}
 

@@ -70,6 +70,8 @@ namespace ZeldaOracle.Game.Control {
 
 		public void StartGame() {
 
+			roomTicks = 0;
+
 			// Setup the player beforehand so certain classes such as the HUD can reference it
 			player = new Player();
 
@@ -82,8 +84,6 @@ namespace ZeldaOracle.Game.Control {
 			menuSecondaryItems.NextMenu		= menuEssences;
 			menuEssences.PreviousMenu		= menuSecondaryItems;
 			menuEssences.NextMenu			= menuWeapons;
-
-			roomTicks = 0;
 
 			inventory = new Inventory(this);
 			inventory.AddItem(new ItemWallet(2), true);
@@ -123,72 +123,84 @@ namespace ZeldaOracle.Game.Control {
 			rewardManager = new RewardManager(this);
 
 			rewardManager.AddReward(new RewardRupee("rupees_1", 1,
-				"You got<n><red>1 Rupee<red>!<n>That's terrible.",
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 5, 3, -4, -9)));
+				"You got <red>1 Rupee<red>!<n>That's terrible.",
+				GameData.SPR_REWARD_RUPEE_GREEN));
 
 			rewardManager.AddReward(new RewardRupee("rupees_5", 5,
-				"You got<n><red>5 Rupees<red>!<n>That's nice.",
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 6, 3, -4, -9)));
+				"You got<n><red>5 Rupees<red>!",
+				GameData.SPR_REWARD_RUPEE_RED));
 
 			rewardManager.AddReward(new RewardRupee("rupees_20", 20,
-				"You got<n><red>20 Rupees<red>!<n>That's nice.",
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 7, 3, -4, -9)));
+				"You got<n><red>20 Rupees<red>!<n>That's not bad.",
+				GameData.SPR_REWARD_RUPEE_BLUE));
 
 			rewardManager.AddReward(new RewardRupee("rupees_30", 30,
 				"You got<n><red>30 Rupees<red>!<n>That's nice.",
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 7, 3, -4, -9)));
+				GameData.SPR_REWARD_RUPEE_BLUE));
 
 			rewardManager.AddReward(new RewardRupee("rupees_50", 50,
-				"You got<n><red>50 Rupees<red>!<n>That's nice.",
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 7, 3, -4, -9)));
+				"You got<n><red>50 Rupees<red>!<n>How lucky!",
+				GameData.SPR_REWARD_RUPEE_BLUE));
 
 			rewardManager.AddReward(new RewardRupee("rupees_100", 100,
-				"You got<n><red>100 Rupees<red>!<n>That's nice.",
-				new Sprite(GameData.SHEET_ITEMS_LARGE, 0, 3, -8, -9)));
+				"You got <red>100<n>Rupees<red>! I bet<n>you're thrilled!",
+				GameData.SPR_REWARD_RUPEE_BIG_BLUE));
+
+			rewardManager.AddReward(new RewardRupee("rupees_150", 150,
+				"You got <red>150<n>Rupees<red>!<n>Way to go!!!",
+				GameData.SPR_REWARD_RUPEE_BIG_RED));
 
 			rewardManager.AddReward(new RewardRupee("rupees_200", 200,
-				"You got<n><red>200 Rupees<red>!<n>That's nice.",
-				new Sprite(GameData.SHEET_ITEMS_LARGE, 1, 3, -8, -9)));
+				"You got <red>200<n>Rupees<red>! That's<n>pure bliss!",
+				GameData.SPR_REWARD_RUPEE_BIG_RED));
 
 			rewardManager.AddReward(new RewardItem("item_flippers_1", "item_flippers", Item.Level1, RewardHoldTypes.TwoHands,
 				"You got <red>Zora's Flippers<red>! You can now go for a swim! Press A to swim, B to dive!",
-				new Sprite(GameData.SHEET_ITEMS_LARGE, 6, 1, -8, -8)));
+				GameData.SPR_ITEM_ICON_FLIPPERS_1));
 
 			rewardManager.AddReward(new RewardItem("item_sword_1", "item_sword", Item.Level1, RewardHoldTypes.OneHand,
 				"You got a Hero's <red>Wooden Sword<red>! Hold A or B to charge it up, then release it for a spin attack!",
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 0, 0, -4, -8)));
+				GameData.SPR_ITEM_ICON_SWORD_1));
 
 			rewardManager.AddReward(new RewardRecoveryHeart("hearts_1", 1,
-				"You got a<n><red>Recovery Heart<red>!",
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 13, 3, -4, -6)));
+				"You recovered<n>only one <red>heart<red>!",
+				GameData.SPR_REWARD_HEART));
+
+			rewardManager.AddReward(new RewardRecoveryHeart("hearts_3", 3,
+				"You got three<n><red>hearts<red>!",
+				GameData.SPR_REWARD_HEARTS_3));
+
+			rewardManager.AddReward(new RewardHeartPiece());
+
+			rewardManager.AddReward(new RewardHeartContainer());
 
 			rewardManager.AddReward(new RewardAmmo("ammo_ember_seeds_5", "ammo_ember_seeds", 5,
 				"You got<n><red>5 Ember Seeds<red>!",
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 0, 3, -4, -1)));
+				GameData.SPR_REWARD_SEED_EMBER));
 
 			rewardManager.AddReward(new RewardAmmo("ammo_scent_seeds_5", "ammo_scent_seeds", 5,
 				"You got<n><red>5 Scent Seeds<red>!",
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 1, 3, -4, -1)));
+				GameData.SPR_REWARD_SEED_SCENT));
 
 			rewardManager.AddReward(new RewardAmmo("ammo_pegasus_seeds_5", "ammo_pegasus_seeds", 5,
 				"You got<n><red>5 Pegasus Seeds<red>!",
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 2, 3, -4, -1)));
+				GameData.SPR_REWARD_SEED_PEGASUS));
 
 			rewardManager.AddReward(new RewardAmmo("ammo_gale_seeds_5", "ammo_gale_seeds", 5,
 				"You got<n><red>5 Gale Seeds<red>!",
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 3, 3, -4, -1)));
+				GameData.SPR_REWARD_SEED_GALE));
 
 			rewardManager.AddReward(new RewardAmmo("ammo_mystery_seeds_5", "ammo_mystery_seeds", 5,
 				"You got<n><red>5 Mystery Seeds<red>!",
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 4, 3, -4, -1)));
+				GameData.SPR_REWARD_SEED_MYSTERY));
 
 			rewardManager.AddReward(new RewardAmmo("ammo_bombs_5", "ammo_bombs", 5,
 				"You got<n><red>5 Bombs<red>!",
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 13, 0, -4, -8)));
+				GameData.SPR_REWARD_SEED_EMBER));
 
 			rewardManager.AddReward(new RewardAmmo("ammo_arrows_5", "ammo_arrows", 5,
 				"You got<n><red>5 Arrows<red>!",
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 15, 1, -4, -10)));
+				GameData.SPR_REWARD_SEED_EMBER));
 
 
 			// TODO: Load world here.

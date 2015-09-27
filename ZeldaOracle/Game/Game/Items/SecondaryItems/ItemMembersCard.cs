@@ -18,7 +18,7 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 			this.name = new string[] { "Member's Card" };
 			this.description = new string[] { "Opens the door!" };
 			this.slot = new Point2I(1, 1);
-			this.sprite = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(7, 7)) };
+			this.sprite = new Sprite[] { GameData.SPR_ITEM_ICON_MEMBERS_CARD };
 		}
 
 	}

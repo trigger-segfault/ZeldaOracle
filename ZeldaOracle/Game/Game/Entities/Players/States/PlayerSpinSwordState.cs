@@ -38,7 +38,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public virtual void OnHitAngle(int angle, bool isLast = false) {
 			if (player.IsOnGround) {
-				CutTilesAtPosition(player.Center + (Angles.ToVector(angle) * 16));
+				CutTilesAtPosition(player.Center + (Angles.ToVector(angle) * 13));
 				if (isLast)
 					CutTilesAtPosition(player.Center);
 			}

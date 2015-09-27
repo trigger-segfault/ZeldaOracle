@@ -17,7 +17,7 @@ namespace ZeldaOracle.Game.Items.Essences {
 			this.name = new string[] { "Eternal Spirit" };
 			this.description = new string[] { "It speaks across time to the heart!" };
 			this.slot = 0;
-			this.sprite = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(8, 7)) };
+			this.sprite = new Sprite[] { GameData.SPR_ITEM_ICON_ESSENCE_1 };
 		}
 
 	}

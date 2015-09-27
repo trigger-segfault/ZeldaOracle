@@ -17,7 +17,7 @@ namespace ZeldaOracle.Game.Items.Essences {
 			this.name = new string[] { "Ancient Wood" };
 			this.description = new string[] { "It speaks only truth to closed ears." };
 			this.slot = 1;
-			this.sprite = new Sprite[] { new Sprite(GameData.SHEET_ITEMS_LARGE, new Point2I(9, 7)) };
+			this.sprite = new Sprite[] { GameData.SPR_ITEM_ICON_ESSENCE_2 };
 		}
 
 	}

@@ -135,11 +135,48 @@ SPRITE item_seed_scent,						(1, 3); SIZE (8, 8); END;
 SPRITE item_seed_pegasus,					(2, 3); SIZE (8, 8); END;
 SPRITE item_seed_gale,						(3, 3); SIZE (8, 8); END;
 SPRITE item_seed_mystery,					(4, 3); SIZE (8, 8); END;
+SPRITE item_ammo_arrow,						(15, 1); END;
+SPRITE item_ammo_bomb,						(13, 0); END;
+
+SPRITE reward_rupee_green,					(5, 3), (4, 1); END;
+SPRITE reward_rupee_red,					(6, 3), (4, 1); END;
+SPRITE reward_rupee_blue,					(7, 3), (4, 1); END;
+SPRITE reward_heart,						(13, 3), (4, 2); END;
+SPRITE reward_hearts_3,						(13, 3), (3, 0); ADD (13, 3), (0, 4); ADD (13, 3), (8, 4); END;
+SPRITE reward_seed_ember,					(0, 3), (4, 7); END;
+SPRITE reward_seed_scent,					(1, 3), (4, 7); END;
+SPRITE reward_seed_pegasus,					(2, 3), (4, 7); END;
+SPRITE reward_seed_gale,					(3, 3), (4, 7); END;
+SPRITE reward_seed_mystery,					(4, 3), (4, 7); END;
+
 
 SPRITESHEET "items_large";
 
 SPRITE item_icon_biggoron_sword,			(8, 0); END;
 SPRITE item_icon_biggoron_sword_equipped,	(9, 0); ADD (10, 0), (16, 0); END;
+
+SPRITE item_icon_flippers_1,				(6, 1); END;
+SPRITE item_icon_flippers_2,				(7, 1); END;
+SPRITE item_icon_magic_potion,				(6, 3); END;
+SPRITE item_icon_members_card,				(7, 7); END;
+SPRITE item_icon_essence_seed,				(0, 9); END;
+SPRITE item_icon_essence_1,					(8, 7); END;
+SPRITE item_icon_essence_2,					(9, 7); END;
+SPRITE item_icon_essence_3,					(10, 7); END;
+SPRITE item_icon_essence_4,					(11, 7); END;
+SPRITE item_icon_essence_5,					(0, 8); END;
+SPRITE item_icon_essence_6,					(1, 8); END;
+SPRITE item_icon_essence_7,					(2, 8); END;
+SPRITE item_icon_essence_8,					(3, 8); END;
+
+SPRITE reward_rupee_big_blue,				(0, 3); END;
+SPRITE reward_rupee_big_red,				(1, 3); END;
+SPRITE reward_heart_piece,					(4, 3); END;
+SPRITE reward_heart_container,				(5, 3); END;
+SPRITE reward_harp,							(0, 0), (3, 0); END;
+SPRITE reward_dungeon_map,					(8, 3); END;
+SPRITE reward_dungeon_compass,				(9, 3); END;
+SPRITE reward_dungeon_boss_key,				(10, 3); END;
 
 
 #==============================================================
@@ -168,4 +205,17 @@ SPRITE hud_key,						(0, 1); END;
 SPRITE hud_x,						(1, 1); END;
 SPRITE hud_level,					(2, 1); END;
 SPRITE hud_text_next_arrow,			(4, 4); END;
+
+SPRITESHEET "menu_large";
+
+SPRITE hud_heart_pieces_empty_top_left,			(0, 0); END;
+SPRITE hud_heart_pieces_empty_top_right,		(1, 0), (16, 0); END;
+SPRITE hud_heart_pieces_empty_bottom_left,		(0, 1), (0, 16); END;
+SPRITE hud_heart_pieces_empty_bottom_right,		(1, 1), (16, 16); END;
+SPRITE hud_heart_pieces_full_top_left,			(0, 2); END;
+SPRITE hud_heart_pieces_full_top_right,			(1, 2), (16, 0); END;
+SPRITE hud_heart_pieces_full_bottom_left,		(0, 3), (0, 16); END;
+SPRITE hud_heart_pieces_full_bottom_right,		(1, 3), (16, 16); END;
+
+SPRITE hud_save_button,				(5, 2); ADD (6, 2), (16, 0); END;
 
