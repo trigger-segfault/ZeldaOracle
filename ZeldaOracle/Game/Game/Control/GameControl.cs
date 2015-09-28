@@ -118,10 +118,9 @@ namespace ZeldaOracle.Game.Control {
 				new ItemSlingshot());
 			
 			inventory.ObtainAmmo("ammo_scent_seeds");
-			inventory.ObtainAmmo("ammo_pegasus_seeds");
-			inventory.ObtainAmmo("ammo_gale_seeds");
+			//inventory.ObtainAmmo("ammo_pegasus_seeds");
+			//inventory.ObtainAmmo("ammo_gale_seeds");
 			inventory.ObtainAmmo("ammo_mystery_seeds");
-			inventory.ObtainItem("item_seed_satchel");
 
 			hud = new HUD(this);
 			hud.DynamicHealth = player.Health;

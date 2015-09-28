@@ -32,6 +32,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 					RoomControl.GameControl.PushRoomState(new RoomStateReward(reward, (Point2I)Position));
 					Sprite = GameData.SPR_TILE_CHEST_OPEN;
 					// TODO: Play chest open sound
+					Properties.Set("looted", true);
 					BaseProperties.Set("looted", true);
 				}
 				else {

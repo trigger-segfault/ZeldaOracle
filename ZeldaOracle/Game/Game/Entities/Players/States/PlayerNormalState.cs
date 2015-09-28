@@ -28,6 +28,16 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			isNaturalState	= true;
 			pushTimer		= 0;
 		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Interaction
+		//-----------------------------------------------------------------------------
+
+		public void StopPushing() {
+			pushTimer = 0;
+			player.Graphics.AnimationPlayer.Animation = GameData.ANIM_PLAYER_DEFAULT;
+		}
 
 
 		//-----------------------------------------------------------------------------
@@ -57,7 +67,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				// Update pushing.
 				Tile actionTile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
 				CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
-
+				
 				if (actionTile != null && player.Movement.IsMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
 					player.Graphics.AnimationPlayer.Animation = GameData.ANIM_PLAYER_PUSH;
 					pushTimer++;

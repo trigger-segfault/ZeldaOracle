@@ -309,27 +309,27 @@ namespace ZeldaOracle.Game {
 			BuildTile(20, 10).SetSolidModel(MODEL_BRIDGE_H);
 			BuildTile(20, 11).SetSolidModel(MODEL_BRIDGE_H_TOP);
 			BuildTile(20, 13).SetSolidModel(MODEL_BRIDGE_H_BOTTOM);
-			// Irregular Ledges
+			// Irregular blocks/Ledges
 			BuildTile( 0, 17).SetSolidModel(MODEL_CORNER_NW);
-			BuildTile( 1, 17).CreateLedge(MODEL_EDGE_N, Directions.Down);
+			BuildTile( 1, 17).CreateLedge(MODEL_EDGE_N, Directions.North);
 			BuildTile( 2, 17).SetSolidModel(MODEL_CORNER_NE);
 			BuildTile( 4, 17).SetSolidModel(MODEL_CORNER_NW);
-			BuildTile( 5, 17).CreateLedge(MODEL_EDGE_N, Directions.Down);
+			BuildTile( 5, 17).CreateLedge(MODEL_EDGE_N, Directions.North);
 			BuildTile( 6, 17).SetSolidModel(MODEL_CORNER_NE);
-			BuildTile( 0, 18).CreateLedge(MODEL_EDGE_W, Directions.Down);
-			BuildTile( 2, 18).CreateLedge(MODEL_EDGE_E, Directions.Down);
-			BuildTile( 3, 18).CreateLedge(MODEL_EDGE_E, Directions.Down);
-			BuildTile( 4, 18).CreateLedge(MODEL_EDGE_W, Directions.Down);
-			BuildTile( 6, 18).CreateLedge(MODEL_EDGE_E, Directions.Down);
-			BuildTile( 7, 18).CreateLedge(MODEL_EDGE_E, Directions.Down);
+			BuildTile( 0, 18).CreateLedge(MODEL_EDGE_W, Directions.West);
+			BuildTile( 2, 18).CreateLedge(MODEL_EDGE_E, Directions.East);
+			BuildTile( 3, 18).SetSolidModel(MODEL_EDGE_E);
+			BuildTile( 4, 18).CreateLedge(MODEL_EDGE_W, Directions.West);
+			BuildTile( 6, 18).CreateLedge(MODEL_EDGE_E, Directions.East);
+			BuildTile( 7, 18).SetSolidModel(MODEL_EDGE_E);
 			BuildTile( 0, 19).SetSolidModel(MODEL_CORNER_SW);
-			BuildTile( 1, 19).CreateLedge(MODEL_EDGE_S, Directions.Down);
+			BuildTile( 1, 19).CreateLedge(MODEL_EDGE_S, Directions.South);
 			BuildTile( 2, 19).SetSolidModel(MODEL_CORNER_SE);
-			BuildTile( 3, 19).CreateLedge(MODEL_EDGE_W, Directions.Down);
+			BuildTile( 3, 19).SetSolidModel(MODEL_EDGE_W);
 			BuildTile( 4, 19).SetSolidModel(MODEL_CORNER_SW);
-			BuildTile( 5, 19).CreateLedge(MODEL_EDGE_S, Directions.Down);
+			BuildTile( 5, 19).CreateLedge(MODEL_EDGE_S, Directions.South);
 			BuildTile( 6, 19).SetSolidModel(MODEL_CORNER_SE);
-			BuildTile( 7, 19).CreateLedge(MODEL_EDGE_W, Directions.Down);
+			BuildTile( 7, 19).SetSolidModel(MODEL_EDGE_W);
 			BuildTile( 0, 20).SetSolidModel(MODEL_CORNER_NW);
 			BuildTile( 1, 20).SetSolidModel(MODEL_CORNER_NE);
 			BuildTile( 2, 20).SetSolidModel(MODEL_INSIDE_CORNER_SE);
@@ -346,9 +346,10 @@ namespace ZeldaOracle.Game {
 			BuildTile( 5, 21).SetSolidModel(MODEL_CORNER_SE);
 			BuildTile( 6, 21).SetSolidModel(MODEL_INSIDE_CORNER_NE);
 			BuildTile( 7, 21).SetSolidModel(MODEL_INSIDE_CORNER_NW);
-			
-			// Ledges.
 			BuildTile( 1,  3).CreateLedge(MODEL_BLOCK, Directions.Down);
+			BuildTile( 9,  9).CreateLedge(MODEL_EDGE_S, Directions.Down);
+			BuildTile( 9, 10).CreateLedge(MODEL_BLOCK, Directions.Down);
+			BuildTile( 9, 11).CreateLedge(MODEL_BLOCK, Directions.Down);
 
 			
 			// INTERIOR TILESET:
