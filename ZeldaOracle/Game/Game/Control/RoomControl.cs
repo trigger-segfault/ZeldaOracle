@@ -15,6 +15,7 @@ using ZeldaOracle.Game.GameStates.Transitions;
 using ZeldaOracle.Game.Debug;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Common.Input;
@@ -34,6 +35,7 @@ namespace ZeldaOracle.Game.Control {
 		private Point2I			roomLocation;
 		private List<Entity>	entities;
 		private Tile[,,]		tiles;
+		private List<EventTile>	eventTiles;
 		private ViewControl		viewControl;
 		
 
@@ -47,6 +49,7 @@ namespace ZeldaOracle.Game.Control {
 			tiles			= null;
 			roomLocation	= Point2I.Zero;
 			entities		= new List<Entity>();
+			eventTiles		= new List<EventTile>();
 			viewControl		= new ViewControl();
 		}
 		
@@ -159,6 +162,12 @@ namespace ZeldaOracle.Game.Control {
 			tiles[tile.Location.X, tile.Location.Y, tile.Layer] = null;
 		}
 
+		// Put an event tile into the room.
+		public void AddEventTile(EventTile eventTile) {
+			eventTile.Initialize(this);
+			eventTiles.Add(eventTile);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Initialization
@@ -168,6 +177,9 @@ namespace ZeldaOracle.Game.Control {
 			this.room			= room;
 			this.roomLocation	= room.Location;
 			this.level			= room.Level;
+
+			// Clear event tiles.
+			eventTiles.Clear();
 
 			// Clear all entities from the old room (except for the player).
 			entities.Clear();
@@ -209,6 +221,11 @@ namespace ZeldaOracle.Game.Control {
 							t.Initialize(this);
 					}
 				}
+			}
+			
+			// Initialize the event tiles.
+			for (int i = 0; i < eventTiles.Count; i++) {
+				eventTiles[i].Initialize(this);
 			}
 			
 			viewControl.Bounds = RoomBounds;
@@ -309,6 +326,11 @@ namespace ZeldaOracle.Game.Control {
 					}
 				}
 			}
+			
+			// Update the event tiles.
+			for (int i = 0; i < eventTiles.Count; i++) {
+				eventTiles[i].Update();
+			}
 
 			// Update view to follow player.
 			viewControl.PanTo(Player.Center);
@@ -348,7 +370,6 @@ namespace ZeldaOracle.Game.Control {
 
 			// Draw the room.
 			g.Translate(0, 16);
-
 			g.Translate(-viewControl.Position);
 
 			// Draw tiles.

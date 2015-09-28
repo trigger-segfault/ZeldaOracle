@@ -336,6 +336,9 @@
     <Compile Include="Game\Tiles\Custom\TileChest.cs" />
     <Compile Include="Game\Tiles\Custom\TileOwl.cs" />
     <Compile Include="Game\Tiles\Custom\TileLantern.cs" />
+    <Compile Include="Game\Tiles\EventTiles\EventTile.cs" />
+    <Compile Include="Game\Tiles\EventTiles\EventTileData.cs" />
+    <Compile Include="Game\Tiles\EventTiles\WarpEvent.cs" />
     <Compile Include="Game\Tiles\Tile.cs" />
     <Compile Include="Game\Tiles\TileData.cs" />
     <Compile Include="Game\Tiles\TileFlags.cs" />

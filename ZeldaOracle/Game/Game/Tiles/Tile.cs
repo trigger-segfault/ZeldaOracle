@@ -228,7 +228,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Properties
 		//-----------------------------------------------------------------------------
 		
-		// Returns the room control this entity belongs to.
+		// Returns the room control this tlie belongs to.
 		public RoomControl RoomControl {
 			get { return roomControl; }
 			set { roomControl = value; }
