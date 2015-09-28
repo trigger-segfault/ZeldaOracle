@@ -42,7 +42,6 @@
 			this.statusBarLabelTileLoc = new System.Windows.Forms.ToolStripStatusLabel();
 			this.splitContainerLevelsAndWorld = new System.Windows.Forms.SplitContainer();
 			this.panelLevels = new System.Windows.Forms.Panel();
-			this.treeViewLevels = new System.Windows.Forms.TreeView();
 			this.splitContainerWorldAndTiles = new System.Windows.Forms.SplitContainer();
 			this.panelWorld = new System.Windows.Forms.Panel();
 			this.splitContainerTilesAndProperties = new System.Windows.Forms.SplitContainer();
@@ -57,6 +56,7 @@
 			this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.duplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.treeViewLevels = new System.Windows.Forms.TreeView();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
@@ -243,15 +243,6 @@
 			this.panelLevels.Size = new System.Drawing.Size(167, 424);
 			this.panelLevels.TabIndex = 0;
 			// 
-			// treeViewLevels
-			// 
-			this.treeViewLevels.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.treeViewLevels.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.treeViewLevels.Location = new System.Drawing.Point(0, 0);
-			this.treeViewLevels.Name = "treeViewLevels";
-			this.treeViewLevels.Size = new System.Drawing.Size(165, 422);
-			this.treeViewLevels.TabIndex = 0;
-			// 
 			// splitContainerWorldAndTiles
 			// 
 			this.splitContainerWorldAndTiles.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -388,6 +379,14 @@
 			this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
 			this.duplicateToolStripMenuItem.Text = "Duplicate";
 			// 
+			// treeViewLevels
+			// 
+			this.treeViewLevels.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.treeViewLevels.Location = new System.Drawing.Point(0, 0);
+			this.treeViewLevels.Name = "treeViewLevels";
+			this.treeViewLevels.Size = new System.Drawing.Size(165, 422);
+			this.treeViewLevels.TabIndex = 0;
+			// 
 			// EditorForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -450,7 +449,6 @@
 		private System.Windows.Forms.ToolStripButton buttonAddLevel;
 		private System.Windows.Forms.Panel panelLevels;
 		private System.Windows.Forms.Panel panelWorld;
-		private System.Windows.Forms.TreeView treeViewLevels;
 		private System.Windows.Forms.ToolStripStatusLabel statusBarLabelRoomLoc;
 		private System.Windows.Forms.ToolStripStatusLabel statusBarLabelTileLoc;
 		private System.Windows.Forms.ContextMenuStrip contextMenuLevelSelect;
@@ -466,5 +464,6 @@
 		private System.Windows.Forms.ToolStripComboBox comboBoxTilesets;
 		private System.Windows.Forms.Panel panelTiles2;
 		private System.Windows.Forms.ToolStripComboBox comboBoxZones;
+		private System.Windows.Forms.TreeView treeViewLevels;
 	}
 }

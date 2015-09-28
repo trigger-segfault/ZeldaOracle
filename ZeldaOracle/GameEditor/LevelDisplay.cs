@@ -44,6 +44,8 @@ namespace ZeldaEditor {
 			// Start the timer to refresh the panel.
 			Application.Idle += delegate { Invalidate(); };
 
+			editorControl.OpenFile("../../../../WorldFiles/temp_world.zwd");
+
 			UpdateLevel();
 		}
 
