@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using XnaColor		= Microsoft.Xna.Framework.Color;
 
+using GdiColor		= System.Drawing.Color;
+
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Graphics {
@@ -278,6 +280,12 @@ public struct Color {
 	}
 	public static implicit operator XnaColor(Color c) {
 		return new XnaColor(c.r, c.g, c.b, c.a);
+	}
+	public static explicit operator Color(GdiColor c) {
+		return new Color(c.R, c.G, c.B, c.A);
+	}
+	public static implicit operator GdiColor(Color c) {
+		return GdiColor.FromArgb(c.A, c.R, c.G, c.B);
 	}
 	public static bool operator ==(Color a, Color b) {
 		return (a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a);
