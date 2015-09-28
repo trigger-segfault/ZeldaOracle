@@ -130,6 +130,7 @@ namespace ZeldaEditor {
 					// Do something.
 				}
 			}
+			this.Focus();
 		}
 
 		private void OnMouseMove(object sender, MouseEventArgs e) {

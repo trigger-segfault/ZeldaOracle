@@ -59,9 +59,9 @@ namespace ZeldaEditor {
 		// Accessors
 		//-----------------------------------------------------------------------------
 
-		public Point2I GetTileLoc(Point2I point) {
+		public Point2I GetTileCoord(Point2I point) {
 			//
-			return (point + new Point2I(HorizontalScroll.Value, VerticalScroll.Value)) / (Tileset.SpriteSheet.CellSize + Tileset.SpriteSheet.Spacing);
+			return point / (Tileset.SpriteSheet.CellSize + Tileset.SpriteSheet.Spacing);
 		}
 
 		//-----------------------------------------------------------------------------
@@ -73,12 +73,13 @@ namespace ZeldaEditor {
 		}
 
 		private void OnMouseDown(object sender, MouseEventArgs e) {
-			Point2I mouseLoc = new Point2I(e.X, e.Y);
-			Point2I newSelectedTile = GetTileLoc(mouseLoc);
+			Point2I mousePos = ScrollPosition + e.Location;
+			Point2I newSelectedTile = GetTileCoord(mousePos);
 			if (newSelectedTile >= Point2I.Zero && newSelectedTile < Tileset.Size) {
 				SelectedTile = newSelectedTile;
 				Invalidate();
 			}
+			this.Focus();
 		}
 
 		private void OnMouseMove(object sender, MouseEventArgs e) {
@@ -137,6 +138,10 @@ namespace ZeldaEditor {
 		public Point2I SelectedTile {
 			get { return editorControl.SelectedTile; }
 			set { editorControl.SelectedTile = value; }
+		}
+
+		public Point2I ScrollPosition {
+			get { return new Point2I(HorizontalScroll.Value, VerticalScroll.Value); }
 		}
 	}
 }

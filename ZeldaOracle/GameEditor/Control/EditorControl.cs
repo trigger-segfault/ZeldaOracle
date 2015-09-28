@@ -69,13 +69,16 @@ namespace ZeldaEditor.Control {
 				this.tileset		= GameData.TILESET_OVERWORLD;
 				this.zone			= GameData.ZONE_SUMMER;
 
+				editorForm.ComboBoxTilesets.Items.Clear();
 				foreach (KeyValuePair<string, Tileset> entry in Resources.GetResourceDictionary<Tileset>()) {
 					editorForm.ComboBoxTilesets.Items.Add(entry.Key);
 				}
 				editorForm.ComboBoxTilesets.SelectedIndex = 0;
 
+				editorForm.ComboBoxZones.Items.Clear();
 				foreach (KeyValuePair<string, Zone> entry in Resources.GetResourceDictionary<Zone>()) {
-					editorForm.ComboBoxZones.Items.Add(entry.Key);
+					if (tileset.SpriteSheet.Image.HasVariant(entry.Key))
+						editorForm.ComboBoxZones.Items.Add(entry.Key);
 				}
 				editorForm.ComboBoxZones.SelectedIndex = 0;
 
@@ -130,7 +133,22 @@ namespace ZeldaEditor.Control {
 
 		public void ChangeTileset(string name) {
 			tileset = Resources.GetResource<Tileset>(name);
+
+			int index = 0;
+			if (!tileset.SpriteSheet.Image.HasVariant(zone.ID))
+				zone = Resources.GetResource<Zone>(tileset.SpriteSheet.Image.VariantName);
+			editorForm.ComboBoxZones.Items.Clear();
+			foreach (KeyValuePair<string, Zone> entry in Resources.GetResourceDictionary<Zone>()) {
+				if (tileset.SpriteSheet.Image.HasVariant(entry.Key)) {
+					editorForm.ComboBoxZones.Items.Add(entry.Key);
+					if (entry.Key == zone.ID)
+						editorForm.ComboBoxZones.SelectedIndex = index;
+					index++;
+				}
+			}
 			editorForm.TileDisplay.UpdateTileset();
+			editorForm.TileDisplay.UpdateZone();
+
 		}
 
 		public void ChangeZone(string name) {

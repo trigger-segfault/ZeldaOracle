@@ -126,6 +126,30 @@ namespace ZeldaOracle.Common.Graphics {
 			return this;
 		}
 
+		// Returns if the variant with the specified ID exists.
+		public bool HasVariant(int variantID) {
+			if (variantID == 0)
+				return true;
+			Image image = this;
+			while (image != null) {
+				if (image.variantID == variantID)
+					return true;
+				image = image.nextVariant;
+			}
+			return false;
+		}
+
+		// Returns if the variant with the specified name exists.
+		public bool HasVariant(string variantName) {
+			Image image = this;
+			while (image != null) {
+				if (image.variantName == variantName)
+					return true;
+				image = image.nextVariant;
+			}
+			return false;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Management
