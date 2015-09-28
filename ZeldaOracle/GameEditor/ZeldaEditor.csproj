@@ -66,7 +66,13 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GraphicsDeviceService.cs" />
-    <Compile Include="MyXnaControl.cs">
+    <Compile Include="LevelAddForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LevelAddForm.Designer.cs">
+      <DependentUpon>LevelAddForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LevelDisplay.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Program.cs" />
@@ -74,6 +80,9 @@
     <Compile Include="ServiceContainer.cs" />
     <EmbeddedResource Include="EditorForm.resx">
       <DependentUpon>EditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LevelAddForm.resx">
+      <DependentUpon>LevelAddForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -112,6 +112,10 @@
       <Name>ledge_jump_world</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Worlds\custom_world.zwd">
+      <Name>custom_world</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Worlds\test_level.zwd">
       <Name>test_level</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

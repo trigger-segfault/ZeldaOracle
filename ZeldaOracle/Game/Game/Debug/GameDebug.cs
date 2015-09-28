@@ -254,23 +254,17 @@ namespace ZeldaOracle.Game.Debug {
 				}
 			}*/
 
-			/*
+			
 			{
 				WorldFile worldFile = new WorldFile();
-				World world = new World();
-				world.StartLevelIndex = 0;
-				world.StartRoomLocation = new Point2I(2, 1);
-				world.StartTileLocation = new Point2I(3, 2);
-				world.Levels.Add(level);
-				level.Name = "Level 1";
-				worldFile.Save("Content/Worlds/temp_world.zwd", world);
+				worldFile.Save("Content/Worlds/custom_world.zwd", world);
 			}
 			{
-				WorldFile worldFile = new WorldFile();
-				World world = worldFile.Load("Content/Worlds/temp_world.zwd");
-				level = world.Levels[0];
+				//WorldFile worldFile = new WorldFile();
+				//World world = worldFile.Load("Content/Worlds/temp_world.zwd");
+				//level = world.Levels[0];
 			}
-			*/
+			
 
 			return world;
 		}
