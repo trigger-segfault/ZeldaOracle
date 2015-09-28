@@ -104,7 +104,6 @@ namespace ZeldaEditor {
 				editorControl.ChangeZone((string)(sender as ToolStripComboBox).Items[(sender as ToolStripComboBox).SelectedIndex]);
 		}
 
-
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
@@ -112,6 +111,7 @@ namespace ZeldaEditor {
 		public TreeView LevelTreeView {
 			get { return treeViewLevels; }
 		}
+
 		public ContextMenuStrip ContextMenuLevelSelect {
 			get { return contextMenuLevelSelect; }
 		}

@@ -44,6 +44,8 @@ namespace ZeldaEditor {
 			// Start the timer to refresh the panel.
 			Application.Idle += delegate { Invalidate(); };
 
+			editorControl.OpenFile("../../../../WorldFiles/temp_world.zwd");
+
 			UpdateLevel();
 		}
 
@@ -130,6 +132,7 @@ namespace ZeldaEditor {
 					// Do something.
 				}
 			}
+			this.Focus();
 		}
 
 		private void OnMouseMove(object sender, MouseEventArgs e) {
