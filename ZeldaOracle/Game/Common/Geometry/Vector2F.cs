@@ -7,6 +7,13 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
+using GdiPoint		= System.Drawing.Point;
+using GdiPointF		= System.Drawing.PointF;
+using GdiSize		= System.Drawing.Size;
+using GdiSizeF		= System.Drawing.SizeF;
+using GdiRectangle	= System.Drawing.Rectangle;
+using GdiRectangleF	= System.Drawing.RectangleF;
+
 namespace ZeldaOracle.Common.Geometry {
 /** <summary>
  * The 2D floating precision vector with numerous operations and functions.
@@ -286,6 +293,34 @@ public struct Vector2F {
 	}
 	public static explicit operator Point(Vector2F v) {
 		return new Point((int)v.X, (int)v.Y);
+	}
+
+	//--------------------------------
+
+	public static implicit operator Vector2F(GdiPoint p) {
+		return new Vector2F(p.X, p.Y);
+	}
+	public static implicit operator Vector2F(GdiSize s) {
+		return new Vector2F(s.Width, s.Height);
+	}
+	public static implicit operator Vector2F(GdiPointF p) {
+		return new Vector2F(p.X, p.Y);
+	}
+	public static implicit operator Vector2F(GdiSizeF s) {
+		return new Vector2F(s.Width, s.Height);
+	}
+
+	public static explicit operator GdiPoint(Vector2F v) {
+		return new GdiPoint((int)v.X, (int)v.Y);
+	}
+	public static explicit operator GdiSize(Vector2F v) {
+		return new GdiSize((int)v.X, (int)v.Y);
+	}
+	public static implicit operator GdiPointF(Vector2F v) {
+		return new GdiPointF(v.X, v.Y);
+	}
+	public static implicit operator GdiSizeF(Vector2F v) {
+		return new GdiSizeF(v.X, v.Y);
 	}
 
 	//========== PROPERTIES ==========

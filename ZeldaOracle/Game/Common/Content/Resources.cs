@@ -499,6 +499,11 @@ namespace ZeldaOracle.Common.Content {
 			set { verboseOutput = value; }
 		}
 
+		// Gets the dictionary of tilesets.
+		public static Dictionary<string, Tileset> Tilesets {
+			get { return tilesets; }
+		}
+
 		// Gets the dictionary of sounds.
 		public static Dictionary<string, Sound> Sounds {
 			get { return sounds; }
