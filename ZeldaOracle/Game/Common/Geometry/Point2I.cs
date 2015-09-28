@@ -6,6 +6,13 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
+using GdiPoint		= System.Drawing.Point;
+using GdiPointF		= System.Drawing.PointF;
+using GdiSize		= System.Drawing.Size;
+using GdiSizeF		= System.Drawing.SizeF;
+using GdiRectangle	= System.Drawing.Rectangle;
+using GdiRectangleF	= System.Drawing.RectangleF;
+
 namespace ZeldaOracle.Common.Geometry {
 /** <summary>
  * The 2D integer precision point with basic operations and functions.
@@ -266,6 +273,34 @@ public struct Point2I {
 	}
 	public static explicit operator Vector2(Point2I p) {
 		return new Vector2((float)p.X, (float)p.Y);
+	}
+
+	//--------------------------------
+
+	public static implicit operator Point2I(GdiPoint p) {
+		return new Point2I(p.X, p.Y);
+	}
+	public static implicit operator Point2I(GdiSize s) {
+		return new Point2I(s.Width, s.Height);
+	}
+	public static explicit operator Point2I(GdiPointF p) {
+		return new Point2I((int)p.X, (int)p.Y);
+	}
+	public static explicit operator Point2I(GdiSizeF s) {
+		return new Point2I((int)s.Width, (int)s.Height);
+	}
+
+	public static implicit operator GdiPoint(Point2I p) {
+		return new GdiPoint(p.X, p.Y);
+	}
+	public static implicit operator GdiSize(Point2I p) {
+		return new GdiSize(p.X, p.Y);
+	}
+	public static implicit operator GdiPointF(Point2I p) {
+		return new GdiPointF(p.X, p.Y);
+	}
+	public static implicit operator GdiSizeF(Point2I p) {
+		return new GdiSizeF(p.X, p.Y);
 	}
 
 	//========== PROPERTIES ==========

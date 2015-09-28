@@ -6,6 +6,13 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
+using GdiPoint		= System.Drawing.Point;
+using GdiPointF		= System.Drawing.PointF;
+using GdiSize		= System.Drawing.Size;
+using GdiSizeF		= System.Drawing.SizeF;
+using GdiRectangle	= System.Drawing.Rectangle;
+using GdiRectangleF	= System.Drawing.RectangleF;
+
 namespace ZeldaOracle.Common.Geometry {
 	
 	// The 2D integer precision rectangle with basic operations and functions.
@@ -165,6 +172,22 @@ namespace ZeldaOracle.Common.Geometry {
 
 		public static explicit operator Rectangle(Rectangle2I r) {
 			return new Rectangle(r.Point.X, r.Point.Y, r.Size.X, r.Size.Y);
+		}
+
+		//--------------------------------
+
+		public static implicit operator Rectangle2I(GdiRectangle r) {
+			return new Rectangle2I(r.X, r.Y, r.Width, r.Height);
+		}
+		public static explicit operator Rectangle2I(GdiRectangleF r) {
+			return new Rectangle2I((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height);
+		}
+
+		public static implicit operator GdiRectangle(Rectangle2I r) {
+			return new GdiRectangle(r.X, r.Y, r.Width, r.Height);
+		}
+		public static implicit operator GdiRectangleF(Rectangle2I r) {
+			return new GdiRectangleF(r.X, r.Y, r.Width, r.Height);
 		}
 
 		//========== PROPERTIES ==========

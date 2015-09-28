@@ -6,6 +6,13 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
+using GdiPoint		= System.Drawing.Point;
+using GdiPointF		= System.Drawing.PointF;
+using GdiSize		= System.Drawing.Size;
+using GdiSizeF		= System.Drawing.SizeF;
+using GdiRectangle	= System.Drawing.Rectangle;
+using GdiRectangleF	= System.Drawing.RectangleF;
+
 namespace ZeldaOracle.Common.Geometry {
 /** <summary>
  * The 2D floating precision rectangle with numerous operations and functions.
@@ -174,6 +181,22 @@ public struct Rectangle2F {
 	}
 	public static explicit operator Rectangle(Rectangle2F r) {
 		return new Rectangle((int)r.Point.X, (int)r.Point.Y, (int)r.Size.X, (int)r.Size.Y);
+	}
+
+	//--------------------------------
+
+	public static implicit operator Rectangle2F(GdiRectangle r) {
+		return new Rectangle2F(r.X, r.Y, r.Width, r.Height);
+	}
+	public static implicit operator Rectangle2F(GdiRectangleF r) {
+		return new Rectangle2F(r.X, r.Y, r.Width, r.Height);
+	}
+
+	public static explicit operator GdiRectangle(Rectangle2F r) {
+		return new GdiRectangle((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height);
+	}
+	public static implicit operator GdiRectangleF(Rectangle2F r) {
+		return new GdiRectangleF(r.X, r.Y, r.Width, r.Height);
 	}
 
 	//========== PROPERTIES ==========

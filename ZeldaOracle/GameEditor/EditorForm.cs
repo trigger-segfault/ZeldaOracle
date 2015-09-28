@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework.Content;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,13 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WinFormsGraphicsDevice;
-//using ZeldaOracle.Common.Content;
+using ZeldaEditor.Control;
 
 namespace ZeldaEditor {
 	public partial class EditorForm : Form {
 		
 		private LevelDisplay levelDisplay;
+		private TileDisplay tileDisplay;
+		private EditorControl editorControl;
 
 
 		//-----------------------------------------------------------------------------
@@ -24,23 +24,33 @@ namespace ZeldaEditor {
 		public EditorForm() {
 			InitializeComponent();
 
+			editorControl		= new EditorControl();
+			editorControl.EditorForm	= this;
+
 			// Create the level display.
 			levelDisplay		= new LevelDisplay();
+			levelDisplay.EditorControl	= editorControl;
 			levelDisplay.Name	= "levelDisplay";
 			levelDisplay.Dock	= DockStyle.Fill;
-			splitContainer2.Panel1.Controls.Add(this.levelDisplay);
 			levelDisplay.EditorForm = this;
+			panelWorld.Controls.Add(this.levelDisplay);
 
-			treeView1.ExpandAll();
-			treeView1.NodeMouseDoubleClick += delegate(object sender, TreeNodeMouseClickEventArgs e) {
-				levelDisplay.OpenLevel(e.Node.Index);
+			tileDisplay			= new TileDisplay();
+			tileDisplay.EditorControl	= editorControl;
+			tileDisplay.Name	= "tileDisplay";
+			tileDisplay.Dock	= DockStyle.Fill;
+			tileDisplay.EditorForm = this;
+			panelTiles2.Controls.Add(tileDisplay);
+
+			treeViewLevels.ExpandAll();
+			treeViewLevels.NodeMouseDoubleClick += delegate(object sender, TreeNodeMouseClickEventArgs e) {
+				editorControl.OpenLevel(e.Node.Index);
 			};
-			treeView1.AfterLabelEdit += delegate(object sender, NodeLabelEditEventArgs e) {
+			treeViewLevels.AfterLabelEdit += delegate(object sender, NodeLabelEditEventArgs e) {
 				Console.WriteLine("Renamed level to " + e.Label);
 				// Editing the label renames the level.
 			};
 		}
-
 
 		//-----------------------------------------------------------------------------
 		// Event handlers
@@ -56,7 +66,7 @@ namespace ZeldaEditor {
 
 			if (openFileDialog.FileName != String.Empty) {
 				Console.WriteLine("Opened file " + openFileDialog.FileName + ".");
-				levelDisplay.OpenFile(openFileDialog.FileName);
+				editorControl.OpenFile(openFileDialog.FileName);
 			}
 		}
 
@@ -65,12 +75,12 @@ namespace ZeldaEditor {
 			SaveFileDialog saveFileDialog = new SaveFileDialog();
 			saveFileDialog.Filter = "Zelda world files (*.zwd)|*.zwd";
 			saveFileDialog.ValidateNames = true;
-			
+
 			saveFileDialog.ShowDialog();
-			
+
 			if (saveFileDialog.FileName != String.Empty) {
 				Console.WriteLine("Saving file as " + saveFileDialog.FileName + ".");
-				levelDisplay.SaveFile(saveFileDialog.FileName);
+				editorControl.SaveFile(saveFileDialog.FileName);
 			}
 		}
 
@@ -80,13 +90,27 @@ namespace ZeldaEditor {
 			form.ShowDialog(this);
 		}
 
-		
+		private void buttonAnimations_Click(object sender, EventArgs e) {
+			editorControl.PlayAnimations = (sender as ToolStripButton).Checked;
+		}
+
+		private void comboBoxTilesets_SelectedIndexChanged(object sender, EventArgs e) {
+			if ((string)(sender as ToolStripComboBox).Items[(sender as ToolStripComboBox).SelectedIndex] != "")
+				editorControl.ChangeTileset((string)(sender as ToolStripComboBox).Items[(sender as ToolStripComboBox).SelectedIndex]);
+		}
+
+		private void comboBoxZone_SelectedIndexChanged(object sender, EventArgs e) {
+			if ((string)(sender as ToolStripComboBox).Items[(sender as ToolStripComboBox).SelectedIndex] != "")
+				editorControl.ChangeZone((string)(sender as ToolStripComboBox).Items[(sender as ToolStripComboBox).SelectedIndex]);
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
 		public TreeView LevelTreeView {
-			get { return treeView1; }
+			get { return treeViewLevels; }
 		}
 		public ContextMenuStrip ContextMenuLevelSelect {
 			get { return contextMenuLevelSelect; }
@@ -102,6 +126,22 @@ namespace ZeldaEditor {
 
 		public ToolStripStatusLabel StatusBarLabelRoomLoc {
 			get { return statusBarLabelRoomLoc; }
+		}
+
+		public LevelDisplay LevelDisplay {
+			get { return levelDisplay; }
+		}
+
+		public TileDisplay TileDisplay {
+			get { return tileDisplay; }
+		}
+
+		public ToolStripComboBox ComboBoxTilesets {
+			get { return comboBoxTilesets; }
+		}
+
+		public ToolStripComboBox ComboBoxZones {
+			get { return comboBoxZones; }
 		}
 	}
 }
