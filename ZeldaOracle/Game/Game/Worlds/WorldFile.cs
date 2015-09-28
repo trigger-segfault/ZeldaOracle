@@ -200,6 +200,7 @@ namespace ZeldaOracle.Game.Worlds {
 				tileData.SheetLocation = new Point2I(
 					reader.ReadInt32(),
 					reader.ReadInt32());
+				tileData = tileData.Tileset.TileData[tileData.SheetLocation.X, tileData.SheetLocation.Y];
 			}
 			else {
 				tileData.Flags	= (TileFlags) reader.ReadInt64();

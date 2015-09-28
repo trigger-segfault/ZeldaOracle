@@ -8,7 +8,6 @@ namespace ZeldaOracle.Game.Worlds {
 	public class World {
 
 		private List<Level> levels;
-		private int currentLevel;
 		private int startLevelIndex;
 		private Point2I startRoomLocation;
 		private Point2I startTileLocation;
@@ -20,7 +19,6 @@ namespace ZeldaOracle.Game.Worlds {
 
 		public World() {
 			levels = new List<Level>();
-			currentLevel = 0;
 		}
 
 
@@ -28,10 +26,6 @@ namespace ZeldaOracle.Game.Worlds {
 		// Properties
 		//-----------------------------------------------------------------------------
 		
-		public Level CurrentLevel {
-			get { return levels[currentLevel]; }
-		}
-
 		public List<Level> Levels {
 			get { return levels; }
 		}

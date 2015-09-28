@@ -11,7 +11,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		//-----------------------------------------------------------------------------
 
 		public Monster() {
-
+			
 		}
 	}
 }

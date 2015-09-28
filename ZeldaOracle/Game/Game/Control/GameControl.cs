@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control.Menus;
+using ZeldaOracle.Game.Debug;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.RoomStates;
@@ -23,23 +24,23 @@ namespace ZeldaOracle.Game.Control {
 	// The main control for the current game session.
 	public class GameControl {
 
-		private GameManager gameManager;
-		private RoomControl roomControl;
-		private World world;
-		private Player player;
-		private HUD hud;
-		private Inventory inventory;
-		private RewardManager rewardManager;
-		private bool advancedGame;
-		private int roomTicks; // The total number of ticks elapsed (used for animation.
-		private RoomStateStack roomStateStack;
-		private bool updateRoom;
-		private bool animateRoom;
+		private GameManager		gameManager;
+		private RoomControl		roomControl;
+		private World			world;
+		private Player			player;
+		private HUD				hud;
+		private Inventory		inventory;
+		private RewardManager	rewardManager;
+		private RoomStateStack	roomStateStack;
+		private bool			isAdvancedGame;
+		private int				roomTicks; // The total number of ticks elapsed since the game was started (used for animation).
+		private bool			updateRoom;
+		private bool			animateRoom;
 
 		// Menus
-		private MenuWeapons menuWeapons;
-		private MenuSecondaryItems menuSecondaryItems;
-		private MenuEssences menuEssences;
+		private MenuWeapons			menuWeapons;
+		private MenuSecondaryItems	menuSecondaryItems;
+		private MenuEssences		menuEssences;
 
 
 		//-----------------------------------------------------------------------------
@@ -47,21 +48,20 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		public GameControl(GameManager gameManager) {
-			this.gameManager	= gameManager;
-			this.roomStateStack	= null;
-			this.roomControl	= null;
-			this.world			= null;
-			this.player			= null;
-			this.hud			= null;
-			this.inventory		= null;
-			this.rewardManager	= null;
-			this.advancedGame	= false;
-			this.updateRoom		= true;
-			this.animateRoom	= true;
-
-			this.menuWeapons	= null;
+			this.gameManager		= gameManager;
+			this.roomStateStack		= null;
+			this.roomControl		= null;
+			this.world				= null;
+			this.player				= null;
+			this.hud				= null;
+			this.inventory			= null;
+			this.rewardManager		= null;
+			this.isAdvancedGame		= false;
+			this.updateRoom			= true;
+			this.animateRoom		= true;
+			this.menuWeapons		= null;
 			this.menuSecondaryItems	= null;
-			this.menuEssences	= null;
+			this.menuEssences		= null;
 		}
 
 
@@ -69,6 +69,7 @@ namespace ZeldaOracle.Game.Control {
 		// Methods
 		//-----------------------------------------------------------------------------
 
+		// Start a new game.
 		public void StartGame() {
 			roomTicks = 0;
 
@@ -207,27 +208,30 @@ namespace ZeldaOracle.Game.Control {
 				"You got<n><red>5 Arrows<red>!",
 				GameData.SPR_REWARD_SEED_EMBER));
 
-			//roomControl.BeginTestWorld(player);
-
 			// Create the room control.
 			roomControl = new RoomControl();
 			gameManager.PushGameState(roomControl);
 
-			roomControl.BeginTestWorld(player);
-			/*
+			// Create the test world.
+			world = GameDebug.CreateTestWorld();
+			
 			// Load the world.
-			WorldFile worldFile = new WorldFile();
-			world = worldFile.Load("Content/Worlds/temp_world.zwd");
-			player.Position = world.StartTileLocation * GameSettings.TILE_SIZE;
-			roomControl.Player = player;
-			roomControl.BeginRoom(world.StartRoom);*/
+			//WorldFile worldFile = new WorldFile();
+			//world = worldFile.Load("Content/Worlds/temp_world.zwd");
 
 			// Begin the room state.
+			player.Position = world.StartTileLocation * GameSettings.TILE_SIZE;
+			roomControl.BeginRoom(world.StartRoom);
 			roomStateStack = new RoomStateStack(new RoomStateNormal());
 			roomStateStack.Begin(this);
 
 			AudioSystem.MasterVolume = 0.06f;
 		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Text Messages
+		//-----------------------------------------------------------------------------
 
 		public void DisplayMessage(Message message) {
 			PushRoomState(new RoomStateTextReader(message));
@@ -236,6 +240,11 @@ namespace ZeldaOracle.Game.Control {
 		public void DisplayMessage(string text) {
 			PushRoomState(new RoomStateTextReader(new Message(text)));
 		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Menu
+		//-----------------------------------------------------------------------------
 
 		public void OpenMenu(Menu currentMenu, Menu menu) {
 			gameManager.PopGameState();
@@ -245,6 +254,7 @@ namespace ZeldaOracle.Game.Control {
 				menu
 			);
 		}
+
 		public void OpenMenu(Menu menu) {
 			AudioSystem.PlaySound("UI/menu_open");
 			gameManager.QueueGameStates(
@@ -253,6 +263,7 @@ namespace ZeldaOracle.Game.Control {
 				menu
 			);
 		}
+
 		public void CloseMenu(Menu menu) {
 			AudioSystem.PlaySound("UI/menu_close");
 			gameManager.PopGameState();
@@ -262,6 +273,7 @@ namespace ZeldaOracle.Game.Control {
 				roomControl
 			);
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Room state management
@@ -294,6 +306,7 @@ namespace ZeldaOracle.Game.Control {
 		public void PopRoomStates(int amount) {
 			roomStateStack.Pop(amount);
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -332,8 +345,8 @@ namespace ZeldaOracle.Game.Control {
 
 		// Returns true if this is an advanced game.
 		public bool IsAdvancedGame {
-			get { return advancedGame; }
-			set { advancedGame = value; }
+			get { return isAdvancedGame; }
+			set { isAdvancedGame = value; }
 		}
 
 		// The player weapons menu.
