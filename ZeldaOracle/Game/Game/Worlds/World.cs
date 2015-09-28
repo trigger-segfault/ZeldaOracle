@@ -23,6 +23,23 @@ namespace ZeldaOracle.Game.Worlds {
 
 
 		//-----------------------------------------------------------------------------
+		// Accessors
+		//-----------------------------------------------------------------------------
+		
+		public bool ExistsLevel(string levelID) {
+			return (GetLevel(levelID) != null);
+		}
+
+		public Level GetLevel(string levelID) {
+			for (int i = 0; i < levels.Count; i++) {
+				if (levels[i].Name == levelID)
+					return levels[i];
+			}
+			return null;
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 		

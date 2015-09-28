@@ -30,8 +30,10 @@
 			this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+			this.buttonNew = new System.Windows.Forms.ToolStripButton();
 			this.buttonLoad = new System.Windows.Forms.ToolStripButton();
 			this.buttonSave = new System.Windows.Forms.ToolStripButton();
+			this.buttonSaveAs = new System.Windows.Forms.ToolStripButton();
 			this.buttonAnimations = new System.Windows.Forms.ToolStripButton();
 			this.buttonAddLevel = new System.Windows.Forms.ToolStripButton();
 			this.toolStrip2 = new System.Windows.Forms.ToolStrip();
@@ -45,18 +47,16 @@
 			this.panelWorld = new System.Windows.Forms.Panel();
 			this.splitContainerTilesAndProperties = new System.Windows.Forms.SplitContainer();
 			this.panelTiles1 = new System.Windows.Forms.Panel();
+			this.panelTiles2 = new System.Windows.Forms.Panel();
+			this.toolStrip3 = new System.Windows.Forms.ToolStrip();
+			this.comboBoxTilesets = new System.Windows.Forms.ToolStripComboBox();
+			this.comboBoxZones = new System.Windows.Forms.ToolStripComboBox();
 			this.panelProperties = new System.Windows.Forms.Panel();
+			this.propertyGrid = new System.Windows.Forms.PropertyGrid();
 			this.contextMenuLevelSelect = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.duplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.propertyGrid = new System.Windows.Forms.PropertyGrid();
-			this.buttonNew = new System.Windows.Forms.ToolStripButton();
-			this.buttonSaveAs = new System.Windows.Forms.ToolStripButton();
-			this.toolStrip3 = new System.Windows.Forms.ToolStrip();
-			this.comboBoxTilesets = new System.Windows.Forms.ToolStripComboBox();
-			this.panelTiles2 = new System.Windows.Forms.Panel();
-			this.comboBoxZones = new System.Windows.Forms.ToolStripComboBox();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
@@ -74,9 +74,9 @@
 			this.splitContainerTilesAndProperties.Panel2.SuspendLayout();
 			this.splitContainerTilesAndProperties.SuspendLayout();
 			this.panelTiles1.SuspendLayout();
+			this.toolStrip3.SuspendLayout();
 			this.panelProperties.SuspendLayout();
 			this.contextMenuLevelSelect.SuspendLayout();
-			this.toolStrip3.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// menuStrip1
@@ -124,6 +124,15 @@
 			this.toolStrip1.TabIndex = 1;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
+			// buttonNew
+			// 
+			this.buttonNew.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonNew.Image = ((System.Drawing.Image)(resources.GetObject("buttonNew.Image")));
+			this.buttonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonNew.Name = "buttonNew";
+			this.buttonNew.Size = new System.Drawing.Size(23, 22);
+			this.buttonNew.Text = "New World";
+			// 
 			// buttonLoad
 			// 
 			this.buttonLoad.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -143,6 +152,15 @@
 			this.buttonSave.Size = new System.Drawing.Size(23, 22);
 			this.buttonSave.Text = "Save World";
 			this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+			// 
+			// buttonSaveAs
+			// 
+			this.buttonSaveAs.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonSaveAs.Image = ((System.Drawing.Image)(resources.GetObject("buttonSaveAs.Image")));
+			this.buttonSaveAs.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonSaveAs.Name = "buttonSaveAs";
+			this.buttonSaveAs.Size = new System.Drawing.Size(23, 22);
+			this.buttonSaveAs.Text = "Save As World";
 			// 
 			// buttonAnimations
 			// 
@@ -229,6 +247,7 @@
 			// 
 			this.treeViewLevels.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.treeViewLevels.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.treeViewLevels.FullRowSelect = true;
 			this.treeViewLevels.Location = new System.Drawing.Point(0, 0);
 			this.treeViewLevels.Name = "treeViewLevels";
 			this.treeViewLevels.Size = new System.Drawing.Size(165, 422);
@@ -292,6 +311,40 @@
 			this.panelTiles1.Size = new System.Drawing.Size(288, 234);
 			this.panelTiles1.TabIndex = 0;
 			// 
+			// panelTiles2
+			// 
+			this.panelTiles2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panelTiles2.Location = new System.Drawing.Point(0, 25);
+			this.panelTiles2.Name = "panelTiles2";
+			this.panelTiles2.Size = new System.Drawing.Size(286, 207);
+			this.panelTiles2.TabIndex = 1;
+			// 
+			// toolStrip3
+			// 
+			this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.comboBoxTilesets,
+            this.comboBoxZones});
+			this.toolStrip3.Location = new System.Drawing.Point(0, 0);
+			this.toolStrip3.Name = "toolStrip3";
+			this.toolStrip3.Size = new System.Drawing.Size(286, 25);
+			this.toolStrip3.TabIndex = 0;
+			this.toolStrip3.Text = "toolStrip3";
+			// 
+			// comboBoxTilesets
+			// 
+			this.comboBoxTilesets.AutoToolTip = true;
+			this.comboBoxTilesets.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxTilesets.Name = "comboBoxTilesets";
+			this.comboBoxTilesets.Size = new System.Drawing.Size(121, 25);
+			this.comboBoxTilesets.SelectedIndexChanged += new System.EventHandler(this.comboBoxTilesets_SelectedIndexChanged);
+			// 
+			// comboBoxZones
+			// 
+			this.comboBoxZones.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxZones.Name = "comboBoxZones";
+			this.comboBoxZones.Size = new System.Drawing.Size(121, 25);
+			this.comboBoxZones.SelectedIndexChanged += new System.EventHandler(this.comboBoxZone_SelectedIndexChanged);
+			// 
 			// panelProperties
 			// 
 			this.panelProperties.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -301,6 +354,14 @@
 			this.panelProperties.Name = "panelProperties";
 			this.panelProperties.Size = new System.Drawing.Size(288, 186);
 			this.panelProperties.TabIndex = 0;
+			// 
+			// propertyGrid
+			// 
+			this.propertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.propertyGrid.Location = new System.Drawing.Point(0, 0);
+			this.propertyGrid.Name = "propertyGrid";
+			this.propertyGrid.Size = new System.Drawing.Size(286, 184);
+			this.propertyGrid.TabIndex = 0;
 			// 
 			// contextMenuLevelSelect
 			// 
@@ -328,63 +389,6 @@
 			this.duplicateToolStripMenuItem.Name = "duplicateToolStripMenuItem";
 			this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
 			this.duplicateToolStripMenuItem.Text = "Duplicate";
-			// 
-			// propertyGrid
-			// 
-			this.propertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.propertyGrid.Location = new System.Drawing.Point(0, 0);
-			this.propertyGrid.Name = "propertyGrid";
-			this.propertyGrid.Size = new System.Drawing.Size(286, 184);
-			this.propertyGrid.TabIndex = 0;
-			// 
-			// buttonNew
-			// 
-			this.buttonNew.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.buttonNew.Image = ((System.Drawing.Image)(resources.GetObject("buttonNew.Image")));
-			this.buttonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.buttonNew.Name = "buttonNew";
-			this.buttonNew.Size = new System.Drawing.Size(23, 22);
-			this.buttonNew.Text = "New World";
-			// 
-			// buttonSaveAs
-			// 
-			this.buttonSaveAs.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.buttonSaveAs.Image = ((System.Drawing.Image)(resources.GetObject("buttonSaveAs.Image")));
-			this.buttonSaveAs.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.buttonSaveAs.Name = "buttonSaveAs";
-			this.buttonSaveAs.Size = new System.Drawing.Size(23, 22);
-			this.buttonSaveAs.Text = "Save As World";
-			// 
-			// toolStrip3
-			// 
-			this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.comboBoxTilesets,
-            this.comboBoxZones});
-			this.toolStrip3.Location = new System.Drawing.Point(0, 0);
-			this.toolStrip3.Name = "toolStrip3";
-			this.toolStrip3.Size = new System.Drawing.Size(286, 25);
-			this.toolStrip3.TabIndex = 0;
-			this.toolStrip3.Text = "toolStrip3";
-			// 
-			// comboBoxTilesets
-			// 
-			this.comboBoxTilesets.Name = "comboBoxTilesets";
-			this.comboBoxTilesets.Size = new System.Drawing.Size(121, 25);
-			this.comboBoxTilesets.SelectedIndexChanged += new System.EventHandler(this.comboBoxTilesets_SelectedIndexChanged);
-			// 
-			// panelTiles2
-			// 
-			this.panelTiles2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panelTiles2.Location = new System.Drawing.Point(0, 25);
-			this.panelTiles2.Name = "panelTiles2";
-			this.panelTiles2.Size = new System.Drawing.Size(286, 207);
-			this.panelTiles2.TabIndex = 1;
-			// 
-			// comboBoxZones
-			// 
-			this.comboBoxZones.Name = "comboBoxZones";
-			this.comboBoxZones.Size = new System.Drawing.Size(121, 25);
-			this.comboBoxZones.SelectedIndexChanged += new System.EventHandler(this.comboBoxZone_SelectedIndexChanged);
 			// 
 			// EditorForm
 			// 
@@ -421,10 +425,10 @@
 			this.splitContainerTilesAndProperties.ResumeLayout(false);
 			this.panelTiles1.ResumeLayout(false);
 			this.panelTiles1.PerformLayout();
-			this.panelProperties.ResumeLayout(false);
-			this.contextMenuLevelSelect.ResumeLayout(false);
 			this.toolStrip3.ResumeLayout(false);
 			this.toolStrip3.PerformLayout();
+			this.panelProperties.ResumeLayout(false);
+			this.contextMenuLevelSelect.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

@@ -4,16 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Tiles.EventTiles;
 
 namespace ZeldaOracle.Game.Worlds {
 	public class Room {
 		
-		private Level			level;		// The level this room is in.
-		private Point2I			location;	// Location within the level.
-		private Point2I			size;		// Size of the tile grid.
-		private int				layerCount;	// Number of tile layers.
-		private TileData[,,]	tileData;	// 3D grid of tile data (x, y, layer)
-		private Zone			zone;
+		private Level				level;		// The level this room is in.
+		private Point2I				location;	// Location within the level.
+		private Point2I				size;		// Size of the tile grid.
+		private int					layerCount;	// Number of tile layers.
+		private TileData[,,]		tileData;	// 3D grid of tile data (x, y, layer)
+		private List<EventTileData>	eventData;
+		private Zone				zone;
 
 
 		//-----------------------------------------------------------------------------
@@ -26,6 +28,7 @@ namespace ZeldaOracle.Game.Worlds {
 			this.size		= level.RoomSize;
 			this.layerCount	= GameSettings.DEFAULT_TILE_LAYER_COUNT; // Default tile layers.
 			this.tileData	= new TileData[size.X, size.Y, layerCount];
+			this.eventData	= new List<EventTileData>();
 			this.zone		= null;
 		}
 		
@@ -42,6 +45,11 @@ namespace ZeldaOracle.Game.Worlds {
 		public TileData[,,] TileData {
 			get { return tileData; }
 			set { tileData = value; }
+		}
+
+		public List<EventTileData> EventData {
+			get { return eventData; }
+			set { eventData = value; }
 		}
 
 		public Level Level {

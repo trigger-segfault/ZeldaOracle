@@ -249,6 +249,7 @@
     <Compile Include="Game\GameStates\GameStateStack.cs" />
     <Compile Include="Game\GameStates\StateDummy.cs" />
     <Compile Include="Game\GameStates\Transitions\MenuTransitionPush.cs" />
+    <Compile Include="Game\GameStates\Transitions\RoomTransitionFade.cs" />
     <Compile Include="Game\GameStates\Transitions\TransitionFade.cs" />
     <Compile Include="Game\GameStates\Transitions\RoomTransition.cs" />
     <Compile Include="Game\GameStates\Transitions\RoomTransitionPush.cs" />

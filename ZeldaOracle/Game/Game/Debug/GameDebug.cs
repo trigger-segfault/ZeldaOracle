@@ -13,13 +13,14 @@ using ZeldaOracle.Game.GameStates.Transitions;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.Custom;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Items.Rewards;
-using ZeldaOracle.Game.Tiles.Custom;
 using ZeldaOracle.Game.GameStates.RoomStates;
 
 namespace ZeldaOracle.Game.Debug {
@@ -102,7 +103,10 @@ namespace ZeldaOracle.Game.Debug {
 			world.Levels.Add(LoadJavaLevel("Content/Worlds/test_level.zwd"));
 			world.Levels.Add(LoadJavaLevel("Content/Worlds/interiors.zwd"));
 			world.Levels.Add(LoadJavaLevel("Content/Worlds/big_interiors.zwd"));
-			
+			world.Levels[0].Name = "overworld";
+			world.Levels[1].Name = "interiors";
+			world.Levels[2].Name = "big_interiors";
+
 			// Create a movable block tile.
 			TileData tdBlock		= new TileData(TileFlags.Solid | TileFlags.Movable);
 			tdBlock.Sprite			= GameData.SPR_TILE_MOVABLE_BLOCK;
@@ -207,15 +211,39 @@ namespace ZeldaOracle.Game.Debug {
 			r.TileData[7, 2, 1] = tdGrass;
 			r.TileData[8, 2, 1] = tdGrass;
 			r.TileData[8, 3, 1] = tdGrass;
+
+			r = level.GetRoom(new Point2I(2, 2));
+			EventTileData ed = new EventTileData();
+			ed.Type = typeof(WarpEvent);
+			ed.Properties.Add(Property.CreateString("id", "warp_a"));
+			ed.Properties.Add(Property.CreateString("warp_type", "tunnel"));
+			ed.Properties.Add(Property.CreateString("destination_level", "overworld"));
+			ed.Properties.Add(Property.CreateString("destination_warp_point", "warp_b"));
+			ed.Position = new Point2I(16, 64);
+			r.EventData.Add(ed);
+
+			r = level.GetRoom(new Point2I(1, 1));
+			ed = new EventTileData();
+			ed.Type = typeof(WarpEvent);
+			ed.Properties.Add(Property.CreateString("id", "warp_b"));
+			ed.Properties.Add(Property.CreateString("warp_type", "stairs"));
+			ed.Properties.Add(Property.CreateString("destination_level", "overworld"));
+			ed.Properties.Add(Property.CreateString("destination_warp_point", "warp_a"));
+			ed.Position = new Point2I(64, 96);
+			r.EventData.Add(ed);
+
 			r = level.GetRoom(new Point2I(1, 1));
 			r.TileData[1, 1, 1] = tdDiamond;
 			r.TileData[2, 2, 1] = tdDiamond;
 			r.TileData[2, 4, 1] = tdDiamond;
 			r.TileData[8, 2, 1] = tdPot;
+
 			r = level.GetRoom(new Point2I(3, 0));
 			r.TileData[3, 2, 1] = tdLantern;
+
 			r = level.GetRoom(new Point2I(1, 0));
 			r.TileData[8, 2, 1] = tdRock;
+
 			r = level.GetRoom(new Point2I(2, 0));
 			for (int x = 1; x < 8; x++) {
 				for (int y = 2; y < 6; y++) {

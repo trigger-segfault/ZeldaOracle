@@ -16,6 +16,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		private Point2I			size;
 		private Properties		properties;
 		private Properties		modifiedProperties;
+		private Point2I			position;
 
 		
 		//-----------------------------------------------------------------------------
@@ -24,6 +25,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 
 		public EventTileData() {
 			type				= null;
+			position			= Point2I.Zero;
 			size				= Point2I.One;
 			properties			= new Properties();
 			modifiedProperties	= new Properties();
@@ -41,6 +43,11 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		public Type Type {
 			get { return type; }
 			set { type = value; }
+		}
+		
+		public Point2I Position {
+			get { return position; }
+			set { position = value; }
 		}
 		
 		public Point2I Size {

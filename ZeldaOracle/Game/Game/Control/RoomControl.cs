@@ -172,6 +172,10 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 		// Initialization
 		//-----------------------------------------------------------------------------
+		
+		public void BeginRoom() {
+			BeginRoom(room);
+		}
 
 		public void BeginRoom(Room room) {
 			this.room			= room;
@@ -211,6 +215,14 @@ namespace ZeldaOracle.Game.Control {
 					}
 				}
 			}
+
+			// Create the event tiles.
+			eventTiles.Capacity = room.EventData.Count;
+			for (int i = 0; i < room.EventData.Count; i++) {
+				EventTileData data = room.EventData[i];
+				EventTile eventTile = EventTile.CreateEvent(data);
+				eventTiles.Add(eventTile);
+			}
 			
 			// Initialize the tiles.
 			for (int x = 0; x < room.Width; x++) {
@@ -240,34 +252,31 @@ namespace ZeldaOracle.Game.Control {
 			}
 		}
 		
-		// Transition to a room adjacent to the current one.
-		public void EnterAdjacentRoom(int direction) {
-			// Find the adjacent room.
-			Point2I relative = Directions.ToPoint(direction);
-			Point2I nextLocation = roomLocation + relative;
-			if (!level.ContainsRoom(nextLocation))
-				return;
-			Room nextRoom = level.GetRoom(nextLocation);
-
-			// Setup the new room control.
+		public void TransitionToRoom(Room nextRoom, RoomTransition transition) {
+			// Create the new room control.
 			RoomControl newControl = new RoomControl();
 			newControl.gameManager	= gameManager;
 			newControl.level		= level;
 			newControl.room			= nextRoom;
-			newControl.roomLocation	= nextLocation;
-			newControl.BeginRoom(nextRoom);
-			entities.Remove(Player);
+			newControl.roomLocation	= nextRoom.Location;
 			
-			// Move the player to the new room.
-			Player.RoomControl = newControl;
-			Player.Position -= relative * nextRoom.Size * GameSettings.TILE_SIZE;
-			newControl.viewControl.CenterOn(Player.Center);
-
 			// Play the transition.
-			RoomTransitionPush transition = new RoomTransitionPush(this, newControl, direction);
+			transition.OldRoomControl = this;
+			transition.NewRoomControl = newControl;
 			gameManager.PopGameState();
 			gameManager.PushGameState(transition);
 			GameControl.RoomControl = newControl;
+		}
+
+		// Transition to a room adjacent to the current one.
+		public void EnterAdjacentRoom(int direction) {
+			Point2I nextLocation = roomLocation + Directions.ToPoint(direction);
+
+			// Transition to the room.
+			if (level.ContainsRoom(nextLocation)) {
+				Room nextRoom = level.GetRoom(nextLocation);
+				TransitionToRoom(nextRoom, new RoomTransitionPush(direction));
+			}
 		}
 
 
@@ -388,6 +397,13 @@ namespace ZeldaOracle.Game.Control {
 			g.Begin(GameSettings.DRAW_MODE_BACK_TO_FRONT);
 			for (int i = 0; i < entities.Count; ++i) {
 				entities[i].Draw(g);
+			}
+			
+			// Draw event tiles.
+			g.End();
+			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+			for (int i = 0; i < eventTiles.Count; ++i) {
+				eventTiles[i].Draw(g);
 			}
 
 			// Draw HUD.

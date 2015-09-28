@@ -168,6 +168,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public void StopPushing()  {
 			if (state == stateNormal)
 				stateNormal.StopPushing();
+			movement.IsMoving = false;
+			movement.StopMotion();
+			movement.ChooseAnimation();
 		}
 
 		public void Hurt(int damage) {
@@ -394,7 +397,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		
 		public int Direction {
 			get { return direction; }
-			set { direction = value; }
+			set {
+				direction = value;
+				if (syncAnimationWithDirection)
+					graphics.AnimationPlayer.SubStripIndex = direction;
+			}
 		}
 
 		public int UseAngle {

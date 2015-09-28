@@ -45,6 +45,9 @@ IMAGE tileset_overworld;
 	VARIANT graveyard	"Tiles/overworld_graveyard";
 	VARIANT forest		"Tiles/overworld_forest";
 	END;
+IMAGE tileset_interior;
+	VARIANT interior "Tiles/tileset_interior";
+	END;
 	
 
 #==============================================================

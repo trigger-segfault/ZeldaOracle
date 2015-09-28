@@ -21,6 +21,8 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		protected Point2I		size;
 		protected Properties	properties;
 
+		protected Rectangle2I	collisionBox;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -32,6 +34,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			position		= Vector2F.Zero;
 			size			= Point2I.One;
 			properties		= new Properties();
+			collisionBox	= new Rectangle2I(0, 0, 16, 16);
 		}
 		
 
@@ -46,17 +49,35 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		
 
 		//-----------------------------------------------------------------------------
+		// Accessors
+		//-----------------------------------------------------------------------------
+		
+		public bool IsTouchingPlayer() {
+			return PositionedCollisionBox.Contains(roomControl.Player.Origin);
+			//return (roomControl.Player.Physics.PositionedCollisionBox.Intersects(PositionedCollisionBox));
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Virtual methods
 		//-----------------------------------------------------------------------------
+
+		public virtual void OnTouch() {}
 
 		protected virtual void Initialize() {}
 		
 		// Called when the room is only to update graphics.
 		public virtual void UpdateGraphics() {}
 
-		public virtual void Update() {}
+		public virtual void Update() {
+			if (IsTouchingPlayer()) {
+				OnTouch();
+			}
+		}
 		
-		public virtual void Draw() {}
+		public virtual void Draw(Graphics2D g) {
+			//g.DrawSprite(GameData.SPR_TILE_ARMOS_STATUE, position);
+		}
 		
 
 		//-----------------------------------------------------------------------------
@@ -73,6 +94,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			else
 				tile = (EventTile) data.Type.GetConstructor(Type.EmptyTypes).Invoke(null);
 			
+			tile.position	= data.Position;
 			tile.eventData	= data;
 			tile.size		= data.Size;
 			tile.properties.Merge(data.Properties, true);
@@ -86,6 +108,9 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		public Rectangle2F PositionedCollisionBox {
+			get { return new Rectangle2F(collisionBox.Point + position, collisionBox.Size); }
+		}
 		
 		// Get the room control this event belongs to.
 		public RoomControl RoomControl {
