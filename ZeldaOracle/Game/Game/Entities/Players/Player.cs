@@ -63,8 +63,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// TEMPORARY: Change tool drawing to something else
 		public AnimationPlayer toolAnimation;
 
-		private bool isItemButtonPressDisabled;
-
 		private PlayerSwimmingSkills swimmingSkills;
 
 		private PlayerTunics tunic;
@@ -87,8 +85,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			useDirection		= 0;
 			useAngle			= 0;
 			autoRoomTransition	= false;
-			syncAnimationWithDirection	= true;
-			isItemButtonPressDisabled	= false;
+			syncAnimationWithDirection = true;
 			movement = new PlayerMoveComponent(this);
 
 			// Unit properties.
@@ -167,6 +164,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Interaction
 		//-----------------------------------------------------------------------------
 
+		// For when the player needs to stop pushing, such as when reading text or opening a chest.
+		public void StopPushing()  {
+			if (state == stateNormal)
+				stateNormal.StopPushing();
+		}
+
 		public void Hurt(int damage) {
 			health = GMath.Max(0, health - damage);
 			invincibleTimer = InvincibleDuration;
@@ -184,7 +187,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				if (item != null) {
 					item.Player = this;
 
-					if (!isItemButtonPressDisabled && item.IsUsable()) {
+					if (item.IsUsable()) {
 						if (Inventory.GetSlotButton(i).IsPressed())
 							item.OnButtonPress();
 						if (Inventory.GetSlotButton(i).IsDown())
@@ -274,10 +277,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public override void Update() {
-			isItemButtonPressDisabled = false;
-
 			if (invincibleTimer > 0)
 				invincibleTimer--;
+
+			bool stopPushing = false;
 
 			movement.Update();
 			UpdateUseDirections();
@@ -286,9 +289,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (IsOnGround) {
 				Tile actionTile = physics.GetMeetingSolidTile(position, direction);
 				if (actionTile != null && Controls.A.IsPressed()) {
-					if (actionTile.OnAction(direction))
-						isItemButtonPressDisabled = true;
-					// TODO: player stops pushing when reading text.
+					if (actionTile.OnAction(direction)) {
+						Controls.A.Disable(true);
+						stopPushing = true;
+					}
 				}
 			}
 
@@ -299,6 +303,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 			state.Update();
 			UpdateEquippedItems();
 
+			if (stopPushing)
+				StopPushing();
+
+			// Notify for touching tiles.
+			// TODO: move this somewhere else.
 			Rectangle2I tiles = RoomControl.GetTileAreaFromRect(physics.PositionedCollisionBox);
 			for (int x = tiles.Left; x < tiles.Right; x++) {
 				for (int y = tiles.Top; y < tiles.Bottom; y++) {
@@ -310,14 +319,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 				}
 			}
 
-			tiles = RoomControl.GetTileAreaFromRect(physics.PositionedCollisionBox, 1);
+			// Notify colliding tiles.
+			// TODO: move this somewhere else.
+			Rectangle2F myBox = physics.PositionedCollisionBox.Inflated(1, 1);
+			tiles = RoomControl.GetTileAreaFromRect(myBox);
 			for (int x = tiles.Left; x < tiles.Right; x++) {
 				for (int y = tiles.Top; y < tiles.Bottom; y++) {
 					for (int layer = 0; layer < RoomControl.Room.LayerCount; layer++) {
 						Tile tile = RoomControl.GetTile(new Point2I(x, y), layer);
 						if (tile != null && tile.CollisionModel != null) {
 							for (int i = 0; i < tile.CollisionModel.BoxCount; i++) {
-								if (((Rectangle2F)tile.CollisionModel[i] + tile.Position).Colliding(physics.PositionedCollisionBox.Inflated(1, 1))) {
+								if (((Rectangle2F)tile.CollisionModel[i] + tile.Position).Colliding(myBox)) {
 									tile.OnCollide();
 									break;
 								}

@@ -81,9 +81,15 @@ namespace ZeldaOracle.Game.Control.Menus {
 						currentSlotGroup = null;
 						ammoSlotGroup = new SlotGroup();
 						List<Ammo> ammo = new List<Ammo>();
+
+						int currentAmmoIndex = 0;
+
 						for (int i = 0; i < selectedItem.NumAmmos; i++) {
-							if (selectedItem.GetAmmoAt(i).IsObtained)
+							if (selectedItem.GetAmmoAt(i).IsObtained) {
+								if (selectedItem.CurrentAmmo == i)
+									currentAmmoIndex = ammo.Count;
 								ammo.Add(selectedItem.GetAmmoAt(i));
+							}
 						}
 
 						int start = (160 - (ammo.Count * 24 + 8)) / 2 + 8;
@@ -96,7 +102,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 							ammoSlotGroup.GetSlotAt(i).SetConnection(Directions.Left, ammoSlotGroup.GetSlotAt((i + ammo.Count - 1) % ammo.Count));
 							ammoSlotGroup.GetSlotAt(i).SetConnection(Directions.Right, ammoSlotGroup.GetSlotAt((i + 1) % ammo.Count));
 						}
-						ammoSlotGroup.SetCurrentSlot(ammoSlotGroup.GetSlotAt(selectedItem.CurrentAmmo));
+						ammoSlotGroup.SetCurrentSlot(ammoSlotGroup.GetSlotAt(currentAmmoIndex));
 					}
 					else {
 						EquipWeapon(slot);

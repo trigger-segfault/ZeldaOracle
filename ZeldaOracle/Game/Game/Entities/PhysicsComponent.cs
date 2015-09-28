@@ -298,20 +298,23 @@ namespace ZeldaOracle.Game.Entities {
 		// Return the solid tile that the entity is facing towards if it were at the given position.
 		public Tile GetMeetingSolidTile(Vector2F position, int direction) {
 			Vector2F checkPos = position + Directions.ToPoint(direction);
-			Point2I location = entity.RoomControl.GetTileLocation(entity.Center) + 
-				Directions.ToPoint(direction);
-			if (!entity.RoomControl.IsTileInBounds(location))
-				return null;
+			Point2I location  = entity.RoomControl.GetTileLocation(entity.Center);
+			
+			// Check the tile on the player and in front of him.
+			for (int j = 0; j < 2; j++) {
+				if (entity.RoomControl.IsTileInBounds(location)) {
+					for (int i = 0; i < entity.RoomControl.Room.LayerCount; i++) {
+						Tile tile = entity.RoomControl.GetTile(location, i);
 
-			for (int i = 0; i < entity.RoomControl.Room.LayerCount; i++) {
-				Tile tile = entity.RoomControl.GetTile(location, i);
-
-				if (CanCollideWithTile(tile) && CollisionModel.Intersecting(
-					tile.CollisionModel, tile.Position, collisionBox, checkPos) &&
-					!CanDodgeCollision(tile, direction))
-				{
-					return tile;
+						if (CanCollideWithTile(tile) && CollisionModel.Intersecting(
+							tile.CollisionModel, tile.Position, collisionBox, checkPos) &&
+							!CanDodgeCollision(tile, direction))
+						{
+							return tile;
+						}
+					}
 				}
+				location += Directions.ToPoint(direction);
 			}
 			return null;
 		}
