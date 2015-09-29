@@ -16,10 +16,10 @@ namespace ZeldaEditor {
 
 	public partial class EditorForm : Form {
 		
-		private LevelDisplay levelDisplay;
-		private TileDisplay tileDisplay;
-		private EditorControl editorControl;
-		private PropertiesContainer propertiesContainer;
+		private LevelDisplay		levelDisplay;
+		private TileDisplay			tileDisplay;
+		private EditorControl		editorControl;
+		//private PropertiesContainer	propertiesContainer;
 
 
 		//-----------------------------------------------------------------------------
@@ -29,22 +29,22 @@ namespace ZeldaEditor {
 		public EditorForm() {
 			InitializeComponent();
 
-			editorControl		= new EditorControl();
+			editorControl				= new EditorControl();
 			editorControl.EditorForm	= this;
 
 			// Create the level display.
-			levelDisplay		= new LevelDisplay();
+			levelDisplay				= new LevelDisplay();
 			levelDisplay.EditorControl	= editorControl;
-			levelDisplay.Name	= "levelDisplay";
-			levelDisplay.Dock	= DockStyle.Fill;
-			levelDisplay.EditorForm = this;
+			levelDisplay.Name			= "levelDisplay";
+			levelDisplay.Dock			= DockStyle.Fill;
+			levelDisplay.EditorForm		= this;
 			panelWorld.Controls.Add(this.levelDisplay);
 
-			tileDisplay			= new TileDisplay();
+			tileDisplay					= new TileDisplay();
 			tileDisplay.EditorControl	= editorControl;
-			tileDisplay.Name	= "tileDisplay";
-			tileDisplay.Dock	= DockStyle.Fill;
-			tileDisplay.EditorForm = this;
+			tileDisplay.Name			= "tileDisplay";
+			tileDisplay.Dock			= DockStyle.Fill;
+			tileDisplay.EditorForm		= this;
 			panelTiles2.Controls.Add(tileDisplay);
 
 			treeViewLevels.ExpandAll();
@@ -57,38 +57,15 @@ namespace ZeldaEditor {
 			};
 
 			// Create test properties.
-			Properties properties = new Properties();
-			properties.Set("text",		"Hello, World!");
-			properties.Set("direction",	3);
-			properties.Set("pi",		3.14f);
-			properties.Set("enabled",		true);
+			//Properties properties = new Properties();
+			//properties.Set("text",		"Hello, World!");
+			//properties.Set("direction",	3);
+			//properties.Set("pi",		3.14f);
+			//properties.Set("enabled",		true);
 
-			/*
-			Properties properties2 = new Properties();
-			properties.Set("text",		"Hello, World!");
-			properties.Set("direction",	3);
-			properties.Set("pi",		3.14f);
-			properties.Set("enabled",		true);
-			*/
-
-			propertiesContainer = new PropertiesContainer();
-			propertiesContainer.Set(null, properties);
-			propertyGrid.SelectedObject			= propertiesContainer;
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-		
-		public void CloseProperties() {
-			propertiesContainer.Clear();
-			propertyGrid.Refresh();
-		}
-
-		public void OpenProperties(Properties properties, Properties baseProperties) {
-			propertiesContainer.Set(properties, baseProperties);
-			propertyGrid.Refresh();
+			//propertiesContainer = new PropertiesContainer();
+			//propertiesContainer.Set(null, properties);
+			//propertyGrid.SelectedObject = propertiesContainer;
 		}
 
 
@@ -182,6 +159,10 @@ namespace ZeldaEditor {
 
 		public ToolStripComboBox ComboBoxZones {
 			get { return comboBoxZones; }
+		}
+
+		public PropertyGrid PropertyGrid {
+			get { return propertyGrid; }
 		}
 	}
 

@@ -6,7 +6,7 @@ using System.Text;
 namespace ZeldaOracle.Common.Properties {
 	
 	/// <summary>
-	/// The possible data types for a property.
+	/// The possible raw data types for a property.
 	/// </summary>
 	public enum PropertyType {
 		List,
@@ -15,6 +15,62 @@ namespace ZeldaOracle.Common.Properties {
 		Float,
 		Boolean
 	}
+
+
+	/// <summary>
+	/// PropertyDocumentation
+	/// </summary>
+	public class PropertyDocumentation {
+		private string readableName; // A name that's more human-readable
+		private string editorType;
+		private string category;
+		private string description;
+
+
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
+
+		public PropertyDocumentation() {
+			readableName	= "";
+			editorType		= "";
+			category		= "";
+			description		= "";
+		}
+
+		public PropertyDocumentation(string readableName, string editorType, string category, string description) {
+			this.readableName	= readableName;
+			this.editorType		= editorType;
+			this.category		= category;
+			this.description	= description;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public string ReadableName {
+			get { return readableName; }
+			set { readableName = value; }
+		}
+
+		public string EditorType {
+			get { return editorType; }
+			set { editorType = value; }
+		}
+
+		public string Category {
+			get { return category; }
+			set { category = value; }
+		}
+
+		public string Description {
+			get { return description; }
+			set { description = value; }
+		}
+	}
+
 
 	/// <summary>
 	/// A proprety represents a piece of data that can be represented
@@ -36,6 +92,8 @@ namespace ZeldaOracle.Common.Properties {
 		private Property next;
 		// If this property is a list of properties, then 'firstChild' points to the first property in the list.
 		private Property firstChild;
+		// The documentation for this property, if it is a base-property.
+		private PropertyDocumentation documentation;
 
 		
 		//-----------------------------------------------------------------------------
@@ -51,6 +109,7 @@ namespace ZeldaOracle.Common.Properties {
 			this.stringValue	= "";
 			this.next			= null;
 			this.firstChild		= null;
+			this.documentation	= null;
 		}
 		
 		// Construct a property as a copy of another.
@@ -62,6 +121,7 @@ namespace ZeldaOracle.Common.Properties {
 			stringValue		= copy.stringValue;
 			next			= null;
 			firstChild		= null;
+			documentation	= null;
 
 			if (copy.firstChild != null)
 				firstChild = new Property(copy.firstChild);
@@ -103,6 +163,15 @@ namespace ZeldaOracle.Common.Properties {
 			}
 
 			return null; // ERROR: Index out of bounds!
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Mutators
+		//-----------------------------------------------------------------------------
+
+		public void SetDocumentation(string readableName, string editorType, string category, string description) {
+			documentation = new PropertyDocumentation(readableName, editorType, category, description);
 		}
 
 
@@ -167,6 +236,15 @@ namespace ZeldaOracle.Common.Properties {
 		public PropertyType Type {
 			get { return type; }
 			set { type = value; }
+		}
+
+		public PropertyDocumentation Documentation {
+			get { return documentation; }
+			set { documentation = value; }
+		}
+
+		public bool HasDocumentation {
+			get { return (documentation != null); }
 		}
 
 		// Values.

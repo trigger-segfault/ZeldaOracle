@@ -2,14 +2,167 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing.Design;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
 using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Content;
+using ZeldaEditor.Control;
+using ZeldaOracle.Game.Items.Rewards;
 
 
 namespace ZeldaEditor {
+
+	class RewardPropertyEditor : UITypeEditor {
+        private IWindowsFormsEditorService svc;
+		private RewardManager rewardManager;
+		private ListBox listBox;
+
+
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
+
+		public RewardPropertyEditor(RewardManager rewardManager) {
+			this.rewardManager	= rewardManager;
+			this.svc			= null;
+			this.listBox		= new ListBox();
+			
+			// Add resources to the list.
+			listBox.Items.Add("(none)");
+			foreach (KeyValuePair<string, Reward> entry in rewardManager.RewardDictionary) {
+				listBox.Items.Add(entry.Key);
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
+
+		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
+			return UITypeEditorEditStyle.DropDown;
+		}
+
+		public override object EditValue(ITypeDescriptorContext context, System.IServiceProvider provider, object value) {
+			svc = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
+			
+			if (svc != null)
+			{
+				listBox.SelectedValueChanged += new EventHandler(this.ValueChanged);
+				svc.DropDownControl(listBox);
+
+				if (listBox.SelectedIndex >= 0) {
+					if (listBox.SelectedIndex == 0)
+						value = "";
+					else 
+						value = (string) listBox.Items[listBox.SelectedIndex];
+				}
+			}
+			return value;
+		}
+
+        private void ValueChanged(object sender, EventArgs e) {
+            if (svc != null)
+                svc.CloseDropDown();
+        }
+	}
+
+	class ResourcePropertyEditor<T> : UITypeEditor {
+        private IWindowsFormsEditorService svc = null;
+
+		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
+			return UITypeEditorEditStyle.DropDown;
+		}
+
+		public override object EditValue(ITypeDescriptorContext context, System.IServiceProvider provider, object value) {
+			svc = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
+			
+			//Foo foo = value as Foo;
+			
+			if (svc != null)// && foo != null)
+			{           
+				ListBox comboBox = new ListBox();
+
+				Dictionary<string, T> resourceMap = Resources.GetResourceDictionary<T>();
+				comboBox.Items.Add("(none)");
+				foreach (KeyValuePair<string, T> entry in resourceMap) {
+					comboBox.Items.Add(entry.Key);
+				}
+
+				comboBox.SelectedValueChanged += new EventHandler(this.ValueChanged);
+				//SetEditorProps((ComboBox) context.Instance, comboBox);
+				
+				svc.DropDownControl(comboBox);
+
+				if (comboBox.SelectedIndex >= 0) {
+					if (comboBox.SelectedIndex == 0)
+						value = "";
+					else 
+						value = (string) comboBox.Items[comboBox.SelectedIndex];
+				}
+			}
+			return value; // can also replace the wrapper object here
+		}
+
+        private void ValueChanged(object sender, EventArgs e) {
+            if (svc != null) {
+                svc.CloseDropDown();
+            }
+        }
+	}
+
+	
+	class FooEditor : UITypeEditor {
+		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
+			return UITypeEditorEditStyle.Modal;
+		}
+
+		public override object EditValue(ITypeDescriptorContext context, System.IServiceProvider provider, object value) {
+			IWindowsFormsEditorService svc = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
+			
+			//Foo foo = value as Foo;
+
+			if (svc != null)// && foo != null)
+			{            
+				using (FooForm form = new FooForm()) {
+					//form.Value = foo.Bar;
+					if (svc.ShowDialog(form) == DialogResult.OK) {
+						//foo.Bar = form.Value; // update object
+					}
+				}
+			}
+			return value; // can also replace the wrapper object here
+		}
+	}
+
+	class FooForm : Form {
+		private TextBox textbox;
+		private Button okButton;
+
+		public FooForm() {
+			textbox = new TextBox();
+			Controls.Add(textbox);
+			okButton = new Button();
+			okButton.Text = "OK";
+			okButton.Dock = DockStyle.Bottom;
+			okButton.DialogResult = DialogResult.OK;
+			Controls.Add(okButton);
+		}
+
+		public string Value
+		{
+			get { return textbox.Text; }
+			set { textbox.Text = value; }
+		}
+	}
+
 	
 	public class PropertyInstance {
 		private Property modifiedProperty;
@@ -34,19 +187,21 @@ namespace ZeldaEditor {
 	[TypeConverter(typeof(PropertiesContainer.CustomObjectConverter))]
 	public class PropertiesContainer {
 		
-
+		private List<PropertyInstance> propertyInstances;
 		private Properties baseProperties;
 		private Properties properties;
-		private List<PropertyInstance> propertyInstances;
+		private PropertyGridControl propertyGridControl;
+
 		
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public PropertiesContainer() {
-			properties = null;
-			baseProperties = null;
-			propertyInstances = new List<PropertyInstance>();
+		public PropertiesContainer(PropertyGridControl propertyGridControl) {
+			this.properties				= null;
+			this.baseProperties			= null;
+			this.propertyInstances		= new List<PropertyInstance>();
+			this.propertyGridControl	= propertyGridControl;
 		}
 		
 		
@@ -97,6 +252,11 @@ namespace ZeldaEditor {
 			}
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
 		[Browsable(false)]
 		public Properties Properties {
 			get { return properties; }
@@ -110,6 +270,11 @@ namespace ZeldaEditor {
 		[Browsable(false)]
 		public List<PropertyInstance> PropertyInstances {
 			get { return propertyInstances; }
+		}
+
+		[Browsable(false)]
+		public PropertyGridControl PropertyGridControl {
+			get { return propertyGridControl; }
 		}
 
 
@@ -129,24 +294,24 @@ namespace ZeldaEditor {
 
 				if (instances != null) {
 					for (int i = 0; i < instances.Count; i++) {
+						PropertyInstance instance = instances[i];
+
+						string name = CustomPropertyDescriptor.GetDisplayName(
+							instance.ModifiedProperty,
+							instance.BaseProperty);
+
+						UITypeEditor editor = null;
+						if (instance.BaseProperty != null && instance.BaseProperty.HasDocumentation)
+							editor = obj.PropertyGridControl.GetUITypeEditor(instance.BaseProperty.Documentation.EditorType);
+
+
 						props[i] = new CustomPropertyDescriptor(
-							instances[i].ModifiedProperty,
-							instances[i].BaseProperty,
+							name,
+							editor,
+							instance.ModifiedProperty,
+							instance.BaseProperty,
 							obj.Properties);
 					}
-
-					/*
-					int index = stdProps.Count;
-
-					// Add base properties.
-
-					foreach (KeyValuePair<string, Property> prop in properties.PropertyMap) {
-						Property baseProperty = null;
-						if (baseProperties != null && baseProperties.Exists(prop.Key)) {
-							baseProperty = baseProperties[prop.Key];
-						}
-						props[index++] = new CustomPropertyDescriptor(prop.Value, baseProperty);
-					}*/
 				}
 
 				return new PropertyDescriptorCollection(props);
@@ -157,18 +322,12 @@ namespace ZeldaEditor {
 			private Property property;
 			private Property baseProperty;
 			private Properties modifiedProperties;
+			private UITypeEditor editor;
 
-
-			//-----------------------------------------------------------------------------
-			// Constructor
-			//-----------------------------------------------------------------------------
-
-			public CustomPropertyDescriptor(Property property, Property baseProperty, Properties modifiedProperties)
-				: base(property != null ? property.Name : baseProperty.Name, null)
-			{
-				this.property = property;
-				this.baseProperty = baseProperty;
-				this.modifiedProperties = modifiedProperties;
+			public static string GetDisplayName(Property property, Property baseProperty) {
+				if (baseProperty != null && baseProperty.HasDocumentation)
+					return baseProperty.Documentation.ReadableName;
+				return (baseProperty != null ? baseProperty.Name : property.Name);
 			}
 
 			public Property Property {
@@ -177,21 +336,24 @@ namespace ZeldaEditor {
 
 
 			//-----------------------------------------------------------------------------
+			// Constructor
+			//-----------------------------------------------------------------------------
+
+			public CustomPropertyDescriptor(string name, UITypeEditor editor, Property property, Property baseProperty, Properties modifiedProperties) :
+				base(name, null)
+			{
+				this.editor				= editor;
+				this.property			= property;
+				this.baseProperty		= baseProperty;
+				this.modifiedProperties	= modifiedProperties;
+			}
+
+
+			//-----------------------------------------------------------------------------
 			// Overridden methods
 			//-----------------------------------------------------------------------------
 
-			public override string Category {
-				get { return ""; }
-			}
-
-			public override string Description {
-				get { return ""; }
-			}
-
-			public override string Name {
-				get { return (property != null ? property.Name : baseProperty.Name); }
-			}
-
+			// Returns true if the property is modified.
 			public override bool ShouldSerializeValue(object component) {
 				if (baseProperty == null)
 					return true;
@@ -200,35 +362,29 @@ namespace ZeldaEditor {
 				return !property.EqualsValue(baseProperty);
 			}
 
-			public override void ResetValue(object component) {
-			}
-
-			public override bool IsReadOnly {
-				get { return false; }
-			}
-
-			public override Type PropertyType {
-				get {
-					if (Property.Type == ZeldaOracle.Common.Properties.PropertyType.String)
-						return typeof(string);
-					if (Property.Type == ZeldaOracle.Common.Properties.PropertyType.Integer)
-						return typeof(int);
-					if (Property.Type == ZeldaOracle.Common.Properties.PropertyType.Float)
-						return typeof(float);
-					if (Property.Type == ZeldaOracle.Common.Properties.PropertyType.Boolean)
-						return typeof(bool);
-					return null;
-				}
-			}
-
+			// Is the value allowed to be reset?
 			public override bool CanResetValue(object component) {
 				return true;
 			}
 
-			public override Type ComponentType {
-				get { return typeof(CustomObjectType); }
+			// Reset the value to the default.
+			public override void ResetValue(object component) {
+				// TODO: override ResetValue
 			}
 
+			// Get the editor to use to edit this property.
+			public override object GetEditor(Type editorBaseType) {
+				if (editorBaseType == typeof(UITypeEditor)) {
+					if (editor != null)
+						return editor;
+					return base.GetEditor(editorBaseType);
+				}
+				else {
+					return base.GetEditor(editorBaseType);
+				}
+			}
+
+			// Set the value of the property.
 			public override void SetValue(object component, object value) {
 				if (property == null) {
 					property = new ZeldaOracle.Common.Properties.Property(baseProperty);
@@ -251,7 +407,8 @@ namespace ZeldaEditor {
 					property = null;
 				}
 			}
-
+			
+			// Get the value of the property.
 			public override object GetValue(object component) {
 				if (Property.Type == ZeldaOracle.Common.Properties.PropertyType.String)
 					return Property.StringValue;
@@ -263,171 +420,68 @@ namespace ZeldaEditor {
 					return Property.BoolValue;
 				return null;
 			}
-		
-			/*
-			public override string	Category									{ get { return property.Category; } }
-			public override string	Description									{ get { return property.Description; } }
-			public override string	Name										{ get { return property.Name; } }
-			public override bool	ShouldSerializeValue(object component)		{ return !property.Value.Equals(property.DefaultValue); }
-			public override void	ResetValue(object component)				{ property.Value = null; }
-			public override bool	IsReadOnly									{ get { return property.IsReadOnly; } }
-			public override Type	PropertyType								{ get { return property.Type; } }
-			public override bool	CanResetValue(object component)				{ return true; }
-			public override Type	ComponentType								{ get { return typeof(CustomObjectType); } }
-			public override void	SetValue(object component, object value)	{ property.Value = value; }
-			public override object	GetValue(object component)					{ return property.Value; }
-			*/
-		}
-	}
-
-	#region OLD
-
-	public class CustomProperty {
-		private string	name;
-		private string	description;
-		private string	category;
-		private Type	type;
-		private object	value;
-		private object	defaultValue;
-		private bool	isReadOnly;
-		private bool	isVisible;
 
 
-		public static CustomProperty Create<T>(string name, object value, object defaultValue, string description, string category) {
-			CustomProperty property = new CustomProperty();
-			property.name			= name;
-			property.value			= value;
-			property.defaultValue	= defaultValue;
-			property.description	= description;
-			property.category		= category;
-			property.type			= typeof(T);
-			property.isReadOnly		= false;
-			property.isVisible		= true;
-			return property;
-		}
-		
-		public CustomProperty() {
-			this.name			= "";
-			this.description	= "";
-			this.category		= "";
-			this.type			= null;
-			this.value			= null;
-			this.defaultValue	= null;
-			this.isReadOnly		= false;
-			this.isVisible		= true;
-		}
+			//-----------------------------------------------------------------------------
+			// Overridden properties
+			//-----------------------------------------------------------------------------
+			
+			// Is the property read-only?
+			public override bool IsReadOnly {
+				get { return false; }
+			}
+			
+			// Should the property be listed in the property grid?
+			public override bool IsBrowsable {
+				get { return false; }
+			}
 
+			public override Type ComponentType {
+				get { return typeof(PropertiesContainer); }
+			}
 
-		public CustomProperty(string name, object value, bool isReadOnly, bool isVisible) {
-			this.name		= name;
-			this.value		= value;
-			this.isReadOnly	= isReadOnly;
-			this.isVisible	= isVisible;
-		}
-
-		public string Name {
-			get { return name; }
-			set { name = value; }
-		}
-
-		public string Description {
-			get { return description; }
-			set { description = value; }
-		}
-
-		public string Category {
-			get { return category; }
-			set { category = value; }
-		}
-
-		public object Value {
-			get { return value; }
-			set { this.value = value; }
-		}
-
-		public object DefaultValue {
-			get { return defaultValue; }
-			set { defaultValue = value; }
-		}
-
-		public bool IsReadOnly {
-			get { return isReadOnly; }
-			set { isReadOnly = value; }
-		}
-
-		public bool IsVisible {
-			get { return isVisible; }
-			set { isVisible = value; }
-		}
-
-		public Type Type {
-			get { return type; }
-			set { type = value; }
-		}
-	}
-
-
-	[TypeConverter(typeof(CustomObjectType.CustomObjectConverter))]
-	public class CustomObjectType {
-
-		private readonly List<CustomProperty> properties;
-
-
-		public CustomObjectType() {
-			properties = new List<CustomProperty>();
-		}
-
-		public void AddProperty(CustomProperty property) {
-			properties.Add(property);
-		}
-
-		[Browsable(false)]
-		public List<CustomProperty> Properties {
-			get { return properties; }
-		}
-
-		private class CustomObjectConverter : ExpandableObjectConverter {
-			public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes) {
-				var stdProps = base.GetProperties(context, value, attributes);
-				
-				CustomObjectType obj = value as CustomObjectType;
-				List<CustomProperty> customProps = obj == null ? null : obj.Properties;
-				PropertyDescriptor[] props = new PropertyDescriptor[stdProps.Count + (customProps == null ? 0 : customProps.Count)];
-				stdProps.CopyTo(props, 0);
-
-				if (customProps != null) {
-					int index = stdProps.Count;
-					foreach (CustomProperty prop in customProps) {
-						props[index++] = new CustomPropertyDescriptor(prop);
-					}
+			// Get the category this property should be listed under.
+			public override string Category {
+				get {
+					if (baseProperty != null && baseProperty.HasDocumentation)
+						return baseProperty.Documentation.Category;
+					return "";
 				}
-
-				return new PropertyDescriptorCollection(props);
-			}
-		}
-
-		private class CustomPropertyDescriptor : PropertyDescriptor {
-			private readonly CustomProperty prop;
-
-			public CustomPropertyDescriptor(CustomProperty prop)
-				: base(prop.Name, null)
-			{
-				this.prop = prop;
 			}
 
-			public override string	Category									{ get { return prop.Category; } }
-			public override string	Description									{ get { return prop.Description; } }
-			public override string	Name										{ get { return prop.Name; } }
-			public override bool	ShouldSerializeValue(object component)		{ return !prop.Value.Equals(prop.DefaultValue); }
-			public override void	ResetValue(object component)				{ prop.Value = null; }
-			public override bool	IsReadOnly									{ get { return prop.IsReadOnly; } }
-			public override Type	PropertyType								{ get { return prop.Type; } }
-			public override bool	CanResetValue(object component)				{ return true; }
-			public override Type	ComponentType								{ get { return typeof(CustomObjectType); } }
-			public override void	SetValue(object component, object value)	{ prop.Value = value; }
-			public override object	GetValue(object component)					{ return prop.Value; }
+			// Get the description for the property.
+			public override string Description {
+				get {
+					if (baseProperty != null && baseProperty.HasDocumentation)
+						return baseProperty.Documentation.Description;
+					return "";
+				}
+			}
+
+			// Get the display name for the property.
+			public override string Name {
+				get {
+					if (baseProperty != null && baseProperty.HasDocumentation)
+						return baseProperty.Documentation.ReadableName;
+					return (baseProperty != null ? baseProperty.Name : property.Name);
+				}
+			}
+			
+			public override Type PropertyType {
+				get {
+					if (Property.Type == ZeldaOracle.Common.Properties.PropertyType.String)
+						return typeof(string);
+					if (Property.Type == ZeldaOracle.Common.Properties.PropertyType.Integer)
+						return typeof(int);
+					if (Property.Type == ZeldaOracle.Common.Properties.PropertyType.Float)
+						return typeof(float);
+					if (Property.Type == ZeldaOracle.Common.Properties.PropertyType.Boolean)
+						return typeof(bool);
+					return null;
+				}
+			}
+
 		}
 	}
 
-	#endregion
 }

@@ -326,15 +326,18 @@ namespace ZeldaOracle.Game {
 			tdSign.SpriteAsObject	= GameData.SPR_TILE_SIGN_ASOBJECT;
 			tdSign.BreakAnimation	= GameData.ANIM_EFFECT_SIGN_BREAK;
 			tdSign.CollisionModel	= GameData.MODEL_BLOCK;
-			tdSign.Properties.Set("text", "Hello, World!");
-			tdSign.Properties.Set("text_side", "You can't read it from here!");
+			tdSign.Properties.Set("text", "Hello, World!")
+				.SetDocumentation("Text", "text_message", "Text", "The text to display when the sign is read from the front.");
+			tdSign.Properties.Set("text_side", "You can't read it from here!")
+				.SetDocumentation("Side Text", "text_message", "Text", "The text to display when the sign is read from the sides/back.");
 			Resources.AddResource("sign", tdSign);
 
 			// Create a chest tile.
 			TileData tdChest		= new TileData(typeof(TileChest), TileFlags.Solid);
 			tdChest.Sprite			= GameData.SPR_TILE_CHEST;
 			tdChest.CollisionModel	= GameData.MODEL_BLOCK;
-			tdChest.Properties.Set("reward", "rupees_1");
+			tdChest.Properties.Set("reward", "rupees_1")
+				.SetDocumentation("Reward", "reward", "", "The reward contained inside the chest.");
 			Resources.AddResource("chest", tdChest);
 			
 			// Create a reward tile (heart piece).

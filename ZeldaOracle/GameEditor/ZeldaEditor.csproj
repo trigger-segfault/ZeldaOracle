@@ -58,7 +58,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Control\EditorControl.cs" />
-    <Compile Include="CustomProperties.cs" />
+    <Compile Include="Control\PropertyGridControl.cs" />
+    <Compile Include="CustomProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="TileDisplay.cs">
       <SubType>Component</SubType>
     </Compile>
