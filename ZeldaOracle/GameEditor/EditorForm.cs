@@ -21,6 +21,8 @@ namespace ZeldaEditor {
 		private EditorControl editorControl;
 		private PropertiesContainer propertiesContainer;
 
+		private ToolStripButton[] toolButtons;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -74,6 +76,18 @@ namespace ZeldaEditor {
 			propertiesContainer = new PropertiesContainer();
 			propertiesContainer.Set(null, properties);
 			propertyGrid.SelectedObject			= propertiesContainer;
+
+			this.comboBoxWorldLayer.Items.Add("Layer 1");
+			this.comboBoxWorldLayer.Items.Add("Layer 2");
+			this.comboBoxWorldLayer.Items.Add("Layer 3");
+			this.comboBoxWorldLayer.SelectedIndex = 0;
+
+			this.toolButtons	= new ToolStripButton[] {
+				buttonToolPointer,
+				buttonToolPlace,
+				buttonToolSelection,
+				buttonToolEyedropper
+			};
 		}
 
 
@@ -137,11 +151,79 @@ namespace ZeldaEditor {
 		private void comboBoxTilesets_SelectedIndexChanged(object sender, EventArgs e) {
 			if ((string)(sender as ToolStripComboBox).Items[(sender as ToolStripComboBox).SelectedIndex] != "")
 				editorControl.ChangeTileset((string)(sender as ToolStripComboBox).Items[(sender as ToolStripComboBox).SelectedIndex]);
+			levelDisplay.Focus();
 		}
 
 		private void comboBoxZone_SelectedIndexChanged(object sender, EventArgs e) {
 			if ((string)(sender as ToolStripComboBox).Items[(sender as ToolStripComboBox).SelectedIndex] != "")
 				editorControl.ChangeZone((string)(sender as ToolStripComboBox).Items[(sender as ToolStripComboBox).SelectedIndex]);
+			levelDisplay.Focus();
+		}
+
+		private void comboBoxWorldLayer_SelectedIndexChanged(object sender, EventArgs e) {
+			editorControl.CurrentLayer = this.comboBoxWorldLayer.SelectedIndex;
+			levelDisplay.Focus();
+		}
+
+		private void buttonTool_Click(object sender, EventArgs e) {
+			for (int i = 0; i < toolButtons.Length; i++) {
+				if (toolButtons[i] != sender)
+					toolButtons[i].Checked = false;
+				else {
+					toolButtons[i].Checked = true;
+					editorControl.ChangeTool(i);
+				}
+			}
+		}
+
+		private void hideBelowToolStripMenuItem_Click(object sender, EventArgs e) {
+			editorControl.BelowTileDrawMode = TileDrawModes.Hide;
+			hideBelowToolStripMenuItem.Checked = true;
+			fadeBelowToolStripMenuItem.Checked = false;
+			showBelowToolStripMenuItem.Checked = false;
+		}
+
+		private void fadeBelowToolStripMenuItem_Click(object sender, EventArgs e) {
+			editorControl.BelowTileDrawMode = TileDrawModes.Fade;
+			hideBelowToolStripMenuItem.Checked = false;
+			fadeBelowToolStripMenuItem.Checked = true;
+			showBelowToolStripMenuItem.Checked = false;
+		}
+
+		private void showBelowToolStripMenuItem_Click(object sender, EventArgs e) {
+			editorControl.BelowTileDrawMode = TileDrawModes.Show;
+			hideBelowToolStripMenuItem.Checked = false;
+			fadeBelowToolStripMenuItem.Checked = false;
+			showBelowToolStripMenuItem.Checked = true;
+		}
+
+		private void hideAboveToolStripMenuItem_Click(object sender, EventArgs e) {
+			editorControl.AboveTileDrawMode = TileDrawModes.Hide;
+			hideAboveToolStripMenuItem.Checked = true;
+			fadeAboveToolStripMenuItem.Checked = false;
+			showAboveToolStripMenuItem.Checked = false;
+		}
+
+		private void fadeAboveToolStripMenuItem_Click(object sender, EventArgs e) {
+			editorControl.AboveTileDrawMode = TileDrawModes.Fade;
+			hideAboveToolStripMenuItem.Checked = false;
+			fadeAboveToolStripMenuItem.Checked = true;
+			showAboveToolStripMenuItem.Checked = false;
+		}
+
+		private void showAboveToolStripMenuItem_Click(object sender, EventArgs e) {
+			editorControl.AboveTileDrawMode = TileDrawModes.Show;
+			hideAboveToolStripMenuItem.Checked = false;
+			fadeAboveToolStripMenuItem.Checked = false;
+			showAboveToolStripMenuItem.Checked = true;
+		}
+
+		private void showRewardsToolStripMenuItem_Click(object sender, EventArgs e) {
+			editorControl.ShowRewards = showRewardsToolStripMenuItem.Checked;
+		}
+
+		private void buttonWorldGrid_Click(object sender, EventArgs e) {
+			editorControl.ShowGrid = buttonWorldGrid.Checked;
 		}
 
 		//-----------------------------------------------------------------------------
@@ -182,6 +264,10 @@ namespace ZeldaEditor {
 
 		public ToolStripComboBox ComboBoxZones {
 			get { return comboBoxZones; }
+		}
+
+		private void showRoomBordersToolStripMenuItem_Click(object sender, EventArgs e) {
+			editorControl.RoomSpacing = showRoomBordersToolStripMenuItem.Checked ? 1 : 0;
 		}
 	}
 
