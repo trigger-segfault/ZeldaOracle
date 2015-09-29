@@ -37,6 +37,10 @@ namespace ZeldaEditor.Control {
 			typeEditors["collision_model"]	= new ResourcePropertyEditor<CollisionModel>();
 			typeEditors["zone"]				= new ResourcePropertyEditor<Zone>();
 			typeEditors["reward"]			= new RewardPropertyEditor(editorControl.RewardManager);
+			
+			typeEditors["text_message"]		= null;
+			typeEditors["script"]			= null;
+
 		}
 
 
