@@ -43,6 +43,7 @@ namespace ZeldaEditor {
 			MouseMove += OnMouseMove;
 			MouseDown += OnMouseDown;
 			MouseLeave += OnMouseLeave;
+			MouseEnter += OnMouseEnter;
 			this.ResizeRedraw = true;
 
 			// Start the timer to refresh the panel.
@@ -142,22 +143,46 @@ namespace ZeldaEditor {
 		private void OnMouseDown(object sender, MouseEventArgs e) {
 			if (editorControl.IsLevelOpen) {
 				Point2I mousePos = ScrollPosition + e.Location;
+				Room room = GetRoom(mousePos);
 				TileDataInstance tile = GetTile(mousePos, editorControl.CurrentLayer);
 
-				if (tile != null) {
-					// Do something.
-					switch (editorControl.CurrentTool) {
-					case 0:
+				// Do something.
+				switch (editorControl.CurrentTool) {
+				case 0:
+					if (tile != null) {
 						editorControl.SelectedRoom = GetRoomCoordinates(mousePos, false);
 						editorControl.SelectedTile = GetTileCoordinates(mousePos);
 						EditorControl.OpenTileProperties(tile);
-						break;
-					case 1:
-
-
-						break;
 					}
-					
+					break;
+				case 1:
+					if (e.Button == System.Windows.Forms.MouseButtons.Left) {
+						room.CreateTile(
+							editorControl.Tileset.TileData[
+								editorControl.SelectedTilesetTile.X,
+								editorControl.SelectedTilesetTile.Y
+							],
+							highlightedTile.X, highlightedTile.Y, editorControl.CurrentLayer
+						);
+					}
+					else if (e.Button == System.Windows.Forms.MouseButtons.Right) {
+						if (editorControl.CurrentLayer == 0) {
+							room.CreateTile(
+								editorControl.Tileset.TileData[
+									editorControl.Tileset.DefaultTile.X,
+									editorControl.Tileset.DefaultTile.Y
+								],
+								highlightedTile.X, highlightedTile.Y, editorControl.CurrentLayer
+							);
+						}
+						else {
+							room.RemoveTile(
+								highlightedTile.X, highlightedTile.Y, editorControl.CurrentLayer
+							);
+						}
+					}
+
+					break;
 				}
 			}
 			this.Focus();
@@ -166,15 +191,53 @@ namespace ZeldaEditor {
 			highlightedRoom = -Point2I.One;
 			highlightedTile = -Point2I.One;
 		}
+		private void OnMouseEnter(object sender, EventArgs e) {
+			this.Focus();
+		}
 
 		private void OnMouseMove(object sender, MouseEventArgs e) {
 			if (editorControl.IsLevelOpen) {
 				Point2I mousePos = ScrollPosition + e.Location;
+				Room room = GetRoom(mousePos);
 				highlightedRoom = GetRoomCoordinates(mousePos, false);
 				highlightedTile = GetTileCoordinates(mousePos);
 				if (!(highlightedRoom < Level.Dimensions)) {
 					highlightedRoom = -Point2I.One;
 					highlightedTile = -Point2I.One;
+				}
+				TileDataInstance tile = GetTile(mousePos, editorControl.CurrentLayer);
+
+				switch (editorControl.CurrentTool) {
+				case 0:
+					break;
+				case 1:
+					if (e.Button == System.Windows.Forms.MouseButtons.Left) {
+						room.CreateTile(
+							editorControl.Tileset.TileData[
+								editorControl.SelectedTilesetTile.X,
+								editorControl.SelectedTilesetTile.Y
+							],
+							highlightedTile.X, highlightedTile.Y, editorControl.CurrentLayer
+						);
+					}
+					else if (e.Button == System.Windows.Forms.MouseButtons.Right) {
+						if (editorControl.CurrentLayer == 0) {
+							room.CreateTile(
+								editorControl.Tileset.TileData[
+									editorControl.Tileset.DefaultTile.X,
+									editorControl.Tileset.DefaultTile.Y
+								],
+								highlightedTile.X, highlightedTile.Y, editorControl.CurrentLayer
+							);
+						}
+						else {
+							room.RemoveTile(
+								highlightedTile.X, highlightedTile.Y, editorControl.CurrentLayer
+							);
+						}
+					}
+
+					break;
 				}
 
 				if (Level.ContainsRoom(highlightedRoom)) {
@@ -273,6 +336,7 @@ namespace ZeldaEditor {
 				Point2I tilePoint = highlightedRoom * roomSize + highlightedTile * GameSettings.TILE_SIZE;
 				if (editorControl.HighlightMouseTile && highlightedTile >= Point2I.Zero) {
 					g.FillRectangle(new Rectangle2I(tilePoint, new Point2I(GameSettings.TILE_SIZE + 1)), Color.White * 0.8f);
+					g.DrawRectangle(new Rectangle2I(tilePoint, new Point2I(GameSettings.TILE_SIZE + 1)), 1, Color.Black);
 				}
 				tilePoint = editorControl.SelectedRoom * roomSize + editorControl.SelectedTile * GameSettings.TILE_SIZE;
 				if (editorControl.SelectedTile >= Point2I.Zero) {

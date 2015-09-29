@@ -644,6 +644,7 @@
 			this.Controls.Add(this.toolStrip2);
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.menuStrip1);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "EditorForm";
 			this.Text = "Oracle Engine Editor";
