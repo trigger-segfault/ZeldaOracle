@@ -199,6 +199,10 @@ namespace ZeldaOracle.Common.Properties {
 			map.Clear();
 		}
 
+		public void Remove(string name) {
+			map.Remove(name);
+		}
+
 		// Add a new property to the map.
 		public void Add(Property property) {
 			map[property.Name] = property;
@@ -338,6 +342,11 @@ namespace ZeldaOracle.Common.Properties {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
+
+		// Get the number of properties.
+		public int Count {
+			get { return map.Count; }
+		}
 
 		// Get the map of properties.
 		public Dictionary<string, Property> PropertyMap {

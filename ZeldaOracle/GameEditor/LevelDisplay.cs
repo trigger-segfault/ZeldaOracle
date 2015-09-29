@@ -71,7 +71,7 @@ namespace ZeldaEditor {
 		}
 
 		public Room GetRoom(Point2I point) {
-			if (editorControl.IsLevelOpen)
+			if (!editorControl.IsLevelOpen)
 				return null;
 			Point2I roomCoord = GetRoomCoordinates(point, false);
 			if (Level.ContainsRoom(roomCoord))
@@ -86,15 +86,15 @@ namespace ZeldaEditor {
 			return GMath.Clamp(tileCoord, Point2I.Zero, Level.RoomSize);
 		}
 		
-		public TileData GetTopTile(Point2I point) {
-			if (editorControl.IsLevelOpen)
+		public TileDataInstance GetTopTile(Point2I point) {
+			if (!editorControl.IsLevelOpen)
 				return null;
 			Room room = GetRoom(point);
 			if (room == null)
 				return null;
 			Point2I tileCoord = GetTileCoordinates(point);
 			for (int i = room.LayerCount - 1; i >= 0; i--) {
-				TileData t = room.TileData[tileCoord.X, tileCoord.Y, i];
+				TileDataInstance t = room.GetTile(tileCoord.X, tileCoord.Y, i);
 				if (t != null)
 					return t;
 			}
@@ -126,10 +126,11 @@ namespace ZeldaEditor {
 		private void OnMouseDown(object sender, MouseEventArgs e) {
 			if (editorControl.IsLevelOpen) {
 				Point2I mousePos = ScrollPosition + e.Location;
-				TileData tileData = GetTopTile(mousePos);
+				TileDataInstance tile = GetTopTile(mousePos);
 
-				if (tileData != null) {
+				if (tile != null) {
 					// Do something.
+					EditorControl.OpenTileProperties(tile);
 				}
 			}
 			this.Focus();
@@ -160,7 +161,7 @@ namespace ZeldaEditor {
 			for (int i = 0; i < room.LayerCount; i++) {
 				for (int x = 0; x < room.Width; x++) {
 					for (int y = 0; y < room.Height; y++) {
-						TileData data = room.TileData[x, y, i];
+						TileDataInstance data = room.GetTile(x, y, i);
 						Vector2F position = new Vector2F(x, y) * GameSettings.TILE_SIZE;
 						
 						if (data != null) {

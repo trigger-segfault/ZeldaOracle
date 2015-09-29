@@ -25,13 +25,12 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		private int maxDistance;
 		private float playerSpeed;
 
-		//-----------------------------------------------------------------------------
-		// Constructors
-		//-----------------------------------------------------------------------------
 
-		public RoomTransitionPush(RoomControl roomOld, RoomControl roomNew, int direction) :
-			base(roomOld, roomNew)
-		{
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
+		
+		public RoomTransitionPush(int direction) {
 			this.direction = direction;
 		}
 		
@@ -68,6 +67,10 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			playerSpeed	= TRANSITION_PLAYER_HSPEED;
 			if (Directions.IsVertical(direction))
 				playerSpeed = TRANSITION_PLAYER_VSPEED;
+
+			// Move the player to the new room.
+			Player.Position -= Directions.ToPoint(direction) * NewRoomControl.RoomBounds.Size;
+			SetupNewRoom();
 		}
 
 		public override void Update() {
@@ -76,15 +79,12 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			// Update screen panning.
 			if (timer > TRANSITION_DELAY) {
 				distance += TRANSITION_SPEED;
-				player.Position += (Vector2F) Directions.ToPoint(direction) * playerSpeed;
+				Player.Position += (Vector2F) Directions.ToPoint(direction) * playerSpeed;
 
 				// Check if we are done panning.
 				if (distance >= maxDistance) {
-					player.RoomEnterPosition = player.Position;
-					gameManager.PopGameState();
-					gameManager.PushGameState(roomNew);
-					player.OnEnterRoom();
-					roomOld.DestroyRoom();
+					DestroyOldRoom();
+					EndTransition();
 				}
 			}
 		}

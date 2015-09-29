@@ -13,6 +13,7 @@ namespace ZeldaOracle.Game.Tiles {
 	public class TileData {
 
 		private Type			type;
+
 		private TileFlags		flags;
 		private Point2I			size;
 		private Sprite			sprite;
@@ -23,7 +24,6 @@ namespace ZeldaOracle.Game.Tiles {
 		private Point2I			sheetLocation;	// Location on the tileset.
 		private Tileset			tileset;
 		private Properties		properties;
-		private Properties		modifiedProperties; // Properties modified by a game state.
 
 		
 		//-----------------------------------------------------------------------------
@@ -42,7 +42,6 @@ namespace ZeldaOracle.Game.Tiles {
 			sheetLocation		= Point2I.Zero;
 			tileset				= null;
 			properties			= new Properties();
-			modifiedProperties	= new Properties();
 		}
 		
 		public TileData(TileFlags flags) : this() {
@@ -112,10 +111,6 @@ namespace ZeldaOracle.Game.Tiles {
 		public Properties Properties {
 			get { return properties; }
 			set { properties = value; }
-		}
-
-		public Properties ModifiedProperties {
-			get { return modifiedProperties; }
 		}
 	}
 }

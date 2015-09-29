@@ -18,6 +18,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
 using Song = ZeldaOracle.Common.Audio.Song;
 using Playlist = ZeldaOracle.Common.Audio.Playlist;
@@ -72,6 +73,8 @@ namespace ZeldaOracle.Common.Content {
 		
 		private static Dictionary<string, CollisionModel> collisionModels;
 		private static Dictionary<string, Tileset> tilesets;
+		private static Dictionary<string, TileData> tileData;
+		private static Dictionary<string, EventTileData> eventTileData;
 		private static Dictionary<string, Zone> zones;
 
 		// SOUNDS:
@@ -148,6 +151,8 @@ namespace ZeldaOracle.Common.Content {
 
 			collisionModels		= new Dictionary<string, CollisionModel>();
 			tilesets			= new Dictionary<string, Tileset>();
+			tileData			= new Dictionary<string, TileData>();
+			eventTileData		= new Dictionary<string, EventTileData>();
 			zones				= new Dictionary<string, Zone>();
 
 			// Settings
@@ -167,6 +172,8 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries[typeof(Playlist)]			= playlists;
 			resourceDictionaries[typeof(CollisionModel)]	= collisionModels;
 			resourceDictionaries[typeof(Tileset)]			= tilesets;
+			resourceDictionaries[typeof(TileData)]			= tileData;
+			resourceDictionaries[typeof(EventTileData)]		= eventTileData;
 			resourceDictionaries[typeof(Zone)]				= zones;
 		}
 
@@ -175,6 +182,14 @@ namespace ZeldaOracle.Common.Content {
 		// Generic Resource Methods
 		//-----------------------------------------------------------------------------
 	
+		// Does the a resource with the given name and type exist?
+		public static bool ExistsResource<T>(T resource) {
+			if (!ExistsResourceType<T>())
+				return false; // This type of resource doesn't exist!
+			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
+			return dictionary.ContainsValue(resource);
+		}
+
 		// Does the a resource with the given name and type exist?
 		public static bool ExistsResource<T>(string name) {
 			if (!ExistsResourceType<T>())

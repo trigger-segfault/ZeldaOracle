@@ -270,6 +270,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 				}
 			}
 			
+			ChooseAnimation();
+		}
+
+		public void ChooseAnimation() {
 			// Update movement animation.
 			if (player.IsOnGround && moveCondition != PlayerMoveCondition.NoControl &&
 				(player.Graphics.AnimationPlayer.Animation == GameData.ANIM_PLAYER_DEFAULT ||
@@ -388,6 +392,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		
 		public bool IsMoving {
 			get { return isMoving; }
+			set { isMoving = value; }
 		}
 		
 		public int MoveDirection {

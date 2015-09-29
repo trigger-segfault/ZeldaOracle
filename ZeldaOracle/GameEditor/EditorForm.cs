@@ -1,20 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZeldaEditor.Control;
+using ZeldaOracle.Common.Properties;
 
 namespace ZeldaEditor {
+
 	public partial class EditorForm : Form {
 		
 		private LevelDisplay levelDisplay;
 		private TileDisplay tileDisplay;
 		private EditorControl editorControl;
+		private PropertiesContainer propertiesContainer;
 
 
 		//-----------------------------------------------------------------------------
@@ -50,7 +55,42 @@ namespace ZeldaEditor {
 				Console.WriteLine("Renamed level to " + e.Label);
 				// Editing the label renames the level.
 			};
+
+			// Create test properties.
+			Properties properties = new Properties();
+			properties.Set("text",		"Hello, World!");
+			properties.Set("direction",	3);
+			properties.Set("pi",		3.14f);
+			properties.Set("enabled",		true);
+
+			/*
+			Properties properties2 = new Properties();
+			properties.Set("text",		"Hello, World!");
+			properties.Set("direction",	3);
+			properties.Set("pi",		3.14f);
+			properties.Set("enabled",		true);
+			*/
+
+			propertiesContainer = new PropertiesContainer();
+			propertiesContainer.Set(null, properties);
+			propertyGrid.SelectedObject			= propertiesContainer;
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+		
+		public void CloseProperties() {
+			propertiesContainer.Clear();
+			propertyGrid.Refresh();
+		}
+
+		public void OpenProperties(Properties properties, Properties baseProperties) {
+			propertiesContainer.Set(properties, baseProperties);
+			propertyGrid.Refresh();
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Event handlers
@@ -144,4 +184,5 @@ namespace ZeldaEditor {
 			get { return comboBoxZones; }
 		}
 	}
+
 }

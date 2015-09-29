@@ -27,17 +27,15 @@ namespace ZeldaOracle.Game.Tiles {
 		private Vector2F		offset;			// Offset in pixels from its tile location (used for movement).
 
 		// Settings
-		private TileData		tileData;		// The tile data used to create this tile.
-		private TileFlags		flags;
-		private Tileset			tileset;		// The tileset that this tile was created from (can be null).
-		private Point2I			tileSheetLoc;	// The location on the tileset this tile was created from.
-		private Point2I			size;			// How many tile spaces this tile occupies. NOTE: this isn't supported yet.
-		private CollisionModel	collisionModel;
-		private Sprite			sprite;
-		private Sprite			spriteAsObject;	// The sprite for the tile if it were picked up, pushed, etc.
-		private Animation		breakAnimation;	// The animation to play when the tile is broken.
-		private int				pushDelay;		// Number of ticks of pushing before the player can move this tile.
-		protected Properties	properties;
+		private TileDataInstance	tileData;		// The tile data used to create this tile.
+		private TileFlags			flags;
+		private Point2I				size;			// How many tile spaces this tile occupies. NOTE: this isn't supported yet.
+		private CollisionModel		collisionModel;
+		private Sprite				sprite;
+		private Sprite				spriteAsObject;	// The sprite for the tile if it were picked up, pushed, etc.
+		private Animation			breakAnimation;	// The animation to play when the tile is broken.
+		private int					pushDelay;		// Number of ticks of pushing before the player can move this tile.
+		private Properties			properties;
 
 
 		//-----------------------------------------------------------------------------
@@ -197,7 +195,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		// Instantiate a tile from the given tile-data.
-		public static Tile CreateTile(TileData data) {
+		public static Tile CreateTile(TileDataInstance data) {
 			Tile tile;
 			
 			// Construct the tile.
@@ -206,9 +204,10 @@ namespace ZeldaOracle.Game.Tiles {
 			else
 				tile = (Tile) data.Type.GetConstructor(Type.EmptyTypes).Invoke(null);
 			
+			tile.location			= data.Location;
+			tile.layer				= data.Layer;
+
 			tile.tileData			= data;
-			tile.tileset			= data.Tileset;
-			tile.tileSheetLoc		= data.SheetLocation;
 			tile.flags				= data.Flags;
 			tile.sprite				= data.Sprite;
 			tile.spriteAsObject		= data.SpriteAsObject;
@@ -217,7 +216,7 @@ namespace ZeldaOracle.Game.Tiles {
 			tile.size				= data.Size;
 			tile.animationPlayer.Animation = data.Animation;
 
-			tile.properties.Merge(data.Properties, true);
+			tile.properties.Merge(data.BaseProperties, true);
 			tile.properties.Merge(data.ModifiedProperties, true);
 
 			return tile;
@@ -228,7 +227,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Properties
 		//-----------------------------------------------------------------------------
 		
-		// Returns the room control this entity belongs to.
+		// Returns the room control this tlie belongs to.
 		public RoomControl RoomControl {
 			get { return roomControl; }
 			set { roomControl = value; }
@@ -306,16 +305,6 @@ namespace ZeldaOracle.Game.Tiles {
 			set { collisionModel = value; }
 		}
 
-		public Tileset Tileset {
-			get { return tileset; }
-			set { tileset = value; }
-		}
-
-		public Point2I TileSheetLocation {
-			get { return tileSheetLoc; }
-			set { tileSheetLoc = value; }
-		}
-
 		public int PushDelay {
 			get { return pushDelay; }
 			set { pushDelay = value; }
@@ -350,7 +339,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 		
 		// Get the original tile data from which this was created.
-		public TileData TileData {
+		public TileDataInstance TileData {
 			get { return tileData; }
 		}
 		

@@ -55,7 +55,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public override void Initialize() {
-			isLit = properties.GetBoolean("lit", false);
+			isLit = Properties.GetBoolean("lit", false);
 
 			if (isLit) {
 				AnimationPlayer.Play(GameData.ANIM_TILE_LANTERN);

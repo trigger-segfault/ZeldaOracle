@@ -15,35 +15,68 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 	public class RoomTransition : GameState {
 		protected RoomControl	roomOld;
 		protected RoomControl	roomNew;
-		protected Player		player;
 		
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RoomTransition(RoomControl roomOld, RoomControl roomNew) {
-			this.roomOld	= roomOld;
-			this.roomNew	= roomNew;
-			this.player		= roomOld.Player;
+		public RoomTransition() {
+			roomOld = null;
+			roomNew = null;
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Room control
+		//-----------------------------------------------------------------------------
+
+		protected void EndTransition() {
+			gameManager.PopGameState();
+			gameManager.PushGameState(roomNew);
+			Player.RoomEnterPosition = Player.Position;
+			Player.OnEnterRoom();
+		}
+
+		protected void DestroyOldRoom() {
+			OldRoomControl.DestroyRoom();
+		}
 		
+		protected void SetupNewRoom() {
+			OldRoomControl.Entities.Remove(Player);
+			NewRoomControl.BeginRoom();
+			Player.RoomControl = NewRoomControl;
+			NewRoomControl.ViewControl.CenterOn(Player.Center);
+		}
+		
+
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnBegin() {
-			player = roomOld.Player;
+		public override void OnBegin() {}
+
+		public override void Update() {}
+
+		public override void Draw(Graphics2D g) {}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+		
+		public Player Player {
+			get { return GameControl.Player; }
 		}
 
-		public override void Update() {
-
+		public RoomControl NewRoomControl {
+			get { return roomNew; }
+			set { roomNew = value; }
 		}
-
-		public override void Draw(Graphics2D g) {
-
+		
+		public RoomControl OldRoomControl {
+			get { return roomOld; }
+			set { roomOld = value; }
 		}
-
 	}
 }

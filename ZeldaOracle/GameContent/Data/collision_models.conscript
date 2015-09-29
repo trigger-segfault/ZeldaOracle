@@ -5,7 +5,7 @@
 
 MODEL block;			ADD  0,  0, 16, 16; END;
 MODEL edge_e;			ADD  8,  0,  8, 16; END;
-MODEL edge_n;			ADD  0,  0, 16,  7; END;
+MODEL edge_n;			ADD  0,  0, 16,  6; END;
 MODEL edge_w;			ADD  0,  0,  8, 16; END;
 MODEL edge_s;			ADD  0,  8, 16,  8; END;
 MODEL doorway;			ADD  0,  0, 16,  6; END;

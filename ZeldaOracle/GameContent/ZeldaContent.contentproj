@@ -72,6 +72,10 @@
       <Name>animations</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Data\tile_data.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>tile_data</Name>
+    </None>
     <None Include="Data\collision_models.conscript">
       <Name>collision_models</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

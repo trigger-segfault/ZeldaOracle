@@ -1,0 +1,43 @@
+
+
+## TODO: Write the script loader for this.
+
+
+
+#==============================================================
+# Tile Data
+#==============================================================
+
+TILE pot;
+	FLAGS		solid, movable, pickupable, cuttable, switchable;
+	SPRITE		tile_pot;
+	SPRITEOBJ	tile_pot_asobject;
+	BREAKANIM	effect_rock_break;
+	MODEL		block;
+END;
+
+
+TILE sign;
+	TYPE		TileSign;
+	FLAGS		solid, pickupable, burnable, cuttable, switchable;
+	SPRITE		tile_sign;
+	SPRITEOBJ	tile_sign_asobject;
+	BREAKANIM	effect_sign_break;
+	MODEL		block;
+	PROPERTIES	(text, "Hello World!");
+END;
+
+
+
+#==============================================================
+# Event Tile Data
+#==============================================================
+
+EVENT warp;
+	TYPE		WarpEvent;
+	PROPERTIES	(warp_type,					"tunnel"),
+				(destination_level,			""),
+				(destination_warp_point,	"");
+END;
+
+

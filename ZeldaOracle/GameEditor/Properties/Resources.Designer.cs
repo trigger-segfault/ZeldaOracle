@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ZeldaEditor.Properties {
+namespace ZeldaEditor.ProjectProperties {
     using System;
     
     

@@ -21,20 +21,20 @@ namespace ZeldaEditor.Control {
 
 		private bool isInitialized;
 
-		private EditorForm editorForm;
-		private World world;
-		private Level level;
-		private Tileset tileset;
-		private Zone zone;
-		private Point2I selectedTile;
-		private RewardManager rewardManager;
-		private Inventory inventory;
+		private EditorForm		editorForm;
+		private World			world;
+		private Level			level;
+		private Tileset			tileset;
+		private Zone			zone;
+		private Point2I			selectedTile;
+		private RewardManager	rewardManager;
+		private Inventory		inventory;
 
-		private Stopwatch timer;
-		private int ticks;
-		private int roomSpacing;
+		private Stopwatch		timer;
+		private int				ticks;
+		private int				roomSpacing;
 
-		private bool playAnimations;
+		private bool			playAnimations;
 
 
 		//-----------------------------------------------------------------------------
@@ -155,6 +155,19 @@ namespace ZeldaEditor.Control {
 		public void ChangeZone(string name) {
 			zone = Resources.GetResource<Zone>(name);
 			editorForm.TileDisplay.UpdateZone();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Tiles
+		//-----------------------------------------------------------------------------
+
+		public void OpenTileProperties(TileDataInstance tile) {
+			editorForm.OpenProperties(tile.ModifiedProperties, tile.BaseProperties);
+		}
+		
+		public void CloseProperties(TileDataInstance tile) {
+			editorForm.CloseProperties();
 		}
 
 
