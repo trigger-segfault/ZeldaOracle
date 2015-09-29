@@ -59,8 +59,13 @@
   <ItemGroup>
     <Compile Include="Control\EditorControl.cs" />
     <Compile Include="Control\PropertyGridControl.cs" />
-    <Compile Include="CustomProperties.cs">
+    <Compile Include="Control\TileDrawModes.cs" />
+    <Compile Include="CustomProperties.cs" />
+    <Compile Include="TextMessageEditForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TextMessageEditForm.Designer.cs">
+      <DependentUpon>TextMessageEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="TileDisplay.cs">
       <SubType>Component</SubType>
@@ -103,6 +108,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="TextMessageEditForm.resx">
+      <DependentUpon>TextMessageEditForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

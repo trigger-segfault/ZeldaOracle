@@ -17,6 +17,7 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaEditor.Control {
+
 	public class EditorControl {
 
 		private bool isInitialized;
@@ -28,15 +29,26 @@ namespace ZeldaEditor.Control {
 		private Level			level;
 		private Tileset			tileset;
 		private Zone			zone;
-		private Point2I			selectedTile;
 		private RewardManager	rewardManager;
 		private Inventory		inventory;
 
 		private Stopwatch		timer;
 		private int				ticks;
-		private int				roomSpacing;
 
 		private bool			playAnimations;
+
+		// Editing
+		private int				roomSpacing;
+		private int				currentLayer;
+		private int				currentTool;
+		private TileDrawModes	aboveTileDrawMode;
+		private TileDrawModes	belowTileDrawMode;
+		private bool			showRewards;
+		private bool			showGrid;
+		private bool			highlightMouseTile;
+		private Point2I			selectedRoom;
+		private Point2I			selectedTile;
+		private Point2I			selectedTilesetTile;
 
 
 		//-----------------------------------------------------------------------------
@@ -49,7 +61,6 @@ namespace ZeldaEditor.Control {
 			this.level			= null;
 			this.tileset		= null;
 			this.zone			= null;
-			this.selectedTile	= Point2I.Zero;
 			this.rewardManager	= null;
 			this.inventory		= null;
 			this.timer			= null;
@@ -57,6 +68,17 @@ namespace ZeldaEditor.Control {
 			this.roomSpacing	= 1;
 			this.playAnimations	= false;
 			this.isInitialized	= false;
+
+			this.currentLayer	= 0;
+			this.currentTool	= 0;
+			this.aboveTileDrawMode	= TileDrawModes.Fade;
+			this.belowTileDrawMode	= TileDrawModes.Fade;
+			this.showRewards	= true;
+			this.showGrid		= false;
+			this.highlightMouseTile	= true;
+			this.selectedRoom	= -Point2I.One;
+			this.selectedTile	= -Point2I.One;
+			this.selectedTilesetTile = Point2I.Zero;
 		}
 
 		public void Initialize(ContentManager contentManager, GraphicsDevice graphicsDevice) {
@@ -72,6 +94,9 @@ namespace ZeldaEditor.Control {
 				this.playAnimations = false;
 				this.tileset		= GameData.TILESET_OVERWORLD;
 				this.zone			= GameData.ZONE_SUMMER;
+
+				GameData.LoadInventory(inventory);
+				GameData.LoadRewards(rewardManager);
 
 				editorForm.ComboBoxTilesets.Items.Clear();
 				foreach (KeyValuePair<string, Tileset> entry in Resources.GetResourceDictionary<Tileset>()) {
@@ -162,6 +187,13 @@ namespace ZeldaEditor.Control {
 			editorForm.TileDisplay.UpdateZone();
 		}
 
+		public void ChangeTool(int toolIndex) {
+			currentTool = toolIndex;
+			if (currentTool != 0) {
+				selectedRoom = -Point2I.One;
+				selectedTile = -Point2I.One;
+			}
+		}
 
 		//-----------------------------------------------------------------------------
 		// Tiles
@@ -237,13 +269,62 @@ namespace ZeldaEditor.Control {
 			get { return zone; }
 		}
 
-		public RewardManager RewardManager {
-			get { return rewardManager; }
+		public Point2I SelectedRoom {
+			get { return selectedRoom; }
+			set { selectedRoom = value; }
 		}
 
 		public Point2I SelectedTile {
 			get { return selectedTile; }
 			set { selectedTile = value; }
+		}
+
+		public Point2I SelectedTilesetTile {
+			get { return selectedTilesetTile; }
+			set { selectedTilesetTile = value; }
+		}
+
+		public RewardManager RewardManager {
+			get { return rewardManager; }
+		}
+
+		public Inventory Inventory {
+			get { return inventory; }
+		}
+
+		public int CurrentLayer {
+			get { return currentLayer; }
+			set { currentLayer = GMath.Clamp(value, 0, 3); }
+		}
+
+		public int CurrentTool {
+			get { return currentTool; }
+			set { currentTool = value; }
+		}
+
+		public TileDrawModes AboveTileDrawMode {
+			get { return aboveTileDrawMode; }
+			set { aboveTileDrawMode = value; }
+		}
+
+		public TileDrawModes BelowTileDrawMode {
+			get { return belowTileDrawMode; }
+			set { belowTileDrawMode = value; }
+		}
+
+		public bool ShowRewards {
+			get { return showRewards; }
+			set { showRewards = value; }
+		}
+
+		public bool ShowGrid {
+			get { return showGrid; }
+			set { showGrid = value; }
+		}
+
+		public bool HighlightMouseTile {
+			get { return highlightMouseTile; }
+			set { highlightMouseTile = value; }
 		}
 	}
 }

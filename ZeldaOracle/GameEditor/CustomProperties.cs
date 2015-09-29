@@ -119,50 +119,23 @@ namespace ZeldaEditor {
 	}
 
 	
-	class FooEditor : UITypeEditor {
+	class TextMessagePropertyEditor : UITypeEditor {
 		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
 			return UITypeEditorEditStyle.Modal;
 		}
 
 		public override object EditValue(ITypeDescriptorContext context, System.IServiceProvider provider, object value) {
 			IWindowsFormsEditorService svc = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
-			
-			//Foo foo = value as Foo;
-
-			if (svc != null)// && foo != null)
-			{            
-				using (FooForm form = new FooForm()) {
-					//form.Value = foo.Bar;
-					if (svc.ShowDialog(form) == DialogResult.OK) {
-						//foo.Bar = form.Value; // update object
-					}
+			if (svc != null) {
+				using (TextMessageEditForm form = new TextMessageEditForm()) {
+					form.MessageText = (string) value;
+					if (svc.ShowDialog(form) == DialogResult.OK)
+						value = form.MessageText;
 				}
 			}
-			return value; // can also replace the wrapper object here
+			return value;
 		}
 	}
-
-	class FooForm : Form {
-		private TextBox textbox;
-		private Button okButton;
-
-		public FooForm() {
-			textbox = new TextBox();
-			Controls.Add(textbox);
-			okButton = new Button();
-			okButton.Text = "OK";
-			okButton.Dock = DockStyle.Bottom;
-			okButton.DialogResult = DialogResult.OK;
-			Controls.Add(okButton);
-		}
-
-		public string Value
-		{
-			get { return textbox.Text; }
-			set { textbox.Text = value; }
-		}
-	}
-
 	
 	public class PropertyInstance {
 		private Property modifiedProperty;

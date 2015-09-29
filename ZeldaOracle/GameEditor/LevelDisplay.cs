@@ -25,6 +25,9 @@ namespace ZeldaEditor {
 		private EditorForm	editorForm;
 		private EditorControl editorControl;
 
+		private Point2I highlightedRoom;
+		private Point2I highlightedTile;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -39,6 +42,7 @@ namespace ZeldaEditor {
 			// Wire the events.
 			MouseMove += OnMouseMove;
 			MouseDown += OnMouseDown;
+			MouseLeave += OnMouseLeave;
 			this.ResizeRedraw = true;
 
 			// Start the timer to refresh the panel.
@@ -47,6 +51,9 @@ namespace ZeldaEditor {
 			editorControl.OpenFile("../../../../WorldFiles/temp_world.zwd");
 
 			UpdateLevel();
+
+			this.highlightedRoom = -Point2I.One;
+			this.highlightedTile = -Point2I.One;
 		}
 
 		protected override void Dispose(bool disposing) {
@@ -66,7 +73,7 @@ namespace ZeldaEditor {
 			Point2I span = (Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing;
 			Point2I roomCoord = point / span;
 			if (clamp)
-				return GMath.Clamp(roomCoord, Point2I.Zero, Level.Dimensions);
+				return GMath.Clamp(roomCoord, Point2I.Zero, Level.Dimensions - 1);
 			return roomCoord;
 		}
 
@@ -83,9 +90,18 @@ namespace ZeldaEditor {
 			Point2I span = (Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing;
 			Point2I begin = GetRoomCoordinates(point, false) * span;
 			Point2I tileCoord = (point - begin) / GameSettings.TILE_SIZE;
-			return GMath.Clamp(tileCoord, Point2I.Zero, Level.RoomSize);
+			return GMath.Clamp(tileCoord, Point2I.Zero, Level.RoomSize - 1);
 		}
-		
+
+		public TileDataInstance GetTile(Point2I point, int layer) {
+			if (!editorControl.IsLevelOpen)
+				return null;
+			Room room = GetRoom(point);
+			if (room == null)
+				return null;
+			Point2I tileCoord = GetTileCoordinates(point);
+			return room.GetTile(tileCoord.X, tileCoord.Y, layer);
+		}
 		public TileDataInstance GetTopTile(Point2I point) {
 			if (!editorControl.IsLevelOpen)
 				return null;
@@ -126,25 +142,44 @@ namespace ZeldaEditor {
 		private void OnMouseDown(object sender, MouseEventArgs e) {
 			if (editorControl.IsLevelOpen) {
 				Point2I mousePos = ScrollPosition + e.Location;
-				TileDataInstance tile = GetTopTile(mousePos);
+				TileDataInstance tile = GetTile(mousePos, editorControl.CurrentLayer);
 
 				if (tile != null) {
 					// Do something.
-					EditorControl.OpenTileProperties(tile);
+					switch (editorControl.CurrentTool) {
+					case 0:
+						editorControl.SelectedRoom = GetRoomCoordinates(mousePos, false);
+						editorControl.SelectedTile = GetTileCoordinates(mousePos);
+						EditorControl.OpenTileProperties(tile);
+						break;
+					case 1:
+
+
+						break;
+					}
+					
 				}
 			}
 			this.Focus();
+		}
+		private void OnMouseLeave(object sender, EventArgs e) {
+			highlightedRoom = -Point2I.One;
+			highlightedTile = -Point2I.One;
 		}
 
 		private void OnMouseMove(object sender, MouseEventArgs e) {
 			if (editorControl.IsLevelOpen) {
 				Point2I mousePos = ScrollPosition + e.Location;
-				Point2I roomCoord = GetRoomCoordinates(mousePos, false);
-				Point2I tileCoord = GetTileCoordinates(mousePos);
+				highlightedRoom = GetRoomCoordinates(mousePos, false);
+				highlightedTile = GetTileCoordinates(mousePos);
+				if (!(highlightedRoom < Level.Dimensions)) {
+					highlightedRoom = -Point2I.One;
+					highlightedTile = -Point2I.One;
+				}
 
-				if (Level.ContainsRoom(roomCoord)) {
-					editorForm.StatusBarLabelRoomLoc.Text = "Room " + roomCoord.ToString();
-					editorForm.StatusBarLabelTileLoc.Text = "Tile " + tileCoord.ToString();
+				if (Level.ContainsRoom(highlightedRoom)) {
+					editorForm.StatusBarLabelRoomLoc.Text = "Room " + highlightedRoom.ToString();
+					editorForm.StatusBarLabelTileLoc.Text = "Tile " + highlightedTile.ToString();
 					return;
 				}
 			}
@@ -158,22 +193,58 @@ namespace ZeldaEditor {
 		//-----------------------------------------------------------------------------
 
 		private void DrawRoom(Graphics2D g, Room room) {
+			Color belowFade = new Color(255, 255, 255, 150);
+			Color aboveFade = new Color(255, 255, 255, 100);
+			Color hide = Color.Transparent;
+			Color normal = Color.White;
 			for (int i = 0; i < room.LayerCount; i++) {
 				for (int x = 0; x < room.Width; x++) {
 					for (int y = 0; y < room.Height; y++) {
 						TileDataInstance data = room.GetTile(x, y, i);
 						Vector2F position = new Vector2F(x, y) * GameSettings.TILE_SIZE;
-						
+
+						if (i == 0) {
+							g.FillRectangle(new Rectangle2I((Point2I)position, new Point2I(GameSettings.TILE_SIZE)), Color.White);
+						}
+						Color color = normal;
+						if (editorControl.CurrentLayer > i) {
+							if (editorControl.BelowTileDrawMode == TileDrawModes.Hide)
+								color = hide;
+							else if (editorControl.BelowTileDrawMode == TileDrawModes.Fade)
+								color = belowFade;
+						}
+						else if (editorControl.CurrentLayer < i) {
+							if (editorControl.AboveTileDrawMode == TileDrawModes.Hide)
+								color = hide;
+							else if (editorControl.AboveTileDrawMode == TileDrawModes.Fade)
+								color = aboveFade;
+						}
 						if (data != null) {
 							if (data.Animation != null) {
-								g.DrawAnimation(data.Animation, room.Zone.ImageVariantID, editorControl.Ticks, position);
+								g.DrawAnimation(data.Animation, room.Zone.ImageVariantID, editorControl.Ticks, position, color);
 							}
 							else if (data.Sprite != null) {
-								g.DrawSprite(data.Sprite, room.Zone.ImageVariantID, position);
+								g.DrawSprite(data.Sprite, room.Zone.ImageVariantID, position, color);
 							}
+							if (editorControl.ShowRewards && data.ModifiedProperties.Exists("reward") &&
+								editorControl.RewardManager.HasReward(data.ModifiedProperties.GetString("reward")))
+							{
+								Animation anim = editorControl.RewardManager.GetReward(data.ModifiedProperties.GetString("reward")).Animation;
+								g.DrawAnimation(anim, editorControl.Ticks, position, color);
+							}
+						}
+
+						if (i == room.LayerCount - 1) {
+							if (editorControl.ShowGrid)
+								g.DrawRectangle(new Rectangle2I((Point2I)position, new Point2I(GameSettings.TILE_SIZE + 1)), 1, new Color(0, 0, 0, 150));
 						}
 					}
 				}
+			}
+
+			if (editorControl.RoomSpacing > 0) {
+				g.FillRectangle(new Rectangle2I(0, room.Height * GameSettings.TILE_SIZE, room.Width * GameSettings.TILE_SIZE, editorControl.RoomSpacing), Color.Black);
+				g.FillRectangle(new Rectangle2I(room.Width * GameSettings.TILE_SIZE, 0, editorControl.RoomSpacing, room.Height * GameSettings.TILE_SIZE + editorControl.RoomSpacing), Color.Black);
 			}
 		}
 
@@ -194,6 +265,20 @@ namespace ZeldaEditor {
 						DrawRoom(g, Level.GetRoom(x, y));
 						g.ResetTranslation();
 					}
+				}
+
+
+				g.Translate(new Vector2F(-this.HorizontalScroll.Value, -this.VerticalScroll.Value));
+				Point2I roomSize = (Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing;
+				Point2I tilePoint = highlightedRoom * roomSize + highlightedTile * GameSettings.TILE_SIZE;
+				if (editorControl.HighlightMouseTile && highlightedTile >= Point2I.Zero) {
+					g.FillRectangle(new Rectangle2I(tilePoint, new Point2I(GameSettings.TILE_SIZE + 1)), Color.White * 0.8f);
+				}
+				tilePoint = editorControl.SelectedRoom * roomSize + editorControl.SelectedTile * GameSettings.TILE_SIZE;
+				if (editorControl.SelectedTile >= Point2I.Zero) {
+					g.DrawRectangle(new Rectangle2I(tilePoint, new Point2I(GameSettings.TILE_SIZE + 1)), 1, Color.White);
+					g.DrawRectangle(new Rectangle2I(tilePoint + 1, new Point2I(GameSettings.TILE_SIZE - 1)), 1, Color.Black);
+					g.DrawRectangle(new Rectangle2I(tilePoint - 1, new Point2I(GameSettings.TILE_SIZE + 3)), 1, Color.Black);
 				}
 			}
 
