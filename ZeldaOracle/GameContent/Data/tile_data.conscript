@@ -8,6 +8,9 @@
 # Tile Data
 #==============================================================
 
+
+	PROPERTIES	(name, value, editor_type, category, description);
+
 TILE pot;
 	FLAGS		solid, movable, pickupable, cuttable, switchable;
 	SPRITE		tile_pot;
@@ -24,7 +27,11 @@ TILE sign;
 	SPRITEOBJ	tile_sign_asobject;
 	BREAKANIM	effect_sign_break;
 	MODEL		block;
-	PROPERTIES	(text, "Hello World!");
+	PROPERTIES
+		(text, "Hello World!", "text_message", "Text",
+			"The text to display when the sign is read from the front.");
+		(side_text,	"You can't read it from there!", "text_message", "Text",
+			"The text to display when the sign is read from the sides/back.");
 END;
 
 

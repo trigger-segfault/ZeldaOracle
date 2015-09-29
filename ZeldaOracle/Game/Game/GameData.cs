@@ -315,14 +315,16 @@ namespace ZeldaOracle.Game {
 			TileData tdOwl			= new TileData(typeof(TileOwl), TileFlags.Solid);
 			tdOwl.Sprite			= GameData.SPR_TILE_OWL;
 			tdOwl.CollisionModel	= GameData.MODEL_BLOCK;
-			tdOwl.Properties.Set("text", "You have been spooked by the <blue>Spooky Owl<blue>!");
+			tdOwl.Properties.Set("text", "You have been spooked by the <blue>Spooky Owl<blue>!")
+				.SetDocumentation("Text", "text_message", "Text", "The text to display when the owl is activated.");
 			Resources.AddResource("owl", tdOwl);
 			
 			// Create a lantern tile.
 			TileData tdLantern			= new TileData(typeof(TileLantern), TileFlags.Solid);
 			tdLantern.Sprite			= GameData.SPR_TILE_LANTERN_UNLIT;
 			tdLantern.CollisionModel	= GameData.MODEL_BLOCK;
-			tdLantern.Properties.Set("lit", false);
+			tdLantern.Properties.Set("lit", false)
+				.SetDocumentation("Lit", "", "", "Whether the lantern starts lit or not.");
 			Resources.AddResource("lantern", tdLantern);
 
 			// Create a Sign tile
@@ -332,21 +334,25 @@ namespace ZeldaOracle.Game {
 			tdSign.SpriteAsObject	= GameData.SPR_TILE_SIGN_ASOBJECT;
 			tdSign.BreakAnimation	= GameData.ANIM_EFFECT_SIGN_BREAK;
 			tdSign.CollisionModel	= GameData.MODEL_BLOCK;
-			tdSign.Properties.Set("text", "Hello, World!");
-			tdSign.Properties.Set("text_side", "You can't read it from here!");
+			tdSign.Properties.Set("text", "Hello, World!")
+				.SetDocumentation("Text", "text_message", "Text", "The text to display when the sign is read from the front.");
+			tdSign.Properties.Set("text_side", "You can't read it from here!")
+				.SetDocumentation("Side Text", "text_message", "Text", "The text to display when the sign is read from the sides/back.");
 			Resources.AddResource("sign", tdSign);
 
 			// Create a chest tile.
 			TileData tdChest		= new TileData(typeof(TileChest), TileFlags.Solid);
 			tdChest.Sprite			= GameData.SPR_TILE_CHEST;
 			tdChest.CollisionModel	= GameData.MODEL_BLOCK;
-			tdChest.Properties.Set("reward", "rupees_1");
+			tdChest.Properties.Set("reward", "rupees_1")
+				.SetDocumentation("Reward", "reward", "", "The reward contained inside the chest.");
 			Resources.AddResource("chest", tdChest);
 			
 			// Create a reward tile (heart piece).
 			TileData tdHeartPiece		= new TileData(typeof(TileReward), TileFlags.Solid);
 			tdHeartPiece.CollisionModel	= GameData.MODEL_CENTER;
-			tdHeartPiece.Properties.Set("reward", "heart_piece");
+			tdHeartPiece.Properties.Set("reward", "heart_piece")
+				.SetDocumentation("Reward", "reward", "", "The reward to spawn.");
 			Resources.AddResource("reward", tdHeartPiece);
 
 			

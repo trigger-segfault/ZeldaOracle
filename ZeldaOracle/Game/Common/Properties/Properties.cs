@@ -226,21 +226,26 @@ namespace ZeldaOracle.Common.Properties {
 		
 		// Sets a propertiy's value, creating it if it doesn't already exist.
 		// This can modify an existing property or create a new property.
+		
+		public Property Set(string name, Property property) {
+			map[name] = property;
+			return property;
+		}
 
-		public void Set(string name, string value) {
-			map[name] = Property.CreateString(name, value);
+		public Property Set(string name, string value) {
+			return Set(name, Property.CreateString(name, value));
 		}
 		
-		public void Set(string name, int value) {
-			map[name] = Property.CreateInt(name, value);
+		public Property Set(string name, int value) {
+			return Set(name, Property.CreateInt(name, value));
 		}
 		
-		public void Set(string name, float value) {
-			map[name] = Property.CreateFloat(name, value);
+		public Property Set(string name, float value) {
+			return Set(name, Property.CreateFloat(name, value));
 		}
 		
-		public void Set(string name, bool value) {
-			map[name] = Property.CreateBool(name, value);
+		public Property Set(string name, bool value) {
+			return Set(name, Property.CreateBool(name, value));
 		}
 		
 
