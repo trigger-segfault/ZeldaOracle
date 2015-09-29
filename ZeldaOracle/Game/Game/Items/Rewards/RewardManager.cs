@@ -57,6 +57,10 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			return rewards[id];
 		}
 
+		public bool HasReward(string id) {
+			return rewards.ContainsKey(id);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties

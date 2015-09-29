@@ -239,6 +239,42 @@ public class Graphics2D {
 		}
 	}
 
+	public void DrawSprite(Sprite sprite, int variantID, Vector2F position, Color color, float depth = 0.0f) {
+		for (Sprite part = sprite; part != null; part = part.NextPart) {
+			Image image = sprite.Image.GetVariant(variantID);
+			spriteBatch.Draw(image, NewPos(position) + (Vector2)part.DrawOffset, (Rectangle)part.SourceRect,
+				(XnaColor)color, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
+		}
+	}
+
+	public void DrawSprite(Sprite sprite, float x, float y, Color color, float depth = 0.0f) {
+		DrawSprite(sprite, new Vector2F(x, y), color, depth);
+	}
+
+	public void DrawSprite(Sprite sprite, int variantID, float x, float y, Color color, float depth = 0.0f) {
+		DrawSprite(sprite, variantID, new Vector2F(x, y), color, depth);
+	}
+
+	public void DrawSprite(Sprite sprite, Vector2F position, Color color, float depth = 0.0f) {
+		for (Sprite part = sprite; part != null; part = part.NextPart) {
+			spriteBatch.Draw(part.Image, NewPos(position) + (Vector2)part.DrawOffset, (Rectangle)part.SourceRect,
+				(XnaColor)color, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
+		}
+	}
+
+	public void DrawSprite(Sprite sprite, Rectangle2F destination, Color color, float depth = 0.0f) {
+		DrawSprite(sprite, 0, destination, color, depth);
+	}
+
+	public void DrawSprite(Sprite sprite, int variantID, Rectangle2F destination, Color color, float depth = 0.0f) {
+		for (Sprite part = sprite; part != null; part = part.NextPart) {
+			Image image = sprite.Image.GetVariant(variantID);
+			destination.Point = NewPos(destination.Point) + (Vector2F)part.DrawOffset;
+			spriteBatch.Draw(image, (Rectangle)destination, (Rectangle)part.SourceRect,
+				(XnaColor)color, 0.0f, Vector2.Zero, SpriteEffects.None, depth);
+		}
+	}
+
 	//-----------------------------------------------------------------------------
 	// Animation drawing
 	//-----------------------------------------------------------------------------
@@ -280,6 +316,46 @@ public class Graphics2D {
 
 	public void DrawAnimation(AnimationPlayer animationPlayer, Vector2F position, float depth = 0.0f) {
 		DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, position, depth);
+	}
+
+
+	// Draw an animation during at the given time stamp and position.
+	public void DrawAnimation(Animation animation, float time, Vector2F position, Color color, float depth = 0.0f) {
+		DrawAnimation(animation, time, position.X, position.Y, color, depth);
+	}
+
+	// Draw an animation during at the given time stamp and position.
+	public void DrawAnimation(Animation animation, float time, float x, float y, Color color, float depth = 0.0f) {
+		DrawAnimation(animation, 0, time, x, y, color, depth);
+	}
+
+	// Draw an animation during at the given time stamp and position.
+	public void DrawAnimation(Animation animation, int variantID, float time, Vector2F position, Color color, float depth = 0.0f) {
+		DrawAnimation(animation, variantID, time, position.X, position.Y, color, depth);
+	}
+
+	// Draw an animation during at the given time stamp and position.
+	public void DrawAnimation(Animation animation, int variantID, float time, float x, float y, Color color, float depth = 0.0f) {
+		if (animation.LoopMode == LoopMode.Repeat) {
+			if (animation.Duration == 0)
+				time = 0;
+			else
+				time %= animation.Duration;
+		}
+		x = GMath.Round(x);
+		y = GMath.Round(y);
+
+		for (int i = 0; i < animation.Frames.Count; ++i) {
+			AnimationFrame frame = animation.Frames[i];
+			if (time < frame.StartTime)
+				return;
+			if (time < frame.StartTime + frame.Duration || (time >= animation.Duration && frame.StartTime + frame.Duration == animation.Duration))
+				DrawSprite(frame.Sprite, variantID, x, y, color, depth);
+		}
+	}
+
+	public void DrawAnimation(AnimationPlayer animationPlayer, Vector2F position, Color color, float depth = 0.0f) {
+		DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, position, color, depth);
 	}
 	
 

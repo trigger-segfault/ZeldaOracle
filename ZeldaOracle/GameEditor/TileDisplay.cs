@@ -108,7 +108,12 @@ namespace ZeldaEditor {
 			g.Clear(Color.White);
 			g.Translate(new Vector2F(-this.HorizontalScroll.Value, -this.VerticalScroll.Value));
 			g.DrawImage(Tileset.SpriteSheet.Image.GetVariant(Zone.ImageVariantID), Point2I.Zero);
-			g.DrawRectangle(new Rectangle2I(SelectedTile * (Tileset.SpriteSheet.CellSize + Tileset.SpriteSheet.Spacing), Tileset.SpriteSheet.CellSize), 1, Color.White);
+
+			Point2I tilePoint = SelectedTile * (Tileset.SpriteSheet.CellSize + Tileset.SpriteSheet.Spacing);
+
+			g.DrawRectangle(new Rectangle2I(tilePoint, Tileset.SpriteSheet.CellSize + 1), 1, Color.White);
+			g.DrawRectangle(new Rectangle2I(tilePoint + 1, Tileset.SpriteSheet.CellSize - 1), 1, Color.Black);
+			g.DrawRectangle(new Rectangle2I(tilePoint - 1, Tileset.SpriteSheet.CellSize + 3), 1, Color.Black);
 			g.ResetTranslation();
 			g.End();
 		}
@@ -136,8 +141,8 @@ namespace ZeldaEditor {
 		}
 
 		public Point2I SelectedTile {
-			get { return editorControl.SelectedTile; }
-			set { editorControl.SelectedTile = value; }
+			get { return editorControl.SelectedTilesetTile; }
+			set { editorControl.SelectedTilesetTile = value; }
 		}
 
 		public Point2I ScrollPosition {

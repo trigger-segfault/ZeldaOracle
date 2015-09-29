@@ -17,6 +17,12 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.Custom;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Game.Items.Weapons;
+using ZeldaOracle.Game.Items.Essences;
+using ZeldaOracle.Game.Items.KeyItems;
+using ZeldaOracle.Game.Items.Equipment;
+using ZeldaOracle.Game.Items;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game {
 	
@@ -545,6 +551,130 @@ namespace ZeldaOracle.Game {
 		// Loads the music.
 		private static void LoadMusic() {
 			Resources.LoadMusic(Resources.MusicDirectory + "music.conscript");
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Inventory Loading
+		//-----------------------------------------------------------------------------
+
+		public static void LoadInventory(Inventory inventory, bool obtain = false) {
+
+			inventory.AddItems(obtain,
+				new ItemWallet(),
+				new ItemSword(),
+				new ItemBracelet(),
+				new ItemFeather(),
+				new ItemBow(),
+				new ItemEssence1(),
+				new ItemEssence2(),
+				new ItemEssence3(),
+				new ItemEssence4(),
+				new ItemEssence5(),
+				new ItemEssence6(),
+				new ItemEssence7(),
+				new ItemEssence8(),
+				new ItemFlippers(),
+				new ItemMagicPotion(),
+				new ItemEssenceSeed(),
+				new ItemBombs(),
+				new ItemOcarina(),
+				new ItemBigSword(),
+				new ItemMembersCard(),
+				new ItemSword(),
+				new ItemShield(),
+				new ItemBoomerang(),
+				new ItemSeedSatchel(),
+				new ItemSeedShooter(),
+				new ItemSlingshot());
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Reward Loading
+		//-----------------------------------------------------------------------------
+
+		public static void LoadRewards(RewardManager rewardManager) {
+
+			rewardManager.AddReward(new RewardRupee("rupees_1", 1,
+				"You got <red>1 Rupee<red>!<n>That's terrible.",
+				GameData.SPR_REWARD_RUPEE_GREEN));
+
+			rewardManager.AddReward(new RewardRupee("rupees_5", 5,
+				"You got<n><red>5 Rupees<red>!",
+				GameData.SPR_REWARD_RUPEE_RED));
+
+			rewardManager.AddReward(new RewardRupee("rupees_20", 20,
+				"You got<n><red>20 Rupees<red>!<n>That's not bad.",
+				GameData.SPR_REWARD_RUPEE_BLUE));
+
+			rewardManager.AddReward(new RewardRupee("rupees_30", 30,
+				"You got<n><red>30 Rupees<red>!<n>That's nice.",
+				GameData.SPR_REWARD_RUPEE_BLUE));
+
+			rewardManager.AddReward(new RewardRupee("rupees_50", 50,
+				"You got<n><red>50 Rupees<red>!<n>How lucky!",
+				GameData.SPR_REWARD_RUPEE_BLUE));
+
+			rewardManager.AddReward(new RewardRupee("rupees_100", 100,
+				"You got <red>100<n>Rupees<red>! I bet<n>you're thrilled!",
+				GameData.SPR_REWARD_RUPEE_BIG_BLUE));
+
+			rewardManager.AddReward(new RewardRupee("rupees_150", 150,
+				"You got <red>150<n>Rupees<red>!<n>Way to go!!!",
+				GameData.SPR_REWARD_RUPEE_BIG_RED));
+
+			rewardManager.AddReward(new RewardRupee("rupees_200", 200,
+				"You got <red>200<n>Rupees<red>! That's<n>pure bliss!",
+				GameData.SPR_REWARD_RUPEE_BIG_RED));
+
+			rewardManager.AddReward(new RewardItem("item_flippers_1", "item_flippers", Item.Level1, RewardHoldTypes.TwoHands,
+				"You got <red>Zora's Flippers<red>! You can now go for a swim! Press A to swim, B to dive!",
+				GameData.SPR_ITEM_ICON_FLIPPERS_1));
+
+			rewardManager.AddReward(new RewardItem("item_sword_1", "item_sword", Item.Level1, RewardHoldTypes.OneHand,
+				"You got a Hero's <red>Wooden Sword<red>! Hold A or B to charge it up, then release it for a spin attack!",
+				GameData.SPR_ITEM_ICON_SWORD_1));
+
+			rewardManager.AddReward(new RewardRecoveryHeart("hearts_1", 1,
+				"You recovered<n>only one <red>heart<red>!",
+				GameData.SPR_REWARD_HEART));
+
+			rewardManager.AddReward(new RewardRecoveryHeart("hearts_3", 3,
+				"You got three<n><red>hearts<red>!",
+				GameData.SPR_REWARD_HEARTS_3));
+
+			rewardManager.AddReward(new RewardHeartPiece());
+
+			rewardManager.AddReward(new RewardHeartContainer());
+
+			rewardManager.AddReward(new RewardAmmo("ammo_ember_seeds_5", "ammo_ember_seeds", 5,
+				"You got<n><red>5 Ember Seeds<red>!",
+				GameData.SPR_REWARD_SEED_EMBER));
+
+			rewardManager.AddReward(new RewardAmmo("ammo_scent_seeds_5", "ammo_scent_seeds", 5,
+				"You got<n><red>5 Scent Seeds<red>!",
+				GameData.SPR_REWARD_SEED_SCENT));
+
+			rewardManager.AddReward(new RewardAmmo("ammo_pegasus_seeds_5", "ammo_pegasus_seeds", 5,
+				"You got<n><red>5 Pegasus Seeds<red>!",
+				GameData.SPR_REWARD_SEED_PEGASUS));
+
+			rewardManager.AddReward(new RewardAmmo("ammo_gale_seeds_5", "ammo_gale_seeds", 5,
+				"You got<n><red>5 Gale Seeds<red>!",
+				GameData.SPR_REWARD_SEED_GALE));
+
+			rewardManager.AddReward(new RewardAmmo("ammo_mystery_seeds_5", "ammo_mystery_seeds", 5,
+				"You got<n><red>5 Mystery Seeds<red>!",
+				GameData.SPR_REWARD_SEED_MYSTERY));
+
+			rewardManager.AddReward(new RewardAmmo("ammo_bombs_5", "ammo_bombs", 5,
+				"You got<n><red>5 Bombs<red>!",
+				GameData.SPR_REWARD_SEED_EMBER));
+
+			rewardManager.AddReward(new RewardAmmo("ammo_arrows_5", "ammo_arrows", 5,
+				"You got<n><red>5 Arrows<red>!",
+				GameData.SPR_REWARD_SEED_EMBER));
 		}
 
 
