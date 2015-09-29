@@ -44,11 +44,11 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		// Functions
 		//----------------------------------------------------------------------------
-
+		/*
 		public Tile CreateTile(Point2I sheetLocation) {
 			TileData data = tileData[sheetLocation.X, sheetLocation.Y];
 			return Tile.CreateTile(data);
-		}
+		}*/
 
 		public void LoadConfig(string filename) {
 			// Create default tile data.

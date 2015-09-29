@@ -197,21 +197,10 @@ namespace ZeldaOracle.Game.Control {
 			for (int x = 0; x < room.Width; x++) {
 				for (int y = 0; y < room.Height; y++) {
 					for (int i = 0; i < room.LayerCount; i++) {
-						TileData data = room.TileData[x, y, i];
-
-						if (data == null) {
-							tiles[x, y, i] = null;
-						}
-						else {
-							Tile t;
-							if (data.Tileset != null)
-								t = data.Tileset.CreateTile(data.SheetLocation);
-							else 
-								t = Tile.CreateTile(data);
-							t.Location = new Point2I(x, y);
-							t.Layer = i;
-							tiles[x, y, i] = t;
-						}
+						TileDataInstance data = room.TileData[x, y, i];
+						tiles[x, y, i] = null;
+						if (data != null)
+							tiles[x, y, i] = Tile.CreateTile(data);
 					}
 				}
 			}
@@ -219,7 +208,7 @@ namespace ZeldaOracle.Game.Control {
 			// Create the event tiles.
 			eventTiles.Capacity = room.EventData.Count;
 			for (int i = 0; i < room.EventData.Count; i++) {
-				EventTileData data = room.EventData[i];
+				EventTileDataInstance data  = room.EventData[i];
 				EventTile eventTile = EventTile.CreateEvent(data);
 				eventTiles.Add(eventTile);
 			}

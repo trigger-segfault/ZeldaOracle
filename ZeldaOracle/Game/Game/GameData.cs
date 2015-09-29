@@ -14,10 +14,12 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Tiles.Custom;
+using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game {
-
+	
 	// A static class for storing links to all game content.
 	public class GameData {
 
@@ -257,6 +259,94 @@ namespace ZeldaOracle.Game {
 		}
 
 		private static void LoadTilesets() {
+			// Create a movable block tile.
+			TileData tdBlock		= new TileData(TileFlags.Solid | TileFlags.Movable);
+			tdBlock.Sprite			= GameData.SPR_TILE_MOVABLE_BLOCK;
+			tdBlock.SpriteAsObject	= GameData.SPR_TILE_MOVABLE_BLOCK_ASOBJECT;
+			tdBlock.CollisionModel	= GameData.MODEL_BLOCK;
+			Resources.AddResource("movable_block", tdBlock);
+			
+			// Create a diamond rock tile.
+			TileData tdDiamond			= new TileData(TileFlags.Solid | TileFlags.Switchable | TileFlags.SwitchStays);
+			tdDiamond.Sprite			= GameData.SPR_TILE_DIAMOND_ROCK;
+			tdDiamond.SpriteAsObject	= GameData.SPR_TILE_DIAMOND_ROCK_ASOBJECT;
+			tdDiamond.CollisionModel	= GameData.MODEL_BLOCK;
+			Resources.AddResource("diamond_rock", tdDiamond);
+			
+			// Create a bush tile.
+			TileData tdBush			= new TileData(TileFlags.Solid | TileFlags.Pickupable | TileFlags.Bombable |
+										TileFlags.Burnable | TileFlags.Switchable | TileFlags.Cuttable);
+			tdBush.Sprite			= GameData.SPR_TILE_BUSH;
+			tdBush.SpriteAsObject	= GameData.SPR_TILE_BUSH_ASOBJECT;
+			tdBush.BreakAnimation	= GameData.ANIM_EFFECT_LEAVES;
+			tdBush.CollisionModel	= GameData.MODEL_BLOCK;
+			Resources.AddResource("bush", tdBush);
+			
+			// Create a pot tile.
+			TileData tdPot			= new TileData(TileFlags.Solid | TileFlags.Pickupable |
+										TileFlags.Cuttable | TileFlags.Switchable | TileFlags.Movable);
+			tdPot.Sprite			= GameData.SPR_TILE_POT;
+			tdPot.SpriteAsObject	= GameData.SPR_TILE_POT_ASOBJECT;
+			tdPot.BreakAnimation	= GameData.ANIM_EFFECT_ROCK_BREAK;
+			tdPot.CollisionModel	= GameData.MODEL_BLOCK;
+			Resources.AddResource("pot", tdPot);
+			
+			// Create a rock tile.
+			TileData tdRock			= new TileData(TileFlags.Solid | TileFlags.Pickupable);
+			tdRock.Sprite			= GameData.SPR_TILE_ROCK;
+			tdRock.SpriteAsObject	= GameData.SPR_TILE_ROCK_ASOBJECT;
+			tdRock.BreakAnimation	= GameData.ANIM_EFFECT_ROCK_BREAK;
+			tdRock.CollisionModel	= GameData.MODEL_BLOCK;
+			Resources.AddResource("rock", tdRock);
+			
+			// Create a grass tile.
+			TileData tdGrass		= new TileData(TileFlags.Grass | TileFlags.Cuttable | TileFlags.Burnable | TileFlags.Bombable);
+			tdGrass.Sprite			= GameData.SPR_TILE_GRASS;
+			tdGrass.BreakAnimation	= GameData.ANIM_EFFECT_GRASS_LEAVES;
+			Resources.AddResource("grass", tdGrass);
+			
+			// Create an owl tile.
+			TileData tdOwl			= new TileData(typeof(TileOwl), TileFlags.Solid);
+			tdOwl.Sprite			= GameData.SPR_TILE_OWL;
+			tdOwl.CollisionModel	= GameData.MODEL_BLOCK;
+			tdOwl.Properties.Set("text", "You have been spooked by the <blue>Spooky Owl<blue>!");
+			Resources.AddResource("owl", tdOwl);
+			
+			// Create a lantern tile.
+			TileData tdLantern			= new TileData(typeof(TileLantern), TileFlags.Solid);
+			tdLantern.Sprite			= GameData.SPR_TILE_LANTERN_UNLIT;
+			tdLantern.CollisionModel	= GameData.MODEL_BLOCK;
+			tdLantern.Properties.Set("lit", false);
+			Resources.AddResource("lantern", tdLantern);
+
+			// Create a Sign tile
+			TileData tdSign = new TileData(typeof(TileSign), TileFlags.Solid | TileFlags.Pickupable |
+				TileFlags.Burnable | TileFlags.Cuttable | TileFlags.Switchable);
+			tdSign.Sprite			= GameData.SPR_TILE_SIGN;
+			tdSign.SpriteAsObject	= GameData.SPR_TILE_SIGN_ASOBJECT;
+			tdSign.BreakAnimation	= GameData.ANIM_EFFECT_SIGN_BREAK;
+			tdSign.CollisionModel	= GameData.MODEL_BLOCK;
+			tdSign.Properties.Set("text", "Hello, World!");
+			tdSign.Properties.Set("text_side", "You can't read it from here!");
+			Resources.AddResource("sign", tdSign);
+
+			// Create a chest tile.
+			TileData tdChest		= new TileData(typeof(TileChest), TileFlags.Solid);
+			tdChest.Sprite			= GameData.SPR_TILE_CHEST;
+			tdChest.CollisionModel	= GameData.MODEL_BLOCK;
+			tdChest.Properties.Set("reward", "rupees_1");
+			Resources.AddResource("chest", tdChest);
+			
+			// Create a reward tile (heart piece).
+			TileData tdHeartPiece		= new TileData(typeof(TileReward), TileFlags.Solid);
+			tdHeartPiece.CollisionModel	= GameData.MODEL_CENTER;
+			tdHeartPiece.Properties.Set("reward", "heart_piece");
+			Resources.AddResource("reward", tdHeartPiece);
+
+			
+			Resources.AddResource("warp", new EventTileData(typeof(WarpEvent)));
+
+
 			tilesetBuilder = new TilesetBuilder();
 
 			// OVERWORLD TILESET:

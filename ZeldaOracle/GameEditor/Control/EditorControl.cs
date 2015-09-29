@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Rewards;
@@ -20,20 +21,20 @@ namespace ZeldaEditor.Control {
 
 		private bool isInitialized;
 
-		private EditorForm editorForm;
-		private World world;
-		private Level level;
-		private Tileset tileset;
-		private Zone zone;
-		private Point2I selectedTile;
-		private RewardManager rewardManager;
-		private Inventory inventory;
+		private EditorForm		editorForm;
+		private World			world;
+		private Level			level;
+		private Tileset			tileset;
+		private Zone			zone;
+		private Point2I			selectedTile;
+		private RewardManager	rewardManager;
+		private Inventory		inventory;
 
-		private Stopwatch timer;
-		private int ticks;
-		private int roomSpacing;
+		private Stopwatch		timer;
+		private int				ticks;
+		private int				roomSpacing;
 
-		private bool playAnimations;
+		private bool			playAnimations;
 
 
 		//-----------------------------------------------------------------------------
@@ -69,13 +70,16 @@ namespace ZeldaEditor.Control {
 				this.tileset		= GameData.TILESET_OVERWORLD;
 				this.zone			= GameData.ZONE_SUMMER;
 
+				editorForm.ComboBoxTilesets.Items.Clear();
 				foreach (KeyValuePair<string, Tileset> entry in Resources.GetResourceDictionary<Tileset>()) {
 					editorForm.ComboBoxTilesets.Items.Add(entry.Key);
 				}
 				editorForm.ComboBoxTilesets.SelectedIndex = 0;
 
+				editorForm.ComboBoxZones.Items.Clear();
 				foreach (KeyValuePair<string, Zone> entry in Resources.GetResourceDictionary<Zone>()) {
-					editorForm.ComboBoxZones.Items.Add(entry.Key);
+					if (tileset.SpriteSheet.Image.HasVariant(entry.Key))
+						editorForm.ComboBoxZones.Items.Add(entry.Key);
 				}
 				editorForm.ComboBoxZones.SelectedIndex = 0;
 
@@ -130,12 +134,40 @@ namespace ZeldaEditor.Control {
 
 		public void ChangeTileset(string name) {
 			tileset = Resources.GetResource<Tileset>(name);
+
+			int index = 0;
+			if (!tileset.SpriteSheet.Image.HasVariant(zone.ID))
+				zone = Resources.GetResource<Zone>(tileset.SpriteSheet.Image.VariantName);
+			editorForm.ComboBoxZones.Items.Clear();
+			foreach (KeyValuePair<string, Zone> entry in Resources.GetResourceDictionary<Zone>()) {
+				if (tileset.SpriteSheet.Image.HasVariant(entry.Key)) {
+					editorForm.ComboBoxZones.Items.Add(entry.Key);
+					if (entry.Key == zone.ID)
+						editorForm.ComboBoxZones.SelectedIndex = index;
+					index++;
+				}
+			}
 			editorForm.TileDisplay.UpdateTileset();
+			editorForm.TileDisplay.UpdateZone();
+
 		}
 
 		public void ChangeZone(string name) {
 			zone = Resources.GetResource<Zone>(name);
 			editorForm.TileDisplay.UpdateZone();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Tiles
+		//-----------------------------------------------------------------------------
+
+		public void OpenTileProperties(TileDataInstance tile) {
+			editorForm.OpenProperties(tile.ModifiedProperties, tile.BaseProperties);
+		}
+		
+		public void CloseProperties(TileDataInstance tile) {
+			editorForm.CloseProperties();
 		}
 
 

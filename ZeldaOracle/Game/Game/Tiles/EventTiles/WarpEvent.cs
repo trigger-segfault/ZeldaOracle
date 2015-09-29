@@ -36,14 +36,16 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		public void Warp() {
 			string warpLevelID = Properties.GetString("destination_level", RoomControl.Level.Name);
 			Level warpLevel = RoomControl.GameControl.World.GetLevel(warpLevelID);
+			if (warpLevel == null)
+				return;
 
 			// Search for warp tile in all rooms.
 			Room destRoom;
-			EventTileData destEvent;
+			EventTileDataInstance destEvent;
 			string warpID = properties.GetString("destination_warp_point", "?");
 
 			if (FindDestinationInLevel(warpID, warpLevel, out destRoom, out destEvent)) {
-				int dir = destEvent.Properties.GetInteger("face_direction", Directions.Left);
+				int dir = destEvent.ModifiedProperties.GetInteger("face_direction", Directions.Left); // TODO: modified properties might not cut it here
 				RoomControl.TransitionToRoom(destRoom, new RoomTransitionFade(destEvent.Position, dir));
 			}
 			else {
@@ -51,7 +53,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			}
 		}
 
-		public bool FindDestinationInLevel(string id, Level level, out Room destRoom, out EventTileData destEvent) {
+		public bool FindDestinationInLevel(string id, Level level, out Room destRoom, out EventTileDataInstance destEvent) {
 			for (int x = 0; x < level.Width; x++) {
 				for (int y = 0; y < level.Height; y++) {
 					if (FindDestinationInRoom(id, level.GetRoom(x, y), out destRoom, out destEvent))
@@ -63,9 +65,9 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			return false;
 		}
 
-		public bool FindDestinationInRoom(string id, Room room, out Room destRoom, out EventTileData destEvent) {
+		public bool FindDestinationInRoom(string id, Room room, out Room destRoom, out EventTileDataInstance destEvent) {
 			for (int i = 0; i < room.EventData.Count; i++) {
-				if (room.EventData[i].Properties.GetString("id") == id) {
+				if (room.EventData[i].ModifiedProperties.GetString("id") == id) {
 					destRoom = room;
 					destEvent = room.EventData[i];
 					return true;
@@ -102,7 +104,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			base.Update();
 
 			if (IsTouchingPlayer()) {
-				if (warpEnabled) {
+				if (warpEnabled && RoomControl.Player.IsOnGround) {
 					Warp();
 					warpEnabled = false;
 				}

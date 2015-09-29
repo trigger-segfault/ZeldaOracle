@@ -311,10 +311,12 @@
     <Compile Include="Game\Tiles\Custom\TileOwl.cs" />
     <Compile Include="Game\Tiles\Custom\TileLantern.cs" />
     <Compile Include="Game\Tiles\EventTiles\EventTile.cs" />
+    <Compile Include="Game\Tiles\EventTiles\EventTileDataInstance.cs" />
     <Compile Include="Game\Tiles\EventTiles\EventTileData.cs" />
     <Compile Include="Game\Tiles\EventTiles\WarpEvent.cs" />
     <Compile Include="Game\Tiles\Tile.cs" />
     <Compile Include="Game\Tiles\TileData.cs" />
+    <Compile Include="Game\Tiles\TileDataInstance.cs" />
     <Compile Include="Game\Tiles\TileFlags.cs" />
     <Compile Include="Game\Tiles\Tileset.cs" />
     <Compile Include="Game\Tiles\Custom\TileSign.cs" />

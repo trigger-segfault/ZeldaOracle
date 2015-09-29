@@ -245,9 +245,7 @@
 			// 
 			// treeViewLevels
 			// 
-			this.treeViewLevels.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.treeViewLevels.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.treeViewLevels.FullRowSelect = true;
 			this.treeViewLevels.Location = new System.Drawing.Point(0, 0);
 			this.treeViewLevels.Name = "treeViewLevels";
 			this.treeViewLevels.Size = new System.Drawing.Size(165, 422);
@@ -332,7 +330,6 @@
 			// 
 			// comboBoxTilesets
 			// 
-			this.comboBoxTilesets.AutoToolTip = true;
 			this.comboBoxTilesets.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxTilesets.Name = "comboBoxTilesets";
 			this.comboBoxTilesets.Size = new System.Drawing.Size(121, 25);
@@ -400,7 +397,7 @@
 			this.Controls.Add(this.toolStrip2);
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.menuStrip1);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			//this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "EditorForm";
 			this.Text = "Oracle Engine Editor";
@@ -452,7 +449,6 @@
 		private System.Windows.Forms.ToolStripButton buttonAddLevel;
 		private System.Windows.Forms.Panel panelLevels;
 		private System.Windows.Forms.Panel panelWorld;
-		private System.Windows.Forms.TreeView treeViewLevels;
 		private System.Windows.Forms.ToolStripStatusLabel statusBarLabelRoomLoc;
 		private System.Windows.Forms.ToolStripStatusLabel statusBarLabelTileLoc;
 		private System.Windows.Forms.ContextMenuStrip contextMenuLevelSelect;
@@ -468,5 +464,6 @@
 		private System.Windows.Forms.ToolStripComboBox comboBoxTilesets;
 		private System.Windows.Forms.Panel panelTiles2;
 		private System.Windows.Forms.ToolStripComboBox comboBoxZones;
+		private System.Windows.Forms.TreeView treeViewLevels;
 	}
 }

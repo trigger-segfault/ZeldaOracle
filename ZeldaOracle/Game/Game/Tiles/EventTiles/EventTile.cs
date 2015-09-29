@@ -15,13 +15,13 @@ using ZeldaOracle.Game.Worlds;
 namespace ZeldaOracle.Game.Tiles.EventTiles {
 	public class EventTile {
 		
-		private RoomControl		roomControl;
-		private	EventTileData	eventData;
-		protected Vector2F		position;
-		protected Point2I		size;
-		protected Properties	properties;
+		private RoomControl				roomControl;
+		private	EventTileDataInstance	eventData;
+		protected Vector2F				position;
+		protected Point2I				size;
+		protected Properties			properties;
 
-		protected Rectangle2I	collisionBox;
+		protected Rectangle2I			collisionBox;
 
 
 		//-----------------------------------------------------------------------------
@@ -85,7 +85,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		//-----------------------------------------------------------------------------
 
 		// Instantiate an event tile from the given event-data.
-		public static EventTile CreateEvent(EventTileData data) {
+		public static EventTile CreateEvent(EventTileDataInstance data) {
 			EventTile tile;
 			
 			// Construct the tile.
@@ -97,7 +97,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			tile.position	= data.Position;
 			tile.eventData	= data;
 			tile.size		= data.Size;
-			tile.properties.Merge(data.Properties, true);
+			tile.properties.Merge(data.BaseProperties, true);
 			tile.properties.Merge(data.ModifiedProperties, true);
 
 			return tile;
@@ -119,7 +119,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		}
 
 
-		public EventTileData EventData {
+		public EventTileDataInstance EventData {
 			get { return eventData; }
 			set { eventData = value; }
 		}

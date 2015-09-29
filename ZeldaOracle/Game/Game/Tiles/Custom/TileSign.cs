@@ -19,9 +19,9 @@ namespace ZeldaOracle.Game.Tiles {
 			string text = "";
 
 			if (direction == Directions.Up)
-				text = properties.GetString("text", GameSettings.TEXT_UNDEFINED);
+				text = Properties.GetString("text", GameSettings.TEXT_UNDEFINED);
 			else
-				text = "You can't read it from here!";
+				text = Properties.GetString("text_side", GameSettings.TEXT_UNDEFINED);
 
 			RoomControl.GameControl.DisplayMessage(text);
 			return true;

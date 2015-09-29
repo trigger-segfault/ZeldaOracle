@@ -74,6 +74,20 @@ namespace ZeldaOracle.Common.Properties {
 		// Accessors
 		//-----------------------------------------------------------------------------
 
+		public bool EqualsValue(Property other) {
+			if (type != other.type || type == PropertyType.List)
+				return false;
+			else if (type == PropertyType.String)
+				return (StringValue == other.StringValue);
+			else if (type == PropertyType.Integer)
+				return (IntValue == other.IntValue);
+			else if (type == PropertyType.Float)
+				return (FloatValue == other.FloatValue);
+			else if (type == PropertyType.Boolean)
+				return (BoolValue == other.BoolValue);
+			return false;
+		}
+
 		// Get the child at the given index (if this is a list).
 		public Property GetChild(int index) {
 			if (type != PropertyType.List)
