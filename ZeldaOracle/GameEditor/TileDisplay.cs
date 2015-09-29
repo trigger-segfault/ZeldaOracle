@@ -79,6 +79,7 @@ namespace ZeldaEditor {
 			Point2I newSelectedTile = GetTileCoord(mousePos);
 			if (newSelectedTile >= Point2I.Zero && newSelectedTile < Tileset.Size) {
 				SelectedTile = newSelectedTile;
+				editorControl.SelectedTilesetTileData = Tileset.TileData[newSelectedTile.X, newSelectedTile.Y];
 				Invalidate();
 			}
 			this.Focus();

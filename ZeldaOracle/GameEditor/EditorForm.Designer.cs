@@ -56,6 +56,10 @@
 			this.fadeAboveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showAboveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+			this.showRewardsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.showRoomBordersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.buttonWorldGrid = new System.Windows.Forms.ToolStripButton();
+			this.buttonAnimations = new System.Windows.Forms.ToolStripButton();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.statusBarLabelRoomLoc = new System.Windows.Forms.ToolStripStatusLabel();
 			this.statusBarLabelTileLoc = new System.Windows.Forms.ToolStripStatusLabel();
@@ -76,10 +80,8 @@
 			this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.duplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.buttonWorldGrid = new System.Windows.Forms.ToolStripButton();
-			this.showRewardsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.showRoomBordersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.buttonAnimations = new System.Windows.Forms.ToolStripButton();
+			this.buttonTest = new System.Windows.Forms.ToolStripButton();
+			this.buttonTestPlayerPlace = new System.Windows.Forms.ToolStripButton();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.toolStrip2.SuspendLayout();
@@ -141,7 +143,9 @@
             this.buttonSave,
             this.buttonSaveAs,
             this.buttonAddLevel,
-            this.toolStripSeparator1});
+            this.toolStripSeparator1,
+            this.buttonTest,
+            this.buttonTestPlayerPlace});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 24);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(875, 25);
@@ -338,7 +342,7 @@
 			this.hideBelowToolStripMenuItem.CheckOnClick = true;
 			this.hideBelowToolStripMenuItem.Name = "hideBelowToolStripMenuItem";
 			this.hideBelowToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-			this.hideBelowToolStripMenuItem.Text = "Hide Below";
+			this.hideBelowToolStripMenuItem.Text = "Hide Layers Below";
 			this.hideBelowToolStripMenuItem.Click += new System.EventHandler(this.hideBelowToolStripMenuItem_Click);
 			// 
 			// fadeBelowToolStripMenuItem
@@ -348,7 +352,7 @@
 			this.fadeBelowToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.fadeBelowToolStripMenuItem.Name = "fadeBelowToolStripMenuItem";
 			this.fadeBelowToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-			this.fadeBelowToolStripMenuItem.Text = "Fade Below";
+			this.fadeBelowToolStripMenuItem.Text = "Fade Layers Below";
 			this.fadeBelowToolStripMenuItem.Click += new System.EventHandler(this.fadeBelowToolStripMenuItem_Click);
 			// 
 			// showBelowToolStripMenuItem
@@ -356,7 +360,7 @@
 			this.showBelowToolStripMenuItem.CheckOnClick = true;
 			this.showBelowToolStripMenuItem.Name = "showBelowToolStripMenuItem";
 			this.showBelowToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-			this.showBelowToolStripMenuItem.Text = "Show Below";
+			this.showBelowToolStripMenuItem.Text = "Show Layers Below";
 			this.showBelowToolStripMenuItem.Click += new System.EventHandler(this.showBelowToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator4
@@ -369,7 +373,7 @@
 			this.hideAboveToolStripMenuItem.CheckOnClick = true;
 			this.hideAboveToolStripMenuItem.Name = "hideAboveToolStripMenuItem";
 			this.hideAboveToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-			this.hideAboveToolStripMenuItem.Text = "Hide Above";
+			this.hideAboveToolStripMenuItem.Text = "Hide Layers Above";
 			this.hideAboveToolStripMenuItem.Click += new System.EventHandler(this.hideAboveToolStripMenuItem_Click);
 			// 
 			// fadeAboveToolStripMenuItem
@@ -379,7 +383,7 @@
 			this.fadeAboveToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.fadeAboveToolStripMenuItem.Name = "fadeAboveToolStripMenuItem";
 			this.fadeAboveToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-			this.fadeAboveToolStripMenuItem.Text = "Fade Above";
+			this.fadeAboveToolStripMenuItem.Text = "Fade Layers Above";
 			this.fadeAboveToolStripMenuItem.Click += new System.EventHandler(this.fadeAboveToolStripMenuItem_Click);
 			// 
 			// showAboveToolStripMenuItem
@@ -387,13 +391,55 @@
 			this.showAboveToolStripMenuItem.CheckOnClick = true;
 			this.showAboveToolStripMenuItem.Name = "showAboveToolStripMenuItem";
 			this.showAboveToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-			this.showAboveToolStripMenuItem.Text = "Show Above";
+			this.showAboveToolStripMenuItem.Text = "Show Layers Above";
 			this.showAboveToolStripMenuItem.Click += new System.EventHandler(this.showAboveToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator5
 			// 
 			this.toolStripSeparator5.Name = "toolStripSeparator5";
 			this.toolStripSeparator5.Size = new System.Drawing.Size(178, 6);
+			// 
+			// showRewardsToolStripMenuItem
+			// 
+			this.showRewardsToolStripMenuItem.Checked = true;
+			this.showRewardsToolStripMenuItem.CheckOnClick = true;
+			this.showRewardsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.showRewardsToolStripMenuItem.Name = "showRewardsToolStripMenuItem";
+			this.showRewardsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+			this.showRewardsToolStripMenuItem.Text = "Show Rewards";
+			this.showRewardsToolStripMenuItem.Click += new System.EventHandler(this.showRewardsToolStripMenuItem_Click);
+			// 
+			// showRoomBordersToolStripMenuItem
+			// 
+			this.showRoomBordersToolStripMenuItem.Checked = true;
+			this.showRoomBordersToolStripMenuItem.CheckOnClick = true;
+			this.showRoomBordersToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.showRoomBordersToolStripMenuItem.Name = "showRoomBordersToolStripMenuItem";
+			this.showRoomBordersToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+			this.showRoomBordersToolStripMenuItem.Text = "Show Room Borders";
+			this.showRoomBordersToolStripMenuItem.Click += new System.EventHandler(this.showRoomBordersToolStripMenuItem_Click);
+			// 
+			// buttonWorldGrid
+			// 
+			this.buttonWorldGrid.CheckOnClick = true;
+			this.buttonWorldGrid.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonWorldGrid.Image = ((System.Drawing.Image)(resources.GetObject("buttonWorldGrid.Image")));
+			this.buttonWorldGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonWorldGrid.Name = "buttonWorldGrid";
+			this.buttonWorldGrid.Size = new System.Drawing.Size(23, 22);
+			this.buttonWorldGrid.Text = "Show Grid";
+			this.buttonWorldGrid.Click += new System.EventHandler(this.buttonWorldGrid_Click);
+			// 
+			// buttonAnimations
+			// 
+			this.buttonAnimations.CheckOnClick = true;
+			this.buttonAnimations.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonAnimations.Image = ((System.Drawing.Image)(resources.GetObject("buttonAnimations.Image")));
+			this.buttonAnimations.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonAnimations.Name = "buttonAnimations";
+			this.buttonAnimations.Size = new System.Drawing.Size(23, 22);
+			this.buttonAnimations.Text = "Play Animations";
+			this.buttonAnimations.Click += new System.EventHandler(this.buttonAnimations_Click);
 			// 
 			// statusStrip1
 			// 
@@ -592,47 +638,26 @@
 			this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
 			this.duplicateToolStripMenuItem.Text = "Duplicate";
 			// 
-			// buttonWorldGrid
+			// buttonTest
 			// 
-			this.buttonWorldGrid.CheckOnClick = true;
-			this.buttonWorldGrid.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.buttonWorldGrid.Image = ((System.Drawing.Image)(resources.GetObject("buttonWorldGrid.Image")));
-			this.buttonWorldGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.buttonWorldGrid.Name = "buttonWorldGrid";
-			this.buttonWorldGrid.Size = new System.Drawing.Size(23, 22);
-			this.buttonWorldGrid.Text = "Show Grid";
-			this.buttonWorldGrid.Click += new System.EventHandler(this.buttonWorldGrid_Click);
+			this.buttonTest.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonTest.Image = ((System.Drawing.Image)(resources.GetObject("buttonTest.Image")));
+			this.buttonTest.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonTest.Name = "buttonTest";
+			this.buttonTest.Size = new System.Drawing.Size(23, 22);
+			this.buttonTest.Text = "Test Level";
+			this.buttonTest.Click += new System.EventHandler(this.buttonTest_Click);
 			// 
-			// showRewardsToolStripMenuItem
+			// buttonTestPlayerPlace
 			// 
-			this.showRewardsToolStripMenuItem.Checked = true;
-			this.showRewardsToolStripMenuItem.CheckOnClick = true;
-			this.showRewardsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.showRewardsToolStripMenuItem.Name = "showRewardsToolStripMenuItem";
-			this.showRewardsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-			this.showRewardsToolStripMenuItem.Text = "Show Rewards";
-			this.showRewardsToolStripMenuItem.Click += new System.EventHandler(this.showRewardsToolStripMenuItem_Click);
-			// 
-			// showRoomBordersToolStripMenuItem
-			// 
-			this.showRoomBordersToolStripMenuItem.Checked = true;
-			this.showRoomBordersToolStripMenuItem.CheckOnClick = true;
-			this.showRoomBordersToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.showRoomBordersToolStripMenuItem.Name = "showRoomBordersToolStripMenuItem";
-			this.showRoomBordersToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-			this.showRoomBordersToolStripMenuItem.Text = "Show Room Borders";
-			this.showRoomBordersToolStripMenuItem.Click += new System.EventHandler(this.showRoomBordersToolStripMenuItem_Click);
-			// 
-			// buttonAnimations
-			// 
-			this.buttonAnimations.CheckOnClick = true;
-			this.buttonAnimations.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.buttonAnimations.Image = ((System.Drawing.Image)(resources.GetObject("buttonAnimations.Image")));
-			this.buttonAnimations.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.buttonAnimations.Name = "buttonAnimations";
-			this.buttonAnimations.Size = new System.Drawing.Size(23, 22);
-			this.buttonAnimations.Text = "Play Animations";
-			this.buttonAnimations.Click += new System.EventHandler(this.buttonAnimations_Click);
+			this.buttonTestPlayerPlace.CheckOnClick = true;
+			this.buttonTestPlayerPlace.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonTestPlayerPlace.Image = ((System.Drawing.Image)(resources.GetObject("buttonTestPlayerPlace.Image")));
+			this.buttonTestPlayerPlace.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonTestPlayerPlace.Name = "buttonTestPlayerPlace";
+			this.buttonTestPlayerPlace.Size = new System.Drawing.Size(23, 22);
+			this.buttonTestPlayerPlace.Text = "Test Level At Position";
+			this.buttonTestPlayerPlace.Click += new System.EventHandler(this.toolStripButton1_Click);
 			// 
 			// EditorForm
 			// 
@@ -737,5 +762,7 @@
 		private System.Windows.Forms.ToolStripButton buttonWorldGrid;
 		private System.Windows.Forms.ToolStripMenuItem showRoomBordersToolStripMenuItem;
 		private System.Windows.Forms.ToolStripButton buttonAnimations;
+		private System.Windows.Forms.ToolStripButton buttonTest;
+		private System.Windows.Forms.ToolStripButton buttonTestPlayerPlace;
 	}
 }

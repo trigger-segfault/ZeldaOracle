@@ -753,6 +753,9 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_TILE_DEFAULT;	// The default ground background tile.
 		public static Sprite SPR_TILE_DUG;		// A hole in the ground created by a shovel.
 	
+		// Player sprites.
+		public static Sprite SPR_PLAYER_FORWARD;
+
 		// Object tiles.
 		public static Sprite SPR_TILE_BUSH;
 		public static Sprite SPR_TILE_BUSH_ASOBJECT;
