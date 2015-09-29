@@ -23,6 +23,8 @@ namespace ZeldaEditor.Control {
 		private bool isInitialized;
 
 		private EditorForm		editorForm;
+		private PropertyGridControl propertyGridControl;
+
 		private World			world;
 		private Level			level;
 		private Tileset			tileset;
@@ -54,6 +56,7 @@ namespace ZeldaEditor.Control {
 		//-----------------------------------------------------------------------------
 
 		public EditorControl() {
+			this.propertyGridControl	= null;
 			this.world			= null;
 			this.level			= null;
 			this.tileset		= null;
@@ -107,6 +110,8 @@ namespace ZeldaEditor.Control {
 						editorForm.ComboBoxZones.Items.Add(entry.Key);
 				}
 				editorForm.ComboBoxZones.SelectedIndex = 0;
+
+				propertyGridControl = new PropertyGridControl(this, editorForm.PropertyGrid);
 
 				this.isInitialized = true;
 			}
@@ -195,11 +200,11 @@ namespace ZeldaEditor.Control {
 		//-----------------------------------------------------------------------------
 
 		public void OpenTileProperties(TileDataInstance tile) {
-			editorForm.OpenProperties(tile.ModifiedProperties, tile.BaseProperties);
+			propertyGridControl.OpenProperties(tile.ModifiedProperties, tile.BaseProperties);
 		}
 		
 		public void CloseProperties(TileDataInstance tile) {
-			editorForm.CloseProperties();
+			propertyGridControl.CloseProperties();
 		}
 
 
@@ -221,6 +226,10 @@ namespace ZeldaEditor.Control {
 		public EditorForm EditorForm {
 			get { return editorForm; }
 			set { editorForm = value; }
+		}
+		
+		public PropertyGridControl PropertyGridControl {
+			get { return propertyGridControl; }
 		}
 
 		public bool IsWorldOpen {

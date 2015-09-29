@@ -65,6 +65,9 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
+		
+		public Dictionary<string, Reward> RewardDictionary {
+			get { return rewards; }
+		}
 	}
 }
