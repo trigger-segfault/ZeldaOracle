@@ -53,6 +53,10 @@ namespace ZeldaOracle.Game.Worlds {
 			tile.Room		= this;
 		}
 
+		public void RemoveTile(int x, int y, int layer) {
+			tileData[x, y, layer] = null;
+		}
+
 		public TileDataInstance CreateTile(TileData data, int x, int y, int layer) {
 			TileDataInstance dataInstance = new TileDataInstance(data, x, y, layer);
 			dataInstance.Room = this;

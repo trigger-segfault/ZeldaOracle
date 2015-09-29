@@ -68,13 +68,15 @@ public class GameBase : XnaGame {
 
 	private bool isContentLoaded;
 
+	private string[] launchParameters;
+
 	
 	//-----------------------------------------------------------------------------
 	// Initialization
 	//-----------------------------------------------------------------------------
 
 	// Constructs the game base class.
-	public GameBase() {
+	public GameBase(string[] launchParameters) {
 		// Graphics
 		this.graphics				= new GraphicsDeviceManager(this);
 		this.spriteBatch			= null;
@@ -83,6 +85,7 @@ public class GameBase : XnaGame {
 		this.windowSize				= new Point2I(160 * 4, 144 * 4);
 		this.windowSizeChanged		= false;
 		this.isContentLoaded		= true;
+		this.launchParameters		= launchParameters;
 
 		// Game
 		this.game					= null;
@@ -116,8 +119,8 @@ public class GameBase : XnaGame {
 		Keyboard.Initialize();
 		Mouse.Initialize();
 		GamePad.Initialize();
-	
-		game = new GameManager();
+
+		game = new GameManager(launchParameters);
 		
 		base.Initialize();
 

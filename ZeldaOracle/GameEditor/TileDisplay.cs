@@ -39,6 +39,8 @@ namespace ZeldaEditor {
 			// Wire the events.
 			MouseMove += OnMouseMove;
 			MouseDown += OnMouseDown;
+			MouseLeave += OnMouseLeave;
+			MouseEnter += OnMouseEnter;
 
 			// Start the timer to refresh the panel.
 			Application.Idle += delegate { Invalidate(); };
@@ -77,13 +79,20 @@ namespace ZeldaEditor {
 			Point2I newSelectedTile = GetTileCoord(mousePos);
 			if (newSelectedTile >= Point2I.Zero && newSelectedTile < Tileset.Size) {
 				SelectedTile = newSelectedTile;
+				editorControl.SelectedTilesetTileData = Tileset.TileData[newSelectedTile.X, newSelectedTile.Y];
 				Invalidate();
 			}
 			this.Focus();
 		}
 
 		private void OnMouseMove(object sender, MouseEventArgs e) {
+
+		}
+		private void OnMouseLeave(object sender, EventArgs e) {
 			
+		}
+		private void OnMouseEnter(object sender, EventArgs e) {
+			this.Focus();
 		}
 
 		public void UpdateTileset() {

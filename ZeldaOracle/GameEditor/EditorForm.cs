@@ -192,6 +192,18 @@ namespace ZeldaEditor {
 			editorControl.ShowGrid = buttonWorldGrid.Checked;
 		}
 
+		private void buttonTest_Click(object sender, EventArgs e) {
+			editorControl.TestWorld();
+		}
+
+		private void toolStripButton1_Click(object sender, EventArgs e) {
+			editorControl.PlayerPlaceMode = buttonTestPlayerPlace.Checked;
+		}
+
+		private void showRoomBordersToolStripMenuItem_Click(object sender, EventArgs e) {
+			editorControl.RoomSpacing = showRoomBordersToolStripMenuItem.Checked ? 1 : 0;
+		}
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
@@ -235,8 +247,9 @@ namespace ZeldaEditor {
 		public PropertyGrid PropertyGrid {
 			get { return propertyGrid; }
 		}
-		private void showRoomBordersToolStripMenuItem_Click(object sender, EventArgs e) {
-			editorControl.RoomSpacing = showRoomBordersToolStripMenuItem.Checked ? 1 : 0;
+
+		public ToolStripButton ButtonTestPlayerPlace {
+			get { return buttonTestPlayerPlace; }
 		}
 	}
 

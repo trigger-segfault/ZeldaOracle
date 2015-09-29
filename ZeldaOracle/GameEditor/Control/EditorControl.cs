@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,6 +50,8 @@ namespace ZeldaEditor.Control {
 		private Point2I			selectedRoom;
 		private Point2I			selectedTile;
 		private Point2I			selectedTilesetTile;
+		private TileData		selectedTilesetTileData;
+		private bool			playerPlaceMode;
 
 
 		//-----------------------------------------------------------------------------
@@ -79,6 +82,8 @@ namespace ZeldaEditor.Control {
 			this.selectedRoom	= -Point2I.One;
 			this.selectedTile	= -Point2I.One;
 			this.selectedTilesetTile = Point2I.Zero;
+			this.selectedTilesetTileData	= null;
+			this.playerPlaceMode	= false;
 		}
 
 		public void Initialize(ContentManager contentManager, GraphicsDevice graphicsDevice) {
@@ -94,6 +99,8 @@ namespace ZeldaEditor.Control {
 				this.playAnimations = false;
 				this.tileset		= GameData.TILESET_OVERWORLD;
 				this.zone			= GameData.ZONE_SUMMER;
+
+				this.selectedTilesetTileData = this.tileset.TileData[0, 0];
 
 				GameData.LoadInventory(inventory);
 				GameData.LoadRewards(rewardManager);
@@ -193,6 +200,29 @@ namespace ZeldaEditor.Control {
 				selectedRoom = -Point2I.One;
 				selectedTile = -Point2I.One;
 			}
+		}
+
+		public void TestWorld() {
+			string worldPath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "testing.zwd");
+			WorldFile worldFile = new WorldFile();
+			worldFile.Save(worldPath, world);
+			string exePath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "ZeldaOracle.exe");
+			Process.Start(exePath, "\"" + worldPath + "\"");
+		}
+
+		public void TestWorld(Point2I roomCoord, Point2I playerCoord) {
+			playerPlaceMode = false;
+			int levelIndex = 0;
+			for (levelIndex = 0; levelIndex < world.Levels.Count; levelIndex++) {
+				if (world.Levels[levelIndex] == level)
+					break;
+			}
+			string worldPath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "testing.zwd");
+			WorldFile worldFile = new WorldFile();
+			worldFile.Save(worldPath, world);
+			string exePath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "ZeldaOracle.exe");
+			Process.Start(exePath, "\"" + worldPath + "\" -test " + levelIndex + " " + roomCoord.X + " " + roomCoord.Y + " " + playerCoord.X + " " + playerCoord.Y);
+			editorForm.ButtonTestPlayerPlace.Checked = false;
 		}
 
 		//-----------------------------------------------------------------------------
@@ -325,6 +355,16 @@ namespace ZeldaEditor.Control {
 		public bool HighlightMouseTile {
 			get { return highlightMouseTile; }
 			set { highlightMouseTile = value; }
+		}
+
+		public bool PlayerPlaceMode {
+			get { return playerPlaceMode; }
+			set { playerPlaceMode = value; }
+		}
+
+		public TileData SelectedTilesetTileData {
+			get { return selectedTilesetTileData; }
+			set { selectedTilesetTileData = value; }
 		}
 	}
 }

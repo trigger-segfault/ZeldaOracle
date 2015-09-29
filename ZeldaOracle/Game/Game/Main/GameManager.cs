@@ -49,6 +49,7 @@ namespace ZeldaOracle.Game.Main {
 		private GameStateStack	gameStateStack;
 		private int				elapsedTicks;		// The number of ticks since the start of the game.
 		private bool			debugMode;
+		private string[]		launchParameters;
 
 
 		//-----------------------------------------------------------------------------
@@ -62,10 +63,11 @@ namespace ZeldaOracle.Game.Main {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public GameManager() {
-			gameBase = null;
-			gameScale = 4;
-			debugMode = false;
+		public GameManager(string[] launchParameters) {
+			this.gameBase = null;
+			this.gameScale = 4;
+			this.debugMode = false;
+			this.launchParameters = launchParameters;
 		}
 
 		// Initializes the game manager.
@@ -285,6 +287,10 @@ namespace ZeldaOracle.Game.Main {
 
 		public GameState CurrentGameState {
 			get { return gameStateStack.CurrentGameState; }
+		}
+
+		public string[] LaunchParameters {
+			get { return launchParameters; }
 		}
 
 	}

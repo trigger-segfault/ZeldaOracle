@@ -89,7 +89,7 @@ namespace ZeldaOracle.Game.Control {
 			menuEssences.PreviousMenu		= menuSecondaryItems;
 			menuEssences.NextMenu			= menuWeapons;
 
-			GameData.LoadInventory(inventory);
+			GameData.LoadInventory(inventory, true);
 			
 			inventory.ObtainAmmo("ammo_scent_seeds");
 			//inventory.ObtainAmmo("ammo_pegasus_seeds");
@@ -108,15 +108,35 @@ namespace ZeldaOracle.Game.Control {
 			gameManager.PushGameState(roomControl);
 
 			// Create the test world.
-			world = GameDebug.CreateTestWorld();
 			
 			// Load the world.
 			//WorldFile worldFile = new WorldFile();
 			//world = worldFile.Load("Content/Worlds/temp_world.zwd");
 
 			// Begin the room state.
-			player.Position = world.StartTileLocation * GameSettings.TILE_SIZE;
-			roomControl.BeginRoom(world.StartRoom);
+			if (gameManager.LaunchParameters.Length > 0) {
+				WorldFile worldFile = new WorldFile();
+				world = worldFile.Load(gameManager.LaunchParameters[0]);
+				if (gameManager.LaunchParameters.Length > 1 && gameManager.LaunchParameters[1] == "-test") {
+					int startLevel = Int32.Parse(gameManager.LaunchParameters[2]);
+					int startRoomX = Int32.Parse(gameManager.LaunchParameters[3]);
+					int startRoomY = Int32.Parse(gameManager.LaunchParameters[4]);
+					int startPlayerX = Int32.Parse(gameManager.LaunchParameters[5]);
+					int startPlayerY = Int32.Parse(gameManager.LaunchParameters[6]);
+
+					player.Position = new Point2I(startPlayerX, startPlayerY) * GameSettings.TILE_SIZE + new Point2I(8, 16);
+					roomControl.BeginRoom(world.Levels[startLevel].Rooms[startRoomX, startRoomY]);
+				}
+				else {
+					player.Position = world.StartTileLocation * GameSettings.TILE_SIZE + new Point2I(8, 16);
+					roomControl.BeginRoom(world.StartRoom);
+				}
+			}
+			else {
+				world = GameDebug.CreateTestWorld();
+				player.Position = world.StartTileLocation * GameSettings.TILE_SIZE + new Point2I(8, 16);
+				roomControl.BeginRoom(world.StartRoom);
+			}
 			roomStateStack = new RoomStateStack(new RoomStateNormal());
 			roomStateStack.Begin(this);
 
