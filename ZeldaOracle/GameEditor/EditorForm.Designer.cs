@@ -100,6 +100,9 @@
 			this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.duplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.playAnimationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.showGridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.toolStrip2.SuspendLayout();
@@ -157,6 +160,7 @@
 			this.newWorldToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
 			this.newWorldToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
 			this.newWorldToolStripMenuItem.Text = "&New World...";
+			this.newWorldToolStripMenuItem.Click += new System.EventHandler(this.newWorldToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator6
 			// 
@@ -169,6 +173,7 @@
 			this.openWorldToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
 			this.openWorldToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
 			this.openWorldToolStripMenuItem.Text = "&Open World...";
+			this.openWorldToolStripMenuItem.Click += new System.EventHandler(this.openWorldToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator7
 			// 
@@ -181,6 +186,7 @@
 			this.saveWorldToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
 			this.saveWorldToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
 			this.saveWorldToolStripMenuItem.Text = "&Save World";
+			this.saveWorldToolStripMenuItem.Click += new System.EventHandler(this.saveWorldToolStripMenuItem_Click);
 			// 
 			// saveWorldAsToolStripMenuItem
 			// 
@@ -189,6 +195,7 @@
             | System.Windows.Forms.Keys.S)));
 			this.saveWorldAsToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
 			this.saveWorldAsToolStripMenuItem.Text = "Save World &As...";
+			this.saveWorldAsToolStripMenuItem.Click += new System.EventHandler(this.saveWorldAsToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator8
 			// 
@@ -200,6 +207,7 @@
 			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
 			this.exitToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
 			this.exitToolStripMenuItem.Text = "E&xit";
+			this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
 			// 
 			// editToolStripMenuItem
 			// 
@@ -223,6 +231,7 @@
 			this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
 			this.undoToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
 			this.undoToolStripMenuItem.Text = "&Undo";
+			this.undoToolStripMenuItem.Click += new System.EventHandler(this.undoToolStripMenuItem_Click);
 			// 
 			// redoToolStripMenuItem
 			// 
@@ -230,6 +239,7 @@
 			this.redoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
 			this.redoToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
 			this.redoToolStripMenuItem.Text = "&Redo";
+			this.redoToolStripMenuItem.Click += new System.EventHandler(this.redoToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator9
 			// 
@@ -242,6 +252,7 @@
 			this.cutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
 			this.cutToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
 			this.cutToolStripMenuItem.Text = "Cu&t";
+			this.cutToolStripMenuItem.Click += new System.EventHandler(this.cutToolStripMenuItem_Click);
 			// 
 			// copyToolStripMenuItem
 			// 
@@ -249,6 +260,7 @@
 			this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
 			this.copyToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
 			this.copyToolStripMenuItem.Text = "&Copy";
+			this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
 			// 
 			// pasteToolStripMenuItem
 			// 
@@ -256,6 +268,7 @@
 			this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
 			this.pasteToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
 			this.pasteToolStripMenuItem.Text = "&Paste";
+			this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
 			// 
 			// deleteToolStripMenuItem1
 			// 
@@ -263,6 +276,7 @@
 			this.deleteToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.Delete;
 			this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(164, 22);
 			this.deleteToolStripMenuItem1.Text = "&Delete";
+			this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.deleteToolStripMenuItem1_Click);
 			// 
 			// toolStripSeparator10
 			// 
@@ -275,9 +289,13 @@
 			this.selectAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
 			this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
 			this.selectAllToolStripMenuItem.Text = "Select &All";
+			this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
 			// 
 			// viewToolStripMenuItem
 			// 
+			this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.playAnimationsToolStripMenuItem,
+            this.showGridToolStripMenuItem});
 			this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
 			this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
 			this.viewToolStripMenuItem.Text = "&View";
@@ -297,6 +315,7 @@
             | System.Windows.Forms.Keys.L)));
 			this.addLevelToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
 			this.addLevelToolStripMenuItem.Text = "&Add Level...";
+			this.addLevelToolStripMenuItem.Click += new System.EventHandler(this.addLevelToolStripMenuItem_Click);
 			// 
 			// toolStrip1
 			// 
@@ -306,7 +325,8 @@
             this.buttonSave,
             this.buttonSaveAs,
             this.buttonAddLevel,
-            this.toolStripSeparator1});
+            this.toolStripSeparator1,
+            this.toolStripButton1});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 24);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(875, 25);
@@ -320,7 +340,8 @@
 			this.buttonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.buttonNew.Name = "buttonNew";
 			this.buttonNew.Size = new System.Drawing.Size(23, 22);
-			this.buttonNew.Text = "New World";
+			this.buttonNew.Text = "New World (Ctrl+N)";
+			this.buttonNew.Click += new System.EventHandler(this.newWorldToolStripMenuItem_Click);
 			// 
 			// buttonLoad
 			// 
@@ -329,8 +350,8 @@
 			this.buttonLoad.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.buttonLoad.Name = "buttonLoad";
 			this.buttonLoad.Size = new System.Drawing.Size(23, 22);
-			this.buttonLoad.Text = "Open World";
-			this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
+			this.buttonLoad.Text = "Open World (Ctrl+O)";
+			this.buttonLoad.Click += new System.EventHandler(this.openWorldToolStripMenuItem_Click);
 			// 
 			// buttonSave
 			// 
@@ -339,8 +360,8 @@
 			this.buttonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.buttonSave.Name = "buttonSave";
 			this.buttonSave.Size = new System.Drawing.Size(23, 22);
-			this.buttonSave.Text = "Save World";
-			this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+			this.buttonSave.Text = "Save World (Ctrl+S)";
+			this.buttonSave.Click += new System.EventHandler(this.saveWorldToolStripMenuItem_Click);
 			// 
 			// buttonSaveAs
 			// 
@@ -349,8 +370,8 @@
 			this.buttonSaveAs.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.buttonSaveAs.Name = "buttonSaveAs";
 			this.buttonSaveAs.Size = new System.Drawing.Size(23, 22);
-			this.buttonSaveAs.Text = "Save World As";
-			this.buttonSaveAs.Click += new System.EventHandler(this.buttonSaveAs_Click);
+			this.buttonSaveAs.Text = "Save World As (Ctrl+Shift+S)";
+			this.buttonSaveAs.Click += new System.EventHandler(this.saveWorldAsToolStripMenuItem_Click);
 			// 
 			// buttonAddLevel
 			// 
@@ -359,8 +380,8 @@
 			this.buttonAddLevel.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.buttonAddLevel.Name = "buttonAddLevel";
 			this.buttonAddLevel.Size = new System.Drawing.Size(23, 22);
-			this.buttonAddLevel.Text = "Add New Level";
-			this.buttonAddLevel.Click += new System.EventHandler(this.buttonAddLevel_Click);
+			this.buttonAddLevel.Text = "Add New Level (Ctrl+Shift+L)";
+			this.buttonAddLevel.Click += new System.EventHandler(this.addLevelToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator1
 			// 
@@ -447,7 +468,8 @@
 			this.buttonToolCopy.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.buttonToolCopy.Name = "buttonToolCopy";
 			this.buttonToolCopy.Size = new System.Drawing.Size(23, 22);
-			this.buttonToolCopy.Text = "toolStripButton1";
+			this.buttonToolCopy.Text = "Copy (Ctrl+C)";
+			this.buttonToolCopy.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
 			// 
 			// buttonToolCut
 			// 
@@ -456,7 +478,8 @@
 			this.buttonToolCut.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.buttonToolCut.Name = "buttonToolCut";
 			this.buttonToolCut.Size = new System.Drawing.Size(23, 22);
-			this.buttonToolCut.Text = "R";
+			this.buttonToolCut.Text = "Cut (Ctrl+X)";
+			this.buttonToolCut.Click += new System.EventHandler(this.cutToolStripMenuItem_Click);
 			// 
 			// buttonToolPaste
 			// 
@@ -465,7 +488,8 @@
 			this.buttonToolPaste.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.buttonToolPaste.Name = "buttonToolPaste";
 			this.buttonToolPaste.Size = new System.Drawing.Size(23, 22);
-			this.buttonToolPaste.Text = "toolStripButton1";
+			this.buttonToolPaste.Text = "Paste (Ctrl+V)";
+			this.buttonToolPaste.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator3
 			// 
@@ -589,7 +613,7 @@
 			this.buttonWorldGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.buttonWorldGrid.Name = "buttonWorldGrid";
 			this.buttonWorldGrid.Size = new System.Drawing.Size(23, 22);
-			this.buttonWorldGrid.Text = "Show Grid";
+			this.buttonWorldGrid.Text = "Show Grid (Ctrl+G)";
 			this.buttonWorldGrid.Click += new System.EventHandler(this.buttonWorldGrid_Click);
 			// 
 			// buttonAnimations
@@ -811,6 +835,30 @@
 			this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
 			this.duplicateToolStripMenuItem.Text = "Duplicate";
 			// 
+			// playAnimationsToolStripMenuItem
+			// 
+			this.playAnimationsToolStripMenuItem.CheckOnClick = true;
+			this.playAnimationsToolStripMenuItem.Name = "playAnimationsToolStripMenuItem";
+			this.playAnimationsToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+			this.playAnimationsToolStripMenuItem.Text = "Play Animations";
+			// 
+			// showGridToolStripMenuItem
+			// 
+			this.showGridToolStripMenuItem.CheckOnClick = true;
+			this.showGridToolStripMenuItem.Name = "showGridToolStripMenuItem";
+			this.showGridToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+			this.showGridToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+			this.showGridToolStripMenuItem.Text = "Show Grid";
+			// 
+			// toolStripButton1
+			// 
+			this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton1.Name = "toolStripButton1";
+			this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton1.Text = "toolStripButton1";
+			// 
 			// EditorForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -936,5 +984,8 @@
 		private System.Windows.Forms.ToolStripMenuItem selectAllToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem worldToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem addLevelToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem playAnimationsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem showGridToolStripMenuItem;
+		private System.Windows.Forms.ToolStripButton toolStripButton1;
 	}
 }

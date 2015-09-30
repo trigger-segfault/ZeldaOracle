@@ -28,6 +28,7 @@ namespace ZeldaEditor.Control {
 		// Control
 		private EditorForm			editorForm;
 		private PropertyGridControl	propertyGridControl;
+		private string				worldFileName;
 		private World				world;
 		private Level				level;
 		private Tileset				tileset;
@@ -37,6 +38,7 @@ namespace ZeldaEditor.Control {
 
 		private Stopwatch			timer;
 		private int					ticks;
+		private bool				hasMadeChanges;
 
 		// Settings
 		private bool				playAnimations;
@@ -70,6 +72,7 @@ namespace ZeldaEditor.Control {
 
 		public EditorControl() {
 			this.propertyGridControl	= null;
+			this.worldFileName	= String.Empty;
 			this.world			= null;
 			this.level			= null;
 			this.tileset		= null;
@@ -81,20 +84,21 @@ namespace ZeldaEditor.Control {
 			this.roomSpacing	= 1;
 			this.playAnimations	= false;
 			this.isInitialized	= false;
+			this.hasMadeChanges	= false;
 
-			this.currentLayer			= 0;
+			this.currentLayer				= 0;
 			this.currentToolIndex			= 0;
-			this.aboveTileDrawMode		= TileDrawModes.Fade;
-			this.belowTileDrawMode		= TileDrawModes.Fade;
-			this.showRewards			= true;
-			this.showGrid				= false;
-			this.highlightMouseTile		= true;
-			this.selectedRoom			= -Point2I.One;
-			this.selectedTile			= -Point2I.One;
-			this.selectedTilesetTile	= Point2I.Zero;
+			this.aboveTileDrawMode			= TileDrawModes.Fade;
+			this.belowTileDrawMode			= TileDrawModes.Fade;
+			this.showRewards				= true;
+			this.showGrid					= false;
+			this.highlightMouseTile			= true;
+			this.selectedRoom				= -Point2I.One;
+			this.selectedTile				= -Point2I.One;
+			this.selectedTilesetTile		= Point2I.Zero;
 			this.selectedTilesetTileData	= null;
-			this.playerPlaceMode		= false;
-			this.sampleFromAllLayers	= false;
+			this.playerPlaceMode			= false;
+			this.sampleFromAllLayers		= false;
 		}
 
 		public void Initialize(ContentManager contentManager, GraphicsDevice graphicsDevice) {
@@ -154,12 +158,16 @@ namespace ZeldaEditor.Control {
 			if (IsWorldOpen) {
 				WorldFile saveFile = new WorldFile();
 				saveFile.Save(fileName, world);
+				hasMadeChanges = false;
 			}
 		}
 
 		// Open a world file with the given filename.
 		public void OpenFile(string fileName) {
 			CloseFile();
+
+			hasMadeChanges = false;
+			worldFileName = fileName;
 
 			// Load the world.
 			WorldFile worldFile = new WorldFile();
@@ -182,8 +190,10 @@ namespace ZeldaEditor.Control {
 		// Close the world file.
 		public void CloseFile() {
 			if (IsWorldOpen) {
-				world = null;
-				level = null;
+				world			= null;
+				level			= null;
+				hasMadeChanges	= false;
+				worldFileName	= "";
 				editorForm.LevelTreeView.Nodes.Clear();
 			}
 		}
@@ -196,6 +206,7 @@ namespace ZeldaEditor.Control {
 			propertyGridControl.OpenProperties(level.Properties, "Level");
 		}
 
+		// Add a new level the world, and open it if specified.
 		public void AddLevel(Level level, bool openLevel) {
 			world.Levels.Add(level);
 			
@@ -263,19 +274,17 @@ namespace ZeldaEditor.Control {
 		// Tiles
 		//-----------------------------------------------------------------------------
 
+		// Open the properties for the given tile in the property grid.
 		public void OpenTileProperties(TileDataInstance tile) {
 			propertyGridControl.OpenProperties(tile.ModifiedProperties, "Tile ");
-		}
-		
-		public void CloseProperties(TileDataInstance tile) {
-			propertyGridControl.CloseProperties();
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Tools
 		//-----------------------------------------------------------------------------
-
+		
+		// Change the current tool to the tool of the given index.
 		public void ChangeTool(int toolIndex) {
 			currentToolIndex = toolIndex;
 			if (currentToolIndex != 0) {
@@ -285,7 +294,8 @@ namespace ZeldaEditor.Control {
 			editorForm.OnToolChange(toolIndex);
 		}
 		
-		public EditorTool AddTool(EditorTool tool) {
+		// Add a new tool to the list of tools and initialize it.
+		private EditorTool AddTool(EditorTool tool) {
 			tool.Initialize(this);
 			tools.Add(tool);
 			return tool;
@@ -296,11 +306,13 @@ namespace ZeldaEditor.Control {
 		// Ticks
 		//-----------------------------------------------------------------------------
 
+		// Update the elapsed ticks based on the total elapsed seconds.
 		public void UpdateTicks() {
 			double time = timer.Elapsed.TotalSeconds;
 			if (playAnimations)
 				ticks = (int)(time * 60.0);
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -427,6 +439,18 @@ namespace ZeldaEditor.Control {
 		public ToolPointer ToolPointer {
 			get { return toolPointer; }
 			set { toolPointer = value; }
+		}
+
+		public bool IsWorldFromFile {
+			get { return (worldFileName != String.Empty); }
+		}
+
+		public string WorldFileName {
+			get { return worldFileName; }
+		}
+
+		public bool HasMadeChanges {
+			get { return hasMadeChanges; }
 		}
 	}
 }

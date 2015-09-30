@@ -21,7 +21,6 @@ namespace ZeldaEditor {
 		private LevelDisplay		levelDisplay;
 		private TileDisplay			tileDisplay;
 		private EditorControl		editorControl;
-		//private PropertiesContainer	propertiesContainer;
 
 		private ToolStripButton[]	toolButtons;
 
@@ -77,12 +76,66 @@ namespace ZeldaEditor {
 		}
 
 
-		protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
-			if (keyData == (Keys.Control | Keys.O)) {
-				MessageBox.Show("Hotkey pressed!");
-				return true;
+		//-----------------------------------------------------------------------------
+		// Methods
+		//-----------------------------------------------------------------------------
+
+		// Prompt the user to save unsaved changes if there are any. Returns
+		// the result of the prompt dialogue (yes/no/cancel), or 'yes' if
+		// there were no unsaved changes.
+		private DialogResult PromptSaveChanges() {
+			if (!editorControl.IsWorldOpen || !editorControl.HasMadeChanges)
+				return DialogResult.Yes;
+
+			string worldName = "untitled";
+			if (editorControl.IsWorldFromFile)
+				worldName = editorControl.WorldFileName;
+			DialogResult result = MessageBox.Show("Do you want to save changes to " + worldName + "?", "Unsave Changes",
+				MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+			
+			if (result == DialogResult.Yes)
+				SaveWorld();
+			
+			return result;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Event Handlers
+		//-----------------------------------------------------------------------------
+
+		// Attempt to save the world automatically first, or open a dialogue
+		// if the world isn't from a file.
+		private void SaveWorld() {
+			if (editorControl.IsWorldFromFile)
+				editorControl.SaveFileAs(editorControl.WorldFileName); // Save to file.
+			else
+				SaveWorldAs(); // Open Save as dialogue
+		}
+
+		// Open a save file dialogue to save the world.
+		private void SaveWorldAs() {
+			SaveFileDialog saveFileDialog = new SaveFileDialog();
+			saveFileDialog.Filter = "Zelda world files (*.zwd)|*.zwd";
+			saveFileDialog.ValidateNames = true;
+
+			if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+				Console.WriteLine("Saving file as " + saveFileDialog.FileName + ".");
+				editorControl.SaveFileAs(saveFileDialog.FileName);
 			}
-			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
+		
+		// Make sure to check for unsaved changes when closing.
+		protected override void OnFormClosing(FormClosingEventArgs e) {
+			if (PromptSaveChanges() == DialogResult.Cancel)
+				e.Cancel = true;
+			else
+				base.OnFormClosing(e);
 		}
 
 
@@ -99,50 +152,6 @@ namespace ZeldaEditor {
 		//-----------------------------------------------------------------------------
 		// Form Event Handlers
 		//-----------------------------------------------------------------------------
-
-		// Open a file.
-		private void buttonLoad_Click(object sender, EventArgs e) {
-			OpenFileDialog openFileDialog = new OpenFileDialog();
-			openFileDialog.DereferenceLinks = true;
-			openFileDialog.Filter = "Zelda world files (*.zwd)|*.zwd";
-
-			openFileDialog.ShowDialog();
-
-			if (openFileDialog.FileName != String.Empty) {
-				Console.WriteLine("Opened file " + openFileDialog.FileName + ".");
-				editorControl.OpenFile(openFileDialog.FileName);
-			}
-		}
-
-		// Save the file.
-		private void buttonSave_Click(object sender, EventArgs e) {
-			buttonSaveAs_Click(sender, e);
-		}
-		
-		// Save the file as.
-		private void buttonSaveAs_Click(object sender, EventArgs e) {
-			SaveFileDialog saveFileDialog = new SaveFileDialog();
-			saveFileDialog.Filter = "Zelda world files (*.zwd)|*.zwd";
-			saveFileDialog.ValidateNames = true;
-
-			saveFileDialog.ShowDialog();
-
-			if (saveFileDialog.FileName != String.Empty) {
-				Console.WriteLine("Saving file as " + saveFileDialog.FileName + ".");
-				editorControl.SaveFileAs(saveFileDialog.FileName);
-			}
-		}
-
-		// Add a new level to the world.
-		private void buttonAddLevel_Click(object sender, EventArgs e) {
-			using (LevelAddForm form = new LevelAddForm()) {
-				if (form.ShowDialog(this) == DialogResult.OK) {
-					Level level = new Level(form.LevelName, form.LevelWidth, form.LevelHeight,
-						form.LevelLayerCount, form.LevelRoomSize, form.LevelZone);
-					editorControl.AddLevel(level, true);
-				}
-			}
-		}
 
 		private void buttonAnimations_Click(object sender, EventArgs e) {
 			editorControl.PlayAnimations = (sender as ToolStripButton).Checked;
@@ -286,6 +295,111 @@ namespace ZeldaEditor {
 		public ToolStripButton ButtonTestPlayerPlace {
 			get { return buttonTestPlayerPlace; }
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// File Menu Buttons
+		//-----------------------------------------------------------------------------
+
+		// New World...
+		private void newWorldToolStripMenuItem_Click(object sender, EventArgs e) {
+			if (PromptSaveChanges() != DialogResult.Cancel) {
+				// TODO: New World
+			}
+		}
+
+		//-----------------------------------------------------------------------------
+
+		// Open World...
+		private void openWorldToolStripMenuItem_Click(object sender, EventArgs e) {
+			if (PromptSaveChanges() != DialogResult.Cancel) {
+				OpenFileDialog openFileDialog = new OpenFileDialog();
+				openFileDialog.DereferenceLinks = true;
+				openFileDialog.Filter = "Zelda world files (*.zwd)|*.zwd";
+
+				if (openFileDialog.ShowDialog() == DialogResult.OK) {
+					Console.WriteLine("Opened file " + openFileDialog.FileName + ".");
+					editorControl.OpenFile(openFileDialog.FileName);
+				}
+			}
+		}
+
+		//-----------------------------------------------------------------------------
+
+		// Save World...
+		private void saveWorldToolStripMenuItem_Click(object sender, EventArgs e) {
+			SaveWorld();
+		}
+
+		// Save World As...
+		private void saveWorldAsToolStripMenuItem_Click(object sender, EventArgs e) {
+			SaveWorldAs();
+		}
+		
+		//-----------------------------------------------------------------------------
+
+		// Exit
+		private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
+			Close();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Edit Menu Buttons
+		//-----------------------------------------------------------------------------
+
+		// Undo
+		private void undoToolStripMenuItem_Click(object sender, EventArgs e) {
+
+		}
+
+		// Redo
+		private void redoToolStripMenuItem_Click(object sender, EventArgs e) {
+
+		}
+		
+		//-----------------------------------------------------------------------------
+
+		// Cut
+		private void cutToolStripMenuItem_Click(object sender, EventArgs e) {
+
+		}
+
+		// Copy
+		private void copyToolStripMenuItem_Click(object sender, EventArgs e) {
+
+		}
+
+		// Paste
+		private void pasteToolStripMenuItem_Click(object sender, EventArgs e) {
+
+		}
+
+		// Delete
+		private void deleteToolStripMenuItem1_Click(object sender, EventArgs e) {
+
+		}
+		
+		//-----------------------------------------------------------------------------
+
+		// Select All
+		private void selectAllToolStripMenuItem_Click(object sender, EventArgs e) {
+
+		}
+		
+		//-----------------------------------------------------------------------------
+
+		// Add Level...
+		private void addLevelToolStripMenuItem_Click(object sender, EventArgs e) {
+			using (LevelAddForm form = new LevelAddForm()) {
+				if (form.ShowDialog(this) == DialogResult.OK) {
+					Level level = new Level(form.LevelName, form.LevelWidth, form.LevelHeight,
+						form.LevelLayerCount, form.LevelRoomSize, form.LevelZone);
+					editorControl.AddLevel(level, true);
+				}
+			}
+		}
+
 
 	}
 
