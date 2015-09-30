@@ -55,7 +55,7 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		// Return a normalized vector representing the given angle.
-		public static Vector2F ToVector(int angle) {
+		public static Vector2F ToVector(int angle, bool normalize = true) {
 			Vector2F vec = Vector2F.Zero;
 			if (angle % 8 == SouthEast || angle % 8 == East || angle % 8 == NorthEast)
 				vec.X = 1;
@@ -65,7 +65,7 @@ namespace ZeldaOracle.Common.Geometry {
 				vec.Y = -1;
 			else if (angle % 8 >= SouthWest && angle % 8 <= SouthEast)
 				vec.Y = 1;
-			return vec.Normalized;
+			return (normalize ? vec.Normalized : vec);
 		}
 
 		// Return a point the given angle.
