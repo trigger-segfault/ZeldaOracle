@@ -9,6 +9,7 @@ namespace ZeldaOracle.Common.Properties {
 
 		// The property map.
 		private Dictionary<string, Property> map;
+		private Properties baseProperties;
 
 
 		//-----------------------------------------------------------------------------
@@ -18,11 +19,7 @@ namespace ZeldaOracle.Common.Properties {
 		// Construct an empty properties list.
 		public Properties() {
 			map = new Dictionary<string, Property>();
-		}
-
-		// Construct this properties as a copy of another.
-		public Properties(Properties p) {
-			map = new Dictionary<string, Property>(p.map);
+			baseProperties = null;
 		}
 
 
@@ -31,7 +28,9 @@ namespace ZeldaOracle.Common.Properties {
 		//-----------------------------------------------------------------------------
 		
 		// Get the property with the given name.
-		public Property GetProperty(string name) {
+		public Property GetProperty(string name, bool acceptBaseProperties = false) {
+			if (acceptBaseProperties && baseProperties != null && !map.ContainsKey(name))
+				return baseProperties.GetProperty(name, true);
 			return map[name];
 		}
 		
@@ -42,14 +41,25 @@ namespace ZeldaOracle.Common.Properties {
 
 		// Returns true if there exists a property with the given name.
 		public bool Exists(string name) {
+			if (baseProperties != null && baseProperties.Exists(name))
+				return true;
 			return map.ContainsKey(name);
 		}
 
 		// Returns true if there exists a property with the given name and type.
 		public bool Exists(string name, PropertyType type) {
+			if (baseProperties != null && baseProperties.Exists(name, type))
+				return true;
 			if (!map.ContainsKey(name))
 				return false;
 			return (map[name].Type == type);
+		}
+
+		// Does the given property have a value different from the base properties?
+		public bool IsPropertyModified(string name) {
+			if (baseProperties == null || !map.ContainsKey(name) || !baseProperties.map.ContainsKey(name))
+				return false;
+			return !baseProperties.map[name].EqualsValue(map[name]);
 		}
 
 		
@@ -59,32 +69,44 @@ namespace ZeldaOracle.Common.Properties {
 		
 		// Return true if there exists a property with the given name that equates to the given value.
 		public bool ExistsEquals(string name, string value) {
-			if (!map.ContainsKey(name))
+			if (!map.ContainsKey(name)) {
+				if (baseProperties != null)
+					return baseProperties.ExistsEquals(name, value);
 				return false;
+			}
 			Property p = GetProperty(name);
 			return (p.Type == PropertyType.String && p.StringValue == value);
 		}
 		
 		// Return true if there exists a property with the given name that equates to the given value.
 		public bool ExistsEquals(string name, int value) {
-			if (!map.ContainsKey(name))
+			if (!map.ContainsKey(name)) {
+				if (baseProperties != null)
+					return baseProperties.ExistsEquals(name, value);
 				return false;
+			}
 			Property p = GetProperty(name);
 			return (p.Type == PropertyType.Integer && p.IntValue == value);
 		}
 		
 		// Return true if there exists a property with the given name that equates to the given value.
 		public bool ExistsEquals(string name, float value) {
-			if (!map.ContainsKey(name))
+			if (!map.ContainsKey(name)) {
+				if (baseProperties != null)
+					return baseProperties.ExistsEquals(name, value);
 				return false;
+			}
 			Property p = GetProperty(name);
 			return (p.Type == PropertyType.Float && p.FloatValue == value);
 		}
 		
 		// Return true if there exists a property with the given name that equates to the given value.
 		public bool ExistsEquals(string name, bool value) {
-			if (!map.ContainsKey(name))
+			if (!map.ContainsKey(name)) {
+				if (baseProperties != null)
+					return baseProperties.ExistsEquals(name, value);
 				return false;
+			}
 			Property p = GetProperty(name);
 			return (p.Type == PropertyType.Boolean && p.BoolValue == value);
 		}
@@ -93,35 +115,47 @@ namespace ZeldaOracle.Common.Properties {
 		//-----------------------------------------------------------------------------
 		// Exist NOT equals
 		//-----------------------------------------------------------------------------
-
+		
 		// Return true if there exists a property with the given name that equates to the given value.
 		public bool ExistsNotEquals(string name, string value) {
-			if (!map.ContainsKey(name))
+			if (!map.ContainsKey(name)) {
+				if (baseProperties != null)
+					return baseProperties.ExistsNotEquals(name, value);
 				return false;
+			}
 			Property p = GetProperty(name);
 			return (p.Type == PropertyType.String && p.StringValue != value);
 		}
 		
 		// Return true if there exists a property with the given name that equates to the given value.
 		public bool ExistsNotEquals(string name, int value) {
-			if (!map.ContainsKey(name))
+			if (!map.ContainsKey(name)) {
+				if (baseProperties != null)
+					return baseProperties.ExistsNotEquals(name, value);
 				return false;
+			}
 			Property p = GetProperty(name);
 			return (p.Type == PropertyType.Integer && p.IntValue != value);
 		}
 		
 		// Return true if there exists a property with the given name that equates to the given value.
 		public bool ExistsNotEquals(string name, float value) {
-			if (!map.ContainsKey(name))
+			if (!map.ContainsKey(name)) {
+				if (baseProperties != null)
+					return baseProperties.ExistsNotEquals(name, value);
 				return false;
+			}
 			Property p = GetProperty(name);
 			return (p.Type == PropertyType.Float && p.FloatValue != value);
 		}
 		
 		// Return true if there exists a property with the given name that equates to the given value.
 		public bool ExistsNotEquals(string name, bool value) {
-			if (!map.ContainsKey(name))
+			if (!map.ContainsKey(name)) {
+				if (baseProperties != null)
+					return baseProperties.ExistsNotEquals(name, value);
 				return false;
+			}
 			Property p = GetProperty(name);
 			return (p.Type == PropertyType.Boolean && p.BoolValue != value);
 		}
@@ -138,21 +172,29 @@ namespace ZeldaOracle.Common.Properties {
 		
 		// Get a boolean value with a default value fallback.
 		public string GetString(string name) {
+			if (baseProperties != null && !map.ContainsKey(name))
+				return baseProperties.GetString(name);
 			return GetProperty(name).StringValue;
 		}
 		
 		// Get a boolean value with a default value fallback.
 		public int GetInteger(string name) {
+			if (baseProperties != null && !map.ContainsKey(name))
+				return baseProperties.GetInteger(name);
 			return GetProperty(name).IntValue;
 		}
 		
 		// Get a boolean value with a default value fallback.
 		public float GetFloat(string name) {
+			if (baseProperties != null && !map.ContainsKey(name))
+				return baseProperties.GetFloat(name);
 			return GetProperty(name).FloatValue;
 		}
 		
 		// Get a boolean value with a default value fallback.
 		public bool GetBoolean(string name) {
+			if (baseProperties != null && !map.ContainsKey(name))
+				return baseProperties.GetBoolean(name);
 			return GetProperty(name).BoolValue;
 		}
 
@@ -163,6 +205,8 @@ namespace ZeldaOracle.Common.Properties {
 
 		// Get a boolean value with a default value fallback.
 		public string GetString(string name, string defaultValue) {
+			if (baseProperties != null && !map.ContainsKey(name))
+				return baseProperties.GetString(name, defaultValue);
 			if (Exists(name, PropertyType.String))
 				return GetProperty(name).StringValue;
 			return defaultValue;
@@ -170,6 +214,8 @@ namespace ZeldaOracle.Common.Properties {
 		
 		// Get a boolean value with a default value fallback.
 		public int GetInteger(string name, int defaultValue) {
+			if (baseProperties != null && !map.ContainsKey(name))
+				return baseProperties.GetInteger(name, defaultValue);
 			if (Exists(name, PropertyType.Integer))
 				return GetProperty(name).IntValue;
 			return defaultValue;
@@ -177,6 +223,8 @@ namespace ZeldaOracle.Common.Properties {
 		
 		// Get a boolean value with a default value fallback.
 		public float GetFloat(string name, float defaultValue) {
+			if (baseProperties != null && !map.ContainsKey(name))
+				return baseProperties.GetFloat(name, defaultValue);
 			if (Exists(name, PropertyType.Float))
 				return GetProperty(name).FloatValue;
 			return defaultValue;
@@ -184,6 +232,8 @@ namespace ZeldaOracle.Common.Properties {
 		
 		// Get a boolean value with a default value fallback.
 		public bool GetBoolean(string name, bool defaultValue) {
+			if (baseProperties != null && !map.ContainsKey(name))
+				return baseProperties.GetBoolean(name, defaultValue);
 			if (Exists(name, PropertyType.Boolean))
 				return GetProperty(name).BoolValue;
 			return defaultValue;
@@ -206,6 +256,7 @@ namespace ZeldaOracle.Common.Properties {
 		// Add a new property to the map.
 		public void Add(Property property) {
 			map[property.Name] = property;
+			// TODO: Check if property is not equal to default.
 		}
 
 		// Merge these properties with another.
@@ -252,7 +303,7 @@ namespace ZeldaOracle.Common.Properties {
 		//-----------------------------------------------------------------------------
 		// Property define
 		//-----------------------------------------------------------------------------
-
+		/*
 		// Set the given property ONLY it doesn't already exist.
 		// This can only create a new property.
 		// Returns true if the property was created.
@@ -329,7 +380,7 @@ namespace ZeldaOracle.Common.Properties {
 			}
 			return false;
 		}
-
+		*/
 
 		//-----------------------------------------------------------------------------
 		// Static Methods
@@ -361,6 +412,12 @@ namespace ZeldaOracle.Common.Properties {
 		// Get the property with the given name.
 		public Property this[string propertyName] {
 			get { return map[propertyName]; }
+		}
+		
+		// Get the base properties.
+		public Properties BaseProperties {
+			get { return baseProperties; }
+			set { baseProperties = value; }
 		}
 
 	}

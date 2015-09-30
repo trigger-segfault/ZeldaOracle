@@ -10,7 +10,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZeldaEditor.Control;
+using ZeldaEditor.Tools;
 using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaEditor {
 
@@ -21,7 +23,7 @@ namespace ZeldaEditor {
 		private EditorControl		editorControl;
 		//private PropertiesContainer	propertiesContainer;
 
-		private ToolStripButton[] toolButtons;
+		private ToolStripButton[]	toolButtons;
 
 
 		//-----------------------------------------------------------------------------
@@ -55,7 +57,9 @@ namespace ZeldaEditor {
 			};
 			treeViewLevels.AfterLabelEdit += delegate(object sender, NodeLabelEditEventArgs e) {
 				Console.WriteLine("Renamed level to " + e.Label);
-				// Editing the label renames the level.
+				int levelIndex = e.Node.Index;
+				Level level = editorControl.World.GetLevel(levelIndex);
+				level.Name = e.Label;
 			};
 
 			this.comboBoxWorldLayer.Items.Add("Layer 1");
@@ -63,6 +67,7 @@ namespace ZeldaEditor {
 			this.comboBoxWorldLayer.Items.Add("Layer 3");
 			this.comboBoxWorldLayer.SelectedIndex = 0;
 
+			// Create tools.
 			this.toolButtons	= new ToolStripButton[] {
 				buttonToolPointer,
 				buttonToolPlace,
@@ -72,8 +77,27 @@ namespace ZeldaEditor {
 		}
 
 
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+			if (keyData == (Keys.Control | Keys.O)) {
+				MessageBox.Show("Hotkey pressed!");
+				return true;
+			}
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
+
 		//-----------------------------------------------------------------------------
-		// Event handlers
+		// Event Handlers
+		//-----------------------------------------------------------------------------
+
+		public void OnToolChange(int toolIndex) {
+			for (int i = 0; i < toolButtons.Length; i++)
+				toolButtons[i].Checked = (i == toolIndex);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Form Event Handlers
 		//-----------------------------------------------------------------------------
 
 		// Open a file.
@@ -90,8 +114,13 @@ namespace ZeldaEditor {
 			}
 		}
 
-		// Save the file as.
+		// Save the file.
 		private void buttonSave_Click(object sender, EventArgs e) {
+			buttonSaveAs_Click(sender, e);
+		}
+		
+		// Save the file as.
+		private void buttonSaveAs_Click(object sender, EventArgs e) {
 			SaveFileDialog saveFileDialog = new SaveFileDialog();
 			saveFileDialog.Filter = "Zelda world files (*.zwd)|*.zwd";
 			saveFileDialog.ValidateNames = true;
@@ -100,14 +129,19 @@ namespace ZeldaEditor {
 
 			if (saveFileDialog.FileName != String.Empty) {
 				Console.WriteLine("Saving file as " + saveFileDialog.FileName + ".");
-				editorControl.SaveFile(saveFileDialog.FileName);
+				editorControl.SaveFileAs(saveFileDialog.FileName);
 			}
 		}
 
 		// Add a new level to the world.
 		private void buttonAddLevel_Click(object sender, EventArgs e) {
-			LevelAddForm form = new LevelAddForm();
-			form.ShowDialog(this);
+			using (LevelAddForm form = new LevelAddForm()) {
+				if (form.ShowDialog(this) == DialogResult.OK) {
+					Level level = new Level(form.LevelName, form.LevelWidth, form.LevelHeight,
+						form.LevelLayerCount, form.LevelRoomSize, form.LevelZone);
+					editorControl.AddLevel(level, true);
+				}
+			}
 		}
 
 		private void buttonAnimations_Click(object sender, EventArgs e) {
@@ -133,12 +167,8 @@ namespace ZeldaEditor {
 
 		private void buttonTool_Click(object sender, EventArgs e) {
 			for (int i = 0; i < toolButtons.Length; i++) {
-				if (toolButtons[i] != sender)
-					toolButtons[i].Checked = false;
-				else {
-					toolButtons[i].Checked = true;
+				if (toolButtons[i] == sender)
 					editorControl.ChangeTool(i);
-				}
 			}
 		}
 
@@ -204,6 +234,7 @@ namespace ZeldaEditor {
 			editorControl.RoomSpacing = showRoomBordersToolStripMenuItem.Checked ? 1 : 0;
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
@@ -248,9 +279,14 @@ namespace ZeldaEditor {
 			get { return propertyGrid; }
 		}
 
+		public Label PropertyGridTitle {
+			get { return propertyGridTitle; }
+		}
+
 		public ToolStripButton ButtonTestPlayerPlace {
 			get { return buttonTestPlayerPlace; }
 		}
+
 	}
 
 }

@@ -37,6 +37,7 @@ namespace ZeldaOracle.Game.Tiles {
 			this.layer		= layer;
 			this.tileData	= tileData;
 			this.modifiedProperties = new Properties();
+			this.modifiedProperties.BaseProperties = tileData.Properties;
 		}
 
 
@@ -61,7 +62,13 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public TileData TileData {
 			get { return tileData; }
-			set { tileData = value; }
+			set {
+				tileData = value;
+				if (tileData == null)
+					modifiedProperties.BaseProperties = null;
+				else
+					modifiedProperties.BaseProperties = tileData.Properties;
+			}
 		}
 		
 		public Properties ModifiedProperties {

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 
@@ -11,11 +12,10 @@ namespace ZeldaOracle.Game.Worlds {
 		
 		private Level							level;		// The level this room is in.
 		private Point2I							location;	// Location within the level.
-		private Point2I							size;		// Size of the tile grid.
-		private int								layerCount;	// Number of tile layers.
 		private TileDataInstance[,,]			tileData;	// 3D grid of tile data (x, y, layer)
 		private List<EventTileDataInstance>		eventData;
 		private Zone							zone;
+		private Properties						properties;
 
 
 		//-----------------------------------------------------------------------------
@@ -25,17 +25,20 @@ namespace ZeldaOracle.Game.Worlds {
 		public Room(Level level, int x, int y) {
 			this.level		= level;
 			this.location	= new Point2I(x, y);
-			this.size		= level.RoomSize;
-			this.layerCount	= GameSettings.DEFAULT_TILE_LAYER_COUNT; // Default tile layers.
-			this.tileData	= new TileDataInstance[size.X, size.Y, layerCount];
+			this.tileData	= new TileDataInstance[level.RoomSize.X, level.RoomSize.Y, level.RoomLayerCount];
 			this.eventData	= new List<EventTileDataInstance>();
 			this.zone		= null;
+			this.properties	= new Properties();
 		}
 		
 
 		//-----------------------------------------------------------------------------
 		// Accessors
 		//-----------------------------------------------------------------------------
+		
+		public TileDataInstance GetTile(Point2I location, int layer) {
+			return tileData[location.X, location.Y, layer];
+		}
 
 		public TileDataInstance GetTile(int x, int y, int layer) {
 			return tileData[x, y, layer];
@@ -55,6 +58,10 @@ namespace ZeldaOracle.Game.Worlds {
 
 		public void RemoveTile(int x, int y, int layer) {
 			tileData[x, y, layer] = null;
+		}
+
+		public TileDataInstance CreateTile(TileData data, Point2I location, int layer) {
+			return CreateTile(data, location.X, location.Y, layer);
 		}
 
 		public TileDataInstance CreateTile(TileData data, int x, int y, int layer) {
@@ -106,24 +113,29 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public Point2I Size {
-			get { return size; }
+			get { return level.RoomSize; }
 		}
 
 		public int Width {
-			get { return size.X; }
+			get { return level.RoomWidth; }
 		}
 
 		public int Height {
-			get { return size.Y; }
+			get { return level.RoomHeight; }
 		}
 
 		public int LayerCount {
-			get { return layerCount; }
+			get { return level.RoomLayerCount; }
 		}
 
 		public Zone Zone {
 			get { return zone; }
 			set { zone = value; }
+		}
+
+		public Properties Properties {
+			get { return properties; }
+			set { properties = value; }
 		}
 	}
 }
