@@ -46,6 +46,8 @@
 			this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
 			this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.playAnimationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.showGridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.worldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.addLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -55,6 +57,7 @@
 			this.buttonSaveAs = new System.Windows.Forms.ToolStripButton();
 			this.buttonAddLevel = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.toolStrip2 = new System.Windows.Forms.ToolStrip();
 			this.buttonToolPointer = new System.Windows.Forms.ToolStripButton();
 			this.buttonToolPlace = new System.Windows.Forms.ToolStripButton();
@@ -100,9 +103,9 @@
 			this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.duplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.playAnimationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.showGridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+			this.testLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.testLevelAtPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.toolStrip2.SuspendLayout();
@@ -300,10 +303,27 @@
 			this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
 			this.viewToolStripMenuItem.Text = "&View";
 			// 
+			// playAnimationsToolStripMenuItem
+			// 
+			this.playAnimationsToolStripMenuItem.CheckOnClick = true;
+			this.playAnimationsToolStripMenuItem.Name = "playAnimationsToolStripMenuItem";
+			this.playAnimationsToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+			this.playAnimationsToolStripMenuItem.Text = "Play Animations";
+			// 
+			// showGridToolStripMenuItem
+			// 
+			this.showGridToolStripMenuItem.CheckOnClick = true;
+			this.showGridToolStripMenuItem.Name = "showGridToolStripMenuItem";
+			this.showGridToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+			this.showGridToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+			this.showGridToolStripMenuItem.Text = "Show Grid";
+			// 
 			// worldToolStripMenuItem
 			// 
 			this.worldToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addLevelToolStripMenuItem});
+            this.addLevelToolStripMenuItem,
+            this.testLevelToolStripMenuItem,
+            this.testLevelAtPositionToolStripMenuItem});
 			this.worldToolStripMenuItem.Name = "worldToolStripMenuItem";
 			this.worldToolStripMenuItem.Size = new System.Drawing.Size(51, 20);
 			this.worldToolStripMenuItem.Text = "&World";
@@ -326,7 +346,8 @@
             this.buttonSaveAs,
             this.buttonAddLevel,
             this.toolStripSeparator1,
-            this.toolStripButton1});
+            this.toolStripButton1,
+            this.toolStripButton2});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 24);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(875, 25);
@@ -387,6 +408,16 @@
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
 			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+			// 
+			// toolStripButton1
+			// 
+			this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton1.Name = "toolStripButton1";
+			this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton1.Text = "Test Level (F5)";
+			this.toolStripButton1.Click += new System.EventHandler(this.testLevelToolStripMenuItem_Click);
 			// 
 			// toolStrip2
 			// 
@@ -835,29 +866,32 @@
 			this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
 			this.duplicateToolStripMenuItem.Text = "Duplicate";
 			// 
-			// playAnimationsToolStripMenuItem
+			// toolStripButton2
 			// 
-			this.playAnimationsToolStripMenuItem.CheckOnClick = true;
-			this.playAnimationsToolStripMenuItem.Name = "playAnimationsToolStripMenuItem";
-			this.playAnimationsToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
-			this.playAnimationsToolStripMenuItem.Text = "Play Animations";
+			this.toolStripButton2.CheckOnClick = true;
+			this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
+			this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton2.Name = "toolStripButton2";
+			this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton2.Text = "Test Level From Location (Shift+F5)";
+			this.toolStripButton2.Click += new System.EventHandler(this.testLevelAtPositionToolStripMenuItem_Click);
 			// 
-			// showGridToolStripMenuItem
+			// testLevelToolStripMenuItem
 			// 
-			this.showGridToolStripMenuItem.CheckOnClick = true;
-			this.showGridToolStripMenuItem.Name = "showGridToolStripMenuItem";
-			this.showGridToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-			this.showGridToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
-			this.showGridToolStripMenuItem.Text = "Show Grid";
+			this.testLevelToolStripMenuItem.Name = "testLevelToolStripMenuItem";
+			this.testLevelToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+			this.testLevelToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+			this.testLevelToolStripMenuItem.Text = "Test Level";
+			this.testLevelToolStripMenuItem.Click += new System.EventHandler(this.testLevelToolStripMenuItem_Click);
 			// 
-			// toolStripButton1
+			// testLevelAtPositionToolStripMenuItem
 			// 
-			this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton1.Name = "toolStripButton1";
-			this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton1.Text = "toolStripButton1";
+			this.testLevelAtPositionToolStripMenuItem.Name = "testLevelAtPositionToolStripMenuItem";
+			this.testLevelAtPositionToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F5)));
+			this.testLevelAtPositionToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+			this.testLevelAtPositionToolStripMenuItem.Text = "Test Level At Position";
+			this.testLevelAtPositionToolStripMenuItem.Click += new System.EventHandler(this.testLevelAtPositionToolStripMenuItem_Click);
 			// 
 			// EditorForm
 			// 
@@ -987,5 +1021,8 @@
 		private System.Windows.Forms.ToolStripMenuItem playAnimationsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem showGridToolStripMenuItem;
 		private System.Windows.Forms.ToolStripButton toolStripButton1;
+		private System.Windows.Forms.ToolStripMenuItem testLevelToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem testLevelAtPositionToolStripMenuItem;
+		private System.Windows.Forms.ToolStripButton toolStripButton2;
 	}
 }

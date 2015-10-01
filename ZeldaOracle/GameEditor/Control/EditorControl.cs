@@ -266,7 +266,7 @@ namespace ZeldaEditor.Control {
 			worldFile.Save(worldPath, world);
 			string exePath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "ZeldaOracle.exe");
 			Process.Start(exePath, "\"" + worldPath + "\" -test " + levelIndex + " " + roomCoord.X + " " + roomCoord.Y + " " + playerCoord.X + " " + playerCoord.Y);
-			editorForm.ButtonTestPlayerPlace.Checked = false;
+			// TODO: editorForm.ButtonTestPlayerPlace.Checked = false;
 		}
 
 

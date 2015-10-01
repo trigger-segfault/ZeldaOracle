@@ -231,14 +231,6 @@ namespace ZeldaEditor {
 			editorControl.ShowGrid = buttonWorldGrid.Checked;
 		}
 
-		private void buttonTest_Click(object sender, EventArgs e) {
-			editorControl.TestWorld();
-		}
-
-		private void toolStripButton1_Click(object sender, EventArgs e) {
-			editorControl.PlayerPlaceMode = buttonTestPlayerPlace.Checked;
-		}
-
 		private void showRoomBordersToolStripMenuItem_Click(object sender, EventArgs e) {
 			editorControl.RoomSpacing = showRoomBordersToolStripMenuItem.Checked ? 1 : 0;
 		}
@@ -388,6 +380,20 @@ namespace ZeldaEditor {
 		}
 		
 		//-----------------------------------------------------------------------------
+		// World Menu Buttons
+		//-----------------------------------------------------------------------------
+
+
+		// Test Level
+		private void testLevelToolStripMenuItem_Click(object sender, EventArgs e) {
+			editorControl.TestWorld();
+		}
+
+		// Test Level At Position
+		private void testLevelAtPositionToolStripMenuItem_Click(object sender, EventArgs e) {
+			//editorControl.PlayerPlaceMode = buttonTestPlayerPlace.Checked;
+			editorControl.PlayerPlaceMode = true;
+		}
 
 		// Add Level...
 		private void addLevelToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -399,6 +405,8 @@ namespace ZeldaEditor {
 				}
 			}
 		}
+
+		//-----------------------------------------------------------------------------
 
 
 	}
