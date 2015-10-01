@@ -1,5 +1,5 @@
-﻿namespace ZeldaEditor {
-	partial class TextMessageEditForm {
+﻿namespace ZeldaEditor.PropertiesEditor.CustomEditors {
+	partial class TextMessageEditorForm {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -55,7 +55,7 @@
 			this.buttonOkay.Text = "Okay";
 			this.buttonOkay.UseVisualStyleBackColor = true;
 			// 
-			// TextMessageEditForm
+			// TextMessageEditorForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -63,7 +63,9 @@
 			this.Controls.Add(this.buttonOkay);
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.textBox);
-			this.Name = "TextMessageEditForm";
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.Name = "TextMessageEditorForm";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Edit Text Message";
 			this.ResumeLayout(false);
 			this.PerformLayout();

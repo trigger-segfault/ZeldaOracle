@@ -58,15 +58,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Control\EditorControl.cs" />
+    <Compile Include="Control\EditorGraphics.cs" />
+    <Compile Include="Control\EditorResources.cs" />
     <Compile Include="Control\PropertyGridControl.cs" />
     <Compile Include="Control\TileDrawModes.cs" />
-    <Compile Include="CustomProperties.cs" />
-    <Compile Include="TextMessageEditForm.cs">
+    <Compile Include="PropertiesEditor\CustomEditors\RewardPropertyEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TextMessageEditForm.Designer.cs">
-      <DependentUpon>TextMessageEditForm.cs</DependentUpon>
+    <Compile Include="PropertiesEditor\CustomEditors\RewardPropertyEditorForm.Designer.cs">
+      <DependentUpon>RewardPropertyEditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PropertiesEditor\CustomProperties.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\TextMessageEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PropertiesEditor\CustomEditors\TextMessageEditorForm.Designer.cs">
+      <DependentUpon>TextMessageEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PropertiesEditor\CustomPropertyDescriptor.cs" />
     <Compile Include="TileDisplay.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -76,6 +85,10 @@
     <Compile Include="EditorForm.Designer.cs">
       <DependentUpon>EditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\EditorTool.cs" />
+    <Compile Include="Tools\ToolEyedrop.cs" />
+    <Compile Include="Tools\ToolPlace.cs" />
+    <Compile Include="Tools\ToolPointer.cs" />
     <Compile Include="WinFormsGraphicsDevice\GraphicsDeviceControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -98,6 +111,9 @@
     <EmbeddedResource Include="LevelAddForm.resx">
       <DependentUpon>LevelAddForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PropertiesEditor\CustomEditors\RewardPropertyEditorForm.resx">
+      <DependentUpon>RewardPropertyEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -108,8 +124,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="TextMessageEditForm.resx">
-      <DependentUpon>TextMessageEditForm.cs</DependentUpon>
+    <EmbeddedResource Include="PropertiesEditor\CustomEditors\TextMessageEditorForm.resx">
+      <DependentUpon>TextMessageEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

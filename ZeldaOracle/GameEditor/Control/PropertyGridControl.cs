@@ -11,6 +11,8 @@ using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Worlds;
+using ZeldaEditor.PropertiesEditor;
+using ZeldaEditor.PropertiesEditor.CustomEditors;
 
 namespace ZeldaEditor.Control {
 	public class PropertyGridControl {
@@ -59,14 +61,16 @@ namespace ZeldaEditor.Control {
 		// Methods
 		//-----------------------------------------------------------------------------
 
-		public void OpenProperties(Properties properties, Properties baseProperties) {
-			propertiesContainer.Set(properties, baseProperties);
+		public void OpenProperties(Properties properties, string typeName) {
+			propertiesContainer.Set(properties);
 			propertyGrid.Refresh();
+			editorControl.EditorForm.PropertyGridTitle.Text = typeName + "  Properties";
 		}
 		
 		public void CloseProperties() {
 			propertiesContainer.Clear();
 			propertyGrid.Refresh();
+			editorControl.EditorForm.PropertyGridTitle.Text = "";
 		}
 
 

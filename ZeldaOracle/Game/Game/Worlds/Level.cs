@@ -3,26 +3,39 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Properties;
 
 namespace ZeldaOracle.Game.Worlds {
 	public class Level {
-		private string	name;
-		private World	world;
-		private Point2I roomSize;	// The size in tiles of each room in the level.
-		private int		roomLayerCount; // The number of tile layers for each room in the level.
-		private Point2I dimensions;	// The dimensions of the grid of rooms.
-		private Room[,] rooms;		// The grid of rooms.
-		
+		private string		name;
+		private World		world;
+		private Point2I		roomSize;		// The size in tiles of each room in the level.
+		private int			roomLayerCount; // The number of tile layers for each room in the level.
+		private Point2I		dimensions;		// The dimensions of the grid of rooms.
+		private Room[,]		rooms;			// The grid of rooms.
+		private Properties	properties;
+
 		
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
+		
+		public Level(string name, int width, int height, int layerCount, Point2I roomSize, Zone zone) {
+			this.name			= name;
+			this.world			= null;
+			this.roomSize		= roomSize;
+			this.roomLayerCount = layerCount;
+			this.properties		= new Properties();
+
+			Resize(new Point2I(width, height));
+		}
 
 		public Level(int width, int height, Point2I roomSize) {
-			this.name		= "";
-			this.world		= null;
-			this.roomSize	= roomSize;
-			this.roomLayerCount = 3;
+			this.name			= "";
+			this.world			= null;
+			this.roomSize		= roomSize;
+			this.roomLayerCount = GameSettings.DEFAULT_TILE_LAYER_COUNT;
+			this.properties		= new Properties();
 
 			Resize(new Point2I(width, height));
 		}
@@ -119,6 +132,11 @@ namespace ZeldaOracle.Game.Worlds {
 		public int RoomLayerCount {
 			get { return roomLayerCount; }
 			set { roomLayerCount = value; }
+		}
+
+		public Properties Properties {
+			get { return properties; }
+			set { properties = value; }
 		}
 	}
 }

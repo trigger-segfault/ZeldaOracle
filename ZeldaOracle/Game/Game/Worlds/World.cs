@@ -30,6 +30,10 @@ namespace ZeldaOracle.Game.Worlds {
 			return (GetLevel(levelID) != null);
 		}
 
+		public Level GetLevel(int index) {
+			return levels[index];
+		}
+
 		public Level GetLevel(string levelID) {
 			for (int i = 0; i < levels.Count; i++) {
 				if (levels[i].Name == levelID)

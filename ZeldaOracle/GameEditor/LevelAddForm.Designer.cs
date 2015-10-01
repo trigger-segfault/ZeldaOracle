@@ -35,8 +35,11 @@
 			this.label5 = new System.Windows.Forms.Label();
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.buttonAdd = new System.Windows.Forms.Button();
+			this.numericLayerCount = new System.Windows.Forms.NumericUpDown();
+			this.label6 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.numericLevelWidth)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericLevelHeight)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericLayerCount)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// textBoxLevelName
@@ -103,7 +106,7 @@
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(17, 94);
+			this.label3.Location = new System.Drawing.Point(17, 119);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(59, 13);
 			this.label3.TabIndex = 1;
@@ -127,10 +130,10 @@
 			this.comboBoxRoomSize.Items.AddRange(new object[] {
             "Small (10 x 8)",
             "Large (15 x 11)"});
-			this.comboBoxRoomSize.Location = new System.Drawing.Point(85, 91);
+			this.comboBoxRoomSize.Location = new System.Drawing.Point(85, 116);
 			this.comboBoxRoomSize.Name = "comboBoxRoomSize";
 			this.comboBoxRoomSize.Size = new System.Drawing.Size(145, 21);
-			this.comboBoxRoomSize.TabIndex = 3;
+			this.comboBoxRoomSize.TabIndex = 4;
 			// 
 			// comboBoxZone
 			// 
@@ -141,15 +144,15 @@
             "Forest",
             "Graveyard",
             "Interior"});
-			this.comboBoxZone.Location = new System.Drawing.Point(85, 118);
+			this.comboBoxZone.Location = new System.Drawing.Point(85, 143);
 			this.comboBoxZone.Name = "comboBoxZone";
 			this.comboBoxZone.Size = new System.Drawing.Size(145, 21);
-			this.comboBoxZone.TabIndex = 4;
+			this.comboBoxZone.TabIndex = 5;
 			// 
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(38, 121);
+			this.label5.Location = new System.Drawing.Point(41, 146);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(35, 13);
 			this.label5.TabIndex = 1;
@@ -159,23 +162,53 @@
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(155, 165);
+			this.buttonCancel.Location = new System.Drawing.Point(155, 192);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-			this.buttonCancel.TabIndex = 6;
+			this.buttonCancel.TabIndex = 7;
 			this.buttonCancel.Text = "Cancel";
 			this.buttonCancel.UseVisualStyleBackColor = true;
-			this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
 			// 
 			// buttonAdd
 			// 
-			this.buttonAdd.Location = new System.Drawing.Point(74, 165);
+			this.buttonAdd.Location = new System.Drawing.Point(74, 192);
 			this.buttonAdd.Name = "buttonAdd";
 			this.buttonAdd.Size = new System.Drawing.Size(75, 23);
-			this.buttonAdd.TabIndex = 5;
+			this.buttonAdd.TabIndex = 6;
 			this.buttonAdd.Text = "Add";
 			this.buttonAdd.UseVisualStyleBackColor = true;
-			this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
+			// 
+			// numericLayerCount
+			// 
+			this.numericLayerCount.Location = new System.Drawing.Point(85, 90);
+			this.numericLayerCount.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+			this.numericLayerCount.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numericLayerCount.Name = "numericLayerCount";
+			this.numericLayerCount.Size = new System.Drawing.Size(145, 20);
+			this.numericLayerCount.TabIndex = 3;
+			this.numericLayerCount.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+			// 
+			// label6
+			// 
+			this.label6.AutoSize = true;
+			this.label6.Location = new System.Drawing.Point(35, 90);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(41, 13);
+			this.label6.TabIndex = 1;
+			this.label6.Text = "Layers:";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// LevelAddForm
 			// 
@@ -183,15 +216,17 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(242, 200);
+			this.ClientSize = new System.Drawing.Size(242, 227);
 			this.Controls.Add(this.buttonAdd);
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.comboBoxZone);
 			this.Controls.Add(this.comboBoxRoomSize);
+			this.Controls.Add(this.numericLayerCount);
 			this.Controls.Add(this.numericLevelHeight);
 			this.Controls.Add(this.numericLevelWidth);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.label3);
+			this.Controls.Add(this.label6);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
@@ -204,6 +239,7 @@
 			this.Text = "Add New Level";
 			((System.ComponentModel.ISupportInitialize)(this.numericLevelWidth)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericLevelHeight)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericLayerCount)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -223,5 +259,7 @@
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Button buttonCancel;
 		private System.Windows.Forms.Button buttonAdd;
+		private System.Windows.Forms.NumericUpDown numericLayerCount;
+		private System.Windows.Forms.Label label6;
 	}
 }

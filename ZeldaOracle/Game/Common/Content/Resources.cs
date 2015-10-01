@@ -208,6 +208,14 @@ namespace ZeldaOracle.Common.Content {
 			return dictionary[name];
 		}
 
+		// Get the resource with the given name and type.
+		public static string GetResourceName<T>(T resource) where T : class {
+			if (!ExistsResourceType<T>())
+				return ""; // This type of resource doesn't exist!
+			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
+			return dictionary.FirstOrDefault(x => x.Value == resource).Key;
+		}
+
 		// Get the dictionary used to store the given type of resources.
 		public static Dictionary<string, T> GetResourceDictionary<T>() {
 			if (!ExistsResourceType<T>())

@@ -136,6 +136,10 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return defaultTile; }
 			set { defaultTile = value; }
 		}
+		
+		public TileData DefaultTileData {
+			get { return tileData[defaultTile.X, defaultTile.Y]; }
+		}
 
 		public SpriteSheet SpriteSheet {
 			get { return sheet; }

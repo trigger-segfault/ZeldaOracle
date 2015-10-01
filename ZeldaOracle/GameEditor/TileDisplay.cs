@@ -56,6 +56,7 @@ namespace ZeldaEditor {
 
 			base.Dispose(disposing);
 		}
+
 		
 		//-----------------------------------------------------------------------------
 		// Accessors
@@ -65,6 +66,7 @@ namespace ZeldaEditor {
 			//
 			return point / (Tileset.SpriteSheet.CellSize + Tileset.SpriteSheet.Spacing);
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Events
