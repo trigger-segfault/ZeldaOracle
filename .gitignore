@@ -21,15 +21,11 @@ $RECYCLE.BIN/
 
 *.cachefile
 
-ZeldaOracle/Game/bin
-ZeldaOracle/Game/obj
-
-ZeldaOracle/GameContent/bin
-ZeldaOracle/GameContent/obj
-ZeldaOracle/GameEditor/bin
-ZeldaOracle/GameEditor/obj
-
 *.suo
+
+bin
+
+obj
 
 # =========================
 # Operating System Files

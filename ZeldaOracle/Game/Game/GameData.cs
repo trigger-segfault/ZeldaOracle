@@ -638,9 +638,37 @@ namespace ZeldaOracle.Game {
 				"You got <red>Zora's Flippers<red>! You can now go for a swim! Press A to swim, B to dive!",
 				GameData.SPR_ITEM_ICON_FLIPPERS_1));
 
+			rewardManager.AddReward(new RewardItem("item_flippers_2", "item_flippers", Item.Level2, RewardHoldTypes.TwoHands,
+				"You got a <red>Mermaid Suit<red>! Now you can swim in deep waters. Press DPAD to swim, B to dive and A to use items.",
+				GameData.SPR_ITEM_ICON_FLIPPERS_2));
+
 			rewardManager.AddReward(new RewardItem("item_sword_1", "item_sword", Item.Level1, RewardHoldTypes.OneHand,
 				"You got a Hero's <red>Wooden Sword<red>! Hold A or B to charge it up, then release it for a spin attack!",
 				GameData.SPR_ITEM_ICON_SWORD_1));
+
+			rewardManager.AddReward(new RewardItem("item_sword_2", "item_sword", Item.Level2, RewardHoldTypes.OneHand,
+				"You got the sacred <red>Noble Sword<red>!",
+				GameData.SPR_ITEM_ICON_SWORD_2));
+
+			rewardManager.AddReward(new RewardItem("item_sword_3", "item_sword", Item.Level3, RewardHoldTypes.OneHand,
+				"You got the legendary <red>Master Sword<red>!",
+				GameData.SPR_ITEM_ICON_SWORD_3));
+
+			rewardManager.AddReward(new RewardItem("item_shield_1", "item_shield", Item.Level1, RewardHoldTypes.TwoHands,
+				"You got a <red>Wooden Shield<red>!",
+				GameData.SPR_ITEM_ICON_SHIELD_1));
+
+			rewardManager.AddReward(new RewardItem("item_shield_2", "item_shield", Item.Level2, RewardHoldTypes.TwoHands,
+				"You got an <red>Iron Shield<red>!",
+				GameData.SPR_ITEM_ICON_SHIELD_2));
+
+			rewardManager.AddReward(new RewardItem("item_shield_3", "item_shield", Item.Level3, RewardHoldTypes.TwoHands,
+				"You got the <red>Mirror Shield<red>!",
+				GameData.SPR_ITEM_ICON_SHIELD_3));
+
+			rewardManager.AddReward(new RewardItem("item_bombs_1", "item_bombs", Item.Level1, RewardHoldTypes.TwoHands,
+				"You got <red?Bombs<red>! Use them to blow open false walls. Press A or B to set a Bomb. If you also press DPAD, you can throw the Bomb.",
+				GameData.SPR_ITEM_ICON_BOMB));
 
 			rewardManager.AddReward(new RewardRecoveryHeart("hearts_1", 1,
 				"You recovered<n>only one <red>heart<red>!",
@@ -676,11 +704,11 @@ namespace ZeldaOracle.Game {
 
 			rewardManager.AddReward(new RewardAmmo("ammo_bombs_5", "ammo_bombs", 5,
 				"You got<n><red>5 Bombs<red>!",
-				GameData.SPR_REWARD_SEED_EMBER));
+				GameData.SPR_ITEM_AMMO_BOMB));
 
 			rewardManager.AddReward(new RewardAmmo("ammo_arrows_5", "ammo_arrows", 5,
 				"You got<n><red>5 Arrows<red>!",
-				GameData.SPR_REWARD_SEED_EMBER));
+				GameData.SPR_ITEM_AMMO_ARROW));
 		}
 
 
@@ -801,6 +829,9 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_ITEM_SEED_GALE;
 		public static Sprite SPR_ITEM_SEED_MYSTERY;
 		public static Sprite[] SPR_ITEM_SEEDS;
+
+		public static Sprite SPR_ITEM_AMMO_ARROW;
+		public static Sprite SPR_ITEM_AMMO_BOMB;
 		
 		public static Sprite SPR_ITEM_ICON_BIGGORON_SWORD;
 		public static Sprite SPR_ITEM_ICON_BIGGORON_SWORD_EQUIPPED;

@@ -19,6 +19,10 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		public RewardItem(string id, string itemID, int level, RewardHoldTypes holdType, string message, Sprite sprite) {
 			this.id				= id;
+			if (sprite.SourceRect.Width == 8 && sprite.DrawOffset.X == 0) {
+				sprite = new Sprite(sprite);
+				sprite.DrawOffset = new Point2I(4, sprite.DrawOffset.Y);
+			}
 			this.animation		= new Animation(sprite);
 			this.message		= message;
 			this.hasDuration	= true;
