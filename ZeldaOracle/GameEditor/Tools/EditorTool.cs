@@ -9,21 +9,12 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaEditor.Tools {
-	
-	public enum EditorTools {
-		Pointer		= 0,
-		Place		= 1,
-		Select		= 2,
-		Eyedrop		= 3,
-	}
-
-
 	public abstract class EditorTool {
 		protected EditorControl editorControl;
-		protected string name;
-
+		protected string		name;
 		private bool			isDragging;
 		private MouseButtons	dragButton;
+		private Cursor			mouseCursor;
 
 
 		//-----------------------------------------------------------------------------
@@ -39,48 +30,70 @@ namespace ZeldaEditor.Tools {
 		// Methods
 		//-----------------------------------------------------------------------------
 
-
 		public void Initialize(EditorControl editorControl) {
 			this.editorControl = editorControl;
+			this.mouseCursor = Cursors.Default;
 			Initialize();
+		}
+
+		public void StopDragging() {
+			isDragging = false;
 		}
 
 		
 		//-----------------------------------------------------------------------------
 		// Virtual methods
 		//-----------------------------------------------------------------------------
+		
+		// Called when the current layer is changed (or switched to events).
+		public virtual void OnChangeLayer() {}
+
+		public virtual void Cut() {}
+
+		public virtual void Copy() {}
+
+		public virtual void Paste() {}
+
+		public virtual void Delete() {}
+
+		public virtual void SelectAll() {}
+
+		public virtual void Deselect() {}
+
 
 		public virtual void Initialize() {}
 		
 		public virtual void OnBegin() {}
 		
 		public virtual void OnEnd() {}
+		
+		public virtual void OnMouseDragBegin(MouseEventArgs e) {}
 
-		public virtual void OnMouseDown(MouseEventArgs e, Room room, Point2I tileLocation) {
+		public virtual void OnMouseDragEnd(MouseEventArgs e) {}
+
+		public virtual void OnMouseDragMove(MouseEventArgs e) {}
+
+		public virtual void OnMouseDown(MouseEventArgs e) {
 			if (!isDragging) {
 				isDragging = true;
 				dragButton = e.Button;
-				OnMouseDragBegin(dragButton, room, tileLocation);
+				OnMouseDragBegin(e);
 			}
 		}
 
-		public virtual void OnMouseUp(MouseEventArgs e, Room room, Point2I tileLocation) {
+		public virtual void OnMouseUp(MouseEventArgs e) {
 			if (isDragging && e.Button.HasFlag(dragButton)) {
 				isDragging = false;
-				OnMouseDragEnd(dragButton, room, tileLocation);
+				OnMouseDragEnd(e);
 				dragButton = MouseButtons.None;
 			}
 		}
 
-		public virtual void OnMouseMove(MouseEventArgs e, Room room, Point2I tileLocation) {
-			if (isDragging) {
-				OnMouseDragMove(dragButton, room, tileLocation);
+		public virtual void OnMouseMove(MouseEventArgs e) {
+			if (isDragging && e.Button.HasFlag(dragButton)) {
+				OnMouseDragMove(e);
 			}
 		}
-		
-		public virtual void OnMouseDragBegin(MouseButtons buttons, Room room, Point2I tileLocation) {}
-		public virtual void OnMouseDragEnd(MouseButtons buttons, Room room, Point2I tileLocation) {}
-		public virtual void OnMouseDragMove(MouseButtons buttons, Room room, Point2I tileLocation) {}
 
 
 		//-----------------------------------------------------------------------------
@@ -95,6 +108,23 @@ namespace ZeldaEditor.Tools {
 		public EditorControl EditorControl {
 			get { return editorControl; }
 			set { editorControl = value; }
+		}
+
+		public LevelDisplay LevelDisplayControl {
+			get { return editorControl.LevelDisplay; }
+		}
+
+		public Cursor MouseCursor {
+			get { return mouseCursor; }
+			set { mouseCursor = value; }
+		}
+
+		public MouseButtons DragButton {
+			get { return dragButton; }
+		}
+		
+		public bool IsDragging {
+			get { return isDragging; }
 		}
 	}
 }

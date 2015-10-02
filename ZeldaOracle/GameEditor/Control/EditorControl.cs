@@ -28,6 +28,7 @@ namespace ZeldaEditor.Control {
 		// Control
 		private EditorForm			editorForm;
 		private PropertyGridControl	propertyGridControl;
+		private string				worldFilePath;
 		private string				worldFileName;
 		private World				world;
 		private Level				level;
@@ -42,11 +43,13 @@ namespace ZeldaEditor.Control {
 
 		// Settings
 		private bool				playAnimations;
+		private bool				eventMode;
 		
 		// Tools
 		private List<EditorTool>	tools;
 		private ToolPointer			toolPointer;
 		private ToolPlace			toolPlace;
+		private ToolSelection		toolSelection;
 		private ToolEyedrop			toolEyedrop;
 
 		// Editing
@@ -64,6 +67,7 @@ namespace ZeldaEditor.Control {
 		private TileData		selectedTilesetTileData;
 		private bool			playerPlaceMode;
 		private bool			sampleFromAllLayers; // TODO: implement this.
+		private bool			showEvents;
 
 
 		//-----------------------------------------------------------------------------
@@ -72,7 +76,8 @@ namespace ZeldaEditor.Control {
 
 		public EditorControl() {
 			this.propertyGridControl	= null;
-			this.worldFileName	= String.Empty;
+			this.worldFilePath	= String.Empty;
+			this.worldFileName	= "untitled";
 			this.world			= null;
 			this.level			= null;
 			this.tileset		= null;
@@ -92,6 +97,7 @@ namespace ZeldaEditor.Control {
 			this.belowTileDrawMode			= TileDrawModes.Fade;
 			this.showRewards				= true;
 			this.showGrid					= false;
+			this.showEvents					= false;
 			this.highlightMouseTile			= true;
 			this.selectedRoom				= -Point2I.One;
 			this.selectedTile				= -Point2I.One;
@@ -116,6 +122,7 @@ namespace ZeldaEditor.Control {
 				this.tileset		= GameData.TILESET_OVERWORLD;
 				this.zone			= GameData.ZONE_SUMMER;
 				this.selectedTilesetTileData = this.tileset.TileData[0, 0];
+				this.eventMode		= false;
 
 				GameData.LoadInventory(inventory);
 				GameData.LoadRewards(rewardManager);
@@ -135,17 +142,32 @@ namespace ZeldaEditor.Control {
 				}
 				editorForm.ComboBoxZones.SelectedIndex = 0;
 
+				// Create controllers.
 				propertyGridControl = new PropertyGridControl(this, editorForm.PropertyGrid);
 
 				// Create tools.
 				tools = new List<EditorTool>();
-				AddTool(toolPointer	= new ToolPointer());
-				AddTool(toolPlace	= new ToolPlace());
-				AddTool(toolPlace);
-				AddTool(toolEyedrop	= new ToolEyedrop());
+				AddTool(toolPointer		= new ToolPointer());
+				AddTool(toolPlace		= new ToolPlace());
+				AddTool(toolSelection	= new ToolSelection());
+				AddTool(toolEyedrop		= new ToolEyedrop());
+				currentToolIndex = 0;
+				tools[currentToolIndex].OnBegin();
 
 				this.isInitialized = true;
 			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// General
+		//-----------------------------------------------------------------------------
+
+		public void UpdateWindowTitle() {
+			editorForm.Text = "Oracle Engine Editor - " + worldFileName;
+			if (hasMadeChanges)
+				editorForm.Text += "*";
+			editorForm.Text += " [" + level.Name + "]";
 		}
 
 
@@ -167,7 +189,8 @@ namespace ZeldaEditor.Control {
 			CloseFile();
 
 			hasMadeChanges = false;
-			worldFileName = fileName;
+			worldFilePath = fileName;
+			worldFileName = Path.GetFileName(fileName);
 
 			// Load the world.
 			WorldFile worldFile = new WorldFile();
@@ -190,10 +213,11 @@ namespace ZeldaEditor.Control {
 		// Close the world file.
 		public void CloseFile() {
 			if (IsWorldOpen) {
+				propertyGridControl.CloseProperties();
 				world			= null;
 				level			= null;
 				hasMadeChanges	= false;
-				worldFileName	= "";
+				worldFilePath	= "";
 				editorForm.LevelTreeView.Nodes.Clear();
 			}
 		}
@@ -202,8 +226,8 @@ namespace ZeldaEditor.Control {
 		public void OpenLevel(int index) {
 			level = world.Levels[index];
 			editorForm.LevelDisplay.UpdateLevel();
-			editorForm.Text = "Oracle Engine Editor [" + level.Name + "]";
-			propertyGridControl.OpenProperties(level.Properties, "Level");
+			UpdateWindowTitle();
+			propertyGridControl.OpenProperties(level.Properties);
 		}
 
 		// Add a new level the world, and open it if specified.
@@ -246,27 +270,31 @@ namespace ZeldaEditor.Control {
 
 		// Test/play the world.
 		public void TestWorld() {
-			string worldPath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "testing.zwd");
-			WorldFile worldFile = new WorldFile();
-			worldFile.Save(worldPath, world);
-			string exePath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "ZeldaOracle.exe");
-			Process.Start(exePath, "\"" + worldPath + "\"");
+			if (IsWorldOpen) {
+				string worldPath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "testing.zwd");
+				WorldFile worldFile = new WorldFile();
+				worldFile.Save(worldPath, world);
+				string exePath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "ZeldaOracle.exe");
+				Process.Start(exePath, "\"" + worldPath + "\"");
+			}
 		}
 		
 		// Test/play the world with the player placed at the given room and point.
 		public void TestWorld(Point2I roomCoord, Point2I playerCoord) {
-			playerPlaceMode = false;
-			int levelIndex = 0;
-			for (levelIndex = 0; levelIndex < world.Levels.Count; levelIndex++) {
-				if (world.Levels[levelIndex] == level)
-					break;
+			if (IsWorldOpen) {
+				playerPlaceMode = false;
+				int levelIndex = 0;
+				for (levelIndex = 0; levelIndex < world.Levels.Count; levelIndex++) {
+					if (world.Levels[levelIndex] == level)
+						break;
+				}
+				string worldPath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "testing.zwd");
+				WorldFile worldFile = new WorldFile();
+				worldFile.Save(worldPath, world);
+				string exePath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "ZeldaOracle.exe");
+				Process.Start(exePath, "\"" + worldPath + "\" -test " + levelIndex + " " + roomCoord.X + " " + roomCoord.Y + " " + playerCoord.X + " " + playerCoord.Y);
+				// TODO: editorForm.ButtonTestPlayerPlace.Checked = false;
 			}
-			string worldPath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "testing.zwd");
-			WorldFile worldFile = new WorldFile();
-			worldFile.Save(worldPath, world);
-			string exePath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "ZeldaOracle.exe");
-			Process.Start(exePath, "\"" + worldPath + "\" -test " + levelIndex + " " + roomCoord.X + " " + roomCoord.Y + " " + playerCoord.X + " " + playerCoord.Y);
-			// TODO: editorForm.ButtonTestPlayerPlace.Checked = false;
 		}
 
 
@@ -276,7 +304,7 @@ namespace ZeldaEditor.Control {
 
 		// Open the properties for the given tile in the property grid.
 		public void OpenTileProperties(TileDataInstance tile) {
-			propertyGridControl.OpenProperties(tile.ModifiedProperties, "Tile ");
+			propertyGridControl.OpenProperties(tile.Properties);
 		}
 
 
@@ -286,12 +314,18 @@ namespace ZeldaEditor.Control {
 		
 		// Change the current tool to the tool of the given index.
 		public void ChangeTool(int toolIndex) {
-			currentToolIndex = toolIndex;
-			if (currentToolIndex != 0) {
-				selectedRoom = -Point2I.One;
-				selectedTile = -Point2I.One;
+			if (toolIndex != currentToolIndex) {
+				tools[currentToolIndex].OnEnd();
+
+				currentToolIndex = toolIndex;
+				if (currentToolIndex != 0) {
+					selectedRoom = -Point2I.One;
+					selectedTile = -Point2I.One;
+				}
+
+				editorForm.OnToolChange(toolIndex);
+				tools[currentToolIndex].OnBegin();
 			}
-			editorForm.OnToolChange(toolIndex);
 		}
 		
 		// Add a new tool to the list of tools and initialize it.
@@ -325,6 +359,10 @@ namespace ZeldaEditor.Control {
 		
 		public PropertyGridControl PropertyGridControl {
 			get { return propertyGridControl; }
+		}
+		
+		public LevelDisplay LevelDisplay {
+			get { return editorForm.LevelDisplay; }
 		}
 
 		public bool IsWorldOpen {
@@ -403,7 +441,11 @@ namespace ZeldaEditor.Control {
 		}
 
 		public EditorTool CurrentTool {
-			get { return tools[currentToolIndex]; }
+			get {
+				if (tools == null)
+					return null;
+				return tools[currentToolIndex];
+			}
 		}
 
 		public TileDrawModes AboveTileDrawMode {
@@ -426,6 +468,16 @@ namespace ZeldaEditor.Control {
 			set { showGrid = value; }
 		}
 
+		public bool ShowEvents {
+			get { return showEvents; }
+			set { showEvents = value; }
+		}
+
+		public bool EventMode {
+			get { return eventMode; }
+			set { eventMode = value; }
+		}
+
 		public bool HighlightMouseTile {
 			get { return highlightMouseTile; }
 			set { highlightMouseTile = value; }
@@ -438,11 +490,26 @@ namespace ZeldaEditor.Control {
 
 		public ToolPointer ToolPointer {
 			get { return toolPointer; }
-			set { toolPointer = value; }
+		}
+
+		public ToolPlace ToolPlace {
+			get { return toolPlace; }
+		}
+
+		public ToolSelection ToolSelection {
+			get { return toolSelection; }
+		}
+
+		public ToolEyedrop ToolEyedrop {
+			get { return toolEyedrop; }
 		}
 
 		public bool IsWorldFromFile {
-			get { return (worldFileName != String.Empty); }
+			get { return (worldFilePath != String.Empty); }
+		}
+
+		public string WorldFilePath {
+			get { return worldFilePath; }
 		}
 
 		public string WorldFileName {

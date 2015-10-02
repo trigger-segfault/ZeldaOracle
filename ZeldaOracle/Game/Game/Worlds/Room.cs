@@ -51,9 +51,17 @@ namespace ZeldaOracle.Game.Worlds {
 		
 		public void SetTile(TileDataInstance tile, int x, int y, int layer) {
 			tileData[x, y, layer] = tile;
-			tile.Location	= new Point2I(x, y);
-			tile.Layer		= layer;
-			tile.Room		= this;
+			if (tile != null) {
+				tile.Location	= new Point2I(x, y);
+				tile.Layer		= layer;
+				tile.Room		= this;
+			}
+		}
+
+		public void RemoveTile(TileDataInstance tile) {
+			if (tile.Room == this) {
+				tileData[tile.Location.X, tile.Location.Y, tile.Layer] = null;
+			}
 		}
 
 		public void RemoveTile(int x, int y, int layer) {
@@ -84,6 +92,10 @@ namespace ZeldaOracle.Game.Worlds {
 		public void AddEventTile(EventTileDataInstance eventTile) {
 			eventData.Add(eventTile);
 			eventTile.Room = this;
+		}
+		
+		public void RemoveEventTile(EventTileDataInstance eventTile) {
+			eventData.Remove(eventTile);
 		}
 
 

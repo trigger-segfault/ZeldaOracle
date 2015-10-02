@@ -22,6 +22,7 @@ namespace ZeldaEditor.Control {
 		private PropertiesContainer	propertiesContainer;
 		private Dictionary<string, UITypeEditor> typeEditors;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
@@ -32,14 +33,14 @@ namespace ZeldaEditor.Control {
 
 			propertiesContainer = new PropertiesContainer(this);
 			propertyGrid.SelectedObject = propertiesContainer;
-			typeEditors = new Dictionary<string,UITypeEditor>();
 
+			// Setup property editor types.
+			typeEditors = new Dictionary<string,UITypeEditor>();
 			typeEditors["sprite"]			= new ResourcePropertyEditor<Sprite>();
 			typeEditors["animation"]		= new ResourcePropertyEditor<Animation>();
 			typeEditors["collision_model"]	= new ResourcePropertyEditor<CollisionModel>();
 			typeEditors["zone"]				= new ResourcePropertyEditor<Zone>();
 			typeEditors["reward"]			= new RewardPropertyEditor(editorControl.RewardManager);
-			
 			typeEditors["text_message"]		= new TextMessagePropertyEditor();
 			typeEditors["script"]			= null;
 
@@ -61,16 +62,14 @@ namespace ZeldaEditor.Control {
 		// Methods
 		//-----------------------------------------------------------------------------
 
-		public void OpenProperties(Properties properties, string typeName) {
+		public void OpenProperties(Properties properties) {
 			propertiesContainer.Set(properties);
 			propertyGrid.Refresh();
-			editorControl.EditorForm.PropertyGridTitle.Text = typeName + "  Properties";
 		}
 		
 		public void CloseProperties() {
 			propertiesContainer.Clear();
 			propertyGrid.Refresh();
-			editorControl.EditorForm.PropertyGridTitle.Text = "";
 		}
 
 

@@ -390,64 +390,64 @@ public static class GMath {
 		return new Point2I(Math.Abs(aX), Math.Abs(aY));
 	}
 
-	// Plusmod
+	// Wrapping (modulus that also works as wrapping for negative numbers)
 
 	/** <summary> Returns the positive modulus of the specified number. </summary> */
-	public static sbyte Plusmod(sbyte a, sbyte mod) {
+	public static sbyte Wrap(sbyte a, sbyte mod) {
 		sbyte value = (sbyte)(a % mod);
 		return (value < 0 ? (sbyte)(value + mod) : value);
 	}
 	/** <summary> Returns the positive modulus of the specified number. </summary> */
-	public static short Plusmod(short a, short mod) {
+	public static short Wrap(short a, short mod) {
 		short value = (short)(a % mod);
 		return (value < 0 ? (short)(value + mod) : value);
 	}
 	/** <summary> Returns the positive modulus of the specified number. </summary> */
-	public static int Plusmod(int a, int mod) {
+	public static int Wrap(int a, int mod) {
 		int value = a % mod;
 		return (value < 0 ? value + mod : value);
 	}
 	/** <summary> Returns the positive modulus of the specified number. </summary> */
-	public static long Plusmod(long a, long mod) {
+	public static long Wrap(long a, long mod) {
 		long value = a % mod;
 		return (value < 0L ? value + mod : value);
 	}
 	/** <summary> Returns the positive modulus of the specified number. </summary> */
-	public static float Plusmod(float a, float mod) {
+	public static float Wrap(float a, float mod) {
 		float value = a % mod;
 		return (value < 0.0f ? value + mod : value);
 	}
 	/** <summary> Returns the positive modulus of the specified number. </summary> */
-	public static double Plusmod(double a, double mod) {
+	public static double Wrap(double a, double mod) {
 		double value = a % mod;
 		return (value < 0.0d ? value + mod : value);
 	}
 	/** <summary> Returns the positive modulus of the specified number. </summary> */
-	public static decimal Plusmod(decimal a, decimal mod) {
+	public static decimal Wrap(decimal a, decimal mod) {
 		decimal value = a % mod;
 		return (value < 0.0m ? value + mod : value);
 	}
 
 	/** <summary> Returns the positive modulus coordinates of the specified vector. </summary> */
-	public static Vector2F Plusmod(Vector2F a, float mod) {
+	public static Vector2F Wrap(Vector2F a, float mod) {
 		Vector2F value = a % mod;
 		return new Vector2F(value.X < 0.0d ? value.X + mod : value.X,
 							value.Y < 0.0d ? value.Y + mod : value.Y);
 	}
 	/** <summary> Returns the positive modulus coordinates of the specified vector. </summary> */
-	public static Vector2F Plusmod(Vector2F a, Vector2F mod) {
+	public static Vector2F Wrap(Vector2F a, Vector2F mod) {
 		Vector2F value = a % mod;
 		return new Vector2F(value.X < 0.0d ? value.X + mod.X : value.X,
 							value.Y < 0.0d ? value.Y + mod.Y : value.Y);
 	}
 	/** <summary> Returns the positive modulus coordinates of the specified point. </summary> */
-	public static Point2I Plusmod(Point2I a, int mod) {
+	public static Point2I Wrap(Point2I a, int mod) {
 		Point2I value = a % mod;
 		return new Point2I( value.X < 0 ? value.X + mod : value.X,
 							value.Y < 0 ? value.Y + mod : value.Y);
 	}
 	/** <summary> Returns the positive modulus coordinates of the specified point. </summary> */
-	public static Point2I Plusmod(Point2I a, Point2I mod) {
+	public static Point2I Wrap(Point2I a, Point2I mod) {
 		Point2I value = a % mod;
 		return new Point2I( value.X < 0 ? value.X + mod.X : value.X,
 							value.Y < 0 ? value.Y + mod.Y : value.Y);
@@ -963,36 +963,36 @@ public static class GMath {
 
 	/** <summary> Returns the absolute angle as (0, 360]. </summary> */
 	public static float Plusdir(float angle) {
-		return Plusmod(angle, (float)FullAngle);
+		return Wrap(angle, (float)FullAngle);
 	}
 	/** <summary> Returns the absolute angle as (0, 360]. </summary> */
 	public static double Plusdir(double angle) {
-		return Plusmod(angle, FullAngle);
+		return Wrap(angle, FullAngle);
 	}
 	/** <summary> Returns the absolute angle as [0, 360). </summary> */
 	public static float Plusdir2(float angle) {
-		float value = Plusmod(angle, (float)FullAngle);
+		float value = Wrap(angle, (float)FullAngle);
 		if (value == 0.0f)
 			return (float)FullAngle;
 		return value;
 	}
 	/** <summary> Returns the absolute angle as [0, 360). </summary> */
 	public static double Plusdir2(double angle) {
-		double value = Plusmod(angle, FullAngle);
+		double value = Wrap(angle, FullAngle);
 		if (value == 0.0d)
 			return FullAngle;
 		return value;
 	}
 	/** <summary> Returns the absolute angle as [-180, 180). </summary> */
 	public static float Plusdir3(float angle) {
-		float value = Plusmod(angle, (float)FullAngle);
+		float value = Wrap(angle, (float)FullAngle);
 		if (value > (float)HalfAngle)
 			return value - (float)FullAngle;
 		return value;
 	}
 	/** <summary> Returns the absolute angle as [-180, 180). </summary> */
 	public static double Plusdir3(double angle) {
-		double value = Plusmod(angle, FullAngle);
+		double value = Wrap(angle, FullAngle);
 		if (value > HalfAngle)
 			return value - FullAngle;
 		return value;

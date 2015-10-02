@@ -64,6 +64,7 @@ namespace ZeldaEditor {
 			this.comboBoxWorldLayer.Items.Add("Layer 1");
 			this.comboBoxWorldLayer.Items.Add("Layer 2");
 			this.comboBoxWorldLayer.Items.Add("Layer 3");
+			this.comboBoxWorldLayer.Items.Add("Events");
 			this.comboBoxWorldLayer.SelectedIndex = 0;
 
 			// Create tools.
@@ -87,10 +88,9 @@ namespace ZeldaEditor {
 			if (!editorControl.IsWorldOpen || !editorControl.HasMadeChanges)
 				return DialogResult.Yes;
 
-			string worldName = "untitled";
-			if (editorControl.IsWorldFromFile)
-				worldName = editorControl.WorldFileName;
-			DialogResult result = MessageBox.Show("Do you want to save changes to " + worldName + "?", "Unsave Changes",
+			// Show the dialogue.
+			string worldName = editorControl.WorldFileName;
+			DialogResult result = MessageBox.Show("Do you want to save changes to " + worldName + "?", "Unsaved Changes",
 				MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
 			
 			if (result == DialogResult.Yes)
@@ -99,22 +99,34 @@ namespace ZeldaEditor {
 			return result;
 		}
 
-
 		//-----------------------------------------------------------------------------
 		// Event Handlers
 		//-----------------------------------------------------------------------------
+
+		// Use this for shortcut keys that won't work on their own.
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+			if (keyData == (Keys.PageUp)) {
+				cycleLayerUpToolStripMenuItem_Click(null, null);
+				return true;
+			}
+			if (keyData == Keys.PageDown) {
+				cycleLayerUpToolStripMenuItem1_Click(null, null);
+				return true;
+			}
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
 
 		// Attempt to save the world automatically first, or open a dialogue
 		// if the world isn't from a file.
 		private void SaveWorld() {
 			if (editorControl.IsWorldFromFile)
-				editorControl.SaveFileAs(editorControl.WorldFileName); // Save to file.
+				editorControl.SaveFileAs(editorControl.WorldFilePath); // Save to file.
 			else
-				SaveWorldAs(); // Open Save as dialogue
+				ShowSaveWorldDialog(); // Open Save as dialogue
 		}
 
 		// Open a save file dialogue to save the world.
-		private void SaveWorldAs() {
+		private void ShowSaveWorldDialog() {
 			SaveFileDialog saveFileDialog = new SaveFileDialog();
 			saveFileDialog.Filter = "Zelda world files (*.zwd)|*.zwd";
 			saveFileDialog.ValidateNames = true;
@@ -122,6 +134,18 @@ namespace ZeldaEditor {
 			if (saveFileDialog.ShowDialog() == DialogResult.OK) {
 				Console.WriteLine("Saving file as " + saveFileDialog.FileName + ".");
 				editorControl.SaveFileAs(saveFileDialog.FileName);
+			}
+		}
+
+		// Open an open file dialogue to open a world file.
+		private void ShowOpenWorldDialog() {
+			OpenFileDialog openFileDialog = new OpenFileDialog();
+			openFileDialog.DereferenceLinks = true;
+			openFileDialog.Filter = "Zelda world files (*.zwd)|*.zwd";
+
+			if (openFileDialog.ShowDialog() == DialogResult.OK) {
+				Console.WriteLine("Opened file " + openFileDialog.FileName + ".");
+				editorControl.OpenFile(openFileDialog.FileName);
 			}
 		}
 
@@ -153,27 +177,43 @@ namespace ZeldaEditor {
 		// Form Event Handlers
 		//-----------------------------------------------------------------------------
 
+		// Play animations
 		private void buttonAnimations_Click(object sender, EventArgs e) {
 			editorControl.PlayAnimations = (sender as ToolStripButton).Checked;
 		}
 
+		// Select tileset
 		private void comboBoxTilesets_SelectedIndexChanged(object sender, EventArgs e) {
 			if ((string)(sender as ToolStripComboBox).Items[(sender as ToolStripComboBox).SelectedIndex] != "")
 				editorControl.ChangeTileset((string)(sender as ToolStripComboBox).Items[(sender as ToolStripComboBox).SelectedIndex]);
 			levelDisplay.Focus();
 		}
 
+		// Select zone
 		private void comboBoxZone_SelectedIndexChanged(object sender, EventArgs e) {
 			if ((string)(sender as ToolStripComboBox).Items[(sender as ToolStripComboBox).SelectedIndex] != "")
 				editorControl.ChangeZone((string)(sender as ToolStripComboBox).Items[(sender as ToolStripComboBox).SelectedIndex]);
 			levelDisplay.Focus();
 		}
 
+		// Select layer
 		private void comboBoxWorldLayer_SelectedIndexChanged(object sender, EventArgs e) {
-			editorControl.CurrentLayer = this.comboBoxWorldLayer.SelectedIndex;
+			if (comboBoxWorldLayer.SelectedIndex == comboBoxWorldLayer.Items.Count - 1) {
+				editorControl.EventMode = true;
+			}
+			else {
+				// TODO: Change tileset to event tileset.
+				editorControl.EventMode = false;
+				editorControl.CurrentLayer = comboBoxWorldLayer.SelectedIndex;
+				if (editorControl.CurrentTool != null)
+					editorControl.CurrentTool.OnChangeLayer();
+			}
+			if (editorControl.PropertyGridControl != null)
+				editorControl.PropertyGridControl.CloseProperties();
 			levelDisplay.Focus();
 		}
 
+		// Tool buttons
 		private void buttonTool_Click(object sender, EventArgs e) {
 			for (int i = 0; i < toolButtons.Length; i++) {
 				if (toolButtons[i] == sender)
@@ -181,6 +221,7 @@ namespace ZeldaEditor {
 			}
 		}
 
+		// Hide below layers
 		private void hideBelowToolStripMenuItem_Click(object sender, EventArgs e) {
 			editorControl.BelowTileDrawMode = TileDrawModes.Hide;
 			hideBelowToolStripMenuItem.Checked = true;
@@ -188,27 +229,31 @@ namespace ZeldaEditor {
 			showBelowToolStripMenuItem.Checked = false;
 		}
 
+		// Fade below layers
 		private void fadeBelowToolStripMenuItem_Click(object sender, EventArgs e) {
 			editorControl.BelowTileDrawMode = TileDrawModes.Fade;
 			hideBelowToolStripMenuItem.Checked = false;
 			fadeBelowToolStripMenuItem.Checked = true;
 			showBelowToolStripMenuItem.Checked = false;
 		}
-
+		
+		// Show below layers
 		private void showBelowToolStripMenuItem_Click(object sender, EventArgs e) {
 			editorControl.BelowTileDrawMode = TileDrawModes.Show;
 			hideBelowToolStripMenuItem.Checked = false;
 			fadeBelowToolStripMenuItem.Checked = false;
 			showBelowToolStripMenuItem.Checked = true;
 		}
-
+		
+		// Hide above layers
 		private void hideAboveToolStripMenuItem_Click(object sender, EventArgs e) {
 			editorControl.AboveTileDrawMode = TileDrawModes.Hide;
 			hideAboveToolStripMenuItem.Checked = true;
 			fadeAboveToolStripMenuItem.Checked = false;
 			showAboveToolStripMenuItem.Checked = false;
 		}
-
+		
+		// Fade above layers
 		private void fadeAboveToolStripMenuItem_Click(object sender, EventArgs e) {
 			editorControl.AboveTileDrawMode = TileDrawModes.Fade;
 			hideAboveToolStripMenuItem.Checked = false;
@@ -216,6 +261,7 @@ namespace ZeldaEditor {
 			showAboveToolStripMenuItem.Checked = false;
 		}
 
+		// Show above layers
 		private void showAboveToolStripMenuItem_Click(object sender, EventArgs e) {
 			editorControl.AboveTileDrawMode = TileDrawModes.Show;
 			hideAboveToolStripMenuItem.Checked = false;
@@ -223,16 +269,24 @@ namespace ZeldaEditor {
 			showAboveToolStripMenuItem.Checked = true;
 		}
 
+		// Show Rewards
 		private void showRewardsToolStripMenuItem_Click(object sender, EventArgs e) {
 			editorControl.ShowRewards = showRewardsToolStripMenuItem.Checked;
 		}
 
-		private void buttonWorldGrid_Click(object sender, EventArgs e) {
-			editorControl.ShowGrid = buttonWorldGrid.Checked;
-		}
-
+		// Show Room Borders
 		private void showRoomBordersToolStripMenuItem_Click(object sender, EventArgs e) {
 			editorControl.RoomSpacing = showRoomBordersToolStripMenuItem.Checked ? 1 : 0;
+		}
+
+		// Show Events
+		private void showEventsToolStripMenuItem_Click(object sender, EventArgs e) {
+			editorControl.ShowEvents = showEventsToolStripMenuItem.Checked;
+		}
+
+		// Show grid
+		private void buttonWorldGrid_Click(object sender, EventArgs e) {
+			editorControl.ShowGrid = buttonWorldGrid.Checked;
 		}
 
 
@@ -280,8 +334,8 @@ namespace ZeldaEditor {
 			get { return propertyGrid; }
 		}
 
-		public Label PropertyGridTitle {
-			get { return propertyGridTitle; }
+		public PropertyGrid PropertyGridEvents {
+			get { return propertyGrid1; }
 		}
 
 		public ToolStripButton ButtonTestPlayerPlace {
@@ -304,16 +358,16 @@ namespace ZeldaEditor {
 
 		// Open World...
 		private void openWorldToolStripMenuItem_Click(object sender, EventArgs e) {
-			if (PromptSaveChanges() != DialogResult.Cancel) {
-				OpenFileDialog openFileDialog = new OpenFileDialog();
-				openFileDialog.DereferenceLinks = true;
-				openFileDialog.Filter = "Zelda world files (*.zwd)|*.zwd";
+			if (PromptSaveChanges() != DialogResult.Cancel)
+				ShowOpenWorldDialog();
+		}
 
-				if (openFileDialog.ShowDialog() == DialogResult.OK) {
-					Console.WriteLine("Opened file " + openFileDialog.FileName + ".");
-					editorControl.OpenFile(openFileDialog.FileName);
-				}
-			}
+		//-----------------------------------------------------------------------------
+
+		// Close World
+		private void closeWorldToolStripMenuItem_Click(object sender, EventArgs e) {
+			if (PromptSaveChanges() != DialogResult.Cancel)
+				editorControl.CloseFile();
 		}
 
 		//-----------------------------------------------------------------------------
@@ -325,7 +379,7 @@ namespace ZeldaEditor {
 
 		// Save World As...
 		private void saveWorldAsToolStripMenuItem_Click(object sender, EventArgs e) {
-			SaveWorldAs();
+			ShowSaveWorldDialog();
 		}
 		
 		//-----------------------------------------------------------------------------
@@ -354,30 +408,36 @@ namespace ZeldaEditor {
 
 		// Cut
 		private void cutToolStripMenuItem_Click(object sender, EventArgs e) {
-
+			editorControl.CurrentTool.Cut();
 		}
 
 		// Copy
 		private void copyToolStripMenuItem_Click(object sender, EventArgs e) {
-
+			editorControl.CurrentTool.Copy();
 		}
 
 		// Paste
 		private void pasteToolStripMenuItem_Click(object sender, EventArgs e) {
-
+			editorControl.CurrentTool.Paste();
 		}
 
 		// Delete
 		private void deleteToolStripMenuItem1_Click(object sender, EventArgs e) {
-
+			editorControl.CurrentTool.Delete();
 		}
 		
 		//-----------------------------------------------------------------------------
 
 		// Select All
 		private void selectAllToolStripMenuItem_Click(object sender, EventArgs e) {
-
+			editorControl.CurrentTool.SelectAll();
 		}
+
+		// Deselect
+		private void deselectToolStripMenuItem_Click(object sender, EventArgs e) {
+			editorControl.CurrentTool.Deselect();
+		}
+
 		
 		//-----------------------------------------------------------------------------
 		// World Menu Buttons
@@ -404,6 +464,18 @@ namespace ZeldaEditor {
 					editorControl.AddLevel(level, true);
 				}
 			}
+		}
+
+		// Cycle Layer Up
+		private void cycleLayerUpToolStripMenuItem_Click(object sender, EventArgs e) {
+			comboBoxWorldLayer.SelectedIndex = 
+				(comboBoxWorldLayer.SelectedIndex + 1) % comboBoxWorldLayer.Items.Count;
+		}
+		
+		// Cycle Layer Down
+		private void cycleLayerUpToolStripMenuItem1_Click(object sender, EventArgs e) {
+			comboBoxWorldLayer.SelectedIndex = 
+				(comboBoxWorldLayer.SelectedIndex + comboBoxWorldLayer.Items.Count - 1) % comboBoxWorldLayer.Items.Count;
 		}
 
 		//-----------------------------------------------------------------------------

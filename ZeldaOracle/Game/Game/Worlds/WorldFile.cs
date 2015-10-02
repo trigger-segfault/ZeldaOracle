@@ -218,14 +218,14 @@ namespace ZeldaOracle.Game.Worlds {
 					reader.ReadInt32(),
 					reader.ReadInt32());
 				tile.TileData = tileset.TileData[sheetLocation.X, sheetLocation.Y];
-				tile.ModifiedProperties = ReadProperties(reader);
-				tile.ModifiedProperties.BaseProperties = tile.TileData.Properties;
+				tile.Properties = ReadProperties(reader);
+				tile.Properties.BaseProperties = tile.TileData.Properties;
 			}
 			else {
 				// Create tile from a TileData resource.
 				tile.TileData = ReadResource(reader, tileData);
-				tile.ModifiedProperties = ReadProperties(reader);
-				tile.ModifiedProperties.BaseProperties = tile.TileData.Properties;
+				tile.Properties = ReadProperties(reader);
+				tile.Properties.BaseProperties = tile.TileData.Properties;
 			}
 
 			return tile;
@@ -240,6 +240,7 @@ namespace ZeldaOracle.Game.Worlds {
 				reader.ReadInt32(),
 				reader.ReadInt32());
 			eventTile.ModifiedProperties = ReadProperties(reader);
+			eventTile.ModifiedProperties.BaseProperties = eventTile.EventTileData.Properties;
 
 			return eventTile;
 		}
@@ -486,12 +487,12 @@ namespace ZeldaOracle.Game.Worlds {
 				WriteResource(writer, tile.Tileset, tilesets);
 				writer.Write((int) tile.SheetLocation.X);
 				writer.Write((int) tile.SheetLocation.Y);
-				WriteProperties(writer, tile.ModifiedProperties);
+				WriteProperties(writer, tile.Properties);
 			}
 			else {
 				writer.Write((int) -1);
 				WriteResource(writer, tile.TileData, tileData);
-				WriteProperties(writer, tile.ModifiedProperties);
+				WriteProperties(writer, tile.Properties);
 				//writer.Write((long) tileData.Flags);
 				//WriteTileType(writer, tileData.Type);
 				//WriteResource(writer, tileData.CollisionModel, collisionModels);

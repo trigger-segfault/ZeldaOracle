@@ -356,7 +356,15 @@ namespace ZeldaOracle.Game {
 			Resources.AddResource("reward", tdHeartPiece);
 
 			
-			Resources.AddResource("warp", new EventTileData(typeof(WarpEvent)));
+			EventTileData etd = new EventTileData(typeof(WarpEvent));
+			etd.Sprite = SPR_EVENT_TILE_WARP_STAIRS;
+			etd.Properties.Set("warp_type", "tunnel")
+				.SetDocumentation("Warp Type", "tunnel", "", "The type of warp point.");
+			etd.Properties.Set("destination_level", "")
+				.SetDocumentation("Destination Level", "", "", "The level where the destination point is in.");
+			etd.Properties.Set("destination_warp_point", "")
+				.SetDocumentation("Destination Warp Point", "", "", "The id of the warp point destination.");
+			Resources.AddResource("warp", etd);
 
 
 			tilesetBuilder = new TilesetBuilder();
@@ -917,7 +925,6 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_HUD_X;
 		public static Sprite SPR_HUD_LEVEL;
 		public static Sprite SPR_HUD_TEXT_NEXT_ARROW;
-
 		public static Sprite SPR_HUD_HEART_PIECES_EMPTY_TOP_LEFT;
 		public static Sprite SPR_HUD_HEART_PIECES_EMPTY_TOP_RIGHT;
 		public static Sprite SPR_HUD_HEART_PIECES_EMPTY_BOTTOM_LEFT;
@@ -927,10 +934,15 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_HUD_HEART_PIECES_FULL_BOTTOM_LEFT;
 		public static Sprite SPR_HUD_HEART_PIECES_FULL_BOTTOM_RIGHT;
 		public static Sprite SPR_HUD_SAVE_BUTTON;
-
 		public static Sprite[] SPR_HUD_HEARTS;
 		public static Sprite[] SPR_HUD_HEART_PIECES_EMPTY;
 		public static Sprite[] SPR_HUD_HEART_PIECES_FULL;
+		
+		// Event tiles.
+		public static Sprite SPR_EVENT_TILE_WARP_STAIRS;
+		public static Sprite SPR_EVENT_TILE_WARP_TUNNEL;
+		public static Sprite SPR_EVENT_TILE_WARP_ENTRANCE;
+		public static Sprite SPR_EVENT_TILE_TRACK_INTERSECTION;
 
 
 		//-----------------------------------------------------------------------------

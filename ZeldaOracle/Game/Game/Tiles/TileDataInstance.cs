@@ -16,7 +16,7 @@ namespace ZeldaOracle.Game.Tiles {
 		private Point2I		location;
 		private int			layer;
 		private TileData	tileData;
-		private Properties	modifiedProperties; // Properties modified from the tiledata
+		private Properties	properties;
 
 
 		//-----------------------------------------------------------------------------
@@ -28,7 +28,7 @@ namespace ZeldaOracle.Game.Tiles {
 			this.location	= Point2I.Zero;
 			this.layer		= 0;
 			this.tileData	= null;
-			this.modifiedProperties = new Properties();
+			this.properties = new Properties();
 		}
 
 		public TileDataInstance(TileData tileData, int x, int y, int layer) {
@@ -36,8 +36,8 @@ namespace ZeldaOracle.Game.Tiles {
 			this.location	= new Point2I(x, y);
 			this.layer		= layer;
 			this.tileData	= tileData;
-			this.modifiedProperties = new Properties();
-			this.modifiedProperties.BaseProperties = tileData.Properties;
+			this.properties = new Properties();
+			this.properties.BaseProperties = tileData.Properties;
 		}
 
 
@@ -65,15 +65,15 @@ namespace ZeldaOracle.Game.Tiles {
 			set {
 				tileData = value;
 				if (tileData == null)
-					modifiedProperties.BaseProperties = null;
+					properties.BaseProperties = null;
 				else
-					modifiedProperties.BaseProperties = tileData.Properties;
+					properties.BaseProperties = tileData.Properties;
 			}
 		}
 		
-		public Properties ModifiedProperties {
-			get { return modifiedProperties; }
-			set { modifiedProperties = value; }
+		public Properties Properties {
+			get { return properties; }
+			set { properties = value; }
 		}
 		
 		public Type Type {
