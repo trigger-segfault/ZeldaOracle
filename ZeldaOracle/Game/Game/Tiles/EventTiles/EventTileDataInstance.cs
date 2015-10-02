@@ -17,7 +17,6 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		private Point2I			position;
 		private EventTileData	data;
 		private Properties		modifiedProperties; // Properties modified from the tiledata
-
 		
 
 		//-----------------------------------------------------------------------------
@@ -36,6 +35,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			this.position			= position;
 			this.data				= tileData;
 			this.modifiedProperties	= new Properties();
+			this.modifiedProperties.BaseProperties = tileData.Properties;
 		}
 		
 
@@ -78,6 +78,10 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 
 		public Properties BaseProperties {
 			get { return data.Properties; }
+		}
+
+		public Sprite Sprite {
+			get { return data.Sprite; }
 		}
 	}
 }

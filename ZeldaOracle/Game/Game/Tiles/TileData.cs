@@ -42,6 +42,9 @@ namespace ZeldaOracle.Game.Tiles {
 			sheetLocation		= Point2I.Zero;
 			tileset				= null;
 			properties			= new Properties();
+
+			properties.Set("id", "")
+				.SetDocumentation("ID", "", "", "The id used to refer to this tile.");
 		}
 		
 		public TileData(TileFlags flags) : this() {

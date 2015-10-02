@@ -15,8 +15,8 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		private Type			type;
 		private Point2I			size;
 		private Properties		properties;
-		private Properties		modifiedProperties;
 		private Point2I			position;
+		private Sprite			sprite; // NOTE: This would only be visible in the editor.
 
 		
 		//-----------------------------------------------------------------------------
@@ -25,10 +25,13 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 
 		public EventTileData() {
 			type				= null;
+			sprite				= null;
 			position			= Point2I.Zero;
 			size				= Point2I.One;
 			properties			= new Properties();
-			modifiedProperties	= new Properties();
+
+			properties.Set("id", "")
+				.SetDocumentation("ID", "", "", "The id used to refer to this event.");
 		}
 		
 		public EventTileData(Type type) : this() {
@@ -60,8 +63,9 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			set { properties = value; }
 		}
 
-		public Properties ModifiedProperties {
-			get { return modifiedProperties; }
+		public Sprite Sprite {
+			get { return sprite; }
+			set { sprite = value; }
 		}
 	}
 }

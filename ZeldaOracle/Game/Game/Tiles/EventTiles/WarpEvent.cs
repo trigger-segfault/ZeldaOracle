@@ -67,7 +67,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 
 		public bool FindDestinationInRoom(string id, Room room, out Room destRoom, out EventTileDataInstance destEvent) {
 			for (int i = 0; i < room.EventData.Count; i++) {
-				if (room.EventData[i].ModifiedProperties.GetString("id") == id) {
+				if (room.EventData[i].ModifiedProperties.GetString("id", "") == id) {
 					destRoom = room;
 					destEvent = room.EventData[i];
 					return true;

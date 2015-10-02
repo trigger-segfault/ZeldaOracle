@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Tiles.EventTiles;
 
 namespace ZeldaEditor.Tools {
 	public class ToolEyedrop : EditorTool {
@@ -40,21 +41,52 @@ namespace ZeldaEditor.Tools {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnMouseDragBegin(MouseButtons buttons, Room room, Point2I tileLocation) {
-			if (room != null)
-				ActivateTile(buttons, room, tileLocation);
+		public override void OnChangeLayer() {
+			
 		}
 
-		public override void OnMouseDragEnd(MouseButtons buttons, Room room, Point2I tileLocation) {
-			if (buttons == MouseButtons.Left) {
-				// Switch back to place tool.
+		public override void OnBegin() {
+			EditorControl.HighlightMouseTile = false;
+		}
+
+		public override void OnMouseMove(MouseEventArgs e) {
+			base.OnMouseMove(e);
+			
+			Point2I mousePos = new Point2I(e.X, e.Y);
+
+			if (!editorControl.EventMode) {
+				// Highlight tiles.
+				TileDataInstance tile = LevelDisplayControl.SampleTile(mousePos, editorControl.CurrentLayer);
+				EditorControl.HighlightMouseTile = (tile != null);
+			}
+			else {
+				// Highlight event tiles.
+				EventTileDataInstance eventTile = LevelDisplayControl.SampleEventTile(mousePos);
+				EditorControl.HighlightMouseTile = (eventTile != null);
+			}
+		}
+
+		public override void OnMouseDragBegin(MouseEventArgs e) {
+			Point2I mousePos	= new Point2I(e.X, e.Y);
+			Room	room		= LevelDisplayControl.SampleRoom(mousePos);
+			Point2I tileCoord	= LevelDisplayControl.SampleTileCoordinates(mousePos);
+			if (room != null)
+				ActivateTile(e.Button, room, tileCoord);
+		}
+
+		public override void OnMouseDragEnd(MouseEventArgs e) {
+			// Switch back to place tool.
+			if (e.Button == MouseButtons.Left) {
 				editorControl.ChangeTool(1);
 			}
 		}
 
-		public override void OnMouseDragMove(MouseButtons buttons, Room room, Point2I tileLocation) {
+		public override void OnMouseDragMove(MouseEventArgs e) {
+			Point2I mousePos	= new Point2I(e.X, e.Y);
+			Room	room		= LevelDisplayControl.SampleRoom(mousePos);
+			Point2I tileCoord	= LevelDisplayControl.SampleTileCoordinates(mousePos);
 			if (room != null)
-				ActivateTile(buttons, room, tileLocation);
+				ActivateTile(e.Button, room, tileCoord);
 		}
 	}
 }

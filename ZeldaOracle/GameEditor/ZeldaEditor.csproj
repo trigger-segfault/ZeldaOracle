@@ -88,6 +88,7 @@
     <Compile Include="Tools\EditorTool.cs" />
     <Compile Include="Tools\ToolEyedrop.cs" />
     <Compile Include="Tools\ToolPlace.cs" />
+    <Compile Include="Tools\ToolSelection.cs" />
     <Compile Include="Tools\ToolPointer.cs" />
     <Compile Include="WinFormsGraphicsDevice\GraphicsDeviceControl.cs">
       <SubType>Component</SubType>
@@ -146,6 +147,7 @@
       <Name>Zelda</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

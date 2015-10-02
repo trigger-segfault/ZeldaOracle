@@ -217,7 +217,7 @@ namespace ZeldaOracle.Game.Tiles {
 			tile.animationPlayer.Animation = data.Animation;
 
 			tile.properties.Merge(data.BaseProperties, true);
-			tile.properties.Merge(data.ModifiedProperties, true);
+			tile.properties.Merge(data.Properties, true);
 
 			return tile;
 		}
@@ -346,7 +346,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Get the modified properties of the tile data from which this was created.
 		// Do not access these properties, only modify them.
 		public Properties BaseProperties {
-			get { return tileData.ModifiedProperties; }
+			get { return tileData.Properties; }
 		}
 	}
 }
