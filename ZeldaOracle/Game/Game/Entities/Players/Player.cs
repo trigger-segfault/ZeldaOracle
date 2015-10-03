@@ -188,8 +188,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			for (int i = 0; i < EquippedUsableItems.Length; i++) {
 				ItemWeapon item = EquippedUsableItems[i];
 				if (item != null) {
-					item.Player = this;
-
 					if (item.IsUsable()) {
 						if (Inventory.GetSlotButton(i).IsPressed())
 							item.OnButtonPress();

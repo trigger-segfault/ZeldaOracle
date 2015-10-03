@@ -1,0 +1,127 @@
+
+
+## TODO: Write the script loader for this.
+
+
+
+
+
+#==============================================================
+# Tile Data
+#==============================================================
+
+
+#	PROPERTIES	(name, value, editor_type, category, description);
+
+
+TILE movable_block;
+	FLAGS		solid, movable;
+	SPRITE		tile_movable_block, tile_movable_block_asobject;
+	MODEL		block;
+END;
+
+TILE diamond_rock;
+	FLAGS		Solid, Switchable, SwitchStays;
+	SPRITE		tile_diamond_rock, tile_diamond_rock_asobject;
+	BREAKANIM	effect_rock_break;
+	MODEL		block;
+END;
+
+TILE bush;
+	FLAGS		Solid, Pickupable, Bombable, Burnable, Switchable, Cuttable;
+	SPRITE		tile_bush, tile_bush_asobject;
+	BREAKANIM	effect_leaves;
+	MODEL		block;
+END;
+
+TILE pot;
+	FLAGS		solid, movable, pickupable, cuttable, switchable;
+	SPRITE		tile_pot, tile_pot_asobject;
+	BREAKANIM	effect_rock_break;
+	MODEL		block;
+END;
+
+TILE rock;
+	FLAGS		solid, pickupable;
+	SPRITE		tile_rock, tile_rock_asobject;
+	BREAKANIM	effect_rock_break;
+	MODEL		block;
+END;
+
+TILE grass;
+	FLAGS		Grass, Cuttable, Bombable, Burnable;
+	SPRITE		tile_grass;
+	BREAKANIM	effect_grass_leaves;
+	MODEL		block;
+END;
+
+TILE sign;
+	TYPE		TileSign;
+	FLAGS		solid, pickupable, burnable, cuttable, switchable;
+	SPRITE		tile_sign;
+	SPRITEOBJ	tile_sign_asobject;
+	BREAKANIM	effect_sign_break;
+	MODEL		block;
+	PROPERTIES
+		(string, text, "Hello World!",
+			"Side Text", "text_message", "Text",
+			"The text to display when the sign is read from the front."),
+		(string, side_text,	"You can't read it from there!",
+			"Text", "text_message", "Text",
+			"The text to display when the sign is read from the sides/back.");
+END;
+
+TILE owl;
+	TYPE		TileOwl;
+	FLAGS		solid;
+	SPRITE		tile_owl;
+	MODEL		block;
+	PROPERTIES
+		(string, text, "<red>undefined<red>",
+			"Text", "text_message", "",
+			"The text to display when the owl is activated.");
+END;
+
+TILE lantern;
+	TYPE		TileOwl;
+	FLAGS		solid;
+	SPRITE		tile_lantern_unlit;
+	MODEL		block;
+	PROPERTIES
+		(boolean, lit, false,
+			"Lit", "", "",
+			 "Whether the lantern starts lit or not.");
+END;
+
+TILE chest;
+	TYPE		TileChest;
+	FLAGS		solid;
+	SPRITE		tile_chest;
+	MODEL		block;
+	PROPERTIES
+		(string, reward, "rupees_1",
+			"Reward", "reward", "",
+			 "The reward contained inside the chest.");
+END;
+
+TILE reward;
+	TYPE		TileReward;
+	FLAGS		solid;
+	MODEL		center;
+	PROPERTIES
+		(string, reward, "heart_piece",
+			"Reward", "reward", "",
+			 "The reward to spawn.");
+END;
+
+
+#==============================================================
+# TODO: Event Tile Data
+#==============================================================
+
+#EVENT warp;
+#	TYPE		WarpEvent;
+#	PROPERTIES	(warp_type,					"tunnel"),
+#				(destination_level,			""),
+#				(destination_warp_point,	""; END;
+#END;

@@ -32,31 +32,31 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 		//-----------------------------------------------------------------------------
 
 		// Called when the item's level is changed.
-		public virtual void OnLevelUp() {
+		public override void OnLevelUp() {
 			Player.SwimmingSkills |= PlayerSwimmingSkills.CanSwimInWater;
 			if (level == Item.Level2)
 				Player.SwimmingSkills |= PlayerSwimmingSkills.CanSwimInOcean;
 		}
 
 		// Called when the item has been obtained.
-		public virtual void OnObtained() {
+		public override void OnObtained() {
 			Player.SwimmingSkills |= PlayerSwimmingSkills.CanSwimInWater;
 			if (level == Item.Level2)
 				Player.SwimmingSkills |= PlayerSwimmingSkills.CanSwimInOcean;
 		}
 
 		// Called when the item has been unobtained.
-		public virtual void OnUnobtained() {
+		public override void OnUnobtained() {
 			Player.SwimmingSkills &= ~(PlayerSwimmingSkills.CanSwimInWater | PlayerSwimmingSkills.CanSwimInOcean);
 		}
 
 		// Called when the item has been stolen.
-		public virtual void OnStolen() {
+		public override void OnStolen() {
 			Player.SwimmingSkills &= ~(PlayerSwimmingSkills.CanSwimInWater | PlayerSwimmingSkills.CanSwimInOcean);
 		}
 
 		// Called when the stolen item has been returned.
-		public virtual void OnReturned() {
+		public override void OnReturned() {
 			Player.SwimmingSkills |= PlayerSwimmingSkills.CanSwimInWater;
 			if (level == Item.Level2)
 				Player.SwimmingSkills |= PlayerSwimmingSkills.CanSwimInOcean;

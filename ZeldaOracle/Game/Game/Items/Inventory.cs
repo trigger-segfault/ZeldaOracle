@@ -298,5 +298,9 @@ namespace ZeldaOracle.Game.Items {
 			get { return piecesOfHeart; }
 			set { piecesOfHeart = value; }
 		}
+
+		public GameControl GameControl {
+			get { return gameControl; }
+		}
 	}
 }

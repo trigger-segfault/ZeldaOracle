@@ -13,7 +13,6 @@ namespace ZeldaOracle.Game.Items {
 	public abstract class Item : ISlotItem {
 
 		protected Inventory		inventory;
-		protected Player		player;
 
 		protected string		id;
 		protected string[]		name;
@@ -121,13 +120,12 @@ namespace ZeldaOracle.Game.Items {
 		
 		// Gets the player.
 		public Player Player {
-			get { return player; }
-			set { player = value; }
+			get { return inventory.GameControl.Player; }
 		}
 
 		// Gets the current room control.
 		public RoomControl RoomControl {
-			get { return player.RoomControl; }
+			get { return inventory.GameControl.RoomControl; }
 		}
 
 		// Gets the id of the item.

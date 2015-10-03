@@ -409,9 +409,14 @@ namespace ZeldaOracle.Common.Content {
 			LoadScript(assetName, new AnimationSR());
 		}
 
-		// Loads/compiles animations from a script file.
+		// Loads/compiles collision models from a script file.
 		public static void LoadCollisionModels(string assetName) {
 			LoadScript(assetName, new CollisionModelSR());
+		}
+
+		// Loads/compiles tilesets from a script file.
+		public static void LoadTilesets(string assetName) {
+			LoadScript(assetName, new TilesetSR());
 		}
 
 		// Loads a sound effect.

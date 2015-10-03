@@ -22,6 +22,11 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
+		
+		public Tileset(string id, SpriteSheet sheet, Point2I size) :
+			this(id, sheet, size.X, size.Y)
+		{
+		}
 
 		public Tileset(string id, SpriteSheet sheet, int width, int height) {
 			this.id				= id;
@@ -36,6 +41,7 @@ namespace ZeldaOracle.Game.Tiles {
 					tileData[x, y] = new TileData();
 					tileData[x, y].Tileset = this;
 					tileData[x, y].SheetLocation = new Point2I(x, y);
+					tileData[x, y].Sprite = new Sprite(sheet, x, y);
 				}
 			}
 		}
@@ -49,6 +55,29 @@ namespace ZeldaOracle.Game.Tiles {
 			TileData data = tileData[sheetLocation.X, sheetLocation.Y];
 			return Tile.CreateTile(data);
 		}*/
+
+		public void ConfigureTile(TileData data, char configChar) {
+			switch (configChar) {
+				case 'S':
+					data.Flags |= TileFlags.Solid;
+					data.CollisionModel = GameData.MODEL_BLOCK;
+					break;
+				case 'F':
+					data.Flags |= TileFlags.Waterfall | TileFlags.Solid | TileFlags.LedgeDown;
+					data.CollisionModel = GameData.MODEL_BLOCK;
+					break;
+				case 'G': data.Flags |= TileFlags.Diggable;		break;
+				case 'H': data.Flags |= TileFlags.Hole;			break;
+				case 'V': data.Flags |= TileFlags.Lava;			break;
+				case 'W': data.Flags |= TileFlags.Water;		break;
+				case 'I': data.Flags |= TileFlags.Ice;			break;
+				case 'R': data.Flags |= TileFlags.Stairs;		break;
+				case 'D': data.Flags |= TileFlags.Ladder;		break;
+				case 'A': data.Flags |= TileFlags.HalfSolid;	break;
+				case 'P': data.Flags |= TileFlags.Puddle;		break;
+				case 'O': data.Flags |= TileFlags.Water | TileFlags.Ocean; break;
+			}
+		}
 
 		public void LoadConfig(string filename) {
 			// Create default tile data.
@@ -68,33 +97,8 @@ namespace ZeldaOracle.Game.Tiles {
 				
 				for (int y = 0; y < size.Y; y++) {
 					string line = reader.ReadLine();
-
-					for (int x = 0; x < size.X && x < line.Length; x++) {
-						TileData data = tileData[x, y];
-						char c = line[x];
-
-						switch (c) {
-							case 'S':
-								data.Flags |= TileFlags.Solid;
-								data.CollisionModel = GameData.MODEL_BLOCK;
-								break;
-							case 'F':
-								data.Flags |= TileFlags.Waterfall | TileFlags.Solid | TileFlags.LedgeDown;
-								data.CollisionModel = GameData.MODEL_BLOCK;
-								break;
-							case 'G': data.Flags |= TileFlags.Diggable;		break;
-							case 'H': data.Flags |= TileFlags.Hole;			break;
-							case 'V': data.Flags |= TileFlags.Lava;			break;
-							case 'W': data.Flags |= TileFlags.Water;		break;
-							case 'I': data.Flags |= TileFlags.Ice;			break;
-							case 'R': data.Flags |= TileFlags.Stairs;		break;
-							case 'D': data.Flags |= TileFlags.Ladder;		break;
-							case 'A': data.Flags |= TileFlags.HalfSolid;	break;
-							case 'P': data.Flags |= TileFlags.Puddle;		break;
-							case 'O': data.Flags |= TileFlags.Water | TileFlags.Ocean; break;
-						}
-					}
-
+					for (int x = 0; x < size.X && x < line.Length; x++)
+						ConfigureTile(tileData[x, y], line[x]);
 					stream.Close();
 				}
 			}

@@ -44,13 +44,13 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		// Called when the items button is pressed (A or B).
 		public override void OnButtonPress() {
-			player.SwingState.NextState = player.HoldSwordState;
-			player.SwingState.EquipSlot = CurrentEquipSlot;
-			player.SwingState.WeaponAnimation = GameData.ANIM_SWORD_SWING;
-			player.HoldSwordState.EquipSlot = CurrentEquipSlot;
-			player.HoldSwordState.WeaponAnimation = GameData.ANIM_SWORD_HOLD;
-			player.SpinSwordState.WeaponAnimation = GameData.ANIM_SWORD_SPIN;
-			player.BeginState(player.SwingState);
+			Player.SwingState.NextState = Player.HoldSwordState;
+			Player.SwingState.EquipSlot = CurrentEquipSlot;
+			Player.SwingState.WeaponAnimation = GameData.ANIM_SWORD_SWING;
+			Player.HoldSwordState.EquipSlot = CurrentEquipSlot;
+			Player.HoldSwordState.WeaponAnimation = GameData.ANIM_SWORD_HOLD;
+			Player.SpinSwordState.WeaponAnimation = GameData.ANIM_SWORD_SPIN;
+			Player.BeginState(Player.SwingState);
 		}
 
 		// Update the item.

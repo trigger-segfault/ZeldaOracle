@@ -265,7 +265,9 @@ namespace ZeldaOracle.Game.Debug {
 					byte tilesetIndex = bin.ReadByte();
 
 					if (tilesetIndex > 0) {
-						Tileset tileset = GameData.TILESETS[tilesetIndex - 1];
+						Tileset tileset = GameData.TILESET_OVERWORLD;
+						if (tilesetIndex == 2)
+							tileset = GameData.TILESET_INTERIOR;
 						byte tilesetSourceX = bin.ReadByte();
 						byte tilesetSourceY = bin.ReadByte();
 						room.CreateTile(tileset.TileData[tilesetSourceX, tilesetSourceY], x, y, 0);

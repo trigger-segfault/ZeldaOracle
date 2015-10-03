@@ -49,7 +49,6 @@ namespace ZeldaOracle.Game.Worlds {
 		private List<ResourceInfo<TileData>>		tileData;
 		private List<ResourceInfo<EventTileData>>	eventTileData;
 		
-		private List<Type> possibleTileTypes;
 
 		//private int[]			zones;
 		
@@ -105,11 +104,6 @@ namespace ZeldaOracle.Game.Worlds {
 
 			World world = new World();
 			
-			// A list of possible tile types.
-			possibleTileTypes = Assembly.GetExecutingAssembly().GetTypes().ToList().Where(
-				t => (t.Namespace != null && t.Namespace.StartsWith(typeof(Tile).Namespace))
-			).ToList();
-
 			// Read the header.
 			ReadHeader(reader, world);
 			// Read the string list.
@@ -331,17 +325,9 @@ namespace ZeldaOracle.Game.Worlds {
 			tileTypes.Capacity = typeCount;
 
 			for (int i = 0; i < typeCount; i++) {
-				int index = reader.ReadInt32();
-				string name = strings[index];
-				Type type = null;
-
-				for (int j = 0; j < possibleTileTypes.Count; j++) {
-					if (possibleTileTypes[j].Name == name) {
-						type = possibleTileTypes[j];
-						break;
-					}
-				}
-
+				int index	= reader.ReadInt32();
+				string name	= strings[index];
+				Type type	= Tile.GetType(name, false);
 				tileTypes.Add(new ResourceInfo<Type>(type, index));
 			}
 		}

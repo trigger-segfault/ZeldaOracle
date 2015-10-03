@@ -43,12 +43,12 @@ namespace ZeldaOracle.Game.Items {
 			if (bombEntity == null || bombEntity.IsDestroyed) {
 				// Conjure a new bomb.
 				bombEntity = new Bomb();
-				player.BeginState(new PlayerCarryState(bombEntity));
+				Player.BeginState(new PlayerCarryState(bombEntity));
 			}
 			else {
 				// Pickup a bomb from the ground.
-				if (player.Physics.IsSoftMeetingEntity(bombEntity)) {
-					player.BeginState(new PlayerCarryState(bombEntity));
+				if (Player.Physics.IsSoftMeetingEntity(bombEntity)) {
+					Player.BeginState(new PlayerCarryState(bombEntity));
 					bombEntity.RemoveFromRoom();
 				}
 			}
