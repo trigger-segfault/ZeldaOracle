@@ -1,0 +1,134 @@
+
+
+#==============================================================
+# Overworld Tileset
+#==============================================================
+
+TILESET overworld, tileset_overworld, (21, 36);
+DEFAULT (1, 25);
+
+CONFIG;
+SSSSSSSSSSSSSSSSSSSSS
+SSSSSSSSSSSSSSSSSSSSS
+SSSSSSSSSSSSSSSSSSSSS
+SSSSSSSSSSSSSSSSSSSSS
+S.SSSSSSSSSSSSSSSSSSS
+..SSSSSSSSSSSSSSSSSSS
+SSSSSSSSSSSSSSSSSSSSS
+SSSSSSSSSSSSS.SSSSSSS
+SSSSSSSSSSSSS.SSSSSSS
+SSSSSSSSD.DDS.SSSSS..
+SSSSSSSSDSDDSSSSSSS..
+SSSSS...DSD.SSSSSSS..
+SSSS........SSS......
+SSSS....RRRRSSS......
+FOP........HSSSS.....
+FWWSS....GGGSSSSS....
+FPISS..GGGSGSSSSS....
+...H...GGGGGSSS.SS...
+.G...G..GGGG..S.SS...
+........GGGG..S.SS...
+........GGGGSSSSSS...
+........GGGGSSSSSSS.S
+GGGGGGGGGGGGSSSSS.S.S
+GGGGGGSSGGGGSSSSSSSSS
+GGGGGGGGGGGGSSSSSSSSS
+GGGGGGGGGGGGSSSSSSSSS
+GGGGGGGGGGGG.SSSSSSSS
+GGGGGGGGGGGGSSSSSSSSS
+GGGGGGGGGGGG.....SSSS
+GGGGGGGGGGGG.....SSSS
+GGGGGGGGGGGG.SSSSSSSS
+GGGGGGGGGGGG.SSSSSSSS
+SSSSSSSSSSV..SSSS....
+SSSSSSSSSS...SSSS....
+SSSSSSSSSS...SSSS....
+SSSSSSSSSS...SSSS..SS
+END;
+
+# Animations.
+	TILE ( 1, 15); ANIM tile_water; END;
+	TILE ( 2, 15); ANIM tile_water_deep; END;
+	TILE ( 1, 14); ANIM tile_ocean; END;
+	TILE ( 2, 14); ANIM tile_ocean_shore; END;
+	TILE ( 1, 16); ANIM tile_puddle; END;
+	TILE ( 0, 14); ANIM tile_waterfall_top; END;
+	TILE ( 0, 15); ANIM tile_waterfall; END;
+	TILE ( 0, 16); ANIM tile_waterfall_bottom; END;
+	TILE ( 3, 23); ANIM tile_flowers; END;
+# Cave entrances
+	TILE ( 1,  4); SOLID edge_n; END;
+	TILE ( 0,  5); SOLID edge_n; END;
+	TILE ( 1,  5); SOLID edge_n; END;
+	TILE (12, 26); SOLID edge_n; END;
+# Tree entrances
+	TILE (12, 28); SOLID edge_n; END;
+	TILE (17, 22); SOLID edge_n; END;
+	TILE (13,  7); SOLID doorway; END;
+# Doorways
+	TILE (13,  8); SOLID doorway; END;
+	TILE (13,  9); SOLID doorway; END;
+	TILE (19,  9); SOLID corner_nw; END;
+	TILE (20,  9); SOLID corner_ne; END;
+	TILE (15, 17); SOLID doorway; END;
+	TILE (15, 18); SOLID doorway; END;
+	TILE (15, 19); SOLID doorway; END;
+	TILE (12, 18); SOLID corner_nw; END;
+	TILE (13, 18); SOLID corner_ne; END;
+# Bridges
+	TILE (15, 12); SOLID bridge_v_left; END;
+	TILE (17, 12); SOLID bridge_v_right; END;
+	TILE (18, 12); SOLID bridge_v; END;
+	TILE (15, 13); SOLID bridge_v_left; END;
+	TILE (17, 13); SOLID bridge_v_right; END;
+	TILE (18, 13); SOLID bridge_v; END;
+	TILE (19, 10); SOLID bridge_h; END;
+	TILE (19, 11); SOLID bridge_h_top; END;
+	TILE (19, 13); SOLID bridge_h_bottom; END;
+	TILE (20, 10); SOLID bridge_h; END;
+	TILE (20, 11); SOLID bridge_h_top; END;
+	TILE (20, 13); SOLID bridge_h_bottom; END;
+# Irregular blocks/Ledges
+	TILE ( 0, 17); SOLID corner_nw; END;
+	TILE ( 1, 17); LEDGE edge_n, north; END;
+	TILE ( 2, 17); SOLID corner_ne; END;
+	TILE ( 4, 17); SOLID corner_nw; END;
+	TILE ( 5, 17); LEDGE edge_n, north; END;
+	TILE ( 6, 17); SOLID corner_ne; END;
+	TILE ( 0, 18); LEDGE edge_w, west; END;
+	TILE ( 2, 18); LEDGE edge_e, east; END;
+	TILE ( 3, 18); SOLID edge_e; END;
+	TILE ( 4, 18); LEDGE edge_w, west; END;
+	TILE ( 6, 18); LEDGE edge_e, east; END;
+	TILE ( 7, 18); SOLID edge_e; END;
+	TILE ( 0, 19); SOLID corner_sw; END;
+	TILE ( 1, 19); LEDGE edge_s, south; END;
+	TILE ( 2, 19); SOLID corner_se; END;
+	TILE ( 3, 19); SOLID edge_w; END;
+	TILE ( 4, 19); SOLID corner_sw; END;
+	TILE ( 5, 19); LEDGE edge_s, south; END;
+	TILE ( 6, 19); SOLID corner_se; END;
+	TILE ( 7, 19); SOLID edge_w; END;
+	TILE ( 0, 20); SOLID corner_nw; END;
+	TILE ( 1, 20); SOLID corner_ne; END;
+	TILE ( 2, 20); SOLID inside_corner_se; END;
+	TILE ( 3, 20); SOLID inside_corner_sw; END;
+	TILE ( 4, 20); SOLID corner_nw; END;
+	TILE ( 5, 20); SOLID corner_ne; END;
+	TILE ( 6, 20); SOLID inside_corner_se; END;
+	TILE ( 7, 20); SOLID inside_corner_sw; END;
+	TILE ( 0, 21); SOLID corner_sw; END;
+	TILE ( 1, 21); SOLID corner_se; END;
+	TILE ( 2, 21); SOLID inside_corner_ne; END;
+	TILE ( 3, 21); SOLID inside_corner_nw; END;
+	TILE ( 4, 21); SOLID corner_sw; END;
+	TILE ( 5, 21); SOLID corner_se; END;
+	TILE ( 6, 21); SOLID inside_corner_ne; END;
+	TILE ( 7, 21); SOLID inside_corner_nw; END;
+	TILE ( 1,  3); LEDGE block, down; END;
+	TILE ( 9,  9); LEDGE edge_s, down; END;
+	TILE ( 9, 10); LEDGE block, down; END;
+	TILE ( 9, 11); LEDGE block, down; END;
+
+END;
+

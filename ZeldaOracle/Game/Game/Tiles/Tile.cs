@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Common.Geometry;
@@ -15,6 +16,7 @@ using ZeldaOracle.Game.Worlds;
 namespace ZeldaOracle.Game.Tiles {
 	
 	public class Tile {
+		private static Type[] tileTypeList = null;
 
 		// Internal
 		private RoomControl		roomControl;
@@ -220,6 +222,21 @@ namespace ZeldaOracle.Game.Tiles {
 			tile.properties.Merge(data.Properties, true);
 
 			return tile;
+		}
+
+		public static Type GetType(string typeName, bool ignoreCase) {
+			if (tileTypeList == null)
+				tileTypeList = Assembly.GetExecutingAssembly().GetTypes();
+
+			StringComparison comparision = StringComparison.Ordinal;
+			if (ignoreCase)
+				comparision = StringComparison.OrdinalIgnoreCase;
+
+			for (int i = 0; i < tileTypeList.Length; i++) {
+				if (tileTypeList[i].Name.Equals(typeName, comparision))
+					return tileTypeList[i];
+			}
+			return null;
 		}
 
 

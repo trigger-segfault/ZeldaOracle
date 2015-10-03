@@ -16,6 +16,15 @@ ANIM tile_lantern; SUBSTRIP repeat;
 
 SPRITESHEET "zoneset_small";
 
+
+# TODO: Actually make these two animations.
+ANIM tile_waterfall_top; SUBSTRIP repeat;
+	ADD strip, 16, 4, (0, 4), (0, 0), (1, 0);
+	MAKEQUAD; END;
+ANIM tile_lavafall_top; SUBSTRIP repeat;
+	ADD strip, 16, 4, (0, 4), (0, 0), (1, 0);
+	MAKEQUAD; END;
+
 ANIM tile_water; SUBSTRIP repeat;
 	ADD strip, 16, 4, (0, 4), (0, 0), (1, 0);
 	MAKEQUAD; END;

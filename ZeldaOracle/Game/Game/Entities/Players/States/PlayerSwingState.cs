@@ -9,7 +9,6 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Control;
-using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Players.States {

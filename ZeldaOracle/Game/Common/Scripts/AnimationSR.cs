@@ -73,7 +73,7 @@ namespace ZeldaOracle.Common.Scripts {
 				else if (parameters.GetString(0) == "clamp")
 					loopMode = LoopMode.Clamp;
 				else
-					; // ERROR: unknown loop mode
+					ThrowParseError("Unknown loop mode '" + parameters.GetString(0) + "' for animation");
 
 				animationBuilder.CreateSubStrip();
 				animationBuilder.SetLoopMode(loopMode);
@@ -122,7 +122,7 @@ namespace ZeldaOracle.Common.Scripts {
 						parameters.GetPoint(3, Point2I.Zero).Y);
 				}
 				else
-					; // ERROR: Unknown.
+					ThrowParseError("Unknown add type '" + parameters.GetString(0) + "' for animation");
 			});
 			AddCommand("Insert", delegate(CommandParam parameters) {
 				if (parameters.GetString(0) == "strip") {
@@ -147,7 +147,7 @@ namespace ZeldaOracle.Common.Scripts {
 						parameters.GetPoint(4, Point2I.Zero).Y);
 				}
 				else
-					; // ERROR: Unknown.
+					ThrowParseError("Unknown insert type '" + parameters.GetString(0) + "' for animation");
 			});
 			
 
@@ -176,7 +176,7 @@ namespace ZeldaOracle.Common.Scripts {
 				else if (parameters.GetString(1) == "off")
 					startOn = false;
 				else
-					;// ERROR: unknown value.
+					ThrowParseError("Must be either on or off for flicker start state");
 
 				animationBuilder.MakeFlicker(parameters.GetInt(0), startOn);
 			});

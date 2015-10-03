@@ -45,18 +45,18 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			if (ammo[currentAmmo].IsEmpty)
 				return;
 			
-			player.Direction = player.UseDirection;
+			Player.Direction = Player.UseDirection;
 
 			Projectile projectile = new Projectile();
 				
 			// General
 			projectile.Owner			= Player;
 			projectile.Position			= new Vector2F(Player.X, Player.Y - 8) + (Directions.ToVector(Player.Direction) * 8.0f);
-			projectile.ZPosition		= player.ZPosition;
-			projectile.Angle			= Directions.ToAngle(player.Direction);
+			projectile.ZPosition		= Player.ZPosition;
+			projectile.Angle			= Directions.ToAngle(Player.Direction);
 			projectile.Physics.Velocity	= Directions.ToVector(Player.Direction) * 3.0f;
 
-			player.Direction = player.Direction;
+			Player.Direction = Player.Direction;
 
 			// Graphics.
 			projectile.Graphics.SubStripIndex = projectile.Angle;
@@ -90,8 +90,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			RoomControl.SpawnEntity(projectile);
 			ammo[currentAmmo].Amount--;
 
-			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
-			player.BeginBusyState(10);
+			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
+			Player.BeginBusyState(10);
 		}
 
 		// Called when the item is added to the inventory list.

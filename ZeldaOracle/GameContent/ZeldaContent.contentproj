@@ -72,7 +72,7 @@
       <Name>animations</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Data\tile_data.conscript">
+    <None Include="Tilesets\tile_data.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>tile_data</Name>
     </None>
@@ -199,7 +199,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Tilesets\overworld.txt">
+    <None Include="Tilesets\overworld.conscript">
       <Name>overworld</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -460,7 +460,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Tilesets\interior.txt">
+    <None Include="Tilesets\interior.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>interior</Name>
     </None>

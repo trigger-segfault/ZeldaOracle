@@ -65,12 +65,13 @@ namespace ZeldaOracle.Common.Scripts {
 				Console.WriteLine("------------------------------------------------------------------");
 			}
 		}
-
-		private int lineIndex;
-		private int charIndex;
-		private string word;
-		private string line;
-		private string fileName;
+		
+		private StreamReader	streamReader;
+		private int				lineIndex;
+		private int				charIndex;
+		private string			word;
+		private string			line;
+		private string			fileName;
 
 		private List<ScriptCommand> commands;
 
@@ -105,10 +106,10 @@ namespace ZeldaOracle.Common.Scripts {
 		//-----------------------------------------------------------------------------
 
 		// Begins reading the script.
-		protected virtual void BeginReading() {}
+		//protected virtual void BeginReading() {}
 
 		// Ends reading the script.
-		protected virtual void EndReading() {}
+		//protected virtual void EndReading() {}
 
 		// Reads a line in the script as a command.
 		protected virtual bool ReadCommand(string commandName, CommandParam parameters) {
@@ -124,7 +125,7 @@ namespace ZeldaOracle.Common.Scripts {
 			return false;
 		}
 
-		private void ThrowParseError(string message, bool showCarret = true) {
+		protected void ThrowParseError(string message, bool showCarret = true) {
 			throw new ParseException(message, fileName, line, lineIndex + 1, charIndex + 1);
 		}
 
@@ -179,8 +180,6 @@ namespace ZeldaOracle.Common.Scripts {
 				}
 			}
 
-			//PrintParementers(parameterRoot);
-			
 			parameterParent	= new CommandParam("");
 			parameterParent.Type = CommandParamType.Array;
 			parameterRoot	= parameterParent;
@@ -200,16 +199,10 @@ namespace ZeldaOracle.Common.Scripts {
 		}
 
 		// Read a single line of the script.
-		protected void ReadLine(string line) {
+		protected override void ReadLine(string line) {
 			word = "";
 			bool quotes = false;
-			
 			charIndex = 0;
-
-			parameterParent	= new CommandParam("");
-			parameterParent.Type = CommandParamType.Array;
-			parameterRoot	= parameterParent;
-			parameter		= null;
 
 			// Parse line character by character.
 			for (int i = 0; i < line.Length; i++) {
@@ -238,7 +231,10 @@ namespace ZeldaOracle.Common.Scripts {
 				// Semicolons.
 				else if (c == ';') {
 					CompleteWord();
+					int prevLineIndex = lineIndex;
 					CompleteStatement();
+					if (lineIndex > prevLineIndex)
+						return;
 				}
 
 				// Single-line comment.
@@ -283,23 +279,35 @@ namespace ZeldaOracle.Common.Scripts {
 			// Make sure quotes are closed and statements are ended.
 			if (quotes)
 				ThrowParseError("Expected \"");
-			else if (parameterRoot.Count > 0 || word.Length > 0)
-				ThrowParseError("Expected ;");
+
+			CompleteWord();
 		}
-		
+
+		protected string NextLine() {
+			lineIndex++;
+			line = streamReader.ReadLine();
+			return line;
+		}
+
 		// Parse and interpret the given text stream as a script, line by line.
 		public override void ReadScript(StreamReader reader, string path) {
 			this.fileName = path;
+			this.streamReader = reader;
 
 			BeginReading();
+
+			parameterParent	= new CommandParam("");
+			parameterParent.Type = CommandParamType.Array;
+			parameterRoot	= parameterParent;
+			parameter		= null;
 			
 			// Read all lines.
-			lineIndex = 0;
+			lineIndex = -1;
 			while (!reader.EndOfStream) {
-				line = reader.ReadLine();
+				NextLine();
 				ReadLine(line);
-				lineIndex++;
 			}
+
 			EndReading();
 		}
 

@@ -25,7 +25,6 @@ namespace ZeldaEditor {
 
 		private EditorForm		editorForm;
 		private EditorControl	editorControl;
-
 		private Point2I			highlightedRoom;
 		private Point2I			highlightedTile;
 		private Point2I			cursorTileLocation;

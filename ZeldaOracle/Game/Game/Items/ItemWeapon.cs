@@ -35,14 +35,14 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 
 		public virtual bool IsUsable() {
-			if (player.IsInAir && !flags.HasFlag(ItemFlags.UsableWhileJumping))
+			if (Player.IsInAir && !flags.HasFlag(ItemFlags.UsableWhileJumping))
 				return false;
-			if (((player.CurrentState is PlayerHoldSwordState) ||
-				(player.CurrentState is PlayerSwingState) ||
-				(player.CurrentState is PlayerSpinSwordState)) &&
+			if (((Player.CurrentState is PlayerHoldSwordState) ||
+				(Player.CurrentState is PlayerSwingState) ||
+				(Player.CurrentState is PlayerSpinSwordState)) &&
 				flags.HasFlag(ItemFlags.UsableWithSword))
 				return true;
-			return (player.CurrentState is PlayerNormalState);
+			return (Player.CurrentState is PlayerNormalState);
 		}
 
 		// Called when the item is switched to.
