@@ -32,8 +32,9 @@ namespace ZeldaEditor.PropertiesEditor {
 			//Foo foo = value as Foo;
 			
 			if (svc != null)// && foo != null)
-			{           
+			{
 				ListBox comboBox = new ListBox();
+				comboBox.BorderStyle = BorderStyle.None;
 
 				Dictionary<string, T> resourceMap = Resources.GetResourceDictionary<T>();
 				comboBox.Items.Add("(none)");

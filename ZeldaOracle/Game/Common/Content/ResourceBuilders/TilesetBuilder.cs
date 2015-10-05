@@ -71,16 +71,32 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 			return this;
 		}
 		
-		public TilesetBuilder SetAnim(Animation animation) {
-			tileData.Animation = animation;
+		public TilesetBuilder SetSprite(SpriteAnimation spriteAnimation) {
+			tileData.Sprite = spriteAnimation;
 			return this;
 		}
-		
-		public TilesetBuilder SetSprite(Sprite sprite) {
-			tileData.Sprite = sprite;
+
+		public TilesetBuilder SetAnims(params Animation[] animations) {
+			SpriteAnimation[] spriteAnimations = new SpriteAnimation[animations.Length];
+			for (int i = 0; i < animations.Length; i++)
+				spriteAnimations[i] = animations[i];
 			return this;
 		}
-		
+
+		public TilesetBuilder SetSprites(params Sprite[] sprites) {
+			SpriteAnimation[] spriteAnimations = new SpriteAnimation[sprites.Length];
+			for (int i = 0; i < sprites.Length; i++)
+				spriteAnimations[i] = sprites[i];
+			return this;
+		}
+
+		public TilesetBuilder SetSpriteAnims(params SpriteAnimation[] spriteAnims) {
+			SpriteAnimation[] spriteAnimations = new SpriteAnimation[spriteAnims.Length];
+			for (int i = 0; i < spriteAnims.Length; i++)
+				spriteAnimations[i] = spriteAnims[i];
+			return this;
+		}
+
 		public TilesetBuilder AddFlags(TileFlags flags) {
 			tileData.Flags |= flags;
 			return this;

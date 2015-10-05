@@ -47,15 +47,15 @@ SSSSSSSSSS...SSSS..SS
 END;
 
 # Animations.
-	TILE ( 1, 15); ANIM tile_water; END;
-	TILE ( 2, 15); ANIM tile_water_deep; END;
-	TILE ( 1, 14); ANIM tile_ocean; END;
-	TILE ( 2, 14); ANIM tile_ocean_shore; END;
-	TILE ( 1, 16); ANIM tile_puddle; END;
-	TILE ( 0, 14); ANIM tile_waterfall_top; END;
-	TILE ( 0, 15); ANIM tile_waterfall; END;
-	TILE ( 0, 16); ANIM tile_waterfall_bottom; END;
-	TILE ( 3, 23); ANIM tile_flowers; END;
+	TILE ( 1, 15); SPRITE tile_water; END;
+	TILE ( 2, 15); SPRITE tile_water_deep; END;
+	TILE ( 1, 14); SPRITE tile_ocean; END;
+	TILE ( 2, 14); SPRITE tile_ocean_shore; END;
+	TILE ( 1, 16); SPRITE tile_puddle; END;
+	TILE ( 0, 14); SPRITE tile_waterfall_top; END;
+	TILE ( 0, 15); SPRITE tile_waterfall; END;
+	TILE ( 0, 16); SPRITE tile_waterfall_bottom; END;
+	TILE ( 3, 23); SPRITE tile_flowers; END;
 # Cave entrances
 	TILE ( 1,  4); SOLID edge_n; END;
 	TILE ( 0,  5); SOLID edge_n; END;

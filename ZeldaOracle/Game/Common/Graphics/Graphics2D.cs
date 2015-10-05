@@ -357,7 +357,39 @@ public class Graphics2D {
 	public void DrawAnimation(AnimationPlayer animationPlayer, Vector2F position, Color color, float depth = 0.0f) {
 		DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, position, color, depth);
 	}
-	
+
+
+	// Draw an animation during at the given time stamp and position.
+	public void DrawAnimation(SpriteAnimation animation, float time, Vector2F position, Color color, float depth = 0.0f) {
+		if (animation.IsAnimation)
+			DrawAnimation(animation.Animation, time, position.X, position.Y, color, depth);
+		else
+			DrawSprite(animation.Sprite, position.X, position.Y, color, depth);
+	}
+
+	// Draw an animation during at the given time stamp and position.
+	public void DrawAnimation(SpriteAnimation animation, float time, float x, float y, Color color, float depth = 0.0f) {
+		if (animation.IsAnimation)
+			DrawAnimation(animation.Animation, time, x, y, color, depth);
+		else
+			DrawSprite(animation.Sprite, x, y, color, depth);
+	}
+
+	// Draw an animation during at the given time stamp and position.
+	public void DrawAnimation(SpriteAnimation animation, int variantID, float time, Vector2F position, Color color, float depth = 0.0f) {
+		if (animation.IsAnimation)
+			DrawAnimation(animation.Animation, variantID, time, position.X, position.Y, color, depth);
+		else
+			DrawSprite(animation.Sprite, variantID, position.X, position.Y, color, depth);
+	}
+
+	// Draw an animation during at the given time stamp and position.
+	public void DrawAnimation(SpriteAnimation animation, int variantID, float time, float x, float y, Color color, float depth = 0.0f) {
+		if (animation.IsAnimation)
+			DrawAnimation(animation.Animation, variantID, time, x, y, color, depth);
+		else
+			DrawSprite(animation.Sprite, variantID, x, y, color, depth);
+	}
 
 	//-----------------------------------------------------------------------------
 	// Text Drawing

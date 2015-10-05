@@ -13,6 +13,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Worlds;
 using ZeldaEditor.PropertiesEditor;
 using ZeldaEditor.PropertiesEditor.CustomEditors;
+using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaEditor.Control {
 	public class PropertyGridControl {
@@ -21,6 +22,7 @@ namespace ZeldaEditor.Control {
 		private PropertyGrid		propertyGrid;
 		private PropertiesContainer	propertiesContainer;
 		private Dictionary<string, UITypeEditor> typeEditors;
+		private object				editedObject;
 
 
 		//-----------------------------------------------------------------------------
@@ -43,6 +45,7 @@ namespace ZeldaEditor.Control {
 			typeEditors["reward"]			= new RewardPropertyEditor(editorControl.RewardManager);
 			typeEditors["text_message"]		= new TextMessagePropertyEditor();
 			typeEditors["script"]			= null;
+			typeEditors["sprite_index"]		= new SpriteIndexComboBox(this);
 
 		}
 
@@ -62,12 +65,14 @@ namespace ZeldaEditor.Control {
 		// Methods
 		//-----------------------------------------------------------------------------
 
-		public void OpenProperties(Properties properties) {
+		public void OpenProperties(Properties properties, object editedObject) {
+			this.editedObject = editedObject;
 			propertiesContainer.Set(properties);
 			propertyGrid.Refresh();
 		}
 		
 		public void CloseProperties() {
+			editedObject = null;
 			propertiesContainer.Clear();
 			propertyGrid.Refresh();
 		}
@@ -76,5 +81,14 @@ namespace ZeldaEditor.Control {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
+
+		public TileDataInstance TileData {
+			get { return editedObject as TileDataInstance; }
+		}
+
+		public object EditedObject {
+			get { return editedObject; }
+			set { editedObject = value; }
+		}
 	}
 }

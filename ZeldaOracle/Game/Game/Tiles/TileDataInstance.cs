@@ -88,16 +88,24 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return tileData.Flags; }
 		}
 
-		public Sprite Sprite {
+		public SpriteAnimation Sprite {
 			get { return tileData.Sprite; }
 		}
 
-		public Sprite SpriteAsObject {
-			get { return tileData.SpriteAsObject; }
+		public SpriteAnimation CurrentSprite {
+			get {
+				if (tileData.SpriteList.Length > 0)
+					return tileData.SpriteList[properties.GetInteger("sprite_index")];
+				return new SpriteAnimation();
+			}
 		}
 
-		public Animation Animation {
-			get { return tileData.Animation; }
+		public SpriteAnimation[] SpriteList {
+			get { return tileData.SpriteList; }
+		}
+
+		public SpriteAnimation SpriteAsObject {
+			get { return tileData.SpriteAsObject; }
 		}
 
 		public Animation BreakAnimation {

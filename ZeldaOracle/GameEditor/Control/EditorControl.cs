@@ -227,7 +227,7 @@ namespace ZeldaEditor.Control {
 			level = world.Levels[index];
 			editorForm.LevelDisplay.UpdateLevel();
 			UpdateWindowTitle();
-			propertyGridControl.OpenProperties(level.Properties);
+			propertyGridControl.OpenProperties(level.Properties, level);
 		}
 
 		// Add a new level the world, and open it if specified.
@@ -304,7 +304,7 @@ namespace ZeldaEditor.Control {
 
 		// Open the properties for the given tile in the property grid.
 		public void OpenTileProperties(TileDataInstance tile) {
-			propertyGridControl.OpenProperties(tile.Properties);
+			propertyGridControl.OpenProperties(tile.Properties, tile);
 		}
 
 

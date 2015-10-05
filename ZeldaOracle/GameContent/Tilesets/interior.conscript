@@ -22,11 +22,11 @@ SSSSSSSS H
 END;
 
 # Animations.
-	TILE ( 7,  9); ANIM tile_lantern; END;
-	TILE ( 4,  4); ANIM tile_water; END;
-	TILE ( 4,  3); ANIM tile_puddle; END;
-	TILE ( 3,  4); ANIM tile_waterfall; END;
-	TILE ( 3,  5); ANIM tile_waterfall_bottom; END;
+	TILE ( 7,  9); SPRITE tile_lantern; END;
+	TILE ( 4,  4); SPRITE tile_water; END;
+	TILE ( 4,  3); SPRITE tile_puddle; END;
+	TILE ( 3,  4); SPRITE tile_waterfall; END;
+	TILE ( 3,  5); SPRITE tile_waterfall_bottom; END;
 # Ledges
 	TILE (1, 0); LEDGE block, up; END;
 	TILE (0, 1); LEDGE block, left; END;
