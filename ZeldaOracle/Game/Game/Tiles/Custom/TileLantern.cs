@@ -29,16 +29,14 @@ namespace ZeldaOracle.Game.Tiles {
 		public void Light() {
 			if (!isLit) {
 				isLit = true;
-				Sprite = null;
-				AnimationPlayer.Play(GameData.ANIM_TILE_LANTERN);
+				CustomSprite = GameData.ANIM_TILE_LANTERN;
 			}
 		}
 
 		public void PutOut() {
 			if (isLit) {
 				isLit = false;
-				AnimationPlayer.Animation = null;
-				Sprite = GameData.SPR_TILE_LANTERN_UNLIT;
+				CustomSprite = GameData.SPR_TILE_LANTERN_UNLIT;
 			}
 		}
 
@@ -58,7 +56,7 @@ namespace ZeldaOracle.Game.Tiles {
 			isLit = Properties.GetBoolean("lit", false);
 
 			if (isLit) {
-				AnimationPlayer.Play(GameData.ANIM_TILE_LANTERN);
+				CustomSprite = GameData.ANIM_TILE_LANTERN;
 			}
 		}
 	}

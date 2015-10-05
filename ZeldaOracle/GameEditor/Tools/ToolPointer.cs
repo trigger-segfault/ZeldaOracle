@@ -102,7 +102,7 @@ namespace ZeldaEditor.Tools {
 					if (selectedTile != null) {
 						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
 						LevelDisplayControl.SetSelectionBox(levelTileCoord, Point2I.One);
-						EditorControl.PropertyGridControl.OpenProperties(selectedTile.Properties);
+						EditorControl.PropertyGridControl.OpenProperties(selectedTile.Properties, selectedTile);
 					}
 					else {
 						LevelDisplayControl.ClearSelectionBox();
@@ -116,7 +116,7 @@ namespace ZeldaEditor.Tools {
 					if (selectedEventTile != null) {
 						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
 						LevelDisplayControl.SetSelectionBox(levelTileCoord, Point2I.One);
-						EditorControl.PropertyGridControl.OpenProperties(selectedEventTile.ModifiedProperties);
+						EditorControl.PropertyGridControl.OpenProperties(selectedEventTile.ModifiedProperties, selectedEventTile);
 					}
 					else {
 						LevelDisplayControl.ClearSelectionBox();

@@ -131,17 +131,19 @@ namespace ZeldaOracle.Common.Scripts {
 			});
 			// Sprite <sprite>
 			AddCommand("Sprite", delegate(CommandParam parameters) {
-				tileData.Sprite = Resources.GetSprite(parameters.GetString(0));
-				if (parameters.Count > 1)
-					tileData.SpriteAsObject = Resources.GetSprite(parameters.GetString(1));
+				tileData.Sprite = Resources.GetSpriteAnimation(parameters.GetString(0));
+			});
+			// SpriteList [sprite1] [sprite2]...
+			AddCommand("SpriteList", delegate(CommandParam parameters) {
+				SpriteAnimation[] spriteList = new SpriteAnimation[parameters.Count];
+				for (int i = 0; i < parameters.Count; i++)
+					spriteList[i] = Resources.GetSpriteAnimation(parameters.GetString(i));
+
+				tileData.SpriteList = spriteList;
 			});
 			// SpriteObj <sprite-object>
 			AddCommand("SpriteObj", delegate(CommandParam parameters) {
-				tileData.SpriteAsObject = Resources.GetSprite(parameters.GetString(0));
-			});
-			// Anim <animation>
-			AddCommand("Anim", delegate(CommandParam parameters) {
-				tileData.Animation = Resources.GetAnimation(parameters.GetString(0));
+				tileData.SpriteAsObject = Resources.GetSpriteAnimation(parameters.GetString(0));
 			});
 			// BreakAnim <animation>
 			AddCommand("BreakAnim", delegate(CommandParam parameters) {

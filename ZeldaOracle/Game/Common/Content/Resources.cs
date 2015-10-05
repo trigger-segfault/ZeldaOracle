@@ -241,6 +241,13 @@ namespace ZeldaOracle.Common.Content {
 		// Resource Accessors
 		//-----------------------------------------------------------------------------
 
+		public static SpriteAnimation GetSpriteAnimation(string name) {
+			if (sprites.ContainsKey(name))
+				return sprites[name];
+			else
+				return animations[name];
+		}
+
 		// Gets the image with the specified name.
 		public static Image GetImage(string name) {
 			return images[name];

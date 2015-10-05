@@ -13,7 +13,10 @@ namespace ZeldaOracle.Common.Properties {
 		String,
 		Integer,
 		Float,
-		Boolean
+		Boolean,
+		Tile,
+		Sprite,
+		Effect
 	}
 
 
