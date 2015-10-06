@@ -1,0 +1,107 @@
+
+#==============================================================
+# Sprites
+#==============================================================
+
+LOAD SPRITES;
+	
+SPRITESHEET "tileset_special_nv",			"Tiles/tileset_special_nv",				(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "tileset_special_nv_extras",	"Tiles/tileset_special_nv_extras",		(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Animations
+#==============================================================
+
+LOAD ANIMATIONS;
+
+SPRITESHEET "tileset_special_nv_extras";
+
+TEMPANIM trampoline_bounce; SUBSTRIP clamp;
+	ADD frame, 12, (4, 0); ADD frame, 2, (3, 0); ADD frame, 8, (5, 0); ADD frame, 1, (3, 0); END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+LOAD TILESETS;
+
+TEMPTILE chest;
+	TYPE		TileChest;
+	FLAGS		solid;
+	MODEL		block;
+	PROPERTIES
+		(string, reward, "rupees_1",
+			"Reward", "reward", "",
+			 "The reward contained inside the chest."),
+		(boolean, looted, "false",
+			"Looted", "", "",
+			"True if the item has been taken from the chest.");
+END;
+
+TEMPTILE reward;
+	TYPE		TileReward
+	FLAGS		solid;
+	MODEL		center;
+	PROPERTIES
+		(string, reward, "heart_piece",
+			"Reward", "reward", "",
+			 "The reward to spawn."),
+		(boolean, looted, "false",
+			"Looted", "", "",
+			"True if the item has been taken.");
+END;
+
+TEMPTILE trampoline;
+	FLAGS		solid, movable;
+	MODEL		block;
+END;
+
+TEMPTILE color_barrier_blue;
+	FLAGS		solid;
+	MODEL		block;
+END;
+
+TEMPTILE color_barrier_red;
+	FLAGS		none;
+END;
+
+#==============================================================
+# Tilesets
+#==============================================================
+
+TILESET special_nv, tileset_special_nv, (12, 2);
+DEFAULT (0, 0);
+
+# Rewards
+
+TILE (0, 0);
+	CLONE			chest;
+	SPRITEINDEX		1, "tileset_special_nv_extras",	(0, 0);
+END;
+
+TILE (1, 0);
+	CLONE			chest;
+	SPRITEINDEX		1, "tileset_special_nv_extras",	(1, 0);
+END;
+
+TILE (2, 0);
+	CLONE			chest;
+	SPRITEINDEX		1, "tileset_special_nv_extras",	(2, 0);
+END;
+
+TILE (3, 0);
+	CLONE			reward;
+	SPRITE			"tileset_special_nv_extras", (11, 1);
+END;
+
+TILE (6, 0);
+	CLONE			trampoline;
+	SPRITEINDEX		1, trampoline_bounce;
+END;
+
+TILE (0, 1);
+	SPRITEINDEX		1, "tileset_special_nv_extras", (2, 1);
+	SPRITEINDEX		2, "tileset_special_nv_extras", (3, 1);
+END;
+
+END;

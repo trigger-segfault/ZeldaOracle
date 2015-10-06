@@ -33,20 +33,29 @@ namespace ZeldaOracle.Common.Scripts {
 		private AnimationBuilder animationBuilder;
 		private Animation animation;
 		private string animationName;
+		private TemporaryResources resources;
+		private bool useTemporary;
 
 
 		//-----------------------------------------------------------------------------
 		// Override
 		//-----------------------------------------------------------------------------
 
-		public AnimationSR() {
-			animationBuilder = new AnimationBuilder();
+		public AnimationSR(TemporaryResources resources = null) {
+
+			this.resources			= resources;
+			this.useTemporary		= resources != null;
+			this.animationBuilder	= new AnimationBuilder();
 
 			
 			// SPRITE SHEET.
 
 			AddCommand("SpriteSheet", delegate(CommandParam parameters) {
-				SpriteSheet sheet = Resources.GetSpriteSheet(parameters.GetString(0));
+				SpriteSheet sheet;
+				if (useTemporary && resources != null)
+					sheet = resources.GetResource<SpriteSheet>(parameters.GetString(0));
+				else
+					sheet = Resources.GetResource<SpriteSheet>(parameters.GetString(0));
 				animationBuilder.SpriteSheet = sheet;
 			});
 
@@ -61,7 +70,10 @@ namespace ZeldaOracle.Common.Scripts {
 			AddCommand("End", delegate(CommandParam parameters) {
 				if (animation != null) {
 					animationBuilder.End();
-					Resources.AddAnimation(animationName, animation);
+					if (useTemporary && resources != null)
+						resources.AddResource<Animation>(animationName, animation);
+					else
+						Resources.AddResource<Animation>(animationName, animation);
 				}
 			});
 			AddCommand("SubStrip", delegate(CommandParam parameters) {
@@ -81,8 +93,12 @@ namespace ZeldaOracle.Common.Scripts {
 					animation = animationBuilder.Animation;
 			});
 			AddCommand("Clone", delegate(CommandParam parameters) {
-				if (Resources.AnimationExists(parameters.GetString(0))) {
-					animationBuilder.CreateClone(Resources.GetAnimation(parameters.GetString(0)));
+				if (useTemporary && resources != null && resources.ExistsResource<Animation>(parameters.GetString(0))) {
+					animationBuilder.CreateClone(resources.GetResource<Animation>(parameters.GetString(0)));
+					animation = animationBuilder.Animation;
+				}
+				if (Resources.ExistsResource<Animation>(parameters.GetString(0))) {
+					animationBuilder.CreateClone(Resources.GetResource<Animation>(parameters.GetString(0)));
 					animation = animationBuilder.Animation;
 				}
 				else {
@@ -199,5 +215,9 @@ namespace ZeldaOracle.Common.Scripts {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		public bool UseTemporaryResources {
+			get { return useTemporary; }
+			set { useTemporary = value; }
+		}
 	}
 } // end namespace

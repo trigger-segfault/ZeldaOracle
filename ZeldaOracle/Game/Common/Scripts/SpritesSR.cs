@@ -15,21 +15,30 @@ namespace ZeldaOracle.Common.Scripts {
 		private SpriteBuilder spriteBuilder;
 		private Sprite sprite;
 		private string spriteName;
+		private TemporaryResources resources;
+		private bool useTemporary;
 
 
 		//-----------------------------------------------------------------------------
 		// Override
 		//-----------------------------------------------------------------------------
 
-		public SpritesSR() {
-			spriteBuilder = new SpriteBuilder();
+		public SpritesSR(TemporaryResources resources = null) {
+
+			this.resources		= resources;
+			this.useTemporary	= resources != null;
+			this.spriteBuilder	= new SpriteBuilder();
 
 			// SPRITE SHEET.
 
 			AddCommand("SpriteSheet", delegate(CommandParam parameters) {
 				if (parameters.Count == 1) {
 					// Start using the given sprite sheet.
-					SpriteSheet sheet = Resources.GetSpriteSheet(parameters.GetString(0));
+					SpriteSheet sheet;
+					if (useTemporary && resources != null)
+						sheet = resources.GetResource<SpriteSheet>(parameters.GetString(0));
+					else
+						sheet = Resources.GetResource<SpriteSheet>(parameters.GetString(0));
 					spriteBuilder.SpriteSheet = sheet;
 				}
 				else {
@@ -45,7 +54,7 @@ namespace ZeldaOracle.Common.Scripts {
 					}
 					
 					if (Resources.ImageExists(imagePath))
-						image = Resources.GetImage(imagePath);
+						image = Resources.GetResource<Image>(imagePath);
 					else
 						image = Resources.LoadImage(Resources.ImageDirectory + imagePath);
 
@@ -56,7 +65,7 @@ namespace ZeldaOracle.Common.Scripts {
 							parameters.GetPoint(i + 0),
 							parameters.GetPoint(i + 2),
 							parameters.GetPoint(i + 1));
-					Resources.AddSpriteSheet(sheetName, sheet);
+					Resources.AddResource<SpriteSheet>(sheetName, sheet);
 					spriteBuilder.SpriteSheet = sheet;
 				}
 			});
@@ -75,7 +84,10 @@ namespace ZeldaOracle.Common.Scripts {
 			AddCommand("End", delegate(CommandParam parameters) {
 				if (sprite != null) {
 					spriteBuilder.End();
-					Resources.AddSprite(spriteName, sprite);
+					if (useTemporary && resources != null)
+						resources.AddResource<Sprite>(spriteName, sprite);
+					else
+						Resources.AddResource<Sprite>(spriteName, sprite);
 					sprite = null;
 				}
 			});
@@ -115,5 +127,9 @@ namespace ZeldaOracle.Common.Scripts {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		public bool UseTemporaryResources {
+			get { return useTemporary; }
+			set { useTemporary = value; }
+		}
 	}
 } // end namespace

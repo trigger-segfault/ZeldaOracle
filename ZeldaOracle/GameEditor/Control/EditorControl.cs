@@ -264,8 +264,10 @@ namespace ZeldaEditor.Control {
 		}
 
 		public void ChangeZone(string name) {
-			zone = Resources.GetResource<Zone>(name);
-			editorForm.TileDisplay.UpdateZone();
+			if (name != "(none)") {
+				zone = Resources.GetResource<Zone>(name);
+				editorForm.TileDisplay.UpdateZone();
+			}
 		}
 
 		// Test/play the world.

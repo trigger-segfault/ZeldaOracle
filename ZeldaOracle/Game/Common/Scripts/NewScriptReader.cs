@@ -96,6 +96,12 @@ namespace ZeldaOracle.Common.Scripts {
 		//-----------------------------------------------------------------------------
 
 		protected void AddCommand(string name, Action<CommandParam> action) {
+			// Don't add commands that already exist.
+			for (int i = 0; i < commands.Count; i++) {
+				if (String.Compare(commands[i].Name, name, StringComparison.CurrentCultureIgnoreCase) == 0)
+					return;
+			}
+
 			ScriptCommand command = new ScriptCommand(name, action);
 			commands.Add(command);
 		}

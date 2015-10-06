@@ -14,14 +14,17 @@ namespace ZeldaOracle.Common.Scripts {
 
 		private Image	image;
 		private Image	imageTail;
-		private string	imageName;
+		private string imageName;
+		private TemporaryResources resources;
 
 
 		//-----------------------------------------------------------------------------
 		// Override
 		//-----------------------------------------------------------------------------
 
-		public ImagesSR() {
+		public ImagesSR(TemporaryResources resources = null) {
+
+			this.resources	= resources;
 
 			// Sprite <name>
 			AddCommand("Image", delegate(CommandParam parameters) {
