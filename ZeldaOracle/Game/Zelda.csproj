@@ -122,6 +122,7 @@
     <Compile Include="Common\Collision\CollisionModel.cs" />
     <Compile Include="Common\Content\Resource.cs" />
     <Compile Include="Common\Content\Resources.cs" />
+    <Compile Include="Common\Content\TemporaryResources.cs" />
     <Compile Include="Common\Content\TextureLoader.cs" />
     <None Include="Common\Debug\DebugControllerBase.cs" />
     <None Include="Common\Debug\DebugMenu.cs" />

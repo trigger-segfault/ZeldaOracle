@@ -56,6 +56,34 @@ namespace ZeldaOracle.Game.Tiles {
 			this.flags	= flags;
 		}
 
+		public TileData(TileData copy) : this() {
+			type				= copy.type;
+			size				= copy.size;
+			flags				= copy.flags;
+			spriteList			= new SpriteAnimation[copy.spriteList.Length];
+			spriteAsObject		= new SpriteAnimation(copy.spriteAsObject);
+			breakAnimation		= copy.breakAnimation;
+			collisionModel		= copy.collisionModel;
+			sheetLocation		= copy.sheetLocation;
+			tileset				= copy.tileset;
+			properties			= new Properties();
+
+			properties.Merge(copy.properties, true);
+
+			for (int i = 0; i < spriteList.Length; i++)
+				spriteList[i] = new SpriteAnimation(copy.spriteList[i]);
+		}
+
+		public void Clone(TileData copy) {
+			type				= copy.type;
+			size				= copy.size;
+			flags				= copy.flags;
+			breakAnimation		= copy.breakAnimation;
+			collisionModel		= copy.collisionModel;
+			properties			= new Properties();
+
+			properties.Merge(copy.properties, true);
+		}
 
 		//-----------------------------------------------------------------------------
 		// Properties

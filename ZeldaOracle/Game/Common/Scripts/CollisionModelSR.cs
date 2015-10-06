@@ -13,13 +13,16 @@ namespace ZeldaOracle.Common.Scripts {
 
 		private CollisionModel model;
 		private string	modelName;
+		private TemporaryResources resources;
 
 
 		//-----------------------------------------------------------------------------
 		// Override
 		//-----------------------------------------------------------------------------
 
-		public CollisionModelSR() {
+		public CollisionModelSR(TemporaryResources resources = null) {
+
+			this.resources	= resources;
 
 			// Sprite <name>
 			AddCommand("Model", delegate(CommandParam parameters) {

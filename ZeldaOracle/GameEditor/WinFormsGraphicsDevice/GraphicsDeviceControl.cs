@@ -108,16 +108,20 @@ namespace WinFormsGraphicsDevice {
 		/// Redraws the control in response to a WinForms paint message.
 		/// </summary>
 		protected override void OnPaint(PaintEventArgs e) {
-			string beginDrawError = BeginDraw();
+			if (ClientSize.Width > 0 && ClientSize.Height > 0) {
+				string beginDrawError = BeginDraw();
 
-			if (string.IsNullOrEmpty(beginDrawError)) {
-				// Draw the control using the GraphicsDevice.
-				Draw();
-				EndDraw();
-			}
-			else {
-				// If BeginDraw failed, show an error message using System.Drawing.
-				PaintUsingSystemDrawing(e.Graphics, beginDrawError);
+				if (string.IsNullOrEmpty(beginDrawError)) {
+					// Draw the control using the GraphicsDevice.
+					if (ClientSize.Width > 0 && ClientSize.Height > 0) {
+						Draw();
+						EndDraw();
+					}
+				}
+				else {
+					// If BeginDraw failed, show an error message using System.Drawing.
+					PaintUsingSystemDrawing(e.Graphics, beginDrawError);
+				}
 			}
 		}
 
@@ -170,8 +174,8 @@ namespace WinFormsGraphicsDevice {
 		/// </summary>
 		void EndDraw() {
 			try {
-				Rectangle sourceRectangle = new Rectangle(0, 0, ClientSize.Width,
-																ClientSize.Height);
+				Rectangle sourceRectangle = new Rectangle(0, 0, Math.Max(0, ClientSize.Width),
+																Math.Max(0, ClientSize.Height));
 
 				GraphicsDevice.Present(sourceRectangle, null, this.Handle);
 			}
