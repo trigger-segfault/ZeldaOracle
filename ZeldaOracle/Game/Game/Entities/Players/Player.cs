@@ -76,6 +76,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		private const int InvincibleDuration = 25;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
@@ -98,9 +99,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 			tunic			= PlayerTunics.GreenTunic;
 
 			// Physics.
-			Physics.CollideWithWorld = true;
-			Physics.HasGravity = true;
-			Physics.CollideWithRoomEdge = true;
+			Physics.CollisionBox		= new Rectangle2F(-4, -10, 8, 9);
+			Physics.SoftCollisionBox	= new Rectangle2F(-6, -14, 12, 13);
+			Physics.CollideWithWorld	= true;
+			Physics.CollideWithEntities	= true;
+			Physics.CollideWithRoomEdge	= true;
+			Physics.HasGravity			= true;
 
 			// Graphics.
 			Graphics.ShadowDrawOffset = originOffset;
@@ -286,11 +290,24 @@ namespace ZeldaOracle.Game.Entities.Players {
 			movement.Update();
 			UpdateUseDirections();
 			
-			// Check for tile press interactions.
-			if (IsOnGround) {
-				Tile actionTile = physics.GetMeetingSolidTile(position, direction);
-				if (actionTile != null && Controls.A.IsPressed()) {
-					if (actionTile.OnAction(direction)) {
+			// Check for tile & entity press interactions.
+			if (IsOnGround && Controls.A.IsPressed()) {
+				Entity actionEntity = null;
+				for (int i = 0; i < RoomControl.Entities.Count; i++) {
+					Entity e = RoomControl.Entities[i];
+					if (e != this && !e.IsDestroyed && e.Physics.IsSolid && Physics.IsSoftMeetingEntity(e) &&
+						Entity.AreEntitiesAligned(this, e, direction, e.ActionAlignDistance) &&
+						e.OnPlayerAction(direction))
+					{
+						actionEntity = e;
+						Controls.A.Disable(true);
+						stopPushing = true;
+						break;
+					}
+				}
+				if (actionEntity == null) {
+					Tile actionTile = physics.GetMeetingSolidTile(position, direction);
+					if (actionTile != null && actionTile.OnAction(direction)) {
 						Controls.A.Disable(true);
 						stopPushing = true;
 					}

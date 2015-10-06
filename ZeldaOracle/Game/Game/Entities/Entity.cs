@@ -51,6 +51,7 @@ namespace ZeldaOracle.Game.Entities {
 		protected GraphicsComponent	graphics;
 		protected Point2I			originOffset;
 		protected Point2I			centerOffset;
+		protected int				actionAlignDistance; // How many pixels off of alignment to interact with the entity (based on center positions).
 
 
 		//-----------------------------------------------------------------------------
@@ -68,11 +69,19 @@ namespace ZeldaOracle.Game.Entities {
 			graphics		= new GraphicsComponent(this);
 			originOffset	= Point2I.Zero;
 			centerOffset	= Point2I.Zero;
+			actionAlignDistance = 5;
 		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Interaction Methods
+		//-----------------------------------------------------------------------------
+
+		public virtual bool OnPlayerAction(int direction) { return false; }
 
 
 		//-----------------------------------------------------------------------------
-		// Virtual methods
+		// Virtual Methods
 		//-----------------------------------------------------------------------------
 
 		// Initializes the entity and sets up containment variables.
@@ -176,6 +185,16 @@ namespace ZeldaOracle.Game.Entities {
 		public void DisablePhysics() {
 			physics.IsEnabled = false;
 		}
+		
+		
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		public static bool AreEntitiesAligned(Entity a, Entity b, int direction, int threshold) {
+			return ((Directions.IsVertical(direction) && Math.Abs(a.Center.X - b.Center.X) <= threshold) ||
+				(Directions.IsHorizontal(direction) && Math.Abs(a.Center.Y - b.Center.Y) <= threshold));
+		}
 	
 
 		//-----------------------------------------------------------------------------
@@ -272,5 +291,10 @@ namespace ZeldaOracle.Game.Entities {
 		public Vector2F Center {
 			get { return position + centerOffset; }
 		}
+	
+		public int ActionAlignDistance {
+			get { return actionAlignDistance; }
+			set { actionAlignDistance = value; }
+		}
 	}
-} // End namespace
+}
