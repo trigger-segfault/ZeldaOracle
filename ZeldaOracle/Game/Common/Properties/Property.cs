@@ -13,7 +13,10 @@ namespace ZeldaOracle.Common.Properties {
 		String,
 		Integer,
 		Float,
-		Boolean
+		Boolean,
+		Tile,
+		Sprite,
+		Effect
 	}
 
 
@@ -43,6 +46,13 @@ namespace ZeldaOracle.Common.Properties {
 			this.editorType		= editorType;
 			this.category		= category;
 			this.description	= description;
+		}
+
+		public PropertyDocumentation(PropertyDocumentation copy) {
+			readableName	= copy.readableName;
+			editorType		= copy.editorType;
+			category		= copy.category;
+			description		= copy.description;
 		}
 
 
@@ -127,6 +137,8 @@ namespace ZeldaOracle.Common.Properties {
 				firstChild = new Property(copy.firstChild);
 			if (copy.next != null)
 				next = new Property(copy.next);
+			if (copy.documentation != null)
+				documentation = new PropertyDocumentation(copy.documentation);
 		}
 
 

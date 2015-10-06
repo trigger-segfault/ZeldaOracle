@@ -12,18 +12,17 @@ namespace ZeldaOracle.Game.Tiles {
 
 	public class TileData {
 
-		private Type			type;
+		private Type				type;
 
-		private TileFlags		flags;
-		private Point2I			size;
-		private Sprite			sprite;
-		private Sprite			spriteAsObject;
-		private Animation		animation;
-		private Animation		breakAnimation;	// The animation to play when the tile is broken.
-		private CollisionModel	collisionModel;
-		private Point2I			sheetLocation;	// Location on the tileset.
-		private Tileset			tileset;
-		private Properties		properties;
+		private TileFlags			flags;
+		private Point2I				size;
+		private SpriteAnimation[]	spriteList;
+		private SpriteAnimation		spriteAsObject;
+		private Animation			breakAnimation;	// The animation to play when the tile is broken.
+		private CollisionModel		collisionModel;
+		private Point2I				sheetLocation;	// Location on the tileset.
+		private Tileset				tileset;
+		private Properties			properties;
 
 		
 		//-----------------------------------------------------------------------------
@@ -34,9 +33,8 @@ namespace ZeldaOracle.Game.Tiles {
 			type				= null;
 			size				= Point2I.One;
 			flags				= TileFlags.Default;
-			sprite				= null;
-			spriteAsObject		= null;
-			animation			= null;
+			spriteList			= new SpriteAnimation[0];
+			spriteAsObject		= new SpriteAnimation();
 			breakAnimation		= null;
 			collisionModel		= null;
 			sheetLocation		= Point2I.Zero;
@@ -45,6 +43,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 			properties.Set("id", "")
 				.SetDocumentation("ID", "", "", "The id used to refer to this tile.");
+			properties.Set("sprite_index", 0)
+				.SetDocumentation("Sprite Index", "sprite_index", "", "The current sprite in the sprite list to draw.");
 		}
 		
 		public TileData(TileFlags flags) : this() {
@@ -56,6 +56,34 @@ namespace ZeldaOracle.Game.Tiles {
 			this.flags	= flags;
 		}
 
+		public TileData(TileData copy) : this() {
+			type				= copy.type;
+			size				= copy.size;
+			flags				= copy.flags;
+			spriteList			= new SpriteAnimation[copy.spriteList.Length];
+			spriteAsObject		= new SpriteAnimation(copy.spriteAsObject);
+			breakAnimation		= copy.breakAnimation;
+			collisionModel		= copy.collisionModel;
+			sheetLocation		= copy.sheetLocation;
+			tileset				= copy.tileset;
+			properties			= new Properties();
+
+			properties.Merge(copy.properties, true);
+
+			for (int i = 0; i < spriteList.Length; i++)
+				spriteList[i] = new SpriteAnimation(copy.spriteList[i]);
+		}
+
+		public void Clone(TileData copy) {
+			type				= copy.type;
+			size				= copy.size;
+			flags				= copy.flags;
+			breakAnimation		= copy.breakAnimation;
+			collisionModel		= copy.collisionModel;
+			properties			= new Properties();
+
+			properties.Merge(copy.properties, true);
+		}
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -76,19 +104,34 @@ namespace ZeldaOracle.Game.Tiles {
 			set { flags = value; }
 		}
 
-		public Sprite Sprite {
-			get { return sprite; }
-			set { sprite = value; }
+		public SpriteAnimation Sprite {
+			get {
+				if (spriteList.Length > 0)
+					return spriteList[0];
+				return new SpriteAnimation();
+			}
+			set {
+				if (value == null)
+					spriteList = new SpriteAnimation[0];
+				else
+					spriteAsObject.Set(value);
+				spriteList = new SpriteAnimation[] { value };
+			}
 		}
 
-		public Sprite SpriteAsObject {
+		public SpriteAnimation[] SpriteList {
+			get { return spriteList; }
+			set { spriteList = value; }
+		}
+
+		public SpriteAnimation SpriteAsObject {
 			get { return spriteAsObject; }
-			set { spriteAsObject = value; }
-		}
-
-		public Animation Animation {
-			get { return animation; }
-			set { animation = value; }
+			set {
+				if (value == null)
+					spriteAsObject.SetNull();
+				else
+					spriteAsObject.Set(value);
+			}
 		}
 
 		public Animation BreakAnimation {

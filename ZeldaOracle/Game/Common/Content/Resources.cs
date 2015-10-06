@@ -70,7 +70,8 @@ namespace ZeldaOracle.Common.Content {
 		private static Dictionary<string, Effect> shaders;
 		// The texture loader for loading images from file.
 		private static TextureLoader textureLoader;
-		
+
+		// The collection of loaded collision models.
 		private static Dictionary<string, CollisionModel> collisionModels;
 		private static Dictionary<string, Tileset> tilesets;
 		private static Dictionary<string, TileData> tileData;
@@ -240,6 +241,14 @@ namespace ZeldaOracle.Common.Content {
 		//-----------------------------------------------------------------------------
 		// Resource Accessors
 		//-----------------------------------------------------------------------------
+
+		// Gets a sprite or animation depending on which one exists.
+		public static SpriteAnimation GetSpriteAnimation(string name) {
+			if (sprites.ContainsKey(name))
+				return sprites[name];
+			else
+				return animations[name];
+		}
 
 		// Gets the image with the specified name.
 		public static Image GetImage(string name) {

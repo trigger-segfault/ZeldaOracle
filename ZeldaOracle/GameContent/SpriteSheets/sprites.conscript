@@ -34,10 +34,14 @@ SPRITESHEET "player_items",				(16, 16), (1, 1), (0, 0); END;
 
 SPRITESHEET "event_tiles", "Tiles/event_tiles"		(16, 16), (1, 1), (18, 18); END;
 
+SPRITESHEET "color_cube", "Tiles/color_cube"		(16, 16), (1, 1), (18, 18); END;
+
 
 #==============================================================
 # Event Tile Sprites (Editor Only)
 #==============================================================
+
+SPRITESHEET "event_tiles";
 
 SPRITE event_tile_warp_entrance,		(0, 0); END;
 SPRITE event_tile_warp_stairs,			(1, 0); END;
@@ -47,6 +51,16 @@ SPRITE event_tile_track_intersection,	(3, 0); END;
 #==============================================================
 # Tile Sprites
 #==============================================================
+
+SPRITESHEET "color_cube";
+
+SPRITE color_cube_blue_yellow,		(0, 0); END;
+SPRITE color_cube_blue_red,			(1, 0); END;
+SPRITE color_cube_yellow_red,		(2, 0); END;
+SPRITE color_cube_yellow_blue,		(3, 0); END;
+SPRITE color_cube_red_blue,			(4, 0); END;
+SPRITE color_cube_red_yellow,		(5, 0); END;
+
 
 SPRITESHEET "zoneset_large";
 

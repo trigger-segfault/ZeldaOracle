@@ -46,7 +46,6 @@ namespace ZeldaEditor {
 			MouseDown	+= OnMouseDown;
 			MouseUp		+= OnMouseUp;
 			MouseLeave	+= OnMouseLeave;
-			MouseEnter	+= OnMouseEnter;
 			
 			this.ResizeRedraw = true;
 
@@ -212,10 +211,8 @@ namespace ZeldaEditor {
 			Point2I position = tile.Location * GameSettings.TILE_SIZE;
 
 			// Draw tile sprite/animation.
-			if (tile.Animation != null)
-				g.DrawAnimation(tile.Animation, tile.Room.Zone.ImageVariantID, editorControl.Ticks, position, color);
-			else if (tile.Sprite != null)
-				g.DrawSprite(tile.Sprite, tile.Room.Zone.ImageVariantID, position, color);
+			if (!tile.CurrentSprite.IsNull)
+				g.DrawAnimation(tile.CurrentSprite, tile.Room.Zone.ImageVariantID, editorControl.Ticks, position, color);
 
 			// Draw rewards.
 			if (editorControl.ShowRewards && tile.Properties.Exists("reward") &&
@@ -330,18 +327,22 @@ namespace ZeldaEditor {
 				
 				// Draw the highlight box.
 				if (editorControl.HighlightMouseTile && cursorTileLocation >= Point2I.Zero) {
+					g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
 					Rectangle2I box = new Rectangle2I(GetLevelTileCoordDrawPosition(cursorTileLocation), new Point2I(16, 16));
 					g.DrawRectangle(box.Inflated(1, 1), 1, Color.White);
+					g.ResetTranslation();
 				}
 
 				// Draw the selection box.
 				if (!selectionBox.IsEmpty) {
+					g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
 					Point2I start = GetLevelTileCoordDrawPosition(selectionBox.TopLeft);
 					Point2I end   = GetLevelTileCoordDrawPosition(selectionBox.BottomRight);
 					Rectangle2I box = new Rectangle2I(start, end - start);
 					g.DrawRectangle(box, 1, Color.White);
 					g.DrawRectangle(box.Inflated(1, 1), 1, Color.Black);
 					g.DrawRectangle(box.Inflated(-1, -1), 1, Color.Black);
+					g.ResetTranslation();
 				}
 
 				// Draw player sprite for 'Test At Position'
@@ -376,10 +377,6 @@ namespace ZeldaEditor {
 			highlightedRoom		= -Point2I.One;
 			highlightedTile		= -Point2I.One;
 			cursorTileLocation	= -Point2I.One;
-		}
-
-		private void OnMouseEnter(object sender, EventArgs e) {
-			this.Focus();
 		}
 
 		private void OnMouseDown(object sender, MouseEventArgs e) {

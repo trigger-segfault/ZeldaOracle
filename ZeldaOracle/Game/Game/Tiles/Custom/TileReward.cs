@@ -45,7 +45,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 				// Change the sprite to the reward.
 				string rewardName = Properties.GetString("reward", "rupees_1");
 				Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
-				AnimationPlayer.Animation = reward.Animation;
+				CustomSprite = reward.Animation;
 			}
 		}
 

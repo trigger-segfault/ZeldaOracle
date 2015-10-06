@@ -86,6 +86,30 @@ namespace ZeldaOracle.Common.Graphics {
 				nextStrip.SwitchSpriteSheet(sheet);
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Sprites
+		//-----------------------------------------------------------------------------
+
+		public Sprite GetFrameAsSprite(int time) {
+			Sprite sprite = null;
+			Sprite currentSprite = null;
+			for (int i = 0; i < frames.Count; i++) {
+				if (frames[i].StartTime <= time && frames[i].StartTime + frames[i].Duration - 1 >= time) {
+					if (sprite == null) {
+						sprite = new Sprite(frames[i].Sprite);
+						currentSprite = sprite;
+					}
+					else {
+						currentSprite.NextPart = new Sprite(frames[i].Sprite);
+						currentSprite = currentSprite.NextPart;
+					}
+				}
+			}
+			return sprite;
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------

@@ -118,10 +118,13 @@ namespace ZeldaEditor {
 			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 			g.Clear(Color.White);
 			g.Translate(new Vector2F(-this.HorizontalScroll.Value, -this.VerticalScroll.Value));
+			g.Translate(-Tileset.SpriteSheet.Offset);
 			g.DrawImage(Tileset.SpriteSheet.Image.GetVariant(Zone.ImageVariantID), Point2I.Zero);
 
 			Point2I tilePoint = SelectedTile * (Tileset.SpriteSheet.CellSize + Tileset.SpriteSheet.Spacing);
 
+			g.ResetTranslation();
+			g.Translate(new Vector2F(-this.HorizontalScroll.Value, -this.VerticalScroll.Value));
 			g.DrawRectangle(new Rectangle2I(tilePoint, Tileset.SpriteSheet.CellSize + 1), 1, Color.White);
 			g.DrawRectangle(new Rectangle2I(tilePoint + 1, Tileset.SpriteSheet.CellSize - 1), 1, Color.Black);
 			g.DrawRectangle(new Rectangle2I(tilePoint - 1, Tileset.SpriteSheet.CellSize + 3), 1, Color.Black);

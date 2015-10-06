@@ -72,6 +72,10 @@
       <Name>animations</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Tilesets\special_nv.conscript">
+      <Name>special_nv</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Tilesets\tile_data.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>tile_data</Name>
@@ -475,6 +479,25 @@
   <ItemGroup>
     <Compile Include="Images\Tiles\event_tiles.png">
       <Name>event_tiles</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\Tiles\color_cube.png">
+      <Name>color_cube</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\Tiles\tileset_special_nv.png">
+      <Name>tileset_special_nv</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_special_nv_extras.png">
+      <Name>tileset_special_nv_extras</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

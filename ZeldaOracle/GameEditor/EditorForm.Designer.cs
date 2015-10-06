@@ -51,6 +51,9 @@
 			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.playAnimationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showGridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
+			this.cycleLayerUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.cycleLayerUpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.worldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.addLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.testLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -114,9 +117,6 @@
 			this.duplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
 			this.panelWorldTabEvents = new System.Windows.Forms.Panel();
-			this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
-			this.cycleLayerUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.cycleLayerUpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.toolStrip2.SuspendLayout();
@@ -356,6 +356,25 @@
 			this.showGridToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
 			this.showGridToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
 			this.showGridToolStripMenuItem.Text = "Show Grid";
+			// 
+			// toolStripSeparator12
+			// 
+			this.toolStripSeparator12.Name = "toolStripSeparator12";
+			this.toolStripSeparator12.Size = new System.Drawing.Size(167, 6);
+			// 
+			// cycleLayerUpToolStripMenuItem
+			// 
+			this.cycleLayerUpToolStripMenuItem.Name = "cycleLayerUpToolStripMenuItem";
+			this.cycleLayerUpToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+			this.cycleLayerUpToolStripMenuItem.Text = "Cycle Layer Up";
+			this.cycleLayerUpToolStripMenuItem.Click += new System.EventHandler(this.cycleLayerUpToolStripMenuItem_Click);
+			// 
+			// cycleLayerUpToolStripMenuItem1
+			// 
+			this.cycleLayerUpToolStripMenuItem1.Name = "cycleLayerUpToolStripMenuItem1";
+			this.cycleLayerUpToolStripMenuItem1.Size = new System.Drawing.Size(170, 22);
+			this.cycleLayerUpToolStripMenuItem1.Text = "Cycle Layer Down";
+			this.cycleLayerUpToolStripMenuItem1.Click += new System.EventHandler(this.cycleLayerUpToolStripMenuItem1_Click);
 			// 
 			// worldToolStripMenuItem
 			// 
@@ -980,25 +999,6 @@
 			this.panelWorldTabEvents.Name = "panelWorldTabEvents";
 			this.panelWorldTabEvents.Size = new System.Drawing.Size(398, 392);
 			this.panelWorldTabEvents.TabIndex = 0;
-			// 
-			// toolStripSeparator12
-			// 
-			this.toolStripSeparator12.Name = "toolStripSeparator12";
-			this.toolStripSeparator12.Size = new System.Drawing.Size(167, 6);
-			// 
-			// cycleLayerUpToolStripMenuItem
-			// 
-			this.cycleLayerUpToolStripMenuItem.Name = "cycleLayerUpToolStripMenuItem";
-			this.cycleLayerUpToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
-			this.cycleLayerUpToolStripMenuItem.Text = "Cycle Layer Up";
-			this.cycleLayerUpToolStripMenuItem.Click += new System.EventHandler(this.cycleLayerUpToolStripMenuItem_Click);
-			// 
-			// cycleLayerUpToolStripMenuItem1
-			// 
-			this.cycleLayerUpToolStripMenuItem1.Name = "cycleLayerUpToolStripMenuItem1";
-			this.cycleLayerUpToolStripMenuItem1.Size = new System.Drawing.Size(170, 22);
-			this.cycleLayerUpToolStripMenuItem1.Text = "Cycle Layer Down";
-			this.cycleLayerUpToolStripMenuItem1.Click += new System.EventHandler(this.cycleLayerUpToolStripMenuItem1_Click);
 			// 
 			// EditorForm
 			// 

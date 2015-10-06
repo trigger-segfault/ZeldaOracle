@@ -26,6 +26,20 @@ namespace ZeldaEditor.Control {
 			DrawSprite(g, sprite, variantID, position.X, position.Y);
 		}
 
+		public static void DrawSprite(Graphics g, SpriteAnimation sprite, int variantID, Point2I position) {
+			if (sprite.IsAnimation)
+				DrawSprite(g, sprite.Animation.GetFrameAsSprite(0), variantID, position.X, position.Y);
+			else
+				DrawSprite(g, sprite.Sprite, variantID, position.X, position.Y);
+		}
+
+		public static void DrawSprite(Graphics g, SpriteAnimation sprite, int variantID, Point2I position, Point2I sourceSize) {
+			if (sprite.IsAnimation)
+				DrawSprite(g, sprite.Animation.GetFrameAsSprite(0), variantID, position.X, position.Y, sourceSize.X, sourceSize.Y);
+			else
+				DrawSprite(g, sprite.Sprite, variantID, position.X, position.Y, sourceSize.X, sourceSize.Y);
+		}
+
 		public static void DrawSprite(Graphics g, Sprite sprite, int x, int y) {
 			for (Sprite part = sprite; part != null; part = part.NextPart) {
 				Bitmap bitmap = EditorResources.GetBitmap(part.Image);
@@ -43,6 +57,18 @@ namespace ZeldaEditor.Control {
 				Rectangle sourceRect = new Rectangle(
 					part.SourceRect.X, part.SourceRect.Y,
 					part.SourceRect.Width, part.SourceRect.Height);
+				g.DrawImage(bitmap, x + part.DrawOffset.X,
+					y + part.DrawOffset.Y, sourceRect, GraphicsUnit.Pixel);
+			}
+		}
+
+		public static void DrawSprite(Graphics g, Sprite sprite, int variantID, int x, int y, int srcwidth, int srcheight) {
+			for (Sprite part = sprite; part != null; part = part.NextPart) {
+				Bitmap bitmap = EditorResources.GetBitmap(part.Image.GetVariant(variantID));
+				Rectangle sourceRect = new Rectangle(
+					part.SourceRect.X, part.SourceRect.Y,
+					GMath.Min(srcwidth, part.DrawOffset.X + part.SourceRect.Width) - part.DrawOffset.X,
+					GMath.Min(srcheight, part.DrawOffset.Y + part.SourceRect.Height) - part.DrawOffset.Y);
 				g.DrawImage(bitmap, x + part.DrawOffset.X,
 					y + part.DrawOffset.Y, sourceRect, GraphicsUnit.Pixel);
 			}

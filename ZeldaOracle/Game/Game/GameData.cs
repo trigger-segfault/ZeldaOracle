@@ -202,6 +202,13 @@ namespace ZeldaOracle.Game {
 				SPR_HUD_HEART_PIECES_FULL_BOTTOM_RIGHT,
 				SPR_HUD_HEART_PIECES_FULL_TOP_RIGHT
 			};
+
+			SPR_COLOR_CUBE_ORIENTATIONS = new Sprite[6];
+			string[] orientations = { "blue_yellow", "blue_red", "yellow_red", "yellow_blue", "red_blue", "red_yellow" };
+
+			for (int i = 0; i < 6; i++) {
+				SPR_COLOR_CUBE_ORIENTATIONS[i] = Resources.GetResource<Sprite>("color_cube_" + orientations[i]);
+			}
 		}
 
 
@@ -220,7 +227,17 @@ namespace ZeldaOracle.Game {
 				ANIM_EFFECT_SEED_GALE.AddFrame(i, 1, new Sprite(
 					GameData.SHEET_COLOR_EFFECTS, ((i % 6) < 3 ? 4 : 5), y, -8, -8));
 			}
-			
+
+			ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS = new Animation[6, 4];
+			string[] orientations = { "blue_yellow", "blue_red", "yellow_red", "yellow_blue", "red_blue", "red_yellow" };
+			string[] directions = { "right", "up", "left", "down" };
+
+			for (int i = 0; i < 6; i++) {
+				for (int j = 0; j < 4; j++) {
+					ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS[i, j] = Resources.GetResource<Animation>("color_cube_" + orientations[i] + "_" + directions[j]);
+				}
+			}
+
 			IntegrateResources<Animation>("ANIM_");
 		}
 
@@ -240,11 +257,13 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		private static void LoadZones() {
+			ZONE_DEFAULT	= new Zone("",			"(none)",		VARIANT_NONE);
 			ZONE_SUMMER		= new Zone("summer",	"Summer",		VARIANT_SUMMER);
 			ZONE_FOREST		= new Zone("forest",	"Forest",		VARIANT_FOREST);
 			ZONE_GRAVEYARD	= new Zone("graveyard",	"Graveyard",	VARIANT_GRAVEYARD);
 			ZONE_INTERIOR	= new Zone("interior",	"Interior",		VARIANT_INTERIOR);
 
+			Resources.AddResource("",			ZONE_DEFAULT);
 			Resources.AddResource("summer",		ZONE_SUMMER);
 			Resources.AddResource("forest",		ZONE_FOREST);
 			Resources.AddResource("graveyard",	ZONE_GRAVEYARD);
@@ -260,6 +279,7 @@ namespace ZeldaOracle.Game {
 			Resources.LoadTilesets("Tilesets/tile_data.conscript");
 			Resources.LoadTilesets("Tilesets/overworld.conscript");
 			Resources.LoadTilesets("Tilesets/interior.conscript");
+			Resources.LoadTilesets("Tilesets/special_nv.conscript");
 
 			// Create an warp event.
 			EventTileData etd = new EventTileData(typeof(WarpEvent));
@@ -586,6 +606,8 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_TILE_OWL;
 		public static Sprite SPR_TILE_OWL_ACTIVATED;
 
+		public static Sprite[] SPR_COLOR_CUBE_ORIENTATIONS;
+
 		// Item Icons.
 		public static Sprite SPR_ITEM_SEED_EMBER;
 		public static Sprite SPR_ITEM_SEED_SCENT;
@@ -719,6 +741,8 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_TILE_LAVAFALL;
 		public static Animation ANIM_TILE_LAVAFALL_BOTTOM;
 		public static Animation ANIM_TILE_LAVAFALL_TOP;
+
+		public static Animation[,] ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS;
 	
 		// Player animations.
 		public static Animation ANIM_PLAYER_DEFAULT;
@@ -814,6 +838,7 @@ namespace ZeldaOracle.Game {
 		// Zones
 		//-----------------------------------------------------------------------------
 
+		public static Zone ZONE_DEFAULT;
 		public static Zone ZONE_SUMMER;
 		public static Zone ZONE_FOREST;
 		public static Zone ZONE_GRAVEYARD;

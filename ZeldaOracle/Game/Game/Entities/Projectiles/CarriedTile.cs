@@ -54,12 +54,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public override void Initialize() {
 			base.Initialize();
 			
-			if (tile.AnimationPlayer.Animation != null)
-				Graphics.PlayAnimation(tile.AnimationPlayer.Animation);
-			else if (tile.SpriteAsObject != null)
-				Graphics.PlaySprite(tile.SpriteAsObject);
-			else if (tile.Sprite != null)
-				Graphics.PlaySprite(tile.Sprite);
+			if (!tile.SpriteAsObject.IsNull)
+				Graphics.PlayAnimation(tile.SpriteAsObject);
+			else
+				Graphics.PlayAnimation(tile.CurrentSprite);
 		}
 
 		public override void OnLand() {

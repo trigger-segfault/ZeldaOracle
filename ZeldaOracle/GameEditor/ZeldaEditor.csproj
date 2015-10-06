@@ -76,6 +76,7 @@
       <DependentUpon>TextMessageEditorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PropertiesEditor\CustomPropertyDescriptor.cs" />
+    <Compile Include="PropertiesEditor\SpriteIndexComboBox.cs" />
     <Compile Include="TileDisplay.cs">
       <SubType>Component</SubType>
     </Compile>

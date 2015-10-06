@@ -16,34 +16,39 @@
 
 TILE movable_block;
 	FLAGS		solid, movable;
-	SPRITE		tile_movable_block, tile_movable_block_asobject;
+	SPRITE		tile_movable_block;
+	SPRITEOBJ	tile_movable_block_asobject;
 	MODEL		block;
 END;
 
 TILE diamond_rock;
 	FLAGS		Solid, Switchable, SwitchStays;
-	SPRITE		tile_diamond_rock, tile_diamond_rock_asobject;
+	SPRITE		tile_diamond_rock;
+	SPRITEOBJ	tile_diamond_rock_asobject;
 	BREAKANIM	effect_rock_break;
 	MODEL		block;
 END;
 
 TILE bush;
 	FLAGS		Solid, Pickupable, Bombable, Burnable, Switchable, Cuttable;
-	SPRITE		tile_bush, tile_bush_asobject;
+	SPRITE		tile_bush;
+	SPRITEOBJ	tile_bush_asobject;
 	BREAKANIM	effect_leaves;
 	MODEL		block;
 END;
 
 TILE pot;
 	FLAGS		solid, movable, pickupable, cuttable, switchable;
-	SPRITE		tile_pot, tile_pot_asobject;
+	SPRITE		tile_pot;
+	SPRITEOBJ	tile_pot_asobject;
 	BREAKANIM	effect_rock_break;
 	MODEL		block;
 END;
 
 TILE rock;
 	FLAGS		solid, pickupable;
-	SPRITE		tile_rock, tile_rock_asobject;
+	SPRITE		tile_rock;
+	SPRITEOBJ	tile_rock_asobject;
 	BREAKANIM	effect_rock_break;
 	MODEL		block;
 END;
@@ -74,7 +79,7 @@ END;
 TILE owl;
 	TYPE		TileOwl;
 	FLAGS		solid;
-	SPRITE		tile_owl;
+	SPRITELIST	tile_owl, tile_owl_activated;
 	MODEL		block;
 	PROPERTIES
 		(string, text, "<red>undefined<red>",
@@ -83,9 +88,9 @@ TILE owl;
 END;
 
 TILE lantern;
-	TYPE		TileOwl;
+	TYPE		TileLantern;
 	FLAGS		solid;
-	SPRITE		tile_lantern_unlit;
+	SPRITELIST	tile_lantern_unlit, tile_lantern;
 	MODEL		block;
 	PROPERTIES
 		(boolean, lit, false,
@@ -96,7 +101,7 @@ END;
 TILE chest;
 	TYPE		TileChest;
 	FLAGS		solid;
-	SPRITE		tile_chest;
+	SPRITELIST	tile_chest, tile_chest_open;
 	MODEL		block;
 	PROPERTIES
 		(string, reward, "rupees_1",

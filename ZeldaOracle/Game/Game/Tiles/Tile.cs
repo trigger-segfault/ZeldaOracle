@@ -22,7 +22,6 @@ namespace ZeldaOracle.Game.Tiles {
 		private RoomControl		roomControl;
 		private Point2I			location;		// The tile location in the room.
 		private int				layer;			// The layer this tile is in.
-		private AnimationPlayer	animationPlayer;
 		private Point2I			moveDirection;
 		private bool			isMoving;
 		private float			movementSpeed;
@@ -33,8 +32,8 @@ namespace ZeldaOracle.Game.Tiles {
 		private TileFlags			flags;
 		private Point2I				size;			// How many tile spaces this tile occupies. NOTE: this isn't supported yet.
 		private CollisionModel		collisionModel;
-		private Sprite				sprite;
-		private Sprite				spriteAsObject;	// The sprite for the tile if it were picked up, pushed, etc.
+		private SpriteAnimation		customSprite;
+		private SpriteAnimation		spriteAsObject;	// The sprite for the tile if it were picked up, pushed, etc.
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
 		private int					pushDelay;		// Number of ticks of pushing before the player can move this tile.
 		private Properties			properties;
@@ -51,8 +50,8 @@ namespace ZeldaOracle.Game.Tiles {
 			offset			= Point2I.Zero;
 			size			= Point2I.One;
 			flags			= TileFlags.Default;
-			sprite			= null;
-			animationPlayer	= new AnimationPlayer();
+			customSprite	= new SpriteAnimation();
+			spriteAsObject	= new SpriteAnimation();
 			isMoving		= false;
 			pushDelay		= 20;
 			properties		= new Properties();
@@ -66,7 +65,6 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		public void Initialize(RoomControl control) {
 			this.roomControl = control;
-			this.animationPlayer.Play();
 			Initialize();
 		}
 		
@@ -172,22 +170,21 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public virtual void UpdateGraphics() {
 
-			// Update the animation.
-			animationPlayer.Update();
 		}
 
 		public virtual void Draw(Graphics2D g) {
-			if (animationPlayer.SubStrip != null) {
+			SpriteAnimation sprite = (!customSprite.IsNull ? customSprite : CurrentSprite);
+			if (isMoving && !spriteAsObject.IsNull)
+				sprite = spriteAsObject;
+
+			if (sprite.IsAnimation) {
 				// Draw as an animation.
-				g.DrawAnimation(animationPlayer.SubStrip, Zone.ImageVariantID,
+				g.DrawAnimation(sprite.Animation, Zone.ImageVariantID,
 					RoomControl.GameControl.RoomTicks, Position);
 			}
-			else {
+			else if (sprite.IsSprite) {
 				// Draw as a sprite.
-				Sprite spr = sprite;
-				if (isMoving && spriteAsObject != null)
-					spr = spriteAsObject;
-				g.DrawSprite(spr, Zone.ImageVariantID, Position);
+				g.DrawSprite(sprite.Sprite, Zone.ImageVariantID, Position);
 			}
 		}
 		
@@ -211,12 +208,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 			tile.tileData			= data;
 			tile.flags				= data.Flags;
-			tile.sprite				= data.Sprite;
 			tile.spriteAsObject		= data.SpriteAsObject;
 			tile.breakAnimation		= data.BreakAnimation;
 			tile.collisionModel		= data.CollisionModel;
 			tile.size				= data.Size;
-			tile.animationPlayer.Animation = data.Animation;
 
 			tile.properties.Merge(data.BaseProperties, true);
 			tile.properties.Merge(data.Properties, true);
@@ -297,24 +292,42 @@ namespace ZeldaOracle.Game.Tiles {
 			set { flags = value; }
 		}
 
-		public Sprite Sprite {
-			get { return sprite; }
-			set { sprite = value; }
+		public SpriteAnimation CustomSprite {
+			get { return customSprite; }
+			set {
+				if (value == null)
+					customSprite.SetNull();
+				else
+					customSprite.Set(value);
+			}
+		}
+
+		public SpriteAnimation SpriteAsObject {
+			get { return spriteAsObject; }
+			set {
+				if (value == null)
+					spriteAsObject.SetNull();
+				else
+					spriteAsObject.Set(value);
+			}
+		}
+
+		public SpriteAnimation CurrentSprite {
+			get {
+				if (tileData.SpriteList.Length > 0)
+					return tileData.SpriteList[properties.GetInteger("sprite_index")];
+				return new SpriteAnimation();
+			}
+		}
+
+		public int SpriteIndex {
+			get { return properties.GetInteger("sprite_index"); }
+			set { properties.Set("sprite_index", value); }
 		}
 
 		public Animation BreakAnimation {
 			get { return breakAnimation; }
 			set { breakAnimation = value; }
-		}
-
-		public Sprite SpriteAsObject {
-			get { return spriteAsObject; }
-			set { spriteAsObject = value; }
-		}
-
-		public AnimationPlayer AnimationPlayer {
-			get { return animationPlayer; }
-			set { animationPlayer = value; }
 		}
 
 		public CollisionModel CollisionModel {

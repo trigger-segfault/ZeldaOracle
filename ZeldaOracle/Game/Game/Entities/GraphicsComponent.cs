@@ -73,10 +73,20 @@ namespace ZeldaOracle.Game.Entities
 		public void PlayAnimation() {
 			animationPlayer.Play();
 		}
-		
+
 		public void PlaySprite(Sprite sprite) {
 			this.sprite = sprite;
 			animationPlayer.Animation = null;
+		}
+
+		public void PlayAnimation(SpriteAnimation sprite) {
+			if (sprite.IsSprite) {
+				this.sprite = sprite.Sprite;
+				animationPlayer.Animation = null;
+			}
+			else {
+				animationPlayer.Play(sprite.Animation);
+			}
 		}
 		
 		public void PlayAnimation(Animation animation) {
