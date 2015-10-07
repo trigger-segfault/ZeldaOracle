@@ -108,6 +108,10 @@
       <Name>sheet_debug_menu_script</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Tilesets\water.conscript">
+      <Name>water</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Worlds\big_interiors.zwd">
       <Name>big_interiors</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -498,6 +502,23 @@
     </Compile>
     <Compile Include="Images\Tiles\tileset_special_nv_extras.png">
       <Name>tileset_special_nv_extras</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\Tiles\tileset_water_present.png">
+      <Name>tileset_water_present</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_water_present_extras_16x16.png">
+      <Name>tileset_water_present_extras_16x16</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_water_present_extras_8x8.png">
+      <Name>tileset_water_present_extras_8x8</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
