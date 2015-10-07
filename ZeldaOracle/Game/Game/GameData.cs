@@ -264,12 +264,14 @@ namespace ZeldaOracle.Game {
 			ZONE_FOREST		= new Zone("forest",	"Forest",		VARIANT_FOREST);
 			ZONE_GRAVEYARD	= new Zone("graveyard",	"Graveyard",	VARIANT_GRAVEYARD);
 			ZONE_INTERIOR	= new Zone("interior",	"Interior",		VARIANT_INTERIOR);
+			ZONE_PRESENT	= new Zone("present",	"Present",		VARIANT_PRESENT);
 
 			Resources.AddResource("",			ZONE_DEFAULT);
 			Resources.AddResource("summer",		ZONE_SUMMER);
 			Resources.AddResource("forest",		ZONE_FOREST);
 			Resources.AddResource("graveyard",	ZONE_GRAVEYARD);
 			Resources.AddResource("interior",	ZONE_INTERIOR);
+			Resources.AddResource("present",	ZONE_PRESENT);
 		}
 
 		//-----------------------------------------------------------------------------
@@ -282,6 +284,7 @@ namespace ZeldaOracle.Game {
 			Resources.LoadTilesets("Tilesets/overworld.conscript");
 			Resources.LoadTilesets("Tilesets/interior.conscript");
 			Resources.LoadTilesets("Tilesets/special_nv.conscript");
+			Resources.LoadTilesets("Tilesets/water.conscript");
 
 			// Create an warp event.
 			EventTileData etd = new EventTileData(typeof(WarpEvent));
@@ -525,6 +528,7 @@ namespace ZeldaOracle.Game {
 		public static int VARIANT_FOREST	= 9;
 		public static int VARIANT_GRAVEYARD	= 10;
 		public static int VARIANT_INTERIOR	= 11;
+		public static int VARIANT_PRESENT	= 12;
 
 
 		//-----------------------------------------------------------------------------
@@ -847,6 +851,7 @@ namespace ZeldaOracle.Game {
 		public static Zone ZONE_FOREST;
 		public static Zone ZONE_GRAVEYARD;
 		public static Zone ZONE_INTERIOR;
+		public static Zone ZONE_PRESENT;
 
 
 		//-----------------------------------------------------------------------------
