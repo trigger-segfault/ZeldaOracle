@@ -72,5 +72,11 @@ namespace ZeldaOracle.Common.Geometry {
 		public static int ToAngle(int direction) {
 			return (direction * 2);
 		}
+
+		public static int RoundFromRadians(float radians) {
+			float halfPi = (float) Math.PI * 0.5f;
+			int dir = (int) Math.Round(radians / halfPi);
+			return GMath.Wrap(dir, Directions.Count);
+		}
 	}
 }
