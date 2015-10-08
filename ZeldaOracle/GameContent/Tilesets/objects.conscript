@@ -1,0 +1,235 @@
+
+#==============================================================
+# Sprites
+#==============================================================
+
+LOAD SPRITES;
+	
+SPRITESHEET "tileset_objects",					(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "tileset_objects_extras_16x16",		(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Animations
+#==============================================================
+
+LOAD ANIMATIONS;
+
+SPRITESHEET "tileset_objects_extras_16x16";
+
+TEMPANIM lanturn_lit; SUBSTRIP repeat;
+	ADD strip, 16, 4, (0, 3); END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+LOAD TILESETS;
+
+TEMPTILE lanturn;
+	TYPE		TileLanturn;
+	FLAGS		solid;
+	MODEL		block;
+	PROPERTIES
+		(boolean, lit, true,
+			"Lit", "", "",
+			 "Whether the lantern starts lit or not.");
+END;
+
+TEMPTILE sign;
+	TYPE		TileSign;
+	FLAGS		solid, pickupable, burnable, cuttable, switchable;
+	BREAKANIM	effect_sign_break;
+	MODEL		block;
+	PROPERTIES
+		(string, text, "Hello World!",
+			"Side Text", "text_message", "Text",
+			"The text to display when the sign is read from the front."),
+		(string, side_text,	"You can't read it from there!",
+			"Text", "text_message", "Text",
+			"The text to display when the sign is read from the sides/back.");
+END;
+
+TEMPTILE pushable_block;
+	FLAGS		solid, movable;
+	MODEL		block;
+END;
+
+
+#==============================================================
+# Tilesets
+#==============================================================
+
+TILESET objects, tileset_objects, (12, 12);
+DEFAULT (0, 0);
+
+TILE (0, 0);
+	FLAGS		Solid, Pickupable, Bombable, Burnable, Switchable, Cuttable;
+	SPRITEOBJ	"tileset_objects_extras_16x16", (0, 0);
+	BREAKANIM	effect_leaves;
+	MODEL		block;
+END;
+
+TILE (1, 0);
+	FLAGS		Solid, Cuttable;
+	BREAKANIM	effect_leaves;
+	MODEL		block;
+END;
+
+TILE (2, 0);
+	FLAGS		Solid, Cuttable;
+	BREAKANIM	effect_leaves;
+	MODEL		block;
+END;
+
+TILE (3, 0);
+	FLAGS		Solid, Cuttable;
+	BREAKANIM	effect_leaves;
+	MODEL		block;
+END;
+
+TILE (4, 0);
+	FLAGS		Solid, Cuttable;
+	BREAKANIM	effect_leaves;
+	MODEL		block;
+END;
+
+TILE (5, 0);
+	FLAGS		Solid, Cuttable;
+	BREAKANIM	effect_leaves;
+	MODEL		block;
+END;
+
+TILE (6, 0);
+	FLAGS		Solid, Cuttable;
+	BREAKANIM	effect_leaves;
+	MODEL		block;
+END;
+
+TILE (7, 0);
+	FLAGS		Solid, Pickupable;
+	SPRITEOBJ	"tileset_objects_extras_16x16", (1, 0);
+	MODEL		block;
+END;
+
+TILE (8, 0);
+	FLAGS		Solid, Pickupable, Cuttable, Switchable, movable;
+	SPRITEOBJ	"tileset_objects_extras_16x16", (2, 0);
+	BREAKANIM	effect_rock_break;
+	MODEL		block;
+END;
+
+TILE (9, 0);
+	FLAGS		Solid, Burnable;
+	MODEL		block;
+END;
+
+TILE (10, 0);
+	FLAGS		Cuttable, Grass, burnable, bombable;
+	BREAKANIM	effect_grass_leaves;
+END;
+
+TILE (11, 0);
+	FLAGS		Cuttable, burnable, bombable;
+	BREAKANIM	effect_grass_leaves;
+END;
+
+TILE (0, 1);
+	FLAGS		Solid, Pickupable;
+	SPRITEOBJ	"tileset_objects_extras_16x16", (3, 0);
+	BREAKANIM	effect_rock_break;
+	MODEL		block;
+END;
+
+TILE (1, 1);
+	FLAGS		Solid, Switchable, SwitchStays;
+	SPRITEOBJ	"tileset_objects_extras_16x16", (4, 0);
+	BREAKANIM	effect_rock_break;
+	MODEL		block;
+END;
+
+TILE (2, 1);
+	FLAGS		Solid, Cuttable;
+	SPRITEOBJ	"tileset_objects_extras_16x16", (5, 0);
+	BREAKANIM	effect_rock_break;
+	MODEL		block;
+END;
+
+TILE (3, 1);
+	FLAGS		Solid, Cuttable, movable, Pickupable;
+	SPRITEOBJ	"tileset_objects_extras_16x16", (6, 0);
+	BREAKANIM	effect_rock_break;
+	MODEL		block;
+END;
+
+TILE (4, 1);
+	CLONE		sign;
+	SPRITEOBJ	"tileset_objects_extras_16x16", (7, 0);
+END;
+
+TILE (5, 1);
+	CLONE		sign;
+	SPRITEOBJ	"tileset_objects_extras_16x16", (8, 0);
+END;
+
+TILE (6, 1);
+	CLONE		pushable_block;
+	SPRITEOBJ	"tileset_objects_extras_16x16", (3, 1);
+END;
+
+TILE (7, 1);
+	FLAGS		solid, bombable;
+	BREAKANIM	effect_rock_break;
+	MODEL		block;
+END;
+
+TILE (8, 1);
+	CLONE		pushable_block;
+	SPRITEOBJ	"tileset_objects_extras_16x16", (9, 0);
+END;
+
+TILE (9, 1);
+	CLONE		pushable_block;
+	SPRITEOBJ	"tileset_objects_extras_16x16", (10, 0);
+END;
+
+TILE (10, 1);
+	CLONE		pushable_block;
+	SPRITEOBJ	"tileset_objects_extras_16x16", (11, 0);
+END;
+
+TILE (11, 1);
+	CLONE		pushable_block;
+END;
+
+TILE (0, 2);
+	FLAGS		solid, diggable;
+	MODEL		block;
+END;
+
+TILE (2, 2);
+	FLAGS		hole;
+END;
+
+TILE (0, 5);
+	CLONE		lanturn;
+	SPRITEINDEX	0, "lanturn_lit";
+	SPRITEINDEX 1, "tileset_objects_extras_16x16", (4, 3);
+END;
+
+TILE (5, 5);
+	SPRITEINDEX 1, "tileset_objects_extras_16x16", (7, 3);
+	SPRITEINDEX 2, "tileset_objects_extras_16x16", (8, 3);
+END;
+
+TILE (6, 5);
+	SPRITEINDEX 1, "tileset_objects", (7, 5);
+	SPRITEINDEX 2, "tileset_objects_extras_16x16", (9, 3);
+END;
+
+TILE (7, 5);
+	SPRITEINDEX 1, "tileset_objects", (6, 5);
+	SPRITEINDEX 2, "tileset_objects_extras_16x16", (9, 3);
+END;
+
+
+END;

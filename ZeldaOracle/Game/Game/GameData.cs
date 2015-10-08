@@ -280,11 +280,16 @@ namespace ZeldaOracle.Game {
 
 		private static void LoadTilesets() {
 			// Load tilesets and tile data.
-			Resources.LoadTilesets("Tilesets/tile_data.conscript");
-			Resources.LoadTilesets("Tilesets/overworld.conscript");
-			Resources.LoadTilesets("Tilesets/interior.conscript");
-			Resources.LoadTilesets("Tilesets/special_nv.conscript");
+			Resources.LoadTilesets("Tilesets/cliffs.conscript");
+			Resources.LoadTilesets("Tilesets/land.conscript");
+			Resources.LoadTilesets("Tilesets/forest.conscript");
 			Resources.LoadTilesets("Tilesets/water.conscript");
+			Resources.LoadTilesets("Tilesets/structures.conscript");
+			Resources.LoadTilesets("Tilesets/objects.conscript");
+			Resources.LoadTilesets("Tilesets/objects_nv.conscript");
+			Resources.LoadTilesets("Tilesets/tile_data.conscript");
+			//Resources.LoadTilesets("Tilesets/overworld.conscript");
+			Resources.LoadTilesets("Tilesets/interior.conscript");
 
 			// Create an warp event.
 			EventTileData etd = new EventTileData(typeof(WarpEvent));
@@ -510,6 +515,7 @@ namespace ZeldaOracle.Game {
 
 		public static Tileset TILESET_OVERWORLD;
 		public static Tileset TILESET_INTERIOR;
+		public static Tileset TILESET_CLIFFS;
 
 
 		//-----------------------------------------------------------------------------
