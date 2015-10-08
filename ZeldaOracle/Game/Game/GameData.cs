@@ -175,7 +175,7 @@ namespace ZeldaOracle.Game {
 			IntegrateResources<SpriteSheet>("SHEET_");
 			IntegrateResources<Sprite>("SPR_");
 			
-			// TEMPORARY: Create seed sprite array here.
+			// TEMPORARY: Create sprite arrays here.
 			SPR_ITEM_SEEDS = new Sprite[] {
 				SPR_ITEM_SEED_EMBER,
 				SPR_ITEM_SEED_SCENT,
@@ -190,14 +190,12 @@ namespace ZeldaOracle.Game {
 				SPR_HUD_HEART_3,
 				SPR_HUD_HEART_4,
 			};
-
 			SPR_HUD_HEART_PIECES_EMPTY = new Sprite[] {
 				SPR_HUD_HEART_PIECES_EMPTY_TOP_LEFT,
 				SPR_HUD_HEART_PIECES_EMPTY_BOTTOM_LEFT,
 				SPR_HUD_HEART_PIECES_EMPTY_BOTTOM_RIGHT,
 				SPR_HUD_HEART_PIECES_EMPTY_TOP_RIGHT
 			};
-
 			SPR_HUD_HEART_PIECES_FULL = new Sprite[] {
 				SPR_HUD_HEART_PIECES_FULL_TOP_LEFT,
 				SPR_HUD_HEART_PIECES_FULL_BOTTOM_LEFT,
@@ -302,7 +300,6 @@ namespace ZeldaOracle.Game {
 			etd.Sprite = SPR_EVENT_TILE_WARP_STAIRS;
 			Resources.AddResource("npc", etd);
 
-
 			IntegrateResources<Tileset>("TILESET_");
 		}
 
@@ -313,7 +310,6 @@ namespace ZeldaOracle.Game {
 
 		// Loads the fonts.
 		private static void LoadFonts() {
-
 			Resources.LoadGameFonts("Fonts/fonts.conscript");
 
 			FONT_LARGE = Resources.GetGameFont("Fonts/font_large");

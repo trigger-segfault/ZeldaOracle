@@ -5,15 +5,11 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Worlds;
-using ZeldaOracle.Game.GameStates.Transitions;
+using ZeldaOracle.Game.Entities;
 
 namespace ZeldaOracle.Game.Tiles.EventTiles {
 
 	public class NPCEvent : EventTile {
-
-		public WarpType warpType;
-		public bool warpEnabled;
-
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -32,6 +28,8 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			base.Initialize();
 
 			// Spawn NPC entity.
+			NPC npc = new NPC();
+			RoomControl.SpawnEntity(npc, position - npc.Graphics.DrawOffset);
 		}
 
 
