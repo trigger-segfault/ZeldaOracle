@@ -1,0 +1,55 @@
+
+#==============================================================
+# Sprites
+#==============================================================
+
+LOAD SPRITES;
+
+SPRITESHEET "tileset_forest",		(16, 16), (1, 1), (18, 18);
+
+#==============================================================
+# Tiles
+#==============================================================
+
+LOAD TILESETS;
+
+
+#==============================================================
+# Tilesets
+#==============================================================
+
+LOAD TILESETS;
+
+TILESET forest, tileset_forest, (12, 12);
+DEFAULT (0, 0);
+
+CONFIG;
+SSSSSSSSSSSS
+SSSSSSSSSSSS
+SSSSSSSSSSSS
+SSSSSSSSSSSS
+SSSSSSS.S.S.
+SSSSS..SS...
+SSSSSSSSSSSS
+SSSSSSSSSSSS
+SSSSSSSSSSSS
+SSSSSSSSSSS.
+SSSS........
+SSSS........
+END;
+
+# SPECIAL TILES
+
+TILE (5, 5); SOLID doorway; END;
+TILE (6, 5); SOLID doorway; END;
+
+# Overhead tile
+#TILE (4, 7); END;
+
+# Stump top tile
+#TILE (10, 4); END;
+
+# Stump small tile
+#TILE (7, 5); END;
+
+END;

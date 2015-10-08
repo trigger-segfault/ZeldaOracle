@@ -1,0 +1,82 @@
+
+#==============================================================
+# Sprites
+#==============================================================
+
+LOAD SPRITES;
+
+SPRITESHEET "tileset_cliffs",		(16, 16), (1, 1), (18, 18);
+
+#==============================================================
+# Tiles
+#==============================================================
+
+LOAD TILESETS;
+
+
+#==============================================================
+# Tilesets
+#==============================================================
+
+LOAD TILESETS;
+
+TILESET cliffs, tileset_cliffs, (12, 15);
+DEFAULT (1, 1);
+
+CONFIG;
+SSSSSSSSSSSS
+SSSSSSSSSSSS
+SSSSSSSSSSSS
+SSSSSSSSSSSS
+S.SSSSSSSSSS
+....SSSSSSSS
+SSSSSSSSSSSS
+SSSSSSSSSSSS
+SSSSSSSSSSSS
+SSSSSSSSD.DD
+SSSSSSSSD.DD
+........D.D.
+........RRRR
+............
+............
+END;
+
+# CLIFF TILES
+
+TILE (0, 11); SOLID edge_n; END;
+TILE (1, 11); SOLID edge_n; END;
+TILE (2, 11); SOLID edge_n; END;
+TILE (3, 11); SOLID edge_n; END;
+TILE (0, 12); SOLID edge_n; END;
+TILE (1, 12); SOLID edge_n; END;
+TILE (2, 12); SOLID edge_n; END;
+TILE (3, 12); SOLID edge_n; END;
+TILE (0, 13); SOLID edge_n; END;
+TILE (1, 13); SOLID edge_n; END;
+TILE (2, 13); SOLID edge_n; END;
+TILE (3, 13); SOLID edge_n; END;
+TILE (0, 14); SOLID edge_n; END;
+TILE (1, 14); SOLID edge_n; END;
+TILE (2, 14); SOLID edge_n; END;
+TILE (3, 14); SOLID edge_n; END;
+
+TILE (1, 3); LEDGE block, down; END;
+
+TILE (4, 14); LEDGE edge_n, down; END;
+TILE (5, 14); LEDGE edge_n, down; END;
+TILE (6, 14); LEDGE edge_n, down; END;
+TILE (7, 14); LEDGE edge_n, down; END;
+
+TILE (9, 9); LEDGE edge_s, down; END;
+TILE (9, 10); LEDGE block, down; END;
+TILE (9, 11); LEDGE block, down; END;
+
+
+# DOORWAY TILES
+
+TILE (1, 4); SOLID doorway; END;
+TILE (0, 5); SOLID doorway; END;
+TILE (1, 5); SOLID doorway; END;
+TILE (2, 5); SOLID doorway; END;
+
+END;

@@ -119,8 +119,8 @@ namespace ZeldaEditor.Control {
 				this.ticks			= 0;
 				this.roomSpacing	= 1;
 				this.playAnimations = false;
-				this.tileset		= GameData.TILESET_OVERWORLD;
-				this.zone			= GameData.ZONE_SUMMER;
+				this.tileset		= GameData.TILESET_CLIFFS;
+				this.zone			= GameData.ZONE_PRESENT;
 				this.selectedTilesetTileData = this.tileset.TileData[0, 0];
 				this.eventMode		= false;
 
