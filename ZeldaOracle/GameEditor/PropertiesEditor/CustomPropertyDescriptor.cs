@@ -113,12 +113,20 @@ namespace ZeldaEditor.PropertiesEditor {
 			
 		// Is the property read-only?
 		public override bool IsReadOnly {
-			get { return false; }
+			get {
+				if (documentation != null)
+					return !documentation.IsEditable;
+				return false;
+			}
 		}
 			
 		// Should the property be listed in the property grid?
 		public override bool IsBrowsable {
-			get { return false; }
+			get {
+				if (documentation != null)
+					return !documentation.IsHidden;
+				return true;
+			}
 		}
 
 		public override Type ComponentType {

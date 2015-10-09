@@ -13,16 +13,17 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Common.Scripts;
-using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.Custom;
-using ZeldaOracle.Game.Tiles.EventTiles;
-using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Items.Essences;
 using ZeldaOracle.Game.Items.KeyItems;
 using ZeldaOracle.Game.Items.Equipment;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Rewards;
+using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Tiles.Custom;
+using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game {
 	
@@ -303,6 +304,8 @@ namespace ZeldaOracle.Game {
 			// Create an NPC event.
 			etd = new EventTileData(typeof(NPCEvent));
 			etd.Sprite = SPR_EVENT_TILE_WARP_STAIRS;
+			etd.Properties.Set("npc_flags", (int) NPCFlags.Default)
+				.SetDocumentation("NPC Options", "enum_flags", "", "The options for the NPC.");
 			Resources.AddResource("npc", etd);
 
 			IntegrateResources<Tileset>("TILESET_");

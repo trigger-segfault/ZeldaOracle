@@ -104,6 +104,10 @@ IMAGE player;
 	VARIANT blue	"Units/Player/player_blue";
 	VARIANT hurt	"Units/Player/player_hurt";
 	END;
+	
+IMAGE npcs;
+	VARIANT red		"Units/NPCs/npcs_red";
+	END;
 
 #IMAGE basic_monsters;
 #	VARIANT normal	"Units/Monsters/basic_monsters";

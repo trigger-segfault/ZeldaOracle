@@ -285,7 +285,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (invincibleTimer > 0)
 				invincibleTimer--;
 
-			bool stopPushing = false;
+			bool performedAction = false;
 
 			movement.Update();
 			UpdateUseDirections();
@@ -301,7 +301,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 					{
 						actionEntity = e;
 						Controls.A.Disable(true);
-						stopPushing = true;
+						performedAction = true;
 						break;
 					}
 				}
@@ -309,7 +309,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 					Tile actionTile = physics.GetMeetingSolidTile(position, direction);
 					if (actionTile != null && actionTile.OnAction(direction)) {
 						Controls.A.Disable(true);
-						stopPushing = true;
+						performedAction = true;
 					}
 				}
 			}
@@ -321,7 +321,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			state.Update();
 			UpdateEquippedItems();
 
-			if (stopPushing)
+			if (performedAction)
 				StopPushing();
 
 			// Notify for touching tiles.
