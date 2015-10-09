@@ -24,10 +24,12 @@ namespace ZeldaOracle.Common.Properties {
 	/// PropertyDocumentation
 	/// </summary>
 	public class PropertyDocumentation {
-		private string readableName; // A name that's more human-readable
-		private string editorType;
-		private string category;
-		private string description;
+		private string	readableName; // A name that's more human-readable
+		private string	editorType;
+		private string	category;
+		private string	description;
+		private bool	isEditable;
+		private bool	isHidden;
 
 
 		//-----------------------------------------------------------------------------
@@ -39,13 +41,17 @@ namespace ZeldaOracle.Common.Properties {
 			editorType		= "";
 			category		= "";
 			description		= "";
+			isEditable		= true;
+			isHidden		= false;
 		}
 
-		public PropertyDocumentation(string readableName, string editorType, string category, string description) {
+		public PropertyDocumentation(string readableName, string editorType, string category, string description, bool isEditable, bool isHidden) {
 			this.readableName	= readableName;
 			this.editorType		= editorType;
 			this.category		= category;
 			this.description	= description;
+			this.isEditable		= isEditable;
+			this.isHidden		= isHidden;
 		}
 
 		public PropertyDocumentation(PropertyDocumentation copy) {
@@ -53,6 +59,8 @@ namespace ZeldaOracle.Common.Properties {
 			editorType		= copy.editorType;
 			category		= copy.category;
 			description		= copy.description;
+			isEditable		= copy.isEditable;
+			isHidden		= copy.isHidden;
 		}
 
 
@@ -78,6 +86,18 @@ namespace ZeldaOracle.Common.Properties {
 		public string Description {
 			get { return description; }
 			set { description = value; }
+		}
+		
+		// Can the property be edited using the property editor?
+		public bool IsEditable {
+			get { return isEditable; }
+			set { isEditable = value; }
+		}
+
+		// Is the property not shown in the property editor?
+		public bool IsHidden {
+			get { return isHidden; }
+			set { isHidden = value; }
 		}
 	}
 
@@ -182,8 +202,8 @@ namespace ZeldaOracle.Common.Properties {
 		// Mutators
 		//-----------------------------------------------------------------------------
 
-		public void SetDocumentation(string readableName, string editorType, string category, string description) {
-			documentation = new PropertyDocumentation(readableName, editorType, category, description);
+		public void SetDocumentation(string readableName, string editorType, string category, string description, bool isEditable = true, bool isHidden = false) {
+			documentation = new PropertyDocumentation(readableName, editorType, category, description, isEditable, isHidden);
 		}
 
 
