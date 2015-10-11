@@ -70,10 +70,10 @@ TILE sign;
 	PROPERTIES
 		(string, text, "Hello World!",
 			"Side Text", "text_message", "Text",
-			"The text to display when the sign is read from the front."),
+			"The text to display when the sign is read from the front.", false),
 		(string, side_text,	"You can't read it from there!",
 			"Text", "text_message", "Text",
-			"The text to display when the sign is read from the sides/back.");
+			"The text to display when the sign is read from the sides/back.", false);
 END;
 
 TILE owl;
@@ -84,7 +84,7 @@ TILE owl;
 	PROPERTIES
 		(string, text, "<red>undefined<red>",
 			"Text", "text_message", "",
-			"The text to display when the owl is activated.");
+			"The text to display when the owl is activated.", false);
 END;
 
 TILE lantern;
@@ -95,7 +95,7 @@ TILE lantern;
 	PROPERTIES
 		(boolean, lit, false,
 			"Lit", "", "",
-			 "Whether the lantern starts lit or not.");
+			 "Whether the lantern starts lit or not.", false);
 END;
 
 TILE chest;
@@ -106,7 +106,7 @@ TILE chest;
 	PROPERTIES
 		(string, reward, "rupees_1",
 			"Reward", "reward", "",
-			 "The reward contained inside the chest.");
+			 "The reward contained inside the chest.", false);
 END;
 
 TILE reward;
@@ -116,7 +116,7 @@ TILE reward;
 	PROPERTIES
 		(string, reward, "heart_piece",
 			"Reward", "reward", "",
-			 "The reward to spawn.");
+			 "The reward to spawn.", false);
 END;
 
 

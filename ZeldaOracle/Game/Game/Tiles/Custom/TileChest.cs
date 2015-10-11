@@ -30,11 +30,10 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 					string rewardName = Properties.GetString("reward", "rupees_1");
 					Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
 					RoomControl.GameControl.PushRoomState(new RoomStateReward(reward, (Point2I)Position));
-					//SpriteAnimation = GameData.SPR_TILE_CHEST_OPEN;
-					Properties.Set("sprite_index", 1);
+					
+					
 					// TODO: Play chest open sound
-					Properties.Set("looted", true);
-					BaseProperties.Set("looted", true);
+					Properties.SetBase("looted", true);
 				}
 				else {
 					RoomControl.GameControl.DisplayMessage("It won't open from this side!");
@@ -48,10 +47,10 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			base.Initialize();
 
 			// TODO: Make open sprite a property
-			if (Properties.GetBoolean("looted", false))
+			/*if (Properties.GetBoolean("looted", false))
 				Properties.Set("sprite_index", 1);
 			else
-				Properties.Set("sprite_index", 0);
+				Properties.Set("sprite_index", 0);*/
 		}
 
 	}

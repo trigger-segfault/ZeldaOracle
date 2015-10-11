@@ -229,7 +229,7 @@ namespace ZeldaEditor {
 
 			// Select different sprites for certain events.
 			if (eventTile.Type == typeof(WarpEvent)) {
-				string warpType = eventTile.ModifiedProperties.GetString("warp_type");
+				string warpType = eventTile.Properties.GetString("warp_type");
 				if (warpType == "tunnel")
 					spr = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
 				else if (warpType == "stairs")
@@ -453,7 +453,7 @@ namespace ZeldaEditor {
 
 		protected override void Draw() {
 			editorControl.UpdateTicks();
-
+			
 			Graphics2D g = new Graphics2D(spriteBatch);
 			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 			DrawLevel(g);

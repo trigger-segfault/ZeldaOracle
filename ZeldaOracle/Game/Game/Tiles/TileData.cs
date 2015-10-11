@@ -42,9 +42,9 @@ namespace ZeldaOracle.Game.Tiles {
 			properties			= new Properties();
 
 			properties.Set("id", "")
-				.SetDocumentation("ID", "", "", "The id used to refer to this tile.");
+				.SetDocumentation("ID", "", "", "The id used to refer to this tile.", false);
 			properties.Set("sprite_index", 0)
-				.SetDocumentation("Sprite Index", "sprite_index", "", "The current sprite in the sprite list to draw.");
+				.SetDocumentation("Sprite Index", "sprite_index", "", "The current sprite in the sprite list to draw.", true);
 		}
 		
 		public TileData(TileFlags flags) : this() {

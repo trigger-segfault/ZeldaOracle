@@ -13,6 +13,7 @@ using ZeldaEditor.Control;
 using ZeldaEditor.Tools;
 using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Game.Worlds;
+using ZeldaEditor.PropertiesEditor;
 
 namespace ZeldaEditor {
 
@@ -476,6 +477,39 @@ namespace ZeldaEditor {
 		private void cycleLayerUpToolStripMenuItem1_Click(object sender, EventArgs e) {
 			comboBoxWorldLayer.SelectedIndex = 
 				(comboBoxWorldLayer.SelectedIndex + comboBoxWorldLayer.Items.Count - 1) % comboBoxWorldLayer.Items.Count;
+		}
+
+		private void renameToolStripMenuItem_Click(object sender, EventArgs e) {
+			MessageBox.Show("Name is already in use!", "Invalid Name");
+		}
+
+		private void duplicateToolStripMenuItem_Click(object sender, EventArgs e) {
+
+		}
+
+		private void deleteToolStripMenuItem_Click(object sender, EventArgs e) {
+
+		}
+
+		private void resizeToolStripMenuItem_Click(object sender, EventArgs e) {
+			if (LevelResizeShiftForm.ShowResize(this, editorControl.Level.Dimensions) == DialogResult.OK) {
+				editorControl.Level.Resize(LevelResizeShiftForm.LevelSize);
+			}
+		}
+
+		private void shiftToolStripMenuItem_Click(object sender, EventArgs e) {
+			if (LevelResizeShiftForm.ShowShift(this, editorControl.Level.Dimensions) == DialogResult.OK) {
+				editorControl.Level.Shift(LevelResizeShiftForm.LevelShift);
+			}
+		}
+
+		private void propertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e) {
+			CustomPropertyDescriptor propertyDescriptor = e.ChangedItem.PropertyDescriptor as CustomPropertyDescriptor;
+			//propertyDescriptor.Console.WriteLine(propertyDescriptor.Property.Name);
+			if (propertyDescriptor.Property.Action != null)
+				propertyDescriptor.Property.Action(editorControl.PropertyGridControl.EditedObject, e.ChangedItem.Value);
+			//propertyGrid.Refresh();
+			//editorControl.PropertyGridControl.EditedObject.Properties
 		}
 
 		//-----------------------------------------------------------------------------

@@ -15,7 +15,7 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles {
 	
-	public class Tile {
+	public class Tile : IPropertyObject {
 		private static Type[] tileTypeList = null;
 
 		// Internal
@@ -55,6 +55,7 @@ namespace ZeldaOracle.Game.Tiles {
 			isMoving		= false;
 			pushDelay		= 20;
 			properties		= new Properties();
+			properties.PropertyObject = this;
 			tileData		= null;
 		}
 

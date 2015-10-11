@@ -16,7 +16,7 @@ LOAD ANIMATIONS;
 
 SPRITESHEET "tileset_objects_extras_16x16";
 
-TEMPANIM lanturn_lit; SUBSTRIP repeat;
+TEMPANIM lantern_lit; SUBSTRIP repeat;
 	ADD strip, 16, 4, (0, 3); END;
 
 #==============================================================
@@ -25,14 +25,14 @@ TEMPANIM lanturn_lit; SUBSTRIP repeat;
 
 LOAD TILESETS;
 
-TEMPTILE lanturn;
-	TYPE		TileLanturn;
+TEMPTILE lantern;
+	TYPE		TileLantern;
 	FLAGS		solid;
 	MODEL		block;
 	PROPERTIES
 		(boolean, lit, true,
 			"Lit", "", "",
-			 "Whether the lantern starts lit or not.");
+			 "Whether the lantern starts lit or not.", false);
 END;
 
 TEMPTILE sign;
@@ -42,11 +42,8 @@ TEMPTILE sign;
 	MODEL		block;
 	PROPERTIES
 		(string, text, "Hello World!",
-			"Side Text", "text_message", "Text",
-			"The text to display when the sign is read from the front."),
-		(string, side_text,	"You can't read it from there!",
 			"Text", "text_message", "Text",
-			"The text to display when the sign is read from the sides/back.");
+			"The text to display when the sign is read from the front.", false);
 END;
 
 TEMPTILE pushable_block;
@@ -60,7 +57,11 @@ END;
 #==============================================================
 
 TILESET objects, tileset_objects, (12, 12);
-DEFAULT (0, 0);
+DEFAULT (0, 3);
+
+TILE (0, 3);
+	FLAGS		diggable;
+END;
 
 TILE (0, 0);
 	FLAGS		Solid, Pickupable, Bombable, Burnable, Switchable, Cuttable;
@@ -211,24 +212,30 @@ TILE (2, 2);
 END;
 
 TILE (0, 5);
-	CLONE		lanturn;
-	SPRITEINDEX	0, "lanturn_lit";
+	CLONE		lantern;
+	SPRITEINDEX	0, "lantern_lit";
 	SPRITEINDEX 1, "tileset_objects_extras_16x16", (4, 3);
 END;
 
 TILE (5, 5);
 	SPRITEINDEX 1, "tileset_objects_extras_16x16", (7, 3);
 	SPRITEINDEX 2, "tileset_objects_extras_16x16", (8, 3);
+	PROPERTIES	
+			(show, sprite_index);
 END;
 
 TILE (6, 5);
 	SPRITEINDEX 1, "tileset_objects", (7, 5);
 	SPRITEINDEX 2, "tileset_objects_extras_16x16", (9, 3);
+	PROPERTIES	
+			(show, sprite_index);
 END;
 
 TILE (7, 5);
 	SPRITEINDEX 1, "tileset_objects", (6, 5);
 	SPRITEINDEX 2, "tileset_objects_extras_16x16", (9, 3);
+	PROPERTIES	
+			(show, sprite_index);
 END;
 
 

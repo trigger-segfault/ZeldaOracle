@@ -16,11 +16,18 @@ namespace ZeldaEditor {
 
 		public LevelAddForm() {
 			InitializeComponent();
-			
+
 			buttonAdd.DialogResult		= DialogResult.OK;
 			buttonCancel.DialogResult	= DialogResult.Cancel;
 
 			comboBoxRoomSize.SelectedIndex = 0;
+
+
+			comboBoxZone.Items.Clear();
+
+			foreach (KeyValuePair<string, Zone> entry in Resources.GetResourceDictionary<Zone>()) {
+				comboBoxZone.Items.Add(entry.Key);
+			}
 			comboBoxZone.SelectedIndex = 0;
 		}
 
@@ -49,8 +56,7 @@ namespace ZeldaEditor {
 		}
 		
 		public Zone LevelZone {
-			get { return null; }
-			//get { return Resources.GetResource<Zone>(comboBoxZone.Text); }
+			get { return Resources.GetResource<Zone>(comboBoxZone.Text); }
 		}
 	}
 }

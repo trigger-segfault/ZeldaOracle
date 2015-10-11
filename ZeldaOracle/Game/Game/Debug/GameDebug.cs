@@ -154,17 +154,17 @@ namespace ZeldaOracle.Game.Debug {
 
 			r = level.GetRoom(2, 2);
 			e = r.CreateEventTile(etdWarp, 16, 64);
-				e.ModifiedProperties.Add(Property.CreateString("id", "warp_a"));
-				e.ModifiedProperties.Add(Property.CreateString("warp_type", "tunnel"));
-				e.ModifiedProperties.Add(Property.CreateString("destination_level", "overworld"));
-				e.ModifiedProperties.Add(Property.CreateString("destination_warp_point", "warp_b"));
+				e.Properties.Add(Property.CreateString("id", "warp_a"));
+				e.Properties.Add(Property.CreateString("warp_type", "tunnel"));
+				e.Properties.Add(Property.CreateString("destination_level", "overworld"));
+				e.Properties.Add(Property.CreateString("destination_warp_point", "warp_b"));
 			
 			r = level.GetRoom(1, 1);
 			e = r.CreateEventTile(etdWarp, 64, 96);
-				e.ModifiedProperties.Add(Property.CreateString("id", "warp_b"));
-				e.ModifiedProperties.Add(Property.CreateString("warp_type", "stairs"));
-				e.ModifiedProperties.Add(Property.CreateString("destination_level", "overworld"));
-				e.ModifiedProperties.Add(Property.CreateString("destination_warp_point", "warp_a"));
+				e.Properties.Add(Property.CreateString("id", "warp_b"));
+				e.Properties.Add(Property.CreateString("warp_type", "stairs"));
+				e.Properties.Add(Property.CreateString("destination_level", "overworld"));
+				e.Properties.Add(Property.CreateString("destination_warp_point", "warp_a"));
 
 			r = level.GetRoom(new Point2I(1, 1));
 			r.CreateTile(tdDiamond, 1, 1, 1);

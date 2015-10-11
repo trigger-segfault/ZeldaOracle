@@ -42,6 +42,40 @@ namespace ZeldaOracle.Game.Worlds {
 			return null;
 		}
 
+		public int GetLevelIndex(string levelID) {
+			for (int i = 0; i < levels.Count; i++) {
+				if (levels[i].Name == levelID)
+					return i;
+			}
+			return -1;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Mutators
+		//-----------------------------------------------------------------------------
+
+		public void AddLevel(Level level) {
+			levels.Add(level);
+		}
+
+		public void RemoveLevel(string levelID) {
+			for (int i = 0; i < levels.Count; i++) {
+				if (levels[i].Name == levelID) {
+					levels.RemoveAt(i);
+					break;
+				}
+			}
+		}
+			
+		public void RemoveLevel(Level level) {
+			levels.Remove(level);
+		}
+
+		public void RemoveLevelAt(int index) {
+			levels.RemoveAt(index);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -68,6 +102,10 @@ namespace ZeldaOracle.Game.Worlds {
 		public Point2I StartTileLocation {
 			get { return startTileLocation; }
 			set { startTileLocation = value; }
+		}
+
+		public int levelCount {
+			get { return levels.Count; }
 		}
 	}
 }

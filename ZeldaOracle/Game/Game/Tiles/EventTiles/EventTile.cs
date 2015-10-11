@@ -98,7 +98,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			tile.eventData	= data;
 			tile.size		= data.Size;
 			tile.properties.Merge(data.BaseProperties, true);
-			tile.properties.Merge(data.ModifiedProperties, true);
+			tile.properties.Merge(data.Properties, true);
 
 			return tile;
 		}

@@ -10,9 +10,6 @@ namespace ZeldaOracle.Game.Tiles {
 
 	public class TileLantern : Tile {
 
-		private bool isLit;
-
-		
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
@@ -27,16 +24,16 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public void Light() {
-			if (!isLit) {
-				isLit = true;
-				CustomSprite = GameData.ANIM_TILE_LANTERN;
+			if (!Properties.GetBoolean("lit", false)) {
+				BaseProperties.Set("lit", true);
+				Properties.Set("lit", true);
 			}
 		}
 
 		public void PutOut() {
-			if (isLit) {
-				isLit = false;
-				CustomSprite = GameData.SPR_TILE_LANTERN_UNLIT;
+			if (Properties.GetBoolean("lit", false)) {
+				BaseProperties.Set("lit", false);
+				Properties.Set("lit", false);
 			}
 		}
 
@@ -46,18 +43,14 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		public override void OnSeedHit(Seed seed) {
-			if (seed.Type == SeedType.Ember && !isLit) {
+			if (seed.Type == SeedType.Ember && !Properties.GetBoolean("lit", false)) {
 				Light();
 				seed.Destroy();
 			}
 		}
 
 		public override void Initialize() {
-			isLit = Properties.GetBoolean("lit", false);
-
-			if (isLit) {
-				CustomSprite = GameData.ANIM_TILE_LANTERN;
-			}
+			
 		}
 	}
 }

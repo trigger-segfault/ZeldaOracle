@@ -47,6 +47,9 @@ namespace ZeldaOracle.Game {
 
 			Console.WriteLine("Loading Collision Models");
 			LoadCollisionModels();
+
+			Console.WriteLine("Loading Property Actions");
+			LoadPropertyActions();
 			
 			Console.WriteLine("Loading Zones");
 			LoadZones();
@@ -251,6 +254,43 @@ namespace ZeldaOracle.Game {
 			IntegrateResources<CollisionModel>("MODEL_");
 		}
 
+		//-----------------------------------------------------------------------------
+		// Property Action Loading
+		//-----------------------------------------------------------------------------
+
+		private static bool IsTileDataInstanceOf(IPropertyObject sender, Type type) {
+			return (sender is TileDataInstance && (sender as TileDataInstance).TileData.Type == type);
+		}
+		private static bool IsTileOrTileDataInstanceOf(IPropertyObject sender, Type type) {
+			return (sender is TileDataInstance && (sender as TileDataInstance).TileData.Type == type) || sender.GetType() == type;
+		}
+
+		private static void LoadPropertyActions() {
+			Resources.AddResource<PropertyAction>("zone", delegate(IPropertyObject sender, object value) {
+				if (sender is Room) {
+					Room room = sender as Room;
+					room.Zone = Resources.GetResource<Zone>((string)value);
+				}
+				else if (sender is Level) {
+					Level level = sender as Level;
+					level.Zone = Resources.GetResource<Zone>((string)value);
+				}
+			});
+
+			Resources.AddResource<PropertyAction>("looted", delegate(IPropertyObject sender, object value) {
+				if (IsTileOrTileDataInstanceOf(sender, typeof(TileChest))) {
+					sender.Properties.Set("sprite_index", (bool)value ? 1 : 0);
+				}
+			});
+
+			Resources.AddResource<PropertyAction>("lit", delegate(IPropertyObject sender, object value) {
+				if (IsTileOrTileDataInstanceOf(sender, typeof(TileLantern))) {
+					sender.Properties.Set("sprite_index", (bool)value ? 0 : 1);
+				}
+			});
+
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Zone Loading
@@ -262,7 +302,8 @@ namespace ZeldaOracle.Game {
 			ZONE_FOREST		= new Zone("forest",	"Forest",		VARIANT_FOREST);
 			ZONE_GRAVEYARD	= new Zone("graveyard",	"Graveyard",	VARIANT_GRAVEYARD);
 			ZONE_INTERIOR	= new Zone("interior",	"Interior",		VARIANT_INTERIOR);
-			ZONE_PRESENT	= new Zone("present",	"Present",		VARIANT_PRESENT);
+			ZONE_PRESENT	= new Zone("present", "Present", VARIANT_PRESENT);
+			ZONE_INTERIOR_PRESENT	= new Zone("interior_present", "Interior Present", VARIANT_INTERIOR_PRESENT);
 
 			Resources.AddResource("",			ZONE_DEFAULT);
 			Resources.AddResource("summer",		ZONE_SUMMER);
@@ -270,6 +311,7 @@ namespace ZeldaOracle.Game {
 			Resources.AddResource("graveyard",	ZONE_GRAVEYARD);
 			Resources.AddResource("interior",	ZONE_INTERIOR);
 			Resources.AddResource("present",	ZONE_PRESENT);
+			Resources.AddResource("interior_present", ZONE_INTERIOR_PRESENT);
 		}
 
 		//-----------------------------------------------------------------------------
@@ -282,22 +324,23 @@ namespace ZeldaOracle.Game {
 			Resources.LoadTilesets("Tilesets/land.conscript");
 			Resources.LoadTilesets("Tilesets/forest.conscript");
 			Resources.LoadTilesets("Tilesets/water.conscript");
-			Resources.LoadTilesets("Tilesets/structures.conscript");
+			Resources.LoadTilesets("Tilesets/town.conscript");
+			Resources.LoadTilesets("Tilesets/interior2.conscript");
 			Resources.LoadTilesets("Tilesets/objects.conscript");
 			Resources.LoadTilesets("Tilesets/objects_nv.conscript");
 			Resources.LoadTilesets("Tilesets/tile_data.conscript");
-			//Resources.LoadTilesets("Tilesets/overworld.conscript");
+			Resources.LoadTilesets("Tilesets/overworld.conscript");
 			Resources.LoadTilesets("Tilesets/interior.conscript");
 
 			// Create an warp event.
 			EventTileData etd = new EventTileData(typeof(WarpEvent));
 			etd.Sprite = SPR_EVENT_TILE_WARP_STAIRS;
 			etd.Properties.Set("warp_type", "tunnel")
-				.SetDocumentation("Warp Type", "tunnel", "", "The type of warp point.");
+				.SetDocumentation("Warp Type", "tunnel", "", "The type of warp point.", false);
 			etd.Properties.Set("destination_level", "")
-				.SetDocumentation("Destination Level", "", "", "The level where the destination point is in.");
+				.SetDocumentation("Destination Level", "", "", "The level where the destination point is in.", false);
 			etd.Properties.Set("destination_warp_point", "")
-				.SetDocumentation("Destination Warp Point", "", "", "The id of the warp point destination.");
+				.SetDocumentation("Destination Warp Point", "", "", "The id of the warp point destination.", false);
 			Resources.AddResource("warp", etd);
 			
 			// Create an NPC event.
@@ -531,6 +574,7 @@ namespace ZeldaOracle.Game {
 		public static int VARIANT_GRAVEYARD	= 10;
 		public static int VARIANT_INTERIOR	= 11;
 		public static int VARIANT_PRESENT	= 12;
+		public static int VARIANT_INTERIOR_PRESENT	= 13;
 
 
 		//-----------------------------------------------------------------------------
@@ -854,6 +898,7 @@ namespace ZeldaOracle.Game {
 		public static Zone ZONE_GRAVEYARD;
 		public static Zone ZONE_INTERIOR;
 		public static Zone ZONE_PRESENT;
+		public static Zone ZONE_INTERIOR_PRESENT;
 
 
 		//-----------------------------------------------------------------------------

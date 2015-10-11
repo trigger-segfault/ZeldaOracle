@@ -21,6 +21,7 @@ namespace ZeldaOracle.Common.Scripts {
 		private CommandParam		children;
 		private int					count;
 		private string				stringValue;
+		private bool				boolValue;
 		private int					intValue;
 		private float				floatValue;
 
@@ -38,6 +39,7 @@ namespace ZeldaOracle.Common.Scripts {
 			
 			float.TryParse(str, out floatValue);
 			int.TryParse(str, out intValue);
+			bool.TryParse(str, out boolValue);
 		}
 
 		
@@ -51,6 +53,10 @@ namespace ZeldaOracle.Common.Scripts {
 
 		public string GetString(int index) {
 			return GetParam(index).Str;
+		}
+
+		public bool GetBool(int index) {
+			return GetParam(index).Boolean;
 		}
 		
 		public int GetInt(int index) {
@@ -105,6 +111,10 @@ namespace ZeldaOracle.Common.Scripts {
 		public int Count {
 			get { return count; }
 			set { count = value; }
+		}
+
+		public bool Boolean {
+			get { return boolValue; }
 		}
 
 		public int Integer {

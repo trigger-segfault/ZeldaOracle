@@ -233,8 +233,8 @@ namespace ZeldaOracle.Game.Worlds {
 			eventTile.Position = new Point2I(
 				reader.ReadInt32(),
 				reader.ReadInt32());
-			eventTile.ModifiedProperties = ReadProperties(reader);
-			eventTile.ModifiedProperties.BaseProperties = eventTile.EventTileData.Properties;
+			eventTile.Properties = ReadProperties(reader);
+			eventTile.Properties.BaseProperties = eventTile.EventTileData.Properties;
 
 			return eventTile;
 		}
@@ -494,7 +494,7 @@ namespace ZeldaOracle.Game.Worlds {
 			WriteResource(writer, eventTile.EventTileData, eventTileData);
 			writer.Write(eventTile.Position.X);
 			writer.Write(eventTile.Position.Y);
-			WriteProperties(writer, eventTile.ModifiedProperties);
+			WriteProperties(writer, eventTile.Properties);
 		}
 
 		private void WriteProperties(BinaryWriter writer, Properties properties) {

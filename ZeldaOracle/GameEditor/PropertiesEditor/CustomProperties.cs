@@ -115,6 +115,37 @@ namespace ZeldaEditor.PropertiesEditor {
 				if (!hasBaseProperty)
 					propertyList.Add(propertyEntry.Value);
 			}
+
+			for (int i = 0; i < propertyList.Count; i++) {
+				if (propertyList[i].HasDocumentation && propertyList[i].Documentation.Hidden) {
+					propertyList.RemoveAt(i);
+					i--;
+				}
+			}
+		}
+
+		public void AddBaseProperties(Properties properties, Properties modifiedProperties) {
+			// Add the base properties.
+			if (properties.BaseProperties != null)
+				AddBaseProperties(properties.BaseProperties, modifiedProperties);
+
+			int basePropertyCount = propertyList.Count;
+
+			// Add the properties.
+			foreach (KeyValuePair<string, Property> propertyEntry in properties.PropertyMap) {
+				bool hasBaseProperty = false;
+
+				// Check if there is a matching base property.
+				for (int i = 0; i < basePropertyCount; i++) {
+					if (propertyList[i].Name == propertyEntry.Value.Name) {
+						propertyList[i] = propertyEntry.Value;
+						hasBaseProperty = true;
+						break;
+					}
+				}
+				if (!hasBaseProperty)
+					propertyList.Add(propertyEntry.Value);
+			}
 		}
 
 		public void Set(Properties properties) {

@@ -22,7 +22,7 @@ namespace ZeldaEditor.Control {
 		private PropertyGrid		propertyGrid;
 		private PropertiesContainer	propertiesContainer;
 		private Dictionary<string, UITypeEditor> typeEditors;
-		private object				editedObject;
+		private IPropertyObject		editedObject;
 
 
 		//-----------------------------------------------------------------------------
@@ -65,7 +65,7 @@ namespace ZeldaEditor.Control {
 		// Methods
 		//-----------------------------------------------------------------------------
 
-		public void OpenProperties(Properties properties, object editedObject) {
+		public void OpenProperties(Properties properties, IPropertyObject editedObject) {
 			this.editedObject = editedObject;
 			propertiesContainer.Set(properties);
 			propertyGrid.Refresh();
@@ -86,7 +86,7 @@ namespace ZeldaEditor.Control {
 			get { return editedObject as TileDataInstance; }
 		}
 
-		public object EditedObject {
+		public IPropertyObject EditedObject {
 			get { return editedObject; }
 			set { editedObject = value; }
 		}

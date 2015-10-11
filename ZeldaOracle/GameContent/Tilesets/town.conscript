@@ -5,8 +5,8 @@
 
 LOAD SPRITES;
 
-SPRITESHEET "tileset_structures",					(16, 16), (1, 1), (18, 18);
-SPRITESHEET "tileset_structures_extras_16x16",		(16, 16), (1, 1), (18, 18);
+SPRITESHEET "tileset_town",					(16, 16), (1, 1), (18, 18);
+SPRITESHEET "tileset_town_extras_16x16",		(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Animations
@@ -14,7 +14,7 @@ SPRITESHEET "tileset_structures_extras_16x16",		(16, 16), (1, 1), (18, 18);
 
 LOAD ANIMATIONS;
 
-SPRITESHEET "tileset_structures_extras_16x16";
+SPRITESHEET "tileset_town_extras_16x16";
 
 # FOUNTAINS
 
@@ -53,7 +53,7 @@ LOAD TILESETS;
 
 LOAD TILESETS;
 
-TILESET structures, tileset_structures, (12, 14);
+TILESET town, tileset_town, (12, 14);
 DEFAULT (4, 11);
 
 CONFIG;

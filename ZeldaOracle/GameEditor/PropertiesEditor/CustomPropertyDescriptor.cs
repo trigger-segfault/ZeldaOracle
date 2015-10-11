@@ -165,5 +165,18 @@ namespace ZeldaEditor.PropertiesEditor {
 				return null;
 			}
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public Property Property {
+			get { return property; }
+		}
+
+		public PropertyDocumentation Documentation {
+			get { return documentation; }
+		}
 	}
 }

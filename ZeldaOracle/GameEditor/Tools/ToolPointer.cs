@@ -13,6 +13,7 @@ namespace ZeldaEditor.Tools {
 	public class ToolPointer : EditorTool {
 		private TileDataInstance selectedTile;
 		private EventTileDataInstance selectedEventTile;
+		private Room selectedRoom;
 
 
 		//-----------------------------------------------------------------------------
@@ -96,17 +97,25 @@ namespace ZeldaEditor.Tools {
 
 			if (e.Button == MouseButtons.Left && room != null) {
 				if (!editorControl.EventMode) {
-					// Select tiles.
-					selectedTile = room.GetTile(tileCoord, editorControl.CurrentLayer);
-
-					if (selectedTile != null) {
-						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
-						LevelDisplayControl.SetSelectionBox(levelTileCoord, Point2I.One);
-						EditorControl.PropertyGridControl.OpenProperties(selectedTile.Properties, selectedTile);
+					if (System.Windows.Forms.Control.ModifierKeys == Keys.Shift) {
+						selectedRoom = room;
+						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, Point2I.Zero);
+						LevelDisplayControl.SetSelectionBox(levelTileCoord, room.Size);
+						EditorControl.PropertyGridControl.OpenProperties(room.Properties, room);
 					}
 					else {
-						LevelDisplayControl.ClearSelectionBox();
-						EditorControl.PropertyGridControl.CloseProperties();
+						// Select tiles.
+						selectedTile = room.GetTile(tileCoord, editorControl.CurrentLayer);
+
+						if (selectedTile != null) {
+							Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
+							LevelDisplayControl.SetSelectionBox(levelTileCoord, Point2I.One);
+							EditorControl.PropertyGridControl.OpenProperties(selectedTile.Properties, selectedTile);
+						}
+						else {
+							LevelDisplayControl.ClearSelectionBox();
+							EditorControl.PropertyGridControl.CloseProperties();
+						}
 					}
 				}
 				else {
@@ -116,7 +125,7 @@ namespace ZeldaEditor.Tools {
 					if (selectedEventTile != null) {
 						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
 						LevelDisplayControl.SetSelectionBox(levelTileCoord, Point2I.One);
-						EditorControl.PropertyGridControl.OpenProperties(selectedEventTile.ModifiedProperties, selectedEventTile);
+						EditorControl.PropertyGridControl.OpenProperties(selectedEventTile.Properties, selectedEventTile);
 					}
 					else {
 						LevelDisplayControl.ClearSelectionBox();
