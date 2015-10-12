@@ -29,7 +29,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 				string rewardName = Properties.GetString("reward", "rupees_1");
 				Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
 				RoomControl.GameControl.PushRoomState(new RoomStateReward(reward));
-				BaseProperties.Set("looted", true);
+				Properties.SetBase("looted", true);
 				// Remove the useless tile.
 				RoomControl.RemoveTile(this);
 			}

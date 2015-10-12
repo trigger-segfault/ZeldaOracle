@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
@@ -100,9 +100,9 @@ namespace ZeldaOracle.Game.Debug {
 			world.Levels.Add(LoadJavaLevel("Content/Worlds/test_level.zwd"));
 			world.Levels.Add(LoadJavaLevel("Content/Worlds/interiors.zwd"));
 			world.Levels.Add(LoadJavaLevel("Content/Worlds/big_interiors.zwd"));
-			world.Levels[0].Name = "overworld";
-			world.Levels[1].Name = "interiors";
-			world.Levels[2].Name = "big_interiors";
+			world.Levels[0].Properties.Set("id", "overworld");
+			world.Levels[1].Properties.Set("id", "interiors");
+			world.Levels[2].Properties.Set("id", "big_interiors");
 
 			TileData tdBlock		= Resources.GetResource<TileData>("movable_block");
 			TileData tdDiamond		= Resources.GetResource<TileData>("diamond_rock");
@@ -124,7 +124,7 @@ namespace ZeldaOracle.Game.Debug {
 
 			// Setup the overworld rooms.
 			level = world.Levels[0];
-			r = level.GetRoom(2, 1);
+			r = level.GetRoomAt(2, 1);
 			t = r.CreateTile(tdOwl, 8, 1, 1);
 				t.Properties.Set("text", "Hello, World!");
 			t = r.CreateTile(tdChest, 7, 1, 1);
@@ -152,33 +152,33 @@ namespace ZeldaOracle.Game.Debug {
 			r.CreateTile(tdGrass, 8, 2, 1);
 			r.CreateTile(tdGrass, 8, 3, 1);
 
-			r = level.GetRoom(2, 2);
+			r = level.GetRoomAt(2, 2);
 			e = r.CreateEventTile(etdWarp, 16, 64);
-				e.ModifiedProperties.Add(Property.CreateString("id", "warp_a"));
-				e.ModifiedProperties.Add(Property.CreateString("warp_type", "tunnel"));
-				e.ModifiedProperties.Add(Property.CreateString("destination_level", "overworld"));
-				e.ModifiedProperties.Add(Property.CreateString("destination_warp_point", "warp_b"));
+				e.Properties.Add(Property.CreateString("id", "warp_a"));
+				e.Properties.Add(Property.CreateString("warp_type", "tunnel"));
+				e.Properties.Add(Property.CreateString("destination_level", "overworld"));
+				e.Properties.Add(Property.CreateString("destination_warp_point", "warp_b"));
 			
-			r = level.GetRoom(1, 1);
+			r = level.GetRoomAt(1, 1);
 			e = r.CreateEventTile(etdWarp, 64, 96);
-				e.ModifiedProperties.Add(Property.CreateString("id", "warp_b"));
-				e.ModifiedProperties.Add(Property.CreateString("warp_type", "stairs"));
-				e.ModifiedProperties.Add(Property.CreateString("destination_level", "overworld"));
-				e.ModifiedProperties.Add(Property.CreateString("destination_warp_point", "warp_a"));
+				e.Properties.Add(Property.CreateString("id", "warp_b"));
+				e.Properties.Add(Property.CreateString("warp_type", "stairs"));
+				e.Properties.Add(Property.CreateString("destination_level", "overworld"));
+				e.Properties.Add(Property.CreateString("destination_warp_point", "warp_a"));
 
-			r = level.GetRoom(new Point2I(1, 1));
+			r = level.GetRoomAt(new Point2I(1, 1));
 			r.CreateTile(tdDiamond, 1, 1, 1);
 			r.CreateTile(tdDiamond, 2, 2, 1);
 			r.CreateTile(tdDiamond, 2, 4, 1);
 			r.CreateTile(tdPot, 8, 2, 1);
 
-			r = level.GetRoom(new Point2I(3, 0));
+			r = level.GetRoomAt(new Point2I(3, 0));
 			r.CreateTile(tdLantern, 3, 2, 1);
 
-			r = level.GetRoom(new Point2I(1, 0));
+			r = level.GetRoomAt(new Point2I(1, 0));
 			r.CreateTile(tdRock, 8, 2, 1);
 
-			r = level.GetRoom(new Point2I(2, 0));
+			r = level.GetRoomAt(new Point2I(2, 0));
 			for (int x = 1; x < 8; x++) {
 				for (int y = 2; y < 6; y++) {
 					r.CreateTile(tdBush, x, y, 1);
@@ -201,12 +201,12 @@ namespace ZeldaOracle.Game.Debug {
 			
 			// Setup the interior rooms.
 			level = world.Levels[1];
-			r = level.GetRoom(2, 1);
+			r = level.GetRoomAt(2, 1);
 			r.Zone = GameData.ZONE_INTERIOR;
 			r.CreateTile(tdPot, 1, 2, 1);
 			r.CreateTile(tdPot, 1, 3, 1);
 			r.CreateTile(tdPot, 5, 1, 1);
-			r = level.GetRoom(3, 1);
+			r = level.GetRoomAt(3, 1);
 			r.Zone = GameData.ZONE_INTERIOR;
 			r.CreateTile(tdChest, 8, 1, 1);
 			r.CreateTile(tdPot, 8, 2, 1);

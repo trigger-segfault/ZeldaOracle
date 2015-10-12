@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
-using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Content;
@@ -71,18 +71,18 @@ namespace ZeldaEditor.PropertiesEditor {
 			// If the property hasn't been modified, then create a new property for it.
 			if (!isModified) {
 				Console.WriteLine("Creating new modified property");
-				property = new ZeldaOracle.Common.Properties.Property(property);
+				property = new ZeldaOracle.Common.Scripting.Property(property);
 				modifiedProperties.Add(property);
 			}
 
 			// Set the appropriate value.
-			if (property.Type == ZeldaOracle.Common.Properties.PropertyType.String)
+			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.String)
 				property.StringValue = (string) value;
-			if (property.Type == ZeldaOracle.Common.Properties.PropertyType.Integer)
+			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Integer)
 				property.IntValue = (int) value;
-			if (property.Type == ZeldaOracle.Common.Properties.PropertyType.Float)
+			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Float)
 				property.FloatValue = (float) value;
-			if (property.Type == ZeldaOracle.Common.Properties.PropertyType.Boolean)
+			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Boolean)
 				property.BoolValue = (bool) value;
 				
 			// Check if base and modified are the same. If so, remove the modified one.
@@ -95,13 +95,13 @@ namespace ZeldaEditor.PropertiesEditor {
 			
 		// Get the value of the property.
 		public override object GetValue(object component) {
-			if (property.Type == ZeldaOracle.Common.Properties.PropertyType.String)
+			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.String)
 				return property.StringValue;
-			if (property.Type == ZeldaOracle.Common.Properties.PropertyType.Integer)
+			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Integer)
 				return property.IntValue;
-			if (property.Type == ZeldaOracle.Common.Properties.PropertyType.Float)
+			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Float)
 				return property.FloatValue;
-			if (property.Type == ZeldaOracle.Common.Properties.PropertyType.Boolean)
+			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Boolean)
 				return property.BoolValue;
 			return null;
 		}
@@ -162,16 +162,29 @@ namespace ZeldaEditor.PropertiesEditor {
 			
 		public override Type PropertyType {
 			get {
-				if (property.Type == ZeldaOracle.Common.Properties.PropertyType.String)
+				if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.String)
 					return typeof(string);
-				if (property.Type == ZeldaOracle.Common.Properties.PropertyType.Integer)
+				if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Integer)
 					return typeof(int);
-				if (property.Type == ZeldaOracle.Common.Properties.PropertyType.Float)
+				if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Float)
 					return typeof(float);
-				if (property.Type == ZeldaOracle.Common.Properties.PropertyType.Boolean)
+				if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Boolean)
 					return typeof(bool);
 				return null;
 			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public Property Property {
+			get { return property; }
+		}
+
+		public PropertyDocumentation Documentation {
+			get { return documentation; }
 		}
 	}
 }

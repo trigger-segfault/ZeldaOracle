@@ -6,11 +6,11 @@ using System.Reflection;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Collision;
-using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles {
-	public class TileDataInstance {
+	public class TileDataInstance : IPropertyObject {
 
 		private Room		room;
 		private Point2I		location;
@@ -29,6 +29,7 @@ namespace ZeldaOracle.Game.Tiles {
 			this.layer		= 0;
 			this.tileData	= null;
 			this.properties = new Properties();
+			this.properties.PropertyObject = this;
 		}
 
 		public TileDataInstance(TileData tileData, int x, int y, int layer) {
@@ -37,6 +38,7 @@ namespace ZeldaOracle.Game.Tiles {
 			this.layer		= layer;
 			this.tileData	= tileData;
 			this.properties = new Properties();
+			this.properties.PropertyObject = this;
 			this.properties.BaseProperties = tileData.Properties;
 		}
 
@@ -73,7 +75,10 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		public Properties Properties {
 			get { return properties; }
-			set { properties = value; }
+			set {
+				properties = value;
+				properties.PropertyObject = this;
+			}
 		}
 		
 		public Type Type {

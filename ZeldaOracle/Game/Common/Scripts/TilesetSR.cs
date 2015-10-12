@@ -8,7 +8,7 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Content.ResourceBuilders;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Tiles;
 
@@ -155,36 +155,50 @@ namespace ZeldaOracle.Common.Scripts {
 				}
 			});
 			// Properties <(type, name, value, editor-type, category, description)...>
+			// Properties <(hide, name)...>
+			// Properties <(show, name)...>
 			AddTilesetCommand("Properties", delegate(CommandParam parameters) {
 				// TODO: handle lists.
 				for (int i = 0; i < parameters.Count; i++) {
 					CommandParam param = parameters[i];
-					
-					Property property = null;
+
 					string name = param.GetString(1);
-					PropertyType type = (PropertyType) Enum.Parse(typeof(PropertyType), param.GetString(0), true);
 
-					if (type == PropertyType.String)
-						property = Property.CreateString(name, param.GetString(2));
-					else if (type == PropertyType.Integer)
-						property = Property.CreateInt(name, param.GetInt(2));
-					else if (type == PropertyType.Float)
-						property = Property.CreateFloat(name, param.GetFloat(2));
-					else if (type == PropertyType.Boolean)
-						property = Property.CreateBool(name, (param.GetString(2) == "true"));
-					else
-						ThrowParseError("Unsupported property type for " + name);
-
-					if (param.Count > 3) {
-						property.SetDocumentation(
-							param.GetString(3),
-							param.GetString(4),
-							param.GetString(5),
-							param.GetString(6));
+					if (String.Compare(param.GetString(0), "hide", StringComparison.CurrentCultureIgnoreCase) == 0) {
+						tileData.Properties[name].Documentation.IsHidden = true;
 					}
+					else if (String.Compare(param.GetString(0), "show", StringComparison.CurrentCultureIgnoreCase) == 0) {
+						tileData.Properties[name].Documentation.IsHidden = false;
+					}
+					else {
 
-					if (property != null)
-						tileData.Properties.Add(property);
+						Property property = null;
+						PropertyType type = (PropertyType)Enum.Parse(typeof(PropertyType), param.GetString(0), true);
+
+						if (type == PropertyType.String)
+							property = Property.CreateString(name, param.GetString(2));
+						else if (type == PropertyType.Integer)
+							property = Property.CreateInt(name, param.GetInt(2));
+						else if (type == PropertyType.Float)
+							property = Property.CreateFloat(name, param.GetFloat(2));
+						else if (type == PropertyType.Boolean)
+							property = Property.CreateBool(name, (param.GetString(2) == "true"));
+						else
+							ThrowParseError("Unsupported property type for " + name);
+
+						if (param.Count > 3) {
+							property.SetDocumentation(
+								param.GetString(3),
+								param.GetString(4),
+								param.GetString(5),
+								param.GetString(6),
+								true,
+								param.GetBool(7));
+						}
+
+						if (property != null)
+							tileData.Properties.Add(property);
+					}
 				}
 			});
 			// Sprite <sprite-animation>

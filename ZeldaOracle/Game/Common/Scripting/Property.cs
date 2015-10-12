@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Content;
+using ZeldaOracle.Game.Worlds;
 
-namespace ZeldaOracle.Common.Properties {
+namespace ZeldaOracle.Common.Scripting {
 	
+
+	public delegate void PropertyAction(IPropertyObject sender, object value);
+
 	/// <summary>
 	/// The possible raw data types for a property.
 	/// </summary>
@@ -13,10 +18,7 @@ namespace ZeldaOracle.Common.Properties {
 		String,
 		Integer,
 		Float,
-		Boolean,
-		Tile,
-		Sprite,
-		Effect
+		Boolean
 	}
 
 
@@ -124,6 +126,10 @@ namespace ZeldaOracle.Common.Properties {
 		private Property firstChild;
 		// The documentation for this property, if it is a base-property.
 		private PropertyDocumentation documentation;
+		// The action that occurs when the property is changed.
+		private PropertyAction action;
+		// The properties containing this property.
+		private Properties properties;
 
 		
 		//-----------------------------------------------------------------------------
@@ -140,6 +146,11 @@ namespace ZeldaOracle.Common.Properties {
 			this.next			= null;
 			this.firstChild		= null;
 			this.documentation	= null;
+			this.action			= null;
+			this.properties		= null;
+
+			if (Resources.ExistsResource<PropertyAction>(name))
+				this.action		= Resources.GetResource<PropertyAction>(name);
 		}
 		
 		// Construct a property as a copy of another.
@@ -152,6 +163,8 @@ namespace ZeldaOracle.Common.Properties {
 			next			= null;
 			firstChild		= null;
 			documentation	= null;
+			action			= copy.action;
+			properties		= null;
 
 			if (copy.firstChild != null)
 				firstChild = new Property(copy.firstChild);
@@ -202,8 +215,43 @@ namespace ZeldaOracle.Common.Properties {
 		// Mutators
 		//-----------------------------------------------------------------------------
 
-		public void SetDocumentation(string readableName, string editorType, string category, string description, bool isEditable = true, bool isHidden = false) {
+		public void SetValues(Property values) {
+			intValue	= values.intValue;
+			floatValue	= values.floatValue;
+			stringValue = values.stringValue;
+			if (properties != null) {
+				switch (this.type) {
+				case PropertyType.Boolean: RunAction(properties.PropertyObject, BoolValue); break;
+				case PropertyType.Integer: RunAction(properties.PropertyObject, IntValue); break;
+				case PropertyType.Float: RunAction(properties.PropertyObject, FloatValue); break;
+				case PropertyType.String: RunAction(properties.PropertyObject, StringValue); break;
+				}
+			}
+		}
+
+		public Property SetDocumentation(string readableName, string editorType, string category, string description, bool isEditable, bool isHidden) {
 			documentation = new PropertyDocumentation(readableName, editorType, category, description, isEditable, isHidden);
+			return this;
+		}
+
+		public Property SetAction(PropertyAction action) {
+			this.action = action;
+			return this;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Actions
+		//-----------------------------------------------------------------------------
+
+		public void RunAction(IPropertyObject sender, object value) {
+			if (action != null) {
+				action(sender, value);
+				Console.WriteLine("Run Action - " + name);
+			}
+			else {
+				Console.WriteLine("Try Action - " + name);
+			}
 		}
 
 
@@ -283,22 +331,38 @@ namespace ZeldaOracle.Common.Properties {
 
 		public string StringValue {
 			get { return stringValue; }
-			set { stringValue = value; }
+			set {
+				stringValue = value;
+				if (properties != null)
+					RunAction(properties.PropertyObject, value);
+			}
 		}
 
 		public int IntValue {
 			get { return intValue; }
-			set { intValue = value; }
+			set {
+				intValue = value;
+				if (properties != null)
+					RunAction(properties.PropertyObject, value);
+			}
 		}
 
 		public float FloatValue {
 			get { return floatValue; }
-			set { floatValue = value; }
+			set {
+				floatValue = value;
+				if (properties != null)
+					RunAction(properties.PropertyObject, value);
+			}
 		}
 
 		public bool BoolValue {
 			get { return (intValue == 1); }
-			set { intValue = (value ? 1 : 0); }
+			set {
+				intValue = (value ? 1 : 0);
+				if (properties != null)
+					RunAction(properties.PropertyObject, value);
+			}
 		}
 
 		// Lists.
@@ -322,6 +386,16 @@ namespace ZeldaOracle.Common.Properties {
 		public int Count {
 			get { return intValue; }
 			set { intValue = value; }
+		}
+
+		public PropertyAction Action {
+			get { return action; }
+			set { action = value; }
+		}
+
+		public Properties Properties {
+			get { return properties; }
+			set { properties = value; }
 		}
 	}
 }

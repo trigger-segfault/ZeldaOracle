@@ -9,12 +9,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
-using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Content;
 using ZeldaEditor.Control;
 using ZeldaOracle.Game.Items.Rewards;
+using ZeldaOracle.Common.Scripting;
 
 
 namespace ZeldaEditor.PropertiesEditor {
@@ -98,6 +98,37 @@ namespace ZeldaEditor.PropertiesEditor {
 			if (properties.BaseProperties != null)
 				AddProperties(properties.BaseProperties);
 			
+			int basePropertyCount = propertyList.Count;
+
+			// Add the properties.
+			foreach (KeyValuePair<string, Property> propertyEntry in properties.PropertyMap) {
+				bool hasBaseProperty = false;
+
+				// Check if there is a matching base property.
+				for (int i = 0; i < basePropertyCount; i++) {
+					if (propertyList[i].Name == propertyEntry.Value.Name) {
+						propertyList[i] = propertyEntry.Value;
+						hasBaseProperty = true;
+						break;
+					}
+				}
+				if (!hasBaseProperty)
+					propertyList.Add(propertyEntry.Value);
+			}
+
+			for (int i = 0; i < propertyList.Count; i++) {
+				if (propertyList[i].HasDocumentation && propertyList[i].Documentation.IsHidden) {
+					propertyList.RemoveAt(i);
+					i--;
+				}
+			}
+		}
+
+		public void AddBaseProperties(Properties properties, Properties modifiedProperties) {
+			// Add the base properties.
+			if (properties.BaseProperties != null)
+				AddBaseProperties(properties.BaseProperties, modifiedProperties);
+
 			int basePropertyCount = propertyList.Count;
 
 			// Add the properties.

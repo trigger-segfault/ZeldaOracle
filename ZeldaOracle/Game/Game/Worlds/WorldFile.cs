@@ -8,11 +8,12 @@ using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 
 namespace ZeldaOracle.Game.Worlds {
+
 
 	public class ResourceInfo<T> {
 		private T resource;
@@ -36,6 +37,9 @@ namespace ZeldaOracle.Game.Worlds {
 
 	// Used to save and load world files.
 	public class WorldFile {
+
+		private const bool NEW_FORMAT = true;
+
 		private static char[] MAGIC = { 'Z', 'w', 'd', '2' };
 		private string			fileName;
 
@@ -103,7 +107,7 @@ namespace ZeldaOracle.Game.Worlds {
 			Clear();
 
 			World world = new World();
-			
+
 			// Read the header.
 			ReadHeader(reader, world);
 			// Read the string list.
@@ -117,6 +121,9 @@ namespace ZeldaOracle.Game.Worlds {
 			ReadResourceList(reader, animations);
 			ReadResourceList(reader, tileData);
 			ReadResourceList(reader, eventTileData);
+
+			if (NEW_FORMAT)
+				ReadWorld(reader, world);
 
 			// Read the level data.
 			int levelCount = reader.ReadInt32();
@@ -141,18 +148,28 @@ namespace ZeldaOracle.Game.Worlds {
 					reader.ReadInt32());
 		}
 
+		private void ReadWorld(BinaryReader reader, World world) {
+			world.Properties.Merge(ReadProperties(reader), true);
+		}
+
 		private Level ReadLevel(BinaryReader reader) {
-			
-			string name			= ReadString(reader);
+			string name = ""; Properties props = new Properties();
+			if (!NEW_FORMAT)
+				name			= ReadString(reader);
 			int width			= reader.ReadInt32();
 			int height			= reader.ReadInt32();
 			int roomWidth		= reader.ReadInt32();
 			int roomHeight		= reader.ReadInt32();
 			int roomLayerCount	= reader.ReadInt32();
+			if (NEW_FORMAT)
+				props			= ReadProperties(reader);
 
 			Level level = new Level(width, height, new Point2I(roomWidth, roomHeight));
 			level.RoomLayerCount = roomLayerCount;
-			level.Name = name;
+			if (!NEW_FORMAT)
+				level.Properties.Set("id", name);
+			else
+				level.Properties.Merge(props, true);
 
 			// Read rooms.
 			for (int y = 0; y < level.Height; y++) {
@@ -170,8 +187,11 @@ namespace ZeldaOracle.Game.Worlds {
 			int width  = reader.ReadInt32();
 			int height = reader.ReadInt32();
 			int layerCount = reader.ReadInt32();
-			
+
 			room.Zone = ReadResource(reader, zones);
+
+			if (NEW_FORMAT)
+				room.Properties.Merge(ReadProperties(reader), true);
 			
 			// Read tile data for first layer.
 			for (int y = 0; y < room.Height; y++) {
@@ -233,8 +253,8 @@ namespace ZeldaOracle.Game.Worlds {
 			eventTile.Position = new Point2I(
 				reader.ReadInt32(),
 				reader.ReadInt32());
-			eventTile.ModifiedProperties = ReadProperties(reader);
-			eventTile.ModifiedProperties.BaseProperties = eventTile.EventTileData.Properties;
+			eventTile.Properties = ReadProperties(reader);
+			eventTile.Properties.BaseProperties = eventTile.EventTileData.Properties;
 
 			return eventTile;
 		}
@@ -361,14 +381,15 @@ namespace ZeldaOracle.Game.Worlds {
 			Clear();
 
 			// Write the level data to memory.
-			MemoryStream levelDataStream = new MemoryStream();
-			BinaryWriter levelDataWriter = new BinaryWriter(levelDataStream);
-			levelDataWriter.Write(world.Levels.Count);
+			MemoryStream worldDataStream = new MemoryStream();
+			BinaryWriter worldDataWriter = new BinaryWriter(worldDataStream);
+			WriteWorld(worldDataWriter, world);
+			worldDataWriter.Write(world.Levels.Count);
 			for (int i = 0; i < world.Levels.Count; i++)
-				WriteLevel(levelDataWriter, world.Levels[i]);
-			byte[] levelData = levelDataStream.GetBuffer();
-			int levelDataSize = (int) levelDataStream.Length;
-			levelDataWriter.Close();
+				WriteLevel(worldDataWriter, world.Levels[i]);
+			byte[] worldData = worldDataStream.GetBuffer();
+			int levelDataSize = (int) worldDataStream.Length;
+			worldDataWriter.Close();
 			
 			// Write the header.
 			WriteHeader(writer, world);
@@ -383,8 +404,9 @@ namespace ZeldaOracle.Game.Worlds {
 			WriteResourceList(writer, animations);
 			WriteResourceList(writer, tileData);
 			WriteResourceList(writer, eventTileData);
-			// Write the level data.
-			writer.Write(levelData, 0, levelDataSize);
+
+			// Write the world data.
+			writer.Write(worldData, 0, levelDataSize);
 		}
 
 		private void WriteHeader(BinaryWriter writer, World world) {
@@ -397,18 +419,23 @@ namespace ZeldaOracle.Game.Worlds {
 			writer.Write(world.StartTileLocation.Y);
 		}
 
+		private void WriteWorld(BinaryWriter writer, World world) {
+			WriteProperties(writer, world.Properties);
+		}
+
 		private void WriteLevel(BinaryWriter writer, Level level) {
-			WriteString(writer, level.Name);
+			//WriteString(writer, level.Name);
 			writer.Write(level.Width);
 			writer.Write(level.Height);
 			writer.Write(level.RoomWidth);
 			writer.Write(level.RoomHeight);
 			writer.Write(level.RoomLayerCount);
+			WriteProperties(writer, level.Properties);
 
 			// Write rooms.
 			for (int y = 0; y < level.Height; y++) {
 				for (int x = 0; x < level.Width; x++) {
-					Room room = level.GetRoom(x, y);
+					Room room = level.GetRoomAt(x, y);
 					WriteRoom(writer, room);
 				}
 			}
@@ -419,6 +446,7 @@ namespace ZeldaOracle.Game.Worlds {
 			writer.Write(room.Height);
 			writer.Write(room.LayerCount);
 			WriteResource(writer, room.Zone, zones);
+			WriteProperties(writer, room.Properties);
 
 			// Write all tiles for the first tile layer.
 			for (int y = 0; y < room.Height; y++) {
@@ -494,7 +522,7 @@ namespace ZeldaOracle.Game.Worlds {
 			WriteResource(writer, eventTile.EventTileData, eventTileData);
 			writer.Write(eventTile.Position.X);
 			writer.Write(eventTile.Position.Y);
-			WriteProperties(writer, eventTile.ModifiedProperties);
+			WriteProperties(writer, eventTile.Properties);
 		}
 
 		private void WriteProperties(BinaryWriter writer, Properties properties) {

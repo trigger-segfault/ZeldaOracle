@@ -1,85 +1,135 @@
 
 #==============================================================
-# Interior Tileset
+# Sprites
 #==============================================================
 
-TILESET interior, tileset_interior, (10, 15);
-DEFAULT (4, 1);
+LOAD SPRITES;
+
+SPRITESHEET "tileset_interior",					(16, 16), (1, 1), (18, 18);
+
+#==============================================================
+# Animations
+#==============================================================
+
+LOAD ANIMATIONS;
+
+
+#==============================================================
+# Tiles
+#==============================================================
+
+LOAD TILESETS;
+
+
+#==============================================================
+# Tilesets
+#==============================================================
+
+LOAD TILESETS;
+
+TILESET interior, tileset_interior, (12, 19);
+DEFAULT (4, 10);
 
 CONFIG;
-SSSSRSSSSS
-SSSR R    
-SSSSRS    
-SSS P SSS 
-SSS W     
-SSS       
-SSSSSSSSSS
-SSSSSSSSHH
-SSSS   S H 
-SSSSSSSS H
-          
- S  S  S S
+SSSSSSSS....
+SSS.......S.
+SSS.........
+SRS.........
+R.R.......S.
+SRSSSSSSS...
+SSSSSSSSS...
+SSSSSSSSS.S.
+SSSSSSSSS...
+SSSSSSSSSS..
+S.SS.SSSSS..
+SSS.........
+SSSSSSS.....
+SS..SSS.....
+SSSSSS......
 END;
 
-# Animations.
-	TILE ( 7,  9); SPRITE tile_lantern; END;
-	TILE ( 4,  4); SPRITE tile_water; END;
-	TILE ( 4,  3); SPRITE tile_puddle; END;
-	TILE ( 3,  4); SPRITE tile_waterfall; END;
-	TILE ( 3,  5); SPRITE tile_waterfall_bottom; END;
 # Ledges
-	TILE (1, 0); LEDGE block, up; END;
-	TILE (0, 1); LEDGE block, left; END;
-	TILE (2, 1); LEDGE block, right; END;
-	TILE (1, 2); LEDGE block, down; END;
+TILE (1, 0); LEDGE block, up; END;
+TILE (0, 1); LEDGE block, left; END;
+TILE (2, 1); LEDGE block, right; END;
+TILE (1, 2); LEDGE block, down; END;
+
+TILE (1, 9); LEDGE block, up; END;
+TILE (0, 10); LEDGE block, left; END;
+TILE (2, 10); LEDGE block, right; END;
+TILE (1, 11); LEDGE block, down; END;
+
 # Irregular Collision Models
-	TILE (8, 2); SOLID doorway; END; ## stairs down
-	TILE (9, 2); SOLID doorway; END; ## stairs up
-	TILE (9, 3); SOLID edge_n; END; ## fireplace
-	TILE (8, 4); SOLID edge_n; END; ## fireplace Post
-	TILE (8, 5); SOLID edge_w; END; ## entrance left
-	TILE (9, 5); SOLID edge_e; END; ## entrance right
-	TILE (4, 8); SOLID edge_n; END; ## bookshelves
-	TILE (5, 8); SOLID edge_n; END; ## drawers
-	TILE (6, 8); SOLID edge_n; END; ## shelves
-# Railings 1
-	TILE (0, 10); SOLID corner_nw; END;
-	TILE (1, 10); SOLID edge_n; END;
-	TILE (2, 10); SOLID corner_ne; END;
-	TILE (0, 11); SOLID edge_w; END;
-	TILE (2, 11); SOLID edge_e; END;
-	TILE (0, 12); SOLID corner_sw; END;
-	TILE (1, 12); SOLID edge_s; END;
-	TILE (2, 12); SOLID corner_se; END;
-	TILE (0, 13); SOLID inside_corner_nw; END;
-	TILE (1, 13); SOLID inside_corner_ne; END;
-	TILE (0, 14); SOLID inside_corner_sw; END;
-	TILE (1, 14); SOLID inside_corner_se; END;
-# Railings 2
-	TILE (3, 10); SOLID corner_nw; END;
-	TILE (4, 10); SOLID edge_n; END;
-	TILE (5, 10); SOLID corner_ne; END;
-	TILE (3, 11); SOLID edge_w; END;
-	TILE (5, 11); SOLID edge_e; END;
-	TILE (3, 12); SOLID corner_sw; END;
-	TILE (4, 12); SOLID edge_s; END;
-	TILE (5, 12); SOLID corner_se; END;
-	TILE (3, 13); SOLID inside_corner_nw; END;
-	TILE (4, 13); SOLID inside_corner_ne; END;
-	TILE (3, 14); SOLID inside_corner_sw; END;
-	TILE (4, 14); SOLID inside_corner_se; END;
-# Railings 3
-	TILE (6, 10); SOLID corner_nw; END;
-	TILE (7, 10); SOLID edge_n; END;
-	TILE (8, 10); SOLID corner_ne; END;
-	TILE (6, 11); SOLID edge_w; END;
-	TILE (8, 11); SOLID edge_e; END;
-	TILE (6, 12); SOLID corner_sw; END;
-	TILE (7, 12); SOLID edge_s; END;
-	TILE (8, 12); SOLID corner_se; END;
-	TILE (6, 13); SOLID inside_corner_nw; END;
-	TILE (7, 13); SOLID inside_corner_ne; END;
-	TILE (6, 14); SOLID inside_corner_sw; END;
-	TILE (7, 14); SOLID inside_corner_se; END;
+TILE (8, 0); SOLID doorway; END;
+TILE (8, 11); SOLID doorway; END;
+TILE (9, 11); SOLID doorway; END;
+TILE (3, 1); SOLID edge_n; END;
+TILE (4, 1); SOLID edge_n; END;
+TILE (5, 1); SOLID edge_n; END;
+TILE (6, 1); SOLID edge_n; END;
+TILE (7, 1); SOLID edge_n; END;
+TILE (3, 2); SOLID edge_n; END;
+TILE (4, 2); SOLID edge_n; END;
+TILE (5, 2); SOLID edge_n; END;
+TILE (6, 2); SOLID edge_n; END;
+TILE (7, 2); SOLID edge_n; END;
+TILE (3, 11); SOLID edge_w; END;
+TILE (4, 11); SOLID edge_e; END;
+
+# Barriers
+TILE (9, 0); SOLID corner_nw; END;
+TILE (10, 0); SOLID edge_n; END;
+TILE (11, 0); SOLID corner_ne; END;
+TILE (9, 1); SOLID edge_w; END;
+TILE (11, 1); SOLID edge_e; END;
+TILE (9, 2); SOLID corner_sw; END;
+TILE (10, 2); SOLID edge_s; END;
+TILE (11, 2); SOLID corner_se; END;
+
+TILE (10, 9); SOLID inside_corner_nw; END;
+TILE (11, 9); SOLID inside_corner_ne; END;
+TILE (10, 10); SOLID inside_corner_sw; END;
+TILE (11, 10); SOLID inside_corner_se; END;
+
+
+TILE (9, 3); SOLID corner_nw; END;
+TILE (10, 3); SOLID edge_n; END;
+TILE (11, 3); SOLID corner_ne; END;
+TILE (9, 4); SOLID edge_w; END;
+TILE (11, 4); SOLID edge_e; END;
+TILE (9, 5); SOLID corner_sw; END;
+TILE (10, 5); SOLID edge_s; END;
+TILE (11, 5); SOLID corner_se; END;
+
+TILE (10, 11); SOLID inside_corner_nw; END;
+TILE (11, 11); SOLID inside_corner_ne; END;
+TILE (10, 12); SOLID inside_corner_sw; END;
+TILE (11, 12); SOLID inside_corner_se; END;
+
+
+TILE (9, 6); SOLID corner_nw; END;
+TILE (10, 6); SOLID edge_n; END;
+TILE (11, 6); SOLID corner_ne; END;
+TILE (9, 7); SOLID edge_w; END;
+TILE (11, 7); SOLID edge_e; END;
+TILE (9, 8); SOLID corner_sw; END;
+TILE (10, 8); SOLID edge_s; END;
+TILE (11, 8); SOLID corner_se; END;
+
+TILE (10, 13); SOLID inside_corner_nw; END;
+TILE (11, 13); SOLID inside_corner_ne; END;
+TILE (10, 14); SOLID inside_corner_sw; END;
+TILE (11, 14); SOLID inside_corner_se; END;
+
+# Holes
+TILE (7, 12); FLAGS HOLE; END;
+TILE (7, 13); FLAGS HOLE; END;
+TILE (8, 12); FLAGS HOLE; END;
+TILE (8, 13); FLAGS HOLE; END;
+TILE (8, 14); FLAGS HOLE; END;
+TILE (9, 12); FLAGS HOLE; END;
+TILE (9, 13); FLAGS HOLE; END;
+TILE (9, 14); FLAGS HOLE; END;
+
 
 END;

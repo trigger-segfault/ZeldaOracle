@@ -36,10 +36,10 @@ TEMPTILE chest;
 	PROPERTIES
 		(string, reward, "rupees_1",
 			"Reward", "reward", "",
-			 "The reward contained inside the chest."),
+			 "The reward contained inside the chest.", false),
 		(boolean, looted, "false",
 			"Looted", "", "",
-			"True if the item has been taken from the chest.");
+			"True if the item has been taken from the chest.", false);
 END;
 
 TEMPTILE reward;
@@ -49,10 +49,10 @@ TEMPTILE reward;
 	PROPERTIES
 		(string, reward, "heart_piece",
 			"Reward", "reward", "",
-			 "The reward to spawn."),
+			 "The reward to spawn.", false),
 		(boolean, looted, "false",
 			"Looted", "", "",
-			"True if the item has been taken.");
+			"True if the item has been taken.", false);
 END;
 
 TEMPTILE trampoline;
@@ -67,7 +67,7 @@ TEMPTILE owl;
 	PROPERTIES
 		(string, text, "<red>undefined<red>",
 			"Text", "text_message", "",
-			"The text to display when the owl is activated.");
+			"The text to display when the owl is activated.", false);
 END;
 
 #==============================================================

@@ -6,7 +6,7 @@ using System.Reflection;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Collision;
-using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -42,9 +42,9 @@ namespace ZeldaOracle.Game.Tiles {
 			properties			= new Properties();
 
 			properties.Set("id", "")
-				.SetDocumentation("ID", "", "", "The id used to refer to this tile.");
+				.SetDocumentation("ID", "", "", "The id used to refer to this tile.", true, false);
 			properties.Set("sprite_index", 0)
-				.SetDocumentation("Sprite Index", "sprite_index", "", "The current sprite in the sprite list to draw.");
+				.SetDocumentation("Sprite Index", "sprite_index", "", "The current sprite in the sprite list to draw.", true, true);
 		}
 		
 		public TileData(TileFlags flags) : this() {

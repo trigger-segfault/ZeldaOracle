@@ -3,12 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Common.Content;
 
 namespace ZeldaOracle.Game.Worlds {
-	public class Room {
+	public class Room : IPropertyObject {
 		
 		private Level							level;		// The level this room is in.
 		private Point2I							location;	// Location within the level.
@@ -29,6 +30,33 @@ namespace ZeldaOracle.Game.Worlds {
 			this.eventData	= new List<EventTileDataInstance>();
 			this.zone		= null;
 			this.properties	= new Properties();
+			this.properties.PropertyObject = this;
+			this.properties.BaseProperties = new Properties();
+
+			this.properties.BaseProperties.Set("id", "")
+				.SetDocumentation("ID", "", "", "The id used to refer to this room.", true, false);
+			this.properties.BaseProperties.Set("music", "")
+				.SetDocumentation("Music", "song", "", "The music to play in this room. Select none to choose the default music.", true, false);
+			this.properties.BaseProperties.Set("zone", "")
+				.SetDocumentation("Zone", "zone", "", "The zone type for this room.", true, false);
+		}
+
+		public Room(Level level, int x, int y, Zone zone) {
+			this.level		= level;
+			this.location	= new Point2I(x, y);
+			this.tileData	= new TileDataInstance[level.RoomSize.X, level.RoomSize.Y, level.RoomLayerCount];
+			this.eventData	= new List<EventTileDataInstance>();
+			this.zone		= zone;
+			this.properties	= new Properties();
+			this.properties.PropertyObject = this;
+			this.properties.BaseProperties = new Properties();
+
+			this.properties.BaseProperties.Set("id", "")
+				.SetDocumentation("ID", "", "", "The id used to refer to this room.", true, false);
+			this.properties.BaseProperties.Set("music", "")
+				.SetDocumentation("Music", "song", "", "The music to play in this room. Select none to choose the default music.", true, false);
+			this.properties.BaseProperties.Set("zone", "")
+				.SetDocumentation("Zone", "zone", "", "The zone type for this room.", true, false);
 		}
 		
 
@@ -147,7 +175,10 @@ namespace ZeldaOracle.Game.Worlds {
 
 		public Properties Properties {
 			get { return properties; }
-			set { properties = value; }
+			set {
+				properties = value;
+				properties.PropertyObject = this;
+			}
 		}
 	}
 }

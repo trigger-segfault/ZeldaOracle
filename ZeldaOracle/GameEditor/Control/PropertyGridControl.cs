@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
-using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Geometry;
@@ -14,6 +13,8 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaEditor.PropertiesEditor;
 using ZeldaEditor.PropertiesEditor.CustomEditors;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaEditor.Control {
 	public class PropertyGridControl {
@@ -22,7 +23,7 @@ namespace ZeldaEditor.Control {
 		private PropertyGrid		propertyGrid;
 		private PropertiesContainer	propertiesContainer;
 		private Dictionary<string, UITypeEditor> typeEditors;
-		private object				editedObject;
+		private IPropertyObject		editedObject;
 
 
 		//-----------------------------------------------------------------------------
@@ -41,6 +42,8 @@ namespace ZeldaEditor.Control {
 			typeEditors["sprite"]			= new ResourcePropertyEditor<Sprite>();
 			typeEditors["animation"]		= new ResourcePropertyEditor<Animation>();
 			typeEditors["collision_model"]	= new ResourcePropertyEditor<CollisionModel>();
+			typeEditors["song"]				= new ResourcePropertyEditor<Song>();
+			typeEditors["sound"]			= new ResourcePropertyEditor<Sound>();
 			typeEditors["zone"]				= new ResourcePropertyEditor<Zone>();
 			typeEditors["reward"]			= new RewardPropertyEditor(editorControl.RewardManager);
 			typeEditors["text_message"]		= new TextMessagePropertyEditor();
@@ -65,7 +68,7 @@ namespace ZeldaEditor.Control {
 		// Methods
 		//-----------------------------------------------------------------------------
 
-		public void OpenProperties(Properties properties, object editedObject) {
+		public void OpenProperties(Properties properties, IPropertyObject editedObject) {
 			this.editedObject = editedObject;
 			propertiesContainer.Set(properties);
 			propertyGrid.Refresh();
@@ -86,7 +89,7 @@ namespace ZeldaEditor.Control {
 			get { return editedObject as TileDataInstance; }
 		}
 
-		public object EditedObject {
+		public IPropertyObject EditedObject {
 			get { return editedObject; }
 			set { editedObject = value; }
 		}

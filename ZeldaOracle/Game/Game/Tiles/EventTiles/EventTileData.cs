@@ -6,7 +6,7 @@ using System.Reflection;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Collision;
-using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Game.Tiles.EventTiles {
 	
@@ -31,7 +31,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			properties			= new Properties();
 
 			properties.Set("id", "")
-				.SetDocumentation("ID", "", "", "The id used to refer to this event.");
+				.SetDocumentation("ID", "", "", "The id used to refer to this event.", true, false);
 		}
 		
 		public EventTileData(Type type) : this() {

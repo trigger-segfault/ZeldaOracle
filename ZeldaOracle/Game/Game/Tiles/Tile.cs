@@ -6,7 +6,7 @@ using System.Text;
 using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Effects;
@@ -15,7 +15,7 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles {
 	
-	public class Tile {
+	public class Tile : IPropertyObject {
 		private static Type[] tileTypeList = null;
 
 		// Internal
@@ -55,6 +55,7 @@ namespace ZeldaOracle.Game.Tiles {
 			isMoving		= false;
 			pushDelay		= 20;
 			properties		= new Properties();
+			properties.PropertyObject = this;
 			tileData		= null;
 		}
 
@@ -215,6 +216,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 			tile.properties.Merge(data.BaseProperties, true);
 			tile.properties.Merge(data.Properties, true);
+			tile.properties.BaseProperties	= data.Properties;
 
 			return tile;
 		}

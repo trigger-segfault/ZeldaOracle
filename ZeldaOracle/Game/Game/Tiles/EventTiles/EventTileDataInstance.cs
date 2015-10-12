@@ -6,12 +6,12 @@ using System.Reflection;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Collision;
-using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles.EventTiles {
 	
-	public class EventTileDataInstance {
+	public class EventTileDataInstance : IPropertyObject {
 
 		private Room			room;
 		private Point2I			position;
@@ -28,6 +28,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			this.position			= Point2I.Zero;
 			this.data				= null;
 			this.modifiedProperties	= new Properties();
+			this.modifiedProperties.PropertyObject = this;
 		}
 
 		public EventTileDataInstance(EventTileData tileData, Point2I position) {
@@ -35,6 +36,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			this.position			= position;
 			this.data				= tileData;
 			this.modifiedProperties	= new Properties();
+			this.modifiedProperties.PropertyObject = this;
 			this.modifiedProperties.BaseProperties = tileData.Properties;
 		}
 		
@@ -58,9 +60,12 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			set { position = value; }
 		}
 
-		public Properties ModifiedProperties {
+		public Properties Properties {
 			get { return modifiedProperties; }
-			set { modifiedProperties = value; }
+			set {
+				modifiedProperties = value;
+				modifiedProperties.PropertyObject = this;
+			}
 		}
 
 

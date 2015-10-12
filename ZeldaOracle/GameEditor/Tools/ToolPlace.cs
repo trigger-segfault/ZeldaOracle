@@ -75,25 +75,57 @@ namespace ZeldaEditor.Tools {
 		public override void OnMouseDown(MouseEventArgs e) {
 			base.OnMouseDown(e);
 
-			if (EditorControl.EventMode && e.Button == MouseButtons.Left) {
-				//EventTileData eventTile = Resources.GetResource<EventTileData>("warp");
-				EventTileData eventTile = Resources.GetResource<EventTileData>("npc");
+			Point2I mousePos	= new Point2I(e.X, e.Y);
+			Room room			= LevelDisplayControl.SampleRoom(mousePos);
+			Point2I tileCoord	= LevelDisplayControl.SampleTileCoordinates(mousePos);
 
-				Point2I mousePos	= new Point2I(e.X, e.Y);
-				Room	room		= LevelDisplayControl.SampleRoom(mousePos);
-				
-				if (room != null) {
-					Point2I roomPos = LevelDisplayControl.GetRoomDrawPosition(room);
-					Point2I pos = (mousePos - roomPos) / 8;
-					pos *= 8;
-					//Point2I tileCoord = LevelDisplayControl.SampleTileCoordinates(mousePos);
-					room.CreateEventTile(eventTile, pos);
+			if (EditorControl.EventMode) {
+				if (EditorControl.EventMode && e.Button == MouseButtons.Left) {
+					EventTileData eventTile = Resources.GetResource<EventTileData>("warp");
+					//EventTileData eventTile = Resources.GetResource<EventTileData>("npc");
+
+					//Point2I mousePos	= new Point2I(e.X, e.Y);
+					//Room room		= LevelDisplayControl.SampleRoom(mousePos);
+
+					if (room != null) {
+						Point2I roomPos = LevelDisplayControl.GetRoomDrawPosition(room);
+						Point2I pos = (mousePos - roomPos) / 8;
+						pos *= 8;
+						//Point2I tileCoord = LevelDisplayControl.SampleTileCoordinates(mousePos);
+						room.CreateEventTile(eventTile, pos);
+					}
+				}
+				else if (EditorControl.EventMode && e.Button == MouseButtons.Right) {
+					EventTileDataInstance eventTile = LevelDisplayControl.SampleEventTile(new Point2I(e.X, e.Y));
+					if (eventTile != null) {
+						eventTile.Room.RemoveEventTile(eventTile);
+					}
+				}
+				else if (e.Button == MouseButtons.Middle) {
+					// Select events.
+					EventTileDataInstance selectedEventTile = LevelDisplayControl.SampleEventTile(mousePos);
+
+					if (selectedEventTile != null) {
+						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
+						EditorControl.PropertyGridControl.OpenProperties(selectedEventTile.Properties, selectedEventTile);
+					}
+					else {
+						EditorControl.PropertyGridControl.CloseProperties();
+					}
 				}
 			}
-			else if (EditorControl.EventMode && e.Button == MouseButtons.Right) {
-				EventTileDataInstance eventTile = LevelDisplayControl.SampleEventTile(new Point2I(e.X, e.Y));
-				if (eventTile != null) {
-					eventTile.Room.RemoveEventTile(eventTile);
+			else {
+				if (e.Button == MouseButtons.Middle) {
+					// Select tiles.
+					TileDataInstance selectedTile = room.GetTile(tileCoord, editorControl.CurrentLayer);
+
+					if (selectedTile != null) {
+						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
+						EditorControl.PropertyGridControl.OpenProperties(selectedTile.Properties, selectedTile);
+					}
+					else {
+						EditorControl.PropertyGridControl.CloseProperties();
+					}
 				}
 			}
 		}

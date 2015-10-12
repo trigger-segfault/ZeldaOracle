@@ -7,7 +7,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
@@ -263,7 +263,7 @@ namespace ZeldaOracle.Game.Control {
 
 			// Transition to the room.
 			if (level.ContainsRoom(nextLocation)) {
-				Room nextRoom = level.GetRoom(nextLocation);
+				Room nextRoom = level.GetRoomAt(nextLocation);
 				TransitionToRoom(nextRoom, new RoomTransitionPush(direction));
 			}
 		}

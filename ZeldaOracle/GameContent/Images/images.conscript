@@ -46,20 +46,23 @@ IMAGE tileset_overworld;
 	VARIANT forest		"Tiles/overworld_forest";
 	END;
 
-IMAGE tileset_interior;
+IMAGE tileset_interior2;
 	VARIANT interior	"Tiles/tileset_interior";
 	END;
 	
 IMAGE tileset_water;
-	VARIANT present		"Tiles/tileset_water_present";
+	VARIANT present				"Tiles/tileset_water_present";
+	VARIANT interior_present	"Tiles/tileset_water_interior_present";
 	END;
 
 IMAGE tileset_water_extras_8x8;
-	VARIANT present		"Tiles/tileset_water_present_extras_8x8";
+	VARIANT present				"Tiles/tileset_water_present_extras_8x8";
+	VARIANT interior_present	"Tiles/tileset_water_interior_present_extras_8x8";
 	END;
 
 IMAGE tileset_water_extras_16x16;
-	VARIANT present		"Tiles/tileset_water_present_extras_16x16";
+	VARIANT present				"Tiles/tileset_water_present_extras_16x16";
+	VARIANT interior_present	"Tiles/tileset_water_interior_present_extras_16x16";
 	END;
 
 IMAGE tileset_land;
@@ -78,20 +81,26 @@ IMAGE tileset_forest;
 	VARIANT present		"Tiles/tileset_forest_present";
 	END;
 
-IMAGE tileset_structures;
-	VARIANT present		"Tiles/tileset_structures_present";
+IMAGE tileset_town;
+	VARIANT present		"Tiles/tileset_town_present";
 	END;
 
-IMAGE tileset_structures_extras_16x16;
-	VARIANT present		"Tiles/tileset_structures_present_extras_16x16";
+IMAGE tileset_town_extras_16x16;
+	VARIANT present		"Tiles/tileset_town_present_extras_16x16";
 	END;
 	
 IMAGE tileset_objects;
-	VARIANT present		"Tiles/tileset_objects_present";
+	VARIANT present				"Tiles/tileset_objects_present";
+	VARIANT interior_present	"Tiles/tileset_objects_interior_present";
 	END;
 
 IMAGE tileset_objects_extras_16x16;
-	VARIANT present		"Tiles/tileset_objects_present_extras_16x16";
+	VARIANT present				"Tiles/tileset_objects_present_extras_16x16";
+	VARIANT interior_present	"Tiles/tileset_objects_interior_present_extras_16x16";
+	END;
+
+IMAGE tileset_interior;
+	VARIANT interior_present	"Tiles/tileset_interior_interior_present";
 	END;
 
 #==============================================================

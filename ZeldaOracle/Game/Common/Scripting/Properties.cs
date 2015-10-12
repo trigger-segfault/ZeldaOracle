@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ZeldaOracle.Common.Properties {
+namespace ZeldaOracle.Common.Scripting {
 
 	public class Properties {
 
 		// The property map.
 		private Dictionary<string, Property> map;
 		private Properties baseProperties;
+		private IPropertyObject propertyObject;
 
 
 		//-----------------------------------------------------------------------------
@@ -18,8 +19,8 @@ namespace ZeldaOracle.Common.Properties {
 
 		// Construct an empty properties list.
 		public Properties() {
-			map = new Dictionary<string, Property>();
-			baseProperties = null;
+			this.map			= new Dictionary<string, Property>();
+			this.baseProperties	= null;
 		}
 
 
@@ -256,6 +257,7 @@ namespace ZeldaOracle.Common.Properties {
 		// Add a new property to the map.
 		public void Add(Property property) {
 			map[property.Name] = property;
+			map[property.Name].Properties = this;
 			// TODO: Check if property is not equal to default.
 		}
 
@@ -265,8 +267,15 @@ namespace ZeldaOracle.Common.Properties {
 
 			for (int i = 0; i < keys.Length; ++i) {
 				string key = keys[i];
-				if (replaceExisting || !map.ContainsKey(key))
+				PropertyDocumentation docs = null;
+				if (replaceExisting && map.ContainsKey(key))
+					docs = map[key].Documentation;
+				if (replaceExisting || !map.ContainsKey(key)) {
 					map[key] = new Property(other.map[key]);
+					map[key].Properties = this;
+					if (replaceExisting && map.ContainsKey(key))
+						map[key].Documentation = docs;
+				}
 			}
 		}
 
@@ -277,26 +286,75 @@ namespace ZeldaOracle.Common.Properties {
 		
 		// Sets a propertiy's value, creating it if it doesn't already exist.
 		// This can modify an existing property or create a new property.
-		
-		public Property Set(string name, Property property) {
-			map[name] = property;
+
+		private Property SetProperty(string name, Property property, bool setBase) {
+			if (setBase) {
+				if (map.ContainsKey(name)) {
+					map[name].SetValues(property);
+				}
+				else {
+					map[name] = property;
+					map[name].Properties = this;
+				}
+				if (baseProperties != null)
+					baseProperties.SetProperty(name, property, false);
+			}
+			else {
+				if (map.ContainsKey(name)) {
+					map[name].SetValues(property);
+				}
+				else if (baseProperties != null && baseProperties.map.ContainsKey(name)) {
+					map[name] = new Property(baseProperties.map[name]);
+					map[name].Properties = this;
+					map[name].SetValues(property);
+				}
+				else {
+					map[name] = property;
+					map[name].Properties = this;
+				}
+			}
 			return property;
 		}
 
+		public Property Set(string name, Property property) {
+			return SetProperty(name, property, false);
+		}
+
 		public Property Set(string name, string value) {
-			return Set(name, Property.CreateString(name, value));
+			return SetProperty(name, Property.CreateString(name, value), false);
 		}
 		
 		public Property Set(string name, int value) {
-			return Set(name, Property.CreateInt(name, value));
+			return SetProperty(name, Property.CreateInt(name, value), false);
 		}
 		
 		public Property Set(string name, float value) {
-			return Set(name, Property.CreateFloat(name, value));
+			return SetProperty(name, Property.CreateFloat(name, value), false);
 		}
 		
 		public Property Set(string name, bool value) {
-			return Set(name, Property.CreateBool(name, value));
+			return SetProperty(name, Property.CreateBool(name, value), false);
+		}
+
+
+		public Property SetBase(string name, Property property) {
+			return SetProperty(name, property, true);
+		}
+
+		public Property SetBase(string name, string value) {
+			return SetProperty(name, Property.CreateString(name, value), true);
+		}
+
+		public Property SetBase(string name, int value) {
+			return SetProperty(name, Property.CreateInt(name, value), true);
+		}
+
+		public Property SetBase(string name, float value) {
+			return SetProperty(name, Property.CreateFloat(name, value), true);
+		}
+
+		public Property SetBase(string name, bool value) {
+			return SetProperty(name, Property.CreateBool(name, value), true);
 		}
 		
 
@@ -418,6 +476,11 @@ namespace ZeldaOracle.Common.Properties {
 		public Properties BaseProperties {
 			get { return baseProperties; }
 			set { baseProperties = value; }
+		}
+
+		public IPropertyObject PropertyObject {
+			get { return propertyObject; }
+			set { propertyObject = value; }
 		}
 
 	}

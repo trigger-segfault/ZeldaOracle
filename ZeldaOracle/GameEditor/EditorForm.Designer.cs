@@ -97,7 +97,15 @@
 			this.statusBarLabelTileLoc = new System.Windows.Forms.ToolStripStatusLabel();
 			this.splitContainerLevelsAndWorld = new System.Windows.Forms.SplitContainer();
 			this.panelLevels = new System.Windows.Forms.Panel();
-			this.treeViewLevels = new System.Windows.Forms.TreeView();
+			this.treeViewWorld = new System.Windows.Forms.TreeView();
+			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+			this.toolStrip4 = new System.Windows.Forms.ToolStrip();
+			this.buttonTreeViewNewLevel = new System.Windows.Forms.ToolStripButton();
+			this.buttonTreeViewNewArea = new System.Windows.Forms.ToolStripButton();
+			this.buttonTreeViewDuplicate = new System.Windows.Forms.ToolStripButton();
+			this.buttonTreeViewDelete = new System.Windows.Forms.ToolStripButton();
+			this.buttonTreeViewMoveUp = new System.Windows.Forms.ToolStripButton();
+			this.buttonTreeViewMoveDown = new System.Windows.Forms.ToolStripButton();
 			this.levelTabControl = new System.Windows.Forms.TabControl();
 			this.levelTabPageTiles = new System.Windows.Forms.TabPage();
 			this.splitContainerWorldAndTiles = new System.Windows.Forms.SplitContainer();
@@ -112,11 +120,17 @@
 			this.propertyGrid = new System.Windows.Forms.PropertyGrid();
 			this.levelTabPageEvents = new System.Windows.Forms.TabPage();
 			this.contextMenuLevelSelect = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.editToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.duplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.resizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.shiftToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
 			this.panelWorldTabEvents = new System.Windows.Forms.Panel();
+			this.contextMenuGeneral = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.editPropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.renameToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.toolStrip2.SuspendLayout();
@@ -126,6 +140,7 @@
 			this.splitContainerLevelsAndWorld.Panel2.SuspendLayout();
 			this.splitContainerLevelsAndWorld.SuspendLayout();
 			this.panelLevels.SuspendLayout();
+			this.toolStrip4.SuspendLayout();
 			this.levelTabControl.SuspendLayout();
 			this.levelTabPageTiles.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerWorldAndTiles)).BeginInit();
@@ -140,6 +155,7 @@
 			this.toolStrip3.SuspendLayout();
 			this.panelProperties.SuspendLayout();
 			this.contextMenuLevelSelect.SuspendLayout();
+			this.contextMenuGeneral.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// menuStrip1
@@ -790,29 +806,119 @@
 			// 
 			this.splitContainerLevelsAndWorld.Panel2.Controls.Add(this.levelTabControl);
 			this.splitContainerLevelsAndWorld.Size = new System.Drawing.Size(875, 424);
-			this.splitContainerLevelsAndWorld.SplitterDistance = 167;
+			this.splitContainerLevelsAndWorld.SplitterDistance = 184;
 			this.splitContainerLevelsAndWorld.TabIndex = 4;
 			// 
 			// panelLevels
 			// 
 			this.panelLevels.AutoScroll = true;
 			this.panelLevels.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panelLevels.Controls.Add(this.treeViewLevels);
+			this.panelLevels.Controls.Add(this.treeViewWorld);
+			this.panelLevels.Controls.Add(this.toolStrip4);
 			this.panelLevels.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panelLevels.Location = new System.Drawing.Point(0, 0);
 			this.panelLevels.Name = "panelLevels";
-			this.panelLevels.Size = new System.Drawing.Size(167, 424);
+			this.panelLevels.Size = new System.Drawing.Size(184, 424);
 			this.panelLevels.TabIndex = 0;
 			// 
-			// treeViewLevels
+			// treeViewWorld
 			// 
-			this.treeViewLevels.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.treeViewLevels.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.treeViewLevels.LabelEdit = true;
-			this.treeViewLevels.Location = new System.Drawing.Point(0, 0);
-			this.treeViewLevels.Name = "treeViewLevels";
-			this.treeViewLevels.Size = new System.Drawing.Size(165, 422);
-			this.treeViewLevels.TabIndex = 0;
+			this.treeViewWorld.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.treeViewWorld.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.treeViewWorld.ImageIndex = 0;
+			this.treeViewWorld.ImageList = this.imageList1;
+			this.treeViewWorld.Location = new System.Drawing.Point(0, 25);
+			this.treeViewWorld.Name = "treeViewWorld";
+			this.treeViewWorld.SelectedImageIndex = 0;
+			this.treeViewWorld.Size = new System.Drawing.Size(182, 397);
+			this.treeViewWorld.TabIndex = 0;
+			this.treeViewWorld.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewLevels_AfterSelect);
+			this.treeViewWorld.MouseClick += new System.Windows.Forms.MouseEventHandler(this.treeViewLevels_MouseClick);
+			// 
+			// imageList1
+			// 
+			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+			this.imageList1.Images.SetKeyName(0, "globe-green.png");
+			this.imageList1.Images.SetKeyName(1, "maps-stack.png");
+			this.imageList1.Images.SetKeyName(2, "map.png");
+			this.imageList1.Images.SetKeyName(3, "zones-stack.png");
+			this.imageList1.Images.SetKeyName(4, "zone.png");
+			this.imageList1.Images.SetKeyName(5, "scripts-text.png");
+			this.imageList1.Images.SetKeyName(6, "script-text.png");
+			// 
+			// toolStrip4
+			// 
+			this.toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.buttonTreeViewNewLevel,
+            this.buttonTreeViewNewArea,
+            this.buttonTreeViewDuplicate,
+            this.buttonTreeViewDelete,
+            this.buttonTreeViewMoveUp,
+            this.buttonTreeViewMoveDown});
+			this.toolStrip4.Location = new System.Drawing.Point(0, 0);
+			this.toolStrip4.Name = "toolStrip4";
+			this.toolStrip4.Size = new System.Drawing.Size(182, 25);
+			this.toolStrip4.TabIndex = 1;
+			this.toolStrip4.Text = "toolStrip4";
+			// 
+			// buttonTreeViewNewLevel
+			// 
+			this.buttonTreeViewNewLevel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonTreeViewNewLevel.Image = ((System.Drawing.Image)(resources.GetObject("buttonTreeViewNewLevel.Image")));
+			this.buttonTreeViewNewLevel.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonTreeViewNewLevel.Name = "buttonTreeViewNewLevel";
+			this.buttonTreeViewNewLevel.Size = new System.Drawing.Size(23, 22);
+			this.buttonTreeViewNewLevel.Text = "New Level";
+			this.buttonTreeViewNewLevel.Click += new System.EventHandler(this.buttonTreeViewNewLevel_Click);
+			// 
+			// buttonTreeViewNewArea
+			// 
+			this.buttonTreeViewNewArea.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonTreeViewNewArea.Image = ((System.Drawing.Image)(resources.GetObject("buttonTreeViewNewArea.Image")));
+			this.buttonTreeViewNewArea.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonTreeViewNewArea.Name = "buttonTreeViewNewArea";
+			this.buttonTreeViewNewArea.Size = new System.Drawing.Size(23, 22);
+			this.buttonTreeViewNewArea.Text = "New Area";
+			// 
+			// buttonTreeViewDuplicate
+			// 
+			this.buttonTreeViewDuplicate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonTreeViewDuplicate.Image = ((System.Drawing.Image)(resources.GetObject("buttonTreeViewDuplicate.Image")));
+			this.buttonTreeViewDuplicate.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonTreeViewDuplicate.Name = "buttonTreeViewDuplicate";
+			this.buttonTreeViewDuplicate.Size = new System.Drawing.Size(23, 22);
+			this.buttonTreeViewDuplicate.Text = "Duplicate";
+			// 
+			// buttonTreeViewDelete
+			// 
+			this.buttonTreeViewDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonTreeViewDelete.Image = ((System.Drawing.Image)(resources.GetObject("buttonTreeViewDelete.Image")));
+			this.buttonTreeViewDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonTreeViewDelete.Name = "buttonTreeViewDelete";
+			this.buttonTreeViewDelete.Size = new System.Drawing.Size(23, 22);
+			this.buttonTreeViewDelete.Text = "Delete";
+			this.buttonTreeViewDelete.Click += new System.EventHandler(this.buttonTreeViewDelete_Click);
+			// 
+			// buttonTreeViewMoveUp
+			// 
+			this.buttonTreeViewMoveUp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonTreeViewMoveUp.Image = ((System.Drawing.Image)(resources.GetObject("buttonTreeViewMoveUp.Image")));
+			this.buttonTreeViewMoveUp.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonTreeViewMoveUp.Name = "buttonTreeViewMoveUp";
+			this.buttonTreeViewMoveUp.Size = new System.Drawing.Size(23, 22);
+			this.buttonTreeViewMoveUp.Text = "Move Up";
+			this.buttonTreeViewMoveUp.Click += new System.EventHandler(this.buttonMoveUp_Click);
+			// 
+			// buttonTreeViewMoveDown
+			// 
+			this.buttonTreeViewMoveDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonTreeViewMoveDown.Image = ((System.Drawing.Image)(resources.GetObject("buttonTreeViewMoveDown.Image")));
+			this.buttonTreeViewMoveDown.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonTreeViewMoveDown.Name = "buttonTreeViewMoveDown";
+			this.buttonTreeViewMoveDown.Size = new System.Drawing.Size(23, 22);
+			this.buttonTreeViewMoveDown.Text = "Move Down";
+			this.buttonTreeViewMoveDown.Click += new System.EventHandler(this.buttonTreeViewMoveDown_Click);
 			// 
 			// levelTabControl
 			// 
@@ -822,7 +928,7 @@
 			this.levelTabControl.Location = new System.Drawing.Point(0, 0);
 			this.levelTabControl.Name = "levelTabControl";
 			this.levelTabControl.SelectedIndex = 0;
-			this.levelTabControl.Size = new System.Drawing.Size(704, 424);
+			this.levelTabControl.Size = new System.Drawing.Size(687, 424);
 			this.levelTabControl.TabIndex = 0;
 			// 
 			// levelTabPageTiles
@@ -831,7 +937,7 @@
 			this.levelTabPageTiles.Location = new System.Drawing.Point(4, 22);
 			this.levelTabPageTiles.Name = "levelTabPageTiles";
 			this.levelTabPageTiles.Padding = new System.Windows.Forms.Padding(3);
-			this.levelTabPageTiles.Size = new System.Drawing.Size(696, 398);
+			this.levelTabPageTiles.Size = new System.Drawing.Size(679, 398);
 			this.levelTabPageTiles.TabIndex = 1;
 			this.levelTabPageTiles.Text = "Tiles";
 			this.levelTabPageTiles.UseVisualStyleBackColor = true;
@@ -850,8 +956,8 @@
 			// splitContainerWorldAndTiles.Panel2
 			// 
 			this.splitContainerWorldAndTiles.Panel2.Controls.Add(this.splitContainerTilesAndProperties);
-			this.splitContainerWorldAndTiles.Size = new System.Drawing.Size(690, 392);
-			this.splitContainerWorldAndTiles.SplitterDistance = 396;
+			this.splitContainerWorldAndTiles.Size = new System.Drawing.Size(673, 392);
+			this.splitContainerWorldAndTiles.SplitterDistance = 379;
 			this.splitContainerWorldAndTiles.TabIndex = 0;
 			// 
 			// panelWorld
@@ -861,7 +967,7 @@
 			this.panelWorld.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panelWorld.Location = new System.Drawing.Point(0, 0);
 			this.panelWorld.Name = "panelWorld";
-			this.panelWorld.Size = new System.Drawing.Size(396, 392);
+			this.panelWorld.Size = new System.Drawing.Size(379, 392);
 			this.panelWorld.TabIndex = 0;
 			// 
 			// splitContainerTilesAndProperties
@@ -944,13 +1050,14 @@
 			this.propertyGrid.Name = "propertyGrid";
 			this.propertyGrid.Size = new System.Drawing.Size(288, 214);
 			this.propertyGrid.TabIndex = 0;
+			this.propertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid_PropertyValueChanged);
 			// 
 			// levelTabPageEvents
 			// 
 			this.levelTabPageEvents.Location = new System.Drawing.Point(4, 22);
 			this.levelTabPageEvents.Name = "levelTabPageEvents";
 			this.levelTabPageEvents.Padding = new System.Windows.Forms.Padding(3);
-			this.levelTabPageEvents.Size = new System.Drawing.Size(696, 398);
+			this.levelTabPageEvents.Size = new System.Drawing.Size(693, 398);
 			this.levelTabPageEvents.TabIndex = 2;
 			this.levelTabPageEvents.Text = "Unused";
 			this.levelTabPageEvents.UseVisualStyleBackColor = true;
@@ -958,29 +1065,61 @@
 			// contextMenuLevelSelect
 			// 
 			this.contextMenuLevelSelect.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.deleteToolStripMenuItem,
+            this.editToolStripMenuItem1,
             this.renameToolStripMenuItem,
-            this.duplicateToolStripMenuItem});
+            this.duplicateToolStripMenuItem,
+            this.deleteToolStripMenuItem,
+            this.resizeToolStripMenuItem,
+            this.shiftToolStripMenuItem});
 			this.contextMenuLevelSelect.Name = "contextMenuLevelSelect";
-			this.contextMenuLevelSelect.Size = new System.Drawing.Size(125, 70);
+			this.contextMenuLevelSelect.Size = new System.Drawing.Size(125, 136);
 			// 
-			// deleteToolStripMenuItem
+			// editToolStripMenuItem1
 			// 
-			this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-			this.deleteToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
-			this.deleteToolStripMenuItem.Text = "Delete";
+			this.editToolStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("editToolStripMenuItem1.Image")));
+			this.editToolStripMenuItem1.Name = "editToolStripMenuItem1";
+			this.editToolStripMenuItem1.Size = new System.Drawing.Size(124, 22);
+			this.editToolStripMenuItem1.Text = "Edit";
 			// 
 			// renameToolStripMenuItem
 			// 
+			this.renameToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("renameToolStripMenuItem.Image")));
 			this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
 			this.renameToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
 			this.renameToolStripMenuItem.Text = "Rename";
+			this.renameToolStripMenuItem.Click += new System.EventHandler(this.renameToolStripMenuItem_Click);
 			// 
 			// duplicateToolStripMenuItem
 			// 
+			this.duplicateToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("duplicateToolStripMenuItem.Image")));
 			this.duplicateToolStripMenuItem.Name = "duplicateToolStripMenuItem";
 			this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
 			this.duplicateToolStripMenuItem.Text = "Duplicate";
+			this.duplicateToolStripMenuItem.Click += new System.EventHandler(this.duplicateToolStripMenuItem_Click);
+			// 
+			// deleteToolStripMenuItem
+			// 
+			this.deleteToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("deleteToolStripMenuItem.Image")));
+			this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+			this.deleteToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+			this.deleteToolStripMenuItem.Text = "Delete";
+			this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+			// 
+			// resizeToolStripMenuItem
+			// 
+			this.resizeToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("resizeToolStripMenuItem.Image")));
+			this.resizeToolStripMenuItem.Name = "resizeToolStripMenuItem";
+			this.resizeToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+			this.resizeToolStripMenuItem.Text = "Resize";
+			this.resizeToolStripMenuItem.Click += new System.EventHandler(this.resizeToolStripMenuItem_Click);
+			// 
+			// shiftToolStripMenuItem
+			// 
+			this.shiftToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("shiftToolStripMenuItem.Image")));
+			this.shiftToolStripMenuItem.Name = "shiftToolStripMenuItem";
+			this.shiftToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+			this.shiftToolStripMenuItem.Text = "Shift";
+			this.shiftToolStripMenuItem.Click += new System.EventHandler(this.shiftToolStripMenuItem_Click);
 			// 
 			// propertyGrid1
 			// 
@@ -999,6 +1138,30 @@
 			this.panelWorldTabEvents.Name = "panelWorldTabEvents";
 			this.panelWorldTabEvents.Size = new System.Drawing.Size(398, 392);
 			this.panelWorldTabEvents.TabIndex = 0;
+			// 
+			// contextMenuGeneral
+			// 
+			this.contextMenuGeneral.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.editPropertiesToolStripMenuItem,
+            this.renameToolStripMenuItem1});
+			this.contextMenuGeneral.Name = "contextMenuGeneral";
+			this.contextMenuGeneral.Size = new System.Drawing.Size(151, 48);
+			// 
+			// editPropertiesToolStripMenuItem
+			// 
+			this.editPropertiesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("editPropertiesToolStripMenuItem.Image")));
+			this.editPropertiesToolStripMenuItem.Name = "editPropertiesToolStripMenuItem";
+			this.editPropertiesToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+			this.editPropertiesToolStripMenuItem.Text = "Edit Properties";
+			this.editPropertiesToolStripMenuItem.Click += new System.EventHandler(this.editPropertiesToolStripMenuItem_Click);
+			// 
+			// renameToolStripMenuItem1
+			// 
+			this.renameToolStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("renameToolStripMenuItem1.Image")));
+			this.renameToolStripMenuItem1.Name = "renameToolStripMenuItem1";
+			this.renameToolStripMenuItem1.Size = new System.Drawing.Size(150, 22);
+			this.renameToolStripMenuItem1.Text = "Rename";
+			this.renameToolStripMenuItem1.Click += new System.EventHandler(this.renameToolStripMenuItem1_Click);
 			// 
 			// EditorForm
 			// 
@@ -1027,6 +1190,9 @@
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerLevelsAndWorld)).EndInit();
 			this.splitContainerLevelsAndWorld.ResumeLayout(false);
 			this.panelLevels.ResumeLayout(false);
+			this.panelLevels.PerformLayout();
+			this.toolStrip4.ResumeLayout(false);
+			this.toolStrip4.PerformLayout();
 			this.levelTabControl.ResumeLayout(false);
 			this.levelTabPageTiles.ResumeLayout(false);
 			this.splitContainerWorldAndTiles.Panel1.ResumeLayout(false);
@@ -1043,6 +1209,7 @@
 			this.toolStrip3.PerformLayout();
 			this.panelProperties.ResumeLayout(false);
 			this.contextMenuLevelSelect.ResumeLayout(false);
+			this.contextMenuGeneral.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1080,7 +1247,6 @@
 		private System.Windows.Forms.ToolStripComboBox comboBoxTilesets;
 		private System.Windows.Forms.Panel panelTiles2;
 		private System.Windows.Forms.ToolStripComboBox comboBoxZones;
-		private System.Windows.Forms.TreeView treeViewLevels;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripButton buttonToolPointer;
 		private System.Windows.Forms.ToolStripButton buttonToolPlace;
@@ -1144,5 +1310,20 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
 		private System.Windows.Forms.ToolStripMenuItem cycleLayerUpToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem cycleLayerUpToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem resizeToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem shiftToolStripMenuItem;
+		private System.Windows.Forms.ToolStrip toolStrip4;
+		private System.Windows.Forms.ToolStripButton buttonTreeViewNewLevel;
+		private System.Windows.Forms.ToolStripButton buttonTreeViewNewArea;
+		private System.Windows.Forms.ToolStripButton buttonTreeViewDuplicate;
+		private System.Windows.Forms.ToolStripButton buttonTreeViewDelete;
+		private System.Windows.Forms.ImageList imageList1;
+		private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem1;
+		private System.Windows.Forms.ContextMenuStrip contextMenuGeneral;
+		private System.Windows.Forms.ToolStripMenuItem editPropertiesToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem1;
+		public System.Windows.Forms.TreeView treeViewWorld;
+		public System.Windows.Forms.ToolStripButton buttonTreeViewMoveDown;
+		public System.Windows.Forms.ToolStripButton buttonTreeViewMoveUp;
 	}
 }

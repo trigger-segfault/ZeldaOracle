@@ -22,6 +22,7 @@ using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
 using Song = ZeldaOracle.Common.Audio.Song;
 using Playlist = ZeldaOracle.Common.Audio.Playlist;
+using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Common.Content {
 
@@ -77,6 +78,7 @@ namespace ZeldaOracle.Common.Content {
 		private static Dictionary<string, TileData> tileData;
 		private static Dictionary<string, EventTileData> eventTileData;
 		private static Dictionary<string, Zone> zones;
+		private static Dictionary<string, PropertyAction> propertyActions;
 
 		// SOUNDS:
 		// The collection of loaded sound effects.
@@ -156,6 +158,8 @@ namespace ZeldaOracle.Common.Content {
 			eventTileData		= new Dictionary<string, EventTileData>();
 			zones				= new Dictionary<string, Zone>();
 
+			propertyActions		= new Dictionary<string, PropertyAction>();
+
 			// Settings
 			verboseOutput		= false;
 
@@ -176,6 +180,7 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries[typeof(TileData)]			= tileData;
 			resourceDictionaries[typeof(EventTileData)]		= eventTileData;
 			resourceDictionaries[typeof(Zone)]				= zones;
+			resourceDictionaries[typeof(PropertyAction)]	= propertyActions;
 		}
 
 	
