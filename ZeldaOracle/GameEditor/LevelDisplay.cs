@@ -102,7 +102,7 @@ namespace ZeldaEditor {
 				return null;
 			Point2I roomCoord = SampleRoomCoordinates(point, clamp);
 			if (Level.ContainsRoom(roomCoord))
-				return Level.GetRoom(roomCoord);
+				return Level.GetRoomAt(roomCoord);
 			return null;
 		}
 		
@@ -320,7 +320,7 @@ namespace ZeldaEditor {
 					for (int y = 0; y < Level.Height; y++) {
 						g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
 						g.Translate((Vector2F)(new Point2I(x, y) * ((Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing)));
-						DrawRoom(g, Level.GetRoom(x, y));
+						DrawRoom(g, Level.GetRoomAt(x, y));
 						g.ResetTranslation();
 					}
 				}

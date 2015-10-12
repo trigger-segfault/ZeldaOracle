@@ -18,6 +18,7 @@ using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
 using ZeldaEditor.Tools;
+using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaEditor.Control {
 
@@ -167,7 +168,7 @@ namespace ZeldaEditor.Control {
 			editorForm.Text = "Oracle Engine Editor - " + worldFileName;
 			if (hasMadeChanges)
 				editorForm.Text += "*";
-			editorForm.Text += " [" + level.Name + "]";
+			editorForm.Text += " [" + level.Properties.GetString("id") + "]";
 		}
 
 
@@ -198,16 +199,8 @@ namespace ZeldaEditor.Control {
 			if (world.Levels.Count > 0)
 				OpenLevel(0);
 
-			// Populate the level list. (tree view).
-			TreeNode worldNode = new TreeNode("World Name");
-			editorForm.LevelTreeView.Nodes.Clear();
-			editorForm.LevelTreeView.Nodes.Add(worldNode);
-			for (int i = 0; i < world.Levels.Count; i++) {
-				TreeNode levelNode = new TreeNode(world.Levels[i].Name);
-				worldNode.Nodes.Add(levelNode);
-				levelNode.ContextMenuStrip = editorForm.ContextMenuLevelSelect;
-			}
-			worldNode.Expand();
+			RefreshWorldTreeView();
+			editorForm.LevelTreeView.ExpandAll();
 		}
 
 		// Close the world file.
@@ -235,12 +228,14 @@ namespace ZeldaEditor.Control {
 			world.Levels.Add(level);
 			
 			// Add node in level list.
-			TreeNode levelNode = new TreeNode(level.Name);
-			editorForm.LevelTreeView.Nodes[0].Nodes.Add(levelNode);
-			levelNode.ContextMenuStrip = editorForm.ContextMenuLevelSelect;
+			//TreeNode levelNode = new TreeNode(level.Name);
+			//editorForm.LevelTreeView.Nodes[0].Nodes.Add(levelNode);
+			//levelNode.ContextMenuStrip = editorForm.ContextMenuLevelSelect;
+			RefreshWorldTreeView();
 
 			if (openLevel)
 				OpenLevel(world.Levels.Count - 1);
+
 		}
 
 		public void ChangeTileset(string name) {
@@ -300,13 +295,57 @@ namespace ZeldaEditor.Control {
 		}
 
 
+		public void RefreshWorldTreeView() {
+			TreeView worldTreeView = editorForm.LevelTreeView;
+			TreeNode worldNode, levelsNode, areasNode, scriptsNode;
+			if (world == null) {
+				worldTreeView.Nodes.Clear();
+			}
+			else {
+				if (worldTreeView.Nodes.Count == 0) {
+					worldNode = new TreeNode(world.Properties.GetString("id"), 0, 0);
+					levelsNode = new TreeNode("Levels", 1, 1);
+					areasNode = new TreeNode("Areas", 3, 3);
+					scriptsNode = new TreeNode("Scripts", 5, 5);
+					worldNode.Name = "world";
+					levelsNode.Name = "levels";
+					areasNode.Name = "areas";
+					scriptsNode.Name = "scripts";
+					worldTreeView.Nodes.Add(worldNode);
+					worldNode.Nodes.Add(levelsNode);
+					worldNode.Nodes.Add(areasNode);
+					worldNode.Nodes.Add(scriptsNode);
+
+					worldNode.ContextMenuStrip	= editorForm.ContenxtMenuGeneral;
+				}
+				else {
+					worldNode = worldTreeView.Nodes[0];
+					levelsNode = worldNode.Nodes[0];
+					areasNode = worldNode.Nodes[1];
+					scriptsNode = worldNode.Nodes[2];
+
+					levelsNode.Nodes.Clear();
+					areasNode.Nodes.Clear();
+					scriptsNode.Nodes.Clear();
+				}
+				worldNode.Text = world.Properties.GetString("id");
+				for (int i = 0; i < world.Levels.Count; i++) {
+					TreeNode levelNode = new TreeNode(world.Levels[i].Properties.GetString("id"), 2, 2);
+					levelNode.Name = "level";
+					levelsNode.Nodes.Add(levelNode);
+					levelNode.ContextMenuStrip = editorForm.ContextMenuLevelSelect;
+				}
+			}
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Tiles
 		//-----------------------------------------------------------------------------
 
 		// Open the properties for the given tile in the property grid.
-		public void OpenTileProperties(TileDataInstance tile) {
-			propertyGridControl.OpenProperties(tile.Properties, tile);
+		public void OpenObjectProperties(IPropertyObject propertyObject) {
+			propertyGridControl.OpenProperties(propertyObject.Properties, propertyObject);
 		}
 
 

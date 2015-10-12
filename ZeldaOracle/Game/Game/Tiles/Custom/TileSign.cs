@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Game.Tiles {
 

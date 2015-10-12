@@ -46,7 +46,7 @@ IMAGE tileset_overworld;
 	VARIANT forest		"Tiles/overworld_forest";
 	END;
 
-IMAGE tileset_interior;
+IMAGE tileset_interior2;
 	VARIANT interior	"Tiles/tileset_interior";
 	END;
 	
@@ -99,7 +99,7 @@ IMAGE tileset_objects_extras_16x16;
 	VARIANT interior_present	"Tiles/tileset_objects_interior_present_extras_16x16";
 	END;
 
-IMAGE tileset_interior2;
+IMAGE tileset_interior;
 	VARIANT interior_present	"Tiles/tileset_interior_interior_present";
 	END;
 

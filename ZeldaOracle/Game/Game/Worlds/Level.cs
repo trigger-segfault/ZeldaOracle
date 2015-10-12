@@ -3,12 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Content;
 
 namespace ZeldaOracle.Game.Worlds {
 	public class Level : IPropertyObject {
-		private string		name;
 		private World		world;
 		private Point2I		roomSize;		// The size in tiles of each room in the level.
 		private int			roomLayerCount; // The number of tile layers for each room in the level.
@@ -23,7 +22,6 @@ namespace ZeldaOracle.Game.Worlds {
 		//-----------------------------------------------------------------------------
 		
 		public Level(string name, int width, int height, int layerCount, Point2I roomSize, Zone zone) {
-			this.name			= name;
 			this.world			= null;
 			this.roomSize		= roomSize;
 			this.roomLayerCount = layerCount;
@@ -31,12 +29,17 @@ namespace ZeldaOracle.Game.Worlds {
 			this.zone			= zone;
 			this.properties		= new Properties();
 			this.properties.PropertyObject = this;
+			this.properties.BaseProperties = new Properties();
+
+			this.properties.BaseProperties.Set("id", "")
+				.SetDocumentation("ID", "", "", "The id used to refer to this level.", false);
+
+			this.properties.Set("id", name);
 
 			Resize(new Point2I(width, height));
 		}
 
 		public Level(int width, int height, Point2I roomSize) {
-			this.name			= "";
 			this.world			= null;
 			this.roomSize		= roomSize;
 			this.roomLayerCount = GameSettings.DEFAULT_TILE_LAYER_COUNT;
@@ -44,6 +47,10 @@ namespace ZeldaOracle.Game.Worlds {
 			this.zone			= Resources.GetResource<Zone>("");
 			this.properties		= new Properties();
 			this.properties.PropertyObject = this;
+			this.properties.BaseProperties = new Properties();
+
+			this.properties.BaseProperties.Set("id", "")
+				.SetDocumentation("ID", "", "", "The id used to refer to this level.", false);
 
 			Resize(new Point2I(width, height));
 		}
@@ -57,11 +64,11 @@ namespace ZeldaOracle.Game.Worlds {
 			return (location.X >= 0 && location.Y >= 0 && location.X < dimensions.X && location.Y < dimensions.Y);
 		}
 
-		public Room GetRoom(int x, int y) {
-			return GetRoom(new Point2I(x, y));
+		public Room GetRoomAt(int x, int y) {
+			return GetRoomAt(new Point2I(x, y));
 		}
 
-		public Room GetRoom(Point2I location) {
+		public Room GetRoomAt(Point2I location) {
 			if (!ContainsRoom(location))
 				return null;
 			return rooms[location.X, location.Y];
@@ -112,11 +119,6 @@ namespace ZeldaOracle.Game.Worlds {
 
 		public World World {
 			get { return world; }
-		}
-		
-		public string Name {
-			get { return name; }
-			set { name = value; }
 		}
 		
 		public Room[,] Rooms {

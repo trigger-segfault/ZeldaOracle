@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ZeldaOracle.Common.Properties {
+namespace ZeldaOracle.Common.Scripting {
 
 	public class Properties {
 
@@ -267,9 +267,14 @@ namespace ZeldaOracle.Common.Properties {
 
 			for (int i = 0; i < keys.Length; ++i) {
 				string key = keys[i];
+				PropertyDocumentation docs = null;
+				if (replaceExisting && map.ContainsKey(key))
+					docs = map[key].Documentation;
 				if (replaceExisting || !map.ContainsKey(key)) {
 					map[key] = new Property(other.map[key]);
 					map[key].Properties = this;
+					if (replaceExisting && map.ContainsKey(key))
+						map[key].Documentation = docs;
 				}
 			}
 		}
@@ -291,7 +296,8 @@ namespace ZeldaOracle.Common.Properties {
 					map[name] = property;
 					map[name].Properties = this;
 				}
-				baseProperties.SetProperty(name, property, false);
+				if (baseProperties != null)
+					baseProperties.SetProperty(name, property, false);
 			}
 			else {
 				if (map.ContainsKey(name)) {

@@ -22,7 +22,7 @@ using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
 using Song = ZeldaOracle.Common.Audio.Song;
 using Playlist = ZeldaOracle.Common.Audio.Playlist;
-using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Common.Content {
 

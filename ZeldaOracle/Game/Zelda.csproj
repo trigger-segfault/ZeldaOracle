@@ -174,8 +174,8 @@
     <Compile Include="Common\Input\Mouse.cs" />
     <Compile Include="Common\Input\MouseButtons.cs" />
     <Compile Include="Common\Input\Controls\Trigger.cs" />
-    <Compile Include="Common\Properties\Properties.cs" />
-    <Compile Include="Common\Properties\Property.cs" />
+    <Compile Include="Common\Scripting\Properties.cs" />
+    <Compile Include="Common\Scripting\Property.cs" />
     <Compile Include="Common\Scripts\AnimationSR.cs" />
     <Compile Include="Common\Scripts\CommandParam.cs" />
     <Compile Include="Common\Scripts\GameFontSR.cs" />
@@ -325,7 +325,7 @@
     <Compile Include="Game\Tiles\TileFlags.cs" />
     <Compile Include="Game\Tiles\Tileset.cs" />
     <Compile Include="Game\Tiles\Custom\TileSign.cs" />
-    <Compile Include="Common\Properties\IPropertyObject.cs" />
+    <Compile Include="Common\Scripting\IPropertyObject.cs" />
     <Compile Include="Game\Worlds\Room.cs" />
     <Compile Include="Game\Worlds\Level.cs" />
     <Compile Include="Game\Worlds\World.cs" />

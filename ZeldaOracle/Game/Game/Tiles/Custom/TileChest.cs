@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.Items.Rewards;

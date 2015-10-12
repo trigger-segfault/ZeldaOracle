@@ -9,12 +9,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
-using ZeldaOracle.Common.Properties;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Content;
 using ZeldaEditor.Control;
 using ZeldaOracle.Game.Items.Rewards;
+using ZeldaOracle.Common.Scripting;
 
 
 namespace ZeldaEditor.PropertiesEditor {

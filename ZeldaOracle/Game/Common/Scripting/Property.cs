@@ -5,7 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Game.Worlds;
 
-namespace ZeldaOracle.Common.Properties {
+namespace ZeldaOracle.Common.Scripting {
 
 
 	public delegate void PropertyAction(IPropertyObject sender, object value);

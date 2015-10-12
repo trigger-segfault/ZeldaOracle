@@ -34,7 +34,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		//-----------------------------------------------------------------------------
 
 		public void Warp() {
-			string warpLevelID = Properties.GetString("destination_level", RoomControl.Level.Name);
+			string warpLevelID = Properties.GetString("destination_level", RoomControl.Level.Properties.GetString("id"));
 			Level warpLevel = RoomControl.GameControl.World.GetLevel(warpLevelID);
 			if (warpLevel == null)
 				return;
@@ -56,7 +56,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		public bool FindDestinationInLevel(string id, Level level, out Room destRoom, out EventTileDataInstance destEvent) {
 			for (int x = 0; x < level.Width; x++) {
 				for (int y = 0; y < level.Height; y++) {
-					if (FindDestinationInRoom(id, level.GetRoom(x, y), out destRoom, out destEvent))
+					if (FindDestinationInRoom(id, level.GetRoomAt(x, y), out destRoom, out destEvent))
 						return true;
 				}
 			}

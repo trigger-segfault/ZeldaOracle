@@ -81,8 +81,8 @@ namespace ZeldaEditor.Tools {
 
 			if (EditorControl.EventMode) {
 				if (EditorControl.EventMode && e.Button == MouseButtons.Left) {
-					//EventTileData eventTile = Resources.GetResource<EventTileData>("warp");
-					EventTileData eventTile = Resources.GetResource<EventTileData>("npc");
+					EventTileData eventTile = Resources.GetResource<EventTileData>("warp");
+					//EventTileData eventTile = Resources.GetResource<EventTileData>("npc");
 
 					//Point2I mousePos	= new Point2I(e.X, e.Y);
 					//Room room		= LevelDisplayControl.SampleRoom(mousePos);

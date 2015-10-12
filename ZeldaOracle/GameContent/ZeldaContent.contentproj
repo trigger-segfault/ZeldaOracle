@@ -80,8 +80,8 @@
       <Name>forest</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Tilesets\interior2.conscript">
-      <Name>interior2</Name>
+    <None Include="Tilesets\interior.conscript">
+      <Name>interior</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Tilesets\land.conscript">
@@ -492,9 +492,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Tilesets\interior.conscript">
+    <None Include="Tilesets\interior2.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>interior</Name>
+      <Name>interior2</Name>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Common.Content;
@@ -31,12 +31,14 @@ namespace ZeldaOracle.Game.Worlds {
 			this.zone		= null;
 			this.properties	= new Properties();
 			this.properties.PropertyObject = this;
+			this.properties.BaseProperties = new Properties();
 
-			this.properties.Set("zone", "")
-				.SetDocumentation("Zone", "zone", "", "The zone type for this room.", false)
-				;//.SetAction(delegate(IPropertyObject sender, object value) {
-				//	(sender as Room).zone = Resources.GetResource<Zone>(properties.GetString("zone"));
-				//});
+			this.properties.BaseProperties.Set("id", "")
+				.SetDocumentation("ID", "", "", "The id used to refer to this room.", false);
+			this.properties.BaseProperties.Set("music", "")
+				.SetDocumentation("Music", "song", "", "The music to play in this room. Select none to choose the default music.", false);
+			this.properties.BaseProperties.Set("zone", "")
+				.SetDocumentation("Zone", "zone", "", "The zone type for this room.", false);
 		}
 
 		public Room(Level level, int x, int y, Zone zone) {
@@ -47,12 +49,14 @@ namespace ZeldaOracle.Game.Worlds {
 			this.zone		= zone;
 			this.properties	= new Properties();
 			this.properties.PropertyObject = this;
+			this.properties.BaseProperties = new Properties();
 
-			this.properties.Set("zone", zone.Name)
-				.SetDocumentation("Zone", "zone", "", "The zone type for this room.", false)
-				;//.SetAction(delegate(IPropertyObject sender, object value) {
-				//(sender as Room).zone = Resources.GetResource<Zone>(properties.GetString("zone"));
-			//});
+			this.properties.BaseProperties.Set("id", "")
+				.SetDocumentation("ID", "", "", "The id used to refer to this room.", false);
+			this.properties.BaseProperties.Set("music", "")
+				.SetDocumentation("Music", "song", "", "The music to play in this room. Select none to choose the default music.", false);
+			this.properties.BaseProperties.Set("zone", "")
+				.SetDocumentation("Zone", "zone", "", "The zone type for this room.", false);
 		}
 		
 

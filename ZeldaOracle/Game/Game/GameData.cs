@@ -11,7 +11,7 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Content.ResourceBuilders;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.Custom;
@@ -325,12 +325,12 @@ namespace ZeldaOracle.Game {
 			Resources.LoadTilesets("Tilesets/forest.conscript");
 			Resources.LoadTilesets("Tilesets/water.conscript");
 			Resources.LoadTilesets("Tilesets/town.conscript");
-			Resources.LoadTilesets("Tilesets/interior2.conscript");
+			Resources.LoadTilesets("Tilesets/interior.conscript");
 			Resources.LoadTilesets("Tilesets/objects.conscript");
 			Resources.LoadTilesets("Tilesets/objects_nv.conscript");
 			Resources.LoadTilesets("Tilesets/tile_data.conscript");
 			Resources.LoadTilesets("Tilesets/overworld.conscript");
-			Resources.LoadTilesets("Tilesets/interior.conscript");
+			Resources.LoadTilesets("Tilesets/interior2.conscript");
 
 			// Create an warp event.
 			EventTileData etd = new EventTileData(typeof(WarpEvent));

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaOracle.Common.Properties;
+using ZeldaOracle.Common.Scripting;
 
-namespace ZeldaOracle.Common.Properties {
+namespace ZeldaOracle.Common.Scripting {
 
 	// An object that contains Zelda properties.
 	public interface IPropertyObject {
