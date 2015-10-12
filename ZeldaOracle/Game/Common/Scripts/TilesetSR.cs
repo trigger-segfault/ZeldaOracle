@@ -165,10 +165,10 @@ namespace ZeldaOracle.Common.Scripts {
 					string name = param.GetString(1);
 
 					if (String.Compare(param.GetString(0), "hide", StringComparison.CurrentCultureIgnoreCase) == 0) {
-						tileData.Properties[name].Documentation.Hidden = true;
+						tileData.Properties[name].Documentation.IsHidden = true;
 					}
 					else if (String.Compare(param.GetString(0), "show", StringComparison.CurrentCultureIgnoreCase) == 0) {
-						tileData.Properties[name].Documentation.Hidden = false;
+						tileData.Properties[name].Documentation.IsHidden = false;
 					}
 					else {
 
@@ -192,6 +192,7 @@ namespace ZeldaOracle.Common.Scripts {
 								param.GetString(4),
 								param.GetString(5),
 								param.GetString(6),
+								true,
 								param.GetBool(7));
 						}
 

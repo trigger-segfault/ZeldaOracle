@@ -117,7 +117,7 @@ namespace ZeldaEditor.PropertiesEditor {
 			}
 
 			for (int i = 0; i < propertyList.Count; i++) {
-				if (propertyList[i].HasDocumentation && propertyList[i].Documentation.Hidden) {
+				if (propertyList[i].HasDocumentation && propertyList[i].Documentation.IsHidden) {
 					propertyList.RemoveAt(i);
 					i--;
 				}

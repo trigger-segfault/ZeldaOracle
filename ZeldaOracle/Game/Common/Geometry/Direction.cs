@@ -29,6 +29,10 @@ namespace ZeldaOracle.Common.Geometry {
 		// Methods
 		//-----------------------------------------------------------------------------
 
+		public static int Reverse(int direction) {
+			return ((direction + 2) % 4);
+		}
+
 		public static bool IsHorizontal(int direction) {
 			return (direction % 2 == 0);
 		}

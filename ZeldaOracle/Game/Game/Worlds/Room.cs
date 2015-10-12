@@ -34,11 +34,11 @@ namespace ZeldaOracle.Game.Worlds {
 			this.properties.BaseProperties = new Properties();
 
 			this.properties.BaseProperties.Set("id", "")
-				.SetDocumentation("ID", "", "", "The id used to refer to this room.", false);
+				.SetDocumentation("ID", "", "", "The id used to refer to this room.", true, false);
 			this.properties.BaseProperties.Set("music", "")
-				.SetDocumentation("Music", "song", "", "The music to play in this room. Select none to choose the default music.", false);
+				.SetDocumentation("Music", "song", "", "The music to play in this room. Select none to choose the default music.", true, false);
 			this.properties.BaseProperties.Set("zone", "")
-				.SetDocumentation("Zone", "zone", "", "The zone type for this room.", false);
+				.SetDocumentation("Zone", "zone", "", "The zone type for this room.", true, false);
 		}
 
 		public Room(Level level, int x, int y, Zone zone) {
@@ -52,11 +52,11 @@ namespace ZeldaOracle.Game.Worlds {
 			this.properties.BaseProperties = new Properties();
 
 			this.properties.BaseProperties.Set("id", "")
-				.SetDocumentation("ID", "", "", "The id used to refer to this room.", false);
+				.SetDocumentation("ID", "", "", "The id used to refer to this room.", true, false);
 			this.properties.BaseProperties.Set("music", "")
-				.SetDocumentation("Music", "song", "", "The music to play in this room. Select none to choose the default music.", false);
+				.SetDocumentation("Music", "song", "", "The music to play in this room. Select none to choose the default music.", true, false);
 			this.properties.BaseProperties.Set("zone", "")
-				.SetDocumentation("Zone", "zone", "", "The zone type for this room.", false);
+				.SetDocumentation("Zone", "zone", "", "The zone type for this room.", true, false);
 		}
 		
 

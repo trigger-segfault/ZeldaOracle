@@ -6,7 +6,7 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Common.Scripting {
-
+	
 
 	public delegate void PropertyAction(IPropertyObject sender, object value);
 
@@ -30,7 +30,8 @@ namespace ZeldaOracle.Common.Scripting {
 		private string	editorType;
 		private string	category;
 		private string	description;
-		private bool	hidden;
+		private bool	isEditable;
+		private bool	isHidden;
 
 
 		//-----------------------------------------------------------------------------
@@ -42,15 +43,17 @@ namespace ZeldaOracle.Common.Scripting {
 			editorType		= "";
 			category		= "";
 			description		= "";
-			hidden			= false;
+			isEditable		= true;
+			isHidden		= false;
 		}
 
-		public PropertyDocumentation(string readableName, string editorType, string category, string description, bool hidden) {
+		public PropertyDocumentation(string readableName, string editorType, string category, string description, bool isEditable, bool isHidden) {
 			this.readableName	= readableName;
 			this.editorType		= editorType;
 			this.category		= category;
 			this.description	= description;
-			this.hidden			= hidden;
+			this.isEditable		= isEditable;
+			this.isHidden		= isHidden;
 		}
 
 		public PropertyDocumentation(PropertyDocumentation copy) {
@@ -58,7 +61,8 @@ namespace ZeldaOracle.Common.Scripting {
 			editorType		= copy.editorType;
 			category		= copy.category;
 			description		= copy.description;
-			hidden			= copy.hidden;
+			isEditable		= copy.isEditable;
+			isHidden		= copy.isHidden;
 		}
 
 
@@ -85,10 +89,17 @@ namespace ZeldaOracle.Common.Scripting {
 			get { return description; }
 			set { description = value; }
 		}
+		
+		// Can the property be edited using the property editor?
+		public bool IsEditable {
+			get { return isEditable; }
+			set { isEditable = value; }
+		}
 
-		public bool Hidden {
-			get { return hidden; }
-			set { hidden = value; }
+		// Is the property not shown in the property editor?
+		public bool IsHidden {
+			get { return isHidden; }
+			set { isHidden = value; }
 		}
 	}
 
@@ -218,8 +229,8 @@ namespace ZeldaOracle.Common.Scripting {
 			}
 		}
 
-		public Property SetDocumentation(string readableName, string editorType, string category, string description, bool hidden) {
-			documentation = new PropertyDocumentation(readableName, editorType, category, description, hidden);
+		public Property SetDocumentation(string readableName, string editorType, string category, string description, bool isEditable, bool isHidden) {
+			documentation = new PropertyDocumentation(readableName, editorType, category, description, isEditable, isHidden);
 			return this;
 		}
 

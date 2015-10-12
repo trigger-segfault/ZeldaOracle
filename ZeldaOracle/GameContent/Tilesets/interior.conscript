@@ -48,6 +48,17 @@ SS..SSS.....
 SSSSSS......
 END;
 
+# Ledges
+TILE (1, 0); LEDGE block, up; END;
+TILE (0, 1); LEDGE block, left; END;
+TILE (2, 1); LEDGE block, right; END;
+TILE (1, 2); LEDGE block, down; END;
+
+TILE (1, 9); LEDGE block, up; END;
+TILE (0, 10); LEDGE block, left; END;
+TILE (2, 10); LEDGE block, right; END;
+TILE (1, 11); LEDGE block, down; END;
+
 # Irregular Collision Models
 TILE (8, 0); SOLID doorway; END;
 TILE (8, 11); SOLID doorway; END;

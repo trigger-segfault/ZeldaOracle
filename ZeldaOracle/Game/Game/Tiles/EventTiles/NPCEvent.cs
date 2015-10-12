@@ -16,7 +16,6 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		//-----------------------------------------------------------------------------
 
 		public NPCEvent() {
-
 		}
 
 
@@ -29,6 +28,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 
 			// Spawn NPC entity.
 			NPC npc = new NPC();
+			npc.Flags = (NPCFlags) Properties.GetInteger("npc_flags");
 			RoomControl.SpawnEntity(npc, position - npc.Graphics.DrawOffset);
 		}
 

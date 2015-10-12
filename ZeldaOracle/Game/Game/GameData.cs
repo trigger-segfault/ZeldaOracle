@@ -13,16 +13,17 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Scripts;
-using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.Custom;
-using ZeldaOracle.Game.Tiles.EventTiles;
-using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Items.Essences;
 using ZeldaOracle.Game.Items.KeyItems;
 using ZeldaOracle.Game.Items.Equipment;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Rewards;
+using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Tiles.Custom;
+using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game {
 	
@@ -336,16 +337,18 @@ namespace ZeldaOracle.Game {
 			EventTileData etd = new EventTileData(typeof(WarpEvent));
 			etd.Sprite = SPR_EVENT_TILE_WARP_STAIRS;
 			etd.Properties.Set("warp_type", "tunnel")
-				.SetDocumentation("Warp Type", "tunnel", "", "The type of warp point.", false);
+				.SetDocumentation("Warp Type", "tunnel", "", "The type of warp point.", true, false);
 			etd.Properties.Set("destination_level", "")
-				.SetDocumentation("Destination Level", "", "", "The level where the destination point is in.", false);
+				.SetDocumentation("Destination Level", "", "", "The level where the destination point is in.", true, false);
 			etd.Properties.Set("destination_warp_point", "")
-				.SetDocumentation("Destination Warp Point", "", "", "The id of the warp point destination.", false);
+				.SetDocumentation("Destination Warp Point", "", "", "The id of the warp point destination.", true, false);
 			Resources.AddResource("warp", etd);
 			
 			// Create an NPC event.
 			etd = new EventTileData(typeof(NPCEvent));
 			etd.Sprite = SPR_EVENT_TILE_WARP_STAIRS;
+			etd.Properties.Set("npc_flags", (int) NPCFlags.Default)
+				.SetDocumentation("NPC Options", "enum_flags", "", "The options for the NPC.", true, false);
 			Resources.AddResource("npc", etd);
 
 			IntegrateResources<Tileset>("TILESET_");

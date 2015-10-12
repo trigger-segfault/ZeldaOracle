@@ -31,7 +31,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			properties			= new Properties();
 
 			properties.Set("id", "")
-				.SetDocumentation("ID", "", "", "The id used to refer to this event.", false);
+				.SetDocumentation("ID", "", "", "The id used to refer to this event.", true, false);
 		}
 		
 		public EventTileData(Type type) : this() {

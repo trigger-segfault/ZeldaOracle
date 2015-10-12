@@ -32,7 +32,7 @@ namespace ZeldaOracle.Game.Worlds {
 			this.properties.BaseProperties = new Properties();
 
 			this.properties.BaseProperties.Set("id", "")
-				.SetDocumentation("ID", "", "", "The id used to refer to this level.", false);
+				.SetDocumentation("ID", "", "", "The id used to refer to this level.", true, false);
 
 			this.properties.Set("id", name);
 
@@ -50,7 +50,7 @@ namespace ZeldaOracle.Game.Worlds {
 			this.properties.BaseProperties = new Properties();
 
 			this.properties.BaseProperties.Set("id", "")
-				.SetDocumentation("ID", "", "", "The id used to refer to this level.", false);
+				.SetDocumentation("ID", "", "", "The id used to refer to this level.", true, false);
 
 			Resize(new Point2I(width, height));
 		}
