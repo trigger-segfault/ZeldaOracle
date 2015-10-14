@@ -268,12 +268,13 @@ namespace ZeldaOracle.Common.Scripting {
 			for (int i = 0; i < keys.Length; ++i) {
 				string key = keys[i];
 				PropertyDocumentation docs = null;
-				if (replaceExisting && map.ContainsKey(key))
+				// TODO: Why did I do replace existing for docs?
+				if (replaceExisting && map.ContainsKey(key) && map[key].Documentation != null)
 					docs = map[key].Documentation;
 				if (replaceExisting || !map.ContainsKey(key)) {
 					map[key] = new Property(other.map[key]);
 					map[key].Properties = this;
-					if (replaceExisting && map.ContainsKey(key))
+					if (replaceExisting && map.ContainsKey(key) && docs != null)
 						map[key].Documentation = docs;
 				}
 			}

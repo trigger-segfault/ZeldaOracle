@@ -33,6 +33,7 @@ namespace ZeldaEditor.Tools {
 					editorControl.SelectedTilesetTileData,
 					tileLocation.X, tileLocation.Y, editorControl.CurrentLayer
 				);
+
 			}
 			else if (mouseButton == MouseButtons.Right) {
 				if (editorControl.CurrentLayer == 0) {
