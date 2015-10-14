@@ -63,10 +63,14 @@
 			this.buttonLoad = new System.Windows.Forms.ToolStripButton();
 			this.buttonSave = new System.Windows.Forms.ToolStripButton();
 			this.buttonSaveAs = new System.Windows.Forms.ToolStripButton();
-			this.buttonAddLevel = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+			this.buttonTestLevel = new System.Windows.Forms.ToolStripButton();
+			this.buttonTestLevelPlace = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
+			this.buttonAddLevel = new System.Windows.Forms.ToolStripButton();
+			this.buttonAddArea = new System.Windows.Forms.ToolStripButton();
+			this.buttonAddDungeon = new System.Windows.Forms.ToolStripButton();
+			this.buttonAddScript = new System.Windows.Forms.ToolStripButton();
 			this.toolStrip2 = new System.Windows.Forms.ToolStrip();
 			this.buttonToolPointer = new System.Windows.Forms.ToolStripButton();
 			this.buttonToolPlace = new System.Windows.Forms.ToolStripButton();
@@ -100,12 +104,14 @@
 			this.treeViewWorld = new System.Windows.Forms.TreeView();
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.toolStrip4 = new System.Windows.Forms.ToolStrip();
-			this.buttonTreeViewNewLevel = new System.Windows.Forms.ToolStripButton();
-			this.buttonTreeViewNewArea = new System.Windows.Forms.ToolStripButton();
+			this.buttonTreeViewEdit = new System.Windows.Forms.ToolStripButton();
+			this.buttonTreeViewRename = new System.Windows.Forms.ToolStripButton();
 			this.buttonTreeViewDuplicate = new System.Windows.Forms.ToolStripButton();
 			this.buttonTreeViewDelete = new System.Windows.Forms.ToolStripButton();
 			this.buttonTreeViewMoveUp = new System.Windows.Forms.ToolStripButton();
 			this.buttonTreeViewMoveDown = new System.Windows.Forms.ToolStripButton();
+			this.buttonTreeViewResize = new System.Windows.Forms.ToolStripButton();
+			this.buttonTreeViewShift = new System.Windows.Forms.ToolStripButton();
 			this.levelTabControl = new System.Windows.Forms.TabControl();
 			this.levelTabPageTiles = new System.Windows.Forms.TabPage();
 			this.splitContainerWorldAndTiles = new System.Windows.Forms.SplitContainer();
@@ -407,7 +413,7 @@
 			this.addLevelToolStripMenuItem.Name = "addLevelToolStripMenuItem";
 			this.addLevelToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.L)));
-			this.addLevelToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+			this.addLevelToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
 			this.addLevelToolStripMenuItem.Text = "&Add Level...";
 			this.addLevelToolStripMenuItem.Click += new System.EventHandler(this.addLevelToolStripMenuItem_Click);
 			// 
@@ -415,16 +421,16 @@
 			// 
 			this.testLevelToolStripMenuItem.Name = "testLevelToolStripMenuItem";
 			this.testLevelToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.testLevelToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-			this.testLevelToolStripMenuItem.Text = "Test Level";
+			this.testLevelToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
+			this.testLevelToolStripMenuItem.Text = "Test World";
 			this.testLevelToolStripMenuItem.Click += new System.EventHandler(this.testLevelToolStripMenuItem_Click);
 			// 
 			// testLevelAtPositionToolStripMenuItem
 			// 
 			this.testLevelAtPositionToolStripMenuItem.Name = "testLevelAtPositionToolStripMenuItem";
 			this.testLevelAtPositionToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F5)));
-			this.testLevelAtPositionToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
-			this.testLevelAtPositionToolStripMenuItem.Text = "Test Level At Position";
+			this.testLevelAtPositionToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
+			this.testLevelAtPositionToolStripMenuItem.Text = "Test World From Location";
 			this.testLevelAtPositionToolStripMenuItem.Click += new System.EventHandler(this.testLevelAtPositionToolStripMenuItem_Click);
 			// 
 			// toolStrip1
@@ -434,10 +440,14 @@
             this.buttonLoad,
             this.buttonSave,
             this.buttonSaveAs,
-            this.buttonAddLevel,
             this.toolStripSeparator1,
-            this.toolStripButton1,
-            this.toolStripButton2});
+            this.buttonTestLevel,
+            this.buttonTestLevelPlace,
+            this.toolStripSeparator13,
+            this.buttonAddLevel,
+            this.buttonAddArea,
+            this.buttonAddDungeon,
+            this.buttonAddScript});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 24);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(875, 25);
@@ -484,6 +494,37 @@
 			this.buttonSaveAs.Text = "Save World As (Ctrl+Shift+S)";
 			this.buttonSaveAs.Click += new System.EventHandler(this.saveWorldAsToolStripMenuItem_Click);
 			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+			// 
+			// buttonTestLevel
+			// 
+			this.buttonTestLevel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonTestLevel.Image = ((System.Drawing.Image)(resources.GetObject("buttonTestLevel.Image")));
+			this.buttonTestLevel.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonTestLevel.Name = "buttonTestLevel";
+			this.buttonTestLevel.Size = new System.Drawing.Size(23, 22);
+			this.buttonTestLevel.Text = "Test World (F5)";
+			this.buttonTestLevel.Click += new System.EventHandler(this.testLevelToolStripMenuItem_Click);
+			// 
+			// buttonTestLevelPlace
+			// 
+			this.buttonTestLevelPlace.CheckOnClick = true;
+			this.buttonTestLevelPlace.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonTestLevelPlace.Image = ((System.Drawing.Image)(resources.GetObject("buttonTestLevelPlace.Image")));
+			this.buttonTestLevelPlace.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonTestLevelPlace.Name = "buttonTestLevelPlace";
+			this.buttonTestLevelPlace.Size = new System.Drawing.Size(23, 22);
+			this.buttonTestLevelPlace.Text = "Test World From Location (Shift+F5)";
+			this.buttonTestLevelPlace.Click += new System.EventHandler(this.testLevelAtPositionToolStripMenuItem_Click);
+			// 
+			// toolStripSeparator13
+			// 
+			this.toolStripSeparator13.Name = "toolStripSeparator13";
+			this.toolStripSeparator13.Size = new System.Drawing.Size(6, 25);
+			// 
 			// buttonAddLevel
 			// 
 			this.buttonAddLevel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -494,31 +535,32 @@
 			this.buttonAddLevel.Text = "Add New Level (Ctrl+Shift+L)";
 			this.buttonAddLevel.Click += new System.EventHandler(this.addLevelToolStripMenuItem_Click);
 			// 
-			// toolStripSeparator1
+			// buttonAddArea
 			// 
-			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+			this.buttonAddArea.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonAddArea.Image = ((System.Drawing.Image)(resources.GetObject("buttonAddArea.Image")));
+			this.buttonAddArea.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonAddArea.Name = "buttonAddArea";
+			this.buttonAddArea.Size = new System.Drawing.Size(23, 22);
+			this.buttonAddArea.Text = "Add New Area (Ctrl+Shift+A)";
 			// 
-			// toolStripButton1
+			// buttonAddDungeon
 			// 
-			this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton1.Name = "toolStripButton1";
-			this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton1.Text = "Test Level (F5)";
-			this.toolStripButton1.Click += new System.EventHandler(this.testLevelToolStripMenuItem_Click);
+			this.buttonAddDungeon.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonAddDungeon.Image = ((System.Drawing.Image)(resources.GetObject("buttonAddDungeon.Image")));
+			this.buttonAddDungeon.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonAddDungeon.Name = "buttonAddDungeon";
+			this.buttonAddDungeon.Size = new System.Drawing.Size(23, 22);
+			this.buttonAddDungeon.Text = "Add New Dungeon (Ctrl+Shift+D)";
 			// 
-			// toolStripButton2
+			// buttonAddScript
 			// 
-			this.toolStripButton2.CheckOnClick = true;
-			this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-			this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton2.Name = "toolStripButton2";
-			this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton2.Text = "Test Level From Location (Shift+F5)";
-			this.toolStripButton2.Click += new System.EventHandler(this.testLevelAtPositionToolStripMenuItem_Click);
+			this.buttonAddScript.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonAddScript.Image = ((System.Drawing.Image)(resources.GetObject("buttonAddScript.Image")));
+			this.buttonAddScript.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonAddScript.Name = "buttonAddScript";
+			this.buttonAddScript.Size = new System.Drawing.Size(23, 22);
+			this.buttonAddScript.Text = "Add New Script";
 			// 
 			// toolStrip2
 			// 
@@ -552,7 +594,7 @@
 			this.buttonToolPointer.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.buttonToolPointer.Name = "buttonToolPointer";
 			this.buttonToolPointer.Size = new System.Drawing.Size(23, 22);
-			this.buttonToolPointer.Text = "Pointer Tool";
+			this.buttonToolPointer.Text = "Pointer Tool (M)";
 			this.buttonToolPointer.Click += new System.EventHandler(this.buttonTool_Click);
 			// 
 			// buttonToolPlace
@@ -563,7 +605,7 @@
 			this.buttonToolPlace.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.buttonToolPlace.Name = "buttonToolPlace";
 			this.buttonToolPlace.Size = new System.Drawing.Size(23, 22);
-			this.buttonToolPlace.Text = "Place Tool";
+			this.buttonToolPlace.Text = "Place Tool (P)";
 			this.buttonToolPlace.Click += new System.EventHandler(this.buttonTool_Click);
 			// 
 			// buttonToolSelection
@@ -574,7 +616,7 @@
 			this.buttonToolSelection.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.buttonToolSelection.Name = "buttonToolSelection";
 			this.buttonToolSelection.Size = new System.Drawing.Size(23, 22);
-			this.buttonToolSelection.Text = "Selection Tool";
+			this.buttonToolSelection.Text = "Selection Tool (S)";
 			this.buttonToolSelection.Click += new System.EventHandler(this.buttonTool_Click);
 			// 
 			// buttonToolEyedropper
@@ -585,7 +627,7 @@
 			this.buttonToolEyedropper.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.buttonToolEyedropper.Name = "buttonToolEyedropper";
 			this.buttonToolEyedropper.Size = new System.Drawing.Size(23, 22);
-			this.buttonToolEyedropper.Text = "Eyedropper Tool";
+			this.buttonToolEyedropper.Text = "Eyedropper Tool (K)";
 			this.buttonToolEyedropper.Click += new System.EventHandler(this.buttonTool_Click);
 			// 
 			// toolStripSeparator2
@@ -801,12 +843,13 @@
 			// splitContainerLevelsAndWorld.Panel1
 			// 
 			this.splitContainerLevelsAndWorld.Panel1.Controls.Add(this.panelLevels);
+			this.splitContainerLevelsAndWorld.Panel1MinSize = 198;
 			// 
 			// splitContainerLevelsAndWorld.Panel2
 			// 
 			this.splitContainerLevelsAndWorld.Panel2.Controls.Add(this.levelTabControl);
 			this.splitContainerLevelsAndWorld.Size = new System.Drawing.Size(875, 424);
-			this.splitContainerLevelsAndWorld.SplitterDistance = 184;
+			this.splitContainerLevelsAndWorld.SplitterDistance = 198;
 			this.splitContainerLevelsAndWorld.TabIndex = 4;
 			// 
 			// panelLevels
@@ -818,7 +861,7 @@
 			this.panelLevels.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panelLevels.Location = new System.Drawing.Point(0, 0);
 			this.panelLevels.Name = "panelLevels";
-			this.panelLevels.Size = new System.Drawing.Size(184, 424);
+			this.panelLevels.Size = new System.Drawing.Size(198, 424);
 			this.panelLevels.TabIndex = 0;
 			// 
 			// treeViewWorld
@@ -830,7 +873,7 @@
 			this.treeViewWorld.Location = new System.Drawing.Point(0, 25);
 			this.treeViewWorld.Name = "treeViewWorld";
 			this.treeViewWorld.SelectedImageIndex = 0;
-			this.treeViewWorld.Size = new System.Drawing.Size(182, 397);
+			this.treeViewWorld.Size = new System.Drawing.Size(196, 397);
 			this.treeViewWorld.TabIndex = 0;
 			this.treeViewWorld.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewLevels_AfterSelect);
 			this.treeViewWorld.MouseClick += new System.Windows.Forms.MouseEventHandler(this.treeViewLevels_MouseClick);
@@ -844,42 +887,47 @@
 			this.imageList1.Images.SetKeyName(2, "map.png");
 			this.imageList1.Images.SetKeyName(3, "zones-stack.png");
 			this.imageList1.Images.SetKeyName(4, "zone.png");
-			this.imageList1.Images.SetKeyName(5, "scripts-text.png");
-			this.imageList1.Images.SetKeyName(6, "script-text.png");
+			this.imageList1.Images.SetKeyName(5, "walls-stack.png");
+			this.imageList1.Images.SetKeyName(6, "wall.png");
+			this.imageList1.Images.SetKeyName(7, "scripts-text.png");
+			this.imageList1.Images.SetKeyName(8, "script-text.png");
 			// 
 			// toolStrip4
 			// 
 			this.toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.buttonTreeViewNewLevel,
-            this.buttonTreeViewNewArea,
+            this.buttonTreeViewEdit,
+            this.buttonTreeViewRename,
             this.buttonTreeViewDuplicate,
             this.buttonTreeViewDelete,
             this.buttonTreeViewMoveUp,
-            this.buttonTreeViewMoveDown});
+            this.buttonTreeViewMoveDown,
+            this.buttonTreeViewResize,
+            this.buttonTreeViewShift});
 			this.toolStrip4.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip4.Name = "toolStrip4";
-			this.toolStrip4.Size = new System.Drawing.Size(182, 25);
+			this.toolStrip4.Size = new System.Drawing.Size(196, 25);
 			this.toolStrip4.TabIndex = 1;
 			this.toolStrip4.Text = "toolStrip4";
 			// 
-			// buttonTreeViewNewLevel
+			// buttonTreeViewEdit
 			// 
-			this.buttonTreeViewNewLevel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.buttonTreeViewNewLevel.Image = ((System.Drawing.Image)(resources.GetObject("buttonTreeViewNewLevel.Image")));
-			this.buttonTreeViewNewLevel.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.buttonTreeViewNewLevel.Name = "buttonTreeViewNewLevel";
-			this.buttonTreeViewNewLevel.Size = new System.Drawing.Size(23, 22);
-			this.buttonTreeViewNewLevel.Text = "New Level";
-			this.buttonTreeViewNewLevel.Click += new System.EventHandler(this.buttonTreeViewNewLevel_Click);
+			this.buttonTreeViewEdit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonTreeViewEdit.Image = ((System.Drawing.Image)(resources.GetObject("buttonTreeViewEdit.Image")));
+			this.buttonTreeViewEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonTreeViewEdit.Name = "buttonTreeViewEdit";
+			this.buttonTreeViewEdit.Size = new System.Drawing.Size(23, 22);
+			this.buttonTreeViewEdit.Text = "Edit";
+			this.buttonTreeViewEdit.Click += new System.EventHandler(this.buttonTreeViewEdit_Click);
 			// 
-			// buttonTreeViewNewArea
+			// buttonTreeViewRename
 			// 
-			this.buttonTreeViewNewArea.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.buttonTreeViewNewArea.Image = ((System.Drawing.Image)(resources.GetObject("buttonTreeViewNewArea.Image")));
-			this.buttonTreeViewNewArea.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.buttonTreeViewNewArea.Name = "buttonTreeViewNewArea";
-			this.buttonTreeViewNewArea.Size = new System.Drawing.Size(23, 22);
-			this.buttonTreeViewNewArea.Text = "New Area";
+			this.buttonTreeViewRename.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonTreeViewRename.Image = ((System.Drawing.Image)(resources.GetObject("buttonTreeViewRename.Image")));
+			this.buttonTreeViewRename.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonTreeViewRename.Name = "buttonTreeViewRename";
+			this.buttonTreeViewRename.Size = new System.Drawing.Size(23, 22);
+			this.buttonTreeViewRename.Text = "Rename";
+			this.buttonTreeViewRename.Click += new System.EventHandler(this.buttonTreeViewRename_Click);
 			// 
 			// buttonTreeViewDuplicate
 			// 
@@ -920,6 +968,26 @@
 			this.buttonTreeViewMoveDown.Text = "Move Down";
 			this.buttonTreeViewMoveDown.Click += new System.EventHandler(this.buttonTreeViewMoveDown_Click);
 			// 
+			// buttonTreeViewResize
+			// 
+			this.buttonTreeViewResize.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonTreeViewResize.Image = ((System.Drawing.Image)(resources.GetObject("buttonTreeViewResize.Image")));
+			this.buttonTreeViewResize.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonTreeViewResize.Name = "buttonTreeViewResize";
+			this.buttonTreeViewResize.Size = new System.Drawing.Size(23, 22);
+			this.buttonTreeViewResize.Text = "Resize Level";
+			this.buttonTreeViewResize.Click += new System.EventHandler(this.buttonTreeViewResize_Click);
+			// 
+			// buttonTreeViewShift
+			// 
+			this.buttonTreeViewShift.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonTreeViewShift.Image = ((System.Drawing.Image)(resources.GetObject("buttonTreeViewShift.Image")));
+			this.buttonTreeViewShift.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonTreeViewShift.Name = "buttonTreeViewShift";
+			this.buttonTreeViewShift.Size = new System.Drawing.Size(23, 22);
+			this.buttonTreeViewShift.Text = "Shift Level";
+			this.buttonTreeViewShift.Click += new System.EventHandler(this.buttonTreeViewShift_Click);
+			// 
 			// levelTabControl
 			// 
 			this.levelTabControl.Controls.Add(this.levelTabPageTiles);
@@ -928,7 +996,7 @@
 			this.levelTabControl.Location = new System.Drawing.Point(0, 0);
 			this.levelTabControl.Name = "levelTabControl";
 			this.levelTabControl.SelectedIndex = 0;
-			this.levelTabControl.Size = new System.Drawing.Size(687, 424);
+			this.levelTabControl.Size = new System.Drawing.Size(673, 424);
 			this.levelTabControl.TabIndex = 0;
 			// 
 			// levelTabPageTiles
@@ -937,7 +1005,7 @@
 			this.levelTabPageTiles.Location = new System.Drawing.Point(4, 22);
 			this.levelTabPageTiles.Name = "levelTabPageTiles";
 			this.levelTabPageTiles.Padding = new System.Windows.Forms.Padding(3);
-			this.levelTabPageTiles.Size = new System.Drawing.Size(679, 398);
+			this.levelTabPageTiles.Size = new System.Drawing.Size(665, 398);
 			this.levelTabPageTiles.TabIndex = 1;
 			this.levelTabPageTiles.Text = "Tiles";
 			this.levelTabPageTiles.UseVisualStyleBackColor = true;
@@ -956,8 +1024,8 @@
 			// splitContainerWorldAndTiles.Panel2
 			// 
 			this.splitContainerWorldAndTiles.Panel2.Controls.Add(this.splitContainerTilesAndProperties);
-			this.splitContainerWorldAndTiles.Size = new System.Drawing.Size(673, 392);
-			this.splitContainerWorldAndTiles.SplitterDistance = 379;
+			this.splitContainerWorldAndTiles.Size = new System.Drawing.Size(659, 392);
+			this.splitContainerWorldAndTiles.SplitterDistance = 365;
 			this.splitContainerWorldAndTiles.TabIndex = 0;
 			// 
 			// panelWorld
@@ -967,7 +1035,7 @@
 			this.panelWorld.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panelWorld.Location = new System.Drawing.Point(0, 0);
 			this.panelWorld.Name = "panelWorld";
-			this.panelWorld.Size = new System.Drawing.Size(379, 392);
+			this.panelWorld.Size = new System.Drawing.Size(365, 392);
 			this.panelWorld.TabIndex = 0;
 			// 
 			// splitContainerTilesAndProperties
@@ -1057,7 +1125,7 @@
 			this.levelTabPageEvents.Location = new System.Drawing.Point(4, 22);
 			this.levelTabPageEvents.Name = "levelTabPageEvents";
 			this.levelTabPageEvents.Padding = new System.Windows.Forms.Padding(3);
-			this.levelTabPageEvents.Size = new System.Drawing.Size(693, 398);
+			this.levelTabPageEvents.Size = new System.Drawing.Size(665, 398);
 			this.levelTabPageEvents.TabIndex = 2;
 			this.levelTabPageEvents.Text = "Unused";
 			this.levelTabPageEvents.UseVisualStyleBackColor = true;
@@ -1229,7 +1297,6 @@
 		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
-		private System.Windows.Forms.ToolStripButton buttonAddLevel;
 		private System.Windows.Forms.Panel panelLevels;
 		private System.Windows.Forms.Panel panelWorld;
 		private System.Windows.Forms.ToolStripStatusLabel statusBarLabelRoomLoc;
@@ -1271,8 +1338,6 @@
 		private System.Windows.Forms.ToolStripButton buttonWorldGrid;
 		private System.Windows.Forms.ToolStripMenuItem showRoomBordersToolStripMenuItem;
 		private System.Windows.Forms.ToolStripButton buttonAnimations;
-		private System.Windows.Forms.ToolStripButton buttonTest;
-		private System.Windows.Forms.ToolStripButton buttonTestPlayerPlace;
 		private System.Windows.Forms.ToolStripMenuItem newWorldToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem openWorldToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem saveWorldToolStripMenuItem;
@@ -1294,10 +1359,10 @@
 		private System.Windows.Forms.ToolStripMenuItem addLevelToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem playAnimationsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem showGridToolStripMenuItem;
-		private System.Windows.Forms.ToolStripButton toolStripButton1;
+		private System.Windows.Forms.ToolStripButton buttonTestLevel;
 		private System.Windows.Forms.ToolStripMenuItem testLevelToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem testLevelAtPositionToolStripMenuItem;
-		private System.Windows.Forms.ToolStripButton toolStripButton2;
+		private System.Windows.Forms.ToolStripButton buttonTestLevelPlace;
 		private System.Windows.Forms.TabControl levelTabControl;
 		private System.Windows.Forms.TabPage levelTabPageTiles;
 		private System.Windows.Forms.ToolStripMenuItem showEventsToolStripMenuItem;
@@ -1313,8 +1378,6 @@
 		private System.Windows.Forms.ToolStripMenuItem resizeToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem shiftToolStripMenuItem;
 		private System.Windows.Forms.ToolStrip toolStrip4;
-		private System.Windows.Forms.ToolStripButton buttonTreeViewNewLevel;
-		private System.Windows.Forms.ToolStripButton buttonTreeViewNewArea;
 		private System.Windows.Forms.ToolStripButton buttonTreeViewDuplicate;
 		private System.Windows.Forms.ToolStripButton buttonTreeViewDelete;
 		private System.Windows.Forms.ImageList imageList1;
@@ -1325,5 +1388,14 @@
 		public System.Windows.Forms.TreeView treeViewWorld;
 		public System.Windows.Forms.ToolStripButton buttonTreeViewMoveDown;
 		public System.Windows.Forms.ToolStripButton buttonTreeViewMoveUp;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
+		private System.Windows.Forms.ToolStripButton buttonAddLevel;
+		private System.Windows.Forms.ToolStripButton buttonAddArea;
+		private System.Windows.Forms.ToolStripButton buttonAddDungeon;
+		private System.Windows.Forms.ToolStripButton buttonAddScript;
+		private System.Windows.Forms.ToolStripButton buttonTreeViewRename;
+		private System.Windows.Forms.ToolStripButton buttonTreeViewEdit;
+		private System.Windows.Forms.ToolStripButton buttonTreeViewResize;
+		private System.Windows.Forms.ToolStripButton buttonTreeViewShift;
 	}
 }

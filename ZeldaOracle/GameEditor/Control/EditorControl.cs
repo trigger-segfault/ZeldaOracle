@@ -168,7 +168,8 @@ namespace ZeldaEditor.Control {
 			editorForm.Text = "Oracle Engine Editor - " + worldFileName;
 			if (hasMadeChanges)
 				editorForm.Text += "*";
-			editorForm.Text += " [" + level.Properties.GetString("id") + "]";
+			if (level != null)
+				editorForm.Text += " [" + level.Properties.GetString("id") + "]";
 		}
 
 
@@ -221,6 +222,13 @@ namespace ZeldaEditor.Control {
 			editorForm.LevelDisplay.UpdateLevel();
 			UpdateWindowTitle();
 			propertyGridControl.OpenProperties(level.Properties, level);
+		}
+
+		public void CloseLevel() {
+			level = null;
+			editorForm.LevelDisplay.UpdateLevel();
+			UpdateWindowTitle();
+			propertyGridControl.CloseProperties();
 		}
 
 		// Add a new level the world, and open it if specified.
@@ -297,7 +305,7 @@ namespace ZeldaEditor.Control {
 
 		public void RefreshWorldTreeView() {
 			TreeView worldTreeView = editorForm.LevelTreeView;
-			TreeNode worldNode, levelsNode, areasNode, scriptsNode;
+			TreeNode worldNode, levelsNode, areasNode, dungeonsNode, scriptsNode;
 			if (world == null) {
 				worldTreeView.Nodes.Clear();
 			}
@@ -306,14 +314,17 @@ namespace ZeldaEditor.Control {
 					worldNode = new TreeNode(world.Properties.GetString("id"), 0, 0);
 					levelsNode = new TreeNode("Levels", 1, 1);
 					areasNode = new TreeNode("Areas", 3, 3);
-					scriptsNode = new TreeNode("Scripts", 5, 5);
+					dungeonsNode = new TreeNode("Dungeons", 5, 5);
+					scriptsNode = new TreeNode("Scripts", 7, 7);
 					worldNode.Name = "world";
 					levelsNode.Name = "levels";
 					areasNode.Name = "areas";
+					dungeonsNode.Name = "dungeons";
 					scriptsNode.Name = "scripts";
 					worldTreeView.Nodes.Add(worldNode);
 					worldNode.Nodes.Add(levelsNode);
 					worldNode.Nodes.Add(areasNode);
+					worldNode.Nodes.Add(dungeonsNode);
 					worldNode.Nodes.Add(scriptsNode);
 
 					worldNode.ContextMenuStrip	= editorForm.ContenxtMenuGeneral;
@@ -322,10 +333,12 @@ namespace ZeldaEditor.Control {
 					worldNode = worldTreeView.Nodes[0];
 					levelsNode = worldNode.Nodes[0];
 					areasNode = worldNode.Nodes[1];
-					scriptsNode = worldNode.Nodes[2];
+					dungeonsNode = worldNode.Nodes[2];
+					scriptsNode = worldNode.Nodes[3];
 
 					levelsNode.Nodes.Clear();
 					areasNode.Nodes.Clear();
+					dungeonsNode.Nodes.Clear();
 					scriptsNode.Nodes.Clear();
 				}
 				worldNode.Text = world.Properties.GetString("id");
