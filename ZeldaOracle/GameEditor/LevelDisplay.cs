@@ -365,6 +365,11 @@ namespace ZeldaEditor {
 				this.HorizontalScroll.Value = 0;
 				this.VerticalScroll.Value = 0;
 			}
+			else {
+				this.AutoScrollMinSize = Point2I.One;
+				this.HorizontalScroll.Value = 0;
+				this.VerticalScroll.Value = 0;
+			}
 		}
 
 
@@ -389,6 +394,7 @@ namespace ZeldaEditor {
 					// Test the world after placing the player.
 					if (highlightedTile != -Point2I.One) {
 						editorControl.TestWorld(highlightedRoom, highlightedTile);
+						editorForm.ButtonTestLevelPlace.Checked = false;
 					}
 				}
 				else {

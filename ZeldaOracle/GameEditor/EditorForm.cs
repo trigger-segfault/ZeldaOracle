@@ -26,6 +26,10 @@ namespace ZeldaEditor {
 
 		private ToolStripButton[]	toolButtons;
 
+		private delegate void HotKeyAction();
+
+		private Dictionary<Keys, HotKeyAction> hotKeyCommands;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -82,6 +86,14 @@ namespace ZeldaEditor {
 				buttonToolSelection,
 				buttonToolEyedropper
 			};
+
+			this.hotKeyCommands = new Dictionary<Keys, HotKeyAction>();
+			this.hotKeyCommands.Add(Keys.PageUp, delegate() { cycleLayerUpToolStripMenuItem_Click(null, null); });
+			this.hotKeyCommands.Add(Keys.PageDown, delegate() { cycleLayerUpToolStripMenuItem1_Click(null, null); });
+			this.hotKeyCommands.Add(Keys.M, delegate() { buttonTool_Click(this.buttonToolPointer, null); });
+			this.hotKeyCommands.Add(Keys.P, delegate() { buttonTool_Click(this.buttonToolPlace, null); });
+			this.hotKeyCommands.Add(Keys.S, delegate() { buttonTool_Click(this.buttonToolSelection, null); });
+			this.hotKeyCommands.Add(Keys.K, delegate() { buttonTool_Click(this.buttonToolEyedropper, null); });
 		}
 
 
@@ -113,12 +125,8 @@ namespace ZeldaEditor {
 
 		// Use this for shortcut keys that won't work on their own.
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
-			if (keyData == (Keys.PageUp)) {
-				cycleLayerUpToolStripMenuItem_Click(null, null);
-				return true;
-			}
-			if (keyData == Keys.PageDown) {
-				cycleLayerUpToolStripMenuItem1_Click(null, null);
+			if (hotKeyCommands.ContainsKey(keyData)) {
+				hotKeyCommands[keyData]();
 				return true;
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
@@ -346,8 +354,8 @@ namespace ZeldaEditor {
 			get { return propertyGrid1; }
 		}
 
-		public ToolStripButton ButtonTestPlayerPlace {
-			get { return buttonTestPlayerPlace; }
+		public ToolStripButton ButtonTestLevelPlace {
+			get { return buttonTestLevelPlace; }
 		}
 
 		public ContextMenuStrip ContenxtMenuGeneral {
@@ -458,13 +466,17 @@ namespace ZeldaEditor {
 
 		// Test Level
 		private void testLevelToolStripMenuItem_Click(object sender, EventArgs e) {
-			editorControl.TestWorld();
+			if (!editorControl.IsWorldOpen)
+				MessageBox.Show(this, "No world is open.", "Test World");
+			else if (editorControl.World.LevelCount == 0)
+				MessageBox.Show(this, "Cannot test a world with no levels.", "Test World");
+			else
+				editorControl.TestWorld();
 		}
 
 		// Test Level At Position
 		private void testLevelAtPositionToolStripMenuItem_Click(object sender, EventArgs e) {
-			//editorControl.PlayerPlaceMode = buttonTestPlayerPlace.Checked;
-			editorControl.PlayerPlaceMode = true;
+			editorControl.PlayerPlaceMode = buttonTestLevelPlace.Checked;
 		}
 
 		// Add Level...
@@ -555,20 +567,28 @@ namespace ZeldaEditor {
 		}
 
 		private void treeViewLevels_AfterSelect(object sender, TreeViewEventArgs e) {
-			if (e.Node.Name == "level" || e.Node.Name == "area") {
+			if (e.Node.Name == "level" || e.Node.Name == "area" || e.Node.Name == "dungeon" || e.Node.Name == "script") {
 				int count = 0;
 				if (e.Node.Name == "level")
 					count = editorControl.World.LevelCount;
+				buttonTreeViewEdit.Enabled = true;
+				buttonTreeViewRename.Enabled = true;
 				buttonTreeViewDuplicate.Enabled = true;
-				buttonTreeViewDelete.Enabled = (count > 1);
+				buttonTreeViewDelete.Enabled = true;
 				buttonTreeViewMoveUp.Enabled = (e.Node.Index > 0);
 				buttonTreeViewMoveDown.Enabled = (e.Node.Index + 1 < e.Node.Parent.Nodes.Count);
+				buttonTreeViewResize.Enabled = (e.Node.Name == "level");
+				buttonTreeViewShift.Enabled = (e.Node.Name == "level");
 			}
 			else {
+				buttonTreeViewRename.Enabled = (e.Node.Name == "world");
+				buttonTreeViewEdit.Enabled = (e.Node.Name == "world");
 				buttonTreeViewDuplicate.Enabled = false;
 				buttonTreeViewDelete.Enabled = false;
 				buttonTreeViewMoveUp.Enabled = false;
 				buttonTreeViewMoveDown.Enabled = false;
+				buttonTreeViewResize.Enabled = false;
+				buttonTreeViewShift.Enabled = false;
 			}
 		}
 
@@ -607,9 +627,53 @@ namespace ZeldaEditor {
 					int index = treeViewWorld.SelectedNode.Index;
 					editorControl.World.RemoveLevelAt(treeViewWorld.SelectedNode.Index);
 					editorControl.RefreshWorldTreeView();
-					editorControl.OpenLevel(GMath.Max(0, index - 1));
-					treeViewWorld.SelectedNode = treeViewWorld.Nodes[0].Nodes[0].Nodes[GMath.Max(0, index - 1)];
+					if (editorControl.World.LevelCount == 0) {
+						editorControl.CloseLevel();
+						treeViewWorld.SelectedNode = treeViewWorld.Nodes[0].Nodes[0];
+						treeViewLevels_AfterSelect(null, new TreeViewEventArgs(treeViewWorld.SelectedNode));
+					}
+					else {
+						editorControl.OpenLevel(GMath.Max(0, index - 1));
+						treeViewWorld.SelectedNode = treeViewWorld.Nodes[0].Nodes[0].Nodes[GMath.Max(0, index - 1)];
+					}
 				}
+			}
+		}
+
+		private void buttonTreeViewRename_Click(object sender, EventArgs e) {
+			if (treeViewWorld.SelectedNode.Name == "world") {
+				if (RenameForm.Show(this, editorControl.World.Properties.GetString("id")) == DialogResult.OK) {
+					editorControl.World.Properties.Set("id", RenameForm.NewName);
+					editorControl.RefreshWorldTreeView();
+				}
+			}
+			else if (treeViewWorld.SelectedNode.Name == "level") {
+				int levelIndex = treeViewWorld.SelectedNode.Index;
+				if (RenameForm.Show(this, editorControl.World.GetLevelAt(levelIndex).Properties.GetString("id")) == DialogResult.OK) {
+					editorControl.World.GetLevelAt(levelIndex).Properties.Set("id", RenameForm.NewName);
+					editorControl.RefreshWorldTreeView();
+				}
+			}
+		}
+
+		private void buttonTreeViewResize_Click(object sender, EventArgs e) {
+			if (LevelResizeShiftForm.ShowResize(this, editorControl.Level.Dimensions) == DialogResult.OK) {
+				editorControl.Level.Resize(LevelResizeShiftForm.LevelSize);
+			}
+		}
+
+		private void buttonTreeViewShift_Click(object sender, EventArgs e) {
+			if (LevelResizeShiftForm.ShowShift(this, editorControl.Level.Dimensions) == DialogResult.OK) {
+				editorControl.Level.Shift(LevelResizeShiftForm.LevelShift);
+			}
+		}
+
+		private void buttonTreeViewEdit_Click(object sender, EventArgs e) {
+			if (treeViewWorld.SelectedNode.Name == "world") {
+				editorControl.OpenObjectProperties(editorControl.World);
+			}
+			else if (treeViewWorld.SelectedNode.Name == "level") {
+				editorControl.OpenLevel(treeViewWorld.SelectedNode.Index);
 			}
 		}
 

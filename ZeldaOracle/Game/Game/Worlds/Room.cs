@@ -57,6 +57,8 @@ namespace ZeldaOracle.Game.Worlds {
 				.SetDocumentation("Music", "song", "", "The music to play in this room. Select none to choose the default music.", true, false);
 			this.properties.BaseProperties.Set("zone", "")
 				.SetDocumentation("Zone", "zone", "", "The zone type for this room.", true, false);
+
+			this.properties.Set("zone", zone.ID);
 		}
 		
 
