@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Content;
 
 namespace ZeldaOracle.Common.Scripting {
 
@@ -9,18 +10,21 @@ namespace ZeldaOracle.Common.Scripting {
 
 		// The property map.
 		private Dictionary<string, Property> map;
+		// The properties from which these properties derive from (can be null).
 		private Properties baseProperties;
+		// The object that holds these properties.
 		private IPropertyObject propertyObject;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
-
+		
 		// Construct an empty properties list.
 		public Properties() {
 			this.map			= new Dictionary<string, Property>();
 			this.baseProperties	= null;
+			this.propertyObject	= null;
 		}
 
 
@@ -171,6 +175,11 @@ namespace ZeldaOracle.Common.Scripting {
 			return GetProperty(name);
 		}
 		
+		// Get a resource value with a default value fallback.
+		public T GetResource<T>(string name) where T : class {
+			return Resources.GetResource<T>(GetString(name));
+		}
+		
 		// Get a boolean value with a default value fallback.
 		public string GetString(string name) {
 			if (baseProperties != null && !map.ContainsKey(name))
@@ -203,6 +212,15 @@ namespace ZeldaOracle.Common.Scripting {
 		//-----------------------------------------------------------------------------
 		// Property value acces (with defaults)
 		//-----------------------------------------------------------------------------
+		
+		// Get a resource value with a default value fallback.
+		public T GetResource<T>(string name, T defaultValue) where T : class {
+			if (baseProperties != null && !map.ContainsKey(name))
+				return baseProperties.GetResource(name, defaultValue);
+			if (Exists(name, PropertyType.String))
+				return Resources.GetResource<T>(GetString(name));
+			return defaultValue;
+		}
 
 		// Get a boolean value with a default value fallback.
 		public string GetString(string name, string defaultValue) {
@@ -245,6 +263,13 @@ namespace ZeldaOracle.Common.Scripting {
 		// General Mutators
 		//-----------------------------------------------------------------------------
 		
+		public void RunActionForAll() {
+			List<Property> list = map.Values.ToList();
+			for (int i = 0; i < list.Count; i++) {
+				list[i].RunAction(propertyObject, list[i].Value);
+			}
+		}
+
 		// Clear the property map.
 		public void Clear() {
 			map.Clear();

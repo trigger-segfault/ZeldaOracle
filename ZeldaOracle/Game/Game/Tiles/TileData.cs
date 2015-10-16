@@ -10,19 +10,14 @@ using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TileData {
+	public class TileData : BaseTileData {
 
-		private Type				type;
-
+		private SpriteAnimation[]	spriteList;
 		private TileFlags			flags;
 		private Point2I				size;
-		private SpriteAnimation[]	spriteList;
 		private SpriteAnimation		spriteAsObject;
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
 		private CollisionModel		collisionModel;
-		private Point2I				sheetLocation;	// Location on the tileset.
-		private Tileset				tileset;
-		private Properties			properties;
 
 		
 		//-----------------------------------------------------------------------------
@@ -30,21 +25,12 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public TileData() {
-			type				= null;
+			spriteList			= new SpriteAnimation[0];
 			size				= Point2I.One;
 			flags				= TileFlags.Default;
-			spriteList			= new SpriteAnimation[0];
 			spriteAsObject		= new SpriteAnimation();
 			breakAnimation		= null;
 			collisionModel		= null;
-			sheetLocation		= Point2I.Zero;
-			tileset				= null;
-			properties			= new Properties();
-
-			properties.Set("id", "")
-				.SetDocumentation("ID", "", "", "The id used to refer to this tile.", true, false);
-			properties.Set("sprite_index", 0)
-				.SetDocumentation("Sprite Index", "sprite_index", "", "The current sprite in the sprite list to draw.", true, true);
 		}
 		
 		public TileData(TileFlags flags) : this() {
@@ -56,55 +42,40 @@ namespace ZeldaOracle.Game.Tiles {
 			this.flags	= flags;
 		}
 
-		public TileData(TileData copy) : this() {
-			type				= copy.type;
+		public TileData(TileData copy) : base(copy) {
 			size				= copy.size;
 			flags				= copy.flags;
-			spriteList			= new SpriteAnimation[copy.spriteList.Length];
 			spriteAsObject		= new SpriteAnimation(copy.spriteAsObject);
 			breakAnimation		= copy.breakAnimation;
 			collisionModel		= copy.collisionModel;
-			sheetLocation		= copy.sheetLocation;
-			tileset				= copy.tileset;
-			properties			= new Properties();
-
-			properties.Merge(copy.properties, true);
-
+			spriteList			= new SpriteAnimation[copy.spriteList.Length];
+			
 			for (int i = 0; i < spriteList.Length; i++)
 				spriteList[i] = new SpriteAnimation(copy.spriteList[i]);
 		}
 
-		public void Clone(TileData copy) {
-			type				= copy.type;
-			size				= copy.size;
-			flags				= copy.flags;
-			breakAnimation		= copy.breakAnimation;
-			collisionModel		= copy.collisionModel;
-			properties			= new Properties();
-
-			properties.Merge(copy.properties, true);
-		}
-
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-
-		public Type Type {
-			get { return type; }
-			set { type = value; }
+		public override void Clone(BaseTileData copy) {
+			base.Clone(copy);
+			if (copy is TileData) {
+				TileData copyTileData = (TileData) copy;
+				size				= copyTileData.size;
+				flags				= copyTileData.flags;
+				spriteAsObject		= new SpriteAnimation(copyTileData.spriteAsObject);
+				breakAnimation		= copyTileData.breakAnimation;
+				collisionModel		= copyTileData.collisionModel;
+				spriteList			= new SpriteAnimation[copyTileData.spriteList.Length];
+				
+				for (int i = 0; i < spriteList.Length; i++)
+					spriteList[i] = new SpriteAnimation(copyTileData.spriteList[i]);
+			}
 		}
 		
-		public Point2I Size {
-			get { return size; }
-			set { size = value; }
-		}
 
-		public TileFlags Flags {
-			get { return flags; }
-			set { flags = value; }
-		}
+		//-----------------------------------------------------------------------------
+		// Overridden Properties
+		//-----------------------------------------------------------------------------
 
-		public SpriteAnimation Sprite {
+		public override SpriteAnimation Sprite {
 			get {
 				if (spriteList.Length > 0)
 					return spriteList[0];
@@ -119,9 +90,24 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
 		public SpriteAnimation[] SpriteList {
 			get { return spriteList; }
 			set { spriteList = value; }
+		}
+
+		public Point2I Size {
+			get { return size; }
+			set { size = value; }
+		}
+
+		public TileFlags Flags {
+			get { return flags; }
+			set { flags = value; }
 		}
 
 		public SpriteAnimation SpriteAsObject {
@@ -142,21 +128,6 @@ namespace ZeldaOracle.Game.Tiles {
 		public CollisionModel CollisionModel {
 			get { return collisionModel; }
 			set { collisionModel = value; }
-		}
-
-		public Point2I SheetLocation {
-			get { return sheetLocation; }
-			set { sheetLocation = value; }
-		}
-		
-		public Tileset Tileset {
-			get { return tileset; }
-			set { tileset = value; }
-		}
-
-		public Properties Properties {
-			get { return properties; }
-			set { properties = value; }
 		}
 	}
 }

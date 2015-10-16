@@ -11,48 +11,50 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles.EventTiles {
 	
-	public class EventTileDataInstance : IPropertyObject {
+	public class EventTileDataInstance : BaseTileDataInstance {
 
-		private Room			room;
 		private Point2I			position;
-		private EventTileData	data;
-		private Properties		modifiedProperties; // Properties modified from the tiledata
+		private SpriteAnimation	sprite;
 		
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
-		
-		public EventTileDataInstance() {
-			this.room				= null;
-			this.position			= Point2I.Zero;
-			this.data				= null;
-			this.modifiedProperties	= new Properties();
-			this.modifiedProperties.PropertyObject = this;
+
+		public EventTileDataInstance(EventTileData tileData, Point2I position) :
+			base(tileData)
+		{
+			this.position	= position;
+			this.sprite		= tileData.Sprite;
 		}
 
-		public EventTileDataInstance(EventTileData tileData, Point2I position) {
-			this.room				= null;
-			this.position			= position;
-			this.data				= tileData;
-			this.modifiedProperties	= new Properties();
-			this.modifiedProperties.PropertyObject = this;
-			this.modifiedProperties.BaseProperties = tileData.Properties;
+
+		//-----------------------------------------------------------------------------
+		// Overridden Properties
+		//-----------------------------------------------------------------------------
+
+		// The current sprite/animation to visually display.
+		public override SpriteAnimation CurrentSprite {
+			get {
+				if (sprite.IsAnimation)
+					return sprite.Animation.GetSubstrip(SubStripIndex);
+				return sprite;
+			}
+		}
+
+		public override SpriteAnimation Sprite {
+			get { return sprite; }
+			set { sprite = value; }
 		}
 		
 
 		//-----------------------------------------------------------------------------
-		// Instance Properties
+		// Properties
 		//-----------------------------------------------------------------------------
 		
 		public EventTileData EventTileData {
-			get { return data; }
-			set { data = value; }
-		}
-		
-		public Room Room {
-			get { return room; }
-			set { room = value; }
+			get { return (EventTileData) tileData; }
+			set { tileData = value; }
 		}
 		
 		public Point2I Position {
@@ -60,33 +62,13 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			set { position = value; }
 		}
 
-		public Properties Properties {
-			get { return modifiedProperties; }
-			set {
-				modifiedProperties = value;
-				modifiedProperties.PropertyObject = this;
-			}
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Data Properties
-		//-----------------------------------------------------------------------------
-
-		public Type Type {
-			get { return data.Type; }
-		}
-		
 		public Point2I Size {
-			get { return data.Size; }
+			get { return EventTileData.Size; }
 		}
 
-		public Properties BaseProperties {
-			get { return data.Properties; }
-		}
-
-		public Sprite Sprite {
-			get { return data.Sprite; }
+		public int SubStripIndex {
+			get { return properties.GetInteger("substrip_index"); }
+			set { properties.Set("substrip_index", value); }
 		}
 	}
 }

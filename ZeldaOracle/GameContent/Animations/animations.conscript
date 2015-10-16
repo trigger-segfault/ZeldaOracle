@@ -419,10 +419,10 @@ ANIM effect_falling_object; SUBSTRIP reset;
 SPRITESHEET "npcs";
 
 ANIM npc_1; SUBSTRIP repeat; ADD strip, 16, 2, (0, 0); MAKEDYNAMIC 4, (2, 0); END;
-ANIM npc_2; SUBSTRIP repeat; ADD strip, 16, 2, (1, 0); MAKEDYNAMIC 4, (2, 0); END;
-ANIM npc_3; SUBSTRIP repeat; ADD strip, 16, 2, (2, 0); MAKEDYNAMIC 4, (2, 0); END;
-ANIM npc_4; SUBSTRIP repeat; ADD strip, 16, 2, (3, 0); MAKEDYNAMIC 4, (2, 0); END;
-ANIM npc_5; SUBSTRIP repeat; ADD strip, 16, 2, (4, 0); MAKEDYNAMIC 4, (2, 0); END;
+ANIM npc_2; SUBSTRIP repeat; ADD strip, 16, 2, (0, 1); MAKEDYNAMIC 4, (2, 0); END;
+ANIM npc_3; SUBSTRIP repeat; ADD strip, 16, 2, (0, 2); MAKEDYNAMIC 4, (2, 0); END;
+ANIM npc_4; SUBSTRIP repeat; ADD strip, 16, 2, (0, 3); MAKEDYNAMIC 4, (2, 0); END;
+ANIM npc_5; SUBSTRIP repeat; ADD strip, 16, 2, (0, 4); MAKEDYNAMIC 4, (2, 0); END;
 
 ANIM npc_shopkeeper; SUBSTRIP repeat;
 	ADD frame, 16, (0, 22), (0, 0); ADD part, 16, (0, 21), (0, -16);

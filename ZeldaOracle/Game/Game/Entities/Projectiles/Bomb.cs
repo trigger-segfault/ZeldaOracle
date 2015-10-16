@@ -82,7 +82,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			flashDelay	= 108 - 36;
 			fuseTime	= 108;
 			Graphics.PlayAnimation(GameData.ANIM_ITEM_BOMB);
-			Graphics.AnimationPlayer.Pause();
+			Graphics.PauseAnimation();
 		}
 
 		public override void UpdateCarrying() {

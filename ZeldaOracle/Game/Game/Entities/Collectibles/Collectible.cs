@@ -61,7 +61,7 @@ namespace ZeldaOracle.Game.Entities {
 			
 			timer								= 0;
 
-			Graphics.AnimationPlayer.Animation	= reward.Animation;
+			Graphics.Animation					= reward.Animation;
 			Graphics.IsGrassEffectVisible		= true;
 			Graphics.IsRipplesEffectVisible		= true;
 			Graphics.IsShadowVisible			= true;

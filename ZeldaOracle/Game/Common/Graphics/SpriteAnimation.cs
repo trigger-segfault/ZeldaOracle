@@ -16,19 +16,19 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 
 		public SpriteAnimation() {
-			this.value	= null;
+			this.value = null;
 		}
 
 		public SpriteAnimation(Sprite sprite) {
-			this.value	= sprite;
+			this.value = sprite;
 		}
 
 		public SpriteAnimation(Animation animation) {
-			this.value	= animation;
+			this.value = animation;
 		}
 
 		public SpriteAnimation(SpriteAnimation spriteAnimation) {
-			this.value	= spriteAnimation.value;
+			this.value = spriteAnimation.value;
 		}
 
 
@@ -37,15 +37,15 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 
 		public void Set(Sprite sprite) {
-			this.value	= sprite;
+			this.value = sprite;
 		}
 
 		public void Set(Animation animation) {
-			this.value	= animation;
+			this.value = animation;
 		}
 
 		public void Set(SpriteAnimation spriteAnimation) {
-			this.value	= spriteAnimation.value;
+			this.value = spriteAnimation.value;
 		}
 
 		public void SetNull() {

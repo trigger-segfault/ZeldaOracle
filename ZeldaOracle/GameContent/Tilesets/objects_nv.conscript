@@ -81,16 +81,19 @@ DEFAULT (0, 0);
 
 TILE (0, 0);
 	CLONE			chest;
+	SPRITEINDEX		0, "tileset_objects_nv",				(0, 0);
 	SPRITEINDEX		1, "tileset_objects_nv_extras_16x16",	(0, 0);
 END;
 
 TILE (1, 0);
 	CLONE			chest;
+	SPRITEINDEX		0, "tileset_objects_nv",				(1, 0);
 	SPRITEINDEX		1, "tileset_objects_nv_extras_16x16",	(1, 0);
 END;
 
 TILE (2, 0);
 	CLONE			chest;
+	SPRITEINDEX		0, "tileset_objects_nv",				(2, 0);
 	SPRITEINDEX		1, "tileset_objects_nv_extras_16x16",	(2, 0);
 END;
 
@@ -101,11 +104,14 @@ END;
 
 TILE (6, 0);
 	CLONE			trampoline;
+	SPRITEINDEX		0, "tileset_objects_nv",				(6, 0);
 	SPRITEINDEX		1, trampoline_bounce;
 END;
 
+
 TILE (9, 0);
 	CLONE			owl;
+	SPRITEINDEX		0, tile_owl;
 	SPRITEINDEX		1, owl_activated;
 END;
 

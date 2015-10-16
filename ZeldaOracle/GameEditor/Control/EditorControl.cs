@@ -250,8 +250,11 @@ namespace ZeldaEditor.Control {
 			tileset = Resources.GetResource<Tileset>(name);
 
 			int index = 0;
-			if (!tileset.SpriteSheet.Image.HasVariant(zone.ID))
+			if (!tileset.SpriteSheet.Image.HasVariant(zone.ID)) {
 				zone = Resources.GetResource<Zone>(tileset.SpriteSheet.Image.VariantName);
+				if (zone == null)
+					zone = GameData.ZONE_DEFAULT;
+			}
 			editorForm.ComboBoxZones.Items.Clear();
 			foreach (KeyValuePair<string, Zone> entry in Resources.GetResourceDictionary<Zone>()) {
 				if (tileset.SpriteSheet.Image.HasVariant(entry.Key)) {

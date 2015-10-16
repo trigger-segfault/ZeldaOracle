@@ -153,7 +153,15 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public void DisplayMessage(string text) {
-			PushRoomState(new RoomStateTextReader(new Message(text)));
+			DisplayMessage(new Message(text));
+		}
+		
+		public void DisplayMessage(Message message, Action completeAction) {
+			PushRoomState(new RoomStateQueue(new RoomStateTextReader(message), new RoomStateAction(completeAction)));
+		}
+
+		public void DisplayMessage(string text, Action completeAction) {
+			DisplayMessage(new Message(text), completeAction);
 		}
 		
 

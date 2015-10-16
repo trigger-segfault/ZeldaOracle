@@ -10,9 +10,11 @@ using ZeldaOracle.Game.GameStates.Transitions;
 namespace ZeldaOracle.Game.Tiles.EventTiles {
 
 	public enum WarpType {
-		Tunnel,
-		Entrance,
-		Stairs
+		Tunnel		= 0,
+		Entrance	= 1,
+		Stairs		= 2,
+
+		Count		= 3
 	}
 
 	public class WarpEvent : EventTile {

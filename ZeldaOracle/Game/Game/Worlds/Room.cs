@@ -79,6 +79,22 @@ namespace ZeldaOracle.Game.Worlds {
 		// Mutators
 		//-----------------------------------------------------------------------------
 		
+		public void IterateTiles(Action<TileDataInstance> function) {
+			for (int i = 0; i < LayerCount; i++) {
+				for (int y = 0; y < Height; y++) {
+					for (int x = 0; x < Width; x++) {
+						if (tileData[x, y, i] != null)
+							function(tileData[x, y, i]);
+					}
+				}
+			}
+		}
+		
+		public void IterateEventTiles(Action<EventTileDataInstance> function) {
+			for (int i = 0; i < eventData.Count; i++)
+				function(eventData[i]);
+		}
+
 		public void SetTile(TileDataInstance tile, int x, int y, int layer) {
 			tileData[x, y, layer] = tile;
 			if (tile != null) {

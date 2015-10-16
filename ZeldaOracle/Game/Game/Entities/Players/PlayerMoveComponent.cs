@@ -276,8 +276,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public void ChooseAnimation() {
 			// Update movement animation.
 			if (player.IsOnGround && moveCondition != PlayerMoveCondition.NoControl &&
-				(player.Graphics.AnimationPlayer.Animation == GameData.ANIM_PLAYER_DEFAULT ||
-				player.Graphics.AnimationPlayer.Animation == GameData.ANIM_PLAYER_CARRY))
+				(player.Graphics.Animation == GameData.ANIM_PLAYER_DEFAULT ||
+				player.Graphics.Animation == GameData.ANIM_PLAYER_CARRY))
 			{
 				if (isMoving && !player.Graphics.IsAnimationPlaying)
 					player.Graphics.PlayAnimation();

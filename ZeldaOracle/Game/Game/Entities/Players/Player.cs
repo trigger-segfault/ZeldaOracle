@@ -415,7 +415,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			set {
 				direction = value;
 				if (syncAnimationWithDirection)
-					graphics.AnimationPlayer.SubStripIndex = direction;
+					graphics.SubStripIndex = direction;
 			}
 		}
 

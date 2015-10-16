@@ -16,7 +16,6 @@ namespace ZeldaOracle.Game.Entities
 		private	Point2I			drawOffset;
 		private Entity			entity;				// The entity this component belongs to.
 		private AnimationPlayer	animationPlayer;
-		private int				subStripIndex;
 		private bool			hasDynamicDepth;
 		private	bool			isVisible;
 		private bool			isGrassEffectVisible;
@@ -47,7 +46,6 @@ namespace ZeldaOracle.Game.Entities
 			this.entity					= entity;
 			this.animationPlayer		= new AnimationPlayer();
 			this.sprite					= null;
-			this.subStripIndex			= 0;
 			this.isVisible				= true;
 			this.isShadowVisible		= true;
 			this.grassDrawOffset		= Point2I.Zero;
@@ -101,19 +99,26 @@ namespace ZeldaOracle.Game.Entities
 		public void StopAnimation() {
 			animationPlayer.Stop();
 		}
+		
+		public void PauseAnimation(bool isPaused) {
+			animationPlayer.Pause(isPaused);
+		}
+		
+		public void PauseAnimation() {
+			animationPlayer.Pause();
+		}
+		
+		public void ResumeAnimation() {
+			animationPlayer.Resume();
+		}
 
 
 		//-----------------------------------------------------------------------------
 		// Update/Draw
 		//-----------------------------------------------------------------------------
 		
-		public void SyncAnimation() {
-			animationPlayer.SubStripIndex = subStripIndex;
-		}
-
 		public void Update() {
 			if ((entity.GameControl.UpdateRoom || isAnimatedWhenPaused) && entity.GameControl.AnimateRoom) {
-				animationPlayer.SubStripIndex = subStripIndex;
 				animationPlayer.Update();
 
 				if (isFlickering) {
@@ -186,8 +191,8 @@ namespace ZeldaOracle.Game.Entities
 		}
 
 		public int SubStripIndex {
-			get { return subStripIndex; }
-			set { subStripIndex = value; }
+			get { return animationPlayer.SubStripIndex; }
+			set { animationPlayer.SubStripIndex = value; }
 		}
 
 		public bool IsAnimationPlaying {
@@ -197,6 +202,11 @@ namespace ZeldaOracle.Game.Entities
 
 		public bool IsAnimationDone {
 			get { return animationPlayer.IsDone; }
+		}
+
+		public Animation Animation {
+			get { return animationPlayer.Animation; }
+			set { animationPlayer.Animation = value; }
 		}
 
 		public bool IsVisible {
