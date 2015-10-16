@@ -133,6 +133,8 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 			else {
+				//WorldFile worldFile = new WorldFile();
+				//world = worldFile.Load("temp_world.zwd");
 				world = GameDebug.CreateTestWorld();
 				player.Position = world.StartTileLocation * GameSettings.TILE_SIZE + new Point2I(8, 16);
 				roomControl.BeginRoom(world.StartRoom);

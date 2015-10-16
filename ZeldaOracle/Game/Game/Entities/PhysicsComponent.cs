@@ -425,14 +425,20 @@ namespace ZeldaOracle.Game.Entities {
 					velocity.X	= 0.0f;
 
 					if (myBox.Center.X < block.Center.X) {
-						entity.X = block.Left - collisionBox.Right;
-						if (!HasFlags(PhysicsFlags.AutoDodge) || !PerformCollisionDodge(block, Directions.Right))
-							collisionInfo[Directions.Right].SetTileCollision(tile, Directions.Right);
+						// TODO: David refactor this hackish 'if statement' to prevent the player from jittering when getting pushed vertically.
+						// See below if statement as well.
+						if (tile.MoveDirection % 2 != 1) {
+							entity.X = block.Left - collisionBox.Right;
+							if (!HasFlags(PhysicsFlags.AutoDodge) || !PerformCollisionDodge(block, Directions.Right))
+								collisionInfo[Directions.Right].SetTileCollision(tile, Directions.Right);
+						}
 					}
 					else {
-						entity.X = block.Right - collisionBox.Left;
-						if (!HasFlags(PhysicsFlags.AutoDodge) || !PerformCollisionDodge(block, Directions.Left))
-							collisionInfo[Directions.Left].SetTileCollision(tile, Directions.Left);
+						if (tile.MoveDirection % 2 != 1) {
+							entity.X = block.Right - collisionBox.Left;
+							if (!HasFlags(PhysicsFlags.AutoDodge) || !PerformCollisionDodge(block, Directions.Left))
+								collisionInfo[Directions.Left].SetTileCollision(tile, Directions.Left);
+						}
 					}
 					return true;
 				}

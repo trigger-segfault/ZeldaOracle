@@ -51,6 +51,18 @@ namespace ZeldaOracle.Common.Geometry {
 			return (Directions.Count - direction) % Directions.Count;
 		}
 
+		public static int FromPoint(Point2I point) {
+			if (point.X > 0)
+				return Directions.Right;
+			if (point.Y < 0)
+				return Directions.Up;
+			if (point.X < 0)
+				return Directions.Left;
+			if (point.Y > 0)
+				return Directions.Down;
+			return -1;
+		}
+
 		public static Point2I ToPoint(int direction) {
 			direction = direction % 4;
 			if (direction == Right)
