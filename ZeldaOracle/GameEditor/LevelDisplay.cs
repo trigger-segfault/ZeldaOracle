@@ -54,6 +54,7 @@ namespace ZeldaEditor {
 
 			// TEMP: Open this world file upon starting the editor.
 			editorControl.OpenFile("../../../../WorldFiles/temp_world.zwd");
+			//editorControl.OpenFile("temp_world.zwd");
 
 			UpdateLevel();
 

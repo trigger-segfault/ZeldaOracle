@@ -137,6 +137,7 @@
 			this.contextMenuGeneral = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.editPropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.renameToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.textBoxScript = new System.Windows.Forms.RichTextBox();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.toolStrip2.SuspendLayout();
@@ -160,6 +161,7 @@
 			this.panelTiles1.SuspendLayout();
 			this.toolStrip3.SuspendLayout();
 			this.panelProperties.SuspendLayout();
+			this.levelTabPageEvents.SuspendLayout();
 			this.contextMenuLevelSelect.SuspendLayout();
 			this.contextMenuGeneral.SuspendLayout();
 			this.SuspendLayout();
@@ -1007,7 +1009,7 @@
 			this.levelTabPageTiles.Padding = new System.Windows.Forms.Padding(3);
 			this.levelTabPageTiles.Size = new System.Drawing.Size(665, 398);
 			this.levelTabPageTiles.TabIndex = 1;
-			this.levelTabPageTiles.Text = "Tiles";
+			this.levelTabPageTiles.Text = "Level Editor";
 			this.levelTabPageTiles.UseVisualStyleBackColor = true;
 			// 
 			// splitContainerWorldAndTiles
@@ -1122,12 +1124,13 @@
 			// 
 			// levelTabPageEvents
 			// 
+			this.levelTabPageEvents.Controls.Add(this.textBoxScript);
 			this.levelTabPageEvents.Location = new System.Drawing.Point(4, 22);
 			this.levelTabPageEvents.Name = "levelTabPageEvents";
 			this.levelTabPageEvents.Padding = new System.Windows.Forms.Padding(3);
 			this.levelTabPageEvents.Size = new System.Drawing.Size(665, 398);
 			this.levelTabPageEvents.TabIndex = 2;
-			this.levelTabPageEvents.Text = "Unused";
+			this.levelTabPageEvents.Text = "Script Editor";
 			this.levelTabPageEvents.UseVisualStyleBackColor = true;
 			// 
 			// contextMenuLevelSelect
@@ -1231,6 +1234,20 @@
 			this.renameToolStripMenuItem1.Text = "Rename";
 			this.renameToolStripMenuItem1.Click += new System.EventHandler(this.renameToolStripMenuItem1_Click);
 			// 
+			// textBoxScript
+			// 
+			this.textBoxScript.AcceptsTab = true;
+			this.textBoxScript.BackColor = System.Drawing.SystemColors.Window;
+			this.textBoxScript.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.textBoxScript.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.textBoxScript.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.textBoxScript.Location = new System.Drawing.Point(3, 3);
+			this.textBoxScript.Name = "textBoxScript";
+			this.textBoxScript.Size = new System.Drawing.Size(659, 392);
+			this.textBoxScript.TabIndex = 0;
+			this.textBoxScript.Text = "";
+			this.textBoxScript.WordWrap = false;
+			// 
 			// EditorForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1276,6 +1293,7 @@
 			this.toolStrip3.ResumeLayout(false);
 			this.toolStrip3.PerformLayout();
 			this.panelProperties.ResumeLayout(false);
+			this.levelTabPageEvents.ResumeLayout(false);
 			this.contextMenuLevelSelect.ResumeLayout(false);
 			this.contextMenuGeneral.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -1397,5 +1415,6 @@
 		private System.Windows.Forms.ToolStripButton buttonTreeViewEdit;
 		private System.Windows.Forms.ToolStripButton buttonTreeViewResize;
 		private System.Windows.Forms.ToolStripButton buttonTreeViewShift;
+		private System.Windows.Forms.RichTextBox textBoxScript;
 	}
 }

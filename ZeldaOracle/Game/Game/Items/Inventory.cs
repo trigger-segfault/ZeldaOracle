@@ -82,6 +82,18 @@ namespace ZeldaOracle.Game.Items {
 			}
 		}
 
+		public bool IsWeaponEquipped(Item item) {
+			return equippedWeapons[0] == item || equippedWeapons[1] == item;
+		}
+
+		public bool IsWeaponButtonDown(Item item) {
+			if (equippedWeapons[0] == item)
+				return Controls.A.IsDown();
+			if (equippedWeapons[1] == item)
+				return Controls.B.IsDown();
+			return false;
+		}
+
 		// Equips a non-usable item.
 		public void EquipEquipment(Item item) {
 			ItemEquipment equippableItem = item as ItemEquipment;

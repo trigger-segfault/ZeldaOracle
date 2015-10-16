@@ -13,6 +13,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Entities.Players.States;
+using ZeldaOracle.Common.Audio;
 
 
 //States:
@@ -312,6 +313,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 						performedAction = true;
 					}
 				}
+			}
+
+			if (IsOnGround && movement.JumpStartTile != -Point2I.One) {
+				RoomControl.GetTopTile(RoomControl.GetTileLocation(Origin)).OnLand(movement.JumpStartTile);
+				movement.JumpStartTile = -Point2I.One;
 			}
 
 			// Update the current player state.

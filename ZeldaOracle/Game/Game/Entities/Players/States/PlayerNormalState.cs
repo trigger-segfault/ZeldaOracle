@@ -75,6 +75,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					if (pushTimer > actionTile.PushDelay && actionTile.Flags.HasFlag(TileFlags.Movable)) {
 						if (actionTile.OnPush(player.Direction, 1.0f))
 							pushTimer = 0;
+						else
+							actionTile.OnPushing(player.Direction);
+					}
+					else {
+						actionTile.OnPushing(player.Direction);
 					}
 				}
 				else {

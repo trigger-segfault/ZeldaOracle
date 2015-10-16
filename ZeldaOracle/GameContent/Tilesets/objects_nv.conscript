@@ -23,6 +23,15 @@ SPRITESHEET "tileset_objects_nv_extras_16x16";
 TEMPANIM trampoline_bounce; SUBSTRIP clamp;
 	ADD frame, 12, (4, 0); ADD frame, 2, (3, 0); ADD frame, 8, (5, 0); ADD frame, 1, (3, 0); END;
 
+TEMPANIM roller_horizontal_roll;
+	SUBSTRIP clamp;  ADD frame, 9, (6, 0); ADD frame, 12, (7, 0); ADD frame, 10, (8, 0); ADD frame, 1, (6, 0);
+	SUBSTRIP clamp;  ADD frame, 9, (6, 0); ADD frame, 12, (8, 0); ADD frame, 10, (7, 0); ADD frame, 1, (6, 0); END;
+	
+TEMPANIM roller_vertical_roll;
+	SUBSTRIP clamp;  ADD frame, 9, (9, 0); ADD frame, 12, (11, 0); ADD frame, 10, (10, 0); ADD frame, 1, (9, 0);
+	SUBSTRIP clamp;  ADD frame, 9, (9, 0); ADD frame, 12, (10, 0); ADD frame, 10, (11, 0); ADD frame, 1, (9, 0); END;
+
+
 #==============================================================
 # Tiles
 #==============================================================
@@ -70,6 +79,40 @@ TEMPTILE owl;
 			"The text to display when the owl is activated.", false);
 END;
 
+TEMPTILE color_cube;
+	TYPE		TileColorCube;
+	FLAGS		solid, movable;
+	MODEL		block;
+	PROPERTIES
+		(show sprite_index);
+END;
+
+TEMPTILE roller_horizontal;
+	TYPE		TileRoller;
+	FLAGS		solid, movable, notgrabbable;
+	MODEL		block;
+	PROPERTIES
+		(boolean, vertical, "false",
+			"Vertical", "", "",
+			"The roller rolls vertically", true),
+		(boolean, first_roller, "false",
+			"First Roller", "", "",
+			"This is the top left roller of a group. Any rollers before this won't be connected.", false);
+END;
+
+TEMPTILE roller_vertical;
+	TYPE		TileRoller;
+	FLAGS		solid, movable, notgrabbable;
+	MODEL		block;
+	PROPERTIES
+		(boolean, vertical, "true",
+			"Vertical", "", "",
+			"The roller rolls vertically", true),
+		(boolean, first_roller, "false",
+			"First Roller", "", "",
+			"This is the top left roller of a group. Any rollers before this won't be connected.", false);
+END;
+
 #==============================================================
 # Tilesets
 #==============================================================
@@ -104,9 +147,29 @@ TILE (6, 0);
 	SPRITEINDEX		1, trampoline_bounce;
 END;
 
+TILE (7, 0);
+	CLONE			roller_horizontal;
+	SPRITEINDEX		1, roller_horizontal_roll;
+END;
+
+TILE (8, 0);
+	CLONE			roller_vertical;
+	SPRITEINDEX		1, roller_vertical_roll;
+END;
+
 TILE (9, 0);
 	CLONE			owl;
 	SPRITEINDEX		1, owl_activated;
+END;
+
+TILE (10, 0);
+	CLONE color_cube;
+	SPRITEINDEX		0, "color_cube", (0, 0);
+	SPRITEINDEX		1, "color_cube", (1, 0);
+	SPRITEINDEX		2, "color_cube", (2, 0);
+	SPRITEINDEX		3, "color_cube", (3, 0);
+	SPRITEINDEX		4, "color_cube", (4, 0);
+	SPRITEINDEX		5, "color_cube", (5, 0);
 END;
 
 END;

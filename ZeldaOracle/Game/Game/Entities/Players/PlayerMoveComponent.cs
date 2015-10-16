@@ -47,6 +47,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private Vector2F			velocityPrev;			// The player's velocity on the previous frame.
 		private int					moveAngle;				// The angle the player is moving in.
 		private int					moveDirection;			// The direction that the player wants to face.
+		private Point2I				jumpStartTile;			// The tile the player started jumping on. (Used for jump color tiles)
 
 		// Movement modes.
 		private PlayerMotionType	mode;
@@ -80,6 +81,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			velocityPrev			= Vector2F.Zero;
 			moveAngle				= Angles.South;
 			mode					= new PlayerMotionType();
+			jumpStartTile			= -Point2I.One;
 
 			// Controls.
 			analogMode		= false;
@@ -152,6 +154,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public void Jump() {
 			if (player.IsOnGround) {
+				jumpStartTile = player.RoomControl.GetTileLocation(player.Origin);
 				player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
 				if (player.CurrentState is PlayerNormalState)
 					player.Graphics.PlayAnimation("player_jump");
@@ -410,6 +413,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public PlayerMoveCondition MoveCondition {
 			get { return moveCondition; }
 			set { moveCondition = value; }
+		}
+
+		public Point2I JumpStartTile {
+			get { return jumpStartTile; }
+			set { jumpStartTile = value; }
 		}
 	}
 }

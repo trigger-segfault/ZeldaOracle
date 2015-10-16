@@ -45,6 +45,7 @@ namespace ZeldaOracle.Game.Tiles {
 		LedgeDown		= 0x80000000,
 		
 		//Surface			= 0x100000000,	// Does this tile count as a walkable surface opposed?
+		NotGrabbable	= 0x200000000,
 
 		Default			= 0,			// Default tile flags.
 	}
