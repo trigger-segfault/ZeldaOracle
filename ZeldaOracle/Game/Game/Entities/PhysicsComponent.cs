@@ -663,7 +663,11 @@ namespace ZeldaOracle.Game.Entities {
 		public bool IsInWater {
 			get { return IsOnGround && topTileFlags.HasFlag(TileFlags.Water); }
 		}
-		
+
+		public bool IsInOcean {
+			get { return IsOnGround && topTileFlags.HasFlag(TileFlags.Ocean); }
+		}
+
 		public bool IsInLava {
 			get { return IsOnGround && topTileFlags.HasFlag(TileFlags.Lava); }
 		}

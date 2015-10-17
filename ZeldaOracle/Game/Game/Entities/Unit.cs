@@ -44,6 +44,26 @@ namespace ZeldaOracle.Game.Entities {
 			centerOffset	= new Point2I(8, 8);
 		}
 
+		//-----------------------------------------------------------------------------
+		// Virtual methods
+		//-----------------------------------------------------------------------------
+
+
+		public virtual void Hurt(int damage) {
+
+		}
+
+		public virtual void Hurt(int damage, float radians) {
+			
+		}
+
+		public virtual void RespawnDeath() {
+			
+		}
+
+		public virtual void Death() {
+
+		}
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
