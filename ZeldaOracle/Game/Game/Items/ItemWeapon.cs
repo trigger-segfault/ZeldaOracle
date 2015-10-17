@@ -30,6 +30,31 @@ namespace ZeldaOracle.Game.Items {
 		}
 
 
+		public void Equip(int slot) {
+			equipSlot = slot;
+			base.Equip();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Buttons
+		//-----------------------------------------------------------------------------
+		
+		public bool IsButtonDown() {
+			if (IsTwoHanded)
+				return inventory.GetSlotButton(0).IsDown() ||
+					inventory.GetSlotButton(1).IsDown();
+			return inventory.GetSlotButton(equipSlot).IsDown();
+		}
+		
+		public bool IsButtonPressed() {
+			if (IsTwoHanded)
+				return inventory.GetSlotButton(0).IsPressed() ||
+					inventory.GetSlotButton(1).IsPressed();
+			return inventory.GetSlotButton(equipSlot).IsPressed();
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Virtual
 		//-----------------------------------------------------------------------------
@@ -44,12 +69,6 @@ namespace ZeldaOracle.Game.Items {
 				return true;
 			return (Player.CurrentState is PlayerNormalState);
 		}
-
-		// Called when the item is switched to.
-		public virtual void OnStart() { }
-
-		// Called when the item is put away.
-		public virtual void OnEnd() { }
 
 		// Immediately interrupt this item (ex: if the player falls in a hole).
 		public virtual void Interrupt() { }
@@ -109,6 +128,10 @@ namespace ZeldaOracle.Game.Items {
 
 		public InputControl CurrentControl {
 			get { return inventory.GetSlotButton(equipSlot); }
+		}
+
+		public bool IsTwoHanded {
+			get { return flags.HasFlag(ItemFlags.TwoHanded); }
 		}
 	}
 }

@@ -50,7 +50,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			timer = 0;
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_GRAB);
-			player.Graphics.AnimationPlayer.Pause();
+			player.Graphics.PauseAnimation();
 		}
 		
 		public override void OnEnd(PlayerState newState) {
@@ -76,7 +76,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 			else {
 				timer = 0;
-				player.Graphics.AnimationPlayer.Stop();
+				player.Graphics.StopAnimation();
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_GRAB);
 			}
 		}

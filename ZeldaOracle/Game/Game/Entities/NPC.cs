@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Main;
 
@@ -34,6 +35,8 @@ namespace ZeldaOracle.Game.Entities {
 		// The animation to play when being talked to.
 		private SpriteAnimation animationTalk;
 
+		private Message message;
+
 		private NPCFlags flags;
 
 
@@ -55,6 +58,9 @@ namespace ZeldaOracle.Game.Entities {
 			actionAlignDistance	= 5;
 			flags				= NPCFlags.FacePlayerOnTalk | NPCFlags.FacePlayerWhenNear;
 			
+			message = null;
+			animationTalk = null;
+
 			// Bounding box for talking is 4 pixels beyond the hard collision box (inclusive).
 			// Alignment limit is a max 5 pixels in either direction (inclusive).
 		}
@@ -65,22 +71,31 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public override void Initialize() {
-			//Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
-			Graphics.PlayAnimation("npc_shopkeeper");
+			Graphics.PlayAnimation(animationDefault);
 
 			sightDistance	= 2;
-			direction		= Directions.Down;
 			faceDirection	= direction;
 
-			Graphics.IsAnimatedWhenPaused = flags.HasFlag(NPCFlags.AnimateOnTalk);
+			Graphics.IsAnimatedWhenPaused	= flags.HasFlag(NPCFlags.AnimateOnTalk);
+			Graphics.SubStripIndex			= faceDirection;
 		}
 
 		public override bool OnPlayerAction(int direction) {
-			//GameControl.DisplayMessage("Hello, my friend!");
-			GameControl.DisplayMessage("Welcome, sir! Bring me any item you wish to purchase.");
-			if (flags.HasFlag(NPCFlags.FacePlayerOnTalk))
-				faceDirection = Directions.Reverse(direction);
-			return true;
+			if (message != null) {
+				if (!animationTalk.IsNull) {
+					Graphics.PlayAnimation(animationTalk);
+				}
+				if (flags.HasFlag(NPCFlags.FacePlayerOnTalk)) {
+					faceDirection = Directions.Reverse(direction);
+					Graphics.SubStripIndex = faceDirection;
+				}
+				GameControl.DisplayMessage(message, delegate() {
+					if (!animationTalk.IsNull)
+						Graphics.PlayAnimation(animationDefault);
+				});
+				return true;
+			}
+			return false;
 		}
 
 		public override void Update() {
@@ -132,6 +147,26 @@ namespace ZeldaOracle.Game.Entities {
 		public NPCFlags Flags {
 			get { return flags; }
 			set { flags = value; }
+		}
+
+		public int Direction {
+			get { return direction; }
+			set { direction = value; }
+		}
+
+		public Message Message {
+			get { return message; }
+			set { message = value; }
+		}
+
+		public SpriteAnimation DefaultAnimation {
+			get { return animationDefault; }
+			set { animationDefault = value; }
+		}
+
+		public SpriteAnimation TalkAnimation {
+			get { return animationTalk; }
+			set { animationTalk = value; }
 		}
 	}
 }

@@ -132,6 +132,22 @@ namespace ZeldaOracle.Game.Worlds {
 				world.Levels.Add(level);
 			}
 
+			// Trigger property actions on tiles.
+			for (int i = 0; i < world.LevelCount; i++) {
+				Level level = world.Levels[i];
+				for (int x = 0; x < level.Width; x++) {
+					for (int y = 0; y < level.Height; y++) {
+						Room room = level.GetRoomAt(x, y);
+						room.IterateTiles(delegate(TileDataInstance tile) {
+							tile.Properties.RunActionForAll();
+						});
+						room.IterateEventTiles(delegate(EventTileDataInstance tile) {
+							tile.Properties.RunActionForAll();
+						});
+					}
+				}
+			}
+
 			return world;
 		}
 
@@ -246,13 +262,12 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		private EventTileDataInstance ReadEventTileData(BinaryReader reader) {
-			EventTileDataInstance eventTile = new EventTileDataInstance();
-
-			// Create event tile from a EventTileData resource.
-			eventTile.EventTileData = ReadResource(reader, eventTileData);
-			eventTile.Position = new Point2I(
+			EventTileData tileData = ReadResource(reader, eventTileData);
+			Point2I position = new Point2I(
 				reader.ReadInt32(),
 				reader.ReadInt32());
+
+			EventTileDataInstance eventTile = new EventTileDataInstance(tileData, position);
 			eventTile.Properties = ReadProperties(reader);
 			eventTile.Properties.BaseProperties = eventTile.EventTileData.Properties;
 

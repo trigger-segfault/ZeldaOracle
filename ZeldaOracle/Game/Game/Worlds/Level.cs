@@ -89,7 +89,7 @@ namespace ZeldaOracle.Game.Worlds {
 					if (oldRooms != null && x < dimensions.X && y < dimensions.Y)
 						rooms[x, y] = oldRooms[x, y];
 					else
-						rooms[x, y] = new Room(this, x, y, zone ?? Resources.GetResource<Zone>(""));
+						rooms[x, y] = new Room(this, x, y, zone ?? GameData.ZONE_DEFAULT);
 				}
 			}
 

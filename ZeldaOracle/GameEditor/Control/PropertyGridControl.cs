@@ -49,6 +49,8 @@ namespace ZeldaEditor.Control {
 			typeEditors["text_message"]		= new TextMessagePropertyEditor();
 			typeEditors["script"]			= null;
 			typeEditors["sprite_index"]		= new SpriteIndexComboBox(this);
+			typeEditors["direction"]		= null;
+			typeEditors["angle"]			= null;
 
 		}
 

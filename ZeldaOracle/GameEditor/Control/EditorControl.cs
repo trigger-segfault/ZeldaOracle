@@ -67,7 +67,6 @@ namespace ZeldaEditor.Control {
 		private Point2I			selectedTilesetTile;
 		private TileData		selectedTilesetTileData;
 		private bool			playerPlaceMode;
-		private bool			sampleFromAllLayers; // TODO: implement this.
 		private bool			showEvents;
 
 
@@ -105,7 +104,6 @@ namespace ZeldaEditor.Control {
 			this.selectedTilesetTile		= Point2I.Zero;
 			this.selectedTilesetTileData	= null;
 			this.playerPlaceMode			= false;
-			this.sampleFromAllLayers		= false;
 		}
 
 		public void Initialize(ContentManager contentManager, GraphicsDevice graphicsDevice) {
@@ -250,8 +248,11 @@ namespace ZeldaEditor.Control {
 			tileset = Resources.GetResource<Tileset>(name);
 
 			int index = 0;
-			if (!tileset.SpriteSheet.Image.HasVariant(zone.ID))
+			if (!tileset.SpriteSheet.Image.HasVariant(zone.ID)) {
 				zone = Resources.GetResource<Zone>(tileset.SpriteSheet.Image.VariantName);
+				if (zone == null)
+					zone = GameData.ZONE_DEFAULT;
+			}
 			editorForm.ComboBoxZones.Items.Clear();
 			foreach (KeyValuePair<string, Zone> entry in Resources.GetResourceDictionary<Zone>()) {
 				if (tileset.SpriteSheet.Image.HasVariant(entry.Key)) {

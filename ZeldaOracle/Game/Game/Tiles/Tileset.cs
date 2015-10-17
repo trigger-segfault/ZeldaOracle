@@ -39,9 +39,9 @@ namespace ZeldaOracle.Game.Tiles {
 			for (int x = 0; x < size.X; x++) {
 				for (int y = 0; y < size.Y; y++) {
 					tileData[x, y] = new TileData();
-					tileData[x, y].Tileset = this;
-					tileData[x, y].SheetLocation = new Point2I(x, y);
-					tileData[x, y].Sprite = new Sprite(sheet, x, y);
+					tileData[x, y].Tileset			= this;
+					tileData[x, y].SheetLocation	= new Point2I(x, y);
+					tileData[x, y].Sprite			= new Sprite(sheet, x, y);
 				}
 			}
 		}

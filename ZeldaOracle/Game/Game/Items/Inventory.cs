@@ -67,7 +67,7 @@ namespace ZeldaOracle.Game.Items {
 			else {
 				// Unequip the current item.
 				if (equippedWeapons[slot] != null) {
-					if (equippedWeapons[slot].HasFlag(ItemFlags.TwoHanded))
+					if (equippedWeapons[slot].IsTwoHanded)
 						equippedWeapons[1 - slot] = null;
 					equippedWeapons[slot].Unequip();
 				}

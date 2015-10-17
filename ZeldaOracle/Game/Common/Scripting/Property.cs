@@ -212,7 +212,9 @@ namespace ZeldaOracle.Common.Scripting {
 			RunAction(properties.PropertyObject, objectValue);
 		}*/
 
-		public Property SetDocumentation(string readableName, string editorType, string category, string description, bool isEditable, bool isHidden) {
+		public Property SetDocumentation(string readableName, string editorType, string category,
+			string description, bool isEditable = true, bool isHidden = false)
+		{
 			documentation = new PropertyDocumentation(readableName, editorType, category, description, isEditable, isHidden);
 			return this;
 		}
@@ -354,6 +356,20 @@ namespace ZeldaOracle.Common.Scripting {
 				objectValue = value;
 				if (properties != null)
 					RunAction(properties.PropertyObject, value);
+			}
+		}
+
+		public object Value {
+			get {
+				if (type == PropertyType.String)
+					return StringValue;
+				if (type == PropertyType.Integer)
+					return IntValue;
+				if (type == PropertyType.Float)
+					return FloatValue;
+				if (type == PropertyType.Boolean)
+					return BoolValue;
+				return null;
 			}
 		}
 

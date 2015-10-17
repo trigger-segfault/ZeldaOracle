@@ -18,6 +18,8 @@ namespace ZeldaOracle.Game.Control.Menus {
 		private int ammoSlot;
 		private Point2I ammoMenuSize;
 		private SlotGroup ammoSlotGroup;
+		private ItemWeapon[] oldEquippedWeapons;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -30,6 +32,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 			this.ammoSlot			= 0;
 			this.ammoMenuSize		= new Point2I(16, 8);
 			this.ammoSlotGroup		= null;
+			this.oldEquippedWeapons		= new ItemWeapon[2];
 
 			SlotGroup group = new SlotGroup();
 			currentSlotGroup = group;
@@ -66,6 +69,35 @@ namespace ZeldaOracle.Game.Control.Menus {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
+
+		public override void OnOpen() {
+			// Remember the equipped items from before opening the menu.
+			for (int i = 0; i < Inventory.NumEquipSlots; i++)
+				oldEquippedWeapons[i] = GameControl.Inventory.EquippedWeapons[i];
+		}
+
+		public override void OnClose() {
+			// Unequp old weapons.
+			for (int i = 0; i < Inventory.NumEquipSlots; i++) {
+				ItemWeapon weapon = oldEquippedWeapons[i];
+				if (weapon != null && !GameControl.Inventory.IsWeaponEquipped(weapon)) {
+					weapon.Unequip();
+					if (weapon.IsTwoHanded)
+						break;
+				}
+			}
+
+			// Equip new weapons.
+			for (int i = 0; i < Inventory.NumEquipSlots; i++) {
+				ItemWeapon weapon = GameControl.Inventory.EquippedWeapons[i];
+				if (weapon != null) {
+					weapon.Equip(i);
+					if (weapon.IsTwoHanded)
+						break;
+				}
+			}
+		}
+
 		public override void Update() {
 			base.Update();
 
@@ -74,12 +106,13 @@ namespace ZeldaOracle.Game.Control.Menus {
 				if (Controls.A.IsPressed() || Controls.B.IsPressed()) {
 					int slot = (Controls.A.IsPressed() ? 0 : 1);
 					ItemWeapon selectedItem = slotGroups[0].CurrentSlot.SlotItem as ItemWeapon;
+
 					if (selectedItem != null && selectedItem.NumAmmos > 1) {
-						ammoMenuSize = new Point2I(16, 8);
-						ammoSlot = slot;
-						inSubMenu = true;
-						currentSlotGroup = null;
-						ammoSlotGroup = new SlotGroup();
+						ammoMenuSize		= new Point2I(16, 8);
+						ammoSlot			= slot;
+						inSubMenu			= true;
+						currentSlotGroup	= null;
+						ammoSlotGroup		= new SlotGroup();
 						List<Ammo> ammo = new List<Ammo>();
 
 						int currentAmmoIndex = 0;
@@ -166,8 +199,30 @@ namespace ZeldaOracle.Game.Control.Menus {
 		private void EquipWeapon(int slot) {
 			ItemWeapon weapon = slotGroups[0].CurrentSlot.SlotItem as ItemWeapon;
 			AudioSystem.PlaySound("UI/menu_select");
+			
 			if (GameControl.Inventory.EquippedWeapons[slot] != null) {
-				if (weapon != null && weapon.HasFlag(ItemFlags.TwoHanded)) {
+				if (GameControl.Inventory.EquippedWeapons[slot].IsTwoHanded)
+					GameControl.Inventory.EquippedWeapons[1 - slot] = null;
+
+				ItemWeapon placeholder = GameControl.Inventory.EquippedWeapons[slot];
+				GameControl.Inventory.EquippedWeapons[slot] = weapon;
+
+				slotGroups[0].CurrentSlot.SlotItem = placeholder;
+			}
+			else {
+				GameControl.Inventory.EquippedWeapons[slot] = weapon;
+				slotGroups[0].CurrentSlot.SlotItem = null;
+			}
+
+			if (weapon != null && weapon.IsTwoHanded) {
+				if (GameControl.Inventory.EquippedWeapons[1 - slot] != null)
+					NextAvailableSlot.SlotItem = GameControl.Inventory.EquippedWeapons[1 - slot];
+				GameControl.Inventory.EquippedWeapons[1 - slot] = weapon;
+			}
+			
+			/*
+			if (GameControl.Inventory.EquippedWeapons[slot] != null) {
+				if (weapon != null && weapon.IsTwoHanded) {
 					NextAvailableSlot.SlotItem = GameControl.Inventory.EquippedWeapons[1 - slot];
 				}
 				ItemWeapon placeholder = GameControl.Inventory.EquippedWeapons[slot];
@@ -178,6 +233,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 				GameControl.Inventory.EquipWeapon(weapon, slot);
 				slotGroups[0].CurrentSlot.SlotItem = null;
 			}
+			*/
 			ResetDescription();
 		}
 

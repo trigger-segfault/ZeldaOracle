@@ -297,10 +297,6 @@ namespace ZeldaOracle.Game.Control {
 					if (GameControl.AnimateRoom)
 						entities[i].UpdateGraphics();
 				}
-				else if (entities[i].IsAlive && entities[i].IsInRoom && i >= entityCount) {
-					// For entities spawned this frame, only update their graphics component.
-					entities[i].Graphics.SyncAnimation();
-				}
 			}
 
 			// Remove destroyed entities.

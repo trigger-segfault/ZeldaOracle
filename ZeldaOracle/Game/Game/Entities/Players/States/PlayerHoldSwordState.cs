@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
 
@@ -12,10 +13,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		private PlayerState nextState;
 		private Animation weaponAnimation;
-		private int equipSlot;
+		private ItemWeapon weapon;
 		private int chargeTimer;
 		private int direction;
-		private bool isStabbing;
 
 
 		//-----------------------------------------------------------------------------
@@ -32,7 +32,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public PlayerHoldSwordState() {
 			this.weaponAnimation	= null;
 			this.nextState			= null;
-			this.equipSlot			= 0;
+			this.weapon				= null;
 			this.chargeTimer		= 0;
 			this.direction			= Directions.Right;
 		}
@@ -43,23 +43,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		private void StabTile(Tile tile) {
-			isStabbing	= true;
-			chargeTimer	= 0;
-			player.Movement.MoveCondition = PlayerMoveCondition.NoControl; // TODO: allows sideways movement for stabbing.
-			player.toolAnimation.Play(GameData.ANIM_SWORD_STAB);
-			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_STAB);
 			if (player.IsOnGround)
 				tile.OnSwordHit();
-		}
-		
-		private void EndStab() {
-			isStabbing	= false;
-			chargeTimer	= 0;
-			player.Movement.MoveCondition	= PlayerMoveCondition.FreeMovement;
-			player.toolAnimation.Animation	= weaponAnimation;
-			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
-			if (player.GameControl.Inventory.GetSlotButton(equipSlot).IsUp())
-				player.BeginNormalState();
+			player.BeginState(player.SwordStabState);
 		}
 
 
@@ -68,14 +54,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			isStabbing = false;
-			
 			// The player can hold his sword while ledge jumping.
 
 			if (!(previousState is PlayerLedgeJumpState))
 				chargeTimer = 0;
 
-			if (player.GameControl.Inventory.GetSlotButton(equipSlot).IsDown()) {
+			if (weapon.IsEquipped && weapon.IsButtonDown()) {
 				player.Movement.IsStrafing		= true;
 				player.Movement.MoveCondition	= PlayerMoveCondition.FreeMovement;
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
@@ -107,31 +91,25 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			player.Direction = direction;
 
-			if (isStabbing) {
-				if (player.Graphics.IsAnimationDone)
-					EndStab();
+			// Charge up the sword.
+			chargeTimer++;
+				if (chargeTimer == ChargeTime) {
+				player.toolAnimation.Animation = GameData.ANIM_SWORD_CHARGED;
+				// TODO: play charge sound.
 			}
-			else {
-				// Charge up the sword.
-				chargeTimer++;
-				 if (chargeTimer == ChargeTime) {
-					player.toolAnimation.Animation = GameData.ANIM_SWORD_CHARGED;
-					// TODO: play charge sound.
-				}
 			
-				// Check for tiles to stab.
-				CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
-				Tile tile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
-				if (tile != null && player.Movement.IsMoving && collisionInfo.Type == CollisionType.Tile)
-					StabTile(tile);
+			// Check for tiles to stab.
+			CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
+			Tile tile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
+			if (tile != null && player.Movement.IsMoving && collisionInfo.Type == CollisionType.Tile)
+				StabTile(tile);
 
-				// Release the sword button (spin if charged).
-				else if (player.GameControl.Inventory.GetSlotButton(equipSlot).IsUp()) {
-					if (chargeTimer >= ChargeTime)
-						player.BeginState(player.SpinSwordState);
-					else
-						player.BeginNormalState();
-				}
+			// Release the sword button (spin if charged).
+			else if (!weapon.IsEquipped || !weapon.IsButtonDown()) {
+				if (chargeTimer >= ChargeTime)
+					player.BeginState(player.SpinSwordState);
+				else
+					player.BeginNormalState();
 			}
 		}
 
@@ -150,9 +128,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			set { weaponAnimation = value; }
 		}
 
-		public int EquipSlot {
-			get { return equipSlot; }
-			set { equipSlot = value; }
+		public ItemWeapon Weapon {
+			get { return weapon; }
+			set { weapon = value; }
 		}
 	}
 }

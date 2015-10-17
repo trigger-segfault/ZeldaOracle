@@ -206,6 +206,8 @@ namespace ZeldaOracle.Common.Content {
 
 		// Get the resource with the given name and type.
 		public static T GetResource<T>(string name) {
+			if (name.Length == 0)
+				return default(T);
 			if (!ExistsResourceType<T>())
 				return default(T); // This type of resource doesn't exist!
 			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];

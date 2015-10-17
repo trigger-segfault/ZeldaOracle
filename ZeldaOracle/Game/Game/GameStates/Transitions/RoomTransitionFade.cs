@@ -58,6 +58,8 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 					isBeginningFade = false;
 					timer = 0;
 					Player.Direction = faceDirection;
+					Player.InterruptItems();
+					Player.BeginNormalState();
 					Player.StopPushing();
 				}
 				else {

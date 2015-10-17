@@ -155,7 +155,15 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public void DisplayMessage(string text) {
-			PushRoomState(new RoomStateTextReader(new Message(text)));
+			DisplayMessage(new Message(text));
+		}
+		
+		public void DisplayMessage(Message message, Action completeAction) {
+			PushRoomState(new RoomStateQueue(new RoomStateTextReader(message), new RoomStateAction(completeAction)));
+		}
+
+		public void DisplayMessage(string text, Action completeAction) {
+			DisplayMessage(new Message(text), completeAction);
 		}
 		
 
@@ -179,6 +187,9 @@ namespace ZeldaOracle.Game.Control {
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, menu),
 				menu
 			);
+			menuWeapons.OnOpen();
+			menuSecondaryItems.OnOpen();
+			menuEssences.OnOpen();
 		}
 
 		public void CloseMenu(Menu menu) {
@@ -189,6 +200,9 @@ namespace ZeldaOracle.Game.Control {
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, roomControl),
 				roomControl
 			);
+			menuWeapons.OnClose();
+			menuSecondaryItems.OnClose();
+			menuEssences.OnClose();
 		}
 
 

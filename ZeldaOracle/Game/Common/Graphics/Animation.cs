@@ -109,6 +109,16 @@ namespace ZeldaOracle.Common.Graphics {
 			return sprite;
 		}
 
+		public Animation GetSubstrip(int index) {
+			Animation substrip = this;
+			for (int i = 0; i < index; i++) {
+				substrip = substrip.nextStrip;
+				if (substrip == null)
+					return this;
+			}
+			return substrip;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties

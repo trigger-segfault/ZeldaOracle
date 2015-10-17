@@ -226,8 +226,8 @@ namespace ZeldaEditor {
 
 		// Draw an event tile.
 		private void DrawEventTile(Graphics2D g, EventTileDataInstance eventTile, Color color) {
-			Sprite spr = eventTile.Sprite;
-
+			SpriteAnimation spr = eventTile.CurrentSprite;
+			/*
 			// Select different sprites for certain events.
 			if (eventTile.Type == typeof(WarpEvent)) {
 				string warpType = eventTile.Properties.GetString("warp_type");
@@ -237,11 +237,11 @@ namespace ZeldaEditor {
 					spr = GameData.SPR_EVENT_TILE_WARP_STAIRS;
 				else if (warpType == "entrance")
 					spr = GameData.SPR_EVENT_TILE_WARP_ENTRANCE;
-			}
-					
+			}*/
+			
 			// Draw the sprite.
-			if (spr != null) {
-				g.DrawSprite(spr, eventTile.Room.Zone.ImageVariantID, eventTile.Position);
+			if (!spr.IsNull) {
+				g.DrawAnimation(spr, eventTile.Room.Zone.ImageVariantID, editorControl.Ticks, eventTile.Position, Color.White);
 			}
 			else {
 				Rectangle2I r = new Rectangle2I(eventTile.Position, eventTile.Size * GameSettings.TILE_SIZE);

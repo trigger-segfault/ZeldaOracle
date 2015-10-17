@@ -2,54 +2,56 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Input;
-using ZeldaOracle.Game.Main;
-using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Items;
-using ZeldaOracle.Game.Items.Weapons;
-using ZeldaOracle.Game.Control;
+using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
-	public class PlayerLadderState : PlayerState {
+	public class PlayerSwordStabState : PlayerState {
+
+		private ItemWeapon weapon;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public PlayerLadderState() {
-			isNaturalState = true;
+		public PlayerSwordStabState() {
+			this.weapon = null;
 		}
-
+		
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		public override bool RequestStateChange(PlayerState newState) {
-			return true;
-		}
-
 		public override void OnBegin(PlayerState previousState) {
-			player.Movement.CanJump = false;
-			Player.Graphics.PlayAnimation(player.MoveAnimation);
+			player.Movement.MoveCondition = PlayerMoveCondition.NoControl; // TODO: allows sideways movement for stabbing when jumping.
+			player.toolAnimation.Play(GameData.ANIM_SWORD_STAB);
+			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_STAB);
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.Movement.CanJump = true;
-			Player.Graphics.StopAnimation();
+			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
+			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
 		}
 
 		public override void Update() {
 			base.Update();
-			
-			// Always face up when on a ladder.
-			player.Direction = Directions.Up;
+
+			if (player.Graphics.IsAnimationDone) {
+				if (weapon.IsEquipped && weapon.IsButtonDown()) {
+					// Continue holding sword.
+					player.BeginState(Player.HoldSwordState);
+				}
+				else {
+					// Put sword away.
+					player.toolAnimation.Animation = null;
+					player.BeginNormalState();
+				}
+			}
 		}
 
 
@@ -57,5 +59,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		public ItemWeapon Weapon {
+			get { return weapon; }
+			set { weapon = value; }
+		}
 	}
 }

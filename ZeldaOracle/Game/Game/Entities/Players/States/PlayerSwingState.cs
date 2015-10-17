@@ -9,6 +9,7 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Control;
+using ZeldaOracle.Game.Items;
 using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
@@ -20,7 +21,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		private PlayerState nextState;
 		private Animation weaponAnimation;
-		private int equipSlot;
+		private ItemWeapon weapon;
 		private bool hasPeaked;
 
 		private readonly Point2I[] SWING_OFFSETS = {
@@ -95,7 +96,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public PlayerSwingState() {
 			this.weaponAnimation	= null;
 			this.nextState			= null;
-			this.equipSlot			= 0;
+			this.weapon				= null;
 			this.hasPeaked			= false;
 		}
 		
@@ -167,7 +168,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 
 			// Reset the swing
-			if (player.GameControl.Inventory.GetSlotButton(equipSlot).IsPressed()) {
+			if (weapon.IsEquipped && weapon.IsButtonPressed()) {
 				player.Direction = player.UseDirection;
 				player.toolAnimation.SubStripIndex = player.Direction;
 				player.Graphics.PlayAnimation();
@@ -195,9 +196,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			set { weaponAnimation = value; }
 		}
 
-		public int EquipSlot {
-			get { return equipSlot; }
-			set { equipSlot = value; }
+		public ItemWeapon Weapon {
+			get { return weapon; }
+			set { weapon = value; }
 		}
 	}
 }

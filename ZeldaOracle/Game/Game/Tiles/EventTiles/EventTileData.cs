@@ -10,43 +10,45 @@ using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Game.Tiles.EventTiles {
 	
-	public class EventTileData {
+	public class EventTileData : BaseTileData {
 
-		private Type			type;
 		private Point2I			size;
-		private Properties		properties;
 		private Point2I			position;
-		private Sprite			sprite; // NOTE: This would only be visible in the editor.
-
+		private SpriteAnimation	sprite;		// NOTE: This would only be visible in the editor.
+		//private bool			isVisible;	// Is the event visible in-game?
 		
+
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
 		public EventTileData() {
-			type				= null;
-			sprite				= null;
-			position			= Point2I.Zero;
-			size				= Point2I.One;
-			properties			= new Properties();
+			sprite			= new SpriteAnimation();
+			position		= Point2I.Zero;
+			size			= Point2I.One;
+		}
+		
+		public EventTileData(Type type) {
+			this.type		= type;
+			this.position	= Point2I.Zero;
+			this.size		= Point2I.One;
+			this.sprite		= null;
+		}
+		
+		
+		//-----------------------------------------------------------------------------
+		// Overridden Properties
+		//-----------------------------------------------------------------------------
+		
+		public override SpriteAnimation Sprite {
+			get { return sprite; }
+			set { sprite = value; }
+		}
 
-			properties.Set("id", "")
-				.SetDocumentation("ID", "", "", "The id used to refer to this event.", true, false);
-		}
-		
-		public EventTileData(Type type) : this() {
-			this.type = type;
-		}
-		
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
-		public Type Type {
-			get { return type; }
-			set { type = value; }
-		}
 		
 		public Point2I Position {
 			get { return position; }
@@ -56,16 +58,6 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		public Point2I Size {
 			get { return size; }
 			set { size = value; }
-		}
-
-		public Properties Properties {
-			get { return properties; }
-			set { properties = value; }
-		}
-
-		public Sprite Sprite {
-			get { return sprite; }
-			set { sprite = value; }
 		}
 	}
 }

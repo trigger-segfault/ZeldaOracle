@@ -33,6 +33,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public TileRoller() {
 			animationPlayer = new AnimationPlayer();
+
+			// TODO: Rollers can't be sword-stabbed, aren't pushable diagonally, and are only solid to the player.
 		}
 
 		//-----------------------------------------------------------------------------

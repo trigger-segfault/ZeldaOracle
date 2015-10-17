@@ -219,6 +219,7 @@
     <Compile Include="Game\Entities\NPC.cs" />
     <Compile Include="Game\Entities\Players\PlayerSwimmingSkills.cs" />
     <Compile Include="Game\Entities\Players\PlayerTunics.cs" />
+    <Compile Include="Game\Entities\Players\States\PlayerSwordStabState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSpinSwordState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerGrabState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerHoldSwordState.cs" />
@@ -238,6 +239,7 @@
     <Compile Include="Game\Entities\Projectiles\Seed.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateNormal.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateQueue.cs" />
+    <Compile Include="Game\GameStates\RoomStates\RoomStateAction.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateStack.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomState.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateReward.cs" />
@@ -317,6 +319,7 @@
     <Compile Include="Game\Tiles\Custom\TileChest.cs" />
     <Compile Include="Game\Tiles\Custom\TileOwl.cs" />
     <Compile Include="Game\Tiles\Custom\TileLantern.cs" />
+    <Compile Include="Game\Tiles\BaseTileData.cs" />
     <Compile Include="Game\Tiles\EventTiles\EventTile.cs" />
     <Compile Include="Game\Tiles\EventTiles\EventTileDataInstance.cs" />
     <Compile Include="Game\Tiles\EventTiles\EventTileData.cs" />
@@ -324,6 +327,7 @@
     <Compile Include="Game\Tiles\EventTiles\WarpEvent.cs" />
     <Compile Include="Game\Tiles\Tile.cs" />
     <Compile Include="Game\Tiles\TileData.cs" />
+    <Compile Include="Game\Tiles\BaseTileDataInstance.cs" />
     <Compile Include="Game\Tiles\TileDataInstance.cs" />
     <Compile Include="Game\Tiles\TileFlags.cs" />
     <Compile Include="Game\Tiles\Tileset.cs" />

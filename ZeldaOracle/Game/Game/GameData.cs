@@ -262,8 +262,14 @@ namespace ZeldaOracle.Game {
 		private static bool IsTileDataInstanceOf(IPropertyObject sender, Type type) {
 			return (sender is TileDataInstance && (sender as TileDataInstance).TileData.Type == type);
 		}
+		private static bool IsEventTileDataInstanceOf(IPropertyObject sender, Type type) {
+			return (sender is EventTileDataInstance && (sender as EventTileDataInstance).EventTileData.Type == type);
+		}
 		private static bool IsTileOrTileDataInstanceOf(IPropertyObject sender, Type type) {
-			return (sender is TileDataInstance && (sender as TileDataInstance).TileData.Type == type) || sender.GetType() == type;
+			if (sender == null)
+				return false;
+			return (IsTileDataInstanceOf(sender, type) ||
+				IsEventTileDataInstanceOf(sender, type) || sender.GetType() == type);
 		}
 
 		private static void LoadPropertyActions() {
@@ -289,7 +295,25 @@ namespace ZeldaOracle.Game {
 					sender.Properties.Set("sprite_index", (bool)value ? 0 : 1);
 				}
 			});
-
+			
+			Resources.AddResource<PropertyAction>("direction", delegate(IPropertyObject sender, object value) {
+				if (IsTileOrTileDataInstanceOf(sender, typeof(NPCEvent))) {
+					sender.Properties.Set("substrip_index", (int) value);
+				}
+			});
+			
+			Resources.AddResource<PropertyAction>("warp_type", delegate(IPropertyObject sender, object value) {
+				if (IsEventTileDataInstanceOf(sender, typeof(WarpEvent))) {
+					WarpType warpType = (WarpType) Enum.Parse(typeof(WarpType), (string) value, true);
+					EventTileDataInstance eventTile = (EventTileDataInstance) sender;
+					if (warpType == WarpType.Entrance)
+						eventTile.Sprite = GameData.SPR_EVENT_TILE_WARP_ENTRANCE;
+					else if (warpType == WarpType.Tunnel)
+						eventTile.Sprite = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
+					else if (warpType == WarpType.Stairs)
+						eventTile.Sprite = GameData.SPR_EVENT_TILE_WARP_STAIRS;
+				}
+			});
 		}
 
 
@@ -306,7 +330,7 @@ namespace ZeldaOracle.Game {
 			ZONE_PRESENT	= new Zone("present", "Present", VARIANT_PRESENT);
 			ZONE_INTERIOR_PRESENT	= new Zone("interior_present", "Interior Present", VARIANT_INTERIOR_PRESENT);
 
-			Resources.AddResource("",			ZONE_DEFAULT);
+			Resources.AddResource("default",	ZONE_DEFAULT);
 			Resources.AddResource("summer",		ZONE_SUMMER);
 			Resources.AddResource("forest",		ZONE_FOREST);
 			Resources.AddResource("graveyard",	ZONE_GRAVEYARD);
@@ -337,20 +361,30 @@ namespace ZeldaOracle.Game {
 			EventTileData etd = new EventTileData(typeof(WarpEvent));
 			etd.Sprite = SPR_EVENT_TILE_WARP_STAIRS;
 			etd.Properties.Set("warp_type", "tunnel")
-				.SetDocumentation("Warp Type", "tunnel", "", "The type of warp point.", true, false);
+				.SetDocumentation("Warp Type", "tunnel", "", "The type of warp point.");
 			etd.Properties.Set("destination_level", "")
-				.SetDocumentation("Destination Level", "", "", "The level where the destination point is in.", true, false);
+				.SetDocumentation("Destination Level", "", "", "The level where the destination point is in.");
 			etd.Properties.Set("destination_warp_point", "")
-				.SetDocumentation("Destination Warp Point", "", "", "The id of the warp point destination.", true, false);
+				.SetDocumentation("Destination Warp Point", "", "", "The id of the warp point destination.");
+			etd.Sprite = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
 			Resources.AddResource("warp", etd);
 			
 			// Create an NPC event.
 			etd = new EventTileData(typeof(NPCEvent));
 			etd.Sprite = SPR_EVENT_TILE_WARP_STAIRS;
 			etd.Properties.Set("npc_flags", (int) NPCFlags.Default)
-				.SetDocumentation("NPC Options", "enum_flags", "", "The options for the NPC.", true, false);
+				.SetDocumentation("NPC Options", "enum_flags", "", "The options for the NPC.");
+			etd.Properties.Set("direction", Directions.Down)
+				.SetDocumentation("Direction", "direction", "", "The default direction the NPC faces.");
+			etd.Properties.Set("text", "<red>undefined<red>")
+				.SetDocumentation("Text", "text_message", "", "The text to display when the NPC is talked to.");
+			etd.Properties.Set("animation", "npc_shopkeeper")
+				.SetDocumentation("Animation", "animation", "", "The animation of the NPC.");
+			etd.Properties.Set("animation_talk", "")
+				.SetDocumentation("Talk Animation", "animation", "", "The animation of the NPC when being talked to.");
+			etd.Properties.GetProperty("sprite_index").Documentation.IsHidden = false;
 			Resources.AddResource("npc", etd);
-
+			etd.Sprite = Resources.GetAnimation("npc_shopkeeper");
 			IntegrateResources<Tileset>("TILESET_");
 		}
 

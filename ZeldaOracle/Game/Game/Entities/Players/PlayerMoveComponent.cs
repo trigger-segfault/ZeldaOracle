@@ -32,6 +32,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerMoveCondition	moveCondition;			// What are the conditions in which the player can move?
 		private bool				canLedgeJump;
 		private bool				canJump;
+		private bool				canUseWarpPoint;		// Can the player go through warp points?
 		private bool				isStrafing;
 
 		// Internal
@@ -71,6 +72,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			moveCondition			= PlayerMoveCondition.FreeMovement;
 			canLedgeJump			= true;
 			canJump					= true;
+			canUseWarpPoint			= true;
 			isStrafing				= false;
 
 			// Internal.
@@ -161,7 +163,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 			else {
 				if (player.CurrentState is PlayerNormalState)
-					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
+					player.Graphics.PlayAnimation(player.MoveAnimation);
 			}
 		}
 
@@ -279,8 +281,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public void ChooseAnimation() {
 			// Update movement animation.
 			if (player.IsOnGround && moveCondition != PlayerMoveCondition.NoControl &&
-				(player.Graphics.AnimationPlayer.Animation == GameData.ANIM_PLAYER_DEFAULT ||
-				player.Graphics.AnimationPlayer.Animation == GameData.ANIM_PLAYER_CARRY))
+				(player.Graphics.Animation == player.MoveAnimation ||
+				player.Graphics.Animation == GameData.ANIM_PLAYER_DEFAULT ||
+				player.Graphics.Animation == GameData.ANIM_PLAYER_CARRY))
 			{
 				if (isMoving && !player.Graphics.IsAnimationPlaying)
 					player.Graphics.PlayAnimation();
@@ -396,6 +399,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public bool IsMoving {
 			get { return isMoving; }
 			set { isMoving = value; }
+		}
+		
+		public bool CanUseWarpPoint {
+			get { return canUseWarpPoint; }
+			set { canUseWarpPoint = value; }
 		}
 		
 		public int MoveDirection {
