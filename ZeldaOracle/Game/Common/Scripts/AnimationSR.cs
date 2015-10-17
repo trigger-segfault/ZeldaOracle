@@ -196,6 +196,9 @@ namespace ZeldaOracle.Common.Scripts {
 
 				animationBuilder.MakeFlicker(parameters.GetInt(0), startOn);
 			});
+			AddCommand("Repeat", delegate(CommandParam parameters) {
+				animationBuilder.RepeatPreviousFrames(parameters.GetInt(0), parameters.GetInt(1));
+			});
 		}
 
 		// Begins reading the script.

@@ -13,25 +13,25 @@ public static class GMath {
 	//========== CONSTANTS ===========
 
 	/** <summary> Represents the ratio of the circumference of a circle to its diameter, specified by the constant, π. </summary> */
-	public const double Pi = 3.14159265358979323846;
+	public const float Pi = 3.14159265358979323846f;
 	/** <summary> Represents the natural logarithmic base, specified by the constant, e. </summary> */
-	public const double E = 2.71828182845904523536;
+	public const float E = 2.71828182845904523536f;
 	
 	/** <summary> Quarter of an angle in either radians or degrees. </summary> */
-	public static double QuarterAngle {
-		get { return (usingDegrees ? 90.0 : Pi / 2.0); }
+	public static float QuarterAngle {
+		get { return (usingDegrees ? 90.0f : Pi / 2.0f); }
 	}
 	/** <summary> Half of an angle in either radians or degrees. </summary> */
-	public static double HalfAngle {
-		get { return (usingDegrees ? 180.0 : Pi); }
+	public static float HalfAngle {
+		get { return (usingDegrees ? 180.0f : Pi); }
 	}
 	/** <summary> Three quarters of an angle in either radians or degrees. </summary> */
-	public static double ThreeFourthsAngle {
-		get { return (usingDegrees ? 270.0 : Pi * 1.5); }
+	public static float ThreeFourthsAngle {
+		get { return (usingDegrees ? 270.0f : Pi * 1.5f); }
 	}
 	/** <summary> A full angle in either radians or degrees. </summary> */
-	public static double FullAngle {
-		get { return (usingDegrees ? 360.0 : Pi * 2.0); }
+	public static float FullAngle {
+		get { return (usingDegrees ? 360.0f : Pi * 2.0f); }
 	}
 
 	//========== VARIABLES ===========

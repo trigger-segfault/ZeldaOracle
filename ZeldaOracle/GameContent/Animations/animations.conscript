@@ -235,6 +235,25 @@ ANIM player_raise_one_hand; SUBSTRIP clamp;
 ANIM player_raise_two_hands; SUBSTRIP clamp;
 	ADD frame, 0, (1, 16); END;
 
+ANIM player_drown;
+	SUBSTRIP clamp; ADD frame, 8, (0, 13), (0, 2); ADD frame, 17, (0, 21), (0, 4);
+	SUBSTRIP clamp; ADD frame, 8, (2, 13), (0, 2); ADD frame, 17, (0, 21), (0, 4);
+	SUBSTRIP clamp; ADD frame, 8, (4, 13), (0, 2); ADD frame, 17, (0, 21), (0, 4);
+	SUBSTRIP clamp; ADD frame, 8, (6, 13), (0, 2); ADD frame, 17, (0, 21), (0, 4); END;
+
+ANIM player_fall_hole; SUBSTRIP clamp;
+	ADD frame, 16, (1, 20); ADD frame, 10, (2, 20); ADD frame, 11, (3, 20); END;
+
+ANIM player_crush_horizontal; SUBSTRIP clamp;
+	ADD frame, 44, (5, 20); ADD part, 44, (6, 20), (0, -16);
+	ADD frame, 1, (7, 20); ADD frame, 1, (6, 0);
+	ADD frame, 1, (7, 20); ADD frame, 1, (5, 20); ADD part, 1, (6, 20), (0, -16);
+	ADD frame, 1, (7, 20); ADD frame, 1, (5, 20); ADD part, 1, (6, 20), (0, -16);
+	ADD frame, 1, (7, 20); ADD frame, 1, (6, 0);
+	REPEAT 10, 5; END;
+
+ANIM player_invisible; SUBSTRIP clamp;
+	ADD frame, 0, (7, 20); END;
 
 #==============================================================
 # Player Item Animations
@@ -361,6 +380,17 @@ ANIM item_scent_pod; SUBSTRIP repeat;
 
 SPRITESHEET "color_effects";
 
+ANIM effect_lava_splash; SUBSTRIP reset;
+	ADD frame, 2, (4, 3), (-7, -13); ADD part, 2, (4, 3), (-9, -13);
+	ADD frame, 2, (4, 15), (-6, -14); ADD part, 2, (4, 15), (-10, -14);
+	ADD frame, 2, (4, 19), (-5, -15); ADD part, 2, (4, 19), (-11, -15);
+	ADD frame, 2, (4, 3), (-4, -16); ADD part, 2, (4, 3), (-12, -16);
+	ADD frame, 2, (4, 15), (-3, -17); ADD part, 2, (4, 15), (-13, -17);
+	ADD frame, 2, (4, 19), (-2, -16); ADD part, 2, (4, 19), (-14, -16);
+	ADD frame, 2, (4, 3), (-1, -15); ADD part, 2, (4, 3), (-15, -15);
+	ADD frame, 2, (4, 15), (0, -14); ADD part, 2, (4, 15), (-16, -14);
+	ADD frame, 2, (4, 19), (1, -13); ADD part, 2, (4, 19), (-17, -13);
+	ADD frame, 3, (4, 3), (2, -11); ADD part, 3, (4, 3), (-18, -11); END;
 
 ANIM effect_bomb_explosion; SUBSTRIP reset;
 	ADD frame, 4, (0,  0);
@@ -386,7 +416,7 @@ ANIM effect_seed_mystery; SUBSTRIP reset; ### PegasusSeedEffect.ShiftSourcePosit
 	OFFSET (-8, -8); END;
 ANIM effect_seed_ember; SUBSTRIP reset;
 	ADD frame, 2, (1, 3);
-	ADD frame, 2, (1, 2); ADD frame, 2, (1, 17); ADD frame, 2, (1, 1); ### RepeatPreviousFrames 3, 9;
+	ADD frame, 2, (1, 2); ADD frame, 2, (1, 17); ADD frame, 2, (1, 1); REPEAT 3, 9;
 	ADD frame, 2, (1, 2);
 	OFFSET (-8, -8); END;
 

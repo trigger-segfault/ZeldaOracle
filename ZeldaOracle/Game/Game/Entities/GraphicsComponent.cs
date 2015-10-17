@@ -31,6 +31,7 @@ namespace ZeldaOracle.Game.Entities
 		private int				flickerTimer;
 		private bool			flickerIsVisible;
 		private bool			isAnimatedWhenPaused;
+		private bool			isHurting;
 
 		private int				imageVariant;
 
@@ -61,6 +62,7 @@ namespace ZeldaOracle.Game.Entities
 			this.flickerIsVisible		= true;
 			this.imageVariant			= GameData.VARIANT_NONE;
 			this.isAnimatedWhenPaused	= false;
+			this.isHurting				= false;
 		}
 		
 
@@ -151,19 +153,24 @@ namespace ZeldaOracle.Game.Entities
 			float shadowDepth	= 0.9f;
 			float ripplesDepth	= 0.29f;
 			float grassDepth	= 0.28f;
+			int newImageVariant = imageVariant;
 
 			// Draw the shadow.
 			if (isShadowVisible && entity.ZPosition > 1 && entity.GameControl.RoomTicks % 2 == 0) {
 				g.DrawSprite(GameData.SPR_SHADOW, Entity.Position + shadowDrawOffset, shadowDepth);
 			}
 
+			// Change the variant if hurting.
+			if (isHurting && entity.GameControl.RoomTicks % 8 >= 4)
+				newImageVariant = GameData.VARIANT_HURT;
+
 			// Draw the sprite/animation.
 			float depth = 0.6f - 0.3f * (entity.Origin.Y / (float) (entity.RoomControl.Room.Height * GameSettings.TILE_SIZE));
 			Vector2F drawPosition = Entity.Position - new Vector2F(0, Entity.ZPosition);
 			if (animationPlayer.SubStrip != null)
-				g.DrawAnimation(animationPlayer.SubStrip, imageVariant, animationPlayer.PlaybackTime, drawPosition + drawOffset, depth);
+				g.DrawAnimation(animationPlayer.SubStrip, newImageVariant, animationPlayer.PlaybackTime, drawPosition + drawOffset, depth);
 			else if (sprite != null)
-				g.DrawSprite(sprite, imageVariant, drawPosition + drawOffset, depth);
+				g.DrawSprite(sprite, newImageVariant, drawPosition + drawOffset, depth);
 			
 			// Draw the ripples effect.
 			if (isRipplesEffectVisible && entity.Physics.IsEnabled && entity.Physics.IsInPuddle)
@@ -177,6 +184,7 @@ namespace ZeldaOracle.Game.Entities
 				g.FillRectangle(entity.Physics.SoftCollisionBox + entity.Position, new Color(0, 0, 255, 150), depth - 0.0001f);
 				g.FillRectangle(entity.Physics.CollisionBox + entity.Position, new Color(255, 0, 0, 150), depth - 0.0002f);
 				g.FillRectangle(new Rectangle2F(entity.Origin, Vector2F.One), Color.White, depth - 0.0003f);
+				g.FillRectangle(new Rectangle2F(entity.Position, Vector2F.One), new Color(255, 255, 0), depth - 0.0004f);
 			}
 		}
 
@@ -283,6 +291,11 @@ namespace ZeldaOracle.Game.Entities
 		public int ImageVariant {
 			get { return imageVariant; }
 			set { imageVariant = value; }
+		}
+
+		public bool IsHurting {
+			get { return isHurting; }
+			set { isHurting = value; }
 		}
 
 		// DEBUG: draw collision boxes.

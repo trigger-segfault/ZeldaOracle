@@ -453,7 +453,6 @@ namespace ZeldaOracle.Game {
 				new ItemEssence6(),
 				new ItemEssence7(),
 				new ItemEssence8(),
-				new ItemFlippers(),
 				new ItemMagicPotion(),
 				new ItemEssenceSeed(),
 				new ItemBombs(),
@@ -466,6 +465,10 @@ namespace ZeldaOracle.Game {
 				new ItemSeedSatchel(),
 				new ItemSeedShooter(),
 				new ItemSlingshot());
+
+			inventory.AddItems(false,
+				new ItemFlippers());
+
 		}
 
 
@@ -856,10 +859,12 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PLAYER_JUMP;
 		public static Animation ANIM_PLAYER_SUBMERGED;
 		public static Animation ANIM_PLAYER_DIE;
-		public static Animation ANIM_PLAYER_FALL;
-		public static Animation ANIM_PLAYER_DROWN;
 		public static Animation ANIM_PLAYER_RAISE_ONE_HAND;
 		public static Animation ANIM_PLAYER_RAISE_TWO_HANDS;
+		public static Animation ANIM_PLAYER_DROWN;
+		public static Animation ANIM_PLAYER_FALL_HOLE;
+		public static Animation ANIM_PLAYER_CRUSH_HORIZONTAL;
+		public static Animation ANIM_PLAYER_INVISIBLE;
 
 		// Weapon animations.
 		public static Animation ANIM_SWORD_HOLD;
@@ -876,15 +881,15 @@ namespace ZeldaOracle.Game {
 		// Effect animations.
 		public static Animation ANIM_EFFECT_DIRT;
 		public static Animation ANIM_EFFECT_WATER_SPLASH;
-		public static Animation ANIM_EFFECT_LAVA_SPLASH;
 		public static Animation ANIM_EFFECT_RIPPLES;
 		public static Animation ANIM_EFFECT_GRASS;
 		public static Animation ANIM_EFFECT_ROCK_BREAK;
 		public static Animation ANIM_EFFECT_SIGN_BREAK;
 		public static Animation ANIM_EFFECT_LEAVES;
 		public static Animation ANIM_EFFECT_GRASS_LEAVES;
-		
+
 		// Color effect animations.
+		public static Animation ANIM_EFFECT_LAVA_SPLASH;
 		public static Animation ANIM_EFFECT_BOMB_EXPLOSION;
 		public static Animation ANIM_EFFECT_MONSTER_EXPLOSION;
 		public static Animation ANIM_EFFECT_SEED_EMBER;

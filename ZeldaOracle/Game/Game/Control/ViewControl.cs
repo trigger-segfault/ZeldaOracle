@@ -39,7 +39,11 @@ namespace ZeldaOracle.Game.Control {
 				(Vector2F) (bounds.BottomRight - viewSize));
 		}
 
-		
+		public bool IsCenteredOnPosition(Vector2F position) {
+			return (GMath.Round(this.position) == GMath.Round(GetPositionCenteredOn(position)));
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// View movement
 		//-----------------------------------------------------------------------------
