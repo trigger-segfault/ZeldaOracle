@@ -50,11 +50,33 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			isSubmerged = false;
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SWIM);
-			
+
 			// Create a splash effect.
-			Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH);
-			splash.Position = player.Position - new Vector2F(0, 4);
-			player.RoomControl.SpawnEntity(splash);
+			if (player.Physics.IsInLava) {
+				Effect splash = new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH);
+				splash.Position = player.Position - new Vector2F(0, 4);
+				player.RoomControl.SpawnEntity(splash);
+			}
+			else {
+				Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH);
+				splash.Position = player.Position - new Vector2F(0, 4);
+				player.RoomControl.SpawnEntity(splash);
+			}
+
+			// Check if the player should drown.
+			if ((player.Physics.IsInWater && !player.SwimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInWater)) ||
+				player.Physics.IsInOcean && !player.SwimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInOcean)) {
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DROWN);
+				player.RespawnDeath();
+				// Cancel the hurt animation if the player was knocked in.
+				player.InvincibleTimer = 0;
+				player.Graphics.IsHurting = false;
+			}
+			else if (player.Physics.IsInLava && !player.SwimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInLava)) {
+				player.Graphics.IsHurting = true;
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DROWN);
+				player.RespawnDeath();
+			}
 		}
 		
 		public override void OnEnd(PlayerState newState) {
@@ -65,6 +87,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		public override void Update() {
+
+
 			// Slow down movement over time from strokes
 			if (player.Movement.MoveSpeedScale > 1.0f)
 				player.Movement.MoveSpeedScale -= 0.025f;

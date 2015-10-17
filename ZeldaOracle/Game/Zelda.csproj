@@ -219,6 +219,7 @@
     <Compile Include="Game\Entities\NPC.cs" />
     <Compile Include="Game\Entities\Players\PlayerSwimmingSkills.cs" />
     <Compile Include="Game\Entities\Players\PlayerTunics.cs" />
+    <Compile Include="Game\Entities\Players\States\PlayerRespawnDeathState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSwordStabState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSpinSwordState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerGrabState.cs" />

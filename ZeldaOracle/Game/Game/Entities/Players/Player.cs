@@ -63,6 +63,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerHoldSwordState	stateHoldSword;
 		private PlayerSwordStabState	stateSwordStab;
 		private PlayerSpinSwordState	stateSpinSword;
+		private PlayerRespawnDeathState stateRespawnDeath;
 
 		// TEMPORARY: Change tool drawing to something else
 		public AnimationPlayer toolAnimation;
@@ -72,6 +73,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerTunics tunic;
 
 		private int invincibleTimer;
+		private float knockbackDirection;
+		private bool useKnockback;
 
 
 		//-----------------------------------------------------------------------------
@@ -79,6 +82,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 
 		private const int InvincibleDuration = 25;
+		private const int InvincibleControlRestoreDuration = 8;
+
+		private const int KnockbackSnapCount = 16;
+		private const float KnockbackSpeed = 1.3f;
 
 
 		//-----------------------------------------------------------------------------
@@ -100,6 +107,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			MaxHealth		= 4 * 3;
 			swimmingSkills	= PlayerSwimmingSkills.CantSwim;
 			invincibleTimer	= 0;
+			knockbackDirection	= 0f;
+			useKnockback	= false;
 			tunic			= PlayerTunics.GreenTunic;
 
 			// Physics.
@@ -115,16 +124,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Graphics.DrawOffset = new Point2I(-8, -16);
 
 			// Create the basic player states.
-			state			= null;
-			stateNormal		= new PlayerNormalState();
-			stateBusy		= new PlayerBusyState();
-			stateSwim		= new PlayerSwimState();
-			stateLadder		= new PlayerLadderState();
-			stateLedgeJump	= new PlayerLedgeJumpState();
-			stateSwing		= new PlayerSwingState();
-			stateHoldSword	= new PlayerHoldSwordState();
-			stateSwordStab	= new PlayerSwordStabState();
-			stateSpinSword	= new PlayerSpinSwordState();
+			state				= null;
+			stateNormal			= new PlayerNormalState();
+			stateBusy			= new PlayerBusyState();
+			stateSwim			= new PlayerSwimState();
+			stateLadder			= new PlayerLadderState();
+			stateLedgeJump		= new PlayerLedgeJumpState();
+			stateSwing			= new PlayerSwingState();
+			stateHoldSword		= new PlayerHoldSwordState();
+			stateSwordStab		= new PlayerSwordStabState();
+			stateSpinSword		= new PlayerSpinSwordState();
+			stateRespawnDeath	= new PlayerRespawnDeathState();
 
 			toolAnimation	= new AnimationPlayer();
 
@@ -151,7 +161,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Return the player state that the player wants to be in
 		// based on his current position.
 		public PlayerState GetDesiredNaturalState() {
-			if (physics.IsInWater)
+			if (physics.IsInWater || physics.IsInOcean || physics.IsInLava)
 				return stateSwim;
 			else if (physics.IsOnLadder)
 				return stateLadder;
@@ -176,7 +186,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 
 		// For when the player needs to stop pushing, such as when reading text or opening a chest.
-		public void StopPushing()  {
+		public void StopPushing() {
 			if (state == stateNormal)
 				stateNormal.StopPushing();
 			movement.IsMoving = false;
@@ -184,11 +194,30 @@ namespace ZeldaOracle.Game.Entities.Players {
 			movement.ChooseAnimation();
 		}
 
-		public void Hurt(int damage) {
+		public override void Hurt(int damage) {
 			health = GMath.Max(0, health - damage);
+			graphics.IsHurting = true;
 			invincibleTimer = InvincibleDuration;
+			useKnockback = false;
+			movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
 		}
 
+		public override void Hurt(int damage, float radians) {
+			health = GMath.Max(0, health - damage);
+			graphics.IsHurting = true;
+			invincibleTimer = InvincibleDuration;
+			knockbackDirection = radians;
+			useKnockback = true;
+			movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
+		}
+
+		public override void RespawnDeath() {
+			BeginState(stateRespawnDeath);
+		}
+
+		public override void Death() {
+			base.Death();
+		}
 
 		//-----------------------------------------------------------------------------
 		// Items
@@ -301,8 +330,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public override void Update() {
-			if (invincibleTimer > 0)
+			if (invincibleTimer > 0) {
 				invincibleTimer--;
+				if (invincibleTimer == 0)
+					graphics.IsHurting = false;
+			}
 
 			bool performedAction = false;
 
@@ -343,6 +375,23 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (state != desiredNaturalState && state.RequestStateChange(desiredNaturalState))
 				BeginState(desiredNaturalState);
 			state.Update();
+
+			if (invincibleTimer > InvincibleControlRestoreDuration && useKnockback) {
+				Vector2F motion = new Vector2F(KnockbackSpeed, knockbackDirection, true);
+				// Snap velocity direction.
+				float snapInterval = ((float)GMath.Pi * 2.0f) / KnockbackSnapCount;
+				float theta = (float)Math.Atan2(-motion.Y, motion.X);
+				if (theta < 0)
+					theta += (float)Math.PI * 2.0f;
+				int angle = (int)((theta / snapInterval) + 0.5f);
+				Physics.Velocity = new Vector2F(
+					(float)Math.Cos(angle * snapInterval) * motion.Length,
+					(float)-Math.Sin(angle * snapInterval) * motion.Length);
+			}
+			else if (invincibleTimer == InvincibleControlRestoreDuration) {
+				movement.MoveCondition = PlayerMoveCondition.FreeMovement;
+			}
+
 			UpdateEquippedItems();
 
 			if (performedAction)
@@ -387,16 +436,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (syncAnimationWithDirection)
 				Graphics.SubStripIndex = direction;
 			
-			// Set image variant based on tunic and hurt timer.
-			if (invincibleTimer != 0 && (invincibleTimer + 1) % 8 < 4) {
-				Graphics.ImageVariant = GameData.VARIANT_HURT;
-			}
-			else {
-				switch (tunic) {
-				case PlayerTunics.GreenTunic:	Graphics.ImageVariant = GameData.VARIANT_GREEN;	break;
-				case PlayerTunics.RedTunic:		Graphics.ImageVariant = GameData.VARIANT_RED;	break;
-				case PlayerTunics.BlueTunic:	Graphics.ImageVariant = GameData.VARIANT_BLUE;	break;
-				}
+			switch (tunic) {
+			case PlayerTunics.GreenTunic:	Graphics.ImageVariant = GameData.VARIANT_GREEN;	break;
+			case PlayerTunics.RedTunic:		Graphics.ImageVariant = GameData.VARIANT_RED;	break;
+			case PlayerTunics.BlueTunic:	Graphics.ImageVariant = GameData.VARIANT_BLUE;	break;
 			}
 
 			// Update superclass.
@@ -494,6 +537,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return moveAnimation; }
 			set { moveAnimation = value; }
 		}
+
+		public int InvincibleTimer {
+			get { return invincibleTimer; }
+			set { invincibleTimer = value; }
+		}
 		
 		// Player states
 
@@ -539,6 +587,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerSpinSwordState SpinSwordState {
 			get { return stateSpinSword; }
+		}
+
+		public PlayerRespawnDeathState RespawnDeathState {
+			get { return stateRespawnDeath; }
 		}
 	}
 }

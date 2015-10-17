@@ -54,7 +54,7 @@ namespace ZeldaOracle.Game.Debug {
 				}
 			}
 			if (Keyboard.IsKeyPressed(Keys.H)) {
-				gameControl.Player.Hurt(0);
+				gameControl.Player.Hurt(0, GRandom.NextFloat(GMath.FullAngle));
 			}
 			if (Keyboard.IsKeyPressed(Keys.M)) {
 				AudioSystem.PlaySong("overworld");
