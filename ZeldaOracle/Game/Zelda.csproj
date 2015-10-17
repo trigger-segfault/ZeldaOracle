@@ -295,6 +295,7 @@
     <Compile Include="Game\Items\Weapons\ItemSeedSatchel.cs" />
     <Compile Include="Game\Items\Weapons\ItemBoomerang.cs" />
     <Compile Include="Game\Items\Weapons\ItemShield.cs" />
+    <Compile Include="Game\Items\Weapons\ItemShovel.cs" />
     <Compile Include="Game\Items\Weapons\ItemSword.cs" />
     <Compile Include="Game\Items\Weapons\ItemBigSword.cs" />
     <Compile Include="Game\Items\Weapons\ItemBombs.cs" />

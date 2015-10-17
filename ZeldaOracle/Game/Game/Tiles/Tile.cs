@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using ZeldaOracle.Common.Collision;
+using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
@@ -150,6 +151,27 @@ namespace ZeldaOracle.Game.Tiles {
 			return true;
 		}
 
+		public virtual bool OnDig() {
+			if (IsDiggable) {
+
+				if (layer == 0) {
+					roomControl.RemoveTile(this);
+
+					TileData data = Resources.GetResource<TileData>("dug");
+					Tile dugTile = Tile.CreateTile(data);
+
+					roomControl.PlaceTile(dugTile, location, layer);
+					customSprite = GameData.SPR_TILE_DUG;
+				}
+				else {
+					roomControl.RemoveTile(this);
+				}
+
+				return true;
+			}
+			return false;
+		}
+
 		// Called while the player is trying to push the tile but before it's actually moved.
 		public virtual void OnPushing(int direction) {
 
@@ -207,6 +229,11 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		// Static methods
 		//-----------------------------------------------------------------------------
+
+		// Instantiate a tile from the given tile-data.
+		public static Tile CreateTile(TileData data) {
+			return CreateTile(new TileDataInstance(data, 0, 0, 0));
+		}
 
 		// Instantiate a tile from the given tile-data.
 		public static Tile CreateTile(TileDataInstance data) {
@@ -362,6 +389,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public int MoveDirection {
 			get { return Directions.FromPoint(moveDirection); }
+		}
+
+		public bool IsDiggable {
+			get { return flags.HasFlag(TileFlags.Diggable); }
 		}
 
 		public bool IsLedge {

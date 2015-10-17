@@ -56,6 +56,10 @@ TEMPTILE color_jump_pad;
 		(show sprite_index);
 END;
 
+TILE dug;
+	SPRITE "tileset_objects", (1, 2);
+END;
+
 
 #==============================================================
 # Tilesets

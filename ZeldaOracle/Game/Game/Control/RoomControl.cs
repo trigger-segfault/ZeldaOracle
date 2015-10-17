@@ -152,6 +152,8 @@ namespace ZeldaOracle.Game.Control {
 
 		// Use this for placing tiles at runtime.
 		public void PlaceTile(Tile tile, int x, int y, int layer) {
+			tile.Location = new Point2I(x, y);
+			tile.Layer = layer;
 			tile.Initialize(this);
 			tiles[x, y, layer] = tile;
 		}

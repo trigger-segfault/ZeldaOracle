@@ -445,6 +445,7 @@ namespace ZeldaOracle.Game {
 				new ItemBracelet(),
 				new ItemFeather(),
 				new ItemBow(),
+				new ItemShovel(),
 				new ItemEssence1(),
 				new ItemEssence2(),
 				new ItemEssence3(),
