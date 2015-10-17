@@ -19,7 +19,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.name			= new string[] { "Wooden Sword", "Noble Sword", "Master Sword" };
 			this.description	= new string[] { "A hero's blade.", "A sacred blade.", "The blade of legends." };
 			this.maxLevel		= Item.Level3;
-			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping;
+			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWhileInHole;
 
 			sprite = new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(0, 0)),

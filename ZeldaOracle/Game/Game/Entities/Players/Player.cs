@@ -337,7 +337,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				RoomControl.GetTopTile(RoomControl.GetTileLocation(Origin)).OnLand(movement.JumpStartTile);
 				movement.JumpStartTile = -Point2I.One;
 			}
-
+			
 			// Update the current player state.
 			PlayerState desiredNaturalState = GetDesiredNaturalState();
 			if (state != desiredNaturalState && state.RequestStateChange(desiredNaturalState))

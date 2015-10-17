@@ -24,7 +24,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.description	= new string[] { "Always comes back to you.", "A remote-control weapon." };
 			this.level			= 0;
 			this.maxLevel		= Item.Level2;
-			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword;
+			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword | ItemFlags.UsableWhileInHole;
 
 			sprite = new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(4, 1)),

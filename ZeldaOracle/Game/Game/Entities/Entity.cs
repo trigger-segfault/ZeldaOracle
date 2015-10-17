@@ -186,6 +186,10 @@ namespace ZeldaOracle.Game.Entities {
 			physics.IsEnabled = false;
 		}
 		
+		public void SetPositionByCenter(Vector2F center) {
+			position = center - centerOffset;
+		}
+
 		
 		//-----------------------------------------------------------------------------
 		// Static Methods

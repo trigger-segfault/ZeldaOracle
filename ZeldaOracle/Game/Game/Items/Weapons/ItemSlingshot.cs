@@ -25,7 +25,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.description	= new string[] { "Used to shoot seeds.", "Shoots in 3 directions." };
 			this.maxLevel		= Item.Level2;
 			this.currentAmmo	= 0;
-			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping;
+			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWhileInHole;
 			this.sprite			= new Sprite[] { GameData.SPR_ITEM_ICON_SLINGSHOT_1, GameData.SPR_ITEM_ICON_SLINGSHOT_2 };
 			this.spriteEquipped	= new Sprite[] { GameData.SPR_ITEM_ICON_SLINGSHOT_1, GameData.SPR_ITEM_ICON_SLINGSHOT_2_EQUIPPED };
 		}

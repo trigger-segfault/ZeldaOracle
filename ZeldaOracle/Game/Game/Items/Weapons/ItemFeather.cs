@@ -50,7 +50,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		// Jump/deploy cape.
 		public override void OnButtonPress() {
-			if (Player.IsOnGround) {
+			if (Player.IsOnGround && !Player.Physics.IsInHole) {
 				Player.Movement.Jump();
 			}
 			else if (level == ItemWeapon.Level2) {

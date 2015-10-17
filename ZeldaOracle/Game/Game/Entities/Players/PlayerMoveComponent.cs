@@ -59,6 +59,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerMotionType	moveModeAir;		// For jumping
 		private PlayerMotionType	moveModeWater;		// For swimming.
 
+		private Tile				holeTile;
+		private bool				doomedToFallInHole;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -86,6 +89,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			moveAngle				= Angles.South;
 			mode					= new PlayerMotionType();
 			jumpStartTile			= -Point2I.One;
+			doomedToFallInHole		= false;
+			holeTile				= null;
 
 			// Controls.
 			analogMode		= false;
@@ -375,7 +380,56 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Update movement.
 			UpdateMoveControls();
 			velocityPrev = player.Physics.Velocity;
+
+			// Check for falling in holes.
+			if (player.Physics.IsInHole) {
+				Point2I holeTileLoc = player.RoomControl.GetTileLocation(player.Origin);
+				holeTile = player.RoomControl.GetTopTile(holeTileLoc);
+
+				Vector2F position = player.Center;
+				Vector2F goalPosition = holeTile.Center;
+
+				Rectangle2F doomRect = new Rectangle2F(holeTile.Position, new Vector2F(16, 16));
+				if (doomRect.Contains(player.Origin))
+					doomedToFallInHole = true;
+
+				// Pan on each axis seperately
+				for (int i = 0; i < 2; i++) {
+					float diff = goalPosition[i] - position[i];
+					if (Math.Abs(diff) > 0.5f)
+						position[i] += Math.Sign(diff) * 0.5f;
+					else
+						position[i] = goalPosition[i];
+				}
+
+				player.SetPositionByCenter(position);
+			}
+			else {
+				doomedToFallInHole = false;
+			}
 			
+			if (doomedToFallInHole && holeTile != null) {
+				Rectangle2F doomRect = new Rectangle2F(holeTile.Position, new Vector2F(16, 16));
+				// collide with hole boundries.
+				if (player.Origin.X + player.Physics.Velocity.X < doomRect.Left) {
+					player.Origin = new Vector2F(doomRect.Left, player.Origin.Y);
+					player.Physics.Velocity = new Vector2F(0.0f, player.Physics.Velocity.Y);
+				}
+				if (player.Origin.X + player.Physics.Velocity.X + 1 > doomRect.Right) {
+					player.Origin = new Vector2F(doomRect.Right - 1, player.Origin.Y);
+					player.Physics.Velocity = new Vector2F(0.0f, player.Physics.Velocity.Y);
+				}
+				
+				if (player.Origin.Y + player.Physics.Velocity.Y < doomRect.Top) {
+					player.Origin = new Vector2F(player.Origin.X, doomRect.Top);
+					player.Physics.Velocity = new Vector2F(player.Physics.Velocity.X, 0.0f);
+				}
+				if (player.Origin.Y + player.Physics.Velocity.Y + 1 > doomRect.Bottom) {
+					player.Origin = new Vector2F(player.Origin.X, doomRect.Bottom - 1);
+					player.Physics.Velocity = new Vector2F(player.Physics.Velocity.X, 0.0f);
+				}
+			}
+
 			// Check for ledge jumping (ledges/waterfalls)
 			CollisionInfo collisionInfo = player.Physics.CollisionInfo[moveDirection];
 			if (canLedgeJump && mode.CanLedgeJump && isMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {

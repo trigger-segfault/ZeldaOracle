@@ -15,5 +15,6 @@ namespace ZeldaOracle.Game.Items {
 		UsableWhileJumping	= 0x4,
 		UsableWithSword		= 0x8,
 		UsableUnderwater	= 0x10,
+		UsableWhileInHole	= 0x20,
 	}
 }

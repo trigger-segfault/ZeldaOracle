@@ -23,7 +23,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.name			= new string[] { "Wooden Shield", "Iron Shield", "Mirror Shield" };
 			this.description	= new string[] { "A small shield.", "A large shield.", "A reflective shield." };
 			this.maxLevel		= Item.Level3;
-			this.flags			= ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword;
+			this.flags			= ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword | ItemFlags.UsableWhileInHole;
 
 			this.sprite			= new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(3, 0)),

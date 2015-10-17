@@ -26,7 +26,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.description	= new string[] { "A bag for carrying seeds.", "A bag for carrying seeds.", "A bag for carrying seeds." };
 			this.maxLevel		= Item.Level3;
 			this.currentAmmo	= 0;
-			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword;
+			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword | ItemFlags.UsableWhileInHole;
 
 			sprite = new Sprite[] {
 				GameData.SPR_ITEM_ICON_SATCHEL,

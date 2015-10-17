@@ -58,9 +58,11 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 		// Virtual
 		//-----------------------------------------------------------------------------
-
+		
 		public virtual bool IsUsable() {
 			if (Player.IsInAir && !flags.HasFlag(ItemFlags.UsableWhileJumping))
+				return false;
+			if (Player.Physics.IsInHole && !flags.HasFlag(ItemFlags.UsableWhileInHole))
 				return false;
 			if (((Player.CurrentState is PlayerHoldSwordState) ||
 				(Player.CurrentState is PlayerSwingState) ||
@@ -71,7 +73,7 @@ namespace ZeldaOracle.Game.Items {
 		}
 
 		// Immediately interrupt this item (ex: if the player falls in a hole).
-		public virtual void Interrupt() { }
+		public virtual void Interrupt() {}
 
 		// Called when the items button is down (A or B).
 		public virtual void OnButtonDown() {}
