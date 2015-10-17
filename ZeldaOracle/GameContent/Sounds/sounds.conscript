@@ -14,4 +14,6 @@
 @sound "Items/slash_1" 1.0 0.0 0.0 false
 @sound "Items/slash_2" 1.0 0.0 0.0 false
 @sound "Items/slash_3" 1.0 0.0 0.0 false
+@sound "Items/shield" 1.0 0.0 0.0 false
+
 @end

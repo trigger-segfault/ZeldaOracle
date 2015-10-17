@@ -23,7 +23,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		//-----------------------------------------------------------------------------
 
 		public EventTileData() {
-			sprite			= null;
+			sprite			= new SpriteAnimation();
 			position		= Point2I.Zero;
 			size			= Point2I.One;
 		}

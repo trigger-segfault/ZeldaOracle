@@ -35,7 +35,6 @@ namespace ZeldaOracle.Common.Scripts {
 			parent = null;
 			type = CommandParamType.String;
 			count = 0;
-			// TODO: parse int/float.
 			
 			float.TryParse(str, out floatValue);
 			int.TryParse(str, out intValue);

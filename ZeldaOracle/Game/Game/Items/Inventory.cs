@@ -67,7 +67,7 @@ namespace ZeldaOracle.Game.Items {
 			else {
 				// Unequip the current item.
 				if (equippedWeapons[slot] != null) {
-					if (equippedWeapons[slot].HasFlag(ItemFlags.TwoHanded))
+					if (equippedWeapons[slot].IsTwoHanded)
 						equippedWeapons[1 - slot] = null;
 					equippedWeapons[slot].Unequip();
 				}
@@ -80,6 +80,18 @@ namespace ZeldaOracle.Game.Items {
 				weapon.CurrentEquipSlot = slot;
 				weapon.Equip();
 			}
+		}
+
+		public bool IsWeaponEquipped(Item item) {
+			return equippedWeapons[0] == item || equippedWeapons[1] == item;
+		}
+
+		public bool IsWeaponButtonDown(Item item) {
+			if (equippedWeapons[0] == item)
+				return Controls.A.IsDown();
+			if (equippedWeapons[1] == item)
+				return Controls.B.IsDown();
+			return false;
 		}
 
 		// Equips a non-usable item.

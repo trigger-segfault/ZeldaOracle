@@ -43,6 +43,17 @@ namespace ZeldaOracle.Game.Control.Menus {
 
 
 		//-----------------------------------------------------------------------------
+		// Virtual methods
+		//-----------------------------------------------------------------------------
+		
+		// Called when the inventory menu is opened from the gameplay.
+		public virtual void OnOpen() {}
+		
+		// Called when the entire menu collection is closed.
+		public virtual void OnClose() {}
+
+
+		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 

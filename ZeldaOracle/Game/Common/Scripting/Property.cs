@@ -114,12 +114,8 @@ namespace ZeldaOracle.Common.Scripting {
 		private string name;
 		// The data type of the property.
 		private PropertyType type;
-		// The value for integer properties. Used as children count for lists, used as 0 or 1 for booleans.
-		private int intValue;
-		// The value for float properties.
-		private float floatValue;
-		// The value for string properties.
-		private string stringValue;
+		// The object value for the property.
+		private object objectValue;
 		// If this property is part of a list of properties, then 'next' points to the next property in the list.
 		private Property next;
 		// If this property is a list of properties, then 'firstChild' points to the first property in the list.
@@ -140,9 +136,7 @@ namespace ZeldaOracle.Common.Scripting {
 		public Property(string name, PropertyType type = PropertyType.String) {
 			this.name			= name;
 			this.type			= type;
-			this.intValue		= 0;
-			this.floatValue		= 0;
-			this.stringValue	= "";
+			this.objectValue	= 0;
 			this.next			= null;
 			this.firstChild		= null;
 			this.documentation	= null;
@@ -157,9 +151,7 @@ namespace ZeldaOracle.Common.Scripting {
 		public Property(Property copy) {
 			name			= copy.name;
 			type			= copy.type;
-			intValue		= copy.intValue;
-			floatValue		= copy.floatValue;
-			stringValue		= copy.stringValue;
+			objectValue		= copy.objectValue;
 			next			= null;
 			firstChild		= null;
 			documentation	= null;
@@ -215,19 +207,10 @@ namespace ZeldaOracle.Common.Scripting {
 		// Mutators
 		//-----------------------------------------------------------------------------
 
-		public void SetValues(Property values) {
-			intValue	= values.intValue;
-			floatValue	= values.floatValue;
-			stringValue = values.stringValue;
-			if (properties != null) {
-				switch (this.type) {
-				case PropertyType.Boolean: RunAction(properties.PropertyObject, BoolValue); break;
-				case PropertyType.Integer: RunAction(properties.PropertyObject, IntValue); break;
-				case PropertyType.Float: RunAction(properties.PropertyObject, FloatValue); break;
-				case PropertyType.String: RunAction(properties.PropertyObject, StringValue); break;
-				}
-			}
-		}
+		/*public void SetValues(Property values) {
+			objectValue	= values.objectValue;
+			RunAction(properties.PropertyObject, objectValue);
+		}*/
 
 		public Property SetDocumentation(string readableName, string editorType, string category,
 			string description, bool isEditable = true, bool isHidden = false)
@@ -280,28 +263,28 @@ namespace ZeldaOracle.Common.Scripting {
 		// Create a string property with the given value.
 		public static Property CreateString(string name, string value) {
 			Property p = new Property(name, PropertyType.String);
-			p.StringValue = value;
+			p.objectValue = value;
 			return p;
 		}
 		
 		// Create an integer property with the given value.
 		public static Property CreateInt(string name, int value) {
 			Property p = new Property(name, PropertyType.Integer);
-			p.IntValue = value;
+			p.objectValue = value;
 			return p;
 		}
 		
 		// Create a float property with the given value.
 		public static Property CreateFloat(string name, float value) {
 			Property p = new Property(name, PropertyType.Float);
-			p.FloatValue = value;
+			p.objectValue = value;
 			return p;
 		}
 		
 		// Create a boolean property with the given value.
 		public static Property CreateBool(string name, bool value) {
 			Property p = new Property(name, PropertyType.Boolean);
-			p.BoolValue = value;
+			p.objectValue = value;
 			return p;
 		}
 
@@ -331,37 +314,46 @@ namespace ZeldaOracle.Common.Scripting {
 
 		// Values.
 
-		public string StringValue {
-			get { return stringValue; }
+		public object ObjectValue {
+			get { return objectValue; }
 			set {
-				stringValue = value;
+				objectValue = value;
+				if (properties != null)
+					RunAction(properties.PropertyObject, value);
+			}
+		}
+
+		public string StringValue {
+			get { return (string)objectValue; }
+			set {
+				objectValue = value;
 				if (properties != null)
 					RunAction(properties.PropertyObject, value);
 			}
 		}
 
 		public int IntValue {
-			get { return intValue; }
+			get { return (int)objectValue; }
 			set {
-				intValue = value;
+				objectValue = value;
 				if (properties != null)
 					RunAction(properties.PropertyObject, value);
 			}
 		}
 
 		public float FloatValue {
-			get { return floatValue; }
+			get { return (float)objectValue; }
 			set {
-				floatValue = value;
+				objectValue = value;
 				if (properties != null)
 					RunAction(properties.PropertyObject, value);
 			}
 		}
 
 		public bool BoolValue {
-			get { return (intValue == 1); }
+			get { return (bool)objectValue; }
 			set {
-				intValue = (value ? 1 : 0);
+				objectValue = value;
 				if (properties != null)
 					RunAction(properties.PropertyObject, value);
 			}
@@ -400,8 +392,8 @@ namespace ZeldaOracle.Common.Scripting {
 
 		// Return the number of children
 		public int Count {
-			get { return intValue; }
-			set { intValue = value; }
+			get { return (int)objectValue; }
+			set { objectValue = value; }
 		}
 
 		public PropertyAction Action {

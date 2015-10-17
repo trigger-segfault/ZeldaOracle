@@ -133,6 +133,8 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 			else {
+				//WorldFile worldFile = new WorldFile();
+				//world = worldFile.Load("temp_world.zwd");
 				world = GameDebug.CreateTestWorld();
 				player.Position = world.StartTileLocation * GameSettings.TILE_SIZE + new Point2I(8, 16);
 				roomControl.BeginRoom(world.StartRoom);
@@ -185,6 +187,9 @@ namespace ZeldaOracle.Game.Control {
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, menu),
 				menu
 			);
+			menuWeapons.OnOpen();
+			menuSecondaryItems.OnOpen();
+			menuEssences.OnOpen();
 		}
 
 		public void CloseMenu(Menu menu) {
@@ -195,6 +200,9 @@ namespace ZeldaOracle.Game.Control {
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, roomControl),
 				roomControl
 			);
+			menuWeapons.OnClose();
+			menuSecondaryItems.OnClose();
+			menuEssences.OnClose();
 		}
 
 

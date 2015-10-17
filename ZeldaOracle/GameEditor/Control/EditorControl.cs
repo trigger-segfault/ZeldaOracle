@@ -67,7 +67,6 @@ namespace ZeldaEditor.Control {
 		private Point2I			selectedTilesetTile;
 		private TileData		selectedTilesetTileData;
 		private bool			playerPlaceMode;
-		private bool			sampleFromAllLayers; // TODO: implement this.
 		private bool			showEvents;
 
 
@@ -105,7 +104,6 @@ namespace ZeldaEditor.Control {
 			this.selectedTilesetTile		= Point2I.Zero;
 			this.selectedTilesetTileData	= null;
 			this.playerPlaceMode			= false;
-			this.sampleFromAllLayers		= false;
 		}
 
 		public void Initialize(ContentManager contentManager, GraphicsDevice graphicsDevice) {

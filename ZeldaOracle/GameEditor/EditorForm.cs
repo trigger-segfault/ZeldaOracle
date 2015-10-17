@@ -125,10 +125,10 @@ namespace ZeldaEditor {
 
 		// Use this for shortcut keys that won't work on their own.
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
-			if (hotKeyCommands.ContainsKey(keyData)) {
+			/*if (hotKeyCommands.ContainsKey(keyData)) {
 				hotKeyCommands[keyData]();
 				return true;
-			}
+			}*/
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 

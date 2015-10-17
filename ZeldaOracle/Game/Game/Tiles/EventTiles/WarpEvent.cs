@@ -42,12 +42,13 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 				return;
 
 			// Search for warp tile in all rooms.
+			// TODO: include better functions for this task.
 			Room destRoom;
 			EventTileDataInstance destEvent;
 			string warpID = properties.GetString("destination_warp_point", "?");
 
 			if (FindDestinationInLevel(warpID, warpLevel, out destRoom, out destEvent)) {
-				int dir = destEvent.Properties.GetInteger("face_direction", Directions.Left); // TODO: modified properties might not cut it here
+				int dir = destEvent.Properties.GetInteger("face_direction", Directions.Down);
 				RoomControl.TransitionToRoom(destRoom, new RoomTransitionFade(destEvent.Position, dir));
 			}
 			else {
@@ -106,7 +107,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			base.Update();
 
 			if (IsTouchingPlayer()) {
-				if (warpEnabled && RoomControl.Player.IsOnGround) {
+				if (RoomControl.Player.CanUseWarpPoint && warpEnabled && RoomControl.Player.IsOnGround) {
 					Warp();
 					warpEnabled = false;
 				}

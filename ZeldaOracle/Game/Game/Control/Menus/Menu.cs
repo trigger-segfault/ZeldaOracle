@@ -37,7 +37,6 @@ namespace ZeldaOracle.Game.Control.Menus {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-
 		public override void OnBegin() {
 
 		}

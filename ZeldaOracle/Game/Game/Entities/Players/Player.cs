@@ -13,6 +13,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Entities.Players.States;
+using ZeldaOracle.Common.Audio;
 
 
 //States:
@@ -50,6 +51,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// The movement component for the player.
 		private PlayerMoveComponent movement;
 
+		private Animation moveAnimation;
+
 
 		private PlayerNormalState		stateNormal;
 		private PlayerBusyState			stateBusy;
@@ -58,6 +61,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerLadderState		stateLadder;
 		private PlayerSwingState		stateSwing;
 		private PlayerHoldSwordState	stateHoldSword;
+		private PlayerSwordStabState	stateSwordStab;
 		private PlayerSpinSwordState	stateSpinSword;
 
 		// TEMPORARY: Change tool drawing to something else
@@ -119,9 +123,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateLedgeJump	= new PlayerLedgeJumpState();
 			stateSwing		= new PlayerSwingState();
 			stateHoldSword	= new PlayerHoldSwordState();
+			stateSwordStab	= new PlayerSwordStabState();
 			stateSpinSword	= new PlayerSpinSwordState();
 
 			toolAnimation	= new AnimationPlayer();
+
+			moveAnimation	= GameData.ANIM_PLAYER_DEFAULT;
 		}
 
 
@@ -187,6 +194,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Items
 		//-----------------------------------------------------------------------------
 
+		public void InterruptItems() {
+			for (int i = 0; i < EquippedUsableItems.Length; i++) {
+				ItemWeapon item = EquippedUsableItems[i];
+				item.Interrupt();
+				if (item.IsTwoHanded)
+					break;
+			}
+		}
+
 		// Update items by checking if their buttons are pressed.
 		public void UpdateEquippedItems() {
 			for (int i = 0; i < EquippedUsableItems.Length; i++) {
@@ -197,8 +213,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 							item.OnButtonPress();
 						if (Inventory.GetSlotButton(i).IsDown())
 							item.OnButtonDown();
+						item.Update();
 					}
 					//equippedItems[i].Update();
+					if (item.IsTwoHanded)
+						break;
 				}
 			}
 		}
@@ -312,6 +331,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 						performedAction = true;
 					}
 				}
+			}
+
+			if (IsOnGround && movement.JumpStartTile != -Point2I.One) {
+				RoomControl.GetTopTile(RoomControl.GetTileLocation(Origin)).OnLand(movement.JumpStartTile);
+				movement.JumpStartTile = -Point2I.One;
 			}
 
 			// Update the current player state.
@@ -460,6 +484,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return tunic; }
 			set { tunic = value; }
 		}
+
+		public bool CanUseWarpPoint {
+			get { return movement.CanUseWarpPoint; }
+			set { movement.CanUseWarpPoint = value; }
+		}
+
+		public Animation MoveAnimation {
+			get { return moveAnimation; }
+			set { moveAnimation = value; }
+		}
 		
 		// Player states
 
@@ -497,6 +531,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerHoldSwordState HoldSwordState {
 			get { return stateHoldSword; }
+		}
+
+		public PlayerSwordStabState SwordStabState {
+			get { return stateSwordStab; }
 		}
 
 		public PlayerSpinSwordState SpinSwordState {

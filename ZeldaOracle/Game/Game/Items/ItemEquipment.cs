@@ -38,9 +38,10 @@ namespace ZeldaOracle.Game.Items {
 		public void Unequip() {
 			if (isEquipped) {
 				isEquipped = false;
-				OnEquip();
+				OnUnequip();
 			}
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Virtual
@@ -55,9 +56,9 @@ namespace ZeldaOracle.Game.Items {
 		// Draws the item inside the inventory.
 		protected override void DrawSprite(Graphics2D g, Point2I position, int lightOrDark) {
 			Sprite spr = sprite[level];
-			if (spriteEquipped != null)
+			if (inventory.IsWeaponEquipped(this) && spriteEquipped != null)
 				spr = spriteEquipped[level];
-			g.DrawSprite(isEquipped ? spr : sprite[level], lightOrDark, position);
+			g.DrawSprite(spr, lightOrDark, position);
 		}
 
 

@@ -32,6 +32,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerMoveCondition	moveCondition;			// What are the conditions in which the player can move?
 		private bool				canLedgeJump;
 		private bool				canJump;
+		private bool				canUseWarpPoint;		// Can the player go through warp points?
 		private bool				isStrafing;
 
 		// Internal
@@ -47,6 +48,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private Vector2F			velocityPrev;			// The player's velocity on the previous frame.
 		private int					moveAngle;				// The angle the player is moving in.
 		private int					moveDirection;			// The direction that the player wants to face.
+		private Point2I				jumpStartTile;			// The tile the player started jumping on. (Used for jump color tiles)
 
 		// Movement modes.
 		private PlayerMotionType	mode;
@@ -70,6 +72,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			moveCondition			= PlayerMoveCondition.FreeMovement;
 			canLedgeJump			= true;
 			canJump					= true;
+			canUseWarpPoint			= true;
 			isStrafing				= false;
 
 			// Internal.
@@ -80,6 +83,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			velocityPrev			= Vector2F.Zero;
 			moveAngle				= Angles.South;
 			mode					= new PlayerMotionType();
+			jumpStartTile			= -Point2I.One;
 
 			// Controls.
 			analogMode		= false;
@@ -152,13 +156,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public void Jump() {
 			if (player.IsOnGround) {
+				jumpStartTile = player.RoomControl.GetTileLocation(player.Origin);
 				player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
 				if (player.CurrentState is PlayerNormalState)
 					player.Graphics.PlayAnimation("player_jump");
 			}
 			else {
 				if (player.CurrentState is PlayerNormalState)
-					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
+					player.Graphics.PlayAnimation(player.MoveAnimation);
 			}
 		}
 
@@ -276,7 +281,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public void ChooseAnimation() {
 			// Update movement animation.
 			if (player.IsOnGround && moveCondition != PlayerMoveCondition.NoControl &&
-				(player.Graphics.Animation == GameData.ANIM_PLAYER_DEFAULT ||
+				(player.Graphics.Animation == player.MoveAnimation ||
+				player.Graphics.Animation == GameData.ANIM_PLAYER_DEFAULT ||
 				player.Graphics.Animation == GameData.ANIM_PLAYER_CARRY))
 			{
 				if (isMoving && !player.Graphics.IsAnimationPlaying)
@@ -395,6 +401,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 			set { isMoving = value; }
 		}
 		
+		public bool CanUseWarpPoint {
+			get { return canUseWarpPoint; }
+			set { canUseWarpPoint = value; }
+		}
+		
 		public int MoveDirection {
 			get { return moveDirection; }
 		}
@@ -410,6 +421,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public PlayerMoveCondition MoveCondition {
 			get { return moveCondition; }
 			set { moveCondition = value; }
+		}
+
+		public Point2I JumpStartTile {
+			get { return jumpStartTile; }
+			set { jumpStartTile = value; }
 		}
 	}
 }

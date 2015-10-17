@@ -18,7 +18,6 @@ SPRITESHEET "tileset_objects_extras_16x16";
 
 TEMPANIM lantern_lit; SUBSTRIP repeat;
 	ADD strip, 16, 4, (0, 3); END;
-
 #==============================================================
 # Tiles
 #==============================================================
@@ -49,6 +48,12 @@ END;
 TEMPTILE pushable_block;
 	FLAGS		solid, movable;
 	MODEL		block;
+END;
+
+TEMPTILE color_jump_pad;
+	TYPE		TileColorJumpPad;
+	PROPERTIES
+		(show sprite_index);
 END;
 
 
@@ -218,10 +223,9 @@ TILE (0, 5);
 END;
 
 TILE (5, 5);
+	CLONE		color_jump_pad;
 	SPRITEINDEX 1, "tileset_objects_extras_16x16", (7, 3);
 	SPRITEINDEX 2, "tileset_objects_extras_16x16", (8, 3);
-	PROPERTIES	
-			(show, sprite_index);
 END;
 
 TILE (6, 5);

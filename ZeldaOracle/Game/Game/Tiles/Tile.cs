@@ -57,6 +57,7 @@ namespace ZeldaOracle.Game.Tiles {
 			properties		= new Properties();
 			properties.PropertyObject = this;
 			tileData		= null;
+			moveDirection	= Point2I.Zero; 
 		}
 
 
@@ -149,6 +150,16 @@ namespace ZeldaOracle.Game.Tiles {
 			return true;
 		}
 
+		// Called while the player is trying to push the tile but before it's actually moved.
+		public virtual void OnPushing(int direction) {
+
+		}
+
+		// Called when the player jumps and lands on the tile.
+		public virtual void OnLand(Point2I startTile) {
+			
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Simulation
@@ -160,12 +171,15 @@ namespace ZeldaOracle.Game.Tiles {
 			// Update movement (after pushed).
 			if (isMoving) {
 				if (offset.LengthSquared > 0.0f) {
-					offset += (Vector2F) moveDirection * movementSpeed;
-					if (offset.LengthSquared == 0.0f) {
+					offset += (Vector2F)moveDirection * movementSpeed;
+					if (offset.LengthSquared == 0.0f || GMath.Sign(offset) == GMath.Sign(moveDirection)) {
 						offset = Vector2F.Zero;
 						isMoving = false;
 					}
 				}
+			}
+			else {
+				moveDirection = Point2I.Zero;
 			}
 		}
 
@@ -344,6 +358,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public bool IsMoving {
 			get { return isMoving; }
+		}
+
+		public int MoveDirection {
+			get { return Directions.FromPoint(moveDirection); }
 		}
 
 		public bool IsLedge {

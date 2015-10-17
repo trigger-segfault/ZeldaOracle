@@ -80,6 +80,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			isPickingUp = true;
 			player.Movement.CanJump			= false;
 			player.Movement.CanLedgeJump	= false;
+			player.Movement.CanUseWarpPoint	= false;
 			player.Movement.MoveCondition	= PlayerMoveCondition.NoControl;
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
 		}
@@ -87,6 +88,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnEnd(PlayerState newState) {
 			player.Movement.CanJump			= true;
 			player.Movement.CanLedgeJump	= true;
+			player.Movement.CanUseWarpPoint	= true;
 			
 			if (newState is PlayerSwimState || newState is PlayerLadderState) {
 				DropObject(false);

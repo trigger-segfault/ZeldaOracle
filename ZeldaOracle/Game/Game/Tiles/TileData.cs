@@ -63,10 +63,13 @@ namespace ZeldaOracle.Game.Tiles {
 				spriteAsObject		= new SpriteAnimation(copyTileData.spriteAsObject);
 				breakAnimation		= copyTileData.breakAnimation;
 				collisionModel		= copyTileData.collisionModel;
-				spriteList			= new SpriteAnimation[copyTileData.spriteList.Length];
 				
-				for (int i = 0; i < spriteList.Length; i++)
-					spriteList[i] = new SpriteAnimation(copyTileData.spriteList[i]);
+				if (copyTileData.spriteList.Length > 0) {
+					spriteList = new SpriteAnimation[copyTileData.spriteList.Length];
+					for (int i = 0; i < spriteList.Length; i++) {
+						spriteList[i] = new SpriteAnimation(copyTileData.spriteList[i]);
+					}
+				}
 			}
 		}
 		

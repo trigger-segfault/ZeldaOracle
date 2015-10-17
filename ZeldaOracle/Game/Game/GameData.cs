@@ -367,12 +367,6 @@ namespace ZeldaOracle.Game {
 			etd.Properties.Set("destination_warp_point", "")
 				.SetDocumentation("Destination Warp Point", "", "", "The id of the warp point destination.");
 			etd.Sprite = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
-
-			//etd.SpriteList = new SpriteAnimation[(int) WarpType.Count];
-			//etd.SpriteList[(int) WarpType.Entrance] = GameData.SPR_EVENT_TILE_WARP_ENTRANCE;
-			//etd.SpriteList[(int) WarpType.Stairs] = GameData.SPR_EVENT_TILE_WARP_STAIRS;
-			//etd.SpriteList[(int) WarpType.Tunnel] = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
-
 			Resources.AddResource("warp", etd);
 			
 			// Create an NPC event.
@@ -391,15 +385,6 @@ namespace ZeldaOracle.Game {
 			etd.Properties.GetProperty("sprite_index").Documentation.IsHidden = false;
 			Resources.AddResource("npc", etd);
 			etd.Sprite = Resources.GetAnimation("npc_shopkeeper");
-			/*
-			etd.Properties.Set("sprite_index", 1);
-			etd.SpriteList = new SpriteAnimation[] {
-				Resources.GetAnimation("npc_1"),
-				Resources.GetAnimation("npc_2"),
-				Resources.GetAnimation("npc_3"),
-				Resources.GetAnimation("npc_shopkeeper"),
-			};*/
-
 			IntegrateResources<Tileset>("TILESET_");
 		}
 

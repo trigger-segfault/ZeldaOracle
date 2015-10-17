@@ -316,7 +316,7 @@ namespace ZeldaOracle.Common.Scripting {
 		private Property SetProperty(string name, Property property, bool setBase) {
 			if (setBase) {
 				if (map.ContainsKey(name)) {
-					map[name].SetValues(property);
+					map[name].ObjectValue = property.ObjectValue;
 				}
 				else {
 					map[name] = property;
@@ -327,12 +327,12 @@ namespace ZeldaOracle.Common.Scripting {
 			}
 			else {
 				if (map.ContainsKey(name)) {
-					map[name].SetValues(property);
+					map[name].ObjectValue = property.ObjectValue;
 				}
 				else if (baseProperties != null && baseProperties.map.ContainsKey(name)) {
 					map[name] = new Property(baseProperties.map[name]);
 					map[name].Properties = this;
-					map[name].SetValues(property);
+					map[name].ObjectValue = property.ObjectValue;
 				}
 				else {
 					map[name] = property;

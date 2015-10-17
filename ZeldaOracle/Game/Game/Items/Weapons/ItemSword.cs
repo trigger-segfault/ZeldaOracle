@@ -19,7 +19,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.name			= new string[] { "Wooden Sword", "Noble Sword", "Master Sword" };
 			this.description	= new string[] { "A hero's blade.", "A sacred blade.", "The blade of legends." };
 			this.maxLevel		= Item.Level3;
-			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword;
+			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping;
 
 			sprite = new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(0, 0)),
@@ -33,23 +33,26 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		// Called when the item is switched to.
-		public override void OnStart() { }
-
-		// Called when the item is put away.
-		public override void OnEnd() { }
-
 		// Immediately interrupt this item (ex: if the player falls in a hole).
-		public override void Interrupt() { }
+		public override void Interrupt() {
+			//if (Player.CurrentState == Player.HoldSwordState && !Player.HoldSwordState.IsStabbing) {
+			//	Player.BeginNormalState();
+			//}
+		}
 
 		// Called when the items button is pressed (A or B).
 		public override void OnButtonPress() {
-			Player.SwingState.NextState = Player.HoldSwordState;
-			Player.SwingState.EquipSlot = CurrentEquipSlot;
-			Player.SwingState.WeaponAnimation = GameData.ANIM_SWORD_SWING;
-			Player.HoldSwordState.EquipSlot = CurrentEquipSlot;
-			Player.HoldSwordState.WeaponAnimation = GameData.ANIM_SWORD_HOLD;
-			Player.SpinSwordState.WeaponAnimation = GameData.ANIM_SWORD_SPIN;
+
+			Player.SwingState.NextState				= Player.HoldSwordState;
+			Player.SwingState.Weapon				= this;
+			Player.SwingState.WeaponAnimation		= GameData.ANIM_SWORD_SWING;
+
+			Player.HoldSwordState.Weapon			= this;
+			Player.HoldSwordState.WeaponAnimation	= GameData.ANIM_SWORD_HOLD;
+			Player.SpinSwordState.WeaponAnimation	= GameData.ANIM_SWORD_SPIN;
+
+			Player.SwordStabState.Weapon			= this;
+
 			Player.BeginState(Player.SwingState);
 		}
 
