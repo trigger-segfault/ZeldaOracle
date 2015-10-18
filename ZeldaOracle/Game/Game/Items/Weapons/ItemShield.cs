@@ -92,7 +92,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Immediately interrupt this item (ex: if the player falls in a hole).
 		public override void Interrupt() {
 			StopBlocking();
-			Player.MoveAnimation = GameData.ANIM_PLAYER_DEFAULT;
+			Player.MoveAnimation = shieldAnimation;
 		}
 
 		// Update the item.

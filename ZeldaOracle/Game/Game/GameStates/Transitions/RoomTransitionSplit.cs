@@ -14,11 +14,15 @@ using ZeldaOracle.Game.Worlds;
 namespace ZeldaOracle.Game.GameStates.Transitions {
 	
 	public class RoomTransitionSplit : RoomTransition {
-		private const int TRANSITION_SPLIT_DELAY = 6;
+		private const int TRANSITION_SPLIT_BEGIN_DELAY	= 3;
+		private const int TRANSITION_SPLIT_MOVE_DELAY	= 7;
+		private const int TRANSITION_SPLIT_END_DELAY	= 14;
 		
 		private Color	splitColor;
 		private int[]	sideWidths;
 		private int		timer;
+		private int		endTimer;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -38,32 +42,42 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			base.OnBegin();
 
 			timer = 0;
+			endTimer = 0;
 			for (int i = 0; i < 2; i++)
 				sideWidths[i] = GameSettings.VIEW_WIDTH / 2;
-			
-			// Switch rooms immediately.
-			SetupNewRoom();
-			DestroyOldRoom();
 		}
 
 		public override void Update() {
 			timer++;
-			if (timer >= TRANSITION_SPLIT_DELAY) {
+			if (timer == TRANSITION_SPLIT_BEGIN_DELAY) {
+				// Switch rooms.
+				SetupNewRoom();
+				DestroyOldRoom();
+			}
+			else if (timer >= TRANSITION_SPLIT_BEGIN_DELAY + TRANSITION_SPLIT_MOVE_DELAY) {
 				sideWidths[(timer + 1) % 2] -= 8;
 				if (sideWidths[0] <= 0 && sideWidths[1] <= 0) {
-					EndTransition();
+					endTimer++;
+					if (endTimer > TRANSITION_SPLIT_END_DELAY)
+						EndTransition();
 				}
 			}
 		}
 
 		public override void Draw(Graphics2D g) {
 			g.ResetTranslation();
-			NewRoomControl.Draw(g);
 
-			g.ResetTranslation();
-			g.Translate(0, 16);
-			g.FillRectangle(new Rectangle2F(0, 0, sideWidths[0], GameSettings.VIEW_HEIGHT), splitColor);
-			g.FillRectangle(new Rectangle2F(GameSettings.VIEW_WIDTH - sideWidths[1], 0, sideWidths[1], GameSettings.VIEW_HEIGHT), splitColor);
+			if (timer < TRANSITION_SPLIT_BEGIN_DELAY) {
+				OldRoomControl.Draw(g);
+			}
+			else {
+				NewRoomControl.Draw(g);
+
+				g.ResetTranslation();
+				g.Translate(0, 16);
+				g.FillRectangle(new Rectangle2F(0, 0, sideWidths[0], GameSettings.VIEW_HEIGHT), splitColor);
+				g.FillRectangle(new Rectangle2F(GameSettings.VIEW_WIDTH - sideWidths[1], 0, sideWidths[1], GameSettings.VIEW_HEIGHT), splitColor);
+			}
 		}
 
 	}

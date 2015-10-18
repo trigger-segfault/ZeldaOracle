@@ -366,6 +366,8 @@ namespace ZeldaOracle.Game {
 				.SetDocumentation("Destination Level", "", "", "The level where the destination point is in.");
 			etd.Properties.Set("destination_warp_point", "")
 				.SetDocumentation("Destination Warp Point", "", "", "The id of the warp point destination.");
+			etd.Properties.Set("face_direction", Directions.Down)
+				.SetDocumentation("Face Direction", "", "", "The direction the player should face when entering a room through this Warp Point.");
 			etd.Sprite = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
 			Resources.AddResource("warp", etd);
 			
