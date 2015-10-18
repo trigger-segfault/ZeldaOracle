@@ -82,15 +82,21 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			else if (ammoID == "ammo_scent_seeds") {
 				ThrowSeed(SeedType.Scent);
 			}
-			else if (ammoID == "ammo_pegasus_seeds") {
-				// TODO: start sprinting.
-				Player.RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_PEGASUS_DUST), Player.Center - new Point2I(0, 8));
-			}
 			else if (ammoID == "ammo_gale_seeds") {
 				DropSeed(SeedType.Gale);
 			}
 			else if (ammoID == "ammo_mystery_seeds") {
 				ThrowSeed(SeedType.Mystery);
+			}
+			else if (ammoID == "ammo_pegasus_seeds") {
+				// Start sprinting.
+				if (!Player.Movement.IsSprinting) {
+					Player.RoomControl.SpawnEntity(new Effect(
+						GameData.ANIM_EFFECT_PEGASUS_DUST), Player.Center - new Point2I(0, 8));
+					Player.Movement.StartSprinting(
+						GameSettings.PLAYER_SPRINT_DURATION,
+						GameSettings.PLAYER_SPRINT_SPEED_SCALE);
+				}
 			}
 		}
 

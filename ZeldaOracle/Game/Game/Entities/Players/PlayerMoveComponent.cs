@@ -35,6 +35,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private bool				canPush;
 		private bool				canUseWarpPoint;		// Can the player go through warp points?
 		private bool				isStrafing;
+		private bool				isSprinting;
+		private int					sprintTimer;
+		private float				sprintSpeedScale;
 
 		// Internal
 		private Player				player;
@@ -83,6 +86,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 			canPush					= true;
 			canUseWarpPoint			= true;
 			isStrafing				= false;
+			isSprinting				= false;
+			sprintTimer				= 0;
+			sprintSpeedScale		= 1.5f;
 
 			// Internal.
 			allowMovementControl	= true;
@@ -169,6 +175,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 			motion = Vector2F.Zero;
 		}
 
+		public void StartSprinting(int duration, float sprintSpeedScale) {
+			this.sprintTimer		= duration;
+			this.sprintSpeedScale	= sprintSpeedScale;
+			this.isSprinting		= true;
+		}
+
 		public void Jump() {
 			if (player.IsOnGround) {
 				// Allow initial jump movement if only can move in air.
@@ -177,6 +189,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 					if (isMoving) {
 						float scaledSpeed		= moveModeAir.MoveSpeed * moveSpeedScale;
+						if (isSprinting && mode != moveModeWater)
+							scaledSpeed *= sprintSpeedScale;
 						Vector2F keyMotion		= moveVector * scaledSpeed;
 						player.Physics.Velocity	= keyMotion;
 						motion					= keyMotion;
@@ -254,6 +268,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 				// Determine key-motion (the velocity we want to move at)
 				float scaledSpeed = mode.MoveSpeed * moveSpeedScale;
+				if (isSprinting && mode != moveModeWater)
+					scaledSpeed *= sprintSpeedScale;
 				Vector2F keyMotion = keyMoveVector * scaledSpeed;
 
 				// Update acceleration-based motion.
@@ -327,10 +343,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 				player.Graphics.Animation == GameData.ANIM_PLAYER_DEFAULT ||
 				player.Graphics.Animation == GameData.ANIM_PLAYER_CARRY))
 			{
-				if (isMoving && !player.Graphics.IsAnimationPlaying)
-					player.Graphics.PlayAnimation();
-				if (!isMoving && player.Graphics.IsAnimationPlaying)
-					player.Graphics.StopAnimation();
+				if (isMoving || isSprinting) {
+					if (!player.Graphics.IsAnimationPlaying)
+						player.Graphics.PlayAnimation();
+				}
+				else {
+					if (player.Graphics.IsAnimationPlaying)
+						player.Graphics.StopAnimation();
+				}
 			}
 		}
 		
@@ -396,7 +416,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 					Tile newHoleTile	= player.RoomControl.GetTopTile(holeTileLoc);
 					Point2I newQuadrent	= (Point2I) (player.Origin / 8);
 					if (newQuadrent != holeEnterQuadrent) {
-						Console.WriteLine("Different quadrent: " + holeEnterQuadrent + " -> " + newQuadrent);
 						doomedToFallInHole = true;
 						holeTile = newHoleTile;
 					}
@@ -466,6 +485,18 @@ namespace ZeldaOracle.Game.Entities.Players {
 			UpdateFallingInHoles();
 			velocityPrev = player.Physics.Velocity;
 
+			// Update sprinting.
+			if (isSprinting) {
+				if (sprintTimer % 10 == 0) {
+					//Sounds.PLAYER_LAND.play();
+					player.RoomControl.SpawnEntity(new Effect(
+						GameData.ANIM_EFFECT_SPRINT_PUFF), player.Origin);
+				}
+				sprintTimer--;
+				if (sprintTimer <= 0)
+					isSprinting = false;
+			}
+
 			// Check for ledge jumping (ledges/waterfalls)
 			CollisionInfo collisionInfo = player.Physics.CollisionInfo[moveDirection];
 			if (canLedgeJump && mode.CanLedgeJump && isMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
@@ -526,6 +557,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public bool CanUseWarpPoint {
 			get { return canUseWarpPoint; }
 			set { canUseWarpPoint = value; }
+		}
+		
+		public bool IsSprinting {
+			get { return isSprinting; }
 		}
 		
 		public int MoveDirection {
