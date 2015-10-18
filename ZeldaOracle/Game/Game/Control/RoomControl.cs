@@ -38,6 +38,8 @@ namespace ZeldaOracle.Game.Control {
 		private List<EventTile>	eventTiles;
 		private ViewControl		viewControl;
 		
+		private event Action<Player> eventPlayerRespawn;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -55,7 +57,7 @@ namespace ZeldaOracle.Game.Control {
 		
 
 		//-----------------------------------------------------------------------------
-		// Accessors
+		// Tile Accessors
 		//-----------------------------------------------------------------------------
 		
 		// Return the tile at the given location (can return null).
@@ -108,20 +110,7 @@ namespace ZeldaOracle.Game.Control {
 		
 
 		//-----------------------------------------------------------------------------
-		// Mutators
-		//-----------------------------------------------------------------------------
-		
-		// Move the given tile to a new location.
-		public void MoveTile(Tile tile, Point2I newLocation, int newLayer) {
-			tiles[tile.Location.X, tile.Location.Y, tile.Layer] = null;
-			tiles[newLocation.X, newLocation.Y, newLayer] = tile;
-			tile.Location = newLocation;
-			tile.Layer = newLayer;
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Spawning / Removal
+		// Tile & Entity Management
 		//-----------------------------------------------------------------------------
 		
 		// Use this for spawning entites at runtime.
@@ -152,6 +141,8 @@ namespace ZeldaOracle.Game.Control {
 
 		// Use this for placing tiles at runtime.
 		public void PlaceTile(Tile tile, int x, int y, int layer) {
+			tile.Location = new Point2I(x, y);
+			tile.Layer = layer;
 			tile.Initialize(this);
 			tiles[x, y, layer] = tile;
 		}
@@ -166,6 +157,14 @@ namespace ZeldaOracle.Game.Control {
 		public void AddEventTile(EventTile eventTile) {
 			eventTile.Initialize(this);
 			eventTiles.Add(eventTile);
+		}
+
+		// Move the given tile to a new location.
+		public void MoveTile(Tile tile, Point2I newLocation, int newLayer) {
+			tiles[tile.Location.X, tile.Location.Y, tile.Layer] = null;
+			tiles[newLocation.X, newLocation.Y, newLayer] = tile;
+			tile.Location = newLocation;
+			tile.Layer = newLayer;
 		}
 
 
@@ -270,6 +269,16 @@ namespace ZeldaOracle.Game.Control {
 
 
 		//-----------------------------------------------------------------------------
+		// Events
+		//-----------------------------------------------------------------------------
+
+		public void OnPlayerRespawn() {
+			if (eventPlayerRespawn != null)
+				eventPlayerRespawn.Invoke(Player);
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
@@ -328,7 +337,7 @@ namespace ZeldaOracle.Game.Control {
 
 			// Update view to follow player.
 			viewControl.PanTo(Player.Center);
-
+			
 			// Detect room transitions.
 			if (Player.AllowRoomTransition) {
 				for (int direction = 0; direction < Directions.Count; direction++) {
@@ -344,9 +353,8 @@ namespace ZeldaOracle.Game.Control {
 					}
 				}
 			}
-
+			
 			GameControl.HUD.Update();
-
 			GameControl.UpdateRoomState();
 
 			if (GameControl.UpdateRoom) {
@@ -355,7 +363,7 @@ namespace ZeldaOracle.Game.Control {
 					GameControl.OpenMenu(GameControl.MenuWeapons);
 				}
 				
-				// Update debug keys.
+				// DEBUG: Update debug keys.
 				GameDebug.UpdateRoomDebugKeys(this);
 			}
 		}
@@ -437,6 +445,11 @@ namespace ZeldaOracle.Game.Control {
 
 		public ViewControl ViewControl {
 			get { return viewControl; }
+		}
+
+		public event Action<Player> PlayerRespawn {
+			add { eventPlayerRespawn += value; }
+			remove { eventPlayerRespawn -= value; }
 		}
 	}
 }

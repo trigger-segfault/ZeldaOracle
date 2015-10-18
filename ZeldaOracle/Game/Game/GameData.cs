@@ -445,6 +445,7 @@ namespace ZeldaOracle.Game {
 				new ItemBracelet(),
 				new ItemFeather(),
 				new ItemBow(),
+				new ItemShovel(),
 				new ItemEssence1(),
 				new ItemEssence2(),
 				new ItemEssence3(),
@@ -898,6 +899,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_EFFECT_SEED_GALE;
 		public static Animation ANIM_EFFECT_SEED_MYSTERY;
 		public static Animation ANIM_EFFECT_PEGASUS_DUST;		// The dust the player sprinkles over himself when using a pegasus seed.
+		public static Animation ANIM_EFFECT_SPRINT_PUFF;
 		public static Animation ANIM_EFFECT_OWL_SPARKLE;
 		public static Animation ANIM_ITEM_SCENT_POD;
 		public static Animation ANIM_EFFECT_FALLING_OBJECT;

@@ -25,7 +25,7 @@ namespace ZeldaOracle.Game.Items {
 			this.maxLevel		= Item.Level3;
 			this.currentAmmo	= 0;
 			
-			this.flags			= ItemFlags.None;
+			this.flags			= ItemFlags.UsableWhileInHole;
 
 			sprite = new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0)),

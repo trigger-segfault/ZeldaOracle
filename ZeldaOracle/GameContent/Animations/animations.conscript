@@ -323,10 +323,10 @@ ANIM item_bomb; SUBSTRIP repeat;
 SPRITESHEET "basic_effects";
 
 ANIM effect_dirt;
-	SUBSTRIP reset;  ADD frame, 1, (5,0), (-14, -12); ADD part, 1, (5, 0), (-10,  -6);
-	SUBSTRIP reset;  ADD frame, 1, (4,0), ( -8, -10); ADD part, 1, (5, 0), ( -8,  -8);
-	SUBSTRIP reset;  ADD frame, 1, (4,0), ( -2, -12); ADD part, 1, (4, 0), ( -6,  -6);
-	SUBSTRIP reset;  ADD frame, 1, (4,0), ( -8,  -8); ADD part, 1, (5, 0), ( -8, -10);
+	SUBSTRIP reset;  ADD frame, 1, (5, 0), (-12,  -9); ADD part, 1, (5, 0), ( -8,  -3); # right
+	SUBSTRIP reset;  ADD frame, 1, (4, 0), ( -8,  -8); ADD part, 1, (5, 0), ( -8,  -6); # up
+	SUBSTRIP reset;  ADD frame, 1, (4, 0), ( -2,  -9); ADD part, 1, (4, 0), (  0,  -2); # left
+	SUBSTRIP reset;  ADD frame, 1, (4, 0), ( -8,  -6); ADD part, 1, (5, 0), ( -8,  -8); # down
 	END;
 ANIM effect_water_splash; SUBSTRIP reset;
 	ADD frame, 4, (2,2), ( -8, -11); ADD part, 4, (3, 2), ( -8, -11);
@@ -429,6 +429,13 @@ ANIM effect_pegasus_dust; SUBSTRIP reset;
 	ADD frame, 1, (8,  1), (-13,  -7); ADD part, 1, (8,  2), (-10, -11); ADD part, 1, (8,  1), (-1, -7); ADD part, 1, (8,  2), (-6, -11);
 	ADD frame, 1, (8, 14), (-17,  -5); ADD part, 1, (8, 13), (-12,  -9); ADD part, 1, (8, 14), ( 2, -5); ADD part, 1, (8, 13), (-3,  -9);
 	ADD frame, 1, (8,  9), (-17,  -5); ADD part, 1, (8, 10), (-12,  -9); ADD part  1, (8,  9), (-4, -5); ADD part, 1, (8, 10), (-3,  -9); END;
+ANIM effect_sprint_puff; SUBSTRIP reset;
+	ADD frame, 2, (3, 12);
+	ADD frame, 4, (4, 12);
+	ADD frame, 3, (5, 12);
+	OFFSET (-8, -8);
+	FLICKER 1, on;
+	END;
 ANIM effect_owl_sparkle; SUBSTRIP reset;
 	ADD frame, 9, (9,  8);
 	ADD frame, 18, (9,  9);

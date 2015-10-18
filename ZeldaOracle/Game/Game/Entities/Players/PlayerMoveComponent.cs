@@ -32,8 +32,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerMoveCondition	moveCondition;			// What are the conditions in which the player can move?
 		private bool				canLedgeJump;
 		private bool				canJump;
+		private bool				canPush;
 		private bool				canUseWarpPoint;		// Can the player go through warp points?
 		private bool				isStrafing;
+		private bool				isSprinting;
+		private int					sprintTimer;
+		private float				sprintSpeedScale;
 
 		// Internal
 		private Player				player;
@@ -58,6 +62,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerMotionType	moveModeAir;		// For jumping
 		private PlayerMotionType	moveModeWater;		// For swimming.
 
+		private Tile				holeTile;
+		private bool				doomedToFallInHole;
+		private int					holeDoomTimer;
+		private Vector2F			holeSlipVelocity;
+		private Point2I				holeEnterQuadrent;
+		private bool				fallingInHole;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -72,8 +83,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 			moveCondition			= PlayerMoveCondition.FreeMovement;
 			canLedgeJump			= true;
 			canJump					= true;
+			canPush					= true;
 			canUseWarpPoint			= true;
 			isStrafing				= false;
+			isSprinting				= false;
+			sprintTimer				= 0;
+			sprintSpeedScale		= 1.5f;
 
 			// Internal.
 			allowMovementControl	= true;
@@ -84,6 +99,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 			moveAngle				= Angles.South;
 			mode					= new PlayerMotionType();
 			jumpStartTile			= -Point2I.One;
+
+			doomedToFallInHole		= false;
+			holeTile				= null;
+			holeDoomTimer			= 0;
+			holeSlipVelocity		= Vector2F.Zero;
+			fallingInHole			= false;
 
 			// Controls.
 			analogMode		= false;
@@ -154,12 +175,33 @@ namespace ZeldaOracle.Game.Entities.Players {
 			motion = Vector2F.Zero;
 		}
 
+		public void StartSprinting(int duration, float sprintSpeedScale) {
+			this.sprintTimer		= duration;
+			this.sprintSpeedScale	= sprintSpeedScale;
+			this.isSprinting		= true;
+		}
+
 		public void Jump() {
 			if (player.IsOnGround) {
+				// Allow initial jump movement if only can move in air.
+				if (moveCondition != PlayerMoveCondition.NoControl && !mode.IsSlippery) {
+					Vector2F moveVector = PollMovementKeys(true);
+
+					if (isMoving) {
+						float scaledSpeed		= moveModeAir.MoveSpeed * moveSpeedScale;
+						if (isSprinting && mode != moveModeWater)
+							scaledSpeed *= sprintSpeedScale;
+						Vector2F keyMotion		= moveVector * scaledSpeed;
+						player.Physics.Velocity	= keyMotion;
+						motion					= keyMotion;
+					}
+				}
+				
+				// Jump!
 				jumpStartTile = player.RoomControl.GetTileLocation(player.Origin);
 				player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
 				if (player.CurrentState is PlayerNormalState)
-					player.Graphics.PlayAnimation("player_jump");
+					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
 			}
 			else {
 				if (player.CurrentState is PlayerNormalState)
@@ -167,13 +209,41 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 		}
 
-		private void UpdateMoveControls() {
+		private Vector2F PollMovementKeys(bool allowMovementControl) {
+			Vector2F moveVector = Vector2F.Zero;
 			isMoving	= false;
 			analogMode	= !analogStick.Position.IsZero;
-			
+
+			if (analogMode) {
+				// Check analog stick.
+				analogAngle = analogStick.Position.Direction;
+				CheckAnalogStick(allowMovementControl);
+			}
+			else {
+				// Check movement keys.
+				if (!CheckMoveKey(Directions.Left, allowMovementControl) && !CheckMoveKey(Directions.Right, allowMovementControl))
+					moveAxes[0] = false; // x-axis
+				if (!CheckMoveKey(Directions.Up, allowMovementControl) && !CheckMoveKey(Directions.Down, allowMovementControl))
+					moveAxes[1] = false; // y-axis
+			}
+
+			// Update movement or acceleration.
+			if (allowMovementControl && (isMoving || autoAccelerate)) {
+				if (analogMode)
+					moveVector = analogStick.Position;
+				else
+					moveVector = Angles.ToVector(moveAngle);
+			}
+
+			return moveVector;
+		}
+
+		private void UpdateMoveControls() {
 			// Check if the player is allowed to control his motion.
 			allowMovementControl = true;
 			if (moveCondition == PlayerMoveCondition.NoControl)
+				allowMovementControl = false;
+			else if (player.IsOnGround && player.IsBeingKnockedBack)
 				allowMovementControl = false;
 			else if (moveCondition == PlayerMoveCondition.OnlyInAir && player.IsOnGround)
 				allowMovementControl = false;
@@ -181,23 +251,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 				allowMovementControl = false;
 
 			// Check movement input.
-			if (analogMode) {
-				// Check analog stick.
-				analogAngle = analogStick.Position.Direction;
-				CheckAnalogStick();
-			}
-			else {
-				// Check movement keys.
-				if (!CheckMoveKey(Directions.Left) && !CheckMoveKey(Directions.Right))
-					moveAxes[0] = false;	// x-axis
-				if (!CheckMoveKey(Directions.Up) && !CheckMoveKey(Directions.Down))
-					moveAxes[1] = false;	// y-axis
-			}
+			Vector2F keyMoveVector = PollMovementKeys(allowMovementControl);
 				
 			// Don't affect the facing direction when strafing
-			if (!isStrafing && !mode.IsStrafing && isMoving) {
+			if (!isStrafing && !mode.IsStrafing && isMoving)
 				player.Direction = moveDirection;
-			}
 
 			// Don't auto-dodge collisions when moving at an angle.
 			player.Physics.SetFlags(PhysicsFlags.AutoDodge,
@@ -205,14 +263,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Update movement or acceleration.
 			if (allowMovementControl && (isMoving || autoAccelerate)) {
-				if (!isMoving) {
+				if (!isMoving)
 					moveAngle = Directions.ToAngle(player.Direction);
-				}
 
+				// Determine key-motion (the velocity we want to move at)
 				float scaledSpeed = mode.MoveSpeed * moveSpeedScale;
-				Vector2F keyMotion = Angles.ToVector(moveAngle) * scaledSpeed; // The velocity we want to move at.
-				if (analogMode)
-					keyMotion = analogStick.Position * scaledSpeed;
+				if (isSprinting && mode != moveModeWater)
+					scaledSpeed *= sprintSpeedScale;
+				Vector2F keyMotion = keyMoveVector * scaledSpeed;
 
 				// Update acceleration-based motion.
 				if (mode.IsSlippery) {
@@ -285,16 +343,20 @@ namespace ZeldaOracle.Game.Entities.Players {
 				player.Graphics.Animation == GameData.ANIM_PLAYER_DEFAULT ||
 				player.Graphics.Animation == GameData.ANIM_PLAYER_CARRY))
 			{
-				if (isMoving && !player.Graphics.IsAnimationPlaying)
-					player.Graphics.PlayAnimation();
-				if (!isMoving && player.Graphics.IsAnimationPlaying)
-					player.Graphics.StopAnimation();
+				if (isMoving || isSprinting) {
+					if (!player.Graphics.IsAnimationPlaying)
+						player.Graphics.PlayAnimation();
+				}
+				else {
+					if (player.Graphics.IsAnimationPlaying)
+						player.Graphics.StopAnimation();
+				}
 			}
 		}
 		
 		// Poll the movement key for the given direction, returning true if
 		// it is down. This also manages the strafing behavior of movement.
-		private bool CheckMoveKey(int dir) {
+		private bool CheckMoveKey(int dir, bool allowMovementControl) {
 			if (moveButtons[dir].IsDown()) {
 				if (allowMovementControl)
 					isMoving = true;
@@ -317,7 +379,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		// Update player direction angle angle from analog controls.
-		private void CheckAnalogStick() {
+		private void CheckAnalogStick(bool allowMovementControl) {
 			if (allowMovementControl)
 				isMoving = true;
 			
@@ -325,6 +387,79 @@ namespace ZeldaOracle.Game.Entities.Players {
 			moveAxes[1]		= true;
 			moveDirection	= (int) GMath.Round(analogAngle / 90.0f) % Directions.Count;
 			moveDirection	= Directions.FlipVertical(moveDirection);
+		}
+
+		private void UpdateFallingInHoles() {
+			if (fallingInHole) {
+				holeDoomTimer--;
+
+				if (doomedToFallInHole) {
+					// The player is doomed to fall in the hole, he cannot escape it.
+					if (holeDoomTimer < 0)
+						player.Physics.Velocity = Vector2F.Zero;
+					
+					// Collide with hole boundries.
+					Rectangle2F holeRect = new Rectangle2F(holeTile.Position, new Vector2F(16, 16));
+					Rectangle2F collisionBox = new Rectangle2F(player.OriginOffset, Vector2F.One);
+					player.Physics.PerformInsideEdgeCollisions(collisionBox, holeRect);
+				}
+				else if (!player.Physics.IsInHole) {
+					// Stop falling in a hole.
+					fallingInHole		= false;
+					doomedToFallInHole	= false;
+					holeTile			= null;
+					return;
+				}
+				else {
+					// Check if the player has changed quadrents.
+					Point2I holeTileLoc = player.RoomControl.GetTileLocation(player.Origin);
+					Tile newHoleTile	= player.RoomControl.GetTopTile(holeTileLoc);
+					Point2I newQuadrent	= (Point2I) (player.Origin / 8);
+					if (newQuadrent != holeEnterQuadrent) {
+						doomedToFallInHole = true;
+						holeTile = newHoleTile;
+					}
+				}
+				
+				// Move toward the hole's center on each axis seperately.
+				for (int i = 0; i < 2; i++) {
+					float diff = holeTile.Center[i] - player.Center[i];
+					if (Math.Abs(diff) > 0.6f) {
+						float dist = 0.25f;
+						
+						// Pull the player in more if he's moving away from the hole.
+						if ((diff < 0 && player.Physics.Velocity[i] > 0.25f) ||
+							(diff > 0 && player.Physics.Velocity[i] < -0.25f))
+							dist = 0.5f;
+
+						if (!(diff < 0 && player.Physics.Velocity[i] < -0.25f) &&
+							!(diff > 0 && player.Physics.Velocity[i] > 0.25f))
+						{
+							holeSlipVelocity[i] = Math.Sign(diff) * dist;
+						}
+					}
+				}
+				player.Position += holeSlipVelocity;
+					
+				// Fall in the hole when close to the center.
+				if (player.Center.DistanceTo(holeTile.Center) <= 1.0f) {
+					player.SetPositionByCenter(holeTile.Center);
+					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_FALL_HOLE);
+					player.RespawnDeath();
+					holeTile			= null;
+					fallingInHole		= false;
+					doomedToFallInHole	= false;
+				}
+			}
+			else if (player.Physics.IsInHole && player.CurrentState != player.RespawnDeathState) {
+				// Start falling in a hole.
+				Point2I holeTileLoc = player.RoomControl.GetTileLocation(player.Origin);
+				holeTile			= player.RoomControl.GetTopTile(holeTileLoc);
+				holeEnterQuadrent	= (Point2I) (player.Origin / 8);
+				doomedToFallInHole	= false;
+				fallingInHole		= true;
+				holeDoomTimer		= 10;
+			}
 		}
 
 
@@ -347,8 +482,21 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Update movement.
 			UpdateMoveControls();
+			UpdateFallingInHoles();
 			velocityPrev = player.Physics.Velocity;
-			
+
+			// Update sprinting.
+			if (isSprinting) {
+				if (sprintTimer % 10 == 0) {
+					//Sounds.PLAYER_LAND.play();
+					player.RoomControl.SpawnEntity(new Effect(
+						GameData.ANIM_EFFECT_SPRINT_PUFF), player.Origin);
+				}
+				sprintTimer--;
+				if (sprintTimer <= 0)
+					isSprinting = false;
+			}
+
 			// Check for ledge jumping (ledges/waterfalls)
 			CollisionInfo collisionInfo = player.Physics.CollisionInfo[moveDirection];
 			if (canLedgeJump && mode.CanLedgeJump && isMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
@@ -391,6 +539,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 			set { canJump = value; }
 		}
 		
+		public bool CanPush {
+			get { return canPush; }
+			set { canPush = value; }
+		}
+		
 		public bool IsStrafing {
 			get { return isStrafing; }
 			set { isStrafing = value; }
@@ -404,6 +557,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public bool CanUseWarpPoint {
 			get { return canUseWarpPoint; }
 			set { canUseWarpPoint = value; }
+		}
+		
+		public bool IsSprinting {
+			get { return isSprinting; }
 		}
 		
 		public int MoveDirection {

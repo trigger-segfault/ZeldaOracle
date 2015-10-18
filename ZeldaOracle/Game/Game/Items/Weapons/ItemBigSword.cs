@@ -18,7 +18,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.description	= new string[] { "A powerful, two-handed sword." };
 			this.sprite			= new Sprite[] { GameData.SPR_ITEM_ICON_BIGGORON_SWORD };
 			this.spriteEquipped	= new Sprite[] { GameData.SPR_ITEM_ICON_BIGGORON_SWORD_EQUIPPED };
-			this.flags			= ItemFlags.TwoHanded | ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping;
+			this.flags			= ItemFlags.TwoHanded | ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWhileInHole;
 		}
 
 	}

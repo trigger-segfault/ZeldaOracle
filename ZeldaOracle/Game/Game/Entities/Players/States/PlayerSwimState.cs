@@ -65,7 +65,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Check if the player should drown.
 			if ((player.Physics.IsInWater && !player.SwimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInWater)) ||
-				player.Physics.IsInOcean && !player.SwimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInOcean)) {
+				player.Physics.IsInOcean && !player.SwimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInOcean))
+			{
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DROWN);
 				player.RespawnDeath();
 				// Cancel the hurt animation if the player was knocked in.

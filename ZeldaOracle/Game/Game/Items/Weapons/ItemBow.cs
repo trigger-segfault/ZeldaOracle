@@ -25,7 +25,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.description	= new string[] { "Weapon of a marksman.", "Weapon of a marksman.", "Weapon of a marksman." };
 			this.maxLevel		= Item.Level3;
 			this.currentAmmo	= 0;
-			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword;
+			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword | ItemFlags.UsableWhileInHole;
 
 			sprite = new Sprite[] {
 				new Sprite(GameData.SHEET_ITEMS_SMALL, 13, 1),

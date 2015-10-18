@@ -26,7 +26,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.currentAmmo	= 0;
 			this.sprite			= new Sprite[] { GameData.SPR_ITEM_ICON_SEED_SHOOTER };
 			this.spriteEquipped	= new Sprite[] { GameData.SPR_ITEM_ICON_SEED_SHOOTER_EQUIPPED };
-			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping;
+			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWhileInHole;
 		}
 
 
