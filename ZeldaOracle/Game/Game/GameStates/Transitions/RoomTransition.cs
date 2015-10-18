@@ -34,7 +34,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		protected void EndTransition() {
 			gameManager.PopGameState();
 			gameManager.PushGameState(roomNew);
-			Player.RoomEnterPosition = Player.Position;
+			Player.MarkRespawn();
 			Player.OnEnterRoom();
 		}
 

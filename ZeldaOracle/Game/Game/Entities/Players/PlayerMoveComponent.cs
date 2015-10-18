@@ -61,6 +61,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		private Tile				holeTile;
 		private bool				doomedToFallInHole;
+		private int					holeDoomTimer;
+		private Vector2F			holeSlipVelocity;
+		private Point2I				holeEnterQuadrent;
+		private bool				fallingInHole;
 
 
 		//-----------------------------------------------------------------------------
@@ -89,8 +93,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 			moveAngle				= Angles.South;
 			mode					= new PlayerMotionType();
 			jumpStartTile			= -Point2I.One;
+
 			doomedToFallInHole		= false;
 			holeTile				= null;
+			holeDoomTimer			= 0;
+			holeSlipVelocity		= Vector2F.Zero;
+			fallingInHole			= false;
 
 			// Controls.
 			analogMode		= false;
@@ -220,6 +228,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Check if the player is allowed to control his motion.
 			allowMovementControl = true;
 			if (moveCondition == PlayerMoveCondition.NoControl)
+				allowMovementControl = false;
+			else if (player.IsOnGround && player.IsBeingKnockedBack)
 				allowMovementControl = false;
 			else if (moveCondition == PlayerMoveCondition.OnlyInAir && player.IsOnGround)
 				allowMovementControl = false;
@@ -359,6 +369,80 @@ namespace ZeldaOracle.Game.Entities.Players {
 			moveDirection	= Directions.FlipVertical(moveDirection);
 		}
 
+		private void UpdateFallingInHoles() {
+			if (fallingInHole) {
+				holeDoomTimer--;
+
+				if (doomedToFallInHole) {
+					// The player is doomed to fall in the hole, he cannot escape it.
+					if (holeDoomTimer < 0)
+						player.Physics.Velocity = Vector2F.Zero;
+					
+					// Collide with hole boundries.
+					Rectangle2F holeRect = new Rectangle2F(holeTile.Position, new Vector2F(16, 16));
+					Rectangle2F collisionBox = new Rectangle2F(player.OriginOffset, Vector2F.One);
+					player.Physics.PerformInsideEdgeCollisions(collisionBox, holeRect);
+				}
+				else if (!player.Physics.IsInHole) {
+					// Stop falling in a hole.
+					fallingInHole		= false;
+					doomedToFallInHole	= false;
+					holeTile			= null;
+					return;
+				}
+				else {
+					// Check if the player has changed quadrents.
+					Point2I holeTileLoc = player.RoomControl.GetTileLocation(player.Origin);
+					Tile newHoleTile	= player.RoomControl.GetTopTile(holeTileLoc);
+					Point2I newQuadrent	= (Point2I) (player.Origin / 8);
+					if (newQuadrent != holeEnterQuadrent) {
+						Console.WriteLine("Different quadrent: " + holeEnterQuadrent + " -> " + newQuadrent);
+						doomedToFallInHole = true;
+						holeTile = newHoleTile;
+					}
+				}
+				
+				// Move toward the hole's center on each axis seperately.
+				for (int i = 0; i < 2; i++) {
+					float diff = holeTile.Center[i] - player.Center[i];
+					if (Math.Abs(diff) > 0.6f) {
+						float dist = 0.25f;
+						
+						// Pull the player in more if he's moving away from the hole.
+						if ((diff < 0 && player.Physics.Velocity[i] > 0.25f) ||
+							(diff > 0 && player.Physics.Velocity[i] < -0.25f))
+							dist = 0.5f;
+
+						if (!(diff < 0 && player.Physics.Velocity[i] < -0.25f) &&
+							!(diff > 0 && player.Physics.Velocity[i] > 0.25f))
+						{
+							holeSlipVelocity[i] = Math.Sign(diff) * dist;
+						}
+					}
+				}
+				player.Position += holeSlipVelocity;
+					
+				// Fall in the hole when close to the center.
+				if (player.Center.DistanceTo(holeTile.Center) <= 1.0f) {
+					player.SetPositionByCenter(holeTile.Center);
+					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_FALL_HOLE);
+					player.RespawnDeath();
+					holeTile			= null;
+					fallingInHole		= false;
+					doomedToFallInHole	= false;
+				}
+			}
+			else if (player.Physics.IsInHole && player.CurrentState != player.RespawnDeathState) {
+				// Start falling in a hole.
+				Point2I holeTileLoc = player.RoomControl.GetTileLocation(player.Origin);
+				holeTile			= player.RoomControl.GetTopTile(holeTileLoc);
+				holeEnterQuadrent	= (Point2I) (player.Origin / 8);
+				doomedToFallInHole	= false;
+				fallingInHole		= true;
+				holeDoomTimer		= 10;
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Update
@@ -379,56 +463,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Update movement.
 			UpdateMoveControls();
+			UpdateFallingInHoles();
 			velocityPrev = player.Physics.Velocity;
-
-			// Check for falling in holes.
-			if (player.Physics.IsInHole) {
-				Point2I holeTileLoc = player.RoomControl.GetTileLocation(player.Origin);
-				holeTile = player.RoomControl.GetTopTile(holeTileLoc);
-
-				Vector2F position = player.Center;
-				Vector2F goalPosition = holeTile.Center;
-
-				Rectangle2F doomRect = new Rectangle2F(holeTile.Position, new Vector2F(16, 16));
-				if (doomRect.Contains(player.Origin))
-					doomedToFallInHole = true;
-
-				// Pan on each axis seperately
-				for (int i = 0; i < 2; i++) {
-					float diff = goalPosition[i] - position[i];
-					if (Math.Abs(diff) > 0.5f)
-						position[i] += Math.Sign(diff) * 0.5f;
-					else
-						position[i] = goalPosition[i];
-				}
-
-				player.SetPositionByCenter(position);
-			}
-			else {
-				doomedToFallInHole = false;
-			}
-			
-			if (doomedToFallInHole && holeTile != null) {
-				Rectangle2F doomRect = new Rectangle2F(holeTile.Position, new Vector2F(16, 16));
-				// collide with hole boundries.
-				if (player.Origin.X + player.Physics.Velocity.X < doomRect.Left) {
-					player.Origin = new Vector2F(doomRect.Left, player.Origin.Y);
-					player.Physics.Velocity = new Vector2F(0.0f, player.Physics.Velocity.Y);
-				}
-				if (player.Origin.X + player.Physics.Velocity.X + 1 > doomRect.Right) {
-					player.Origin = new Vector2F(doomRect.Right - 1, player.Origin.Y);
-					player.Physics.Velocity = new Vector2F(0.0f, player.Physics.Velocity.Y);
-				}
-				
-				if (player.Origin.Y + player.Physics.Velocity.Y < doomRect.Top) {
-					player.Origin = new Vector2F(player.Origin.X, doomRect.Top);
-					player.Physics.Velocity = new Vector2F(player.Physics.Velocity.X, 0.0f);
-				}
-				if (player.Origin.Y + player.Physics.Velocity.Y + 1 > doomRect.Bottom) {
-					player.Origin = new Vector2F(player.Origin.X, doomRect.Bottom - 1);
-					player.Physics.Velocity = new Vector2F(player.Physics.Velocity.X, 0.0f);
-				}
-			}
 
 			// Check for ledge jumping (ledges/waterfalls)
 			CollisionInfo collisionInfo = player.Physics.CollisionInfo[moveDirection];

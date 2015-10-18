@@ -338,6 +338,32 @@ namespace ZeldaOracle.Game.Entities {
 		// Collisions
 		//-----------------------------------------------------------------------------
 
+		// Collide with the inside edges of a rectangle..
+		public void PerformInsideEdgeCollisions(Rectangle2F collisionBox, Rectangle2F rect) {
+			Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position);
+
+			if (myBox.Left < rect.Left) {
+				isColliding	= true;
+				entity.X	= rect.Left - collisionBox.Left;
+				velocity.X	= 0;
+			}
+			else if (myBox.Right > rect.Right) {
+				isColliding	= true;
+				entity.X	= rect.Right - collisionBox.Right;
+				velocity.X	= 0;
+			}
+			if (myBox.Top < rect.Top) {
+				isColliding	= true;
+				entity.Y	= rect.Top - collisionBox.Top;
+				velocity.Y	= 0;
+			}
+			else if (myBox.Bottom > rect.Bottom) {
+				isColliding	= true;
+				entity.Y	= rect.Bottom - collisionBox.Bottom;
+				velocity.Y	= 0;
+			}
+		}
+
 		// This should be called after applying velocity.
 		public void CheckRoomEdgeCollisions(Rectangle2F collisionBox) {
 			Rectangle2F roomBounds = entity.RoomControl.RoomBounds;

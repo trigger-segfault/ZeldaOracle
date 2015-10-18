@@ -37,9 +37,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			direction = ledgeBeginTile.LedgeDirection;
 
 			// TODO: player.passable = true;
+			player.IsStateControlled		= true;
 			player.AutoRoomTransition		= true;
 			player.Movement.IsStrafing		= true;
-			player.Movement.MoveCondition	= PlayerMoveCondition.NoControl;
 			player.Physics.CollideWithWorld = false;
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
 			
@@ -99,10 +99,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd(PlayerState newState) {
+			player.IsStateControlled		= false;
 			player.AutoRoomTransition		= false;
 			player.Physics.CollideWithWorld = true;
 			player.Movement.IsStrafing		= false;
-			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 		}
 
 		public override void OnEnterRoom() {
@@ -149,6 +149,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// If done, return to the normal player state.
 			if (isDone) {
 				player.Physics.Velocity = Vector2F.Zero;
+				if (ledgeExtendsToNextRoom)
+					player.MarkRespawn();
 				if (isHoldingSword)
 					player.BeginState(player.HoldSwordState);
 				else

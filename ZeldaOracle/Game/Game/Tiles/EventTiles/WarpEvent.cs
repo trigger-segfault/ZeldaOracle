@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.GameStates.Transitions;
+using ZeldaOracle.Game.Entities.Players;
 
 namespace ZeldaOracle.Game.Tiles.EventTiles {
 
@@ -90,17 +91,13 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			base.Initialize();
 			
 			string typeName = Properties.GetString("warp_type", "Tunnel");
-
-			warpType = WarpType.Tunnel;
-			if (typeName == "tunnel")
-				warpType = WarpType.Tunnel;
-			else if (typeName == "entrance")
-				warpType = WarpType.Entrance;
-			else if (typeName == "stairs")
-				warpType = WarpType.Stairs;
-			
+			warpType		= (WarpType) Enum.Parse(typeof(WarpType), typeName, true);
 			collisionBox	= new Rectangle2I(2, 6, 12, 12);
 			warpEnabled		= !IsTouchingPlayer();
+
+			RoomControl.PlayerRespawn += delegate(Player player) {
+				warpEnabled = !IsTouchingPlayer();
+			};
 		}
 
 		public override void Update() {

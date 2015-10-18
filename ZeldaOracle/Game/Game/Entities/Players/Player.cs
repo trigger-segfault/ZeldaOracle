@@ -43,7 +43,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// The player doesn't need to be moving to transition.
 		private bool autoRoomTransition;
 		// The position the player was at when he entered the room.
-		private Vector2F roomEnterPosition;
+		private Vector2F respawnPosition;
+		private int respawnDirection;
 		// The current player state.
 		private PlayerState state;
 		// The previous player state.
@@ -52,6 +53,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerMoveComponent movement;
 
 		private Animation moveAnimation;
+
+		private bool isStateControlled; // Is the player fully being controlled by its current state?
 
 
 		private PlayerNormalState		stateNormal;
@@ -97,11 +100,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 			useDirection		= 0;
 			useAngle			= 0;
 			autoRoomTransition	= false;
+			isStateControlled	= false;
 			syncAnimationWithDirection = true;
 			movement = new PlayerMoveComponent(this);
 
 			// Unit properties.
-			originOffset	= new Point2I(0, -2);
+			originOffset	= new Point2I(0, -3);
 			centerOffset	= new Point2I(0, -8);
 			Health			= 4 * 3;
 			MaxHealth		= 4 * 3;
@@ -145,6 +149,20 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 		// Player states
 		//-----------------------------------------------------------------------------
+
+		// Mark the player's current position/direction as where he should respawn.
+		public void MarkRespawn() {
+			respawnPosition		= position;
+			respawnDirection	= direction;
+		}
+
+		public void Respawn() {
+			position	= respawnPosition;
+			direction	= respawnDirection;
+			RoomControl.OnPlayerRespawn();
+			
+			// TODO: Break any breakable blocks the player respawns and collides with.
+		}
 
 		// Begin the given player state.
 		public void BeginState(PlayerState newState) {
@@ -199,7 +217,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			graphics.IsHurting = true;
 			invincibleTimer = InvincibleDuration;
 			useKnockback = false;
-			movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
+			//movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
 		}
 
 		public override void Hurt(int damage, float radians) {
@@ -208,7 +226,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			invincibleTimer = InvincibleDuration;
 			knockbackDirection = radians;
 			useKnockback = true;
-			movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
+			//movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
 		}
 
 		public override void RespawnDeath() {
@@ -226,9 +244,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public void InterruptItems() {
 			for (int i = 0; i < EquippedUsableItems.Length; i++) {
 				ItemWeapon item = EquippedUsableItems[i];
-				item.Interrupt();
-				if (item.IsTwoHanded)
-					break;
+				if (item != null) {
+					item.Interrupt();
+					if (item.IsTwoHanded)
+						break;
+				}
 			}
 		}
 
@@ -244,7 +264,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 							item.OnButtonDown();
 						item.Update();
 					}
-					//equippedItems[i].Update();
 					if (item.IsTwoHanded)
 						break;
 				}
@@ -330,101 +349,114 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public override void Update() {
-			if (invincibleTimer > 0) {
-				invincibleTimer--;
-				if (invincibleTimer == 0)
-					graphics.IsHurting = false;
-			}
-
 			bool performedAction = false;
 
-			movement.Update();
-			UpdateUseDirections();
-			
-			// Check for tile & entity press interactions.
-			if (IsOnGround && Controls.A.IsPressed()) {
-				Entity actionEntity = null;
-				for (int i = 0; i < RoomControl.Entities.Count; i++) {
-					Entity e = RoomControl.Entities[i];
-					if (e != this && !e.IsDestroyed && e.Physics.IsSolid && Physics.IsSoftMeetingEntity(e) &&
-						Entity.AreEntitiesAligned(this, e, direction, e.ActionAlignDistance) &&
-						e.OnPlayerAction(direction))
-					{
-						actionEntity = e;
-						Controls.A.Disable(true);
-						performedAction = true;
-						break;
-					}
-				}
-				if (actionEntity == null) {
-					Tile actionTile = physics.GetMeetingSolidTile(position, direction);
-					if (actionTile != null && actionTile.OnAction(direction)) {
-						Controls.A.Disable(true);
-						performedAction = true;
-					}
-				}
-			}
+			if (!isStateControlled) {
+				// Try to switch to a natural state.
+				//PlayerState desiredNaturalState = GetDesiredNaturalState();
+				//if (state != desiredNaturalState && state.RequestStateChange(desiredNaturalState))
+					//BeginState(desiredNaturalState);
 
-			if (IsOnGround && movement.JumpStartTile != -Point2I.One) {
-				RoomControl.GetTopTile(RoomControl.GetTileLocation(Origin)).OnLand(movement.JumpStartTile);
-				movement.JumpStartTile = -Point2I.One;
+				// Update hurting.
+				if (invincibleTimer > 0) {
+					invincibleTimer--;
+					if (invincibleTimer == 0)
+						graphics.IsHurting = false;
+				}
+
+				movement.Update();
+				UpdateUseDirections();
+			
+				// Check for tile & entity press interactions.
+				if (IsOnGround && Controls.A.IsPressed()) {
+					Entity actionEntity = null;
+					for (int i = 0; i < RoomControl.Entities.Count; i++) {
+						Entity e = RoomControl.Entities[i];
+						if (e != this && !e.IsDestroyed && e.Physics.IsSolid && Physics.IsSoftMeetingEntity(e) &&
+							Entity.AreEntitiesAligned(this, e, direction, e.ActionAlignDistance) &&
+							e.OnPlayerAction(direction))
+						{
+							actionEntity = e;
+							Controls.A.Disable(true);
+							performedAction = true;
+							break;
+						}
+					}
+					if (actionEntity == null) {
+						Tile actionTile = physics.GetMeetingSolidTile(position, direction);
+						if (actionTile != null && actionTile.OnAction(direction)) {
+							Controls.A.Disable(true);
+							performedAction = true;
+						}
+					}
+				}
+
+				if (IsOnGround && movement.JumpStartTile != -Point2I.One) {
+					RoomControl.GetTopTile(RoomControl.GetTileLocation(Origin)).OnLand(movement.JumpStartTile);
+					movement.JumpStartTile = -Point2I.One;
+				}
+
+				// Try to switch to a natural state.
+				PlayerState desiredNaturalState = GetDesiredNaturalState();
+				if (state != desiredNaturalState && state.RequestStateChange(desiredNaturalState))
+					BeginState(desiredNaturalState);
 			}
 			
 			// Update the current player state.
-			PlayerState desiredNaturalState = GetDesiredNaturalState();
-			if (state != desiredNaturalState && state.RequestStateChange(desiredNaturalState))
-				BeginState(desiredNaturalState);
 			state.Update();
+			
+			if (!isStateControlled) {
 
-			if (invincibleTimer > InvincibleControlRestoreDuration && useKnockback) {
-				Vector2F motion = new Vector2F(KnockbackSpeed, knockbackDirection, true);
-				// Snap velocity direction.
-				float snapInterval = ((float)GMath.Pi * 2.0f) / KnockbackSnapCount;
-				float theta = (float)Math.Atan2(-motion.Y, motion.X);
-				if (theta < 0)
-					theta += (float)Math.PI * 2.0f;
-				int angle = (int)((theta / snapInterval) + 0.5f);
-				Physics.Velocity = new Vector2F(
-					(float)Math.Cos(angle * snapInterval) * motion.Length,
-					(float)-Math.Sin(angle * snapInterval) * motion.Length);
-			}
-			else if (invincibleTimer == InvincibleControlRestoreDuration) {
-				movement.MoveCondition = PlayerMoveCondition.FreeMovement;
-			}
+				if (invincibleTimer > InvincibleControlRestoreDuration && useKnockback) {
+					Vector2F motion = new Vector2F(KnockbackSpeed, knockbackDirection, true);
+					// Snap velocity direction.
+					float snapInterval = ((float)GMath.Pi * 2.0f) / KnockbackSnapCount;
+					float theta = (float)Math.Atan2(-motion.Y, motion.X);
+					if (theta < 0)
+						theta += (float)Math.PI * 2.0f;
+					int angle = (int)((theta / snapInterval) + 0.5f);
+					Physics.Velocity = new Vector2F(
+						(float)Math.Cos(angle * snapInterval) * motion.Length,
+						(float)-Math.Sin(angle * snapInterval) * motion.Length);
+				}
+				else if (invincibleTimer == InvincibleControlRestoreDuration) {
+					//movement.MoveCondition = PlayerMoveCondition.FreeMovement;
+				}
 
-			UpdateEquippedItems();
+				UpdateEquippedItems();
 
-			if (performedAction)
-				StopPushing();
+				if (performedAction)
+					StopPushing();
 
-			// Notify for touching tiles.
-			// TODO: move this somewhere else.
-			Rectangle2I tiles = RoomControl.GetTileAreaFromRect(physics.PositionedCollisionBox);
-			for (int x = tiles.Left; x < tiles.Right; x++) {
-				for (int y = tiles.Top; y < tiles.Bottom; y++) {
-					for (int layer = 0; layer < RoomControl.Room.LayerCount; layer++) {
-						Tile tile = RoomControl.GetTile(new Point2I(x, y), layer);
-						if (tile != null)
-							tile.OnTouch();
+				// Notify for touching tiles.
+				// TODO: move this somewhere else.
+				Rectangle2I tiles = RoomControl.GetTileAreaFromRect(physics.PositionedCollisionBox);
+				for (int x = tiles.Left; x < tiles.Right; x++) {
+					for (int y = tiles.Top; y < tiles.Bottom; y++) {
+						for (int layer = 0; layer < RoomControl.Room.LayerCount; layer++) {
+							Tile tile = RoomControl.GetTile(new Point2I(x, y), layer);
+							if (tile != null)
+								tile.OnTouch();
+						}
 					}
 				}
-			}
 
-			// Notify colliding tiles.
-			// TODO: move this somewhere else.
-			Rectangle2F myBox = physics.PositionedCollisionBox.Inflated(1, 1);
-			tiles = RoomControl.GetTileAreaFromRect(myBox);
-			for (int x = tiles.Left; x < tiles.Right; x++) {
-				for (int y = tiles.Top; y < tiles.Bottom; y++) {
-					for (int layer = 0; layer < RoomControl.Room.LayerCount; layer++) {
-						Tile tile = RoomControl.GetTile(new Point2I(x, y), layer);
-						if (tile != null && tile.CollisionModel != null) {
-							for (int i = 0; i < tile.CollisionModel.BoxCount; i++) {
-								if (((Rectangle2F)tile.CollisionModel[i] + tile.Position).Colliding(myBox)) {
-									tile.OnCollide();
-									break;
+				// Notify colliding tiles.
+				// TODO: move this somewhere else.
+				Rectangle2F myBox = physics.PositionedCollisionBox.Inflated(1, 1);
+				tiles = RoomControl.GetTileAreaFromRect(myBox);
+				for (int x = tiles.Left; x < tiles.Right; x++) {
+					for (int y = tiles.Top; y < tiles.Bottom; y++) {
+						for (int layer = 0; layer < RoomControl.Room.LayerCount; layer++) {
+							Tile tile = RoomControl.GetTile(new Point2I(x, y), layer);
+							if (tile != null && tile.CollisionModel != null) {
+								for (int i = 0; i < tile.CollisionModel.BoxCount; i++) {
+									if (((Rectangle2F)tile.CollisionModel[i] + tile.Position).Colliding(myBox)) {
+										tile.OnCollide();
+										break;
+									}
 								}
-							}
+							}	
 						}
 					}
 				}
@@ -441,6 +473,22 @@ namespace ZeldaOracle.Game.Entities.Players {
 			case PlayerTunics.RedTunic:		Graphics.ImageVariant = GameData.VARIANT_RED;	break;
 			case PlayerTunics.BlueTunic:	Graphics.ImageVariant = GameData.VARIANT_BLUE;	break;
 			}
+			/*
+			// Detect room transitions.
+			if (AllowRoomTransition) {
+				for (int dir = 0; dir < Directions.Count; dir++) {
+					CollisionInfo info = physics.CollisionInfo[dir];
+
+					if (info.Type == CollisionType.RoomEdge &&
+						(Controls.GetArrowControl(dir).IsDown() ||
+						Controls.GetAnalogDirection(dir) ||
+						autoRoomTransition))
+					{
+						RoomControl.EnterAdjacentRoom(dir);
+						break;
+					}
+				}
+			}*/
 
 			// Update superclass.
 			base.Update();
@@ -512,11 +560,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return autoRoomTransition; }
 			set { autoRoomTransition = value; }
 		}
-		
-		public Vector2F RoomEnterPosition {
-			get { return roomEnterPosition; }
-			set { roomEnterPosition = value; }
-		}
 
 		public PlayerSwimmingSkills SwimmingSkills {
 			get { return swimmingSkills; }
@@ -542,6 +585,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return invincibleTimer; }
 			set { invincibleTimer = value; }
 		}
+
+		public bool IsBeingKnockedBack {
+			get { return (invincibleTimer > InvincibleControlRestoreDuration && useKnockback); }
+		}
+
+		public bool IsStateControlled {
+			get { return isStateControlled; }
+			set { isStateControlled = value; }
+		}
+
 		
 		// Player states
 

@@ -25,11 +25,16 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void OnBegin(PlayerState previousState) {
 			respawning = false;
-			player.Movement.MoveCondition = PlayerMoveCondition.NoControl;
+			player.IsStateControlled = true;
+			//player.Movement.MoveCondition = PlayerMoveCondition.NoControl;
+			player.Movement.StopMotion();
+			player.Physics.CollideWithWorld = false;
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
+			player.IsStateControlled = false;
+			player.Physics.CollideWithWorld = true;
+			//player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 		}
 
 		public override void Update() {
@@ -38,20 +43,21 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			if (respawning) {
 				if (player.RoomControl.ViewControl.IsCenteredOnPosition(player.Center)) {
 					player.Graphics.IsVisible = true;
-					player.BeginNormalState();
 					player.Hurt(2);
+					player.BeginNormalState();
 				}
 			}
 			else if (player.Graphics.IsAnimationDone) {
 				player.Graphics.IsVisible = false;
-				player.Position = player.RoomEnterPosition;
 				respawning = true;
+				player.Respawn();
 			}
 		}
 
 		public override bool RequestStateChange(PlayerState newState) {
 			return false;
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
