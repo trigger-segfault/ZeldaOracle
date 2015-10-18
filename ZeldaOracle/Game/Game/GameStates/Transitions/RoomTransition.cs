@@ -13,9 +13,10 @@ using ZeldaOracle.Game.Worlds;
 namespace ZeldaOracle.Game.GameStates.Transitions {
 	
 	public class RoomTransition : GameState {
-		protected RoomControl	roomOld;
-		protected RoomControl	roomNew;
-		
+		private RoomControl roomOld;
+		private RoomControl roomNew;
+		private event Action<RoomControl> eventSetupNewRoom;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -24,6 +25,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		public RoomTransition() {
 			roomOld = null;
 			roomNew = null;
+			eventSetupNewRoom = null;
 		}
 
 
@@ -32,10 +34,11 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		//-----------------------------------------------------------------------------
 
 		protected void EndTransition() {
-			gameManager.PopGameState();
-			gameManager.PushGameState(roomNew);
+			//gameManager.PopGameState(); // Pop this state
+			//gameManager.PushGameState(roomNew);
 			Player.MarkRespawn();
 			Player.OnEnterRoom();
+			End();
 		}
 
 		protected void DestroyOldRoom() {
@@ -46,6 +49,8 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			OldRoomControl.Entities.Remove(Player);
 			NewRoomControl.BeginRoom();
 			Player.RoomControl = NewRoomControl;
+			if (eventSetupNewRoom != null)
+				eventSetupNewRoom.Invoke(roomNew);
 			NewRoomControl.ViewControl.CenterOn(Player.Center);
 		}
 		
@@ -77,6 +82,11 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		public RoomControl OldRoomControl {
 			get { return roomOld; }
 			set { roomOld = value; }
+		}
+		
+		public event Action<RoomControl> NewRoomSetup {
+			add { eventSetupNewRoom += value; }
+			remove { eventSetupNewRoom -= value; }
 		}
 	}
 }

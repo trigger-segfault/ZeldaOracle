@@ -260,6 +260,16 @@ namespace ZeldaOracle.Common.Geometry {
 
 		//========= CALCULATIONS =========
 
+		public int GetEdge(int direction) {
+			if (direction == Directions.Right)
+				return Right;
+			if (direction == Directions.Left)
+				return Left;
+			if (direction == Directions.Up)
+				return Top;
+			return Bottom;
+		}
+
 		/** <summary> Returns a rectangle with the corners stretched out by the specified amount. </summary> */
 		public Rectangle2I Inflated(Point2I amount) {
 			return new Rectangle2I(Point - amount, Size + amount * 2);

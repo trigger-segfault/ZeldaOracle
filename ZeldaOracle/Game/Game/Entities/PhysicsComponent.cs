@@ -46,6 +46,7 @@ namespace ZeldaOracle.Game.Entities {
 		private bool			hasLanded;
 		private TileFlags		topTileFlags;		// The flags for the top-most tile the entity is located over.
 		private TileFlags		allTileFlags;		// The group of flags for all the tiles the entity is located over.
+		private Action			customCollisionFunction;
 
 
 		//-----------------------------------------------------------------------------
@@ -67,7 +68,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.allTileFlags		= TileFlags.None;
 			this.isColliding		= false;
 			this.autoDodgeDistance	= 6;
-
+			this.customCollisionFunction	= null;
 			this.hasLanded			= false;
 
 			this.collisionInfo = new CollisionInfo[Directions.Count];
@@ -104,25 +105,28 @@ namespace ZeldaOracle.Game.Entities {
 			for (int i = 0; i < Directions.Count; i++)
 				collisionInfo[i].Clear();
 
-			// Handle Z position.
+			// Update Z dynamics.
 			UpdateZVelocity();
 			if (entity.IsDestroyed)
 				return;
 
-			// Check world collisions.
+			// 1. Collide with solid tiles and entities.
 			if (HasFlags(PhysicsFlags.CollideWorld) || HasFlags(PhysicsFlags.CollideEntities))
 				CheckCollisions();
-	
+			// 2. Collide with room edges.
+			if (HasFlags(PhysicsFlags.CollideRoomEdge))
+				CheckRoomEdgeCollisions(collisionBox);
+			// 3. Custom collision function.
+			if (customCollisionFunction != null)
+				customCollisionFunction.Invoke();
+
 			// Apply velocity.
 			entity.Position += velocity;
 
+			// Check the flags of the tiles below the entity.
 			CheckGroundTiles();
-			
-			// Collide with room edges.
-			if (HasFlags(PhysicsFlags.CollideRoomEdge))
-				CheckRoomEdgeCollisions(softCollisionBox); // TODO: this should default to hard collision-box.
 
-			// Check if outside room.
+			// Check if destroyed outside room.
 			if (HasFlags(PhysicsFlags.DestroyedOutsideRoom) &&
 				!entity.RoomControl.RoomBounds.Contains(entity.Origin))
 			{
@@ -130,22 +134,18 @@ namespace ZeldaOracle.Game.Entities {
 				return;
 			}
 			
-			if (IsInHole) {
+			// Notiy entity when in hazard tiles.
+			if (IsInHole)
 				entity.OnFallInHole();
-			}
-			else if (IsInWater) {
+			else if (IsInWater)
 				entity.OnFallInWater();
-			}
-			else if (IsInLava) {
+			else if (IsInLava)
 				entity.OnFallInLava();
-			}
-
 			if (entity.IsDestroyed)
 				return;
 			
-			if (hasLanded) {
+			if (hasLanded)
 				entity.OnLand();
-			}
 		}
 
 		// Check the flags of the tiles the entity is located on top of (if it is on the ground).
@@ -367,30 +367,30 @@ namespace ZeldaOracle.Game.Entities {
 		// This should be called after applying velocity.
 		public void CheckRoomEdgeCollisions(Rectangle2F collisionBox) {
 			Rectangle2F roomBounds = entity.RoomControl.RoomBounds;
-			Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position);
+			Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position + velocity);
 
 			if (myBox.Left < roomBounds.Left) {
-				isColliding = true;
-				entity.X = roomBounds.Left - collisionBox.Left;
-				velocity.X = 0;
+				isColliding	= true;
+				entity.X	= roomBounds.Left - collisionBox.Left;
+				velocity.X	= 0;
 				collisionInfo[Directions.Left].SetRoomEdgeCollision(Directions.Left);
 			}
 			else if (myBox.Right > roomBounds.Right) {
-				isColliding = true;
-				entity.X = roomBounds.Right - collisionBox.Right;
-				velocity.X = 0;
+				isColliding	= true;
+				entity.X	= roomBounds.Right - collisionBox.Right;
+				velocity.X	= 0;
 				collisionInfo[Directions.Right].SetRoomEdgeCollision(Directions.Right);
 			}
 			if (myBox.Top < roomBounds.Top) {
-				isColliding = true;
-				entity.Y = roomBounds.Top - collisionBox.Top;
-				velocity.Y = 0;
+				isColliding	= true;
+				entity.Y	= roomBounds.Top - collisionBox.Top;
+				velocity.Y	= 0;
 				collisionInfo[Directions.Up].SetRoomEdgeCollision(Directions.Up);
 			}
 			else if (myBox.Bottom > roomBounds.Bottom) {
-				isColliding = true;
-				entity.Y = roomBounds.Bottom - collisionBox.Bottom;
-				velocity.Y = 0;
+				isColliding	= true;
+				entity.Y	= roomBounds.Bottom - collisionBox.Bottom;
+				velocity.Y	= 0;
 				collisionInfo[Directions.Down].SetRoomEdgeCollision(Directions.Down);
 			}
 		}
@@ -611,6 +611,16 @@ namespace ZeldaOracle.Game.Entities {
 			set { velocity = value; }
 		}
 
+		public float VelocityX {
+			get { return velocity.X; }
+			set { velocity.X = value; }
+		}
+
+		public float VelocityY {
+			get { return velocity.Y; }
+			set { velocity.Y = value; }
+		}
+
 		public float ZVelocity {
 			get { return zVelocity; }
 			set { zVelocity = value; }
@@ -661,6 +671,11 @@ namespace ZeldaOracle.Game.Entities {
 		
 		public bool IsColliding {
 			get { return isColliding; }
+		}
+
+		public Action CustomCollisionFunction {
+			get { return customCollisionFunction; }
+			set { customCollisionFunction = value; }
 		}
 
 

@@ -89,5 +89,9 @@ namespace ZeldaOracle.Game.Tiles {
 		public Tileset Tileset {
 			get { return tileData.Tileset; }
 		}
+
+		public string ID {
+			get { return properties.GetString("id", ""); }
+		}
 	}
 }

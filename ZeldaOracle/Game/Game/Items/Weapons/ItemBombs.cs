@@ -40,7 +40,7 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 
 		public override void OnButtonPress() {
-			if (bombEntity == null || bombEntity.IsDestroyed) {
+			if (bombEntity == null || bombEntity.IsDestroyed || !bombEntity.IsInRoom) {
 				// Conjure a new bomb.
 				bombEntity = new Bomb();
 				Player.BeginState(new PlayerCarryState(bombEntity));

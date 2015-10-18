@@ -120,7 +120,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Physics.SoftCollisionBox	= new Rectangle2F(-6, -14, 12, 13);
 			Physics.CollideWithWorld	= true;
 			Physics.CollideWithEntities	= true;
-			Physics.CollideWithRoomEdge	= true;
+			//Physics.CollideWithRoomEdge	= true;
 			Physics.HasGravity			= true;
 
 			// Graphics.
@@ -143,6 +143,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			toolAnimation	= new AnimationPlayer();
 
 			moveAnimation	= GameData.ANIM_PLAYER_DEFAULT;
+
+			Physics.CustomCollisionFunction = CheckRoomEdgeCollisions;
 		}
 
 
@@ -328,6 +330,57 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 		}
 
+		// Check if the player can room-transition in the given direction.
+		private bool CanRoomTransition(int transitionDirection) {
+			if (!AllowRoomTransition)
+				return false;
+			if (AutoRoomTransition)
+				return true;
+			if (movement.MoveCondition != PlayerMoveCondition.FreeMovement || !movement.IsMoving)
+				return false;
+			return (Controls.GetArrowControl(transitionDirection).IsDown() || Controls.GetAnalogDirection(transitionDirection));
+		}
+		
+		// Custom collision function for colliding with room edges.
+		private void CheckRoomEdgeCollisions() {
+			Rectangle2F roomBounds = RoomControl.RoomBounds;
+			Rectangle2F myBox = Physics.SoftCollisionBox;
+			myBox.Point += position + Physics.Velocity;
+			int transitionDirection = -1;
+
+			// Collide with room edges.
+			if (myBox.Left < roomBounds.Left) {
+				position.X = roomBounds.Left - physics.SoftCollisionBox.Left;
+				physics.VelocityX = 0;
+				if (CanRoomTransition(Directions.Left))
+					transitionDirection = Directions.Left;
+			}
+			else if (myBox.Right > roomBounds.Right) {
+				position.X = roomBounds.Right - physics.SoftCollisionBox.Right;
+				physics.VelocityX = 0;
+				if (CanRoomTransition(Directions.Right))
+					transitionDirection = Directions.Right;
+			}
+			if (myBox.Top < roomBounds.Top) {
+				position.Y = roomBounds.Top - physics.SoftCollisionBox.Top;
+				physics.VelocityY = 0;
+				if (transitionDirection < 0 && CanRoomTransition(Directions.Up))
+					transitionDirection = Directions.Up;
+			}
+			else if (myBox.Bottom > roomBounds.Bottom) {
+				position.Y = roomBounds.Bottom - physics.SoftCollisionBox.Bottom;
+				physics.VelocityY = 0;
+				if (transitionDirection < 0 && CanRoomTransition(Directions.Down))
+					transitionDirection = Directions.Down;
+			}
+
+			// Request a transition on the room edge.
+			if (transitionDirection >= 0) {
+				physics.Velocity = Vector2F.Zero;
+				RoomControl.RequestRoomTransition(transitionDirection);
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
@@ -352,11 +405,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			bool performedAction = false;
 
 			if (!isStateControlled) {
-				// Try to switch to a natural state.
-				//PlayerState desiredNaturalState = GetDesiredNaturalState();
-				//if (state != desiredNaturalState && state.RequestStateChange(desiredNaturalState))
-					//BeginState(desiredNaturalState);
-
 				// Update hurting.
 				if (invincibleTimer > 0) {
 					invincibleTimer--;
@@ -473,22 +521,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			case PlayerTunics.RedTunic:		Graphics.ImageVariant = GameData.VARIANT_RED;	break;
 			case PlayerTunics.BlueTunic:	Graphics.ImageVariant = GameData.VARIANT_BLUE;	break;
 			}
-			/*
-			// Detect room transitions.
-			if (AllowRoomTransition) {
-				for (int dir = 0; dir < Directions.Count; dir++) {
-					CollisionInfo info = physics.CollisionInfo[dir];
-
-					if (info.Type == CollisionType.RoomEdge &&
-						(Controls.GetArrowControl(dir).IsDown() ||
-						Controls.GetAnalogDirection(dir) ||
-						autoRoomTransition))
-					{
-						RoomControl.EnterAdjacentRoom(dir);
-						break;
-					}
-				}
-			}*/
 
 			// Update superclass.
 			base.Update();

@@ -254,8 +254,11 @@
     <Compile Include="Game\GameStates\GameState.cs" />
     <Compile Include="Game\GameStates\GameStateQueue.cs" />
     <Compile Include="Game\GameStates\GameStateStack.cs" />
+    <Compile Include="Game\GameStates\GameStateAction.cs" />
     <Compile Include="Game\GameStates\StateDummy.cs" />
     <Compile Include="Game\GameStates\Transitions\MenuTransitionPush.cs" />
+    <Compile Include="Game\GameStates\Transitions\RoomEnterExitState.cs" />
+    <Compile Include="Game\GameStates\Transitions\RoomTransitionSplit.cs" />
     <Compile Include="Game\GameStates\Transitions\RoomTransitionFade.cs" />
     <Compile Include="Game\GameStates\Transitions\TransitionFade.cs" />
     <Compile Include="Game\GameStates\Transitions\RoomTransition.cs" />
