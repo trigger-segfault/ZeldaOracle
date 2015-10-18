@@ -36,15 +36,15 @@ namespace ZeldaEditor.Tools {
 
 			}
 			else if (mouseButton == MouseButtons.Right) {
-				if (editorControl.CurrentLayer == 0) {
+				/*if (editorControl.CurrentLayer == 0) {
 					room.CreateTile(
 						editorControl.Tileset.DefaultTileData,
 						tileLocation.X, tileLocation.Y, editorControl.CurrentLayer
 					);
 				}
-				else {
+				else {*/
 					room.RemoveTile(tileLocation.X, tileLocation.Y, editorControl.CurrentLayer);
-				}
+				//}
 			}
 			else if (mouseButton == MouseButtons.Middle) {
 				// Sample the tile.

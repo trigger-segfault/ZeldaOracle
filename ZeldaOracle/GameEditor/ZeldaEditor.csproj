@@ -101,6 +101,8 @@
     <Compile Include="EditorForm.Designer.cs">
       <DependentUpon>EditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\ToolSquare.cs" />
+    <Compile Include="Tools\ToolFill.cs" />
     <Compile Include="Tools\EditorTool.cs" />
     <Compile Include="Tools\ToolEyedrop.cs" />
     <Compile Include="Tools\ToolPlace.cs" />

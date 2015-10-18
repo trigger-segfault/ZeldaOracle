@@ -80,7 +80,7 @@ namespace ZeldaEditor {
 			return ((Level.RoomSize * room.Location) + tileLocationInRoom);
 		}
 
-		// Sample the room coordinates at the given point, clamping them to the level's imensions if specified.
+		// Sample the room coordinates at the given point, clamping them to the level's dimensions if specified.
 		public Point2I SampleRoomCoordinates(Point2I point, bool clamp = false) {
 			Point2I span = (Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing;
 			Point2I roomCoord = point / span;
@@ -97,7 +97,7 @@ namespace ZeldaEditor {
 			return roomCoord;
 		}
 
-		// Sample the oom at the given point, clamping to the levels dimensions if specified.
+		// Sample the room at the given point, clamping to the levels dimensions if specified.
 		public Room SampleRoom(Point2I point, bool clamp = false) {
 			if (!editorControl.IsLevelOpen)
 				return null;
