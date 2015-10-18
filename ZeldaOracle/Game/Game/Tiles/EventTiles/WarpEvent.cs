@@ -62,7 +62,11 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			
 			// Position the player.
 			if (warpType == WarpType.Entrance) {
-				player.Position = position + new Point2I(8, 16) + Directions.ToVector(edgeDirection) * 8.0f;
+				player.Position = position + new Point2I(8, 16);
+				if (edgeDirection == Directions.Down)
+					player.Position += Directions.ToVector(edgeDirection) * 8.0f;
+				else
+					player.Position += Directions.ToVector(edgeDirection) * 16.0f;
 				player.Direction = Directions.Reverse(edgeDirection);
 			}
 			else {
@@ -80,14 +84,17 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		// Create the game-state when exiting a room through this warp point.
 		public GameState CreateExitState() {
 			if (warpType == WarpType.Entrance)
-				return RoomEnterExitState.CreateExit(edgeDirection, 24);
+				return RoomEnterExitState.CreateExit(edgeDirection, 25);
 			return null;
 		}
 		
 		// Create the game-state when entering a room through this warp point.
 		public GameState CreateEnterState() {
+			int distance = 19;
+			if (edgeDirection == Directions.Down)
+				distance += 8;
 			if (warpType == WarpType.Entrance)
-				return RoomEnterExitState.CreateEnter(Directions.Reverse(edgeDirection), 24, null);
+				return RoomEnterExitState.CreateEnter(Directions.Reverse(edgeDirection), distance, null);
 			return null;
 		}
 
@@ -132,8 +139,10 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			int minDist = -1;
 			for (int dir = 0; dir < 4; dir++) {
 				int dist = Math.Abs(myBox.GetEdge(dir) - roomBounds.GetEdge(dir));
-				if (dist < minDist || minDist < 0)
+				if (dist < minDist || minDist < 0) {
 					edgeDirection = dir;
+					minDist = dist;
+				}
 			}
 
 			// Make sure we know if the player respawns on top of this warp point.

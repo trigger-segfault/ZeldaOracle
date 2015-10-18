@@ -145,9 +145,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			pos.Y -= player.ZPosition;
 
 			// Handle head bobbing when the player is moving horizontally.
+			float playbackTime = player.Graphics.AnimationPlayer.PlaybackTime;
 			if (!isPickingUp &&
 				(player.Direction == Directions.Left || player.Direction == Directions.Right)
-					&& player.Graphics.AnimationPlayer.PlaybackTime >= 6)
+					&& playbackTime >= 2 && playbackTime < 8)
 			{
 				pos.Y += 1;
 			}
