@@ -19,18 +19,19 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		
 		private int		timer;
 		private bool	isBeginningFade;
-		private Point2I	spawnPosition;
 		private Color	fadeColor;
-		private	int		faceDirection; // The direction the player faces when he enters the new room.
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RoomTransitionFade(Point2I spawnPosition, int faceDirection) {
-			this.fadeColor = Color.White;
-			this.spawnPosition = spawnPosition;
-			this.faceDirection = faceDirection;
+		public RoomTransitionFade() {
+			fadeColor = Color.White;
+		}
+		
+		public RoomTransitionFade(Color fadeColor) {
+			this.fadeColor = fadeColor;
 		}
 
 		
@@ -47,20 +48,13 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 
 		public override void Update() {
 			timer++;
-
-			timer++;
 			if (timer > TRANSITION_FADE_DURATION) {
 				if (isBeginningFade) {
 					// Switch rooms.
-					Player.Position = spawnPosition + new Point2I(8, 16);
 					SetupNewRoom();
 					DestroyOldRoom();
 					isBeginningFade = false;
 					timer = 0;
-					Player.Direction = faceDirection;
-					Player.InterruptItems();
-					Player.BeginNormalState();
-					Player.StopPushing();
 				}
 				else {
 					EndTransition();

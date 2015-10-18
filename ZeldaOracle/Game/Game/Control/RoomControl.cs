@@ -5,25 +5,25 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
+using ZeldaOracle.Common.Input;
+using ZeldaOracle.Common.Content;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
+using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.GameStates.Transitions;
+using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Game.Debug;
+using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Tiles.Custom;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
-using ZeldaOracle.Game.Control.Menus;
-using ZeldaOracle.Common.Input;
-using ZeldaOracle.Common.Content;
-using ZeldaOracle.Common.Audio;
-using ZeldaOracle.Game.Items.Rewards;
-using ZeldaOracle.Game.Tiles.Custom;
-using ZeldaOracle.Game.GameStates.RoomStates;
 
 namespace ZeldaOracle.Game.Control {
 
@@ -37,8 +37,10 @@ namespace ZeldaOracle.Game.Control {
 		private Tile[,,]		tiles;
 		private List<EventTile>	eventTiles;
 		private ViewControl		viewControl;
+		private int				requestedTransitionDirection;
 		
-		private event Action<Player> eventPlayerRespawn;
+		private event Action<Player>	eventPlayerRespawn;
+		private event Action<int>		eventRoomTransitioning;
 
 
 		//-----------------------------------------------------------------------------
@@ -53,6 +55,9 @@ namespace ZeldaOracle.Game.Control {
 			entities		= new List<Entity>();
 			eventTiles		= new List<EventTile>();
 			viewControl		= new ViewControl();
+			requestedTransitionDirection = 0;
+			eventPlayerRespawn		= null;
+			eventRoomTransitioning	= null;
 		}
 		
 
@@ -106,6 +111,14 @@ namespace ZeldaOracle.Game.Control {
 			area.Size	= ((Point2I) (rect.BottomRight / (float) GameSettings.TILE_SIZE)) + Point2I.One - area.Point;
 			area.Inflate(inflateAmount, inflateAmount);
 			return Rectangle2I.Intersect(area, new Rectangle2I(Point2I.Zero, room.Size));
+		}
+
+		public EventTile FindEventTile(EventTileDataInstance data) {
+			for (int i = 0; i < eventTiles.Count; i++) {
+				if (eventTiles[i].EventData == data)
+					return eventTiles[i];
+			}
+			return null;
 		}
 		
 
@@ -239,21 +252,29 @@ namespace ZeldaOracle.Game.Control {
 					entities[i].IsDestroyed = true;
 			}
 		}
+
+		// Request to transition to an adjacent room.
+		public void RequestRoomTransition(int transitionDirection) {
+			requestedTransitionDirection = transitionDirection;
+		}
+
+		// Cancel any requested room transitions.
+		// This should be called in the event 'RoomTransitioning'
+		public void CancelRoomTransition() {
+			requestedTransitionDirection = -1;
+		}
 		
+		// Transition to another rooom.
 		public void TransitionToRoom(Room nextRoom, RoomTransition transition) {
-			// Create the new room control.
-			RoomControl newControl = new RoomControl();
-			newControl.gameManager	= gameManager;
-			newControl.level		= level;
-			newControl.room			= nextRoom;
-			newControl.roomLocation	= nextRoom.Location;
-			
-			// Play the transition.
-			transition.OldRoomControl = this;
-			transition.NewRoomControl = newControl;
-			gameManager.PopGameState();
-			gameManager.PushGameState(transition);
-			GameControl.RoomControl = newControl;
+			TransitionToRoom(nextRoom, transition, null, null, null);
+		}
+		
+		// Transition to another room through warp points.
+		public void Warp(WarpEvent startPoint, EventTileDataInstance endPoint) {
+			TransitionToRoom(endPoint.Room, 
+				startPoint.CreateTransition(endPoint),
+				startPoint.CreateExitState(),
+				null, endPoint);
 		}
 
 		// Transition to a room adjacent to the current one.
@@ -265,6 +286,59 @@ namespace ZeldaOracle.Game.Control {
 				Room nextRoom = level.GetRoomAt(nextLocation);
 				TransitionToRoom(nextRoom, new RoomTransitionPush(direction));
 			}
+		}
+		
+		public void TransitionToRoom(Room nextRoom, RoomTransition transition, GameState exitState, GameState enterState, EventTileDataInstance warpTile) {
+			// Create the new room control.
+			RoomControl newControl = new RoomControl();
+			newControl.gameManager	= gameManager;
+			newControl.level		= level;
+			newControl.room			= nextRoom;
+			newControl.roomLocation	= nextRoom.Location;
+			
+			//               [Exit]                       [Enter]
+			// [RoomOld] -> [RoomOld] -> [Transition] -> [RoomNew] -> [RoomNew]
+			
+			// Create the sequence of game states for the transition.
+			GameState postTransitionState = new GameStateAction(delegate(GameStateAction actionState) {
+				gameManager.PopGameState(); // Pop the queue state.
+				gameManager.PushGameState(newControl); // Push the new room control state.
+
+				// Find the warp event were warping to and grab its enter-state.
+				if (warpTile != null) {
+					WarpEvent eventTile = newControl.FindEventTile(warpTile) as WarpEvent;
+					if (eventTile != null)
+						enterState = eventTile.CreateEnterState();
+				}
+				if (enterState != null)
+					gameManager.PushGameState(enterState); // Push the enter state.
+			});
+			GameState preTransitionState = new GameStateAction(delegate(GameStateAction actionState) {
+				GameControl.RoomControl = newControl;
+				gameManager.PopGameState(); // Pop the queue state.
+				gameManager.PopGameState(); // Pop the room control state.
+				gameManager.PushGameState(new GameStateQueue(transition, postTransitionState));
+				newControl.FindEventTile(warpTile);
+			});
+
+			if (warpTile != null) {
+				transition.NewRoomSetup += delegate(RoomControl roomControl) {
+					// Find the warp event were warping to.
+					WarpEvent eventTile = newControl.FindEventTile(warpTile) as WarpEvent;
+					if (eventTile != null)
+						eventTile.SetupRoomOnEnter();
+				};
+			}
+
+			// Create the game state for the transition sequence.
+			GameState state = preTransitionState;
+			if (exitState != null)
+				state = new GameStateQueue(exitState, preTransitionState);
+
+			// Begin the transition.
+			transition.OldRoomControl = this;
+			transition.NewRoomControl = newControl;
+			gameManager.PushGameState(state);
 		}
 
 
@@ -284,18 +358,15 @@ namespace ZeldaOracle.Game.Control {
 
 		public override void OnBegin() {
 			GameControl.RoomControl = this;
+			requestedTransitionDirection = 0;
 		}
 		
 		public override void OnEnd() {
 			
 		}
 
-		public override void Update() {
-			GameControl.RoomTicks++;
-
-			RoomState roomState		= GameControl.CurrentRoomState;
-			GameControl.UpdateRoom	= roomState.UpdateRoom;
-			GameControl.AnimateRoom	= roomState.AnimateRoom;
+		private void UpdateObjects() {
+			requestedTransitionDirection = -1;
 
 			// Update entities.
 			int entityCount = entities.Count;
@@ -305,6 +376,9 @@ namespace ZeldaOracle.Game.Control {
 						entities[i].Update();
 					if (GameControl.AnimateRoom)
 						entities[i].UpdateGraphics();
+
+					if (requestedTransitionDirection >= 0)
+						break;
 				}
 			}
 
@@ -314,6 +388,9 @@ namespace ZeldaOracle.Game.Control {
 					entities.RemoveAt(i--);
 				}
 			}
+
+			if (requestedTransitionDirection >= 0)
+				return;
 			
 			// Update tiles.
 			for (int i = 0; i < room.LayerCount; i++) {
@@ -334,23 +411,35 @@ namespace ZeldaOracle.Game.Control {
 			for (int i = 0; i < eventTiles.Count; i++) {
 				eventTiles[i].Update();
 			}
+		}
+
+		public override void Update() {
+			GameControl.RoomTicks++;
+
+			RoomState roomState		= GameControl.CurrentRoomState;
+			GameControl.UpdateRoom	= roomState.UpdateRoom;
+			GameControl.AnimateRoom	= roomState.AnimateRoom;
+
+			// Update entities, tiles, and event tiles.
+			UpdateObjects();
 
 			// Update view to follow player.
 			viewControl.PanTo(Player.Center);
 			
-			// Detect room transitions.
-			if (Player.AllowRoomTransition) {
-				for (int direction = 0; direction < Directions.Count; direction++) {
-					CollisionInfo info = Player.Physics.CollisionInfo[direction];
-
-					if (info.Type == CollisionType.RoomEdge &&
-						(Controls.GetArrowControl(direction).IsDown() ||
-						Controls.GetAnalogDirection(direction) ||
-						Player.AutoRoomTransition))
-					{
-						EnterAdjacentRoom(direction);
-						break;
+			if (requestedTransitionDirection >= 0) {
+				// Call the event RoomTransitioning.
+				// This event has a chance to cancel the room transition.
+				if (eventRoomTransitioning != null) {
+					Delegate[] invocationList = eventRoomTransitioning.GetInvocationList();
+					for (int i = 0; i < invocationList.Length; i++) {
+						invocationList[i].DynamicInvoke(requestedTransitionDirection);
+						if (requestedTransitionDirection < 0)
+							break;
 					}
+				}
+				if (requestedTransitionDirection >= 0) {
+					EnterAdjacentRoom(requestedTransitionDirection);
+					requestedTransitionDirection = -1;
 				}
 			}
 			
@@ -359,9 +448,12 @@ namespace ZeldaOracle.Game.Control {
 
 			if (GameControl.UpdateRoom) {
 				// [Start] Open inventory.
-				if (Controls.Start.IsPressed()) {
+				if (Controls.Start.IsPressed())
 					GameControl.OpenMenu(GameControl.MenuWeapons);
-				}
+
+				// [Select] Open map screen.
+				if (Controls.Select.IsPressed())
+					Console.WriteLine("TODO: Open Map Screen");
 				
 				// DEBUG: Update debug keys.
 				GameDebug.UpdateRoomDebugKeys(this);
@@ -405,6 +497,7 @@ namespace ZeldaOracle.Game.Control {
 			g.ResetTranslation();
 			GameControl.HUD.Draw(g, false);
 
+			// Draw the current room state.
 			GameControl.DrawRoomState(g);
 		}
 
@@ -447,9 +540,16 @@ namespace ZeldaOracle.Game.Control {
 			get { return viewControl; }
 		}
 
+		// Called after the player respawns.
 		public event Action<Player> PlayerRespawn {
 			add { eventPlayerRespawn += value; }
 			remove { eventPlayerRespawn -= value; }
+		}
+
+		// Called as the room is about to transition.
+		public event Action<int> RoomTransitioning {
+			add { eventRoomTransitioning += value; }
+			remove { eventRoomTransitioning -= value; }
 		}
 	}
 }

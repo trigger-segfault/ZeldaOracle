@@ -46,11 +46,11 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			// Draw the old room.
 			g.ResetTranslation();
 			g.Translate(panNew);
-			roomOld.Draw(g);
+			OldRoomControl.Draw(g);
 			
 			// Draw the new room.
 			g.Translate(panNew + panOld);
-			roomNew.Draw(g);
+			NewRoomControl.Draw(g);
 		}
 
 		
@@ -90,8 +90,8 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		}
 
 		public override void Draw(Graphics2D g) {
-			Zone zoneOld = roomOld.Room.Zone;
-			Zone zoneNew = roomNew.Room.Zone;
+			Zone zoneOld = OldRoomControl.Room.Zone;
+			Zone zoneNew = NewRoomControl.Room.Zone;
 
 			if (zoneOld == zoneNew) {
 				// Draw the rooms normally.
@@ -104,17 +104,17 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 				g.End();
 				g.SetRenderTarget(GameData.RenderTargetGameTemp);
 				g.Begin(GameSettings.DRAW_MODE_DEFAULT);
-				roomOld.Room.Zone = zoneNew;
+				OldRoomControl.Room.Zone = zoneNew;
 				DrawRooms(g);
-				roomOld.Room.Zone = zoneOld;
+				OldRoomControl.Room.Zone = zoneOld;
 
 				// Switch to main render target to draw the old zone.
 				g.End();
 				g.SetRenderTarget(GameData.RenderTargetGame);
 				g.Begin(GameSettings.DRAW_MODE_DEFAULT);
-				roomNew.Room.Zone = zoneOld;
+				NewRoomControl.Room.Zone = zoneOld;
 				DrawRooms(g);
-				roomNew.Room.Zone = zoneNew;
+				NewRoomControl.Room.Zone = zoneNew;
 
 				// Draw the temp render target (with the new zone) at an opacity.
 				float opacity = (float) distance / (float) maxDistance;

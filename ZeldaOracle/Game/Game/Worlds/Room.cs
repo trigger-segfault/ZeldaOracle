@@ -74,6 +74,14 @@ namespace ZeldaOracle.Game.Worlds {
 			return tileData[x, y, layer];
 		}
 
+		public EventTileDataInstance FindEventTileByID(string id) {
+			for (int i = 0; i < eventData.Count; i++) {
+				if (eventData[i].ID == id)
+					return eventData[i];
+			}
+			return null;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Mutators

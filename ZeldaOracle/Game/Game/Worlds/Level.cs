@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Content;
+using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Tiles.EventTiles;
 
 namespace ZeldaOracle.Game.Worlds {
 	public class Level : IPropertyObject {
@@ -72,6 +74,17 @@ namespace ZeldaOracle.Game.Worlds {
 			if (!ContainsRoom(location))
 				return null;
 			return rooms[location.X, location.Y];
+		}
+
+		public EventTileDataInstance FindEventTileByID(string id) {
+			for (int x = 0; x < dimensions.X; x++) {
+				for (int y = 0; y < dimensions.Y; y++) {
+					EventTileDataInstance eventTile = rooms[x, y].FindEventTileByID(id);
+					if (eventTile != null)
+						return eventTile;
+				}
+			}
+			return null;
 		}
 
 

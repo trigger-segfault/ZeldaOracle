@@ -5,8 +5,9 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Worlds;
-using ZeldaOracle.Game.GameStates.Transitions;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.GameStates;
+using ZeldaOracle.Game.GameStates.Transitions;
 
 namespace ZeldaOracle.Game.Tiles.EventTiles {
 
@@ -22,6 +23,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 
 		public WarpType warpType;
 		public bool warpEnabled;
+		public int edgeDirection;
 
 
 		//-----------------------------------------------------------------------------
@@ -30,56 +32,91 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 
 		public WarpEvent() {
 		}
+		
+		
+		//-----------------------------------------------------------------------------
+		// Warp Accessors
+		//-----------------------------------------------------------------------------
+
+		// Find the event tile for the this warp point's destination.
+		public EventTileDataInstance FindDestinationPoint() {
+			string warpID = properties.GetString("destination_warp_point", "?");
+			string warpLevelID = Properties.GetString("destination_level", RoomControl.Level.Properties.GetString("id"));
+			if (warpID.Length == 0 || warpLevelID.Length == 0)
+				return null;
+			Level warpLevel = RoomControl.GameControl.World.GetLevel(warpLevelID);
+			if (warpLevel == null)
+				return null;
+			return warpLevel.FindEventTileByID(warpID);
+		}
 
 
 		//-----------------------------------------------------------------------------
 		// Warping
 		//-----------------------------------------------------------------------------
 
-		public void Warp() {
-			string warpLevelID = Properties.GetString("destination_level", RoomControl.Level.Properties.GetString("id"));
-			Level warpLevel = RoomControl.GameControl.World.GetLevel(warpLevelID);
-			if (warpLevel == null)
-				return;
+		// This method is called when a room is entered through this warp point.
+		public void SetupRoomOnEnter() {
+			Player player = RoomControl.Player;
+			warpEnabled = false;
+			
+			// Position the player.
+			if (warpType == WarpType.Entrance) {
+				player.Position = position + new Point2I(8, 16);
+				if (edgeDirection == Directions.Down)
+					player.Position += Directions.ToVector(edgeDirection) * 8.0f;
+				else
+					player.Position += Directions.ToVector(edgeDirection) * 16.0f;
+				player.Direction = Directions.Reverse(edgeDirection);
+			}
+			else {
+				int faceDirection = Properties.GetInteger("face_direction", Directions.Down);
+				player.Position = position + new Point2I(8, 16);
+				player.Direction = faceDirection;
+			}
 
-			// Search for warp tile in all rooms.
-			// TODO: include better functions for this task.
-			Room destRoom;
-			EventTileDataInstance destEvent;
-			string warpID = properties.GetString("destination_warp_point", "?");
+			// Setup the player's state.
+			player.InterruptItems();
+			player.BeginNormalState();
+			player.StopPushing();
+		}
 
-			if (FindDestinationInLevel(warpID, warpLevel, out destRoom, out destEvent)) {
-				int dir = destEvent.Properties.GetInteger("face_direction", Directions.Down);
-				RoomControl.TransitionToRoom(destRoom, new RoomTransitionFade(destEvent.Position, dir));
+		// Create the game-state when exiting a room through this warp point.
+		public GameState CreateExitState() {
+			if (warpType == WarpType.Entrance)
+				return RoomEnterExitState.CreateExit(edgeDirection, 25);
+			return null;
+		}
+		
+		// Create the game-state when entering a room through this warp point.
+		public GameState CreateEnterState() {
+			int distance = 19;
+			if (edgeDirection == Directions.Down)
+				distance += 8;
+			if (warpType == WarpType.Entrance)
+				return RoomEnterExitState.CreateEnter(Directions.Reverse(edgeDirection), distance, null);
+			return null;
+		}
+
+		// Create the room transition state for this warp point.
+		public RoomTransition CreateTransition(EventTileDataInstance destination) {
+			int dir = destination.Properties.GetInteger("face_direction", Directions.Down);
+			if (warpType == WarpType.Stairs)
+				return new RoomTransitionFade();
+			return new RoomTransitionSplit();
+		}
+
+		// Warp to the destination point.
+		public void Warp(int warpDirection) {
+			EventTileDataInstance destination = FindDestinationPoint();
+
+			if (destination != null) {
+				RoomControl.Warp(this, destination);
+				RoomControl.Player.BeginNormalState();
 			}
 			else {
 				Console.WriteLine("Invalid warp destination!");
 			}
-		}
-
-		public bool FindDestinationInLevel(string id, Level level, out Room destRoom, out EventTileDataInstance destEvent) {
-			for (int x = 0; x < level.Width; x++) {
-				for (int y = 0; y < level.Height; y++) {
-					if (FindDestinationInRoom(id, level.GetRoomAt(x, y), out destRoom, out destEvent))
-						return true;
-				}
-			}
-			destRoom = null;
-			destEvent = null;
-			return false;
-		}
-
-		public bool FindDestinationInRoom(string id, Room room, out Room destRoom, out EventTileDataInstance destEvent) {
-			for (int i = 0; i < room.EventData.Count; i++) {
-				if (room.EventData[i].Properties.GetString("id", "") == id) {
-					destRoom = room;
-					destEvent = room.EventData[i];
-					return true;
-				}
-			}
-			destRoom = null;
-			destEvent = null;
-			return false;
 		}
 
 
@@ -89,23 +126,48 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 
 		protected override void Initialize() {
 			base.Initialize();
-			
+
 			string typeName = Properties.GetString("warp_type", "Tunnel");
 			warpType		= (WarpType) Enum.Parse(typeof(WarpType), typeName, true);
 			collisionBox	= new Rectangle2I(2, 6, 12, 12);
 			warpEnabled		= !IsTouchingPlayer();
+			
+			// Find the closest room edge.
+			edgeDirection = -1;
+			Rectangle2I roomBounds = RoomControl.RoomBounds;
+			Rectangle2I myBox = new Rectangle2I((int) position.X, (int) position.Y, 16, 16);
+			int minDist = -1;
+			for (int dir = 0; dir < 4; dir++) {
+				int dist = Math.Abs(myBox.GetEdge(dir) - roomBounds.GetEdge(dir));
+				if (dist < minDist || minDist < 0) {
+					edgeDirection = dir;
+					minDist = dist;
+				}
+			}
 
+			// Make sure we know if the player respawns on top of this warp point.
 			RoomControl.PlayerRespawn += delegate(Player player) {
 				warpEnabled = !IsTouchingPlayer();
+			};
+
+			// For entrance warp points, intercept room transitions in order to warp.
+			RoomControl.RoomTransitioning += delegate(int direction) {
+				if (warpType == WarpType.Entrance && direction == edgeDirection && IsTouchingPlayer()) {
+					RoomControl.CancelRoomTransition();
+					Warp(direction);
+				}
 			};
 		}
 
 		public override void Update() {
 			base.Update();
 
-			if (IsTouchingPlayer()) {
+			if (warpType == WarpType.Entrance) {
+				warpEnabled = true;
+			}
+			else if (IsTouchingPlayer()) {
 				if (RoomControl.Player.CanUseWarpPoint && warpEnabled && RoomControl.Player.IsOnGround) {
-					Warp();
+					Warp(RoomControl.Player.Direction);
 					warpEnabled = false;
 				}
 			}
