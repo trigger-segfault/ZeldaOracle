@@ -50,6 +50,8 @@ namespace ZeldaEditor.Control {
 		private List<EditorTool>	tools;
 		private ToolPointer			toolPointer;
 		private ToolPlace			toolPlace;
+		private	ToolSquare			toolSquare;
+		private ToolFill			toolFill;
 		private ToolSelection		toolSelection;
 		private ToolEyedrop			toolEyedrop;
 
@@ -148,6 +150,8 @@ namespace ZeldaEditor.Control {
 				tools = new List<EditorTool>();
 				AddTool(toolPointer		= new ToolPointer());
 				AddTool(toolPlace		= new ToolPlace());
+				AddTool(toolSquare		= new ToolSquare());
+				AddTool(toolFill		= new ToolFill());
 				AddTool(toolSelection	= new ToolSelection());
 				AddTool(toolEyedrop		= new ToolEyedrop());
 				currentToolIndex = 0;

@@ -30,6 +30,7 @@ namespace ZeldaEditor {
 
 		private Dictionary<Keys, HotKeyAction> hotKeyCommands;
 
+		System.Windows.Forms.Control activeControl;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -62,7 +63,7 @@ namespace ZeldaEditor {
 				Level level = editorControl.World.GetLevel(levelIndex);
 				level.Name = e.Label;
 			};*/
-
+			activeControl = null;
 
 			treeViewWorld.NodeMouseDoubleClick += delegate(object sender, TreeNodeMouseClickEventArgs e) {
 				if (e.Node.Name == "level") {
@@ -83,6 +84,8 @@ namespace ZeldaEditor {
 			this.toolButtons	= new ToolStripButton[] {
 				buttonToolPointer,
 				buttonToolPlace,
+				buttonToolSquare,
+				buttonToolFill,
 				buttonToolSelection,
 				buttonToolEyedropper
 			};
@@ -90,10 +93,12 @@ namespace ZeldaEditor {
 			this.hotKeyCommands = new Dictionary<Keys, HotKeyAction>();
 			this.hotKeyCommands.Add(Keys.PageUp, delegate() { cycleLayerUpToolStripMenuItem_Click(null, null); });
 			this.hotKeyCommands.Add(Keys.PageDown, delegate() { cycleLayerUpToolStripMenuItem1_Click(null, null); });
-			//this.hotKeyCommands.Add(Keys.M, delegate() { buttonTool_Click(this.buttonToolPointer, null); });
-			//this.hotKeyCommands.Add(Keys.P, delegate() { buttonTool_Click(this.buttonToolPlace, null); });
-			//this.hotKeyCommands.Add(Keys.S, delegate() { buttonTool_Click(this.buttonToolSelection, null); });
-			//this.hotKeyCommands.Add(Keys.K, delegate() { buttonTool_Click(this.buttonToolEyedropper, null); });
+			this.hotKeyCommands.Add(Keys.M, delegate() { buttonTool_Click(this.buttonToolPointer, null); });
+			this.hotKeyCommands.Add(Keys.P, delegate() { buttonTool_Click(this.buttonToolPlace, null); });
+			this.hotKeyCommands.Add(Keys.O, delegate() { buttonTool_Click(this.buttonToolSquare, null); });
+			this.hotKeyCommands.Add(Keys.F, delegate() { buttonTool_Click(this.buttonToolFill, null); });
+			this.hotKeyCommands.Add(Keys.S, delegate() { buttonTool_Click(this.buttonToolSelection, null); });
+			this.hotKeyCommands.Add(Keys.K, delegate() { buttonTool_Click(this.buttonToolEyedropper, null); });
 		}
 
 
@@ -123,12 +128,24 @@ namespace ZeldaEditor {
 		// Event Handlers
 		//-----------------------------------------------------------------------------
 
+		private void EditorForm_Load(object sender, EventArgs e) {
+			foreach (System.Windows.Forms.Control c in (sender as System.Windows.Forms.Control).Controls) {
+				c.GotFocus += OnControlFocus;
+				EditorForm_Load(c, null);
+			}
+		}
+
+		private void OnControlFocus(object sender, EventArgs e) {
+			this.activeControl = sender as System.Windows.Forms.Control;
+		}
+
 		// Use this for shortcut keys that won't work on their own.
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
-			/*if (hotKeyCommands.ContainsKey(keyData)) {
+			bool typing = this.activeControl is TextBoxBase;
+			if (!typing && hotKeyCommands.ContainsKey(keyData)) {
 				hotKeyCommands[keyData]();
 				return true;
-			}*/
+			}
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 

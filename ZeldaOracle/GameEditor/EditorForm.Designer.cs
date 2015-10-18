@@ -74,6 +74,8 @@
 			this.toolStrip2 = new System.Windows.Forms.ToolStrip();
 			this.buttonToolPointer = new System.Windows.Forms.ToolStripButton();
 			this.buttonToolPlace = new System.Windows.Forms.ToolStripButton();
+			this.buttonToolSquare = new System.Windows.Forms.ToolStripButton();
+			this.buttonToolFill = new System.Windows.Forms.ToolStripButton();
 			this.buttonToolSelection = new System.Windows.Forms.ToolStripButton();
 			this.buttonToolEyedropper = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -125,6 +127,7 @@
 			this.panelProperties = new System.Windows.Forms.Panel();
 			this.propertyGrid = new System.Windows.Forms.PropertyGrid();
 			this.levelTabPageEvents = new System.Windows.Forms.TabPage();
+			this.textBoxScript = new System.Windows.Forms.RichTextBox();
 			this.contextMenuLevelSelect = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.editToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -137,7 +140,6 @@
 			this.contextMenuGeneral = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.editPropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.renameToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-			this.textBoxScript = new System.Windows.Forms.RichTextBox();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.toolStrip2.SuspendLayout();
@@ -569,6 +571,8 @@
 			this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.buttonToolPointer,
             this.buttonToolPlace,
+            this.buttonToolSquare,
+            this.buttonToolFill,
             this.buttonToolSelection,
             this.buttonToolEyedropper,
             this.toolStripSeparator2,
@@ -609,6 +613,26 @@
 			this.buttonToolPlace.Size = new System.Drawing.Size(23, 22);
 			this.buttonToolPlace.Text = "Place Tool (P)";
 			this.buttonToolPlace.Click += new System.EventHandler(this.buttonTool_Click);
+			// 
+			// buttonToolSquare
+			// 
+			this.buttonToolSquare.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonToolSquare.Image = ((System.Drawing.Image)(resources.GetObject("buttonToolSquare.Image")));
+			this.buttonToolSquare.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonToolSquare.Name = "buttonToolSquare";
+			this.buttonToolSquare.Size = new System.Drawing.Size(23, 22);
+			this.buttonToolSquare.Text = "Square Tool (O)";
+			this.buttonToolSquare.Click += new System.EventHandler(this.buttonTool_Click);
+			// 
+			// buttonToolFill
+			// 
+			this.buttonToolFill.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonToolFill.Image = ((System.Drawing.Image)(resources.GetObject("buttonToolFill.Image")));
+			this.buttonToolFill.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonToolFill.Name = "buttonToolFill";
+			this.buttonToolFill.Size = new System.Drawing.Size(23, 22);
+			this.buttonToolFill.Text = "Fill Tool (F)";
+			this.buttonToolFill.Click += new System.EventHandler(this.buttonTool_Click);
 			// 
 			// buttonToolSelection
 			// 
@@ -1133,6 +1157,20 @@
 			this.levelTabPageEvents.Text = "Script Editor";
 			this.levelTabPageEvents.UseVisualStyleBackColor = true;
 			// 
+			// textBoxScript
+			// 
+			this.textBoxScript.AcceptsTab = true;
+			this.textBoxScript.BackColor = System.Drawing.SystemColors.Window;
+			this.textBoxScript.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.textBoxScript.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.textBoxScript.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.textBoxScript.Location = new System.Drawing.Point(3, 3);
+			this.textBoxScript.Name = "textBoxScript";
+			this.textBoxScript.Size = new System.Drawing.Size(659, 392);
+			this.textBoxScript.TabIndex = 0;
+			this.textBoxScript.Text = "";
+			this.textBoxScript.WordWrap = false;
+			// 
 			// contextMenuLevelSelect
 			// 
 			this.contextMenuLevelSelect.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1234,20 +1272,6 @@
 			this.renameToolStripMenuItem1.Text = "Rename";
 			this.renameToolStripMenuItem1.Click += new System.EventHandler(this.renameToolStripMenuItem1_Click);
 			// 
-			// textBoxScript
-			// 
-			this.textBoxScript.AcceptsTab = true;
-			this.textBoxScript.BackColor = System.Drawing.SystemColors.Window;
-			this.textBoxScript.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.textBoxScript.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textBoxScript.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textBoxScript.Location = new System.Drawing.Point(3, 3);
-			this.textBoxScript.Name = "textBoxScript";
-			this.textBoxScript.Size = new System.Drawing.Size(659, 392);
-			this.textBoxScript.TabIndex = 0;
-			this.textBoxScript.Text = "";
-			this.textBoxScript.WordWrap = false;
-			// 
 			// EditorForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1259,9 +1283,11 @@
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.menuStrip1);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.KeyPreview = true;
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "EditorForm";
 			this.Text = "Oracle Engine Editor";
+			this.Load += new System.EventHandler(this.EditorForm_Load);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
 			this.toolStrip1.ResumeLayout(false);
@@ -1416,5 +1442,7 @@
 		private System.Windows.Forms.ToolStripButton buttonTreeViewResize;
 		private System.Windows.Forms.ToolStripButton buttonTreeViewShift;
 		private System.Windows.Forms.RichTextBox textBoxScript;
+		private System.Windows.Forms.ToolStripButton buttonToolSquare;
+		private System.Windows.Forms.ToolStripButton buttonToolFill;
 	}
 }

@@ -543,9 +543,85 @@ namespace ZeldaOracle.Game {
 				"You got the <red>Mirror Shield<red>!",
 				GameData.SPR_ITEM_ICON_SHIELD_3));
 
+			rewardManager.AddReward(new RewardItem("item_biggoron_sword", "item_biggoron_sword", Item.Level1, RewardHoldTypes.TwoHands,
+				"You got <red>Biggoron's Sword<red>! This two-handed sword is huge!",
+				GameData.SPR_ITEM_ICON_BIGGORON_SWORD));
+
+			rewardManager.AddReward(new RewardItem("item_seed_satchel_1", "item_seed_satchel", Item.Level1, RewardHoldTypes.TwoHands,
+				"You got a <red>Seed Satchel<red>! And it has <red>20 Ember Seeds<red>!",
+				GameData.SPR_ITEM_ICON_SATCHEL));
+
+			rewardManager.AddReward(new RewardItem("item_seed_satchel_2", "item_seed_satchel", Item.Level2, RewardHoldTypes.TwoHands,
+				"You can now hold more <red>Mystical Seeds<red> than before!",
+				GameData.SPR_ITEM_ICON_SATCHEL));
+
+			rewardManager.AddReward(new RewardItem("item_seed_satchel_3", "item_seed_satchel", Item.Level3, RewardHoldTypes.TwoHands,
+				"You can now hold even more <red>Mystical Seeds<red> than before!",
+				GameData.SPR_ITEM_ICON_SATCHEL));
+
 			rewardManager.AddReward(new RewardItem("item_bombs_1", "item_bombs", Item.Level1, RewardHoldTypes.TwoHands,
-				"You got <red?Bombs<red>! Use them to blow open false walls. Press A or B to set a Bomb. If you also press DPAD, you can throw the Bomb.",
+				"You got <red>Bombs<red>! Use them to blow open false walls. Press A or B to set a Bomb. If you also press DPAD, you can throw the Bomb.",
 				GameData.SPR_ITEM_ICON_BOMB));
+
+			rewardManager.AddReward(new RewardItem("item_bombs_2", "item_bombs", Item.Level2, RewardHoldTypes.TwoHands,
+				"You can now hold more <red>Bombs<red> than before!",
+				GameData.SPR_ITEM_ICON_BOMB));
+
+			rewardManager.AddReward(new RewardItem("item_bombs_3", "item_bombs", Item.Level3, RewardHoldTypes.TwoHands,
+				"You can now hold even more <red>Bombs<red> than before!",
+				GameData.SPR_ITEM_ICON_BOMB));
+
+			rewardManager.AddReward(new RewardItem("item_bracelet_1", "item_bracelet", Item.Level1, RewardHoldTypes.TwoHands,
+				"You got the <red>Power Bracelet<red>! Hold the button and press DPAD to life heavy objects!",
+				GameData.SPR_ITEM_ICON_BRACELET));
+
+			rewardManager.AddReward(new RewardItem("item_bracelet_2", "item_bracelet", Item.Level2, RewardHoldTypes.TwoHands,
+				"You got the <red>Power Glove<red>! You can now lift heavy objects.",
+				GameData.SPR_ITEM_ICON_POWER_GLOVES));
+
+			rewardManager.AddReward(new RewardItem("item_boomerang_1", "item_boomerang", Item.Level1, RewardHoldTypes.TwoHands,
+				"You got the <red>Boomerang<red>! Use it to stop enemies in their tracks!",
+				GameData.SPR_ITEM_ICON_BOOMERANG_1));
+
+			rewardManager.AddReward(new RewardItem("item_boomerang_2", "item_boomerang", Item.Level2, RewardHoldTypes.TwoHands,
+				"It's the <red>Magical Boomerang<red>! Press DPAD while holding the button to control its flight path!",
+				GameData.SPR_ITEM_ICON_BOOMERANG_2));
+
+			rewardManager.AddReward(new RewardItem("item_feather_1", "item_feather", Item.Level1, RewardHoldTypes.TwoHands,
+				"You got <red>Roc's Feather<red>! You feel as light as a feather!",
+				GameData.SPR_ITEM_ICON_FEATHER));
+
+			rewardManager.AddReward(new RewardItem("item_feather_2", "item_feather", Item.Level2, RewardHoldTypes.TwoHands,
+				"You got <red>Roc's Cape<red>! Press and hold the button to do a double jump!",
+				GameData.SPR_ITEM_ICON_CAPE));
+
+			rewardManager.AddReward(new RewardItem("item_shovel", "item_shovel", Item.Level1, RewardHoldTypes.TwoHands,
+				"You got the <red>Shovel<red>! Now start digging!",
+				GameData.SPR_ITEM_ICON_SHOVEL));
+
+			rewardManager.AddReward(new RewardItem("item_seed_shooter", "item_seed_shooter", Item.Level1, RewardHoldTypes.TwoHands,
+				"You got the <red>Seed Shooter<red>! Pick your seeds, fire, then watch them ricochet.",
+				GameData.SPR_ITEM_ICON_SEED_SHOOTER));
+
+			rewardManager.AddReward(new RewardItem("item_slingshot_1", "item_slingshot", Item.Level1, RewardHoldTypes.TwoHands,
+				"You got the <red>Slingshot<red>! Choose your seeds and take aim!",
+				GameData.SPR_ITEM_ICON_SLINGSHOT_1));
+
+			rewardManager.AddReward(new RewardItem("item_slingshot_2", "item_slingshot", Item.Level2, RewardHoldTypes.TwoHands,
+				"You got the <red>Hyper Slingshot<red>! It shoots three seeds at a time!",
+				GameData.SPR_ITEM_ICON_SLINGSHOT_2));
+
+			rewardManager.AddReward(new RewardItem("item_bow_1", "item_bow", Item.Level1, RewardHoldTypes.TwoHands,
+				"You got <red>Bow<red>! Shoot arrows at your enemies!",
+				GameData.SPR_ITEM_ICON_BOW));
+
+			rewardManager.AddReward(new RewardItem("item_bow_2", "item_bow", Item.Level2, RewardHoldTypes.TwoHands,
+				"Your <red>Bow<red> has been upgraded! You can now hold more arrows.",
+				GameData.SPR_ITEM_ICON_BOW));
+
+			rewardManager.AddReward(new RewardItem("item_bow_3", "item_bow", Item.Level3, RewardHoldTypes.TwoHands,
+				"Your <red>Bow<red> has been upgraded! You can now hold even more arrows.",
+				GameData.SPR_ITEM_ICON_BOW));
 
 			rewardManager.AddReward(new RewardRecoveryHeart("hearts_1", 1,
 				"You recovered<n>only one <red>heart<red>!",
