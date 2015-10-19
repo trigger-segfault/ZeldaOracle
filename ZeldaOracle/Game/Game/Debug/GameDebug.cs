@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
+using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.Transitions;
@@ -29,23 +30,29 @@ namespace ZeldaOracle.Game.Debug {
 		public static void UpdateRoomDebugKeys(RoomControl roomControl) {
 			GameControl gameControl = roomControl.GameControl;
 
+			// G: Display a test message.
 			if (Keyboard.IsKeyPressed(Keys.G)) {
 				gameControl.DisplayMessage("I was a <red>hero<red> to broken robots 'cause I was one of them, but how can I sing about being damaged if I'm not?<p> That's like <green>Christina Aguilera<green> singing Spanish. Ooh, wait! That's it! I'll fake it!");
 			}
+			// INSERT: Fill all ammo.
 			if (Keyboard.IsKeyPressed(Keys.Insert)) {
 				gameControl.Inventory.FillAllAmmo();
 			}
+			// DELETE: Empty all ammo.
 			if (Keyboard.IsKeyPressed(Keys.Delete)) {
 				gameControl.Inventory.EmptyAllAmmo();
 			}
+			// HOME: Set the player's health to max.
 			if (Keyboard.IsKeyPressed(Keys.Home)) {
 				gameControl.Player.MaxHealth = 4 * 14;
 				gameControl.Player.Health = gameControl.Player.MaxHealth;
 			}
+			// END: Set the player's health to 3 hearts.
 			if (Keyboard.IsKeyPressed(Keys.End)) {
 				gameControl.Player.Health = 4 * 3;
 			}
-
+			
+			// T: Cycle which tunic the player is wearing.
 			if (Keyboard.IsKeyPressed(Keys.T)) {
 				switch (gameControl.Player.Tunic) {
 				case PlayerTunics.GreenTunic:	gameControl.Player.Tunic = PlayerTunics.RedTunic; break;
@@ -53,15 +60,21 @@ namespace ZeldaOracle.Game.Debug {
 				case PlayerTunics.BlueTunic:	gameControl.Player.Tunic = PlayerTunics.GreenTunic; break;
 				}
 			}
+			// H: Hurt the player in a random direction.
 			if (Keyboard.IsKeyPressed(Keys.H)) {
-				gameControl.Player.Hurt(0, GRandom.NextFloat(GMath.FullAngle));
+				float angle = GRandom.NextFloat(GMath.FullAngle);
+				Vector2F source = gameControl.Player.Position +  new Vector2F(5.0f, angle, true);
+				gameControl.Player.Hurt(new DamageInfo(1, source));
 			}
+			// M: Play music.
 			if (Keyboard.IsKeyPressed(Keys.M)) {
 				AudioSystem.PlaySong("overworld");
 			}
+			// N: Set the volume to max.
 			if (Keyboard.IsKeyPressed(Keys.N)) {
 				AudioSystem.MasterVolume = 1.0f;
 			}
+			// Q: Spawn a random rupees collectible.
 			if (Keyboard.IsKeyPressed(Keys.Q)) {
 				int[] rupees = { 1, 5, 20, 100, 200 };//, 5, 20, 100, 200 };
 				int rupee = GRandom.NextInt(rupees.Length);
@@ -69,23 +82,33 @@ namespace ZeldaOracle.Game.Debug {
 				collectible.Position = gameControl.Player.Position;
 				collectible.ZPosition = 100;
 			}
+			// Y: Show/hide collision boxes.
 			if (Keyboard.IsKeyPressed(Keys.Y)) {
 				GraphicsComponent.DrawCollisionBoxes = !GraphicsComponent.DrawCollisionBoxes;
 			}
+			// J: Spawn a heart collectible.
 			if (Keyboard.IsKeyPressed(Keys.K)) {
 				Collectible collectible = gameControl.RewardManager.SpawnCollectible("hearts_1");
 				collectible.Position = gameControl.Player.Position;
 				collectible.ZPosition = 100;
 			}
+			// B: Spawn bomb collectibles.
 			if (Keyboard.IsKeyPressed(Keys.B)) {
 				Collectible collectible = gameControl.RewardManager.SpawnCollectible("ammo_bombs_5");
 				collectible.Position = gameControl.Player.Position;
 				collectible.ZPosition = 100;
 			}
+			// J: Spawn arrow collectibles.
 			if (Keyboard.IsKeyPressed(Keys.J)) {
 				Collectible collectible = gameControl.RewardManager.SpawnCollectible("ammo_arrows_5");
 				collectible.Position = gameControl.Player.Position;
 				collectible.ZPosition = 100;
+			}
+			// 0: Spawn a monster.
+			if (Keyboard.IsKeyPressed(Keys.D0)) {
+				Monster monster = new Monster();
+				Vector2F position = new Vector2F(32, 32) + new Vector2F(8, 14);
+				roomControl.SpawnEntity(monster, position);
 			}
 		}
 

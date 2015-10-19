@@ -19,51 +19,6 @@ using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaEditor.PropertiesEditor {
 	
-	class ResourcePropertyEditor<T> : UITypeEditor {
-        private IWindowsFormsEditorService svc = null;
-
-		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
-			return UITypeEditorEditStyle.DropDown;
-		}
-
-		public override object EditValue(ITypeDescriptorContext context, System.IServiceProvider provider, object value) {
-			svc = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
-			
-			//Foo foo = value as Foo;
-			
-			if (svc != null)// && foo != null)
-			{
-				ListBox comboBox = new ListBox();
-				comboBox.BorderStyle = BorderStyle.None;
-
-				Dictionary<string, T> resourceMap = Resources.GetResourceDictionary<T>();
-				comboBox.Items.Add("(none)");
-				foreach (KeyValuePair<string, T> entry in resourceMap) {
-					comboBox.Items.Add(entry.Key);
-				}
-
-				comboBox.SelectedValueChanged += new EventHandler(this.ValueChanged);
-				//SetEditorProps((ComboBox) context.Instance, comboBox);
-				
-				svc.DropDownControl(comboBox);
-
-				if (comboBox.SelectedIndex >= 0) {
-					if (comboBox.SelectedIndex == 0)
-						value = "";
-					else 
-						value = (string) comboBox.Items[comboBox.SelectedIndex];
-				}
-			}
-			return value; // can also replace the wrapper object here
-		}
-
-        private void ValueChanged(object sender, EventArgs e) {
-            if (svc != null) {
-                svc.CloseDropDown();
-            }
-        }
-	}
-
 
 	[TypeConverter(typeof(PropertiesContainer.CustomObjectConverter))]
 	public class PropertiesContainer {

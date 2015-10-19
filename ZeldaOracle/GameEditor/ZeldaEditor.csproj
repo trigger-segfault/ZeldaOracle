@@ -69,6 +69,8 @@
     <Compile Include="PropertiesEditor\CustomEditors\DropDownPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\DirectionPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\EnumComboBox.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\FormPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\ResourcePropertyEditor.cs" />
     <Compile Include="RenameForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,7 +97,7 @@
       <DependentUpon>TextMessageEditorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PropertiesEditor\CustomPropertyDescriptor.cs" />
-    <Compile Include="PropertiesEditor\SpriteIndexComboBox.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\SpriteIndexComboBox.cs" />
     <Compile Include="TileDisplay.cs">
       <SubType>Component</SubType>
     </Compile>

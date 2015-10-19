@@ -212,6 +212,7 @@
     <Compile Include="Game\Debug\GameDebug.cs" />
     <Compile Include="Game\Entities\Collectibles\Collectible.cs" />
     <Compile Include="Game\Entities\CollisionInfo.cs" />
+    <Compile Include="Game\Entities\DamageInfo.cs" />
     <Compile Include="Game\Entities\Effects\EffectGale.cs" />
     <Compile Include="Game\Entities\Effects\Fire.cs" />
     <Compile Include="Game\Entities\Effects\EffectFallingObject.cs" />
@@ -331,6 +332,7 @@
     <Compile Include="Game\Tiles\EventTiles\EventTile.cs" />
     <Compile Include="Game\Tiles\EventTiles\EventTileDataInstance.cs" />
     <Compile Include="Game\Tiles\EventTiles\EventTileData.cs" />
+    <Compile Include="Game\Tiles\EventTiles\MonsterEvent.cs" />
     <Compile Include="Game\Tiles\EventTiles\NPCEvent.cs" />
     <Compile Include="Game\Tiles\EventTiles\WarpEvent.cs" />
     <Compile Include="Game\Tiles\Tile.cs" />
