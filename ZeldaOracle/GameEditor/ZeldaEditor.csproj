@@ -65,6 +65,10 @@
     <Compile Include="Control\EditorResources.cs" />
     <Compile Include="Control\PropertyGridControl.cs" />
     <Compile Include="Control\TileDrawModes.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\CustomPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\DropDownPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\DirectionPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\EnumComboBox.cs" />
     <Compile Include="RenameForm.cs">
       <SubType>Form</SubType>
     </Compile>

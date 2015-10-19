@@ -38,7 +38,7 @@ namespace ZeldaEditor.Control {
 			propertyGrid.SelectedObject = propertiesContainer;
 
 			// Setup property editor types.
-			typeEditors = new Dictionary<string,UITypeEditor>();
+			typeEditors = new Dictionary<string, UITypeEditor>();
 			typeEditors["sprite"]			= new ResourcePropertyEditor<Sprite>();
 			typeEditors["animation"]		= new ResourcePropertyEditor<Animation>();
 			typeEditors["collision_model"]	= new ResourcePropertyEditor<CollisionModel>();
@@ -49,9 +49,15 @@ namespace ZeldaEditor.Control {
 			typeEditors["text_message"]		= new TextMessagePropertyEditor();
 			typeEditors["script"]			= null;
 			typeEditors["sprite_index"]		= new SpriteIndexComboBox(this);
-			typeEditors["direction"]		= null;
+			typeEditors["direction"]		= new DirectionPropertyEditor();
 			typeEditors["angle"]			= null;
+			typeEditors["enum"]				= new EnumComboBox();
+			typeEditors["enum_flags"]		= null;
 
+			foreach (KeyValuePair<string, UITypeEditor> entry in typeEditors) {
+				if (entry.Value is CustomPropertyEditor)
+					((CustomPropertyEditor) entry.Value).Initialize(this);
+			}
 		}
 
 

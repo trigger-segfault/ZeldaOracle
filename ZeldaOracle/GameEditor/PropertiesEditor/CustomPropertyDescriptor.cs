@@ -42,6 +42,13 @@ namespace ZeldaEditor.PropertiesEditor {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
+		// Get the editor to use to edit this property.
+		public override object GetEditor(Type editorBaseType) {
+			if (editor != null && editorBaseType == typeof(UITypeEditor))
+				return editor;
+			return base.GetEditor(editorBaseType);
+		}
+
 		// Returns true if the property is modified.
 		public override bool ShouldSerializeValue(object component) {
 			return modifiedProperties.IsPropertyModified(property.Name);
@@ -51,26 +58,28 @@ namespace ZeldaEditor.PropertiesEditor {
 		public override bool CanResetValue(object component) {
 			return true;
 		}
+			
+		// Get the displayed value of the property.
+		public override object GetValue(object component) {
+			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.List)
+				return null;
+			return property.ObjectValue;
+		}
 
 		// Reset the value to the default.
 		public override void ResetValue(object component) {
 			// TODO: override ResetValue
+			Property rootProperty = property.GetRootProperty();
+			if (property != rootProperty)
+				property.SetValue(rootProperty);
 		}
 
-		// Get the editor to use to edit this property.
-		public override object GetEditor(Type editorBaseType) {
-			if (editor != null && editorBaseType == typeof(UITypeEditor))
-				return editor;
-			return base.GetEditor(editorBaseType);
-		}
-
-		// Set the value of the property.
+		// Set the displayed value of the property.
 		public override void SetValue(object component, object value) {
 			bool isModified = modifiedProperties.IsPropertyModified(property.Name);
 
 			// If the property hasn't been modified, then create a new property for it.
 			if (!isModified) {
-				Console.WriteLine("Creating new modified property");
 				property = new ZeldaOracle.Common.Scripting.Property(property);
 				modifiedProperties.Add(property);
 			}
@@ -87,23 +96,9 @@ namespace ZeldaEditor.PropertiesEditor {
 				
 			// Check if base and modified are the same. If so, remove the modified one.
 			if (isModified && !modifiedProperties.IsPropertyModified(property.Name)) {
-				Console.WriteLine("Removing redundant modified property");
 				modifiedProperties.Remove(property.Name);
 				property = modifiedProperties.GetProperty(property.Name, true);
 			}
-		}
-			
-		// Get the value of the property.
-		public override object GetValue(object component) {
-			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.String)
-				return property.StringValue;
-			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Integer)
-				return property.IntValue;
-			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Float)
-				return property.FloatValue;
-			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Boolean)
-				return property.BoolValue;
-			return null;
 		}
 
 

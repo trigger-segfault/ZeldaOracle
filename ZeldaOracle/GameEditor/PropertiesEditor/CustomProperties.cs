@@ -94,56 +94,33 @@ namespace ZeldaEditor.PropertiesEditor {
 		}
 
 		public void AddProperties(Properties properties) {
-			// Add the base properties.
+			// Add the base properties recursively.
 			if (properties.BaseProperties != null)
 				AddProperties(properties.BaseProperties);
+			int basePropertyCount = propertyList.Count;
 			
-			int basePropertyCount = propertyList.Count;
-
 			// Add the properties.
 			foreach (KeyValuePair<string, Property> propertyEntry in properties.PropertyMap) {
-				bool hasBaseProperty = false;
+				bool okayToAdd = true;
 
 				// Check if there is a matching base property.
 				for (int i = 0; i < basePropertyCount; i++) {
 					if (propertyList[i].Name == propertyEntry.Value.Name) {
 						propertyList[i] = propertyEntry.Value;
-						hasBaseProperty = true;
+						okayToAdd = false;
 						break;
 					}
 				}
-				if (!hasBaseProperty)
-					propertyList.Add(propertyEntry.Value);
-			}
 
-			for (int i = 0; i < propertyList.Count; i++) {
-				if (propertyList[i].HasDocumentation && propertyList[i].Documentation.IsHidden) {
-					propertyList.RemoveAt(i);
-					i--;
+				// Make sure property isn't hidden.
+				if (okayToAdd) {
+					PropertyDocumentation doc = propertyEntry.Value.GetRootDocumentation();
+					if (doc != null && doc.IsHidden)
+						okayToAdd = false;
 				}
-			}
-		}
 
-		public void AddBaseProperties(Properties properties, Properties modifiedProperties) {
-			// Add the base properties.
-			if (properties.BaseProperties != null)
-				AddBaseProperties(properties.BaseProperties, modifiedProperties);
-
-			int basePropertyCount = propertyList.Count;
-
-			// Add the properties.
-			foreach (KeyValuePair<string, Property> propertyEntry in properties.PropertyMap) {
-				bool hasBaseProperty = false;
-
-				// Check if there is a matching base property.
-				for (int i = 0; i < basePropertyCount; i++) {
-					if (propertyList[i].Name == propertyEntry.Value.Name) {
-						propertyList[i] = propertyEntry.Value;
-						hasBaseProperty = true;
-						break;
-					}
-				}
-				if (!hasBaseProperty)
+				// Add the property.
+				if (okayToAdd)
 					propertyList.Add(propertyEntry.Value);
 			}
 		}

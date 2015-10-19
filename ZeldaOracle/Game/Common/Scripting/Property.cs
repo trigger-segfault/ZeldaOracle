@@ -7,7 +7,6 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Common.Scripting {
 	
-
 	public delegate void PropertyAction(IPropertyObject sender, object value);
 
 	/// <summary>
@@ -23,88 +22,6 @@ namespace ZeldaOracle.Common.Scripting {
 
 
 	/// <summary>
-	/// PropertyDocumentation
-	/// </summary>
-	public class PropertyDocumentation {
-		private string	readableName; // A name that's more human-readable
-		private string	editorType;
-		private string	category;
-		private string	description;
-		private bool	isEditable;
-		private bool	isHidden;
-
-
-		//-----------------------------------------------------------------------------
-		// Constructors
-		//-----------------------------------------------------------------------------
-
-		public PropertyDocumentation() {
-			readableName	= "";
-			editorType		= "";
-			category		= "";
-			description		= "";
-			isEditable		= true;
-			isHidden		= false;
-		}
-
-		public PropertyDocumentation(string readableName, string editorType, string category, string description, bool isEditable, bool isHidden) {
-			this.readableName	= readableName;
-			this.editorType		= editorType;
-			this.category		= category;
-			this.description	= description;
-			this.isEditable		= isEditable;
-			this.isHidden		= isHidden;
-		}
-
-		public PropertyDocumentation(PropertyDocumentation copy) {
-			readableName	= copy.readableName;
-			editorType		= copy.editorType;
-			category		= copy.category;
-			description		= copy.description;
-			isEditable		= copy.isEditable;
-			isHidden		= copy.isHidden;
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-
-		public string ReadableName {
-			get { return readableName; }
-			set { readableName = value; }
-		}
-
-		public string EditorType {
-			get { return editorType; }
-			set { editorType = value; }
-		}
-
-		public string Category {
-			get { return category; }
-			set { category = value; }
-		}
-
-		public string Description {
-			get { return description; }
-			set { description = value; }
-		}
-		
-		// Can the property be edited using the property editor?
-		public bool IsEditable {
-			get { return isEditable; }
-			set { isEditable = value; }
-		}
-
-		// Is the property not shown in the property editor?
-		public bool IsHidden {
-			get { return isHidden; }
-			set { isHidden = value; }
-		}
-	}
-
-
-	/// <summary>
 	/// A proprety represents a piece of data that can be represented
 	/// multiple types including lists of other properties.
 	/// </summary>
@@ -114,7 +31,7 @@ namespace ZeldaOracle.Common.Scripting {
 		private string name;
 		// The data type of the property.
 		private PropertyType type;
-		// The object value for the property.
+		// The object value for the property. For lists, this is used to store the child count as an integer.
 		private object objectValue;
 		// If this property is part of a list of properties, then 'next' points to the next property in the list.
 		private Property next;
@@ -142,9 +59,10 @@ namespace ZeldaOracle.Common.Scripting {
 			this.documentation	= null;
 			this.action			= null;
 			this.properties		= null;
-
+			
+			// Add the property action.
 			if (Resources.ExistsResource<PropertyAction>(name))
-				this.action		= Resources.GetResource<PropertyAction>(name);
+				this.action = Resources.GetResource<PropertyAction>(name);
 		}
 		
 		// Construct a property as a copy of another.
@@ -170,19 +88,12 @@ namespace ZeldaOracle.Common.Scripting {
 		//-----------------------------------------------------------------------------
 		// Accessors
 		//-----------------------------------------------------------------------------
-
+		
+		// Return true of this and another property have the equivilent values.
 		public bool EqualsValue(Property other) {
 			if (type != other.type || type == PropertyType.List)
 				return false;
-			else if (type == PropertyType.String)
-				return (StringValue == other.StringValue);
-			else if (type == PropertyType.Integer)
-				return (IntValue == other.IntValue);
-			else if (type == PropertyType.Float)
-				return (FloatValue == other.FloatValue);
-			else if (type == PropertyType.Boolean)
-				return (BoolValue == other.BoolValue);
-			return false;
+			return objectValue.Equals(other.objectValue);
 		}
 
 		// Get the child at the given index (if this is a list).
@@ -202,23 +113,44 @@ namespace ZeldaOracle.Common.Scripting {
 			return null; // ERROR: Index out of bounds!
 		}
 
+		// Find the root that this property is a modification of.
+		public Property GetRootProperty() {
+			if (properties.BaseProperties == null)
+				return this;
+			return properties.GetRootProperty(name);
+		}
+
+		// Get the root documentation for this property.
+		public PropertyDocumentation GetRootDocumentation() {
+			return GetRootProperty().Documentation;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Mutators
 		//-----------------------------------------------------------------------------
 
-		/*public void SetValues(Property values) {
-			objectValue	= values.objectValue;
-			RunAction(properties.PropertyObject, objectValue);
-		}*/
+		// Set the value of this property by another property.
+		// NOTE: This won't work with lists.
+		public void SetValue(Property other) {
+			if (type == PropertyType.List || other.type == PropertyType.List) {
+				Console.WriteLine("ERROR: Lists not supported in properties yet!");
+				return;
+			}
+			type = other.type;
+			ObjectValue = other.objectValue;
+		}
 
-		public Property SetDocumentation(string readableName, string editorType, string category,
-			string description, bool isEditable = true, bool isHidden = false)
+		// Create the documentation for this property.
+		public Property SetDocumentation(string readableName, string editorType, string editorSubType, string category,
+				string description, bool isEditable = true, bool isHidden = false)
 		{
-			documentation = new PropertyDocumentation(readableName, editorType, category, description, isEditable, isHidden);
+			documentation = new PropertyDocumentation(readableName,
+				editorType, editorSubType, category, description, isEditable, isHidden);
 			return this;
 		}
 
+		// Set the property action to occur when this property is modified.
 		public Property SetAction(PropertyAction action) {
 			this.action = action;
 			return this;
@@ -230,18 +162,13 @@ namespace ZeldaOracle.Common.Scripting {
 		//-----------------------------------------------------------------------------
 
 		public void RunAction(IPropertyObject sender, object value) {
-			if (action != null) {
+			if (action != null)
 				action(sender, value);
-				Console.WriteLine("Run Action - " + name);
-			}
-			else {
-				Console.WriteLine("Try Action - " + name);
-			}
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Static methods
+		// Static Factory Methods
 		//-----------------------------------------------------------------------------
 		
 		// Create a list of properties.
@@ -324,7 +251,7 @@ namespace ZeldaOracle.Common.Scripting {
 		}
 
 		public string StringValue {
-			get { return (string)objectValue; }
+			get { return (string) objectValue; }
 			set {
 				objectValue = value;
 				if (properties != null)
@@ -333,7 +260,7 @@ namespace ZeldaOracle.Common.Scripting {
 		}
 
 		public int IntValue {
-			get { return (int)objectValue; }
+			get { return (int) objectValue; }
 			set {
 				objectValue = value;
 				if (properties != null)
@@ -342,7 +269,7 @@ namespace ZeldaOracle.Common.Scripting {
 		}
 
 		public float FloatValue {
-			get { return (float)objectValue; }
+			get { return (float) objectValue; }
 			set {
 				objectValue = value;
 				if (properties != null)
@@ -351,7 +278,7 @@ namespace ZeldaOracle.Common.Scripting {
 		}
 
 		public bool BoolValue {
-			get { return (bool)objectValue; }
+			get { return (bool) objectValue; }
 			set {
 				objectValue = value;
 				if (properties != null)
@@ -360,17 +287,7 @@ namespace ZeldaOracle.Common.Scripting {
 		}
 
 		public object Value {
-			get {
-				if (type == PropertyType.String)
-					return StringValue;
-				if (type == PropertyType.Integer)
-					return IntValue;
-				if (type == PropertyType.Float)
-					return FloatValue;
-				if (type == PropertyType.Boolean)
-					return BoolValue;
-				return null;
-			}
+			get { return objectValue; }
 		}
 
 		// Lists.
@@ -392,7 +309,7 @@ namespace ZeldaOracle.Common.Scripting {
 
 		// Return the number of children
 		public int Count {
-			get { return (int)objectValue; }
+			get { return (int) objectValue; }
 			set { objectValue = value; }
 		}
 
