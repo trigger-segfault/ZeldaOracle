@@ -73,7 +73,7 @@ TILE (0, 3);
 END;
 
 TILE (0, 0);
-	FLAGS		Solid, Pickupable, Bombable, Burnable, Switchable, Cuttable;
+	FLAGS		Solid, Pickupable, Bombable, Burnable, Switchable, Cuttable, AbsorbSeeds;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (0, 0);
 	BREAKANIM	effect_leaves;
 	MODEL		block;
@@ -122,24 +122,24 @@ TILE (7, 0);
 END;
 
 TILE (8, 0);
-	FLAGS		Solid, Pickupable, Cuttable, Switchable, movable;
+	FLAGS		Solid, Pickupable, Cuttable, Switchable, Movable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (2, 0);
 	BREAKANIM	effect_rock_break;
 	MODEL		block;
 END;
 
 TILE (9, 0);
-	FLAGS		Solid, Burnable;
+	FLAGS		Solid, Burnable, AbsorbSeeds;
 	MODEL		block;
 END;
 
 TILE (10, 0);
-	FLAGS		Cuttable, Grass, burnable, bombable;
+	FLAGS		Cuttable, Grass, Burnable, Bombable;
 	BREAKANIM	effect_grass_leaves;
 END;
 
 TILE (11, 0);
-	FLAGS		Cuttable, burnable, bombable;
+	FLAGS		Cuttable, Burnable, Bombable;
 	BREAKANIM	effect_grass_leaves;
 END;
 

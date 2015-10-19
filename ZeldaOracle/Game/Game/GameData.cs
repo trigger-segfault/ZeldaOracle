@@ -951,6 +951,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_SWORD_SWING;
 		public static Animation ANIM_SWORD_SPIN;
 		public static Animation ANIM_SWORD_STAB;
+		public static Animation ANIM_SEED_SHOOTER;
 
 		// Projectile animations.
 		public static Animation ANIM_ITEM_BOMB;

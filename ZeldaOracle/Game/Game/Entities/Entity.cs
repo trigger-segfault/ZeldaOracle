@@ -45,6 +45,9 @@ namespace ZeldaOracle.Game.Entities {
 		private bool				isAlive;
 		private bool				isInRoom;
 
+		private Vector2F			previousPosition;
+		private float				previousZPosition;
+
 		protected Vector2F			position;
 		protected float				zPosition;
 		protected PhysicsComponent	physics;
@@ -59,17 +62,19 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public Entity() {
-			roomControl		= null;
-			isAlive			= false;
-			isInRoom		= false;
-			isInitialized	= false;
-			position		= Vector2F.Zero;
-			zPosition		= 0.0f;
-			physics			= new PhysicsComponent(this);
-			graphics		= new GraphicsComponent(this);
-			originOffset	= Point2I.Zero;
-			centerOffset	= Point2I.Zero;
-			actionAlignDistance = 5;
+			roomControl			= null;
+			isAlive				= false;
+			isInRoom			= false;
+			isInitialized		= false;
+			position			= Vector2F.Zero;
+			zPosition			= 0.0f;
+			previousPosition	= Vector2F.Zero;
+			previousZPosition	= 0.0f;
+			physics				= new PhysicsComponent(this);
+			graphics			= new GraphicsComponent(this);
+			originOffset		= Point2I.Zero;
+			centerOffset		= Point2I.Zero;
+			actionAlignDistance	= 5;
 		}
 		
 
@@ -93,6 +98,8 @@ namespace ZeldaOracle.Game.Entities {
 		// Called every step to update the entity.
 		public virtual void Update() {
 			// Update the physics component.
+			previousPosition  = position;
+			previousZPosition = zPosition;
 			if (physics.IsEnabled)
 				physics.Update();
 		}
@@ -162,6 +169,9 @@ namespace ZeldaOracle.Game.Entities {
 			if (!isInitialized) {
 				isInitialized = true;
 				Initialize();
+				physics.Initialize();
+				previousPosition  = position;
+				previousZPosition = zPosition;
 			}
 		}
 
@@ -260,6 +270,14 @@ namespace ZeldaOracle.Game.Entities {
 		public float ZPosition {
 			get { return zPosition; }
 			set { zPosition = value; }
+		}
+		
+		public Vector2F PreviousPosition {
+			get { return previousPosition; }
+		}
+	
+		public float PreviousZPosition {
+			get { return previousZPosition; }
 		}
 	
 		// Gets or sets the entity's physics component.

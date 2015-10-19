@@ -35,12 +35,15 @@ namespace ZeldaOracle.Game.Entities {
 		private PhysicsFlags	flags;
 		private Vector2F		velocity;			// XY-Velocity in pixels per frame.
 		private float			zVelocity;			// Z-Velocity in pixels per frame.
+		private Vector2F		previousVelocity;	// XY-Velocity before physics update is called.
+		private float			previousZVelocity;	// Z-Velocity before physics update is called.
 		private float			gravity;			// Gravity in pixels per frame^2
 		private float			maxFallSpeed;
 		private Rectangle2F		collisionBox;		// The "hard" collision box, used to collide with solid entities/tiles.
 		private Rectangle2F		softCollisionBox;	// The "soft" collision box, used to collide with items, monsters, room edges, etc.
 		private int				autoDodgeDistance; // The maximum distance allowed to dodge collisions.
 
+		private Vector2F		reboundVelocity;
 		private bool			isColliding;
 		private CollisionInfo[] collisionInfo;
 		private bool			hasLanded;
@@ -60,6 +63,8 @@ namespace ZeldaOracle.Game.Entities {
 			this.entity				= entity;
 			this.velocity			= Vector2F.Zero;
 			this.zVelocity			= 0.0f;
+			this.previousVelocity	= Vector2F.Zero;
+			this.previousZVelocity	= 0.0f;
 			this.gravity			= GameSettings.DEFAULT_GRAVITY;
 			this.maxFallSpeed		= GameSettings.DEFAULT_MAX_FALL_SPEED;
 			this.collisionBox		= new Rectangle2F(-4, -10, 8, 9);		// TEMPORARY: this is the player collision box.
@@ -70,6 +75,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.autoDodgeDistance	= 6;
 			this.customCollisionFunction	= null;
 			this.hasLanded			= false;
+			this.reboundVelocity	= Vector2F.Zero;
 
 			this.collisionInfo = new CollisionInfo[Directions.Count];
 			for (int i = 0; i < Directions.Count; i++)
@@ -98,10 +104,19 @@ namespace ZeldaOracle.Game.Entities {
 		// Update methods
 		//-----------------------------------------------------------------------------
 
+		public void Initialize() {
+			previousVelocity  = velocity;
+			previousZVelocity = zVelocity;
+		}
+
 		public void Update() {
+			previousVelocity = velocity;
+			previousZVelocity = zVelocity;
+
 			// Remove collision state flags.
 			hasLanded = false;
 			isColliding = false;
+			reboundVelocity = Vector2F.Zero;
 			for (int i = 0; i < Directions.Count; i++)
 				collisionInfo[i].Clear();
 
@@ -122,6 +137,7 @@ namespace ZeldaOracle.Game.Entities {
 
 			// Apply velocity.
 			entity.Position += velocity;
+			velocity += reboundVelocity;
 
 			// Check the flags of the tiles below the entity.
 			CheckGroundTiles();
@@ -448,7 +464,9 @@ namespace ZeldaOracle.Game.Entities {
 				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.X + velocity.X, entity.Y);
 				if (myBox.Intersects(block)) {
 					isColliding	= true;
-					velocity.X	= 0.0f;
+					if (flags.HasFlag(PhysicsFlags.ReboundSolid) && reboundVelocity.X == 0.0f)
+						reboundVelocity.X = -velocity.X;
+					velocity.X = 0.0f;
 
 					if (myBox.Center.X < block.Center.X) {
 						// TODO: David refactor this hackish 'if statement' to prevent the player from jittering when getting pushed vertically.
@@ -473,7 +491,9 @@ namespace ZeldaOracle.Game.Entities {
 				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position + velocity);
 				if (myBox.Intersects(block)) {
 					isColliding	= true;
-					velocity.Y	= 0.0f;
+					if (flags.HasFlag(PhysicsFlags.ReboundSolid) && reboundVelocity.Y == 0.0f)
+						reboundVelocity.Y = -velocity.Y;
+					velocity.Y = 0.0f;
 
 					if (myBox.Center.Y < block.Center.Y) {
 						entity.Y = block.Top - collisionBox.Bottom;
@@ -624,6 +644,14 @@ namespace ZeldaOracle.Game.Entities {
 		public float ZVelocity {
 			get { return zVelocity; }
 			set { zVelocity = value; }
+		}
+
+		public Vector2F PreviousVelocity {
+			get { return previousVelocity; }
+		}
+
+		public float PreviousZVelocity {
+			get { return previousZVelocity; }
 		}
 		
 		public float Gravity {
