@@ -66,6 +66,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerHoldSwordState	stateHoldSword;
 		private PlayerSwordStabState	stateSwordStab;
 		private PlayerSpinSwordState	stateSpinSword;
+		private PlayerSeedShooterState	stateSeedShooter;
 		private PlayerRespawnDeathState stateRespawnDeath;
 
 		// TEMPORARY: Change tool drawing to something else
@@ -138,6 +139,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateHoldSword		= new PlayerHoldSwordState();
 			stateSwordStab		= new PlayerSwordStabState();
 			stateSpinSword		= new PlayerSpinSwordState();
+			stateSeedShooter	= new PlayerSeedShooterState();
 			stateRespawnDeath	= new PlayerRespawnDeathState();
 
 			toolAnimation	= new AnimationPlayer();
@@ -672,6 +674,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerSpinSwordState SpinSwordState {
 			get { return stateSpinSword; }
+		}
+
+		public PlayerSeedShooterState SeedShooterState {
+			get { return stateSeedShooter; }
 		}
 
 		public PlayerRespawnDeathState RespawnDeathState {

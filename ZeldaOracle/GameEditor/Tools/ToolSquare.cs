@@ -103,6 +103,17 @@ namespace ZeldaEditor.Tools {
 		public override void OnMouseDragEnd(MouseEventArgs e) {
 			if (e.Button == MouseButtons.Left && isCreatingSelectionBox) {
 				isCreatingSelectionBox = false;
+				Point2I mousePos  = new Point2I(e.X, e.Y);
+				Point2I tileCoord = LevelDisplayControl.SampleLevelTileCoordinates(mousePos);
+				Point2I minCoord  = GMath.Min(dragBeginTileCoord, tileCoord);
+				Point2I maxCoord  = GMath.Max(dragBeginTileCoord, tileCoord);
+				Point2I totalSize	= editorControl.Level.Dimensions * editorControl.Level.RoomSize;
+				for (int x = minCoord.X; x <= maxCoord.X && x < totalSize.X; x++) {
+					for (int y = minCoord.Y; y <= maxCoord.Y && y < totalSize.Y; y++) {
+						ActivateTile(e.Button, new Point2I(x, y));
+					}
+				}
+				LevelDisplayControl.ClearSelectionBox();
 			}
 		}
 
@@ -116,41 +127,5 @@ namespace ZeldaEditor.Tools {
 				LevelDisplayControl.SetSelectionBox(minCoord, maxCoord - minCoord + Point2I.One);
 			}
 		}
-
-		public override void OnMouseDown(MouseEventArgs e) {
-			base.OnMouseDown(e);
-		}
-
-		public override void OnMouseUp(MouseEventArgs e) {
-			Point2I mousePos  = new Point2I(e.X, e.Y);
-			Point2I tileCoord = LevelDisplayControl.SampleLevelTileCoordinates(mousePos);
-			Point2I minCoord  = GMath.Min(dragBeginTileCoord, tileCoord);
-			Point2I maxCoord  = GMath.Max(dragBeginTileCoord, tileCoord);
-			Point2I totalSize	= editorControl.Level.Dimensions * editorControl.Level.RoomSize;
-			for (int x = minCoord.X; x <= maxCoord.X && x < totalSize.X; x++) {
-				for (int y = minCoord.Y; y <= maxCoord.Y && y < totalSize.Y; y++) {
-					ActivateTile(e.Button, new Point2I(x, y));
-				}
-			}
-			LevelDisplayControl.ClearSelectionBox();
-			base.OnMouseUp(e);
-		}
-
-		public override void OnMouseMove(MouseEventArgs e) {
-			// Check if mouse is over selection.
-			Point2I point = new Point2I(e.X, e.Y);
-			Point2I tileCoord = LevelDisplayControl.SampleLevelTileCoordinates(point);
-			if (!isCreatingSelectionBox && LevelDisplayControl.SelectionBox.Contains(tileCoord)) {
-				MouseCursor = Cursors.SizeAll;
-				editorControl.HighlightMouseTile = false;
-			}
-			else {
-				MouseCursor = Cursors.Default;
-				editorControl.HighlightMouseTile = true;
-			}
-
-			base.OnMouseMove(e);
-		}
-
 	}
 }

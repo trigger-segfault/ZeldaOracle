@@ -36,7 +36,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		// Called when the items button is pressed (A or B).
 		public override void OnButtonPress() {
-			
+			Player.SeedShooterState.Weapon = this;
+			Player.BeginState(Player.SeedShooterState);
 		}
 
 		// Called when the item is added to the inventory list.
@@ -121,6 +122,28 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Called when the stolen item has been returned.
 		public override void OnReturned() {
 
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public SeedType CurrentSeedType {
+			get {
+				string ammoID = ammo[currentAmmo].ID;
+				if (ammoID == "ammo_ember_seeds")
+					return SeedType.Ember;
+				else if (ammoID == "ammo_scent_seeds")
+					return SeedType.Scent;
+				else if (ammoID == "ammo_gale_seeds")
+					return SeedType.Gale;
+				else if (ammoID == "ammo_mystery_seeds")
+					return SeedType.Mystery;
+				else if (ammoID == "ammo_pegasus_seeds")
+					return SeedType.Pegasus;
+				return SeedType.Ember;
+			}
 		}
 	}
 }

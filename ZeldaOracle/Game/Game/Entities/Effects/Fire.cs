@@ -17,6 +17,8 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		public Fire() :
 			base(GameData.ANIM_EFFECT_SEED_EMBER)
 		{
+			EnablePhysics(PhysicsFlags.HasGravity);
+			Graphics.DrawOffset = new Point2I(0, -2);
 		}
 		
 

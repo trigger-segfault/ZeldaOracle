@@ -50,7 +50,7 @@ namespace ZeldaOracle.Game.Entities {
 
 			// Physics.
 			EnablePhysics(PhysicsFlags.Solid | PhysicsFlags.HasGravity);
-			Physics.CollisionBox = new Rectangle2F(-8, -11, 16, 15);
+			Physics.CollisionBox = new Rectangle2F(-8, -11, 16, 13);
 			Physics.SoftCollisionBox = new Rectangle2F(-10, -15, 20, 19);
 
 			// General.

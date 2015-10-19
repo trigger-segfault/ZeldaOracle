@@ -71,7 +71,7 @@ END;
 
 TEMPTILE owl;
 	TYPE		TileOwl;
-	FLAGS		solid;
+	FLAGS		Solid, AbsorbSeeds;
 	MODEL		block;
 	PROPERTIES
 		(string, text, "<red>undefined<red>",

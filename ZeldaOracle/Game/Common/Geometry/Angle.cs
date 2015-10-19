@@ -5,6 +5,11 @@ using System.Text;
 
 namespace ZeldaOracle.Common.Geometry {
 
+	public enum WindingOrder {
+		Clockwise,
+		CounterClockwise,
+	}
+
 	public static class Angles {
 
 		//-----------------------------------------------------------------------------
@@ -35,6 +40,22 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 		// Methods
 		//-----------------------------------------------------------------------------
+
+		// Return the modular distance from one angle to another using the given winding order.
+		public static int GetAngleDistance(int startAngle, int endAngle, WindingOrder windingOrder) {
+			if (windingOrder == WindingOrder.Clockwise) {
+				if (endAngle > startAngle)
+					return (startAngle + Angles.AngleCount - endAngle);
+				else
+					return (startAngle - endAngle);
+			}
+			else {
+				if (endAngle < startAngle)
+					return (endAngle + Angles.AngleCount - startAngle);
+				else
+					return (endAngle - startAngle);
+			}
+		}
 
 		public static bool IsHorizontal(int angle) {
 			return (angle % 4 == 0);
