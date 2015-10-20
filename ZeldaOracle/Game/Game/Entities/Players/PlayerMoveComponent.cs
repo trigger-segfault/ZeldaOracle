@@ -297,14 +297,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 					// Set the players velocity.
 					if (mode.DirectionSnapCount > 0) {
 						// Snap velocity direction.
-						float snapInterval = ((float) GMath.Pi * 2.0f) / mode.DirectionSnapCount;
-						float theta = (float) Math.Atan2(-motion.Y, motion.X);
-						if (theta < 0)
-							theta += (float) Math.PI * 2.0f;
-						int angle = (int) ((theta / snapInterval) + 0.5f);
-						player.Physics.Velocity = new Vector2F(
-							(float)  Math.Cos(angle * snapInterval) * motion.Length,
-							(float) -Math.Sin(angle * snapInterval) * motion.Length);
+						player.Physics.Velocity = Vector2F.SnapDirectionByCount(motion, mode.DirectionSnapCount);
 					}
 					else {
 						// Don't snap velocity direction.

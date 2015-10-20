@@ -43,7 +43,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			if (respawning) {
 				if (player.RoomControl.ViewControl.IsCenteredOnPosition(player.Center)) {
 					player.Graphics.IsVisible = true;
-					player.Hurt(2);
+					player.Hurt(new DamageInfo(2));
 					player.BeginNormalState();
 				}
 			}

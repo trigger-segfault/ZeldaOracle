@@ -26,7 +26,7 @@ namespace ZeldaOracle.Game.Worlds {
 			this.properties.BaseProperties = new Properties();
 
 			this.properties.BaseProperties.Set("id", "world_name")
-				.SetDocumentation("ID", "", "", "The id used to refer to this world.", true, false);
+				.SetDocumentation("ID", "", "", "", "The id used to refer to this world.", true, false);
 		}
 
 

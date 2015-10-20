@@ -32,22 +32,15 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 
 	}
 	
-	
-	class TextMessagePropertyEditor : UITypeEditor {
-		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
-			return UITypeEditorEditStyle.Modal;
+	public class TextMessagePropertyEditor : FormPropertyEditor {
+		public override Form CreateForm(object value) {
+			TextMessageEditorForm form = new TextMessageEditorForm();
+			form.MessageText = (string) value;
+			return form;
 		}
 
-		public override object EditValue(ITypeDescriptorContext context, System.IServiceProvider provider, object value) {
-			IWindowsFormsEditorService svc = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
-			if (svc != null) {
-				using (TextMessageEditorForm form = new TextMessageEditorForm()) {
-					form.MessageText = (string) value;
-					if (svc.ShowDialog(form) == DialogResult.OK)
-						value = form.MessageText;
-				}
-			}
-			return value;
+		public override object OnResultOkay(Form form, object value) {
+			return (form as TextMessageEditorForm).MessageText;
 		}
 	}
 }

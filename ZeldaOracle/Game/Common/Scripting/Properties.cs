@@ -39,6 +39,16 @@ namespace ZeldaOracle.Common.Scripting {
 			return map[name];
 		}
 		
+		// Get the root property with the given name.
+		public Property GetRootProperty(string name) {
+			Property root = null;
+			if (baseProperties != null)
+				root = baseProperties.GetRootProperty(name);
+			if (root == null)
+				root = GetProperty(name, false);
+			return root;
+		}
+		
 
 		//-----------------------------------------------------------------------------
 		// Property existance

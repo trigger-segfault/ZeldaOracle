@@ -129,6 +129,7 @@
     <None Include="Common\Debug\DebugMenuItem.cs" />
     <None Include="Common\Debug\RadioButtonMenuItem.cs" />
     <None Include="Common\Debug\ToggleMenuItem.cs" />
+    <Compile Include="Common\Scripting\ScriptingAttributes.cs" />
     <Compile Include="Common\Geometry\Align.cs" />
     <Compile Include="Common\Geometry\Angle.cs" />
     <Compile Include="Common\Geometry\Direction.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Common\Input\MouseButtons.cs" />
     <Compile Include="Common\Input\Controls\Trigger.cs" />
     <Compile Include="Common\Scripting\Properties.cs" />
+    <Compile Include="Common\Scripting\PropertyDocumentation.cs" />
     <Compile Include="Common\Scripting\Property.cs" />
     <Compile Include="Common\Scripts\AnimationSR.cs" />
     <Compile Include="Common\Scripts\CommandParam.cs" />
@@ -210,6 +212,7 @@
     <Compile Include="Game\Debug\GameDebug.cs" />
     <Compile Include="Game\Entities\Collectibles\Collectible.cs" />
     <Compile Include="Game\Entities\CollisionInfo.cs" />
+    <Compile Include="Game\Entities\DamageInfo.cs" />
     <Compile Include="Game\Entities\Effects\EffectGale.cs" />
     <Compile Include="Game\Entities\Effects\Fire.cs" />
     <Compile Include="Game\Entities\Effects\EffectFallingObject.cs" />
@@ -235,6 +238,9 @@
     <Compile Include="Game\Entities\Players\PlayerState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSwimState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSwingState.cs" />
+    <Compile Include="Game\Entities\Projectiles\Boomerang.cs" />
+    <Compile Include="Game\Entities\Projectiles\SwordBeam.cs" />
+    <Compile Include="Game\Entities\Projectiles\Arrow.cs" />
     <Compile Include="Game\Entities\Projectiles\Bomb.cs" />
     <Compile Include="Game\Entities\Projectiles\CarriedTile.cs" />
     <Compile Include="Game\Entities\Projectiles\Projectile.cs" />
@@ -329,6 +335,7 @@
     <Compile Include="Game\Tiles\EventTiles\EventTile.cs" />
     <Compile Include="Game\Tiles\EventTiles\EventTileDataInstance.cs" />
     <Compile Include="Game\Tiles\EventTiles\EventTileData.cs" />
+    <Compile Include="Game\Tiles\EventTiles\MonsterEvent.cs" />
     <Compile Include="Game\Tiles\EventTiles\NPCEvent.cs" />
     <Compile Include="Game\Tiles\EventTiles\WarpEvent.cs" />
     <Compile Include="Game\Tiles\Tile.cs" />

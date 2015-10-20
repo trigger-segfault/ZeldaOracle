@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
@@ -15,8 +17,9 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		Tunnel		= 0,
 		Entrance	= 1,
 		Stairs		= 2,
-
-		Count		= 3
+		
+		[ScriptingAttributes.Hidden]
+		Count		= 3,
 	}
 
 	public class WarpEvent : EventTile {

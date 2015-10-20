@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Entities.Monsters;
 
 namespace ZeldaOracle.Game.Entities.Effects {
 	public class Fire : Effect {
@@ -19,6 +20,17 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		{
 			EnablePhysics(PhysicsFlags.HasGravity);
 			Graphics.DrawOffset = new Point2I(0, -2);
+			Physics.AddCollisionHandler(typeof(Monster), CollisionBoxType.Soft, CollideWithMonster);
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Collision Handlers
+		//-----------------------------------------------------------------------------
+
+		private void CollideWithMonster(Entity entity) {
+			Monster monster = entity as Monster;
+			monster.TriggerInteraction(monster.HandlerFire, this);
 		}
 		
 
@@ -39,11 +51,6 @@ namespace ZeldaOracle.Game.Entities.Effects {
 				if (tile != null)
 					tile.OnBurn();
 			}
-		}
-
-		public override void Update() {
-			base.Update();
-			// TODO: collide with monsters.
 		}
 	}
 }
