@@ -61,6 +61,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public override void OnLand() {
+			// TODO: Interactions with monsters.
 			Break();
 			base.OnLand();
 		}

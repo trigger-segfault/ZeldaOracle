@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
 	
@@ -9,8 +10,12 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 	public class Projectile : Entity {
 
-		private int		angle;
-		private Entity	owner;
+		protected int		angle;
+		protected int		direction;
+		protected Entity	owner;
+		protected bool		syncAnimationWithAngle;
+		protected bool		syncAnimationWithDirection;
+
 		private event Action eventCollision;
 		private event Action eventLand;
 
@@ -22,13 +27,17 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public Projectile() {
 			EnablePhysics();
 
-			eventCollision = null;
-			eventLand = null;
-			angle = 0;
-			owner = null;
+			syncAnimationWithAngle = false;
+			syncAnimationWithDirection = false;
 
-			Graphics.IsRipplesEffectVisible = false;
-			Graphics.IsGrassEffectVisible = false;
+			owner			= null;
+			eventCollision	= null;
+			eventLand		= null;
+			angle			= 0;
+			direction		= 0;
+
+			Graphics.IsRipplesEffectVisible	= false;
+			Graphics.IsGrassEffectVisible	= false;
 		}
 
 
@@ -43,6 +52,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		public override void Initialize() {
 			base.Initialize();
+
+			if (syncAnimationWithDirection)
+				Graphics.SubStripIndex = direction;
+			else if (syncAnimationWithAngle)
+				Graphics.SubStripIndex = angle;
 		}
 
 		public override void Update() {
@@ -53,6 +67,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			if (physics.IsColliding && eventCollision != null) {
 				eventCollision();
 			}
+			
+			if (syncAnimationWithDirection)
+				Graphics.SubStripIndex = direction;
+			else if (syncAnimationWithAngle)
+				Graphics.SubStripIndex = angle;
 		}
 
 		public override void Draw(Common.Graphics.Graphics2D g) {
@@ -66,7 +85,19 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		public int Angle {
 			get { return angle; }
-			set { angle = value; }
+			set {
+				angle = value;
+				if (angle % 2 == 0)
+					direction = angle / 2;
+			}
+		}
+		
+		public int Direction {
+			get { return direction; }
+			set {
+				direction = value;
+				angle = Directions.ToAngle(direction);
+			}
 		}
 
 		public Entity Owner {

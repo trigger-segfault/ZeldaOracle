@@ -492,5 +492,26 @@ public struct Vector2F {
 		return (this - ProjectionOn(v));
 	}
 
+	//-----------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------
+
+	public static Vector2F CreatePolar(float length, float direction) {
+		return new Vector2F(length, direction, true);
+	}
+
+	public static Vector2F SnapDirection(Vector2F v, float angleSnapInterval) {
+		float theta = v.Direction;
+		if (theta < 0.0f)
+			theta += GMath.FullAngle;
+		int angleIndex = (int) ((theta / angleSnapInterval) + 0.5f); // Round to nearest interval.
+		float length = v.Length;
+		return Vector2F.CreatePolar(length, angleIndex * angleSnapInterval);
+	}
+
+	public static Vector2F SnapDirectionByCount(Vector2F v, int intervalCount) {
+		return SnapDirection(v, GMath.FullAngle / intervalCount);
+	}
+
 }
 } // End namespace

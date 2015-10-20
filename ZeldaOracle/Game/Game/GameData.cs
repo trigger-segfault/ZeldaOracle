@@ -944,6 +944,9 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PLAYER_CRUSH_HORIZONTAL;
 		public static Animation ANIM_PLAYER_INVISIBLE;
 
+		// Monster animations.
+		public static Animation ANIM_MONSTER_OCTOROK;
+
 		// Weapon animations.
 		public static Animation ANIM_SWORD_HOLD;
 		public static Animation ANIM_SWORD_CHARGED;
@@ -956,6 +959,9 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_ITEM_BOMB;
 		public static Animation ANIM_PROJECTILE_PLAYER_ARROW;
 		public static Animation ANIM_PROJECTILE_PLAYER_ARROW_CRASH;
+		public static Animation ANIM_PROJECTILE_SWORD_BEAM;
+		public static Animation ANIM_PROJECTILE_PLAYER_BOOMERANG_1;
+		public static Animation ANIM_PROJECTILE_PLAYER_BOOMERANG_2;
 	
 		// Effect animations.
 		public static Animation ANIM_EFFECT_DIRT;
@@ -981,6 +987,8 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_EFFECT_OWL_SPARKLE;
 		public static Animation ANIM_ITEM_SCENT_POD;
 		public static Animation ANIM_EFFECT_FALLING_OBJECT;
+		public static Animation ANIM_EFFECT_CLING;
+		public static Animation ANIM_EFFECT_CLING_LIGHT;
 
 
 		//-----------------------------------------------------------------------------

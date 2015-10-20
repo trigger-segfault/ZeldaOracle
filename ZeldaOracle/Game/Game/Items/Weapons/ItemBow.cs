@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Input;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Effects;
+using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Players.States;
 
@@ -41,53 +42,21 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		// Called when the items button is pressed (A or B).
 		public override void OnButtonPress() {
-			// Shoot an arrow!
 			if (ammo[currentAmmo].IsEmpty)
 				return;
 			
 			Player.Direction = Player.UseDirection;
 
-			Projectile projectile = new Projectile();
-				
-			// General
-			projectile.Owner			= Player;
-			projectile.Position			= new Vector2F(Player.X, Player.Y - 8) + (Directions.ToVector(Player.Direction) * 8.0f);
-			projectile.ZPosition		= Player.ZPosition;
-			projectile.Angle			= Directions.ToAngle(Player.Direction);
-			projectile.Physics.Velocity	= Directions.ToVector(Player.Direction) * 3.0f;
+			// Spawn the arrow.
+			// TODO: keep track of arrows (only can shoot 2 at a time).
+			Arrow arrow = new Arrow();
+			arrow.Owner				= Player;
+			arrow.Position			= Player.Center + (Directions.ToVector(Player.Direction) * 8.0f);
+			arrow.ZPosition			= Player.ZPosition;
+			arrow.Direction			= Player.Direction;
+			arrow.Physics.Velocity	= Directions.ToVector(Player.Direction) * GameSettings.PROJECTILE_ARROW_SPEED;
+			RoomControl.SpawnEntity(arrow);
 
-			Player.Direction = Player.Direction;
-
-			// Graphics.
-			projectile.Graphics.SubStripIndex = projectile.Angle;
-			projectile.Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_PLAYER_ARROW);
-
-			// Physics.
-			projectile.Physics.CollisionBox	= new Rectangle2F(-2, -2, 4, 4);
-			projectile.EnablePhysics(PhysicsFlags.CollideWorld | PhysicsFlags.LedgePassable |
-								PhysicsFlags.HalfSolidPassable | PhysicsFlags.DestroyedOutsideRoom);
-
-			// Crash event.
-			Vector2F v = projectile.Physics.Velocity;
-			projectile.EventCollision += delegate() {
-				// Create crash effect.
-				Effect effect = new Effect();
-				effect.Position = projectile.Position;
-				effect.CreateDestroyTimer(32);
-					
-				effect.Physics.Velocity		= -(v.Normalized) * 0.25f;
-				effect.Physics.ZVelocity	= 1;
-				effect.Physics.Gravity		= 0.07f;
-				effect.EnablePhysics(PhysicsFlags.HasGravity);
-					
-				effect.Graphics.IsShadowVisible = false;
-				effect.Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_PLAYER_ARROW_CRASH);
-
-				RoomControl.SpawnEntity(effect);
-				projectile.Destroy();
-			};
-
-			RoomControl.SpawnEntity(projectile);
 			ammo[currentAmmo].Amount--;
 
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);

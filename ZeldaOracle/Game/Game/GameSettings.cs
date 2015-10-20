@@ -52,6 +52,14 @@ namespace ZeldaOracle.Game {
 		public const float				DEFAULT_GRAVITY				= 0.125f;	// Default gravity acceleration in pixels per frame^2
 		public const float				DEFAULT_MAX_FALL_SPEED		= 4.0f;
 		
+		// Projectiles
+		public const float				PROJECTILE_ARROW_SPEED				= 3.0f;
+		public const float				PROJECTILE_SWORD_BEAM_SPEED			= 3.0f;
+		public const float				PROJECTILE_BOOMERANG_SPEED_1		= 1.5f;
+		public const float				PROJECTILE_BOOMERANG_SPEED_2		= 3.0f;
+		public const int				PROJECTILE_BOOMERANG_RETURN_DELAY_1	= 41;
+		public const int				PROJECTILE_BOOMERANG_RETURN_DELAY_2	= 100;
+		
 		// Units
 		public const float				UNIT_KNOCKBACK_SPEED			= 1.0f; // 1.3 ??
 		public const int				UNIT_KNOCKBACK_DURATION			= 16;

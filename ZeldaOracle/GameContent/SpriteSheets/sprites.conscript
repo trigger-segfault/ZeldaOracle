@@ -26,6 +26,7 @@ SPRITESHEET "Tiles/zoneset_large", "zoneset", (16, 16), (1, 1), (0, 0); END;
 SPRITESHEET "Tiles/zoneset_small", "zoneset", (8, 8), (1, 1), (187, 0); END;
 
 SPRITESHEET "player",					(16, 16), (1, 1), (0, 0); END;
+SPRITESHEET "basic_monsters",			(16, 16), (1, 1), (0, 0); END;
 
 SPRITESHEET "Effects/basic_effects",	(16, 16), (1, 1), (0, 0); END;
 SPRITESHEET "Effects/color_effects",	(16, 16), (1, 1), (0, 0); END;

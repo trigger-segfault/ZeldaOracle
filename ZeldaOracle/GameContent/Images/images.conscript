@@ -131,3 +131,7 @@ IMAGE npcs;
 #	VARIANT hurt	"Units/Monsters/monsters_hurt";
 #	END;
 
+IMAGE basic_monsters;
+	VARIANT normal	"Units/Monsters/basic_monsters";
+	VARIANT hurt	"Units/Monsters/basic_monsters_hurt";
+	END;

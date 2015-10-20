@@ -84,25 +84,19 @@ namespace ZeldaOracle.Game.Entities {
 				if (damage.HasSource) {
 					knockbackVelocity = (Center - damage.SourcePosition).Normalized;
 					knockbackVelocity *= GameSettings.UNIT_KNOCKBACK_SPEED;
-				
-					// Snap velocity direction.
-					float snapInterval = ((float) GMath.Pi * 2.0f) / GameSettings.UNIT_KNOCKBACK_ANGLE_SNAP_COUNT;
-					float theta = (float) Math.Atan2(-knockbackVelocity.Y, knockbackVelocity.X);
-					if (theta < 0)
-						theta += (float) Math.PI * 2.0f;
-					int angle = (int) ((theta / snapInterval) + 0.5f);
-					knockbackVelocity = new Vector2F(
-						(float) Math.Cos(angle * snapInterval) * knockbackVelocity.Length,
-						(float) -Math.Sin(angle * snapInterval) * knockbackVelocity.Length);
+					knockbackVelocity = Vector2F.SnapDirectionByCount(
+						knockbackVelocity, GameSettings.UNIT_KNOCKBACK_ANGLE_SNAP_COUNT);
 				}
 				Knockback(knockbackVelocity, knockbackDuration);
 			}
 
 			// Damage.
-			health				= GMath.Max(0, health - damage.Amount);
-			invincibleTimer		= hurtInvincibleDuration;
-			hurtFlickerTimer	= hurtFlickerDuration;
-			graphics.IsHurting	= true;
+			if (damage.Amount > 0) {
+				health				= GMath.Max(0, health - damage.Amount);
+				invincibleTimer		= hurtInvincibleDuration;
+				hurtFlickerTimer	= hurtFlickerDuration;
+				graphics.IsHurting	= true;
+			}
 		}
 
 		public void Knockback(Vector2F velocity, int duration) {
@@ -124,6 +118,11 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 
+		public virtual void OnKnockbackEnd() {
+			physics.Velocity = Vector2F.Zero;
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
@@ -135,10 +134,13 @@ namespace ZeldaOracle.Game.Entities {
 		public override void Update() {
 			
 			// Update knockback.
-			if (knockbackTimer > 0)
+			if (knockbackTimer > 0) {
 				knockbackTimer--;
+				if (knockbackTimer == 0)
+					OnKnockbackEnd();
+			}
 			if (IsBeingKnockedBack)
-				Physics.Velocity += knockbackVelocity;
+				Physics.Velocity = knockbackVelocity; // TODO: player can move while being knocked back.
 			
 			// Update hurt flickering.
 			if (hurtFlickerTimer > 0)

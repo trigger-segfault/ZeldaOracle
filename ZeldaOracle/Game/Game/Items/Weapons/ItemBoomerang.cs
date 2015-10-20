@@ -38,7 +38,17 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		//-----------------------------------------------------------------------------
 
 		public override void OnButtonPress() {
-			
+			Player.Direction = Player.UseDirection;
+
+			// Spawn the boomerang.
+			// TODO: keep track of boomerang entity.
+			Boomerang boomerang = new Boomerang(level);
+			boomerang.Owner		= Player;
+			boomerang.Angle		= Player.UseAngle;
+			RoomControl.SpawnEntity(boomerang, Player.Center, Player.ZPosition);
+
+			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
+			Player.BeginBusyState(10);
 		}
 	}
 }

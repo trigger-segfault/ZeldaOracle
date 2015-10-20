@@ -63,8 +63,8 @@ namespace ZeldaOracle.Game.Debug {
 			// H: Hurt the player in a random direction.
 			if (Keyboard.IsKeyPressed(Keys.H)) {
 				float angle = GRandom.NextFloat(GMath.FullAngle);
-				Vector2F source = gameControl.Player.Position +  new Vector2F(5.0f, angle, true);
-				gameControl.Player.Hurt(new DamageInfo(1, source));
+				Vector2F source = gameControl.Player.Center +  new Vector2F(5.0f, angle, true);
+				gameControl.Player.Hurt(new DamageInfo(0, source));
 			}
 			// M: Play music.
 			if (Keyboard.IsKeyPressed(Keys.M)) {
@@ -106,8 +106,10 @@ namespace ZeldaOracle.Game.Debug {
 			}
 			// 0: Spawn a monster.
 			if (Keyboard.IsKeyPressed(Keys.D0)) {
-				Monster monster = new Monster();
-				Vector2F position = new Vector2F(32, 32) + new Vector2F(8, 14);
+				Monster monster		= new Monster();
+				monster.MaxHealth	= 10;
+				monster.Health		= 10;
+				Vector2F position	= new Vector2F(32, 32) + new Vector2F(8, 14);
 				roomControl.SpawnEntity(monster, position);
 			}
 		}

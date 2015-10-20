@@ -28,6 +28,40 @@ namespace ZeldaOracle.Game.Entities {
 		CollideEntities			= 0x1000,	// Collide with solid entities.
 	}
 
+	public enum CollisionBoxType {
+		Hard = 0,
+		Soft = 1,
+	}
+
+	public delegate void EntityCollisionHandler(Entity entity);
+
+	public class EntityCollisionHandlerInstance {
+		private Type entityType;
+		private EntityCollisionHandler collisionHandler;
+		private CollisionBoxType collisionBoxType;
+
+		public EntityCollisionHandlerInstance(Type entityType, EntityCollisionHandler handler, CollisionBoxType collisionBoxType) {
+			this.entityType = entityType;
+			this.collisionHandler = handler;
+			this.collisionBoxType = collisionBoxType;
+		}
+		
+		public Type EntityType {
+			get { return entityType; }
+			set { entityType = value; }
+		}
+		
+		public EntityCollisionHandler CollisionHandler {
+			get { return collisionHandler; }
+			set { collisionHandler = value; }
+		}
+
+		public CollisionBoxType CollisionBoxType {
+			get { return collisionBoxType; }
+			set { collisionBoxType = value; }
+		}
+	}
+
 	public class PhysicsComponent {
 
 		private Entity			entity;				// The entity this component belongs to.
@@ -50,6 +84,8 @@ namespace ZeldaOracle.Game.Entities {
 		private TileFlags		topTileFlags;		// The flags for the top-most tile the entity is located over.
 		private TileFlags		allTileFlags;		// The group of flags for all the tiles the entity is located over.
 		private Action			customCollisionFunction;
+
+		private List<EntityCollisionHandlerInstance> entityCollisionHandlers;
 
 
 		//-----------------------------------------------------------------------------
@@ -77,12 +113,30 @@ namespace ZeldaOracle.Game.Entities {
 			this.hasLanded			= false;
 			this.reboundVelocity	= Vector2F.Zero;
 
+			this.entityCollisionHandlers = new List<EntityCollisionHandlerInstance>();
+
 			this.collisionInfo = new CollisionInfo[Directions.Count];
 			for (int i = 0; i < Directions.Count; i++)
 				collisionInfo[i].Clear();
 
 		}
 		
+		public void AddCollisionHandler(Type entityType, CollisionBoxType collisionBoxType, EntityCollisionHandler handler) {
+			entityCollisionHandlers.Add(new EntityCollisionHandlerInstance(
+					entityType, handler, collisionBoxType));
+		}
+		
+		public void HandleEntityCollisions(Type entityType, CollisionBoxType collisionBoxType, EntityCollisionHandler handler) {
+			for (int i = 0; i < entity.RoomControl.Entities.Count; i++) {
+				Entity e = entity.RoomControl.Entities[i];
+				if (e.GetType().IsAssignableFrom(entityType) && IsMeetingEntity(e, collisionBoxType)) {
+					handler(e);
+					if (entity.IsDestroyed)
+						return;
+				}
+			}
+		}
+
 		
 		//-----------------------------------------------------------------------------
 		// Flags
@@ -114,11 +168,28 @@ namespace ZeldaOracle.Game.Entities {
 			previousZVelocity = zVelocity;
 
 			// Remove collision state flags.
-			hasLanded = false;
-			isColliding = false;
-			reboundVelocity = Vector2F.Zero;
+			hasLanded		= false;
+			isColliding		= false;
+			reboundVelocity	= Vector2F.Zero;
 			for (int i = 0; i < Directions.Count; i++)
 				collisionInfo[i].Clear();
+
+			// Perform custom collision handling.
+			if (entityCollisionHandlers.Count > 0) {
+				for (int i = 0; i < entity.RoomControl.Entities.Count; i++) {
+					Entity e = entity.RoomControl.Entities[i];
+					for (int j = 0; j < entityCollisionHandlers.Count; j++) {
+						EntityCollisionHandlerInstance handler = entityCollisionHandlers[j];
+						if (e.GetType().IsAssignableFrom(handler.EntityType) &&
+							IsMeetingEntity(e, handler.CollisionBoxType))
+						{
+							entityCollisionHandlers[j].CollisionHandler(e);
+							if (entity.IsDestroyed)
+								return;
+						}
+					}
+				}
+			}
 
 			// Update Z dynamics.
 			UpdateZVelocity();
@@ -335,6 +406,12 @@ namespace ZeldaOracle.Game.Entities {
 				location += Directions.ToPoint(direction);
 			}
 			return null;
+		}
+		
+		public bool IsMeetingEntity(Entity other, CollisionBoxType collisionBoxType, int maxZDistance = 10) {
+			if (collisionBoxType == CollisionBoxType.Hard)
+				return IsHardMeetingEntity(other);
+			return IsSoftMeetingEntity(other, maxZDistance);
 		}
 
 		public bool IsSoftMeetingEntity(Entity other, int maxZDistance = 10) {

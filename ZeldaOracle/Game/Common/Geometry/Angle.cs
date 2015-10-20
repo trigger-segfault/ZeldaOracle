@@ -40,6 +40,10 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 		// Methods
 		//-----------------------------------------------------------------------------
+		
+		public static int Reverse(int angle) {
+			return ((angle + 4) % 8);
+		}
 
 		// Return the modular distance from one angle to another using the given winding order.
 		public static int GetAngleDistance(int startAngle, int endAngle, WindingOrder windingOrder) {
