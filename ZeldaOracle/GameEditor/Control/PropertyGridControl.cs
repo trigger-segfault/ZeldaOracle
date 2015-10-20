@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
-using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Worlds;

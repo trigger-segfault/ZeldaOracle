@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Tiles;
@@ -106,13 +107,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 			// Collide with monsters.
 			if (owner is Player) {
-				for (int i = 0; i < RoomControl.Entities.Count; i++) {
-					Monster monster = RoomControl.Entities[i] as Monster;
-					if (monster != null && physics.IsSoftMeetingEntity(monster)) {
-						OnCollideMonster(monster);
-						if (IsDestroyed)
-							return;
-					}
+				CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
+				for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
+					OnCollideMonster(iterator.CollisionInfo.Entity as Monster);
+					if (IsDestroyed)
+						return;
 				}
 			}
 			

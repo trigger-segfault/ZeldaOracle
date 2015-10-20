@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Entities {
 	
@@ -29,9 +29,11 @@ namespace ZeldaOracle.Game.Entities {
 	}
 
 	public enum CollisionBoxType {
-		Hard = 0,
-		Soft = 1,
+		Hard	= 0,
+		Soft	= 1,
+		Custom	= 2,
 	}
+
 
 	public delegate void EntityCollisionHandler(Entity entity);
 

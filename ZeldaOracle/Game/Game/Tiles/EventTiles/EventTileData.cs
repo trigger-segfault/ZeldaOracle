@@ -5,7 +5,6 @@ using System.Text;
 using System.Reflection;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Game.Tiles.EventTiles {

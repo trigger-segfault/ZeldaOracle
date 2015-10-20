@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
@@ -43,13 +44,12 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				return;
 
 			// Collide with monsters.
-			for (int i = 0; i < RoomControl.Entities.Count; i++) {
-				Monster monster = RoomControl.Entities[i] as Monster;
-				if (monster != null && physics.IsSoftMeetingEntity(monster)) {
-					monster.TriggerInteraction(monster.HandlerSeeds[(int) type], this);
-					if (IsDestroyed)
-						return;
-				}
+			CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
+			for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
+				Monster monster = iterator.CollisionInfo.Entity as Monster;
+				monster.TriggerInteraction(monster.HandlerSeeds[(int) type], this);
+				if (IsDestroyed)
+					return;
 			}
 
 			// Notify the tile of the seed hitting it.

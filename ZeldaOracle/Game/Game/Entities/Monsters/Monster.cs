@@ -288,13 +288,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		public override void Update() {
-
+			/*
 			// Check collisions with player.
 			Player player = RoomControl.Player;
 			if (physics.IsSoftMeetingEntity(player)) {
 				player.Hurt(contactDamage, Center);
 			}
-
+			*/
 			base.Update();
 		}
 
