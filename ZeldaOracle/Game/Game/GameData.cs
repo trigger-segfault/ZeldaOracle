@@ -329,6 +329,7 @@ namespace ZeldaOracle.Game {
 			ZONE_INTERIOR	= new Zone("interior",	"Interior",		VARIANT_INTERIOR);
 			ZONE_PRESENT	= new Zone("present", "Present", VARIANT_PRESENT);
 			ZONE_INTERIOR_PRESENT	= new Zone("interior_present", "Interior Present", VARIANT_INTERIOR_PRESENT);
+			ZONE_AGES_DUNGEON_1	= new Zone("ages_dungeon_1", "Ages Dungeon 1", VARIANT_AGES_DUNGEON_1);
 
 			Resources.AddResource("default",	ZONE_DEFAULT);
 			Resources.AddResource("summer",		ZONE_SUMMER);
@@ -337,6 +338,7 @@ namespace ZeldaOracle.Game {
 			Resources.AddResource("interior",	ZONE_INTERIOR);
 			Resources.AddResource("present",	ZONE_PRESENT);
 			Resources.AddResource("interior_present", ZONE_INTERIOR_PRESENT);
+			Resources.AddResource("ages_dungeon_1", ZONE_AGES_DUNGEON_1);
 		}
 
 		//-----------------------------------------------------------------------------
@@ -351,6 +353,7 @@ namespace ZeldaOracle.Game {
 			Resources.LoadTilesets("Tilesets/water.conscript");
 			Resources.LoadTilesets("Tilesets/town.conscript");
 			Resources.LoadTilesets("Tilesets/interior.conscript");
+			Resources.LoadTilesets("Tilesets/dungeon.conscript");
 			Resources.LoadTilesets("Tilesets/objects.conscript");
 			Resources.LoadTilesets("Tilesets/objects_nv.conscript");
 			Resources.LoadTilesets("Tilesets/tile_data.conscript");
@@ -373,7 +376,7 @@ namespace ZeldaOracle.Game {
 			
 			// Create an NPC event.
 			etd = new EventTileData(typeof(NPCEvent));
-			etd.Sprite = SPR_EVENT_TILE_WARP_STAIRS;
+			etd.Sprite = Resources.GetAnimation("npc_shopkeeper");
 			etd.Properties.Set("npc_flags", (int) NPCFlags.Default)
 				.SetDocumentation("NPC Options", "enum_flags", "", "", "The options for the NPC.");
 			etd.Properties.Set("direction", Directions.Down)
@@ -385,7 +388,8 @@ namespace ZeldaOracle.Game {
 			etd.Properties.Set("animation_talk", "")
 				.SetDocumentation("Talk Animation", "animation", "", "", "The animation of the NPC when being talked to.");
 			Resources.AddResource("npc", etd);
-			etd.Sprite = Resources.GetAnimation("npc_shopkeeper");
+
+
 			IntegrateResources<Tileset>("TILESET_");
 		}
 
@@ -693,6 +697,7 @@ namespace ZeldaOracle.Game {
 		public static int VARIANT_INTERIOR	= 11;
 		public static int VARIANT_PRESENT	= 12;
 		public static int VARIANT_INTERIOR_PRESENT	= 13;
+		public static int VARIANT_AGES_DUNGEON_1	= 14;
 
 
 		//-----------------------------------------------------------------------------
@@ -1029,6 +1034,7 @@ namespace ZeldaOracle.Game {
 		public static Zone ZONE_INTERIOR;
 		public static Zone ZONE_PRESENT;
 		public static Zone ZONE_INTERIOR_PRESENT;
+		public static Zone ZONE_AGES_DUNGEON_1;
 
 
 		//-----------------------------------------------------------------------------

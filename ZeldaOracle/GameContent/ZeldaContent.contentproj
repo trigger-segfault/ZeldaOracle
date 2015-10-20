@@ -76,6 +76,10 @@
       <Name>cliffs</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Tilesets\dungeon.conscript">
+      <Name>dungeon</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Tilesets\forest.conscript">
       <Name>forest</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -651,6 +655,38 @@
     </Compile>
     <Compile Include="Images\Units\Monsters\basic_monsters_hurt.png">
       <Name>basic_monsters_hurt</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\Tiles\tileset_dungeon_ages_dungeon_1.png">
+      <Name>tileset_dungeon_ages_dungeon_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_objects_ages_dungeon_1.png">
+      <Name>tileset_objects_ages_dungeon_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_objects_ages_dungeon_1_extras_16x16.png">
+      <Name>tileset_objects_ages_dungeon_1_extras_16x16</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_water_ages_dungeon_1.png">
+      <Name>tileset_water_ages_dungeon_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_water_ages_dungeon_1_extras_16x16.png">
+      <Name>tileset_water_ages_dungeon_1_extras_16x16</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_water_ages_dungeon_1_extras_8x8.png">
+      <Name>tileset_water_ages_dungeon_1_extras_8x8</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
