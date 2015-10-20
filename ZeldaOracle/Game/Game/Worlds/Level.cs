@@ -22,6 +22,11 @@ namespace ZeldaOracle.Game.Worlds {
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
+
+		public Level(int width, int height, Point2I roomSize) :
+			this("", width, height, GameSettings.DEFAULT_TILE_LAYER_COUNT, roomSize, null)
+		{
+		}
 		
 		public Level(string name, int width, int height, int layerCount, Point2I roomSize, Zone zone) {
 			this.world			= null;
@@ -34,25 +39,9 @@ namespace ZeldaOracle.Game.Worlds {
 			this.properties.BaseProperties = new Properties();
 
 			this.properties.BaseProperties.Set("id", "")
-				.SetDocumentation("ID", "", "", "The id used to refer to this level.", true, false);
+				.SetDocumentation("ID", "", "", "", "The id used to refer to this level.", true, false);
 
 			this.properties.Set("id", name);
-
-			Resize(new Point2I(width, height));
-		}
-
-		public Level(int width, int height, Point2I roomSize) {
-			this.world			= null;
-			this.roomSize		= roomSize;
-			this.roomLayerCount = GameSettings.DEFAULT_TILE_LAYER_COUNT;
-			this.dimensions		= Point2I.Zero;
-			this.zone			= Resources.GetResource<Zone>("");
-			this.properties		= new Properties();
-			this.properties.PropertyObject = this;
-			this.properties.BaseProperties = new Properties();
-
-			this.properties.BaseProperties.Set("id", "")
-				.SetDocumentation("ID", "", "", "The id used to refer to this level.", true, false);
 
 			Resize(new Point2I(width, height));
 		}

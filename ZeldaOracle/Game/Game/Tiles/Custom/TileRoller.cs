@@ -27,12 +27,17 @@ namespace ZeldaOracle.Game.Tiles {
 		private int pushTimer;
 		private bool pushed;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public TileRoller() {
 			animationPlayer = new AnimationPlayer();
+			
+			destroyedInHoles	= false;
+			destroyedInWater	= false;
+			destroyedInLava		= false;
 
 			// TODO: Rollers can't be sword-stabbed, aren't pushable diagonally, and are only solid to the player.
 		}

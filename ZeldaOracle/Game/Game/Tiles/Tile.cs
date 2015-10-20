@@ -39,6 +39,10 @@ namespace ZeldaOracle.Game.Tiles {
 		private int					pushDelay;		// Number of ticks of pushing before the player can move this tile.
 		private Properties			properties;
 
+		protected bool				destroyedInHoles;
+		protected bool				destroyedInWater;
+		protected bool				destroyedInLava;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -59,6 +63,10 @@ namespace ZeldaOracle.Game.Tiles {
 			properties.PropertyObject = this;
 			tileData		= null;
 			moveDirection	= Point2I.Zero; 
+
+			destroyedInHoles	= true;
+			destroyedInWater	= true;
+			destroyedInLava		= true;
 		}
 
 
@@ -172,6 +180,47 @@ namespace ZeldaOracle.Game.Tiles {
 		public virtual void OnLand(Point2I startTile) {
 			
 		}
+		
+		// Called when a tile is finished moving after being pushed.
+		public virtual void OnCompleteMovement() {
+			// Check if we are over a hazard tile (water, lava, hole).
+			Tile tile = null;
+			for (int i = layer - 1; i >= 0 && tile == null; i--)
+				tile = roomControl.GetTile(location, i);
+
+			if (tile != null) {
+				if (tile.flags.HasFlag(TileFlags.Water))
+					OnFallInWater();
+				else if (tile.flags.HasFlag(TileFlags.Lava))
+					OnFallInLava();
+				else if (tile.flags.HasFlag(TileFlags.Hole))
+					OnFallInHole();
+			}
+		}
+		
+		// Called when the tile is pushed into a hole.
+		public virtual void OnFallInHole() {
+			if (destroyedInHoles) {
+				RoomControl.SpawnEntity(new EffectFallingObject(), Center);
+				RoomControl.RemoveTile(this);
+			}
+		}
+		
+		// Called when the tile is pushed into water.
+		public virtual void OnFallInWater() {
+			if (destroyedInWater) {
+				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_WATER_SPLASH), Center);
+				RoomControl.RemoveTile(this);
+			}
+		}
+		
+		// Called when the tile is pushed into lava.
+		public virtual void OnFallInLava() {
+			if (destroyedInLava) {
+				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH), Center);
+				RoomControl.RemoveTile(this);
+			}
+		}
 
 
 		//-----------------------------------------------------------------------------
@@ -207,10 +256,11 @@ namespace ZeldaOracle.Game.Tiles {
 			// Update movement (after pushed).
 			if (isMoving) {
 				if (offset.LengthSquared > 0.0f) {
-					offset += (Vector2F)moveDirection * movementSpeed;
+					offset += (Vector2F) moveDirection * movementSpeed;
 					if (offset.LengthSquared == 0.0f || GMath.Sign(offset) == GMath.Sign(moveDirection)) {
 						offset = Vector2F.Zero;
 						isMoving = false;
+						OnCompleteMovement();
 					}
 				}
 			}

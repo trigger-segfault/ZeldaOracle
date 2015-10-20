@@ -29,13 +29,13 @@ namespace ZeldaOracle.Game.Tiles {
 			properties			= new Properties();
 
 			properties.Set("id", "")
-				.SetDocumentation("ID", "", "",
+				.SetDocumentation("ID", "", "", "",
 				"The id used to refer to this tile.", true, false);
 			properties.Set("sprite_index", 0)
-				.SetDocumentation("Sprite Index", "sprite_index", "Internal",
+				.SetDocumentation("Sprite Index", "sprite_index", "", "Internal",
 				"The current sprite in the sprite list to draw.", true, true);
 			properties.Set("substrip_index", 0)
-				.SetDocumentation("Animation Substrip Index", "", "Internal",
+				.SetDocumentation("Animation Substrip Index", "", "", "Internal",
 				"The index of the substrip for dynamic animations.", true, true);
 		}
 

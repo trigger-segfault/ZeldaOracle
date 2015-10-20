@@ -7,15 +7,19 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Entities;
+using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Game.Items.Weapons;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerSwingState : PlayerState {
 
 		private const int SWING_TILE_PEAK_DELAY = 6;
+		private const int SWING_SWORD_BEAM_DELAY = 6;
 
 		private readonly int[] SWING_ENTITY_PEAK_DELAYS = { 1, 4, 7 };
 
@@ -121,6 +125,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// TODO: Create a sword subclass for this and override this method?
 			if (player.IsInAir)
 				return;
+
+			// Collide with entities.
 			Rectangle2F hitRect = (Rectangle2F)SWING_DIRECTIONS[player.Direction, swingIndex] + player.Center;
 			for (int i = 0; i < player.RoomControl.Entities.Count; i++) {
 				Entity e = player.RoomControl.Entities[i];
@@ -128,8 +134,33 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					if (e is Collectible && (e as Collectible).IsPickupable) {
 						(e as Collectible).Collect();
 					}
+					if (e is Monster) {
+						Monster monster = e as Monster;
+						monster.TriggerInteraction(monster.HandlerSword, weapon as ItemSword);
+					}
 				}
 			}
+		}
+
+		public void SpawnSwordBeam() {
+			// Spawn a sword beam.
+			// TODO: keep track of sword beams (only can shoot 2 at a time).
+			SwordBeam beam = new SwordBeam();
+			beam.Owner				= Player;
+			beam.Position			= Player.Center + (Directions.ToVector(Player.Direction) * 12.0f);
+			beam.ZPosition			= Player.ZPosition;
+			beam.Direction			= Player.Direction;
+			beam.Physics.Velocity	= Directions.ToVector(Player.Direction) * GameSettings.PROJECTILE_SWORD_BEAM_SPEED;
+
+			// Adjust the beam spawn position based on player direction.
+			if (Directions.IsHorizontal(player.Direction))
+				beam.Position += new Vector2F(0, 4);
+			else if (player.Direction == Directions.Up)
+				beam.Position -= new Vector2F(4, 0);
+			else if (player.Direction == Directions.Down)
+				beam.Position += new Vector2F(3, 0);
+			
+			player.RoomControl.SpawnEntity(beam);
 		}
 		
 
@@ -166,6 +197,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				if (player.toolAnimation.PlaybackTime == SWING_ENTITY_PEAK_DELAYS[i])
 					OnSwingEntityPeak(i);
 			}
+
+			if (player.toolAnimation.PlaybackTime == SWING_SWORD_BEAM_DELAY)
+				SpawnSwordBeam();
 
 			// Reset the swing
 			if (weapon.IsEquipped && weapon.IsButtonPressed()) {

@@ -69,9 +69,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			{
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DROWN);
 				player.RespawnDeath();
-				// Cancel the hurt animation if the player was knocked in.
-				player.InvincibleTimer = 0;
-				player.Graphics.IsHurting = false;
+				// TODO: Cancel the hurt animation if the player was knocked in.
+				//player.InvincibleTimer = 0;
+				//player.Graphics.IsHurting = false;
 			}
 			else if (player.Physics.IsInLava && !player.SwimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInLava)) {
 				player.Graphics.IsHurting = true;

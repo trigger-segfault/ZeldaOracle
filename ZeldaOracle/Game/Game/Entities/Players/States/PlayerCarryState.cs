@@ -20,6 +20,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private bool isPickingUp; // Is the pickup animation playing?
 		private int pickupTimer;
 		private Point2I objectDrawOffset;
+		private bool isObjectDropped;
 
 		private Entity carryObject;
 		private int throwDuration; // How many ticks the player waits when throwing.
@@ -53,6 +54,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 		
 		public void DropObject(bool enterBusyState = true) {
+			isObjectDropped = true;
 			player.RoomControl.SpawnEntity(carryObject, player.Origin, 16);
 			if (enterBusyState) {
 				player.BeginBusyState(throwDuration);
@@ -61,9 +63,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		public void ThrowObject(bool enterBusyState = true) {
-			DropObject(enterBusyState);
 			carryObject.Physics.ZVelocity = 1.0f;
 			carryObject.Physics.Velocity = Directions.ToVector(Player.MoveDirection) * 1.5f;
+			DropObject(enterBusyState);
+		}
+
+		public void DestroyObject() {
+			isObjectDropped = true;
+			carryObject.Destroy();
 		}
 
 
@@ -73,6 +80,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		
 		public override void OnBegin(PlayerState previousState) {
 			carryObject.Initialize(player.RoomControl);
+
+			isObjectDropped = false;
 
 			objectDrawOffset = new Point2I(0, -2);
 			objectDrawOffset += Directions.ToPoint(player.Direction) * 8;
@@ -90,8 +99,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.CanLedgeJump	= true;
 			player.Movement.CanUseWarpPoint	= true;
 			
-			if (newState is PlayerSwimState || newState is PlayerLadderState) {
-				DropObject(false);
+			if (!isObjectDropped) {
+				if (newState is PlayerSwimState || newState is PlayerLadderState)
+					DropObject(false);
+				else
+					DestroyObject();
 			}
 		}
 

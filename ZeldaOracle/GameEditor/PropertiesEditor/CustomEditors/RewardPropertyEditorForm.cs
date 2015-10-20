@@ -15,6 +15,27 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaEditor.Control;
 
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
+	
+	public class RewardPropertyEditor : FormPropertyEditor {
+		private RewardManager rewardManager;
+
+		public RewardPropertyEditor(RewardManager rewardManager) {
+			this.rewardManager = rewardManager;
+		}
+
+		public override Form CreateForm(object value) {
+			return new RewardPropertyEditorForm(rewardManager, (string) value);
+		}
+
+		public override object OnResultOkay(Form form, object value) {
+			return ((RewardPropertyEditorForm) form).RewardName;
+		}
+		
+		public override object OnResultCancel(Form form, object value) {
+			return value;
+		}
+	}
+
 	public partial class RewardPropertyEditorForm : Form {
 		private RewardManager rewardManager;
 
@@ -135,135 +156,4 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 			set { textBox1.Text = value; }
 		}
 	}
-
-	public abstract class FormPropertyEditor : UITypeEditor {
-
-		public abstract Form CreateForm(object value);
-
-		public abstract object OnResultOkay(Form form, object value);
-
-		public virtual object OnResultCancel(Form form, object value) {
-			return value;
-		}
-
-		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
-			return UITypeEditorEditStyle.Modal;
-		}
-
-		public override object EditValue(ITypeDescriptorContext context, System.IServiceProvider provider, object value) {
-			IWindowsFormsEditorService svc = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
-			if (svc != null) {
-				using (Form form = CreateForm(value)) {
-					if (svc.ShowDialog(form) == DialogResult.OK)
-						return OnResultOkay(form, value);
-					else
-						return OnResultCancel(form, value);
-				}
-			}
-			return value;
-		}
-	}
-
-	/*
-	public class RewardPropertyEditor : UITypeEditor {
-		private RewardManager rewardManager;
-
-		public RewardPropertyEditor(RewardManager rewardManager) {
-			this.rewardManager = rewardManager;
-		}
-
-		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
-			return UITypeEditorEditStyle.Modal;
-		}
-
-		public override object EditValue(ITypeDescriptorContext context, System.IServiceProvider provider, object value) {
-			IWindowsFormsEditorService svc = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
-			if (svc != null) {
-				using (RewardPropertyEditorForm form = new RewardPropertyEditorForm(rewardManager)) {
-					form.RewardName = (string) value;
-					if (svc.ShowDialog(form) == DialogResult.OK)
-						value = form.RewardName;
-				}
-			}
-			return value;
-		}
-	}*/
-	
-	
-	public class RewardPropertyEditor : FormPropertyEditor {
-		private RewardManager rewardManager;
-
-		public RewardPropertyEditor(RewardManager rewardManager) {
-			this.rewardManager = rewardManager;
-		}
-
-		public override Form CreateForm(object value) {
-			return new RewardPropertyEditorForm(rewardManager, (string) value);
-		}
-
-		public override object OnResultOkay(Form form, object value) {
-			return ((RewardPropertyEditorForm) form).RewardName;
-		}
-		
-		public override object OnResultCancel(Form form, object value) {
-			return value;
-		}
-	}
-
-	/*
-	public class RewardPropertyEditor : UITypeEditor {
-        private IWindowsFormsEditorService svc;
-		private RewardManager rewardManager;
-		private ListBox listBox;
-
-
-		//-----------------------------------------------------------------------------
-		// Constructor
-		//-----------------------------------------------------------------------------
-
-		public RewardPropertyEditor(RewardManager rewardManager) {
-			this.rewardManager	= rewardManager;
-			this.svc			= null;
-			this.listBox		= new ListBox();
-			
-			// Add resources to the list.
-			listBox.Items.Add("(none)");
-			foreach (KeyValuePair<string, Reward> entry in rewardManager.RewardDictionary) {
-				listBox.Items.Add(entry.Key);
-			}
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Overridden Methods
-		//-----------------------------------------------------------------------------
-
-		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
-			return UITypeEditorEditStyle.DropDown;
-		}
-
-		public override object EditValue(ITypeDescriptorContext context, System.IServiceProvider provider, object value) {
-			svc = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
-			
-			if (svc != null)
-			{
-				listBox.SelectedValueChanged += new EventHandler(this.ValueChanged);
-				svc.DropDownControl(listBox);
-
-				if (listBox.SelectedIndex >= 0) {
-					if (listBox.SelectedIndex == 0)
-						value = "";
-					else 
-						value = (string) listBox.Items[listBox.SelectedIndex];
-				}
-			}
-			return value;
-		}
-
-        private void ValueChanged(object sender, EventArgs e) {
-            if (svc != null)
-                svc.CloseDropDown();
-        }
-	}
-		*/
 }

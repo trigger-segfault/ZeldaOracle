@@ -22,7 +22,7 @@ namespace ZeldaEditor.Control {
 		private EditorControl		editorControl;
 		private PropertyGrid		propertyGrid;
 		private PropertiesContainer	propertiesContainer;
-		private Dictionary<string, UITypeEditor> typeEditors;
+		private Dictionary<string, CustomPropertyEditor> typeEditors;
 		private IPropertyObject		editedObject;
 
 
@@ -37,8 +37,8 @@ namespace ZeldaEditor.Control {
 			propertiesContainer = new PropertiesContainer(this);
 			propertyGrid.SelectedObject = propertiesContainer;
 
-			// Setup property editor types.
-			typeEditors = new Dictionary<string,UITypeEditor>();
+			// Create property editor types.
+			typeEditors = new Dictionary<string, CustomPropertyEditor>();
 			typeEditors["sprite"]			= new ResourcePropertyEditor<Sprite>();
 			typeEditors["animation"]		= new ResourcePropertyEditor<Animation>();
 			typeEditors["collision_model"]	= new ResourcePropertyEditor<CollisionModel>();
@@ -48,10 +48,17 @@ namespace ZeldaEditor.Control {
 			typeEditors["reward"]			= new RewardPropertyEditor(editorControl.RewardManager);
 			typeEditors["text_message"]		= new TextMessagePropertyEditor();
 			typeEditors["script"]			= null;
-			typeEditors["sprite_index"]		= new SpriteIndexComboBox(this);
-			typeEditors["direction"]		= null;
+			typeEditors["sprite_index"]		= new SpriteIndexComboBox();
+			typeEditors["direction"]		= new DirectionPropertyEditor();
 			typeEditors["angle"]			= null;
+			typeEditors["enum"]				= new EnumComboBox();
+			typeEditors["enum_flags"]		= null;
 
+			// Initialize property type editors.
+			foreach (KeyValuePair<string, CustomPropertyEditor> entry in typeEditors) {
+				if (entry.Value != null)
+					entry.Value.Initialize(this);
+			}
 		}
 
 

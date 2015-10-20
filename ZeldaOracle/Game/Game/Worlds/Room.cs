@@ -23,25 +23,7 @@ namespace ZeldaOracle.Game.Worlds {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public Room(Level level, int x, int y) {
-			this.level		= level;
-			this.location	= new Point2I(x, y);
-			this.tileData	= new TileDataInstance[level.RoomSize.X, level.RoomSize.Y, level.RoomLayerCount];
-			this.eventData	= new List<EventTileDataInstance>();
-			this.zone		= null;
-			this.properties	= new Properties();
-			this.properties.PropertyObject = this;
-			this.properties.BaseProperties = new Properties();
-
-			this.properties.BaseProperties.Set("id", "")
-				.SetDocumentation("ID", "", "", "The id used to refer to this room.", true, false);
-			this.properties.BaseProperties.Set("music", "")
-				.SetDocumentation("Music", "song", "", "The music to play in this room. Select none to choose the default music.", true, false);
-			this.properties.BaseProperties.Set("zone", "")
-				.SetDocumentation("Zone", "zone", "", "The zone type for this room.", true, false);
-		}
-
-		public Room(Level level, int x, int y, Zone zone) {
+		public Room(Level level, int x, int y, Zone zone = null) {
 			this.level		= level;
 			this.location	= new Point2I(x, y);
 			this.tileData	= new TileDataInstance[level.RoomSize.X, level.RoomSize.Y, level.RoomLayerCount];
@@ -50,15 +32,16 @@ namespace ZeldaOracle.Game.Worlds {
 			this.properties	= new Properties();
 			this.properties.PropertyObject = this;
 			this.properties.BaseProperties = new Properties();
-
+			
 			this.properties.BaseProperties.Set("id", "")
-				.SetDocumentation("ID", "", "", "The id used to refer to this room.", true, false);
+				.SetDocumentation("ID", "", "", "", "The id used to refer to this room.", true, false);
 			this.properties.BaseProperties.Set("music", "")
-				.SetDocumentation("Music", "song", "", "The music to play in this room. Select none to choose the default music.", true, false);
+				.SetDocumentation("Music", "song", "", "", "The music to play in this room. Select none to choose the default music.", true, false);
 			this.properties.BaseProperties.Set("zone", "")
-				.SetDocumentation("Zone", "zone", "", "The zone type for this room.", true, false);
+				.SetDocumentation("Zone", "zone", "", "", "The zone type for this room.", true, false);
 
-			this.properties.Set("zone", zone.ID);
+			if (zone != null)
+				this.properties.Set("zone", zone.ID);
 		}
 		
 

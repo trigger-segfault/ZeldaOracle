@@ -361,13 +361,13 @@ namespace ZeldaOracle.Game {
 			EventTileData etd = new EventTileData(typeof(WarpEvent));
 			etd.Sprite = SPR_EVENT_TILE_WARP_STAIRS;
 			etd.Properties.Set("warp_type", "tunnel")
-				.SetDocumentation("Warp Type", "tunnel", "", "The type of warp point.");
+				.SetDocumentation("Warp Type", "enum", "WarpType", "", "The type of warp point.");
 			etd.Properties.Set("destination_level", "")
-				.SetDocumentation("Destination Level", "", "", "The level where the destination point is in.");
+				.SetDocumentation("Destination Level", "", "", "", "The level where the destination point is in.");
 			etd.Properties.Set("destination_warp_point", "")
-				.SetDocumentation("Destination Warp Point", "", "", "The id of the warp point destination.");
+				.SetDocumentation("Destination Warp Point", "", "", "", "The id of the warp point destination.");
 			etd.Properties.Set("face_direction", Directions.Down)
-				.SetDocumentation("Face Direction", "", "", "The direction the player should face when entering a room through this Warp Point.");
+				.SetDocumentation("Face Direction", "direction", "", "", "The direction the player should face when entering a room through this Warp Point.");
 			etd.Sprite = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
 			Resources.AddResource("warp", etd);
 			
@@ -375,16 +375,15 @@ namespace ZeldaOracle.Game {
 			etd = new EventTileData(typeof(NPCEvent));
 			etd.Sprite = SPR_EVENT_TILE_WARP_STAIRS;
 			etd.Properties.Set("npc_flags", (int) NPCFlags.Default)
-				.SetDocumentation("NPC Options", "enum_flags", "", "The options for the NPC.");
+				.SetDocumentation("NPC Options", "enum_flags", "", "", "The options for the NPC.");
 			etd.Properties.Set("direction", Directions.Down)
-				.SetDocumentation("Direction", "direction", "", "The default direction the NPC faces.");
+				.SetDocumentation("Direction", "direction", "", "", "The default direction the NPC faces.");
 			etd.Properties.Set("text", "<red>undefined<red>")
-				.SetDocumentation("Text", "text_message", "", "The text to display when the NPC is talked to.");
+				.SetDocumentation("Text", "text_message", "", "", "The text to display when the NPC is talked to.");
 			etd.Properties.Set("animation", "npc_shopkeeper")
-				.SetDocumentation("Animation", "animation", "", "The animation of the NPC.");
+				.SetDocumentation("Animation", "animation", "", "", "The animation of the NPC.");
 			etd.Properties.Set("animation_talk", "")
-				.SetDocumentation("Talk Animation", "animation", "", "The animation of the NPC when being talked to.");
-			etd.Properties.GetProperty("sprite_index").Documentation.IsHidden = false;
+				.SetDocumentation("Talk Animation", "animation", "", "", "The animation of the NPC when being talked to.");
 			Resources.AddResource("npc", etd);
 			etd.Sprite = Resources.GetAnimation("npc_shopkeeper");
 			IntegrateResources<Tileset>("TILESET_");
@@ -945,6 +944,9 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PLAYER_CRUSH_HORIZONTAL;
 		public static Animation ANIM_PLAYER_INVISIBLE;
 
+		// Monster animations.
+		public static Animation ANIM_MONSTER_OCTOROK;
+
 		// Weapon animations.
 		public static Animation ANIM_SWORD_HOLD;
 		public static Animation ANIM_SWORD_CHARGED;
@@ -957,6 +959,9 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_ITEM_BOMB;
 		public static Animation ANIM_PROJECTILE_PLAYER_ARROW;
 		public static Animation ANIM_PROJECTILE_PLAYER_ARROW_CRASH;
+		public static Animation ANIM_PROJECTILE_SWORD_BEAM;
+		public static Animation ANIM_PROJECTILE_PLAYER_BOOMERANG_1;
+		public static Animation ANIM_PROJECTILE_PLAYER_BOOMERANG_2;
 	
 		// Effect animations.
 		public static Animation ANIM_EFFECT_DIRT;
@@ -982,6 +987,8 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_EFFECT_OWL_SPARKLE;
 		public static Animation ANIM_ITEM_SCENT_POD;
 		public static Animation ANIM_EFFECT_FALLING_OBJECT;
+		public static Animation ANIM_EFFECT_CLING;
+		public static Animation ANIM_EFFECT_CLING_LIGHT;
 
 
 		//-----------------------------------------------------------------------------

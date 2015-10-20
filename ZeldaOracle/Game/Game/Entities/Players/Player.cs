@@ -56,7 +56,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		private bool isStateControlled; // Is the player fully being controlled by its current state?
 
-
 		private PlayerNormalState		stateNormal;
 		private PlayerBusyState			stateBusy;
 		private PlayerSwimState			stateSwim;
@@ -69,16 +68,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerSeedShooterState	stateSeedShooter;
 		private PlayerRespawnDeathState stateRespawnDeath;
 
+		private PlayerSwimmingSkills	swimmingSkills;
+		private PlayerTunics			tunic;
+
 		// TEMPORARY: Change tool drawing to something else
 		public AnimationPlayer toolAnimation;
-
-		private PlayerSwimmingSkills swimmingSkills;
-
-		private PlayerTunics tunic;
-
-		private int invincibleTimer;
-		private float knockbackDirection;
-		private bool useKnockback;
 
 
 		//-----------------------------------------------------------------------------
@@ -102,26 +96,23 @@ namespace ZeldaOracle.Game.Entities.Players {
 			useAngle			= 0;
 			autoRoomTransition	= false;
 			isStateControlled	= false;
+			movement			= new PlayerMoveComponent(this);
 			syncAnimationWithDirection = true;
-			movement = new PlayerMoveComponent(this);
 
 			// Unit properties.
-			originOffset	= new Point2I(0, -3);
-			centerOffset	= new Point2I(0, -8);
-			Health			= 4 * 3;
-			MaxHealth		= 4 * 3;
-			swimmingSkills	= PlayerSwimmingSkills.CantSwim;
-			invincibleTimer	= 0;
-			knockbackDirection	= 0f;
-			useKnockback	= false;
-			tunic			= PlayerTunics.GreenTunic;
+			originOffset		= new Point2I(0, -3);
+			centerOffset		= new Point2I(0, -8);
+			Health				= 4 * 3;
+			MaxHealth			= 4 * 3;
+			swimmingSkills		= PlayerSwimmingSkills.CantSwim;
+			tunic				= PlayerTunics.GreenTunic;
+			moveAnimation		= GameData.ANIM_PLAYER_DEFAULT;
 
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2F(-4, -10, 8, 9);
 			Physics.SoftCollisionBox	= new Rectangle2F(-6, -14, 12, 13);
 			Physics.CollideWithWorld	= true;
 			Physics.CollideWithEntities	= true;
-			//Physics.CollideWithRoomEdge	= true;
 			Physics.HasGravity			= true;
 
 			// Graphics.
@@ -143,8 +134,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateRespawnDeath	= new PlayerRespawnDeathState();
 
 			toolAnimation	= new AnimationPlayer();
-
-			moveAnimation	= GameData.ANIM_PLAYER_DEFAULT;
 
 			Physics.CustomCollisionFunction = CheckRoomEdgeCollisions;
 		}
@@ -216,30 +205,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 			movement.ChooseAnimation();
 		}
 
-		public override void Hurt(int damage) {
-			health = GMath.Max(0, health - damage);
-			graphics.IsHurting = true;
-			invincibleTimer = InvincibleDuration;
-			useKnockback = false;
-			//movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
-		}
-
-		public override void Hurt(int damage, float radians) {
-			health = GMath.Max(0, health - damage);
-			graphics.IsHurting = true;
-			invincibleTimer = InvincibleDuration;
-			knockbackDirection = radians;
-			useKnockback = true;
-			//movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
-		}
-
 		public override void RespawnDeath() {
 			BeginState(stateRespawnDeath);
 		}
 
-		public override void Death() {
-			base.Death();
-		}
 
 		//-----------------------------------------------------------------------------
 		// Items
@@ -403,16 +372,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 			state.OnLeaveRoom();
 		}
 
+		public override void Die() {
+			// Don't actually die.
+		}
+
 		public override void Update() {
 			bool performedAction = false;
 
 			if (!isStateControlled) {
-				// Update hurting.
-				if (invincibleTimer > 0) {
-					invincibleTimer--;
-					if (invincibleTimer == 0)
-						graphics.IsHurting = false;
-				}
 
 				movement.Update();
 				UpdateUseDirections();
@@ -456,22 +423,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			state.Update();
 			
 			if (!isStateControlled) {
-
-				if (invincibleTimer > InvincibleControlRestoreDuration && useKnockback) {
-					Vector2F motion = new Vector2F(KnockbackSpeed, knockbackDirection, true);
-					// Snap velocity direction.
-					float snapInterval = ((float)GMath.Pi * 2.0f) / KnockbackSnapCount;
-					float theta = (float)Math.Atan2(-motion.Y, motion.X);
-					if (theta < 0)
-						theta += (float)Math.PI * 2.0f;
-					int angle = (int)((theta / snapInterval) + 0.5f);
-					Physics.Velocity = new Vector2F(
-						(float)Math.Cos(angle * snapInterval) * motion.Length,
-						(float)-Math.Sin(angle * snapInterval) * motion.Length);
-				}
-				else if (invincibleTimer == InvincibleControlRestoreDuration) {
-					//movement.MoveCondition = PlayerMoveCondition.FreeMovement;
-				}
 
 				UpdateEquippedItems();
 
@@ -613,15 +564,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public Animation MoveAnimation {
 			get { return moveAnimation; }
 			set { moveAnimation = value; }
-		}
-
-		public int InvincibleTimer {
-			get { return invincibleTimer; }
-			set { invincibleTimer = value; }
-		}
-
-		public bool IsBeingKnockedBack {
-			get { return (invincibleTimer > InvincibleControlRestoreDuration && useKnockback); }
 		}
 
 		public bool IsStateControlled {

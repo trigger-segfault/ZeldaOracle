@@ -154,7 +154,8 @@ namespace ZeldaOracle.Common.Scripts {
 					tileData.Flags |= (TileFlags) Enum.Parse(typeof(TileFlags), parameters.GetString(i), true);
 				}
 			});
-			// Properties <(type, name, value, editor-type, category, description)...>
+			// Properties <(type, name, value, readable-name, editor-type, category, description)...>
+			// Properties <(type, name, value, readable-name, (editor-type, editor-sub-type), category, description)...>
 			// Properties <(hide, name)...>
 			// Properties <(show, name)...>
 			AddTilesetCommand("Properties", delegate(CommandParam parameters) {
@@ -173,7 +174,7 @@ namespace ZeldaOracle.Common.Scripts {
 					else {
 
 						Property property = null;
-						PropertyType type = (PropertyType)Enum.Parse(typeof(PropertyType), param.GetString(0), true);
+						PropertyType type = (PropertyType) Enum.Parse(typeof(PropertyType), param.GetString(0), true);
 
 						if (type == PropertyType.String)
 							property = Property.CreateString(name, param.GetString(2));
@@ -186,10 +187,21 @@ namespace ZeldaOracle.Common.Scripts {
 						else
 							ThrowParseError("Unsupported property type for " + name);
 
+						string editorType = "";
+						string editorSubType = "";
+						if (param[4].Type == CommandParamType.Array) {
+							editorType = param[4].GetString(0);
+							editorSubType = param[4].GetString(1);
+						}
+						else {
+							editorType = param.GetString(4);
+						}
+
 						if (param.Count > 3) {
 							property.SetDocumentation(
 								param.GetString(3),
-								param.GetString(4),
+								editorType,
+								editorSubType,
 								param.GetString(5),
 								param.GetString(6),
 								true,
