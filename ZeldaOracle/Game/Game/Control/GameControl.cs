@@ -125,10 +125,12 @@ namespace ZeldaOracle.Game.Control {
 					int startPlayerY = Int32.Parse(gameManager.LaunchParameters[6]);
 
 					player.Position = new Point2I(startPlayerX, startPlayerY) * GameSettings.TILE_SIZE + new Point2I(8, 16);
+					player.MarkRespawn();
 					roomControl.BeginRoom(world.Levels[startLevel].Rooms[startRoomX, startRoomY]);
 				}
 				else {
 					player.Position = world.StartTileLocation * GameSettings.TILE_SIZE + new Point2I(8, 16);
+					player.MarkRespawn();
 					roomControl.BeginRoom(world.StartRoom);
 				}
 			}
@@ -137,6 +139,7 @@ namespace ZeldaOracle.Game.Control {
 				//world = worldFile.Load("temp_world.zwd");
 				world = GameDebug.CreateTestWorld();
 				player.Position = world.StartTileLocation * GameSettings.TILE_SIZE + new Point2I(8, 16);
+				player.MarkRespawn();
 				roomControl.BeginRoom(world.StartRoom);
 			}
 			roomStateStack = new RoomStateStack(new RoomStateNormal());

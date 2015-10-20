@@ -1,0 +1,90 @@
+
+#==============================================================
+# Sprites
+#==============================================================
+
+LOAD SPRITES;
+
+SPRITESHEET "tileset_dungeon",					(16, 16), (1, 1), (18, 18);
+
+#==============================================================
+# Animations
+#==============================================================
+
+LOAD ANIMATIONS;
+
+
+#==============================================================
+# Tiles
+#==============================================================
+
+LOAD TILESETS;
+
+
+#==============================================================
+# Tilesets
+#==============================================================
+
+LOAD TILESETS;
+
+TILESET dungeon, tileset_dungeon, (12, 15);
+DEFAULT (4, 10);
+
+CONFIG;
+S.SG........
+.S........S.
+S.SSSSS.....
+SRS.........
+R.R.........
+SRSHHSS.....
+...HHSS..SSS
+...HH....SSS
+S..HH.......
+S.SSS.......
+.S.SS.......
+S.S.........
+S.SSS.......
+.S.SS.......
+S.S.........
+END;
+
+# Ledges
+TILE (1, 0); LEDGE block, up; END;
+TILE (0, 1); LEDGE block, left; END;
+TILE (2, 1); LEDGE block, right; END;
+TILE (1, 2); LEDGE block, down; END;
+
+TILE (1, 9); LEDGE block, up; END;
+TILE (0, 10); LEDGE block, left; END;
+TILE (2, 10); LEDGE block, right; END;
+TILE (1, 11); LEDGE block, down; END;
+
+TILE (1, 12); LEDGE block, up; END;
+TILE (0, 13); LEDGE block, left; END;
+TILE (2, 13); LEDGE block, right; END;
+TILE (1, 14); LEDGE block, down; END;
+
+# Irregular Collision Models
+TILE (0, 7); SOLID edge_s; END;
+TILE (2, 7); SOLID edge_s; END;
+TILE (5, 3); SOLID doorway; END;
+TILE (6, 3); SOLID doorway; END;
+
+# Barriers
+TILE (9, 0); SOLID corner_nw; END;
+TILE (10, 0); SOLID edge_n; END;
+TILE (11, 0); SOLID corner_ne; END;
+TILE (9, 1); SOLID edge_w; END;
+TILE (11, 1); SOLID edge_e; END;
+TILE (9, 2); SOLID corner_sw; END;
+TILE (10, 2); SOLID edge_s; END;
+TILE (11, 2); SOLID corner_se; END;
+
+TILE (7, 2); SOLID inside_corner_nw; END;
+TILE (8, 2); SOLID inside_corner_ne; END;
+TILE (7, 3); SOLID inside_corner_sw; END;
+TILE (8, 3); SOLID inside_corner_se; END;
+
+
+
+END;

@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
+using FormsControl = System.Windows.Forms.Control;
 
 namespace ZeldaEditor.Tools {
 	public class ToolPointer : EditorTool {
@@ -97,7 +98,7 @@ namespace ZeldaEditor.Tools {
 
 			if (e.Button == MouseButtons.Left && room != null) {
 				if (!editorControl.EventMode) {
-					if (System.Windows.Forms.Control.ModifierKeys == Keys.Shift) {
+					if (FormsControl.ModifierKeys == Keys.Shift) {
 						selectedRoom = room;
 						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, Point2I.Zero);
 						LevelDisplayControl.SetSelectionBox(levelTileCoord, room.Size);
