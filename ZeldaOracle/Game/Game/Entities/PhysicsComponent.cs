@@ -426,6 +426,13 @@ namespace ZeldaOracle.Game.Entities {
 			return false;
 		}
 
+		public bool IsSoftMeetingEntity(Entity other, Rectangle2F collisionBox, int maxZDistance = 10) {
+			collisionBox.Point += entity.Position;
+			if (CanCollideWithEntity(other) && GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
+				return collisionBox.Intersects(other.Physics.PositionedSoftCollisionBox);
+			return false;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Collisions

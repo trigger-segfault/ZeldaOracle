@@ -5,6 +5,8 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Effects;
+using ZeldaOracle.Game.Entities.Monsters;
+using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
@@ -40,9 +42,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		//-----------------------------------------------------------------------------
 
 		private void Explode() {
-			RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_BOMB_EXPLOSION),
-				position + graphics.DrawOffset, zPosition);
-			Destroy();
+			BombExplosion bombExplosion = new BombExplosion();
+			RoomControl.SpawnEntity(bombExplosion, Center, zPosition);
 
 			// Explode nearby tiles.
 			if (zPosition < 4) {
@@ -59,6 +60,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 					}
 				}
 			}
+
+			Destroy();
 		}
 
 		private void BurnFuse() {

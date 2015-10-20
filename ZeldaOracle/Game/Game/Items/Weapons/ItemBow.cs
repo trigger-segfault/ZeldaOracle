@@ -15,6 +15,9 @@ using ZeldaOracle.Game.Entities.Players.States;
 namespace ZeldaOracle.Game.Items.Weapons {
 
 	public class ItemBow : ItemWeapon {
+		
+		private EntityTracker<Arrow> arrowTracker;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -27,11 +30,12 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.maxLevel		= Item.Level3;
 			this.currentAmmo	= 0;
 			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword | ItemFlags.UsableWhileInHole;
+			this.arrowTracker	= new EntityTracker<Arrow>(2);
 
 			sprite = new Sprite[] {
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 13, 1),
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 13, 1),
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 13, 1)
+				GameData.SPR_ITEM_ICON_BOW,
+				GameData.SPR_ITEM_ICON_BOW,
+				GameData.SPR_ITEM_ICON_BOW
 			};
 		}
 
@@ -42,7 +46,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		// Called when the items button is pressed (A or B).
 		public override void OnButtonPress() {
-			if (ammo[currentAmmo].IsEmpty)
+			if (ammo[currentAmmo].IsEmpty || arrowTracker.IsMaxedOut)
 				return;
 			
 			Player.Direction = Player.UseDirection;
@@ -58,6 +62,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			RoomControl.SpawnEntity(arrow);
 
 			ammo[currentAmmo].Amount--;
+			arrowTracker.TrackEntity(arrow);
 
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 			Player.BeginBusyState(10);

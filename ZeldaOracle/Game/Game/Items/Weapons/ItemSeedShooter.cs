@@ -14,6 +14,9 @@ using ZeldaOracle.Game.Items.Ammos;
 namespace ZeldaOracle.Game.Items.Weapons {
 
 	public class ItemSeedShooter : ItemWeapon {
+		
+		private EntityTracker<SeedProjectile> seedTracker;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -27,6 +30,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.sprite			= new Sprite[] { GameData.SPR_ITEM_ICON_SEED_SHOOTER };
 			this.spriteEquipped	= new Sprite[] { GameData.SPR_ITEM_ICON_SEED_SHOOTER_EQUIPPED };
 			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWhileInHole;
+			this.seedTracker	= new EntityTracker<SeedProjectile>(1);
 		}
 
 
@@ -144,6 +148,10 @@ namespace ZeldaOracle.Game.Items.Weapons {
 					return SeedType.Pegasus;
 				return SeedType.Ember;
 			}
+		}
+
+		public EntityTracker<SeedProjectile> SeedTracker {
+			get { return seedTracker; }
 		}
 	}
 }

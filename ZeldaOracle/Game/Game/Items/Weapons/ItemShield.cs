@@ -25,10 +25,10 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.maxLevel		= Item.Level3;
 			this.flags			= ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword | ItemFlags.UsableWhileInHole;
 
-			this.sprite			= new Sprite[] {
-				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(3, 0)),
-				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(4, 0)),
-				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(5, 0))
+			this.sprite = new Sprite[] {
+				GameData.SPR_ITEM_ICON_SHIELD_1,
+				GameData.SPR_ITEM_ICON_SHIELD_2,
+				GameData.SPR_ITEM_ICON_SHIELD_3
 			};
 
 			shieldAnimation = GameData.ANIM_PLAYER_SHIELD;

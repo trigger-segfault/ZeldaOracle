@@ -14,6 +14,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Game.Entities;
+using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Items.Essences;
 using ZeldaOracle.Game.Items.KeyItems;
@@ -243,6 +244,13 @@ namespace ZeldaOracle.Game {
 			}
 
 			IntegrateResources<Animation>("ANIM_");
+
+			ANIM_EFFECT_SEEDS = new Animation[5];
+			ANIM_EFFECT_SEEDS[(int) SeedType.Ember]		= ANIM_EFFECT_SEED_EMBER;
+			ANIM_EFFECT_SEEDS[(int) SeedType.Scent]		= ANIM_EFFECT_SEED_SCENT;
+			ANIM_EFFECT_SEEDS[(int) SeedType.Gale]		= ANIM_EFFECT_SEED_GALE;
+			ANIM_EFFECT_SEEDS[(int) SeedType.Pegasus]	= ANIM_EFFECT_SEED_PEGASUS;
+			ANIM_EFFECT_SEEDS[(int) SeedType.Mystery]	= ANIM_EFFECT_SEED_MYSTERY;
 		}
 
 		
@@ -989,6 +997,8 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_EFFECT_FALLING_OBJECT;
 		public static Animation ANIM_EFFECT_CLING;
 		public static Animation ANIM_EFFECT_CLING_LIGHT;
+
+		public static Animation[] ANIM_EFFECT_SEEDS;
 
 
 		//-----------------------------------------------------------------------------

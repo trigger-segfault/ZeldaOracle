@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
 
@@ -38,8 +39,8 @@ namespace ZeldaOracle.Game.Tiles {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 		
-		public override void OnSeedHit(Seed seed) {
-			if (seed.Type == SeedType.Mystery && !isActivated) {
+		public override void OnSeedHit(SeedType seedType, Entity seed) {
+			if (seedType == SeedType.Mystery && !isActivated) {
 				isActivated		= true;
 				sparkleIndex	= 0;
 				timer			= 0;

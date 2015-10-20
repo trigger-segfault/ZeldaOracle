@@ -11,30 +11,33 @@ using ZeldaOracle.Game.Tiles;
 namespace ZeldaOracle.Game.Entities.Projectiles {
 	public class Arrow : Projectile {
 		
+
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
+
 		public Arrow() {
 			// General.
 			syncAnimationWithAngle = true;
 
 			// Physics.
-			EventCollision += Crash;
 			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 1);
 			Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 1);
 			EnablePhysics(PhysicsFlags.CollideWorld | PhysicsFlags.LedgePassable |
 					PhysicsFlags.HalfSolidPassable | PhysicsFlags.DestroyedOutsideRoom);
-
-			// Add a monster collision handler.
-			Physics.AddCollisionHandler(typeof(Monster), CollisionBoxType.Soft, delegate(Entity entity) {
-				Monster monster = entity as Monster;
-				monster.TriggerInteraction(monster.HandlerArrow, this);
-			});
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
 
 		public override void Initialize() {
 			base.Initialize();
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_PLAYER_ARROW);
 		}
 
-		private void Crash() {
+		public override void OnCollideTile(Tile tile) {
 			// Create crash effect.
 			Effect effect = new Effect();
 			effect.CreateDestroyTimer(32);	
@@ -47,6 +50,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			RoomControl.SpawnEntity(effect, position);
 
 			Destroy();
+		}
+
+		public override void OnCollideMonster(Monster monster) {
+			monster.TriggerInteraction(monster.HandlerArrow, this);
 		}
 	}
 }

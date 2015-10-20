@@ -13,6 +13,8 @@ using ZeldaOracle.Game.Entities.Players;
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemBoomerang : ItemWeapon {
 
+		private EntityTracker<Boomerang> boomerangTracker;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -25,10 +27,11 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.level			= 0;
 			this.maxLevel		= Item.Level2;
 			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword | ItemFlags.UsableWhileInHole;
+			this.boomerangTracker	= new EntityTracker<Boomerang>(1);
 
 			sprite = new Sprite[] {
-				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(4, 1)),
-				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(5, 1))
+				GameData.SPR_ITEM_ICON_BOOMERANG_1,
+				GameData.SPR_ITEM_ICON_BOOMERANG_2
 			};
 		}
 
@@ -38,14 +41,15 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		//-----------------------------------------------------------------------------
 
 		public override void OnButtonPress() {
-			Player.Direction = Player.UseDirection;
+			if (boomerangTracker.IsMaxedOut)
+				return;
 
 			// Spawn the boomerang.
-			// TODO: keep track of boomerang entity.
 			Boomerang boomerang = new Boomerang(level);
 			boomerang.Owner		= Player;
 			boomerang.Angle		= Player.UseAngle;
 			RoomControl.SpawnEntity(boomerang, Player.Center, Player.ZPosition);
+			boomerangTracker.TrackEntity(boomerang);
 
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 			Player.BeginBusyState(10);

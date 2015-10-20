@@ -40,26 +40,34 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		private void Shoot() {
-			Vector2F[] projectilePositions = new Vector2F[] {
-				new Vector2F(16, 7),
-				new Vector2F(15, -2),
-				new Vector2F(0, -12),
-				new Vector2F(-4, -6),
-				new Vector2F(-9, 7),
-				new Vector2F(-4, 12),
-				new Vector2F(7, 15),
-				new Vector2F(15, 11)
-			};
+			if (!weapon.SeedTracker.IsMaxedOut) {
+				Vector2F[] projectilePositions = new Vector2F[] {
+					new Vector2F(16, 7),
+					new Vector2F(15, -2),
+					new Vector2F(0, -12),
+					new Vector2F(-4, -6),
+					new Vector2F(-9, 7),
+					new Vector2F(-4, 12),
+					new Vector2F(7, 15),
+					new Vector2F(15, 11)
+				};
 
-			// Spawn the seed projectile.
-			SeedType seedType = weapon.CurrentSeedType;
-			Seed seed = new Seed(seedType, true);
-			Vector2F pos = Player.Position - new Vector2F(8, 16) + projectilePositions[angle] + new Vector2F(4, 4 + 7);
-			seed.Physics.Velocity = Angles.ToVector(angle) * 3.0f;
-			Player.RoomControl.SpawnEntity(seed, pos, Player.ZPosition + 5);
+				// Spawn the seed projectile.
+				SeedType seedType = weapon.CurrentSeedType;
+				SeedProjectile seed = new SeedProjectile(seedType);
+				seed.Owner = player;
+				Vector2F pos = Player.Position - new Vector2F(8, 16) + projectilePositions[angle] + new Vector2F(4, 4 + 7);
+				seed.Physics.Velocity = Angles.ToVector(angle) * 3.0f;
+				Player.RoomControl.SpawnEntity(seed, pos, Player.ZPosition + 5);
+				weapon.SeedTracker.TrackEntity(seed);
 
-			isShooting = true;
-			shootTimer = 0;
+				// Begin shooting.
+				isShooting = true;
+				shootTimer = 0;
+			}
+			else {
+				Player.BeginNormalState();
+			}
 		}
 
 

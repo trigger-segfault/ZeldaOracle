@@ -57,7 +57,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public delegate void InteractionHandler_Bracelet(ItemBracelet itemBracelet);
 
 		// Projectiles & Thrown objects
-		public delegate void InteractionHandler_Seed(Seed seed);
+		public delegate void InteractionHandler_Seed(SeedEntity seed);
 		public delegate void InteractionHandler_Arrow(Arrow arrow);
 		public delegate void InteractionHandler_SwordBeam(SwordBeam swordBeam);
 		public delegate void InteractionHandler_Boomerang(Boomerang boomerang);
@@ -114,8 +114,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Graphics.DrawOffset = new Point2I(-8, -14);
 			centerOffset		= new Point2I(0, -6);
 
-			// Monster settings.
-			contactDamage = 1;
+			// Monster & unit settings.
+			knockbackSpeed			= GameSettings.MONSTER_KNOCKBACK_SPEED;
+			knockbackDuration		= GameSettings.MONSTER_KNOCKBACK_DURATION;
+			hurtInvincibleDuration	= GameSettings.MONSTER_HURT_INVINCIBLE_DURATION;
+			hurtFlickerDuration		= GameSettings.MONSTER_HURT_FLICKER_DURATION;
+			contactDamage			= 1;
 
 			// Interaction Handlers:
 			// Player & items
@@ -200,24 +204,39 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Hurt(0, RoomControl.Player.Center); // Knockback
 		}
 		
-		protected virtual void OnEmberSeedHit(Seed seed) {
-			// Burn
+		protected virtual void OnEmberSeedHit(SeedEntity seed) {
+			seed.DestroyWithEffect(SeedType.Ember, seed.Center);
+			// Burn is handled by OnFireHit()
 		}
 		
-		protected virtual void OnScentSeedHit(Seed seed) {
+		protected virtual void OnScentSeedHit(SeedEntity seed) {
 			Hurt(1, seed.Center);
+			seed.DestroyWithVisualEffect(SeedType.Scent, seed.Center);
 		}
 		
-		protected virtual void OnGaleSeedHit(Seed seed) {
-			
+		protected virtual void OnGaleSeedHit(SeedEntity seed) {
+			if (seed is SeedProjectile) {
+				seed.DestroyWithVisualEffect(SeedType.Gale, Center);
+			}
 		}
 		
-		protected virtual void OnPegasusSeedHit(Seed seed) {
+		protected virtual void OnPegasusSeedHit(SeedEntity seed) {
 			// Stun
+			seed.DestroyWithVisualEffect(SeedType.Pegasus, seed.Center);
 		}
 		
-		protected virtual void OnMysterySeedHit(Seed seed) {
+		protected virtual void OnMysterySeedHit(SeedEntity seed) {
 			// Random: burn, stun, damage, gale
+			Random random = new Random();
+			int rand = random.Next(4);
+			if (rand == 0)
+				TriggerInteraction(handlerSeeds[(int) SeedType.Ember], seed);
+			else if (rand == 1)
+				TriggerInteraction(handlerSeeds[(int) SeedType.Scent], seed);
+			else if (rand == 2)
+				TriggerInteraction(handlerSeeds[(int) SeedType.Gale], seed);
+			else
+				TriggerInteraction(handlerSeeds[(int) SeedType.Pegasus], seed);
 		}
 		
 		protected virtual void OnArrowHit(Arrow arrow) {
@@ -238,6 +257,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		
 		protected virtual void OnThrownObjectHit(CarriedTile thrownObject) {
 			// Damage
+			Hurt(1, thrownObject.Center);
 		}
 		
 		protected virtual void OnFireHit(Fire fire) {

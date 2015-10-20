@@ -5,9 +5,13 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Entities;
+using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemSword : ItemWeapon {
+		
+		private EntityTracker<SwordBeam> beamTracker;
 		
 
 		//-----------------------------------------------------------------------------
@@ -20,11 +24,12 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.description	= new string[] { "A hero's blade.", "A sacred blade.", "The blade of legends." };
 			this.maxLevel		= Item.Level3;
 			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWhileInHole;
+			this.beamTracker	= new EntityTracker<SwordBeam>(1);
 
 			sprite = new Sprite[] {
-				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(0, 0)),
-				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(1, 0)),
-				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(2, 0))
+				GameData.SPR_ITEM_ICON_SWORD_1,
+				GameData.SPR_ITEM_ICON_SWORD_2,
+				GameData.SPR_ITEM_ICON_SWORD_3
 			};
 		}
 
@@ -64,5 +69,14 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		// Draws over link's sprite.
 		public override void DrawOver() { }
+		
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public EntityTracker<SwordBeam> BeamTracker {
+			get { return beamTracker; }
+		}
 	}
 }

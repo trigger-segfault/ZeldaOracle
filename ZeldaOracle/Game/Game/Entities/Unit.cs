@@ -28,7 +28,8 @@ namespace ZeldaOracle.Game.Entities {
 
 		protected int health;
 		protected int healthMax;
-
+		
+		protected float		knockbackSpeed;
 		protected int		knockbackDuration;
 		protected int		hurtInvincibleDuration;
 		protected int		hurtFlickerDuration;
@@ -46,6 +47,7 @@ namespace ZeldaOracle.Game.Entities {
 		public Unit() {
 			EnablePhysics();
 			
+			knockbackSpeed			= GameSettings.UNIT_KNOCKBACK_SPEED;
 			knockbackDuration		= GameSettings.UNIT_KNOCKBACK_DURATION;
 			hurtInvincibleDuration	= GameSettings.UNIT_HURT_INVINCIBLE_DURATION;
 			hurtFlickerDuration		= GameSettings.UNIT_HURT_FLICKER_DURATION;
@@ -83,7 +85,7 @@ namespace ZeldaOracle.Game.Entities {
 				Vector2F knockbackVelocity = Vector2F.Zero;
 				if (damage.HasSource) {
 					knockbackVelocity = (Center - damage.SourcePosition).Normalized;
-					knockbackVelocity *= GameSettings.UNIT_KNOCKBACK_SPEED;
+					knockbackVelocity *= knockbackSpeed;
 					knockbackVelocity = Vector2F.SnapDirectionByCount(
 						knockbackVelocity, GameSettings.UNIT_KNOCKBACK_ANGLE_SNAP_COUNT);
 				}
@@ -177,6 +179,10 @@ namespace ZeldaOracle.Game.Entities {
 		public int MaxHealth {
 			get { return healthMax; }
 			set { healthMax = GMath.Max(value, 0); }
+		}
+
+		public bool IsAtFullHealth {
+			get { return (health == healthMax); }
 		}
 
 		public bool IsBeingKnockedBack {

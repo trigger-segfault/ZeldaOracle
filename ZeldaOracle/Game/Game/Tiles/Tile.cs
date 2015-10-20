@@ -10,6 +10,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Control;
+using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Worlds;
@@ -85,7 +86,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		// Called when a seed of the given type hits this tile.
-		public virtual void OnSeedHit(Seed seed) {}
+		public virtual void OnSeedHit(SeedType type, Entity seed) {}
 
 		// Called when the player presses A on this tile, when facing the given direction.
 		// Return true if player controls should be disabled for the rest of the frame.

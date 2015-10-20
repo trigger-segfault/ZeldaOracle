@@ -143,24 +143,29 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		public void SpawnSwordBeam() {
-			// Spawn a sword beam.
-			// TODO: keep track of sword beams (only can shoot 2 at a time).
-			SwordBeam beam = new SwordBeam();
-			beam.Owner				= Player;
-			beam.Position			= Player.Center + (Directions.ToVector(Player.Direction) * 12.0f);
-			beam.ZPosition			= Player.ZPosition;
-			beam.Direction			= Player.Direction;
-			beam.Physics.Velocity	= Directions.ToVector(Player.Direction) * GameSettings.PROJECTILE_SWORD_BEAM_SPEED;
+			ItemSword itemSword = weapon as ItemSword;
 
-			// Adjust the beam spawn position based on player direction.
-			if (Directions.IsHorizontal(player.Direction))
-				beam.Position += new Vector2F(0, 4);
-			else if (player.Direction == Directions.Up)
-				beam.Position -= new Vector2F(4, 0);
-			else if (player.Direction == Directions.Down)
-				beam.Position += new Vector2F(3, 0);
+			if (itemSword.BeamTracker.IsAvailable && player.IsAtFullHealth && itemSword.Level > Item.Level1) {
+				// Spawn a sword beam.
+				// TODO: keep track of sword beams (only can shoot 2 at a time).
+				SwordBeam beam = new SwordBeam();
+				beam.Owner				= Player;
+				beam.Position			= Player.Center + (Directions.ToVector(Player.Direction) * 12.0f);
+				beam.ZPosition			= Player.ZPosition;
+				beam.Direction			= Player.Direction;
+				beam.Physics.Velocity	= Directions.ToVector(Player.Direction) * GameSettings.PROJECTILE_SWORD_BEAM_SPEED;
+
+				// Adjust the beam spawn position based on player direction.
+				if (Directions.IsHorizontal(player.Direction))
+					beam.Position += new Vector2F(0, 4);
+				else if (player.Direction == Directions.Up)
+					beam.Position -= new Vector2F(4, 0);
+				else if (player.Direction == Directions.Down)
+					beam.Position += new Vector2F(3, 0);
 			
-			player.RoomControl.SpawnEntity(beam);
+				player.RoomControl.SpawnEntity(beam);
+				itemSword.BeamTracker.TrackEntity(beam);
+			}
 		}
 		
 
