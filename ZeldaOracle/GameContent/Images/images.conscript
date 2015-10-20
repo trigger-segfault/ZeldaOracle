@@ -53,16 +53,19 @@ IMAGE tileset_interior2;
 IMAGE tileset_water;
 	VARIANT present				"Tiles/tileset_water_present";
 	VARIANT interior_present	"Tiles/tileset_water_interior_present";
+	VARIANT ages_dungeon_1		"Tiles/tileset_water_ages_dungeon_1";
 	END;
 
 IMAGE tileset_water_extras_8x8;
 	VARIANT present				"Tiles/tileset_water_present_extras_8x8";
 	VARIANT interior_present	"Tiles/tileset_water_interior_present_extras_8x8";
+	VARIANT ages_dungeon_1		"Tiles/tileset_water_ages_dungeon_1_extras_8x8";
 	END;
 
 IMAGE tileset_water_extras_16x16;
 	VARIANT present				"Tiles/tileset_water_present_extras_16x16";
 	VARIANT interior_present	"Tiles/tileset_water_interior_present_extras_16x16";
+	VARIANT ages_dungeon_1		"Tiles/tileset_water_ages_dungeon_1_extras_16x16";
 	END;
 
 IMAGE tileset_land;
@@ -92,15 +95,21 @@ IMAGE tileset_town_extras_16x16;
 IMAGE tileset_objects;
 	VARIANT present				"Tiles/tileset_objects_present";
 	VARIANT interior_present	"Tiles/tileset_objects_interior_present";
+	VARIANT ages_dungeon_1		"Tiles/tileset_objects_ages_dungeon_1";
 	END;
 
 IMAGE tileset_objects_extras_16x16;
 	VARIANT present				"Tiles/tileset_objects_present_extras_16x16";
 	VARIANT interior_present	"Tiles/tileset_objects_interior_present_extras_16x16";
+	VARIANT ages_dungeon_1		"Tiles/tileset_objects_ages_dungeon_1_extras_16x16";
 	END;
 
 IMAGE tileset_interior;
 	VARIANT interior_present	"Tiles/tileset_interior_interior_present";
+	END;
+
+IMAGE tileset_dungeon;
+	VARIANT ages_dungeon_1		"Tiles/tileset_dungeon_ages_dungeon_1";
 	END;
 
 #==============================================================
