@@ -16,6 +16,8 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaEditor.PropertiesEditor;
 using ZeldaOracle.Common.Geometry;
 
+using FormsControl = System.Windows.Forms.Control;
+
 namespace ZeldaEditor {
 
 	public partial class EditorForm : Form {
@@ -30,7 +32,7 @@ namespace ZeldaEditor {
 
 		private Dictionary<Keys, HotKeyAction> hotKeyCommands;
 
-		System.Windows.Forms.Control activeControl;
+		FormsControl activeControl;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -57,12 +59,6 @@ namespace ZeldaEditor {
 			tileDisplay.EditorForm		= this;
 			panelTiles2.Controls.Add(tileDisplay);
 
-			/*treeViewLevels.AfterLabelEdit += delegate(object sender, NodeLabelEditEventArgs e) {
-				Console.WriteLine("Renamed level to " + e.Label);
-				int levelIndex = e.Node.Index;
-				Level level = editorControl.World.GetLevel(levelIndex);
-				level.Name = e.Label;
-			};*/
 			activeControl = null;
 
 			treeViewWorld.NodeMouseDoubleClick += delegate(object sender, TreeNodeMouseClickEventArgs e) {
@@ -129,14 +125,14 @@ namespace ZeldaEditor {
 		//-----------------------------------------------------------------------------
 
 		private void EditorForm_Load(object sender, EventArgs e) {
-			foreach (System.Windows.Forms.Control c in (sender as System.Windows.Forms.Control).Controls) {
+			foreach (FormsControl c in (sender as FormsControl).Controls) {
 				c.GotFocus += OnControlFocus;
 				EditorForm_Load(c, null);
 			}
 		}
 
 		private void OnControlFocus(object sender, EventArgs e) {
-			this.activeControl = sender as System.Windows.Forms.Control;
+			this.activeControl = sender as FormsControl;
 		}
 
 		// Use this for shortcut keys that won't work on their own.
