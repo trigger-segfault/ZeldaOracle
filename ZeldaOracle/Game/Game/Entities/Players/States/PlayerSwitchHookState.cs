@@ -53,8 +53,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 				// Find location for tile to land at.
 				tileSwitchLocation = player.RoomControl.GetTileLocation(player.Center);
-				tileSwitchLocation[1 - (direction % 2)] = hookedTile.Location[1 - (direction % 2)];
-
+				int syncAxis = Axes.GetOpposite(Directions.ToAxis(direction));
+				tileSwitchLocation[syncAxis] = hookedTile.Location[syncAxis];
+				
 				// Check if there is a hazard tile.
 				if (hookedTile.StaysOnSwitch && !CanTileLandAtLocation(tileSwitchLocation)) {
 					// Attempt to move landing location one tile further to avoid hazard.
@@ -75,13 +76,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			if (!player.RoomControl.IsTileInBounds(location))
 				return false;
 			Tile checkTile = player.RoomControl.GetTopTile(location);
-			return (checkTile == null ||
-					(checkTile.Layer != player.RoomControl.Room.LayerCount - 1 &&
-					checkTile.IsCoverable &&
-					!checkTile.IsSolid &&
-					!checkTile.IsHole &&
-					!checkTile.IsWater &&
-					!checkTile.IsLava));
+			if (checkTile == null)
+				return true;
+			return (checkTile.Layer != player.RoomControl.Room.LayerCount - 1 &&
+					checkTile.IsCoverable	&& !checkTile.IsSolid	&&
+					!checkTile.IsHole		&& !checkTile.IsWater	&& !checkTile.IsLava);
 		}
 
 		private bool WillTileBreakAtLocation(Point2I location) {
@@ -91,13 +90,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			if (checkTile == null)
 				return false;
 			return (checkTile.Layer == player.RoomControl.Room.LayerCount - 1 ||
-					!checkTile.IsCoverable ||
-					checkTile.IsStairs ||
-					checkTile.IsLadder ||
-					checkTile.IsSolid ||
-					checkTile.IsHole ||
-					checkTile.IsWater ||
-					checkTile.IsLava);
+					!checkTile.IsCoverable	|| checkTile.IsStairs	|| checkTile.IsLadder	|| checkTile.IsSolid ||
+					checkTile.IsHole		|| checkTile.IsWater	|| checkTile.IsLava);
 		}
 
 		private void SwitchPositions() {
@@ -131,11 +125,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			liftZPosition	= 0;
 			direction		= player.Direction;
 
-			player.Movement.MoveCondition = PlayerMoveCondition.NoControl;
-			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
+			player.Movement.CanJump			= false;
+			player.Movement.MoveCondition	= PlayerMoveCondition.NoControl;
+			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 		}
 		
 		public override void OnEnd(PlayerState newState) {
+			player.Movement.CanJump			= true;
 			player.Physics.HasGravity		= true;
 			player.IsStateControlled		= false;
 			player.Movement.MoveCondition	= PlayerMoveCondition.FreeMovement;

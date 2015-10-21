@@ -34,6 +34,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 2);
 			EnablePhysics(PhysicsFlags.CollideWorld | PhysicsFlags.LedgePassable |
 					PhysicsFlags.HalfSolidPassable | PhysicsFlags.CollideRoomEdge);
+			
+			// Graphics.
+			Graphics.IsShadowVisible = false;
 		}
 
 		

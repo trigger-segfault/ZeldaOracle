@@ -119,6 +119,7 @@
     <Compile Include="Common\Audio\Song.cs" />
     <Compile Include="Common\Audio\Sound.cs" />
     <Compile Include="Common\Audio\SoundInstance.cs" />
+    <Compile Include="Common\Geometry\Axes.cs" />
     <Compile Include="Common\Geometry\CollisionModel.cs" />
     <Compile Include="Common\Content\Resource.cs" />
     <Compile Include="Common\Content\Resources.cs" />

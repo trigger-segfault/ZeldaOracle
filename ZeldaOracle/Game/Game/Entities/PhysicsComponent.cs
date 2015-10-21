@@ -555,7 +555,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		private bool ResolveCollision(int axis, Tile tile, Rectangle2F block) {
-			if (axis == 0) { // X-Axis
+			if (axis == Axes.X) {
 				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.X + velocity.X, entity.Y);
 				if (myBox.Intersects(block)) {
 					isColliding	= true;
@@ -582,7 +582,7 @@ namespace ZeldaOracle.Game.Entities {
 					return true;
 				}
 			}
-			else if (axis == 1) { // Y-Axis
+			else if (axis == Axes.Y) {
 				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position + velocity);
 				if (myBox.Intersects(block)) {
 					isColliding	= true;
@@ -609,7 +609,7 @@ namespace ZeldaOracle.Game.Entities {
 		private bool ResolveCollision(int axis, Entity other) {
 			Rectangle2F block = other.Physics.PositionedCollisionBox;
 
-			if (axis == 0) { // X-Axis
+			if (axis == Axes.X) {
 				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.X + velocity.X, entity.Y);
 				if (myBox.Intersects(block)) {
 					isColliding	= true;
@@ -626,7 +626,7 @@ namespace ZeldaOracle.Game.Entities {
 					return true;
 				}
 			}
-			else if (axis == 1) { // Y-Axis
+			else if (axis == Axes.Y) {
 				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position + velocity);
 				if (myBox.Intersects(block)) {
 					isColliding	= true;
