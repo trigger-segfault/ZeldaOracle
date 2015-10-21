@@ -435,6 +435,15 @@ namespace ZeldaOracle.Game.Entities {
 			return false;
 		}
 
+		public bool IsCollidingWith(Entity other, CollisionBoxType collisionBoxType, int maxZDistance = 10) {
+			return IsCollidingWith(other, collisionBoxType, collisionBoxType, maxZDistance);
+		}
+
+		public bool IsCollidingWith(Entity other, CollisionBoxType myBoxType, CollisionBoxType otherBoxType, int maxZDistance = 10) {
+			return CollisionTest.PerformCollisionTest(entity, other,
+				new CollisionTestSettings(null, myBoxType, otherBoxType, maxZDistance)).IsColliding;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Collisions

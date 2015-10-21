@@ -381,25 +381,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public override void Update() {
 			bool performedAction = false;
 
-			if (Keyboard.IsKeyPressed(Keys.A)) {
-				/*
-				CollisionTestSettings settings = new CollisionTestSettings();
-				settings.RequiredFlags	= PhysicsFlags.None;
-				settings.RequiredType	= typeof(Monster);
-				settings.MaxZDistance	= -1;
-				settings.CollisionBoxType1	= CollisionBoxType.Soft;
-				settings.CollisionBoxType2	= CollisionBoxType.Soft;
-				//settings.CollisionBox1	= Physics.SoftCollisionBox;
-				//settings.CollisionBox2	= Physics.SoftCollisionBox;
-				*/
-
-				CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
-				for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
-					Monster monster = iterator.CollisionInfo.Entity as Monster;
-
-				}
-			}
-
 			if (!isStateControlled) {
 
 				movement.Update();

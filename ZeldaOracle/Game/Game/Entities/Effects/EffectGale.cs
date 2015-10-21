@@ -15,7 +15,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		// ON MONSTER:
 		//   31 before fade.
 		//   18 of fade.
-		// ON NOTHING
+		// ON NOTHING (Dropped from satchel)
 		//   0 before fade.
 		//   256 of fade.
 

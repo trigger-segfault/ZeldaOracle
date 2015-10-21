@@ -500,7 +500,12 @@ ANIM effect_cling_light;
 	CLONE effect_cling;
 	FLICKER 1, on;
 	END;
-
+ANIM effect_burn; SUBSTRIP repeat;
+	ADD frame, 1, (1, 2);
+	ADD frame, 2, (1, 14);
+	ADD frame, 2, (1, 18);
+	ADD frame, 3, (1, 1); ADD frame, 3, (1, 13); ADD frame, 3, (1, 17); REPEAT 3, 6;
+	OFFSET (-8, -8); END;
 	
 #==============================================================
 # NPC Animations

@@ -89,15 +89,17 @@ namespace ZeldaOracle.Game.Entities {
 					knockbackVelocity = Vector2F.SnapDirectionByCount(
 						knockbackVelocity, GameSettings.UNIT_KNOCKBACK_ANGLE_SNAP_COUNT);
 				}
-				Knockback(knockbackVelocity, knockbackDuration);
+				Knockback(knockbackVelocity, damage.KnockbackDuration);
 			}
 
 			// Damage.
 			if (damage.Amount > 0) {
 				health				= GMath.Max(0, health - damage.Amount);
 				invincibleTimer		= hurtInvincibleDuration;
-				hurtFlickerTimer	= hurtFlickerDuration;
-				graphics.IsHurting	= true;
+				if (damage.Flicker) {
+					hurtFlickerTimer = hurtFlickerDuration;
+					graphics.IsHurting = true;
+				}
 			}
 		}
 

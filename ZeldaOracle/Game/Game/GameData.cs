@@ -1001,6 +1001,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_EFFECT_FALLING_OBJECT;
 		public static Animation ANIM_EFFECT_CLING;
 		public static Animation ANIM_EFFECT_CLING_LIGHT;
+		public static Animation ANIM_EFFECT_BURN;
 
 		public static Animation[] ANIM_EFFECT_SEEDS;
 

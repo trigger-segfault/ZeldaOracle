@@ -38,14 +38,9 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 		
-		public override void Initialize() {
-			base.Initialize();
-		}
-
 		public override void OnDestroy() {
 			// Burn tiles.
 			Point2I location = RoomControl.GetTileLocation(position);
-			
 			if (RoomControl.IsTileInBounds(location)) {
 				Tile tile = RoomControl.GetTopTile(location);
 				if (tile != null)
