@@ -397,7 +397,7 @@ public struct Rectangle2F {
 
     // Return whether this and another rectangle are intersecting.
     public bool Intersects(Rectangle2F other) {
-		if (IsEmpty || other.IsEmpty)
+		if (IsEmpty && other.IsEmpty)
 			return false;
 		return !(other.Left - Right >= 0 || other.Top - Bottom >= 0 ||
 		         Left - other.Right >= 0 || Top - other.Bottom >= 0);

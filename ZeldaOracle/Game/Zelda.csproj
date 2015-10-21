@@ -225,6 +225,7 @@
     <Compile Include="Game\Entities\NPC.cs" />
     <Compile Include="Game\Entities\Players\PlayerSwimmingSkills.cs" />
     <Compile Include="Game\Entities\Players\PlayerTunics.cs" />
+    <Compile Include="Game\Entities\Players\States\PlayerSwitchHookState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSeedShooterState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerRespawnDeathState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSwordStabState.cs" />
@@ -241,6 +242,7 @@
     <Compile Include="Game\Entities\Players\PlayerState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSwimState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSwingState.cs" />
+    <Compile Include="Game\Entities\Projectiles\SwitchHookProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\Boomerang.cs" />
     <Compile Include="Game\Entities\Projectiles\SeedEntity.cs" />
     <Compile Include="Game\Entities\Projectiles\SeedProjectile.cs" />
@@ -306,6 +308,7 @@
     <Compile Include="Game\Items\SecondaryItems\ItemEssenceSeed.cs" />
     <Compile Include="Game\Items\SecondaryItems\ItemMagicPotion.cs" />
     <Compile Include="Game\Items\SecondaryItems\ItemFlippers.cs" />
+    <Compile Include="Game\Items\Weapons\ItemSwitchHook.cs" />
     <Compile Include="Game\Items\Weapons\ItemSlingshot.cs" />
     <Compile Include="Game\Items\Weapons\ItemSeedShooter.cs" />
     <Compile Include="Game\Items\Weapons\ItemSeedSatchel.cs" />

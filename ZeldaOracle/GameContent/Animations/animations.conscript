@@ -349,6 +349,12 @@ ANIM projectile_player_boomerang_2; SUBSTRIP repeat;
 	ADD frame, 2, (4, 9); ADD frame, 2, (7, 9);
 	ADD frame, 2, (6, 9); ADD frame, 2, (5, 9);
 	OFFSET (-8, -8); END;
+ANIM projectile_switch_hook;
+	SUBSTRIP repeat; ADD frame, 4, (0, 7); ADD frame, 4, (1, 7); OFFSET (-3, -8);
+	SUBSTRIP repeat; ADD frame, 4, (2, 7); ADD frame, 4, (3, 7); OFFSET (-8, -13);
+	SUBSTRIP repeat; ADD frame, 4, (4, 7); ADD frame, 4, (5, 7); OFFSET (-13, -8);
+	SUBSTRIP repeat; ADD frame, 4, (6, 7); ADD frame, 4, (7, 7); OFFSET (-8, -3);
+	END;
 
 
 #==============================================================
@@ -507,6 +513,7 @@ ANIM effect_burn; SUBSTRIP repeat;
 	ADD frame, 3, (1, 1); ADD frame, 3, (1, 13); ADD frame, 3, (1, 17); REPEAT 3, 6;
 	OFFSET (-8, -8); END;
 	
+
 #==============================================================
 # NPC Animations
 #==============================================================

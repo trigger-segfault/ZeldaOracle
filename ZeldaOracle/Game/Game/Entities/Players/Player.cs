@@ -68,7 +68,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerSwordStabState	stateSwordStab;
 		private PlayerSpinSwordState	stateSpinSword;
 		private PlayerSeedShooterState	stateSeedShooter;
-		private PlayerRespawnDeathState stateRespawnDeath;
+		private PlayerSwitchHookState	stateSwitchHook;
+		private PlayerRespawnDeathState	stateRespawnDeath;
 
 		private PlayerSwimmingSkills	swimmingSkills;
 		private PlayerTunics			tunic;
@@ -133,6 +134,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateSwordStab		= new PlayerSwordStabState();
 			stateSpinSword		= new PlayerSpinSwordState();
 			stateSeedShooter	= new PlayerSeedShooterState();
+			stateSwitchHook		= new PlayerSwitchHookState();
 			stateRespawnDeath	= new PlayerRespawnDeathState();
 
 			toolAnimation	= new AnimationPlayer();
@@ -622,6 +624,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerSeedShooterState SeedShooterState {
 			get { return stateSeedShooter; }
+		}
+
+		public PlayerSwitchHookState SwitchHookState {
+			get { return stateSwitchHook; }
 		}
 
 		public PlayerRespawnDeathState RespawnDeathState {

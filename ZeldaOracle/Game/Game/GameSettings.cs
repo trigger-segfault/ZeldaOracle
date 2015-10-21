@@ -53,12 +53,15 @@ namespace ZeldaOracle.Game {
 		public const float				DEFAULT_MAX_FALL_SPEED		= 4.0f;
 		
 		// Projectiles
-		public const float				PROJECTILE_ARROW_SPEED				= 3.0f;
-		public const float				PROJECTILE_SWORD_BEAM_SPEED			= 3.0f;
-		public const float				PROJECTILE_BOOMERANG_SPEED_1		= 1.5f;
-		public const float				PROJECTILE_BOOMERANG_SPEED_2		= 3.0f;
-		public const int				PROJECTILE_BOOMERANG_RETURN_DELAY_1	= 41;
-		public const int				PROJECTILE_BOOMERANG_RETURN_DELAY_2	= 100;
+		public const float				PROJECTILE_ARROW_SPEED					= 3.0f;
+		public const float				PROJECTILE_SWORD_BEAM_SPEED				= 3.0f;
+		public static readonly float[]	PROJECTILE_BOOMERANG_SPEEDS				= { 1.5f, 3.0f };
+		public static readonly int[]	PROJECTILE_BOOMERANG_RETURN_DELAYS		= { 41, 100 };
+		public static readonly float[]	PROJECTILE_SWITCH_HOOK_SPEEDS			= { 2.0f, 3.0f };
+		public static readonly int[]	PROJECTILE_SWITCH_HOOK_LENGTHS			= { 82, 112 };
+		public const int				SWITCH_HOOK_LATCH_DURATION				= 20;
+		public const float				SWITCH_HOOK_LIFT_SPEED					= 1.0f;
+		public const int				SWITCH_HOOK_LIFT_HEIGHT					= 16;
 		
 		// Units
 		public const float				UNIT_KNOCKBACK_SPEED			= 1.0f; // 1.3 ??

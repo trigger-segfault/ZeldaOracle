@@ -151,6 +151,18 @@ namespace ZeldaOracle.Game.Control {
 		public void PlaceTile(Tile tile, Point2I location, int layer) {
 			PlaceTile(tile, location.X, location.Y, layer);
 		}
+		
+		// Use this for placing tiles at runtime.
+		public void PlaceTileOnHighestLayer(Tile tile, Point2I location) {
+			int layer = room.LayerCount - 1;
+			for (int i = room.LayerCount - 1; i >= 0; i--) {
+				if (tiles[location.X, location.Y, i] == null) {
+					layer = i;
+					break;
+				}
+			}
+			PlaceTile(tile, location, layer);
+		}
 
 		// Use this for placing tiles at runtime.
 		public void PlaceTile(Tile tile, int x, int y, int layer) {
@@ -164,6 +176,7 @@ namespace ZeldaOracle.Game.Control {
 		public void RemoveTile(Tile tile) {
 			// TODO: OnRemove?
 			tiles[tile.Location.X, tile.Location.Y, tile.Layer] = null;
+			tile.IsAlive = false;
 		}
 
 		// Put an event tile into the room.

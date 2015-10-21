@@ -454,6 +454,7 @@ namespace ZeldaOracle.Game {
 			inventory.AddItems(obtain,
 				new ItemWallet(),
 				new ItemSword(),
+				new ItemSwitchHook(),
 				new ItemBracelet(),
 				new ItemFeather(),
 				new ItemBow(),
@@ -752,6 +753,9 @@ namespace ZeldaOracle.Game {
 		// Player sprites.
 		public static Sprite SPR_PLAYER_FORWARD;
 
+		// Entities.
+		public static Sprite SPR_SWITCH_HOOK_LINK;
+
 		// Object tiles.
 		public static Sprite SPR_TILE_BUSH;
 		public static Sprite SPR_TILE_BUSH_ASOBJECT;
@@ -828,8 +832,8 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_ITEM_ICON_CAPE;
 		public static Sprite SPR_ITEM_ICON_BOOMERANG_1;
 		public static Sprite SPR_ITEM_ICON_BOOMERANG_2;
-		public static Sprite SPR_ITEM_ICON_SWITCH_HOOK_1;
-		public static Sprite SPR_ITEM_ICON_SWITCH_HOOK_2;
+		public static Sprite SPR_ITEM_ICON_SWITCH_HOOK;
+		public static Sprite SPR_ITEM_ICON_HOOK_SHOT;
 		public static Sprite SPR_ITEM_ICON_MAGNET_GLOVES_BLUE;
 		public static Sprite SPR_ITEM_ICON_MAGNET_GLOVES_RED;
 		public static Sprite SPR_ITEM_ICON_CANE;
@@ -974,6 +978,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PROJECTILE_SWORD_BEAM;
 		public static Animation ANIM_PROJECTILE_PLAYER_BOOMERANG_1;
 		public static Animation ANIM_PROJECTILE_PLAYER_BOOMERANG_2;
+		public static Animation ANIM_PROJECTILE_SWITCH_HOOK;
 	
 		// Effect animations.
 		public static Animation ANIM_EFFECT_DIRT;

@@ -26,14 +26,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public Boomerang(int level) {
 			this.level = level;
 
-			if (level == Item.Level1) {
-				speed = GameSettings.PROJECTILE_BOOMERANG_SPEED_1;
-				returnDelay = GameSettings.PROJECTILE_BOOMERANG_RETURN_DELAY_1;
-			}
-			else {
-				speed = GameSettings.PROJECTILE_BOOMERANG_SPEED_2;
-				returnDelay = GameSettings.PROJECTILE_BOOMERANG_RETURN_DELAY_2;
-			}
+			speed		= GameSettings.PROJECTILE_BOOMERANG_SPEEDS[level];
+			returnDelay	= GameSettings.PROJECTILE_BOOMERANG_RETURN_DELAYS[level];
 
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 2);

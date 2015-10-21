@@ -21,6 +21,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		// Internal
 		private RoomControl		roomControl;
+		private bool			isAlive;
+		private bool			isInitialized;
 		private Point2I			location;		// The tile location in the room.
 		private int				layer;			// The layer this tile is in.
 		private Point2I			moveDirection;
@@ -50,6 +52,8 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		// Use CreateTile() instead of this constructor.
 		protected Tile() {
+			isAlive			= false;
+			isInitialized	= false;
 			location		= Point2I.Zero;
 			layer			= 0;
 			offset			= Point2I.Zero;
@@ -76,7 +80,12 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		public void Initialize(RoomControl control) {
 			this.roomControl = control;
-			Initialize();
+			this.isAlive = true;
+
+			if (!isInitialized) {
+				isInitialized = true;
+				Initialize();
+			}
 		}
 		
 
@@ -455,8 +464,68 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return Directions.FromPoint(moveDirection); }
 		}
 
+		public Properties Properties {
+			get { return properties; }
+		}
+		
+		// Get the original tile data from which this was created.
+		public TileDataInstance TileData {
+			get { return tileData; }
+		}
+		
+		// Get the modified properties of the tile data from which this was created.
+		// Do not access these properties, only modify them.
+		public Properties BaseProperties {
+			get { return tileData.Properties; }
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Flag Properties
+		//-----------------------------------------------------------------------------
+
 		public bool IsDiggable {
 			get { return flags.HasFlag(TileFlags.Diggable); }
+		}
+
+		public bool IsCoverable {
+			get { return !flags.HasFlag(TileFlags.NotCoverable); }
+		}
+
+		public bool IsSwitchable {
+			get { return flags.HasFlag(TileFlags.Switchable); }
+		}
+
+		public bool StaysOnSwitch {
+			get { return flags.HasFlag(TileFlags.SwitchStays); }
+		}
+
+		public bool BreaksOnSwitch {
+			get { return !flags.HasFlag(TileFlags.SwitchStays); }
+		}
+		
+		public bool IsHole {
+			get { return flags.HasFlag(TileFlags.Hole); }
+		}
+		
+		public bool IsWater {
+			get { return flags.HasFlag(TileFlags.Water); }
+		}
+		
+		public bool IsLava {
+			get { return flags.HasFlag(TileFlags.Lava); }
+		}
+		
+		public bool IsSolid {
+			get { return flags.HasFlag(TileFlags.Solid); }
+		}
+		
+		public bool IsStairs {
+			get { return flags.HasFlag(TileFlags.Stairs); }
+		}
+		
+		public bool IsLadder {
+			get { return flags.HasFlag(TileFlags.Ladder); }
 		}
 
 		public bool IsLedge {
@@ -479,19 +548,15 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
-		public Properties Properties {
-			get { return properties; }
+		// Returns true if the tile is not alive.
+		public bool IsDestroyed {
+			get { return !isAlive; }
 		}
-		
-		// Get the original tile data from which this was created.
-		public TileDataInstance TileData {
-			get { return tileData; }
-		}
-		
-		// Get the modified properties of the tile data from which this was created.
-		// Do not access these properties, only modify them.
-		public Properties BaseProperties {
-			get { return tileData.Properties; }
+
+		// Returns true if the tile is still alive.
+		public bool IsAlive {
+			get { return isAlive; }
+			set { isAlive = value; }
 		}
 	}
 }

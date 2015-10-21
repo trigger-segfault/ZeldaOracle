@@ -69,7 +69,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public delegate void InteractionHandler_SwordBeam(SwordBeam swordBeam);
 		public delegate void InteractionHandler_Boomerang(Boomerang boomerang);
 		public delegate void InteractionHandler_RodFire(Projectile rodFire);
-		public delegate void InteractionHandler_SwitchHook(Entity hook);
+		public delegate void InteractionHandler_SwitchHook(SwitchHookProjectile hook);
 		public delegate void InteractionHandler_ThrownObject(CarriedTile thrownObject);
 
 		// Effects
@@ -151,7 +151,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			handlerBoomerang		= OnBoomerangHit;
 			handlerSwordBeam		= OnSwordBeamHit;
 			handlerRodFire			= null;
-			handlerSwitchHook		= null;
+			handlerSwitchHook		= OnSwitchHook;
 			handlerThrownObject		= OnThrownObjectHit;
 			// Effects
 			handlerFire				= OnFireHit;
@@ -237,6 +237,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		
 		protected virtual void OnButtonAction() {
 			
+		}
+		
+		protected virtual void OnSwitchHook(SwitchHookProjectile hook) {
+			Hurt(1, hook.Position);
+			hook.BeginReturn(false);
 		}
 		
 		protected virtual void OnSwordHit(ItemSword itemSword) {

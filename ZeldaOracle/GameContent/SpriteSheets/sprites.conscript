@@ -40,6 +40,15 @@ SPRITESHEET "color_cube", "Tiles/color_cube"		(16, 16), (1, 1), (18, 18); END;
 
 
 #==============================================================
+# Entities
+#==============================================================
+
+SPRITESHEET "color_effects";
+
+SPRITE switch_hook_link, (5, 4), (-8, -8); END;
+
+
+#==============================================================
 # Event Tile Sprites (Editor Only)
 #==============================================================
 
@@ -49,6 +58,7 @@ SPRITE event_tile_warp_entrance,		(0, 0); END;
 SPRITE event_tile_warp_stairs,			(1, 0); END;
 SPRITE event_tile_warp_tunnel,			(2, 0); END;
 SPRITE event_tile_track_intersection,	(3, 0); END;
+
 
 #==============================================================
 # Tile Sprites
@@ -159,8 +169,8 @@ SPRITE item_icon_feather,					(2, 1); END;
 SPRITE item_icon_cape,						(3, 1); END;
 SPRITE item_icon_boomerang_1,				(4, 1); END;
 SPRITE item_icon_boomerang_2,				(5, 1); END;
-SPRITE item_icon_switch_hook_1,				(6, 1); END;
-SPRITE item_icon_switch_hook_2,				(7, 1); END;
+SPRITE item_icon_switch_hook,				(6, 1); END;
+SPRITE item_icon_hook_shot,					(7, 1); END;
 SPRITE item_icon_magnet_gloves_blue,		(8, 1); END;
 SPRITE item_icon_magnet_gloves_red,			(9, 1); END;
 SPRITE item_icon_cane,						(10, 1); END;
@@ -255,4 +265,3 @@ SPRITE hud_heart_pieces_full_bottom_left,		(0, 3), (0, 16); END;
 SPRITE hud_heart_pieces_full_bottom_right,		(1, 3), (16, 16); END;
 
 SPRITE hud_save_button,				(5, 2); ADD (6, 2), (16, 0); END;
-
