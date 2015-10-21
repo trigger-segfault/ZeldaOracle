@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Effects;
@@ -42,6 +43,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		Count,
 	};
 
+	// MonsterState:
+	// - MonsterBurnState
+	// - MonsterGaleState
+	// - MonsterStunState
+	// - MonsterFallInHoleState
+
 	public class Monster : Unit {
 		
 		//-----------------------------------------------------------------------------
@@ -57,12 +64,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public delegate void InteractionHandler_Bracelet(ItemBracelet itemBracelet);
 
 		// Projectiles & Thrown objects
-		public delegate void InteractionHandler_Seed(Seed seed);
+		public delegate void InteractionHandler_Seed(SeedEntity seed);
 		public delegate void InteractionHandler_Arrow(Arrow arrow);
 		public delegate void InteractionHandler_SwordBeam(SwordBeam swordBeam);
 		public delegate void InteractionHandler_Boomerang(Boomerang boomerang);
 		public delegate void InteractionHandler_RodFire(Projectile rodFire);
-		public delegate void InteractionHandler_SwitchHook(Entity hook);
+		public delegate void InteractionHandler_SwitchHook(SwitchHookProjectile hook);
 		public delegate void InteractionHandler_ThrownObject(CarriedTile thrownObject);
 
 		// Effects
@@ -76,7 +83,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		private Properties properties;
 		private int contactDamage;
-		
+		private bool isBurning;
+		private AnimationPlayer effectAnimation;
+
 		// Interaction handlers.
 		// Player & items
 		private InteractionHandler_ButtonAction		handlerButtonAction;
@@ -104,18 +113,30 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public Monster() {
 			// Physics.
-			Physics.CollisionBox		= new Rectangle2I(3 - 8, 5 - 14, 10, 10);
-			Physics.SoftCollisionBox	= new Rectangle2I(2 - 8, 3 - 14, 12, 13);
+			Physics.CollisionBox		= new Rectangle2I(-5, -9, 10, 10);
+			Physics.SoftCollisionBox	= new Rectangle2I(-6, -11, 12, 11);
 			Physics.CollideWithWorld	= true;
 			Physics.CollideWithRoomEdge	= true;
 			Physics.HasGravity			= true;
+
+			// With player
+			// Top: 4 overlap
+			// Bottom: 3 overlap?
+			// Sides: 3 overlap
 
 			// Graphics.
 			Graphics.DrawOffset = new Point2I(-8, -14);
 			centerOffset		= new Point2I(0, -6);
 
-			// Monster settings.
-			contactDamage = 1;
+			// Monster & unit settings.
+			knockbackSpeed			= GameSettings.MONSTER_KNOCKBACK_SPEED;
+			knockbackDuration		= GameSettings.MONSTER_KNOCKBACK_DURATION;
+			hurtInvincibleDuration	= GameSettings.MONSTER_HURT_INVINCIBLE_DURATION;
+			hurtFlickerDuration		= GameSettings.MONSTER_HURT_FLICKER_DURATION;
+			contactDamage			= 1;
+
+			isBurning		= false;
+			effectAnimation	= new AnimationPlayer();
 
 			// Interaction Handlers:
 			// Player & items
@@ -130,7 +151,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			handlerBoomerang		= OnBoomerangHit;
 			handlerSwordBeam		= OnSwordBeamHit;
 			handlerRodFire			= null;
-			handlerSwitchHook		= null;
+			handlerSwitchHook		= OnSwitchHook;
 			handlerThrownObject		= OnThrownObjectHit;
 			// Effects
 			handlerFire				= OnFireHit;
@@ -178,6 +199,32 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			
 		}
 
+		public void Burn(int damage) {
+			if (IsInvincible || isBurning)
+				return;
+
+			// Apply damage.
+			DamageInfo damageInfo = new DamageInfo(damage);
+			damageInfo.ApplyKnockBack		= true;
+			damageInfo.HasSource			= false;
+			damageInfo.KnockbackDuration	= GameSettings.MONSTER_BURN_DURATION;
+			damageInfo.Flicker				= false;
+
+			Hurt(damageInfo);
+
+			isBurning = true;
+
+			// Create the burn effect.
+			effectAnimation.Play(GameData.ANIM_EFFECT_BURN);
+		}
+
+		public override void OnKnockbackEnd() {
+			base.OnKnockbackEnd();
+			if (isBurning) {
+				isBurning = false;
+				effectAnimation.Animation = null;
+			}
+		}
 		
 		//-----------------------------------------------------------------------------
 		// Interactions
@@ -192,6 +239,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			
 		}
 		
+		protected virtual void OnSwitchHook(SwitchHookProjectile hook) {
+			Hurt(1, hook.Position);
+			hook.BeginReturn(false);
+		}
+		
 		protected virtual void OnSwordHit(ItemSword itemSword) {
 			Hurt(1, RoomControl.Player.Center);
 		}
@@ -200,24 +252,39 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Hurt(0, RoomControl.Player.Center); // Knockback
 		}
 		
-		protected virtual void OnEmberSeedHit(Seed seed) {
-			// Burn
+		protected virtual void OnEmberSeedHit(SeedEntity seed) {
+			//seed.DestroyWithEffect(SeedType.Ember, seed.Center);
+			// Burn is handled by OnFireHit()
 		}
 		
-		protected virtual void OnScentSeedHit(Seed seed) {
+		protected virtual void OnScentSeedHit(SeedEntity seed) {
 			Hurt(1, seed.Center);
+			seed.DestroyWithVisualEffect(SeedType.Scent, seed.Center);
 		}
 		
-		protected virtual void OnGaleSeedHit(Seed seed) {
-			
+		protected virtual void OnGaleSeedHit(SeedEntity seed) {
+			if (seed is SeedProjectile) {
+				seed.DestroyWithVisualEffect(SeedType.Gale, Center);
+			}
 		}
 		
-		protected virtual void OnPegasusSeedHit(Seed seed) {
+		protected virtual void OnPegasusSeedHit(SeedEntity seed) {
 			// Stun
+			seed.DestroyWithVisualEffect(SeedType.Pegasus, seed.Center);
 		}
 		
-		protected virtual void OnMysterySeedHit(Seed seed) {
+		protected virtual void OnMysterySeedHit(SeedEntity seed) {
 			// Random: burn, stun, damage, gale
+			Random random = new Random();
+			int rand = random.Next(4);
+			if (rand == 0)
+				TriggerInteraction(handlerSeeds[(int) SeedType.Ember], seed);
+			else if (rand == 1)
+				TriggerInteraction(handlerSeeds[(int) SeedType.Scent], seed);
+			else if (rand == 2)
+				TriggerInteraction(handlerSeeds[(int) SeedType.Gale], seed);
+			else
+				TriggerInteraction(handlerSeeds[(int) SeedType.Pegasus], seed);
 		}
 		
 		protected virtual void OnArrowHit(Arrow arrow) {
@@ -238,12 +305,16 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		
 		protected virtual void OnThrownObjectHit(CarriedTile thrownObject) {
 			// Damage
+			Hurt(1, thrownObject.Center);
 		}
 		
 		protected virtual void OnFireHit(Fire fire) {
 			// Burn
-			Hurt(1, fire.Center);
-			fire.Destroy();
+			// Burning is like stunning
+			if (!IsInvincible && !isBurning) {
+				Burn(1);
+				fire.Destroy();
+			}
 		}
 		
 		protected virtual void OnBombExplosionHit(Effect explosion) {
@@ -267,15 +338,26 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			base.Die();
 		}
 
-		public override void Update() {
+		public override void UpdateGraphics() {
+			base.UpdateGraphics();
+			effectAnimation.Update();
+		}
 
+		public override void Update() {
+			
 			// Check collisions with player.
 			Player player = RoomControl.Player;
-			if (physics.IsSoftMeetingEntity(player)) {
+			if (physics.IsCollidingWith(player, CollisionBoxType.Soft)) {
 				player.Hurt(contactDamage, Center);
 			}
 
 			base.Update();
+		}
+
+		public override void Draw(Graphics2D g) {
+			base.Draw(g);
+			if (effectAnimation.Animation != null)
+				g.DrawAnimation(effectAnimation, Center - new Vector2F(0, zPosition));
 		}
 
 		

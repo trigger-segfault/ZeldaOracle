@@ -11,7 +11,7 @@ using ZeldaOracle.Game.Entities.Players.States;
 namespace ZeldaOracle.Game.Items {
 	public class ItemBombs : ItemWeapon {
 		
-		private Bomb bombEntity;
+		private EntityTracker<Bomb> bombTracker;
 
 
 		//-----------------------------------------------------------------------------
@@ -24,13 +24,14 @@ namespace ZeldaOracle.Game.Items {
 			this.description	= new string[] { "Very explosive.", "Very explosive.", "Very explosive." };
 			this.maxLevel		= Item.Level3;
 			this.currentAmmo	= 0;
-			
+			this.bombTracker	= new EntityTracker<Bomb>(1);
+
 			this.flags			= ItemFlags.UsableWhileInHole;
 
 			sprite = new Sprite[] {
-				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0)),
-				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0)),
-				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0))
+				GameData.SPR_ITEM_ICON_BOMB,
+				GameData.SPR_ITEM_ICON_BOMB,
+				GameData.SPR_ITEM_ICON_BOMB,
 			};
 		}
 
@@ -40,16 +41,18 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 
 		public override void OnButtonPress() {
-			if (bombEntity == null || bombEntity.IsDestroyed || !bombEntity.IsInRoom) {
+			if (bombTracker.IsEmpty) {
 				// Conjure a new bomb.
-				bombEntity = new Bomb();
-				Player.BeginState(new PlayerCarryState(bombEntity));
+				Bomb bomb = new Bomb();
+				bombTracker.TrackEntity(bomb);
+				Player.BeginState(new PlayerCarryState(bomb));
 			}
 			else {
 				// Pickup a bomb from the ground.
-				if (Player.Physics.IsSoftMeetingEntity(bombEntity)) {
-					Player.BeginState(new PlayerCarryState(bombEntity));
-					bombEntity.RemoveFromRoom();
+				Bomb bomb = bombTracker.GetEntity();
+				if (Player.Physics.IsSoftMeetingEntity(bomb)) {
+					Player.BeginState(new PlayerCarryState(bomb));
+					bomb.RemoveFromRoom();
 				}
 			}
 		}

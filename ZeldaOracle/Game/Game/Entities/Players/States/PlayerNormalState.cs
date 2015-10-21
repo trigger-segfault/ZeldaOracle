@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Game.Main;
+using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Items;

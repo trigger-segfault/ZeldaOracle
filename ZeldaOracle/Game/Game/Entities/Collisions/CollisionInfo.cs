@@ -5,7 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Tiles;
 
-namespace ZeldaOracle.Game.Entities {
+namespace ZeldaOracle.Game.Entities.Collisions {
 
 	public enum CollisionType {
 		None,

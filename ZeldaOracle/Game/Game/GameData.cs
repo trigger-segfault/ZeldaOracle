@@ -6,7 +6,6 @@ using System.Text;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Content.ResourceBuilders;
 using ZeldaOracle.Common.Geometry;
@@ -14,6 +13,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Game.Entities;
+using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Items.Essences;
 using ZeldaOracle.Game.Items.KeyItems;
@@ -243,6 +243,13 @@ namespace ZeldaOracle.Game {
 			}
 
 			IntegrateResources<Animation>("ANIM_");
+
+			ANIM_EFFECT_SEEDS = new Animation[5];
+			ANIM_EFFECT_SEEDS[(int) SeedType.Ember]		= ANIM_EFFECT_SEED_EMBER;
+			ANIM_EFFECT_SEEDS[(int) SeedType.Scent]		= ANIM_EFFECT_SEED_SCENT;
+			ANIM_EFFECT_SEEDS[(int) SeedType.Gale]		= ANIM_EFFECT_SEED_GALE;
+			ANIM_EFFECT_SEEDS[(int) SeedType.Pegasus]	= ANIM_EFFECT_SEED_PEGASUS;
+			ANIM_EFFECT_SEEDS[(int) SeedType.Mystery]	= ANIM_EFFECT_SEED_MYSTERY;
 		}
 
 		
@@ -447,6 +454,7 @@ namespace ZeldaOracle.Game {
 			inventory.AddItems(obtain,
 				new ItemWallet(),
 				new ItemSword(),
+				new ItemSwitchHook(),
 				new ItemBracelet(),
 				new ItemFeather(),
 				new ItemBow(),
@@ -745,6 +753,9 @@ namespace ZeldaOracle.Game {
 		// Player sprites.
 		public static Sprite SPR_PLAYER_FORWARD;
 
+		// Entities.
+		public static Sprite SPR_SWITCH_HOOK_LINK;
+
 		// Object tiles.
 		public static Sprite SPR_TILE_BUSH;
 		public static Sprite SPR_TILE_BUSH_ASOBJECT;
@@ -821,8 +832,8 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_ITEM_ICON_CAPE;
 		public static Sprite SPR_ITEM_ICON_BOOMERANG_1;
 		public static Sprite SPR_ITEM_ICON_BOOMERANG_2;
-		public static Sprite SPR_ITEM_ICON_SWITCH_HOOK_1;
-		public static Sprite SPR_ITEM_ICON_SWITCH_HOOK_2;
+		public static Sprite SPR_ITEM_ICON_SWITCH_HOOK;
+		public static Sprite SPR_ITEM_ICON_HOOK_SHOT;
 		public static Sprite SPR_ITEM_ICON_MAGNET_GLOVES_BLUE;
 		public static Sprite SPR_ITEM_ICON_MAGNET_GLOVES_RED;
 		public static Sprite SPR_ITEM_ICON_CANE;
@@ -967,6 +978,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PROJECTILE_SWORD_BEAM;
 		public static Animation ANIM_PROJECTILE_PLAYER_BOOMERANG_1;
 		public static Animation ANIM_PROJECTILE_PLAYER_BOOMERANG_2;
+		public static Animation ANIM_PROJECTILE_SWITCH_HOOK;
 	
 		// Effect animations.
 		public static Animation ANIM_EFFECT_DIRT;
@@ -994,6 +1006,9 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_EFFECT_FALLING_OBJECT;
 		public static Animation ANIM_EFFECT_CLING;
 		public static Animation ANIM_EFFECT_CLING_LIGHT;
+		public static Animation ANIM_EFFECT_BURN;
+
+		public static Animation[] ANIM_EFFECT_SEEDS;
 
 
 		//-----------------------------------------------------------------------------

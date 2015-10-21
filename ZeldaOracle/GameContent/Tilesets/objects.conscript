@@ -165,7 +165,7 @@ TILE (2, 1);
 END;
 
 TILE (3, 1);
-	FLAGS		Solid, Cuttable, movable, Pickupable;
+	FLAGS		Solid, Cuttable, Movable, Pickupable, Switchable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (6, 0);
 	BREAKANIM	effect_rock_break;
 	MODEL		block;

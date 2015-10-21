@@ -24,10 +24,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.description	= new string[] { "A handy tool." };
 			this.maxLevel		= Item.Level1;
 			this.flags			= ItemFlags.UsableWhileInHole;
-
-			sprite = new Sprite[] {
-				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(15, 0)),
-			};
+			this.sprite			= new Sprite[] { GameData.SPR_ITEM_ICON_SHOVEL };
 		}
 
 

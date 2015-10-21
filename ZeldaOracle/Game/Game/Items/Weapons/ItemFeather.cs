@@ -27,8 +27,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.flags			= ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword;
 
 			sprite = new Sprite[] {
-				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(2, 1)),
-				new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(3, 1))
+				GameData.SPR_ITEM_ICON_FEATHER,
+				GameData.SPR_ITEM_ICON_CAPE
 			};
 		}
 

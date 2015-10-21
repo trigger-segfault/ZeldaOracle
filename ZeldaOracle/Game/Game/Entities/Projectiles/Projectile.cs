@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Game.Entities.Collisions;
+using ZeldaOracle.Game.Entities.Monsters;
+using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
 	
@@ -39,10 +43,23 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			Graphics.IsRipplesEffectVisible	= false;
 			Graphics.IsGrassEffectVisible	= false;
 		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Virtual Methods
+		//-----------------------------------------------------------------------------
+		
+		public virtual void OnCollideTile(Tile tile) {
+
+		}
+
+		public virtual void OnCollideMonster(Monster monster) {
+
+		}
 
 
 		//-----------------------------------------------------------------------------
-		// Overridden methods
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
 		public override void OnLand() {
@@ -66,6 +83,36 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			// Check if collided.
 			if (physics.IsColliding && eventCollision != null) {
 				eventCollision();
+				if (IsDestroyed)
+					return;
+			}
+
+			// Collide with tiles.
+			if (physics.IsColliding) {
+				CollisionType type = CollisionType.RoomEdge;
+				Tile tile = null;
+				for (int i = 0; i < 4; i++) {
+					if (Physics.CollisionInfo[i].IsColliding) {
+						type = Physics.CollisionInfo[i].Type;
+						tile = Physics.CollisionInfo[i].Tile;
+						break;
+					}
+				}
+				if (tile != null) {
+					OnCollideTile(tile);
+					if (IsDestroyed)
+						return;
+				}
+			}
+
+			// Collide with monsters.
+			if (owner is Player) {
+				CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
+				for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
+					OnCollideMonster(iterator.CollisionInfo.Entity as Monster);
+					if (IsDestroyed)
+						return;
+				}
 			}
 			
 			if (syncAnimationWithDirection)

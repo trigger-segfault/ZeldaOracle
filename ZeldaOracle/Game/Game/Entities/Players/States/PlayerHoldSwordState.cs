@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;

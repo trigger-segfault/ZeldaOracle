@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 
-namespace ZeldaOracle.Common.Collision {
+namespace ZeldaOracle.Common.Geometry {
 	
 	public class CollisionModel {
 		private List<Rectangle2I> boxes;

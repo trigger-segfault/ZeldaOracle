@@ -31,8 +31,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.flags			= ItemFlags.None;
 
 			sprite = new Sprite[] {
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 0, 1),
-				new Sprite(GameData.SHEET_ITEMS_SMALL, 1, 1)
+				GameData.SPR_ITEM_ICON_BRACELET,
+				GameData.SPR_ITEM_ICON_POWER_GLOVES
 			};
 
 			grabState = new PlayerGrabState();

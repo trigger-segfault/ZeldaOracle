@@ -11,6 +11,9 @@ namespace ZeldaOracle.Game.Entities {
 		private Vector2F	sourcePosition;
 		private bool		hasSource;
 		private bool		applyKnockBack;
+		private int			knockbackDuration;
+		private bool		flicker;
+		private int			flickerDuration;
 
 
 		//-----------------------------------------------------------------------------
@@ -21,6 +24,9 @@ namespace ZeldaOracle.Game.Entities {
 			this.amount			= amount;
 			this.hasSource		= false;
 			this.applyKnockBack	= true;
+			this.knockbackDuration	= GameSettings.UNIT_KNOCKBACK_DURATION;
+			this.flicker			= true;
+			this.flickerDuration	= GameSettings.MONSTER_HURT_FLICKER_DURATION;
 		}
 
 		public DamageInfo(int amount, Vector2F sourcePosition) {
@@ -28,6 +34,9 @@ namespace ZeldaOracle.Game.Entities {
 			this.hasSource		= true;
 			this.sourcePosition	= sourcePosition;
 			this.applyKnockBack	= true;
+			this.knockbackDuration	= GameSettings.UNIT_KNOCKBACK_DURATION;
+			this.flicker			= true;
+			this.flickerDuration	= GameSettings.MONSTER_HURT_FLICKER_DURATION;
 		}
 
 
@@ -50,9 +59,24 @@ namespace ZeldaOracle.Game.Entities {
 			set { hasSource = value; }
 		}
 
+		public bool Flicker {
+			get { return flicker; }
+			set { flicker = value; }
+		}
+
 		public bool ApplyKnockBack {
 			get { return applyKnockBack; }
 			set { applyKnockBack = value; }
+		}
+
+		public int KnockbackDuration {
+			get { return knockbackDuration; }
+			set { knockbackDuration = value; }
+		}
+
+		public int FlickerDuration {
+			get { return flickerDuration; }
+			set { flickerDuration = value; }
 		}
 	}
 

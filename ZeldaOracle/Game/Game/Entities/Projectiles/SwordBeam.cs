@@ -11,6 +11,11 @@ using ZeldaOracle.Game.Tiles;
 namespace ZeldaOracle.Game.Entities.Projectiles {
 	public class SwordBeam : Projectile {
 		
+
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
+
 		public SwordBeam() {
 			// General.
 			syncAnimationWithDirection = true;
@@ -21,13 +26,12 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 1);
 			EnablePhysics(PhysicsFlags.CollideWorld | PhysicsFlags.LedgePassable |
 					PhysicsFlags.HalfSolidPassable | PhysicsFlags.DestroyedOutsideRoom);
-
-			// Add a monster collision handler.
-			Physics.AddCollisionHandler(typeof(Monster), CollisionBoxType.Soft, delegate(Entity entity) {
-				Monster monster = entity as Monster;
-				monster.TriggerInteraction(monster.HandlerSwordBeam, this);
-			});
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
 
 		public override void Initialize() {
 			base.Initialize();
@@ -42,6 +46,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			}
 
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_SWORD_BEAM);
+		}
+
+		public override void OnCollideMonster(Monster monster) {
+			monster.TriggerInteraction(monster.HandlerSwordBeam, this);
 		}
 
 		private void Crash() {

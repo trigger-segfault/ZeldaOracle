@@ -349,6 +349,12 @@ ANIM projectile_player_boomerang_2; SUBSTRIP repeat;
 	ADD frame, 2, (4, 9); ADD frame, 2, (7, 9);
 	ADD frame, 2, (6, 9); ADD frame, 2, (5, 9);
 	OFFSET (-8, -8); END;
+ANIM projectile_switch_hook;
+	SUBSTRIP repeat; ADD frame, 4, (0, 7); ADD frame, 4, (1, 7); OFFSET (-3, -8);
+	SUBSTRIP repeat; ADD frame, 4, (2, 7); ADD frame, 4, (3, 7); OFFSET (-8, -13);
+	SUBSTRIP repeat; ADD frame, 4, (4, 7); ADD frame, 4, (5, 7); OFFSET (-13, -8);
+	SUBSTRIP repeat; ADD frame, 4, (6, 7); ADD frame, 4, (7, 7); OFFSET (-8, -3);
+	END;
 
 
 #==============================================================
@@ -433,7 +439,8 @@ ANIM effect_bomb_explosion; SUBSTRIP reset;
 	ADD frame, 3, (0,  0);
 	ADD frame, 7, (0,  0), (-6, -6); ADD part, 7, (0,0), (6, -6); ADD part, 7, (0, 0), (-6, 2); ADD part, 7, (0, 0), (6, 2);
 	ADD frame, 8, (6,  1), (-8, -8); ADD part, 8, (7,1), (8, -8); ADD part, 8, (6, 2), (-8, 8); ADD part, 8, (7, 2), (8, 8);
-	ADD frame, 9, (1,  0), (-8, -8); ADD part, 9, (1,0), (8, -8); ADD part, 9, (1, 0), (-8, 8); ADD part, 9, (1, 0), (8, 8); END;
+	ADD frame, 9, (1,  0), (-8, -8); ADD part, 9, (1,0), (8, -8); ADD part, 9, (1, 0), (-8, 8); ADD part, 9, (1, 0), (8, 8);
+	OFFSET (-8, -8); END;
 ANIM effect_monster_explosion; SUBSTRIP reset;
 	ADD frame, 5, (0,  0), ( -4, -14); ADD part, 5, (0, 0), (-12, -2);
 	ADD frame, 2, (6,  8), (-16, -16); ADD part, 2, (6, 8), (0, 0);
@@ -499,8 +506,14 @@ ANIM effect_cling_light;
 	CLONE effect_cling;
 	FLICKER 1, on;
 	END;
-
+ANIM effect_burn; SUBSTRIP repeat;
+	ADD frame, 1, (1, 2);
+	ADD frame, 2, (1, 14);
+	ADD frame, 2, (1, 18);
+	ADD frame, 3, (1, 1); ADD frame, 3, (1, 13); ADD frame, 3, (1, 17); REPEAT 3, 6;
+	OFFSET (-8, -8); END;
 	
+
 #==============================================================
 # NPC Animations
 #==============================================================

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
+using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
@@ -29,7 +31,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			
 			//OriginOffset				= new Point2I(8, 14);
 			Physics.CollisionBox		= new Rectangle2F(-3, -5, 6, 1);
-			Physics.SoftCollisionBox	= new Rectangle2F(-3, -5, 6, 1);
+			Physics.SoftCollisionBox	= new Rectangle2F(-7, -7, 14, 14);
 			graphics.DrawOffset			= new Point2I(-8, -14);
 			centerOffset				= new Point2I(0, -6);
 		}
@@ -61,9 +63,16 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public override void OnLand() {
-			// TODO: Interactions with monsters.
+			// Collide with monsters.
+			CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
+			for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
+				Monster monster = iterator.CollisionInfo.Entity as Monster;
+				monster.TriggerInteraction(monster.HandlerThrownObject, this);
+				if (IsDestroyed)
+					return;
+			}
+
 			Break();
-			base.OnLand();
 		}
 
 		public override void Update() {

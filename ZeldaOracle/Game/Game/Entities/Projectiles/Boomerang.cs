@@ -19,36 +19,40 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		private int level;
 
 
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
+
 		public Boomerang(int level) {
 			this.level = level;
 
-			if (level == Item.Level1) {
-				speed = GameSettings.PROJECTILE_BOOMERANG_SPEED_1;
-				returnDelay = GameSettings.PROJECTILE_BOOMERANG_RETURN_DELAY_1;
-			}
-			else {
-				speed = GameSettings.PROJECTILE_BOOMERANG_SPEED_2;
-				returnDelay = GameSettings.PROJECTILE_BOOMERANG_RETURN_DELAY_2;
-			}
+			speed		= GameSettings.PROJECTILE_BOOMERANG_SPEEDS[level];
+			returnDelay	= GameSettings.PROJECTILE_BOOMERANG_RETURN_DELAYS[level];
 
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 2);
 			Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 2);
 			EnablePhysics(PhysicsFlags.CollideWorld | PhysicsFlags.LedgePassable |
 					PhysicsFlags.HalfSolidPassable | PhysicsFlags.CollideRoomEdge);
-
-			// Add a monster collision handler.
-			Physics.AddCollisionHandler(typeof(Monster), CollisionBoxType.Soft, delegate(Entity entity) {
-				Monster monster = entity as Monster;
-				monster.TriggerInteraction(monster.HandlerBoomerang, this);
-			});
 		}
 
+		
+		//-----------------------------------------------------------------------------
+		// Boomerang Methods
+		//-----------------------------------------------------------------------------
 
 		public void BeginReturn() {
-			isReturning = true;
-			physics.Flags &= ~(PhysicsFlags.CollideRoomEdge | PhysicsFlags.CollideWorld);
+			if (!isReturning) {
+				isReturning					= true;
+				physics.CollideWithWorld	= false;
+				physics.CollideWithRoomEdge	= false;
+			}
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
 
 		public override void Initialize() {
 			base.Initialize();
@@ -58,15 +62,25 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			else
 				Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_PLAYER_BOOMERANG_2);
 
-			isReturning = false;
-			timer = 0;
-			physics.Velocity = Angles.ToVector(angle) * speed;
+			isReturning			= false;
+			timer				= 0;
+			physics.Velocity	= Angles.ToVector(angle) * speed;
+		}
+
+		public override void OnCollideTile(Tile tile) {
+			// Create cling effect.
+			Effect effect = new Effect(GameData.ANIM_EFFECT_CLING);
+			RoomControl.SpawnEntity(effect, position, zPosition);
+			BeginReturn();
+		}
+
+		public override void OnCollideMonster(Monster monster) {
+			monster.TriggerInteraction(monster.HandlerBoomerang, this);
 		}
 
 		public override void Update() {
-
-
 			if (isReturning) {
+				// Return to player.
 				Vector2F trajectory = RoomControl.Player.Center - Center;
 				if (trajectory.Length <= speed) {
 					Destroy();
@@ -77,22 +91,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			}
 			else {
 				timer++;
-				if (physics.IsColliding) {
-					CollisionType type = CollisionType.RoomEdge;
-					// Create cling effect.
-					for (int i = 0; i < 4; i++) {
-						if (Physics.CollisionInfo[i].IsColliding) {
-							type = Physics.CollisionInfo[i].Type;
-							break;
-						}
-					}
-					if (type == CollisionType.Tile) {
-						Effect effect = new Effect(GameData.ANIM_EFFECT_CLING);
-						RoomControl.SpawnEntity(effect, position, zPosition);
-					}
-					BeginReturn();
-				}
-				if (timer > returnDelay)
+				if (physics.IsColliding || timer > returnDelay)
 					BeginReturn();
 			}
 

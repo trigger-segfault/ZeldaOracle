@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Collision;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Entities {
 	
@@ -29,9 +29,11 @@ namespace ZeldaOracle.Game.Entities {
 	}
 
 	public enum CollisionBoxType {
-		Hard = 0,
-		Soft = 1,
+		Hard	= 0,
+		Soft	= 1,
+		Custom	= 2,
 	}
+
 
 	public delegate void EntityCollisionHandler(Entity entity);
 
@@ -424,6 +426,22 @@ namespace ZeldaOracle.Game.Entities {
 			if (CanCollideWithEntity(other))
 				return PositionedCollisionBox.Intersects(other.Physics.PositionedCollisionBox);
 			return false;
+		}
+
+		public bool IsSoftMeetingEntity(Entity other, Rectangle2F collisionBox, int maxZDistance = 10) {
+			collisionBox.Point += entity.Position;
+			if (CanCollideWithEntity(other) && GMath.Abs(entity.ZPosition - other.ZPosition) < maxZDistance)
+				return collisionBox.Intersects(other.Physics.PositionedSoftCollisionBox);
+			return false;
+		}
+
+		public bool IsCollidingWith(Entity other, CollisionBoxType collisionBoxType, int maxZDistance = 10) {
+			return IsCollidingWith(other, collisionBoxType, collisionBoxType, maxZDistance);
+		}
+
+		public bool IsCollidingWith(Entity other, CollisionBoxType myBoxType, CollisionBoxType otherBoxType, int maxZDistance = 10) {
+			return CollisionTest.PerformCollisionTest(entity, other,
+				new CollisionTestSettings(null, myBoxType, otherBoxType, maxZDistance)).IsColliding;
 		}
 
 

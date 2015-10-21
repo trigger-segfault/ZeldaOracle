@@ -10,33 +10,6 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Entities {
 
-	// Flags for certain entity properties.
-	// Some of these are physics related.
-	[Flags]
-	public enum EntityFlags {
-		None					= 0,
-		Dead					= 0x2000,	// The entity is dead and no longer exists.
-
-		// Physics
-		DestroyedOutsideRoom	= 0x40,		// The entity is destroyed when it is outside of the room.
-		DestroyedInHoles		= 0x20,		// The entity gets destroyed in holes.
-		Solid					= 0x1,		// Entity is solid.
-		HasGravity				= 0x80,		// The entity is affected by gravity.
-		CollideRoomEdge			= 0x4,		// Colide with the edges of rooms.
-		ReboundSolid			= 0x8,		// Rebound off of solids.
-		ReboundRoomEdge			= 0x10,		// Rebound off of room edges.
-		CollideWorld			= 0x2,		// Collide with solids
-		Bounces					= 0x100,	// The entity bounces when it falls to the ground.
-		AutoDodge				= 0x4000,	// Will move out of the way when colliding the edges of objects.
-		HalfSolidPassable		= 0x800,	// The entity can pass over half-solids.
-		LedgePassable			= 0x400,	// The entity can pass over ledges.
-
-		// Graphics.
-		DynamicDepth			= 0x1000,	// The entity has dynamic depth.
-		ShadowVisible			= 0x200,	// A shadows is visible for the entity.
-	};
-
-
 	// The main class for entity objects in the room.
 	public abstract class Entity {
 

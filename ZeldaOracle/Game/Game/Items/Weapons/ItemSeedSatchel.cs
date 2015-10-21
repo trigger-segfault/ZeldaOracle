@@ -16,6 +16,12 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 	public class ItemSeedSatchel : ItemWeapon {
 
+		private EntityTracker<Seed> emberSeedTracker;
+		private EntityTracker<Seed> scentSeedTracker;
+		private EntityTracker<Seed> galeSeedTracker;
+		private EntityTracker<Seed> mysterySeedTracker;
+
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
@@ -27,6 +33,10 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.maxLevel		= Item.Level3;
 			this.currentAmmo	= 0;
 			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword | ItemFlags.UsableWhileInHole;
+			this.emberSeedTracker	= new EntityTracker<Seed>(1);
+			this.scentSeedTracker	= new EntityTracker<Seed>(1);
+			this.galeSeedTracker	= new EntityTracker<Seed>(1);
+			this.mysterySeedTracker	= new EntityTracker<Seed>(1);
 
 			sprite = new Sprite[] {
 				GameData.SPR_ITEM_ICON_SATCHEL,
@@ -54,13 +64,13 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		}
 		
 		private Seed ThrowSeed(SeedType type) {
-			Seed seed = new Seed(type, false);
+			Seed seed = new Seed(type);
 
 			Vector2F velocity = Directions.ToVector(Player.Direction);
 			Vector2F pos = Player.Origin + (velocity * 4.0f);
-			Player.RoomControl.SpawnEntity(seed, pos, Player.ZPosition + 6);
 			seed.Physics.Velocity = velocity * 0.75f;
-			
+			Player.RoomControl.SpawnEntity(seed, pos, Player.ZPosition + 6);
+
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 			Player.BeginBusyState(10);
 
@@ -77,16 +87,20 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			string ammoID = ammo[currentAmmo].ID;
 
 			if (ammoID == "ammo_ember_seeds") {
-				ThrowSeed(SeedType.Ember);
+				if (emberSeedTracker.IsAvailable)
+					emberSeedTracker.TrackEntity(ThrowSeed(SeedType.Ember));
 			}
 			else if (ammoID == "ammo_scent_seeds") {
-				ThrowSeed(SeedType.Scent);
+				if (scentSeedTracker.IsAvailable)
+					scentSeedTracker.TrackEntity(ThrowSeed(SeedType.Scent));
 			}
 			else if (ammoID == "ammo_gale_seeds") {
-				DropSeed(SeedType.Gale);
+				if (galeSeedTracker.IsAvailable)
+					galeSeedTracker.TrackEntity(DropSeed(SeedType.Gale));
 			}
 			else if (ammoID == "ammo_mystery_seeds") {
-				ThrowSeed(SeedType.Mystery);
+				if (mysterySeedTracker.IsAvailable)
+					mysterySeedTracker.TrackEntity(ThrowSeed(SeedType.Mystery));
 			}
 			else if (ammoID == "ammo_pegasus_seeds") {
 				// Start sprinting.
