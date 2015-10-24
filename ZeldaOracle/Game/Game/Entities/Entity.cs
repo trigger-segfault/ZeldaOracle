@@ -70,11 +70,15 @@ namespace ZeldaOracle.Game.Entities {
 	
 		// Called every step to update the entity.
 		public virtual void Update() {
+			Vector2F tempPos = position;
+			float tempZPos = zPosition;
+
 			// Update the physics component.
-			previousPosition  = position;
-			previousZPosition = zPosition;
 			if (physics.IsEnabled)
 				physics.Update();
+
+			previousPosition  = tempPos;
+			previousZPosition = tempZPos;
 		}
 
 		// Called every step to update the entity's gaphics.

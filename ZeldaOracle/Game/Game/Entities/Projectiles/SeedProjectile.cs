@@ -45,14 +45,17 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		public override void Initialize() {
 			base.Initialize();
-			Graphics.PlaySprite(GameData.SPR_ITEM_SEEDS[(int) type]);
 			reboundCounter = 0;
+			Graphics.PlaySprite(GameData.SPR_ITEM_SEEDS[(int) type]);
+			CheckInitialCollision();
 		}
 
-		public override void OnCollideTile(Tile tile) {
-			reboundCounter++;
-			if (!(reboundCounter >= 3 || (tile != null && tile.Flags.HasFlag(TileFlags.AbsorbSeeds)))) {
-				return;
+		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
+			if (!isInitialCollision) {
+				reboundCounter++;
+				if (!(reboundCounter >= 3 || (tile != null && tile.Flags.HasFlag(TileFlags.AbsorbSeeds)))) {
+					return;
+				}
 			}
 
 			// Move 3 pixels into the block from where it collided.

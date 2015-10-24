@@ -46,6 +46,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			}
 
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_SWORD_BEAM);
+			CheckInitialCollision();
 		}
 
 		public override void OnCollideMonster(Monster monster) {

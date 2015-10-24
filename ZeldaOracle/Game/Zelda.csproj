@@ -226,6 +226,7 @@
     <Compile Include="Game\Entities\NPC.cs" />
     <Compile Include="Game\Entities\Players\PlayerSwimmingSkills.cs" />
     <Compile Include="Game\Entities\Players\PlayerTunics.cs" />
+    <Compile Include="Game\Entities\Players\States\PlayerMagicBoomerangState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSwitchHookState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSeedShooterState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerRespawnDeathState.cs" />

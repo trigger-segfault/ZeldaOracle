@@ -67,7 +67,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 			
 			hookProjectile.Position = hookedEntity.Center;
-
+			
+			player.Physics.CollideWithWorld		= false;
+			player.Physics.CollideWithEntities	= false;
 			player.Physics.HasGravity	= false;
 			player.IsStateControlled	= true;
 		}
@@ -131,10 +133,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.Movement.CanJump			= true;
-			player.Physics.HasGravity		= true;
-			player.IsStateControlled		= false;
-			player.Movement.MoveCondition	= PlayerMoveCondition.FreeMovement;
+			player.Movement.CanJump				= true;
+			player.Physics.CollideWithWorld		= true;
+			player.Physics.CollideWithEntities	= true;
+			player.Physics.HasGravity			= true;
+			player.IsStateControlled			= false;
+			player.Movement.MoveCondition		= PlayerMoveCondition.FreeMovement;
 		}
 
 		public override void Update() {

@@ -36,7 +36,7 @@ END;
 
 TEMPTILE sign;
 	TYPE		TileSign;
-	FLAGS		solid, pickupable, burnable, cuttable, switchable;
+	FLAGS		Solid, Pickupable, Burnable, Cuttable, Switchable, Boomerangable;
 	BREAKANIM	effect_sign_break;
 	MODEL		block;
 	PROPERTIES
@@ -68,59 +68,69 @@ END;
 TILESET objects, tileset_objects, (12, 12);
 DEFAULT (0, 3);
 
+# ??
 TILE (0, 3);
 	FLAGS		diggable;
 END;
 
+# Bush
 TILE (0, 0);
-	FLAGS		Solid, Pickupable, Bombable, Burnable, Switchable, Cuttable, AbsorbSeeds;
+	FLAGS		Solid, Pickupable, Bombable, Burnable, Switchable, Cuttable, AbsorbSeeds, Boomerangable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (0, 0);
 	BREAKANIM	effect_leaves;
 	MODEL		block;
 END;
 
+# Plant
 TILE (1, 0);
-	FLAGS		Solid, Cuttable;
+	FLAGS		Solid, Cuttable, Boomerangable;
 	BREAKANIM	effect_leaves;
 	MODEL		block;
 END;
 
+# Flowers Red
 TILE (2, 0);
-	FLAGS		Solid, Cuttable;
+	FLAGS		Solid, Cuttable, Boomerangable;
 	BREAKANIM	effect_leaves;
 	MODEL		block;
 END;
 
+# Flowers Blue
 TILE (3, 0);
-	FLAGS		Solid, Cuttable;
+	FLAGS		Solid, Cuttable, Boomerangable;
 	BREAKANIM	effect_leaves;
 	MODEL		block;
 END;
 
+# Flowers Pink
 TILE (4, 0);
-	FLAGS		Solid, Cuttable;
+	FLAGS		Solid, Cuttable, Boomerangable;
 	BREAKANIM	effect_leaves;
 	MODEL		block;
 END;
 
+# Flower
 TILE (5, 0);
-	FLAGS		Solid, Cuttable;
+	FLAGS		Solid, Cuttable, Boomerangable;
 	BREAKANIM	effect_leaves;
 	MODEL		block;
 END;
 
+# Water Flower
 TILE (6, 0);
-	FLAGS		Solid, Cuttable;
+	FLAGS		Solid, Cuttable, Boomerangable;
 	BREAKANIM	effect_leaves;
 	MODEL		block;
 END;
 
+# Mushroom
 TILE (7, 0);
 	FLAGS		Solid, Pickupable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (1, 0);
 	MODEL		block;
 END;
 
+# Seed
 TILE (8, 0);
 	FLAGS		Solid, Pickupable, Cuttable, Switchable, Movable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (2, 0);
@@ -128,21 +138,25 @@ TILE (8, 0);
 	MODEL		block;
 END;
 
+# Burnable Tree
 TILE (9, 0);
 	FLAGS		Solid, Burnable, AbsorbSeeds;
 	MODEL		block;
 END;
 
+# Grass
 TILE (10, 0);
-	FLAGS		Cuttable, Grass, Burnable, Bombable;
+	FLAGS		Cuttable, Grass, Burnable, Bombable, Boomerangable;
 	BREAKANIM	effect_grass_leaves;
 END;
 
+# Grass 2
 TILE (11, 0);
-	FLAGS		Cuttable, Burnable, Bombable;
+	FLAGS		Cuttable, Burnable, Bombable, Boomerangable;
 	BREAKANIM	effect_grass_leaves;
 END;
 
+# Rock
 TILE (0, 1);
 	FLAGS		Solid, Pickupable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (3, 0);
@@ -150,6 +164,7 @@ TILE (0, 1);
 	MODEL		block;
 END;
 
+# Diamond Rock
 TILE (1, 1);
 	FLAGS		Solid, Switchable, SwitchStays;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (4, 0);
@@ -157,6 +172,7 @@ TILE (1, 1);
 	MODEL		block;
 END;
 
+# Crystal
 TILE (2, 1);
 	FLAGS		Solid, Cuttable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (5, 0);
@@ -164,6 +180,7 @@ TILE (2, 1);
 	MODEL		block;
 END;
 
+# Pot
 TILE (3, 1);
 	FLAGS		Solid, Cuttable, Movable, Pickupable, Switchable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (6, 0);
@@ -171,61 +188,73 @@ TILE (3, 1);
 	MODEL		block;
 END;
 
+# Sign 
 TILE (4, 1);
 	CLONE		sign;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (7, 0);
 END;
 
+# Sign Old
 TILE (5, 1);
 	CLONE		sign;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (8, 0);
 END;
 
+# Movable Block
 TILE (6, 1);
 	CLONE		pushable_block;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (3, 1);
 END;
 
+# Bombable Block
 TILE (7, 1);
 	FLAGS		solid, bombable;
 	BREAKANIM	effect_rock_break;
 	MODEL		block;
 END;
 
+# Armos Statue
 TILE (8, 1);
 	CLONE		pushable_block;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (9, 0);
 END;
 
+# Gravestone
 TILE (9, 1);
 	CLONE		pushable_block;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (10, 0);
 END;
 
+# Fairy Satue
 TILE (10, 1);
 	CLONE		pushable_block;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (11, 0);
 END;
 
+# Ice Block
 TILE (11, 1);
 	CLONE		pushable_block;
 END;
 
+# Dirt pile
 TILE (0, 2);
 	FLAGS		solid, diggable;
 	MODEL		block;
 END;
 
+# Hole
 TILE (2, 2);
 	FLAGS		hole;
 END;
 
+# Lantern
 TILE (0, 5);
 	CLONE		lantern;
 	SPRITEINDEX	0, "lantern_lit";
 	SPRITEINDEX 1, "tileset_objects_extras_16x16", (4, 3);
 END;
 
+# Color Jump Pad
 TILE (5, 5);
 	CLONE		color_jump_pad;
 	SPRITEINDEX 1, "tileset_objects_extras_16x16", (7, 3);

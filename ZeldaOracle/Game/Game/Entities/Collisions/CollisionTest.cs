@@ -9,6 +9,97 @@ using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Entities.Collisions {
 	
+	public class TileCollisionTest {
+		private Rectangle2F			entityCollisionBox;
+		private Rectangle2F			tileCollisionBox;
+		private CollisionBoxType	entityCollisionBoxType;
+		private bool				useTileCollisionModel;
+		
+		
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
+
+		public TileCollisionTest(CollisionBoxType entityBoxType) {
+			this.entityCollisionBoxType	= entityBoxType;
+			this.useTileCollisionModel	= true;
+		}
+		
+		public TileCollisionTest(Rectangle2F entityCollisionBox) {
+			this.entityCollisionBoxType	= CollisionBoxType.Custom;
+			this.entityCollisionBox		= entityCollisionBox;
+			this.useTileCollisionModel	= true;
+		}
+		
+		public TileCollisionTest(CollisionBoxType entityBoxType, Rectangle2F tileCollisionBox) {
+			this.entityCollisionBoxType	= entityBoxType;
+			this.useTileCollisionModel	= false;
+			this.tileCollisionBox		= tileCollisionBox;
+		}
+		
+		public TileCollisionTest(Rectangle2F entityCollisionBox, Rectangle2F tileCollisionBox) {
+			this.entityCollisionBoxType	= CollisionBoxType.Custom;
+			this.entityCollisionBox		= entityCollisionBox;
+			this.useTileCollisionModel	= false;
+			this.tileCollisionBox		= tileCollisionBox;
+		}
+
+		//-----------------------------------------------------------------------------
+		// Collision Test
+		//-----------------------------------------------------------------------------
+
+		public CollisionInfo PerformCollisionTest(Entity entity, Tile tile) {
+			CollisionInfo collisionInfo = new CollisionInfo();
+
+			// Setup the entity's collision boxe.
+			Rectangle2F entityBox = GetEntityCollisionBox(entity);
+			entityBox.Point += entity.Position;
+
+			// Iterate over the tiles collision boxes.
+			int boxCount = GetTileCollisionBoxCount(tile);
+			for (int i = 0; i < boxCount; i++) {
+				// Setup the tile's collision boxe.
+				Rectangle2F tileBox = GetTileCollisionBox(tile, i);
+				tileBox.Point += tile.Position;
+				
+				// Perform the collision test.
+				if (entityBox.Intersects(tileBox)) {
+					collisionInfo.SetTileCollision(tile, 0);
+				}
+			}
+
+			return collisionInfo;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Accessors
+		//-----------------------------------------------------------------------------
+
+		public Rectangle2F GetEntityCollisionBox(Entity entity) {
+			if (entityCollisionBoxType == CollisionBoxType.Hard)
+				return entity.Physics.CollisionBox;
+			else if (entityCollisionBoxType == CollisionBoxType.Soft)
+				return entity.Physics.SoftCollisionBox;
+			return entityCollisionBox;
+		}
+
+		public int GetTileCollisionBoxCount(Tile tile) {
+			if (useTileCollisionModel) {
+				if (tile.CollisionModel == null)
+					return 0;
+				return tile.CollisionModel.BoxCount;
+			}
+			return 1;
+		}
+
+		public Rectangle2F GetTileCollisionBox(Tile tile, int boxIndex) {
+			if (useTileCollisionModel)
+				return tile.CollisionModel.Boxes[boxIndex];
+			return tileCollisionBox;
+		}
+	}
+	
 	
 	public class CollisionTestSettings {
 		private Rectangle2F			collisionBox1;
@@ -132,7 +223,7 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		// Static Collision Test Methods
 		//-----------------------------------------------------------------------------
 
-		// Perform a collision test.
+		// Perform a collision test between two entities.
 		public static CollisionInfo PerformCollisionTest(Entity entity, Entity other, CollisionTestSettings settings) {
 			CollisionInfo collisionInfo = new CollisionInfo();
 
@@ -157,7 +248,7 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			return collisionInfo;
 		}
 	}
-	
+
 	public class CollisionIterator {
 		private Entity					entity;
 		private CollisionTestSettings	settings;
@@ -238,4 +329,87 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		}
 	}
 
+	
+	
+	public class TileCollisionIterator {
+		private Entity				entity;
+		private TileCollisionTest	collisionTest;
+		private Point2I				location;
+		private int					layer;
+		private CollisionInfo		collisionInfo;
+
+
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
+
+		public TileCollisionIterator(Entity entity, TileCollisionTest collisionTest) {
+			this.entity			= entity;
+			this.collisionTest	= collisionTest;
+			this.location		= new Point2I();
+			this.layer			= 0;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Iteration
+		//-----------------------------------------------------------------------------
+		
+		public void Begin(Entity entity) {
+			this.entity = entity;
+			location = new Point2I(-1, 0);
+			layer = 0;
+			Next();
+		}
+
+		public void Begin() {
+			location = new Point2I(-1, 0);
+			layer = 0;
+			Next();
+		}
+
+		public void Next() {
+			Tile tile = null;
+			while (tile == null) {
+				if (!NextLocation())
+					break;
+				tile = entity.RoomControl.GetTile(location, layer);
+				if (tile != null) {
+					collisionInfo = collisionTest.PerformCollisionTest(entity, tile);
+					if (!collisionInfo.IsColliding)
+						tile = null;
+				}
+			}
+		}
+
+		private bool NextLocation() {
+			location.X++;
+			if (location.X >= entity.RoomControl.Room.Width) {
+				location.X = 0;
+				location.Y++;
+				if (location.Y >= entity.RoomControl.Room.Height) {
+					location.Y = 0;
+					layer++;
+					if (layer >= entity.RoomControl.Room.LayerCount) {
+						// Out of bounds!
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+		
+		public bool IsGood() {
+			return (entity.RoomControl.IsTileInBounds(location, layer));
+		}
+		
+		public CollisionInfo CollisionInfo {
+			get { return collisionInfo; }
+		}
+	}
 }

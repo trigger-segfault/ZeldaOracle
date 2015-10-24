@@ -70,20 +70,33 @@ TILE (2, 7); SOLID edge_s; END;
 TILE (5, 3); SOLID doorway; END;
 TILE (6, 3); SOLID doorway; END;
 
-# Barriers
-TILE (9, 0); SOLID corner_nw; END;
-TILE (10, 0); SOLID edge_n; END;
-TILE (11, 0); SOLID corner_ne; END;
-TILE (9, 1); SOLID edge_w; END;
-TILE (11, 1); SOLID edge_e; END;
-TILE (9, 2); SOLID corner_sw; END;
-TILE (10, 2); SOLID edge_s; END;
-TILE (11, 2); SOLID corner_se; END;
+# Barriers 1
+TILE ( 9, 0); HALFSOLID corner_nw; END;
+TILE (10, 0); HALFSOLID edge_n; END;
+TILE (11, 0); HALFSOLID corner_ne; END;
+TILE ( 9, 1); HALFSOLID edge_w; END;
+TILE (11, 1); HALFSOLID edge_e; END;
+TILE ( 9, 2); HALFSOLID corner_sw; END;
+TILE (10, 2); HALFSOLID edge_s; END;
+TILE (11, 2); HALFSOLID corner_se; END;
+TILE ( 7, 2); HALFSOLID inside_corner_nw; END;
+TILE ( 8, 2); HALFSOLID inside_corner_ne; END;
+TILE ( 7, 3); HALFSOLID inside_corner_sw; END;
+TILE ( 8, 3); HALFSOLID inside_corner_se; END;
 
-TILE (7, 2); SOLID inside_corner_nw; END;
-TILE (8, 2); SOLID inside_corner_ne; END;
-TILE (7, 3); SOLID inside_corner_sw; END;
-TILE (8, 3); SOLID inside_corner_se; END;
+# Barriers 2
+TILE ( 9, 3); HALFSOLID corner_nw; END;
+TILE (10, 3); HALFSOLID edge_n; END;
+TILE (11, 3); HALFSOLID corner_ne; END;
+TILE ( 9, 4); HALFSOLID edge_w; END;
+TILE (11, 4); HALFSOLID edge_e; END;
+TILE ( 9, 5); HALFSOLID corner_sw; END;
+TILE (10, 5); HALFSOLID edge_s; END;
+TILE (11, 5); HALFSOLID corner_se; END;
+TILE ( 7, 5); HALFSOLID inside_corner_nw; END;
+TILE ( 8, 5); HALFSOLID inside_corner_ne; END;
+TILE ( 7, 6); HALFSOLID inside_corner_sw; END;
+TILE ( 8, 6); HALFSOLID inside_corner_se; END;
 
 
 

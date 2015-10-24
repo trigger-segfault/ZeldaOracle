@@ -8,10 +8,10 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Items;
+using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
 	public class SwitchHookProjectile : Projectile {
-		
 		private float	speed;
 		private int		length;
 		private int		level;
@@ -21,6 +21,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		private float	distance;
 		private int		timer;
 		private object	hookedObject;
+		private Collectible collectible;
 
 
 		//-----------------------------------------------------------------------------
@@ -94,14 +95,15 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			base.Initialize();
 
 			if (direction == Directions.Right)
-				Physics.CollisionBox = new Rectangle2F(0, 0, 2, 0);
+				Physics.CollisionBox = new Rectangle2F(0, 0, 2, 1);
 			else if (direction == Directions.Left)
-				Physics.CollisionBox = new Rectangle2F(-2, 0, 2, 0);
+				Physics.CollisionBox = new Rectangle2F(-2, 0, 2, 1);
 			else if (direction == Directions.Up)
-				Physics.CollisionBox = new Rectangle2F(0, -2, 0, 2);
+				Physics.CollisionBox = new Rectangle2F(0, -2, 1, 2);
 			else if (direction == Directions.Down)
-				Physics.CollisionBox = new Rectangle2F(0, 0, 0, 4);
+				Physics.CollisionBox = new Rectangle2F(0, 0, 1, 4);
 
+			collectible			= null;
 			hookedObject		= null;
 			isReturning			= false;
 			isHooked			= false;
@@ -113,23 +115,24 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			Graphics.Animation = GameData.ANIM_PROJECTILE_SWITCH_HOOK;
 		}
 
-		public override void OnCollideTile(Tile tile) {
+		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
+			if (!isReturning && !isHooked && !isLifting) {
+				if (tile.IsSwitchable) {
+					// TODO: Switch with tile.
 
-			if (tile.IsSwitchable) {
-				// TODO: Switch with tile.
-
-				hookedObject	= tile;
-				isHooked		= true;
-				timer			= 0;
-				graphics.PlayAnimation();
-			}
-			else {
-				BeginReturn(false);
-			}
+					hookedObject	= tile;
+					isHooked		= true;
+					timer			= 0;
+					graphics.PlayAnimation();
+				}
+				else {
+					BeginReturn(false);
+				}
 			
-			// Create cling effect.
-			Effect effect = new Effect(GameData.ANIM_EFFECT_CLING);
-			RoomControl.SpawnEntity(effect, position + Directions.ToVector(direction) * 5.0f, zPosition);
+				// Create cling effect.
+				Effect effect = new Effect(GameData.ANIM_EFFECT_CLING);
+				RoomControl.SpawnEntity(effect, position + Directions.ToVector(direction) * 5.0f, zPosition);
+			}
 		}
 
 		public override void OnCollideMonster(Monster monster) {
@@ -145,6 +148,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				// Return to player.
 				Vector2F trajectory = (RoomControl.Player.Center + new Vector2F(0, 3)) - Center;
 				if (trajectory.Length <= speed) {
+					if (collectible != null)
+						collectible.Collect();
 					Destroy();
 				}
 				else {
@@ -165,7 +170,17 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				}
 			}
 			else {
-				// TODO: Collide with monsters and collectibles.
+				// Check for collectibles to pick up.
+				CollisionIterator iterator = new CollisionIterator(this, typeof(Collectible), CollisionBoxType.Soft);
+				iterator.Begin();
+				if (iterator.IsGood()) {
+					Collectible c = iterator.CollisionInfo.Entity as Collectible;
+					if (c.IsPickupable) {
+						collectible = c;
+						c.Destroy();
+						BeginReturn(true);
+					}
+				}
 
 				distance += speed;
 				if (physics.IsColliding || distance >= length)
@@ -185,6 +200,14 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			g.DrawSprite(GameData.SPR_SWITCH_HOOK_LINK, linkPos - new Vector2F(0, zPosition));
 
 			base.Draw(g);
+
+			// Draw collectible.
+			if (collectible != null) {
+				Vector2F pos = Center + Directions.ToVector(direction) * 4;
+				collectible.SetPositionByCenter(pos);
+				collectible.ZPosition = zPosition;
+				collectible.Graphics.Draw(g);
+			}
 		}
 
 

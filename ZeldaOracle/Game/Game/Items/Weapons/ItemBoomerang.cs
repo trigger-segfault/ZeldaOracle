@@ -51,8 +51,16 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			RoomControl.SpawnEntity(boomerang, Player.Center, Player.ZPosition);
 			boomerangTracker.TrackEntity(boomerang);
 
-			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
-			Player.BeginBusyState(10);
+			if (level == Item.Level1) {
+				Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
+				Player.BeginBusyState(10);
+			}
+			else {
+				// Enter a player state to control the magic boomerang.
+				Player.MagicBoomerangState.Weapon = this;
+				Player.MagicBoomerangState.BoomerangEntity = boomerang;
+				Player.BeginState(Player.MagicBoomerangState);
+			}
 		}
 	}
 }

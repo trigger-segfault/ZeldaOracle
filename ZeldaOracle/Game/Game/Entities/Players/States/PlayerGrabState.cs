@@ -31,7 +31,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			Tile grabTile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
 
 			if (grabTile != null && grabTile.Flags.HasFlag(TileFlags.Pickupable)) {
-				player.BeginState(new PlayerCarryState(grabTile));
+				player.CarryState.SetCarryObject(grabTile);
+				player.BeginState(player.CarryState);
 				player.RoomControl.RemoveTile(grabTile);
 				return true;
 			}

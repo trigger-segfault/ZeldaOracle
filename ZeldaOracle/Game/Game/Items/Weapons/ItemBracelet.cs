@@ -15,8 +15,6 @@ using ZeldaOracle.Game.Tiles;
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemBracelet : ItemWeapon {
 
-		private PlayerGrabState grabState;
-
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -34,51 +32,20 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				GameData.SPR_ITEM_ICON_BRACELET,
 				GameData.SPR_ITEM_ICON_POWER_GLOVES
 			};
-
-			grabState = new PlayerGrabState();
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
-
-		// Grab, pull, and pickup objects.
-		public override void OnButtonPress() {
-			/*
-			float minDist = 0;
-			Tile grabTile = null;
-
-			// If multiple tiles, pick the closer one.
-			for (int i = 0; i < player.FrontTiles.Length; i++) {
-				Tile tile = player.FrontTiles[i];
-
-				if (tile != null) {
-					Vector2F disp = tile.Center - Player.Center;
-
-					int axis = (player.Direction + 1) % 2;
-					float dist = Math.Abs(disp[axis]);
-
-					if (grabTile == null || dist < minDist) {
-						grabTile = tile;
-						minDist = dist;
-					}
-				}
-			}
-
-			if (grabTile != null && !(player.CurrentState is PlayerGrabState)) {
-				player.BeginState(new PlayerGrabState());
-			}
-			*/
-		}
 		
 		// Grab, pull, and pickup objects.
 		public override void OnButtonDown() {
 			// Check for a tile to grab.
 			Tile grabTile = Player.Physics.GetMeetingSolidTile(Player.Position, Player.Direction);
-			if (grabTile != null && !grabTile.Flags.HasFlag(TileFlags.NotGrabbable) && Player.CurrentState != grabState) {
-				grabState.BraceletEquipSlot = CurrentEquipSlot;
-				Player.BeginState(grabState);
+			if (grabTile != null && !grabTile.Flags.HasFlag(TileFlags.NotGrabbable) && Player.CurrentState != Player.GrabState) {
+				Player.GrabState.BraceletEquipSlot = CurrentEquipSlot;
+				Player.BeginState(Player.GrabState);
 				Player.Movement.StopMotion();
 			}
 		}

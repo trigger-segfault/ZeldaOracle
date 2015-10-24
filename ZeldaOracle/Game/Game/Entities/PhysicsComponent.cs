@@ -64,7 +64,10 @@ namespace ZeldaOracle.Game.Entities {
 		}
 	}
 
+
 	public class PhysicsComponent {
+
+		public delegate bool TileCollisionCondition(Tile tile);
 
 		private Entity			entity;				// The entity this component belongs to.
 		private bool			isEnabled;			// Are physics enabled for the entity?
@@ -78,6 +81,9 @@ namespace ZeldaOracle.Game.Entities {
 		private Rectangle2F		collisionBox;		// The "hard" collision box, used to collide with solid entities/tiles.
 		private Rectangle2F		softCollisionBox;	// The "soft" collision box, used to collide with items, monsters, room edges, etc.
 		private int				autoDodgeDistance; // The maximum distance allowed to dodge collisions.
+		private Action			customCollisionFunction;
+
+		private TileCollisionCondition customTileCollisionCondition;
 
 		private Vector2F		reboundVelocity;
 		private bool			isColliding;
@@ -85,7 +91,8 @@ namespace ZeldaOracle.Game.Entities {
 		private bool			hasLanded;
 		private TileFlags		topTileFlags;		// The flags for the top-most tile the entity is located over.
 		private TileFlags		allTileFlags;		// The group of flags for all the tiles the entity is located over.
-		private Action			customCollisionFunction;
+		private int				ledgeAltitude;		// How many ledges the entity has passed over.
+		private Point2I			ledgeTileLocation;	// The tile location of the ledge we are currently passing over, or (-1, -1) if not passing over ledge.
 
 		private List<EntityCollisionHandlerInstance> entityCollisionHandlers;
 
@@ -114,6 +121,8 @@ namespace ZeldaOracle.Game.Entities {
 			this.customCollisionFunction	= null;
 			this.hasLanded			= false;
 			this.reboundVelocity	= Vector2F.Zero;
+			this.ledgeAltitude		= 0;
+			this.ledgeTileLocation	= new Point2I(-1, -1);
 
 			this.entityCollisionHandlers = new List<EntityCollisionHandlerInstance>();
 
@@ -205,12 +214,19 @@ namespace ZeldaOracle.Game.Entities {
 			if (HasFlags(PhysicsFlags.CollideRoomEdge))
 				CheckRoomEdgeCollisions(collisionBox);
 			// 3. Custom collision function.
-			if (customCollisionFunction != null)
+			if (customCollisionFunction != null) {
 				customCollisionFunction.Invoke();
+				if (entity.IsDestroyed)
+					return;
+			}
 
 			// Apply velocity.
 			entity.Position += velocity;
 			velocity += reboundVelocity;
+
+			// Check ledges.
+			if (HasFlags(PhysicsFlags.LedgePassable))
+				CheckLedges();
 
 			// Check the flags of the tiles below the entity.
 			CheckGroundTiles();
@@ -251,6 +267,30 @@ namespace ZeldaOracle.Game.Entities {
 						topTileFlags |= tile.Flags;
 						allTileFlags |= tile.Flags;
 						break;
+					}
+				}
+			}
+		}
+
+		// Update ledge passing, handling changes in altitude.
+		private void CheckLedges() {
+			Point2I prevLocation = entity.RoomControl.GetTileLocation(entity.PreviousPosition + collisionBox.Center);
+			Point2I location = entity.RoomControl.GetTileLocation(entity.Position + collisionBox.Center);
+
+			// When moving over a new tile, check its ledge state.
+			if (location != prevLocation) {
+				ledgeTileLocation = new Point2I(-1, -1);
+
+				if (entity.RoomControl.IsTileInBounds(location)) {
+					Tile tile = entity.RoomControl.GetTopTile(location);
+
+					if (tile != null && tile.IsLedge) {
+						ledgeTileLocation = location;
+						// Adjust ledge altitude.
+						if (IsGoingUpLedge(tile))
+							ledgeAltitude--;
+						else if (IsGoingDownLedge(tile))
+							ledgeAltitude++;
 					}
 				}
 			}
@@ -325,6 +365,8 @@ namespace ZeldaOracle.Game.Entities {
 				return false;
 			if (tile.Flags.HasFlag(TileFlags.HalfSolid) && flags.HasFlag(PhysicsFlags.HalfSolidPassable))
 				return false;
+			if (customTileCollisionCondition != null)
+				return customTileCollisionCondition(tile);
 			return true;
 		}
 
@@ -548,13 +590,20 @@ namespace ZeldaOracle.Game.Entities {
 			bool collide = false;
 			for (int i = 0; i < model.Boxes.Count; ++i) {
 				Rectangle2F box = Rectangle2F.Translate((Rectangle2F) model.Boxes[i], modelPos);
-				if (ResolveCollision(axis, tile, box))
+				if (ResolveCollision(axis, tile, box)) {
 					collide = true;
+				}
 			}
 			return collide;
 		}
 
 		private bool ResolveCollision(int axis, Tile tile, Rectangle2F block) {
+			// Check if tile is a ledge we won't collide with.
+			if (tile.IsLedge && flags.HasFlag(PhysicsFlags.LedgePassable)) {
+				if (ledgeAltitude > 0 || tile.Location == ledgeTileLocation || IsGoingDownLedge(tile))
+					return false;
+			}
+
 			if (axis == Axes.X) {
 				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.X + velocity.X, entity.Y);
 				if (myBox.Intersects(block)) {
@@ -706,6 +755,22 @@ namespace ZeldaOracle.Game.Entities {
 			return false;
 		}
 
+		private bool IsGoingDownLedge(Tile ledgeTile) {
+			int ledgeDirection = ledgeTile.LedgeDirection;
+			int checkAxis = Directions.ToAxis(ledgeDirection);
+			if (ledgeDirection == Directions.Up || ledgeDirection == Directions.Left)
+				return (velocity[checkAxis] < 0);
+			return (velocity[checkAxis] > 0);
+		}
+
+		private bool IsGoingUpLedge(Tile ledgeTile) {
+			int ledgeDirection = ledgeTile.LedgeDirection;
+			int checkAxis = Directions.ToAxis(ledgeDirection);
+			if (ledgeDirection == Directions.Up || ledgeDirection == Directions.Left)
+				return (velocity[checkAxis] > 0);
+			return (velocity[checkAxis] < 0);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -767,6 +832,10 @@ namespace ZeldaOracle.Game.Entities {
 			set { autoDodgeDistance = value; }
 		}
 
+		public TileCollisionCondition CustomTileCollisionCondition {
+			get { return customTileCollisionCondition; }
+			set { customTileCollisionCondition = value; }
+		}
 
 		// Collision info.
 

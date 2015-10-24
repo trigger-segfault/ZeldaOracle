@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace ZeldaOracle.Common.Geometry {
+
 /** <summary>
 * A static class for advanced game-related mathematical functions and calculations.
 * </summary> */
@@ -924,6 +925,14 @@ public static class GMath {
 
 	//============ ANGLES ============
 	
+	public static float GetDirection(Vector2F v, bool invertY) {
+		if (v.X == 0.0f && v.Y == 0.0f)
+			return 0.0f;
+		if (invertY)
+			v.Y = -v.Y;
+		return GMath.Plusdir(GMath.Atan2(v.Y, v.X));
+	}
+
 	// Convert Angle
 
 	/** <summary> Converts the given angle into degrees if UsingDegrees is true. </summary> */
@@ -1010,6 +1019,22 @@ public static class GMath {
 		if (dir > HalfAngle)
 			return dir - FullAngle;
 		return dir;
+	}
+	
+	// Return the modular distance from one angle to another using the given winding order.
+	public static float GetAngleDistance(float startAngle, float endAngle, WindingOrder windingOrder) {
+		if (windingOrder == WindingOrder.Clockwise) {
+			if (endAngle > startAngle)
+				return (startAngle + GMath.FullAngle - endAngle);
+			else
+				return (startAngle - endAngle);
+		}
+		else {
+			if (endAngle < startAngle)
+				return (endAngle + GMath.FullAngle - startAngle);
+			else
+				return (endAngle - startAngle);
+		}
 	}
 
 	//========= TRIGONOMETRY =========

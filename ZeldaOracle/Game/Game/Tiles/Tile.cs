@@ -124,6 +124,12 @@ namespace ZeldaOracle.Game.Tiles {
 				Break(true);
 		}
 
+		// Called when the tile is hit by the player's boomerang.
+		public virtual void OnBoomerang() {
+			if (!isMoving && flags.HasFlag(TileFlags.Boomerangable))
+				Break(true);
+		}
+
 		// Called when the player wants to push the tile.
 		public virtual bool OnPush(int direction, float movementSpeed) {
 			if (isMoving)
@@ -187,7 +193,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		// Called when the player jumps and lands on the tile.
 		public virtual void OnLand(Point2I startTile) {
-			
+
 		}
 		
 		// Called when a tile is finished moving after being pushed.
@@ -490,6 +496,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public bool IsCoverable {
 			get { return !flags.HasFlag(TileFlags.NotCoverable); }
+		}
+
+		public bool IsBoomerangable {
+			get { return flags.HasFlag(TileFlags.Boomerangable); }
 		}
 
 		public bool IsSwitchable {
