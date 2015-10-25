@@ -60,7 +60,7 @@ namespace ZeldaOracle.Game.Tiles {
 			properties		= new Properties();
 			properties.PropertyObject = this;
 			tileData		= null;
-			moveDirection	= Point2I.Zero;
+			moveDirection	= Point2I.Zero; 
 		}
 
 
@@ -105,6 +105,12 @@ namespace ZeldaOracle.Game.Tiles {
 		// Called when the tile is burned by a fire.
 		public virtual void OnBurn() { }
 
+		// Called when the tile is hit by the player's boomerang.
+		public virtual void OnBoomerang() {
+			if (!isMoving && flags.HasFlag(TileFlags.Boomerangable))
+				Break(true);
+		}
+
 		// Called when the player wants to push the tile.
 		public virtual bool OnPush(int direction, float movementSpeed) {
 			if (isMoving)
@@ -119,7 +125,7 @@ namespace ZeldaOracle.Game.Tiles {
 			int newLayer = -1;
 			for (int i = 0; i < RoomControl.Room.LayerCount; i++) {
 				Tile t = RoomControl.GetTile(newLocation.X, newLocation.Y, i);
-				if (t != null && (t.Flags.HasFlag(TileFlags.Solid) || t.Flags.HasFlag(TileFlags.NotCoverable)))
+				if (t != null && (t.IsSolid || !t.IsCoverable || t.IsStairs || t.IsLadder))
 					return false;
 				if (t == null && newLayer != layer)
 					newLayer = i;
@@ -166,7 +172,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		// Called when the player jumps and lands on the tile.
 		public virtual void OnLand(Point2I startTile) { }
-		
+			
 		// Called when a tile is finished moving after being pushed.
 		public virtual void OnCompleteMovement() {
 			// Check if we are over a hazard tile (water, lava, hole).
@@ -267,7 +273,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		// Simulation
 		//-----------------------------------------------------------------------------
-		
+
 		public virtual void OnInitialize() {}
 
 		public virtual void Update() {
@@ -306,7 +312,7 @@ namespace ZeldaOracle.Game.Tiles {
 				g.DrawSprite(sprite.Sprite, Zone.ImageVariantID, Position);
 			}
 		}
-
+		
 		//-----------------------------------------------------------------------------
 		// Flags methods
 		//-----------------------------------------------------------------------------
@@ -508,7 +514,19 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public bool IsCoverable {
-			get { return !Flags.HasFlag(TileFlags.NotCoverable); }
+			get { return !flags.HasFlag(TileFlags.NotCoverable); }
+		}
+
+		public bool IsSwitchable {
+			get { return flags.HasFlag(TileFlags.Switchable); }
+		}
+
+		public bool StaysOnSwitch {
+			get { return flags.HasFlag(TileFlags.SwitchStays); }
+		}
+
+		public bool BreaksOnSwitch {
+			get { return !flags.HasFlag(TileFlags.SwitchStays); }
 		}
 		
 		public bool IsHole {
