@@ -299,8 +299,6 @@ namespace ZeldaOracle.Game.Entities {
 		// Update the z-velocity, position, and gravity of the entity.
 		private void UpdateZVelocity() {
 			if (entity.ZPosition > 0.0f || zVelocity != 0.0f) {
-				entity.ZPosition += zVelocity;
-
 				// Apply gravity.
 				if (HasFlags(PhysicsFlags.HasGravity)) {
 					zVelocity -= gravity;
@@ -308,7 +306,10 @@ namespace ZeldaOracle.Game.Entities {
 						zVelocity = -maxFallSpeed;
 				}
 
-				// Land on the ground.
+				// Apply z-velocity.
+				entity.ZPosition += zVelocity;
+
+				// Check if landed on the ground.
 				if (entity.ZPosition <= 0.0f) {
 					hasLanded = true;
 					if (HasFlags(PhysicsFlags.Bounces)) {

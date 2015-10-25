@@ -502,6 +502,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (!isStateControlled) {
 				UpdateEquippedItems();
 				CheckTouchedTiles();
+				
+				Physics.Gravity = GameSettings.DEFAULT_GRAVITY;
+				if (movement.IsCapeDeployed)
+					Physics.Gravity = GameSettings.PLAYER_CAPE_GRAVITY;
 			}
 
 			// Sync the graphics image variant with the current tunic.
