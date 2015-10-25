@@ -21,7 +21,6 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
 using Song = ZeldaOracle.Common.Audio.Song;
-using Playlist = ZeldaOracle.Common.Audio.Playlist;
 using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Common.Content {
@@ -85,8 +84,6 @@ namespace ZeldaOracle.Common.Content {
 		private static Dictionary<string, Sound> sounds;
 		// The collection of loaded songs.
 		private static Dictionary<string, Song> songs;
-		// The collection of loaded playlists.
-		private static Dictionary<string, Playlist> playlists;
 
 		// LANGUAGES:
 		// The collection of loaded languages.
@@ -147,7 +144,6 @@ namespace ZeldaOracle.Common.Content {
 			// Sounds
 			sounds				= new Dictionary<string, Sound>();
 			songs				= new Dictionary<string, Song>();
-			playlists			= new Dictionary<string, Playlist>();
 
 			// Languages
 			languages			= new List<Language>();
@@ -174,7 +170,6 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries[typeof(Effect)]			= shaders;
 			resourceDictionaries[typeof(Sound)]				= sounds;
 			resourceDictionaries[typeof(Song)]				= songs;
-			resourceDictionaries[typeof(Playlist)]			= playlists;
 			resourceDictionaries[typeof(CollisionModel)]	= collisionModels;
 			resourceDictionaries[typeof(Tileset)]			= tilesets;
 			resourceDictionaries[typeof(TileData)]			= tileData;
@@ -335,11 +330,6 @@ namespace ZeldaOracle.Common.Content {
 		// Gets the song with the specified name.
 		public static Song GetSong(string name) {
 			return songs[name];
-		}
-
-		// Gets the playlist with the specified name.
-		public static Playlist GetPlaylist(string name) {
-			return playlists[name];
 		}
 
 		// Gets the language with the specified name.

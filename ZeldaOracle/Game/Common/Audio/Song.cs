@@ -11,7 +11,6 @@ using XnaPlaylist = Microsoft.Xna.Framework.Media.Playlist;
 
 using ZeldaOracle.Common.Geometry;
 using Song = ZeldaOracle.Common.Audio.Song;
-using Playlist = ZeldaOracle.Common.Audio.Playlist;
 
 namespace ZeldaOracle.Common.Audio {
 /** <summary>
