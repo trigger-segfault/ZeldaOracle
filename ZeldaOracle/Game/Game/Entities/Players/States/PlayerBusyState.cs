@@ -11,6 +11,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private int timer;
 		private int duration;
 		private Dictionary<int, Action<PlayerState>> actions;
+		private Action<PlayerState> endAction;
 
 
 		//-----------------------------------------------------------------------------
@@ -21,6 +22,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			this.timer		= 0;
 			this.duration	= 0;
 			this.actions	= new Dictionary<int,Action<PlayerState>>();
+			this.endAction	= null;
 		}
 		
 
@@ -30,6 +32,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public void AddDelayedAction(int time, Action<PlayerState> action) {
 			actions[time] = action;
+		}
+
+		public void SetEndAction(Action<PlayerState> action) {
+			endAction = action;
 		}
 
 
@@ -50,6 +56,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			timer = 0;
 			duration = 0;
 			actions.Clear();
+			if (endAction != null)
+				endAction(this);
 		}
 
 		public override void Update() {

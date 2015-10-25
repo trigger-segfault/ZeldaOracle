@@ -15,6 +15,9 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 	public class ItemSlingshot : ItemWeapon {
 
+		private EntityTracker<SeedProjectile> seedTracker;
+
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
@@ -28,6 +31,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWhileInHole;
 			this.sprite			= new Sprite[] { GameData.SPR_ITEM_ICON_SLINGSHOT_1, GameData.SPR_ITEM_ICON_SLINGSHOT_2 };
 			this.spriteEquipped	= new Sprite[] { GameData.SPR_ITEM_ICON_SLINGSHOT_1, GameData.SPR_ITEM_ICON_SLINGSHOT_2_EQUIPPED };
+			this.seedTracker	= new EntityTracker<SeedProjectile>(3);
 		}
 
 
@@ -37,7 +41,64 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		// Called when the items button is pressed (A or B).
 		public override void OnButtonPress() {
-			
+			if (!seedTracker.IsEmpty)
+				return;
+
+			SeedType seedType = CurrentSeedType;
+			int direction = Player.UseDirection;
+
+			Player.Direction = direction;
+
+			// Determine the seed spawn position based on player facing direction.
+			Vector2F seedPos = Player.Center;
+			if (direction == Directions.Up)
+				seedPos = Player.Center + (Directions.ToVector(direction) * 1);
+			else if (direction == Directions.Down)
+				seedPos = Player.Center + (Directions.ToVector(direction) * 8);
+			else
+				seedPos = Player.Position - new Vector2F(0, 2) + (Directions.ToVector(direction) * 4);
+
+			// Spawn the seed projectile.
+			SeedProjectile seed = new SeedProjectile(seedType, false);
+			seed.Owner = Player;
+			seed.Physics.Velocity = Directions.ToVector(direction) * GameSettings.SLINGSHOT_SEED_SPEED;
+			Player.RoomControl.SpawnEntity(seed, seedPos, Player.ZPosition + 5);
+			seedTracker.TrackEntity(seed);
+
+			// Spawn the extra 2 seeds for the Hyper Slingshot.
+			if (level == Item.Level2) {
+				for (int i = 0; i < 2; i++) {
+					int sideDirection = direction + (i == 0 ? 1 : 3);
+					seed = new SeedProjectile(seedType, false);
+					seed.Owner = Player;
+
+					// Calculate the velocity based on a degree offset.
+					float degrees = direction * GMath.QuarterAngle;
+					if (i == 0)
+						degrees += GameSettings.SLINGSHOT_SEED_DEGREE_OFFSET;
+					else
+						degrees -= GameSettings.SLINGSHOT_SEED_DEGREE_OFFSET;
+					seed.Physics.Velocity = Vector2F.CreatePolar(GameSettings.SLINGSHOT_SEED_SPEED, degrees);
+					seed.Physics.VelocityY = -seed.Physics.VelocityY;
+
+					Player.RoomControl.SpawnEntity(seed, seedPos, Player.ZPosition + 5);
+					seedTracker.TrackEntity(seed);
+				}
+			}
+
+			// Set the tool animation.
+			if (level == Item.Level1)
+				Player.toolAnimation.Play(GameData.ANIM_SLINGSHOT_1);
+			else
+				Player.toolAnimation.Play(GameData.ANIM_SLINGSHOT_2);
+			Player.toolAnimation.SubStripIndex = direction;
+
+			// Begin the player busy state.
+			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
+			Player.BusyState.SetEndAction(delegate(PlayerState playerState) {
+				playerState.Player.toolAnimation.Animation = null;
+			});
+			Player.BeginBusyState(10);
 		}
 
 		// Called when the item is added to the inventory list.
@@ -108,20 +169,27 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		public override void OnObtained() {
 			inventory.ObtainAmmo(this.ammo[0]);
 		}
+		
+		
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
 
-		// Called when the item has been unobtained.
-		public override void OnUnobtained() {
-
-		}
-
-		// Called when the item has been stolen.
-		public override void OnStolen() {
-
-		}
-
-		// Called when the stolen item has been returned.
-		public override void OnReturned() {
-
+		public SeedType CurrentSeedType {
+			get {
+				string ammoID = ammo[currentAmmo].ID;
+				if (ammoID == "ammo_ember_seeds")
+					return SeedType.Ember;
+				else if (ammoID == "ammo_scent_seeds")
+					return SeedType.Scent;
+				else if (ammoID == "ammo_gale_seeds")
+					return SeedType.Gale;
+				else if (ammoID == "ammo_mystery_seeds")
+					return SeedType.Mystery;
+				else if (ammoID == "ammo_pegasus_seeds")
+					return SeedType.Pegasus;
+				return SeedType.Ember;
+			}
 		}
 	}
 }

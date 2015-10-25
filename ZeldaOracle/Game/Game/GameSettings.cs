@@ -62,6 +62,10 @@ namespace ZeldaOracle.Game {
 		public const int				SWITCH_HOOK_LATCH_DURATION				= 20;
 		public const float				SWITCH_HOOK_LIFT_SPEED					= 1.0f;
 		public const int				SWITCH_HOOK_LIFT_HEIGHT					= 16;
+		public const float				PROJECTILE_MAGIC_ROD_FIRE_SPEED			= 2.0f;
+		
+		public const float				SLINGSHOT_SEED_SPEED					= 3.0f;
+		public const float				SLINGSHOT_SEED_DEGREE_OFFSET			= 20.0f;
 		
 		// Units
 		public const float				UNIT_KNOCKBACK_SPEED			= 1.0f; // 1.3 ??

@@ -37,9 +37,12 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 2);
 			EnablePhysics(PhysicsFlags.CollideWorld | PhysicsFlags.LedgePassable |
 					PhysicsFlags.HalfSolidPassable | PhysicsFlags.CollideRoomEdge);
-			physics.CustomTileCollisionCondition = delegate(Tile tile) {
-				return !tile.IsBoomerangable;
-			};
+
+			if (level == Item.Level2) {
+				physics.CustomTileCollisionCondition = delegate(Tile tile) {
+					return !tile.IsBoomerangable;
+				};
+			}
 			
 			// Graphics.
 			Graphics.IsShadowVisible = false;
@@ -110,15 +113,18 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			}
 			else {
 				// Check for boomerangable tiles.
-				Point2I tileLoc = RoomControl.GetTileLocation(position);
-				if (tileLoc != tileLocation && RoomControl.IsTileInBounds(tileLoc)) {
-					Tile tile = RoomControl.GetTopTile(tileLoc);
-					if (tile != null) {
-						tile.OnBoomerang();
+				if (level == Item.Level2) {
+					Point2I tileLoc = RoomControl.GetTileLocation(position);
+					if (tileLoc != tileLocation && RoomControl.IsTileInBounds(tileLoc)) {
+						Tile tile = RoomControl.GetTopTile(tileLoc);
+						if (tile != null) {
+							tile.OnBoomerang();
+						}
 					}
+					tileLocation = tileLoc;
 				}
-				tileLocation = tileLoc;
 
+				// Update return timer.
 				timer++;
 				if (timer > returnDelay)
 					BeginReturn();

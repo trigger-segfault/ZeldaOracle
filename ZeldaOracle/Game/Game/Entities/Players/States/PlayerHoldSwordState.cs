@@ -32,11 +32,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerHoldSwordState() {
-			this.weaponAnimation	= null;
-			this.nextState			= null;
-			this.weapon				= null;
-			this.chargeTimer		= 0;
-			this.direction			= Directions.Right;
+			weaponAnimation	= GameData.ANIM_SWORD_HOLD;
+			nextState		= null;
+			weapon			= null;
+			chargeTimer		= 0;
+			direction		= Directions.Right;
 		}
 		
 		
@@ -55,6 +55,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					player.RoomControl.SpawnEntity(clingEffect, pos);
 				}
 			}
+			player.SwordStabState.Weapon = weapon;
 			player.BeginState(player.SwordStabState);
 		}
 

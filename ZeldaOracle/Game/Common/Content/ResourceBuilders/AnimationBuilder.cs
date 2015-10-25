@@ -150,8 +150,18 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 		}
 
 		public AnimationBuilder Offset(int x, int y) {
-			for (int i = 0; i < animation.Frames.Count; i++)
-				animation.Frames[i].Sprite.DrawOffset += new Point2I(x, y);
+			for (Animation anim = animation; anim != null; anim = anim.NextStrip) {
+				for (int i = 0; i < anim.Frames.Count; i++)
+					anim.Frames[i].Sprite.DrawOffset += new Point2I(x, y);
+			}
+			return this;
+		}
+
+		public AnimationBuilder ShiftSourcePositions(int x, int y) {
+			for (Animation anim = animation; anim != null; anim = anim.NextStrip) {
+				for (int i = 0; i < anim.Frames.Count; i++)
+					anim.Frames[i].Sprite.SourceRect += new Point2I(x, y) * (SpriteSheet.CellSize + SpriteSheet.Spacing);
+			}
 			return this;
 		}
 

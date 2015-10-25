@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Players.States;
+using ZeldaOracle.Game.Entities.Players.States.SwingStates;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Common.Input;
 

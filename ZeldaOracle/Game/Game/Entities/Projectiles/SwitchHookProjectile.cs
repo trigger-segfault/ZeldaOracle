@@ -40,8 +40,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			syncAnimationWithDirection = true;
 
 			// Physics.
-			EnablePhysics(PhysicsFlags.CollideWorld | PhysicsFlags.CollideRoomEdge |
-					PhysicsFlags.LedgePassable | PhysicsFlags.HalfSolidPassable);
+			EnablePhysics(
+				PhysicsFlags.CollideWorld |
+				PhysicsFlags.CollideRoomEdge |
+				PhysicsFlags.LedgePassable |
+				PhysicsFlags.HalfSolidPassable);
 
 			// Graphics.
 			Graphics.IsShadowVisible = false;

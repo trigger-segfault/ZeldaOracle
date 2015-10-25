@@ -138,7 +138,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 		
 		public void HandleEntityCollisions(Type entityType, CollisionBoxType collisionBoxType, EntityCollisionHandler handler) {
-			for (int i = 0; i < entity.RoomControl.Entities.Count; i++) {
+			for (int i = 0; i < entity.RoomControl.EntityCount; i++) {
 				Entity e = entity.RoomControl.Entities[i];
 				if (e.GetType().IsAssignableFrom(entityType) && IsMeetingEntity(e, collisionBoxType)) {
 					handler(e);
@@ -187,7 +187,7 @@ namespace ZeldaOracle.Game.Entities {
 
 			// Perform custom collision handling.
 			if (entityCollisionHandlers.Count > 0) {
-				for (int i = 0; i < entity.RoomControl.Entities.Count; i++) {
+				for (int i = 0; i < entity.RoomControl.EntityCount; i++) {
 					Entity e = entity.RoomControl.Entities[i];
 					for (int j = 0; j < entityCollisionHandlers.Count; j++) {
 						EntityCollisionHandlerInstance handler = entityCollisionHandlers[j];
@@ -575,7 +575,7 @@ namespace ZeldaOracle.Game.Entities {
 
 				// Collide with solid entities.
 				if (flags.HasFlag(PhysicsFlags.CollideEntities)) {
-					for (int i = 0; i < entity.RoomControl.Entities.Count; i++) {
+					for (int i = 0; i < entity.RoomControl.EntityCount; i++) {
 						Entity e = entity.RoomControl.Entities[i];
 						if (e.Physics.IsEnabled && e.Physics.IsSolid) {
 							if (CanCollideWithEntity(e))

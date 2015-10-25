@@ -199,6 +199,16 @@ namespace ZeldaOracle.Common.Scripts {
 			AddCommand("Repeat", delegate(CommandParam parameters) {
 				animationBuilder.RepeatPreviousFrames(parameters.GetInt(0), parameters.GetInt(1));
 			});
+			// Rewinds back to the first animation (if currently on a latter substrip).
+			AddCommand("Rewind", delegate(CommandParam parameters) {
+				animationBuilder.Animation = animation;
+			});
+			// Shifts the source positions of all sprites in the animation.
+			AddCommand("ShiftSource", delegate(CommandParam parameters) {
+				animationBuilder.ShiftSourcePositions(
+					parameters.GetPoint(0).X,
+					parameters.GetPoint(0).Y);
+			});
 		}
 
 		// Begins reading the script.

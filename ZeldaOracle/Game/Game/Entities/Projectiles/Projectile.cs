@@ -31,8 +31,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public Projectile() {
 			EnablePhysics();
 
-			syncAnimationWithAngle = false;
-			syncAnimationWithDirection = false;
+			syncAnimationWithAngle		= false;
+			syncAnimationWithDirection	= false;
 
 			owner			= null;
 			eventCollision	= null;

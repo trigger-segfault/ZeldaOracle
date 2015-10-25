@@ -14,13 +14,14 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 	public class SeedProjectile : SeedEntity {
 
 		private int reboundCounter;
+		private bool reboundOffWalls;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public SeedProjectile(SeedType type) :
+		public SeedProjectile(SeedType type, bool reboundOffWalls) :
 			base(type)
 		{
 			// Physics.
@@ -29,9 +30,12 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			EnablePhysics(
 				PhysicsFlags.DestroyedOutsideRoom |
 				PhysicsFlags.CollideWorld |
-				PhysicsFlags.ReboundSolid |
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.LedgePassable);
+
+			this.reboundOffWalls = reboundOffWalls;
+			if (reboundOffWalls)
+				Physics.Flags |= PhysicsFlags.ReboundSolid;
 
 			// Graphics.
 			graphics.DrawOffset	= new Point2I(-4, -6);
@@ -51,7 +55,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
-			if (!isInitialCollision) {
+			if (reboundOffWalls && !isInitialCollision) {
 				reboundCounter++;
 				if (!(reboundCounter >= 3 || (tile != null && tile.Flags.HasFlag(TileFlags.AbsorbSeeds)))) {
 					return;
@@ -59,7 +63,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			}
 
 			// Move 3 pixels into the block from where it collided.
-			position += Physics.PreviousVelocity.Normalized * 3.0f;
+			if (!isInitialCollision)
+				position += Physics.PreviousVelocity.Normalized * 3.0f;
 
 			// Notify the tile of the seed hitting it.
 			if (tile != null) {

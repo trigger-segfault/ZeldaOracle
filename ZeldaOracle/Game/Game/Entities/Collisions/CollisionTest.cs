@@ -304,7 +304,7 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		public void Next() {
 			// Find the index of the next collision.
 			CollisionInfo info;
-			for (int i = index + 1; i < entity.RoomControl.Entities.Count; i++) {
+			for (int i = index + 1; i < entity.RoomControl.EntityCount; i++) {
 				info = CollisionTest.PerformCollisionTest(entity, entity.RoomControl.Entities[i], settings);
 				if (info.IsColliding) {
 					index = i;

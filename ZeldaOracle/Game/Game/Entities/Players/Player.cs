@@ -15,6 +15,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Entities.Players.States;
+using ZeldaOracle.Game.Entities.Players.States.SwingStates;
 using ZeldaOracle.Common.Audio;
 
 
@@ -63,7 +64,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerSwimState				stateSwim;
 		private PlayerLedgeJumpState		stateLedgeJump;
 		private PlayerLadderState			stateLadder;
-		private PlayerSwingState			stateSwing;
+		private PlayerSwingSwordState		stateSwingSword;
+		private PlayerSwingBigSwordState	stateSwingBigSword;
+		private PlayerSwingCaneState		stateSwingCane;
+		private PlayerSwingMagicRodState		stateSwingMagicRod;
 		private PlayerHoldSwordState		stateHoldSword;
 		private PlayerSwordStabState		stateSwordStab;
 		private PlayerSpinSwordState		stateSpinSword;
@@ -132,7 +136,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateSwim			= new PlayerSwimState();
 			stateLadder			= new PlayerLadderState();
 			stateLedgeJump		= new PlayerLedgeJumpState();
-			stateSwing			= new PlayerSwingState();
+			stateSwingSword		= new PlayerSwingSwordState();
+			stateSwingBigSword	= new PlayerSwingBigSwordState();
+			stateSwingMagicRod	= new PlayerSwingMagicRodState();
+			stateSwingCane		= new PlayerSwingCaneState();
 			stateHoldSword		= new PlayerHoldSwordState();
 			stateSwordStab		= new PlayerSwordStabState();
 			stateSpinSword		= new PlayerSpinSwordState();
@@ -374,7 +381,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 					return;
 
 				// First check entity interactions.
-				for (int i = 0; i < RoomControl.Entities.Count; i++) {
+				for (int i = 0; i < RoomControl.EntityCount; i++) {
 					Entity e = RoomControl.Entities[i];
 					if (e != this && !e.IsDestroyed && e.Physics.IsSolid && Physics.IsSoftMeetingEntity(e) &&
 						Entity.AreEntitiesAligned(this, e, direction, e.ActionAlignDistance) &&
@@ -636,8 +643,20 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return stateLadder; }
 		}
 
-		public PlayerSwingState SwingState {
-			get { return stateSwing; }
+		public PlayerSwingSwordState SwingSwordState {
+			get { return stateSwingSword; }
+		}
+
+		public PlayerSwingBigSwordState SwingBigSwordState {
+			get { return stateSwingBigSword; }
+		}
+
+		public PlayerSwingCaneState SwingCaneState {
+			get { return stateSwingCane; }
+		}
+
+		public PlayerSwingMagicRodState SwingMagicRodState {
+			get { return stateSwingMagicRod; }
 		}
 
 		public PlayerHoldSwordState HoldSwordState {
