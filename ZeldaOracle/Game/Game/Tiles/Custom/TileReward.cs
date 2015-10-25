@@ -35,8 +35,8 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			}
 		}
 
-		public override void Initialize() {
-			base.Initialize();
+		public override void OnInitialize() {
+			base.OnInitialize();
 
 			if (Properties.GetBoolean("looted", false)) {
 				RoomControl.RemoveTile(this);

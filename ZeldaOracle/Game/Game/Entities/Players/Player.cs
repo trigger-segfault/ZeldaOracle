@@ -252,10 +252,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 							item.OnButtonPress();
 						if (Inventory.GetSlotButton(i).IsDown())
 							item.OnButtonDown();
-						item.Update();
+						if (item.IsTwoHanded && 0 == 1)
+							item.Update();
 					}
-					if (item.IsTwoHanded)
-						break;
 				}
 			}
 		}

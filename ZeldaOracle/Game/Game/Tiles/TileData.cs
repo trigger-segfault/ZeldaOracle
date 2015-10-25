@@ -13,6 +13,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		private SpriteAnimation[]	spriteList;
 		private TileFlags			flags;
+		private TileSpecialFlags	specialFlags;
 		private Point2I				size;
 		private SpriteAnimation		spriteAsObject;
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
@@ -27,23 +28,27 @@ namespace ZeldaOracle.Game.Tiles {
 			spriteList			= new SpriteAnimation[0];
 			size				= Point2I.One;
 			flags				= TileFlags.Default;
+			specialFlags		= TileSpecialFlags.Default;
 			spriteAsObject		= new SpriteAnimation();
 			breakAnimation		= null;
 			collisionModel		= null;
 		}
 		
-		public TileData(TileFlags flags) : this() {
-			this.flags = flags;
+		public TileData(TileFlags flags, TileSpecialFlags specialFlags) : this() {
+			this.flags			= flags;
+			this.specialFlags	= specialFlags;
 		}
-		
-		public TileData(Type type, TileFlags flags) : this() {
-			this.type	= type;
-			this.flags	= flags;
+
+		public TileData(Type type, TileFlags flags, TileSpecialFlags specialFlags) : this() {
+			this.type			= type;
+			this.flags			= flags;
+			this.specialFlags	= specialFlags;
 		}
 
 		public TileData(TileData copy) : base(copy) {
 			size				= copy.size;
 			flags				= copy.flags;
+			specialFlags		= copy.specialFlags;
 			spriteAsObject		= new SpriteAnimation(copy.spriteAsObject);
 			breakAnimation		= copy.breakAnimation;
 			collisionModel		= copy.collisionModel;
@@ -59,6 +64,7 @@ namespace ZeldaOracle.Game.Tiles {
 				TileData copyTileData = (TileData) copy;
 				size				= copyTileData.size;
 				flags				= copyTileData.flags;
+				specialFlags		= copyTileData.specialFlags;
 				spriteAsObject		= new SpriteAnimation(copyTileData.spriteAsObject);
 				breakAnimation		= copyTileData.breakAnimation;
 				collisionModel		= copyTileData.collisionModel;
@@ -110,6 +116,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public TileFlags Flags {
 			get { return flags; }
 			set { flags = value; }
+		}
+
+		public TileSpecialFlags SpecialFlags {
+			get { return specialFlags; }
+			set { specialFlags = value; }
 		}
 
 		public SpriteAnimation SpriteAsObject {

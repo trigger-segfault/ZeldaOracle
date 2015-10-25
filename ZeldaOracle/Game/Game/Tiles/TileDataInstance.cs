@@ -92,6 +92,10 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return tileData.Flags; }
 		}
 
+		public TileSpecialFlags SpecialFlags {
+			get { return tileData.SpecialFlags; }
+		}
+
 		public SpriteAnimation Sprite {
 			get { return tileData.Sprite; }
 		}
