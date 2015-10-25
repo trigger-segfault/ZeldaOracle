@@ -42,7 +42,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		}
 
 		public override void OnSwingEnd() {
-			player.BeginState(player.HoldSwordState);
+			player.BeginNormalState();
 		}
 		
 		public override void OnHitMonster(Monster monster) {

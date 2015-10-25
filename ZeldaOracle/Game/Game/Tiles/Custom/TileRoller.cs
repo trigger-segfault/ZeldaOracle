@@ -9,7 +9,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TileRoller : TileInteractable {
+	public class TileRoller : Tile {
 
 		private AnimationPlayer animationPlayer;
 

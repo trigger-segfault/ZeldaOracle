@@ -150,7 +150,14 @@ namespace ZeldaOracle.Common.Scripts {
 			// Flags <flags[]...>
 			AddTilesetCommand("Flags", delegate(CommandParam parameters) {
 				for (int i = 0; i < parameters.Count; i++) {
-					tileData.Flags |= (TileFlags) Enum.Parse(typeof(TileFlags), parameters.GetString(i), true);
+					TileFlags flags = TileFlags.None;
+					TileSpecialFlags specialFlags = TileSpecialFlags.None;
+					if (Enum.TryParse<TileFlags>(parameters.GetString(i), true, out flags))
+						tileData.Flags |= flags;
+					else if (Enum.TryParse<TileSpecialFlags>(parameters.GetString(i), true, out specialFlags))
+						tileData.SpecialFlags |= specialFlags;
+					else
+						throw new ArgumentException("Invalid tile flag: \"" + parameters.GetString(i) + "\"!");
 				}
 			});
 			// Properties <(type, name, value, readable-name, editor-type, category, description)...>

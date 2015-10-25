@@ -18,7 +18,7 @@ namespace ZeldaOracle.Game.Tiles {
 		RedYellow
 	}
 
-	public class TileColorCube : TileInteractable {
+	public class TileColorCube : Tile {
 
 		private AnimationPlayer animationPlayer;
 

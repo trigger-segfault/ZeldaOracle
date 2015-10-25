@@ -7,7 +7,7 @@ using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TileSign : TileInteractable {
+	public class TileSign : Tile {
 
 
 		public TileSign() {

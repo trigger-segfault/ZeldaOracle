@@ -25,10 +25,10 @@ namespace ZeldaOracle.Game.Tiles {
 		private bool			isInitialized;
 		private Point2I			location;		// The tile location in the room.
 		private int				layer;			// The layer this tile is in.
-		protected Point2I		moveDirection;
-		protected bool			isMoving;
-		protected float			movementSpeed;
-		protected Vector2F		offset;			// Offset in pixels from its tile location (used for movement).
+		private Point2I			moveDirection;
+		private bool			isMoving;
+		private float			movementSpeed;
+		private Vector2F		offset;			// Offset in pixels from its tile location (used for movement).
 
 		// Settings
 		private TileDataInstance	tileData;		// The tile data used to create this tile.
@@ -97,51 +97,32 @@ namespace ZeldaOracle.Game.Tiles {
 		public virtual void OnCollide() { }
 
 		// Called when the player hits this tile with the sword.
-		public virtual void OnSwordHit() { }
+		public virtual void OnSwordHit() {
+			if (!isMoving && SpecialFlags.HasFlag(TileSpecialFlags.Cuttable))
+				Break(true);
+		}
 
 		// Called when the player hits this tile with the sword.
-		public virtual void OnBombExplode() { }
+		public virtual void OnBombExplode() {
+			if (!isMoving && SpecialFlags.HasFlag(TileSpecialFlags.Bombable))
+				Break(true);
+		}
 
 		// Called when the tile is burned by a fire.
-		public virtual void OnBurn() { }
+		public virtual void OnBurn() {
+			if (!isMoving && SpecialFlags.HasFlag(TileSpecialFlags.Burnable))
+				Break(true);
+		}
 
 		// Called when the tile is hit by the player's boomerang.
 		public virtual void OnBoomerang() {
-			if (!isMoving && flags.HasFlag(TileFlags.Boomerangable))
+			if (!isMoving && SpecialFlags.HasFlag(TileSpecialFlags.Boomerangable))
 				Break(true);
 		}
 
 		// Called when the player wants to push the tile.
 		public virtual bool OnPush(int direction, float movementSpeed) {
-			if (isMoving)
-				return false;
-			
-			// Make sure were not pushing out of bounds.
-			Point2I newLocation = location + Directions.ToPoint(direction);
-			if (!RoomControl.IsTileInBounds(newLocation))
-				return false;
-
-			// Make sure there are no obstructions.
-			int newLayer = -1;
-			for (int i = 0; i < RoomControl.Room.LayerCount; i++) {
-				Tile t = RoomControl.GetTile(newLocation.X, newLocation.Y, i);
-				if (t != null && (t.IsSolid || !t.IsCoverable || t.IsStairs || t.IsLadder))
-					return false;
-				if (t == null && newLayer != layer)
-					newLayer = i;
-			}
-
-			// Not enough layers to place this tile.
-			if (newLayer < 0)
-				return false;
-
-			// Move the tile to the new location.
-			isMoving = true;
-			this.movementSpeed = movementSpeed;
-			moveDirection = Directions.ToPoint(direction);
-			offset = -Directions.ToVector(direction) * GameSettings.TILE_SIZE;
-			RoomControl.MoveTile(this, newLocation, newLayer);
-			return true;
+			return Move(direction, 1, movementSpeed);
 		}
 
 		public virtual bool OnDig(int direction) {
@@ -191,21 +172,30 @@ namespace ZeldaOracle.Game.Tiles {
 					tile.OnCover(this);
 			}
 		}
-		
+
 		// Called when the tile is pushed into a hole.
-		public virtual void OnFallInHole() { }
-		
+		public virtual void OnFallInHole() {
+			RoomControl.SpawnEntity(new EffectFallingObject(), Center);
+			RoomControl.RemoveTile(this);
+		}
+
 		// Called when the tile is pushed into water.
-		public virtual void OnFallInWater() { }
-		
+		public virtual void OnFallInWater() {
+			RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_WATER_SPLASH), Center);
+			RoomControl.RemoveTile(this);
+		}
+
 		// Called when the tile is pushed into lava.
-		public virtual void OnFallInLava() { }
+		public virtual void OnFallInLava() {
+			RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH), Center);
+			RoomControl.RemoveTile(this);
+		}
 
 		// Called when a tile covers this tile.
 		public virtual void OnCover(Tile tile) { }
 
 		// Called when this tile is uncovered.
-		public virtual void OnUncover() { }
+		public virtual void OnUncover(Tile tile) { }
 
 
 		//-----------------------------------------------------------------------------
@@ -246,7 +236,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 			Tile unconveredTile = roomControl.GetTopTile(oldLocation);
 			if (unconveredTile != null)
-				unconveredTile.OnUncover();
+				unconveredTile.OnUncover(this);
 
 			return true;
 		}
@@ -318,8 +308,18 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		// Returns true if the tile has both the normal and special flags.
-		public bool HasFlags(TileFlags flags, TileSpecialFlags specialFlags) {
+		public bool HasFlag(TileFlags flags, TileSpecialFlags specialFlags) {
 			return Flags.HasFlag(flags) && SpecialFlags.HasFlag(specialFlags);
+		}
+
+		// Returns true if the tile has the normal flags.
+		public bool HasFlag(TileFlags flags) {
+			return Flags.HasFlag(flags);
+		}
+
+		// Returns true if the tile has the special flags.
+		public bool HasFlag(TileSpecialFlags specialFlags) {
+			return SpecialFlags.HasFlag(specialFlags);
 		}
 
 		//-----------------------------------------------------------------------------
@@ -514,19 +514,23 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public bool IsCoverable {
-			get { return !flags.HasFlag(TileFlags.NotCoverable); }
+			get { return !Flags.HasFlag(TileFlags.NotCoverable); }
 		}
 
 		public bool IsSwitchable {
-			get { return flags.HasFlag(TileFlags.Switchable); }
+			get { return SpecialFlags.HasFlag(TileSpecialFlags.Switchable); }
 		}
 
 		public bool StaysOnSwitch {
-			get { return flags.HasFlag(TileFlags.SwitchStays); }
+			get { return SpecialFlags.HasFlag(TileSpecialFlags.SwitchStays); }
 		}
 
 		public bool BreaksOnSwitch {
-			get { return !flags.HasFlag(TileFlags.SwitchStays); }
+			get { return !SpecialFlags.HasFlag(TileSpecialFlags.SwitchStays); }
+		}
+
+		public bool IsBoomerangable {
+			get { return SpecialFlags.HasFlag(TileSpecialFlags.Boomerangable); }
 		}
 		
 		public bool IsHole {

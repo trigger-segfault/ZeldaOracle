@@ -12,8 +12,6 @@ namespace ZeldaOracle.Game.Tiles {
 
 		// General.
 		Movable			= 0x1,			// Tile can be pushed around.
-
-		// TileInteractable.
 		Pickupable		= 0x2,			// Tile can be picked up and carried.
 		Burnable		= 0x4,			// Destroyed by fire.
 		Cuttable		= 0x8,			// Destroyed by sword.

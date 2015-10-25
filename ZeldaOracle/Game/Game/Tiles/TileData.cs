@@ -34,18 +34,21 @@ namespace ZeldaOracle.Game.Tiles {
 			collisionModel		= null;
 		}
 		
-		public TileData(TileFlags flags) : this() {
-			this.flags = flags;
+		public TileData(TileFlags flags, TileSpecialFlags specialFlags) : this() {
+			this.flags			= flags;
+			this.specialFlags	= specialFlags;
 		}
-		
-		public TileData(Type type, TileFlags flags) : this() {
-			this.type	= type;
-			this.flags	= flags;
+
+		public TileData(Type type, TileFlags flags, TileSpecialFlags specialFlags) : this() {
+			this.type			= type;
+			this.flags			= flags;
+			this.specialFlags	= specialFlags;
 		}
 
 		public TileData(TileData copy) : base(copy) {
 			size				= copy.size;
 			flags				= copy.flags;
+			specialFlags		= copy.specialFlags;
 			spriteAsObject		= new SpriteAnimation(copy.spriteAsObject);
 			breakAnimation		= copy.breakAnimation;
 			collisionModel		= copy.collisionModel;
@@ -61,6 +64,7 @@ namespace ZeldaOracle.Game.Tiles {
 				TileData copyTileData = (TileData) copy;
 				size				= copyTileData.size;
 				flags				= copyTileData.flags;
+				specialFlags		= copyTileData.specialFlags;
 				spriteAsObject		= new SpriteAnimation(copyTileData.spriteAsObject);
 				breakAnimation		= copyTileData.breakAnimation;
 				collisionModel		= copyTileData.collisionModel;
