@@ -13,20 +13,27 @@ namespace ZeldaOracle.Game.Entities {
 		protected bool showMessage;
 		protected int timer;
 
+
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
 
-		private const int Duration = 513;
-		private const int FadeTime = 400;
-		private const int PickupableTime = 12;
+		private const int DURATION			= 513;
+		private const int FADE_TIME			= 400;
+		private const int PICKUPABLE_DELAY	= 12;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
 		public Collectible(Reward reward) {
-			EnablePhysics(PhysicsFlags.Bounces |
+			this.reward			= reward;
+			this.showMessage	= false;
+			this.timer			= 0;
+
+			EnablePhysics(
+				PhysicsFlags.Bounces |
 				PhysicsFlags.HasGravity |
 				PhysicsFlags.DestroyedOutsideRoom |
 				PhysicsFlags.CollideWorld |
@@ -34,10 +41,7 @@ namespace ZeldaOracle.Game.Entities {
 				PhysicsFlags.LedgePassable |
 				PhysicsFlags.DestroyedInHoles);
 
-			this.reward			= reward;
-			this.showMessage	= false;
-			this.timer			= 0;
-			this.Graphics.DrawOffset	= new Point2I(-8, -8);
+			Graphics.DrawOffset = new Point2I(-8, -8);
 		}
 
 		//-----------------------------------------------------------------------------
@@ -78,15 +82,15 @@ namespace ZeldaOracle.Game.Entities {
 
 			timer++;
 			if (reward.HasDuration) {
-				if (timer == Duration) {
+				if (timer == DURATION) {
 					Destroy();
 				}
-				else if (timer == FadeTime)
+				else if (timer == FADE_TIME)
 					graphics.IsFlickering = true;
 			}
 
-			// Check for colliding with the player.
-			if (physics.IsSoftMeetingEntity(GameControl.Player, 9) && timer >= PickupableTime)
+			// Check if colliding with the player.
+			if (physics.IsSoftMeetingEntity(GameControl.Player, 9) && IsPickupable)
 				Collect();
 		}
 
@@ -104,7 +108,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsPickupable {
-			get { return (timer >= PickupableTime); }
+			get { return (timer >= PICKUPABLE_DELAY); }
 		}
 	}
 }

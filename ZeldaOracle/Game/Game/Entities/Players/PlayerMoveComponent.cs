@@ -365,6 +365,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Move animation can be replaced by cape animation.
 			if (player.Graphics.Animation == player.MoveAnimation && player.IsInAir && isCapeDeployed)
 				player.Graphics.Animation = GameData.ANIM_PLAYER_CAPE;
+			else if (player.IsOnGround && player.Graphics.Animation == GameData.ANIM_PLAYER_CAPE)
+				player.Graphics.Animation = player.MoveAnimation;
 		}
 		
 		// Poll the movement key for the given direction, returning true if

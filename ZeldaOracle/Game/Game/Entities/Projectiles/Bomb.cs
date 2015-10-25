@@ -21,7 +21,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		//-----------------------------------------------------------------------------
 
 		public Bomb() {
-			EnablePhysics(PhysicsFlags.Bounces |
+			EnablePhysics(
+				PhysicsFlags.Bounces |
 				PhysicsFlags.HasGravity |
 				PhysicsFlags.DestroyedOutsideRoom |
 				PhysicsFlags.CollideWorld |
@@ -61,7 +62,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				}
 			}
 
-			Destroy();
+			DestroyAndTransform(bombExplosion);
 		}
 
 		private void BurnFuse() {

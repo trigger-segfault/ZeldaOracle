@@ -17,6 +17,7 @@ namespace ZeldaOracle.Game.Entities {
 		private	bool				isInitialized;
 		private bool				isAlive;
 		private bool				isInRoom;
+		private Entity				transformedEntity; // The entity this entity has transformed into (bomb -> explosion)
 
 		private Vector2F			previousPosition;
 		private float				previousZPosition;
@@ -39,6 +40,7 @@ namespace ZeldaOracle.Game.Entities {
 			isAlive				= false;
 			isInRoom			= false;
 			isInitialized		= false;
+			transformedEntity	= null;
 			position			= Vector2F.Zero;
 			zPosition			= 0.0f;
 			previousPosition	= Vector2F.Zero;
@@ -104,7 +106,7 @@ namespace ZeldaOracle.Game.Entities {
 
 		// Called when the entity falls in a hole.
 		public virtual void OnFallInHole() {
-			if (physics.DestroyedInHoles) {
+			if (physics.IsDestroyedInHoles) {
 				RoomControl.SpawnEntity(new EffectFallingObject(), position);
 				Destroy();
 			}
@@ -112,7 +114,7 @@ namespace ZeldaOracle.Game.Entities {
 		
 		// Called when the entity falls in water.
 		public virtual void OnFallInWater() {
-			if (physics.DestroyedInHoles) {
+			if (physics.IsDestroyedInHoles) {
 				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_WATER_SPLASH), position);
 				Destroy();
 			}
@@ -120,7 +122,7 @@ namespace ZeldaOracle.Game.Entities {
 		
 		// Called when the entity falls in lava.
 		public virtual void OnFallInLava() {
-			if (physics.DestroyedInHoles) {
+			if (physics.IsDestroyedInHoles) {
 				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH), position);
 				Destroy();
 			}
@@ -162,6 +164,11 @@ namespace ZeldaOracle.Game.Entities {
 				isInRoom = false;
 				OnDestroy();
 			}
+		}
+
+		public void DestroyAndTransform(Entity transformedEntity) {
+			Destroy();
+			this.transformedEntity = transformedEntity;
 		}
 
 		public void EnablePhysics(PhysicsFlags flags = PhysicsFlags.None) {
@@ -294,6 +301,10 @@ namespace ZeldaOracle.Game.Entities {
 		public int ActionAlignDistance {
 			get { return actionAlignDistance; }
 			set { actionAlignDistance = value; }
+		}
+
+		public Entity TransformedEntity {
+			get { return transformedEntity; }
 		}
 	}
 }

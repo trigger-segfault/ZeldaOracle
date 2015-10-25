@@ -40,38 +40,45 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		//-----------------------------------------------------------------------------
 
 		public void DestroyWithEffect(SeedType seedType, Vector2F effectPosition) {
-			CreateEffect(seedType, effectPosition);
-			Destroy();
+			Entity effectEntity = CreateEffect(seedType, effectPosition);
+			DestroyAndTransform(effectEntity);
 		}
 
 		public void DestroyWithVisualEffect(SeedType seedType, Vector2F effectPosition) {
-			CreateVisualEffect(seedType, effectPosition);
-			Destroy();
+			Entity effectEntity = CreateVisualEffect(seedType, effectPosition);
+			DestroyAndTransform(effectEntity);
 		}
 
-		public void CreateVisualEffect(SeedType seedType, Vector2F effectPosition) {
-			RoomControl.SpawnEntity(new Effect(
-				GameData.ANIM_EFFECT_SEEDS[(int) seedType]), effectPosition);
+		public Entity CreateVisualEffect(SeedType seedType, Vector2F effectPosition) {
+			Effect effect = new Effect(GameData.ANIM_EFFECT_SEEDS[(int) seedType]);
+			RoomControl.SpawnEntity(effect, effectPosition);
+			return effect;
 		}
 
-		public void CreateEffect(SeedType seedType, Vector2F effectPosition) {
+		public Entity CreateEffect(SeedType seedType, Vector2F effectPosition) {
+			Entity effectEntity = null;
+
 			// Create the seed's effect.
 			if (seedType == SeedType.Ember) {
-				RoomControl.SpawnEntity(new Fire(), effectPosition);
+				effectEntity = new Fire();
+				RoomControl.SpawnEntity(effectEntity, effectPosition);
 			}
 			else if (seedType == SeedType.Scent) {
-				RoomControl.SpawnEntity(new ScentPod(), effectPosition);
+				effectEntity = new ScentPod();
+				RoomControl.SpawnEntity(effectEntity, effectPosition);
 			}
 			else if (seedType == SeedType.Mystery) {
-				CreateVisualEffect(seedType, effectPosition);
+				effectEntity = CreateVisualEffect(seedType, effectPosition);
 			}
 			else if (seedType == SeedType.Pegasus) {
-				CreateVisualEffect(seedType, effectPosition);
+				effectEntity = CreateVisualEffect(seedType, effectPosition);
 			}
 			else if (seedType == SeedType.Gale) {
-				CreateVisualEffect(seedType, effectPosition);
+				effectEntity = CreateVisualEffect(seedType, effectPosition);
 				//RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_SEED_GALE), effectPosition);
 			}
+
+			return effectEntity;
 		}
 		
 

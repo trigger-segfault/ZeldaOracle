@@ -45,15 +45,17 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			// Create crash effect.
 			Effect effect = new Effect();
 			effect.CreateDestroyTimer(32);	
-			effect.Physics.Velocity		= Angles.ToVector(Angles.Reverse(Angle)) * 0.25f;
+			if (!isInitialCollision)
+				effect.Physics.Velocity = Angles.ToVector(Angles.Reverse(Angle)) * 0.25f;
 			effect.Physics.ZVelocity	= 1.0f;
 			effect.Physics.Gravity		= 0.07f;
 			effect.EnablePhysics(PhysicsFlags.HasGravity);
 			effect.Graphics.IsShadowVisible = false;
 			effect.Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_PLAYER_ARROW_CRASH);
+
 			RoomControl.SpawnEntity(effect, position);
 
-			Destroy();
+			DestroyAndTransform(effect);
 		}
 
 		public override void OnCollideMonster(Monster monster) {
