@@ -33,6 +33,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Constructors
 		//-----------------------------------------------------------------------------
 		
+		public PlayerCarryState() {
+		}
+
 		public PlayerCarryState(Entity carryObject) {
 			this.carryObject			= carryObject;
 			this.throwDuration			= 8;
@@ -53,6 +56,23 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Internal methods.
 		//-----------------------------------------------------------------------------
 		
+		public void SetCarryObject(object carryObject) {
+			if (carryObject is Tile) {
+				Tile carryTile = (Tile) carryObject;
+				this.carryObject			= new CarriedTile(carryTile);
+				this.throwDuration			= 2;
+				this.pickupFrame1Duration	= 6;
+				this.pickupFrame2Duration	= 4;
+				this.carryObject.Graphics.ImageVariant = carryTile.Zone.ImageVariantID;
+			}
+			else if (carryObject is Entity) {
+				this.carryObject			= (Entity) carryObject;
+				this.throwDuration			= 8;
+				this.pickupFrame1Duration	= 4;
+				this.pickupFrame2Duration	= 4;
+			}
+		}
+
 		public void DropObject(bool enterBusyState = true) {
 			isObjectDropped = true;
 			player.RoomControl.SpawnEntity(carryObject, player.Origin, 16);
@@ -144,6 +164,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 				// Check for button press to throw/drop.
 				if (Controls.A.IsPressed() || Controls.B.IsPressed()) {
+					if (Controls.A.IsPressed())
+						Controls.A.Reset();
+					if (Controls.B.IsPressed())
+						Controls.B.Reset();
 					if (player.Movement.IsMoving)
 						ThrowObject();
 					else

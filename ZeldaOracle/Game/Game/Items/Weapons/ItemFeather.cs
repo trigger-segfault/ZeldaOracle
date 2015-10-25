@@ -37,32 +37,23 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
+		// Check if the player is allowed to jump.
 		public override bool IsUsable() {
 			return Player.Movement.CanJump;
 		}
 
-		// Deploy cape.
-		public override void OnButtonDown() {
-			if (level == ItemWeapon.Level2) {
-				// TODO: deploy cape.
-			}
-		}
-
-		// Jump/deploy cape.
+		// Jump when on ground.
 		public override void OnButtonPress() {
 			if (Player.IsOnGround && !Player.Physics.IsInHole) {
 				Player.Movement.Jump();
 			}
-			else if (level == ItemWeapon.Level2) {
-				// TODO: deploy cape.
+		}
+
+		// Deplay cape when in air.
+		public override void OnButtonDown() {
+			if (Player.IsInAir && level == ItemWeapon.Level2) {
+				Player.Movement.DeployCape();
 			}
 		}
-
-		// Draws the item inside the inventory.
-		public override void DrawSlot(Graphics2D g, Point2I position, int lightOrDark) {
-			DrawSprite(g, position, lightOrDark);
-			DrawLevel(g, position, lightOrDark);
-		}
-
 	}
 }

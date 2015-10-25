@@ -5,7 +5,6 @@ using System.Text;
 
 namespace ZeldaOracle.Common.Geometry {
 
-
 	public static class Directions {
 		
 		//-----------------------------------------------------------------------------
@@ -29,14 +28,18 @@ namespace ZeldaOracle.Common.Geometry {
 		// Methods
 		//-----------------------------------------------------------------------------
 
+		
+		// Return the opposite of the given direction.
 		public static int Reverse(int direction) {
 			return ((direction + 2) % 4);
 		}
-
+		
+		// Return true if the given direction is horizontal (left or right).
 		public static bool IsHorizontal(int direction) {
 			return (direction % 2 == 0);
 		}
 		
+		// Return true if the given direction is vertical (up or down).
 		public static bool IsVertical(int direction) {
 			return (direction % 2 == 1);
 		}
@@ -62,7 +65,8 @@ namespace ZeldaOracle.Common.Geometry {
 				return Directions.Down;
 			return -1;
 		}
-
+		
+		// Return a unit vector as a point in the given direction.
 		public static Point2I ToPoint(int direction) {
 			direction = direction % 4;
 			if (direction == Right)
@@ -74,6 +78,7 @@ namespace ZeldaOracle.Common.Geometry {
 			return new Point2I(0, 1);
 		}
 
+		// Return a unit vector in the given direction.
 		public static Vector2F ToVector(int direction) {
 			direction = direction % 4;
 			if (direction == Right)
@@ -85,8 +90,14 @@ namespace ZeldaOracle.Common.Geometry {
 			return new Vector2F(0.0f, 1.0f);
 		}
 
+		// Return the angle representation of the given direction.
 		public static int ToAngle(int direction) {
 			return (direction * 2);
+		}
+
+		// Return the axis that the given direction is aligned on.
+		public static int ToAxis(int direction) {
+			return (direction % 2);
 		}
 
 		public static int RoundFromRadians(float radians) {

@@ -10,7 +10,7 @@ public enum DisableState {
 
 	Enabled					= 0,
 	Disabled				= 1,
-	DisabledUntilRelease	= 2
+	DisabledUntilRelease	= 2,
 
 }
 } // End namespace

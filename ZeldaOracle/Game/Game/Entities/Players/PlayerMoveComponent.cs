@@ -54,6 +54,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private int					moveAngle;				// The angle the player is moving in.
 		private int					moveDirection;			// The direction that the player wants to face.
 		private Point2I				jumpStartTile;			// The tile the player started jumping on. (Used for jump color tiles)
+		private bool				isCapeDeployed;
 
 		// Movement modes.
 		private PlayerMotionType	mode;
@@ -100,7 +101,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			moveAngle				= Angles.South;
 			mode					= new PlayerMotionType();
 			jumpStartTile			= -Point2I.One;
-
+			isCapeDeployed			= false;
 			doomedToFallInHole		= false;
 			holeTile				= null;
 			holeDoomTimer			= 0;
@@ -199,6 +200,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				}
 				
 				// Jump!
+				isCapeDeployed = false;
 				jumpStartTile = player.RoomControl.GetTileLocation(player.Origin);
 				player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
 				if (player.CurrentState is PlayerNormalState)
@@ -207,6 +209,18 @@ namespace ZeldaOracle.Game.Entities.Players {
 			else {
 				if (player.CurrentState is PlayerNormalState)
 					player.Graphics.PlayAnimation(player.MoveAnimation);
+			}
+		}
+
+		public void DeployCape() {
+			// 23 frame delay from jump start
+			if (player.IsInAir && !isCapeDeployed && player.Physics.ZVelocity -
+				GameSettings.DEFAULT_GRAVITY <= -GameSettings.PLAYER_CAPE_REQUIRED_FALLSPEED)
+			{
+				player.Physics.ZVelocity = GameSettings.PLAYER_CAPE_JUMP_SPEED + GameSettings.PLAYER_CAPE_GRAVITY;
+				 isCapeDeployed = true;
+				if (player.CurrentState is PlayerNormalState)
+					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CAPE);
 			}
 		}
 
@@ -337,6 +351,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				player.Graphics.Animation == GameData.ANIM_PLAYER_DEFAULT ||
 				player.Graphics.Animation == GameData.ANIM_PLAYER_CARRY))
 			{
+				// Play/stop the move animation.
 				if (isMoving || isSprinting) {
 					if (!player.Graphics.IsAnimationPlaying)
 						player.Graphics.PlayAnimation();
@@ -346,6 +361,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 						player.Graphics.StopAnimation();
 				}
 			}
+			
+			// Move animation can be replaced by cape animation.
+			if (player.Graphics.Animation == player.MoveAnimation && player.IsInAir && isCapeDeployed)
+				player.Graphics.Animation = GameData.ANIM_PLAYER_CAPE;
 		}
 		
 		// Poll the movement key for the given direction, returning true if
@@ -563,6 +582,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		
 		public int MoveAngle {
 			get { return moveAngle; }
+		}
+
+		public bool IsCapeDeployed {
+			get { return (player.IsInAir && isCapeDeployed); }
 		}
 		
 		public PlayerMotionType MoveMode {

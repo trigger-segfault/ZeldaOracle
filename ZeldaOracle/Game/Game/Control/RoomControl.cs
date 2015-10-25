@@ -38,6 +38,7 @@ namespace ZeldaOracle.Game.Control {
 		private List<EventTile>	eventTiles;
 		private ViewControl		viewControl;
 		private int				requestedTransitionDirection;
+		private int				entityCount;
 		
 		private event Action<Player>	eventPlayerRespawn;
 		private event Action<int>		eventRoomTransitioning;
@@ -58,6 +59,7 @@ namespace ZeldaOracle.Game.Control {
 			requestedTransitionDirection = 0;
 			eventPlayerRespawn		= null;
 			eventRoomTransitioning	= null;
+			entityCount				= 0;
 		}
 		
 
@@ -253,6 +255,8 @@ namespace ZeldaOracle.Game.Control {
 			for (int i = 0; i < eventTiles.Count; i++) {
 				eventTiles[i].Initialize(this);
 			}
+
+			entityCount = entities.Count;
 			
 			viewControl.Bounds = RoomBounds;
 			viewControl.ViewSize = GameSettings.VIEW_SIZE;
@@ -382,7 +386,7 @@ namespace ZeldaOracle.Game.Control {
 			requestedTransitionDirection = -1;
 
 			// Update entities.
-			int entityCount = entities.Count;
+			entityCount = entities.Count;
 			for (int i = 0; i < entities.Count; i++) {
 				if (entities[i].IsAlive && entities[i].IsInRoom && i < entityCount) {
 					if (GameControl.UpdateRoom)
@@ -537,6 +541,11 @@ namespace ZeldaOracle.Game.Control {
 		// Get the list of entities.
 		public List<Entity> Entities {
 			get { return entities; }
+		}
+
+		// Get the number of entities (use this to iterate the entity list).
+		public int EntityCount {
+			get { return entityCount; }
 		}
 
 		// Get the size of the room in pixels.

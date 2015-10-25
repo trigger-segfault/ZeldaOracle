@@ -289,6 +289,11 @@ namespace ZeldaOracle.Common.Scripts {
 				tileData.Flags |= TileFlags.Solid;
 				tileData.CollisionModel = resources.GetResource<CollisionModel>(parameters.GetString(0));
 			});
+			// HalfSolid <collision-model>
+			AddTilesetCommand("HalfSolid", delegate(CommandParam parameters) {
+				tileData.Flags |= TileFlags.Solid | TileFlags.HalfSolid;
+				tileData.CollisionModel = resources.GetResource<CollisionModel>(parameters.GetString(0));
+			});
 			// Ledge <collision-model> <direction>
 			AddTilesetCommand("Ledge", delegate(CommandParam parameters) {
 				tileData.Flags |= TileFlags.Solid;

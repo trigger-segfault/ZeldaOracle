@@ -54,7 +54,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 				// Spawn the seed projectile.
 				SeedType seedType = weapon.CurrentSeedType;
-				SeedProjectile seed = new SeedProjectile(seedType);
+				SeedProjectile seed = new SeedProjectile(seedType, true);
 				seed.Owner = player;
 				Vector2F pos = Player.Position - new Vector2F(8, 16) + projectilePositions[angle] + new Vector2F(4, 4 + 7);
 				seed.Physics.Velocity = Angles.ToVector(angle) * 3.0f;

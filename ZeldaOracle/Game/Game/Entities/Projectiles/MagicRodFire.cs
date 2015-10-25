@@ -9,20 +9,16 @@ using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
-	public class SwordBeam : Projectile {
+	public class MagicRodFire : Projectile {
 		
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public SwordBeam() {
-			// General.
-			syncAnimationWithDirection = true;
-
+		public MagicRodFire() {
 			// Physics.
-			EventCollision += Crash;
-			Physics.CollisionBox		= new Rectangle2F(-1, -4, 2, 1);
+			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 1);
 			Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 1);
 			EnablePhysics(
 				PhysicsFlags.CollideWorld |
@@ -38,29 +34,24 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		public override void Initialize() {
 			base.Initialize();
-
-			if (Directions.IsHorizontal(Direction)) {
-				Physics.CollisionBox		= new Rectangle2F(-1, -5, 2, 1);
-				Physics.SoftCollisionBox	= new Rectangle2F(-1, -5, 2, 1);
-			}
-			else {
-				Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 2);
-				Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 2);
-			}
-
-			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_SWORD_BEAM);
+			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_MAGIC_ROD_FIRE);
 			CheckInitialCollision();
 		}
 
-		public override void OnCollideMonster(Monster monster) {
-			monster.TriggerInteraction(monster.HandlerSwordBeam, this);
+		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
+			// Move 3 pixels into the block from where it collided.
+			if (!isInitialCollision)
+				position += Physics.PreviousVelocity.Normalized * 3.0f;
+
+			// Spawn fire.
+			Fire fire = new Fire();
+			RoomControl.SpawnEntity(fire, position);
+
+			Destroy();
 		}
 
-		private void Crash() {
-			// Create cling effect.
-			Effect effect = new Effect(GameData.ANIM_EFFECT_CLING_LIGHT);
-			RoomControl.SpawnEntity(effect, position, zPosition);
-			Destroy();
+		public override void OnCollideMonster(Monster monster) {
+			monster.TriggerInteraction(monster.HandlerRodFire, this);
 		}
 	}
 }
