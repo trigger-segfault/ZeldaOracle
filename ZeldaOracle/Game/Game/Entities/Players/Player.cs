@@ -15,6 +15,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Entities.Players.States;
+using ZeldaOracle.Game.Entities.Players.States.SwingStates;
 using ZeldaOracle.Common.Audio;
 
 
@@ -58,18 +59,24 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		private bool isStateControlled; // Is the player fully being controlled by its current state?
 
-		private PlayerNormalState		stateNormal;
-		private PlayerBusyState			stateBusy;
-		private PlayerSwimState			stateSwim;
-		private PlayerLedgeJumpState	stateLedgeJump;
-		private PlayerLadderState		stateLadder;
-		private PlayerSwingState		stateSwing;
-		private PlayerHoldSwordState	stateHoldSword;
-		private PlayerSwordStabState	stateSwordStab;
-		private PlayerSpinSwordState	stateSpinSword;
-		private PlayerSeedShooterState	stateSeedShooter;
-		private PlayerSwitchHookState	stateSwitchHook;
-		private PlayerRespawnDeathState	stateRespawnDeath;
+		private PlayerNormalState			stateNormal;
+		private PlayerBusyState				stateBusy;
+		private PlayerSwimState				stateSwim;
+		private PlayerLedgeJumpState		stateLedgeJump;
+		private PlayerLadderState			stateLadder;
+		private PlayerSwingSwordState		stateSwingSword;
+		private PlayerSwingBigSwordState	stateSwingBigSword;
+		private PlayerSwingCaneState		stateSwingCane;
+		private PlayerSwingMagicRodState		stateSwingMagicRod;
+		private PlayerHoldSwordState		stateHoldSword;
+		private PlayerSwordStabState		stateSwordStab;
+		private PlayerSpinSwordState		stateSpinSword;
+		private PlayerSeedShooterState		stateSeedShooter;
+		private PlayerSwitchHookState		stateSwitchHook;
+		private PlayerMagicBoomerangState	stateMagicBoomerang;
+		private PlayerGrabState				stateGrab;
+		private PlayerCarryState			stateCarry;
+		private PlayerRespawnDeathState		stateRespawnDeath;
 
 		private PlayerSwimmingSkills	swimmingSkills;
 		private PlayerTunics			tunic;
@@ -129,12 +136,18 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateSwim			= new PlayerSwimState();
 			stateLadder			= new PlayerLadderState();
 			stateLedgeJump		= new PlayerLedgeJumpState();
-			stateSwing			= new PlayerSwingState();
+			stateSwingSword		= new PlayerSwingSwordState();
+			stateSwingBigSword	= new PlayerSwingBigSwordState();
+			stateSwingMagicRod	= new PlayerSwingMagicRodState();
+			stateSwingCane		= new PlayerSwingCaneState();
 			stateHoldSword		= new PlayerHoldSwordState();
 			stateSwordStab		= new PlayerSwordStabState();
 			stateSpinSword		= new PlayerSpinSwordState();
 			stateSeedShooter	= new PlayerSeedShooterState();
 			stateSwitchHook		= new PlayerSwitchHookState();
+			stateMagicBoomerang	= new PlayerMagicBoomerangState();
+			stateGrab			= new PlayerGrabState();
+			stateCarry			= new PlayerCarryState();
 			stateRespawnDeath	= new PlayerRespawnDeathState();
 
 			toolAnimation	= new AnimationPlayer();
@@ -356,6 +369,89 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 		}
 
+		// Check for tile & entity press interactions.
+		private void CheckPressInteractions() {
+			// TODO: interactions not allowed when:
+			//  - In PlayerGrabState or PlayerCarryState
+			//  - In carry state
+
+			if (IsOnGround && Controls.A.IsPressed()) {
+				// TEMPORARY: Can't do actions while grabbing or carring.
+				if (state == stateGrab || state == stateCarry)
+					return;
+
+				// First check entity interactions.
+				for (int i = 0; i < RoomControl.EntityCount; i++) {
+					Entity e = RoomControl.Entities[i];
+					if (e != this && !e.IsDestroyed && e.Physics.IsSolid && Physics.IsSoftMeetingEntity(e) &&
+						Entity.AreEntitiesAligned(this, e, direction, e.ActionAlignDistance) &&
+						e.OnPlayerAction(direction))
+					{
+						Controls.A.Disable(true);
+						StopPushing();
+					}
+				}
+
+				// Then check tile interactions.
+				Tile actionTile = physics.GetMeetingSolidTile(position, direction);
+				if (actionTile != null && actionTile.OnAction(direction)) {
+					Controls.A.Disable(true);
+					StopPushing();
+				}
+			}
+		}
+
+		private void CheckTouchedTiles() {
+			// Notify touching tiles.
+			// TODO: move this somewhere else.
+			Rectangle2I tiles = RoomControl.GetTileAreaFromRect(physics.PositionedCollisionBox);
+
+			for (int x = tiles.Left; x < tiles.Right; x++) {
+				for (int y = tiles.Top; y < tiles.Bottom; y++) {
+					for (int layer = 0; layer < RoomControl.Room.LayerCount; layer++) {
+						Tile tile = RoomControl.GetTile(new Point2I(x, y), layer);
+						if (tile != null)
+							tile.OnTouch();
+					}
+				}
+			}
+
+			// Notify colliding tiles.
+			// TODO: move this somewhere else.
+			Rectangle2F myBox = physics.PositionedCollisionBox.Inflated(1, 1);
+			tiles = RoomControl.GetTileAreaFromRect(myBox);
+
+			TileCollisionTest tileTest = new TileCollisionTest(myBox);
+			TileCollisionIterator tileIterator = new TileCollisionIterator(this, tileTest);
+			for (tileIterator.Begin(); tileIterator.IsGood(); tileIterator.Next()) {
+				tileIterator.CollisionInfo.Tile.OnCollide();
+			}
+			/*
+			for (int x = tiles.Left; x < tiles.Right; x++) {
+				for (int y = tiles.Top; y < tiles.Bottom; y++) {
+					for (int layer = 0; layer < RoomControl.Room.LayerCount; layer++) {
+						Tile tile = RoomControl.GetTile(new Point2I(x, y), layer);
+						if (tile != null && tile.CollisionModel != null) {
+							for (int i = 0; i < tile.CollisionModel.BoxCount; i++) {
+								if (((Rectangle2F)tile.CollisionModel[i] + tile.Position).Colliding(myBox)) {
+									tile.OnCollide();
+									break;
+								}
+							}
+						}	
+					}
+				}
+			}
+			*/
+		}
+
+		// Try to switch to a natural state.
+		private void RequestNaturalState() {
+			PlayerState desiredNaturalState = GetDesiredNaturalState();
+			if (state != desiredNaturalState && state.RequestStateChange(desiredNaturalState))
+				BeginState(desiredNaturalState);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
@@ -380,105 +476,50 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Don't actually die.
 		}
 
+		public override void OnLand() {
+			base.OnLand();
+
+			// Notify the tile we landed on.
+			Tile tile = RoomControl.GetTopTile(RoomControl.GetTileLocation(Origin));
+			if (tile != null)
+				tile.OnLand(movement.JumpStartTile);
+			movement.JumpStartTile = -Point2I.One;
+		}
+
 		public override void Update() {
-			bool performedAction = false;
-
+			// Pre-state update.
 			if (!isStateControlled) {
-
 				movement.Update();
 				UpdateUseDirections();
-			
-				// Check for tile & entity press interactions.
-				if (IsOnGround && Controls.A.IsPressed()) {
-					Entity actionEntity = null;
-					for (int i = 0; i < RoomControl.Entities.Count; i++) {
-						Entity e = RoomControl.Entities[i];
-						if (e != this && !e.IsDestroyed && e.Physics.IsSolid && Physics.IsSoftMeetingEntity(e) &&
-							Entity.AreEntitiesAligned(this, e, direction, e.ActionAlignDistance) &&
-							e.OnPlayerAction(direction))
-						{
-							actionEntity = e;
-							Controls.A.Disable(true);
-							performedAction = true;
-							break;
-						}
-					}
-					if (actionEntity == null) {
-						Tile actionTile = physics.GetMeetingSolidTile(position, direction);
-						if (actionTile != null && actionTile.OnAction(direction)) {
-							Controls.A.Disable(true);
-							performedAction = true;
-						}
-					}
-				}
-
-				if (IsOnGround && movement.JumpStartTile != -Point2I.One) {
-					RoomControl.GetTopTile(RoomControl.GetTileLocation(Origin)).OnLand(movement.JumpStartTile);
-					movement.JumpStartTile = -Point2I.One;
-				}
-
-				// Try to switch to a natural state.
-				PlayerState desiredNaturalState = GetDesiredNaturalState();
-				if (state != desiredNaturalState && state.RequestStateChange(desiredNaturalState))
-					BeginState(desiredNaturalState);
+				CheckPressInteractions();
+				RequestNaturalState();
 			}
 			
 			// Update the current player state.
 			state.Update();
-			
+
+			// Post-state update.
 			if (!isStateControlled) {
-
 				UpdateEquippedItems();
-
-				if (performedAction)
-					StopPushing();
-
-				// Notify for touching tiles.
-				// TODO: move this somewhere else.
-				Rectangle2I tiles = RoomControl.GetTileAreaFromRect(physics.PositionedCollisionBox);
-				for (int x = tiles.Left; x < tiles.Right; x++) {
-					for (int y = tiles.Top; y < tiles.Bottom; y++) {
-						for (int layer = 0; layer < RoomControl.Room.LayerCount; layer++) {
-							Tile tile = RoomControl.GetTile(new Point2I(x, y), layer);
-							if (tile != null)
-								tile.OnTouch();
-						}
-					}
-				}
-
-				// Notify colliding tiles.
-				// TODO: move this somewhere else.
-				Rectangle2F myBox = physics.PositionedCollisionBox.Inflated(1, 1);
-				tiles = RoomControl.GetTileAreaFromRect(myBox);
-				for (int x = tiles.Left; x < tiles.Right; x++) {
-					for (int y = tiles.Top; y < tiles.Bottom; y++) {
-						for (int layer = 0; layer < RoomControl.Room.LayerCount; layer++) {
-							Tile tile = RoomControl.GetTile(new Point2I(x, y), layer);
-							if (tile != null && tile.CollisionModel != null) {
-								for (int i = 0; i < tile.CollisionModel.BoxCount; i++) {
-									if (((Rectangle2F)tile.CollisionModel[i] + tile.Position).Colliding(myBox)) {
-										tile.OnCollide();
-										break;
-									}
-								}
-							}	
-						}
-					}
-				}
+				CheckTouchedTiles();
+				
+				Physics.Gravity = GameSettings.DEFAULT_GRAVITY;
+				if (movement.IsCapeDeployed)
+					Physics.Gravity = GameSettings.PLAYER_CAPE_GRAVITY;
 			}
 
-			// TEMPORARY: Change tool drawing to something else
-			toolAnimation.Update();
-
-			if (syncAnimationWithDirection)
-				Graphics.SubStripIndex = direction;
-			
+			// Sync the graphics image variant with the current tunic.
 			switch (tunic) {
 			case PlayerTunics.GreenTunic:	Graphics.ImageVariant = GameData.VARIANT_GREEN;	break;
 			case PlayerTunics.RedTunic:		Graphics.ImageVariant = GameData.VARIANT_RED;	break;
 			case PlayerTunics.BlueTunic:	Graphics.ImageVariant = GameData.VARIANT_BLUE;	break;
 			}
 
+			// Graphics.
+			toolAnimation.Update(); // TEMPORARY: Change tool drawing to something else
+			if (syncAnimationWithDirection)
+				Graphics.SubStripIndex = direction;
+			
 			// Update superclass.
 			base.Update();
 		}
@@ -606,8 +647,20 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return stateLadder; }
 		}
 
-		public PlayerSwingState SwingState {
-			get { return stateSwing; }
+		public PlayerSwingSwordState SwingSwordState {
+			get { return stateSwingSword; }
+		}
+
+		public PlayerSwingBigSwordState SwingBigSwordState {
+			get { return stateSwingBigSword; }
+		}
+
+		public PlayerSwingCaneState SwingCaneState {
+			get { return stateSwingCane; }
+		}
+
+		public PlayerSwingMagicRodState SwingMagicRodState {
+			get { return stateSwingMagicRod; }
 		}
 
 		public PlayerHoldSwordState HoldSwordState {
@@ -628,6 +681,18 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerSwitchHookState SwitchHookState {
 			get { return stateSwitchHook; }
+		}
+
+		public PlayerMagicBoomerangState MagicBoomerangState {
+			get { return stateMagicBoomerang; }
+		}
+
+		public PlayerCarryState CarryState {
+			get { return stateCarry; }
+		}
+
+		public PlayerGrabState GrabState {
+			get { return stateGrab; }
 		}
 
 		public PlayerRespawnDeathState RespawnDeathState {

@@ -4,23 +4,27 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Entities;
+using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Items.Weapons {
-	public class ItemBigSword : ItemWeapon {
+	public class ItemCane : ItemWeapon {
 		
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemBigSword() {
-			this.id				= "item_biggoron_sword";
-			this.name			= new string[] { "Biggoron's Sword" };
-			this.description	= new string[] { "A powerful, two-handed sword." };
-			this.sprite			= new Sprite[] { GameData.SPR_ITEM_ICON_BIGGORON_SWORD };
-			this.spriteEquipped	= new Sprite[] { GameData.SPR_ITEM_ICON_BIGGORON_SWORD_EQUIPPED };
-			this.flags			= ItemFlags.TwoHanded | ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWhileInHole;
+		public ItemCane() {
+			this.id				= "item_cane";
+			this.name			= new string[] { "Cane of Somaria" };
+			this.description	= new string[] { "Used to create blocks." };
+			this.maxLevel		= Item.Level1;
+			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWhileInHole;
+			this.sprite			= new Sprite[] { GameData.SPR_ITEM_ICON_CANE };
 		}
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
@@ -28,8 +32,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		// Called when the items button is pressed (A or B).
 		public override void OnButtonPress() {
-			Player.SwingBigSwordState.Weapon = this;
-			Player.BeginState(Player.SwingBigSwordState);
+			Player.SwingCaneState.Weapon = this;
+			Player.BeginState(Player.SwingCaneState);
 		}
 	}
 }

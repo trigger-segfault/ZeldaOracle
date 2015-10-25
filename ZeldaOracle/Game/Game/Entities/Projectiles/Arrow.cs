@@ -23,8 +23,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 1);
 			Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 1);
-			EnablePhysics(PhysicsFlags.CollideWorld | PhysicsFlags.LedgePassable |
-					PhysicsFlags.HalfSolidPassable | PhysicsFlags.DestroyedOutsideRoom);
+			EnablePhysics(
+				PhysicsFlags.CollideWorld |
+				PhysicsFlags.LedgePassable |
+				PhysicsFlags.HalfSolidPassable |
+				PhysicsFlags.DestroyedOutsideRoom);
 		}
 
 
@@ -35,9 +38,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public override void Initialize() {
 			base.Initialize();
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_PLAYER_ARROW);
+			CheckInitialCollision();
 		}
 
-		public override void OnCollideTile(Tile tile) {
+		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
 			// Create crash effect.
 			Effect effect = new Effect();
 			effect.CreateDestroyTimer(32);	

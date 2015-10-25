@@ -9,28 +9,23 @@ using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Items.Weapons {
-	public class ItemSword : ItemWeapon {
+	public class ItemMagicRod : ItemWeapon {
 		
-		private EntityTracker<SwordBeam> beamTracker;
-		
+		private EntityTracker<MagicRodFire> fireTracker;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ItemSword() {
-			this.id				= "item_sword";
-			this.name			= new string[] { "Wooden Sword", "Noble Sword", "Master Sword" };
-			this.description	= new string[] { "A hero's blade.", "A sacred blade.", "The blade of legends." };
-			this.maxLevel		= Item.Level3;
+		public ItemMagicRod() {
+			this.id				= "item_magic_rod";
+			this.name			= new string[] { "Magic Rod" };
+			this.description	= new string[] { "Burn, baby burn!" };
+			this.maxLevel		= Item.Level1;
 			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWhileInHole;
-			this.beamTracker	= new EntityTracker<SwordBeam>(1);
-
-			sprite = new Sprite[] {
-				GameData.SPR_ITEM_ICON_SWORD_1,
-				GameData.SPR_ITEM_ICON_SWORD_2,
-				GameData.SPR_ITEM_ICON_SWORD_3
-			};
+			this.sprite			= new Sprite[] { GameData.SPR_ITEM_ICON_MAGIC_ROD };
+			this.fireTracker	= new EntityTracker<MagicRodFire>(2);
 		}
 
 
@@ -40,17 +35,17 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		// Called when the items button is pressed (A or B).
 		public override void OnButtonPress() {
-			Player.SwingSwordState.Weapon = this;
-			Player.BeginState(Player.SwingSwordState);
+			Player.SwingMagicRodState.Weapon = this;
+			Player.BeginState(Player.SwingMagicRodState);
 		}
-
+		
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public EntityTracker<SwordBeam> BeamTracker {
-			get { return beamTracker; }
+		public EntityTracker<MagicRodFire> FireTracker {
+			get { return fireTracker; }
 		}
 	}
 }

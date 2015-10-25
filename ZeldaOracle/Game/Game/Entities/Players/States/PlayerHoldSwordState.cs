@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Collisions;
+using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
@@ -31,11 +32,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerHoldSwordState() {
-			this.weaponAnimation	= null;
-			this.nextState			= null;
-			this.weapon				= null;
-			this.chargeTimer		= 0;
-			this.direction			= Directions.Right;
+			weaponAnimation	= GameData.ANIM_SWORD_HOLD;
+			nextState		= null;
+			weapon			= null;
+			chargeTimer		= 0;
+			direction		= Directions.Right;
 		}
 		
 		
@@ -44,8 +45,17 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		private void StabTile(Tile tile) {
-			if (player.IsOnGround)
+			if (player.IsOnGround) {
 				tile.OnSwordHit();
+
+				// Create cling effect.
+				if (!tile.IsDestroyed) {
+					Effect clingEffect = new Effect(GameData.ANIM_EFFECT_CLING_LIGHT);
+					Vector2F pos = player.Center + (13 * Directions.ToVector(direction));
+					player.RoomControl.SpawnEntity(clingEffect, pos);
+				}
+			}
+			player.SwordStabState.Weapon = weapon;
 			player.BeginState(player.SwordStabState);
 		}
 

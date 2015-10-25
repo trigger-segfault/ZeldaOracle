@@ -119,6 +119,7 @@
     <Compile Include="Common\Audio\Song.cs" />
     <Compile Include="Common\Audio\Sound.cs" />
     <Compile Include="Common\Audio\SoundInstance.cs" />
+    <Compile Include="Common\Geometry\Axes.cs" />
     <Compile Include="Common\Geometry\CollisionModel.cs" />
     <Compile Include="Common\Content\Resource.cs" />
     <Compile Include="Common\Content\Resources.cs" />
@@ -225,11 +226,11 @@
     <Compile Include="Game\Entities\NPC.cs" />
     <Compile Include="Game\Entities\Players\PlayerSwimmingSkills.cs" />
     <Compile Include="Game\Entities\Players\PlayerTunics.cs" />
+    <Compile Include="Game\Entities\Players\States\PlayerMagicBoomerangState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSwitchHookState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSeedShooterState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerRespawnDeathState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSwordStabState.cs" />
-    <Compile Include="Game\Entities\Players\States\PlayerSpinSwordState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerGrabState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerHoldSwordState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerLadderState.cs" />
@@ -241,7 +242,14 @@
     <Compile Include="Game\Entities\Players\States\PlayerNormalState.cs" />
     <Compile Include="Game\Entities\Players\PlayerState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSwimState.cs" />
-    <Compile Include="Game\Entities\Players\States\PlayerSwingState.cs" />
+    <Compile Include="Game\Entities\Players\States\SwingStates\PlayerSwingMagicRodState.cs" />
+    <Compile Include="Game\Entities\Players\States\SwingStates\PlayerSwingState.cs" />
+    <Compile Include="Game\Entities\Players\States\SwingStates\PlayerSwingCaneState.cs" />
+    <Compile Include="Game\Entities\Players\States\SwingStates\PlayerSwingBigSwordState.cs" />
+    <Compile Include="Game\Entities\Players\States\SwingStates\PlayerSpinSwordState.cs" />
+    <Compile Include="Game\Entities\Players\States\SwingStates\PlayerSwingSwordState.cs" />
+    <Compile Include="Game\Entities\Players\States\SwingStates\PlayerBaseSwingSwordState.cs" />
+    <Compile Include="Game\Entities\Projectiles\MagicRodFire.cs" />
     <Compile Include="Game\Entities\Projectiles\SwitchHookProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\Boomerang.cs" />
     <Compile Include="Game\Entities\Projectiles\SeedEntity.cs" />
@@ -308,6 +316,7 @@
     <Compile Include="Game\Items\SecondaryItems\ItemEssenceSeed.cs" />
     <Compile Include="Game\Items\SecondaryItems\ItemMagicPotion.cs" />
     <Compile Include="Game\Items\SecondaryItems\ItemFlippers.cs" />
+    <Compile Include="Game\Items\Weapons\ItemMagicRod.cs" />
     <Compile Include="Game\Items\Weapons\ItemSwitchHook.cs" />
     <Compile Include="Game\Items\Weapons\ItemSlingshot.cs" />
     <Compile Include="Game\Items\Weapons\ItemSeedShooter.cs" />
@@ -315,6 +324,7 @@
     <Compile Include="Game\Items\Weapons\ItemBoomerang.cs" />
     <Compile Include="Game\Items\Weapons\ItemShield.cs" />
     <Compile Include="Game\Items\Weapons\ItemShovel.cs" />
+    <Compile Include="Game\Items\Weapons\ItemCane.cs" />
     <Compile Include="Game\Items\Weapons\ItemSword.cs" />
     <Compile Include="Game\Items\Weapons\ItemBigSword.cs" />
     <Compile Include="Game\Items\Weapons\ItemBombs.cs" />

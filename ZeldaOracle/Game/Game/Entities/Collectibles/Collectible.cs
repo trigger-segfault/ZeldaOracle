@@ -104,7 +104,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsPickupable {
-			get { return timer >= PickupableTime; }
+			get { return (timer >= PickupableTime); }
 		}
 	}
 }

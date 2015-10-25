@@ -454,6 +454,8 @@ namespace ZeldaOracle.Game {
 			inventory.AddItems(obtain,
 				new ItemWallet(),
 				new ItemSword(),
+				new ItemMagicRod(),
+				new ItemCane(),
 				new ItemSwitchHook(),
 				new ItemBracelet(),
 				new ItemFeather(),
@@ -837,7 +839,8 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_ITEM_ICON_MAGNET_GLOVES_BLUE;
 		public static Sprite SPR_ITEM_ICON_MAGNET_GLOVES_RED;
 		public static Sprite SPR_ITEM_ICON_CANE;
-		public static Sprite SPR_ITEM_ICON_FIRE_ROD;
+		public static Sprite SPR_ITEM_ICON_ROD_OF_ESSENCES;
+		public static Sprite SPR_ITEM_ICON_MAGIC_ROD;
 		public static Sprite SPR_ITEM_ICON_OCARINA;
 		public static Sprite SPR_ITEM_ICON_BOW;
 		public static Sprite SPR_ITEM_ICON_FLIPPERS_1;
@@ -951,6 +954,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PLAYER_SPIN;
 		public static Animation ANIM_PLAYER_AIM;
 		public static Animation ANIM_PLAYER_JUMP;
+		public static Animation ANIM_PLAYER_CAPE;
 		public static Animation ANIM_PLAYER_SUBMERGED;
 		public static Animation ANIM_PLAYER_DIE;
 		public static Animation ANIM_PLAYER_RAISE_ONE_HAND;
@@ -969,7 +973,12 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_SWORD_SWING;
 		public static Animation ANIM_SWORD_SPIN;
 		public static Animation ANIM_SWORD_STAB;
+		public static Animation ANIM_BIG_SWORD_SWING;
+		public static Animation ANIM_CANE_SWING;
+		public static Animation ANIM_MAGIC_ROD_SWING;
 		public static Animation ANIM_SEED_SHOOTER;
+		public static Animation ANIM_SLINGSHOT_1;
+		public static Animation ANIM_SLINGSHOT_2;
 
 		// Projectile animations.
 		public static Animation ANIM_ITEM_BOMB;
@@ -979,6 +988,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PROJECTILE_PLAYER_BOOMERANG_1;
 		public static Animation ANIM_PROJECTILE_PLAYER_BOOMERANG_2;
 		public static Animation ANIM_PROJECTILE_SWITCH_HOOK;
+		public static Animation ANIM_PROJECTILE_MAGIC_ROD_FIRE;
 	
 		// Effect animations.
 		public static Animation ANIM_EFFECT_DIRT;

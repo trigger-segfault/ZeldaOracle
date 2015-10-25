@@ -8,6 +8,7 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Items;
+using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
 	public class Boomerang : Projectile {
@@ -17,6 +18,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		private int timer;
 		private int returnDelay;
 		private int level;
+		private List<Collectible> collectibles;
+		private Point2I tileLocation;
 
 
 		//-----------------------------------------------------------------------------
@@ -34,6 +37,15 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 2);
 			EnablePhysics(PhysicsFlags.CollideWorld | PhysicsFlags.LedgePassable |
 					PhysicsFlags.HalfSolidPassable | PhysicsFlags.CollideRoomEdge);
+
+			if (level == Item.Level2) {
+				physics.CustomTileCollisionCondition = delegate(Tile tile) {
+					return !tile.IsBoomerangable;
+				};
+			}
+			
+			// Graphics.
+			Graphics.IsShadowVisible = false;
 		}
 
 		
@@ -62,12 +74,19 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			else
 				Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_PLAYER_BOOMERANG_2);
 
+			collectibles		= new List<Collectible>();
 			isReturning			= false;
 			timer				= 0;
 			physics.Velocity	= Angles.ToVector(angle) * speed;
+
+			tileLocation = new Point2I(-1, -1);
 		}
 
-		public override void OnCollideTile(Tile tile) {
+		public override void OnCollideRoomEdge() {
+			BeginReturn();
+		}
+
+		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
 			// Create cling effect.
 			Effect effect = new Effect(GameData.ANIM_EFFECT_CLING);
 			RoomControl.SpawnEntity(effect, position, zPosition);
@@ -79,23 +98,74 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public override void Update() {
+
 			if (isReturning) {
 				// Return to player.
 				Vector2F trajectory = RoomControl.Player.Center - Center;
 				if (trajectory.Length <= speed) {
 					Destroy();
+					for (int i = 0; i < collectibles.Count; i++)
+						collectibles[i].Collect();
 				}
 				else {
 					physics.Velocity = trajectory.Normalized * speed;
 				}
 			}
 			else {
+				// Check for boomerangable tiles.
+				if (level == Item.Level2) {
+					Point2I tileLoc = RoomControl.GetTileLocation(position);
+					if (tileLoc != tileLocation && RoomControl.IsTileInBounds(tileLoc)) {
+						Tile tile = RoomControl.GetTopTile(tileLoc);
+						if (tile != null) {
+							tile.OnBoomerang();
+						}
+					}
+					tileLocation = tileLoc;
+				}
+
+				// Update return timer.
 				timer++;
-				if (physics.IsColliding || timer > returnDelay)
+				if (timer > returnDelay)
 					BeginReturn();
 			}
 
+			// Collide with collectibles.
+			CollisionIterator iterator = new CollisionIterator(this, typeof(Collectible), CollisionBoxType.Soft);
+			for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
+				Collectible collectible = iterator.CollisionInfo.Entity as Collectible;
+				if (collectible.IsPickupable) {
+					collectibles.Add(collectible);
+					collectible.Destroy();
+					BeginReturn();
+				}
+			}
+
 			base.Update();
+		}
+
+		public override void Draw(Graphics2D g) {
+			base.Draw(g);
+
+			for (int i = 0; i < collectibles.Count; i++) {
+				Collectible collectible = collectibles[i];
+				collectible.SetPositionByCenter(Center);
+				collectible.ZPosition = zPosition;
+				collectible.Graphics.Draw(g);
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public bool IsReturning {
+			get { return isReturning; }
+		}
+
+		public float Speed {
+			get { return speed; }
 		}
 	}
 }

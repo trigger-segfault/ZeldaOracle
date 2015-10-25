@@ -45,7 +45,8 @@ namespace ZeldaOracle.Game.Items {
 				// Conjure a new bomb.
 				Bomb bomb = new Bomb();
 				bombTracker.TrackEntity(bomb);
-				Player.BeginState(new PlayerCarryState(bomb));
+				Player.CarryState.SetCarryObject(bomb);
+				Player.BeginState(Player.CarryState);
 			}
 			else {
 				// Pickup a bomb from the ground.

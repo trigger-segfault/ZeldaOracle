@@ -31,8 +31,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public Projectile() {
 			EnablePhysics();
 
-			syncAnimationWithAngle = false;
-			syncAnimationWithDirection = false;
+			syncAnimationWithAngle		= false;
+			syncAnimationWithDirection	= false;
 
 			owner			= null;
 			eventCollision	= null;
@@ -46,10 +46,27 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		
 
 		//-----------------------------------------------------------------------------
+		// Projectile Methods
+		//-----------------------------------------------------------------------------
+		
+		protected void CheckInitialCollision() {
+			if (physics.IsPlaceMeetingSolid(position, physics.CollisionBox)) {
+				Point2I tileLocation = RoomControl.GetTileLocation(Origin);
+				Tile tile = RoomControl.GetTopTile(tileLocation);
+				OnCollideTile(tile, true);
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Virtual Methods
 		//-----------------------------------------------------------------------------
 		
-		public virtual void OnCollideTile(Tile tile) {
+		public virtual void OnCollideRoomEdge() {
+
+		}
+
+		public virtual void OnCollideTile(Tile tile, bool isInitialCollision) {
 
 		}
 
@@ -77,7 +94,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public override void Update() {
-
 			base.Update();
 
 			// Check if collided.
@@ -99,14 +115,18 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 					}
 				}
 				if (tile != null) {
-					OnCollideTile(tile);
+					OnCollideTile(tile, false);
 					if (IsDestroyed)
 						return;
 				}
+				else if (type == CollisionType.RoomEdge)
+					OnCollideRoomEdge();
 			}
 
 			// Collide with monsters.
 			if (owner is Player) {
+
+
 				CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
 				for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
 					OnCollideMonster(iterator.CollisionInfo.Entity as Monster);

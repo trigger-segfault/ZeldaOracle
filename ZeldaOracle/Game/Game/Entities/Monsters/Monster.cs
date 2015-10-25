@@ -68,7 +68,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public delegate void InteractionHandler_Arrow(Arrow arrow);
 		public delegate void InteractionHandler_SwordBeam(SwordBeam swordBeam);
 		public delegate void InteractionHandler_Boomerang(Boomerang boomerang);
-		public delegate void InteractionHandler_RodFire(Projectile rodFire);
+		public delegate void InteractionHandler_RodFire(MagicRodFire rodFire);
 		public delegate void InteractionHandler_SwitchHook(SwitchHookProjectile hook);
 		public delegate void InteractionHandler_ThrownObject(CarriedTile thrownObject);
 
@@ -142,7 +142,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Player & items
 			handlerButtonAction		= OnButtonAction;
 			handlerSword			= OnSwordHit;
-			handlerBigSword			= null;
+			handlerBigSword			= OnBigSwordHit;
 			handlerShield			= OnShieldHit;
 			handlerShovel			= null;
 			handlerBracelet			= null;
@@ -150,7 +150,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			handlerArrow			= OnArrowHit;
 			handlerBoomerang		= OnBoomerangHit;
 			handlerSwordBeam		= OnSwordBeamHit;
-			handlerRodFire			= null;
+			handlerRodFire			= OnMagicRodFireHit;
 			handlerSwitchHook		= OnSwitchHook;
 			handlerThrownObject		= OnThrownObjectHit;
 			// Effects
@@ -248,6 +248,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Hurt(1, RoomControl.Player.Center);
 		}
 		
+		protected virtual void OnBigSwordHit(ItemBigSword itemBigSword) {
+			Hurt(2, RoomControl.Player.Center);
+		}
+		
 		protected virtual void OnShieldHit(ItemShield itemShield) {
 			Hurt(0, RoomControl.Player.Center); // Knockback
 		}
@@ -311,6 +315,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		protected virtual void OnFireHit(Fire fire) {
 			// Burn
 			// Burning is like stunning
+			if (!IsInvincible && !isBurning) {
+				Burn(1);
+				fire.Destroy();
+			}
+		}
+		
+		protected virtual void OnMagicRodFireHit(MagicRodFire fire) {
 			if (!IsInvincible && !isBurning) {
 				Burn(1);
 				fire.Destroy();

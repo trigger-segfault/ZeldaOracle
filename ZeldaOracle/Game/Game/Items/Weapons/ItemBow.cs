@@ -52,7 +52,6 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			Player.Direction = Player.UseDirection;
 
 			// Spawn the arrow.
-			// TODO: keep track of arrows (only can shoot 2 at a time).
 			Arrow arrow = new Arrow();
 			arrow.Owner				= Player;
 			arrow.Position			= Player.Center + (Directions.ToVector(Player.Direction) * 8.0f);

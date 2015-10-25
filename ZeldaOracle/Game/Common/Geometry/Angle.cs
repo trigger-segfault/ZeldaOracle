@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Geometry {
 
@@ -41,6 +42,22 @@ namespace ZeldaOracle.Common.Geometry {
 		// Methods
 		//-----------------------------------------------------------------------------
 		
+		public static int Add(int angle, int addAmount, WindingOrder windingOrder) {
+			if (windingOrder == WindingOrder.Clockwise)
+				angle -= addAmount;
+			else
+				angle += addAmount;
+			return GMath.Wrap(angle, Angles.AngleCount);
+		}
+		
+		public static int Subtract(int angle, int subtractAmount, WindingOrder windingOrder) {
+			if (windingOrder == WindingOrder.Clockwise)
+				angle += subtractAmount;
+			else
+				angle -= subtractAmount;
+			return GMath.Wrap(angle, Angles.AngleCount);
+		}
+
 		public static int Reverse(int angle) {
 			return ((angle + 4) % 8);
 		}
