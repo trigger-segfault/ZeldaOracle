@@ -9,7 +9,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TileRoller : Tile {
+	public class TileRoller : TileInteractable {
 
 		private AnimationPlayer animationPlayer;
 
@@ -34,10 +34,6 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public TileRoller() {
 			animationPlayer = new AnimationPlayer();
-			
-			destroyedInHoles	= false;
-			destroyedInWater	= false;
-			destroyedInLava		= false;
 
 			// TODO: Rollers can't be sword-stabbed, aren't pushable diagonally, and are only solid to the player.
 		}
@@ -48,8 +44,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		// Pushes the roller.
 		public void PushRoller(int direction) {
-			bool vertical = Properties.GetBoolean("vertical");
-			if (((vertical && Directions.IsVertical(direction)) || (!vertical && Directions.IsHorizontal(direction))) && nextRoller != null)
+			if (((IsVertical && Directions.IsVertical(direction)) || (!IsVertical && Directions.IsHorizontal(direction))) && nextRoller != null)
 				nextRoller.PushRoller(direction);
 
 			animationPlayer.Play(TileData.SpriteList[1].Animation);
@@ -59,7 +54,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (firstRoller == this)
 				returnTimer = 60;
 
-			base.OnPush(direction, MOVEMENT_SPEED);
+			base.Move(direction, 1, MOVEMENT_SPEED);
 		}
 
 		// Makes sure all rollers in the group can be pushed in the same direction.
@@ -86,8 +81,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (newLayer < 0)
 				return false;
 
-			bool vertical = Properties.GetBoolean("vertical");
-			if ((vertical && Directions.IsVertical(direction)) || (!vertical && Directions.IsHorizontal(direction)))
+			if ((IsVertical && Directions.IsVertical(direction)) || (!IsVertical && Directions.IsHorizontal(direction)))
 				return (nextRoller != null ? nextRoller.CanPushRoller(direction) : true);
 			return false;
 		}
@@ -102,15 +96,14 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public override void OnPushing(int direction) {
-			bool vertical = Properties.GetBoolean("vertical");
-			int currentPosition = (vertical ? Location.Y : Location.X);
+			int currentPosition = (IsVertical ? Location.Y : Location.X);
 			if (!IsMoving && RoomControl.GameControl.Inventory.IsWeaponButtonDown(RoomControl.GameControl.Inventory.GetItem("item_bracelet"))) {
 				bool pushableDirection = false;
 				switch (direction) {
-				case Directions.Right: pushableDirection = !vertical && currentPosition >= startPosition; break;
-				case Directions.Up: pushableDirection = vertical && currentPosition <= startPosition; break;
-				case Directions.Left: pushableDirection = !vertical && currentPosition <= startPosition; break;
-				case Directions.Down: pushableDirection = vertical && currentPosition >= startPosition; break;
+				case Directions.Right: pushableDirection = !IsVertical && currentPosition >= startPosition; break;
+				case Directions.Up: pushableDirection = IsVertical && currentPosition <= startPosition; break;
+				case Directions.Left: pushableDirection = !IsVertical && currentPosition <= startPosition; break;
+				case Directions.Down: pushableDirection = IsVertical && currentPosition >= startPosition; break;
 				}
 				if (pushableDirection) {
 
@@ -127,6 +120,18 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
+		// Called when the tile is pushed into a hole.
+		public override void OnFallInHole() {
+		}
+
+		// Called when the tile is pushed into water.
+		public override void OnFallInWater() {
+		}
+
+		// Called when the tile is pushed into lava.
+		public override void OnFallInLava() {
+		}
+
 		public override void Update() {
 			base.Update();
 			if (IsMoving) {
@@ -135,14 +140,13 @@ namespace ZeldaOracle.Game.Tiles {
 			else {
 				if (!pushed)
 					pushTimer = 0;
-				bool vertical = Properties.GetBoolean("vertical");
-				int currentPosition = (vertical ? Location.Y : Location.X);
+				int currentPosition = (IsVertical ? Location.Y : Location.X);
 				if (startPosition != currentPosition && firstRoller == this && returnTimer > 0) {
 					int direction;
 					if (currentPosition < startPosition)
-						direction = (vertical ? Directions.Down : Directions.Right);
+						direction = (IsVertical ? Directions.Down : Directions.Right);
 					else
-						direction = (vertical ? Directions.Up : Directions.Left);
+						direction = (IsVertical ? Directions.Up : Directions.Left);
 
 					if (!CanPushRoller(direction)) {
 						// Reset the return timer while it can't roll back.
@@ -158,9 +162,8 @@ namespace ZeldaOracle.Game.Tiles {
 			pushed = false;
 		}
 
-		public override void Initialize() {
-			bool vertical = Properties.GetBoolean("vertical");
-			startPosition = (vertical ? Location.Y : Location.X);
+		public override void OnInitialize() {
+			startPosition = (IsVertical ? Location.Y : Location.X);
 			returnTimer = 0;
 			TileRoller roller = this;
 			do {
@@ -168,10 +171,10 @@ namespace ZeldaOracle.Game.Tiles {
 				// Don't look any further, this is automatically the first roller.
 				if (roller.Properties.GetBoolean("first_roller"))
 					break;
-				roller = RoomControl.GetTopTile(roller.Location + Directions.ToPoint(vertical ? Directions.Left : Directions.Up)) as TileRoller;
+				roller = RoomControl.GetTopTile(roller.Location + Directions.ToPoint(IsVertical ? Directions.Left : Directions.Up)) as TileRoller;
 			} while (roller != null);
 
-			nextRoller = RoomControl.GetTopTile(Location + Directions.ToPoint(vertical ? Directions.Right : Directions.Down)) as TileRoller;
+			nextRoller = RoomControl.GetTopTile(Location + Directions.ToPoint(IsVertical ? Directions.Right : Directions.Down)) as TileRoller;
 			// Don't include the next roller if it's the start of a new group.
 			if (nextRoller != null && nextRoller.Properties.GetBoolean("first_roller"))
 				nextRoller = null;
@@ -195,6 +198,14 @@ namespace ZeldaOracle.Game.Tiles {
 				// Draw as a sprite.
 				g.DrawSprite(sprite.Sprite, Zone.ImageVariantID, Position);
 			}
+		}
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		private bool IsVertical {
+			get { return SpecialFlags.HasFlag(TileSpecialFlags.VerticalRoller); }
 		}
 	}
 }

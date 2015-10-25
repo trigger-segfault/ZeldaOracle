@@ -25,14 +25,13 @@ namespace ZeldaOracle.Game.Tiles {
 		private bool			isInitialized;
 		private Point2I			location;		// The tile location in the room.
 		private int				layer;			// The layer this tile is in.
-		private Point2I			moveDirection;
-		private bool			isMoving;
-		private float			movementSpeed;
-		private Vector2F		offset;			// Offset in pixels from its tile location (used for movement).
+		protected Point2I		moveDirection;
+		protected bool			isMoving;
+		protected float			movementSpeed;
+		protected Vector2F		offset;			// Offset in pixels from its tile location (used for movement).
 
 		// Settings
 		private TileDataInstance	tileData;		// The tile data used to create this tile.
-		private TileFlags			flags;
 		private Point2I				size;			// How many tile spaces this tile occupies. NOTE: this isn't supported yet.
 		private CollisionModel		collisionModel;
 		private SpriteAnimation		customSprite;
@@ -40,10 +39,6 @@ namespace ZeldaOracle.Game.Tiles {
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
 		private int					pushDelay;		// Number of ticks of pushing before the player can move this tile.
 		private Properties			properties;
-
-		protected bool				destroyedInHoles;
-		protected bool				destroyedInWater;
-		protected bool				destroyedInLava;
 
 
 		//-----------------------------------------------------------------------------
@@ -58,7 +53,6 @@ namespace ZeldaOracle.Game.Tiles {
 			layer			= 0;
 			offset			= Point2I.Zero;
 			size			= Point2I.One;
-			flags			= TileFlags.Default;
 			customSprite	= new SpriteAnimation();
 			spriteAsObject	= new SpriteAnimation();
 			isMoving		= false;
@@ -66,11 +60,7 @@ namespace ZeldaOracle.Game.Tiles {
 			properties		= new Properties();
 			properties.PropertyObject = this;
 			tileData		= null;
-			moveDirection	= Point2I.Zero; 
-
-			destroyedInHoles	= true;
-			destroyedInWater	= true;
-			destroyedInLava		= true;
+			moveDirection	= Point2I.Zero;
 		}
 
 
@@ -84,7 +74,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 			if (!isInitialized) {
 				isInitialized = true;
-				Initialize();
+				OnInitialize();
 			}
 		}
 		
@@ -107,22 +97,13 @@ namespace ZeldaOracle.Game.Tiles {
 		public virtual void OnCollide() { }
 
 		// Called when the player hits this tile with the sword.
-		public virtual void OnSwordHit() {
-			if (!isMoving && flags.HasFlag(TileFlags.Cuttable))
-				Break(true);
-		}
+		public virtual void OnSwordHit() { }
 
 		// Called when the player hits this tile with the sword.
-		public virtual void OnBombExplode() {
-			if (!isMoving && flags.HasFlag(TileFlags.Bombable))
-				Break(true);
-		}
+		public virtual void OnBombExplode() { }
 
 		// Called when the tile is burned by a fire.
-		public virtual void OnBurn() {
-			if (!isMoving && flags.HasFlag(TileFlags.Burnable))
-				Break(true);
-		}
+		public virtual void OnBurn() { }
 
 		// Called when the player wants to push the tile.
 		public virtual bool OnPush(int direction, float movementSpeed) {
@@ -157,7 +138,7 @@ namespace ZeldaOracle.Game.Tiles {
 			return true;
 		}
 
-		public virtual bool OnDig() {
+		public virtual bool OnDig(int direction) {
 			if (!isMoving && IsDiggable) {
 
 				if (layer == 0) {
@@ -181,14 +162,10 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		// Called while the player is trying to push the tile but before it's actually moved.
-		public virtual void OnPushing(int direction) {
-
-		}
+		public virtual void OnPushing(int direction) { }
 
 		// Called when the player jumps and lands on the tile.
-		public virtual void OnLand(Point2I startTile) {
-			
-		}
+		public virtual void OnLand(Point2I startTile) { }
 		
 		// Called when a tile is finished moving after being pushed.
 		public virtual void OnCompleteMovement() {
@@ -198,43 +175,75 @@ namespace ZeldaOracle.Game.Tiles {
 				tile = roomControl.GetTile(location, i);
 
 			if (tile != null) {
-				if (tile.flags.HasFlag(TileFlags.Water))
+				if (tile.Flags.HasFlag(TileFlags.Water))
 					OnFallInWater();
-				else if (tile.flags.HasFlag(TileFlags.Lava))
+				else if (tile.Flags.HasFlag(TileFlags.Lava))
 					OnFallInLava();
-				else if (tile.flags.HasFlag(TileFlags.Hole))
+				else if (tile.Flags.HasFlag(TileFlags.Hole))
 					OnFallInHole();
+				else
+					tile.OnCover(this);
 			}
 		}
 		
 		// Called when the tile is pushed into a hole.
-		public virtual void OnFallInHole() {
-			if (destroyedInHoles) {
-				RoomControl.SpawnEntity(new EffectFallingObject(), Center);
-				RoomControl.RemoveTile(this);
-			}
-		}
+		public virtual void OnFallInHole() { }
 		
 		// Called when the tile is pushed into water.
-		public virtual void OnFallInWater() {
-			if (destroyedInWater) {
-				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_WATER_SPLASH), Center);
-				RoomControl.RemoveTile(this);
-			}
-		}
+		public virtual void OnFallInWater() { }
 		
 		// Called when the tile is pushed into lava.
-		public virtual void OnFallInLava() {
-			if (destroyedInLava) {
-				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH), Center);
-				RoomControl.RemoveTile(this);
-			}
-		}
+		public virtual void OnFallInLava() { }
+
+		// Called when a tile covers this tile.
+		public virtual void OnCover(Tile tile) { }
+
+		// Called when this tile is uncovered.
+		public virtual void OnUncover() { }
 
 
 		//-----------------------------------------------------------------------------
 		// Mutators
 		//-----------------------------------------------------------------------------
+
+		protected bool Move(int direction, int distance, float movementSpeed) {
+			Point2I oldLocation = location;
+
+			if (isMoving)
+				return false;
+
+			// Make sure were not pushing out of bounds.
+			Point2I newLocation = location + Directions.ToPoint(direction) * distance;
+			if (!RoomControl.IsTileInBounds(newLocation))
+				return false;
+
+			// Make sure there are no obstructions.
+			int newLayer = -1;
+			for (int i = 0; i < RoomControl.Room.LayerCount; i++) {
+				Tile t = RoomControl.GetTile(newLocation.X, newLocation.Y, i);
+				if (t != null && (t.Flags.HasFlag(TileFlags.Solid) || t.Flags.HasFlag(TileFlags.NotCoverable)))
+					return false;
+				if (t == null && newLayer != layer)
+					newLayer = i;
+			}
+
+			// Not enough layers to place this tile.
+			if (newLayer < 0)
+				return false;
+
+			// Move the tile to the new location.
+			isMoving = true;
+			this.movementSpeed = movementSpeed;
+			moveDirection = Directions.ToPoint(direction);
+			offset = -Directions.ToVector(direction) * GameSettings.TILE_SIZE;
+			RoomControl.MoveTile(this, newLocation, newLayer);
+
+			Tile unconveredTile = roomControl.GetTopTile(oldLocation);
+			if (unconveredTile != null)
+				unconveredTile.OnUncover();
+
+			return true;
+		}
 
 		public void Break(bool spawnDrops) {
 			RoomControl.SpawnEntity(new Effect(breakAnimation), Center);
@@ -258,14 +267,14 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		// Simulation
 		//-----------------------------------------------------------------------------
-
-		public virtual void Initialize() {}
+		
+		public virtual void OnInitialize() {}
 
 		public virtual void Update() {
 			// Update movement (after pushed).
 			if (isMoving) {
 				if (offset.LengthSquared > 0.0f) {
-					offset += (Vector2F) moveDirection * movementSpeed;
+					offset += (Vector2F)moveDirection * movementSpeed;
 					if (offset.LengthSquared == 0.0f || GMath.Sign(offset) == GMath.Sign(moveDirection)) {
 						offset = Vector2F.Zero;
 						isMoving = false;
@@ -297,7 +306,15 @@ namespace ZeldaOracle.Game.Tiles {
 				g.DrawSprite(sprite.Sprite, Zone.ImageVariantID, Position);
 			}
 		}
-		
+
+		//-----------------------------------------------------------------------------
+		// Flags methods
+		//-----------------------------------------------------------------------------
+
+		// Returns true if the tile has both the normal and special flags.
+		public bool HasFlags(TileFlags flags, TileSpecialFlags specialFlags) {
+			return Flags.HasFlag(flags) && SpecialFlags.HasFlag(specialFlags);
+		}
 
 		//-----------------------------------------------------------------------------
 		// Static methods
@@ -322,7 +339,6 @@ namespace ZeldaOracle.Game.Tiles {
 			tile.layer				= data.Layer;
 
 			tile.tileData			= data;
-			tile.flags				= data.Flags;
 			tile.spriteAsObject		= data.SpriteAsObject;
 			tile.breakAnimation		= data.BreakAnimation;
 			tile.collisionModel		= data.CollisionModel;
@@ -404,8 +420,11 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public TileFlags Flags {
-			get { return flags; }
-			set { flags = value; }
+			get { return tileData.Flags; }
+		}
+
+		public TileSpecialFlags SpecialFlags {
+			get { return tileData.SpecialFlags; }
 		}
 
 		public SpriteAnimation CustomSprite {
@@ -485,64 +504,53 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public bool IsDiggable {
-			get { return flags.HasFlag(TileFlags.Diggable); }
+			get { return Flags.HasFlag(TileFlags.Diggable); }
 		}
 
 		public bool IsCoverable {
-			get { return !flags.HasFlag(TileFlags.NotCoverable); }
-		}
-
-		public bool IsSwitchable {
-			get { return flags.HasFlag(TileFlags.Switchable); }
-		}
-
-		public bool StaysOnSwitch {
-			get { return flags.HasFlag(TileFlags.SwitchStays); }
-		}
-
-		public bool BreaksOnSwitch {
-			get { return !flags.HasFlag(TileFlags.SwitchStays); }
+			get { return !Flags.HasFlag(TileFlags.NotCoverable); }
 		}
 		
 		public bool IsHole {
-			get { return flags.HasFlag(TileFlags.Hole); }
+			get { return Flags.HasFlag(TileFlags.Hole); }
 		}
 		
 		public bool IsWater {
-			get { return flags.HasFlag(TileFlags.Water); }
+			get { return Flags.HasFlag(TileFlags.Water); }
 		}
 		
 		public bool IsLava {
-			get { return flags.HasFlag(TileFlags.Lava); }
+			get { return Flags.HasFlag(TileFlags.Lava); }
 		}
 		
 		public bool IsSolid {
-			get { return flags.HasFlag(TileFlags.Solid); }
+			get { return Flags.HasFlag(TileFlags.Solid); }
 		}
 		
 		public bool IsStairs {
-			get { return flags.HasFlag(TileFlags.Stairs); }
+			get { return Flags.HasFlag(TileFlags.Stairs); }
 		}
 		
 		public bool IsLadder {
-			get { return flags.HasFlag(TileFlags.Ladder); }
+			get { return Flags.HasFlag(TileFlags.Ladder); }
 		}
 
 		public bool IsLedge {
 			get { return (
-				flags.HasFlag(TileFlags.LedgeRight) ||
-				flags.HasFlag(TileFlags.LedgeUp) ||
-				flags.HasFlag(TileFlags.LedgeLeft) ||
-				flags.HasFlag(TileFlags.LedgeDown)); }
+				Flags.HasFlag(TileFlags.LedgeRight) ||
+				Flags.HasFlag(TileFlags.LedgeUp) ||
+				Flags.HasFlag(TileFlags.LedgeLeft) ||
+				Flags.HasFlag(TileFlags.LedgeDown));
+			}
 		}
 
 		public int LedgeDirection {
 			get {
-				if (flags.HasFlag(TileFlags.LedgeRight))
+				if (Flags.HasFlag(TileFlags.LedgeRight))
 					return Directions.Right;
-				if (flags.HasFlag(TileFlags.LedgeUp))
+				if (Flags.HasFlag(TileFlags.LedgeUp))
 					return Directions.Up;
-				if (flags.HasFlag(TileFlags.LedgeLeft))
+				if (Flags.HasFlag(TileFlags.LedgeLeft))
 					return Directions.Left;
 				return Directions.Down;
 			}

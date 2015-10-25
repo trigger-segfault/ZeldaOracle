@@ -18,7 +18,7 @@ namespace ZeldaOracle.Game.Tiles {
 		RedYellow
 	}
 
-	public class TileColorCube : Tile {
+	public class TileColorCube : TileInteractable {
 
 		private AnimationPlayer animationPlayer;
 
@@ -65,7 +65,7 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
-		public override void Initialize() {
+		public override void OnInitialize() {
 			
 		}
 

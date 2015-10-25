@@ -43,8 +43,8 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			return false;
 		}
 
-		public override void Initialize() {
-			base.Initialize();
+		public override void OnInitialize() {
+			base.OnInitialize();
 
 			// TODO: Make open sprite a property
 			/*if (Properties.GetBoolean("looted", false))

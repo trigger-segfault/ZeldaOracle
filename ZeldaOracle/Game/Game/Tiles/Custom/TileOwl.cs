@@ -47,7 +47,7 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
-		public override void Initialize() {
+		public override void OnInitialize() {
 			isActivated = false;
 			SpriteIndex = 0;
 			//CustomSprite = GameData.SPR_TILE_OWL;

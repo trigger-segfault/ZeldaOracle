@@ -13,6 +13,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		private SpriteAnimation[]	spriteList;
 		private TileFlags			flags;
+		private TileSpecialFlags	specialFlags;
 		private Point2I				size;
 		private SpriteAnimation		spriteAsObject;
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
@@ -27,6 +28,7 @@ namespace ZeldaOracle.Game.Tiles {
 			spriteList			= new SpriteAnimation[0];
 			size				= Point2I.One;
 			flags				= TileFlags.Default;
+			specialFlags		= TileSpecialFlags.Default;
 			spriteAsObject		= new SpriteAnimation();
 			breakAnimation		= null;
 			collisionModel		= null;
@@ -110,6 +112,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public TileFlags Flags {
 			get { return flags; }
 			set { flags = value; }
+		}
+
+		public TileSpecialFlags SpecialFlags {
+			get { return specialFlags; }
+			set { specialFlags = value; }
 		}
 
 		public SpriteAnimation SpriteAsObject {
