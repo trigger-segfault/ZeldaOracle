@@ -474,8 +474,8 @@ namespace ZeldaOracle.Game {
 			inventory.AddItems(obtain,
 				new ItemWallet(),
 				new ItemSword(),
-				new ItemMagicRod(),
 				new ItemCane(),
+				new ItemMagicRod(),
 				new ItemSwitchHook(),
 				new ItemBracelet(),
 				new ItemFeather(),
@@ -815,6 +815,7 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_TILE_ARMOS_STATUE;
 		public static Sprite SPR_TILE_OWL;
 		public static Sprite SPR_TILE_OWL_ACTIVATED;
+		public static Sprite SPR_TILE_SOMARIA_BLOCK;
 
 		public static Sprite[] SPR_COLOR_CUBE_ORIENTATIONS;
 
@@ -1037,6 +1038,8 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_EFFECT_CLING;
 		public static Animation ANIM_EFFECT_CLING_LIGHT;
 		public static Animation ANIM_EFFECT_BURN;
+		public static Animation ANIM_EFFECT_SOMARIA_BLOCK_CREATE;
+		public static Animation ANIM_EFFECT_SOMARIA_BLOCK_DESTROY;
 
 		public static Animation[] ANIM_EFFECT_SEEDS;
 

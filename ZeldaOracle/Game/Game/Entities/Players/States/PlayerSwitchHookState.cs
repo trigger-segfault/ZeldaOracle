@@ -80,9 +80,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			Tile checkTile = player.RoomControl.GetTopTile(location);
 			if (checkTile == null)
 				return true;
-			return (checkTile.Layer != player.RoomControl.Room.LayerCount - 1 &&
-					checkTile.IsCoverable	&& !checkTile.IsSolid	&&
-					!checkTile.IsHole		&& !checkTile.IsWater	&& !checkTile.IsLava);
+			return (checkTile.Layer != player.RoomControl.Room.TopLayer &&
+					!checkTile.IsNotCoverable && !checkTile.IsSolid	&& !checkTile.IsHoleWaterOrLava);
 		}
 
 		private bool WillTileBreakAtLocation(Point2I location) {
@@ -91,9 +90,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			Tile checkTile = player.RoomControl.GetTopTile(location);
 			if (checkTile == null)
 				return false;
-			return (checkTile.Layer == player.RoomControl.Room.LayerCount - 1 ||
-					!checkTile.IsCoverable	|| checkTile.IsStairs	|| checkTile.IsLadder	|| checkTile.IsSolid ||
-					checkTile.IsHole		|| checkTile.IsWater	|| checkTile.IsLava);
+			return (checkTile.Layer == player.RoomControl.Room.TopLayer ||
+					!checkTile.IsCoverableByBlock || checkTile.IsHoleWaterOrLava);
 		}
 
 		private void SwitchPositions() {

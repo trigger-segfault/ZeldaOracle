@@ -40,12 +40,17 @@ SPRITESHEET "color_cube", "Tiles/color_cube"		(16, 16), (1, 1), (18, 18); END;
 
 
 #==============================================================
-# Entities
+# Player Items
 #==============================================================
 
 SPRITESHEET "color_effects";
 
 SPRITE switch_hook_link, (5, 4), (-8, -8); END;
+
+
+SPRITESHEET "player_items";
+
+SPRITE tile_somaria_block, (4, 8); END;
 
 
 #==============================================================

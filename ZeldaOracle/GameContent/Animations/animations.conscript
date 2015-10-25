@@ -565,7 +565,18 @@ ANIM effect_burn; SUBSTRIP repeat;
 	ADD frame, 2, (1, 18);
 	ADD frame, 3, (1, 1); ADD frame, 3, (1, 13); ADD frame, 3, (1, 17); REPEAT 3, 6;
 	OFFSET (-8, -8); END;
-	
+
+ANIM effect_somaria_block_create; SUBSTRIP reset;
+	ADD frame, 3, (3, 12);
+	ADD frame, 3, (0, 12);
+	ADD frame, 3, (1, 12);
+	OFFSET (-8, -8); END;
+ANIM effect_somaria_block_destroy; SUBSTRIP reset;
+	ADD frame, 6, (0, 12);
+	ADD frame, 8, (1, 12);
+	ADD frame, 5, (5, 12);
+	OFFSET (-8, -8); END;
+
 
 #==============================================================
 # NPC Animations

@@ -504,6 +504,10 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return tileData.Properties; }
 		}
 
+		public bool IsCoverableByBlock {
+			get { return (!IsNotCoverable && !IsSolid && !IsStairs && !IsLadder); }
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Flag Properties
@@ -513,8 +517,8 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return Flags.HasFlag(TileFlags.Diggable); }
 		}
 
-		public bool IsCoverable {
-			get { return !Flags.HasFlag(TileFlags.NotCoverable); }
+		public bool IsNotCoverable {
+			get { return Flags.HasFlag(TileFlags.NotCoverable); }
 		}
 
 		public bool IsSwitchable {
@@ -543,6 +547,10 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		public bool IsLava {
 			get { return Flags.HasFlag(TileFlags.Lava); }
+		}
+		
+		public bool IsHoleWaterOrLava {
+			get { return (IsHole || IsWater || IsLava); }
 		}
 		
 		public bool IsSolid {

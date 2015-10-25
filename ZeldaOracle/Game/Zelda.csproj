@@ -215,6 +215,7 @@
     <Compile Include="Game\Entities\Collisions\CollisionInfo.cs" />
     <Compile Include="Game\Entities\Collisions\CollisionTest.cs" />
     <Compile Include="Game\Entities\DamageInfo.cs" />
+    <Compile Include="Game\Entities\Effects\EffectCreateSomariaBlock.cs" />
     <Compile Include="Game\Entities\Effects\EffectGale.cs" />
     <Compile Include="Game\Entities\Effects\BombExplosion.cs" />
     <Compile Include="Game\Entities\Effects\Fire.cs" />
@@ -343,6 +344,7 @@
     <Compile Include="Common\Content\ResourceBuilders\AnimationBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\SpriteBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\TilesetBuilder.cs" />
+    <Compile Include="Game\Tiles\Custom\TileSomariaBlock.cs" />
     <Compile Include="Game\Tiles\TileSpecialFlags.cs" />
     <Compile Include="Game\Tiles\Custom\TileRoller.cs" />
     <Compile Include="Game\Tiles\Custom\TileColorCube.cs" />

@@ -177,6 +177,14 @@ namespace ZeldaOracle.Game.Worlds {
 			get { return level.RoomLayerCount; }
 		}
 
+		public int BottomLayer {
+			get { return 0; }
+		}
+
+		public int TopLayer {
+			get { return (level.RoomLayerCount - 1); }
+		}
+
 		public Zone Zone {
 			get { return zone; }
 			set { zone = value; }

@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Entities;
+using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Projectiles;
@@ -43,10 +44,18 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 
 		private void SpawnSomariaBlock() {
+			ItemCane itemCane = (ItemCane) Weapon;
+
+			// Break any existing somaria block.
+			if (itemCane.SomariaBlockTile != null) {
+				itemCane.SomariaBlockTile.Break(false);
+				itemCane.SomariaBlockTile = null;
+			}
+			
 			Vector2F pos = player.Center + (Directions.ToVector(SwingDirection) * 19);
 			Point2I tileLocation = player.RoomControl.GetTileLocation(pos);
-
-			// TODO: SpawnSomariaBlock
+			EffectCreateSomariaBlock effect = new EffectCreateSomariaBlock(tileLocation, player.ZPosition, itemCane);
+			player.RoomControl.SpawnEntity(effect);
 		}
 
 
