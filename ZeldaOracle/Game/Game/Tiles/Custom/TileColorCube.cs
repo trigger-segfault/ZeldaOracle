@@ -65,7 +65,7 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
-		public override void Initialize() {
+		public override void OnInitialize() {
 			
 		}
 

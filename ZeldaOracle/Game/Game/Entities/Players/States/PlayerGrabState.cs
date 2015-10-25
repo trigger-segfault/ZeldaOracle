@@ -30,7 +30,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private bool AttemptPickup() {
 			Tile grabTile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
 
-			if (grabTile != null && grabTile.Flags.HasFlag(TileFlags.Pickupable)) {
+			if (grabTile != null && grabTile.HasFlag(TileSpecialFlags.Pickupable)) {
 				player.CarryState.SetCarryObject(grabTile);
 				player.BeginState(player.CarryState);
 				player.RoomControl.RemoveTile(grabTile);

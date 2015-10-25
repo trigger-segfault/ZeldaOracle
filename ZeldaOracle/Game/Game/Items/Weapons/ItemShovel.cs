@@ -44,7 +44,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			Point2I tileLoc = RoomControl.GetTileLocation(hotspot);
 			Tile tile = RoomControl.GetTopTile(tileLoc);
 
-			if (tile != null && tile.OnDig()) {
+			if (tile != null && tile.OnDig(Player.Direction)) {
 				// Create dirt effect.
 				Effect effect = new Effect();
 				effect.CreateDestroyTimer(15);
@@ -66,7 +66,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				RoomControl.SpawnEntity(effect, tile.Center);
 			}
 			else {
-				// Play cling sound.
+				// TODO: Play cling sound.
 			}
 		}
 
