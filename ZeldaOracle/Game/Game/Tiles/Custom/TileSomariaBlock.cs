@@ -14,6 +14,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 		}
 
+		public override void OnInitialize() {
+			DropList = null;
+		}
+
 		public override void OnFallInHole() {
 			Break(false);
 		}

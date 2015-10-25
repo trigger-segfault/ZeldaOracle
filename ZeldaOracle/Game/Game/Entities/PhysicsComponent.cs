@@ -204,7 +204,7 @@ namespace ZeldaOracle.Game.Entities {
 			if (HasFlags(PhysicsFlags.CollideWorld) || HasFlags(PhysicsFlags.CollideEntities))
 				CheckCollisions();
 			// 2. Collide with room edges.
-			if (HasFlags(PhysicsFlags.CollideRoomEdge))
+			if (HasFlags(PhysicsFlags.CollideRoomEdge) || HasFlags(PhysicsFlags.ReboundRoomEdge))
 				CheckRoomEdgeCollisions(collisionBox);
 			// 3. Custom collision function.
 			if (customCollisionFunction != null) {
@@ -305,6 +305,8 @@ namespace ZeldaOracle.Game.Entities {
 				// Check if landed on the ground.
 				if (entity.ZPosition <= 0.0f) {
 					hasLanded = true;
+					entity.ZPosition = 0.0f;
+
 					if (HasFlags(PhysicsFlags.Bounces)) {
 						Bounce();
 					}
@@ -331,12 +333,15 @@ namespace ZeldaOracle.Game.Entities {
 			if (entity.IsDestroyed)
 				return;
 
-
 			if (zVelocity < -1.0f) {
+				// Bounce back into the air.
+				hasLanded = false;
 				entity.ZPosition = 0.1f;
 				zVelocity = -zVelocity * 0.5f;
 			}
 			else {
+				// Stay on the ground.
+				entity.ZPosition = 0.0f;
 				zVelocity = 0;
 				velocity = Vector2F.Zero;
 			}
@@ -552,24 +557,32 @@ namespace ZeldaOracle.Game.Entities {
 			if (myBox.Left < roomBounds.Left) {
 				isColliding	= true;
 				entity.X	= roomBounds.Left - collisionBox.Left;
+				if (flags.HasFlag(PhysicsFlags.ReboundRoomEdge) && reboundVelocity.X == 0.0f)
+					reboundVelocity.X = -velocity.X;
 				velocity.X	= 0;
 				collisionInfo[Directions.Left].SetRoomEdgeCollision(Directions.Left);
 			}
 			else if (myBox.Right > roomBounds.Right) {
 				isColliding	= true;
 				entity.X	= roomBounds.Right - collisionBox.Right;
+				if (flags.HasFlag(PhysicsFlags.ReboundRoomEdge) && reboundVelocity.X == 0.0f)
+					reboundVelocity.X = -velocity.X;
 				velocity.X	= 0;
 				collisionInfo[Directions.Right].SetRoomEdgeCollision(Directions.Right);
 			}
 			if (myBox.Top < roomBounds.Top) {
 				isColliding	= true;
 				entity.Y	= roomBounds.Top - collisionBox.Top;
+				if (flags.HasFlag(PhysicsFlags.ReboundRoomEdge) && reboundVelocity.Y == 0.0f)
+					reboundVelocity.Y = -velocity.Y;
 				velocity.Y	= 0;
 				collisionInfo[Directions.Up].SetRoomEdgeCollision(Directions.Up);
 			}
 			else if (myBox.Bottom > roomBounds.Bottom) {
 				isColliding	= true;
 				entity.Y	= roomBounds.Bottom - collisionBox.Bottom;
+				if (flags.HasFlag(PhysicsFlags.ReboundRoomEdge) && reboundVelocity.Y == 0.0f)
+					reboundVelocity.Y = -velocity.Y;
 				velocity.Y	= 0;
 				collisionInfo[Directions.Down].SetRoomEdgeCollision(Directions.Down);
 			}
@@ -833,6 +846,11 @@ namespace ZeldaOracle.Game.Entities {
 		public float Gravity {
 			get { return gravity; }
 			set { gravity = value; }
+		}
+
+		public float MaxFallSpeed {
+			get { return maxFallSpeed; }
+			set { maxFallSpeed = value; }
 		}
 
 		public bool IsInAir {

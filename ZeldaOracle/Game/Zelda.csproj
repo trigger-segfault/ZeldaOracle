@@ -210,6 +210,8 @@
     <Compile Include="Game\Control\Message.cs" />
     <Compile Include="Game\Control\RoomControl.cs" />
     <Compile Include="Game\Debug\GameDebug.cs" />
+    <Compile Include="Game\Entities\Collectibles\CollectibleReward.cs" />
+    <Compile Include="Game\Entities\Collectibles\CollectibleFairy.cs" />
     <Compile Include="Game\Entities\Collectibles\Collectible.cs" />
     <Compile Include="Game\Entities\Collisions\CollisionInfo.cs" />
     <Compile Include="Game\Entities\Collisions\CollisionTest.cs" />
@@ -287,6 +289,11 @@
     <Compile Include="Game\GameStates\Transitions\RoomTransitionPush.cs" />
     <Compile Include="Game\Items\Ammo.cs" />
     <Compile Include="Game\Items\Ammos\AmmoSatchelSeeds.cs" />
+    <Compile Include="Game\Items\Drops\DropChance.cs" />
+    <Compile Include="Game\Items\Drops\DropManager.cs" />
+    <Compile Include="Game\Items\Drops\IDropCreator.cs" />
+    <Compile Include="Game\Items\Drops\Drop.cs" />
+    <Compile Include="Game\Items\Drops\DropList.cs" />
     <Compile Include="Game\Items\ItemSecondary.cs" />
     <Compile Include="Game\Items\Equipment\ItemWallet.cs" />
     <Compile Include="Game\Items\Essences\ItemEssence8.cs" />

@@ -42,6 +42,9 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				center.Y += 4.0f;
 			Vector2F hotspot = GMath.Round(center) + (Directions.ToVector(Player.Direction) * distance);
 			Point2I tileLoc = RoomControl.GetTileLocation(hotspot);
+			if (!RoomControl.IsTileInBounds(tileLoc))
+				return;
+
 			Tile tile = RoomControl.GetTopTile(tileLoc);
 
 			if (tile != null && tile.OnDig(Player.Direction)) {

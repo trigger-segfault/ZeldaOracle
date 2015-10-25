@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using XnaSong = Microsoft.Xna.Framework.Media.Song;
-using XnaPlaylist = Microsoft.Xna.Framework.Media.Playlist;
 
 using ZeldaOracle.Common.Geometry;
 using Song = ZeldaOracle.Common.Audio.Song;

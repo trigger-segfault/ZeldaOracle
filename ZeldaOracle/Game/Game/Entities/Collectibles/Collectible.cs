@@ -9,52 +9,39 @@ using ZeldaOracle.Game.Items.Rewards;
 namespace ZeldaOracle.Game.Entities {
 	public class Collectible : Entity {
 
-		protected Reward reward;
-		protected bool showMessage;
 		protected int timer;
-
-
-		//-----------------------------------------------------------------------------
-		// Constants
-		//-----------------------------------------------------------------------------
-
-		private const int DURATION			= 513;
-		private const int FADE_TIME			= 400;
-		private const int PICKUPABLE_DELAY	= 12;
+		protected int pickupableDelay;
+		protected int aliveDuration;
+		protected int fadeDelay;
+		protected bool hasDuration;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public Collectible(Reward reward) {
-			this.reward			= reward;
-			this.showMessage	= false;
+		public Collectible() {
 			this.timer			= 0;
+			this.hasDuration	= true;
 
-			EnablePhysics(
-				PhysicsFlags.Bounces |
-				PhysicsFlags.HasGravity |
-				PhysicsFlags.DestroyedOutsideRoom |
-				PhysicsFlags.CollideWorld |
-				PhysicsFlags.HalfSolidPassable |
-				PhysicsFlags.LedgePassable |
-				PhysicsFlags.DestroyedInHoles);
+			// Physics.
+			Physics.CollisionBox		= new Rectangle2I(-2, -2, 4, 4);
+			Physics.SoftCollisionBox	= new Rectangle2I(-2, -2, 4, 4);
 
-			Graphics.DrawOffset = new Point2I(-8, -8);
+			aliveDuration	= GameSettings.COLLECTIBLE_ALIVE_DURATION;
+			fadeDelay		= GameSettings.COLLECTIBLE_FADE_DELAY;
+			pickupableDelay	= GameSettings.COLLECTIBLE_PICKUPABLE_DELAY;
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Collection
 		//-----------------------------------------------------------------------------
 
-		public void Collect() {
+		public virtual void Collect() {
 			Destroy();
-			if (showMessage) {
-				GameControl.DisplayMessage(new Control.Message(reward.Message));
-			}
-			reward.OnCollect(GameControl);
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
@@ -63,29 +50,19 @@ namespace ZeldaOracle.Game.Entities {
 		public override void Initialize() {
 			base.Initialize();
 			
-			timer								= 0;
-
-			Graphics.Animation					= reward.Animation;
-			Graphics.IsGrassEffectVisible		= true;
-			Graphics.IsRipplesEffectVisible		= true;
-			Graphics.IsShadowVisible			= true;
-			Graphics.GrassDrawOffset			= new Point2I(0, 5);
-			Graphics.RipplesDrawOffset			= new Point2I(0, 6);
-			Graphics.ShadowDrawOffset			= new Point2I(0, 5);
-
-			Physics.CollisionBox				= new Rectangle2I(-4, -4, 8, 8);
-			Physics.SoftCollisionBox			= new Rectangle2I(-5, -4, 9, 8);
+			timer = 0;
 		}
 
 		public override void Update() {
 			base.Update();
 
+			// Update timeout timer.
 			timer++;
-			if (reward.HasDuration) {
-				if (timer == DURATION) {
+			if (hasDuration) {
+				if (timer == aliveDuration) {
 					Destroy();
 				}
-				else if (timer == FADE_TIME)
+				else if (timer == fadeDelay)
 					graphics.IsFlickering = true;
 			}
 
@@ -94,21 +71,18 @@ namespace ZeldaOracle.Game.Entities {
 				Collect();
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public Reward Reward {
-			get { return reward; }
-		}
-
-		public bool ShowMessage {
-			get { return showMessage; }
-			set { showMessage = value; }
-		}
-
 		public bool IsPickupable {
-			get { return (timer >= PICKUPABLE_DELAY); }
+			get { return (timer >= pickupableDelay); }
+		}
+
+		public int PickupableDelay {
+			get { return pickupableDelay; }
+			set { pickupableDelay = value; }
 		}
 	}
 }

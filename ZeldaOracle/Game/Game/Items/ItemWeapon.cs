@@ -15,7 +15,6 @@ namespace ZeldaOracle.Game.Items {
 
 	public abstract class ItemWeapon : ItemEquipment {
 
-
 		// The flags describing the item.
 		protected ItemFlags	flags;
 		private int			equipSlot;

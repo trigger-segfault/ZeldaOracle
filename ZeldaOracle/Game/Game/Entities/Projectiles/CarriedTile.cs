@@ -21,7 +21,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public CarriedTile(Tile tile) {
 			this.tile = tile;
 
-			EnablePhysics(PhysicsFlags.Bounces |
+			EnablePhysics(
 				PhysicsFlags.HasGravity |
 				PhysicsFlags.DestroyedOutsideRoom |
 				PhysicsFlags.CollideWorld |

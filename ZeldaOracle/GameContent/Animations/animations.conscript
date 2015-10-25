@@ -606,3 +606,15 @@ ANIM monster_octorok; SUBSTRIP repeat;
 	ADD strip, 8, 2, (0, 1);
 	MAKEDYNAMIC 4, (2, 0); END;
 
+
+#==============================================================
+# Collectible Animations
+#==============================================================
+
+SPRITESHEET "items_small";
+
+ANIM collectible_fairy;
+	SUBSTRIP repeat; ADD frame, 1, (14, 3), (-4, -8);
+	SUBSTRIP repeat; ADD frame, 1, (15, 3), (-4, -8);
+	END;
+

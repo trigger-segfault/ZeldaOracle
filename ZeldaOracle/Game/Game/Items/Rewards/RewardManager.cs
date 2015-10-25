@@ -12,6 +12,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		private GameControl gameControl;
 		private Dictionary<string, Reward> rewards;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
@@ -27,7 +28,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		//-----------------------------------------------------------------------------
 
 		public Collectible SpawnCollectibleFromBreakableTile(Reward reward, Point2I position) {
-			Collectible collectible = new Collectible(reward);
+			Collectible collectible = new CollectibleReward(reward);
 			gameControl.RoomControl.SpawnEntity(collectible);
 			collectible.Position = position;
 			collectible.Physics.ZVelocity = 1.5f;
@@ -38,7 +39,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		}
 
 		public Collectible SpawnCollectible(Reward reward) {
-			Collectible collectible = new Collectible(reward);
+			Collectible collectible = new CollectibleReward(reward);
 			gameControl.RoomControl.SpawnEntity(collectible);
 			return collectible;
 		}

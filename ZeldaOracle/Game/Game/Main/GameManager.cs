@@ -12,7 +12,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using XnaSong		= Microsoft.Xna.Framework.Media.Song;
-using XnaPlaylist	= Microsoft.Xna.Framework.Media.Playlist;
 using XnaKeys		= Microsoft.Xna.Framework.Input.Keys;
 
 using ZeldaOracle.Common.Audio;

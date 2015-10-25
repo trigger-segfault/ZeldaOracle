@@ -279,8 +279,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		
 		protected virtual void OnMysterySeedHit(SeedEntity seed) {
 			// Random: burn, stun, damage, gale
-			Random random = new Random();
-			int rand = random.Next(4);
+			int rand = GRandom.NextInt(4);
 			if (rand == 0)
 				TriggerInteraction(handlerSeeds[(int) SeedType.Ember], seed);
 			else if (rand == 1)

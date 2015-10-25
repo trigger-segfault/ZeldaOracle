@@ -52,9 +52,21 @@ namespace ZeldaOracle.Game {
 		public const float				DEFAULT_GRAVITY				= 0.125f;	// Default gravity acceleration in pixels per frame^2
 		public const float				DEFAULT_MAX_FALL_SPEED		= 4.0f;
 		
-		// Projectiles
+		// Drops & Collectibles
+		public const float				DROP_ENTITY_SPAWN_ZVELOCITY				= 1.5f;
+		public const float				DROP_ENTITY_DIG_VELOCITY				= 0.75f;
+		public const int				COLLECTIBLE_ALIVE_DURATION				= 513;
+		public const int				COLLECTIBLE_FADE_DELAY					= 400;
+		public const int				COLLECTIBLE_PICKUPABLE_DELAY			= 12;
+		public const int				COLLECTIBLE_DIG_PICKUPABLE_DELAY		= 16;
+		public const int				COLLECTIBLE_FAIRY_ALIVE_DURATION		= 513;
+		public const int				COLLECTIBLE_FAIRY_FADE_DELAY			= 400;
+		public const int				COLLECTIBLE_FAIRY_HOVER_HEIGHT			= 8;
+
+		// Projectiles and Items
 		public const float				PROJECTILE_ARROW_SPEED					= 3.0f;
 		public const float				PROJECTILE_SWORD_BEAM_SPEED				= 3.0f;
+		public const float				PROJECTILE_MAGIC_ROD_FIRE_SPEED			= 2.0f;
 		public static readonly float[]	PROJECTILE_BOOMERANG_SPEEDS				= { 1.5f, 3.0f };
 		public static readonly int[]	PROJECTILE_BOOMERANG_RETURN_DELAYS		= { 41, 100 };
 		public static readonly float[]	PROJECTILE_SWITCH_HOOK_SPEEDS			= { 2.0f, 3.0f };
@@ -62,11 +74,11 @@ namespace ZeldaOracle.Game {
 		public const int				SWITCH_HOOK_LATCH_DURATION				= 20;
 		public const float				SWITCH_HOOK_LIFT_SPEED					= 1.0f;
 		public const int				SWITCH_HOOK_LIFT_HEIGHT					= 16;
-		public const float				PROJECTILE_MAGIC_ROD_FIRE_SPEED			= 2.0f;
-		
 		public const float				SLINGSHOT_SEED_SPEED					= 3.0f;
-		public const float				SLINGSHOT_SEED_DEGREE_OFFSET			= 20.0f;
-		
+		public const float				SLINGSHOT_SEED_DEGREE_OFFSET			= 20.0f; // For the 2 extra seed from the hyper slingshot.
+		public const int				SCENT_POD_DURATION						= 240;
+		public const int				SCENT_POD_FADE_DELAY					= 60;
+
 		// Units
 		public const float				UNIT_KNOCKBACK_SPEED			= 1.0f; // 1.3 ??
 		public const int				UNIT_KNOCKBACK_DURATION			= 16;

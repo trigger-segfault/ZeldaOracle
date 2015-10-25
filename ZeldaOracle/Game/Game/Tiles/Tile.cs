@@ -12,6 +12,7 @@ using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Items.Drops;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles {
@@ -39,6 +40,7 @@ namespace ZeldaOracle.Game.Tiles {
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
 		private int					pushDelay;		// Number of ticks of pushing before the player can move this tile.
 		private Properties			properties;
+		private DropList			dropList;
 
 
 		//-----------------------------------------------------------------------------
@@ -61,6 +63,8 @@ namespace ZeldaOracle.Game.Tiles {
 			properties.PropertyObject = this;
 			tileData		= null;
 			moveDirection	= Point2I.Zero; 
+			dropList		= null;
+
 		}
 
 
@@ -74,6 +78,13 @@ namespace ZeldaOracle.Game.Tiles {
 
 			if (!isInitialized) {
 				isInitialized = true;
+				
+				// Setup default drop list.
+				if (IsDiggable && !IsSolid)
+					dropList = RoomControl.GameControl.DropManager.GetDropList("dig");
+				else
+					dropList = RoomControl.GameControl.DropManager.GetDropList("default");
+
 				OnInitialize();
 			}
 		}
@@ -110,8 +121,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 		// Called when the tile is burned by a fire.
 		public virtual void OnBurn() {
-			if (!isMoving && SpecialFlags.HasFlag(TileSpecialFlags.Burnable))
-				Break(true);
+			if (!isMoving && SpecialFlags.HasFlag(TileSpecialFlags.Burnable)) {
+				SpawnDrop();
+				roomControl.RemoveTile(this);
+			}
 		}
 
 		// Called when the tile is hit by the player's boomerang.
@@ -136,12 +149,18 @@ namespace ZeldaOracle.Game.Tiles {
 
 					roomControl.PlaceTile(dugTile, location, layer);
 					customSprite = GameData.SPR_TILE_DUG;
+
+					// Spawn drop.
+					Entity dropEntity = SpawnDrop();
+					if (dropEntity != null) {
+						if (dropEntity is Collectible)
+							(dropEntity as Collectible).PickupableDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
+						dropEntity.Physics.Velocity = Directions.ToVector(direction) * GameSettings.DROP_ENTITY_DIG_VELOCITY;
+					}
 				}
 				else {
 					roomControl.RemoveTile(this);
 				}
-
-				// TOOD: spawn drops when dug.
 
 				return true;
 			}
@@ -246,17 +265,25 @@ namespace ZeldaOracle.Game.Tiles {
 			RoomControl.RemoveTile(this);
 
 			if (spawnDrops) {
-				// TEMP: this is a temporary drop list.
-				string[] drops = {
-					"rupees_1", "rupees_5", "hearts_1",
-					"ammo_ember_seeds_5", "ammo_scent_seeds_5", "ammo_pegasus_seeds_5", "ammo_gale_seeds_5", "ammo_mystery_seeds_5",
-					"ammo_bombs_5", "ammo_arrows_5"
-				 };
-
-				string dropName = drops[GRandom.NextInt(drops.Length)];
-				RoomControl.GameControl.RewardManager
-					.SpawnCollectibleFromBreakableTile(dropName, (Point2I) Center);
+				SpawnDrop();
 			}
+		}
+
+		public Entity SpawnDrop() {
+			Entity dropEntity = null;
+
+			// Choose a drop or null.
+			if (dropList != null)
+				dropEntity = dropList.CreateDropEntity(GameControl);
+
+			// Spawn the drop.
+			if (dropEntity != null) {
+				dropEntity.SetPositionByCenter(Center);
+				dropEntity.Physics.ZVelocity = GameSettings.DROP_ENTITY_SPAWN_ZVELOCITY;
+				RoomControl.SpawnEntity(dropEntity);
+			}
+
+			return dropEntity;
 		}
 
 
@@ -382,6 +409,10 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return roomControl; }
 			set { roomControl = value; }
 		}
+		
+		public GameControl GameControl {
+			get { return roomControl.GameControl; }
+		}
 
 		public Zone Zone {
 			get { return roomControl.Room.Zone; }
@@ -506,6 +537,11 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public bool IsCoverableByBlock {
 			get { return (!IsNotCoverable && !IsSolid && !IsStairs && !IsLadder); }
+		}
+
+		public DropList DropList {
+			get { return dropList; }
+			set { dropList = value; }
 		}
 
 

@@ -64,6 +64,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					if (CanTileLandAtLocation(newSwitchLocation))
 						tileSwitchLocation = newSwitchLocation;
 				}
+
+				// Spawn drops as the tile is picked up.
+				hookedTile.SpawnDrop();
 			}
 			
 			hookProjectile.Position = hookedEntity.Center;
