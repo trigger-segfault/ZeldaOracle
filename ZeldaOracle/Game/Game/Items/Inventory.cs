@@ -99,7 +99,6 @@ namespace ZeldaOracle.Game.Items {
 			ItemEquipment equippableItem = item as ItemEquipment;
 		}
 		
-
 		// Adds multiple item to the list
 		public void AddItems(bool obtain, params Item[] items) {
 			for (int i = 0; i < items.Length; i++)
@@ -209,6 +208,12 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 		// Ammo
 		//-----------------------------------------------------------------------------
+		
+		// Adds multiple ammo types to the list
+		public void AddAmmos(bool obtain, params Ammo[] ammos) {
+			for (int i = 0; i < ammos.Length; i++)
+				AddAmmo(ammos[i], obtain);
+		}
 
 		// Adds the ammo type to the list.
 		public Ammo AddAmmo(Ammo ammo, bool obtain) {

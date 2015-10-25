@@ -12,8 +12,11 @@ namespace ZeldaOracle.Game.Items {
 		protected string id;
 		protected string name;
 		protected string description;
+
+		protected bool isAmountBased;
 		private int amount;
 		private int maxAmount;
+
 		private bool isObtained;
 		protected bool isStolen;
 		protected Sprite sprite;

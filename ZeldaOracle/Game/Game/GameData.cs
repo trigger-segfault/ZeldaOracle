@@ -14,6 +14,7 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Items.Ammos;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Items.Essences;
 using ZeldaOracle.Game.Items.KeyItems;
@@ -451,6 +452,25 @@ namespace ZeldaOracle.Game {
 
 		public static void LoadInventory(Inventory inventory, bool obtain = false) {
 
+			// Add ammos.
+			inventory.AddAmmos(false,
+				new AmmoSatchelSeeds("ammo_ember_seeds", "Ember Seeds", "A burst of fire!",
+					new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(0, 3)), 0, 20),
+				new AmmoSatchelSeeds("ammo_scent_seeds", "Scent Seeds", "An aromatic blast!",
+					new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(1, 3)), 0, 20),
+				new AmmoSatchelSeeds("ammo_pegasus_seeds", "Pegasus Seeds", "Steals speed?",
+					new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(2, 3)), 0, 20),
+				new AmmoSatchelSeeds("ammo_gale_seeds", "Gale Seeds", "A mighty blow!",
+					new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(3, 3)), 0, 20),
+				new AmmoSatchelSeeds("ammo_mystery_seeds", "Mystery Seeds", "A producer of unknown effects.",
+					new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(4, 3)), 0, 20),
+				new Ammo("ammo_bombs", "Bombs", "Very explosive.",
+					new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0)), 0, 10),
+				new Ammo("ammo_arrows", "Arrows", "A standard arrow.",
+					new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(15, 1)), 0, 30)
+			);
+
+			// Add weapons.
 			inventory.AddItems(obtain,
 				new ItemWallet(),
 				new ItemSword(),
@@ -482,9 +502,9 @@ namespace ZeldaOracle.Game {
 				new ItemSeedShooter(),
 				new ItemSlingshot());
 
+			// Add key items.
 			inventory.AddItems(false,
 				new ItemFlippers());
-
 		}
 
 

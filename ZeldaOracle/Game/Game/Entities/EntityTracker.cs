@@ -22,11 +22,11 @@ namespace ZeldaOracle.Game.Entities {
 		// Tracking
 		//-----------------------------------------------------------------------------
 
-		// Get the first entity (that's of the desired type).
+		// Get the first entity (that's of the desired tracking type).
 		public T GetEntity() {
 			for (int i = 0; i < entities.Length; i++) {
 				RefreshEntityAtIndex(i);
-				if (entities[i] != null && entities[i] is T)
+				if (entities[i] != null && (entities[i] is T))
 					return (T) entities[i];
 			}
 			return null;

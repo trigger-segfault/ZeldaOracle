@@ -46,9 +46,11 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		// Called when the items button is pressed (A or B).
 		public override void OnButtonPress() {
-			if (ammo[currentAmmo].IsEmpty || arrowTracker.IsMaxedOut)
+			if (arrowTracker.IsMaxedOut || !HasAmmo())
 				return;
 			
+			UseAmmo();
+
 			Player.Direction = Player.UseDirection;
 
 			// Spawn the arrow.
@@ -60,7 +62,6 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			arrow.Physics.Velocity	= Directions.ToVector(Player.Direction) * GameSettings.PROJECTILE_ARROW_SPEED;
 			RoomControl.SpawnEntity(arrow);
 
-			ammo[currentAmmo].Amount--;
 			arrowTracker.TrackEntity(arrow);
 
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
@@ -70,18 +71,10 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Called when the item is added to the inventory list.
 		public override void OnAdded(Inventory inventory) {
 			base.OnAdded(inventory);
-			int[] maxAmounts = { 30, 40, 50 };
 
 			this.currentAmmo = 0;
 			this.ammo = new Ammo[] {
-				inventory.AddAmmo(
-					new Ammo(
-						"ammo_arrows", "Arrows", "A standard arrow.",
-						new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(15, 1)),
-						maxAmounts[level], maxAmounts[level]
-					),
-					false
-				)
+				inventory.GetAmmo("ammo_arrows")
 			};
 		}
 
@@ -93,15 +86,16 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		// Called when the item's level is changed.
 		public override void OnLevelUp() {
-			int[] maxAmounts = { 30, 40, 50 };
-			inventory.GetAmmo("ammo_arrows").MaxAmount = maxAmounts[level];
-			inventory.GetAmmo("ammo_arrows").Amount = maxAmounts[level];
+			int[] maxAmounts	= { 30, 40, 50 };
+			ammo[0].MaxAmount	= maxAmounts[level];
+			ammo[0].Amount		= maxAmounts[level];
 		}
 
 
 		// Called when the item has been obtained.
 		public override void OnObtained() {
-			inventory.ObtainAmmo(this.ammo[0]);
+			inventory.ObtainAmmo(ammo[0]);
+			ammo[0].Amount = ammo[0].MaxAmount;
 		}
 
 		// Called when the item has been unobtained.

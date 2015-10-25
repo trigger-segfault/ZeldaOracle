@@ -40,7 +40,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		private void Shoot() {
-			if (!weapon.SeedTracker.IsMaxedOut) {
+			if (!weapon.SeedTracker.IsMaxedOut && weapon.HasAmmo()) {
 				Vector2F[] projectilePositions = new Vector2F[] {
 					new Vector2F(16, 7),
 					new Vector2F(15, -2),
@@ -60,6 +60,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				seed.Physics.Velocity = Angles.ToVector(angle) * 3.0f;
 				Player.RoomControl.SpawnEntity(seed, pos, Player.ZPosition + 5);
 				weapon.SeedTracker.TrackEntity(seed);
+
+				weapon.UseAmmo();
 
 				// Begin shooting.
 				isShooting = true;

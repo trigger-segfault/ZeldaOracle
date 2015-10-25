@@ -29,8 +29,9 @@ namespace ZeldaOracle.Game.Control.Menus {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public InventoryMenu(GameManager gameManager)
-			: base(gameManager) {
+		public InventoryMenu(GameManager gameManager) :
+			base(gameManager)
+		{
 			this.previousMenu	= null;
 			this.nextMenu		= null;
 			this.drawHUD		= true;

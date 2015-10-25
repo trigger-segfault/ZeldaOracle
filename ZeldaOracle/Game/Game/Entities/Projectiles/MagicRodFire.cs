@@ -46,7 +46,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			// Spawn fire.
 			Fire fire = new Fire();
 			RoomControl.SpawnEntity(fire, position);
-
 			DestroyAndTransform(fire);
 		}
 

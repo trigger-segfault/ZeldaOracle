@@ -333,6 +333,7 @@
     <Compile Include="Game\Items\Weapons\ItemFeather.cs" />
     <Compile Include="Game\Items\Weapons\ItemOcarina.cs" />
     <Compile Include="Game\Control\Controls.cs" />
+    <Compile Include="Game\Items\Weapons\SeedBasedItem.cs" />
     <Compile Include="Game\Main\GameBase.cs" />
     <Compile Include="Game\GameData.cs" />
     <Compile Include="Game\Main\GameManager.cs" />
