@@ -15,7 +15,8 @@ namespace ZeldaOracle.Game.Entities
 		private	Point2I			drawOffset;
 		private Entity			entity;				// The entity this component belongs to.
 		private AnimationPlayer	animationPlayer;
-		private bool			hasDynamicDepth;
+		private DepthLayer		depthLayer;
+		private DepthLayer		depthLayerInAir;
 		private	bool			isVisible;
 		private bool			isGrassEffectVisible;
 		private bool			isRipplesEffectVisible;
@@ -46,6 +47,8 @@ namespace ZeldaOracle.Game.Entities
 			this.entity					= entity;
 			this.animationPlayer		= new AnimationPlayer();
 			this.sprite					= null;
+			this.depthLayer				= DepthLayer.None;
+			this.depthLayerInAir		= DepthLayer.None;
 			this.isVisible				= true;
 			this.isShadowVisible		= true;
 			this.grassDrawOffset		= Point2I.Zero;
@@ -154,6 +157,28 @@ namespace ZeldaOracle.Game.Entities
 			float grassDepth	= 0.28f;
 			int newImageVariant = imageVariant;
 
+			DepthLayer layer = depthLayer;
+			if (depthLayerInAir != DepthLayer.None && entity.IsInAir)
+				layer = depthLayerInAir;
+
+			float depthLayerMin			= 0.1f;
+			float depthLayerMax			= 0.9f;
+			int depthLayerCount			= (int) DepthLayer.Count;
+			float depthLayerRegionSpan	= (depthLayerMax - depthLayerMin) / (depthLayerCount);
+			float depthLayerRegionStart	= depthLayerMin + (depthLayerRegionSpan * (int) layer);
+			
+			// Newer entities draw BELOW older ones.
+			int entityIndex = entity.RoomControl.Entities.IndexOf(entity);
+			float entityPercent = 1.0f - ((float) entityIndex / entity.RoomControl.Entities.Count);
+			
+			float extraPercision = depthLayerRegionSpan / (float) entity.RoomControl.Entities.Count;
+
+			float depth = depthLayerRegionStart + (entityPercent * depthLayerRegionSpan);
+
+			shadowDepth		= 0.05f;
+			ripplesDepth	= depth + (0.3f * extraPercision);
+			grassDepth		= depth + (0.7f * extraPercision);
+
 			// Draw the shadow.
 			if (isShadowVisible && entity.ZPosition > 1 && entity.GameControl.RoomTicks % 2 == 0) {
 				g.DrawSprite(GameData.SPR_SHADOW, Entity.Position + shadowDrawOffset, shadowDepth);
@@ -164,7 +189,7 @@ namespace ZeldaOracle.Game.Entities
 				newImageVariant = GameData.VARIANT_HURT;
 
 			// Draw the sprite/animation.
-			float depth = 0.6f - 0.3f * (entity.Origin.Y / (float) (entity.RoomControl.Room.Height * GameSettings.TILE_SIZE));
+			//float depth = 0.6f - 0.3f * (entity.Origin.Y / (float) (entity.RoomControl.Room.Height * GameSettings.TILE_SIZE));
 			Vector2F drawPosition = Entity.Position - new Vector2F(0, Entity.ZPosition);
 			if (animationPlayer.SubStrip != null)
 				g.DrawAnimation(animationPlayer.SubStrip, newImageVariant, animationPlayer.PlaybackTime, drawPosition + drawOffset, depth);
@@ -295,6 +320,16 @@ namespace ZeldaOracle.Game.Entities
 		public bool IsHurting {
 			get { return isHurting; }
 			set { isHurting = value; }
+		}
+
+		public DepthLayer DepthLayer {
+			get { return depthLayer; }
+			set { depthLayer = value; }
+		}
+
+		public DepthLayer DepthLayerInAir {
+			get { return depthLayerInAir; }
+			set { depthLayerInAir = value; }
 		}
 
 		// DEBUG: draw collision boxes.

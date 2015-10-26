@@ -102,8 +102,9 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			else if (seedType == SeedType.Pegasus) {
 				// Start sprinting.
 				if (!Player.Movement.IsSprinting) {
-					Player.RoomControl.SpawnEntity(new Effect(
-						GameData.ANIM_EFFECT_PEGASUS_DUST), Player.Center - new Point2I(0, 8));
+					Player.RoomControl.SpawnEntity(
+						new Effect(GameData.ANIM_EFFECT_PEGASUS_DUST, DepthLayer.EffectPegasusDust),
+						Player.Center - new Point2I(0, 8));
 					Player.Movement.StartSprinting(
 						GameSettings.PLAYER_SPRINT_DURATION,
 						GameSettings.PLAYER_SPRINT_SPEED_SCALE);

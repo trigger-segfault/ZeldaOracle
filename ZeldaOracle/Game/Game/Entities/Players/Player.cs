@@ -126,8 +126,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Physics.HasGravity			= true;
 
 			// Graphics.
-			Graphics.ShadowDrawOffset = originOffset;
-			Graphics.DrawOffset = new Point2I(-8, -16);
+			Graphics.DepthLayer			= DepthLayer.PlayerAndNPCs;
+			Graphics.DepthLayerInAir	= DepthLayer.InAirPlayer;
+			Graphics.ShadowDrawOffset	= originOffset;
+			Graphics.DrawOffset			= new Point2I(-8, -16);
 
 			// Create the basic player states.
 			state				= null;
@@ -252,7 +254,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 							item.OnButtonPress();
 						if (Inventory.GetSlotButton(i).IsDown())
 							item.OnButtonDown();
-						if (item.IsTwoHanded && 0 == 1)
+						if (!item.IsTwoHanded || i == 1)
 							item.Update();
 					}
 				}

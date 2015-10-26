@@ -27,6 +27,10 @@ namespace ZeldaOracle.Game.Entities {
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2I(-2, -2, 4, 4);
 			Physics.SoftCollisionBox	= new Rectangle2I(-2, -2, 4, 4);
+			
+			// Graphics.
+			Graphics.DepthLayer			= DepthLayer.Collectibles;
+			Graphics.DepthLayerInAir	= DepthLayer.InAirCollectibles;
 
 			aliveDuration	= GameSettings.COLLECTIBLE_ALIVE_DURATION;
 			fadeDelay		= GameSettings.COLLECTIBLE_FADE_DELAY;

@@ -50,7 +50,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 				// Create cling effect.
 				if (!tile.IsDestroyed) {
-					Effect clingEffect = new Effect(GameData.ANIM_EFFECT_CLING_LIGHT);
+					Effect clingEffect = new Effect(GameData.ANIM_EFFECT_CLING_LIGHT, DepthLayer.EffectCling);
 					Vector2F pos = player.Center + (13 * Directions.ToVector(direction));
 					player.RoomControl.SpawnEntity(clingEffect, pos);
 				}

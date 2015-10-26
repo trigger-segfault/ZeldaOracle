@@ -23,6 +23,8 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			EnablePhysics(PhysicsFlags.None);
 			Physics.CollisionBox		= new Rectangle2F(-12, -12, 24, 24);
 			Physics.SoftCollisionBox	= new Rectangle2F(-12, -12, 24, 24);
+			
+			Graphics.DepthLayer = DepthLayer.EffectBombExplosion;
 		}
 		
 

@@ -216,6 +216,7 @@
     <Compile Include="Game\Entities\Collisions\CollisionInfo.cs" />
     <Compile Include="Game\Entities\Collisions\CollisionTest.cs" />
     <Compile Include="Game\Entities\DamageInfo.cs" />
+    <Compile Include="Game\Entities\DepthLayer.cs" />
     <Compile Include="Game\Entities\Effects\EffectCreateSomariaBlock.cs" />
     <Compile Include="Game\Entities\Effects\EffectGale.cs" />
     <Compile Include="Game\Entities\Effects\BombExplosion.cs" />
@@ -262,6 +263,7 @@
     <Compile Include="Game\Entities\Projectiles\CarriedTile.cs" />
     <Compile Include="Game\Entities\Projectiles\Projectile.cs" />
     <Compile Include="Game\Entities\Projectiles\Seed.cs" />
+    <Compile Include="Game\Entities\UnitTool.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateNormal.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateQueue.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateAction.cs" />

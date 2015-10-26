@@ -25,6 +25,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				PhysicsFlags.LedgePassable |
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.DestroyedOutsideRoom);
+
+			// Graphics.
+			Graphics.DepthLayer	= DepthLayer.ProjectileRodFire;
 		}
 
 

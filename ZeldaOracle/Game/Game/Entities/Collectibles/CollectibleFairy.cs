@@ -31,8 +31,9 @@ namespace ZeldaOracle.Game.Entities {
 			EnablePhysics(PhysicsFlags.ReboundRoomEdge);
 
 			// Graphics.
-			centerOffset		= new Point2I(0, -5);
+			Graphics.DepthLayer	= DepthLayer.InAirCollectibles;
 			Graphics.DrawOffset	= new Point2I(0, -5);
+			centerOffset		= new Point2I(0, -5);
 		}
 
 

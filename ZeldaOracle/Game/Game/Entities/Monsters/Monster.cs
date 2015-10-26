@@ -125,8 +125,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Sides: 3 overlap
 
 			// Graphics.
-			Graphics.DrawOffset = new Point2I(-8, -14);
-			centerOffset		= new Point2I(0, -6);
+			Graphics.DepthLayer			= DepthLayer.Monsters;
+			Graphics.DepthLayerInAir	= DepthLayer.InAirMonsters;
+			Graphics.DrawOffset			= new Point2I(-8, -14);
+			centerOffset				= new Point2I(0, -6);
 
 			// Monster & unit settings.
 			knockbackSpeed			= GameSettings.MONSTER_KNOCKBACK_SPEED;
@@ -343,7 +345,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		public override void Die() {
-			Effect explosion = new Effect(GameData.ANIM_EFFECT_MONSTER_EXPLOSION);
+			Effect explosion = new Effect(GameData.ANIM_EFFECT_MONSTER_EXPLOSION, DepthLayer.EffectMonsterExplosion);
 			RoomControl.SpawnEntity(explosion, Center);
 			base.Die();
 		}

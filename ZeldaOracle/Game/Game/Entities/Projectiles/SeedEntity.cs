@@ -50,7 +50,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public Entity CreateVisualEffect(SeedType seedType, Vector2F effectPosition) {
-			Effect effect = new Effect(GameData.ANIM_EFFECT_SEEDS[(int) seedType]);
+			Effect effect = new Effect(GameData.ANIM_EFFECT_SEEDS[(int) seedType], DepthLayer.EffectSeed);
 			RoomControl.SpawnEntity(effect, effectPosition);
 			return effect;
 		}

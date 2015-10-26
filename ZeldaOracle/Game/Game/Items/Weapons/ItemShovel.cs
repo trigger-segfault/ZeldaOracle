@@ -50,6 +50,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			if (tile != null && tile.OnDig(Player.Direction)) {
 				// Create dirt effect.
 				Effect effect = new Effect();
+				effect.Graphics.DepthLayer = DepthLayer.EffectDirt;
 				effect.CreateDestroyTimer(15);
 				effect.EnablePhysics(PhysicsFlags.HasGravity);
 				effect.Physics.Velocity = Directions.ToVector(Player.Direction) * 0.5f;

@@ -48,7 +48,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			}
 			
 			// Graphics.
-			Graphics.IsShadowVisible = false;
+			Graphics.DepthLayer			= DepthLayer.ProjectileBoomerang;
+			Graphics.IsShadowVisible	= false;
 		}
 
 		
@@ -91,7 +92,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
 			// Create cling effect.
-			Effect effect = new Effect(GameData.ANIM_EFFECT_CLING);
+			Effect effect = new Effect(GameData.ANIM_EFFECT_CLING, DepthLayer.EffectCling);
 			RoomControl.SpawnEntity(effect, position, zPosition);
 			BeginReturn();
 		}
@@ -101,6 +102,18 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public override void Update() {
+			// Check for boomerangable tiles.
+			if (level == Item.Level2) {
+				Point2I tileLoc = RoomControl.GetTileLocation(position);
+				if (tileLoc != tileLocation && RoomControl.IsTileInBounds(tileLoc)) {
+					Tile tile = RoomControl.GetTopTile(tileLoc);
+					if (tile != null) {
+						tile.OnBoomerang();
+					}
+				}
+				tileLocation = tileLoc;
+			}
+
 			if (isReturning) {
 				// Return to player.
 				Vector2F trajectory = RoomControl.Player.Center - Center;
@@ -114,17 +127,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				}
 			}
 			else {
-				// Check for boomerangable tiles.
-				if (level == Item.Level2) {
-					Point2I tileLoc = RoomControl.GetTileLocation(position);
-					if (tileLoc != tileLocation && RoomControl.IsTileInBounds(tileLoc)) {
-						Tile tile = RoomControl.GetTopTile(tileLoc);
-						if (tile != null) {
-							tile.OnBoomerang();
-						}
-					}
-					tileLocation = tileLoc;
-				}
 
 				// Update return timer.
 				timer++;

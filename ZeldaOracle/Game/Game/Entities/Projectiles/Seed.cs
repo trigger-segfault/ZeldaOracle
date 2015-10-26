@@ -30,7 +30,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				PhysicsFlags.DestroyedInHoles);
 
 			// Graphics.
-			graphics.DrawOffset	= new Point2I(-4, -6);
+			Graphics.DepthLayer	= DepthLayer.InAirSeed;
+			Graphics.DrawOffset	= new Point2I(-4, -6);
 			centerOffset		= new Point2I(0, -2);
 		}
 

@@ -200,13 +200,13 @@ namespace ZeldaOracle.Game.Tiles {
 
 		// Called when the tile is pushed into water.
 		public virtual void OnFallInWater() {
-			RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_WATER_SPLASH), Center);
+			RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash), Center);
 			RoomControl.RemoveTile(this);
 		}
 
 		// Called when the tile is pushed into lava.
 		public virtual void OnFallInLava() {
-			RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH), Center);
+			RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH, DepthLayer.EffectSplash), Center);
 			RoomControl.RemoveTile(this);
 		}
 
@@ -261,7 +261,11 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public void Break(bool spawnDrops) {
-			RoomControl.SpawnEntity(new Effect(breakAnimation), Center);
+			if (breakAnimation != null) {
+				Effect breakEffect = new Effect(breakAnimation, DepthLayer.EffectTileBreak);
+				RoomControl.SpawnEntity(breakEffect, Center);
+			}
+
 			RoomControl.RemoveTile(this);
 
 			if (spawnDrops) {

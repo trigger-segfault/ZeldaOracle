@@ -23,11 +23,14 @@ namespace ZeldaOracle.Game.Entities {
 	
 	public class Unit : Entity {
 		
-		// The direction the unit is facing.
-		protected int direction;
+		// List of tools that the unit is carrying/holding.
+		private UnitTool[]	tools;
 
-		protected int health;
-		protected int healthMax;
+		// The direction the unit is facing.
+		protected int		direction;
+
+		protected int		health;
+		protected int		healthMax;
 		
 		protected float		knockbackSpeed;
 		protected int		knockbackDuration;
@@ -56,6 +59,7 @@ namespace ZeldaOracle.Game.Entities {
 			hurtFlickerTimer		= 0;
 			invincibleTimer			= 0;
 			knockbackVelocity		= Vector2F.Zero;
+			tools					= new UnitTool[0];
 
 			health			= 1;
 			healthMax		= 1;
@@ -197,6 +201,11 @@ namespace ZeldaOracle.Game.Entities {
 		
 		public bool IsHurtFlickering {
 			get { return (hurtFlickerTimer > 0); }
+		}
+		
+		public UnitTool[] Tools {
+			get { return tools; }
+			set { tools = value; }
 		}
 	}
 }

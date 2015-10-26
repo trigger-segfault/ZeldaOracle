@@ -141,10 +141,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				Graphics.SubStripIndex = angle;
 		}
 
-		public override void Draw(Common.Graphics.Graphics2D g) {
-			base.Draw(g);
-		}
-
 
 		//-----------------------------------------------------------------------------
 		// Properties

@@ -32,6 +32,8 @@ namespace ZeldaOracle.Game.Entities.Effects {
 				Physics.SoftCollisionBox = new Rectangle2F(-8, -8, 16, 16);
 				EnablePhysics(PhysicsFlags.Solid);
 			}
+			
+			Graphics.DepthLayer	= DepthLayer.EffectSomariaBlockPoof;
 		}
 		
 
@@ -67,7 +69,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			else {
 				// Spawn a poof effect.
 				RoomControl.SpawnEntity(
-					new Effect(GameData.ANIM_EFFECT_SOMARIA_BLOCK_DESTROY),
+					new Effect(GameData.ANIM_EFFECT_SOMARIA_BLOCK_DESTROY, DepthLayer.EffectSomariaBlockPoof),
 					position, zPosition);
 			}
 		}

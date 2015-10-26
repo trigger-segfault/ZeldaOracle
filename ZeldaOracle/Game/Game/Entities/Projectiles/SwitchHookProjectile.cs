@@ -47,7 +47,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				PhysicsFlags.HalfSolidPassable);
 
 			// Graphics.
-			Graphics.IsShadowVisible = false;
+			Graphics.DepthLayer			= DepthLayer.ProjectileSwitchHook;
+			Graphics.IsShadowVisible	= false;
 		}
 
 
@@ -133,7 +134,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				}
 			
 				// Create cling effect.
-				Effect effect = new Effect(GameData.ANIM_EFFECT_CLING);
+				Effect effect = new Effect(GameData.ANIM_EFFECT_CLING, DepthLayer.EffectCling);
 				RoomControl.SpawnEntity(effect, position + Directions.ToVector(direction) * 5.0f, zPosition);
 			}
 		}
