@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Tiles;
 
@@ -189,9 +190,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 		}
 
-		public override void DrawOver(Common.Graphics.Graphics2D g) {
+		public override void DrawOver(Graphics2D g) {
 			if (isSwitching) {
-				hookedEntity.Draw(g);
+				float depth = Entity.CalculateDepth(player, DepthLayer.RisingTile);
+				hookedEntity.Graphics.Draw(g, depth);
 			}
 		}
 

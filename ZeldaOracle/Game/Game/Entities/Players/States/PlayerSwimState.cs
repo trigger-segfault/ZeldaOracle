@@ -85,10 +85,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.CanJump = true;
 			player.Movement.MoveSpeedScale = 1.0f;
 			player.Movement.AutoAccelerate = false;
+			player.Graphics.DepthLayer = DepthLayer.PlayerAndNPCs;
 		}
 
 		public override void Update() {
-
 
 			// Slow down movement over time from strokes
 			if (player.Movement.MoveSpeedScale > 1.0f)
@@ -109,6 +109,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				if (submergedTimer <= 0 || Controls.B.IsPressed()) {
 					isSubmerged = false;
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SWIM);
+					player.Graphics.DepthLayer = DepthLayer.PlayerAndNPCs;
 				}
 			}
 			else if (Controls.B.IsPressed()) {
@@ -123,7 +124,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 				//Sounds.PLAYER_WADE.play();
 
-				// TODO: Change player depth to lowest.
+				// Change player depth to lowest.
+				player.Graphics.DepthLayer = DepthLayer.PlayerSubmerged;
 			}
 
 			base.Update();

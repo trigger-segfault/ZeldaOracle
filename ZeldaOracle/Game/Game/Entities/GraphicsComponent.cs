@@ -142,12 +142,12 @@ namespace ZeldaOracle.Game.Entities
 				}
 			}
 		}
-
+		/*
 		public void Draw(Graphics2D g) {
-			// Depth ranges:
+		}*/
 
-			if (!isVisible || (isFlickering && !flickerIsVisible))
-				return;
+		public void Draw(Graphics2D g, float depth = -1) {
+			// Depth ranges:
 
 			// Front [0.0 - 0.3][0.3 - 0.6][0.6 - 0.9][0.9    ][0.9 - 1.0] Back
 			//       [???      ][Entities ][???      ][Shadows][???      ]
@@ -169,20 +169,41 @@ namespace ZeldaOracle.Game.Entities
 			
 			// Newer entities draw BELOW older ones.
 			int entityIndex = entity.RoomControl.Entities.IndexOf(entity);
+			if (entityIndex < 0)
+				entityIndex = 0;
 			float entityPercent = 1.0f - ((float) entityIndex / entity.RoomControl.Entities.Count);
+			float entityDepthRegionSpan = depthLayerRegionSpan / (float) entity.RoomControl.Entities.Count;
 			
 			float extraPercision = depthLayerRegionSpan / (float) entity.RoomControl.Entities.Count;
 
-			float depth = depthLayerRegionStart + (entityPercent * depthLayerRegionSpan);
+			if (depth < 0.0f) {
+				depth = depthLayerRegionStart + (entityPercent * depthLayerRegionSpan);
+				depth += entityDepthRegionSpan * 0.5f;
+			}
 
 			shadowDepth		= 0.05f;
-			ripplesDepth	= depth + (0.3f * extraPercision);
-			grassDepth		= depth + (0.7f * extraPercision);
+			ripplesDepth	= depth + (0.01f * entityDepthRegionSpan);
+			grassDepth		= depth + (0.02f * entityDepthRegionSpan);
+
+			float depthPadding = 0.01f * entityDepthRegionSpan;
+
+			entity.DrawBelow(g,
+				depth - (entityDepthRegionSpan * 0.5f) + depthPadding,
+				depth - depthPadding);
+			entity.DrawAbove(g,
+				grassDepth + depthPadding,
+				depth + (entityDepthRegionSpan * 0.5f) - depthPadding);
+
+			if (!isVisible)
+				return;
 
 			// Draw the shadow.
 			if (isShadowVisible && entity.ZPosition > 1 && entity.GameControl.RoomTicks % 2 == 0) {
 				g.DrawSprite(GameData.SPR_SHADOW, Entity.Position + shadowDrawOffset, shadowDepth);
 			}
+
+			if (isFlickering && !flickerIsVisible)
+				return;
 
 			// Change the variant if hurting.
 			if (isHurting && entity.GameControl.RoomTicks % 8 >= 4)

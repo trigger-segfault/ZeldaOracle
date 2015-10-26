@@ -190,12 +190,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 
 			// Draw the object.
+			float depth = Entity.CalculateDepth(player, DepthLayer.ProjectileCarriedTile);
 			if (carryObject.Graphics.AnimationPlayer.SubStrip != null) {
 				g.DrawAnimation(carryObject.Graphics.AnimationPlayer.SubStrip, carryObject.Graphics.ImageVariant,
-					carryObject.Graphics.AnimationPlayer.PlaybackTime, pos, 0.0f);
+					carryObject.Graphics.AnimationPlayer.PlaybackTime, pos, depth);
 			}
 			else if (carryObject.Graphics.Sprite != null)
-				g.DrawSprite(carryObject.Graphics.Sprite, carryObject.Graphics.ImageVariant, pos, 0.0f);
+				g.DrawSprite(carryObject.Graphics.Sprite, carryObject.Graphics.ImageVariant, pos, depth);
 		}
 
 

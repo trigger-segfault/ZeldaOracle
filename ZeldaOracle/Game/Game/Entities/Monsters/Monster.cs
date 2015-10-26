@@ -368,8 +368,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public override void Draw(Graphics2D g) {
 			base.Draw(g);
-			if (effectAnimation.Animation != null)
-				g.DrawAnimation(effectAnimation, Center - new Vector2F(0, zPosition));
+
+			// Draw burn effect.
+			if (effectAnimation.Animation != null) {
+				float depth = Entity.CalculateDepth(this, DepthLayer.EffectMonsterBurnFlame);
+				g.DrawAnimation(effectAnimation, Center - new Vector2F(0, zPosition), depth);
+			}
 		}
 
 		

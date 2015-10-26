@@ -33,6 +33,7 @@ namespace ZeldaOracle.Game.Entities {
 
 		PlayerSwingItem,
 		PlayerAndNPCs,
+		RisingTile,
 		
 		InAirSeed,
 		InAirMonsters,

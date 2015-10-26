@@ -527,8 +527,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public override void Draw(Graphics2D g) {
 			// TEMPORARY: Change tool drawing to something else
-			if (toolAnimation.Animation != null)
-				g.DrawAnimation(toolAnimation, position - new Vector2F(8, 16 + ZPosition), 0.6f);
+			if (toolAnimation.Animation != null) {
+				float toolDepth = Entity.CalculateDepth(this, DepthLayer.PlayerSwingItem);
+				g.DrawAnimation(toolAnimation, position - new Vector2F(8, 16 + ZPosition), toolDepth);
+			}
 
 			base.Draw(g);
 			state.DrawOver(g);

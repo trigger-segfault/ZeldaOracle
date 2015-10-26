@@ -109,7 +109,7 @@ namespace ZeldaOracle.Game {
 
 		// Monsters
 		public const int				MONSTER_STUN_DURATION		= 400;	// How long a monster gets stunned for (by boomerang/pegasus seeds).
-		public const int				MONSTER_STUN_SHAKE_DURATION	= 60;	// How long the monster shakes while stunned.
+		public const int				MONSTER_STUN_SHAKE_DURATION	= 60;	// How long the monster shakes at the end of being stunned.
 
 		// Graphics.
 
@@ -126,7 +126,7 @@ namespace ZeldaOracle.Game {
 
 		public static DrawMode DRAW_MODE_BACK_TO_FRONT = new DrawMode() {
 			BlendState		= BlendState.AlphaBlend,
-			SortMode		= SpriteSortMode.FrontToBack,
+			SortMode		= SpriteSortMode.FrontToBack, // Use FrontToBack so our depth values mean 0 is below and 1 is above.
 			SamplerState	= SamplerState.PointClamp
 		};
 	}
