@@ -42,11 +42,15 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				center.Y += 4.0f;
 			Vector2F hotspot = GMath.Round(center) + (Directions.ToVector(Player.Direction) * distance);
 			Point2I tileLoc = RoomControl.GetTileLocation(hotspot);
+			if (!RoomControl.IsTileInBounds(tileLoc))
+				return;
+
 			Tile tile = RoomControl.GetTopTile(tileLoc);
 
 			if (tile != null && tile.OnDig(Player.Direction)) {
 				// Create dirt effect.
 				Effect effect = new Effect();
+				effect.Graphics.DepthLayer = DepthLayer.EffectDirt;
 				effect.CreateDestroyTimer(15);
 				effect.EnablePhysics(PhysicsFlags.HasGravity);
 				effect.Physics.Velocity = Directions.ToVector(Player.Direction) * 0.5f;

@@ -11,6 +11,9 @@ using ZeldaOracle.Game.Entities.Projectiles;
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemCane : ItemWeapon {
 		
+		private TileData somariaBlockTileData;
+		private TileSomariaBlock somariaBlockTile;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -23,6 +26,9 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.maxLevel		= Item.Level1;
 			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWhileInHole;
 			this.sprite			= new Sprite[] { GameData.SPR_ITEM_ICON_CANE };
+
+			this.somariaBlockTile		= null;
+			this.somariaBlockTileData	= null;
 		}
 
 
@@ -34,6 +40,42 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		public override void OnButtonPress() {
 			Player.SwingCaneState.Weapon = this;
 			Player.BeginState(Player.SwingCaneState);
+		}
+
+		public override void OnAdded(Inventory inventory) {
+			base.OnAdded(inventory);
+
+			somariaBlockTile = null;
+
+			// Create the somaria block tile data.
+			somariaBlockTileData = new TileData(
+				typeof(TileSomariaBlock), TileFlags.Solid,
+				TileSpecialFlags.Movable |
+				TileSpecialFlags.Cuttable |
+				TileSpecialFlags.Bombable |
+				TileSpecialFlags.Boomerangable |
+				TileSpecialFlags.Pickupable);
+			somariaBlockTileData.CollisionModel	= GameData.MODEL_BLOCK;
+			somariaBlockTileData.Sprite			= GameData.SPR_TILE_SOMARIA_BLOCK;
+			somariaBlockTileData.BreakAnimation	= GameData.ANIM_EFFECT_SOMARIA_BLOCK_DESTROY;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public TileSomariaBlock SomariaBlockTile {
+			get {
+				if (somariaBlockTile != null && (somariaBlockTile.IsDestroyed || somariaBlockTile.RoomControl != Player.RoomControl))
+					return null;
+				return somariaBlockTile;
+			}
+			set { somariaBlockTile = value; }
+		}
+
+		public TileData SomariaBlockTileData {
+			get { return somariaBlockTileData; }
 		}
 	}
 }

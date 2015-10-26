@@ -21,18 +21,20 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public CarriedTile(Tile tile) {
 			this.tile = tile;
 
-			EnablePhysics(PhysicsFlags.Bounces |
+			// Physics.
+			Physics.CollisionBox		= new Rectangle2F(-3, -5, 6, 1);
+			Physics.SoftCollisionBox	= new Rectangle2F(-7, -7, 14, 14);
+			EnablePhysics(
 				PhysicsFlags.HasGravity |
 				PhysicsFlags.DestroyedOutsideRoom |
 				PhysicsFlags.CollideWorld |
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.LedgePassable |
 				PhysicsFlags.DestroyedInHoles);
-			
-			//OriginOffset				= new Point2I(8, 14);
-			Physics.CollisionBox		= new Rectangle2F(-3, -5, 6, 1);
-			Physics.SoftCollisionBox	= new Rectangle2F(-7, -7, 14, 14);
-			graphics.DrawOffset			= new Point2I(-8, -13);
+
+			// Graphics.
+			Graphics.DepthLayer			= DepthLayer.ProjectileCarriedTile;
+			Graphics.DrawOffset			= new Point2I(-8, -13);
 			centerOffset				= new Point2I(0, -5);
 		}
 
@@ -43,7 +45,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		public void Break() {
 			if (tile.BreakAnimation != null) {
-				RoomControl.SpawnEntity(new Effect(tile.BreakAnimation), Center);
+				RoomControl.SpawnEntity(new Effect(tile.BreakAnimation, DepthLayer.EffectTileBreak), Center);
 			}
 			Destroy();
 		}

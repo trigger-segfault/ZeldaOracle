@@ -42,16 +42,19 @@ namespace ZeldaOracle.Game.Items {
 
 		public override void OnButtonPress() {
 			if (bombTracker.IsEmpty) {
-				// Conjure a new bomb.
-				Bomb bomb = new Bomb();
-				bombTracker.TrackEntity(bomb);
-				Player.CarryState.SetCarryObject(bomb);
-				Player.BeginState(Player.CarryState);
+				if (HasAmmo()) {
+					// Conjure a new bomb.
+					UseAmmo();
+					Bomb bomb = new Bomb();
+					bombTracker.TrackEntity(bomb);
+					Player.CarryState.SetCarryObject(bomb);
+					Player.BeginState(Player.CarryState);
+				}
 			}
 			else {
 				// Pickup a bomb from the ground.
 				Bomb bomb = bombTracker.GetEntity();
-				if (Player.Physics.IsSoftMeetingEntity(bomb)) {
+				if (bomb != null && Player.Physics.IsSoftMeetingEntity(bomb)) {
 					Player.BeginState(new PlayerCarryState(bomb));
 					bomb.RemoveFromRoom();
 				}
@@ -61,31 +64,24 @@ namespace ZeldaOracle.Game.Items {
 		// Called when the item is added to the inventory list
 		public override void OnAdded(Inventory inventory) {
 			base.OnAdded(inventory);
-			int[] maxAmounts = { 10, 20, 30 };
 
 			this.currentAmmo = 0;
 			this.ammo = new Ammo[] {
-				inventory.AddAmmo(
-					new Ammo(
-						"ammo_bombs", "Bombs", "Very explosive.",
-						new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0)),
-						maxAmounts[level], maxAmounts[level]
-					),
-					false
-				)
+				inventory.GetAmmo("ammo_bombs")
 			};
 		}
 
 		// Called when the item's level is changed.
 		public override void OnLevelUp() {
-			int[] maxAmounts = { 10, 20, 30 };
-			inventory.GetAmmo("ammo_bombs").MaxAmount = maxAmounts[level];
-			inventory.GetAmmo("ammo_bombs").Amount = maxAmounts[level];
+			int[] maxAmounts	= { 10, 20, 30 };
+			ammo[0].MaxAmount	= maxAmounts[level];
+			ammo[0].Amount		= maxAmounts[level];
 		}
 
 		// Called when the item has been obtained.
 		public override void OnObtained() {
-			inventory.ObtainAmmo(inventory.GetAmmo("ammo_bombs"));
+			inventory.ObtainAmmo(ammo[0]);
+			ammo[0].Amount = ammo[0].MaxAmount;
 		}
 
 

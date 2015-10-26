@@ -15,6 +15,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		protected bool hasDuration;
 		protected bool isCollectibleWithItems;
 		protected RewardHoldTypes holdType;
+		
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -30,10 +31,14 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 
 		//-----------------------------------------------------------------------------
-		// Virtual methods
+		// Virtual Methods
 		//-----------------------------------------------------------------------------
 
 		public virtual void OnCollect(GameControl gameControl) {}
+
+		public virtual bool IsAvailable(GameControl gameControl) {
+			return true;
+		}
 
 
 		//-----------------------------------------------------------------------------

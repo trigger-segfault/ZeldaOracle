@@ -17,6 +17,7 @@ namespace ZeldaOracle.Game.Entities {
 		private	bool				isInitialized;
 		private bool				isAlive;
 		private bool				isInRoom;
+		private Entity				transformedEntity; // The entity this entity has transformed into (bomb -> explosion)
 
 		private Vector2F			previousPosition;
 		private float				previousZPosition;
@@ -39,6 +40,7 @@ namespace ZeldaOracle.Game.Entities {
 			isAlive				= false;
 			isInRoom			= false;
 			isInitialized		= false;
+			transformedEntity	= null;
 			position			= Vector2F.Zero;
 			zPosition			= 0.0f;
 			previousPosition	= Vector2F.Zero;
@@ -92,6 +94,15 @@ namespace ZeldaOracle.Game.Entities {
 		public virtual void Draw(Graphics2D g) {
 			graphics.Draw(g);
 		}
+		
+		
+		// Called to draw above the entity.
+		public virtual void DrawBelow(Graphics2D g, float depthLow, float depthHigh) {
+		}
+		
+		// Called to draw above the entity.
+		public virtual void DrawAbove(Graphics2D g, float depthLow, float depthHigh) {
+		}
 
 		// Called when the entity enters the room.
 		public virtual void OnEnterRoom() {}
@@ -104,7 +115,7 @@ namespace ZeldaOracle.Game.Entities {
 
 		// Called when the entity falls in a hole.
 		public virtual void OnFallInHole() {
-			if (physics.DestroyedInHoles) {
+			if (physics.IsDestroyedInHoles) {
 				RoomControl.SpawnEntity(new EffectFallingObject(), position);
 				Destroy();
 			}
@@ -112,16 +123,16 @@ namespace ZeldaOracle.Game.Entities {
 		
 		// Called when the entity falls in water.
 		public virtual void OnFallInWater() {
-			if (physics.DestroyedInHoles) {
-				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_WATER_SPLASH), position);
+			if (physics.IsDestroyedInHoles) {
+				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash), position);
 				Destroy();
 			}
 		}
 		
 		// Called when the entity falls in lava.
 		public virtual void OnFallInLava() {
-			if (physics.DestroyedInHoles) {
-				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH), position);
+			if (physics.IsDestroyedInHoles) {
+				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH, DepthLayer.EffectSplash), position);
 				Destroy();
 			}
 		}
@@ -164,6 +175,11 @@ namespace ZeldaOracle.Game.Entities {
 			}
 		}
 
+		public void DestroyAndTransform(Entity transformedEntity) {
+			Destroy();
+			this.transformedEntity = transformedEntity;
+		}
+
 		public void EnablePhysics(PhysicsFlags flags = PhysicsFlags.None) {
 			physics.IsEnabled = true;
 			physics.Flags |= flags;
@@ -175,6 +191,46 @@ namespace ZeldaOracle.Game.Entities {
 		
 		public void SetPositionByCenter(Vector2F center) {
 			position = center - centerOffset;
+		}
+		
+		
+		//-----------------------------------------------------------------------------
+		// Depth Calculations
+		//-----------------------------------------------------------------------------
+
+		public static float CalculateDepth(Entity entity, DepthLayer depthLayer) {
+			float depthLayerMin			= 0.1f;
+			float depthLayerMax			= 0.9f;
+			int depthLayerCount			= (int) DepthLayer.Count;
+			float depthLayerRegionSpan	= (depthLayerMax - depthLayerMin) / (depthLayerCount);
+			float depthLayerRegionStart	= depthLayerMin + (depthLayerRegionSpan * (int) depthLayer);
+			
+			// Newer entities draw BELOW older ones.
+			int entityIndex = entity.RoomControl.Entities.IndexOf(entity);
+			if (entityIndex < 0)
+				entityIndex = 0;
+			float entityPercent = 1.0f - ((float) entityIndex / entity.RoomControl.Entities.Count);
+			float entityDepthRegionSpan = depthLayerRegionSpan / (float) entity.RoomControl.Entities.Count;
+			
+			float depth = depthLayerRegionStart + (entityPercent * depthLayerRegionSpan);
+			depth += entityDepthRegionSpan * 0.5f;
+
+			return depth;
+
+			/*
+			float shadowDepth	= 0.05f;
+			float ripplesDepth	= depth + (0.01f * entityDepthRegionSpan);
+			float grassDepth	= depth + (0.02f * entityDepthRegionSpan);
+
+			float depthPadding = 0.01f * entityDepthRegionSpan;
+			
+			entity.DrawBelow(g,
+				depth - (entityDepthRegionSpan * 0.5f) + depthPadding,
+				depth - depthPadding);
+			entity.DrawAbove(g,
+				grassDepth + depthPadding,
+				depth + (entityDepthRegionSpan * 0.5f) - depthPadding);
+			*/
 		}
 
 		
@@ -294,6 +350,10 @@ namespace ZeldaOracle.Game.Entities {
 		public int ActionAlignDistance {
 			get { return actionAlignDistance; }
 			set { actionAlignDistance = value; }
+		}
+
+		public Entity TransformedEntity {
+			get { return transformedEntity; }
 		}
 	}
 }

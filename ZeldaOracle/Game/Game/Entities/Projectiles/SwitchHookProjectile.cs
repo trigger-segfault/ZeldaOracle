@@ -47,7 +47,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				PhysicsFlags.HalfSolidPassable);
 
 			// Graphics.
-			Graphics.IsShadowVisible = false;
+			Graphics.DepthLayer			= DepthLayer.ProjectileSwitchHook;
+			Graphics.IsShadowVisible	= false;
 		}
 
 
@@ -133,7 +134,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				}
 			
 				// Create cling effect.
-				Effect effect = new Effect(GameData.ANIM_EFFECT_CLING);
+				Effect effect = new Effect(GameData.ANIM_EFFECT_CLING, DepthLayer.EffectCling);
 				RoomControl.SpawnEntity(effect, position + Directions.ToVector(direction) * 5.0f, zPosition);
 			}
 		}
@@ -193,23 +194,20 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			base.Update();
 		}
 
-		public override void Draw(Graphics2D g) {
-
+		public override void DrawBelow(Graphics2D g, float depthLow, float depthHigh) {
 			// Draw 3 links between hook and player (alternating which one is visible).
 			Vector2F hookStartPos = HookStartPosition;
 			int linkIndex = (GameControl.RoomTicks % 3) + 1;
 			float percent = (linkIndex / 4.0f);
 			Vector2F linkPos = hookStartPos + (percent * (position - hookStartPos));
-			g.DrawSprite(GameData.SPR_SWITCH_HOOK_LINK, linkPos - new Vector2F(0, zPosition));
-
-			base.Draw(g);
+			g.DrawSprite(GameData.SPR_SWITCH_HOOK_LINK, linkPos - new Vector2F(0, zPosition), depthHigh);
 
 			// Draw collectible.
 			if (collectible != null) {
 				Vector2F pos = Center + Directions.ToVector(direction) * 4;
 				collectible.SetPositionByCenter(pos);
 				collectible.ZPosition = zPosition;
-				collectible.Graphics.Draw(g);
+				collectible.Graphics.Draw(g, (depthLow + depthHigh) * 0.5f);
 			}
 		}
 

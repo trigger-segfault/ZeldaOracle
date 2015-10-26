@@ -55,21 +55,21 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private int					moveDirection;			// The direction that the player wants to face.
 		private Point2I				jumpStartTile;			// The tile the player started jumping on. (Used for jump color tiles)
 		private bool				isCapeDeployed;
-
-		// Movement modes.
-		private PlayerMotionType	mode;
-		private PlayerMotionType	moveModeNormal;		// For regular walking.
-		private PlayerMotionType	moveModeSlow;		// For climbing ladders and stairs.
-		private PlayerMotionType	moveModeIce;		// For walking on ice.
-		private PlayerMotionType	moveModeAir;		// For jumping
-		private PlayerMotionType	moveModeWater;		// For swimming.
-
 		private Tile				holeTile;
 		private bool				doomedToFallInHole;
 		private int					holeDoomTimer;
 		private Vector2F			holeSlipVelocity;
 		private Point2I				holeEnterQuadrent;
 		private bool				fallingInHole;
+
+		// Movement modes.
+		private PlayerMotionType	mode;
+		private PlayerMotionType	moveModeNormal;		// For regular walking.
+		private PlayerMotionType	moveModeSlow;		// For climbing ladders and stairs, or when in grass.
+		private PlayerMotionType	moveModeGrass;		// For walking in grass.
+		private PlayerMotionType	moveModeIce;		// For walking on ice.
+		private PlayerMotionType	moveModeAir;		// For jumping
+		private PlayerMotionType	moveModeWater;		// For swimming.
 
 
 		//-----------------------------------------------------------------------------
@@ -125,10 +125,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 			moveModeNormal.CanRoomChange		= true;
 			
 			// Slow movement.
-			moveModeSlow = new PlayerMotionType();
-			moveModeSlow.MoveSpeed				= 0.5f;
-			moveModeSlow.CanLedgeJump			= true;
-			moveModeSlow.CanRoomChange			= true;
+			moveModeSlow = new PlayerMotionType(moveModeNormal);
+			moveModeSlow.MoveSpeed = 0.5f;
+			
+			// Grass movement.
+			moveModeGrass = new PlayerMotionType(moveModeNormal);
+			moveModeGrass.MoveSpeed = 0.75f;
 			
 			// Ice movement.
 			moveModeIce = new PlayerMotionType();
@@ -365,6 +367,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Move animation can be replaced by cape animation.
 			if (player.Graphics.Animation == player.MoveAnimation && player.IsInAir && isCapeDeployed)
 				player.Graphics.Animation = GameData.ANIM_PLAYER_CAPE;
+			else if (player.IsOnGround && player.Graphics.Animation == GameData.ANIM_PLAYER_CAPE)
+				player.Graphics.Animation = player.MoveAnimation;
 		}
 		
 		// Poll the movement key for the given direction, returning true if
@@ -490,6 +494,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 				mode = moveModeIce;
 			else if (player.Physics.IsOnLadder || player.Physics.IsOnStairs)
 				mode = moveModeSlow;
+			else if (player.Physics.IsInGrass)
+				mode = moveModeGrass;
 			else
 				mode = moveModeNormal;
 
@@ -502,8 +508,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (isSprinting) {
 				if (sprintTimer % 10 == 0) {
 					//Sounds.PLAYER_LAND.play();
-					player.RoomControl.SpawnEntity(new Effect(
-						GameData.ANIM_EFFECT_SPRINT_PUFF), player.Origin);
+					player.RoomControl.SpawnEntity(
+						new Effect(GameData.ANIM_EFFECT_SPRINT_PUFF, DepthLayer.EffectSprintPuff),
+						player.Origin);
 				}
 				sprintTimer--;
 				if (sprintTimer <= 0)

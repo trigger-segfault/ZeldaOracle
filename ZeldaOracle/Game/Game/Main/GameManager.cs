@@ -12,7 +12,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using XnaSong		= Microsoft.Xna.Framework.Media.Song;
-using XnaPlaylist	= Microsoft.Xna.Framework.Media.Playlist;
 using XnaKeys		= Microsoft.Xna.Framework.Input.Keys;
 
 using ZeldaOracle.Common.Audio;
@@ -31,7 +30,6 @@ using Buttons		= ZeldaOracle.Common.Input.Buttons;
 using MouseButtons	= ZeldaOracle.Common.Input.MouseButtons;
 using Color			= ZeldaOracle.Common.Graphics.Color;
 using Song			= ZeldaOracle.Common.Audio.Song;
-using Playlist		= ZeldaOracle.Common.Audio.Playlist;
 
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Common.Translation;

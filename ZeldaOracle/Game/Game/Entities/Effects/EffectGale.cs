@@ -24,7 +24,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		//-----------------------------------------------------------------------------
 
 		public EffectGale() :
-			base(GameData.ANIM_EFFECT_SEED_GALE)
+			base(GameData.ANIM_EFFECT_SEED_GALE, DepthLayer.EffectGale)
 		{
 			CreateDestroyTimer(256, 255, 1);
 		}

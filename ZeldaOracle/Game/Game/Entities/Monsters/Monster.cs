@@ -125,8 +125,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Sides: 3 overlap
 
 			// Graphics.
-			Graphics.DrawOffset = new Point2I(-8, -14);
-			centerOffset		= new Point2I(0, -6);
+			Graphics.DepthLayer			= DepthLayer.Monsters;
+			Graphics.DepthLayerInAir	= DepthLayer.InAirMonsters;
+			Graphics.DrawOffset			= new Point2I(-8, -14);
+			centerOffset				= new Point2I(0, -6);
 
 			// Monster & unit settings.
 			knockbackSpeed			= GameSettings.MONSTER_KNOCKBACK_SPEED;
@@ -279,8 +281,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		
 		protected virtual void OnMysterySeedHit(SeedEntity seed) {
 			// Random: burn, stun, damage, gale
-			Random random = new Random();
-			int rand = random.Next(4);
+			int rand = GRandom.NextInt(4);
 			if (rand == 0)
 				TriggerInteraction(handlerSeeds[(int) SeedType.Ember], seed);
 			else if (rand == 1)
@@ -344,7 +345,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		public override void Die() {
-			Effect explosion = new Effect(GameData.ANIM_EFFECT_MONSTER_EXPLOSION);
+			Effect explosion = new Effect(GameData.ANIM_EFFECT_MONSTER_EXPLOSION, DepthLayer.EffectMonsterExplosion);
 			RoomControl.SpawnEntity(explosion, Center);
 			base.Die();
 		}
@@ -367,8 +368,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public override void Draw(Graphics2D g) {
 			base.Draw(g);
-			if (effectAnimation.Animation != null)
-				g.DrawAnimation(effectAnimation, Center - new Vector2F(0, zPosition));
+
+			// Draw burn effect.
+			if (effectAnimation.Animation != null) {
+				float depth = Entity.CalculateDepth(this, DepthLayer.EffectMonsterBurnFlame);
+				g.DrawAnimation(effectAnimation, Center - new Vector2F(0, zPosition), depth);
+			}
 		}
 
 		

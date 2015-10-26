@@ -20,8 +20,6 @@ namespace ZeldaOracle.Game.Items {
 		protected int			level;
 		protected int			maxLevel;
 
-		protected int			currentAmmo;
-		protected Ammo[]		ammo;
 		protected bool			isObtained;
 		protected bool			isStolen;
 
@@ -48,8 +46,6 @@ namespace ZeldaOracle.Game.Items {
 			this.description	= new string[] { "" };
 			this.level			= Item.Level1;
 			this.maxLevel		= Item.Level1;
-			this.currentAmmo	= -1;
-			this.ammo			= null;
 			this.isObtained		= false;
 			this.isStolen		= false;
 			this.sprite			= null;
@@ -94,24 +90,10 @@ namespace ZeldaOracle.Game.Items {
 			g.DrawSprite(sprite[level], lightOrDark, position);
 		}
 
-		protected virtual void DrawAmmo(Graphics2D g, Point2I position, int lightOrDark) {
-			Color color = (lightOrDark == GameData.VARIANT_LIGHT ? new Color(16, 16, 16) : Color.Black);
-			g.DrawString(GameData.FONT_SMALL, ammo[currentAmmo].Amount.ToString("00"), position + new Point2I(8, 8), color);
-		}
-
 		protected virtual void DrawLevel(Graphics2D g, Point2I position, int lightOrDark) {
 			Color color = (lightOrDark == GameData.VARIANT_LIGHT ? new Color(16, 16, 16) : Color.Black);
 			g.DrawSprite(GameData.SPR_HUD_LEVEL, lightOrDark, position + new Point2I(8, 8));
 			g.DrawString(GameData.FONT_SMALL, (level + 1).ToString(), position + new Point2I(16, 8), color);
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Ammo
-		//-----------------------------------------------------------------------------
-
-		public Ammo GetAmmoAt(int index) {
-			return ammo[index];
 		}
 
 		//-----------------------------------------------------------------------------
@@ -185,19 +167,6 @@ namespace ZeldaOracle.Game.Items {
 						OnReturned();
 				}
 			}
-		}
-
-		public int NumAmmos {
-			get {
-				if (ammo != null)
-					return ammo.Length;
-				return 0;
-			}
-		}
-
-		public int CurrentAmmo {
-			get { return currentAmmo; }
-			set { currentAmmo = GMath.Clamp(value, 0, ammo.Length - 1); }
 		}
 	}
 }

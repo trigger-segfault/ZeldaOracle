@@ -25,6 +25,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				PhysicsFlags.LedgePassable |
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.DestroyedOutsideRoom);
+
+			// Graphics.
+			Graphics.DepthLayer	= DepthLayer.ProjectileRodFire;
 		}
 
 
@@ -46,8 +49,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			// Spawn fire.
 			Fire fire = new Fire();
 			RoomControl.SpawnEntity(fire, position);
-
-			Destroy();
+			DestroyAndTransform(fire);
 		}
 
 		public override void OnCollideMonster(Monster monster) {

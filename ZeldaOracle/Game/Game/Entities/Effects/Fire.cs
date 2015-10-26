@@ -19,8 +19,10 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			base(GameData.ANIM_EFFECT_SEED_EMBER)
 		{
 			EnablePhysics(PhysicsFlags.HasGravity);
-			Graphics.DrawOffset = new Point2I(0, -2);
 			Physics.AddCollisionHandler(typeof(Monster), CollisionBoxType.Soft, CollideWithMonster);
+
+			Graphics.DrawOffset	= new Point2I(0, -2);
+			Graphics.DepthLayer	= DepthLayer.EffectFire;
 		}
 		
 

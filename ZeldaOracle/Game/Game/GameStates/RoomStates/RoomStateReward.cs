@@ -85,6 +85,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 
 		public override void Draw(Graphics2D g) {
 			g.Translate(0, 16);
+			g.Translate(-RoomControl.ViewControl.Position);
 
 			if (reward.HoldType == RewardHoldTypes.Raise && useChest) {
 				g.DrawAnimation(animationPlayer, chestPosition + new Point2I(0, -8 - (timer + 2) / 4), 0.3f);
@@ -97,7 +98,8 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 					g.DrawAnimation(animationPlayer, GameControl.Player.Position + new Point2I(-12, -30), 0.3f);
 				}
 			}
-
+			
+			g.Translate(RoomControl.ViewControl.Position);
 			g.Translate(0, -16);
 		}
 	}

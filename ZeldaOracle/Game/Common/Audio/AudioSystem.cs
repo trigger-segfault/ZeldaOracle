@@ -6,12 +6,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using XnaSong = Microsoft.Xna.Framework.Media.Song;
-using XnaPlaylist = Microsoft.Xna.Framework.Media.Playlist;
 
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Content;
 using Song = ZeldaOracle.Common.Audio.Song;
-using Playlist = ZeldaOracle.Common.Audio.Playlist;
 
 namespace ZeldaOracle.Common.Audio {
 /** <summary>

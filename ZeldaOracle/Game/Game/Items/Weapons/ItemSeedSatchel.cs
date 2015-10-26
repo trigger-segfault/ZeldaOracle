@@ -14,7 +14,7 @@ using ZeldaOracle.Game.Items.Ammos;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 
-	public class ItemSeedSatchel : ItemWeapon {
+	public class ItemSeedSatchel : SeedBasedItem {
 
 		private EntityTracker<Seed> emberSeedTracker;
 		private EntityTracker<Seed> scentSeedTracker;
@@ -74,6 +74,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 			Player.BeginBusyState(10);
 
+			UseAmmo();
+
 			return seed;
 		}
 
@@ -84,85 +86,39 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		// Called when the items button is pressed (A or B).
 		public override void OnButtonPress() {
-			string ammoID = ammo[currentAmmo].ID;
+			if (!HasAmmo())
+				return;
 
-			if (ammoID == "ammo_ember_seeds") {
+			SeedType seedType = CurrentSeedType;
+
+			if (seedType == SeedType.Ember) {
 				if (emberSeedTracker.IsAvailable)
 					emberSeedTracker.TrackEntity(ThrowSeed(SeedType.Ember));
 			}
-			else if (ammoID == "ammo_scent_seeds") {
+			else if (seedType == SeedType.Scent) {
 				if (scentSeedTracker.IsAvailable)
 					scentSeedTracker.TrackEntity(ThrowSeed(SeedType.Scent));
 			}
-			else if (ammoID == "ammo_gale_seeds") {
-				if (galeSeedTracker.IsAvailable)
-					galeSeedTracker.TrackEntity(DropSeed(SeedType.Gale));
-			}
-			else if (ammoID == "ammo_mystery_seeds") {
-				if (mysterySeedTracker.IsAvailable)
-					mysterySeedTracker.TrackEntity(ThrowSeed(SeedType.Mystery));
-			}
-			else if (ammoID == "ammo_pegasus_seeds") {
+			else if (seedType == SeedType.Pegasus) {
 				// Start sprinting.
 				if (!Player.Movement.IsSprinting) {
-					Player.RoomControl.SpawnEntity(new Effect(
-						GameData.ANIM_EFFECT_PEGASUS_DUST), Player.Center - new Point2I(0, 8));
+					Player.RoomControl.SpawnEntity(
+						new Effect(GameData.ANIM_EFFECT_PEGASUS_DUST, DepthLayer.EffectPegasusDust),
+						Player.Center - new Point2I(0, 8));
 					Player.Movement.StartSprinting(
 						GameSettings.PLAYER_SPRINT_DURATION,
 						GameSettings.PLAYER_SPRINT_SPEED_SCALE);
+					UseAmmo();
 				}
 			}
-		}
-
-		// Called when the item is added to the inventory list.
-		public override void OnAdded(Inventory inventory) {
-			base.OnAdded(inventory);
-			int[] maxAmounts = { 20, 30, 50 };
-
-			this.currentAmmo = 0;
-
-			this.ammo = new Ammo[] {
-				inventory.AddAmmo(
-					new AmmoSatchelSeeds(
-						"ammo_ember_seeds", "Ember Seeds", "A burst of fire!",
-						new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(0, 3)),
-						0, maxAmounts[level]
-					),
-					false
-				),
-				inventory.AddAmmo(
-					new AmmoSatchelSeeds(
-						"ammo_scent_seeds", "Scent Seeds", "An aromatic blast!",
-						new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(1, 3)),
-						0, maxAmounts[level]
-					),
-					false
-				),
-				inventory.AddAmmo(
-					new AmmoSatchelSeeds(
-						"ammo_pegasus_seeds", "Pegasus Seeds", "Steals speed?",
-						new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(2, 3)),
-						0, maxAmounts[level]
-					),
-					false
-				),
-				inventory.AddAmmo(
-					new AmmoSatchelSeeds(
-						"ammo_gale_seeds", "Gale Seeds", "A mighty blow!",
-						new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(3, 3)),
-						0, maxAmounts[level]
-					),
-					false
-				),
-				inventory.AddAmmo(
-					new AmmoSatchelSeeds(
-						"ammo_mystery_seeds", "Mystery Seeds", "A producer of unknown effects.",
-						new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(4, 3)),
-						0, maxAmounts[level]
-					),
-					false
-				)
-			};
+			else if (seedType == SeedType.Gale) {
+				if (galeSeedTracker.IsAvailable)
+					galeSeedTracker.TrackEntity(DropSeed(SeedType.Gale));
+			}
+			else if (seedType == SeedType.Mystery) {
+				if (mysterySeedTracker.IsAvailable)
+					mysterySeedTracker.TrackEntity(ThrowSeed(SeedType.Mystery));
+			}
 		}
 
 		// Draws the item inside the inventory.
@@ -174,6 +130,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		// Called when the item's level is changed.
 		public override void OnLevelUp() {
+			// Increase the max amount of seeds you can carry.
 			int[] maxAmounts = { 20, 30, 50 };
 			for (int i = 0; i < ammo.Length; i++) {
 				ammo[i].MaxAmount = maxAmounts[level];
@@ -182,48 +139,11 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			}
 		}
 
-
 		// Called when the item has been obtained.
 		public override void OnObtained() {
+			// Obtain the first seed type (Ember seeds).
 			inventory.ObtainAmmo(this.ammo[0]);
 			this.ammo[0].Amount = 20;
-		}
-
-		// Called when the item has been unobtained.
-		public override void OnUnobtained() {
-
-		}
-
-		// Called when the item has been stolen.
-		public override void OnStolen() {
-
-		}
-
-		// Called when the stolen item has been returned.
-		public override void OnReturned() {
-
-		}
-		
-		
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-
-		public SeedType CurrentSeedType {
-			get {
-				string ammoID = ammo[currentAmmo].ID;
-				if (ammoID == "ammo_ember_seeds")
-					return SeedType.Ember;
-				else if (ammoID == "ammo_scent_seeds")
-					return SeedType.Scent;
-				else if (ammoID == "ammo_gale_seeds")
-					return SeedType.Gale;
-				else if (ammoID == "ammo_mystery_seeds")
-					return SeedType.Mystery;
-				else if (ammoID == "ammo_pegasus_seeds")
-					return SeedType.Pegasus;
-				return SeedType.Ember;
-			}
 		}
 	}
 }

@@ -126,8 +126,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Physics.HasGravity			= true;
 
 			// Graphics.
-			Graphics.ShadowDrawOffset = originOffset;
-			Graphics.DrawOffset = new Point2I(-8, -16);
+			Graphics.DepthLayer			= DepthLayer.PlayerAndNPCs;
+			Graphics.DepthLayerInAir	= DepthLayer.InAirPlayer;
+			Graphics.ShadowDrawOffset	= originOffset;
+			Graphics.DrawOffset			= new Point2I(-8, -16);
 
 			// Create the basic player states.
 			state				= null;
@@ -252,7 +254,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 							item.OnButtonPress();
 						if (Inventory.GetSlotButton(i).IsDown())
 							item.OnButtonDown();
-						if (item.IsTwoHanded && 0 == 1)
+						if (!item.IsTwoHanded || i == 1)
 							item.Update();
 					}
 				}
@@ -525,8 +527,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public override void Draw(Graphics2D g) {
 			// TEMPORARY: Change tool drawing to something else
-			if (toolAnimation.Animation != null)
-				g.DrawAnimation(toolAnimation, position - new Vector2F(8, 16 + ZPosition), 0.6f);
+			if (toolAnimation.Animation != null) {
+				float toolDepth = Entity.CalculateDepth(this, DepthLayer.PlayerSwingItem);
+				g.DrawAnimation(toolAnimation, position - new Vector2F(8, 16 + ZPosition), toolDepth);
+			}
 
 			base.Draw(g);
 			state.DrawOver(g);

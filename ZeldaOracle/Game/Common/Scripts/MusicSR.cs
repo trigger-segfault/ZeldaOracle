@@ -5,7 +5,6 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using XnaPlaylist = Microsoft.Xna.Framework.Media.Playlist;
 
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Content;

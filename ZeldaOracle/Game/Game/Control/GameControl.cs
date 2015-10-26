@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.Items;
+using ZeldaOracle.Game.Items.Drops;
 using ZeldaOracle.Game.Items.Equipment;
 using ZeldaOracle.Game.Items.Essences;
 using ZeldaOracle.Game.Items.KeyItems;
@@ -31,6 +32,7 @@ namespace ZeldaOracle.Game.Control {
 		private HUD				hud;
 		private Inventory		inventory;
 		private RewardManager	rewardManager;
+		private DropManager		dropManager;
 		private RoomStateStack	roomStateStack;
 		private bool			isAdvancedGame;
 		private int				roomTicks; // The total number of ticks elapsed since the game was started (used for animation).
@@ -56,6 +58,7 @@ namespace ZeldaOracle.Game.Control {
 			this.hud				= null;
 			this.inventory			= null;
 			this.rewardManager		= null;
+			this.dropManager		= null;
 			this.isAdvancedGame		= false;
 			this.updateRoom			= true;
 			this.animateRoom		= true;
@@ -91,6 +94,7 @@ namespace ZeldaOracle.Game.Control {
 
 			GameData.LoadInventory(inventory, true);
 			
+			inventory.ObtainAmmo("ammo_ember_seeds");
 			inventory.ObtainAmmo("ammo_scent_seeds");
 			inventory.ObtainAmmo("ammo_pegasus_seeds");
 			inventory.ObtainAmmo("ammo_gale_seeds");
@@ -100,8 +104,9 @@ namespace ZeldaOracle.Game.Control {
 			hud.DynamicHealth = player.Health;
 
 			rewardManager = new RewardManager(this);
-
 			GameData.LoadRewards(rewardManager);
+			dropManager = new DropManager(this);
+			GameData.LoadDrops(dropManager, rewardManager);
 
 			// Create the room control.
 			roomControl = new RoomControl();
@@ -305,6 +310,10 @@ namespace ZeldaOracle.Game.Control {
 
 		public RewardManager RewardManager {
 			get { return rewardManager; }
+		}
+
+		public DropManager DropManager {
+			get { return dropManager; }
 		}
 
 		public bool UpdateRoom {

@@ -14,10 +14,13 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		//-----------------------------------------------------------------------------
 
 		public ScentPod() {
-			graphics.DrawOffset = new Point2I(-8, -12);
+			Graphics.DepthLayer = DepthLayer.EffectScentSeedPod;
+			Graphics.DrawOffset = new Point2I(-8, -12);
 			centerOffset		= new Point2I(0, -4);
 
-			CreateDestroyTimer(240, 60);
+			CreateDestroyTimer(
+				GameSettings.SCENT_POD_DURATION,
+				GameSettings.SCENT_POD_FADE_DELAY);
 		}
 		
 

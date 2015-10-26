@@ -13,7 +13,10 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Game.Entities;
+using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Items.Ammos;
+using ZeldaOracle.Game.Items.Drops;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Items.Essences;
 using ZeldaOracle.Game.Items.KeyItems;
@@ -90,10 +93,12 @@ namespace ZeldaOracle.Game {
 
 					if (Resources.ExistsResource<T>(name))
 						field.SetValue(null, Resources.GetResource<T>(name));
-					else if (field.GetValue(null) != null)
-						Console.WriteLine("** WARNING: " + name + " is built programatically.");
-					else 
-						Console.WriteLine("** WARNING: " + name + " is never defined.");
+					else if (field.GetValue(null) != null) {
+						//Console.WriteLine("** WARNING: " + name + " is built programatically.");
+					}
+					else {
+						//Console.WriteLine("** WARNING: " + name + " is never defined.");
+					}
 				}
 			}
 			
@@ -112,8 +117,9 @@ namespace ZeldaOracle.Game {
 						break;
 					}
 				}
-				if (matchingField == null)
-					Console.WriteLine("** WARNING: Resource \"" + name + "\" does not have a corresponding field.");
+				if (matchingField == null) {
+					//Console.WriteLine("** WARNING: Resource \"" + name + "\" does not have a corresponding field.");
+				}
 			}
 		}
 
@@ -451,16 +457,35 @@ namespace ZeldaOracle.Game {
 
 		public static void LoadInventory(Inventory inventory, bool obtain = false) {
 
+			// Add ammos.
+			inventory.AddAmmos(false,
+				new AmmoSatchelSeeds("ammo_ember_seeds", "Ember Seeds", "A burst of fire!",
+					new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(0, 3)), 0, 20),
+				new AmmoSatchelSeeds("ammo_scent_seeds", "Scent Seeds", "An aromatic blast!",
+					new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(1, 3)), 0, 20),
+				new AmmoSatchelSeeds("ammo_pegasus_seeds", "Pegasus Seeds", "Steals speed?",
+					new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(2, 3)), 0, 20),
+				new AmmoSatchelSeeds("ammo_gale_seeds", "Gale Seeds", "A mighty blow!",
+					new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(3, 3)), 0, 20),
+				new AmmoSatchelSeeds("ammo_mystery_seeds", "Mystery Seeds", "A producer of unknown effects.",
+					new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(4, 3)), 0, 20),
+				new Ammo("ammo_bombs", "Bombs", "Very explosive.",
+					new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(13, 0)), 0, 10),
+				new Ammo("ammo_arrows", "Arrows", "A standard arrow.",
+					new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(15, 1)), 0, 30)
+			);
+
+			// Add weapons.
 			inventory.AddItems(obtain,
 				new ItemWallet(),
 				new ItemSword(),
-				new ItemMagicRod(),
+				new ItemShovel(),
 				new ItemCane(),
+				new ItemMagicRod(),
 				new ItemSwitchHook(),
 				new ItemBracelet(),
 				new ItemFeather(),
 				new ItemBow(),
-				new ItemShovel(),
 				new ItemEssence1(),
 				new ItemEssence2(),
 				new ItemEssence3(),
@@ -482,9 +507,9 @@ namespace ZeldaOracle.Game {
 				new ItemSeedShooter(),
 				new ItemSlingshot());
 
+			// Add key items.
 			inventory.AddItems(false,
 				new ItemFlippers());
-
 		}
 
 
@@ -494,37 +519,7 @@ namespace ZeldaOracle.Game {
 
 		public static void LoadRewards(RewardManager rewardManager) {
 
-			rewardManager.AddReward(new RewardRupee("rupees_1", 1,
-				"You got <red>1 Rupee<red>!<n>That's terrible.",
-				GameData.SPR_REWARD_RUPEE_GREEN));
-
-			rewardManager.AddReward(new RewardRupee("rupees_5", 5,
-				"You got<n><red>5 Rupees<red>!",
-				GameData.SPR_REWARD_RUPEE_RED));
-
-			rewardManager.AddReward(new RewardRupee("rupees_20", 20,
-				"You got<n><red>20 Rupees<red>!<n>That's not bad.",
-				GameData.SPR_REWARD_RUPEE_BLUE));
-
-			rewardManager.AddReward(new RewardRupee("rupees_30", 30,
-				"You got<n><red>30 Rupees<red>!<n>That's nice.",
-				GameData.SPR_REWARD_RUPEE_BLUE));
-
-			rewardManager.AddReward(new RewardRupee("rupees_50", 50,
-				"You got<n><red>50 Rupees<red>!<n>How lucky!",
-				GameData.SPR_REWARD_RUPEE_BLUE));
-
-			rewardManager.AddReward(new RewardRupee("rupees_100", 100,
-				"You got <red>100<n>Rupees<red>! I bet<n>you're thrilled!",
-				GameData.SPR_REWARD_RUPEE_BIG_BLUE));
-
-			rewardManager.AddReward(new RewardRupee("rupees_150", 150,
-				"You got <red>150<n>Rupees<red>!<n>Way to go!!!",
-				GameData.SPR_REWARD_RUPEE_BIG_RED));
-
-			rewardManager.AddReward(new RewardRupee("rupees_200", 200,
-				"You got <red>200<n>Rupees<red>! That's<n>pure bliss!",
-				GameData.SPR_REWARD_RUPEE_BIG_RED));
+			// Key Items.
 
 			rewardManager.AddReward(new RewardItem("item_flippers_1", "item_flippers", Item.Level1, RewardHoldTypes.TwoHands,
 				"You got <red>Zora's Flippers<red>! You can now go for a swim! Press A to swim, B to dive!",
@@ -533,6 +528,8 @@ namespace ZeldaOracle.Game {
 			rewardManager.AddReward(new RewardItem("item_flippers_2", "item_flippers", Item.Level2, RewardHoldTypes.TwoHands,
 				"You got a <red>Mermaid Suit<red>! Now you can swim in deep waters. Press DPAD to swim, B to dive and A to use items.",
 				GameData.SPR_ITEM_ICON_FLIPPERS_2));
+
+			// Weapons.
 
 			rewardManager.AddReward(new RewardItem("item_sword_1", "item_sword", Item.Level1, RewardHoldTypes.OneHand,
 				"You got a Hero's <red>Wooden Sword<red>! Hold A or B to charge it up, then release it for a spin attack!",
@@ -638,6 +635,46 @@ namespace ZeldaOracle.Game {
 				"Your <red>Bow<red> has been upgraded! You can now hold even more arrows.",
 				GameData.SPR_ITEM_ICON_BOW));
 
+			// Rupees.
+
+			rewardManager.AddReward(new RewardRupee("rupees_1", 1,
+				"You got <red>1 Rupee<red>!<n>That's terrible.",
+				GameData.SPR_REWARD_RUPEE_GREEN));
+
+			rewardManager.AddReward(new RewardRupee("rupees_5", 5,
+				"You got<n><red>5 Rupees<red>!",
+				GameData.SPR_REWARD_RUPEE_RED));
+
+			rewardManager.AddReward(new RewardRupee("rupees_20", 20,
+				"You got<n><red>20 Rupees<red>!<n>That's not bad.",
+				GameData.SPR_REWARD_RUPEE_BLUE));
+
+			rewardManager.AddReward(new RewardRupee("rupees_30", 30,
+				"You got<n><red>30 Rupees<red>!<n>That's nice.",
+				GameData.SPR_REWARD_RUPEE_BLUE));
+
+			rewardManager.AddReward(new RewardRupee("rupees_50", 50,
+				"You got<n><red>50 Rupees<red>!<n>How lucky!",
+				GameData.SPR_REWARD_RUPEE_BLUE));
+
+			rewardManager.AddReward(new RewardRupee("rupees_100", 100,
+				"You got <red>100<n>Rupees<red>! I bet<n>you're thrilled!",
+				GameData.SPR_REWARD_RUPEE_BIG_BLUE));
+
+			rewardManager.AddReward(new RewardRupee("rupees_150", 150,
+				"You got <red>150<n>Rupees<red>!<n>Way to go!!!",
+				GameData.SPR_REWARD_RUPEE_BIG_RED));
+
+			rewardManager.AddReward(new RewardRupee("rupees_200", 200,
+				"You got <red>200<n>Rupees<red>! That's<n>pure bliss!",
+				GameData.SPR_REWARD_RUPEE_BIG_RED));
+
+			// Hearts.
+
+			rewardManager.AddReward(new RewardHeartPiece());
+
+			rewardManager.AddReward(new RewardHeartContainer());
+
 			rewardManager.AddReward(new RewardRecoveryHeart("hearts_1", 1,
 				"You recovered<n>only one <red>heart<red>!",
 				GameData.SPR_REWARD_HEART));
@@ -646,9 +683,7 @@ namespace ZeldaOracle.Game {
 				"You got three<n><red>hearts<red>!",
 				GameData.SPR_REWARD_HEARTS_3));
 
-			rewardManager.AddReward(new RewardHeartPiece());
-
-			rewardManager.AddReward(new RewardHeartContainer());
+			// Ammo.
 
 			rewardManager.AddReward(new RewardAmmo("ammo_ember_seeds_5", "ammo_ember_seeds", 5,
 				"You got<n><red>5 Ember Seeds<red>!",
@@ -677,6 +712,56 @@ namespace ZeldaOracle.Game {
 			rewardManager.AddReward(new RewardAmmo("ammo_arrows_5", "ammo_arrows", 5,
 				"You got<n><red>5 Arrows<red>!",
 				GameData.SPR_ITEM_AMMO_ARROW));
+
+			// Monsters?
+
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Drop Lists Loading
+		//-----------------------------------------------------------------------------
+
+		public static void LoadDrops(DropManager dropManager, RewardManager rewardManager) {
+
+			DropList dropsRupees = dropManager.CreateDropList("rupees");
+			dropsRupees.AddDrop(3, rewardManager.GetReward("rupees_1"));
+			dropsRupees.AddDrop(1, rewardManager.GetReward("rupees_5"));
+
+			DropList dropsHearts = dropManager.CreateDropList("hearts");
+			dropsHearts.AddDrop(4, rewardManager.GetReward("hearts_1"));
+			dropsHearts.AddDrop(1, typeof(CollectibleFairy));
+			
+			DropList dropsSeeds = dropManager.CreateDropList("seeds");
+			dropsSeeds.AddDrop(1, rewardManager.GetReward("ammo_ember_seeds_5"));
+			dropsSeeds.AddDrop(1, rewardManager.GetReward("ammo_scent_seeds_5"));
+			dropsSeeds.AddDrop(1, rewardManager.GetReward("ammo_pegasus_seeds_5"));
+			dropsSeeds.AddDrop(1, rewardManager.GetReward("ammo_gale_seeds_5"));
+			dropsSeeds.AddDrop(1, rewardManager.GetReward("ammo_mystery_seeds_5"));
+			
+			DropList dropsAmmo = dropManager.CreateDropList("ammo");
+			dropsAmmo.AddDrop(1, rewardManager.GetReward("ammo_bombs_5"));
+			dropsAmmo.AddDrop(1, rewardManager.GetReward("ammo_arrows_5"));
+			dropsAmmo.AddDrop(5, dropsSeeds);
+			
+			
+			// Drops that are created by default for tiles.
+			DropList dropsDefault = dropManager.CreateDropList("default", 1, 3);
+			dropsDefault.AddDrop(50, dropsAmmo);
+			dropsDefault.AddDrop(46, dropsRupees);
+			dropsDefault.AddDrop(25, dropsHearts);
+
+			// Drops that are created when a ground tile is dug up.
+			DropList dropsDigRupees = new DropList();
+			dropsDigRupees.AddDrop(25, dropsRupees);
+			dropsDigRupees.AddDrop(1, rewardManager.GetReward("rupees_100"));
+			DropList dropsDigMonsters = new DropList();
+			dropsDigMonsters.AddDrop(5, typeof(Monster)); // TODO: Beetle as a dig Drop
+			dropsDigMonsters.AddDrop(2, typeof(Monster)); // TODO: Rope as a dig Drop
+			DropList dropsDig = dropManager.CreateDropList("dig", 1, 4);
+			dropsDig.AddDrop(46, dropsDigRupees);
+			dropsDig.AddDrop(25, dropsHearts);
+			dropsDig.AddDrop(7, dropsDigMonsters);
 		}
 
 
@@ -795,6 +880,7 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_TILE_ARMOS_STATUE;
 		public static Sprite SPR_TILE_OWL;
 		public static Sprite SPR_TILE_OWL_ACTIVATED;
+		public static Sprite SPR_TILE_SOMARIA_BLOCK;
 
 		public static Sprite[] SPR_COLOR_CUBE_ORIENTATIONS;
 
@@ -967,6 +1053,9 @@ namespace ZeldaOracle.Game {
 		// Monster animations.
 		public static Animation ANIM_MONSTER_OCTOROK;
 
+		// Colllectible animations.
+		public static Animation ANIM_COLLECTIBLE_FAIRY;
+
 		// Weapon animations.
 		public static Animation ANIM_SWORD_HOLD;
 		public static Animation ANIM_SWORD_CHARGED;
@@ -1017,6 +1106,8 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_EFFECT_CLING;
 		public static Animation ANIM_EFFECT_CLING_LIGHT;
 		public static Animation ANIM_EFFECT_BURN;
+		public static Animation ANIM_EFFECT_SOMARIA_BLOCK_CREATE;
+		public static Animation ANIM_EFFECT_SOMARIA_BLOCK_DESTROY;
 
 		public static Animation[] ANIM_EFFECT_SEEDS;
 
@@ -1095,7 +1186,5 @@ namespace ZeldaOracle.Game {
 		public static RenderTarget2D RenderTargetGame;
 		public static RenderTarget2D RenderTargetGameTemp;
 		public static RenderTarget2D RenderTargetDebug;
-
-
 	}
 }

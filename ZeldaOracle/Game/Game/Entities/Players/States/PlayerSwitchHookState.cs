@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Tiles;
 
@@ -64,6 +65,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					if (CanTileLandAtLocation(newSwitchLocation))
 						tileSwitchLocation = newSwitchLocation;
 				}
+
+				// Spawn drops as the tile is picked up.
+				hookedTile.SpawnDrop();
 			}
 			
 			hookProjectile.Position = hookedEntity.Center;
@@ -80,9 +84,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			Tile checkTile = player.RoomControl.GetTopTile(location);
 			if (checkTile == null)
 				return true;
-			return (checkTile.Layer != player.RoomControl.Room.LayerCount - 1 &&
-					checkTile.IsCoverable	&& !checkTile.IsSolid	&&
-					!checkTile.IsHole		&& !checkTile.IsWater	&& !checkTile.IsLava);
+			return (checkTile.Layer != player.RoomControl.Room.TopLayer &&
+					!checkTile.IsNotCoverable && !checkTile.IsSolid	&& !checkTile.IsHoleWaterOrLava);
 		}
 
 		private bool WillTileBreakAtLocation(Point2I location) {
@@ -91,9 +94,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			Tile checkTile = player.RoomControl.GetTopTile(location);
 			if (checkTile == null)
 				return false;
-			return (checkTile.Layer == player.RoomControl.Room.LayerCount - 1 ||
-					!checkTile.IsCoverable	|| checkTile.IsStairs	|| checkTile.IsLadder	|| checkTile.IsSolid ||
-					checkTile.IsHole		|| checkTile.IsWater	|| checkTile.IsLava);
+			return (checkTile.Layer == player.RoomControl.Room.TopLayer ||
+					!checkTile.IsCoverableByBlock || checkTile.IsHoleWaterOrLava);
 		}
 
 		private void SwitchPositions() {
@@ -188,9 +190,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 		}
 
-		public override void DrawOver(Common.Graphics.Graphics2D g) {
+		public override void DrawOver(Graphics2D g) {
 			if (isSwitching) {
-				hookedEntity.Draw(g);
+				float depth = Entity.CalculateDepth(player, DepthLayer.RisingTile);
+				hookedEntity.Graphics.Draw(g, depth);
 			}
 		}
 

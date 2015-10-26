@@ -20,6 +20,35 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private float	minSpeed;				// Minimum speed threshhold used to jump back to zero when decelerating.
 		private int		directionSnapCount;		// The number of intervals movement directions should snap to for acceleration-based movement.
 		
+
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
+
+		public PlayerMotionType() {
+			moveSpeed			= 1.0f;
+			canLedgeJump		= true;
+			canRoomChange		= true;
+			isStrafing			= false;
+			isSlippery			= false;
+			acceleration		= 0.08f;
+			deceleration		= 0.05f;
+			minSpeed			= 0.05f;
+			directionSnapCount	= 32;
+		}
+		
+		public PlayerMotionType(PlayerMotionType copy) {
+			moveSpeed			= copy.moveSpeed;
+			canLedgeJump		= copy.canLedgeJump;
+			canRoomChange		= copy.canRoomChange;
+			isStrafing			= copy.isStrafing;
+			isSlippery			= copy.isSlippery;
+			acceleration		= copy.acceleration;
+			deceleration		= copy.deceleration;
+			minSpeed			= copy.minSpeed;
+			directionSnapCount	= copy.directionSnapCount;
+		}
+
 		
 		//-----------------------------------------------------------------------------
 		// Properties

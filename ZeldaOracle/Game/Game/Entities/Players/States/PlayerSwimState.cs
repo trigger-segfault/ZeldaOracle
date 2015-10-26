@@ -53,12 +53,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Create a splash effect.
 			if (player.Physics.IsInLava) {
-				Effect splash = new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH);
+				Effect splash = new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH, DepthLayer.EffectSplash);
 				splash.Position = player.Position - new Vector2F(0, 4);
 				player.RoomControl.SpawnEntity(splash);
 			}
 			else {
-				Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH);
+				Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash);
 				splash.Position = player.Position - new Vector2F(0, 4);
 				player.RoomControl.SpawnEntity(splash);
 			}
@@ -85,10 +85,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.CanJump = true;
 			player.Movement.MoveSpeedScale = 1.0f;
 			player.Movement.AutoAccelerate = false;
+			player.Graphics.DepthLayer = DepthLayer.PlayerAndNPCs;
 		}
 
 		public override void Update() {
-
 
 			// Slow down movement over time from strokes
 			if (player.Movement.MoveSpeedScale > 1.0f)
@@ -109,6 +109,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				if (submergedTimer <= 0 || Controls.B.IsPressed()) {
 					isSubmerged = false;
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SWIM);
+					player.Graphics.DepthLayer = DepthLayer.PlayerAndNPCs;
 				}
 			}
 			else if (Controls.B.IsPressed()) {
@@ -117,13 +118,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SUBMERGED);
 
 				// Create a splash effect.
-				Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH);
+				Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash);
 				splash.Position = player.Position - new Vector2F(0, 4);
 				player.RoomControl.SpawnEntity(splash);
 
 				//Sounds.PLAYER_WADE.play();
 
-				// TODO: Change player depth to lowest.
+				// Change player depth to lowest.
+				player.Graphics.DepthLayer = DepthLayer.PlayerSubmerged;
 			}
 
 			base.Update();

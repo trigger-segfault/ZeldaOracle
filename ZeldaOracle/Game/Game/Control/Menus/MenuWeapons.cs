@@ -220,20 +220,6 @@ namespace ZeldaOracle.Game.Control.Menus {
 				GameControl.Inventory.EquippedWeapons[1 - slot] = weapon;
 			}
 			
-			/*
-			if (GameControl.Inventory.EquippedWeapons[slot] != null) {
-				if (weapon != null && weapon.IsTwoHanded) {
-					NextAvailableSlot.SlotItem = GameControl.Inventory.EquippedWeapons[1 - slot];
-				}
-				ItemWeapon placeholder = GameControl.Inventory.EquippedWeapons[slot];
-				GameControl.Inventory.EquipWeapon(weapon, slot);
-				slotGroups[0].CurrentSlot.SlotItem = placeholder;
-			}
-			else {
-				GameControl.Inventory.EquipWeapon(weapon, slot);
-				slotGroups[0].CurrentSlot.SlotItem = null;
-			}
-			*/
 			ResetDescription();
 		}
 

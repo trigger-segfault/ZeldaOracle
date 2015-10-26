@@ -15,7 +15,8 @@ namespace ZeldaOracle.Game.Entities
 		private	Point2I			drawOffset;
 		private Entity			entity;				// The entity this component belongs to.
 		private AnimationPlayer	animationPlayer;
-		private bool			hasDynamicDepth;
+		private DepthLayer		depthLayer;
+		private DepthLayer		depthLayerInAir;
 		private	bool			isVisible;
 		private bool			isGrassEffectVisible;
 		private bool			isRipplesEffectVisible;
@@ -46,6 +47,8 @@ namespace ZeldaOracle.Game.Entities
 			this.entity					= entity;
 			this.animationPlayer		= new AnimationPlayer();
 			this.sprite					= null;
+			this.depthLayer				= DepthLayer.None;
+			this.depthLayerInAir		= DepthLayer.None;
 			this.isVisible				= true;
 			this.isShadowVisible		= true;
 			this.grassDrawOffset		= Point2I.Zero;
@@ -139,12 +142,12 @@ namespace ZeldaOracle.Game.Entities
 				}
 			}
 		}
-
+		/*
 		public void Draw(Graphics2D g) {
-			// Depth ranges:
+		}*/
 
-			if (!isVisible || (isFlickering && !flickerIsVisible))
-				return;
+		public void Draw(Graphics2D g, float depth = -1) {
+			// Depth ranges:
 
 			// Front [0.0 - 0.3][0.3 - 0.6][0.6 - 0.9][0.9    ][0.9 - 1.0] Back
 			//       [???      ][Entities ][???      ][Shadows][???      ]
@@ -154,17 +157,60 @@ namespace ZeldaOracle.Game.Entities
 			float grassDepth	= 0.28f;
 			int newImageVariant = imageVariant;
 
+			DepthLayer layer = depthLayer;
+			if (depthLayerInAir != DepthLayer.None && entity.IsInAir)
+				layer = depthLayerInAir;
+
+			float depthLayerMin			= 0.1f;
+			float depthLayerMax			= 0.9f;
+			int depthLayerCount			= (int) DepthLayer.Count;
+			float depthLayerRegionSpan	= (depthLayerMax - depthLayerMin) / (depthLayerCount);
+			float depthLayerRegionStart	= depthLayerMin + (depthLayerRegionSpan * (int) layer);
+			
+			// Newer entities draw BELOW older ones.
+			int entityIndex = entity.RoomControl.Entities.IndexOf(entity);
+			if (entityIndex < 0)
+				entityIndex = 0;
+			float entityPercent = 1.0f - ((float) entityIndex / entity.RoomControl.Entities.Count);
+			float entityDepthRegionSpan = depthLayerRegionSpan / (float) entity.RoomControl.Entities.Count;
+			
+			float extraPercision = depthLayerRegionSpan / (float) entity.RoomControl.Entities.Count;
+
+			if (depth < 0.0f) {
+				depth = depthLayerRegionStart + (entityPercent * depthLayerRegionSpan);
+				depth += entityDepthRegionSpan * 0.5f;
+			}
+
+			shadowDepth		= 0.05f;
+			ripplesDepth	= depth + (0.01f * entityDepthRegionSpan);
+			grassDepth		= depth + (0.02f * entityDepthRegionSpan);
+
+			float depthPadding = 0.01f * entityDepthRegionSpan;
+
+			entity.DrawBelow(g,
+				depth - (entityDepthRegionSpan * 0.5f) + depthPadding,
+				depth - depthPadding);
+			entity.DrawAbove(g,
+				grassDepth + depthPadding,
+				depth + (entityDepthRegionSpan * 0.5f) - depthPadding);
+
+			if (!isVisible)
+				return;
+
 			// Draw the shadow.
 			if (isShadowVisible && entity.ZPosition > 1 && entity.GameControl.RoomTicks % 2 == 0) {
 				g.DrawSprite(GameData.SPR_SHADOW, Entity.Position + shadowDrawOffset, shadowDepth);
 			}
+
+			if (isFlickering && !flickerIsVisible)
+				return;
 
 			// Change the variant if hurting.
 			if (isHurting && entity.GameControl.RoomTicks % 8 >= 4)
 				newImageVariant = GameData.VARIANT_HURT;
 
 			// Draw the sprite/animation.
-			float depth = 0.6f - 0.3f * (entity.Origin.Y / (float) (entity.RoomControl.Room.Height * GameSettings.TILE_SIZE));
+			//float depth = 0.6f - 0.3f * (entity.Origin.Y / (float) (entity.RoomControl.Room.Height * GameSettings.TILE_SIZE));
 			Vector2F drawPosition = Entity.Position - new Vector2F(0, Entity.ZPosition);
 			if (animationPlayer.SubStrip != null)
 				g.DrawAnimation(animationPlayer.SubStrip, newImageVariant, animationPlayer.PlaybackTime, drawPosition + drawOffset, depth);
@@ -295,6 +341,16 @@ namespace ZeldaOracle.Game.Entities
 		public bool IsHurting {
 			get { return isHurting; }
 			set { isHurting = value; }
+		}
+
+		public DepthLayer DepthLayer {
+			get { return depthLayer; }
+			set { depthLayer = value; }
+		}
+
+		public DepthLayer DepthLayerInAir {
+			get { return depthLayerInAir; }
+			set { depthLayerInAir = value; }
 		}
 
 		// DEBUG: draw collision boxes.

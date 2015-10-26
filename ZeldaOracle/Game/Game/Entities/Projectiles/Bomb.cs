@@ -21,7 +21,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		//-----------------------------------------------------------------------------
 
 		public Bomb() {
-			EnablePhysics(PhysicsFlags.Bounces |
+			EnablePhysics(
+				PhysicsFlags.Bounces |
 				PhysicsFlags.HasGravity |
 				PhysicsFlags.DestroyedOutsideRoom |
 				PhysicsFlags.CollideWorld |
@@ -32,7 +33,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			//OriginOffset				= new Point2I(8, 14);
 			Physics.CollisionBox		= new Rectangle2F(-3, -5, 6, 1);
 			Physics.SoftCollisionBox	= new Rectangle2F(-3, -5, 6, 1);
-			graphics.DrawOffset			= new Point2I(-8, -14);
+
+			Graphics.DepthLayer			= DepthLayer.ProjectileBomb;
+			Graphics.DrawOffset			= new Point2I(-8, -14);
 			centerOffset				= new Point2I(0, -4);
 		}
 
@@ -61,7 +64,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				}
 			}
 
-			Destroy();
+			DestroyAndTransform(bombExplosion);
 		}
 
 		private void BurnFuse() {

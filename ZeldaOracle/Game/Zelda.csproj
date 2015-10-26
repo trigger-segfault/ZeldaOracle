@@ -115,7 +115,6 @@
   <ItemGroup>
     <Compile Include="Common\Audio\AudioSystem.cs" />
     <Compile Include="Common\Audio\SongInstance.cs" />
-    <Compile Include="Common\Audio\Playlist.cs" />
     <Compile Include="Common\Audio\Song.cs" />
     <Compile Include="Common\Audio\Sound.cs" />
     <Compile Include="Common\Audio\SoundInstance.cs" />
@@ -211,10 +210,14 @@
     <Compile Include="Game\Control\Message.cs" />
     <Compile Include="Game\Control\RoomControl.cs" />
     <Compile Include="Game\Debug\GameDebug.cs" />
+    <Compile Include="Game\Entities\Collectibles\CollectibleReward.cs" />
+    <Compile Include="Game\Entities\Collectibles\CollectibleFairy.cs" />
     <Compile Include="Game\Entities\Collectibles\Collectible.cs" />
     <Compile Include="Game\Entities\Collisions\CollisionInfo.cs" />
     <Compile Include="Game\Entities\Collisions\CollisionTest.cs" />
     <Compile Include="Game\Entities\DamageInfo.cs" />
+    <Compile Include="Game\Entities\DepthLayer.cs" />
+    <Compile Include="Game\Entities\Effects\EffectCreateSomariaBlock.cs" />
     <Compile Include="Game\Entities\Effects\EffectGale.cs" />
     <Compile Include="Game\Entities\Effects\BombExplosion.cs" />
     <Compile Include="Game\Entities\Effects\Fire.cs" />
@@ -260,6 +263,7 @@
     <Compile Include="Game\Entities\Projectiles\CarriedTile.cs" />
     <Compile Include="Game\Entities\Projectiles\Projectile.cs" />
     <Compile Include="Game\Entities\Projectiles\Seed.cs" />
+    <Compile Include="Game\Entities\UnitTool.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateNormal.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateQueue.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateAction.cs" />
@@ -287,6 +291,11 @@
     <Compile Include="Game\GameStates\Transitions\RoomTransitionPush.cs" />
     <Compile Include="Game\Items\Ammo.cs" />
     <Compile Include="Game\Items\Ammos\AmmoSatchelSeeds.cs" />
+    <Compile Include="Game\Items\Drops\DropChance.cs" />
+    <Compile Include="Game\Items\Drops\DropManager.cs" />
+    <Compile Include="Game\Items\Drops\IDropCreator.cs" />
+    <Compile Include="Game\Items\Drops\Drop.cs" />
+    <Compile Include="Game\Items\Drops\DropList.cs" />
     <Compile Include="Game\Items\ItemSecondary.cs" />
     <Compile Include="Game\Items\Equipment\ItemWallet.cs" />
     <Compile Include="Game\Items\Essences\ItemEssence8.cs" />
@@ -333,6 +342,7 @@
     <Compile Include="Game\Items\Weapons\ItemFeather.cs" />
     <Compile Include="Game\Items\Weapons\ItemOcarina.cs" />
     <Compile Include="Game\Control\Controls.cs" />
+    <Compile Include="Game\Items\Weapons\SeedBasedItem.cs" />
     <Compile Include="Game\Main\GameBase.cs" />
     <Compile Include="Game\GameData.cs" />
     <Compile Include="Game\Main\GameManager.cs" />
@@ -342,6 +352,7 @@
     <Compile Include="Common\Content\ResourceBuilders\AnimationBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\SpriteBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\TilesetBuilder.cs" />
+    <Compile Include="Game\Tiles\Custom\TileSomariaBlock.cs" />
     <Compile Include="Game\Tiles\TileSpecialFlags.cs" />
     <Compile Include="Game\Tiles\Custom\TileRoller.cs" />
     <Compile Include="Game\Tiles\Custom\TileColorCube.cs" />

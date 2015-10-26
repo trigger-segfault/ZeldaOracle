@@ -33,6 +33,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			if (grabTile != null && grabTile.HasFlag(TileSpecialFlags.Pickupable)) {
 				player.CarryState.SetCarryObject(grabTile);
 				player.BeginState(player.CarryState);
+				grabTile.SpawnDrop();
 				player.RoomControl.RemoveTile(grabTile);
 				return true;
 			}

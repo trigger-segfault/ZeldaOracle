@@ -13,6 +13,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		protected string ammoID;
 		protected int amount;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
@@ -44,14 +45,19 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			this.amount			= amount;
 		}
 
+
 		//-----------------------------------------------------------------------------
-		// Virtual methods
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
 		public override void OnCollect(GameControl gameControl) {
 			//AudioSystem.PlaySound("Pickups/get_ammo");
 
 			gameControl.Inventory.GetAmmo(ammoID).Amount += amount;
+		}
+		
+		public override bool IsAvailable(GameControl gameControl) {
+			return gameControl.Inventory.IsAmmoAvailable(ammoID);
 		}
 
 		//-----------------------------------------------------------------------------

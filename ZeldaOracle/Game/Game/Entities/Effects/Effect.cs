@@ -28,11 +28,20 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		}
 		
 		// Create an effect that plays an animation and then dissapears
-		public Effect(Animation animation) : this() {
+		protected Effect(Animation animation) :
+			this(animation, DepthLayer.None)
+		{
+		}
+		
+		// Create an effect that plays an animation and then dissapears
+		public Effect(Animation animation, DepthLayer depthLayer) :
+			this()
+		{
 			destroyTimer = -1;
 			destroyOnAnimationComplete = true;
 
 			Graphics.PlayAnimation(animation);
+			Graphics.DepthLayer = depthLayer;
 		}
 
 
@@ -70,10 +79,6 @@ namespace ZeldaOracle.Game.Entities.Effects {
 				if (destroyTimer <= 0)
 					Destroy();
 			}
-		}
-
-		public override void Draw(Graphics2D g) {
-			base.Draw(g);
 		}
 
 

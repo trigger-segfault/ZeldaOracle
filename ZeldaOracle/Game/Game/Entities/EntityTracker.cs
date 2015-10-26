@@ -6,7 +6,7 @@ using System.Text;
 namespace ZeldaOracle.Game.Entities {
 	public class EntityTracker<T> where T : Entity {
 
-		private T[] entities;
+		private Entity[] entities;
 
 
 		//-----------------------------------------------------------------------------
@@ -14,7 +14,7 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public EntityTracker(int count) {
-			entities = new T[count];
+			entities = new Entity[count];
 		}
 
 
@@ -22,10 +22,12 @@ namespace ZeldaOracle.Game.Entities {
 		// Tracking
 		//-----------------------------------------------------------------------------
 
+		// Get the first entity (that's of the desired tracking type).
 		public T GetEntity() {
 			for (int i = 0; i < entities.Length; i++) {
-				if (entities[i] != null && !IsEntityDead(entities[i]))
-					return entities[i];
+				RefreshEntityAtIndex(i);
+				if (entities[i] != null && (entities[i] is T))
+					return (T) entities[i];
 			}
 			return null;
 		}
@@ -33,7 +35,8 @@ namespace ZeldaOracle.Game.Entities {
 		// Add an entity to be tracked, returning true if there was an available tracking slot.
 		public bool TrackEntity(T entity) {
 			for (int i = 0; i < entities.Length; i++) {
-				if (entities[i] == null || IsEntityDead(entities[i])) {
+				RefreshEntityAtIndex(i);
+				if (entities[i] == null) {
 					entities[i] = entity;
 					return true;
 				}
@@ -42,8 +45,20 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		// Return true if a non-null entity is considered dead/destroyed.
-		private bool IsEntityDead(T entity) {
+		private bool IsEntityDead(Entity entity) {
 			return (entity.IsDestroyed || !entity.IsInRoom);
+		}
+
+		private void RefreshEntityAtIndex(int index) {
+			Entity entity = entities[index];
+			if (entity != null && IsEntityDead(entity)) {
+				if (entity.TransformedEntity != null) {
+					entities[index] = entity.TransformedEntity;
+					RefreshEntityAtIndex(index);
+				}
+				else
+					entities[index] = null;
+			}
 		}
 
 
@@ -71,12 +86,9 @@ namespace ZeldaOracle.Game.Entities {
 			get {
 				int aliveCount = 0;
 				for (int i = 0; i < entities.Length; i++) {
-					if (entities[i] != null) {
-						if (IsEntityDead(entities[i]))
-							entities[i] = null;
-						else
-							aliveCount++;
-					}
+					RefreshEntityAtIndex(i);
+					if (entities[i] != null)
+						aliveCount++;
 				}
 				return aliveCount;
 			}

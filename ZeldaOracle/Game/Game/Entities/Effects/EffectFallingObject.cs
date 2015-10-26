@@ -19,6 +19,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		public EffectFallingObject() :
 			base(GameData.ANIM_EFFECT_FALLING_OBJECT)
 		{
+			Graphics.DepthLayer = DepthLayer.EffectFallingObject;
 		}
 		
 

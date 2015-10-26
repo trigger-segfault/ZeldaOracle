@@ -45,13 +45,14 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public NPC() {
-			// Graphics.
-			Graphics.DrawOffset = new Point2I(-8, -14);
-
 			// Physics.
 			EnablePhysics(PhysicsFlags.Solid | PhysicsFlags.HasGravity);
 			Physics.CollisionBox = new Rectangle2F(-8, -11, 16, 13);
 			Physics.SoftCollisionBox = new Rectangle2F(-10, -15, 20, 19);
+
+			// Graphics.
+			Graphics.DepthLayer	= DepthLayer.PlayerAndNPCs;
+			Graphics.DrawOffset = new Point2I(-8, -14);
 
 			// General.
 			centerOffset		= Graphics.DrawOffset + new Point2I(8, 8);
