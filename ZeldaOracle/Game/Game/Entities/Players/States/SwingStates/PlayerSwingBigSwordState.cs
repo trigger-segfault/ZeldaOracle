@@ -19,6 +19,37 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 	public class PlayerSwingBigSwordState : PlayerBaseSwingSwordState {
 
+		private const int SL = 18;
+		private const int AL = 14;
+
+		private readonly Rectangle2I[,] SWING_TOOL_BOXES_BIG = new Rectangle2I[,] {
+			{
+				new Rectangle2I(-8, -8 - SL, 16, SL),
+				new Rectangle2I(8, -8 - AL, AL, AL),
+				new Rectangle2I(8, -8, SL, 16),
+				new Rectangle2I(8, 8, AL, AL),
+				new Rectangle2I(-8, 8, 16, SL),
+			}, {
+				new Rectangle2I(8, -8, SL, 16),
+				new Rectangle2I(8, -8 - AL, AL, AL),
+				new Rectangle2I(-8, -8 - SL, 16, SL),
+				new Rectangle2I(-8 - AL, -8 - AL, AL, AL),
+				new Rectangle2I(-8 - SL, -8, SL, 16),
+			}, {
+				new Rectangle2I(-8, -8 - SL, 16, SL),
+				new Rectangle2I(-8 - AL, -8 - AL, AL, AL),
+				new Rectangle2I(-8 - SL, -8, SL, 16),
+				new Rectangle2I(-8 - AL, 8, AL, AL),
+				new Rectangle2I(-8, 8, 16, SL),
+			}, {
+				new Rectangle2I(-8 - SL, -8, SL, 16),
+				new Rectangle2I(-8 - AL, 8, AL, AL),
+				new Rectangle2I(-8, 8, 16, SL),
+				new Rectangle2I(8, 8, AL, AL),
+				new Rectangle2I(8, -8, SL, 16),
+			}
+		};
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
@@ -30,6 +61,8 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			swingAngleDurations		= new int[] { 12, 4, 4, 4, 10 };
 			weaponSwingAnimation	= GameData.ANIM_BIG_SWORD_SWING;
 			playerSwingAnimation	= GameData.ANIM_PLAYER_SWING_BIG;
+
+			swingCollisionBoxes = SWING_TOOL_BOXES_BIG;
 		}
 
 
@@ -38,6 +71,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 
 		public override void OnSwingBegin() {
+			base.OnSwingBegin();
 			AudioSystem.PlayRandomSound("Items/slash_1", "Items/slash_2", "Items/slash_3");
 		}
 

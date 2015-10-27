@@ -140,7 +140,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public virtual bool OnDig(int direction) {
 			if (!isMoving && IsDiggable) {
-
+				
+				// Remove/dig the tile.
 				if (layer == 0) {
 					roomControl.RemoveTile(this);
 
@@ -149,17 +150,17 @@ namespace ZeldaOracle.Game.Tiles {
 
 					roomControl.PlaceTile(dugTile, location, layer);
 					customSprite = GameData.SPR_TILE_DUG;
-
-					// Spawn drop.
-					Entity dropEntity = SpawnDrop();
-					if (dropEntity != null) {
-						if (dropEntity is Collectible)
-							(dropEntity as Collectible).PickupableDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
-						dropEntity.Physics.Velocity = Directions.ToVector(direction) * GameSettings.DROP_ENTITY_DIG_VELOCITY;
-					}
 				}
 				else {
 					roomControl.RemoveTile(this);
+				}
+
+				// Spawn drop.
+				Entity dropEntity = SpawnDrop();
+				if (dropEntity != null) {
+					if (dropEntity is Collectible)
+						(dropEntity as Collectible).PickupableDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
+					dropEntity.Physics.Velocity = Directions.ToVector(direction) * GameSettings.DROP_ENTITY_DIG_VELOCITY;
 				}
 
 				return true;

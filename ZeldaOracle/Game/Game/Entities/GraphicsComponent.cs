@@ -32,11 +32,7 @@ namespace ZeldaOracle.Game.Entities
 		private bool			flickerIsVisible;
 		private bool			isAnimatedWhenPaused;
 		private bool			isHurting;
-
 		private int				imageVariant;
-
-
-		private static bool		drawCollisionBoxes	= false;
 
 
 		//-----------------------------------------------------------------------------
@@ -123,8 +119,10 @@ namespace ZeldaOracle.Game.Entities
 		
 		public void Update() {
 			if ((entity.GameControl.UpdateRoom || isAnimatedWhenPaused) && entity.GameControl.AnimateRoom) {
+				// Update the animation player.
 				animationPlayer.Update();
 
+				// Update flickering.
 				if (isFlickering) {
 					flickerTimer++;
 					if (flickerTimer >= flickerAlternateDelay) {
@@ -137,100 +135,50 @@ namespace ZeldaOracle.Game.Entities
 					flickerIsVisible = true;
 				}
 
+				// Update grass effect animation.
 				if (isGrassEffectVisible && entity.Physics.IsInGrass && entity.Physics.Velocity.Length > 0.1f) {
 					grassAnimationTicks += 1;
 				}
 			}
 		}
-		/*
-		public void Draw(Graphics2D g) {
-		}*/
 
-		public void Draw(Graphics2D g, float depth = -1) {
-			// Depth ranges:
+		// Draw the entity's graphics,
+		public void Draw(RoomGraphics g) {
+			Draw(g, CurrentDepthLayer);
+		}
 
-			// Front [0.0 - 0.3][0.3 - 0.6][0.6 - 0.9][0.9    ][0.9 - 1.0] Back
-			//       [???      ][Entities ][???      ][Shadows][???      ]
-
-			float shadowDepth	= 0.9f;
-			float ripplesDepth	= 0.29f;
-			float grassDepth	= 0.28f;
-			int newImageVariant = imageVariant;
-
-			DepthLayer layer = depthLayer;
-			if (depthLayerInAir != DepthLayer.None && entity.IsInAir)
-				layer = depthLayerInAir;
-
-			float depthLayerMin			= 0.1f;
-			float depthLayerMax			= 0.9f;
-			int depthLayerCount			= (int) DepthLayer.Count;
-			float depthLayerRegionSpan	= (depthLayerMax - depthLayerMin) / (depthLayerCount);
-			float depthLayerRegionStart	= depthLayerMin + (depthLayerRegionSpan * (int) layer);
-			
-			// Newer entities draw BELOW older ones.
-			int entityIndex = entity.RoomControl.Entities.IndexOf(entity);
-			if (entityIndex < 0)
-				entityIndex = 0;
-			float entityPercent = 1.0f - ((float) entityIndex / entity.RoomControl.Entities.Count);
-			float entityDepthRegionSpan = depthLayerRegionSpan / (float) entity.RoomControl.Entities.Count;
-			
-			float extraPercision = depthLayerRegionSpan / (float) entity.RoomControl.Entities.Count;
-
-			if (depth < 0.0f) {
-				depth = depthLayerRegionStart + (entityPercent * depthLayerRegionSpan);
-				depth += entityDepthRegionSpan * 0.5f;
-			}
-
-			shadowDepth		= 0.05f;
-			ripplesDepth	= depth + (0.01f * entityDepthRegionSpan);
-			grassDepth		= depth + (0.02f * entityDepthRegionSpan);
-
-			float depthPadding = 0.01f * entityDepthRegionSpan;
-
-			entity.DrawBelow(g,
-				depth - (entityDepthRegionSpan * 0.5f) + depthPadding,
-				depth - depthPadding);
-			entity.DrawAbove(g,
-				grassDepth + depthPadding,
-				depth + (entityDepthRegionSpan * 0.5f) - depthPadding);
-
+		// Draw the entity's graphics on the given depth layer.
+		public void Draw(RoomGraphics g, DepthLayer layer) {
 			if (!isVisible)
 				return;
 
 			// Draw the shadow.
 			if (isShadowVisible && entity.ZPosition > 1 && entity.GameControl.RoomTicks % 2 == 0) {
-				g.DrawSprite(GameData.SPR_SHADOW, Entity.Position + shadowDrawOffset, shadowDepth);
+				g.DrawSprite(GameData.SPR_SHADOW, Entity.Position + shadowDrawOffset, layer);
 			}
 
 			if (isFlickering && !flickerIsVisible)
 				return;
 
 			// Change the variant if hurting.
+			int newImageVariant = imageVariant;
 			if (isHurting && entity.GameControl.RoomTicks % 8 >= 4)
 				newImageVariant = GameData.VARIANT_HURT;
 
 			// Draw the sprite/animation.
-			//float depth = 0.6f - 0.3f * (entity.Origin.Y / (float) (entity.RoomControl.Room.Height * GameSettings.TILE_SIZE));
 			Vector2F drawPosition = Entity.Position - new Vector2F(0, Entity.ZPosition);
 			if (animationPlayer.SubStrip != null)
-				g.DrawAnimation(animationPlayer.SubStrip, newImageVariant, animationPlayer.PlaybackTime, drawPosition + drawOffset, depth);
+				g.DrawAnimation(animationPlayer.SubStrip, newImageVariant, animationPlayer.PlaybackTime, drawPosition + drawOffset, layer);
 			else if (sprite != null)
-				g.DrawSprite(sprite, newImageVariant, drawPosition + drawOffset, depth);
+				g.DrawSprite(sprite, newImageVariant, drawPosition + drawOffset, layer);
 			
 			// Draw the ripples effect.
 			if (isRipplesEffectVisible && entity.Physics.IsEnabled && entity.Physics.IsInPuddle)
-				g.DrawAnimation(GameData.ANIM_EFFECT_RIPPLES, entity.GameControl.RoomTicks, entity.Origin + ripplesDrawOffset, ripplesDepth);
+				g.DrawAnimation(GameData.ANIM_EFFECT_RIPPLES, entity.GameControl.RoomTicks, entity.Origin + ripplesDrawOffset, layer);
 			
 			// Draw the grass effect.
 			if (isGrassEffectVisible && entity.Physics.IsEnabled &&entity.Physics.IsInGrass)
-				g.DrawAnimation(GameData.ANIM_EFFECT_GRASS, grassAnimationTicks, entity.Origin + grassDrawOffset, grassDepth);
-
-			if (drawCollisionBoxes) {
-				g.FillRectangle(entity.Physics.SoftCollisionBox + entity.Position, new Color(0, 0, 255, 150), depth - 0.0001f);
-				g.FillRectangle(entity.Physics.CollisionBox + entity.Position, new Color(255, 0, 0, 150), depth - 0.0002f);
-				g.FillRectangle(new Rectangle2F(entity.Origin, Vector2F.One), Color.White, depth - 0.0003f);
-				g.FillRectangle(new Rectangle2F(entity.Position, Vector2F.One), new Color(255, 255, 0), depth - 0.0004f);
-			}
+				g.DrawAnimation(GameData.ANIM_EFFECT_GRASS, grassAnimationTicks, entity.Origin + grassDrawOffset, layer);
 		}
 
 		
@@ -353,10 +301,12 @@ namespace ZeldaOracle.Game.Entities
 			set { depthLayerInAir = value; }
 		}
 
-		// DEBUG: draw collision boxes.
-		public static bool DrawCollisionBoxes {
-			get { return drawCollisionBoxes; }
-			set { drawCollisionBoxes = value; }
+		public DepthLayer CurrentDepthLayer {
+			get {
+				if (depthLayerInAir != DepthLayer.None && entity.IsInAir)
+					return depthLayerInAir;
+				return depthLayer;
+			}
 		}
 	}
 }

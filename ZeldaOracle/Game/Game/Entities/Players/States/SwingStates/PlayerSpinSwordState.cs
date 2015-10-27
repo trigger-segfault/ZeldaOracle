@@ -18,6 +18,20 @@ using ZeldaOracle.Game.Items.Weapons;
 namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 	public class PlayerSpinSwordState : PlayerBaseSwingSwordState {
+		
+		private const int SL = 16;
+		private const int AL = 13;
+		private const int SW = 10;
+		private readonly Rectangle2I[] SWING_TOOL_BOXES_SPIN = new Rectangle2I[] {
+			new Rectangle2I(8, -8 + 16 - SW, SL, SW),
+			new Rectangle2I(-8 + SW, -8 - AL, AL + 16 - SW, AL + 16 - SW),
+			new Rectangle2I(-8, -8 - SL, SW, SL),
+			new Rectangle2I(-8 - AL, -8 - AL, AL, AL + 16 - SW),
+			new Rectangle2I(-8 - SL, -8 + 16 - SW, SL, SW),
+			new Rectangle2I(-8 - AL, 8, AL + 16 - SW, AL),
+			new Rectangle2I(-8 + 16 - SW, 8, SW, SL),
+			new Rectangle2I(8, 8, AL, AL),
+		};
 
 
 		//-----------------------------------------------------------------------------
@@ -40,6 +54,14 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 				WindingOrder.Clockwise,
 				WindingOrder.Clockwise
 			};
+
+			swingCollisionBoxes = new Rectangle2I[4, 9];
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 9; j++) {
+					int angle = GMath.Wrap((i * 2) - j, Angles.AngleCount);
+					swingCollisionBoxes[i, j] = SWING_TOOL_BOXES_SPIN[angle];
+				}
+			}
 		}
 
 
@@ -59,6 +81,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 
 		public override void OnSwingBegin() {
+			base.OnSwingBegin();
 			// Play sword-spin sound.
 		}
 

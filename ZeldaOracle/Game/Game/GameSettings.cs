@@ -8,17 +8,6 @@ using ZeldaOracle.Common.Graphics;
 
 
 /*
- *	GAME TODO LIST:
- *		- Work out depth for things (Player submerge should be behind all things)
- *		- Work out position/origin/center confusions.
- *		- Player:
- *			- 
- *		- Graphics:
- *			- Drawing sprites/animations with different sprite sheets (player hurt, different zones, menu light/dark)
- *		- Resources:
- *			- Define animations in a file
- *		- Properties
- *		
  *	DEBUG KEYS:
  *		- 1: Speed up the game.
  *		- G: Read text.
@@ -86,11 +75,20 @@ namespace ZeldaOracle.Game {
 		public const int				UNIT_HURT_FLICKER_DURATION		= 32;
 		public const int				UNIT_KNOCKBACK_ANGLE_SNAP_COUNT	= 16;
 		
-		public const float				MONSTER_KNOCKBACK_SPEED				= 1.0f; // 1.3 ??
-		public const int				MONSTER_KNOCKBACK_DURATION			= 16;
+		public const float				MONSTER_KNOCKBACK_SPEED				= 2.0f; // 1.3 ??
+		public const int				MONSTER_HURT_KNOCKBACK_DURATION		= 11;
+		public const int				MONSTER_BUMP_KNOCKBACK_DURATION		= 8;
+
 		public const int				MONSTER_HURT_INVINCIBLE_DURATION	= 16;
 		public const int				MONSTER_HURT_FLICKER_DURATION		= 16;
 		public const int				MONSTER_BURN_DURATION				= 59;
+		
+		public const float				PLAYER_KNOCKBACK_SPEED				= 1.25f; // 1.3 ??
+		public const int				PLAYER_HURT_KNOCKBACK_DURATION		= 15;
+		public const int				PLAYER_BUMP_KNOCKBACK_DURATION		= 11;
+		//public const int				MONSTER_HURT_INVINCIBLE_DURATION	= 16;
+		//public const int				MONSTER_HURT_FLICKER_DURATION		= 16;
+		//public const int				MONSTER_BURN_DURATION				= 59;
 		
 		//public const int				InvincibleDuration					= 25;
 		//public const int				InvincibleControlRestoreDuration	= 8;
@@ -127,6 +125,12 @@ namespace ZeldaOracle.Game {
 		public static DrawMode DRAW_MODE_BACK_TO_FRONT = new DrawMode() {
 			BlendState		= BlendState.AlphaBlend,
 			SortMode		= SpriteSortMode.FrontToBack, // Use FrontToBack so our depth values mean 0 is below and 1 is above.
+			SamplerState	= SamplerState.PointClamp
+		};
+
+		public static DrawMode DRAW_MODE_ROOM_GRAPHICS = new DrawMode() {
+			BlendState		= BlendState.AlphaBlend,
+			SortMode		= SpriteSortMode.Deferred,
 			SamplerState	= SamplerState.PointClamp
 		};
 	}

@@ -74,11 +74,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				player.Movement.IsStrafing		= true;
 				player.Movement.MoveCondition	= PlayerMoveCondition.FreeMovement;
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
-				player.toolAnimation.SubStripIndex = player.Direction;
-				player.toolAnimation.Play();
+				
+				player.EquipTool(player.ToolVisual);
+
 				direction = Player.Direction;
 				if (!(previousState is PlayerLedgeJumpState))
-					player.toolAnimation.Animation = weaponAnimation;
+					player.ToolVisual.PlayAnimation(weaponAnimation);
+
+				player.ToolVisual.AnimationPlayer.SubStripIndex = direction;
 			}
 			else {
 				if (chargeTimer >= ChargeTime)
@@ -94,7 +97,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			
 			// The player can hold his sword while ledge jumping.
 			if (!(newState is PlayerLedgeJumpState))
-				player.toolAnimation.Animation = null;
+				player.UnequipTool(player.ToolVisual);
 		}
 
 		public override void Update() {
@@ -105,7 +108,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// Charge up the sword.
 			chargeTimer++;
 				if (chargeTimer == ChargeTime) {
-				player.toolAnimation.Animation = GameData.ANIM_SWORD_CHARGED;
+				player.ToolVisual.AnimationPlayer.Animation = GameData.ANIM_SWORD_CHARGED;
 				// TODO: play charge sound.
 			}
 			

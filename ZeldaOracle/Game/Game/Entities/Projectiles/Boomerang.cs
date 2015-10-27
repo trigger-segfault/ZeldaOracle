@@ -148,13 +148,15 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			base.Update();
 		}
 
-		public override void DrawAbove(Graphics2D g, float depthLow, float depthHigh) {
+		public override void Draw(RoomGraphics g) {
+			base.Draw(g);
+
 			for (int i = 0; i < collectibles.Count; i++) {
 				Collectible collectible = collectibles[i];
 				collectible.SetPositionByCenter(Center);
 				collectible.ZPosition = zPosition;
 				float percent = i / (float) collectibles.Count;
-				collectible.Graphics.Draw(g, depthLow + ((depthHigh - depthLow) * percent));
+				collectible.Graphics.Draw(g, Graphics.CurrentDepthLayer);
 			}
 		}
 

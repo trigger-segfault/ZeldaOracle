@@ -194,20 +194,22 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			base.Update();
 		}
 
-		public override void DrawBelow(Graphics2D g, float depthLow, float depthHigh) {
+		public override void Draw(RoomGraphics g) {
+			base.Draw(g);
+
 			// Draw 3 links between hook and player (alternating which one is visible).
 			Vector2F hookStartPos = HookStartPosition;
 			int linkIndex = (GameControl.RoomTicks % 3) + 1;
 			float percent = (linkIndex / 4.0f);
 			Vector2F linkPos = hookStartPos + (percent * (position - hookStartPos));
-			g.DrawSprite(GameData.SPR_SWITCH_HOOK_LINK, linkPos - new Vector2F(0, zPosition), depthHigh);
+			g.DrawSprite(GameData.SPR_SWITCH_HOOK_LINK, linkPos - new Vector2F(0, zPosition), Graphics.DepthLayer);
 
 			// Draw collectible.
 			if (collectible != null) {
 				Vector2F pos = Center + Directions.ToVector(direction) * 4;
 				collectible.SetPositionByCenter(pos);
 				collectible.ZPosition = zPosition;
-				collectible.Graphics.Draw(g, (depthLow + depthHigh) * 0.5f);
+				collectible.Graphics.Draw(g, Graphics.CurrentDepthLayer);
 			}
 		}
 

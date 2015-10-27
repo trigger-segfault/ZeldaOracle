@@ -650,7 +650,6 @@ namespace ZeldaOracle.Game.Entities {
 					isColliding	= true;
 					if (flags.HasFlag(PhysicsFlags.ReboundSolid) && reboundVelocity.X == 0.0f)
 						reboundVelocity.X = -velocity.X;
-					velocity.X = 0.0f;
 
 					if (myBox.Center.X < block.Center.X) {
 						// TODO: David refactor this hackish 'if statement' to prevent the player from jittering when getting pushed vertically.
@@ -668,6 +667,8 @@ namespace ZeldaOracle.Game.Entities {
 								collisionInfo[Directions.Left].SetTileCollision(tile, Directions.Left);
 						}
 					}
+
+					velocity.X = 0.0f;
 					return true;
 				}
 			}
@@ -677,7 +678,6 @@ namespace ZeldaOracle.Game.Entities {
 					isColliding	= true;
 					if (flags.HasFlag(PhysicsFlags.ReboundSolid) && reboundVelocity.Y == 0.0f)
 						reboundVelocity.Y = -velocity.Y;
-					velocity.Y = 0.0f;
 
 					if (myBox.Center.Y < block.Center.Y) {
 						entity.Y = block.Top - collisionBox.Bottom;
@@ -689,6 +689,8 @@ namespace ZeldaOracle.Game.Entities {
 						if (!HasFlags(PhysicsFlags.AutoDodge) || !PerformCollisionDodge(block, Directions.Up))
 							collisionInfo[Directions.Up].SetTileCollision(tile, Directions.Up);
 					}
+
+					velocity.Y = 0.0f;
 					return true;
 				}
 			}
@@ -752,6 +754,9 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool CanDodgeCollision(Rectangle2F block, int direction) {
+			if (Math.Abs(velocity.X) > 0.001f && Math.Abs(velocity.Y) > 0.001f)
+				return false; // Only dodge when moving horizontally or vertically.
+
 			float		dodgeDist	= autoDodgeDistance;
 			Rectangle2F	objBox		= Rectangle2F.Translate(collisionBox, entity.Position);
 			Vector2F	pos			= entity.Position;
@@ -776,6 +781,9 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		private bool PerformCollisionDodge(Rectangle2F block, int direction) {
+			if (Math.Abs(velocity.X) > 0.001f && Math.Abs(velocity.Y) > 0.001f)
+				return false; // Only dodge when moving horizontally or vertically.
+
 			float		dodgeDist	= autoDodgeDistance;
 			Rectangle2F	objBox		= Rectangle2F.Translate(collisionBox, entity.Position);
 			Vector2F	pos			= entity.Position;

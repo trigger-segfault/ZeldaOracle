@@ -91,17 +91,8 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		// Called every step to draw the entity.
-		public virtual void Draw(Graphics2D g) {
+		public virtual void Draw(RoomGraphics g) {
 			graphics.Draw(g);
-		}
-		
-		
-		// Called to draw above the entity.
-		public virtual void DrawBelow(Graphics2D g, float depthLow, float depthHigh) {
-		}
-		
-		// Called to draw above the entity.
-		public virtual void DrawAbove(Graphics2D g, float depthLow, float depthHigh) {
 		}
 
 		// Called when the entity enters the room.
@@ -191,46 +182,6 @@ namespace ZeldaOracle.Game.Entities {
 		
 		public void SetPositionByCenter(Vector2F center) {
 			position = center - centerOffset;
-		}
-		
-		
-		//-----------------------------------------------------------------------------
-		// Depth Calculations
-		//-----------------------------------------------------------------------------
-
-		public static float CalculateDepth(Entity entity, DepthLayer depthLayer) {
-			float depthLayerMin			= 0.1f;
-			float depthLayerMax			= 0.9f;
-			int depthLayerCount			= (int) DepthLayer.Count;
-			float depthLayerRegionSpan	= (depthLayerMax - depthLayerMin) / (depthLayerCount);
-			float depthLayerRegionStart	= depthLayerMin + (depthLayerRegionSpan * (int) depthLayer);
-			
-			// Newer entities draw BELOW older ones.
-			int entityIndex = entity.RoomControl.Entities.IndexOf(entity);
-			if (entityIndex < 0)
-				entityIndex = 0;
-			float entityPercent = 1.0f - ((float) entityIndex / entity.RoomControl.Entities.Count);
-			float entityDepthRegionSpan = depthLayerRegionSpan / (float) entity.RoomControl.Entities.Count;
-			
-			float depth = depthLayerRegionStart + (entityPercent * depthLayerRegionSpan);
-			depth += entityDepthRegionSpan * 0.5f;
-
-			return depth;
-
-			/*
-			float shadowDepth	= 0.05f;
-			float ripplesDepth	= depth + (0.01f * entityDepthRegionSpan);
-			float grassDepth	= depth + (0.02f * entityDepthRegionSpan);
-
-			float depthPadding = 0.01f * entityDepthRegionSpan;
-			
-			entity.DrawBelow(g,
-				depth - (entityDepthRegionSpan * 0.5f) + depthPadding,
-				depth - depthPadding);
-			entity.DrawAbove(g,
-				grassDepth + depthPadding,
-				depth + (entityDepthRegionSpan * 0.5f) - depthPadding);
-			*/
 		}
 
 		
@@ -345,6 +296,10 @@ namespace ZeldaOracle.Game.Entities {
 
 		public Vector2F Center {
 			get { return position + centerOffset; }
+		}
+
+		public Vector2F CenterOffset {
+			get { return centerOffset; }
 		}
 	
 		public int ActionAlignDistance {

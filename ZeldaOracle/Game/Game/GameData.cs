@@ -1053,6 +1053,9 @@ namespace ZeldaOracle.Game {
 		// Monster animations.
 		public static Animation ANIM_MONSTER_OCTOROK;
 
+		// Monster items.
+		public static Animation ANIM_MONSTER_SWORD_HOLD;
+
 		// Colllectible animations.
 		public static Animation ANIM_COLLECTIBLE_FAIRY;
 

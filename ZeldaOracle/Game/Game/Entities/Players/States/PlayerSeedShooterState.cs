@@ -88,12 +88,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_AIM);
 			player.Graphics.SubStripIndex = angle;
-			player.toolAnimation.Play(GameData.ANIM_SEED_SHOOTER);
-			player.toolAnimation.SubStripIndex = angle;
+			player.EquipTool(player.ToolVisual);
+			player.ToolVisual.PlayAnimation(GameData.ANIM_SEED_SHOOTER);
+			player.ToolVisual.AnimationPlayer.SubStripIndex = angle;
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.toolAnimation.Animation		= null;
+			player.UnequipTool(player.ToolVisual);
 			player.SyncAnimationWithDirection	= true;
 			player.Movement.MoveCondition		= PlayerMoveCondition.FreeMovement;
 		}
@@ -130,7 +131,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 				// Make player and seed-shooter face the aim angle.
 				player.Graphics.SubStripIndex = angle;
-				player.toolAnimation.SubStripIndex = angle;
+				player.ToolVisual.AnimationPlayer.SubStripIndex = angle;
 
 				// Shoot when the button is released.
 				if (!weapon.IsEquipped || !weapon.IsButtonDown()) {

@@ -29,13 +29,15 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void OnBegin(PlayerState previousState) {
 			player.Movement.MoveCondition = PlayerMoveCondition.NoControl; // TODO: allows sideways movement for stabbing when jumping.
-			player.toolAnimation.Play(GameData.ANIM_SWORD_STAB);
+			player.EquipTool(player.ToolVisual);
+			player.ToolVisual.PlayAnimation(GameData.ANIM_SWORD_STAB);
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_STAB);
 		}
 		
 		public override void OnEnd(PlayerState newState) {
 			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
+			player.UnequipTool(player.ToolVisual);
 		}
 
 		public override void Update() {
@@ -48,7 +50,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				}
 				else {
 					// Put sword away.
-					player.toolAnimation.Animation = null;
+					player.UnequipTool(player.ToolVisual);
 					player.BeginNormalState();
 				}
 			}

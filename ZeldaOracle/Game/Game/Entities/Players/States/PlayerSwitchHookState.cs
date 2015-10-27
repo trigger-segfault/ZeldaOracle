@@ -190,10 +190,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 		}
 
-		public override void DrawOver(Graphics2D g) {
+		public override void DrawOver(RoomGraphics g) {
 			if (isSwitching) {
-				float depth = Entity.CalculateDepth(player, DepthLayer.RisingTile);
-				hookedEntity.Graphics.Draw(g, depth);
+				hookedEntity.Graphics.Draw(g, DepthLayer.RisingTile);
 			}
 		}
 

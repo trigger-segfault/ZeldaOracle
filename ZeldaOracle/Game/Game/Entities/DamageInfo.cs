@@ -21,20 +21,20 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public DamageInfo(int amount) {
-			this.amount			= amount;
-			this.hasSource		= false;
-			this.applyKnockBack	= true;
-			this.knockbackDuration	= GameSettings.UNIT_KNOCKBACK_DURATION;
+			this.amount				= amount;
+			this.hasSource			= false;
+			this.applyKnockBack		= true;
+			this.knockbackDuration	= -1;
 			this.flicker			= true;
 			this.flickerDuration	= GameSettings.MONSTER_HURT_FLICKER_DURATION;
 		}
 
 		public DamageInfo(int amount, Vector2F sourcePosition) {
-			this.amount			= amount;
-			this.hasSource		= true;
-			this.sourcePosition	= sourcePosition;
-			this.applyKnockBack	= true;
-			this.knockbackDuration	= GameSettings.UNIT_KNOCKBACK_DURATION;
+			this.amount				= amount;
+			this.hasSource			= true;
+			this.sourcePosition		= sourcePosition;
+			this.applyKnockBack		= true;
+			this.knockbackDuration	= -1;
 			this.flicker			= true;
 			this.flickerDuration	= GameSettings.MONSTER_HURT_FLICKER_DURATION;
 		}

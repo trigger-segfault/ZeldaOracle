@@ -11,11 +11,13 @@ using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Game.Entities.Players.States.SwingStates;
+using ZeldaOracle.Game.Entities.Players.Tools;
 using ZeldaOracle.Common.Audio;
 
 
@@ -41,8 +43,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private int useDirection;
 		// The current angle that the player wants face to use items.
 		private int useAngle;
-		// TODO: better name for this.
-		private bool syncAnimationWithDirection;
 		// The player doesn't need to be moving to transition.
 		private bool autoRoomTransition;
 		// The position the player was at when he entered the room.
@@ -59,6 +59,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		private bool isStateControlled; // Is the player fully being controlled by its current state?
 
+		// Player Tools
+		private PlayerToolShield	toolShield;
+		private PlayerToolSword		toolSword;
+		private PlayerToolVisual	toolVisual;
+
+		// Player States
 		private PlayerNormalState			stateNormal;
 		private PlayerBusyState				stateBusy;
 		private PlayerSwimState				stateSwim;
@@ -67,7 +73,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerSwingSwordState		stateSwingSword;
 		private PlayerSwingBigSwordState	stateSwingBigSword;
 		private PlayerSwingCaneState		stateSwingCane;
-		private PlayerSwingMagicRodState		stateSwingMagicRod;
+		private PlayerSwingMagicRodState	stateSwingMagicRod;
 		private PlayerHoldSwordState		stateHoldSword;
 		private PlayerSwordStabState		stateSwordStab;
 		private PlayerSpinSwordState		stateSpinSword;
@@ -80,9 +86,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		private PlayerSwimmingSkills	swimmingSkills;
 		private PlayerTunics			tunic;
-
-		// TEMPORARY: Change tool drawing to something else
-		public AnimationPlayer toolAnimation;
 
 
 		//-----------------------------------------------------------------------------
@@ -109,14 +112,21 @@ namespace ZeldaOracle.Game.Entities.Players {
 			movement			= new PlayerMoveComponent(this);
 			syncAnimationWithDirection = true;
 
+			toolShield = new PlayerToolShield();
+			toolSword = new PlayerToolSword();
+			toolVisual = new PlayerToolVisual();
+
 			// Unit properties.
-			originOffset		= new Point2I(0, -3);
-			centerOffset		= new Point2I(0, -8);
-			Health				= 4 * 3;
-			MaxHealth			= 4 * 3;
-			swimmingSkills		= PlayerSwimmingSkills.CantSwim;
-			tunic				= PlayerTunics.GreenTunic;
-			moveAnimation		= GameData.ANIM_PLAYER_DEFAULT;
+			originOffset			= new Point2I(0, -3);
+			centerOffset			= new Point2I(0, -8);
+			Health					= 4 * 3;
+			MaxHealth				= 4 * 3;
+			swimmingSkills			= PlayerSwimmingSkills.CantSwim;
+			tunic					= PlayerTunics.GreenTunic;
+			moveAnimation			= GameData.ANIM_PLAYER_DEFAULT;
+			knockbackSpeed			= GameSettings.PLAYER_KNOCKBACK_SPEED;
+			hurtKnockbackDuration	= GameSettings.PLAYER_HURT_KNOCKBACK_DURATION;
+			bumpKnockbackDuration	= GameSettings.PLAYER_BUMP_KNOCKBACK_DURATION;
 
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2F(-4, -10, 8, 9);
@@ -124,6 +134,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Physics.CollideWithWorld	= true;
 			Physics.CollideWithEntities	= true;
 			Physics.HasGravity			= true;
+			Physics.AutoDodges			= true;
 
 			// Graphics.
 			Graphics.DepthLayer			= DepthLayer.PlayerAndNPCs;
@@ -151,8 +162,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateGrab			= new PlayerGrabState();
 			stateCarry			= new PlayerCarryState();
 			stateRespawnDeath	= new PlayerRespawnDeathState();
-
-			toolAnimation	= new AnimationPlayer();
 
 			Physics.CustomCollisionFunction = CheckRoomEdgeCollisions;
 		}
@@ -460,7 +469,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 		
 		public override void Initialize() {
 			base.Initialize();
+			
+			// Initialize tools.
+			toolShield.Initialize(this);
+			toolSword.Initialize(this);
+			toolVisual.Initialize(this);
 
+			// Begin the default player state.
 			BeginState(stateNormal);
 			previousState = stateNormal;
 		}
@@ -509,6 +524,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 					Physics.Gravity = GameSettings.PLAYER_CAPE_GRAVITY;
 			}
 
+			if (Graphics.Animation == GameData.ANIM_PLAYER_SHIELD_BLOCK ||
+				Graphics.Animation == GameData.ANIM_PLAYER_SHIELD_LARGE_BLOCK)
+			{
+				EquipTool(toolShield);
+			}
+			else if (toolShield.IsEquipped) {
+				UnequipTool(toolShield);
+			}
+
+
 			// Sync the graphics image variant with the current tunic.
 			switch (tunic) {
 			case PlayerTunics.GreenTunic:	Graphics.ImageVariant = GameData.VARIANT_GREEN;	break;
@@ -516,22 +541,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 			case PlayerTunics.BlueTunic:	Graphics.ImageVariant = GameData.VARIANT_BLUE;	break;
 			}
 
-			// Graphics.
-			toolAnimation.Update(); // TEMPORARY: Change tool drawing to something else
-			if (syncAnimationWithDirection)
-				Graphics.SubStripIndex = direction;
-			
 			// Update superclass.
 			base.Update();
 		}
 
-		public override void Draw(Graphics2D g) {
-			// TEMPORARY: Change tool drawing to something else
-			if (toolAnimation.Animation != null) {
-				float toolDepth = Entity.CalculateDepth(this, DepthLayer.PlayerSwingItem);
-				g.DrawAnimation(toolAnimation, position - new Vector2F(8, 16 + ZPosition), toolDepth);
-			}
-
+		public override void Draw(RoomGraphics g) {
 			base.Draw(g);
 			state.DrawOver(g);
 		}
@@ -557,15 +571,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public int MoveDirection {
 			get { return movement.MoveDirection; }
 		}
-		
-		public int Direction {
-			get { return direction; }
-			set {
-				direction = value;
-				if (syncAnimationWithDirection)
-					graphics.SubStripIndex = direction;
-			}
-		}
 
 		public int UseAngle {
 			get { return useAngle; }
@@ -582,11 +587,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		
 		public bool AllowRoomTransition {
 			get { return movement.MoveMode.CanRoomChange; }
-		}
-		
-		public bool SyncAnimationWithDirection {
-			get { return syncAnimationWithDirection; }
-			set { syncAnimationWithDirection = value; }
 		}
 		
 		public bool AutoRoomTransition {
@@ -700,6 +700,18 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerRespawnDeathState RespawnDeathState {
 			get { return stateRespawnDeath; }
+		}
+
+		public PlayerToolSword ToolSword {
+			get { return toolSword; }
+		}
+		
+		public PlayerToolShield ToolShield {
+			get { return toolShield; }
+		}
+		
+		public PlayerToolVisual ToolVisual {
+			get { return toolVisual; }
 		}
 	}
 }

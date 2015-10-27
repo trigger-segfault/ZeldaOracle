@@ -90,15 +90,15 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 			// Set the tool animation.
 			if (level == Item.Level1)
-				Player.toolAnimation.Play(GameData.ANIM_SLINGSHOT_1);
+				Player.ToolVisual.PlayAnimation(GameData.ANIM_SLINGSHOT_1);
 			else
-				Player.toolAnimation.Play(GameData.ANIM_SLINGSHOT_2);
-			Player.toolAnimation.SubStripIndex = direction;
+				Player.ToolVisual.PlayAnimation(GameData.ANIM_SLINGSHOT_2);
+			Player.ToolVisual.AnimationPlayer.SubStripIndex = direction;
 
 			// Begin the player busy state.
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 			Player.BusyState.SetEndAction(delegate(PlayerState playerState) {
-				playerState.Player.toolAnimation.Animation = null;
+				playerState.Player.UnequipTool(playerState.Player.ToolVisual);
 			});
 			Player.BeginBusyState(10);
 		}

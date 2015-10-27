@@ -9,6 +9,7 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.Transitions;
 using ZeldaOracle.Game.Main;
@@ -26,6 +27,9 @@ using ZeldaOracle.Game.GameStates.RoomStates;
 
 namespace ZeldaOracle.Game.Debug {
 	public class GameDebug {
+
+		private static bool DrawCollisionBoxes = false;
+
 		
 		public static void UpdateRoomDebugKeys(RoomControl roomControl) {
 			GameControl gameControl = roomControl.GameControl;
@@ -84,7 +88,7 @@ namespace ZeldaOracle.Game.Debug {
 			}
 			// Y: Show/hide collision boxes.
 			if (Keyboard.IsKeyPressed(Keys.Y)) {
-				GraphicsComponent.DrawCollisionBoxes = !GraphicsComponent.DrawCollisionBoxes;
+				DrawCollisionBoxes = !DrawCollisionBoxes;
 			}
 			// J: Spawn a heart collectible.
 			if (Keyboard.IsKeyPressed(Keys.K)) {
@@ -105,10 +109,8 @@ namespace ZeldaOracle.Game.Debug {
 				collectible.ZPosition = 100;
 			}
 			// 0: Spawn a monster.
-			if (Keyboard.IsKeyPressed(Keys.D0)) {
-				Monster monster		= new Monster();
-				monster.MaxHealth	= 10;
-				monster.Health		= 10;
+			if (Keyboard.IsKeyPressed(Keys.D0) || Keyboard.IsKeyPressed(Keys.Add)) {
+				Monster monster		= new TestMonster();
 				Vector2F position	= new Vector2F(32, 32) + new Vector2F(8, 14);
 				roomControl.SpawnEntity(monster, position);
 			}
@@ -309,5 +311,28 @@ namespace ZeldaOracle.Game.Debug {
 			return room;
 		}
 
+		public static void DrawRoom(Graphics2D g, RoomControl roomControl) {
+			if (DrawCollisionBoxes) {
+				// Draw entity collision boxes.
+				List<Entity> entities = roomControl.Entities;
+				for (int i = entities.Count - 1; i >= 0; i--) {
+					Entity entity = entities[i];
+
+					g.FillRectangle(entity.Physics.SoftCollisionBox + entity.Position, new Color(0, 0, 255, 150));
+					g.FillRectangle(entity.Physics.CollisionBox + entity.Position, new Color(255, 0, 0, 150));
+					g.FillRectangle(new Rectangle2F(entity.Origin, Vector2F.One), Color.White);
+					g.FillRectangle(new Rectangle2F(entity.Position, Vector2F.One), new Color(255, 255, 0));
+
+					if (entity is Unit) {
+						Unit unit = (Unit) entity;
+						foreach (UnitTool tool in unit.Tools) {
+							if (tool.IsPhysicsEnabled) {
+								g.FillRectangle(tool.PositionedCollisionBox, new Color(255, 0, 255, 150));
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }
