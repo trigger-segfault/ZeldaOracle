@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Input;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Effects;
+using ZeldaOracle.Game.Entities.Monsters.Tools;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
@@ -16,12 +17,30 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 	public class TestMonster : Monster {
 
+		/*
+		 * -8, -8
+			SUBSTRIP repeat; ADD frame, 4, (0, 0), ( 12,   4);
+			SUBSTRIP repeat; ADD frame, 4, (2, 0), ( -4, -12);
+			SUBSTRIP repeat; ADD frame, 4, (4, 0), (-12,   4);
+			SUBSTRIP repeat; ADD frame, 4, (6, 0), (  3,  14); END;
+		*/
+
+		private readonly Rectangle2I[] SWORD_BOXES = new Rectangle2I[] {
+			new Rectangle2I( 12 - 8,   4 - 8 + 7, 11, 2),
+			new Rectangle2I(  4 - 8 + 7, -12 - 8 + 3 + 2, 2, 11),
+			new Rectangle2I(-12 - 8 + 3 + 2,   4 - 8 + 7, 11, 2),
+			new Rectangle2I( -4 - 8 + 7,  14 - 8, 2, 8),
+		};
+
+
 		private Keys[] movementKeys;
 		private float moveSpeed;
 		private bool isMoving;
 		private bool[] moveAxes;
 		private int moveAngle;
 		private int moveDirection;
+		private MonsterToolSword toolSword;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -29,11 +48,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		
 		public TestMonster() {
 
-			moveSpeed		= 1.0f;
+			moveSpeed		= 0.75f;
 			isMoving		= false;
 			moveAxes		= new bool[] { false, false };
 			moveDirection	= Directions.Right;
 			moveAngle		= Angles.Right;
+
+			toolSword = new MonsterToolSword();
 
 			movementKeys = new Keys[] {
 				Keys.NumPad6, // Right
@@ -77,6 +98,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public override void Initialize() {
 			base.Initialize();
+
+			toolSword.Initialize(this);
 		}
 
 		public override void Update() {
@@ -93,13 +116,38 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			if (isMoving) {
 				Vector2F moveVector = Angles.ToVector(moveAngle, true) * moveSpeed;
 				physics.Velocity = moveVector;
-				if (!Graphics.IsAnimationPlaying)
+				if (!Graphics.IsAnimationPlaying) {
 					Graphics.PlayAnimation();
+					if (toolSword.IsEquipped)
+						toolSword.AnimationPlayer.Play();
+				}
 			}
 			else {
 				physics.Velocity = Vector2F.Zero;
-				if (Graphics.IsAnimationPlaying)
+				if (Graphics.IsAnimationPlaying) {
 					Graphics.StopAnimation();
+					if (toolSword.IsEquipped)
+						toolSword.AnimationPlayer.Stop();
+				}
+			}
+
+			// NumPad7: Shoot a projectile
+			if (Keyboard.IsKeyPressed(Keys.NumPad7)) {
+				Arrow arrow = new Arrow();
+				arrow.Owner				= this;
+				arrow.Position			= Center + (Directions.ToVector(direction) * 8.0f);
+				arrow.ZPosition			= zPosition;
+				arrow.Direction			= direction;
+				arrow.Physics.Velocity	= Directions.ToVector(direction) * GameSettings.PROJECTILE_ARROW_SPEED;
+				RoomControl.SpawnEntity(arrow);
+			}
+
+			// NumPad /: Equip/Unequip a sword
+			if (Keyboard.IsKeyPressed(Keys.Divide)) {
+				if (!toolSword.IsEquipped)
+					EquipTool(toolSword);
+				else
+					UnequipTool(toolSword);
 			}
 
 			base.Update();

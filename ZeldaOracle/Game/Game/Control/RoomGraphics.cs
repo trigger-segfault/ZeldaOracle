@@ -11,6 +11,9 @@ using ZeldaOracle.Game.Control;
 namespace ZeldaOracle.Game.Entities {
 
 	public class RoomGraphics {
+
+		// Possible Improvement:
+		//  - Use an object pool of Drawing Instructions
 		
 		//-----------------------------------------------------------------------------
 		// Internal Drawing Instruction Class
@@ -38,8 +41,8 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 		
 		public RoomControl roomControl;
-		private DrawingInstruction[] layerHeads;
-		private DrawingInstruction[] layerTails;
+		private DrawingInstruction[] layerHeads; // The heads of the drawing instruction queues for each layer.
+		private DrawingInstruction[] layerTails; // The tails of the drawing instruction queues for each layer.
 
 
 		//-----------------------------------------------------------------------------
@@ -114,7 +117,8 @@ namespace ZeldaOracle.Game.Entities {
 		
 		// Draw an animation player.
 		public void DrawAnimation(AnimationPlayer animationPlayer, int imageVariant, Vector2F position, DepthLayer depth) {
-			DrawAnimation(animationPlayer.SubStrip, imageVariant, animationPlayer.PlaybackTime, position, depth);
+			if (animationPlayer.SubStrip != null)
+				DrawAnimation(animationPlayer.SubStrip, imageVariant, animationPlayer.PlaybackTime, position, depth);
 		}
 		
 		// Draw an sprite or animation at the given playback time.

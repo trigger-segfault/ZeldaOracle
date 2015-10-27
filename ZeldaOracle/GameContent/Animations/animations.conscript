@@ -368,6 +368,13 @@ ANIM slingshot_2;
 	SUBSTRIP repeat; ADD frame, 9, (6, 6), (-12, 0);
 	SUBSTRIP repeat; ADD frame, 9, (7, 6), (3, 13); END;
 
+ANIM monster_sword_hold;
+	SUBSTRIP repeat; ADD frame, 8, (0, 0), ( 8,  4); ADD frame, 8, (0, 0), ( 10,   4);
+	SUBSTRIP repeat; ADD frame, 8, (2, 0), ( 4, -8); ADD frame, 8, (2, 0), ( 4,  -10);
+	SUBSTRIP repeat; ADD frame, 8, (4, 0), (-8,  4); ADD frame, 8, (4, 0), (-10,   4);
+	SUBSTRIP repeat; ADD frame, 8, (6, 0), (-4,  7); ADD frame, 8, (6, 0), ( -4,   9); END;
+
+
 #==============================================================
 # Projectile + Item Animations
 #==============================================================
@@ -603,7 +610,8 @@ MAKEDYNAMIC 4, (2, 0); END;
 SPRITESHEET "basic_monsters";
 
 ANIM monster_octorok; SUBSTRIP repeat;
-	ADD strip, 8, 2, (0, 1);
+	ADD strip, 8, 2, (8, 1); ## Moblin
+	### ADD strip, 8, 2, (0, 1); ## Octorok
 	MAKEDYNAMIC 4, (2, 0); END;
 
 

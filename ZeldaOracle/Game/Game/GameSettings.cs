@@ -75,11 +75,20 @@ namespace ZeldaOracle.Game {
 		public const int				UNIT_HURT_FLICKER_DURATION		= 32;
 		public const int				UNIT_KNOCKBACK_ANGLE_SNAP_COUNT	= 16;
 		
-		public const float				MONSTER_KNOCKBACK_SPEED				= 1.0f; // 1.3 ??
-		public const int				MONSTER_KNOCKBACK_DURATION			= 16;
+		public const float				MONSTER_KNOCKBACK_SPEED				= 2.0f; // 1.3 ??
+		public const int				MONSTER_HURT_KNOCKBACK_DURATION		= 11;
+		public const int				MONSTER_BUMP_KNOCKBACK_DURATION		= 8;
+
 		public const int				MONSTER_HURT_INVINCIBLE_DURATION	= 16;
 		public const int				MONSTER_HURT_FLICKER_DURATION		= 16;
 		public const int				MONSTER_BURN_DURATION				= 59;
+		
+		public const float				PLAYER_KNOCKBACK_SPEED				= 1.25f; // 1.3 ??
+		public const int				PLAYER_HURT_KNOCKBACK_DURATION		= 15;
+		public const int				PLAYER_BUMP_KNOCKBACK_DURATION		= 11;
+		//public const int				MONSTER_HURT_INVINCIBLE_DURATION	= 16;
+		//public const int				MONSTER_HURT_FLICKER_DURATION		= 16;
+		//public const int				MONSTER_BURN_DURATION				= 59;
 		
 		//public const int				InvincibleDuration					= 25;
 		//public const int				InvincibleControlRestoreDuration	= 8;

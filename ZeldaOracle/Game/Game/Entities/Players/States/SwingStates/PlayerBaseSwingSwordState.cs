@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
@@ -43,9 +44,9 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 
 		protected void CutTileAtLocation(Point2I location) {
-				Tile tile = player.RoomControl.GetTopTile(location);
-				if (tile != null)
-					tile.OnSwordHit();
+			Tile tile = player.RoomControl.GetTopTile(location);
+			if (tile != null)
+				tile.OnSwordHit();
 		}
 
 
@@ -54,7 +55,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 
 		public virtual void OnHitMonster(Monster monster) {
-			monster.TriggerInteraction(monster.HandlerSword, Weapon as ItemSword);
+			//monster.TriggerInteraction(monster.HandlerSword, Weapon as ItemSword);
 		}
 
 
@@ -62,9 +63,9 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnSwingBegin() {
-			AudioSystem.PlayRandomSound("Items/slash_1", "Items/slash_2", "Items/slash_3");
-
+		
+		public override UnitTool GetSwingTool() {
+			return player.ToolSword;
 		}
 
 		public override void OnSwingEnd() {
@@ -80,6 +81,8 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		}
 		
 		public override void OnSwingEntityPeak(int angle, Rectangle2F collisionBox) {
+			return;
+
 			// Collide with entities.
 			for (int i = 0; i < player.RoomControl.EntityCount; i++) {
 				Entity e = player.RoomControl.Entities[i];

@@ -473,6 +473,8 @@ public class Graphics2D {
 
 	// Draws the specified filled rectangle.
 	public void FillRectangle(Rectangle2F rect, Color color, double depth = 0.0) {
+		rect.X = GMath.Round(rect.X);
+		rect.Y = GMath.Round(rect.Y);
 		DrawImage(white1x1, rect, Vector2F.Zero, 0.0, color, SpriteEffects.None, depth);
 		//DrawImage(white1x1, rect.Center + 0.5, new Vector2D(0.5, 0.5), rect.Size, 0, color, SpriteEffects.None, depth);
 	}

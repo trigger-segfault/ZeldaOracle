@@ -9,6 +9,7 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.Transitions;
 using ZeldaOracle.Game.Main;
@@ -321,6 +322,15 @@ namespace ZeldaOracle.Game.Debug {
 					g.FillRectangle(entity.Physics.CollisionBox + entity.Position, new Color(255, 0, 0, 150));
 					g.FillRectangle(new Rectangle2F(entity.Origin, Vector2F.One), Color.White);
 					g.FillRectangle(new Rectangle2F(entity.Position, Vector2F.One), new Color(255, 255, 0));
+
+					if (entity is Unit) {
+						Unit unit = (Unit) entity;
+						foreach (UnitTool tool in unit.Tools) {
+							if (tool.IsPhysicsEnabled) {
+								g.FillRectangle(tool.PositionedCollisionBox, new Color(255, 0, 255, 150));
+							}
+						}
+					}
 				}
 			}
 		}

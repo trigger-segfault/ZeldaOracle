@@ -8,10 +8,25 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
+
+	// Reactions:
+	// - None
+	// - Kill
+	// - Damage
+	// - Bump
+	// - Intercept projectiles
+	// - Burn
+	// - Stun
+	// - Gale
+
+	// SPECIAL
+	//  - SwitchHook
+	//  - 
 
 	public enum InteractionType {
 		None = -1,
@@ -82,7 +97,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		//-----------------------------------------------------------------------------
 
 		private Properties properties;
+
+		// Settings.
+		private bool isKnockbackable; // Can the monster be knocked back?
 		private int contactDamage;
+
+		// Burn State.
 		private bool isBurning;
 		private AnimationPlayer effectAnimation;
 
@@ -117,6 +137,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Physics.SoftCollisionBox	= new Rectangle2I(-6, -11, 12, 11);
 			Physics.CollideWithWorld	= true;
 			Physics.CollideWithRoomEdge	= true;
+			Physics.AutoDodges			= true;
 			Physics.HasGravity			= true;
 			Physics.IsDestroyedInHoles	= true;
 
@@ -133,11 +154,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Monster & unit settings.
 			knockbackSpeed			= GameSettings.MONSTER_KNOCKBACK_SPEED;
-			knockbackDuration		= GameSettings.MONSTER_KNOCKBACK_DURATION;
+			hurtKnockbackDuration	= GameSettings.MONSTER_HURT_KNOCKBACK_DURATION;
+			bumpKnockbackDuration	= GameSettings.MONSTER_BUMP_KNOCKBACK_DURATION;
 			hurtInvincibleDuration	= GameSettings.MONSTER_HURT_INVINCIBLE_DURATION;
 			hurtFlickerDuration		= GameSettings.MONSTER_HURT_FLICKER_DURATION;
 			contactDamage			= 1;
-
+			
+			isKnockbackable	= true;
 			isBurning		= false;
 			effectAnimation	= new AnimationPlayer();
 
@@ -205,6 +228,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public void Burn(int damage) {
 			if (IsInvincible || isBurning)
 				return;
+
+			// TODO: Enter burn state.
 
 			// Apply damage.
 			DamageInfo damageInfo = new DamageInfo(damage);
@@ -345,12 +370,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			health = healthMax;
 
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_OCTOROK);
-
-			UnitTool testTool = new UnitTool();
-			testTool.Initialize(this);
-			testTool.AnimationPlayer.Play(GameData.ANIM_SWORD_HOLD);
-			testTool.AnimationPlayer.Pause();
-			Tools = new UnitTool[] { testTool };
 		}
 
 		public override void Die() {
@@ -366,17 +385,78 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public override void Update() {
 			
-			// Check collisions with player.
+			// 1. MonsterTools to PlayerTools
+			// 2. MonsterTools to Player
+			// 4. PlayerTools to Monster
+			// 2. Monster to Player
+
+			bool parry = false;
 			Player player = RoomControl.Player;
-			if (physics.IsCollidingWith(player, CollisionBoxType.Soft)) {
-				player.Hurt(contactDamage, Center);
+
+			// Collide my tools with player's tools.
+			foreach (UnitTool monsterTool in Tools) {
+				if (parry)
+					break;
+
+				if (monsterTool.IsPhysicsEnabled) {
+					foreach (UnitTool playerTool in player.Tools) {
+						if (playerTool.IsPhysicsEnabled &&
+							monsterTool.PositionedCollisionBox.Intersects(
+							playerTool.PositionedCollisionBox))
+						{
+							if ((monsterTool.ToolType == UnitToolType.Sword || monsterTool.ToolType == UnitToolType.Shield) &&
+								(playerTool.ToolType == UnitToolType.Sword || playerTool.ToolType == UnitToolType.Shield) &&
+								!IsBeingKnockedBack && !player.IsBeingKnockedBack)
+							{
+								Vector2F contactPoint = playerTool.PositionedCollisionBox.Center;
+								Bump(contactPoint);
+								player.Bump(contactPoint);
+								Effect effectCling = new Effect(GameData.ANIM_EFFECT_CLING, DepthLayer.EffectCling);
+								RoomControl.SpawnEntity(effectCling, contactPoint);
+								parry = true;
+							}
+						}
+					}
+				}
 			}
-			for (int i = 0; i < Tools.Length; i++) {
-				UnitTool tool = Tools[i];
-				if (tool.ToolType == UnitToolType.Sword) {
+
+			// Collide my tools with player.
+			foreach (UnitTool tool in Tools) {
+				if (parry)
+					break;
+
+				if (tool.IsPhysicsEnabled && tool.ToolType == UnitToolType.Sword) {
 					if (player.Physics.PositionedSoftCollisionBox.Intersects(tool.PositionedCollisionBox))
 						player.Hurt(contactDamage, Center);
 				}
+			}
+
+			// Collide with player's tools.
+			foreach (UnitTool tool in player.Tools) {
+				if (parry || IsInvincible || IsBeingKnockedBack)
+					break;
+
+				if (tool.IsPhysicsEnabled && (tool.ToolType == UnitToolType.Sword || tool.ToolType == UnitToolType.Shield)) {
+					if (Physics.PositionedSoftCollisionBox.Intersects(tool.PositionedCollisionBox)) {
+						if (tool.ToolType == UnitToolType.Sword) {
+							Hurt(1, player.Center);
+						}
+						else if (tool.ToolType == UnitToolType.Shield) {
+							Vector2F contactPoint = (player.Center + Center) * 0.5f;
+							if (!IsBeingKnockedBack)
+								Bump(contactPoint);
+							if (!player.IsBeingKnockedBack)
+								player.Bump(contactPoint);
+							parry = true;
+						}
+						//TriggerInteraction(HandlerSword, Weapon as ItemSword);
+					}
+				}
+			}
+
+			// Check collisions with player.
+			if (!parry && physics.IsCollidingWith(player, CollisionBoxType.Soft)) {
+				player.Hurt(contactDamage, Center);
 			}
 
 			base.Update();

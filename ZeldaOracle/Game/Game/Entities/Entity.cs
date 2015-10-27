@@ -297,6 +297,10 @@ namespace ZeldaOracle.Game.Entities {
 		public Vector2F Center {
 			get { return position + centerOffset; }
 		}
+
+		public Vector2F CenterOffset {
+			get { return centerOffset; }
+		}
 	
 		public int ActionAlignDistance {
 			get { return actionAlignDistance; }

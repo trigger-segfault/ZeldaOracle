@@ -14,6 +14,7 @@ using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Items.Weapons;
+using ZeldaOracle.Game.Entities.Units;
 
 namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 	public class PlayerSwingState : PlayerState {
@@ -107,6 +108,26 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			new Rectangle2I(-3, 12, 12, 19)
 		};
 
+		private readonly Rectangle2I[,] SWING_TOOL_BOXES = new Rectangle2I[,] {
+			{
+				new Rectangle2I(-8, -8 - 10, 16, 10),
+				new Rectangle2I(8, -8 - 10, 10, 16 + 6),
+				new Rectangle2I(8, 8 - 10, 19, 10),
+			}, {
+				new Rectangle2I(8, -8, 10, 16),
+				new Rectangle2I(-8 + 10 - 6, -8 - 10, 16 + 6, 10),
+				new Rectangle2I(-8, -8 - 19, 10, 19),
+			}, {
+				new Rectangle2I(-8, -8 - 10, 16, 10),
+				new Rectangle2I(-8 - 10, -8 - 10, 10, 16 + 6),
+				new Rectangle2I(-8 - 19, 8 - 10, 19, 10),
+			}, {
+				new Rectangle2I(-8 - 10, -8, 10, 16),
+				new Rectangle2I(-8 - 10, 8, 16 + 6, 10),
+				new Rectangle2I(8 - 10, 8, 10, 19),
+			}
+		};
+
 		
 		//-----------------------------------------------------------------------------
 		// Members
@@ -132,8 +153,12 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		protected WindingOrder[]	swingWindingOrders;
 		protected Animation			weaponSwingAnimation;
 		protected Animation			playerSwingAnimation;
+
+		protected Rectangle2I[,]	swingCollisionBoxes;
+
+		protected UnitTool			playerTool;
 	
-		
+
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
@@ -149,6 +174,8 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			weaponSwingAnimation		= GameData.ANIM_SWORD_SWING;
 			playerSwingAnimation		= GameData.ANIM_PLAYER_SWING;
 			timedActions				= new Dictionary<int, Action>();
+
+			swingCollisionBoxes			= SWING_TOOL_BOXES;
 
 			swingWindingOrders = new WindingOrder[] {
 				WindingOrder.Clockwise,
@@ -178,8 +205,11 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 			player.Direction = direction;
 			player.Graphics.PlayAnimation(playerSwingAnimation);
-			player.toolAnimation.Play(weaponSwingAnimation);
-			player.toolAnimation.SubStripIndex = direction;
+
+			playerTool = GetSwingTool();
+			player.EquipTool(playerTool);
+			playerTool.PlayAnimation(weaponSwingAnimation);
+			playerTool.AnimationPlayer.SubStripIndex = direction;
 
 			OnSwingBegin();
 			
@@ -191,6 +221,12 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			// Invoke any actions set to occur at time 0.
 			if (timedActions.ContainsKey(0))
 				timedActions[0].Invoke();
+
+			
+				
+			Rectangle2I toolBox = swingCollisionBoxes[swingDirection, Math.Min(swingCollisionBoxes.Length - 1, swingAngleIndex)];
+			toolBox.Point += (Point2I) player.CenterOffset;
+			playerTool.CollisionBox = toolBox;
 		}
 		
 		
@@ -198,8 +234,12 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		// Virtual methods
 		//-----------------------------------------------------------------------------
 		
+		public virtual UnitTool GetSwingTool() {
+			return player.ToolVisual;
+		}
+
 		public virtual void OnSwingBegin() {
-			AudioSystem.PlayRandomSound("Items/slash_1", "Items/slash_2", "Items/slash_3");
+
 		}
 
 		public virtual void OnSwingEnd() {
@@ -220,13 +260,14 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
+			playerTool = player.ToolVisual;
 			player.Movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
 			Swing(player.UseDirection);
 		}
 		
 		public override void OnEnd(PlayerState newState) {
 			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
-			player.toolAnimation.Animation = null;
+			player.UnequipTool(playerTool);
 		}
 
 		public override void Update() {
@@ -240,7 +281,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			// Check for changing swing angles.
 			bool changedAngles = false;
 			int t = 0;
-			int time = (int) player.toolAnimation.PlaybackTime;
+			int time = (int) playerTool.AnimationPlayer.PlaybackTime;
 			for (int i = 0; i < swingAngleDurations.Length; i++) {
 				if (time == t && swingAngleIndex != i) {
 					swingAngleIndex	= i;
@@ -259,13 +300,20 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			}
 
 			// Check for a swing entity peak (entity peaks happen 1 frame after changing angles).
+			/*
 			if (time - swingAngleStartTime == 1) {
 				Rectangle2F box = swingAngleCollisionBoxes[swingAngle];
 				if (lunge && swingAngleIndex == swingAngleDurations.Length - 1)
 					box = swingLungeCollisionBoxes[swingDirection];
+				
 				box.Point += player.Center;
 				OnSwingEntityPeak(swingAngle, box);
 			}
+			*/
+				
+			Rectangle2I toolBox = swingCollisionBoxes[swingDirection, Math.Min(swingCollisionBoxes.Length - 1, swingAngleIndex)];
+			toolBox.Point += (Point2I) player.CenterOffset;
+			playerTool.CollisionBox = toolBox;
 
 			// Invoke any occuring timed actions.
 			if (timedActions.ContainsKey(time))
@@ -276,7 +324,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 				Swing(player.UseDirection);
 
 			// End the swing.
-			if (player.toolAnimation.IsDone && player.Graphics.IsAnimationDone)
+			if (playerTool.AnimationPlayer.IsDone && player.Graphics.IsAnimationDone)
 				OnSwingEnd();
 		}
 

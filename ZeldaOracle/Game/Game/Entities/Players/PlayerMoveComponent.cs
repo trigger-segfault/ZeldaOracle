@@ -274,10 +274,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (!isStrafing && !mode.IsStrafing && isMoving)
 				player.Direction = moveDirection;
 
-			// Don't auto-dodge collisions when moving at an angle.
-			player.Physics.SetFlags(PhysicsFlags.AutoDodge,
-				Angles.IsHorizontal(moveAngle) || Angles.IsVertical(moveAngle));
-
 			// Update movement or acceleration.
 			if (allowMovementControl && (isMoving || autoAccelerate)) {
 				if (!isMoving)

@@ -8,7 +8,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Game.Main;
 
-namespace ZeldaOracle.Game.Entities {
+namespace ZeldaOracle.Game.Entities.Units {
 
 	// NOTE: These will probably be changed
 	[Flags]
@@ -24,7 +24,7 @@ namespace ZeldaOracle.Game.Entities {
 	public class Unit : Entity {
 		
 		// List of tools that the unit is carrying/holding.
-		private UnitTool[]	tools;
+		private HashSet<UnitTool> tools;
 
 		// The direction the unit is facing.
 		protected int		direction;
@@ -37,6 +37,9 @@ namespace ZeldaOracle.Game.Entities {
 		protected int		knockbackDuration;
 		protected int		hurtInvincibleDuration;
 		protected int		hurtFlickerDuration;
+		
+		protected int		hurtKnockbackDuration;
+		protected int		bumpKnockbackDuration;
 
 		private int			knockbackTimer;
 		private int			invincibleTimer;
@@ -50,7 +53,6 @@ namespace ZeldaOracle.Game.Entities {
 		
 		public Unit() {
 			EnablePhysics();
-			
 
 			knockbackSpeed			= GameSettings.UNIT_KNOCKBACK_SPEED;
 			knockbackDuration		= GameSettings.UNIT_KNOCKBACK_DURATION;
@@ -61,7 +63,7 @@ namespace ZeldaOracle.Game.Entities {
 			hurtFlickerTimer		= 0;
 			invincibleTimer			= 0;
 			knockbackVelocity		= Vector2F.Zero;
-			tools					= new UnitTool[0];
+			tools					= new HashSet<UnitTool>();
 			
 			syncAnimationWithDirection = false;
 			direction		= Directions.Right;
@@ -73,9 +75,46 @@ namespace ZeldaOracle.Game.Entities {
 
 
 		//-----------------------------------------------------------------------------
+		// Tools
+		//-----------------------------------------------------------------------------
+
+		public bool IsToolEquipped(UnitTool tool) {
+			return tools.Contains(tool);
+		}
+
+		public void EquipTool(UnitTool tool) {
+			if (tools.Add(tool)) {
+				tool.Unit = this;
+				tool.IsEquipped = true;
+				tool.OnEquip();
+			}
+		}
+		
+		public void UnequipTool(UnitTool tool) {
+			if (tools.Remove(tool)) {
+				tool.IsEquipped = false;
+				tool.OnUnequip();
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Virtual methods
 		//-----------------------------------------------------------------------------
 		
+		public void Knockback(int duration, float speed, Vector2F sourcePosition) {
+			knockbackDuration	= duration;
+			knockbackTimer		= duration;
+			knockbackVelocity	= (Center - sourcePosition).Normalized;
+			knockbackVelocity  *= speed;
+			knockbackVelocity	= Vector2F.SnapDirectionByCount(
+				knockbackVelocity, GameSettings.UNIT_KNOCKBACK_ANGLE_SNAP_COUNT);
+		}
+		
+		public void Bump(Vector2F sourcePosition) {
+			Knockback(bumpKnockbackDuration, knockbackSpeed, sourcePosition);
+		}
+
 		public void Hurt(int damage) {
 			Hurt(new DamageInfo(damage));
 		}
@@ -85,19 +124,18 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public void Hurt(DamageInfo damage) {
-			if (IsInvincible)
+			if (IsInvincible || IsBeingKnockedBack)
 				return;
 
 			// Knockback.
 			if (damage.ApplyKnockBack) {
-				Vector2F knockbackVelocity = Vector2F.Zero;
-				if (damage.HasSource) {
-					knockbackVelocity = (Center - damage.SourcePosition).Normalized;
-					knockbackVelocity *= knockbackSpeed;
-					knockbackVelocity = Vector2F.SnapDirectionByCount(
-						knockbackVelocity, GameSettings.UNIT_KNOCKBACK_ANGLE_SNAP_COUNT);
-				}
-				Knockback(knockbackVelocity, damage.KnockbackDuration);
+				Vector2F damageSourcePos = Center;
+				int duration = hurtKnockbackDuration;
+				if (damage.HasSource)
+					damageSourcePos = damage.SourcePosition;
+				if (damage.KnockbackDuration >= 0)
+					duration = damage.KnockbackDuration;
+				Knockback(duration, knockbackSpeed, damageSourcePos);
 			}
 
 			// Damage.
@@ -109,12 +147,6 @@ namespace ZeldaOracle.Game.Entities {
 					graphics.IsHurting = true;
 				}
 			}
-		}
-
-		public void Knockback(Vector2F velocity, int duration) {
-			knockbackVelocity	= velocity;
-			knockbackDuration	= duration;
-			knockbackTimer		= duration;
 		}
 
 		public virtual void RespawnDeath() {
@@ -170,9 +202,8 @@ namespace ZeldaOracle.Game.Entities {
 			}
 
 			// Update tools.
-			for (int i = 0; i < tools.Length; i++) {
-				tools[i].Update();
-			}
+			foreach (UnitTool tool in tools)
+				tool.Update();
 			
 			if (syncAnimationWithDirection)
 				Graphics.SubStripIndex = direction;
@@ -181,14 +212,25 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public override void Draw(RoomGraphics g) {
+			DepthLayer depthLayer = Graphics.CurrentDepthLayer;
+
+			// Draw tools under.
+			foreach (UnitTool tool in tools) {
+				if (!tool.DrawAboveUnit) {
+					Vector2F drawPosition = position - new Vector2F(0, zPosition) + Graphics.DrawOffset + tool.DrawOffset;
+					g.DrawAnimation(tool.AnimationPlayer, drawPosition, depthLayer);
+				}
+			}
+
 			// Draw entity.
 			base.Draw(g);
 
-			// Draw tools.
-			DepthLayer depthLayer = Graphics.CurrentDepthLayer;
-			for (int i = 0; i < tools.Length; i++) {
-				Vector2F drawPosition = position - new Vector2F(0, zPosition) + Graphics.DrawOffset + tools[i].DrawOffset;
-				g.DrawAnimation(tools[i].AnimationPlayer, drawPosition, depthLayer);
+			// Draw tools over.
+			foreach (UnitTool tool in tools) {
+				if (tool.DrawAboveUnit) {
+					Vector2F drawPosition = position - new Vector2F(0, zPosition) + Graphics.DrawOffset + tool.DrawOffset;
+					g.DrawAnimation(tool.AnimationPlayer, drawPosition, depthLayer);
+				}
 			}
 		}
 
@@ -237,9 +279,8 @@ namespace ZeldaOracle.Game.Entities {
 			set { syncAnimationWithDirection = value; }
 		}
 		
-		public UnitTool[] Tools {
+		public HashSet<UnitTool> Tools {
 			get { return tools; }
-			set { tools = value; }
 		}
 	}
 }

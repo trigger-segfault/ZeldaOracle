@@ -228,6 +228,7 @@
     <Compile Include="Game\Entities\GraphicsComponent.cs" />
     <Compile Include="Game\Entities\Monsters\TestMonster.cs" />
     <Compile Include="Game\Entities\Monsters\Monster.cs" />
+    <Compile Include="Game\Entities\Monsters\Tools\MonsterToolSword.cs" />
     <Compile Include="Game\Entities\NPC.cs" />
     <Compile Include="Game\Entities\Players\PlayerSwimmingSkills.cs" />
     <Compile Include="Game\Entities\Players\PlayerTunics.cs" />
@@ -254,6 +255,9 @@
     <Compile Include="Game\Entities\Players\States\SwingStates\PlayerSpinSwordState.cs" />
     <Compile Include="Game\Entities\Players\States\SwingStates\PlayerSwingSwordState.cs" />
     <Compile Include="Game\Entities\Players\States\SwingStates\PlayerBaseSwingSwordState.cs" />
+    <Compile Include="Game\Entities\Players\Tools\PlayerToolSword.cs" />
+    <Compile Include="Game\Entities\Players\Tools\PlayerToolVisual.cs" />
+    <Compile Include="Game\Entities\Players\Tools\PlayerToolShield.cs" />
     <Compile Include="Game\Entities\Projectiles\MagicRodFire.cs" />
     <Compile Include="Game\Entities\Projectiles\SwitchHookProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\Boomerang.cs" />
@@ -265,7 +269,7 @@
     <Compile Include="Game\Entities\Projectiles\CarriedTile.cs" />
     <Compile Include="Game\Entities\Projectiles\Projectile.cs" />
     <Compile Include="Game\Entities\Projectiles\Seed.cs" />
-    <Compile Include="Game\Entities\UnitTool.cs" />
+    <Compile Include="Game\Entities\Units\UnitTool.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateNormal.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateQueue.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateAction.cs" />
@@ -278,7 +282,7 @@
     <Compile Include="Game\Entities\Effects\Effect.cs" />
     <Compile Include="Game\Entities\Entity.cs" />
     <Compile Include="Game\Entities\PhysicsComponent.cs" />
-    <Compile Include="Game\Entities\Unit.cs" />
+    <Compile Include="Game\Entities\Units\Unit.cs" />
     <Compile Include="Game\GameStates\GameState.cs" />
     <Compile Include="Game\GameStates\GameStateQueue.cs" />
     <Compile Include="Game\GameStates\GameStateStack.cs" />
