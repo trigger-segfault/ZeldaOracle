@@ -41,8 +41,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private int useDirection;
 		// The current angle that the player wants face to use items.
 		private int useAngle;
-		// TODO: better name for this.
-		private bool syncAnimationWithDirection;
 		// The player doesn't need to be moving to transition.
 		private bool autoRoomTransition;
 		// The position the player was at when he entered the room.
@@ -518,18 +516,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Graphics.
 			toolAnimation.Update(); // TEMPORARY: Change tool drawing to something else
-			if (syncAnimationWithDirection)
-				Graphics.SubStripIndex = direction;
 			
 			// Update superclass.
 			base.Update();
 		}
 
-		public override void Draw(Graphics2D g) {
+		public override void Draw(RoomGraphics g) {
 			// TEMPORARY: Change tool drawing to something else
 			if (toolAnimation.Animation != null) {
-				float toolDepth = Entity.CalculateDepth(this, DepthLayer.PlayerSwingItem);
-				g.DrawAnimation(toolAnimation, position - new Vector2F(8, 16 + ZPosition), toolDepth);
+				g.DrawAnimation(toolAnimation, position - new Vector2F(8, 16 + ZPosition), DepthLayer.PlayerSwingItem);
 			}
 
 			base.Draw(g);
@@ -557,15 +552,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public int MoveDirection {
 			get { return movement.MoveDirection; }
 		}
-		
-		public int Direction {
-			get { return direction; }
-			set {
-				direction = value;
-				if (syncAnimationWithDirection)
-					graphics.SubStripIndex = direction;
-			}
-		}
 
 		public int UseAngle {
 			get { return useAngle; }
@@ -582,11 +568,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		
 		public bool AllowRoomTransition {
 			get { return movement.MoveMode.CanRoomChange; }
-		}
-		
-		public bool SyncAnimationWithDirection {
-			get { return syncAnimationWithDirection; }
-			set { syncAnimationWithDirection = value; }
 		}
 		
 		public bool AutoRoomTransition {

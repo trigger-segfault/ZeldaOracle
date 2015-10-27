@@ -239,9 +239,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 			else {
 				// Check movement keys.
 				if (!CheckMoveKey(Directions.Left, allowMovementControl) && !CheckMoveKey(Directions.Right, allowMovementControl))
-					moveAxes[0] = false; // x-axis
+					moveAxes[Axes.X] = false;
 				if (!CheckMoveKey(Directions.Up, allowMovementControl) && !CheckMoveKey(Directions.Down, allowMovementControl))
-					moveAxes[1] = false; // y-axis
+					moveAxes[Axes.Y] = false;
 			}
 
 			// Update movement or acceleration.

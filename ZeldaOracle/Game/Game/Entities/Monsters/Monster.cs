@@ -118,6 +118,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Physics.CollideWithWorld	= true;
 			Physics.CollideWithRoomEdge	= true;
 			Physics.HasGravity			= true;
+			Physics.IsDestroyedInHoles	= true;
 
 			// With player
 			// Top: 4 overlap
@@ -341,7 +342,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public override void Initialize() {
 			base.Initialize();
 
+			health = healthMax;
+
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_OCTOROK);
+
+			UnitTool testTool = new UnitTool();
+			testTool.Initialize(this);
+			testTool.AnimationPlayer.Play(GameData.ANIM_SWORD_HOLD);
+			testTool.AnimationPlayer.Pause();
+			Tools = new UnitTool[] { testTool };
 		}
 
 		public override void Die() {
@@ -362,17 +371,23 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			if (physics.IsCollidingWith(player, CollisionBoxType.Soft)) {
 				player.Hurt(contactDamage, Center);
 			}
+			for (int i = 0; i < Tools.Length; i++) {
+				UnitTool tool = Tools[i];
+				if (tool.ToolType == UnitToolType.Sword) {
+					if (player.Physics.PositionedSoftCollisionBox.Intersects(tool.PositionedCollisionBox))
+						player.Hurt(contactDamage, Center);
+				}
+			}
 
 			base.Update();
 		}
 
-		public override void Draw(Graphics2D g) {
+		public override void Draw(RoomGraphics g) {
 			base.Draw(g);
 
 			// Draw burn effect.
 			if (effectAnimation.Animation != null) {
-				float depth = Entity.CalculateDepth(this, DepthLayer.EffectMonsterBurnFlame);
-				g.DrawAnimation(effectAnimation, Center - new Vector2F(0, zPosition), depth);
+				g.DrawAnimation(effectAnimation, Center - new Vector2F(0, zPosition), DepthLayer.EffectMonsterBurnFlame);
 			}
 		}
 

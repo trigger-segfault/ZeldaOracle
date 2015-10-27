@@ -7,12 +7,21 @@ using ZeldaOracle.Common.Graphics;
 
 
 namespace ZeldaOracle.Game.Entities {
+
+	public enum UnitToolType {
+		Sword,
+		Shield,
+		Visual,
+	}
+
 	public class UnitTool {
 		
 		private Unit			unit;
 		private AnimationPlayer	animationPlayer;
 		private bool			drawAboveUnit;
 		private Rectangle2F		collisionBox;
+		private Point2I			drawOffset;
+		private UnitToolType	toolType;
 
 
 		//-----------------------------------------------------------------------------
@@ -24,10 +33,18 @@ namespace ZeldaOracle.Game.Entities {
 			drawAboveUnit	= false;
 			animationPlayer	= new AnimationPlayer();
 			collisionBox	= new Rectangle2F(-1, -1, 2, 2);
+			toolType		= UnitToolType.Visual;
 		}
 
-
 		
+
+		public void Initialize(Unit unit) {
+			this.unit = unit;
+		}
+
+		public void Update() {
+			animationPlayer.SubStripIndex = unit.Direction;
+		}
 		
 
 		//-----------------------------------------------------------------------------
@@ -71,6 +88,16 @@ namespace ZeldaOracle.Game.Entities {
 
 		public Rectangle2F PositionedCollisionBox {
 			get { return Rectangle2F.Translate(collisionBox, unit.Position); }
+		}
+
+		public Point2I DrawOffset {
+			get { return drawOffset; }
+			set { drawOffset = value; }
+		}
+
+		public UnitToolType ToolType {
+			get { return toolType; }
+			set { toolType = value; }
 		}
 	}
 }

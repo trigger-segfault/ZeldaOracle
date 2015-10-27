@@ -39,7 +39,8 @@ namespace ZeldaOracle.Game.Control {
 		private ViewControl		viewControl;
 		private int				requestedTransitionDirection;
 		private int				entityCount;
-		
+		private RoomGraphics	roomGraphics;
+
 		private event Action<Player>	eventPlayerRespawn;
 		private event Action<int>		eventRoomTransitioning;
 
@@ -56,6 +57,7 @@ namespace ZeldaOracle.Game.Control {
 			entities		= new List<Entity>();
 			eventTiles		= new List<EventTile>();
 			viewControl		= new ViewControl();
+			roomGraphics	= new RoomGraphics(this);
 			requestedTransitionDirection = 0;
 			eventPlayerRespawn		= null;
 			eventRoomTransitioning	= null;
@@ -496,10 +498,13 @@ namespace ZeldaOracle.Game.Control {
 			
 			// Draw entities.
 			g.End();
-			g.Begin(GameSettings.DRAW_MODE_BACK_TO_FRONT);
-			for (int i = 0; i < entities.Count; ++i) {
-				entities[i].Draw(g);
-			}
+			g.Begin(GameSettings.DRAW_MODE_ROOM_GRAPHICS);
+
+			// Draw entities in reverse order (because newer entities are drawn below older ones).
+			roomGraphics.Clear();
+			for (int i = entities.Count - 1; i >= 0; i--)
+				entities[i].Draw(roomGraphics);
+			roomGraphics.DrawAll(g);
 			
 			// Draw event tiles.
 			g.End();
@@ -507,6 +512,8 @@ namespace ZeldaOracle.Game.Control {
 			for (int i = 0; i < eventTiles.Count; ++i) {
 				eventTiles[i].Draw(g);
 			}
+
+			GameDebug.DrawRoom(g, this);
 
 			// Draw HUD.
 			g.End();

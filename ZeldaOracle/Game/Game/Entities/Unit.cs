@@ -28,6 +28,7 @@ namespace ZeldaOracle.Game.Entities {
 
 		// The direction the unit is facing.
 		protected int		direction;
+		protected bool		syncAnimationWithDirection;
 
 		protected int		health;
 		protected int		healthMax;
@@ -50,6 +51,7 @@ namespace ZeldaOracle.Game.Entities {
 		public Unit() {
 			EnablePhysics();
 			
+
 			knockbackSpeed			= GameSettings.UNIT_KNOCKBACK_SPEED;
 			knockbackDuration		= GameSettings.UNIT_KNOCKBACK_DURATION;
 			hurtInvincibleDuration	= GameSettings.UNIT_HURT_INVINCIBLE_DURATION;
@@ -60,7 +62,9 @@ namespace ZeldaOracle.Game.Entities {
 			invincibleTimer			= 0;
 			knockbackVelocity		= Vector2F.Zero;
 			tools					= new UnitTool[0];
-
+			
+			syncAnimationWithDirection = false;
+			direction		= Directions.Right;
 			health			= 1;
 			healthMax		= 1;
 			direction		= Directions.Right;
@@ -165,11 +169,27 @@ namespace ZeldaOracle.Game.Entities {
 				}
 			}
 
+			// Update tools.
+			for (int i = 0; i < tools.Length; i++) {
+				tools[i].Update();
+			}
+			
+			if (syncAnimationWithDirection)
+				Graphics.SubStripIndex = direction;
+
 			base.Update();
 		}
 
-		public override void Draw(Graphics2D g) {
+		public override void Draw(RoomGraphics g) {
+			// Draw entity.
 			base.Draw(g);
+
+			// Draw tools.
+			DepthLayer depthLayer = Graphics.CurrentDepthLayer;
+			for (int i = 0; i < tools.Length; i++) {
+				Vector2F drawPosition = position - new Vector2F(0, zPosition) + Graphics.DrawOffset + tools[i].DrawOffset;
+				g.DrawAnimation(tools[i].AnimationPlayer, drawPosition, depthLayer);
+			}
 		}
 
 
@@ -201,6 +221,20 @@ namespace ZeldaOracle.Game.Entities {
 		
 		public bool IsHurtFlickering {
 			get { return (hurtFlickerTimer > 0); }
+		}
+		
+		public int Direction {
+			get { return direction; }
+			set {
+				direction = value;
+				if (syncAnimationWithDirection)
+					graphics.SubStripIndex = direction;
+			}
+		}
+		
+		public bool SyncAnimationWithDirection {
+			get { return syncAnimationWithDirection; }
+			set { syncAnimationWithDirection = value; }
 		}
 		
 		public UnitTool[] Tools {

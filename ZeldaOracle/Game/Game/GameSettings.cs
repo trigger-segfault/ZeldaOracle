@@ -8,17 +8,6 @@ using ZeldaOracle.Common.Graphics;
 
 
 /*
- *	GAME TODO LIST:
- *		- Work out depth for things (Player submerge should be behind all things)
- *		- Work out position/origin/center confusions.
- *		- Player:
- *			- 
- *		- Graphics:
- *			- Drawing sprites/animations with different sprite sheets (player hurt, different zones, menu light/dark)
- *		- Resources:
- *			- Define animations in a file
- *		- Properties
- *		
  *	DEBUG KEYS:
  *		- 1: Speed up the game.
  *		- G: Read text.
@@ -127,6 +116,12 @@ namespace ZeldaOracle.Game {
 		public static DrawMode DRAW_MODE_BACK_TO_FRONT = new DrawMode() {
 			BlendState		= BlendState.AlphaBlend,
 			SortMode		= SpriteSortMode.FrontToBack, // Use FrontToBack so our depth values mean 0 is below and 1 is above.
+			SamplerState	= SamplerState.PointClamp
+		};
+
+		public static DrawMode DRAW_MODE_ROOM_GRAPHICS = new DrawMode() {
+			BlendState		= BlendState.AlphaBlend,
+			SortMode		= SpriteSortMode.Deferred,
 			SamplerState	= SamplerState.PointClamp
 		};
 	}

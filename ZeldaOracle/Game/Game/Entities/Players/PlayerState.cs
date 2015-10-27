@@ -47,7 +47,7 @@ namespace ZeldaOracle.Game.Entities.Players
 
 		public virtual void Update() {}
 		
-		public virtual void DrawOver(Graphics2D g) {}
+		public virtual void DrawOver(RoomGraphics g) {}
 
 
 		//-----------------------------------------------------------------------------

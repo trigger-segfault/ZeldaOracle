@@ -176,7 +176,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 		}
 		
-		public override void DrawOver(Graphics2D g) {
+		public override void DrawOver(RoomGraphics g) {
 			Vector2F pos = player.Position + objectDrawOffset + carryObject.Graphics.DrawOffset;
 			pos.Y -= player.ZPosition;
 
@@ -190,13 +190,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 
 			// Draw the object.
-			float depth = Entity.CalculateDepth(player, DepthLayer.ProjectileCarriedTile);
 			if (carryObject.Graphics.AnimationPlayer.SubStrip != null) {
 				g.DrawAnimation(carryObject.Graphics.AnimationPlayer.SubStrip, carryObject.Graphics.ImageVariant,
-					carryObject.Graphics.AnimationPlayer.PlaybackTime, pos, depth);
+					carryObject.Graphics.AnimationPlayer.PlaybackTime, pos, DepthLayer.ProjectileCarriedTile);
 			}
 			else if (carryObject.Graphics.Sprite != null)
-				g.DrawSprite(carryObject.Graphics.Sprite, carryObject.Graphics.ImageVariant, pos, depth);
+				g.DrawSprite(carryObject.Graphics.Sprite, carryObject.Graphics.ImageVariant, pos, DepthLayer.ProjectileCarriedTile);
 		}
 
 
