@@ -51,7 +51,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		
 		protected void CheckInitialCollision() {
 			if (physics.IsPlaceMeetingSolid(position, physics.CollisionBox)) {
-				Point2I tileLocation = RoomControl.GetTileLocation(Origin);
+				Point2I tileLocation = RoomControl.GetTileLocation(Position);
 				Tile tile = RoomControl.GetTopTile(tileLocation);
 				OnCollideTile(tile, true);
 			}

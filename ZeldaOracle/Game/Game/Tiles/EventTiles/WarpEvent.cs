@@ -62,10 +62,12 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		public void SetupRoomOnEnter() {
 			Player player = RoomControl.Player;
 			warpEnabled = false;
+
+			Vector2F center = position + new Vector2F(8, 8);
+			player.SetPositionByCenter(center);
 			
 			// Position the player.
 			if (warpType == WarpType.Entrance) {
-				player.Position = position + new Point2I(8, 16);
 				if (edgeDirection == Directions.Down)
 					player.Position += Directions.ToVector(edgeDirection) * 8.0f;
 				else
@@ -74,7 +76,6 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			}
 			else {
 				int faceDirection = Properties.GetInteger("face_direction", Directions.Down);
-				player.Position = position + new Point2I(8, 16);
 				player.Direction = faceDirection;
 			}
 

@@ -54,12 +54,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// Create a splash effect.
 			if (player.Physics.IsInLava) {
 				Effect splash = new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH, DepthLayer.EffectSplash);
-				splash.Position = player.Position - new Vector2F(0, 4);
+				splash.Position = player.Center + new Vector2F(0, 4);
 				player.RoomControl.SpawnEntity(splash);
 			}
 			else {
 				Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash);
-				splash.Position = player.Position - new Vector2F(0, 4);
+				splash.Position = player.Center + new Vector2F(0, 4);
 				player.RoomControl.SpawnEntity(splash);
 			}
 
@@ -119,7 +119,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 				// Create a splash effect.
 				Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash);
-				splash.Position = player.Position - new Vector2F(0, 4);
+				splash.Position = player.Center + new Vector2F(0, 4);
 				player.RoomControl.SpawnEntity(splash);
 
 				//Sounds.PLAYER_WADE.play();

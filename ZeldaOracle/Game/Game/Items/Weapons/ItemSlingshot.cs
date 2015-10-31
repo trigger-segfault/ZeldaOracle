@@ -58,7 +58,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			else if (direction == Directions.Down)
 				seedPos = Player.Center + (Directions.ToVector(direction) * 8);
 			else
-				seedPos = Player.Position - new Vector2F(0, 2) + (Directions.ToVector(direction) * 4);
+				seedPos = Player.Center + new Vector2F(0, 6) + (Directions.ToVector(direction) * 4);
 
 			// Spawn the seed projectile.
 			SeedProjectile seed = new SeedProjectile(seedType, false);

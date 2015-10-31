@@ -117,8 +117,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			toolVisual = new PlayerToolVisual();
 
 			// Unit properties.
-			originOffset			= new Point2I(0, -3);
-			centerOffset			= new Point2I(0, -8);
+			centerOffset			= new Point2I(0, -5);
 			Health					= 4 * 3;
 			MaxHealth				= 4 * 3;
 			swimmingSkills			= PlayerSwimmingSkills.CantSwim;
@@ -129,8 +128,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			bumpKnockbackDuration	= GameSettings.PLAYER_BUMP_KNOCKBACK_DURATION;
 
 			// Physics.
-			Physics.CollisionBox		= new Rectangle2F(-4, -10, 8, 9);
-			Physics.SoftCollisionBox	= new Rectangle2F(-6, -14, 12, 13);
+			Physics.CollisionBox		= new Rectangle2F(-4, -10 + 3, 8, 9);
+			Physics.SoftCollisionBox	= new Rectangle2F(-6, -14 + 3, 12, 13);
 			Physics.CollideWithWorld	= true;
 			Physics.CollideWithEntities	= true;
 			Physics.HasGravity			= true;
@@ -139,8 +138,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Graphics.
 			Graphics.DepthLayer			= DepthLayer.PlayerAndNPCs;
 			Graphics.DepthLayerInAir	= DepthLayer.InAirPlayer;
-			Graphics.ShadowDrawOffset	= originOffset;
-			Graphics.DrawOffset			= new Point2I(-8, -16);
+			Graphics.DrawOffset			= new Point2I(-8, -13);
 
 			// Create the basic player states.
 			state				= null;
@@ -496,7 +494,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			base.OnLand();
 
 			// Notify the tile we landed on.
-			Tile tile = RoomControl.GetTopTile(RoomControl.GetTileLocation(Origin));
+			Tile tile = RoomControl.GetTopTile(RoomControl.GetTileLocation(Position));
 			if (tile != null)
 				tile.OnLand(movement.JumpStartTile);
 			movement.JumpStartTile = -Point2I.One;

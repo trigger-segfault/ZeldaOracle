@@ -69,6 +69,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				// Spawn drops as the tile is picked up.
 				hookedTile.SpawnDrop();
 			}
+
+			hookedEntity.RemoveFromRoom();
 			
 			hookProjectile.Position = hookedEntity.Center;
 			
@@ -101,9 +103,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private void SwitchPositions() {
 			isSwitched = true;
 
-			Vector2F tempPosition = player.Position;
-			player.Position = hookedEntity.Position;
-			hookedEntity.Position = tempPosition;
+			// Swap player and entity positions.
+			Vector2F tempPosition	= player.Position;
+			player.Position			= hookedEntity.Position;
+			hookedEntity.Position	= tempPosition;
+			hookProjectile.Position	= hookedEntity.Center;
+			player.Direction		= Directions.Reverse(player.Direction);
 
 			// Align positions to grid for tiles.
 			if (hookedObject is Tile) {
@@ -111,8 +116,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				hookedEntity.SetPositionByCenter(center);
 			}
 
-			hookProjectile.Position = hookedEntity.Center;
-			player.Direction = Directions.Reverse(player.Direction);
 			hookProjectile.OnSwitchPositions();
 		}
 
@@ -164,6 +167,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 						liftZPosition = 0.0f;
 
 						hookProjectile.Destroy();
+						
+						hookedEntity.ZPosition = 0.0f;
 
 						if (hookedObject is Tile) {
 							Tile tile = hookedObject as Tile;
@@ -173,6 +178,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 							else {
 								player.RoomControl.PlaceTileOnHighestLayer(tile, tileSwitchLocation);
 							}
+						}
+						else {
+							player.RoomControl.SpawnEntity(hookedEntity);
 						}
 
 						// Return to normal.

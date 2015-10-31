@@ -320,7 +320,7 @@ namespace ZeldaOracle.Game.Debug {
 
 					g.FillRectangle(entity.Physics.SoftCollisionBox + entity.Position, new Color(0, 0, 255, 150));
 					g.FillRectangle(entity.Physics.CollisionBox + entity.Position, new Color(255, 0, 0, 150));
-					g.FillRectangle(new Rectangle2F(entity.Origin, Vector2F.One), Color.White);
+					//g.FillRectangle(new Rectangle2F(entity.Origin, Vector2F.One), Color.White);
 					g.FillRectangle(new Rectangle2F(entity.Position, Vector2F.One), new Color(255, 255, 0));
 
 					if (entity is Unit) {

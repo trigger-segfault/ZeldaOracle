@@ -59,6 +59,16 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public void OnSwitchPositions() {
 		}
 
+		public void SwitchWithEntity(Entity entity) {
+			if (!isReturning && !isHooked && !isLifting) {
+				hookedObject	= entity;
+				isHooked		= true;
+				timer			= 0;
+				graphics.PlayAnimation();
+				Physics.Velocity = Vector2F.Zero;
+			}
+		}
+
 		public void BeginSwitching() {
 			isLifting = true;
 

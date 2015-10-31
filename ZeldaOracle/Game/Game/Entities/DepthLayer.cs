@@ -8,6 +8,8 @@ namespace ZeldaOracle.Game.Entities {
 	public enum DepthLayer {
 		None = 0,
 
+		Shadows,
+
 		Collectibles,
 		PlayerSubmerged,
 

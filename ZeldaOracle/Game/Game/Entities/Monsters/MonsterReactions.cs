@@ -218,6 +218,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			
 			// Switch places with the monster (Only for switch-hook interactions).
 			public static void SwitchHook(Monster monster, Entity sender, EventArgs args) {
+				SwitchHookProjectile hook = sender as SwitchHookProjectile;
+				hook.SwitchWithEntity(monster);
 			}
 			
 
