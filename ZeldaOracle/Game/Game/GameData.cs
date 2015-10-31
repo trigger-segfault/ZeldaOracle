@@ -1181,6 +1181,16 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PROJECTILE_PLAYER_BOOMERANG_2;
 		public static Animation ANIM_PROJECTILE_SWITCH_HOOK;
 		public static Animation ANIM_PROJECTILE_MAGIC_ROD_FIRE;
+		
+		// Monster projectile animations.
+		public static Animation ANIM_PROJECTILE_MONSTER_ARROW;
+		public static Animation ANIM_PROJECTILE_MONSTER_ARROW_CRASH;
+		public static Animation ANIM_PROJECTILE_MONSTER_SPEAR;
+		public static Animation ANIM_PROJECTILE_MONSTER_BOOMERANG;
+		public static Animation ANIM_PROJECTILE_MONSTER_MAGIC;
+		public static Animation ANIM_PROJECTILE_MONSTER_FIREBALL;
+		public static Animation ANIM_PROJECTILE_MONSTER_BONE;
+		public static Animation ANIM_PROJECTILE_MONSTER_ROCK;
 	
 		// Effect animations.
 		public static Animation ANIM_EFFECT_DIRT;

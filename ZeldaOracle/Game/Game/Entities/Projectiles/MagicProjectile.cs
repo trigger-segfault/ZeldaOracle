@@ -6,19 +6,20 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Monsters;
+using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
-	public class Arrow : Projectile, IInterceptable {
+	public class MagicProjectile : Projectile, IInterceptable {
 		
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public Arrow() {
+		public MagicProjectile() {
 			// General.
-			syncAnimationWithAngle = true;
+			syncAnimationWithDirection = true;
 
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 1);
@@ -31,8 +32,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 			// Graphics.
 			Graphics.DepthLayer = DepthLayer.ProjectileArrow;
-			crashAnimation	= GameData.ANIM_PROJECTILE_PLAYER_ARROW_CRASH;
-			bounceOnCrash	= true;
 		}
 
 
@@ -42,7 +41,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		public override void Initialize() {
 			base.Initialize();
-			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_PLAYER_ARROW);
+			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_MONSTER_MAGIC);
 			CheckInitialCollision();
 		}
 		
@@ -54,8 +53,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			Crash(isInitialCollision);
 		}
 
-		public override void OnCollideMonster(Monster monster) {
-			monster.TriggerInteraction(InteractionType.Arrow, this);
+		public override void OnCollidePlayer(Player player) {
+			player.Hurt(1, position);
+			Destroy();
 		}
 	}
 }

@@ -18,6 +18,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 		
 		protected Unit			unit;
 		protected bool			drawAboveUnit;
+		protected bool			syncAnimationWithDirection;
 		protected Rectangle2I	collisionBox;
 		protected Point2I		drawOffset;
 		protected UnitToolType	toolType;
@@ -40,6 +41,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			isEquipped			= false;
 			isPhysicsEnabled	= true;
 			imageVariantID		= GameData.VARIANT_NONE;
+			syncAnimationWithDirection	= true;
 		}
 
 		public void Initialize(Unit unit) {
@@ -68,7 +70,8 @@ namespace ZeldaOracle.Game.Entities.Units {
 
 		public virtual void Update() {
 			animationPlayer.Update();
-			animationPlayer.SubStripIndex = unit.Direction;
+			if (syncAnimationWithDirection)
+				animationPlayer.SubStripIndex = unit.Direction;
 
 			if (isPhysicsEnabled) {
 				for (int i = 0; i < unit.RoomControl.EntityCount; i++) {

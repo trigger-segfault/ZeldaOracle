@@ -50,20 +50,16 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				return;
 			
 			UseAmmo();
-
 			Player.Direction = Player.UseDirection;
-
-			// Spawn the arrow.
+			
+			// Shoot and track the arrow projectile.
 			Arrow arrow = new Arrow();
-			arrow.Owner				= Player;
-			arrow.Position			= Player.Center + (Directions.ToVector(Player.Direction) * 8.0f);
-			arrow.ZPosition			= Player.ZPosition;
-			arrow.Direction			= Player.Direction;
-			arrow.Physics.Velocity	= Directions.ToVector(Player.Direction) * GameSettings.PROJECTILE_ARROW_SPEED;
-			RoomControl.SpawnEntity(arrow);
-
+			Player.ShootFromDirection(arrow, Player.Direction,
+				GameSettings.PROJECTILE_ARROW_SPEED,
+				Directions.ToVector(Player.Direction) * 8.0f);
 			arrowTracker.TrackEntity(arrow);
 
+			// Begin the busy state.
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 			Player.BeginBusyState(10);
 		}

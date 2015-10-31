@@ -47,48 +47,49 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			UseAmmo();
 
 			SeedType seedType = CurrentSeedType;
-			int direction = Player.UseDirection;
 
+			int direction = Player.UseDirection;
 			Player.Direction = direction;
 
 			// Determine the seed spawn position based on player facing direction.
-			Vector2F seedPos = Player.Center;
+			Vector2F seedPos;
 			if (direction == Directions.Up)
-				seedPos = Player.Center + (Directions.ToVector(direction) * 1);
+				seedPos = Directions.ToVector(direction) * 1;
 			else if (direction == Directions.Down)
-				seedPos = Player.Center + (Directions.ToVector(direction) * 8);
+				seedPos = Directions.ToVector(direction) * 8;
 			else
-				seedPos = Player.Center + new Vector2F(0, 6) + (Directions.ToVector(direction) * 4);
+				seedPos = new Vector2F(0, 6) + (Directions.ToVector(direction) * 4);
 
-			// Spawn the seed projectile.
+			// Spawn the main seed projectile.
 			SeedProjectile seed = new SeedProjectile(seedType, false);
-			seed.Owner = Player;
-			seed.Physics.Velocity = Directions.ToVector(direction) * GameSettings.SLINGSHOT_SEED_SPEED;
-			Player.RoomControl.SpawnEntity(seed, seedPos, Player.ZPosition + 5);
+			Player.ShootProjectile(seed,
+				Directions.ToVector(direction) * GameSettings.SLINGSHOT_SEED_SPEED,
+				seedPos, 5);
 			seedTracker.TrackEntity(seed);
 
 			// Spawn the extra 2 seeds for the Hyper Slingshot.
 			if (level == Item.Level2) {
 				for (int i = 0; i < 2; i++) {
 					int sideDirection = direction + (i == 0 ? 1 : 3);
-					seed = new SeedProjectile(seedType, false);
-					seed.Owner = Player;
-
+					
 					// Calculate the velocity based on a degree offset.
 					float degrees = direction * GMath.QuarterAngle;
 					if (i == 0)
 						degrees += GameSettings.SLINGSHOT_SEED_DEGREE_OFFSET;
 					else
 						degrees -= GameSettings.SLINGSHOT_SEED_DEGREE_OFFSET;
-					seed.Physics.Velocity = Vector2F.CreatePolar(GameSettings.SLINGSHOT_SEED_SPEED, degrees);
-					seed.Physics.VelocityY = -seed.Physics.VelocityY;
-
-					Player.RoomControl.SpawnEntity(seed, seedPos, Player.ZPosition + 5);
+					Vector2F velocity = Vector2F.CreatePolar(GameSettings.SLINGSHOT_SEED_SPEED, degrees);
+					velocity.Y = -velocity.Y;
+					
+					// Spawn the seed.
+					seed = new SeedProjectile(seedType, false);
+					Player.ShootProjectile(seed, velocity, seedPos, 5);
 					seedTracker.TrackEntity(seed);
 				}
 			}
 
 			// Set the tool animation.
+			Player.EquipTool(Player.ToolVisual);
 			if (level == Item.Level1)
 				Player.ToolVisual.PlayAnimation(GameData.ANIM_SLINGSHOT_1);
 			else

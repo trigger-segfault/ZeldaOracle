@@ -138,13 +138,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// NumPad7: Shoot a projectile
 			if (Keyboard.IsKeyPressed(Keys.NumPad7)) {
-				Arrow arrow = new Arrow();
-				arrow.Owner				= this;
-				arrow.Position			= Center + (Directions.ToVector(direction) * 8.0f);
-				arrow.ZPosition			= zPosition;
-				arrow.Direction			= direction;
-				arrow.Physics.Velocity	= Directions.ToVector(direction) * GameSettings.PROJECTILE_ARROW_SPEED;
-				RoomControl.SpawnEntity(arrow);
+				//ShootFromDirection(new MagicProjectile(), direction, 2.0f);
+				//ShootFromDirection(new RockProjectile(), direction, 2.0f);
+				ShootFromDirection(new MonsterArrowProjectile(), direction, 2.0f);
 			}
 
 			// NumPad /: Equip/Unequip a sword

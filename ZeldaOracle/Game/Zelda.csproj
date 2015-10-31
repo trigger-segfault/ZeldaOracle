@@ -260,6 +260,9 @@
     <Compile Include="Game\Entities\Players\Tools\PlayerToolSword.cs" />
     <Compile Include="Game\Entities\Players\Tools\PlayerToolVisual.cs" />
     <Compile Include="Game\Entities\Players\Tools\PlayerToolShield.cs" />
+    <Compile Include="Game\Entities\Projectiles\MagicProjectile.cs" />
+    <Compile Include="Game\Entities\Projectiles\MonsterArrowProjectile.cs" />
+    <Compile Include="Game\Entities\Projectiles\RockProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\MagicRodFire.cs" />
     <Compile Include="Game\Entities\Projectiles\SwitchHookProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\Boomerang.cs" />

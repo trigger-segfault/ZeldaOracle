@@ -240,5 +240,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 					return RoomControl.Player.Center;
 			}
 		}
+
+		public float Speed {
+			get { return speed; }
+		}
 	}
 }

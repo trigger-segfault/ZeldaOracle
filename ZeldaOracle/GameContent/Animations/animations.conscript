@@ -412,6 +412,33 @@ ANIM projectile_magic_rod_fire; SUBSTRIP repeat;
 
 
 #==============================================================
+# Monster Items & Projectiles
+#==============================================================
+	
+SPRITESHEET "monster_items";
+
+ANIM projectile_monster_arrow; SUBSTRIP repeat;
+	ADD frame, 1, (0, 0), (-8, -8);
+	MAKEDYNAMIC 4, (1, 0); END;
+ANIM projectile_monster_arrow_crash; SUBSTRIP reset;
+	ADD strip, 6, 4, (0, 0), (-8, -8); END;
+ANIM projectile_monster_spear; SUBSTRIP repeat;
+	ADD strip, 4, 2, (0, 1), (-8, -8);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM projectile_monster_boomerang; SUBSTRIP repeat;
+	ADD strip, 2, 4, (0, 9), (-8, -8); END;
+ANIM projectile_monster_magic; SUBSTRIP repeat;
+	ADD frame, 1, (0, 2), (-8, -8);
+	MAKEDYNAMIC 4, (1, 0); END;
+ANIM projectile_monster_fireball; SUBSTRIP repeat;
+	ADD strip, 4, 2, (4, 2), (-8, -8); END;
+ANIM projectile_monster_bone; SUBSTRIP repeat;
+	ADD strip, 4, 2, (6, 2), (-8, -8); END;
+ANIM projectile_monster_rock; SUBSTRIP repeat;
+	ADD frame, 1, (0, 3), (-8, -8); END;
+
+
+#==============================================================
 # Effect Animations
 #==============================================================
 

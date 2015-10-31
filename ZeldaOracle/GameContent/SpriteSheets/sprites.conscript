@@ -32,6 +32,7 @@ SPRITESHEET "color_monsters",			(16, 16), (1, 1), (18, 18); END;
 SPRITESHEET "Effects/basic_effects",	(16, 16), (1, 1), (0, 0); END;
 SPRITESHEET "Effects/color_effects",	(16, 16), (1, 1), (0, 0); END;
 SPRITESHEET "player_items",				(16, 16), (1, 1), (0, 0); END;
+SPRITESHEET "monster_items" "Units/Monsters/monster_items", (16, 16), (1, 1), (0, 0); END;
 
 SPRITESHEET "npcs",						(16, 16), (1, 1), (18, 18); END;
 
