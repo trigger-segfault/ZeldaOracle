@@ -246,6 +246,7 @@ namespace ZeldaOracle.Game {
 				ANIM_EFFECT_SEED_GALE.AddFrame(i, 1, new Sprite(
 					GameData.SHEET_COLOR_EFFECTS, ((i % 6) < 3 ? 4 : 5), y, -8, -8));
 			}
+			Resources.SetResource("effect_seed_gale", ANIM_EFFECT_SEED_GALE);
 
 			ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS = new Animation[6, 4];
 			string[] orientations = { "blue_yellow", "blue_red", "yellow_red", "yellow_blue", "red_blue", "red_yellow" };
@@ -825,6 +826,7 @@ namespace ZeldaOracle.Game {
 		public static int VARIANT_INTERIOR_PRESENT	= 13;
 		public static int VARIANT_AGES_DUNGEON_1	= 14;
 
+		public static int VARIANT_ORANGE	= 15;
 
 		//-----------------------------------------------------------------------------
 		// Sprite Sheets
@@ -1083,6 +1085,73 @@ namespace ZeldaOracle.Game {
 
 		// Monster animations.
 		public static Animation ANIM_MONSTER_OCTOROK;
+		public static Animation ANIM_MONSTER_MOBLIN;
+		public static Animation ANIM_MONSTER_DARKNUT;
+		public static Animation ANIM_MONSTER_PIG_MOBLIN;
+		public static Animation ANIM_MONSTER_SHROUDED_STALFOS;
+		public static Animation ANIM_MONSTER_ARM_MIMIC;
+		public static Animation ANIM_MONSTER_BEAMOS;
+		public static Animation ANIM_MONSTER_PINCER_HEAD;
+		public static Animation ANIM_MONSTER_MINI_MOLDORM_HEAD;
+		public static Animation ANIM_MONSTER_IRON_MASK;
+		public static Animation ANIM_MONSTER_IRON_MASK_NAKED;
+		public static Animation ANIM_MONSTER_IRON_MASK_MASK;
+		public static Animation ANIM_MONSTER_BUZZ_BLOB;
+		public static Animation ANIM_MONSTER_CUKEMAN;
+		public static Animation ANIM_MONSTER_BUZZ_BLOB_ELECTROCUTE;
+		public static Animation ANIM_MONSTER_LYNEL;
+		public static Animation ANIM_MONSTER_ROPE;
+		public static Animation ANIM_MONSTER_CROW;
+		public static Animation ANIM_MONSTER_FLOOR_MASTER;
+		public static Animation ANIM_MONSTER_FLOOR_MASTER_GRAB;
+		public static Animation ANIM_MONSTER_WALL_MASTER;
+		public static Animation ANIM_MONSTER_WALL_MASTER_GRAB;
+		public static Animation ANIM_MONSTER_BIRI;
+		public static Animation ANIM_MONSTER_BARI;
+		public static Animation ANIM_MONSTER_BARI_ELECTROCUTE;
+		public static Animation ANIM_MONSTER_GIBDO;
+		public static Animation ANIM_MONSTER_SAND_CRAB;
+		public static Animation ANIM_MONSTER_WATER_TEKTIKE;
+		public static Animation ANIM_MONSTER_GOPONGA_FLOWER;
+		public static Animation ANIM_MONSTER_PEAHAT;
+		public static Animation ANIM_MONSTER_GEL;
+		public static Animation ANIM_MONSTER_ZOL;
+		public static Animation ANIM_MONSTER_ZOL_JUMP;
+		public static Animation ANIM_MONSTER_ZOL_BURROW;
+		public static Animation ANIM_MONSTER_ZOL_UNBURROW;
+		public static Animation ANIM_MONSTER_COLOR_GEL_BODY;
+		public static Animation ANIM_MONSTER_COLOR_GEL_HIGHLIGHT;
+		public static Animation ANIM_MONSTER_COLOR_GEL_EYES;
+		public static Animation ANIM_MONSTER_BUBBLE;
+		public static Animation ANIM_MONSTER_STALFOS;
+		public static Animation ANIM_MONSTER_STALFOS_JUMP;
+		public static Animation ANIM_MONSTER_SPINNING_BLADE_TRAP_SLEEP;
+		public static Animation ANIM_MONSTER_SPINNING_BLADE_TRAP;
+		public static Animation ANIM_MONSTER_LEEVER;
+		public static Animation ANIM_MONSTER_LEEVER_BURROW;
+		public static Animation ANIM_MONSTER_LEEVER_UNBURROW;
+		public static Animation ANIM_MONSTER_BALL_AND_CHAIN_TROOPER;
+		public static Animation ANIM_MONSTER_CANDLE_HEAD;
+		public static Animation ANIM_MONSTER_CANDLE_HEAD_SLEEP;
+		public static Animation ANIM_MONSTER_BLADE_TRAP;
+		public static Animation ANIM_MONSTER_GIANT_BLADE_TRAP;
+		public static Animation ANIM_MONSTER_SPIKED_BEETLE;
+		public static Animation ANIM_MONSTER_SPIKED_BEETLE_FLIPPED;
+		public static Animation ANIM_MONSTER_RIVER_ZORA;
+		public static Animation ANIM_MONSTER_RIVER_ZORA_SHOOT;
+		public static Animation ANIM_MONSTER_RIVER_ZORA_WATER_SWIRLS;
+		public static Animation ANIM_MONSTER_HARDHAT_BEETLE;
+		public static Animation ANIM_MONSTER_SPINY_BEETLE;
+		public static Animation ANIM_MONSTER_BEETLE;
+		public static Animation ANIM_MONSTER_WIZZROBE;
+		public static Animation ANIM_MONSTER_WIZZROBE_HAT;
+		public static Animation ANIM_MONSTER_LIKE_LIKE;
+		public static Animation ANIM_MONSTER_LIKE_LIKE_DEVOUR;
+		public static Animation ANIM_MONSTER_ARMOS;
+		public static Animation ANIM_MONSTER_TEKTIKE;
+		public static Animation ANIM_MONSTER_TEKTIKE_JUMP;
+		public static Animation ANIM_MONSTER_POLS_VOICE;
+		public static Animation ANIM_MONSTER_POLS_VOICE_JUMP;
 
 		// Monster items.
 		public static Animation ANIM_MONSTER_SWORD_HOLD;

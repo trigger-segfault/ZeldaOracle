@@ -11,7 +11,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
-	public class SwitchHookProjectile : Projectile {
+	public class SwitchHookProjectile : Projectile, IInterceptable {
 		private float	speed;
 		private int		length;
 		private int		level;
@@ -117,6 +117,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			physics.Velocity	= Directions.ToVector(direction) * speed;
 
 			Graphics.Animation = GameData.ANIM_PROJECTILE_SWITCH_HOOK;
+		}
+
+		public void Intercept() {
+			BeginReturn(false);
 		}
 
 		public override void OnCollideTile(Tile tile, bool isInitialCollision) {

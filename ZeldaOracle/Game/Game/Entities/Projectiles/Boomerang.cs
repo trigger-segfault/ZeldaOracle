@@ -11,7 +11,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
-	public class Boomerang : Projectile {
+	public class Boomerang : Projectile, IInterceptable {
 
 		private bool isReturning;
 		private float speed;
@@ -86,7 +86,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			tileLocation = new Point2I(-1, -1);
 		}
 
-		public override void Intercept() {
+		public void Intercept() {
 			BeginReturn();
 		}
 

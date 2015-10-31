@@ -13,6 +13,10 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
+	
+	//-----------------------------------------------------------------------------
+	// Interaction Type
+	//-----------------------------------------------------------------------------
 
 	public enum InteractionType {
 		None = -1,
@@ -35,9 +39,14 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		Shovel,					// Hit by a shovel being used.
 		Pickup,					// Attempt to use the bracelet to pickup.
 		ButtonAction,			// The A button is pressed while colliding.
+		
+		Parry,
+		PlayerContact,
+
 		SwordHitShield,			// Their sword hits my shield.
 		BiggoronSwordHitShield,	// Their biggoron sword hits my shield.
 		ShieldHitShield,		// Their shield hits my shield.
+
 		ThrownObject,			// Hit by a thrown object (thrown tiles, not bombs).
 		MineCart,				// Hit by a minecart.
 		Block,					// Hit by a block (either moving or spawned on top of).
@@ -45,19 +54,86 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		Count,
 	};
 
+		
+	//-----------------------------------------------------------------------------
+	// Interaction Event Arguments
+	//-----------------------------------------------------------------------------
+	
+	public class InteractionArgs : EventArgs {
+        public Vector2F ContactPoint { get; set; }
+	}
+
 	public class WeaponInteractionEventArgs : EventArgs {
         public ItemWeapon Weapon { get; set; }
 	}
+	
+	public class ParryInteractionArgs : InteractionArgs {
+        public UnitTool SenderTool { get; set; }
+        public UnitTool MonsterTool { get; set; }
+	}
+
 
 	public partial class Monster : Unit {
-		// Member vs Static
-		// Has Item parameter?
+
+		public static InteractionType GetSeedInteractionType(SeedType seedType) {
+			return (InteractionType) ((int) InteractionType.EmberSeed + (int) seedType);
+		}
+
+		
+		//-----------------------------------------------------------------------------
+		// Interaction Delegates
+		//-----------------------------------------------------------------------------
 
 		public delegate void InteractionMemberDelegate(Entity sender, EventArgs args);
 
 		public delegate void InteractionStaticDelegate(Monster monster, Entity sender, EventArgs args);
-		//public delegate void StaticInteractionDelegateItem(Monster monster, Entity sender, ItemWeapon item);
 		
+		private static InteractionStaticDelegate ToStaticInteractionDelegate(InteractionMemberDelegate memberDelegate) {
+			return delegate(Monster monster, Entity sender, EventArgs args) {
+				memberDelegate.Invoke(sender, args);
+			};
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Interaction Handler
+		//-----------------------------------------------------------------------------
+
+		public class InteractionHandler {
+			private InteractionStaticDelegate handler;
+			
+			public InteractionHandler Clear() {
+				handler = null;
+				return this;
+			}
+			
+			public InteractionHandler Set(InteractionMemberDelegate reaction) {
+				handler = ToStaticInteractionDelegate(reaction);
+				return this;
+			}
+			
+			public InteractionHandler Set(InteractionStaticDelegate reaction) {
+				handler = reaction;
+				return this;
+			}
+			
+			public InteractionHandler Add(InteractionMemberDelegate reaction) {
+				return Add(ToStaticInteractionDelegate(reaction));
+			}
+			
+			public InteractionHandler Add(InteractionStaticDelegate reaction) {
+				if (handler == null)
+					handler = reaction;
+				else
+					handler += reaction;
+				return this;
+			}
+
+			public void Trigger(Monster monster, Entity sender, EventArgs args) {
+				if (handler != null)
+					handler.Invoke(monster, sender, args);
+			}
+		}
 
 
 		//-----------------------------------------------------------------------------
@@ -122,6 +198,24 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			public static void Gale(Monster monster, Entity sender, EventArgs args) {
 			}
 			
+			// Trigger a random seed effect.
+			public static void MysterySeed(Monster monster, Entity sender, EventArgs args) {
+				// Random: burn, stun, damage, gale
+				int rand = GRandom.NextInt(4);
+				SeedEntity seed = (SeedEntity) sender;
+
+				if (rand == 0)
+					seed.SeedType = SeedType.Ember;
+				else if (rand == 1)
+					seed.SeedType = SeedType.Scent;
+				else if (rand == 2)
+					seed.SeedType = SeedType.Pegasus;
+				else
+					seed.SeedType = SeedType.Gale;
+
+				monster.TriggerInteraction(Monster.GetSeedInteractionType(seed.SeedType), sender, args);
+			}
+			
 			// Switch places with the monster (Only for switch-hook interactions).
 			public static void SwitchHook(Monster monster, Entity sender, EventArgs args) {
 			}
@@ -141,15 +235,23 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Damage the monster for the given amount based on the used item's level.
 			public static InteractionStaticDelegate DamageByLevel(int amountLevel1, int amountLevel2, int amountLevel3) {
 				return delegate(Monster monster, Entity sender, EventArgs args) {
-					WeaponInteractionEventArgs weaponArgs = args as WeaponInteractionEventArgs;
+					int level = (args as WeaponInteractionEventArgs).Weapon.Level;
 					int amount = 0;
-					if (weaponArgs.Weapon.Level == Item.Level1)
+					if (level == Item.Level1)
 						amount = amountLevel1;
-					else if (weaponArgs.Weapon.Level == Item.Level2)
+					else if (level == Item.Level2)
 						amount = amountLevel2;
-					else if (weaponArgs.Weapon.Level == Item.Level3)
+					else if (level == Item.Level3)
 						amount = amountLevel3;
 					monster.Hurt(amount, sender.Center);
+				};
+			}
+
+			public static InteractionStaticDelegate ContactEffect(Effect effect) {
+				return delegate(Monster monster, Entity sender, EventArgs args) {
+					Effect clonedEffect = effect.Clone();
+					InteractionArgs interactionArgs = args as InteractionArgs;
+					monster.RoomControl.SpawnEntity(clonedEffect, interactionArgs.ContactPoint);
 				};
 			}
 			
@@ -187,8 +289,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			}
 
 			public static void Intercept(Monster monster, Entity sender, EventArgs args) {
-				if (sender is Projectile)
-					(sender as Projectile).Intercept();
+				if (sender is IInterceptable)
+					(sender as IInterceptable).Intercept();
 			}
 			
 			public static void Bump(Monster monster, Entity sender, EventArgs args) {

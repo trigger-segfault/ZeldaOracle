@@ -65,6 +65,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			syncAnimationWithDirection = true;
 			MaxHealth = 10;
+			
+			color = MonsterColor.Orange;
 		}
 		
 		
@@ -98,6 +100,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public override void Initialize() {
 			base.Initialize();
+
+			//Graphics.PlayAnimation(GameData.ANIM_MONSTER_MOBLIN);
+			Graphics.PlayAnimation(GameData.ANIM_MONSTER_DARKNUT);
 
 			toolSword.Initialize(this);
 		}
@@ -150,7 +155,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					UnequipTool(toolSword);
 			}
 
+
 			base.Update();
+
+			toolSword.ImageVariantID = Graphics.ImageVariant;
 		}
 	}
 }

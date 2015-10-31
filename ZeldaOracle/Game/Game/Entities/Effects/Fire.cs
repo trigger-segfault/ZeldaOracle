@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Entities.Monsters;
+using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Entities.Effects {
 	public class Fire : Effect {
@@ -19,7 +20,6 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			base(GameData.ANIM_EFFECT_SEED_EMBER)
 		{
 			EnablePhysics(PhysicsFlags.HasGravity);
-			Physics.AddCollisionHandler(typeof(Monster), CollisionBoxType.Soft, CollideWithMonster);
 
 			Graphics.DrawOffset	= new Point2I(0, -2);
 			Graphics.DepthLayer	= DepthLayer.EffectFire;
@@ -27,20 +27,10 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		
 
 		//-----------------------------------------------------------------------------
-		// Collision Handlers
-		//-----------------------------------------------------------------------------
-
-		private void CollideWithMonster(Entity entity) {
-			Monster monster = entity as Monster;
-			monster.TriggerInteraction(InteractionType.Fire, this);
-		}
-		
-
-		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 		
-		public override void OnDestroy() {
+		public override void OnDestroyTimerDone() {
 			// Burn tiles.
 			Point2I location = RoomControl.GetTileLocation(position);
 			if (RoomControl.IsTileInBounds(location)) {
@@ -48,6 +38,21 @@ namespace ZeldaOracle.Game.Entities.Effects {
 				if (tile != null)
 					tile.OnBurn();
 			}
+			Destroy();
+		}
+
+		public override void Update() {
+			
+			// Collide with monsters.
+			CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
+			for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
+				Monster monster = iterator.CollisionInfo.Entity as Monster;
+				monster.TriggerInteraction(InteractionType.Fire, this);
+				if (IsDestroyed)
+					return;
+			}
+
+			base.Update();
 		}
 	}
 }

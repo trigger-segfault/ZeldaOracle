@@ -325,7 +325,7 @@ namespace ZeldaOracle.Game.Debug {
 
 					if (entity is Unit) {
 						Unit unit = (Unit) entity;
-						foreach (UnitTool tool in unit.Tools) {
+						foreach (UnitTool tool in unit.EquippedTools) {
 							if (tool.IsPhysicsEnabled) {
 								g.FillRectangle(tool.PositionedCollisionBox, new Color(255, 0, 255, 150));
 							}

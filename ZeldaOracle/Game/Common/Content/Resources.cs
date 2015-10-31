@@ -241,6 +241,14 @@ namespace ZeldaOracle.Common.Content {
 			dictionary.Add(assetName, resource);
 		}
 
+		// Add the given resource under the given name.
+		public static void SetResource<T>(string assetName, T resource) {
+			if (!ExistsResourceType<T>())
+				return; // This type of resource doesn't exist!
+			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
+			dictionary[assetName] = resource;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Resource Accessors

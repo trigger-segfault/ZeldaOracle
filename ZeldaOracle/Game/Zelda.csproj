@@ -226,6 +226,7 @@
     <Compile Include="Game\Entities\Effects\ScentPod.cs" />
     <Compile Include="Game\Entities\EntityTracker.cs" />
     <Compile Include="Game\Entities\GraphicsComponent.cs" />
+    <Compile Include="Game\Entities\IInterceptable.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterReactions.cs" />
     <Compile Include="Game\Entities\Monsters\TestMonster.cs" />
     <Compile Include="Game\Entities\Monsters\Monster.cs" />

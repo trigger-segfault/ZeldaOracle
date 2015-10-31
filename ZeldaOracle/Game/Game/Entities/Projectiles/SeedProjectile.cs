@@ -11,7 +11,7 @@ using ZeldaOracle.Game.Tiles;
 namespace ZeldaOracle.Game.Entities.Projectiles {
 	
 	// Seeds shot from the seed-shooter or slingshot.
-	public class SeedProjectile : SeedEntity {
+	public class SeedProjectile : SeedEntity, IInterceptable {
 
 		private int reboundCounter;
 		private bool reboundOffWalls;
@@ -53,6 +53,15 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			reboundCounter = 0;
 			Graphics.PlaySprite(GameData.SPR_ITEM_SEEDS[(int) type]);
 			CheckInitialCollision();
+		}
+
+		public void Intercept() {
+			// Create the seed's effect.
+			if (type == SeedType.Ember)
+				RoomControl.SpawnEntity(new Fire(), Center - new Vector2F(0, 1), zPosition);
+			else
+				CreateVisualEffect(type, Center);
+			Destroy();
 		}
 
 		public override void OnCollideTile(Tile tile, bool isInitialCollision) {

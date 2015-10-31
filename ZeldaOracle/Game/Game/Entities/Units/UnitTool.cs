@@ -24,6 +24,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 		private AnimationPlayer	animationPlayer;
 		private bool			isEquipped;
 		private bool			isPhysicsEnabled;
+		private int				imageVariantID;
 
 
 		//-----------------------------------------------------------------------------
@@ -38,6 +39,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			toolType			= UnitToolType.Visual;
 			isEquipped			= false;
 			isPhysicsEnabled	= true;
+			imageVariantID		= GameData.VARIANT_NONE;
 		}
 
 		public void Initialize(Unit unit) {
@@ -175,6 +177,11 @@ namespace ZeldaOracle.Game.Entities.Units {
 		public bool IsPhysicsEnabled {
 			get { return isPhysicsEnabled; }
 			set { isPhysicsEnabled = value; }
+		}
+		
+		public int ImageVariantID {
+			get { return imageVariantID; }
+			set { imageVariantID = value; }
 		}
 	}
 }

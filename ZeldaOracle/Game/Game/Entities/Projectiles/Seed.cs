@@ -12,7 +12,7 @@ using ZeldaOracle.Game.Tiles;
 namespace ZeldaOracle.Game.Entities.Projectiles {
 
 	// Seeds dropped from the satchel.
-	public class Seed : SeedEntity {
+	public class Seed : SeedEntity, IInterceptable {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -39,6 +39,13 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
+
+		public void Intercept() {
+			if (type == SeedType.Ember)
+				DestroyWithEffect(type, Center);
+			else
+				DestroyWithVisualEffect(type, Center);
+		}
 
 		public override void OnLand() {
 			if (IsDestroyed)

@@ -9,7 +9,7 @@ using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
-	public class MagicRodFire : Projectile {
+	public class MagicRodFire : Projectile, IInterceptable {
 		
 
 		//-----------------------------------------------------------------------------
@@ -41,7 +41,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			CheckInitialCollision();
 		}
 
-		public override void Intercept() {
+		public void Intercept() {
 			// Spawn fire.
 			Fire fire = new Fire();
 			RoomControl.SpawnEntity(fire, position);
