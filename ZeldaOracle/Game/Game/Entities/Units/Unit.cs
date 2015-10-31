@@ -102,6 +102,10 @@ namespace ZeldaOracle.Game.Entities.Units {
 		// Virtual methods
 		//-----------------------------------------------------------------------------
 		
+		public void Kill() {
+			Die();
+		}
+
 		public void Knockback(int duration, float speed, Vector2F sourcePosition) {
 			knockbackDuration	= duration;
 			knockbackTimer		= duration;

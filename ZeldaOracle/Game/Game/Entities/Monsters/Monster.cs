@@ -14,49 +14,18 @@ using ZeldaOracle.Game.Items.Weapons;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 
-	// Reactions:
-	// - None
-	// - Kill
-	// - Damage
-	// - Bump
-	// - Intercept projectiles
-	// - Burn
-	// - Stun
-	// - Gale
+	public enum MonsterRespawnType {
+		Never	= 0,
+		Always	= 1,
+		Normal	= 2,
+	}
 
-	// SPECIAL
-	//  - SwitchHook
-	//  - 
-
-	public enum InteractionType {
-		None = -1,
-
-		EmberSeed = 0,			// Hit by an ember seed.
-		ScentSeed,				// Hit by a scent seed.
-		PegasusSeed,			// Hit by a pegasus seed.
-		GaleSeed,				// Hit by a gale seed.
-		MysterySeed,			// Hit by a mystery seed.
-		Fire,					// Touches fire.
-		Arrow,					// Hit by an arrow.
-		SwordBeam,				// Hit by a sword beam projectile.
-		RodFire,				// Hit by a projectile from the fire-rod.
-		Sword,					// Hit by a sword.
-		BiggoronSword,			// Hit by a biggoron sword.
-		Boomerang,				// Hit by a boomerang.
-		BombExplosion,			// Hit by a bomb explosion.
-		Shield,					// Hit by a shield.
-		SwitchHook,				// Hit by the switch hook.
-		Shovel,					// Hit by a shovel being used.
-		Pickup,					// Attempt to use the bracelet to pickup.
-		ButtonAction,			// The A button is pressed while colliding.
-		SwordHitShield,			// Their sword hits my shield.
-		BiggoronSwordHitShield,	// Their biggoron sword hits my shield.
-		ShieldHitShield,		// Their shield hits my shield.
-		ThrownObject,			// Hit by a thrown object (thrown tiles, not bombs).
-		MineCart,				// Hit by a minecart.
-
-		Count,
-	};
+	public enum MonsterColor {
+		Red		= 0,
+		Blue	= 1,
+		Green	= 2,
+		Orange	= 3,
+	}
 
 	// MonsterState:
 	// - MonsterBurnState
@@ -64,7 +33,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 	// - MonsterStunState
 	// - MonsterFallInHoleState
 
-	public class Monster : Unit {
+	public partial class Monster : Unit {
 		
 		//-----------------------------------------------------------------------------
 		// Interaction Handler Delegates
@@ -126,6 +95,85 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		private InteractionHandler_Fire				handlerFire;
 		private InteractionHandler_BombExplosion	handlerBombExplosion;
 
+		private InteractionHandler[] interactionHandlers;
+
+		private static InteractionStaticDelegate ToStaticInteractionDelegate(InteractionMemberDelegate memberDelegate) {
+			return delegate(Monster monster, Entity sender, EventArgs args) {
+				memberDelegate.Invoke(sender, args);
+			};
+		}
+
+		public class InteractionHandler {
+			private InteractionStaticDelegate handler;
+			
+			public InteractionHandler Clear() {
+				handler = null;
+				return this;
+			}
+			
+			public InteractionHandler Set(InteractionMemberDelegate reaction) {
+				handler = ToStaticInteractionDelegate(reaction);
+				return this;
+			}
+			
+			public InteractionHandler Set(InteractionStaticDelegate reaction) {
+				handler = reaction;
+				return this;
+			}
+			
+			public InteractionHandler Add(InteractionMemberDelegate reaction) {
+				return Add(ToStaticInteractionDelegate(reaction));
+			}
+			
+			public InteractionHandler Add(InteractionStaticDelegate reaction) {
+				if (handler == null)
+					handler = reaction;
+				else
+					handler += reaction;
+				return this;
+			}
+
+			public void Trigger(Monster monster, Entity sender, EventArgs args) {
+				if (handler != null)
+					handler.Invoke(monster, sender, args);
+			}
+		}
+
+		public InteractionHandler GetInteraction(InteractionType type) {
+			return interactionHandlers[(int) type];
+		}
+		/*
+		public void SetReaction(InteractionType type, InteractionStaticDelegate reaction) {
+			GetInteraction(type).Set(reaction);
+		}
+
+		public void SetReaction(InteractionType type, InteractionMemberDelegate reaction) {
+			GetInteraction(type).Set(reaction);
+		}
+		*/
+		public void SetReaction(InteractionType type, params InteractionStaticDelegate[] reactions) {
+			InteractionHandler handler = GetInteraction(type);
+			handler.Clear();
+			for (int i = 0; i < reactions.Length; i++)
+				handler.Add(reactions[i]);
+		}
+
+		public void SetReaction(InteractionType type, params InteractionMemberDelegate[] reactions) {
+			InteractionHandler handler = GetInteraction(type);
+			handler.Clear();
+			for (int i = 0; i < reactions.Length; i++)
+				handler.Add(reactions[i]);
+		}
+
+		public void TriggerInteraction(InteractionType type, Entity sender) {
+			TriggerInteraction(type, sender, EventArgs.Empty);
+		}
+
+		public void TriggerInteraction(InteractionType type, Entity sender, EventArgs args) {
+			InteractionHandler handler = GetInteraction(type);
+			handler.Trigger(this, sender, args);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -144,7 +192,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// With player
 			// Top: 4 overlap
 			// Bottom: 3 overlap?
-			// Sides: 3 overlap
+			// Sides: 3 overlap	
 
 			// Graphics.
 			Graphics.DepthLayer			= DepthLayer.Monsters;
@@ -163,6 +211,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isKnockbackable	= true;
 			isBurning		= false;
 			effectAnimation	= new AnimationPlayer();
+
+			interactionHandlers = new InteractionHandler[(int) InteractionType.Count];
+			for (int i = 0; i < (int) InteractionType.Count; i++)
+				interactionHandlers[i] = new InteractionHandler();
 
 			// Interaction Handlers:
 			// Player & items
@@ -189,40 +241,37 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			handlerSeeds[(int) SeedType.Gale]		= OnGaleSeedHit;
 			handlerSeeds[(int) SeedType.Pegasus]	= OnPegasusSeedHit;
 			handlerSeeds[(int) SeedType.Mystery]	= OnMysterySeedHit;
-
-
-			//SetInteraction(InteractionType.Fire,		ResponseBurn);
-			//SetInteraction(InteractionType.EmberSeed,	ResponseBurn);
-			//SetInteraction(InteractionType.RodFire,		ResponseBurn, DestroySource);
-
-			// From Java game, translated a bit:
-			/*
-			SetInteraction(InteractionType.None,			null);
-			SetInteraction(InteractionType.RodFire,			new BURN(1));
-			SetInteraction(InteractionType.Fire,			new COMBO(new DESTROY_SOURCE(), new BURN(1)));
-			SetInteraction(InteractionType.EmberSeed,		new BURN(1));
-			SetInteraction(InteractionType.ScentSeed,		new SEED_REACTION(1, new DAMAGE(1)));
-			SetInteraction(InteractionType.PegasusSeed,		new SEED_REACTION(2, new STUN()));
-			SetInteraction(InteractionType.GaleSeed,		new GALE());
-			SetInteraction(InteractionType.MysterySeed,		new MYSTERY_SEED());
-			SetInteraction(InteractionType.Arrow,			new DAMAGE(1));
-			SetInteraction(InteractionType.SwordBeam,		new DAMAGE(1));
-			SetInteraction(InteractionType.Sword,			new DAMAGE(1, 2, 3));
-			SetInteraction(InteractionType.BiggoronSword,	new DAMAGE(3));
-			SetInteraction(InteractionType.BombExplosion,	new DAMAGE(1));
-			SetInteraction(InteractionType.Boomerang,		new STUN());
-			SetInteraction(InteractionType.Shield,			new BUMP(true));
-			SetInteraction(InteractionType.Shovel,			new BUMP());
-			SetInteraction(InteractionType.SwitchHook,		new SWITCH());
-			SetInteraction(InteractionType.MineCart,		new DISSAPEAR_KILL()); // TODO
-			SetInteraction(InteractionType.ThrownObject,	new DAMAGE(1)); // TODO
-			SetInteraction(InteractionType.Pickup,			null);
-			SetInteraction(InteractionType.ButtonAction,	null);
-			SetInteraction(InteractionType.SwordHitShield,			new COMBO(new EFFECT_CLING(), new BUMP(true)));
-			SetInteraction(InteractionType.BiggoronSwordHitShield,	new COMBO(new EFFECT_CLING(), new BUMP()));
-			SetInteraction(InteractionType.ShieldHitShield,			new COMBO(new EFFECT_CLING(), new BUMP(true)));
-			*/
 			
+			// Seeds
+			SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept);
+			SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept);
+			SetReaction(InteractionType.PegasusSeed,	SenderReactions.Intercept);
+			SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept);
+			SetReaction(InteractionType.MysterySeed,	SenderReactions.Intercept);
+			// Projectiles
+			SetReaction(InteractionType.Arrow,			SenderReactions.Intercept, Reactions.Damage);
+			SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Damage);
+			SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.Stun);
+			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.SwitchHook);
+			SetReaction(InteractionType.RodFire,		SenderReactions.Intercept);
+			// Environment
+			SetReaction(InteractionType.Fire,			SenderReactions.Intercept, Reactions.Burn);
+			SetReaction(InteractionType.BombExplosion,	Reactions.Damage);
+			SetReaction(InteractionType.ThrownObject,	Reactions.Damage);
+			SetReaction(InteractionType.MineCart,		Reactions.SoftKill);
+			SetReaction(InteractionType.Block,			Reactions.Damage);
+			// Tools
+			SetReaction(InteractionType.Sword,			Reactions.DamageByLevel(1, 2, 3));
+			SetReaction(InteractionType.BiggoronSword,	Reactions.Damage3);
+			SetReaction(InteractionType.Shield,			Reactions.Bump); // BUMP(true)
+			SetReaction(InteractionType.Shovel,			Reactions.Bump); // BUMP()
+			// Player
+			SetReaction(InteractionType.Pickup,			Reactions.None);
+			SetReaction(InteractionType.ButtonAction,	Reactions.None);
+
+			//SetReaction(InteractionType.SwordHitShield,			new COMBO(new EFFECT_CLING(), new BUMP(true)));
+			//SetReaction(InteractionType.BiggoronSwordHitShield,	new COMBO(new EFFECT_CLING(), new BUMP()));
+			//SetReaction(InteractionType.ShieldHitShield,			new COMBO(new EFFECT_CLING(), new BUMP(true)));
 		}
 
 		public void Burn(int damage) {
@@ -257,11 +306,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		//-----------------------------------------------------------------------------
 		// Interactions
 		//-----------------------------------------------------------------------------
-		
+		/*
 		public void TriggerInteraction(Delegate action, params object[] args) {
 			if (action != null)
 				action.DynamicInvoke(args);
-		}
+		}*/
 		
 		protected virtual void OnButtonAction() {
 			
@@ -306,6 +355,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 		
 		protected virtual void OnMysterySeedHit(SeedEntity seed) {
+			/*
 			// Random: burn, stun, damage, gale
 			int rand = GRandom.NextInt(4);
 			if (rand == 0)
@@ -316,6 +366,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				TriggerInteraction(handlerSeeds[(int) SeedType.Gale], seed);
 			else
 				TriggerInteraction(handlerSeeds[(int) SeedType.Pegasus], seed);
+			*/
 		}
 		
 		protected virtual void OnArrowHit(Arrow arrow) {

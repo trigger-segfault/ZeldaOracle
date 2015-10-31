@@ -48,7 +48,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
 			for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
 				Monster monster = iterator.CollisionInfo.Entity as Monster;
-				monster.TriggerInteraction(monster.HandlerSeeds[(int) type], this);
+				InteractionType interactionType = (InteractionType) ((int) InteractionType.EmberSeed + (int) type);
+				monster.TriggerInteraction(interactionType, this);
 				if (IsDestroyed)
 					return;
 			}

@@ -62,6 +62,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		// Virtual Methods
 		//-----------------------------------------------------------------------------
 		
+		public virtual void Intercept() {
+
+		}
+
 		public virtual void OnCollideRoomEdge() {
 
 		}

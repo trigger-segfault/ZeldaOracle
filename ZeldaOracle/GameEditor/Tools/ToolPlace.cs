@@ -28,12 +28,15 @@ namespace ZeldaEditor.Tools {
 		//-----------------------------------------------------------------------------
 
 		private void ActivateTile(MouseButtons mouseButton, Room room, Point2I tileLocation) {
+			
 			if (mouseButton == MouseButtons.Left) {
-				room.CreateTile(
-					editorControl.SelectedTilesetTileData,
-					tileLocation.X, tileLocation.Y, editorControl.CurrentLayer
-				);
-
+				TileData selectedTilesetTileData = editorControl.SelectedTilesetTileData as TileData;
+				if (selectedTilesetTileData != null) {
+					room.CreateTile(
+						selectedTilesetTileData,
+						tileLocation.X, tileLocation.Y, editorControl.CurrentLayer
+					);
+				}
 			}
 			else if (mouseButton == MouseButtons.Right) {
 				/*if (editorControl.CurrentLayer == 0) {
@@ -50,6 +53,7 @@ namespace ZeldaEditor.Tools {
 				// Sample the tile.
 				TileDataInstance tile = room.GetTile(tileLocation, EditorControl.CurrentLayer);
 				if (tile != null) {
+					// TODO: Search for the event tile to sample.
 					editorControl.SelectedTilesetTile = -Point2I.One;
 					editorControl.SelectedTilesetTileData = tile.TileData;
 				}
@@ -80,15 +84,17 @@ namespace ZeldaEditor.Tools {
 			Room room			= LevelDisplayControl.SampleRoom(mousePos);
 			Point2I tileCoord	= LevelDisplayControl.SampleTileCoordinates(mousePos);
 
-			if (EditorControl.EventMode) {
+			if (editorControl.EventMode) {
 				if (EditorControl.EventMode && e.Button == MouseButtons.Left) {
-					EventTileData eventTile = Resources.GetResource<EventTileData>("warp");
+					EventTileData eventTile = editorControl.SelectedTilesetTileData as EventTileData;
+
+					//EventTileData eventTile = Resources.GetResource<EventTileData>("warp");
 					//EventTileData eventTile = Resources.GetResource<EventTileData>("npc");
 
 					//Point2I mousePos	= new Point2I(e.X, e.Y);
 					//Room room		= LevelDisplayControl.SampleRoom(mousePos);
 
-					if (room != null) {
+					if (room != null && eventTile != null) {
 						Point2I roomPos = LevelDisplayControl.GetRoomDrawPosition(room);
 						Point2I pos = (mousePos - roomPos) / 8;
 						pos *= 8;

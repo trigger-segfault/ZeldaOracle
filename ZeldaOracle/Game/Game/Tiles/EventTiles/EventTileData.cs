@@ -25,13 +25,16 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			sprite			= new SpriteAnimation();
 			position		= Point2I.Zero;
 			size			= Point2I.One;
+			
+			properties.Set("image_variant", 0)
+				.SetDocumentation("Image Variant ID", "", "", "Internal",
+				"The image variant to draw the sprtie with.", true, true);
 		}
 		
-		public EventTileData(Type type) {
-			this.type		= type;
-			this.position	= Point2I.Zero;
-			this.size		= Point2I.One;
-			this.sprite		= null;
+		public EventTileData(Type type) :
+			this()
+		{
+			this.type = type;
 		}
 		
 		

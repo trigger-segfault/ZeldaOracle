@@ -16,6 +16,7 @@ using ZeldaOracle.Game;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
 using ZeldaEditor.Tools;
 using ZeldaOracle.Common.Scripting;
@@ -33,7 +34,7 @@ namespace ZeldaEditor.Control {
 		private string				worldFileName;
 		private World				world;
 		private Level				level;
-		private Tileset				tileset;
+		private ITileset			tileset;
 		private Zone				zone;
 		private RewardManager		rewardManager;
 		private Inventory			inventory;
@@ -65,9 +66,8 @@ namespace ZeldaEditor.Control {
 		private bool			showGrid;
 		private bool			highlightMouseTile;
 		private Point2I			selectedRoom;
-		private Point2I			selectedTile;
 		private Point2I			selectedTilesetTile;
-		private TileData		selectedTilesetTileData;
+		private BaseTileData	selectedTilesetTileData;
 		private bool			playerPlaceMode;
 		private bool			showEvents;
 
@@ -102,7 +102,6 @@ namespace ZeldaEditor.Control {
 			this.showEvents					= false;
 			this.highlightMouseTile			= true;
 			this.selectedRoom				= -Point2I.One;
-			this.selectedTile				= -Point2I.One;
 			this.selectedTilesetTile		= Point2I.Zero;
 			this.selectedTilesetTileData	= null;
 			this.playerPlaceMode			= false;
@@ -122,7 +121,7 @@ namespace ZeldaEditor.Control {
 				this.playAnimations = false;
 				this.tileset		= GameData.TILESET_CLIFFS;
 				this.zone			= GameData.ZONE_PRESENT;
-				this.selectedTilesetTileData = this.tileset.TileData[0, 0];
+				this.selectedTilesetTileData = this.tileset.GetTileData(0, 0);
 				this.eventMode		= false;
 
 				GameData.LoadInventory(inventory);
@@ -131,6 +130,9 @@ namespace ZeldaEditor.Control {
 				// Create tileset combo box.
 				editorForm.ComboBoxTilesets.Items.Clear();
 				foreach (KeyValuePair<string, Tileset> entry in Resources.GetResourceDictionary<Tileset>()) {
+					editorForm.ComboBoxTilesets.Items.Add(entry.Key);
+				}
+				foreach (KeyValuePair<string, EventTileset> entry in Resources.GetResourceDictionary<EventTileset>()) {
 					editorForm.ComboBoxTilesets.Items.Add(entry.Key);
 				}
 				editorForm.ComboBoxTilesets.SelectedIndex = 0;
@@ -249,26 +251,34 @@ namespace ZeldaEditor.Control {
 		}
 
 		public void ChangeTileset(string name) {
-			tileset = Resources.GetResource<Tileset>(name);
+			if (Resources.ExistsResource<Tileset>(name))
+				tileset = Resources.GetResource<Tileset>(name);
+			else if (Resources.ExistsResource<EventTileset>(name))
+				tileset = Resources.GetResource<EventTileset>(name);
+			
+			if (tileset.SpriteSheet != null) {
+				// Determine which zone to begin using for this tileset.
+				int index = 0;
+				if (!tileset.SpriteSheet.Image.HasVariant(zone.ID)) {
+					zone = Resources.GetResource<Zone>(tileset.SpriteSheet.Image.VariantName);
+					if (zone == null)
+						zone = GameData.ZONE_DEFAULT;
+				}
 
-			int index = 0;
-			if (!tileset.SpriteSheet.Image.HasVariant(zone.ID)) {
-				zone = Resources.GetResource<Zone>(tileset.SpriteSheet.Image.VariantName);
-				if (zone == null)
-					zone = GameData.ZONE_DEFAULT;
-			}
-			editorForm.ComboBoxZones.Items.Clear();
-			foreach (KeyValuePair<string, Zone> entry in Resources.GetResourceDictionary<Zone>()) {
-				if (tileset.SpriteSheet.Image.HasVariant(entry.Key)) {
-					editorForm.ComboBoxZones.Items.Add(entry.Key);
-					if (entry.Key == zone.ID)
-						editorForm.ComboBoxZones.SelectedIndex = index;
-					index++;
+				// Setup zone combo box for the new tileset.
+				editorForm.ComboBoxZones.Items.Clear();
+				foreach (KeyValuePair<string, Zone> entry in Resources.GetResourceDictionary<Zone>()) {
+					if (tileset.SpriteSheet.Image.HasVariant(entry.Key)) {
+						editorForm.ComboBoxZones.Items.Add(entry.Key);
+						if (entry.Key == zone.ID)
+							editorForm.ComboBoxZones.SelectedIndex = index;
+						index++;
+					}
 				}
 			}
+
 			editorForm.TileDisplay.UpdateTileset();
 			editorForm.TileDisplay.UpdateZone();
-
 		}
 
 		public void ChangeZone(string name) {
@@ -379,7 +389,6 @@ namespace ZeldaEditor.Control {
 				currentToolIndex = toolIndex;
 				if (currentToolIndex != 0) {
 					selectedRoom = -Point2I.One;
-					selectedTile = -Point2I.One;
 				}
 
 				editorForm.OnToolChange(toolIndex);
@@ -453,7 +462,7 @@ namespace ZeldaEditor.Control {
 			set { playAnimations = value; }
 		}
 
-		public Tileset Tileset {
+		public ITileset Tileset {
 			get { return tileset; }
 		}
 
@@ -466,19 +475,17 @@ namespace ZeldaEditor.Control {
 			set { selectedRoom = value; }
 		}
 
-		public Point2I SelectedTile {
-			get { return selectedTile; }
-			set { selectedTile = value; }
-		}
-
 		public Point2I SelectedTilesetTile {
 			get { return selectedTilesetTile; }
 			set { selectedTilesetTile = value; }
 		}
 
-		public TileData SelectedTilesetTileData {
+		public BaseTileData SelectedTilesetTileData {
 			get { return selectedTilesetTileData; }
-			set { selectedTilesetTileData = value; }
+			set {
+				selectedTilesetTileData = value;
+				editorForm.TileDisplay.Invalidate();
+			}
 		}
 
 		public RewardManager RewardManager {
@@ -531,9 +538,13 @@ namespace ZeldaEditor.Control {
 			get { return showEvents; }
 			set { showEvents = value; }
 		}
+		
+		public bool ShouldDrawEvents {
+			get { return (showEvents || eventMode || (selectedTilesetTileData is EventTileData) || (tileset is EventTileset)); }
+		}
 
 		public bool EventMode {
-			get { return eventMode; }
+			get { return (eventMode || (selectedTilesetTileData is EventTileData)); }
 			set { eventMode = value; }
 		}
 
@@ -577,6 +588,10 @@ namespace ZeldaEditor.Control {
 
 		public bool HasMadeChanges {
 			get { return hasMadeChanges; }
+		}
+
+		public bool IsSelectedTileAnEvent {
+			get { return (selectedTilesetTileData is EventTileData); }
 		}
 	}
 }

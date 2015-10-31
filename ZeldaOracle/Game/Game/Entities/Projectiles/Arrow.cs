@@ -43,8 +43,16 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_PLAYER_ARROW);
 			CheckInitialCollision();
 		}
+		
+		public override void Intercept() {
+			Crash(false);
+		}
 
 		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
+			Crash(isInitialCollision);
+		}
+
+		private void Crash(bool isInitialCollision) {
 			// Create crash effect.
 			Effect effect = new Effect();
 			effect.CreateDestroyTimer(32);	
@@ -62,7 +70,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public override void OnCollideMonster(Monster monster) {
-			monster.TriggerInteraction(monster.HandlerArrow, this);
+			monster.TriggerInteraction(InteractionType.Arrow, this);
 		}
 	}
 }

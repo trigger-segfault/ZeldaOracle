@@ -86,6 +86,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			tileLocation = new Point2I(-1, -1);
 		}
 
+		public override void Intercept() {
+			BeginReturn();
+		}
+
 		public override void OnCollideRoomEdge() {
 			BeginReturn();
 		}
@@ -98,7 +102,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public override void OnCollideMonster(Monster monster) {
-			monster.TriggerInteraction(monster.HandlerBoomerang, this);
+			monster.TriggerInteraction(InteractionType.Boomerang, this);
 		}
 
 		public override void Update() {

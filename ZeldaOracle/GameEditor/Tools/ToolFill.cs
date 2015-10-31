@@ -154,10 +154,12 @@ namespace ZeldaEditor.Tools {
 				}
 				else if (editorControl.CurrentLayer == 0 || GetTileAt(target) != null) {
 					// Fill tiles.
-					TileData fillData = editorControl.SelectedTilesetTileData;
-					if (e.Button == MouseButtons.Right)
-						fillData = null;
-					Fill(target, fillData);
+					TileData fillData = editorControl.SelectedTilesetTileData as TileData;
+					if (fillData != null) {
+						if (e.Button == MouseButtons.Right)
+							fillData = null;
+						Fill(target, fillData);
+					}
 				}
 
 			}

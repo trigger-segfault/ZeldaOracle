@@ -32,7 +32,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 
 		private void CollideWithMonster(Entity entity) {
 			Monster monster = entity as Monster;
-			monster.TriggerInteraction(monster.HandlerFire, this);
+			monster.TriggerInteraction(InteractionType.Fire, this);
 		}
 		
 

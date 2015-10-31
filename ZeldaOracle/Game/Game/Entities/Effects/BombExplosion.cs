@@ -41,7 +41,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 				CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft, -1);
 				for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
 					Monster monster = iterator.CollisionInfo.Entity as Monster;
-					monster.TriggerInteraction(monster.HandlerBombExplosion, this);
+					monster.TriggerInteraction(InteractionType.BombExplosion, this);
 					if (IsDestroyed)
 						return;
 				}

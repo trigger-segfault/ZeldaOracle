@@ -84,7 +84,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public override void OnCollideMonster(Monster monster) {
-			monster.TriggerInteraction(monster.HandlerSeeds[(int) type], this);
+			InteractionType interactionType = (InteractionType) ((int) InteractionType.EmberSeed + (int) type);
+			monster.TriggerInteraction(interactionType, this);
 		}
 	}
 }

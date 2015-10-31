@@ -41,19 +41,23 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			CheckInitialCollision();
 		}
 
-		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
-			// Move 3 pixels into the block from where it collided.
-			if (!isInitialCollision)
-				position += Physics.PreviousVelocity.Normalized * 3.0f;
-
+		public override void Intercept() {
 			// Spawn fire.
 			Fire fire = new Fire();
 			RoomControl.SpawnEntity(fire, position);
 			DestroyAndTransform(fire);
 		}
 
+		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
+			// Move 3 pixels into the block from where it collided.
+			if (!isInitialCollision)
+				position += Physics.PreviousVelocity.Normalized * 3.0f;
+
+			Intercept();
+		}
+
 		public override void OnCollideMonster(Monster monster) {
-			monster.TriggerInteraction(monster.HandlerRodFire, this);
+			monster.TriggerInteraction(InteractionType.RodFire, this);
 		}
 	}
 }

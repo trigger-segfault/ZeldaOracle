@@ -21,7 +21,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			syncAnimationWithDirection = true;
 
 			// Physics.
-			EventCollision += Crash;
 			Physics.CollisionBox		= new Rectangle2F(-1, -4, 2, 1);
 			Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 1);
 			EnablePhysics(
@@ -51,16 +50,20 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_SWORD_BEAM);
 			CheckInitialCollision();
 		}
-
-		public override void OnCollideMonster(Monster monster) {
-			monster.TriggerInteraction(monster.HandlerSwordBeam, this);
-		}
-
-		private void Crash() {
+		
+		public override void Intercept() {
 			// Create cling effect.
 			Effect effect = new Effect(GameData.ANIM_EFFECT_CLING_LIGHT, DepthLayer.EffectCling);
 			RoomControl.SpawnEntity(effect, position, zPosition);
 			DestroyAndTransform(effect);
+		}
+
+		public override void OnCollideMonster(Monster monster) {
+			monster.TriggerInteraction(InteractionType.SwordBeam, this);
+		}
+
+		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
+			Intercept();
 		}
 	}
 }

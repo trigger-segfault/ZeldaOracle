@@ -27,6 +27,15 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.Custom;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
+using System.CodeDom.Compiler;
+
+namespace ScriptingInterface
+{
+    public interface IScriptType1
+    {
+        string RunScript(int value);
+    }
+}
 
 namespace ZeldaOracle.Game {
 	
@@ -373,6 +382,9 @@ namespace ZeldaOracle.Game {
 			Resources.LoadTilesets("Tilesets/overworld.conscript");
 			Resources.LoadTilesets("Tilesets/interior2.conscript");
 
+			EventTileset eventTileset = new EventTileset("events", null, 12, 16);
+			Resources.AddResource(eventTileset.ID, eventTileset);
+
 			// Create an warp event.
 			EventTileData etd = new EventTileData(typeof(WarpEvent));
 			etd.Sprite = SPR_EVENT_TILE_WARP_STAIRS;
@@ -386,10 +398,12 @@ namespace ZeldaOracle.Game {
 				.SetDocumentation("Face Direction", "direction", "", "", "The direction the player should face when entering a room through this Warp Point.");
 			etd.Sprite = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
 			Resources.AddResource("warp", etd);
+			eventTileset.TileData[0, 0] = etd;
 			
 			// Create an NPC event.
 			etd = new EventTileData(typeof(NPCEvent));
 			etd.Sprite = Resources.GetAnimation("npc_shopkeeper");
+			etd.Properties.Set("substrip_index", Directions.Down);
 			etd.Properties.Set("npc_flags", (int) NPCFlags.Default)
 				.SetDocumentation("NPC Options", "enum_flags", "", "", "The options for the NPC.");
 			etd.Properties.Set("direction", Directions.Down)
@@ -401,6 +415,23 @@ namespace ZeldaOracle.Game {
 			etd.Properties.Set("animation_talk", "")
 				.SetDocumentation("Talk Animation", "animation", "", "", "The animation of the NPC when being talked to.");
 			Resources.AddResource("npc", etd);
+			eventTileset.TileData[1, 0] = etd;
+			
+			// Create a monster event.
+			etd = new EventTileData(typeof(MonsterEvent));
+			etd.Sprite = Resources.GetAnimation("monster_octorok");
+			
+			etd.Properties.Set("color", "Red")
+				.SetDocumentation("Color", "enum", "MonsterColor", "", "The color of the monster.");
+			etd.Properties.Set("respawn_type", "Normal")
+				.SetDocumentation("Respawn Type", "enum", "MonsterRespawnType", "", "When a monster respawns.");
+
+			etd.Properties.Set("substrip_index", Directions.Down);
+			//etd.Properties.Set("image_variant", GameData.VARIANT_RED);
+
+			Resources.AddResource("monster_octorok_red", etd);
+			eventTileset.TileData[2, 0] = etd;
+
 
 
 			IntegrateResources<Tileset>("TILESET_");

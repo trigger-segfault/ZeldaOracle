@@ -69,7 +69,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
 			for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
 				Monster monster = iterator.CollisionInfo.Entity as Monster;
-				monster.TriggerInteraction(monster.HandlerThrownObject, this);
+				monster.TriggerInteraction(InteractionType.ThrownObject, this);
 				if (IsDestroyed)
 					return;
 			}

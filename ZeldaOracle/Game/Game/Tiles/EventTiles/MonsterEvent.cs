@@ -31,7 +31,9 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 
 			// Spawn the monster entity.
 			Monster monster = new Monster();
-			RoomControl.SpawnEntity(monster, position);
+			Vector2F center = position + new Vector2F(8, 8);
+			monster.SetPositionByCenter(center);
+			RoomControl.SpawnEntity(monster);
 		}
 
 
