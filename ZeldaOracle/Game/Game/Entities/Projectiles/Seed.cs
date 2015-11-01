@@ -12,7 +12,7 @@ using ZeldaOracle.Game.Tiles;
 namespace ZeldaOracle.Game.Entities.Projectiles {
 
 	// Seeds dropped from the satchel.
-	public class Seed : SeedEntity {
+	public class Seed : SeedEntity, IInterceptable {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -40,6 +40,13 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
+		public void Intercept() {
+			if (type == SeedType.Ember)
+				DestroyWithEffect(type, Center);
+			else
+				DestroyWithVisualEffect(type, Center);
+		}
+
 		public override void OnLand() {
 			if (IsDestroyed)
 				return;
@@ -48,7 +55,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
 			for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
 				Monster monster = iterator.CollisionInfo.Entity as Monster;
-				monster.TriggerInteraction(monster.HandlerSeeds[(int) type], this);
+				InteractionType interactionType = (InteractionType) ((int) InteractionType.EmberSeed + (int) type);
+				monster.TriggerInteraction(interactionType, this);
 				if (IsDestroyed)
 					return;
 			}

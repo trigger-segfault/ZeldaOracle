@@ -11,7 +11,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
-	public class SwitchHookProjectile : Projectile {
+	public class SwitchHookProjectile : Projectile, IInterceptable {
 		private float	speed;
 		private int		length;
 		private int		level;
@@ -57,6 +57,16 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		//-----------------------------------------------------------------------------
 		
 		public void OnSwitchPositions() {
+		}
+
+		public void SwitchWithEntity(Entity entity) {
+			if (!isReturning && !isHooked && !isLifting) {
+				hookedObject	= entity;
+				isHooked		= true;
+				timer			= 0;
+				graphics.PlayAnimation();
+				Physics.Velocity = Vector2F.Zero;
+			}
 		}
 
 		public void BeginSwitching() {
@@ -119,6 +129,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			Graphics.Animation = GameData.ANIM_PROJECTILE_SWITCH_HOOK;
 		}
 
+		public void Intercept() {
+			BeginReturn(false);
+		}
+
 		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
 			if (!isReturning && !isHooked && !isLifting) {
 				if (tile.IsSwitchable) {
@@ -141,7 +155,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		public override void OnCollideMonster(Monster monster) {
 			if (!isReturning && !isHooked && !isLifting)
-				monster.TriggerInteraction(monster.HandlerSwitchHook, this);
+				monster.TriggerInteraction(InteractionType.SwitchHook, this);
 		}
 
 		public override void Update() {
@@ -225,6 +239,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				else
 					return RoomControl.Player.Center;
 			}
+		}
+
+		public float Speed {
+			get { return speed; }
 		}
 	}
 }

@@ -18,6 +18,7 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 		public PlayerToolVisual() {
 			toolType = UnitToolType.Visual;
 			IsPhysicsEnabled = false;
+			syncAnimationWithDirection = false;
 		}
 
 	}

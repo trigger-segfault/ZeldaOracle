@@ -18,12 +18,14 @@ namespace ZeldaOracle.Game.Entities.Units {
 		
 		protected Unit			unit;
 		protected bool			drawAboveUnit;
+		protected bool			syncAnimationWithDirection;
 		protected Rectangle2I	collisionBox;
 		protected Point2I		drawOffset;
 		protected UnitToolType	toolType;
 		private AnimationPlayer	animationPlayer;
 		private bool			isEquipped;
 		private bool			isPhysicsEnabled;
+		private int				imageVariantID;
 
 
 		//-----------------------------------------------------------------------------
@@ -38,6 +40,8 @@ namespace ZeldaOracle.Game.Entities.Units {
 			toolType			= UnitToolType.Visual;
 			isEquipped			= false;
 			isPhysicsEnabled	= true;
+			imageVariantID		= GameData.VARIANT_NONE;
+			syncAnimationWithDirection	= true;
 		}
 
 		public void Initialize(Unit unit) {
@@ -66,7 +70,8 @@ namespace ZeldaOracle.Game.Entities.Units {
 
 		public virtual void Update() {
 			animationPlayer.Update();
-			animationPlayer.SubStripIndex = unit.Direction;
+			if (syncAnimationWithDirection)
+				animationPlayer.SubStripIndex = unit.Direction;
 
 			if (isPhysicsEnabled) {
 				for (int i = 0; i < unit.RoomControl.EntityCount; i++) {
@@ -175,6 +180,11 @@ namespace ZeldaOracle.Game.Entities.Units {
 		public bool IsPhysicsEnabled {
 			get { return isPhysicsEnabled; }
 			set { isPhysicsEnabled = value; }
+		}
+		
+		public int ImageVariantID {
+			get { return imageVariantID; }
+			set { imageVariantID = value; }
 		}
 	}
 }

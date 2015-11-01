@@ -11,7 +11,7 @@ using ZeldaOracle.Game.Tiles;
 namespace ZeldaOracle.Game.Entities.Projectiles {
 	
 	// Seeds shot from the seed-shooter or slingshot.
-	public class SeedProjectile : SeedEntity {
+	public class SeedProjectile : SeedEntity, IInterceptable {
 
 		private int reboundCounter;
 		private bool reboundOffWalls;
@@ -55,6 +55,19 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			CheckInitialCollision();
 		}
 
+		public void Intercept() {
+			// Create the seed's effect.
+			if (type == SeedType.Ember) {
+				Fire fire = new Fire();
+				RoomControl.SpawnEntity(fire, Center - new Vector2F(0, 1), zPosition);
+				DestroyAndTransform(fire);
+			}
+			else {
+				Entity effect = CreateVisualEffect(type, Center);
+				DestroyAndTransform(effect);
+			}
+		}
+
 		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
 			if (reboundOffWalls && !isInitialCollision) {
 				reboundCounter++;
@@ -74,17 +87,12 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 					return;
 			}
 			
-			// Create the seed's effect.
-			if (type == SeedType.Ember)
-				RoomControl.SpawnEntity(new Fire(), Center - new Vector2F(0, 1), zPosition);
-			else
-				CreateVisualEffect(type, Center);
-
-			Destroy();
+			Intercept();
 		}
 
 		public override void OnCollideMonster(Monster monster) {
-			monster.TriggerInteraction(monster.HandlerSeeds[(int) type], this);
+			InteractionType interactionType = (InteractionType) ((int) InteractionType.EmberSeed + (int) type);
+			monster.TriggerInteraction(interactionType, this);
 		}
 	}
 }

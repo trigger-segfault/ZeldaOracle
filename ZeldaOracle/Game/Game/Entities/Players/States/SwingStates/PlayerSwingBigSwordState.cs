@@ -80,7 +80,10 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		}
 		
 		public override void OnHitMonster(Monster monster) {
-			monster.TriggerInteraction(monster.HandlerBigSword, Weapon as ItemBigSword);
+			WeaponInteractionEventArgs args = new WeaponInteractionEventArgs() {
+				Weapon = (ItemBigSword) Weapon
+			};
+			monster.TriggerInteraction(InteractionType.BiggoronSword, player, args);
 		}
 	}
 }

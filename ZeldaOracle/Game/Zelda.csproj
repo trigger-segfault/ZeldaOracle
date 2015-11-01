@@ -226,6 +226,8 @@
     <Compile Include="Game\Entities\Effects\ScentPod.cs" />
     <Compile Include="Game\Entities\EntityTracker.cs" />
     <Compile Include="Game\Entities\GraphicsComponent.cs" />
+    <Compile Include="Game\Entities\IInterceptable.cs" />
+    <Compile Include="Game\Entities\Monsters\MonsterReactions.cs" />
     <Compile Include="Game\Entities\Monsters\TestMonster.cs" />
     <Compile Include="Game\Entities\Monsters\Monster.cs" />
     <Compile Include="Game\Entities\Monsters\Tools\MonsterToolSword.cs" />
@@ -258,6 +260,9 @@
     <Compile Include="Game\Entities\Players\Tools\PlayerToolSword.cs" />
     <Compile Include="Game\Entities\Players\Tools\PlayerToolVisual.cs" />
     <Compile Include="Game\Entities\Players\Tools\PlayerToolShield.cs" />
+    <Compile Include="Game\Entities\Projectiles\MagicProjectile.cs" />
+    <Compile Include="Game\Entities\Projectiles\MonsterArrowProjectile.cs" />
+    <Compile Include="Game\Entities\Projectiles\RockProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\MagicRodFire.cs" />
     <Compile Include="Game\Entities\Projectiles\SwitchHookProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\Boomerang.cs" />
@@ -358,7 +363,10 @@
     <Compile Include="Common\Content\ResourceBuilders\AnimationBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\SpriteBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\TilesetBuilder.cs" />
+    <Compile Include="Game\Tiles\ITileset.cs" />
     <Compile Include="Game\Tiles\Custom\TileSomariaBlock.cs" />
+    <Compile Include="Game\Tiles\BaseTileset.cs" />
+    <Compile Include="Game\Tiles\EventTiles\EventTileset.cs" />
     <Compile Include="Game\Tiles\TileSpecialFlags.cs" />
     <Compile Include="Game\Tiles\Custom\TileRoller.cs" />
     <Compile Include="Game\Tiles\Custom\TileColorCube.cs" />

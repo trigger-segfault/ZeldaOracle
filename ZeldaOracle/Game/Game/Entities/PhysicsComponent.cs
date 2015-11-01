@@ -226,7 +226,7 @@ namespace ZeldaOracle.Game.Entities {
 
 			// Check if destroyed outside room.
 			if (HasFlags(PhysicsFlags.DestroyedOutsideRoom) &&
-				!entity.RoomControl.RoomBounds.Contains(entity.Origin))
+				!entity.RoomControl.RoomBounds.Contains(entity.Position))
 			{
 				entity.Destroy();
 				return;
@@ -251,7 +251,7 @@ namespace ZeldaOracle.Game.Entities {
 			topTileFlags = TileFlags.None;
 			allTileFlags = TileFlags.None;
 
-			Point2I location = entity.RoomControl.GetTileLocation(entity.Origin);
+			Point2I location = entity.RoomControl.GetTileLocation(entity.Position);
 			if (entity.RoomControl.IsTileInBounds(location)) {
 				for (int i = entity.RoomControl.Room.LayerCount - 1; i >= 0; i--) {
 					Tile tile = entity.RoomControl.GetTile(location, i);

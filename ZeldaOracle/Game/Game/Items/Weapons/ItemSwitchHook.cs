@@ -41,11 +41,9 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 			Player.Direction = Player.UseDirection;
 
-			// Spawn the boomerang.
+			// Shoot and hook projectile.
 			SwitchHookProjectile hook = new SwitchHookProjectile(level);
-			hook.Owner		= Player;
-			hook.Direction	= Player.UseDirection;
-			RoomControl.SpawnEntity(hook);
+			Player.ShootFromDirection(hook, Player.Direction, hook.Speed);
 
 			// Begin the player state.
 			Player.SwitchHookState.Hook = hook;

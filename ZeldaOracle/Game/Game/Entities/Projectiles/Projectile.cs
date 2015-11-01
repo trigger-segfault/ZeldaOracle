@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Collisions;
+using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Tiles;
@@ -19,9 +21,12 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		protected Entity	owner;
 		protected bool		syncAnimationWithAngle;
 		protected bool		syncAnimationWithDirection;
+		protected Animation	crashAnimation;
+		protected bool		bounceOnCrash;
 
 		private event Action eventCollision;
 		private event Action eventLand;
+
 
 
 		//-----------------------------------------------------------------------------
@@ -42,16 +47,49 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 			Graphics.IsRipplesEffectVisible	= false;
 			Graphics.IsGrassEffectVisible	= false;
+
+			crashAnimation	= null;
+			bounceOnCrash	= false;
 		}
 		
 
 		//-----------------------------------------------------------------------------
 		// Projectile Methods
 		//-----------------------------------------------------------------------------
+
+		protected void Crash(bool isInitialCollision) {
+			if (crashAnimation != null) {
+				// Create crash effect.
+				Effect effect;
+
+				if (bounceOnCrash) {
+					effect = new Effect();
+					effect.CreateDestroyTimer(32);
+					effect.EnablePhysics(PhysicsFlags.HasGravity);
+					if (!isInitialCollision)
+						effect.Physics.Velocity = Angles.ToVector(Angles.Reverse(Angle)) * 0.25f;
+					effect.Physics.ZVelocity	= 1.0f;
+					effect.Physics.Gravity		= 0.07f;
+					effect.Graphics.PlayAnimation(crashAnimation);
+				}
+				else {
+					effect = new Effect(crashAnimation, Graphics.DepthLayer);
+				}
+				
+				effect.Graphics.IsShadowVisible = false;
+				effect.Graphics.DepthLayer = Graphics.DepthLayer;
+
+				RoomControl.SpawnEntity(effect, position);
+				DestroyAndTransform(effect);
+			}
+			else {
+				Destroy();
+			}
+		}
 		
 		protected void CheckInitialCollision() {
 			if (physics.IsPlaceMeetingSolid(position, physics.CollisionBox)) {
-				Point2I tileLocation = RoomControl.GetTileLocation(Origin);
+				Point2I tileLocation = RoomControl.GetTileLocation(Position);
 				Tile tile = RoomControl.GetTopTile(tileLocation);
 				OnCollideTile(tile, true);
 			}
@@ -61,7 +99,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		//-----------------------------------------------------------------------------
 		// Virtual Methods
 		//-----------------------------------------------------------------------------
-		
+
 		public virtual void OnCollideRoomEdge() {
 
 		}
@@ -71,6 +109,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public virtual void OnCollideMonster(Monster monster) {
+
+		}
+
+		public virtual void OnCollidePlayer(Player player) {
 
 		}
 
@@ -123,15 +165,19 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 					OnCollideRoomEdge();
 			}
 
-			// Collide with monsters.
 			if (owner is Player) {
-
-
+				// Collide with monsters.
 				CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
 				for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
 					OnCollideMonster(iterator.CollisionInfo.Entity as Monster);
 					if (IsDestroyed)
 						return;
+				}
+			}
+			else {
+				// Collide with the player.
+				if (Physics.IsMeetingEntity(RoomControl.Player, CollisionBoxType.Soft)) {
+					OnCollidePlayer(RoomControl.Player);
 				}
 			}
 			

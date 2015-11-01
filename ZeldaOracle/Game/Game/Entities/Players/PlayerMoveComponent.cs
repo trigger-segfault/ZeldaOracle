@@ -203,7 +203,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				
 				// Jump!
 				isCapeDeployed = false;
-				jumpStartTile = player.RoomControl.GetTileLocation(player.Origin);
+				jumpStartTile = player.RoomControl.GetTileLocation(player.Position);
 				player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
 				if (player.CurrentState is PlayerNormalState)
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
@@ -413,7 +413,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 					
 					// Collide with hole boundries.
 					Rectangle2F holeRect = new Rectangle2F(holeTile.Position, new Vector2F(16, 16));
-					Rectangle2F collisionBox = new Rectangle2F(player.OriginOffset, Vector2F.One);
+					Rectangle2F collisionBox = new Rectangle2F(Vector2F.Zero, Vector2F.One);
 					player.Physics.PerformInsideEdgeCollisions(collisionBox, holeRect);
 				}
 				else if (!player.Physics.IsInHole) {
@@ -425,9 +425,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 				}
 				else {
 					// Check if the player has changed quadrents.
-					Point2I holeTileLoc = player.RoomControl.GetTileLocation(player.Origin);
+					Point2I holeTileLoc = player.RoomControl.GetTileLocation(player.Position);
 					Tile newHoleTile	= player.RoomControl.GetTopTile(holeTileLoc);
-					Point2I newQuadrent	= (Point2I) (player.Origin / 8);
+					Point2I newQuadrent	= (Point2I) (player.Position / 8);
 					if (newQuadrent != holeEnterQuadrent) {
 						doomedToFallInHole = true;
 						holeTile = newHoleTile;
@@ -466,9 +466,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 			else if (player.Physics.IsInHole && player.CurrentState != player.RespawnDeathState) {
 				// Start falling in a hole.
-				Point2I holeTileLoc = player.RoomControl.GetTileLocation(player.Origin);
+				Point2I holeTileLoc = player.RoomControl.GetTileLocation(player.Position);
 				holeTile			= player.RoomControl.GetTopTile(holeTileLoc);
-				holeEnterQuadrent	= (Point2I) (player.Origin / 8);
+				holeEnterQuadrent	= (Point2I) (player.Position / 8);
 				doomedToFallInHole	= false;
 				fallingInHole		= true;
 				holeDoomTimer		= 10;
@@ -506,7 +506,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 					//Sounds.PLAYER_LAND.play();
 					player.RoomControl.SpawnEntity(
 						new Effect(GameData.ANIM_EFFECT_SPRINT_PUFF, DepthLayer.EffectSprintPuff),
-						player.Origin);
+						player.Position);
 				}
 				sprintTimer--;
 				if (sprintTimer <= 0)

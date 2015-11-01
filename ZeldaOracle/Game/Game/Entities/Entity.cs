@@ -26,7 +26,6 @@ namespace ZeldaOracle.Game.Entities {
 		protected float				zPosition;
 		protected PhysicsComponent	physics;
 		protected GraphicsComponent	graphics;
-		protected Point2I			originOffset;
 		protected Point2I			centerOffset;
 		protected int				actionAlignDistance; // How many pixels off of alignment to interact with the entity (based on center positions).
 
@@ -47,7 +46,6 @@ namespace ZeldaOracle.Game.Entities {
 			previousZPosition	= 0.0f;
 			physics				= new PhysicsComponent(this);
 			graphics			= new GraphicsComponent(this);
-			originOffset		= Point2I.Zero;
 			centerOffset		= Point2I.Zero;
 			actionAlignDistance	= 5;
 		}
@@ -282,16 +280,6 @@ namespace ZeldaOracle.Game.Entities {
 
 		public bool IsOnGround {
 			get { return !IsInAir; }
-		}
-
-		public Vector2F Origin {
-			get { return (position + originOffset); }
-			set { position = value - originOffset; }
-		}
-
-		public Point2I OriginOffset {
-			get { return originOffset; }
-			set { originOffset = value; }
 		}
 
 		public Vector2F Center {

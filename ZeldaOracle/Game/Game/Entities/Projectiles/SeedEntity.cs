@@ -88,6 +88,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		public SeedType SeedType {
 			get { return type; }
+			set { type = value; }
 		}
 	}
 }

@@ -6,17 +6,10 @@ using System.Text;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using Microsoft.Xna.Framework;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class Tileset {
-		
-		private string		id;
-		private TileData[,]	tileData;
-		private Point2I		size;
-		private SpriteSheet	sheet;
-		private Point2I		defaultTile;
+	public class Tileset : BaseTileset<TileData> {
 
 
 		//-----------------------------------------------------------------------------
@@ -28,34 +21,17 @@ namespace ZeldaOracle.Game.Tiles {
 		{
 		}
 
-		public Tileset(string id, SpriteSheet sheet, int width, int height) {
-			this.id				= id;
-			this.sheet			= sheet;
-			this.size			= new Point2I(width, height);
-			this.defaultTile	= Point2I.Zero;
-			this.tileData		= new TileData[width, height];
-
-			// Create default tiledata.
-			for (int x = 0; x < size.X; x++) {
-				for (int y = 0; y < size.Y; y++) {
-					tileData[x, y] = new TileData();
-					tileData[x, y].Tileset			= this;
-					tileData[x, y].SheetLocation	= new Point2I(x, y);
-					tileData[x, y].Sprite			= new Sprite(sheet, x, y);
-				}
-			}
+		public Tileset(string id, SpriteSheet sheet, int width, int height) :
+			base(id, sheet, width, height)
+		{
 		}
 		
 
-		//-----------------------------------------------------------------------------
+		//----------------------------------------------------------------------------
 		// Functions
 		//----------------------------------------------------------------------------
-		/*
-		public Tile CreateTile(Point2I sheetLocation) {
-			TileData data = tileData[sheetLocation.X, sheetLocation.Y];
-			return Tile.CreateTile(data);
-		}*/
 
+		// Configure a tile using single characters that represent basic tile types.
 		public void ConfigureTile(TileData data, char configChar) {
 			switch (configChar) {
 				case 'S':
@@ -78,33 +54,18 @@ namespace ZeldaOracle.Game.Tiles {
 				case 'O': data.Flags |= TileFlags.Water | TileFlags.Ocean; break;
 			}
 		}
+		
 
-		public void LoadConfig(string filename) {
-			// Create default tile data.
-			for (int x = 0; x < size.X; x++) {
-				for (int y = 0; y < size.Y; y++) {
-					tileData[x, y] = new TileData();
-					tileData[x, y].Tileset			= this;
-					tileData[x, y].SheetLocation	= new Point2I(x, y);
-					tileData[x, y].Sprite			= new Sprite(sheet, x, y, 0, 0);
-				}
-			}
-			
-			// Read the character grid.
-			try {
-				Stream stream = TitleContainer.OpenStream(filename);
-				StreamReader reader = new StreamReader(stream, Encoding.ASCII);
-				
-				for (int y = 0; y < size.Y; y++) {
-					string line = reader.ReadLine();
-					for (int x = 0; x < size.X && x < line.Length; x++)
-						ConfigureTile(tileData[x, y], line[x]);
-					stream.Close();
-				}
-			}
-			catch (FileNotFoundException) {
-				Console.WriteLine("Error loading tileset config \"" + filename + "\"");
-			}
+		//----------------------------------------------------------------------------
+		// Overridden Methods
+		//----------------------------------------------------------------------------
+
+		protected override TileData CreateDefaultTileData(Point2I location) {
+			TileData tileData		= new TileData();
+			tileData.Tileset		= this;
+			tileData.SheetLocation	= location;
+			tileData.Sprite			= new Sprite(sheet, location);
+			return tileData;
 		}
 
 
@@ -112,42 +73,5 @@ namespace ZeldaOracle.Game.Tiles {
 		// Properties
 		//-----------------------------------------------------------------------------
 		
-		public string ID {
-			get { return id; }
-			set { id = value; }
-		}
-
-		public TileData[,] TileData {
-			get { return tileData; }
-		}
-		
-		public Point2I Size {
-			get { return size; }
-			set { size = value; }
-		}
-		
-		public int Width {
-			get { return size.X; }
-			set { size.X = value; }
-		}
-		
-		public int Height {
-			get { return size.Y; }
-			set { size.Y = value; }
-		}
-		
-		public Point2I DefaultTile {
-			get { return defaultTile; }
-			set { defaultTile = value; }
-		}
-		
-		public TileData DefaultTileData {
-			get { return tileData[defaultTile.X, defaultTile.Y]; }
-		}
-
-		public SpriteSheet SpriteSheet {
-			get { return sheet; }
-			set { sheet = value; }
-		}
 	}
 }

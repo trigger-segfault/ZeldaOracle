@@ -43,6 +43,23 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			Graphics.PlayAnimation(animation);
 			Graphics.DepthLayer = depthLayer;
 		}
+		
+		// Create an effect that plays an animation and then dissapears
+		public Effect(Effect copy) :
+			this()
+		{
+			destroyTimer = copy.destroyTimer;
+			destroyOnAnimationComplete = copy.destroyOnAnimationComplete;
+			fadeDelay = copy.fadeDelay;
+			Graphics.DepthLayer = copy.Graphics.DepthLayer;
+
+			if (copy.Graphics.Animation != null)
+				Graphics.PlayAnimation(copy.Graphics.Animation);
+		}
+
+		public Effect Clone() {
+			return new Effect(this);
+		}
 
 
 		//-----------------------------------------------------------------------------
@@ -55,10 +72,19 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			this.fadeDelay = fadeDelay;
 			Graphics.FlickerAlternateDelay = flickerAlternateDelay;
 		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Virtual Methods
+		//-----------------------------------------------------------------------------
+
+		public virtual void OnDestroyTimerDone() {
+			Destroy();
+		}
 
 
 		//-----------------------------------------------------------------------------
-		// Overridden methods
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
 		
 		public override void Initialize() {
@@ -69,7 +95,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			base.Update();
 
 			if (destroyOnAnimationComplete && Graphics.IsAnimationDone)
-				Destroy();
+				OnDestroyTimerDone();
 
 			// Update the destroy timer.
 			if (destroyTimer >= 0) {
@@ -77,7 +103,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 				if (fadeDelay > 0 && destroyTimer == fadeDelay)
 					graphics.IsFlickering = true;
 				if (destroyTimer <= 0)
-					Destroy();
+					OnDestroyTimerDone();
 			}
 		}
 

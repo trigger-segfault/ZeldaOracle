@@ -127,20 +127,15 @@ IMAGE npcs;
 	VARIANT red		"Units/NPCs/npcs_red";
 	END;
 
-#IMAGE basic_monsters;
-#	VARIANT normal	"Units/Monsters/basic_monsters";
-#	VARIANT hurt	"Units/Monsters/basic_monsters_hurt";
-#	END;
-
-#IMAGE color_monsters;
-#	VARIANT red		"Units/Monsters/monsters_red";
-#	VARIANT blue	"Units/Monsters/monsters_blue";
-#	VARIANT green	"Units/Monsters/monsters_green";
-#	VARIANT yellow	"Units/Monsters/monsters_yellow";
-#	VARIANT hurt	"Units/Monsters/monsters_hurt";
-#	END;
+IMAGE color_monsters;
+	VARIANT red		"Units/Monsters/color_monsters_red";
+	VARIANT blue	"Units/Monsters/color_monsters_blue";
+	VARIANT green	"Units/Monsters/color_monsters_green";
+	VARIANT orange	"Units/Monsters/color_monsters_orange";
+	VARIANT hurt	"Units/Monsters/color_monsters_hurt";
+	END;
 
 IMAGE basic_monsters;
-	VARIANT normal	"Units/Monsters/basic_monsters";
-	VARIANT hurt	"Units/Monsters/basic_monsters_hurt";
+	VARIANT normal	"Units/Monsters/monsters";
+	VARIANT hurt	"Units/Monsters/monsters_hurt";
 	END;

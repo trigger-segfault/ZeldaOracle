@@ -238,10 +238,13 @@ namespace ZeldaEditor {
 				else if (warpType == "entrance")
 					spr = GameData.SPR_EVENT_TILE_WARP_ENTRANCE;
 			}*/
-			
+
 			// Draw the sprite.
 			if (!spr.IsNull) {
-				g.DrawAnimation(spr, eventTile.Room.Zone.ImageVariantID, editorControl.Ticks, eventTile.Position, Color.White);
+				int imageVariantID = eventTile.Properties.GetInteger("image_variant");
+				if (imageVariantID < 0)
+					imageVariantID = eventTile.Room.Zone.ImageVariantID;
+				g.DrawAnimation(spr, imageVariantID, editorControl.Ticks, eventTile.Position, Color.White);
 			}
 			else {
 				Rectangle2I r = new Rectangle2I(eventTile.Position, eventTile.Size * GameSettings.TILE_SIZE);
@@ -263,7 +266,7 @@ namespace ZeldaEditor {
 			for (int i = 0; i < room.LayerCount; i++) {
 				// Determine color/transparency for layer based on layer visibility.
 				Color color = normal;
-				if (!editorControl.EventMode) {
+				if (!editorControl.ShouldDrawEvents) {
 					if (editorControl.CurrentLayer > i) {
 						if (editorControl.BelowTileDrawMode == TileDrawModes.Hide)
 							color = hide;
@@ -298,7 +301,7 @@ namespace ZeldaEditor {
 			}
 
 			// Draw event tiles.
-			if (editorControl.ShowEvents || editorControl.EventMode) {
+			if (editorControl.ShowEvents || editorControl.ShouldDrawEvents) {
 				for (int i = 0; i < room.EventData.Count; i++)
 					DrawEventTile(g, room.EventData[i], Color.White);
 			}

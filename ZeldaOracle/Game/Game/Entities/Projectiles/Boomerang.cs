@@ -11,7 +11,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
-	public class Boomerang : Projectile {
+	public class Boomerang : Projectile, IInterceptable {
 
 		private bool isReturning;
 		private float speed;
@@ -86,6 +86,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			tileLocation = new Point2I(-1, -1);
 		}
 
+		public void Intercept() {
+			BeginReturn();
+		}
+
 		public override void OnCollideRoomEdge() {
 			BeginReturn();
 		}
@@ -98,7 +102,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public override void OnCollideMonster(Monster monster) {
-			monster.TriggerInteraction(monster.HandlerBoomerang, this);
+			monster.TriggerInteraction(InteractionType.Boomerang, this);
 		}
 
 		public override void Update() {

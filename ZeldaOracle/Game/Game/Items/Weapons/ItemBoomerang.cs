@@ -44,14 +44,13 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			if (boomerangTracker.IsMaxedOut)
 				return;
 
-			// Spawn the boomerang.
+			// Shoot and track the boomerang.
 			Boomerang boomerang = new Boomerang(level);
-			boomerang.Owner		= Player;
-			boomerang.Angle		= Player.UseAngle;
-			RoomControl.SpawnEntity(boomerang, Player.Center, Player.ZPosition);
+			Player.ShootFromAngle(boomerang, Player.UseAngle, boomerang.Speed);
 			boomerangTracker.TrackEntity(boomerang);
 
 			if (level == Item.Level1) {
+				// Begin the standard busy state for the regular boomerang.
 				Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 				Player.BeginBusyState(10);
 			}

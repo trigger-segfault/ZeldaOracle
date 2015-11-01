@@ -74,6 +74,7 @@ namespace ZeldaOracle.Common.Content {
 		private static Dictionary<string, CollisionModel> collisionModels;
 		private static Dictionary<string, Tileset> tilesets;
 		private static Dictionary<string, TileData> tileData;
+		private static Dictionary<string, EventTileset> eventTilesets;
 		private static Dictionary<string, EventTileData> eventTileData;
 		private static Dictionary<string, Zone> zones;
 		private static Dictionary<string, PropertyAction> propertyActions;
@@ -150,6 +151,7 @@ namespace ZeldaOracle.Common.Content {
 			collisionModels		= new Dictionary<string, CollisionModel>();
 			tilesets			= new Dictionary<string, Tileset>();
 			tileData			= new Dictionary<string, TileData>();
+			eventTilesets		= new Dictionary<string, EventTileset>();
 			eventTileData		= new Dictionary<string, EventTileData>();
 			zones				= new Dictionary<string, Zone>();
 
@@ -172,6 +174,7 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries[typeof(CollisionModel)]	= collisionModels;
 			resourceDictionaries[typeof(Tileset)]			= tilesets;
 			resourceDictionaries[typeof(TileData)]			= tileData;
+			resourceDictionaries[typeof(EventTileset)]		= eventTilesets;
 			resourceDictionaries[typeof(EventTileData)]		= eventTileData;
 			resourceDictionaries[typeof(Zone)]				= zones;
 			resourceDictionaries[typeof(PropertyAction)]	= propertyActions;
@@ -236,6 +239,14 @@ namespace ZeldaOracle.Common.Content {
 				return; // This type of resource doesn't exist!
 			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
 			dictionary.Add(assetName, resource);
+		}
+
+		// Add the given resource under the given name.
+		public static void SetResource<T>(string assetName, T resource) {
+			if (!ExistsResourceType<T>())
+				return; // This type of resource doesn't exist!
+			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
+			dictionary[assetName] = resource;
 		}
 
 

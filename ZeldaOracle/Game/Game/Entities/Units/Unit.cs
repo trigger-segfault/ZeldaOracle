@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Game.Main;
+using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Entities.Units {
 
@@ -99,9 +100,54 @@ namespace ZeldaOracle.Game.Entities.Units {
 
 
 		//-----------------------------------------------------------------------------
+		// Projectiles
+		//-----------------------------------------------------------------------------
+		
+		public Projectile ShootFromDirection(Projectile projectile, int direction, float speed) {
+			return ShootFromDirection(projectile, direction, speed, Vector2F.Zero, 0);
+		}
+
+		public Projectile ShootFromAngle(Projectile projectile, int angle, float speed) {
+			return ShootFromAngle(projectile, angle, speed, Vector2F.Zero, 0);
+		}
+
+		public Projectile ShootProjectile(Projectile projectile, Vector2F velocity) {
+			return ShootProjectile(projectile, velocity, Vector2F.Zero, 0);
+		}
+		
+		public Projectile ShootFromDirection(Projectile projectile, int direction, float speed, Vector2F positionOffset, int zPositionOffset = 0) {
+			projectile.Owner		= this;
+			projectile.Direction	= direction;
+			projectile.Physics.Velocity	= Directions.ToVector(direction) * speed;
+			RoomControl.SpawnEntity(projectile, Center + positionOffset, zPosition + zPositionOffset);
+			return projectile;
+		}
+		
+		public Projectile ShootFromAngle(Projectile projectile, int angle, float speed, Vector2F positionOffset, int zPositionOffset = 0) {
+			projectile.Owner	= this;
+			projectile.Angle	= angle;
+			projectile.Physics.Velocity	= Angles.ToVector(angle, true) * speed;
+			RoomControl.SpawnEntity(projectile, Center + positionOffset, zPosition + zPositionOffset);
+			return projectile;
+		}
+
+		public Projectile ShootProjectile(Projectile projectile, Vector2F velocity, Vector2F positionOffset, int zPositionOffset) {
+			projectile.Owner		= this;
+			projectile.Direction	= direction;
+			projectile.Physics.Velocity	= velocity;
+			RoomControl.SpawnEntity(projectile, Center + positionOffset, zPosition + zPositionOffset);
+			return projectile;
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Virtual methods
 		//-----------------------------------------------------------------------------
 		
+		public void Kill() {
+			Die();
+		}
+
 		public void Knockback(int duration, float speed, Vector2F sourcePosition) {
 			knockbackDuration	= duration;
 			knockbackTimer		= duration;
@@ -218,7 +264,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			foreach (UnitTool tool in tools) {
 				if (!tool.DrawAboveUnit) {
 					Vector2F drawPosition = position - new Vector2F(0, zPosition) + Graphics.DrawOffset + tool.DrawOffset;
-					g.DrawAnimation(tool.AnimationPlayer, drawPosition, depthLayer);
+					g.DrawAnimation(tool.AnimationPlayer, tool.ImageVariantID, drawPosition, depthLayer);
 				}
 			}
 
@@ -229,7 +275,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			foreach (UnitTool tool in tools) {
 				if (tool.DrawAboveUnit) {
 					Vector2F drawPosition = position - new Vector2F(0, zPosition) + Graphics.DrawOffset + tool.DrawOffset;
-					g.DrawAnimation(tool.AnimationPlayer, drawPosition, depthLayer);
+					g.DrawAnimation(tool.AnimationPlayer, tool.ImageVariantID, drawPosition, depthLayer);
 				}
 			}
 		}
@@ -279,7 +325,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			set { syncAnimationWithDirection = value; }
 		}
 		
-		public HashSet<UnitTool> Tools {
+		public HashSet<UnitTool> EquippedTools {
 			get { return tools; }
 		}
 	}

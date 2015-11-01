@@ -648,18 +648,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Images\Units\Monsters\basic_monsters.png">
-      <Name>basic_monsters</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Units\Monsters\basic_monsters_hurt.png">
-      <Name>basic_monsters_hurt</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Images\Tiles\tileset_dungeon_ages_dungeon_1.png">
       <Name>tileset_dungeon_ages_dungeon_1</Name>
       <Importer>TextureImporter</Importer>
@@ -687,6 +675,50 @@
     </Compile>
     <Compile Include="Images\Tiles\tileset_water_ages_dungeon_1_extras_8x8.png">
       <Name>tileset_water_ages_dungeon_1_extras_8x8</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\Units\Monsters\color_monsters_blue.png">
+      <Name>color_monsters_blue</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Units\Monsters\color_monsters_green.png">
+      <Name>color_monsters_green</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Units\Monsters\color_monsters_hurt.png">
+      <Name>color_monsters_hurt</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Units\Monsters\color_monsters_orange.png">
+      <Name>color_monsters_orange</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Units\Monsters\color_monsters_red.png">
+      <Name>color_monsters_red</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Units\Monsters\monsters.png">
+      <Name>monsters</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Units\Monsters\monsters_hurt.png">
+      <Name>monsters_hurt</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\Units\Monsters\monster_items.png">
+      <Name>monster_items</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

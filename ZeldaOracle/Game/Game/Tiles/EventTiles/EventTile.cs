@@ -52,7 +52,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		//-----------------------------------------------------------------------------
 		
 		public bool IsTouchingPlayer() {
-			return PositionedCollisionBox.Contains(roomControl.Player.Origin);
+			return PositionedCollisionBox.Contains(roomControl.Player.Position);
 			//return (roomControl.Player.Physics.PositionedCollisionBox.Intersects(PositionedCollisionBox));
 		}
 

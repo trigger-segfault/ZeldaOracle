@@ -20,6 +20,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private bool isPickingUp; // Is the pickup animation playing?
 		private int pickupTimer;
 		private Point2I objectDrawOffset;
+		private int objectZOffset;
 		private bool isObjectDropped;
 
 		private Entity carryObject;
@@ -75,7 +76,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public void DropObject(bool enterBusyState = true) {
 			isObjectDropped = true;
-			player.RoomControl.SpawnEntity(carryObject, player.Origin, 16);
+			player.RoomControl.SpawnEntity(carryObject, player.Position, 16);
 			if (enterBusyState) {
 				player.BeginBusyState(throwDuration);
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
@@ -102,9 +103,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			carryObject.Initialize(player.RoomControl);
 
 			isObjectDropped = false;
-
-			objectDrawOffset = new Point2I(0, -2);
-			objectDrawOffset += Directions.ToPoint(player.Direction) * 8;
+			
+			objectZOffset = 0;
+			if (carryObject is CarriedTile)
+				objectDrawOffset.Y -= 2;
+			objectDrawOffset = Directions.ToPoint(player.Direction) * 8;
 			pickupTimer = 0;
 			isPickingUp = true;
 			player.Movement.CanJump			= false;
@@ -135,17 +138,22 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				
 				// Handle the 2 frames of picking up.
 				if (pickupTimer < pickupFrame1Duration) {
-					objectDrawOffset = new Point2I(0, -2);
-					objectDrawOffset += Directions.ToPoint(player.Direction) * 8;
+					objectZOffset = 0;
+					if (carryObject is CarriedTile)
+						objectDrawOffset.Y -= 2;
+					objectDrawOffset = Directions.ToPoint(player.Direction) * 8;
 					Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
 				}
 				else if (pickupTimer < pickupFrame1Duration + pickupFrame2Duration) {
-					objectDrawOffset = new Point2I(0, -10);
-					objectDrawOffset += Directions.ToPoint(player.Direction) * 2;
+					objectZOffset = 8;
+					if (carryObject is CarriedTile)
+						objectDrawOffset.Y -= 2;
+					objectDrawOffset = Directions.ToPoint(player.Direction) * 2;
 					Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_GRAB);
 				}
 				else {
-					objectDrawOffset = new Point2I(0, -15);
+					objectDrawOffset	= Point2I.Zero;
+					objectZOffset		= 13;
 					isPickingUp = false;
 					player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 					Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CARRY);
@@ -153,8 +161,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 			else {
 				// Update the carried object.
+				objectDrawOffset		= Point2I.Zero;
+				objectZOffset			= 13;
 				carryObject.RoomControl	= player.RoomControl;
-				carryObject.Position	= player.Origin;
+				carryObject.Position	= player.Position;
 				carryObject.ZPosition	= player.ZPosition + 16;
 				carryObject.UpdateCarrying();
 				if (carryObject.IsDestroyed) {
@@ -177,25 +187,21 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void DrawOver(RoomGraphics g) {
-			Vector2F pos = player.Position + objectDrawOffset + carryObject.Graphics.DrawOffset;
-			pos.Y -= player.ZPosition;
+			carryObject.Position	= player.Position + objectDrawOffset;
+			carryObject.ZPosition	= player.ZPosition + objectZOffset;
+			if (!isPickingUp && Directions.IsHorizontal(player.Direction))
+				carryObject.ZPosition += 1;
 
 			// Handle head bobbing when the player is moving horizontally.
 			float playbackTime = player.Graphics.AnimationPlayer.PlaybackTime;
-			if (!isPickingUp &&
-				(player.Direction == Directions.Left || player.Direction == Directions.Right)
-					&& playbackTime >= 2 && playbackTime < 8)
+			if (!isPickingUp && Directions.IsHorizontal(player.Direction)
+				&& playbackTime >= 2 && playbackTime < 8)
 			{
-				pos.Y += 1;
+				carryObject.ZPosition -= 1;
 			}
 
 			// Draw the object.
-			if (carryObject.Graphics.AnimationPlayer.SubStrip != null) {
-				g.DrawAnimation(carryObject.Graphics.AnimationPlayer.SubStrip, carryObject.Graphics.ImageVariant,
-					carryObject.Graphics.AnimationPlayer.PlaybackTime, pos, DepthLayer.ProjectileCarriedTile);
-			}
-			else if (carryObject.Graphics.Sprite != null)
-				g.DrawSprite(carryObject.Graphics.Sprite, carryObject.Graphics.ImageVariant, pos, DepthLayer.ProjectileCarriedTile);
+			carryObject.Graphics.Draw(g, DepthLayer.ProjectileCarriedTile);
 		}
 
 

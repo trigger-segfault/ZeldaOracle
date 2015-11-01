@@ -57,11 +57,15 @@ namespace ZeldaEditor.Tools {
 		private void ActivateTile(MouseButtons mouseButton, Point2I levelTileCoord) {
 			Room room = editorControl.Level.GetRoomAt(levelTileCoord / editorControl.Level.RoomSize);
 			Point2I tileCoord = levelTileCoord % editorControl.Level.RoomSize;
+
 			if (mouseButton == MouseButtons.Left) {
-				room.CreateTile(
-					editorControl.SelectedTilesetTileData,
-					tileCoord.X, tileCoord.Y, editorControl.CurrentLayer
-				);
+				TileData tileData = editorControl.SelectedTilesetTileData as TileData;
+				if (tileData != null) {
+					room.CreateTile(
+						tileData,
+						tileCoord.X, tileCoord.Y, editorControl.CurrentLayer
+					);
+				}
 
 			}
 			else if (mouseButton == MouseButtons.Right) {
