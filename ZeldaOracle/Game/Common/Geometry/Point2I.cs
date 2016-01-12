@@ -303,6 +303,20 @@ public struct Point2I {
 		return new GdiSizeF(p.X, p.Y);
 	}
 
+	//-----------------------------------------------------------------------------
+	// Static Methods
+	//-----------------------------------------------------------------------------
+
+	// Clamp is exclusive.
+	public static Point2I Clamp(Point2I value, Rectangle2I bounds) {
+		if (bounds.IsEmpty)
+			return Point2I.Zero;
+		return new Point2I(
+			GMath.Clamp(value.X, bounds.Min.X, bounds.Max.X - 1),
+			GMath.Clamp(value.Y, bounds.Min.Y, bounds.Max.Y - 1));
+	}
+
+
 	//========== PROPERTIES ==========
 
 	/** <summary> Gets or sets the direction of the point. </summary> */

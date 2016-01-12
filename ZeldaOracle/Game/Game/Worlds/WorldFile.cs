@@ -1,18 +1,28 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 
 namespace ZeldaOracle.Game.Worlds {
 
+	public class WorldFileException : Exception {
+		public WorldFileException(string message) :
+			base("")
+		{
+		}
+	}
 
 	public class ResourceInfo<T> {
 		private T resource;
@@ -36,11 +46,12 @@ namespace ZeldaOracle.Game.Worlds {
 
 	// Used to save and load world files.
 	public class WorldFile {
-
-		private const bool NEW_FORMAT = true;
-
+		
 		private static char[] MAGIC = { 'Z', 'w', 'd', '2' };
-		private string			fileName;
+		private const int WORLDFILE_VERSION = 2;
+
+		private string fileName;
+		private int version;
 
 		private List<string>						strings;
 		private List<ResourceInfo<Zone>>			zones;
@@ -52,9 +63,20 @@ namespace ZeldaOracle.Game.Worlds {
 		private List<ResourceInfo<TileData>>		tileData;
 		private List<ResourceInfo<EventTileData>>	eventTileData;
 		
+		private string errorMessage;
+
 
 		//private int[]			zones;
 		
+		private static bool VerifyMagic(char[] magic) {
+			if (magic.Length != MAGIC.Length)
+				return false;
+			for (int i = 0; i < MAGIC.Length; i++) {
+				if (magic[i] != MAGIC[i])
+					return false;
+			}
+			return true;
+		}
 
 
 		//-----------------------------------------------------------------------------
@@ -104,56 +126,65 @@ namespace ZeldaOracle.Game.Worlds {
 
 		private World Load(BinaryReader reader) {
 			Clear();
+			
+			World world = null;
 
-			World world = new World();
+			try {
+				world = new World();
 
-			// Read the header.
-			ReadHeader(reader, world);
-			// Read the string list.
-			ReadStrings(reader);
-			// Read resource lists.
-			ReadTileTypes(reader);
-			ReadResourceList(reader, zones);
-			ReadResourceList(reader, tilesets);
-			ReadResourceList(reader, collisionModels);
-			ReadResourceList(reader, sprites);
-			ReadResourceList(reader, animations);
-			ReadResourceList(reader, tileData);
-			ReadResourceList(reader, eventTileData);
+				// Read the header.
+				ReadHeader(reader, world);
+				// Read the string list.
+				ReadStrings(reader);
+				// Read resource lists.
+				ReadTileTypes(reader);
+				ReadResourceList(reader, zones);
+				ReadResourceList(reader, tilesets);
+				ReadResourceList(reader, collisionModels);
+				ReadResourceList(reader, sprites);
+				ReadResourceList(reader, animations);
+				ReadResourceList(reader, tileData);
+				ReadResourceList(reader, eventTileData);
+				if (version == 2)
+					ReadScripts(reader, world);
 
-			if (NEW_FORMAT)
+				// Read the world data.
 				ReadWorld(reader, world);
 
-			// Read the level data.
-			int levelCount = reader.ReadInt32();
-			for (int i = 0; i < levelCount; i++) {
-				Level level = ReadLevel(reader);
-				world.Levels.Add(level);
-			}
-
-			// Trigger property actions on tiles.
-			for (int i = 0; i < world.LevelCount; i++) {
-				Level level = world.Levels[i];
-				for (int x = 0; x < level.Width; x++) {
-					for (int y = 0; y < level.Height; y++) {
-						Room room = level.GetRoomAt(x, y);
-						room.IterateTiles(delegate(TileDataInstance tile) {
-							tile.Properties.RunActionForAll();
-						});
-						room.IterateEventTiles(delegate(EventTileDataInstance tile) {
-							tile.Properties.RunActionForAll();
-						});
+				// TEMP: Trigger property actions on tiles.
+				for (int i = 0; i < world.LevelCount; i++) {
+					Level level = world.Levels[i];
+					for (int x = 0; x < level.Width; x++) {
+						for (int y = 0; y < level.Height; y++) {
+							Room room = level.GetRoomAt(x, y);
+							room.IterateTiles(delegate(TileDataInstance tile) {
+								tile.Properties.RunActionForAll();
+							});
+							room.IterateEventTiles(delegate(EventTileDataInstance tile) {
+								tile.Properties.RunActionForAll();
+							});
+						}
 					}
 				}
+			}
+			catch (WorldFileException e) {
+				Console.WriteLine("Error loading world: " + e.Message);
+				return null;
 			}
 
 			return world;
 		}
-
-
+		
 		private void ReadHeader(BinaryReader reader, World world) {
+			// 4 bytes: Read and verify the magic number.
 			char[] magic = reader.ReadChars(4);
+			if (!VerifyMagic(magic))
+				ThrowWorldFileException("Invalid file type");
 
+			// 4 bytes: Read the version number.
+			version = reader.ReadInt32();
+			
+			// Read the player starting position.
 			world.StartLevelIndex = reader.ReadInt32();
 			world.StartRoomLocation = new Point2I(
 					reader.ReadInt32(),
@@ -164,29 +195,31 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		private void ReadWorld(BinaryReader reader, World world) {
+			// Read the world's properties.
 			world.Properties.Merge(ReadProperties(reader), true);
+			
+			// Read the world's levels.
+			int levelCount = reader.ReadInt32();
+			for (int i = 0; i < levelCount; i++) {
+				Level level = ReadLevel(reader);
+				world.Levels.Add(level);
+			}
 		}
 
 		private Level ReadLevel(BinaryReader reader) {
-			string name = ""; Properties props = new Properties();
-			if (!NEW_FORMAT)
-				name			= ReadString(reader);
+			// Read the level dimensions.
 			int width			= reader.ReadInt32();
 			int height			= reader.ReadInt32();
 			int roomWidth		= reader.ReadInt32();
 			int roomHeight		= reader.ReadInt32();
 			int roomLayerCount	= reader.ReadInt32();
-			if (NEW_FORMAT)
-				props			= ReadProperties(reader);
-
 			Level level = new Level(width, height, new Point2I(roomWidth, roomHeight));
 			level.RoomLayerCount = roomLayerCount;
-			if (!NEW_FORMAT)
-				level.Properties.Set("id", name);
-			else
-				level.Properties.Merge(props, true);
 
-			// Read rooms.
+			// Read the level's properties.
+			level.Properties.Merge(ReadProperties(reader), true);
+			
+			// Read all the rooms in the level.
 			for (int y = 0; y < level.Height; y++) {
 				for (int x = 0; x < level.Width; x++) {
 					Room room = new Room(level, x, y);
@@ -199,23 +232,25 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 		
 		private void ReadRoom(BinaryReader reader, Room room) {
+			// Read the dimensions.
 			int width  = reader.ReadInt32();
 			int height = reader.ReadInt32();
 			int layerCount = reader.ReadInt32();
 
+			// Read the zone.
 			room.Zone = ReadResource(reader, zones);
 
-			if (NEW_FORMAT)
-				room.Properties.Merge(ReadProperties(reader), true);
+			// Read the room's properties.
+			room.Properties.Merge(ReadProperties(reader), true);
 			
-			// Read tile data for first layer.
+			// Read tile data for first layer (stored as a grid of tiles).
 			for (int y = 0; y < room.Height; y++) {
 				for (int x = 0; x < room.Width; x++) {
 					room.SetTile(ReadTileData(reader), x, y, 0);
 				}
 			}
 
-			// Read tile data for higher layers.
+			// Read tile data for higher layers (stored as a list of non-null tiles).
 			int tileDataCount = reader.ReadInt32();
 			for (int i = 0; i < tileDataCount; i++) {
 				int x		= reader.ReadInt32();
@@ -397,10 +432,8 @@ namespace ZeldaOracle.Game.Worlds {
 			// Write the level data to memory.
 			MemoryStream worldDataStream = new MemoryStream();
 			BinaryWriter worldDataWriter = new BinaryWriter(worldDataStream);
+			WriteScripts(worldDataWriter, world);
 			WriteWorld(worldDataWriter, world);
-			worldDataWriter.Write(world.Levels.Count);
-			for (int i = 0; i < world.Levels.Count; i++)
-				WriteLevel(worldDataWriter, world.Levels[i]);
 			byte[] worldData = worldDataStream.GetBuffer();
 			int levelDataSize = (int) worldDataStream.Length;
 			worldDataWriter.Close();
@@ -424,7 +457,8 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		private void WriteHeader(BinaryWriter writer, World world) {
-			writer.Write(MAGIC);
+			writer.Write(MAGIC);	// Magic 4 bytes "Zwd2"
+			writer.Write(WORLDFILE_VERSION);	// WorldFile version number.
 
 			writer.Write(world.StartLevelIndex);
 			writer.Write(world.StartRoomLocation.X);
@@ -432,9 +466,117 @@ namespace ZeldaOracle.Game.Worlds {
 			writer.Write(world.StartTileLocation.X);
 			writer.Write(world.StartTileLocation.Y);
 		}
+		
+		private void WriteScripts(BinaryWriter writer, World world) {
+			// Write the compiled assembly.
+			byte[] rawAssembly = world.ScriptManager.RawAssembly;
+			if (rawAssembly != null) {
+				writer.Write(world.ScriptManager.RawAssembly.Length);
+				writer.Write(world.ScriptManager.RawAssembly);
+			}
+			else
+				writer.Write((int) 0);
+
+			// Write the individual scripts.
+			writer.Write(world.Scripts.Count);
+			foreach (KeyValuePair<string, Script> script in world.Scripts)
+				WriteScript(writer, script.Value);
+		}
+		
+		private void WriteScript(BinaryWriter writer, Script script) {
+			// Write the name and source code.
+			WriteString(writer, script.Name);
+			WriteString(writer, script.Code);
+			writer.Write(script.IsHidden);
+			
+			// Write the parameters.
+			writer.Write(script.Parameters.Count);
+			for (int i = 0; i < script.Parameters.Count; i++) {
+				WriteString(writer, script.Parameters[i].Type);
+				WriteString(writer, script.Parameters[i].Name);
+			}
+			
+			// Write the errors and warnings.
+			writer.Write(script.Errors.Count);
+			for (int i = 0; i < script.Errors.Count; i++) {
+				writer.Write(script.Errors[i].Line);
+				writer.Write(script.Errors[i].Column);
+				WriteString(writer, script.Errors[i].ErrorNumber);
+				WriteString(writer, script.Errors[i].ErrorText);
+			}
+			writer.Write(script.Warnings.Count);
+			for (int i = 0; i < script.Warnings.Count; i++) {
+				writer.Write(script.Warnings[i].Line);
+				writer.Write(script.Warnings[i].Column);
+				WriteString(writer, script.Warnings[i].ErrorNumber);
+				WriteString(writer, script.Warnings[i].ErrorText);
+			}
+		}
+				
+		private void ReadScripts(BinaryReader reader, World world) {
+			// Read the raw assembly.
+			int byteCount = reader.ReadInt32();
+			if (byteCount > 0)
+				world.ScriptManager.RawAssembly = reader.ReadBytes(byteCount);
+			else
+				world.ScriptManager.RawAssembly = null;
+
+			// Read the individual scripts.
+			int count = reader.ReadInt32();
+			for (int i = 0; i < count; i++)
+				world.AddScript(ReadScript(reader));
+		}
+		
+		private Script ReadScript(BinaryReader reader) {
+			Script script = new Script();
+
+			// Read the name and source code.
+			script.Name		= ReadString(reader);
+			script.Code		= ReadString(reader);
+			script.IsHidden	= reader.ReadBoolean();
+			
+			// Read the parameters.
+			int paramCount = reader.ReadInt32();
+			for (int i = 0; i < paramCount; i++) {
+				ScriptParameter param = new ScriptParameter();
+				param.Type = ReadString(reader);
+				param.Name = ReadString(reader);
+				script.Parameters.Add(param);
+			}
+			
+			// Read errors and warnings.
+			int errorCount = reader.ReadInt32();
+			for (int i = 0; i < errorCount; i++) {
+				ScriptCompileError error = new ScriptCompileError();
+				error.Line			= reader.ReadInt32();
+				error.Column		= reader.ReadInt32();
+				error.ErrorNumber	= ReadString(reader);
+				error.ErrorText		= ReadString(reader);
+				error.IsWarning		= true;
+				script.Errors.Add(error);
+			}
+			int warningCount = reader.ReadInt32();
+			for (int i = 0; i < warningCount; i++) {
+				ScriptCompileError warning = new ScriptCompileError();
+				warning.Line		= reader.ReadInt32();
+				warning.Column		= reader.ReadInt32();
+				warning.ErrorNumber	= ReadString(reader);
+				warning.ErrorText	= ReadString(reader);
+				warning.IsWarning	= true;
+				script.Warnings.Add(warning);
+			}
+
+			return script;
+		}
 
 		private void WriteWorld(BinaryWriter writer, World world) {
+			// Write the world's properties.
 			WriteProperties(writer, world.Properties);
+			
+			// Write the level data.
+			writer.Write(world.Levels.Count);
+			for (int i = 0; i < world.Levels.Count; i++)
+				WriteLevel(writer, world.Levels[i]);
 		}
 
 		private void WriteLevel(BinaryWriter writer, Level level) {
@@ -649,6 +791,25 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 			writer.Write(index);
 			return index;
+		}
+
+		
+		//-----------------------------------------------------------------------------
+		// Errors
+		//-----------------------------------------------------------------------------
+
+		public void ThrowWorldFileException(string message) {
+			this.errorMessage = message;
+			throw new WorldFileException(message);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public string ErrorMessage {
+			get { return errorMessage; }
 		}
 	}
 }

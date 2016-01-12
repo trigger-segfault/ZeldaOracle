@@ -37,7 +37,7 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 			
 			if (entity is Collectible) {
 				Collectible collectible = (Collectible) entity;
-				if (collectible.IsPickupable)
+				if (collectible.IsPickupable && collectible.IsCollectibleWithItems)
 					collectible.Collect();
 			}
 			else if (entity is Monster) {

@@ -40,8 +40,7 @@ LOAD TILESETS;
 
 TEMPTILE chest;
 	TYPE		TileChest;
-	FLAGS		solid;
-	MODEL		block;
+	SOLID		block;
 	PROPERTIES
 		(string, reward, "rupees_1",
 			"Reward", "reward", "",
@@ -53,8 +52,7 @@ END;
 
 TEMPTILE reward;
 	TYPE		TileReward
-	FLAGS		solid;
-	MODEL		center;
+	SOLID		center;
 	PROPERTIES
 		(string, reward, "heart_piece",
 			"Reward", "reward", "",
@@ -65,14 +63,14 @@ TEMPTILE reward;
 END;
 
 TEMPTILE trampoline;
-	FLAGS		solid, movable;
-	MODEL		block;
+	FLAGS		Movable;
+	SOLID		block;
 END;
 
 TEMPTILE owl;
 	TYPE		TileOwl;
-	FLAGS		Solid, AbsorbSeeds;
-	MODEL		block;
+	FLAGS		AbsorbSeeds;
+	SOLID		block;
 	PROPERTIES
 		(string, text, "<red>undefined<red>",
 			"Text", "text_message", "",
@@ -81,16 +79,16 @@ END;
 
 TEMPTILE color_cube;
 	TYPE		TileColorCube;
-	FLAGS		solid, movable;
-	MODEL		block;
+	FLAGS		movable;
+	SOLID		block;
 	PROPERTIES
 		(show sprite_index);
 END;
 
 TEMPTILE roller_horizontal;
 	TYPE		TileRoller;
-	FLAGS		solid, movable, notgrabbable;
-	MODEL		block;
+	FLAGS		movable, notgrabbable;
+	SOLID		block;
 	PROPERTIES
 		(boolean, vertical, "false",
 			"Vertical", "", "",
@@ -102,8 +100,8 @@ END;
 
 TEMPTILE roller_vertical;
 	TYPE		TileRoller;
-	FLAGS		solid, movable, notgrabbable;
-	MODEL		block;
+	FLAGS		movable, notgrabbable;
+	SOLID		block;
 	PROPERTIES
 		(boolean, vertical, "true",
 			"Vertical", "", "",
@@ -175,6 +173,11 @@ TILE (10, 0);
 	SPRITEINDEX		3, "color_cube", (3, 0);
 	SPRITEINDEX		4, "color_cube", (4, 0);
 	SPRITEINDEX		5, "color_cube", (5, 0);
+END;
+
+# Platform
+TILE (11, 0);
+	TYPE TilePlatform;
 END;
 
 END;

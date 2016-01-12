@@ -26,14 +26,16 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		// Called when the player presses A on this tile, when facing the given direction.
 		public override bool OnAction(int direction) {
 			if (!Properties.GetBoolean("looted", false)) {
+
 				if (direction == Directions.Up) {
 					string rewardName = Properties.GetString("reward", "rupees_1");
 					Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
 					RoomControl.GameControl.PushRoomState(new RoomStateReward(reward, (Point2I)Position));
-					
-					
+										
 					// TODO: Play chest open sound
 					Properties.SetBase("looted", true);
+					Properties.SetBase("enabled", true); // Opened chest are always spawned.
+					Properties.Set("sprite_index", 1);
 				}
 				else {
 					RoomControl.GameControl.DisplayMessage("It won't open from this side!");
@@ -46,12 +48,14 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		public override void OnInitialize() {
 			base.OnInitialize();
 
-			// TODO: Make open sprite a property
-			/*if (Properties.GetBoolean("looted", false))
+			if (IsLooted)
 				Properties.Set("sprite_index", 1);
 			else
-				Properties.Set("sprite_index", 0);*/
+				Properties.Set("sprite_index", 0);
 		}
 
+		public bool IsLooted {
+			get { return Properties.GetBoolean("looted", false); }
+		}
 	}
 }

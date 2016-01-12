@@ -10,11 +10,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZeldaEditor.Control;
-using ZeldaEditor.Tools;
-using ZeldaOracle.Common.Scripting;
-using ZeldaOracle.Game.Worlds;
+using ZeldaEditor.ObjectsEditor;
 using ZeldaEditor.PropertiesEditor;
+using ZeldaEditor.PropertiesEditor.CustomEditors;
+using ZeldaEditor.Scripting;
+using ZeldaEditor.Tools;
+using ZeldaOracle.Game.Control.Scripting;
+using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Scripting;
 
 using FormsControl = System.Windows.Forms.Control;
 
@@ -26,6 +31,8 @@ namespace ZeldaEditor {
 		private TileDisplay			tileDisplay;
 		private EditorControl		editorControl;
 
+		private ObjectEditor		objectEditorForm;
+
 		private ToolStripButton[]	toolButtons;
 
 		private delegate void HotKeyAction();
@@ -34,6 +41,8 @@ namespace ZeldaEditor {
 
 		FormsControl activeControl;
 
+		//private WorldTreeView worldTreeView;
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
@@ -41,8 +50,11 @@ namespace ZeldaEditor {
 		public EditorForm() {
 			InitializeComponent();
 
-			editorControl				= new EditorControl();
-			editorControl.EditorForm	= this;
+			// Create the editor control instance.
+			editorControl = new EditorControl(this);
+
+			// Setup the world tree view.
+			worldTreeView.EditorControl = editorControl;
 
 			// Create the level display.
 			levelDisplay				= new LevelDisplay();
@@ -51,7 +63,8 @@ namespace ZeldaEditor {
 			levelDisplay.Dock			= DockStyle.Fill;
 			levelDisplay.EditorForm		= this;
 			panelWorld.Controls.Add(this.levelDisplay);
-
+			
+			// Create the tileset display.
 			tileDisplay					= new TileDisplay();
 			tileDisplay.EditorControl	= editorControl;
 			tileDisplay.Name			= "tileDisplay";
@@ -61,14 +74,9 @@ namespace ZeldaEditor {
 
 			activeControl = null;
 
-			treeViewWorld.NodeMouseDoubleClick += delegate(object sender, TreeNodeMouseClickEventArgs e) {
-				if (e.Node.Name == "level") {
-					editorControl.OpenLevel(e.Node.Index);
-				}
-				else if (e.Node.Name == "world") {
-					editorControl.OpenObjectProperties(editorControl.World);
-				}
-			};
+			objectEditorForm = null;
+
+			statusLabelTask.Text = null;
 
 			this.comboBoxWorldLayer.Items.Add("Layer 1");
 			this.comboBoxWorldLayer.Items.Add("Layer 2");
@@ -77,7 +85,7 @@ namespace ZeldaEditor {
 			this.comboBoxWorldLayer.SelectedIndex = 0;
 
 			// Create tools.
-			this.toolButtons	= new ToolStripButton[] {
+			this.toolButtons = new ToolStripButton[] {
 				buttonToolPointer,
 				buttonToolPlace,
 				buttonToolSquare,
@@ -323,10 +331,6 @@ namespace ZeldaEditor {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public TreeView LevelTreeView {
-			get { return treeViewWorld; }
-		}
-
 		public ContextMenuStrip ContextMenuLevelSelect {
 			get { return contextMenuLevelSelect; }
 		}
@@ -470,13 +474,37 @@ namespace ZeldaEditor {
 		private void deselectToolStripMenuItem_Click(object sender, EventArgs e) {
 			editorControl.CurrentTool.Deselect();
 		}
+		
+		//-----------------------------------------------------------------------------
+
+		// Tile Properties...
+		private void tilePropertiesToolStripMenuItem_Click(object sender, EventArgs e) {
+			IPropertyObject obj = editorControl.PropertyGridControl.EditedObject;
+			if (obj is IPropertyObject) {
+				if (objectEditorForm == null || objectEditorForm.IsDisposed)
+					objectEditorForm = new ObjectEditor(editorControl);
+				objectEditorForm.SetObject((IPropertyObject) obj);
+				objectEditorForm.Show(this);
+
+				/*
+				using (Form form = new ObjectEditor((TileDataInstance) obj)) {
+					//if (form.ShowDialog(this) == DialogResult.OK) {
+					form.Show();
+					if (form.DialogResult == DialogResult.OK) {
+
+					}
+					else {
+
+					}
+				}*/
+			}
+		}
 
 		
 		//-----------------------------------------------------------------------------
 		// World Menu Buttons
 		//-----------------------------------------------------------------------------
-
-
+		
 		// Test Level
 		private void testLevelToolStripMenuItem_Click(object sender, EventArgs e) {
 			if (!editorControl.IsWorldOpen)
@@ -502,6 +530,25 @@ namespace ZeldaEditor {
 				}
 			}
 		}
+		
+		// Create Script...
+		private void buttonAddScript_Click(object sender, EventArgs e) {
+			Script script = new Script();
+			script.Name = "untitled";
+			script.Code = "";
+			worldTreeView.RefreshScripts();
+			editorControl.AddScript(script);
+
+			using (ScriptEditor form = new ScriptEditor(script, editorControl)) {
+				if (form.ShowDialog(this) == DialogResult.OK) {
+				}
+				else {
+					editorControl.World.RemoveScript(script);
+				}
+			
+				worldTreeView.RefreshScripts();
+			}
+		}
 
 		// Cycle Layer Up
 		private void cycleLayerUpToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -515,184 +562,134 @@ namespace ZeldaEditor {
 				(comboBoxWorldLayer.SelectedIndex + comboBoxWorldLayer.Items.Count - 1) % comboBoxWorldLayer.Items.Count;
 		}
 
-		private void renameToolStripMenuItem_Click(object sender, EventArgs e) {
-			if (treeViewWorld.SelectedNode.Name == "level") {
-				int levelIndex = treeViewWorld.SelectedNode.Index;
-				if (RenameForm.Show(this, editorControl.World.GetLevelAt(levelIndex).Properties.GetString("id")) == DialogResult.OK) {
-					editorControl.World.GetLevelAt(levelIndex).Properties.Set("id", RenameForm.NewName);
-					editorControl.RefreshWorldTreeView();
-				}
-			}
+		
+		//-----------------------------------------------------------------------------
+		// Property Grid events
+		//-----------------------------------------------------------------------------
+
+		// Property value changed.
+		private void propertyGrid_PropertyValueChanged(object sender, PropertyValueChangedEventArgs e) {
+			editorControl.PropertyGridControl.OnPropertyChange(sender, e);
 		}
-
-		private void duplicateToolStripMenuItem_Click(object sender, EventArgs e) {
-
-		}
-
-		private void deleteToolStripMenuItem_Click(object sender, EventArgs e) {
-
-		}
-
-		private void resizeToolStripMenuItem_Click(object sender, EventArgs e) {
-			if (LevelResizeShiftForm.ShowResize(this, editorControl.Level.Dimensions) == DialogResult.OK) {
-				editorControl.Level.Resize(LevelResizeShiftForm.LevelSize);
-			}
-		}
-
-		private void shiftToolStripMenuItem_Click(object sender, EventArgs e) {
-			if (LevelResizeShiftForm.ShowShift(this, editorControl.Level.Dimensions) == DialogResult.OK) {
-				editorControl.Level.Shift(LevelResizeShiftForm.LevelShift);
-			}
-		}
-
-		private void propertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e) {
-			CustomPropertyDescriptor propertyDescriptor = e.ChangedItem.PropertyDescriptor as CustomPropertyDescriptor;
-			if (propertyDescriptor.Property.Action != null)
-				propertyDescriptor.Property.Action(editorControl.PropertyGridControl.EditedObject, e.ChangedItem.Value);
-			if (propertyDescriptor.Property.Name == "id") {
-				IPropertyObject propObject = propertyDescriptor.Property.Properties.PropertyObject;
-				if (propObject is World || propObject is Level) {
-					editorControl.RefreshWorldTreeView();
-				}
-			}
-		}
-
-		private void renameToolStripMenuItem1_Click(object sender, EventArgs e) {
-			if (treeViewWorld.SelectedNode.Name == "world") {
-				if (RenameForm.Show(this, editorControl.World.Properties.GetString("id")) == DialogResult.OK) {
-					editorControl.World.Properties.Set("id", RenameForm.NewName);
-					editorControl.RefreshWorldTreeView();
-				}
-			}
-		}
-
-		private void editPropertiesToolStripMenuItem_Click(object sender, EventArgs e) {
-			if (treeViewWorld.SelectedNode.Name == "world") {
-				editorControl.OpenObjectProperties(editorControl.World);
-			}
-		}
-
-		// Make sure the right clicked node doesn't change back after selecting an item in the content menu.
-		private void treeViewLevels_MouseClick(object sender, MouseEventArgs e) {
-			// Only check with right click so pressing the pluses and minuses don't change the selection.
-			if (e.Button == MouseButtons.Right)
-				treeViewWorld.SelectedNode = treeViewWorld.GetNodeAt(e.X, e.Y);
-		}
-
+		
+		
+		//-----------------------------------------------------------------------------
+		// World Tree View button events
+		//-----------------------------------------------------------------------------
+		
+		// Update which tool strip buttons are enabled based on which node type is selected.
 		private void treeViewLevels_AfterSelect(object sender, TreeViewEventArgs e) {
 			if (e.Node.Name == "level" || e.Node.Name == "area" || e.Node.Name == "dungeon" || e.Node.Name == "script") {
-				int count = 0;
-				if (e.Node.Name == "level")
-					count = editorControl.World.LevelCount;
-				buttonTreeViewEdit.Enabled = true;
-				buttonTreeViewRename.Enabled = true;
-				buttonTreeViewDuplicate.Enabled = true;
-				buttonTreeViewDelete.Enabled = true;
-				buttonTreeViewMoveUp.Enabled = (e.Node.Index > 0);
-				buttonTreeViewMoveDown.Enabled = (e.Node.Index + 1 < e.Node.Parent.Nodes.Count);
-				buttonTreeViewResize.Enabled = (e.Node.Name == "level");
-				buttonTreeViewShift.Enabled = (e.Node.Name == "level");
+				buttonTreeViewEdit.Enabled		= true;
+				buttonTreeViewRename.Enabled	= true;
+				buttonTreeViewDuplicate.Enabled	= true;
+				buttonTreeViewDelete.Enabled	= true;
+				buttonTreeViewMoveUp.Enabled	= (e.Node.Index > 0);
+				buttonTreeViewMoveDown.Enabled	= (e.Node.Index + 1 < e.Node.Parent.Nodes.Count);
+				buttonTreeViewResize.Enabled	= (e.Node.Name == "level");
+				buttonTreeViewShift.Enabled		= (e.Node.Name == "level");
 			}
 			else {
-				buttonTreeViewRename.Enabled = (e.Node.Name == "world");
-				buttonTreeViewEdit.Enabled = (e.Node.Name == "world");
-				buttonTreeViewDuplicate.Enabled = false;
-				buttonTreeViewDelete.Enabled = false;
-				buttonTreeViewMoveUp.Enabled = false;
-				buttonTreeViewMoveDown.Enabled = false;
-				buttonTreeViewResize.Enabled = false;
-				buttonTreeViewShift.Enabled = false;
+				buttonTreeViewRename.Enabled	= (e.Node.Name == "world");
+				buttonTreeViewEdit.Enabled		= (e.Node.Name == "world");
+				buttonTreeViewDuplicate.Enabled	= false;
+				buttonTreeViewDelete.Enabled	= false;
+				buttonTreeViewMoveUp.Enabled	= false;
+				buttonTreeViewMoveDown.Enabled	= false;
+				buttonTreeViewResize.Enabled	= false;
+				buttonTreeViewShift.Enabled		= false;
 			}
 		}
 
-		private void buttonMoveUp_Click(object sender, EventArgs e) {
-			TreeNode node = treeViewWorld.SelectedNode;
-			if (node.Name == "level") {
-				editorControl.World.MoveLevel(node.Index, -1, true);
-				editorControl.RefreshWorldTreeView();
-				treeViewWorld.SelectedNode = treeViewWorld.Nodes[0].Nodes[0].Nodes[node.Index - 1];
-			}
+		// Edit node.
+		private void buttonTreeViewEdit_Click(object sender, EventArgs e) {
+			worldTreeView.OpenNode(worldTreeView.SelectedNode);
 		}
 
-		private void buttonTreeViewMoveDown_Click(object sender, EventArgs e) {
-			TreeNode node = treeViewWorld.SelectedNode;
-			if (node.Name == "level") {
-				editorControl.World.MoveLevel(node.Index, 1, true);
-				editorControl.RefreshWorldTreeView();
-				treeViewWorld.SelectedNode = treeViewWorld.Nodes[0].Nodes[0].Nodes[node.Index + 1];
-			}
-		}
-
-		private void buttonTreeViewNewLevel_Click(object sender, EventArgs e) {
-			using (LevelAddForm form = new LevelAddForm()) {
-				if (form.ShowDialog(this) == DialogResult.OK) {
-					Level level = new Level(form.LevelName, form.LevelWidth, form.LevelHeight,
-						form.LevelLayerCount, form.LevelRoomSize, form.LevelZone);
-					editorControl.AddLevel(level, true);
-					treeViewWorld.SelectedNode = treeViewWorld.Nodes[0].Nodes[0].Nodes[treeViewWorld.Nodes[0].Nodes[0].Nodes.Count - 1];
-				}
-			}
-		}
-
-		private void buttonTreeViewDelete_Click(object sender, EventArgs e) {
-			if (treeViewWorld.SelectedNode.Name == "level") {
-				if (MessageBox.Show(this, "Would you like to delete this level?", "Delete", MessageBoxButtons.YesNo) == DialogResult.Yes) {
-					int index = treeViewWorld.SelectedNode.Index;
-					editorControl.World.RemoveLevelAt(treeViewWorld.SelectedNode.Index);
-					editorControl.RefreshWorldTreeView();
-					if (editorControl.World.LevelCount == 0) {
-						editorControl.CloseLevel();
-						treeViewWorld.SelectedNode = treeViewWorld.Nodes[0].Nodes[0];
-						treeViewLevels_AfterSelect(null, new TreeViewEventArgs(treeViewWorld.SelectedNode));
-					}
-					else {
-						editorControl.OpenLevel(GMath.Max(0, index - 1));
-						treeViewWorld.SelectedNode = treeViewWorld.Nodes[0].Nodes[0].Nodes[GMath.Max(0, index - 1)];
-					}
-				}
-			}
-		}
-
+		// Rename node.
 		private void buttonTreeViewRename_Click(object sender, EventArgs e) {
-			if (treeViewWorld.SelectedNode.Name == "world") {
-				if (RenameForm.Show(this, editorControl.World.Properties.GetString("id")) == DialogResult.OK) {
-					editorControl.World.Properties.Set("id", RenameForm.NewName);
-					editorControl.RefreshWorldTreeView();
-				}
-			}
-			else if (treeViewWorld.SelectedNode.Name == "level") {
-				int levelIndex = treeViewWorld.SelectedNode.Index;
-				if (RenameForm.Show(this, editorControl.World.GetLevelAt(levelIndex).Properties.GetString("id")) == DialogResult.OK) {
-					editorControl.World.GetLevelAt(levelIndex).Properties.Set("id", RenameForm.NewName);
-					editorControl.RefreshWorldTreeView();
-				}
-			}
+			worldTreeView.RenameNode();
 		}
 
+		// Duplicate node.
+		private void buttonTreeViewDuplicate_Click(object sender, EventArgs e) {
+			worldTreeView.DuplicateNode();
+		}
+
+		// Delete node.
+		private void buttonTreeViewDelete_Click(object sender, EventArgs e) {
+			worldTreeView.DeleteNode();
+		}
+
+		// Move node up.
+		private void buttonMoveUp_Click(object sender, EventArgs e) {
+			worldTreeView.MoveNodeUp();
+		}
+		
+		// Move node down.
+		private void buttonTreeViewMoveDown_Click(object sender, EventArgs e) {
+			worldTreeView.MoveNodeDown();
+		}
+
+		// Resize level node.
 		private void buttonTreeViewResize_Click(object sender, EventArgs e) {
 			if (LevelResizeShiftForm.ShowResize(this, editorControl.Level.Dimensions) == DialogResult.OK) {
 				editorControl.Level.Resize(LevelResizeShiftForm.LevelSize);
 			}
 		}
 
+		// Shift level node.
 		private void buttonTreeViewShift_Click(object sender, EventArgs e) {
 			if (LevelResizeShiftForm.ShowShift(this, editorControl.Level.Dimensions) == DialogResult.OK) {
 				editorControl.Level.Shift(LevelResizeShiftForm.LevelShift);
 			}
 		}
 
-		private void buttonTreeViewEdit_Click(object sender, EventArgs e) {
-			if (treeViewWorld.SelectedNode.Name == "world") {
-				editorControl.OpenObjectProperties(editorControl.World);
+		//-----------------------------------------------------------------------------
+		
+		private void levelTabControl_Selected(object sender, TabControlEventArgs e) {
+			/*if (levelTabControl.SelectedTab == levelTabPageTiles) {
+				Console.WriteLine("Tiles tab selected!");
+				levelDisplay.Parent = panelWorld;
 			}
-			else if (treeViewWorld.SelectedNode.Name == "level") {
-				editorControl.OpenLevel(treeViewWorld.SelectedNode.Index);
-			}
+			else if (levelTabControl.SelectedTab == levelTabPageTriggers) {
+				Console.WriteLine("Triggers tab selected!");
+				levelDisplay.Parent = panelTriggersLevelDisplay;
+			}*/
 		}
 
+		// Create dungeon.
+		private void buttonAddDungeon_Click(object sender, EventArgs e) {
+
+		}
+
+
+		// Open room properties.
+		private void roomPropertiesToolStripMenuItem_Click(object sender, EventArgs e) {
+			Point2I selectedRoom = editorControl.SelectedRoom;
+			if (selectedRoom.X >= 0 && selectedRoom.Y >= 0) {
+				Room room = editorControl.Level.GetRoomAt(selectedRoom);
+
+				if (objectEditorForm == null || objectEditorForm.IsDisposed)
+					objectEditorForm = new ObjectEditor(editorControl);
+				objectEditorForm.SetObject(room);
+				objectEditorForm.Show(this);
+			}
+		}
+		
+		// Open room properties.
+		private void roomPropertiesToolStripMenuItem1_Click(object sender, EventArgs e) {
+			Room room = editorControl.LevelDisplay.SelectedRoom;
+
+			if (room != null) {
+				if (objectEditorForm == null || objectEditorForm.IsDisposed)
+					objectEditorForm = new ObjectEditor(editorControl);
+				objectEditorForm.SetObject(room);
+				objectEditorForm.Show(this);
+			}
+		}
+		
 		//-----------------------------------------------------------------------------
-
-
 	}
 
 }

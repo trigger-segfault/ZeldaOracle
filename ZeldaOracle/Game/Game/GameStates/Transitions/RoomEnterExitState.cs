@@ -71,6 +71,8 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 				//GameManager.PopGameState();
 				if (enterMessage != null && type == EnterExitType.Enter)
 					GameControl.DisplayMessage(enterMessage);
+				if (type == EnterExitType.Enter)
+					player.MarkRespawn();
 			}
 		}
 

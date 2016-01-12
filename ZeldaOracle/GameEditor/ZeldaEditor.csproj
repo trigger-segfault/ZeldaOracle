@@ -39,6 +39,9 @@
     <ApplicationIcon>Editor.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FastColoredTextBox">
+      <HintPath>..\..\FastColoredTextBox.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Avatar, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
@@ -64,13 +67,33 @@
     <Compile Include="Control\EditorGraphics.cs" />
     <Compile Include="Control\EditorResources.cs" />
     <Compile Include="Control\PropertyGridControl.cs" />
+    <Compile Include="Scripting\ScriptEditorCompiler.cs" />
     <Compile Include="Control\TileDrawModes.cs" />
+    <Compile Include="ObjectsEditor\ObjectEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ObjectsEditor\ObjectEditor.Designer.cs">
+      <DependentUpon>ObjectEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectsEditor\ObjectEditorEventsTab.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectsEditor\ObjectEditorEventsTab.Designer.cs">
+      <DependentUpon>ObjectEditorEventsTab.cs</DependentUpon>
+    </Compile>
     <Compile Include="PropertiesEditor\CustomEditors\CustomPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\DropDownPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\DirectionPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\EnumComboBox.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\FormPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\ResourcePropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\ScriptPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\TextMessageEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PropertiesEditor\CustomEditors\TextMessageEditorForm.Designer.cs">
+      <DependentUpon>TextMessageEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="RenameForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,11 +113,11 @@
       <DependentUpon>RewardPropertyEditorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PropertiesEditor\CustomProperties.cs" />
-    <Compile Include="PropertiesEditor\CustomEditors\TextMessageEditorForm.cs">
+    <Compile Include="Scripting\ScriptEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PropertiesEditor\CustomEditors\TextMessageEditorForm.Designer.cs">
-      <DependentUpon>TextMessageEditorForm.cs</DependentUpon>
+    <Compile Include="Scripting\ScriptEditor.Designer.cs">
+      <DependentUpon>ScriptEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="PropertiesEditor\CustomPropertyDescriptor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\SpriteIndexComboBox.cs" />
@@ -114,6 +137,10 @@
     <Compile Include="Tools\ToolPlace.cs" />
     <Compile Include="Tools\ToolSelection.cs" />
     <Compile Include="Tools\ToolPointer.cs" />
+    <Compile Include="TreeViews\IWorldTreeViewNode.cs" />
+    <Compile Include="TreeViews\WorldTreeNode.cs" />
+    <Compile Include="TreeViews\ScriptTreeNode.cs" />
+    <Compile Include="TreeViews\LevelTreeNode.cs" />
     <Compile Include="WinFormsGraphicsDevice\GraphicsDeviceControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -130,6 +157,18 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WinFormsGraphicsDevice\ServiceContainer.cs" />
+    <Compile Include="TreeViews\WorldTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <EmbeddedResource Include="ObjectsEditor\ObjectEditor.resx">
+      <DependentUpon>ObjectEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectsEditor\ObjectEditorEventsTab.resx">
+      <DependentUpon>ObjectEditorEventsTab.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertiesEditor\CustomEditors\TextMessageEditorForm.resx">
+      <DependentUpon>TextMessageEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="RenameForm.resx">
       <DependentUpon>RenameForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -156,8 +195,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="PropertiesEditor\CustomEditors\TextMessageEditorForm.resx">
-      <DependentUpon>TextMessageEditorForm.cs</DependentUpon>
+    <EmbeddedResource Include="Scripting\ScriptEditor.resx">
+      <DependentUpon>ScriptEditor.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -173,6 +212,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ZeldaAPI\ZeldaAPI.csproj">
+      <Project>{b8b46d20-161d-47d3-810a-69d5ca61c080}</Project>
+      <Name>ZeldaAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Game\Zelda.csproj">
       <Project>{899daec0-cf01-4b30-a6e4-a0db613978bd}</Project>
       <Name>Zelda</Name>
@@ -180,6 +223,20 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Editor.ico" />
+    <None Include="Resources\arrow-circle-315.png" />
+    <None Include="Resources\arrow-circle-225-left.png" />
+    <None Include="Resources\document-copy.png" />
+    <None Include="Resources\scissors.png" />
+    <None Include="Resources\clipboard-paste.png" />
+    <None Include="Resources\disk.png" />
+    <None Include="Resources\script-text--plus.png" />
+    <None Include="Resources\maps.png" />
+    <None Include="Resources\map--plus.png" />
+    <None Include="Resources\map.png" />
+    <None Include="Resources\script-text.png" />
+    <None Include="Resources\script--exclamation.png" />
+    <None Include="Resources\exclamation.png" />
+    <None Include="Resources\tick.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

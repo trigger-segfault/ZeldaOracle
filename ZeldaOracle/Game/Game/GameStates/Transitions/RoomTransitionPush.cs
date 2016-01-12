@@ -69,8 +69,10 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 				playerSpeed = TRANSITION_PLAYER_VSPEED;
 
 			// Move the player to the new room.
-			Player.Position -= Directions.ToPoint(direction) * NewRoomControl.RoomBounds.Size;
+			Vector2F playerPos = Player.Position - (Directions.ToPoint(direction) * NewRoomControl.RoomBounds.Size);
+			Player.Position = playerPos + Directions.ToVector(direction) * (playerSpeed * ((float) maxDistance / (float) TRANSITION_SPEED));
 			SetupNewRoom();
+			Player.Position = playerPos;
 		}
 
 		public override void Update() {

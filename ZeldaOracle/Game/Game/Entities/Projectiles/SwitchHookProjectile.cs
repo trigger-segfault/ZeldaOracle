@@ -193,7 +193,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				iterator.Begin();
 				if (iterator.IsGood()) {
 					Collectible c = iterator.CollisionInfo.Entity as Collectible;
-					if (c.IsPickupable) {
+					if (c.IsPickupable && c.IsCollectibleWithItems) {
 						collectible = c;
 						c.Destroy();
 						BeginReturn(true);

@@ -11,58 +11,59 @@
 
 
 TILE movable_block;
-	FLAGS		solid, movable;
+	SOLID		block;
+	FLAGS		movable;
 	SPRITE		tile_movable_block;
 	SPRITEOBJ	tile_movable_block_asobject;
-	MODEL		block;
 END;
 
 TILE diamond_rock;
-	FLAGS		Solid, Switchable, SwitchStays;
+	SOLID		block;
+	FLAGS		Switchable, SwitchStays;
 	SPRITE		tile_diamond_rock;
 	SPRITEOBJ	tile_diamond_rock_asobject;
 	BREAKANIM	effect_rock_break;
-	MODEL		block;
 END;
 
 TILE bush;
-	FLAGS		Solid, Pickupable, Bombable, Burnable, Switchable, Cuttable;
+	SOLID		block;
+	FLAGS		Pickupable, Bombable, Burnable, Switchable, Cuttable;
 	SPRITE		tile_bush;
 	SPRITEOBJ	tile_bush_asobject;
 	BREAKANIM	effect_leaves;
-	MODEL		block;
 END;
 
 TILE pot;
-	FLAGS		solid, movable, pickupable, cuttable, switchable;
+	SOLID		block;
+	FLAGS		movable, pickupable, cuttable, switchable;
 	SPRITE		tile_pot;
 	SPRITEOBJ	tile_pot_asobject;
 	BREAKANIM	effect_rock_break;
-	MODEL		block;
 END;
 
 TILE rock;
-	FLAGS		solid, pickupable;
+	SOLID		block;
+	FLAGS		pickupable;
 	SPRITE		tile_rock;
 	SPRITEOBJ	tile_rock_asobject;
 	BREAKANIM	effect_rock_break;
-	MODEL		block;
 END;
 
 TILE grass;
-	FLAGS		Grass, Cuttable, Bombable, Burnable;
+	FLAGS		Cuttable, Bombable, Burnable;
 	SPRITE		tile_grass;
+	ENVTYPE		Grass;
 	BREAKANIM	effect_grass_leaves;
 	MODEL		block;
 END;
 
 TILE sign;
 	TYPE		TileSign;
-	FLAGS		solid, pickupable, burnable, cuttable, switchable;
+	SOLID		block;
+	FLAGS		pickupable, burnable, cuttable, switchable;
 	SPRITE		tile_sign;
 	SPRITEOBJ	tile_sign_asobject;
 	BREAKANIM	effect_sign_break;
-	MODEL		block;
 	PROPERTIES
 		(string, text, "Hello World!",
 			"Side Text", "text_message", "Text",
@@ -74,9 +75,8 @@ END;
 
 TILE owl;
 	TYPE		TileOwl;
-	FLAGS		solid;
+	SOLID		block;
 	SPRITELIST	tile_owl, tile_owl_activated;
-	MODEL		block;
 	PROPERTIES
 		(string, text, "<red>undefined<red>",
 			"Text", "text_message", "",
@@ -85,9 +85,8 @@ END;
 
 TILE lantern;
 	TYPE		TileLantern;
-	FLAGS		solid;
+	SOLID		block;
 	SPRITELIST	tile_lantern_unlit, tile_lantern;
-	MODEL		block;
 	PROPERTIES
 		(boolean, lit, false,
 			"Lit", "", "",
@@ -96,9 +95,8 @@ END;
 
 TILE chest;
 	TYPE		TileChest;
-	FLAGS		solid;
+	SOLID		block;
 	SPRITELIST	tile_chest, tile_chest_open;
-	MODEL		block;
 	PROPERTIES
 		(string, reward, "rupees_1",
 			"Reward", "reward", "",
@@ -107,8 +105,7 @@ END;
 
 TILE reward;
 	TYPE		TileReward;
-	FLAGS		solid;
-	MODEL		center;
+	SOLID		center;
 	PROPERTIES
 		(string, reward, "heart_piece",
 			"Reward", "reward", "",

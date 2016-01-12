@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Items.Rewards;
+using ZeldaOracle.Game.GameStates.RoomStates;
 
 namespace ZeldaOracle.Game.Entities {
 	public class CollectibleReward : Collectible {
@@ -19,7 +20,9 @@ namespace ZeldaOracle.Game.Entities {
 
 		public CollectibleReward(Reward reward) {
 			this.reward			= reward;
-			this.showMessage	= false;
+			this.showMessage	= !reward.OnlyShowMessageInChest;
+			this.hasDuration	= reward.HasDuration;
+			this.isCollectibleWithItems = reward.IsCollectibleWithItems;
 
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2I(-4, -9, 8, 8);
@@ -46,10 +49,11 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public override void Collect() {
-			if (showMessage)
-				GameControl.DisplayMessage(reward.Message);
+			if (showMessage) {
+				RoomControl.GameControl.PushRoomState(new RoomStateReward(reward));
+			}
 			reward.OnCollect(GameControl);
-			Destroy();
+			base.Collect();
 		}
 
 

@@ -33,7 +33,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 	// - MonsterStunState
 	// - MonsterFallInHoleState
 
-	public partial class Monster : Unit {
+	public partial class Monster : Unit, ZeldaAPI.Monster {
 		
 		private Properties properties;
 		private bool isKnockbackable; // Can the monster be knocked back?
@@ -57,6 +57,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// - Sides: 3 overlap	
 
 			color = MonsterColor.Red;
+			properties = new Properties();
 
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2I(-5, -9, 10, 10);

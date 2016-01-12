@@ -22,6 +22,12 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			Graphics.DepthLayer = DepthLayer.EffectFallingObject;
 		}
 		
+		public EffectFallingObject(DepthLayer depthLayer) :
+			base(GameData.ANIM_EFFECT_FALLING_OBJECT)
+		{
+			Graphics.DepthLayer = depthLayer;
+		}
+		
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods

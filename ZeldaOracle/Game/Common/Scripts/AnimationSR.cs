@@ -137,6 +137,9 @@ namespace ZeldaOracle.Common.Scripts {
 						parameters.GetPoint(3, Point2I.Zero).X,
 						parameters.GetPoint(3, Point2I.Zero).Y);
 				}
+				else if (parameters.GetString(0) == "emptyframe") {
+					animationBuilder.AddEmptyFrame(parameters.GetInt(1));
+				}
 				else
 					ThrowParseError("Unknown add type '" + parameters.GetString(0) + "' for animation");
 			});

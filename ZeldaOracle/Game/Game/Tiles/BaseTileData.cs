@@ -11,10 +11,11 @@ namespace ZeldaOracle.Game.Tiles {
 
 	public abstract class BaseTileData {
 		
-		protected Type				type;
-		protected Tileset			tileset;
-		protected Point2I			sheetLocation;	// Location on a tileset.
-		protected Properties		properties;
+		protected Type type;
+		protected Tileset tileset;
+		protected Point2I sheetLocation;	// TODO: remove this, maybe?
+		protected Properties properties;
+		protected ObjectEventCollection events;
 
 		
 		//-----------------------------------------------------------------------------
@@ -22,14 +23,19 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public BaseTileData() {
-			type				= null;
-			tileset				= null;
-			sheetLocation		= Point2I.Zero;
-			properties			= new Properties();
+			type			= null;
+			tileset			= null;
+			sheetLocation	= Point2I.Zero;
+			properties		= new Properties();
+			events			= new ObjectEventCollection();
 
 			properties.Set("id", "")
 				.SetDocumentation("ID", "", "", "",
-				"The id used to refer to this tile.", true, false);
+				"The id used to refer to this tile.");
+			properties.Set("enabled", true)
+				.SetDocumentation("Enabled", "", "", "",
+				"True if the tile is spawned upon entering the room.");
+
 			properties.Set("sprite_index", 0)
 				.SetDocumentation("Sprite Index", "sprite_index", "", "Internal",
 				"The current sprite in the sprite list to draw.", true, true);
@@ -98,6 +104,10 @@ namespace ZeldaOracle.Game.Tiles {
 		public Properties Properties {
 			get { return properties; }
 			set { properties = value; }
+		}
+
+		public ObjectEventCollection Events {
+			get { return events; }
 		}
 	}
 }

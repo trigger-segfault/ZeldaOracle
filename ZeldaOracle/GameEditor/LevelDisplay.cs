@@ -29,6 +29,7 @@ namespace ZeldaEditor {
 		private Point2I			highlightedTile;
 		private Point2I			cursorTileLocation;
 		private Rectangle2I		selectionBox;
+		private Room			selectedRoom;
 
 
 		//-----------------------------------------------------------------------------
@@ -38,6 +39,8 @@ namespace ZeldaEditor {
 		protected override void Initialize() {
 			content		= new ContentManager(Services, "Content");
 			spriteBatch	= new Microsoft.Xna.Framework.Graphics.SpriteBatch(GraphicsDevice);
+			
+			selectedRoom = null;
 
 			editorControl.Initialize(content, GraphicsDevice);
 			
@@ -174,6 +177,8 @@ namespace ZeldaEditor {
 		// Set the selection box
 		public void SetSelectionBox(Point2I start, Point2I size) {
 			selectionBox = new Rectangle2I(start, size);
+			Point2I roomLoc = GMath.Clamp(start / Level.RoomSize, Point2I.Zero, Level.Dimensions);
+			selectedRoom = Level.GetRoomAt(roomLoc);
 		}
 
 
@@ -227,17 +232,21 @@ namespace ZeldaEditor {
 		// Draw an event tile.
 		private void DrawEventTile(Graphics2D g, EventTileDataInstance eventTile, Color color) {
 			SpriteAnimation spr = eventTile.CurrentSprite;
-			/*
+			
 			// Select different sprites for certain events.
-			if (eventTile.Type == typeof(WarpEvent)) {
-				string warpType = eventTile.Properties.GetString("warp_type");
-				if (warpType == "tunnel")
-					spr = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
-				else if (warpType == "stairs")
-					spr = GameData.SPR_EVENT_TILE_WARP_STAIRS;
-				else if (warpType == "entrance")
+			if (eventTile.Type == typeof(NPCEvent)) {
+				eventTile.SubStripIndex = eventTile.Properties.GetInteger("direction", 0);
+			}
+			else if (eventTile.Type == typeof(WarpEvent)) {
+				string warpTypeStr = eventTile.Properties.GetString("warp_type", "tunnel");
+				WarpType warpType = (WarpType) Enum.Parse(typeof(WarpType), warpTypeStr, true);
+				if (warpType == WarpType.Entrance)
 					spr = GameData.SPR_EVENT_TILE_WARP_ENTRANCE;
-			}*/
+				else if (warpType == WarpType.Tunnel)
+					spr = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
+				else if (warpType == WarpType.Stairs)
+					spr = GameData.SPR_EVENT_TILE_WARP_STAIRS;
+			}
 
 			// Draw the sprite.
 			if (!spr.IsNull) {
@@ -499,7 +508,15 @@ namespace ZeldaEditor {
 
 		public Rectangle2I SelectionBox {
 			get { return selectionBox; }
-			set { selectionBox = value; }
+			set {
+				selectionBox = value;
+				Point2I roomLoc = GMath.Clamp(value.Point / Level.RoomSize, Point2I.Zero, Level.Dimensions);
+				selectedRoom = Level.GetRoomAt(roomLoc);
+			}
+		}
+
+		public Room SelectedRoom {
+			get { return selectedRoom; }
 		}
 	}
 }

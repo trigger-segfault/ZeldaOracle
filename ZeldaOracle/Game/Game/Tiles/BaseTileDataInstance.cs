@@ -9,7 +9,7 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles {
-	public abstract class BaseTileDataInstance : IPropertyObject {
+	public abstract class BaseTileDataInstance : IPropertyObject, IEventObject {
 
 		protected Room				room;
 		protected BaseTileData		tileData;
@@ -71,6 +71,10 @@ namespace ZeldaOracle.Game.Tiles {
 				properties = value;
 				properties.PropertyObject = this;
 			}
+		}
+
+		public ObjectEventCollection Events {
+			get { return tileData.Events; }
 		}
 
 		public Properties BaseProperties {

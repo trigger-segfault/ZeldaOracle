@@ -75,6 +75,7 @@ namespace ZeldaEditor.PropertiesEditor {
 		}
 
 		// Set the displayed value of the property.
+		// This method will only be called if the new value is different from the old one.
 		public override void SetValue(object component, object value) {
 			bool isModified = modifiedProperties.IsPropertyModified(property.Name);
 

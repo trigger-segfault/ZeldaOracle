@@ -87,7 +87,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			for (int i = 0; i < player.RoomControl.EntityCount; i++) {
 				Entity e = player.RoomControl.Entities[i];
 				if (e.Physics.PositionedSoftCollisionBox.Colliding(collisionBox)) {
-					if (e is Collectible && (e as Collectible).IsPickupable) {
+					if (e is Collectible && (e as Collectible).IsPickupable && (e as Collectible).IsCollectibleWithItems) {
 						(e as Collectible).Collect();
 					}
 					if (e is Monster) {

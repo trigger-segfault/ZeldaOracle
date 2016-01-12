@@ -18,6 +18,8 @@ SPRITESHEET "tileset_objects_extras_16x16";
 
 TEMPANIM lantern_lit; SUBSTRIP repeat;
 	ADD strip, 16, 4, (0, 3); END;
+
+
 #==============================================================
 # Tiles
 #==============================================================
@@ -26,19 +28,20 @@ LOAD TILESETS;
 
 TEMPTILE lantern;
 	TYPE		TileLantern;
-	FLAGS		solid;
-	MODEL		block;
-	PROPERTIES
-		(boolean, lit, true,
-			"Lit", "", "",
-			 "Whether the lantern starts lit or not.", false);
+	SOLID		block;
+	PROPERTIES	(boolean, lit, true, "Lit", "", "",
+				"Whether the lantern starts lit or not.", false),
+				(boolean, stay_lit, false, "Stay Lit", "", "",
+				"True if the lantern stays lit after leaving the room.", false);
+	EVENT event_light, "Light", "Occurs when the lantern is lighted.", (Lantern, lantern);
+	EVENT event_put_out, "Put Out", "Occurs when the lantern is put out.", (Lantern, lantern);
 END;
 
 TEMPTILE sign;
 	TYPE		TileSign;
-	FLAGS		Solid, Pickupable, Burnable, Cuttable, Switchable, Boomerangable;
+	SOLID		block;
+	FLAGS		Pickupable, Burnable, Cuttable, Switchable, Boomerangable;
 	BREAKANIM	effect_sign_break;
-	MODEL		block;
 	PROPERTIES
 		(string, text, "Hello World!",
 			"Text", "text_message", "Text",
@@ -46,14 +49,23 @@ TEMPTILE sign;
 END;
 
 TEMPTILE pushable_block;
-	FLAGS		solid, movable;
-	MODEL		block;
+	SOLID		block;
+	FLAGS		movable;
+	PROPERTIES	(boolean, move_once, true);
 END;
 
 TEMPTILE color_jump_pad;
 	TYPE		TileColorJumpPad;
 	PROPERTIES
 		(show sprite_index);
+END;
+
+TEMPTILE button;
+	TYPE		TileButton;
+	#PROPERTIES	(string, on_press, "", "On Press", "script", "Events", "When the button is pressed.", false),
+	#			(string, on_release, "", "On Release", "script", "Events", "When the button is released.", false);
+	EVENT on_press, "On Press", "Occurs when the button is pressed.", (Button button);
+	EVENT on_release, "On Release", "Occurs when the button is released.", (Button button);
 END;
 
 TILE dug;
@@ -70,83 +82,84 @@ DEFAULT (0, 3);
 
 # ??
 TILE (0, 3);
-	FLAGS		diggable;
+	FLAGS		Digable;
 END;
 
 # Bush
 TILE (0, 0);
-	FLAGS		Solid, Pickupable, Bombable, Burnable, Switchable, Cuttable, AbsorbSeeds, Boomerangable;
+	SOLID		block;
+	FLAGS		Pickupable, Bombable, Burnable, Switchable, Cuttable, AbsorbSeeds, Boomerangable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (0, 0);
 	BREAKANIM	effect_leaves;
-	MODEL		block;
 END;
 
 # Plant
 TILE (1, 0);
-	FLAGS		Solid, Cuttable, Boomerangable;
+	SOLID		block;
+	FLAGS		Cuttable, Boomerangable;
 	BREAKANIM	effect_leaves;
-	MODEL		block;
 END;
 
 # Flowers Red
 TILE (2, 0);
-	FLAGS		Solid, Cuttable, Boomerangable;
+	SOLID		block;
+	FLAGS		Cuttable, Boomerangable;
 	BREAKANIM	effect_leaves;
-	MODEL		block;
 END;
 
 # Flowers Blue
 TILE (3, 0);
-	FLAGS		Solid, Cuttable, Boomerangable;
+	SOLID		block;
+	FLAGS		Cuttable, Boomerangable;
 	BREAKANIM	effect_leaves;
-	MODEL		block;
 END;
 
 # Flowers Pink
 TILE (4, 0);
-	FLAGS		Solid, Cuttable, Boomerangable;
+	SOLID		block;
+	FLAGS		Cuttable, Boomerangable;
 	BREAKANIM	effect_leaves;
-	MODEL		block;
 END;
 
 # Flower
 TILE (5, 0);
-	FLAGS		Solid, Cuttable, Boomerangable;
+	SOLID		block;
+	FLAGS		Cuttable, Boomerangable;
 	BREAKANIM	effect_leaves;
-	MODEL		block;
 END;
 
 # Water Flower
 TILE (6, 0);
-	FLAGS		Solid, Cuttable, Boomerangable;
+	SOLID		block;
+	FLAGS		Cuttable, Boomerangable;
 	BREAKANIM	effect_leaves;
-	MODEL		block;
 END;
 
 # Mushroom
 TILE (7, 0);
-	FLAGS		Solid, Pickupable;
+	SOLID		block;
+	FLAGS		Pickupable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (1, 0);
-	MODEL		block;
 END;
 
 # Seed
 TILE (8, 0);
-	FLAGS		Solid, Pickupable, Cuttable, Switchable, Movable;
+	SOLID		block;
+	FLAGS		Pickupable, Cuttable, Switchable, Movable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (2, 0);
 	BREAKANIM	effect_rock_break;
-	MODEL		block;
 END;
 
 # Burnable Tree
 TILE (9, 0);
-	FLAGS		Solid, Burnable, AbsorbSeeds;
-	MODEL		block;
+	SOLID		block;
+	FLAGS		Burnable, AbsorbSeeds;
 END;
 
 # Grass
 TILE (10, 0);
-	FLAGS		Cuttable, Grass, Burnable, Bombable, Boomerangable;
+	FLAGS		Cuttable, Burnable, Bombable, Boomerangable;
+	ENVTYPE		Grass;
 	BREAKANIM	effect_grass_leaves;
 END;
 
@@ -158,34 +171,34 @@ END;
 
 # Rock
 TILE (0, 1);
-	FLAGS		Solid, Pickupable;
+	SOLID		block;
+	FLAGS		Pickupable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (3, 0);
 	BREAKANIM	effect_rock_break;
-	MODEL		block;
 END;
 
 # Diamond Rock
 TILE (1, 1);
-	FLAGS		Solid, Switchable, SwitchStays;
+	SOLID		block;
+	FLAGS		Switchable, SwitchStays;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (4, 0);
 	BREAKANIM	effect_rock_break;
-	MODEL		block;
 END;
 
 # Crystal
 TILE (2, 1);
-	FLAGS		Solid, Cuttable;
+	SOLID		block;
+	FLAGS		Cuttable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (5, 0);
 	BREAKANIM	effect_rock_break;
-	MODEL		block;
 END;
 
 # Pot
 TILE (3, 1);
-	FLAGS		Solid, Cuttable, Movable, Pickupable, Switchable;
+	SOLID		block;
+	FLAGS		Cuttable, Movable, Pickupable, Switchable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (6, 0);
 	BREAKANIM	effect_rock_break;
-	MODEL		block;
 END;
 
 # Sign 
@@ -208,9 +221,9 @@ END;
 
 # Bombable Block
 TILE (7, 1);
-	FLAGS		solid, bombable;
+	SOLID		block;
+	FLAGS		Bombable;
 	BREAKANIM	effect_rock_break;
-	MODEL		block;
 END;
 
 # Armos Statue
@@ -238,13 +251,19 @@ END;
 
 # Dirt pile
 TILE (0, 2);
-	FLAGS		solid, diggable;
-	MODEL		block;
+	SOLID		block;
+	FLAGS		Digable;
 END;
 
 # Hole
 TILE (2, 2);
-	FLAGS		hole;
+	ENVTYPE		Hole;
+END;
+
+# Cracked Floor
+TILE (3, 2);
+	TYPE		TileCrackedFloor
+	#FLAGS		surface; ???
 END;
 
 # Lantern
@@ -254,11 +273,33 @@ TILE (0, 5);
 	SPRITEINDEX 1, "tileset_objects_extras_16x16", (4, 3);
 END;
 
+# Button
+TILE (2, 5);
+	CLONE		button;
+	SPRITEINDEX	0, "tileset_objects", (2, 5);
+	SPRITEINDEX	1, "tileset_objects_extras_16x16", (6, 3);
+END;
+
+# Color Cube Slot
+TILE (3, 5);
+	TYPE TileColorCubeSlot;
+	EVENT on_color_change, "Color Change", "Occurs when the color changes.",
+		(ColorCubeSlot, tile, Color, color);
+END;
+
+# Color lantern
+TILE (4, 5);
+	TYPE TileColorLantern;
+	SOLID block;
+	EVENT on_color_change, "Color Change", "Occurs when the color changes.",
+		(ColorLantern, tile, Color, color);
+END;
+
 # Color Jump Pad
 TILE (5, 5);
 	CLONE		color_jump_pad;
-	SPRITEINDEX 1, "tileset_objects_extras_16x16", (7, 3);
-	SPRITEINDEX 2, "tileset_objects_extras_16x16", (8, 3);
+	SPRITEINDEX 2, "tileset_objects_extras_16x16", (7, 3);
+	SPRITEINDEX 1, "tileset_objects_extras_16x16", (8, 3);
 END;
 
 TILE (6, 5);
@@ -275,5 +316,133 @@ TILE (7, 5);
 			(show, sprite_index);
 END;
 
+# Platform
+TILE (10, 5);
+	TYPE TilePlatform;
+END;
+
+
+TILE (0, 7);
+	TYPE		TileDoor;
+	SOLID		block;
+	PROPERTIES
+		(integer, direction, 1,
+			"Direction", "direction", "",
+			"The direction the door is facing.", false);
+END;
+TILE (1, 7);
+	TYPE		TileDoor;
+	SOLID		block;
+	PROPERTIES
+		(integer, direction, 2,
+			"Direction", "direction", "",
+			"The direction the door is facing.", false);
+END;
+TILE (0, 8);
+	TYPE		TileDoor;
+	SOLID		block;
+	PROPERTIES
+		(integer, direction, 3,
+			"Direction", "direction", "",
+			"The direction the door is facing.", false);
+END;
+TILE (1, 8);
+	TYPE		TileDoor;
+	SOLID		block;
+	PROPERTIES
+		(integer, direction, 0,
+			"Direction", "direction", "",
+			"The direction the door is facing.", false);
+END;
+
+
+# Small key Door
+
+TEMPTILE small_key_door;
+	TYPE		TileSmallKeyDoor;
+	SOLID		block;
+	PROPERTIES
+		(integer, direction, 0,
+			"Direction", "direction", "",
+			"The direction the door is facing.", false);
+END;
+
+TEMPTILE boss_key_door;
+	TYPE		TileBossKeyDoor;
+	SOLID		block;
+	PROPERTIES
+		(integer, direction, 0,
+			"Direction", "direction", "",
+			"The direction the door is facing.", false);
+END;
+
+TILE (4, 7);
+	CLONE small_key_door;
+	PROPERTIES (integer, direction, 1);
+END;
+TILE (5, 7);
+	CLONE small_key_door;
+	PROPERTIES (integer, direction, 2);
+END;
+TILE (4, 8);
+	CLONE small_key_door;
+	PROPERTIES (integer, direction, 3);
+END;
+TILE (5, 8);
+	CLONE small_key_door;
+	PROPERTIES (integer, direction, 0);
+END;
+
+# Boss key doors
+
+TILE (6, 7);
+	CLONE boss_key_door;
+	PROPERTIES (integer, direction, 1);
+END;
+TILE (7, 7);
+	CLONE boss_key_door;
+	PROPERTIES (integer, direction, 2);
+END;
+TILE (6, 8);
+	CLONE boss_key_door;
+	PROPERTIES (integer, direction, 3);
+END;
+TILE (7, 8);
+	CLONE boss_key_door;
+	PROPERTIES (integer, direction, 0);
+END;
+
+
+# Eye Statue
+TILE (0, 11);
+	TYPE	TileEyeStatue;
+	SOLID	block;
+END;
+
+# Key block
+TILE (2, 11);
+	TYPE	TileLockedBlock;
+	SOLID	block;
+END;
+
+# Burnable Web Walls
+TEMPTILE web_wall;
+	SOLID block;
+	FLAGS Burnable;
+	END;
+TILE (0, 9); CLONE web_wall; END;
+TILE (1, 9); CLONE web_wall; END;
+TILE (0, 10); CLONE web_wall; END;
+TILE (1, 10); CLONE web_wall; END;
+
+# Bombable Walls
+TEMPTILE bombable_wall;
+	SOLID block;
+	FLAGS Burnable;
+	END;
+TILE (2, 9); CLONE bombable_wall; END;
+TILE (3, 9); CLONE bombable_wall; END;
+TILE (2, 10); CLONE bombable_wall; END;
+TILE (3, 10); CLONE bombable_wall; END;
 
 END;

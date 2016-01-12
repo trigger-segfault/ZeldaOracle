@@ -53,18 +53,6 @@ namespace ZeldaOracle.Common.Geometry {
 		public static int FlipVertical(int direction) {
 			return (Directions.Count - direction) % Directions.Count;
 		}
-
-		public static int FromPoint(Point2I point) {
-			if (point.X > 0)
-				return Directions.Right;
-			if (point.Y < 0)
-				return Directions.Up;
-			if (point.X < 0)
-				return Directions.Left;
-			if (point.Y > 0)
-				return Directions.Down;
-			return -1;
-		}
 		
 		// Return a unit vector as a point in the given direction.
 		public static Point2I ToPoint(int direction) {
@@ -100,9 +88,40 @@ namespace ZeldaOracle.Common.Geometry {
 			return (direction % 2);
 		}
 
+		public static int FromPoint(Point2I point) {
+			if (point.X > 0)
+				return Directions.Right;
+			if (point.Y < 0)
+				return Directions.Up;
+			if (point.X < 0)
+				return Directions.Left;
+			if (point.Y > 0)
+				return Directions.Down;
+			return -1;
+		}
+		
+		public static int NearestFromVector(Vector2F vector) {
+			// Cheap algorithm for turning a vector into an axis-aligned direction.
+			if (vector.X > 0) {
+				if (vector.X >= Math.Abs(vector.Y))
+					return Directions.Right;
+				else if (vector.Y < 0)
+					return Directions.Up;
+				else
+					return Directions.Down;
+			}
+			else {
+				if (-vector.X >= Math.Abs(vector.Y))
+					return Directions.Left;
+				else if (vector.Y < 0)
+					return Directions.Up;
+				else
+					return Directions.Down;
+			}
+		}
+
 		public static int RoundFromRadians(float radians) {
-			float halfPi = (float) Math.PI * 0.5f;
-			int dir = (int) Math.Round(radians / halfPi);
+			int dir = (int) Math.Round(radians / GMath.HalfPi);
 			return GMath.Wrap(dir, Directions.Count);
 		}
 	}

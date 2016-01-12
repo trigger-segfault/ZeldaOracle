@@ -9,6 +9,50 @@ SPRITESHEET "zoneset_large";
 ANIM tile_lantern; SUBSTRIP repeat;
 	ADD strip, 16, 4, (1, 8); END;
 	
+	
+# Doors
+
+SPRITESHEET "zoneset_large";
+
+ANIM tile_door_close;
+	SUBSTRIP clamp;
+		ADD frame, 6, (0, 4), (-8, 0);
+		ADD frame, 6, (0, 4);
+	SUBSTRIP clamp;
+		ADD frame, 6, (0, 5), (0, 8);
+		ADD frame, 6, (0, 5);
+	SUBSTRIP clamp;
+		ADD frame, 6, (0, 6), (8, 0);
+		ADD frame, 6, (0, 6);
+	SUBSTRIP clamp;
+		ADD frame, 6, (0, 7), (0, -8);
+		ADD frame, 6, (0, 7);
+	END;
+	
+ANIM tile_door_open;
+	SUBSTRIP clamp;
+		ADD frame, 6, (0, 4), (-8, 0);
+		ADD emptyframe, 6;
+	SUBSTRIP clamp;
+		ADD frame, 6, (0, 5), (0, 8);
+		ADD emptyframe, 6;
+	SUBSTRIP clamp;
+		ADD frame, 6, (0, 6), (8, 0);
+		ADD emptyframe, 6;
+	SUBSTRIP clamp;
+		ADD frame, 6, (0, 7), (0, -8);
+		ADD emptyframe, 6;
+	END;
+
+ANIM tile_locked_door_open;		CLONE tile_door_open; SHIFTSOURCE (1, 0); END;
+ANIM tile_minecart_door_open;	CLONE tile_door_open; SHIFTSOURCE (2, 0); END;
+ANIM tile_boss_door_open;		CLONE tile_door_open; SHIFTSOURCE (3, 0); END;
+ANIM tile_locked_door_close;	CLONE tile_door_close; SHIFTSOURCE (1, 0); END;
+ANIM tile_minecart_door_close;	CLONE tile_door_close; SHIFTSOURCE (2, 0); END;
+ANIM tile_boss_door_close;		CLONE tile_door_close; SHIFTSOURCE (3, 0); END;
+
+
+
 #==============================================================
 # Color Cube Animations
 #==============================================================
@@ -154,6 +198,42 @@ ANIM tile_ocean_shore; SUBSTRIP repeat;
 	INSERT strip, 0, 16, 4, (7, 4), (8, 0), (0, 1);
 	INSERT strip, 0, 16, 4, (4, 4), (0, 8), (0, 1);
 	INSERT strip, 0, 16, 4, (5, 4), (8, 8), (0, 1); END;
+ANIM tile_wall_torch_right; SUBSTRIP repeat;
+	INSERT frame,  0, 16,    (1, 15), (0, 0);
+	INSERT strip, 16, 16, 4, (0, 15), (0, 0);
+	INSERT frame, 80, 16,    (2, 15), (0, 0);
+	INSERT frame,  0, 16,    (1, 15), (0, 8);
+	INSERT strip, 16, 16, 4, (0, 15), (0, 8);
+	INSERT frame, 80, 16,    (2, 15), (0, 8);
+	INSERT frame, 0, 96, (0, 16), (8, 0);
+	INSERT frame, 0, 96, (0, 16), (8, 8); END;
+ANIM tile_wall_torch_up; SUBSTRIP repeat;
+	INSERT frame,  0, 16,    (1, 15), (0, 8);
+	INSERT strip, 16, 16, 4, (0, 15), (0, 8);
+	INSERT frame, 80, 16,    (2, 15), (0, 8);
+	INSERT frame,  0, 16,    (1, 15), (8, 8);
+	INSERT strip, 16, 16, 4, (0, 15), (8, 8);
+	INSERT frame, 80, 16,    (2, 15), (8, 8);
+	INSERT frame, 0, 96, (1, 16), (0, 0);
+	INSERT frame, 0, 96, (1, 16), (8, 0); END;
+ANIM tile_wall_torch_left; SUBSTRIP repeat;
+	INSERT frame,  0, 16,    (1, 15), (8, 0);
+	INSERT strip, 16, 16, 4, (0, 15), (8, 0);
+	INSERT frame, 80, 16,    (2, 15), (8, 0);
+	INSERT frame,  0, 16,    (1, 15), (8, 8);
+	INSERT strip, 16, 16, 4, (0, 15), (8, 8);
+	INSERT frame, 80, 16,    (2, 15), (8, 8);
+	INSERT frame, 0, 96, (2, 16), (0, 0);
+	INSERT frame, 0, 96, (2, 16), (0, 8); END;
+ANIM tile_wall_torch_down; SUBSTRIP repeat;
+	INSERT frame,  0, 16,    (1, 15), (0, 0);
+	INSERT strip, 16, 16, 4, (0, 15), (0, 0);
+	INSERT frame, 80, 16,    (2, 15), (0, 0);
+	INSERT frame,  0, 16,    (1, 15), (8, 0);
+	INSERT strip, 16, 16, 4, (0, 15), (8, 0);
+	INSERT frame, 80, 16,    (2, 15), (8, 0);
+	INSERT frame, 0, 96, (3, 16), (0, 8);
+	INSERT frame, 0, 96, (3, 16), (8, 8); END;
 
 
 #==============================================================
@@ -604,7 +684,30 @@ ANIM effect_somaria_block_destroy; SUBSTRIP reset;
 	ADD frame, 8, (1, 12);
 	ADD frame, 5, (5, 12);
 	OFFSET (-8, -8); END;
+	
+ANIM effect_block_appear; SUBSTRIP reset;
+	ADD frame, 3, (3, 12);
+	ADD frame, 3, (0, 12);
+	ADD frame, 3, (1, 12);
+	OFFSET (-8, -8); END;
+ANIM effect_block_disappear; SUBSTRIP reset;
+	ADD frame, 6, (0, 12);
+	ADD frame, 8, (1, 12);
+	ADD frame, 5, (5, 12);
+	OFFSET (-8, -8); END;
 
+ANIM effect_color_flame_red; SUBSTRIP repeat;
+	ADD strip, 8, 4, (5, 3);
+	OFFSET ( -8, -8); END;
+ANIM effect_color_flame_blue; SUBSTRIP repeat;
+	ADD strip, 8, 4, (5, 7);
+	OFFSET ( -8, -8); END;
+ANIM effect_color_flame_green; SUBSTRIP repeat;
+	ADD strip, 8, 4, (5, 11);
+	OFFSET ( -8, -8); END;
+ANIM effect_color_flame_yellow; SUBSTRIP repeat;
+	ADD strip, 8, 4, (5, 15);
+	OFFSET ( -8, -8); END;
 
 #==============================================================
 # NPC Animations
@@ -634,7 +737,7 @@ ANIM monster_octorok; SUBSTRIP repeat;
 	ADD strip, 8, 2, (0, 0);
 	MAKEDYNAMIC 4, (2, 0); END;
 ANIM monster_moblin; SUBSTRIP repeat;
-	ADD strip, 8, 2, (8, 0);
+	ADD strip, 12, 2, (8, 0);
 	MAKEDYNAMIC 4, (2, 0); END;
 ANIM monster_darknut; SUBSTRIP repeat;
 	ADD strip, 8, 2, (0, 1);
@@ -679,12 +782,12 @@ ANIM monster_buzz_blob_electrocute; SUBSTRIP repeat;
 	ADD frame, 8, (14, 3);
 	ADD frame, 8, (15, 3); END;
 ANIM monster_lynel;
-	SUBSTRIP repeat; Add frame, 8, (10, 4), (-8, 0); Add part, 8, (11, 4), (8, 0);
-					 Add frame, 8, (12, 4), (-8, 0); Add part, 8, (13, 4), (8, 0);
-	SUBSTRIP repeat; Add frame, 8, (14, 4); Add frame, 8, (15, 4);
-	SUBSTRIP repeat; Add frame, 8, (10, 5), (-8, 0); Add part, 8, (11, 5), (8, 0);
-					 Add frame, 8, (12, 5), (-8, 0); Add part, 8, (13, 5), (8, 0);
-	SUBSTRIP repeat; Add frame, 8, (14, 5); Add frame, 8, (15, 5);
+	SUBSTRIP repeat; Add frame, 12, (10, 4), (-8, 0); Add part, 12, (11, 4), (8, 0);
+					 Add frame, 12, (12, 4), (-8, 0); Add part, 12, (13, 4), (8, 0);
+	SUBSTRIP repeat; Add frame, 12, (14, 4); Add frame, 12, (15, 4);
+	SUBSTRIP repeat; Add frame, 12, (10, 5), (-8, 0); Add part, 12, (11, 5), (8, 0);
+					 Add frame, 12, (12, 5), (-8, 0); Add part, 12, (13, 5), (8, 0);
+	SUBSTRIP repeat; Add frame, 12, (14, 5); Add frame, 12, (15, 5);
 	END;
 ANIM monster_rope; SUBSTRIP repeat;
 	ADD strip, 8, 2, (0, 7);
@@ -711,7 +814,7 @@ ANIM monster_bari; SUBSTRIP repeat;
 ANIM monster_bari_electrocute; SUBSTRIP repeat;
 	ADD strip, 8, 2, (2, 8); END;
 ANIM monster_gibdo; SUBSTRIP repeat;
-	ADD strip, 8, 2, (6, 8); END;
+	ADD strip, 16, 2, (6, 8); END;
 ANIM monster_sand_crab; SUBSTRIP repeat;
 	ADD strip, 8, 2, (8, 8); END;
 ANIM monster_water_tektike; SUBSTRIP repeat;

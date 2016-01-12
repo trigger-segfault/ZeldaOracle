@@ -75,7 +75,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					player.Graphics.Animation = GameData.ANIM_PLAYER_PUSH;
 					pushTimer++;
 
-					if (pushTimer > actionTile.PushDelay && actionTile.HasFlag(TileSpecialFlags.Movable)) {
+					if (pushTimer > actionTile.PushDelay) {
 						if (actionTile.OnPush(player.Direction, 1.0f))
 							pushTimer = 0;
 						else

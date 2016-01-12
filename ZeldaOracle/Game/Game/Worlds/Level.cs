@@ -1,10 +1,10 @@
-﻿using ZeldaOracle.Common.Geometry;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Content;
+using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 
@@ -39,7 +39,7 @@ namespace ZeldaOracle.Game.Worlds {
 			this.properties.BaseProperties = new Properties();
 
 			this.properties.BaseProperties.Set("id", "")
-				.SetDocumentation("ID", "", "", "", "The id used to refer to this level.", true, false);
+				.SetDocumentation("ID", "", "", "", "The id used to refer to this level.", false, true);
 
 			this.properties.Set("id", name);
 
@@ -173,6 +173,11 @@ namespace ZeldaOracle.Game.Worlds {
 		public Zone Zone {
 			get { return zone; }
 			set { zone = value; }
+		}
+
+		public string Id {
+			get { return properties.GetString("id"); }
+			set { properties.Set("id", value); }
 		}
 	}
 }

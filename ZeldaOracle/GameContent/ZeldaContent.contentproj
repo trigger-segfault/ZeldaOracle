@@ -58,6 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Images\Editor\" />
     <Folder Include="Languages\" />
     <Folder Include="Particles\" />
     <Folder Include="Shaders\" />
@@ -719,6 +720,27 @@
   <ItemGroup>
     <Compile Include="Images\Units\Monsters\monster_items.png">
       <Name>monster_items</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\UI\screen_dungeon_map.png">
+      <Name>screen_dungeon_map</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\Tiles\zoneset_ages_dungeon_1.png">
+      <Name>zoneset_ages_dungeon_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\Tiles\zoneset_ages_dungeon_4.png">
+      <Name>zoneset_ages_dungeon_4</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

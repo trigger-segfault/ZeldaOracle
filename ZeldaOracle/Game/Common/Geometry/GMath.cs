@@ -17,6 +17,9 @@ public static class GMath {
 	public const float Pi = 3.14159265358979323846f;
 	/** <summary> Represents the natural logarithmic base, specified by the constant, e. </summary> */
 	public const float E = 2.71828182845904523536f;
+
+	public const float HalfPi = Pi * 0.5f;
+	public const float QuarterPi = Pi * 0.25f;
 	
 	/** <summary> Quarter of an angle in either radians or degrees. </summary> */
 	public static float QuarterAngle {

@@ -59,7 +59,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		//-----------------------------------------------------------------------------
 
 		// This method is called when a room is entered through this warp point.
-		public void SetupRoomOnEnter() {
+		public void SetupPlayerInRoom() {
 			Player player = RoomControl.Player;
 			warpEnabled = false;
 

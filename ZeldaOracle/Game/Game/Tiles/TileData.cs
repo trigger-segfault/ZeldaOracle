@@ -12,13 +12,10 @@ namespace ZeldaOracle.Game.Tiles {
 	public class TileData : BaseTileData {
 
 		private SpriteAnimation[]	spriteList;
-		private TileFlags			flags;
-		private TileSpecialFlags	specialFlags;
 		private Point2I				size;
 		private SpriteAnimation		spriteAsObject;
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
-		private CollisionModel		collisionModel;
-
+		
 		
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -27,31 +24,41 @@ namespace ZeldaOracle.Game.Tiles {
 		public TileData() {
 			spriteList			= new SpriteAnimation[0];
 			size				= Point2I.One;
-			flags				= TileFlags.Default;
-			specialFlags		= TileSpecialFlags.Default;
 			spriteAsObject		= new SpriteAnimation();
 			breakAnimation		= null;
-			collisionModel		= null;
+
+			// General.
+			properties.Set("flags", (int) TileFlags.Default);
+			properties.Set("solidity", (int) TileSolidType.NotSolid);
+			properties.Set("collision_model", "");
+			properties.Set("environment_type", (int) TileEnvironmentType.Normal);
+			
+			// Interaction Options.
+			properties.Set("move_once", false);
+			properties.Set("move_direction", -1);
+			properties.Set("cuttable_sword_level", 0);
+			properties.Set("pickupable_bracelet_level", 0);
+			properties.Set("ledge_direction", Directions.Down);
+
+			// Events.
+			properties.Set("on_move", "")
+				.SetDocumentation("On Move", "script", "", "Events",
+				"Occurs when the tile is moved.", true, false);
 		}
 		
-		public TileData(TileFlags flags, TileSpecialFlags specialFlags) : this() {
-			this.flags			= flags;
-			this.specialFlags	= specialFlags;
+		public TileData(TileFlags flags) : this() {
+			this.Flags = flags;
 		}
 
-		public TileData(Type type, TileFlags flags, TileSpecialFlags specialFlags) : this() {
-			this.type			= type;
-			this.flags			= flags;
-			this.specialFlags	= specialFlags;
+		public TileData(Type type, TileFlags flags) : this() {
+			this.type = type;
+			this.Flags = flags;
 		}
 
 		public TileData(TileData copy) : base(copy) {
 			size				= copy.size;
-			flags				= copy.flags;
-			specialFlags		= copy.specialFlags;
 			spriteAsObject		= new SpriteAnimation(copy.spriteAsObject);
 			breakAnimation		= copy.breakAnimation;
-			collisionModel		= copy.collisionModel;
 			spriteList			= new SpriteAnimation[copy.spriteList.Length];
 			
 			for (int i = 0; i < spriteList.Length; i++)
@@ -63,12 +70,10 @@ namespace ZeldaOracle.Game.Tiles {
 			if (copy is TileData) {
 				TileData copyTileData = (TileData) copy;
 				size				= copyTileData.size;
-				flags				= copyTileData.flags;
-				specialFlags		= copyTileData.specialFlags;
 				spriteAsObject		= new SpriteAnimation(copyTileData.spriteAsObject);
 				breakAnimation		= copyTileData.breakAnimation;
-				collisionModel		= copyTileData.collisionModel;
-				
+				events				= new ObjectEventCollection(copyTileData.events);
+
 				if (copyTileData.spriteList.Length > 0) {
 					spriteList = new SpriteAnimation[copyTileData.spriteList.Length];
 					for (int i = 0; i < spriteList.Length; i++) {
@@ -114,13 +119,8 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public TileFlags Flags {
-			get { return flags; }
-			set { flags = value; }
-		}
-
-		public TileSpecialFlags SpecialFlags {
-			get { return specialFlags; }
-			set { specialFlags = value; }
+			get { return (TileFlags) properties.GetInteger("flags", 0); }
+			set { properties.Set("flags", (int) value); }
 		}
 
 		public SpriteAnimation SpriteAsObject {
@@ -139,8 +139,23 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public CollisionModel CollisionModel {
-			get { return collisionModel; }
-			set { collisionModel = value; }
+			get { return properties.GetResource<CollisionModel>("collision_model", null); }
+			set { properties.SetAsResource<CollisionModel>("collision_model", value); }
+		}
+
+		public TileEnvironmentType EnvironmentType {
+			get { return properties.GetEnum<TileEnvironmentType>("environment_type", TileEnvironmentType.Normal); }
+			set { properties.Set("environment_type", (int) value); }
+		}
+
+		public TileSolidType SolidType {
+			get { return properties.GetEnum<TileSolidType>("solidity", TileSolidType.NotSolid); }
+			set { properties.Set("solidity", (int) value); }
+		}
+
+		public int LedgeDirection {
+			get { return properties.GetInteger("ledge_direction", Directions.Down); }
+			set { properties.Set("ledge_direction", value); }
 		}
 	}
 }

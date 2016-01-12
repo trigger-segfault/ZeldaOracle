@@ -20,7 +20,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			this.message		= "You got a <red>Heart Container<red>!";
 			this.hasDuration	= false;
 			this.holdType		= RewardHoldTypes.TwoHands;
-			this.isCollectibleWithItems	= true;
+			this.isCollectibleWithItems	= false;
 		}
 
 		//-----------------------------------------------------------------------------

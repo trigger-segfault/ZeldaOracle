@@ -19,7 +19,6 @@ namespace ZeldaOracle.Game.Entities {
 		EffectScentSeedPod,
 		EffectSeed,
 		EffectGale,
-		EffectSomariaBlockPoof,
 
 		Monsters,
 
@@ -45,6 +44,8 @@ namespace ZeldaOracle.Game.Entities {
 		ProjectileSwordBeam,
 		ProjectileBomb,
 		EffectSprintPuff,
+		EffectCrackedFloorCrumble,
+		EffectSomariaBlockPoof,
 		ProjectileCarriedTile,
 		ItemSeedShooter,
 

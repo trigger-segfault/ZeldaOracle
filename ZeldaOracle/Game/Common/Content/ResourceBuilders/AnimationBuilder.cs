@@ -72,6 +72,10 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 			return InsertFrame(animation.Duration, duration, sprite);
 		}
 
+		public AnimationBuilder AddEmptyFrame(int duration) {
+			return AddFrame(duration, new Sprite((Image) null, 0, 0, 0, 0));
+		}
+
 		public AnimationBuilder AddPart(int sheetX, int sheetY, int offsetX = 0, int offsetY = 0) {
 			return AddPart(new Sprite(sheet, sheetX, sheetY, offsetX, offsetY));
 		}

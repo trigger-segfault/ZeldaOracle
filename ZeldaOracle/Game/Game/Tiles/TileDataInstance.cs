@@ -9,7 +9,7 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles {
-	public class TileDataInstance : IPropertyObject {
+	public class TileDataInstance : IPropertyObject, IEventObject {
 
 		private Room		room;
 		private Point2I		location;
@@ -39,6 +39,20 @@ namespace ZeldaOracle.Game.Tiles {
 			this.properties = new Properties();
 			this.properties.PropertyObject = this;
 			this.properties.BaseProperties = tileData.Properties;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Flags
+		//-----------------------------------------------------------------------------
+
+		public void SetFlags(TileFlags flagsToSet, bool enabled) {
+			TileFlags flags = Flags;
+			if (enabled)
+				flags |= flagsToSet;
+			else
+				flags &= ~flagsToSet;
+			Flags = flags;
 		}
 
 
@@ -88,14 +102,6 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return tileData.Size; }
 		}
 
-		public TileFlags Flags {
-			get { return tileData.Flags; }
-		}
-
-		public TileSpecialFlags SpecialFlags {
-			get { return tileData.SpecialFlags; }
-		}
-
 		public SpriteAnimation Sprite {
 			get { return tileData.Sprite; }
 		}
@@ -120,8 +126,14 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return tileData.BreakAnimation; }
 		}
 
+		public TileFlags Flags {
+			get { return (TileFlags) properties.GetInteger("flags", 0); }
+			set { properties.SetPropertyGeneric("flags", (int) value, true); }
+		}
+
 		public CollisionModel CollisionModel {
-			get { return tileData.CollisionModel; }
+			get { return properties.GetResource<CollisionModel>("collision_model", null); }
+			set { properties.SetAsResource<CollisionModel>("collision_model", value); }
 		}
 
 		public Point2I SheetLocation {
@@ -134,6 +146,14 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public Properties BaseProperties {
 			get { return TileData.Properties; }
+		}
+
+		public ObjectEventCollection Events {
+			get { return TileData.Events; }
+		}
+
+		public string Id {
+			get { return properties.GetString("id", ""); }
 		}
 	}
 }

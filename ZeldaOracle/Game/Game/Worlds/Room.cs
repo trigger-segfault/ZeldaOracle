@@ -9,7 +9,7 @@ using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Common.Content;
 
 namespace ZeldaOracle.Game.Worlds {
-	public class Room : IPropertyObject {
+	public class Room : IPropertyObject, IEventObject {
 		
 		private Level							level;		// The level this room is in.
 		private Point2I							location;	// Location within the level.
@@ -17,6 +17,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private List<EventTileDataInstance>		eventData;
 		private Zone							zone;
 		private Properties						properties;
+		private ObjectEventCollection			events;
 
 
 		//-----------------------------------------------------------------------------
@@ -29,6 +30,7 @@ namespace ZeldaOracle.Game.Worlds {
 			this.tileData	= new TileDataInstance[level.RoomSize.X, level.RoomSize.Y, level.RoomLayerCount];
 			this.eventData	= new List<EventTileDataInstance>();
 			this.zone		= zone;
+			this.events		= new ObjectEventCollection();
 			this.properties	= new Properties();
 			this.properties.PropertyObject = this;
 			this.properties.BaseProperties = new Properties();
@@ -39,6 +41,14 @@ namespace ZeldaOracle.Game.Worlds {
 				.SetDocumentation("Music", "song", "", "", "The music to play in this room. Select none to choose the default music.", true, false);
 			this.properties.BaseProperties.Set("zone", "")
 				.SetDocumentation("Zone", "zone", "", "", "The zone type for this room.", true, false);
+			
+			events.AddEvent("event_room_start", "Room Start", "Occurs when the room begins.");
+			this.properties.BaseProperties.Set("event_room_start", "")
+				.SetDocumentation("Room Start", "script", "", "", "Occurs when the room begins.");
+			
+			events.AddEvent("event_all_monsters_dead", "All Monsters Dead", "Occurs when all monsters are dead.");
+			this.properties.BaseProperties.Set("event_all_monsters_dead", "")
+				.SetDocumentation("All Monsters Dead", "script", "", "", "Occurs when all monsters are dead.");
 
 			if (zone != null)
 				this.properties.Set("zone", zone.ID);
@@ -63,6 +73,30 @@ namespace ZeldaOracle.Game.Worlds {
 					return eventData[i];
 			}
 			return null;
+		}
+
+		public IEnumerable<TileDataInstance> GetTiles(string id) {
+			for (int i = 0; i < LayerCount; i++) {
+				for (int x = 0; x < Width; x++) {
+					for (int y = 0; y < Height; y++) {
+						TileDataInstance tile = tileData[x, y, i];
+						if (tile != null && tile.Id == id)
+							yield return tile;
+					}
+				}
+			}
+		}
+
+		public IEnumerable<TileDataInstance> GetTiles() {
+			for (int i = 0; i < LayerCount; i++) {
+				for (int x = 0; x < Width; x++) {
+					for (int y = 0; y < Height; y++) {
+						TileDataInstance tile = tileData[x, y, i];
+						if (tile != null)
+							yield return tile;
+					}
+				}
+			}
 		}
 
 
@@ -196,6 +230,10 @@ namespace ZeldaOracle.Game.Worlds {
 				properties = value;
 				properties.PropertyObject = this;
 			}
+		}
+		
+		public ObjectEventCollection Events {
+			get { return events; }
 		}
 	}
 }

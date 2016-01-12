@@ -71,7 +71,7 @@ namespace ZeldaOracle.Game.Tiles {
 			int newLayer = -1;
 			for (int i = 0; i < RoomControl.Room.LayerCount; i++) {
 				Tile t = RoomControl.GetTile(newLocation.X, newLocation.Y, i);
-				if (t != null && (t.Flags.HasFlag(TileFlags.Solid) || t.Flags.HasFlag(TileFlags.NotCoverable)))
+				if (t != null && (t.IsSolid || t.Flags.HasFlag(TileFlags.NotCoverable)))
 					return false;
 				if (t == null && newLayer != Layer)
 					newLayer = i;
@@ -205,7 +205,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		private bool IsVertical {
-			get { return SpecialFlags.HasFlag(TileSpecialFlags.VerticalRoller); }
+			get { return Properties.GetBoolean("vertical", false); }
 		}
 	}
 }

@@ -8,12 +8,14 @@ namespace ZeldaOracle.Common.Scripting {
 
 	public class Properties {
 
-		// The property map.
-		private Dictionary<string, Property> map;
-		// The properties from which these properties derive from (can be null).
-		private Properties baseProperties;
 		// The object that holds these properties.
 		private IPropertyObject propertyObject;
+		// The properties from which these properties derive from (can be null).
+		private Properties baseProperties;
+		// The property map.
+		private Dictionary<string, Property> map;
+		
+		//private ScriptEventCollection;
 
 
 		//-----------------------------------------------------------------------------
@@ -21,10 +23,14 @@ namespace ZeldaOracle.Common.Scripting {
 		//-----------------------------------------------------------------------------
 		
 		// Construct an empty properties list.
-		public Properties() {
+		public Properties() : this(null) {
+		}
+
+		// Construct an empty properties list with the given property object.
+		public Properties(IPropertyObject propertyObject) {
 			this.map			= new Dictionary<string, Property>();
 			this.baseProperties	= null;
-			this.propertyObject	= null;
+			this.propertyObject	= propertyObject;
 		}
 
 
@@ -36,7 +42,9 @@ namespace ZeldaOracle.Common.Scripting {
 		public Property GetProperty(string name, bool acceptBaseProperties = false) {
 			if (acceptBaseProperties && baseProperties != null && !map.ContainsKey(name))
 				return baseProperties.GetProperty(name, true);
-			return map[name];
+			if (map.ContainsKey(name))
+				return map[name];
+			return null;
 		}
 		
 		// Get the root property with the given name.
@@ -227,8 +235,11 @@ namespace ZeldaOracle.Common.Scripting {
 		public T GetResource<T>(string name, T defaultValue) where T : class {
 			if (baseProperties != null && !map.ContainsKey(name))
 				return baseProperties.GetResource(name, defaultValue);
-			if (Exists(name, PropertyType.String))
-				return Resources.GetResource<T>(GetString(name));
+			if (Exists(name, PropertyType.String)) {
+				string resourceName = GetString(name);
+				if (resourceName.Length > 0)
+					return Resources.GetResource<T>(resourceName);
+			}
 			return defaultValue;
 		}
 
@@ -247,6 +258,15 @@ namespace ZeldaOracle.Common.Scripting {
 				return baseProperties.GetInteger(name, defaultValue);
 			if (Exists(name, PropertyType.Integer))
 				return GetProperty(name).IntValue;
+			return defaultValue;
+		}
+		
+		// Get an enum value with a default value fallback.
+		public E GetEnum<E>(string name, E defaultValue) where E : struct {
+			if (baseProperties != null && !map.ContainsKey(name))
+				return baseProperties.GetEnum<E>(name, defaultValue);
+			if (Exists(name, PropertyType.Integer))
+				return (E) Enum.ToObject(typeof(E), GetProperty(name).IntValue);
 			return defaultValue;
 		}
 		
@@ -276,7 +296,7 @@ namespace ZeldaOracle.Common.Scripting {
 		public void RunActionForAll() {
 			List<Property> list = map.Values.ToList();
 			for (int i = 0; i < list.Count; i++) {
-				list[i].RunAction(propertyObject, list[i].Value);
+				list[i].RunAction(propertyObject, list[i].ObjectValue);
 			}
 		}
 
@@ -317,12 +337,11 @@ namespace ZeldaOracle.Common.Scripting {
 
 
 		//-----------------------------------------------------------------------------
-		// Property set
+		// Property Setters
 		//-----------------------------------------------------------------------------
 		
 		// Sets a propertiy's value, creating it if it doesn't already exist.
 		// This can modify an existing property or create a new property.
-
 		private Property SetProperty(string name, Property property, bool setBase) {
 			if (setBase) {
 				if (map.ContainsKey(name)) {
@@ -351,6 +370,37 @@ namespace ZeldaOracle.Common.Scripting {
 			}
 			return property;
 		}
+		
+		public void SetPropertyGeneric(string name, object value, bool removeRedundencies) {
+			Property property = GetProperty(name, true);
+
+			// If there is a property contained in this object with the given name.
+			if (property.Properties == this) {
+				// Set our property's value.
+				property.ObjectValue = value;
+				
+				// If the property now has the same value as its base, then remove it.
+				if (!IsPropertyModified(name))
+					map.Remove(name);
+			}
+
+			// Else, we need to create one if the desired value is different from the base's value.
+			else if (!property.ObjectValue.Equals(value)) {
+				Property newProp = new Property(property);
+				newProp.ObjectValue = value;
+				newProp.Properties = this;
+				map[name] = newProp;
+			}
+		}
+
+
+		public Property SetAsResource<T>(string name, T resource) where T : class {
+			string resourceName = "";
+			if (resource != null)
+				resourceName = Resources.GetResourceName<T>(resource);
+			return Set(name, resourceName);
+		}
+
 
 		public Property Set(string name, Property property) {
 			return SetProperty(name, property, false);

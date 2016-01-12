@@ -9,7 +9,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TileLantern : Tile {
+	public class TileLantern : Tile, ZeldaAPI.Lantern {
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -23,19 +23,35 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		// Interaction
 		//-----------------------------------------------------------------------------
-
+		
 		public void Light() {
-			if (!Properties.GetBoolean("lit", false)) {
-				BaseProperties.Set("lit", true);
-				Properties.Set("lit", true);
-			}
+			Light(Properties.GetBoolean("stay_lit", false));
+		}
+		
+		public void PutOut() {
+			PutOut(Properties.GetBoolean("stay_lit", false));
 		}
 
-		public void PutOut() {
-			if (Properties.GetBoolean("lit", false)) {
-				BaseProperties.Set("lit", false);
-				Properties.Set("lit", false);
+		public void Light(bool stayLit) {
+			if (!IsLit) {
+				IsLit = true;
+				CustomSprite = GameData.ANIM_TILE_LANTERN;
+				GameControl.ExecuteScript(Properties.GetString("event_light", ""), this);
 			}
+			
+			if (stayLit)
+				BaseProperties.Set("lit", true);
+		}
+
+		public void PutOut(bool stayLit) {
+			if (IsLit) {
+				IsLit = false;
+				CustomSprite = GameData.SPR_TILE_LANTERN_UNLIT;
+				GameControl.ExecuteScript(Properties.GetString("event_put_out", ""), this);
+			}
+
+			if (stayLit)
+				BaseProperties.Set("lit", false);
 		}
 
 
@@ -51,7 +67,20 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public override void OnInitialize() {
-			
+			if (IsLit)
+				CustomSprite = GameData.ANIM_TILE_LANTERN;
+			else
+				CustomSprite = GameData.SPR_TILE_LANTERN_UNLIT;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public bool IsLit {
+			get { return Properties.GetBoolean("lit"); }
+			set { Properties.Set("lit", value); }
 		}
 	}
 }

@@ -203,6 +203,8 @@ public class Graphics2D {
 	
 
 	public void DrawSprite(Sprite sprite, int variantID, Vector2F position, float depth = 0.0f) {
+		if (sprite.Image == null)
+			return;
 		for (Sprite part = sprite; part != null; part = part.NextPart) {
 			Image image = sprite.Image.GetVariant(variantID);
 			spriteBatch.Draw(image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
@@ -219,6 +221,8 @@ public class Graphics2D {
 	}
 
 	public void DrawSprite(Sprite sprite, Vector2F position, float depth = 0.0f) {
+		if (sprite.Image == null)
+			return;
 		for (Sprite part = sprite; part != null; part = part.NextPart) {
 			spriteBatch.Draw(part.Image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
 				XnaColor.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
@@ -230,6 +234,8 @@ public class Graphics2D {
 	}
 
 	public void DrawSprite(Sprite sprite, int variantID, Rectangle2F destination, float depth = 0.0f) {
+		if (sprite.Image == null)
+			return;
 		for (Sprite part = sprite; part != null; part = part.NextPart) {
 			Image image = sprite.Image.GetVariant(variantID);
 			destination.Point = NewPos(destination.Point) + (Vector2F) part.DrawOffset;
@@ -239,6 +245,8 @@ public class Graphics2D {
 	}
 
 	public void DrawSprite(Sprite sprite, int variantID, Vector2F position, Color color, float depth = 0.0f) {
+		if (sprite.Image == null)
+			return;
 		for (Sprite part = sprite; part != null; part = part.NextPart) {
 			Image image = sprite.Image.GetVariant(variantID);
 			spriteBatch.Draw(image, NewPos(position) + (Vector2)part.DrawOffset, (Rectangle)part.SourceRect,
@@ -255,6 +263,8 @@ public class Graphics2D {
 	}
 
 	public void DrawSprite(Sprite sprite, Vector2F position, Color color, float depth = 0.0f) {
+		if (sprite.Image == null)
+			return;
 		for (Sprite part = sprite; part != null; part = part.NextPart) {
 			spriteBatch.Draw(part.Image, NewPos(position) + (Vector2)part.DrawOffset, (Rectangle)part.SourceRect,
 				(XnaColor)color, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
@@ -266,6 +276,8 @@ public class Graphics2D {
 	}
 
 	public void DrawSprite(Sprite sprite, int variantID, Rectangle2F destination, Color color, float depth = 0.0f) {
+		if (sprite.Image == null)
+			return;
 		for (Sprite part = sprite; part != null; part = part.NextPart) {
 			Image image = sprite.Image.GetVariant(variantID);
 			destination.Point = NewPos(destination.Point) + (Vector2F)part.DrawOffset;

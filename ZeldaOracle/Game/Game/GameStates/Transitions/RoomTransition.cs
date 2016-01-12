@@ -15,7 +15,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 	public class RoomTransition : GameState {
 		private RoomControl roomOld;
 		private RoomControl roomNew;
-		private event Action<RoomControl> eventSetupNewRoom;
+		private event Action<RoomControl> eventSetupNewRoom; // Called right after the room is set up.
 
 
 		//-----------------------------------------------------------------------------

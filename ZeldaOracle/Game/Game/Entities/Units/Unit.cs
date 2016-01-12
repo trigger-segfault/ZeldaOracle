@@ -212,6 +212,11 @@ namespace ZeldaOracle.Game.Entities.Units {
 			physics.Velocity = Vector2F.Zero;
 		}
 
+		public virtual void UpdateSubStripIndex() {
+			if (syncAnimationWithDirection)
+				Graphics.SubStripIndex = direction;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
@@ -251,8 +256,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			foreach (UnitTool tool in tools)
 				tool.Update();
 			
-			if (syncAnimationWithDirection)
-				Graphics.SubStripIndex = direction;
+			UpdateSubStripIndex();
 
 			base.Update();
 		}

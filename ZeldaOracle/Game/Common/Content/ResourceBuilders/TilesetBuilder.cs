@@ -54,19 +54,20 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 		//-----------------------------------------------------------------------------
 
 		public TilesetBuilder SetModel(CollisionModel model) {
-			tileData.Flags |= TileFlags.Solid;
+			tileData.CollisionModel	= model;
 			return this;
 		}
 		
 		public TilesetBuilder SetSolidModel(CollisionModel model) {
-			tileData.CollisionModel = model;
-			tileData.Flags |= TileFlags.Solid;
+			tileData.SolidType		= TileSolidType.Solid;
+			tileData.CollisionModel	= model;
 			return this;
 		}
 		
 		public TilesetBuilder CreateLedge(CollisionModel model, int ledgeDirection) {
-			tileData.CollisionModel = model;
-			tileData.Flags |= TileFlags.Solid | (TileFlags) ((int) TileFlags.LedgeRight << ledgeDirection);
+			tileData.CollisionModel	= model;
+			tileData.LedgeDirection	= ledgeDirection;
+			tileData.SolidType		= TileSolidType.Ledge;
 			return this;
 		}
 		

@@ -12,27 +12,30 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		protected int amount;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
 		public RewardRupee(string id, int amount, string message, Sprite sprite) {
 			this.id				= id;
-			this.animation		= new Animation(sprite);
+			this.amount			= amount;
 			this.message		= message;
+			this.animation		= new Animation(sprite);
 			this.hasDuration	= true;
 			this.holdType		= RewardHoldTypes.Raise;
 			this.isCollectibleWithItems	= true;
-
-			this.amount			= amount;
+			this.onlyShowMessageInChest = true;
 		}
 		public RewardRupee(string id, int amount, string message, Animation animation) {
 			this.id				= id;
-			this.animation		= animation;
+			this.amount			= amount;
 			this.message		= message;
+			this.animation		= animation;
 			this.hasDuration	= true;
 			this.holdType		= RewardHoldTypes.Raise;
 			this.isCollectibleWithItems	= true;
+			this.onlyShowMessageInChest = true;
 		}
 
 		//-----------------------------------------------------------------------------

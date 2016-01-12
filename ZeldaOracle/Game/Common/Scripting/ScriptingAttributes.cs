@@ -123,5 +123,12 @@ static void RunScript(Assembly script) {
 
 		// Use this for enum values that should be hidden in the editor.
 		public class Hidden : Attribute {}
+
+		public class Description : Attribute {
+			public Description(string description) {
+				this.Text = description;
+			}
+			public string Text { get; set; }
+		}
 	}
 }

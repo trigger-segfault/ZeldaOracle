@@ -20,6 +20,24 @@ namespace ZeldaOracle.Common.Scripting {
 		Boolean
 	}
 
+	public class PropertyValue {
+		// The data type of the property.
+		private PropertyType type;
+
+		// The object value for the property. For lists, this is used to store the child count as an integer.
+		private object objectValue;
+
+		public PropertyType Type {
+			get { return type; }
+			set { type = value; }
+		}
+		
+		public object ObjectValue {
+			get { return objectValue; }
+			set { objectValue = value; }
+		}
+	}
+
 
 	/// <summary>
 	/// A proprety represents a piece of data that can be represented
@@ -34,12 +52,12 @@ namespace ZeldaOracle.Common.Scripting {
 		// The object value for the property. For lists, this is used to store the child count as an integer.
 		private object objectValue;
 		// If this property is part of a list of properties, then 'next' points to the next property in the list.
-		private Property next;
+		private Property nextSibling;
 		// If this property is a list of properties, then 'firstChild' points to the first property in the list.
 		private Property firstChild;
 		// The documentation for this property, if it is a base-property.
 		private PropertyDocumentation documentation;
-		// The action that occurs when the property is changed.
+		// The action that occurs when the property is changed. NOTE: this is currently unused.
 		private PropertyAction action;
 		// The properties containing this property.
 		private Properties properties;
@@ -54,7 +72,7 @@ namespace ZeldaOracle.Common.Scripting {
 			this.name			= name;
 			this.type			= type;
 			this.objectValue	= 0;
-			this.next			= null;
+			this.nextSibling	= null;
 			this.firstChild		= null;
 			this.documentation	= null;
 			this.action			= null;
@@ -70,7 +88,7 @@ namespace ZeldaOracle.Common.Scripting {
 			name			= copy.name;
 			type			= copy.type;
 			objectValue		= copy.objectValue;
-			next			= null;
+			nextSibling		= null;
 			firstChild		= null;
 			documentation	= null;
 			action			= copy.action;
@@ -78,8 +96,8 @@ namespace ZeldaOracle.Common.Scripting {
 
 			if (copy.firstChild != null)
 				firstChild = new Property(copy.firstChild);
-			if (copy.next != null)
-				next = new Property(copy.next);
+			if (copy.nextSibling != null)
+				nextSibling = new Property(copy.nextSibling);
 			if (copy.documentation != null)
 				documentation = new PropertyDocumentation(copy.documentation);
 		}
@@ -106,7 +124,7 @@ namespace ZeldaOracle.Common.Scripting {
 			while (p != null) {
 				if (i == index)
 					return p;
-				p = p.next;
+				p = p.nextSibling;
 				i++;
 			}
 
@@ -134,11 +152,37 @@ namespace ZeldaOracle.Common.Scripting {
 		// NOTE: This won't work with lists.
 		public void SetValue(Property other) {
 			if (type == PropertyType.List || other.type == PropertyType.List) {
-				Console.WriteLine("ERROR: Lists not supported in properties yet!");
+				Console.WriteLine("ERROR: Lists not fully supported in properties yet!");
 				return;
 			}
 			type = other.type;
 			ObjectValue = other.objectValue;
+		}
+
+		// Set the value of the property with an object and a type.
+		public void SetValue(object value, PropertyType type) {
+			this.type = type;
+			this.ObjectValue = value;
+		}
+		
+		// Set the value as a boolean.
+		public void SetValue(bool value) {
+			BoolValue = value;
+		}
+		
+		// Set the value as an integer.
+		public void SetValue(int value) {
+			IntValue = value;
+		}
+		
+		// Set the value as a float.
+		public void SetValue(float value) {
+			FloatValue = value;
+		}
+		
+		// Set the value as a string.
+		public void SetValue(string value) {
+			StringValue = value;
 		}
 
 		// Create the documentation for this property.
@@ -180,8 +224,8 @@ namespace ZeldaOracle.Common.Scripting {
 				Property p = new Property(properties[0]);
 				parent.firstChild = p;
 				for (int i = 0; i < properties.Length - 1; i++) {
-					p.next = new Property(properties[i + 1]);
-					p = p.next;
+					p.nextSibling = new Property(properties[i + 1]);
+					p = p.nextSibling;
 				}
 			}
 			return parent;
@@ -220,27 +264,32 @@ namespace ZeldaOracle.Common.Scripting {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		// The name/key of the property.
 		public string Name {
 			get { return name; }
 			set { name = value; }
 		}
 
-		public PropertyType Type {
-			get { return type; }
-			set { type = value; }
-		}
-
+		// Documentation directly associated with this property.
 		public PropertyDocumentation Documentation {
 			get { return documentation; }
 			set { documentation = value; }
 		}
 
+		// Returns true if this property has documentation directly associated with it.
 		public bool HasDocumentation {
 			get { return (documentation != null); }
 		}
 
-		// Values.
+		// Property Value ------------------------------------------------------------
 
+		// The data type of the property.
+		public PropertyType Type {
+			get { return type; }
+			set { type = value; }
+		}
+		
+		// The property's raw object value.
 		public object ObjectValue {
 			get { return objectValue; }
 			set {
@@ -249,7 +298,8 @@ namespace ZeldaOracle.Common.Scripting {
 					RunAction(properties.PropertyObject, value);
 			}
 		}
-
+		
+		// The property value as a string.
 		public string StringValue {
 			get { return (string) objectValue; }
 			set {
@@ -258,7 +308,8 @@ namespace ZeldaOracle.Common.Scripting {
 					RunAction(properties.PropertyObject, value);
 			}
 		}
-
+		
+		// The property value as an integer.
 		public int IntValue {
 			get { return (int) objectValue; }
 			set {
@@ -267,7 +318,8 @@ namespace ZeldaOracle.Common.Scripting {
 					RunAction(properties.PropertyObject, value);
 			}
 		}
-
+		
+		// The property value as a float.
 		public float FloatValue {
 			get { return (float) objectValue; }
 			set {
@@ -277,6 +329,7 @@ namespace ZeldaOracle.Common.Scripting {
 			}
 		}
 
+		// The property value as a boolean.
 		public bool BoolValue {
 			get { return (bool) objectValue; }
 			set {
@@ -285,18 +338,16 @@ namespace ZeldaOracle.Common.Scripting {
 					RunAction(properties.PropertyObject, value);
 			}
 		}
+		
+		// Lists ---------------------------------------------------------------------
 
-		public object Value {
-			get { return objectValue; }
-		}
-
-		// Lists.
-
+		// The next sibling property (if this property is part of a list).
 		public Property Next {
-			get { return next; }
-			set { next = value; }
+			get { return nextSibling; }
+			set { nextSibling = value; }
 		}
-
+		
+		// The first child property in the list (if this property is a list).
 		public Property FirstChild {
 			get { return firstChild; }
 			set { firstChild = value; }
@@ -312,12 +363,13 @@ namespace ZeldaOracle.Common.Scripting {
 			get { return (int) objectValue; }
 			set { objectValue = value; }
 		}
-
+		/*
 		public PropertyAction Action {
 			get { return action; }
 			set { action = value; }
-		}
+		}*/
 
+		// The properties container this property is contained in.
 		public Properties Properties {
 			get { return properties; }
 			set { properties = value; }

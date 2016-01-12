@@ -8,7 +8,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 	
 	public class Effect : Entity {
 
-		private int		destroyTimer;
+		protected int	destroyTimer;
 		protected bool	destroyOnAnimationComplete;
 		protected int	fadeDelay;
 

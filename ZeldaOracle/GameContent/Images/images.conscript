@@ -1,6 +1,14 @@
 
 
 #==============================================================
+# Screens
+#==============================================================
+
+IMAGE screen_dungeon_map, "UI/screen_dungeon_map"; END;
+
+
+
+#==============================================================
 # Menu
 #==============================================================
 
@@ -12,7 +20,6 @@ IMAGE menu_large;
 	VARIANT dark  "UI/menu_large";
 	VARIANT light "UI/menu_large_light";
 	END;
-	
 
 #==============================================================
 # Items
@@ -33,12 +40,12 @@ IMAGE items_large;
 #==============================================================
 
 IMAGE zoneset;
-	VARIANT summer		"Tiles/zoneset";
-	VARIANT graveyard	"Tiles/zoneset_graveyard";
-	VARIANT forest		"Tiles/zoneset_forest";
-	VARIANT interior	"Tiles/zoneset_interior";
-#	VARIANT dungeon_1	"Tiles/zoneset_dungeon_1";
-#	VARIANT dungeon_2	"Tiles/zoneset_dungeon_2";
+	VARIANT summer			"Tiles/zoneset";
+	VARIANT graveyard		"Tiles/zoneset_graveyard";
+	VARIANT forest			"Tiles/zoneset_forest";
+	VARIANT interior		"Tiles/zoneset_interior";
+	VARIANT ages_dungeon_1	"Tiles/zoneset_ages_dungeon_1";
+	VARIANT ages_dungeon_4	"Tiles/zoneset_ages_dungeon_4";
 	END;
 IMAGE tileset_overworld;
 	VARIANT summer		"Tiles/tileset";
@@ -139,3 +146,4 @@ IMAGE basic_monsters;
 	VARIANT normal	"Units/Monsters/monsters";
 	VARIANT hurt	"Units/Monsters/monsters_hurt";
 	END;
+

@@ -14,6 +14,7 @@ using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.Transitions;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Control;
+using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Tiles.Custom;
@@ -34,6 +35,14 @@ namespace ZeldaOracle.Game.Debug {
 		public static void UpdateRoomDebugKeys(RoomControl roomControl) {
 			GameControl gameControl = roomControl.GameControl;
 
+			// OPEN BRACKET: open all open doors.
+			if (Keyboard.IsKeyPressed(Keys.OpenBracket)) {
+				gameControl.RoomControl.OpenAllDoors();
+			}
+			// CLOSE BRACKET: close all doors.
+			else if (Keyboard.IsKeyPressed(Keys.CloseBracket)) {
+				gameControl.RoomControl.CloseAllDoors();
+			}
 			// G: Display a test message.
 			if (Keyboard.IsKeyPressed(Keys.G)) {
 				gameControl.DisplayMessage("I was a <red>hero<red> to broken robots 'cause I was one of them, but how can I sing about being damaged if I'm not?<p> That's like <green>Christina Aguilera<green> singing Spanish. Ooh, wait! That's it! I'll fake it!");
@@ -41,6 +50,13 @@ namespace ZeldaOracle.Game.Debug {
 			// INSERT: Fill all ammo.
 			if (Keyboard.IsKeyPressed(Keys.Insert)) {
 				gameControl.Inventory.FillAllAmmo();
+				Dungeon dungeon = gameControl.RoomControl.Dungeon;
+				if (dungeon != null) {
+					dungeon.NumSmallKeys = Math.Min(dungeon.NumSmallKeys + 3, 9);
+					dungeon.HasMap		= true;
+					dungeon.HasCompass	= true;
+					dungeon.HasBossKey	= true;
+				}
 			}
 			// DELETE: Empty all ammo.
 			if (Keyboard.IsKeyPressed(Keys.Delete)) {
@@ -111,6 +127,8 @@ namespace ZeldaOracle.Game.Debug {
 			// 0: Spawn a monster.
 			if (Keyboard.IsKeyPressed(Keys.D0) || Keyboard.IsKeyPressed(Keys.Add)) {
 				Monster monster		= new TestMonster();
+				//Monster monster		= new MonsterOctorok();
+				//Monster monster		= new MonsterMoblin();
 				Vector2F position	= new Vector2F(32, 32) + new Vector2F(8, 14);
 				roomControl.SpawnEntity(monster, position);
 			}

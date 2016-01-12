@@ -13,18 +13,20 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game;
+using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
 using ZeldaEditor.Tools;
+using ZeldaEditor.Scripting;
 using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaEditor.Control {
 
 	public class EditorControl {
-
+		
 		private bool isInitialized;
 
 		// Control
@@ -70,13 +72,18 @@ namespace ZeldaEditor.Control {
 		private BaseTileData	selectedTilesetTileData;
 		private bool			playerPlaceMode;
 		private bool			showEvents;
+		private bool						needsRecompiling;
+		private Task<ScriptCompileResult>	compileTask;
+		private ScriptCompileCallback		compileCallback;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public EditorControl() {
+		public EditorControl(EditorForm editorForm) {
+			this.editorForm		= editorForm;
+
 			this.propertyGridControl	= null;
 			this.worldFilePath	= String.Empty;
 			this.worldFileName	= "untitled";
@@ -92,6 +99,9 @@ namespace ZeldaEditor.Control {
 			this.playAnimations	= false;
 			this.isInitialized	= false;
 			this.hasMadeChanges	= false;
+			this.needsRecompiling	= false;
+			this.compileTask		= null;
+			this.compileCallback	= null;
 
 			this.currentLayer				= 0;
 			this.currentToolIndex			= 0;
@@ -160,9 +170,12 @@ namespace ZeldaEditor.Control {
 				tools[currentToolIndex].OnBegin();
 
 				this.isInitialized = true;
+
+				Application.Idle += delegate {
+					Update();
+				};
 			}
 		}
-
 
 		//-----------------------------------------------------------------------------
 		// General
@@ -174,6 +187,46 @@ namespace ZeldaEditor.Control {
 				editorForm.Text += "*";
 			if (level != null)
 				editorForm.Text += " [" + level.Properties.GetString("id") + "]";
+		}
+
+		// Called with Application.Idle.
+		private void Update() {
+			if (compileTask != null) {
+				if (compileTask.IsCompleted) {
+					compileCallback(compileTask.Result);
+					compileTask = null;
+				}
+			}
+			else if (needsRecompiling) {
+				needsRecompiling = false;
+
+				CompileAllScripts(OnCompileCompleted);
+			}
+		}
+
+		
+		//-----------------------------------------------------------------------------
+		// Script Compiling
+		//-----------------------------------------------------------------------------
+
+		public delegate void ScriptCompileCallback(ScriptCompileResult result);
+
+		public void CompileScript(Script script, ScriptCompileCallback callback) {
+			this.compileCallback = callback;
+			compileTask = ScriptEditorCompiler.CompileScriptAsync(script);
+		}
+		
+		private void CompileAllScripts(ScriptCompileCallback callback) {
+			this.compileCallback = callback;
+			string code = world.ScriptManager.CreateCode();
+			compileTask = Task.Run(() => world.ScriptManager.Compile(code));
+			editorForm.statusLabelTask.Text = "Compiling scripts.";
+		}
+				
+		private void OnCompileCompleted(ScriptCompileResult result) {
+			world.ScriptManager.RawAssembly = result.RawAssembly;
+			Console.WriteLine("Compiled scripts with " + result.Errors.Count + " errors and " + result.Warnings.Count + " warnings.");
+			editorForm.statusLabelTask.Text = "";
 		}
 
 
@@ -192,20 +245,32 @@ namespace ZeldaEditor.Control {
 
 		// Open a world file with the given filename.
 		public void OpenFile(string fileName) {
-			CloseFile();
-
-			hasMadeChanges = false;
-			worldFilePath = fileName;
-			worldFileName = Path.GetFileName(fileName);
-
 			// Load the world.
 			WorldFile worldFile = new WorldFile();
-			world = worldFile.Load(fileName);
-			if (world.Levels.Count > 0)
-				OpenLevel(0);
+			World loadedWorld = worldFile.Load(fileName);
 
-			RefreshWorldTreeView();
-			editorForm.LevelTreeView.ExpandAll();
+			// Verify the world was loaded successfully.
+			if (loadedWorld != null) {
+				CloseFile();
+
+				hasMadeChanges = false;
+				worldFilePath = fileName;
+				worldFileName = Path.GetFileName(fileName);
+				needsRecompiling = true;
+
+				world = loadedWorld;
+				if (world.Levels.Count > 0)
+					OpenLevel(0);
+
+				RefreshWorldTreeView();
+				editorForm.worldTreeView.ExpandAll();
+			}
+			else {
+				// Display the error.
+				MessageBox.Show(editorForm, "Failed to open world file:\n" +
+					worldFile.ErrorMessage, "Error Opening World",
+					MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			}
 		}
 
 		// Close the world file.
@@ -216,8 +281,16 @@ namespace ZeldaEditor.Control {
 				level			= null;
 				hasMadeChanges	= false;
 				worldFilePath	= "";
-				editorForm.LevelTreeView.Nodes.Clear();
+				RefreshWorldTreeView();
 			}
+		}
+
+		// Open the given level.
+		public void OpenLevel(Level level) {
+			this.level = level;
+			editorForm.LevelDisplay.UpdateLevel();
+			UpdateWindowTitle();
+			propertyGridControl.OpenProperties(level.Properties, level);
 		}
 
 		// Open the given level index in the level display.
@@ -238,16 +311,14 @@ namespace ZeldaEditor.Control {
 		// Add a new level the world, and open it if specified.
 		public void AddLevel(Level level, bool openLevel) {
 			world.Levels.Add(level);
-			
-			// Add node in level list.
-			//TreeNode levelNode = new TreeNode(level.Name);
-			//editorForm.LevelTreeView.Nodes[0].Nodes.Add(levelNode);
-			//levelNode.ContextMenuStrip = editorForm.ContextMenuLevelSelect;
 			RefreshWorldTreeView();
-
 			if (openLevel)
 				OpenLevel(world.Levels.Count - 1);
+		}
 
+		public void AddScript(Script script) {
+			world.AddScript(script);
+			RefreshWorldTreeView();
 		}
 
 		public void ChangeTileset(string name) {
@@ -317,53 +388,8 @@ namespace ZeldaEditor.Control {
 			}
 		}
 
-
 		public void RefreshWorldTreeView() {
-			TreeView worldTreeView = editorForm.LevelTreeView;
-			TreeNode worldNode, levelsNode, areasNode, dungeonsNode, scriptsNode;
-			if (world == null) {
-				worldTreeView.Nodes.Clear();
-			}
-			else {
-				if (worldTreeView.Nodes.Count == 0) {
-					worldNode = new TreeNode(world.Properties.GetString("id"), 0, 0);
-					levelsNode = new TreeNode("Levels", 1, 1);
-					areasNode = new TreeNode("Areas", 3, 3);
-					dungeonsNode = new TreeNode("Dungeons", 5, 5);
-					scriptsNode = new TreeNode("Scripts", 7, 7);
-					worldNode.Name = "world";
-					levelsNode.Name = "levels";
-					areasNode.Name = "areas";
-					dungeonsNode.Name = "dungeons";
-					scriptsNode.Name = "scripts";
-					worldTreeView.Nodes.Add(worldNode);
-					worldNode.Nodes.Add(levelsNode);
-					worldNode.Nodes.Add(areasNode);
-					worldNode.Nodes.Add(dungeonsNode);
-					worldNode.Nodes.Add(scriptsNode);
-
-					worldNode.ContextMenuStrip	= editorForm.ContenxtMenuGeneral;
-				}
-				else {
-					worldNode = worldTreeView.Nodes[0];
-					levelsNode = worldNode.Nodes[0];
-					areasNode = worldNode.Nodes[1];
-					dungeonsNode = worldNode.Nodes[2];
-					scriptsNode = worldNode.Nodes[3];
-
-					levelsNode.Nodes.Clear();
-					areasNode.Nodes.Clear();
-					dungeonsNode.Nodes.Clear();
-					scriptsNode.Nodes.Clear();
-				}
-				worldNode.Text = world.Properties.GetString("id");
-				for (int i = 0; i < world.Levels.Count; i++) {
-					TreeNode levelNode = new TreeNode(world.Levels[i].Properties.GetString("id"), 2, 2);
-					levelNode.Name = "level";
-					levelsNode.Nodes.Add(levelNode);
-					levelNode.ContextMenuStrip = editorForm.ContextMenuLevelSelect;
-				}
-			}
+			editorForm.worldTreeView.RefreshTree();
 		}
 
 
@@ -401,6 +427,29 @@ namespace ZeldaEditor.Control {
 			tool.Initialize(this);
 			tools.Add(tool);
 			return tool;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Scripts
+		//-----------------------------------------------------------------------------
+
+		public Script GenerateInternalScript() {
+			return GenerateInternalScript(new Script());
+		}
+
+		public Script GenerateInternalScript(Script script) {
+			script.IsHidden = true;
+
+			int i = 0;
+			do {
+				script.Name = "__internal_script_" + i + "__";
+				i++;
+			}
+			while (world.GetScript(script.Name) != null);
+
+			world.AddScript(script);
+			return script;
 		}
 
 
@@ -592,6 +641,15 @@ namespace ZeldaEditor.Control {
 
 		public bool IsSelectedTileAnEvent {
 			get { return (selectedTilesetTileData is EventTileData); }
+		}
+
+		public bool NeedsRecompiling {
+			get { return needsRecompiling; }
+			set { needsRecompiling = value; }
+		}
+
+		public bool IsBusyCompiling {
+			get { return (compileTask != null); }
 		}
 	}
 }

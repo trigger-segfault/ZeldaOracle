@@ -32,6 +32,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.EquipTool(player.ToolVisual);
 			player.ToolVisual.PlayAnimation(GameData.ANIM_SWORD_STAB);
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_STAB);
+			player.ToolVisual.AnimationPlayer.SubStripIndex = player.Direction;
 		}
 		
 		public override void OnEnd(PlayerState newState) {

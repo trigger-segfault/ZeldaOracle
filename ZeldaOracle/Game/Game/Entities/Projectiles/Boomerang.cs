@@ -142,7 +142,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			CollisionIterator iterator = new CollisionIterator(this, typeof(Collectible), CollisionBoxType.Soft);
 			for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
 				Collectible collectible = iterator.CollisionInfo.Entity as Collectible;
-				if (collectible.IsPickupable) {
+				if (collectible.IsPickupable && collectible.IsCollectibleWithItems) {
 					collectibles.Add(collectible);
 					collectible.Destroy();
 					BeginReturn();

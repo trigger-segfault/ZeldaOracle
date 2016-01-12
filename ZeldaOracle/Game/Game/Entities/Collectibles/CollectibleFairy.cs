@@ -45,7 +45,7 @@ namespace ZeldaOracle.Game.Entities {
 			if (GameControl.HUD.DynamicHealth >= GameControl.Player.MaxHealth)
 				AudioSystem.PlaySound("Pickups/get_heart");
 			RoomControl.Player.Health += 6 * 4;
-			Destroy();
+			base.Collect();
 		}
 
 

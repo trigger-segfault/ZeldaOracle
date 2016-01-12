@@ -129,6 +129,9 @@
     <None Include="Common\Debug\DebugMenuItem.cs" />
     <None Include="Common\Debug\RadioButtonMenuItem.cs" />
     <None Include="Common\Debug\ToggleMenuItem.cs" />
+    <Compile Include="Common\Scripting\IEventObject.cs" />
+    <Compile Include="Common\Scripting\ObjectEvent.cs" />
+    <Compile Include="Common\Scripting\ObjectEventCollection.cs" />
     <Compile Include="Common\Scripting\ScriptingAttributes.cs" />
     <Compile Include="Common\Geometry\Align.cs" />
     <Compile Include="Common\Geometry\Angle.cs" />
@@ -178,6 +181,7 @@
     <Compile Include="Common\Scripting\Properties.cs" />
     <Compile Include="Common\Scripting\PropertyDocumentation.cs" />
     <Compile Include="Common\Scripting\Property.cs" />
+    <Compile Include="Common\Scripting\ZeldaObject.cs" />
     <Compile Include="Common\Scripts\AnimationSR.cs" />
     <Compile Include="Common\Scripts\CommandParam.cs" />
     <Compile Include="Common\Scripts\GameFontSR.cs" />
@@ -204,12 +208,16 @@
     <Compile Include="Game\Control\Menus\Menu.cs" />
     <Compile Include="Game\Control\Menus\MenuWeapons.cs" />
     <Compile Include="Game\Control\Menus\InventoryMenu.cs" />
+    <Compile Include="Game\Control\Menus\ScreenDungeonMap.cs" />
     <Compile Include="Game\Control\Menus\Slot.cs" />
     <Compile Include="Game\Control\Menus\ISlotConnection.cs" />
     <Compile Include="Game\Control\Menus\SlotGroup.cs" />
     <Compile Include="Game\Control\Message.cs" />
     <Compile Include="Game\Control\RoomControl.cs" />
     <Compile Include="Game\Control\RoomGraphics.cs" />
+    <Compile Include="Game\Control\Scripting\Script.cs" />
+    <Compile Include="Game\Control\Scripting\ScriptManager.cs" />
+    <Compile Include="Game\Control\Scripting\ScriptRunner.cs" />
     <Compile Include="Game\Debug\GameDebug.cs" />
     <Compile Include="Game\Entities\Collectibles\CollectibleReward.cs" />
     <Compile Include="Game\Entities\Collectibles\CollectibleFairy.cs" />
@@ -219,6 +227,7 @@
     <Compile Include="Game\Entities\DamageInfo.cs" />
     <Compile Include="Game\Entities\DepthLayer.cs" />
     <Compile Include="Game\Entities\Effects\EffectCreateSomariaBlock.cs" />
+    <Compile Include="Game\Entities\Effects\EffectUsedItem.cs" />
     <Compile Include="Game\Entities\Effects\EffectGale.cs" />
     <Compile Include="Game\Entities\Effects\BombExplosion.cs" />
     <Compile Include="Game\Entities\Effects\Fire.cs" />
@@ -227,7 +236,11 @@
     <Compile Include="Game\Entities\EntityTracker.cs" />
     <Compile Include="Game\Entities\GraphicsComponent.cs" />
     <Compile Include="Game\Entities\IInterceptable.cs" />
+    <Compile Include="Game\Entities\Monsters\BasicMonster - Copy.cs" />
+    <Compile Include="Game\Entities\Monsters\BasicMonster.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterReactions.cs" />
+    <Compile Include="Game\Entities\Monsters\MonsterOctorok.cs" />
+    <Compile Include="Game\Entities\Monsters\MonsterRope.cs" />
     <Compile Include="Game\Entities\Monsters\TestMonster.cs" />
     <Compile Include="Game\Entities\Monsters\Monster.cs" />
     <Compile Include="Game\Entities\Monsters\Tools\MonsterToolSword.cs" />
@@ -275,6 +288,9 @@
     <Compile Include="Game\Entities\Projectiles\Projectile.cs" />
     <Compile Include="Game\Entities\Projectiles\Seed.cs" />
     <Compile Include="Game\Entities\Units\UnitTool.cs" />
+    <Compile Include="Game\GameDataRewards.cs" />
+    <Compile Include="Game\GameDataSprites.cs" />
+    <Compile Include="Game\GameDataAnimations.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateNormal.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateQueue.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateAction.cs" />
@@ -326,16 +342,17 @@
     <Compile Include="Game\Items\Rewards\RewardHeartContainer.cs" />
     <Compile Include="Game\Items\Rewards\RewardHeartPiece.cs" />
     <Compile Include="Game\Items\Rewards\RewardItem.cs" />
+    <Compile Include="Game\Items\Rewards\RewardDungeonItem.cs" />
     <Compile Include="Game\Items\Rewards\RewardAmmo.cs" />
     <Compile Include="Game\Items\Rewards\RewardRecoveryHeart.cs" />
     <Compile Include="Game\Items\Rewards\Reward.cs" />
     <Compile Include="Game\Items\Rewards\RewardHoldTypes.cs" />
     <Compile Include="Game\Items\Rewards\RewardManager.cs" />
     <Compile Include="Game\Items\Rewards\RewardRupee.cs" />
-    <Compile Include="Game\Items\SecondaryItems\ItemMembersCard.cs" />
-    <Compile Include="Game\Items\SecondaryItems\ItemEssenceSeed.cs" />
-    <Compile Include="Game\Items\SecondaryItems\ItemMagicPotion.cs" />
-    <Compile Include="Game\Items\SecondaryItems\ItemFlippers.cs" />
+    <Compile Include="Game\Items\KeyItems\ItemMembersCard.cs" />
+    <Compile Include="Game\Items\KeyItems\ItemEssenceSeed.cs" />
+    <Compile Include="Game\Items\KeyItems\ItemMagicPotion.cs" />
+    <Compile Include="Game\Items\KeyItems\ItemFlippers.cs" />
     <Compile Include="Game\Items\Weapons\ItemMagicRod.cs" />
     <Compile Include="Game\Items\Weapons\ItemSwitchHook.cs" />
     <Compile Include="Game\Items\Weapons\ItemSlingshot.cs" />
@@ -363,6 +380,16 @@
     <Compile Include="Common\Content\ResourceBuilders\AnimationBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\SpriteBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\TilesetBuilder.cs" />
+    <Compile Include="Game\Tiles\Custom\TileColorLantern.cs" />
+    <Compile Include="Game\Tiles\Custom\TileColorCubeSlot.cs" />
+    <Compile Include="Game\Tiles\Custom\TileCrackedFloor.cs" />
+    <Compile Include="Game\Tiles\Custom\TilePlatform.cs" />
+    <Compile Include="Game\Tiles\Custom\TileEyeStatue.cs" />
+    <Compile Include="Game\Tiles\Custom\Doors\TileBossKeyDoor.cs" />
+    <Compile Include="Game\Tiles\Custom\Doors\TileSmallKeyDoor.cs" />
+    <Compile Include="Game\Tiles\Custom\TileLockedBlock.cs" />
+    <Compile Include="Game\Tiles\Custom\Doors\TileDoor.cs" />
+    <Compile Include="Game\Tiles\Custom\TileButton.cs" />
     <Compile Include="Game\Tiles\ITileset.cs" />
     <Compile Include="Game\Tiles\Custom\TileSomariaBlock.cs" />
     <Compile Include="Game\Tiles\BaseTileset.cs" />
@@ -390,6 +417,7 @@
     <Compile Include="Game\Tiles\Tileset.cs" />
     <Compile Include="Game\Tiles\Custom\TileSign.cs" />
     <Compile Include="Common\Scripting\IPropertyObject.cs" />
+    <Compile Include="Game\Worlds\Dungeon.cs" />
     <Compile Include="Game\Worlds\Room.cs" />
     <Compile Include="Game\Worlds\Level.cs" />
     <Compile Include="Game\Worlds\World.cs" />
@@ -404,6 +432,10 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ZeldaAPI\ZeldaAPI.csproj">
+      <Project>{b8b46d20-161d-47d3-810a-69d5ca61c080}</Project>
+      <Name>ZeldaAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GameContent\ZeldaContent.contentproj">
       <Name>ZeldaContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>

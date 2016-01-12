@@ -17,12 +17,14 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		//-----------------------------------------------------------------------------
 
 		public RewardRecoveryHeart(string id, int amount, string message, Sprite sprite) {
+			InitSprite(sprite);
+
 			this.id				= id;
-			this.animation		= new Animation(sprite);
 			this.message		= message;
 			this.hasDuration	= true;
 			this.holdType		= RewardHoldTypes.Raise;
 			this.isCollectibleWithItems	= true;
+			this.onlyShowMessageInChest = true;
 
 			this.amount			= amount;
 		}

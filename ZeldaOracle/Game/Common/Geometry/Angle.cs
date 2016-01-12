@@ -129,5 +129,14 @@ namespace ZeldaOracle.Common.Geometry {
 				return (directionV == Directions.Up ? Angles.UpLeft : Angles.DownLeft);
 			return (directionV == Directions.Up ? Angles.UpRight : Angles.DownRight);
 		}
+				
+		public static int NearestFromVector(Vector2F vector) {
+			return RoundFromRadians((float) Math.Atan2((double) -vector.Y, (double) vector.X));
+		}
+
+		public static int RoundFromRadians(float radians) {
+			int angle = (int) GMath.Round(radians / GMath.QuarterPi);
+			return GMath.Wrap(angle, Angles.AngleCount);
+		}
 	}
 }

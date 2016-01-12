@@ -145,21 +145,26 @@ namespace ZeldaOracle.Common.Scripts {
 			// Type <type>
 			AddTilesetCommand("Type", delegate(CommandParam parameters) {
 				tileData.Type = Tile.GetType(parameters.GetString(0), true);
-				
 			});
 			// Flags <flags[]...>
 			AddTilesetCommand("Flags", delegate(CommandParam parameters) {
 				for (int i = 0; i < parameters.Count; i++) {
 					TileFlags flags = TileFlags.None;
-					TileSpecialFlags specialFlags = TileSpecialFlags.None;
 					if (Enum.TryParse<TileFlags>(parameters.GetString(i), true, out flags))
 						tileData.Flags |= flags;
-					else if (Enum.TryParse<TileSpecialFlags>(parameters.GetString(i), true, out specialFlags))
-						tileData.SpecialFlags |= specialFlags;
 					else
 						throw new ArgumentException("Invalid tile flag: \"" + parameters.GetString(i) + "\"!");
 				}
 			});
+			// EnvType <type>
+			AddTilesetCommand("EnvType", delegate(CommandParam parameters) {
+				TileEnvironmentType envType = TileEnvironmentType.Normal;
+				if (Enum.TryParse<TileEnvironmentType>(parameters.GetString(0), true, out envType))
+					tileData.Properties.Set("environment_type", (int) envType);
+				else
+					throw new ArgumentException("Invalid tile environment type: \"" + parameters.GetString(0) + "\"!");
+			});
+			// Properties <(name, value>
 			// Properties <(type, name, value, readable-name, editor-type, category, description)...>
 			// Properties <(type, name, value, readable-name, (editor-type, editor-sub-type), category, description)...>
 			// Properties <(hide, name)...>
@@ -192,18 +197,18 @@ namespace ZeldaOracle.Common.Scripts {
 							property = Property.CreateBool(name, (param.GetString(2) == "true"));
 						else
 							ThrowParseError("Unsupported property type for " + name);
-
-						string editorType = "";
-						string editorSubType = "";
-						if (param[4].Type == CommandParamType.Array) {
-							editorType = param[4].GetString(0);
-							editorSubType = param[4].GetString(1);
-						}
-						else {
-							editorType = param.GetString(4);
-						}
-
+						
 						if (param.Count > 3) {
+							string editorType = "";
+							string editorSubType = "";
+							if (param[4].Type == CommandParamType.Array) {
+								editorType = param[4].GetString(0);
+								editorSubType = param[4].GetString(1);
+							}
+							else {
+								editorType = param.GetString(4);
+							}
+
 							property.SetDocumentation(
 								param.GetString(3),
 								editorType,
@@ -218,6 +223,29 @@ namespace ZeldaOracle.Common.Scripts {
 							tileData.Properties.Add(property);
 					}
 				}
+			});
+			// Event <name>, <readable-name>, <description>, (<param-type-1>, <param-name-1>, <param-type-2>, <param-name-2>...)
+			AddTilesetCommand("Event", delegate(CommandParam parameters) {
+				Property property = Property.CreateString(parameters.GetString(0), "");
+				property.SetDocumentation(parameters.GetString(1), "script", "", "Events", parameters.GetString(2), true, false);
+				tileData.Properties.Add(property);
+				
+				// Create the event's script parameter list.
+				CommandParam paramList = parameters[3];
+				ScriptParameter[] scriptParams = new ScriptParameter[paramList.Count / 2];
+				for (int i = 0; i < scriptParams.Length; i++) {
+					scriptParams[i] = new ScriptParameter() {
+						Type = paramList.GetString(i * 2),
+						Name = paramList.GetString((i * 2) + 1)
+					};
+				}
+
+				// Add the event to the tile-data.
+				tileData.Events.AddEvent(new ObjectEvent(
+						parameters.GetString(0), // Name
+						parameters.GetString(1), // Readable name
+						parameters.GetString(2), // Description
+						scriptParams));
 			});
 			// Sprite <sprite-animation>
 			// Sprite <spritesheet> <x-index> <y-index> <x-offset> <y-offset>
@@ -293,27 +321,27 @@ namespace ZeldaOracle.Common.Scripts {
 			});
 			// Solid <collision-model>
 			AddTilesetCommand("Solid", delegate(CommandParam parameters) {
-				tileData.Flags |= TileFlags.Solid;
+				tileData.SolidType = TileSolidType.Solid;
 				tileData.CollisionModel = resources.GetResource<CollisionModel>(parameters.GetString(0));
 			});
 			// HalfSolid <collision-model>
 			AddTilesetCommand("HalfSolid", delegate(CommandParam parameters) {
-				tileData.Flags |= TileFlags.Solid | TileFlags.HalfSolid;
+				tileData.SolidType = TileSolidType.HalfSolid;
 				tileData.CollisionModel = resources.GetResource<CollisionModel>(parameters.GetString(0));
 			});
 			// Ledge <collision-model> <direction>
 			AddTilesetCommand("Ledge", delegate(CommandParam parameters) {
-				tileData.Flags |= TileFlags.Solid;
+				tileData.SolidType = TileSolidType.Ledge;
 				tileData.CollisionModel = resources.GetResource<CollisionModel>(parameters.GetString(0));
 				string dirName = parameters.GetString(1);
 				if (dirName == "right" || dirName == "east")
-					tileData.Flags |= TileFlags.LedgeRight;
+					tileData.LedgeDirection = Directions.Right;
 				else if (dirName == "left" || dirName == "west")
-					tileData.Flags |= TileFlags.LedgeLeft;
+					tileData.LedgeDirection = Directions.Left;
 				else if (dirName == "up" || dirName == "north")
-					tileData.Flags |= TileFlags.LedgeUp;
+					tileData.LedgeDirection = Directions.Up;
 				else if (dirName == "down" || dirName == "south")
-					tileData.Flags |= TileFlags.LedgeDown;
+					tileData.LedgeDirection = Directions.Down;
 			});
 			// Clone <tiledata>
 			AddTilesetCommand("Clone", delegate(CommandParam parameters) {
