@@ -470,8 +470,8 @@ public class Graphics2D {
 
 	// Draws the specified line.
 	public void DrawLine(Line2F line, float thickness, Color color, float depth = 0.0f) {
-		DrawImage(white1x1, line.Center + 0.5f, new Vector2F(0.5f, 0.5f),
-			new Vector2F((line.Length + thickness), thickness), 
+		DrawImage(white1x1, line.Center + new Vector2F(0.5f, 0.5f), new Vector2F(0.5f, 0.5f),
+			new Vector2F((line.Length + thickness), thickness),
 			line.Direction, color, SpriteEffects.None, depth);
 	}
 
@@ -479,8 +479,8 @@ public class Graphics2D {
 	public void DrawRectangle(Rectangle2F rect, float thickness, Color color, float depth = 0.0f) {
 		DrawLine(new Line2F(rect.Point, rect.Point + new Vector2F(rect.Width - 1, 0.0f)), thickness, color, depth);
 		DrawLine(new Line2F(rect.Point, rect.Point + new Vector2F(0.0f, rect.Height - 1)), thickness, color, depth);
-		DrawLine(new Line2F(rect.Point + rect.Size - 1, rect.Point + new Vector2F(rect.Width - 1, 0.0f)), thickness, color, depth);
-		DrawLine(new Line2F(rect.Point + rect.Size - 1, rect.Point + new Vector2F(0.0f, rect.Height - 1)), thickness, color, depth);
+		DrawLine(new Line2F(rect.Point + rect.Size - Vector2F.One, rect.Point + new Vector2F(rect.Width - 1, 0.0f)), thickness, color, depth);
+		DrawLine(new Line2F(rect.Point + rect.Size - Vector2F.One, rect.Point + new Vector2F(0.0f, rect.Height - 1)), thickness, color, depth);
 	}
 
 	// Draws the specified filled rectangle.

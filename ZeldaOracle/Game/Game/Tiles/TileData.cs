@@ -33,6 +33,9 @@ namespace ZeldaOracle.Game.Tiles {
 			properties.Set("solidity", (int) TileSolidType.NotSolid);
 			properties.Set("collision_model", "");
 			properties.Set("environment_type", (int) TileEnvironmentType.Normal);
+
+			// Motion.
+			properties.Set("path", "");
 			
 			// Interaction Options.
 			properties.Set("move_once", false);

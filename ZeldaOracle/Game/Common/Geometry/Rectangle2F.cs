@@ -129,15 +129,15 @@ public struct Rectangle2F {
 	public static Rectangle2F operator +(Rectangle2F r, Vector2F v) {
 		return new Rectangle2F(r.Point + v, r.Size);
 	}
-	public static Rectangle2F operator +(Rectangle2F r, float f) {
-		return new Rectangle2F(r.Point + f, r.Size);
-	}
+	/*public static Rectangle2F operator +(Rectangle2F r, float f) {
+		return new Rectangle2F(r.Point + new Vector2F(f, f), r.Size);
+	}*/
 	public static Rectangle2F operator -(Rectangle2F r, Vector2F v) {
 		return new Rectangle2F(r.Point - v, r.Size);
 	}
-	public static Rectangle2F operator -(Rectangle2F r, float f) {
-		return new Rectangle2F(r.Point - f, r.Size);
-	}
+	/*public static Rectangle2F operator -(Rectangle2F r, float f) {
+		return new Rectangle2F(r.Point - new Vector2F(f, f), r.Size);
+	}*/
 
 	public static Rectangle2F operator *(Rectangle2F r, Vector2F v) {
 		return new Rectangle2F(r.Point, r.Size * v);

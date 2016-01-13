@@ -12,11 +12,13 @@ namespace ZeldaOracle.Game.Tiles {
 
 	public class TilePlatform : Tile {
 
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public TilePlatform() {
+			fallsInHoles = false;
 		}
 
 
@@ -25,12 +27,19 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		public override void OnInitialize() {
+			/*
+			path = new TilePath();
+			path.Repeats = true;
 
+			path.AddMove(Directions.Down,	1, 0.5f, 0);
+			path.AddMove(Directions.Up,		4, 0.5f, 0);
+			path.AddMove(Directions.Down,	3, 0.5f, 0);
+			*/
+			
 		}
 
 		public override void Update() {
 			base.Update();
-
 		}
 
 		public override void Draw(Graphics2D g) {

@@ -26,11 +26,18 @@ namespace ZeldaOracle.Game.Tiles {
 		private Point2I				location;		// The tile location in the room.
 		private int					layer;			// The layer this tile is in.
 		private Point2I				moveDirection;
+		private int					moveDistance;
+		private int					currentMoveDistance;
 		private bool				isMoving;
 		private float				movementSpeed;
 		private Vector2F			offset;			// Offset in pixels from its tile location (used for movement).
 		protected AnimationPlayer	animationPlayer;
 		private bool				hasMoved;
+		protected TilePath			path;			// The path the tile is currently following.
+		private int					pathTimer;
+		private int					pathMoveIndex;
+		protected bool				fallsInHoles;
+		private Vector2F			velocity;
 
 		// Settings
 		private TileDataInstance	tileData;		// The tile data used to create this tile.
@@ -44,6 +51,8 @@ namespace ZeldaOracle.Game.Tiles {
 		private DropList			dropList;
 		private bool				isSolid;
 		private Properties			properties;
+		
+		public bool IsUpdated { get; set; } // This is to make sure tiles are only updated once per frame.
 
 
 		//-----------------------------------------------------------------------------
@@ -69,6 +78,10 @@ namespace ZeldaOracle.Game.Tiles {
 			dropList		= null;
 			animationPlayer	= null;
 			hasMoved		= false;
+			path			= null;
+			pathTimer		= 0;
+			pathMoveIndex	= 0;
+			fallsInHoles	= true;
 		}
 
 
@@ -77,14 +90,20 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		public void Initialize(RoomControl control) {
-			this.roomControl = control;
-			this.isAlive = true;
-
-			this.hasMoved = false;
+			this.roomControl	= control;
+			this.isAlive		= true;
 
 			if (!isInitialized) {
-				isInitialized = true;
+				isInitialized	= true;
+				hasMoved		= false;
+				velocity		= Vector2F.Zero;
 				
+				// Begin a path if there is one.
+				string pathString = properties.GetString("path", "");
+				TilePath p = TilePath.Parse(pathString);
+				BeginPath(p);
+
+				// Set the solid state.
 				isSolid = (SolidType != TileSolidType.NotSolid);
 
 				// Setup default drop list.
@@ -93,6 +112,7 @@ namespace ZeldaOracle.Game.Tiles {
 				else
 					dropList = RoomControl.GameControl.DropManager.GetDropList("default");
 
+				// Call the virtual initialization method.
 				OnInitialize();
 			}
 		}
@@ -101,12 +121,99 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		// Flags
 		//-----------------------------------------------------------------------------
+
+		// Returns true if the tile has the normal flags.
+		public bool HasFlag(TileFlags flags) {
+			return Flags.HasFlag(flags);
+		}
 		
 		public void SetFlags(TileFlags flagsToSet, bool enabled) {
 			if (enabled)
 				flags |= flagsToSet;
 			else
 				flags &= ~flagsToSet;
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Movement
+		//-----------------------------------------------------------------------------
+
+		// Begin following a path.
+		public void BeginPath(TilePath path) {
+			this.path = path;
+			pathMoveIndex = 0;
+			pathTimer = 0;
+		}
+
+		// Move over a distance.
+		protected bool Move(int direction, int distance, float movementSpeed) {
+			if (isMoving)
+				return false;
+
+			int newLayer;
+			if (IsMoveObstructed(direction, out newLayer))
+				return false;
+
+			this.movementSpeed	= movementSpeed;
+			this.moveDistance	= distance;
+			this.moveDirection	= Directions.ToPoint(direction);
+			this.isMoving		= true;
+			this.hasMoved		= true;
+			this.currentMoveDistance	= 0;
+			
+			// Move the tile one step forward.
+			Point2I oldLocation = location;
+			RoomControl.MoveTile(this, location + moveDirection, newLayer);
+			offset = -Directions.ToVector(direction) * GameSettings.TILE_SIZE;
+
+			// Uncover the tile this was located over.
+			// TODO: larger sized tiles, moving more than 1 distance.
+			Tile unconveredTile = roomControl.GetTopTile(oldLocation);
+			if (unconveredTile != null)
+				unconveredTile.OnUncover(this);
+
+			// Fire the OnMove event.
+			GameControl.ExecuteScript(properties.GetString("on_move", ""));
+
+			return true;
+		}
+
+		protected bool IsMoveObstructed(int direction, out int newLayer) {
+			Point2I newLocation = location + Directions.ToPoint(direction);
+			return IsMoveObstructed(newLocation, out newLayer);
+		}
+
+		protected bool IsMoveObstructed(Point2I newLocation, out int newLayer) {
+			newLayer = -1;
+
+			// Check if the move will keep the tile in the room bounds.
+			Rectangle2I roomRect = new Rectangle2I(0, 0, roomControl.Room.Width, roomControl.Room.Height);
+			Rectangle2I tileRect = new Rectangle2I(newLocation, size);
+			if (!roomRect.Contains(tileRect))
+				return true;
+
+			// Check for tile obstructions and find an empty layer to put the tile in.
+			for (int i = 0; i < RoomControl.Room.LayerCount; i++) {
+				for (int x = 0; x < size.X; x++) {
+					for (int y = 0; y < size.Y; y++) {
+						Point2I loc = newLocation + new Point2I(x, y);
+						Tile t = RoomControl.GetTile(newLocation + new Point2I(x, y), i);
+
+						if (t == this) {
+							newLayer = i;
+						}
+						else {
+							if (t != null && !t.IsCoverableByBlock)
+								return true;
+							if (t == null && newLayer != layer)
+								newLayer = i;
+						}
+					}
+				}
+			}
+
+			return (newLayer < 0);
 		}
 
 
@@ -115,7 +222,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		// Called when a seed of the given type hits this tile.
-		public virtual void OnSeedHit(SeedType type, Entity seed) {}
+		public virtual void OnSeedHit(SeedType type, Entity seed) { }
 
 		// Called when the player presses A on this tile, when facing the given direction.
 		// Return true if player controls should be disabled for the rest of the frame.
@@ -165,34 +272,34 @@ namespace ZeldaOracle.Game.Tiles {
 			return Move(direction, 1, movementSpeed);
 		}
 
+		// Called when the player digs the tile with the shovel.
 		public virtual bool OnDig(int direction) {
-			if (!isMoving && IsDigable) {
-				
-				// Remove/dig the tile.
-				if (layer == 0) {
-					roomControl.RemoveTile(this);
+			if (isMoving || !IsDigable)
+				return false;
 
-					TileData data = Resources.GetResource<TileData>("dug");
-					Tile dugTile = Tile.CreateTile(data);
-
-					roomControl.PlaceTile(dugTile, location, layer);
-					customSprite = GameData.SPR_TILE_DUG;
-				}
-				else {
-					roomControl.RemoveTile(this);
-				}
-
-				// Spawn drop.
-				Entity dropEntity = SpawnDrop();
-				if (dropEntity != null) {
-					if (dropEntity is Collectible)
-						(dropEntity as Collectible).PickupableDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
-					dropEntity.Physics.Velocity = Directions.ToVector(direction) * GameSettings.DROP_ENTITY_DIG_VELOCITY;
-				}
-
-				return true;
+			// Remove/dig the tile.
+			if (layer == 0) {
+				roomControl.RemoveTile(this);
+					
+				// Spawn the a "dug" tile in this tile's place.
+				TileData data = Resources.GetResource<TileData>("dug");
+				Tile dugTile = Tile.CreateTile(data);
+				roomControl.PlaceTile(dugTile, location, layer);
+				customSprite = GameData.SPR_TILE_DUG;
 			}
-			return false;
+			else {
+				roomControl.RemoveTile(this);
+			}
+
+			// Spawn drops.
+			Entity dropEntity = SpawnDrop();
+			if (dropEntity != null) {
+				if (dropEntity is Collectible)
+					(dropEntity as Collectible).PickupableDelay = GameSettings.COLLECTIBLE_DIG_PICKUPABLE_DELAY;
+				dropEntity.Physics.Velocity = Directions.ToVector(direction) * GameSettings.DROP_ENTITY_DIG_VELOCITY;
+			}
+
+			return true;
 		}
 
 		// Called while the player is trying to push the tile but before it's actually moved.
@@ -201,44 +308,53 @@ namespace ZeldaOracle.Game.Tiles {
 		// Called when the player jumps and lands on the tile.
 		public virtual void OnLand(Point2I startTile) { }
 			
-		// Called when a tile is finished moving after being pushed.
+		// Called when the tile completes a movement (like after being pushed).
 		public virtual void OnCompleteMovement() {
 			// Check if we are over a hazard tile (water, lava, hole).
-			Tile tile = null;
-			for (int i = layer - 1; i >= 0 && tile == null; i--)
-				tile = roomControl.GetTile(location, i);
+			// TEMP: Only movable tiles can fall in hazards.
+			if (HasFlag(TileFlags.Movable)) {
+				Tile tile = null;
+				for (int i = layer - 1; i >= 0 && tile == null; i--)
+					tile = roomControl.GetTile(location, i);
 
-			if (tile != null) {
-				if (tile.IsWater)
-					OnFallInWater();
-				else if (tile.IsLava)
-					OnFallInLava();
-				else if (tile.IsHole)
-					OnFallInHole();
-				else
-					tile.OnCover(this);
+				if (tile != null) {
+					if (tile.IsWater)
+						OnFallInWater();
+					else if (tile.IsLava)
+						OnFallInLava();
+					else if (tile.IsHole)
+						OnFallInHole();
+					else
+						tile.OnCover(this);
+				}
 			}
 		}
 
 		// Called when the tile is pushed into a hole.
 		public virtual void OnFallInHole() {
-			RoomControl.SpawnEntity(new EffectFallingObject(), Center);
-			RoomControl.RemoveTile(this);
+			if (fallsInHoles) {
+				RoomControl.SpawnEntity(new EffectFallingObject(), Center);
+				RoomControl.RemoveTile(this);
+			}
 		}
 
 		// Called when the tile is pushed into water.
 		public virtual void OnFallInWater() {
-			RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash), Center);
-			RoomControl.RemoveTile(this);
+			if (fallsInHoles) {
+				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash), Center);
+				RoomControl.RemoveTile(this);
+			}
 		}
 
 		// Called when the tile is pushed into lava.
 		public virtual void OnFallInLava() {
-			RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH, DepthLayer.EffectSplash), Center);
-			RoomControl.RemoveTile(this);
+			if (fallsInHoles) {
+				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH, DepthLayer.EffectSplash), Center);
+				RoomControl.RemoveTile(this);
+			}
 		}
 
-		// Called when a tile covers this tile.
+		// Called when another tile covers this tile.
 		public virtual void OnCover(Tile tile) { }
 
 		// Called when this tile is uncovered.
@@ -249,70 +365,27 @@ namespace ZeldaOracle.Game.Tiles {
 		// Mutators
 		//-----------------------------------------------------------------------------
 
-		protected bool Move(int direction, int distance, float movementSpeed) {
-			Point2I oldLocation = location;
-
-			if (isMoving)
-				return false;
-
-			// Make sure were not pushing out of bounds.
-			Point2I newLocation = location + Directions.ToPoint(direction) * distance;
-			if (!RoomControl.IsTileInBounds(newLocation))
-				return false;
-
-			// Make sure there are no obstructions.
-			int newLayer = -1;
-			for (int i = 0; i < RoomControl.Room.LayerCount; i++) {
-				Tile t = RoomControl.GetTile(newLocation.X, newLocation.Y, i);
-				if (t != null && !t.IsCoverableByBlock)
-					return false;
-				if (t == null && newLayer != layer)
-					newLayer = i;
-			}
-
-			// Not enough layers to place this tile.
-			if (newLayer < 0)
-				return false;
-
-			// Move the tile to the new location.
-			isMoving = true;
-			hasMoved = true;
-			this.movementSpeed = movementSpeed;
-			moveDirection = Directions.ToPoint(direction);
-			offset = -Directions.ToVector(direction) * GameSettings.TILE_SIZE;
-			RoomControl.MoveTile(this, newLocation, newLayer);
-
-			Tile unconveredTile = roomControl.GetTopTile(oldLocation);
-			if (unconveredTile != null)
-				unconveredTile.OnUncover(this);
-
-			// Fire the OnMove event.
-			GameControl.ExecuteScript(properties.GetString("on_move", ""));
-
-			return true;
-		}
-
+		// Break the tile, destroying it.
 		public void Break(bool spawnDrops) {
+			// Spawn the break effect.
 			if (breakAnimation != null) {
 				Effect breakEffect = new Effect(breakAnimation, DepthLayer.EffectTileBreak);
 				RoomControl.SpawnEntity(breakEffect, Center);
 			}
 
-			RoomControl.RemoveTile(this);
-
-			if (spawnDrops) {
+			// Spawn drops.
+			if (spawnDrops)
 				SpawnDrop();
-			}
+						
+			RoomControl.RemoveTile(this);
 		}
 
+		// Spawn a drop entity based on the random drop-list.
 		public Entity SpawnDrop() {
-			Entity dropEntity = null;
+			// Choose a random drop (or none) from the list.
+			Entity dropEntity = dropList.CreateDropEntity(GameControl);
 
-			// Choose a drop or null.
-			if (dropList != null)
-				dropEntity = dropList.CreateDropEntity(GameControl);
-
-			// Spawn the drop.
+			// Spawn the drop if there is one.
 			if (dropEntity != null) {
 				dropEntity.SetPositionByCenter(Center);
 				dropEntity.Physics.ZVelocity = GameSettings.DROP_ENTITY_SPAWN_ZVELOCITY;
@@ -330,19 +403,60 @@ namespace ZeldaOracle.Game.Tiles {
 		public virtual void OnInitialize() {}
 
 		public virtual void Update() {
-			// Update movement (after pushed).
+			// Velocity must be applied on the next frame in order to syncronize
+			// entities moving on this tile, because entities are updated before tiles.
+			if (isMoving)
+				offset += velocity;
+			else
+				velocity = Vector2F.Zero;
+
+			// Update movement.
 			if (isMoving) {
-				if (offset.LengthSquared > 0.0f) {
-					offset += (Vector2F)moveDirection * movementSpeed;
-					if (offset.LengthSquared == 0.0f || GMath.Sign(offset) == GMath.Sign(moveDirection)) {
-						offset = Vector2F.Zero;
-						isMoving = false;
+				// Set the amount to move for the next frame.
+				if (isMoving)
+					velocity = (Vector2F) moveDirection * movementSpeed;
+				
+				if (offset.Dot(moveDirection) >= 0.0f) {
+					currentMoveDistance++;
+					offset -= (Vector2F) (moveDirection * GameSettings.TILE_SIZE);
+
+					if (currentMoveDistance >= moveDistance) {
+						offset			= Vector2F.Zero;
+						velocity		= Vector2F.Zero;
+						moveDirection	= Point2I.Zero;
+						isMoving		= false;
 						OnCompleteMovement();
+					}
+					else {
+						roomControl.MoveTile(this, location + moveDirection, layer);
+					}
+				}
+				else if (currentMoveDistance + 1 >= moveDistance) {
+					// Don't overshoot the destination.
+					float overshoot = (offset + velocity).Dot(moveDirection);
+					if (overshoot >= 0.0f) {
+						velocity -= overshoot * (Vector2F) moveDirection;
 					}
 				}
 			}
-			else {
-				moveDirection = Point2I.Zero;
+			// Update path following.
+			else if (path != null) {
+				TilePathMove move = path.Moves[pathMoveIndex];
+					
+				// Begin the next move in the path after the delay has been passed.
+				if (pathTimer >= move.Delay) {
+					Move(move.Direction, move.Distance, move.Speed);
+					pathTimer = 0;
+					pathMoveIndex++;
+					if (pathMoveIndex >= path.Moves.Count) {
+						if (path.Repeats)
+							pathMoveIndex = 0;
+						else
+							path = null;
+					}
+				}
+
+				pathTimer++;
 			}
 		}
 
@@ -370,27 +484,17 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
-		
-		//-----------------------------------------------------------------------------
-		// Flags Methods
-		//-----------------------------------------------------------------------------
-
-		// Returns true if the tile has the normal flags.
-		public bool HasFlag(TileFlags flags) {
-			return Flags.HasFlag(flags);
-		}
-
 
 		//-----------------------------------------------------------------------------
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
-		// Instantiate a tile from the given tile-data.
+		// Construct a tile from the given tile-data.
 		public static Tile CreateTile(TileData data) {
 			return CreateTile(new TileDataInstance(data, 0, 0, 0));
 		}
 
-		// Instantiate a tile from the given tile-data.
+		// Construct a tile from the given tile-data.
 		public static Tile CreateTile(TileDataInstance data) {
 			Tile tile;
 			
@@ -661,6 +765,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public int LedgeDirection {
 			get { return properties.GetInteger("ledge_direction", Directions.Down); }
+		}
+
+		public Vector2F Velocity {
+			get { return velocity; }
 		}
 
 

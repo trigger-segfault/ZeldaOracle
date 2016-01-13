@@ -256,6 +256,10 @@ namespace ZeldaOracle.Game.Control {
 			for (int xx = 0; xx < tile.Width; xx++) {
 				for (int yy = 0; yy < tile.Height; yy++) {
 					tiles[tile.Location.X + xx, tile.Location.Y + yy, tile.Layer] = null;
+				}
+			}
+			for (int xx = 0; xx < tile.Width; xx++) {
+				for (int yy = 0; yy < tile.Height; yy++) {
 					tiles[newLocation.X + xx, newLocation.Y + yy, newLayer] = tile;
 				}
 			}
@@ -491,11 +495,14 @@ namespace ZeldaOracle.Game.Control {
 				return;
 			
 			// Update tiles.
+			foreach (Tile t in GetTiles())
+				t.IsUpdated = false;
 			for (int i = 0; i < room.LayerCount; i++) {
 				for (int x = 0; x < room.Width; x++) {
 					for (int y = 0; y < room.Height; y++) {
 						Tile t = tiles[x, y, i];
-						if (t != null && x == t.Location.X && y == t.Location.Y) {
+						if (t != null && x == t.Location.X && y == t.Location.Y && !t.IsUpdated) {
+							t.IsUpdated = true;
 							if (GameControl.UpdateRoom)
 								t.Update();
 							if (GameControl.AnimateRoom)

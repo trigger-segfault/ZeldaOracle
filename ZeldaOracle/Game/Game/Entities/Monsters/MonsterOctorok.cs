@@ -69,7 +69,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public override void Initialize() {
 			base.Initialize();
-			
+			moveSpeed = 0.0f;
 			if (color == MonsterColor.Red) {
 				MaxHealth		= 1;
 				ContactDamage	= 1;

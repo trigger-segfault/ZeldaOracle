@@ -229,6 +229,11 @@ namespace ZeldaOracle.Game.Entities {
 					topTile = tile;
 				}
 			}
+			if (topTile != null) {
+				// TODO: Integrate the surface tile's velocity into our
+				// velocity rather than just moving position.
+				entity.Position += topTile.Velocity;
+			}
 
 			// Check if destroyed outside room.
 			if (HasFlags(PhysicsFlags.DestroyedOutsideRoom) &&

@@ -161,22 +161,22 @@ public struct Vector2F {
 	public static Vector2F operator +(Vector2F v1, Vector2F v2) {
 		return new Vector2F(v1.X + v2.X, v1.Y + v2.Y);
 	}
-	public static Vector2F operator +(float f1, Vector2F v2) {
+	/*public static Vector2F operator +(float f1, Vector2F v2) {
 		return new Vector2F(f1 + v2.X, f1 + v2.Y);
 	}
 	public static Vector2F operator +(Vector2F v1, float f2) {
 		return new Vector2F(v1.X + f2, v1.Y + f2);
-	}
+	}*/
 
 	public static Vector2F operator -(Vector2F v1, Vector2F v2) {
 		return new Vector2F(v1.X - v2.X, v1.Y - v2.Y);
 	}
-	public static Vector2F operator -(float f1, Vector2F v2) {
+	/*public static Vector2F operator -(float f1, Vector2F v2) {
 		return new Vector2F(f1 - v2.X, f1 - v2.Y);
 	}
 	public static Vector2F operator -(Vector2F v1, float f2) {
 		return new Vector2F(v1.X - f2, v1.Y - f2);
-	}
+	}*/
 
 	public static Vector2F operator *(Vector2F v1, Vector2F v2) {
 		return new Vector2F(v1.X * v2.X, v1.Y * v2.Y);
