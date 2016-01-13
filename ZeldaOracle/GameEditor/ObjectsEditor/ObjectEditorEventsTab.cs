@@ -183,7 +183,7 @@ namespace ZeldaEditor.ObjectsEditor {
 
 				// Set the property.
 				Console.WriteLine("Setting property '" + objEvent.Id + "' to the value '" + propValue + "'");
-				objectEditor.PropertyObject.Properties.SetPropertyGeneric(objEvent.Id, propValue, true);
+				objectEditor.PropertyObject.Properties.Set(objEvent.Id, propValue);
 			}
 		}
 

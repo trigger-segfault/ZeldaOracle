@@ -128,7 +128,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public TileFlags Flags {
 			get { return (TileFlags) properties.GetInteger("flags", 0); }
-			set { properties.SetPropertyGeneric("flags", (int) value, true); }
+			set { properties.Set("flags", (int) value); }
 		}
 
 		public CollisionModel CollisionModel {

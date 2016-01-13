@@ -57,7 +57,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			if (monster != null) {
 				Vector2F center = position + new Vector2F(8, 8);
 				monster.SetPositionByCenter(center);
-				monster.Properties.Merge(properties, true);
+				monster.Properties.SetAll(properties);
 				RoomControl.SpawnEntity(monster);
 			}
 			else {

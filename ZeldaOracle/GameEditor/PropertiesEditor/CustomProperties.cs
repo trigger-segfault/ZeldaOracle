@@ -49,34 +49,10 @@ namespace ZeldaEditor.PropertiesEditor {
 		}
 
 		public void AddProperties(Properties properties) {
-			// Add the base properties recursively.
-			if (properties.BaseProperties != null)
-				AddProperties(properties.BaseProperties);
-			int basePropertyCount = propertyList.Count;
-			
-			// Add the properties.
-			foreach (KeyValuePair<string, Property> propertyEntry in properties.PropertyMap) {
-				bool okayToAdd = true;
-
-				// Check if there is a matching base property.
-				for (int i = 0; i < basePropertyCount; i++) {
-					if (propertyList[i].Name == propertyEntry.Value.Name) {
-						propertyList[i] = propertyEntry.Value;
-						okayToAdd = false;
-						break;
-					}
-				}
-
-				// Make sure property isn't hidden.
-				if (okayToAdd) {
-					PropertyDocumentation doc = propertyEntry.Value.GetRootDocumentation();
-					if (doc != null && doc.IsHidden)
-						okayToAdd = false;
-				}
-
-				// Add the property.
-				if (okayToAdd)
-					propertyList.Add(propertyEntry.Value);
+			foreach (Property property in  properties.GetAllProperties()) {
+				PropertyDocumentation doc = property.GetRootDocumentation();
+				if (doc == null || !doc.IsHidden)
+					propertyList.Add(property);
 			}
 		}
 
@@ -125,28 +101,15 @@ namespace ZeldaEditor.PropertiesEditor {
 					Property property	= propertyList[i];
 					string name			= property.Name;
 					UITypeEditor editor = null;
-
-					// Find the documentation for this property.
-					Properties objProperties = obj.Properties;
-					PropertyDocumentation documentation = null;
-					while (objProperties != null) {
-						if (objProperties.PropertyMap.ContainsKey(property.Name)) {
-							Property p = objProperties.PropertyMap[property.Name];
-							if (p.Documentation != null) {
-								documentation = p.Documentation;
-								break;
-							}
-						}
-						objProperties = objProperties.BaseProperties;
-					}
-
+					PropertyDocumentation documentation = property.GetDocumentation();
+					
 					// Find the editor.
 					if (documentation != null)
 						editor = obj.PropertyGridControl.GetUITypeEditor(documentation.EditorType);
 
 					// Create the property descriptor.
 					props[i] = new CustomPropertyDescriptor(
-						documentation, editor, property, obj.Properties);
+						documentation, editor, property.Name, obj.Properties);
 				}
 
 				return new PropertyDescriptorCollection(props);

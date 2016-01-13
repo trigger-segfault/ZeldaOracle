@@ -19,7 +19,7 @@ namespace ZeldaEditor.PropertiesEditor {
 	
 	public class CustomPropertyDescriptor : PropertyDescriptor {
 		private Properties				modifiedProperties;
-		private Property				property;
+		private string					propertyName;
 		private PropertyDocumentation	documentation;
 		private UITypeEditor			editor;
 
@@ -28,12 +28,12 @@ namespace ZeldaEditor.PropertiesEditor {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public CustomPropertyDescriptor(PropertyDocumentation documentation, UITypeEditor editor, Property property, Properties modifiedProperties) :
-			base(documentation == null ? property.Name : documentation.ReadableName, null)
+		public CustomPropertyDescriptor(PropertyDocumentation documentation, UITypeEditor editor, string propertyName, Properties modifiedProperties) :
+			base(documentation == null ? propertyName : documentation.ReadableName, null)
 		{
 			this.documentation		= documentation;
 			this.editor				= editor;
-			this.property			= property;
+			this.propertyName		= propertyName;
 			this.modifiedProperties	= modifiedProperties;
 		}
 
@@ -51,7 +51,7 @@ namespace ZeldaEditor.PropertiesEditor {
 
 		// Returns true if the property is modified.
 		public override bool ShouldSerializeValue(object component) {
-			return modifiedProperties.IsPropertyModified(property.Name);
+			return modifiedProperties.IsPropertyModified(propertyName);
 		}
 
 		// Is the value allowed to be reset?
@@ -61,6 +61,7 @@ namespace ZeldaEditor.PropertiesEditor {
 			
 		// Get the displayed value of the property.
 		public override object GetValue(object component) {
+			Property property = Property;
 			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.List)
 				return null;
 			return property.ObjectValue;
@@ -68,38 +69,24 @@ namespace ZeldaEditor.PropertiesEditor {
 
 		// Reset the value to the default.
 		public override void ResetValue(object component) {
-			// TODO: override ResetValue
-			Property rootProperty = property.GetRootProperty();
-			if (property != rootProperty)
-				property.SetValue(rootProperty);
+			Property baseProperty = modifiedProperties.BaseProperties.GetProperty(propertyName, true);
+			if (baseProperty != null)
+				modifiedProperties.Set(propertyName, baseProperty);
 		}
 
 		// Set the displayed value of the property.
 		// This method will only be called if the new value is different from the old one.
 		public override void SetValue(object component, object value) {
-			bool isModified = modifiedProperties.IsPropertyModified(property.Name);
-
-			// If the property hasn't been modified, then create a new property for it.
-			if (!isModified) {
-				property = new ZeldaOracle.Common.Scripting.Property(property);
-				modifiedProperties.Add(property);
-			}
-
 			// Set the appropriate value.
+			Property property = Property;
 			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.String)
-				property.StringValue = (string) value;
+				modifiedProperties.Set(propertyName, (string) value);
 			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Integer)
-				property.IntValue = (int) value;
+				modifiedProperties.Set(propertyName, (int) value);
 			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Float)
-				property.FloatValue = (float) value;
+				modifiedProperties.Set(propertyName, (float) value);
 			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Boolean)
-				property.BoolValue = (bool) value;
-				
-			// Check if base and modified are the same. If so, remove the modified one.
-			if (isModified && !modifiedProperties.IsPropertyModified(property.Name)) {
-				modifiedProperties.Remove(property.Name);
-				property = modifiedProperties.GetProperty(property.Name, true);
-			}
+				modifiedProperties.Set(propertyName, (bool) value);
 		}
 
 
@@ -152,12 +139,13 @@ namespace ZeldaEditor.PropertiesEditor {
 			get {
 				if (documentation != null)
 					return documentation.ReadableName;
-				return property.Name;
+				return propertyName;
 			}
 		}
 			
 		public override Type PropertyType {
 			get {
+				Property property = Property;
 				if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.String)
 					return typeof(string);
 				if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Integer)
@@ -176,7 +164,10 @@ namespace ZeldaEditor.PropertiesEditor {
 		//-----------------------------------------------------------------------------
 
 		public Property Property {
-			get { return property; }
+			get {
+				return modifiedProperties.GetProperty(propertyName, true);
+				//return property;
+			}
 		}
 
 		public PropertyDocumentation Documentation {

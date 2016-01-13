@@ -150,22 +150,6 @@ namespace ZeldaOracle.Game.Worlds {
 
 				// Read the world data.
 				ReadWorld(reader, world);
-
-				// TEMP: Trigger property actions on tiles.
-				for (int i = 0; i < world.LevelCount; i++) {
-					Level level = world.Levels[i];
-					for (int x = 0; x < level.Width; x++) {
-						for (int y = 0; y < level.Height; y++) {
-							Room room = level.GetRoomAt(x, y);
-							room.IterateTiles(delegate(TileDataInstance tile) {
-								tile.Properties.RunActionForAll();
-							});
-							room.IterateEventTiles(delegate(EventTileDataInstance tile) {
-								tile.Properties.RunActionForAll();
-							});
-						}
-					}
-				}
 			}
 			catch (WorldFileException e) {
 				Console.WriteLine("Error loading world: " + e.Message);
@@ -196,7 +180,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 		private void ReadWorld(BinaryReader reader, World world) {
 			// Read the world's properties.
-			world.Properties.Merge(ReadProperties(reader), true);
+			ReadProperties(reader, world.Properties);
 			
 			// Read the world's levels.
 			int levelCount = reader.ReadInt32();
@@ -217,7 +201,7 @@ namespace ZeldaOracle.Game.Worlds {
 			level.RoomLayerCount = roomLayerCount;
 
 			// Read the level's properties.
-			level.Properties.Merge(ReadProperties(reader), true);
+			ReadProperties(reader, level.Properties);
 			
 			// Read all the rooms in the level.
 			for (int y = 0; y < level.Height; y++) {
@@ -241,7 +225,7 @@ namespace ZeldaOracle.Game.Worlds {
 			room.Zone = ReadResource(reader, zones);
 
 			// Read the room's properties.
-			room.Properties.Merge(ReadProperties(reader), true);
+			ReadProperties(reader, room.Properties);
 			
 			// Read tile data for first layer (stored as a grid of tiles).
 			for (int y = 0; y < room.Height; y++) {
@@ -282,13 +266,13 @@ namespace ZeldaOracle.Game.Worlds {
 					reader.ReadInt32(),
 					reader.ReadInt32());
 				tile.TileData = tileset.TileData[sheetLocation.X, sheetLocation.Y];
-				tile.Properties = ReadProperties(reader);
+				ReadProperties(reader, tile.Properties);
 				tile.Properties.BaseProperties = tile.TileData.Properties;
 			}
 			else {
 				// Create tile from a TileData resource.
 				tile.TileData = ReadResource(reader, tileData);
-				tile.Properties = ReadProperties(reader);
+				ReadProperties(reader, tile.Properties);
 				tile.Properties.BaseProperties = tile.TileData.Properties;
 			}
 
@@ -302,18 +286,19 @@ namespace ZeldaOracle.Game.Worlds {
 				reader.ReadInt32());
 
 			EventTileDataInstance eventTile = new EventTileDataInstance(tileData, position);
-			eventTile.Properties = ReadProperties(reader);
+			ReadProperties(reader, eventTile.Properties);
+			eventTile.Properties.PropertyObject = eventTile;
 			eventTile.Properties.BaseProperties = eventTile.EventTileData.Properties;
 
 			return eventTile;
 		}
 
-		private Properties ReadProperties(BinaryReader reader) {
+		private Properties ReadProperties(BinaryReader reader, Properties properties) {
 			int count = reader.ReadInt32();
-			Properties properties = new Properties();
 			for (int i = 0; i < count; i++) {
 				Property property = ReadProperty(reader);
-				properties.Add(property);
+				properties.Set(property.Name, property);
+				//properties.Add(property);
 			}
 			return properties;
 		}
@@ -682,8 +667,8 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		private void WriteProperties(BinaryWriter writer, Properties properties) {
-			writer.Write((int) properties.PropertyMap.Count);
-			foreach (Property property in properties.PropertyMap.Values) {
+			writer.Write((int) properties.Count);
+			foreach (Property property in properties.GetProperties()) {
 				WriteProperty(writer, property);
 			}
 		}

@@ -29,18 +29,20 @@ namespace ZeldaOracle.Game.Tiles {
 			properties		= new Properties();
 			events			= new ObjectEventCollection();
 
-			properties.Set("id", "")
-				.SetDocumentation("ID", "", "", "",
+			properties.Set("id", "");
+			properties.SetDocumentation("id", "ID", "", "", "",
 				"The id used to refer to this tile.");
-			properties.Set("enabled", true)
-				.SetDocumentation("Enabled", "", "", "",
+
+			properties.Set("enabled", true);
+			properties.SetDocumentation("enabled", "Enabled", "", "", "",
 				"True if the tile is spawned upon entering the room.");
 
-			properties.Set("sprite_index", 0)
-				.SetDocumentation("Sprite Index", "sprite_index", "", "Internal",
+			properties.Set("sprite_index", 0);
+			properties.SetDocumentation("sprite_index", "Sprite Index", "sprite_index", "", "Internal",
 				"The current sprite in the sprite list to draw.", true, true);
-			properties.Set("substrip_index", 0)
-				.SetDocumentation("Animation Substrip Index", "", "", "Internal",
+
+			properties.Set("substrip_index", 0);
+			properties.SetDocumentation("substrip_index", "Animation Substrip Index", "", "", "Internal",
 				"The index of the substrip for dynamic animations.", true, true);
 		}
 
@@ -49,13 +51,13 @@ namespace ZeldaOracle.Game.Tiles {
 			tileset				= copy.tileset;
 			sheetLocation		= copy.sheetLocation;
 			properties			= new Properties();
-			properties.Merge(copy.properties, true);
+			properties.SetAll(copy.properties);
 		}
 
 		public virtual void Clone(BaseTileData copy) {
 			type		= copy.type;
 			properties	= new Properties();
-			properties.Merge(copy.properties, true);
+			properties.SetAll(copy.properties);
 		}
 		
 		

@@ -223,7 +223,7 @@ namespace ZeldaEditor.ObjectsEditor {
 		public void ApplyChanges() {
 			// Id.
 			propertyObject.Properties.Exists("id");
-			propertyObject.Properties.SetPropertyGeneric("id", textBoxId.Text, true);
+			propertyObject.Properties.Set("id", textBoxId.Text);
 			
 			// Spawn Type.
 			propertyObject.Properties.Set("enabled", !checkBoxStartDisabled.Checked);
@@ -256,9 +256,9 @@ namespace ZeldaEditor.ObjectsEditor {
 			tile.SetFlags(TileFlags.Boomerangable,	checkBoxBoomerangable.Checked);
 			tile.SetFlags(TileFlags.Switchable,		checkBoxSwitchable.Checked);
 			tile.SetFlags(TileFlags.SwitchStays,	!checkBoxBreakOnSwitch.Checked);
-			tile.Properties.SetPropertyGeneric("move_once", checkBoxMoveOnce.Checked, true);
-			tile.Properties.SetPropertyGeneric("cuttable_sword_level", comboBoxSwordLevel.SelectedIndex, true);
-			tile.Properties.SetPropertyGeneric("pickupable_bracelet_level", comboBoxBraceletLevel.SelectedIndex, true);
+			tile.Properties.Set("move_once", checkBoxMoveOnce.Checked);
+			tile.Properties.Set("cuttable_sword_level", comboBoxSwordLevel.SelectedIndex);
+			tile.Properties.Set("pickupable_bracelet_level", comboBoxBraceletLevel.SelectedIndex);
 
 			// Move direction
 			int moveDir = ((ComboBoxItem<int>) comboBoxMoveDirection.SelectedItem).Value;
@@ -276,28 +276,10 @@ namespace ZeldaEditor.ObjectsEditor {
 			int basePropertyCount = propertyList.Count;
 			
 			// Add the properties.
-			foreach (KeyValuePair<string, Property> propertyEntry in properties.PropertyMap) {
-				bool okayToAdd = true;
-
-				// Check if there is a matching base property.
-				for (int i = 0; i < basePropertyCount; i++) {
-					if (propertyList[i].Name == propertyEntry.Value.Name) {
-						propertyList[i] = propertyEntry.Value;
-						okayToAdd = false;
-						break;
-					}
-				}
-
-				// Make sure property isn't hidden.
-				if (okayToAdd) {
-					PropertyDocumentation doc = propertyEntry.Value.GetRootDocumentation();
-					if (doc != null && doc.IsHidden)
-						okayToAdd = false;
-				}
-
-				// Add the property.
-				if (okayToAdd)
-					propertyList.Add(propertyEntry.Value);
+			foreach (Property property in  properties.GetAllProperties()) {
+				PropertyDocumentation doc = property.GetRootDocumentation();
+				if (doc == null || !doc.IsHidden)
+					propertyList.Add(property);
 			}
 		}
 

@@ -410,8 +410,8 @@ namespace ZeldaOracle.Game.Tiles {
 			tile.collisionModel		= data.CollisionModel;
 			tile.size				= data.Size;
 
-			tile.properties.Merge(data.BaseProperties, true);
-			tile.properties.Merge(data.Properties, true);
+			tile.properties.SetAll(data.BaseProperties);
+			tile.properties.SetAll(data.Properties);
 			tile.properties.BaseProperties	= data.Properties;
 			
 			return tile;

@@ -39,6 +39,8 @@ namespace ZeldaOracle.Game.Tiles {
 			properties.Set("cuttable_sword_level", 0);
 			properties.Set("pickupable_bracelet_level", 0);
 			properties.Set("ledge_direction", Directions.Down);
+			properties.Set("spawn_from_ceiling", false);
+			properties.Set("spawn_poof_effect", false);
 
 			// Events.
 			properties.Set("on_move", "")

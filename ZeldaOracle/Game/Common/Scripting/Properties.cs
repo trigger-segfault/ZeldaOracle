@@ -14,8 +14,6 @@ namespace ZeldaOracle.Common.Scripting {
 		private Properties baseProperties;
 		// The property map.
 		private Dictionary<string, Property> map;
-		
-		//private ScriptEventCollection;
 
 
 		//-----------------------------------------------------------------------------
@@ -25,7 +23,7 @@ namespace ZeldaOracle.Common.Scripting {
 		// Construct an empty properties list.
 		public Properties() : this(null) {
 		}
-
+		
 		// Construct an empty properties list with the given property object.
 		public Properties(IPropertyObject propertyObject) {
 			this.map			= new Dictionary<string, Property>();
@@ -38,253 +36,203 @@ namespace ZeldaOracle.Common.Scripting {
 		// Basic accessors
 		//-----------------------------------------------------------------------------
 		
+		// Get an enumerable list of all the modified properties.
+		public IEnumerable<Property> GetProperties() {
+			foreach (Property property in map.Values) {
+				yield return property;
+			}
+		}
+		
+		// Get an enumerable list of all properties and base properties.
+		public IEnumerable<Property> GetAllProperties() {
+			for (Properties properties = this; properties != null; properties = properties.baseProperties) {
+				foreach (Property property in properties.map.Values) {
+					if (GetProperty(property.Name, true) == property)
+						yield return property;
+				}
+			}
+		}
+		
 		// Get the property with the given name.
-		public Property GetProperty(string name, bool acceptBaseProperties = false) {
-			if (acceptBaseProperties && baseProperties != null && !map.ContainsKey(name))
+		public Property GetProperty(string name, bool acceptBaseProperties) {
+			KeyValuePair<string, Property> property = map.FirstOrDefault(p => p.Key == name);
+			if (property.Value == null && acceptBaseProperties && baseProperties != null)
 				return baseProperties.GetProperty(name, true);
-			if (map.ContainsKey(name))
-				return map[name];
-			return null;
+			return property.Value;
 		}
 		
 		// Get the root property with the given name.
 		public Property GetRootProperty(string name) {
-			Property root = null;
-			if (baseProperties != null)
-				root = baseProperties.GetRootProperty(name);
-			if (root == null)
-				root = GetProperty(name, false);
-			return root;
+			Property property = GetProperty(name, true);
+			if (property != null)
+				return property.GetRootProperty();
+			return null;
 		}
 		
 
 		//-----------------------------------------------------------------------------
-		// Property existance
+		// Property Existance
 		//-----------------------------------------------------------------------------
 
 		// Returns true if there exists a property with the given name.
 		public bool Exists(string name) {
-			if (baseProperties != null && baseProperties.Exists(name))
-				return true;
-			return map.ContainsKey(name);
+			return (GetProperty(name, true) != null);
 		}
 
 		// Returns true if there exists a property with the given name and type.
 		public bool Exists(string name, PropertyType type) {
-			if (baseProperties != null && baseProperties.Exists(name, type))
-				return true;
-			if (!map.ContainsKey(name))
-				return false;
-			return (map[name].Type == type);
+			Property p = GetProperty(name, true);
+			return (p != null && p.Type == type);
 		}
 
 		// Does the given property have a value different from the base properties?
 		public bool IsPropertyModified(string name) {
-			if (baseProperties == null || !map.ContainsKey(name) || !baseProperties.map.ContainsKey(name))
-				return false;
-			return !baseProperties.map[name].EqualsValue(map[name]);
+			return map.ContainsKey(name);
 		}
 
 		
 		//-----------------------------------------------------------------------------
-		// Exist equals
+		// Exist Equals
 		//-----------------------------------------------------------------------------
 		
 		// Return true if there exists a property with the given name that equates to the given value.
 		public bool ExistsEquals(string name, string value) {
-			if (!map.ContainsKey(name)) {
-				if (baseProperties != null)
-					return baseProperties.ExistsEquals(name, value);
-				return false;
-			}
-			Property p = GetProperty(name);
-			return (p.Type == PropertyType.String && p.StringValue == value);
+			Property p = GetProperty(name, true);
+			return (p != null && p.Type == PropertyType.String && p.StringValue == value);
 		}
 		
 		// Return true if there exists a property with the given name that equates to the given value.
 		public bool ExistsEquals(string name, int value) {
-			if (!map.ContainsKey(name)) {
-				if (baseProperties != null)
-					return baseProperties.ExistsEquals(name, value);
-				return false;
-			}
-			Property p = GetProperty(name);
-			return (p.Type == PropertyType.Integer && p.IntValue == value);
+			Property p = GetProperty(name, true);
+			return (p != null && p.Type == PropertyType.Integer && p.IntValue == value);
 		}
 		
 		// Return true if there exists a property with the given name that equates to the given value.
 		public bool ExistsEquals(string name, float value) {
-			if (!map.ContainsKey(name)) {
-				if (baseProperties != null)
-					return baseProperties.ExistsEquals(name, value);
-				return false;
-			}
-			Property p = GetProperty(name);
-			return (p.Type == PropertyType.Float && p.FloatValue == value);
+			Property p = GetProperty(name, true);
+			return (p != null && p.Type == PropertyType.Float && p.FloatValue == value);
 		}
 		
 		// Return true if there exists a property with the given name that equates to the given value.
 		public bool ExistsEquals(string name, bool value) {
-			if (!map.ContainsKey(name)) {
-				if (baseProperties != null)
-					return baseProperties.ExistsEquals(name, value);
-				return false;
-			}
-			Property p = GetProperty(name);
-			return (p.Type == PropertyType.Boolean && p.BoolValue == value);
+			Property p = GetProperty(name, true);
+			return (p != null && p.Type == PropertyType.Boolean && p.BoolValue == value);
 		}
 		
 		
 		//-----------------------------------------------------------------------------
-		// Exist NOT equals
+		// Exist NOT Equals
 		//-----------------------------------------------------------------------------
 		
 		// Return true if there exists a property with the given name that equates to the given value.
 		public bool ExistsNotEquals(string name, string value) {
-			if (!map.ContainsKey(name)) {
-				if (baseProperties != null)
-					return baseProperties.ExistsNotEquals(name, value);
-				return false;
-			}
-			Property p = GetProperty(name);
-			return (p.Type == PropertyType.String && p.StringValue != value);
+			Property p = GetProperty(name, true);
+			return (p != null && p.Type == PropertyType.String && p.StringValue != value);
 		}
 		
 		// Return true if there exists a property with the given name that equates to the given value.
 		public bool ExistsNotEquals(string name, int value) {
-			if (!map.ContainsKey(name)) {
-				if (baseProperties != null)
-					return baseProperties.ExistsNotEquals(name, value);
-				return false;
-			}
-			Property p = GetProperty(name);
-			return (p.Type == PropertyType.Integer && p.IntValue != value);
+			Property p = GetProperty(name, true);
+			return (p != null && p.Type == PropertyType.Integer && p.IntValue != value);
 		}
 		
 		// Return true if there exists a property with the given name that equates to the given value.
 		public bool ExistsNotEquals(string name, float value) {
-			if (!map.ContainsKey(name)) {
-				if (baseProperties != null)
-					return baseProperties.ExistsNotEquals(name, value);
-				return false;
-			}
-			Property p = GetProperty(name);
-			return (p.Type == PropertyType.Float && p.FloatValue != value);
+			Property p = GetProperty(name, true);
+			return (p != null && p.Type == PropertyType.Float && p.FloatValue != value);
 		}
 		
 		// Return true if there exists a property with the given name that equates to the given value.
 		public bool ExistsNotEquals(string name, bool value) {
-			if (!map.ContainsKey(name)) {
-				if (baseProperties != null)
-					return baseProperties.ExistsNotEquals(name, value);
-				return false;
-			}
-			Property p = GetProperty(name);
-			return (p.Type == PropertyType.Boolean && p.BoolValue != value);
+			Property p = GetProperty(name, true);
+			return (p != null && p.Type == PropertyType.Boolean && p.BoolValue != value);
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Property value access
 		//-----------------------------------------------------------------------------
-		
-		// Get a boolean value with a default value fallback.
-		public Property GetList(string name) {
-			return GetProperty(name);
-		}
-		
+
 		// Get a resource value with a default value fallback.
 		public T GetResource<T>(string name) where T : class {
 			return Resources.GetResource<T>(GetString(name));
 		}
 		
-		// Get a boolean value with a default value fallback.
+		// Get an enum property value.
+		public E GetEnum<E>(string name) where E : struct {
+			return (E) Enum.ToObject(typeof(E), GetProperty(name, true).IntValue);
+		}
+		
+		// Get a string property value.
 		public string GetString(string name) {
-			if (baseProperties != null && !map.ContainsKey(name))
-				return baseProperties.GetString(name);
-			return GetProperty(name).StringValue;
+			return GetProperty(name, true).StringValue;
 		}
 		
-		// Get a boolean value with a default value fallback.
+		// Get an integer property value.
 		public int GetInteger(string name) {
-			if (baseProperties != null && !map.ContainsKey(name))
-				return baseProperties.GetInteger(name);
-			return GetProperty(name).IntValue;
+			return GetProperty(name, true).IntValue;
 		}
 		
-		// Get a boolean value with a default value fallback.
+		// Get a float property value.
 		public float GetFloat(string name) {
-			if (baseProperties != null && !map.ContainsKey(name))
-				return baseProperties.GetFloat(name);
-			return GetProperty(name).FloatValue;
+			return GetProperty(name, true).FloatValue;
 		}
 		
-		// Get a boolean value with a default value fallback.
+		// Get a boolean property value.
 		public bool GetBoolean(string name) {
-			if (baseProperties != null && !map.ContainsKey(name))
-				return baseProperties.GetBoolean(name);
-			return GetProperty(name).BoolValue;
+			return GetProperty(name, true).BoolValue;
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Property value acces (with defaults)
+		// Property value access (with defaults)
 		//-----------------------------------------------------------------------------
 		
-		// Get a resource value with a default value fallback.
+		// Get a resource property value with a default value fallback.
 		public T GetResource<T>(string name, T defaultValue) where T : class {
-			if (baseProperties != null && !map.ContainsKey(name))
-				return baseProperties.GetResource(name, defaultValue);
-			if (Exists(name, PropertyType.String)) {
-				string resourceName = GetString(name);
-				if (resourceName.Length > 0)
-					return Resources.GetResource<T>(resourceName);
-			}
+			Property p = GetProperty(name, true);
+			if (p != null && p.StringValue.Length > 0)
+				return Resources.GetResource<T>(p.StringValue);
 			return defaultValue;
 		}
 
-		// Get a boolean value with a default value fallback.
+		// Get a string property value with a default value fallback.
 		public string GetString(string name, string defaultValue) {
-			if (baseProperties != null && !map.ContainsKey(name))
-				return baseProperties.GetString(name, defaultValue);
-			if (Exists(name, PropertyType.String))
-				return GetProperty(name).StringValue;
+			Property p = GetProperty(name, true);
+			if (p != null)
+				return p.StringValue;
 			return defaultValue;
 		}
 		
-		// Get a boolean value with a default value fallback.
+		// Get an integer property value with a default value fallback.
 		public int GetInteger(string name, int defaultValue) {
-			if (baseProperties != null && !map.ContainsKey(name))
-				return baseProperties.GetInteger(name, defaultValue);
-			if (Exists(name, PropertyType.Integer))
-				return GetProperty(name).IntValue;
+			Property p = GetProperty(name, true);
+			if (p != null)
+				return p.IntValue;
 			return defaultValue;
 		}
 		
-		// Get an enum value with a default value fallback.
+		// Get an enum property value with a default value fallback.
 		public E GetEnum<E>(string name, E defaultValue) where E : struct {
-			if (baseProperties != null && !map.ContainsKey(name))
-				return baseProperties.GetEnum<E>(name, defaultValue);
-			if (Exists(name, PropertyType.Integer))
-				return (E) Enum.ToObject(typeof(E), GetProperty(name).IntValue);
+			Property p = GetProperty(name, true);
+			if (p != null)
+				return (E) Enum.ToObject(typeof(E), p.IntValue);
 			return defaultValue;
 		}
 		
-		// Get a boolean value with a default value fallback.
+		// Get a float property value with a default value fallback.
 		public float GetFloat(string name, float defaultValue) {
-			if (baseProperties != null && !map.ContainsKey(name))
-				return baseProperties.GetFloat(name, defaultValue);
-			if (Exists(name, PropertyType.Float))
-				return GetProperty(name).FloatValue;
+			Property p = GetProperty(name, true);
+			if (p != null)
+				return p.FloatValue;
 			return defaultValue;
 		}
 		
-		// Get a boolean value with a default value fallback.
+		// Get a boolean property value with a default value fallback.
 		public bool GetBoolean(string name, bool defaultValue) {
-			if (baseProperties != null && !map.ContainsKey(name))
-				return baseProperties.GetBoolean(name, defaultValue);
-			if (Exists(name, PropertyType.Boolean))
-				return GetProperty(name).BoolValue;
+			Property p = GetProperty(name, true);
+			if (p != null)
+				return p.BoolValue;
 			return defaultValue;
 		}
 
@@ -292,107 +240,39 @@ namespace ZeldaOracle.Common.Scripting {
 		//-----------------------------------------------------------------------------
 		// General Mutators
 		//-----------------------------------------------------------------------------
-		
+		/*
 		public void RunActionForAll() {
 			List<Property> list = map.Values.ToList();
 			for (int i = 0; i < list.Count; i++) {
 				list[i].RunAction(propertyObject, list[i].ObjectValue);
 			}
 		}
-
+		
 		// Clear the property map.
 		public void Clear() {
 			map.Clear();
 		}
-
+		
 		public void Remove(string name) {
 			map.Remove(name);
 		}
-
-		// Add a new property to the map.
-		public void Add(Property property) {
-			map[property.Name] = property;
-			map[property.Name].Properties = this;
-			// TODO: Check if property is not equal to default.
-		}
-
+		
 		// Merge these properties with another.
 		public void Merge(Properties other, bool replaceExisting) {
-			string[] keys = other.map.Keys.ToArray();
+			foreach (Property otherProperty in other.map.Values)
+				SetProperty(otherProperty.Name, otherProperty, false);
+		}*/
 
-			for (int i = 0; i < keys.Length; ++i) {
-				string key = keys[i];
-				PropertyDocumentation docs = null;
-				// TODO: Why did I do replace existing for docs?
-				if (replaceExisting && map.ContainsKey(key) && map[key].Documentation != null)
-					docs = map[key].Documentation;
-				if (replaceExisting || !map.ContainsKey(key)) {
-					map[key] = new Property(other.map[key]);
-					map[key].Properties = this;
-					if (replaceExisting && map.ContainsKey(key) && docs != null)
-						map[key].Documentation = docs;
-				}
-			}
+		// Merge these properties with another.
+		public void SetAll(Properties other) {
+			foreach (Property otherProperty in other.map.Values)
+				SetProperty(otherProperty.Name, otherProperty.ObjectValue, false);
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Property Setters
 		//-----------------------------------------------------------------------------
-		
-		// Sets a propertiy's value, creating it if it doesn't already exist.
-		// This can modify an existing property or create a new property.
-		private Property SetProperty(string name, Property property, bool setBase) {
-			if (setBase) {
-				if (map.ContainsKey(name)) {
-					map[name].ObjectValue = property.ObjectValue;
-				}
-				else {
-					map[name] = property;
-					map[name].Properties = this;
-				}
-				if (baseProperties != null)
-					baseProperties.SetProperty(name, property, false);
-			}
-			else {
-				if (map.ContainsKey(name)) {
-					map[name].ObjectValue = property.ObjectValue;
-				}
-				else if (baseProperties != null && baseProperties.map.ContainsKey(name)) {
-					map[name] = new Property(baseProperties.map[name]);
-					map[name].Properties = this;
-					map[name].ObjectValue = property.ObjectValue;
-				}
-				else {
-					map[name] = property;
-					map[name].Properties = this;
-				}
-			}
-			return property;
-		}
-		
-		public void SetPropertyGeneric(string name, object value, bool removeRedundencies) {
-			Property property = GetProperty(name, true);
-
-			// If there is a property contained in this object with the given name.
-			if (property.Properties == this) {
-				// Set our property's value.
-				property.ObjectValue = value;
-				
-				// If the property now has the same value as its base, then remove it.
-				if (!IsPropertyModified(name))
-					map.Remove(name);
-			}
-
-			// Else, we need to create one if the desired value is different from the base's value.
-			else if (!property.ObjectValue.Equals(value)) {
-				Property newProp = new Property(property);
-				newProp.ObjectValue = value;
-				newProp.Properties = this;
-				map[name] = newProp;
-			}
-		}
-
 
 		public Property SetAsResource<T>(string name, T resource) where T : class {
 			string resourceName = "";
@@ -401,141 +281,133 @@ namespace ZeldaOracle.Common.Scripting {
 			return Set(name, resourceName);
 		}
 
-
 		public Property Set(string name, Property property) {
-			return SetProperty(name, property, false);
+			return SetProperty(name, property.ObjectValue, false);
 		}
 
 		public Property Set(string name, string value) {
-			return SetProperty(name, Property.CreateString(name, value), false);
+			return SetProperty(name, value, false);
 		}
 		
 		public Property Set(string name, int value) {
-			return SetProperty(name, Property.CreateInt(name, value), false);
+			return SetProperty(name, value, false);
 		}
 		
 		public Property Set(string name, float value) {
-			return SetProperty(name, Property.CreateFloat(name, value), false);
+			return SetProperty(name, value, false);
 		}
 		
 		public Property Set(string name, bool value) {
-			return SetProperty(name, Property.CreateBool(name, value), false);
+			return SetProperty(name, value, false);
 		}
 
-
 		public Property SetBase(string name, Property property) {
-			return SetProperty(name, property, true);
+			return SetProperty(name, property.ObjectValue, true);
 		}
 
 		public Property SetBase(string name, string value) {
-			return SetProperty(name, Property.CreateString(name, value), true);
+			return SetProperty(name, value, true);
 		}
 
 		public Property SetBase(string name, int value) {
-			return SetProperty(name, Property.CreateInt(name, value), true);
+			return SetProperty(name, value, true);
 		}
 
 		public Property SetBase(string name, float value) {
-			return SetProperty(name, Property.CreateFloat(name, value), true);
+			return SetProperty(name, value, true);
 		}
 
 		public Property SetBase(string name, bool value) {
-			return SetProperty(name, Property.CreateBool(name, value), true);
+			return SetProperty(name, value, true);
 		}
-		
 
-		//-----------------------------------------------------------------------------
-		// Property define
-		//-----------------------------------------------------------------------------
-		/*
+		public void SetDocumentation(string name, string readableName, string editorType,
+			string editorSubType, string category, string description, bool isEditable = true, bool isHidden = false)
+		{
+			SetDocumentation(name, new PropertyDocumentation(readableName,
+				editorType, editorSubType, category, description, isEditable, isHidden));
+		}
+
+		public void SetDocumentation(string name, PropertyDocumentation documentation) {
+			Property p = GetProperty(name, false);
+			if (p != null)
+				p.Documentation = documentation;
+		}
+				
 		// Set the given property ONLY it doesn't already exist.
 		// This can only create a new property.
 		// Returns true if the property was created.
-
-		public bool Define(string name, string value) {
-			if (!Exists(name)) {
-				map.Add(name, Property.CreateString(name, value));
-				return true;
-			}
-			return false;
-		}
-
-		public bool Define(string name, int value) {
-			if (!Exists(name)) {
-				map.Add(name, Property.CreateInt(name, value));
-				return true;
-			}
-			return false;
-		}
-
-		public bool Define(string name, float value) {
-			if (!Exists(name)) {
-				map.Add(name, Property.CreateFloat(name, value));
-				return true;
-			}
-			return false;
-		}
-
-		public bool Define(string name, bool value) {
-			if (!Exists(name)) {
-				map.Add(name, Property.CreateBool(name, value));
-				return true;
-			}
-			return false;
-		}
+		//public bool Define(string name, string value);
 		
-
-		//-----------------------------------------------------------------------------
-		// Property modify
-		//-----------------------------------------------------------------------------
-
 		// Set the value of the given property ONLY if it already exists.
 		// This can only modifiy existing property.
 		// Returns true if the property does exist.
-
-		public bool Modify(string name, string value) {
-			if (Exists(name)) {
-				map[name] = Property.CreateString(name, value);
-				return true;
-			}
-			return false;
-		}
-
-		public bool Modify(string name, int value) {
-			if (Exists(name)) {
-				map[name] = Property.CreateInt(name, value);
-				return true;
-			}
-			return false;
-		}
-
-		public bool Modify(string name, float value) {
-			if (Exists(name)) {
-				map[name] = Property.CreateFloat(name, value);
-				return true;
-			}
-			return false;
-		}
-
-		public bool Modify(string name, bool value) {
-			if (Exists(name)) {
-				map[name] = Property.CreateBool(name, value);
-				return true;
-			}
-			return false;
-		}
-		*/
+		//public bool Modify(string name, string value);
+		
 
 		//-----------------------------------------------------------------------------
-		// Static Methods
+		// Internal Methods
 		//-----------------------------------------------------------------------------
 		
-		// Create a Properties instance from the given list of properties.
-		public static Properties Create(params Property[] propertyList) {
-			Properties p = new Properties();
-			for (int i = 0; i < propertyList.Length; i++)
-				p.Add(propertyList[i]);
-			return p;
+		// Sets a propertiy's value, creating it if it doesn't already exist.
+		// This can modify an existing property or create a new property.
+		private Property SetProperty(string name, object value, bool setBase) {
+			if (setBase && baseProperties != null) {
+				// Set the property from the base properties and remove the
+				// now-redundant property from this properties' map.
+				baseProperties.SetProperty(name, value, false);
+				map.Remove(name);
+				return null;
+			}
+			else {
+				// Check if the value we are setting is redundant.
+				bool redundantValue = false;
+				Property baseProperty = null;
+				if (baseProperties != null) {
+					baseProperty = baseProperties.GetProperty(name, true);
+					if (baseProperty != null && baseProperty.ObjectValue.Equals(value))
+						redundantValue = true;
+				}
+
+				// Set the property value.
+				if (map.ContainsKey(name)) {
+					if (redundantValue) {
+						// Remove the redundant property.
+						map.Remove(name);
+						return null;
+					}
+					else {
+						// Set an existing property's value.
+						Property p = map[name];
+						p.ObjectValue = value;
+						return p;
+					}
+				}
+				else if (!redundantValue) {
+					// Create a new property.
+					Property p = Property.Create(name, value);
+					p.Properties = this;
+					p.BaseProperty = baseProperty;
+					map[name] = p;
+					return p;
+				}
+			}
+			return null;
+		}
+
+		// Link up our properties with their corresponding base properties.
+		private void ConnectBaseProperties() {
+			Property[] properties = map.Values.ToArray();
+
+			// Link properties with base properties.
+			foreach (Property property in properties) {
+				Property baseProperty = baseProperties.GetProperty(property.Name, true);
+				property.BaseProperty = baseProperty;
+
+				// Remove a redundant property (one that is equal to its base value).
+				if (baseProperty != null && property.EqualsValue(baseProperty))
+					map.Remove(property.Name);
+			}
 		}
 
 
@@ -543,31 +415,31 @@ namespace ZeldaOracle.Common.Scripting {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		// Get the number of properties.
-		public int Count {
-			get { return map.Count; }
-		}
-
-		// Get the map of properties.
-		public Dictionary<string, Property> PropertyMap {
-			get { return map; }
-		}
-		
-		// Get the property with the given name.
-		public Property this[string propertyName] {
-			get { return map[propertyName]; }
-		}
-		
-		// Get the base properties.
-		public Properties BaseProperties {
-			get { return baseProperties; }
-			set { baseProperties = value; }
-		}
-
+		// The object that has these properties.
 		public IPropertyObject PropertyObject {
 			get { return propertyObject; }
 			set { propertyObject = value; }
 		}
 
+		// Get the number of properties.
+		public int Count {
+			get { return map.Count; }
+		}
+		/*
+		// Get the underlying map of properties.
+		public Dictionary<string, Property> PropertyMap {
+			get { return map; }
+		}*/
+		/*
+		// Get the property with the given name.
+		public Property this[string propertyName] {
+			get { return map[propertyName]; }
+		}*/
+		
+		// Get the base properties.
+		public Properties BaseProperties {
+			get { return baseProperties; }
+			set { baseProperties = value; ConnectBaseProperties(); }
+		}
 	}
 }

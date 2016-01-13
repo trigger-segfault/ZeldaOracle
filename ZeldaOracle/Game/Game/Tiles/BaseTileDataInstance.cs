@@ -23,8 +23,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public BaseTileDataInstance() {
 			room		= null;
 			tileData	= null;
-			properties	= new Properties();
-			properties.PropertyObject = this;
+			properties	= new Properties(this);
 		}
 
 		public BaseTileDataInstance(BaseTileData tileData) {

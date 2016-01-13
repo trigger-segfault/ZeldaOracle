@@ -61,6 +61,8 @@ namespace ZeldaOracle.Common.Scripting {
 		private PropertyAction action;
 		// The properties containing this property.
 		private Properties properties;
+		// The base property that this property modifies.
+		private Property baseProperty;
 
 		
 		//-----------------------------------------------------------------------------
@@ -77,7 +79,8 @@ namespace ZeldaOracle.Common.Scripting {
 			this.documentation	= null;
 			this.action			= null;
 			this.properties		= null;
-			
+			this.baseProperty	= null;
+
 			// Add the property action.
 			if (Resources.ExistsResource<PropertyAction>(name))
 				this.action = Resources.GetResource<PropertyAction>(name);
@@ -93,6 +96,7 @@ namespace ZeldaOracle.Common.Scripting {
 			documentation	= null;
 			action			= copy.action;
 			properties		= null;
+			baseProperty	= null;
 
 			if (copy.firstChild != null)
 				firstChild = new Property(copy.firstChild);
@@ -133,21 +137,29 @@ namespace ZeldaOracle.Common.Scripting {
 
 		// Find the root that this property is a modification of.
 		public Property GetRootProperty() {
-			if (properties.BaseProperties == null)
-				return this;
-			return properties.GetRootProperty(name);
+			Property p = this;
+			while (p.baseProperty != null)
+				p = p.baseProperty;
+			return p;
 		}
 
 		// Get the root documentation for this property.
 		public PropertyDocumentation GetRootDocumentation() {
-			return GetRootProperty().Documentation;
+			return GetDocumentation(true);
+		}
+
+		public PropertyDocumentation GetDocumentation(bool acceptBase = true) {
+			Property p = this;
+			while (acceptBase && p.documentation == null && p.baseProperty != null)
+				p = p.baseProperty;
+			return p.documentation;
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Mutators
 		//-----------------------------------------------------------------------------
-
+		/*
 		// Set the value of this property by another property.
 		// NOTE: This won't work with lists.
 		public void SetValue(Property other) {
@@ -184,6 +196,7 @@ namespace ZeldaOracle.Common.Scripting {
 		public void SetValue(string value) {
 			StringValue = value;
 		}
+		*/
 
 		// Create the documentation for this property.
 		public Property SetDocumentation(string readableName, string editorType, string editorSubType, string category,
@@ -257,6 +270,19 @@ namespace ZeldaOracle.Common.Scripting {
 			Property p = new Property(name, PropertyType.Boolean);
 			p.objectValue = value;
 			return p;
+		}
+		
+		// Create a boolean property with the given value.
+		public static Property Create(string name, object value) {
+			if (value is int)
+				return Property.CreateInt(name, (int) value);
+			if (value is float)
+				return Property.CreateFloat(name, (float) value);
+			if (value is bool)
+				return Property.CreateBool(name, (bool) value);
+			if (value is string)
+				return Property.CreateString(name, (string) value);
+			return null;
 		}
 
 
@@ -373,6 +399,11 @@ namespace ZeldaOracle.Common.Scripting {
 		public Properties Properties {
 			get { return properties; }
 			set { properties = value; }
+		}
+
+		public Property BaseProperty {
+			get { return baseProperty; }
+			set { baseProperty = value; }
 		}
 	}
 }

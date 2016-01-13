@@ -177,10 +177,11 @@ namespace ZeldaOracle.Common.Scripts {
 					string name = param.GetString(1);
 
 					if (String.Compare(param.GetString(0), "hide", StringComparison.CurrentCultureIgnoreCase) == 0) {
-						tileData.Properties[name].Documentation.IsHidden = true;
+						// TODO: this
+						//tileData.Properties.GetProperty(name).Documentation.IsHidden = true;
 					}
 					else if (String.Compare(param.GetString(0), "show", StringComparison.CurrentCultureIgnoreCase) == 0) {
-						tileData.Properties[name].Documentation.IsHidden = false;
+						//tileData.Properties.GetProperty(name).Documentation.IsHidden = false;
 					}
 					else {
 
@@ -220,7 +221,7 @@ namespace ZeldaOracle.Common.Scripts {
 						}
 
 						if (property != null)
-							tileData.Properties.Add(property);
+							tileData.Properties.Set(property.Name, property);
 					}
 				}
 			});
@@ -228,7 +229,7 @@ namespace ZeldaOracle.Common.Scripts {
 			AddTilesetCommand("Event", delegate(CommandParam parameters) {
 				Property property = Property.CreateString(parameters.GetString(0), "");
 				property.SetDocumentation(parameters.GetString(1), "script", "", "Events", parameters.GetString(2), true, false);
-				tileData.Properties.Add(property);
+				tileData.Properties.Set(property.Name, property);
 				
 				// Create the event's script parameter list.
 				CommandParam paramList = parameters[3];
