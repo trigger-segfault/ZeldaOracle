@@ -99,7 +99,8 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 		
 		public Point2I Size {
-			get { return tileData.Size; }
+			get { return properties.GetPoint("size", Point2I.One); }
+			set { properties.Set("size", value); }
 		}
 
 		public SpriteAnimation Sprite {

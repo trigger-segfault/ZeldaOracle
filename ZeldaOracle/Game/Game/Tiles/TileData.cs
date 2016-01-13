@@ -12,7 +12,7 @@ namespace ZeldaOracle.Game.Tiles {
 	public class TileData : BaseTileData {
 
 		private SpriteAnimation[]	spriteList;
-		private Point2I				size;
+		//private Point2I				size;
 		private SpriteAnimation		spriteAsObject;
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
 		
@@ -23,11 +23,12 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public TileData() {
 			spriteList			= new SpriteAnimation[0];
-			size				= Point2I.One;
+			//size				= Point2I.One;
 			spriteAsObject		= new SpriteAnimation();
 			breakAnimation		= null;
 
 			// General.
+			properties.SetGeneric("size", Point2I.One);
 			properties.Set("flags", (int) TileFlags.Default);
 			properties.Set("solidity", (int) TileSolidType.NotSolid);
 			properties.Set("collision_model", "");
@@ -58,7 +59,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public TileData(TileData copy) : base(copy) {
-			size				= copy.size;
+			//size				= copy.size;
 			spriteAsObject		= new SpriteAnimation(copy.spriteAsObject);
 			breakAnimation		= copy.breakAnimation;
 			spriteList			= new SpriteAnimation[copy.spriteList.Length];
@@ -71,7 +72,7 @@ namespace ZeldaOracle.Game.Tiles {
 			base.Clone(copy);
 			if (copy is TileData) {
 				TileData copyTileData = (TileData) copy;
-				size				= copyTileData.size;
+				//size				= copyTileData.size;
 				spriteAsObject		= new SpriteAnimation(copyTileData.spriteAsObject);
 				breakAnimation		= copyTileData.breakAnimation;
 				events				= new ObjectEventCollection(copyTileData.events);
@@ -116,8 +117,10 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public Point2I Size {
-			get { return size; }
-			set { size = value; }
+			get { return properties.Get<Point2I>("size"); }
+			set { properties.SetGeneric("size", value); }
+			//get { return size; }
+			//set { size = value; }
 		}
 
 		public TileFlags Flags {

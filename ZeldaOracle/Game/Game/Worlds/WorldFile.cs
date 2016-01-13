@@ -319,6 +319,9 @@ namespace ZeldaOracle.Game.Worlds {
 			else if (type == PropertyType.String) {
 				return Property.CreateString(name, ReadString(reader));
 			}
+			if (type == PropertyType.Point) {
+				return Property.Create(name, new Point2I(reader.ReadInt32(), reader.ReadInt32()));
+			}
 			else if (type == PropertyType.List) {
 				int count = reader.ReadInt32();
 				Property list = Property.CreateList(name);
@@ -688,6 +691,10 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 			else if (property.Type == PropertyType.String) {
 				WriteString(writer, property.StringValue);
+			}
+			else if (property.Type == PropertyType.Point) {
+				writer.Write(((Point2I) property.ObjectValue).X);
+				writer.Write(((Point2I) property.ObjectValue).Y);
 			}
 			else if (property.Type == PropertyType.List) {
 				writer.Write((int) property.Count);

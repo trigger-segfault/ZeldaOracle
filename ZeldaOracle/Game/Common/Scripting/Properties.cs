@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Content;
+using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Scripting {
 
@@ -182,6 +183,16 @@ namespace ZeldaOracle.Common.Scripting {
 		public bool GetBoolean(string name) {
 			return GetProperty(name, true).BoolValue;
 		}
+		
+		// Get a boolean property value.
+		public Point2I GetPoint(string name) {
+			return (Point2I) GetProperty(name, true).ObjectValue;
+		}
+		
+		// Get a generic property value.
+		public T Get<T>(string name) {
+			return (T) GetProperty(name, true).ObjectValue;
+		}
 
 
 		//-----------------------------------------------------------------------------
@@ -198,18 +209,12 @@ namespace ZeldaOracle.Common.Scripting {
 
 		// Get a string property value with a default value fallback.
 		public string GetString(string name, string defaultValue) {
-			Property p = GetProperty(name, true);
-			if (p != null)
-				return p.StringValue;
-			return defaultValue;
+			return Get<string>(name, defaultValue);
 		}
 		
 		// Get an integer property value with a default value fallback.
 		public int GetInteger(string name, int defaultValue) {
-			Property p = GetProperty(name, true);
-			if (p != null)
-				return p.IntValue;
-			return defaultValue;
+			return Get<int>(name, defaultValue);
 		}
 		
 		// Get an enum property value with a default value fallback.
@@ -222,17 +227,24 @@ namespace ZeldaOracle.Common.Scripting {
 		
 		// Get a float property value with a default value fallback.
 		public float GetFloat(string name, float defaultValue) {
-			Property p = GetProperty(name, true);
-			if (p != null)
-				return p.FloatValue;
-			return defaultValue;
+			return Get<float>(name, defaultValue);
 		}
 		
 		// Get a boolean property value with a default value fallback.
 		public bool GetBoolean(string name, bool defaultValue) {
+			return Get<bool>(name, defaultValue);
+		}
+		
+		// Get a point property value with a default value fallback.
+		public Point2I GetPoint(string name, Point2I defaultValue) {
+			return Get<Point2I>(name, defaultValue);
+		}
+		
+		// Get a generic property value with a default value fallback.
+		public T Get<T>(string name, T defaultValue) {
 			Property p = GetProperty(name, true);
 			if (p != null)
-				return p.BoolValue;
+				return (T) p.ObjectValue;
 			return defaultValue;
 		}
 
@@ -298,6 +310,14 @@ namespace ZeldaOracle.Common.Scripting {
 		}
 		
 		public Property Set(string name, bool value) {
+			return SetProperty(name, value, false);
+		}
+		
+		public Property Set(string name, Point2I value) {
+			return SetProperty(name, value, false);
+		}
+		
+		public Property SetGeneric(string name, object value) {
 			return SetProperty(name, value, false);
 		}
 

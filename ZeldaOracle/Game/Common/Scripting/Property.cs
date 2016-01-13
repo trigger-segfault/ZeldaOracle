@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Content;
+using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Common.Scripting {
@@ -17,7 +18,8 @@ namespace ZeldaOracle.Common.Scripting {
 		String,
 		Integer,
 		Float,
-		Boolean
+		Boolean,
+		Point,
 	}
 
 	public class PropertyValue {
@@ -274,15 +276,39 @@ namespace ZeldaOracle.Common.Scripting {
 		
 		// Create a boolean property with the given value.
 		public static Property Create(string name, object value) {
-			if (value is int)
-				return Property.CreateInt(name, (int) value);
-			if (value is float)
-				return Property.CreateFloat(name, (float) value);
-			if (value is bool)
-				return Property.CreateBool(name, (bool) value);
-			if (value is string)
-				return Property.CreateString(name, (string) value);
+			Property p = new Property(name, TypeToPropertyType(value.GetType()));
+			p.objectValue = value;
+			return p;
+		}
+
+		// Convert a PropertyType to a System.Type.
+		public static Type PropertyTypeToType(PropertyType propertyType) {
+			if (propertyType == PropertyType.String)
+				return typeof(string);
+			if (propertyType == PropertyType.Integer)
+				return typeof(int);
+			if (propertyType == PropertyType.Float)
+				return typeof(float);
+			if (propertyType == PropertyType.Boolean)
+				return typeof(bool);
+			if (propertyType == PropertyType.Point)
+				return typeof(Point2I);
 			return null;
+		}
+		
+		// Convert a System.Type to a PropertyType.
+		public static PropertyType TypeToPropertyType(Type type) {
+			if (type == typeof(string))
+				return PropertyType.String;
+			if (type == typeof(int))
+				return PropertyType.Integer;
+			if (type == typeof(float))
+				return PropertyType.Float;
+			if (type == typeof(bool))
+				return PropertyType.Boolean;
+			if (type == typeof(Point2I))
+				return PropertyType.Point;
+			return PropertyType.Integer;
 		}
 
 

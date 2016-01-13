@@ -17,7 +17,6 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public TilePlatform() {
-			Size = new Point2I(2, 2);
 		}
 
 

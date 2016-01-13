@@ -163,6 +163,10 @@ namespace ZeldaEditor.ObjectsEditor {
 			checkBoxStartDisabled.Checked	= !propertyObject.Properties.GetBoolean("enabled", true);
 			checkBoxDropFromCeiling.Checked	= propertyObject.Properties.GetBoolean("spawn_from_ceiling", false);
 			checkBoxPoofEffect.Checked		= propertyObject.Properties.GetBoolean("spawn_poof_effect", false);
+			
+			// Size.
+			numberBoxWidth.Value = tile.Size.X;
+			numberBoxHeight.Value = tile.Size.Y;
 
 			if (tile != null) {
 				// Solid type.
@@ -225,6 +229,9 @@ namespace ZeldaEditor.ObjectsEditor {
 			propertyObject.Properties.Exists("id");
 			propertyObject.Properties.Set("id", textBoxId.Text);
 			
+			// Size.
+			tile.Size = new Point2I((int) numberBoxWidth.Value, (int) numberBoxHeight.Value);
+
 			// Spawn Type.
 			propertyObject.Properties.Set("enabled", !checkBoxStartDisabled.Checked);
 			propertyObject.Properties.Set("spawn_from_ceiling", checkBoxDropFromCeiling.Checked);

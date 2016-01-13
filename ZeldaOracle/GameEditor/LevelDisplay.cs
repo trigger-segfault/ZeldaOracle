@@ -214,18 +214,25 @@ namespace ZeldaEditor {
 		
 		// Draw a tile.
 		private void DrawTile(Graphics2D g, TileDataInstance tile, Color color) {
-			Point2I position = tile.Location * GameSettings.TILE_SIZE;
+			Point2I size = tile.Size;
+			
+			// Draw the tile once per point within its size.
+			for (int y = 0; y < size.Y; y++) {
+				for (int x = 0; x < size.X; x++) {
+					Point2I position = (tile.Location + new Point2I(x, y)) * GameSettings.TILE_SIZE;
 
-			// Draw tile sprite/animation.
-			if (!tile.CurrentSprite.IsNull)
-				g.DrawAnimation(tile.CurrentSprite, tile.Room.Zone.ImageVariantID, editorControl.Ticks, position, color);
+					// Draw tile sprite/animation.
+					if (!tile.CurrentSprite.IsNull)
+						g.DrawAnimation(tile.CurrentSprite, tile.Room.Zone.ImageVariantID, editorControl.Ticks, position, color);
 
-			// Draw rewards.
-			if (editorControl.ShowRewards && tile.Properties.Exists("reward") &&
-				editorControl.RewardManager.HasReward(tile.Properties.GetString("reward")))
-			{
-				Animation anim = editorControl.RewardManager.GetReward(tile.Properties.GetString("reward")).Animation;
-				g.DrawAnimation(anim, editorControl.Ticks, position, color);
+					// Draw rewards.
+					if (editorControl.ShowRewards && tile.Properties.Exists("reward") &&
+						editorControl.RewardManager.HasReward(tile.Properties.GetString("reward")))
+					{
+						Animation anim = editorControl.RewardManager.GetReward(tile.Properties.GetString("reward")).Animation;
+						g.DrawAnimation(anim, editorControl.Ticks, position, color);
+					}
+				}
 			}
 		}
 

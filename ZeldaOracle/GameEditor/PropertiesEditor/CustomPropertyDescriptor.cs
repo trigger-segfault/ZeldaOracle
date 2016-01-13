@@ -79,14 +79,7 @@ namespace ZeldaEditor.PropertiesEditor {
 		public override void SetValue(object component, object value) {
 			// Set the appropriate value.
 			Property property = Property;
-			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.String)
-				modifiedProperties.Set(propertyName, (string) value);
-			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Integer)
-				modifiedProperties.Set(propertyName, (int) value);
-			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Float)
-				modifiedProperties.Set(propertyName, (float) value);
-			if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Boolean)
-				modifiedProperties.Set(propertyName, (bool) value);
+			modifiedProperties.SetGeneric(propertyName, value);
 		}
 
 
@@ -144,18 +137,7 @@ namespace ZeldaEditor.PropertiesEditor {
 		}
 			
 		public override Type PropertyType {
-			get {
-				Property property = Property;
-				if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.String)
-					return typeof(string);
-				if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Integer)
-					return typeof(int);
-				if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Float)
-					return typeof(float);
-				if (property.Type == ZeldaOracle.Common.Scripting.PropertyType.Boolean)
-					return typeof(bool);
-				return null;
-			}
+			get { return Property.PropertyTypeToType(Property.Type); }
 		}
 
 
