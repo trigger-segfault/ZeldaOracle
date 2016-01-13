@@ -130,9 +130,7 @@ namespace ZeldaEditor.TreeViews {
 		public void RefreshScripts() {
 			scriptsNode.Nodes.Clear();
 			
-			foreach (KeyValuePair<string, Script> pair in editorControl.World.Scripts) {
-				Script script = pair.Value;
-
+			foreach (Script script in editorControl.World.Scripts.Values) {
 				if (!script.IsHidden) {
 					ScriptTreeNode scriptNode = new ScriptTreeNode(script);
 					scriptNode.ContextMenuStrip = editorControl.EditorForm.contextMenuScriptNode;
@@ -143,6 +141,12 @@ namespace ZeldaEditor.TreeViews {
 
 		public void RefreshDungeons() {
 			dungeonsNode.Nodes.Clear();
+			
+			foreach (Dungeon dungeon in editorControl.World.Dungeons.Values) {
+				DungeonTreeNode dungeonNode = new DungeonTreeNode(dungeon);
+				//dungeonNode.ContextMenuStrip = editorControl.EditorForm.contextMenuDungeonNode;
+				dungeonsNode.Nodes.Add(dungeonNode);
+			}
 		}
 		
 		public void RefreshAreas() {

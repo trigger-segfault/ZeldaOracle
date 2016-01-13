@@ -6,6 +6,7 @@ using System.Text;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.Custom;
 using ZeldaOracle.Common.Content;
 
 namespace ZeldaOracle.Game.Worlds {
@@ -34,20 +35,22 @@ namespace ZeldaOracle.Game.Worlds {
 			this.properties	= new Properties();
 			this.properties.PropertyObject = this;
 			this.properties.BaseProperties = new Properties();
-			
-			this.properties.BaseProperties.Set("id", "")
+
+			properties.BaseProperties.Set("id", "")
 				.SetDocumentation("ID", "", "", "", "The id used to refer to this room.", true, false);
-			this.properties.BaseProperties.Set("music", "")
+			properties.BaseProperties.Set("music", "")
 				.SetDocumentation("Music", "song", "", "", "The music to play in this room. Select none to choose the default music.", true, false);
-			this.properties.BaseProperties.Set("zone", "")
+			properties.BaseProperties.Set("zone", "")
 				.SetDocumentation("Zone", "zone", "", "", "The zone type for this room.", true, false);
 			
+			properties.BaseProperties.Set("discovered", false);
+
 			events.AddEvent("event_room_start", "Room Start", "Occurs when the room begins.");
-			this.properties.BaseProperties.Set("event_room_start", "")
+			properties.BaseProperties.Set("event_room_start", "")
 				.SetDocumentation("Room Start", "script", "", "", "Occurs when the room begins.");
 			
 			events.AddEvent("event_all_monsters_dead", "All Monsters Dead", "Occurs when all monsters are dead.");
-			this.properties.BaseProperties.Set("event_all_monsters_dead", "")
+			properties.BaseProperties.Set("event_all_monsters_dead", "")
 				.SetDocumentation("All Monsters Dead", "script", "", "", "Occurs when all monsters are dead.");
 
 			if (zone != null)
@@ -97,6 +100,16 @@ namespace ZeldaOracle.Game.Worlds {
 					}
 				}
 			}
+		}
+
+		public bool HasUnopenedTreasure() {
+			foreach (TileDataInstance tile in GetTiles()) {
+				if (tile.Type == typeof(TileChest) && !tile.Properties.GetBoolean("looted", false))
+					return true;
+				if (tile.Type == typeof(TileReward) && !tile.Properties.GetBoolean("looted", false))
+					return true;
+			}
+			return false;
 		}
 
 
@@ -224,6 +237,10 @@ namespace ZeldaOracle.Game.Worlds {
 			set { zone = value; }
 		}
 
+		public Dungeon Dungeon {
+			get { return level.Dungeon; }
+		}
+
 		public Properties Properties {
 			get { return properties; }
 			set {
@@ -234,6 +251,11 @@ namespace ZeldaOracle.Game.Worlds {
 		
 		public ObjectEventCollection Events {
 			get { return events; }
+		}
+		
+		public bool IsDiscovered {
+			get { return properties.GetBoolean("discovered", false); }
+			set { properties.Set("discovered", value); }
 		}
 	}
 }

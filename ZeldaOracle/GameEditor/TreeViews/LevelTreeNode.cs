@@ -25,6 +25,7 @@ namespace ZeldaEditor.TreeViews {
 
 		public override void Open(EditorControl editorControl) {
 			editorControl.OpenLevel(level);
+			editorControl.OpenObjectProperties(level);
 		}
 
 		public override void Delete(EditorControl editorControl) {

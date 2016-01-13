@@ -13,6 +13,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		private bool isPressed;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
@@ -27,6 +28,7 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		public override void OnInitialize() {
 			isPressed = false;
+			Properties.SetBase("sprite_index", (isPressed ? 1 : 0));
 		}
 
 		public override void Update() {
@@ -50,10 +52,11 @@ namespace ZeldaOracle.Game.Tiles {
 				}
 			}
 
-			Properties.SetBase("sprite_index", (isDown ? 1 : 0));
-
-			if (isPressed != isDown) {
+			// Check if the pressed state has changed.
+			bool releasable = Properties.GetBoolean("releasable", true);
+			if (isPressed != isDown && (isDown || releasable)) {
 				isPressed = isDown;
+				Properties.SetBase("sprite_index", (isPressed ? 1 : 0));
 
 				if (isPressed) {
 					GameControl.ExecuteScript(Properties.GetString("on_press", ""), this);

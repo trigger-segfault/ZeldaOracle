@@ -39,9 +39,8 @@ namespace ZeldaEditor {
 
 		private Dictionary<Keys, HotKeyAction> hotKeyCommands;
 
-		FormsControl activeControl;
+		private FormsControl activeControl;
 
-		//private WorldTreeView worldTreeView;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -520,13 +519,24 @@ namespace ZeldaEditor {
 			editorControl.PlayerPlaceMode = buttonTestLevelPlace.Checked;
 		}
 
-		// Add Level...
+		// Add New Level...
 		private void addLevelToolStripMenuItem_Click(object sender, EventArgs e) {
-			using (LevelAddForm form = new LevelAddForm()) {
+			using (LevelAddForm form = new LevelAddForm(editorControl.World)) {
 				if (form.ShowDialog(this) == DialogResult.OK) {
 					Level level = new Level(form.LevelName, form.LevelWidth, form.LevelHeight,
 						form.LevelLayerCount, form.LevelRoomSize, form.LevelZone);
 					editorControl.AddLevel(level, true);
+				}
+			}
+		}
+		
+		// Add New Dungeon...
+		private void buttonAddDungeon_Click(object sender, EventArgs e) {
+			using (DungeonAddForm form = new DungeonAddForm(editorControl.World)) {
+				if (form.ShowDialog(this) == DialogResult.OK) {
+					Dungeon dungeon = form.CreateDungeon();
+					editorControl.World.AddDungeon(dungeon);
+					editorControl.RefreshWorldTreeView();
 				}
 			}
 		}
@@ -656,11 +666,6 @@ namespace ZeldaEditor {
 				Console.WriteLine("Triggers tab selected!");
 				levelDisplay.Parent = panelTriggersLevelDisplay;
 			}*/
-		}
-
-		// Create dungeon.
-		private void buttonAddDungeon_Click(object sender, EventArgs e) {
-
 		}
 
 

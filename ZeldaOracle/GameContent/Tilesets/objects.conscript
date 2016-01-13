@@ -62,8 +62,7 @@ END;
 
 TEMPTILE button;
 	TYPE		TileButton;
-	#PROPERTIES	(string, on_press, "", "On Press", "script", "Events", "When the button is pressed.", false),
-	#			(string, on_release, "", "On Release", "script", "Events", "When the button is released.", false);
+	PROPERTIES (boolean, releasable, true, "Releasable", "", "", "Can the button only be pressed, and not released?", false);
 	EVENT on_press, "On Press", "Occurs when the button is pressed.", (Button button);
 	EVENT on_release, "On Release", "Occurs when the button is released.", (Button button);
 END;

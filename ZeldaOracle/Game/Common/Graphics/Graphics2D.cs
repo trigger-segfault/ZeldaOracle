@@ -329,6 +329,10 @@ public class Graphics2D {
 		DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, position, depth);
 	}
 
+	public void DrawAnimation(AnimationPlayer animationPlayer, int variantID, Vector2F position, float depth = 0.0f) {
+		DrawAnimation(animationPlayer.SubStrip, variantID, animationPlayer.PlaybackTime, position, depth);
+	}
+
 
 	// Draw an animation during at the given time stamp and position.
 	public void DrawAnimation(Animation animation, float time, Vector2F position, Color color, float depth = 0.0f) {

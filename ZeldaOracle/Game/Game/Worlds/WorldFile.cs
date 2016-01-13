@@ -145,8 +145,6 @@ namespace ZeldaOracle.Game.Worlds {
 				ReadResourceList(reader, animations);
 				ReadResourceList(reader, tileData);
 				ReadResourceList(reader, eventTileData);
-				if (version == 2)
-					ReadScripts(reader, world);
 
 				// Read the world data.
 				ReadWorld(reader, world);
@@ -182,12 +180,28 @@ namespace ZeldaOracle.Game.Worlds {
 			// Read the world's properties.
 			ReadProperties(reader, world.Properties);
 			
-			// Read the world's levels.
+			// Read the dungeons.
+			int dungoenCount = reader.ReadInt32();
+			for (int i = 0; i < dungoenCount; i++) {
+				Dungeon dungeon = ReadDungeon(reader);
+				world.AddDungeon(dungeon);
+			}
+
+			// Read the levels.
 			int levelCount = reader.ReadInt32();
 			for (int i = 0; i < levelCount; i++) {
 				Level level = ReadLevel(reader);
-				world.Levels.Add(level);
+				world.AddLevel(level);
 			}
+			
+			// Read the scripts.
+			ReadScripts(reader, world);
+		}
+
+		private Dungeon ReadDungeon(BinaryReader reader) {
+			Dungeon dungeon = new Dungeon();
+			ReadProperties(reader, dungeon.Properties);
+			return dungeon;
 		}
 
 		private Level ReadLevel(BinaryReader reader) {
@@ -420,7 +434,6 @@ namespace ZeldaOracle.Game.Worlds {
 			// Write the level data to memory.
 			MemoryStream worldDataStream = new MemoryStream();
 			BinaryWriter worldDataWriter = new BinaryWriter(worldDataStream);
-			WriteScripts(worldDataWriter, world);
 			WriteWorld(worldDataWriter, world);
 			byte[] worldData = worldDataStream.GetBuffer();
 			int levelDataSize = (int) worldDataStream.Length;
@@ -561,10 +574,22 @@ namespace ZeldaOracle.Game.Worlds {
 			// Write the world's properties.
 			WriteProperties(writer, world.Properties);
 			
+			// Write the dungeons.
+			writer.Write(world.Dungeons.Count);
+			foreach (Dungeon dungeon in world.Dungeons.Values)
+				WriteDungeon(writer, dungeon);
+
 			// Write the level data.
 			writer.Write(world.Levels.Count);
 			for (int i = 0; i < world.Levels.Count; i++)
 				WriteLevel(writer, world.Levels[i]);
+			
+			// Write the scripts.
+			WriteScripts(writer, world);
+		}
+
+		private void WriteDungeon(BinaryWriter writer, Dungeon dungeon) {
+			WriteProperties(writer, dungeon.Properties);
 		}
 
 		private void WriteLevel(BinaryWriter writer, Level level) {

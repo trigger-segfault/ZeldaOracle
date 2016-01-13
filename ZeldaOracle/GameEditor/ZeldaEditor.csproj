@@ -67,6 +67,12 @@
     <Compile Include="Control\EditorGraphics.cs" />
     <Compile Include="Control\EditorResources.cs" />
     <Compile Include="Control\PropertyGridControl.cs" />
+    <Compile Include="DungeonAddForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DungeonAddForm.Designer.cs">
+      <DependentUpon>DungeonAddForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scripting\ScriptEditorCompiler.cs" />
     <Compile Include="Control\TileDrawModes.cs" />
     <Compile Include="ObjectsEditor\ObjectEditor.cs">
@@ -138,6 +144,7 @@
     <Compile Include="Tools\ToolSelection.cs" />
     <Compile Include="Tools\ToolPointer.cs" />
     <Compile Include="TreeViews\IWorldTreeViewNode.cs" />
+    <Compile Include="TreeViews\DungeonTreeNode.cs" />
     <Compile Include="TreeViews\WorldTreeNode.cs" />
     <Compile Include="TreeViews\ScriptTreeNode.cs" />
     <Compile Include="TreeViews\LevelTreeNode.cs" />
@@ -160,6 +167,9 @@
     <Compile Include="TreeViews\WorldTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <EmbeddedResource Include="DungeonAddForm.resx">
+      <DependentUpon>DungeonAddForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ObjectsEditor\ObjectEditor.resx">
       <DependentUpon>ObjectEditor.cs</DependentUpon>
     </EmbeddedResource>

@@ -68,7 +68,7 @@ namespace ZeldaOracle.Game.Control {
 			eventRoomTransitioning	= null;
 			entityCount				= 0;
 
-			dungeon = new Dungeon("dungeon1"); // TODO: remove this.
+			//dungeon = new Dungeon("dungeon1", "Spirit's Grave"); // TODO: remove this.
 		}
 		
 
@@ -321,6 +321,10 @@ namespace ZeldaOracle.Game.Control {
 			this.room			= room;
 			this.roomLocation	= room.Location;
 			this.level			= room.Level;
+			this.dungeon		= room.Dungeon;
+
+			// Discover the room.
+			room.IsDiscovered = true;
 
 			// Clear event tiles.
 			eventTiles.Clear();

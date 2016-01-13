@@ -201,6 +201,8 @@
     <Compile Include="Common\Translation\WrappedLetterString.cs" />
     <Compile Include="Game\Control\GameControl.cs" />
     <Compile Include="Game\Control\HUD.cs" />
+    <Compile Include="Game\Control\Maps\DungeonMapFloor.cs" />
+    <Compile Include="Game\Control\Maps\DungeonMapRoom.cs" />
     <Compile Include="Game\Control\Menus\CustomSlotItem.cs" />
     <Compile Include="Game\Control\Menus\MenuEssences.cs" />
     <Compile Include="Game\Control\Menus\MenuSecondaryItems.cs" />
@@ -208,7 +210,7 @@
     <Compile Include="Game\Control\Menus\Menu.cs" />
     <Compile Include="Game\Control\Menus\MenuWeapons.cs" />
     <Compile Include="Game\Control\Menus\InventoryMenu.cs" />
-    <Compile Include="Game\Control\Menus\ScreenDungeonMap.cs" />
+    <Compile Include="Game\Control\Maps\ScreenDungeonMap.cs" />
     <Compile Include="Game\Control\Menus\Slot.cs" />
     <Compile Include="Game\Control\Menus\ISlotConnection.cs" />
     <Compile Include="Game\Control\Menus\SlotGroup.cs" />

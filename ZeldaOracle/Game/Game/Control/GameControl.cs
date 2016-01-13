@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.Control.Maps;
 using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Debug;
@@ -272,14 +273,16 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public void OpenMapScreen() {
-			ScreenDungeonMap mapScreen = mapDungeon;
-			AudioSystem.PlaySound("UI/menu_open");
-			gameManager.QueueGameStates(
-				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, roomControl),
-				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, mapScreen),
-				mapScreen
-			);
-			mapScreen.OnOpen();
+			if (roomControl.Dungeon != null) {
+				ScreenDungeonMap mapScreen = mapDungeon;
+				AudioSystem.PlaySound("UI/menu_open");
+				gameManager.QueueGameStates(
+					new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, roomControl),
+					new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, mapScreen),
+					mapScreen
+				);
+				mapScreen.OnOpen();
+			}
 		}
 
 		public void CloseMapScreen() {

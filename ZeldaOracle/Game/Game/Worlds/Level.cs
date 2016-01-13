@@ -10,6 +10,7 @@ using ZeldaOracle.Game.Tiles.EventTiles;
 
 namespace ZeldaOracle.Game.Worlds {
 	public class Level : IPropertyObject {
+
 		private World		world;
 		private Point2I		roomSize;		// The size in tiles of each room in the level.
 		private int			roomLayerCount; // The number of tile layers for each room in the level.
@@ -34,15 +35,17 @@ namespace ZeldaOracle.Game.Worlds {
 			this.roomLayerCount = layerCount;
 			this.dimensions		= Point2I.Zero;
 			this.zone			= zone;
-			this.properties		= new Properties();
-			this.properties.PropertyObject = this;
-			this.properties.BaseProperties = new Properties();
 
-			this.properties.BaseProperties.Set("id", "")
+			properties = new Properties(this);
+			properties.BaseProperties = new Properties();
+
+			properties.BaseProperties.Set("id", "")
 				.SetDocumentation("ID", "", "", "", "The id used to refer to this level.", false, true);
 
-			this.properties.Set("id", name);
+			properties.BaseProperties.Set("dungeon", "");
 
+			properties.Set("id", name);
+			
 			Resize(new Point2I(width, height));
 		}
 
@@ -121,6 +124,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 		public World World {
 			get { return world; }
+			set { world = value; }
 		}
 		
 		public Room[,] Rooms {
@@ -178,6 +182,16 @@ namespace ZeldaOracle.Game.Worlds {
 		public string Id {
 			get { return properties.GetString("id"); }
 			set { properties.Set("id", value); }
+		}
+		
+		public Dungeon Dungeon {
+			get { return world.GetDungoen(properties.GetString("dungeon", "")); }
+			set {
+				if (value == null)
+					properties.GetString("dungeon", "");
+				else
+					properties.GetString("dungeon", value.ID);
+			}
 		}
 	}
 }

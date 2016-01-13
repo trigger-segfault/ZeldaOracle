@@ -158,6 +158,7 @@
 			this.buttonCancel.TabIndex = 7;
 			this.buttonCancel.Text = "Cancel";
 			this.buttonCancel.UseVisualStyleBackColor = true;
+			this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
 			// 
 			// buttonAdd
 			// 
@@ -167,6 +168,7 @@
 			this.buttonAdd.TabIndex = 6;
 			this.buttonAdd.Text = "Add";
 			this.buttonAdd.UseVisualStyleBackColor = true;
+			this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
 			// 
 			// numericLayerCount
 			// 

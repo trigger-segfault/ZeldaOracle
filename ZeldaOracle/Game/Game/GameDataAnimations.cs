@@ -14,6 +14,9 @@ namespace ZeldaOracle.Game {
 		// Animations
 		//-----------------------------------------------------------------------------
 
+		// UI animations.
+		public static Animation ANIM_UI_MAP_CURSOR;
+
 		// Tile animations.
 		public static Animation ANIM_TILE_WATER;
 		public static Animation ANIM_TILE_OCEAN;

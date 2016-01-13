@@ -165,5 +165,10 @@ namespace ZeldaOracle.Game.Tiles {
 				};
 			}
 		}
+
+		public TileSolidType SolidType {
+			get { return properties.GetEnum<TileSolidType>("solidity", TileSolidType.NotSolid); }
+			set { properties.Set("solidity", (int) value); }
+		}
 	}
 }

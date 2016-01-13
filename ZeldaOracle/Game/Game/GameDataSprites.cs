@@ -226,6 +226,56 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_UI_MAP_ARROW_DOWN;
 		public static Sprite SPR_UI_MAP_ARROW_UP;
 		
+		public static Sprite SPR_UI_MAP_ROOM_NONE;
+		public static Sprite SPR_UI_MAP_ROOM_RIGHT;
+		public static Sprite SPR_UI_MAP_ROOM_UP;
+		public static Sprite SPR_UI_MAP_ROOM_UP_RIGHT;
+		public static Sprite SPR_UI_MAP_ROOM_LEFT;
+		public static Sprite SPR_UI_MAP_ROOM_LEFT_RIGHT;
+		public static Sprite SPR_UI_MAP_ROOM_LEFT_UP;
+		public static Sprite SPR_UI_MAP_ROOM_LEFT_UP_RIGHT;
+		public static Sprite SPR_UI_MAP_ROOM_DOWN;
+		public static Sprite SPR_UI_MAP_ROOM_DOWN_RIGHT;
+		public static Sprite SPR_UI_MAP_ROOM_DOWN_UP;
+		public static Sprite SPR_UI_MAP_ROOM_DOWN_UP_RIGHT;
+		public static Sprite SPR_UI_MAP_ROOM_DOWN_LEFT;
+		public static Sprite SPR_UI_MAP_ROOM_DOWN_LEFT_RIGHT;
+		public static Sprite SPR_UI_MAP_ROOM_DOWN_LEFT_UP;
+		public static Sprite SPR_UI_MAP_ROOM_DOWN_LEFT_UP_RIGHT;
+		/*
+		public static Sprite SPR_UI_MAP_ROOM_LEFT;
+		public static Sprite SPR_UI_MAP_ROOM_UP;
+		public static Sprite SPR_UI_MAP_ROOM_DOWN;
+		
+		public static Sprite SPR_UI_MAP_ROOM_RIGHT_LEFT;
+		public static Sprite SPR_UI_MAP_ROOM_LEFT_LEFT;
+		public static Sprite SPR_UI_MAP_ROOM_UP_LEFT;
+		public static Sprite SPR_UI_MAP_ROOM_DOWN_LEFT;
+
+		public static Sprite SPR_UI_MAP_ROOM_RIGHT_RIGHT;
+		public static Sprite SPR_UI_MAP_ROOM_LEFT_RIGHT;
+		public static Sprite SPR_UI_MAP_ROOM_UP_RIGHT;
+		public static Sprite SPR_UI_MAP_ROOM_DOWN_RIGHT;
+
+
+		public static Sprite SPR_UI_MAP_ROOM_NO_CONNECTIONS;
+		public static Sprite SPR_UI_MAP_ROOM_DEAD_END_RIGHT;
+		public static Sprite SPR_UI_MAP_ROOM_DEAD_END_UP;
+		public static Sprite SPR_UI_MAP_ROOM_DEAD_END_LEFT;
+		public static Sprite SPR_UI_MAP_ROOM_DEAD_END_DOWN;
+		public static Sprite SPR_UI_MAP_ROOM_HALL_HORIZONTAL;
+		public static Sprite SPR_UI_MAP_ROOM_HALL_VERTICAL;
+		public static Sprite SPR_UI_MAP_ROOM_CORNER_TOP_RIGHT;
+		public static Sprite SPR_UI_MAP_ROOM_CORNER_TOP_LEFT;
+		public static Sprite SPR_UI_MAP_ROOM_CORNER_BOTTOM_RIGHT;
+		public static Sprite SPR_UI_MAP_ROOM_CORNER_BOTTOM_LEFT;
+		public static Sprite SPR_UI_MAP_ROOM_T_INTERSECTION_RIGHT;
+		public static Sprite SPR_UI_MAP_ROOM_T_INTERSECTION_UP;
+		public static Sprite SPR_UI_MAP_ROOM_T_INTERSECTION_LEFT;
+		public static Sprite SPR_UI_MAP_ROOM_T_INTERSECTION_DOWN;
+		public static Sprite SPR_UI_MAP_ROOM_4WAY_INTERSECTION;
+		*/
+
 		// Event tiles.
 		public static Sprite SPR_EVENT_TILE_WARP_STAIRS;
 		public static Sprite SPR_EVENT_TILE_WARP_TUNNEL;

@@ -276,6 +276,23 @@ SPRITE ui_map_floor_indicator			(11, 6); END;
 SPRITE ui_map_arrow_down				(4, 4); END;
 SPRITE ui_map_arrow_up					(5, 4); END;
 
+SPRITE ui_map_room_down_right			(6, 2); END;
+SPRITE ui_map_room_down_left_right		(7, 2); END;
+SPRITE ui_map_room_down_left			(8, 2); END;
+SPRITE ui_map_room_down					(9, 2); END;
+SPRITE ui_map_room_down_up_right		(6, 3); END;
+SPRITE ui_map_room_down_left_up_right	(7, 3); END;
+SPRITE ui_map_room_down_left_up			(8, 3); END;
+SPRITE ui_map_room_down_up				(9, 3); END;
+SPRITE ui_map_room_up_right				(6, 4); END;
+SPRITE ui_map_room_left_up_right		(7, 4); END;
+SPRITE ui_map_room_left_up				(8, 4); END;
+SPRITE ui_map_room_up					(9, 4); END;
+SPRITE ui_map_room_right				(6, 5); END;
+SPRITE ui_map_room_left_right			(7, 5); END;
+SPRITE ui_map_room_left					(8, 5); END;
+SPRITE ui_map_room_none					(9, 5); END;
+
 
 SPRITESHEET "menu_large";
 

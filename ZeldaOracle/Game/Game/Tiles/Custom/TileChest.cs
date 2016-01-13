@@ -54,6 +54,11 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 				Properties.Set("sprite_index", 0);
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
 		public bool IsLooted {
 			get { return Properties.GetBoolean("looted", false); }
 		}
