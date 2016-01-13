@@ -209,8 +209,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_EFFECT_BURN;
 		public static Animation ANIM_EFFECT_SOMARIA_BLOCK_CREATE;
 		public static Animation ANIM_EFFECT_SOMARIA_BLOCK_DESTROY;
-		public static Animation ANIM_EFFECT_BLOCK_APPEAR;
-		public static Animation ANIM_EFFECT_BLOCK_DISAPPEAR;
+		public static Animation ANIM_EFFECT_BLOCK_POOF;
 		public static Animation ANIM_EFFECT_COLOR_FLAME_RED;
 		public static Animation ANIM_EFFECT_COLOR_FLAME_BLUE;
 		public static Animation ANIM_EFFECT_COLOR_FLAME_GREEN;

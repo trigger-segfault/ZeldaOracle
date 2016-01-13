@@ -35,7 +35,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 				// Spawn the key and poof effects.
 				RoomControl.SpawnEntity(new EffectUsedItem(GameData.SPR_REWARD_SMALL_KEY), Center);
-				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_BLOCK_DISAPPEAR, DepthLayer.EffectSomariaBlockPoof), Center);
+				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_BLOCK_POOF, DepthLayer.EffectSomariaBlockPoof), Center);
 
 				// Destroy the tile forever.
 				BaseProperties.Set("enabled", false);

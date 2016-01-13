@@ -42,6 +42,7 @@ TEMPTILE chest;
 	TYPE		TileChest;
 	SOLID		block;
 	PROPERTIES
+		(integer, spawn_delay_after_poof, 16),
 		(string, reward, "rupees_1",
 			"Reward", "reward", "",
 			 "The reward contained inside the chest.", false),

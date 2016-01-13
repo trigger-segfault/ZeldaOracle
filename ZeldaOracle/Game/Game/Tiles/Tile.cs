@@ -376,14 +376,17 @@ namespace ZeldaOracle.Game.Tiles {
 			// Spawn drops.
 			if (spawnDrops)
 				SpawnDrop();
-						
+			
 			RoomControl.RemoveTile(this);
 		}
 
 		// Spawn a drop entity based on the random drop-list.
 		public Entity SpawnDrop() {
+			Entity dropEntity = null;
+			
 			// Choose a random drop (or none) from the list.
-			Entity dropEntity = dropList.CreateDropEntity(GameControl);
+			if (dropList != null)
+				dropEntity = dropList.CreateDropEntity(GameControl);
 
 			// Spawn the drop if there is one.
 			if (dropEntity != null) {
@@ -613,7 +616,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public SpriteAnimation CurrentSprite {
 			get {
-				if (tileData.SpriteList.Length > 0)
+				if (tileData != null && tileData.SpriteList.Length > 0)
 					return tileData.SpriteList[properties.GetInteger("sprite_index")];
 				return new SpriteAnimation();
 			}
@@ -659,7 +662,11 @@ namespace ZeldaOracle.Game.Tiles {
 		// Get the modified properties of the tile data from which this was created.
 		// Do not access these properties, only modify them.
 		public Properties BaseProperties {
-			get { return tileData.Properties; }
+			get {
+				if (tileData == null)
+					return properties;
+				return tileData.Properties;
+			}
 		}
 
 		public bool IsCoverableByBlock {
@@ -769,6 +776,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public Vector2F Velocity {
 			get { return velocity; }
+		}
+
+		public virtual TileDataInstance TileDataOwner {
+			get { return tileData; }
 		}
 
 

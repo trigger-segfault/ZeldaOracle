@@ -25,6 +25,7 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.Custom;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Game.Tiles.Internal;
 
 namespace ZeldaOracle.Game.Control {
 
@@ -170,7 +171,7 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public bool IsTileSpawned(TileDataInstance tileDataInstance) {
-			return GetTiles().Any(t => t.TileData == tileDataInstance);
+			return GetTiles().Any(t => t.TileDataOwner == tileDataInstance);
 		}
 
 		public bool IsEventTileSpawned(EventTileDataInstance eventTileDataInstance) {
@@ -203,21 +204,60 @@ namespace ZeldaOracle.Game.Control {
 			entities.Add(e);
 		}
 		
-		// Use this for placing tiles at runtime.
+		// Spawn a tile if it isn't already spawned.
+		public void SpawnTile(TileDataInstance tileData, bool staySpawned) {
+			if (!IsTileSpawned(tileData)) {
+				TileSpawnOptions spawnOptions = tileData.SpawnOptions;
+				if (spawnOptions.PoofEffect) {
+					Tile tile = new AppearingTile(tileData, spawnOptions);
+					PlaceTile(tile, tileData.Location, tileData.Layer);
+				}
+				else {
+					Tile tile = Tile.CreateTile(tileData);
+					PlaceTile(tile, tileData.Location, tileData.Layer);
+				}
+			}
+			if (staySpawned)
+				tileData.Properties.Set("enabled", true);
+		}
+		
+		// Spawn an event tile if it isn't already spawned.
+		public void SpawnEventTile(EventTileDataInstance eventTileData, bool staySpawned) {
+			if (!IsEventTileSpawned(eventTileData)) {
+				EventTile tile = EventTile.CreateEvent(eventTileData);
+				AddEventTile(tile);
+			}
+			if (staySpawned)
+				eventTileData.Properties.Set("enabled", true);
+		}
+		
+		// Place a tile in the tile grid at the given location and layer.
 		public void PlaceTile(Tile tile, Point2I location, int layer) {
 			PlaceTile(tile, location.X, location.Y, layer);
 		}
 		
-		// Use this for placing tiles at runtime.
-		public void PlaceTileOnHighestLayer(Tile tile, Point2I location) {
-			int layer = room.LayerCount - 1;
+		// Place a tile in highest empty layer at the given location.
+		// Returns true if there was an empty space to place the tile.
+		public bool PlaceTileOnHighestLayer(Tile tile, Point2I location) {
+			// Find the highest empty layer.
+			int layer = -1;
 			for (int i = room.LayerCount - 1; i >= 0; i--) {
-				if (tiles[location.X, location.Y, i] == null) {
-					layer = i;
-					break;
+				bool isLayerEmpty = true;
+				for (int x = 0; x < tile.Width && isLayerEmpty; x++) {
+					for (int y = 0; y < tile.Height && isLayerEmpty; y++) {
+						if (tiles[location.X + x, location.Y + y, i] != null)
+							isLayerEmpty = false;
+					}
 				}
+				if (isLayerEmpty)
+					layer = i;
 			}
+			if (layer < 0)
+				return false;
+
+			// Place the tile in that layer.
 			PlaceTile(tile, location, layer);
+			return true;
 		}
 
 		// Use this for placing tiles at runtime.
@@ -233,16 +273,15 @@ namespace ZeldaOracle.Game.Control {
 			tile.Initialize(this);
 		}
 
-		// Use this for placing tiles at runtime.
+		// Remove a tile from the room.
 		public void RemoveTile(Tile tile) {
-			// TODO: OnRemove?
-			for (int xx = 0; xx < tile.Width; xx++) {
-				for (int yy = 0; yy < tile.Height; yy++) {
-					tiles[tile.Location.X + xx, tile.Location.Y + yy, tile.Layer] = null;
+			for (int x = 0; x < tile.Width; x++) {
+				for (int y = 0; y < tile.Height; y++) {
+					tiles[tile.Location.X + x, tile.Location.Y + y, tile.Layer] = null;
 				}
 			}
-			tiles[tile.Location.X, tile.Location.Y, tile.Layer] = null;
 			tile.IsAlive = false;
+			// TODO: OnRemove?
 		}
 
 		// Put an event tile into the room.
@@ -253,25 +292,25 @@ namespace ZeldaOracle.Game.Control {
 
 		// Move the given tile to a new location.
 		public void MoveTile(Tile tile, Point2I newLocation, int newLayer) {
+			// Remove from old location.
 			for (int xx = 0; xx < tile.Width; xx++) {
 				for (int yy = 0; yy < tile.Height; yy++) {
 					tiles[tile.Location.X + xx, tile.Location.Y + yy, tile.Layer] = null;
 				}
 			}
+			// Place in new location.
 			for (int xx = 0; xx < tile.Width; xx++) {
 				for (int yy = 0; yy < tile.Height; yy++) {
 					tiles[newLocation.X + xx, newLocation.Y + yy, newLayer] = tile;
 				}
 			}
-			//tiles[tile.Location.X, tile.Location.Y, tile.Layer] = null;
-			//tiles[newLocation.X, newLocation.Y, newLayer] = tile;
 			tile.Location = newLocation;
 			tile.Layer = newLayer;
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Initialization
+		// Room Setup & Destroy
 		//-----------------------------------------------------------------------------
 		
 		public void BeginRoom() {
@@ -354,6 +393,11 @@ namespace ZeldaOracle.Game.Control {
 					entities[i].IsDestroyed = true;
 			}
 		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Room Transitions
+		//-----------------------------------------------------------------------------
 
 		// Request to transition to an adjacent room.
 		public void RequestRoomTransition(int transitionDirection) {
@@ -650,24 +694,12 @@ namespace ZeldaOracle.Game.Control {
 					yield return (tile as T);
 			}
 		}
-		
+
 		public void SpawnTile(string id, bool staySpawned = false) {
-			foreach (TileDataInstance tileData in Room.GetTiles(id)) {
-				if (!IsTileSpawned(tileData)) {
-					Tile tile = Tile.CreateTile(tileData);
-					PlaceTile(tile, tileData.Location, tileData.Layer);
-				}
-				if (staySpawned)
-					tileData.Properties.Set("enabled", true);
-			}
-			foreach (EventTileDataInstance eventTileData in Room.EventData) {
-				if (!IsEventTileSpawned(eventTileData)) {
-					EventTile tile = EventTile.CreateEvent(eventTileData);
-					AddEventTile(tile);
-				}
-				if (staySpawned)
-					eventTileData.Properties.Set("enabled", true);
-			}
+			foreach (TileDataInstance tileData in Room.GetTiles(id))
+				SpawnTile(tileData, staySpawned);
+			foreach (EventTileDataInstance eventTileData in Room.EventData)
+				SpawnEventTile(eventTileData, staySpawned);
 		}
 		
 		public IEnumerable<T> GetEntitiesOfType<T>() where T : class {

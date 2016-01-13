@@ -390,6 +390,8 @@
     <Compile Include="Game\Tiles\Custom\TileLockedBlock.cs" />
     <Compile Include="Game\Tiles\Custom\Doors\TileDoor.cs" />
     <Compile Include="Game\Tiles\Custom\TileButton.cs" />
+    <Compile Include="Game\Tiles\Internal\AppearingTile.cs" />
+    <Compile Include="Game\Tiles\Internal\PlaceHolderTile.cs" />
     <Compile Include="Game\Tiles\ITileset.cs" />
     <Compile Include="Game\Tiles\Custom\TileSomariaBlock.cs" />
     <Compile Include="Game\Tiles\BaseTileset.cs" />

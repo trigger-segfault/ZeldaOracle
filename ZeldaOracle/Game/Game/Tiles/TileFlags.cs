@@ -29,6 +29,12 @@ namespace ZeldaOracle.Game.Tiles {
 		Ledge,
 	}
 
+	public struct TileSpawnOptions {
+		public bool PoofEffect { get; set; }
+		public int SpawnDelayAfterPoof { get; set; }
+
+	}
+
 	[Flags]
 	public enum TileFlags : ulong {
 		None			= 0,

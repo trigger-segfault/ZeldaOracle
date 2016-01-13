@@ -45,6 +45,7 @@ namespace ZeldaOracle.Game.Tiles {
 			properties.Set("ledge_direction", Directions.Down);
 			properties.Set("spawn_from_ceiling", false);
 			properties.Set("spawn_poof_effect", false);
+			properties.Set("spawn_delay_after_poof", 31);
 
 			// Events.
 			properties.Set("on_move", "")

@@ -164,11 +164,12 @@ namespace ZeldaEditor.ObjectsEditor {
 			checkBoxDropFromCeiling.Checked	= propertyObject.Properties.GetBoolean("spawn_from_ceiling", false);
 			checkBoxPoofEffect.Checked		= propertyObject.Properties.GetBoolean("spawn_poof_effect", false);
 			
-			// Size.
-			numberBoxWidth.Value = tile.Size.X;
-			numberBoxHeight.Value = tile.Size.Y;
 
 			if (tile != null) {
+				// Size.
+				numberBoxWidth.Value = tile.Size.X;
+				numberBoxHeight.Value = tile.Size.Y;
+
 				// Solid type.
 				comboBoxSolidType.SelectedIndex = 0;
 				TileSolidType solidType = (TileSolidType) tile.Properties.GetInteger("solidity", (int) TileSolidType.NotSolid);
@@ -228,48 +229,50 @@ namespace ZeldaEditor.ObjectsEditor {
 			// Id.
 			propertyObject.Properties.Exists("id");
 			propertyObject.Properties.Set("id", textBoxId.Text);
-			
-			// Size.
-			tile.Size = new Point2I((int) numberBoxWidth.Value, (int) numberBoxHeight.Value);
 
 			// Spawn Type.
 			propertyObject.Properties.Set("enabled", !checkBoxStartDisabled.Checked);
 			propertyObject.Properties.Set("spawn_from_ceiling", checkBoxDropFromCeiling.Checked);
 			propertyObject.Properties.Set("spawn_poof_effect", checkBoxPoofEffect.Checked);
 			
-			// Solid Type.
-			TileSolidType solidType = ((ComboBoxItem<TileSolidType>) comboBoxSolidType.SelectedItem).Value;
-			tile.Properties.Set("solidity", (int) solidType);
+			if (tile != null) {
+				// Size.
+				tile.Size = new Point2I((int) numberBoxWidth.Value, (int) numberBoxHeight.Value);
+			
+				// Solid Type.
+				TileSolidType solidType = ((ComboBoxItem<TileSolidType>) comboBoxSolidType.SelectedItem).Value;
+				tile.Properties.Set("solidity", (int) solidType);
 
-			// Ledge direction
-			int ledgeDir = ((ComboBoxItem<int>) comboBoxLedgeDirection.SelectedItem).Value;
-			tile.Properties.Set("ledge_direction", ledgeDir);
+				// Ledge direction
+				int ledgeDir = ((ComboBoxItem<int>) comboBoxLedgeDirection.SelectedItem).Value;
+				tile.Properties.Set("ledge_direction", ledgeDir);
 
-			// Collision Model.
-			CollisionModel collisionModel = ((ComboBoxItem<CollisionModel>) comboBoxCollisionModel.SelectedItem).Value;
-			tile.CollisionModel = collisionModel;
+				// Collision Model.
+				CollisionModel collisionModel = ((ComboBoxItem<CollisionModel>) comboBoxCollisionModel.SelectedItem).Value;
+				tile.CollisionModel = collisionModel;
 
-			// Environment Type.
-			TileEnvironmentType envType = ((ComboBoxItem<TileEnvironmentType>) comboBoxMovementType.SelectedItem).Value;
-			tile.Properties.Set("environment_type", (int) envType);
+				// Environment Type.
+				TileEnvironmentType envType = ((ComboBoxItem<TileEnvironmentType>) comboBoxMovementType.SelectedItem).Value;
+				tile.Properties.Set("environment_type", (int) envType);
 
-			//  Interactions.
-			tile.SetFlags(TileFlags.Cuttable,		checkBoxCuttable.Checked);
-			tile.SetFlags(TileFlags.Pickupable,		checkBoxPickupable.Checked);
-			tile.SetFlags(TileFlags.Movable,		checkBoxMovable.Checked);
-			tile.SetFlags(TileFlags.Burnable,		checkBoxBurnable.Checked);
-			tile.SetFlags(TileFlags.Bombable,		checkBoxBombable.Checked);
-			tile.SetFlags(TileFlags.Digable,		checkBoxDigable.Checked);
-			tile.SetFlags(TileFlags.Boomerangable,	checkBoxBoomerangable.Checked);
-			tile.SetFlags(TileFlags.Switchable,		checkBoxSwitchable.Checked);
-			tile.SetFlags(TileFlags.SwitchStays,	!checkBoxBreakOnSwitch.Checked);
-			tile.Properties.Set("move_once", checkBoxMoveOnce.Checked);
-			tile.Properties.Set("cuttable_sword_level", comboBoxSwordLevel.SelectedIndex);
-			tile.Properties.Set("pickupable_bracelet_level", comboBoxBraceletLevel.SelectedIndex);
+				//  Interactions.
+				tile.SetFlags(TileFlags.Cuttable,		checkBoxCuttable.Checked);
+				tile.SetFlags(TileFlags.Pickupable,		checkBoxPickupable.Checked);
+				tile.SetFlags(TileFlags.Movable,		checkBoxMovable.Checked);
+				tile.SetFlags(TileFlags.Burnable,		checkBoxBurnable.Checked);
+				tile.SetFlags(TileFlags.Bombable,		checkBoxBombable.Checked);
+				tile.SetFlags(TileFlags.Digable,		checkBoxDigable.Checked);
+				tile.SetFlags(TileFlags.Boomerangable,	checkBoxBoomerangable.Checked);
+				tile.SetFlags(TileFlags.Switchable,		checkBoxSwitchable.Checked);
+				tile.SetFlags(TileFlags.SwitchStays,	!checkBoxBreakOnSwitch.Checked);
+				tile.Properties.Set("move_once", checkBoxMoveOnce.Checked);
+				tile.Properties.Set("cuttable_sword_level", comboBoxSwordLevel.SelectedIndex);
+				tile.Properties.Set("pickupable_bracelet_level", comboBoxBraceletLevel.SelectedIndex);
 
-			// Move direction
-			int moveDir = ((ComboBoxItem<int>) comboBoxMoveDirection.SelectedItem).Value;
-			tile.Properties.Set("move_direction", moveDir);
+				// Move direction
+				int moveDir = ((ComboBoxItem<int>) comboBoxMoveDirection.SelectedItem).Value;
+				tile.Properties.Set("move_direction", moveDir);
+			}
 
 			// Apply events.
 			eventsTab.ApplyChanges();

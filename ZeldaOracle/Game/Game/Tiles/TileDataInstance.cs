@@ -156,5 +156,14 @@ namespace ZeldaOracle.Game.Tiles {
 		public string Id {
 			get { return properties.GetString("id", ""); }
 		}
+
+		public TileSpawnOptions SpawnOptions {
+			get {
+				return new TileSpawnOptions() {
+					PoofEffect = properties.GetBoolean("spawn_poof_effect", false),
+					SpawnDelayAfterPoof = properties.GetInteger("spawn_delay_after_poof", 31),
+				};
+			}
+		}
 	}
 }
