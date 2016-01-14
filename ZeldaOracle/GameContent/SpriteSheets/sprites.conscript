@@ -119,6 +119,8 @@ SPRITE tile_bridge_v,				(6, 9); END;
 SPRITE tile_color_cube_slot,		(7, 9); END;
 SPRITE tile_cracked_floor,			(8, 9); END;
 SPRITE tile_pit,					(9, 9); END;
+SPRITE tile_regrowable_plant_cut	(5, 2); END;
+SPRITE tile_regrowable_plant_grown	(4, 3); END;
 
 
 #==============================================================

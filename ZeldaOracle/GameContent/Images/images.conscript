@@ -41,6 +41,7 @@ IMAGE items_large;
 
 IMAGE zoneset;
 	VARIANT summer			"Tiles/zoneset";
+	VARIANT present			"Tiles/zoneset_present";
 	VARIANT graveyard		"Tiles/zoneset_graveyard";
 	VARIANT forest			"Tiles/zoneset_forest";
 	VARIANT interior		"Tiles/zoneset_interior";

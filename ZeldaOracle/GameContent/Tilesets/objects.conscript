@@ -95,8 +95,9 @@ END;
 
 # Plant
 TILE (1, 0);
-	SOLID		block;
-	FLAGS		Cuttable, Boomerangable;
+	TYPE		TileRegrowingPlant;
+	MODEL		block;
+	FLAGS		Cuttable, Bombable;
 	BREAKANIM	effect_leaves;
 END;
 

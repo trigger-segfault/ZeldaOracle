@@ -377,7 +377,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		// Break the tile, destroying it.
-		public void Break(bool spawnDrops) {
+		public virtual void Break(bool spawnDrops) {
 			// Spawn the break effect.
 			if (breakAnimation != null) {
 				Effect breakEffect = new Effect(breakAnimation, DepthLayer.EffectTileBreak);
@@ -388,9 +388,9 @@ namespace ZeldaOracle.Game.Tiles {
 			if (spawnDrops)
 				SpawnDrop();
 			
+			// Destroy the tile.
 			if (properties.GetBoolean("disable_on_destroy", false))
 				Properties.SetBase("enabled", false);
-
 			RoomControl.RemoveTile(this);
 		}
 

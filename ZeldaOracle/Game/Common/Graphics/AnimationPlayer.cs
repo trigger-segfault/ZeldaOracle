@@ -82,7 +82,7 @@ namespace ZeldaOracle.Common.Graphics {
 					else
 						timer = 0.0f;
 				}
-				else if (subStrip.LoopMode == LoopMode.Reset && timer > subStrip.Duration) {
+				else if (subStrip.LoopMode == LoopMode.Clamp && timer > subStrip.Duration) {
 					// Hang on the last frame.
 					timer = subStrip.Duration;
 				}	

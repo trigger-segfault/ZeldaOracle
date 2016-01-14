@@ -16,7 +16,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private Point2I							location;	// Location within the level.
 		private TileDataInstance[,,]			tileData;	// 3D grid of tile data (x, y, layer)
 		private List<EventTileDataInstance>		eventData;
-		private Zone							zone;
+		//private Zone							zone;
 		private Properties						properties;
 		private ObjectEventCollection			events;
 
@@ -30,7 +30,7 @@ namespace ZeldaOracle.Game.Worlds {
 			this.location	= new Point2I(x, y);
 			this.tileData	= new TileDataInstance[level.RoomSize.X, level.RoomSize.Y, level.RoomLayerCount];
 			this.eventData	= new List<EventTileDataInstance>();
-			this.zone		= zone;
+			//this.zone		= zone;
 			this.events		= new ObjectEventCollection();
 			this.properties	= new Properties();
 			this.properties.PropertyObject = this;
@@ -55,8 +55,8 @@ namespace ZeldaOracle.Game.Worlds {
 			properties.BaseProperties.Set("event_all_monsters_dead", "")
 				.SetDocumentation("All Monsters Dead", "script", "", "", "Occurs when all monsters are dead.");
 
-			if (zone != null)
-				this.properties.Set("zone", zone.ID);
+			/*if (zone != null)
+				this.properties.Set("zone", zone.ID);*/
 		}
 		
 
@@ -231,8 +231,18 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public Zone Zone {
-			get { return zone; }
-			set { zone = value; }
+			get {
+				Zone zone = properties.GetResource<Zone>("zone", null);
+				if (zone != null)
+					return zone;
+				return level.Zone;
+			}
+			set {/*
+				if (value != null)
+					properties.Set("zone", value.ID);
+				else
+					properties.Set("zone", "");*/
+			}
 		}
 
 		public Dungeon Dungeon {

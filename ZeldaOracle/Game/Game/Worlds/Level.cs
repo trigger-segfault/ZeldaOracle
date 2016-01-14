@@ -16,7 +16,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private int			roomLayerCount; // The number of tile layers for each room in the level.
 		private Point2I		dimensions;		// The dimensions of the grid of rooms.
 		private Room[,]		rooms;			// The grid of rooms.
-		private Zone		zone;
+		//private Zone		zone;
 		private Properties	properties;
 
 		
@@ -34,7 +34,8 @@ namespace ZeldaOracle.Game.Worlds {
 			this.roomSize		= roomSize;
 			this.roomLayerCount = layerCount;
 			this.dimensions		= Point2I.Zero;
-			this.zone			= zone;
+			//this.zone			= zone;
+
 
 			properties = new Properties(this);
 			properties.BaseProperties = new Properties();
@@ -47,6 +48,11 @@ namespace ZeldaOracle.Game.Worlds {
 			properties.BaseProperties.Set("discovered", false);
 
 			properties.Set("id", name);
+
+			properties.BaseProperties.Set("zone", "")
+				.SetDocumentation("Zone", "zone", "", "", "The zone type for this room.", true, false);
+
+			Zone = zone;
 			
 			Resize(new Point2I(width, height));
 		}
@@ -104,7 +110,7 @@ namespace ZeldaOracle.Game.Worlds {
 					if (oldRooms != null && x < dimensions.X && y < dimensions.Y)
 						rooms[x, y] = oldRooms[x, y];
 					else
-						rooms[x, y] = new Room(this, x, y, zone ?? GameData.ZONE_DEFAULT);
+						rooms[x, y] = new Room(this, x, y, Zone ?? GameData.ZONE_DEFAULT);
 				}
 			}
 
@@ -122,7 +128,7 @@ namespace ZeldaOracle.Game.Worlds {
 						y - distance.Y >= 0 && y - distance.Y < dimensions.Y)
 						rooms[x, y] = oldRooms[x - distance.X, y - distance.Y];
 					else
-						rooms[x, y] = new Room(this, x, y, zone ?? Resources.GetResource<Zone>(""));
+						rooms[x, y] = new Room(this, x, y, Zone ?? Resources.GetResource<Zone>(""));
 				}
 			}
 		}
@@ -185,8 +191,15 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public Zone Zone {
-			get { return zone; }
-			set { zone = value; }
+			get { return properties.GetResource<Zone>("zone", null); }
+			set {
+				if (value != null)
+					properties.Set("zone", value.ID);
+				else
+					properties.Set("zone", "");
+			}
+			//get { return zone; }
+			//set { zone = value; }
 		}
 
 		public string Id {

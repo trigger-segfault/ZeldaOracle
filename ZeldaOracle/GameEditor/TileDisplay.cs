@@ -201,6 +201,7 @@ namespace ZeldaEditor {
 		public ITileset Tileset {
 			get { return editorControl.Tileset; }
 		}
+
 		public Zone Zone {
 			get { return editorControl.Zone; }
 		}

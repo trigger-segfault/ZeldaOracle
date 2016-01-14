@@ -235,12 +235,9 @@ namespace ZeldaOracle.Game.Worlds {
 			int height = reader.ReadInt32();
 			int layerCount = reader.ReadInt32();
 
-			// Read the zone.
-			room.Zone = ReadResource(reader, zones);
-
 			// Read the room's properties.
 			ReadProperties(reader, room.Properties);
-			
+
 			// Read tile data for first layer (stored as a grid of tiles).
 			for (int y = 0; y < room.Height; y++) {
 				for (int x = 0; x < room.Width; x++) {
@@ -614,7 +611,6 @@ namespace ZeldaOracle.Game.Worlds {
 			writer.Write(room.Width);
 			writer.Write(room.Height);
 			writer.Write(room.LayerCount);
-			WriteResource(writer, room.Zone, zones);
 			WriteProperties(writer, room.Properties);
 
 			// Write all tiles for the first tile layer.

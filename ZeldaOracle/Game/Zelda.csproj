@@ -385,6 +385,7 @@
     <Compile Include="Game\Tiles\Custom\TileColorLantern.cs" />
     <Compile Include="Game\Tiles\Custom\TileColorCubeSlot.cs" />
     <Compile Include="Game\Tiles\Custom\TileCrackedFloor.cs" />
+    <Compile Include="Game\Tiles\Custom\TileRegrowingPlant.cs" />
     <Compile Include="Game\Tiles\Custom\TilePlatform.cs" />
     <Compile Include="Game\Tiles\Custom\TileEyeStatue.cs" />
     <Compile Include="Game\Tiles\Custom\Doors\TileBossKeyDoor.cs" />

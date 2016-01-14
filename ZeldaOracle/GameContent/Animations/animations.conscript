@@ -65,6 +65,8 @@ ANIM tile_locked_door_close;	CLONE tile_door_close; SHIFTSOURCE (1, 0); END;
 ANIM tile_minecart_door_close;	CLONE tile_door_close; SHIFTSOURCE (2, 0); END;
 ANIM tile_boss_door_close;		CLONE tile_door_close; SHIFTSOURCE (3, 0); END;
 
+ANIM tile_regrowable_plant_regrow; SUBSTRIP clamp;
+	ADD frame, 12, (4, 2); END;
 
 
 #==============================================================
