@@ -58,7 +58,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		private void StabTile(Tile tile) {
 			if (player.IsOnGround) {
-				tile.OnSwordHit();
+				tile.OnSwordHit(weapon);
 
 				// Create cling effect.
 				if (!tile.IsDestroyed) {

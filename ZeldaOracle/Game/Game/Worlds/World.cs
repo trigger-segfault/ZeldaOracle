@@ -128,6 +128,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 		public void AddDungeon(Dungeon dungeon) {
 			dungeons.Add(dungeon.ID, dungeon);
+			dungeon.World = this;
 		}
 
 		public void RemoveDungeon(Dungeon dungeon) {

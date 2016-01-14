@@ -275,6 +275,10 @@ SPRITE ui_map_floor_background			(9, 6); END;
 SPRITE ui_map_floor_indicator			(11, 6); END;
 SPRITE ui_map_arrow_down				(4, 4); END;
 SPRITE ui_map_arrow_up					(5, 4); END;
+SPRITE ui_map_cursor,					(10, 4), (-4, -4);
+									ADD (11, 4), ( 4, -4);
+									ADD (10, 5), (-4,  4);
+									ADD (11, 5), ( 4,  4); END;
 
 SPRITE ui_map_room_down_right			(6, 2); END;
 SPRITE ui_map_room_down_left_right		(7, 2); END;

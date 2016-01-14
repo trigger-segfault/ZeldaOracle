@@ -9,9 +9,42 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 
 namespace ZeldaOracle.Game.Worlds {
+
+	public class DungeonFloor {
+
+		private Level level;
+		private int floorNumber;
+
+		public DungeonFloor(Level level, int floorNumber) {
+			this.level = level;
+			this.floorNumber = floorNumber;
+		}
+		
+		public Level Level {
+			get { return level; }
+		}
+
+		public int FloorNumber {
+			get { return floorNumber; }
+		}
+		
+		public bool IsBossFloor {
+			get { return false; }
+		}
+		
+		public bool IsDiscovered {
+			get {
+				if (level != null)
+					return level.IsDiscovered;
+				return false;
+			}
+		}
+	}
+
 	public class Dungeon : IPropertyObject {
 
 		//private string id;
+		private World world;
 		private Properties properties;
 		
 
@@ -47,8 +80,83 @@ namespace ZeldaOracle.Game.Worlds {
 
 
 		//-----------------------------------------------------------------------------
+		// Accessors
+		//-----------------------------------------------------------------------------
+
+		// Return a sorted list of all the floors in the dungeon.
+		public DungeonFloor[] GetFloors() {
+			int lowestFloorNumber = Int32.MaxValue;
+			int highestFloorNumber = Int32.MinValue;
+			bool foundAny = false;
+
+			foreach (Level level in world.Levels) {
+				if (level.Dungeon == this) {
+					foundAny = true;
+					if (level.DungeonFloor < lowestFloorNumber)
+						lowestFloorNumber = level.DungeonFloor;
+					if (level.DungeonFloor > highestFloorNumber)
+						highestFloorNumber = level.DungeonFloor;
+				}
+			}
+
+			if (!foundAny)
+				return new DungeonFloor[0];
+
+			int floorNumberCount = (highestFloorNumber - lowestFloorNumber) + 1;
+			DungeonFloor[] floors = new DungeonFloor[floorNumberCount];
+
+			for (int i = 0; i < floorNumberCount; i++)
+				floors[i] = new DungeonFloor(null, lowestFloorNumber + i);
+			foreach (Level level in world.Levels) {
+				floors[level.DungeonFloor - lowestFloorNumber] = new DungeonFloor(level, level.DungeonFloor);
+			}
+
+			return floors;
+			/*
+
+			List<Level> floors = new List<Level>();
+			foreach (Level level in world.Levels) {
+				if (level.Dungeon == this)
+					floors.Add(level);
+			}
+			floors.Sort(delegate(Level a, Level b) {
+				int floorA = a.DungeonFloor;
+				int floorB = b.DungeonFloor;
+
+				if (floorA > floorB)
+					return 1;
+				else if (floorA < floorB)
+					return -1;
+				else 
+					return 0;
+			});
+
+			if (floors.Count == 0)
+				return new Level[0];
+
+			int minFloorNumber = floors[0].DungeonFloor;
+			int maxFloorNumber = floors[floors.Count - 1].DungeonFloor;
+			int floorNumberCount = maxFloorNumber - minFloorNumber;
+			Level[] floors2 = new Level[floorNumberCount];
+
+			foreach (Level floor in floors) {
+				int index = floor.DungeonFloor - minFloorNumber;
+				floors2[index] = floor;
+			}
+
+			return floors.ToArray();
+			*/
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
+
+		public World World {
+			get { return world; }
+			set { world = value; }
+		}
 
 		public int NumSmallKeys {
 			get { return properties.GetInteger("small_keys", 0); }
@@ -85,6 +193,28 @@ namespace ZeldaOracle.Game.Worlds {
 			set {
 				properties = value;
 				properties.PropertyObject = this;
+			}
+		}
+
+		public int LowestFloorNumber {
+			get {
+				int lowest = Int32.MaxValue;
+				foreach (Level level in world.Levels) {
+					if (level.DungeonFloor < lowest)
+						lowest = level.DungeonFloor;
+				}
+				return lowest;
+			}
+		}
+		
+		public int HighestFloorNumber {
+			get {
+				int highest = Int32.MinValue;
+				foreach (Level level in world.Levels) {
+					if (level.DungeonFloor > highest)
+						highest = level.DungeonFloor;
+				}
+				return highest;
 			}
 		}
 	}

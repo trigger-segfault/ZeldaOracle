@@ -43,6 +43,8 @@ namespace ZeldaOracle.Game.Worlds {
 				.SetDocumentation("ID", "", "", "", "The id used to refer to this level.", false, true);
 
 			properties.BaseProperties.Set("dungeon", "");
+			properties.BaseProperties.Set("dungeon_floor", 0);
+			properties.BaseProperties.Set("discovered", false);
 
 			properties.Set("id", name);
 			
@@ -188,10 +190,20 @@ namespace ZeldaOracle.Game.Worlds {
 			get { return world.GetDungoen(properties.GetString("dungeon", "")); }
 			set {
 				if (value == null)
-					properties.GetString("dungeon", "");
+					properties.Set("dungeon", "");
 				else
-					properties.GetString("dungeon", value.ID);
+					properties.Set("dungeon", value.ID);
 			}
+		}
+		
+		public int DungeonFloor {
+			get { return properties.GetInteger("dungeon_floor", 0); }
+			set { properties.Set("dungeon_floor", value); }
+		}
+		
+		public bool IsDiscovered {
+			get { return properties.GetBoolean("discovered", false); }
+			set { properties.Set("discovered", value); }
 		}
 	}
 }

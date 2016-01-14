@@ -16,7 +16,9 @@ namespace ZeldaOracle.Game.Control.Maps {
 	
 	public class DungeonMapRoom {
 
+		private DungeonMapFloor floor;
 		private Room	room;
+		private Point2I	location;
 		private bool	hasTreasure;
 		private bool	isBossRoom;
 		private bool	isDiscovered;
@@ -28,11 +30,13 @@ namespace ZeldaOracle.Game.Control.Maps {
 		//-----------------------------------------------------------------------------
 
 		public DungeonMapRoom() {
+			this.floor			= null;
 			this.room			= null;
 			this.hasTreasure	= false;
 			this.isBossRoom		= false;
 			this.sprite			= null;
 			this.isDiscovered	= false;
+			this.location		= Point2I.Zero;
 		}
 
 
@@ -40,7 +44,7 @@ namespace ZeldaOracle.Game.Control.Maps {
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
-		public static DungeonMapRoom Create(Room room) {
+		public static DungeonMapRoom Create(Room room, DungeonMapFloor floor) {
 			// Don't show empty rooms.
 			if (IsRoomEmpty(room))
 				return null;
@@ -51,7 +55,9 @@ namespace ZeldaOracle.Game.Control.Maps {
 				hasTreasure		= room.HasUnopenedTreasure(),
 				isDiscovered	= room.IsDiscovered,
 				isBossRoom		= false,
+				location		= room.Location,
 				sprite			= null,
+				floor			= floor,
 			};
 			
 			// Determine the sprite to draw for this room based on its connections.
@@ -160,6 +166,15 @@ namespace ZeldaOracle.Game.Control.Maps {
 
 		public Room Room {
 			get { return room; }
+		}
+
+		public Point2I Location {
+			get { return location; }
+		}
+
+		public DungeonMapFloor Floor {
+			get { return floor; }
+			set { floor = value; }
 		}
 	}
 

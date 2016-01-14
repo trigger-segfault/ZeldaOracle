@@ -17,31 +17,37 @@ namespace ZeldaOracle.Game.Control.Maps {
 	public class DungeonMapFloor {
 
 		private DungeonMapRoom[,] rooms;
-		private Level level;
+		private DungeonFloor dungeonFloor;
 		private Point2I size;
 		private int floorNumber; // 2 = "3F", 1 = "2F", 0 = "1F", -1 = "B1F", -2 = "B2F", etc.
 		private bool isBossFloor;
+		private bool isDiscovered;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public DungeonMapFloor(Level level, int floorNumber) {
-			this.level			= level;
-			this.floorNumber	= floorNumber;
+		public DungeonMapFloor(DungeonFloor dungeonFloor) {
+			this.dungeonFloor	= dungeonFloor;
+			this.floorNumber	= dungeonFloor.FloorNumber;
+			this.isDiscovered	= dungeonFloor.IsDiscovered;
+			this.isBossFloor	= dungeonFloor.IsBossFloor;
 			this.size			= new Point2I(8, 8);
-			this.isBossFloor	= false;
+
 
 			// Create rooms.
 			rooms = new DungeonMapRoom[size.X, size.Y];
-			for (int x = 0; x < size.X; x++) {
-				for (int y = 0; y < size.Y; y++) {
-					Point2I loc = new Point2I(x, y);
-					if (level.ContainsRoom(loc))
-						rooms[x, y] = DungeonMapRoom.Create(level.GetRoomAt(x, y));
-					else
-						rooms[x, y] = null;
+			
+			if (dungeonFloor.Level !=  null) {
+				for (int x = 0; x < size.X; x++) {
+					for (int y = 0; y < size.Y; y++) {
+						Point2I loc = new Point2I(x, y);
+						if (dungeonFloor.Level.ContainsRoom(loc))
+							rooms[x, y] = DungeonMapRoom.Create(dungeonFloor.Level.GetRoomAt(loc), this);
+						else
+							rooms[x, y] = null;
+					}
 				}
 			}
 		}
@@ -55,8 +61,16 @@ namespace ZeldaOracle.Game.Control.Maps {
 			get { return rooms; }
 		}
 
+		public DungeonFloor DungeonFloor {
+			get { return dungeonFloor; }
+		}
+
 		public int FloorNumber {
 			get { return floorNumber; }
+		}
+		
+		public bool IsDiscovered {
+			get { return isDiscovered; }
 		}
 
 		public Point2I Size {

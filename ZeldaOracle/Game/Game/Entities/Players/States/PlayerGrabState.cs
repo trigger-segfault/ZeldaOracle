@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Input;
+using ZeldaOracle.Game.Items;
+using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
 
@@ -29,13 +31,18 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		private bool AttemptPickup() {
 			Tile grabTile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
+			
+			if (grabTile != null) {
+				int minLevel = grabTile.Properties.GetInteger("pickupable_bracelet_level", Item.Level1);
+				Item item = player.Inventory.GetItem("item_bracelet");
 
-			if (grabTile != null && grabTile.HasFlag(TileFlags.Pickupable)) {
-				player.CarryState.SetCarryObject(grabTile);
-				player.BeginState(player.CarryState);
-				grabTile.SpawnDrop();
-				player.RoomControl.RemoveTile(grabTile);
-				return true;
+				if (grabTile.HasFlag(TileFlags.Pickupable) && item.Level >= minLevel) {
+					player.CarryState.SetCarryObject(grabTile);
+					player.BeginState(player.CarryState);
+					grabTile.SpawnDrop();
+					player.RoomControl.RemoveTile(grabTile);
+					return true;
+				}
 			}
 
 			return false;

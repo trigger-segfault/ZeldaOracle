@@ -225,6 +225,7 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_UI_MAP_FLOOR_INDICATOR;
 		public static Sprite SPR_UI_MAP_ARROW_DOWN;
 		public static Sprite SPR_UI_MAP_ARROW_UP;
+		public static Sprite SPR_UI_MAP_CURSOR;
 		
 		public static Sprite SPR_UI_MAP_ROOM_NONE;
 		public static Sprite SPR_UI_MAP_ROOM_RIGHT;

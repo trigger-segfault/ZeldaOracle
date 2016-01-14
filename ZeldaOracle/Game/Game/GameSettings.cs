@@ -6,16 +6,8 @@ using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 
-
-/*
- *	DEBUG KEYS:
- *		- 1: Speed up the game.
- *		- G: Read text.
- *		- V: (When reading text) skip to next line.
- *		- Z: Fire an arrow.
-*/
-
 namespace ZeldaOracle.Game {
+
 	public class GameSettings {
 		
 		// World
@@ -53,6 +45,7 @@ namespace ZeldaOracle.Game {
 		public const int				COLLECTIBLE_FAIRY_HOVER_HEIGHT			= 8;
 
 		// Projectiles and Items
+		public static readonly float[]	BRACELET_PUSH_SPEEDS					= { 0.5f, 1.0f };
 		public const float				PROJECTILE_ARROW_SPEED					= 3.0f;
 		public const float				PROJECTILE_SWORD_BEAM_SPEED				= 3.0f;
 		public const float				PROJECTILE_MAGIC_ROD_FIRE_SPEED			= 2.0f;
@@ -105,6 +98,7 @@ namespace ZeldaOracle.Game {
 		public const float				PLAYER_CAPE_GRAVITY				= 0.04f;	// 0.04 = 1/25
 		public const int				PLAYER_SPRINT_DURATION			= 480;
 		public const float				PLAYER_SPRINT_SPEED_SCALE		= 1.5f;
+		public const float				PLAYER_DEFAULT_PUSH_SPEED		= 0.5f;
 
 		// Monsters
 		public const int				MONSTER_STUN_DURATION		= 400;	// How long a monster gets stunned for (by boomerang/pegasus seeds).
@@ -113,7 +107,6 @@ namespace ZeldaOracle.Game {
 		// Tiles
 		public const int				TILE_CRACKED_FLOOR_CRUMBLE_DELAY = 30;
 
-		// Graphics.
 
 
 		//-----------------------------------------------------------------------------

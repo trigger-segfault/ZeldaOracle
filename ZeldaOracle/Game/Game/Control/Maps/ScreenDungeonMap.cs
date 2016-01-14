@@ -16,15 +16,20 @@ namespace ZeldaOracle.Game.Control.Maps {
 
 	public class ScreenDungeonMap : GameState {
 
-		private Image backgroundImage;
-		private Dungeon dungeon;
-		private int viewFloorIndex;		// Which floor wer are currently viewing.
-		private int playerFloorIndex;	// Which floor the player is on.
-		private int floorViewPosition;	// The current view position.
-		private int floorViewSpeed;		// How fast to move the view when changing floors.
-		private bool isChangingFloors;
+		private Image	backgroundImage;
+		private Dungeon	dungeon;
+		private int		viewFloorIndex;		// Which floor wer are currently viewing.
+		private DungeonMapFloor viewFloor;
+		private int		playerFloorNumber;	// Which floor the player is on.
+		private Point2I	playerRoomLocation;
+		private int		floorViewPosition;	// The current view position.
+		private int		floorViewSpeed;		// How fast to move the view when changing floors.
+		private bool	isChangingFloors;
+		private int		cursorTimer;
+		private int		lowestFloorNumber;
+		private int		highestFloorNumber;
 		private List<DungeonMapFloor> floors;
-		private AnimationPlayer cursorAnimationPlayer;
+		private List<DungeonMapFloor> discoveredFloors;
 
 
 		//-----------------------------------------------------------------------------
@@ -32,11 +37,11 @@ namespace ZeldaOracle.Game.Control.Maps {
 		//-----------------------------------------------------------------------------
 
 		public ScreenDungeonMap(GameManager gameManager) {
-			this.gameManager = gameManager;
-			this.backgroundImage = Resources.GetImage("screen_dungeon_map");
-			this.dungeon = null;
-			this.floors = new List<DungeonMapFloor>();
-			this.cursorAnimationPlayer = new AnimationPlayer();
+			this.gameManager		= gameManager;
+			this.backgroundImage	= Resources.GetImage("screen_dungeon_map");
+			this.dungeon			= null;
+			this.floors				= new List<DungeonMapFloor>();
+			this.discoveredFloors	= new List<DungeonMapFloor>();
 		}
 
 
@@ -45,30 +50,39 @@ namespace ZeldaOracle.Game.Control.Maps {
 		//-----------------------------------------------------------------------------
 
 		private void DrawRoom(Graphics2D g, DungeonMapRoom room, Point2I position) {
-			if (room != null) {
-				// Determine the sprite to draw for the room.
-				Sprite sprite = null;
-				if (room.IsDiscovered)
-					sprite = room.Sprite;
-				else if (dungeon.HasMap)
-					sprite = GameData.SPR_UI_MAP_UNDISCOVERED_ROOM;
-				if (dungeon.HasCompass) {
-					if (room.IsBossRoom)
-						sprite = GameData.SPR_UI_MAP_BOSS_ROOM;
-					else if (room.HasTreasure)
-						sprite = GameData.SPR_UI_MAP_TREASURE_ROOM;
-				}
+			if (room == null)
+				return;
 
-				// Draw the room sprite.
-				if (sprite != null)
-					g.DrawSprite(sprite, GameData.VARIANT_LIGHT, position);
+			// Determine the sprite to draw for the room.
+			Sprite sprite = null;
+			if (room.IsDiscovered)
+				sprite = room.Sprite;
+			else if (dungeon.HasMap)
+				sprite = GameData.SPR_UI_MAP_UNDISCOVERED_ROOM;
+
+			// Determine extra sprite to draw for the room (treasure, boss, or player).
+			Sprite extraSprite = null;
+			if (playerRoomLocation == room.Location && playerFloorNumber == room.Floor.FloorNumber &&
+				(cursorTimer >= 32 || isChangingFloors || room.Floor != viewFloor))
+			{
+				extraSprite = GameData.SPR_UI_MAP_PLAYER;
 			}
+			else if (dungeon.HasCompass) {
+				if (room.IsBossRoom)
+					extraSprite = GameData.SPR_UI_MAP_BOSS_ROOM;
+				else if (room.HasTreasure)
+					extraSprite = GameData.SPR_UI_MAP_TREASURE_ROOM;
+			}
+
+			// Draw the two sprites.
+			if (sprite != null)
+				g.DrawSprite(sprite, GameData.VARIANT_LIGHT, position);
+			if (extraSprite != null)
+				g.DrawSprite(extraSprite, GameData.VARIANT_LIGHT, position);
 		}
 
 		private void DrawFloor(Graphics2D g, DungeonMapFloor floor, Point2I position) {
-			Point2I cursorPos = new Point2I(-1, -1);
-
-			// Draw the level background rectangle.
+			// Draw the floor background rectangle.
 			g.DrawSprite(GameData.SPR_UI_MAP_FLOOR_BACKGROUND,
 				GameData.VARIANT_LIGHT, new Rectangle2I(position, new Point2I(64, 64)));
 			
@@ -76,16 +90,9 @@ namespace ZeldaOracle.Game.Control.Maps {
 			for (int x = 0; x < 8; x++) {
 				for (int y = 0; y < 8; y++) {
 					Point2I drawPos = position + (new Point2I(x, y) * 8);
-					DungeonMapRoom room = floor.Rooms[x, y];
-					DrawRoom(g, room, drawPos);
-					if (room != null && room.Room == GameControl.RoomControl.Room)
-						cursorPos = drawPos;
+					DrawRoom(g, floor.Rooms[x, y], drawPos);
 				}
 			}
-
-			// Draw room cursor.
-			if (cursorPos >= Vector2F.Zero)
-				g.DrawAnimation(cursorAnimationPlayer, GameData.VARIANT_LIGHT, cursorPos);
 		}
 
 
@@ -94,19 +101,36 @@ namespace ZeldaOracle.Game.Control.Maps {
 		//-----------------------------------------------------------------------------
 
 		public void OnOpen() {
-			dungeon	= GameControl.RoomControl.Dungeon;
-
-			//floorNumbers		= new int[] { -2, -1, 0, 1, 2 };
-			playerFloorIndex	= 0;
-			viewFloorIndex		= playerFloorIndex;
-			floorViewPosition	= viewFloorIndex * 80;
+			dungeon				= GameControl.RoomControl.Dungeon;
+			playerRoomLocation	= GameControl.RoomControl.RoomLocation;
+			playerFloorNumber	= 0;
+			viewFloorIndex		= 0;
 			floorViewSpeed		= 8;
 			isChangingFloors	= false;
+			cursorTimer			= 0;
+			viewFloor			= null;
 
+			// Add the dungeon floors.
+			DungeonFloor[] levelFloors = dungeon.GetFloors();
+			lowestFloorNumber	= levelFloors[0].FloorNumber;
+			highestFloorNumber	= levelFloors[levelFloors.Length - 1].FloorNumber;
 			floors.Clear();
-			floors.Add(new DungeonMapFloor(GameControl.RoomControl.Level, 0));
+			discoveredFloors.Clear();
 
-			cursorAnimationPlayer.Play(GameData.ANIM_UI_MAP_CURSOR);
+			for (int i = 0; i < levelFloors.Length; i++) {
+				DungeonMapFloor floor = new DungeonMapFloor(levelFloors[i]);
+				floors.Add(floor);
+
+				if (floor.DungeonFloor.Level == GameControl.RoomControl.Level) {
+					playerFloorNumber	= floor.FloorNumber;
+					viewFloor			= floor;
+					viewFloorIndex		= discoveredFloors.Count;
+				}
+				if (floor.IsDiscovered || dungeon.HasMap)
+					discoveredFloors.Add(floor);
+			}
+			
+			floorViewPosition = viewFloorIndex * 80;
 		}
 
 		public void OnClose() {
@@ -117,28 +141,33 @@ namespace ZeldaOracle.Game.Control.Maps {
 		}
 		
 		public override void Update() {
-			cursorAnimationPlayer.Update();
+			cursorTimer++;
+			if (cursorTimer >= 64)
+				cursorTimer = 0;
 
-			// [SELECT] Close the map screen.
+			// [SELECT] to  close the map screen.
 			if (Controls.Select.IsPressed()) {
 				GameControl.CloseMapScreen();
 				return;
 			}
 
-			// [UP] and [DOWN] to change floors.
 			if (!isChangingFloors) {
-				if (Controls.Up.IsPressed() && viewFloorIndex < floors.Count - 1) {
+				// [UP] and [DOWN] to change floors.
+				if (Controls.Up.IsPressed() && viewFloorIndex < discoveredFloors.Count - 1) {
 					viewFloorIndex++;
 					isChangingFloors = true;
+					viewFloor = discoveredFloors[viewFloorIndex];
 					AudioSystem.PlaySound("UI/menu_cursor_move");
 				}
 				else if (Controls.Down.IsPressed() && viewFloorIndex > 0) {
 					viewFloorIndex--;
 					isChangingFloors = true;
+					viewFloor = discoveredFloors[viewFloorIndex];
 					AudioSystem.PlaySound("UI/menu_cursor_move");
 				}
 			}
 			else {
+				// Update changing of floor view position.
 				int nextFloorViewPosition = viewFloorIndex * 80;
 				if (floorViewPosition < nextFloorViewPosition)
 					floorViewPosition = Math.Min(floorViewPosition + floorViewSpeed, nextFloorViewPosition);
@@ -153,8 +182,6 @@ namespace ZeldaOracle.Game.Control.Maps {
 			if (dungeon == null)
 				return;
 			
-			Color black = Color.Black;//(lightDark == GameData.VARIANT_LIGHT ? new Color(16, 16, 16) : Color.Black);
-
 			// Draw the background.
 			g.DrawImage(backgroundImage, Point2I.Zero);
 
@@ -170,31 +197,42 @@ namespace ZeldaOracle.Game.Control.Maps {
 			for (int i = 0; i < floors.Count; i++) {
 				DungeonMapFloor floor = floors[i];
 
-				// Draw the floor's label box on the left side of the screen.
-				Point2I floorPos = floorBasePos - new Point2I(0, i * 8);
-				string floorName = floor.FloorNumberText;
-				g.DrawString(GameData.FONT_SMALL, floorName, floorPos, new Color(248, 248, 216)); // drop shadow
-				g.DrawString(GameData.FONT_SMALL, floorName, floorPos + new Point2I(0, -1), new Color(56, 32, 16));
-				g.DrawSprite(GameData.SPR_UI_MAP_FLOOR_BOX_LEFT, GameData.VARIANT_LIGHT, floorPos + new Point2I(32, 0));
-				g.DrawSprite(GameData.SPR_UI_MAP_FLOOR_BOX_RIGHT, GameData.VARIANT_LIGHT, floorPos + new Point2I(40, 0));
-				if (viewFloorIndex == i)
-					g.DrawSprite(GameData.SPR_UI_MAP_FLOOR_INDICATOR, GameData.VARIANT_LIGHT, floorPos + new Point2I(24, 0));
-				if (playerFloorIndex == i)
-					g.DrawSprite(GameData.SPR_UI_MAP_PLAYER, GameData.VARIANT_LIGHT, floorPos + new Point2I(36, 0));
-				if (floor.IsBossFloor)
-					g.DrawSprite(GameData.SPR_UI_MAP_BOSS_FLOOR, GameData.VARIANT_LIGHT, floorPos + new Point2I(48, 0));
-							
-				// Draw the floor's room display on the right side of the screen.
-				Point2I floorRoomDisplayPos = new Point2I(80, 40 - (80 * i) + floorViewPosition);
-				if (floorRoomDisplayPos.Y < GameSettings.SCREEN_HEIGHT && floorRoomDisplayPos.Y > -80)
-					DrawFloor(g, floor, floorRoomDisplayPos);
+				if (discoveredFloors.Contains(floor)) {
+					// Draw the floor's label box on the left side of the screen.
+					Point2I floorPos = floorBasePos - new Point2I(0, i * 8);
+					string floorName = floor.FloorNumberText;
+					g.DrawString(GameData.FONT_SMALL, floorName, floorPos, new Color(248, 248, 216)); // drop shadow
+					g.DrawString(GameData.FONT_SMALL, floorName, floorPos + new Point2I(0, -1), new Color(56, 32, 16));
+					g.DrawSprite(GameData.SPR_UI_MAP_FLOOR_BOX_LEFT, GameData.VARIANT_LIGHT, floorPos + new Point2I(32, 0));
+					g.DrawSprite(GameData.SPR_UI_MAP_FLOOR_BOX_RIGHT, GameData.VARIANT_LIGHT, floorPos + new Point2I(40, 0));
+
+					// Draw the icons around the name box.
+					if (viewFloor == floor)
+						g.DrawSprite(GameData.SPR_UI_MAP_FLOOR_INDICATOR, GameData.VARIANT_LIGHT, floorPos + new Point2I(24, 0));
+					if (playerFloorNumber == floor.FloorNumber)
+						g.DrawSprite(GameData.SPR_UI_MAP_PLAYER, GameData.VARIANT_LIGHT, floorPos + new Point2I(36, 0));
+					if (floor.IsBossFloor)
+						g.DrawSprite(GameData.SPR_UI_MAP_BOSS_FLOOR, GameData.VARIANT_LIGHT, floorPos + new Point2I(48, 0));
+					
+					// Draw the floor's room display on the right side of the screen.
+					int discoveredFloorIndex = discoveredFloors.IndexOf(floor);
+					Point2I floorRoomDisplayPos = new Point2I(80, 40 - (80 * discoveredFloorIndex) + floorViewPosition);
+					if (floorRoomDisplayPos.Y < GameSettings.SCREEN_HEIGHT && floorRoomDisplayPos.Y > -80)
+						DrawFloor(g, floor, floorRoomDisplayPos);
+				
+					// Draw room display cursor.
+					if (!isChangingFloors && viewFloor == floor && cursorTimer < 32) {
+						Point2I drawPos = floorRoomDisplayPos + (playerRoomLocation * 8);
+						g.DrawSprite(GameData.SPR_UI_MAP_CURSOR, GameData.VARIANT_LIGHT, drawPos);
+					}
+				}
 			}
 			
 			// Draw floor view traversal arrows.
 			if (!isChangingFloors) {
     			if (viewFloorIndex > 0)
     				g.DrawSprite(GameData.SPR_UI_MAP_ARROW_DOWN, GameData.VARIANT_LIGHT, 108, 108);
-    			if (viewFloorIndex < floors.Count - 1)
+    			if (viewFloorIndex < discoveredFloors.Count - 1)
     				g.DrawSprite(GameData.SPR_UI_MAP_ARROW_UP, GameData.VARIANT_LIGHT, 108, 28);
 			}
 

@@ -46,7 +46,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		protected void CutTileAtLocation(Point2I location) {
 			Tile tile = player.RoomControl.GetTopTile(location);
 			if (tile != null)
-				tile.OnSwordHit();
+				tile.OnSwordHit(Weapon);
 		}
 
 

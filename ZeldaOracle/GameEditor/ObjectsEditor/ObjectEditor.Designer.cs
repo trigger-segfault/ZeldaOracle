@@ -26,8 +26,12 @@
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.numberBoxWidth = new System.Windows.Forms.NumericUpDown();
 			this.comboBoxSolidType = new System.Windows.Forms.ComboBox();
+			this.numberBoxHeight = new System.Windows.Forms.NumericUpDown();
 			this.comboBoxMovementType = new System.Windows.Forms.ComboBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.comboBoxLedgeDirection = new System.Windows.Forms.ComboBox();
 			this.label6 = new System.Windows.Forms.Label();
@@ -44,7 +48,7 @@
 			this.tabPage5 = new System.Windows.Forms.TabPage();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.labelMoveDirection = new System.Windows.Forms.Label();
-			this.checkBox10 = new System.Windows.Forms.CheckBox();
+			this.checkBoxDisableOnDestroy = new System.Windows.Forms.CheckBox();
 			this.labelBraceletLevel = new System.Windows.Forms.Label();
 			this.checkBoxBurnable = new System.Windows.Forms.CheckBox();
 			this.checkBoxBombable = new System.Windows.Forms.CheckBox();
@@ -68,21 +72,17 @@
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.buttonDone = new System.Windows.Forms.Button();
-			this.numberBoxHeight = new System.Windows.Forms.NumericUpDown();
-			this.label2 = new System.Windows.Forms.Label();
-			this.numberBoxWidth = new System.Windows.Forms.NumericUpDown();
-			this.label3 = new System.Windows.Forms.Label();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numberBoxWidth)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numberBoxHeight)).BeginInit();
 			this.groupBox1.SuspendLayout();
 			this.tabPage5.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.tabPage3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.panel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.numberBoxHeight)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numberBoxWidth)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tabControl1
@@ -134,6 +134,23 @@
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "General";
 			// 
+			// numberBoxWidth
+			// 
+			this.numberBoxWidth.Location = new System.Drawing.Point(147, 19);
+			this.numberBoxWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numberBoxWidth.Name = "numberBoxWidth";
+			this.numberBoxWidth.Size = new System.Drawing.Size(145, 20);
+			this.numberBoxWidth.TabIndex = 12;
+			this.numberBoxWidth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			// 
 			// comboBoxSolidType
 			// 
 			this.comboBoxSolidType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -146,6 +163,23 @@
 			this.comboBoxSolidType.TabIndex = 10;
 			this.comboBoxSolidType.SelectedIndexChanged += new System.EventHandler(this.comboBoxSolidType_SelectedIndexChanged);
 			// 
+			// numberBoxHeight
+			// 
+			this.numberBoxHeight.Location = new System.Drawing.Point(147, 45);
+			this.numberBoxHeight.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numberBoxHeight.Name = "numberBoxHeight";
+			this.numberBoxHeight.Size = new System.Drawing.Size(145, 20);
+			this.numberBoxHeight.TabIndex = 12;
+			this.numberBoxHeight.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			// 
 			// comboBoxMovementType
 			// 
 			this.comboBoxMovementType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -156,6 +190,24 @@
 			this.comboBoxMovementType.Name = "comboBoxMovementType";
 			this.comboBoxMovementType.Size = new System.Drawing.Size(145, 21);
 			this.comboBoxMovementType.TabIndex = 10;
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(6, 47);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(38, 13);
+			this.label3.TabIndex = 1;
+			this.label3.Text = "Height";
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(6, 21);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(38, 13);
+			this.label2.TabIndex = 1;
+			this.label2.Text = "Width:";
 			// 
 			// label5
 			// 
@@ -301,7 +353,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox3.Controls.Add(this.labelMoveDirection);
-			this.groupBox3.Controls.Add(this.checkBox10);
+			this.groupBox3.Controls.Add(this.checkBoxDisableOnDestroy);
 			this.groupBox3.Controls.Add(this.labelBraceletLevel);
 			this.groupBox3.Controls.Add(this.checkBoxBurnable);
 			this.groupBox3.Controls.Add(this.checkBoxBombable);
@@ -333,15 +385,15 @@
 			this.labelMoveDirection.TabIndex = 10;
 			this.labelMoveDirection.Text = "Move Direction";
 			// 
-			// checkBox10
+			// checkBoxDisableOnDestroy
 			// 
-			this.checkBox10.AutoSize = true;
-			this.checkBox10.Location = new System.Drawing.Point(6, 329);
-			this.checkBox10.Name = "checkBox10";
-			this.checkBox10.Size = new System.Drawing.Size(98, 17);
-			this.checkBox10.TabIndex = 0;
-			this.checkBox10.Text = "Stay Destroyed";
-			this.checkBox10.UseVisualStyleBackColor = true;
+			this.checkBoxDisableOnDestroy.AutoSize = true;
+			this.checkBoxDisableOnDestroy.Location = new System.Drawing.Point(6, 329);
+			this.checkBoxDisableOnDestroy.Name = "checkBoxDisableOnDestroy";
+			this.checkBoxDisableOnDestroy.Size = new System.Drawing.Size(113, 17);
+			this.checkBoxDisableOnDestroy.TabIndex = 0;
+			this.checkBoxDisableOnDestroy.Text = "Disable on destroy";
+			this.checkBoxDisableOnDestroy.UseVisualStyleBackColor = true;
 			// 
 			// labelBraceletLevel
 			// 
@@ -587,58 +639,6 @@
 			this.buttonDone.UseVisualStyleBackColor = true;
 			this.buttonDone.Click += new System.EventHandler(this.buttonDone_Click);
 			// 
-			// numberBoxHeight
-			// 
-			this.numberBoxHeight.Location = new System.Drawing.Point(147, 45);
-			this.numberBoxHeight.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.numberBoxHeight.Name = "numberBoxHeight";
-			this.numberBoxHeight.Size = new System.Drawing.Size(145, 20);
-			this.numberBoxHeight.TabIndex = 12;
-			this.numberBoxHeight.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(6, 21);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(38, 13);
-			this.label2.TabIndex = 1;
-			this.label2.Text = "Width:";
-			// 
-			// numberBoxWidth
-			// 
-			this.numberBoxWidth.Location = new System.Drawing.Point(147, 19);
-			this.numberBoxWidth.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.numberBoxWidth.Name = "numberBoxWidth";
-			this.numberBoxWidth.Size = new System.Drawing.Size(145, 20);
-			this.numberBoxWidth.TabIndex = 12;
-			this.numberBoxWidth.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			// 
-			// label3
-			// 
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(6, 47);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(38, 13);
-			this.label3.TabIndex = 1;
-			this.label3.Text = "Height";
-			// 
 			// ObjectEditor
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -655,6 +655,8 @@
 			this.tabPage1.PerformLayout();
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numberBoxWidth)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numberBoxHeight)).EndInit();
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.tabPage5.ResumeLayout(false);
@@ -663,8 +665,6 @@
 			this.tabPage3.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 			this.panel1.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.numberBoxHeight)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numberBoxWidth)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -693,7 +693,7 @@
 		private System.Windows.Forms.TabPage tabPage5;
 		private System.Windows.Forms.GroupBox groupBox3;
 		private System.Windows.Forms.Label labelMoveDirection;
-		private System.Windows.Forms.CheckBox checkBox10;
+		private System.Windows.Forms.CheckBox checkBoxDisableOnDestroy;
 		private System.Windows.Forms.Label labelBraceletLevel;
 		private System.Windows.Forms.CheckBox checkBoxBurnable;
 		private System.Windows.Forms.CheckBox checkBoxBombable;

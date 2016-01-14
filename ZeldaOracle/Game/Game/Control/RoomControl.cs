@@ -324,7 +324,8 @@ namespace ZeldaOracle.Game.Control {
 			this.dungeon		= room.Dungeon;
 
 			// Discover the room.
-			room.IsDiscovered = true;
+			room.IsDiscovered	= true;
+			level.IsDiscovered	= true;
 
 			// Clear event tiles.
 			eventTiles.Clear();

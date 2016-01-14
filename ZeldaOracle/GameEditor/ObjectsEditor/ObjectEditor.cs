@@ -214,6 +214,7 @@ namespace ZeldaEditor.ObjectsEditor {
 				checkBoxMoveOnce.Checked			= tile.Properties.GetBoolean("move_once", false);
 				comboBoxSwordLevel.SelectedIndex	= tile.Properties.GetInteger("cuttable_sword_level", 0);
 				comboBoxBraceletLevel.SelectedIndex	= tile.Properties.GetInteger("pickupable_bracelet_level", 0);
+				checkBoxDisableOnDestroy.Checked	= tile.Properties.GetBoolean("disable_on_destroy", false);
 				
 				// Move direction.
 				comboBoxMoveDirection.SelectedIndex = 0;
@@ -268,6 +269,7 @@ namespace ZeldaEditor.ObjectsEditor {
 				tile.Properties.Set("move_once", checkBoxMoveOnce.Checked);
 				tile.Properties.Set("cuttable_sword_level", comboBoxSwordLevel.SelectedIndex);
 				tile.Properties.Set("pickupable_bracelet_level", comboBoxBraceletLevel.SelectedIndex);
+				tile.Properties.Set("disable_on_destroy", checkBoxDisableOnDestroy.Checked);
 
 				// Move direction
 				int moveDir = ((ComboBoxItem<int>) comboBoxMoveDirection.SelectedItem).Value;

@@ -12,7 +12,9 @@ using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Drops;
+using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles {
@@ -235,9 +237,13 @@ namespace ZeldaOracle.Game.Tiles {
 		public virtual void OnCollide() { }
 
 		// Called when the player hits this tile with the sword.
-		public virtual void OnSwordHit() {
-			if (!isMoving && flags.HasFlag(TileFlags.Cuttable))
+		public virtual void OnSwordHit(ItemWeapon swordItem) {
+			int minLevel = properties.GetInteger("cuttable_sword_level", Item.Level1);
+			if (!isMoving && flags.HasFlag(TileFlags.Cuttable) &&
+				(!(swordItem is ItemSword) || swordItem.Level >= minLevel))
+			{
 				Break(true);
+			}
 		}
 
 		// Called when the player hits this tile with the sword.
@@ -251,6 +257,8 @@ namespace ZeldaOracle.Game.Tiles {
 			if (!isMoving && flags.HasFlag(TileFlags.Burnable)) {
 				SpawnDrop();
 				roomControl.RemoveTile(this);
+				if (properties.GetBoolean("disable_on_destroy", false))
+					BaseProperties.Set("enabled", false);
 			}
 		}
 
@@ -290,6 +298,9 @@ namespace ZeldaOracle.Game.Tiles {
 			else {
 				roomControl.RemoveTile(this);
 			}
+
+			if (properties.GetBoolean("disable_on_destroy", false))
+				BaseProperties.Set("enabled", false);
 
 			// Spawn drops.
 			Entity dropEntity = SpawnDrop();
@@ -377,6 +388,9 @@ namespace ZeldaOracle.Game.Tiles {
 			if (spawnDrops)
 				SpawnDrop();
 			
+			if (properties.GetBoolean("disable_on_destroy", false))
+				BaseProperties.Set("enabled", false);
+
 			RoomControl.RemoveTile(this);
 		}
 

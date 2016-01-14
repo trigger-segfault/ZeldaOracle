@@ -62,7 +62,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			base.Update();
 
 			if (player.IsInAir) {
-				// TODO: play jump animation at remembering the frame.
+				// TODO: Play jump animation at remembering the frame?
 			}
 			else {
 				// Update pushing.
@@ -76,7 +76,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					pushTimer++;
 
 					if (pushTimer > actionTile.PushDelay) {
-						if (actionTile.OnPush(player.Direction, 1.0f))
+						if (actionTile.OnPush(player.Direction, player.PushSpeed))
 							pushTimer = 0;
 						else
 							actionTile.OnPushing(player.Direction);
