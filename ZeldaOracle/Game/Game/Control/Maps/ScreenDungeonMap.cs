@@ -87,8 +87,8 @@ namespace ZeldaOracle.Game.Control.Maps {
 				GameData.VARIANT_LIGHT, new Rectangle2I(position, new Point2I(64, 64)));
 			
 			// Draw the rooms.
-			for (int x = 0; x < 8; x++) {
-				for (int y = 0; y < 8; y++) {
+			for (int x = 0; x < floor.Width; x++) {
+				for (int y = 0; y < floor.Height; y++) {
 					Point2I drawPos = position + (new Point2I(x, y) * 8);
 					DrawRoom(g, floor.Rooms[x, y], drawPos);
 				}
@@ -101,15 +101,17 @@ namespace ZeldaOracle.Game.Control.Maps {
 		//-----------------------------------------------------------------------------
 
 		public void OnOpen() {
-			dungeon				= GameControl.RoomControl.Dungeon;
-			playerRoomLocation	= GameControl.RoomControl.RoomLocation;
+			Room playerRoom = GameControl.LastRoomOnMap;
+
+			dungeon				= playerRoom.Dungeon;
+			playerRoomLocation	= playerRoom.Location;
 			playerFloorNumber	= 0;
 			viewFloorIndex		= 0;
 			floorViewSpeed		= 8;
 			isChangingFloors	= false;
 			cursorTimer			= 0;
 			viewFloor			= null;
-
+			
 			// Add the dungeon floors.
 			DungeonFloor[] levelFloors = dungeon.GetFloors();
 			lowestFloorNumber	= levelFloors[0].FloorNumber;
@@ -121,7 +123,7 @@ namespace ZeldaOracle.Game.Control.Maps {
 				DungeonMapFloor floor = new DungeonMapFloor(levelFloors[i]);
 				floors.Add(floor);
 
-				if (floor.DungeonFloor.Level == GameControl.RoomControl.Level) {
+				if (floor.DungeonFloor.Level == playerRoom.Level) {
 					playerFloorNumber	= floor.FloorNumber;
 					viewFloor			= floor;
 					viewFloorIndex		= discoveredFloors.Count;
@@ -211,7 +213,7 @@ namespace ZeldaOracle.Game.Control.Maps {
 						g.DrawSprite(GameData.SPR_UI_MAP_FLOOR_INDICATOR, GameData.VARIANT_LIGHT, floorPos + new Point2I(24, 0));
 					if (playerFloorNumber == floor.FloorNumber)
 						g.DrawSprite(GameData.SPR_UI_MAP_PLAYER, GameData.VARIANT_LIGHT, floorPos + new Point2I(36, 0));
-					if (floor.IsBossFloor)
+					if (floor.IsBossFloor && dungeon.HasCompass)
 						g.DrawSprite(GameData.SPR_UI_MAP_BOSS_FLOOR, GameData.VARIANT_LIGHT, floorPos + new Point2I(48, 0));
 					
 					// Draw the floor's room display on the right side of the screen.

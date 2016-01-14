@@ -32,19 +32,25 @@ namespace ZeldaOracle.Game.Control.Maps {
 			this.dungeonFloor	= dungeonFloor;
 			this.floorNumber	= dungeonFloor.FloorNumber;
 			this.isDiscovered	= dungeonFloor.IsDiscovered;
-			this.isBossFloor	= dungeonFloor.IsBossFloor;
 			this.size			= new Point2I(8, 8);
 
 
 			// Create rooms.
 			rooms = new DungeonMapRoom[size.X, size.Y];
+			isBossFloor = false;
 			
 			if (dungeonFloor.Level !=  null) {
 				for (int x = 0; x < size.X; x++) {
 					for (int y = 0; y < size.Y; y++) {
 						Point2I loc = new Point2I(x, y);
-						if (dungeonFloor.Level.ContainsRoom(loc))
-							rooms[x, y] = DungeonMapRoom.Create(dungeonFloor.Level.GetRoomAt(loc), this);
+						if (dungeonFloor.Level.ContainsRoom(loc)) {
+							Room room = dungeonFloor.Level.GetRoomAt(loc);
+							if (!room.IsHiddenFromMap) {
+								rooms[x, y] = DungeonMapRoom.Create(room, this);
+								if (rooms[x, y] != null && rooms[x, y].IsBossRoom)
+									isBossFloor = true;
+							}
+						}
 						else
 							rooms[x, y] = null;
 					}

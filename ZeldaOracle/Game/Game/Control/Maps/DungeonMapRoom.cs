@@ -54,7 +54,7 @@ namespace ZeldaOracle.Game.Control.Maps {
 				room			= room,
 				hasTreasure		= room.HasUnopenedTreasure(),
 				isDiscovered	= room.IsDiscovered,
-				isBossRoom		= false,
+				isBossRoom		= room.IsBossRoom,
 				location		= room.Location,
 				sprite			= null,
 				floor			= floor,

@@ -436,10 +436,12 @@ namespace ZeldaOracle.Game {
 				.SetDocumentation("Respawn Type", "enum", "MonsterRespawnType", "", "When a monster respawns.");
 			etd.Properties.Set("monster_type", monsterType.Name)
 				.SetDocumentation("Monster Type", "string", "", "", "When a monster respawns.");
+			etd.Properties.Set("dead", false);
 
 			etd.Events.AddEvent("event_die", "Die", "Occurs when the monster dies.", new ScriptParameter("Monster", "monster"));
 			etd.Properties.Set("event_die", "")
 				.SetDocumentation("Die", "script", "", "", "Occurs when the monster dies.");
+
 
 			etd.Properties.Set("substrip_index", Directions.Down);
 			if (color == MonsterColor.Red)

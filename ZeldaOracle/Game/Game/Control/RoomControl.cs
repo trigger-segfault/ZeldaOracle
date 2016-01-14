@@ -32,7 +32,6 @@ namespace ZeldaOracle.Game.Control {
 	// Handles the main Zelda gameplay within a room.
 	public class RoomControl : GameState, ZeldaAPI.Room {
 
-		private Level			level;
 		private Room			room;
 		private Point2I			roomLocation;
 		private Dungeon			dungeon;
@@ -54,7 +53,6 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		public RoomControl() {
-			level			= null;
 			room			= null;
 			dungeon			= null;
 			tiles			= null;
@@ -320,12 +318,11 @@ namespace ZeldaOracle.Game.Control {
 		public void BeginRoom(Room room) {
 			this.room			= room;
 			this.roomLocation	= room.Location;
-			this.level			= room.Level;
 			this.dungeon		= room.Dungeon;
 
 			// Discover the room.
-			room.IsDiscovered	= true;
-			level.IsDiscovered	= true;
+			room.IsDiscovered = true;
+			room.Level.IsDiscovered = true;
 
 			// Clear event tiles.
 			eventTiles.Clear();
@@ -433,8 +430,8 @@ namespace ZeldaOracle.Game.Control {
 			Point2I nextLocation = roomLocation + Directions.ToPoint(direction);
 
 			// Transition to the room.
-			if (level.ContainsRoom(nextLocation)) {
-				Room nextRoom = level.GetRoomAt(nextLocation);
+			if (Level.ContainsRoom(nextLocation)) {
+				Room nextRoom = Level.GetRoomAt(nextLocation);
 				TransitionToRoom(nextRoom, new RoomTransitionPush(direction));
 			}
 		}
@@ -443,7 +440,6 @@ namespace ZeldaOracle.Game.Control {
 			// Create the new room control.
 			RoomControl newControl = new RoomControl();
 			newControl.gameManager	= gameManager;
-			newControl.level		= level;
 			newControl.room			= nextRoom;
 			newControl.roomLocation	= nextRoom.Location;
 			
@@ -508,7 +504,6 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin() {
-			GameControl.RoomControl = this;
 			requestedTransitionDirection = 0;
 		}
 		
@@ -726,7 +721,7 @@ namespace ZeldaOracle.Game.Control {
 
 		// The current level that contains the room the player is in.
 		public Level Level {
-			get { return level; }
+			get { return room.Level; }
 		}
 
 		// The current room the player is in.

@@ -258,7 +258,7 @@ namespace ZeldaOracle.Game.Tiles {
 				SpawnDrop();
 				roomControl.RemoveTile(this);
 				if (properties.GetBoolean("disable_on_destroy", false))
-					BaseProperties.Set("enabled", false);
+					Properties.SetBase("enabled", false);
 			}
 		}
 
@@ -300,7 +300,7 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 
 			if (properties.GetBoolean("disable_on_destroy", false))
-				BaseProperties.Set("enabled", false);
+				Properties.SetBase("enabled", false);
 
 			// Spawn drops.
 			Entity dropEntity = SpawnDrop();
@@ -389,7 +389,7 @@ namespace ZeldaOracle.Game.Tiles {
 				SpawnDrop();
 			
 			if (properties.GetBoolean("disable_on_destroy", false))
-				BaseProperties.Set("enabled", false);
+				Properties.SetBase("enabled", false);
 
 			RoomControl.RemoveTile(this);
 		}
@@ -671,16 +671,6 @@ namespace ZeldaOracle.Game.Tiles {
 		// Get the original tile data from which this was created.
 		public TileDataInstance TileData {
 			get { return tileData; }
-		}
-		
-		// Get the modified properties of the tile data from which this was created.
-		// Do not access these properties, only modify them.
-		public Properties BaseProperties {
-			get {
-				if (tileData == null)
-					return properties;
-				return tileData.Properties;
-			}
 		}
 
 		public bool IsCoverableByBlock {

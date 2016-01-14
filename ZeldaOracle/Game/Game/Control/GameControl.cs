@@ -42,6 +42,7 @@ namespace ZeldaOracle.Game.Control {
 		private bool			updateRoom;
 		private bool			animateRoom;
 		private ScriptRunner	scriptRunner;
+		private Room			lastRoomOnMap;
 
 		// Menus
 		private MenuWeapons			menuWeapons;
@@ -169,6 +170,9 @@ namespace ZeldaOracle.Game.Control {
 			}
 			roomStateStack = new RoomStateStack(new RoomStateNormal());
 			roomStateStack.Begin(this);
+			
+			if (!roomControl.Room.IsHiddenFromMap)
+				lastRoomOnMap = roomControl.Room;
 
 			AudioSystem.MasterVolume = 0.06f;
 		}
@@ -273,7 +277,7 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public void OpenMapScreen() {
-			if (roomControl.Dungeon != null) {
+			if (lastRoomOnMap != null && lastRoomOnMap.Dungeon != null) {
 				ScreenDungeonMap mapScreen = mapDungeon;
 				AudioSystem.PlaySound("UI/menu_open");
 				gameManager.QueueGameStates(
@@ -343,7 +347,23 @@ namespace ZeldaOracle.Game.Control {
 		// Gets the current room control.
 		public RoomControl RoomControl {
 			get { return roomControl; }
-			set { roomControl = value; }
+			set {
+				Level oldLevel = roomControl.Level;
+				roomControl = value;
+
+				if (!roomControl.Room.IsHiddenFromMap)
+					lastRoomOnMap = roomControl.Room;
+
+				// Respawn all monsters in the previous level.
+				if (roomControl.Level != oldLevel) {
+					foreach (Room room in oldLevel.GetRooms())
+						room.RespawnMonsters();
+				}
+			}
+		}
+
+		public Room LastRoomOnMap {
+			get { return lastRoomOnMap; }
 		}
 
 		// Gets the world.

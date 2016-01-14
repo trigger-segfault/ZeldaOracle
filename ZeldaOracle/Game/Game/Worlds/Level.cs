@@ -70,6 +70,14 @@ namespace ZeldaOracle.Game.Worlds {
 			return rooms[location.X, location.Y];
 		}
 
+		public IEnumerable<Room> GetRooms() {
+			for (int x = 0; x < dimensions.X; x++) {
+				for (int y = 0; y < dimensions.Y; y++) {
+					yield return rooms[x, y];
+				}
+			}
+		}
+
 		public EventTileDataInstance FindEventTileByID(string id) {
 			for (int x = 0; x < dimensions.X; x++) {
 				for (int y = 0; y < dimensions.Y; y++) {

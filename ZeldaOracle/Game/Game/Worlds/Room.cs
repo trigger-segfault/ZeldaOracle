@@ -44,6 +44,8 @@ namespace ZeldaOracle.Game.Worlds {
 				.SetDocumentation("Zone", "zone", "", "", "The zone type for this room.", true, false);
 			
 			properties.BaseProperties.Set("discovered", false);
+			properties.BaseProperties.Set("hidden_from_map", false);
+			properties.BaseProperties.Set("boss_room", false);
 
 			events.AddEvent("event_room_start", "Room Start", "Occurs when the room begins.");
 			properties.BaseProperties.Set("event_room_start", "")
@@ -114,25 +116,9 @@ namespace ZeldaOracle.Game.Worlds {
 
 
 		//-----------------------------------------------------------------------------
-		// Mutators
+		// Tile Management
 		//-----------------------------------------------------------------------------
 		
-		public void IterateTiles(Action<TileDataInstance> function) {
-			for (int i = 0; i < LayerCount; i++) {
-				for (int y = 0; y < Height; y++) {
-					for (int x = 0; x < Width; x++) {
-						if (tileData[x, y, i] != null)
-							function(tileData[x, y, i]);
-					}
-				}
-			}
-		}
-		
-		public void IterateEventTiles(Action<EventTileDataInstance> function) {
-			for (int i = 0; i < eventData.Count; i++)
-				function(eventData[i]);
-		}
-
 		public void SetTile(TileDataInstance tile, int x, int y, int layer) {
 			tileData[x, y, layer] = tile;
 			if (tile != null) {
@@ -182,6 +168,18 @@ namespace ZeldaOracle.Game.Worlds {
 			eventData.Remove(eventTile);
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Special In-Game Methods
+		//-----------------------------------------------------------------------------
+
+		public void RespawnMonsters() {
+			foreach (EventTileDataInstance tile in eventData) {
+				if (tile.Type == typeof(MonsterEvent)) {
+					tile.Properties.Set("dead", false);
+				}
+			}
+		}
 
 
 		//-----------------------------------------------------------------------------
@@ -256,6 +254,16 @@ namespace ZeldaOracle.Game.Worlds {
 		public bool IsDiscovered {
 			get { return properties.GetBoolean("discovered", false); }
 			set { properties.Set("discovered", value); }
+		}
+		
+		public bool IsHiddenFromMap {
+			get { return properties.GetBoolean("hidden_from_map", false); }
+			set { properties.Set("hidden_from_map", value); }
+		}
+		
+		public bool IsBossRoom {
+			get { return properties.GetBoolean("boss_room", false); }
+			set { properties.Set("boss_room", value); }
 		}
 	}
 }

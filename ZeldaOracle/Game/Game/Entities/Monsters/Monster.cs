@@ -226,9 +226,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			ChooseImageVariant();
 		}
 
-		public override void Die() {
+		public override void Die(){
 			Effect explosion = new Effect(GameData.ANIM_EFFECT_MONSTER_EXPLOSION, DepthLayer.EffectMonsterExplosion);
 			RoomControl.SpawnEntity(explosion, Center);
+			Properties.SetBase("dead", true);
 			base.Die();
 		}
 

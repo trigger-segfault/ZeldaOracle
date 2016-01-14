@@ -27,6 +27,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 		
+		// TODO: Move these generic methods somewhere else.
 		public static T ConstructObject<T>(string typeName) where T : class {
 			Type type = Assembly.GetExecutingAssembly().GetTypes().First(x => x.Name == typeName);
 			if (type == null)
@@ -44,24 +45,24 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		protected override void Initialize() {
 			base.Initialize();
 
-			// Construct the monster object.
-			string monsterTypeStr = Properties.GetString("monster_type", "");
-			Monster monster = ConstructObject<Monster>(monsterTypeStr);
+			bool isDead = properties.GetBoolean("dead", false);
 
-			/*string monsterTypeStr = Properties.GetString("monster_type", "");
-			Type monsterType = Assembly.GetExecutingAssembly().GetTypes().First(x => x.Name == monsterTypeStr);
-			ConstructorInfo constructor = monsterType.GetConstructor(Type.EmptyTypes);
-			Monster monster = constructor.Invoke(null) as Monster;*/
-			
+			Monster monster = null;
+
+			// Construct the monster object.
+			if (!isDead) {
+				string monsterTypeStr = Properties.GetString("monster_type", "");
+				monster = ConstructObject<Monster>(monsterTypeStr);
+				if (monster == null)
+					Console.WriteLine("Error trying to spawn monster of type " + monsterTypeStr);
+			}
+
 			// Spawn the monster entity.
 			if (monster != null) {
 				Vector2F center = position + new Vector2F(8, 8);
 				monster.SetPositionByCenter(center);
-				monster.Properties.SetAll(properties);
+				monster.Properties = properties;
 				RoomControl.SpawnEntity(monster);
-			}
-			else {
-				Console.WriteLine("Error trying to spawn monster of type " + monsterTypeStr);
 			}
 		}
 

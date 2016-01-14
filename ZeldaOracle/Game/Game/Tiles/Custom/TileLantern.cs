@@ -40,7 +40,7 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 			
 			if (stayLit)
-				BaseProperties.Set("lit", true);
+				Properties.SetBase("lit", true);
 		}
 
 		public void PutOut(bool stayLit) {
@@ -51,7 +51,7 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 
 			if (stayLit)
-				BaseProperties.Set("lit", false);
+				Properties.SetBase("lit", false);
 		}
 
 

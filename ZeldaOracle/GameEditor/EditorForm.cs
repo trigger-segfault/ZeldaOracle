@@ -687,6 +687,7 @@ namespace ZeldaEditor {
 			Room room = editorControl.LevelDisplay.SelectedRoom;
 
 			if (room != null) {
+				editorControl.OpenObjectProperties(room);
 				if (objectEditorForm == null || objectEditorForm.IsDisposed)
 					objectEditorForm = new ObjectEditor(editorControl);
 				objectEditorForm.SetObject(room);

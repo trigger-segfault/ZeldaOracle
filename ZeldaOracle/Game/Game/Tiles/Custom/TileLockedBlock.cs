@@ -38,7 +38,7 @@ namespace ZeldaOracle.Game.Tiles {
 				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_BLOCK_POOF, DepthLayer.EffectSomariaBlockPoof), Center);
 
 				// Destroy the tile forever.
-				BaseProperties.Set("enabled", false);
+				Properties.SetBase("enabled", false);
 				RoomControl.RemoveTile(this);
 
 				return true;
