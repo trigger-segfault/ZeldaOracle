@@ -49,11 +49,11 @@ namespace ZeldaOracle.Game.Worlds {
 
 			events.AddEvent("event_room_start", "Room Start", "Occurs when the room begins.");
 			properties.BaseProperties.Set("event_room_start", "")
-				.SetDocumentation("Room Start", "script", "", "", "Occurs when the room begins.");
+				.SetDocumentation("Room Start", "script", "", "Events", "Occurs when the room begins.");
 			
 			events.AddEvent("event_all_monsters_dead", "All Monsters Dead", "Occurs when all monsters are dead.");
 			properties.BaseProperties.Set("event_all_monsters_dead", "")
-				.SetDocumentation("All Monsters Dead", "script", "", "", "Occurs when all monsters are dead.");
+				.SetDocumentation("All Monsters Dead", "script", "", "Events", "Occurs when all monsters are dead.");
 
 			/*if (zone != null)
 				this.properties.Set("zone", zone.ID);*/

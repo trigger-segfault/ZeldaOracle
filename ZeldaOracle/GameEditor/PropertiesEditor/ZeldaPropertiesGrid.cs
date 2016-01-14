@@ -5,38 +5,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.Design;
-using ZeldaOracle.Common.Graphics;
+using ZeldaEditor.Control;
+using ZeldaEditor.PropertiesEditor.CustomEditors;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Worlds;
-using ZeldaEditor.PropertiesEditor;
-using ZeldaEditor.PropertiesEditor.CustomEditors;
-using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Common.Audio;
-using ZeldaOracle.Common.Scripting;
 
-namespace ZeldaEditor.Control {
-	public class PropertyGridControl {
+namespace ZeldaEditor.PropertiesEditor {
 
-		private EditorControl		editorControl;
-		private PropertyGrid		propertyGrid;
+	public class ZeldaPropertiesGrid : PropertyGrid {
+
+		private EditorControl editorControl;
+		private IPropertyObject propertyObject;
 		private PropertiesContainer	propertiesContainer;
 		private Dictionary<string, CustomPropertyEditor> typeEditors;
-		private IPropertyObject		editedObject;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public PropertyGridControl(EditorControl editorControl, PropertyGrid propertyGrid) {
-			this.editorControl	= editorControl;
-			this.propertyGrid	= propertyGrid;
+		public ZeldaPropertiesGrid() {
+			editorControl		= null;
+			propertyObject		= null;
+			propertiesContainer	= new PropertiesContainer(null);
 
-			propertiesContainer = new PropertiesContainer(this);
-			propertyGrid.SelectedObject = propertiesContainer;
-
+			this.SelectedObject			= propertiesContainer;
+			this.PropertyValueChanged	+= OnPropertyChange;
+			
 			// Create property editor types.
 			typeEditors = new Dictionary<string, CustomPropertyEditor>();
 			typeEditors["sprite"]			= new ResourcePropertyEditor<Sprite>();
@@ -55,12 +54,6 @@ namespace ZeldaEditor.Control {
 			typeEditors["enum_flags"]		= null;
 			typeEditors["dungeon"]			= new DungeonPropertyEditor();
 			typeEditors["level"]			= new LevelPropertyEditor();
-
-			// Initialize property type editors.
-			foreach (KeyValuePair<string, CustomPropertyEditor> entry in typeEditors) {
-				if (entry.Value != null)
-					entry.Value.Initialize(this);
-			}
 		}
 
 
@@ -74,21 +67,24 @@ namespace ZeldaEditor.Control {
 			return typeEditors[editorType];
 		}
 
-
+		
 		//-----------------------------------------------------------------------------
-		// Methods
+		// Properties Methods
 		//-----------------------------------------------------------------------------
 
-		public void OpenProperties(Properties properties, IPropertyObject editedObject) {
-			this.editedObject = editedObject;
-			propertiesContainer.Set(properties);
-			propertyGrid.Refresh();
+		public void OpenProperties(IPropertyObject propertyObject) {
+			this.propertyObject = propertyObject;
+			propertiesContainer.Set(propertyObject.Properties);
+
+			
+		}
+		
+		public void RefreshProperties() {
+			Refresh();
 		}
 		
 		public void CloseProperties() {
-			editedObject = null;
 			propertiesContainer.Clear();
-			propertyGrid.Refresh();
 		}
 		
 
@@ -96,7 +92,7 @@ namespace ZeldaEditor.Control {
 		// Events
 		//-----------------------------------------------------------------------------
 
-		public void OnPropertyChange(object sender, PropertyValueChangedEventArgs e) {
+		private void OnPropertyChange(object sender, PropertyValueChangedEventArgs e) {
 			CustomPropertyDescriptor propertyDescriptor = e.ChangedItem.PropertyDescriptor as CustomPropertyDescriptor;
 			Property property = propertyDescriptor.Property;
 			PropertyDocumentation propertyDoc = property.GetRootDocumentation();
@@ -127,24 +123,23 @@ namespace ZeldaEditor.Control {
 			}
 
 		}
-
+		
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
-		public TileDataInstance TileData {
-			get { return editedObject as TileDataInstance; }
-		}
-
-		public IPropertyObject EditedObject {
-			get { return editedObject; }
-			set { editedObject = value; }
-		}
-
-		public EditorControl EditorControl {
+		
+		public EditorControl EditorControl { 
 			get { return editorControl; }
 			set { editorControl = value; }
+		}
+
+		public Properties Properties {
+			get { return propertyObject.Properties; }
+		}
+		
+		public IPropertyObject PropertyObject {
+			get { return propertyObject; }
 		}
 	}
 }

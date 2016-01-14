@@ -480,10 +480,14 @@ namespace ZeldaEditor {
 		private void tilePropertiesToolStripMenuItem_Click(object sender, EventArgs e) {
 			IPropertyObject obj = editorControl.PropertyGridControl.EditedObject;
 			if (obj is IPropertyObject) {
-				if (objectEditorForm == null || objectEditorForm.IsDisposed)
+				if (objectEditorForm == null || objectEditorForm.IsDisposed) {
 					objectEditorForm = new ObjectEditor(editorControl);
-				objectEditorForm.SetObject((IPropertyObject) obj);
-				objectEditorForm.Show(this);
+					objectEditorForm.SetObject((IPropertyObject) obj);
+					objectEditorForm.Show(this);
+				}
+				else {
+					objectEditorForm.SetObject((IPropertyObject) obj);
+				}
 
 				/*
 				using (Form form = new ObjectEditor((TileDataInstance) obj)) {
@@ -688,10 +692,14 @@ namespace ZeldaEditor {
 
 			if (room != null) {
 				editorControl.OpenObjectProperties(room);
-				if (objectEditorForm == null || objectEditorForm.IsDisposed)
+				if (objectEditorForm == null || objectEditorForm.IsDisposed) {
 					objectEditorForm = new ObjectEditor(editorControl);
-				objectEditorForm.SetObject(room);
-				objectEditorForm.Show(this);
+					objectEditorForm.SetObject(room);
+					objectEditorForm.Show(this);
+				}
+				else {
+					objectEditorForm.SetObject(room);
+				}
 			}
 		}
 		

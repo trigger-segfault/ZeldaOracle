@@ -119,8 +119,8 @@ SPRITE tile_bridge_v,				(6, 9); END;
 SPRITE tile_color_cube_slot,		(7, 9); END;
 SPRITE tile_cracked_floor,			(8, 9); END;
 SPRITE tile_pit,					(9, 9); END;
-SPRITE tile_regrowable_plant_cut	(5, 2); END;
-SPRITE tile_regrowable_plant_grown	(4, 3); END;
+SPRITE tile_regrowable_plant_cut,	(5, 2); END;
+SPRITE tile_regrowable_plant_grown,	(4, 3); END;
 
 
 #==============================================================
@@ -129,10 +129,25 @@ SPRITE tile_regrowable_plant_grown	(4, 3); END;
 
 SPRITESHEET "general_tiles";
 
-SPRITE tile_owl,				(0, 0); END;
-SPRITE tile_owl_activated,		(1, 0), (-8, 0); ADD (2, 0), (8, 0); END;
-SPRITE tile_moving_platform,	(1, 1); END;
-SPRITE tile_statue_eye,			(2, 1); END;
+SPRITE tile_owl,						(0, 0); END;
+SPRITE tile_owl_activated,				(1, 0), (-8, 0); ADD (2, 0), (8, 0); END;
+SPRITE tile_color_switch_red,			(3, 0); END;
+SPRITE tile_color_switch_blue,			(4, 0); END;
+SPRITE tile_color_tile_red,				(5, 0); END;
+SPRITE tile_color_jump_pad_red,			(6, 0); END;
+SPRITE tile_color_statue_red,			(7, 0); END;
+SPRITE tile_moving_platform,			(1, 1); END;
+SPRITE tile_statue_eye,					(2, 1); END;
+SPRITE tile_color_barrier_red_raised,	(3, 1); END;
+SPRITE tile_color_barrier_blue_raised,	(4, 1); END;
+SPRITE tile_color_tile_yellow,			(5, 1); END;
+SPRITE tile_color_jump_pad_yellow,		(6, 1); END;
+SPRITE tile_color_statue_yellow,		(7, 1); END;
+SPRITE tile_color_tile_blue,			(5, 2); END;
+SPRITE tile_color_jump_pad_blue,		(6, 2); END;
+SPRITE tile_color_statue_blue,			(7, 2); END;
+SPRITE tile_color_barrier_red_lowered,	(3, 3); END;
+SPRITE tile_color_barrier_blue_lowered,	(4, 3); END;
 
 
 #==============================================================

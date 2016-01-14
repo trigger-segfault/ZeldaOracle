@@ -25,7 +25,13 @@
 		private void InitializeComponent() {
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
+			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+			this.groupBoxCustomObjectControls = new System.Windows.Forms.GroupBox();
+			this.panelCustomObjectControl = new System.Windows.Forms.Panel();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.checkBoxStartDisabled = new System.Windows.Forms.CheckBox();
+			this.textBoxId = new System.Windows.Forms.TextBox();
 			this.numberBoxWidth = new System.Windows.Forms.NumericUpDown();
 			this.comboBoxSolidType = new System.Windows.Forms.ComboBox();
 			this.numberBoxHeight = new System.Windows.Forms.NumericUpDown();
@@ -38,14 +44,8 @@
 			this.comboBoxCollisionModel = new System.Windows.Forms.ComboBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.labelLedgeDirection = new System.Windows.Forms.Label();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.checkBoxSecretSound = new System.Windows.Forms.CheckBox();
 			this.checkBoxPoofEffect = new System.Windows.Forms.CheckBox();
-			this.checkBoxDropFromCeiling = new System.Windows.Forms.CheckBox();
-			this.checkBoxStartDisabled = new System.Windows.Forms.CheckBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.textBoxId = new System.Windows.Forms.TextBox();
-			this.tabPage5 = new System.Windows.Forms.TabPage();
+			this.tabPageTileInteractions = new System.Windows.Forms.TabPage();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.labelMoveDirection = new System.Windows.Forms.Label();
 			this.checkBoxDisableOnDestroy = new System.Windows.Forms.CheckBox();
@@ -72,14 +72,20 @@
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.buttonDone = new System.Windows.Forms.Button();
+			this.eventsTab = new ZeldaEditor.ObjectsEditor.ObjectEditorEventsTab();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+			this.splitContainer1.Panel1.SuspendLayout();
+			this.splitContainer1.Panel2.SuspendLayout();
+			this.splitContainer1.SuspendLayout();
+			this.groupBoxCustomObjectControls.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numberBoxWidth)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numberBoxHeight)).BeginInit();
-			this.groupBox1.SuspendLayout();
-			this.tabPage5.SuspendLayout();
+			this.tabPageTileInteractions.SuspendLayout();
 			this.groupBox3.SuspendLayout();
+			this.tabPage2.SuspendLayout();
 			this.tabPage3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.panel1.SuspendLayout();
@@ -88,7 +94,7 @@
 			// tabControl1
 			// 
 			this.tabControl1.Controls.Add(this.tabPage1);
-			this.tabControl1.Controls.Add(this.tabPage5);
+			this.tabControl1.Controls.Add(this.tabPageTileInteractions);
 			this.tabControl1.Controls.Add(this.tabPage2);
 			this.tabControl1.Controls.Add(this.tabPage3);
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -100,11 +106,7 @@
 			// 
 			// tabPage1
 			// 
-			this.tabPage1.Controls.Add(this.groupBox2);
-			this.tabPage1.Controls.Add(this.groupBox1);
-			this.tabPage1.Controls.Add(this.checkBoxStartDisabled);
-			this.tabPage1.Controls.Add(this.label1);
-			this.tabPage1.Controls.Add(this.textBoxId);
+			this.tabPage1.Controls.Add(this.splitContainer1);
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -113,8 +115,58 @@
 			this.tabPage1.Text = "General";
 			this.tabPage1.UseVisualStyleBackColor = true;
 			// 
+			// splitContainer1
+			// 
+			this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainer1.IsSplitterFixed = true;
+			this.splitContainer1.Location = new System.Drawing.Point(3, 3);
+			this.splitContainer1.Name = "splitContainer1";
+			// 
+			// splitContainer1.Panel1
+			// 
+			this.splitContainer1.Panel1.Controls.Add(this.groupBoxCustomObjectControls);
+			this.splitContainer1.Panel1.Controls.Add(this.label1);
+			this.splitContainer1.Panel1.Controls.Add(this.textBoxId);
+			// 
+			// splitContainer1.Panel2
+			// 
+			this.splitContainer1.Panel2.Controls.Add(this.groupBox2);
+			this.splitContainer1.Size = new System.Drawing.Size(553, 362);
+			this.splitContainer1.SplitterDistance = 270;
+			this.splitContainer1.TabIndex = 16;
+			// 
+			// groupBoxCustomObjectControls
+			// 
+			this.groupBoxCustomObjectControls.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBoxCustomObjectControls.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.groupBoxCustomObjectControls.Controls.Add(this.panelCustomObjectControl);
+			this.groupBoxCustomObjectControls.Location = new System.Drawing.Point(3, 50);
+			this.groupBoxCustomObjectControls.Name = "groupBoxCustomObjectControls";
+			this.groupBoxCustomObjectControls.Padding = new System.Windows.Forms.Padding(10);
+			this.groupBoxCustomObjectControls.Size = new System.Drawing.Size(264, 309);
+			this.groupBoxCustomObjectControls.TabIndex = 15;
+			this.groupBoxCustomObjectControls.TabStop = false;
+			this.groupBoxCustomObjectControls.Text = "groupBox4";
+			// 
+			// panelCustomObjectControl
+			// 
+			this.panelCustomObjectControl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.panelCustomObjectControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panelCustomObjectControl.Location = new System.Drawing.Point(10, 23);
+			this.panelCustomObjectControl.MinimumSize = new System.Drawing.Size(100, 0);
+			this.panelCustomObjectControl.Name = "panelCustomObjectControl";
+			this.panelCustomObjectControl.Size = new System.Drawing.Size(244, 276);
+			this.panelCustomObjectControl.TabIndex = 0;
+			// 
 			// groupBox2
 			// 
+			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox2.Controls.Add(this.checkBoxPoofEffect);
+			this.groupBox2.Controls.Add(this.checkBoxStartDisabled);
 			this.groupBox2.Controls.Add(this.numberBoxWidth);
 			this.groupBox2.Controls.Add(this.comboBoxSolidType);
 			this.groupBox2.Controls.Add(this.numberBoxHeight);
@@ -127,23 +179,53 @@
 			this.groupBox2.Controls.Add(this.comboBoxCollisionModel);
 			this.groupBox2.Controls.Add(this.label7);
 			this.groupBox2.Controls.Add(this.labelLedgeDirection);
-			this.groupBox2.Location = new System.Drawing.Point(11, 65);
+			this.groupBox2.Location = new System.Drawing.Point(3, 3);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(298, 198);
+			this.groupBox2.Size = new System.Drawing.Size(273, 356);
 			this.groupBox2.TabIndex = 11;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "General";
 			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(10, 14);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(21, 13);
+			this.label1.TabIndex = 1;
+			this.label1.Text = "ID:";
+			// 
+			// checkBoxStartDisabled
+			// 
+			this.checkBoxStartDisabled.AutoSize = true;
+			this.checkBoxStartDisabled.Location = new System.Drawing.Point(11, 19);
+			this.checkBoxStartDisabled.Name = "checkBoxStartDisabled";
+			this.checkBoxStartDisabled.Size = new System.Drawing.Size(95, 17);
+			this.checkBoxStartDisabled.TabIndex = 4;
+			this.checkBoxStartDisabled.Text = "Starts disabled";
+			this.checkBoxStartDisabled.UseVisualStyleBackColor = true;
+			// 
+			// textBoxId
+			// 
+			this.textBoxId.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textBoxId.Location = new System.Drawing.Point(59, 11);
+			this.textBoxId.Name = "textBoxId";
+			this.textBoxId.Size = new System.Drawing.Size(208, 20);
+			this.textBoxId.TabIndex = 0;
+			// 
 			// numberBoxWidth
 			// 
-			this.numberBoxWidth.Location = new System.Drawing.Point(147, 19);
+			this.numberBoxWidth.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.numberBoxWidth.Location = new System.Drawing.Point(116, 47);
 			this.numberBoxWidth.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
 			this.numberBoxWidth.Name = "numberBoxWidth";
-			this.numberBoxWidth.Size = new System.Drawing.Size(145, 20);
+			this.numberBoxWidth.Size = new System.Drawing.Size(151, 20);
 			this.numberBoxWidth.TabIndex = 12;
 			this.numberBoxWidth.Value = new decimal(new int[] {
             1,
@@ -157,22 +239,24 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBoxSolidType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxSolidType.FormattingEnabled = true;
-			this.comboBoxSolidType.Location = new System.Drawing.Point(147, 71);
+			this.comboBoxSolidType.Location = new System.Drawing.Point(116, 99);
 			this.comboBoxSolidType.Name = "comboBoxSolidType";
-			this.comboBoxSolidType.Size = new System.Drawing.Size(145, 21);
+			this.comboBoxSolidType.Size = new System.Drawing.Size(151, 21);
 			this.comboBoxSolidType.TabIndex = 10;
 			this.comboBoxSolidType.SelectedIndexChanged += new System.EventHandler(this.comboBoxSolidType_SelectedIndexChanged);
 			// 
 			// numberBoxHeight
 			// 
-			this.numberBoxHeight.Location = new System.Drawing.Point(147, 45);
+			this.numberBoxHeight.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.numberBoxHeight.Location = new System.Drawing.Point(116, 73);
 			this.numberBoxHeight.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
 			this.numberBoxHeight.Name = "numberBoxHeight";
-			this.numberBoxHeight.Size = new System.Drawing.Size(145, 20);
+			this.numberBoxHeight.Size = new System.Drawing.Size(151, 20);
 			this.numberBoxHeight.TabIndex = 12;
 			this.numberBoxHeight.Value = new decimal(new int[] {
             1,
@@ -186,15 +270,15 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBoxMovementType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxMovementType.FormattingEnabled = true;
-			this.comboBoxMovementType.Location = new System.Drawing.Point(147, 152);
+			this.comboBoxMovementType.Location = new System.Drawing.Point(116, 180);
 			this.comboBoxMovementType.Name = "comboBoxMovementType";
-			this.comboBoxMovementType.Size = new System.Drawing.Size(145, 21);
+			this.comboBoxMovementType.Size = new System.Drawing.Size(151, 21);
 			this.comboBoxMovementType.TabIndex = 10;
 			// 
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(6, 47);
+			this.label3.Location = new System.Drawing.Point(6, 75);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(38, 13);
 			this.label3.TabIndex = 1;
@@ -203,7 +287,7 @@
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(6, 21);
+			this.label2.Location = new System.Drawing.Point(8, 49);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(38, 13);
 			this.label2.TabIndex = 1;
@@ -212,7 +296,7 @@
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(6, 74);
+			this.label5.Location = new System.Drawing.Point(6, 102);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(60, 13);
 			this.label5.TabIndex = 1;
@@ -224,15 +308,15 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBoxLedgeDirection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxLedgeDirection.FormattingEnabled = true;
-			this.comboBoxLedgeDirection.Location = new System.Drawing.Point(147, 98);
+			this.comboBoxLedgeDirection.Location = new System.Drawing.Point(116, 126);
 			this.comboBoxLedgeDirection.Name = "comboBoxLedgeDirection";
-			this.comboBoxLedgeDirection.Size = new System.Drawing.Size(145, 21);
+			this.comboBoxLedgeDirection.Size = new System.Drawing.Size(151, 21);
 			this.comboBoxLedgeDirection.TabIndex = 10;
 			// 
 			// label6
 			// 
 			this.label6.AutoSize = true;
-			this.label6.Location = new System.Drawing.Point(8, 155);
+			this.label6.Location = new System.Drawing.Point(8, 183);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(96, 13);
 			this.label6.TabIndex = 1;
@@ -244,15 +328,15 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBoxCollisionModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxCollisionModel.FormattingEnabled = true;
-			this.comboBoxCollisionModel.Location = new System.Drawing.Point(147, 125);
+			this.comboBoxCollisionModel.Location = new System.Drawing.Point(116, 153);
 			this.comboBoxCollisionModel.Name = "comboBoxCollisionModel";
-			this.comboBoxCollisionModel.Size = new System.Drawing.Size(145, 21);
+			this.comboBoxCollisionModel.Size = new System.Drawing.Size(151, 21);
 			this.comboBoxCollisionModel.TabIndex = 10;
 			// 
 			// label7
 			// 
 			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(8, 128);
+			this.label7.Location = new System.Drawing.Point(8, 156);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(80, 13);
 			this.label7.TabIndex = 1;
@@ -261,91 +345,32 @@
 			// labelLedgeDirection
 			// 
 			this.labelLedgeDirection.AutoSize = true;
-			this.labelLedgeDirection.Location = new System.Drawing.Point(6, 101);
+			this.labelLedgeDirection.Location = new System.Drawing.Point(6, 129);
 			this.labelLedgeDirection.Name = "labelLedgeDirection";
 			this.labelLedgeDirection.Size = new System.Drawing.Size(82, 13);
 			this.labelLedgeDirection.TabIndex = 1;
 			this.labelLedgeDirection.Text = "Ledge Direction";
 			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.checkBoxSecretSound);
-			this.groupBox1.Controls.Add(this.checkBoxPoofEffect);
-			this.groupBox1.Controls.Add(this.checkBoxDropFromCeiling);
-			this.groupBox1.Location = new System.Drawing.Point(11, 269);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(298, 90);
-			this.groupBox1.TabIndex = 5;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Spawn Type";
-			// 
-			// checkBoxSecretSound
-			// 
-			this.checkBoxSecretSound.AutoSize = true;
-			this.checkBoxSecretSound.Location = new System.Drawing.Point(6, 65);
-			this.checkBoxSecretSound.Name = "checkBoxSecretSound";
-			this.checkBoxSecretSound.Size = new System.Drawing.Size(125, 17);
-			this.checkBoxSecretSound.TabIndex = 0;
-			this.checkBoxSecretSound.Text = "Secret Sound TODO";
-			this.checkBoxSecretSound.UseVisualStyleBackColor = true;
-			// 
 			// checkBoxPoofEffect
 			// 
 			this.checkBoxPoofEffect.AutoSize = true;
-			this.checkBoxPoofEffect.Location = new System.Drawing.Point(6, 42);
+			this.checkBoxPoofEffect.Location = new System.Drawing.Point(116, 19);
 			this.checkBoxPoofEffect.Name = "checkBoxPoofEffect";
-			this.checkBoxPoofEffect.Size = new System.Drawing.Size(79, 17);
+			this.checkBoxPoofEffect.Size = new System.Drawing.Size(135, 17);
 			this.checkBoxPoofEffect.TabIndex = 0;
-			this.checkBoxPoofEffect.Text = "Poof Effect";
+			this.checkBoxPoofEffect.Text = "Spawn with poof effect";
 			this.checkBoxPoofEffect.UseVisualStyleBackColor = true;
 			// 
-			// checkBoxDropFromCeiling
+			// tabPageTileInteractions
 			// 
-			this.checkBoxDropFromCeiling.AutoSize = true;
-			this.checkBoxDropFromCeiling.Location = new System.Drawing.Point(6, 19);
-			this.checkBoxDropFromCeiling.Name = "checkBoxDropFromCeiling";
-			this.checkBoxDropFromCeiling.Size = new System.Drawing.Size(106, 17);
-			this.checkBoxDropFromCeiling.TabIndex = 0;
-			this.checkBoxDropFromCeiling.Text = "Drop from Ceiling";
-			this.checkBoxDropFromCeiling.UseVisualStyleBackColor = true;
-			// 
-			// checkBoxStartDisabled
-			// 
-			this.checkBoxStartDisabled.AutoSize = true;
-			this.checkBoxStartDisabled.Location = new System.Drawing.Point(17, 42);
-			this.checkBoxStartDisabled.Name = "checkBoxStartDisabled";
-			this.checkBoxStartDisabled.Size = new System.Drawing.Size(97, 17);
-			this.checkBoxStartDisabled.TabIndex = 4;
-			this.checkBoxStartDisabled.Text = "Starts Disabled";
-			this.checkBoxStartDisabled.UseVisualStyleBackColor = true;
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(8, 9);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(21, 13);
-			this.label1.TabIndex = 1;
-			this.label1.Text = "ID:";
-			// 
-			// textBoxId
-			// 
-			this.textBoxId.Location = new System.Drawing.Point(35, 6);
-			this.textBoxId.Name = "textBoxId";
-			this.textBoxId.Size = new System.Drawing.Size(132, 20);
-			this.textBoxId.TabIndex = 0;
-			this.textBoxId.Text = "id";
-			// 
-			// tabPage5
-			// 
-			this.tabPage5.Controls.Add(this.groupBox3);
-			this.tabPage5.Location = new System.Drawing.Point(4, 22);
-			this.tabPage5.Name = "tabPage5";
-			this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage5.Size = new System.Drawing.Size(559, 368);
-			this.tabPage5.TabIndex = 4;
-			this.tabPage5.Text = "Interactions";
-			this.tabPage5.UseVisualStyleBackColor = true;
+			this.tabPageTileInteractions.Controls.Add(this.groupBox3);
+			this.tabPageTileInteractions.Location = new System.Drawing.Point(4, 22);
+			this.tabPageTileInteractions.Name = "tabPageTileInteractions";
+			this.tabPageTileInteractions.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPageTileInteractions.Size = new System.Drawing.Size(559, 368);
+			this.tabPageTileInteractions.TabIndex = 4;
+			this.tabPageTileInteractions.Text = "Interactions";
+			this.tabPageTileInteractions.UseVisualStyleBackColor = true;
 			// 
 			// groupBox3
 			// 
@@ -379,7 +404,7 @@
 			// labelMoveDirection
 			// 
 			this.labelMoveDirection.AutoSize = true;
-			this.labelMoveDirection.Location = new System.Drawing.Point(119, 167);
+			this.labelMoveDirection.Location = new System.Drawing.Point(159, 167);
 			this.labelMoveDirection.Name = "labelMoveDirection";
 			this.labelMoveDirection.Size = new System.Drawing.Size(79, 13);
 			this.labelMoveDirection.TabIndex = 10;
@@ -449,7 +474,7 @@
 			this.comboBoxMoveDirection.FormattingEnabled = true;
 			this.comboBoxMoveDirection.Location = new System.Drawing.Point(28, 164);
 			this.comboBoxMoveDirection.Name = "comboBoxMoveDirection";
-			this.comboBoxMoveDirection.Size = new System.Drawing.Size(85, 21);
+			this.comboBoxMoveDirection.Size = new System.Drawing.Size(125, 21);
 			this.comboBoxMoveDirection.TabIndex = 9;
 			// 
 			// comboBoxBraceletLevel
@@ -554,6 +579,7 @@
 			// 
 			// tabPage2
 			// 
+			this.tabPage2.Controls.Add(this.eventsTab);
 			this.tabPage2.Location = new System.Drawing.Point(4, 22);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -639,6 +665,14 @@
 			this.buttonDone.UseVisualStyleBackColor = true;
 			this.buttonDone.Click += new System.EventHandler(this.buttonDone_Click);
 			// 
+			// eventsTab
+			// 
+			this.eventsTab.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.eventsTab.Location = new System.Drawing.Point(3, 3);
+			this.eventsTab.Name = "eventsTab";
+			this.eventsTab.Size = new System.Drawing.Size(553, 362);
+			this.eventsTab.TabIndex = 0;
+			// 
 			// ObjectEditor
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -652,16 +686,20 @@
 			this.Text = "ObjectEditor";
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
-			this.tabPage1.PerformLayout();
+			this.splitContainer1.Panel1.ResumeLayout(false);
+			this.splitContainer1.Panel1.PerformLayout();
+			this.splitContainer1.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+			this.splitContainer1.ResumeLayout(false);
+			this.groupBoxCustomObjectControls.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numberBoxWidth)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numberBoxHeight)).EndInit();
-			this.groupBox1.ResumeLayout(false);
-			this.groupBox1.PerformLayout();
-			this.tabPage5.ResumeLayout(false);
+			this.tabPageTileInteractions.ResumeLayout(false);
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox3.PerformLayout();
+			this.tabPage2.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 			this.panel1.ResumeLayout(false);
@@ -682,15 +720,12 @@
 		private System.Windows.Forms.Button buttonCancel;
 		private System.Windows.Forms.Button buttonDone;
 		private System.Windows.Forms.CheckBox checkBoxStartDisabled;
-		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.CheckBox checkBoxSecretSound;
 		private System.Windows.Forms.CheckBox checkBoxPoofEffect;
-		private System.Windows.Forms.CheckBox checkBoxDropFromCeiling;
 		private System.Windows.Forms.DataGridView dataGridView1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
 		private System.Windows.Forms.ComboBox comboBoxSolidType;
-		private System.Windows.Forms.TabPage tabPage5;
+		private System.Windows.Forms.TabPage tabPageTileInteractions;
 		private System.Windows.Forms.GroupBox groupBox3;
 		private System.Windows.Forms.Label labelMoveDirection;
 		private System.Windows.Forms.CheckBox checkBoxDisableOnDestroy;
@@ -721,5 +756,9 @@
 		private System.Windows.Forms.NumericUpDown numberBoxHeight;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label2;
+		private ObjectEditorEventsTab eventsTab;
+		private System.Windows.Forms.GroupBox groupBoxCustomObjectControls;
+		private System.Windows.Forms.Panel panelCustomObjectControl;
+		private System.Windows.Forms.SplitContainer splitContainer1;
 	}
 }

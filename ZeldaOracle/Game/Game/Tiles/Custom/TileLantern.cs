@@ -25,11 +25,11 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		public void Light() {
-			Light(Properties.GetBoolean("stay_lit", false));
+			Light(Properties.GetBoolean("remember_state", false));
 		}
 		
 		public void PutOut() {
-			PutOut(Properties.GetBoolean("stay_lit", false));
+			PutOut(Properties.GetBoolean("remember_state", false));
 		}
 
 		public void Light(bool stayLit) {

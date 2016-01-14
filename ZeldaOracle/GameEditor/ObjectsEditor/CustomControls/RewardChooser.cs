@@ -1,36 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Drawing.Design;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.Design;
 using ZeldaOracle.Game.Items.Rewards;
-using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaEditor.Control;
 
-namespace ZeldaEditor.PropertiesEditor.CustomEditors {
+namespace ZeldaEditor.ObjectsEditor.CustomControls {
+	public partial class RewardChooser : UserControl {
 
-	public partial class RewardPropertyEditorForm : Form {
 		private RewardManager rewardManager;
 
+		public RewardChooser() {
+			InitializeComponent();
+			rewardManager = null;
+		}
 
-		//-----------------------------------------------------------------------------
-		// Constructor
-		//-----------------------------------------------------------------------------
+		public RewardChooser(RewardManager rewardManager) {
+			InitializeComponent();
+			Setup(rewardManager);
+		}
 
-		public RewardPropertyEditorForm(RewardManager rewardManager, string startValue) {
+		public void Setup(RewardManager rewardManager) {
 			this.rewardManager = rewardManager;
 
-			InitializeComponent();
-			
-			buttonOkay.DialogResult		= DialogResult.OK;
-			buttonCancel.DialogResult	= DialogResult.Cancel;
+			listBox1.Items.Clear();
+			textBox1.AutoCompleteCustomSource.Clear();
 			
 			// Add rewards to the list.
 			listBox1.Items.Add("");
@@ -41,7 +41,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 				textBox1.AutoCompleteCustomSource.Add(entry.Key);
 			}
 
-			textBox1.Text = startValue;
+			textBox1.Text = "";
 		}
 
 
@@ -60,11 +60,11 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 			else
 				listBox1.ClearSelected();
 		}
-
+		/*
 		private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e) {
 			DialogResult = DialogResult.OK;
 			Close();
-		}
+		}*/
 
 		private void textBox1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e) {
 			if (e.KeyCode == Keys.Up) {
@@ -134,26 +134,6 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 		public string RewardName {
 			get { return textBox1.Text; }
 			set { textBox1.Text = value; }
-		}
-	}
-	
-	public class RewardPropertyEditor : FormPropertyEditor {
-		private RewardManager rewardManager;
-
-		public RewardPropertyEditor(RewardManager rewardManager) {
-			this.rewardManager = rewardManager;
-		}
-
-		public override Form CreateForm(object value) {
-			return new RewardPropertyEditorForm(rewardManager, (string) value);
-		}
-
-		public override object OnResultOkay(Form form, object value) {
-			return ((RewardPropertyEditorForm) form).RewardName;
-		}
-		
-		public override object OnResultCancel(Form form, object value) {
-			return value;
 		}
 	}
 }

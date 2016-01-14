@@ -91,6 +91,10 @@ namespace ZeldaOracle.Game.Worlds {
 			return null;
 		}
 
+		public IEnumerable<Dungeon> GetDungeons() {
+			return dungeons.Values;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Mutators

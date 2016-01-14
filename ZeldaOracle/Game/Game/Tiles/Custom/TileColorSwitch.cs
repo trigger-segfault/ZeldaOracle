@@ -12,14 +12,16 @@ using ZeldaOracle.Game.Items.Weapons;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TileLever : SwitchTileBase, ZeldaAPI.Lever {
+	public class TileColorSwitch : SwitchTileBase, ZeldaAPI.ColorSwitch {
+
+		private PuzzleColor color;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public TileLever() {
+		public TileColorSwitch() {
 
 		}
 		
@@ -29,10 +31,14 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public override void OnToggle(bool switchState) {
-			if (switchState)
-				CustomSprite = GameData.SPR_TILE_LEVER_RIGHT;
-			else
-				CustomSprite = GameData.SPR_TILE_LEVER_LEFT;
+			if (switchState) {
+				color = PuzzleColor.Blue;
+				CustomSprite = GameData.SPR_TILE_COLOR_SWITCH_BLUE;
+			}
+			else {
+				color = PuzzleColor.Red;
+				CustomSprite = GameData.SPR_TILE_COLOR_SWITCH_RED;
+			}
 		}
 
 
@@ -42,11 +48,15 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void OnInitialize() {
 			base.OnInitialize();
-
-			if (SwitchState)
-				CustomSprite = GameData.SPR_TILE_LEVER_RIGHT;
-			else
-				CustomSprite = GameData.SPR_TILE_LEVER_LEFT;
+			
+			if (SwitchState) {
+				color = PuzzleColor.Blue;
+				CustomSprite = GameData.SPR_TILE_COLOR_SWITCH_BLUE;
+			}
+			else {
+				color = PuzzleColor.Red;
+				CustomSprite = GameData.SPR_TILE_COLOR_SWITCH_RED;
+			}
 		}
 	}
 }

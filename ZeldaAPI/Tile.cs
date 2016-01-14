@@ -35,6 +35,9 @@ namespace ZeldaAPI {
 
 	public interface Lever {
 	}
+
+	public interface ColorSwitch {
+	}
 	
 	public interface Reward {
 		void SpawnReward();

@@ -217,7 +217,7 @@ namespace ZeldaOracle.Common.Scripts {
 								param.GetString(5),
 								param.GetString(6),
 								true,
-								param.GetBool(7));
+								param.GetBool(7, false));
 						}
 
 						if (property != null)

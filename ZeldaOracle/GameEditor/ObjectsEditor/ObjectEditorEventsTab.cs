@@ -20,7 +20,6 @@ namespace ZeldaEditor.ObjectsEditor {
 	public partial class ObjectEditorEventsTab : UserControl {
 
 		private ObjectEditor objectEditor;
-		private List<Property> eventProperties;
 		private List<InternalObjectEvent> objectEvents;
 		private InternalObjectEvent objectEvent;
 		
@@ -48,14 +47,19 @@ namespace ZeldaEditor.ObjectsEditor {
 			this.objectEditor = objectEditor;
 		}
 
-		public void SetupObject(List<Property> eventProperties) {
-			this.eventProperties = eventProperties;
+		public void SetupObject(IPropertyObject propertyObject) {
+			// Create a list of all event properties.
+			List<Property> eventProperties = new List<Property>();
+			foreach (Property property in propertyObject.Properties.GetAllProperties()) {
+				PropertyDocumentation doc = property.GetDocumentation();
+				if (doc != null && doc.EditorType == "script")
+					eventProperties.Add(property);
+			}
 			
-			IEventObject eventObject = objectEditor.PropertyObject as IEventObject;
-
 			objectEvents.Clear();
-
 			listBoxEvents.Items.Clear();
+
+			IEventObject eventObject = objectEditor.PropertyObject as IEventObject;
 
 			if (eventObject != null) {
 				foreach (KeyValuePair<string, ObjectEvent> entry in eventObject.Events.Events) {

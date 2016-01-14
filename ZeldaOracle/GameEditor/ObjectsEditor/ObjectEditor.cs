@@ -16,6 +16,8 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
+using ZeldaEditor.ObjectsEditor.CustomControls;
+using ZeldaOracle.Game.Tiles.Custom;
 
 namespace ZeldaEditor.ObjectsEditor {
 
@@ -24,9 +26,8 @@ namespace ZeldaEditor.ObjectsEditor {
 		private EditorControl editorControl;
 		private TileDataInstance tile;
 		private IPropertyObject propertyObject;
-		private List<Property> propertyList;
-		private List<Property> eventProperties;
-		private ObjectEditorEventsTab eventsTab;
+		private CustomObjectEditorControl customControl;
+		private Dictionary<Type, CustomObjectEditorControl> customTileTypeControls;
 
 
 		//-----------------------------------------------------------------------------
@@ -36,20 +37,20 @@ namespace ZeldaEditor.ObjectsEditor {
 		public ObjectEditor(EditorControl editorControl) {
 			InitializeComponent();
 
-			this.editorControl = editorControl;
+			// Setup the custom control types.
+			customTileTypeControls = new Dictionary<Type, CustomObjectEditorControl>();
+			customTileTypeControls[typeof(TileButton)]		= new ObjectControlsTileButton();
+			customTileTypeControls[typeof(TileLantern)]		= new ObjectControlsTileLantern();
+			customTileTypeControls[typeof(TileLever)]		= new ObjectControlsTileLever();
+			customTileTypeControls[typeof(TileColorSwitch)]	= new ObjectControlsTileColorSwitch();
+			customTileTypeControls[typeof(TileChest)]		= new ObjectControlsTileChest();
+			customTileTypeControls[typeof(TileReward)]		= new ObjectControlsTileReward();
+			/*foreach (CustomObjectEditorControl editor in customTileTypeControls.Values)
+				editor.Initialize(this);*/
 
-			propertyList = new List<Property>();
-			eventProperties = new List<Property>();
-
-			tile = null;
-			
-			// Create events tab.
-			eventsTab = new ObjectEditorEventsTab();
-			eventsTab.Initialize(this);
-			eventsTab.Dock = DockStyle.Fill;
-			tabPage2.Controls.Add(eventsTab);
-
-			Text = "Object Properties";
+			this.editorControl	= editorControl;
+			this.tile			= null;
+			this.eventsTab.Initialize(this);
 			
 			dataGridView1.Rows.Add();
 			dataGridView1.Rows.Add();
@@ -126,45 +127,84 @@ namespace ZeldaEditor.ObjectsEditor {
 
 		public void SetObject(IPropertyObject propertyObject) {
 			this.propertyObject = propertyObject;
+			
+			// Determine the name of the base type of the property object.
+			string baseTypeName = "Object";
+			if (propertyObject is TileDataInstance)
+				baseTypeName = "Tile";
+			else if (propertyObject is EventTileDataInstance)
+				baseTypeName = "Event Tile";
+			else if (propertyObject is Room)
+				baseTypeName = "Room";
+			else if (propertyObject is Level)
+				baseTypeName = "Level";
+			else if (propertyObject is World)
+				baseTypeName = "World";
+			else if (propertyObject is Dungeon)
+				baseTypeName = "Dungeon";
+			else if (propertyObject is Script)
+				baseTypeName = "Script";
 
+			// Determine the type of the object.
+			Type tileType = null;
+			tile = null;
 			if (propertyObject is TileDataInstance) {
 				tile = (TileDataInstance) propertyObject;
-				
-				// Set the title of the form.
-				if (tile.Type == null)
-					Text = "Object Properties [Tile]";
-				else
-					Text = "Object Properties [" + tile.Type.Name + "]";
+				tileType = tile.Type;
+				if (tileType == null)
+					tileType = typeof(Tile);
+			}
+			else if (propertyObject is EventTileDataInstance) {
+				tileType = ((EventTileDataInstance) propertyObject).Type;
+				if (tileType == null)
+					tileType = typeof(EventTile);
+			}
+			
+			// Only show Tile Interactions tab page for tiles.
+			if (propertyObject is TileDataInstance) {
+				if (!tabControl1.TabPages.Contains(tabPageTileInteractions))
+					tabControl1.TabPages.Add(tabPageTileInteractions);
 			}
 			else {
-				Text = "Object Properties";
-				tile = null;
+				if (tabControl1.TabPages.Contains(tabPageTileInteractions))
+					tabControl1.TabPages.Remove(tabPageTileInteractions);
+			}
+
+			// Set the form title.
+			if (tileType != null) {
+				Text = String.Format("{0} Properties [{1}]", baseTypeName, tileType.Name);
+				groupBoxCustomObjectControls.Text = tileType.Name;
+			}
+			else {
+				Text = String.Format("{0} Properties", baseTypeName);
+				groupBoxCustomObjectControls.Text = baseTypeName;
+			}
+
+			// Remove the custom control for the previous tile type.
+			if (customControl != null) {
+				panelCustomObjectControl.Controls.Remove(customControl);
+				//groupBoxCustomObjectControls.Controls.Remove(customControl);
+				customControl = null;
+			}
+			// Add the custom control for the tile type.
+			if (tileType != null && customTileTypeControls.ContainsKey(tileType)) {
+				customControl = customTileTypeControls[tileType];
+				customControl.Initialize(this);
+				customControl.Dock = DockStyle.Fill;
+				panelCustomObjectControl.Controls.Add(customControl);
+				//groupBoxCustomObjectControls.Controls.Add(customControl);
 			}
 			
 			// Setup events tab.
-			propertyList.Clear();
-			AddProperties(propertyObject.Properties);
-			for (int i = 0; i < propertyList.Count; i++) {
-				Property property = propertyList[i];
-				PropertyDocumentation doc = property.GetRootDocumentation();
-				string name = (doc != null ? doc.ReadableName : property.Name);
-
-				// Check if the property is an event.
-				if (doc != null && doc.EditorType == "script") {
-					eventProperties.Add(property);
-				}
-			}
-			eventsTab.SetupObject(eventProperties);
+			eventsTab.SetupObject(propertyObject);
 					
 			// ID.
 			textBoxId.Text = propertyObject.Properties.GetString("id", "");
 
 			// Spawn type.
 			checkBoxStartDisabled.Checked	= !propertyObject.Properties.GetBoolean("enabled", true);
-			checkBoxDropFromCeiling.Checked	= propertyObject.Properties.GetBoolean("spawn_from_ceiling", false);
 			checkBoxPoofEffect.Checked		= propertyObject.Properties.GetBoolean("spawn_poof_effect", false);
 			
-
 			if (tile != null) {
 				// Size.
 				numberBoxWidth.Value = tile.Size.X;
@@ -224,6 +264,10 @@ namespace ZeldaEditor.ObjectsEditor {
 						comboBoxMoveDirection.SelectedItem = item;
 				}
 			}
+
+			// Setup custom controls.
+			if (customControl != null)
+				customControl.SetupObject(propertyObject);
 		}
 
 		public void ApplyChanges() {
@@ -233,7 +277,6 @@ namespace ZeldaEditor.ObjectsEditor {
 
 			// Spawn Type.
 			propertyObject.Properties.Set("enabled", !checkBoxStartDisabled.Checked);
-			propertyObject.Properties.Set("spawn_from_ceiling", checkBoxDropFromCeiling.Checked);
 			propertyObject.Properties.Set("spawn_poof_effect", checkBoxPoofEffect.Checked);
 			
 			if (tile != null) {
@@ -278,36 +321,12 @@ namespace ZeldaEditor.ObjectsEditor {
 
 			// Apply events.
 			eventsTab.ApplyChanges();
+			
+			// Apply custom controls.
+			if (customControl != null)
+				customControl.ApplyChanges(propertyObject);
 		}
 		
-
-		public void AddProperties(Properties properties) {
-			// Add the base properties recursively.
-			if (properties.BaseProperties != null)
-				AddProperties(properties.BaseProperties);
-			int basePropertyCount = propertyList.Count;
-			
-			// Add the properties.
-			foreach (Property property in  properties.GetAllProperties()) {
-				PropertyDocumentation doc = property.GetRootDocumentation();
-				if (doc == null || !doc.IsHidden)
-					propertyList.Add(property);
-			}
-		}
-
-		/*
-		public void SetObject(TileDataInstance tile) {
-			this.tile = tile;
-			
-			// Set the title of the form.
-			if (tile.Type == null)
-				Text = "Object Properties [Tile]";
-			else
-				Text = "Object Properties [" + tile.Type.Name + "]";
-
-			textBoxId.Text = tile.Properties.GetString("id", "");
-		}*/
-
 		
 		//-----------------------------------------------------------------------------
 		// Form Events

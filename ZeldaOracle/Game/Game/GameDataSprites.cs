@@ -99,6 +99,21 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_TILE_SOMARIA_BLOCK;
 		public static Sprite SPR_TILE_REGROWABLE_PLANT_CUT;
 		public static Sprite SPR_TILE_REGROWABLE_PLANT_GROWN;
+		public static Sprite SPR_TILE_COLOR_SWITCH_RED;
+		public static Sprite SPR_TILE_COLOR_SWITCH_BLUE;
+		public static Sprite SPR_TILE_COLOR_TILE_RED;
+		public static Sprite SPR_TILE_COLOR_TILE_BLUE;
+		public static Sprite SPR_TILE_COLOR_TILE_YELLOW;
+		public static Sprite SPR_TILE_COLOR_JUMP_PAD_RED;
+		public static Sprite SPR_TILE_COLOR_JUMP_PAD_YELLOW;
+		public static Sprite SPR_TILE_COLOR_JUMP_PAD_BLUE;
+		public static Sprite SPR_TILE_COLOR_STATUE_RED;
+		public static Sprite SPR_TILE_COLOR_STATUE_YELLOW;
+		public static Sprite SPR_TILE_COLOR_STATUE_BLUE;
+		public static Sprite SPR_TILE_COLOR_BARRIER_RED_RAISED;
+		public static Sprite SPR_TILE_COLOR_BARRIER_RED_LOWERED;
+		public static Sprite SPR_TILE_COLOR_BARRIER_BLUE_RAISED;
+		public static Sprite SPR_TILE_COLOR_BARRIER_BLUE_LOWERED;
 
 		public static Sprite[] SPR_COLOR_CUBE_ORIENTATIONS;
 

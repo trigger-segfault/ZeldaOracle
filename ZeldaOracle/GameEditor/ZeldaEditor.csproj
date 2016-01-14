@@ -73,6 +73,45 @@
     <Compile Include="DungeonAddForm.Designer.cs">
       <DependentUpon>DungeonAddForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ObjectsEditor\CustomControls\CustomObjectEditorControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileReward.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileChest.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileLever.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileColorSwitch.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileLantern.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Control\CustomControls\CustomObjectEditorControl.cs" />
+    <Compile Include="ObjectsEditor\CustomControls\RewardChooser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectsEditor\CustomControls\RewardChooser.Designer.cs">
+      <DependentUpon>RewardChooser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectsEditor\CustomControls\UserControl1.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectsEditor\CustomControls\UserControl1.Designer.cs">
+      <DependentUpon>UserControl1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PropertiesEditor\CustomEditors\LevelPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\DungeonPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\ZeldaPropertiesGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Scripting\ScriptEditorCompiler.cs" />
     <Compile Include="Control\TileDrawModes.cs" />
     <Compile Include="ObjectsEditor\ObjectEditor.cs">
@@ -169,6 +208,33 @@
     </Compile>
     <EmbeddedResource Include="DungeonAddForm.resx">
       <DependentUpon>DungeonAddForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectsEditor\CustomControls\CustomObjectEditorControl.resx">
+      <DependentUpon>CustomObjectEditorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileReward.resx">
+      <DependentUpon>ObjectControlsTileReward.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileChest.resx">
+      <DependentUpon>ObjectControlsTileChest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileLever.resx">
+      <DependentUpon>ObjectControlsTileLever.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileColorSwitch.resx">
+      <DependentUpon>ObjectControlsTileColorSwitch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileLantern.resx">
+      <DependentUpon>ObjectControlsTileLantern.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileButton.resx">
+      <DependentUpon>ObjectControlsTileButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectsEditor\CustomControls\RewardChooser.resx">
+      <DependentUpon>RewardChooser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectsEditor\CustomControls\UserControl1.resx">
+      <DependentUpon>UserControl1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ObjectsEditor\ObjectEditor.resx">
       <DependentUpon>ObjectEditor.cs</DependentUpon>

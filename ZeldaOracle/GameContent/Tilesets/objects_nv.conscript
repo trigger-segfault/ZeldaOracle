@@ -63,6 +63,16 @@ TEMPTILE reward;
 			"True if the item has been taken.", false);
 END;
 
+TEMPTILE color_switch;
+	TYPE		TileColorSwitch;
+	SOLID		block;
+	FLAGS		AbsorbSeeds;
+	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "", "Can the color switch only be switched once?"),
+				(boolean, switch_state,		false,	"Switch State",		"", "", "The switch state of the color switch (false = blue, true = red)."),
+				(boolean, remember_state,	false,	"Remember State",	"", "", "Will the color switch's state be remembered after leaving the room?");
+	EVENT		event_toggle, "Toggle", "Occurs when the Color Switch changes color.", (ColorSwitch, switch);
+END;
+
 TEMPTILE trampoline;
 	FLAGS		Movable;
 	SOLID		block;
@@ -142,6 +152,10 @@ END;
 TILE (3, 0);
 	CLONE			reward;
 	SPRITE			"tileset_objects_nv_extras_16x16", (9, 1);
+END;
+
+TILE (4, 0);
+	CLONE			color_switch;
 END;
 
 TILE (6, 0);

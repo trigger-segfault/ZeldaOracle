@@ -43,8 +43,11 @@ namespace ZeldaOracle.Game.Worlds {
 			properties.BaseProperties.Set("id", "")
 				.SetDocumentation("ID", "", "", "", "The id used to refer to this level.", false, true);
 
-			properties.BaseProperties.Set("dungeon", "");
-			properties.BaseProperties.Set("dungeon_floor", 0);
+			properties.BaseProperties.Set("dungeon", "")
+				.SetDocumentation("Dungeon", "dungeon", "", "", "The dungeon this level belongs to.");
+			properties.BaseProperties.Set("dungeon_floor", 0)
+				.SetDocumentation("Dungeon Floor", "", "", "", "The floor in the dungeon this level belongs to.");
+
 			properties.BaseProperties.Set("discovered", false);
 
 			properties.Set("id", name);

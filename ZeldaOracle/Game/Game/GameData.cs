@@ -381,7 +381,7 @@ namespace ZeldaOracle.Game {
 			etd.Properties.Set("warp_type", "tunnel")
 				.SetDocumentation("Warp Type", "enum", "WarpType", "", "The type of warp point.");
 			etd.Properties.Set("destination_level", "")
-				.SetDocumentation("Destination Level", "", "", "", "The level where the destination point is in.");
+				.SetDocumentation("Destination Level", "level", "", "", "The level where the destination point is in.");
 			etd.Properties.Set("destination_warp_point", "")
 				.SetDocumentation("Destination Warp Point", "", "", "", "The id of the warp point destination.");
 			etd.Properties.Set("face_direction", Directions.Down)

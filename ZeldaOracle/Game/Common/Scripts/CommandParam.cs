@@ -58,6 +58,13 @@ namespace ZeldaOracle.Common.Scripts {
 			return GetParam(index).Boolean;
 		}
 		
+
+		public bool GetBool(int index, bool defaultValue) {
+			if (index < count)
+				return GetParam(index).Boolean;
+			return defaultValue;
+		}
+		
 		public int GetInt(int index) {
 			return GetParam(index).Integer;
 		}

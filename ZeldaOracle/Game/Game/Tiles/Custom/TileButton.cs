@@ -27,8 +27,13 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		public override void OnInitialize() {
-			isPressed = false;
-			Properties.SetBase("sprite_index", (isPressed ? 1 : 0));
+			isPressed = Properties.Get("pressed", false);
+			//Properties.Set("sprite_index", (isPressed ? 1 : 0));
+
+			if (isPressed)
+				CustomSprite = GameData.SPR_TILE_BUTTON_DOWN;
+			else
+				CustomSprite = GameData.SPR_TILE_BUTTON_UP;
 		}
 
 		public override void Update() {
@@ -56,13 +61,21 @@ namespace ZeldaOracle.Game.Tiles {
 			bool releasable = Properties.GetBoolean("releasable", true);
 			if (isPressed != isDown && (isDown || releasable)) {
 				isPressed = isDown;
-				Properties.SetBase("sprite_index", (isPressed ? 1 : 0));
 
+				// Set the pressed state.
+				if (Properties.Get("remember_state", false))
+					Properties.SetBase("pressed", isPressed);
+				else
+					Properties.Set("pressed", isPressed);
+
+				// Fire the event.
 				if (isPressed) {
-					GameControl.ExecuteScript(Properties.GetString("on_press", ""), this);
+					CustomSprite = GameData.SPR_TILE_BUTTON_DOWN;
+					GameControl.FireEvent(this, "on_press", this);
 				}
 				else {
-					GameControl.ExecuteScript(Properties.GetString("on_release", ""), this);
+					CustomSprite = GameData.SPR_TILE_BUTTON_UP;
+					GameControl.FireEvent(this, "on_release", this);
 				}
 			}
 		}

@@ -29,10 +29,8 @@ LOAD TILESETS;
 TEMPTILE lantern;
 	TYPE		TileLantern;
 	SOLID		block;
-	PROPERTIES	(boolean, lit, true, "Lit", "", "",
-				"Whether the lantern starts lit or not.", false),
-				(boolean, stay_lit, false, "Stay Lit", "", "",
-				"True if the lantern stays lit after leaving the room.", false);
+	PROPERTIES	(boolean, lit,				true, "Lit", "", "", "Whether the lantern starts lit or not.", false),
+				(boolean, remember_state,	false, "Remember State", "", "", "Will the lantern's lit state be remembered after leaving the room?");
 	EVENT event_light, "Light", "Occurs when the lantern is lighted.", (Lantern, lantern);
 	EVENT event_put_out, "Put Out", "Occurs when the lantern is put out.", (Lantern, lantern);
 END;
@@ -63,7 +61,9 @@ END;
 
 TEMPTILE button;
 	TYPE		TileButton;
-	PROPERTIES (boolean, releasable, true, "Releasable", "", "", "Can the button only be pressed, and not released?", false);
+	PROPERTIES	(boolean, releasable,		true, "Releasable",			"", "", "Can the button only be pressed, and not released?"),
+				(boolean, pressed,			false, "Pressed",			"", "", "Is the button pressed"),
+				(boolean, remember_state,	false, "Remember State",	"", "", "Will the button's state be remembered after leaving the room?");
 	EVENT on_press, "On Press", "Occurs when the button is pressed.", (Button button);
 	EVENT on_release, "On Release", "Occurs when the button is released.", (Button button);
 END;
@@ -280,7 +280,10 @@ TILE (1, 5);
 	TYPE TileLever;
 	SOLID block;
 	FLAGS AbsorbSeeds;
-	EVENT event_toggle, "Toggle", "Occurs when the lever is toggled.", (Lever lever);
+	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "", "Can the lever only be switched once?"),
+				(boolean, switch_state,		false,	"Switch State",		"", "", "The switch state of the lever."),
+				(boolean, remember_state,	false,	"Remember State",	"", "", "Will the lever's state be remembered after leaving the room?");
+	EVENT event_toggle, "Toggle", "Occurs when the lever is toggled.", (Lever, lever);
 END;
 
 # Button
