@@ -232,14 +232,19 @@ namespace ZeldaOracle.Common.Scripts {
 				tileData.Properties.Set(property.Name, property);
 				
 				// Create the event's script parameter list.
-				CommandParam paramList = parameters[3];
-				ScriptParameter[] scriptParams = new ScriptParameter[paramList.Count / 2];
-				for (int i = 0; i < scriptParams.Length; i++) {
-					scriptParams[i] = new ScriptParameter() {
-						Type = paramList.GetString(i * 2),
-						Name = paramList.GetString((i * 2) + 1)
-					};
+				ScriptParameter[] scriptParams;
+				if (parameters.Count > 3) {
+					CommandParam paramList = parameters[3];
+					scriptParams = new ScriptParameter[paramList.Count / 2];
+					for (int i = 0; i < scriptParams.Length; i++) {
+						scriptParams[i] = new ScriptParameter() {
+							Type = paramList.GetString(i * 2),
+							Name = paramList.GetString((i * 2) + 1)
+						};
+					}
 				}
+				else
+					scriptParams = new ScriptParameter[0];
 
 				// Add the event to the tile-data.
 				tileData.Events.AddEvent(new ObjectEvent(

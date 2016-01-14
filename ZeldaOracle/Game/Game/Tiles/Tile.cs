@@ -224,7 +224,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		// Called when a seed of the given type hits this tile.
-		public virtual void OnSeedHit(SeedType type, Entity seed) { }
+		public virtual void OnSeedHit(SeedType type, SeedEntity seed) { }
 
 		// Called when the player presses A on this tile, when facing the given direction.
 		// Return true if player controls should be disabled for the rest of the frame.

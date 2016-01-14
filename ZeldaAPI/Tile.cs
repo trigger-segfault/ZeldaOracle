@@ -32,6 +32,9 @@ namespace ZeldaAPI {
 
 	public interface Button {
 	}
+
+	public interface Lever {
+	}
 	
 	public interface Reward {
 		void SpawnReward();

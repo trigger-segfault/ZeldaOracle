@@ -39,7 +39,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 		
-		public override void OnSeedHit(SeedType seedType, Entity seed) {
+		public override void OnSeedHit(SeedType seedType, SeedEntity seed) {
 			if (seedType == SeedType.Mystery && !isActivated) {
 				isActivated		= true;
 				sparkleIndex	= 0;

@@ -275,6 +275,14 @@ TILE (0, 5);
 	SPRITEINDEX 1, "tileset_objects_extras_16x16", (4, 3);
 END;
 
+# Lever
+TILE (1, 5);
+	TYPE TileLever;
+	SOLID block;
+	FLAGS AbsorbSeeds;
+	EVENT event_toggle, "Toggle", "Occurs when the lever is toggled.", (Lever lever);
+END;
+
 # Button
 TILE (2, 5);
 	CLONE		button;

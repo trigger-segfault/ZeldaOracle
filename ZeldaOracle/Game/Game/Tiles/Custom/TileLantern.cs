@@ -59,7 +59,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 		
-		public override void OnSeedHit(SeedType seedType, Entity seed) {
+		public override void OnSeedHit(SeedType seedType, SeedEntity seed) {
 			if (seedType == SeedType.Ember && !Properties.GetBoolean("lit", false)) {
 				Light();
 				seed.Destroy();

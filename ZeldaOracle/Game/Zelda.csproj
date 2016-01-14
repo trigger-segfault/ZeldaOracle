@@ -382,6 +382,7 @@
     <Compile Include="Common\Content\ResourceBuilders\AnimationBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\SpriteBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\TilesetBuilder.cs" />
+    <Compile Include="Game\Tiles\Custom\TileLever.cs" />
     <Compile Include="Game\Tiles\Custom\TileColorLantern.cs" />
     <Compile Include="Game\Tiles\Custom\TileColorCubeSlot.cs" />
     <Compile Include="Game\Tiles\Custom\TileCrackedFloor.cs" />
