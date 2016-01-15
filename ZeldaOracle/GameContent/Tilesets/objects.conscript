@@ -55,20 +55,20 @@ END;
 
 TEMPTILE color_jump_pad;
 	TYPE		TileColorJumpPad;
-	PROPERTIES	(integer, color,			0,		"Color",			"", "", "The color of the jump pad."),
-				(boolean, remember_state,	false,	"Remember State",	"", "", "Will the jump pad's color be remembered after leaving the room?");
+	PROPERTIES	(integer, color,			0,		"Color",			"", "Color", "The color of the jump pad."),
+				(boolean, remember_state,	false,	"Remember State",	"", "Color", "Will the jump pad's color be remembered after leaving the room?");
 END;
 
 TEMPTILE color_tile;
 	TYPE		TileColorTile;
-	PROPERTIES	(integer, color,			0,		"Color",			"", "", "The color of the tile."),
-				(boolean, remember_state,	false,	"Remember State",	"", "", "Will the tile's color be remembered after leaving the room?");
+	PROPERTIES	(integer, color,			0,		"Color",			"", "Color", "The color of the tile."),
+				(boolean, remember_state,	false,	"Remember State",	"", "Color", "Will the tile's color be remembered after leaving the room?");
 END;
 
 TEMPTILE color_barrier;
 	TYPE		TileColorBarrier;
 	HALFSOLID	block;
-	PROPERTIES	(integer, color, 0, "Color", "", "", "The color of the barrier (red or blue).");
+	PROPERTIES	(integer, color, 0, "Color", "", "Color", "The color of the barrier (red or blue).");
 END;
 
 TEMPTILE color_statue;
@@ -90,9 +90,9 @@ END;
 
 TEMPTILE button;
 	TYPE		TileButton;
-	PROPERTIES	(boolean, releasable,		true, "Releasable",			"", "", "Can the button only be pressed, and not released?"),
-				(boolean, pressed,			false, "Pressed",			"", "", "Is the button pressed"),
-				(boolean, remember_state,	false, "Remember State",	"", "", "Will the button's state be remembered after leaving the room?");
+	PROPERTIES	(boolean, releasable,		true, "Releasable",			"", "Button", "Can the button only be pressed, and not released?"),
+				(boolean, pressed,			false, "Pressed",			"", "Button", "Is the button pressed"),
+				(boolean, remember_state,	false, "Remember State",	"", "Button", "Will the button's state be remembered after leaving the room?");
 	EVENT on_press, "On Press", "Occurs when the button is pressed.", (Button button);
 	EVENT on_release, "On Release", "Occurs when the button is released.", (Button button);
 END;
@@ -101,18 +101,18 @@ TEMPTILE lever;
 	TYPE TileLever;
 	SOLID block;
 	FLAGS AbsorbSeeds;
-	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "", "Can the lever only be switched once?"),
-				(boolean, switch_state,		false,	"Switch State",		"", "", "True if the lever is facing left."),
-				(boolean, remember_state,	false,	"Remember State",	"", "", "Will the lever's state be remembered after leaving the room?");
+	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "Lever", "Can the lever only be switched once?"),
+				(boolean, switch_state,		false,	"Switch State",		"", "Lever", "True if the lever is facing left."),
+				(boolean, remember_state,	false,	"Remember State",	"", "Lever", "Will the lever's state be remembered after leaving the room?");
 	EVENT event_toggle, "Toggle", "Occurs when the lever is toggled.", (Lever, lever);
 END;
 
 TEMPTILE door;
 	TYPE		TileDoor;
 	SOLID		block;
-	PROPERTIES	(boolean, open, false, "Open", "", "", "True if the door open."),
-				(integer, direction, 0, "Direction", "direction", "", "The direction the door is facing.", false),
-				(boolean, remember_state, false, "Remember State", "", "", "Will the door's opened state be remembered after leaving the room?");
+	PROPERTIES	(boolean, open, false, "Open", "", "Door", "True if the door open."),
+				(integer, direction, 0, "Direction", "direction", "Door", "The direction the door is facing.", false),
+				(boolean, remember_state, false, "Remember State", "", "Door", "Will the door's opened state be remembered after leaving the room?");
 END;
 
 TEMPTILE small_key_door;
@@ -147,6 +147,17 @@ TEMPTILE bombable_wall;
 	SOLID		block;
 	FLAGS		Burnable;
 	PROPERTIES	(boolean, disable_on_destroy, true);
+END;
+
+TEMPTILE minecart_track;
+	TYPE		TileMinecartTrack;
+	SPRITEINDEX	0, "tileset_objects", (10, 11);	# Horizontal
+	SPRITEINDEX	1, "tileset_objects", (11, 11);	# Vertical
+	SPRITEINDEX	2, "tileset_objects", (10, 10);	# Right/Up
+	SPRITEINDEX	3, "tileset_objects", (11, 10);	# Up/Left
+	SPRITEINDEX	4, "tileset_objects", (11, 9);	# Left/Down
+	SPRITEINDEX	5, "tileset_objects", (10, 9);	# Down/Right
+	PROPERTIES	(boolean, minecart, false, "Has Minecart", "", "Minecart", "Does this track currently have a minecart on it?");
 END;
 
 # This tile is used by the Shovel.
@@ -378,6 +389,8 @@ END;
 # Lever
 TILE (1, 5);
 	CLONE lever;
+	SPRITEINDEX	0, "tileset_objects", (1, 5);
+	SPRITEINDEX	1, "tileset_objects_extras_16x16", (5, 3);
 END;
 
 # Button
@@ -497,6 +510,32 @@ TILE (2, 9);	CLONE bombable_wall; END;
 TILE (3, 9);	CLONE bombable_wall; END;
 TILE (2, 10);	CLONE bombable_wall; END;
 TILE (3, 10);	CLONE bombable_wall; END;
+
+# Minecart Tracks
+TILE (10, 9);
+	CLONE minecart_track;
+	PROPERTIES (integer, sprite_index, 5);
+END;
+TILE (11, 9);
+	CLONE minecart_track;
+	PROPERTIES (integer, sprite_index, 4);
+END;
+TILE (10, 10);
+	CLONE minecart_track;
+	PROPERTIES (integer, sprite_index, 2);
+END;
+TILE (11, 10);
+	CLONE minecart_track;
+	PROPERTIES (integer, sprite_index, 3);
+END;
+TILE (10, 11);
+	CLONE minecart_track;
+	PROPERTIES (integer, sprite_index, 0);
+END;
+TILE (11, 11);
+	CLONE minecart_track;
+	PROPERTIES (integer, sprite_index, 1);
+END;
 
 # Eye Statue
 TILE (0, 11);

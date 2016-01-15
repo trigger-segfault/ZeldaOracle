@@ -23,6 +23,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		FreeMovement,	// Freely control movement
 		OnlyInAir,		// Only control his movement in air.
 		NoControl,		// No movement control.
+		FixedPosition,	// Allow changing direction, but not actual movement.
 	}
 	
 	public class PlayerMoveComponent {
@@ -269,10 +270,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Check movement input.
 			Vector2F keyMoveVector = PollMovementKeys(allowMovementControl);
-				
+			
 			// Don't affect the facing direction when strafing
 			if (!isStrafing && !mode.IsStrafing && isMoving)
 				player.Direction = moveDirection;
+
+			if (moveCondition == PlayerMoveCondition.FixedPosition)
+				allowMovementControl = false;
 
 			// Update movement or acceleration.
 			if (allowMovementControl && (isMoving || autoAccelerate)) {
@@ -345,6 +349,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public void ChooseAnimation() {
 			// Update movement animation.
 			if (player.IsOnGround && moveCondition != PlayerMoveCondition.NoControl &&
+				moveCondition != PlayerMoveCondition.FixedPosition &&
 				(player.Graphics.Animation == player.MoveAnimation ||
 				player.Graphics.Animation == GameData.ANIM_PLAYER_DEFAULT ||
 				player.Graphics.Animation == GameData.ANIM_PLAYER_CARRY))

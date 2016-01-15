@@ -28,11 +28,12 @@ namespace ZeldaOracle.Game.Tiles {
 		// Lever Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnToggle(bool switchState) {
+		public override void OnToggle(bool switchState) {/*
 			if (switchState)
 				CustomSprite = GameData.SPR_TILE_LEVER_RIGHT;
 			else
-				CustomSprite = GameData.SPR_TILE_LEVER_LEFT;
+				CustomSprite = GameData.SPR_TILE_LEVER_LEFT;*/
+			SpriteIndex = (switchState ? 1 : 0);
 		}
 
 
@@ -42,11 +43,12 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void OnInitialize() {
 			base.OnInitialize();
-
+			/*
 			if (SwitchState)
 				CustomSprite = GameData.SPR_TILE_LEVER_RIGHT;
 			else
-				CustomSprite = GameData.SPR_TILE_LEVER_LEFT;
+				CustomSprite = GameData.SPR_TILE_LEVER_LEFT;*/
+			SpriteIndex = (SwitchState ? 1 : 0);
 		}
 	}
 }

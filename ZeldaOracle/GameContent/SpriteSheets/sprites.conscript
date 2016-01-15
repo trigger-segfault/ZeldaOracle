@@ -149,6 +149,9 @@ SPRITE tile_color_statue_blue,			(7, 2); END;
 SPRITE tile_color_barrier_red_lowered,	(3, 3); END;
 SPRITE tile_color_barrier_blue_lowered,	(4, 3); END;
 
+SPRITE minecart_horizontal,				(0, 2), (0, -3); ADD (2, 2), (0, -3); END;
+SPRITE minecart_vertical,				(0, 3), (0, -3); ADD (2, 3), (0, -3); END;
+
 
 #==============================================================
 # Effects

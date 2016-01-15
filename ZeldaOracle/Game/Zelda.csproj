@@ -238,6 +238,7 @@
     <Compile Include="Game\Entities\EntityTracker.cs" />
     <Compile Include="Game\Entities\GraphicsComponent.cs" />
     <Compile Include="Game\Entities\IInterceptable.cs" />
+    <Compile Include="Game\Entities\Minecart.cs" />
     <Compile Include="Game\Entities\Monsters\BasicMonster - Copy.cs" />
     <Compile Include="Game\Entities\Monsters\BasicMonster.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterReactions.cs" />
@@ -250,6 +251,7 @@
     <Compile Include="Game\Entities\Players\PlayerSwimmingSkills.cs" />
     <Compile Include="Game\Entities\Players\PlayerTunics.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerMagicBoomerangState.cs" />
+    <Compile Include="Game\Entities\Players\States\PlayerMinecartState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSwitchHookState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSeedShooterState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerRespawnDeathState.cs" />
@@ -383,6 +385,7 @@
     <Compile Include="Common\Content\ResourceBuilders\SpriteBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\TilesetBuilder.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorBarrier.cs" />
+    <Compile Include="Game\Tiles\Custom\Minecart\TileMinecartTrack.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorTile.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorSwitch.cs" />
     <Compile Include="Game\Tiles\Custom\SwitchTileBase.cs" />
@@ -478,6 +481,7 @@
   <ItemGroup>
     <Folder Include="Common\Collision\" />
     <Folder Include="Game\Entities\Monsters\States\" />
+    <Folder Include="Game\Tiles\EventTiles\Puzzles\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

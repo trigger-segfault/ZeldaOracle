@@ -83,6 +83,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerGrabState				stateGrab;
 		private PlayerCarryState			stateCarry;
 		private PlayerRespawnDeathState		stateRespawnDeath;
+		private PlayerMinecartState			stateMinecart;
 
 		private PlayerSwimmingSkills	swimmingSkills;
 		private PlayerTunics			tunic;
@@ -160,6 +161,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateGrab			= new PlayerGrabState();
 			stateCarry			= new PlayerCarryState();
 			stateRespawnDeath	= new PlayerRespawnDeathState();
+			stateMinecart		= new PlayerMinecartState();
 
 			Physics.CustomCollisionFunction = CheckRoomEdgeCollisions;
 		}
@@ -544,6 +546,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public override void Draw(RoomGraphics g) {
+			state.DrawUnder(g);
 			base.Draw(g);
 			state.DrawOver(g);
 		}
@@ -709,6 +712,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public PlayerRespawnDeathState RespawnDeathState {
 			get { return stateRespawnDeath; }
 		}
+
+		public PlayerMinecartState MinecartState {
+			get { return stateMinecart; }
+		}
+
+		// Tools.
 
 		public PlayerToolSword ToolSword {
 			get { return toolSword; }

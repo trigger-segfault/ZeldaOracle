@@ -56,6 +56,8 @@ namespace ZeldaOracle.Game {
 
 		// Entities.
 		public static Sprite SPR_SWITCH_HOOK_LINK;
+		public static Sprite SPR_MINECART_VERTICAL;
+		public static Sprite SPR_MINECART_HORIZONTAL;
 
 		// Object tiles.
 		public static Sprite SPR_TILE_BUSH;
