@@ -385,6 +385,7 @@
     <Compile Include="Common\Content\ResourceBuilders\SpriteBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\TilesetBuilder.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorBarrier.cs" />
+    <Compile Include="Game\Tiles\Custom\Doors\TileMinecartDoor.cs" />
     <Compile Include="Game\Tiles\Custom\Minecart\TileMinecartTrack.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorTile.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorSwitch.cs" />

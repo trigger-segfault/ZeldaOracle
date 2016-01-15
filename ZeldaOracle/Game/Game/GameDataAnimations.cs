@@ -47,8 +47,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_TILE_REGROWABLE_PLANT_REGROW;
 
 		// General tiles.
-		public static Animation ANIM_MINECART_HORIZONTAL;
-		public static Animation ANIM_MINECART_VERTICAL;
+		public static Animation ANIM_MINECART;
 	
 		// Player animations.
 		public static Animation ANIM_PLAYER_DEFAULT;
@@ -78,6 +77,11 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PLAYER_FALL_HOLE;
 		public static Animation ANIM_PLAYER_CRUSH_HORIZONTAL;
 		public static Animation ANIM_PLAYER_INVISIBLE;
+		public static Animation ANIM_PLAYER_MINECART_IDLE;
+		public static Animation ANIM_PLAYER_MINECART_THROW;
+		public static Animation ANIM_PLAYER_MINECART_AIM;
+		public static Animation ANIM_PLAYER_MINECART_SWING;
+		public static Animation ANIM_PLAYER_MINECART_SWING_BIG;
 
 		// Monster animations.
 		public static Animation ANIM_MONSTER_OCTOROK;
@@ -159,11 +163,14 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_SWORD_HOLD;
 		public static Animation ANIM_SWORD_CHARGED;
 		public static Animation ANIM_SWORD_SWING;
+		public static Animation ANIM_SWORD_MINECART_SWING;
 		public static Animation ANIM_SWORD_SPIN;
 		public static Animation ANIM_SWORD_STAB;
 		public static Animation ANIM_BIG_SWORD_SWING;
 		public static Animation ANIM_CANE_SWING;
+		public static Animation ANIM_CANE_MINECART_SWING;
 		public static Animation ANIM_MAGIC_ROD_SWING;
+		public static Animation ANIM_MAGIC_ROD_MINECART_SWING;
 		public static Animation ANIM_SEED_SHOOTER;
 		public static Animation ANIM_SLINGSHOT_1;
 		public static Animation ANIM_SLINGSHOT_2;

@@ -70,13 +70,21 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
+		public override void OnBegin(PlayerState previousState) {
+			if (player.IsInMinecart) {
+				weaponSwingAnimation	= GameData.ANIM_BIG_SWORD_SWING;
+				playerSwingAnimation	= GameData.ANIM_PLAYER_MINECART_SWING_BIG;
+			}
+			else {
+				weaponSwingAnimation	= GameData.ANIM_BIG_SWORD_SWING;
+				playerSwingAnimation	= GameData.ANIM_PLAYER_SWING_BIG;
+			}
+			base.OnBegin(previousState);
+		}
+
 		public override void OnSwingBegin() {
 			base.OnSwingBegin();
 			AudioSystem.PlayRandomSound("Items/slash_1", "Items/slash_2", "Items/slash_3");
-		}
-
-		public override void OnSwingEnd() {
-			player.BeginNormalState();
 		}
 		
 		public override void OnHitMonster(Monster monster) {

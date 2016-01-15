@@ -59,6 +59,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		private bool isStateControlled; // Is the player fully being controlled by its current state?
 
+		private Vector2F viewFocusOffset;
+
 		// Player Tools
 		private PlayerToolShield	toolShield;
 		private PlayerToolSword		toolSword;
@@ -112,6 +114,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			isStateControlled	= false;
 			movement			= new PlayerMoveComponent(this);
 			syncAnimationWithDirection = true;
+			viewFocusOffset = Vector2F.Zero;
 
 			toolShield = new PlayerToolShield();
 			toolSword = new PlayerToolSword();
@@ -210,13 +213,31 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		// Begin the busy state with the specified duration.
 		public void BeginBusyState(int duration) {
-			stateBusy.Duration = duration;
+			stateBusy.Duration				= duration;
+			stateBusy.Animation				= Graphics.Animation;
+			stateBusy.AnimationInMinecart	= Graphics.Animation;
+			BeginState(stateBusy);
+		}
+
+		public void BeginBusyState(int duration, Animation animation, Animation animationInMinecart = null) {
+			stateBusy.Duration				= duration;
+			stateBusy.Animation				= animation;
+			stateBusy.AnimationInMinecart	= animationInMinecart;
+			if (IsInMinecart && animationInMinecart != null)
+				Graphics.PlayAnimation(animationInMinecart);
+			else
+				Graphics.PlayAnimation(animation);
 			BeginState(stateBusy);
 		}
 
 		// Begin the desired natural state.
 		public void BeginNormalState() {
 			BeginState(GetDesiredNaturalState());
+		}
+
+		public void EnterMinecart(Minecart minecart) {
+			stateMinecart.Minecart = minecart;
+			stateMinecart.Begin(this, null);
 		}
 
 
@@ -546,6 +567,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public override void Draw(RoomGraphics g) {
+			if (IsInMinecart)
+				stateMinecart.DrawUnder(g);
 			state.DrawUnder(g);
 			base.Draw(g);
 			state.DrawOver(g);
@@ -628,6 +651,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 				}
 				return GameSettings.PLAYER_DEFAULT_PUSH_SPEED;
 			}
+		}
+
+		public Vector2F ViewFocusOffset {
+			get { return viewFocusOffset; }
+			set { viewFocusOffset = value; }
+		}
+
+		public bool IsInMinecart {
+			get { return (stateMinecart.IsActive); }
 		}
 
 		

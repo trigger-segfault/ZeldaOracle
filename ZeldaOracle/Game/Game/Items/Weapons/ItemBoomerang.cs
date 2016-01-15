@@ -51,8 +51,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 			if (level == Item.Level1) {
 				// Begin the standard busy state for the regular boomerang.
-				Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
-				Player.BeginBusyState(10);
+				Player.BeginBusyState(10, GameData.ANIM_PLAYER_THROW, GameData.ANIM_PLAYER_MINECART_THROW);
 			}
 			else {
 				// Enter a player state to control the magic boomerang.

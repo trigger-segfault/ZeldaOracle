@@ -73,14 +73,31 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
+		public override void OnBegin(PlayerState previousState) {
+			if (player.IsInMinecart) {
+				weaponSwingAnimation	= GameData.ANIM_SWORD_MINECART_SWING;
+				playerSwingAnimation	= GameData.ANIM_PLAYER_MINECART_SWING;
+			}
+			else {
+				weaponSwingAnimation	= GameData.ANIM_SWORD_SWING;
+				playerSwingAnimation	= GameData.ANIM_PLAYER_SWING;
+			}
+			base.OnBegin(previousState);
+		}
+
 		public override void OnSwingBegin() {
 			base.OnSwingBegin();
 			AudioSystem.PlayRandomSound("Items/slash_1", "Items/slash_2", "Items/slash_3");
 		}
 
 		public override void OnSwingEnd() {
-			player.HoldSwordState.Weapon = Weapon;
-			player.BeginState(player.HoldSwordState);
+			// Begin holding the sword after swinging.
+			if (!player.IsInMinecart) {
+				player.HoldSwordState.Weapon = Weapon;
+				player.BeginState(player.HoldSwordState);
+			}
+			else
+				base.OnSwingEnd();
 		}
 	}
 }

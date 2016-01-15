@@ -578,7 +578,7 @@ namespace ZeldaOracle.Game.Control {
 			UpdateObjects();
 
 			// Update view to follow player.
-			viewControl.PanTo(Player.Center);
+			viewControl.PanTo(Player.Center + Player.ViewFocusOffset);
 			
 			if (requestedTransitionDirection >= 0) {
 				// Call the event RoomTransitioning.

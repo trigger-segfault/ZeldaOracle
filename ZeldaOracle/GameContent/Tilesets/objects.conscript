@@ -127,6 +127,11 @@ TEMPTILE boss_key_door;
 	PROPERTIES	(boolean, remember_state, true);
 END;
 
+TEMPTILE minecart_door;
+	CLONE		door;
+	TYPE		TileMinecartDoor;
+END;
+
 TEMPTILE eye_statue;
 	TYPE		TileEyeStatue;
 	SOLID		block;
@@ -496,6 +501,24 @@ TILE (6, 8);
 END;
 TILE (7, 8);
 	CLONE boss_key_door;
+	PROPERTIES (integer, direction, 0);
+END;
+
+# Minecart doors
+TILE (2, 7);
+	CLONE minecart_door;
+	PROPERTIES (integer, direction, 1);
+END;
+TILE (3, 7);
+	CLONE minecart_door;
+	PROPERTIES (integer, direction, 2);
+END;
+TILE (2, 8);
+	CLONE minecart_door;
+	PROPERTIES (integer, direction, 3);
+END;
+TILE (3, 8);
+	CLONE minecart_door;
 	PROPERTIES (integer, direction, 0);
 END;
 

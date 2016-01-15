@@ -260,8 +260,8 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			playerTool = player.ToolVisual;
 			player.Movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
+			playerTool = player.ToolVisual;
 			Swing(player.UseDirection);
 		}
 		

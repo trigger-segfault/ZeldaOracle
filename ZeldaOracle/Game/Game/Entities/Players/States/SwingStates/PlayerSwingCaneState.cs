@@ -44,6 +44,10 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 
 		private void SpawnSomariaBlock() {
+			// Cane of Somaria doesn't work while the player is in a minecart.
+			if (player.IsInMinecart)
+				return;
+
 			ItemCane itemCane = (ItemCane) Weapon;
 
 			// Break any existing somaria block.
@@ -63,12 +67,20 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnSwingBegin() {
-			AudioSystem.PlayRandomSound("Items/slash_1", "Items/slash_2", "Items/slash_3");
+		public override void OnBegin(PlayerState previousState) {
+			if (player.IsInMinecart) {
+				weaponSwingAnimation	= GameData.ANIM_CANE_MINECART_SWING;
+				playerSwingAnimation	= GameData.ANIM_PLAYER_MINECART_SWING;
+			}
+			else {
+				weaponSwingAnimation	= GameData.ANIM_CANE_SWING;
+				playerSwingAnimation	= GameData.ANIM_PLAYER_SWING;
+			}
+			base.OnBegin(previousState);
 		}
 
-		public override void OnSwingEnd() {
-			player.BeginNormalState();
+		public override void OnSwingBegin() {
+			AudioSystem.PlayRandomSound("Items/slash_1", "Items/slash_2", "Items/slash_3");
 		}
 	}
 }

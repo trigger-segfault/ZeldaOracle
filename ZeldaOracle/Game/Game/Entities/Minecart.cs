@@ -42,8 +42,7 @@ namespace ZeldaOracle.Game.Entities {
 		public override bool OnPlayerAction(int direction) {
 			// Hop in minecart.
 			Player player = RoomControl.Player;
-			player.MinecartState.Minecart = this;
-			player.BeginState(player.MinecartState);
+			player.EnterMinecart(this);
 			return true;
 		}
 

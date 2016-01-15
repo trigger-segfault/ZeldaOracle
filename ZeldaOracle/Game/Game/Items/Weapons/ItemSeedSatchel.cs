@@ -70,9 +70,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			Vector2F pos = Player.Position + (velocity * 4.0f);
 			seed.Physics.Velocity = velocity * 0.75f;
 			Player.RoomControl.SpawnEntity(seed, pos, Player.ZPosition + 6);
-
-			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
-			Player.BeginBusyState(10);
+			
+			Player.BeginBusyState(10, GameData.ANIM_PLAYER_THROW, GameData.ANIM_PLAYER_MINECART_THROW);
 
 			UseAmmo();
 

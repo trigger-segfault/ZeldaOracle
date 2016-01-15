@@ -60,8 +60,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			arrowTracker.TrackEntity(arrow);
 
 			// Begin the busy state.
-			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
-			Player.BeginBusyState(10);
+			Player.BeginBusyState(10, GameData.ANIM_PLAYER_THROW, GameData.ANIM_PLAYER_MINECART_THROW);
 		}
 
 		// Called when the item is added to the inventory list.

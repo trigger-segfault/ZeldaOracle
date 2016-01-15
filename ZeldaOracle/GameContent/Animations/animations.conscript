@@ -75,13 +75,13 @@ ANIM tile_regrowable_plant_regrow; SUBSTRIP clamp;
 
 SPRITESHEET "general_tiles";
 
-ANIM minecart_horizontal; SUBSTRIP repeat;
-	ADD frame, 12, (1, 2), (0, -3); ADD part, 12, (2, 3), (0, -2); 
-	ADD frame, 12, (0, 2), (0, -3); ADD part, 12, (2, 3), (0, -3); 
-	END;
-ANIM minecart_vertical; SUBSTRIP repeat;
-	ADD frame, 12, (1, 3), (0, -3); ADD part, 12 (2, 3), (-1, -3);
-	ADD frame, 12, (0, 3), (0, -3); ADD part, 12 (2, 3), (0, -3);
+ANIM minecart;
+	SUBSTRIP repeat; # horizontal
+		ADD frame, 12, (1, 2), (0, -3); ADD part, 12, (2, 3), (0, -2); 
+		ADD frame, 12, (0, 2), (0, -3); ADD part, 12, (2, 3), (0, -3); 
+	SUBSTRIP repeat; # vertical
+		ADD frame, 12, (1, 3), (0, -3); ADD part, 12 (2, 3), (-1, -3);
+		ADD frame, 12, (0, 3), (0, -3); ADD part, 12 (2, 3), (0, -3);
 	END;
 
 
@@ -388,6 +388,36 @@ ANIM player_aim;
 	SUBSTRIP repeat; ADD frame 1, (0, 8);
 	END;
 
+## Player in Minecart Animations
+
+ANIM player_minecart_idle; SUBSTRIP repeat;
+	ADD frame, 1, (2, 21);
+	MAKEDYNAMIC 4, (1, 0); END;
+ANIM player_minecart_throw; SUBSTRIP repeat;
+	ADD frame, 1, (0, 23);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_minecart_aim;
+	SUBSTRIP repeat; ADD frame 1, (0, 23); # right
+	SUBSTRIP repeat; ADD frame 1, (3, 22);
+	SUBSTRIP repeat; ADD frame 1, (2, 23); # up
+	SUBSTRIP repeat; ADD frame 1, (2, 22);
+	SUBSTRIP repeat; ADD frame 1, (4, 23); # left
+	SUBSTRIP repeat; ADD frame 1, (1, 22);
+	SUBSTRIP repeat; ADD frame 1, (6, 23); # down
+	SUBSTRIP repeat; ADD frame 1, (0, 22);
+	END;
+ANIM player_minecart_swing;
+	SUBSTRIP clamp; ADD frame, 3, (4, 22); ADD frame, 11, (0, 23);
+	SUBSTRIP clamp; ADD frame, 3, (3, 22); ADD frame, 11, (2, 23);
+	SUBSTRIP clamp; ADD frame, 3, (2, 22); ADD frame, 11, (4, 23);
+	SUBSTRIP clamp; ADD frame, 3, (1, 22); ADD frame, 11, (6, 23); END;
+ANIM player_minecart_swing_big;
+	SUBSTRIP clamp; ADD frame, 12, (4, 22); ADD frame, 9, (0, 23); ADD frame, 13, (5, 22);
+	SUBSTRIP clamp; ADD frame, 12, (3, 22); ADD frame, 9, (2, 23); ADD frame, 13, (6, 22);
+	SUBSTRIP clamp; ADD frame, 12, (2, 22); ADD frame, 9, (4, 23); ADD frame, 13, (1, 22);
+	SUBSTRIP clamp; ADD frame, 12, (1, 22); ADD frame, 9, (6, 23); ADD frame, 13, (5, 22); END;
+	
+
 #==============================================================
 # Player Item Animations
 #==============================================================
@@ -415,6 +445,19 @@ ANIM magic_rod_swing;
 	END;
 ANIM cane_swing;
 	CLONE sword_swing;
+	SHIFTSOURCE (0, 4);
+	END;
+ANIM sword_minecart_swing;
+	SUBSTRIP clamp;  ADD frame, 3, (2, 0), (  0, -16); ADD frame, 3, (1, 0), ( 13, -13); ADD frame, 11, (0, 0), ( 12,   4);
+	SUBSTRIP clamp;  ADD frame, 3, (0, 0), ( 16,   0); ADD frame, 3, (1, 0), ( 13, -13); ADD frame, 11, (2, 0), ( -4, -12);
+	SUBSTRIP clamp;  ADD frame, 3, (2, 0), (  0, -16); ADD frame, 3, (3, 0), (-13, -13); ADD frame, 11, (4, 0), (-12,   4);
+	SUBSTRIP clamp;  ADD frame, 3, (4, 0), (-15,   2); ADD frame, 3, (5, 0), (-13,  15); ADD frame, 11, (6, 0), (  3,  14); END;
+ANIM magic_rod_minecart_swing;
+	CLONE sword_minecart_swing;
+	SHIFTSOURCE (0, 3);
+	END;
+ANIM cane_minecart_swing;
+	CLONE sword_minecart_swing;
 	SHIFTSOURCE (0, 4);
 	END;
 ANIM sword_spin;

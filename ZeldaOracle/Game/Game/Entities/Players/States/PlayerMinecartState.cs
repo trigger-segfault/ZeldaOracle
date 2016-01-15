@@ -14,6 +14,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Entities.Players.States.SwingStates;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 
@@ -26,10 +27,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private int direction;
 		private TileMinecartTrack trackTile;
 		private AnimationPlayer minecartAnimationPlayer;
+		private Vector2F playerOffset;
 
 
 		//-----------------------------------------------------------------------------
-		// Constructors
+		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public PlayerMinecartState() {
@@ -39,26 +41,15 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			minecartAnimationPlayer = new AnimationPlayer();
 		}
 		
-
-
+		
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			
-			player.AutoRoomTransition			= true;
-			player.Physics.CollideWithWorld		= false;
-			player.Physics.CollideWithEntities	= false;
-			//player.IsStateControlled			= true;
-			player.Movement.MoveCondition		= PlayerMoveCondition.FixedPosition; // Fixed in place with pivot?
-			//player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
-
-			TileMinecartTrack tile = minecart.TrackTile;
-			minecart.Destroy();
-			tileLocation = tile.Location;
-
 			// Determine start direction.
+			TileMinecartTrack tile = minecart.TrackTile;
+			tileLocation = tile.Location;
 			direction = -1;
 			trackTile = null;
 			foreach (int dir in minecart.TrackTile.GetDirections()) {
@@ -69,60 +60,78 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				}
 			}
 
-			moveDistance = 0.0f;
-
 			// Error, no directions available to move in.
 			if (trackTile == null) {
-				player.BeginState(player.NormalState);
+				End(null);
 				return;
 			}
-
+			// Begin moving to the next tile.
 			if (!MoveToNextTile()) {
-				player.BeginState(player.NormalState);
+				End(null);
 				return;
 			}
 			
-			player.SetPositionByCenter(minecart.Center);
+			// No other player states should change these variables while in a minecart.
+			player.AutoRoomTransition			= true;
+			player.Physics.CollideWithWorld		= false; 
+			player.Physics.CollideWithEntities	= false;
+
+			// Play the animations.
+			player.MoveAnimation = GameData.ANIM_PLAYER_MINECART_IDLE;
+			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MINECART_IDLE);
+			minecartAnimationPlayer.Play(GameData.ANIM_MINECART);
+
+			// Setup position.
+			moveDistance = 0.0f;
+			UpdatePlayerPosition();
+						
+			// Destroy the minecart.
+			minecart.Destroy();
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			
+			// Reset changed player state variables.
 			player.AutoRoomTransition			= false;
 			player.Physics.CollideWithWorld		= true;
 			player.Physics.CollideWithEntities	= true;
-			//player.IsStateControlled			= false;
-			player.Movement.MoveCondition		= PlayerMoveCondition.FreeMovement;
+			player.ViewFocusOffset				= Vector2F.Zero;
 			
+			// Revert to default player animation.
+			if (player.MoveAnimation == GameData.ANIM_PLAYER_MINECART_IDLE)
+				player.MoveAnimation = GameData.ANIM_PLAYER_DEFAULT;
+
+			// Notify the current player state we have exited the minecart.
+			if (player.CurrentState != null)
+				player.CurrentState.OnExitMinecart();
 		}
 
 		public override void Update() {
 			base.Update();
 
+			// Update minecart animation.
 			minecartAnimationPlayer.Update();
-
-			moveDistance += minecartSpeed;
 			
-			player.SetPositionByCenter(
-				trackTile.Center - (Directions.ToVector(direction) * GameSettings.TILE_SIZE)
-				+ (Directions.ToVector(direction) * Math.Min(moveDistance, GameSettings.TILE_SIZE)));
+			// Keep the default player animation to be in a minecart.
+			if (player.MoveAnimation == GameData.ANIM_PLAYER_DEFAULT)
+				player.MoveAnimation = GameData.ANIM_PLAYER_MINECART_IDLE;
 
+			// Update movement.
+			moveDistance += minecartSpeed;
 			if (moveDistance >= GameSettings.TILE_SIZE) {
-				if (MoveToNextTile()) {
-					// Success
-				}
-				else {
-					// End of the track.
-					player.BeginState(player.NormalState);
-					player.Position += Directions.ToVector(direction) * GameSettings.TILE_SIZE;
-					// Spawn another minecart entity.
-					Minecart minecart = new Minecart(trackTile);
-					player.RoomControl.SpawnEntity(minecart);
+				// Move to the next tile.
+				if (!MoveToNextTile()) {
+					ExitMinecart(direction);
+					return;
 				}
 			}
+
+			UpdatePlayerPosition();
 		}
 
 		public override void DrawUnder(RoomGraphics g) {
-			g.DrawAnimation(minecartAnimationPlayer, player.Center - new Vector2F(8, 8), DepthLayer.PlayerAndNPCs);
+			// Draw the minecart below the player.
+			g.DrawAnimation(minecartAnimationPlayer,
+				player.Center - new Vector2F(8, 8) - playerOffset, DepthLayer.PlayerAndNPCs);
 		}
 
 
@@ -130,6 +139,47 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Navigation methods
 		//-----------------------------------------------------------------------------
 
+		private void ExitMinecart(int direction) {
+			// End of the track.
+			player.SetPositionByCenter(
+				((tileLocation + new Vector2F(0.5f, 0.5f)) * GameSettings.TILE_SIZE) +
+				(Directions.ToVector(direction) * GameSettings.TILE_SIZE));
+
+			// Spawn another minecart entity.
+			if (minecart == null || minecart.IsDestroyed) {
+				minecart = new Minecart(trackTile);
+				player.RoomControl.SpawnEntity(minecart);
+				minecart = null;
+			}
+
+			// End the minecart state.
+			End(null);
+		}
+
+		private void UpdatePlayerPosition() {
+			// Determine player offset based on minecart animation.
+			if (minecartAnimationPlayer.PlaybackTime < 12) {
+				if (Directions.IsHorizontal(direction))
+					playerOffset = new Vector2F(0, -8);
+				else
+					playerOffset = new Vector2F(-1, -9);
+			}
+			else {
+				if (Directions.IsHorizontal(direction))
+					playerOffset = new Vector2F(0, -9);
+				else
+					playerOffset = new Vector2F(0, -9);
+			}
+			player.ViewFocusOffset = -playerOffset;
+			
+			// Set the player position.
+			player.SetPositionByCenter(
+				trackTile.Center - (Directions.ToVector(direction) * GameSettings.TILE_SIZE)
+				+ (Directions.ToVector(direction) * Math.Min(moveDistance, GameSettings.TILE_SIZE)));
+			player.Position += playerOffset;
+		}
+
+		// Get the tracktile in the direction, or NULL if the path is blocked.
 		private TileMinecartTrack GetNextTrackTile(Point2I location, int direction) {
 			int comeFromDirection = Directions.Reverse(direction);
 			Point2I nextLocation = tileLocation + Directions.ToPoint(direction);
@@ -141,13 +191,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					TileMinecartTrack trackTile = tile as TileMinecartTrack;
 					if (trackTile != null && trackTile.GetDirections().Contains(comeFromDirection))
 						return trackTile;
-					else
+					else if (!(tile is TileMinecartDoor))
 						return null;
 				}
 			}
 			return null;
 		}
 
+		// Move to the next track tile.
 		private bool MoveToNextTile() {
 			moveDistance -= GameSettings.TILE_SIZE;
 			tileLocation += Directions.ToPoint(direction);
@@ -168,15 +219,18 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			TileMinecartTrack nextTackTile = GetNextTrackTile(tileLocation, nextDirection);
 			if (nextTackTile == null)
 				return false;
-			
+
 			trackTile = nextTackTile;
 			direction = nextDirection;
+			minecartAnimationPlayer.SubStripIndex = (Directions.IsHorizontal(direction) ? 0 : 1);
 			
-			if (Directions.IsHorizontal(direction))
-				minecartAnimationPlayer.Play(GameData.ANIM_MINECART_HORIZONTAL);
-			else
-				minecartAnimationPlayer.Play(GameData.ANIM_MINECART_VERTICAL);
-			
+			// Open any minecart doors in the next tile.
+			for (int i = 0; i < player.RoomControl.Room.LayerCount; i++) {
+				TileMinecartDoor tileDoor = player.RoomControl.GetTile(trackTile.Location, i) as TileMinecartDoor;
+				if (tileDoor != null)
+					tileDoor.Open();
+			}
+
 			return true;
 		}
 

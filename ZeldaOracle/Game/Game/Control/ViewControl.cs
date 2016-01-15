@@ -20,7 +20,7 @@ namespace ZeldaOracle.Game.Control {
 		public ViewControl() {
 			this.viewSize		= GameSettings.VIEW_SIZE;
 			this.panSpeed		= GameSettings.VIEW_PAN_SPEED;
-			this.position		= new Vector2F();
+			this.position		= Vector2F.Zero;
 		}
 		
 
