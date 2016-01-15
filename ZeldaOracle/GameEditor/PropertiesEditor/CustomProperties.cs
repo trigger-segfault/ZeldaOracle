@@ -23,7 +23,7 @@ namespace ZeldaEditor.PropertiesEditor {
 	[TypeConverter(typeof(PropertiesContainer.CustomObjectConverter))]
 	public class PropertiesContainer {
 		
-		private PropertyGridControl	propertyGridControl;
+		private ZeldaPropertyGrid	propertyGrid;
 		private Properties			properties;
 		private List<Property>		propertyList;
 
@@ -32,10 +32,10 @@ namespace ZeldaEditor.PropertiesEditor {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public PropertiesContainer(PropertyGridControl propertyGridControl) {
-			this.properties				= null;
-			this.propertyList			= new List<Property>();
-			this.propertyGridControl	= propertyGridControl;
+		public PropertiesContainer(ZeldaPropertyGrid propertyGrid) {
+			this.properties		= null;
+			this.propertyList	= new List<Property>();
+			this.propertyGrid	= propertyGrid;
 		}
 		
 		
@@ -50,7 +50,7 @@ namespace ZeldaEditor.PropertiesEditor {
 
 		public void AddProperties(Properties properties) {
 			foreach (Property property in  properties.GetAllProperties()) {
-				PropertyDocumentation doc = property.GetRootDocumentation();
+				PropertyDocumentation doc = property.GetDocumentation();
 				if (doc == null || !doc.IsHidden)
 					propertyList.Add(property);
 			}
@@ -78,8 +78,8 @@ namespace ZeldaEditor.PropertiesEditor {
 		}
 
 		[Browsable(false)]
-		public PropertyGridControl PropertyGridControl {
-			get { return propertyGridControl; }
+		public ZeldaPropertyGrid PropertyGrid {
+			get { return propertyGrid; }
 		}
 
 
@@ -105,7 +105,7 @@ namespace ZeldaEditor.PropertiesEditor {
 					
 					// Find the editor.
 					if (documentation != null)
-						editor = obj.PropertyGridControl.GetUITypeEditor(documentation.EditorType);
+						editor = obj.PropertyGrid.GetUITypeEditor(documentation.EditorType);
 
 					// Create the property descriptor.
 					props[i] = new CustomPropertyDescriptor(

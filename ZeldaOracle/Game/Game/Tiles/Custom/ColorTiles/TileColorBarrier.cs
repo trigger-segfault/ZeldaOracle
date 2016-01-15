@@ -8,13 +8,13 @@ using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TileColorJumpPad : Tile {
+	public class TileColorBarrier : Tile {
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public TileColorJumpPad() {
+		public TileColorBarrier() {
 
 		}
 
@@ -23,28 +23,17 @@ namespace ZeldaOracle.Game.Tiles {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnLand(Point2I startTile) {
-			if (startTile != Location) {
-				// Cycle the color (red -> yellow -> blue)
-				PuzzleColor c = Color;
-				if (c == PuzzleColor.Red)
-					Color = PuzzleColor.Yellow;
-				else if (c == PuzzleColor.Yellow)
-					Color = PuzzleColor.Blue;
-				else
- 					Color = PuzzleColor.Red;
-
-				int spriteIndex = Properties.GetInteger("sprite_index");
-				spriteIndex++;
-				if (spriteIndex == TileData.SpriteList.Length)
-					spriteIndex = 0;
-				Properties.SetBase("sprite_index", spriteIndex);
-				// TODO: Play color change sound
-			}
-		}
-
 		public override void OnInitialize() {
-			//Color = PuzzleColor.Red;
+			PuzzleColor color = Color;
+
+			if (color == PuzzleColor.Red) {
+				IsSolid = false;
+				CustomSprite = GameData.SPR_TILE_COLOR_BARRIER_RED_LOWERED;
+			}
+			else if (color == PuzzleColor.Blue) {
+				IsSolid = true;
+				CustomSprite = GameData.SPR_TILE_COLOR_BARRIER_BLUE_RAISED;
+			}
 		}
 
 
@@ -53,8 +42,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public PuzzleColor Color {
-			get { return (PuzzleColor) SpriteIndex; }
-			set { Properties.Set("sprite_index", (int) value); }
+			get { return (PuzzleColor) Properties.Get("color", (int) PuzzleColor.Red); }
 		}
 
 	}

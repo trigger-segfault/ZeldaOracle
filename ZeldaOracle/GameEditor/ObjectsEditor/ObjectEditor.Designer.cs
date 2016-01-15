@@ -28,10 +28,11 @@
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.groupBoxCustomObjectControls = new System.Windows.Forms.GroupBox();
 			this.panelCustomObjectControl = new System.Windows.Forms.Panel();
-			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.checkBoxStartDisabled = new System.Windows.Forms.CheckBox();
 			this.textBoxId = new System.Windows.Forms.TextBox();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.checkBoxPoofEffect = new System.Windows.Forms.CheckBox();
+			this.checkBoxStartDisabled = new System.Windows.Forms.CheckBox();
 			this.numberBoxWidth = new System.Windows.Forms.NumericUpDown();
 			this.comboBoxSolidType = new System.Windows.Forms.ComboBox();
 			this.numberBoxHeight = new System.Windows.Forms.NumericUpDown();
@@ -44,7 +45,6 @@
 			this.comboBoxCollisionModel = new System.Windows.Forms.ComboBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.labelLedgeDirection = new System.Windows.Forms.Label();
-			this.checkBoxPoofEffect = new System.Windows.Forms.CheckBox();
 			this.tabPageTileInteractions = new System.Windows.Forms.TabPage();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.labelMoveDirection = new System.Windows.Forms.Label();
@@ -65,14 +65,13 @@
 			this.checkBoxMovable = new System.Windows.Forms.CheckBox();
 			this.checkBoxCuttable = new System.Windows.Forms.CheckBox();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
+			this.eventsTab = new ZeldaEditor.ObjectsEditor.ObjectEditorEventsTab();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
-			this.dataGridView1 = new System.Windows.Forms.DataGridView();
-			this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.rawPropertyGrid = new ZeldaEditor.PropertiesEditor.ZeldaPropertyGrid();
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.buttonApply = new System.Windows.Forms.Button();
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.buttonDone = new System.Windows.Forms.Button();
-			this.eventsTab = new ZeldaEditor.ObjectsEditor.ObjectEditorEventsTab();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -87,7 +86,6 @@
 			this.groupBox3.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			this.tabPage3.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -160,6 +158,24 @@
 			this.panelCustomObjectControl.Size = new System.Drawing.Size(244, 276);
 			this.panelCustomObjectControl.TabIndex = 0;
 			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(10, 14);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(21, 13);
+			this.label1.TabIndex = 1;
+			this.label1.Text = "ID:";
+			// 
+			// textBoxId
+			// 
+			this.textBoxId.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textBoxId.Location = new System.Drawing.Point(59, 11);
+			this.textBoxId.Name = "textBoxId";
+			this.textBoxId.Size = new System.Drawing.Size(208, 20);
+			this.textBoxId.TabIndex = 0;
+			// 
 			// groupBox2
 			// 
 			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -186,14 +202,15 @@
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "General";
 			// 
-			// label1
+			// checkBoxPoofEffect
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(10, 14);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(21, 13);
-			this.label1.TabIndex = 1;
-			this.label1.Text = "ID:";
+			this.checkBoxPoofEffect.AutoSize = true;
+			this.checkBoxPoofEffect.Location = new System.Drawing.Point(116, 19);
+			this.checkBoxPoofEffect.Name = "checkBoxPoofEffect";
+			this.checkBoxPoofEffect.Size = new System.Drawing.Size(135, 17);
+			this.checkBoxPoofEffect.TabIndex = 0;
+			this.checkBoxPoofEffect.Text = "Spawn with poof effect";
+			this.checkBoxPoofEffect.UseVisualStyleBackColor = true;
 			// 
 			// checkBoxStartDisabled
 			// 
@@ -204,15 +221,6 @@
 			this.checkBoxStartDisabled.TabIndex = 4;
 			this.checkBoxStartDisabled.Text = "Starts disabled";
 			this.checkBoxStartDisabled.UseVisualStyleBackColor = true;
-			// 
-			// textBoxId
-			// 
-			this.textBoxId.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBoxId.Location = new System.Drawing.Point(59, 11);
-			this.textBoxId.Name = "textBoxId";
-			this.textBoxId.Size = new System.Drawing.Size(208, 20);
-			this.textBoxId.TabIndex = 0;
 			// 
 			// numberBoxWidth
 			// 
@@ -350,16 +358,6 @@
 			this.labelLedgeDirection.Size = new System.Drawing.Size(82, 13);
 			this.labelLedgeDirection.TabIndex = 1;
 			this.labelLedgeDirection.Text = "Ledge Direction";
-			// 
-			// checkBoxPoofEffect
-			// 
-			this.checkBoxPoofEffect.AutoSize = true;
-			this.checkBoxPoofEffect.Location = new System.Drawing.Point(116, 19);
-			this.checkBoxPoofEffect.Name = "checkBoxPoofEffect";
-			this.checkBoxPoofEffect.Size = new System.Drawing.Size(135, 17);
-			this.checkBoxPoofEffect.TabIndex = 0;
-			this.checkBoxPoofEffect.Text = "Spawn with poof effect";
-			this.checkBoxPoofEffect.UseVisualStyleBackColor = true;
 			// 
 			// tabPageTileInteractions
 			// 
@@ -588,9 +586,17 @@
 			this.tabPage2.Text = "Events";
 			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
+			// eventsTab
+			// 
+			this.eventsTab.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.eventsTab.Location = new System.Drawing.Point(3, 3);
+			this.eventsTab.Name = "eventsTab";
+			this.eventsTab.Size = new System.Drawing.Size(553, 362);
+			this.eventsTab.TabIndex = 0;
+			// 
 			// tabPage3
 			// 
-			this.tabPage3.Controls.Add(this.dataGridView1);
+			this.tabPage3.Controls.Add(this.rawPropertyGrid);
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
@@ -599,40 +605,20 @@
 			this.tabPage3.Text = "Raw Properties";
 			this.tabPage3.UseVisualStyleBackColor = true;
 			// 
-			// dataGridView1
+			// rawPropertyGrid
 			// 
-			this.dataGridView1.AllowUserToAddRows = false;
-			this.dataGridView1.AllowUserToDeleteRows = false;
-			this.dataGridView1.AllowUserToResizeRows = false;
-			this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column1,
-            this.Column2});
-			this.dataGridView1.Location = new System.Drawing.Point(8, 6);
-			this.dataGridView1.MultiSelect = false;
-			this.dataGridView1.Name = "dataGridView1";
-			this.dataGridView1.RowHeadersVisible = false;
-			this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.dataGridView1.Size = new System.Drawing.Size(543, 356);
-			this.dataGridView1.TabIndex = 3;
-			// 
-			// Column1
-			// 
-			this.Column1.HeaderText = "Property Name";
-			this.Column1.Name = "Column1";
-			// 
-			// Column2
-			// 
-			this.Column2.HeaderText = "Value";
-			this.Column2.Name = "Column2";
+			this.rawPropertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.rawPropertyGrid.EditorControl = null;
+			this.rawPropertyGrid.Location = new System.Drawing.Point(3, 3);
+			this.rawPropertyGrid.Name = "rawPropertyGrid";
+			this.rawPropertyGrid.Size = new System.Drawing.Size(553, 362);
+			this.rawPropertyGrid.TabIndex = 4;
+			this.rawPropertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.rawPropertyGrid_PropertyValueChanged);
 			// 
 			// panel1
 			// 
 			this.panel1.AutoSize = true;
+			this.panel1.Controls.Add(this.buttonApply);
 			this.panel1.Controls.Add(this.buttonCancel);
 			this.panel1.Controls.Add(this.buttonDone);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -640,6 +626,17 @@
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(567, 29);
 			this.panel1.TabIndex = 1;
+			// 
+			// buttonApply
+			// 
+			this.buttonApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonApply.Location = new System.Drawing.Point(407, 3);
+			this.buttonApply.Name = "buttonApply";
+			this.buttonApply.Size = new System.Drawing.Size(75, 23);
+			this.buttonApply.TabIndex = 2;
+			this.buttonApply.Text = "Apply";
+			this.buttonApply.UseVisualStyleBackColor = true;
+			this.buttonApply.Click += new System.EventHandler(this.buttonApply_Click);
 			// 
 			// buttonCancel
 			// 
@@ -657,21 +654,13 @@
 			// 
 			this.buttonDone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonDone.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.buttonDone.Location = new System.Drawing.Point(407, 3);
+			this.buttonDone.Location = new System.Drawing.Point(326, 3);
 			this.buttonDone.Name = "buttonDone";
 			this.buttonDone.Size = new System.Drawing.Size(75, 23);
 			this.buttonDone.TabIndex = 0;
 			this.buttonDone.Text = "Done";
 			this.buttonDone.UseVisualStyleBackColor = true;
 			this.buttonDone.Click += new System.EventHandler(this.buttonDone_Click);
-			// 
-			// eventsTab
-			// 
-			this.eventsTab.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.eventsTab.Location = new System.Drawing.Point(3, 3);
-			this.eventsTab.Name = "eventsTab";
-			this.eventsTab.Size = new System.Drawing.Size(553, 362);
-			this.eventsTab.TabIndex = 0;
 			// 
 			// ObjectEditor
 			// 
@@ -701,7 +690,6 @@
 			this.groupBox3.PerformLayout();
 			this.tabPage2.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -721,9 +709,6 @@
 		private System.Windows.Forms.Button buttonDone;
 		private System.Windows.Forms.CheckBox checkBoxStartDisabled;
 		private System.Windows.Forms.CheckBox checkBoxPoofEffect;
-		private System.Windows.Forms.DataGridView dataGridView1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
 		private System.Windows.Forms.ComboBox comboBoxSolidType;
 		private System.Windows.Forms.TabPage tabPageTileInteractions;
 		private System.Windows.Forms.GroupBox groupBox3;
@@ -760,5 +745,7 @@
 		private System.Windows.Forms.GroupBox groupBoxCustomObjectControls;
 		private System.Windows.Forms.Panel panelCustomObjectControl;
 		private System.Windows.Forms.SplitContainer splitContainer1;
+		private PropertiesEditor.ZeldaPropertyGrid rawPropertyGrid;
+		private System.Windows.Forms.Button buttonApply;
 	}
 }

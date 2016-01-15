@@ -25,22 +25,22 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 
 			// Open the script this property is referencing.
 			if (scriptName.Length > 0)
-				script = editorControl.World.GetScript(scriptName);
+				script = EditorControl.World.GetScript(scriptName);
 
 			// If it is null, create a new hidden script.
 			if (script == null) {
-				script = editorControl.GenerateInternalScript();
+				script = EditorControl.GenerateInternalScript();
 				wasGenerated = true;
 				
-				if (editorControl.PropertyGridControl.EditedObject is IEventObject) {
-					ObjectEvent e = ((IEventObject) editorControl.PropertyGridControl.EditedObject).Events.GetEvent(property.Name);
+				if (PropertyGrid.PropertyObject is IEventObject) {
+					ObjectEvent e = ((IEventObject) PropertyGrid.PropertyObject).Events.GetEvent(property.Name);
 					if (e != null)
 						script.Parameters = e.Parameters;
 				}
 			}
 
 			// Open the scrpit editor form.
-			ScriptEditor form = new ScriptEditor(script, editorControl);
+			ScriptEditor form = new ScriptEditor(script, EditorControl);
 			return form;
 		}
 
@@ -51,7 +51,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 		public override object OnResultCancel(Form form, object value) {
 			// If the script was newly generated, delete it completely.
 			if (wasGenerated) {
-				editorControl.World.RemoveScript(script);
+				EditorControl.World.RemoveScript(script);
 				return "";
 			}
 			return value;

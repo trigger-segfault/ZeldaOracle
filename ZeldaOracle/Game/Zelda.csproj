@@ -382,11 +382,13 @@
     <Compile Include="Common\Content\ResourceBuilders\AnimationBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\SpriteBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\TilesetBuilder.cs" />
-    <Compile Include="Game\Tiles\Custom\TileColorSwitch.cs" />
+    <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorBarrier.cs" />
+    <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorTile.cs" />
+    <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorSwitch.cs" />
     <Compile Include="Game\Tiles\Custom\SwitchTileBase.cs" />
     <Compile Include="Game\Tiles\Custom\TileLever.cs" />
-    <Compile Include="Game\Tiles\Custom\TileColorLantern.cs" />
-    <Compile Include="Game\Tiles\Custom\TileColorCubeSlot.cs" />
+    <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorLantern.cs" />
+    <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorCubeSlot.cs" />
     <Compile Include="Game\Tiles\Custom\TileCrackedFloor.cs" />
     <Compile Include="Game\Tiles\Custom\TileRegrowingPlant.cs" />
     <Compile Include="Game\Tiles\Custom\TilePlatform.cs" />
@@ -405,8 +407,8 @@
     <Compile Include="Game\Tiles\TilePath.cs" />
     <Compile Include="Game\Tiles\TileSpecialFlags.cs" />
     <Compile Include="Game\Tiles\Custom\TileRoller.cs" />
-    <Compile Include="Game\Tiles\Custom\TileColorCube.cs" />
-    <Compile Include="Game\Tiles\Custom\TileColorJumpPad.cs" />
+    <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorCube.cs" />
+    <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorJumpPad.cs" />
     <Compile Include="Game\Tiles\Custom\TileReward.cs" />
     <Compile Include="Game\Tiles\Custom\TileChest.cs" />
     <Compile Include="Game\Tiles\Custom\TileOwl.cs" />

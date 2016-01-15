@@ -22,6 +22,7 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaEditor.Tools;
 using ZeldaEditor.Scripting;
 using ZeldaOracle.Common.Scripting;
+using ZeldaEditor.PropertiesEditor;
 
 namespace ZeldaEditor.Control {
 
@@ -31,7 +32,6 @@ namespace ZeldaEditor.Control {
 
 		// Control
 		private EditorForm			editorForm;
-		private PropertyGridControl	propertyGridControl;
 		private string				worldFilePath;
 		private string				worldFileName;
 		private World				world;
@@ -84,7 +84,7 @@ namespace ZeldaEditor.Control {
 		public EditorControl(EditorForm editorForm) {
 			this.editorForm		= editorForm;
 
-			this.propertyGridControl	= null;
+			//this.propertyGridControl	= null;
 			this.worldFilePath	= String.Empty;
 			this.worldFileName	= "untitled";
 			this.world			= null;
@@ -154,9 +154,6 @@ namespace ZeldaEditor.Control {
 						editorForm.ComboBoxZones.Items.Add(entry.Key);
 				}
 				editorForm.ComboBoxZones.SelectedIndex = 0;
-
-				// Create controllers.
-				propertyGridControl = new PropertyGridControl(this, editorForm.PropertyGrid);
 
 				// Create tools.
 				tools = new List<EditorTool>();
@@ -276,7 +273,7 @@ namespace ZeldaEditor.Control {
 		// Close the world file.
 		public void CloseFile() {
 			if (IsWorldOpen) {
-				propertyGridControl.CloseProperties();
+				PropertyGrid.CloseProperties();
 				world			= null;
 				level			= null;
 				hasMadeChanges	= false;
@@ -290,7 +287,7 @@ namespace ZeldaEditor.Control {
 			this.level = level;
 			editorForm.LevelDisplay.UpdateLevel();
 			UpdateWindowTitle();
-			propertyGridControl.OpenProperties(level.Properties, level);
+			PropertyGrid.OpenProperties(level.Properties, level);
 		}
 
 		// Open the given level index in the level display.
@@ -298,14 +295,14 @@ namespace ZeldaEditor.Control {
 			level = world.Levels[index];
 			editorForm.LevelDisplay.UpdateLevel();
 			UpdateWindowTitle();
-			propertyGridControl.OpenProperties(level.Properties, level);
+			PropertyGrid.OpenProperties(level.Properties, level);
 		}
 
 		public void CloseLevel() {
 			level = null;
 			editorForm.LevelDisplay.UpdateLevel();
 			UpdateWindowTitle();
-			propertyGridControl.CloseProperties();
+			PropertyGrid.CloseProperties();
 		}
 
 		// Add a new level the world, and open it if specified.
@@ -399,7 +396,7 @@ namespace ZeldaEditor.Control {
 
 		// Open the properties for the given tile in the property grid.
 		public void OpenObjectProperties(IPropertyObject propertyObject) {
-			propertyGridControl.OpenProperties(propertyObject.Properties, propertyObject);
+			PropertyGrid.OpenProperties(propertyObject.Properties, propertyObject);
 		}
 
 
@@ -474,8 +471,8 @@ namespace ZeldaEditor.Control {
 			set { editorForm = value; }
 		}
 		
-		public PropertyGridControl PropertyGridControl {
-			get { return propertyGridControl; }
+		public ZeldaPropertyGrid PropertyGrid {
+			get { return editorForm.PropertyGrid; }
 		}
 		
 		public LevelDisplay LevelDisplay {

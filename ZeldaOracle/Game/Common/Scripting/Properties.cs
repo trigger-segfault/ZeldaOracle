@@ -22,7 +22,10 @@ namespace ZeldaOracle.Common.Scripting {
 		//-----------------------------------------------------------------------------
 		
 		// Construct an empty properties list.
-		public Properties() : this(null) {
+		public Properties() {
+			this.map			= new Dictionary<string, Property>();
+			this.baseProperties	= null;
+			this.propertyObject	= null;
 		}
 		
 		// Construct an empty properties list with the given property object.
@@ -30,6 +33,18 @@ namespace ZeldaOracle.Common.Scripting {
 			this.map			= new Dictionary<string, Property>();
 			this.baseProperties	= null;
 			this.propertyObject	= propertyObject;
+		}
+
+		public Properties(Properties copy) {
+			this.map			= new Dictionary<string, Property>();
+			this.baseProperties = null;
+			this.propertyObject = copy.propertyObject;
+			foreach (Property property in copy.map.Values) {
+				Property p		= new Property(property);
+				p.Properties	= this;
+				p.BaseProperty	= null;
+				map[p.Name]		= p;
+			}
 		}
 
 

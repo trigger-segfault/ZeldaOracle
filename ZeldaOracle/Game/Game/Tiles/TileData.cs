@@ -28,25 +28,42 @@ namespace ZeldaOracle.Game.Tiles {
 			breakAnimation		= null;
 
 			// General.
-			properties.SetGeneric("size", Point2I.One);
-			properties.Set("flags", (int) TileFlags.Default);
-			properties.Set("solidity", (int) TileSolidType.NotSolid);
-			properties.Set("collision_model", "");
-			properties.Set("environment_type", (int) TileEnvironmentType.Normal);
+			properties.SetGeneric("size", Point2I.One)
+				.SetDocumentation("Size", "General", "");
+			properties.Set("flags", (int) TileFlags.Default)
+				.SetDocumentation("Tile Flags", "General", "");
+			properties.Set("solidity", (int) TileSolidType.NotSolid)
+				.SetDocumentation("Solid Type", "General", "");
+			properties.Set("ledge_direction", Directions.Down)
+				.SetDocumentation("Ledge Direction", "General", "");
+			properties.Set("collision_model", "")
+				.SetDocumentation("Collision Model", "collision_model", "", "General", "");
+			properties.Set("environment_type", (int) TileEnvironmentType.Normal)
+				.SetDocumentation("Environment Type", "General", "");
+			properties.Set("disable_on_destroy", false)
+				.SetDocumentation("Disable on Destroy", "General", "");
 
 			// Motion.
-			properties.Set("path", "");
+			properties.Set("path", "")
+				.SetDocumentation("Path", "Motion", "A path the tile follows in.");
 			
 			// Interaction Options.
-			properties.Set("move_once", false);
-			properties.Set("move_direction", -1);
-			properties.Set("cuttable_sword_level", 0);
-			properties.Set("pickupable_bracelet_level", 0);
-			properties.Set("ledge_direction", Directions.Down);
-			properties.Set("spawn_from_ceiling", false);
-			properties.Set("spawn_poof_effect", false);
-			properties.Set("spawn_delay_after_poof", 31);
-			properties.Set("disable_on_destroy", false);
+			properties.Set("move_once", false)
+				.SetDocumentation("Move Once", "Interactions", "");
+			properties.Set("move_direction", -1)
+				.SetDocumentation("Move Direction", "Interactions", "");
+			properties.Set("cuttable_sword_level", 0)
+				.SetDocumentation("Cuttable Sword Level", "Interactions", "");
+			properties.Set("pickupable_bracelet_level", 0)
+				.SetDocumentation("Pickupable Bracelet Level", "Interactions", "");
+
+			// Spawning.
+			properties.Set("spawn_from_ceiling", false)
+				.SetDocumentation("Spawn from Ceiling", "Spawning", "");
+			properties.Set("spawn_poof_effect", false)
+				.SetDocumentation("Spawn with Poof Effect", "Spawning", "");
+			properties.Set("spawn_delay_after_poof", 31)
+				.SetDocumentation("Spawn Delay after Poof", "Spawning", "");
 
 			// Events.
 			properties.Set("on_move", "")

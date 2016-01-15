@@ -114,14 +114,10 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			foreach (KeyValuePair<string, Script> entry in scripts) {
 				Script script = entry.Value;
 				if (!script.HasErrors) {
-					Console.WriteLine(" - Added script '" + script.Name + "'");
 					code += "public void RunScript_" + script.Name + "(" + CreateParametersString(script.Parameters) + ")" +
 						"{" +
 							script.Code +
 						"}";
-				}
-				else {
-					Console.WriteLine(" - Ignored script '" + script.Name + "' (it has errors)");
 				}
 			}
 

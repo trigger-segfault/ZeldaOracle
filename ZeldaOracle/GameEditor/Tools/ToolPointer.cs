@@ -69,7 +69,7 @@ namespace ZeldaEditor.Tools {
 			selectedEventTile = null;
 			selectedTile = null;
 			LevelDisplayControl.ClearSelectionBox();
-			EditorControl.PropertyGridControl.CloseProperties();
+			EditorControl.PropertyGrid.CloseProperties();
 		}
 
 		
@@ -102,7 +102,7 @@ namespace ZeldaEditor.Tools {
 						selectedRoom = room;
 						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, Point2I.Zero);
 						LevelDisplayControl.SetSelectionBox(levelTileCoord, room.Size);
-						EditorControl.PropertyGridControl.OpenProperties(room.Properties, room);
+						EditorControl.PropertyGrid.OpenProperties(room.Properties, room);
 					}
 					else {
 						// Select tiles.
@@ -111,11 +111,11 @@ namespace ZeldaEditor.Tools {
 						if (selectedTile != null) {
 							Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
 							LevelDisplayControl.SetSelectionBox(levelTileCoord, Point2I.One);
-							EditorControl.PropertyGridControl.OpenProperties(selectedTile.Properties, selectedTile);
+							EditorControl.PropertyGrid.OpenProperties(selectedTile.Properties, selectedTile);
 						}
 						else {
 							LevelDisplayControl.ClearSelectionBox();
-							EditorControl.PropertyGridControl.CloseProperties();
+							EditorControl.PropertyGrid.CloseProperties();
 						}
 					}
 				}
@@ -126,11 +126,11 @@ namespace ZeldaEditor.Tools {
 					if (selectedEventTile != null) {
 						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
 						LevelDisplayControl.SetSelectionBox(levelTileCoord, Point2I.One);
-						EditorControl.PropertyGridControl.OpenProperties(selectedEventTile.Properties, selectedEventTile);
+						EditorControl.PropertyGrid.OpenProperties(selectedEventTile.Properties, selectedEventTile);
 					}
 					else {
 						LevelDisplayControl.ClearSelectionBox();
-						EditorControl.PropertyGridControl.CloseProperties();
+						EditorControl.PropertyGrid.CloseProperties();
 					}
 				}
 			}

@@ -30,11 +30,11 @@ namespace ZeldaOracle.Game.Tiles {
 			events			= new ObjectEventCollection();
 
 			properties.Set("id", "");
-			properties.SetDocumentation("id", "ID", "", "", "",
+			properties.SetDocumentation("id", "ID", "", "", "General",
 				"The id used to refer to this tile.");
 
 			properties.Set("enabled", true);
-			properties.SetDocumentation("enabled", "Enabled", "", "", "",
+			properties.SetDocumentation("enabled", "Enabled", "", "", "General",
 				"True if the tile is spawned upon entering the room.");
 
 			properties.Set("sprite_index", 0);
@@ -56,8 +56,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public virtual void Clone(BaseTileData copy) {
 			type		= copy.type;
-			properties	= new Properties();
-			properties.SetAll(copy.properties);
+			properties	= new Properties(copy.properties);
+			//properties.SetAll(copy.properties);
 		}
 		
 		

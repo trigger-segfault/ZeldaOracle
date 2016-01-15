@@ -16,7 +16,7 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaEditor.PropertiesEditor {
 
-	public class ZeldaPropertiesGrid : PropertyGrid {
+	public class ZeldaPropertyGrid : PropertyGrid {
 
 		private EditorControl editorControl;
 		private IPropertyObject propertyObject;
@@ -28,16 +28,20 @@ namespace ZeldaEditor.PropertiesEditor {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ZeldaPropertiesGrid() {
+		public ZeldaPropertyGrid() {
 			editorControl		= null;
 			propertyObject		= null;
-			propertiesContainer	= new PropertiesContainer(null);
+			propertiesContainer	= new PropertiesContainer(this);
+			typeEditors			= new Dictionary<string, CustomPropertyEditor>();
 
 			this.SelectedObject			= propertiesContainer;
 			this.PropertyValueChanged	+= OnPropertyChange;
-			
-			// Create property editor types.
-			typeEditors = new Dictionary<string, CustomPropertyEditor>();
+		}
+
+		public void Initialize(EditorControl editorControl) {
+			this.editorControl = editorControl;
+
+			// Create custom property editor types.
 			typeEditors["sprite"]			= new ResourcePropertyEditor<Sprite>();
 			typeEditors["animation"]		= new ResourcePropertyEditor<Animation>();
 			typeEditors["collision_model"]	= new ResourcePropertyEditor<CollisionModel>();
@@ -54,6 +58,11 @@ namespace ZeldaEditor.PropertiesEditor {
 			typeEditors["enum_flags"]		= null;
 			typeEditors["dungeon"]			= new DungeonPropertyEditor();
 			typeEditors["level"]			= new LevelPropertyEditor();
+
+			// Initialize the property editors.
+			foreach (CustomPropertyEditor editor in typeEditors.Values.Where(e => e != null)) {
+				editor.Initialize(this);
+			}
 		}
 
 
@@ -71,12 +80,15 @@ namespace ZeldaEditor.PropertiesEditor {
 		//-----------------------------------------------------------------------------
 		// Properties Methods
 		//-----------------------------------------------------------------------------
+		
+		public void OpenProperties(Properties properties, IPropertyObject propertyObject) {
+			OpenProperties(propertyObject);
+		}
 
 		public void OpenProperties(IPropertyObject propertyObject) {
 			this.propertyObject = propertyObject;
 			propertiesContainer.Set(propertyObject.Properties);
-
-			
+			Refresh();
 		}
 		
 		public void RefreshProperties() {
@@ -85,6 +97,7 @@ namespace ZeldaEditor.PropertiesEditor {
 		
 		public void CloseProperties() {
 			propertiesContainer.Clear();
+			Refresh();
 		}
 		
 

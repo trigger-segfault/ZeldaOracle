@@ -52,8 +52,11 @@ namespace ZeldaEditor {
 			// Create the editor control instance.
 			editorControl = new EditorControl(this);
 
-			// Setup the world tree view.
+			// Initialize world tree view.
 			worldTreeView.EditorControl = editorControl;
+
+			// Initialize property grid.
+			propertyGrid.Initialize(editorControl);
 
 			// Create the level display.
 			levelDisplay				= new LevelDisplay();
@@ -72,11 +75,11 @@ namespace ZeldaEditor {
 			panelTiles2.Controls.Add(tileDisplay);
 
 			activeControl = null;
-
 			objectEditorForm = null;
 
 			statusLabelTask.Text = null;
 
+			// Setup layer combo-box.
 			this.comboBoxWorldLayer.Items.Add("Layer 1");
 			this.comboBoxWorldLayer.Items.Add("Layer 2");
 			this.comboBoxWorldLayer.Items.Add("Layer 3");
@@ -93,15 +96,17 @@ namespace ZeldaEditor {
 				buttonToolEyedropper
 			};
 
-			this.hotKeyCommands = new Dictionary<Keys, HotKeyAction>();
-			this.hotKeyCommands.Add(Keys.PageUp, delegate() { cycleLayerUpToolStripMenuItem_Click(null, null); });
-			this.hotKeyCommands.Add(Keys.PageDown, delegate() { cycleLayerUpToolStripMenuItem1_Click(null, null); });
-			this.hotKeyCommands.Add(Keys.M, delegate() { buttonTool_Click(this.buttonToolPointer, null); });
-			this.hotKeyCommands.Add(Keys.P, delegate() { buttonTool_Click(this.buttonToolPlace, null); });
-			this.hotKeyCommands.Add(Keys.O, delegate() { buttonTool_Click(this.buttonToolSquare, null); });
-			this.hotKeyCommands.Add(Keys.F, delegate() { buttonTool_Click(this.buttonToolFill, null); });
-			this.hotKeyCommands.Add(Keys.S, delegate() { buttonTool_Click(this.buttonToolSelection, null); });
-			this.hotKeyCommands.Add(Keys.K, delegate() { buttonTool_Click(this.buttonToolEyedropper, null); });
+			// Add hotkeys.
+			hotKeyCommands = new Dictionary<Keys, HotKeyAction>();
+			hotKeyCommands.Add(Keys.PageUp, delegate() { cycleLayerUpToolStripMenuItem_Click(null, null); });
+			hotKeyCommands.Add(Keys.PageDown, delegate() { cycleLayerUpToolStripMenuItem1_Click(null, null); });
+			hotKeyCommands.Add(Keys.M, delegate() { buttonTool_Click(this.buttonToolPointer, null); });
+			hotKeyCommands.Add(Keys.P, delegate() { buttonTool_Click(this.buttonToolPlace, null); });
+			hotKeyCommands.Add(Keys.O, delegate() { buttonTool_Click(this.buttonToolSquare, null); });
+			hotKeyCommands.Add(Keys.F, delegate() { buttonTool_Click(this.buttonToolFill, null); });
+			hotKeyCommands.Add(Keys.S, delegate() { buttonTool_Click(this.buttonToolSelection, null); });
+			hotKeyCommands.Add(Keys.K, delegate() { buttonTool_Click(this.buttonToolEyedropper, null); });
+			
 		}
 
 
@@ -144,7 +149,10 @@ namespace ZeldaEditor {
 
 		// Use this for shortcut keys that won't work on their own.
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
-			bool typing = this.activeControl is TextBoxBase;
+			bool typing = (activeControl is TextBoxBase) || (activeControl is ComboBox);
+			if (typing && hotKeyCommands.ContainsKey(keyData))
+				Console.WriteLine("Typing!!");
+
 			if (!typing && hotKeyCommands.ContainsKey(keyData)) {
 				hotKeyCommands[keyData]();
 				return true;
@@ -244,8 +252,8 @@ namespace ZeldaEditor {
 				if (editorControl.CurrentTool != null)
 					editorControl.CurrentTool.OnChangeLayer();
 			}
-			if (editorControl.PropertyGridControl != null)
-				editorControl.PropertyGridControl.CloseProperties();
+			if (editorControl.PropertyGrid != null)
+				editorControl.PropertyGrid.CloseProperties();
 			levelDisplay.Focus();
 		}
 
@@ -362,12 +370,8 @@ namespace ZeldaEditor {
 			get { return comboBoxZones; }
 		}
 
-		public PropertyGrid PropertyGrid {
+		public ZeldaPropertyGrid PropertyGrid {
 			get { return propertyGrid; }
-		}
-
-		public PropertyGrid PropertyGridEvents {
-			get { return propertyGrid1; }
 		}
 
 		public ToolStripButton ButtonTestLevelPlace {
@@ -478,7 +482,7 @@ namespace ZeldaEditor {
 
 		// Tile Properties...
 		private void tilePropertiesToolStripMenuItem_Click(object sender, EventArgs e) {
-			IPropertyObject obj = editorControl.PropertyGridControl.EditedObject;
+			IPropertyObject obj = editorControl.PropertyGrid.PropertyObject;
 			if (obj is IPropertyObject) {
 				if (objectEditorForm == null || objectEditorForm.IsDisposed) {
 					objectEditorForm = new ObjectEditor(editorControl);
@@ -488,18 +492,6 @@ namespace ZeldaEditor {
 				else {
 					objectEditorForm.SetObject((IPropertyObject) obj);
 				}
-
-				/*
-				using (Form form = new ObjectEditor((TileDataInstance) obj)) {
-					//if (form.ShowDialog(this) == DialogResult.OK) {
-					form.Show();
-					if (form.DialogResult == DialogResult.OK) {
-
-					}
-					else {
-
-					}
-				}*/
 			}
 		}
 
@@ -576,16 +568,6 @@ namespace ZeldaEditor {
 				(comboBoxWorldLayer.SelectedIndex + comboBoxWorldLayer.Items.Count - 1) % comboBoxWorldLayer.Items.Count;
 		}
 
-		
-		//-----------------------------------------------------------------------------
-		// Property Grid events
-		//-----------------------------------------------------------------------------
-
-		// Property value changed.
-		private void propertyGrid_PropertyValueChanged(object sender, PropertyValueChangedEventArgs e) {
-			editorControl.PropertyGridControl.OnPropertyChange(sender, e);
-		}
-		
 		
 		//-----------------------------------------------------------------------------
 		// World Tree View button events

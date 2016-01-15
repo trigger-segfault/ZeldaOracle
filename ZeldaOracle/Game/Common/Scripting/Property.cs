@@ -208,6 +208,12 @@ namespace ZeldaOracle.Common.Scripting {
 				editorType, editorSubType, category, description, isEditable, isHidden);
 			return this;
 		}
+		
+		public Property SetDocumentation(string readableName, string category, string description)
+		{
+			documentation = new PropertyDocumentation(readableName, "", "", category, description, true, false);
+			return this;
+		}
 
 		// Set the property action to occur when this property is modified.
 		public Property SetAction(PropertyAction action) {

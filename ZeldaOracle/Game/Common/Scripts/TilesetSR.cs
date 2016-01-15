@@ -173,32 +173,39 @@ namespace ZeldaOracle.Common.Scripts {
 				// TODO: handle lists.
 				for (int i = 0; i < parameters.Count; i++) {
 					CommandParam param = parameters[i];
-
 					string name = param.GetString(1);
 
-					if (String.Compare(param.GetString(0), "hide", StringComparison.CurrentCultureIgnoreCase) == 0) {
-						// TODO: this
-						//tileData.Properties.GetProperty(name).Documentation.IsHidden = true;
+					if (String.Compare(param.GetString(0), "hide", StringComparison.OrdinalIgnoreCase) == 0) {
+						tileData.Properties.GetProperty(name, false).Documentation.IsHidden = true;
 					}
-					else if (String.Compare(param.GetString(0), "show", StringComparison.CurrentCultureIgnoreCase) == 0) {
-						//tileData.Properties.GetProperty(name).Documentation.IsHidden = false;
+					else if (String.Compare(param.GetString(0), "show", StringComparison.OrdinalIgnoreCase) == 0) {
+						tileData.Properties.GetProperty(name, false).Documentation.IsHidden = false;
 					}
 					else {
+						// Parse the property type.
+						PropertyType type;
+						if (!Enum.TryParse<PropertyType>(param.GetString(0), true, out type))
+							ThrowParseError("Unknown property type " + name);
 
-						Property property = null;
-						PropertyType type = (PropertyType) Enum.Parse(typeof(PropertyType), param.GetString(0), true);
-
+						// Parse the property value.
+						object value = null;
 						if (type == PropertyType.String)
-							property = Property.CreateString(name, param.GetString(2));
+							value = param.GetString(2);
 						else if (type == PropertyType.Integer)
-							property = Property.CreateInt(name, param.GetInt(2));
+							value = param.GetInt(2);
 						else if (type == PropertyType.Float)
-							property = Property.CreateFloat(name, param.GetFloat(2));
+							value = param.GetFloat(2);
 						else if (type == PropertyType.Boolean)
-							property = Property.CreateBool(name, (param.GetString(2) == "true"));
+							value = param.GetString(2).Equals("true", StringComparison.OrdinalIgnoreCase);
 						else
 							ThrowParseError("Unsupported property type for " + name);
 						
+						// Set the property.
+						Property property = null;
+						if (value != null)
+							property = tileData.Properties.SetGeneric(name, value);
+
+						// Set the property's documentation.
 						if (param.Count > 3) {
 							string editorType = "";
 							string editorSubType = "";
@@ -209,27 +216,29 @@ namespace ZeldaOracle.Common.Scripts {
 							else {
 								editorType = param.GetString(4);
 							}
+							
+							PropertyDocumentation documentation = new PropertyDocumentation() {
+								ReadableName	= param.GetString(3),
+								EditorType		= editorType,
+								EditorSubType	= editorSubType,
+								Category		= param.GetString(5),
+								Description		= param.GetString(6),
+								IsEditable		= true,
+								IsHidden		= param.GetBool(7, false),
+							};
 
-							property.SetDocumentation(
-								param.GetString(3),
-								editorType,
-								editorSubType,
-								param.GetString(5),
-								param.GetString(6),
-								true,
-								param.GetBool(7, false));
+							if (property != null)
+								property.Documentation = documentation;
 						}
-
-						if (property != null)
-							tileData.Properties.Set(property.Name, property);
 					}
 				}
 			});
 			// Event <name>, <readable-name>, <description>, (<param-type-1>, <param-name-1>, <param-type-2>, <param-name-2>...)
 			AddTilesetCommand("Event", delegate(CommandParam parameters) {
 				Property property = Property.CreateString(parameters.GetString(0), "");
-				property.SetDocumentation(parameters.GetString(1), "script", "", "Events", parameters.GetString(2), true, false);
-				tileData.Properties.Set(property.Name, property);
+				//property.SetDocumentation(parameters.GetString(1), "script", "", "Events", parameters.GetString(2), true, false);
+				tileData.Properties.Set(property.Name, property)
+					.SetDocumentation(parameters.GetString(1), "script", "", "Events", parameters.GetString(2), true, false);
 				
 				// Create the event's script parameter list.
 				ScriptParameter[] scriptParams;

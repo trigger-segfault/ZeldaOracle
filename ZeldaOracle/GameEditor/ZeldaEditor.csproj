@@ -76,6 +76,21 @@
     <Compile Include="ObjectsEditor\CustomControls\CustomObjectEditorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileDoor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileColorLantern.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileColorCube.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileColorJumpPad.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileSign.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileReward.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -92,9 +107,8 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileButton.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Control\CustomControls\CustomObjectEditorControl.cs" />
     <Compile Include="ObjectsEditor\CustomControls\RewardChooser.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -109,7 +123,7 @@
     </Compile>
     <Compile Include="PropertiesEditor\CustomEditors\LevelPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\DungeonPropertyEditor.cs" />
-    <Compile Include="PropertiesEditor\ZeldaPropertiesGrid.cs">
+    <Compile Include="PropertiesEditor\ZeldaPropertyGrid.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Scripting\ScriptEditorCompiler.cs" />
@@ -211,6 +225,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ObjectsEditor\CustomControls\CustomObjectEditorControl.resx">
       <DependentUpon>CustomObjectEditorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileDoor.resx">
+      <DependentUpon>ObjectControlsTileDoor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileColorLantern.resx">
+      <DependentUpon>ObjectControlsTileColorLantern.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileColorCube.resx">
+      <DependentUpon>ObjectControlsTileColorCube.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileColorJumpPad.resx">
+      <DependentUpon>ObjectControlsTileColorJumpPad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileSign.resx">
+      <DependentUpon>ObjectControlsTileSign.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileReward.resx">
       <DependentUpon>ObjectControlsTileReward.cs</DependentUpon>

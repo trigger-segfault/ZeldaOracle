@@ -37,26 +37,27 @@ namespace ZeldaEditor.ObjectsEditor {
 		public ObjectEditor(EditorControl editorControl) {
 			InitializeComponent();
 
+			rawPropertyGrid.Initialize(editorControl);
+
 			// Setup the custom control types.
 			customTileTypeControls = new Dictionary<Type, CustomObjectEditorControl>();
-			customTileTypeControls[typeof(TileButton)]		= new ObjectControlsTileButton();
-			customTileTypeControls[typeof(TileLantern)]		= new ObjectControlsTileLantern();
-			customTileTypeControls[typeof(TileLever)]		= new ObjectControlsTileLever();
-			customTileTypeControls[typeof(TileColorSwitch)]	= new ObjectControlsTileColorSwitch();
-			customTileTypeControls[typeof(TileChest)]		= new ObjectControlsTileChest();
-			customTileTypeControls[typeof(TileReward)]		= new ObjectControlsTileReward();
-			/*foreach (CustomObjectEditorControl editor in customTileTypeControls.Values)
-				editor.Initialize(this);*/
+			customTileTypeControls[typeof(TileButton)]			= new ObjectControlsTileButton();
+			customTileTypeControls[typeof(TileLantern)]			= new ObjectControlsTileLantern();
+			customTileTypeControls[typeof(TileLever)]			= new ObjectControlsTileLever();
+			customTileTypeControls[typeof(TileColorSwitch)]		= new ObjectControlsTileColorSwitch();
+			customTileTypeControls[typeof(TileChest)]			= new ObjectControlsTileChest();
+			customTileTypeControls[typeof(TileReward)]			= new ObjectControlsTileReward();
+			customTileTypeControls[typeof(TileSign)]			= new ObjectControlsTileSign();
+			customTileTypeControls[typeof(TileOwl)]				= new ObjectControlsTileSign();			// TileOwl == TileSign
+			customTileTypeControls[typeof(TileColorCube)]		= new ObjectControlsTileColorCube();
+			customTileTypeControls[typeof(TileColorLantern)]	= new ObjectControlsTileColorLantern();
+			customTileTypeControls[typeof(TileColorJumpPad)]	= new ObjectControlsTileColorJumpPad();
+			customTileTypeControls[typeof(TileColorTile)]		= new ObjectControlsTileColorJumpPad();	// TileColorTile == TileColorJumpPad
+			customTileTypeControls[typeof(TileDoor)]			= new ObjectControlsTileDoor();
 
 			this.editorControl	= editorControl;
 			this.tile			= null;
 			this.eventsTab.Initialize(this);
-			
-			dataGridView1.Rows.Add();
-			dataGridView1.Rows.Add();
-			dataGridView1.Rows.Add();
-			dataGridView1.Rows.Add();
-			dataGridView1.Rows.Add();
 
 			// Solid Types.
 			comboBoxSolidType.Items.AddRange(new ComboBoxItem<TileSolidType>[] {
@@ -169,6 +170,9 @@ namespace ZeldaEditor.ObjectsEditor {
 				if (tabControl1.TabPages.Contains(tabPageTileInteractions))
 					tabControl1.TabPages.Remove(tabPageTileInteractions);
 			}
+			
+			// Setup the raw properties grid.
+			rawPropertyGrid.OpenProperties(propertyObject);
 
 			// Set the form title.
 			if (tileType != null) {
@@ -211,35 +215,21 @@ namespace ZeldaEditor.ObjectsEditor {
 				numberBoxHeight.Value = tile.Size.Y;
 
 				// Solid type.
-				comboBoxSolidType.SelectedIndex = 0;
-				TileSolidType solidType = (TileSolidType) tile.Properties.GetInteger("solidity", (int) TileSolidType.NotSolid);
-				foreach (ComboBoxItem<TileSolidType> item in comboBoxSolidType.Items) {
-					if (item.Value == solidType)
-						comboBoxSolidType.SelectedItem = item;
-				}
+				TileSolidType solidType = (TileSolidType)
+					tile.Properties.GetInteger("solidity", (int) TileSolidType.NotSolid);
+				ComboBoxItem<TileSolidType>.SelectComboBoxItem(comboBoxSolidType, solidType);
 				
 				// Ledge Direction.
-				comboBoxLedgeDirection.SelectedIndex = 0;
 				int ledgeDir = tile.Properties.GetInteger("ledge_direction", Directions.Down);
-				foreach (ComboBoxItem<int> item in comboBoxLedgeDirection.Items) {
-					if (item.Value == ledgeDir)
-						comboBoxLedgeDirection.SelectedItem = item;
-				}
+				ComboBoxItem<int>.SelectComboBoxItem(comboBoxLedgeDirection, ledgeDir);
 
 				// Collision model.
-				comboBoxCollisionModel.SelectedIndex = 0;
-				foreach (ComboBoxItem<CollisionModel> item in comboBoxCollisionModel.Items) {
-					if (item.Value == tile.CollisionModel)
-						comboBoxCollisionModel.SelectedItem = item;
-				}
+				ComboBoxItem<CollisionModel>.SelectComboBoxItem(comboBoxCollisionModel, tile.CollisionModel);
 
 				// Environment type.
-				comboBoxMovementType.SelectedIndex = 0;
-				TileEnvironmentType envType = (TileEnvironmentType) tile.Properties.GetInteger("environment_type", (int) TileEnvironmentType.Normal);
-				foreach (ComboBoxItem<TileEnvironmentType> item in comboBoxMovementType.Items) {
-					if (item.Value == envType)
-						comboBoxMovementType.SelectedItem = item;
-				}
+				TileEnvironmentType envType = (TileEnvironmentType)
+					tile.Properties.GetInteger("environment_type", (int) TileEnvironmentType.Normal);
+				ComboBoxItem<TileEnvironmentType>.SelectComboBoxItem(comboBoxMovementType, envType);
 				
 				//  Interactions.
 				checkBoxCuttable.Checked			= tile.Flags.HasFlag(TileFlags.Cuttable);
@@ -257,12 +247,8 @@ namespace ZeldaEditor.ObjectsEditor {
 				checkBoxDisableOnDestroy.Checked	= tile.Properties.GetBoolean("disable_on_destroy", false);
 				
 				// Move direction.
-				comboBoxMoveDirection.SelectedIndex = 0;
-				int moveDir = tile.Properties.GetInteger("move_direction", -1);
-				foreach (ComboBoxItem<int> item in comboBoxMoveDirection.Items) {
-					if (item.Value == moveDir)
-						comboBoxMoveDirection.SelectedItem = item;
-				}
+				ComboBoxItem<int>.SelectComboBoxItem(comboBoxMoveDirection,
+					tile.Properties.GetInteger("move_direction", -1));
 			}
 
 			// Setup custom controls.
@@ -283,21 +269,20 @@ namespace ZeldaEditor.ObjectsEditor {
 				// Size.
 				tile.Size = new Point2I((int) numberBoxWidth.Value, (int) numberBoxHeight.Value);
 			
-				// Solid Type.
-				TileSolidType solidType = ((ComboBoxItem<TileSolidType>) comboBoxSolidType.SelectedItem).Value;
-				tile.Properties.Set("solidity", (int) solidType);
-
+				// Solid Type
+				tile.Properties.Set("solidity",
+					(int) ComboBoxItem<TileSolidType>.GetComboBoxValue(comboBoxSolidType));
+				
 				// Ledge direction
-				int ledgeDir = ((ComboBoxItem<int>) comboBoxLedgeDirection.SelectedItem).Value;
-				tile.Properties.Set("ledge_direction", ledgeDir);
+				tile.Properties.Set("ledge_direction",
+					ComboBoxItem<int>.GetComboBoxValue(comboBoxLedgeDirection));
 
 				// Collision Model.
-				CollisionModel collisionModel = ((ComboBoxItem<CollisionModel>) comboBoxCollisionModel.SelectedItem).Value;
-				tile.CollisionModel = collisionModel;
+				tile.CollisionModel = ComboBoxItem<CollisionModel>.GetComboBoxValue(comboBoxCollisionModel);
 
 				// Environment Type.
-				TileEnvironmentType envType = ((ComboBoxItem<TileEnvironmentType>) comboBoxMovementType.SelectedItem).Value;
-				tile.Properties.Set("environment_type", (int) envType);
+				tile.Properties.Set("environment_type",
+					(int) ComboBoxItem<TileEnvironmentType>.GetComboBoxValue(comboBoxMovementType));
 
 				//  Interactions.
 				tile.SetFlags(TileFlags.Cuttable,		checkBoxCuttable.Checked);
@@ -325,6 +310,8 @@ namespace ZeldaEditor.ObjectsEditor {
 			// Apply custom controls.
 			if (customControl != null)
 				customControl.ApplyChanges(propertyObject);
+
+			rawPropertyGrid.RefreshProperties();
 		}
 		
 		
@@ -337,6 +324,11 @@ namespace ZeldaEditor.ObjectsEditor {
 			DialogResult = DialogResult.OK;
 			ApplyChanges();
 			Close();
+		}
+
+		// Apply.
+		private void buttonApply_Click(object sender, EventArgs e) {
+			ApplyChanges();
 		}
 
 		// Cancel.
@@ -467,6 +459,10 @@ namespace ZeldaEditor.ObjectsEditor {
 			comboBoxLedgeDirection.Enabled = isLedge;
 			labelLedgeDirection.Enabled = isLedge;
 		}
+
+		private void rawPropertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e) {
+			SetObject(propertyObject);
+		}
 	}
 	/*
 	public class TileEnvTypeItem {
@@ -520,6 +516,20 @@ namespace ZeldaEditor.ObjectsEditor {
 
 		public override string ToString() {
 			return Name;
+		}
+		
+		public static T GetComboBoxValue(ComboBox comboBox) {
+			return ((ComboBoxItem<T>) comboBox.SelectedItem).Value;
+		}
+
+		public static void SelectComboBoxItem(ComboBox comboBox, T value) {
+			comboBox.SelectedIndex = 0;
+			foreach (ComboBoxItem<T> item in comboBox.Items) {
+				if (item.Value.Equals(value)) {
+					comboBox.SelectedItem = item;
+					break;
+				}
+			}
 		}
 	}
 }

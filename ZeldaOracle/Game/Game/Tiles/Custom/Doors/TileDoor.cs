@@ -53,8 +53,8 @@ namespace ZeldaOracle.Game.Tiles {
 			
 			if (instantaneous)
 				animationPlayer.PlaybackTime = animationPlayer.Animation.Duration;
-			if (rememberState)
-				Properties.SetBase("opened", true);
+			if (rememberState || Properties.GetBoolean("remember_state", false))
+				Properties.SetBase("open", true);
 		}
 
 		// Close the door.
@@ -73,8 +73,8 @@ namespace ZeldaOracle.Game.Tiles {
 			
 			if (instantaneous)
 				animationPlayer.PlaybackTime = animationPlayer.Animation.Duration;
-			if (rememberState)
-				Properties.SetBase("opened", false);
+			if (rememberState || Properties.GetBoolean("remember_state", false))
+				Properties.SetBase("open", false);
 		}
 
 		// Find a door that's connected to this one in an adjacent room.
@@ -113,7 +113,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		public override void OnInitialize() {
-			isOpen = Properties.GetBoolean("opened", false);
+			isOpen = Properties.GetBoolean("open", false);
 			isPlayerBlockingClose = false;
 
 			// A closed door will start open if the player is colliding with door.

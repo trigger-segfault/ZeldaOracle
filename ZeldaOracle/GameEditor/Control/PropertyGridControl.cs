@@ -34,7 +34,7 @@ namespace ZeldaEditor.Control {
 			this.editorControl	= editorControl;
 			this.propertyGrid	= propertyGrid;
 
-			propertiesContainer = new PropertiesContainer(this);
+			propertiesContainer = new PropertiesContainer(null);
 			propertyGrid.SelectedObject = propertiesContainer;
 
 			// Create property editor types.
@@ -55,12 +55,12 @@ namespace ZeldaEditor.Control {
 			typeEditors["enum_flags"]		= null;
 			typeEditors["dungeon"]			= new DungeonPropertyEditor();
 			typeEditors["level"]			= new LevelPropertyEditor();
-
+			/*
 			// Initialize property type editors.
 			foreach (KeyValuePair<string, CustomPropertyEditor> entry in typeEditors) {
 				if (entry.Value != null)
 					entry.Value.Initialize(this);
-			}
+			}*/
 		}
 
 

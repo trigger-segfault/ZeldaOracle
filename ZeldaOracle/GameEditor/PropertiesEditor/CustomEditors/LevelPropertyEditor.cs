@@ -35,14 +35,14 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 
 		public override void CreateList(ListBox listBox, object value) {
 			listBox.Items.Add("(none)");
-			foreach (Level level in editorControl.World.Levels)
+			foreach (Level level in EditorControl.World.Levels)
 				listBox.Items.Add(level.Id);
 		}
 
 		public override object OnItemSelected(ListBox listBox, int index, object value) {
 			Level level = null;
 			if (index > 0)
-				level = editorControl.World.GetLevel((string) listBox.Items[index]);
+				level = EditorControl.World.GetLevel((string) listBox.Items[index]);
 			return (level != null ? level.Id : "");
 		}
 	}

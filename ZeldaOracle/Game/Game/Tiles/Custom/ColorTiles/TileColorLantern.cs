@@ -40,7 +40,16 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public override void OnInitialize() {
-			flameAnimation = null;
+			PuzzleColor color = Color;
+
+			if (color == PuzzleColor.Red)
+				flameAnimation = GameData.ANIM_EFFECT_COLOR_FLAME_RED;
+			else if (color == PuzzleColor.Blue)
+				flameAnimation = GameData.ANIM_EFFECT_COLOR_FLAME_BLUE;
+			else if (color == PuzzleColor.Yellow)
+				flameAnimation = GameData.ANIM_EFFECT_COLOR_FLAME_YELLOW;
+			else
+				flameAnimation = null;
 		}
 
 		public override void Draw(Graphics2D g) {

@@ -55,8 +55,20 @@ END;
 
 TEMPTILE color_jump_pad;
 	TYPE		TileColorJumpPad;
-	PROPERTIES
-		(show sprite_index);
+	PROPERTIES	(integer, color,			0,		"Color",			"", "", "The color of the jump pad."),
+				(boolean, remember_state,	false,	"Remember State",	"", "", "Will the jump pad's color be remembered after leaving the room?");
+END;
+
+TEMPTILE color_tile;
+	TYPE		TileColorTile;
+	PROPERTIES	(integer, color,			0,		"Color",			"", "", "The color of the tile."),
+				(boolean, remember_state,	false,	"Remember State",	"", "", "Will the tile's color be remembered after leaving the room?");
+END;
+
+TEMPTILE color_barrier;
+	TYPE		TileColorBarrier;
+	HALFSOLID	block;
+	PROPERTIES	(integer, color, 0, "Color", "", "", "The color of the barrier (red or blue).");
 END;
 
 TEMPTILE button;
@@ -68,9 +80,30 @@ TEMPTILE button;
 	EVENT on_release, "On Release", "Occurs when the button is released.", (Button button);
 END;
 
+TEMPTILE door;
+	TYPE		TileDoor;
+	SOLID		block;
+	PROPERTIES	(boolean, open, false, "Open", "", "", "True if the door open."),
+				(integer, direction, 0, "Direction", "direction", "", "The direction the door is facing.", false),
+				(boolean, remember_state, false, "Remember State", "", "", "Will the door's opened state be remembered after leaving the room?");
+END;
+
+TEMPTILE small_key_door;
+	CLONE		door;
+	TYPE		TileSmallKeyDoor;
+	PROPERTIES	(boolean, remember_state, true);
+END;
+
+TEMPTILE boss_key_door;
+	CLONE		door;
+	TYPE		TileBossKeyDoor;
+	PROPERTIES	(boolean, remember_state, true);
+END;
+
 TILE dug;
 	SPRITE "tileset_objects", (1, 2);
 END;
+
 
 
 #==============================================================
@@ -308,86 +341,61 @@ TILE (4, 5);
 		(ColorLantern, tile, Color, color);
 END;
 
-# Color Jump Pad
+# Color Jump Pad (Red)
 TILE (5, 5);
 	CLONE		color_jump_pad;
-	SPRITEINDEX 2, "tileset_objects_extras_16x16", (7, 3);
-	SPRITEINDEX 1, "tileset_objects_extras_16x16", (8, 3);
+	PROPERTIES	(integer, color, 0);
 END;
 
+# Color Tile (Blue)
 TILE (6, 5);
-	SPRITEINDEX 1, "tileset_objects", (7, 5);
-	SPRITEINDEX 2, "tileset_objects_extras_16x16", (9, 3);
-	PROPERTIES	
-			(show, sprite_index);
+	CLONE		color_tile;
+	PROPERTIES	(integer, color, 2);
 END;
 
+# Color Tile (Red)
 TILE (7, 5);
-	SPRITEINDEX 1, "tileset_objects", (6, 5);
-	SPRITEINDEX 2, "tileset_objects_extras_16x16", (9, 3);
-	PROPERTIES	
-			(show, sprite_index);
+	CLONE		color_tile;
+	PROPERTIES (integer, color, 0);
 END;
 
-# Platform
+# Color Barrier (Blue)
+TILE (8, 5);
+	CLONE		color_barrier;
+	PROPERTIES	(integer, color, 2);
+END;
+
+# Color Barrier (Red)
+TILE (9, 5);
+	CLONE		color_barrier;
+	PROPERTIES	(integer, color, 0);
+END;
+
+# Moving Platform
 TILE (10, 5);
 	TYPE TilePlatform;
 END;
 
+# Basic Doors
 
 TILE (0, 7);
-	TYPE		TileDoor;
-	SOLID		block;
-	PROPERTIES
-		(integer, direction, 1,
-			"Direction", "direction", "",
-			"The direction the door is facing.", false);
+	CLONE door;
+	PROPERTIES (integer, direction, 1);
 END;
 TILE (1, 7);
-	TYPE		TileDoor;
-	SOLID		block;
-	PROPERTIES
-		(integer, direction, 2,
-			"Direction", "direction", "",
-			"The direction the door is facing.", false);
+	CLONE door;
+	PROPERTIES (integer, direction, 2);
 END;
 TILE (0, 8);
-	TYPE		TileDoor;
-	SOLID		block;
-	PROPERTIES
-		(integer, direction, 3,
-			"Direction", "direction", "",
-			"The direction the door is facing.", false);
+	CLONE door;
+	PROPERTIES (integer, direction, 3);
 END;
 TILE (1, 8);
-	TYPE		TileDoor;
-	SOLID		block;
-	PROPERTIES
-		(integer, direction, 0,
-			"Direction", "direction", "",
-			"The direction the door is facing.", false);
+	CLONE door;
+	PROPERTIES (integer, direction, 0);
 END;
 
-
-# Small key Door
-
-TEMPTILE small_key_door;
-	TYPE		TileSmallKeyDoor;
-	SOLID		block;
-	PROPERTIES
-		(integer, direction, 0,
-			"Direction", "direction", "",
-			"The direction the door is facing.", false);
-END;
-
-TEMPTILE boss_key_door;
-	TYPE		TileBossKeyDoor;
-	SOLID		block;
-	PROPERTIES
-		(integer, direction, 0,
-			"Direction", "direction", "",
-			"The direction the door is facing.", false);
-END;
+# Small key doors
 
 TILE (4, 7);
 	CLONE small_key_door;
