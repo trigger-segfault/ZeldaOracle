@@ -49,7 +49,7 @@ END;
 
 TEMPTILE pushable_block;
 	SOLID		block;
-	FLAGS		movable;
+	FLAGS		Movable;
 	PROPERTIES	(boolean, move_once, true);
 END;
 
@@ -71,6 +71,23 @@ TEMPTILE color_barrier;
 	PROPERTIES	(integer, color, 0, "Color", "", "", "The color of the barrier (red or blue).");
 END;
 
+TEMPTILE color_statue;
+	SOLID		block;
+	FLAGS		Movable;
+	PROPERTIES	(integer, color, 0, "Color", "", "", "The color of the statue.");
+END;
+
+TEMPTILE color_cube_slot;
+	TYPE		TileColorCubeSlot;
+	EVENT		on_color_change, "Color Change", "Occurs when the slot's color changes.", (ColorCubeSlot, tile, Color, color);
+END;
+
+TEMPTILE color_lantern;
+	TYPE		TileColorLantern;
+	SOLID		block;
+	EVENT		on_color_change, "Color Change", "Occurs when the lantern's flame color changes.", (ColorLantern, tile, Color, color);
+END;
+
 TEMPTILE button;
 	TYPE		TileButton;
 	PROPERTIES	(boolean, releasable,		true, "Releasable",			"", "", "Can the button only be pressed, and not released?"),
@@ -78,6 +95,16 @@ TEMPTILE button;
 				(boolean, remember_state,	false, "Remember State",	"", "", "Will the button's state be remembered after leaving the room?");
 	EVENT on_press, "On Press", "Occurs when the button is pressed.", (Button button);
 	EVENT on_release, "On Release", "Occurs when the button is released.", (Button button);
+END;
+
+TEMPTILE lever;
+	TYPE TileLever;
+	SOLID block;
+	FLAGS AbsorbSeeds;
+	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "", "Can the lever only be switched once?"),
+				(boolean, switch_state,		false,	"Switch State",		"", "", "True if the lever is facing left."),
+				(boolean, remember_state,	false,	"Remember State",	"", "", "Will the lever's state be remembered after leaving the room?");
+	EVENT event_toggle, "Toggle", "Occurs when the lever is toggled.", (Lever, lever);
 END;
 
 TEMPTILE door;
@@ -100,8 +127,31 @@ TEMPTILE boss_key_door;
 	PROPERTIES	(boolean, remember_state, true);
 END;
 
+TEMPTILE eye_statue;
+	TYPE		TileEyeStatue;
+	SOLID		block;
+END;
+
+TEMPTILE locked_block;
+	TYPE		TileLockedBlock;
+	SOLID		block;
+END;
+
+TEMPTILE web_wall;
+	SOLID		block;
+	FLAGS		Burnable;
+	PROPERTIES	(boolean, disable_on_destroy, true);
+END;
+
+TEMPTILE bombable_wall;
+	SOLID		block;
+	FLAGS		Burnable;
+	PROPERTIES	(boolean, disable_on_destroy, true);
+END;
+
+# This tile is used by the Shovel.
 TILE dug;
-	SPRITE "tileset_objects", (1, 2);
+	SPRITE		"tileset_objects", (1, 2);
 END;
 
 
@@ -298,7 +348,24 @@ END;
 # Cracked Floor
 TILE (3, 2);
 	TYPE		TileCrackedFloor
-	#FLAGS		surface; ???
+END;
+
+# Color statue (Red)
+TILE (8, 3);
+	CLONE color_statue;
+	PROPERTIES	(integer, color, 0);
+END;
+
+# Color statue (Blue)
+TILE (9, 3);
+	CLONE color_statue;
+	PROPERTIES	(integer, color, 2);
+END;
+
+# Color statue (Yellow)
+TILE (10, 3);
+	CLONE color_statue;
+	PROPERTIES	(integer, color, 1);
 END;
 
 # Lantern
@@ -310,13 +377,7 @@ END;
 
 # Lever
 TILE (1, 5);
-	TYPE TileLever;
-	SOLID block;
-	FLAGS AbsorbSeeds;
-	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "", "Can the lever only be switched once?"),
-				(boolean, switch_state,		false,	"Switch State",		"", "", "The switch state of the lever."),
-				(boolean, remember_state,	false,	"Remember State",	"", "", "Will the lever's state be remembered after leaving the room?");
-	EVENT event_toggle, "Toggle", "Occurs when the lever is toggled.", (Lever, lever);
+	CLONE lever;
 END;
 
 # Button
@@ -328,17 +389,12 @@ END;
 
 # Color Cube Slot
 TILE (3, 5);
-	TYPE TileColorCubeSlot;
-	EVENT on_color_change, "Color Change", "Occurs when the color changes.",
-		(ColorCubeSlot, tile, Color, color);
+	CLONE color_cube_slot;
 END;
 
 # Color lantern
 TILE (4, 5);
-	TYPE TileColorLantern;
-	SOLID block;
-	EVENT on_color_change, "Color Change", "Occurs when the color changes.",
-		(ColorLantern, tile, Color, color);
+	CLONE color_lantern;
 END;
 
 # Color Jump Pad (Red)
@@ -376,8 +432,7 @@ TILE (10, 5);
 	TYPE TilePlatform;
 END;
 
-# Basic Doors
-
+# Basic doors
 TILE (0, 7);
 	CLONE door;
 	PROPERTIES (integer, direction, 1);
@@ -396,7 +451,6 @@ TILE (1, 8);
 END;
 
 # Small key doors
-
 TILE (4, 7);
 	CLONE small_key_door;
 	PROPERTIES (integer, direction, 1);
@@ -415,7 +469,6 @@ TILE (5, 8);
 END;
 
 # Boss key doors
-
 TILE (6, 7);
 	CLONE boss_key_door;
 	PROPERTIES (integer, direction, 1);
@@ -433,39 +486,26 @@ TILE (7, 8);
 	PROPERTIES (integer, direction, 0);
 END;
 
+# Burnable Web Walls
+TILE (0, 9);	CLONE web_wall; END;
+TILE (1, 9);	CLONE web_wall; END;
+TILE (0, 10);	CLONE web_wall; END;
+TILE (1, 10);	CLONE web_wall; END;
+
+# Bombable Walls
+TILE (2, 9);	CLONE bombable_wall; END;
+TILE (3, 9);	CLONE bombable_wall; END;
+TILE (2, 10);	CLONE bombable_wall; END;
+TILE (3, 10);	CLONE bombable_wall; END;
 
 # Eye Statue
 TILE (0, 11);
-	TYPE	TileEyeStatue;
-	SOLID	block;
+	CLONE eye_statue;
 END;
 
-# Key block
+# Locked block
 TILE (2, 11);
-	TYPE	TileLockedBlock;
-	SOLID	block;
+	CLONE locked_block;
 END;
-
-# Burnable Web Walls
-TEMPTILE web_wall;
-	SOLID block;
-	FLAGS Burnable;
-	PROPERTIES (boolean, disable_on_destroy, true);
-	END;
-TILE (0, 9); CLONE web_wall; END;
-TILE (1, 9); CLONE web_wall; END;
-TILE (0, 10); CLONE web_wall; END;
-TILE (1, 10); CLONE web_wall; END;
-
-# Bombable Walls
-TEMPTILE bombable_wall;
-	SOLID block;
-	FLAGS Burnable;
-	PROPERTIES (boolean, disable_on_destroy, true);
-	END;
-TILE (2, 9); CLONE bombable_wall; END;
-TILE (3, 9); CLONE bombable_wall; END;
-TILE (2, 10); CLONE bombable_wall; END;
-TILE (3, 10); CLONE bombable_wall; END;
 
 END;
