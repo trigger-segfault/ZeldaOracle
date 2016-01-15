@@ -49,13 +49,16 @@ namespace ZeldaOracle.Game.Entities {
 		public override void Initialize() {
 			//Graphics.PlayAnimation(animationDefault);
 
-			if (minecartTrack.IsHorizontal)
-				Graphics.PlaySprite(GameData.SPR_MINECART_HORIZONTAL);
+			if (minecartTrack != null) {
+				if (minecartTrack.IsHorizontal)
+					Graphics.PlaySprite(GameData.SPR_MINECART_HORIZONTAL);
+				else
+					Graphics.PlaySprite(GameData.SPR_MINECART_VERTICAL);
+
+				Position = minecartTrack.Position;
+			}
 			else
-				Graphics.PlaySprite(GameData.SPR_MINECART_VERTICAL);
-
-			Position = minecartTrack.Position;
-
+				Graphics.PlaySprite(GameData.SPR_MINECART_HORIZONTAL);
 		}
 
 		public override void Update() {
@@ -71,6 +74,14 @@ namespace ZeldaOracle.Game.Entities {
 
 		public TileMinecartTrack TrackTile {
 			get { return minecartTrack; }
+		}
+		
+		public Point2I TrackTileLocation {
+			get {
+				if (minecartTrack == null)
+					return RoomControl.GetTileLocation(Center);
+				return minecartTrack.Location;
+			}
 		}
 	}
 }

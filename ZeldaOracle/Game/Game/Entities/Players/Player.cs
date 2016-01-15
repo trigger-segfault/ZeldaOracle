@@ -502,10 +502,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public override void OnEnterRoom() {
+			if (IsInMinecart)
+				stateMinecart.OnEnterRoom();
 			state.OnEnterRoom();
 		}
 
 		public override void OnLeaveRoom() {
+			if (IsInMinecart)
+				stateMinecart.OnLeaveRoom();
 			state.OnLeaveRoom();
 		}
 

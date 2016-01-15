@@ -267,6 +267,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 			else if (player.IsInAir && player.Physics.ZVelocity >= 0.1f)
 				allowMovementControl = false;
 
+			if (player.IsInMinecart)
+				allowMovementControl = true;
+
 			// Check movement input.
 			Vector2F keyMoveVector = PollMovementKeys(allowMovementControl);
 			
