@@ -206,7 +206,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Position += playerOffset;
 		}
 
-		// Attempt to move along the track in the given directin.
+		// Attempt to move along the track in the given direction.
 		private bool MoveInDirection(int moveDirection, out bool isStop) {
 			Point2I nextLocation = tileLocation + Directions.ToPoint(moveDirection);
 			
@@ -216,7 +216,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			if (!FindTrackTile(nextLocation, comeFromDirection, out nextTrackTile, out isStop))
 				return false;
 
-			moveDistance -= GameSettings.TILE_SIZE;
+			moveDistance	-= GameSettings.TILE_SIZE;
 			direction		= moveDirection;
 			trackTile		= nextTrackTile;
 			tileLocation	= nextLocation;

@@ -702,6 +702,14 @@ namespace ZeldaOracle.Game.Control {
 				SpawnEventTile(eventTileData, staySpawned);
 		}
 		
+		public ZeldaAPI.Tile GetTileById(string id) {
+			foreach (Tile tile in GetTiles()) {
+				if (tile.Properties.Get("id", "") == id)
+					return (tile as ZeldaAPI.Tile);
+			}
+			return null;
+		}
+		
 		public IEnumerable<T> GetEntitiesOfType<T>() where T : class {
 			foreach (Entity entity in entities) {
 				T t = entity as T;

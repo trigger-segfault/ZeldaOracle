@@ -64,7 +64,13 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public void SwitchTrackDirection() {
+			int currentIndex = SpriteIndex;
+			int switchedIndex = Properties.GetInteger("switched_track_index", currentIndex);
 
+			if (currentIndex != switchedIndex) {
+				Properties.SetBase("switched_track_index", currentIndex);
+				Properties.SetBase("sprite_index", switchedIndex);
+			}
 		}
 
 

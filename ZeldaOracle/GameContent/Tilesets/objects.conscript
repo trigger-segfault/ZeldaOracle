@@ -163,7 +163,8 @@ TEMPTILE minecart_track;
 	SPRITEINDEX	3, "tileset_objects", (11, 10);	# Up/Left
 	SPRITEINDEX	4, "tileset_objects", (11, 9);	# Left/Down
 	SPRITEINDEX	5, "tileset_objects", (10, 9);	# Down/Right
-	PROPERTIES	(boolean, minecart, false, "Has Minecart", "", "Minecart", "Does this track currently have a minecart on it?");
+	PROPERTIES	(boolean, minecart, false, "Has Minecart", "", "Minecart", "Does this track currently have a minecart on it?"),
+				(integer, switched_track_index, 0, "Switched Track Index", "", "Minecart", "");
 END;
 
 # This tile is used by the Shovel.

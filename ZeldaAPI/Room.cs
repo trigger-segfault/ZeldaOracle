@@ -41,6 +41,10 @@ namespace ZeldaAPI {
 		[Attributes.Description("Get an enumerable list of all the room's tiles of the given type.")]
 		IEnumerable<T> GetTilesOfType<T>() where T : class;
 
+
+		Tile GetTileById(string id);
+
+
 		[Attributes.Description("Spawn a tile by ID if it has not been spawned already.")]
 		void SpawnTile(string id, bool staySpawned = false);
 		
