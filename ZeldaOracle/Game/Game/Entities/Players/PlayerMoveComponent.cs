@@ -267,6 +267,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			else if (player.IsInAir && player.Physics.ZVelocity >= 0.1f)
 				allowMovementControl = false;
 
+			// Player can ALWAYS change directions when in a minecart.
 			if (player.IsInMinecart)
 				allowMovementControl = true;
 
@@ -277,6 +278,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (!isStrafing && !mode.IsStrafing && isMoving)
 				player.Direction = moveDirection;
 
+			// Update the minecart state.
 			if (player.IsInMinecart)
 				player.MinecartState.Update();
 

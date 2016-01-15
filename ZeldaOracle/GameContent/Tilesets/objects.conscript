@@ -156,6 +156,7 @@ END;
 
 TEMPTILE minecart_track;
 	TYPE		TileMinecartTrack;
+	FLAGS		NotCoverable;
 	SPRITEINDEX	0, "tileset_objects", (10, 11);	# Horizontal
 	SPRITEINDEX	1, "tileset_objects", (11, 11);	# Vertical
 	SPRITEINDEX	2, "tileset_objects", (10, 10);	# Right/Up
@@ -176,7 +177,7 @@ END;
 # Tilesets
 #==============================================================
 
-TILESET objects, tileset_objects, (12, 12);
+TILESET objects, tileset_objects, (12, 13);
 DEFAULT (0, 3);
 
 # ??
@@ -558,6 +559,12 @@ END;
 TILE (11, 11);
 	CLONE minecart_track;
 	PROPERTIES (integer, sprite_index, 1);
+END;
+
+# Minecart End Track
+TILE (11, 12);
+	TYPE	TileMinecartStop;
+	FLAGS	NotCoverable;
 END;
 
 # Eye Statue

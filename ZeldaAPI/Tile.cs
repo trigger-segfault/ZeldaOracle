@@ -38,6 +38,10 @@ namespace ZeldaAPI {
 
 	public interface ColorSwitch {
 	}
+
+	public interface MinecartTrack {
+		void SwitchTrackDirection();
+	}
 	
 	public interface Reward {
 		void SpawnReward();

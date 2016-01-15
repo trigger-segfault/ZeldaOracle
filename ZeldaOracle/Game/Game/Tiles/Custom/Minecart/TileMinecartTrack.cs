@@ -18,7 +18,7 @@ namespace ZeldaOracle.Game.Tiles {
 	 * 5 - down/right
 	*/
 
-	public class TileMinecartTrack : Tile {
+	public class TileMinecartTrack : Tile, ZeldaAPI.MinecartTrack {
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -26,6 +26,23 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public TileMinecartTrack() {
 
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Track methods
+		//-----------------------------------------------------------------------------
+
+		public IEnumerable<int> GetDirections() {
+			int spriteIndex = SpriteIndex;
+			if (spriteIndex == 0 || spriteIndex == 2 || spriteIndex == 5)
+				yield return Directions.Right;
+			if (spriteIndex == 1 || spriteIndex == 2 || spriteIndex == 3)
+				yield return Directions.Up;
+			if (spriteIndex == 0 || spriteIndex == 3 || spriteIndex == 4)
+				yield return Directions.Left;
+			if (spriteIndex == 1 || spriteIndex == 4 || spriteIndex == 5)
+				yield return Directions.Down;
 		}
 
 
@@ -40,18 +57,16 @@ namespace ZeldaOracle.Game.Tiles {
 				RoomControl.SpawnEntity(minecart, Position);
 			}
 		}
+		
 
-		public IEnumerable<int> GetDirections() {
-			int spriteIndex = SpriteIndex;
-			if (spriteIndex == 0 || spriteIndex == 2 || spriteIndex == 5)
-				yield return Directions.Right;
-			if (spriteIndex == 1 || spriteIndex == 2 || spriteIndex == 3)
-				yield return Directions.Up;
-			if (spriteIndex == 0 || spriteIndex == 3 || spriteIndex == 4)
-				yield return Directions.Left;
-			if (spriteIndex == 1 || spriteIndex == 4 || spriteIndex == 5)
-				yield return Directions.Down;
+		//-----------------------------------------------------------------------------
+		// API Methods
+		//-----------------------------------------------------------------------------
+
+		public void SwitchTrackDirection() {
+
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties

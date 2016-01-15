@@ -56,14 +56,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				ExitMinecart(Directions.Reverse(player.Direction));
 				return;
 			}
-
 			startingTrackTileData = minecart.TrackTile.TileData;
 			if (startingTrackTileData != null)
 				startingTrackTileData.Properties.Set("minecart", false);
 
 			// Determine start direction.
 			foreach (int dir in minecart.TrackTile.GetDirections()) {
-				if (MoveInDirection(dir))
+				bool isStop;
+				if (MoveInDirection(dir, out isStop))
 					break;
 			}
 			
@@ -207,17 +207,15 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		// Attempt to move along the track in the given directin.
-		private bool MoveInDirection(int moveDirection) {
+		private bool MoveInDirection(int moveDirection, out bool isStop) {
 			Point2I nextLocation = tileLocation + Directions.ToPoint(moveDirection);
-
+			
 			// Find the next track tile and check for obstructions.
 			int comeFromDirection = Directions.Reverse(moveDirection);
-			TileMinecartTrack nextTrackTile = GetTrackTile(nextLocation, comeFromDirection);
-
-			bool isNextTileInBounds = player.RoomControl.IsTileInBounds(nextLocation);
-			if (nextTrackTile == null && isNextTileInBounds)
+			TileMinecartTrack nextTrackTile;
+			if (!FindTrackTile(nextLocation, comeFromDirection, out nextTrackTile, out isStop))
 				return false;
-			
+
 			moveDistance -= GameSettings.TILE_SIZE;
 			direction		= moveDirection;
 			trackTile		= nextTrackTile;
@@ -225,7 +223,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			minecartAnimationPlayer.SubStripIndex = (Directions.IsHorizontal(direction) ? 0 : 1);
 			
 			// Open any minecart doors in the next tile.
-			if (isNextTileInBounds) {
+			if (player.RoomControl.IsTileInBounds(nextLocation)) {
 				for (int i = 0; i < player.RoomControl.Room.LayerCount; i++) {
 					TileMinecartDoor tileDoor = player.RoomControl.GetTile(tileLocation, i) as TileMinecartDoor;
 					if (tileDoor != null && tileDoor.Direction == comeFromDirection)
@@ -242,25 +240,37 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Look for a track tile.
 			if (trackTile == null) {
-				trackTile = GetTrackTile(tileLocation, direction);
+				bool isStop;
+				FindTrackTile(tileLocation, direction, out trackTile, out isStop);
 				if (trackTile == null)
 					return false;
 			}
 
 			// Get the next direction to move in.
-			foreach (int dir in trackTile.GetDirections()) {
-				if (dir != comeFromDirection)
-					return MoveInDirection(dir);
+			for (int i = 0; i < Directions.Count; i++) {
+				int dir = (comeFromDirection + i + 1) % Directions.Count;
+				if (trackTile.GetDirections().Contains(dir)) {
+					bool isStop;
+					if (MoveInDirection(dir, out isStop))
+						return true;
+					if (isStop)
+						return false;
+				}
 			}
 
 			return false;
 		}
 		
-		// Get the track tile at the location that has the given direction.
-		// Returns NULL if there are obstructions over the track.
-		private TileMinecartTrack GetTrackTile(Point2I location, int direction) {
+		// Check if it is okay to move to a location with a track tile that has the given direction.
+		// Outputs the track tile that was found,
+		// And outputs true to isStop if there was a stop-point at the given locatin.
+		// Returns true if it is okay to move to the given tile.
+		private bool FindTrackTile(Point2I location, int direction, out TileMinecartTrack track, out bool isStop) {
+			isStop = false;
+			track = null;
+
 			if (!player.RoomControl.IsTileInBounds(location))
-				return null;
+				return true;
 
 			for (int i = player.RoomControl.Room.LayerCount - 1; i >= 0; i--) {
 				Tile tile = player.RoomControl.GetTile(location, i);
@@ -268,16 +278,22 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				if (tile != null) {
 					TileMinecartTrack trackTile = tile as TileMinecartTrack;
 
-					if (trackTile != null && trackTile.GetDirections().Contains(direction))
-						return trackTile;
-
+					if (trackTile != null && trackTile.GetDirections().Contains(direction)) {
+						track = trackTile;
+						return true;
+					}
+					if (tile is TileMinecartStop) {
+						isStop = true;
+						return false;
+					}
 					// Minecart doors are not obstructions, but other solid tiles are.
-					if (tile.IsSolid && !(tile is TileMinecartDoor))
-						return null;
+					if (tile.IsSolid && !(tile is TileMinecartDoor)) {
+						return false;
+					}
 				}
 			}
 
-			return null;
+			return false;
 		}
 
 
