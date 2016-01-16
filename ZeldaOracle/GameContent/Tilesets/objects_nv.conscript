@@ -122,6 +122,14 @@ TEMPTILE roller_vertical;
 			"This is the top left roller of a group. Any rollers before this won't be connected.", false);
 END;
 
+TEMPTILE crossing_grate;
+	TYPE		TileCrossingGate;
+	SOLID		edge_w;
+	PROPERTIES	(boolean, raised,    false, "Raised",      "", "Crossing Gate", "True if the gate is raised.");
+	PROPERTIES	(boolean, face_left, false, "Facing Left", "", "Crossing Gate", "True if the crossing gate is facing left.");
+END;
+
+
 #==============================================================
 # Tilesets
 #==============================================================
@@ -193,6 +201,18 @@ END;
 # Platform
 TILE (11, 0);
 	TYPE TilePlatform;
+END;
+
+# Crossing Gate (right)
+TILE (0, 1);
+	CLONE crossing_grate;
+	PROPERTIES (boolean, face_left, false);
+END;
+
+# Crossing Gate (left)
+TILE (1, 1);
+	CLONE crossing_grate;
+	PROPERTIES (boolean, face_left, true);
 END;
 
 END;

@@ -45,6 +45,9 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_TILE_BOSS_DOOR_CLOSE;
 		public static Animation[,] ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS;
 		public static Animation ANIM_TILE_REGROWABLE_PLANT_REGROW;
+		
+		public static Animation ANIM_TILE_CROSSING_GATE_RAISE;
+		public static Animation ANIM_TILE_CROSSING_GATE_LOWER;
 
 		// General tiles.
 		public static Animation ANIM_MINECART;

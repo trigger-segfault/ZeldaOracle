@@ -23,6 +23,14 @@ namespace ZeldaAPI {
 	public interface ColorLantern {
 		Color Color { get; set; }
 	}
+	
+	public interface ColorJumpPad {
+		Color Color { get; set; }
+	}
+	
+	public interface ColorTile {
+		Color Color { get; set; }
+	}
 
 	public interface Door {
 		void Open(bool instantaneous = false, bool rememberState = false);
@@ -41,6 +49,12 @@ namespace ZeldaAPI {
 
 	public interface MinecartTrack {
 		void SwitchTrackDirection();
+	}
+
+	public interface CrossingGate {
+		void Raise();
+		void Lower();
+		bool IsRaised { get; }
 	}
 	
 	public interface Reward {

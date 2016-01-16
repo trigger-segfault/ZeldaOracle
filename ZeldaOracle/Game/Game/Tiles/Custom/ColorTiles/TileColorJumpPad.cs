@@ -8,7 +8,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TileColorJumpPad : Tile {
+	public class TileColorJumpPad : Tile, ZeldaAPI.ColorJumpPad {
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -47,6 +47,8 @@ namespace ZeldaOracle.Game.Tiles {
 					CustomSprite = GameData.SPR_TILE_COLOR_JUMP_PAD_YELLOW;
 				else if (color == PuzzleColor.Blue)
 					CustomSprite = GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE;
+				
+				GameControl.FireEvent(this, "event_color_change", this, ((ZeldaAPI.ColorJumpPad) this).Color);
 			}
 		}
 
@@ -70,6 +72,15 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return (PuzzleColor) Properties.Get("color", (int) PuzzleColor.Red); }
 			set { Properties.Set("color", (int) value); }
 		}
+		
 
+		//-----------------------------------------------------------------------------
+		// API Implementations
+		//-----------------------------------------------------------------------------
+
+		ZeldaAPI.Color ZeldaAPI.ColorJumpPad.Color {
+			get { return (ZeldaAPI.Color) Color; }
+			set { Color = (PuzzleColor) value; }
+		}
 	}
 }

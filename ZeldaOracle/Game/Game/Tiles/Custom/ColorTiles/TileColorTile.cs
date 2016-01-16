@@ -8,7 +8,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TileColorTile : Tile {
+	public class TileColorTile : Tile, ZeldaAPI.ColorTile {
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -42,12 +42,26 @@ namespace ZeldaOracle.Game.Tiles {
 		public PuzzleColor Color {
 			get { return (PuzzleColor) Properties.Get("color", (int) PuzzleColor.Red); }
 			set {
+				bool changed = (value != Color);
+
 				if (Properties.Get("remember_state", false))
 					Properties.SetBase("color", (int) value);
 				else
 					Properties.Set("color", (int) value);
+
+				//if (changed)
+					//GameControl.FireEvent(this, "event_color_change", this, ((ZeldaAPI.ColorTile) this).Color);
 			}
 		}
+		
+		
+		//-----------------------------------------------------------------------------
+		// API Implementations
+		//-----------------------------------------------------------------------------
 
+		ZeldaAPI.Color ZeldaAPI.ColorTile.Color {
+			get { return (ZeldaAPI.Color) Color; }
+			set { Color = (PuzzleColor) value; }
+		}
 	}
 }
