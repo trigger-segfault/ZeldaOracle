@@ -62,6 +62,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				RoomControl.SpawnEntity(fire, Center - new Vector2F(0, 1), zPosition);
 				DestroyAndTransform(fire);
 			}
+			else if (type == SeedType.Gale) {
+				EffectGale gale = new EffectGale(false);
+				RoomControl.SpawnEntity(gale, Center - new Vector2F(0, 1), zPosition);
+				DestroyAndTransform(gale);
+			}
 			else {
 				Entity effect = CreateVisualEffect(type, Center);
 				DestroyAndTransform(effect);
@@ -91,8 +96,19 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public override void OnCollideMonster(Monster monster) {
-			InteractionType interactionType = (InteractionType) ((int) InteractionType.EmberSeed + (int) type);
-			monster.TriggerInteraction(interactionType, this);
+			if (type == SeedType.Ember)
+				Intercept();
+			else if (type == SeedType.Scent)
+				monster.TriggerInteraction(InteractionType.ScentSeed, this);
+			else if (type == SeedType.Pegasus)
+				monster.TriggerInteraction(InteractionType.PegasusSeed, this);
+			else if (type == SeedType.Gale)
+				Intercept();
+			else if (type == SeedType.Mystery)
+				monster.TriggerInteraction(InteractionType.MysterySeed, this);
+
+			//InteractionType interactionType = (InteractionType) ((int) InteractionType.EmberSeed + (int) type);
+			//monster.TriggerInteraction(interactionType, this);
 		}
 	}
 }

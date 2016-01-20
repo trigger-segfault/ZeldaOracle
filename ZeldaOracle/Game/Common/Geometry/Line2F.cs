@@ -147,12 +147,13 @@ public struct Line2F {
 	public static Line2F operator -(Line2F l) {
 		return new Line2F(l.End1, l.End1 - l.Size);
 	}
+	/*
 	public static Line2F operator ++(Line2F l) {
 		return new Line2F(++l.End1, ++l.End2);
 	}
 	public static Line2F operator --(Line2F l) {
 		return new Line2F(--l.End1, --l.End2);
-	}
+	}*/
 
 	//--------------------------------
 

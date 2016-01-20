@@ -90,7 +90,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				effectEntity = CreateVisualEffect(seedType, effectPosition);
 			}
 			else if (seedType == SeedType.Gale) {
-				effectEntity = CreateVisualEffect(seedType, effectPosition);
+				effectEntity = new EffectGale(true);
+				RoomControl.SpawnEntity(effectEntity, effectPosition);
 				AudioSystem.PlaySound(GameData.SOUND_GALE_SEED);
 				//RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_SEED_GALE), effectPosition);
 			}

@@ -245,6 +245,12 @@
     <Compile Include="Game\Entities\Monsters\MonsterReactions.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterOctorok.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterRope.cs" />
+    <Compile Include="Game\Entities\Monsters\States\MonsterFallInHoleState.cs" />
+    <Compile Include="Game\Entities\Monsters\States\MonsterNormalState.cs" />
+    <Compile Include="Game\Entities\Monsters\States\MonsterGaleState.cs" />
+    <Compile Include="Game\Entities\Monsters\States\MonsterStunState.cs" />
+    <Compile Include="Game\Entities\Monsters\States\MonsterBurnState.cs" />
+    <Compile Include="Game\Entities\Monsters\States\MonsterState.cs" />
     <Compile Include="Game\Entities\Monsters\TestMonster.cs" />
     <Compile Include="Game\Entities\Monsters\Monster.cs" />
     <Compile Include="Game\Entities\Monsters\Tools\MonsterToolSword.cs" />
@@ -485,7 +491,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\Collision\" />
-    <Folder Include="Game\Entities\Monsters\States\" />
     <Folder Include="Game\Tiles\EventTiles\Puzzles\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

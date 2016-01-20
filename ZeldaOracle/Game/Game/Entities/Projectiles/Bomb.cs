@@ -50,12 +50,13 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			RoomControl.SpawnEntity(bombExplosion, Center, zPosition);
 			AudioSystem.PlaySound(GameData.SOUND_BOMB_EXPLODE);
 
-			// Explode nearby tiles.
+			// Explode nearby top tiles.
 			if (zPosition < 4) {
-				Rectangle2F tileExplodeArea = new Rectangle2F(-12, -12, 24, 24);
+				Rectangle2F tileExplodeArea = Rectangle2F.Zero.Inflated(12, 12);
 				tileExplodeArea.Point += Center;
 
 				Rectangle2I area = RoomControl.GetTileAreaFromRect(tileExplodeArea);
+				
 				for (int x = area.Left; x < area.Right; x++) {
 					for (int y = area.Top; y < area.Bottom; y++) {
 						Tile tile = RoomControl.GetTopTile(x, y);
@@ -87,8 +88,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			base.Initialize();
 
 			timer		= 0;
-			flashDelay	= 108 - 36;
-			fuseTime	= 108;
+			flashDelay	= GameSettings.BOMB_FLICKER_DELAY;
+			fuseTime	= GameSettings.BOMB_FUSE_TIME;
 			Graphics.PlayAnimation(GameData.ANIM_ITEM_BOMB);
 			Graphics.PauseAnimation();
 		}

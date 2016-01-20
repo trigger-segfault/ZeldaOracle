@@ -44,10 +44,10 @@ TEMPTILE chest;
 	PROPERTIES
 		(integer, spawn_delay_after_poof, 16),
 		(string, reward, "rupees_1",
-			"Reward", "reward", "",
+			"Reward", "reward", "Chest",
 			 "The reward contained inside the chest.", false),
 		(boolean, looted, "false",
-			"Looted", "", "",
+			"Looted", "", "Chest",
 			"True if the item has been taken from the chest.", false);
 END;
 
@@ -56,10 +56,10 @@ TEMPTILE reward;
 	SOLID		center;
 	PROPERTIES
 		(string, reward, "heart_piece",
-			"Reward", "reward", "",
+			"Reward", "reward", "Reward",
 			 "The reward to spawn.", false),
 		(boolean, looted, "false",
-			"Looted", "", "",
+			"Looted", "", "Reward",
 			"True if the item has been taken.", false);
 END;
 
@@ -84,7 +84,7 @@ TEMPTILE owl;
 	SOLID		block;
 	PROPERTIES
 		(string, text, "<red>undefined<red>",
-			"Text", "text_message", "",
+			"Text", "text_message", "Owl",
 			"The text to display when the owl is activated.", false);
 END;
 
@@ -102,10 +102,10 @@ TEMPTILE roller_horizontal;
 	SOLID		block;
 	PROPERTIES
 		(boolean, vertical, "false",
-			"Vertical", "", "",
+			"Vertical", "", "Roller",
 			"The roller rolls vertically", true),
 		(boolean, first_roller, "false",
-			"First Roller", "", "",
+			"First Roller", "", "Roller",
 			"This is the top left roller of a group. Any rollers before this won't be connected.", false);
 END;
 
@@ -115,10 +115,10 @@ TEMPTILE roller_vertical;
 	SOLID		block;
 	PROPERTIES
 		(boolean, vertical, "true",
-			"Vertical", "", "",
+			"Vertical", "", "Roller",
 			"The roller rolls vertically", true),
 		(boolean, first_roller, "false",
-			"First Roller", "", "",
+			"First Roller", "", "Roller",
 			"This is the top left roller of a group. Any rollers before this won't be connected.", false);
 END;
 

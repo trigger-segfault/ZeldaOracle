@@ -196,6 +196,9 @@ namespace ZeldaOracle.Game.Entities.Units {
 				}
 			}
 
+			if (damage.InvincibleDuration > 0)
+				invincibleTimer = damage.InvincibleDuration;
+
 			OnHurt(damage);
 		}
 

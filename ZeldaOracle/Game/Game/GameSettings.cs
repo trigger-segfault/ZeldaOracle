@@ -61,6 +61,8 @@ namespace ZeldaOracle.Game {
 		public const float				SEED_SHOOTER_SHOOT_SPEED				= 3.0f;
 		public const int				SCENT_POD_DURATION						= 240;
 		public const int				SCENT_POD_FADE_DELAY					= 60;
+		public const int				BOMB_FUSE_TIME							= 108;
+		public const int				BOMB_FLICKER_DELAY						= 72;
 
 		// Units
 		public const float				UNIT_KNOCKBACK_SPEED			= 1.0f; // 1.3 ??

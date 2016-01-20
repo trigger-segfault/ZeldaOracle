@@ -12,6 +12,7 @@ using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Game.Entities.Monsters.States;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 
@@ -40,11 +41,19 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		private bool isKnockbackable; // Can the monster be knocked back?
 		private int contactDamage;
 		private InteractionHandler[] interactionHandlers;
-
-		// Burn State.
-		private bool isBurning;
-		private AnimationPlayer effectAnimation;
 		protected MonsterColor color;
+		
+		// The current monster state.
+		private MonsterState state;
+		// The previous monster state.
+		private MonsterState previousState;
+
+		// States.
+		private MonsterBurnState		stateBurn;
+		private MonsterStunState		stateStun;
+		private MonsterFallInHoleState	stateFallInHole;
+		private MonsterGaleState		stateGale;
+		
 
 
 		//-----------------------------------------------------------------------------
@@ -83,8 +92,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			hurtFlickerDuration		= GameSettings.MONSTER_HURT_FLICKER_DURATION;
 			contactDamage			= 1;
 			isKnockbackable			= true;
-			isBurning				= false;
-			effectAnimation			= new AnimationPlayer();
 			
 			interactionHandlers = new InteractionHandler[(int) InteractionType.Count];
 			for (int i = 0; i < (int) InteractionType.Count; i++)
@@ -129,18 +136,61 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			//SetReaction(InteractionType.BiggoronSwordHitShield,	new COMBO(new EFFECT_CLING(), new BUMP()));
 			//SetReaction(InteractionType.ShieldHitShield,			new COMBO(new EFFECT_CLING(), new BUMP(true)));
 		}
+		
+		
+		//-----------------------------------------------------------------------------
+		// Monster States
+		//-----------------------------------------------------------------------------
+				
+		// Begin the given monster state.
+		public void BeginState(MonsterState newState) {
+			if (state != newState) {
+				if (state != null) {
+					state.End(newState);
+				}
+				previousState = state;
+				state = newState;
+				newState.Begin(this, previousState);
+			}
+		}
+		
+		public void BeginNormalState() {
+			BeginState(new MonsterNormalState());
+		}
 
+		public virtual void UpdateAI() {
+
+		}
+		
 		
 		//-----------------------------------------------------------------------------
 		// Monster Reactions
 		//-----------------------------------------------------------------------------
 
+		public void Stun() {
+			AudioSystem.PlaySound(GameData.SOUND_MONSTER_HURT);
+
+			if ((state is MonsterNormalState) || (state is MonsterStunState)) {
+				BeginState(new MonsterStunState(GameSettings.MONSTER_STUN_DURATION));
+			}
+		}
+
+		public void EnterGale(EffectGale gale) {
+			if (state is MonsterNormalState)
+				BeginState(new MonsterGaleState(gale));
+		}
+
 		public void Burn(int damage) {
-			if (IsInvincible || isBurning)
+			//if (IsInvincible || isBurning)
+				//return;
+						
+			if (IsInvincible || !(state is MonsterNormalState))
 				return;
 
 			// TODO: Enter burn state.
-
+			BeginState(new MonsterBurnState(damage));
+			//MonsterBurnState burnState = new MonsterBurnState(damage);
+			/*
 			// Apply damage.
 			DamageInfo damageInfo = new DamageInfo(damage);
 			damageInfo.ApplyKnockBack		= true;
@@ -154,6 +204,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Create the burn effect.
 			effectAnimation.Play(GameData.ANIM_EFFECT_BURN);
+			*/
 		}
 
 		public void OnTouchPlayer(Entity sender, EventArgs args) {
@@ -225,6 +276,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			health = healthMax;
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_OCTOROK);
 			ChooseImageVariant();
+			
+			// Begin the default monster state.
+			BeginNormalState();
+			previousState = state;
 		}
 
 		public override void Die(){
@@ -237,10 +292,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public override void OnKnockbackEnd() {
 			base.OnKnockbackEnd();
-			if (isBurning) {
-				isBurning = false;
-				effectAnimation.Animation = null;
-			}
 		}
 
 		public override void OnHurt(DamageInfo damage) {
@@ -250,11 +301,21 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public override void UpdateGraphics() {
 			ChooseImageVariant();
 			base.UpdateGraphics();
-			effectAnimation.Update();
+		}
+
+		public override void OnFallInHole() {
+			//base.OnFallInHole();
+
+			if (state is MonsterNormalState) {
+				BeginState(new MonsterFallInHoleState());
+			}
 		}
 
 		public override void Update() {
-			
+						
+			// Update the current monster state.
+			state.Update();
+						
 			// 1. (M-M) MonsterTools to PlayerTools
 			// 2. (M-1) MonsterTools to Player
 			// 4. (M-1) PlayerTools to Monster
@@ -330,7 +391,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			}
 
 			// Check collisions with player.
-			if (!parry && physics.IsCollidingWith(player, CollisionBoxType.Soft)) {
+			if (!parry && !IsStunned && !IsBurning && !IsInGale && !IsFallingInHole &&
+				physics.IsCollidingWith(player, CollisionBoxType.Soft))
+			{
 				TriggerInteraction(InteractionType.PlayerContact, player);
 			}
 
@@ -338,12 +401,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		public override void Draw(RoomGraphics g) {
+			state.DrawUnder(g);
 			base.Draw(g);
-
-			// Draw burn effect.
-			if (effectAnimation.Animation != null) {
-				g.DrawAnimation(effectAnimation, Center - new Vector2F(0, zPosition), DepthLayer.EffectMonsterBurnFlame);
-			}
+			state.DrawOver(g);
 		}
 
 		
@@ -364,6 +424,22 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public bool IsKnockbackable {
 			get { return isKnockbackable; }
 			set { isKnockbackable = value; }
+		}
+
+		public bool IsStunned {
+			get { return (state is MonsterStunState); }
+		}
+		
+		public bool IsBurning {
+			get { return (state is MonsterBurnState); }
+		}
+		
+		public bool IsInGale {
+			get { return (state is MonsterGaleState); }
+		}
+		
+		public bool IsFallingInHole {
+			get { return (state is MonsterFallInHoleState); }
 		}
 	}
 }

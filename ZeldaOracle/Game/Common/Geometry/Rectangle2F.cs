@@ -117,12 +117,13 @@ public struct Rectangle2F {
 	public static Rectangle2F operator -(Rectangle2F r) {
 		return new Rectangle2F(r.Point, -r.Size);
 	}
+	/*
 	public static Rectangle2F operator ++(Rectangle2F r) {
 		return new Rectangle2F(++r.Point, r.Size);
 	}
 	public static Rectangle2F operator --(Rectangle2F r) {
 		return new Rectangle2F(--r.Point, r.Size);
-	}
+	}*/
 
 	//--------------------------------
 

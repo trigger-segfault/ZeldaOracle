@@ -16,6 +16,7 @@ using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Audio;
 using ZeldaEditor.Control;
+using ZeldaOracle.Game.Tiles.Custom;
 
 namespace ZeldaEditor {
 	public class LevelDisplay : GraphicsDeviceControl {
@@ -264,6 +265,12 @@ namespace ZeldaEditor {
 					animation = GameData.ANIM_TILE_LANTERN;
 				else
 					sprite = GameData.SPR_TILE_LANTERN_UNLIT;
+			}
+			//-----------------------------------------------------------------------------
+			// Chest.
+			else if (tile.Type == typeof(TileChest)) {
+				bool isLooted = tile.Properties.GetBoolean("looted", false);
+				sprite = tile.SpriteList[isLooted ? 1 : 0].Sprite;
 			}
 			//-----------------------------------------------------------------------------
 			// Color Lantern.

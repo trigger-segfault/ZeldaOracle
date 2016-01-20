@@ -210,7 +210,7 @@ namespace ZeldaOracle.Game.Main {
 			g.SetRenderTarget(null);
 			g.ResetTranslation();
 			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
-			g.DrawImage(GameData.RenderTargetGame, Vector2F.Zero, Vector2F.Zero, (Vector2F) gameScale, 0.0);
+			g.DrawImage(GameData.RenderTargetGame, Vector2F.Zero, Vector2F.Zero, new Vector2F(gameScale, gameScale), 0.0);
 			g.End();
 		}
 

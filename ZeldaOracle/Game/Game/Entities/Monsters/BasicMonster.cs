@@ -323,9 +323,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			FaceRandomDirection();
 		}
 
-		public override void Update() {
-			base.Update();
-
+		public override void UpdateAI() {
+			
 			if (IsOnGround || movesInAir) {
 				// Update movement states.
 				if (isPaused) {

@@ -32,13 +32,12 @@ namespace ZeldaOracle.Game {
 	
 	// A static class for storing links to all game content.
 	public partial class GameData {
-
-
+		
 		//-----------------------------------------------------------------------------
 		// Initialization
 		//-----------------------------------------------------------------------------
 
-		// Initializes and loads the game content.
+		// Initializes and loads the game content. NOTE: The order here is important.
 		public static void Initialize() {
 			Console.WriteLine("Loading Images");
 			LoadImages();
@@ -75,24 +74,24 @@ namespace ZeldaOracle.Game {
 
 		// Assign static fields from their corresponding loaded resources.
 		private static void IntegrateResources<T>(string prefix) {
-			FieldInfo[] fields = typeof(GameData).GetFields();
+			IEnumerable<FieldInfo> fields = typeof(GameData).GetFields()
+				.Where(field =>
+					field.Name.StartsWith(prefix) &&
+					field.FieldType == typeof(T) &&
+					field.IsStatic);
 
-			// Assign static fields from their corresponding loaded resources.
-			for (int i = 0; i < fields.Length; i++) {
-				FieldInfo field = fields[i];
-				string name = field.Name.ToLower();
+			// Set the values of the static fields to their corresponding loaded resources.
+			foreach (FieldInfo field in fields) {
+				string name = field.Name.ToLower().Remove(0, prefix.Length);
 				
-				if (field.FieldType == typeof(T) && field.Name.StartsWith(prefix)) {
-					name = name.Remove(0, prefix.Length);
-
-					if (Resources.ExistsResource<T>(name))
-						field.SetValue(null, Resources.GetResource<T>(name));
-					else if (field.GetValue(null) != null) {
-						//Console.WriteLine("** WARNING: " + name + " is built programatically.");
-					}
-					else {
-						//Console.WriteLine("** WARNING: " + name + " is never defined.");
-					}
+				if (Resources.ExistsResource<T>(name)) {
+					field.SetValue(null, Resources.GetResource<T>(name));
+				}
+				else if (field.GetValue(null) != null) {
+					//Console.WriteLine("** WARNING: " + name + " is built programatically.");
+				}
+				else {
+					//Console.WriteLine("** WARNING: " + name + " is never defined.");
 				}
 			}
 			
@@ -101,16 +100,9 @@ namespace ZeldaOracle.Game {
 			Dictionary<string, T> dictionary = Resources.GetResourceDictionary<T>();
 			foreach (KeyValuePair<string, T> entry in dictionary) {
 				string name = prefix.ToLower() + entry.Key;
-				T resource = entry.Value;
-
-				FieldInfo matchingField = null;
-				for (int i = 0; i < fields.Length; i++) {
-					FieldInfo field = fields[i];
-					if (field.FieldType == typeof(T) && String.Compare(field.Name, name, true) == 0) {
-						matchingField = field;
-						break;
-					}
-				}
+				FieldInfo matchingField = fields.FirstOrDefault(
+					field => String.Compare(field.Name, name, true) == 0);
+				
 				if (matchingField == null) {
 					//Console.WriteLine("** WARNING: Resource \"" + name + "\" does not have a corresponding field.");
 				}
@@ -133,199 +125,46 @@ namespace ZeldaOracle.Game {
 			Resources.LoadImage("Images/UI/menu_essences_a");
 			Resources.LoadImage("Images/UI/menu_essences_b");
 
-			//Resources.GetImage("screen_dungeon_map");
-
 			// Set the variant IDs for images with variants.
-			FieldInfo[] fields = typeof(GameData).GetFields();
-			Dictionary<string, Image> dictionary = Resources.GetResourceDictionary<Image>();
 			string prefix = "VARIANT_";
-
-			foreach (KeyValuePair<string, Image> entry in dictionary) {
-				Image image = entry.Value;
-
-				if (image.HasVariants || image.VariantName != "") {
-					while (image != null) {
-						string name = prefix.ToLower() + image.VariantName;
-						
-						// Find the matching variant constant for this name.
-						FieldInfo matchingField = null;
-						for (int i = 0; i < fields.Length; i++) {
-							FieldInfo field = fields[i];
-							if (field.Name.StartsWith(prefix) && field.FieldType == typeof(int) && String.Compare(field.Name, name, true) == 0) {
-								matchingField = field;
-								break;
-							}
-						}
-
-						if (matchingField != null)
-							image.VariantID = (int) matchingField.GetValue(null);
-						else
-							Console.WriteLine("** WARNING: Uknown variant \"" + image.VariantName + "\".");
-
-						image = image.NextVariant;
-					}
-				}
-			}
-		}
-
-		/*
-		//-----------------------------------------------------------------------------
-		// Sprite Loading
-		//-----------------------------------------------------------------------------
-
-		// Loads the sprites and sprite-sheets.
-		private static void LoadSprites() {
-			Resources.LoadSpriteSheets("SpriteSheets/sprites.conscript");
-			IntegrateResources<SpriteSheet>("SHEET_");
-			IntegrateResources<Sprite>("SPR_");
+			IEnumerable<FieldInfo> fields = typeof(GameData).GetFields()
+				.Where(field =>
+					field.Name.StartsWith(prefix) &&
+					field.FieldType == typeof(int) &&
+					field.IsStatic);
 			
-			// TEMPORARY: Create sprite arrays here.
-			SPR_ITEM_SEEDS = new Sprite[] {
-				SPR_ITEM_SEED_EMBER,
-				SPR_ITEM_SEED_SCENT,
-				SPR_ITEM_SEED_PEGASUS,
-				SPR_ITEM_SEED_GALE,
-				SPR_ITEM_SEED_MYSTERY
-			};
-			SPR_HUD_HEARTS = new Sprite[] {
-				SPR_HUD_HEART_0,
-				SPR_HUD_HEART_1,
-				SPR_HUD_HEART_2,
-				SPR_HUD_HEART_3,
-				SPR_HUD_HEART_4,
-			};
-			SPR_HUD_HEART_PIECES_EMPTY = new Sprite[] {
-				SPR_HUD_HEART_PIECES_EMPTY_TOP_LEFT,
-				SPR_HUD_HEART_PIECES_EMPTY_BOTTOM_LEFT,
-				SPR_HUD_HEART_PIECES_EMPTY_BOTTOM_RIGHT,
-				SPR_HUD_HEART_PIECES_EMPTY_TOP_RIGHT
-			};
-			SPR_HUD_HEART_PIECES_FULL = new Sprite[] {
-				SPR_HUD_HEART_PIECES_FULL_TOP_LEFT,
-				SPR_HUD_HEART_PIECES_FULL_BOTTOM_LEFT,
-				SPR_HUD_HEART_PIECES_FULL_BOTTOM_RIGHT,
-				SPR_HUD_HEART_PIECES_FULL_TOP_RIGHT
-			};
-
-			SPR_COLOR_CUBE_ORIENTATIONS = new Sprite[6];
-			string[] orientations = { "blue_yellow", "blue_red", "yellow_red", "yellow_blue", "red_blue", "red_yellow" };
-
-			for (int i = 0; i < 6; i++) {
-				SPR_COLOR_CUBE_ORIENTATIONS[i] = Resources.GetResource<Sprite>("color_cube_" + orientations[i]);
-			}
-		}
-		*/
-
-		/*
-		//-----------------------------------------------------------------------------
-		// Animations Loading
-		//-----------------------------------------------------------------------------
-
-		private static void LoadAnimations() {
-			Resources.LoadAnimations("Animations/animations.conscript");
-
-			// Create gale effect animation.
-			SpriteSheet sheet = Resources.GetSpriteSheet("color_effects");
-			ANIM_EFFECT_SEED_GALE = new Animation();
-			for (int i = 0; i < 12; i++) {
-				int y = 1 + (((5 - (i % 4)) % 4) * 4);
-				ANIM_EFFECT_SEED_GALE.AddFrame(i, 1, new Sprite(
-					GameData.SHEET_COLOR_EFFECTS, ((i % 6) < 3 ? 4 : 5), y, -8, -8));
-			}
-			Resources.SetResource("effect_seed_gale", ANIM_EFFECT_SEED_GALE);
-
-			ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS = new Animation[6, 4];
-			string[] orientations = { "blue_yellow", "blue_red", "yellow_red", "yellow_blue", "red_blue", "red_yellow" };
-			string[] directions = { "right", "up", "left", "down" };
-
-			for (int i = 0; i < 6; i++) {
-				for (int j = 0; j < 4; j++) {
-					ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS[i, j] = Resources.GetResource<Animation>("color_cube_" + orientations[i] + "_" + directions[j]);
+			// Generate image variant IDs.
+			int variantIndex = 0;
+			foreach (FieldInfo field in fields)
+				field.SetValue(null, variantIndex++);
+			
+			// Link image variants with their variant IDs
+			Dictionary<string, Image> dictionary = Resources.GetResourceDictionary<Image>();
+			foreach (Image image in dictionary.Values.Where(img => img.HasVariants)) {
+				// Loop through the image's variants.
+				for (Image subimg = image; subimg != null; subimg = subimg.NextVariant) {
+					// Find the field with this name.
+					string name = prefix.ToLower() + subimg.VariantName;
+					FieldInfo matchingField = fields.FirstOrDefault(
+						field => String.Compare(field.Name, name, true) == 0);
+						
+					// Set the image's variant ID to the field's value.
+					if (matchingField != null)
+						subimg.VariantID = (int) matchingField.GetValue(null);
+					else
+						Console.WriteLine("** WARNING: Uknown variant \"" + subimg.VariantName + "\".");
 				}
 			}
-
-			IntegrateResources<Animation>("ANIM_");
-
-			ANIM_EFFECT_SEEDS = new Animation[5];
-			ANIM_EFFECT_SEEDS[(int) SeedType.Ember]		= ANIM_EFFECT_SEED_EMBER;
-			ANIM_EFFECT_SEEDS[(int) SeedType.Scent]		= ANIM_EFFECT_SEED_SCENT;
-			ANIM_EFFECT_SEEDS[(int) SeedType.Gale]		= ANIM_EFFECT_SEED_GALE;
-			ANIM_EFFECT_SEEDS[(int) SeedType.Pegasus]	= ANIM_EFFECT_SEED_PEGASUS;
-			ANIM_EFFECT_SEEDS[(int) SeedType.Mystery]	= ANIM_EFFECT_SEED_MYSTERY;
 		}
-		*/
-		
+
+
 		//-----------------------------------------------------------------------------
-		// Collision Models Loading
+		// Collision Model Loading
 		//-----------------------------------------------------------------------------
 
 		private static void LoadCollisionModels() {
 			Resources.LoadCollisionModels("Data/collision_models.conscript");
 			IntegrateResources<CollisionModel>("MODEL_");
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Property Action Loading
-		//-----------------------------------------------------------------------------
-		/*
-		private static bool IsTileDataInstanceOf(IPropertyObject sender, Type type) {
-			return (sender is TileDataInstance && (sender as TileDataInstance).TileData.Type == type);
-		}
-		private static bool IsEventTileDataInstanceOf(IPropertyObject sender, Type type) {
-			return (sender is EventTileDataInstance && (sender as EventTileDataInstance).EventTileData.Type == type);
-		}
-		private static bool IsTileOrTileDataInstanceOf(IPropertyObject sender, Type type) {
-			if (sender == null)
-				return false;
-			return (IsTileDataInstanceOf(sender, type) ||
-				IsEventTileDataInstanceOf(sender, type) || sender.GetType() == type);
-		}
-		*/
-		// TODO: Get rid of property actions and migrate their purpose to the Editor
-		// TODO: Lantern lit states in editor
-		// TODO: Chest looted states in editor
-		// TODO: Level/room change zones
-		private static void LoadPropertyActions() {
-			/*Resources.AddResource<PropertyAction>("zone", delegate(IPropertyObject sender, object value) {
-				if (sender is Room) {
-					Room room = sender as Room;
-					room.Zone = Resources.GetResource<Zone>((string)value);
-				}
-				else if (sender is Level) {
-					Level level = sender as Level;
-					level.Zone = Resources.GetResource<Zone>((string)value);
-				}
-			});*/
-			/*
-			Resources.AddResource<PropertyAction>("looted", delegate(IPropertyObject sender, object value) {
-				if (IsTileOrTileDataInstanceOf(sender, typeof(TileChest))) {
-					sender.Properties.Set("sprite_index", (bool)value ? 1 : 0);
-				}
-			});*/
-			/* 
-			Resources.AddResource<PropertyAction>("lit", delegate(IPropertyObject sender, object value) {
-				if (IsTileOrTileDataInstanceOf(sender, typeof(TileLantern))) {
-					sender.Properties.Set("sprite_index", (bool)value ? 0 : 1);
-				}
-			});*/
-			/*Resources.AddResource<PropertyAction>("direction", delegate(IPropertyObject sender, object value) {
-				if (IsTileOrTileDataInstanceOf(sender, typeof(NPCEvent))) {
-					sender.Properties.Set("substrip_index", (int) value);
-				}
-			});*/
-			/*Resources.AddResource<PropertyAction>("warp_type", delegate(IPropertyObject sender, object value) {
-				if (IsEventTileDataInstanceOf(sender, typeof(WarpEvent))) {
-					WarpType warpType = (WarpType) Enum.Parse(typeof(WarpType), (string) value, true);
-					EventTileDataInstance eventTile = (EventTileDataInstance) sender;
-					if (warpType == WarpType.Entrance)
-						eventTile.Sprite = GameData.SPR_EVENT_TILE_WARP_ENTRANCE;
-					else if (warpType == WarpType.Tunnel)
-						eventTile.Sprite = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
-					else if (warpType == WarpType.Stairs)
-						eventTile.Sprite = GameData.SPR_EVENT_TILE_WARP_STAIRS;
-				}
-			});*/
 		}
 
 
@@ -486,22 +325,26 @@ namespace ZeldaOracle.Game {
 		// Image Variants
 		//-----------------------------------------------------------------------------
 
-		public static int VARIANT_NONE		= 0;
-		public static int VARIANT_DARK		= 1;
-		public static int VARIANT_LIGHT		= 2;
-		public static int VARIANT_RED		= 3;
-		public static int VARIANT_BLUE		= 4;
-		public static int VARIANT_GREEN		= 5;
-		public static int VARIANT_YELLOW	= 6;
-		public static int VARIANT_HURT		= 7;
-		public static int VARIANT_SUMMER	= 8;
-		public static int VARIANT_FOREST	= 9;
-		public static int VARIANT_GRAVEYARD	= 10;
-		public static int VARIANT_INTERIOR	= 11;
-		public static int VARIANT_PRESENT	= 12;
-		public static int VARIANT_INTERIOR_PRESENT	= 13;
-		public static int VARIANT_AGES_DUNGEON_1	= 14;
-		public static int VARIANT_ORANGE	= 15;
+		public static int VARIANT_NONE;
+		public static int VARIANT_NORMAL;
+		public static int VARIANT_DARK;
+		public static int VARIANT_LIGHT;
+		public static int VARIANT_RED;
+		public static int VARIANT_BLUE;
+		public static int VARIANT_GREEN;
+		public static int VARIANT_YELLOW;
+		public static int VARIANT_ORANGE;
+		public static int VARIANT_HURT;
+		public static int VARIANT_SUMMER;
+		public static int VARIANT_FOREST;
+		public static int VARIANT_GRAVEYARD;
+		public static int VARIANT_INTERIOR;
+		public static int VARIANT_PRESENT;
+		public static int VARIANT_INTERIOR_PRESENT;
+		public static int VARIANT_AGES_DUNGEON_1;
+		public static int VARIANT_AGES_DUNGEON_2;
+		public static int VARIANT_AGES_DUNGEON_3;
+		public static int VARIANT_AGES_DUNGEON_4;
 		
 
 		//-----------------------------------------------------------------------------
@@ -555,16 +398,6 @@ namespace ZeldaOracle.Game {
 		public static GameFont FONT_LARGE;
 		public static GameFont FONT_SMALL;
 
-
-		//-----------------------------------------------------------------------------
-		// Sound Effects
-		//-----------------------------------------------------------------------------
-		
-
-		//-----------------------------------------------------------------------------
-		// Music
-		//-----------------------------------------------------------------------------
-		
 
 		//-----------------------------------------------------------------------------
 		// Render Targets

@@ -192,10 +192,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			
 			// Stun the monster.
 			public static void Stun(Monster monster, Entity sender, EventArgs args) {
+				monster.Stun();
 			}
 			
 			// Send the monster in a gale.
 			public static void Gale(Monster monster, Entity sender, EventArgs args) {
+				monster.EnterGale((EffectGale) sender);
 			}
 			
 			// Trigger a random seed effect.

@@ -115,9 +115,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				Point2I tileLoc = RoomControl.GetTileLocation(position);
 				if (tileLoc != tileLocation && RoomControl.IsTileInBounds(tileLoc)) {
 					Tile tile = RoomControl.GetTopTile(tileLoc);
-					if (tile != null) {
+					if (tile != null)
 						tile.OnBoomerang();
-					}
 				}
 				tileLocation = tileLoc;
 			}
@@ -126,16 +125,15 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				// Return to player.
 				Vector2F trajectory = RoomControl.Player.Center - Center;
 				if (trajectory.Length <= speed) {
-					Destroy();
 					for (int i = 0; i < collectibles.Count; i++)
 						collectibles[i].Collect();
+					Destroy();
 				}
 				else {
 					physics.Velocity = trajectory.Normalized * speed;
 				}
 			}
 			else {
-
 				// Update return timer.
 				timer++;
 				if (timer > returnDelay)
@@ -159,6 +157,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public override void Draw(RoomGraphics g) {
 			base.Draw(g);
 
+			// Draw collectibles over boomerang.
 			for (int i = 0; i < collectibles.Count; i++) {
 				Collectible collectible = collectibles[i];
 				collectible.SetPositionByCenter(Center);

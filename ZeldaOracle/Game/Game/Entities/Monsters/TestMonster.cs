@@ -107,7 +107,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			toolSword.Initialize(this);
 		}
 
-		public override void Update() {
+		public override void UpdateAI() {
 			isMoving = false;
 
 			// Check movement keys.
@@ -150,10 +150,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				else
 					UnequipTool(toolSword);
 			}
-
-
-			base.Update();
-
+			
 			toolSword.ImageVariantID = Graphics.ImageVariant;
 		}
 	}

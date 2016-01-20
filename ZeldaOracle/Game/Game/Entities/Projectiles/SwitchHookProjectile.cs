@@ -206,6 +206,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 					}
 				}
 
+				// Return after extending to the maximum distance.
 				distance += speed;
 				if (physics.IsColliding || distance >= length)
 					BeginReturn(false);
@@ -221,10 +222,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			Vector2F hookStartPos = HookStartPosition;
 			int linkIndex = (GameControl.RoomTicks % 3) + 1;
 			float percent = (linkIndex / 4.0f);
-			Vector2F linkPos = hookStartPos + (percent * (position - hookStartPos));
-			g.DrawSprite(GameData.SPR_SWITCH_HOOK_LINK, linkPos - new Vector2F(0, zPosition), Graphics.DepthLayer);
+			Vector2F linkPos = Vector2F.Lerp(hookStartPos, position, percent);
+			g.DrawSprite(GameData.SPR_SWITCH_HOOK_LINK,
+				linkPos - new Vector2F(0, zPosition), Graphics.DepthLayer);
 
-			// Draw collectible.
+			// Draw collectible over hook.
 			if (collectible != null) {
 				Vector2F pos = Center + Directions.ToVector(direction) * 4;
 				collectible.SetPositionByCenter(pos);
