@@ -26,6 +26,9 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			this.hasDuration	= false;
 			this.isCollectibleWithItems	= (id != "small_key");
 			this.onlyShowMessageInChest = (id == "small_key");
+
+			if (id == "small_key" || id == "boss_key")
+				this.soundBounce = GameData.SOUND_KEY_BOUNCE;
 		}
 
 
@@ -38,14 +41,20 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			Dungeon dungeon = gameControl.RoomControl.Dungeon;
 
 			if (dungeon != null) {
-				if (id == "small_key")
+				if (id == "small_key") {
 					dungeon.NumSmallKeys++;
-				else if (id == "boss_key")
+					AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
+				}
+				else if (id == "boss_key") {
 					dungeon.HasBossKey = true;
-				else if (id == "map")
+					AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
+				}
+				else if (id == "map") {
 					dungeon.HasMap = true;
-				else if (id == "compass")
+				}
+				else if (id == "compass") {
 					dungeon.HasCompass = true;
+				}
 			}
 		}
 

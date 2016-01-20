@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Effects;
@@ -96,6 +97,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		public override void OnCollideMonster(Monster monster) {
 			monster.TriggerInteraction(InteractionType.Arrow, this);
+		}
+
+		protected override void OnCrash() {
+			base.OnCrash();
+			AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 		}
 	}
 }

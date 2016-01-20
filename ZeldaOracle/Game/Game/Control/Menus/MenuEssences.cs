@@ -87,7 +87,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 			// Equip equipment.
 			if (Controls.A.IsPressed()) {
 				if (currentSlotGroup.NumSlots == 3 && currentSlotGroup.CurrentSlotIndex == 2) {
-					AudioSystem.PlaySound("UI/menu_select");
+					AudioSystem.PlaySound(GameData.SOUND_MENU_SELECT);
 				}
 			}
 		}

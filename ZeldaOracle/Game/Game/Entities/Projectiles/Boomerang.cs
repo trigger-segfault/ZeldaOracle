@@ -9,6 +9,7 @@ using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Entities.Collisions;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
 	public class Boomerang : Projectile, IInterceptable {
@@ -98,6 +99,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			// Create cling effect.
 			Effect effect = new Effect(GameData.ANIM_EFFECT_CLING, DepthLayer.EffectCling);
 			RoomControl.SpawnEntity(effect, position, zPosition);
+			AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 			BeginReturn();
 		}
 
@@ -106,6 +108,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public override void Update() {
+			AudioSystem.LoopSoundWhileActive(GameData.SOUND_BOOMERANG_LOOP);
+
 			// Check for boomerangable tiles.
 			if (level == Item.Level2) {
 				Point2I tileLoc = RoomControl.GetTileLocation(position);

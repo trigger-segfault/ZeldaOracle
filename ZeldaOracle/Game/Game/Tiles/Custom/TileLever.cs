@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
@@ -13,8 +14,7 @@ using ZeldaOracle.Game.Items.Weapons;
 namespace ZeldaOracle.Game.Tiles {
 
 	public class TileLever : SwitchTileBase, ZeldaAPI.Lever {
-
-
+		
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
@@ -34,6 +34,8 @@ namespace ZeldaOracle.Game.Tiles {
 			else
 				CustomSprite = GameData.SPR_TILE_LEVER_LEFT;*/
 			SpriteIndex = (switchState ? 1 : 0);
+
+			AudioSystem.PlaySound(GameData.SOUND_SWITCH);
 		}
 
 
@@ -49,6 +51,19 @@ namespace ZeldaOracle.Game.Tiles {
 			else
 				CustomSprite = GameData.SPR_TILE_LEVER_LEFT;*/
 			SpriteIndex = (SwitchState ? 1 : 0);
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Scripting API
+		//-----------------------------------------------------------------------------
+
+		bool ZeldaAPI.Lever.IsFacingLeft {
+			get { return !SwitchState; }
+		}
+		
+		bool ZeldaAPI.Lever.IsFacingRight {
+			get { return SwitchState; }
 		}
 	}
 }

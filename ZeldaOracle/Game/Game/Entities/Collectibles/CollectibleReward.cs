@@ -34,6 +34,7 @@ namespace ZeldaOracle.Game.Entities {
 				PhysicsFlags.CollideWorld |
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.DestroyedInHoles);
+			Physics.BounceSound = reward.BounceSound;
 
 			// Graphics.
 			centerOffset					= new Point2I(0, -5);

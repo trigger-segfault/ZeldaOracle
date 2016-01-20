@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
@@ -85,6 +86,9 @@ namespace ZeldaOracle.Game.Tiles {
 					flameAnimation = GameData.ANIM_EFFECT_COLOR_FLAME_YELLOW;
 				else
 					flameAnimation = null;
+				
+				if (prevColor == PuzzleColor.None && value != PuzzleColor.None)
+					AudioSystem.PlaySound(GameData.SOUND_FIRE);
 			}
 		}
 		

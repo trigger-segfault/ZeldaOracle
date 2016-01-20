@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Collisions;
@@ -47,6 +48,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			if (tile.BreakAnimation != null) {
 				RoomControl.SpawnEntity(new Effect(tile.BreakAnimation, DepthLayer.EffectTileBreak), Center);
 			}
+			if (tile.BreakSound != null)
+				AudioSystem.PlaySound(tile.BreakSound);
 			Destroy();
 		}
 

@@ -525,6 +525,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (tile != null)
 				tile.OnLand(movement.JumpStartTile);
 			movement.JumpStartTile = -Point2I.One;
+			
+			AudioSystem.PlaySound(GameData.SOUND_PLAYER_LAND);
+		}
+
+		public override void OnHurt(DamageInfo damage) {
+			AudioSystem.PlaySound(GameData.SOUND_PLAYER_HURT);
 		}
 
 		public override void Update() {

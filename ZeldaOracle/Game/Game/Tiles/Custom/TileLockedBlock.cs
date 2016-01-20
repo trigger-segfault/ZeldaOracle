@@ -9,6 +9,7 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -32,6 +33,9 @@ namespace ZeldaOracle.Game.Tiles {
 			// Check if we have a small key to use.
 			if (dungeon.NumSmallKeys > 0) {
 				dungeon.NumSmallKeys--;
+				
+				AudioSystem.PlaySound(GameData.SOUND_CHEST_OPEN);
+				AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
 
 				// Spawn the key and poof effects.
 				RoomControl.SpawnEntity(new EffectUsedItem(GameData.SPR_REWARD_SMALL_KEY), Center);

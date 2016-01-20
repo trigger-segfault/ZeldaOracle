@@ -15,6 +15,7 @@ using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Entities.Players.States.SwingStates;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 
@@ -127,6 +128,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void Update() {
 			base.Update();
+
+			AudioSystem.LoopSoundWhileActive(GameData.SOUND_MINECART_LOOP);
 
 			// Update minecart animation.
 			minecartAnimationPlayer.Update();

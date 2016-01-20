@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities.Projectiles;
@@ -48,6 +49,8 @@ namespace ZeldaOracle.Game.Tiles {
 				else if (color == PuzzleColor.Blue)
 					CustomSprite = GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE;
 				
+				AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
+
 				GameControl.FireEvent(this, "event_color_change", this, ((ZeldaAPI.ColorJumpPad) this).Color);
 			}
 		}

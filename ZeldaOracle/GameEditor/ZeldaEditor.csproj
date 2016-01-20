@@ -76,6 +76,9 @@
     <Compile Include="ObjectsEditor\CustomControls\CustomObjectEditorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileCrossingGate.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileDoor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -225,6 +228,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ObjectsEditor\CustomControls\CustomObjectEditorControl.resx">
       <DependentUpon>CustomObjectEditorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileCrossingGate.resx">
+      <DependentUpon>ObjectControlsTileCrossingGate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileDoor.resx">
       <DependentUpon>ObjectControlsTileDoor.cs</DependentUpon>

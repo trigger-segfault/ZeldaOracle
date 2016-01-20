@@ -10,11 +10,11 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Tiles {
 
 	public class TileSmallKeyDoor : TileDoor {
-
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -23,6 +23,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public TileSmallKeyDoor() {
 			animationOpen	= GameData.ANIM_TILE_LOCKED_DOOR_OPEN;
 			animationClose	= GameData.ANIM_TILE_LOCKED_DOOR_CLOSE;
+			openCloseSound	= null;
 		}
 
 
@@ -36,6 +37,9 @@ namespace ZeldaOracle.Game.Tiles {
 			if (dungeon.NumSmallKeys > 0) {
 				dungeon.NumSmallKeys--;
 				Open();
+
+				AudioSystem.PlaySound(GameData.SOUND_CHEST_OPEN);
+				AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
 
 				// Spawn the key effect.
 				EffectUsedItem effect = new EffectUsedItem(GameData.SPR_REWARD_SMALL_KEY);

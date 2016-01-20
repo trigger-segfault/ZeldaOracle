@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Projectiles;
@@ -61,6 +62,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					spawnOffset, 5);
 				weapon.SeedTracker.TrackEntity(seed);
 				weapon.UseAmmo();
+				
+				AudioSystem.PlaySound(GameData.SOUND_SEED_SHOOTER);
 
 				// Begin shooting.
 				isShooting = true;

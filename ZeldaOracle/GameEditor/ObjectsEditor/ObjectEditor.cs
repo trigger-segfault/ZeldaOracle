@@ -54,6 +54,7 @@ namespace ZeldaEditor.ObjectsEditor {
 			customTileTypeControls[typeof(TileColorJumpPad)]	= new ObjectControlsTileColorJumpPad();
 			customTileTypeControls[typeof(TileColorTile)]		= new ObjectControlsTileColorJumpPad();	// TileColorTile == TileColorJumpPad
 			customTileTypeControls[typeof(TileDoor)]			= new ObjectControlsTileDoor();
+			customTileTypeControls[typeof(TileCrossingGate)]	= new ObjectControlsTileCrossingGate();
 
 			this.editorControl	= editorControl;
 			this.tile			= null;

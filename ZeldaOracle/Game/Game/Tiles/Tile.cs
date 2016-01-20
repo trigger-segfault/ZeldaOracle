@@ -16,6 +16,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Drops;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Tiles {
 	
@@ -40,6 +41,7 @@ namespace ZeldaOracle.Game.Tiles {
 		private int					pathMoveIndex;
 		protected bool				fallsInHoles;
 		private Vector2F			velocity;
+		protected Sound				soundMove;
 
 		// Settings
 		private TileDataInstance	tileData;		// The tile data used to create this tile.
@@ -49,6 +51,7 @@ namespace ZeldaOracle.Game.Tiles {
 		private SpriteAnimation		customSprite;
 		private SpriteAnimation		spriteAsObject;	// The sprite for the tile if it were picked up, pushed, etc.
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
+		private Sound				breakSound;	// The sound to play when the tile is broken.
 		private int					pushDelay;		// Number of ticks of pushing before the player can move this tile.
 		private DropList			dropList;
 		private bool				isSolid;
@@ -84,6 +87,7 @@ namespace ZeldaOracle.Game.Tiles {
 			pathTimer		= 0;
 			pathMoveIndex	= 0;
 			fallsInHoles	= true;
+			soundMove		= GameData.SOUND_BLOCK_PUSH;
 		}
 
 
@@ -277,7 +281,12 @@ namespace ZeldaOracle.Game.Tiles {
 			int moveDir = properties.GetInteger("move_direction", -1);
 			if (moveDir >= 0 && direction != moveDir)
 				return false;
-			return Move(direction, 1, movementSpeed);
+			if (Move(direction, 1, movementSpeed)) {
+				if (soundMove != null)
+					AudioSystem.PlaySound(soundMove);
+				return true;
+			}
+			return false;
 		}
 
 		// Called when the player digs the tile with the shovel.
@@ -345,6 +354,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public virtual void OnFallInHole() {
 			if (fallsInHoles) {
 				RoomControl.SpawnEntity(new EffectFallingObject(), Center);
+				AudioSystem.PlaySound(GameData.SOUND_OBJECT_FALL);
 				RoomControl.RemoveTile(this);
 			}
 		}
@@ -353,6 +363,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public virtual void OnFallInWater() {
 			if (fallsInHoles) {
 				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash), Center);
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 				RoomControl.RemoveTile(this);
 			}
 		}
@@ -361,6 +372,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public virtual void OnFallInLava() {
 			if (fallsInHoles) {
 				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH, DepthLayer.EffectSplash), Center);
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 				RoomControl.RemoveTile(this);
 			}
 		}
@@ -383,6 +395,9 @@ namespace ZeldaOracle.Game.Tiles {
 				Effect breakEffect = new Effect(breakAnimation, DepthLayer.EffectTileBreak);
 				RoomControl.SpawnEntity(breakEffect, Center);
 			}
+
+			if (breakSound != null)
+				AudioSystem.PlaySound(breakSound);
 
 			// Spawn drops.
 			if (spawnDrops)
@@ -528,6 +543,7 @@ namespace ZeldaOracle.Game.Tiles {
 			tile.flags				= data.Flags;
 			tile.spriteAsObject		= data.SpriteAsObject;
 			tile.breakAnimation		= data.BreakAnimation;
+			tile.breakSound			= data.BreakSound;
 			tile.collisionModel		= data.CollisionModel;
 			tile.size				= data.Size;
 
@@ -644,6 +660,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public Animation BreakAnimation {
 			get { return breakAnimation; }
 			set { breakAnimation = value; }
+		}
+
+		public Sound BreakSound {
+			get { return breakSound; }
+			set { breakSound = value; }
 		}
 
 		public CollisionModel CollisionModel {
@@ -791,5 +812,8 @@ namespace ZeldaOracle.Game.Tiles {
 		// Scripting API
 		//-----------------------------------------------------------------------------
 
+		string ZeldaAPI.Tile.Id {
+			get { return properties.GetString("id", ""); }
+		}
 	}
 }

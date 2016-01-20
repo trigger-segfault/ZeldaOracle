@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Effects;
@@ -32,6 +33,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			
 			Physics.CollisionBox		= new Rectangle2F(-3, -5, 6, 1);
 			Physics.SoftCollisionBox	= new Rectangle2F(-3, -5, 6, 1);
+			Physics.BounceSound			= GameData.SOUND_BOMB_BOUNCE;
 
 			Graphics.DepthLayer			= DepthLayer.ProjectileBomb;
 			Graphics.DrawOffset			= new Point2I(-8, -13);
@@ -46,6 +48,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		private void Explode() {
 			BombExplosion bombExplosion = new BombExplosion();
 			RoomControl.SpawnEntity(bombExplosion, Center, zPosition);
+			AudioSystem.PlaySound(GameData.SOUND_BOMB_EXPLODE);
 
 			// Explode nearby tiles.
 			if (zPosition < 4) {

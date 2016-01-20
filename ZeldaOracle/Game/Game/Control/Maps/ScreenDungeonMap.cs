@@ -159,13 +159,13 @@ namespace ZeldaOracle.Game.Control.Maps {
 					viewFloorIndex++;
 					isChangingFloors = true;
 					viewFloor = discoveredFloors[viewFloorIndex];
-					AudioSystem.PlaySound("UI/menu_cursor_move");
+					AudioSystem.PlaySound(GameData.SOUND_MENU_CURSOR_MOVE);
 				}
 				else if (Controls.Down.IsPressed() && viewFloorIndex > 0) {
 					viewFloorIndex--;
 					isChangingFloors = true;
 					viewFloor = discoveredFloors[viewFloorIndex];
-					AudioSystem.PlaySound("UI/menu_cursor_move");
+					AudioSystem.PlaySound(GameData.SOUND_MENU_CURSOR_MOVE);
 				}
 			}
 			else {

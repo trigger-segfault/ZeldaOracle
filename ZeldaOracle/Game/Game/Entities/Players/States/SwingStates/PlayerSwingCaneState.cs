@@ -60,6 +60,8 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			Point2I tileLocation = player.RoomControl.GetTileLocation(pos);
 			EffectCreateSomariaBlock effect = new EffectCreateSomariaBlock(tileLocation, player.ZPosition, itemCane);
 			player.RoomControl.SpawnEntity(effect);
+			
+			AudioSystem.PlaySound(GameData.SOUND_MYSTERY_SEED);
 		}
 
 
@@ -80,7 +82,10 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		}
 
 		public override void OnSwingBegin() {
-			AudioSystem.PlayRandomSound("Items/slash_1", "Items/slash_2", "Items/slash_3");
+			AudioSystem.PlayRandomSound(
+				GameData.SOUND_SWORD_SLASH_1,
+				GameData.SOUND_SWORD_SLASH_2,
+				GameData.SOUND_SWORD_SLASH_3);
 		}
 	}
 }

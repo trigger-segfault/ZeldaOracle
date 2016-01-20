@@ -40,6 +40,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public TileColorCube() {
 			animationPlayer = new AnimationPlayer();
+			soundMove = GameData.SOUND_SWITCH;
 		}
 
 		//-----------------------------------------------------------------------------

@@ -198,7 +198,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 
 		private void EquipWeapon(int slot) {
 			ItemWeapon weapon = slotGroups[0].CurrentSlot.SlotItem as ItemWeapon;
-			AudioSystem.PlaySound("UI/menu_select");
+			AudioSystem.PlaySound(GameData.SOUND_MENU_SELECT);
 			
 			if (GameControl.Inventory.EquippedWeapons[slot] != null) {
 				if (GameControl.Inventory.EquippedWeapons[slot].IsTwoHanded)

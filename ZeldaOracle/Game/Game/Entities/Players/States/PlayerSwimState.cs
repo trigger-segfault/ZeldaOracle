@@ -14,6 +14,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerSwimState : PlayerState {
@@ -78,6 +79,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DROWN);
 				player.RespawnDeath();
 			}
+			
+			AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 		}
 		
 		public override void OnEnd(PlayerState newState) {
@@ -96,7 +99,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			
 			// Stroking scales the movement speed.
 			if (player.Movement.MoveSpeedScale <= 1.4f && Controls.A.IsPressed()) {
-				//Sounds.PLAYER_SWIM.play();
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_SWIM);
 				player.Movement.MoveSpeedScale = 2.0f;
 			}
 
@@ -122,7 +125,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				splash.Position = player.Center + new Vector2F(0, 4);
 				player.RoomControl.SpawnEntity(splash);
 
-				//Sounds.PLAYER_WADE.play();
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 
 				// Change player depth to lowest.
 				player.Graphics.DepthLayer = DepthLayer.PlayerSubmerged;

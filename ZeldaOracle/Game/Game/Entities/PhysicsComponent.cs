@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Entities.Collisions;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities {
 	
@@ -77,6 +78,7 @@ namespace ZeldaOracle.Game.Entities {
 		private float					maxFallSpeed;
 		private Vector2F				velocity;			// XY-Velocity in pixels per frame.
 		private float					zVelocity;			// Z-Velocity in pixels per frame.
+		private Sound					soundBounce;
 
 		// Collision.
 		private Rectangle2F				collisionBox;		// The "hard" collision box, used to collide with solid entities/tiles.
@@ -124,6 +126,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.reboundVelocity	= Vector2F.Zero;
 			this.ledgeAltitude		= 0;
 			this.ledgeTileLocation	= new Point2I(-1, -1);
+			this.soundBounce		= null;
 
 			this.collisionInfo = new CollisionInfo[Directions.Count];
 			for (int i = 0; i < Directions.Count; i++)
@@ -337,7 +340,8 @@ namespace ZeldaOracle.Game.Entities {
 				zVelocity = 0;
 				velocity = Vector2F.Zero;
 			}
-			//Sounds.play(soundBounce);
+			if (soundBounce != null)
+				AudioSystem.PlaySound(soundBounce);
 
 			if (velocity.Length > 0.25)
 				velocity *= 0.5f;
@@ -854,6 +858,11 @@ namespace ZeldaOracle.Game.Entities {
 		public int AutoDodgeDistance {
 			get { return autoDodgeDistance; }
 			set { autoDodgeDistance = value; }
+		}
+
+		public Sound BounceSound {
+			get { return soundBounce; }
+			set { soundBounce = value; }
 		}
 
 

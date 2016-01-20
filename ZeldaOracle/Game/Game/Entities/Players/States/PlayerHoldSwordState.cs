@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Collisions;
@@ -65,6 +66,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					Effect clingEffect = new Effect(GameData.ANIM_EFFECT_CLING_LIGHT, DepthLayer.EffectCling);
 					Vector2F pos = player.Center + (13 * Directions.ToVector(direction));
 					player.RoomControl.SpawnEntity(clingEffect, pos);
+					AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 				}
 			}
 			player.SwordStabState.Weapon = weapon;
@@ -124,9 +126,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Charge up the sword.
 			chargeTimer++;
-				if (chargeTimer == ChargeTime) {
+			if (chargeTimer == ChargeTime) {
 				player.ToolSword.AnimationPlayer.Animation = GameData.ANIM_SWORD_CHARGED;
-				// TODO: play charge sound.
+				AudioSystem.PlaySound(GameData.SOUND_SWORD_CHARGE);
 			}
 			
 			// Check for tiles to stab.

@@ -1,19 +1,92 @@
 
-@sounds "Pickups"
 
-@sound "Pickups/get_heart" 1.0 0.0 0.0 false
-@sound "Pickups/get_rupee" 1.0 0.0 0.0 false
-@sound "Pickups/get_rupee_loop" 1.0 0.0 0.0 false
+# Effects ---------------------------------------------------------------------
 
-@sound "UI/menu_open" 1.0 0.0 0.0 false
-@sound "UI/menu_close" 1.0 0.0 0.0 false
-@sound "UI/menu_next" 1.0 0.0 0.0 false
-@sound "UI/menu_cursor_move" 1.0 0.0 0.0 false
-@sound "UI/menu_select" 1.0 0.0 0.0 false
+SOUND appear_vanish,			"Effects/appear_vanish";
+SOUND effect_cling,				"Effects/effect_cling";
+SOUND fire,						"Effects/fire";
+SOUND gale_seed,				"Effects/gale_seed";
+SOUND leaves,					"Effects/leaves";
+SOUND mystery_seed,				"Effects/mystery_seed";
+SOUND object_fall,				"Effects/object_fall";
+SOUND rock_shatter,				"Effects/rock_shatter";
+SOUND scent_seed,				"Effects/scent_seed";
+SOUND scent_seed_pod,			"Effects/scent_seed_pod";
 
-@sound "Items/slash_1" 1.0 0.0 0.0 false
-@sound "Items/slash_2" 1.0 0.0 0.0 false
-@sound "Items/slash_3" 1.0 0.0 0.0 false
-@sound "Items/shield" 1.0 0.0 0.0 false
+# Items -----------------------------------------------------------------------
 
-@end
+SOUND biggoron_sword,			"Items/biggoron_sword";
+SOUND bomb_bounce,				"Items/bomb_bounce";
+SOUND bomb_explode,				"Items/bomb_explode";
+SOUND boomerang_loop,			"Items/boomerang_loop";
+SOUND fire_rod,					"Items/fire_rod";
+SOUND key_bounce,				"Items/key_bounce";
+SOUND seed_shooter,				"Items/seed_shooter";
+SOUND shield,					"Items/shield";
+SOUND shield_deflect,			"Items/shield_deflect";
+SOUND shoot_projectile,			"Items/shoot_projectile";
+SOUND shovel,					"Items/shovel";
+SOUND switch_hook_loop,			"Items/switch_hook_loop";
+SOUND switch_hook_switch,		"Items/switch_hook_switch";
+SOUND sword_beam,				"Items/sword_beam";
+SOUND sword_charge,				"Items/sword_charge";
+SOUND sword_slash_1,			"Items/sword_slash_1";
+SOUND sword_slash_2,			"Items/sword_slash_2";
+SOUND sword_slash_3,			"Items/sword_slash_3";
+SOUND sword_spin,				"Items/sword_spin";
+
+# Misc ------------------------------------------------------------------------
+
+SOUND dungeon_signal,			"Misc/dungeon_signal";
+SOUND fanfare_item,				"Misc/fanfare_item";
+SOUND fanfare_essence,			"Misc/fanfare_essence";
+SOUND low_health_loop,			"Misc/low_health_loop";
+SOUND minecart_loop,			"Misc/minecart_loop";
+SOUND room_exit,				"Misc/room_exit";
+SOUND secret,					"Misc/secret";
+SOUND secret_long,				"Misc/secret_long";
+
+# Monster ---------------------------------------------------------------------
+
+SOUND monster_die,				"Monster/monster_die";
+SOUND monster_hurt,				"Monster/monster_hurt";
+SOUND monster_jump,				"Monster/monster_jump";
+
+# Pickups ---------------------------------------------------------------------
+
+SOUND get_heart,				"Pickups/get_heart";
+SOUND get_item,					"Pickups/get_item";
+SOUND get_rupee,				"Pickups/get_rupee";
+SOUND get_rupee_loop,			"Pickups/get_rupee_loop";
+
+# Player ----------------------------------------------------------------------
+
+SOUND player_fall,				"Player/player_fall";
+SOUND player_hurt,				"Player/player_hurt";
+SOUND player_jump,				"Player/player_jump";
+SOUND player_land,				"Player/player_land";
+SOUND player_pickup,			"Player/player_pickup";
+SOUND player_swim,				"Player/player_swim";
+SOUND player_throw,				"Player/player_throw";
+SOUND player_wade,				"Player/player_wade";
+
+# Tiles -----------------------------------------------------------------------
+
+SOUND block_push,				"Tiles/block_push";
+SOUND blue_roller,				"Tiles/blue_roller";
+SOUND chest_open,				"Tiles/chest_open";
+SOUND crossing_gate,			"Tiles/crossing_gate";
+SOUND dungeon_door,				"Tiles/dungeon_door";
+SOUND floor_crumble,			"Tiles/floor_crumble";
+SOUND switch,					"Tiles/switch";
+
+# Menu ------------------------------------------------------------------------
+
+SOUND menu_open,				"UI/menu_open";
+SOUND menu_close,				"UI/menu_close";
+SOUND menu_next,				"UI/menu_next";
+SOUND menu_cursor_move,			"UI/menu_cursor_move";
+SOUND menu_select,				"UI/menu_select";
+SOUND text_continue,			"UI/text_continue";
+SOUND text_letter,				"UI/text_letter";
+

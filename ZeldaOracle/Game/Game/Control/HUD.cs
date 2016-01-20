@@ -46,33 +46,9 @@ namespace ZeldaOracle.Game.Control {
 			int health = gameControl.Player.Health;
 
 			// Update dynamic rupees.
-			if (dynamicRupees < rupees) {
-				dynamicRupees++;
-				if (dynamicRupees < rupees) {
-					if (!AudioSystem.IsSoundPlaying("Pickups/get_rupee_loop")) {
-						AudioSystem.PlaySound("Pickups/get_rupee_loop", true);
-					}
-				}
-				else {
-					if (AudioSystem.IsSoundPlaying("Pickups/get_rupee_loop")) {
-						AudioSystem.StopSound("Pickups/get_rupee_loop");
-					}
-					AudioSystem.PlaySound("Pickups/get_rupee");
-				}
-			}
-			else if (dynamicRupees > rupees) {
-				dynamicRupees--;
-				if (dynamicRupees > rupees) {
-					if (!AudioSystem.IsSoundPlaying("Pickups/get_rupee_loop")) {
-						AudioSystem.PlaySound("Pickups/get_rupee_loop", true);
-					}
-				}
-				else {
-					if (AudioSystem.IsSoundPlaying("Pickups/get_rupee_loop")) {
-						AudioSystem.StopSound("Pickups/get_rupee_loop");
-					}
-					AudioSystem.PlaySound("Pickups/get_rupee");
-				}
+			if (dynamicRupees != rupees) {
+				dynamicRupees += Math.Sign(rupees - dynamicRupees);
+				AudioSystem.LoopSoundWhileActive(GameData.SOUND_GET_RUPEE_LOOP);
 			}
 
 			// Update dynamic health.
@@ -84,7 +60,7 @@ namespace ZeldaOracle.Game.Control {
 					healthTimer = 0;
 					dynamicHealth++;
 					if (dynamicHealth % 4 == 0) {
-						AudioSystem.PlaySound("Pickups/get_heart");
+						AudioSystem.PlaySound(GameData.SOUND_GET_HEART);
 					}
 				}
 			}

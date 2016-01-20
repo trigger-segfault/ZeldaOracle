@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Tiles {
 	public class TileDataInstance : IPropertyObject, IEventObject {
@@ -125,6 +126,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public Animation BreakAnimation {
 			get { return tileData.BreakAnimation; }
+		}
+
+		public Sound BreakSound {
+			get { return tileData.BreakSound; }
 		}
 
 		public TileFlags Flags {

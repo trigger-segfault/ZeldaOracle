@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Content.ResourceBuilders;
 using ZeldaOracle.Common.Geometry;
@@ -329,6 +330,10 @@ namespace ZeldaOracle.Common.Scripts {
 			// BreakAnim <animation>
 			AddTilesetCommand("BreakAnim", delegate(CommandParam parameters) {
 				tileData.BreakAnimation = resources.GetResource<Animation>(parameters.GetString(0));
+			});
+			// BreakSound <sound>
+			AddTilesetCommand("BreakSound", delegate(CommandParam parameters) {
+				tileData.BreakSound = Resources.GetResource<Sound>(parameters.GetString(0));
 			});
 			// Model <collision-model>
 			AddTilesetCommand("Model", delegate(CommandParam parameters) {

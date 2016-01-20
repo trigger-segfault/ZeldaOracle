@@ -82,7 +82,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 		public override void OnSwingBegin() {
 			base.OnSwingBegin();
-			// Play sword-spin sound.
+			AudioSystem.PlaySound(GameData.SOUND_SWORD_SPIN);
 		}
 
 		public override void OnSwingEnd() {

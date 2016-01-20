@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Projectiles;
@@ -78,6 +79,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Physics.CollideWithEntities	= false;
 			player.Physics.HasGravity	= false;
 			player.IsStateControlled	= true;
+			
+			AudioSystem.PlaySound(GameData.SOUND_SWITCH_HOOK_SWITCH);
 		}
 
 		private bool CanTileLandAtLocation(Point2I location) {

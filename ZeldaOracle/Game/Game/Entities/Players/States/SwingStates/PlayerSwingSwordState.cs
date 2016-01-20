@@ -65,6 +65,8 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			
 				player.RoomControl.SpawnEntity(beam);
 				itemSword.BeamTracker.TrackEntity(beam);
+				
+				AudioSystem.PlaySound(GameData.SOUND_SWORD_BEAM);
 			}
 		}
 
@@ -87,7 +89,10 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 		public override void OnSwingBegin() {
 			base.OnSwingBegin();
-			AudioSystem.PlayRandomSound("Items/slash_1", "Items/slash_2", "Items/slash_3");
+			AudioSystem.PlayRandomSound(
+				GameData.SOUND_SWORD_SLASH_1,
+				GameData.SOUND_SWORD_SLASH_2,
+				GameData.SOUND_SWORD_SLASH_3);
 		}
 
 		public override void OnSwingEnd() {

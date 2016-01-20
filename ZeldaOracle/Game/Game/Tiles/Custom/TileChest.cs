@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
@@ -31,8 +32,8 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 					string rewardName = Properties.GetString("reward", "rupees_1");
 					Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
 					RoomControl.GameControl.PushRoomState(new RoomStateReward(reward, (Point2I)Position));
-										
-					// TODO: Play chest open sound
+					
+					AudioSystem.PlaySound(GameData.SOUND_CHEST_OPEN);
 					Properties.SetBase("looted", true);
 					Properties.SetBase("enabled", true); // Opened chest are always spawned.
 					SpriteIndex = 1;

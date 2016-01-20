@@ -35,7 +35,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		public override void OnCollect(GameControl gameControl) {
 			if (gameControl.HUD.DynamicHealth >= gameControl.Player.MaxHealth)
-				AudioSystem.PlaySound("Pickups/get_heart");
+				AudioSystem.PlaySound(GameData.SOUND_GET_HEART);
 
 			gameControl.Player.Health += amount * 4;
 		}

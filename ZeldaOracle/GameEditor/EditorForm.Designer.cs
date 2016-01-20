@@ -162,6 +162,7 @@
 			this.levelTabPageTriggers = new System.Windows.Forms.TabPage();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.panelTriggersLevelDisplay = new System.Windows.Forms.Panel();
+			this.statusBarLabelTileInfo = new System.Windows.Forms.ToolStripStatusLabel();
 			this.worldTreeView = new ZeldaEditor.TreeViews.WorldTreeView();
 			this.propertyGrid = new ZeldaEditor.PropertiesEditor.ZeldaPropertyGrid();
 			this.menuStrip1.SuspendLayout();
@@ -492,6 +493,7 @@
 			// 
 			// toolStrip1
 			// 
+			this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.buttonNew,
             this.buttonLoad,
@@ -623,6 +625,7 @@
 			// 
 			// toolStrip2
 			// 
+			this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.buttonToolPointer,
             this.buttonToolPlace,
@@ -896,6 +899,7 @@
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusBarLabelRoomLoc,
             this.statusBarLabelTileLoc,
+            this.statusBarLabelTileInfo,
             this.toolStripStatusLabel1,
             this.statusLabelTask});
 			this.statusStrip1.Location = new System.Drawing.Point(0, 630);
@@ -920,7 +924,7 @@
 			// toolStripStatusLabel1
 			// 
 			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-			this.toolStripStatusLabel1.Size = new System.Drawing.Size(572, 17);
+			this.toolStripStatusLabel1.Size = new System.Drawing.Size(525, 17);
 			this.toolStripStatusLabel1.Spring = true;
 			// 
 			// statusLabelTask
@@ -1209,6 +1213,7 @@
 			// 
 			// toolStrip4
 			// 
+			this.toolStrip4.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.buttonTreeViewEdit,
             this.buttonTreeViewRename,
@@ -1395,6 +1400,7 @@
 			// 
 			// toolStrip3
 			// 
+			this.toolStrip3.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.comboBoxTilesets,
             this.comboBoxZones});
@@ -1460,6 +1466,12 @@
 			this.panelTriggersLevelDisplay.Name = "panelTriggersLevelDisplay";
 			this.panelTriggersLevelDisplay.Size = new System.Drawing.Size(474, 524);
 			this.panelTriggersLevelDisplay.TabIndex = 0;
+			// 
+			// statusBarLabelTileInfo
+			// 
+			this.statusBarLabelTileInfo.Name = "statusBarLabelTileInfo";
+			this.statusBarLabelTileInfo.Size = new System.Drawing.Size(47, 17);
+			this.statusBarLabelTileInfo.Text = "TileInfo";
 			// 
 			// worldTreeView
 			// 
@@ -1685,5 +1697,6 @@
 		private System.Windows.Forms.ToolStripMenuItem roomPropertiesToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem roomPropertiesToolStripMenuItem1;
 		private PropertiesEditor.ZeldaPropertyGrid propertyGrid;
+		private System.Windows.Forms.ToolStripStatusLabel statusBarLabelTileInfo;
 	}
 }

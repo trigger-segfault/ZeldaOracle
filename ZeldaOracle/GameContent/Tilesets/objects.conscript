@@ -40,6 +40,7 @@ TEMPTILE sign;
 	SOLID		block;
 	FLAGS		Pickupable, Burnable, Cuttable, Switchable, Boomerangable;
 	BREAKANIM	effect_sign_break;
+	BREAKSOUND	rock_shatter;
 	PROPERTIES
 		(integer, cuttable_sword_level, 1),
 		(string, text, "Hello World!",
@@ -193,6 +194,7 @@ TILE (0, 0);
 	FLAGS		Pickupable, Bombable, Burnable, Switchable, Cuttable, AbsorbSeeds, Boomerangable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (0, 0);
 	BREAKANIM	effect_leaves;
+	BREAKSOUND	leaves;
 END;
 
 # Plant
@@ -201,6 +203,7 @@ TILE (1, 0);
 	MODEL		block;
 	FLAGS		Cuttable, Bombable;
 	BREAKANIM	effect_leaves;
+	BREAKSOUND	leaves;
 END;
 
 # Flowers Red
@@ -208,6 +211,7 @@ TILE (2, 0);
 	SOLID		block;
 	FLAGS		Cuttable, Boomerangable;
 	BREAKANIM	effect_leaves;
+	BREAKSOUND	leaves;
 END;
 
 # Flowers Blue
@@ -215,6 +219,7 @@ TILE (3, 0);
 	SOLID		block;
 	FLAGS		Cuttable, Boomerangable;
 	BREAKANIM	effect_leaves;
+	BREAKSOUND	leaves;
 END;
 
 # Flowers Pink
@@ -222,6 +227,7 @@ TILE (4, 0);
 	SOLID		block;
 	FLAGS		Cuttable, Boomerangable;
 	BREAKANIM	effect_leaves;
+	BREAKSOUND	leaves;
 END;
 
 # Flower
@@ -229,6 +235,7 @@ TILE (5, 0);
 	SOLID		block;
 	FLAGS		Cuttable, Boomerangable;
 	BREAKANIM	effect_leaves;
+	BREAKSOUND	leaves;
 END;
 
 # Water Flower
@@ -236,6 +243,7 @@ TILE (6, 0);
 	SOLID		block;
 	FLAGS		Cuttable, Boomerangable;
 	BREAKANIM	effect_leaves;
+	BREAKSOUND	leaves;
 END;
 
 # Mushroom
@@ -251,6 +259,7 @@ TILE (8, 0);
 	FLAGS		Pickupable, Cuttable, Switchable, Movable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (2, 0);
 	BREAKANIM	effect_rock_break;
+	BREAKSOUND	rock_shatter;
 END;
 
 # Burnable Tree
@@ -264,12 +273,14 @@ TILE (10, 0);
 	FLAGS		Cuttable, Burnable, Bombable, Boomerangable;
 	ENVTYPE		Grass;
 	BREAKANIM	effect_grass_leaves;
+	BREAKSOUND	leaves;
 END;
 
 # Grass 2
 TILE (11, 0);
 	FLAGS		Cuttable, Burnable, Bombable, Boomerangable;
 	BREAKANIM	effect_grass_leaves;
+	BREAKSOUND	leaves;
 END;
 
 # Rock
@@ -278,6 +289,7 @@ TILE (0, 1);
 	FLAGS		Pickupable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (3, 0);
 	BREAKANIM	effect_rock_break;
+	BREAKSOUND	rock_shatter;
 END;
 
 # Diamond Rock
@@ -286,6 +298,7 @@ TILE (1, 1);
 	FLAGS		Switchable, SwitchStays;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (4, 0);
 	BREAKANIM	effect_rock_break;
+	BREAKSOUND	rock_shatter;
 END;
 
 # Crystal
@@ -294,6 +307,7 @@ TILE (2, 1);
 	FLAGS		Cuttable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (5, 0);
 	BREAKANIM	effect_rock_break;
+	BREAKSOUND	rock_shatter;
 END;
 
 # Pot
@@ -302,6 +316,7 @@ TILE (3, 1);
 	FLAGS		Cuttable, Movable, Pickupable, Switchable;
 	SPRITEOBJ	"tileset_objects_extras_16x16", (6, 0);
 	BREAKANIM	effect_rock_break;
+	BREAKSOUND	rock_shatter;
 	PROPERTIES	(integer, cuttable_sword_level, 1);
 END;
 
@@ -328,6 +343,7 @@ TILE (7, 1);
 	SOLID		block;
 	FLAGS		Bombable;
 	BREAKANIM	effect_rock_break;
+	BREAKSOUND	rock_shatter;
 END;
 
 # Armos Statue

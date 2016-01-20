@@ -9,6 +9,7 @@ using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Entities.Collisions;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
 	public class SwitchHookProjectile : Projectile, IInterceptable {
@@ -150,6 +151,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				// Create cling effect.
 				Effect effect = new Effect(GameData.ANIM_EFFECT_CLING, DepthLayer.EffectCling);
 				RoomControl.SpawnEntity(effect, position + Directions.ToVector(direction) * 5.0f, zPosition);
+				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 			}
 		}
 
@@ -163,6 +165,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 			}
 			else if (isReturning) {
+				AudioSystem.LoopSoundWhileActive(GameData.SOUND_SWITCH_HOOK_LOOP);
+
 				// Return to player.
 				Vector2F trajectory = (RoomControl.Player.Center + new Vector2F(0, 3)) - Center;
 				if (trajectory.Length <= speed) {
@@ -188,6 +192,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				}
 			}
 			else {
+				AudioSystem.LoopSoundWhileActive(GameData.SOUND_SWITCH_HOOK_LOOP);
+
 				// Check for collectibles to pick up.
 				CollisionIterator iterator = new CollisionIterator(this, typeof(Collectible), CollisionBoxType.Soft);
 				iterator.Begin();

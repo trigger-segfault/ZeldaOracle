@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control;
@@ -16,6 +17,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		protected bool isCollectibleWithItems;
 		protected RewardHoldTypes holdType;
 		protected bool onlyShowMessageInChest;
+		protected Sound soundBounce;
 		
 
 		//-----------------------------------------------------------------------------
@@ -29,6 +31,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			this.hasDuration	= false;
 			this.isCollectibleWithItems	= false;
 			this.onlyShowMessageInChest = false;
+			this.soundBounce			= null;
 		}
 
 
@@ -94,6 +97,10 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		public bool OnlyShowMessageInChest {
 			get { return onlyShowMessageInChest; }
+		}
+
+		public Sound BounceSound {
+			get { return soundBounce; }
 		}
 	}
 }

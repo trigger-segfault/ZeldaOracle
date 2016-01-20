@@ -84,7 +84,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 		public override void OnSwingBegin() {
 			base.OnSwingBegin();
-			AudioSystem.PlayRandomSound("Items/slash_1", "Items/slash_2", "Items/slash_3");
+			AudioSystem.PlaySound(GameData.SOUND_BIGGORON_SWORD);
 		}
 		
 		public override void OnHitMonster(Monster monster) {

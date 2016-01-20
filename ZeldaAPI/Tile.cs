@@ -6,9 +6,10 @@ using System.Text;
 namespace ZeldaAPI {
 
 	public interface Tile {
+		string Id { get; }
 	}
 	
-	public interface Lantern {
+	public interface Lantern : Tile {
 		void Light();
 		void PutOut();
 		void Light(bool stayLit);
@@ -16,54 +17,56 @@ namespace ZeldaAPI {
 		bool IsLit { get; set; }
 	}
 	
-	public interface ColorCubeSlot {
+	public interface ColorCubeSlot : Tile {
 		Color Color { get; set; }
 	}
 	
-	public interface ColorLantern {
+	public interface ColorLantern : Tile {
 		Color Color { get; set; }
 	}
 	
-	public interface ColorJumpPad {
+	public interface ColorJumpPad : Tile {
 		Color Color { get; set; }
 	}
 	
-	public interface ColorTile {
+	public interface ColorTile : Tile {
 		Color Color { get; set; }
 	}
 
-	public interface Door {
+	public interface Door : Tile {
 		void Open(bool instantaneous = false, bool rememberState = false);
 		void Close(bool instantaneous = false, bool rememberState = false);
 		bool IsOpen { get; }
 	}
 
-	public interface Button {
+	public enum DoorState {
+		Opened,
+		Closed,
 	}
 
-	public interface Lever {
+	public interface Button : Tile {
 	}
 
-	public interface ColorSwitch {
+	public interface Lever : Tile {
+		bool IsFacingLeft { get; }
+		bool IsFacingRight { get; }
 	}
 
-	public interface MinecartTrack {
+	public interface ColorSwitch : Tile {
+	}
+
+	public interface MinecartTrack : Tile {
 		void SwitchTrackDirection();
 	}
 
-	public interface CrossingGate {
+	public interface CrossingGate : Tile {
 		void Raise();
 		void Lower();
 		bool IsRaised { get; }
 	}
 	
-	public interface Reward {
+	public interface Reward : Tile {
 		void SpawnReward();
 		bool IsLooted { get; }
-	}
-
-	public enum DoorState {
-		Opened,
-		Closed,
 	}
 }

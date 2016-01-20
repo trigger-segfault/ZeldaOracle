@@ -52,6 +52,13 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			bounceOnCrash	= false;
 		}
 		
+		
+		//-----------------------------------------------------------------------------
+		// Virtual Methods
+		//-----------------------------------------------------------------------------
+
+		protected virtual void OnCrash() { }
+
 
 		//-----------------------------------------------------------------------------
 		// Projectile Methods
@@ -85,6 +92,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			else {
 				Destroy();
 			}
+
+			OnCrash();
 		}
 		
 		protected void CheckInitialCollision() {

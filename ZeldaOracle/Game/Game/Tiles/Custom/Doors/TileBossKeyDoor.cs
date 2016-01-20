@@ -10,11 +10,11 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Tiles {
 
 	public class TileBossKeyDoor : TileDoor {
-
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -23,6 +23,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public TileBossKeyDoor() {
 			animationOpen	= GameData.ANIM_TILE_BOSS_DOOR_OPEN;
 			animationClose	= GameData.ANIM_TILE_BOSS_DOOR_CLOSE;
+			openCloseSound	= null;
 		}
 
 
@@ -36,6 +37,9 @@ namespace ZeldaOracle.Game.Tiles {
 			if (dungeon.HasBossKey) {
 				Open();
 				
+				AudioSystem.PlaySound(GameData.SOUND_CHEST_OPEN);
+				AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
+
 				// Spawn the key effect.
 				EffectUsedItem effect = new EffectUsedItem(GameData.SPR_REWARD_BOSS_KEY);
 				RoomControl.SpawnEntity(effect, Center);

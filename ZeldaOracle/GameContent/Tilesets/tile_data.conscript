@@ -23,6 +23,7 @@ TILE diamond_rock;
 	SPRITE		tile_diamond_rock;
 	SPRITEOBJ	tile_diamond_rock_asobject;
 	BREAKANIM	effect_rock_break;
+	BREAKSOUND	rock_shatter;
 END;
 
 TILE bush;
@@ -31,6 +32,7 @@ TILE bush;
 	SPRITE		tile_bush;
 	SPRITEOBJ	tile_bush_asobject;
 	BREAKANIM	effect_leaves;
+	BREAKSOUND	leaves;
 END;
 
 TILE pot;
@@ -39,6 +41,7 @@ TILE pot;
 	SPRITE		tile_pot;
 	SPRITEOBJ	tile_pot_asobject;
 	BREAKANIM	effect_rock_break;
+	BREAKSOUND	rock_shatter;
 END;
 
 TILE rock;
@@ -47,6 +50,7 @@ TILE rock;
 	SPRITE		tile_rock;
 	SPRITEOBJ	tile_rock_asobject;
 	BREAKANIM	effect_rock_break;
+	BREAKSOUND	rock_shatter;
 END;
 
 TILE grass;
@@ -54,6 +58,7 @@ TILE grass;
 	SPRITE		tile_grass;
 	ENVTYPE		Grass;
 	BREAKANIM	effect_grass_leaves;
+	BREAKSOUND	leaves;
 	MODEL		block;
 END;
 
@@ -64,6 +69,7 @@ TILE sign;
 	SPRITE		tile_sign;
 	SPRITEOBJ	tile_sign_asobject;
 	BREAKANIM	effect_sign_break;
+	BREAKSOUND	rock_shatter;
 	PROPERTIES
 		(string, text, "Hello World!",
 			"Side Text", "text_message", "Text",

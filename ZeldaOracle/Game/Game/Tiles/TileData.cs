@@ -6,6 +6,7 @@ using System.Reflection;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -15,7 +16,8 @@ namespace ZeldaOracle.Game.Tiles {
 		//private Point2I				size;
 		private SpriteAnimation		spriteAsObject;
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
-		
+		private Sound				breakSound;
+
 		
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -97,6 +99,7 @@ namespace ZeldaOracle.Game.Tiles {
 				//size				= copyTileData.size;
 				spriteAsObject		= new SpriteAnimation(copyTileData.spriteAsObject);
 				breakAnimation		= copyTileData.breakAnimation;
+				breakSound			= copyTileData.breakSound;
 				events				= new ObjectEventCollection(copyTileData.events);
 
 				if (copyTileData.spriteList.Length > 0) {
@@ -163,6 +166,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public Animation BreakAnimation {
 			get { return breakAnimation; }
 			set { breakAnimation = value; }
+		}
+
+		public Sound BreakSound {
+			get { return breakSound; }
+			set { breakSound = value; }
 		}
 
 		public CollisionModel CollisionModel {

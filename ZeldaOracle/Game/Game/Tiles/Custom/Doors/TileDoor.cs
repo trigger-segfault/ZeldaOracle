@@ -9,6 +9,7 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -17,6 +18,7 @@ namespace ZeldaOracle.Game.Tiles {
 		private bool isPlayerBlockingClose;
 		protected Animation animationOpen;
 		protected Animation animationClose;
+		protected Sound openCloseSound;
 
 
 		//-----------------------------------------------------------------------------
@@ -27,6 +29,7 @@ namespace ZeldaOracle.Game.Tiles {
 			animationPlayer	= new AnimationPlayer();
 			animationOpen	= GameData.ANIM_TILE_DOOR_OPEN;
 			animationClose	= GameData.ANIM_TILE_DOOR_CLOSE;
+			openCloseSound	= GameData.SOUND_DUNGEON_DOOR;
 		}
 
 
@@ -47,12 +50,15 @@ namespace ZeldaOracle.Game.Tiles {
 				isOpen = true;
 				animationPlayer.Play(animationOpen);
 				IsSolid = false;
+				if (!instantaneous && openCloseSound != null)
+					AudioSystem.PlaySound(GameData.SOUND_DUNGEON_DOOR);
 			}
 			else if (isOpen && isPlayerBlockingClose)
 				isPlayerBlockingClose = false;
 			
 			if (instantaneous)
 				animationPlayer.PlaybackTime = animationPlayer.Animation.Duration;
+
 			if (rememberState || Properties.GetBoolean("remember_state", false))
 				Properties.SetBase("open", true);
 		}
@@ -61,6 +67,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public void Close(bool instantaneous = false, bool rememberState = false) {
 			if (isOpen) {
 				Player player = RoomControl.Player;
+
 				if (CollisionModel.Intersecting(CollisionModel, Position, player.Physics.CollisionBox, player.Position)) {
 					isPlayerBlockingClose = true;
 				}
@@ -68,11 +75,14 @@ namespace ZeldaOracle.Game.Tiles {
 					isOpen = false;
 					animationPlayer.Play(animationClose);
 					IsSolid = true;
+					if (!instantaneous && openCloseSound != null)
+						AudioSystem.PlaySound(GameData.SOUND_DUNGEON_DOOR);
 				}
 			}
 			
 			if (instantaneous)
 				animationPlayer.PlaybackTime = animationPlayer.Animation.Duration;
+
 			if (rememberState || Properties.GetBoolean("remember_state", false))
 				Properties.SetBase("open", false);
 		}

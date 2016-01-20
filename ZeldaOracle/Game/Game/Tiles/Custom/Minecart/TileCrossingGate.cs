@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
@@ -44,16 +45,18 @@ namespace ZeldaOracle.Game.Tiles {
 		public void Raise() {
 			if (!IsRaised) {
 				Properties.Set("raised", true);
-				animationPlayer.Play(GameData.ANIM_TILE_CROSSING_GATE_RAISE);
 				dummySolidTile.IsSolid = false;
+				animationPlayer.Play(GameData.ANIM_TILE_CROSSING_GATE_RAISE);
+				AudioSystem.PlaySound(GameData.SOUND_CROSSING_GATE);
 			}
 		}
 		
 		public void Lower() {
 			if (IsRaised) {
 				Properties.Set("raised", false);
-				animationPlayer.Play(GameData.ANIM_TILE_CROSSING_GATE_LOWER);
 				dummySolidTile.IsSolid = true;
+				animationPlayer.Play(GameData.ANIM_TILE_CROSSING_GATE_LOWER);
+				AudioSystem.PlaySound(GameData.SOUND_CROSSING_GATE);
 			}
 		}
 

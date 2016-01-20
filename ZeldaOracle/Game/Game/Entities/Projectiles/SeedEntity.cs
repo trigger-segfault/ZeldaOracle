@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Effects;
@@ -52,6 +53,18 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public Entity CreateVisualEffect(SeedType seedType, Vector2F effectPosition) {
 			Effect effect = new Effect(GameData.ANIM_EFFECT_SEEDS[(int) seedType], DepthLayer.EffectSeed);
 			RoomControl.SpawnEntity(effect, effectPosition);
+			
+			if (seedType == SeedType.Ember)
+				AudioSystem.PlaySound(GameData.SOUND_FIRE);
+			else if (seedType == SeedType.Scent)
+				AudioSystem.PlaySound(GameData.SOUND_SCENT_SEED);
+			else if (seedType == SeedType.Mystery)
+				AudioSystem.PlaySound(GameData.SOUND_MYSTERY_SEED);
+			else if (seedType == SeedType.Pegasus)
+				AudioSystem.PlaySound(GameData.SOUND_FIRE);
+			else if (seedType == SeedType.Gale)
+				AudioSystem.PlaySound(GameData.SOUND_GALE_SEED);
+
 			return effect;
 		}
 
@@ -62,19 +75,23 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			if (seedType == SeedType.Ember) {
 				effectEntity = new Fire();
 				RoomControl.SpawnEntity(effectEntity, effectPosition);
+				AudioSystem.PlaySound(GameData.SOUND_FIRE);
 			}
 			else if (seedType == SeedType.Scent) {
 				effectEntity = new ScentPod();
 				RoomControl.SpawnEntity(effectEntity, effectPosition);
+				AudioSystem.PlaySound(GameData.SOUND_SCENT_SEED_POD);
 			}
 			else if (seedType == SeedType.Mystery) {
 				effectEntity = CreateVisualEffect(seedType, effectPosition);
+				AudioSystem.PlaySound(GameData.SOUND_MYSTERY_SEED);
 			}
 			else if (seedType == SeedType.Pegasus) {
 				effectEntity = CreateVisualEffect(seedType, effectPosition);
 			}
 			else if (seedType == SeedType.Gale) {
 				effectEntity = CreateVisualEffect(seedType, effectPosition);
+				AudioSystem.PlaySound(GameData.SOUND_GALE_SEED);
 				//RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_SEED_GALE), effectPosition);
 			}
 

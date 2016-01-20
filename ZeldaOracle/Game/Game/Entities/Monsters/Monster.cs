@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 
@@ -228,6 +229,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public override void Die(){
 			Effect explosion = new Effect(GameData.ANIM_EFFECT_MONSTER_EXPLOSION, DepthLayer.EffectMonsterExplosion);
+			AudioSystem.PlaySound(GameData.SOUND_MONSTER_DIE);
 			RoomControl.SpawnEntity(explosion, Center);
 			Properties.SetBase("dead", true);
 			base.Die();
@@ -239,6 +241,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				isBurning = false;
 				effectAnimation.Animation = null;
 			}
+		}
+
+		public override void OnHurt(DamageInfo damage) {
+			AudioSystem.PlaySound(GameData.SOUND_MONSTER_HURT);
 		}
 
 		public override void UpdateGraphics() {

@@ -13,6 +13,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerCarryState : PlayerState {
@@ -81,6 +82,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				player.BeginBusyState(throwDuration);
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 			}
+			AudioSystem.PlaySound(GameData.SOUND_PLAYER_THROW);
 		}
 
 		public void ThrowObject(bool enterBusyState = true) {
@@ -115,6 +117,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.CanUseWarpPoint	= false;
 			player.Movement.MoveCondition	= PlayerMoveCondition.NoControl;
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
+			AudioSystem.PlaySound(GameData.SOUND_PLAYER_PICKUP);
 		}
 		
 		public override void OnEnd(PlayerState newState) {

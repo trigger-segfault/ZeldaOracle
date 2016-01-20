@@ -52,12 +52,6 @@ namespace ZeldaOracle.Game {
 			Console.WriteLine("Loading Collision Models");
 			LoadCollisionModels();
 
-			Console.WriteLine("Loading Zones");
-			LoadZones();
-
-			Console.WriteLine("Loading Tilesets");
-			LoadTilesets();
-
 			Console.WriteLine("Loading Fonts");
 			LoadFonts();
 
@@ -66,6 +60,12 @@ namespace ZeldaOracle.Game {
 
 			Console.WriteLine("Loading Music");
 			LoadMusic();
+
+			Console.WriteLine("Loading Zones");
+			LoadZones();
+
+			Console.WriteLine("Loading Tilesets");
+			LoadTilesets();
 		}
 
 
@@ -474,22 +474,6 @@ namespace ZeldaOracle.Game {
 
 
 		//-----------------------------------------------------------------------------
-		// Sound Loading
-		//-----------------------------------------------------------------------------
-
-		// Loads the sound effects.
-		private static void LoadSounds() {
-			Resources.LoadSounds(Resources.SoundDirectory + "sounds.conscript");
-
-		}
-
-		// Loads the music.
-		private static void LoadMusic() {
-			Resources.LoadMusic(Resources.MusicDirectory + "music.conscript");
-		}
-
-
-		//-----------------------------------------------------------------------------
 		// Tilesets
 		//-----------------------------------------------------------------------------
 
@@ -530,6 +514,8 @@ namespace ZeldaOracle.Game {
 		public static CollisionModel MODEL_EDGE_W;
 		public static CollisionModel MODEL_EDGE_S;
 		public static CollisionModel MODEL_DOORWAY;
+		public static CollisionModel MODEL_DOORWAY_HALF_RIGHT;
+		public static CollisionModel MODEL_DOORWAY_HALF_LEFT;
 		public static CollisionModel MODEL_CORNER_NE;
 		public static CollisionModel MODEL_CORNER_NW;
 		public static CollisionModel MODEL_CORNER_SW;

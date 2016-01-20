@@ -38,9 +38,8 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		//-----------------------------------------------------------------------------
 
 		public override void OnCollect(GameControl gameControl) {
-			//AudioSystem.PlaySound("Pickups/get_ammo");
-
 			gameControl.Inventory.GetAmmo(ammoID).Amount += amount;
+			AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
 		}
 		
 		public override bool IsAvailable(GameControl gameControl) {

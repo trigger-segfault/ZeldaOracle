@@ -252,7 +252,7 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public void OpenMenu(Menu menu) {
-			AudioSystem.PlaySound("UI/menu_open");
+			AudioSystem.PlaySound(GameData.SOUND_MENU_OPEN);
 			gameManager.QueueGameStates(
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, roomControl),
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, menu),
@@ -264,7 +264,7 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public void CloseMenu(Menu menu) {
-			AudioSystem.PlaySound("UI/menu_close");
+			AudioSystem.PlaySound(GameData.SOUND_MENU_CLOSE);
 			gameManager.PopGameState();
 			gameManager.QueueGameStates(
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, menu),
@@ -279,7 +279,7 @@ namespace ZeldaOracle.Game.Control {
 		public void OpenMapScreen() {
 			if (lastRoomOnMap != null && lastRoomOnMap.Dungeon != null) {
 				ScreenDungeonMap mapScreen = mapDungeon;
-				AudioSystem.PlaySound("UI/menu_open");
+				AudioSystem.PlaySound(GameData.SOUND_MENU_OPEN);
 				gameManager.QueueGameStates(
 					new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, roomControl),
 					new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, mapScreen),
@@ -291,7 +291,7 @@ namespace ZeldaOracle.Game.Control {
 
 		public void CloseMapScreen() {
 			ScreenDungeonMap mapScreen = gameManager.CurrentGameState as ScreenDungeonMap;
-			AudioSystem.PlaySound("UI/menu_close");
+			AudioSystem.PlaySound(GameData.SOUND_MENU_CLOSE);
 			gameManager.PopGameState();
 			gameManager.QueueGameStates(
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, mapScreen),

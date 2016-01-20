@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -79,6 +80,8 @@ namespace ZeldaOracle.Game.Tiles {
 					GameControl.FireEvent(this, "on_release", this);
 				}
 				SpriteIndex = (isPressed ? 1 : 0);
+
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 			}
 		}
 	}

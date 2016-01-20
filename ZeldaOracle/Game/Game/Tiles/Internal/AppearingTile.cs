@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities.Effects;
 
@@ -43,6 +44,7 @@ namespace ZeldaOracle.Game.Tiles.Internal {
 						RoomControl.SpawnEntity(effect, pos);
 					}
 				}
+				AudioSystem.PlaySound(GameData.SOUND_APPEAR_VANISH);
 			}
 		}
 

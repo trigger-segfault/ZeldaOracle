@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
@@ -65,7 +66,9 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			animationPlayer.Update();
 			timer++;
 			if (timer == (useChest ? RaiseDuration : NonChestDuration)) {
+				AudioSystem.PlaySound(GameData.SOUND_FANFARE_ITEM);
 				GameControl.DisplayMessage(new Message(reward.Message));
+
 				if (reward.HoldType == RewardHoldTypes.OneHand) {
 					GameControl.Player.BeginBusyState(1);
 					GameControl.Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_RAISE_ONE_HAND);
@@ -78,7 +81,6 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			else if (timer == (useChest ? RaiseDuration : NonChestDuration) + 1) {
 				reward.OnCollect(GameControl);
 				gameControl.PopRoomState();
-				// Play reward sound
 				return;
 			}
 		}

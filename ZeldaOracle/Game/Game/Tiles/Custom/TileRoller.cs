@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
@@ -53,8 +54,11 @@ namespace ZeldaOracle.Game.Tiles {
 			// Only the main roller should start the pushback.
 			if (firstRoller == this)
 				returnTimer = 60;
-
-			base.Move(direction, 1, MOVEMENT_SPEED);
+			
+			if (base.Move(direction, 1, MOVEMENT_SPEED)) {
+				if (firstRoller == this)
+					AudioSystem.PlaySound(GameData.SOUND_BLUE_ROLLER);
+			}
 		}
 
 		// Makes sure all rollers in the group can be pushed in the same direction.

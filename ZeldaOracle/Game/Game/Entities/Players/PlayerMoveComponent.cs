@@ -16,6 +16,7 @@ using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Input.Controls;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Players {
 	
@@ -207,6 +208,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
 				if (player.CurrentState is PlayerNormalState)
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_JUMP);
 			}
 			else {
 				if (player.CurrentState is PlayerNormalState)
@@ -467,7 +469,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 				// Fall in the hole when close to the center.
 				if (player.Center.DistanceTo(holeTile.Center) <= 1.0f) {
 					player.SetPositionByCenter(holeTile.Center);
-					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_FALL_HOLE);
+					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_FALL);
+					AudioSystem.PlaySound(GameData.SOUND_PLAYER_FALL);
 					player.RespawnDeath();
 					holeTile			= null;
 					fallingInHole		= false;

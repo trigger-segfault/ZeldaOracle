@@ -59,6 +59,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			somariaBlockTileData.CollisionModel	= GameData.MODEL_BLOCK;
 			somariaBlockTileData.Sprite			= GameData.SPR_TILE_SOMARIA_BLOCK;
 			somariaBlockTileData.BreakAnimation	= GameData.ANIM_EFFECT_SOMARIA_BLOCK_DESTROY;
+			somariaBlockTileData.BreakSound		= GameData.SOUND_APPEAR_VANISH;
 		}
 
 

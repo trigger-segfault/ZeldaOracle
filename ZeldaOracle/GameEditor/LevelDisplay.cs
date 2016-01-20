@@ -433,7 +433,7 @@ namespace ZeldaEditor {
 				Point2I roomSize = (Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing;
 				Point2I tilePoint = highlightedRoom * roomSize + highlightedTile * GameSettings.TILE_SIZE;
 				if (editorControl.PlayerPlaceMode && highlightedTile >= Point2I.Zero) {
-					g.DrawSprite(GameData.SPR_PLAYER_FORWARD, tilePoint);
+					g.DrawSprite(GameData.SPR_PLAYER_FORWARD, (Vector2F) tilePoint + new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
 				}
 			}
 		}

@@ -44,7 +44,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		public override void OnCollect(GameControl gameControl) {
 			if (gameControl.HUD.DynamicRupees >= gameControl.Inventory.GetAmmo("rupees").MaxAmount)
-				AudioSystem.PlaySound("Pickups/get_rupee");
+				AudioSystem.PlaySound(GameData.SOUND_GET_RUPEE);
 
 			gameControl.Inventory.GetAmmo("rupees").Amount += amount;
 		}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
@@ -39,6 +40,8 @@ namespace ZeldaOracle.Game.Tiles {
 				color = PuzzleColor.Red;
 				CustomSprite = GameData.SPR_TILE_COLOR_SWITCH_RED;
 			}
+
+			AudioSystem.PlaySound(GameData.SOUND_SWITCH);
 		}
 
 
