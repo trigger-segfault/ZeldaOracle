@@ -74,6 +74,9 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		public override void Update() {
 			timer++;
 
+			// Update HUD.
+			GameControl.HUD.Update();
+
 			// Update screen panning.
 			if (timer > TRANSITION_DELAY) {
 				distance += TRANSITION_SPEED;

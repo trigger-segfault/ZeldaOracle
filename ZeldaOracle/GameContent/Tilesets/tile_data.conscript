@@ -1,13 +1,13 @@
 
 
-## TODO: Write the script loader for this.
-
 
 #==============================================================
 # Tile Data
 #==============================================================
 
-#	PROPERTIES	(name, value, editor_type, category, description);
+#	PROPERTIES	(type, name, value);
+#	PROPERTIES	(type, name, value, readable_name, editor_type, category, description);
+#	PROPERTIES	(type, name, value, readable_name, (editor_type, editor_subtype), category, description);
 
 
 TILE movable_block;

@@ -317,14 +317,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		private void CollideMonsterAndPlayer() {
 			Player player = RoomControl.Player;
 
-			IEnumerable<UnitTool> monsterTools = Enumerable.Empty<UnitTool>();
-			IEnumerable<UnitTool> playerTools = Enumerable.Empty<UnitTool>();
+			IEnumerable<UnitTool> monsterTools = EquippedTools.Where(t => t.IsPhysicsEnabled && t.IsSwordOrShield);
+			IEnumerable<UnitTool> playerTools = player.EquippedTools.Where(t => t.IsPhysicsEnabled && t.IsSwordOrShield);
 			
-			if (!IsInvincible && !IsBeingKnockedBack)
-				monsterTools = EquippedTools.Where(t => t.IsPhysicsEnabled && t.IsSwordOrShield);
-			if (!player.IsInvincible && !player.IsBeingKnockedBack)
-				playerTools = player.EquippedTools.Where(t => t.IsPhysicsEnabled && t.IsSwordOrShield);
-						
 			// 1. (M-M) MonsterTools to PlayerTools
 			// 2. (M-1) MonsterTools to Player
 			// 4. (M-1) PlayerTools to Monster
@@ -353,11 +348,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Collide my tools with the player.
 			bool parry = false;
-			foreach (UnitTool tool in monsterTools) {
-				if (player.Physics.PositionedSoftCollisionBox.Intersects(tool.PositionedCollisionBox)) {
-					player.Hurt(contactDamage, Center);
-					parry = true;
-					break;
+			if (!player.IsInvincible) {
+				foreach (UnitTool tool in monsterTools) {
+					if (player.Physics.PositionedSoftCollisionBox.Intersects(tool.PositionedCollisionBox)) {
+						player.Hurt(contactDamage, Center);
+						parry = true;
+						break;
+					}
 				}
 			}
 

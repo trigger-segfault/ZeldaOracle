@@ -36,6 +36,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept);
 			SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.ClingEffect);
 			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.ClingEffect);
+
+			
+			SetReaction(InteractionType.Sword,			Reactions.ParryWithClingEffect);
+			SetReaction(InteractionType.SwordSpin,		Reactions.ParryWithClingEffect);
+			SetReaction(InteractionType.BiggoronSword,	Reactions.ClingEffect);
+			SetReaction(InteractionType.Shovel,			Reactions.ClingEffect);
 		}
 
 		public override void Initialize() {

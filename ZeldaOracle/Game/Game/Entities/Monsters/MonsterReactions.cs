@@ -12,6 +12,7 @@ using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Game.Entities.Monsters.States;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 	
@@ -193,11 +194,29 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Bump the monster and sender.
 			public static void Parry(Monster monster, Entity sender, EventArgs args) {
 				monster.Bump(sender.Center, false);
-				if (sender is Unit)
-					(sender as Unit).Bump(monster.Center, false);
-				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
+				Unit unitSender = sender as Unit;
 
-				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
+				if (unitSender != null && !unitSender.IsBeingKnockedBack) {
+					unitSender.Bump(monster.Center, false);
+					AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
+				}
+			}
+
+			// Bump the monster and sender.
+			public static void ParryWithClingEffect(Monster monster, Entity sender, EventArgs args) {
+				monster.Bump(sender.Center, false);
+				Unit unitSender = sender as Unit;
+
+				if (unitSender != null && !unitSender.IsBeingKnockedBack && !monster.IsBeingKnockedBack) {
+					unitSender.Bump(monster.Center, false);
+					AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
+					
+					Effect effect = new Effect(GameData.ANIM_EFFECT_CLING, DepthLayer.EffectCling);
+					Vector2F effectPos = (monster.Center + sender.Center) * 0.5f;
+					if (args is InteractionArgs)
+						effectPos = (args as InteractionArgs).ContactPoint;
+					monster.RoomControl.SpawnEntity(effect, effectPos);
+				}
 			}
 			
 			// Burn the monster for 1 damage.
@@ -239,6 +258,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			public static void SwitchHook(Monster monster, Entity sender, EventArgs args) {
 				SwitchHookProjectile hook = sender as SwitchHookProjectile;
 				hook.SwitchWithEntity(monster);
+				monster.BeginState(new MonsterBusyState(20));
 			}
 			
 			// Stun the monster.

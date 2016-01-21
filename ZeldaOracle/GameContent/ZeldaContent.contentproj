@@ -101,6 +101,10 @@
       <Name>objects_nv</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Tilesets\event_tile_data.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>event_tile_data</Name>
+    </None>
     <None Include="Tilesets\town.conscript">
       <Name>town</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

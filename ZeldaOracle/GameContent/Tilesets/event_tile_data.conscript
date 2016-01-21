@@ -1,0 +1,87 @@
+
+#	PROPERTIES	(type, name, value);
+#	PROPERTIES	(type, name, value, readable_name, editor_type, category, description);
+#	PROPERTIES	(type, name, value, readable_name, (editor_type, editor_subtype), category, description);
+
+
+#==============================================================================
+# Special Tiles
+#==============================================================================
+
+TILE pit;
+	ENVTYPE		Hole;
+	SPRITE		tile_pit;
+END;
+
+
+#==============================================================================
+# Event Tile Data
+#==============================================================================
+
+EVENTTILE warp;
+	TYPE		WarpEvent;
+	SPRITE		event_tile_warp_tunnel;
+	PROPERTIES	(string,  warp_type,				"tunnel",	"Warp Type", ("enum", "WarpType"), "Warp", "The type of warp point."),
+				(string,  destination_level,		"",			"Destination Level", "level", "Warp", "The level where the destination point is in."),
+				(string,  destination_warp_point,	"",			"Destination Warp Point", "", "Warp", "The id of the warp point destination."),
+				(integer, face_direction,			3,			"Face Direction", "direction", "Warp", "The direction the player should face when entering a room through this Warp Point.");
+END;
+
+EVENTTILE npc;
+	TYPE		NPCEvent;
+	SPRITE		npc_shopkeeper;
+	PROPERTIES	(integer, npc_flags,		6 "NPC Options", "enum_flags", "NPC", "The options for the NPC."),
+				(integer, direction,		0, "Direction", "direction", "NPC", "The default direction the NPC faces."),
+				(string,  text,				"<red>undefined<red>", "Text", "text_message", "NPC", "The text to display when the NPC is talked to."),
+				(string,  animation,		"npc_shopkeeper", "Animation", "animation", "NPC", "The animation of the NPC."),
+				(string,  animation_talk,	"", "Talk Animation", "animation", "NPC", "The animation of the NPC when being talked to.");
+END;
+
+
+#==============================================================================
+# Monsters
+#==============================================================================
+
+EVENTTILE monster;
+	TYPE		MonsterEvent;
+	SPRITE		monster_octorok;
+	PROPERTIES	(integer, color,		0, "Color", ("enum", "MonsterColor"), "Monster", "The color of the monster."),
+				(integer, respawn_type,	0, "Respawn Type", ("enum", "MonsterRespawnType"), "Monster", "How a monster respawns."),
+				(string,  monster_type, MonsterOctorok, "Monster Type", "", "Monster", "The type of monster."),
+				(boolean, dead, false);
+
+	EVENT		event_die, "Die", "Occurs when the monster dies.", (Monster, monster);
+END;
+
+MONSTER monster_octorok_red,	"monster_octorok",		MonsterOctorok,		red;	END;
+MONSTER monster_octorok_blue,	"monster_octorok",		MonsterOctorok,		blue;	END;
+MONSTER monster_moblin_red,		"monster_moblin",		MonsterMoblin,		red;	END;
+MONSTER monster_moblin_blue,	"monster_moblin",		MonsterMoblin,		blue;	END;
+MONSTER monster_gibdo,			"monster_gibdo",		MonsterGibdo,		red;	END;
+MONSTER monster_rope,			"monster_rope",			MonsterRope,		green;	END;
+MONSTER monster_lynel,			"monster_lynel",		MonsterLynel,		red;	END;
+MONSTER monster_beetle,			"monster_beetle",		MonsterBeetle,		green;	END;
+MONSTER monster_blade_trap,		"monster_blade_trap",	MonsterBladeTrap,	red;	END;
+
+
+#==============================================================================
+# Event Tileset
+#==============================================================================
+
+EVENTTILESET events, (12, 13);
+
+SETTILE ( 0, 0), warp;
+SETTILE ( 1, 0), npc;
+SETTILE ( 2, 0), monster_octorok_red;
+SETTILE ( 3, 0), monster_octorok_blue;
+SETTILE ( 4, 0), monster_moblin_red;
+SETTILE ( 5, 0), monster_moblin_blue;
+SETTILE ( 6, 0), monster_gibdo;
+SETTILE ( 7, 0), monster_rope;
+SETTILE ( 8, 0), monster_lynel;
+SETTILE ( 9, 0), monster_beetle;
+SETTILE (10, 0), monster_blade_trap;
+
+END;
+
+

@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Tiles.EventTiles;
 
 namespace ZeldaOracle.Common.Content {
 	public class TemporaryResources {
@@ -27,6 +28,8 @@ namespace ZeldaOracle.Common.Content {
 		private Dictionary<string, CollisionModel> collisionModels;
 		// The collection of loaded tile data strucures.
 		private Dictionary<string, TileData> tileData;
+		// The collection of loaded event tile data strucures.
+		private Dictionary<string, EventTileData> eventTileData;
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -37,9 +40,9 @@ namespace ZeldaOracle.Common.Content {
 			this.spriteSheets		= new Dictionary<string, SpriteSheet>();
 			this.sprites			= new Dictionary<string, Sprite>();
 			this.animations			= new Dictionary<string, Animation>();
-
 			this.collisionModels	= new Dictionary<string, CollisionModel>();
 			this.tileData			= new Dictionary<string, TileData>();
+			this.eventTileData		= new Dictionary<string, EventTileData>();
 
 			// Setup the resource dictionary lookup map.
 			this.resourceDictionaries = new Dictionary<Type, object>();
@@ -49,6 +52,7 @@ namespace ZeldaOracle.Common.Content {
 			this.resourceDictionaries[typeof(Animation)]		= animations;
 			this.resourceDictionaries[typeof(CollisionModel)]	= collisionModels;
 			this.resourceDictionaries[typeof(TileData)]			= tileData;
+			this.resourceDictionaries[typeof(EventTileData)]	= eventTileData;
 		}
 
 

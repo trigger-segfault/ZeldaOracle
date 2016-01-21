@@ -10,7 +10,9 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game;
+using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Tiles.EventTiles;
 
 namespace ZeldaOracle.Common.Scripts {
 
@@ -23,7 +25,10 @@ namespace ZeldaOracle.Common.Scripts {
 	public class TilesetSR : NewScriptReader {
 
 		private Tileset			tileset;
+		private EventTileset	eventTileset;
+		private BaseTileData	baseTileData;
 		private TileData		tileData;
+		private EventTileData	eventTileData;
 		private string			tileDataName;
 		private AnimationSR		animationSR;
 		private SpritesSR		spritesSR;
@@ -43,6 +48,7 @@ namespace ZeldaOracle.Common.Scripts {
 		private List<ScriptCommand> tilesetCommands;
 		private List<ScriptCommand> animationCommands;
 		private List<ScriptCommand> spriteCommands;
+
 
 		//-----------------------------------------------------------------------------
 		// Override
@@ -76,16 +82,19 @@ namespace ZeldaOracle.Common.Scripts {
 
 			// BEGIN/END.
 			
-			// Tileset <name> <sheet-name> <size(width, height)>
+			// Tileset <name>, <sheet-name>, (<width>, <height>)
 			AddTilesetCommand("Tileset", delegate(CommandParam parameters) {
 				SpriteSheet sheet = Resources.GetSpriteSheet(parameters.GetString(1));
 				tileset = new Tileset(parameters.GetString(0),
 					sheet, parameters.GetPoint(2));
 			});
-			// With a tileset:
-			//   Tile <sheet-location>
-			// Without a tileset:
-			//   Tile <name>
+			// EventTileset <name>, (<width>, <height>)
+			AddTilesetCommand("EventTileset", delegate(CommandParam parameters) {
+				eventTileset = new EventTileset(parameters.GetString(0),
+					null, parameters.GetPoint(1));
+			});
+			// Tile <name>
+			// Tile (<sheetX>, <sheetY>)
 			AddTilesetCommand("Tile", delegate(CommandParam parameters) {
 				useTemporary = false;
 				if (tileset != null) {
@@ -96,13 +105,58 @@ namespace ZeldaOracle.Common.Scripts {
 					tileData = new TileData();
 					tileDataName = parameters.GetString(0);
 				}
+				baseTileData = tileData;
 			});
 			// TempTile <name>
 			AddTilesetCommand("TempTile", delegate(CommandParam parameters) {
 				useTemporary = true;
 				tileData = new TileData();
 				tileDataName = parameters.GetString(0);
+				baseTileData = tileData;
 			});
+			// EventTile <name>
+			AddTilesetCommand("EventTile", delegate(CommandParam parameters) {
+				useTemporary = false;
+				eventTileData = new EventTileData();
+				tileDataName = parameters.GetString(0);
+				baseTileData = eventTileData;
+			});
+			// Monster <name> <sprite> <monster-type> <monster-color>
+			AddTilesetCommand("Monster", delegate(CommandParam parameters) {
+				useTemporary = false;
+				eventTileData = new EventTileData();
+				eventTileData.Clone(Resources.GetResource<EventTileData>("monster"));
+				tileDataName = parameters.GetString(0);
+				baseTileData = eventTileData;
+
+				
+				if (parameters.Count > 1) {
+					eventTileData.Sprite = resources.GetSpriteAnimation(parameters.GetString(1));
+				}
+				if (parameters.Count > 2) {
+					eventTileData.Properties.Set("monster_type", parameters.GetString(2));
+				}
+				if (parameters.Count > 3) {
+					MonsterColor color;
+					if (!Enum.TryParse<MonsterColor>(parameters.GetString(3), true, out color))
+						throw new ArgumentException("Invalid monster color: \"" + parameters.GetString(3) + "\"!");
+					eventTileData.Properties.Set("color", (int) color);
+				}
+			});
+			// SetTile (<sheetX>, <sheetY>), <name>
+			AddTilesetCommand("SetTile", delegate(CommandParam parameters) {
+				Point2I location = parameters.GetPoint(0);
+
+				if (tileset != null) {
+					tileset.TileData[location.X, location.Y] = 
+						resources.GetResource<TileData>(parameters.GetString(1));
+				}
+				else if (eventTileset != null) {
+					eventTileset.TileData[location.X, location.Y] = 
+						resources.GetResource<EventTileData>(parameters.GetString(1));
+				}
+			});
+			// End
 			AddTilesetCommand("End", delegate(CommandParam parameters) {
 				if (tileData != null) {
 					if (tileData.Tileset == null) {
@@ -112,10 +166,25 @@ namespace ZeldaOracle.Common.Scripts {
 							Resources.AddResource<TileData>(tileDataName, tileData);
 					}
 					tileData = null;
+					baseTileData = null;
+				}
+				else if (eventTileData != null) {
+					if (eventTileData.Tileset == null) {
+						if (useTemporary)
+							resources.AddResource<EventTileData>(tileDataName, eventTileData);
+						else
+							Resources.AddResource<EventTileData>(tileDataName, eventTileData);
+					}
+					eventTileData = null;
+					baseTileData = null;
 				}
 				else if (tileset != null) {
 					Resources.AddResource<Tileset>(tileset.ID, tileset);
 					tileset = null;
+				}
+				else if (eventTileset != null) {
+					Resources.AddResource<EventTileset>(eventTileset.ID, eventTileset);
+					eventTileset = null;
 				}
 			});
 
@@ -145,7 +214,7 @@ namespace ZeldaOracle.Common.Scripts {
 			
 			// Type <type>
 			AddTilesetCommand("Type", delegate(CommandParam parameters) {
-				tileData.Type = Tile.GetType(parameters.GetString(0), true);
+				baseTileData.Type = Tile.GetType(parameters.GetString(0), true);
 			});
 			// Flags <flags[]...>
 			AddTilesetCommand("Flags", delegate(CommandParam parameters) {
@@ -177,10 +246,10 @@ namespace ZeldaOracle.Common.Scripts {
 					string name = param.GetString(1);
 
 					if (String.Compare(param.GetString(0), "hide", StringComparison.OrdinalIgnoreCase) == 0) {
-						tileData.Properties.GetProperty(name, false).Documentation.IsHidden = true;
+						baseTileData.Properties.GetProperty(name, false).Documentation.IsHidden = true;
 					}
 					else if (String.Compare(param.GetString(0), "show", StringComparison.OrdinalIgnoreCase) == 0) {
-						tileData.Properties.GetProperty(name, false).Documentation.IsHidden = false;
+						baseTileData.Properties.GetProperty(name, false).Documentation.IsHidden = false;
 					}
 					else {
 						// Parse the property type.
@@ -204,7 +273,7 @@ namespace ZeldaOracle.Common.Scripts {
 						// Set the property.
 						Property property = null;
 						if (value != null)
-							property = tileData.Properties.SetGeneric(name, value);
+							property = baseTileData.Properties.SetGeneric(name, value);
 
 						// Set the property's documentation.
 						if (param.Count > 3) {
@@ -238,7 +307,7 @@ namespace ZeldaOracle.Common.Scripts {
 			AddTilesetCommand("Event", delegate(CommandParam parameters) {
 				Property property = Property.CreateString(parameters.GetString(0), "");
 				//property.SetDocumentation(parameters.GetString(1), "script", "", "Events", parameters.GetString(2), true, false);
-				tileData.Properties.Set(property.Name, property)
+				baseTileData.Properties.Set(property.Name, property)
 					.SetDocumentation(parameters.GetString(1), "script", "", "Events", parameters.GetString(2), true, false);
 				
 				// Create the event's script parameter list.
@@ -257,7 +326,7 @@ namespace ZeldaOracle.Common.Scripts {
 					scriptParams = new ScriptParameter[0];
 
 				// Add the event to the tile-data.
-				tileData.Events.AddEvent(new ObjectEvent(
+				baseTileData.Events.AddEvent(new ObjectEvent(
 						parameters.GetString(0), // Name
 						parameters.GetString(1), // Readable name
 						parameters.GetString(2), // Description
@@ -272,10 +341,10 @@ namespace ZeldaOracle.Common.Scripts {
 						parameters.GetPoint(1),
 						parameters.GetPoint(2, Point2I.Zero)
 					));
-					tileData.Sprite = spriteBuilder.End();
+					baseTileData.Sprite = spriteBuilder.End();
 				}
 				else {
-					tileData.Sprite = resources.GetSpriteAnimation(parameters.GetString(0));
+					baseTileData.Sprite = resources.GetSpriteAnimation(parameters.GetString(0));
 				}
 			});
 			// SpriteIndex <index> <sprite-animation>
@@ -365,8 +434,10 @@ namespace ZeldaOracle.Common.Scripts {
 			});
 			// Clone <tiledata>
 			AddTilesetCommand("Clone", delegate(CommandParam parameters) {
-				tileData.Clone(resources.GetResource<TileData>(parameters.GetString(0)));// = new TileData();
-				//tileData.Tileset = tileset;
+				if (tileData != null)
+					tileData.Clone(resources.GetResource<TileData>(parameters.GetString(0)));
+				else if (eventTileData != null)
+					eventTileData.Clone(resources.GetResource<EventTileData>(parameters.GetString(0)));
 			});
 
 			// SPRITE SHEET.

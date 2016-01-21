@@ -44,7 +44,7 @@ namespace ZeldaOracle.Game {
 
 			Console.WriteLine("Loading Sprites");
 			LoadSprites();
-			
+
 			Console.WriteLine("Loading Animations");
 			LoadAnimations();
 
@@ -207,65 +207,15 @@ namespace ZeldaOracle.Game {
 			Resources.LoadTilesets("Tilesets/dungeon.conscript");
 			Resources.LoadTilesets("Tilesets/objects.conscript");
 			Resources.LoadTilesets("Tilesets/objects_nv.conscript");
+			Resources.LoadTilesets("Tilesets/event_tile_data.conscript");
+			// OLD Tilesets:
 			Resources.LoadTilesets("Tilesets/tile_data.conscript");
 			Resources.LoadTilesets("Tilesets/overworld.conscript");
 			Resources.LoadTilesets("Tilesets/interior2.conscript");
 
-			EventTileset eventTileset = new EventTileset("events", null, 12, 16);
-			Resources.AddResource(eventTileset.ID, eventTileset);
-
-			// Create a warp event.
-			EventTileData etd = new EventTileData(typeof(WarpEvent));
-			etd.Sprite = SPR_EVENT_TILE_WARP_STAIRS;
-			etd.Properties.Set("warp_type", "tunnel")
-				.SetDocumentation("Warp Type", "enum", "WarpType", "", "The type of warp point.");
-			etd.Properties.Set("destination_level", "")
-				.SetDocumentation("Destination Level", "level", "", "", "The level where the destination point is in.");
-			etd.Properties.Set("destination_warp_point", "")
-				.SetDocumentation("Destination Warp Point", "", "", "", "The id of the warp point destination.");
-			etd.Properties.Set("face_direction", Directions.Down)
-				.SetDocumentation("Face Direction", "direction", "", "", "The direction the player should face when entering a room through this Warp Point.");
-			etd.Sprite = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
-			Resources.AddResource("warp", etd);
-			eventTileset.TileData[0, 0] = etd;
-			
-			// Create an NPC event.
-			etd = new EventTileData(typeof(NPCEvent));
-			etd.Sprite = Resources.GetAnimation("npc_shopkeeper");
-			etd.Properties.Set("substrip_index", Directions.Down);
-			etd.Properties.Set("npc_flags", (int) NPCFlags.Default)
-				.SetDocumentation("NPC Options", "enum_flags", "", "", "The options for the NPC.");
-			etd.Properties.Set("direction", Directions.Down)
-				.SetDocumentation("Direction", "direction", "", "", "The default direction the NPC faces.");
-			etd.Properties.Set("text", "<red>undefined<red>")
-				.SetDocumentation("Text", "text_message", "", "", "The text to display when the NPC is talked to.");
-			etd.Properties.Set("animation", "npc_shopkeeper")
-				.SetDocumentation("Animation", "animation", "", "", "The animation of the NPC.");
-			etd.Properties.Set("animation_talk", "")
-				.SetDocumentation("Talk Animation", "animation", "", "", "The animation of the NPC when being talked to.");
-			Resources.AddResource("npc", etd);
-			eventTileset.TileData[1, 0] = etd;
-			
-			// Create monster events.
-			CreateMonsterEvent( 2, 0, "monster_octorok_red",	"monster_octorok",		typeof(MonsterOctorok),		MonsterColor.Red);
-			CreateMonsterEvent( 3, 0, "monster_octorok_blue",	"monster_octorok",		typeof(MonsterOctorok),		MonsterColor.Blue);
-			CreateMonsterEvent( 4, 0, "monster_moblin_red",		"monster_moblin",		typeof(MonsterMoblin),		MonsterColor.Red);
-			CreateMonsterEvent( 5, 0, "monster_moblin_blue",	"monster_moblin",		typeof(MonsterMoblin),		MonsterColor.Blue);
-			CreateMonsterEvent( 6, 0, "monster_gibdo",			"monster_gibdo",		typeof(MonsterGibdo),		MonsterColor.Red);
-			CreateMonsterEvent( 7, 0, "monster_rope",			"monster_rope",			typeof(MonsterRope),		MonsterColor.Green);
-			CreateMonsterEvent( 8, 0, "monster_lynel",			"monster_lynel",		typeof(MonsterLynel),		MonsterColor.Red);
-			CreateMonsterEvent( 9, 0, "monster_beetle",			"monster_beetle",		typeof(MonsterBeetle),		MonsterColor.Green);
-			CreateMonsterEvent(10, 0, "monster_blade_trap",		"monster_blade_trap",	typeof(MonsterBladeTrap),	MonsterColor.Red);
-
-			// Create a pit tile data.
-			TileData pitTile = new TileData();
-			pitTile.EnvironmentType = TileEnvironmentType.Hole;
-			pitTile.Sprite = GameData.SPR_TILE_PIT;
-			Resources.AddResource("pit", pitTile);
-
 			IntegrateResources<Tileset>("TILESET_");
 		}
-
+		/*
 		private static EventTileData CreateMonsterEvent(int sx, int sy, string id, string animation, Type monsterType, MonsterColor color) {
 			EventTileData etd = new EventTileData(typeof(MonsterEvent));
 			etd.Sprite = Resources.GetAnimation(animation);
@@ -297,7 +247,7 @@ namespace ZeldaOracle.Game {
 			EventTileset eventTileset = Resources.GetResource<EventTileset>("events");
 			eventTileset.TileData[sx, sy] = etd;
 			return etd;
-		}
+		}*/
 
 
 		//-----------------------------------------------------------------------------
