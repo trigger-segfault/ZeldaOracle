@@ -11,6 +11,8 @@ using ZeldaOracle.Game.Entities.Collisions;
 namespace ZeldaOracle.Game.Entities.Effects {
 	public class Fire : Effect {
 
+		private int timer;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -31,7 +33,12 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
-		
+
+		public override void Initialize() {
+			base.Initialize();
+			timer = 0;
+		}
+
 		public override void OnDestroyTimerDone() {
 			// Burn tiles.
 			Point2I location = RoomControl.GetTileLocation(position);
@@ -44,14 +51,17 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		}
 
 		public override void Update() {
-			
-			// Collide with monsters.
-			CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
-			for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
-				Monster monster = iterator.CollisionInfo.Entity as Monster;
-				monster.TriggerInteraction(InteractionType.Fire, this);
-				if (IsDestroyed)
-					return;
+			timer++;
+
+			if (timer > 3) {
+				// Collide with monsters.
+				CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
+				for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
+					Monster monster = iterator.CollisionInfo.Entity as Monster;
+					monster.TriggerInteraction(InteractionType.Fire, this);
+					if (IsDestroyed)
+						return;
+				}
 			}
 
 			base.Update();

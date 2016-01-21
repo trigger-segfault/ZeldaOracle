@@ -174,7 +174,7 @@ namespace ZeldaOracle.Game.Control {
 			if (!roomControl.Room.IsHiddenFromMap)
 				lastRoomOnMap = roomControl.Room;
 
-			AudioSystem.MasterVolume = 0.06f;
+			AudioSystem.MasterVolume = 0.04f; // The way David likes it.
 		}
 		
 
@@ -230,7 +230,9 @@ namespace ZeldaOracle.Game.Control {
 		}
 		
 		public void DisplayMessage(Message message, Action completeAction) {
-			PushRoomState(new RoomStateQueue(new RoomStateTextReader(message), new RoomStateAction(completeAction)));
+			PushRoomState(new RoomStateQueue(
+				new RoomStateTextReader(message),
+				new RoomStateAction(completeAction)));
 		}
 
 		public void DisplayMessage(string text, Action completeAction) {

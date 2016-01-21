@@ -86,12 +86,12 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			base.OnSwingBegin();
 			AudioSystem.PlaySound(GameData.SOUND_BIGGORON_SWORD);
 		}
-		
+		/*
 		public override void OnHitMonster(Monster monster) {
 			WeaponInteractionEventArgs args = new WeaponInteractionEventArgs() {
 				Weapon = (ItemBigSword) Weapon
 			};
 			monster.TriggerInteraction(InteractionType.BiggoronSword, player, args);
-		}
+		}*/
 	}
 }

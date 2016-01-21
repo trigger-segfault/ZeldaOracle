@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Effects;
@@ -11,7 +12,7 @@ using ZeldaOracle.Game.Tiles;
 namespace ZeldaOracle.Game.Entities.Projectiles {
 	
 	// Seeds shot from the seed-shooter or slingshot.
-	public class SeedProjectile : SeedEntity, IInterceptable {
+	public class SeedProjectile : SeedEntity {
 
 		private int reboundCounter;
 		private bool reboundOffWalls;
@@ -55,25 +56,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			CheckInitialCollision();
 		}
 
-		public void Intercept() {
-			// Create the seed's effect.
-			if (type == SeedType.Ember) {
-				Fire fire = new Fire();
-				RoomControl.SpawnEntity(fire, Center - new Vector2F(0, 1), zPosition);
-				DestroyAndTransform(fire);
-			}
-			else if (type == SeedType.Gale) {
-				EffectGale gale = new EffectGale(false);
-				RoomControl.SpawnEntity(gale, Center - new Vector2F(0, 1), zPosition);
-				DestroyAndTransform(gale);
-			}
-			else {
-				Entity effect = CreateVisualEffect(type, Center);
-				DestroyAndTransform(effect);
-			}
-		}
-
 		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
+			// Count the number of rebounds.
 			if (reboundOffWalls && !isInitialCollision) {
 				reboundCounter++;
 				if (!(reboundCounter >= 3 || (tile != null && tile.Flags.HasFlag(TileFlags.AbsorbSeeds)))) {
@@ -92,23 +76,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 					return;
 			}
 			
-			Intercept();
+			DestroyWithEffect();
 		}
 
 		public override void OnCollideMonster(Monster monster) {
-			if (type == SeedType.Ember)
-				Intercept();
-			else if (type == SeedType.Scent)
-				monster.TriggerInteraction(InteractionType.ScentSeed, this);
-			else if (type == SeedType.Pegasus)
-				monster.TriggerInteraction(InteractionType.PegasusSeed, this);
-			else if (type == SeedType.Gale)
-				Intercept();
-			else if (type == SeedType.Mystery)
-				monster.TriggerInteraction(InteractionType.MysterySeed, this);
-
-			//InteractionType interactionType = (InteractionType) ((int) InteractionType.EmberSeed + (int) type);
-			//monster.TriggerInteraction(interactionType, this);
+			monster.OnSeedHit(this);
 		}
 	}
 }

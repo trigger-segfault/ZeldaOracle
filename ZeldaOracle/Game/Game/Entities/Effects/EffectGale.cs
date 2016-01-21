@@ -59,24 +59,11 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			else {
 				// Collide with monsters.
 				CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
-
 				for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
 					Monster monster = iterator.CollisionInfo.Entity as Monster;
-					/*
-					// TODO: Check better conditions here.
-					if (monster.IsAlive) {
-						monster.EnterGale(this);
-						Destroy();
-						return;
-					}*/
-
-					// TODO: Monster gale interactions.
-					monster.TriggerInteraction(InteractionType.GaleSeed, this);
+					monster.TriggerInteraction(InteractionType.Gale, this);
 					if (IsDestroyed)
 						return;
-					//monster.TriggerInteraction(InteractionType.Fire, this);
-					//if (IsDestroyed)
-						//return;
 				}
 			}
 		}

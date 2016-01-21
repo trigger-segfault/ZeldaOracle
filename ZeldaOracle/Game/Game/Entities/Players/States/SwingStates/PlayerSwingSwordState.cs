@@ -22,12 +22,17 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		
 		private const int SWING_SWORD_BEAM_DELAY = 6;
 
+		// True if the player allowed to hold the sword after swinging.
+		// This turns false when the player slashes a monster.
+		private bool allowHold;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public PlayerSwingSwordState() {
+			allowHold				= true;
 			limitTilesToDirection	= true;
 			isReswingable			= true;
 			lunge					= true;
@@ -89,6 +94,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 		public override void OnSwingBegin() {
 			base.OnSwingBegin();
+			allowHold = true;
 			AudioSystem.PlayRandomSound(
 				GameData.SOUND_SWORD_SLASH_1,
 				GameData.SOUND_SWORD_SLASH_2,
@@ -97,12 +103,22 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 		public override void OnSwingEnd() {
 			// Begin holding the sword after swinging.
-			if (!player.IsInMinecart) {
+			if (!player.IsInMinecart && allowHold && Weapon.IsEquipped && Weapon.IsButtonDown()) {
 				player.HoldSwordState.Weapon = Weapon;
 				player.BeginState(player.HoldSwordState);
 			}
 			else
 				base.OnSwingEnd();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public bool AllowSwordHold {
+			get { return allowHold; }
+			set { allowHold = false; }
 		}
 	}
 }

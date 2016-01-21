@@ -51,7 +51,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			Player.RoomControl = NewRoomControl;
 			if (eventSetupNewRoom != null)
 				eventSetupNewRoom.Invoke(roomNew);
-			NewRoomControl.ViewControl.CenterOn(Player.Center);
+			NewRoomControl.ViewControl.CenterOn(Player.Center + Player.ViewFocusOffset);
 		}
 		
 

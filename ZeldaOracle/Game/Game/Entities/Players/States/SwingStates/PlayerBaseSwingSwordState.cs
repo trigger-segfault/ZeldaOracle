@@ -53,10 +53,11 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 		// Virtual Methods
 		//-----------------------------------------------------------------------------
-
-		public virtual void OnHitMonster(Monster monster) {
+		
+		// NOTE: this has been moved into the UnitTool class.
+		//public virtual void OnHitMonster(Monster monster) {
 			//monster.TriggerInteraction(monster.HandlerSword, Weapon as ItemSword);
-		}
+		//}
 
 
 		//-----------------------------------------------------------------------------
@@ -80,9 +81,8 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			}
 		}
 		
-		public override void OnSwingEntityPeak(int angle, Rectangle2F collisionBox) {
-			return;
-
+		// NOTE: this has been moved into the UnitTool class.
+		/*public override void OnSwingEntityPeak(int angle, Rectangle2F collisionBox) {
 			// Collide with entities.
 			for (int i = 0; i < player.RoomControl.EntityCount; i++) {
 				Entity e = player.RoomControl.Entities[i];
@@ -97,6 +97,6 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 					}
 				}
 			}
-		}
+		}*/
 	}
 }

@@ -23,10 +23,10 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 			IsPhysicsEnabled = true;
 			
 			shieldCollisionBoxes = new Rectangle2I[] {
-				new Rectangle2I(14 - 8, 2 - 16, 2, 14),
-				new Rectangle2I(8 - 8, 0 - 16, 8, 11),
-				new Rectangle2I(0 - 8, 2 - 16, 2, 14),
-				new Rectangle2I(0 - 8, 7 - 16, 9, 9)
+				new Rectangle2I(14 - 8, 2 - 13, 2, 14),	// Right
+				new Rectangle2I( 7 - 8, 0 - 13, 9, 11),	// Up
+				new Rectangle2I( 0 - 8, 2 - 13, 2, 14),	// Left
+				new Rectangle2I( 0 - 8, 7 - 13, 9,  9)	// Down
 			};
 		}
 
@@ -47,6 +47,12 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 				//Monster monster = (Monster) entity;
 				//monster.TriggerInteraction(monster.HandlerShield, itemShield);
 			}
+		}
+
+		public override void OnHitMonster(Monster monster) {
+			monster.TriggerInteraction(InteractionType.Shield, unit, new WeaponInteractionEventArgs() {
+				Weapon = itemShield
+			});
 		}
 
 		public override void Update() {

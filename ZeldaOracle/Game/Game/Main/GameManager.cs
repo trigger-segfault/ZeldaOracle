@@ -166,6 +166,7 @@ namespace ZeldaOracle.Game.Main {
 		// Called every step to update the game.
 		public void Update(float timeDelta) {
 
+			// DEBUG: Ctrl+R to restar the game.
 			if (Keyboard.IsKeyPressed(Keys.R) && Keyboard.IsKeyDown(Keys.LControl)) {
 				while (gameStateStack.Count > 1)
 					gameStateStack.Pop();

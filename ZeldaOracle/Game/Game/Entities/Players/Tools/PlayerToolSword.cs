@@ -34,16 +34,39 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 		}
 
 		public override void OnCollideEntity(Entity entity) {
-			
+			// Collect collectible entities.
 			if (entity is Collectible) {
 				Collectible collectible = (Collectible) entity;
 				if (collectible.IsPickupable && collectible.IsCollectibleWithItems)
 					collectible.Collect();
 			}
-			else if (entity is Monster) {
-				//Monster monster = (Monster) entity;
-				//monster.TriggerInteraction(monster.HandlerShield, itemShield);
-			}
+		}
+
+		public override void OnHitMonster(Monster monster) {
+			InteractionType interactionType = InteractionType.Sword;
+			if (Player.CurrentState == Player.SwingBigSwordState)
+				interactionType = InteractionType.BiggoronSword;
+			else if (Player.CurrentState == Player.SpinSwordState)
+				interactionType = InteractionType.SwordSpin;
+
+			// Trigger the monster's sword reaction.
+			monster.TriggerInteraction(interactionType, unit, new WeaponInteractionEventArgs() {
+				Weapon = itemSword
+			});
+
+			// Stab if holding sword.
+			if (Player.CurrentState == Player.HoldSwordState)
+				Player.HoldSwordState.Stab(false);
+			else if (Player.CurrentState == Player.SwingSwordState)
+				Player.SwingSwordState.AllowSwordHold = false;
+		}
+		
+		public override void OnParry(Unit other, Vector2F contactPoint) {
+			// Stab if holding sword.
+			if (Player.CurrentState == Player.HoldSwordState)
+				Player.HoldSwordState.Stab(true);
+			else if (Player.CurrentState == Player.SwingSwordState)
+				Player.SwingSwordState.AllowSwordHold = false;
 		}
 
 		public override void Update() {

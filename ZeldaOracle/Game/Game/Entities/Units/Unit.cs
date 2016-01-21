@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Units {
 
@@ -34,6 +35,9 @@ namespace ZeldaOracle.Game.Entities.Units {
 		protected int		health;
 		protected int		healthMax;
 		
+		protected bool		isKnockbackable; // Can the unit be knocked back?
+		protected bool		isDamageable; 
+
 		protected float		knockbackSpeed;
 		protected int		knockbackDuration;
 		protected int		hurtInvincibleDuration;
@@ -55,6 +59,9 @@ namespace ZeldaOracle.Game.Entities.Units {
 		public Unit() {
 			EnablePhysics();
 
+			isKnockbackable			= true;
+			isDamageable			= true;
+
 			knockbackSpeed			= GameSettings.UNIT_KNOCKBACK_SPEED;
 			knockbackDuration		= GameSettings.UNIT_KNOCKBACK_DURATION;
 			hurtInvincibleDuration	= GameSettings.UNIT_HURT_INVINCIBLE_DURATION;
@@ -72,6 +79,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			healthMax		= 1;
 			direction		= Directions.Right;
 			centerOffset	= new Point2I(8, 8);
+
 		}
 
 
@@ -151,15 +159,17 @@ namespace ZeldaOracle.Game.Entities.Units {
 		}
 
 		public void Knockback(int duration, float speed, Vector2F sourcePosition) {
-			knockbackDuration	= duration;
-			knockbackTimer		= duration;
-			knockbackVelocity	= (Center - sourcePosition).Normalized;
-			knockbackVelocity  *= speed;
-			knockbackVelocity	= Vector2F.SnapDirectionByCount(
-				knockbackVelocity, GameSettings.UNIT_KNOCKBACK_ANGLE_SNAP_COUNT);
+			if (isKnockbackable) {
+				knockbackDuration	= duration;
+				knockbackTimer		= duration;
+				knockbackVelocity	= (Center - sourcePosition).Normalized;
+				knockbackVelocity  *= speed;
+				knockbackVelocity	= Vector2F.SnapDirectionByCount(
+					knockbackVelocity, GameSettings.UNIT_KNOCKBACK_ANGLE_SNAP_COUNT);
+			}
 		}
 		
-		public void Bump(Vector2F sourcePosition) {
+		public void Bump(Vector2F sourcePosition, bool playSound) {
 			Knockback(bumpKnockbackDuration, knockbackSpeed, sourcePosition);
 		}
 
@@ -310,12 +320,17 @@ namespace ZeldaOracle.Game.Entities.Units {
 			get { return (health == healthMax); }
 		}
 
+		public bool IsKnockbackable {
+			get { return isKnockbackable; }
+			set { isKnockbackable = value; }
+		}
+
 		public bool IsBeingKnockedBack {
 			get { return (knockbackTimer > 0); }
 		}
 		
 		public bool IsInvincible {
-			get { return (invincibleTimer > 0); }
+			get { return (!isDamageable || (invincibleTimer > 0)); }
 		}
 		
 		public bool IsHurtFlickering {

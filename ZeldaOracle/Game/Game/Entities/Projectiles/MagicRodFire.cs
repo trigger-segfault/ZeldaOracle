@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Effects;
@@ -45,6 +46,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			// Spawn fire.
 			Fire fire = new Fire();
 			RoomControl.SpawnEntity(fire, position);
+			AudioSystem.PlaySound(GameData.SOUND_FIRE);
 			DestroyAndTransform(fire);
 		}
 

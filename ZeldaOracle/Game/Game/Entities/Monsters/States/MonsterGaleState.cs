@@ -40,7 +40,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 
 			if (galeEffect != null) {
 				monster.SetPositionByCenter(galeEffect.Position);
-				galeEffect.Destroy();
+				galeEffect.DestroyAndTransform(monster);
 				galeEffect = null;
 			}
 

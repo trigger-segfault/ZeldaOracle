@@ -22,7 +22,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 
 	// The base class for the two types of seeds.
-	public class SeedEntity : Projectile {
+	public class SeedEntity : Projectile, IInterceptable {
 		
 		protected SeedType type;
 
@@ -40,62 +40,69 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		// Seed Effects
 		//-----------------------------------------------------------------------------
 
-		public void DestroyWithEffect(SeedType seedType, Vector2F effectPosition) {
-			Entity effectEntity = CreateEffect(seedType, effectPosition);
+		public void Intercept() {
+			DestroyWithEffect();
+		}
+		
+		public void TriggerMonsterReaction(Monster monster) {
+			// Destroy the seed and create the effect.
+			Entity effect = DestroyWithEffect();
+
+			// Trigger the immediate seed effect actions.
+			if (type == SeedType.Scent)
+				monster.TriggerInteraction(InteractionType.ScentSeed, effect);
+			else if (type == SeedType.Pegasus)
+				monster.TriggerInteraction(InteractionType.PegasusSeed, effect);
+			else if (type == SeedType.Mystery)
+				monster.TriggerInteraction(InteractionType.MysterySeed, effect);
+		}
+
+		// Destroy the seed and spawn its regular effect.
+		public Entity DestroyWithEffect() {
+			Entity effectEntity = CreateEffect(type, false, Center);
 			DestroyAndTransform(effectEntity);
+			return effectEntity;
 		}
-
-		public void DestroyWithVisualEffect(SeedType seedType, Vector2F effectPosition) {
-			Entity effectEntity = CreateVisualEffect(seedType, effectPosition);
+		
+		// Destroy the seed and spawn its satchel effect.
+		public Entity DestroyWithSatchelEffect() {
+			Entity effectEntity = CreateEffect(type, true, Center);
 			DestroyAndTransform(effectEntity);
+			return effectEntity;
 		}
 
-		public Entity CreateVisualEffect(SeedType seedType, Vector2F effectPosition) {
-			Effect effect = new Effect(GameData.ANIM_EFFECT_SEEDS[(int) seedType], DepthLayer.EffectSeed);
-			RoomControl.SpawnEntity(effect, effectPosition);
-			
-			if (seedType == SeedType.Ember)
-				AudioSystem.PlaySound(GameData.SOUND_FIRE);
-			else if (seedType == SeedType.Scent)
-				AudioSystem.PlaySound(GameData.SOUND_SCENT_SEED);
-			else if (seedType == SeedType.Mystery)
-				AudioSystem.PlaySound(GameData.SOUND_MYSTERY_SEED);
-			else if (seedType == SeedType.Pegasus)
-				AudioSystem.PlaySound(GameData.SOUND_FIRE);
-			else if (seedType == SeedType.Gale)
-				AudioSystem.PlaySound(GameData.SOUND_GALE_SEED);
-
-			return effect;
-		}
-
-		public Entity CreateEffect(SeedType seedType, Vector2F effectPosition) {
+		private Entity CreateEffect(SeedType seedType, bool satchelEffect, Vector2F effectPosition) {
 			Entity effectEntity = null;
 
 			// Create the seed's effect.
 			if (seedType == SeedType.Ember) {
 				effectEntity = new Fire();
-				RoomControl.SpawnEntity(effectEntity, effectPosition);
 				AudioSystem.PlaySound(GameData.SOUND_FIRE);
 			}
 			else if (seedType == SeedType.Scent) {
-				effectEntity = new ScentPod();
-				RoomControl.SpawnEntity(effectEntity, effectPosition);
-				AudioSystem.PlaySound(GameData.SOUND_SCENT_SEED_POD);
+				if (satchelEffect) {
+					effectEntity = new ScentPod();
+					AudioSystem.PlaySound(GameData.SOUND_SCENT_SEED_POD);
+				}
+				else {
+					effectEntity = new Effect(GameData.ANIM_EFFECT_SEED_SCENT, DepthLayer.EffectSeed);
+					AudioSystem.PlaySound(GameData.SOUND_SCENT_SEED);
+				}
 			}
 			else if (seedType == SeedType.Mystery) {
-				effectEntity = CreateVisualEffect(seedType, effectPosition);
+				effectEntity = new Effect(GameData.ANIM_EFFECT_SEED_MYSTERY, DepthLayer.EffectSeed);
 				AudioSystem.PlaySound(GameData.SOUND_MYSTERY_SEED);
 			}
 			else if (seedType == SeedType.Pegasus) {
-				effectEntity = CreateVisualEffect(seedType, effectPosition);
+				effectEntity = new Effect(GameData.ANIM_EFFECT_SEED_PEGASUS, DepthLayer.EffectSeed);
+				AudioSystem.PlaySound(GameData.SOUND_FIRE);
 			}
 			else if (seedType == SeedType.Gale) {
-				effectEntity = new EffectGale(true);
-				RoomControl.SpawnEntity(effectEntity, effectPosition);
+				effectEntity = new EffectGale(satchelEffect);
 				AudioSystem.PlaySound(GameData.SOUND_GALE_SEED);
-				//RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_SEED_GALE), effectPosition);
 			}
-
+			
+			RoomControl.SpawnEntity(effectEntity, effectPosition);
 			return effectEntity;
 		}
 		

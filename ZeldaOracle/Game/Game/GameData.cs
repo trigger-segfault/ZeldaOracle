@@ -247,14 +247,15 @@ namespace ZeldaOracle.Game {
 			eventTileset.TileData[1, 0] = etd;
 			
 			// Create monster events.
-			CreateMonsterEvent(2, 0, "monster_octorok_red",		"monster_octorok",	typeof(MonsterOctorok),	MonsterColor.Red);
-			CreateMonsterEvent(3, 0, "monster_octorok_blue",	"monster_octorok",	typeof(MonsterOctorok),	MonsterColor.Blue);
-			CreateMonsterEvent(4, 0, "monster_moblin_red",		"monster_moblin",	typeof(MonsterMoblin),	MonsterColor.Red);
-			CreateMonsterEvent(5, 0, "monster_moblin_blue",		"monster_moblin",	typeof(MonsterMoblin),	MonsterColor.Blue);
-			CreateMonsterEvent(6, 0, "monster_gibdo",			"monster_gibdo",	typeof(MonsterGibdo),	MonsterColor.Red);
-			CreateMonsterEvent(7, 0, "monster_rope",			"monster_rope",		typeof(MonsterRope),	MonsterColor.Green);
-			CreateMonsterEvent(9, 0, "monster_beetle",			"monster_beetle",	typeof(MonsterBeetle),	MonsterColor.Green);
-			CreateMonsterEvent(8, 0, "monster_lynel",			"monster_lynel",	typeof(MonsterLynel),	MonsterColor.Red);
+			CreateMonsterEvent( 2, 0, "monster_octorok_red",	"monster_octorok",		typeof(MonsterOctorok),		MonsterColor.Red);
+			CreateMonsterEvent( 3, 0, "monster_octorok_blue",	"monster_octorok",		typeof(MonsterOctorok),		MonsterColor.Blue);
+			CreateMonsterEvent( 4, 0, "monster_moblin_red",		"monster_moblin",		typeof(MonsterMoblin),		MonsterColor.Red);
+			CreateMonsterEvent( 5, 0, "monster_moblin_blue",	"monster_moblin",		typeof(MonsterMoblin),		MonsterColor.Blue);
+			CreateMonsterEvent( 6, 0, "monster_gibdo",			"monster_gibdo",		typeof(MonsterGibdo),		MonsterColor.Red);
+			CreateMonsterEvent( 7, 0, "monster_rope",			"monster_rope",			typeof(MonsterRope),		MonsterColor.Green);
+			CreateMonsterEvent( 8, 0, "monster_lynel",			"monster_lynel",		typeof(MonsterLynel),		MonsterColor.Red);
+			CreateMonsterEvent( 9, 0, "monster_beetle",			"monster_beetle",		typeof(MonsterBeetle),		MonsterColor.Green);
+			CreateMonsterEvent(10, 0, "monster_blade_trap",		"monster_blade_trap",	typeof(MonsterBladeTrap),	MonsterColor.Red);
 
 			// Create a pit tile data.
 			TileData pitTile = new TileData();

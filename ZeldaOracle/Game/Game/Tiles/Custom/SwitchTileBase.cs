@@ -70,7 +70,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public override void OnSeedHit(SeedType type, SeedEntity seed) {
-			seed.DestroyWithVisualEffect(type, seed.Position);
+			seed.DestroyWithEffect();
 			Toggle();
 		}
 

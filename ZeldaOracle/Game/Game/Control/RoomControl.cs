@@ -42,10 +42,11 @@ namespace ZeldaOracle.Game.Control {
 		private int				requestedTransitionDirection;
 		private int				entityCount;
 		private RoomGraphics	roomGraphics;
+		private RoomPhysics		roomPhysics;
+		private bool			allMonstersDead;
 
 		private event Action<Player>	eventPlayerRespawn;
 		private event Action<int>		eventRoomTransitioning;
-		private bool			allMonstersDead;
 
 
 		//-----------------------------------------------------------------------------
@@ -61,6 +62,7 @@ namespace ZeldaOracle.Game.Control {
 			eventTiles		= new List<EventTile>();
 			viewControl		= new ViewControl();
 			roomGraphics	= new RoomGraphics(this);
+			roomPhysics		= new RoomPhysics(this);
 			requestedTransitionDirection = 0;
 			eventPlayerRespawn		= null;
 			eventRoomTransitioning	= null;
@@ -597,37 +599,29 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 			
+			// Update HUD and current room state.
 			GameControl.HUD.Update();
 			GameControl.UpdateRoomState();
 
 			if (GameControl.UpdateRoom) {
 				// [Start] Open inventory.
-				if (Controls.Start.IsPressed()) {
+				if (Controls.Start.IsPressed())
 					GameControl.OpenMenu(GameControl.MenuWeapons);
-					return;
-				}
-
 				// [Select] Open map screen.
-				if (Controls.Select.IsPressed()) {
+				else if (Controls.Select.IsPressed())
 					GameControl.OpenMapScreen();
-					return;
-				}
-				
 				// DEBUG: Update debug keys.
 				GameDebug.UpdateRoomDebugKeys(this);
 			}
 		}
 
-		public override void Draw(Graphics2D g) {
-
-			// Draw the room.
-			g.Translate(0, 16);
-			g.Translate(-viewControl.Position);
+		public void DrawRoom(Graphics2D g, Vector2F position) {
+			g.Translate(position - viewControl.Position);
 
 			// Draw tiles.
 			for (int i = 0; i < room.LayerCount; i++) {
-				for (int x = 0; x < room.Width; x++) {
-					for (int y = 0; y < room.Height; y++) {
+				for (int y = 0; y < room.Height; y++) {
+					for (int x = 0; x < room.Width; x++) {
 						Tile t = tiles[x, y, i];
 						if (t != null && x == t.Location.X && y == t.Location.Y)
 							t.Draw(g);
@@ -635,33 +629,26 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 			
-			// Draw entities.
-			g.End();
-			g.Begin(GameSettings.DRAW_MODE_ROOM_GRAPHICS);
-
 			// Draw entities in reverse order (because newer entities are drawn below older ones).
 			roomGraphics.Clear();
 			for (int i = entities.Count - 1; i >= 0; i--)
 				entities[i].Draw(roomGraphics);
 			roomGraphics.DrawAll(g);
 			
-			// Draw event tiles.
-			g.End();
-			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
-			for (int i = 0; i < eventTiles.Count; ++i) {
+			// Draw event tiles in reverse order.
+			for (int i = eventTiles.Count - 1; i >= 0; i--)
 				eventTiles[i].Draw(g);
-			}
 
+			// DEBUG: Draw debug information.
 			GameDebug.DrawRoom(g, this);
+			
+			g.Translate(-(position - viewControl.Position));
+		}
 
-			// Draw HUD.
-			g.End();
-			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
-			g.ResetTranslation();
-			GameControl.HUD.Draw(g, false);
-
-			// Draw the current room state.
-			GameControl.DrawRoomState(g);
+		public override void Draw(Graphics2D g) {
+			DrawRoom(g, new Vector2F(0, 16));	// Draw the room.
+			GameControl.HUD.Draw(g, false);		// Draw the HUD.
+			GameControl.DrawRoomState(g);		// Draw the current room state.
 		}
 		
 		

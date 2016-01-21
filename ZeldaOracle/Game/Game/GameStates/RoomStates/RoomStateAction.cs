@@ -10,6 +10,8 @@ using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.GameStates.RoomStates {
+
+	// A room state that performs a single action then ends.
 	public class RoomStateAction : RoomState {
 
 		private Action action;

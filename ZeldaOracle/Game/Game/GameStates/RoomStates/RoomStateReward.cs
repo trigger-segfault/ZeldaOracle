@@ -28,30 +28,29 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		private const int RaiseDuration = 32;
 		private const int NonChestDuration = 6;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public RoomStateReward(Reward reward) {
-			this.updateRoom		= false;
-			this.animateRoom	= true;
-			this.reward			= reward;
-			this.chestPosition	= Point2I.Zero;
-			this.useChest		= false;
-			this.timer			= 0;
-
+		public RoomStateReward(Reward reward)
+		{
+			this.updateRoom			= false;
+			this.animateRoom		= true;
+			this.reward				= reward;
+			this.chestPosition		= Point2I.Zero;
+			this.useChest			= false;
+			this.timer				= 0;
 			this.animationPlayer	= new AnimationPlayer();
 		}
-		public RoomStateReward(Reward reward, Point2I chestPosition) {
-			this.updateRoom		= false;
-			this.animateRoom	= true;
-			this.reward			= reward;
-			this.chestPosition	= chestPosition;
-			this.useChest		= true;
-			this.timer			= 0;
 
-			this.animationPlayer	= new AnimationPlayer();
+		public RoomStateReward(Reward reward, Point2I chestPosition) :
+			this(reward)
+		{
+			this.chestPosition		= chestPosition;
+			this.useChest			= true;
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods

@@ -218,6 +218,7 @@
     <Compile Include="Game\Control\Message.cs" />
     <Compile Include="Game\Control\RoomControl.cs" />
     <Compile Include="Game\Control\RoomGraphics.cs" />
+    <Compile Include="Game\Control\RoomPhysics.cs" />
     <Compile Include="Game\Control\Scripting\Script.cs" />
     <Compile Include="Game\Control\Scripting\ScriptManager.cs" />
     <Compile Include="Game\Control\Scripting\ScriptRunner.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="Game\Entities\Minecart.cs" />
     <Compile Include="Game\Entities\Monsters\BasicMonster - Copy.cs" />
     <Compile Include="Game\Entities\Monsters\BasicMonster.cs" />
+    <Compile Include="Game\Entities\Monsters\MonsterBladeTrap.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterReactions.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterOctorok.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterRope.cs" />

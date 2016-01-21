@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Collisions;
@@ -39,14 +40,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
-
-		public void Intercept() {
-			if (type == SeedType.Ember)
-				DestroyWithEffect(type, Center);
-			else
-				DestroyWithVisualEffect(type, Center);
-		}
-
+		
 		public override void OnLand() {
 			if (IsDestroyed)
 				return;
@@ -55,8 +49,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
 			for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
 				Monster monster = iterator.CollisionInfo.Entity as Monster;
-				InteractionType interactionType = (InteractionType) ((int) InteractionType.EmberSeed + (int) type);
-				monster.TriggerInteraction(interactionType, this);
+				monster.OnSeedHit(this);
 				if (IsDestroyed)
 					return;
 			}
@@ -70,7 +63,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 					return;
 			}
 
-			DestroyWithEffect(type, Center);
+			// Spawn the seed effect.
+			DestroyWithSatchelEffect();
 		}
 
 		public override void Initialize() {

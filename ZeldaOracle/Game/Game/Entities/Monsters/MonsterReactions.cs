@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 	
@@ -27,10 +28,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		GaleSeed,				// Hit by a gale seed.
 		MysterySeed,			// Hit by a mystery seed.
 		Fire,					// Touches fire.
+		Gale,					// Touches gale.
 		Arrow,					// Hit by an arrow.
 		SwordBeam,				// Hit by a sword beam projectile.
 		RodFire,				// Hit by a projectile from the fire-rod.
 		Sword,					// Hit by a sword.
+		SwordSpin,				// Hit by a spinning sword.
 		BiggoronSword,			// Hit by a biggoron sword.
 		Boomerang,				// Hit by a boomerang.
 		BombExplosion,			// Hit by a bomb explosion.
@@ -43,13 +46,14 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		Parry,
 		PlayerContact,
 
-		SwordHitShield,			// Their sword hits my shield.
-		BiggoronSwordHitShield,	// Their biggoron sword hits my shield.
-		ShieldHitShield,		// Their shield hits my shield.
-
 		ThrownObject,			// Hit by a thrown object (thrown tiles, not bombs).
 		MineCart,				// Hit by a minecart.
 		Block,					// Hit by a block (either moving or spawned on top of).
+
+		// UNUSED:
+		SwordHitShield,			// Their sword hits my shield.
+		BiggoronSwordHitShield,	// Their biggoron sword hits my shield.
+		ShieldHitShield,		// Their shield hits my shield.
 
 		Count,
 	};
@@ -182,12 +186,25 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Bump the monster.
 			public static void Bump(Monster monster, Entity sender, EventArgs args) {
-				monster.Bump(sender.Center);
+				AudioSystem.PlaySound(GameData.SOUND_BOMB_BOUNCE);
+				monster.Bump(sender.Center, true);
+			}
+
+			// Bump the monster and sender.
+			public static void Parry(Monster monster, Entity sender, EventArgs args) {
+				monster.Bump(sender.Center, false);
+				if (sender is Unit)
+					(sender as Unit).Bump(monster.Center, false);
+				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
+
+				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 			}
 			
 			// Burn the monster for 1 damage.
 			public static void Burn(Monster monster, Entity sender, EventArgs args) {
 				monster.Burn(1);
+				if (sender is Fire)
+					sender.Destroy();
 			}
 			
 			// Stun the monster.
@@ -222,6 +239,18 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			public static void SwitchHook(Monster monster, Entity sender, EventArgs args) {
 				SwitchHookProjectile hook = sender as SwitchHookProjectile;
 				hook.SwitchWithEntity(monster);
+			}
+			
+			// Stun the monster.
+			public static void ClingEffect(Monster monster, Entity sender, EventArgs args) {
+				Effect effect = new Effect(GameData.ANIM_EFFECT_CLING, DepthLayer.EffectCling);
+				
+				Vector2F effectPos = (monster.Center + sender.Center) * 0.5f;
+				if (args is InteractionArgs)
+					effectPos = (args as InteractionArgs).ContactPoint;
+
+				monster.RoomControl.SpawnEntity(effect, effectPos);
+				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 			}
 			
 
@@ -299,7 +328,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			
 			public static void Bump(Monster monster, Entity sender, EventArgs args) {
 				if (sender is Unit)
-					(sender as Unit).Bump(monster.Center);
+					(sender as Unit).Bump(monster.Center, true);
 			}
 			
 			public static void Damage(Monster monster, Entity sender, EventArgs args) {

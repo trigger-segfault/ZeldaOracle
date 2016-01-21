@@ -57,6 +57,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Internal methods
 		//-----------------------------------------------------------------------------
 
+		public void Stab(bool continueHoldingSword) {
+			player.SwordStabState.Weapon = weapon;
+			player.SwordStabState.ContinueHoldingSword = continueHoldingSword;
+			player.BeginState(player.SwordStabState);
+		}
+
 		private void StabTile(Tile tile) {
 			if (player.IsOnGround) {
 				tile.OnSwordHit(weapon);
@@ -69,7 +75,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 				}
 			}
+
+			// Begin the player stab state.
 			player.SwordStabState.Weapon = weapon;
+			player.SwordStabState.ContinueHoldingSword = true;
 			player.BeginState(player.SwordStabState);
 		}
 
