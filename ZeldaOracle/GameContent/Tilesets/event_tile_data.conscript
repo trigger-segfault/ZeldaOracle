@@ -53,34 +53,64 @@ EVENTTILE monster;
 	EVENT		event_die, "Die", "Occurs when the monster dies.", (Monster, monster);
 END;
 
-MONSTER monster_octorok_red,	"monster_octorok",		MonsterOctorok,		red;	END;
-MONSTER monster_octorok_blue,	"monster_octorok",		MonsterOctorok,		blue;	END;
-MONSTER monster_moblin_red,		"monster_moblin",		MonsterMoblin,		red;	END;
-MONSTER monster_moblin_blue,	"monster_moblin",		MonsterMoblin,		blue;	END;
-MONSTER monster_gibdo,			"monster_gibdo",		MonsterGibdo,		red;	END;
-MONSTER monster_rope,			"monster_rope",			MonsterRope,		green;	END;
-MONSTER monster_lynel,			"monster_lynel",		MonsterLynel,		red;	END;
-MONSTER monster_beetle,			"monster_beetle",		MonsterBeetle,		green;	END;
-MONSTER monster_blade_trap,		"monster_blade_trap",	MonsterBladeTrap,	red;	END;
+MONSTER monster_octorok_red,			"monster_octorok",				MonsterOctorok,			red;	END;
+MONSTER monster_octorok_blue,			"monster_octorok",				MonsterOctorok,			blue;	END;
+MONSTER monster_moblin_red,				"monster_moblin",				MonsterMoblin,			red;	END;
+MONSTER monster_moblin_blue,			"monster_moblin",				MonsterMoblin,			blue;	END;
+MONSTER monster_pig_moblin_red,			"monster_pig_moblin",			MonsterPigMoblin,		red;	END;
+MONSTER monster_pig_moblin_blue,		"monster_pig_moblin",			MonsterPigMoblin,		blue;	END;
+MONSTER monster_darknut_red,			"monster_darknut",				MonsterDarknut,			red;	END;
+MONSTER monster_darknut_blue,			"monster_darknut",				MonsterDarknut,			blue;	END;
+MONSTER monster_lynel_red,				"monster_lynel",				MonsterLynel,			red;	END;
+MONSTER monster_lynel_blue,				"monster_lynel",				MonsterLynel,			blue;	END;
+MONSTER monster_gibdo,					"monster_gibdo",				MonsterGibdo,			red;	END;
+MONSTER monster_rope,					"monster_rope",					MonsterRope,			green;	END;
+MONSTER monster_beetle,					"monster_beetle",				MonsterBeetle,			green;	END;
+MONSTER monster_blade_trap_red,			"monster_blade_trap",			MonsterBladeTrap,		red;	END;
+MONSTER monster_blade_trap_blue,		"monster_blade_trap",			MonsterBladeTrap,		blue;	END;
+MONSTER monster_blade_trap_green,		"monster_blade_trap",			MonsterBladeTrap,		green;	END;
+MONSTER monster_blade_trap_orange,		"monster_blade_trap",			MonsterBladeTrap,		orange;	END;
+MONSTER monster_spiked_beetle,			"monster_spiked_beetle",		MonsterSpikedBeetle,	blue;	END;
+MONSTER monster_sand_crab,				"monster_sand_crab",			MonsterSandCrab,		orange;	END;
+MONSTER monster_shrouded_stalfos,		"monster_shrouded_stalfos",		MonsterShroudedStalfos,	green;	END;
+MONSTER monster_ghini,					"monster_ghini",				MonsterGhini,			red;	END;
+MONSTER monster_zol_green,				"monster_zol",					MonsterZolGreen,		green;	END;
 
 
 #==============================================================================
 # Event Tileset
 #==============================================================================
 
-EVENTTILESET events, (12, 13);
+EVENTTILESET events, (13, 13);
 
 SETTILE ( 0, 0), warp;
 SETTILE ( 1, 0), npc;
+
 SETTILE ( 2, 0), monster_octorok_red;
 SETTILE ( 3, 0), monster_octorok_blue;
-SETTILE ( 4, 0), monster_moblin_red;
-SETTILE ( 5, 0), monster_moblin_blue;
+SETTILE ( 2, 1), monster_moblin_red;
+SETTILE ( 3, 1), monster_moblin_blue;
+SETTILE ( 2, 2), monster_pig_moblin_red;
+SETTILE ( 3, 2), monster_pig_moblin_blue;
+SETTILE ( 2, 3), monster_darknut_red;
+SETTILE ( 3, 3), monster_darknut_blue;
+SETTILE ( 2, 4), monster_lynel_red;
+SETTILE ( 3, 4), monster_lynel_blue;
+
+SETTILE ( 4, 1), monster_zol_green;
+
+SETTILE ( 4, 0), monster_ghini;
+SETTILE ( 5, 0), monster_shrouded_stalfos;
 SETTILE ( 6, 0), monster_gibdo;
 SETTILE ( 7, 0), monster_rope;
-SETTILE ( 8, 0), monster_lynel;
-SETTILE ( 9, 0), monster_beetle;
-SETTILE (10, 0), monster_blade_trap;
+SETTILE (10, 0), monster_beetle;
+SETTILE (10, 1), monster_spiked_beetle;
+SETTILE (10, 2), monster_sand_crab;
+
+SETTILE (11, 0), monster_blade_trap_red;
+SETTILE (11, 1), monster_blade_trap_blue;
+SETTILE (11, 2), monster_blade_trap_green;
+SETTILE (11, 3), monster_blade_trap_orange;
 
 END;
 

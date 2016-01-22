@@ -99,11 +99,14 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isStunnable				= true;
 			isKnockbackable			= true;
 			
+			// Setup default interactions.
 			interactionHandlers = new InteractionHandler[(int) InteractionType.Count];
 			for (int i = 0; i < (int) InteractionType.Count; i++)
 				interactionHandlers[i] = new InteractionHandler();
+			SetDefaultReactions();
+		}
 
-			// Setup default interactions.
+		protected void SetDefaultReactions() {
 			// Seeds
 			SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept);
 			SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept,	Reactions.Damage);
@@ -129,14 +132,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.BiggoronSword,	Reactions.Damage3);
 			SetReaction(InteractionType.Shield,			SenderReactions.Bump, Reactions.Bump);
 			SetReaction(InteractionType.Shovel,			Reactions.Bump);
+			SetReaction(InteractionType.Parry,			Reactions.Parry);
 			// Player
 			SetReaction(InteractionType.Pickup,			Reactions.None);
 			SetReaction(InteractionType.ButtonAction,	Reactions.None);
 			SetReaction(InteractionType.PlayerContact,	OnTouchPlayer);
-			
-			SetReaction(InteractionType.Parry,			Reactions.Parry);
-			//SetReaction(InteractionType.Parry,			SenderReactions.Bump, Reactions.Bump,
-				//Reactions.ContactEffect(new Effect(GameData.ANIM_EFFECT_CLING, DepthLayer.EffectCling)));
 		}
 		
 		
@@ -276,6 +276,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public override void Initialize() {
 			base.Initialize();
+			
+			color = (MonsterColor) Properties.GetInteger("color", (int) color);
 
 			health = healthMax;
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_OCTOROK);
@@ -316,6 +318,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		private void CollideMonsterAndPlayer() {
 			Player player = RoomControl.Player;
+
+			if (Math.Abs(player.ZPosition - zPosition) > 10)
+				return;
 
 			IEnumerable<UnitTool> monsterTools = EquippedTools.Where(t => t.IsPhysicsEnabled && t.IsSwordOrShield);
 			IEnumerable<UnitTool> playerTools = player.EquippedTools.Where(t => t.IsPhysicsEnabled && t.IsSwordOrShield);

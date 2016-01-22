@@ -17,6 +17,7 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Audio;
 using ZeldaEditor.Control;
 using ZeldaOracle.Game.Tiles.Custom;
+using ZeldaOracle.Game.Entities.Monsters;
 
 namespace ZeldaEditor {
 	public class LevelDisplay : GraphicsDeviceControl {
@@ -308,8 +309,11 @@ namespace ZeldaEditor {
 		}
 
 		// Draw an event tile.
-		private void DrawEventTile(Graphics2D g, EventTileDataInstance eventTile, Color color) {
+		private void DrawEventTile(Graphics2D g, EventTileDataInstance eventTile, Color drawColor) {
 			SpriteAnimation spr = eventTile.CurrentSprite;
+			int imageVariantID = eventTile.Properties.GetInteger("image_variant");
+			if (imageVariantID < 0)
+				imageVariantID = eventTile.Room.Zone.ImageVariantID;
 			
 			// Select different sprites for certain events.
 			if (eventTile.Type == typeof(NPCEvent)) {
@@ -328,10 +332,7 @@ namespace ZeldaEditor {
 
 			// Draw the sprite.
 			if (!spr.IsNull) {
-				int imageVariantID = eventTile.Properties.GetInteger("image_variant");
-				if (imageVariantID < 0)
-					imageVariantID = eventTile.Room.Zone.ImageVariantID;
-				g.DrawAnimation(spr, imageVariantID, editorControl.Ticks, eventTile.Position, Color.White);
+				g.DrawAnimation(spr, imageVariantID, editorControl.Ticks, eventTile.Position, drawColor);
 			}
 			else {
 				Rectangle2I r = new Rectangle2I(eventTile.Position, eventTile.Size * GameSettings.TILE_SIZE);

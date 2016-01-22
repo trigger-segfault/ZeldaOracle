@@ -12,6 +12,7 @@ using ZeldaOracle.Game.Entities.Monsters.Tools;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 
@@ -71,6 +72,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		protected float		shootSpeed;
 		protected int		projectileShootOdds;
 		protected int		shootPauseDuration;
+		protected Sound		shootSound;
 				
 		// States.
 		protected bool		isPaused;
@@ -118,6 +120,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			shootSpeed			= 2.0f;
 			projectileShootOdds	= 5;
 			shootPauseDuration	= 30;
+			shootSound			= null;
 		}
 		
 		protected void ChangeDirection() {
@@ -210,7 +213,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			else {
 				ShootFromDirection(projectile, direction, shootSpeed);
 			}*/
-			
+			if (shootSound != null)
+				AudioSystem.PlaySound(shootSound);
+
 			ShootFromDirection(projectile, direction, shootSpeed, Directions.ToVector(direction) * 8.0f);
 
 			//Pause(shootPauseDuration);

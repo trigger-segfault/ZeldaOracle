@@ -169,7 +169,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			}
 		}
 		
-		public void Bump(Vector2F sourcePosition, bool playSound) {
+		public void Bump(Vector2F sourcePosition) {
 			Knockback(bumpKnockbackDuration, knockbackSpeed, sourcePosition);
 		}
 
@@ -226,7 +226,8 @@ namespace ZeldaOracle.Game.Entities.Units {
 
 
 		public virtual void OnKnockbackEnd() {
-			physics.Velocity = Vector2F.Zero;
+			if (IsOnGround)
+				physics.Velocity = Vector2F.Zero;
 		}
 
 		public virtual void UpdateSubStripIndex() {

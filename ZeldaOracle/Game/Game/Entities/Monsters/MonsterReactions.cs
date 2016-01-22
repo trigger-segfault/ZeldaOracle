@@ -188,27 +188,27 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// Bump the monster.
 			public static void Bump(Monster monster, Entity sender, EventArgs args) {
 				AudioSystem.PlaySound(GameData.SOUND_BOMB_BOUNCE);
-				monster.Bump(sender.Center, true);
+				monster.Bump(sender.Center);
 			}
 
 			// Bump the monster and sender.
 			public static void Parry(Monster monster, Entity sender, EventArgs args) {
-				monster.Bump(sender.Center, false);
+				monster.Bump(sender.Center);
 				Unit unitSender = sender as Unit;
 
 				if (unitSender != null && !unitSender.IsBeingKnockedBack) {
-					unitSender.Bump(monster.Center, false);
+					unitSender.Bump(monster.Center);
 					AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 				}
 			}
 
 			// Bump the monster and sender.
 			public static void ParryWithClingEffect(Monster monster, Entity sender, EventArgs args) {
-				monster.Bump(sender.Center, false);
+				monster.Bump(sender.Center);
 				Unit unitSender = sender as Unit;
 
 				if (unitSender != null && !unitSender.IsBeingKnockedBack && !monster.IsBeingKnockedBack) {
-					unitSender.Bump(monster.Center, false);
+					unitSender.Bump(monster.Center);
 					AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 					
 					Effect effect = new Effect(GameData.ANIM_EFFECT_CLING, DepthLayer.EffectCling);
@@ -348,7 +348,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			
 			public static void Bump(Monster monster, Entity sender, EventArgs args) {
 				if (sender is Unit)
-					(sender as Unit).Bump(monster.Center, true);
+					(sender as Unit).Bump(monster.Center);
 			}
 			
 			public static void Damage(Monster monster, Entity sender, EventArgs args) {

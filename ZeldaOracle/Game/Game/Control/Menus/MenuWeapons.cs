@@ -26,7 +26,8 @@ namespace ZeldaOracle.Game.Control.Menus {
 		//-----------------------------------------------------------------------------
 
 		public MenuWeapons(GameManager gameManager)
-			: base(gameManager) {
+			: base(gameManager)
+		{
 			this.backgroundSprite	= Resources.GetImage("UI/menu_weapons_a");
 
 			this.ammoSlot			= 0;

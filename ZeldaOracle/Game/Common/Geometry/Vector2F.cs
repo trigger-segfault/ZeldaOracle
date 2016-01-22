@@ -523,6 +523,10 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 		// Static Methods
 		//-----------------------------------------------------------------------------
+		
+		public static float Distance(Vector2F a, Vector2F b) {
+			return (b - a).Length;
+		}
 
 		public static Vector2F Lerp(Vector2F value1, Vector2F value2, float amount) {
 			return new Vector2F(
