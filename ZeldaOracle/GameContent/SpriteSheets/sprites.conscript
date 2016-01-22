@@ -22,11 +22,11 @@ SPRITESHEET "items_large_light",	"Items/items_large_light"	(16, 16), (1, 1), (18
 SPRITESHEET "tileset_overworld",	(16, 16), (1, 1), (0, 0); END;
 SPRITESHEET "tileset_interior2",	(16, 16), (1, 1), (0, 0); END;
 SPRITESHEET "Tiles/general_tiles",	(16, 16), (1, 1), (0, 0); END;
-SPRITESHEET "Tiles/zoneset_large", "zoneset", (16, 16), (1, 1), (0, 0); END;
-SPRITESHEET "Tiles/zoneset_small", "zoneset", (8, 8), (1, 1), (187, 0); END;
+#SPRITESHEET "Tiles/zoneset_large", "zoneset", (16, 16), (1, 1), (0, 0); END;
+#SPRITESHEET "Tiles/zoneset_small", "zoneset", (8, 8), (1, 1), (187, 0); END;
 
-#SPRITESHEET "Tiles/zoneset_large", "zoneset_new", (16, 16), (1, 1), (18, 18); END;
-#SPRITESHEET "Tiles/zoneset_small", "zoneset_new", (8, 8), (1, 1), (18, 341); END;
+SPRITESHEET "Tiles/zoneset_large", "zoneset_new", (16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "Tiles/zoneset_small", "zoneset_new", (8, 8), (1, 1), (18, 341); END;
 
 SPRITESHEET "player",					(16, 16), (1, 1), (18, 18); END;
 SPRITESHEET "basic_monsters",			(16, 16), (1, 1), (18, 18); END;
@@ -153,9 +153,9 @@ SPRITE tile_portal,					( 7, 4); END;
 SPRITE tile_floor_staircase_down,	( 8, 4); END;
 SPRITE tile_floor_staircase_up,		( 9, 4); END;
 
-SPRITE tile_regrowable_plant_grown,		( 0, 5); END;
-SPRITE tile_regrowable_plant_growing,	( 1, 5); END;
-SPRITE tile_regrowable_plant_cut,		( 2, 5); END;
+SPRITE tile_regrowing_plant_grown,		( 0, 5); END;
+SPRITE tile_regrowing_plant_growing,	( 1, 5); END;
+SPRITE tile_regrowing_plant_cut,		( 2, 5); END;
 SPRITE tile_cactus,						( 3, 5); END;
 SPRITE tile_plant_part_unknown,			( 4, 5); END;
 SPRITE tile_soft_soil,					( 5, 5); END;
@@ -196,9 +196,11 @@ SPRITE tile_color_cube_slot,		(10, 8); END;
 SPRITE tile_minecart_track_corner_southwest,	(11, 8); END;
 SPRITE tile_minecart_track_corner_southeast,	(12, 8); END;
 
-SPRITE tile_floor_tile_monster,		( 9, 9); END;
-SPRITE tile_moving_platform,		( 9, 9); END;
-SPRITE tile_minecart_track_stop,	( 9, 9); END;
+SPRITE tile_floor_tile_monster,			( 8, 9); END;
+SPRITE tile_moving_platform,			( 9, 9); END;
+SPRITE tile_minecart_track_stop,		(10, 9); END;
+SPRITE tile_minecart_track_horizontal,	(11, 9); END;
+SPRITE tile_minecart_track_vertical,	(12, 9); END;
 
 SPRITE tile_door_up,				( 0, 10); END;
 SPRITE tile_door_left,				( 1, 10); END;
