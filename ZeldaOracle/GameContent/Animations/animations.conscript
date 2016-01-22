@@ -26,8 +26,6 @@ ANIM tile_lantern; SUBSTRIP repeat;
 	
 # Doors
 
-SPRITESHEET "zoneset_large";
-
 ANIM tile_door_close;
 	SUBSTRIP clamp;
 		ADD frame, 6, (0, 4), (-8, 0);

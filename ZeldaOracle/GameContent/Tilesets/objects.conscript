@@ -26,16 +26,23 @@ TEMPANIM lantern_lit; SUBSTRIP repeat;
 
 LOAD TILESETS;
 
-TEMPTILE lantern;
+
+# ---- Lantern ----------------------------------------------------------------
+
+TILE lantern;
 	TYPE		TileLantern;
 	SOLID		block;
+	SPRITEINDEX	0, lantern_lit;
+	SPRITEINDEX 1, tile_lantern_unlit;
 	PROPERTIES	(boolean, lit,				true, "Lit", "", "", "Whether the lantern starts lit or not.", false),
 				(boolean, remember_state,	false, "Remember State", "", "", "Will the lantern's lit state be remembered after leaving the room?");
 	EVENT event_light, "Light", "Occurs when the lantern is lighted.", (Lantern, lantern);
 	EVENT event_put_out, "Put Out", "Occurs when the lantern is put out.", (Lantern, lantern);
 END;
 
-TEMPTILE sign;
+# ---- Signs ------------------------------------------------------------------
+
+TILE sign;
 	TYPE		TileSign;
 	SOLID		block;
 	FLAGS		Pickupable, Burnable, Cuttable, Switchable, Boomerangable;
@@ -48,49 +55,111 @@ TEMPTILE sign;
 			"The text to display when the sign is read from the front.", false);
 END;
 
-TEMPTILE pushable_block;
+TILE sign_alt;
+	CLONE		sign;
+	SPRITE		tile_sign_alt;
+	SPRITEOBJ	tile_sign_alt_asobject;
+END;
+
+# ---- Movable Blocks ---------------------------------------------------------
+
+TILE pushable_block;
 	SOLID		block;
 	FLAGS		Movable;
+	SPRITE		tile_movable_block;
+	SPRITEOBJ	tile_movable_block_asobject;
 	PROPERTIES	(boolean, move_once, true);
 END;
 
-TEMPTILE color_jump_pad;
+
+# ---- Color Jump Pad ---------------------------------------------------------
+
+TILE color_jump_pad;
 	TYPE		TileColorJumpPad;
 	PROPERTIES	(integer, color,			0,		"Color",			"", "Color", "The color of the jump pad."),
 				(boolean, remember_state,	false,	"Remember State",	"", "Color", "Will the jump pad's color be remembered after leaving the room?");
 	EVENT		event_color_change, "Color Change", "Occurs when the pad's color changes.", (ColorJumpPad, tile, Color, color);
 END;
 
-TEMPTILE color_tile;
+TILE color_jump_pad_red;
+	CLONE		color_jump_pad;
+	SPRITE		tile_color_jump_pad_red;
+	PROPERTIES	(integer, color, 0);
+END;
+
+TILE color_jump_pad_yellow;
+	CLONE		color_jump_pad;
+	SPRITE		tile_color_jump_pad_yellow;
+	PROPERTIES	(integer, color, 1);
+END;
+
+TILE color_jump_pad_blue;
+	CLONE		color_jump_pad;
+	SPRITE		tile_color_jump_pad_blue;
+	PROPERTIES	(integer, color, 2);
+END;
+
+# ---- Color Tile -------------------------------------------------------------
+
+TILE color_tile;
 	TYPE		TileColorTile;
 	PROPERTIES	(integer, color,			0,		"Color",			"", "Color", "The color of the tile."),
 				(boolean, remember_state,	false,	"Remember State",	"", "Color", "Will the tile's color be remembered after leaving the room?");
 END;
 
-TEMPTILE color_barrier;
+# ---- Color Barrier ----------------------------------------------------------
+
+TILE color_barrier;
 	TYPE		TileColorBarrier;
 	HALFSOLID	block;
+	SPRITE		tile_color_barrier_red_raised;
 	PROPERTIES	(integer, color, 0, "Color", "", "Color", "The color of the barrier (red or blue).");
 END;
 
-TEMPTILE color_statue;
+# ---- Color Statue -----------------------------------------------------------
+
+TILE color_statue;
 	SOLID		block;
 	FLAGS		Movable;
 	PROPERTIES	(integer, color, 0, "Color", "", "", "The color of the statue.");
 END;
 
-TEMPTILE color_cube_slot;
+TILE color_statue_red;
+	CLONE		color_statue;
+	SPRITE		tile_color_statue_red;
+	PROPERTIES	(integer, color, 0);
+END;
+
+TILE color_statue_yellow;
+	CLONE		color_statue;
+	SPRITE		tile_color_statue_yellow;
+	PROPERTIES	(integer, color, 1);
+END;
+
+TILE color_statue_blue;
+	CLONE		color_statue;
+	SPRITE		tile_color_statue_blue;
+	PROPERTIES	(integer, color, 2);
+END;
+
+# ---- Color Cube Slot --------------------------------------------------------
+
+TILE color_cube_slot;
 	TYPE		TileColorCubeSlot;
 	EVENT		on_color_change, "Color Change", "Occurs when the slot's color changes.", (ColorCubeSlot, tile, Color, color);
 END;
 
-TEMPTILE color_lantern;
+# ---- Color Lantern ----------------------------------------------------------
+
+TILE color_lantern;
 	TYPE		TileColorLantern;
 	SOLID		block;
 	EVENT		on_color_change, "Color Change", "Occurs when the lantern's flame color changes.", (ColorLantern, tile, Color, color);
 END;
 
-TEMPTILE button;
+# ---- Button -----------------------------------------------------------------
+
+TILE button;
 	TYPE		TileButton;
 	PROPERTIES	(boolean, releasable,		true, "Releasable",			"", "Button", "Can the button only be pressed, and not released?"),
 				(boolean, pressed,			false, "Pressed",			"", "Button", "Is the button pressed"),
@@ -99,7 +168,9 @@ TEMPTILE button;
 	EVENT on_release, "On Release", "Occurs when the button is released.", (Button button);
 END;
 
-TEMPTILE lever;
+# ---- Lever ------------------------------------------------------------------
+
+TILE lever;
 	TYPE TileLever;
 	SOLID block;
 	FLAGS AbsorbSeeds;
@@ -109,7 +180,9 @@ TEMPTILE lever;
 	EVENT event_toggle, "Toggle", "Occurs when the lever is toggled.", (Lever, lever);
 END;
 
-TEMPTILE door;
+# ---- Door -------------------------------------------------------------------
+
+TILE door;
 	TYPE		TileDoor;
 	SOLID		block;
 	PROPERTIES	(boolean, open, false, "Open", "", "Door", "True if the door open."),
@@ -117,46 +190,46 @@ TEMPTILE door;
 				(boolean, remember_state, false, "Remember State", "", "Door", "Will the door's opened state be remembered after leaving the room?");
 END;
 
-TEMPTILE small_key_door;
+TILE small_key_door;
 	CLONE		door;
 	TYPE		TileSmallKeyDoor;
 	PROPERTIES	(boolean, remember_state, true);
 END;
 
-TEMPTILE boss_key_door;
+TILE boss_key_door;
 	CLONE		door;
 	TYPE		TileBossKeyDoor;
 	PROPERTIES	(boolean, remember_state, true);
 END;
 
-TEMPTILE minecart_door;
+TILE minecart_door;
 	CLONE		door;
 	TYPE		TileMinecartDoor;
 END;
 
-TEMPTILE eye_statue;
+TILE eye_statue;
 	TYPE		TileEyeStatue;
 	SOLID		block;
 END;
 
-TEMPTILE locked_block;
+TILE locked_block;
 	TYPE		TileLockedBlock;
 	SOLID		block;
 END;
 
-TEMPTILE web_wall;
+TILE web_wall;
 	SOLID		block;
 	FLAGS		Burnable;
 	PROPERTIES	(boolean, disable_on_destroy, true);
 END;
 
-TEMPTILE bombable_wall;
+TILE bombable_wall;
 	SOLID		block;
 	FLAGS		Burnable;
 	PROPERTIES	(boolean, disable_on_destroy, true);
 END;
 
-TEMPTILE minecart_track;
+TILE minecart_track;
 	TYPE		TileMinecartTrack;
 	FLAGS		NotCoverable;
 	SPRITEINDEX	0, "tileset_objects", (10, 11);	# Horizontal
@@ -172,6 +245,12 @@ END;
 # This tile is used by the Shovel.
 TILE dug;
 	SPRITE		"tileset_objects", (1, 2);
+END;
+
+# This tile is used by Cracked floors
+TILE pit;
+	ENVTYPE		Hole;
+	SPRITE		tile_pit;
 END;
 
 

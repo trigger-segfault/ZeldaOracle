@@ -38,7 +38,7 @@ TEMPANIM roller_vertical_roll;
 
 LOAD TILESETS;
 
-TEMPTILE chest;
+TILE chest;
 	TYPE		TileChest;
 	SOLID		block;
 	PROPERTIES
@@ -51,9 +51,28 @@ TEMPTILE chest;
 			"True if the item has been taken from the chest.", false);
 END;
 
-TEMPTILE reward;
+TILE chest_curved;
+	CLONE			chest;
+	SPRITEINDEX		0, "tileset_objects_nv",				(0, 0);
+	SPRITEINDEX		1, "tileset_objects_nv_extras_16x16",	(0, 0);
+END;
+
+TILE chest_flat;
+	CLONE			chest;
+	SPRITEINDEX		0, "tileset_objects_nv",				(1, 0);
+	SPRITEINDEX		1, "tileset_objects_nv_extras_16x16",	(1, 0);
+END;
+
+TILE chest_ornate;
+	CLONE			chest;
+	SPRITEINDEX		0, "tileset_objects_nv",				(2, 0);
+	SPRITEINDEX		1, "tileset_objects_nv_extras_16x16",	(2, 0);
+END;
+
+TILE reward;
 	TYPE		TileReward
 	SOLID		center;
+	SPRITE		"tileset_objects_nv_extras_16x16", (9, 1);
 	PROPERTIES
 		(string, reward, "heart_piece",
 			"Reward", "reward", "Reward",
@@ -63,40 +82,51 @@ TEMPTILE reward;
 			"True if the item has been taken.", false);
 END;
 
-TEMPTILE color_switch;
+TILE color_switch;
 	TYPE		TileColorSwitch;
 	SOLID		block;
 	FLAGS		AbsorbSeeds;
+	SPRITE		tile_color_switch_red;
 	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "", "Can the color switch only be switched once?"),
 				(boolean, switch_state,		false,	"Switch State",		"", "", "The switch state of the color switch (false = blue, true = red)."),
 				(boolean, remember_state,	false,	"Remember State",	"", "", "Will the color switch's state be remembered after leaving the room?");
 	EVENT		event_toggle, "Toggle", "Occurs when the Color Switch changes color.", (ColorSwitch, switch);
 END;
 
-TEMPTILE trampoline;
+TILE trampoline;
 	FLAGS		Movable;
 	SOLID		block;
+	SPRITEINDEX	0, "tileset_objects_nv", (6, 0);
+	SPRITEINDEX	1, trampoline_bounce;
 END;
 
-TEMPTILE owl;
+TILE owl;
 	TYPE		TileOwl;
 	FLAGS		AbsorbSeeds;
 	SOLID		block;
+
+	SPRITEINDEX	0, tile_owl;
+	SPRITEINDEX	1, owl_activated;
+
 	PROPERTIES
 		(string, text, "<red>undefined<red>",
 			"Text", "text_message", "Owl",
 			"The text to display when the owl is activated.", false);
 END;
 
-TEMPTILE color_cube;
-	TYPE		TileColorCube;
-	FLAGS		movable;
-	SOLID		block;
-	PROPERTIES
-		(show sprite_index);
+TILE color_cube;
+	TYPE			TileColorCube;
+	FLAGS			movable;
+	SOLID			block;
+	SPRITEINDEX		0, "color_cube", (0, 0);
+	SPRITEINDEX		1, "color_cube", (1, 0);
+	SPRITEINDEX		2, "color_cube", (2, 0);
+	SPRITEINDEX		3, "color_cube", (3, 0);
+	SPRITEINDEX		4, "color_cube", (4, 0);
+	SPRITEINDEX		5, "color_cube", (5, 0);
 END;
 
-TEMPTILE roller_horizontal;
+TEMPTILE roller;
 	TYPE		TileRoller;
 	FLAGS		movable, notgrabbable;
 	SOLID		block;
@@ -109,24 +139,42 @@ TEMPTILE roller_horizontal;
 			"This is the top left roller of a group. Any rollers before this won't be connected.", false);
 END;
 
-TEMPTILE roller_vertical;
-	TYPE		TileRoller;
-	FLAGS		movable, notgrabbable;
-	SOLID		block;
-	PROPERTIES
-		(boolean, vertical, "true",
-			"Vertical", "", "Roller",
-			"The roller rolls vertically", true),
-		(boolean, first_roller, "false",
-			"First Roller", "", "Roller",
-			"This is the top left roller of a group. Any rollers before this won't be connected.", false);
+TILE roller_horizontal;
+	CLONE		roller;
+	SPRITEINDEX	0, "tileset_objects_nv", (7, 0);
+	SPRITEINDEX	1, roller_horizontal_roll;
+	PROPERTIES	(boolean, vertical, "false"),
+				(boolean, first_roller, "false");
 END;
 
-TEMPTILE crossing_grate;
+TILE roller_vertical;
+	CLONE		roller;
+	SPRITEINDEX	0, "tileset_objects_nv", (8, 0);
+	SPRITEINDEX	1, roller_vertical_roll;
+	PROPERTIES	(boolean, vertical, "true"),
+				(boolean, first_roller, "false");
+END;
+
+TILE crossing_grate;
 	TYPE		TileCrossingGate;
 	SOLID		edge_w;
 	PROPERTIES	(boolean, raised,    false, "Raised",      "", "Crossing Gate", "True if the gate is raised.");
 	PROPERTIES	(boolean, face_left, false, "Facing Left", "", "Crossing Gate", "True if the crossing gate is facing left.");
+END;
+
+TILE crossing_grate_right;
+	CLONE crossing_grate;
+	PROPERTIES (boolean, face_left, false);
+END;
+
+TILE crossing_grate_left;
+	CLONE crossing_grate;
+	PROPERTIES (boolean, face_left, true);
+END;
+
+TILE platform;
+	TYPE	TilePlatform;
+	SPRITE	tile_moving_platform;
 END;
 
 
@@ -139,80 +187,23 @@ DEFAULT (0, 0);
 
 # Rewards
 
-TILE (0, 0);
-	CLONE			chest;
-	SPRITEINDEX		0, "tileset_objects_nv",				(0, 0);
-	SPRITEINDEX		1, "tileset_objects_nv_extras_16x16",	(0, 0);
-END;
+SETTILE ( 0, 0), chest_curved;
+SETTILE ( 1, 0), chest_flat;
+SETTILE ( 2, 0), chest_ornate;
 
-TILE (1, 0);
-	CLONE			chest;
-	SPRITEINDEX		0, "tileset_objects_nv",				(1, 0);
-	SPRITEINDEX		1, "tileset_objects_nv_extras_16x16",	(1, 0);
-END;
 
-TILE (2, 0);
-	CLONE			chest;
-	SPRITEINDEX		0, "tileset_objects_nv",				(2, 0);
-	SPRITEINDEX		1, "tileset_objects_nv_extras_16x16",	(2, 0);
-END;
+SETTILE ( 3, 0), reward;
+SETTILE ( 4, 0), color_switch;
 
-TILE (3, 0);
-	CLONE			reward;
-	SPRITE			"tileset_objects_nv_extras_16x16", (9, 1);
-END;
+SETTILE ( 6, 0), trampoline;
+SETTILE ( 7, 0), roller_horizontal;
+SETTILE ( 8, 0), roller_vertical;
+SETTILE ( 9, 0), owl;
 
-TILE (4, 0);
-	CLONE			color_switch;
-END;
-
-TILE (6, 0);
-	CLONE			trampoline;
-	SPRITEINDEX		0, "tileset_objects_nv",				(6, 0);
-	SPRITEINDEX		1, trampoline_bounce;
-END;
-
-TILE (7, 0);
-	CLONE			roller_horizontal;
-	SPRITEINDEX		1, roller_horizontal_roll;
-END;
-
-TILE (8, 0);
-	CLONE			roller_vertical;
-	SPRITEINDEX		1, roller_vertical_roll;
-END;
-
-TILE (9, 0);
-	CLONE			owl;
-	SPRITEINDEX		0, tile_owl;
-	SPRITEINDEX		1, owl_activated;
-END;
-
-TILE (10, 0);
-	CLONE color_cube;
-	SPRITEINDEX		0, "color_cube", (0, 0);
-	SPRITEINDEX		1, "color_cube", (1, 0);
-	SPRITEINDEX		2, "color_cube", (2, 0);
-	SPRITEINDEX		3, "color_cube", (3, 0);
-	SPRITEINDEX		4, "color_cube", (4, 0);
-	SPRITEINDEX		5, "color_cube", (5, 0);
-END;
-
-# Platform
-TILE (11, 0);
-	TYPE TilePlatform;
-END;
-
-# Crossing Gate (right)
-TILE (0, 1);
-	CLONE crossing_grate;
-	PROPERTIES (boolean, face_left, false);
-END;
-
-# Crossing Gate (left)
-TILE (1, 1);
-	CLONE crossing_grate;
-	PROPERTIES (boolean, face_left, true);
-END;
+SETTILE ( 9, 0), owl;
+SETTILE (10, 0), color_cube;
+SETTILE (11, 0), platform;
+SETTILE ( 0, 1), crossing_grate_right;
+SETTILE ( 1, 1), crossing_grate_left;
 
 END;

@@ -209,7 +209,7 @@ namespace ZeldaOracle.Game {
 			Resources.LoadTilesets("Tilesets/objects_nv.conscript");
 			Resources.LoadTilesets("Tilesets/event_tile_data.conscript");
 			// OLD Tilesets:
-			Resources.LoadTilesets("Tilesets/tile_data.conscript");
+			//Resources.LoadTilesets("Tilesets/tile_data.conscript");
 			Resources.LoadTilesets("Tilesets/overworld.conscript");
 			Resources.LoadTilesets("Tilesets/interior2.conscript");
 
