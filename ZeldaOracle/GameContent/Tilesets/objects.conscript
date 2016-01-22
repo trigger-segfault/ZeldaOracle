@@ -16,8 +16,8 @@ LOAD ANIMATIONS;
 
 SPRITESHEET "tileset_objects_extras_16x16";
 
-TEMPANIM lantern_lit; SUBSTRIP repeat;
-	ADD strip, 16, 4, (0, 3); END;
+#TEMPANIM lantern_lit; SUBSTRIP repeat;
+#	ADD strip, 16, 4, (0, 3); END;
 
 
 #==============================================================================
@@ -199,8 +199,8 @@ END;
 TILE lantern;
 	TYPE		TileLantern;
 	SOLID		block;
-	SPRITEINDEX	0, lantern_lit;
-	SPRITEINDEX 1, tile_lantern_unlit;
+	SPRITEINDEX	0, animation,	tile_lantern_lit;
+	SPRITEINDEX	1, sprite,		tile_lantern_unlit;
 	PROPERTIES	(boolean, lit,				true, "Lit", "", "", "Whether the lantern starts lit or not.", false),
 				(boolean, remember_state,	false, "Remember State", "", "", "Will the lantern's lit state be remembered after leaving the room?");
 	EVENT event_light, "Light", "Occurs when the lantern is lighted.", (Lantern, lantern);
@@ -423,50 +423,62 @@ END;
 # ---- Door -------------------------------------------------------------------
 
 TILE door;
-	TYPE		TileDoor;
-	SOLID		block;
-	PROPERTIES	(boolean, open, false, "Open", "", "Door", "True if the door open."),
-				(integer, direction, 0, "Direction", "direction", "Door", "The direction the door is facing.", false),
-				(boolean, remember_state, false, "Remember State", "", "Door", "Will the door's opened state be remembered after leaving the room?");
+	TYPE			TileDoor;
+	SOLID			block;
+	SPRITEINDEX	0,	tile_door_closed;
+	SPRITEINDEX	1,	tile_door_open;
+	SPRITEINDEX	2,	tile_door_close;
+	PROPERTIES		(boolean, open, false, "Open", "", "Door", "True if the door open."),
+					(integer, direction, 0, "Direction", "direction", "Door", "The direction the door is facing.", false),
+					(boolean, remember_state, false, "Remember State", "", "Door", "Will the door's opened state be remembered after leaving the room?");
 END;
 
-TILE door_right;	CLONE door; PROPERTIES (integer, direction, 0); END;
-TILE door_up;		CLONE door; PROPERTIES (integer, direction, 1); END;
-TILE door_left;		CLONE door; PROPERTIES (integer, direction, 2); END;
-TILE door_down;		CLONE door; PROPERTIES (integer, direction, 3); END;
+TILE door_right;	CLONE door; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
+TILE door_up;		CLONE door; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
+TILE door_left;		CLONE door; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
+TILE door_down;		CLONE door; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
 
 
 TILE small_key_door;
-	CLONE		door;
-	TYPE		TileSmallKeyDoor;
-	PROPERTIES	(boolean, remember_state, true);
+	CLONE			door;
+	TYPE			TileSmallKeyDoor;
+	SPRITEINDEX	0,	tile_small_key_door_closed;
+	SPRITEINDEX	1,	tile_small_key_door_open;
+	SPRITEINDEX	2,	tile_small_key_door_close;
+	PROPERTIES		(boolean, remember_state, true);
 END;
 
-TILE small_key_door_right;	CLONE small_key_door; PROPERTIES (integer, direction, 0); END;
-TILE small_key_door_up;		CLONE small_key_door; PROPERTIES (integer, direction, 1); END;
-TILE small_key_door_left;	CLONE small_key_door; PROPERTIES (integer, direction, 2); END;
-TILE small_key_door_down;	CLONE small_key_door; PROPERTIES (integer, direction, 3); END;
+TILE small_key_door_right;	CLONE small_key_door; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
+TILE small_key_door_up;		CLONE small_key_door; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
+TILE small_key_door_left;	CLONE small_key_door; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
+TILE small_key_door_down;	CLONE small_key_door; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
 
 TILE boss_key_door;
 	CLONE		door;
 	TYPE		TileBossKeyDoor;
+	SPRITEINDEX	0,	tile_boss_key_door_closed;
+	SPRITEINDEX	1,	tile_boss_key_door_open;
+	SPRITEINDEX	2,	tile_boss_key_door_close;
 	PROPERTIES	(boolean, remember_state, true);
 END;
 
-TILE boss_key_door_right;	CLONE boss_key_door; PROPERTIES (integer, direction, 0); END;
-TILE boss_key_door_up;		CLONE boss_key_door; PROPERTIES (integer, direction, 1); END;
-TILE boss_key_door_left;	CLONE boss_key_door; PROPERTIES (integer, direction, 2); END;
-TILE boss_key_door_down;	CLONE boss_key_door; PROPERTIES (integer, direction, 3); END;
+TILE boss_key_door_right;	CLONE boss_key_door; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
+TILE boss_key_door_up;		CLONE boss_key_door; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
+TILE boss_key_door_left;	CLONE boss_key_door; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
+TILE boss_key_door_down;	CLONE boss_key_door; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
 
 TILE minecart_door;
 	CLONE		door;
+	SPRITEINDEX	0,	tile_minecart_door_closed;
+	SPRITEINDEX	1,	tile_minecart_door_open;
+	SPRITEINDEX	2,	tile_minecart_door_close;
 	TYPE		TileMinecartDoor;
 END;
 
-TILE minecart_door_right;	CLONE minecart_door; PROPERTIES (integer, direction, 0); END;
-TILE minecart_door_up;		CLONE minecart_door; PROPERTIES (integer, direction, 1); END;
-TILE minecart_door_left;	CLONE minecart_door; PROPERTIES (integer, direction, 2); END;
-TILE minecart_door_down;	CLONE minecart_door; PROPERTIES (integer, direction, 3); END;
+TILE minecart_door_right;	CLONE minecart_door; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
+TILE minecart_door_up;		CLONE minecart_door; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
+TILE minecart_door_left;	CLONE minecart_door; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
+TILE minecart_door_down;	CLONE minecart_door; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
 
 TILE eye_statue;
 	TYPE		TileEyeStatue;

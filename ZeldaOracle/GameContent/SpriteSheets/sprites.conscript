@@ -254,6 +254,7 @@ SPRITE tile_whirlpool_1,			( 0, 14); END;
 SPRITE tile_whirlpool_2,			( 1, 14); END;
 SPRITE tile_whirlpool_3,			( 2, 14); END;
 SPRITE tile_whirlpool_4,			( 3, 14); END;
+SPRITE tile_ice,					( 4, 14); END;
 
 SPRITE tile_poison_bubble_1,		( 0, 15); END;
 SPRITE tile_poison_bubble_2,		( 1, 15); END;
@@ -266,6 +267,65 @@ SPRITE tile_fountain_1, (12, 14); ADD (12, 15), (16, 0); ADD (12, 16), (0, 16); 
 SPRITE tile_fountain_2, (13, 14); ADD (13, 15), (16, 0); ADD (13, 16), (0, 16); ADD (13, 17), (16, 16);
 SPRITE tile_fountain_3, (14, 14); ADD (14, 15), (16, 0); ADD (14, 16), (0, 16); ADD (14, 17), (16, 16);
 SPRITE tile_fountain_4, (15, 14); ADD (15, 15), (16, 0); ADD (15, 16), (0, 16); ADD (15, 17), (16, 16);
+
+
+SPRITESHEET "zoneset_small";
+
+SPRITE tile8x8_black,			(0, 0);
+SPRITE tile8x8_puddle_1,		(1, 0);
+SPRITE tile8x8_puddle_2,		(2, 0);
+SPRITE tile8x8_puddle_3,		(3, 0);
+
+SPRITE tile8x8_water_1,			(0, 1);
+SPRITE tile8x8_water_2,			(1, 1);
+SPRITE tile8x8_water_3,			(2, 1);
+SPRITE tile8x8_water_4,			(3, 1);
+
+SPRITE tile8x8_deep_water_1,	(0, 2);
+SPRITE tile8x8_deep_water_2,	(1, 2);
+SPRITE tile8x8_deep_water_3,	(2, 2);
+SPRITE tile8x8_deep_water_4,	(3, 2);
+
+SPRITE tile8x8_wall_torch_light_1,		(14, 8);
+SPRITE tile8x8_wall_torch_light_2,		(15, 8);
+SPRITE tile8x8_wall_torch_light_3,		(16, 8);
+SPRITE tile8x8_wall_torch_light_4,		(17, 8);
+
+SPRITE tile8x8_wall_torch_holder_right,	(14, 9);
+SPRITE tile8x8_wall_torch_holder_up,	(14, 9);
+SPRITE tile8x8_wall_torch_holder_left,	(14, 9);
+SPRITE tile8x8_wall_torch_holder_down,	(14, 9);
+
+SPRITE tile8x8_flower_1,			(0, 10);
+SPRITE tile8x8_flower_2,			(1, 10);
+SPRITE tile8x8_flower_3,			(2, 10);
+SPRITE tile8x8_flower_4,			(3, 10);
+SPRITE tile8x8_grass_tuft_right,	(4, 10);
+SPRITE tile8x8_grass_tuft_left,		(5, 10);
+
+SPRITE tile8x8_waterfall_rock,		(16, 6);
+
+SPRITE tile8x8_lavafall_rock,		(16, 7);
+SPRITE tile8x8_hardened_lava,		(17, 7);
+
+
+
+SPRITE tile_output_empty_right_top,		(5, 0); END;
+SPRITE tile_output_empty_right_mid,		(5, 1); END;
+SPRITE tile_output_empty_right_bottom,	(5, 2); END;
+
+SPRITE tile_output_empty_left_top,		(4, 0); END;
+SPRITE tile_output_empty_left_mid,		(4, 1); END;
+SPRITE tile_output_empty_left_bottom,	(4, 2); END;
+
+SPRITE tile_output_empty_up_left,		(0, 2); END;
+SPRITE tile_output_empty_up_mid,		(1, 2); END;
+SPRITE tile_output_empty_up_right,		(2, 2); END;
+
+SPRITE tile_output_empty_down_left,		(0, 3); END;
+SPRITE tile_output_empty_down_mid,		(1, 3); END;
+SPRITE tile_output_empty_down_right,	(2, 3); END;
+
 
 
 #==============================================================

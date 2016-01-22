@@ -219,7 +219,7 @@ namespace ZeldaEditor {
 			Sprite sprite = null;
 			Animation animation = null;
 			float playbackTime = editorControl.Ticks;
-			int substripIndex = 0;
+			int substripIndex = tile.Properties.GetInteger("substrip_index", 0);
 			
 			//-----------------------------------------------------------------------------
 			// Platform.
@@ -286,6 +286,11 @@ namespace ZeldaEditor {
 			}*/
 			//-----------------------------------------------------------------------------
 
+			if (animation == null && sprite == null && tile.CurrentSprite.IsAnimation)
+				animation = tile.CurrentSprite.Animation;
+			if (animation == null && sprite == null && tile.CurrentSprite.IsSprite)
+				sprite = tile.CurrentSprite.Sprite;
+
 			// Draw the custom sprite/animation
 			if (animation != null) {
 				g.DrawAnimation(animation.GetSubstrip(substripIndex),
@@ -294,10 +299,10 @@ namespace ZeldaEditor {
 			else if (sprite != null) {
 				g.DrawSprite(sprite, tile.Room.Zone.ImageVariantID, position, drawColor);
 			}
-			else if (!tile.CurrentSprite.IsNull) {
+			/*else if (!tile.CurrentSprite.IsNull) {
 				g.DrawAnimation(tile.CurrentSprite,
 					tile.Room.Zone.ImageVariantID, editorControl.Ticks, position, drawColor);
-			}
+			}*/
 
 			// Draw rewards.
 			if (editorControl.ShowRewards && tile.Properties.Exists("reward") &&

@@ -39,10 +39,10 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_TILE_DOOR_CLOSE;
 		public static Animation ANIM_TILE_MINECART_DOOR_OPEN;
 		public static Animation ANIM_TILE_MINECART_DOOR_CLOSE;
-		public static Animation ANIM_TILE_LOCKED_DOOR_OPEN;
-		public static Animation ANIM_TILE_LOCKED_DOOR_CLOSE;
-		public static Animation ANIM_TILE_BOSS_DOOR_OPEN;
-		public static Animation ANIM_TILE_BOSS_DOOR_CLOSE;
+		public static Animation ANIM_TILE_SMALL_KEY_DOOR_OPEN;
+		public static Animation ANIM_TILE_SMALL_KEY_DOOR_CLOSE;
+		public static Animation ANIM_TILE_BOSS_KEY_DOOR_OPEN;
+		public static Animation ANIM_TILE_BOSS_KEY_DOOR_CLOSE;
 		public static Animation[,] ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS;
 		public static Animation ANIM_TILE_REGROWABLE_PLANT_REGROW;
 		

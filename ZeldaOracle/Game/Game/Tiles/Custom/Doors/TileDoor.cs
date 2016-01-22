@@ -126,6 +126,9 @@ namespace ZeldaOracle.Game.Tiles {
 			isOpen = Properties.GetBoolean("open", false);
 			isPlayerBlockingClose = false;
 
+			animationOpen = TileData.TileData.SpriteList[1].Animation;
+			animationClose = TileData.TileData.SpriteList[2].Animation;
+
 			// A closed door will start open if the player is colliding with door.
 			if (!isOpen) {
 				Player player = RoomControl.Player;

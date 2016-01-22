@@ -21,8 +21,8 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public TileBossKeyDoor() {
-			animationOpen	= GameData.ANIM_TILE_BOSS_DOOR_OPEN;
-			animationClose	= GameData.ANIM_TILE_BOSS_DOOR_CLOSE;
+			animationOpen	= GameData.ANIM_TILE_BOSS_KEY_DOOR_OPEN;
+			animationClose	= GameData.ANIM_TILE_BOSS_KEY_DOOR_CLOSE;
 			openCloseSound	= null;
 		}
 

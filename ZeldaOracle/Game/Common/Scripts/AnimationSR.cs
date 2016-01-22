@@ -122,20 +122,28 @@ namespace ZeldaOracle.Common.Scripts {
 						parameters.GetPoint(5, new Point2I(1, 0)).Y);
 				}
 				else if (parameters.GetString(0) == "frame") {
-					animationBuilder.AddFrame(
-						parameters.GetInt(1),
-						parameters.GetPoint(2).X,
-						parameters.GetPoint(2).Y,
-						parameters.GetPoint(3, Point2I.Zero).X,
-						parameters.GetPoint(3, Point2I.Zero).Y);
+					Sprite spr;
+					Point2I offset = parameters.GetPoint(3, Point2I.Zero);
+					if (parameters[2].Type == CommandParamType.Array) {
+						spr = new Sprite(animationBuilder.SpriteSheet, parameters.GetPoint(2), offset);
+					}
+					else {
+						spr = new Sprite(Resources.GetResource<Sprite>(parameters.GetString(2)));
+						spr.DrawOffset = offset;
+					}
+					animationBuilder.AddFrame(parameters.GetInt(1), spr);
 				}
 				else if (parameters.GetString(0) == "part") {
-					animationBuilder.AddPart(
-						parameters.GetInt(1),
-						parameters.GetPoint(2).X,
-						parameters.GetPoint(2).Y,
-						parameters.GetPoint(3, Point2I.Zero).X,
-						parameters.GetPoint(3, Point2I.Zero).Y);
+					Sprite spr;
+					Point2I offset = parameters.GetPoint(3, Point2I.Zero);
+					if (parameters[2].Type == CommandParamType.Array) {
+						spr = new Sprite(animationBuilder.SpriteSheet, parameters.GetPoint(2), offset);
+					}
+					else {
+						spr = new Sprite(Resources.GetResource<Sprite>(parameters.GetString(2)));
+						spr.DrawOffset = offset;
+					}
+					animationBuilder.AddPart(parameters.GetInt(1), spr);
 				}
 				else if (parameters.GetString(0) == "emptyframe") {
 					animationBuilder.AddEmptyFrame(parameters.GetInt(1));

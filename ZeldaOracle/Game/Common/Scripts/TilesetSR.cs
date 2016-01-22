@@ -139,7 +139,7 @@ namespace ZeldaOracle.Common.Scripts {
 				if (parameters.Count > 3) {
 					MonsterColor color;
 					if (!Enum.TryParse<MonsterColor>(parameters.GetString(3), true, out color))
-						throw new ArgumentException("Invalid monster color: \"" + parameters.GetString(3) + "\"!");
+						ThrowParseError("Invalid monster color: \"" + parameters.GetString(3) + "\"!");
 					eventTileData.Properties.Set("color", (int) color);
 					int imageVariantID = GameData.VARIANT_RED;
 					if (color == MonsterColor.Red)
@@ -233,7 +233,7 @@ namespace ZeldaOracle.Common.Scripts {
 					if (Enum.TryParse<TileFlags>(parameters.GetString(i), true, out flags))
 						tileData.Flags |= flags;
 					else
-						throw new ArgumentException("Invalid tile flag: \"" + parameters.GetString(i) + "\"!");
+						ThrowParseError("Invalid tile flag: \"" + parameters.GetString(i) + "\"!");
 				}
 			});
 			// EnvType <type>
@@ -242,7 +242,7 @@ namespace ZeldaOracle.Common.Scripts {
 				if (Enum.TryParse<TileEnvironmentType>(parameters.GetString(0), true, out envType))
 					tileData.Properties.Set("environment_type", (int) envType);
 				else
-					throw new ArgumentException("Invalid tile environment type: \"" + parameters.GetString(0) + "\"!");
+					ThrowParseError("Invalid tile environment type: \"" + parameters.GetString(0) + "\"!");
 			});
 			// Properties <(name, value>
 			// Properties <(type, name, value, readable-name, editor-type, category, description)...>
@@ -357,8 +357,9 @@ namespace ZeldaOracle.Common.Scripts {
 					baseTileData.Sprite = resources.GetSpriteAnimation(parameters.GetString(0));
 				}
 			});
+			// SpriteIndex <index> <sprite-or-anim> <sprite-animation>
 			// SpriteIndex <index> <sprite-animation>
-			// SpriteIndex <index> <spritesheet> <x-index> <y-index> <x-offset> <y-offset>
+			// SpriteIndex <index> <spritesheet> (<x-index> <y-index>) (<x-offset> <y-offset>)
 			AddTilesetCommand("SpriteIndex", delegate(CommandParam parameters) {
 				int index = parameters.GetInt(0);
 				if (tileData.SpriteList.Length <= index) {
@@ -371,7 +372,7 @@ namespace ZeldaOracle.Common.Scripts {
 					}
 					tileData.SpriteList = spriteList;
 				}
-				if (parameters.Count >= 3) {
+				if (parameters.Count > 2 && parameters[2].Type == CommandParamType.Array) {
 					spriteBuilder.Begin(new Sprite(
 						resources.GetResource<SpriteSheet>(parameters.GetString(1)),
 						parameters.GetPoint(2),
@@ -380,7 +381,18 @@ namespace ZeldaOracle.Common.Scripts {
 					tileData.SpriteList[index] = spriteBuilder.End();
 				}
 				else {
-					tileData.SpriteList[index] = resources.GetSpriteAnimation(parameters.GetString(1));
+					if (parameters.Count == 3) {
+						string typeName = parameters.GetString(1);
+						if (typeName == "sprite")
+							tileData.SpriteList[index] = resources.GetResource<Sprite>(parameters.GetString(2));
+						else if (typeName == "animation")
+							tileData.SpriteList[index] = resources.GetResource<Animation>(parameters.GetString(2));
+						else
+							ThrowParseError("Unknown sprite/animation type '" + typeName + "' (expected \"sprite\" or \"animation\")");
+					}
+					else {
+						tileData.SpriteList[index] = resources.GetSpriteAnimation(parameters.GetString(1));
+					}
 				}
 			});
 			// SpriteList [sprite-animation-1] [sprite-animation-2]...
