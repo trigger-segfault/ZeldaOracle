@@ -42,6 +42,7 @@ namespace ZeldaOracle.Game.Tiles {
 		protected bool				fallsInHoles;
 		private Vector2F			velocity;
 		protected Sound				soundMove;
+		private Vector2F			conveyorVelocity;
 
 		// Settings
 		private TileDataInstance	tileData;		// The tile data used to create this tile.
@@ -66,28 +67,29 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		// Use Tile.CreateTile() instead of this constructor.
 		protected Tile() {
-			isAlive			= false;
-			isInitialized	= false;
-			location		= Point2I.Zero;
-			layer			= 0;
-			offset			= Point2I.Zero;
-			size			= Point2I.One;
-			customSprite	= new SpriteAnimation();
-			spriteAsObject	= new SpriteAnimation();
-			isSolid			= false;
-			isMoving		= false;
-			pushDelay		= 20;
-			properties		= new Properties(this);
-			tileData		= null;
-			moveDirection	= Point2I.Zero; 
-			dropList		= null;
-			animationPlayer	= null;
-			hasMoved		= false;
-			path			= null;
-			pathTimer		= 0;
-			pathMoveIndex	= 0;
-			fallsInHoles	= true;
-			soundMove		= GameData.SOUND_BLOCK_PUSH;
+			isAlive				= false;
+			isInitialized		= false;
+			location			= Point2I.Zero;
+			layer				= 0;
+			offset				= Point2I.Zero;
+			size				= Point2I.One;
+			customSprite		= new SpriteAnimation();
+			spriteAsObject		= new SpriteAnimation();
+			isSolid				= false;
+			isMoving			= false;
+			pushDelay			= 20;
+			properties			= new Properties(this);
+			tileData			= null;
+			moveDirection		= Point2I.Zero; 
+			dropList			= null;
+			animationPlayer		= null;
+			hasMoved			= false;
+			path				= null;
+			pathTimer			= 0;
+			pathMoveIndex		= 0;
+			fallsInHoles		= true;
+			soundMove			= GameData.SOUND_BLOCK_PUSH;
+			conveyorVelocity	= Vector2F.Zero;
 		}
 
 
@@ -546,6 +548,10 @@ namespace ZeldaOracle.Game.Tiles {
 			tile.breakSound			= data.BreakSound;
 			tile.collisionModel		= data.CollisionModel;
 			tile.size				= data.Size;
+			
+			int conveyorAngle = data.ConveyorAngle;
+			if (conveyorAngle >= 0)
+				tile.conveyorVelocity = Angles.ToVector(conveyorAngle, true) * data.ConveyorSpeed;
 
 			//tile.properties.SetAll(data.BaseProperties);
 			//tile.properties.SetAll(data.Properties);
@@ -801,6 +807,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public Vector2F Velocity {
 			get { return velocity; }
+		}
+
+		public Vector2F ConveyorVelocity {
+			get { return conveyorVelocity; }
 		}
 
 		public virtual TileDataInstance TileDataOwner {

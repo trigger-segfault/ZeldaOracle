@@ -216,13 +216,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 		}
 
+		// Deploy Roc's Cape.
 		public void DeployCape() {
-			// 23 frame delay from jump start
 			if (player.IsInAir && !isCapeDeployed && player.Physics.ZVelocity -
 				GameSettings.DEFAULT_GRAVITY <= -GameSettings.PLAYER_CAPE_REQUIRED_FALLSPEED)
 			{
+				isCapeDeployed = true;
 				player.Physics.ZVelocity = GameSettings.PLAYER_CAPE_JUMP_SPEED + GameSettings.PLAYER_CAPE_GRAVITY;
-				 isCapeDeployed = true;
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_THROW);
 				if (player.CurrentState is PlayerNormalState)
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CAPE);
 			}
@@ -515,8 +516,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Update sprinting.
 			if (isSprinting) {
-				if (sprintTimer % 10 == 0) {
-					//Sounds.PLAYER_LAND.play();
+				// Create the sprint effect.
+				if (sprintTimer % GameSettings.PLAYER_SPRINT_EFFECT_INTERVAL == 0 &&
+					player.IsOnGround && player.CurrentState != player.SwimState)
+				{
+					AudioSystem.PlaySound(GameData.SOUND_PLAYER_LAND);
 					player.RoomControl.SpawnEntity(
 						new Effect(GameData.ANIM_EFFECT_SPRINT_PUFF, DepthLayer.EffectSprintPuff),
 						player.Position);
@@ -528,7 +532,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Check for ledge jumping (ledges/waterfalls)
 			CollisionInfo collisionInfo = player.Physics.CollisionInfo[moveDirection];
-			if (canLedgeJump && mode.CanLedgeJump && isMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
+			if (canLedgeJump && mode.CanLedgeJump && isMoving &&
+				collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving)
+			{
 				Tile tile = collisionInfo.Tile;
 				
 				if (tile.IsLedge &&

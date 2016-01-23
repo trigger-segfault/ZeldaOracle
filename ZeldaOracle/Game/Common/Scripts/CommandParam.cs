@@ -80,6 +80,13 @@ namespace ZeldaOracle.Common.Scripts {
 			return Point2I.Zero;
 		}
 		
+		public Vector2F GetVector(int index) {
+			CommandParam p = GetParam(index);
+			if (p.type == CommandParamType.Array && p.Count == 2)
+				return new Vector2F(p.GetFloat(0), p.GetFloat(1));
+			return Vector2F.Zero;
+		}
+		
 		public Point2I GetPoint(int index, Point2I defaultValue) {
 			if (index >= count)
 				return defaultValue;

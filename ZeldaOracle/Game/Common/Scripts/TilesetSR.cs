@@ -244,6 +244,19 @@ namespace ZeldaOracle.Common.Scripts {
 				else
 					ThrowParseError("Invalid tile environment type: \"" + parameters.GetString(0) + "\"!");
 			});
+			// CONVEYOR <angle>, <speed>
+			AddTilesetCommand("Conveyor", delegate(CommandParam parameters) {
+				string str = parameters.GetString(0).ToLower();
+				int angle = -1;
+				if (Angles.TryParse(str, true, out angle))
+					tileData.ConveyorAngle = angle;
+				else if (parameters[0].Type == CommandParamType.Integer)
+					tileData.ConveyorAngle = parameters.GetInt(0);
+				else
+					ThrowParseError("Unknown value for conveyor angle: " + str);
+
+				tileData.ConveyorSpeed = parameters.GetFloat(1);
+			});
 			// Properties <(name, value>
 			// Properties <(type, name, value, readable-name, editor-type, category, description)...>
 			// Properties <(type, name, value, readable-name, (editor-type, editor-sub-type), category, description)...>
@@ -445,14 +458,11 @@ namespace ZeldaOracle.Common.Scripts {
 				tileData.SolidType = TileSolidType.Ledge;
 				tileData.CollisionModel = resources.GetResource<CollisionModel>(parameters.GetString(0));
 				string dirName = parameters.GetString(1);
-				if (dirName == "right" || dirName == "east")
-					tileData.LedgeDirection = Directions.Right;
-				else if (dirName == "left" || dirName == "west")
-					tileData.LedgeDirection = Directions.Left;
-				else if (dirName == "up" || dirName == "north")
-					tileData.LedgeDirection = Directions.Up;
-				else if (dirName == "down" || dirName == "south")
-					tileData.LedgeDirection = Directions.Down;
+				int direction;
+				if (Directions.TryParse(dirName, true, out direction))
+					tileData.LedgeDirection = direction;
+				else
+					ThrowParseError("Unknown value for ledge direction: " + dirName);
 			});
 			// Clone <tiledata>
 			AddTilesetCommand("Clone", delegate(CommandParam parameters) {

@@ -175,5 +175,15 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return properties.GetEnum<TileSolidType>("solidity", TileSolidType.NotSolid); }
 			set { properties.Set("solidity", (int) value); }
 		}
+
+		public int ConveyorAngle {
+			get { return properties.GetInteger("conveyor_angle", -1); }
+			set { properties.Set("conveyor_angle", value); }
+		}
+
+		public float ConveyorSpeed {
+			get { return properties.GetFloat("conveyor_speed", 0.0f); }
+			set { properties.Set("conveyor_speed", value); }
+		}
 	}
 }

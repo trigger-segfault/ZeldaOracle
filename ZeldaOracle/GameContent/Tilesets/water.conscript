@@ -89,26 +89,25 @@ TILE (11, 4); SPRITE tile_lavafall_start_cave_both; END;
 
 # CURRENT TILES
 
-#FLAGS current_direction;
-Tile (4, 0); ENVTYPE Water; SPRITE tile_water_current_left; END;
-Tile (5, 0); ENVTYPE Water; SPRITE tile_water_current_right; END;
-Tile (4, 1); ENVTYPE Water; SPRITE tile_water_current_up; END;
-Tile (5, 1); ENVTYPE Water; SPRITE tile_water_current_down; END;
+Tile (4, 0); CONVEYOR left,		0.75; ENVTYPE Water; SPRITE tile_water_current_left; END;
+Tile (5, 0); CONVEYOR right,	0.75; ENVTYPE Water; SPRITE tile_water_current_right; END;
+Tile (4, 1); CONVEYOR up,		0.75; ENVTYPE Water; SPRITE tile_water_current_up; END;
+Tile (5, 1); CONVEYOR down,		0.75; ENVTYPE Water; SPRITE tile_water_current_down; END;
 
-Tile (4, 2); SPRITE tile_underwater_current_left; END;
-Tile (5, 2); SPRITE tile_underwater_current_right; END;
-Tile (4, 3); SPRITE tile_underwater_current_up; END;
-Tile (5, 3); SPRITE tile_underwater_current_down; END;
+Tile (4, 2); CONVEYOR left,		0.75; SPRITE tile_underwater_current_left; END;
+Tile (5, 2); CONVEYOR right,	0.75; SPRITE tile_underwater_current_right; END;
+Tile (4, 3); CONVEYOR up,		0.75; SPRITE tile_underwater_current_up; END;
+Tile (5, 3); CONVEYOR down,		0.75; SPRITE tile_underwater_current_down; END;
 
-Tile (4, 4); SPRITE tile_sand_current_left; END;
-Tile (5, 4); SPRITE tile_sand_current_right; END;
-Tile (4, 5); SPRITE tile_sand_current_up; END;
-Tile (5, 5); SPRITE tile_sand_current_down; END;
+Tile (4, 4); CONVEYOR left,		0.5; SPRITE tile_sand_current_left; END;
+Tile (5, 4); CONVEYOR right,	0.5; SPRITE tile_sand_current_right; END;
+Tile (4, 5); CONVEYOR up,		0.5; SPRITE tile_sand_current_up; END;
+Tile (5, 5); CONVEYOR down,		0.5; SPRITE tile_sand_current_down; END;
 
-Tile (4, 6); SPRITE tile_quicksand_down_right; END;
-Tile (5, 6); SPRITE tile_quicksand_down_left; END;
-Tile (4, 7); SPRITE tile_quicksand_up_right; END;
-Tile (5, 7); SPRITE tile_quicksand_up_left; END;
+Tile (4, 6); CONVEYOR DownRight,	0.5; SPRITE tile_quicksand_down_right; END;
+Tile (5, 6); CONVEYOR DownLeft,		0.5; SPRITE tile_quicksand_down_left; END;
+Tile (4, 7); CONVEYOR UpRight,		0.5; SPRITE tile_quicksand_up_right; END;
+Tile (5, 7); CONVEYOR UpLeft,		0.5; SPRITE tile_quicksand_up_left; END;
 
 
 # OUTPUT TILES

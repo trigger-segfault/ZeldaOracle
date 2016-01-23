@@ -48,6 +48,8 @@ namespace ZeldaOracle.Game.Tiles {
 			// Motion.
 			properties.Set("path", "")
 				.SetDocumentation("Path", "Motion", "A path the tile follows in.");
+			properties.Set("conveyor_angle", -1);
+			properties.Set("conveyor_speed", 0.0f);
 			
 			// Interaction Options.
 			properties.Set("move_once", false)
@@ -191,6 +193,16 @@ namespace ZeldaOracle.Game.Tiles {
 		public int LedgeDirection {
 			get { return properties.GetInteger("ledge_direction", Directions.Down); }
 			set { properties.Set("ledge_direction", value); }
+		}
+
+		public int ConveyorAngle {
+			get { return properties.GetInteger("conveyor_angle", -1); }
+			set { properties.Set("conveyor_angle", value); }
+		}
+
+		public float ConveyorSpeed {
+			get { return properties.GetFloat("conveyor_speed", 0.0f); }
+			set { properties.Set("conveyor_speed", value); }
 		}
 	}
 }

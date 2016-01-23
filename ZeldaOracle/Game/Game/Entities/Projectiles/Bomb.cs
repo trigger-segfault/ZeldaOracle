@@ -29,7 +29,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				PhysicsFlags.CollideWorld |
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.LedgePassable |
-				PhysicsFlags.DestroyedInHoles);
+				PhysicsFlags.DestroyedInHoles |
+				PhysicsFlags.MoveWithConveyors);
 			
 			Physics.CollisionBox		= new Rectangle2F(-3, -5, 6, 1);
 			Physics.SoftCollisionBox	= new Rectangle2F(-3, -5, 6, 1);

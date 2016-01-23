@@ -27,6 +27,7 @@ namespace ZeldaOracle.Game.Entities {
 		HalfSolidPassable		= 0x800,	// The entity can pass over half-solids (railings).
 		AutoDodge				= 0x1000,	// Will move out of the way when colliding with the edges of objects.
 		PassableToOthers		= 0x2000,	// Other entities are unable to check collisions with the entity.
+		MoveWithConveyors		= 0x4000,	// Moves with conveyor tiles.
 	}
 
 	public enum CollisionBoxType {
@@ -75,8 +76,7 @@ namespace ZeldaOracle.Game.Entities {
 		private bool					isEnabled;			// Are physics enabled for the entity?
 		private PhysicsFlags			flags;
 		private float					gravity;			// Gravity in pixels per frame^2
-		private float					maxFallSpeed;
-		private Vector2F				velocity;			// XY-Velocity in pixels per frame.
+		private float					maxFallSpeed;private Vector2F				velocity;			// XY-Velocity in pixels per frame.
 		private float					zVelocity;			// Z-Velocity in pixels per frame.
 		private Sound					soundBounce;
 
@@ -236,6 +236,8 @@ namespace ZeldaOracle.Game.Entities {
 				// TODO: Integrate the surface tile's velocity into our
 				// velocity rather than just moving position.
 				entity.Position += topTile.Velocity;
+				if (MovesWithConveyors && IsOnGround)
+					entity.Position += topTile.ConveyorVelocity;
 			}
 
 			// Check if destroyed outside room.
@@ -1032,6 +1034,11 @@ namespace ZeldaOracle.Game.Entities {
 		public bool IsPassableToOthers {
 			get { return HasFlags(PhysicsFlags.PassableToOthers); }
 			set { SetFlags(PhysicsFlags.PassableToOthers, value); }
+		}
+
+		public bool MovesWithConveyors {
+			get { return HasFlags(PhysicsFlags.MoveWithConveyors); }
+			set { SetFlags(PhysicsFlags.MoveWithConveyors, value); }
 		}
 
 	}

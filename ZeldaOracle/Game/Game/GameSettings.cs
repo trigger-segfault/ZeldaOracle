@@ -100,6 +100,7 @@ namespace ZeldaOracle.Game {
 		public const float				PLAYER_CAPE_GRAVITY				= 0.04f;	// 0.04 = 1/25
 		public const int				PLAYER_SPRINT_DURATION			= 480;
 		public const float				PLAYER_SPRINT_SPEED_SCALE		= 1.5f;
+		public const int				PLAYER_SPRINT_EFFECT_INTERVAL	= 10;
 		public const float				PLAYER_DEFAULT_PUSH_SPEED		= 0.5f;
 
 		// Monsters

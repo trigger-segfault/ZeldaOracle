@@ -124,5 +124,23 @@ namespace ZeldaOracle.Common.Geometry {
 			int dir = (int) Math.Round(radians / GMath.HalfPi);
 			return GMath.Wrap(dir, Directions.Count);
 		}
+		
+		public static bool TryParse(string value, bool ignoreCase, out int result) {
+			if (ignoreCase)
+				value = value.ToLower();
+			if (value == "right" || value == "east")
+				result = Directions.Right;
+			else if (value == "left" || value == "west")
+				result = Directions.Left;
+			else if (value == "up" || value == "north")
+				result = Directions.Up;
+			else if (value == "down" || value == "south")
+				result = Directions.Down;
+			else {
+				result = -1;
+				return false;
+			}
+			return true;
+		}
 	}
 }

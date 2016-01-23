@@ -138,6 +138,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Physics.CollideWithEntities	= true;
 			Physics.HasGravity			= true;
 			Physics.AutoDodges			= true;
+			Physics.MovesWithConveyors	= true;
 
 			// Graphics.
 			Graphics.DepthLayer			= DepthLayer.PlayerAndNPCs;
