@@ -149,7 +149,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				}
 			
 				// Create cling effect.
-				Effect effect = new Effect(GameData.ANIM_EFFECT_CLING, DepthLayer.EffectCling);
+				Effect effect = new EffectCling();
 				RoomControl.SpawnEntity(effect, position + Directions.ToVector(direction) * 5.0f, zPosition);
 				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 			}

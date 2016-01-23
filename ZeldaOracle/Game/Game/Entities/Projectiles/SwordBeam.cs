@@ -53,7 +53,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		
 		public void Intercept() {
 			// Create cling effect.
-			Effect effect = new Effect(GameData.ANIM_EFFECT_CLING_LIGHT, DepthLayer.EffectCling);
+			Effect effect = new EffectCling(true);
 			RoomControl.SpawnEntity(effect, position, zPosition);
 			DestroyAndTransform(effect);
 		}

@@ -91,14 +91,11 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			if (state == State.BeforeTurn) {
 				// Wait before turning, while shaking the screen.
 				timer++;
-
-				// Shake the screen
 				if (timer <= SCREEN_SHAKE_DURATION) {
 					int mag = SCREEN_SHAKE_MAGNITUDE;
 					RoomControl.ViewControl.ShakeOffset = new Vector2F(
 						GRandom.NextInt(-mag, mag), GRandom.NextInt(-mag, mag));
 				}
-
 				if (timer >= BEFORE_TURN_DELAY) {
 					timer = 0;
 					state = State.Turning;
@@ -124,7 +121,6 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			else if (state == State.AfterTurn) {
 				// Wait before exiting the turnstile.
 				timer++;
-
 				if (timer >= AFTER_TURN_DELAY) {
 					state = State.Walking;
 					timer = 0;

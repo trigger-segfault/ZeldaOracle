@@ -21,6 +21,16 @@ namespace ZeldaOracle.Game.Tiles {
 		private WindingOrder windingOrder;
 		private AnimationPlayer arrowsAnimationPlayer;
 		private AnimationPlayer turnstileAnimationPlayer;
+		private int turnDirection;
+		private int timer;
+
+
+		//-----------------------------------------------------------------------------
+		// Constants
+		//-----------------------------------------------------------------------------
+
+		private const int ACCEPT_TURN_DELAY = 8;
+		private const int ACCEPT_TURN_MIN_DISTANCE_TO_CENTER = 4;
 
 
 		//-----------------------------------------------------------------------------
@@ -93,8 +103,9 @@ namespace ZeldaOracle.Game.Tiles {
 			CollisionModel.AddBox(32, 32, 8, 8);
 			CollisionModel.AddBox(16, 16, 16, 16); // center.
 
-			SolidType	= TileSolidType.Solid;
-			IsSolid		= true;
+			SolidType		= TileSolidType.Solid;
+			IsSolid			= true;
+			turnDirection	= -1;
 
 			// Setup based on the winding order.
 			windingOrder = (Properties.GetBoolean("clockwise", false) ?
@@ -118,11 +129,12 @@ namespace ZeldaOracle.Game.Tiles {
 			
 			Player player = RoomControl.Player;
 			
+			int d = ACCEPT_TURN_MIN_DISTANCE_TO_CENTER;
 			Rectangle2F[] sideRects = new Rectangle2F[] {
-				new Rectangle2F(32, 16, 3, 16),
-				new Rectangle2F(16, 16 - 3, 16, 3),
-				new Rectangle2F(16 - 3, 16, 3, 16),
-				new Rectangle2F(16, 32, 16, 3),
+				new Rectangle2F(32, 16, d, 16),
+				new Rectangle2F(16, 16 - d, 16, d),
+				new Rectangle2F(16 - d, 16, d, 16),
+				new Rectangle2F(16, 32, 16, d),
 			};
 
 			if (player.IsOnGround) {
@@ -138,14 +150,17 @@ namespace ZeldaOracle.Game.Tiles {
 					}
 				}
 
-				if (direction >= 0) {
-					// TODO: Interrupt player state (similar to falling in hole)
-					// Carried objects are dropped.
-					// Sword, seed shooter is put away.
-					// Switch hook is put away.
-					// Busy state is cancelled.
-					AudioSystem.PlaySound(GameData.SOUND_CHEST_OPEN);
-					GameControl.PushRoomState(new RoomStateTurnstile(this, direction));
+				if (turnDirection != direction) {
+					timer = 0;
+					turnDirection = direction;
+				}
+
+				if (turnDirection >= 0) {
+					timer++;
+					if (timer >= ACCEPT_TURN_DELAY) {
+						AudioSystem.PlaySound(GameData.SOUND_CHEST_OPEN);
+						GameControl.PushRoomState(new RoomStateTurnstile(this, direction));
+					}
 				}
 			}
 		}

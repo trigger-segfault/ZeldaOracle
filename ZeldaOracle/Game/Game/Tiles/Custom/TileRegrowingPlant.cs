@@ -54,7 +54,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public override void Break(bool spawnDrops) {
 			if (isGrown) {
 				// Spawn the leaves effect and spawn drops.
-				Effect effect = new Effect(GameData.ANIM_EFFECT_LEAVES, DepthLayer.EffectTileBreak);
+				Effect effect = new Effect(GameData.ANIM_EFFECT_LEAVES, DepthLayer.EffectTileBreak, true);
 				RoomControl.SpawnEntity(effect, Center);
 				
 				if (spawnDrops)

@@ -524,9 +524,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 					player.IsOnGround && player.CurrentState != player.SwimState)
 				{
 					AudioSystem.PlaySound(GameData.SOUND_PLAYER_LAND);
-					player.RoomControl.SpawnEntity(
-						new Effect(GameData.ANIM_EFFECT_SPRINT_PUFF, DepthLayer.EffectSprintPuff),
-						player.Position);
+					Effect sprintEffect = new Effect(GameData.ANIM_EFFECT_SPRINT_PUFF, DepthLayer.EffectSprintPuff, true);
+					player.RoomControl.SpawnEntity(sprintEffect, player.Position);
 				}
 				sprintTimer--;
 				if (sprintTimer <= 0)

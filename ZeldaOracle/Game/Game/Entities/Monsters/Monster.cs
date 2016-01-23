@@ -344,7 +344,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 						playerTool.OnParry(this, contactPoint);
 				
-						RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_CLING, DepthLayer.EffectCling), contactPoint);
+						RoomControl.SpawnEntity(new EffectCling(), contactPoint);
 
 						return;
 					}

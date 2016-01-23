@@ -211,7 +211,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					unitSender.Bump(monster.Center);
 					AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 					
-					Effect effect = new Effect(GameData.ANIM_EFFECT_CLING, DepthLayer.EffectCling);
+					Effect effect = new EffectCling();
 					Vector2F effectPos = (monster.Center + sender.Center) * 0.5f;
 					if (args is InteractionArgs)
 						effectPos = (args as InteractionArgs).ContactPoint;
@@ -263,7 +263,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			
 			// Stun the monster.
 			public static void ClingEffect(Monster monster, Entity sender, EventArgs args) {
-				Effect effect = new Effect(GameData.ANIM_EFFECT_CLING, DepthLayer.EffectCling);
+				Effect effect = new EffectCling();
 				
 				Vector2F effectPos = (monster.Center + sender.Center) * 0.5f;
 				if (args is InteractionArgs)

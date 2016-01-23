@@ -46,7 +46,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		public void Break() {
 			if (tile.BreakAnimation != null) {
-				RoomControl.SpawnEntity(new Effect(tile.BreakAnimation, DepthLayer.EffectTileBreak), Center);
+				Effect breakEffect = new Effect(tile.BreakAnimation, DepthLayer.EffectTileBreak, true);
+				RoomControl.SpawnEntity(breakEffect, Center);
 			}
 			if (tile.BreakSound != null)
 				AudioSystem.PlaySound(tile.BreakSound);

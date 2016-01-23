@@ -97,7 +97,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
 			// Create cling effect.
-			Effect effect = new Effect(GameData.ANIM_EFFECT_CLING, DepthLayer.EffectCling);
+			Effect effect = new EffectCling();
 			RoomControl.SpawnEntity(effect, position, zPosition);
 			AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 			BeginReturn();

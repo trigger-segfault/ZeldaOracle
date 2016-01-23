@@ -102,7 +102,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				// Start sprinting.
 				if (!Player.Movement.IsSprinting) {
 					Player.RoomControl.SpawnEntity(
-						new Effect(GameData.ANIM_EFFECT_PEGASUS_DUST, DepthLayer.EffectPegasusDust),
+						new Effect(GameData.ANIM_EFFECT_PEGASUS_DUST, DepthLayer.EffectPegasusDust, true),
 						Player.Center - new Point2I(0, 8));
 					Player.Movement.StartSprinting(
 						GameSettings.PLAYER_SPRINT_DURATION,

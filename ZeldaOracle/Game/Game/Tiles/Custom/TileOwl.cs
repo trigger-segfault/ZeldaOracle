@@ -63,8 +63,7 @@ namespace ZeldaOracle.Game.Tiles {
 				
 				// Create a sparkle every 8 ticks.
 				if (timer % 8 == 1 && sparkleIndex < sparklePositions.Length) {
-					Effect effect = new Effect(GameData.ANIM_EFFECT_OWL_SPARKLE, DepthLayer.EffectOwlSparkles);
-					effect.Graphics.IsAnimatedWhenPaused = true;
+					Effect effect = new Effect(GameData.ANIM_EFFECT_OWL_SPARKLE, DepthLayer.EffectOwlSparkles, true);
 					RoomControl.SpawnEntity(effect,
 						Position + sparklePositions[sparkleIndex]);
 					sparkleIndex++;
