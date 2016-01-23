@@ -76,6 +76,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// No other player states should change these variables while in a minecart.
 			player.AutoRoomTransition			= true;
+			player.IsPassable					= true;
 			player.Physics.CollideWithWorld		= false; 
 			player.Physics.CollideWithEntities	= false;
 
@@ -95,6 +96,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnEnd(PlayerState newState) {
 			// Reset changed player state variables.
 			player.AutoRoomTransition			= false;
+			player.IsPassable					= false;
 			player.Physics.CollideWithWorld		= true;
 			player.Physics.CollideWithEntities	= true;
 			player.ViewFocusOffset				= Vector2F.Zero;
@@ -149,6 +151,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 
 			UpdatePlayerPosition();
+
+			// Collide with monsters.
+			
 		}
 
 		public override void DrawUnder(RoomGraphics g) {

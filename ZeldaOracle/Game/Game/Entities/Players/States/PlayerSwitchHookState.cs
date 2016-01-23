@@ -75,6 +75,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			
 			hookProjectile.Position = hookedEntity.Center;
 			
+			player.IsPassable					= true;
 			player.Physics.CollideWithWorld		= false;
 			player.Physics.CollideWithEntities	= false;
 			player.Physics.HasGravity	= false;
@@ -142,6 +143,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		
 		public override void OnEnd(PlayerState newState) {
 			player.Movement.CanJump				= true;
+			player.IsPassable					= false;
 			player.Physics.CollideWithWorld		= true;
 			player.Physics.CollideWithEntities	= true;
 			player.Physics.HasGravity			= true;
@@ -150,6 +152,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			if (hookProjectile != null && !hookProjectile.IsDestroyed)
 				hookProjectile.Destroy();
+		}
+
+		public override void OnHurt(DamageInfo damage) {
+			base.OnHurt(damage);
+			player.BeginNormalState();
 		}
 
 		public override void Update() {

@@ -37,6 +37,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(MonsterState previousState) {
+			monster.IsPassable = true;
 
 			if (galeEffect != null) {
 				monster.SetPositionByCenter(galeEffect.Position);
@@ -58,7 +59,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 		}
 
 		public override void OnEnd(MonsterState newState) {
-			
+			// Monster should be destroyed, no need to change back to normal...?
 		}
 
 		public override void Update() {

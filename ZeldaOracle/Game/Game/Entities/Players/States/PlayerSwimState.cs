@@ -109,14 +109,17 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// Update the submerge state.
 			if (isSubmerged) {
 				submergedTimer--;
+				player.IsPassable = true;
 				if (submergedTimer <= 0 || Controls.B.IsPressed()) {
 					isSubmerged = false;
+					player.IsPassable = false;
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SWIM);
 					player.Graphics.DepthLayer = DepthLayer.PlayerAndNPCs;
 				}
 			}
 			else if (Controls.B.IsPressed()) {
 				isSubmerged = true;
+				player.IsPassable = true;
 				submergedTimer = submergedDuration;
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SUBMERGED);
 

@@ -47,6 +47,8 @@ namespace ZeldaOracle.Game.Entities.Players
 
 		public virtual void OnExitMinecart() {}
 
+		public virtual void OnHurt(DamageInfo damage) {}
+
 		public virtual void Update() {}
 		
 		public virtual void DrawUnder(RoomGraphics g) {}

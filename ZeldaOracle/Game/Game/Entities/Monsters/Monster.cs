@@ -319,7 +319,16 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		private void CollideMonsterAndPlayer() {
 			Player player = RoomControl.Player;
 
-			if (Math.Abs(player.ZPosition - zPosition) > 10)
+			// Check for minecart interactions.
+			if (!isPassable && player.IsInMinecart &&
+				physics.IsCollidingWith(player, CollisionBoxType.Soft))
+			{
+				TriggerInteraction(InteractionType.MineCart, player);
+				if (IsDestroyed)
+					return;
+			}
+
+			if (isPassable || player.IsPassable || Math.Abs(player.ZPosition - zPosition) > 10) // TODO: magic number
 				return;
 
 			IEnumerable<UnitTool> monsterTools = EquippedTools.Where(t => t.IsPhysicsEnabled && t.IsSwordOrShield);
@@ -331,29 +340,31 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// 2. (1-1) Monster to Player
 
 			// Collide my tools with player's tools.
-			foreach (UnitTool monsterTool in monsterTools) {
-				foreach (UnitTool playerTool in playerTools) {
-					if (monsterTool.PositionedCollisionBox.Intersects(playerTool.PositionedCollisionBox)) {
-						Vector2F contactPoint = playerTool.PositionedCollisionBox.Center;
+			if (!IsStunned) {
+				foreach (UnitTool monsterTool in monsterTools) {
+					foreach (UnitTool playerTool in playerTools) {
+						if (monsterTool.PositionedCollisionBox.Intersects(playerTool.PositionedCollisionBox)) {
+							Vector2F contactPoint = playerTool.PositionedCollisionBox.Center;
 
-						TriggerInteraction(InteractionType.Parry, player, new ParryInteractionArgs() {
-							ContactPoint	= contactPoint,
-							MonsterTool		= monsterTool,
-							SenderTool		= playerTool
-						});
+							TriggerInteraction(InteractionType.Parry, player, new ParryInteractionArgs() {
+								ContactPoint	= contactPoint,
+								MonsterTool		= monsterTool,
+								SenderTool		= playerTool
+							});
 
-						playerTool.OnParry(this, contactPoint);
+							playerTool.OnParry(this, contactPoint);
 				
-						RoomControl.SpawnEntity(new EffectCling(), contactPoint);
+							RoomControl.SpawnEntity(new EffectCling(), contactPoint);
 
-						return;
+							return;
+						}
 					}
 				}
 			}
 
 			// Collide my tools with the player.
 			bool parry = false;
-			if (!player.IsInvincible) {
+			if (!player.IsInvincible && !IsStunned) {
 				foreach (UnitTool tool in monsterTools) {
 					if (player.Physics.PositionedSoftCollisionBox.Intersects(tool.PositionedCollisionBox)) {
 						player.Hurt(contactDamage, Center);
@@ -373,7 +384,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			}
 
 			// Check collisions with player.
-			if (!parry && !IsStunned && !IsBurning && !IsInGale && !IsFallingInHole &&
+			if (!parry && !IsStunned &&
 				physics.IsCollidingWith(player, CollisionBoxType.Soft))
 			{
 				TriggerInteraction(InteractionType.PlayerContact, player);
@@ -413,18 +424,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public bool IsStunned {
 			get { return (state is MonsterStunState); }
-		}
-		
-		public bool IsBurning {
-			get { return (state is MonsterBurnState); }
-		}
-		
-		public bool IsInGale {
-			get { return (state is MonsterGaleState); }
-		}
-		
-		public bool IsFallingInHole {
-			get { return (state is MonsterFallInHoleState); }
 		}
 	}
 }

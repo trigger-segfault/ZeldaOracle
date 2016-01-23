@@ -28,10 +28,12 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 			monster.Graphics.AnimationPlayer.Speed = 2.0f;
 			monster.Graphics.AnimationPlayer.Play();
 			monster.Physics.Velocity = Vector2F.Zero;
+			monster.IsPassable = true;
 		}
 
 		public override void OnEnd(MonsterState newState) {
 			monster.Graphics.AnimationPlayer.Speed = 1.0f;
+			monster.IsPassable = false;
 		}
 
 		public override void Update() {

@@ -37,6 +37,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 		//-----------------------------------------------------------------------------
 
 		private void Burrow() {
+			isPassable	= true;
 			isBurrowed	= true;
 			isBurrowing	= true;
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_ZOL_BURROW);
@@ -73,6 +74,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 
 		public override void OnEndJump() {
 			base.OnEndJump();
+			isPassable = false;
 			if (jumpIndex > numJumps) {
 				Burrow();
 			}

@@ -635,8 +635,14 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public void DrawRoom(Graphics2D g, Vector2F position) {
-			g.Translate(position - viewControl.ViewPosition);
+			g.Translate(position);
+			
+			// Draw background (in the color of the HUD.
+			Rectangle2I viewRect = new Rectangle2I(0, 0, GameSettings.VIEW_WIDTH, GameSettings.VIEW_HEIGHT);
+			g.DrawSprite(GameData.SPR_HUD_BACKGROUND, GameData.VARIANT_DARK, viewRect);
 
+			g.Translate(-viewControl.ViewPosition);
+			
 			// Draw tiles.
 			for (int i = 0; i < room.LayerCount; i++) {
 				for (int y = 0; y < room.Height; y++) {

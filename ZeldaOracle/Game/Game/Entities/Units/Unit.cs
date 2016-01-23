@@ -37,6 +37,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 		
 		protected bool		isKnockbackable; // Can the unit be knocked back?
 		protected bool		isDamageable; 
+		protected bool		isPassable;
 
 		protected float		knockbackSpeed;
 		protected int		knockbackDuration;
@@ -61,6 +62,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 
 			isKnockbackable			= true;
 			isDamageable			= true;
+			isPassable				= false;
 
 			knockbackSpeed			= GameSettings.UNIT_KNOCKBACK_SPEED;
 			knockbackDuration		= GameSettings.UNIT_KNOCKBACK_DURATION;
@@ -324,6 +326,11 @@ namespace ZeldaOracle.Game.Entities.Units {
 		public bool IsKnockbackable {
 			get { return isKnockbackable; }
 			set { isKnockbackable = value; }
+		}
+
+		public bool IsPassable {
+			get { return isPassable; }
+			set { isPassable = value; }
 		}
 
 		public bool IsBeingKnockedBack {

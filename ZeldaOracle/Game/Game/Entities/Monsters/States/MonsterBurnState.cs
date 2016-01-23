@@ -36,6 +36,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 			
 			monster.Physics.Velocity = Vector2F.Zero;
 			monster.Graphics.PauseAnimation();
+			monster.IsPassable = true;
 
 			// Apply damage (make monster invincible for burn duration).
 			DamageInfo damageInfo = new DamageInfo(burnDamage);
@@ -47,6 +48,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 
 		public override void OnEnd(MonsterState newState) {
 			monster.Graphics.ResumeAnimation();
+			monster.IsPassable = false;
 		}
 
 		public override void Update() {
