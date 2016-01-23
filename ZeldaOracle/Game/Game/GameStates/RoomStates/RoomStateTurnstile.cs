@@ -43,6 +43,8 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		// * up 27 (after walking)
 
 		private const int		PLAYER_EXIT_WALK_DISTANCE		= 15;
+		private const int		SCREEN_SHAKE_DURATION			= 4;
+		private const int		SCREEN_SHAKE_MAGNITUDE			= 3;
 		private const int		BEFORE_TURN_DELAY				= 15;
 		private const int		AFTER_TURN_DELAY				= 7;
 		private static float[]	PLAYER_ROTATE_OFFSETS			= { 12, 10, 8, 2, 0 };
@@ -75,6 +77,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			
 			// Setup the player.
 			Player player = RoomControl.Player;
+			player.BeginNormalState();
 			player.SetPositionByCenter(turnstile.Center +
 				(Directions.ToVector(enterDirection) * PLAYER_ROTATE_OFFSETS[0]));
 			player.Direction = exitDirection;
@@ -88,8 +91,13 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			if (state == State.BeforeTurn) {
 				// Wait before turning, while shaking the screen.
 				timer++;
-				
-				// TODO: Shake the screen somehow...
+
+				// Shake the screen
+				if (timer <= SCREEN_SHAKE_DURATION) {
+					int mag = SCREEN_SHAKE_MAGNITUDE;
+					RoomControl.ViewControl.ShakeOffset = new Vector2F(
+						GRandom.NextInt(-mag, mag), GRandom.NextInt(-mag, mag));
+				}
 
 				if (timer >= BEFORE_TURN_DELAY) {
 					timer = 0;

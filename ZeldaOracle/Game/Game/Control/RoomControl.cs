@@ -593,6 +593,8 @@ namespace ZeldaOracle.Game.Control {
 			GameControl.UpdateRoom	= roomState.UpdateRoom;
 			GameControl.AnimateRoom	= roomState.AnimateRoom;
 
+			viewControl.ShakeOffset = Vector2F.Zero;
+
 			// Update entities, tiles, and event tiles.
 			UpdateObjects();
 
@@ -633,7 +635,7 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public void DrawRoom(Graphics2D g, Vector2F position) {
-			g.Translate(position - viewControl.Position);
+			g.Translate(position - viewControl.ViewPosition);
 
 			// Draw tiles.
 			for (int i = 0; i < room.LayerCount; i++) {
@@ -659,7 +661,7 @@ namespace ZeldaOracle.Game.Control {
 			// DEBUG: Draw debug information.
 			GameDebug.DrawRoom(g, this);
 			
-			g.Translate(-(position - viewControl.Position));
+			g.Translate(-(position - viewControl.ViewPosition));
 		}
 
 		public override void Draw(Graphics2D g) {

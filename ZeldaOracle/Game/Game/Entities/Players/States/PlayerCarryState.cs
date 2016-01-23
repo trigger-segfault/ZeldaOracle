@@ -75,20 +75,21 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 		}
 
-		public void DropObject(bool enterBusyState = true) {
+		public void DropObject(bool enterBusyState = true, bool playSound = true) {
 			isObjectDropped = true;
 			player.RoomControl.SpawnEntity(carryObject, player.Position, 16);
 			if (enterBusyState) {
 				player.BeginBusyState(throwDuration);
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 			}
-			AudioSystem.PlaySound(GameData.SOUND_PLAYER_THROW);
+			if (playSound)
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_THROW);
 		}
 
-		public void ThrowObject(bool enterBusyState = true) {
+		public void ThrowObject(bool enterBusyState = true, bool playSound = true) {
 			carryObject.Physics.ZVelocity = 1.0f;
 			carryObject.Physics.Velocity = Directions.ToVector(Player.MoveDirection) * 1.5f;
-			DropObject(enterBusyState);
+			DropObject(enterBusyState, playSound);
 		}
 
 		public void DestroyObject() {
@@ -126,10 +127,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.CanUseWarpPoint	= true;
 			
 			if (!isObjectDropped) {
-				if (newState is PlayerSwimState || newState is PlayerLadderState)
-					DropObject(false);
-				else
-					DestroyObject();
+				DropObject(false, false);
 			}
 		}
 

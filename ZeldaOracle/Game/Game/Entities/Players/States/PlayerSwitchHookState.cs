@@ -147,6 +147,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Physics.HasGravity			= true;
 			player.IsStateControlled			= false;
 			player.Movement.MoveCondition		= PlayerMoveCondition.FreeMovement;
+
+			if (hookProjectile != null && !hookProjectile.IsDestroyed)
+				hookProjectile.Destroy();
 		}
 
 		public override void Update() {

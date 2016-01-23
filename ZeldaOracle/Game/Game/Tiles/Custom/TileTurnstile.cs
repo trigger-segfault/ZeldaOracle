@@ -125,7 +125,7 @@ namespace ZeldaOracle.Game.Tiles {
 				new Rectangle2F(16, 32, 16, 3),
 			};
 
-			if (player.IsOnGround && player.CurrentState == player.NormalState) {
+			if (player.IsOnGround) {
 				int direction = -1;
 
 				CollisionInfo[] collisionInfo = player.Physics.CollisionInfo;
