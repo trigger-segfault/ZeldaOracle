@@ -281,7 +281,7 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 			tile.IsAlive = false;
-			// TODO: OnRemove?
+			tile.OnRemoveFromRoom();
 		}
 
 		// Put an event tile into the room.
@@ -396,6 +396,8 @@ namespace ZeldaOracle.Game.Control {
 				if (entities[i] != Player)
 					entities[i].IsDestroyed = true;
 			}
+			foreach (Tile tile in GetTiles())
+				tile.OnRemoveFromRoom();
 		}
 		
 

@@ -61,6 +61,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		private Vector2F viewFocusOffset;
 
+		public delegate void PlayerDelegate(Player player);
+
+		private event PlayerDelegate eventJump;
+		private event PlayerDelegate eventLand;
+
 		// Player Tools
 		private PlayerToolShield	toolShield;
 		private PlayerToolSword		toolSword;
@@ -239,6 +244,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public void EnterMinecart(Minecart minecart) {
 			stateMinecart.Minecart = minecart;
 			stateMinecart.Begin(this, null);
+		}
+
+		public void OnJump() {
+			if (eventJump != null)
+				eventJump(this);
 		}
 
 
@@ -512,6 +522,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (IsInMinecart)
 				stateMinecart.OnLeaveRoom();
 			state.OnLeaveRoom();
+
+			// Clear events.
+			eventJump = null;
+			eventLand = null;
 		}
 
 		public override void Die() {
@@ -527,10 +541,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 				tile.OnLand(movement.JumpStartTile);
 			movement.JumpStartTile = -Point2I.One;
 			
+			if (eventLand != null)
+				eventLand(this);
+
 			AudioSystem.PlaySound(GameData.SOUND_PLAYER_LAND);
 		}
 
 		public override void OnHurt(DamageInfo damage) {
+			base.OnHurt(damage);
 			AudioSystem.PlaySound(GameData.SOUND_PLAYER_HURT);
 		}
 
@@ -673,6 +691,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 			get { return (stateMinecart.IsActive); }
 		}
 
+		// Events.
+
+		public event PlayerDelegate EventJump {
+			add { eventJump += value; }
+			remove { eventJump -= value; }
+		}
+
+		public event PlayerDelegate EventLand {
+			add { eventLand += value; }
+			remove { eventLand -= value; }
+		}
 		
 		// Player states
 

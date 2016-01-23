@@ -436,6 +436,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public virtual void OnInitialize() {}
 
+		public virtual void OnRemoveFromRoom() {}
+
 		public virtual void Update() {
 			// Velocity must be applied on the next frame in order to syncronize
 			// entities moving on this tile, because entities are updated before tiles.

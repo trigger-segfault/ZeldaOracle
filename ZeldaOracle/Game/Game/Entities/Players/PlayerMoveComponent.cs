@@ -187,6 +187,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public void Jump() {
+
 			if (player.IsOnGround) {
 				// Allow initial jump movement if only can move in air.
 				if (moveCondition != PlayerMoveCondition.NoControl && !mode.IsSlippery) {
@@ -209,6 +210,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 				if (player.CurrentState is PlayerNormalState)
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_JUMP);
+				
+				player.OnJump();
 			}
 			else {
 				if (player.CurrentState is PlayerNormalState)
