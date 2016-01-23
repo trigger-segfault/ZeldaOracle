@@ -38,6 +38,9 @@ TEMPANIM roller_vertical_roll;
 
 LOAD TILESETS;
 
+
+# ---- Chests -----------------------------------------------------------------
+
 TILE chest;
 	TYPE		TileChest;
 	SOLID		block;
@@ -53,26 +56,28 @@ END;
 
 TILE chest_curved;
 	CLONE			chest;
-	SPRITEINDEX		0, "tileset_objects_nv",				(0, 0);
-	SPRITEINDEX		1, "tileset_objects_nv_extras_16x16",	(0, 0);
+	SPRITEINDEX		0, tile_chest_curved;
+	SPRITEINDEX		1, tile_chest_curved_opened;
 END;
 
 TILE chest_flat;
 	CLONE			chest;
-	SPRITEINDEX		0, "tileset_objects_nv",				(1, 0);
-	SPRITEINDEX		1, "tileset_objects_nv_extras_16x16",	(1, 0);
+	SPRITEINDEX		0, tile_chest_flat;
+	SPRITEINDEX		1, tile_chest_flat_opened;
 END;
 
 TILE chest_ornate;
 	CLONE			chest;
-	SPRITEINDEX		0, "tileset_objects_nv",				(2, 0);
-	SPRITEINDEX		1, "tileset_objects_nv_extras_16x16",	(2, 0);
+	SPRITEINDEX		0, tile_chest_ornate;
+	SPRITEINDEX		1, tile_chest_ornate_opened;
 END;
+
+# ---- Reward -----------------------------------------------------------------
 
 TILE reward;
 	TYPE		TileReward
 	SOLID		center;
-	SPRITE		"tileset_objects_nv_extras_16x16", (9, 1);
+	SPRITE		reward_heart_piece;
 	PROPERTIES
 		(string, reward, "heart_piece",
 			"Reward", "reward", "Reward",
@@ -82,23 +87,42 @@ TILE reward;
 			"True if the item has been taken.", false);
 END;
 
+# ---- Color Switch -----------------------------------------------------------
+
 TILE color_switch;
 	TYPE		TileColorSwitch;
 	SOLID		block;
 	FLAGS		AbsorbSeeds;
-	SPRITE		tile_color_switch_red;
+	SPRITEINDEX	0, tile_color_switch_blue;
+	SPRITEINDEX	1, tile_color_switch_red;
 	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "", "Can the color switch only be switched once?"),
 				(boolean, switch_state,		false,	"Switch State",		"", "", "The switch state of the color switch (false = blue, true = red)."),
 				(boolean, remember_state,	false,	"Remember State",	"", "", "Will the color switch's state be remembered after leaving the room?");
 	EVENT		event_toggle, "Toggle", "Occurs when the Color Switch changes color.", (ColorSwitch, switch);
 END;
 
+TILE color_switch_blue;
+	CLONE		color_switch;
+	PROPERTIES	(boolean, switch_state, false),
+				(integer, sprite_index, 0);
+END;
+
+TILE color_switch_red;
+	CLONE		color_switch;
+	PROPERTIES	(boolean, switch_state, true),
+				(integer, sprite_index, 1);
+END;
+
+# ---- Trampoline -------------------------------------------------------------
+
 TILE trampoline;
 	FLAGS		Movable;
 	SOLID		block;
-	SPRITEINDEX	0, "tileset_objects_nv", (6, 0);
-	SPRITEINDEX	1, trampoline_bounce;
+	SPRITEINDEX	0, tile_trampoline;
+	SPRITEINDEX	1, tile_trampoline_bounce;
 END;
+
+# ---- Owl --------------------------------------------------------------------
 
 TILE owl;
 	TYPE		TileOwl;
@@ -106,13 +130,15 @@ TILE owl;
 	SOLID		block;
 
 	SPRITEINDEX	0, tile_owl;
-	SPRITEINDEX	1, owl_activated;
+	SPRITEINDEX	1, tile_owl_activated;
 
 	PROPERTIES
 		(string, text, "<red>undefined<red>",
 			"Text", "text_message", "Owl",
 			"The text to display when the owl is activated.", false);
 END;
+
+# ---- Color Cube -------------------------------------------------------------
 
 TILE color_cube;
 	TYPE			TileColorCube;
@@ -125,6 +151,8 @@ TILE color_cube;
 	SPRITEINDEX		4, "color_cube", (4, 0);
 	SPRITEINDEX		5, "color_cube", (5, 0);
 END;
+
+# ---- Roller -----------------------------------------------------------------
 
 TEMPTILE roller;
 	TYPE		TileRoller;
@@ -141,19 +169,21 @@ END;
 
 TILE roller_horizontal;
 	CLONE		roller;
-	SPRITEINDEX	0, "tileset_objects_nv", (7, 0);
-	SPRITEINDEX	1, roller_horizontal_roll;
+	SPRITEINDEX	0, tile_roller_horizontal;
+	SPRITEINDEX	1, tile_roller_horizontal_roll;
 	PROPERTIES	(boolean, vertical, "false"),
 				(boolean, first_roller, "false");
 END;
 
 TILE roller_vertical;
 	CLONE		roller;
-	SPRITEINDEX	0, "tileset_objects_nv", (8, 0);
-	SPRITEINDEX	1, roller_vertical_roll;
+	SPRITEINDEX	0, tile_roller_vertical;
+	SPRITEINDEX	1, tile_roller_vertical_roll;
 	PROPERTIES	(boolean, vertical, "true"),
 				(boolean, first_roller, "false");
 END;
+
+# ---- Crossing Gate ----------------------------------------------------------
 
 TILE crossing_grate;
 	TYPE		TileCrossingGate;
@@ -163,7 +193,7 @@ TILE crossing_grate;
 END;
 
 TILE crossing_grate_right;
-	CLONE crossing_grate;
+	CLONE		crossing_grate;
 	PROPERTIES (boolean, face_left, false);
 END;
 
@@ -190,19 +220,16 @@ DEFAULT (0, 0);
 SETTILE ( 0, 0), chest_curved;
 SETTILE ( 1, 0), chest_flat;
 SETTILE ( 2, 0), chest_ornate;
-
-
 SETTILE ( 3, 0), reward;
-SETTILE ( 4, 0), color_switch;
-
+SETTILE ( 4, 0), color_switch_blue;
+# Blue crystal
 SETTILE ( 6, 0), trampoline;
 SETTILE ( 7, 0), roller_horizontal;
 SETTILE ( 8, 0), roller_vertical;
 SETTILE ( 9, 0), owl;
-
-SETTILE ( 9, 0), owl;
 SETTILE (10, 0), color_cube;
 SETTILE (11, 0), platform;
+
 SETTILE ( 0, 1), crossing_grate_right;
 SETTILE ( 1, 1), crossing_grate_left;
 

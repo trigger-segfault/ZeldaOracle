@@ -10,7 +10,7 @@ namespace ZeldaOracle.Game.Main {
 	static class Program {
 
 		// The entry point of the program.
-		static void Main(string[] args) {
+		static void Main(string[] args){
 
 			// Creates and runs the game.
 			using (GameBase game = new GameBase(args)) {

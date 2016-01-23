@@ -175,7 +175,17 @@ ANIM tile_poison_bubble; SUBSTRIP repeat;
 
 SPRITESHEET "general_tiles";
 
-
+ANIM tile_trampoline_bounce; SUBSTRIP clamp;
+	ADD frame, 12, (4, 3);
+	ADD frame,  2, (3, 3);
+	ADD frame,  8, (5, 3);
+	ADD frame,  1, (3, 3); END;
+ANIM tile_roller_horizontal_roll;
+	SUBSTRIP clamp; ADD frame, 9, (0, 3); ADD frame, 12, (1, 3); ADD frame, 10, (2, 3); ADD frame, 1, (0, 3);
+	SUBSTRIP clamp; ADD frame, 9, (0, 3); ADD frame, 12, (2, 3); ADD frame, 10, (1, 3); ADD frame, 1, (0, 3); END;
+ANIM tile_roller_vertical_roll;
+	SUBSTRIP clamp; ADD frame, 9, (0, 4); ADD frame, 12, (2, 4); ADD frame, 10, (1, 4); ADD frame, 1, (0, 4);
+	SUBSTRIP clamp; ADD frame, 9, (0, 4); ADD frame, 12, (1, 4); ADD frame, 10, (2, 4); ADD frame, 1, (0, 4); END;
 	
 ANIM tile_crossing_gate_raise;
 	SUBSTRIP clamp; ## right

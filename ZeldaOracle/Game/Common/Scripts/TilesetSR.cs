@@ -29,7 +29,7 @@ namespace ZeldaOracle.Common.Scripts {
 		private BaseTileData	baseTileData;
 		private TileData		tileData;
 		private EventTileData	eventTileData;
-		private string			tileDataName;
+		//private string			tileDataName;
 		private AnimationSR		animationSR;
 		private SpritesSR		spritesSR;
 		private LoadingModes	loadingMode;
@@ -103,7 +103,7 @@ namespace ZeldaOracle.Common.Scripts {
 				}
 				else {
 					tileData = new TileData();
-					tileDataName = parameters.GetString(0);
+					tileData.Name = parameters.GetString(0);
 				}
 				baseTileData = tileData;
 			});
@@ -111,14 +111,14 @@ namespace ZeldaOracle.Common.Scripts {
 			AddTilesetCommand("TempTile", delegate(CommandParam parameters) {
 				useTemporary = true;
 				tileData = new TileData();
-				tileDataName = parameters.GetString(0);
+				tileData.Name = parameters.GetString(0);
 				baseTileData = tileData;
 			});
 			// EventTile <name>
 			AddTilesetCommand("EventTile", delegate(CommandParam parameters) {
 				useTemporary = false;
 				eventTileData = new EventTileData();
-				tileDataName = parameters.GetString(0);
+				eventTileData.Name = parameters.GetString(0);
 				baseTileData = eventTileData;
 			});
 			// Monster <name> <sprite> <monster-type> <monster-color>
@@ -126,7 +126,7 @@ namespace ZeldaOracle.Common.Scripts {
 				useTemporary = false;
 				eventTileData = new EventTileData();
 				eventTileData.Clone(Resources.GetResource<EventTileData>("monster"));
-				tileDataName = parameters.GetString(0);
+				eventTileData.Name = parameters.GetString(0);
 				baseTileData = eventTileData;
 
 				
@@ -171,9 +171,9 @@ namespace ZeldaOracle.Common.Scripts {
 				if (tileData != null) {
 					if (tileData.Tileset == null) {
 						if (useTemporary)
-							resources.AddResource<TileData>(tileDataName, tileData);
+							resources.AddResource<TileData>(tileData.Name, tileData);
 						else
-							Resources.AddResource<TileData>(tileDataName, tileData);
+							Resources.AddResource<TileData>(tileData.Name, tileData);
 					}
 					tileData = null;
 					baseTileData = null;
@@ -181,9 +181,9 @@ namespace ZeldaOracle.Common.Scripts {
 				else if (eventTileData != null) {
 					if (eventTileData.Tileset == null) {
 						if (useTemporary)
-							resources.AddResource<EventTileData>(tileDataName, eventTileData);
+							resources.AddResource<EventTileData>(eventTileData.Name, eventTileData);
 						else
-							Resources.AddResource<EventTileData>(tileDataName, eventTileData);
+							Resources.AddResource<EventTileData>(eventTileData.Name, eventTileData);
 					}
 					eventTileData = null;
 					baseTileData = null;

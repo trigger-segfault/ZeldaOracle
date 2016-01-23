@@ -16,6 +16,7 @@ namespace ZeldaOracle.Game.Tiles {
 		protected Point2I sheetLocation;	// TODO: remove this, maybe?
 		protected Properties properties;
 		protected ObjectEventCollection events;
+		private string name;
 
 		
 		//-----------------------------------------------------------------------------
@@ -23,6 +24,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public BaseTileData() {
+			name			= "";
 			type			= null;
 			tileset			= null;
 			sheetLocation	= Point2I.Zero;
@@ -110,6 +112,11 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public ObjectEventCollection Events {
 			get { return events; }
+		}
+
+		public string Name {
+			get { return name; }
+			set { name = value; }
 		}
 	}
 }

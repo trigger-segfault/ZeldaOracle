@@ -52,6 +52,7 @@ IMAGE zoneset;
 	
 IMAGE zoneset_new;
 	VARIANT present				"Tiles/Zonesets/zoneset_present";
+	VARIANT ages_dungeon_1		"Tiles/Zonesets/zoneset_ages_dungeon_1";
 	END;
 
 IMAGE tileset_overworld;
