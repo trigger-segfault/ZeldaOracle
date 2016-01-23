@@ -79,6 +79,7 @@ SOUND crossing_gate,			"Tiles/crossing_gate";
 SOUND dungeon_door,				"Tiles/dungeon_door";
 SOUND floor_crumble,			"Tiles/floor_crumble";
 SOUND switch,					"Tiles/switch";
+SOUND turnstile,				"Tiles/turnstile";
 
 # Menu ------------------------------------------------------------------------
 

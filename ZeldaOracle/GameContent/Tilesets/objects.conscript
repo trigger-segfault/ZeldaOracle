@@ -420,7 +420,7 @@ TILE lever;
 	EVENT event_toggle, "Toggle", "Occurs when the lever is toggled.", (Lever, lever);
 END;
 
-# ---- Door -------------------------------------------------------------------
+# ---- Doors ------------------------------------------------------------------
 
 TILE door;
 	TYPE			TileDoor;
@@ -514,6 +514,8 @@ TILE bombable_wall_up;		CLONE bombable_wall; END;
 TILE bombable_wall_left;	CLONE bombable_wall; END;
 TILE bombable_wall_down;	CLONE bombable_wall; END;
 
+# ---- Minecart Tracks --------------------------------------------------------
+
 TILE minecart_track;
 	TYPE		TileMinecartTrack;
 	FLAGS		NotCoverable;
@@ -555,6 +557,15 @@ TILE minecart_track_stop;
 	TYPE	TileMinecartStop;
 	FLAGS	NotCoverable;
 	SPRITE	tile_minecart_track_stop;
+END;
+
+
+# ---- Turnstile --------------------------------------------------------------
+
+TILE turnstile;
+	TYPE	TileTurnstile;
+	SPRITE	tile_turnstile_base;
+	SIZE	(3, 3);
 END;
 
 
@@ -607,7 +618,7 @@ SETTILE ( 3, 2), cracked_floor;
 # Key rock
 # Key stone
 # Movable thingy
-# Blue crystal
+SETTILE (3, 3), turnstile; # Blue crystal
 # Blue crystal hole
 # Floor tile monster
 # Armos monster red

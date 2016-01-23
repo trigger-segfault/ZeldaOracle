@@ -100,6 +100,7 @@ namespace ZeldaOracle.Game {
 		public static Sound SOUND_DUNGEON_DOOR;
 		public static Sound SOUND_FLOOR_CRUMBLE;
 		public static Sound SOUND_SWITCH;
+		public static Sound SOUND_TURNSTILE;
 
 		// UI -------------------------------------------------------------------------
 

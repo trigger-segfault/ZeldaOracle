@@ -178,9 +178,9 @@ SPRITE tile_bridge_vertical,		(10, 7); END;
 SPRITE tile_minecart_track_corner_northwest,	(11, 7); END;
 SPRITE tile_minecart_track_corner_northeast,	(12, 7); END;
 
-SPRITE tile_turnstile, (13, 7), ( 0,  0); ADD (14, 7), (16,  0); ADD (15, 7), (32,  0);
-				   ADD (13, 8), ( 0, 16); ADD (14, 8), (16, 16); ADD (15, 8), (32, 16);
-				   ADD (13, 9), ( 0, 32); ADD (14, 9), (16, 32); ADD (15, 9), (32, 32); END;
+SPRITE tile_turnstile_base, (13, 7), ( 0,  0); ADD (14, 7), (16,  0); ADD (15, 7), (32,  0);
+				        ADD (13, 8), ( 0, 16); ADD (14, 8), (16, 16); ADD (15, 8), (32, 16);
+				        ADD (13, 9), ( 0, 32); ADD (14, 9), (16, 32); ADD (15, 9), (32, 32); END;
 
 SPRITE tile_eye_statue,				( 0, 8); END;
 SPRITE tile_eye_statue_broken,		( 1, 8); END;
@@ -390,8 +390,46 @@ SPRITE tile_arrow_cannon_right,			( 4, 4); END;
 SPRITE minecart_horizontal,				(0, 5), (0, -3); ADD (2, 5), (0, -3); END;
 SPRITE minecart_vertical,				(0, 6), (0, -3); ADD (2, 6), (0, -3); END;
 
-
-
+SPRITE turnstile_bars_angled,
+			( 0,  7), ( 0,  0); ADD ( 1,  7), (16,  0); ADD ( 2,  7), (32,  0);
+		ADD	( 0,  8), ( 0, 16); ADD ( 1,  8), (16, 16); ADD ( 2,  8), (32, 16);
+		ADD	( 0,  9), ( 0, 32); ADD ( 1,  9), (16, 32); ADD ( 2,  9), (32, 32); END;
+SPRITE turnstile_bars_straight,	
+									( 4,  7), (16,  0);
+		ADD	( 3,  8), ( 0, 16); ADD ( 4,  8), (16, 16); ADD ( 5,  8), (32, 16);
+								ADD ( 4,  9), (16, 32); END;
+SPRITE turnstile_bars_rotate_clockwise,
+			( 6,  7), ( 0,  0); ADD ( 7,  7), (16,  0); ADD ( 8,  7), (32,  0);
+		ADD	( 6,  8), ( 0, 16); ADD ( 7,  8), (16, 16); ADD ( 8,  8), (32, 16);
+		ADD	( 6,  9), ( 0, 32); ADD ( 7,  9), (16, 32); ADD ( 8,  9), (32, 32); END;
+SPRITE turnstile_bars_angled_clockwise,
+			( 6,  7), ( 0,  0); ADD ( 7,  7), (16,  0); ADD ( 8,  7), (32,  0);
+		ADD	( 6,  8), ( 0, 16); ADD ( 7,  8), (16, 16); ADD ( 8,  8), (32, 16);
+		ADD	( 6,  9), ( 0, 32); ADD ( 7,  9), (16, 32); ADD ( 8,  9), (32, 32); END;
+SPRITE turnstile_bars_angled_counterclockwise,
+			( 9,  7), ( 0,  0); ADD (10,  7), (16,  0); ADD (11,  7), (32,  0);
+		ADD	( 9,  8), ( 0, 16); ADD (10,  8), (16, 16); ADD (11,  8), (32, 16);
+		ADD	( 9,  9), ( 0, 32); ADD (10,  9), (16, 32); ADD (11,  9), (32, 32); END;
+SPRITE turnstile_bars_angled_blue,
+			( 0, 10), ( 0,  0); ADD ( 1, 10), (16,  0); ADD ( 2, 10), (32,  0);
+		ADD	( 0, 11), ( 0, 16); ADD ( 1, 11), (16, 16); ADD ( 2, 11), (32, 16);
+		ADD	( 0, 12), ( 0, 32); ADD ( 1, 12), (16, 32); ADD ( 2, 12), (32, 32); END;
+SPRITE turnstile_bars_straight_blue,
+									( 4, 10), (16,  0);
+		ADD	( 3, 11), ( 0, 16); ADD ( 4, 11), (16, 16); ADD ( 5, 11), (32, 16);
+								ADD ( 4, 12), (16, 32); END;
+SPRITE turnstile_bars_rotate_clockwise_blue,
+			( 6, 10), ( 0,  0); ADD ( 7, 10), (16,  0); ADD ( 8, 10), (32,  0);
+		ADD	( 6, 11), ( 0, 16); ADD ( 7, 11), (16, 16); ADD ( 8, 11), (32, 16);
+		ADD	( 6, 12), ( 0, 32); ADD ( 7, 12), (16, 32); ADD ( 8, 12), (32, 32); END;
+SPRITE turnstile_bars_angled_clockwise_blue,
+			( 6, 10), ( 0,  0); ADD ( 7, 10), (16,  0); ADD ( 8, 10), (32,  0);
+		ADD	( 6, 11), ( 0, 16); ADD ( 7, 11), (16, 16); ADD ( 8, 11), (32, 16);
+		ADD	( 6, 12), ( 0, 32); ADD ( 7, 12), (16, 32); ADD ( 8, 12), (32, 32); END;
+SPRITE turnstile_bars_angled_counterclockwise_blue,
+			( 9, 10), ( 0,  0); ADD (10, 10), (16,  0); ADD (11, 10), (32,  0);
+		ADD	( 9, 11), ( 0, 16); ADD (10, 11), (16, 16); ADD (11, 11), (32, 16);
+		ADD	( 9, 12), ( 0, 32); ADD (10, 12), (16, 32); ADD (11, 12), (32, 32); END;
 
 #==============================================================
 # Effects

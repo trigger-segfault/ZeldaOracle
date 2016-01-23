@@ -370,6 +370,10 @@ namespace ZeldaOracle.Common.Scripts {
 					baseTileData.Sprite = resources.GetSpriteAnimation(parameters.GetString(0));
 				}
 			});
+			// Size (<width>, <height>)
+			AddTilesetCommand("Size", delegate(CommandParam parameters) {
+				tileData.Size = parameters.GetPoint(0);
+			});
 			// SpriteIndex <index> <sprite-or-anim> <sprite-animation>
 			// SpriteIndex <index> <sprite-animation>
 			// SpriteIndex <index> <spritesheet> (<x-index> <y-index>) (<x-offset> <y-offset>)

@@ -341,13 +341,28 @@ namespace ZeldaOracle.Game.Control {
 			for (int x = 0; x < room.Width; x++) {
 				for (int y = 0; y < room.Height; y++) {
 					for (int i = 0; i < room.LayerCount; i++) {
-						TileDataInstance data = room.TileData[x, y, i];
 						tiles[x, y, i] = null;
+					}
+				}
+			}
+			for (int x = 0; x < room.Width; x++) {
+				for (int y = 0; y < room.Height; y++) {
+					for (int i = 0; i < room.LayerCount; i++) {
+						TileDataInstance data = room.TileData[x, y, i];
+
 						if (data != null && x == data.Location.X && y == data.Location.Y &&
 							data.Properties.GetBoolean("enabled", true))
 						{
-							tiles[x, y, i] = Tile.CreateTile(data);
-							tiles[x, y, i].RoomControl = this;
+							Tile tile = Tile.CreateTile(data);
+							for (int xx = 0; xx < tile.Width; xx++) {
+								for (int yy = 0; yy < tile.Height; yy++) {
+									tiles[x + xx, y + yy, i] = tile;
+								}
+							}
+
+							tile.Location		= new Point2I(x, y);
+							tile.Layer			= i;
+							tile.RoomControl	= this;
 						}
 					}
 				}

@@ -254,6 +254,43 @@ ANIM minecart;
 	END;
 
 
+ANIM turnstile_arrows_clockwise; SUBSTRIP repeat;
+	ADD frame, 12, (3, 7), (16,  0);
+	ADD frame, 12, (5, 7), (32, 16);
+	ADD frame, 12, (5, 9), (16, 32);
+	ADD frame, 12, (3, 9), ( 0, 16);
+	END;
+ANIM turnstile_arrows_counterclockwise; SUBSTRIP repeat;
+	ADD frame, 12, (3, 10), (16,  0);
+	ADD frame, 12, (3, 12), ( 0, 16);
+	ADD frame, 12, (5, 12), (16, 32);
+	ADD frame, 12, (5, 10), (32, 16);
+	END;
+ANIM turnstile_rotate_clockwise;
+	SUBSTRIP clamp;
+		ADD frame, 4, turnstile_bars_angled_clockwise;
+		ADD frame, 4, turnstile_bars_straight;
+		ADD frame, 4, turnstile_bars_angled_counterclockwise;
+		ADD frame, 4, turnstile_bars_angled;
+	SUBSTRIP clamp;
+		ADD frame, 4, turnstile_bars_angled_clockwise_blue;
+		ADD frame, 4, turnstile_bars_straight_blue;
+		ADD frame, 4, turnstile_bars_angled_counterclockwise_blue;
+		ADD frame, 4, turnstile_bars_angled_blue;
+	END;
+ANIM turnstile_rotate_counterclockwise;
+	SUBSTRIP clamp;
+		ADD frame, 4, turnstile_bars_angled_counterclockwise;
+		ADD frame, 4, turnstile_bars_straight;
+		ADD frame, 4, turnstile_bars_angled_clockwise;
+		ADD frame, 4, turnstile_bars_angled;
+	SUBSTRIP clamp;
+		ADD frame, 4, turnstile_bars_angled_counterclockwise_blue;
+		ADD frame, 4, turnstile_bars_straight_blue;
+		ADD frame, 4, turnstile_bars_angled_clockwise_blue;
+		ADD frame, 4, turnstile_bars_angled_blue;
+	END;
+
 #==============================================================
 # Color Cube Animations
 #==============================================================

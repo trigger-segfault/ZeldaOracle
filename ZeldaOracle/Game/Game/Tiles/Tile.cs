@@ -595,7 +595,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public Vector2F Center {
-			get { return Position + new Vector2F(8, 8); }
+			get { return Position + ((Vector2F) size * (0.5f * GameSettings.TILE_SIZE)); }
 		}
 
 		public Vector2F Offset {

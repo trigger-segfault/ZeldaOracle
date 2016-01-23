@@ -320,6 +320,7 @@
     <Compile Include="Game\GameStates\RoomStates\RoomStateNormal.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateQueue.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateAction.cs" />
+    <Compile Include="Game\GameStates\RoomStates\RoomStateTurnstile.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateStack.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomState.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateReward.cs" />
@@ -418,6 +419,7 @@
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorLantern.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorCubeSlot.cs" />
     <Compile Include="Game\Tiles\Custom\TileCrackedFloor.cs" />
+    <Compile Include="Game\Tiles\Custom\TileTurnstile.cs" />
     <Compile Include="Game\Tiles\Custom\TileRegrowingPlant.cs" />
     <Compile Include="Game\Tiles\Custom\TilePlatform.cs" />
     <Compile Include="Game\Tiles\Custom\TileEyeStatue.cs" />

@@ -7,8 +7,8 @@ using ZeldaOracle.Common.Geometry;
 namespace ZeldaOracle.Common.Geometry {
 
 	public enum WindingOrder {
-		Clockwise,
-		CounterClockwise,
+		CounterClockwise	= 0,
+		Clockwise			= 1,
 	}
 
 	public static class Angles {

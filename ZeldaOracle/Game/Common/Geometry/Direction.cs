@@ -27,6 +27,14 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 		// Methods
 		//-----------------------------------------------------------------------------
+		
+		public static int Add(int direction, int addAmount, WindingOrder windingOrder) {
+			if (windingOrder == WindingOrder.Clockwise)
+				direction -= addAmount;
+			else
+				direction += addAmount;
+			return GMath.Wrap(direction, Directions.Count);
+		}
 
 		
 		// Return the opposite of the given direction.

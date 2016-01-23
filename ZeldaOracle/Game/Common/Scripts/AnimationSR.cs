@@ -129,7 +129,7 @@ namespace ZeldaOracle.Common.Scripts {
 					}
 					else {
 						spr = new Sprite(Resources.GetResource<Sprite>(parameters.GetString(2)));
-						spr.DrawOffset = offset;
+						//spr.DrawOffset += offset;
 					}
 					animationBuilder.AddFrame(parameters.GetInt(1), spr);
 				}

@@ -51,6 +51,10 @@ namespace ZeldaOracle.Game {
 
 		// General tiles.
 		public static Animation ANIM_MINECART;
+		public static Animation ANIM_TURNSTILE_ARROWS_CLOCKWISE;
+		public static Animation ANIM_TURNSTILE_ARROWS_COUNTERCLOCKWISE;
+		public static Animation ANIM_TURNSTILE_ROTATE_CLOCKWISE;
+		public static Animation ANIM_TURNSTILE_ROTATE_COUNTERCLOCKWISE;
 	
 		// Player animations.
 		public static Animation ANIM_PLAYER_DEFAULT;
