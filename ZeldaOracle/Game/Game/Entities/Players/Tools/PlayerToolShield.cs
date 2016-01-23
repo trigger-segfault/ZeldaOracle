@@ -8,6 +8,7 @@ using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Game.Items;
 
 namespace ZeldaOracle.Game.Entities.Players.Tools {
 	public class PlayerToolShield : UnitTool {
@@ -52,8 +53,12 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 		}
 
 		public override void OnHitProjectile(Projectile projectile) {
-			projectile.Intercept();
-			AudioSystem.PlaySound(GameData.SOUND_SHIELD_DEFLECT);
+			if (projectile.ProjectileType == ProjectileType.Physical ||
+				(projectile.ProjectileType == ProjectileType.Beam && itemShield.Level == Item.Level3))
+			{
+				projectile.Intercept();
+				AudioSystem.PlaySound(GameData.SOUND_SHIELD_DEFLECT);
+			}
 		}
 
 		public override void OnHitMonster(Monster monster) {

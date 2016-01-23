@@ -12,46 +12,6 @@ using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
 	
-	public class MonsterArrow : Arrow {
-		public MonsterArrow() {
-			crashAnimation				= GameData.ANIM_PROJECTILE_MONSTER_ARROW_CRASH;
-			syncAnimationWithAngle		= false;
-			syncAnimationWithDirection	= true;
-		}
-		
-		public override void Initialize() {
-			base.Initialize();
-			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_MONSTER_ARROW);
-		}
-	}
-	
-	public class OctorokRock : Arrow {
-		public OctorokRock() {
-			crashAnimation				= GameData.ANIM_PROJECTILE_MONSTER_ROCK;
-			syncAnimationWithAngle		= false;
-			syncAnimationWithDirection	= true;
-		}
-		
-		public override void Initialize() {
-			base.Initialize();
-			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_MONSTER_ROCK);
-		}
-	}
-	
-	public class SpearProjectile : Arrow {
-		public SpearProjectile() {
-			crashAnimation				= null;
-			syncAnimationWithAngle		= false;
-			syncAnimationWithDirection	= true;
-			Physics.CollideWithWorld	= false;
-		}
-		
-		public override void Initialize() {
-			base.Initialize();
-			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_MONSTER_SPEAR);
-		}
-	}
-
 	public class Arrow : Projectile {
 		
 		//-----------------------------------------------------------------------------
@@ -60,7 +20,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		public Arrow() {
 			// General.
-			syncAnimationWithAngle = true;
+			syncAnimationWithAngle	= true;
+			projectileType			= ProjectileType.Physical;
 
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 1);

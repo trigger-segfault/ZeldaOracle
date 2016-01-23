@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Main;

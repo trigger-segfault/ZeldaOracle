@@ -45,7 +45,9 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 		}
 
 		public override void OnHitProjectile(Projectile projectile) {
-			if (Player.CurrentState != Player.HoldSwordState) {
+			if (Player.CurrentState != Player.HoldSwordState &&
+				projectile.ProjectileType == ProjectileType.Physical)
+			{
 				projectile.Intercept();
 				AudioSystem.PlaySound(GameData.SOUND_SHIELD_DEFLECT);
 			}

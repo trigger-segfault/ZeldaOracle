@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 
 namespace ZeldaOracle.Game.Tiles {
 

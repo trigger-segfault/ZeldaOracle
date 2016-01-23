@@ -10,7 +10,7 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 
-namespace ZeldaOracle.Game.Entities.Projectiles {
+namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 
 	// Seeds dropped from the satchel.
 	public class Seed : SeedEntity {

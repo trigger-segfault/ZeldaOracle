@@ -15,6 +15,12 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 	
 	public delegate void CollisionResponse();
 
+	public enum ProjectileType {
+		Physical = 0,	// Can always be deflected
+		Beam,			// Can only be deflected by the Mirror Shield
+		NotDeflectable	// Can NEVER be deflected.
+	}
+
 	public class Projectile : Entity, IInterceptable {
 
 		protected int		angle;
@@ -24,6 +30,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		protected bool		syncAnimationWithDirection;
 		protected Animation	crashAnimation;
 		protected bool		bounceOnCrash;
+		protected ProjectileType projectileType;
 
 		private event Action eventCollision;
 		private event Action eventLand;
@@ -51,6 +58,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 			crashAnimation	= null;
 			bounceOnCrash	= false;
+
+			projectileType = ProjectileType.Physical;
 		}
 		
 		
@@ -114,21 +123,13 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		// Virtual Methods
 		//-----------------------------------------------------------------------------
 
-		public virtual void OnCollideRoomEdge() {
+		public virtual void OnCollideRoomEdge() { }
 
-		}
+		public virtual void OnCollideTile(Tile tile, bool isInitialCollision) { }
 
-		public virtual void OnCollideTile(Tile tile, bool isInitialCollision) {
+		public virtual void OnCollideMonster(Monster monster) { }
 
-		}
-
-		public virtual void OnCollideMonster(Monster monster) {
-
-		}
-
-		public virtual void OnCollidePlayer(Player player) {
-
-		}
+		public virtual void OnCollidePlayer(Player player) { }
 
 
 		//-----------------------------------------------------------------------------
@@ -255,6 +256,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public Entity Owner {
 			get { return owner; }
 			set { owner = value; }
+		}
+
+		public ProjectileType ProjectileType {
+			get { return projectileType; }
+			set { projectileType = value; }
 		}
 
 		public event Action EventCollision {

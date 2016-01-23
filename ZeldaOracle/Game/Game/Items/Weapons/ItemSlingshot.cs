@@ -10,6 +10,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Items.Ammos;
+using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 

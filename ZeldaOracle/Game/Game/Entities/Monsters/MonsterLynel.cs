@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Entities.Projectiles.MagicProjectiles;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 	
@@ -35,7 +36,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			shootSpeed			= 3.0f;
 			projectileShootOdds	= 10;
 			shootPauseDuration	= 15;
-								
+
 			// Physics.
 			Physics.Bounces			= true; // This is here for when the monster is digged up or dropped from the ceiling.
 						

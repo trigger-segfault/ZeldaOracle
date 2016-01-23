@@ -9,17 +9,17 @@ using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Tiles;
 
-namespace ZeldaOracle.Game.Entities.Projectiles {
-	public class RockProjectile : Projectile {
+namespace ZeldaOracle.Game.Entities.Projectiles.MagicProjectiles {
+	
+	public class MagicProjectile : Projectile {
 		
-
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public RockProjectile() {
+		public MagicProjectile() {
 			// General.
-			syncAnimationWithAngle = true;
+			syncAnimationWithDirection = true;
 
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 1);
@@ -32,8 +32,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 			// Graphics.
 			Graphics.DepthLayer = DepthLayer.ProjectileArrow;
-			crashAnimation	= GameData.ANIM_PROJECTILE_MONSTER_ROCK;
-			bounceOnCrash	= true;
 		}
 
 
@@ -43,7 +41,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		public override void Initialize() {
 			base.Initialize();
-			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_MONSTER_ROCK);
+			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_MONSTER_MAGIC);
 			CheckInitialCollision();
 		}
 		

@@ -13,6 +13,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Entities.Monsters.States;
+using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 

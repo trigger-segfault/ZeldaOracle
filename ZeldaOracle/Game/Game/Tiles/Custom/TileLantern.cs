@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 
 namespace ZeldaOracle.Game.Tiles {
 

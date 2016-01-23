@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 	

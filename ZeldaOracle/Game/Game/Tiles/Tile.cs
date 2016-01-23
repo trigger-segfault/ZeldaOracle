@@ -17,6 +17,7 @@ using ZeldaOracle.Game.Items.Drops;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 
 namespace ZeldaOracle.Game.Tiles {
 	
