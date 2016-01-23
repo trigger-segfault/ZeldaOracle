@@ -11,7 +11,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Common.Audio;
 
-namespace ZeldaOracle.Game.Entities.Projectiles {
+namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 	public class SwitchHookProjectile : Projectile {
 
 		private float	speed;

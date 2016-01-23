@@ -30,8 +30,8 @@ namespace ZeldaOracle.Common.Scripts {
 		private TileData		tileData;
 		private EventTileData	eventTileData;
 		//private string			tileDataName;
-		private AnimationSR		animationSR;
-		private SpritesSR		spritesSR;
+		//private AnimationSR		animationSR;
+		//private SpritesSR		spritesSR;
 		private LoadingModes	loadingMode;
 		private TemporaryResources resources;
 

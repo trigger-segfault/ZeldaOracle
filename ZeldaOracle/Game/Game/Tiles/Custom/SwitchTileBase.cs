@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;

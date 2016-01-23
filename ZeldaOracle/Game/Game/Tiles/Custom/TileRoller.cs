@@ -12,10 +12,6 @@ namespace ZeldaOracle.Game.Tiles {
 
 	public class TileRoller : Tile {
 
-		private AnimationPlayer animationPlayer;
-
-		private const float MOVEMENT_SPEED = 0.5f;
-
 		private int returnTimer;
 
 		private int startPosition;
@@ -55,7 +51,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (firstRoller == this)
 				returnTimer = 60;
 			
-			if (base.Move(direction, 1, MOVEMENT_SPEED)) {
+			if (base.Move(direction, 1, GameSettings.TILE_ROLLER_MOVE_SPEED)) {
 				if (firstRoller == this)
 					AudioSystem.PlaySound(GameData.SOUND_BLUE_ROLLER);
 			}

@@ -107,9 +107,11 @@ namespace ZeldaOracle.Game {
 		// Monsters
 		public const int				MONSTER_STUN_DURATION		= 400;	// How long a monster gets stunned for (by boomerang/pegasus seeds).
 		public const int				MONSTER_STUN_SHAKE_DURATION	= 60;	// How long the monster shakes at the end of being stunned.
+		public const int				MONSTER_BOOMERANG_DAMAGE	= 1;
 
 		// Tiles
-		public const int				TILE_CRACKED_FLOOR_CRUMBLE_DELAY = 30;
+		public const int				TILE_CRACKED_FLOOR_CRUMBLE_DELAY	= 30;
+		public const float				TILE_ROLLER_MOVE_SPEED				= 0.5f;
 
 
 

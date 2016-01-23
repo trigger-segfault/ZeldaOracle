@@ -14,6 +14,7 @@ using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerCarryState : PlayerState {

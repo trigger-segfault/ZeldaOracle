@@ -61,5 +61,14 @@ namespace ZeldaOracle.Game.Tiles {
 				CustomSprite = GameData.SPR_TILE_COLOR_SWITCH_RED;
 			}
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public PuzzleColor Color {
+			get { return color; }
+		}
 	}
 }

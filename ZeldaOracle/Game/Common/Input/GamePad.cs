@@ -42,7 +42,7 @@ public static class GamePad {
 	private static Trigger[,] triggers;
 
 	/** <summary> True if the gamepad is disabled. </summary> */
-	private static bool disabled;
+	//private static bool disabled; // I commented 'disabled' out because it is unused.
 
 	#endregion
 	//========= CONSTRUCTORS =========
@@ -54,7 +54,7 @@ public static class GamePad {
 		buttons			= new InputControl[4, NumButtons];
 		sticks			= new AnalogStick[4, NumSticks];
 		triggers		= new Trigger[4, NumTriggers];
-		disabled		= false;
+		//disabled		= false;
 
 		// Setup
 		for (int i = 0; i < 4; i++) {
@@ -172,7 +172,7 @@ public static class GamePad {
 				triggers[i, j].Enable();
 		}
 
-		disabled = false;
+		//disabled = false;
 	}
 	/** <summary> Disables all the buttons. </summary> */
 	public static void Disable(bool untilRelease) {
@@ -186,8 +186,8 @@ public static class GamePad {
 				triggers[i, j].Disable(untilRelease);
 		}
 
-		if (!untilRelease)
-			disabled = true;
+		//if (!untilRelease)
+			//disabled = true;
 	}
 
 	#endregion

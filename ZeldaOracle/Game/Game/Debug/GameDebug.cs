@@ -31,7 +31,6 @@ namespace ZeldaOracle.Game.Debug {
 
 		private static bool DrawCollisionBoxes = false;
 
-		private static SoundInstance testSoundInstance = null;
 		
 		public static void UpdateRoomDebugKeys(RoomControl roomControl) {
 			GameControl gameControl = roomControl.GameControl;

@@ -58,6 +58,11 @@ namespace ZeldaOracle.Common.Translation {
 			return false;
 		}
 
+		// This keeps the compiler from giving a warning.
+		public override int GetHashCode() {
+			return base.GetHashCode();
+		}
+
 		//-----------------------------------------------------------------------------
 		// Operators
 		//-----------------------------------------------------------------------------
@@ -163,6 +168,11 @@ namespace ZeldaOracle.Common.Translation {
 				}
 			}
 			return false;
+		}
+
+		// This keeps the compiler from giving a warning.
+		public override int GetHashCode() {
+			return base.GetHashCode();
 		}
 
 		//-----------------------------------------------------------------------------

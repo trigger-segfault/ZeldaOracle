@@ -14,6 +14,7 @@ using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Entities.Monsters.States;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
+using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 	

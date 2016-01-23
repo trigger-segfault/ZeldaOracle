@@ -10,7 +10,7 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 
-namespace ZeldaOracle.Game.Entities.Projectiles {
+namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 	public class CarriedTile : Entity {
 		private Tile tile;
 

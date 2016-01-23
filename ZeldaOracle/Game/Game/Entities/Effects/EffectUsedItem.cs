@@ -9,8 +9,6 @@ using ZeldaOracle.Game.Tiles;
 namespace ZeldaOracle.Game.Entities.Effects {
 	public class EffectUsedItem : Effect {
 
-		private Vector2F holeCenterPosition;
-
 
 		//-----------------------------------------------------------------------------
 		// Constructors

@@ -11,7 +11,9 @@ using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
+
 	public class PlayerGrabState : PlayerState {
+
 		private int timer;
 		private int duration;
 		private int equipSlot;
@@ -22,7 +24,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerGrabState() {
-			equipSlot = 0;
+			equipSlot	= 0;
+			duration	= 10;
 		}
 		
 
@@ -72,7 +75,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			base.Update();
 
 			InputControl grabButton = player.Inventory.GetSlotButton(equipSlot);
-			InputControl pullButton = Controls.Arrows[(player.Direction + 2) % 4];
+			InputControl pullButton = Controls.Arrows[Directions.Reverse(player.Direction)];
 
 			if (!grabButton.IsDown()) {
 				player.BeginNormalState();
@@ -80,7 +83,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			else if (pullButton.IsDown()) {
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
 				timer++;
-				if (timer > 10) {
+				if (timer > duration) {
 					AttemptPickup();
 				}
 			}

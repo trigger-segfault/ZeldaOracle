@@ -10,7 +10,8 @@ using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Tiles;
 
-namespace ZeldaOracle.Game.Entities.Projectiles {
+namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
+
 	public class Bomb : Entity {
 		private int timer;
 		private int flashDelay;
