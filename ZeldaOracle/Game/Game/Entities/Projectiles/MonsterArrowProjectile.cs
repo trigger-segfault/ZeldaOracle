@@ -10,7 +10,7 @@ using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
-	public class MonsterArrowProjectile : Projectile, IInterceptable {
+	public class MonsterArrowProjectile : Projectile {
 		
 
 		//-----------------------------------------------------------------------------
@@ -47,7 +47,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			CheckInitialCollision();
 		}
 		
-		public void Intercept() {
+		public override void Intercept() {
 			Crash(false);
 		}
 

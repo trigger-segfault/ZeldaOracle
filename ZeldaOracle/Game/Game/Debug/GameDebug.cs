@@ -36,15 +36,6 @@ namespace ZeldaOracle.Game.Debug {
 		public static void UpdateRoomDebugKeys(RoomControl roomControl) {
 			GameControl gameControl = roomControl.GameControl;
 
-			
-			if (Keyboard.IsKeyDown(Keys.D7)) {
-				AudioSystem.LoopSoundWhileActive(GameData.SOUND_SWITCH_HOOK_LOOP);
-				//testSoundInstance = AudioSystem.PlaySound(GameData.SOUND_BOOMERANG_LOOP, true);
-			}	
-			else if (Keyboard.IsKeyPressed(Keys.D6) && testSoundInstance != null) {
-				//testSoundInstance.Stop();
-				testSoundInstance.SoundEffectInstance.IsLooped = false;
-			}
 
 			// OPEN BRACKET: open all open doors.
 			if (Keyboard.IsKeyPressed(Keys.OpenBracket)) {

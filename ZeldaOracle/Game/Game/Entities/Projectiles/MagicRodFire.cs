@@ -10,7 +10,7 @@ using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
-	public class MagicRodFire : Projectile, IInterceptable {
+	public class MagicRodFire : Projectile {
 		
 
 		//-----------------------------------------------------------------------------
@@ -36,7 +36,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		// Intercept Methods
 		//-----------------------------------------------------------------------------
 
-		public void Intercept() {
+		public override void Intercept() {
 			DestroyWithFire();
 		}
 

@@ -12,7 +12,7 @@ using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
-	public class Boomerang : Projectile, IInterceptable {
+	public class Boomerang : Projectile {
 
 		private bool isReturning;
 		private float speed;
@@ -87,7 +87,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			tileLocation = new Point2I(-1, -1);
 		}
 
-		public void Intercept() {
+		public override void Intercept() {
 			BeginReturn();
 		}
 

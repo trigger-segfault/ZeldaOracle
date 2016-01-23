@@ -9,7 +9,7 @@ using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
-	public class SwordBeam : Projectile, IInterceptable {
+	public class SwordBeam : Projectile {
 		
 
 		//-----------------------------------------------------------------------------
@@ -51,7 +51,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			CheckInitialCollision();
 		}
 		
-		public void Intercept() {
+		public override void Intercept() {
 			// Create cling effect.
 			Effect effect = new EffectCling(true);
 			RoomControl.SpawnEntity(effect, position, zPosition);

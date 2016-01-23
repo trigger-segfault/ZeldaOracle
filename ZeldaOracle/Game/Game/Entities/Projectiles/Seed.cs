@@ -13,7 +13,7 @@ using ZeldaOracle.Game.Tiles;
 namespace ZeldaOracle.Game.Entities.Projectiles {
 
 	// Seeds dropped from the satchel.
-	public class Seed : SeedEntity, IInterceptable {
+	public class Seed : SeedEntity {
 
 		//-----------------------------------------------------------------------------
 		// Constructors

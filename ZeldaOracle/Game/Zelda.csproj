@@ -266,7 +266,7 @@
     <Compile Include="Game\Entities\Monsters\States\MonsterStunState.cs" />
     <Compile Include="Game\Entities\Monsters\States\MonsterBurnState.cs" />
     <Compile Include="Game\Entities\Monsters\States\MonsterState.cs" />
-    <Compile Include="Game\Entities\Monsters\TestMonster.cs" />
+    <Compile Include="Game\Debug\TestMonster.cs" />
     <Compile Include="Game\Entities\Monsters\Monster.cs" />
     <Compile Include="Game\Entities\Monsters\Tools\MonsterToolSword.cs" />
     <Compile Include="Game\Entities\NPC.cs" />

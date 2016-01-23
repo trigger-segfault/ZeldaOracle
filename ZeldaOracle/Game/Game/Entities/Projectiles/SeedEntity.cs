@@ -22,7 +22,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 
 	// The base class for the two types of seeds.
-	public class SeedEntity : Projectile, IInterceptable {
+	public class SeedEntity : Projectile {
 		
 		protected SeedType type;
 
@@ -40,7 +40,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		// Seed Effects
 		//-----------------------------------------------------------------------------
 
-		public void Intercept() {
+		public override void Intercept() {
 			DestroyWithEffect();
 		}
 		

@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.Entities.Projectiles;
 
 
 namespace ZeldaOracle.Game.Entities.Units {
@@ -63,6 +64,9 @@ namespace ZeldaOracle.Game.Entities.Units {
 		}
 		
 		public virtual void OnHitPlayer(Player player) {
+		}
+		
+		public virtual void OnHitProjectile(Projectile projectile) {
 		}
 
 		public virtual void OnCollideEntity(Entity entity) {

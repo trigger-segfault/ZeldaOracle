@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Monsters.Tools;
@@ -13,7 +14,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 
-namespace ZeldaOracle.Game.Entities.Monsters {
+namespace ZeldaOracle.Game.Debug {
 
 	public class TestMonster : Monster {
 
@@ -140,7 +141,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			if (Keyboard.IsKeyPressed(Keys.NumPad7)) {
 				//ShootFromDirection(new MagicProjectile(), direction, 2.0f);
 				//ShootFromDirection(new RockProjectile(), direction, 2.0f);
-				ShootFromDirection(new MonsterArrowProjectile(), direction, 2.0f);
+				ShootFromDirection(new Arrow(), direction, 2.0f);
 			}
 
 			// NumPad /: Equip/Unequip a sword

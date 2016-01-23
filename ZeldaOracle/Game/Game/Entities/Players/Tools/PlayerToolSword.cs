@@ -6,6 +6,8 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Units;
+using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Entities.Players.Tools {
 	public class PlayerToolSword : UnitTool {
@@ -39,6 +41,13 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 				Collectible collectible = (Collectible) entity;
 				if (collectible.IsPickupable && collectible.IsCollectibleWithItems)
 					collectible.Collect();
+			}
+		}
+
+		public override void OnHitProjectile(Projectile projectile) {
+			if (Player.CurrentState != Player.HoldSwordState) {
+				projectile.Intercept();
+				AudioSystem.PlaySound(GameData.SOUND_SHIELD_DEFLECT);
 			}
 		}
 

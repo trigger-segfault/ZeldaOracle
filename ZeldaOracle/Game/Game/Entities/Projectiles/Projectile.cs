@@ -8,13 +8,14 @@ using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
 	
 	public delegate void CollisionResponse();
 
-	public class Projectile : Entity {
+	public class Projectile : Entity, IInterceptable {
 
 		protected int		angle;
 		protected int		direction;
@@ -56,6 +57,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		//-----------------------------------------------------------------------------
 		// Virtual Methods
 		//-----------------------------------------------------------------------------
+		
+		public virtual void Intercept() {
+			Destroy();
+		}
 
 		protected virtual void OnCrash() { }
 
@@ -166,9 +171,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 					}
 				}
 				if (tile != null) {
-					tile.OnHitByProjectile(this);
-					if (IsDestroyed)
-						return;
+					if (owner == RoomControl.Player) {
+						tile.OnHitByProjectile(this);
+						if (IsDestroyed)
+							return;
+					}
 					OnCollideTile(tile, false);
 					if (IsDestroyed)
 						return;
@@ -178,6 +185,17 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			}
 
 			if (owner is Player) {
+				// Collide with monster tools.
+				foreach (Monster monster in RoomControl.GetEntitiesOfType<Monster>()) {
+					foreach (UnitTool tool in monster.EquippedTools) {
+						if (Physics.PositionedCollisionBox.Intersects(tool.PositionedCollisionBox)) {
+							tool.OnHitProjectile(this);
+							if (IsDestroyed)
+								return;
+						}
+					}
+				}
+
 				// Collide with monsters.
 				CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
 				for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
@@ -187,9 +205,22 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				}
 			}
 			else {
+				Player player = RoomControl.Player;
+				
+				// Collide with the player's tools.
+				foreach (UnitTool tool in player.EquippedTools) {
+					if (Physics.PositionedCollisionBox.Intersects(tool.PositionedCollisionBox)) {
+						tool.OnHitProjectile(this);
+						if (IsDestroyed)
+							return;
+					}
+				}
+				
 				// Collide with the player.
-				if (Physics.IsMeetingEntity(RoomControl.Player, CollisionBoxType.Soft)) {
-					OnCollidePlayer(RoomControl.Player);
+				if (Physics.IsMeetingEntity(player, CollisionBoxType.Soft)) {
+					OnCollidePlayer(player);
+					if (IsDestroyed)
+						return;
 				}
 			}
 			

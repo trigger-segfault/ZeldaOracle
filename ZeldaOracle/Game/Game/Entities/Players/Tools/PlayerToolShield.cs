@@ -6,6 +6,8 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Units;
+using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Players.Tools {
 	public class PlayerToolShield : UnitTool {
@@ -47,6 +49,11 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 				//Monster monster = (Monster) entity;
 				//monster.TriggerInteraction(monster.HandlerShield, itemShield);
 			}
+		}
+
+		public override void OnHitProjectile(Projectile projectile) {
+			projectile.Intercept();
+			AudioSystem.PlaySound(GameData.SOUND_SHIELD_DEFLECT);
 		}
 
 		public override void OnHitMonster(Monster monster) {

@@ -47,6 +47,7 @@ namespace ZeldaOracle.Game {
 		// Projectiles and Items
 		public static readonly float[]	BRACELET_PUSH_SPEEDS					= { 0.5f, 1.0f };
 		public const float				PROJECTILE_ARROW_SPEED					= 3.0f;
+		public const int				PROJECTILE_ARROW_DAMAGE					= 1;
 		public const float				PROJECTILE_SWORD_BEAM_SPEED				= 3.0f;
 		public const float				PROJECTILE_MAGIC_ROD_FIRE_SPEED			= 2.0f;
 		public static readonly float[]	PROJECTILE_BOOMERANG_SPEEDS				= { 1.5f, 3.0f };

@@ -12,7 +12,8 @@ using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
-	public class SwitchHookProjectile : Projectile, IInterceptable {
+	public class SwitchHookProjectile : Projectile {
+
 		private float	speed;
 		private int		length;
 		private int		level;
@@ -130,7 +131,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			Graphics.Animation = GameData.ANIM_PROJECTILE_SWITCH_HOOK;
 		}
 
-		public void Intercept() {
+		public override void Intercept() {
 			BeginReturn(false);
 		}
 

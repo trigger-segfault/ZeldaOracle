@@ -82,6 +82,15 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.BeginState(player.SwordStabState);
 		}
 
+		private void OnStopHolding() {
+			if (chargeTimer >= ChargeTime) {
+				player.SpinSwordState.Weapon = weapon;
+				player.BeginState(player.SpinSwordState);
+			}
+			else
+				player.BeginNormalState();
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
@@ -108,10 +117,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				player.ToolSword.AnimationPlayer.SubStripIndex = direction;
 			}
 			else {
-				if (chargeTimer >= ChargeTime)
-					player.BeginState(player.SpinSwordState);
-				else
-					player.BeginNormalState();
+				OnStopHolding();
 			}
 		}
 		
@@ -148,10 +154,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Release the sword button (spin if charged).
 			else if (!weapon.IsEquipped || !weapon.IsButtonDown()) {
-				if (chargeTimer >= ChargeTime)
-					player.BeginState(player.SpinSwordState);
-				else
-					player.BeginNormalState();
+				OnStopHolding();
 			}
 		}
 
