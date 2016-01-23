@@ -180,7 +180,8 @@ namespace ZeldaOracle.Game {
 			ZONE_INTERIOR	= new Zone("interior",	"Interior",		VARIANT_INTERIOR);
 			ZONE_PRESENT	= new Zone("present", "Present", VARIANT_PRESENT);
 			ZONE_INTERIOR_PRESENT	= new Zone("interior_present", "Interior Present", VARIANT_INTERIOR_PRESENT);
-			ZONE_AGES_DUNGEON_1	= new Zone("ages_dungeon_1", "Ages Dungeon 1", VARIANT_AGES_DUNGEON_1);
+			ZONE_AGES_DUNGEON_1		= new Zone("ages_dungeon_1", "Ages Dungeon 1", VARIANT_AGES_DUNGEON_1);
+			ZONE_AGES_DUNGEON_4		= new Zone("ages_dungeon_4", "Ages Dungeon 4", VARIANT_AGES_DUNGEON_4);
 
 			Resources.AddResource("default",	ZONE_DEFAULT);
 			Resources.AddResource("summer",		ZONE_SUMMER);
@@ -190,6 +191,7 @@ namespace ZeldaOracle.Game {
 			Resources.AddResource("present",	ZONE_PRESENT);
 			Resources.AddResource("interior_present", ZONE_INTERIOR_PRESENT);
 			Resources.AddResource("ages_dungeon_1", ZONE_AGES_DUNGEON_1);
+			Resources.AddResource("ages_dungeon_4", ZONE_AGES_DUNGEON_4);
 		}
 
 		//-----------------------------------------------------------------------------

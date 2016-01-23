@@ -52,7 +52,9 @@ IMAGE zoneset;
 	
 IMAGE zoneset_new;
 	VARIANT present				"Tiles/Zonesets/zoneset_present";
+	VARIANT interior_present	"Tiles/Zonesets/zoneset_interior_present";
 	VARIANT ages_dungeon_1		"Tiles/Zonesets/zoneset_ages_dungeon_1";
+	VARIANT ages_dungeon_4		"Tiles/Zonesets/zoneset_ages_dungeon_4";
 	END;
 
 IMAGE tileset_overworld;
@@ -125,6 +127,7 @@ IMAGE tileset_interior;
 
 IMAGE tileset_dungeon;
 	VARIANT ages_dungeon_1		"Tiles/tileset_dungeon_ages_dungeon_1";
+	VARIANT ages_dungeon_4		"Tiles/tileset_dungeon_ages_dungeon_4";
 	END;
 
 #==============================================================
