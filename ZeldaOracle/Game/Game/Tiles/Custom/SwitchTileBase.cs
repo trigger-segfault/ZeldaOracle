@@ -31,7 +31,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public virtual void OnToggle(bool switchState) {}
 		
-		public void Toggle() {
+		public bool Toggle() {
 			bool switchOnce = Properties.Get("switch_once", false);
 			bool hasSwitched = Properties.Get("has_switched", false);
 			
@@ -49,7 +49,9 @@ namespace ZeldaOracle.Game.Tiles {
 					Properties.Set("switch_state", switchState);
 					Properties.Set("has_switched", true);
 				}
+				return true;
 			}
+			return false;
 		}
 
 
@@ -69,21 +71,36 @@ namespace ZeldaOracle.Game.Tiles {
 			Toggle();
 		}
 
-		public override void OnSeedHit(SeedType type, SeedEntity seed) {
-			seed.DestroyWithEffect();
+		public override bool OnDig(int direction) {
 			Toggle();
+			return false;
 		}
 
-		// TODO: on hit swtich hook.
-		// TODO: On hit projectiles: arrows, magic rod fire
+		public override void OnHitByProjectile(Projectile projectile) {
+			if (projectile is SeedEntity) {
+				if (Toggle())
+					(projectile as SeedEntity).DestroyWithAbsorbedEffect(false);
+			}
+			if (projectile is SwitchHookProjectile) {
+				if (Toggle())
+					(projectile as SwitchHookProjectile).Intercept();
+			}
+			else if (projectile is MagicRodFire) {
+				if (Toggle())
+					(projectile as MagicRodFire).InterceptAndAbsorb();
+			}
+			else if (projectile is Arrow) {
+				if (Toggle())
+					(projectile as Arrow).Intercept();
+			}
+			else if (projectile is SwordBeam) {
+				if (Toggle())
+					(projectile as SwordBeam).Intercept();
+			}
+		}
 
 		public override void OnInitialize() {
 			switchState = Properties.Get("switch_state", false);
-		}
-
-		public override void Update() {
-			base.Update();
-
 		}
 
 

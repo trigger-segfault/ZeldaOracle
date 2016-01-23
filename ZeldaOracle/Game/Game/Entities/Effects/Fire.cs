@@ -12,6 +12,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 	public class Fire : Effect {
 
 		private int timer;
+		private bool isAbsorbed;
 
 
 		//-----------------------------------------------------------------------------
@@ -27,6 +28,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 
 			Graphics.DrawOffset	= new Point2I(0, -2);
 			Graphics.DepthLayer	= DepthLayer.EffectFire;
+			isAbsorbed = false;
 		}
 		
 
@@ -54,17 +56,33 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			timer++;
 
 			if (timer > 3) {
-				// Collide with monsters.
-				CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
-				for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
-					Monster monster = iterator.CollisionInfo.Entity as Monster;
-					monster.TriggerInteraction(InteractionType.Fire, this);
-					if (IsDestroyed)
-						return;
+				if (isAbsorbed) {
+					Destroy();
+					return;
+				}
+				else {
+					// Collide with monsters.
+					CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
+					for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
+						Monster monster = iterator.CollisionInfo.Entity as Monster;
+						monster.TriggerInteraction(InteractionType.Fire, this);
+						if (IsDestroyed)
+							return;
+					}
 				}
 			}
 
 			base.Update();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public bool IsAbsorbed {
+			get { return isAbsorbed; }
+			set { isAbsorbed = value; }
 		}
 	}
 }

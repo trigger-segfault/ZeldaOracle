@@ -231,6 +231,14 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		// Called when a seed of the given type hits this tile.
 		public virtual void OnSeedHit(SeedType type, SeedEntity seed) { }
+		
+		// Called when the tile is hit by one of the player's projectile.
+		public virtual void OnHitByProjectile(Projectile projectile) {
+			if (projectile is SeedEntity) {
+				SeedEntity seed = (SeedEntity) projectile;
+				OnSeedHit(seed.SeedType, seed);
+			}
+		}
 
 		// Called when the player presses A on this tile, when facing the given direction.
 		// Return true if player controls should be disabled for the rest of the frame.
@@ -805,6 +813,11 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public int LedgeDirection {
 			get { return properties.GetInteger("ledge_direction", Directions.Down); }
+		}
+
+		public bool ClingWhenStabbed {
+			get { return properties.GetBoolean("cling_on_stab", true); }
+			set { properties.Set("cling_on_stab", value); }
 		}
 
 		public Vector2F Velocity {

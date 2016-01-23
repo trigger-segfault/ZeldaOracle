@@ -167,6 +167,7 @@ TILE crossing_grate;
 	SOLID		edge_w;
 	PROPERTIES	(boolean, raised,    false, "Raised",      "", "Crossing Gate", "True if the gate is raised.");
 	PROPERTIES	(boolean, face_left, false, "Facing Left", "", "Crossing Gate", "True if the crossing gate is facing left.");
+	PROPERTIES	(boolean, cling_on_stab, false);
 END;
 
 TILE crossing_grate_right;

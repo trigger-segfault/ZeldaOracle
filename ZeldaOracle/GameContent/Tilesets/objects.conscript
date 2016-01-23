@@ -563,9 +563,10 @@ END;
 # ---- Turnstile --------------------------------------------------------------
 
 TILE turnstile;
-	TYPE	TileTurnstile;
-	SPRITE	tile_turnstile_base;
-	SIZE	(3, 3);
+	TYPE		TileTurnstile;
+	SPRITE		tile_turnstile_base;
+	SIZE		(3, 3);
+	PROPERTIES	(boolean, clockwise, false, "Clockwise", "", "Turnstile", "True if the turnstile is in clockwise mode.");
 END;
 
 

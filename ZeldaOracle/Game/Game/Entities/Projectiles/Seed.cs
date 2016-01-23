@@ -58,7 +58,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			Point2I location = RoomControl.GetTileLocation(position);
 			Tile tile = RoomControl.GetTopTile(location);
 			if (tile != null) {
-				tile.OnSeedHit(type, this);
+				tile.OnHitByProjectile(this);
 				if (IsDestroyed)
 					return;
 			}

@@ -166,6 +166,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 					}
 				}
 				if (tile != null) {
+					tile.OnHitByProjectile(this);
+					if (IsDestroyed)
+						return;
 					OnCollideTile(tile, false);
 					if (IsDestroyed)
 						return;

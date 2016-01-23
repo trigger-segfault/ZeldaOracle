@@ -86,12 +86,11 @@ namespace ZeldaOracle.Game.Tiles {
 
 			// Create the dummy tile to serve as the solid
 			dummySolidTile = Tile.CreateTile(new TileData());
-			dummySolidTile.IsSolid = true;
-			dummySolidTile.CollisionModel = new CollisionModel(new Rectangle2I(0, 0, 16, 8));
-			RoomControl.PlaceTile(dummySolidTile, trackLocation, Layer);
-
-			
-			dummySolidTile.IsSolid = !IsRaised;
+			dummySolidTile.IsSolid			= true;
+			dummySolidTile.CollisionModel	= new CollisionModel(new Rectangle2I(0, 0, 16, 8));
+			dummySolidTile.ClingWhenStabbed	= false;
+			dummySolidTile.IsSolid			= !IsRaised;
+			RoomControl.PlaceTile(dummySolidTile, trackLocation, Layer);			
 		}
 
 		public override void Update() {

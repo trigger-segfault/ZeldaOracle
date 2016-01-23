@@ -33,6 +33,29 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 
 		//-----------------------------------------------------------------------------
+		// Intercept Methods
+		//-----------------------------------------------------------------------------
+
+		public void Intercept() {
+			DestroyWithFire();
+		}
+
+		public void InterceptAndAbsorb() {
+			// Spawn fire.
+			Fire fire = DestroyWithFire();
+			fire.IsAbsorbed = true;
+		}
+
+		private Fire DestroyWithFire() {
+			Fire fire = new Fire();
+			RoomControl.SpawnEntity(fire, position);
+			AudioSystem.PlaySound(GameData.SOUND_FIRE);
+			DestroyAndTransform(fire);
+			return fire;
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
@@ -40,14 +63,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			base.Initialize();
 			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_MAGIC_ROD_FIRE);
 			CheckInitialCollision();
-		}
-
-		public void Intercept() {
-			// Spawn fire.
-			Fire fire = new Fire();
-			RoomControl.SpawnEntity(fire, position);
-			AudioSystem.PlaySound(GameData.SOUND_FIRE);
-			DestroyAndTransform(fire);
 		}
 
 		public override void OnCollideTile(Tile tile, bool isInitialCollision) {

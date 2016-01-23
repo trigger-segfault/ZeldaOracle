@@ -58,8 +58,16 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		// Destroy the seed and spawn its regular effect.
-		public Entity DestroyWithEffect() {
-			Entity effectEntity = CreateEffect(type, false, Center);
+		public Entity DestroyWithAbsorbedEffect(bool satchelEffect = false) {
+			Entity effectEntity = DestroyWithEffect(satchelEffect);
+			if (effectEntity is Fire)
+				(effectEntity as Fire).IsAbsorbed = true;
+			return effectEntity;
+		}
+
+		// Destroy the seed and spawn its regular effect.
+		public Entity DestroyWithEffect(bool satchelEffect = false) {
+			Entity effectEntity = CreateEffect(type, satchelEffect, Center);
 			DestroyAndTransform(effectEntity);
 			return effectEntity;
 		}

@@ -68,7 +68,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				tile.OnSwordHit(weapon);
 
 				// Create cling effect.
-				if (!tile.IsDestroyed) {
+				if (!tile.IsDestroyed && tile.ClingWhenStabbed) {
 					Effect clingEffect = new EffectCling(true);
 					Vector2F pos = player.Center + (13 * Directions.ToVector(direction));
 					player.RoomControl.SpawnEntity(clingEffect, pos);

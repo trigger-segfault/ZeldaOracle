@@ -69,13 +69,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			if (!isInitialCollision)
 				position += Physics.PreviousVelocity.Normalized * 3.0f;
 
-			// Notify the tile of the seed hitting it.
-			if (tile != null) {
-				tile.OnSeedHit(type, this);
-				if (IsDestroyed)
-					return;
-			}
-			
 			DestroyWithEffect();
 		}
 
