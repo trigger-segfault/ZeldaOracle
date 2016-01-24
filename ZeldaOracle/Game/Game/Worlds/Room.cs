@@ -119,6 +119,31 @@ namespace ZeldaOracle.Game.Worlds {
 		// Tile Management
 		//-----------------------------------------------------------------------------
 		
+		public void PlaceTile(TileDataInstance tile, Point2I location, int layer) {
+			Point2I size = tile.Size;
+			for (int x = 0; x < size.X; x++) {
+				for (int y = 0; y < size.Y; y++) {
+					Point2I loc = new Point2I(location.X + x, location.Y + y);
+					if (loc.X < Width && loc.Y < Height) {
+						// Remove existing tile.
+						TileDataInstance t = tileData[loc.X, loc.Y, layer];
+						if (t != null)
+							RemoveTile(t);
+						tileData[loc.X, loc.Y, layer] = tile;
+					}
+				}
+			}
+			if (tile != null) {
+				tile.Location	= location;
+				tile.Layer		= layer;
+				tile.Room		= this;
+			}
+		}
+
+		public void SetTile(TileDataInstance tile, Point2I location, int layer) {
+			SetTile(tile, location.X, location.Y, layer);
+		}
+
 		public void SetTile(TileDataInstance tile, int x, int y, int layer) {
 			tileData[x, y, layer] = tile;
 			if (tile != null) {
@@ -130,12 +155,21 @@ namespace ZeldaOracle.Game.Worlds {
 
 		public void RemoveTile(TileDataInstance tile) {
 			if (tile.Room == this) {
-				tileData[tile.Location.X, tile.Location.Y, tile.Layer] = null;
+				Point2I size = tile.Size;
+				for (int x = 0; x < size.X; x++) {
+					for (int y = 0; y < size.Y; y++) {
+						Point2I loc = new Point2I(tile.Location.X + x, tile.Location.Y + y);
+						if (loc.X < Width && loc.Y < Height)
+							tileData[loc.X, loc.Y, tile.Layer] = null;
+					}
+				}
 			}
 		}
 
 		public void RemoveTile(int x, int y, int layer) {
-			tileData[x, y, layer] = null;
+			TileDataInstance tile = tileData[x, y, layer];
+			if (tile != null)
+				RemoveTile(tile);
 		}
 
 		public TileDataInstance CreateTile(TileData data, Point2I location, int layer) {
@@ -145,7 +179,7 @@ namespace ZeldaOracle.Game.Worlds {
 		public TileDataInstance CreateTile(TileData data, int x, int y, int layer) {
 			TileDataInstance dataInstance = new TileDataInstance(data, x, y, layer);
 			dataInstance.Room = this;
-			tileData[x, y, layer] = dataInstance;
+			PlaceTile(dataInstance, new Point2I(x, y), layer);
 			return dataInstance;
 		}
 

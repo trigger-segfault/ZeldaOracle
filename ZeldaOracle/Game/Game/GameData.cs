@@ -60,11 +60,11 @@ namespace ZeldaOracle.Game {
 			Console.WriteLine("Loading Music");
 			LoadMusic();
 
-			Console.WriteLine("Loading Zones");
-			LoadZones();
-
 			Console.WriteLine("Loading Tilesets");
 			LoadTilesets();
+
+			Console.WriteLine("Loading Zones");
+			LoadZones();
 		}
 
 
@@ -173,15 +173,18 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		private static void LoadZones() {
-			ZONE_DEFAULT	= new Zone("",			"(none)",		VARIANT_NONE);
-			ZONE_SUMMER		= new Zone("summer",	"Summer",		VARIANT_SUMMER);
-			ZONE_FOREST		= new Zone("forest",	"Forest",		VARIANT_FOREST);
-			ZONE_GRAVEYARD	= new Zone("graveyard",	"Graveyard",	VARIANT_GRAVEYARD);
-			ZONE_INTERIOR	= new Zone("interior",	"Interior",		VARIANT_INTERIOR);
-			ZONE_PRESENT	= new Zone("present", "Present", VARIANT_PRESENT);
-			ZONE_INTERIOR_PRESENT	= new Zone("interior_present", "Interior Present", VARIANT_INTERIOR_PRESENT);
-			ZONE_AGES_DUNGEON_1		= new Zone("ages_dungeon_1", "Ages Dungeon 1", VARIANT_AGES_DUNGEON_1);
-			ZONE_AGES_DUNGEON_4		= new Zone("ages_dungeon_4", "Ages Dungeon 4", VARIANT_AGES_DUNGEON_4);
+			TileData ground = Resources.GetResource<TileData>("default_ground");
+			TileData floor  = Resources.GetResource<TileData>("default_floor");
+
+			ZONE_DEFAULT			= new Zone("",					"(none)",			VARIANT_NONE,				ground);
+			ZONE_SUMMER				= new Zone("summer",			"Summer",			VARIANT_SUMMER,				ground);
+			ZONE_FOREST				= new Zone("forest",			"Forest",			VARIANT_FOREST,				ground);
+			ZONE_GRAVEYARD			= new Zone("graveyard",			"Graveyard",		VARIANT_GRAVEYARD,			ground);
+			ZONE_INTERIOR			= new Zone("interior",			"Interior",			VARIANT_INTERIOR,			floor);
+			ZONE_PRESENT			= new Zone("present",			"Present",			VARIANT_PRESENT,			floor);
+			ZONE_INTERIOR_PRESENT	= new Zone("interior_present",	"Interior Present",	VARIANT_INTERIOR_PRESENT,	floor);
+			ZONE_AGES_DUNGEON_1		= new Zone("ages_dungeon_1",	"Ages Dungeon 1",	VARIANT_AGES_DUNGEON_1,		floor);
+			ZONE_AGES_DUNGEON_4		= new Zone("ages_dungeon_4",	"Ages Dungeon 4",	VARIANT_AGES_DUNGEON_4,		floor);
 
 			Resources.AddResource("default",	ZONE_DEFAULT);
 			Resources.AddResource("summer",		ZONE_SUMMER);
@@ -201,14 +204,17 @@ namespace ZeldaOracle.Game {
 		private static void LoadTilesets() {
 			// Load tilesets and tile data.
 			Resources.LoadTilesets("Tilesets/cliffs.conscript");
+
+			Resources.LoadTilesets("Tilesets/objects_nv.conscript");
+			Resources.LoadTilesets("Tilesets/objects.conscript");
+
 			Resources.LoadTilesets("Tilesets/land.conscript");
 			Resources.LoadTilesets("Tilesets/forest.conscript");
 			Resources.LoadTilesets("Tilesets/water.conscript");
 			Resources.LoadTilesets("Tilesets/town.conscript");
 			Resources.LoadTilesets("Tilesets/interior.conscript");
 			Resources.LoadTilesets("Tilesets/dungeon.conscript");
-			Resources.LoadTilesets("Tilesets/objects.conscript");
-			Resources.LoadTilesets("Tilesets/objects_nv.conscript");
+			
 			Resources.LoadTilesets("Tilesets/event_tile_data.conscript");
 			// OLD Tilesets:
 			//Resources.LoadTilesets("Tilesets/tile_data.conscript");

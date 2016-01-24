@@ -38,6 +38,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 	public partial class Monster : Unit, ZeldaAPI.Monster {
 		
+		private bool softKill;
+
 		private Properties properties;
 		private int contactDamage;
 		private InteractionHandler[] interactionHandlers;
@@ -99,6 +101,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isBurnable				= true;
 			isStunnable				= true;
 			isKnockbackable			= true;
+
+			softKill = false;
 			
 			// Setup default interactions.
 			interactionHandlers = new InteractionHandler[(int) InteractionType.Count];
@@ -169,6 +173,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		//-----------------------------------------------------------------------------
 		// Monster Reactions
 		//-----------------------------------------------------------------------------
+
+		public void SoftKill() {
+			softKill = true;
+			Kill();
+		}
 
 		public bool Stun() {
 			if (isStunnable && ((state is MonsterNormalState) || (state is MonsterStunState))) {
@@ -293,7 +302,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Effect explosion = new Effect(GameData.ANIM_EFFECT_MONSTER_EXPLOSION, DepthLayer.EffectMonsterExplosion);
 			AudioSystem.PlaySound(GameData.SOUND_MONSTER_DIE);
 			RoomControl.SpawnEntity(explosion, Center);
-			Properties.SetBase("dead", true);
+			if (!softKill)
+				Properties.SetBase("dead", true);
 			base.Die();
 		}
 

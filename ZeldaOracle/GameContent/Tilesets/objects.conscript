@@ -26,6 +26,19 @@ SPRITESHEET "tileset_objects_extras_16x16";
 
 LOAD TILESETS;
 
+
+# Default zone tile for digable ground (for overworlds)
+TILE default_ground;
+	SPRITE		tile_default;
+	FLAGS		Digable;
+END;
+
+# Default zone tile for a hard floor (for dungeons or interiors)
+TILE default_floor;
+	SPRITE		tile_default;
+END;
+
+
 # ---- Bush -------------------------------------------------------------------
 
 TILE bush;
@@ -353,6 +366,7 @@ END;
 # ---- Color Statue -----------------------------------------------------------
 
 TILE color_statue;
+	TYPE		TileColorStatue;
 	SOLID		block;
 	FLAGS		Movable;
 	PROPERTIES	(integer, color, 0, "Color", "", "", "The color of the statue.");

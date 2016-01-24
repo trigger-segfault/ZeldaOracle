@@ -32,6 +32,13 @@ namespace ZeldaEditor.Tools {
 			if (mouseButton == MouseButtons.Left) {
 				TileData selectedTilesetTileData = editorControl.SelectedTilesetTileData as TileData;
 				if (selectedTilesetTileData != null) {
+					
+					TileDataInstance tile = room.GetTile(tileLocation, EditorControl.CurrentLayer);
+					if (tile != null) {
+						room.RemoveTile(tile);
+						editorControl.OnDeleteObject(tile);
+					}
+
 					room.CreateTile(
 						selectedTilesetTileData,
 						tileLocation.X, tileLocation.Y, editorControl.CurrentLayer
@@ -46,7 +53,11 @@ namespace ZeldaEditor.Tools {
 					);
 				}
 				else {*/
-					room.RemoveTile(tileLocation.X, tileLocation.Y, editorControl.CurrentLayer);
+					TileDataInstance tile = room.GetTile(tileLocation, EditorControl.CurrentLayer);
+					if (tile != null) {
+						room.RemoveTile(tile);
+						editorControl.OnDeleteObject(tile);
+					}
 				//}
 			}
 			else if (mouseButton == MouseButtons.Middle) {
@@ -106,6 +117,7 @@ namespace ZeldaEditor.Tools {
 					EventTileDataInstance eventTile = LevelDisplayControl.SampleEventTile(new Point2I(e.X, e.Y));
 					if (eventTile != null) {
 						eventTile.Room.RemoveEventTile(eventTile);
+						editorControl.OnDeleteObject(eventTile);
 					}
 				}
 				else if (e.Button == MouseButtons.Middle) {

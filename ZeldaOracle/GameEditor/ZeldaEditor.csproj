@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Control\EditorWorld.cs" />
     <Compile Include="Control\EditorControl.cs" />
     <Compile Include="Control\EditorGraphics.cs" />
     <Compile Include="Control\EditorResources.cs" />

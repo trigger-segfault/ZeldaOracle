@@ -350,13 +350,15 @@ namespace ZeldaOracle.Game.Control {
 					for (int i = 0; i < room.LayerCount; i++) {
 						TileDataInstance data = room.TileData[x, y, i];
 
-						if (data != null && x == data.Location.X && y == data.Location.Y &&
+						if (data != null && data.IsAtLocation(x, y) &&
 							data.Properties.GetBoolean("enabled", true))
 						{
+							// Place the tile.
 							Tile tile = Tile.CreateTile(data);
 							for (int xx = 0; xx < tile.Width; xx++) {
 								for (int yy = 0; yy < tile.Height; yy++) {
-									tiles[x + xx, y + yy, i] = tile;
+									if (x + xx < room.Width & y + yy < room.Height)
+										tiles[x + xx, y + yy, i] = tile;
 								}
 							}
 

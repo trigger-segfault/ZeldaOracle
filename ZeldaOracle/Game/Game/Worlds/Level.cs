@@ -129,9 +129,28 @@ namespace ZeldaOracle.Game.Worlds {
 				for (int y = 0; y < dimensions.Y; y++) {
 					if (x - distance.X >= 0 && x - distance.X < dimensions.X &&
 						y - distance.Y >= 0 && y - distance.Y < dimensions.Y)
+					{
 						rooms[x, y] = oldRooms[x - distance.X, y - distance.Y];
+						rooms[x, y].Location = new Point2I(x, y);
+					}
 					else
 						rooms[x, y] = new Room(this, x, y, Zone ?? Resources.GetResource<Zone>(""));
+				}
+			}
+		}
+
+		public void FillWithDefaultTiles() {
+			for (int x = 0; x < dimensions.X; x++) {
+				for (int y = 0; y < dimensions.Y; y++) {
+					FillRoomWithDefaultTiles(rooms[x, y]);
+				}
+			}
+		}
+
+		public void FillRoomWithDefaultTiles(Room room) {
+			for (int x = 0; x < room.Width; x++) {
+				for (int y = 0; y < room.Height; y++) {
+					room.SetTile(new TileDataInstance(Zone.DefaultTileData), x, y, 0);
 				}
 			}
 		}

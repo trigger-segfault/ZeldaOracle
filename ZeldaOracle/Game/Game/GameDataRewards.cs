@@ -333,21 +333,21 @@ namespace ZeldaOracle.Game {
 			dropsDefault.AddDrop(25, dropsHearts);
 
 			// Drops that are created when a ground tile is dug up.
-			/*DropList dropsDigRupees = new DropList();
+			DropList dropsDigRupees = new DropList();
 			dropsDigRupees.AddDrop(25, dropsRupees);
 			dropsDigRupees.AddDrop(1, rewardManager.GetReward("rupees_100"));
 			DropList dropsDigMonsters = new DropList();
-			dropsDigMonsters.AddDrop(5, typeof(MonsterBeetle)); // TODO: Beetle as a dig Drop
-			dropsDigMonsters.AddDrop(2, typeof(MonsterRope)); // TODO: Rope as a dig Drop
+			dropsDigMonsters.AddDrop(5, typeof(MonsterBeetle));
+			dropsDigMonsters.AddDrop(2, typeof(MonsterRope));
 			DropList dropsDig = dropManager.CreateDropList("dig", 1, 4);
 			dropsDig.AddDrop(46, dropsDigRupees);
 			dropsDig.AddDrop(25, dropsHearts);
-			dropsDig.AddDrop(7, dropsDigMonsters);*/
+			dropsDig.AddDrop(7, dropsDigMonsters);
 			
-			DropList dropsDig = dropManager.CreateDropList("dig", 1, 1);
+			//DropList dropsDig = dropManager.CreateDropList("dig", 1, 1);
 			//dropsDig.AddDrop(1, typeof(MonsterRope));
 			//dropsDig.AddDrop(1, typeof(MonsterBeetle));
-			dropsDig.AddDrop(1, typeof(MonsterLynel));
+			//dropsDig.AddDrop(1, typeof(MonsterLynel));
 		}
 	}
 }

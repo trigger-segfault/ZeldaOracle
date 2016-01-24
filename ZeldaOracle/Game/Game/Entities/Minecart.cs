@@ -69,7 +69,7 @@ namespace ZeldaOracle.Game.Entities {
 			{
 				for (int i = 0; i < Directions.Count; i++) {
 					if (player.Physics.CollisionInfo[i].Entity == this) {
-						player.EnterMinecart(this);
+						player.JumpIntoMinecart(this);
 						break;
 					}
 				}

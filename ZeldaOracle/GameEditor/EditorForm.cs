@@ -22,6 +22,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
 
 using FormsControl = System.Windows.Forms.Control;
+using ZeldaOracle.Game;
 
 namespace ZeldaEditor {
 
@@ -520,7 +521,9 @@ namespace ZeldaEditor {
 			using (LevelAddForm form = new LevelAddForm(editorControl.World)) {
 				if (form.ShowDialog(this) == DialogResult.OK) {
 					Level level = new Level(form.LevelName, form.LevelWidth, form.LevelHeight,
-						form.LevelLayerCount, form.LevelRoomSize, form.LevelZone);
+						GameSettings.DEFAULT_TILE_LAYER_COUNT, form.LevelRoomSize, form.LevelZone);
+					// Setup the level with default tiles.
+					level.FillWithDefaultTiles();
 					editorControl.AddLevel(level, true);
 				}
 			}

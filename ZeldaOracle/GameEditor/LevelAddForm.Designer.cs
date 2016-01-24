@@ -35,11 +35,8 @@
 			this.label5 = new System.Windows.Forms.Label();
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.buttonAdd = new System.Windows.Forms.Button();
-			this.numericLayerCount = new System.Windows.Forms.NumericUpDown();
-			this.label6 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.numericLevelWidth)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericLevelHeight)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericLayerCount)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// textBoxLevelName
@@ -170,37 +167,6 @@
 			this.buttonAdd.UseVisualStyleBackColor = true;
 			this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
 			// 
-			// numericLayerCount
-			// 
-			this.numericLayerCount.Location = new System.Drawing.Point(85, 90);
-			this.numericLayerCount.Maximum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-			this.numericLayerCount.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.numericLayerCount.Name = "numericLayerCount";
-			this.numericLayerCount.Size = new System.Drawing.Size(145, 20);
-			this.numericLayerCount.TabIndex = 3;
-			this.numericLayerCount.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(3, 92);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(74, 13);
-			this.label6.TabIndex = 1;
-			this.label6.Text = "Layers:";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
 			// LevelAddForm
 			// 
 			this.AcceptButton = this.buttonAdd;
@@ -212,12 +178,10 @@
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.comboBoxZone);
 			this.Controls.Add(this.comboBoxRoomSize);
-			this.Controls.Add(this.numericLayerCount);
 			this.Controls.Add(this.numericLevelHeight);
 			this.Controls.Add(this.numericLevelWidth);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.label6);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
@@ -230,7 +194,6 @@
 			this.Text = "Add New Level";
 			((System.ComponentModel.ISupportInitialize)(this.numericLevelWidth)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericLevelHeight)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericLayerCount)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -250,7 +213,5 @@
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Button buttonCancel;
 		private System.Windows.Forms.Button buttonAdd;
-		private System.Windows.Forms.NumericUpDown numericLayerCount;
-		private System.Windows.Forms.Label label6;
 	}
 }

@@ -32,6 +32,11 @@ namespace ZeldaOracle.Game.Tiles {
 			this.properties.PropertyObject = this;
 		}
 
+		public TileDataInstance(TileData tileData) :
+			this(tileData, -1, -1, -1)
+		{
+		}
+
 		public TileDataInstance(TileData tileData, int x, int y, int layer) {
 			this.room		= null;
 			this.location	= new Point2I(x, y);
@@ -40,6 +45,10 @@ namespace ZeldaOracle.Game.Tiles {
 			this.properties = new Properties();
 			this.properties.PropertyObject = this;
 			this.properties.BaseProperties = tileData.Properties;
+		}
+
+		public bool IsAtLocation(int x, int y) {
+			return (x == location.X && y == location.Y);
 		}
 
 

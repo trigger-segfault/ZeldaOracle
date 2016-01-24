@@ -187,11 +187,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				trackTile.Properties.SetBase("minecart", true);
 
 			// Hop out of the minecart.
-			Vector2F landingPoint = 
-				((tileLocation + new Vector2F(0.5f, 0.5f)) * GameSettings.TILE_SIZE) +
-				(Directions.ToVector(direction) * GameSettings.TILE_SIZE);
-			landingPoint -= player.CenterOffset + new Vector2F(0, 2.0f);
-			player.JumpToPosition(landingPoint, 0.0f, 26, null);
+			Point2I landingTile = tileLocation + Directions.ToPoint(direction);
+			player.JumpOutOfMinecart(landingTile);
 		}
 
 		// Update the player's position relative to the minecart.

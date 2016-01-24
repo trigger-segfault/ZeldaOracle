@@ -7,6 +7,8 @@ namespace ZeldaAPI {
 
 	public interface Tile {
 		string Id { get; }
+
+		bool IsMovable { get; set; }
 	}
 	
 	public interface Lantern : Tile {
@@ -31,6 +33,10 @@ namespace ZeldaAPI {
 	
 	public interface ColorTile : Tile {
 		Color Color { get; set; }
+	}
+	
+	public interface ColorStatue : Tile {
+		Color Color { get; }
 	}
 
 	public interface Door : Tile {

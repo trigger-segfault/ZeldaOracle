@@ -841,5 +841,10 @@ namespace ZeldaOracle.Game.Tiles {
 		string ZeldaAPI.Tile.Id {
 			get { return properties.GetString("id", ""); }
 		}
+
+		bool ZeldaAPI.Tile.IsMovable {
+			get { return HasFlag(TileFlags.Movable); }
+			set { SetFlags(TileFlags.Movable, value); }
+		}
 	}
 }

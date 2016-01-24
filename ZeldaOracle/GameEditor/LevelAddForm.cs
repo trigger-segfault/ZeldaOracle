@@ -84,10 +84,6 @@ namespace ZeldaEditor {
 			get { return (int) numericLevelHeight.Value; }
 		}
 		
-		public int LevelLayerCount {
-			get { return (int) numericLayerCount.Value; }
-		}
-		
 		public Point2I LevelRoomSize {
 			get {
 				if (comboBoxRoomSize.SelectedIndex == 1)

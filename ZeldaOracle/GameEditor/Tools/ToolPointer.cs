@@ -48,12 +48,16 @@ namespace ZeldaEditor.Tools {
 		
 		public override void Delete() {
 			if (!EditorControl.EventMode) {
-				if (selectedTile != null)
+				if (selectedTile != null) {
 					selectedTile.Room.RemoveTile(selectedTile);
+					editorControl.OnDeleteObject(selectedTile);
+				}
 			}
 			else {
-				if (selectedEventTile != null)
+				if (selectedEventTile != null) {
 					selectedEventTile.Room.RemoveEventTile(selectedEventTile);
+					editorControl.OnDeleteObject(selectedEventTile);
+				}
 			}
 			Deselect();
 		}

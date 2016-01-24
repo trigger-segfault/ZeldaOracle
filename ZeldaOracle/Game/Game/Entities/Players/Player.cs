@@ -272,19 +272,24 @@ namespace ZeldaOracle.Game.Entities.Players {
 			BeginSpecialState(stateJumpTo);
 		}
 
-		public void EnterMinecart(Minecart minecart) {
-			// Hop into the minecart.
+		// Hop into the minecart.
+		public void JumpIntoMinecart(Minecart minecart) {
 			JumpToPosition(minecart.Center, 4.0f, 26, delegate(PlayerJumpToState state) {
 				BeginMinecartState(minecart);
 			});
 		}
 
+		// Hop out of a minecart and land at the given tile location.
+		public void JumpOutOfMinecart(Point2I landingTileLocation) {
+			Vector2F landingPoint = (landingTileLocation +
+				new Vector2F(0.5f, 0.5f)) * GameSettings.TILE_SIZE;
+			landingPoint -= centerOffset + new Vector2F(0, 2.0f);
+			JumpToPosition(landingPoint, 0.0f, 26, null);
+		}
+
 		public void BeginMinecartState(Minecart minecart) {
 			stateMinecart.Minecart = minecart;
 			BeginSpecialState(stateMinecart);
-
-			//stateMinecart.Minecart = minecart;
-			//stateMinecart.Begin(this, null);
 		}
 
 		public void OnJump() {

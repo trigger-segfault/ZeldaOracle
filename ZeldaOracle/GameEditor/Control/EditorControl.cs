@@ -399,6 +399,23 @@ namespace ZeldaEditor.Control {
 			PropertyGrid.OpenProperties(propertyObject.Properties, propertyObject);
 		}
 
+		public void OnDeleteObject(IPropertyObject propertyObject) {
+			// Remove any hidden scripts referenced in the tile's propreties.
+			foreach (Property property in propertyObject.Properties.GetProperties()) {
+				PropertyDocumentation doc = property.GetDocumentation();
+
+				// Remove hidden scripts referenced by this property.
+				if (doc.EditorType == "script") {
+					string scriptID = property.StringValue;
+					Script script = world.GetScript(scriptID);
+					if (script != null && script.IsHidden) {
+						world.RemoveScript(script);
+						Console.WriteLine("Removed hidden script: " + scriptID);
+					}
+				}
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Tools

@@ -381,7 +381,7 @@ namespace ZeldaEditor {
 						TileDataInstance tile = room.GetTile(x, y, i);
 						
 						// Draw tile.
-						if (tile != null)
+						if (tile != null && tile.IsAtLocation(x, y))
 							DrawTile(g, tile, position, color);
 
 						// Draw grid square.
