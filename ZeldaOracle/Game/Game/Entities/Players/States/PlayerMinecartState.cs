@@ -82,7 +82,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Play the animations.
 			player.MoveAnimation = GameData.ANIM_PLAYER_MINECART_IDLE;
-			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MINECART_IDLE);
+			if (player.CurrentState != player.CarryState)
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MINECART_IDLE);
 			minecartAnimationPlayer.Play(GameData.ANIM_MINECART);
 
 			// Setup position.
@@ -91,6 +92,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 						
 			// Destroy the minecart.
 			minecart.Destroy();
+			
+			// Notify the current player state we have entered a minecart.
+			if (player.CurrentState != null)
+				player.CurrentState.OnEnterMinecart();
 		}
 		
 		public override void OnEnd(PlayerState newState) {
@@ -170,11 +175,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		// Exit the minecart, dropping the player off in the given direction.
 		private void ExitMinecart(int direction) {
-			// End of the track.
-			player.SetPositionByCenter(
-				((tileLocation + new Vector2F(0.5f, 0.5f)) * GameSettings.TILE_SIZE) +
-				(Directions.ToVector(direction) * GameSettings.TILE_SIZE));
-
 			// Spawn another minecart entity.
 			if (minecart == null || minecart.IsDestroyed) {
 				minecart = new Minecart(trackTile);
@@ -182,11 +182,16 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				minecart = null;
 			}
 
+			// Make the current track tile remember it has a minecart on it.
 			if (trackTile != null)
 				trackTile.Properties.SetBase("minecart", true);
 
-			// End the minecart state.
-			End(null);
+			// Hop out of the minecart.
+			Vector2F landingPoint = 
+				((tileLocation + new Vector2F(0.5f, 0.5f)) * GameSettings.TILE_SIZE) +
+				(Directions.ToVector(direction) * GameSettings.TILE_SIZE);
+			landingPoint -= player.CenterOffset + new Vector2F(0, 2.0f);
+			player.JumpToPosition(landingPoint, 0.0f, 26, null);
 		}
 
 		// Update the player's position relative to the minecart.

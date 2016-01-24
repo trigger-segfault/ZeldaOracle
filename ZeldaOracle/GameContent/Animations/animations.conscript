@@ -781,6 +781,11 @@ ANIM player_swing;
 	SUBSTRIP clamp; ADD frame, 3, (3, 8); ADD frame, 3, (2, 4); ADD frame, 8, (2, 4), ( 0, -4); ADD frame, 3, (2, 4);
 	SUBSTRIP clamp; ADD frame, 3, (2, 8); ADD frame, 3, (4, 4); ADD frame, 8, (4, 4), (-4,  0); ADD frame, 3, (4, 4);
 	SUBSTRIP clamp; ADD frame, 3, (1, 8); ADD frame, 3, (6, 4); ADD frame, 8, (6, 4), ( 0,  4); ADD frame, 3, (6, 4); END;
+ANIM player_swing_nolunge;
+	SUBSTRIP clamp; ADD frame, 3, (4, 8); ADD frame, 14, (0, 4);
+	SUBSTRIP clamp; ADD frame, 3, (3, 8); ADD frame, 14, (2, 4);
+	SUBSTRIP clamp; ADD frame, 3, (2, 8); ADD frame, 14, (4, 4);
+	SUBSTRIP clamp; ADD frame, 3, (1, 8); ADD frame, 14, (6, 4); END;
 ANIM player_swing_big;
 	SUBSTRIP clamp; ADD frame, 12, (4, 8); ADD frame, 9, (0, 4); ADD frame, 13, (5, 8);
 	SUBSTRIP clamp; ADD frame, 12, (3, 8); ADD frame, 9, (2, 4); ADD frame, 13, (6, 8);
@@ -832,31 +837,39 @@ ANIM player_aim;
 ## Player in Minecart Animations
 
 ANIM player_minecart_idle; SUBSTRIP repeat;
-	ADD frame, 1, (2, 21);
+	ADD frame, 1, (0, 22);
+	MAKEDYNAMIC 4, (1, 0); END;
+ANIM player_minecart_carry; SUBSTRIP repeat;
+	ADD frame, 1, (4, 22);
 	MAKEDYNAMIC 4, (1, 0); END;
 ANIM player_minecart_throw; SUBSTRIP repeat;
-	ADD frame, 1, (0, 23);
+	ADD frame, 1, (0, 24);
 	MAKEDYNAMIC 4, (2, 0); END;
 ANIM player_minecart_aim;
-	SUBSTRIP repeat; ADD frame 1, (0, 23); # right
-	SUBSTRIP repeat; ADD frame 1, (3, 22);
-	SUBSTRIP repeat; ADD frame 1, (2, 23); # up
-	SUBSTRIP repeat; ADD frame 1, (2, 22);
-	SUBSTRIP repeat; ADD frame 1, (4, 23); # left
-	SUBSTRIP repeat; ADD frame 1, (1, 22);
-	SUBSTRIP repeat; ADD frame 1, (6, 23); # down
-	SUBSTRIP repeat; ADD frame 1, (0, 22);
+	SUBSTRIP repeat; ADD frame 1, (0, 24); # right
+	SUBSTRIP repeat; ADD frame 1, (3, 23);
+	SUBSTRIP repeat; ADD frame 1, (2, 24); # up
+	SUBSTRIP repeat; ADD frame 1, (2, 23);
+	SUBSTRIP repeat; ADD frame 1, (4, 24); # left
+	SUBSTRIP repeat; ADD frame 1, (1, 23);
+	SUBSTRIP repeat; ADD frame 1, (6, 24); # down
+	SUBSTRIP repeat; ADD frame 1, (0, 23);
 	END;
 ANIM player_minecart_swing;
-	SUBSTRIP clamp; ADD frame, 3, (4, 22); ADD frame, 11, (0, 23);
-	SUBSTRIP clamp; ADD frame, 3, (3, 22); ADD frame, 11, (2, 23);
-	SUBSTRIP clamp; ADD frame, 3, (2, 22); ADD frame, 11, (4, 23);
-	SUBSTRIP clamp; ADD frame, 3, (1, 22); ADD frame, 11, (6, 23); END;
+	SUBSTRIP clamp; ADD frame, 3, (4, 23); ADD frame, 3, (0, 24); ADD frame, 8, (0, 24), ( 4,  0); ADD frame, 3, (0, 24);
+	SUBSTRIP clamp; ADD frame, 3, (3, 23); ADD frame, 3, (2, 24); ADD frame, 8, (2, 24), ( 0, -4); ADD frame, 3, (2, 24);
+	SUBSTRIP clamp; ADD frame, 3, (2, 23); ADD frame, 3, (4, 24); ADD frame, 8, (4, 24), (-4,  0); ADD frame, 3, (4, 24);
+	SUBSTRIP clamp; ADD frame, 3, (1, 23); ADD frame, 3, (6, 24); ADD frame, 8, (6, 24), ( 0,  4); ADD frame, 3, (6, 24); END;
+ANIM player_minecart_swing_nolunge;
+	SUBSTRIP clamp; ADD frame, 3, (4, 23); ADD frame, 14, (0, 24);
+	SUBSTRIP clamp; ADD frame, 3, (3, 23); ADD frame, 14, (2, 24);
+	SUBSTRIP clamp; ADD frame, 3, (2, 23); ADD frame, 14, (4, 24);
+	SUBSTRIP clamp; ADD frame, 3, (1, 23); ADD frame, 14, (6, 24); END;
 ANIM player_minecart_swing_big;
-	SUBSTRIP clamp; ADD frame, 12, (4, 22); ADD frame, 9, (0, 23); ADD frame, 13, (5, 22);
-	SUBSTRIP clamp; ADD frame, 12, (3, 22); ADD frame, 9, (2, 23); ADD frame, 13, (6, 22);
-	SUBSTRIP clamp; ADD frame, 12, (2, 22); ADD frame, 9, (4, 23); ADD frame, 13, (1, 22);
-	SUBSTRIP clamp; ADD frame, 12, (1, 22); ADD frame, 9, (6, 23); ADD frame, 13, (5, 22); END;
+	SUBSTRIP clamp; ADD frame, 12, (4, 23); ADD frame, 9, (0, 24); ADD frame, 13, (5, 23);
+	SUBSTRIP clamp; ADD frame, 12, (3, 23); ADD frame, 9, (2, 24); ADD frame, 13, (6, 23);
+	SUBSTRIP clamp; ADD frame, 12, (2, 23); ADD frame, 9, (4, 24); ADD frame, 13, (1, 23);
+	SUBSTRIP clamp; ADD frame, 12, (1, 23); ADD frame, 9, (6, 24); ADD frame, 13, (5, 23); END;
 	
 
 #==============================================================

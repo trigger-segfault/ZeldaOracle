@@ -71,6 +71,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PLAYER_DIG;
 		public static Animation ANIM_PLAYER_THROW;
 		public static Animation ANIM_PLAYER_SWING;
+		public static Animation ANIM_PLAYER_SWING_NOLUNGE;
 		public static Animation ANIM_PLAYER_SWING_BIG;
 		public static Animation ANIM_PLAYER_STAB;
 		public static Animation ANIM_PLAYER_SPIN;
@@ -86,9 +87,11 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PLAYER_CRUSH_HORIZONTAL;
 		public static Animation ANIM_PLAYER_INVISIBLE;
 		public static Animation ANIM_PLAYER_MINECART_IDLE;
+		public static Animation ANIM_PLAYER_MINECART_CARRY;
 		public static Animation ANIM_PLAYER_MINECART_THROW;
 		public static Animation ANIM_PLAYER_MINECART_AIM;
 		public static Animation ANIM_PLAYER_MINECART_SWING;
+		public static Animation ANIM_PLAYER_MINECART_SWING_NOLUNGE;
 		public static Animation ANIM_PLAYER_MINECART_SWING_BIG;
 
 		// Monster animations.

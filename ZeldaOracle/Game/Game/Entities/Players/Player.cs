@@ -52,6 +52,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerState state;
 		// The previous player state.
 		private PlayerState previousState;
+		// The current player state.
+		private PlayerState specialState;
+		// The previous player state.
+		private PlayerState previousSpecialState;
 		// The movement component for the player.
 		private PlayerMoveComponent movement;
 
@@ -91,6 +95,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerCarryState			stateCarry;
 		private PlayerRespawnDeathState		stateRespawnDeath;
 		private PlayerMinecartState			stateMinecart;
+		private PlayerJumpToState			stateJumpTo;
 
 		private PlayerSwimmingSkills	swimmingSkills;
 		private PlayerTunics			tunic;
@@ -152,6 +157,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Create the basic player states.
 			state				= null;
+			specialState		= null;
+			previousState		= null;
+			previousSpecialState= null;
 			stateNormal			= new PlayerNormalState();
 			stateBusy			= new PlayerBusyState();
 			stateSwim			= new PlayerSwimState();
@@ -171,6 +179,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateCarry			= new PlayerCarryState();
 			stateRespawnDeath	= new PlayerRespawnDeathState();
 			stateMinecart		= new PlayerMinecartState();
+			stateJumpTo			= new PlayerJumpToState();
 
 			Physics.CustomCollisionFunction = CheckRoomEdgeCollisions;
 		}
@@ -197,12 +206,24 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Begin the given player state.
 		public void BeginState(PlayerState newState) {
 			if (state != newState) {
-				if (state != null) {
+				if (state != null)
 					state.End(newState);
-				}
 				previousState = state;
 				state = newState;
-				newState.Begin(this, previousState);
+				state.Begin(this, previousState);
+			}
+		}
+
+		// Begin the given player state as a special state.
+		public void BeginSpecialState(PlayerState newState) {
+			if (specialState != null && !specialState.IsActive)
+				specialState = null;
+			if (specialState != newState) {
+				if (specialState != null)
+					specialState.End(newState);
+				previousSpecialState = specialState;
+				specialState = newState;
+				specialState.Begin(this, previousSpecialState);
 			}
 		}
 
@@ -241,9 +262,29 @@ namespace ZeldaOracle.Game.Entities.Players {
 			BeginState(GetDesiredNaturalState());
 		}
 
+		public void JumpToPosition(Vector2F destinationPosition, float destinationZPosition,
+								   int duration, Action<PlayerJumpToState> endAction)
+		{
+			stateJumpTo.JumpDuration			= duration;
+			stateJumpTo.DestinationPosition		= destinationPosition;
+			stateJumpTo.DestinationZPosition	= destinationZPosition;
+			stateJumpTo.EndAction				= endAction;
+			BeginSpecialState(stateJumpTo);
+		}
+
 		public void EnterMinecart(Minecart minecart) {
+			// Hop into the minecart.
+			JumpToPosition(minecart.Center, 4.0f, 26, delegate(PlayerJumpToState state) {
+				BeginMinecartState(minecart);
+			});
+		}
+
+		public void BeginMinecartState(Minecart minecart) {
 			stateMinecart.Minecart = minecart;
-			stateMinecart.Begin(this, null);
+			BeginSpecialState(stateMinecart);
+
+			//stateMinecart.Minecart = minecart;
+			//stateMinecart.Begin(this, null);
 		}
 
 		public void OnJump() {
@@ -564,6 +605,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 			
 			// Update the current player state.
 			state.Update();
+			
+			// Update the minecart state.
+			if (specialState != null && specialState.IsActive)
+				specialState.Update();
 
 			// Post-state update.
 			if (!isStateControlled) {
@@ -788,6 +833,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerMinecartState MinecartState {
 			get { return stateMinecart; }
+		}
+
+		public PlayerJumpToState JumpToState {
+			get { return stateJumpTo; }
 		}
 
 		// Tools.

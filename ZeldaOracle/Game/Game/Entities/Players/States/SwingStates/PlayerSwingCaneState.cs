@@ -29,12 +29,8 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 
 		public PlayerSwingCaneState() {
-			isReswingable			= true;
-			lunge					= true;
-			swingAnglePullBack		= 2;
-			swingAngleDurations		= new int[] { 3, 3, 12 };
-			weaponSwingAnimation	= GameData.ANIM_CANE_SWING;
-			playerSwingAnimation	= GameData.ANIM_PLAYER_SWING;
+			InitStandardSwing(GameData.ANIM_CANE_SWING,
+							  GameData.ANIM_CANE_MINECART_SWING);
 			AddTimedAction(SPAWN_SOMARIA_BLOCK_DELAY, SpawnSomariaBlock);
 		}
 
@@ -71,12 +67,14 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 		public override void OnBegin(PlayerState previousState) {
 			if (player.IsInMinecart) {
-				weaponSwingAnimation	= GameData.ANIM_CANE_MINECART_SWING;
-				playerSwingAnimation	= GameData.ANIM_PLAYER_MINECART_SWING;
+				weaponSwingAnimation			= GameData.ANIM_CANE_MINECART_SWING;
+				playerSwingAnimation			= GameData.ANIM_PLAYER_SWING_NOLUNGE;
+				playerSwingAnimationInMinecart	= GameData.ANIM_PLAYER_MINECART_SWING_NOLUNGE;
 			}
 			else {
-				weaponSwingAnimation	= GameData.ANIM_CANE_SWING;
-				playerSwingAnimation	= GameData.ANIM_PLAYER_SWING;
+				weaponSwingAnimation			= GameData.ANIM_CANE_SWING;
+				playerSwingAnimation			= GameData.ANIM_PLAYER_SWING;
+				playerSwingAnimationInMinecart	= GameData.ANIM_PLAYER_MINECART_SWING;
 			}
 			base.OnBegin(previousState);
 		}

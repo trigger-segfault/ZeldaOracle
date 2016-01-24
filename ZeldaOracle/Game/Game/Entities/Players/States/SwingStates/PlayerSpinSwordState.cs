@@ -41,6 +41,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		public PlayerSpinSwordState() {
 			limitTilesToDirection	= false;
 			isReswingable			= false;
+
 			lunge					= false;
 			swingAnglePullBack		= 0;
 			swingAngleDurations		= new int[] { 3, 2, 3, 2, 3, 2, 3, 2, 5 };
@@ -55,11 +56,11 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 				WindingOrder.Clockwise
 			};
 
-			swingCollisionBoxes = new Rectangle2I[4, 9];
+			swingCollisionBoxesNoLunge = new Rectangle2I[4, 9];
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 9; j++) {
 					int angle = GMath.Wrap((i * 2) - j, Angles.AngleCount);
-					swingCollisionBoxes[i, j] = SWING_TOOL_BOXES_SPIN[angle];
+					swingCollisionBoxesNoLunge[i, j] = SWING_TOOL_BOXES_SPIN[angle];
 				}
 			}
 		}

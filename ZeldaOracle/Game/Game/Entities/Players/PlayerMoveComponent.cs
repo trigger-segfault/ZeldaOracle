@@ -284,10 +284,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (!isStrafing && !mode.IsStrafing && isMoving)
 				player.Direction = moveDirection;
 
-			// Update the minecart state.
-			if (player.IsInMinecart)
-				player.MinecartState.Update();
-
 			// Update movement or acceleration.
 			if (allowMovementControl && (isMoving || autoAccelerate) && !player.IsInMinecart) {
 				if (!isMoving)

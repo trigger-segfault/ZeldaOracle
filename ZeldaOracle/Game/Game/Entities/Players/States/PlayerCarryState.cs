@@ -136,6 +136,16 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 		}
 
+		public override void OnEnterMinecart() {
+			if (Player.Graphics.Animation == GameData.ANIM_PLAYER_CARRY)
+				Player.Graphics.Animation = GameData.ANIM_PLAYER_MINECART_CARRY;
+		}
+
+		public override void OnExitMinecart() {
+			if (Player.Graphics.Animation == GameData.ANIM_PLAYER_MINECART_CARRY)
+				Player.Graphics.Animation = GameData.ANIM_PLAYER_CARRY;
+		}
+
 		public override void OnHurt(DamageInfo damage) {
 			base.OnHurt(damage);
 			if (player.Movement.IsMoving)
@@ -171,7 +181,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					objectZOffset		= 13;
 					isPickingUp = false;
 					player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
-					Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CARRY);
+					if (player.IsInMinecart)
+						Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MINECART_CARRY);
+					else
+						Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CARRY);
 				}
 			}
 			else {
@@ -188,7 +201,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				}
 
 				// Check for button press to throw/drop.
-				if (Controls.A.IsPressed() || Controls.B.IsPressed()) {
+				if (!player.IsStateControlled && (Controls.A.IsPressed() || Controls.B.IsPressed())) {
 					if (Controls.A.IsPressed())
 						Controls.A.Reset();
 					if (Controls.B.IsPressed())

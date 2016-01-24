@@ -35,12 +35,9 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		public PlayerSwingSwordState() {
 			allowHold				= true;
 			limitTilesToDirection	= true;
-			isReswingable			= true;
-			lunge					= true;
-			swingAnglePullBack		= 2;
-			swingAngleDurations		= new int[] { 3, 3, 12 };
-			weaponSwingAnimation	= GameData.ANIM_SWORD_SWING;
-			playerSwingAnimation	= GameData.ANIM_PLAYER_SWING;
+			
+			InitStandardSwing(GameData.ANIM_SWORD_SWING,
+							  GameData.ANIM_PLAYER_MINECART_SWING);
 			AddTimedAction(SWING_SWORD_BEAM_DELAY, SpawnSwordBeam);
 		}
 
@@ -83,19 +80,22 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 		public override void OnBegin(PlayerState previousState) {
 			if (player.IsInMinecart) {
-				weaponSwingAnimation	= GameData.ANIM_SWORD_MINECART_SWING;
-				playerSwingAnimation	= GameData.ANIM_PLAYER_MINECART_SWING;
+				weaponSwingAnimation			= GameData.ANIM_SWORD_MINECART_SWING;
+				playerSwingAnimation			= GameData.ANIM_PLAYER_SWING_NOLUNGE;
+				playerSwingAnimationInMinecart	= GameData.ANIM_PLAYER_MINECART_SWING_NOLUNGE;
+				allowHold						= false;
 			}
 			else {
-				weaponSwingAnimation	= GameData.ANIM_SWORD_SWING;
-				playerSwingAnimation	= GameData.ANIM_PLAYER_SWING;
+				weaponSwingAnimation			= GameData.ANIM_SWORD_SWING;
+				playerSwingAnimation			= GameData.ANIM_PLAYER_SWING;
+				playerSwingAnimationInMinecart	= GameData.ANIM_PLAYER_MINECART_SWING;
 			}
 			base.OnBegin(previousState);
 		}
 
 		public override void OnSwingBegin() {
 			base.OnSwingBegin();
-			allowHold = true;
+			allowHold = !(player.IsInMinecart);
 			AudioSystem.PlayRandomSound(
 				GameData.SOUND_SWORD_SLASH_1,
 				GameData.SOUND_SWORD_SLASH_2,

@@ -38,13 +38,13 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
-
+		/*
 		public override bool OnPlayerAction(int direction) {
 			// Hop in minecart.
 			Player player = RoomControl.Player;
 			player.EnterMinecart(this);
 			return true;
-		}
+		}*/
 
 		public override void Initialize() {
 			//Graphics.PlayAnimation(animationDefault);
@@ -62,7 +62,18 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public override void Update() {
-
+			
+			Player player = RoomControl.Player;
+			if (player.CurrentState == player.NormalState ||
+				player.CurrentState == player.CarryState)
+			{
+				for (int i = 0; i < Directions.Count; i++) {
+					if (player.Physics.CollisionInfo[i].Entity == this) {
+						player.EnterMinecart(this);
+						break;
+					}
+				}
+			}
 			base.Update();
 		}
 
