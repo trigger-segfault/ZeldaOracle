@@ -8,9 +8,10 @@ namespace ZeldaOracle.Game.Entities.Effects {
 	
 	public class Effect : Entity {
 
-		private int		destroyTimer;
+		protected int	destroyTimer;
 		protected bool	destroyOnAnimationComplete;
 		protected int	fadeDelay;
+		private bool	updateOnRoomPaused;
 
 
 		//-----------------------------------------------------------------------------
@@ -18,6 +19,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		//-----------------------------------------------------------------------------
 		
 		public Effect() {
+			updateOnRoomPaused = false;
 			destroyTimer = -1;
 			fadeDelay = -1;
 			destroyOnAnimationComplete = false;
@@ -34,7 +36,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		}
 		
 		// Create an effect that plays an animation and then dissapears
-		public Effect(Animation animation, DepthLayer depthLayer) :
+		public Effect(Animation animation, DepthLayer depthLayer, bool updateOnRoomPaused = false) :
 			this()
 		{
 			destroyTimer = -1;
@@ -42,6 +44,8 @@ namespace ZeldaOracle.Game.Entities.Effects {
 
 			Graphics.PlayAnimation(animation);
 			Graphics.DepthLayer = depthLayer;
+
+			this.UpdateOnRoomPaused = updateOnRoomPaused;
 		}
 		
 		// Create an effect that plays an animation and then dissapears
@@ -107,10 +111,23 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			}
 		}
 
+		public override void UpdateGraphics() {
+			base.UpdateGraphics();
+			if (!GameControl.UpdateRoom && updateOnRoomPaused)
+				Update();
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		public bool UpdateOnRoomPaused {
+			get { return updateOnRoomPaused; }
+			set {
+				updateOnRoomPaused = value; 
+				Graphics.IsAnimatedWhenPaused = value;
+			}
+		}
 	}
 }

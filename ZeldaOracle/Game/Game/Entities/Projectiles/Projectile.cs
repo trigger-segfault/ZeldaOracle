@@ -8,13 +8,20 @@ using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
 	
 	public delegate void CollisionResponse();
 
-	public class Projectile : Entity {
+	public enum ProjectileType {
+		Physical = 0,	// Can always be deflected
+		Beam,			// Can only be deflected by the Mirror Shield
+		NotDeflectable	// Can NEVER be deflected.
+	}
+
+	public class Projectile : Entity, IInterceptable {
 
 		protected int		angle;
 		protected int		direction;
@@ -23,6 +30,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		protected bool		syncAnimationWithDirection;
 		protected Animation	crashAnimation;
 		protected bool		bounceOnCrash;
+		protected ProjectileType projectileType;
 
 		private event Action eventCollision;
 		private event Action eventLand;
@@ -50,8 +58,21 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 			crashAnimation	= null;
 			bounceOnCrash	= false;
+
+			projectileType = ProjectileType.Physical;
 		}
 		
+		
+		//-----------------------------------------------------------------------------
+		// Virtual Methods
+		//-----------------------------------------------------------------------------
+		
+		public virtual void Intercept() {
+			Destroy();
+		}
+
+		protected virtual void OnCrash() { }
+
 
 		//-----------------------------------------------------------------------------
 		// Projectile Methods
@@ -85,6 +106,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			else {
 				Destroy();
 			}
+
+			OnCrash();
 		}
 		
 		protected void CheckInitialCollision() {
@@ -100,21 +123,13 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		// Virtual Methods
 		//-----------------------------------------------------------------------------
 
-		public virtual void OnCollideRoomEdge() {
+		public virtual void OnCollideRoomEdge() { }
 
-		}
+		public virtual void OnCollideTile(Tile tile, bool isInitialCollision) { }
 
-		public virtual void OnCollideTile(Tile tile, bool isInitialCollision) {
+		public virtual void OnCollideMonster(Monster monster) { }
 
-		}
-
-		public virtual void OnCollideMonster(Monster monster) {
-
-		}
-
-		public virtual void OnCollidePlayer(Player player) {
-
-		}
+		public virtual void OnCollidePlayer(Player player) { }
 
 
 		//-----------------------------------------------------------------------------
@@ -157,6 +172,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 					}
 				}
 				if (tile != null) {
+					if (owner == RoomControl.Player) {
+						tile.OnHitByProjectile(this);
+						if (IsDestroyed)
+							return;
+					}
 					OnCollideTile(tile, false);
 					if (IsDestroyed)
 						return;
@@ -166,6 +186,17 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			}
 
 			if (owner is Player) {
+				// Collide with monster tools.
+				foreach (Monster monster in RoomControl.GetEntitiesOfType<Monster>()) {
+					foreach (UnitTool tool in monster.EquippedTools) {
+						if (Physics.PositionedCollisionBox.Intersects(tool.PositionedCollisionBox)) {
+							tool.OnHitProjectile(this);
+							if (IsDestroyed)
+								return;
+						}
+					}
+				}
+
 				// Collide with monsters.
 				CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
 				for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
@@ -175,9 +206,22 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				}
 			}
 			else {
+				Player player = RoomControl.Player;
+				
+				// Collide with the player's tools.
+				foreach (UnitTool tool in player.EquippedTools) {
+					if (Physics.PositionedCollisionBox.Intersects(tool.PositionedCollisionBox)) {
+						tool.OnHitProjectile(this);
+						if (IsDestroyed)
+							return;
+					}
+				}
+				
 				// Collide with the player.
-				if (Physics.IsMeetingEntity(RoomControl.Player, CollisionBoxType.Soft)) {
-					OnCollidePlayer(RoomControl.Player);
+				if (Physics.IsMeetingEntity(player, CollisionBoxType.Soft)) {
+					OnCollidePlayer(player);
+					if (IsDestroyed)
+						return;
 				}
 			}
 			
@@ -212,6 +256,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public Entity Owner {
 			get { return owner; }
 			set { owner = value; }
+		}
+
+		public ProjectileType ProjectileType {
+			get { return projectileType; }
+			set { projectileType = value; }
 		}
 
 		public event Action EventCollision {

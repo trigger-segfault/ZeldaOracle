@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Input;
+using ZeldaOracle.Game.Items;
+using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
+
 	public class PlayerGrabState : PlayerState {
+
 		private int timer;
 		private int duration;
 		private int equipSlot;
@@ -19,7 +24,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerGrabState() {
-			equipSlot = 0;
+			equipSlot	= 0;
+			duration	= 10;
 		}
 		
 
@@ -29,13 +35,18 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		private bool AttemptPickup() {
 			Tile grabTile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
+			
+			if (grabTile != null) {
+				int minLevel = grabTile.Properties.GetInteger("pickupable_bracelet_level", Item.Level1);
+				Item item = player.Inventory.GetItem("item_bracelet");
 
-			if (grabTile != null && grabTile.HasFlag(TileSpecialFlags.Pickupable)) {
-				player.CarryState.SetCarryObject(grabTile);
-				player.BeginState(player.CarryState);
-				grabTile.SpawnDrop();
-				player.RoomControl.RemoveTile(grabTile);
-				return true;
+				if (grabTile.HasFlag(TileFlags.Pickupable) && item.Level >= minLevel) {
+					player.CarryState.SetCarryObject(grabTile);
+					player.BeginState(player.CarryState);
+					grabTile.SpawnDrop();
+					player.RoomControl.RemoveTile(grabTile);
+					return true;
+				}
 			}
 
 			return false;
@@ -64,7 +75,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			base.Update();
 
 			InputControl grabButton = player.Inventory.GetSlotButton(equipSlot);
-			InputControl pullButton = Controls.Arrows[(player.Direction + 2) % 4];
+			InputControl pullButton = Controls.Arrows[Directions.Reverse(player.Direction)];
 
 			if (!grabButton.IsDown()) {
 				player.BeginNormalState();
@@ -72,7 +83,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			else if (pullButton.IsDown()) {
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
 				timer++;
-				if (timer > 10) {
+				if (timer > duration) {
 					AttemptPickup();
 				}
 			}

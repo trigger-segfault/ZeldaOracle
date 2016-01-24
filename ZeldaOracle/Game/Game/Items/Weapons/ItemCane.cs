@@ -49,15 +49,17 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 			// Create the somaria block tile data.
 			somariaBlockTileData = new TileData(
-				typeof(TileSomariaBlock), TileFlags.Solid,
-				TileSpecialFlags.Movable |
-				TileSpecialFlags.Cuttable |
-				TileSpecialFlags.Bombable |
-				TileSpecialFlags.Boomerangable |
-				TileSpecialFlags.Pickupable);
+					typeof(TileSomariaBlock),
+					TileFlags.Movable |
+					TileFlags.Cuttable |
+					TileFlags.Bombable |
+					TileFlags.Boomerangable |
+					TileFlags.Pickupable);
+			somariaBlockTileData.SolidType		= TileSolidType.Solid;
 			somariaBlockTileData.CollisionModel	= GameData.MODEL_BLOCK;
 			somariaBlockTileData.Sprite			= GameData.SPR_TILE_SOMARIA_BLOCK;
 			somariaBlockTileData.BreakAnimation	= GameData.ANIM_EFFECT_SOMARIA_BLOCK_DESTROY;
+			somariaBlockTileData.BreakSound		= GameData.SOUND_APPEAR_VANISH;
 		}
 
 

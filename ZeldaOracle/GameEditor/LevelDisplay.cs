@@ -16,6 +16,8 @@ using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Audio;
 using ZeldaEditor.Control;
+using ZeldaOracle.Game.Tiles.Custom;
+using ZeldaOracle.Game.Entities.Monsters;
 
 namespace ZeldaEditor {
 	public class LevelDisplay : GraphicsDeviceControl {
@@ -29,6 +31,7 @@ namespace ZeldaEditor {
 		private Point2I			highlightedTile;
 		private Point2I			cursorTileLocation;
 		private Rectangle2I		selectionBox;
+		private Room			selectedRoom;
 
 
 		//-----------------------------------------------------------------------------
@@ -38,6 +41,8 @@ namespace ZeldaEditor {
 		protected override void Initialize() {
 			content		= new ContentManager(Services, "Content");
 			spriteBatch	= new Microsoft.Xna.Framework.Graphics.SpriteBatch(GraphicsDevice);
+			
+			selectedRoom = null;
 
 			editorControl.Initialize(content, GraphicsDevice);
 			
@@ -174,6 +179,8 @@ namespace ZeldaEditor {
 		// Set the selection box
 		public void SetSelectionBox(Point2I start, Point2I size) {
 			selectionBox = new Rectangle2I(start, size);
+			Point2I roomLoc = GMath.Clamp(start / Level.RoomSize, Point2I.Zero, Level.Dimensions);
+			selectedRoom = Level.GetRoomAt(roomLoc);
 		}
 
 
@@ -208,43 +215,129 @@ namespace ZeldaEditor {
 		//-----------------------------------------------------------------------------
 		
 		// Draw a tile.
-		private void DrawTile(Graphics2D g, TileDataInstance tile, Color color) {
-			Point2I position = tile.Location * GameSettings.TILE_SIZE;
+		private void DrawTile(Graphics2D g, TileDataInstance tile, Point2I position, Color drawColor) {
+			Sprite sprite = null;
+			Animation animation = null;
+			float playbackTime = editorControl.Ticks;
+			int substripIndex = tile.Properties.GetInteger("substrip_index", 0);
+			
+			//-----------------------------------------------------------------------------
+			// Platform.
+			if (tile.Type == typeof(TilePlatform)) {
+				if (!tile.CurrentSprite.IsNull) {
+					// Draw the tile once per point within its size.
+					for (int y = 0; y < tile.Size.Y; y++) {
+						for (int x = 0; x < tile.Size.X; x++) {
+							Point2I drawPos = position +
+								(new Point2I(x, y) * GameSettings.TILE_SIZE);
+							g.DrawAnimation(tile.CurrentSprite,
+								tile.Room.Zone.ImageVariantID,
+								editorControl.Ticks, position, drawColor);
+						}
+					}
+				}
+				return;
+			}
+			//-----------------------------------------------------------------------------
+			// Color Jump Pad.
+			else if (tile.Type == typeof(TileColorJumpPad)) {
+				PuzzleColor tileColor = (PuzzleColor) tile.Properties.GetInteger("color", 0);
+				if (tileColor == PuzzleColor.Red)
+					sprite = GameData.SPR_TILE_COLOR_JUMP_PAD_RED;
+				else if (tileColor == PuzzleColor.Yellow)
+					sprite = GameData.SPR_TILE_COLOR_JUMP_PAD_YELLOW;
+				else if (tileColor == PuzzleColor.Blue)
+					sprite = GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE;
+			}
+			//-----------------------------------------------------------------------------
+			// Crossing Gate.
+			else if (tile.Type == typeof(TileCrossingGate)) {
+				if (tile.Properties.GetBoolean("raised", false))
+					animation = GameData.ANIM_TILE_CROSSING_GATE_LOWER;
+				else
+					animation = GameData.ANIM_TILE_CROSSING_GATE_RAISE;
+				substripIndex = (tile.Properties.GetBoolean("face_left", false) ? 1 : 0);
+				playbackTime = 0.0f;
+			}
+			//-----------------------------------------------------------------------------
+			// Lantern.
+			else if (tile.Type == typeof(TileLantern)) {
+				if (tile.Properties.GetBoolean("lit", true))
+					animation = GameData.ANIM_TILE_LANTERN;
+				else
+					sprite = GameData.SPR_TILE_LANTERN_UNLIT;
+			}
+			//-----------------------------------------------------------------------------
+			// Chest.
+			else if (tile.Type == typeof(TileChest)) {
+				bool isLooted = tile.Properties.GetBoolean("looted", false);
+				sprite = tile.SpriteList[isLooted ? 1 : 0].Sprite;
+			}
+			//-----------------------------------------------------------------------------
+			// Color Lantern.
+			/*else if (tile.Type == typeof(TileColorLantern)) {
+				PuzzleColor color = (PuzzleColor) tile.Properties.GetInteger("color", -1);
+				if (color == PuzzleColor.Red)
+					animation = GameData.ANIM_EFFECT_COLOR_FLAME_RED;
+				else if (color == PuzzleColor.Yellow)
+					animation = GameData.ANIM_EFFECT_COLOR_FLAME_YELLOW;
+				else if (color == PuzzleColor.Blue)
+					animation = GameData.ANIM_EFFECT_COLOR_FLAME_BLUE;
+			}*/
+			//-----------------------------------------------------------------------------
 
-			// Draw tile sprite/animation.
-			if (!tile.CurrentSprite.IsNull)
-				g.DrawAnimation(tile.CurrentSprite, tile.Room.Zone.ImageVariantID, editorControl.Ticks, position, color);
+			if (animation == null && sprite == null && tile.CurrentSprite.IsAnimation)
+				animation = tile.CurrentSprite.Animation;
+			if (animation == null && sprite == null && tile.CurrentSprite.IsSprite)
+				sprite = tile.CurrentSprite.Sprite;
+
+			// Draw the custom sprite/animation
+			if (animation != null) {
+				g.DrawAnimation(animation.GetSubstrip(substripIndex),
+					tile.Room.Zone.ImageVariantID, playbackTime, position, drawColor);
+			}
+			else if (sprite != null) {
+				g.DrawSprite(sprite, tile.Room.Zone.ImageVariantID, position, drawColor);
+			}
+			/*else if (!tile.CurrentSprite.IsNull) {
+				g.DrawAnimation(tile.CurrentSprite,
+					tile.Room.Zone.ImageVariantID, editorControl.Ticks, position, drawColor);
+			}*/
 
 			// Draw rewards.
 			if (editorControl.ShowRewards && tile.Properties.Exists("reward") &&
 				editorControl.RewardManager.HasReward(tile.Properties.GetString("reward")))
 			{
 				Animation anim = editorControl.RewardManager.GetReward(tile.Properties.GetString("reward")).Animation;
-				g.DrawAnimation(anim, editorControl.Ticks, position, color);
+				g.DrawAnimation(anim, editorControl.Ticks, position, drawColor);
 			}
 		}
 
 		// Draw an event tile.
-		private void DrawEventTile(Graphics2D g, EventTileDataInstance eventTile, Color color) {
+		private void DrawEventTile(Graphics2D g, EventTileDataInstance eventTile, Color drawColor) {
 			SpriteAnimation spr = eventTile.CurrentSprite;
-			/*
+			int imageVariantID = eventTile.Properties.GetInteger("image_variant");
+			if (imageVariantID < 0)
+				imageVariantID = eventTile.Room.Zone.ImageVariantID;
+			
 			// Select different sprites for certain events.
-			if (eventTile.Type == typeof(WarpEvent)) {
-				string warpType = eventTile.Properties.GetString("warp_type");
-				if (warpType == "tunnel")
-					spr = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
-				else if (warpType == "stairs")
-					spr = GameData.SPR_EVENT_TILE_WARP_STAIRS;
-				else if (warpType == "entrance")
+			if (eventTile.Type == typeof(NPCEvent)) {
+				eventTile.SubStripIndex = eventTile.Properties.GetInteger("direction", 0);
+			}
+			else if (eventTile.Type == typeof(WarpEvent)) {
+				string warpTypeStr = eventTile.Properties.GetString("warp_type", "tunnel");
+				WarpType warpType = (WarpType) Enum.Parse(typeof(WarpType), warpTypeStr, true);
+				if (warpType == WarpType.Entrance)
 					spr = GameData.SPR_EVENT_TILE_WARP_ENTRANCE;
-			}*/
+				else if (warpType == WarpType.Tunnel)
+					spr = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
+				else if (warpType == WarpType.Stairs)
+					spr = GameData.SPR_EVENT_TILE_WARP_STAIRS;
+			}
 
 			// Draw the sprite.
 			if (!spr.IsNull) {
-				int imageVariantID = eventTile.Properties.GetInteger("image_variant");
-				if (imageVariantID < 0)
-					imageVariantID = eventTile.Room.Zone.ImageVariantID;
-				g.DrawAnimation(spr, imageVariantID, editorControl.Ticks, eventTile.Position, Color.White);
+				g.DrawAnimation(spr, imageVariantID, editorControl.Ticks, eventTile.Position, drawColor);
 			}
 			else {
 				Rectangle2I r = new Rectangle2I(eventTile.Position, eventTile.Size * GameSettings.TILE_SIZE);
@@ -284,17 +377,17 @@ namespace ZeldaEditor {
 				// Draw the tile grid for this layer.
 				for (int x = 0; x < room.Width; x++) {
 					for (int y = 0; y < room.Height; y++) {
-						Vector2F position = new Vector2F(x, y) * GameSettings.TILE_SIZE;
+						Point2I position = new Point2I(x, y) * GameSettings.TILE_SIZE;
 						TileDataInstance tile = room.GetTile(x, y, i);
 						
 						// Draw tile.
 						if (tile != null)
-							DrawTile(g, tile, color);
+							DrawTile(g, tile, position, color);
 
 						// Draw grid square.
 						if (i == room.LayerCount - 1) {
 							if (editorControl.ShowGrid)
-								g.DrawRectangle(new Rectangle2I((Point2I) position, new Point2I(GameSettings.TILE_SIZE + 1)), 1, new Color(0, 0, 0, 150));
+								g.DrawRectangle(new Rectangle2I(position, new Point2I(GameSettings.TILE_SIZE + 1)), 1, new Color(0, 0, 0, 150));
 						}
 					}
 				}
@@ -353,7 +446,7 @@ namespace ZeldaEditor {
 				Point2I roomSize = (Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing;
 				Point2I tilePoint = highlightedRoom * roomSize + highlightedTile * GameSettings.TILE_SIZE;
 				if (editorControl.PlayerPlaceMode && highlightedTile >= Point2I.Zero) {
-					g.DrawSprite(GameData.SPR_PLAYER_FORWARD, tilePoint);
+					g.DrawSprite(GameData.SPR_PLAYER_FORWARD, (Vector2F) tilePoint + new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
 				}
 			}
 		}
@@ -499,7 +592,15 @@ namespace ZeldaEditor {
 
 		public Rectangle2I SelectionBox {
 			get { return selectionBox; }
-			set { selectionBox = value; }
+			set {
+				selectionBox = value;
+				Point2I roomLoc = GMath.Clamp(value.Point / Level.RoomSize, Point2I.Zero, Level.Dimensions);
+				selectedRoom = Level.GetRoomAt(roomLoc);
+			}
+		}
+
+		public Room SelectedRoom {
+			get { return selectedRoom; }
 		}
 	}
 }

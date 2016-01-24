@@ -13,6 +13,7 @@ namespace ZeldaOracle.Common.Graphics {
 		private int			subStripIndex;	// The index of the sub-animation-strip.
 		private bool		isPlaying;		// True if the playback is rolling.
 		private float		timer;			// The playback time in ticks.
+		private float		speed;
 
 
 		//-----------------------------------------------------------------------------
@@ -25,6 +26,7 @@ namespace ZeldaOracle.Common.Graphics {
 			subStripIndex	= 0;
 			isPlaying		= false;
 			timer			= 0.0f;
+			speed			= 1.0f;
 		}
 
 
@@ -70,7 +72,7 @@ namespace ZeldaOracle.Common.Graphics {
 		// Update the animation over the elapsed frames.
 		public void Update() {
 			if (isPlaying && subStrip != null) {
-				timer += 1;
+				timer += (1.0f * speed);
 				
 				if (subStrip.LoopMode == LoopMode.Reset && timer >= subStrip.Duration) {
 					//Stop();
@@ -82,7 +84,7 @@ namespace ZeldaOracle.Common.Graphics {
 					else
 						timer = 0.0f;
 				}
-				else if (subStrip.LoopMode == LoopMode.Reset && timer > subStrip.Duration) {
+				else if (subStrip.LoopMode == LoopMode.Clamp && timer > subStrip.Duration) {
 					// Hang on the last frame.
 					timer = subStrip.Duration;
 				}	
@@ -129,6 +131,12 @@ namespace ZeldaOracle.Common.Graphics {
 		// Get the sub-strip that's currently active.
 		public Animation SubStrip {
 			get { return subStrip; }
+		}
+		
+		// Get or set the playback speed (default is 1).
+		public float Speed {
+			get { return speed; }
+			set { speed = value; }
 		}
 
 		// Get or set the animation playback time.

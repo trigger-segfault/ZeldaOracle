@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -39,7 +40,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 		
-		public override void OnSeedHit(SeedType seedType, Entity seed) {
+		public override void OnSeedHit(SeedType seedType, SeedEntity seed) {
 			if (seedType == SeedType.Mystery && !isActivated) {
 				isActivated		= true;
 				sparkleIndex	= 0;
@@ -63,8 +64,7 @@ namespace ZeldaOracle.Game.Tiles {
 				
 				// Create a sparkle every 8 ticks.
 				if (timer % 8 == 1 && sparkleIndex < sparklePositions.Length) {
-					Effect effect = new Effect(GameData.ANIM_EFFECT_OWL_SPARKLE, DepthLayer.EffectOwlSparkles);
-					effect.Graphics.IsAnimatedWhenPaused = true;
+					Effect effect = new Effect(GameData.ANIM_EFFECT_OWL_SPARKLE, DepthLayer.EffectOwlSparkles, true);
 					RoomControl.SpawnEntity(effect,
 						Position + sparklePositions[sparkleIndex]);
 					sparkleIndex++;

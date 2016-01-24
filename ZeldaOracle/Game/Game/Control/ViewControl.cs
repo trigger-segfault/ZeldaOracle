@@ -11,6 +11,7 @@ namespace ZeldaOracle.Game.Control {
 		private Point2I			viewSize;
 		private Rectangle2I		bounds;
 		private float			panSpeed;
+		private Vector2F		shakeOffset;
 
 
 		//-----------------------------------------------------------------------------
@@ -20,7 +21,8 @@ namespace ZeldaOracle.Game.Control {
 		public ViewControl() {
 			this.viewSize		= GameSettings.VIEW_SIZE;
 			this.panSpeed		= GameSettings.VIEW_PAN_SPEED;
-			this.position		= new Vector2F();
+			this.position		= Vector2F.Zero;
+			this.shakeOffset	= Vector2F.Zero;
 		}
 		
 
@@ -75,9 +77,18 @@ namespace ZeldaOracle.Game.Control {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		public Vector2F ShakeOffset {
+			get { return shakeOffset; }
+			set { shakeOffset = value; }
+		}
+		
 		public Vector2F Position {
 			get { return position; }
 			set { position = GetClampedPosition(value); }
+		}
+
+		public Vector2F ViewPosition {
+			get { return position + shakeOffset; }
 		}
 
 		public Point2I ViewSize {

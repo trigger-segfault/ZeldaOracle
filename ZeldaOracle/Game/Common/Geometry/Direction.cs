@@ -27,6 +27,14 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 		// Methods
 		//-----------------------------------------------------------------------------
+		
+		public static int Add(int direction, int addAmount, WindingOrder windingOrder) {
+			if (windingOrder == WindingOrder.Clockwise)
+				direction -= addAmount;
+			else
+				direction += addAmount;
+			return GMath.Wrap(direction, Directions.Count);
+		}
 
 		
 		// Return the opposite of the given direction.
@@ -52,18 +60,6 @@ namespace ZeldaOracle.Common.Geometry {
 		// Return the given direction flipped vertically over the x-axis.
 		public static int FlipVertical(int direction) {
 			return (Directions.Count - direction) % Directions.Count;
-		}
-
-		public static int FromPoint(Point2I point) {
-			if (point.X > 0)
-				return Directions.Right;
-			if (point.Y < 0)
-				return Directions.Up;
-			if (point.X < 0)
-				return Directions.Left;
-			if (point.Y > 0)
-				return Directions.Down;
-			return -1;
 		}
 		
 		// Return a unit vector as a point in the given direction.
@@ -100,10 +96,59 @@ namespace ZeldaOracle.Common.Geometry {
 			return (direction % 2);
 		}
 
+		public static int FromPoint(Point2I point) {
+			if (point.X > 0)
+				return Directions.Right;
+			if (point.Y < 0)
+				return Directions.Up;
+			if (point.X < 0)
+				return Directions.Left;
+			if (point.Y > 0)
+				return Directions.Down;
+			return -1;
+		}
+		
+		public static int NearestFromVector(Vector2F vector) {
+			// Cheap algorithm for turning a vector into an axis-aligned direction.
+			if (vector.X > 0) {
+				if (vector.X >= Math.Abs(vector.Y))
+					return Directions.Right;
+				else if (vector.Y < 0)
+					return Directions.Up;
+				else
+					return Directions.Down;
+			}
+			else {
+				if (-vector.X >= Math.Abs(vector.Y))
+					return Directions.Left;
+				else if (vector.Y < 0)
+					return Directions.Up;
+				else
+					return Directions.Down;
+			}
+		}
+
 		public static int RoundFromRadians(float radians) {
-			float halfPi = (float) Math.PI * 0.5f;
-			int dir = (int) Math.Round(radians / halfPi);
+			int dir = (int) Math.Round(radians / GMath.HalfPi);
 			return GMath.Wrap(dir, Directions.Count);
+		}
+		
+		public static bool TryParse(string value, bool ignoreCase, out int result) {
+			if (ignoreCase)
+				value = value.ToLower();
+			if (value == "right" || value == "east")
+				result = Directions.Right;
+			else if (value == "left" || value == "west")
+				result = Directions.Left;
+			else if (value == "up" || value == "north")
+				result = Directions.Up;
+			else if (value == "down" || value == "south")
+				result = Directions.Down;
+			else {
+				result = -1;
+				return false;
+			}
+			return true;
 		}
 	}
 }

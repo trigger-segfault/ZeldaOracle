@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 
@@ -12,6 +13,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private int duration;
 		private Dictionary<int, Action<PlayerState>> actions;
 		private Action<PlayerState> endAction;
+		private Animation animation;
+		private Animation animationInMinecart;
 
 
 		//-----------------------------------------------------------------------------
@@ -60,6 +63,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				endAction(this);
 		}
 
+		public override void OnExitMinecart() {
+			base.OnExitMinecart();
+			if (player.Graphics.Animation == animation && animationInMinecart != null)
+				player.Graphics.Animation =  animationInMinecart;
+		}
+
 		public override void Update() {
 			base.Update();
 
@@ -80,6 +89,16 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public int Duration {
 			get { return duration; }
 			set { duration = value; }
+		}
+		
+		public Animation Animation {
+			get { return animation; }
+			set { animation = value; }
+		}
+		
+		public Animation AnimationInMinecart {
+			get { return animationInMinecart; }
+			set { animationInMinecart = value; }
 		}
 	}
 }

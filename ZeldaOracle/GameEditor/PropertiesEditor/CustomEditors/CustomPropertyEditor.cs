@@ -18,7 +18,7 @@ using ZeldaOracle.Common.Scripting;
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 	public abstract class CustomPropertyEditor : UITypeEditor {
 
-		protected PropertyGridControl			propertyGridControl;
+		private ZeldaPropertyGrid				propertyGrid;
         protected IWindowsFormsEditorService	editorService;
 		protected CustomPropertyDescriptor		propertyDescriptor;
 		protected Property						property;
@@ -30,15 +30,15 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 		//-----------------------------------------------------------------------------
 
 		public CustomPropertyEditor() {
-			propertyGridControl	= null;
-			editorService			= null;
+			propertyGrid		= null;
+			editorService		= null;
 			property			= null;
 			propertyDescriptor	= null;
 			editStyle			= UITypeEditorEditStyle.None;
 		}
 		
-		public void Initialize(PropertyGridControl propertyGridControl) {
-			this.propertyGridControl = propertyGridControl;
+		public void Initialize(ZeldaPropertyGrid propertyGrid) {
+			this.propertyGrid = propertyGrid;
 			Initialize();
 		}
 
@@ -70,6 +70,19 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 			}
 
 			return value;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public ZeldaPropertyGrid PropertyGrid {
+			get { return propertyGrid; }
+		}
+
+		public EditorControl EditorControl {
+			get { return propertyGrid.EditorControl; }
 		}
 	}
 }

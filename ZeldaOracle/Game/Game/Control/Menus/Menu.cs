@@ -99,11 +99,11 @@ namespace ZeldaOracle.Game.Control.Menus {
 						NextSlot(direction);
 						return;
 					}
-					AudioSystem.PlaySound("UI/menu_cursor_move");
+					AudioSystem.PlaySound(GameData.SOUND_MENU_CURSOR_MOVE);
 				}
 				else if (connection is SlotGroup) {
 					currentSlotGroup = (connection as SlotGroup);
-					AudioSystem.PlaySound("UI/menu_cursor_move");
+					AudioSystem.PlaySound(GameData.SOUND_MENU_CURSOR_MOVE);
 				}
 			}
 		}

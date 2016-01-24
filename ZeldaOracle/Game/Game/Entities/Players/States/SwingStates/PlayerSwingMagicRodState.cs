@@ -14,6 +14,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
+using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 
 namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
@@ -27,12 +28,8 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 
 		public PlayerSwingMagicRodState() {
-			isReswingable			= true;
-			lunge					= true;
-			swingAnglePullBack		= 2;
-			swingAngleDurations		= new int[] { 3, 3, 12 };
-			weaponSwingAnimation	= GameData.ANIM_MAGIC_ROD_SWING;
-			playerSwingAnimation	= GameData.ANIM_PLAYER_SWING;
+			InitStandardSwing(GameData.ANIM_MAGIC_ROD_SWING,
+							  GameData.ANIM_PLAYER_MINECART_SWING);
 			AddTimedAction(SPAWN_FIRE_DELAY, SpawnFireProjectile);
 		}
 
@@ -71,12 +68,22 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnSwingBegin() {
-			AudioSystem.PlayRandomSound("Items/slash_1", "Items/slash_2", "Items/slash_3");
+		public override void OnBegin(PlayerState previousState) {
+			if (player.IsInMinecart) {
+				weaponSwingAnimation			= GameData.ANIM_MAGIC_ROD_MINECART_SWING;
+				playerSwingAnimation			= GameData.ANIM_PLAYER_SWING_NOLUNGE;
+				playerSwingAnimationInMinecart	= GameData.ANIM_PLAYER_MINECART_SWING_NOLUNGE;
+			}
+			else {
+				weaponSwingAnimation			= GameData.ANIM_MAGIC_ROD_SWING;
+				playerSwingAnimation			= GameData.ANIM_PLAYER_SWING;
+				playerSwingAnimationInMinecart	= GameData.ANIM_PLAYER_MINECART_SWING;
+			}
+			base.OnBegin(previousState);
 		}
 
-		public override void OnSwingEnd() {
-			player.BeginNormalState();
+		public override void OnSwingBegin() {
+			AudioSystem.PlaySound(GameData.SOUND_FIRE_ROD);
 		}
 	}
 }

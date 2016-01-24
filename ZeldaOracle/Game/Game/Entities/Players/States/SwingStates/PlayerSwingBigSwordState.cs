@@ -55,14 +55,14 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		//-----------------------------------------------------------------------------
 
 		public PlayerSwingBigSwordState() {
-			isReswingable			= false;
-			lunge					= false;
-			swingAnglePullBack		= 2;
-			swingAngleDurations		= new int[] { 12, 4, 4, 4, 10 };
-			weaponSwingAnimation	= GameData.ANIM_BIG_SWORD_SWING;
-			playerSwingAnimation	= GameData.ANIM_PLAYER_SWING_BIG;
-
-			swingCollisionBoxes = SWING_TOOL_BOXES_BIG;
+			isReswingable					= false;
+			lunge							= false;
+			swingAnglePullBack				= 2;
+			swingAngleDurations				= new int[] { 12, 4, 4, 4, 10 };
+			weaponSwingAnimation			= GameData.ANIM_BIG_SWORD_SWING;
+			playerSwingAnimation			= GameData.ANIM_PLAYER_SWING_BIG;
+			playerSwingAnimationInMinecart	= GameData.ANIM_PLAYER_MINECART_SWING_BIG;
+			swingCollisionBoxesNoLunge		= SWING_TOOL_BOXES_BIG;
 		}
 
 
@@ -72,18 +72,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 		public override void OnSwingBegin() {
 			base.OnSwingBegin();
-			AudioSystem.PlayRandomSound("Items/slash_1", "Items/slash_2", "Items/slash_3");
-		}
-
-		public override void OnSwingEnd() {
-			player.BeginNormalState();
-		}
-		
-		public override void OnHitMonster(Monster monster) {
-			WeaponInteractionEventArgs args = new WeaponInteractionEventArgs() {
-				Weapon = (ItemBigSword) Weapon
-			};
-			monster.TriggerInteraction(InteractionType.BiggoronSword, player, args);
+			AudioSystem.PlaySound(GameData.SOUND_BIGGORON_SWORD);
 		}
 	}
 }

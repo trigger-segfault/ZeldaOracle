@@ -39,10 +39,18 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnBegin(PlayerState previousState) {
 			player.Movement.CanJump			= false;
 			player.Movement.MoveCondition	= PlayerMoveCondition.NoControl;
-			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 			boomerangMotionDirection = boomerang.Angle * GMath.QuarterAngle * 0.5f;
+			
+			if (player.IsInMinecart)
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MINECART_THROW);
+			else
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 		}
-		
+
+		public override void OnExitMinecart() {
+			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
+		}
+
 		public override void OnEnd(PlayerState newState) {
 			player.Movement.CanJump			= true;
 			player.Movement.MoveCondition	= PlayerMoveCondition.FreeMovement;

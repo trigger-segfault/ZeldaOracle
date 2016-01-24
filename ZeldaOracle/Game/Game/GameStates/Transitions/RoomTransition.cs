@@ -15,7 +15,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 	public class RoomTransition : GameState {
 		private RoomControl roomOld;
 		private RoomControl roomNew;
-		private event Action<RoomControl> eventSetupNewRoom;
+		private event Action<RoomControl> eventSetupNewRoom; // Called right after the room is set up.
 
 
 		//-----------------------------------------------------------------------------
@@ -51,7 +51,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			Player.RoomControl = NewRoomControl;
 			if (eventSetupNewRoom != null)
 				eventSetupNewRoom.Invoke(roomNew);
-			NewRoomControl.ViewControl.CenterOn(Player.Center);
+			NewRoomControl.ViewControl.CenterOn(Player.Center + Player.ViewFocusOffset);
 		}
 		
 

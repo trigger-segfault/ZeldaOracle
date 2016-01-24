@@ -76,6 +76,16 @@ public struct RangeI {
 		return base.GetHashCode();
 	}
 
+
+	//-----------------------------------------------------------------------------
+	// Mutators
+	//-----------------------------------------------------------------------------
+
+	public void Set(int min, int max) {
+		this.Min = min;
+		this.Max = max;
+	}
+
 	//========== OPERATORS ===========
 
 	public static bool operator ==(RangeI r1, RangeI r2) {

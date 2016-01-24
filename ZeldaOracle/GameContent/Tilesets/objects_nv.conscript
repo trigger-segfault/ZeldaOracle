@@ -8,29 +8,6 @@ LOAD SPRITES;
 SPRITESHEET "tileset_objects_nv",				"Tiles/tileset_objects_nv",					(16, 16), (1, 1), (18, 18); END;
 SPRITESHEET "tileset_objects_nv_extras_16x16",	"Tiles/tileset_objects_nv_extras_16x16",	(16, 16), (1, 1), (18, 18); END;
 
-SPRITESHEET "tileset_objects_nv_extras_16x16";
-
-TEMPSPRITE	owl_activated,	(0, 2), (-8, 0); ADD (1, 2), (8, 0); END;
-
-#==============================================================
-# Animations
-#==============================================================
-
-LOAD ANIMATIONS;
-
-SPRITESHEET "tileset_objects_nv_extras_16x16";
-
-TEMPANIM trampoline_bounce; SUBSTRIP clamp;
-	ADD frame, 12, (4, 0); ADD frame, 2, (3, 0); ADD frame, 8, (5, 0); ADD frame, 1, (3, 0); END;
-
-TEMPANIM roller_horizontal_roll;
-	SUBSTRIP clamp;  ADD frame, 9, (6, 0); ADD frame, 12, (7, 0); ADD frame, 10, (8, 0); ADD frame, 1, (6, 0);
-	SUBSTRIP clamp;  ADD frame, 9, (6, 0); ADD frame, 12, (8, 0); ADD frame, 10, (7, 0); ADD frame, 1, (6, 0); END;
-	
-TEMPANIM roller_vertical_roll;
-	SUBSTRIP clamp;  ADD frame, 9, (9, 0); ADD frame, 12, (11, 0); ADD frame, 10, (10, 0); ADD frame, 1, (9, 0);
-	SUBSTRIP clamp;  ADD frame, 9, (9, 0); ADD frame, 12, (10, 0); ADD frame, 10, (11, 0); ADD frame, 1, (9, 0); END;
-
 
 #==============================================================
 # Tiles
@@ -38,80 +15,176 @@ TEMPANIM roller_vertical_roll;
 
 LOAD TILESETS;
 
-TEMPTILE chest;
+
+# ---- Chests -----------------------------------------------------------------
+
+TILE chest;
 	TYPE		TileChest;
-	FLAGS		solid;
-	MODEL		block;
+	SOLID		block;
 	PROPERTIES
+		(integer, spawn_delay_after_poof, 16),
 		(string, reward, "rupees_1",
-			"Reward", "reward", "",
+			"Reward", "reward", "Chest",
 			 "The reward contained inside the chest.", false),
 		(boolean, looted, "false",
-			"Looted", "", "",
+			"Looted", "", "Chest",
 			"True if the item has been taken from the chest.", false);
 END;
 
-TEMPTILE reward;
+TILE chest_curved;
+	CLONE			chest;
+	SPRITEINDEX		0, tile_chest_curved;
+	SPRITEINDEX		1, tile_chest_curved_opened;
+END;
+
+TILE chest_flat;
+	CLONE			chest;
+	SPRITEINDEX		0, tile_chest_flat;
+	SPRITEINDEX		1, tile_chest_flat_opened;
+END;
+
+TILE chest_ornate;
+	CLONE			chest;
+	SPRITEINDEX		0, tile_chest_ornate;
+	SPRITEINDEX		1, tile_chest_ornate_opened;
+END;
+
+# ---- Reward -----------------------------------------------------------------
+
+TILE reward;
 	TYPE		TileReward
-	FLAGS		solid;
-	MODEL		center;
+	SOLID		center;
+	##SPRITE		reward_heart_piece;
 	PROPERTIES
 		(string, reward, "heart_piece",
-			"Reward", "reward", "",
+			"Reward", "reward", "Reward",
 			 "The reward to spawn.", false),
 		(boolean, looted, "false",
-			"Looted", "", "",
+			"Looted", "", "Reward",
 			"True if the item has been taken.", false);
 END;
 
-TEMPTILE trampoline;
-	FLAGS		solid, movable;
-	MODEL		block;
+# ---- Color Switch -----------------------------------------------------------
+
+TILE color_switch;
+	TYPE		TileColorSwitch;
+	SOLID		block;
+	FLAGS		AbsorbSeeds;
+	SPRITEINDEX	0, tile_color_switch_blue;
+	SPRITEINDEX	1, tile_color_switch_red;
+	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "", "Can the color switch only be switched once?"),
+				(boolean, switch_state,		false,	"Switch State",		"", "", "The switch state of the color switch (false = blue, true = red)."),
+				(boolean, remember_state,	false,	"Remember State",	"", "", "Will the color switch's state be remembered after leaving the room?");
+	EVENT		event_toggle, "Toggle", "Occurs when the Color Switch changes color.", (ColorSwitch, switch);
 END;
 
-TEMPTILE owl;
+TILE color_switch_blue;
+	CLONE		color_switch;
+	PROPERTIES	(boolean, switch_state, false),
+				(integer, sprite_index, 0);
+END;
+
+TILE color_switch_red;
+	CLONE		color_switch;
+	PROPERTIES	(boolean, switch_state, true),
+				(integer, sprite_index, 1);
+END;
+
+# ---- Trampoline -------------------------------------------------------------
+
+TILE trampoline;
+	FLAGS		Movable;
+	SOLID		block;
+	SPRITEINDEX	0, tile_trampoline;
+	SPRITEINDEX	1, tile_trampoline_bounce;
+END;
+
+# ---- Owl --------------------------------------------------------------------
+
+TILE owl;
 	TYPE		TileOwl;
-	FLAGS		Solid, AbsorbSeeds;
-	MODEL		block;
+	FLAGS		AbsorbSeeds;
+	SOLID		block;
+
+	SPRITEINDEX	0, tile_owl;
+	SPRITEINDEX	1, tile_owl_activated;
+
 	PROPERTIES
 		(string, text, "<red>undefined<red>",
-			"Text", "text_message", "",
+			"Text", "text_message", "Owl",
 			"The text to display when the owl is activated.", false);
 END;
 
-TEMPTILE color_cube;
-	TYPE		TileColorCube;
-	FLAGS		solid, movable;
-	MODEL		block;
-	PROPERTIES
-		(show sprite_index);
+# ---- Color Cube -------------------------------------------------------------
+
+TILE color_cube;
+	TYPE			TileColorCube;
+	FLAGS			movable;
+	SOLID			block;
+	SPRITEINDEX		0, "color_cube", (0, 0);
+	SPRITEINDEX		1, "color_cube", (1, 0);
+	SPRITEINDEX		2, "color_cube", (2, 0);
+	SPRITEINDEX		3, "color_cube", (3, 0);
+	SPRITEINDEX		4, "color_cube", (4, 0);
+	SPRITEINDEX		5, "color_cube", (5, 0);
 END;
 
-TEMPTILE roller_horizontal;
+# ---- Roller -----------------------------------------------------------------
+
+TEMPTILE roller;
 	TYPE		TileRoller;
-	FLAGS		solid, movable, notgrabbable;
-	MODEL		block;
+	FLAGS		movable, notgrabbable;
+	SOLID		block;
 	PROPERTIES
 		(boolean, vertical, "false",
-			"Vertical", "", "",
+			"Vertical", "", "Roller",
 			"The roller rolls vertically", true),
 		(boolean, first_roller, "false",
-			"First Roller", "", "",
+			"First Roller", "", "Roller",
 			"This is the top left roller of a group. Any rollers before this won't be connected.", false);
 END;
 
-TEMPTILE roller_vertical;
-	TYPE		TileRoller;
-	FLAGS		solid, movable, notgrabbable;
-	MODEL		block;
-	PROPERTIES
-		(boolean, vertical, "true",
-			"Vertical", "", "",
-			"The roller rolls vertically", true),
-		(boolean, first_roller, "false",
-			"First Roller", "", "",
-			"This is the top left roller of a group. Any rollers before this won't be connected.", false);
+TILE roller_horizontal;
+	CLONE		roller;
+	SPRITEINDEX	0, tile_roller_horizontal;
+	SPRITEINDEX	1, tile_roller_horizontal_roll;
+	PROPERTIES	(boolean, vertical, "false"),
+				(boolean, first_roller, "false");
 END;
+
+TILE roller_vertical;
+	CLONE		roller;
+	SPRITEINDEX	0, tile_roller_vertical;
+	SPRITEINDEX	1, tile_roller_vertical_roll;
+	PROPERTIES	(boolean, vertical, "true"),
+				(boolean, first_roller, "false");
+END;
+
+# ---- Crossing Gate ----------------------------------------------------------
+
+TILE crossing_grate;
+	TYPE		TileCrossingGate;
+	SOLID		edge_w;
+	PROPERTIES	(boolean, raised,    false, "Raised",      "", "Crossing Gate", "True if the gate is raised.");
+	PROPERTIES	(boolean, face_left, false, "Facing Left", "", "Crossing Gate", "True if the crossing gate is facing left.");
+	PROPERTIES	(boolean, cling_on_stab, false);
+END;
+
+TILE crossing_grate_right;
+	CLONE		crossing_grate;
+	PROPERTIES (boolean, face_left, false);
+END;
+
+TILE crossing_grate_left;
+	CLONE crossing_grate;
+	PROPERTIES (boolean, face_left, true);
+END;
+
+TILE platform;
+	TYPE	TilePlatform;
+	SPRITE	tile_moving_platform;
+END;
+
 
 #==============================================================
 # Tilesets
@@ -122,59 +195,20 @@ DEFAULT (0, 0);
 
 # Rewards
 
-TILE (0, 0);
-	CLONE			chest;
-	SPRITEINDEX		0, "tileset_objects_nv",				(0, 0);
-	SPRITEINDEX		1, "tileset_objects_nv_extras_16x16",	(0, 0);
-END;
+SETTILE ( 0, 0), chest_curved;
+SETTILE ( 1, 0), chest_flat;
+SETTILE ( 2, 0), chest_ornate;
+SETTILE ( 3, 0), reward;
+SETTILE ( 4, 0), color_switch_blue;
+# Blue crystal
+SETTILE ( 6, 0), trampoline;
+SETTILE ( 7, 0), roller_horizontal;
+SETTILE ( 8, 0), roller_vertical;
+SETTILE ( 9, 0), owl;
+SETTILE (10, 0), color_cube;
+SETTILE (11, 0), platform;
 
-TILE (1, 0);
-	CLONE			chest;
-	SPRITEINDEX		0, "tileset_objects_nv",				(1, 0);
-	SPRITEINDEX		1, "tileset_objects_nv_extras_16x16",	(1, 0);
-END;
-
-TILE (2, 0);
-	CLONE			chest;
-	SPRITEINDEX		0, "tileset_objects_nv",				(2, 0);
-	SPRITEINDEX		1, "tileset_objects_nv_extras_16x16",	(2, 0);
-END;
-
-TILE (3, 0);
-	CLONE			reward;
-	SPRITE			"tileset_objects_nv_extras_16x16", (9, 1);
-END;
-
-TILE (6, 0);
-	CLONE			trampoline;
-	SPRITEINDEX		0, "tileset_objects_nv",				(6, 0);
-	SPRITEINDEX		1, trampoline_bounce;
-END;
-
-TILE (7, 0);
-	CLONE			roller_horizontal;
-	SPRITEINDEX		1, roller_horizontal_roll;
-END;
-
-TILE (8, 0);
-	CLONE			roller_vertical;
-	SPRITEINDEX		1, roller_vertical_roll;
-END;
-
-TILE (9, 0);
-	CLONE			owl;
-	SPRITEINDEX		0, tile_owl;
-	SPRITEINDEX		1, owl_activated;
-END;
-
-TILE (10, 0);
-	CLONE color_cube;
-	SPRITEINDEX		0, "color_cube", (0, 0);
-	SPRITEINDEX		1, "color_cube", (1, 0);
-	SPRITEINDEX		2, "color_cube", (2, 0);
-	SPRITEINDEX		3, "color_cube", (3, 0);
-	SPRITEINDEX		4, "color_cube", (4, 0);
-	SPRITEINDEX		5, "color_cube", (5, 0);
-END;
+SETTILE ( 0, 1), crossing_grate_right;
+SETTILE ( 1, 1), crossing_grate_left;
 
 END;

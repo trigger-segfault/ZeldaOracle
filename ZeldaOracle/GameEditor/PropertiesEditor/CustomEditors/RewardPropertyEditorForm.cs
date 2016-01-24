@@ -15,26 +15,6 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaEditor.Control;
 
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
-	
-	public class RewardPropertyEditor : FormPropertyEditor {
-		private RewardManager rewardManager;
-
-		public RewardPropertyEditor(RewardManager rewardManager) {
-			this.rewardManager = rewardManager;
-		}
-
-		public override Form CreateForm(object value) {
-			return new RewardPropertyEditorForm(rewardManager, (string) value);
-		}
-
-		public override object OnResultOkay(Form form, object value) {
-			return ((RewardPropertyEditorForm) form).RewardName;
-		}
-		
-		public override object OnResultCancel(Form form, object value) {
-			return value;
-		}
-	}
 
 	public partial class RewardPropertyEditorForm : Form {
 		private RewardManager rewardManager;
@@ -154,6 +134,26 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 		public string RewardName {
 			get { return textBox1.Text; }
 			set { textBox1.Text = value; }
+		}
+	}
+	
+	public class RewardPropertyEditor : FormPropertyEditor {
+		private RewardManager rewardManager;
+
+		public RewardPropertyEditor(RewardManager rewardManager) {
+			this.rewardManager = rewardManager;
+		}
+
+		public override Form CreateForm(object value) {
+			return new RewardPropertyEditorForm(rewardManager, (string) value);
+		}
+
+		public override object OnResultOkay(Form form, object value) {
+			return ((RewardPropertyEditorForm) form).RewardName;
+		}
+		
+		public override object OnResultCancel(Form form, object value) {
+			return value;
 		}
 	}
 }

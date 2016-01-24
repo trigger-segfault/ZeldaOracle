@@ -25,16 +25,16 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void OnBegin(PlayerState previousState) {
 			respawning = false;
-			player.IsStateControlled = true;
-			//player.Movement.MoveCondition = PlayerMoveCondition.NoControl;
+			player.IsStateControlled		= true;
+			player.IsPassable				= true;
+			player.Physics.CollideWithWorld	= false;
 			player.Movement.StopMotion();
-			player.Physics.CollideWithWorld = false;
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.IsStateControlled = false;
+			player.IsStateControlled		= false;
+			player.IsPassable				= false;
 			player.Physics.CollideWithWorld = true;
-			//player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 		}
 
 		public override void Update() {

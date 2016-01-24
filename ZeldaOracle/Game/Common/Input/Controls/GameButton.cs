@@ -84,5 +84,17 @@ namespace ZeldaOracle.Common.Input.Controls {
 			}
 			return true;
 		}
+
+		// The compiler throws a warning if you define an == operator and 
+		// don't override Object.Equals(Object o) and Object.GetHashCode()
+		public override bool Equals(object obj) {
+			if (obj.GetType() == GetType())
+				return (this == ((GameButton) obj));
+			return false;
+		}
+
+		public override int GetHashCode() {
+			return base.GetHashCode();
+		}
 	}
 }

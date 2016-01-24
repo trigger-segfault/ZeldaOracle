@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
@@ -27,30 +28,29 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		private const int RaiseDuration = 32;
 		private const int NonChestDuration = 6;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public RoomStateReward(Reward reward) {
-			this.updateRoom		= false;
-			this.animateRoom	= true;
-			this.reward			= reward;
-			this.chestPosition	= Point2I.Zero;
-			this.useChest		= false;
-			this.timer			= 0;
-
+		public RoomStateReward(Reward reward)
+		{
+			this.updateRoom			= false;
+			this.animateRoom		= true;
+			this.reward				= reward;
+			this.chestPosition		= Point2I.Zero;
+			this.useChest			= false;
+			this.timer				= 0;
 			this.animationPlayer	= new AnimationPlayer();
 		}
-		public RoomStateReward(Reward reward, Point2I chestPosition) {
-			this.updateRoom		= false;
-			this.animateRoom	= true;
-			this.reward			= reward;
-			this.chestPosition	= chestPosition;
-			this.useChest		= true;
-			this.timer			= 0;
 
-			this.animationPlayer	= new AnimationPlayer();
+		public RoomStateReward(Reward reward, Point2I chestPosition) :
+			this(reward)
+		{
+			this.chestPosition		= chestPosition;
+			this.useChest			= true;
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
@@ -65,7 +65,9 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			animationPlayer.Update();
 			timer++;
 			if (timer == (useChest ? RaiseDuration : NonChestDuration)) {
+				AudioSystem.PlaySound(GameData.SOUND_FANFARE_ITEM);
 				GameControl.DisplayMessage(new Message(reward.Message));
+
 				if (reward.HoldType == RewardHoldTypes.OneHand) {
 					GameControl.Player.BeginBusyState(1);
 					GameControl.Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_RAISE_ONE_HAND);
@@ -78,14 +80,13 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			else if (timer == (useChest ? RaiseDuration : NonChestDuration) + 1) {
 				reward.OnCollect(GameControl);
 				gameControl.PopRoomState();
-				// Play reward sound
 				return;
 			}
 		}
 
 		public override void Draw(Graphics2D g) {
 			g.Translate(0, 16);
-			g.Translate(-RoomControl.ViewControl.Position);
+			g.Translate(-RoomControl.ViewControl.ViewPosition);
 
 			if (reward.HoldType == RewardHoldTypes.Raise && useChest) {
 				g.DrawAnimation(animationPlayer, chestPosition + new Point2I(0, -8 - (timer + 2) / 4), 0.3f);
@@ -99,7 +100,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 				}
 			}
 			
-			g.Translate(RoomControl.ViewControl.Position);
+			g.Translate(RoomControl.ViewControl.ViewPosition);
 			g.Translate(0, -16);
 		}
 	}

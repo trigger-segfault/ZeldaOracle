@@ -40,17 +40,13 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		//-----------------------------------------------------------------------------
 
 		private void DrawRooms(Graphics2D g) {
-			Point2I panNew = -(Directions.ToPoint(direction) * distance);
-			Point2I panOld = Directions.ToPoint(direction) * GameSettings.VIEW_SIZE;
+			// Determine room draw positions.
+			Point2I panOld = Directions.ToPoint(direction) * (-distance);
+			Point2I panNew = Directions.ToPoint(direction) * (GameSettings.VIEW_SIZE - distance);
 
-			// Draw the old room.
-			g.ResetTranslation();
-			g.Translate(panNew);
-			OldRoomControl.Draw(g);
-			
-			// Draw the new room.
-			g.Translate(panNew + panOld);
-			NewRoomControl.Draw(g);
+			// Draw the old and new rooms.
+			OldRoomControl.DrawRoom(g, new Vector2F(0, 16) + panOld);
+			NewRoomControl.DrawRoom(g, new Vector2F(0, 16) + panNew);
 		}
 
 		
@@ -69,12 +65,17 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 				playerSpeed = TRANSITION_PLAYER_VSPEED;
 
 			// Move the player to the new room.
-			Player.Position -= Directions.ToPoint(direction) * NewRoomControl.RoomBounds.Size;
+			Vector2F playerPos = Player.Position - (Directions.ToPoint(direction) * NewRoomControl.RoomBounds.Size);
+			Player.Position = playerPos + Directions.ToVector(direction) * (playerSpeed * ((float) maxDistance / (float) TRANSITION_SPEED));
 			SetupNewRoom();
+			Player.Position = playerPos;
 		}
 
 		public override void Update() {
 			timer++;
+
+			// Update HUD.
+			GameControl.HUD.Update();
 
 			// Update screen panning.
 			if (timer > TRANSITION_DELAY) {
@@ -121,6 +122,9 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 				Color color = Color.White * opacity;
 				g.DrawImage(GameData.RenderTargetGameTemp, Vector2F.Zero, Vector2F.Zero, Vector2F.One, 0.0, color);
 			}
+			
+			// Draw the HUD.
+			GameControl.HUD.Draw(g, false);
 		}
 
 	}

@@ -1,21 +1,22 @@
-﻿using ZeldaOracle.Common.Geometry;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Content;
+using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 
 namespace ZeldaOracle.Game.Worlds {
 	public class Level : IPropertyObject {
+
 		private World		world;
 		private Point2I		roomSize;		// The size in tiles of each room in the level.
 		private int			roomLayerCount; // The number of tile layers for each room in the level.
 		private Point2I		dimensions;		// The dimensions of the grid of rooms.
 		private Room[,]		rooms;			// The grid of rooms.
-		private Zone		zone;
+		//private Zone		zone;
 		private Properties	properties;
 
 		
@@ -33,16 +34,29 @@ namespace ZeldaOracle.Game.Worlds {
 			this.roomSize		= roomSize;
 			this.roomLayerCount = layerCount;
 			this.dimensions		= Point2I.Zero;
-			this.zone			= zone;
-			this.properties		= new Properties();
-			this.properties.PropertyObject = this;
-			this.properties.BaseProperties = new Properties();
+			//this.zone			= zone;
 
-			this.properties.BaseProperties.Set("id", "")
-				.SetDocumentation("ID", "", "", "", "The id used to refer to this level.", true, false);
 
-			this.properties.Set("id", name);
+			properties = new Properties(this);
+			properties.BaseProperties = new Properties();
 
+			properties.BaseProperties.Set("id", "")
+				.SetDocumentation("ID", "", "", "", "The id used to refer to this level.", false, true);
+
+			properties.BaseProperties.Set("dungeon", "")
+				.SetDocumentation("Dungeon", "dungeon", "", "", "The dungeon this level belongs to.");
+			properties.BaseProperties.Set("dungeon_floor", 0)
+				.SetDocumentation("Dungeon Floor", "", "", "", "The floor in the dungeon this level belongs to.");
+
+			properties.BaseProperties.Set("discovered", false);
+
+			properties.Set("id", name);
+
+			properties.BaseProperties.Set("zone", "")
+				.SetDocumentation("Zone", "zone", "", "", "The zone type for this room.", true, false);
+
+			Zone = zone;
+			
 			Resize(new Point2I(width, height));
 		}
 
@@ -63,6 +77,14 @@ namespace ZeldaOracle.Game.Worlds {
 			if (!ContainsRoom(location))
 				return null;
 			return rooms[location.X, location.Y];
+		}
+
+		public IEnumerable<Room> GetRooms() {
+			for (int x = 0; x < dimensions.X; x++) {
+				for (int y = 0; y < dimensions.Y; y++) {
+					yield return rooms[x, y];
+				}
+			}
 		}
 
 		public EventTileDataInstance FindEventTileByID(string id) {
@@ -91,7 +113,7 @@ namespace ZeldaOracle.Game.Worlds {
 					if (oldRooms != null && x < dimensions.X && y < dimensions.Y)
 						rooms[x, y] = oldRooms[x, y];
 					else
-						rooms[x, y] = new Room(this, x, y, zone ?? GameData.ZONE_DEFAULT);
+						rooms[x, y] = new Room(this, x, y, Zone ?? GameData.ZONE_DEFAULT);
 				}
 			}
 
@@ -109,7 +131,7 @@ namespace ZeldaOracle.Game.Worlds {
 						y - distance.Y >= 0 && y - distance.Y < dimensions.Y)
 						rooms[x, y] = oldRooms[x - distance.X, y - distance.Y];
 					else
-						rooms[x, y] = new Room(this, x, y, zone ?? Resources.GetResource<Zone>(""));
+						rooms[x, y] = new Room(this, x, y, Zone ?? Resources.GetResource<Zone>(""));
 				}
 			}
 		}
@@ -121,6 +143,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 		public World World {
 			get { return world; }
+			set { world = value; }
 		}
 		
 		public Room[,] Rooms {
@@ -171,8 +194,40 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public Zone Zone {
-			get { return zone; }
-			set { zone = value; }
+			get { return properties.GetResource<Zone>("zone", null); }
+			set {
+				if (value != null)
+					properties.Set("zone", value.ID);
+				else
+					properties.Set("zone", "");
+			}
+			//get { return zone; }
+			//set { zone = value; }
+		}
+
+		public string Id {
+			get { return properties.GetString("id"); }
+			set { properties.Set("id", value); }
+		}
+		
+		public Dungeon Dungeon {
+			get { return world.GetDungoen(properties.GetString("dungeon", "")); }
+			set {
+				if (value == null)
+					properties.Set("dungeon", "");
+				else
+					properties.Set("dungeon", value.ID);
+			}
+		}
+		
+		public int DungeonFloor {
+			get { return properties.GetInteger("dungeon_floor", 0); }
+			set { properties.Set("dungeon_floor", value); }
+		}
+		
+		public bool IsDiscovered {
+			get { return properties.GetBoolean("discovered", false); }
+			set { properties.Set("discovered", value); }
 		}
 	}
 }

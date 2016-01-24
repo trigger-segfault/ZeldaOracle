@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
@@ -96,6 +97,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			
 			player.Physics.Velocity = velocity;
 			player.Position += velocity;
+			AudioSystem.PlaySound(GameData.SOUND_PLAYER_JUMP);
 		}
 		
 		public override void OnEnd(PlayerState newState) {

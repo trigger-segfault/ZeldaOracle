@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Entities.Monsters;
+using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.Entities.Projectiles;
 
 
 namespace ZeldaOracle.Game.Entities.Units {
@@ -54,6 +57,18 @@ namespace ZeldaOracle.Game.Entities.Units {
 		// Virtual Methods
 		//-----------------------------------------------------------------------------
 		
+		public virtual void OnParry(Unit other, Vector2F contactPoint) {
+		}
+
+		public virtual void OnHitMonster(Monster monster) {
+		}
+		
+		public virtual void OnHitPlayer(Player player) {
+		}
+		
+		public virtual void OnHitProjectile(Projectile projectile) {
+		}
+
 		public virtual void OnCollideEntity(Entity entity) {
 
 		}
@@ -185,6 +200,18 @@ namespace ZeldaOracle.Game.Entities.Units {
 		public int ImageVariantID {
 			get { return imageVariantID; }
 			set { imageVariantID = value; }
+		}
+		
+		public bool IsSword {
+			get { return (toolType == UnitToolType.Sword); }
+		}
+		
+		public bool IsShield {
+			get { return (toolType == UnitToolType.Shield); }
+		}
+
+		public bool IsSwordOrShield {
+			get { return (toolType == UnitToolType.Sword || toolType == UnitToolType.Shield); }
 		}
 	}
 }

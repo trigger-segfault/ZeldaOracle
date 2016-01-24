@@ -11,6 +11,9 @@ using ZeldaOracle.Game.Entities.Collisions;
 namespace ZeldaOracle.Game.Entities.Effects {
 	public class Fire : Effect {
 
+		private int timer;
+		private bool isAbsorbed;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -20,16 +23,24 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			base(GameData.ANIM_EFFECT_SEED_EMBER)
 		{
 			EnablePhysics(PhysicsFlags.HasGravity);
+			
+			Physics.SoftCollisionBox = new Rectangle2F(-6, -6, 12, 12);
 
 			Graphics.DrawOffset	= new Point2I(0, -2);
 			Graphics.DepthLayer	= DepthLayer.EffectFire;
+			isAbsorbed = false;
 		}
 		
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
-		
+
+		public override void Initialize() {
+			base.Initialize();
+			timer = 0;
+		}
+
 		public override void OnDestroyTimerDone() {
 			// Burn tiles.
 			Point2I location = RoomControl.GetTileLocation(position);
@@ -42,17 +53,36 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		}
 
 		public override void Update() {
-			
-			// Collide with monsters.
-			CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
-			for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
-				Monster monster = iterator.CollisionInfo.Entity as Monster;
-				monster.TriggerInteraction(InteractionType.Fire, this);
-				if (IsDestroyed)
+			timer++;
+
+			if (timer > 3) {
+				if (isAbsorbed) {
+					Destroy();
 					return;
+				}
+				else {
+					// Collide with monsters.
+					CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
+					for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
+						Monster monster = iterator.CollisionInfo.Entity as Monster;
+						monster.TriggerInteraction(InteractionType.Fire, this);
+						if (IsDestroyed)
+							return;
+					}
+				}
 			}
 
 			base.Update();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public bool IsAbsorbed {
+			get { return isAbsorbed; }
+			set { isAbsorbed = value; }
 		}
 	}
 }

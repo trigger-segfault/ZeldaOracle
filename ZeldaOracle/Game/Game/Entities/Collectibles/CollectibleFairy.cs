@@ -43,9 +43,9 @@ namespace ZeldaOracle.Game.Entities {
 
 		public override void Collect() {
 			if (GameControl.HUD.DynamicHealth >= GameControl.Player.MaxHealth)
-				AudioSystem.PlaySound("Pickups/get_heart");
+				AudioSystem.PlaySound(GameData.SOUND_GET_HEART);
 			RoomControl.Player.Health += 6 * 4;
-			Destroy();
+			base.Collect();
 		}
 
 

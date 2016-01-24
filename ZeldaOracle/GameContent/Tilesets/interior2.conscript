@@ -1,6 +1,6 @@
 
 #==============================================================
-# Interior Tileset
+# Interior Tileset (OLD version)
 #==============================================================
 
 TILESET interior2, tileset_interior2, (10, 15);

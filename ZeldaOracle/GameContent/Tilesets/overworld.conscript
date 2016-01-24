@@ -1,7 +1,7 @@
 
 
 #==============================================================
-# Overworld Tileset
+# Overworld Tileset (OLD tileset)
 #==============================================================
 
 TILESET overworld, tileset_overworld, (21, 36);

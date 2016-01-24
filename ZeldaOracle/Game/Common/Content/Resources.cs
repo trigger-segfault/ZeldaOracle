@@ -443,6 +443,13 @@ namespace ZeldaOracle.Common.Content {
 			return resource;
 		}
 
+		// Loads a sound effect.
+		public static Sound LoadSound(string name, string assetPath) {
+			Sound resource = new Sound(contentManager.Load<SoundEffect>(assetPath), assetPath, name);
+			sounds.Add(name, resource);
+			return resource;
+		}
+
 		// Loads a song.
 		public static Song LoadSong(string assetName) {
 			string name = assetName.Substring(assetName.IndexOf('/') + 1);

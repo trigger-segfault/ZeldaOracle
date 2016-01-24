@@ -9,6 +9,7 @@ using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Players.States;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemShovel : ItemWeapon {
@@ -68,9 +69,11 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				}
 
 				RoomControl.SpawnEntity(effect, tile.Center);
+				
+				AudioSystem.PlaySound(GameData.SOUND_SHOVEL);
 			}
 			else {
-				// TODO: Play cling sound.
+				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 			}
 		}
 

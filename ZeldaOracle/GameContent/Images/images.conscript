@@ -1,6 +1,14 @@
 
 
 #==============================================================
+# Screens
+#==============================================================
+
+IMAGE screen_dungeon_map, "UI/screen_dungeon_map"; END;
+
+
+
+#==============================================================
 # Menu
 #==============================================================
 
@@ -12,7 +20,6 @@ IMAGE menu_large;
 	VARIANT dark  "UI/menu_large";
 	VARIANT light "UI/menu_large_light";
 	END;
-	
 
 #==============================================================
 # Items
@@ -33,13 +40,23 @@ IMAGE items_large;
 #==============================================================
 
 IMAGE zoneset;
-	VARIANT summer		"Tiles/zoneset";
-	VARIANT graveyard	"Tiles/zoneset_graveyard";
-	VARIANT forest		"Tiles/zoneset_forest";
-	VARIANT interior	"Tiles/zoneset_interior";
-#	VARIANT dungeon_1	"Tiles/zoneset_dungeon_1";
-#	VARIANT dungeon_2	"Tiles/zoneset_dungeon_2";
+	VARIANT summer				"Tiles/zoneset";
+	VARIANT present				"Tiles/zoneset_present";
+	VARIANT graveyard			"Tiles/zoneset_graveyard";
+	VARIANT forest				"Tiles/zoneset_forest";
+	VARIANT interior			"Tiles/zoneset_interior";
+	VARIANT interior_present	"Tiles/zoneset_interior_present";
+	VARIANT ages_dungeon_1		"Tiles/zoneset_ages_dungeon_1";
+	VARIANT ages_dungeon_4		"Tiles/zoneset_ages_dungeon_4";
 	END;
+	
+IMAGE zoneset_new;
+	VARIANT present				"Tiles/Zonesets/zoneset_present";
+	VARIANT interior_present	"Tiles/Zonesets/zoneset_interior_present";
+	VARIANT ages_dungeon_1		"Tiles/Zonesets/zoneset_ages_dungeon_1";
+	VARIANT ages_dungeon_4		"Tiles/Zonesets/zoneset_ages_dungeon_4";
+	END;
+
 IMAGE tileset_overworld;
 	VARIANT summer		"Tiles/tileset";
 	VARIANT graveyard	"Tiles/overworld_graveyard";
@@ -110,6 +127,7 @@ IMAGE tileset_interior;
 
 IMAGE tileset_dungeon;
 	VARIANT ages_dungeon_1		"Tiles/tileset_dungeon_ages_dungeon_1";
+	VARIANT ages_dungeon_4		"Tiles/tileset_dungeon_ages_dungeon_4";
 	END;
 
 #==============================================================
@@ -139,3 +157,4 @@ IMAGE basic_monsters;
 	VARIANT normal	"Units/Monsters/monsters";
 	VARIANT hurt	"Units/Monsters/monsters_hurt";
 	END;
+

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.Control.Scripting;
 
 namespace ZeldaOracle.Game.Worlds {
 	public class World : IPropertyObject {
@@ -12,8 +13,10 @@ namespace ZeldaOracle.Game.Worlds {
 		private int startLevelIndex;
 		private Point2I startRoomLocation;
 		private Point2I startTileLocation;
-
 		private Properties properties;
+		private ScriptManager scriptManager;
+		private Dictionary<string, Dungeon> dungeons;
+
 		
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -21,12 +24,16 @@ namespace ZeldaOracle.Game.Worlds {
 
 		public World() {
 			this.levels = new List<Level>();
+			this.scriptManager = new ScriptManager();
+
 			this.properties = new Properties();
 			this.properties.PropertyObject = this;
 			this.properties.BaseProperties = new Properties();
+			
+			this.dungeons = new Dictionary<string, Dungeon>();
 
 			this.properties.BaseProperties.Set("id", "world_name")
-				.SetDocumentation("ID", "", "", "", "The id used to refer to this world.", true, false);
+				.SetDocumentation("ID", "", "", "", "The id used to refer to this world.", false, true);
 		}
 
 
@@ -58,7 +65,6 @@ namespace ZeldaOracle.Game.Worlds {
 			return -1;
 		}
 		
-
 		public void MoveLevel(int oldIndex, int newIndex, bool relative) {
 			if (relative)
 				newIndex = oldIndex + newIndex;
@@ -75,21 +81,28 @@ namespace ZeldaOracle.Game.Worlds {
 			levels.Insert(newIndex, level);
 		}
 
+		public Script GetScript(string scriptID) {
+			return ScriptManager.GetScript(scriptID);
+		}
+
+		public Dungeon GetDungoen(string dungeonID) {
+			if (dungeons.ContainsKey(dungeonID))
+				return dungeons[dungeonID];
+			return null;
+		}
+
+		public IEnumerable<Dungeon> GetDungeons() {
+			return dungeons.Values;
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Mutators
 		//-----------------------------------------------------------------------------
 
 		public void AddLevel(Level level) {
 			levels.Add(level);
-		}
-
-		public void RemoveLevel(string levelID) {
-			for (int i = 0; i < levels.Count; i++) {
-				if (levels[i].Properties.GetString("id") == levelID) {
-					levels.RemoveAt(i);
-					break;
-				}
-			}
+			level.World = this;
 		}
 			
 		public void RemoveLevel(Level level) {
@@ -100,6 +113,32 @@ namespace ZeldaOracle.Game.Worlds {
 			levels.RemoveAt(index);
 		}
 
+		public void RemoveLevel(string levelID) {
+			for (int i = 0; i < levels.Count; i++) {
+				if (levels[i].Properties.GetString("id") == levelID) {
+					levels.RemoveAt(i);
+					break;
+				}
+			}
+		}
+
+		public void AddScript(Script script) {
+			scriptManager.AddScript(script);
+		}
+
+		public void RemoveScript(Script script) {
+			scriptManager.RemoveScript(script);
+		}
+
+		public void AddDungeon(Dungeon dungeon) {
+			dungeons.Add(dungeon.ID, dungeon);
+			dungeon.World = this;
+		}
+
+		public void RemoveDungeon(Dungeon dungeon) {
+			dungeons.Remove(dungeon.ID);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -107,6 +146,14 @@ namespace ZeldaOracle.Game.Worlds {
 		
 		public List<Level> Levels {
 			get { return levels; }
+		}
+		
+		public Dictionary<string, Script> Scripts {
+			get { return scriptManager.Scripts; }
+		}
+		
+		public Dictionary<string, Dungeon> Dungeons {
+			get { return dungeons; }
 		}
 
 		public Room StartRoom {
@@ -138,6 +185,15 @@ namespace ZeldaOracle.Game.Worlds {
 				properties = value;
 				properties.PropertyObject = this;
 			}
+		}
+
+		public string Id {
+			get { return properties.GetString("id"); }
+			set { properties.Set("id", value); }
+		}
+
+		public ScriptManager ScriptManager {
+			get { return scriptManager; }
 		}
 	}
 }

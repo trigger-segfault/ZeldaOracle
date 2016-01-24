@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control;
@@ -106,6 +107,7 @@ namespace ZeldaOracle.Game.Entities {
 		public virtual void OnFallInHole() {
 			if (physics.IsDestroyedInHoles) {
 				RoomControl.SpawnEntity(new EffectFallingObject(), position);
+				AudioSystem.PlaySound(GameData.SOUND_OBJECT_FALL);
 				Destroy();
 			}
 		}
@@ -113,7 +115,8 @@ namespace ZeldaOracle.Game.Entities {
 		// Called when the entity falls in water.
 		public virtual void OnFallInWater() {
 			if (physics.IsDestroyedInHoles) {
-				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash), position);
+				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash, true), position);
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 				Destroy();
 			}
 		}
@@ -121,7 +124,8 @@ namespace ZeldaOracle.Game.Entities {
 		// Called when the entity falls in lava.
 		public virtual void OnFallInLava() {
 			if (physics.IsDestroyedInHoles) {
-				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH, DepthLayer.EffectSplash), position);
+				RoomControl.SpawnEntity(new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH, DepthLayer.EffectSplash, true), position);
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 				Destroy();
 			}
 		}

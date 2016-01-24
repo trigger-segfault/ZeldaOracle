@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Units {
 
@@ -34,6 +35,10 @@ namespace ZeldaOracle.Game.Entities.Units {
 		protected int		health;
 		protected int		healthMax;
 		
+		protected bool		isKnockbackable; // Can the unit be knocked back?
+		protected bool		isDamageable; 
+		protected bool		isPassable;
+
 		protected float		knockbackSpeed;
 		protected int		knockbackDuration;
 		protected int		hurtInvincibleDuration;
@@ -55,6 +60,10 @@ namespace ZeldaOracle.Game.Entities.Units {
 		public Unit() {
 			EnablePhysics();
 
+			isKnockbackable			= true;
+			isDamageable			= true;
+			isPassable				= false;
+
 			knockbackSpeed			= GameSettings.UNIT_KNOCKBACK_SPEED;
 			knockbackDuration		= GameSettings.UNIT_KNOCKBACK_DURATION;
 			hurtInvincibleDuration	= GameSettings.UNIT_HURT_INVINCIBLE_DURATION;
@@ -72,6 +81,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			healthMax		= 1;
 			direction		= Directions.Right;
 			centerOffset	= new Point2I(8, 8);
+
 		}
 
 
@@ -144,17 +154,21 @@ namespace ZeldaOracle.Game.Entities.Units {
 		// Virtual methods
 		//-----------------------------------------------------------------------------
 		
+		public virtual void OnHurt(DamageInfo damage) { }
+		
 		public void Kill() {
 			Die();
 		}
 
 		public void Knockback(int duration, float speed, Vector2F sourcePosition) {
-			knockbackDuration	= duration;
-			knockbackTimer		= duration;
-			knockbackVelocity	= (Center - sourcePosition).Normalized;
-			knockbackVelocity  *= speed;
-			knockbackVelocity	= Vector2F.SnapDirectionByCount(
-				knockbackVelocity, GameSettings.UNIT_KNOCKBACK_ANGLE_SNAP_COUNT);
+			if (isKnockbackable) {
+				knockbackDuration	= duration;
+				knockbackTimer		= duration;
+				knockbackVelocity	= (Center - sourcePosition).Normalized;
+				knockbackVelocity  *= speed;
+				knockbackVelocity	= Vector2F.SnapDirectionByCount(
+					knockbackVelocity, GameSettings.UNIT_KNOCKBACK_ANGLE_SNAP_COUNT);
+			}
 		}
 		
 		public void Bump(Vector2F sourcePosition) {
@@ -193,6 +207,11 @@ namespace ZeldaOracle.Game.Entities.Units {
 					graphics.IsHurting = true;
 				}
 			}
+
+			if (damage.InvincibleDuration > 0)
+				invincibleTimer = damage.InvincibleDuration;
+
+			OnHurt(damage);
 		}
 
 		public virtual void RespawnDeath() {
@@ -209,7 +228,13 @@ namespace ZeldaOracle.Game.Entities.Units {
 
 
 		public virtual void OnKnockbackEnd() {
-			physics.Velocity = Vector2F.Zero;
+			if (IsOnGround)
+				physics.Velocity = Vector2F.Zero;
+		}
+
+		public virtual void UpdateSubStripIndex() {
+			if (syncAnimationWithDirection)
+				Graphics.SubStripIndex = direction;
 		}
 
 
@@ -251,8 +276,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			foreach (UnitTool tool in tools)
 				tool.Update();
 			
-			if (syncAnimationWithDirection)
-				Graphics.SubStripIndex = direction;
+			UpdateSubStripIndex();
 
 			base.Update();
 		}
@@ -299,12 +323,22 @@ namespace ZeldaOracle.Game.Entities.Units {
 			get { return (health == healthMax); }
 		}
 
+		public bool IsKnockbackable {
+			get { return isKnockbackable; }
+			set { isKnockbackable = value; }
+		}
+
+		public bool IsPassable {
+			get { return isPassable; }
+			set { isPassable = value; }
+		}
+
 		public bool IsBeingKnockedBack {
 			get { return (knockbackTimer > 0); }
 		}
 		
 		public bool IsInvincible {
-			get { return (invincibleTimer > 0); }
+			get { return (!isDamageable || (invincibleTimer > 0)); }
 		}
 		
 		public bool IsHurtFlickering {

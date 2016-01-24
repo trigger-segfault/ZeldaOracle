@@ -9,6 +9,7 @@ using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemBoomerang : ItemWeapon {
@@ -45,14 +46,13 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				return;
 
 			// Shoot and track the boomerang.
-			Boomerang boomerang = new Boomerang(level);
+			PlayerBoomerang boomerang = new PlayerBoomerang(this);
 			Player.ShootFromAngle(boomerang, Player.UseAngle, boomerang.Speed);
 			boomerangTracker.TrackEntity(boomerang);
 
 			if (level == Item.Level1) {
 				// Begin the standard busy state for the regular boomerang.
-				Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
-				Player.BeginBusyState(10);
+				Player.BeginBusyState(10, GameData.ANIM_PLAYER_THROW, GameData.ANIM_PLAYER_MINECART_THROW);
 			}
 			else {
 				// Enter a player state to control the magic boomerang.

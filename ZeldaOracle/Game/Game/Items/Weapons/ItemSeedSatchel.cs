@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Game.Items.Ammos;
+using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 
@@ -70,9 +71,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			Vector2F pos = Player.Position + (velocity * 4.0f);
 			seed.Physics.Velocity = velocity * 0.75f;
 			Player.RoomControl.SpawnEntity(seed, pos, Player.ZPosition + 6);
-
-			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
-			Player.BeginBusyState(10);
+			
+			Player.BeginBusyState(10, GameData.ANIM_PLAYER_THROW, GameData.ANIM_PLAYER_MINECART_THROW);
 
 			UseAmmo();
 
@@ -103,7 +103,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				// Start sprinting.
 				if (!Player.Movement.IsSprinting) {
 					Player.RoomControl.SpawnEntity(
-						new Effect(GameData.ANIM_EFFECT_PEGASUS_DUST, DepthLayer.EffectPegasusDust),
+						new Effect(GameData.ANIM_EFFECT_PEGASUS_DUST, DepthLayer.EffectPegasusDust, true),
 						Player.Center - new Point2I(0, 8));
 					Player.Movement.StartSprinting(
 						GameSettings.PLAYER_SPRINT_DURATION,

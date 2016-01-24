@@ -144,12 +144,12 @@ namespace ZeldaEditor.Tools {
 
 					if (selectedTile != null) {
 						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
-						EditorControl.PropertyGridControl.OpenProperties(selectedTile.Properties, selectedTile);
+						EditorControl.PropertyGrid.OpenProperties(selectedTile.Properties, selectedTile);
 						editorControl.SelectedTilesetTile = -Point2I.One;
 						editorControl.SelectedTilesetTileData = selectedTile.TileData;
 					}
 					else {
-						EditorControl.PropertyGridControl.CloseProperties();
+						EditorControl.PropertyGrid.CloseProperties();
 					}
 				}
 				else if (editorControl.CurrentLayer == 0 || GetTileAt(target) != null) {
@@ -170,10 +170,10 @@ namespace ZeldaEditor.Tools {
 
 					if (selectedEventTile != null) {
 						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
-						EditorControl.PropertyGridControl.OpenProperties(selectedEventTile.Properties, selectedEventTile);
+						EditorControl.PropertyGrid.OpenProperties(selectedEventTile.Properties, selectedEventTile);
 					}
 					else {
-						EditorControl.PropertyGridControl.CloseProperties();
+						EditorControl.PropertyGrid.CloseProperties();
 					}
 				}
 			}

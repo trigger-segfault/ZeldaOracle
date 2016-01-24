@@ -153,7 +153,7 @@ namespace ZeldaOracle.Game.Entities
 				return;
 
 			// Draw the shadow.
-			if (isShadowVisible && entity.ZPosition > 1 && entity.GameControl.RoomTicks % 2 == 0) {
+			if (isShadowVisible && entity.ZPosition >= 1 && entity.GameControl.RoomTicks % 2 == 0) {
 				g.DrawSprite(GameData.SPR_SHADOW, Entity.Position + shadowDrawOffset, DepthLayer.Shadows);
 			}
 

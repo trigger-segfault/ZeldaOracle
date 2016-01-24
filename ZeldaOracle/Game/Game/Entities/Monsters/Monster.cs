@@ -11,6 +11,9 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
+using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Game.Entities.Monsters.States;
+using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 
@@ -33,17 +36,28 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 	// - MonsterStunState
 	// - MonsterFallInHoleState
 
-	public partial class Monster : Unit {
+	public partial class Monster : Unit, ZeldaAPI.Monster {
 		
 		private Properties properties;
-		private bool isKnockbackable; // Can the monster be knocked back?
 		private int contactDamage;
 		private InteractionHandler[] interactionHandlers;
-
-		// Burn State.
-		private bool isBurning;
-		private AnimationPlayer effectAnimation;
 		protected MonsterColor color;
+		
+		// The current monster state.
+		private MonsterState state;
+		// The previous monster state.
+		private MonsterState previousState;
+
+		protected bool isBurnable;
+		protected bool isGaleable;
+		protected bool isStunnable;
+
+		// States.
+		/*private MonsterBurnState		stateBurn;
+		private MonsterStunState		stateStun;
+		private MonsterFallInHoleState	stateFallInHole;
+		private MonsterGaleState		stateGale;*/
+		
 
 
 		//-----------------------------------------------------------------------------
@@ -57,6 +71,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// - Sides: 3 overlap	
 
 			color = MonsterColor.Red;
+			properties = new Properties();
 
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2I(-5, -9, 10, 10);
@@ -80,20 +95,24 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			hurtInvincibleDuration	= GameSettings.MONSTER_HURT_INVINCIBLE_DURATION;
 			hurtFlickerDuration		= GameSettings.MONSTER_HURT_FLICKER_DURATION;
 			contactDamage			= 1;
+			isGaleable				= true;
+			isBurnable				= true;
+			isStunnable				= true;
 			isKnockbackable			= true;
-			isBurning				= false;
-			effectAnimation			= new AnimationPlayer();
 			
+			// Setup default interactions.
 			interactionHandlers = new InteractionHandler[(int) InteractionType.Count];
 			for (int i = 0; i < (int) InteractionType.Count; i++)
 				interactionHandlers[i] = new InteractionHandler();
+			SetDefaultReactions();
+		}
 
-			// Setup default interactions.
+		protected void SetDefaultReactions() {
 			// Seeds
 			SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept);
 			SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept,	Reactions.Damage);
 			SetReaction(InteractionType.PegasusSeed,	SenderReactions.Intercept,	Reactions.Stun);
-			SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept,	Reactions.Gale);
+			SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept);
 			SetReaction(InteractionType.MysterySeed,	Reactions.MysterySeed);
 			// Projectiles
 			SetReaction(InteractionType.Arrow,			SenderReactions.Destroy,	Reactions.Damage);
@@ -102,61 +121,100 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept,	Reactions.Stun);
 			SetReaction(InteractionType.SwitchHook,		Reactions.SwitchHook);
 			// Environment
-			SetReaction(InteractionType.Fire,			SenderReactions.Destroy,	Reactions.Burn);
+			SetReaction(InteractionType.Fire,			Reactions.Burn);
+			SetReaction(InteractionType.Gale,			Reactions.Gale);
 			SetReaction(InteractionType.BombExplosion,	Reactions.Damage);
 			SetReaction(InteractionType.ThrownObject,	Reactions.Damage);
 			SetReaction(InteractionType.MineCart,		Reactions.SoftKill);
 			SetReaction(InteractionType.Block,			Reactions.Damage);
 			// Tools
-			SetReaction(InteractionType.Sword,			Reactions.DamageByLevel(1, 2, 3));
+			SetReaction(InteractionType.Sword,			SenderReactions.Intercept, Reactions.DamageByLevel(1, 2, 3));
+			SetReaction(InteractionType.SwordSpin,		Reactions.Damage2);
 			SetReaction(InteractionType.BiggoronSword,	Reactions.Damage3);
 			SetReaction(InteractionType.Shield,			SenderReactions.Bump, Reactions.Bump);
 			SetReaction(InteractionType.Shovel,			Reactions.Bump);
+			SetReaction(InteractionType.Parry,			Reactions.Parry);
 			// Player
 			SetReaction(InteractionType.Pickup,			Reactions.None);
 			SetReaction(InteractionType.ButtonAction,	Reactions.None);
 			SetReaction(InteractionType.PlayerContact,	OnTouchPlayer);
-			
-			SetReaction(InteractionType.Parry,			SenderReactions.Bump, Reactions.Bump,
-				Reactions.ContactEffect(new Effect(GameData.ANIM_EFFECT_CLING, DepthLayer.EffectCling)));
-
-			// TODO: Parry with Biggoron Sword: don't bump player.
-			// TODO: Spin sword reaction.
-
-			//SetReaction(InteractionType.SwordHitShield,			new COMBO(new EFFECT_CLING(), new BUMP(true)));
-			//SetReaction(InteractionType.BiggoronSwordHitShield,	new COMBO(new EFFECT_CLING(), new BUMP()));
-			//SetReaction(InteractionType.ShieldHitShield,			new COMBO(new EFFECT_CLING(), new BUMP(true)));
+		}
+		
+		
+		//-----------------------------------------------------------------------------
+		// Monster States
+		//-----------------------------------------------------------------------------
+				
+		// Begin the given monster state.
+		public void BeginState(MonsterState newState) {
+			if (state != newState) {
+				if (state != null) {
+					state.End(newState);
+				}
+				previousState = state;
+				state = newState;
+				newState.Begin(this, previousState);
+			}
+		}
+		
+		public void BeginNormalState() {
+			BeginState(new MonsterNormalState());
 		}
 
+		public virtual void UpdateAI() {
+
+		}
+		
 		
 		//-----------------------------------------------------------------------------
 		// Monster Reactions
 		//-----------------------------------------------------------------------------
 
-		public void Burn(int damage) {
-			if (IsInvincible || isBurning)
-				return;
+		public bool Stun() {
+			if (isStunnable && ((state is MonsterNormalState) || (state is MonsterStunState))) {
+				AudioSystem.PlaySound(GameData.SOUND_MONSTER_HURT);
+				BeginState(new MonsterStunState(GameSettings.MONSTER_STUN_DURATION));
+				return true;
+			}
+			return false;
+		}
 
-			// TODO: Enter burn state.
+		public bool EnterGale(EffectGale gale) {
+			if (isGaleable && ((state is MonsterNormalState) || (state is MonsterStunState))) {
+				BeginState(new MonsterGaleState(gale));
+				return true;
+			}
+			return false;
+		}
 
-			// Apply damage.
-			DamageInfo damageInfo = new DamageInfo(damage);
-			damageInfo.ApplyKnockBack		= true;
-			damageInfo.HasSource			= false;
-			damageInfo.KnockbackDuration	= GameSettings.MONSTER_BURN_DURATION;
-			damageInfo.Flicker				= false;
-
-			Hurt(damageInfo);
-
-			isBurning = true;
-
-			// Create the burn effect.
-			effectAnimation.Play(GameData.ANIM_EFFECT_BURN);
+		public bool Burn(int damage) {
+			if (!IsInvincible && isBurnable && ((state is MonsterNormalState) || (state is MonsterStunState))) {
+				BeginState(new MonsterBurnState(damage));
+				return true;
+			}
+			return false;
 		}
 
 		public void OnTouchPlayer(Entity sender, EventArgs args) {
 			Player player = (Player) sender;
 			player.Hurt(contactDamage, Center);
+		}
+
+		public virtual void OnSeedHit(SeedEntity seed) {
+			// For mystery seeds, create the effect for another random seed type.
+			if (seed.SeedType == SeedType.Mystery) {
+				int rand = GRandom.NextInt(4);
+				if (rand == 0)
+					seed.SeedType = SeedType.Ember;
+				else if (rand == 1)
+					seed.SeedType = SeedType.Scent;
+				else if (rand == 2)
+					seed.SeedType = SeedType.Pegasus;
+				else
+					seed.SeedType = SeedType.Gale;
+			}
+
+			seed.TriggerMonsterReaction(this);
 		}
 
 		
@@ -219,123 +277,135 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public override void Initialize() {
 			base.Initialize();
+			
+			color = (MonsterColor) Properties.GetInteger("color", (int) color);
 
 			health = healthMax;
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_OCTOROK);
 			ChooseImageVariant();
+			
+			// Begin the default monster state.
+			BeginNormalState();
+			previousState = state;
 		}
 
-		public override void Die() {
+		public override void Die(){
 			Effect explosion = new Effect(GameData.ANIM_EFFECT_MONSTER_EXPLOSION, DepthLayer.EffectMonsterExplosion);
+			AudioSystem.PlaySound(GameData.SOUND_MONSTER_DIE);
 			RoomControl.SpawnEntity(explosion, Center);
+			Properties.SetBase("dead", true);
 			base.Die();
 		}
 
 		public override void OnKnockbackEnd() {
 			base.OnKnockbackEnd();
-			if (isBurning) {
-				isBurning = false;
-				effectAnimation.Animation = null;
+		}
+
+		public override void OnHurt(DamageInfo damage) {
+			AudioSystem.PlaySound(GameData.SOUND_MONSTER_HURT);
+		}
+
+		public override void OnFallInHole() {
+			// Begin the fall-in-hole state (slipping into a hole).
+			if (state is MonsterNormalState) {
+				BeginState(new MonsterFallInHoleState());
 			}
 		}
 
 		public override void UpdateGraphics() {
 			ChooseImageVariant();
 			base.UpdateGraphics();
-			effectAnimation.Update();
 		}
 
-		public override void Update() {
+		private void CollideMonsterAndPlayer() {
+			Player player = RoomControl.Player;
+
+			// Check for minecart interactions.
+			if (!isPassable && player.IsInMinecart &&
+				physics.IsCollidingWith(player, CollisionBoxType.Soft))
+			{
+				TriggerInteraction(InteractionType.MineCart, player);
+				if (IsDestroyed)
+					return;
+			}
+
+			if (isPassable || player.IsPassable || Math.Abs(player.ZPosition - zPosition) > 10) // TODO: magic number
+				return;
+
+			IEnumerable<UnitTool> monsterTools = EquippedTools.Where(t => t.IsPhysicsEnabled && t.IsSwordOrShield);
+			IEnumerable<UnitTool> playerTools = player.EquippedTools.Where(t => t.IsPhysicsEnabled && t.IsSwordOrShield);
 			
 			// 1. (M-M) MonsterTools to PlayerTools
 			// 2. (M-1) MonsterTools to Player
 			// 4. (M-1) PlayerTools to Monster
 			// 2. (1-1) Monster to Player
 
-			bool parry = false;
-			Player player = RoomControl.Player;
-
 			// Collide my tools with player's tools.
-			foreach (UnitTool monsterTool in EquippedTools) {
-				if (parry)
-					break;
+			if (!IsStunned) {
+				foreach (UnitTool monsterTool in monsterTools) {
+					foreach (UnitTool playerTool in playerTools) {
+						if (monsterTool.PositionedCollisionBox.Intersects(playerTool.PositionedCollisionBox)) {
+							Vector2F contactPoint = playerTool.PositionedCollisionBox.Center;
 
-				if (monsterTool.IsPhysicsEnabled) {
-					foreach (UnitTool playerTool in player.EquippedTools) {
-						if (playerTool.IsPhysicsEnabled &&
-							monsterTool.PositionedCollisionBox.Intersects(
-							playerTool.PositionedCollisionBox))
-						{
-							if ((monsterTool.ToolType == UnitToolType.Sword || monsterTool.ToolType == UnitToolType.Shield) &&
-								(playerTool.ToolType == UnitToolType.Sword || playerTool.ToolType == UnitToolType.Shield) &&
-								!IsBeingKnockedBack && !player.IsBeingKnockedBack)
-							{
-								Vector2F contactPoint = playerTool.PositionedCollisionBox.Center;
+							TriggerInteraction(InteractionType.Parry, player, new ParryInteractionArgs() {
+								ContactPoint	= contactPoint,
+								MonsterTool		= monsterTool,
+								SenderTool		= playerTool
+							});
 
-								TriggerInteraction(InteractionType.Parry, player, new ParryInteractionArgs() {
-									ContactPoint	= contactPoint,
-									MonsterTool		= monsterTool,
-									SenderTool		= playerTool
-								});
+							playerTool.OnParry(this, contactPoint);
+				
+							RoomControl.SpawnEntity(new EffectCling(), contactPoint);
 
-								parry = true;
-							}
+							return;
 						}
 					}
 				}
 			}
 
 			// Collide my tools with the player.
-			foreach (UnitTool tool in EquippedTools) {
-				if (parry)
-					break;
-
-				if (tool.IsPhysicsEnabled && tool.ToolType == UnitToolType.Sword) {
+			bool parry = false;
+			if (!player.IsInvincible && !IsStunned) {
+				foreach (UnitTool tool in monsterTools) {
 					if (player.Physics.PositionedSoftCollisionBox.Intersects(tool.PositionedCollisionBox)) {
 						player.Hurt(contactDamage, Center);
+						parry = true;
+						break;
 					}
 				}
 			}
 
 			// Collide with the player's tools.
-			foreach (UnitTool tool in player.EquippedTools) {
-				if (parry || IsInvincible || IsBeingKnockedBack)
+			foreach (UnitTool tool in playerTools) {
+				if (Physics.PositionedSoftCollisionBox.Intersects(tool.PositionedCollisionBox)) {
+					tool.OnHitMonster(this);
+					parry = true;
 					break;
-
-				if (tool.IsPhysicsEnabled && (tool.ToolType == UnitToolType.Sword || tool.ToolType == UnitToolType.Shield)) {
-					if (Physics.PositionedSoftCollisionBox.Intersects(tool.PositionedCollisionBox)) {
-						if (tool.ToolType == UnitToolType.Sword) {
-							TriggerInteraction(InteractionType.Sword, player, new WeaponInteractionEventArgs() {
-								Weapon = player.Inventory.GetItem("item_sword") as ItemWeapon
-							});
-							parry = true;
-						}
-						else if (tool.ToolType == UnitToolType.Shield) {
-							Vector2F contactPoint = (player.Center + Center) * 0.5f;
-							TriggerInteraction(InteractionType.Shield, player, new WeaponInteractionEventArgs() {
-								Weapon = player.Inventory.GetItem("item_shield") as ItemWeapon
-							});
-							parry = true;
-						}
-					}
 				}
 			}
 
 			// Check collisions with player.
-			if (!parry && physics.IsCollidingWith(player, CollisionBoxType.Soft)) {
+			if (!parry && !IsStunned &&
+				physics.IsCollidingWith(player, CollisionBoxType.Soft))
+			{
 				TriggerInteraction(InteractionType.PlayerContact, player);
 			}
+		}
+
+		public override void Update() {
+			// Update the current monster state.
+			state.Update();
+
+			// Collide player and monster and their tools.
+			CollideMonsterAndPlayer();
 
 			base.Update();
 		}
 
 		public override void Draw(RoomGraphics g) {
+			state.DrawUnder(g);
 			base.Draw(g);
-
-			// Draw burn effect.
-			if (effectAnimation.Animation != null) {
-				g.DrawAnimation(effectAnimation, Center - new Vector2F(0, zPosition), DepthLayer.EffectMonsterBurnFlame);
-			}
+			state.DrawOver(g);
 		}
 
 		
@@ -353,9 +423,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			set { contactDamage = value; }
 		}
 
-		public bool IsKnockbackable {
-			get { return isKnockbackable; }
-			set { isKnockbackable = value; }
+		public bool IsStunned {
+			get { return (state is MonsterStunState); }
 		}
 	}
 }

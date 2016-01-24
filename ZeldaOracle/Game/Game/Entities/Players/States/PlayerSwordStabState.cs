@@ -12,6 +12,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerSwordStabState : PlayerState {
 
 		private ItemWeapon weapon;
+		
+		// True if the player allowed to hold the sword after stabbing.
+		// This is false when the player stabs a monster.
+		private bool continueHolding;
 
 
 		//-----------------------------------------------------------------------------
@@ -20,6 +24,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public PlayerSwordStabState() {
 			this.weapon = null;
+			this.continueHolding = true;
 		}
 		
 
@@ -32,6 +37,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.EquipTool(player.ToolVisual);
 			player.ToolVisual.PlayAnimation(GameData.ANIM_SWORD_STAB);
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_STAB);
+			player.ToolVisual.AnimationPlayer.SubStripIndex = player.Direction;
 		}
 		
 		public override void OnEnd(PlayerState newState) {
@@ -44,7 +50,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			base.Update();
 
 			if (player.Graphics.IsAnimationDone) {
-				if (weapon.IsEquipped && weapon.IsButtonDown()) {
+				if (weapon.IsEquipped && continueHolding && weapon.IsButtonDown()) {
 					// Continue holding sword.
 					player.BeginState(Player.HoldSwordState);
 				}
@@ -64,6 +70,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public ItemWeapon Weapon {
 			get { return weapon; }
 			set { weapon = value; }
+		}
+
+		public bool ContinueHoldingSword {
+			get { return continueHolding; }
+			set { continueHolding = value; }
 		}
 	}
 }

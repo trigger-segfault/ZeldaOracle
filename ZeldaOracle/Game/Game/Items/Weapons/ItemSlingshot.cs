@@ -10,6 +10,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Items.Ammos;
+using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 
@@ -97,11 +98,10 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			Player.ToolVisual.AnimationPlayer.SubStripIndex = direction;
 
 			// Begin the player busy state.
-			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 			Player.BusyState.SetEndAction(delegate(PlayerState playerState) {
 				playerState.Player.UnequipTool(playerState.Player.ToolVisual);
 			});
-			Player.BeginBusyState(10);
+			Player.BeginBusyState(10, GameData.ANIM_PLAYER_THROW, GameData.ANIM_PLAYER_MINECART_THROW);
 		}
 
 		// Draws the item inside the inventory.

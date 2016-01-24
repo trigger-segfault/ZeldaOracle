@@ -59,8 +59,12 @@ namespace ZeldaOracle.Common.Scripts {
 
 				// Display the line of the script.
 				Console.WriteLine(line);
-				for (int i = 1; i < columnNumber; i++)
-					Console.Write(' ');
+				for (int i = 1; i < columnNumber; i++) {
+					if (line[i - 1] == '\t')
+						Console.Write('\t');
+					else
+						Console.Write(' ');
+				}
 				Console.WriteLine('^');
 				Console.WriteLine("------------------------------------------------------------------");
 			}

@@ -166,6 +166,7 @@ namespace ZeldaOracle.Game.Main {
 		// Called every step to update the game.
 		public void Update(float timeDelta) {
 
+			// DEBUG: Ctrl+R to restar the game.
 			if (Keyboard.IsKeyPressed(Keys.R) && Keyboard.IsKeyDown(Keys.LControl)) {
 				while (gameStateStack.Count > 1)
 					gameStateStack.Pop();
@@ -210,7 +211,7 @@ namespace ZeldaOracle.Game.Main {
 			g.SetRenderTarget(null);
 			g.ResetTranslation();
 			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
-			g.DrawImage(GameData.RenderTargetGame, Vector2F.Zero, Vector2F.Zero, (Vector2F) gameScale, 0.0);
+			g.DrawImage(GameData.RenderTargetGame, Vector2F.Zero, Vector2F.Zero, new Vector2F(gameScale, gameScale), 0.0);
 			g.End();
 		}
 

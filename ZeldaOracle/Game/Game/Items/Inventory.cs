@@ -28,6 +28,9 @@ namespace ZeldaOracle.Game.Items {
 		// The number of slots to equip player items.
 		public const int NumEquipSlots = 2;
 
+		public const int SLOT_A = 0;
+		public const int SLOT_B = 1;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor

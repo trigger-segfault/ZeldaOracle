@@ -4,50 +4,61 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game.Tiles.Custom {
-	public class TileReward : Tile {
+	public class TileReward : Tile, ZeldaAPI.Reward {
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public TileReward() { }
+		
 
+		//-----------------------------------------------------------------------------
+		// Reward Methods
+		//-----------------------------------------------------------------------------
+
+		public void SpawnReward() {
+			if (!IsLooted) {
+				string rewardName = Properties.GetString("reward", "rupees_1");
+				Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
+				
+				CollectibleReward collectible = new CollectibleReward(reward);
+				collectible.Collected += delegate() {
+					Properties.SetBase("looted", true);
+				};
+
+				// Spawn the reward collectible.
+				RoomControl.SpawnEntity(collectible);
+				collectible.SetPositionByCenter(Center);
+				if (Properties.GetBoolean("spawn_from_ceiling", false))
+					collectible.ZPosition = Center.Y + 8;
+			}
+		}
+		
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		// Called when the player touches any part of the tile area.
-		public override void OnTouch() {
-			if (RoomControl.Player.IsOnGround) {
-				// Give the player the reward.
-				string rewardName = Properties.GetString("reward", "rupees_1");
-				Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
-				RoomControl.GameControl.PushRoomState(new RoomStateReward(reward));
-				Properties.SetBase("looted", true);
-				// Remove the useless tile.
-				RoomControl.RemoveTile(this);
-			}
-		}
-
 		public override void OnInitialize() {
 			base.OnInitialize();
 
-			if (Properties.GetBoolean("looted", false)) {
-				RoomControl.RemoveTile(this);
-			}
-			else {
-				// Change the sprite to the reward.
-				string rewardName = Properties.GetString("reward", "rupees_1");
-				Reward reward = RoomControl.GameControl.RewardManager.GetReward(rewardName);
-				CustomSprite = reward.Animation;
-			}
+			SpawnReward();
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public bool IsLooted {
+			get { return Properties.GetBoolean("looted", false); }
+		}
 	}
 }

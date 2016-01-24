@@ -144,6 +144,6 @@ TILE (10, 6); SOLID inside_corner_nw; END;
 
 # FLOWERS TILE
 
-TILE (2, 15); FLAGS diggable; SPRITE flowers; END;
+TILE (2, 15); FLAGS Digable; SPRITE flowers; END;
 
 END;

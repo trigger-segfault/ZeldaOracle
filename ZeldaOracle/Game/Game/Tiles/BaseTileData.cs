@@ -11,10 +11,12 @@ namespace ZeldaOracle.Game.Tiles {
 
 	public abstract class BaseTileData {
 		
-		protected Type				type;
-		protected Tileset			tileset;
-		protected Point2I			sheetLocation;	// Location on a tileset.
-		protected Properties		properties;
+		protected Type type;
+		protected Tileset tileset;
+		protected Point2I sheetLocation;	// TODO: remove this, maybe?
+		protected Properties properties;
+		protected ObjectEventCollection events;
+		private string name;
 
 		
 		//-----------------------------------------------------------------------------
@@ -22,19 +24,27 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public BaseTileData() {
-			type				= null;
-			tileset				= null;
-			sheetLocation		= Point2I.Zero;
-			properties			= new Properties();
+			name			= "";
+			type			= null;
+			tileset			= null;
+			sheetLocation	= Point2I.Zero;
+			properties		= new Properties();
+			events			= new ObjectEventCollection();
 
-			properties.Set("id", "")
-				.SetDocumentation("ID", "", "", "",
-				"The id used to refer to this tile.", true, false);
-			properties.Set("sprite_index", 0)
-				.SetDocumentation("Sprite Index", "sprite_index", "", "Internal",
+			properties.Set("id", "");
+			properties.SetDocumentation("id", "ID", "", "", "General",
+				"The id used to refer to this tile.");
+
+			properties.Set("enabled", true);
+			properties.SetDocumentation("enabled", "Enabled", "", "", "General",
+				"True if the tile is spawned upon entering the room.");
+
+			properties.Set("sprite_index", 0);
+			properties.SetDocumentation("sprite_index", "Sprite Index", "sprite_index", "", "Internal",
 				"The current sprite in the sprite list to draw.", true, true);
-			properties.Set("substrip_index", 0)
-				.SetDocumentation("Animation Substrip Index", "", "", "Internal",
+
+			properties.Set("substrip_index", 0);
+			properties.SetDocumentation("substrip_index", "Animation Substrip Index", "", "", "Internal",
 				"The index of the substrip for dynamic animations.", true, true);
 		}
 
@@ -43,13 +53,13 @@ namespace ZeldaOracle.Game.Tiles {
 			tileset				= copy.tileset;
 			sheetLocation		= copy.sheetLocation;
 			properties			= new Properties();
-			properties.Merge(copy.properties, true);
+			properties.SetAll(copy.properties);
 		}
 
 		public virtual void Clone(BaseTileData copy) {
 			type		= copy.type;
-			properties	= new Properties();
-			properties.Merge(copy.properties, true);
+			properties	= new Properties(copy.properties);
+			//properties.SetAll(copy.properties);
 		}
 		
 		
@@ -98,6 +108,15 @@ namespace ZeldaOracle.Game.Tiles {
 		public Properties Properties {
 			get { return properties; }
 			set { properties = value; }
+		}
+
+		public ObjectEventCollection Events {
+			get { return events; }
+		}
+
+		public string Name {
+			get { return name; }
+			set { name = value; }
 		}
 	}
 }

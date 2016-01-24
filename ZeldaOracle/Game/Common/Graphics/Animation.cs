@@ -44,6 +44,13 @@ namespace ZeldaOracle.Common.Graphics {
 
 			this.frames.Add(new AnimationFrame(0, 0, sprite));
 		}
+		
+		public Animation(LoopMode loopMode) {
+			this.frames		= new List<AnimationFrame>();
+			this.duration	= 0;
+			this.nextStrip	= null;
+			this.loopMode	= loopMode;
+		}
 
 		public Animation(Animation copy) {
 			frames		= new List<AnimationFrame>();

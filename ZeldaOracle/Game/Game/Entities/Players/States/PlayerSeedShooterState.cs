@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
+
 	public class PlayerSeedShooterState : PlayerState {
 
 		private const int SHOOT_WAIT_TIME = 12;
@@ -60,6 +63,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					spawnOffset, 5);
 				weapon.SeedTracker.TrackEntity(seed);
 				weapon.UseAmmo();
+				
+				AudioSystem.PlaySound(GameData.SOUND_SEED_SHOOTER);
 
 				// Begin shooting.
 				isShooting = true;
@@ -89,12 +94,20 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.EquipTool(player.ToolVisual);
 			player.ToolVisual.PlayAnimation(GameData.ANIM_SEED_SHOOTER);
 			player.ToolVisual.AnimationPlayer.SubStripIndex = angle;
+
+			if (player.IsInMinecart) {
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MINECART_AIM);
+			}
 		}
 		
 		public override void OnEnd(PlayerState newState) {
 			player.UnequipTool(player.ToolVisual);
 			player.SyncAnimationWithDirection	= true;
 			player.Movement.MoveCondition		= PlayerMoveCondition.FreeMovement;
+		}
+
+		public override void OnExitMinecart() {
+			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_AIM);
 		}
 
 		public override void Update() {

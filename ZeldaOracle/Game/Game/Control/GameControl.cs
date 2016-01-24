@@ -5,7 +5,10 @@ using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.Control.Maps;
 using ZeldaOracle.Game.Control.Menus;
+using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Debug;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
@@ -23,7 +26,7 @@ using ZeldaOracle.Game.Worlds;
 namespace ZeldaOracle.Game.Control {
 
 	// The main control for the current game session.
-	public class GameControl {
+	public class GameControl : ZeldaAPI.Game {
 
 		private GameManager		gameManager;
 		private RoomControl		roomControl;
@@ -38,11 +41,14 @@ namespace ZeldaOracle.Game.Control {
 		private int				roomTicks; // The total number of ticks elapsed since the game was started (used for animation).
 		private bool			updateRoom;
 		private bool			animateRoom;
+		private ScriptRunner	scriptRunner;
+		private Room			lastRoomOnMap;
 
 		// Menus
 		private MenuWeapons			menuWeapons;
 		private MenuSecondaryItems	menuSecondaryItems;
 		private MenuEssences		menuEssences;
+		private ScreenDungeonMap	mapDungeon;
 
 
 		//-----------------------------------------------------------------------------
@@ -65,6 +71,7 @@ namespace ZeldaOracle.Game.Control {
 			this.menuWeapons		= null;
 			this.menuSecondaryItems	= null;
 			this.menuEssences		= null;
+			this.scriptRunner		= null;
 		}
 
 
@@ -72,10 +79,20 @@ namespace ZeldaOracle.Game.Control {
 		// Methods
 		//-----------------------------------------------------------------------------
 
+		public void LoadWorld(string fileName) {
+			WorldFile worldFile = new WorldFile();
+			World world = worldFile.Load(fileName);
+			LoadWorld(world);
+		}
+
+		public void LoadWorld(World world) {
+			this.world = world;
+
+			scriptRunner.OnLoadWorld(world);
+		}
+
 		// Start a new game.
 		public void StartGame() {
-			roomTicks = 0;
-
 			roomTicks = 0;
 
 			// Setup the player beforehand so certain classes such as the HUD can reference it
@@ -92,8 +109,10 @@ namespace ZeldaOracle.Game.Control {
 			menuEssences.PreviousMenu		= menuSecondaryItems;
 			menuEssences.NextMenu			= menuWeapons;
 
+			mapDungeon = new ScreenDungeonMap(gameManager);
+
 			GameData.LoadInventory(inventory, true);
-			
+
 			inventory.ObtainAmmo("ammo_ember_seeds");
 			inventory.ObtainAmmo("ammo_scent_seeds");
 			inventory.ObtainAmmo("ammo_pegasus_seeds");
@@ -108,11 +127,12 @@ namespace ZeldaOracle.Game.Control {
 			dropManager = new DropManager(this);
 			GameData.LoadDrops(dropManager, rewardManager);
 
+			// Create the script runner.
+			scriptRunner = new ScriptRunner(this);
+
 			// Create the room control.
 			roomControl = new RoomControl();
 			gameManager.PushGameState(roomControl);
-
-			// Create the test world.
 			
 			// Load the world.
 			//WorldFile worldFile = new WorldFile();
@@ -120,9 +140,10 @@ namespace ZeldaOracle.Game.Control {
 
 			// Begin the room state.
 			if (gameManager.LaunchParameters.Length > 0) {
-				WorldFile worldFile = new WorldFile();
-				world = worldFile.Load(gameManager.LaunchParameters[0]);
+				LoadWorld(gameManager.LaunchParameters[0]);
+
 				if (gameManager.LaunchParameters.Length > 1 && gameManager.LaunchParameters[1] == "-test") {
+					// Launch parameters can define player's start position.
 					int startLevel = Int32.Parse(gameManager.LaunchParameters[2]);
 					int startRoomX = Int32.Parse(gameManager.LaunchParameters[3]);
 					int startRoomY = Int32.Parse(gameManager.LaunchParameters[4]);
@@ -142,17 +163,59 @@ namespace ZeldaOracle.Game.Control {
 			else {
 				//WorldFile worldFile = new WorldFile();
 				//world = worldFile.Load("temp_world.zwd");
-				world = GameDebug.CreateTestWorld();
+				LoadWorld(GameDebug.CreateTestWorld());
 				player.SetPositionByCenter(world.StartTileLocation * GameSettings.TILE_SIZE + new Point2I(8, 8));
 				player.MarkRespawn();
 				roomControl.BeginRoom(world.StartRoom);
 			}
 			roomStateStack = new RoomStateStack(new RoomStateNormal());
 			roomStateStack.Begin(this);
+			
+			if (!roomControl.Room.IsHiddenFromMap)
+				lastRoomOnMap = roomControl.Room;
 
-			AudioSystem.MasterVolume = 0.06f;
+			AudioSystem.MasterVolume = 0.04f; // The way David likes it.
 		}
 		
+
+		//-----------------------------------------------------------------------------
+		// Scripts
+		//-----------------------------------------------------------------------------
+		
+		public void FireEvent(IPropertyObject caller, string eventName, params object[] parameters) {
+			//ObjectEvent objectEvent = caller.Events.GetEvent(eventName);
+			//if (objectEvent != null) {
+			ExecuteScript(caller.Properties.GetString(eventName, ""), parameters);
+			//}
+		}
+
+		// Execute a script with the given name.
+		public void ExecuteScript(string name, params object[] parameters) {
+			if (!String.IsNullOrEmpty(name)) {
+				Script script = world.GetScript(name);
+				
+				if (script != null) {
+					ExecuteScript(script, parameters);
+				}
+				else {
+					Console.WriteLine("Error trying to execute non-existent script '" + name + "'");
+				}
+			}
+		}
+
+		// Execute a script.
+		public void ExecuteScript(Script script, params object[] parameters) {
+			if (script != null) {
+				Console.WriteLine("Executing script " + script.Name);
+				
+				// Only internal scripts take in parameters.
+				if (script.IsHidden)
+					scriptRunner.RunScript(script.Name, parameters);
+				else
+					scriptRunner.RunScript(script.Name, new object[] {});
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Text Messages
@@ -167,7 +230,9 @@ namespace ZeldaOracle.Game.Control {
 		}
 		
 		public void DisplayMessage(Message message, Action completeAction) {
-			PushRoomState(new RoomStateQueue(new RoomStateTextReader(message), new RoomStateAction(completeAction)));
+			PushRoomState(new RoomStateQueue(
+				new RoomStateTextReader(message),
+				new RoomStateAction(completeAction)));
 		}
 
 		public void DisplayMessage(string text, Action completeAction) {
@@ -189,7 +254,7 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public void OpenMenu(Menu menu) {
-			AudioSystem.PlaySound("UI/menu_open");
+			AudioSystem.PlaySound(GameData.SOUND_MENU_OPEN);
 			gameManager.QueueGameStates(
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, roomControl),
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, menu),
@@ -201,7 +266,7 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public void CloseMenu(Menu menu) {
-			AudioSystem.PlaySound("UI/menu_close");
+			AudioSystem.PlaySound(GameData.SOUND_MENU_CLOSE);
 			gameManager.PopGameState();
 			gameManager.QueueGameStates(
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, menu),
@@ -211,6 +276,31 @@ namespace ZeldaOracle.Game.Control {
 			menuWeapons.OnClose();
 			menuSecondaryItems.OnClose();
 			menuEssences.OnClose();
+		}
+
+		public void OpenMapScreen() {
+			if (lastRoomOnMap != null && lastRoomOnMap.Dungeon != null) {
+				ScreenDungeonMap mapScreen = mapDungeon;
+				AudioSystem.PlaySound(GameData.SOUND_MENU_OPEN);
+				gameManager.QueueGameStates(
+					new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, roomControl),
+					new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, mapScreen),
+					mapScreen
+				);
+				mapScreen.OnOpen();
+			}
+		}
+
+		public void CloseMapScreen() {
+			ScreenDungeonMap mapScreen = gameManager.CurrentGameState as ScreenDungeonMap;
+			AudioSystem.PlaySound(GameData.SOUND_MENU_CLOSE);
+			gameManager.PopGameState();
+			gameManager.QueueGameStates(
+				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, mapScreen),
+				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, roomControl),
+				roomControl
+			);
+			mapScreen.OnClose();
 		}
 
 
@@ -259,7 +349,23 @@ namespace ZeldaOracle.Game.Control {
 		// Gets the current room control.
 		public RoomControl RoomControl {
 			get { return roomControl; }
-			set { roomControl = value; }
+			set {
+				Level oldLevel = roomControl.Level;
+				roomControl = value;
+
+				if (!roomControl.Room.IsHiddenFromMap)
+					lastRoomOnMap = roomControl.Room;
+
+				// Respawn all monsters in the previous level.
+				if (roomControl.Level != oldLevel) {
+					foreach (Room room in oldLevel.GetRooms())
+						room.RespawnMonsters();
+				}
+			}
+		}
+
+		public Room LastRoomOnMap {
+			get { return lastRoomOnMap; }
 		}
 
 		// Gets the world.

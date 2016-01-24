@@ -14,6 +14,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
+using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 
 namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
@@ -22,19 +23,21 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		
 		private const int SWING_SWORD_BEAM_DELAY = 6;
 
+		// True if the player allowed to hold the sword after swinging.
+		// This turns false when the player slashes a monster.
+		private bool allowHold;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public PlayerSwingSwordState() {
+			allowHold				= true;
 			limitTilesToDirection	= true;
-			isReswingable			= true;
-			lunge					= true;
-			swingAnglePullBack		= 2;
-			swingAngleDurations		= new int[] { 3, 3, 12 };
-			weaponSwingAnimation	= GameData.ANIM_SWORD_SWING;
-			playerSwingAnimation	= GameData.ANIM_PLAYER_SWING;
+			
+			InitStandardSwing(GameData.ANIM_SWORD_SWING,
+							  GameData.ANIM_PLAYER_MINECART_SWING);
 			AddTimedAction(SWING_SWORD_BEAM_DELAY, SpawnSwordBeam);
 		}
 
@@ -65,6 +68,8 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			
 				player.RoomControl.SpawnEntity(beam);
 				itemSword.BeamTracker.TrackEntity(beam);
+				
+				AudioSystem.PlaySound(GameData.SOUND_SWORD_BEAM);
 			}
 		}
 
@@ -73,14 +78,48 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
+		public override void OnBegin(PlayerState previousState) {
+			if (player.IsInMinecart) {
+				weaponSwingAnimation			= GameData.ANIM_SWORD_MINECART_SWING;
+				playerSwingAnimation			= GameData.ANIM_PLAYER_SWING_NOLUNGE;
+				playerSwingAnimationInMinecart	= GameData.ANIM_PLAYER_MINECART_SWING_NOLUNGE;
+				allowHold						= false;
+			}
+			else {
+				weaponSwingAnimation			= GameData.ANIM_SWORD_SWING;
+				playerSwingAnimation			= GameData.ANIM_PLAYER_SWING;
+				playerSwingAnimationInMinecart	= GameData.ANIM_PLAYER_MINECART_SWING;
+			}
+			base.OnBegin(previousState);
+		}
+
 		public override void OnSwingBegin() {
 			base.OnSwingBegin();
-			AudioSystem.PlayRandomSound("Items/slash_1", "Items/slash_2", "Items/slash_3");
+			allowHold = !(player.IsInMinecart);
+			AudioSystem.PlayRandomSound(
+				GameData.SOUND_SWORD_SLASH_1,
+				GameData.SOUND_SWORD_SLASH_2,
+				GameData.SOUND_SWORD_SLASH_3);
 		}
 
 		public override void OnSwingEnd() {
-			player.HoldSwordState.Weapon = Weapon;
-			player.BeginState(player.HoldSwordState);
+			// Begin holding the sword after swinging.
+			if (!player.IsInMinecart && allowHold && Weapon.IsEquipped && Weapon.IsButtonDown()) {
+				player.HoldSwordState.Weapon = Weapon;
+				player.BeginState(player.HoldSwordState);
+			}
+			else
+				base.OnSwingEnd();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public bool AllowSwordHold {
+			get { return allowHold; }
+			set { allowHold = false; }
 		}
 	}
 }

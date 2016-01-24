@@ -17,6 +17,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaEditor.Control;
 
 namespace ZeldaEditor {
+
 	public class TileDisplay : GraphicsDeviceControl {
 
 		private static ContentManager content;
@@ -147,8 +148,7 @@ namespace ZeldaEditor {
 							int spacing = 1;
 							Vector2F drawPos = new Vector2F(x, y) * (Tileset.CellSize + spacing);
 							SpriteAnimation spr = tileData.Sprite;
-
-
+							
 							int imageVariantID = tileData.Properties.GetInteger("image_variant", Zone.ImageVariantID);
 							if (imageVariantID < 0)
 								imageVariantID = Zone.ImageVariantID;
@@ -157,7 +157,7 @@ namespace ZeldaEditor {
 								spr.Animation = spr.Animation.GetSubstrip(substripIndex);
 							}
 
-							g.DrawAnimation(tileData.Sprite, Zone.ImageVariantID, 0.0f, drawPos, Color.White);
+							g.DrawAnimation(tileData.Sprite, imageVariantID, 0.0f, drawPos, Color.White);
 						}
 					}
 				}
@@ -201,6 +201,7 @@ namespace ZeldaEditor {
 		public ITileset Tileset {
 			get { return editorControl.Tileset; }
 		}
+
 		public Zone Zone {
 			get { return editorControl.Zone; }
 		}

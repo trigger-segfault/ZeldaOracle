@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Players.States;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 
@@ -59,9 +60,10 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				Directions.ToVector(Player.Direction) * 8.0f);
 			arrowTracker.TrackEntity(arrow);
 
+			AudioSystem.PlaySound(GameData.SOUND_SHOOT_PROJECTILE);
+
 			// Begin the busy state.
-			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
-			Player.BeginBusyState(10);
+			Player.BeginBusyState(10, GameData.ANIM_PLAYER_THROW, GameData.ANIM_PLAYER_MINECART_THROW);
 		}
 
 		// Called when the item is added to the inventory list.

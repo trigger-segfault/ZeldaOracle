@@ -6,16 +6,8 @@ using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 
-
-/*
- *	DEBUG KEYS:
- *		- 1: Speed up the game.
- *		- G: Read text.
- *		- V: (When reading text) skip to next line.
- *		- Z: Fire an arrow.
-*/
-
 namespace ZeldaOracle.Game {
+
 	public class GameSettings {
 		
 		// World
@@ -53,7 +45,9 @@ namespace ZeldaOracle.Game {
 		public const int				COLLECTIBLE_FAIRY_HOVER_HEIGHT			= 8;
 
 		// Projectiles and Items
+		public static readonly float[]	BRACELET_PUSH_SPEEDS					= { 0.5f, 1.0f };
 		public const float				PROJECTILE_ARROW_SPEED					= 3.0f;
+		public const int				PROJECTILE_ARROW_DAMAGE					= 1;
 		public const float				PROJECTILE_SWORD_BEAM_SPEED				= 3.0f;
 		public const float				PROJECTILE_MAGIC_ROD_FIRE_SPEED			= 2.0f;
 		public static readonly float[]	PROJECTILE_BOOMERANG_SPEEDS				= { 1.5f, 3.0f };
@@ -68,6 +62,8 @@ namespace ZeldaOracle.Game {
 		public const float				SEED_SHOOTER_SHOOT_SPEED				= 3.0f;
 		public const int				SCENT_POD_DURATION						= 240;
 		public const int				SCENT_POD_FADE_DELAY					= 60;
+		public const int				BOMB_FUSE_TIME							= 108;
+		public const int				BOMB_FLICKER_DELAY						= 72;
 
 		// Units
 		public const float				UNIT_KNOCKBACK_SPEED			= 1.0f; // 1.3 ??
@@ -105,12 +101,18 @@ namespace ZeldaOracle.Game {
 		public const float				PLAYER_CAPE_GRAVITY				= 0.04f;	// 0.04 = 1/25
 		public const int				PLAYER_SPRINT_DURATION			= 480;
 		public const float				PLAYER_SPRINT_SPEED_SCALE		= 1.5f;
+		public const int				PLAYER_SPRINT_EFFECT_INTERVAL	= 10;
+		public const float				PLAYER_DEFAULT_PUSH_SPEED		= 0.5f;
 
 		// Monsters
 		public const int				MONSTER_STUN_DURATION		= 400;	// How long a monster gets stunned for (by boomerang/pegasus seeds).
 		public const int				MONSTER_STUN_SHAKE_DURATION	= 60;	// How long the monster shakes at the end of being stunned.
+		public const int				MONSTER_BOOMERANG_DAMAGE	= 1;
 
-		// Graphics.
+		// Tiles
+		public const int				TILE_CRACKED_FLOOR_CRUMBLE_DELAY	= 30;
+		public const float				TILE_ROLLER_MOVE_SPEED				= 0.5f;
+
 
 
 		//-----------------------------------------------------------------------------

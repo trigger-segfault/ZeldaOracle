@@ -58,6 +58,13 @@ namespace ZeldaOracle.Common.Scripts {
 			return GetParam(index).Boolean;
 		}
 		
+
+		public bool GetBool(int index, bool defaultValue) {
+			if (index < count)
+				return GetParam(index).Boolean;
+			return defaultValue;
+		}
+		
 		public int GetInt(int index) {
 			return GetParam(index).Integer;
 		}
@@ -71,6 +78,13 @@ namespace ZeldaOracle.Common.Scripts {
 			if (p.type == CommandParamType.Array && p.Count == 2)
 				return new Point2I(p.GetInt(0), p.GetInt(1));
 			return Point2I.Zero;
+		}
+		
+		public Vector2F GetVector(int index) {
+			CommandParam p = GetParam(index);
+			if (p.type == CommandParamType.Array && p.Count == 2)
+				return new Vector2F(p.GetFloat(0), p.GetFloat(1));
+			return Vector2F.Zero;
 		}
 		
 		public Point2I GetPoint(int index, Point2I defaultValue) {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
@@ -10,10 +11,6 @@ using ZeldaOracle.Game.Entities.Projectiles;
 namespace ZeldaOracle.Game.Tiles {
 
 	public class TileRoller : Tile {
-
-		private AnimationPlayer animationPlayer;
-
-		private const float MOVEMENT_SPEED = 0.5f;
 
 		private int returnTimer;
 
@@ -53,8 +50,11 @@ namespace ZeldaOracle.Game.Tiles {
 			// Only the main roller should start the pushback.
 			if (firstRoller == this)
 				returnTimer = 60;
-
-			base.Move(direction, 1, MOVEMENT_SPEED);
+			
+			if (base.Move(direction, 1, GameSettings.TILE_ROLLER_MOVE_SPEED)) {
+				if (firstRoller == this)
+					AudioSystem.PlaySound(GameData.SOUND_BLUE_ROLLER);
+			}
 		}
 
 		// Makes sure all rollers in the group can be pushed in the same direction.
@@ -71,7 +71,7 @@ namespace ZeldaOracle.Game.Tiles {
 			int newLayer = -1;
 			for (int i = 0; i < RoomControl.Room.LayerCount; i++) {
 				Tile t = RoomControl.GetTile(newLocation.X, newLocation.Y, i);
-				if (t != null && (t.Flags.HasFlag(TileFlags.Solid) || t.Flags.HasFlag(TileFlags.NotCoverable)))
+				if (t != null && (t.IsSolid || t.Flags.HasFlag(TileFlags.NotCoverable)))
 					return false;
 				if (t == null && newLayer != Layer)
 					newLayer = i;
@@ -205,7 +205,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		private bool IsVertical {
-			get { return SpecialFlags.HasFlag(TileSpecialFlags.VerticalRoller); }
+			get { return Properties.GetBoolean("vertical", false); }
 		}
 	}
 }

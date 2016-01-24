@@ -87,6 +87,8 @@ namespace ZeldaOracle.Game.Items {
 		//-----------------------------------------------------------------------------
 		
 		public virtual bool IsUsable() {
+			if (Player.IsInMinecart && !flags.HasFlag(ItemFlags.UsableInMinecart))
+				return false;
 			if (Player.IsInAir && !flags.HasFlag(ItemFlags.UsableWhileJumping))
 				return false;
 			if (Player.Physics.IsInHole && !flags.HasFlag(ItemFlags.UsableWhileInHole))

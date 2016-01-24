@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Translation;
@@ -44,6 +45,9 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		// The timer used to update the arrow sprite.
 		private int arrowTimer;
 
+		private int wordIndex;
+
+
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
@@ -81,6 +85,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			timer = 1;
 			state = TextReaderState.WritingLine;
 			windowLinesLeft = linesPerWindow;
+			wordIndex = 0;
 		}
 
 		public override void Update() {
@@ -90,6 +95,19 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			else {
 				switch (state) {
 				case TextReaderState.WritingLine:
+						
+
+						char c = wrappedString.Lines[currentLine][currentChar].Char;
+						bool isLetter = (c != ' ');
+						if (AudioSystem.IsSoundPlaying(GameData.SOUND_TEXT_CONTINUE))
+							wordIndex = 0;
+						else {
+							if (isLetter && (wordIndex % 2) == 0)
+								AudioSystem.PlaySound(GameData.SOUND_TEXT_LETTER);
+							if (isLetter)
+								wordIndex++;
+						}
+
 					currentChar++;
 					if (Controls.A.IsPressed() || Controls.B.IsPressed())
 						currentChar = wrappedString.Lines[currentLine].Length;
@@ -138,6 +156,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 						windowLinesLeft = linesPerWindow;
 						currentChar = 0;
 						currentLine++;
+						AudioSystem.PlaySound(GameData.SOUND_TEXT_CONTINUE);
 					}
 					break;
 				case TextReaderState.PressToEndParagraph:

@@ -11,6 +11,10 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Units;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
+using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Game.Entities.Monsters.States;
+using ZeldaOracle.Game.Entities.Projectiles.Seeds;
+using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 	
@@ -27,10 +31,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		GaleSeed,				// Hit by a gale seed.
 		MysterySeed,			// Hit by a mystery seed.
 		Fire,					// Touches fire.
+		Gale,					// Touches gale.
 		Arrow,					// Hit by an arrow.
 		SwordBeam,				// Hit by a sword beam projectile.
 		RodFire,				// Hit by a projectile from the fire-rod.
 		Sword,					// Hit by a sword.
+		SwordSpin,				// Hit by a spinning sword.
 		BiggoronSword,			// Hit by a biggoron sword.
 		Boomerang,				// Hit by a boomerang.
 		BombExplosion,			// Hit by a bomb explosion.
@@ -43,13 +49,14 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		Parry,
 		PlayerContact,
 
-		SwordHitShield,			// Their sword hits my shield.
-		BiggoronSwordHitShield,	// Their biggoron sword hits my shield.
-		ShieldHitShield,		// Their shield hits my shield.
-
 		ThrownObject,			// Hit by a thrown object (thrown tiles, not bombs).
 		MineCart,				// Hit by a minecart.
 		Block,					// Hit by a block (either moving or spawned on top of).
+
+		// UNUSED:
+		SwordHitShield,			// Their sword hits my shield.
+		BiggoronSwordHitShield,	// Their biggoron sword hits my shield.
+		ShieldHitShield,		// Their shield hits my shield.
 
 		Count,
 	};
@@ -182,20 +189,53 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Bump the monster.
 			public static void Bump(Monster monster, Entity sender, EventArgs args) {
+				AudioSystem.PlaySound(GameData.SOUND_BOMB_BOUNCE);
 				monster.Bump(sender.Center);
+			}
+
+			// Bump the monster and sender.
+			public static void Parry(Monster monster, Entity sender, EventArgs args) {
+				monster.Bump(sender.Center);
+				Unit unitSender = sender as Unit;
+
+				if (unitSender != null && !unitSender.IsBeingKnockedBack) {
+					unitSender.Bump(monster.Center);
+					AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
+				}
+			}
+
+			// Bump the monster and sender.
+			public static void ParryWithClingEffect(Monster monster, Entity sender, EventArgs args) {
+				monster.Bump(sender.Center);
+				Unit unitSender = sender as Unit;
+
+				if (unitSender != null && !unitSender.IsBeingKnockedBack && !monster.IsBeingKnockedBack) {
+					unitSender.Bump(monster.Center);
+					AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
+					
+					Effect effect = new EffectCling();
+					Vector2F effectPos = (monster.Center + sender.Center) * 0.5f;
+					if (args is InteractionArgs)
+						effectPos = (args as InteractionArgs).ContactPoint;
+					monster.RoomControl.SpawnEntity(effect, effectPos);
+				}
 			}
 			
 			// Burn the monster for 1 damage.
 			public static void Burn(Monster monster, Entity sender, EventArgs args) {
 				monster.Burn(1);
+				if (sender is Fire)
+					sender.Destroy();
 			}
 			
 			// Stun the monster.
 			public static void Stun(Monster monster, Entity sender, EventArgs args) {
+				monster.Stun();
 			}
 			
 			// Send the monster in a gale.
 			public static void Gale(Monster monster, Entity sender, EventArgs args) {
+				monster.EnterGale((EffectGale) sender);
 			}
 			
 			// Trigger a random seed effect.
@@ -220,6 +260,19 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			public static void SwitchHook(Monster monster, Entity sender, EventArgs args) {
 				SwitchHookProjectile hook = sender as SwitchHookProjectile;
 				hook.SwitchWithEntity(monster);
+				monster.BeginState(new MonsterBusyState(20));
+			}
+			
+			// Stun the monster.
+			public static void ClingEffect(Monster monster, Entity sender, EventArgs args) {
+				Effect effect = new EffectCling();
+				
+				Vector2F effectPos = (monster.Center + sender.Center) * 0.5f;
+				if (args is InteractionArgs)
+					effectPos = (args as InteractionArgs).ContactPoint;
+
+				monster.RoomControl.SpawnEntity(effect, effectPos);
+				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 			}
 			
 

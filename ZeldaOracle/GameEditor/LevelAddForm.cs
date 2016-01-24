@@ -14,14 +14,19 @@ using ZeldaOracle.Common.Content;
 namespace ZeldaEditor {
 	public partial class LevelAddForm : Form {
 
-		public LevelAddForm() {
+		private World world;
+
+
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
+
+		public LevelAddForm(World world) {
 			InitializeComponent();
 
-			buttonAdd.DialogResult		= DialogResult.OK;
-			buttonCancel.DialogResult	= DialogResult.Cancel;
+			this.world = world;
 
 			comboBoxRoomSize.SelectedIndex = 0;
-
 
 			comboBoxZone.Items.Clear();
 
@@ -30,6 +35,42 @@ namespace ZeldaEditor {
 			}
 			comboBoxZone.SelectedIndex = 0;
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Level Methods
+		//-----------------------------------------------------------------------------
+
+		public Level CreateLevel() {
+			return null;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Form Events
+		//-----------------------------------------------------------------------------
+
+		private void buttonAdd_Click(object sender, EventArgs e) {
+			// Verify the ID is unique.
+			if (world.GetLevel(textBoxLevelName.Text) != null) {
+				MessageBox.Show("A level with the ID '" + textBoxLevelName.Text + "' already exists!",
+					Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+			}
+			else {
+				DialogResult = DialogResult.OK;
+				Close();
+			}
+		}
+
+		private void buttonCancel_Click(object sender, EventArgs e) {
+			DialogResult = DialogResult.Cancel;
+			Close();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
 
 		public string LevelName {
 			get { return textBoxLevelName.Text; }

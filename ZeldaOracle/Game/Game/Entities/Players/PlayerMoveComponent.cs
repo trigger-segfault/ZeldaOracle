@@ -16,6 +16,7 @@ using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Input.Controls;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Players {
 	
@@ -186,6 +187,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public void Jump() {
+
 			if (player.IsOnGround) {
 				// Allow initial jump movement if only can move in air.
 				if (moveCondition != PlayerMoveCondition.NoControl && !mode.IsSlippery) {
@@ -207,6 +209,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 				player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
 				if (player.CurrentState is PlayerNormalState)
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_JUMP);
+				
+				player.OnJump();
 			}
 			else {
 				if (player.CurrentState is PlayerNormalState)
@@ -214,13 +219,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 		}
 
+		// Deploy Roc's Cape.
 		public void DeployCape() {
-			// 23 frame delay from jump start
 			if (player.IsInAir && !isCapeDeployed && player.Physics.ZVelocity -
 				GameSettings.DEFAULT_GRAVITY <= -GameSettings.PLAYER_CAPE_REQUIRED_FALLSPEED)
 			{
+				isCapeDeployed = true;
 				player.Physics.ZVelocity = GameSettings.PLAYER_CAPE_JUMP_SPEED + GameSettings.PLAYER_CAPE_GRAVITY;
-				 isCapeDeployed = true;
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_THROW);
 				if (player.CurrentState is PlayerNormalState)
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CAPE);
 			}
@@ -267,15 +273,19 @@ namespace ZeldaOracle.Game.Entities.Players {
 			else if (player.IsInAir && player.Physics.ZVelocity >= 0.1f)
 				allowMovementControl = false;
 
+			// Player can ALWAYS change directions when in a minecart.
+			if (player.IsInMinecart)
+				allowMovementControl = true;
+
 			// Check movement input.
 			Vector2F keyMoveVector = PollMovementKeys(allowMovementControl);
-				
+			
 			// Don't affect the facing direction when strafing
 			if (!isStrafing && !mode.IsStrafing && isMoving)
 				player.Direction = moveDirection;
 
 			// Update movement or acceleration.
-			if (allowMovementControl && (isMoving || autoAccelerate)) {
+			if (allowMovementControl && (isMoving || autoAccelerate) && !player.IsInMinecart) {
 				if (!isMoving)
 					moveAngle = Directions.ToAngle(player.Direction);
 
@@ -344,10 +354,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public void ChooseAnimation() {
 			// Update movement animation.
-			if (player.IsOnGround && moveCondition != PlayerMoveCondition.NoControl &&
+			if (player.IsOnGround && !player.IsInMinecart &&
+				moveCondition != PlayerMoveCondition.NoControl && 
 				(player.Graphics.Animation == player.MoveAnimation ||
 				player.Graphics.Animation == GameData.ANIM_PLAYER_DEFAULT ||
-				player.Graphics.Animation == GameData.ANIM_PLAYER_CARRY))
+				player.Graphics.Animation == GameData.ANIM_PLAYER_CARRY ||
+				player.Graphics.Animation == GameData.ANIM_PLAYER_MINECART_IDLE))
 			{
 				// Play/stop the move animation.
 				if (isMoving || isSprinting) {
@@ -457,7 +469,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 				// Fall in the hole when close to the center.
 				if (player.Center.DistanceTo(holeTile.Center) <= 1.0f) {
 					player.SetPositionByCenter(holeTile.Center);
-					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_FALL_HOLE);
+					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_FALL);
+					AudioSystem.PlaySound(GameData.SOUND_PLAYER_FALL);
 					player.RespawnDeath();
 					holeTile			= null;
 					fallingInHole		= false;
@@ -502,11 +515,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Update sprinting.
 			if (isSprinting) {
-				if (sprintTimer % 10 == 0) {
-					//Sounds.PLAYER_LAND.play();
-					player.RoomControl.SpawnEntity(
-						new Effect(GameData.ANIM_EFFECT_SPRINT_PUFF, DepthLayer.EffectSprintPuff),
-						player.Position);
+				// Create the sprint effect.
+				if (sprintTimer % GameSettings.PLAYER_SPRINT_EFFECT_INTERVAL == 0 &&
+					player.IsOnGround && player.CurrentState != player.SwimState)
+				{
+					AudioSystem.PlaySound(GameData.SOUND_PLAYER_LAND);
+					Effect sprintEffect = new Effect(GameData.ANIM_EFFECT_SPRINT_PUFF, DepthLayer.EffectSprintPuff, true);
+					player.RoomControl.SpawnEntity(sprintEffect, player.Position);
 				}
 				sprintTimer--;
 				if (sprintTimer <= 0)
@@ -515,7 +530,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Check for ledge jumping (ledges/waterfalls)
 			CollisionInfo collisionInfo = player.Physics.CollisionInfo[moveDirection];
-			if (canLedgeJump && mode.CanLedgeJump && isMoving && collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving) {
+			if (canLedgeJump && mode.CanLedgeJump && isMoving &&
+				collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving)
+			{
 				Tile tile = collisionInfo.Tile;
 				
 				if (tile.IsLedge &&

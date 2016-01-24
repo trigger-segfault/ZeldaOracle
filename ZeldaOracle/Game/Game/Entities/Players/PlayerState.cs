@@ -45,7 +45,15 @@ namespace ZeldaOracle.Game.Entities.Players
 
 		public virtual void OnLeaveRoom() {}
 
+		public virtual void OnEnterMinecart() {}
+
+		public virtual void OnExitMinecart() {}
+
+		public virtual void OnHurt(DamageInfo damage) {}
+
 		public virtual void Update() {}
+		
+		public virtual void DrawUnder(RoomGraphics g) {}
 		
 		public virtual void DrawOver(RoomGraphics g) {}
 

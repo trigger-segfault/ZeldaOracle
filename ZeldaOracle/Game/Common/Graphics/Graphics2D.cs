@@ -203,6 +203,8 @@ public class Graphics2D {
 	
 
 	public void DrawSprite(Sprite sprite, int variantID, Vector2F position, float depth = 0.0f) {
+		if (sprite.Image == null)
+			return;
 		for (Sprite part = sprite; part != null; part = part.NextPart) {
 			Image image = sprite.Image.GetVariant(variantID);
 			spriteBatch.Draw(image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
@@ -219,6 +221,8 @@ public class Graphics2D {
 	}
 
 	public void DrawSprite(Sprite sprite, Vector2F position, float depth = 0.0f) {
+		if (sprite.Image == null)
+			return;
 		for (Sprite part = sprite; part != null; part = part.NextPart) {
 			spriteBatch.Draw(part.Image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
 				XnaColor.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
@@ -230,6 +234,8 @@ public class Graphics2D {
 	}
 
 	public void DrawSprite(Sprite sprite, int variantID, Rectangle2F destination, float depth = 0.0f) {
+		if (sprite.Image == null)
+			return;
 		for (Sprite part = sprite; part != null; part = part.NextPart) {
 			Image image = sprite.Image.GetVariant(variantID);
 			destination.Point = NewPos(destination.Point) + (Vector2F) part.DrawOffset;
@@ -239,6 +245,8 @@ public class Graphics2D {
 	}
 
 	public void DrawSprite(Sprite sprite, int variantID, Vector2F position, Color color, float depth = 0.0f) {
+		if (sprite.Image == null)
+			return;
 		for (Sprite part = sprite; part != null; part = part.NextPart) {
 			Image image = sprite.Image.GetVariant(variantID);
 			spriteBatch.Draw(image, NewPos(position) + (Vector2)part.DrawOffset, (Rectangle)part.SourceRect,
@@ -255,6 +263,8 @@ public class Graphics2D {
 	}
 
 	public void DrawSprite(Sprite sprite, Vector2F position, Color color, float depth = 0.0f) {
+		if (sprite.Image == null)
+			return;
 		for (Sprite part = sprite; part != null; part = part.NextPart) {
 			spriteBatch.Draw(part.Image, NewPos(position) + (Vector2)part.DrawOffset, (Rectangle)part.SourceRect,
 				(XnaColor)color, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
@@ -266,6 +276,8 @@ public class Graphics2D {
 	}
 
 	public void DrawSprite(Sprite sprite, int variantID, Rectangle2F destination, Color color, float depth = 0.0f) {
+		if (sprite.Image == null)
+			return;
 		for (Sprite part = sprite; part != null; part = part.NextPart) {
 			Image image = sprite.Image.GetVariant(variantID);
 			destination.Point = NewPos(destination.Point) + (Vector2F)part.DrawOffset;
@@ -315,6 +327,10 @@ public class Graphics2D {
 
 	public void DrawAnimation(AnimationPlayer animationPlayer, Vector2F position, float depth = 0.0f) {
 		DrawAnimation(animationPlayer.SubStrip, animationPlayer.PlaybackTime, position, depth);
+	}
+
+	public void DrawAnimation(AnimationPlayer animationPlayer, int variantID, Vector2F position, float depth = 0.0f) {
+		DrawAnimation(animationPlayer.SubStrip, variantID, animationPlayer.PlaybackTime, position, depth);
 	}
 
 
@@ -458,8 +474,8 @@ public class Graphics2D {
 
 	// Draws the specified line.
 	public void DrawLine(Line2F line, float thickness, Color color, float depth = 0.0f) {
-		DrawImage(white1x1, line.Center + 0.5f, new Vector2F(0.5f, 0.5f),
-			new Vector2F((line.Length + thickness), thickness), 
+		DrawImage(white1x1, line.Center + new Vector2F(0.5f, 0.5f), new Vector2F(0.5f, 0.5f),
+			new Vector2F((line.Length + thickness), thickness),
 			line.Direction, color, SpriteEffects.None, depth);
 	}
 
@@ -467,8 +483,8 @@ public class Graphics2D {
 	public void DrawRectangle(Rectangle2F rect, float thickness, Color color, float depth = 0.0f) {
 		DrawLine(new Line2F(rect.Point, rect.Point + new Vector2F(rect.Width - 1, 0.0f)), thickness, color, depth);
 		DrawLine(new Line2F(rect.Point, rect.Point + new Vector2F(0.0f, rect.Height - 1)), thickness, color, depth);
-		DrawLine(new Line2F(rect.Point + rect.Size - 1, rect.Point + new Vector2F(rect.Width - 1, 0.0f)), thickness, color, depth);
-		DrawLine(new Line2F(rect.Point + rect.Size - 1, rect.Point + new Vector2F(0.0f, rect.Height - 1)), thickness, color, depth);
+		DrawLine(new Line2F(rect.Point + rect.Size - Vector2F.One, rect.Point + new Vector2F(rect.Width - 1, 0.0f)), thickness, color, depth);
+		DrawLine(new Line2F(rect.Point + rect.Size - Vector2F.One, rect.Point + new Vector2F(0.0f, rect.Height - 1)), thickness, color, depth);
 	}
 
 	// Draws the specified filled rectangle.

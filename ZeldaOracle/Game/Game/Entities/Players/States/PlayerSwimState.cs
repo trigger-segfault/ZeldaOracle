@@ -14,6 +14,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerSwimState : PlayerState {
@@ -53,12 +54,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Create a splash effect.
 			if (player.Physics.IsInLava) {
-				Effect splash = new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH, DepthLayer.EffectSplash);
+				Effect splash = new Effect(GameData.ANIM_EFFECT_LAVA_SPLASH, DepthLayer.EffectSplash, true);
 				splash.Position = player.Center + new Vector2F(0, 4);
 				player.RoomControl.SpawnEntity(splash);
 			}
 			else {
-				Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash);
+				Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash, true);
 				splash.Position = player.Center + new Vector2F(0, 4);
 				player.RoomControl.SpawnEntity(splash);
 			}
@@ -78,6 +79,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DROWN);
 				player.RespawnDeath();
 			}
+			
+			AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 		}
 		
 		public override void OnEnd(PlayerState newState) {
@@ -96,7 +99,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			
 			// Stroking scales the movement speed.
 			if (player.Movement.MoveSpeedScale <= 1.4f && Controls.A.IsPressed()) {
-				//Sounds.PLAYER_SWIM.play();
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_SWIM);
 				player.Movement.MoveSpeedScale = 2.0f;
 			}
 
@@ -106,23 +109,26 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// Update the submerge state.
 			if (isSubmerged) {
 				submergedTimer--;
+				player.IsPassable = true;
 				if (submergedTimer <= 0 || Controls.B.IsPressed()) {
 					isSubmerged = false;
+					player.IsPassable = false;
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SWIM);
 					player.Graphics.DepthLayer = DepthLayer.PlayerAndNPCs;
 				}
 			}
 			else if (Controls.B.IsPressed()) {
 				isSubmerged = true;
+				player.IsPassable = true;
 				submergedTimer = submergedDuration;
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SUBMERGED);
 
 				// Create a splash effect.
-				Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash);
+				Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash, true);
 				splash.Position = player.Center + new Vector2F(0, 4);
 				player.RoomControl.SpawnEntity(splash);
 
-				//Sounds.PLAYER_WADE.play();
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 
 				// Change player depth to lowest.
 				player.Graphics.DepthLayer = DepthLayer.PlayerSubmerged;

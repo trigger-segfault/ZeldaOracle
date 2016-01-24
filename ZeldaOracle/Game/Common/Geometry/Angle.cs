@@ -7,8 +7,8 @@ using ZeldaOracle.Common.Geometry;
 namespace ZeldaOracle.Common.Geometry {
 
 	public enum WindingOrder {
-		Clockwise,
-		CounterClockwise,
+		CounterClockwise	= 0,
+		Clockwise			= 1,
 	}
 
 	public static class Angles {
@@ -128,6 +128,37 @@ namespace ZeldaOracle.Common.Geometry {
 			if (directionH == Directions.Left)
 				return (directionV == Directions.Up ? Angles.UpLeft : Angles.DownLeft);
 			return (directionV == Directions.Up ? Angles.UpRight : Angles.DownRight);
+		}
+				
+		public static int NearestFromVector(Vector2F vector) {
+			return RoundFromRadians((float) Math.Atan2((double) -vector.Y, (double) vector.X));
+		}
+
+		public static int RoundFromRadians(float radians) {
+			int angle = (int) GMath.Round(radians / GMath.QuarterPi);
+			return GMath.Wrap(angle, Angles.AngleCount);
+		}
+		
+		public static bool TryParse(string value, bool ignoreCase, out int result) {
+			if (Directions.TryParse(value, ignoreCase, out result)) {
+				result = Directions.ToAngle(result);
+				return true;
+			}
+			if (ignoreCase)
+				value = value.ToLower();
+			if (value == "upright" || value == "rightup" || value == "northeast")
+				result = Angles.NorthEast;
+			else if (value == "upleft" || value == "leftup" || value == "northwest")
+				result = Angles.NorthWest;
+			else if (value == "downleft" || value == "leftdown" || value == "southwest")
+				result = Angles.SouthWest;
+			else if (value == "downright" || value == "rightdown" || value == "southeast")
+				result = Angles.SouthEast;
+			else {
+				result = -1;
+				return false;
+			}
+			return true;
 		}
 	}
 }

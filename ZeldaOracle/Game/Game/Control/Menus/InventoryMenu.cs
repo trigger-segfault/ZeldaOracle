@@ -71,7 +71,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 					GameControl.CloseMenu(this);
 				}
 				if (Controls.Select.IsPressed()) {
-					AudioSystem.PlaySound("UI/menu_next");
+					AudioSystem.PlaySound(GameData.SOUND_MENU_NEXT);
 					gameManager.PopGameState();
 					gameManager.PushGameState(new MenuTransitionPush(this, nextMenu, Directions.East));
 				}

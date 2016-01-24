@@ -14,6 +14,8 @@ namespace ZeldaOracle.Game.Entities {
 		protected int aliveDuration;
 		protected int fadeDelay;
 		protected bool hasDuration;
+		private event Action collected;
+		protected bool isCollectibleWithItems;
 
 
 		//-----------------------------------------------------------------------------
@@ -35,6 +37,10 @@ namespace ZeldaOracle.Game.Entities {
 			aliveDuration	= GameSettings.COLLECTIBLE_ALIVE_DURATION;
 			fadeDelay		= GameSettings.COLLECTIBLE_FADE_DELAY;
 			pickupableDelay	= GameSettings.COLLECTIBLE_PICKUPABLE_DELAY;
+
+			isCollectibleWithItems = true;
+
+			collected = null;
 		}
 
 
@@ -44,6 +50,8 @@ namespace ZeldaOracle.Game.Entities {
 
 		public virtual void Collect() {
 			Destroy();
+			if (collected != null)
+				collected();
 		}
 
 
@@ -84,9 +92,23 @@ namespace ZeldaOracle.Game.Entities {
 			get { return (timer >= pickupableDelay); }
 		}
 
+		public bool IsCollectibleWithItems {
+			get { return isCollectibleWithItems; }
+		}
+
 		public int PickupableDelay {
 			get { return pickupableDelay; }
 			set { pickupableDelay = value; }
+		}
+
+		public bool HasDuration {
+			get { return hasDuration; }
+			set { hasDuration = value; }
+		}
+
+		public event Action Collected {
+			add { collected += value; }
+			remove { collected -= value; }
 		}
 	}
 }

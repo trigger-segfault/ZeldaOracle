@@ -37,15 +37,9 @@ S.SSSSS.....
 SRS.........
 R.R.........
 SRSHHSS.....
-...HHSS..SSS
+...HHSSS.SSS
 ...HH....SSS
-S..HH.......
-S.SSS.......
-.S.SS.......
-S.S.........
-S.SSS.......
-.S.SS.......
-S.S.........
+S.SHH.......
 END;
 
 # Ledges
@@ -70,7 +64,13 @@ TILE (2, 7); SOLID edge_s; END;
 TILE (5, 3); SOLID doorway; END;
 TILE (6, 3); SOLID doorway; END;
 
-# Barriers 1
+# Wall Torches
+TILE (5, 5); SOLID block; SPRITE tile_wall_torch_up; END;
+TILE (6, 5); SOLID block; SPRITE tile_wall_torch_left; END;
+TILE (5, 6); SOLID block; SPRITE tile_wall_torch_down; END;
+TILE (6, 6); SOLID block; SPRITE tile_wall_torch_right; END;
+
+# Railings 1
 TILE ( 9, 0); HALFSOLID corner_nw; END;
 TILE (10, 0); HALFSOLID edge_n; END;
 TILE (11, 0); HALFSOLID corner_ne; END;
@@ -84,7 +84,7 @@ TILE ( 8, 2); HALFSOLID inside_corner_ne; END;
 TILE ( 7, 3); HALFSOLID inside_corner_sw; END;
 TILE ( 8, 3); HALFSOLID inside_corner_se; END;
 
-# Barriers 2
+# Railings 2
 TILE ( 9, 3); HALFSOLID corner_nw; END;
 TILE (10, 3); HALFSOLID edge_n; END;
 TILE (11, 3); HALFSOLID corner_ne; END;
@@ -93,11 +93,10 @@ TILE (11, 4); HALFSOLID edge_e; END;
 TILE ( 9, 5); HALFSOLID corner_sw; END;
 TILE (10, 5); HALFSOLID edge_s; END;
 TILE (11, 5); HALFSOLID corner_se; END;
-TILE ( 7, 5); HALFSOLID inside_corner_nw; END;
-TILE ( 8, 5); HALFSOLID inside_corner_ne; END;
-TILE ( 7, 6); HALFSOLID inside_corner_sw; END;
-TILE ( 8, 6); HALFSOLID inside_corner_se; END;
-
+TILE ( 7, 4); HALFSOLID inside_corner_nw; END;
+TILE ( 8, 4); HALFSOLID inside_corner_ne; END;
+TILE ( 7, 5); HALFSOLID inside_corner_sw; END;
+TILE ( 8, 5); HALFSOLID inside_corner_se; END;
 
 
 END;

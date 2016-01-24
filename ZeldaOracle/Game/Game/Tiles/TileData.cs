@@ -6,18 +6,17 @@ using System.Reflection;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Tiles {
 
 	public class TileData : BaseTileData {
 
 		private SpriteAnimation[]	spriteList;
-		private TileFlags			flags;
-		private TileSpecialFlags	specialFlags;
-		private Point2I				size;
+		//private Point2I				size;
 		private SpriteAnimation		spriteAsObject;
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
-		private CollisionModel		collisionModel;
+		private Sound				breakSound;
 
 		
 		//-----------------------------------------------------------------------------
@@ -26,32 +25,71 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public TileData() {
 			spriteList			= new SpriteAnimation[0];
-			size				= Point2I.One;
-			flags				= TileFlags.Default;
-			specialFlags		= TileSpecialFlags.Default;
+			//size				= Point2I.One;
 			spriteAsObject		= new SpriteAnimation();
 			breakAnimation		= null;
-			collisionModel		= null;
+
+			// General.
+			properties.SetGeneric("size", Point2I.One)
+				.SetDocumentation("Size", "General", "");
+			properties.Set("flags", (int) TileFlags.Default)
+				.SetDocumentation("Tile Flags", "General", "");
+			properties.Set("solidity", (int) TileSolidType.NotSolid)
+				.SetDocumentation("Solid Type", "General", "");
+			properties.Set("ledge_direction", Directions.Down)
+				.SetDocumentation("Ledge Direction", "General", "");
+			properties.Set("collision_model", "")
+				.SetDocumentation("Collision Model", "collision_model", "", "General", "");
+			properties.Set("environment_type", (int) TileEnvironmentType.Normal)
+				.SetDocumentation("Environment Type", "General", "");
+			properties.Set("disable_on_destroy", false)
+				.SetDocumentation("Disable on Destroy", "General", "");
+
+			// Motion.
+			properties.Set("path", "")
+				.SetDocumentation("Path", "Motion", "A path the tile follows in.");
+			properties.Set("conveyor_angle", -1);
+			properties.Set("conveyor_speed", 0.0f);
+			
+			// Interaction Options.
+			properties.Set("move_once", false)
+				.SetDocumentation("Move Once", "Interactions", "");
+			properties.Set("move_direction", -1)
+				.SetDocumentation("Move Direction", "Interactions", "");
+			properties.Set("cuttable_sword_level", 0)
+				.SetDocumentation("Cuttable Sword Level", "Interactions", "");
+			properties.Set("pickupable_bracelet_level", 0)
+				.SetDocumentation("Pickupable Bracelet Level", "Interactions", "");
+			properties.Set("cling_on_stab", true)
+				.SetDocumentation("Cling on Stab", "Interactions", "True if a cling effect should be spawned when the tile is stabbed with the sword.");
+
+			// Spawning.
+			properties.Set("spawn_from_ceiling", false)
+				.SetDocumentation("Spawn from Ceiling", "Spawning", "");
+			properties.Set("spawn_poof_effect", false)
+				.SetDocumentation("Spawn with Poof Effect", "Spawning", "");
+			properties.Set("spawn_delay_after_poof", 31)
+				.SetDocumentation("Spawn Delay after Poof", "Spawning", "");
+
+			// Events.
+			properties.Set("on_move", "")
+				.SetDocumentation("On Move", "script", "", "Events",
+				"Occurs when the tile is moved.", true, false);
 		}
 		
-		public TileData(TileFlags flags, TileSpecialFlags specialFlags) : this() {
-			this.flags			= flags;
-			this.specialFlags	= specialFlags;
+		public TileData(TileFlags flags) : this() {
+			this.Flags = flags;
 		}
 
-		public TileData(Type type, TileFlags flags, TileSpecialFlags specialFlags) : this() {
-			this.type			= type;
-			this.flags			= flags;
-			this.specialFlags	= specialFlags;
+		public TileData(Type type, TileFlags flags) : this() {
+			this.type = type;
+			this.Flags = flags;
 		}
 
 		public TileData(TileData copy) : base(copy) {
-			size				= copy.size;
-			flags				= copy.flags;
-			specialFlags		= copy.specialFlags;
+			//size				= copy.size;
 			spriteAsObject		= new SpriteAnimation(copy.spriteAsObject);
 			breakAnimation		= copy.breakAnimation;
-			collisionModel		= copy.collisionModel;
 			spriteList			= new SpriteAnimation[copy.spriteList.Length];
 			
 			for (int i = 0; i < spriteList.Length; i++)
@@ -62,13 +100,12 @@ namespace ZeldaOracle.Game.Tiles {
 			base.Clone(copy);
 			if (copy is TileData) {
 				TileData copyTileData = (TileData) copy;
-				size				= copyTileData.size;
-				flags				= copyTileData.flags;
-				specialFlags		= copyTileData.specialFlags;
+				//size				= copyTileData.size;
 				spriteAsObject		= new SpriteAnimation(copyTileData.spriteAsObject);
 				breakAnimation		= copyTileData.breakAnimation;
-				collisionModel		= copyTileData.collisionModel;
-				
+				breakSound			= copyTileData.breakSound;
+				events				= new ObjectEventCollection(copyTileData.events);
+
 				if (copyTileData.spriteList.Length > 0) {
 					spriteList = new SpriteAnimation[copyTileData.spriteList.Length];
 					for (int i = 0; i < spriteList.Length; i++) {
@@ -109,18 +146,15 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public Point2I Size {
-			get { return size; }
-			set { size = value; }
+			get { return properties.Get<Point2I>("size"); }
+			set { properties.SetGeneric("size", value); }
+			//get { return size; }
+			//set { size = value; }
 		}
 
 		public TileFlags Flags {
-			get { return flags; }
-			set { flags = value; }
-		}
-
-		public TileSpecialFlags SpecialFlags {
-			get { return specialFlags; }
-			set { specialFlags = value; }
+			get { return (TileFlags) properties.GetInteger("flags", 0); }
+			set { properties.Set("flags", (int) value); }
 		}
 
 		public SpriteAnimation SpriteAsObject {
@@ -138,9 +172,39 @@ namespace ZeldaOracle.Game.Tiles {
 			set { breakAnimation = value; }
 		}
 
+		public Sound BreakSound {
+			get { return breakSound; }
+			set { breakSound = value; }
+		}
+
 		public CollisionModel CollisionModel {
-			get { return collisionModel; }
-			set { collisionModel = value; }
+			get { return properties.GetResource<CollisionModel>("collision_model", null); }
+			set { properties.SetAsResource<CollisionModel>("collision_model", value); }
+		}
+
+		public TileEnvironmentType EnvironmentType {
+			get { return properties.GetEnum<TileEnvironmentType>("environment_type", TileEnvironmentType.Normal); }
+			set { properties.Set("environment_type", (int) value); }
+		}
+
+		public TileSolidType SolidType {
+			get { return properties.GetEnum<TileSolidType>("solidity", TileSolidType.NotSolid); }
+			set { properties.Set("solidity", (int) value); }
+		}
+
+		public int LedgeDirection {
+			get { return properties.GetInteger("ledge_direction", Directions.Down); }
+			set { properties.Set("ledge_direction", value); }
+		}
+
+		public int ConveyorAngle {
+			get { return properties.GetInteger("conveyor_angle", -1); }
+			set { properties.Set("conveyor_angle", value); }
+		}
+
+		public float ConveyorSpeed {
+			get { return properties.GetFloat("conveyor_speed", 0.0f); }
+			set { properties.Set("conveyor_speed", value); }
 		}
 	}
 }

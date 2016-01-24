@@ -17,12 +17,14 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		//-----------------------------------------------------------------------------
 
 		public RewardRecoveryHeart(string id, int amount, string message, Sprite sprite) {
+			InitSprite(sprite);
+
 			this.id				= id;
-			this.animation		= new Animation(sprite);
 			this.message		= message;
 			this.hasDuration	= true;
 			this.holdType		= RewardHoldTypes.Raise;
 			this.isCollectibleWithItems	= true;
+			this.onlyShowMessageInChest = true;
 
 			this.amount			= amount;
 		}
@@ -33,7 +35,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		public override void OnCollect(GameControl gameControl) {
 			if (gameControl.HUD.DynamicHealth >= gameControl.Player.MaxHealth)
-				AudioSystem.PlaySound("Pickups/get_heart");
+				AudioSystem.PlaySound(GameData.SOUND_GET_HEART);
 
 			gameControl.Player.Health += amount * 4;
 		}

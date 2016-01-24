@@ -26,11 +26,17 @@ namespace ZeldaOracle.Common.Scripts {
 
 			this.resources	= resources;
 
-			// Sprite <name>
+			// Image <name>
+			// Image <name> <file-path>
 			AddCommand("Image", delegate(CommandParam parameters) {
 				imageName	= parameters.GetString(0);
 				image		= null;
 				imageTail	= null;
+
+				if (parameters.Count == 2) {
+					image = Resources.LoadImage(Resources.ImageDirectory + parameters.GetString(1), false);
+					imageTail = image;
+				}
 			});
 
 			// End

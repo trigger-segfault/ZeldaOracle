@@ -38,13 +38,22 @@ namespace ZeldaOracle.Game.Main {
 
 			Controls.analogMovement	= GamePad.GetStick(Buttons.LeftStick);
 
+			/*
 			Controls.a				= new MultiGameButton(new GameButton(Keys.X), new GameButton(Buttons.A));
 			Controls.b				= new MultiGameButton(new GameButton(Keys.Z), new GameButton(Buttons.B));
 			Controls.x				= new MultiGameButton(new GameButton(Keys.S), new GameButton(Buttons.X));
 			Controls.y				= new MultiGameButton(new GameButton(Keys.A), new GameButton(Buttons.Y));
-
 			Controls.start			= new MultiGameButton(new GameButton(Keys.Enter), new GameButton(Buttons.Start));
 			Controls.select			= new MultiGameButton(new GameButton(Keys.Backslash), new GameButton(Buttons.Back));
+			*/
+
+			// David's preffered control scheme:
+			Controls.a				= new MultiGameButton(new GameButton(Keys.Z), new GameButton(Buttons.A));
+			Controls.b				= new MultiGameButton(new GameButton(Keys.X), new GameButton(Buttons.B));
+			Controls.x				= new MultiGameButton(new GameButton(Keys.S), new GameButton(Buttons.X));
+			Controls.y				= new MultiGameButton(new GameButton(Keys.A), new GameButton(Buttons.Y));
+			Controls.start			= new MultiGameButton(new GameButton(Keys.Enter), new GameButton(Buttons.Start));
+			Controls.select			= new MultiGameButton(new GameButton(Keys.RShift), new GameButton(Buttons.Back));
 		}
 
 		//-----------------------------------------------------------------------------

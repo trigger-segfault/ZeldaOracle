@@ -13,6 +13,8 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerCarryState : PlayerState {
@@ -74,19 +76,25 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 		}
 
-		public void DropObject(bool enterBusyState = true) {
-			isObjectDropped = true;
-			player.RoomControl.SpawnEntity(carryObject, player.Position, 16);
-			if (enterBusyState) {
-				player.BeginBusyState(throwDuration);
-				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
+		public void DropObject(bool enterBusyState = true, bool playSound = true) {
+			if (carryObject != null && carryObject.IsAlive) {
+				isObjectDropped = true;
+				player.RoomControl.SpawnEntity(carryObject, player.Position, 16);
+				if (enterBusyState) {
+					player.BeginBusyState(throwDuration);
+					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
+				}
+				if (playSound)
+					AudioSystem.PlaySound(GameData.SOUND_PLAYER_THROW);
 			}
 		}
 
-		public void ThrowObject(bool enterBusyState = true) {
-			carryObject.Physics.ZVelocity = 1.0f;
-			carryObject.Physics.Velocity = Directions.ToVector(Player.MoveDirection) * 1.5f;
-			DropObject(enterBusyState);
+		public void ThrowObject(bool enterBusyState = true, bool playSound = true) {
+			if (carryObject != null && carryObject.IsAlive) {
+				carryObject.Physics.ZVelocity = 1.0f;
+				carryObject.Physics.Velocity = Directions.ToVector(Player.MoveDirection) * 1.5f;
+				DropObject(enterBusyState, playSound);
+			}
 		}
 
 		public void DestroyObject() {
@@ -115,6 +123,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.CanUseWarpPoint	= false;
 			player.Movement.MoveCondition	= PlayerMoveCondition.NoControl;
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
+			AudioSystem.PlaySound(GameData.SOUND_PLAYER_PICKUP);
 		}
 		
 		public override void OnEnd(PlayerState newState) {
@@ -123,11 +132,27 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.CanUseWarpPoint	= true;
 			
 			if (!isObjectDropped) {
-				if (newState is PlayerSwimState || newState is PlayerLadderState)
-					DropObject(false);
-				else
-					DestroyObject();
+				DropObject(false, false);
 			}
+		}
+
+		public override void OnEnterMinecart() {
+			if (Player.Graphics.Animation == GameData.ANIM_PLAYER_CARRY)
+				Player.Graphics.Animation = GameData.ANIM_PLAYER_MINECART_CARRY;
+		}
+
+		public override void OnExitMinecart() {
+			if (Player.Graphics.Animation == GameData.ANIM_PLAYER_MINECART_CARRY)
+				Player.Graphics.Animation = GameData.ANIM_PLAYER_CARRY;
+		}
+
+		public override void OnHurt(DamageInfo damage) {
+			base.OnHurt(damage);
+			if (player.Movement.IsMoving)
+				ThrowObject(false, false);
+			else
+ 				DropObject(false, false);
+			player.BeginNormalState();
 		}
 
 		public override void Update() {
@@ -156,7 +181,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					objectZOffset		= 13;
 					isPickingUp = false;
 					player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
-					Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CARRY);
+					if (player.IsInMinecart)
+						Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MINECART_CARRY);
+					else
+						Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CARRY);
 				}
 			}
 			else {
@@ -173,7 +201,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				}
 
 				// Check for button press to throw/drop.
-				if (Controls.A.IsPressed() || Controls.B.IsPressed()) {
+				if (!player.IsStateControlled && (Controls.A.IsPressed() || Controls.B.IsPressed())) {
 					if (Controls.A.IsPressed())
 						Controls.A.Reset();
 					if (Controls.B.IsPressed())

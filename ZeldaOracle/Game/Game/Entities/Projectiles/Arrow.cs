@@ -2,23 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Monsters;
+using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Projectiles {
-	public class Arrow : Projectile, IInterceptable {
+	
+	public class Arrow : Projectile {
 		
-
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public Arrow() {
 			// General.
-			syncAnimationWithAngle = true;
+			syncAnimationWithAngle	= true;
+			projectileType			= ProjectileType.Physical;
 
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 1);
@@ -46,7 +49,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			CheckInitialCollision();
 		}
 		
-		public void Intercept() {
+		public override void Intercept() {
 			Crash(false);
 		}
 
@@ -56,6 +59,16 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		public override void OnCollideMonster(Monster monster) {
 			monster.TriggerInteraction(InteractionType.Arrow, this);
+		}
+
+		public override void OnCollidePlayer(Player player) {
+			player.Hurt(GameSettings.PROJECTILE_ARROW_DAMAGE, Center);
+			Destroy();
+		}
+
+		protected override void OnCrash() {
+			base.OnCrash();
+			AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 		}
 	}
 }

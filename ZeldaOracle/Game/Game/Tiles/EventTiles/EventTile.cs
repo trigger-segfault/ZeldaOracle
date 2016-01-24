@@ -75,7 +75,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		}
 		
 		public virtual void Draw(Graphics2D g) {
-			//g.DrawSprite(GameData.SPR_TILE_ARMOS_STATUE, position);
+
 		}
 		
 
@@ -96,9 +96,10 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			tile.position	= data.Position;
 			tile.eventData	= data;
 			tile.size		= data.Size;
-			tile.properties.Merge(data.BaseProperties, true);
-			tile.properties.Merge(data.Properties, true);
-
+			tile.properties.SetAll(data.BaseProperties);
+			tile.properties.SetAll(data.Properties);
+			tile.properties.BaseProperties	= data.Properties;
+			
 			return tile;
 		}
 

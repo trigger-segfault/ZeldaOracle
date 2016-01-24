@@ -147,28 +147,29 @@ public struct Line2F {
 	public static Line2F operator -(Line2F l) {
 		return new Line2F(l.End1, l.End1 - l.Size);
 	}
+	/*
 	public static Line2F operator ++(Line2F l) {
 		return new Line2F(++l.End1, ++l.End2);
 	}
 	public static Line2F operator --(Line2F l) {
 		return new Line2F(--l.End1, --l.End2);
-	}
+	}*/
 
 	//--------------------------------
 
 	public static Line2F operator +(Line2F l, Vector2F v) {
 		return new Line2F(l.End1 + v, l.End2 + v);
 	}
-	public static Line2F operator +(Line2F l, float f) {
+	/*public static Line2F operator +(Line2F l, float f) {
 		return new Line2F(l.End1 + f, l.End2 + f);
-	}
+	}*/
 
 	public static Line2F operator -(Line2F l, Vector2F v) {
 		return new Line2F(l.End1 - v, l.End2 - v);
 	}
-	public static Line2F operator -(Line2F l, float f) {
+	/*public static Line2F operator -(Line2F l, float f) {
 		return new Line2F(l.End1 - f, l.End2 - f);
-	}
+	}*/
 
 	//--------------------------------
 
@@ -436,9 +437,10 @@ public struct Line2F {
 		float epsilon = 0.0f;
 
 		if (point != null) {
-			if (point.Value + epsilon < Min || point.Value + epsilon < l.Min)
+			Vector2F epsilonVector = new Vector2F(epsilon, epsilon);
+			if (point.Value + epsilonVector < Min || point.Value + epsilonVector < l.Min)
 				return null;
-			if (point.Value - epsilon > Max || point.Value - epsilon > l.Max)
+			if (point.Value - epsilonVector > Max || point.Value - epsilonVector > l.Max)
 				return null;
 		}
 		return point;

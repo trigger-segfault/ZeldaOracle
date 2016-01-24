@@ -46,17 +46,18 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		protected void CutTileAtLocation(Point2I location) {
 			Tile tile = player.RoomControl.GetTopTile(location);
 			if (tile != null)
-				tile.OnSwordHit();
+				tile.OnSwordHit(Weapon);
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Virtual Methods
 		//-----------------------------------------------------------------------------
-
-		public virtual void OnHitMonster(Monster monster) {
+		
+		// NOTE: this has been moved into the UnitTool class.
+		//public virtual void OnHitMonster(Monster monster) {
 			//monster.TriggerInteraction(monster.HandlerSword, Weapon as ItemSword);
-		}
+		//}
 
 
 		//-----------------------------------------------------------------------------
@@ -80,14 +81,13 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			}
 		}
 		
-		public override void OnSwingEntityPeak(int angle, Rectangle2F collisionBox) {
-			return;
-
+		// NOTE: this has been moved into the UnitTool class.
+		/*public override void OnSwingEntityPeak(int angle, Rectangle2F collisionBox) {
 			// Collide with entities.
 			for (int i = 0; i < player.RoomControl.EntityCount; i++) {
 				Entity e = player.RoomControl.Entities[i];
 				if (e.Physics.PositionedSoftCollisionBox.Colliding(collisionBox)) {
-					if (e is Collectible && (e as Collectible).IsPickupable) {
+					if (e is Collectible && (e as Collectible).IsPickupable && (e as Collectible).IsCollectibleWithItems) {
 						(e as Collectible).Collect();
 					}
 					if (e is Monster) {
@@ -97,6 +97,6 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 					}
 				}
 			}
-		}
+		}*/
 	}
 }

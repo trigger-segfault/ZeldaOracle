@@ -6,10 +6,11 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TileLantern : Tile {
+	public class TileLantern : Tile, ZeldaAPI.Lantern {
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -23,19 +24,37 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		// Interaction
 		//-----------------------------------------------------------------------------
-
+		
 		public void Light() {
-			if (!Properties.GetBoolean("lit", false)) {
-				BaseProperties.Set("lit", true);
-				Properties.Set("lit", true);
-			}
+			Light(Properties.GetBoolean("remember_state", false));
+		}
+		
+		public void PutOut() {
+			PutOut(Properties.GetBoolean("remember_state", false));
 		}
 
-		public void PutOut() {
-			if (Properties.GetBoolean("lit", false)) {
-				BaseProperties.Set("lit", false);
-				Properties.Set("lit", false);
+		public void Light(bool stayLit) {
+			if (!IsLit) {
+				IsLit = true;
+				//CustomSprite = GameData.ANIM_TILE_LANTERN;
+				SpriteIndex = 0;
+				GameControl.ExecuteScript(Properties.GetString("event_light", ""), this);
 			}
+			
+			if (stayLit)
+				Properties.SetBase("lit", true);
+		}
+
+		public void PutOut(bool stayLit) {
+			if (IsLit) {
+				IsLit = false;
+				//CustomSprite = GameData.SPR_TILE_LANTERN_UNLIT;
+				SpriteIndex = 1;
+				GameControl.ExecuteScript(Properties.GetString("event_put_out", ""), this);
+			}
+
+			if (stayLit)
+				Properties.SetBase("lit", false);
 		}
 
 
@@ -43,7 +62,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 		
-		public override void OnSeedHit(SeedType seedType, Entity seed) {
+		public override void OnSeedHit(SeedType seedType, SeedEntity seed) {
 			if (seedType == SeedType.Ember && !Properties.GetBoolean("lit", false)) {
 				Light();
 				seed.Destroy();
@@ -51,7 +70,21 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public override void OnInitialize() {
-			
+			SpriteIndex = (IsLit ? 0 : 1);
+			/*if (IsLit)
+				CustomSprite = GameData.ANIM_TILE_LANTERN;
+			else
+				CustomSprite = GameData.SPR_TILE_LANTERN_UNLIT;*/
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public bool IsLit {
+			get { return Properties.GetBoolean("lit"); }
+			set { Properties.Set("lit", value); }
 		}
 	}
 }

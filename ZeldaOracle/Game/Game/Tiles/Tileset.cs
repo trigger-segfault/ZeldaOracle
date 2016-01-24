@@ -35,23 +35,24 @@ namespace ZeldaOracle.Game.Tiles {
 		public void ConfigureTile(TileData data, char configChar) {
 			switch (configChar) {
 				case 'S':
-					data.Flags |= TileFlags.Solid;
+					data.SolidType = TileSolidType.Solid;
 					data.CollisionModel = GameData.MODEL_BLOCK;
 					break;
 				case 'F':
-					data.Flags |= TileFlags.Waterfall | TileFlags.Solid | TileFlags.LedgeDown;
-					data.CollisionModel = GameData.MODEL_BLOCK;
+					data.EnvironmentType	= TileEnvironmentType.Waterfall;
+					data.LedgeDirection		= Directions.Down;
+					data.CollisionModel		= GameData.MODEL_BLOCK;
 					break;
-				case 'G': data.Flags |= TileFlags.Diggable;		break;
-				case 'H': data.Flags |= TileFlags.Hole;			break;
-				case 'V': data.Flags |= TileFlags.Lava;			break;
-				case 'W': data.Flags |= TileFlags.Water;		break;
-				case 'I': data.Flags |= TileFlags.Ice;			break;
-				case 'R': data.Flags |= TileFlags.Stairs;		break;
-				case 'D': data.Flags |= TileFlags.Ladder;		break;
-				case 'A': data.Flags |= TileFlags.HalfSolid;	break;
-				case 'P': data.Flags |= TileFlags.Puddle;		break;
-				case 'O': data.Flags |= TileFlags.Water | TileFlags.Ocean; break;
+				case 'G': data.Flags |= TileFlags.Digable; break;
+				case 'H': data.EnvironmentType = TileEnvironmentType.Hole; break;
+				case 'V': data.EnvironmentType = TileEnvironmentType.Lava; break;
+				case 'W': data.EnvironmentType = TileEnvironmentType.Water; break;
+				case 'I': data.EnvironmentType = TileEnvironmentType.Ice; break;
+				case 'R': data.EnvironmentType = TileEnvironmentType.Stairs; break;
+				case 'D': data.EnvironmentType = TileEnvironmentType.Ladder; break;
+				case 'A': data.SolidType = TileSolidType.HalfSolid; break;
+				case 'P': data.EnvironmentType = TileEnvironmentType.Puddle; break;
+				case 'O': data.EnvironmentType = TileEnvironmentType.Ocean; break;
 			}
 		}
 		

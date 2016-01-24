@@ -10,6 +10,7 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.Transitions;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Tiles.EventTiles {
 
@@ -59,7 +60,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		//-----------------------------------------------------------------------------
 
 		// This method is called when a room is entered through this warp point.
-		public void SetupRoomOnEnter() {
+		public void SetupPlayerInRoom() {
 			Player player = RoomControl.Player;
 			warpEnabled = false;
 
@@ -115,6 +116,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			EventTileDataInstance destination = FindDestinationPoint();
 
 			if (destination != null) {
+				AudioSystem.PlaySound(GameData.SOUND_ROOM_EXIT);
 				RoomControl.Warp(this, destination);
 				RoomControl.Player.BeginNormalState();
 			}
