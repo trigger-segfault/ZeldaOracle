@@ -34,10 +34,23 @@ namespace ZeldaOracle.Game.Tiles {
 			this.properties.BaseProperties = tileData.Properties;
 		}
 
+		public virtual void Clone(BaseTileDataInstance copy) {
+			this.room		= copy.Room;
+			this.tileData	= copy.tileData;
+			this.properties	= new Properties();
+			this.properties.PropertyObject = this;
+			this.properties.BaseProperties = tileData.Properties;
+			this.properties.SetAll(copy.properties);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Virtual properties
 		//-----------------------------------------------------------------------------
+
+		public abstract Point2I GetPosition();
+		
+		public abstract Rectangle2I GetBounds();
 
 		public abstract SpriteAnimation CurrentSprite { get; }
 
@@ -92,7 +105,7 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return tileData.Tileset; }
 		}
 
-		public string ID {
+		public string Id {
 			get { return properties.GetString("id", ""); }
 		}
 	}

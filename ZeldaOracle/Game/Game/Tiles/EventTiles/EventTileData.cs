@@ -11,7 +11,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 	
 	public class EventTileData : BaseTileData {
 
-		private Point2I			size;
+		private Point2I			size; // TODO: make this refer to pixels, not tiles.
 		private Point2I			position;
 		private SpriteAnimation	sprite;		// NOTE: This would only be visible in the editor.
 		//private bool			isVisible;	// Is the event visible in-game?

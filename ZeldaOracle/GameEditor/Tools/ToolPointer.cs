@@ -31,11 +31,11 @@ namespace ZeldaEditor.Tools {
 		//-----------------------------------------------------------------------------
 
 		public override void OnChangeLayer() {
-			Deselect();
+			//Deselect();
 		}
 
 		public override void Cut() {
-			Deselect();
+			//Deselect();
 		}
 		
 		public override void Copy() {
@@ -43,37 +43,24 @@ namespace ZeldaEditor.Tools {
 		}
 		
 		public override void Paste() {
-			Deselect();
+			//Deselect();
 		}
 		
 		public override void Delete() {
-			if (!EditorControl.EventMode) {
-				if (selectedTile != null) {
-					selectedTile.Room.RemoveTile(selectedTile);
-					editorControl.OnDeleteObject(selectedTile);
-				}
-			}
-			else {
-				if (selectedEventTile != null) {
-					selectedEventTile.Room.RemoveEventTile(selectedEventTile);
-					editorControl.OnDeleteObject(selectedEventTile);
-				}
-			}
-			Deselect();
+			LevelDisplayControl.DeleteTileSelection();
 		}
 
 		public override void SelectAll() {
-			if (EditorControl.EventMode) {
-				// Select all events.
 
-			}
 		}
 
 		public override void Deselect() {
-			selectedEventTile = null;
-			selectedTile = null;
-			LevelDisplayControl.ClearSelectionBox();
+			selectedEventTile	= null;
+			selectedTile		= null;
+			LevelDisplayControl.DeselectTiles();
+			LevelDisplayControl.DeselectSelectionGrid();
 			EditorControl.PropertyGrid.CloseProperties();
+
 		}
 
 		
@@ -82,21 +69,48 @@ namespace ZeldaEditor.Tools {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin() {
-			selectedTile = null;
-			selectedEventTile = null;
+			selectedTile		= null;
+			selectedEventTile	= null;
 			EditorControl.HighlightMouseTile = false;
 		}
 
 		public override void OnEnd() {
-			selectedTile = null;
-			selectedEventTile = null;
-			Deselect();
+			selectedTile		= null;
+			selectedEventTile	= null;
 		}
 
 		public override void OnMouseDown(MouseEventArgs e) {
 			base.OnMouseDown(e);
+
+			Point2I mousePos = new Point2I(e.X, e.Y);
 			
-			Point2I mousePos	= new Point2I(e.X, e.Y);
+			// Sample the tile at the mouse position.
+			BaseTileDataInstance baseTile = null;
+			if (editorControl.EventMode)
+				baseTile = LevelDisplayControl.SampleEventTile(mousePos);
+			else
+				baseTile = LevelDisplayControl.SampleTile(mousePos, editorControl.CurrentLayer);
+			
+			// Select or deselect the tile.
+			if (e.Button == MouseButtons.Left && baseTile != null) {
+				if (FormsControl.ModifierKeys == Keys.Control) {
+					// Add or remove tiles from selection.
+					if (!LevelDisplayControl.IsTileInSelection(baseTile)) {
+						LevelDisplayControl.AddTileToSelection(baseTile);
+						EditorControl.PropertyGrid.OpenProperties(baseTile);
+					}
+					else {
+						LevelDisplayControl.RemoveTileFromSelection(baseTile);
+					}
+				}
+				else {
+					// Select a new tile, deselecting others.
+					LevelDisplayControl.DeselectTiles();
+					LevelDisplayControl.AddTileToSelection(baseTile);
+					EditorControl.PropertyGrid.OpenProperties(baseTile);
+				}
+			}
+			/*
 			Room	room		= LevelDisplayControl.SampleRoom(mousePos);
 			Point2I tileCoord	= LevelDisplayControl.SampleTileCoordinates(mousePos);
 
@@ -116,6 +130,8 @@ namespace ZeldaEditor.Tools {
 							Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
 							LevelDisplayControl.SetSelectionBox(levelTileCoord, Point2I.One);
 							EditorControl.PropertyGrid.OpenProperties(selectedTile.Properties, selectedTile);
+							LevelDisplayControl.SetSelectionBox(selectedTile);
+							LevelDisplayControl.AddTileToSelection(selectedTile);
 						}
 						else {
 							LevelDisplayControl.ClearSelectionBox();
@@ -131,6 +147,7 @@ namespace ZeldaEditor.Tools {
 						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
 						LevelDisplayControl.SetSelectionBox(levelTileCoord, Point2I.One);
 						EditorControl.PropertyGrid.OpenProperties(selectedEventTile.Properties, selectedEventTile);
+						LevelDisplayControl.SetSelectionBox(selectedEventTile);
 					}
 					else {
 						LevelDisplayControl.ClearSelectionBox();
@@ -138,6 +155,7 @@ namespace ZeldaEditor.Tools {
 					}
 				}
 			}
+			*/
 		}
 
 		public override void OnMouseUp(MouseEventArgs e) {

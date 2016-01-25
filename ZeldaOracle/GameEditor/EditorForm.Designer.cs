@@ -104,6 +104,7 @@
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.statusBarLabelRoomLoc = new System.Windows.Forms.ToolStripStatusLabel();
 			this.statusBarLabelTileLoc = new System.Windows.Forms.ToolStripStatusLabel();
+			this.statusBarLabelTileInfo = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.statusLabelTask = new System.Windows.Forms.ToolStripStatusLabel();
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
@@ -162,9 +163,17 @@
 			this.levelTabPageTriggers = new System.Windows.Forms.TabPage();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.panelTriggersLevelDisplay = new System.Windows.Forms.Panel();
-			this.statusBarLabelTileInfo = new System.Windows.Forms.ToolStripStatusLabel();
+			this.contextMenuStripTileInLevel = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
 			this.worldTreeView = new ZeldaEditor.TreeViews.WorldTreeView();
 			this.propertyGrid = new ZeldaEditor.PropertiesEditor.ZeldaPropertyGrid();
+			this.selectRoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator23 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripSeparator24 = new System.Windows.Forms.ToolStripSeparator();
+			this.cutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.copyToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.deselectToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.toolStrip2.SuspendLayout();
@@ -196,6 +205,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
+			this.contextMenuStripTileInLevel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// menuStrip1
@@ -921,6 +931,12 @@
 			this.statusBarLabelTileLoc.Size = new System.Drawing.Size(121, 17);
 			this.statusBarLabelTileLoc.Text = "statusBarLabelTileLoc";
 			// 
+			// statusBarLabelTileInfo
+			// 
+			this.statusBarLabelTileInfo.Name = "statusBarLabelTileInfo";
+			this.statusBarLabelTileInfo.Size = new System.Drawing.Size(47, 17);
+			this.statusBarLabelTileInfo.Text = "TileInfo";
+			// 
 			// toolStripStatusLabel1
 			// 
 			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
@@ -1467,11 +1483,33 @@
 			this.panelTriggersLevelDisplay.Size = new System.Drawing.Size(474, 524);
 			this.panelTriggersLevelDisplay.TabIndex = 0;
 			// 
-			// statusBarLabelTileInfo
+			// contextMenuStripTileInLevel
 			// 
-			this.statusBarLabelTileInfo.Name = "statusBarLabelTileInfo";
-			this.statusBarLabelTileInfo.Size = new System.Drawing.Size(47, 17);
-			this.statusBarLabelTileInfo.Text = "TileInfo";
+			this.contextMenuStripTileInLevel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem5,
+            this.toolStripSeparator23,
+            this.cutToolStripMenuItem1,
+            this.copyToolStripMenuItem1,
+            this.toolStripMenuItem6,
+            this.toolStripSeparator24,
+            this.selectRoomToolStripMenuItem,
+            this.deselectToolStripMenuItem1});
+			this.contextMenuStripTileInLevel.Name = "contextMenuGeneral";
+			this.contextMenuStripTileInLevel.Size = new System.Drawing.Size(153, 170);
+			// 
+			// toolStripMenuItem5
+			// 
+			this.toolStripMenuItem5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItem5.Image")));
+			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem5.Text = "Edit Properties";
+			// 
+			// toolStripMenuItem6
+			// 
+			this.toolStripMenuItem6.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItem6.Image")));
+			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem6.Text = "Delete";
 			// 
 			// worldTreeView
 			// 
@@ -1494,6 +1532,40 @@
 			this.propertyGrid.Name = "propertyGrid";
 			this.propertyGrid.Size = new System.Drawing.Size(288, 214);
 			this.propertyGrid.TabIndex = 0;
+			// 
+			// selectRoomToolStripMenuItem
+			// 
+			this.selectRoomToolStripMenuItem.Name = "selectRoomToolStripMenuItem";
+			this.selectRoomToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.selectRoomToolStripMenuItem.Text = "Select Room";
+			// 
+			// toolStripSeparator23
+			// 
+			this.toolStripSeparator23.Name = "toolStripSeparator23";
+			this.toolStripSeparator23.Size = new System.Drawing.Size(149, 6);
+			// 
+			// toolStripSeparator24
+			// 
+			this.toolStripSeparator24.Name = "toolStripSeparator24";
+			this.toolStripSeparator24.Size = new System.Drawing.Size(149, 6);
+			// 
+			// cutToolStripMenuItem1
+			// 
+			this.cutToolStripMenuItem1.Name = "cutToolStripMenuItem1";
+			this.cutToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+			this.cutToolStripMenuItem1.Text = "Cut";
+			// 
+			// copyToolStripMenuItem1
+			// 
+			this.copyToolStripMenuItem1.Name = "copyToolStripMenuItem1";
+			this.copyToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+			this.copyToolStripMenuItem1.Text = "Copy";
+			// 
+			// deselectToolStripMenuItem1
+			// 
+			this.deselectToolStripMenuItem1.Name = "deselectToolStripMenuItem1";
+			this.deselectToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+			this.deselectToolStripMenuItem1.Text = "Deselect";
 			// 
 			// EditorForm
 			// 
@@ -1551,6 +1623,7 @@
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
 			this.splitContainer1.ResumeLayout(false);
+			this.contextMenuStripTileInLevel.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1698,5 +1771,14 @@
 		private System.Windows.Forms.ToolStripMenuItem roomPropertiesToolStripMenuItem1;
 		private PropertiesEditor.ZeldaPropertyGrid propertyGrid;
 		private System.Windows.Forms.ToolStripStatusLabel statusBarLabelTileInfo;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStripTileInLevel;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem6;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator23;
+		private System.Windows.Forms.ToolStripMenuItem cutToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator24;
+		private System.Windows.Forms.ToolStripMenuItem selectRoomToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem deselectToolStripMenuItem1;
 	}
 }

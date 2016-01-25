@@ -74,7 +74,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 		public EventTileDataInstance FindEventTileByID(string id) {
 			for (int i = 0; i < eventData.Count; i++) {
-				if (eventData[i].ID == id)
+				if (eventData[i].Id == id)
 					return eventData[i];
 			}
 			return null;
@@ -119,6 +119,10 @@ namespace ZeldaOracle.Game.Worlds {
 		// Tile Management
 		//-----------------------------------------------------------------------------
 		
+		public void PlaceTile(TileDataInstance tile, int x, int y, int layer) {
+			PlaceTile(tile, new Point2I(x, y), layer);
+		}
+
 		public void PlaceTile(TileDataInstance tile, Point2I location, int layer) {
 			Point2I size = tile.Size;
 			for (int x = 0; x < size.X; x++) {
@@ -135,19 +139,6 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 			if (tile != null) {
 				tile.Location	= location;
-				tile.Layer		= layer;
-				tile.Room		= this;
-			}
-		}
-
-		public void SetTile(TileDataInstance tile, Point2I location, int layer) {
-			SetTile(tile, location.X, location.Y, layer);
-		}
-
-		public void SetTile(TileDataInstance tile, int x, int y, int layer) {
-			tileData[x, y, layer] = tile;
-			if (tile != null) {
-				tile.Location	= new Point2I(x, y);
 				tile.Layer		= layer;
 				tile.Room		= this;
 			}
@@ -170,6 +161,13 @@ namespace ZeldaOracle.Game.Worlds {
 			TileDataInstance tile = tileData[x, y, layer];
 			if (tile != null)
 				RemoveTile(tile);
+		}
+
+		public void Remove(BaseTileDataInstance tile) {
+			if (tile is TileDataInstance)
+				RemoveTile((TileDataInstance) tile);
+			else if (tile is EventTileDataInstance)
+				RemoveEventTile((EventTileDataInstance) tile);
 		}
 
 		public TileDataInstance CreateTile(TileData data, Point2I location, int layer) {

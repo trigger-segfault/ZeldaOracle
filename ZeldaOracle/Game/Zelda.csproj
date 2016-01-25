@@ -465,8 +465,10 @@
     <Compile Include="Game\Tiles\Custom\TileSign.cs" />
     <Compile Include="Common\Scripting\IPropertyObject.cs" />
     <Compile Include="Game\Worlds\Dungeon.cs" />
+    <Compile Include="Game\Worlds\LevelTileCoord.cs" />
     <Compile Include="Game\Worlds\Room.cs" />
     <Compile Include="Game\Worlds\Level.cs" />
+    <Compile Include="Game\Worlds\TileGrid.cs" />
     <Compile Include="Game\Worlds\World.cs" />
     <Compile Include="Game\Worlds\WorldFile.cs" />
     <Compile Include="Game\Worlds\Zone.cs" />

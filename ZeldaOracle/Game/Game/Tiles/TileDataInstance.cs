@@ -10,13 +10,10 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Tiles {
-	public class TileDataInstance : IPropertyObject, IEventObject {
+	public class TileDataInstance : BaseTileDataInstance, IEventObject {
 
-		private Room		room;
-		private Point2I		location;
-		private int			layer;
-		private TileData	tileData;
-		private Properties	properties;
+		private Point2I	location;
+		private int		layer;
 
 
 		//-----------------------------------------------------------------------------
@@ -47,6 +44,19 @@ namespace ZeldaOracle.Game.Tiles {
 			this.properties.BaseProperties = tileData.Properties;
 		}
 
+		public override void Clone(BaseTileDataInstance copy) {
+			base.Clone(copy);
+			if (copy is TileDataInstance) {
+				this.location	= ((TileDataInstance) copy).location;
+				this.layer		= ((TileDataInstance) copy).layer;
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Accessors
+		//-----------------------------------------------------------------------------
+
 		public bool IsAtLocation(int x, int y) {
 			return (x == location.X && y == location.Y);
 		}
@@ -67,14 +77,42 @@ namespace ZeldaOracle.Game.Tiles {
 
 
 		//-----------------------------------------------------------------------------
-		// Properties
+		// Overridden Methods and Properties
 		//-----------------------------------------------------------------------------
-		
-		public Room Room {
-			get { return room; }
-			set { room = value; }
+
+		public override Point2I GetPosition() {
+			return (location * GameSettings.TILE_SIZE);
 		}
 
+		public override Rectangle2I GetBounds() {
+			return new Rectangle2I(
+					location * GameSettings.TILE_SIZE,
+					Size * GameSettings.TILE_SIZE);
+		}
+		
+		public override SpriteAnimation Sprite {
+			get { return tileData.Sprite; }
+			set { } // Don't see a need to set this.
+		}
+
+		public override SpriteAnimation CurrentSprite {
+			get {
+				if (TileData.SpriteList.Length > 0)
+					return TileData.SpriteList[properties.GetInteger("sprite_index")];
+				return new SpriteAnimation();
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public TileData TileData {
+			get { return (tileData as TileData); }
+			set { base.BaseData = value; }
+		}
+		
 		public Point2I Location {
 			get { return location; }
 			set { location = value; }
@@ -84,61 +122,26 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return layer; }
 			set { layer = value; }
 		}
-
-		public TileData TileData {
-			get { return tileData; }
-			set {
-				tileData = value;
-				if (tileData == null)
-					properties.BaseProperties = null;
-				else
-					properties.BaseProperties = tileData.Properties;
-			}
-		}
-		
-		public Properties Properties {
-			get { return properties; }
-			set {
-				properties = value;
-				properties.PropertyObject = this;
-			}
-		}
-		
-		public Type Type {
-			get { return tileData.Type; }
-		}
 		
 		public Point2I Size {
 			get { return properties.GetPoint("size", Point2I.One); }
 			set { properties.Set("size", value); }
 		}
 
-		public SpriteAnimation Sprite {
-			get { return tileData.Sprite; }
-		}
-
-		public SpriteAnimation CurrentSprite {
-			get {
-				if (tileData.SpriteList.Length > 0)
-					return tileData.SpriteList[properties.GetInteger("sprite_index")];
-				return new SpriteAnimation();
-			}
-		}
-
 		public SpriteAnimation[] SpriteList {
-			get { return tileData.SpriteList; }
+			get { return TileData.SpriteList; }
 		}
 
 		public SpriteAnimation SpriteAsObject {
-			get { return tileData.SpriteAsObject; }
+			get { return TileData.SpriteAsObject; }
 		}
 
 		public Animation BreakAnimation {
-			get { return tileData.BreakAnimation; }
+			get { return TileData.BreakAnimation; }
 		}
 
 		public Sound BreakSound {
-			get { return tileData.BreakSound; }
+			get { return TileData.BreakSound; }
 		}
 
 		public TileFlags Flags {
@@ -149,26 +152,6 @@ namespace ZeldaOracle.Game.Tiles {
 		public CollisionModel CollisionModel {
 			get { return properties.GetResource<CollisionModel>("collision_model", null); }
 			set { properties.SetAsResource<CollisionModel>("collision_model", value); }
-		}
-
-		public Point2I SheetLocation {
-			get { return tileData.SheetLocation; }
-		}
-		
-		public Tileset Tileset {
-			get { return TileData.Tileset; }
-		}
-
-		public Properties BaseProperties {
-			get { return TileData.Properties; }
-		}
-
-		public ObjectEventCollection Events {
-			get { return TileData.Events; }
-		}
-
-		public string Id {
-			get { return properties.GetString("id", ""); }
 		}
 
 		public TileSpawnOptions SpawnOptions {

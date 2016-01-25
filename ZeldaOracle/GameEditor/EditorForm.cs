@@ -383,6 +383,10 @@ namespace ZeldaEditor {
 			get { return contextMenuGeneral; }
 		}
 
+		public ContextMenuStrip ContextMenuStripTileInLevel {
+			get { return contextMenuStripTileInLevel; }
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// File Menu Buttons
