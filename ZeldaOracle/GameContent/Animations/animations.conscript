@@ -290,6 +290,12 @@ ANIM turnstile_rotate_counterclockwise;
 		ADD frame, 4, turnstile_bars_angled_clockwise_blue;
 		ADD frame, 4, turnstile_bars_angled_blue;
 	END;
+ANIM tile_pull_handle;
+	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_right;
+	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_up;
+	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_left;
+	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_down; END;
+
 
 #==============================================================
 # Color Cube Animations

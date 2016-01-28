@@ -16,7 +16,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		private int timer;
 		private int duration;
-		private int equipSlot;
+		private ItemBracelet bracelet;
 
 
 		//-----------------------------------------------------------------------------
@@ -24,7 +24,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerGrabState() {
-			equipSlot	= 0;
+			bracelet	= null;
 			duration	= 10;
 		}
 		
@@ -64,6 +64,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			timer = 0;
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_GRAB);
 			player.Graphics.PauseAnimation();
+			
+			player.Movement.StopMotion();
 		}
 		
 		public override void OnEnd(PlayerState newState) {
@@ -74,7 +76,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void Update() {
 			base.Update();
 
-			InputControl grabButton = player.Inventory.GetSlotButton(equipSlot);
+			InputControl grabButton = player.Inventory.GetSlotButton(bracelet.CurrentEquipSlot);
 			InputControl pullButton = Controls.Arrows[Directions.Reverse(player.Direction)];
 
 			if (!grabButton.IsDown()) {
@@ -99,9 +101,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public int BraceletEquipSlot {
-			get { return equipSlot; }
-			set { equipSlot = value; }
+		public ItemBracelet Bracelet {
+			get { return bracelet; }
+			set { bracelet = value; }
 		}
 	}
 }

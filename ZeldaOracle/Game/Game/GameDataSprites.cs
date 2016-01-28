@@ -116,6 +116,12 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_TILE_COLOR_BARRIER_RED_LOWERED;
 		public static Sprite SPR_TILE_COLOR_BARRIER_BLUE_RAISED;
 		public static Sprite SPR_TILE_COLOR_BARRIER_BLUE_LOWERED;
+		public static Sprite SPR_TILE_PULL_HANDLE_BAR_HORIZONTAL;
+		public static Sprite SPR_TILE_PULL_HANDLE_UP;
+		public static Sprite SPR_TILE_PULL_HANDLE_LEFT;
+		public static Sprite SPR_TILE_PULL_HANDLE_BAR_VERTICAL;
+		public static Sprite SPR_TILE_PULL_HANDLE_DOWN;
+		public static Sprite SPR_TILE_PULL_HANDLE_RIGHT;
 
 		public static Sprite[] SPR_COLOR_CUBE_ORIENTATIONS;
 

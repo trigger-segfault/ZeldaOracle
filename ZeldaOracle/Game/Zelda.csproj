@@ -272,6 +272,7 @@
     <Compile Include="Game\Entities\NPC.cs" />
     <Compile Include="Game\Entities\Players\PlayerSwimmingSkills.cs" />
     <Compile Include="Game\Entities\Players\PlayerTunics.cs" />
+    <Compile Include="Game\Entities\Players\States\PlayerPullHandleState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerJumpToState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerMagicBoomerangState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerMinecartState.cs" />
@@ -421,6 +422,7 @@
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorTile.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorSwitch.cs" />
     <Compile Include="Game\Tiles\Custom\SwitchTileBase.cs" />
+    <Compile Include="Game\Tiles\Custom\TilePullHandle.cs" />
     <Compile Include="Game\Tiles\Custom\TileLever.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorLantern.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorCubeSlot.cs" />

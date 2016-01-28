@@ -82,6 +82,10 @@ namespace ZeldaOracle.Common.Geometry {
 			}
 			return false;
 		}
+		
+		public static explicit operator CollisionModel(Rectangle2I box) {
+			return new CollisionModel(box);
+		}
 
 
 		//-----------------------------------------------------------------------------

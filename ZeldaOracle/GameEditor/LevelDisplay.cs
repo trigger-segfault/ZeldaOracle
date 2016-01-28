@@ -171,10 +171,11 @@ namespace ZeldaEditor {
 				Microsoft.Xna.Framework.Graphics.RenderTargetUsage.PreserveContents);*/
 
 			// Wire the events.
-			MouseMove	+= OnMouseMove;
-			MouseDown	+= OnMouseDown;
-			MouseUp		+= OnMouseUp;
-			MouseLeave	+= OnMouseLeave;
+			MouseMove			+= OnMouseMove;
+			MouseDown			+= OnMouseDown;
+			MouseUp				+= OnMouseUp;
+			MouseLeave			+= OnMouseLeave;
+			MouseDoubleClick	+= OnMouseDoubleClick;
 			
 			this.ResizeRedraw = true;
 
@@ -634,6 +635,7 @@ namespace ZeldaEditor {
 
 				// Draw selected tiles.
 				foreach (BaseTileDataInstance tile in selectedTiles) {
+					g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
 					Rectangle2I bounds = tile.GetBounds();
 					bounds.Point += GetRoomDrawPosition(tile.Room);
 					g.DrawRectangle(bounds, 1, Color.White);
@@ -747,6 +749,18 @@ namespace ZeldaEditor {
 			}
 			editorForm.StatusBarLabelRoomLoc.Text = "Room (?, ?)";
 			editorForm.StatusBarLabelTileLoc.Text = "Tile (?, ?)";
+		}
+
+		private void OnMouseDoubleClick(object sender, MouseEventArgs e) {
+			if (editorControl.IsLevelOpen) {
+				Point2I mousePos = ScrollPosition + e.Location;
+
+				// Notify the current tool.
+				if (!editorControl.PlayerPlaceMode) {
+					e = new MouseEventArgs(e.Button, e.Clicks, mousePos.X, mousePos.Y, e.Delta);
+					editorControl.CurrentTool.OnMouseDoubleClick(e);
+				}
+			}
 		}
 
 

@@ -18,6 +18,7 @@ using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
+using ZeldaOracle.Game.Entities.Players;
 
 namespace ZeldaOracle.Game.Tiles {
 	
@@ -283,6 +284,13 @@ namespace ZeldaOracle.Game.Tiles {
 				Break(true);
 		}
 
+		public virtual void OnGrab(int direction, ItemBracelet bracelet) {
+			Player player = roomControl.Player;
+			player.GrabState.Bracelet = bracelet;
+			player.BeginState(player.GrabState);
+			player.Movement.StopMotion();
+		}
+		
 		// Called when the player wants to push the tile.
 		public virtual bool OnPush(int direction, float movementSpeed) {
 			if (!HasFlag(TileFlags.Movable))

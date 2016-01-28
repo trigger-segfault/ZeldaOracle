@@ -6,11 +6,33 @@ using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Geometry {
 
+	// Possible Names:
+	// - WindingOrder
+	// - RotationDirection
+	// - RotateDirection
+	// - RotDirection
+	// - TurnDirection
+	// "rotation_direction"
+
+	// Currently used in:
+	// - Direction
+	// - Angle
+	// - GMath
+	// - PlayerSwingState
+	// - PlayerSpinSwordState
+	// - PlayerSeedShooterState
+	// - PlayerMagicBoomerangState
+	// - RoomStateTurnstile
+	// - TileTurnstile
+
+	// The direction of rotation.
 	public enum WindingOrder {
 		CounterClockwise	= 0,
 		Clockwise			= 1,
 	}
 
+	// Enumeration values and methods for integers representing one of eight
+	// 45 degree angle intervals in a circle.
 	public static class Angles {
 
 		//-----------------------------------------------------------------------------

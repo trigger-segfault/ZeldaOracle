@@ -51,6 +51,12 @@ namespace ZeldaOracle.Game.Tiles {
 				this.layer		= ((TileDataInstance) copy).layer;
 			}
 		}
+		
+		public override BaseTileDataInstance Duplicate() {
+			TileDataInstance copy = new TileDataInstance();
+			copy.Clone(this);
+			return copy;
+		}
 
 
 		//-----------------------------------------------------------------------------

@@ -43,6 +43,8 @@ namespace ZeldaOracle.Game.Tiles {
 			this.properties.SetAll(copy.properties);
 		}
 
+		public abstract BaseTileDataInstance Duplicate();
+
 
 		//-----------------------------------------------------------------------------
 		// Virtual properties

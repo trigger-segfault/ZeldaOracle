@@ -93,6 +93,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerMagicBoomerangState	stateMagicBoomerang;
 		private PlayerGrabState				stateGrab;
 		private PlayerCarryState			stateCarry;
+		private PlayerPullHandleState		statePullHandle;
 		private PlayerRespawnDeathState		stateRespawnDeath;
 		private PlayerMinecartState			stateMinecart;
 		private PlayerJumpToState			stateJumpTo;
@@ -177,6 +178,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateMagicBoomerang	= new PlayerMagicBoomerangState();
 			stateGrab			= new PlayerGrabState();
 			stateCarry			= new PlayerCarryState();
+			statePullHandle		= new PlayerPullHandleState();
 			stateRespawnDeath	= new PlayerRespawnDeathState();
 			stateMinecart		= new PlayerMinecartState();
 			stateJumpTo			= new PlayerJumpToState();
@@ -830,6 +832,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerGrabState GrabState {
 			get { return stateGrab; }
+		}
+
+		public PlayerPullHandleState PullHandleState {
+			get { return statePullHandle; }
 		}
 
 		public PlayerRespawnDeathState RespawnDeathState {

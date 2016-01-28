@@ -115,6 +115,21 @@ namespace ZeldaEditor {
 		// Methods
 		//-----------------------------------------------------------------------------
 
+		public void OpenObjectPropertiesEditor(IPropertyObject propertyObject) {
+			if (propertyObject != null) {
+				editorControl.OpenObjectProperties(propertyObject);
+
+				if (objectEditorForm == null || objectEditorForm.IsDisposed) {
+					objectEditorForm = new ObjectEditor(editorControl);
+					objectEditorForm.SetObject(propertyObject);
+					objectEditorForm.Show(this);
+				}
+				else {
+					objectEditorForm.SetObject(propertyObject);
+				}
+			}
+		}
+
 		// Prompt the user to save unsaved changes if there are any. Returns
 		// the result of the prompt dialogue (yes/no/cancel), or 'yes' if
 		// there were no unsaved changes.
@@ -468,6 +483,7 @@ namespace ZeldaEditor {
 
 		// Delete
 		private void deleteToolStripMenuItem1_Click(object sender, EventArgs e) {
+			editorControl.LevelDisplay.DeleteSelectionGrid();
 			editorControl.CurrentTool.Delete();
 		}
 		
@@ -480,6 +496,7 @@ namespace ZeldaEditor {
 
 		// Deselect
 		private void deselectToolStripMenuItem_Click(object sender, EventArgs e) {
+			editorControl.LevelDisplay.DeselectSelectionGrid();
 			editorControl.CurrentTool.Deselect();
 		}
 		
@@ -488,16 +505,8 @@ namespace ZeldaEditor {
 		// Tile Properties...
 		private void tilePropertiesToolStripMenuItem_Click(object sender, EventArgs e) {
 			IPropertyObject obj = editorControl.PropertyGrid.PropertyObject;
-			if (obj is IPropertyObject) {
-				if (objectEditorForm == null || objectEditorForm.IsDisposed) {
-					objectEditorForm = new ObjectEditor(editorControl);
-					objectEditorForm.SetObject((IPropertyObject) obj);
-					objectEditorForm.Show(this);
-				}
-				else {
-					objectEditorForm.SetObject((IPropertyObject) obj);
-				}
-			}
+			if (obj is IPropertyObject)
+				OpenObjectPropertiesEditor(obj);
 		}
 
 		
@@ -667,29 +676,15 @@ namespace ZeldaEditor {
 			Point2I selectedRoom = editorControl.SelectedRoom;
 			if (selectedRoom.X >= 0 && selectedRoom.Y >= 0) {
 				Room room = editorControl.Level.GetRoomAt(selectedRoom);
-
-				if (objectEditorForm == null || objectEditorForm.IsDisposed)
-					objectEditorForm = new ObjectEditor(editorControl);
-				objectEditorForm.SetObject(room);
-				objectEditorForm.Show(this);
+				OpenObjectPropertiesEditor(room);
 			}
 		}
 		
 		// Open room properties.
 		private void roomPropertiesToolStripMenuItem1_Click(object sender, EventArgs e) {
 			Room room = editorControl.LevelDisplay.SelectedRoom;
-
-			if (room != null) {
-				editorControl.OpenObjectProperties(room);
-				if (objectEditorForm == null || objectEditorForm.IsDisposed) {
-					objectEditorForm = new ObjectEditor(editorControl);
-					objectEditorForm.SetObject(room);
-					objectEditorForm.Show(this);
-				}
-				else {
-					objectEditorForm.SetObject(room);
-				}
-			}
+			if (room != null)
+				OpenObjectPropertiesEditor(room);
 		}
 		
 		//-----------------------------------------------------------------------------

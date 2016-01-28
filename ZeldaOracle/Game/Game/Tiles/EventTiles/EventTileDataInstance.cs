@@ -38,6 +38,12 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 				this.sprite		= new SpriteAnimation(((EventTileDataInstance) copy).sprite);
 			}
 		}
+		
+		public override BaseTileDataInstance Duplicate() {
+			EventTileDataInstance copy = new EventTileDataInstance();
+			copy.Clone(this);
+			return copy;
+		}
 
 
 		//-----------------------------------------------------------------------------

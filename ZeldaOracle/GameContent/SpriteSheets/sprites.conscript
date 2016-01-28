@@ -387,8 +387,16 @@ SPRITE tile_roller_vertical_3,			( 2, 4); END;
 SPRITE tile_arrow_cannon_left,			( 3, 4); END;
 SPRITE tile_arrow_cannon_right,			( 4, 4); END;
 
-SPRITE minecart_horizontal,				(0, 5), (0, -3); ADD (2, 5), (0, -3); END;
-SPRITE minecart_vertical,				(0, 6), (0, -3); ADD (2, 6), (0, -3); END;
+SPRITE minecart_horizontal,				( 0, 5), (0, -3); ADD (2, 5), (0, -3); END;
+SPRITE minecart_vertical,				( 0, 6), (0, -3); ADD (2, 6), (0, -3); END;
+
+SPRITE tile_pull_handle_bar_horizontal,	(10, 5); END;
+SPRITE tile_pull_handle_up,				(11, 5); END;
+SPRITE tile_pull_handle_left,			(12, 5); END;
+SPRITE tile_pull_handle_bar_vertical,	(10, 6); END;
+SPRITE tile_pull_handle_down,			(11, 6); END;
+SPRITE tile_pull_handle_right,			(12, 6); END;
+
 
 SPRITE turnstile_bars_angled,
 			( 0,  7), ( 0,  0); ADD ( 1,  7), (16,  0); ADD ( 2,  7), (32,  0);

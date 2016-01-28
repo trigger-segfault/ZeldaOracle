@@ -270,6 +270,17 @@ namespace ZeldaOracle.Common.Geometry {
 			return Bottom;
 		}
 
+		public void ExtendEdge(int direction, int amount) {
+			if (direction == Directions.Right || direction == Directions.Left)
+				Size.X += amount;
+			if (direction == Directions.Down || direction == Directions.Up)
+				Size.Y += amount;
+			if (direction == Directions.Left)
+				Point.X -= amount;
+			if (direction == Directions.Up)
+				Point.Y -= amount;
+		}
+
 		/** <summary> Returns a rectangle with the corners stretched out by the specified amount. </summary> */
 		public Rectangle2I Inflated(Point2I amount) {
 			return new Rectangle2I(Point - amount, Size + amount * 2);

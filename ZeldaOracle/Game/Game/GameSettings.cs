@@ -112,6 +112,13 @@ namespace ZeldaOracle.Game {
 		// Tiles
 		public const int				TILE_CRACKED_FLOOR_CRUMBLE_DELAY	= 30;
 		public const float				TILE_ROLLER_MOVE_SPEED				= 0.5f;
+		
+		public const float				TILE_PULL_HANDLE_EXTEND_SPEED			= 0.25f;
+		public const float				TILE_PULL_HANDLE_RETRACT_SPEED			= 0.25f;
+		public const int				TILE_PULL_HANDLE_PLAYER_PULL_DURATION	= 40;
+		public const int				TILE_PULL_HANDLE_PLAYER_PAUSE_DURATION	= 20;
+		public const int				TILE_PULL_HANDLE_EXTEND_LENGTH			= 64;
+		public const int				TILE_PULL_HANDLE_WALL_OFFSET			= 8;
 
 
 

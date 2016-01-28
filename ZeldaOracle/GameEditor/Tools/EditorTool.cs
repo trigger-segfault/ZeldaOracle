@@ -94,6 +94,8 @@ namespace ZeldaEditor.Tools {
 				OnMouseDragMove(e);
 			}
 		}
+		
+		public virtual void OnMouseDoubleClick(MouseEventArgs e) { }
 
 
 		//-----------------------------------------------------------------------------
