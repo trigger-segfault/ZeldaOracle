@@ -235,13 +235,9 @@ namespace ZeldaOracle.Game.Entities {
 
 			// Keep track of the highest-layer tile the entity is positioned over.
 			topTile = null;
-			foreach (Tile tile in entity.RoomControl.GetTiles()) {
-				Rectangle2F tileRect = new Rectangle2F(tile.Position, tile.Size * GameSettings.TILE_SIZE);
-				if (!tile.IsSolid && tileRect.Contains(entity.Position) &&
-					(topTile == null || tile.Layer > topTile.Layer))
-				{
+			foreach (Tile tile in entity.RoomControl.TileManager.GetTilesAtPosition(entity.Position)) {
+				if (!tile.IsSolid && (topTile == null || tile.Layer > topTile.Layer))
 					topTile = tile;
-				}
 			}
 			if (topTile != null) {
 				// TODO: Integrate the surface tile's velocity into our

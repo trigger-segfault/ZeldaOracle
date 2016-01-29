@@ -36,13 +36,13 @@ namespace ZeldaOracle.Game.Control {
 		private Point2I			roomLocation;
 		private Dungeon			dungeon;
 		private List<Entity>	entities;
-		private Tile[,,]		tiles;
 		private List<EventTile>	eventTiles;
 		private ViewControl		viewControl;
 		private int				requestedTransitionDirection;
 		private int				entityCount;
 		private RoomGraphics	roomGraphics;
 		private RoomPhysics		roomPhysics;
+		private TileManager		tileManager;
 		private bool			allMonstersDead;
 
 		private event Action<Player>	eventPlayerRespawn;
@@ -56,19 +56,17 @@ namespace ZeldaOracle.Game.Control {
 		public RoomControl() {
 			room			= null;
 			dungeon			= null;
-			tiles			= null;
 			roomLocation	= Point2I.Zero;
 			entities		= new List<Entity>();
 			eventTiles		= new List<EventTile>();
 			viewControl		= new ViewControl();
+			tileManager		= new TileManager(this);
 			roomGraphics	= new RoomGraphics(this);
 			roomPhysics		= new RoomPhysics(this);
 			requestedTransitionDirection = 0;
 			eventPlayerRespawn		= null;
 			eventRoomTransitioning	= null;
 			entityCount				= 0;
-
-			//dungeon = new Dungeon("dungeon1", "Spirit's Grave"); // TODO: remove this.
 		}
 		
 
@@ -78,88 +76,47 @@ namespace ZeldaOracle.Game.Control {
 
 		// Return an enumerable list of tiles.
 		public IEnumerable<Tile> GetTiles() {
-			for (int i = 0; i < room.LayerCount; i++) {
-				for (int x = 0; x < room.Width; x++) {
-					for (int y = 0; y < room.Height; y++) {
-						Tile tile = tiles[x, y, i];
-						if (tile != null && x == tile.Location.X && y == tile.Location.Y)
-							yield return tile;
-					}
-				}
-			}
+			return tileManager.GetTiles();
 		}
 		
 		// Return an enumerable list of tiles in the given grid based area.
 		public IEnumerable<Tile> GetTilesInArea(Rectangle2I area) {
-			Rectangle2I clippedArea = Rectangle2I.Intersect(area, new Rectangle2I(Point2I.Zero, room.Size));
-			int minX = clippedArea.Min.X;
-			int minY = clippedArea.Min.Y;
-			int maxX = clippedArea.Max.X;
-			int maxY = clippedArea.Max.Y;
-
-			for (int i = 0; i < room.LayerCount; i++) {
-				for (int x = minX; x < maxX; x++) {
-					for (int y = minY; y < maxY; y++) {
-						Tile tile = tiles[x, y, i];
-						if (tile != null) {
-							Point2I loc = tile.Location;
-							if (!clippedArea.Contains(loc))
-								loc = Point2I.Clamp(loc, clippedArea);
-							if (x == loc.X && y == loc.Y)
-								yield return tile;
-						}
-					}
-				}
-			}
+			return tileManager.GetTilesInArea(area);
 		}
 		
 		// Return the tile at the given location (can return null).
 		public Tile GetTile(Point2I location, int layer) {
-			return tiles[location.X, location.Y, layer];
+			return tileManager.GetTile(location, layer);
 		}
 
 		// Return the tile at the given location (can return null).
 		public Tile GetTile(int x, int y, int layer) {
-			return tiles[x, y, layer];
+			return tileManager.GetTile(x, y, layer);
 		}
 
 		// Return the tile at the given location that's on the highest layer.
 		public Tile GetTopTile(int x, int y) {
-			for (int i = room.LayerCount - 1; i >= 0; i--) {
-				if (tiles[x, y, i] != null)
-					return tiles[x, y, i];
-			}
-			return null;
+			return tileManager.GetTopTile(x, y);
 		}
 
 		// Return the tile at the given location that's on the highest layer.
 		public Tile GetTopTile(Point2I location) {
-			for (int i = room.LayerCount - 1; i >= 0; i--) {
-				if (tiles[location.X, location.Y, i] != null)
-					return tiles[location.X, location.Y, i];
-			}
-			return null;
+			return tileManager.GetTopTile(location);
 		}
 		
 		// Return true if the given tile location is inside the room.
 		public bool IsTileInBounds(Point2I location, int layer = 0) {
-			return (location.X >= 0 && location.X < room.Width &&
-					location.Y >= 0 && location.Y < room.Height &&
-					layer >= 0 && layer < room.LayerCount);
+			return tileManager.IsTileInBounds(location, layer);
 		}
 
 		// Return the tile location that the given position in pixels is situated in.
 		public Point2I GetTileLocation(Vector2F position) {
-			return (Point2I) (position / GameSettings.TILE_SIZE);
+			return tileManager.GetTileLocation(position);
 		}
 
 		// inflateAmount inflates the output rectangle.
 		public Rectangle2I GetTileAreaFromRect(Rectangle2F rect, int inflateAmount = 0) {
-			Rectangle2I area;
-			area.Point	= (Point2I) (rect.TopLeft / (float) GameSettings.TILE_SIZE);
-			area.Size	= ((Point2I) (rect.BottomRight / (float) GameSettings.TILE_SIZE)) + Point2I.One - area.Point;
-			area.Inflate(inflateAmount, inflateAmount);
-			return Rectangle2I.Intersect(area, new Rectangle2I(Point2I.Zero, room.Size));
+			return tileManager.GetTileAreaFromRect(rect, inflateAmount);
 		}
 
 		public EventTile FindEventTile(EventTileDataInstance data) {
@@ -233,55 +190,23 @@ namespace ZeldaOracle.Game.Control {
 		
 		// Place a tile in the tile grid at the given location and layer.
 		public void PlaceTile(Tile tile, Point2I location, int layer) {
-			PlaceTile(tile, location.X, location.Y, layer);
+			tileManager.PlaceTile(tile, location, layer);
 		}
 		
 		// Place a tile in highest empty layer at the given location.
 		// Returns true if there was an empty space to place the tile.
 		public bool PlaceTileOnHighestLayer(Tile tile, Point2I location) {
-			// Find the highest empty layer.
-			int layer = -1;
-			for (int i = room.LayerCount - 1; i >= 0; i--) {
-				bool isLayerEmpty = true;
-				for (int x = 0; x < tile.Width && isLayerEmpty; x++) {
-					for (int y = 0; y < tile.Height && isLayerEmpty; y++) {
-						if (tiles[location.X + x, location.Y + y, i] != null)
-							isLayerEmpty = false;
-					}
-				}
-				if (isLayerEmpty)
-					layer = i;
-			}
-			if (layer < 0)
-				return false;
-
-			// Place the tile in that layer.
-			PlaceTile(tile, location, layer);
-			return true;
+			return tileManager.PlaceTileOnHighestLayer(tile, location);
 		}
 
 		// Use this for placing tiles at runtime.
-		public void PlaceTile(Tile tile, int x, int y, int layer) {
-			for (int xx = 0; xx < tile.Width; xx++) {
-				for (int yy = 0; yy < tile.Height; yy++) {
-					tiles[x + xx, y + yy, layer] = tile;
-				}
-			}
-
-			tile.Location = new Point2I(x, y);
-			tile.Layer = layer;
-			tile.Initialize(this);
+		public void PlaceTile(Tile tile, int x, int y, int layer, bool initializeTile = true) {
+			tileManager.PlaceTile(tile, x, y, layer, initializeTile);
 		}
 
 		// Remove a tile from the room.
 		public void RemoveTile(Tile tile) {
-			for (int x = 0; x < tile.Width; x++) {
-				for (int y = 0; y < tile.Height; y++) {
-					tiles[tile.Location.X + x, tile.Location.Y + y, tile.Layer] = null;
-				}
-			}
-			tile.IsAlive = false;
-			tile.OnRemoveFromRoom();
+			tileManager.RemoveTile(tile);
 		}
 
 		// Put an event tile into the room.
@@ -292,20 +217,7 @@ namespace ZeldaOracle.Game.Control {
 
 		// Move the given tile to a new location.
 		public void MoveTile(Tile tile, Point2I newLocation, int newLayer) {
-			// Remove from old location.
-			for (int xx = 0; xx < tile.Width; xx++) {
-				for (int yy = 0; yy < tile.Height; yy++) {
-					tiles[tile.Location.X + xx, tile.Location.Y + yy, tile.Layer] = null;
-				}
-			}
-			// Place in new location.
-			for (int xx = 0; xx < tile.Width; xx++) {
-				for (int yy = 0; yy < tile.Height; yy++) {
-					tiles[newLocation.X + xx, newLocation.Y + yy, newLayer] = tile;
-				}
-			}
-			tile.Location = newLocation;
-			tile.Layer = newLayer;
+			tileManager.MoveTile(tile, newLocation, newLayer);
 		}
 
 
@@ -337,14 +249,7 @@ namespace ZeldaOracle.Game.Control {
 			}
 
 			// Create the tile grid.
-			tiles = new Tile[room.Width, room.Height, room.LayerCount];
-			for (int x = 0; x < room.Width; x++) {
-				for (int y = 0; y < room.Height; y++) {
-					for (int i = 0; i < room.LayerCount; i++) {
-						tiles[x, y, i] = null;
-					}
-				}
-			}
+			tileManager.Initialize(room);
 			for (int x = 0; x < room.Width; x++) {
 				for (int y = 0; y < room.Height; y++) {
 					for (int i = 0; i < room.LayerCount; i++) {
@@ -355,16 +260,7 @@ namespace ZeldaOracle.Game.Control {
 						{
 							// Place the tile.
 							Tile tile = Tile.CreateTile(data);
-							for (int xx = 0; xx < tile.Width; xx++) {
-								for (int yy = 0; yy < tile.Height; yy++) {
-									if (x + xx < room.Width & y + yy < room.Height)
-										tiles[x + xx, y + yy, i] = tile;
-								}
-							}
-
-							tile.Location		= new Point2I(x, y);
-							tile.Layer			= i;
-							tile.RoomControl	= this;
+							PlaceTile(tile, x, y, i, false);
 						}
 					}
 				}
@@ -381,15 +277,7 @@ namespace ZeldaOracle.Game.Control {
 			}
 			
 			// Initialize the tiles.
-			for (int x = 0; x < room.Width; x++) {
-				for (int y = 0; y < room.Height; y++) {
-					for (int i = 0; i < room.LayerCount; i++) {
-						Tile t = tiles[x, y, i];
-						if (t != null)
-							t.Initialize(this);
-					}
-				}
-			}
+			tileManager.InitializeTiles();
 			
 			// Initialize the event tiles.
 			for (int i = 0; i < eventTiles.Count; i++) {
@@ -560,23 +448,8 @@ namespace ZeldaOracle.Game.Control {
 				return;
 			
 			// Update tiles.
-			foreach (Tile t in GetTiles())
-				t.IsUpdated = false;
-			for (int i = 0; i < room.LayerCount; i++) {
-				for (int x = 0; x < room.Width; x++) {
-					for (int y = 0; y < room.Height; y++) {
-						Tile t = tiles[x, y, i];
-						if (t != null && x == t.Location.X && y == t.Location.Y && !t.IsUpdated) {
-							t.IsUpdated = true;
-							if (GameControl.UpdateRoom)
-								t.Update();
-							if (GameControl.AnimateRoom)
-								t.UpdateGraphics();
-						}
-					}
-				}
-			}
-			
+			tileManager.UpdateTiles();
+
 			// Update the event tiles.
 			for (int i = 0; i < eventTiles.Count; i++) {
 				eventTiles[i].Update();
@@ -646,15 +519,7 @@ namespace ZeldaOracle.Game.Control {
 			g.Translate(-viewControl.ViewPosition);
 			
 			// Draw tiles.
-			for (int i = 0; i < room.LayerCount; i++) {
-				for (int y = 0; y < room.Height; y++) {
-					for (int x = 0; x < room.Width; x++) {
-						Tile t = tiles[x, y, i];
-						if (t != null && x == t.Location.X && y == t.Location.Y)
-							t.Draw(g);
-					}
-				}
-			}
+			tileManager.DrawTiles(g);
 			
 			// Draw entities in reverse order (because newer entities are drawn below older ones).
 			roomGraphics.Clear();
@@ -778,6 +643,10 @@ namespace ZeldaOracle.Game.Control {
 
 		public ViewControl ViewControl {
 			get { return viewControl; }
+		}
+
+		public TileManager TileManager {
+			get { return tileManager; }
 		}
 
 		public Dungeon Dungeon {

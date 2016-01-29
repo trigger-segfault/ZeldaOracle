@@ -69,16 +69,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				player.BeginNormalState();
 			}
 			else if (isPulling) {
-				tileHandle.Extend(tileHandle.ExtendSpeed);
-
-				if (tileHandle.IsFullyExtended) {
-					// The handle has been fully extended.
-					isPulling	= false;
-					timer		= 0;
-					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_GRAB);
-					AudioSystem.PlaySound(GameData.SOUND_CHEST_OPEN);
+				// Extend the handle.
+				if (!tileHandle.IsFullyExtended) {
+					tileHandle.Extend(tileHandle.ExtendSpeed);
+					if (tileHandle.IsFullyExtended)
+						AudioSystem.PlaySound(GameData.SOUND_CHEST_OPEN);
 				}
-				else if (timer <= 0) {
+
+				if (timer <= 0) {
 					// Stop pulling to pause for after a short duration.
 					isPulling	= false;
 					timer		= puaseDuration;
@@ -91,12 +89,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_GRAB);
 				}
 			}
-			else if (timer <= 0 && !tileHandle.IsFullyExtended && pullButton.IsDown()) {
+			else if (timer <= 0 && pullButton.IsDown()) {
 				// Begin pulling the handle.
 				timer		= pullDuration;
 				isPulling	= true;
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
-				AudioSystem.PlaySound(GameData.SOUND_BLOCK_PUSH);
+				if (!tileHandle.IsFullyExtended)
+					AudioSystem.PlaySound(GameData.SOUND_BLOCK_PUSH);
 			}
 
 			player.Position = tileHandle.GetPlayerPullPosition();

@@ -68,17 +68,8 @@ namespace ZeldaOracle.Game.Tiles {
 				return false;
 
 			// Make sure there are no obstructions.
-			int newLayer = -1;
-			for (int i = 0; i < RoomControl.Room.LayerCount; i++) {
-				Tile t = RoomControl.GetTile(newLocation.X, newLocation.Y, i);
-				if (t != null && (t.IsSolid || t.Flags.HasFlag(TileFlags.NotCoverable)))
-					return false;
-				if (t == null && newLayer != Layer)
-					newLayer = i;
-			}
-
-			// Not enough layers to place this tile.
-			if (newLayer < 0)
+			int newLayer;
+			if (IsMoveObstructed(direction, out newLayer))
 				return false;
 
 			if ((IsVertical && Directions.IsVertical(direction)) || (!IsVertical && Directions.IsHorizontal(direction)))

@@ -24,6 +24,8 @@ namespace ZeldaOracle.Game.Tiles {
 	
 	public class Tile : IPropertyObject, ZeldaAPI.Tile {
 
+		private Rectangle2I			tileGridLocation;
+
 		// Internal
 		private RoomControl			roomControl;
 		private bool				isAlive;
@@ -69,6 +71,7 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		// Use Tile.CreateTile() instead of this constructor.
 		protected Tile() {
+			tileGridLocation	= Rectangle2I.Zero;
 			isAlive				= false;
 			isInitialized		= false;
 			location			= Point2I.Zero;
@@ -396,6 +399,14 @@ namespace ZeldaOracle.Game.Tiles {
 
 		// Called when this tile is uncovered.
 		public virtual void OnUncover(Tile tile) { }
+
+		public virtual void OnCoverBegin(Tile tile) { }
+		
+		public virtual void OnCoverComplete(Tile tile) { }
+		
+		public virtual void OnUncoverBegin(Tile tile) { }
+
+		public virtual void OnUncoverComplete(Tile tile) { }
 
 
 		//-----------------------------------------------------------------------------
@@ -834,6 +845,11 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public virtual TileDataInstance TileDataOwner {
 			get { return tileData; }
+		}
+
+		public Rectangle2I TileGridLocation {
+			get { return tileGridLocation; }
+			set { tileGridLocation = value; }
 		}
 
 

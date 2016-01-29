@@ -13,6 +13,7 @@ namespace ZeldaOracle.Game.Tiles {
 	public class TileButton : Tile, ZeldaAPI.Button {
 
 		private bool isPressed;
+		private List<Tile> tilesCovering; // List of tiles covering this button
 
 
 		//-----------------------------------------------------------------------------
@@ -20,7 +21,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public TileButton() {
-
+			tilesCovering = new List<Tile>();
 		}
 
 		//-----------------------------------------------------------------------------
@@ -50,14 +51,24 @@ namespace ZeldaOracle.Game.Tiles {
 			if (pressRect.Contains(player.Position))
 				isDown = true;
 
+			pressRect = new Rectangle2F(6, 6, 4, 4);
+			pressRect.Point += Position;
+
 			// Check if a tile is on top of this button.
+			foreach (Tile tile in RoomControl.TileManager.GetTilesAtPosition(Center)) {
+				if (tile.IsSolid) {
+					isDown = true;
+					break;
+				}
+			}
+			/*
 			for (int i = Layer; i < RoomControl.Room.LayerCount; i++) {
 				Tile tile = RoomControl.GetTile(Location, i);
 
 				if (tile != null && tile.IsSolid) {
 					isDown = true;
 				}
-			}
+			}*/
 
 			// Check if the pressed state has changed.
 			bool releasable = Properties.GetBoolean("releasable", true);

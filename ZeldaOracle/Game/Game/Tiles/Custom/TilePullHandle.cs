@@ -93,11 +93,13 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public override void OnGrab(int direction, ItemBracelet bracelet) {
-			Player player = RoomControl.Player;
-			player.PullHandleState.Bracelet			= bracelet;
-			player.PullHandleState.PullHandleTile	= this;
-			player.BeginState(player.PullHandleState);
-			isBeingPulled = true;
+			if (direction == Directions.Reverse(this.direction)) {
+				Player player = RoomControl.Player;
+				player.PullHandleState.Bracelet			= bracelet;
+				player.PullHandleState.PullHandleTile	= this;
+				player.BeginState(player.PullHandleState);
+				isBeingPulled = true;
+			}
 		}
 
 		public override void Update() {
