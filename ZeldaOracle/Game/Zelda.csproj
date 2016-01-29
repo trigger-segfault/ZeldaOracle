@@ -318,6 +318,7 @@
     <Compile Include="Game\Entities\Projectiles\PlayerProjectiles\CarriedTile.cs" />
     <Compile Include="Game\Entities\Projectiles\Projectile.cs" />
     <Compile Include="Game\Entities\Projectiles\Seeds\Seed.cs" />
+    <Compile Include="Game\Control\UnitSystem.cs" />
     <Compile Include="Game\Entities\Units\UnitTool.cs" />
     <Compile Include="Game\GameDataRewards.cs" />
     <Compile Include="Game\GameDataSounds.cs" />

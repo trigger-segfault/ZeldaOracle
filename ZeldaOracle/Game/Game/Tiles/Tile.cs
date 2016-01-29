@@ -246,12 +246,6 @@ namespace ZeldaOracle.Game.Tiles {
 		// Return true if player controls should be disabled for the rest of the frame.
 		public virtual bool OnAction(int direction) { return false; }
 
-		// Called when the player touches any part of the tile area.
-		public virtual void OnTouch() { }
-
-		// Called when the player touches the collision box of the tile.
-		public virtual void OnCollide() { }
-
 		// Called when the player hits this tile with the sword.
 		public virtual void OnSwordHit(ItemWeapon swordItem) {
 			int minLevel = properties.GetInteger("cuttable_sword_level", Item.Level1);

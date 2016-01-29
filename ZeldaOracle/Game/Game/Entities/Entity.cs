@@ -19,16 +19,17 @@ namespace ZeldaOracle.Game.Entities {
 		private bool				isAlive;
 		private bool				isInRoom;
 		private Entity				transformedEntity; // The entity this entity has transformed into (bomb -> explosion)
-
 		private Vector2F			previousPosition;
 		private float				previousZPosition;
 
 		protected Vector2F			position;
 		protected float				zPosition;
-		protected PhysicsComponent	physics;
-		protected GraphicsComponent	graphics;
 		protected Point2I			centerOffset;
 		protected int				actionAlignDistance; // How many pixels off of alignment to interact with the entity (based on center positions).
+		protected Sound				soundBounce;
+
+		protected PhysicsComponent	physics;
+		protected GraphicsComponent	graphics;
 
 
 		//-----------------------------------------------------------------------------
@@ -41,6 +42,7 @@ namespace ZeldaOracle.Game.Entities {
 			isInRoom			= false;
 			isInitialized		= false;
 			transformedEntity	= null;
+			soundBounce			= null;
 			position			= Vector2F.Zero;
 			zPosition			= 0.0f;
 			previousPosition	= Vector2F.Zero;
@@ -102,6 +104,12 @@ namespace ZeldaOracle.Game.Entities {
 
 		// Called when the entity lands on the ground.
 		public virtual void OnLand() {}
+
+		// Called when the entity bounces off of the ground.
+		public virtual void OnBounce() {
+			if (soundBounce != null)
+				AudioSystem.PlaySound(soundBounce);
+		}
 
 		// Called when the entity falls in a hole.
 		public virtual void OnFallInHole() {
@@ -301,6 +309,11 @@ namespace ZeldaOracle.Game.Entities {
 
 		public Entity TransformedEntity {
 			get { return transformedEntity; }
+		}
+
+		public Sound BounceSound {
+			get { return soundBounce; }
+			set { soundBounce = value; }
 		}
 	}
 }

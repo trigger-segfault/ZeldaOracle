@@ -38,13 +38,12 @@ namespace ZeldaOracle.Game.Entities.Effects {
 
 			if (playbackTime > 10) {
 				// Collide with Monsters.
-				CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft, -1);
-				for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
-					Monster monster = iterator.CollisionInfo.Entity as Monster;
+				foreach (Monster monster in Physics.GetEntitiesMeeting<Monster>(CollisionBoxType.Soft, -1)) {
 					monster.TriggerInteraction(InteractionType.BombExplosion, this);
 					if (IsDestroyed)
 						return;
 				}
+
 				// Collide with the Player.
 				if (Physics.IsCollidingWith(RoomControl.Player, CollisionBoxType.Soft, -1)) {
 					RoomControl.Player.Hurt(new DamageInfo(2, Center));

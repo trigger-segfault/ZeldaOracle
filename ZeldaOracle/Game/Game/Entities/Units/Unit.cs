@@ -214,10 +214,6 @@ namespace ZeldaOracle.Game.Entities.Units {
 			OnHurt(damage);
 		}
 
-		public virtual void RespawnDeath() {
-			
-		}
-
 		public virtual void Death() {
 
 		}

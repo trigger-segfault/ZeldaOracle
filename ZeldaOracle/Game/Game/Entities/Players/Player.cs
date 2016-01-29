@@ -20,21 +20,6 @@ using ZeldaOracle.Game.Entities.Players.States.SwingStates;
 using ZeldaOracle.Game.Entities.Players.Tools;
 using ZeldaOracle.Common.Audio;
 
-
-//States:
-//	- None (movement, item control)
-//-------------------------------------
-//	- Minecart (item control)
-//	- Carrying Item (movement, throw)
-//	- Swimming (movement, diving)
-//-------------------------------------
-//	- Ledge Jump
-//	- Busy
-//	- [SwitchHook]
-//	- [SwingingItem]
-//	- Die
-
-
 namespace ZeldaOracle.Game.Entities.Players {
 	
 	public class Player : Unit {
@@ -70,6 +55,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private event PlayerDelegate eventJump;
 		private event PlayerDelegate eventLand;
 
+		private PlayerSwimmingSkills	swimmingSkills;
+		private PlayerTunics			tunic;
+
 		// Player Tools
 		private PlayerToolShield	toolShield;
 		private PlayerToolSword		toolSword;
@@ -98,19 +86,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerMinecartState			stateMinecart;
 		private PlayerJumpToState			stateJumpTo;
 
-		private PlayerSwimmingSkills	swimmingSkills;
-		private PlayerTunics			tunic;
-
 
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
 
-		private const int InvincibleDuration = 25;
-		private const int InvincibleControlRestoreDuration = 8;
-
-		private const int KnockbackSnapCount = 16;
-		private const float KnockbackSpeed = 1.3f;
+		private const int	InvincibleDuration					= 25;
+		private const int	InvincibleControlRestoreDuration	= 8;
+		private const int	KnockbackSnapCount					= 16;
+		private const float	KnockbackSpeed						= 1.3f;
 
 
 		//-----------------------------------------------------------------------------
@@ -118,18 +102,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 
 		public Player() {
-			direction			= Directions.Down;
-			useDirection		= 0;
-			useAngle			= 0;
-			autoRoomTransition	= false;
-			isStateControlled	= false;
-			movement			= new PlayerMoveComponent(this);
-			syncAnimationWithDirection = true;
-			viewFocusOffset = Vector2F.Zero;
-
-			toolShield = new PlayerToolShield();
-			toolSword = new PlayerToolSword();
-			toolVisual = new PlayerToolVisual();
+			movement = new PlayerMoveComponent(this);
 
 			// Unit properties.
 			centerOffset			= new Point2I(0, -5);
@@ -150,17 +123,20 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Physics.HasGravity			= true;
 			Physics.AutoDodges			= true;
 			Physics.MovesWithConveyors	= true;
+			Physics.CollideWithRoomEdge	= true;
+			Physics.RoomEdgeCollisionBoxType = CollisionBoxType.Soft;
 
 			// Graphics.
 			Graphics.DepthLayer			= DepthLayer.PlayerAndNPCs;
 			Graphics.DepthLayerInAir	= DepthLayer.InAirPlayer;
 			Graphics.DrawOffset			= new Point2I(-8, -13);
 
+			// Init tools.
+			toolShield	= new PlayerToolShield();
+			toolSword	= new PlayerToolSword();
+			toolVisual	= new PlayerToolVisual();
+
 			// Create the basic player states.
-			state				= null;
-			specialState		= null;
-			previousState		= null;
-			previousSpecialState= null;
 			stateNormal			= new PlayerNormalState();
 			stateBusy			= new PlayerBusyState();
 			stateSwim			= new PlayerSwimState();
@@ -182,8 +158,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateRespawnDeath	= new PlayerRespawnDeathState();
 			stateMinecart		= new PlayerMinecartState();
 			stateJumpTo			= new PlayerJumpToState();
-
-			Physics.CustomCollisionFunction = CheckRoomEdgeCollisions;
 		}
 
 
@@ -202,7 +176,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 			direction	= respawnDirection;
 			RoomControl.OnPlayerRespawn();
 			
-			// TODO: Break any breakable blocks the player respawns and collides with.
+			// Break any breakable blocks the player respawns and collides with.
+			foreach (Tile tile in Physics.GetTilesMeeting(CollisionBoxType.Hard)) {
+				if (tile.IsSolid)
+					tile.Break(false);
+			}
 		}
 
 		// Begin the given player state.
@@ -229,8 +207,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 		}
 
-		// Return the player state that the player wants to be in
-		// based on his current position.
+		// Return the player state that the player wants to be in based on his current position.
 		public PlayerState GetDesiredNaturalState() {
 			if (physics.IsInWater || physics.IsInOcean || physics.IsInLava)
 				return stateSwim;
@@ -247,7 +224,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateBusy.AnimationInMinecart	= Graphics.Animation;
 			BeginState(stateBusy);
 		}
-
+		
+		// Begin the busy state with the specified duration and animation(s).
 		public void BeginBusyState(int duration, Animation animation, Animation animationInMinecart = null) {
 			stateBusy.Duration				= duration;
 			stateBusy.Animation				= animation;
@@ -264,6 +242,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			BeginState(GetDesiredNaturalState());
 		}
 
+		// Jump to the given position using the special jump state.
 		public void JumpToPosition(Vector2F destinationPosition, float destinationZPosition,
 								   int duration, Action<PlayerJumpToState> endAction)
 		{
@@ -274,10 +253,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 			BeginSpecialState(stateJumpTo);
 		}
 
-		// Hop into the minecart.
+		// Hop into a minecart.
 		public void JumpIntoMinecart(Minecart minecart) {
 			JumpToPosition(minecart.Center, 4.0f, 26, delegate(PlayerJumpToState state) {
-				BeginMinecartState(minecart);
+				stateMinecart.Minecart = minecart;
+				BeginSpecialState(stateMinecart);
 			});
 		}
 
@@ -289,11 +269,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			JumpToPosition(landingPoint, 0.0f, 26, null);
 		}
 
-		public void BeginMinecartState(Minecart minecart) {
-			stateMinecart.Minecart = minecart;
-			BeginSpecialState(stateMinecart);
-		}
-
 		public void OnJump() {
 			if (eventJump != null)
 				eventJump(this);
@@ -301,7 +276,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 
 		//-----------------------------------------------------------------------------
-		// Interaction
+		// Interactions
 		//-----------------------------------------------------------------------------
 
 		// For when the player needs to stop pushing, such as when reading text or opening a chest.
@@ -313,7 +288,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			movement.ChooseAnimation();
 		}
 
-		public override void RespawnDeath() {
+		public void RespawnDeath() {
 			BeginState(stateRespawnDeath);
 		}
 
@@ -334,18 +309,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		// Update items by checking if their buttons are pressed.
-		public void UpdateEquippedItems() {
+		private void UpdateEquippedItems() {
 			for (int i = 0; i < EquippedUsableItems.Length; i++) {
 				ItemWeapon item = EquippedUsableItems[i];
-				if (item != null) {
-					if (item.IsUsable()) {
-						if (Inventory.GetSlotButton(i).IsPressed())
-							item.OnButtonPress();
-						if (Inventory.GetSlotButton(i).IsDown())
-							item.OnButtonDown();
-						if (!item.IsTwoHanded || i == 1)
-							item.Update();
-					}
+				if (item != null && item.IsUsable()) {
+					if (Inventory.GetSlotButton(i).IsPressed())
+						item.OnButtonPress();
+					if (Inventory.GetSlotButton(i).IsDown())
+						item.OnButtonDown();
+					if (!item.IsTwoHanded || i == 1)
+						item.Update();
 				}
 			}
 		}
@@ -410,8 +383,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		// Check if the player can room-transition in the given direction.
 		private bool CanRoomTransition(int transitionDirection) {
-			if (!AllowRoomTransition)
-				return false;
 			if (AutoRoomTransition)
 				return true;
 			if (movement.MoveCondition != PlayerMoveCondition.FreeMovement || !movement.IsMoving)
@@ -419,39 +390,26 @@ namespace ZeldaOracle.Game.Entities.Players {
 			return (Controls.GetArrowControl(transitionDirection).IsDown() || Controls.GetAnalogDirection(transitionDirection));
 		}
 		
+		private bool IsOnHazardTile() {
+			return	physics.IsInHole ||
+					(physics.IsInWater && !swimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInWater)) ||
+					(physics.IsInOcean && !swimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInOcean)) ||
+					(physics.IsInLava  && !swimmingSkills.HasFlag(PlayerSwimmingSkills.CanSwimInLava));
+		}
+
 		// Custom collision function for colliding with room edges.
-		private void CheckRoomEdgeCollisions() {
-			Rectangle2F roomBounds = RoomControl.RoomBounds;
-			Rectangle2F myBox = Physics.SoftCollisionBox;
-			myBox.Point += position + Physics.Velocity;
+		private void CheckRoomTransitions() {
+			if (!AllowRoomTransition || IsOnHazardTile())
+				return;
+
+			// Check for room edge collisions.
 			int transitionDirection = -1;
-
-			// Collide with room edges.
-			if (myBox.Left < roomBounds.Left) {
-				position.X = roomBounds.Left - physics.SoftCollisionBox.Left;
-				physics.VelocityX = 0;
-				if (CanRoomTransition(Directions.Left))
-					transitionDirection = Directions.Left;
+			foreach (CollisionInfo info in Physics.GetCollisions()) {
+				if (info.Type == CollisionType.RoomEdge && CanRoomTransition(info.Direction)) {
+					transitionDirection = info.Direction;
+					break;
+				}
 			}
-			else if (myBox.Right > roomBounds.Right) {
-				position.X = roomBounds.Right - physics.SoftCollisionBox.Right;
-				physics.VelocityX = 0;
-				if (CanRoomTransition(Directions.Right))
-					transitionDirection = Directions.Right;
-			}
-			if (myBox.Top < roomBounds.Top) {
-				position.Y = roomBounds.Top - physics.SoftCollisionBox.Top;
-				physics.VelocityY = 0;
-				if (transitionDirection < 0 && CanRoomTransition(Directions.Up))
-					transitionDirection = Directions.Up;
-			}
-			else if (myBox.Bottom > roomBounds.Bottom) {
-				position.Y = roomBounds.Bottom - physics.SoftCollisionBox.Bottom;
-				physics.VelocityY = 0;
-				if (transitionDirection < 0 && CanRoomTransition(Directions.Down))
-					transitionDirection = Directions.Down;
-			}
-
 			// Request a transition on the room edge.
 			if (transitionDirection >= 0) {
 				physics.Velocity = Vector2F.Zero;
@@ -491,50 +449,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 		}
 
-		private void CheckTouchedTiles() {
-			// Notify touching tiles.
-			// TODO: move this somewhere else.
-			Rectangle2I tiles = RoomControl.GetTileAreaFromRect(physics.PositionedCollisionBox);
-
-			for (int x = tiles.Left; x < tiles.Right; x++) {
-				for (int y = tiles.Top; y < tiles.Bottom; y++) {
-					for (int layer = 0; layer < RoomControl.Room.LayerCount; layer++) {
-						Tile tile = RoomControl.GetTile(new Point2I(x, y), layer);
-						if (tile != null)
-							tile.OnTouch();
-					}
-				}
-			}
-
-			// Notify colliding tiles.
-			// TODO: move this somewhere else.
-			Rectangle2F myBox = physics.PositionedCollisionBox.Inflated(1, 1);
-			tiles = RoomControl.GetTileAreaFromRect(myBox);
-
-			TileCollisionTest tileTest = new TileCollisionTest(myBox);
-			TileCollisionIterator tileIterator = new TileCollisionIterator(this, tileTest);
-			for (tileIterator.Begin(); tileIterator.IsGood(); tileIterator.Next()) {
-				tileIterator.CollisionInfo.Tile.OnCollide();
-			}
-			/*
-			for (int x = tiles.Left; x < tiles.Right; x++) {
-				for (int y = tiles.Top; y < tiles.Bottom; y++) {
-					for (int layer = 0; layer < RoomControl.Room.LayerCount; layer++) {
-						Tile tile = RoomControl.GetTile(new Point2I(x, y), layer);
-						if (tile != null && tile.CollisionModel != null) {
-							for (int i = 0; i < tile.CollisionModel.BoxCount; i++) {
-								if (((Rectangle2F)tile.CollisionModel[i] + tile.Position).Colliding(myBox)) {
-									tile.OnCollide();
-									break;
-								}
-							}
-						}	
-					}
-				}
-			}
-			*/
-		}
-
 		// Try to switch to a natural state.
 		private void RequestNaturalState() {
 			PlayerState desiredNaturalState = GetDesiredNaturalState();
@@ -550,6 +464,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public override void Initialize() {
 			base.Initialize();
 			
+			viewFocusOffset		= Vector2F.Zero;
+			direction			= Directions.Down;
+			useDirection		= 0;
+			useAngle			= 0;
+			autoRoomTransition	= false;
+			isStateControlled	= false;
+			syncAnimationWithDirection = true;
+			
 			// Initialize tools.
 			toolShield.Initialize(this);
 			toolSword.Initialize(this);
@@ -557,17 +479,19 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Begin the default player state.
 			BeginState(stateNormal);
-			previousState = stateNormal;
+			previousState	= stateNormal;
+			specialState	= null;
+			previousSpecialState = null;
 		}
 
 		public override void OnEnterRoom() {
-			if (IsInMinecart)
+			if (specialState != null && specialState.IsActive)
 				stateMinecart.OnEnterRoom();
 			state.OnEnterRoom();
 		}
 
 		public override void OnLeaveRoom() {
-			if (IsInMinecart)
+			if (specialState != null && specialState.IsActive)
 				stateMinecart.OnLeaveRoom();
 			state.OnLeaveRoom();
 
@@ -592,6 +516,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (eventLand != null)
 				eventLand(this);
 
+			Physics.Gravity = GameSettings.DEFAULT_GRAVITY;
 			AudioSystem.PlaySound(GameData.SOUND_PLAYER_LAND);
 		}
 
@@ -599,6 +524,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 			base.OnHurt(damage);
 			AudioSystem.PlaySound(GameData.SOUND_PLAYER_HURT);
 			state.OnHurt(damage);
+		}
+
+		public override void UpdateGraphics() {
+			base.UpdateGraphics();
+			
+			// Sync the graphics image variant with the current tunic.
+			switch (tunic) {
+			case PlayerTunics.GreenTunic:	Graphics.ImageVariant = GameData.VARIANT_GREEN;	break;
+			case PlayerTunics.RedTunic:		Graphics.ImageVariant = GameData.VARIANT_RED;	break;
+			case PlayerTunics.BlueTunic:	Graphics.ImageVariant = GameData.VARIANT_BLUE;	break;
+			}
 		}
 
 		public override void Update() {
@@ -610,23 +546,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 				RequestNaturalState();
 			}
 			
-			// Update the current player state.
+			// Update the current player states.
 			state.Update();
-			
-			// Update the minecart state.
 			if (specialState != null && specialState.IsActive)
 				specialState.Update();
 
 			// Post-state update.
 			if (!isStateControlled) {
 				UpdateEquippedItems();
-				CheckTouchedTiles();
-				
-				Physics.Gravity = GameSettings.DEFAULT_GRAVITY;
-				if (movement.IsCapeDeployed)
-					Physics.Gravity = GameSettings.PLAYER_CAPE_GRAVITY;
 			}
 
+			// Handle SHIELD holding.
 			if (Graphics.Animation == GameData.ANIM_PLAYER_SHIELD_BLOCK ||
 				Graphics.Animation == GameData.ANIM_PLAYER_SHIELD_LARGE_BLOCK)
 			{
@@ -636,24 +566,22 @@ namespace ZeldaOracle.Game.Entities.Players {
 				UnequipTool(toolShield);
 			}
 
-
-			// Sync the graphics image variant with the current tunic.
-			switch (tunic) {
-			case PlayerTunics.GreenTunic:	Graphics.ImageVariant = GameData.VARIANT_GREEN;	break;
-			case PlayerTunics.RedTunic:		Graphics.ImageVariant = GameData.VARIANT_RED;	break;
-			case PlayerTunics.BlueTunic:	Graphics.ImageVariant = GameData.VARIANT_BLUE;	break;
-			}
-
 			// Update superclass.
 			base.Update();
+
+			CheckRoomTransitions();
 		}
 
 		public override void Draw(RoomGraphics g) {
-			if (IsInMinecart)
-				stateMinecart.DrawUnder(g);
 			state.DrawUnder(g);
+			if (specialState != null && specialState.IsActive)
+				specialState.DrawUnder(g);
+
 			base.Draw(g);
+
 			state.DrawOver(g);
+			if (specialState != null && specialState.IsActive)
+				specialState.DrawOver(g);
 		}
 
 		

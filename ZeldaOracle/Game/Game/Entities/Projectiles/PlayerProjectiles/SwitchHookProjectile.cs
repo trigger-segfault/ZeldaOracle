@@ -196,10 +196,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 				AudioSystem.LoopSoundWhileActive(GameData.SOUND_SWITCH_HOOK_LOOP);
 
 				// Check for collectibles to pick up.
-				CollisionIterator iterator = new CollisionIterator(this, typeof(Collectible), CollisionBoxType.Soft);
-				iterator.Begin();
-				if (iterator.IsGood()) {
-					Collectible c = iterator.CollisionInfo.Entity as Collectible;
+				foreach (Collectible c in Physics.GetEntitiesMeeting<Collectible>(CollisionBoxType.Soft)) {
 					if (c.IsPickupable && c.IsCollectibleWithItems) {
 						collectible = c;
 						c.Destroy();

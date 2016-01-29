@@ -164,13 +164,13 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			if (physics.IsColliding) {
 				CollisionType type = CollisionType.RoomEdge;
 				Tile tile = null;
-				for (int i = 0; i < 4; i++) {
-					if (Physics.CollisionInfo[i].IsColliding) {
-						type = Physics.CollisionInfo[i].Type;
-						tile = Physics.CollisionInfo[i].Tile;
-						break;
-					}
+				
+				foreach (CollisionInfo collision in Physics.GetCollisions()) {
+					type = collision.Type;
+					tile = collision.Tile;
+					break;
 				}
+
 				if (tile != null) {
 					if (owner == RoomControl.Player) {
 						tile.OnHitByProjectile(this);
@@ -198,9 +198,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				}
 
 				// Collide with monsters.
-				CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
-				for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
-					OnCollideMonster(iterator.CollisionInfo.Entity as Monster);
+				foreach (Monster monster in Physics.GetEntitiesMeeting<Monster>(CollisionBoxType.Soft)) {
+					OnCollideMonster(monster);
 					if (IsDestroyed)
 						return;
 				}

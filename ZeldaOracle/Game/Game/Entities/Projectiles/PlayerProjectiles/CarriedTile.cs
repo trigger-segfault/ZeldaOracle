@@ -70,9 +70,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 
 		public override void OnLand() {
 			// Collide with monsters.
-			CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
-			for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
-				Monster monster = iterator.CollisionInfo.Entity as Monster;
+			foreach (Monster monster in Physics.GetEntitiesMeeting<Monster>(CollisionBoxType.Soft)) {
 				monster.TriggerInteraction(InteractionType.ThrownObject, this);
 				if (IsDestroyed)
 					return;

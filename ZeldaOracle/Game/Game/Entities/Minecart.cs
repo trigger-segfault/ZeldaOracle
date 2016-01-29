@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Tiles;
 
@@ -67,8 +68,8 @@ namespace ZeldaOracle.Game.Entities {
 			if (player.CurrentState == player.NormalState ||
 				player.CurrentState == player.CarryState)
 			{
-				for (int i = 0; i < Directions.Count; i++) {
-					if (player.Physics.CollisionInfo[i].Entity == this) {
+				foreach (CollisionInfo collision in player.Physics.GetCollisions()) {
+					if (collision.Entity == this) {
 						player.JumpIntoMinecart(this);
 						break;
 					}

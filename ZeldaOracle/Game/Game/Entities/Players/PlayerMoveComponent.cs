@@ -206,7 +206,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 				// Jump!
 				isCapeDeployed = false;
 				jumpStartTile = player.RoomControl.GetTileLocation(player.Position);
-				player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
+				player.Physics.Gravity		= GameSettings.DEFAULT_GRAVITY;
+				player.Physics.ZVelocity	= GameSettings.PLAYER_JUMP_SPEED;
 				if (player.CurrentState is PlayerNormalState)
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_JUMP);
@@ -225,7 +226,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 				GameSettings.DEFAULT_GRAVITY <= -GameSettings.PLAYER_CAPE_REQUIRED_FALLSPEED)
 			{
 				isCapeDeployed = true;
-				player.Physics.ZVelocity = GameSettings.PLAYER_CAPE_JUMP_SPEED + GameSettings.PLAYER_CAPE_GRAVITY;
+				player.Physics.Gravity		= GameSettings.PLAYER_CAPE_GRAVITY;
+				player.Physics.ZVelocity	= GameSettings.PLAYER_CAPE_JUMP_SPEED + GameSettings.PLAYER_CAPE_GRAVITY;
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_THROW);
 				if (player.CurrentState is PlayerNormalState)
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CAPE);

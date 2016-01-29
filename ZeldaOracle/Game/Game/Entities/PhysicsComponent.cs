@@ -76,17 +76,18 @@ namespace ZeldaOracle.Game.Entities {
 		private bool					isEnabled;			// Are physics enabled for the entity?
 		private PhysicsFlags			flags;
 		private float					gravity;			// Gravity in pixels per frame^2
-		private float					maxFallSpeed;private Vector2F				velocity;			// XY-Velocity in pixels per frame.
+		private float					maxFallSpeed;
+		private Vector2F				velocity;			// XY-Velocity in pixels per frame.
 		private float					zVelocity;			// Z-Velocity in pixels per frame.
-		private Sound					soundBounce;
-
+		
 		// Collision.
 		private Rectangle2F				collisionBox;		// The "hard" collision box, used to collide with solid entities/tiles.
 		private Rectangle2F				softCollisionBox;	// The "soft" collision box, used to collide with items, monsters, room edges, etc.
 		private int						autoDodgeDistance;	// The maximum distance allowed to dodge collisions.
 		private Action					customCollisionFunction;
 		private TileCollisionCondition	customTileCollisionCondition;
-		private List<EntityCollisionHandlerInstance> entityCollisionHandlers;
+		private CollisionBoxType		roomEdgeCollisionBoxType;
+		//private List<EntityCollisionHandlerInstance> entityCollisionHandlers;
 
 		// Internal physics state.
 		private Vector2F			previousVelocity;	// XY-Velocity before physics update is called.
@@ -98,6 +99,9 @@ namespace ZeldaOracle.Game.Entities {
 		private Tile				topTile;			// The top-most tile the entity is located over.
 		private int					ledgeAltitude;		// How many ledges the entity has passed over.
 		private Point2I				ledgeTileLocation;	// The tile location of the ledge we are currently passing over, or (-1, -1) if not passing over ledge.
+
+		// Events:
+		//private event Action		eventBounce;
 
 
 		//-----------------------------------------------------------------------------
@@ -121,12 +125,12 @@ namespace ZeldaOracle.Game.Entities {
 			this.isColliding		= false;
 			this.autoDodgeDistance	= 6;
 			this.customCollisionFunction	= null;
-			this.entityCollisionHandlers	= new List<EntityCollisionHandlerInstance>();
+			//this.entityCollisionHandlers	= new List<EntityCollisionHandlerInstance>();
 			this.hasLanded			= false;
 			this.reboundVelocity	= Vector2F.Zero;
 			this.ledgeAltitude		= 0;
 			this.ledgeTileLocation	= new Point2I(-1, -1);
-			this.soundBounce		= null;
+			this.roomEdgeCollisionBoxType = CollisionBoxType.Hard;
 
 			this.collisionInfo = new CollisionInfo[Directions.Count];
 			for (int i = 0; i < Directions.Count; i++)
@@ -138,6 +142,13 @@ namespace ZeldaOracle.Game.Entities {
 		// Custom Collision Setup
 		//-----------------------------------------------------------------------------
 
+		public Rectangle2F GetCollisionBox(CollisionBoxType type) {
+			if (type == CollisionBoxType.Hard)
+				return collisionBox;
+			return softCollisionBox;
+		}
+
+		/*
 		public void AddCollisionHandler(Type entityType, CollisionBoxType collisionBoxType, EntityCollisionHandler handler) {
 			entityCollisionHandlers.Add(new EntityCollisionHandlerInstance(
 					entityType, handler, collisionBoxType));
@@ -153,7 +164,7 @@ namespace ZeldaOracle.Game.Entities {
 				}
 			}
 		}
-
+		*/
 		
 		//-----------------------------------------------------------------------------
 		// Flags
@@ -192,11 +203,11 @@ namespace ZeldaOracle.Game.Entities {
 				collisionInfo[i].Clear();
 
 			// Perform custom collision handling tests.
-			if (entityCollisionHandlers.Count > 0) {
+			/*if (entityCollisionHandlers.Count > 0) {
 				PerformCustomCollisionHandling();
 				if (entity.IsDestroyed)
 					return;
-			}
+			}*/
 
 			// Update Z dynamics.
 			UpdateZVelocity();
@@ -206,7 +217,7 @@ namespace ZeldaOracle.Game.Entities {
 				CheckCollisions();
 			// 2. Collide with room edges.
 			if (HasFlags(PhysicsFlags.CollideRoomEdge) || HasFlags(PhysicsFlags.ReboundRoomEdge))
-				CheckRoomEdgeCollisions(collisionBox);
+				CheckRoomEdgeCollisions(GetCollisionBox(roomEdgeCollisionBoxType));
 			// 3. Custom collision function.
 			if (customCollisionFunction != null) {
 				customCollisionFunction.Invoke();
@@ -248,7 +259,7 @@ namespace ZeldaOracle.Game.Entities {
 				return;
 			}
 			
-			// Chec if in hazard tiles.
+			// Check if in hazard tiles.
 			if (IsInHole)
 				entity.OnFallInHole();
 			else if (IsInWater)
@@ -342,15 +353,16 @@ namespace ZeldaOracle.Game.Entities {
 				zVelocity = 0;
 				velocity = Vector2F.Zero;
 			}
-			if (soundBounce != null)
-				AudioSystem.PlaySound(soundBounce);
 
 			if (velocity.Length > 0.25)
 				velocity *= 0.5f;
 			else
 				velocity = Vector2F.Zero;
-		}
 
+			
+			entity.OnBounce();
+		}
+		/*
 		private void PerformCustomCollisionHandling() {
 			for (int i = 0; i < entity.RoomControl.EntityCount; i++) {
 				Entity e = entity.RoomControl.Entities[i];
@@ -365,7 +377,7 @@ namespace ZeldaOracle.Game.Entities {
 					}
 				}
 			}
-		}
+		}*/
 		
 		
 		//-----------------------------------------------------------------------------
@@ -373,32 +385,34 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 		
 		public IEnumerable<Tile> GetTilesMeeting(CollisionBoxType collisionBoxType) {
-			Room room = entity.RoomControl.Room;
-			
+			return GetTilesMeeting(entity.Position, collisionBoxType);
+		}
+		
+		// Return a list of tiles colliding with this entity (solidity is ignored).
+		public IEnumerable<Tile> GetTilesMeeting(Vector2F position, CollisionBoxType collisionBoxType) {
 			// Find the rectangular area of nearby tiles to collide with.
-			Rectangle2F myBox = (collisionBoxType == CollisionBoxType.Hard ? collisionBox : softCollisionBox);
-			myBox.Point += entity.Position;
+			Rectangle2F myBox = GetCollisionBox(collisionBoxType);
+			myBox.Point += position;
 			myBox.Inflate(2, 2);
-	
-			int x1 = (int) (myBox.Left   / (float) GameSettings.TILE_SIZE);
-			int y1 = (int) (myBox.Top    / (float) GameSettings.TILE_SIZE);
-			int x2 = (int) (myBox.Right  / (float) GameSettings.TILE_SIZE) + 1;
-			int y2 = (int) (myBox.Bottom / (float) GameSettings.TILE_SIZE) + 1;
-
-			Rectangle2I area;
-			area.Point	= (Point2I) (myBox.TopLeft / (float) GameSettings.TILE_SIZE);
-			area.Size	= ((Point2I) (myBox.BottomRight / (float) GameSettings.TILE_SIZE)) + Point2I.One - area.Point;
-			area.Inflate(1, 1);
-			area = Rectangle2I.Intersect(area, new Rectangle2I(Point2I.Zero, room.Size));
-
-			myBox.Inflate(-2, -2);
+			Rectangle2I area = entity.RoomControl.GetTileAreaFromRect(myBox, 1);
 			
+			// Iterate the tiles in the area.
 			foreach (Tile t in entity.RoomControl.GetTilesInArea(area)) {
 				if (t.CollisionModel != null &&
-					CollisionModel.Intersecting(t.CollisionModel, t.Position, collisionBox, entity.Position))
+					CollisionModel.Intersecting(t.CollisionModel, t.Position, collisionBox, position))
 				{
 					yield return t;
 				}
+			}
+		}
+
+		// Return a list of entities colliding with this entity.
+		public IEnumerable<T> GetEntitiesMeeting<T>(CollisionBoxType collisionBoxType, int maxZDistance = 10) where T : Entity {
+			CollisionTestSettings settings = new CollisionTestSettings(typeof(T), collisionBoxType, maxZDistance);
+			for (int i = 0; i < entity.RoomControl.Entities.Count; i++) {
+				T other = entity.RoomControl.Entities[i] as T;
+				if (other != null && CollisionTest.PerformCollisionTest(entity, other, settings).IsColliding)
+					yield return other;
 			}
 		}
 
@@ -423,11 +437,6 @@ namespace ZeldaOracle.Game.Entities {
 			if (other == null)// || !other.Physics.IsEnabled)
 				return false;
 			return true;
-		}
-
-		// Returns true if the entity is colliding in the given direction.
-		public bool IsCollidingDirection(int direction) {
-			return collisionInfo[direction].IsColliding;
 		}
 		
 		// Return true if the entity would collide with a solid object using the
@@ -473,26 +482,11 @@ namespace ZeldaOracle.Game.Entities {
 		
 		// Return the solid tile that the entity is facing towards if it were at the given position.
 		public Tile GetMeetingSolidTile(Vector2F position, int direction) {
-			Vector2F checkPos = position + Directions.ToPoint(direction);
-			Point2I location  = entity.RoomControl.GetTileLocation(entity.Center);
-			
-			// Check the tile on the player and in front of him.
-			for (int j = 0; j < 2; j++) {
-				if (entity.RoomControl.IsTileInBounds(location)) {
-					for (int i = 0; i < entity.RoomControl.Room.LayerCount; i++) {
-						Tile tile = entity.RoomControl.GetTile(location, i);
-
-						if (CanCollideWithTile(tile) && CollisionModel.Intersecting(
-							tile.CollisionModel, tile.Position, collisionBox, checkPos) &&
-							!CanDodgeCollision(tile, direction))
-						{
-							return tile;
-						}
-					}
-				}
-				location += Directions.ToPoint(direction);
-			}
-			return null;
+			Vector2F checkPos = position + (Directions.ToVector(direction) * 1.0f);
+			return GetTilesMeeting(checkPos, CollisionBoxType.Hard)
+						.FirstOrDefault(tile =>
+							CanCollideWithTile(tile) &&
+							!CanDodgeCollision(tile, direction));
 		}
 		
 		public bool IsMeetingEntity(Entity other, CollisionBoxType collisionBoxType, int maxZDistance = 10) {
@@ -530,19 +524,11 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		private bool IsGoingDownLedge(Tile ledgeTile) {
-			int ledgeDirection = ledgeTile.LedgeDirection;
-			int checkAxis = Directions.ToAxis(ledgeDirection);
-			if (ledgeDirection == Directions.Up || ledgeDirection == Directions.Left)
-				return (velocity[checkAxis] < 0);
-			return (velocity[checkAxis] > 0);
+			return velocity.Dot(Directions.ToVector(ledgeTile.LedgeDirection)) > 0.0f;
 		}
 
 		private bool IsGoingUpLedge(Tile ledgeTile) {
-			int ledgeDirection = ledgeTile.LedgeDirection;
-			int checkAxis = Directions.ToAxis(ledgeDirection);
-			if (ledgeDirection == Directions.Up || ledgeDirection == Directions.Left)
-				return (velocity[checkAxis] > 0);
-			return (velocity[checkAxis] < 0);
+			return velocity.Dot(Directions.ToVector(ledgeTile.LedgeDirection)) < 0.0f;
 		}
 
 
@@ -896,10 +882,10 @@ namespace ZeldaOracle.Game.Entities {
 			get { return autoDodgeDistance; }
 			set { autoDodgeDistance = value; }
 		}
-
-		public Sound BounceSound {
-			get { return soundBounce; }
-			set { soundBounce = value; }
+		
+		public CollisionBoxType RoomEdgeCollisionBoxType {
+			get { return roomEdgeCollisionBoxType; }
+			set { roomEdgeCollisionBoxType = value; }
 		}
 
 
@@ -936,11 +922,23 @@ namespace ZeldaOracle.Game.Entities {
 		public CollisionInfo[] CollisionInfo {
 			get { return collisionInfo; }
 		}
+
+		public IEnumerable<CollisionInfo> GetCollisions() {
+			for (int i = 0; i < collisionInfo.Length; i++) {
+				if (collisionInfo[i].IsColliding)
+					yield return collisionInfo[i];
+			}
+		}
 		
 		public bool IsColliding {
 			get { return isColliding; }
 		}
 
+
+		public Tile TopTile {
+			get { return topTile; }
+			set { topTile = value; }
+		}
 
 		// Tile Flags.
 
