@@ -285,10 +285,11 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public virtual void OnGrab(int direction, ItemBracelet bracelet) {
-			Player player = roomControl.Player;
-			player.GrabState.Bracelet = bracelet;
-			player.BeginState(player.GrabState);
-			player.Movement.StopMotion();
+			if (!isMoving && !flags.HasFlag(TileFlags.NotGrabbable)) {
+				Player player = roomControl.Player;
+				player.GrabState.Bracelet = bracelet;
+				player.BeginState(player.GrabState);
+			}
 		}
 		
 		// Called when the player wants to push the tile.

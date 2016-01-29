@@ -69,17 +69,27 @@ namespace ZeldaOracle.Game.Tiles {
 		public override void OnInitialize() {
 			base.OnInitialize();
 
-			IsSolid			= true;
-
-			direction		= Properties.GetInteger("direction", 2);
+			direction		= Properties.GetInteger("direction", Directions.Down);
 			extendLength	= 0.0f;
 			isBeingPulled	= false;
+
+			SetLength(0.0f);
+
+			IsSolid				= true;
+			ClingWhenStabbed	= false;
 
 			Rectangle2I collisionBox = new Rectangle2I(0, 0, 16, 16);
 			collisionBox.ExtendEdge(direction, 1);
 			CollisionModel = new CollisionModel(collisionBox);
 
-			SetLength(0.0f);
+			if (direction == Directions.Right)
+				CustomSprite = GameData.SPR_TILE_PULL_HANDLE_RIGHT;
+			else if (direction == Directions.Up)
+				CustomSprite = GameData.SPR_TILE_PULL_HANDLE_UP;
+			else if (direction == Directions.Left)
+				CustomSprite = GameData.SPR_TILE_PULL_HANDLE_LEFT;
+			else if (direction == Directions.Down)
+				CustomSprite = GameData.SPR_TILE_PULL_HANDLE_DOWN;
 		}
 
 		public override void OnGrab(int direction, ItemBracelet bracelet) {
@@ -92,6 +102,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void Update() {
 
+			// Automatically retract when not being pulled.
 			if (!isBeingPulled && !IsFullyRetracted) {
 				Retract(retractSpeed);
 			}

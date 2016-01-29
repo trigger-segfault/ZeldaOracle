@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Game.Worlds;
-using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Game.Entities.Collisions;
+using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Entities {
 	
@@ -366,8 +366,43 @@ namespace ZeldaOracle.Game.Entities {
 				}
 			}
 		}
-
 		
+		
+		//-----------------------------------------------------------------------------
+		// Collision Iteration
+		//-----------------------------------------------------------------------------
+		
+		public IEnumerable<Tile> GetTilesMeeting(CollisionBoxType collisionBoxType) {
+			Room room = entity.RoomControl.Room;
+			
+			// Find the rectangular area of nearby tiles to collide with.
+			Rectangle2F myBox = (collisionBoxType == CollisionBoxType.Hard ? collisionBox : softCollisionBox);
+			myBox.Point += entity.Position;
+			myBox.Inflate(2, 2);
+	
+			int x1 = (int) (myBox.Left   / (float) GameSettings.TILE_SIZE);
+			int y1 = (int) (myBox.Top    / (float) GameSettings.TILE_SIZE);
+			int x2 = (int) (myBox.Right  / (float) GameSettings.TILE_SIZE) + 1;
+			int y2 = (int) (myBox.Bottom / (float) GameSettings.TILE_SIZE) + 1;
+
+			Rectangle2I area;
+			area.Point	= (Point2I) (myBox.TopLeft / (float) GameSettings.TILE_SIZE);
+			area.Size	= ((Point2I) (myBox.BottomRight / (float) GameSettings.TILE_SIZE)) + Point2I.One - area.Point;
+			area.Inflate(1, 1);
+			area = Rectangle2I.Intersect(area, new Rectangle2I(Point2I.Zero, room.Size));
+
+			myBox.Inflate(-2, -2);
+			
+			foreach (Tile t in entity.RoomControl.GetTilesInArea(area)) {
+				if (t.CollisionModel != null &&
+					CollisionModel.Intersecting(t.CollisionModel, t.Position, collisionBox, entity.Position))
+				{
+					yield return t;
+				}
+			}
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Collision polls
 		//-----------------------------------------------------------------------------

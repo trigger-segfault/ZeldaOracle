@@ -397,6 +397,11 @@ SPRITE tile_pull_handle_bar_vertical,	(10, 6); END;
 SPRITE tile_pull_handle_down,			(11, 6); END;
 SPRITE tile_pull_handle_right,			(12, 6); END;
 
+SPRITE tile_seed_bouncer_horizontal,	(12, 7); END;
+SPRITE tile_seed_bouncer_northeast,		(13, 7); END;
+SPRITE tile_seed_bouncer_vertical,		(14, 7); END;
+SPRITE tile_seed_bouncer_northwest,		(15, 7); END;
+
 
 SPRITE turnstile_bars_angled,
 			( 0,  7), ( 0,  0); ADD ( 1,  7), (16,  0); ADD ( 2,  7), (32,  0);

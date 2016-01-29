@@ -295,6 +295,15 @@ ANIM tile_pull_handle;
 	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_up;
 	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_left;
 	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_down; END;
+ANIM tile_seed_bouncer;
+	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_horizontal;
+	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_northeast;
+	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_vertical;
+	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_northwest;
+	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_horizontal;
+	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_northeast;
+	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_vertical;
+	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_northwest; END;
 
 
 #==============================================================

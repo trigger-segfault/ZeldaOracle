@@ -165,9 +165,9 @@ END;
 TILE crossing_grate;
 	TYPE		TileCrossingGate;
 	SOLID		edge_w;
-	PROPERTIES	(boolean, raised,    false, "Raised",      "", "Crossing Gate", "True if the gate is raised.");
-	PROPERTIES	(boolean, face_left, false, "Facing Left", "", "Crossing Gate", "True if the crossing gate is facing left.");
-	PROPERTIES	(boolean, cling_on_stab, false);
+	PROPERTIES	(boolean, raised,    false, "Raised",      "", "Crossing Gate", "True if the gate is raised."),
+				(boolean, face_left, false, "Facing Left", "", "Crossing Gate", "True if the crossing gate is facing left."),
+				(boolean, cling_on_stab, false);
 END;
 
 TILE crossing_grate_right;
@@ -189,6 +189,14 @@ TILE pull_handle;
 	TYPE		TilePullHandle;
 	SPRITE		tile_pull_handle_down;
 	PROPERTIES	(integer, direction, 3, "Direction", "direction", "Handle", "The direction the handle extends in.");
+END;
+
+TILE seed_bouncer;
+	TYPE		TileSeedBouncer;
+	SPRITE		tile_seed_bouncer;
+	HALFSOLID	block;
+	PROPERTIES	(integer, angle, 0, "Angle", "angle", "Seed Bouncer", "The angle the seed bouncer is facing."),
+				(boolean, cling_on_stab, false);
 END;
 
 
@@ -216,5 +224,7 @@ SETTILE (11, 0), platform;
 
 SETTILE ( 0, 1), crossing_grate_right;
 SETTILE ( 1, 1), crossing_grate_left;
+
+SETTILE ( 5, 1), seed_bouncer; ## TEMP: invisible on sprite sheet.
 
 END;

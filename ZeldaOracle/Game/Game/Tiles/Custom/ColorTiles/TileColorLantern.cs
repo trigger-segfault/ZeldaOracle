@@ -27,19 +27,6 @@ namespace ZeldaOracle.Game.Tiles {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnCover(Tile tile) {
-			if (tile is TileColorCube) {
-				TileColorCube colorCube = (TileColorCube) tile;
-				Color = ((TileColorCube) tile).TopColor;
-			}
-		}
-
-		public override void OnUncover(Tile tile) {
-			if (tile is TileColorCube) {
-				Color = PuzzleColor.None;
-			}
-		}
-
 		public override void OnInitialize() {
 			PuzzleColor color = Color;
 
