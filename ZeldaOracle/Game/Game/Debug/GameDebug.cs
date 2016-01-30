@@ -25,6 +25,7 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.GameStates.RoomStates;
+using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Debug {
 	public class GameDebug {
@@ -331,6 +332,28 @@ namespace ZeldaOracle.Game.Debug {
 		}
 
 		public static void DrawRoom(Graphics2D g, RoomControl roomControl) {
+			/*foreach (Entity entity in roomControl.Entities) {
+				if (entity.Physics.IsEnabled && entity.Physics.CollideWithWorld) {
+					Rectangle2F collisionBox = entity.Physics.PositionedCollisionBox;
+					g.FillRectangle(collisionBox, Color.Yellow);
+
+					for (int i = 0; i < 4; i++) {
+						CollisionInfoNew collisionInfo = entity.Physics.CollisionInfoNew[i];
+
+						if (collisionInfo.IsColliding) {
+							Rectangle2F drawBox = collisionBox;
+							int axis = Directions.ToAxis(i);
+
+							if (i == Directions.Down || i == Directions.Right)
+								drawBox.Point[axis] += drawBox.Size[axis] - collisionInfo.PenetrationDistance;
+							drawBox.Size[axis] = collisionInfo.PenetrationDistance;
+							
+							g.FillRectangle(drawBox, Color.Red);
+						}
+					}
+				}
+			}*/
+
 			if (DrawCollisionBoxes) {
 				// Draw entity collision boxes.
 				List<Entity> entities = roomControl.Entities;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
@@ -28,6 +29,7 @@ namespace ZeldaOracle.Game.Entities {
 		AutoDodge				= 0x1000,	// Will move out of the way when colliding with the edges of objects.
 		PassableToOthers		= 0x2000,	// Other entities are unable to check collisions with the entity.
 		MoveWithConveyors		= 0x4000,	// Moves with conveyor tiles.
+		MoveWithPlatforms		= 0x8000,	// Moves with moving platform tiles.
 	}
 
 	public enum CollisionBoxType {
@@ -135,6 +137,12 @@ namespace ZeldaOracle.Game.Entities {
 			this.collisionInfo = new CollisionInfo[Directions.Count];
 			for (int i = 0; i < Directions.Count; i++)
 				collisionInfo[i].Clear();
+
+			ClipDistances		= new float[4];
+			ClipDirections		= new bool[4];
+			CollisionInfoNew	= new CollisionInfoNew[4];
+			for (int i = 0; i < 4; i++)
+				CollisionInfoNew[i] = new CollisionInfoNew();
 		}
 		
 
@@ -213,11 +221,13 @@ namespace ZeldaOracle.Game.Entities {
 			UpdateZVelocity();
 
 			// 1. Collide with solid tiles and entities.
-			if (HasFlags(PhysicsFlags.CollideWorld) || HasFlags(PhysicsFlags.CollideEntities))
-				CheckCollisions();
+			//if (HasFlags(PhysicsFlags.CollideWorld) || HasFlags(PhysicsFlags.CollideEntities))
+				//CheckCollisions();
+
 			// 2. Collide with room edges.
 			if (HasFlags(PhysicsFlags.CollideRoomEdge) || HasFlags(PhysicsFlags.ReboundRoomEdge))
 				CheckRoomEdgeCollisions(GetCollisionBox(roomEdgeCollisionBoxType));
+
 			// 3. Custom collision function.
 			if (customCollisionFunction != null) {
 				customCollisionFunction.Invoke();
@@ -226,25 +236,23 @@ namespace ZeldaOracle.Game.Entities {
 			}
 
 			// Apply velocity.
-			entity.Position += velocity;
-			velocity += reboundVelocity;
+			//entity.Position += velocity;
+			//velocity += reboundVelocity;
 
 			// Check ledges.
 			if (HasFlags(PhysicsFlags.LedgePassable))
 				CheckLedges();
 
 			// Keep track of the highest-layer tile the entity is positioned over.
-			topTile = null;
-			foreach (Tile tile in entity.RoomControl.TileManager.GetTilesAtPosition(entity.Position)) {
-				if (!tile.IsSolid && (topTile == null || tile.Layer > topTile.Layer))
-					topTile = tile;
-			}
+			topTile = entity.RoomControl.TileManager
+				.GetSurfaceTileAtPosition(entity.Position, MovesWithPlatforms);
 			if (topTile != null) {
 				// TODO: Integrate the surface tile's velocity into our
 				// velocity rather than just moving position.
-				entity.Position += topTile.Velocity;
+				/*if (MovesWithPlatforms)
+					entity.Position += topTile.Velocity;
 				if (MovesWithConveyors && IsOnGround)
-					entity.Position += topTile.ConveyorVelocity;
+					entity.Position += topTile.ConveyorVelocity;*/
 			}
 
 			// Check if destroyed outside room.
@@ -609,11 +617,21 @@ namespace ZeldaOracle.Game.Entities {
 			// Collide with nearby solid tiles HORIZONTALLY and then VERTICALLY.
 			Rectangle2I area = entity.RoomControl.GetTileAreaFromRect(myBox, 1);
 			Room room = entity.RoomControl.Room;
+
+
+			// Handle circular tile collisions.
+			if (HasFlags(PhysicsFlags.CollideWorld)) {
+				foreach (Tile t in entity.RoomControl.GetTilesInArea(area)) {
+					if (CanCollideWithTile(t) && t.CollisionStyle == CollisionStyle.Circular)
+						ResolveCircularCollision(t, t.Position, t.CollisionModel);
+				}
+			}
+
 			for (int axis = 0; axis < 2; ++axis) {
 				// Collide with solid tiles.
 				if (HasFlags(PhysicsFlags.CollideWorld)) {
 					foreach (Tile t in entity.RoomControl.GetTilesInArea(area)) {
-						if (CanCollideWithTile(t))
+						if (CanCollideWithTile(t) && t.CollisionStyle == CollisionStyle.Rectangular)
 							ResolveCollision(axis, t, t.Position, t.CollisionModel);
 					}
 				}
@@ -742,6 +760,19 @@ namespace ZeldaOracle.Game.Entities {
 			return false;
 		}
 		
+		private bool ResolveCircularCollision(Tile tile, Vector2F modelPos, CollisionModel model) {
+			bool colliding = false;
+			for (int i = 0; i < model.BoxCount; i++) {
+				Rectangle2F box = model.Boxes[i];
+				box.Point += modelPos;
+				if (PositionedCollisionBox.Intersects(box)) {
+					entity.Position += 1.0f * (entity.Position - box.Center).Normalized;
+					colliding = true;
+				}
+			}
+			return colliding;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Collision Dodging
@@ -1069,6 +1100,24 @@ namespace ZeldaOracle.Game.Entities {
 			get { return HasFlags(PhysicsFlags.MoveWithConveyors); }
 			set { SetFlags(PhysicsFlags.MoveWithConveyors, value); }
 		}
+
+		public bool MovesWithPlatforms {
+			get { return HasFlags(PhysicsFlags.MoveWithPlatforms); }
+			set { SetFlags(PhysicsFlags.MoveWithPlatforms, value); }
+		}
+		
+
+
+		public int PushedDirection { get; set; }
+		public int ClippedDirection { get; set; }
+		public DirectionMask ClippedDirections { get; set; }
+
+		//public bool IsPushedOnAxis
+
+		public float[] ClipDistances { get; set; }
+		public bool[] ClipDirections { get; set; }
+		public bool AnyCollisions { get; set; }
+		public CollisionInfoNew[] CollisionInfoNew { get; set; }
 
 	}
 }

@@ -7,6 +7,32 @@ using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Collisions {
 
+	public class CollisionInfoNew {
+
+		public int PenetrationDirection { get; set; }
+		public float PenetrationDistance { get; set; }
+		public Rectangle2F CollisionBox { get; set; }
+		public object CollidedObject { get; set; }
+		public bool IsColliding { get; set; }
+		public bool IsResolved { get; set; }
+		
+		public float MaxAllowedPenetrationDistance { get; set; }
+
+		public CollisionInfoNew() {
+			Reset();
+		}
+
+		public void Reset() {
+			IsColliding				= false;
+			IsResolved				= false;
+			PenetrationDistance		= 0.0f;
+			CollidedObject			= null;
+			CollisionBox			= Rectangle2F.Zero;
+			PenetrationDirection	= -1;
+			MaxAllowedPenetrationDistance	= 0.0f;
+		}
+	}
+
 	public enum CollisionType {
 		None,
 		Tile,

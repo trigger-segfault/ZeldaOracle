@@ -206,7 +206,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			player.BeginNormalState();
 		}
 
-		public virtual void OnSwingTilePeak(int angle, Point2I tileLocation) {
+		public virtual void OnSwingTilePeak(int angle, Vector2F hitPoint) {
 
 		}
 
@@ -271,20 +271,8 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			if (changedAngles) {
 				Vector2F hitPoint = player.Center + (Angles.ToVector(swingAngle, false) * 13);
 				Point2I hitTileLocation = player.RoomControl.GetTileLocation(hitPoint);
-				OnSwingTilePeak(swingAngle, hitTileLocation);
+				OnSwingTilePeak(swingAngle, hitPoint);
 			}
-
-			// Check for a swing entity peak (entity peaks happen 1 frame after changing angles).
-			/*
-			if (time - swingAngleStartTime == 1) {
-				Rectangle2F box = swingAngleCollisionBoxes[swingAngle];
-				if (lunge && swingAngleIndex == swingAngleDurations.Length - 1)
-					box = swingLungeCollisionBoxes[swingDirection];
-				
-				box.Point += player.Center;
-				OnSwingEntityPeak(swingAngle, box);
-			}
-			*/
 				
 			Rectangle2I toolBox = swingCollisionBoxes[swingDirection, Math.Min(swingCollisionBoxes.Length - 1, swingAngleIndex)];
 			toolBox.Point += (Point2I) player.CenterOffset;

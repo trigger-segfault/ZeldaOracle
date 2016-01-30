@@ -123,6 +123,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Physics.HasGravity			= true;
 			Physics.AutoDodges			= true;
 			Physics.MovesWithConveyors	= true;
+			Physics.MovesWithPlatforms	= true;
 			Physics.CollideWithRoomEdge	= true;
 			Physics.RoomEdgeCollisionBoxType = CollisionBoxType.Soft;
 

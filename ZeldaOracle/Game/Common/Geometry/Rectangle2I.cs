@@ -326,6 +326,14 @@ namespace ZeldaOracle.Common.Geometry {
 					(rect.Max <= Max));
 		}
 
+		// Returns true if this rectangle intersects another.
+		public bool Intersects(Rectangle2I other) {
+			if (IsEmpty && other.IsEmpty)
+				return false;
+			return !(other.Left - Right >= 0 || other.Top - Bottom >= 0 ||
+					 Left - other.Right >= 0 || Top - other.Bottom >= 0);
+		}
+
 
 		//========== COLLISION ===========
 

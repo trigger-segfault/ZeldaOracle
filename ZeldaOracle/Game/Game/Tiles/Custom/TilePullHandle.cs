@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Projectiles;
@@ -75,6 +76,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 			SetLength(0.0f);
 
+			CollisionStyle		= CollisionStyle.Circular;
 			IsSolid				= true;
 			ClingWhenStabbed	= false;
 

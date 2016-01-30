@@ -70,10 +70,10 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		// Sword Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnSwingTilePeak(int angle, Point2I tileLocation) {
+		public override void OnSwingTilePeak(int angle, Vector2F hitPoint) {
 			// Don't cut the tile when the swing is started.
 			if (SwingAngleIndex > 0)
-				base.OnSwingTilePeak(angle, tileLocation);
+				base.OnSwingTilePeak(angle, hitPoint);
 		}
 
 
@@ -88,7 +88,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 		public override void OnSwingEnd() {
 			// Cut the center tile.
-			CutTileAtLocation(player.RoomControl.GetTileLocation(player.Center));
+			CutTilesAtPoint(player.Center);
 			player.BeginNormalState();
 		}
 	}

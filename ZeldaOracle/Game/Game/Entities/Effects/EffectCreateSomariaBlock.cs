@@ -45,11 +45,18 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		private bool CanBlockSpawnAtLocation(Point2I location) {
 			if (!RoomControl.IsTileInBounds(location))
 				return false;
+
+			foreach (Tile t in RoomControl.TileManager.GetTilesAtPosition(Center)) {
+				if (!t.IsSurface || !t.IsCoverableByBlock || t.IsHoleWaterOrLava)
+					return false;
+			}
+			/*
 			Tile checkTile = RoomControl.GetTopTile(location);
 			if (checkTile == null)
 				return true;
 			return (checkTile.Layer != RoomControl.Room.TopLayer &&
-					checkTile.IsCoverableByBlock && !checkTile.IsHoleWaterOrLava);
+					checkTile.IsCoverableByBlock && !checkTile.IsHoleWaterOrLava);*/
+			return true;
 		}
 		
 

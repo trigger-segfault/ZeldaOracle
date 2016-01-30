@@ -51,5 +51,14 @@ namespace ZeldaOracle.Game.Tiles {
 				}
 			}
 		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Overridden Propreties
+		//-----------------------------------------------------------------------------
+
+		public override bool IsSurface {
+			get { return false; }
+		}
 	}
 }

@@ -19,12 +19,13 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Tiles {
 	
 	public class Tile : IPropertyObject, ZeldaAPI.Tile {
 
-		private Rectangle2I			tileGridLocation;
+		private Rectangle2I			tileGridArea;
 
 		// Internal
 		private RoomControl			roomControl;
@@ -38,6 +39,11 @@ namespace ZeldaOracle.Game.Tiles {
 		private bool				isMoving;
 		private float				movementSpeed;
 		private Vector2F			offset;			// Offset in pixels from its tile location (used for movement).
+
+		private Vector2F			previousOffset;
+		private Point2I				previousLocation;
+		private Tile				surfaceTile;
+
 		protected AnimationPlayer	animationPlayer;
 		private bool				hasMoved;
 		protected TilePath			path;			// The path the tile is currently following.
@@ -52,15 +58,17 @@ namespace ZeldaOracle.Game.Tiles {
 		private TileDataInstance	tileData;		// The tile data used to create this tile.
 		private TileFlags			flags;
 		private Point2I				size;			// How many tile spaces this tile occupies. NOTE: this isn't supported yet.
-		private CollisionModel		collisionModel;
 		private SpriteAnimation		customSprite;
 		private SpriteAnimation		spriteAsObject;	// The sprite for the tile if it were picked up, pushed, etc.
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
 		private Sound				breakSound;	// The sound to play when the tile is broken.
 		private int					pushDelay;		// Number of ticks of pushing before the player can move this tile.
 		private DropList			dropList;
-		private bool				isSolid;
 		private Properties			properties;
+		
+		private bool				isSolid;
+		private CollisionModel		collisionModel;
+		private CollisionStyle		collisionStyle;
 		
 		public bool IsUpdated { get; set; } // This is to make sure tiles are only updated once per frame.
 
@@ -71,7 +79,7 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		// Use Tile.CreateTile() instead of this constructor.
 		protected Tile() {
-			tileGridLocation	= Rectangle2I.Zero;
+			tileGridArea	= Rectangle2I.Zero;
 			isAlive				= false;
 			isInitialized		= false;
 			location			= Point2I.Zero;
@@ -95,6 +103,8 @@ namespace ZeldaOracle.Game.Tiles {
 			fallsInHoles		= true;
 			soundMove			= GameData.SOUND_BLOCK_PUSH;
 			conveyorVelocity	= Vector2F.Zero;
+			surfaceTile			= null;
+			collisionStyle		= CollisionStyle.Rectangular;
 		}
 
 
@@ -180,12 +190,6 @@ namespace ZeldaOracle.Game.Tiles {
 			RoomControl.MoveTile(this, location + moveDirection, newLayer);
 			offset = -Directions.ToVector(direction) * GameSettings.TILE_SIZE;
 
-			// Uncover the tile this was located over.
-			// TODO: larger sized tiles, moving more than 1 distance.
-			Tile unconveredTile = roomControl.GetTopTile(oldLocation);
-			if (unconveredTile != null)
-				unconveredTile.OnUncover(this);
-
 			// Fire the OnMove event.
 			GameControl.ExecuteScript(properties.GetString("on_move", ""));
 
@@ -200,33 +204,25 @@ namespace ZeldaOracle.Game.Tiles {
 		protected bool IsMoveObstructed(Point2I newLocation, out int newLayer) {
 			newLayer = -1;
 
+			Rectangle2I newGridArea = tileGridArea;
+			newGridArea.Point += newLocation - location;
+
 			// Check if the move will keep the tile in the room bounds.
-			Rectangle2I roomRect = new Rectangle2I(0, 0, roomControl.Room.Width, roomControl.Room.Height);
-			Rectangle2I tileRect = new Rectangle2I(newLocation, size);
-			if (!roomRect.Contains(tileRect))
+			if (!roomControl.TileManager.GridArea.Contains(newGridArea))
 				return true;
 
-			// Check for tile obstructions and find an empty layer to put the tile in.
-			for (int i = 0; i < RoomControl.Room.LayerCount; i++) {
-				for (int x = 0; x < size.X; x++) {
-					for (int y = 0; y < size.Y; y++) {
-						Point2I loc = newLocation + new Point2I(x, y);
-						Tile t = RoomControl.GetTile(newLocation + new Point2I(x, y), i);
-
-						if (t == this) {
-							newLayer = i;
-						}
-						else {
-							if (t != null && !t.IsCoverableByBlock)
-								return true;
-							if (t == null && newLayer != layer)
-								newLayer = i;
-						}
-					}
+			// Check if there is a free grid area to move to.
+			int highestLayer = 0;
+			foreach (Tile tile in roomControl.TileManager.GetTilesInArea(newGridArea)) {
+				if (tile != this) {
+					if (!tile.IsCoverableByBlock)
+						return true;
+					else if (tile.Layer > highestLayer)
+						highestLayer = tile.Layer;
 				}
 			}
-
-			return (newLayer < 0);
+			newLayer = highestLayer + 1;
+			return (newLayer < 0 || newLayer >= roomControl.TileManager.LayerCount);
 		}
 
 
@@ -348,23 +344,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Called when the tile completes a movement (like after being pushed).
 		public virtual void OnCompleteMovement() {
 			// Check if we are over a hazard tile (water, lava, hole).
-			// TEMP: Only movable tiles can fall in hazards.
-			if (HasFlag(TileFlags.Movable)) {
-				Tile tile = null;
-				for (int i = layer - 1; i >= 0 && tile == null; i--)
-					tile = roomControl.GetTile(location, i);
-
-				if (tile != null) {
-					if (tile.IsWater)
-						OnFallInWater();
-					else if (tile.IsLava)
-						OnFallInLava();
-					else if (tile.IsHole)
-						OnFallInHole();
-					else
-						tile.OnCover(this);
-				}
-			}
+			
 		}
 
 		// Called when the tile is pushed into a hole.
@@ -395,10 +375,10 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		// Called when another tile covers this tile.
-		public virtual void OnCover(Tile tile) { }
+		//public virtual void OnCover(Tile tile) { }
 
 		// Called when this tile is uncovered.
-		public virtual void OnUncover(Tile tile) { }
+		//public virtual void OnUncover(Tile tile) { }
 
 		public virtual void OnCoverBegin(Tile tile) { }
 		
@@ -462,6 +442,12 @@ namespace ZeldaOracle.Game.Tiles {
 		public virtual void OnRemoveFromRoom() {}
 
 		public virtual void Update() {
+			UpdateMovement();
+			if (!isMoving)
+				CheckSurfaceTile();
+		}
+		
+		private void UpdateMovement() {
 			// Velocity must be applied on the next frame in order to syncronize
 			// entities moving on this tile, because entities are updated before tiles.
 			if (isMoving)
@@ -484,6 +470,9 @@ namespace ZeldaOracle.Game.Tiles {
 						velocity		= Vector2F.Zero;
 						moveDirection	= Point2I.Zero;
 						isMoving		= false;
+						CheckSurfaceTile();
+						if (IsDestroyed)
+							return;
 						OnCompleteMovement();
 					}
 					else {
@@ -516,6 +505,32 @@ namespace ZeldaOracle.Game.Tiles {
 				}
 
 				pathTimer++;
+			}
+		}
+
+		private void CheckSurfaceTile() {
+			// Find the surface tile (tile below this one).
+			Tile newSurfaceTile = null;
+			foreach (Tile tile in roomControl.TileManager
+				.GetTilesAtLocation(location, TileLayerOrder.HighestToLowest))
+			{
+				if (tile != this && tile.IsSurface) {
+					newSurfaceTile = tile;
+					break;
+				}
+			}
+
+			// Check if the surface tile has changed.
+			if (surfaceTile != newSurfaceTile) {
+				surfaceTile = newSurfaceTile;
+				if (surfaceTile != null && path == null) {
+					if (surfaceTile.IsWater)
+						OnFallInWater();
+					else if (surfaceTile.IsLava)
+						OnFallInLava();
+					else if (surfaceTile.IsHole)
+						OnFallInHole();
+				}
 			}
 		}
 
@@ -617,6 +632,10 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return (location * GameSettings.TILE_SIZE) + offset; }
 		}
 
+		public Vector2F PreviousPosition {
+			get { return (previousLocation * GameSettings.TILE_SIZE) + previousOffset; }
+		}
+
 		public Vector2F Center {
 			get { return Position + ((Vector2F) size * (0.5f * GameSettings.TILE_SIZE)); }
 		}
@@ -629,6 +648,16 @@ namespace ZeldaOracle.Game.Tiles {
 		public Point2I Location {
 			get { return location; }
 			set { location = value; }
+		}
+
+		public Vector2F PreviousOffset {
+			get { return previousOffset; }
+			set { previousOffset = value; }
+		}
+
+		public Point2I PreviousLocation {
+			get { return previousLocation; }
+			set { previousLocation = value; }
 		}
 		
 		public int Layer {
@@ -649,6 +678,14 @@ namespace ZeldaOracle.Game.Tiles {
 		public int Height {
 			get { return size.Y; }
 			set { size.Y = value; }
+		}
+		
+		public Rectangle2F Bounds {
+			get { return new Rectangle2F(Position, size * GameSettings.TILE_SIZE); }
+		}
+		
+		public Rectangle2F PreviousBounds {
+			get { return new Rectangle2F(PreviousPosition, size * GameSettings.TILE_SIZE); }
 		}
 
 		public TileFlags Flags {
@@ -784,6 +821,14 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return isSolid; }
 			set { isSolid = value; }
 		}
+		
+		public virtual bool IsSurface {
+			get { return (!isSolid && !IsPlatform); }
+		}
+		
+		public bool IsPlatform {
+			get { return (!isSolid && (isMoving || path != null)); }
+		}
 
 		public bool IsHalfSolid {
 			get { return (SolidType == TileSolidType.HalfSolid); }
@@ -847,9 +892,14 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return tileData; }
 		}
 
-		public Rectangle2I TileGridLocation {
-			get { return tileGridLocation; }
-			set { tileGridLocation = value; }
+		public Rectangle2I TileGridArea {
+			get { return tileGridArea; }
+			set { tileGridArea = value; }
+		}
+
+		public CollisionStyle CollisionStyle {
+			get { return collisionStyle; }
+			set { collisionStyle = value; }
 		}
 
 

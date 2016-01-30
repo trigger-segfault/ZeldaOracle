@@ -147,10 +147,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 			
 			// Check for tiles to stab.
-			CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
-			Tile tile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
-			if (tile != null && player.Movement.IsMoving && collisionInfo.Type == CollisionType.Tile)
-				StabTile(tile);
+			if (Controls.Arrows[player.Direction].IsDown()) {
+				CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
+				Tile tile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
+				if (tile != null && player.Movement.IsMoving && collisionInfo.Type == CollisionType.Tile) {
+					StabTile(tile);
+				}
+			}
 
 			// Release the sword button (spin if charged).
 			else if (!weapon.IsEquipped || !weapon.IsButtonDown()) {

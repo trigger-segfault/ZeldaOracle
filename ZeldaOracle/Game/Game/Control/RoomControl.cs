@@ -455,6 +455,10 @@ namespace ZeldaOracle.Game.Control {
 				eventTiles[i].Update();
 			}
 			
+			// Process Physics.
+			if (GameControl.UpdateRoom)
+				roomPhysics.ProcessPhysics();
+
 			bool nextAllMonstersDead = AllMonstersDead();
 			if (nextAllMonstersDead && !allMonstersDead)
 				GameControl.FireEvent(room, "event_all_monsters_dead");

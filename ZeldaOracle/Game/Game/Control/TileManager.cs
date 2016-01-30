@@ -9,6 +9,11 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Control {
 
+	public enum TileLayerOrder {
+		LowestToHighest = 0,
+		HighestToLowest = 1,
+	}
+
 	public class TileManager {
 
 		private RoomControl roomControl;
@@ -24,7 +29,7 @@ namespace ZeldaOracle.Game.Control {
 
 		public TileManager(RoomControl roomControl) {
 			this.roomControl		= roomControl;
-			this.tileGridCellSize	= new Point2I(16, 16);
+			this.tileGridCellSize	= new Point2I(GameSettings.TILE_SIZE, GameSettings.TILE_SIZE);
 		}
 
 		public void Initialize(Room room) {
@@ -36,91 +41,8 @@ namespace ZeldaOracle.Game.Control {
 
 
 		//-----------------------------------------------------------------------------
-		// Tile Accessors
+		// General Grid Methods
 		//-----------------------------------------------------------------------------
-		
-		// Return an enumerable list of all tiles touching the given position.
-		public IEnumerable<Tile> GetTilesAtPosition(Vector2F position) {
-			Point2I location = (Point2I) (position / tileGridCellSize);
-			if (IsTileInBounds(location)) {
-				for (int i = 0; i < layerCount; i++) {
-					Tile tile = tiles[location.X, location.Y, i];
-					if (tile != null && GetTileBounds(tile).Contains(position))
-						yield return tile;
-				}
-			}
-		}
-		
-		// Return an enumerable list of tiles touching the given rectangular bounds.
-		public IEnumerable<Tile> GetTilesTouching(Rectangle2F bounds) {
-			Rectangle2I area = GetTileAreaFromRect(bounds);
-			foreach (Tile tile in GetTilesInArea(area)) {
-				if (GetTileBounds(tile).Intersects(bounds))
-					yield return tile;
-			}
-		}
-
-		// Return an enumerable list of tiles.
-		public IEnumerable<Tile> GetTiles() {
-			for (int i = 0; i < layerCount; i++) {
-				for (int x = 0; x < GridWidth; x++) {
-					for (int y = 0; y < GridHeight; y++) {
-						Tile tile = tiles[x, y, i];
-						if (tile != null && IsTileAtGridLocation(tile, x, y))
-							yield return tile;
-					}
-				}
-			}
-		}
-		
-		// Return an enumerable list of tiles in the given grid based area.
-		public IEnumerable<Tile> GetTilesInArea(Rectangle2I area) {
-			Rectangle2I clippedArea = Rectangle2I.Intersect(area,
-				new Rectangle2I(Point2I.Zero, gridDimensions));
-
-			for (int i = 0; i < layerCount; i++) {
-				for (int x = clippedArea.Left; x < clippedArea.Right; x++) {
-					for (int y = clippedArea.Top; y < clippedArea.Bottom; y++) {
-						Tile tile = tiles[x, y, i];
-						if (tile != null) {
-							Point2I loc = tile.TileGridLocation.Point;
-							if (!clippedArea.Contains(loc))
-								loc = Point2I.Clamp(loc, clippedArea);
-							if (x == loc.X && y == loc.Y)
-								yield return tile;
-						}
-					}
-				}
-			}
-		}
-		
-		// Return the tile at the given location (can return null).
-		public Tile GetTile(Point2I location, int layer) {
-			return tiles[location.X, location.Y, layer];
-		}
-
-		// Return the tile at the given location (can return null).
-		public Tile GetTile(int x, int y, int layer) {
-			return tiles[x, y, layer];
-		}
-
-		// Return the tile at the given location that's on the highest layer.
-		public Tile GetTopTile(int x, int y) {
-			for (int i = layerCount - 1; i >= 0; i--) {
-				if (tiles[x, y, i] != null)
-					return tiles[x, y, i];
-			}
-			return null;
-		}
-
-		// Return the tile at the given location that's on the highest layer.
-		public Tile GetTopTile(Point2I location) {
-			for (int i = layerCount - 1; i >= 0; i--) {
-				if (tiles[location.X, location.Y, i] != null)
-					return tiles[location.X, location.Y, i];
-			}
-			return null;
-		}
 		
 		// Return true if the given tile location is inside the room.
 		public bool IsTileInBounds(Point2I location, int layer = 0) {
@@ -137,13 +59,127 @@ namespace ZeldaOracle.Game.Control {
 		// inflateAmount inflates the output rectangle.
 		public Rectangle2I GetTileAreaFromRect(Rectangle2F rect, int inflateAmount = 0) {
 			Rectangle2I area;
-			rect.Size = (GMath.Ceiling((rect.Point + rect.Size) / tileGridCellSize) * tileGridCellSize) - rect.Point;
+			rect.Size	= (GMath.Ceiling((rect.Point + rect.Size) / tileGridCellSize) * tileGridCellSize) - rect.Point;
 			area.Point	= (Point2I) (rect.TopLeft / (Vector2F) tileGridCellSize);
 			area.Size	= ((Point2I) (rect.BottomRight / (Vector2F) tileGridCellSize)) - area.Point;
-			if (area.Size < Point2I.One)
-				area.Size = Point2I.One;
-			area.Inflate(inflateAmount, inflateAmount);
+			if (inflateAmount != 0)
+				area.Inflate(inflateAmount, inflateAmount);
 			return Rectangle2I.Intersect(area, new Rectangle2I(Point2I.Zero, gridDimensions));
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Tile Accessors
+		//-----------------------------------------------------------------------------
+		
+		// Return an enumerable list of tiles at the given location.
+		public IEnumerable<Tile> GetTilesAtLocation(Point2I location, TileLayerOrder layerOrder = TileLayerOrder.LowestToHighest) {
+			if (IsTileInBounds(location)) {
+				foreach (int i in GetLayers(layerOrder)) {
+					Tile tile = tiles[location.X, location.Y, i];
+					if (tile != null)
+						yield return tile;
+				}
+			}
+		}
+		
+		// Return an enumerable list of tiles touching the given point.
+		public IEnumerable<Tile> GetTilesAtPosition(Vector2F position, TileLayerOrder layerOrder = TileLayerOrder.LowestToHighest) {
+			Point2I location = (Point2I) (position / tileGridCellSize);
+			foreach (Tile tile in GetTilesAtLocation(location, layerOrder)) {
+				if (tile.Bounds.Contains(position))
+					yield return tile;
+			}
+		}
+		
+		// Return an enumerable list of tiles touching the given rectangular bounds.
+		public IEnumerable<Tile> GetTilesTouching(Rectangle2F bounds, TileLayerOrder layerOrder = TileLayerOrder.LowestToHighest) {
+			Rectangle2I area = GetTileAreaFromRect(bounds);
+			foreach (Tile tile in GetTilesInArea(area, layerOrder)) {
+				if (tile.Bounds.Intersects(bounds))
+					yield return tile;
+			}
+		}
+		
+		// Return an enumerable list of tiles contained within the given tile grid area.
+		public IEnumerable<Tile> GetTilesInArea(Rectangle2I area, TileLayerOrder layerOrder = TileLayerOrder.LowestToHighest) {
+			Rectangle2I clippedArea = Rectangle2I.Intersect(area,
+				new Rectangle2I(Point2I.Zero, gridDimensions));
+			foreach (int i in GetLayers(layerOrder)) {
+				for (int y = clippedArea.Top; y < clippedArea.Bottom; y++) {
+					for (int x = clippedArea.Left; x < clippedArea.Right; x++) {
+						Tile tile = tiles[x, y, i];
+						if (tile != null) {
+							Point2I loc = tile.TileGridArea.Point;
+							if (!clippedArea.Contains(loc))
+								loc = Point2I.Clamp(loc, clippedArea);
+							if (x == loc.X && y == loc.Y)
+								yield return tile;
+						}
+					}
+				}
+			}
+		}
+
+		// Return an enumerable list of all tiles.
+		public IEnumerable<Tile> GetTiles(TileLayerOrder layerOrder = TileLayerOrder.LowestToHighest) {
+			foreach (int i in GetLayers(layerOrder)) {
+				for (int x = 0; x < GridWidth; x++) {
+					for (int y = 0; y < GridHeight; y++) {
+						Tile tile = tiles[x, y, i];
+						if (tile != null && IsTileAtGridLocation(tile, x, y))
+							yield return tile;
+					}
+				}
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Singular Tile Accessors
+		//-----------------------------------------------------------------------------
+		
+		// Return the tile at the given location (can return null).
+		public Tile GetTile(Point2I location, int layer) {
+			return tiles[location.X, location.Y, layer];
+		}
+
+		// Return the tile at the given location (can return null).
+		public Tile GetTile(int x, int y, int layer) {
+			return tiles[x, y, layer];
+		}
+
+		// Return the tile at the given location that's on the highest layer.
+		public Tile GetTopTile(int x, int y) {
+			return GetTopTile(new Point2I(x, y));
+		}
+
+		// Return the tile at the given location that's on the highest layer.
+		public Tile GetTopTile(Point2I location) {
+			return GetTilesAtLocation(location, TileLayerOrder.HighestToLowest).FirstOrDefault();
+		}
+		
+		// Get the topmost tile touching the given point.
+		public Tile GetTopTileAtPosition(Vector2F position) {
+			return GetTilesAtPosition(position, TileLayerOrder.HighestToLowest).FirstOrDefault();
+		}
+
+		// Return the highest surface tile at the given position.
+		public Tile GetSurfaceTile(Point2I location) {
+			foreach (Tile tile in GetTilesAtLocation(location, TileLayerOrder.HighestToLowest)) {
+				if (tile.IsSurface)
+					return tile;
+			}
+			return null;
+		}
+
+		// Return the highest surface tile at the given position.
+		public Tile GetSurfaceTileAtPosition(Vector2F position, bool includePlatforms = false) {
+			foreach (Tile tile in GetTilesAtPosition(position, TileLayerOrder.HighestToLowest)) {
+				if (tile.IsSurface || (includePlatforms && tile.IsPlatform))
+					return tile;
+			}
+			return null;
 		}
 		
 
@@ -154,20 +190,33 @@ namespace ZeldaOracle.Game.Control {
 		// Place a tile in highest empty layer at the given location.
 		// Returns true if there was an empty space to place the tile.
 		public bool PlaceTileOnHighestLayer(Tile tile, Point2I location) {
-			Rectangle2I area = GetTileArea(tile);
+			Rectangle2F tileBounds = new Rectangle2F(
+				location * GameSettings.TILE_SIZE,
+				tile.Size * GameSettings.TILE_SIZE);
+			Rectangle2I area = GetTileAreaFromRect(tileBounds);
 
-			int layer = -1;
-			for (int x = area.Left; x < area.Right; x++) {
-				for (int y = area.Top; y < area.Bottom; y++) {
-					for (int i = 0; i < layerCount; i++) {
+			// Determine which layers are free.
+			bool[] freeLayers = new bool[layerCount];
+			for (int i = 0; i < layerCount; i++) {
+				freeLayers[i] = true;
+				for (int x = area.Left; x < area.Right && freeLayers[i]; x++) {
+					for (int y = area.Top; y < area.Bottom && freeLayers[i]; y++) {
 						Tile t = tiles[x, y, i];
-						if (t != null && layer <= t.Layer)
-							layer = t.Layer + 1;
+						if (t != null)
+							freeLayers[i] = false;
 					}
 				}
 			}
 			
-			if (layer < 0 || layer >= layerCount)
+			// Choose the highest free layer.
+			int layer = -1;
+			for (int i = layerCount - 1; i >= 0; i--) {
+				if (freeLayers[i]) {
+					layer = i;
+					break;
+				}
+			}
+			if (layer < 0)
 				return false;
 
 			// Place the tile in that layer.
@@ -183,10 +232,11 @@ namespace ZeldaOracle.Game.Control {
 
 		// Use this for placing tiles at runtime.
 		public void PlaceTile(Tile tile, Point2I location, int layer, bool initializeTile = true) {
-			tile.Location	= location;
-			tile.Layer		= layer;
+			tile.Location			= location;
+			tile.PreviousLocation	= location;
+			tile.Layer				= layer;
 			Rectangle2I area = GetTileArea(tile);
-			tile.TileGridLocation = area;
+			tile.TileGridArea	= area;
 
 			for (int x = area.Left; x < area.Right; x++) {
 				for (int y = area.Top; y < area.Bottom; y++) {
@@ -195,11 +245,21 @@ namespace ZeldaOracle.Game.Control {
 			}
 			if (initializeTile)
 				tile.Initialize(roomControl);
+			
+			// Check for covered tiles.
+			Rectangle2F tileBounds = tile.Bounds;
+			foreach (Tile t in GetTilesTouching(tileBounds)) {
+				if (t != tile) {
+					t.OnCoverBegin(tile);
+					if (tileBounds.Contains(t.Bounds))
+						t.OnCoverComplete(tile);
+				}
+			}
 		}
 
 		// Remove a tile from the room.
 		public void RemoveTile(Tile tile) {
-			Rectangle2I area = tile.TileGridLocation;
+			Rectangle2I area = tile.TileGridArea;
 			for (int x = area.Left; x < area.Right; x++) {
 				for (int y = area.Top; y < area.Bottom; y++) {
 					tiles[x, y, tile.Layer] = null;
@@ -207,12 +267,29 @@ namespace ZeldaOracle.Game.Control {
 			}
 			tile.IsAlive = false;
 			tile.OnRemoveFromRoom();
+			
+			// Check for uncovered tiles.
+			Rectangle2F tileBounds = tile.Bounds;
+			foreach (Tile t in GetTilesTouching(tileBounds)) {
+				t.OnUncoverBegin(tile);
+				t.OnUncoverComplete(tile);
+			}
 		}
 
 		// Move the given tile to a new location.
 		public void MoveTile(Tile tile, Point2I newLocation, int newLayer) {
 			tile.Location = newLocation;
-			tile.Layer = newLayer;
+			/*
+			if (tile.Layer != newLayer) {
+				Rectangle2I area = tile.TileGridArea;
+				for (int x = area.Left; x < area.Right; x++) {
+					for (int y = area.Top; y < area.Bottom; y++) {
+						tiles[x, y, tile.Layer] = null;
+						tiles[x, y, newLayer] = tile;
+					}
+				}
+				tile.Layer = newLayer;
+			}*/
 		}
 		
 
@@ -243,13 +320,22 @@ namespace ZeldaOracle.Game.Control {
 				for (int y = 0; y < GridHeight; y++) {
 					for (int x = 0; x < GridWidth; x++) {
 						Tile t = tiles[x, y, i];
+
 						if (t != null && IsTileAtGridLocation(t, x, y) && !t.IsUpdated) {
+							Point2I prevLocation = t.Location;
+							Vector2F prevOffset = t.Offset;
+
 							t.IsUpdated = true;
 							if (GameControl.UpdateRoom)
 								t.Update();
 							if (GameControl.AnimateRoom)
 								t.UpdateGraphics();
-							UpdateTileGridArea(t);
+
+							t.PreviousLocation = prevLocation;
+							t.PreviousOffset = prevOffset;
+							
+							if (t.IsAlive)
+								UpdateTileGridArea(t);
 						}
 					}
 				}
@@ -268,7 +354,7 @@ namespace ZeldaOracle.Game.Control {
 
 							/*
 							// DEBUG: draw grid cell occupance.
-							Rectangle2F tileBounds = (Rectangle2F) t.TileGridLocation;
+							Rectangle2F tileBounds = (Rectangle2F) t.TileGridArea;
 							tileBounds.Point *= tileGridCellSize;
 							tileBounds.Size *= tileGridCellSize;
 							Color c = Color.Yellow;
@@ -301,39 +387,91 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 		
 		private bool IsTileAtGridLocation(Tile tile, Point2I gridLocation) {
-			return (tile.TileGridLocation.Point == gridLocation);
+			return (tile.TileGridArea.Point == gridLocation);
 		}
 
 		private bool IsTileAtGridLocation(Tile tile, int x, int y) {
-			return (tile.TileGridLocation.X == x && tile.TileGridLocation.Y == y);
+			return (tile.TileGridArea.X == x && tile.TileGridArea.Y == y);
 		}
 		
 		private void UpdateTileGridArea(Tile tile) {
 			Rectangle2F tileBounds	= new Rectangle2F(tile.Position, tile.Size * GameSettings.TILE_SIZE);
-			Rectangle2I area		= GetTileAreaFromRect(tileBounds);
-			Rectangle2I prevArea	= tile.TileGridLocation;
+			Rectangle2I nextArea	= GetTileAreaFromRect(tileBounds);
+			Rectangle2I prevArea	= tile.TileGridArea;
 			
-			if (area != prevArea) {
+			if (nextArea != prevArea) {
+				// Determine the highest free layer for the tile to move to.
+				int newLayer = -1;
+				for (int i = tile.Layer; i < layerCount; i++) {
+					bool isLayerFree = true;
+					for (int x = nextArea.Left; x < nextArea.Right && isLayerFree; x++) {
+						for (int y = nextArea.Top; y < nextArea.Bottom && isLayerFree; y++) {
+							Tile t = tiles[x, y, i];
+							if (t != null && t != tile)
+								isLayerFree = false;
+						}
+					}
+					if (isLayerFree) {
+						newLayer = i;
+						break;
+					}
+				}
+				if (newLayer < 0) {
+					RemoveTile(tile);
+					return;
+				}
+
+				// Remove the tile from its old area.
 				for (int x = prevArea.Left; x < prevArea.Right; x++) {
 					for (int y = prevArea.Top; y < prevArea.Bottom; y++) {
 						tiles[x, y, tile.Layer] = null;
 					}
 				}
-				tile.TileGridLocation = area;
-				for (int x = area.Left; x < area.Right; x++) {
-					for (int y = area.Top; y < area.Bottom; y++) {
+
+				// Place the tile into its new area.
+				for (int x = nextArea.Left; x < nextArea.Right; x++) {
+					for (int y = nextArea.Top; y < nextArea.Bottom; y++) {
 						tiles[x, y, tile.Layer] = tile;
+					}
+				}
+
+				tile.TileGridArea = nextArea;
+			}
+			
+			// Check for covered/uncovered tiles.
+			Rectangle2F tileBoundsOld = tile.PreviousBounds;
+			Rectangle2F tileBoundsNew = tile.Bounds;
+			if (tileBoundsOld != tileBoundsNew) {
+				foreach (Tile t in GetTilesInArea(nextArea).Union(GetTilesInArea(prevArea))) {
+					Rectangle2F tBounds = t.Bounds;
+					if (t != tile) {
+						if (tileBoundsNew.Contains(tBounds) && !tileBoundsOld.Contains(tBounds))
+							t.OnCoverComplete(tile);
+						else if (tileBoundsNew.Intersects(tBounds) && !tileBoundsOld.Intersects(tBounds))
+							t.OnCoverBegin(tile);
+						else if (tileBoundsOld.Contains(tBounds) && !tileBoundsNew.Contains(tBounds))
+							t.OnUncoverBegin(tile);
+						else if (tileBoundsOld.Intersects(tBounds) && !tileBoundsNew.Intersects(tBounds))
+							t.OnUncoverComplete(tile);
 					}
 				}
 			}
 		}
 
 		private Rectangle2I GetTileArea(Tile tile) {
-			return GetTileAreaFromRect(GetTileBounds(tile));
+			return GetTileAreaFromRect(tile.Bounds);
 		}
 
-		private Rectangle2F GetTileBounds(Tile tile) {
-			return new Rectangle2F(tile.Position, tile.Size * GameSettings.TILE_SIZE);
+		// Return an enumerable list of tile layers in the specified order.
+		public IEnumerable<int> GetLayers(TileLayerOrder order) {
+			if (order == TileLayerOrder.LowestToHighest) {
+				for (int layer = 0; layer < layerCount; layer++)
+					yield return layer;
+			}
+			else {
+				for (int layer = layerCount - 1; layer >= 0; layer--)
+					yield return layer;
+			}
 		}
 
 		
@@ -355,6 +493,14 @@ namespace ZeldaOracle.Game.Control {
 		
 		public int GridHeight {
 			get { return gridDimensions.Y; }
+		}
+		
+		public int LayerCount {
+			get { return layerCount; }
+		}
+		
+		public Rectangle2I GridArea {
+			get { return new Rectangle2I(Point2I.Zero, gridDimensions); }
 		}
 	}
 }

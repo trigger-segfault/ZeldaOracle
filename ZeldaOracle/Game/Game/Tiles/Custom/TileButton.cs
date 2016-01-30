@@ -13,7 +13,10 @@ namespace ZeldaOracle.Game.Tiles {
 	public class TileButton : Tile, ZeldaAPI.Button {
 
 		private bool isPressed;
-		private List<Tile> tilesCovering; // List of tiles covering this button
+		private HashSet<Tile> tilesCovering; // List of tiles covering this button
+		private bool isCovered;
+		private int uncoverTimer;
+		private int uncoverDelay;
 
 
 		//-----------------------------------------------------------------------------
@@ -21,7 +24,8 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public TileButton() {
-			tilesCovering = new List<Tile>();
+			tilesCovering = new HashSet<Tile>();
+			uncoverDelay = 27;
 		}
 
 		//-----------------------------------------------------------------------------
@@ -37,6 +41,27 @@ namespace ZeldaOracle.Game.Tiles {
 			else
 				CustomSprite = GameData.SPR_TILE_BUTTON_UP;*/
 			SpriteIndex = (isPressed ? 1 : 0);
+
+			isCovered = false;
+			uncoverTimer = 0;
+		}
+
+		public override void OnCoverBegin(Tile tile) {
+			tilesCovering.Add(tile);
+		}
+
+		public override void OnCoverComplete(Tile tile) {
+			isCovered = true;
+			tilesCovering.Add(tile);
+		}
+
+		public override void OnUncoverBegin(Tile tile) {
+			isCovered = false;
+			if (tile.IsMoving)
+				uncoverTimer = uncoverDelay;
+			else
+				uncoverTimer = 0;
+			tilesCovering.Remove(tile);
 		}
 
 		public override void Update() {
@@ -54,6 +79,26 @@ namespace ZeldaOracle.Game.Tiles {
 			pressRect = new Rectangle2F(6, 6, 4, 4);
 			pressRect.Point += Position;
 
+			if (isCovered) {
+				isDown = true;
+			}
+			else {
+				uncoverTimer--;
+				if (uncoverTimer > 0)
+					isDown = true;
+				else {
+					foreach (Tile tile in tilesCovering) {
+						if (tile.Bounds.Contains(Center)) {
+							isDown = true;
+						}
+					}
+				}
+			}
+
+			/*
+			pressRect = new Rectangle2F(6, 6, 4, 4);
+			pressRect.Point += Position;
+
 			// Check if a tile is on top of this button.
 			foreach (Tile tile in RoomControl.TileManager.GetTilesAtPosition(Center)) {
 				if (tile.IsSolid) {
@@ -61,6 +106,7 @@ namespace ZeldaOracle.Game.Tiles {
 					break;
 				}
 			}
+			*/
 			/*
 			for (int i = Layer; i < RoomControl.Room.LayerCount; i++) {
 				Tile tile = RoomControl.GetTile(Location, i);
