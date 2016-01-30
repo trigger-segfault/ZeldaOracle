@@ -829,11 +829,19 @@ ANIM player_drown;
 
 ANIM player_crush_horizontal; SUBSTRIP clamp;
 	ADD frame, 44, (5, 20); ADD part, 44, (6, 20), (0, -16);
-	ADD frame, 1, (7, 20); ADD frame, 1, (6, 0);
-	ADD frame, 1, (7, 20); ADD frame, 1, (5, 20); ADD part, 1, (6, 20), (0, -16);
-	ADD frame, 1, (7, 20); ADD frame, 1, (5, 20); ADD part, 1, (6, 20), (0, -16);
-	ADD frame, 1, (7, 20); ADD frame, 1, (6, 0);
-	REPEAT 10, 5; END;
+	ADD emptyframe, 1; ADD frame, 1, (6, 0);
+	ADD emptyframe, 1; ADD frame, 1, (5, 20); ADD part, 1, (6, 20), (0, -16);
+	ADD emptyframe, 1; ADD frame, 1, (5, 20); ADD part, 1, (6, 20), (0, -16);
+	ADD emptyframe, 1; ADD frame, 1, (6, 0);
+	REPEAT 8, 5; END;
+	
+ANIM player_crush_vertical; SUBSTRIP clamp;
+	ADD frame, 44, (4, 20), (0, -2); ## TODO: this sprite should be centered??
+	ADD emptyframe, 1; ADD frame, 1, (6, 0);
+	ADD emptyframe, 1; ADD frame, 1, (4, 20);
+	ADD emptyframe, 1; ADD frame, 1, (4, 20);
+	ADD emptyframe, 1; ADD frame, 1, (6, 0);
+	REPEAT 8, 5; END;
 
 ANIM player_invisible; SUBSTRIP clamp;
 	ADD frame, 0, (7, 20); END;

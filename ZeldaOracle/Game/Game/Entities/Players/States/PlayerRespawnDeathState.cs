@@ -9,6 +9,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		private bool respawning;
 
+		// Crush: 44 frames of squished. 40 frames of flicker
+		// (blank, normal, blank, squish, blank, squish, blank, normal, (repeat))
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors

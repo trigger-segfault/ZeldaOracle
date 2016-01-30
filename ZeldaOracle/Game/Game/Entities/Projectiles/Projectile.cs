@@ -151,7 +151,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public override void Update() {
-			base.Update();
 
 			// Check if collided.
 			if (physics.IsColliding && eventCollision != null) {
@@ -228,6 +227,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				Graphics.SubStripIndex = direction;
 			else if (syncAnimationWithAngle)
 				Graphics.SubStripIndex = angle;
+			
+			base.Update();
 		}
 
 

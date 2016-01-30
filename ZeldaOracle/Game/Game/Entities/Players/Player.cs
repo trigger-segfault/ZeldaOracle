@@ -125,6 +125,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Physics.MovesWithConveyors	= true;
 			Physics.MovesWithPlatforms	= true;
 			Physics.CollideWithRoomEdge	= true;
+			Physics.AllowEdgeClipping	= true;
+			Physics.IsCrushable			= true;
+			Physics.EdgeClipAmount		= 3;
+			Physics.CrushMaxGapSize		= 4;
 			Physics.RoomEdgeCollisionBoxType = CollisionBoxType.Soft;
 
 			// Graphics.
@@ -179,7 +183,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			
 			// Break any breakable blocks the player respawns and collides with.
 			foreach (Tile tile in Physics.GetTilesMeeting(CollisionBoxType.Hard)) {
-				if (tile.IsSolid)
+				if (tile.IsSolid && tile.Layer > 0)
 					tile.Break(false);
 			}
 		}
@@ -503,6 +507,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public override void Die() {
 			// Don't actually die.
+		}
+
+		public override void OnCrush(bool horizontal) {
+			AudioSystem.PlaySound(GameData.SOUND_MONSTER_HURT);
+			RespawnDeath();
+			if (horizontal)
+				Graphics.PlayAnimation(GameData.ANIM_PLAYER_CRUSH_HORIZONTAL);
+			else
+				Graphics.PlayAnimation(GameData.ANIM_PLAYER_CRUSH_VERTICAL);
 		}
 
 		public override void OnLand() {

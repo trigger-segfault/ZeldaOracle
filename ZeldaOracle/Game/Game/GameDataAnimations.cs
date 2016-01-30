@@ -85,6 +85,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PLAYER_DROWN;
 		public static Animation ANIM_PLAYER_FALL;
 		public static Animation ANIM_PLAYER_CRUSH_HORIZONTAL;
+		public static Animation ANIM_PLAYER_CRUSH_VERTICAL;
 		public static Animation ANIM_PLAYER_INVISIBLE;
 		public static Animation ANIM_PLAYER_MINECART_IDLE;
 		public static Animation ANIM_PLAYER_MINECART_CARRY;

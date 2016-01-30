@@ -18,6 +18,11 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		
 		public float MaxAllowedPenetrationDistance { get; set; }
 
+
+		public bool IsAllowedClipping {
+			get { return (IsColliding && PenetrationDistance <= MaxAllowedPenetrationDistance); }
+		}
+
 		public CollisionInfoNew() {
 			Reset();
 		}

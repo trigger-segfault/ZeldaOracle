@@ -111,6 +111,9 @@ namespace ZeldaOracle.Game.Entities {
 				AudioSystem.PlaySound(soundBounce);
 		}
 
+		// Occurs when the entity is crushed between tiles.
+		public virtual void OnCrush(bool horizontal) {}
+
 		// Called when the entity falls in a hole.
 		public virtual void OnFallInHole() {
 			if (physics.IsDestroyedInHoles) {

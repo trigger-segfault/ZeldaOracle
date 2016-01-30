@@ -30,6 +30,8 @@ namespace ZeldaOracle.Game.Entities {
 		PassableToOthers		= 0x2000,	// Other entities are unable to check collisions with the entity.
 		MoveWithConveyors		= 0x4000,	// Moves with conveyor tiles.
 		MoveWithPlatforms		= 0x8000,	// Moves with moving platform tiles.
+		Crushable				= 0x10000,
+		EdgeClipping			= 0x20000,	// Allow clipping into the edges of tiles.
 	}
 
 	public enum CollisionBoxType {
@@ -82,6 +84,9 @@ namespace ZeldaOracle.Game.Entities {
 		private Vector2F				velocity;			// XY-Velocity in pixels per frame.
 		private float					zVelocity;			// Z-Velocity in pixels per frame.
 		
+		private int						crushMaxGapSize;
+		private int						edgeClipAmount;
+
 		// Collision.
 		private Rectangle2F				collisionBox;		// The "hard" collision box, used to collide with solid entities/tiles.
 		private Rectangle2F				softCollisionBox;	// The "soft" collision box, used to collide with items, monsters, room edges, etc.
@@ -134,13 +139,14 @@ namespace ZeldaOracle.Game.Entities {
 			this.ledgeTileLocation	= new Point2I(-1, -1);
 			this.roomEdgeCollisionBoxType = CollisionBoxType.Hard;
 
+			this.crushMaxGapSize	= 0;
+			this.edgeClipAmount		= 1;
+
 			this.collisionInfo = new CollisionInfo[Directions.Count];
 			for (int i = 0; i < Directions.Count; i++)
 				collisionInfo[i].Clear();
 
-			ClipDistances		= new float[4];
-			ClipDirections		= new bool[4];
-			CollisionInfoNew	= new CollisionInfoNew[4];
+			this.CollisionInfoNew = new CollisionInfoNew[4];
 			for (int i = 0; i < 4; i++)
 				CollisionInfoNew[i] = new CollisionInfoNew();
 		}
@@ -249,10 +255,10 @@ namespace ZeldaOracle.Game.Entities {
 			if (topTile != null) {
 				// TODO: Integrate the surface tile's velocity into our
 				// velocity rather than just moving position.
-				/*if (MovesWithPlatforms)
+				if (MovesWithPlatforms)
 					entity.Position += topTile.Velocity;
 				if (MovesWithConveyors && IsOnGround)
-					entity.Position += topTile.ConveyorVelocity;*/
+					entity.Position += topTile.ConveyorVelocity;
 			}
 
 			// Check if destroyed outside room.
@@ -856,7 +862,17 @@ namespace ZeldaOracle.Game.Entities {
 
 		public bool IsEnabled {
 			get { return isEnabled; }
-			set { isEnabled = value; }
+			set {
+				isEnabled = value;
+				if (!isEnabled) {
+					// Clear the collision state.
+					for (int i = 0; i < Directions.Count; i++) {
+						CollisionInfoNew[i].Reset();
+						CollisionInfoNew[i].PenetrationDirection = i;
+						collisionInfo[i].Clear();
+					}
+				}
+			}
 		}
 
 		public Vector2F Velocity {
@@ -914,7 +930,16 @@ namespace ZeldaOracle.Game.Entities {
 			get { return roomEdgeCollisionBoxType; }
 			set { roomEdgeCollisionBoxType = value; }
 		}
+		
+		public int EdgeClipAmount {
+			get { return edgeClipAmount; }
+			set { edgeClipAmount = value; }
+		}
 
+		public int CrushMaxGapSize {
+			get { return crushMaxGapSize; }
+			set { crushMaxGapSize = value; }
+		}
 
 		// Collision info.
 
@@ -959,6 +984,7 @@ namespace ZeldaOracle.Game.Entities {
 		
 		public bool IsColliding {
 			get { return isColliding; }
+			set { isColliding = value; }
 		}
 
 
@@ -1106,18 +1132,19 @@ namespace ZeldaOracle.Game.Entities {
 			set { SetFlags(PhysicsFlags.MoveWithPlatforms, value); }
 		}
 		
+		public bool AllowEdgeClipping {
+			get { return HasFlags(PhysicsFlags.EdgeClipping); }
+			set { SetFlags(PhysicsFlags.EdgeClipping, value); }
+		}
+		
+		public bool IsCrushable {
+			get { return HasFlags(PhysicsFlags.Crushable); }
+			set { SetFlags(PhysicsFlags.Crushable, value); }
+		}
+		
 
 
-		public int PushedDirection { get; set; }
-		public int ClippedDirection { get; set; }
-		public DirectionMask ClippedDirections { get; set; }
 
-		//public bool IsPushedOnAxis
-
-		public float[] ClipDistances { get; set; }
-		public bool[] ClipDirections { get; set; }
-		public bool AnyCollisions { get; set; }
 		public CollisionInfoNew[] CollisionInfoNew { get; set; }
-
 	}
 }
