@@ -127,7 +127,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Physics.CollideWithRoomEdge	= true;
 			Physics.AllowEdgeClipping	= true;
 			Physics.IsCrushable			= false;
-			Physics.EdgeClipAmount		= 3;
+			Physics.EdgeClipAmount		= 1;
 			Physics.CrushMaxGapSize		= 4;
 			Physics.RoomEdgeCollisionBoxType = CollisionBoxType.Soft;
 

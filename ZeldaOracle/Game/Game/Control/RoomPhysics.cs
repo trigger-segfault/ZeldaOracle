@@ -581,7 +581,12 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		// Attempt to dodge a collision.
-		private void PerformCollisionDodge(Entity entity, int direction, object solidObject, Rectangle2F solidBox) {
+		private bool PerformCollisionDodge(Entity entity, int direction, object solidObject, Rectangle2F solidBox) {
+			// Only dodge if moving perpendicular to the edge.
+			int axis = Directions.ToAxis(direction);
+			if (Math.Abs(entity.Physics.Velocity[1 - axis]) > 0.001f)
+				return false;
+
 			Rectangle2F entityBox = entity.Physics.PositionedCollisionBox;
 			float penetrationDistance = GetClipPenetration(
 				entity.Physics.PositionedCollisionBox, solidBox, direction);
@@ -606,10 +611,12 @@ namespace ZeldaOracle.Game.Control {
 					{
 						entity.Position += Directions.ToVector(moveDirection) * moveAmount;
 						entity.Physics.MovementCollisions[direction] = false;
-						return;
+						return true;
 					}
 				}
 			}
+
+			return false;
 		}
 		
 		// Returns true if the entity allowably clipping the given collision.
