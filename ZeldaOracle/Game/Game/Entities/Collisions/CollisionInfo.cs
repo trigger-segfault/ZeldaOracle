@@ -9,6 +9,7 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 
 	public class CollisionInfoNew {
 
+		public Entity Entity { get; set; }
 		public int PenetrationDirection { get; set; }
 		public float PenetrationDistance { get; set; }
 		public Rectangle2F CollisionBox { get; set; }
@@ -36,6 +37,7 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		}
 
 		public void Reset() {
+			Entity					= null;
 			IsColliding				= false;
 			IsResolved				= false;
 			PenetrationDistance		= 0.0f;

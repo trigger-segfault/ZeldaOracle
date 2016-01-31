@@ -146,7 +146,6 @@ namespace ZeldaOracle.Game.Entities {
 			for (int i = 0; i < Directions.Count; i++)
 				collisionInfo[i].Clear();
 
-			this.ClippingDirections = new bool[4];
 			this.MovementCollisions = new bool[4];
 			this.CollisionInfoNew = new CollisionInfoNew[4];
 			for (int i = 0; i < 4; i++)
@@ -1147,7 +1146,6 @@ namespace ZeldaOracle.Game.Entities {
 
 		
 		public bool[] MovementCollisions { get; set; }
-		public bool[] ClippingDirections { get; set; }
 		public CollisionInfoNew[] CollisionInfoNew { get; set; }
 		public bool IsDeadlocked { get; set; }
 	}
