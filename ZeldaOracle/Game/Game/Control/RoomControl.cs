@@ -142,6 +142,7 @@ namespace ZeldaOracle.Game.Control {
 		
 		// Use this for spawning entites at runtime.
 		public void SpawnEntity(Entity e) {
+			e.EntityIndex = entities.Count;
 			e.Initialize(this);
 			entities.Add(e);
 		}
@@ -149,16 +150,14 @@ namespace ZeldaOracle.Game.Control {
 		// Use this for spawning entites at a position at runtime.
 		public void SpawnEntity(Entity e, Vector2F position) {
 			e.Position = position;
-			e.Initialize(this);
-			entities.Add(e);
+			SpawnEntity(e);
 		}
 		
 		// Use this for spawning entites at a position at runtime.
 		public void SpawnEntity(Entity e, Vector2F position, float zPosition) {
-			e.Position = position;
-			e.ZPosition = zPosition;
-			e.Initialize(this);
-			entities.Add(e);
+			e.Position	= position;
+			e.ZPosition	= zPosition;
+			SpawnEntity(e);
 		}
 		
 		// Spawn a tile if it isn't already spawned.

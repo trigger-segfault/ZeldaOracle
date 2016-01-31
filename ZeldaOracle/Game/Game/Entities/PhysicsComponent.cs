@@ -149,9 +149,9 @@ namespace ZeldaOracle.Game.Entities {
 				collisionInfo[i].Clear();
 
 			this.MovementCollisions = new bool[4];
-			this.CollisionInfoNew = new CollisionInfoNew[4];
+			this.ClipCollisionInfo = new CollisionInfoNew[4];
 			for (int i = 0; i < 4; i++)
-				CollisionInfoNew[i] = new CollisionInfoNew();
+				ClipCollisionInfo[i] = new CollisionInfoNew();
 		}
 		
 
@@ -870,8 +870,8 @@ namespace ZeldaOracle.Game.Entities {
 				if (!isEnabled) {
 					// Clear the collision state.
 					for (int i = 0; i < Directions.Count; i++) {
-						CollisionInfoNew[i].Reset();
-						CollisionInfoNew[i].PenetrationDirection = i;
+						ClipCollisionInfo[i].Reset();
+						ClipCollisionInfo[i].PenetrationDirection = i;
 						collisionInfo[i].Clear();
 					}
 				}
@@ -1153,7 +1153,7 @@ namespace ZeldaOracle.Game.Entities {
 
 		
 		public bool[] MovementCollisions { get; set; }
-		public CollisionInfoNew[] CollisionInfoNew { get; set; }
+		public CollisionInfoNew[] ClipCollisionInfo { get; set; }
 		public bool IsDeadlocked { get; set; }
 	}
 }

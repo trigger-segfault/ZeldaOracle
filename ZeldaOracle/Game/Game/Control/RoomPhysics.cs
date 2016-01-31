@@ -43,7 +43,7 @@ namespace ZeldaOracle.Game.Control {
 			entity.Physics.IsColliding = false;
 			for (int i = 0; i < Directions.Count; i++) {
 				entity.Physics.CollisionInfo[i].Clear();
-				CollisionInfoNew collision = entity.Physics.CollisionInfoNew[i];
+				CollisionInfoNew collision = entity.Physics.ClipCollisionInfo[i];
 				collision.Reset();
 				collision.Entity = entity;
 				collision.PenetrationDirection = i;
@@ -88,7 +88,7 @@ namespace ZeldaOracle.Game.Control {
 
 				// Set the entity's collision info.
 				for (int i = 0; i < Directions.Count; i++) {
-					CollisionInfoNew clipCollision = entity.Physics.CollisionInfoNew[i];
+					CollisionInfoNew clipCollision = entity.Physics.ClipCollisionInfo[i];
 
 					if (clipCollision.IsCollidingAndNotAllowedClipping) {
 						if (!entity.Physics.CollisionInfo[i].IsColliding)
@@ -162,7 +162,7 @@ namespace ZeldaOracle.Game.Control {
 			
 			// Determine which collisions can be resolved later.
 			for (int i = 0; i < Directions.Count; i++) {
-				CollisionInfoNew collision = entity.Physics.CollisionInfoNew[i];
+				CollisionInfoNew collision = entity.Physics.ClipCollisionInfo[i];
 				if (collision.IsColliding) {
 					collision.IsResolvable = CanResolveCollision(entity, collision);
 					if (!collision.IsAllowedClipping)
@@ -181,10 +181,10 @@ namespace ZeldaOracle.Game.Control {
 			
 				// Set or replace the collision info for this clip direction.
 				if (clipDirection >= 0) {
-					CollisionInfoNew oldCollisionInfo = entity.Physics.CollisionInfoNew[clipDirection];
+					CollisionInfoNew oldCollisionInfo = entity.Physics.ClipCollisionInfo[clipDirection];
 					CollisionInfoNew newCollisionInfo = CreateCollisionInfo(entity, other, solidBox, clipDirection);
 					if (!oldCollisionInfo.IsColliding || (newCollisionInfo.PenetrationDistance > oldCollisionInfo.PenetrationDistance))
-						entity.Physics.CollisionInfoNew[clipDirection] = newCollisionInfo;
+						entity.Physics.ClipCollisionInfo[clipDirection] = newCollisionInfo;
 				}
 			}
 		}
@@ -251,7 +251,7 @@ namespace ZeldaOracle.Game.Control {
 		// Resolve clip collisions that were not resolved from the previous frame.
 		private void ResolvePreviousClipCollisions(Entity entity) {
 			for (int i = 0; i < Directions.Count; i++) {
-				CollisionInfoNew collision = entity.Physics.CollisionInfoNew[i];
+				CollisionInfoNew collision = entity.Physics.ClipCollisionInfo[i];
 
 				if (!collision.IsResolved && CanResolveCollision(entity, collision)) {
 					float resolveDistance = Math.Max(0.0f, collision.PenetrationDistance - collision.MaxAllowedPenetrationDistance);
@@ -268,11 +268,11 @@ namespace ZeldaOracle.Game.Control {
 			// Determine which collisions have priority.
 			CollisionInfoNew[] collisions = new CollisionInfoNew[2];
 			collisions[Axes.X] = GetPriorityCollision(entity,
-				entity.Physics.CollisionInfoNew[Directions.Right],
-				entity.Physics.CollisionInfoNew[Directions.Left]);
+				entity.Physics.ClipCollisionInfo[Directions.Right],
+				entity.Physics.ClipCollisionInfo[Directions.Left]);
 			collisions[Axes.Y] = GetPriorityCollision(entity,
-				entity.Physics.CollisionInfoNew[Directions.Up],
-				entity.Physics.CollisionInfoNew[Directions.Down]);
+				entity.Physics.ClipCollisionInfo[Directions.Up],
+				entity.Physics.ClipCollisionInfo[Directions.Down]);
 
 			for (int i = 0; i < 2; i++) {
 				CollisionInfoNew collision = collisions[i];
@@ -282,7 +282,7 @@ namespace ZeldaOracle.Game.Control {
 					collision.IsResolved = true;
 
 					// Add to the penetration distance of the opposite collision.
-					CollisionInfoNew otherCollision = entity.Physics.CollisionInfoNew[Directions.Reverse(collision.PenetrationDirection)];
+					CollisionInfoNew otherCollision = entity.Physics.ClipCollisionInfo[Directions.Reverse(collision.PenetrationDirection)];
 					float resolveDistance = Math.Max(0.0f, collision.PenetrationDistance - collision.MaxAllowedPenetrationDistance);
 					otherCollision.PenetrationDistance += resolveDistance;
 				}
@@ -300,7 +300,7 @@ namespace ZeldaOracle.Game.Control {
 					collision.IsResolved = true;
 
 					// Add to the penetration distance of the opposite collision.
-					CollisionInfoNew otherCollision = entity.Physics.CollisionInfoNew[Directions.Reverse(collision.PenetrationDirection)];
+					CollisionInfoNew otherCollision = entity.Physics.ClipCollisionInfo[Directions.Reverse(collision.PenetrationDirection)];
 					float resolveDistance = Math.Max(0.0f, collision.PenetrationDistance - collision.MaxAllowedPenetrationDistance);
 					otherCollision.PenetrationDistance += resolveDistance;
 				}
@@ -316,20 +316,40 @@ namespace ZeldaOracle.Game.Control {
 			else if (collision2.IsCollidingAndNotAllowedClipping && !collision1.IsCollidingAndNotAllowedClipping)
 				return collision2;
 
+			// Resolvable collisions over non resolvable collisions.
 			if (collision1.IsResolvable && !collision2.IsResolvable)
 				return collision1;
 			else if (collision2.IsResolvable && !collision1.IsResolvable)
 				return collision2;
 
+			// Dynamic collisions over static collisions.
+			if (IsSolidObjectDynamic(collision1.CollidedObject) && !IsSolidObjectDynamic(collision2.CollidedObject))
+				return collision1;
+			if (IsSolidObjectDynamic(collision2.CollidedObject) && !IsSolidObjectDynamic(collision1.CollidedObject))
+				return collision2;
+
 			Tile tile1 = collision1.CollidedObject as Tile;
 			Tile tile2 = collision2.CollidedObject as Tile;
+			Entity entity1 = collision1.CollidedObject as Entity;
+			Entity entity2 = collision2.CollidedObject as Entity;
 
-			if (tile1 != null && tile2 != null) {
-				if (tile1.IsInMotion && !tile2.IsInMotion)
+			// Entities over tiles.
+			if (entity1 != null && tile2 != null)
+				return collision1;
+			if (entity2 != null && tile1 != null)
+				return collision2;
+
+			// Compare two entities.
+			if (entity1 != null && entity2 != null) {
+				if (entity1.EntityIndex < entity2.EntityIndex)
 					return collision1;
-				else if (tile2.IsInMotion && !tile1.IsInMotion)
+				if (entity2.EntityIndex < entity1.EntityIndex)
 					return collision2;
-				else if (tile1.Layer > tile2.Layer)
+			}
+
+			// Compare two tiles.
+			if (tile1 != null && tile2 != null) {
+				if (tile1.Layer > tile2.Layer)
 					return collision1;
 				else if (tile2.Layer > tile1.Layer)
 					return collision2;
@@ -357,6 +377,10 @@ namespace ZeldaOracle.Game.Control {
 			if (!collision.IsColliding || collision.IsAllowedClipping)
 				return false;
 			
+			// Don't resolve collisions if they are within the allowable edge clip amount.
+			if (IsSafeClipping(entity, 1 - Directions.ToAxis(collision.PenetrationDirection), entity.Physics.PositionedCollisionBox, collision.CollidedObject, collision.CollisionBox))
+				return false;
+
 			// Static collisions cannot resolve into colliding with other static objects.
 			Tile tile = collision.CollidedObject as Tile;
 			if (tile != null && !tile.IsInMotion) {
@@ -390,7 +414,7 @@ namespace ZeldaOracle.Game.Control {
 			if (entity.Physics.CollideWithRoomEdge && !((Rectangle2F) roomControl.RoomBounds).Contains(entityBox))
 				return true;
 			foreach (CollisionCheck check in GetCollisions(entity, entityBox)) {
-				if (onlyStatic && (check.SolidObject is Tile) && ((Tile) check.SolidObject).IsInMotion)
+				if (onlyStatic && IsSolidObjectDynamic(check.SolidObject))
 					continue;
 				float allowedClipAmount = GetAllowedEdgeClipAmount(entity, check.SolidObject);
 				Rectangle2F insetSolidBox = check.SolidBox.Inflated(-allowedClipAmount, -allowedClipAmount);
@@ -402,7 +426,14 @@ namespace ZeldaOracle.Game.Control {
 			return false;
 		}
 
-				
+		// Returns whether a solid object is considered dynamic (moving tiles or entities).
+		private bool IsSolidObjectDynamic(object solidObject) {
+			if (solidObject is Tile)
+				return ((Tile) solidObject).IsInMotion;
+			return (solidObject is Entity);
+		}
+
+		
 		//-----------------------------------------------------------------------------
 		// Post-Clip Collision Stage
 		//-----------------------------------------------------------------------------
@@ -427,7 +458,7 @@ namespace ZeldaOracle.Game.Control {
 
 			// Clip velocities for collisions.
 			for (int i = 0; i < Directions.Count; i++) {
-				CollisionInfoNew collision = entity.Physics.CollisionInfoNew[i];
+				CollisionInfoNew collision = entity.Physics.ClipCollisionInfo[i];
 				if (collision.IsCollidingAndNotAllowedClipping)
 					ClipEntityVelocity(entity, collision.PenetrationDirection);
 			}
@@ -452,8 +483,8 @@ namespace ZeldaOracle.Game.Control {
 
 			// Check for crushing along each axis.
 			for (int axis = 0; axis < Axes.Count; axis++) {
-				CollisionInfoNew collision1 = entity.Physics.CollisionInfoNew[axis];
-				CollisionInfoNew collision2 = entity.Physics.CollisionInfoNew[axis + 2];
+				CollisionInfoNew collision1 = entity.Physics.ClipCollisionInfo[axis];
+				CollisionInfoNew collision2 = entity.Physics.ClipCollisionInfo[axis + 2];
 
 				// Make sure the entity is colliding between two objects along this axis.
 				float penetration = 0.0f;
@@ -492,9 +523,6 @@ namespace ZeldaOracle.Game.Control {
 		
 		// Resolve any movement collision between the entity and a solid object
 		private void ResolveMovementCollision(Entity entity, int axis, object other, Rectangle2F solidBox) {
-			
-			// TODO: Collision dodging.
-
 			// Setup the entity's translated collision box based on which axis we're checking.
 			Rectangle2F entityBox;
 			if (axis == Axes.X) {
@@ -527,7 +555,7 @@ namespace ZeldaOracle.Game.Control {
 
 			// Ignore collision if the entity is already colliding in the opposite
 			// direction or if the entity is not moving in the clip direction.
-			if (entity.Physics.CollisionInfoNew[Directions.Reverse(clipDirection)].IsCollidingAndNotAllowedClipping ||
+			if (entity.Physics.ClipCollisionInfo[Directions.Reverse(clipDirection)].IsCollidingAndNotAllowedClipping ||
 				entity.Physics.Velocity.Dot(Directions.ToVector(clipDirection)) <= 0.0f)
 				return;
 			
@@ -539,7 +567,7 @@ namespace ZeldaOracle.Game.Control {
 			// a clip edge with this object and the entity is also moving parallel with that edge.
 			for (int i = 0; i < 2; i++) {
 				int dir = Axes.GetOpposite(axis) + (i * 2);
-				CollisionInfoNew checkCollision = entity.Physics.CollisionInfoNew[dir];
+				CollisionInfoNew checkCollision = entity.Physics.ClipCollisionInfo[dir];
 				if (checkCollision.IsColliding && AreEdgesAligned(
 					checkCollision.CollisionBox, solidBox, Directions.Reverse(dir)))
 				{
@@ -548,7 +576,7 @@ namespace ZeldaOracle.Game.Control {
 			}
 			
 			// Resolve the collision.
-			if (!entity.Physics.IsColliding && !entity.Physics.CollisionInfoNew[clipDirection].IsColliding) {
+			if (!entity.Physics.IsColliding && !entity.Physics.ClipCollisionInfo[clipDirection].IsColliding) {
 				// Determine the penetration.
 				float penetrationDistance = GetClipPenetration(entityBox, solidBox, clipDirection);
 				float maxAllowedPenetration = 0.0f;

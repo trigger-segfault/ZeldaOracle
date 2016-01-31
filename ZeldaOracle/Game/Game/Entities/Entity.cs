@@ -18,6 +18,7 @@ namespace ZeldaOracle.Game.Entities {
 		private	bool				isInitialized;
 		private bool				isAlive;
 		private bool				isInRoom;
+		private int					entityIndex;
 		private Entity				transformedEntity; // The entity this entity has transformed into (bomb -> explosion)
 		private Vector2F			previousPosition;
 		private float				previousZPosition;
@@ -37,6 +38,7 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public Entity() {
+			entityIndex			= -1;
 			roomControl			= null;
 			isAlive				= false;
 			isInRoom			= false;
@@ -243,6 +245,11 @@ namespace ZeldaOracle.Game.Entities {
 		// Returns true if the entity is being handled by RoomControl.
 		public bool IsInRoom {
 			get { return isInRoom; }
+		}
+
+		public int EntityIndex {
+			get { return entityIndex; }
+			set { entityIndex = value; }
 		}
 
 		// Gets or sets the position of the entity.

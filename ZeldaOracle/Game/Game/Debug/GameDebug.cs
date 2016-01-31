@@ -386,7 +386,7 @@ namespace ZeldaOracle.Game.Debug {
 					collisionBox.Point = GMath.Round(collisionBox.Point);
 
 					for (int i = 0; i < 4; i++) {
-						CollisionInfoNew collisionInfo = entity.Physics.CollisionInfoNew[i];
+						CollisionInfoNew collisionInfo = entity.Physics.ClipCollisionInfo[i];
 
 						if (collisionInfo.IsColliding && !collisionInfo.IsResolved) {
 							Rectangle2F drawBox = collisionBox;
