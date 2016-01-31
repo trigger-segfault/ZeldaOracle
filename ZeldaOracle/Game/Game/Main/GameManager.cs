@@ -125,6 +125,12 @@ namespace ZeldaOracle.Game.Main {
 			gameBase.Exit();
 		}
 
+		public void Restart() {
+			while (gameStateStack.Count > 1)
+				gameStateStack.Pop();
+			gameControl.StartGame();
+		}
+
 	
 		//-----------------------------------------------------------------------------
 		// Game state management
@@ -167,14 +173,6 @@ namespace ZeldaOracle.Game.Main {
 
 		// Called every step to update the game.
 		public void Update(float timeDelta) {
-
-			// DEBUG: Ctrl+R to restart the game.
-			if (Keyboard.IsKeyPressed(Keys.R) && Keyboard.IsKeyDown(Keys.LControl)) {
-				while (gameStateStack.Count > 1)
-					gameStateStack.Pop();
-				gameControl.StartGame();
-			}
-
 			//prop.Update(1.0 / 60.0, new Point2I(ScreenSize.X - Property<int>.Width, ScreenSize.Y / 2));
 			
 			//if (Keyboard.IsKeyPressed(Keys.F4))

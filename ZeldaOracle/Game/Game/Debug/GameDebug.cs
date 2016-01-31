@@ -55,22 +55,22 @@ namespace ZeldaOracle.Game.Debug {
 		}
 		
 		public static void UpdateRoomDebugKeys() {
-
+			
+			// CTRL+R: Restart the game.
+			if (Keyboard.IsKeyPressed(Keys.R) && Keyboard.IsKeyDown(Keys.LControl))
+				GameManager.Restart();
 			// F5: Pause gameplay.
 			if (Keyboard.IsKeyPressed(Keys.F5))
 				GameManager.IsGamePaused = !GameManager.IsGamePaused;
 			// F6: Step gameplay by one frame.
 			if (Keyboard.IsKeyPressed(Keys.F6) && GameManager.IsGamePaused)
 				GameManager.NextFrame();
-
 			// OPEN BRACKET: open all open doors.
-			if (Keyboard.IsKeyPressed(Keys.OpenBracket)) {
+			if (Keyboard.IsKeyPressed(Keys.OpenBracket))
 				RoomControl.OpenAllDoors();
-			}
 			// CLOSE BRACKET: close all doors.
-			else if (Keyboard.IsKeyPressed(Keys.CloseBracket)) {
+			else if (Keyboard.IsKeyPressed(Keys.CloseBracket))
 				RoomControl.CloseAllDoors();
-			}
 			// G: Display a test message.
 			if (Keyboard.IsKeyPressed(Keys.G)) {
 				gameControl.DisplayMessage("I was a <red>hero<red> to broken robots 'cause I was one of them, but how can I sing about being damaged if I'm not?<p> That's like <green>Christina Aguilera<green> singing Spanish. Ooh, wait! That's it! I'll fake it!");
@@ -391,9 +391,10 @@ namespace ZeldaOracle.Game.Debug {
 						if (collisionInfo.IsColliding && !collisionInfo.IsResolved) {
 							Rectangle2F drawBox = collisionBox;
 							int axis = Directions.ToAxis(i);
+							float penetration = Math.Max(1.0f, GMath.Round(collisionInfo.PenetrationDistance));
 							if (i == Directions.Down || i == Directions.Right)
-								drawBox.Point[axis] += drawBox.Size[axis] - GMath.Round(collisionInfo.PenetrationDistance);
-							drawBox.Size[axis] = GMath.Round(collisionInfo.PenetrationDistance);
+								drawBox.Point[axis] += drawBox.Size[axis] - penetration;
+							drawBox.Size[axis] = penetration;
 							
 							// Draw the strip of penetration.
 							Color penetrationColor = Color.Red;
