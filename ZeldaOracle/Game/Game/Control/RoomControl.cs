@@ -247,6 +247,7 @@ namespace ZeldaOracle.Game.Control {
 				Player.Initialize(this);
 				entities.Add(Player);
 			}
+			roomPhysics.ClearCollisionState(Player);
 
 			// Create the tile grid.
 			tileManager.Initialize(room);
@@ -444,8 +445,8 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 
-			if (requestedTransitionDirection >= 0)
-				return;
+			//if (requestedTransitionDirection >= 0)
+			//	return;
 			
 			// Update tiles.
 			tileManager.UpdateTiles();

@@ -146,6 +146,7 @@ namespace ZeldaOracle.Game.Entities {
 			for (int i = 0; i < Directions.Count; i++)
 				collisionInfo[i].Clear();
 
+			this.ClippingDirections = new bool[4];
 			this.CollisionInfoNew = new CollisionInfoNew[4];
 			for (int i = 0; i < 4; i++)
 				CollisionInfoNew[i] = new CollisionInfoNew();
@@ -213,8 +214,8 @@ namespace ZeldaOracle.Game.Entities {
 			hasLanded		= false;
 			isColliding		= false;
 			reboundVelocity	= Vector2F.Zero;
-			for (int i = 0; i < Directions.Count; i++)
-				collisionInfo[i].Clear();
+			//for (int i = 0; i < Directions.Count; i++)
+				//collisionInfo[i].Clear();
 
 			// Perform custom collision handling tests.
 			/*if (entityCollisionHandlers.Count > 0) {
@@ -231,8 +232,8 @@ namespace ZeldaOracle.Game.Entities {
 				//CheckCollisions();
 
 			// 2. Collide with room edges.
-			if (HasFlags(PhysicsFlags.CollideRoomEdge) || HasFlags(PhysicsFlags.ReboundRoomEdge))
-				CheckRoomEdgeCollisions(GetCollisionBox(roomEdgeCollisionBoxType));
+			//if (HasFlags(PhysicsFlags.CollideRoomEdge) || HasFlags(PhysicsFlags.ReboundRoomEdge))
+				//CheckRoomEdgeCollisions(GetCollisionBox(roomEdgeCollisionBoxType));
 
 			// 3. Custom collision function.
 			if (customCollisionFunction != null) {
@@ -574,7 +575,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		// Check collisions with room edges.
-		private void CheckRoomEdgeCollisions(Rectangle2F collisionBox) {
+		public void CheckRoomEdgeCollisions(Rectangle2F collisionBox) {
 			Rectangle2F roomBounds = entity.RoomControl.RoomBounds;
 			Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position + velocity);
 
@@ -1143,8 +1144,9 @@ namespace ZeldaOracle.Game.Entities {
 		}
 		
 
-
-
+		
+		public bool[] ClippingDirections { get; set; }
 		public CollisionInfoNew[] CollisionInfoNew { get; set; }
+		public bool IsDeadlocked { get; set; }
 	}
 }

@@ -95,12 +95,17 @@ namespace ZeldaOracle.Game.Debug {
 				gameControl.Player.Hurt(new DamageInfo(0, source));
 			}
 			// M: Play music.
-			if (Keyboard.IsKeyPressed(Keys.M)) {
+			/*if (Keyboard.IsKeyPressed(Keys.M)) {
 				AudioSystem.PlaySong("overworld");
 			}
 			// N: Set the volume to max.
 			if (Keyboard.IsKeyPressed(Keys.N)) {
 				AudioSystem.MasterVolume = 1.0f;
+			}*/
+			// N: Noclip mode.
+			if (Keyboard.IsKeyPressed(Keys.N)) {
+				roomControl.Player.Physics.CollideWithEntities = !roomControl.Player.Physics.CollideWithEntities;
+				roomControl.Player.Physics.CollideWithWorld = !roomControl.Player.Physics.CollideWithWorld;
 			}
 			// Q: Spawn a random rupees collectible.
 			if (Keyboard.IsKeyPressed(Keys.Q)) {
@@ -354,10 +359,11 @@ namespace ZeldaOracle.Game.Debug {
 				}
 			}
 			else if (EntityDebugInfoMode == EntityDrawInfo.CollisionTests) {
-				if (entity.Physics.IsEnabled && entity.Physics.CollideWithWorld) {
+				if (entity.Physics.IsEnabled && entity.Physics.CollideWithWorld || entity is Player) {
 					// Draw the hard collision box.
 					Rectangle2F collisionBox = entity.Physics.PositionedCollisionBox;
 					g.FillRectangle(collisionBox, Color.Yellow);
+					collisionBox.Point = GMath.Round(collisionBox.Point);
 
 					for (int i = 0; i < 4; i++) {
 						CollisionInfoNew collisionInfo = entity.Physics.CollisionInfoNew[i];
@@ -366,8 +372,8 @@ namespace ZeldaOracle.Game.Debug {
 							Rectangle2F drawBox = collisionBox;
 							int axis = Directions.ToAxis(i);
 							if (i == Directions.Down || i == Directions.Right)
-								drawBox.Point[axis] += drawBox.Size[axis] - collisionInfo.PenetrationDistance;
-							drawBox.Size[axis] = collisionInfo.PenetrationDistance;
+								drawBox.Point[axis] += drawBox.Size[axis] - GMath.Round(collisionInfo.PenetrationDistance);
+							drawBox.Size[axis] = GMath.Round(collisionInfo.PenetrationDistance);
 							
 							// Draw the strip of penetration.
 							Color penetrationColor = Color.Red;
@@ -376,6 +382,11 @@ namespace ZeldaOracle.Game.Debug {
 							g.FillRectangle(drawBox, penetrationColor);
 						}
 					}
+				}
+				else if (entity.Physics.IsEnabled && entity.Physics.IsSolid) {
+					// Draw the hard collision box.
+					Rectangle2F collisionBox = entity.Physics.PositionedCollisionBox;
+					g.FillRectangle(collisionBox, Color.Olive);
 				}
 			}
 		}

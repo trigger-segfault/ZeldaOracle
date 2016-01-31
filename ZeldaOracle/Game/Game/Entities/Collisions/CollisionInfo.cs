@@ -16,6 +16,8 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		public bool IsColliding { get; set; }
 		public bool IsResolved { get; set; }
 		
+		public bool IsResolvable { get; set; }
+		
 		public float MaxAllowedPenetrationDistance { get; set; }
 
 
@@ -83,6 +85,16 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			this.type			= CollisionType.RoomEdge;
 			this.solidObject	= null;
 			this.direction		= direction;
+		}
+		
+		public void SetCollision(object obj, int direction) {
+			this.type			= CollisionType.None;
+			this.solidObject	= obj;
+			this.direction		= direction;
+			if (obj is Tile)
+				this.type = CollisionType.Tile;
+			else if (obj is Entity)
+				this.type = CollisionType.Entity;
 		}
 
 

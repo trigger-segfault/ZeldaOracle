@@ -749,6 +749,10 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return isMoving; }
 		}
 
+		public bool IsInMotion {
+			get { return (isMoving || path != null); }
+		}
+
 		public int MoveDirection {
 			get { return Directions.FromPoint(moveDirection); }
 		}

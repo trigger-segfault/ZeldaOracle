@@ -125,9 +125,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Physics.MovesWithConveyors	= true;
 			Physics.MovesWithPlatforms	= true;
 			Physics.CollideWithRoomEdge	= true;
-			Physics.AllowEdgeClipping	= true;
+			Physics.AllowEdgeClipping	= false;
 			Physics.IsCrushable			= true;
-			Physics.EdgeClipAmount		= 3;
+			Physics.EdgeClipAmount		= 1;
 			Physics.CrushMaxGapSize		= 4;
 			Physics.RoomEdgeCollisionBoxType = CollisionBoxType.Soft;
 
@@ -510,12 +510,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public override void OnCrush(bool horizontal) {
-			AudioSystem.PlaySound(GameData.SOUND_MONSTER_HURT);
+			/*AudioSystem.PlaySound(GameData.SOUND_MONSTER_HURT);
 			RespawnDeath();
 			if (horizontal)
 				Graphics.PlayAnimation(GameData.ANIM_PLAYER_CRUSH_HORIZONTAL);
 			else
-				Graphics.PlayAnimation(GameData.ANIM_PLAYER_CRUSH_VERTICAL);
+				Graphics.PlayAnimation(GameData.ANIM_PLAYER_CRUSH_VERTICAL);*/
 		}
 
 		public override void OnLand() {
