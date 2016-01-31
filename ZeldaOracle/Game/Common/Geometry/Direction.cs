@@ -141,6 +141,18 @@ namespace ZeldaOracle.Common.Geometry {
 			int dir = (int) Math.Round(radians / GMath.HalfPi);
 			return GMath.Wrap(dir, Directions.Count);
 		}
+
+		public static string ToString(int direction) {
+			if (direction == Directions.Right)
+				return "right";
+			if (direction == Directions.Left)
+				return "left";
+			if (direction == Directions.Up)
+				return "up";
+			if (direction == Directions.Down)
+				return "down";
+			return "error";
+		}
 		
 		public static bool TryParse(string value, bool ignoreCase, out int result) {
 			if (ignoreCase)

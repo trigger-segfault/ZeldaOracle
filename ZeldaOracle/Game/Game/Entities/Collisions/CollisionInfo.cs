@@ -17,12 +17,18 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		public bool IsResolved { get; set; }
 		
 		public bool IsResolvable { get; set; }
+
+		public bool IsValidCollisionInfo { get; set; }
 		
 		public float MaxAllowedPenetrationDistance { get; set; }
 
 
 		public bool IsAllowedClipping {
 			get { return (IsColliding && PenetrationDistance <= MaxAllowedPenetrationDistance); }
+		}
+		
+		public bool IsCollidingAndNotAllowedClipping {
+			get { return (IsColliding && PenetrationDistance > MaxAllowedPenetrationDistance); }
 		}
 
 		public CollisionInfoNew() {
@@ -37,6 +43,7 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			CollisionBox			= Rectangle2F.Zero;
 			PenetrationDirection	= -1;
 			MaxAllowedPenetrationDistance	= 0.0f;
+			IsValidCollisionInfo	= false;
 		}
 	}
 
