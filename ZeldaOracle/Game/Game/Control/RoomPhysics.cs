@@ -384,7 +384,7 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		// Returns true if the entity would be clipping if it were placed at the given position.
-		private bool IsCollidingAt(Entity entity, Vector2F position, bool onlyStatic) {
+		private bool IsCollidingAt(Entity entity, Vector2F position, bool onlyStatic, int clipDirection = -1, float clipDistance = 0.0f) {
 			Rectangle2F entityBox = entity.Physics.CollisionBox;
 			entityBox.Point += position;
 			if (entity.Physics.CollideWithRoomEdge && !((Rectangle2F) roomControl.RoomBounds).Contains(entityBox))
@@ -394,6 +394,8 @@ namespace ZeldaOracle.Game.Control {
 					continue;
 				float allowedClipAmount = GetAllowedEdgeClipAmount(entity, check.SolidObject);
 				Rectangle2F insetSolidBox = check.SolidBox.Inflated(-allowedClipAmount, -allowedClipAmount);
+				if (clipDirection >= 0)
+					insetSolidBox.ExtendEdge(Directions.Reverse(clipDirection), allowedClipAmount - clipDistance);
 				if (entityBox.Intersects(insetSolidBox))
 					return true;
 			}
@@ -570,6 +572,44 @@ namespace ZeldaOracle.Game.Control {
 			entity.Physics.Velocity = velocity;
 			
 			entity.Physics.MovementCollisions[clipDirection] = true;
+			if (!entity.Physics.CollisionInfo[clipDirection].IsColliding)
+				entity.Physics.CollisionInfo[clipDirection].SetCollision(other, clipDirection);
+
+			// Perform collision auto dodging.
+			if (entity.Physics.AutoDodges)
+				PerformCollisionDodge(entity, clipDirection, other, solidBox);
+		}
+
+		// Attempt to dodge a collision.
+		private void PerformCollisionDodge(Entity entity, int direction, object solidObject, Rectangle2F solidBox) {
+			Rectangle2F entityBox = entity.Physics.PositionedCollisionBox;
+			float penetrationDistance = GetClipPenetration(
+				entity.Physics.PositionedCollisionBox, solidBox, direction);
+
+			// Check dodging for both edges of the solid object.
+			for (int side = 0; side < 2; side++) {
+				int moveDirection = (direction + (side == 0 ? 1 : 3)) % 4;
+				float distanceToEdge = Math.Abs(entityBox.GetEdge(
+					Directions.Reverse(moveDirection)) - solidBox.GetEdge(moveDirection));
+
+				// Check if the distance to the edge is within dodge range.
+				if (distanceToEdge <= entity.Physics.AutoDodgeDistance) {
+					float moveAmount = Math.Min(entity.Physics.AutoDodgeSpeed, distanceToEdge);
+					Vector2F nextPosition = GMath.Round(entity.Position) +
+						(Directions.ToVector(moveDirection) * moveAmount);
+					Vector2F goalPosition = entity.Position + Directions.ToVector(direction) +
+						(Directions.ToVector(moveDirection) * distanceToEdge);
+					
+					// Make sure the entity is not colliding when placed at the solid object's edge.
+					if (!IsCollidingAt(entity, nextPosition, false, direction, penetrationDistance) &&
+						!IsCollidingAt(entity, goalPosition, false, direction, penetrationDistance))
+					{
+						entity.Position += Directions.ToVector(moveDirection) * moveAmount;
+						entity.Physics.MovementCollisions[direction] = false;
+						return;
+					}
+				}
+			}
 		}
 		
 		// Returns true if the entity allowably clipping the given collision.

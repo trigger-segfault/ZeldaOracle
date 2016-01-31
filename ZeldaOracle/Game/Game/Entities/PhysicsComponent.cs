@@ -86,11 +86,12 @@ namespace ZeldaOracle.Game.Entities {
 		
 		private int						crushMaxGapSize;
 		private int						edgeClipAmount;
+		private int						autoDodgeDistance;	// The maximum distance allowed to dodge collisions.
+		private float					autoDodgeSpeed;		// The speed to move at when dodging collisions.
 
 		// Collision.
 		private Rectangle2F				collisionBox;		// The "hard" collision box, used to collide with solid entities/tiles.
 		private Rectangle2F				softCollisionBox;	// The "soft" collision box, used to collide with items, monsters, room edges, etc.
-		private int						autoDodgeDistance;	// The maximum distance allowed to dodge collisions.
 		private Action					customCollisionFunction;
 		private TileCollisionCondition	customTileCollisionCondition;
 		private CollisionBoxType		roomEdgeCollisionBoxType;
@@ -131,6 +132,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.topTile			= null;
 			this.isColliding		= false;
 			this.autoDodgeDistance	= 6;
+			this.autoDodgeSpeed		= 1.0f;
 			this.customCollisionFunction	= null;
 			//this.entityCollisionHandlers	= new List<EntityCollisionHandlerInstance>();
 			this.hasLanded			= false;
@@ -801,7 +803,7 @@ namespace ZeldaOracle.Game.Entities {
 				return false; // Only dodge when moving horizontally or vertically.
 
 			float		dodgeDist	= autoDodgeDistance;
-			Rectangle2F	objBox		= Rectangle2F.Translate(collisionBox, entity.Position);
+			Rectangle2F	objBox		= PositionedCollisionBox;
 			Vector2F	pos			= entity.Position;
 			Vector2F	dirVect		= Directions.ToVector(direction);
 
@@ -828,7 +830,7 @@ namespace ZeldaOracle.Game.Entities {
 				return false; // Only dodge when moving horizontally or vertically.
 
 			float		dodgeDist	= autoDodgeDistance;
-			Rectangle2F	objBox		= Rectangle2F.Translate(collisionBox, entity.Position);
+			Rectangle2F	objBox		= entity.Physics.PositionedCollisionBox;
 			Vector2F	pos			= entity.Position;
 			Vector2F	dirVect		= Directions.ToVector(direction);
 
@@ -925,6 +927,11 @@ namespace ZeldaOracle.Game.Entities {
 		public int AutoDodgeDistance {
 			get { return autoDodgeDistance; }
 			set { autoDodgeDistance = value; }
+		}
+		
+		public float AutoDodgeSpeed {
+			get { return autoDodgeSpeed; }
+			set { autoDodgeSpeed = value; }
 		}
 		
 		public CollisionBoxType RoomEdgeCollisionBoxType {

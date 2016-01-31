@@ -344,6 +344,17 @@ public struct Rectangle2F {
 		Size.X += x * 2.0f;
 		Size.Y += y * 2.0f;
 	}
+	
+	public void ExtendEdge(int direction, float amount) {
+		if (direction == Directions.Right || direction == Directions.Left)
+			Size.X += amount;
+		if (direction == Directions.Down || direction == Directions.Up)
+			Size.Y += amount;
+		if (direction == Directions.Left)
+			Point.X -= amount;
+		if (direction == Directions.Up)
+			Point.Y -= amount;
+	}
 
 	//=========== CONTAINS ===========
 
