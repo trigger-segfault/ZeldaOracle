@@ -30,6 +30,21 @@ using ZeldaOracle.Game.Entities.Collisions;
 namespace ZeldaOracle.Game.Debug {
 	public class GameDebug {
 
+		public static GameControl GameControl {
+			get { return gameControl; }
+			set { gameControl = value; }
+		}
+
+		public static RoomControl RoomControl {
+			get { return gameControl.RoomControl; }
+		}
+
+		public static GameManager GameManager {
+			get { return gameControl.GameManager; }
+		}
+
+		private static GameControl gameControl;
+
 		private static EntityDrawInfo EntityDebugInfoMode = EntityDrawInfo.None;
 
 		private enum EntityDrawInfo {
@@ -39,17 +54,22 @@ namespace ZeldaOracle.Game.Debug {
 			Count,
 		}
 		
-		public static void UpdateRoomDebugKeys(RoomControl roomControl) {
-			GameControl gameControl = roomControl.GameControl;
+		public static void UpdateRoomDebugKeys() {
 
+			// F5: Pause gameplay.
+			if (Keyboard.IsKeyPressed(Keys.F5))
+				GameManager.IsGamePaused = !GameManager.IsGamePaused;
+			// F6: Step gameplay by one frame.
+			if (Keyboard.IsKeyPressed(Keys.F6) && GameManager.IsGamePaused)
+				GameManager.NextFrame();
 
 			// OPEN BRACKET: open all open doors.
 			if (Keyboard.IsKeyPressed(Keys.OpenBracket)) {
-				gameControl.RoomControl.OpenAllDoors();
+				RoomControl.OpenAllDoors();
 			}
 			// CLOSE BRACKET: close all doors.
 			else if (Keyboard.IsKeyPressed(Keys.CloseBracket)) {
-				gameControl.RoomControl.CloseAllDoors();
+				RoomControl.CloseAllDoors();
 			}
 			// G: Display a test message.
 			if (Keyboard.IsKeyPressed(Keys.G)) {
@@ -104,8 +124,8 @@ namespace ZeldaOracle.Game.Debug {
 			}*/
 			// N: Noclip mode.
 			if (Keyboard.IsKeyPressed(Keys.N)) {
-				roomControl.Player.Physics.CollideWithEntities = !roomControl.Player.Physics.CollideWithEntities;
-				roomControl.Player.Physics.CollideWithWorld = !roomControl.Player.Physics.CollideWithWorld;
+				RoomControl.Player.Physics.CollideWithEntities	= !RoomControl.Player.Physics.CollideWithEntities;
+				RoomControl.Player.Physics.CollideWithWorld		= !RoomControl.Player.Physics.CollideWithWorld;
 			}
 			// Q: Spawn a random rupees collectible.
 			if (Keyboard.IsKeyPressed(Keys.Q)) {
@@ -143,7 +163,7 @@ namespace ZeldaOracle.Game.Debug {
 				//Monster monster		= new MonsterOctorok();
 				//Monster monster		= new MonsterMoblin();
 				Vector2F position	= new Vector2F(32, 32) + new Vector2F(8, 14);
-				roomControl.SpawnEntity(monster, position);
+				RoomControl.SpawnEntity(monster, position);
 			}
 		}
 

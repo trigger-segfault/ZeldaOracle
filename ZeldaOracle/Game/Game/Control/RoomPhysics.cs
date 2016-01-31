@@ -494,9 +494,12 @@ namespace ZeldaOracle.Game.Control {
 			int collideDirection = -1;
 			Rectangle2F entityCollisionBox;
 			
-			if (entity.Physics.CollisionInfoNew[(axis + 1) % 4].IsColliding &&
-				entity.Physics.CollisionInfoNew[(axis + 3) % 4].IsColliding)
-				return;
+			// FIXME: Can collide with edges of tiles when clipping.
+			// FIXME: Glitchy snapping when pushing down on moving tile near sign above start room.
+
+			/*if ((entity.Physics.CollisionInfoNew[(axis + 1) % 4].IsColliding && !entity.Physics.CollisionInfoNew[(axis + 1) % 4].IsResolved) ||
+				(entity.Physics.CollisionInfoNew[(axis + 3) % 4].IsColliding && !entity.Physics.CollisionInfoNew[(axis + 3) % 4].IsResolved))
+				return;*/
 
 			if (axis == Axes.X) {
 				entityCollisionBox = Rectangle2F.Translate(

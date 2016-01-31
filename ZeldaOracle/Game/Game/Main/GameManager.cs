@@ -34,6 +34,7 @@ using Song			= ZeldaOracle.Common.Audio.Song;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Game.Control.Menus;
+using ZeldaOracle.Game.Debug;
 
 
 namespace ZeldaOracle.Game.Main {
@@ -48,6 +49,7 @@ namespace ZeldaOracle.Game.Main {
 		private int				elapsedTicks;		// The number of ticks since the start of the game.
 		private bool			debugMode;
 		private string[]		launchParameters;
+		private bool			isGamePaused;
 
 
 		//-----------------------------------------------------------------------------
@@ -166,7 +168,7 @@ namespace ZeldaOracle.Game.Main {
 		// Called every step to update the game.
 		public void Update(float timeDelta) {
 
-			// DEBUG: Ctrl+R to restar the game.
+			// DEBUG: Ctrl+R to restart the game.
 			if (Keyboard.IsKeyPressed(Keys.R) && Keyboard.IsKeyDown(Keys.LControl)) {
 				while (gameStateStack.Count > 1)
 					gameStateStack.Pop();
@@ -175,9 +177,9 @@ namespace ZeldaOracle.Game.Main {
 
 			//prop.Update(1.0 / 60.0, new Point2I(ScreenSize.X - Property<int>.Width, ScreenSize.Y / 2));
 			
-			if (Keyboard.IsKeyPressed(Keys.F4)) {
-				GameBase.IsFullScreen = !GameBase.IsFullScreen;
-			}
+			//if (Keyboard.IsKeyPressed(Keys.F4))
+			//	GameBase.IsFullScreen = !GameBase.IsFullScreen;
+
 			// Update the menu
 			Controls.Update();
 
@@ -187,8 +189,18 @@ namespace ZeldaOracle.Game.Main {
 			}
 
 			// Update the game-state stack.
-			gameStateStack.Update();
+			if (!isGamePaused)
+				gameStateStack.Update();
+			
 			elapsedTicks++;
+			
+			// DEBUG: Update debug keys.
+			GameDebug.GameControl = gameControl;
+			GameDebug.UpdateRoomDebugKeys();
+		}
+
+		public void NextFrame() {
+			gameStateStack.Update();
 		}
 	
 	
@@ -282,6 +294,11 @@ namespace ZeldaOracle.Game.Main {
 
 		public int ElapsedTicks {
 			get { return elapsedTicks; }
+		}
+
+		public bool IsGamePaused {
+			get { return isGamePaused; }
+			set { isGamePaused = value; }
 		}
 
 		public GameState CurrentGameState {

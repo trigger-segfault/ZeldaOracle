@@ -509,8 +509,6 @@ namespace ZeldaOracle.Game.Control {
 				// [Select] Open map screen.
 				else if (Controls.Select.IsPressed())
 					GameControl.OpenMapScreen();
-				// DEBUG: Update debug keys.
-				GameDebug.UpdateRoomDebugKeys(this);
 			}
 		}
 
