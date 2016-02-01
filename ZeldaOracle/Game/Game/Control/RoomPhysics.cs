@@ -30,47 +30,65 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		public void ProcessPhysics() {
-
-			// Create list of collisions.
+			// Process physics for all entities.
 			for (int i = 0; i < roomControl.Entities.Count; i++) {
 				Entity entity = roomControl.Entities[i];
-				if (entity.Physics != null && entity.Physics.IsEnabled)
-					ProcessEntity(entity);
-			}
-		}
-
-		public void ClearCollisionState(Entity entity) {
-			entity.Physics.IsColliding = false;
-			for (int i = 0; i < Directions.Count; i++) {
-				entity.Physics.CollisionInfo[i].Clear();
-				CollisionInfoNew collision = entity.Physics.ClipCollisionInfo[i];
-				collision.Reset();
-				collision.Entity = entity;
-				collision.PenetrationDirection = i;
+				if (entity.Physics != null && entity.Physics.IsEnabled) {
+					ProcessEntityPhysics(entity);
+					entity.Physics.IsFirstFrame = false;
+				}
 			}
 		}
 		
-		public void ProcessEntity(Entity entity) {
-			// Reset collision states
+		// Process physics for a single entity.
+		public void ProcessEntityPhysics(Entity entity) {
+			// Initialize the collision state for this frame.
+			InitPhysicsState(entity);
 			// Update Z dynamics
-			// Collide with tiles & entities
-			// Collide with room edge.
+			UpdateEntityZPosition(entity);
+			// Resolve collisions with solid objects.
+			CheckSolidCollisions(entity);
+			// Resolve collisions with the room edge.
+			CheckRoomEdgeCollisions(entity);
 			// Integrate velocity.
-			// Check ledges
-			// Top tile - conveyor effect
-			// Destroy outside of room
-			// Hazard tiles
-			// OnLand()
-
-			// Clear the collision state.
+			entity.Position += entity.Physics.Velocity;
+			// Change velocity if rebounded.
+			CheckRebound(entity);
+			
 			entity.Physics.IsColliding = false;
+			for (int i = 0; i < Directions.Count; i++) {
+				if (entity.Physics.CollisionInfo[i].IsColliding)
+					entity.Physics.IsColliding = true;
+			}
+
+			// Update ledge passing.
+			CheckLedges(entity);
+			// Check the surface tile beneath the entity.
+			CheckSurfaceTile(entity);
+			// Check if destroyed outside room.
+			CheckOutsideRoomBounds(entity);
+		}
+
+		// Initialize an entity's physics state for the frame.
+		public void InitPhysicsState(Entity entity) {
+			entity.Physics.PreviousVelocity		= entity.Physics.Velocity;
+			entity.Physics.PreviousZVelocity	= entity.Physics.ZVelocity;
+			entity.Physics.IsColliding			= false;
+
 			for (int i = 0; i < Directions.Count; i++) {
 				entity.Physics.CollisionInfo[i].Clear();
 				entity.Physics.MovementCollisions[i] = false;
 			}
+		}
 
-			// Perform world collisions.
-			if (entity.Physics.CollideWithWorld) {
+		
+		//-----------------------------------------------------------------------------
+		// Solid Collisions
+		//-----------------------------------------------------------------------------
+
+		// Check collisions with solid objects (entities and/or tiles).
+		private void CheckSolidCollisions(Entity entity) {
+			if (entity.Physics.CollideWithWorld || entity.Physics.CollideWithEntities) {
 				// 1. Resolve unresolved collisions from the previous frame.
 				ResolvePreviousClipCollisions(entity);
 				// 2. Detect collisions.
@@ -101,20 +119,31 @@ namespace ZeldaOracle.Game.Control {
 						entity.Physics.IsColliding = true;
 				}
 			}
-
-			// Collide with room edges.
-			if (entity.Physics.CollideWithRoomEdge || entity.Physics.ReboundRoomEdge)
-				entity.Physics.CheckRoomEdgeCollisions(entity.Physics.GetCollisionBox(entity.Physics.RoomEdgeCollisionBoxType));
-
-
-			// Integrate velocity.
-			entity.Position += entity.Physics.Velocity;
-
-			//UpdateEntityZPosition(entity);
-			//UpdateEntityTopTile(entity);
 		}
-
 		
+		// Check if the entity should rebound off of its collisions.
+		private void CheckRebound(Entity entity) {
+			if (!entity.Physics.ReboundSolid && !entity.Physics.ReboundRoomEdge)
+				return;
+
+			Vector2F newEntityVelocity = entity.Physics.Velocity;
+
+			for (int i = 0; i < Directions.Count; i++) {
+				CollisionInfo collision = entity.Physics.CollisionInfo[i];
+
+				if (collision.IsColliding &&
+					((entity.Physics.ReboundSolid && (collision.Type == CollisionType.Tile || collision.Type == CollisionType.Entity)) ||
+					(entity.Physics.ReboundRoomEdge && collision.Type == CollisionType.RoomEdge)) &&
+					entity.Physics.PreviousVelocity.Dot(Directions.ToVector(i)) > 0.0f)
+				{
+					int axis = Directions.ToAxis(i);
+					newEntityVelocity[axis] = -entity.Physics.PreviousVelocity[axis];
+				}
+			}
+			entity.Physics.Velocity = newEntityVelocity;
+		}
+		
+
 		//-----------------------------------------------------------------------------
 		// Clip Collision Detection
 		//-----------------------------------------------------------------------------
@@ -129,7 +158,7 @@ namespace ZeldaOracle.Game.Control {
 			// Find nearby solid entities.
 			if (entity.Physics.CollideWithEntities) {
 				foreach (Entity other in RoomControl.Entities) {
-					if (other != entity && other.Physics.IsEnabled && other.Physics.IsSolid) {
+					if (other != entity && CanCollideWithEntity(entity, other)) {
 						yield return new CollisionCheck() {
 							SolidBox = other.Physics.PositionedCollisionBox,
 							SolidObject = other
@@ -140,7 +169,7 @@ namespace ZeldaOracle.Game.Control {
 			// Find nearby solid tiles tiles.
 			if (entity.Physics.CollideWithWorld) {
 				foreach (Tile tile in RoomControl.TileManager.GetTilesTouching(area)) {
-					if (tile.IsSolid && tile.CollisionModel != null && tile.CollisionStyle == CollisionStyle.Rectangular) {
+					if (CanCollideWithTile(entity, tile) && tile.CollisionStyle == CollisionStyle.Rectangular) {
 						foreach (Rectangle2I box in tile.CollisionModel.Boxes) {
 							Rectangle2F tileBox = box;
 							tileBox.Point += tile.Position;
@@ -154,6 +183,25 @@ namespace ZeldaOracle.Game.Control {
 			}
 		}
 		
+		private bool CanCollideWithTile(Entity entity, Tile checkTile) {
+			if (checkTile.CollisionModel == null || !checkTile.IsSolid ||
+				(checkTile.IsHalfSolid && entity.Physics.PassOverHalfSolids))
+				return false;
+			if (checkTile.IsLedge && entity.Physics.PassOverLedges) {
+				if (entity.Physics.LedgeAltitude > 0 ||
+					entity.Physics.LedgeTileLocation == checkTile.Location ||
+					entity.Physics.IsGoingDownLedge(checkTile))
+					return false;
+			}
+			if (entity.Physics.CustomTileCollisionCondition != null)
+				return entity.Physics.CustomTileCollisionCondition(checkTile);
+			return true;
+		}
+		
+		private bool CanCollideWithEntity(Entity entity, Entity checkEntity) {
+			return (checkEntity != entity && checkEntity.Physics.IsEnabled && checkEntity.Physics.IsSolid);
+		}
+
 		// Detect clip collisions for an entity, optionally restricting clip direction to a given axis.
 		private void DetectClipCollisions(Entity entity) {
 			Rectangle2F checkArea = entity.Physics.PositionedCollisionBox;
@@ -574,7 +622,7 @@ namespace ZeldaOracle.Game.Control {
 					return;
 				}
 			}
-			
+
 			// Resolve the collision.
 			if (!entity.Physics.IsColliding && !entity.Physics.ClipCollisionInfo[clipDirection].IsColliding) {
 				// Determine the penetration.
@@ -676,83 +724,216 @@ namespace ZeldaOracle.Game.Control {
 		private bool AreEdgesAligned(Rectangle2F box1, Rectangle2F box2, int edgeDirection) {
 			return Math.Abs(box1.GetEdge(edgeDirection) - box2.GetEdge(edgeDirection)) < 0.1f;
 		}
-
+		
 		
 		//-----------------------------------------------------------------------------
-		// Z-Dynamics & Misc.
+		// Room Boundaries
 		//-----------------------------------------------------------------------------
-		
-		public void UpdateEntityTopTile(Entity entity) {
-			Tile topTile = null;
 
-			foreach (Tile tile in roomControl.GetTiles()) {
-				Rectangle2F tileRect = new Rectangle2F(tile.Position, tile.Size * GameSettings.TILE_SIZE);
-				if (!tile.IsSolid && tileRect.Contains(entity.Position) &&
-					(topTile == null || tile.Layer > topTile.Layer))
-				{
-					topTile = tile;
+		// Check collisions with the room's edges.
+		private void CheckRoomEdgeCollisions(Entity entity) {
+			if (!entity.Physics.CollideWithRoomEdge && !entity.Physics.ReboundRoomEdge)
+				return;
+			
+			Rectangle2F collisionBox = entity.Physics.CollisionBox;
+			Rectangle2F entityBox = entity.Physics.CollisionBox;
+			entityBox.Point += entity.Position + entity.Physics.Velocity;
+			Rectangle2F roomBounds = roomControl.RoomBounds;
+
+			/*
+			for (int i = 0; i < Directions.Count; i++) {
+				int axis = Directions.ToAxis(i);
+				float penetration = GetClipPenetration(roomBounds, entityBox, i);
+				float distanceOutside = entityBox.Size[axis] - penetration;
+
+				if (distanceOutside > 0.0f) {
+					entity.Position -= Directions.ToVector(i) * distanceOutside;
+
+					entity.Physics.IsColliding = true;
+					entity.Physics.CollisionInfo[i].SetRoomEdgeCollision(i);
 				}
-			}
+			}*/
 
-			if (topTile != null) {
-				// TODO: Integrate the surface tile's velocity into our
-				// velocity rather than just moving position.
-				entity.Position += topTile.Velocity;
-				if (entity.Physics.MovesWithConveyors && entity.Physics.IsOnGround)
-					entity.Position += topTile.ConveyorVelocity;
+			if (entityBox.Left < roomBounds.Left) {
+				entity.Physics.IsColliding = true;
+				entity.X = roomBounds.Left - collisionBox.Left;
+				if (entity.Physics.ReboundRoomEdge && entity.Physics.ReboundVelocity.X == 0.0f)
+					entity.Physics.ReboundVelocity = new Vector2F(-entity.Physics.VelocityX, entity.Physics.ReboundVelocity.Y);
+				entity.Physics.VelocityX = 0;
+				entity.Physics.CollisionInfo[Directions.Left].SetRoomEdgeCollision(Directions.Left);
 			}
-
-			entity.Physics.TopTile = topTile;
+			else if (entityBox.Right > roomBounds.Right) {
+				entity.Physics.IsColliding = true;
+				entity.X = roomBounds.Right - collisionBox.Right;
+				if (entity.Physics.ReboundRoomEdge && entity.Physics.ReboundVelocity.X == 0.0f)
+					entity.Physics.ReboundVelocity = new Vector2F(-entity.Physics.VelocityX, entity.Physics.ReboundVelocity.Y);
+				entity.Physics.VelocityX = 0;
+				entity.Physics.CollisionInfo[Directions.Right].SetRoomEdgeCollision(Directions.Right);
+			}
+			if (entityBox.Top < roomBounds.Top) {
+				entity.Physics.IsColliding = true;
+				entity.Y = roomBounds.Top - collisionBox.Top;
+				if (entity.Physics.ReboundRoomEdge && entity.Physics.ReboundVelocity.Y == 0.0f)
+					entity.Physics.ReboundVelocity = new Vector2F(entity.Physics.ReboundVelocity.X, -entity.Physics.VelocityY);
+				entity.Physics.VelocityY = 0;
+				entity.Physics.CollisionInfo[Directions.Up].SetRoomEdgeCollision(Directions.Up);
+			}
+			else if (entityBox.Bottom > roomBounds.Bottom) {
+				entity.Physics.IsColliding = true;
+				entity.Y = roomBounds.Bottom - collisionBox.Bottom;
+				if (entity.Physics.ReboundRoomEdge && entity.Physics.ReboundVelocity.Y == 0.0f)
+					entity.Physics.ReboundVelocity = new Vector2F(entity.Physics.ReboundVelocity.X, -entity.Physics.VelocityY);
+				entity.Physics.VelocityY = 0;
+				entity.Physics.CollisionInfo[Directions.Down].SetRoomEdgeCollision(Directions.Down);
+			}
 		}
+
+		// Check if destroyed outside room.
+		private void CheckOutsideRoomBounds(Entity entity) {
+			if (entity.Physics.IsDestroyedOutsideRoom &&
+				!entity.RoomControl.RoomBounds.Contains(entity.Position))
+			{
+				entity.Destroy();
+				return;
+			}
+		}
+		
+		
+		//-----------------------------------------------------------------------------
+		// Z-Dynamics
+		//-----------------------------------------------------------------------------
 
 		public void UpdateEntityZPosition(Entity entity) {
 			if (entity.ZPosition > 0.0f || entity.Physics.ZVelocity != 0.0f) {
-				// Apply gravity.
-				if (entity.Physics.HasFlags(PhysicsFlags.HasGravity)) {
+				// Integrate gravity acceleration.
+				if (entity.Physics.HasGravity) {
 					entity.Physics.ZVelocity -= entity.Physics.Gravity;
-					if (entity.Physics.ZVelocity < -entity.Physics.MaxFallSpeed && entity.Physics.MaxFallSpeed >= 0)
+					if (entity.Physics.ZVelocity < -entity.Physics.MaxFallSpeed && entity.Physics.MaxFallSpeed >= 0.0f)
 						entity.Physics.ZVelocity = -entity.Physics.MaxFallSpeed;
 				}
 
-				// Apply z-velocity.
+				// Integrate z-velocity.
 				entity.ZPosition += entity.Physics.ZVelocity;
 
 				// Check if landed on the ground.
-				if (entity.ZPosition <= 0.0f) {
-					//hasLanded = true;
-					entity.ZPosition = 0.0f;
-
-					if (entity.Physics.HasFlags(PhysicsFlags.Bounces)) {
-						BounceEntity(entity);
-					}
-					else {
-						entity.ZPosition = 0.0f;
-						entity.Physics.ZVelocity = 0.0f;
-					}
-				}
+				if (entity.ZPosition <= 0.0f)
+					LandEntity(entity);
 			}
 			else
 				entity.Physics.ZVelocity = 0.0f;
 		}
 
-		public void BounceEntity(Entity entity) {
-			if (entity.Physics.ZVelocity < -1.0f) {
+		public void LandEntity(Entity entity) {
+			// Check if landed in a hazard surface.
+			CheckHazardSurface(entity);
+			if (entity.IsDestroyed)
+				return;
+
+			if (entity.Physics.Bounces && entity.Physics.ZVelocity < -1.0f) {
 				// Bounce back into the air.
-				//hasLanded = false;
 				entity.ZPosition = 0.1f;
 				entity.Physics.ZVelocity = -entity.Physics.ZVelocity * 0.5f;
+
+				// Half the lateral velocity upon bouncing.
+				if (entity.Physics.Velocity.Length > 0.25f)
+					entity.Physics.Velocity *= 0.5f;
+				else
+					entity.Physics.Velocity = Vector2F.Zero;
+				
+				entity.OnBounce();
 			}
 			else {
 				// Stay on the ground.
 				entity.ZPosition = 0.0f;
-				entity.Physics.ZVelocity = 0;
-				entity.Physics.Velocity = Vector2F.Zero;
-			}
+				entity.Physics.ZVelocity = 0.0f;
 
-			if (entity.Physics.Velocity.Length > 0.25)
-				entity.Physics.Velocity *= 0.5f;
-			else
-				entity.Physics.Velocity = Vector2F.Zero;
+				if (entity.Physics.Bounces) {
+					entity.Physics.Velocity = Vector2F.Zero;
+					entity.OnBounce();
+				}
+
+				entity.OnLand();
+			}
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Surfaces
+		//-----------------------------------------------------------------------------
+		
+		// Check the surface tile beneath the entity.
+		private void CheckSurfaceTile(Entity entity) {
+			// Find the surface tile underneath the entity.
+			entity.Physics.TopTile = roomControl.TileManager
+				.GetSurfaceTileAtPosition(entity.Position, entity.Physics.MovesWithPlatforms);
+
+			// Check if the surface is moving.
+			if (entity.Physics.TopTile != null) {
+				// TODO: Integrate the surface tile's velocity into our
+				// velocity rather than just moving position.
+				if (entity.Physics.MovesWithPlatforms)
+					entity.Position += entity.Physics.TopTile.Velocity;
+				if (entity.Physics.MovesWithConveyors && entity.Physics.IsOnGround)
+					entity.Position += entity.Physics.TopTile.ConveyorVelocity;
+			}
+			
+			// Check if surface tile is a hazardous (water/lava/hole).
+			// This is only supposed to be checked upon landing or bouncing,
+			// but it also is checked when the entity's physics are first updated.
+			if (entity.Physics.IsFirstFrame)
+				CheckHazardSurface(entity);
+		}
+		
+		// Check if the entity is sitting on a hazardous surface (water/lava/hole).
+		private void CheckHazardSurface(Entity entity) {
+			if (entity.Physics.IsInHole)
+				entity.OnFallInHole();
+			else if (entity.Physics.IsInWater)
+				entity.OnFallInWater();
+			else if (entity.Physics.IsInLava)
+				entity.OnFallInLava();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Ledge Passing
+		//-----------------------------------------------------------------------------
+		
+		// Update ledge passing, handling changes in altitude.
+		public void CheckLedges(Entity entity) {
+			if (!entity.Physics.PassOverLedges)
+				return;
+
+			Point2I prevLocation = entity.RoomControl.GetTileLocation(entity.PreviousPosition + entity.Physics.CollisionBox.Center);
+			Point2I location = entity.RoomControl.GetTileLocation(entity.Position + entity.Physics.CollisionBox.Center);
+
+			// When moving over a new tile, check its ledge state.
+			if (location != prevLocation) {
+				entity.Physics.LedgeTileLocation = new Point2I(-1, -1);
+
+				if (entity.RoomControl.IsTileInBounds(location)) {
+					Tile tile = entity.RoomControl.GetTopTile(location);
+
+					if (tile != null && tile.IsLedge) {
+						entity.Physics.LedgeTileLocation = location;
+						// Adjust ledge altitude.
+						if (IsMovingUpLedge(entity, tile))
+							entity.Physics.LedgeAltitude--;
+						else if (IsMovingDownLedge(entity, tile))
+							entity.Physics.LedgeAltitude++;
+					}
+				}
+			}
+		}
+
+		// Returns true if the entity moving down the ledge.
+		public bool IsMovingDownLedge(Entity entity, Tile ledgeTile) {
+			return entity.Physics.Velocity.Dot(Directions.ToVector(ledgeTile.LedgeDirection)) > 0.0f;
+		}
+
+		// Returns true if the entity moving up the ledge.
+		public bool IsMovingUpLedge(Entity entity, Tile ledgeTile) {
+			return entity.Physics.Velocity.Dot(Directions.ToVector(ledgeTile.LedgeDirection)) < 0.0f;
 		}
 
 		

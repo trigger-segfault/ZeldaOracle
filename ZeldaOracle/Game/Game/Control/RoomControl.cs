@@ -246,7 +246,7 @@ namespace ZeldaOracle.Game.Control {
 				Player.Initialize(this);
 				entities.Add(Player);
 			}
-			roomPhysics.ClearCollisionState(Player);
+			roomPhysics.InitPhysicsState(Player);
 
 			// Create the tile grid.
 			tileManager.Initialize(room);
