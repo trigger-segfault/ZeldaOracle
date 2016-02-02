@@ -48,7 +48,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.StopMotion();
 			AudioSystem.PlaySound(GameData.SOUND_PLAYER_PICKUP);
 			
-			player.Position = tileHandle.GetPlayerPullPosition();
+			player.SetPositionByCenter(tileHandle.GetPlayerPullPosition());
 		}
 		
 		public override void OnEnd(PlayerState newState) {
@@ -98,7 +98,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					AudioSystem.PlaySound(GameData.SOUND_BLOCK_PUSH);
 			}
 
-			player.Position = tileHandle.GetPlayerPullPosition();
+			player.SetPositionByCenter(tileHandle.GetPlayerPullPosition());
 		}
 
 		

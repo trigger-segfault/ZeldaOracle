@@ -108,7 +108,8 @@ namespace ZeldaOracle.Game.Worlds {
 			for (int i = 0; i < floorNumberCount; i++)
 				floors[i] = new DungeonFloor(null, lowestFloorNumber + i);
 			foreach (Level level in world.Levels) {
-				floors[level.DungeonFloor - lowestFloorNumber] = new DungeonFloor(level, level.DungeonFloor);
+				if (level.Dungeon == this)
+					floors[level.DungeonFloor - lowestFloorNumber] = new DungeonFloor(level, level.DungeonFloor);
 			}
 
 			return floors;

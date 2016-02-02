@@ -120,16 +120,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Physics.SoftCollisionBox	= new Rectangle2F(-6, -14 + 3, 12, 13);
 			Physics.CollideWithWorld	= true;
 			Physics.CollideWithEntities	= true;
+			Physics.CollideWithRoomEdge	= true;
+			Physics.RoomEdgeCollisionBoxType = CollisionBoxType.Soft;
 			Physics.HasGravity			= true;
 			Physics.AutoDodges			= true;
 			Physics.MovesWithConveyors	= true;
 			Physics.MovesWithPlatforms	= true;
-			Physics.CollideWithRoomEdge	= true;
 			Physics.AllowEdgeClipping	= true;
-			Physics.IsCrushable			= false;
+			Physics.IsCrushable			= true;
 			Physics.EdgeClipAmount		= 1;
 			Physics.CrushMaxGapSize		= 4;
-			Physics.RoomEdgeCollisionBoxType = CollisionBoxType.Soft;
 
 			// Graphics.
 			Graphics.DepthLayer			= DepthLayer.PlayerAndNPCs;

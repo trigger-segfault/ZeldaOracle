@@ -533,20 +533,32 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Check for ledge jumping (ledges/waterfalls)
 			CollisionInfo collisionInfo = player.Physics.CollisionInfo[moveDirection];
 			if (canLedgeJump && mode.CanLedgeJump && isMoving &&
-				collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving)
+				collisionInfo.Type == CollisionType.Tile)
 			{
 				Tile tile = collisionInfo.Tile;
-				
-				if (tile.IsLedge &&
-					moveDirection == tile.LedgeDirection &&
-					collisionInfo.Direction == tile.LedgeDirection)
+				if (tile.IsLedge && moveDirection == tile.LedgeDirection && !tile.IsMoving)
+					TryLedgeJump(tile.LedgeDirection);
+			}
+		}
+
+		private bool TryLedgeJump(int ledgeDirection) {
+			Rectangle2F testBounds = player.Physics.PositionedCollisionBox;
+			testBounds.Point += Directions.ToVector(ledgeDirection) * 1.0f;
+
+			// Check if there any obstructions in front of the player.
+			foreach (Tile tile in player.RoomControl.TileManager.GetTilesTouching(testBounds)) {
+				if ((!tile.IsLedge || tile.LedgeDirection != ledgeDirection) &&
+					tile.IsSolid && tile.CollisionModel != null && CollisionModel.Intersecting(
+					tile.CollisionModel, tile.Position, testBounds, Vector2F.Zero))
 				{
-					// Ledge jump!
-					player.LedgeJumpState.LedgeBeginTile = tile;
-					player.BeginState(player.LedgeJumpState);
-					return;
+					return false;
 				}
 			}
+
+			// No obstructions: begin ledge jump!
+			player.LedgeJumpState.LedgeJumpDirection = ledgeDirection;
+			player.BeginState(player.LedgeJumpState);
+			return true;
 		}
 
 		

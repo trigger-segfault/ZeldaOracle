@@ -59,7 +59,10 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public Vector2F GetPlayerPullPosition() {
-			return Center + (Directions.ToVector(direction) * 17);
+			Vector2F pos = Position + CollisionModel.Boxes[0].Center + (Directions.ToVector(direction) * 10);
+			if (Directions.IsHorizontal(direction))
+				pos.Y -= 2;
+			return pos;
 		}
 
 
@@ -80,8 +83,8 @@ namespace ZeldaOracle.Game.Tiles {
 			IsSolid				= true;
 			ClingWhenStabbed	= false;
 
-			Rectangle2I collisionBox = new Rectangle2I(0, 0, 16, 16);
-			collisionBox.ExtendEdge(direction, 1);
+			Rectangle2I collisionBox = new Rectangle2I(4, 4, 8, 8);
+			collisionBox.ExtendEdge(direction, 5);
 			CollisionModel = new CollisionModel(collisionBox);
 
 			if (direction == Directions.Right)

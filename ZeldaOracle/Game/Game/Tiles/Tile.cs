@@ -448,18 +448,9 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 		
 		private void UpdateMovement() {
-			// Velocity must be applied on the next frame in order to syncronize
-			// entities moving on this tile, because entities are updated before tiles.
-			if (isMoving)
-				offset += velocity;
-			else
-				velocity = Vector2F.Zero;
-
 			// Update movement.
 			if (isMoving) {
-				// Set the amount to move for the next frame.
-				if (isMoving)
-					velocity = (Vector2F) moveDirection * movementSpeed;
+				velocity = (Vector2F) moveDirection * movementSpeed;
 				
 				if (offset.Dot(moveDirection) >= 0.0f) {
 					currentMoveDistance++;
@@ -506,6 +497,12 @@ namespace ZeldaOracle.Game.Tiles {
 
 				pathTimer++;
 			}
+			
+			// Integrate velocity.
+			if (isMoving)
+				offset += velocity;
+			else
+				velocity = Vector2F.Zero;
 		}
 
 		private void CheckSurfaceTile() {

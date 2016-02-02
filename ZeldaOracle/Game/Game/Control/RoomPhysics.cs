@@ -46,12 +46,23 @@ namespace ZeldaOracle.Game.Control {
 			InitPhysicsState(entity);
 			// Update Z dynamics
 			UpdateEntityZPosition(entity);
+			// Check the surface tile beneath the entity.
+			CheckSurfaceTile(entity);
 			// Resolve collisions with solid objects.
 			CheckSolidCollisions(entity);
 			// Resolve collisions with the room edge.
 			CheckRoomEdgeCollisions(entity);
 			// Integrate velocity.
 			entity.Position += entity.Physics.Velocity;
+			
+			// Restore the entity's velocity before collision checks.
+			Vector2F newVelocity = entity.Physics.PreviousVelocity;
+			for (int axis = 0; axis < 2; axis++) {
+				if (entity.Physics.Velocity[axis] == 0.0f)
+					newVelocity[axis] = 0.0f;
+			}
+			entity.Physics.Velocity = newVelocity;
+
 			// Change velocity if rebounded.
 			CheckRebound(entity);
 			
@@ -63,8 +74,6 @@ namespace ZeldaOracle.Game.Control {
 
 			// Update ledge passing.
 			CheckLedges(entity);
-			// Check the surface tile beneath the entity.
-			CheckSurfaceTile(entity);
 			// Check if destroyed outside room.
 			CheckOutsideRoomBounds(entity);
 		}
@@ -89,6 +98,19 @@ namespace ZeldaOracle.Game.Control {
 		// Check collisions with solid objects (entities and/or tiles).
 		private void CheckSolidCollisions(Entity entity) {
 			if (entity.Physics.CollideWithWorld || entity.Physics.CollideWithEntities) {
+				
+				// Handle circular tile collisions.
+				if (entity.Physics.CollideWithWorld) {
+					Rectangle2F checkArea = Rectangle2F.Union(
+						Rectangle2F.Translate(entity.Physics.CollisionBox, entity.Position),
+						Rectangle2F.Translate(entity.Physics.CollisionBox, entity.Position + entity.Physics.Velocity));
+
+					foreach (Tile tile in roomControl.TileManager.GetTilesTouching(checkArea)) {
+						if (CanCollideWithTile(entity, tile) && tile.CollisionStyle == CollisionStyle.Circular)
+							ResolveCircularCollision(entity, tile, tile.Position, tile.CollisionModel);
+					}
+				}
+
 				// 1. Resolve unresolved collisions from the previous frame.
 				ResolvePreviousClipCollisions(entity);
 				// 2. Detect collisions.
@@ -143,6 +165,73 @@ namespace ZeldaOracle.Game.Control {
 			entity.Physics.Velocity = newEntityVelocity;
 		}
 		
+		
+		//-----------------------------------------------------------------------------
+		// Circular Collisions
+		//-----------------------------------------------------------------------------
+		
+		private void ResolveCircularCollision(Entity entity, Tile tile, Vector2F modelPos, CollisionModel model) {
+			for (int i = 0; i < model.BoxCount; i++) {
+				Rectangle2F box = model.Boxes[i];
+				box.Point += modelPos;
+				ResolveCircularCollision(entity, tile, box);
+			}
+		}
+		
+		private void ResolveCircularCollision(Entity entity, object solidObject, Rectangle2F solidBox) {
+			Rectangle2F collisionBox = entity.Physics.CollisionBox;
+			Rectangle2F entityBoxPrev = entity.Physics.CollisionBox;
+			entityBoxPrev.Point += entity.Position;
+
+			// If already colliding with the object, then push away from its center.
+			if (entityBoxPrev.Intersects(solidBox)) {
+				Vector2F correction = (entity.Position - solidBox.Center).Normalized;
+				correction = Vector2F.SnapDirectionByCount(correction, 16);
+				entity.Position += 1.0f * correction;
+				return;
+			}
+
+			// Predict collisions for each axis.
+			for (int axis = 0; axis < 2; axis++) {
+				Rectangle2F entityBox = entity.Physics.CollisionBox;
+				entityBox.Point += entity.Position;
+				if (axis == 0)
+					entityBox.X += entity.Physics.VelocityX;
+				else
+					entityBox.Point += entity.Physics.Velocity;
+
+				if (entityBox.Intersects(solidBox)) {
+					// Snap the position.
+					Vector2F newPos = entity.Position;
+					if (entityBox.Center[axis] < solidBox.Center[axis])
+						newPos[axis] = solidBox.TopLeft[axis] - collisionBox.BottomRight[axis];
+					else
+						newPos[axis] = solidBox.BottomRight[axis] - collisionBox.TopLeft[axis];
+					entity.Position = newPos;
+					
+					Vector2F newVelocity = entity.Physics.Velocity;
+					if (Math.Abs(entity.Physics.Velocity[1 - axis]) < 0.1f) {
+						// Slightly push away from the center of the solid object.
+						Vector2F distance = entity.Physics.PositionedCollisionBox.Center - solidBox.Center;
+						//Vector2F correction = (entity.Position - solidBox.Center).Normalized;
+						//correction = Vector2F.SnapDirectionByCount(correction, 16);
+						if (GMath.Abs(distance[1 - axis]) > 1.0f) {
+							//distance = GMath.Sqr(GMath.Abs(distance)) * GMath.Sign(distance);
+							distance = (distance * distance) * GMath.Sign(distance);
+							//newVelocity[1 - axis] += distance[1 - axis] * 0.015f;
+							newPos = entity.Position;
+							newPos[1 - axis] += distance[1 - axis] * 0.015f;
+							if (!IsCollidingAt(entity, newPos, false))
+								entity.Position = newPos;
+						}
+					}
+					newVelocity[axis] = 0.0f;
+					entity.Physics.Velocity = newVelocity;
+				}
+			}
+		}
+
+
 
 		//-----------------------------------------------------------------------------
 		// Clip Collision Detection
@@ -183,6 +272,7 @@ namespace ZeldaOracle.Game.Control {
 			}
 		}
 		
+		// Returns true if the entity is able to collide with a tile.
 		private bool CanCollideWithTile(Entity entity, Tile checkTile) {
 			if (checkTile.CollisionModel == null || !checkTile.IsSolid ||
 				(checkTile.IsHalfSolid && entity.Physics.PassOverHalfSolids))
@@ -190,7 +280,7 @@ namespace ZeldaOracle.Game.Control {
 			if (checkTile.IsLedge && entity.Physics.PassOverLedges) {
 				if (entity.Physics.LedgeAltitude > 0 ||
 					entity.Physics.LedgeTileLocation == checkTile.Location ||
-					entity.Physics.IsGoingDownLedge(checkTile))
+					IsMovingDownLedge(entity, checkTile))
 					return false;
 			}
 			if (entity.Physics.CustomTileCollisionCondition != null)
@@ -198,6 +288,7 @@ namespace ZeldaOracle.Game.Control {
 			return true;
 		}
 		
+		// Returns true if the entity is able to collide with another entity.
 		private bool CanCollideWithEntity(Entity entity, Entity checkEntity) {
 			return (checkEntity != entity && checkEntity.Physics.IsEnabled && checkEntity.Physics.IsSolid);
 		}
@@ -397,17 +488,17 @@ namespace ZeldaOracle.Game.Control {
 
 			// Compare two tiles.
 			if (tile1 != null && tile2 != null) {
-				if (tile1.Layer > tile2.Layer)
+				if (tile1.Position.Y > tile2.Position.Y)
+					return collision1;
+				else if (tile2.Position.Y > tile1.Position.Y)
+					return collision2;
+				else if (tile1.Position.X > tile2.Position.X)
+					return collision1;
+				else if (tile2.Position.X > tile1.Position.X)
+					return collision2;
+				else if (tile1.Layer > tile2.Layer)
 					return collision1;
 				else if (tile2.Layer > tile1.Layer)
-					return collision2;
-				else if (tile1.Position.Y < tile2.Position.Y)
-					return collision1;
-				else if (tile2.Position.Y < tile1.Position.Y)
-					return collision2;
-				else if (tile1.Position.X < tile2.Position.X)
-					return collision1;
-				else if (tile2.Position.X < tile1.Position.X)
 					return collision2;
 			}
 
@@ -436,6 +527,11 @@ namespace ZeldaOracle.Game.Control {
 				if (IsCollidingAt(entity, newPosition, true))
 					return false;
 			}
+
+			if ((collision.CollidedObject is Tile) && !entity.Physics.CollideWithWorld)
+				return false;
+			if ((collision.CollidedObject is Entity) && !entity.Physics.CollideWithEntities)
+				return false;
 
 			return true;
 		}
@@ -663,6 +759,10 @@ namespace ZeldaOracle.Game.Control {
 			if (Math.Abs(entity.Physics.Velocity[1 - axis]) > 0.001f)
 				return false;
 
+			// Can't dodge moving tiles.
+			if (solidObject is Tile && ((Tile) solidObject).IsMoving)
+				return false;
+
 			Rectangle2F entityBox = entity.Physics.PositionedCollisionBox;
 			float penetrationDistance = GetClipPenetration(
 				entity.Physics.PositionedCollisionBox, solidBox, direction);
@@ -869,12 +969,10 @@ namespace ZeldaOracle.Game.Control {
 
 			// Check if the surface is moving.
 			if (entity.Physics.TopTile != null) {
-				// TODO: Integrate the surface tile's velocity into our
-				// velocity rather than just moving position.
 				if (entity.Physics.MovesWithPlatforms)
-					entity.Position += entity.Physics.TopTile.Velocity;
+					entity.Physics.Velocity += entity.Physics.TopTile.Velocity;
 				if (entity.Physics.MovesWithConveyors && entity.Physics.IsOnGround)
-					entity.Position += entity.Physics.TopTile.ConveyorVelocity;
+					entity.Physics.Velocity += entity.Physics.TopTile.ConveyorVelocity;
 			}
 			
 			// Check if surface tile is a hazardous (water/lava/hole).

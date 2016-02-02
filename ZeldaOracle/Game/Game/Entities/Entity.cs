@@ -163,7 +163,6 @@ namespace ZeldaOracle.Game.Entities {
 			if (!isInitialized) {
 				isInitialized = true;
 				Initialize();
-				physics.Initialize();
 				previousPosition  = position;
 				previousZPosition = zPosition;
 			}

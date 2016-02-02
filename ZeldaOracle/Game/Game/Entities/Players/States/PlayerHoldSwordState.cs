@@ -145,19 +145,19 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				player.ToolSword.AnimationPlayer.Animation = GameData.ANIM_SWORD_CHARGED;
 				AudioSystem.PlaySound(GameData.SOUND_SWORD_CHARGE);
 			}
+
+			// Release the sword button (spin if charged).
+			if (!weapon.IsEquipped || !weapon.IsButtonDown()) {
+				OnStopHolding();
+			}
 			
 			// Check for tiles to stab.
-			if (Controls.Arrows[player.Direction].IsDown()) {
+			else if (Controls.Arrows[player.Direction].IsDown()) {
 				CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
 				Tile tile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
 				if (tile != null && player.Movement.IsMoving && collisionInfo.Type == CollisionType.Tile) {
 					StabTile(tile);
 				}
-			}
-
-			// Release the sword button (spin if charged).
-			else if (!weapon.IsEquipped || !weapon.IsButtonDown()) {
-				OnStopHolding();
 			}
 		}
 

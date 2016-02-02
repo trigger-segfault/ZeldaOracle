@@ -27,6 +27,8 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			Graphics.IsShadowVisible		= false;
 			Graphics.IsGrassEffectVisible	= false;
 			Graphics.IsRipplesEffectVisible	= false;
+
+			physics.IsDestroyedInHoles		= false;
 		}
 		
 		// Create an effect that plays an animation and then dissapears

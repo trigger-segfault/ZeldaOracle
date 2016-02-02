@@ -45,12 +45,19 @@ namespace ZeldaOracle.Game.Debug {
 
 		private static GameControl gameControl;
 
-		private static EntityDrawInfo EntityDebugInfoMode = EntityDrawInfo.None;
+		private static EntityDrawInfo	EntityDebugInfoMode	= EntityDrawInfo.None;
+		private static TileDrawInfo		TileDebugInfoMode	= TileDrawInfo.None;
 
 		private enum EntityDrawInfo {
 			None = 0,
 			CollisionBoxes,
 			CollisionTests,
+			Count,
+		}
+		private enum TileDrawInfo {
+			None = 0,
+			CollisionBoxes,
+			GridArea,
 			Count,
 		}
 		
@@ -135,9 +142,13 @@ namespace ZeldaOracle.Game.Debug {
 				collectible.Position = gameControl.Player.Position;
 				collectible.ZPosition = 100;
 			}
-			// Y: Show/hide collision boxes.
+			// Y: Cycle entity debug info.
 			if (Keyboard.IsKeyPressed(Keys.Y)) {
 				EntityDebugInfoMode = (EntityDrawInfo) (((int) EntityDebugInfoMode + 1) % (int) EntityDrawInfo.Count);
+			}
+			// U: Cycle tile debug info.
+			if (Keyboard.IsKeyPressed(Keys.U)) {
+				TileDebugInfoMode = (TileDrawInfo) (((int) TileDebugInfoMode + 1) % (int) TileDrawInfo.Count);
 			}
 			// J: Spawn a heart collectible.
 			if (Keyboard.IsKeyPressed(Keys.K)) {
@@ -362,6 +373,41 @@ namespace ZeldaOracle.Game.Debug {
 			return room;
 		}
 
+		private static void DrawTile(Graphics2D g, Tile tile) {
+			
+			if (TileDebugInfoMode == TileDrawInfo.CollisionBoxes) {
+				if (tile.IsSolid && tile.CollisionModel != null) {
+					foreach (Rectangle2F box in tile.CollisionModel.Boxes) {
+						Rectangle2F r = Rectangle2F.Translate(box, tile.Position);
+						g.FillRectangle(r, Color.Red);
+						//g.DrawRectangle(r, 1, Color.Maroon);
+					}
+				}
+			}
+			else if (TileDebugInfoMode == TileDrawInfo.GridArea) {
+				Rectangle2F tileBounds = (Rectangle2F) tile.TileGridArea;
+				tileBounds.Point *= GameSettings.TILE_SIZE;
+				tileBounds.Size *= GameSettings.TILE_SIZE;
+				Color c = Color.Yellow;
+				if (tile.Layer == 1)
+					c = Color.Blue;
+				else if (tile.Layer == 2)
+					c = Color.Red;
+				g.FillRectangle(tileBounds, c);
+
+				tileBounds = new Rectangle2F(tile.Position, tile.Size * GameSettings.TILE_SIZE);
+				c = Color.Olive;
+				if (tile.Layer == 1)
+					c = Color.Cyan;
+				else if (tile.Layer == 2)
+					c = Color.Maroon;
+
+				g.DrawLine(new Line2F(tileBounds.TopLeft, tileBounds.BottomRight - new Point2I(1, 1)), 1, c);
+				g.DrawLine(new Line2F(tileBounds.TopRight - new Point2I(1, 0), tileBounds.BottomLeft - new Point2I(0, 1)), 1, c);
+				g.DrawRectangle(tileBounds, 1, Color.Black);
+			}
+		}
+
 		private static void DrawEntity(Graphics2D g, Entity entity) {
 			
 			if (EntityDebugInfoMode == EntityDrawInfo.CollisionBoxes) {
@@ -410,6 +456,12 @@ namespace ZeldaOracle.Game.Debug {
 					g.FillRectangle(collisionBox, Color.Olive);
 				}
 			}
+		}
+
+		public static void DrawRoomTiles(Graphics2D g, RoomControl roomControl) {
+			// Draw debug info for tiles.
+			foreach (Tile tile in roomControl.GetTiles())
+				DrawTile(g, tile);
 		}
 
 		public static void DrawRoom(Graphics2D g, RoomControl roomControl) {

@@ -12,7 +12,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerLedgeJumpState : PlayerState {
 		
 		private Vector2F	velocity;
-		private Tile		ledgeBeginTile;
 		private bool		ledgeExtendsToNextRoom;
 		private bool		hasRoomChanged;
 		private int			direction;
@@ -24,7 +23,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerLedgeJumpState() {
-			ledgeBeginTile = null;
 			isHoldingSword = false;
 		}
 		
@@ -34,8 +32,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-
-			direction = ledgeBeginTile.LedgeDirection;
 
 			// TODO: player.passable = true;
 			player.IsStateControlled		= true;
@@ -165,9 +161,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public Tile LedgeBeginTile {
-			get { return ledgeBeginTile; }
-			set { ledgeBeginTile = value; }
+		public int LedgeJumpDirection {
+			get { return direction; }
+			set { direction = value; }
 		}
 	}
 }

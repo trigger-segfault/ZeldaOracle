@@ -87,6 +87,15 @@ namespace ZeldaOracle.Common.Geometry {
 
 		
 		//-----------------------------------------------------------------------------
+		// Accessors
+		//-----------------------------------------------------------------------------
+
+		public bool Intersects(RangeF other) {
+			return (Max > other.Min && Min < other.Max);
+		}
+
+		
+		//-----------------------------------------------------------------------------
 		// Mutators
 		//-----------------------------------------------------------------------------
 
@@ -162,6 +171,10 @@ namespace ZeldaOracle.Common.Geometry {
 		// Returns true if the min and max values are the same.
 		public bool IsSingle {
 			get { return (Min == Max); }
+		}
+
+		public float Mean {
+			get { return (Max + Min) * 0.5f; }
 		}
 
 		

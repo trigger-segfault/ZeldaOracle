@@ -44,6 +44,7 @@ namespace ZeldaOracle.Game.Control {
 		private RoomPhysics		roomPhysics;
 		private TileManager		tileManager;
 		private bool			allMonstersDead;
+		private int				entityIndexCounter;
 
 		private event Action<Player>	eventPlayerRespawn;
 		private event Action<int>		eventRoomTransitioning;
@@ -67,6 +68,7 @@ namespace ZeldaOracle.Game.Control {
 			eventPlayerRespawn		= null;
 			eventRoomTransitioning	= null;
 			entityCount				= 0;
+			entityIndexCounter		= 0;
 		}
 		
 
@@ -142,7 +144,7 @@ namespace ZeldaOracle.Game.Control {
 		
 		// Use this for spawning entites at runtime.
 		public void SpawnEntity(Entity e) {
-			e.EntityIndex = entities.Count;
+			e.EntityIndex = ++entityIndexCounter;
 			e.Initialize(this);
 			entities.Add(e);
 		}
@@ -244,6 +246,7 @@ namespace ZeldaOracle.Game.Control {
 			entities.Clear();
 			if (Player != null) {
 				Player.Initialize(this);
+				Player.EntityIndex = 0;
 				entities.Add(Player);
 			}
 			roomPhysics.InitPhysicsState(Player);
@@ -522,6 +525,9 @@ namespace ZeldaOracle.Game.Control {
 			
 			// Draw tiles.
 			tileManager.DrawTiles(g);
+
+			// DEBUG: Draw debug information over tiles.
+			GameDebug.DrawRoomTiles(g, this);
 			
 			// Draw entities in reverse order (because newer entities are drawn below older ones).
 			roomGraphics.Clear();

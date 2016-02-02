@@ -32,6 +32,8 @@ namespace ZeldaOracle.Game.Tiles.Internal {
 		public override void OnInitialize() {
 			base.OnInitialize();
 			timer = 0;
+			
+			fallsInHoles = false;
 
 			// Spawn the poof effect.
 			if (spawnOptions.PoofEffect) {
