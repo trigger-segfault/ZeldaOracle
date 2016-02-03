@@ -286,6 +286,8 @@ namespace ZeldaOracle.Game.Control {
 			for (int i = 0; i < eventTiles.Count; i++) {
 				eventTiles[i].Initialize(this);
 			}
+			
+			tileManager.PostInitializeTiles();
 
 			entityCount = entities.Count;
 			

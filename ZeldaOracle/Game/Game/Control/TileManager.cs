@@ -297,23 +297,69 @@ namespace ZeldaOracle.Game.Control {
 		// Tile Game Flow
 		//-----------------------------------------------------------------------------
 
-		// Initialize all tiles in the grid.
-		public void InitializeTiles() {
+		private IEnumerable<Tile> IterateTilesOnce() {
+			foreach (Tile t in GetTiles())
+				t.IsUpdated = false;
 			for (int i = 0; i < layerCount; i++) {
 				for (int y = 0; y < GridHeight; y++) {
 					for (int x = 0; x < GridWidth; x++) {
 						Tile tile = tiles[x, y, i];
-						if (tile != null) {
-							tile.Initialize(roomControl);
-							UpdateTileGridArea(tile);
+						if (tile != null && IsTileAtGridLocation(tile, x, y) && !tile.IsUpdated) {
+							tile.IsUpdated = true;
+							yield return tile;
 						}
 					}
 				}
 			}
 		}
+
+		// Initialize all tiles in the grid.
+		public void InitializeTiles() {
+			foreach (Tile tile in IterateTilesOnce()) {
+				tile.Initialize(roomControl);
+				UpdateTileGridArea(tile);
+			}
+			/*foreach (Tile t in GetTiles())
+				t.IsUpdated = false;
+			for (int i = 0; i < layerCount; i++) {
+				for (int y = 0; y < GridHeight; y++) {
+					for (int x = 0; x < GridWidth; x++) {
+						Tile tile = tiles[x, y, i];
+						if (tile != null && IsTileAtGridLocation(tile, x, y) && !tile.IsUpdated) {
+							tile.Initialize(roomControl);
+							UpdateTileGridArea(tile);
+						}
+					}
+				}
+			}*/
+		}
+
+		// Initialize all tiles in the grid.
+		public void PostInitializeTiles() {
+			foreach (Tile tile in IterateTilesOnce()) {
+				tile.OnPostInitialize();
+				UpdateTileGridArea(tile);
+			}
+		}
 		
 		// Update all tiles in the grid.
 		public void UpdateTiles() {
+			foreach (Tile t in IterateTilesOnce()) {
+				Point2I prevLocation = t.Location;
+				Vector2F prevOffset = t.Offset;
+
+				if (GameControl.UpdateRoom)
+					t.Update();
+				if (GameControl.AnimateRoom)
+					t.UpdateGraphics();
+
+				t.PreviousLocation = prevLocation;
+				t.PreviousOffset = prevOffset;
+							
+				if (t.IsAlive)
+					UpdateTileGridArea(t);
+			}
+			/*
 			foreach (Tile t in GetTiles())
 				t.IsUpdated = false;
 			for (int i = 0; i < layerCount; i++) {
@@ -339,7 +385,7 @@ namespace ZeldaOracle.Game.Control {
 						}
 					}
 				}
-			}
+			}*/
 		}
 		
 		// Draw all tiles in the grid.

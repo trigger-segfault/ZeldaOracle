@@ -207,6 +207,31 @@ TILE spiked_floor;
 	SPRITE		tile_spiked_floor;
 END;
 
+# ---- Bridges ----------------------------------------------------------------
+
+TILE bridge;
+	TYPE		TileBridge;
+	SPRITE		tile_bridge_horizontal;
+	PROPERTIES	(boolean, vertical, false, "Vertical", "", "Bridge", "True if the bridge is vertical."),
+				(integer, bridge_direction, -1, "Bridge Direction", "", "Bridge", "Direction the bridge is in.");
+END;
+
+TILE bridge_horizontal;
+	CLONE		bridge;
+	SPRITE		tile_bridge_horizontal;
+	PROPERTIES	(boolean, vertical, false),
+				(integer, direction, 0);
+END;
+
+TILE bridge_vertical;
+	CLONE		bridge;
+	SPRITE		tile_bridge_vertical;
+	PROPERTIES	(boolean, vertical, true),
+				(integer, direction, 3);
+END;
+
+# ---- Moving Platform --------------------------------------------------------
+
 TILE moving_platform;
 	TYPE		TilePlatform;
 	SPRITE		tile_moving_platform;
@@ -716,8 +741,8 @@ SETTILE ( 0, 11), eye_statue;
 # Slate thing
 SETTILE ( 2, 11), locked_block;
 SETTILE ( 3, 11), spiked_floor;
-# Bridge horizontal
-# Bridge Vertical
+SETTILE ( 4, 11), bridge_horizontal;
+SETTILE ( 5, 11), bridge_vertical;
 
 SETTILE (10, 11), minecart_track_horizontal;
 SETTILE (11, 11), minecart_track_vertical;

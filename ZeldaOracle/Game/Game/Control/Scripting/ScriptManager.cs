@@ -119,6 +119,9 @@ namespace ZeldaOracle.Game.Control.Scripting {
 							script.Code +
 						"}";
 				}
+				else {
+					Console.WriteLine(" ! Script '{0}' has errors!", script.Name);
+				}
 			}
 
 			// Close class and namespace.

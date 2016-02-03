@@ -36,6 +36,7 @@ namespace ZeldaOracle.Game.Tiles {
 			angle = Properties.GetInteger("angle", 0);
 			animationPlayer.Play(GameData.ANIM_TILE_SEED_BOUNCER);
 			animationPlayer.SubStripIndex = angle;
+			fallsInHoles = false;
 		}
 
 

@@ -130,6 +130,7 @@ namespace ZeldaEditor {
 
 		public void AddTileToSelection(BaseTileDataInstance tile) {
 			selectedTiles.Add(tile);
+			selectedRoom = tile.Room;
 		}
 
 		public void RemoveTileFromSelection(BaseTileDataInstance tile) {

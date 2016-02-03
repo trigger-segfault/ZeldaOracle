@@ -75,7 +75,7 @@ TILE color_switch;
 	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "", "Can the color switch only be switched once?"),
 				(boolean, switch_state,		false,	"Switch State",		"", "", "The switch state of the color switch (false = blue, true = red)."),
 				(boolean, remember_state,	false,	"Remember State",	"", "", "Will the color switch's state be remembered after leaving the room?");
-	EVENT		event_toggle, "Toggle", "Occurs when the Color Switch changes color.", (ColorSwitch, switch);
+	EVENT		event_toggle, "Toggle", "Occurs when the Color Switch changes color.", (ColorSwitch, colorSwitch);
 END;
 
 TILE color_switch_blue;

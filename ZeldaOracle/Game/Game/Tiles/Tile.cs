@@ -438,6 +438,8 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public virtual void OnInitialize() {}
+		
+		public virtual void OnPostInitialize() {}
 
 		public virtual void OnRemoveFromRoom() {}
 

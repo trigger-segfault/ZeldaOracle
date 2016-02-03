@@ -2,92 +2,93 @@
 
 # Effects ---------------------------------------------------------------------
 
-SOUND appear_vanish,			"Effects/appear_vanish";
-SOUND effect_cling,				"Effects/effect_cling";
-SOUND fire,						"Effects/fire";
-SOUND gale_seed,				"Effects/gale_seed";
-SOUND leaves,					"Effects/leaves";
-SOUND mystery_seed,				"Effects/mystery_seed";
-SOUND object_fall,				"Effects/object_fall";
-SOUND rock_shatter,				"Effects/rock_shatter";
-SOUND scent_seed,				"Effects/scent_seed";
-SOUND scent_seed_pod,			"Effects/scent_seed_pod";
+SOUND appear_vanish,			"Effects/appear_vanish";	# Oracle_AppearVanish
+SOUND effect_cling,				"Effects/effect_cling";		# Oracle_Sword_Tap
+SOUND fire,						"Effects/fire";				# Oracle_EmberSeed
+SOUND gale_seed,				"Effects/gale_seed";		# Oracle_GaleSeed
+SOUND leaves,					"Effects/leaves";			# Oracle_Bush_Cut
+SOUND mystery_seed,				"Effects/mystery_seed";		# Oracle_MysterySeed
+SOUND object_fall,				"Effects/object_fall";		# Oracle_Block_Fall
+SOUND rock_shatter,				"Effects/rock_shatter";		# Oracle_Rock_Shatter
+SOUND scent_seed,				"Effects/scent_seed";		# Oracle_ScentSeed_Shot
+SOUND scent_seed_pod,			"Effects/scent_seed_pod";	# Oracle_ScentSeed
 
 # Items -----------------------------------------------------------------------
 
-SOUND biggoron_sword,			"Items/biggoron_sword";
-SOUND bomb_bounce,				"Items/bomb_bounce";
-SOUND bomb_explode,				"Items/bomb_explode";
-SOUND boomerang_loop,			"Items/boomerang_loop";
-SOUND fire_rod,					"Items/fire_rod";
-SOUND key_bounce,				"Items/key_bounce";
-SOUND seed_shooter,				"Items/seed_shooter";
-SOUND shield,					"Items/shield";
-SOUND shield_deflect,			"Items/shield_deflect";
-SOUND shoot_projectile,			"Items/shoot_projectile";
-SOUND shovel,					"Items/shovel";
-SOUND switch_hook_loop,			"Items/switch_hook_loop";
-SOUND switch_hook_switch,		"Items/switch_hook_switch";
-SOUND sword_beam,				"Items/sword_beam";
-SOUND sword_charge,				"Items/sword_charge";
-SOUND sword_slash_1,			"Items/sword_slash_1";
-SOUND sword_slash_2,			"Items/sword_slash_2";
-SOUND sword_slash_3,			"Items/sword_slash_3";
-SOUND sword_spin,				"Items/sword_spin";
+SOUND biggoron_sword,			"Items/biggoron_sword";		# Oracle_BiggoronsSword
+SOUND bomb_bounce,				"Items/bomb_bounce";		# Oracle_Bomb_Drop
+SOUND bomb_explode,				"Items/bomb_explode";		# Oracle_Bomb_Blow
+SOUND boomerang_loop,			"Items/boomerang_loop";		# Oracle_Boomerang
+SOUND fire_rod,					"Items/fire_rod";			# (from Link's Awakening)
+SOUND key_bounce,				"Items/key_bounce";			# Oracle_Key_Bounce
+SOUND seed_shooter,				"Items/seed_shooter";		# OOA_SeedShooter
+SOUND shield,					"Items/shield";				# Oracle_Shield
+SOUND shield_deflect,			"Items/shield_deflect";		# Oracle_Shield_Deflect
+SOUND shoot_projectile,			"Items/shoot_projectile";	# Oracle_Enemy_Spit
+SOUND shovel,					"Items/shovel";				# Oracle_Shovel
+SOUND switch_hook_loop,			"Items/switch_hook_loop";	# OOA_SwitchHook_Loop
+SOUND switch_hook_switch,		"Items/switch_hook_switch";	# OOA_SwitchHook_Switch
+SOUND sword_beam,				"Items/sword_beam";			# Oracle_Sword_Shoot
+SOUND sword_charge,				"Items/sword_charge";		# Oracle_Sword_Charge
+SOUND sword_slash_1,			"Items/sword_slash_1";		# Oracle_Sword_Slash1
+SOUND sword_slash_2,			"Items/sword_slash_2";		# Oracle_Sword_Slash2
+SOUND sword_slash_3,			"Items/sword_slash_3";		# Oracle_Sword_Slash3
+SOUND sword_spin,				"Items/sword_spin";			# Oracle_Sword_Spin
 
 # Misc ------------------------------------------------------------------------
 
-SOUND dungeon_signal,			"Misc/dungeon_signal";
-SOUND fanfare_item,				"Misc/fanfare_item";
-SOUND fanfare_essence,			"Misc/fanfare_essence";
-SOUND low_health_loop,			"Misc/low_health_loop";
-SOUND minecart_loop,			"Misc/minecart_loop";
-SOUND room_exit,				"Misc/room_exit";
-SOUND secret,					"Misc/secret";
-SOUND secret_long,				"Misc/secret_long";
+SOUND dungeon_signal,			"Misc/dungeon_signal";		# Oracle_Dungeon_Signal
+SOUND fanfare_item,				"Misc/fanfare_item";		# Oracle_Fanfare_Item
+SOUND fanfare_essence,			"Misc/fanfare_essence";		# Oracle_Fanfare_Essence
+SOUND low_health_loop,			"Misc/low_health_loop";		# Oracle_LowHealth
+SOUND minecart_loop,			"Misc/minecart_loop";		# Oracle_MineCart
+SOUND room_exit,				"Misc/room_exit";			# Oracle_Stairs
+SOUND secret,					"Misc/secret";				# Oracle_Secret
+SOUND secret_long,				"Misc/secret_long";			# Oracle_Secret_Long
 
 # Monster ---------------------------------------------------------------------
 
-SOUND monster_die,				"Monster/monster_die";
-SOUND monster_hurt,				"Monster/monster_hurt";
-SOUND monster_jump,				"Monster/monster_jump";
+SOUND monster_die,				"Monster/monster_die";		# Oracle_Enemy_Die
+SOUND monster_hurt,				"Monster/monster_hurt";		# Oracle_Enemy_Hit
+SOUND monster_jump,				"Monster/monster_jump";		# Oracle_Enemy_Jump
 
 # Pickups ---------------------------------------------------------------------
 
-SOUND get_heart,				"Pickups/get_heart";
-SOUND get_item,					"Pickups/get_item";
-SOUND get_rupee,				"Pickups/get_rupee";
-SOUND get_rupee_loop,			"Pickups/get_rupee_loop";
+SOUND get_heart,				"Pickups/get_heart";		# Oracle_Get_Heart
+SOUND get_item,					"Pickups/get_item";			# Oracle_Get_Item
+SOUND get_rupee,				"Pickups/get_rupee";		# Oracle_Get_Rupee
+SOUND get_rupee_loop,			"Pickups/get_rupee_loop";	# ??
 
 # Player ----------------------------------------------------------------------
 
-SOUND player_fall,				"Player/player_fall";
-SOUND player_hurt,				"Player/player_hurt";
-SOUND player_jump,				"Player/player_jump";
-SOUND player_land,				"Player/player_land";
-SOUND player_pickup,			"Player/player_pickup";
-SOUND player_swim,				"Player/player_swim";
-SOUND player_throw,				"Player/player_throw";
-SOUND player_wade,				"Player/player_wade";
+SOUND player_fall,				"Player/player_fall";		# Oracle_Link_Fall
+SOUND player_hurt,				"Player/player_hurt";		# Oracle_Link_Hurt
+SOUND player_jump,				"Player/player_jump";		# Oracle_Link_Jump
+SOUND player_land,				"Player/player_land";		# Oracle_Link_LandRun
+SOUND player_pickup,			"Player/player_pickup";		# Oracle_Link_PickUp
+SOUND player_swim,				"Player/player_swim";		# Oracle_Link_Swim
+SOUND player_throw,				"Player/player_throw";		# Oracle_Link_Throw
+SOUND player_wade,				"Player/player_wade";		# Oracle_Link_Wade
 
 # Tiles -----------------------------------------------------------------------
 
-SOUND block_push,				"Tiles/block_push";
-SOUND blue_roller,				"Tiles/blue_roller";
-SOUND chest_open,				"Tiles/chest_open";
-SOUND crossing_gate,			"Tiles/crossing_gate";
-SOUND dungeon_door,				"Tiles/dungeon_door";
-SOUND floor_crumble,			"Tiles/floor_crumble";
-SOUND switch,					"Tiles/switch";
-SOUND turnstile,				"Tiles/turnstile";
+SOUND barrier,					"Tiles/barrier";			# Oracle_Barrier
+SOUND block_push,				"Tiles/block_push";			# Oracle_Block_Push
+SOUND blue_roller,				"Tiles/blue_roller";		# OOS_BlueRoller
+SOUND chest_open,				"Tiles/chest_open";			# Oracle_Chest
+SOUND crossing_gate,			"Tiles/crossing_gate";		# Oracle_MineCart_Track
+SOUND dungeon_door,				"Tiles/dungeon_door";		# Oracle_Dungeon_Door
+SOUND floor_crumble,			"Tiles/floor_crumble";		# Oracle_FloorCrumble
+SOUND switch,					"Tiles/switch";				# Oracle_Switch
+SOUND turnstile,				"Tiles/turnstile";			# Oracle_Dungeon_Spinner
 
 # Menu ------------------------------------------------------------------------
 
-SOUND menu_open,				"UI/menu_open";
-SOUND menu_close,				"UI/menu_close";
-SOUND menu_next,				"UI/menu_next";
-SOUND menu_cursor_move,			"UI/menu_cursor_move";
-SOUND menu_select,				"UI/menu_select";
-SOUND text_continue,			"UI/text_continue";
-SOUND text_letter,				"UI/text_letter";
+SOUND menu_open,				"UI/menu_open";				# Oracle_PauseMenu_Open
+SOUND menu_close,				"UI/menu_close";			# Oracle_PauseMenu_Close
+SOUND menu_next,				"UI/menu_next";				# ??
+SOUND menu_cursor_move,			"UI/menu_cursor_move";		# Oracle_Menu_Cursor
+SOUND menu_select,				"UI/menu_select";			# Oracle_Menu_Select
+SOUND text_continue,			"UI/text_continue";			# Oracle_Text_Done
+SOUND text_letter,				"UI/text_letter";			# Oracle_Text_Letter
 

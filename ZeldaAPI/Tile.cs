@@ -68,6 +68,12 @@ namespace ZeldaAPI {
 		void RotateCounterClockwise(int amount = 1);
 	}
 
+	public interface Bridge : Tile {
+		void BuildBridge(bool instantaneous = false, bool rememberState = false);
+		void DestroyBridge(bool instantaneous = false, bool rememberState = false);
+		bool IsBridgeBuilt { get; }
+	}
+
 	public interface MinecartTrack : Tile {
 		void SwitchTrackDirection();
 	}

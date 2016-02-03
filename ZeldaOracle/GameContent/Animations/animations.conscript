@@ -161,7 +161,7 @@ ANIM tile_boss_key_door_open;
 #ANIM tile_boss_door_close;		CLONE tile_door_close; SHIFTSOURCE (3, 0); END;
 
 ANIM tile_regrowable_plant_regrow; SUBSTRIP clamp;
-	ADD frame, 12, (4, 2); END;
+	ADD frame, 12, (1, 5); END;
 	
 ANIM tile_whirlpool; SUBSTRIP repeat;
 	ADD frame, 9, (0, 14); ADD frame, 4, (1, 14); ADD frame, 6, (2, 14); ADD frame, 6, (3, 14);
