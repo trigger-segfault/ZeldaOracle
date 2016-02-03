@@ -23,7 +23,6 @@ SPRITESHEET "zoneset_large";
 #ANIM tile_lantern; SUBSTRIP repeat;
 	#ADD strip, 16, 4, (1, 8); END;
 	
-
 ANIM tile_lantern_lit; SUBSTRIP repeat;
 	ADD frame, 16, tile_lantern_lit_1;
 	ADD frame, 16, tile_lantern_lit_2;
@@ -31,6 +30,11 @@ ANIM tile_lantern_lit; SUBSTRIP repeat;
 	ADD frame, 16, tile_lantern_lit_4;
 	END;
 	
+ANIM tile_spiked_floor; SUBSTRIP repeat;
+	ADD frame, 15, (7, 8);
+	ADD frame, 15, (6, 8);
+	ADD strip, 15, 4, (5, 8); END;
+
 # Doors
 
 ANIM tile_door_closed;
@@ -401,6 +405,8 @@ ANIM color_cube_red_yellow_down; SUBSTRIP clamp;
 
 SPRITESHEET "zoneset_small";
 
+# Wall Torches
+
 ANIM tile_wall_torch_right; SUBSTRIP repeat;
 	INSERT frame,  0, 16,    (15, 8), (0, 0);
 	INSERT strip, 16, 16, 4, (14, 8), (0, 0);
@@ -437,7 +443,7 @@ ANIM tile_wall_torch_down; SUBSTRIP repeat;
 	INSERT frame, 80, 16,    (16, 8), (8, 0);
 	INSERT frame, 0, 96, (17, 9), (0, 8);
 	INSERT frame, 0, 96, (17, 9), (8, 8); END;
-	
+
 # GENERAL LIQUID
 
 ANIM tile_puddle; SUBSTRIP repeat;

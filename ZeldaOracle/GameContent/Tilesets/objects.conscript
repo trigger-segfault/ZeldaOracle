@@ -202,6 +202,11 @@ TILE cracked_floor;
 	SPRITE		tile_cracked_floor;
 END;
 
+TILE spiked_floor;
+	TYPE		TileSpikedFloor;
+	SPRITE		tile_spiked_floor;
+END;
+
 TILE moving_platform;
 	TYPE		TilePlatform;
 	SPRITE		tile_moving_platform;
@@ -710,7 +715,7 @@ SETTILE (11, 10), minecart_track_corner_southeast;
 SETTILE ( 0, 11), eye_statue;
 # Slate thing
 SETTILE ( 2, 11), locked_block;
-# Floor spikes
+SETTILE ( 3, 11), spiked_floor;
 # Bridge horizontal
 # Bridge Vertical
 

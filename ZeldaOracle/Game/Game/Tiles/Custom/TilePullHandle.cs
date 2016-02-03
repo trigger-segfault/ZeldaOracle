@@ -82,7 +82,7 @@ namespace ZeldaOracle.Game.Tiles {
 			CollisionStyle		= CollisionStyle.Circular;
 			IsSolid				= true;
 			ClingWhenStabbed	= false;
-
+			SolidType			= TileSolidType.HalfSolid;
 			Rectangle2I collisionBox = new Rectangle2I(4, 4, 8, 8);
 			collisionBox.ExtendEdge(direction, 5);
 			CollisionModel = new CollisionModel(collisionBox);

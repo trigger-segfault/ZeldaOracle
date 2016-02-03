@@ -29,6 +29,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_TILE_WATER_DEEP;
 		public static Animation ANIM_TILE_PUDDLE;
 		public static Animation ANIM_TILE_LANTERN;
+		public static Animation ANIM_TILE_SPIKED_FLOOR;
 		public static Animation ANIM_TILE_LAVAFALL;
 		public static Animation ANIM_TILE_LAVAFALL_BOTTOM;
 		public static Animation ANIM_TILE_LAVAFALL_TOP;

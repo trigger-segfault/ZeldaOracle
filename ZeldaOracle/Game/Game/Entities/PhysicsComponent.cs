@@ -296,30 +296,6 @@ namespace ZeldaOracle.Game.Entities {
 			return closestTile;
 		}
 
-		private bool IsSafeClippingInDirection(Rectangle2F solidBox, int direction) {
-			return (ClipCollisionInfo[direction].IsAllowedClipping &&
-				RoomPhysics.AreEdgesAligned(solidBox,
-				ClipCollisionInfo[direction].CollisionBox, direction));
-		}
-
-		private bool IsSafeClippingTileInDirection(Tile tile, int direction) { // TODO!!!!
-			if (!ClipCollisionInfo[direction].IsAllowedClipping)
-				return false;
-			if (ClipCollisionInfo[direction].CollidedObject == tile)
-				return true;
-
-			Rectangle2F entityBox = PositionedCollisionBox;
-
-			foreach (Rectangle2F box in tile.CollisionModel.Boxes) {
-				Rectangle2F solidBox = Rectangle2F.Translate(box, tile.Position);
-				
-				if (RoomPhysics.AreEdgesAligned(solidBox, ClipCollisionInfo[direction].CollisionBox, direction))
-				{
-					return true;
-				}
-			}
-			return false;
-		}
 		
 		public bool IsMeetingEntity(Entity other, CollisionBoxType collisionBoxType, int maxZDistance = 10) {
 			if (collisionBoxType == CollisionBoxType.Hard)
@@ -353,16 +329,6 @@ namespace ZeldaOracle.Game.Entities {
 		public bool IsCollidingWith(Entity other, CollisionBoxType myBoxType, CollisionBoxType otherBoxType, int maxZDistance = 10) {
 			return CollisionTest.PerformCollisionTest(entity, other,
 				new CollisionTestSettings(null, myBoxType, otherBoxType, maxZDistance)).IsColliding;
-		}
-		
-		// Returns true if the entity moving down the ledge.
-		public bool IsMovingDownLedge(Tile ledgeTile) {
-			return velocity.Dot(Directions.ToVector(ledgeTile.LedgeDirection)) > 0.0f;
-		}
-
-		// Returns true if the entity moving up the ledge.
-		public bool IsMovingUpLedge(Tile ledgeTile) {
-			return velocity.Dot(Directions.ToVector(ledgeTile.LedgeDirection)) < 0.0f;
 		}
 
 
@@ -399,8 +365,18 @@ namespace ZeldaOracle.Game.Entities {
 
 		
 		//-----------------------------------------------------------------------------
-		// Collision Dodging
+		// Internal Collision Tests
 		//-----------------------------------------------------------------------------
+		
+		// Returns true if the entity moving down the ledge.
+		public bool IsMovingDownLedge(Tile ledgeTile) {
+			return velocity.Dot(Directions.ToVector(ledgeTile.LedgeDirection)) > 0.0f;
+		}
+
+		// Returns true if the entity moving up the ledge.
+		public bool IsMovingUpLedge(Tile ledgeTile) {
+			return velocity.Dot(Directions.ToVector(ledgeTile.LedgeDirection)) < 0.0f;
+		}
 
 		public bool CanDodgeCollision(Tile tile, int direction) {
 			if (!CanCollideWithTile(tile))
@@ -435,6 +411,31 @@ namespace ZeldaOracle.Game.Entities {
 					{
 						return true;
 					}
+				}
+			}
+			return false;
+		}
+		
+		private bool IsSafeClippingInDirection(Rectangle2F solidBox, int direction) {
+			return (ClipCollisionInfo[direction].IsAllowedClipping &&
+				RoomPhysics.AreEdgesAligned(solidBox,
+				ClipCollisionInfo[direction].CollisionBox, direction));
+		}
+
+		private bool IsSafeClippingTileInDirection(Tile tile, int direction) { // TODO!!!!
+			if (!ClipCollisionInfo[direction].IsAllowedClipping)
+				return false;
+			if (ClipCollisionInfo[direction].CollidedObject == tile)
+				return true;
+
+			Rectangle2F entityBox = PositionedCollisionBox;
+
+			foreach (Rectangle2F box in tile.CollisionModel.Boxes) {
+				Rectangle2F solidBox = Rectangle2F.Translate(box, tile.Position);
+				
+				if (RoomPhysics.AreEdgesAligned(solidBox, ClipCollisionInfo[direction].CollisionBox, direction))
+				{
+					return true;
 				}
 			}
 			return false;
