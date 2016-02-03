@@ -68,6 +68,14 @@ namespace ZeldaOracle.Common.Geometry {
 		//-----------------------------------------------------------------------------
 		// Static methods
 		//-----------------------------------------------------------------------------
+		
+		public static bool Intersecting(CollisionModel model,
+										Vector2F modelPosition,
+										Rectangle2F box)
+		{
+			return Intersecting(model, modelPosition, box, Vector2F.Zero);
+
+		}
 
 		public static bool Intersecting(CollisionModel model,
 										Vector2F modelPosition,

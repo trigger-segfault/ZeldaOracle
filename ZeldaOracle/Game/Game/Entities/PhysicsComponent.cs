@@ -201,6 +201,12 @@ namespace ZeldaOracle.Game.Entities {
 				return false;
 			if (tile.IsHalfSolid && flags.HasFlag(PhysicsFlags.HalfSolidPassable))
 				return false;
+			if (tile.IsLedge && PassOverLedges) {
+				if (ledgeAltitude > 0 ||
+					ledgeTileLocation == tile.Location ||
+					IsMovingDownLedge(tile))
+					return false;
+			}
 			if (customTileCollisionCondition != null)
 				return customTileCollisionCondition(tile);
 			return true;
@@ -263,6 +269,32 @@ namespace ZeldaOracle.Game.Entities {
 							!CanDodgeCollision(tile, direction));
 		}
 		
+		// Return the solid tile that the entity is facing towards if it were at the given position.
+		public Tile GetFacingSolidTile(int direction, float distance = 1.0f) {
+			Rectangle2F box = PositionedCollisionBox;
+			box.ExtendEdge(direction, distance);
+			foreach (Tile tile in entity.RoomControl.TileManager.GetTilesTouching(box)) {
+				if (CanCollideWithTile(tile) &&
+					CollisionModel.Intersecting(tile.CollisionModel, tile.Position, box) &&
+					!IsSafeClippingTile(tile) && !CanDodgeCollision(tile, direction))
+				{
+					return tile;
+				}
+			}
+			return null;
+		}
+
+		private bool IsSafeClippingTile(Tile tile) { // TODO!!!!
+			for (int i = 0; i < Directions.Count; i++) {
+				if (ClipCollisionInfo[i].CollidedObject == tile &&
+					ClipCollisionInfo[i].IsAllowedClipping)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		
 		public bool IsMeetingEntity(Entity other, CollisionBoxType collisionBoxType, int maxZDistance = 10) {
 			if (collisionBoxType == CollisionBoxType.Hard)
 				return IsHardMeetingEntity(other);
@@ -295,6 +327,16 @@ namespace ZeldaOracle.Game.Entities {
 		public bool IsCollidingWith(Entity other, CollisionBoxType myBoxType, CollisionBoxType otherBoxType, int maxZDistance = 10) {
 			return CollisionTest.PerformCollisionTest(entity, other,
 				new CollisionTestSettings(null, myBoxType, otherBoxType, maxZDistance)).IsColliding;
+		}
+		
+		// Returns true if the entity moving down the ledge.
+		public bool IsMovingDownLedge(Tile ledgeTile) {
+			return velocity.Dot(Directions.ToVector(ledgeTile.LedgeDirection)) > 0.0f;
+		}
+
+		// Returns true if the entity moving up the ledge.
+		public bool IsMovingUpLedge(Tile ledgeTile) {
+			return velocity.Dot(Directions.ToVector(ledgeTile.LedgeDirection)) < 0.0f;
 		}
 
 

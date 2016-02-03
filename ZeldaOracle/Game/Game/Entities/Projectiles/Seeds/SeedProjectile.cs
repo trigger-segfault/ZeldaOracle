@@ -16,6 +16,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 
 		private int reboundCounter;
 		private bool reboundOffWalls;
+		private Point2I tileLocation;
 
 
 		//-----------------------------------------------------------------------------
@@ -55,7 +56,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 			Graphics.PlaySprite(GameData.SPR_ITEM_SEEDS[(int) type]);
 			CheckInitialCollision();
 
-			
+			tileLocation = new Point2I(-1, -1);
 		}
 
 		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
@@ -63,6 +64,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 			if (reboundOffWalls && !isInitialCollision) {
 				reboundCounter++;
 				if (!(reboundCounter >= 3 || (tile != null && tile.Flags.HasFlag(TileFlags.AbsorbSeeds)))) {
+					if (!(tile is TileSeedBouncer))
+						tileLocation = new Point2I(-1, -1);
 					return;
 				}
 			}
@@ -79,36 +82,56 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 		}
 
 		private bool AttemptBounce(TileSeedBouncer seedBouncer) {
-			int angle = seedBouncer.Angle;
+			// Determine the angle the we are moving at.
+			angle = Angles.NearestFromVector(physics.Velocity);
 
-			// Make sure velocity is going towards tile, not away from it.
-			bool isMovingTowards = (Physics.Velocity.Dot(seedBouncer.Center - Position) > 0.0f);
+			// Determine the angle to bounce off at.
+			int newAngle = -1;
+			int bouncerAngle = seedBouncer.Angle;
+			int bouncerAngleReverse	= Angles.Reverse(seedBouncer.Angle);
+			int plus1  = Angles.Add(angle, 1, WindingOrder.Clockwise);
+			int plus2  = Angles.Add(angle, 2, WindingOrder.Clockwise);
+			int minus1 = Angles.Add(angle, 1, WindingOrder.CounterClockwise);
+			if (plus2 == bouncerAngle || plus2 == bouncerAngleReverse)
+				newAngle = Angles.Reverse(angle);
+			else if (plus1 == bouncerAngle || plus1 == bouncerAngleReverse)
+				newAngle = Angles.Add(angle, 2, WindingOrder.Clockwise);
+			else if (minus1 == bouncerAngle || minus1 == bouncerAngleReverse)
+				newAngle = Angles.Add(angle, 2, WindingOrder.CounterClockwise);
 			
-			if (isMovingTowards) {
-				Console.WriteLine("BOUNCE");
+			// Start moving in the new angle.
+			if (newAngle >= 0) {
+				angle = newAngle;
+				physics.Velocity = Angles.ToVector(angle) * physics.Velocity.Length;
+				OnCollideTile(seedBouncer, false);
 				return true;
 			}
-
 			return false;
 		}
 
 		public override void Update() {
-			// Check for seed bouncers.
-			foreach (Tile tile in Physics.GetTilesMeeting(CollisionBoxType.Hard)) {
-				TileSeedBouncer seedBouncer = tile as TileSeedBouncer;
-				if (seedBouncer != null && AttemptBounce(seedBouncer))
-					break;
+			Point2I loc = (Point2I) (Physics.PositionedCollisionBox.Center / GameSettings.TILE_SIZE);
+
+			// Check if tile location has changed.
+			if (loc != tileLocation) {
+				Rectangle2F rect = new Rectangle2F(loc * GameSettings.TILE_SIZE,
+					new Vector2F(GameSettings.TILE_SIZE, GameSettings.TILE_SIZE));
+
+				// Only change tile locations if the collision box is fully contained inside the tile.
+				if (rect.Contains(physics.PositionedCollisionBox)) {
+					tileLocation = loc;
+					
+					// Check for seed bouncers in the new location.
+					foreach (Tile tile in RoomControl.TileManager.GetTilesAtLocation(tileLocation)) {
+						TileSeedBouncer seedBouncer = tile as TileSeedBouncer;
+						if (seedBouncer != null) {
+							AttemptBounce(seedBouncer);
+							break;
+						}
+					}
+				}
 			}
 
-			/*
-			Point2I location = RoomControl.GetTileLocation(position);
-			Tile tile = RoomControl.GetTopTile(location);
-			if (tile != null) {
-				tile.OnHitByProjectile(this);
-				if (IsDestroyed)
-					return;
-			}
-			*/
 			base.Update();
 		}
 	}

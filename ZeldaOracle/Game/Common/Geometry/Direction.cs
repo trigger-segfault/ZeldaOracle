@@ -5,14 +5,14 @@ using System.Text;
 
 namespace ZeldaOracle.Common.Geometry {
 	
-	[Flags]
+	/*[Flags]
 	public enum DirectionMask {
 		None	= 0x0,
 		Right	= 0x1,
 		Up		= 0x2,
 		Left	= 0x4,
 		Down	= 0x8,
-	}
+	}*/
 
 	public static class Directions {
 		
@@ -172,10 +172,10 @@ namespace ZeldaOracle.Common.Geometry {
 			return true;
 		}
 		
-		public static DirectionMask GetDirectionBit(int direction) {
+		/*public static DirectionMask GetDirectionBit(int direction) {
 			if (direction >= 0 && direction < Count)
 				return (DirectionMask) (1 << direction);
 			return DirectionMask.None;
-		}
+		}*/
 	}
 }
