@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 using System.Reflection;
 
 namespace ZeldaAPI {
-	/*
-	public interface ICustomScript {
-		void RunScript(ZeldaAPI.Room Room);
-	}*/
-
+	
+	// Custom attributes to give information to the script editor.
 	namespace Attributes {
-
 		public class Description : Attribute {
 			public Description(string description) {
 				this.Text = description;
@@ -21,13 +17,20 @@ namespace ZeldaAPI {
 		}
 	}
 
+	// This is the base class used by the scripting API
 	public class CustomScriptBase {
 		// Common variables, accessible to all scripts:
 		// These will be set before calling RunScript.
 		public Room room;
 		public Game game;
 	}
+	
+	// GameControl interface.
+    public interface Game {
+		// Nothing yet...
+    }
 
+	// RoomControl interface.
     public interface Room {
 		[Attributes.Description("Open all doors in the room.")]
 		void OpenAllDoors(bool instantaneous = false, bool rememberState = false);
@@ -58,6 +61,7 @@ namespace ZeldaAPI {
 		
     }
 
+	// Interface for TileDataInstance
 	public interface TileData {
 		void Spawn();
 		void Enable();
@@ -65,17 +69,6 @@ namespace ZeldaAPI {
 		void SpawnAndEnable();
 		bool IsEnabled { get; }
 	}
-	
-    public interface Game {
-    }
-
-	public class TestClass {
-		public TestClass() {
-		}
-
-		public void DoSomething() {
-		}
-	}
 }
 
-//namespace ZeldaAPI.CustomScripts{public class CustomScript : ICustomScript{public void RunScript(Room Room){Room.OpenAllDoors();}}}
+

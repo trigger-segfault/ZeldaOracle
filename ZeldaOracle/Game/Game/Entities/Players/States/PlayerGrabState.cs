@@ -34,7 +34,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		private bool AttemptPickup() {
-			Tile grabTile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
+			Tile grabTile = player.Physics.GetFacingSolidTile(player.Direction);
 			
 			if (grabTile != null) {
 				int minLevel = grabTile.Properties.GetInteger("pickupable_bracelet_level", Item.Level1);

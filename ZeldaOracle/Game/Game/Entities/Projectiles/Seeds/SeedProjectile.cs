@@ -44,45 +44,14 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 			Graphics.DrawOffset	= new Point2I(-4, -6);
 			centerOffset		= new Point2I(0, -2);
 		}
-
+		
 
 		//-----------------------------------------------------------------------------
-		// Overridden methods
+		// Seed Bouncing
 		//-----------------------------------------------------------------------------
-
-		public override void Initialize() {
-			base.Initialize();
-			reboundCounter = 0;
-			Graphics.PlaySprite(GameData.SPR_ITEM_SEEDS[(int) type]);
-			CheckInitialCollision();
-
-			tileLocation = new Point2I(-1, -1);
-		}
-
-		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
-			// Count the number of rebounds.
-			if (reboundOffWalls && !isInitialCollision) {
-				reboundCounter++;
-				if (!(reboundCounter >= 3 || (tile != null && tile.Flags.HasFlag(TileFlags.AbsorbSeeds)))) {
-					if (!(tile is TileSeedBouncer))
-						tileLocation = new Point2I(-1, -1);
-					return;
-				}
-			}
-
-			// Move 3 pixels into the block from where it collided.
-			if (!isInitialCollision)
-				position += Physics.PreviousVelocity.Normalized * 3.0f;
-
-			DestroyWithEffect();
-		}
-
-		public override void OnCollideMonster(Monster monster) {
-			monster.OnSeedHit(this);
-		}
 
 		private bool AttemptBounce(TileSeedBouncer seedBouncer) {
-			// Determine the angle the we are moving at.
+			// Determine the angle the we are moving in.
 			angle = Angles.NearestFromVector(physics.Velocity);
 
 			// Determine the angle to bounce off at.
@@ -109,6 +78,43 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 			return false;
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Overridden methods
+		//-----------------------------------------------------------------------------
+
+		public override void Initialize() {
+			base.Initialize();
+			reboundCounter = 0;
+			tileLocation = new Point2I(-1, -1);
+			Graphics.PlaySprite(GameData.SPR_ITEM_SEEDS[(int) type]);
+			CheckInitialCollision();
+		}
+
+		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
+			// Count the number of rebounds.
+			if (reboundOffWalls && !isInitialCollision) {
+				reboundCounter++;
+				if (!(reboundCounter >= GameSettings.SEED_PROJECTILE_REBOUND_COUNT ||
+					(tile != null && tile.Flags.HasFlag(TileFlags.AbsorbSeeds))))
+				{
+					if (!(tile is TileSeedBouncer))
+						tileLocation = new Point2I(-1, -1);
+					return;
+				}
+			}
+
+			// Move 3 pixels into the block from where it collided.
+			if (!isInitialCollision)
+				position += Physics.PreviousVelocity.Normalized * 3.0f;
+
+			DestroyWithEffect();
+		}
+
+		public override void OnCollideMonster(Monster monster) {
+			monster.OnSeedHit(this);
+		}
+
 		public override void Update() {
 			Point2I loc = (Point2I) (Physics.PositionedCollisionBox.Center / GameSettings.TILE_SIZE);
 
@@ -124,10 +130,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 					// Check for seed bouncers in the new location.
 					foreach (Tile tile in RoomControl.TileManager.GetTilesAtLocation(tileLocation)) {
 						TileSeedBouncer seedBouncer = tile as TileSeedBouncer;
-						if (seedBouncer != null) {
-							AttemptBounce(seedBouncer);
-							break;
-						}
+						if (seedBouncer != null && AttemptBounce(seedBouncer))
+							return;
 					}
 				}
 			}

@@ -60,6 +60,7 @@ namespace ZeldaOracle.Game {
 		public const float				SLINGSHOT_SEED_SPEED					= 3.0f;
 		public const float				SLINGSHOT_SEED_DEGREE_OFFSET			= 20.0f; // For the 2 extra seed from the hyper slingshot.
 		public const float				SEED_SHOOTER_SHOOT_SPEED				= 3.0f;
+		public const int				SEED_PROJECTILE_REBOUND_COUNT			= 3;
 		public const int				SCENT_POD_DURATION						= 240;
 		public const int				SCENT_POD_FADE_DELAY					= 60;
 		public const int				BOMB_FUSE_TIME							= 108;

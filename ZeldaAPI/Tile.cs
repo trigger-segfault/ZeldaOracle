@@ -5,9 +5,9 @@ using System.Text;
 
 namespace ZeldaAPI {
 
+	// Base interface for all tiles.
 	public interface Tile {
 		string Id { get; }
-
 		bool IsMovable { get; set; }
 	}
 	
@@ -39,18 +39,19 @@ namespace ZeldaAPI {
 		Color Color { get; }
 	}
 
+	public enum DoorState {
+		Opened,
+		Closed,
+	}
+
 	public interface Door : Tile {
 		void Open(bool instantaneous = false, bool rememberState = false);
 		void Close(bool instantaneous = false, bool rememberState = false);
 		bool IsOpen { get; }
 	}
 
-	public enum DoorState {
-		Opened,
-		Closed,
-	}
-
 	public interface Button : Tile {
+		// Nothing yet...
 	}
 
 	public interface Lever : Tile {
@@ -59,6 +60,12 @@ namespace ZeldaAPI {
 	}
 
 	public interface ColorSwitch : Tile {
+		// Nothing yet...
+	}
+
+	public interface SeedBouncer : Tile {
+		void RotateClockwise(int amount = 1);
+		void RotateCounterClockwise(int amount = 1);
 	}
 
 	public interface MinecartTrack : Tile {

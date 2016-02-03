@@ -66,7 +66,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 			else {
 				// Update pushing.
-				Tile actionTile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
+				Tile actionTile = player.Physics.GetFacingSolidTile(player.Direction);
 				CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
 				
 				if (player.Movement.CanPush && actionTile != null && player.Movement.IsMoving &&

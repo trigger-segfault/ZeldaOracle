@@ -154,7 +154,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// Check for tiles to stab.
 			else if (Controls.Arrows[player.Direction].IsDown()) {
 				CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
-				Tile tile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
+				Tile tile = player.Physics.GetFacingSolidTile(player.Direction);
 				if (tile != null && player.Movement.IsMoving && collisionInfo.Type == CollisionType.Tile) {
 					StabTile(tile);
 				}

@@ -446,7 +446,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				}
 
 				// Then check tile interactions.
-				Tile actionTile = physics.GetMeetingSolidTile(position, direction);
+				Tile actionTile = physics.GetFacingSolidTile(direction);
 				if (actionTile != null && actionTile.OnAction(direction)) {
 					Controls.A.Disable(true);
 					StopPushing();

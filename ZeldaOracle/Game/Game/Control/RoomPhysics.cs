@@ -821,7 +821,7 @@ namespace ZeldaOracle.Game.Control {
 		}
 		
 		// Returns true if two rectangles share an edge in the given direction.
-		private bool AreEdgesAligned(Rectangle2F box1, Rectangle2F box2, int edgeDirection) {
+		public static bool AreEdgesAligned(Rectangle2F box1, Rectangle2F box2, int edgeDirection) {
 			return Math.Abs(box1.GetEdge(edgeDirection) - box2.GetEdge(edgeDirection)) < 0.1f;
 		}
 		

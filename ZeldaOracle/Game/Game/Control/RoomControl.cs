@@ -661,6 +661,10 @@ namespace ZeldaOracle.Game.Control {
 			get { return dungeon; }
 		}
 
+		public RoomPhysics RoomPhysics {
+			get { return roomPhysics; }
+		}
+
 		// Called after the player respawns.
 		public event Action<Player> PlayerRespawn {
 			add { eventPlayerRespawn += value; }

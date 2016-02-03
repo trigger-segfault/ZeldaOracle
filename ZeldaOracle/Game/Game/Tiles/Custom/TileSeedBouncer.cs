@@ -12,8 +12,10 @@ using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TileSeedBouncer : Tile {
+	public class TileSeedBouncer : Tile, ZeldaAPI.SeedBouncer {
 
+		// Seed bouncers can be in 8 possible angles, but really only 4
+		// of them are unique (because each angle has an equal opposite angle).
 		private int angle;
 		
 
@@ -29,14 +31,6 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
-		/*
-		public override void OnSeedHit(SeedType seedType, SeedEntity seed) {
-			if (seedType == SeedType.Mystery && !isActivated) {
-				isActivated		= true;
-				sparkleIndex	= 0;
-				timer			= 0;
-			}
-		}*/
 
 		public override void OnInitialize() {
 			angle = Properties.GetInteger("angle", 0);
@@ -46,11 +40,28 @@ namespace ZeldaOracle.Game.Tiles {
 
 
 		//-----------------------------------------------------------------------------
+		// Zelda API methods
+		//-----------------------------------------------------------------------------
+
+		public void RotateClockwise(int amount = 1) {
+			Angle = Angles.Add(angle, amount, WindingOrder.Clockwise);
+		}
+		
+		public void RotateCounterClockwise(int amount = 1) {
+			Angle = Angles.Add(angle, amount, WindingOrder.CounterClockwise);
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
 		public int Angle {
 			get { return angle; }
+			set {
+				angle = value;
+				animationPlayer.SubStripIndex = angle;
+			}
 		}
 	}
 }

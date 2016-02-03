@@ -259,35 +259,61 @@ namespace ZeldaOracle.Game.Entities {
 			}
 			return false;
 		}
-		
-		// Return the solid tile that the entity is facing towards if it were at the given position.
-		public Tile GetMeetingSolidTile(Vector2F position, int direction) {
-			Vector2F checkPos = position + (Directions.ToVector(direction) * 1.0f);
-			return GetTilesMeeting(checkPos, CollisionBoxType.Hard)
-						.FirstOrDefault(tile =>
-							CanCollideWithTile(tile) &&
-							!CanDodgeCollision(tile, direction));
-		}
-		
-		// Return the solid tile that the entity is facing towards if it were at the given position.
-		public Tile GetFacingSolidTile(int direction, float distance = 1.0f) {
-			Rectangle2F box = PositionedCollisionBox;
-			box.ExtendEdge(direction, distance);
-			foreach (Tile tile in entity.RoomControl.TileManager.GetTilesTouching(box)) {
-				if (CanCollideWithTile(tile) &&
-					CollisionModel.Intersecting(tile.CollisionModel, tile.Position, box) &&
-					!IsSafeClippingTile(tile) && !CanDodgeCollision(tile, direction))
-				{
-					return tile;
+				
+		// Return the closest solid tile positioned directly in front of the entity (if there is one).
+		public Tile GetFacingSolidTile(int direction, float distance = 1.0f) { // TODO: return closest tile.
+			Rectangle2F entityBox = PositionedCollisionBox;
+			entityBox.ExtendEdge(direction, distance);
+
+			Tile closestTile = null;
+			int alignAxis = 1 - Directions.ToAxis(direction);
+			float closestDistance = -1.0f;
+
+			foreach (Tile tile in entity.RoomControl.TileManager.GetTilesTouching(entityBox)) {
+				if (CanCollideWithTile(tile)) {
+					foreach (Rectangle2F box in tile.CollisionModel.Boxes) {
+						Rectangle2F solidBox = box;
+						solidBox.Point += tile.Position;
+
+						if (entityBox.Intersects(solidBox) &&
+							!IsSafeClippingInDirection(solidBox, (direction + 1) % 4) &&
+							!IsSafeClippingInDirection(solidBox, (direction + 2) % 4) &&
+							!IsSafeClippingInDirection(solidBox, (direction + 3) % 4) &&
+							!CanDodgeCollision(solidBox, direction))
+						{
+							float distToEdge = Math.Max(
+								entityBox.TopLeft[alignAxis] - solidBox.BottomRight[alignAxis],
+								solidBox.TopLeft[alignAxis] - entityBox.BottomRight[alignAxis]);
+							if (closestTile == null || distToEdge < closestDistance) {
+								closestTile = tile;
+								closestDistance = distToEdge;
+								break;
+							}
+						}
+					}
 				}
 			}
-			return null;
+			return closestTile;
 		}
 
-		private bool IsSafeClippingTile(Tile tile) { // TODO!!!!
-			for (int i = 0; i < Directions.Count; i++) {
-				if (ClipCollisionInfo[i].CollidedObject == tile &&
-					ClipCollisionInfo[i].IsAllowedClipping)
+		private bool IsSafeClippingInDirection(Rectangle2F solidBox, int direction) {
+			return (ClipCollisionInfo[direction].IsAllowedClipping &&
+				RoomPhysics.AreEdgesAligned(solidBox,
+				ClipCollisionInfo[direction].CollisionBox, direction));
+		}
+
+		private bool IsSafeClippingTileInDirection(Tile tile, int direction) { // TODO!!!!
+			if (!ClipCollisionInfo[direction].IsAllowedClipping)
+				return false;
+			if (ClipCollisionInfo[direction].CollidedObject == tile)
+				return true;
+
+			Rectangle2F entityBox = PositionedCollisionBox;
+
+			foreach (Rectangle2F box in tile.CollisionModel.Boxes) {
+				Rectangle2F solidBox = Rectangle2F.Translate(box, tile.Position);
+				
+				if (RoomPhysics.AreEdgesAligned(solidBox, ClipCollisionInfo[direction].CollisionBox, direction))
 				{
 					return true;
 				}
