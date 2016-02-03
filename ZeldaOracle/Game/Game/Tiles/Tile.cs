@@ -20,6 +20,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Collisions;
+using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 	
@@ -233,6 +234,9 @@ namespace ZeldaOracle.Game.Tiles {
 		// Called when a seed of the given type hits this tile.
 		public virtual void OnSeedHit(SeedType type, SeedEntity seed) { }
 		
+		// Called when a thrown object crashes onto this tile.
+		public virtual void OnHitByThrownObject(CarriedTile thrownObject) {  }
+
 		// Called when the tile is hit by one of the player's projectile.
 		public virtual void OnHitByProjectile(Projectile projectile) {
 			if (projectile is SeedEntity) {
@@ -780,7 +784,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public bool IsNotCoverable {
-			get { return Flags.HasFlag(TileFlags.NotCoverable); }
+			get { return flags.HasFlag(TileFlags.NotCoverable); }
 		}
 
 		public bool IsDigable {
@@ -801,6 +805,14 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public bool IsBoomerangable {
 			get { return flags.HasFlag(TileFlags.Boomerangable); }
+		}
+
+		public bool IsBreakable {
+			get { return (flags &  (TileFlags.Cuttable |
+									TileFlags.Pickupable |
+									TileFlags.Movable |
+									TileFlags.Switchable |
+									TileFlags.Boomerangable)) != 0; }
 		}
 		
 		public bool IsHole {
@@ -826,7 +838,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 		
 		public virtual bool IsSurface {
-			get { return (!isSolid && !IsPlatform); }
+			get { return ((!isSolid || IsHalfSolid) && !IsPlatform); }
 		}
 		
 		public bool IsPlatform {

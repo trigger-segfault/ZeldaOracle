@@ -34,6 +34,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		private event Action eventCollision;
 		private event Action eventLand;
+		
+		private Point2I tileLocation;
 
 
 
@@ -148,6 +150,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 				Graphics.SubStripIndex = direction;
 			else if (syncAnimationWithAngle)
 				Graphics.SubStripIndex = angle;
+			
+			tileLocation = new Point2I(-1, -1);
 		}
 
 		public override void Update() {
@@ -180,9 +184,24 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 					if (IsDestroyed)
 						return;
 				}
-				else if (type == CollisionType.RoomEdge)
+				else if (type == CollisionType.RoomEdge) {
 					OnCollideRoomEdge();
+					if (IsDestroyed)
+						return;
+				}
 			}
+
+			// Notify surface tiles the projectile is hovering over.
+			Point2I tileLoc = RoomControl.GetTileLocation(position);
+			if (tileLoc != tileLocation && RoomControl.IsTileInBounds(tileLoc) && zPosition < 10.0f) { // TODO: magic number
+				Tile tile = RoomControl.GetTopTile(tileLoc);
+				if (tile != null) {
+					tile.OnHitByProjectile(this);
+					if (IsDestroyed)
+						return;
+				}
+			}
+			tileLocation = tileLoc;
 
 			if (owner is Player) {
 				// Collide with monster tools.

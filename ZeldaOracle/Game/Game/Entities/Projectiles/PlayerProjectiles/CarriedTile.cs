@@ -76,6 +76,17 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 					return;
 			}
 
+			// Collide with surface tiles.
+			Point2I tileLoc = RoomControl.GetTileLocation(position);
+			if (RoomControl.IsTileInBounds(tileLoc)) {
+				Tile tile = RoomControl.GetTopTile(tileLoc);
+				if (tile != null) {
+					tile.OnHitByThrownObject(this);
+					if (IsDestroyed)
+						return;
+				}
+			}
+
 			Break();
 		}
 

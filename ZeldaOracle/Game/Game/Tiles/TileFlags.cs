@@ -36,7 +36,7 @@ namespace ZeldaOracle.Game.Tiles {
 	}
 
 	[Flags]
-	public enum TileFlags : ulong {
+	public enum TileFlags {
 		None			= 0,
 		Default			= 0,			// Default tile flags.
 				

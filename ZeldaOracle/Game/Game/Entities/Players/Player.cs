@@ -183,7 +183,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			
 			// Break any breakable blocks the player respawns and collides with.
 			foreach (Tile tile in Physics.GetTilesMeeting(CollisionBoxType.Hard)) {
-				if (tile.IsSolid && tile.Layer > 0)
+				if (tile.IsSolid && tile.IsBreakable && tile.Layer > 0)
 					tile.Break(false);
 			}
 		}

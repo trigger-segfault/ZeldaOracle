@@ -453,9 +453,9 @@ END;
 # ---- Lever ------------------------------------------------------------------
 
 TILE lever;
-	TYPE TileLever;
-	SOLID block;
-	FLAGS AbsorbSeeds;
+	TYPE		TileLever;
+	HALFSOLID	block;
+	FLAGS		AbsorbSeeds;
 	SPRITEINDEX	0, tile_lever_left;
 	SPRITEINDEX	1, tile_lever_right;
 	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "Lever", "Can the lever only be switched once?"),

@@ -65,10 +65,6 @@ namespace ZeldaOracle.Game.Tiles {
 			Toggle();
 		}
 
-		public override void OnBoomerang() {
-			Toggle();
-		}
-
 		public override void OnBombExplode() {
 			Toggle();
 		}
@@ -76,6 +72,10 @@ namespace ZeldaOracle.Game.Tiles {
 		public override bool OnDig(int direction) {
 			Toggle();
 			return false;
+		}
+
+		public override void OnHitByThrownObject(CarriedTile thrownObject) {
+			Toggle();
 		}
 
 		public override void OnHitByProjectile(Projectile projectile) {
@@ -98,6 +98,10 @@ namespace ZeldaOracle.Game.Tiles {
 			else if (projectile is SwordBeam) {
 				if (Toggle())
 					(projectile as SwordBeam).Intercept();
+			}
+			else if (projectile is PlayerBoomerang) {
+				if (Toggle())
+					(projectile as PlayerBoomerang).Intercept();
 			}
 		}
 

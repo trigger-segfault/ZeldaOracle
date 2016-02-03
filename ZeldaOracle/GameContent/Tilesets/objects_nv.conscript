@@ -68,7 +68,7 @@ END;
 
 TILE color_switch;
 	TYPE		TileColorSwitch;
-	SOLID		block;
+	HALFSOLID	block;
 	FLAGS		AbsorbSeeds;
 	SPRITEINDEX	0, tile_color_switch_blue;
 	SPRITEINDEX	1, tile_color_switch_red;
