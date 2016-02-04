@@ -106,7 +106,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public bool IsRaised {
-			get { return IsRaised; }
+			get { return isRaised; }
 		}
 	}
 }

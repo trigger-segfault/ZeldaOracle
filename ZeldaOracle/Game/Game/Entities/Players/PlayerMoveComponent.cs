@@ -62,6 +62,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private Vector2F			holeSlipVelocity;
 		private Point2I				holeEnterQuadrent;
 		private bool				fallingInHole;
+		private bool				isOnColorBarrier;
 
 		// Movement modes.
 		private PlayerMotionType	mode;
@@ -108,6 +109,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			holeDoomTimer			= 0;
 			holeSlipVelocity		= Vector2F.Zero;
 			fallingInHole			= false;
+			isOnColorBarrier		= false;
 
 			// Controls.
 			analogMode		= false;
@@ -539,6 +541,20 @@ namespace ZeldaOracle.Game.Entities.Players {
 				if (tile.IsLedge && moveDirection == tile.LedgeDirection && !tile.IsMoving)
 					TryLedgeJump(tile.LedgeDirection);
 			}
+			
+			// Check for walking on color barriers.
+			if (player.IsOnGround && (player.Physics.TopTile is TileColorBarrier) && ((TileColorBarrier) player.Physics.TopTile).IsRaised) {
+				if (!isOnColorBarrier) {
+					isOnColorBarrier = true;
+					player.Graphics.DrawOffset -= new Point2I(0, 3);
+				}
+			}
+			else {
+				if (player.IsOnGround && isOnColorBarrier) {
+					isOnColorBarrier = false;
+					player.Graphics.DrawOffset += new Point2I(0, 3);
+				}
+			}
 		}
 
 		private bool TryLedgeJump(int ledgeDirection) {
@@ -634,6 +650,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public Point2I JumpStartTile {
 			get { return jumpStartTile; }
 			set { jumpStartTile = value; }
+		}
+
+		public bool IsOnColorBarrier {
+			get { return isOnColorBarrier; }
 		}
 	}
 }

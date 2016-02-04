@@ -66,10 +66,11 @@ namespace ZeldaOracle.Game.Debug {
 
 			// C: Change color barrier color.
 			if (Keyboard.IsKeyPressed(Keys.C)) {
-				Dungeon dungeon = RoomControl.Dungeon;
-				if (dungeon != null) {
-					PuzzleColor c = (dungeon.ColorSwitchColor == PuzzleColor.Blue ? PuzzleColor.Red : PuzzleColor.Blue);
-					gameControl.PushRoomState(new RoomStateColorBarrier(c));
+				if (RoomControl.Dungeon != null) {
+					PuzzleColor c = (RoomControl.Dungeon.ColorSwitchColor == PuzzleColor.Blue ? PuzzleColor.Red : PuzzleColor.Blue);
+					RoomControl.Dungeon.ColorSwitchColor = c;
+					if (RoomControl.GetTilesOfType<TileColorBarrier>().Any())
+						gameControl.PushRoomState(new RoomStateColorBarrier(c));
 				}
 			}
 			// CTRL+R: Restart the game.
