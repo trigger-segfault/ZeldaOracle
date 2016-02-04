@@ -63,6 +63,7 @@ namespace ZeldaOracle.Game.Worlds {
 			properties.BaseProperties.Set("boss_key",	false);
 			properties.BaseProperties.Set("map",		false);
 			properties.BaseProperties.Set("compass",	false);
+			properties.BaseProperties.Set("color_switch_color", (int) PuzzleColor.Blue);
 		}
 
 		public Dungeon(string id, string name) : 
@@ -217,6 +218,11 @@ namespace ZeldaOracle.Game.Worlds {
 				}
 				return highest;
 			}
+		}
+
+		public PuzzleColor ColorSwitchColor {
+			get { return (PuzzleColor) properties.GetInteger("color_switch_color", (int) PuzzleColor.Blue); }
+			set { properties.Set("color_switch_color", (int) value); }
 		}
 	}
 }

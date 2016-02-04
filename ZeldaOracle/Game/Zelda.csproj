@@ -329,6 +329,7 @@
     <Compile Include="Game\GameStates\RoomStates\RoomStateNormal.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateQueue.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateAction.cs" />
+    <Compile Include="Game\GameStates\RoomStates\RoomStateColorBarrier.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateTurnstile.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateStack.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomState.cs" />

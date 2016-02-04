@@ -57,6 +57,10 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_TILE_CROSSING_GATE_RAISE;
 		public static Animation ANIM_TILE_CROSSING_GATE_LOWER;
 		public static Animation ANIM_TILE_SEED_BOUNCER;
+		public static Animation ANIM_TILE_COLOR_BARRIER_BLUE_RAISE;
+		public static Animation ANIM_TILE_COLOR_BARRIER_BLUE_LOWER;
+		public static Animation ANIM_TILE_COLOR_BARRIER_RED_RAISE;
+		public static Animation ANIM_TILE_COLOR_BARRIER_RED_LOWER;
 	
 		// Player animations.
 		public static Animation ANIM_PLAYER_DEFAULT;

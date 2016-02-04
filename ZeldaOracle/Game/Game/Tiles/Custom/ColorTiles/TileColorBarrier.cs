@@ -3,19 +3,56 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles {
 
 	public class TileColorBarrier : Tile {
+
+		private bool isRaised;
+		private PuzzleColor color;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public TileColorBarrier() {
+			animationPlayer = new AnimationPlayer();
+		}
 
+
+		//-----------------------------------------------------------------------------
+		// Color Barrier Methods
+		//-----------------------------------------------------------------------------
+
+		public void RaiseOrLower() {
+
+		}
+
+		public void Raise() {
+			if (!isRaised) {
+				isRaised	= true;
+				IsSolid		= true;
+				if (color == PuzzleColor.Blue)
+					animationPlayer.Play(GameData.ANIM_TILE_COLOR_BARRIER_BLUE_RAISE);
+				else
+					animationPlayer.Play(GameData.ANIM_TILE_COLOR_BARRIER_RED_RAISE);
+			}
+		}
+		
+		public void Lower() {
+			if (isRaised) {
+				isRaised	= false;
+				IsSolid		= false;
+				if (color == PuzzleColor.Blue)
+					animationPlayer.Play(GameData.ANIM_TILE_COLOR_BARRIER_BLUE_LOWER);
+				else
+					animationPlayer.Play(GameData.ANIM_TILE_COLOR_BARRIER_RED_LOWER);
+			}
 		}
 
 
@@ -24,16 +61,39 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public override void OnInitialize() {
-			PuzzleColor color = Color;
+			this.color		= Color;
+			this.isRaised	= (color == PuzzleColor.Blue);
 
-			if (color == PuzzleColor.Red) {
-				IsSolid = false;
-				CustomSprite = GameData.SPR_TILE_COLOR_BARRIER_RED_LOWERED;
+			Dungeon dungeon = RoomControl.Dungeon;
+			if (dungeon != null)
+				this.isRaised = (dungeon.ColorSwitchColor == color);
+
+			this.IsSolid = isRaised;
+			
+			// Set the sprite.
+			if (isRaised) {
+				if (color == PuzzleColor.Blue)
+					animationPlayer.Play(GameData.ANIM_TILE_COLOR_BARRIER_BLUE_RAISE);
+				else
+					animationPlayer.Play(GameData.ANIM_TILE_COLOR_BARRIER_RED_RAISE);
 			}
-			else if (color == PuzzleColor.Blue) {
-				IsSolid = true;
-				CustomSprite = GameData.SPR_TILE_COLOR_BARRIER_BLUE_RAISED;
+			else {
+				if (color == PuzzleColor.Blue)
+					animationPlayer.Play(GameData.ANIM_TILE_COLOR_BARRIER_BLUE_LOWER);
+				else
+					animationPlayer.Play(GameData.ANIM_TILE_COLOR_BARRIER_RED_LOWER);
 			}
+
+			animationPlayer.PlaybackTime = animationPlayer.Animation.Duration;
+		}
+
+		public override void UpdateGraphics() {
+			animationPlayer.Update();
+			base.UpdateGraphics();
+		}
+
+		public override void Update() {
+			base.Update();
 		}
 
 
@@ -45,5 +105,8 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return (PuzzleColor) Properties.Get("color", (int) PuzzleColor.Red); }
 		}
 
+		public bool IsRaised {
+			get { return IsRaised; }
+		}
 	}
 }

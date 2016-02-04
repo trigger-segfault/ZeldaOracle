@@ -308,7 +308,22 @@ ANIM tile_seed_bouncer;
 	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_northeast;
 	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_vertical;
 	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_northwest; END;
-
+ANIM tile_color_barrier_blue_raise; SUBSTRIP clamp;
+	ADD frame, 2, tile_color_barrier_blue_lowered;
+	ADD frame, 6, tile_color_barrier_blue_halfway;
+	ADD frame, 1, tile_color_barrier_blue_raised; END;
+ANIM tile_color_barrier_blue_lower; SUBSTRIP clamp;
+	ADD frame, 2, tile_color_barrier_blue_raised;
+	ADD frame, 6, tile_color_barrier_blue_halfway;
+	ADD frame, 1, tile_color_barrier_blue_lowered; END;
+ANIM tile_color_barrier_red_raise; SUBSTRIP clamp;
+	ADD frame, 2, tile_color_barrier_red_lowered;
+	ADD frame, 6, tile_color_barrier_red_halfway;
+	ADD frame, 1, tile_color_barrier_red_raised; END;
+ANIM tile_color_barrier_red_lower; SUBSTRIP clamp;
+	ADD frame, 2, tile_color_barrier_red_raised;
+	ADD frame, 6, tile_color_barrier_red_halfway;
+	ADD frame, 1, tile_color_barrier_red_lowered; END;
 
 #==============================================================
 # Color Cube Animations

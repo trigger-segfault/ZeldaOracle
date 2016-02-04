@@ -393,6 +393,18 @@ TILE color_barrier;
 	PROPERTIES	(integer, color, 0, "Color", "", "Color", "The color of the barrier (red or blue).");
 END;
 
+TILE color_barrier_blue;
+	CLONE		color_barrier;
+	SPRITE		tile_color_barrier_red_lowered;
+	PROPERTIES	(integer, color, 0);
+END;
+
+TILE color_barrier_red;
+	CLONE		color_barrier;
+	SPRITE		tile_color_barrier_blue_raised;
+	PROPERTIES	(integer, color, 2);
+END;
+
 # ---- Color Statue -----------------------------------------------------------
 
 TILE color_statue;
@@ -680,8 +692,8 @@ SETTILE ( 4, 5), color_lantern;
 SETTILE ( 5, 5), color_jump_pad_red;
 SETTILE ( 6, 5), color_tile_blue;
 SETTILE ( 7, 5), color_tile_red;
-# Color barrier blue
-# Color barrier red
+SETTILE ( 8, 5), color_barrier_blue;
+SETTILE ( 9, 5), color_barrier_red;
 SETTILE (10, 5), moving_platform;
 # Hardened lava
 

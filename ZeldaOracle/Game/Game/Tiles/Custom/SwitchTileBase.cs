@@ -33,6 +33,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public virtual void OnToggle(bool switchState) {}
 		
+		public virtual void SetSwitchState(bool switchState) {
+			this.switchState = switchState;
+		}
+
 		public bool Toggle() {
 			bool switchOnce = Properties.Get("switch_once", false);
 			bool hasSwitched = Properties.Get("has_switched", false);
@@ -40,6 +44,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (!switchOnce || !hasSwitched) {
 				switchState = !switchState;
 
+				SetSwitchState(switchState);
 				OnToggle(switchState);
 				GameControl.FireEvent(this, "event_toggle", this);
 
@@ -107,6 +112,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void OnInitialize() {
 			switchState = Properties.Get("switch_state", false);
+			SetSwitchState(switchState);
 		}
 
 

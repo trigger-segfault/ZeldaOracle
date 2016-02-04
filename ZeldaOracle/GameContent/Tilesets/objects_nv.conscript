@@ -72,9 +72,10 @@ TILE color_switch;
 	FLAGS		AbsorbSeeds;
 	SPRITEINDEX	0, tile_color_switch_blue;
 	SPRITEINDEX	1, tile_color_switch_red;
-	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "", "Can the color switch only be switched once?"),
-				(boolean, switch_state,		false,	"Switch State",		"", "", "The switch state of the color switch (false = blue, true = red)."),
-				(boolean, remember_state,	false,	"Remember State",	"", "", "Will the color switch's state be remembered after leaving the room?");
+	PROPERTIES	(boolean, switch_once,			false,	"Switch Once",			"", "", "Can the color switch only be switched once?"),
+				(boolean, switch_state,			false,	"Switch State",			"", "", "The switch state of the color switch (false = blue, true = red)."),
+				(boolean, remember_state,		false,	"Remember State",		"", "", "Will the color switch's state be remembered after leaving the room?"),
+				(boolean, sync_with_dungeon,	false,	"Sync With Dungeon",	"", "", "Will the color switch's state be syncronized with other color switches in the dungeon?");
 	EVENT		event_toggle, "Toggle", "Occurs when the Color Switch changes color.", (ColorSwitch, colorSwitch);
 END;
 

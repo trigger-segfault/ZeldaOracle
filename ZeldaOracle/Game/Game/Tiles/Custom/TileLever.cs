@@ -28,28 +28,16 @@ namespace ZeldaOracle.Game.Tiles {
 		// Lever Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnToggle(bool switchState) {/*
-			if (switchState)
-				CustomSprite = GameData.SPR_TILE_LEVER_RIGHT;
-			else
-				CustomSprite = GameData.SPR_TILE_LEVER_LEFT;*/
-			SpriteIndex = (switchState ? 1 : 0);
-
+		public override void OnToggle(bool switchState) {
 			AudioSystem.PlaySound(GameData.SOUND_SWITCH);
 		}
-
-
-		//-----------------------------------------------------------------------------
-		// Overridden methods
-		//-----------------------------------------------------------------------------
-
-		public override void OnInitialize() {
-			base.OnInitialize();
-			/*
-			if (SwitchState)
-				CustomSprite = GameData.SPR_TILE_LEVER_RIGHT;
-			else
-				CustomSprite = GameData.SPR_TILE_LEVER_LEFT;*/
+		
+		public override void SetSwitchState(bool switchState) {
+			base.SetSwitchState(switchState);
+			//if (switchState)
+				//CustomSprite = GameData.SPR_TILE_LEVER_RIGHT;
+			//else
+				//CustomSprite = GameData.SPR_TILE_LEVER_LEFT;
 			SpriteIndex = (SwitchState ? 1 : 0);
 		}
 		

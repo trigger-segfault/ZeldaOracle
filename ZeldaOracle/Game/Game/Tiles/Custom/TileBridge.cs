@@ -231,15 +231,6 @@ namespace ZeldaOracle.Game.Tiles {
 					}
 				}
 			}
-			/*
-			if (bridgeDirection == Directions.Down) {
-				if (ZeldaOracle.Game.Main.Controls.A.IsPressed()) {
-					CreateBridge();
-				}
-				if (ZeldaOracle.Game.Main.Controls.B.IsPressed()) {
-					DestroyBridge();
-				}
-			}*/
 		}
 
 

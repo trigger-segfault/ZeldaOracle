@@ -54,6 +54,7 @@ namespace ZeldaOracle.Game.Debug {
 			CollisionTests,
 			Count,
 		}
+
 		private enum TileDrawInfo {
 			None = 0,
 			CollisionBoxes,
@@ -62,7 +63,15 @@ namespace ZeldaOracle.Game.Debug {
 		}
 		
 		public static void UpdateRoomDebugKeys() {
-			
+
+			// C: Change color barrier color.
+			if (Keyboard.IsKeyPressed(Keys.C)) {
+				Dungeon dungeon = RoomControl.Dungeon;
+				if (dungeon != null) {
+					PuzzleColor c = (dungeon.ColorSwitchColor == PuzzleColor.Blue ? PuzzleColor.Red : PuzzleColor.Blue);
+					gameControl.PushRoomState(new RoomStateColorBarrier(c));
+				}
+			}
 			// CTRL+R: Restart the game.
 			if (Keyboard.IsKeyPressed(Keys.R) && Keyboard.IsKeyDown(Keys.LControl))
 				GameManager.Restart();
