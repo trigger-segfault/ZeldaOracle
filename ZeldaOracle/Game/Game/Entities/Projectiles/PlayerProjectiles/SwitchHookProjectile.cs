@@ -206,11 +206,16 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 
 				// Return after extending to the maximum distance.
 				distance += speed;
-				if (physics.IsColliding || distance >= length)
+				if (distance >= length)
 					BeginReturn(false);
 			}
 
 			base.Update();
+
+			// This should handle room edge collisions.
+			if (!isReturning && !isHooked && !isLifting && physics.IsColliding) {
+				BeginReturn(false);
+			}
 		}
 
 		public override void Draw(RoomGraphics g) {

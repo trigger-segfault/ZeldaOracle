@@ -543,18 +543,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 			
 			// Check for walking on color barriers.
-			if (player.IsOnGround && (player.Physics.TopTile is TileColorBarrier) && ((TileColorBarrier) player.Physics.TopTile).IsRaised) {
-				if (!isOnColorBarrier) {
-					isOnColorBarrier = true;
-					player.Graphics.DrawOffset -= new Point2I(0, 3);
-				}
+			if (player.IsOnGround && (player.Physics.TopTile is TileColorBarrier) &&
+				((TileColorBarrier) player.Physics.TopTile).IsRaised)
+			{
+				IsOnColorBarrier = true;
 			}
-			else {
-				if (player.IsOnGround && isOnColorBarrier) {
-					isOnColorBarrier = false;
-					player.Graphics.DrawOffset += new Point2I(0, 3);
-				}
-			}
+			else if (player.IsOnGround)
+				IsOnColorBarrier = false;
 		}
 
 		private bool TryLedgeJump(int ledgeDirection) {
@@ -654,6 +649,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public bool IsOnColorBarrier {
 			get { return isOnColorBarrier; }
+			set {
+				isOnColorBarrier = value;
+				player.Graphics.DrawOffset = new Point2I(-8, -13); // TODO: magic numbers
+				if (isOnColorBarrier)
+					player.Graphics.DrawOffset -= new Point2I(0, 3);
+			}
 		}
 	}
 }

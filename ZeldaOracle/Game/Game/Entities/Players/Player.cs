@@ -185,13 +185,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public void Respawn() {
 			position	= respawnPosition;
 			direction	= respawnDirection;
+			LandOnSurface(); // Break any breakable blocks the player respawns and collides with.
 			RoomControl.OnPlayerRespawn();
-			
-			// Break any breakable blocks the player respawns and collides with.
-			foreach (Tile tile in Physics.GetTilesMeeting(CollisionBoxType.Hard)) {
-				if (tile.IsSolid && tile.IsBreakable && tile.Layer > 0)
-					tile.Break(false);
-			}
 		}
 
 		// Begin the given player state.
@@ -289,6 +284,20 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 		// Interactions
 		//-----------------------------------------------------------------------------
+		
+		// Land on the given surface, breaking any obstructions.
+		// This is used for when the player begins colliding with the world again in a new position.
+		public void LandOnSurface() {
+			// Break tiles in the way, not if on a color barrier.
+			foreach (Tile tile in Physics.GetTilesMeeting(position, CollisionBoxType.Hard)) {
+				if (tile.IsSolid) {
+					if (tile.IsBreakable)
+						tile.Break(false);
+					else if (tile is TileColorBarrier)
+						movement.IsOnColorBarrier = true;
+				}
+			}
+		}
 
 		// For when the player needs to stop pushing, such as when reading text or opening a chest.
 		public void StopPushing() {

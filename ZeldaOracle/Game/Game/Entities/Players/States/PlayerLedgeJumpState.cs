@@ -25,6 +25,15 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public PlayerLedgeJumpState() {
 			isHoldingSword = false;
 		}
+
+		private bool CanLandAtPosition(Vector2F position) {
+			foreach (Tile tile in player.Physics.GetTilesMeeting(position, CollisionBoxType.Hard)) {
+				if (tile.IsSolid && !(tile is TileColorBarrier) && !tile.IsBreakable) {
+					return false;
+				}
+			}
+			return true;
+		}
 		
 
 		//-----------------------------------------------------------------------------
@@ -54,7 +63,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// Find the landing position, calculating the move distance in pixels.
 			Vector2F pos = player.Position + Directions.ToVector(direction);
 			int distance = 0;
-			while (player.Physics.IsPlaceMeetingSolid(pos, player.Physics.CollisionBox)) {
+			while (!CanLandAtPosition(pos)) {
 				distance += 1;
 				pos += Directions.ToVector(direction);
 			}
@@ -110,7 +119,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				// Find the landing position, calculating the movement distance in pixels.
 				Vector2F pos = player.Position;
 				int distance = 0;
-				while (player.Physics.IsPlaceMeetingSolid(pos, player.Physics.CollisionBox)) {
+				while (!CanLandAtPosition(pos)) {
 					distance += 1;
 					pos += Directions.ToVector(direction);
 				}
@@ -141,12 +150,16 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 			else {
 				player.Physics.Velocity = velocity;
-				isDone = !player.Physics.IsPlaceMeetingSolid(player.Position, player.Physics.CollisionBox);
+				isDone = CanLandAtPosition(player.Position);
 			}
 
 			// If done, return to the normal player state.
 			if (isDone) {
 				player.Physics.Velocity = Vector2F.Zero;
+
+				// TODO: break blocks in the way.
+				player.LandOnSurface();
+
 				if (ledgeExtendsToNextRoom)
 					player.MarkRespawn();
 				if (isHoldingSword)
