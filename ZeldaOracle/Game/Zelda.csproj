@@ -417,7 +417,9 @@
     <Compile Include="Common\Content\ResourceBuilders\AnimationBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\SpriteBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\TilesetBuilder.cs" />
+    <Compile Include="Game\Tiles\Custom\ColorTiles\IColoredTile.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorBarrier.cs" />
+    <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorBlock.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorStatue.cs" />
     <Compile Include="Game\Tiles\Custom\Doors\TileMinecartDoor.cs" />
     <Compile Include="Game\Tiles\Custom\Minecart\TileMinecartStop.cs" />
@@ -443,6 +445,7 @@
     <Compile Include="Game\Tiles\Custom\TileLockedBlock.cs" />
     <Compile Include="Game\Tiles\Custom\Doors\TileDoor.cs" />
     <Compile Include="Game\Tiles\Custom\TileButton.cs" />
+    <Compile Include="Game\Tiles\EventTiles\Puzzles\EventColorTilePuzzle.cs" />
     <Compile Include="Game\Tiles\Internal\AppearingTile.cs" />
     <Compile Include="Game\Tiles\Internal\PlaceHolderTile.cs" />
     <Compile Include="Game\Tiles\ITileset.cs" />
@@ -524,7 +527,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\Collision\" />
-    <Folder Include="Game\Tiles\EventTiles\Puzzles\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

@@ -432,6 +432,32 @@ TILE color_statue_blue;
 	PROPERTIES	(integer, color, 2);
 END;
 
+# ---- Color Block -----------------------------------------------------------
+
+TILE color_block;
+	TYPE		TileColorBlock;
+	SOLID		block;
+	PROPERTIES	(integer, color, 0, "Color", "", "", "The color of the block.");
+END;
+
+TILE color_block_red;
+	CLONE		color_block;
+	SPRITE		tile_color_block_red;
+	PROPERTIES	(integer, color, 0);
+END;
+
+TILE color_block_yellow;
+	CLONE		color_block;
+	SPRITE		tile_color_block_yellow;
+	PROPERTIES	(integer, color, 1);
+END;
+
+TILE color_block_blue;
+	CLONE		color_block;
+	SPRITE		tile_color_block_blue;
+	PROPERTIES	(integer, color, 2);
+END;
+
 # ---- Color Cube Slot --------------------------------------------------------
 
 TILE color_cube_slot;

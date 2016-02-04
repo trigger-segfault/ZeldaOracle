@@ -10,7 +10,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TileColorLantern : Tile, ZeldaAPI.ColorLantern {
+	public class TileColorLantern : Tile, IColoredTile, ZeldaAPI.ColorLantern {
 
 		private Animation flameAnimation;
 

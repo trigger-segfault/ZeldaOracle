@@ -8,13 +8,13 @@ using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TileColorStatue : Tile, IColoredTile, ZeldaAPI.ColorStatue {
+	public class TileColorBlock : Tile, IColoredTile, ZeldaAPI.ColorBlock {
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public TileColorStatue() {
+		public TileColorBlock() {
 
 		}
 
@@ -32,7 +32,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// API Implementations
 		//-----------------------------------------------------------------------------
 
-		ZeldaAPI.Color ZeldaAPI.ColorStatue.Color {
+		ZeldaAPI.Color ZeldaAPI.ColorBlock.Color {
 			get { return (ZeldaAPI.Color) Color; }
 		}
 	}

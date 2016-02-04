@@ -38,6 +38,10 @@ namespace ZeldaAPI {
 	public interface ColorStatue : Tile {
 		Color Color { get; }
 	}
+	
+	public interface ColorBlock : Tile {
+		Color Color { get; }
+	}
 
 	public enum DoorState {
 		Opened,

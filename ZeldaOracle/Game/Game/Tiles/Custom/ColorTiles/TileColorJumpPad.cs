@@ -10,7 +10,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TileColorJumpPad : Tile, ZeldaAPI.ColorJumpPad {
+	public class TileColorJumpPad : Tile, IColoredTile, ZeldaAPI.ColorJumpPad {
 
 		private static List<TileColorJumpPad> markedTiles = new List<TileColorJumpPad>();
 		private static Point2I playerJumpStartTileLocation;

@@ -10,7 +10,7 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TileColorBarrier : Tile {
+	public class TileColorBarrier : Tile, IColoredTile {
 
 		private bool isRaised;
 		private PuzzleColor color;
@@ -29,10 +29,6 @@ namespace ZeldaOracle.Game.Tiles {
 		// Color Barrier Methods
 		//-----------------------------------------------------------------------------
 
-		public void RaiseOrLower() {
-
-		}
-
 		public void Raise() {
 			if (!isRaised) {
 				isRaised	= true;
@@ -41,6 +37,12 @@ namespace ZeldaOracle.Game.Tiles {
 					animationPlayer.Play(GameData.ANIM_TILE_COLOR_BARRIER_BLUE_RAISE);
 				else
 					animationPlayer.Play(GameData.ANIM_TILE_COLOR_BARRIER_RED_RAISE);
+
+				// Break any blocks on top of this tile.
+				foreach (Tile tile in RoomControl.TileManager.GetTilesAtLocation(Location)) {
+					if (tile.Layer > Layer)
+						tile.Break(false);
+				}
 			}
 		}
 		
@@ -90,10 +92,6 @@ namespace ZeldaOracle.Game.Tiles {
 		public override void UpdateGraphics() {
 			animationPlayer.Update();
 			base.UpdateGraphics();
-		}
-
-		public override void Update() {
-			base.Update();
 		}
 
 

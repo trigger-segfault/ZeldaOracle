@@ -29,6 +29,19 @@ END;
 
 
 #==============================================================================
+# Puzzles
+#==============================================================================
+
+EVENTTILE color_tile_puzzle;
+	TYPE		EventColorTilePuzzle;
+	SPRITE		event_tile_color_tile_puzzle;
+	PROPERTIES	(boolean, solve_once, false, "Solve Once", "", "Puzzle", "Can the puzzle only be solved once and not unsolved?");
+	EVENT		solved, "Solved", "Occurs when the puzzle is solved.";
+	EVENT		unsolve, "Unsolve", "Occurs when the puzzle is unsolved (is no longer considered solved).";
+END;
+
+
+#==============================================================================
 # Monsters
 #==============================================================================
 
@@ -75,6 +88,8 @@ EVENTTILESET events, (13, 13);
 
 SETTILE ( 0, 0), warp;
 SETTILE ( 1, 0), npc;
+
+SETTILE ( 0, 1), color_tile_puzzle;
 
 SETTILE ( 2, 0), monster_octorok_red;
 SETTILE ( 3, 0), monster_octorok_blue;

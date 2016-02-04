@@ -8,7 +8,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TileColorTile : Tile, ZeldaAPI.ColorTile {
+	public class TileColorTile : Tile, IColoredTile, ZeldaAPI.ColorTile {
 
 		//-----------------------------------------------------------------------------
 		// Constructor
