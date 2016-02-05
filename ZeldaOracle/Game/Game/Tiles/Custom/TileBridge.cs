@@ -149,11 +149,11 @@ namespace ZeldaOracle.Game.Tiles {
 		// Zelda API Methods
 		//-----------------------------------------------------------------------------
 		
-		void ZeldaAPI.Bridge.BuildBridge(bool instantaneous = false, bool rememberState = false) {
+		void ZeldaAPI.Bridge.BuildBridge(bool instantaneous, bool rememberState) {
 			CreateBridge(instantaneous, rememberState);
 		}
 
-		void ZeldaAPI.Bridge.DestroyBridge(bool instantaneous = false, bool rememberState = false) {
+		void ZeldaAPI.Bridge.DestroyBridge(bool instantaneous, bool rememberState) {
 			DestroyBridge(instantaneous, rememberState);
 		}
 

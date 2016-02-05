@@ -168,17 +168,17 @@ namespace ZeldaOracle.Game.Entities
 			// Draw the sprite/animation.
 			Vector2F drawPosition = Entity.Position - new Vector2F(0, Entity.ZPosition);
 			if (animationPlayer.SubStrip != null)
-				g.DrawAnimation(animationPlayer.SubStrip, newImageVariant, animationPlayer.PlaybackTime, drawPosition + drawOffset, layer);
+				g.DrawAnimation(animationPlayer.SubStrip, newImageVariant, animationPlayer.PlaybackTime, drawPosition + drawOffset, layer, entity.Position);
 			else if (sprite != null)
-				g.DrawSprite(sprite, newImageVariant, drawPosition + drawOffset, layer);
+				g.DrawSprite(sprite, newImageVariant, drawPosition + drawOffset, layer, entity.Position);
 			
 			// Draw the ripples effect.
 			if (isRipplesEffectVisible && entity.Physics.IsEnabled && entity.Physics.IsInPuddle)
-				g.DrawAnimation(GameData.ANIM_EFFECT_RIPPLES, entity.GameControl.RoomTicks, entity.Position + ripplesDrawOffset, layer);
+				g.DrawAnimation(GameData.ANIM_EFFECT_RIPPLES, entity.GameControl.RoomTicks, entity.Position + ripplesDrawOffset, layer, entity.Position);
 			
 			// Draw the grass effect.
 			if (isGrassEffectVisible && entity.Physics.IsEnabled &&entity.Physics.IsInGrass)
-				g.DrawAnimation(GameData.ANIM_EFFECT_GRASS, grassAnimationTicks, entity.Position + grassDrawOffset, layer);
+				g.DrawAnimation(GameData.ANIM_EFFECT_GRASS, grassAnimationTicks, entity.Position + grassDrawOffset, layer, entity.Position);
 		}
 
 		

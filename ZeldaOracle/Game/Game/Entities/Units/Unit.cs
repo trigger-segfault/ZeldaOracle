@@ -284,7 +284,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			foreach (UnitTool tool in tools) {
 				if (!tool.DrawAboveUnit) {
 					Vector2F drawPosition = position - new Vector2F(0, zPosition) + Graphics.DrawOffset + tool.DrawOffset;
-					g.DrawAnimation(tool.AnimationPlayer, tool.ImageVariantID, drawPosition, depthLayer);
+					g.DrawAnimation(tool.AnimationPlayer, tool.ImageVariantID, drawPosition, depthLayer, position);
 				}
 			}
 
@@ -295,7 +295,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			foreach (UnitTool tool in tools) {
 				if (tool.DrawAboveUnit) {
 					Vector2F drawPosition = position - new Vector2F(0, zPosition) + Graphics.DrawOffset + tool.DrawOffset;
-					g.DrawAnimation(tool.AnimationPlayer, tool.ImageVariantID, drawPosition, depthLayer);
+					g.DrawAnimation(tool.AnimationPlayer, tool.ImageVariantID, drawPosition, depthLayer, position);
 				}
 			}
 		}

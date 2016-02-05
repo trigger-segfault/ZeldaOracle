@@ -535,6 +535,7 @@ namespace ZeldaOracle.Game.Control {
 			roomGraphics.Clear();
 			for (int i = entities.Count - 1; i >= 0; i--)
 				entities[i].Draw(roomGraphics);
+			roomGraphics.SortDepthLayer(DepthLayer.PlayerAndNPCs); // Sort dynamic depth layers.
 			roomGraphics.DrawAll(g);
 			
 			// Draw event tiles in reverse order.
