@@ -35,7 +35,7 @@ abstract public class ScriptReader {
 		return "";
 	}
 	/** <summary> Read a single line of the script. </summary> */
-	protected virtual void ReadLine(string line) {
+	protected virtual void ParseLine(string line) {
 		List<string> words = new List<string>();
 		string word = "";
 		bool quotes = false;
@@ -96,7 +96,7 @@ abstract public class ScriptReader {
 	public virtual void ReadScript(StreamReader reader, string path) {
 		BeginReading();
 		while (!reader.EndOfStream)
-			ReadLine(reader.ReadLine());
+			ParseLine(reader.ReadLine());
 		EndReading();
 	}
 	/** <summary> Parse a single line, usually being a command of some sort. </summary> */

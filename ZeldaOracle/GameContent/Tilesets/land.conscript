@@ -1,6 +1,6 @@
 
 #==============================================================
-# Sprites
+# Sprite Sheets
 #==============================================================
 
 LOAD SPRITES;
@@ -8,19 +8,6 @@ LOAD SPRITES;
 SPRITESHEET "tileset_land",					(16, 16), (1, 1), (18, 18);
 SPRITESHEET "tileset_land_extras_8x8",		(8, 8), (1, 1), (18, 18);
 
-#==============================================================
-# Animations
-#==============================================================
-
-LOAD ANIMATIONS;
-
-SPRITESHEET "tileset_land_extras_8x8";
-
-# FLOWERS
-
-TEMPANIM flowers; SUBSTRIP repeat;
-	ADD frame, 16, (3, 0), (0, 0); ADD frame, 16, (0, 0), (0, 0); ADD frame, 16, (1, 0), (0, 0); ADD frame, 16, (2, 0), (0, 0);
-	INSERT strip, 0, 16, 4, (0, 0), (8, 8); INSERT frame, 0, 64, (4, 0), (8, 0); INSERT frame, 0, 64, (5, 0), (0, 8); END;
 
 #==============================================================
 # Tiles
@@ -144,6 +131,6 @@ TILE (10, 6); SOLID inside_corner_nw; END;
 
 # FLOWERS TILE
 
-TILE (2, 15); FLAGS Digable; SPRITE flowers; END;
+TILE (2, 15); FLAGS Digable; SPRITE tile_flowers; END;
 
 END;

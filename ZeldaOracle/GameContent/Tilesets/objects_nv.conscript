@@ -1,6 +1,6 @@
 
 #==============================================================
-# Sprites
+# Sprite Sheets
 #==============================================================
 
 LOAD SPRITES;
@@ -52,8 +52,8 @@ END;
 # ---- Reward -----------------------------------------------------------------
 
 TILE reward;
-	TYPE		TileReward
-	SOLID		center;
+	TYPE			TileReward;
+	SOLID			center;
 	##SPRITE		reward_heart_piece;
 	PROPERTIES
 		(string, reward, "heart_piece",
@@ -215,7 +215,7 @@ SETTILE ( 1, 0), chest_flat;
 SETTILE ( 2, 0), chest_ornate;
 SETTILE ( 3, 0), reward;
 SETTILE ( 4, 0), color_switch_blue;
-SETTILE ( 5, 0), pull_handle			## TEMP: should be blue crystal
+SETTILE ( 5, 0), pull_handle;			## TEMP: should be blue crystal
 SETTILE ( 6, 0), trampoline;
 SETTILE ( 7, 0), roller_horizontal;
 SETTILE ( 8, 0), roller_vertical;

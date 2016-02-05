@@ -66,9 +66,9 @@ namespace ZeldaOracle.Game.Entities {
 		public void Clear() {
 			// Clear the instruction queues for each depth layer.
 			for (int i = 0; i < layerHeads.Length; i++) {
-				layerHeads[i] = null;
-				layerTails[i] = null;
-				layerCounts[i] = 0;
+				layerHeads[i]	= null;
+				layerTails[i]	= null;
+				layerCounts[i]	= 0;
 			}
 		}
 
@@ -91,25 +91,29 @@ namespace ZeldaOracle.Game.Entities {
 		// Sort a depth layer. Sprites with smaller y coordinates
 		// will be drawn before ones with larger y coordinates.
 		public void SortDepthLayer(DepthLayer layer) {
+			// Check if the layer is empty.
 			int layerIndex = (int) layer;
 			if (layerHeads[layerIndex] == null)
 				return;
 
-			List<DrawingInstruction> instructions = new List<DrawingInstruction>(layerCounts[(int) layer]);
-			DrawingInstruction instruction = layerHeads[(int) layer];
+			// Create a list of the drawing instructions.
+			List<DrawingInstruction> instructions = new List<DrawingInstruction>(layerCounts[layerIndex]);
+			DrawingInstruction instruction = layerHeads[layerIndex];
 			while (instruction != null) {
 				instructions.Add(instruction);
 				instruction = instruction.next;
 			}
 
+			// Sort the list by depth origin Y.
 			instructions.Sort(delegate(DrawingInstruction a, DrawingInstruction b) {
-				if (a.depthOrigin.Y < b.depthOrigin.Y)
+				if (Math.Round(a.depthOrigin.Y) < Math.Round(b.depthOrigin.Y))
 					return -1;
 				return 1;
 			});
 
-			layerHeads[(int) layer] = instructions[0];
-			layerTails[(int) layer] = instructions[instructions.Count - 1];
+			// Update the drawing instruction linked list.
+			layerHeads[layerIndex] = instructions[0];
+			layerTails[layerIndex] = instructions[instructions.Count - 1];
 			for (int i = 0; i < instructions.Count; i++) {
 				if (i + 1 < instructions.Count)
 					instructions[i].next = instructions[i + 1];

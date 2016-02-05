@@ -28,7 +28,10 @@ namespace ZeldaOracle.Common.Scripts {
 
 			// Image <name>
 			// Image <name> <file-path>
-			AddCommand("Image", delegate(CommandParam parameters) {
+			AddCommand("Image", 
+				"string name",
+				"string name, string filePath",
+			delegate(CommandParam parameters) {
 				imageName	= parameters.GetString(0);
 				image		= null;
 				imageTail	= null;
@@ -40,7 +43,7 @@ namespace ZeldaOracle.Common.Scripts {
 			});
 
 			// End
-			AddCommand("End", delegate(CommandParam parameters) {
+			AddCommand("End", "", delegate(CommandParam parameters) {
 				if (image != null) {
 					Resources.AddImage(imageName, image);
 					image = null;
@@ -48,7 +51,9 @@ namespace ZeldaOracle.Common.Scripts {
 			});
 
 			// Variant <name> <file-path>
-			AddCommand("Variant", delegate(CommandParam parameters) {
+			AddCommand("Variant",
+				"string name, string filePath",
+			delegate(CommandParam parameters) {
 				Image variant = Resources.LoadImage(Resources.ImageDirectory + parameters.GetString(1), false);
 				variant.VariantName	= parameters.GetString(0);
 

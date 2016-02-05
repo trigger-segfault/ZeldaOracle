@@ -26,8 +26,10 @@ namespace ZeldaOracle.Common.Scripts {
 			this.resources		= resources;
 			this.useTemporary	= resources != null;
 
-			// Sound <name> <path> <volume=1> <pitch> <pan=0> <muted=false>
-			AddCommand("Sound", delegate(CommandParam parameters) {
+			// Sound <name> <path> <volume=1> <pitch=0> <pan=0> <muted=false>
+			AddCommand("Sound",
+				"string name, string path, float volume = 1, float pitch = 0, float pan = 0, bool muted = false",
+			delegate(CommandParam parameters) {
 				string name = parameters.GetString(0);
 				string path = parameters.GetString(1);
 				Sound sound	= Resources.LoadSound(name, Resources.SoundDirectory + path);

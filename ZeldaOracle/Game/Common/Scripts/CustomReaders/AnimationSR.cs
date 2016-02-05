@@ -50,7 +50,9 @@ namespace ZeldaOracle.Common.Scripts {
 			
 			// SPRITE SHEET.
 
-			AddCommand("SpriteSheet", delegate(CommandParam parameters) {
+			AddCommand("SpriteSheet",
+				"string path",
+			delegate(CommandParam parameters) {
 				SpriteSheet sheet;
 				if (useTemporary && resources != null)
 					sheet = resources.GetResource<SpriteSheet>(parameters.GetString(0));
@@ -62,12 +64,14 @@ namespace ZeldaOracle.Common.Scripts {
 			
 			// BEGIN/END.
 
-			AddCommand("Anim", delegate(CommandParam parameters) {
+			AddCommand("Anim",
+				"string name",
+			delegate(CommandParam parameters) {
 				animationName = parameters.GetString(0);
 				animationBuilder.BeginNull();
 				animation = null;
 			});
-			AddCommand("End", delegate(CommandParam parameters) {
+			AddCommand("End", "", delegate(CommandParam parameters) {
 				if (animation != null) {
 					animationBuilder.End();
 					if (useTemporary && resources != null)
@@ -76,7 +80,9 @@ namespace ZeldaOracle.Common.Scripts {
 						Resources.AddResource<Animation>(animationName, animation);
 				}
 			});
-			AddCommand("SubStrip", delegate(CommandParam parameters) {
+			AddCommand("SubStrip", 
+				"string loopMode",
+			delegate(CommandParam parameters) {
 				LoopMode loopMode = LoopMode.Repeat;
 				if (parameters.GetString(0) == "reset")
 					loopMode = LoopMode.Reset;
@@ -85,14 +91,16 @@ namespace ZeldaOracle.Common.Scripts {
 				else if (parameters.GetString(0) == "clamp")
 					loopMode = LoopMode.Clamp;
 				else
-					ThrowParseError("Unknown loop mode '" + parameters.GetString(0) + "' for animation");
+					ThrowParseError("Unknown loop mode '" + parameters.GetString(0) + "' for animation", parameters[0]);
 
 				animationBuilder.CreateSubStrip();
 				animationBuilder.SetLoopMode(loopMode);
 				if (animation == null)
 					animation = animationBuilder.Animation;
 			});
-			AddCommand("Clone", delegate(CommandParam parameters) {
+			AddCommand("Clone",
+				"string animationName",
+			delegate(CommandParam parameters) {
 				if (useTemporary && resources != null && resources.ExistsResource<Animation>(parameters.GetString(0))) {
 					animationBuilder.CreateClone(resources.GetResource<Animation>(parameters.GetString(0)));
 					animation = animationBuilder.Animation;
@@ -102,14 +110,22 @@ namespace ZeldaOracle.Common.Scripts {
 					animation = animationBuilder.Animation;
 				}
 				else {
-					// ERROR: can't clone nonexistant animation.
+					// ERROR: Can't clone nonexistant animation.
+					ThrowParseError("The animation '" + parameters.GetString(0) + "' does not exist", parameters[0]);
 				}
 			});
 
 			
 			// FRAME BUILDING.
 			
-			AddCommand("Add", delegate(CommandParam parameters) {
+			AddCommand("Add",
+				"string emptyFrame, int duration",
+				"string strip, int duration, int stripLength, (int sourceX, int sourceY), (int offsetX, int offsetY) = (0, 0), (int nextSourceX, int nextSourceY) = (1, 0)",
+				"string frame, int duration, (int sourceX, int sourceY), (int offsetX, int offsetY) = (0, 0)",
+				"string part,  int duration, (int sourceX, int sourceY), (int offsetX, int offsetY) = (0, 0)",
+				"string frame, int duration, string spriteName, (int offsetX, int offsetY) = (0, 0)",
+				"string part,  int duration, string spriteName, (int offsetX, int offsetY) = (0, 0)",
+			delegate(CommandParam parameters) {
 				if (parameters.GetString(0) == "strip") {
 					animationBuilder.AddFrameStrip(
 						parameters.GetInt(1),
@@ -152,7 +168,10 @@ namespace ZeldaOracle.Common.Scripts {
 				else
 					ThrowParseError("Unknown add type '" + parameters.GetString(0) + "' for animation");
 			});
-			AddCommand("Insert", delegate(CommandParam parameters) {
+			AddCommand("Insert",
+				"string strip, int time, int duration, int stripLength, (int sourceX, int sourceY), (int offsetX, int offsetY) = (0, 0), (int nextSourceX, int nextSourceY) = (1, 0)",
+				"string frame, int time, int duration, (int sourceX, int sourceY), (int offsetX, int offsetY) = (0, 0)",
+			delegate(CommandParam parameters) {
 				if (parameters.GetString(0) == "strip") {
 					animationBuilder.InsertFrameStrip(
 						parameters.GetInt(1),
@@ -181,21 +200,27 @@ namespace ZeldaOracle.Common.Scripts {
 
 			// MODIFICATIONS.
 
-			AddCommand("MakeQuad", delegate(CommandParam parameters) {
+			AddCommand("MakeQuad", "", delegate(CommandParam parameters) {
 				animationBuilder.MakeQuad();
 			});
-			AddCommand("MakeDynamic", delegate(CommandParam parameters) {
+			AddCommand("MakeDynamic",
+				"int numSubstrips, (int nextSourceX, int nextSourceY)",
+			delegate(CommandParam parameters) {
 				animationBuilder.MakeDynamic(
 					parameters.GetInt(0), 
 					parameters.GetPoint(1).X,
 					parameters.GetPoint(1).Y);
 			});
-			AddCommand("Offset", delegate(CommandParam parameters) {
+			AddCommand("Offset",
+				"(int offsetX, int offsetY)",
+			delegate(CommandParam parameters) {
 				animationBuilder.Offset(
 					parameters.GetPoint(0).X,
 					parameters.GetPoint(0).Y);
 			});
-			AddCommand("Flicker", delegate(CommandParam parameters) {
+			AddCommand("Flicker",
+				"int alternateDelay, string startOnOrOff",
+			delegate(CommandParam parameters) {
 				// FLICKER <alternateDelay> <on/off>
 
 				bool startOn = true;
@@ -209,15 +234,19 @@ namespace ZeldaOracle.Common.Scripts {
 				animationBuilder.MakeFlicker(parameters.GetInt(0), startOn);
 			});
 			// Repeat <numFrames, numRepeats
-			AddCommand("Repeat", delegate(CommandParam parameters) {
+			AddCommand("Repeat",
+				"int numFrames, int numRepeats",
+			delegate(CommandParam parameters) {
 				animationBuilder.RepeatPreviousFrames(parameters.GetInt(0), parameters.GetInt(1));
 			});
 			// Rewinds back to the first animation (if currently on a latter substrip).
-			AddCommand("Rewind", delegate(CommandParam parameters) {
+			AddCommand("Rewind", "", delegate(CommandParam parameters) {
 				animationBuilder.Animation = animation;
 			});
 			// Shifts the source positions of all sprites in the animation.
-			AddCommand("ShiftSource", delegate(CommandParam parameters) {
+			AddCommand("ShiftSource",
+				"(int shiftX, int shiftY)",
+			delegate(CommandParam parameters) {
 				animationBuilder.ShiftSourcePositions(
 					parameters.GetPoint(0).X,
 					parameters.GetPoint(0).Y);

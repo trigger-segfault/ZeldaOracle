@@ -31,7 +31,13 @@ namespace ZeldaOracle.Common.Scripts {
 
 			// SPRITE SHEET.
 
-			AddCommand("SpriteSheet", delegate(CommandParam parameters) {
+			// SpriteSheet <name>
+			// SpriteSheet name, path, 
+			AddCommand("SpriteSheet",
+				"string name",
+				"string path, (int cellWidth, int cellHeight), (int spacingX, int spacingY), (int offsetX, int offsetY)",
+				"string name, string path, (int cellWidth, int cellHeight), (int spacingX, int spacingY), (int offsetX, int offsetY)",
+			delegate(CommandParam parameters) {
 				if (parameters.Count == 1) {
 					// Start using the given sprite sheet.
 					SpriteSheet sheet;
@@ -73,7 +79,9 @@ namespace ZeldaOracle.Common.Scripts {
 			// BEGIN/END.
 			
 			// Sprite <name> <grid-location> <draw-offset = (0, 0)>
-			AddCommand("Sprite", delegate(CommandParam parameters) {
+			AddCommand("Sprite",
+				"string name, (int gridLocationX, int gridLocationY), (int drawOffsetX, int drawOffsetY) = (0, 0)",
+			delegate(CommandParam parameters) {
 				spriteName = parameters.GetString(0);
 				sprite = new Sprite(
 					spriteBuilder.SpriteSheet,
@@ -81,7 +89,7 @@ namespace ZeldaOracle.Common.Scripts {
 					parameters.GetPoint(2, Point2I.Zero));
 				spriteBuilder.Begin(sprite);
 			});
-			AddCommand("End", delegate(CommandParam parameters) {
+			AddCommand("End", "", delegate(CommandParam parameters) {
 				if (sprite != null) {
 					spriteBuilder.End();
 					if (useTemporary && resources != null)
@@ -95,7 +103,9 @@ namespace ZeldaOracle.Common.Scripts {
 			// BUILDING.
 			
 			// Add <grid-location> <draw-offset = (0, 0)>
-			AddCommand("Add", delegate(CommandParam parameters) {
+			AddCommand("Add",
+				"(int gridLocationX, int gridLocationY), (int drawOffsetX, int drawOffsetY) = (0, 0)",
+			delegate(CommandParam parameters) {
 				spriteBuilder.AddPart(
 					parameters.GetPoint(0).X,
 					parameters.GetPoint(0).Y,
@@ -103,7 +113,9 @@ namespace ZeldaOracle.Common.Scripts {
 					parameters.GetPoint(1, Point2I.Zero).Y);
 			});
 			// Size <size>
-			AddCommand("Size", delegate(CommandParam parameters) {
+			AddCommand("Size",
+				"(int width, int height)",
+			delegate(CommandParam parameters) {
 				spriteBuilder.SetSize(
 					parameters.GetPoint(0).X,
 					parameters.GetPoint(0).Y);

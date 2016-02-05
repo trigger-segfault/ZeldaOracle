@@ -101,6 +101,16 @@ namespace ZeldaOracle.Game.Control {
 			}
 		}
 		
+		// Return an enumerable list of solid tiles colliding with the given collision box.
+		public IEnumerable<Tile> GetSolidTilesColliding(Rectangle2F collisionBox, TileLayerOrder layerOrder = TileLayerOrder.LowestToHighest) {
+			Rectangle2I area = GetTileAreaFromRect(collisionBox);
+			foreach (Tile tile in GetTilesInArea(area, layerOrder)) {
+				if (tile.IsSolid && tile.CollisionModel != null &&
+					CollisionModel.Intersecting(tile.CollisionModel, tile.Position, collisionBox))
+					yield return tile;
+			}
+		}
+		
 		// Return an enumerable list of tiles contained within the given tile grid area.
 		public IEnumerable<Tile> GetTilesInArea(Rectangle2I area, TileLayerOrder layerOrder = TileLayerOrder.LowestToHighest) {
 			Rectangle2I clippedArea = Rectangle2I.Intersect(area,

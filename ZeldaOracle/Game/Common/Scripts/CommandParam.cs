@@ -10,8 +10,14 @@ namespace ZeldaOracle.Common.Scripts {
 		String,
 		Integer,
 		Float,
-		Array
+		Boolean,
+		Array,
+
+		Any, // Any value that's not an array.
+
+		Unknown,
 	}
+
 
 	public class CommandParam {
 		
@@ -25,20 +31,87 @@ namespace ZeldaOracle.Common.Scripts {
 		private int					intValue;
 		private float				floatValue;
 
+		private int					lineIndex; // Line index where this parameter is specified.
+		private int					charIndex; // Character index within the line this parameter is specified.
+		private string				name;	// Only used for command parameters structure.
+
+		private CommandParam		defaultValue;
+
 		
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
+		
+		public CommandParam() :
+			this(CommandParamType.String)
+		{
+		}
 
-		public CommandParam(string str) {
-			stringValue = str;
-			parent = null;
-			type = CommandParamType.String;
-			count = 0;
-			
+		public CommandParam(CommandParamType type) {
+			this.name			= "";
+			this.parent			= null;
+			this.children		= null;
+			this.nextParam		= null;
+			this.type			= type;
+			this.count			= 0;
+			this.stringValue	= "";
+			this.floatValue		= 0.0f;
+			this.intValue		= 0;
+			this.boolValue		= false;
+			this.charIndex		= -1;
+			this.lineIndex		= -1;
+			this.defaultValue	= null;
+		}
+
+		public CommandParam(string str) :
+			this(CommandParamType.String)
+		{
+			this.stringValue = str;
+
 			float.TryParse(str, out floatValue);
 			int.TryParse(str, out intValue);
 			bool.TryParse(str, out boolValue);
+		}
+
+		public CommandParam(CommandParam copy) {
+			this.name			= copy.name;
+			this.type			= copy.Type;
+			this.parent			= null;
+			this.defaultValue	= null;
+			this.stringValue	= copy.stringValue;
+			this.floatValue		= copy.floatValue;
+			this.intValue		= copy.intValue;
+			this.boolValue		= copy.boolValue;
+			this.charIndex		= copy.charIndex;
+
+			// Copy array children.
+			this.count = 0;
+			if (type == CommandParamType.Array) {
+				CommandParam copyChild = copy.Children;
+				while (copyChild != null) {
+					AddChild(new CommandParam(copyChild));
+					copyChild = copyChild.NextParam;
+				}
+			}
+		}
+
+		
+		//-----------------------------------------------------------------------------
+		// Type Checks
+		//-----------------------------------------------------------------------------
+
+		public bool IsValidType(CommandParamType checkType) {
+			if (type == CommandParamType.Array || checkType == CommandParamType.Array)
+				return (type == checkType);
+			if (checkType == CommandParamType.String || checkType == CommandParamType.Any)
+				return true;
+			if (checkType == CommandParamType.Integer)
+				return int.TryParse(stringValue, out intValue);
+			if (checkType == CommandParamType.Float)
+				return float.TryParse(stringValue, out floatValue);
+			if (checkType == CommandParamType.Boolean)
+				return bool.TryParse(stringValue, out boolValue);
+			return false;
 		}
 
 		
@@ -95,6 +168,35 @@ namespace ZeldaOracle.Common.Scripts {
 				return new Point2I(p.GetInt(0), p.GetInt(1));
 			return Point2I.Zero;
 		}
+		
+		
+		//-----------------------------------------------------------------------------
+		// Array Mutators
+		//-----------------------------------------------------------------------------
+
+		public void SetValueByParse(string value) {
+			stringValue = value;
+			
+			float.TryParse(value, out floatValue);
+			int.TryParse(value, out intValue);
+			bool.TryParse(value, out boolValue);
+		}
+
+		public CommandParam AddChild(CommandParam child) {
+			if (type == CommandParamType.Array) {
+				if (Children == null) {
+					Children = child;
+				}
+				else {
+					CommandParam lastChild = Children;
+					while (lastChild.NextParam != null)
+						lastChild = lastChild.NextParam;
+					lastChild.NextParam = child;
+				}
+				count++;
+			}
+			return child;
+		}
 
 		
 		//-----------------------------------------------------------------------------
@@ -104,6 +206,11 @@ namespace ZeldaOracle.Common.Scripts {
 		public CommandParamType Type {
 			get { return type; }
 			set { type = value; }
+		}
+		
+		public string Name {
+			get { return name; }
+			set { name = value; }
 		}
 		
 		public CommandParam NextParam {
@@ -141,6 +248,16 @@ namespace ZeldaOracle.Common.Scripts {
 		public string Str {
 			get { return stringValue; }
 		}
+	
+		public int CharIndex {
+			get { return charIndex; }
+			set { charIndex = value; }
+		}
+	
+		public int LineIndex {
+			get { return lineIndex; }
+			set { lineIndex = value; }
+		}
 
 		public CommandParam this[int index] {
 			get {
@@ -158,6 +275,10 @@ namespace ZeldaOracle.Common.Scripts {
 			}
 		}
 
+		public CommandParam DefaultValue {
+			get { return defaultValue; }
+			set { defaultValue = value; }
+		}
 	}
 }
 

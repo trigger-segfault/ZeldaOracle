@@ -53,7 +53,7 @@ public class LanguageSR : ScriptReader {
 		Resources.AddLanguage(language);
 	}
 	/** <summary> Read a single line of the script. </summary> */
-	protected override void ReadLine(string line) {
+	protected override void ParseLine(string line) {
 		// Ignore comments.
 		if (line.StartsWith("#"))
 			return;

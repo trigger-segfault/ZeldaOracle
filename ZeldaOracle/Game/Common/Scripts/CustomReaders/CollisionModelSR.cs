@@ -23,27 +23,35 @@ namespace ZeldaOracle.Common.Scripts {
 
 			this.resources	= resources;
 
-			// Sprite <name>
-			AddCommand("Model", delegate(CommandParam parameters) {
+			// Model <name>
+			AddCommand("Model", "string name", delegate(CommandParam parameters) {
 				modelName = parameters.GetString(0);
 				model = new CollisionModel();
 			});
 
 			// End
-			AddCommand("End", delegate(CommandParam parameters) {
+			AddCommand("End", "", delegate(CommandParam parameters) {
 				if (model != null) {
 					Resources.AddResource(modelName, model);
 					model = null;
 				}
 			});
 
-			// Variant <name> <file-path>
-			AddCommand("Add", delegate(CommandParam parameters) {
+			// Add x, y, width, height
+			AddCommand("Add", "int x, int y, int width, int height", delegate(CommandParam parameters) {
 				model.AddBox(
 					parameters.GetInt(0),
 					parameters.GetInt(1),
 					parameters.GetInt(2),
 					parameters.GetInt(3));
+			});
+
+			// Add x, y, width, height
+			AddCommand("Test",
+			//"float x, string y, bool width, (int a, int b, (string c)) = (0, 1, (hello)), float height = 2.5f",
+			"float x, string y, bool width, (int a, int b, (string c)), float height",
+			delegate(CommandParam parameters) {
+				Console.WriteLine(CommandParamFormatParser.ToString(parameters));
 			});
 		}
 

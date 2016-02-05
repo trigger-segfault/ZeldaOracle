@@ -172,6 +172,40 @@ ANIM tile_whirlpool; SUBSTRIP repeat;
 
 ANIM tile_poison_bubble; SUBSTRIP repeat;
 	ADD strip, 15, 4, (0, 15); END;
+	
+# FOUNTAINS
+
+ANIM tile_fountain_path_nw; SUBSTRIP repeat;
+	ADD frame, 1, (10, 14); ADD emptyframe, 1;
+	ADD frame, 1, (10, 14); ADD emptyframe, 1;
+	ADD frame, 1, (10, 14); ADD emptyframe, 1;
+	ADD frame, 1, (10, 15); ADD emptyframe, 1;
+	ADD frame, 1, (10, 15); ADD emptyframe, 1;
+	ADD frame, 1, (10, 15); ADD emptyframe, 1;
+	REPEAT 12, 3;
+	INSERT strip, 0, 12, 4, (12, 14); END;
+ANIM tile_fountain_path_ne; SUBSTRIP repeat;
+	ADD frame, 1, (11, 14); ADD emptyframe, 1;
+	ADD frame, 1, (11, 14); ADD emptyframe, 1;
+	ADD frame, 1, (11, 14); ADD emptyframe, 1;
+	ADD frame, 1, (11, 15); ADD emptyframe, 1;
+	ADD frame, 1, (11, 15); ADD emptyframe, 1;
+	ADD frame, 1, (11, 15); ADD emptyframe, 1;
+	REPEAT 12, 3;
+	INSERT strip, 0, 12, 4, (12, 15); END;
+ANIM tile_fountain_path_sw; SUBSTRIP repeat;
+	ADD strip, 12, 4, (12, 16); END;
+ANIM tile_fountain_path_se; SUBSTRIP repeat;
+	ADD strip, 12, 4, (12, 17); END;
+ANIM tile_fountain_dirt_nw; SUBSTRIP repeat;
+	CLONE tile_fountain_path_nw; END;
+ANIM tile_fountain_dirt_ne; SUBSTRIP repeat;
+	CLONE tile_fountain_path_ne; END;
+ANIM tile_fountain_dirt_sw; SUBSTRIP repeat;
+	CLONE tile_fountain_path_sw; END;
+ANIM tile_fountain_dirt_se; SUBSTRIP repeat;
+	CLONE tile_fountain_path_se; END;
+
 
 #==============================================================
 # General Tile Animations
@@ -419,6 +453,17 @@ ANIM color_cube_red_yellow_down; SUBSTRIP clamp;
 #==============================================================
 
 SPRITESHEET "zoneset_small";
+
+# Flowers
+
+ANIM tile_flowers; SUBSTRIP repeat;
+	ADD frame, 16, (3, 10), (0, 0);
+	ADD frame, 16, (0, 10), (0, 0);
+	ADD frame, 16, (1, 10), (0, 0);
+	ADD frame, 16, (2, 10), (0, 0);
+	INSERT strip, 0, 16, 4, (0, 10), (8, 8);
+	INSERT frame, 0, 64, (4, 10), (8, 0);
+	INSERT frame, 0, 64, (5, 10), (0, 8); END;
 
 # Wall Torches
 
@@ -684,7 +729,6 @@ ANIM tile_output_lavafall_right_bottom; SUBSTRIP repeat;
 	INSERT strip, 0, 8, 4, (20, 4), (8, 0); INSERT frame, 0, 32, (11, 9), (0, 0);
 	INSERT frame, 0, 32, (6, 9), (0, 8); INSERT frame, 0, 32, (7, 9), (8, 8); END;
 	
-
 ANIM tile_output_waterfall_left_top; SUBSTRIP repeat;
 	INSERT strip, 0, 8, 4, (20, 2), (0, 8); INSERT frame, 0, 32, (4, 8), (0, 0);
 	INSERT frame, 0, 32, (5, 8), (8, 0); INSERT frame, 0, 32, (10, 8), (8, 8); END;
@@ -705,7 +749,6 @@ ANIM tile_output_lavafall_left_bottom; SUBSTRIP repeat;
 	INSERT strip, 0, 8, 4, (20, 6), (0, 0); INSERT frame, 0, 32, (10, 9), (8, 0);
 	INSERT frame, 0, 32, (4, 9), (0, 8); INSERT frame, 0, 32, (5, 9), (8, 8); END;
 
-	
 ANIM tile_output_waterfall_up_left; SUBSTRIP repeat;
 	INSERT strip, 0, 8, 4, (20, 1), (8, 0); INSERT frame, 0, 32, (0, 8), (0, 0);
 	INSERT frame, 0, 32, (0, 9), (0, 8); INSERT frame, 0, 32, (8, 8), (8, 8); END;
@@ -725,7 +768,6 @@ ANIM tile_output_lavafall_up_mid; SUBSTRIP repeat;
 ANIM tile_output_lavafall_up_right; SUBSTRIP repeat;
 	INSERT strip, 0, 8, 4, (20, 5), (0, 0); INSERT frame, 0, 32, (1, 8), (8, 0);
 	INSERT frame, 0, 32, (9, 8), (0, 8); INSERT frame, 0, 32, (1, 9), (8, 8); END;
-
 
 ANIM tile_output_waterfall_down_left; SUBSTRIP repeat;
 	INSERT strip, 0, 8, 4, (20, 3), (8, 8); INSERT frame, 0, 32, (2, 8), (0, 0);
