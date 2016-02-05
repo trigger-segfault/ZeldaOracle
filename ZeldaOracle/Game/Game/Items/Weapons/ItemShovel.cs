@@ -10,6 +10,7 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Game.Entities.Monsters;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemShovel : ItemWeapon {
@@ -49,7 +50,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			Tile tile = RoomControl.GetTopTile(tileLoc);
 
 			if (tile != null && tile.OnDig(Player.Direction)) {
-				// Create dirt effect.
+				// Spawn dirt effect.
 				Effect effect = new Effect();
 				effect.Graphics.DepthLayer = DepthLayer.EffectDirt;
 				effect.CreateDestroyTimer(15);
@@ -58,7 +59,6 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				effect.Graphics.IsShadowVisible = false;
 				effect.Graphics.PlayAnimation(GameData.ANIM_EFFECT_DIRT);
 				effect.Graphics.SubStripIndex = Player.Direction;
-					
 				if (Directions.IsHorizontal(Player.Direction)) {
 					effect.Physics.ZVelocity	= 3.0f;
 					effect.Physics.Gravity		= 0.5f;
@@ -67,13 +67,21 @@ namespace ZeldaOracle.Game.Items.Weapons {
 					effect.Physics.ZVelocity	= 2.5f;
 					effect.Physics.Gravity		= 0.4f;
 				}
-
 				RoomControl.SpawnEntity(effect, tile.Center);
 				
+
 				AudioSystem.PlaySound(GameData.SOUND_SHOVEL);
 			}
 			else {
 				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
+			}
+			
+			// Check for monster interactions.
+			Rectangle2I shovelHitBox = new Rectangle2I(-4, -4, 8, 8);
+			shovelHitBox.Point += (Point2I) Player.CenterOffset;
+			shovelHitBox.ExtendEdge(Player.Direction, 7);
+			foreach (Monster monster in Player.Physics.GetEntitiesMeeting<Monster>(shovelHitBox, CollisionBoxType.Soft)) {
+				monster.TriggerInteraction(InteractionType.Shovel, Player);
 			}
 		}
 

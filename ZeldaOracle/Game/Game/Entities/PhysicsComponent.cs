@@ -191,6 +191,16 @@ namespace ZeldaOracle.Game.Entities {
 			}
 		}
 
+		// Return a list of entities colliding with this entity.
+		public IEnumerable<T> GetEntitiesMeeting<T>(Rectangle2I myCollisionBox, CollisionBoxType otherCollisionBoxType, int maxZDistance = 10) where T : Entity {
+			CollisionTestSettings settings = new CollisionTestSettings(typeof(T), myCollisionBox, otherCollisionBoxType, maxZDistance);
+			for (int i = 0; i < entity.RoomControl.Entities.Count; i++) {
+				T other = entity.RoomControl.Entities[i] as T;
+				if (other != null && CollisionTest.PerformCollisionTest(entity, other, settings).IsColliding)
+					yield return other;
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Collision polls
