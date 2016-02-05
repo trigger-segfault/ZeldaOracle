@@ -32,6 +32,7 @@ namespace ZeldaOracle.Game.Entities {
 		MoveWithPlatforms		= 0x8000,	// Moves with moving platform tiles.
 		Crushable				= 0x10000,
 		EdgeClipping			= 0x20000,	// Allow clipping into the edges of tiles.
+		Flying					= 0x40000,	// Flying entities are never considered to be on the ground (even if their Z position is zero)
 	}
 
 	public enum CollisionBoxType {
@@ -508,7 +509,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsInAir {
-			get { return (entity.ZPosition > 0.0f || zVelocity > 0.0f); }
+			get { return (entity.ZPosition > 0.0f || zVelocity > 0.0f || IsFlying); }
 		}
 
 		public bool IsOnGround {
@@ -734,6 +735,11 @@ namespace ZeldaOracle.Game.Entities {
 		public bool IsCrushable {
 			get { return HasFlags(PhysicsFlags.Crushable); }
 			set { SetFlags(PhysicsFlags.Crushable, value); }
+		}
+		
+		public bool IsFlying {
+			get { return HasFlags(PhysicsFlags.Flying); }
+			set { SetFlags(PhysicsFlags.Flying, value); }
 		}
 		
 

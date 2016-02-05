@@ -44,7 +44,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		//-----------------------------------------------------------------------------
 		
 		public Projectile() {
-			EnablePhysics();
+			EnablePhysics(PhysicsFlags.Flying);
 
 			syncAnimationWithAngle		= false;
 			syncAnimationWithDirection	= false;
@@ -54,9 +54,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			eventLand		= null;
 			angle			= 0;
 			direction		= 0;
-
-			Graphics.IsRipplesEffectVisible	= false;
-			Graphics.IsGrassEffectVisible	= false;
 
 			crashAnimation	= null;
 			bounceOnCrash	= false;

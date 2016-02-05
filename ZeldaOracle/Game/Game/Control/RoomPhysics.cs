@@ -58,8 +58,10 @@ namespace ZeldaOracle.Game.Control {
 			// Restore the entity's velocity before collision checks.
 			Vector2F newVelocity = entity.Physics.PreviousVelocity;
 			for (int axis = 0; axis < 2; axis++) {
-				if (entity.Physics.Velocity[axis] == 0.0f)
-					newVelocity[axis] = 0.0f;
+				if (Math.Sign(newVelocity[axis]) > 0 && entity.Physics.Velocity[axis] <= newVelocity[axis])
+					newVelocity[axis] = entity.Physics.Velocity[axis];
+				else if (Math.Sign(newVelocity[axis]) < 0 && entity.Physics.Velocity[axis] >= newVelocity[axis])
+					newVelocity[axis] = entity.Physics.Velocity[axis];
 			}
 			entity.Physics.Velocity = newVelocity;
 
