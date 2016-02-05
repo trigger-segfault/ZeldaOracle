@@ -65,6 +65,10 @@ namespace ZeldaOracle.Game.Tiles {
 			properties.Set("raised_on_buttons", false)
 				.SetDocumentation("Raised on Buttons", "Interactions", "True if a the tile appears raised when pushed onto a button.");
 
+			properties.Set("hurt_area_point", new Point2I(-1, -1));
+			properties.Set("hurt_area_size", new Point2I(18, 18));
+			properties.Set("hurt_damage", 0);
+
 			// Spawning.
 			properties.Set("spawn_from_ceiling", false)
 				.SetDocumentation("Spawn from Ceiling", "Spawning", "");
@@ -207,6 +211,23 @@ namespace ZeldaOracle.Game.Tiles {
 		public float ConveyorSpeed {
 			get { return properties.GetFloat("conveyor_speed", 0.0f); }
 			set { properties.Set("conveyor_speed", value); }
+		}
+
+		public Rectangle2I HurtArea {
+			get {
+				return new Rectangle2I(
+					properties.GetPoint("hurt_area_point", new Point2I(-1, -1)),
+					properties.GetPoint("hurt_area_size", new Point2I(18, 18)));
+			}
+			set {
+				properties.Set("hurt_area_point", value.Point);
+				properties.Set("hurt_area_size", value.Size);
+			}
+		}
+
+		public int HurtDamage {
+			get { return properties.GetInteger("hurt_damage", 0); }
+			set { properties.Set("hurt_damage", value); }
 		}
 	}
 }

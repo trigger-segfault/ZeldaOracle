@@ -50,7 +50,7 @@ namespace ZeldaOracle.Game.Tiles {
 		Switchable		= 0x40,		// Can be switched with using the Switch Hook.
 		SwitchStays		= 0x80,		// Won't be destroyed when switched using the Switch Hook.
 		Digable			= 0x100,	// Can be dug with a shovel.
-		
+
 		NotCoverable	= 0x200,	// Tile can't be covered by movable blocks.
 		NotPushable		= 0x400,	// Player will not use the pushing animation when walking into the tile.
 
@@ -58,5 +58,6 @@ namespace ZeldaOracle.Game.Tiles {
 		NotGrabbable	= 0x800,	// The player cannot grab the tile with the power bracelet.
 		AbsorbSeeds		= 0x1000,	// Seeds will be destroyed when hitting this tile instead of bouncing off.
 		InstantPickup	= 0x2000,	// The tile is picked up instantly, without having to pull on it.
+		HurtPlayer		= 0x4000,	// Hurt the player when he touches the tile.
 	}
 }

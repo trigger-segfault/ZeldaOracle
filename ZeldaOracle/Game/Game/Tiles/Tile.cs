@@ -453,6 +453,23 @@ namespace ZeldaOracle.Game.Tiles {
 			UpdateMovement();
 			if (!isMoving)
 				CheckSurfaceTile();
+			
+			// Check if hurting the player.
+			if (HasFlag(TileFlags.HurtPlayer) && roomControl.Player.IsOnGround) {
+				Rectangle2F playerBox = roomControl.Player.Physics.PositionedCollisionBox;
+				Rectangle2F hurtBox = tileData.TileData.HurtArea;
+				hurtBox.Point += Position;
+				if (hurtBox.Intersects(playerBox)) {
+					roomControl.Player.Hurt(new DamageInfo(tileData.TileData.HurtDamage) {
+						ApplyKnockBack		= true,
+						KnockbackDuration	= 14,
+						InvincibleDuration	= 35,
+						FlickerDuration		= 35,
+						HasSource			= true,
+						SourcePosition		= Center
+					});
+				}
+			}
 		}
 		
 		private void UpdateMovement() {

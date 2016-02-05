@@ -208,6 +208,13 @@ TILE spiked_floor;
 	SPRITE		tile_spiked_floor;
 END;
 
+TILE cactus;
+	FLAGS		HurtPlayer;
+	SOLID		edge_e;
+	SPRITE		tile_cactus;
+	HURT		1, (4, -1, 13, 18);
+END;
+
 # ---- Bridges ----------------------------------------------------------------
 
 TILE bridge;
@@ -692,7 +699,7 @@ SETTILE ( 2, 2), pit;
 SETTILE ( 3, 2), cracked_floor;
 # Soft soil
 # Portal
-# Cactus
+SETTILE ( 6, 2), cactus;
 # Unknown leaf thing
 # Magnet north
 # Magnet south

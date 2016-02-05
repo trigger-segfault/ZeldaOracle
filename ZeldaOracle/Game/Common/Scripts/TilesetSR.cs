@@ -468,6 +468,15 @@ namespace ZeldaOracle.Common.Scripts {
 				else
 					ThrowParseError("Unknown value for ledge direction: " + dirName);
 			});
+			// Hurt <damage> <(area-x, area-y, area-width, area-height)>
+			AddTilesetCommand("Hurt", delegate(CommandParam parameters) {
+				tileData.HurtDamage = parameters.GetInt(0);
+				tileData.HurtArea = new Rectangle2I(
+					parameters[1].GetInt(0),
+					parameters[1].GetInt(1),
+					parameters[1].GetInt(2),
+					parameters[1].GetInt(3));
+			});
 			// Clone <tiledata>
 			AddTilesetCommand("Clone", delegate(CommandParam parameters) {
 				if (tileData != null)

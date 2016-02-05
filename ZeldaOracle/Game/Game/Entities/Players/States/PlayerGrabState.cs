@@ -79,6 +79,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.CanJump = true;
 			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 		}
+		
+		public override void OnHurt(DamageInfo damage) {
+			base.OnHurt(damage);
+			player.BeginNormalState();
+		}
 
 		public override void Update() {
 			base.Update();

@@ -42,9 +42,11 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Grab, pull, and pickup objects.
 		public override void OnButtonDown() {
 			// Check for a tile to grab.
-			Tile grabTile = Player.Physics.GetFacingSolidTile(Player.Direction);
-			if (grabTile != null)
-				grabTile.OnGrab(Player.Direction, this);
+			if (!Player.IsBeingKnockedBack) {
+				Tile grabTile = Player.Physics.GetFacingSolidTile(Player.Direction);
+				if (grabTile != null)
+					grabTile.OnGrab(Player.Direction, this);
+			}
 		}
 	}
 }

@@ -34,11 +34,18 @@ TILE lava_5;		ENVTYPE Lava;		SPRITE tile_lava_5; END;
 # HURT TILES
 
 TILE whirlpool;					ENVTYPE Whirlpool; SPRITE tile_whirlpool; END;
-TILE poison_bubble;				ENVTYPE Ocean; SOLID block; SPRITE tile_poison_bubble; END;
 TILE underwater_hole_top;		ENVTYPE Hole; SPRITE tile_underwater_hole_top; END;
 TILE underwater_hole;			ENVTYPE Hole; END;
 TILE underwater_hole_bottom;	ENVTYPE Hole; SPRITE tile_underwater_hole_bottom; END;
 TILE underwater_hole_both;		ENVTYPE Hole; SPRITE tile_underwater_hole_both; END;
+
+TILE poison_bubble;
+	FLAGS		HurtPlayer;
+	ENVTYPE		Ocean;
+	SOLID		block;
+	SPRITE		tile_poison_bubble;
+	HURT		1, (4, -1, 13, 18);
+END;
 
 # WATERFALL TILES
 
