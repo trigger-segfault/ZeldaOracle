@@ -137,6 +137,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 
 				if (walkDistance >= PLAYER_EXIT_WALK_DISTANCE) {
 					turnstile.ToggleDirection();
+					player.LandOnSurface();
 					gameControl.PopRoomState();
 				}
 			}

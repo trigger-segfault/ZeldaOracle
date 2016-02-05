@@ -453,7 +453,6 @@
     <Compile Include="Game\Tiles\BaseTileset.cs" />
     <Compile Include="Game\Tiles\EventTiles\EventTileset.cs" />
     <Compile Include="Game\Tiles\TilePath.cs" />
-    <Compile Include="Game\Tiles\TileSpecialFlags.cs" />
     <Compile Include="Game\Tiles\Custom\TileRoller.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorCube.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorJumpPad.cs" />

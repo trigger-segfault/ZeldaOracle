@@ -8,6 +8,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerRespawnDeathState : PlayerState {
 
 		private bool respawning;
+		private bool waitForAnimation;
 
 		// Crush: 44 frames of squished. 40 frames of flicker
 		// (blank, normal, blank, squish, blank, squish, blank, normal, (repeat))
@@ -19,6 +20,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public PlayerRespawnDeathState() {
 			respawning = false;
+			waitForAnimation = true;
 		}
 		
 
@@ -52,7 +54,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					player.BeginNormalState();
 				}
 			}
-			else if (player.Graphics.IsAnimationDone) {
+			else if (!waitForAnimation || player.Graphics.IsAnimationDone) {
 				player.Graphics.IsVisible = false;
 				respawning = true;
 				player.Respawn();
@@ -68,5 +70,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		public bool WaitForAnimation {
+			get { return waitForAnimation; }
+			set { waitForAnimation = value; }
+		}
 	}
 }

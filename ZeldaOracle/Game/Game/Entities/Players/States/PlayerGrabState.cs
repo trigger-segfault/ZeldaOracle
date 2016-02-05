@@ -66,6 +66,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Graphics.PauseAnimation();
 			
 			player.Movement.StopMotion();
+			
+			// Check if grabbing an instantly pickupable tile.
+			Tile grabTile = player.Physics.GetFacingSolidTile(player.Direction);
+			if (grabTile.HasFlag(TileFlags.Pickupable | TileFlags.InstantPickup)) {
+				if (AttemptPickup())
+					return;
+			}
 		}
 		
 		public override void OnEnd(PlayerState newState) {

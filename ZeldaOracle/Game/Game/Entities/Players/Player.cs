@@ -176,19 +176,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Player states
 		//-----------------------------------------------------------------------------
 
-		// Mark the player's current position/direction as where he should respawn.
-		public void MarkRespawn() {
-			respawnPosition		= position;
-			respawnDirection	= direction;
-		}
-
-		public void Respawn() {
-			position	= respawnPosition;
-			direction	= respawnDirection;
-			LandOnSurface(); // Break any breakable blocks the player respawns and collides with.
-			RoomControl.OnPlayerRespawn();
-		}
-
 		// Begin the given player state.
 		public void BeginState(PlayerState newState) {
 			if (state != newState) {
@@ -309,7 +296,36 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public void RespawnDeath() {
+			stateRespawnDeath.WaitForAnimation = true;
 			BeginState(stateRespawnDeath);
+		}
+
+		public void RespawnDeathInstantaneous() {
+			stateRespawnDeath.WaitForAnimation = false;
+			BeginState(stateRespawnDeath);
+		}
+
+		// Mark the player's current position/direction as where he should respawn.
+		public void MarkRespawn() {
+			respawnPosition		= position;
+			respawnDirection	= direction;
+		}
+
+		// Move the player to his marked spawn position in the room.
+		public void Respawn() {
+			position	= respawnPosition;
+			direction	= respawnDirection;
+			LandOnSurface(); // Break any breakable blocks the player respawns and collides with.
+
+			// If colliding with a door, then move forward one tile.
+			foreach (Tile tile in Physics.GetTilesMeeting(position, CollisionBoxType.Hard)) {
+				if ((tile is TileDoor) && tile.IsSolid) {
+					SetPositionByCenter(tile.Center + Directions.ToVector(((TileDoor) tile).Direction) * GameSettings.TILE_SIZE);
+					break;
+				}
+			}
+
+			RoomControl.OnPlayerRespawn();
 		}
 
 

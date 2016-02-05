@@ -19,6 +19,7 @@ namespace ZeldaOracle.Game.Tiles {
 		protected Animation animationOpen;
 		protected Animation animationClose;
 		protected Sound openCloseSound;
+		private bool hasUpdated;
 
 
 		//-----------------------------------------------------------------------------
@@ -67,11 +68,18 @@ namespace ZeldaOracle.Game.Tiles {
 		public void Close(bool instantaneous = false, bool rememberState = false) {
 			if (isOpen) {
 				Player player = RoomControl.Player;
+				bool isTouchingPlayer = CollisionModel.Intersecting(CollisionModel, Position, player.Physics.PositionedCollisionBox);
 
-				if (CollisionModel.Intersecting(CollisionModel, Position, player.Physics.CollisionBox, player.Position)) {
-					isPlayerBlockingClose = true;
+
+				if (isTouchingPlayer && !hasUpdated) {
+						isPlayerBlockingClose = true;
 				}
 				else {
+					if (isTouchingPlayer) {
+						// Damage & respawn the player
+						player.RespawnDeathInstantaneous();
+					}
+
 					isOpen = false;
 					animationPlayer.Play(animationClose);
 					IsSolid = true;
@@ -126,6 +134,8 @@ namespace ZeldaOracle.Game.Tiles {
 			isOpen = Properties.GetBoolean("open", false);
 			isPlayerBlockingClose = false;
 
+			hasUpdated = false;
+
 			animationOpen = TileData.TileData.SpriteList[1].Animation;
 			animationClose = TileData.TileData.SpriteList[2].Animation;
 
@@ -156,6 +166,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public override void Update() {
 			base.Update();
 
+			hasUpdated = true;
 			
 			Player player = RoomControl.Player;
 			if (isPlayerBlockingClose && !CollisionModel.Intersecting(CollisionModel, Position, player.Physics.CollisionBox, player.Position)) {

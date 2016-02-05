@@ -112,7 +112,7 @@ namespace ZeldaEditor.Tools {
 			
 			// Select or deselect the tile.
 			if (e.Button == MouseButtons.Left) {
-				if (FormsControl.ModifierKeys == Keys.Control) {
+				/*if (FormsControl.ModifierKeys == Keys.Control) {
 					if (baseTile != null) {
 						// Add or remove tiles from selection.
 						if (!LevelDisplayControl.IsTileInSelection(baseTile)) {
@@ -124,7 +124,7 @@ namespace ZeldaEditor.Tools {
 						}
 					}
 				}
-				else {
+				else */{
 					// Select a new tile, deselecting others.
 					LevelDisplayControl.DeselectTiles();
 					if (baseTile != null) {

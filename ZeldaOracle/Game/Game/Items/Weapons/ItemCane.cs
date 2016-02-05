@@ -54,7 +54,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 					TileFlags.Cuttable |
 					TileFlags.Bombable |
 					TileFlags.Boomerangable |
-					TileFlags.Pickupable);
+					TileFlags.Pickupable |
+					TileFlags.InstantPickup);
 			somariaBlockTileData.SolidType		= TileSolidType.Solid;
 			somariaBlockTileData.CollisionModel	= GameData.MODEL_BLOCK;
 			somariaBlockTileData.Sprite			= GameData.SPR_TILE_SOMARIA_BLOCK;
