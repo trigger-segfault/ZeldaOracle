@@ -176,7 +176,8 @@ TILE pot;
 	SPRITEOBJ	tile_pot_asobject;
 	BREAKANIM	effect_rock_break;
 	BREAKSOUND	rock_shatter;
-	PROPERTIES	(integer, cuttable_sword_level, 1);
+	PROPERTIES	(integer, cuttable_sword_level, 1),
+				(boolean, raised_on_buttons, true);
 END;
 
 TILE dirt_pile;

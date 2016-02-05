@@ -32,14 +32,15 @@ namespace ZeldaOracle.Game.Tiles {
 		private RoomControl			roomControl;
 		private bool				isAlive;
 		private bool				isInitialized;
-		private Point2I				location;		// The tile location in the room.
-		private int					layer;			// The layer this tile is in.
+		private Point2I				location;			// The tile location in the room.
+		private int					layer;				// The layer this tile is in.
 		private Point2I				moveDirection;
 		private int					moveDistance;
 		private int					currentMoveDistance;
 		private bool				isMoving;
 		private float				movementSpeed;
-		private Vector2F			offset;			// Offset in pixels from its tile location (used for movement).
+		private Vector2F			offset;				// Offset in pixels from its tile location (used for movement).
+		private Point2I				raisedDrawOffset;	// Offset to draw tiles that are slightly raised (EX: pushing pots onto a button)
 
 		private Vector2F			previousOffset;
 		private Point2I				previousLocation;
@@ -47,7 +48,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		protected AnimationPlayer	animationPlayer;
 		private bool				hasMoved;
-		protected TilePath			path;			// The path the tile is currently following.
+		protected TilePath			path;				// The path the tile is currently following.
 		private int					pathTimer;
 		private int					pathMoveIndex;
 		protected bool				fallsInHoles;
@@ -56,14 +57,14 @@ namespace ZeldaOracle.Game.Tiles {
 		private Vector2F			conveyorVelocity;
 
 		// Settings
-		private TileDataInstance	tileData;		// The tile data used to create this tile.
+		private TileDataInstance	tileData;			// The tile data used to create this tile.
 		private TileFlags			flags;
-		private Point2I				size;			// How many tile spaces this tile occupies. NOTE: this isn't supported yet.
+		private Point2I				size;				// How many tile spaces this tile occupies. NOTE: this isn't supported yet.
 		private SpriteAnimation		customSprite;
-		private SpriteAnimation		spriteAsObject;	// The sprite for the tile if it were picked up, pushed, etc.
-		private Animation			breakAnimation;	// The animation to play when the tile is broken.
-		private Sound				breakSound;	// The sound to play when the tile is broken.
-		private int					pushDelay;		// Number of ticks of pushing before the player can move this tile.
+		private SpriteAnimation		spriteAsObject;		// The sprite for the tile if it were picked up, pushed, etc.
+		private Animation			breakAnimation;		// The animation to play when the tile is broken.
+		private Sound				breakSound;			// The sound to play when the tile is broken.
+		private int					pushDelay;			// Number of ticks of pushing before the player can move this tile.
 		private DropList			dropList;
 		private Properties			properties;
 		
@@ -106,6 +107,7 @@ namespace ZeldaOracle.Game.Tiles {
 			conveyorVelocity	= Vector2F.Zero;
 			surfaceTile			= null;
 			collisionStyle		= CollisionStyle.Rectangular;
+			raisedDrawOffset	= Point2I.Zero;
 		}
 
 
@@ -546,18 +548,20 @@ namespace ZeldaOracle.Game.Tiles {
 			if (isMoving && !spriteAsObject.IsNull)
 				sprite = spriteAsObject;
 
+			Vector2F drawPosition = Position + raisedDrawOffset;
+
 			if (animationPlayer != null) {
 				g.DrawAnimation(animationPlayer.SubStrip, Zone.ImageVariantID,
-					animationPlayer.PlaybackTime, Position);
+					animationPlayer.PlaybackTime, drawPosition);
 			}
 			else if (sprite.IsAnimation) {
 				// Draw as an animation.
 				g.DrawAnimation(sprite.Animation, Zone.ImageVariantID,
-					RoomControl.GameControl.RoomTicks, Position);
+					RoomControl.GameControl.RoomTicks, drawPosition);
 			}
 			else if (sprite.IsSprite) {
 				// Draw as a sprite.
-				g.DrawSprite(sprite.Sprite, Zone.ImageVariantID, Position);
+				g.DrawSprite(sprite.Sprite, Zone.ImageVariantID, drawPosition);
 			}
 		}
 
@@ -776,6 +780,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public DropList DropList {
 			get { return dropList; }
 			set { dropList = value; }
+		}
+
+		public Point2I RaisedDrawOffset {
+			get { return raisedDrawOffset; }
+			set { raisedDrawOffset = value; }
 		}
 
 

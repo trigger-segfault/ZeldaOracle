@@ -111,9 +111,11 @@ namespace ZeldaOracle.Game {
 		public const int				MONSTER_BOOMERANG_DAMAGE	= 1;
 
 		// Tiles
-		public const int				TILE_CRACKED_FLOOR_CRUMBLE_DELAY	= 30;
-		public const float				TILE_ROLLER_MOVE_SPEED				= 0.5f;
-		
+		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.
+		public const int				TILE_BUTTON_UNCOVER_RELEASE_DELAY		= 27;	// Delay between being uncovered and becoming released.
+		public static readonly Rectangle2F	TILE_BUTTON_PLAYER_PRESS_AREA		= new Rectangle2F(0, 5, 16, 16);
+		public const int				TILE_CRACKED_FLOOR_CRUMBLE_DELAY		= 30;
+		public const float				TILE_ROLLER_MOVE_SPEED					= 0.5f;
 		public const float				TILE_PULL_HANDLE_EXTEND_SPEED			= 0.25f;
 		public const float				TILE_PULL_HANDLE_RETRACT_SPEED			= 0.25f;
 		public const int				TILE_PULL_HANDLE_PLAYER_PULL_DURATION	= 40;
