@@ -7,13 +7,13 @@ using ZeldaOracle.Common.Geometry;
 namespace ZeldaOracle.Common.Scripts {
 
 	public enum CommandParamType {
+		Array,
+
 		String,
 		Integer,
 		Float,
-		Boolean,
-		Array,
-
-		Any, // Any value that's not an array.
+		Boolean,	
+		Any,		// Any value that's not an array.
 
 		Unknown,
 	}
@@ -56,10 +56,9 @@ namespace ZeldaOracle.Common.Scripts {
 		}
 
 		public CommandParam(string str) :
-			this(CommandParamType.String)
+			this(CommandParamType.Any)
 		{
-			this.value			= str;
-			this.stringValue	= str;
+			this.stringValue = str;
 		}
 		
 		public CommandParam(CommandParam copy) {
@@ -113,25 +112,25 @@ namespace ZeldaOracle.Common.Scripts {
 				return true;
 			if (checkType == CommandParamType.Integer) {
 				int intValue;
-				return int.TryParse((string) value, out intValue);
+				return int.TryParse(stringValue, out intValue);
 			}
 			if (checkType == CommandParamType.Float) {
 				float floatValue;
-				return float.TryParse((string) value, out floatValue);
+				return float.TryParse(stringValue, out floatValue);
 			}
 			if (checkType == CommandParamType.Boolean) {
 				bool boolValue;
-				return bool.TryParse((string) value, out boolValue);
+				return bool.TryParse(stringValue, out boolValue);
 			}
 			return false;
 		}
 
 		// Set the value of the parameter by parsing the given string.
 		public void SetValueByParse(string str) {
-			if (type == CommandParamType.String) {
+			this.stringValue = str;
+
+			if (type == CommandParamType.String)
 				this.value = str;
-				this.stringValue = str;
-			}
 			else if (type == CommandParamType.Integer)
 				this.value = int.Parse(str);
 			else if (type == CommandParamType.Float)
@@ -302,8 +301,8 @@ namespace ZeldaOracle.Common.Scripts {
 		public string StringValue {
 			get {
 				if (type == CommandParamType.String)
-					return (string) stringValue;
-				return value.ToString();
+					return (string) value;
+				return stringValue;
 			}
 		}
 			

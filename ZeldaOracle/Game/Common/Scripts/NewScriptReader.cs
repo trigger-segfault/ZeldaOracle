@@ -11,7 +11,7 @@ namespace ZeldaOracle.Common.Scripts {
 	 * is meant to be implemented to be able to
 	 * interpret text files written in a certain syntax.
 	 * </summary> */
-	public class NewScriptReader : ScriptReader {
+	public class NewScriptReader {
 		
 		private StreamReader	streamReader;
 		private string			fileName;
@@ -95,10 +95,10 @@ namespace ZeldaOracle.Common.Scripts {
 		//-----------------------------------------------------------------------------
 
 		// Begins reading the script.
-		//protected virtual void BeginReading() {}
+		protected virtual void BeginReading() {}
 
 		// Ends reading the script.
-		//protected virtual void EndReading() {}
+		protected virtual void EndReading() {}
 		
 		// Reads a line in the script as a command.
 		protected virtual bool PerformCommand(string commandName, CommandParam parameters) {
@@ -222,7 +222,7 @@ namespace ZeldaOracle.Common.Scripts {
 		}
 
 		// Parse a single line in the script.
-		protected override void ParseLine(string line) {
+		protected void ParseLine(string line) {
 			bool quotes	= false;
 			word		= "";
 			charIndex	= 0;
@@ -313,7 +313,7 @@ namespace ZeldaOracle.Common.Scripts {
 		}
 
 		// Parse and interpret the given text stream as a script, line by line.
-		public override void ReadScript(StreamReader reader, string path) {
+		public void ReadScript(StreamReader reader, string path) {
 			this.fileName = path;
 			this.streamReader = reader;
 

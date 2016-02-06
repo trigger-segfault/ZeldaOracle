@@ -391,13 +391,6 @@ namespace ZeldaOracle.Common.Content {
 			return resource;
 		}
 
-		// Loads a single sprite sheet from a script file.
-		public static SpriteSheet LoadSpriteSheet(string assetName) {
-			SpriteSheetSROld script = new SpriteSheetSROld();
-			LoadScript(assetName, script);
-			return script.Sheet;
-		}
-
 		// Loads/compiles sprite sheets from a script file.
 		public static void LoadSpriteSheets(string assetName) {
 			LoadScript(assetName, new SpritesSR());
@@ -479,12 +472,12 @@ namespace ZeldaOracle.Common.Content {
 		//-----------------------------------------------------------------------------
 
 		// Loads a script file with the given script reader object.
-		public static void LoadScript(string assetName, ScriptReader sr) {
+		public static void LoadScript(string assetName, NewScriptReader sr) {
 			LoadScript(assetName, sr, Encoding.Default);
 		}
 
 		// Loads a script file with the given encoding and script reader object.
-		public static void LoadScript(string assetName, ScriptReader sr, Encoding encoding) {
+		public static void LoadScript(string assetName, NewScriptReader sr, Encoding encoding) {
 			try {
 				Stream stream = TitleContainer.OpenStream(contentManager.RootDirectory + "/" + assetName);
 				StreamReader reader = new StreamReader(stream, encoding);
