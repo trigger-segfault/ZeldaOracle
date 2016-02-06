@@ -35,8 +35,14 @@ namespace ZeldaOracle.Common.Scripts {
 					result += "float";
 				else if (param.Type == CommandParamType.Boolean)
 					result += "bool";
+				else if (param.Type == CommandParamType.Any)
+					result += "var";
 				result += " " + param.Name;
 			}
+
+			// Show the variadic ellipses.
+			if (param.IsVariadic)
+				result += "...";
 
 			// Append the default value.
 			if (param.DefaultValue != null) {
@@ -62,7 +68,7 @@ namespace ZeldaOracle.Common.Scripts {
 				result += ")";
 			}
 			else {
-				if (param.Type == CommandParamType.String)
+				if (param.Type == CommandParamType.String || param.Type == CommandParamType.Any)
 					result += "\"" + param.StringValue + "\"";
 				else if (param.Type == CommandParamType.Integer)
 					result += param.IntValue;
@@ -194,10 +200,18 @@ namespace ZeldaOracle.Common.Scripts {
 		}
 
 		private static void CompleteToken(ParseData data) {
-			if (data.Token.Length > 0) {
-				data.Tokens.Add(data.Token);
+			bool isVariadic = false;
 
-				if (data.IsParsingValue) {
+			if (data.Token.EndsWith("...")) {
+				data.Token = data.Token.Substring(0, data.Token.Length - 3);
+				isVariadic = true;
+			}
+
+			if (data.Token.Length > 0 || isVariadic) {
+				if (data.Token.Length > 0)
+					data.Tokens.Add(data.Token);
+
+				if (data.IsParsingValue && data.Token.Length > 0) {
 					CommandParam p;
 					if (data.IsParsingDefaultValue) {
 						CommandReferenceParam refParam = data.RefParamStack
@@ -211,13 +225,17 @@ namespace ZeldaOracle.Common.Scripts {
 					data.ValParamStack.Peek().AddChild(p);
 					data.Tokens.Clear();
 				}
-				else {
-					if (data.Tokens.Count == 2) {
+				if (!data.IsParsingValue) {
+					if (data.Token.Length > 0 && data.Tokens.Count == 2) {
 						data.RefParamStack.Peek().AddChild(new CommandReferenceParam() {
-							Type = ParseCommandParamType(data.Tokens[0]),
-							Name = data.Tokens[1]
+							Type		= ParseCommandParamType(data.Tokens[0]),
+							Name		= data.Tokens[1],
+							IsVariadic	= isVariadic
 						});
 						data.Tokens.Clear();
+					}
+					else if (isVariadic) {
+						data.RefParamStack.Peek().GetChildren().Last().IsVariadic = true;
 					}
 				}
 
@@ -247,7 +265,7 @@ namespace ZeldaOracle.Common.Scripts {
 				return CommandParamType.Float;
 			if (typeName == "string" || typeName == "str")
 				return CommandParamType.String;
-			if (typeName == "any")
+			if (typeName == "any" || typeName == "var" || typeName == "?")
 				return CommandParamType.Any;
 			return CommandParamType.Unknown;
 		}

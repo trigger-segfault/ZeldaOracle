@@ -14,6 +14,7 @@ namespace ZeldaOracle.Common.Scripts {
 		private CommandReferenceParam	children;
 		private CommandParam			defaultValue;
 		private object					value;
+		private bool					isVariadic;
 
 
 		//-----------------------------------------------------------------------------
@@ -99,6 +100,11 @@ namespace ZeldaOracle.Common.Scripts {
 		public string Name {
 			get { return name; }
 			set { name = value; }
+		}
+		
+		public bool IsVariadic {
+			get { return isVariadic; }
+			set { isVariadic = value; }
 		}
 				
 		// Arrays ---------------------------------------------------------------------

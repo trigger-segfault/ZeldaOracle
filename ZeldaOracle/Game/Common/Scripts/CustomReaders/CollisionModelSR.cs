@@ -46,10 +46,15 @@ namespace ZeldaOracle.Common.Scripts {
 					parameters.GetInt(3));
 			});
 
-			// Add x, y, width, height
 			AddCommand("Test",
-			//"float x, string y, bool width, (int a, int b, (string c)) = (0, 1, (hello)), float height = 2.5f",
-			"float x, string y, bool width, (int a, int b, (string c)), float height",
+				//"float x, string y, bool width, (int a, int b, (string c)) = (0, 1, (hello)), float height = 2.5f",
+				"any x = fuck, string y, bool width, (int a, int b, (string c)), float height",
+			delegate(CommandParam parameters) {
+				Console.WriteLine(CommandParamParser.ToString(parameters));
+			});
+
+			AddCommand("Variadic",
+				"var values...",
 			delegate(CommandParam parameters) {
 				Console.WriteLine(CommandParamParser.ToString(parameters));
 			});

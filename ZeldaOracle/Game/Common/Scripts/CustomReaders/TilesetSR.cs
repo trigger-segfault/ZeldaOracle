@@ -24,52 +24,31 @@ namespace ZeldaOracle.Common.Scripts {
 
 	public class TilesetSR : NewScriptReader {
 
-		private Tileset			tileset;
-		private EventTileset	eventTileset;
-		private BaseTileData	baseTileData;
-		private TileData		tileData;
-		private EventTileData	eventTileData;
-		//private string			tileDataName;
-		//private AnimationSR		animationSR;
-		//private SpritesSR		spritesSR;
-		private LoadingModes	loadingMode;
-		private TemporaryResources resources;
-
-		private SpriteBuilder spriteBuilder;
-		private Sprite sprite;
-		private string spriteName;
-
-		private AnimationBuilder animationBuilder;
-		private Animation animation;
-		private string animationName;
-
-		private bool useTemporary;
-
-		private List<ScriptCommand> tilesetCommands;
-		private List<ScriptCommand> animationCommands;
-		private List<ScriptCommand> spriteCommands;
+		private Tileset				tileset;
+		private EventTileset		eventTileset;
+		private BaseTileData		baseTileData;
+		private TileData			tileData;
+		private EventTileData		eventTileData;
+		//private LoadingModes		loadingMode;
+		private SpriteBuilder		spriteBuilder;
+		private TemporaryResources	resources;
+		private bool				useTemporary;
 
 
 		//-----------------------------------------------------------------------------
-		// Override
+		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public TilesetSR() {
 
-			this.tilesetCommands	= new List<ScriptCommand>();
-			this.animationCommands	= new List<ScriptCommand>();
-			this.spriteCommands		= new List<ScriptCommand>();
-
-			this.loadingMode	= LoadingModes.Tilesets;
+			//this.loadingMode	= LoadingModes.Tilesets;
 			this.resources		= new TemporaryResources();
 			this.useTemporary	= false;
-
-			this.animationBuilder	= new AnimationBuilder();
 			this.spriteBuilder	= new SpriteBuilder();
 
-			// Tileset <name> <sheet-name> <size(width, height)>
-			AddCommand("Load", delegate(CommandParam parameters) {
-				string loadType = parameters.GetString(0).ToLower();
+			// Load <resource-type>
+			AddCommand("Load", "string resourceType", delegate(CommandParam parameters) {
+				/*string loadType = parameters.GetString(0).ToLower();
 				if (loadType == "tilesets")
 					loadingMode = LoadingModes.Tilesets;
 				else if (loadType == "animations")
@@ -77,7 +56,7 @@ namespace ZeldaOracle.Common.Scripts {
 				else if (loadType == "sprites")
 					loadingMode = LoadingModes.Sprites;
 				else
-					ThrowParseError("Invalid Load type", true);
+					ThrowParseError("Invalid Load type", true);*/
 			});
 
 			// BEGIN/END.
@@ -241,7 +220,7 @@ namespace ZeldaOracle.Common.Scripts {
 				baseTileData.Type = Tile.GetType(parameters.GetString(0), true);
 			});
 			// Flags <flags[]...>
-			AddTilesetCommand("Flags", delegate(CommandParam parameters) {
+			AddCommand("Flags", "string flags...", delegate(CommandParam parameters) {
 				for (int i = 0; i < parameters.ChildCount; i++) {
 					TileFlags flags = TileFlags.None;
 					if (Enum.TryParse<TileFlags>(parameters.GetString(i), true, out flags))
@@ -282,19 +261,23 @@ namespace ZeldaOracle.Common.Scripts {
 
 			});*/
 
-			AddTilesetCommand("Properties", delegate(CommandParam parameters) {
-				// TODO: handle lists.
+			AddCommand("Properties",
+				"(string type, string name, var otherData...)...",
+				//"(string type, string name, var value, string readableName, string editorType, string category, string description)...",
+				//"(string type, string name, var value, string readableName, (string editorType, string editorSubType), string category, string description, bool isHidden = false)...",
+			delegate(CommandParam parameters) {
+				// TODO: handle lists?
 				for (int i = 0; i < parameters.ChildCount; i++) {
 					CommandParam param = parameters[i];
 					string name = param.GetString(1);
 
-					if (String.Compare(param.GetString(0), "hide", StringComparison.OrdinalIgnoreCase) == 0) {
+					/*if (String.Compare(param.GetString(0), "hide", StringComparison.OrdinalIgnoreCase) == 0) {
 						baseTileData.Properties.GetProperty(name, false).Documentation.IsHidden = true;
 					}
 					else if (String.Compare(param.GetString(0), "show", StringComparison.OrdinalIgnoreCase) == 0) {
 						baseTileData.Properties.GetProperty(name, false).Documentation.IsHidden = false;
 					}
-					else {
+					else */{
 						// Parse the property type.
 						PropertyType type;
 						if (!Enum.TryParse<PropertyType>(param.GetString(0), true, out type))
@@ -347,7 +330,10 @@ namespace ZeldaOracle.Common.Scripts {
 				}
 			});
 			// Event <name>, <readable-name>, <description>, (<param-type-1>, <param-name-1>, <param-type-2>, <param-name-2>...)
-			AddTilesetCommand("Event", delegate(CommandParam parameters) {
+			AddCommand("Event",
+				/*"string name, string readableName, string description",
+				"string name, string readableName, string description, (string params...)",*/
+			delegate(CommandParam parameters) {
 				Property property = Property.CreateString(parameters.GetString(0), "");
 				//property.SetDocumentation(parameters.GetString(1), "script", "", "Events", parameters.GetString(2), true, false);
 				baseTileData.Properties.Set(property.Name, property)
@@ -382,12 +368,13 @@ namespace ZeldaOracle.Common.Scripts {
 				"string spriteSheetName, (int sourceX, int sourceY), (int offsetX, int offsetY) = (0, 0)",
 			delegate(CommandParam parameters) {
 				if (parameters.ChildCount >= 2) {
-					spriteBuilder.Begin(new Sprite(
+					Console.Write("UH OH!");
+					/*spriteBuilder.Begin(new Sprite(
 						resources.GetResource<SpriteSheet>(parameters.GetString(0)),
 						parameters.GetPoint(1),
 						parameters.GetPoint(2, Point2I.Zero)
 					));
-					baseTileData.Sprite = spriteBuilder.End();
+					baseTileData.Sprite = spriteBuilder.End();*/
 				}
 				else {
 					baseTileData.Sprite = resources.GetSpriteAnimation(parameters.GetString(0));
@@ -443,7 +430,7 @@ namespace ZeldaOracle.Common.Scripts {
 			});
 
 			// SpriteList [sprite-animation-1] [sprite-animation-2]...
-			AddTilesetCommand("SpriteList", delegate(CommandParam parameters) {
+			AddCommand("SpriteList", "string spriteAnimations...", delegate(CommandParam parameters) {
 				SpriteAnimation[] spriteList = new SpriteAnimation[parameters.ChildCount];
 				for (int i = 0; i < parameters.ChildCount; i++)
 					spriteList[i] = resources.GetSpriteAnimation(parameters.GetString(i));
@@ -524,155 +511,6 @@ namespace ZeldaOracle.Common.Scripts {
 			});
 
 			// SPRITE SHEET.
-
-			AddAnimationCommand("SpriteSheet", delegate(CommandParam parameters) {
-				SpriteSheet sheet = Resources.GetResource<SpriteSheet>(parameters.GetString(0));
-				animationBuilder.SpriteSheet = sheet;
-			});
-
-
-			// BEGIN/END.
-
-			AddAnimationCommand("Anim", delegate(CommandParam parameters) {
-				animationName = parameters.GetString(0);
-				animationBuilder.BeginNull();
-				animation = null;
-				useTemporary = false;
-			});
-			AddAnimationCommand("TempAnim", delegate(CommandParam parameters) {
-				animationName = parameters.GetString(0);
-				animationBuilder.BeginNull();
-				animation = null;
-				useTemporary = true;
-			});
-			AddAnimationCommand("End", delegate(CommandParam parameters) {
-				if (animation != null) {
-					animationBuilder.End();
-					if (useTemporary)
-						resources.AddResource<Animation>(animationName, animation);
-					else
-						Resources.AddResource<Animation>(animationName, animation);
-				}
-			});
-			AddAnimationCommand("SubStrip", delegate(CommandParam parameters) {
-				LoopMode loopMode = LoopMode.Repeat;
-				if (parameters.GetString(0) == "reset")
-					loopMode = LoopMode.Reset;
-				else if (parameters.GetString(0) == "repeat" || parameters.GetString(0) == "loop")
-					loopMode = LoopMode.Repeat;
-				else if (parameters.GetString(0) == "clamp")
-					loopMode = LoopMode.Clamp;
-				else
-					ThrowParseError("Unknown loop mode '" + parameters.GetString(0) + "' for animation");
-
-				animationBuilder.CreateSubStrip();
-				animationBuilder.SetLoopMode(loopMode);
-				if (animation == null)
-					animation = animationBuilder.Animation;
-			});
-			AddAnimationCommand("Clone", delegate(CommandParam parameters) {
-				if (resources.ExistsResource<Animation>(parameters.GetString(0))) {
-					animationBuilder.CreateClone(resources.GetResource<Animation>(parameters.GetString(0)));
-					animation = animationBuilder.Animation;
-				}
-				else {
-					// ERROR: can't clone nonexistant animation.
-				}
-			});
-
-
-			// FRAME BUILDING.
-
-			AddAnimationCommand("Add", delegate(CommandParam parameters) {
-				if (parameters.GetString(0) == "strip") {
-					animationBuilder.AddFrameStrip(
-						parameters.GetInt(1),
-						parameters.GetPoint(3).X,
-						parameters.GetPoint(3).Y,
-						parameters.GetInt(2),
-						parameters.GetPoint(4, Point2I.Zero).X,
-						parameters.GetPoint(4, Point2I.Zero).Y,
-						parameters.GetPoint(5, new Point2I(1, 0)).X,
-						parameters.GetPoint(5, new Point2I(1, 0)).Y);
-				}
-				else if (parameters.GetString(0) == "frame") {
-					animationBuilder.AddFrame(
-						parameters.GetInt(1),
-						parameters.GetPoint(2).X,
-						parameters.GetPoint(2).Y,
-						parameters.GetPoint(3, Point2I.Zero).X,
-						parameters.GetPoint(3, Point2I.Zero).Y);
-				}
-				else if (parameters.GetString(0) == "part") {
-					animationBuilder.AddPart(
-						parameters.GetInt(1),
-						parameters.GetPoint(2).X,
-						parameters.GetPoint(2).Y,
-						parameters.GetPoint(3, Point2I.Zero).X,
-						parameters.GetPoint(3, Point2I.Zero).Y);
-				}
-				else
-					ThrowParseError("Unknown add type '" + parameters.GetString(0) + "' for animation");
-			});
-			AddAnimationCommand("Insert", delegate(CommandParam parameters) {
-				if (parameters.GetString(0) == "strip") {
-					animationBuilder.InsertFrameStrip(
-						parameters.GetInt(1),
-						parameters.GetInt(2),
-						parameters.GetPoint(4).X,
-						parameters.GetPoint(4).Y,
-						parameters.GetInt(3),
-						parameters.GetPoint(5, Point2I.Zero).X,
-						parameters.GetPoint(5, Point2I.Zero).Y,
-						parameters.GetPoint(6, new Point2I(1, 0)).X,
-						parameters.GetPoint(6, new Point2I(1, 0)).Y);
-				}
-				else if (parameters.GetString(0) == "frame") {
-					animationBuilder.InsertFrame(
-						parameters.GetInt(1),
-						parameters.GetInt(2),
-						parameters.GetPoint(3).X,
-						parameters.GetPoint(3).Y,
-						parameters.GetPoint(4, Point2I.Zero).X,
-						parameters.GetPoint(4, Point2I.Zero).Y);
-				}
-				else
-					ThrowParseError("Unknown insert type '" + parameters.GetString(0) + "' for animation");
-			});
-
-
-			// MODIFICATIONS.
-
-			AddAnimationCommand("MakeQuad", delegate(CommandParam parameters) {
-				animationBuilder.MakeQuad();
-			});
-			AddAnimationCommand("MakeDynamic", delegate(CommandParam parameters) {
-				animationBuilder.MakeDynamic(
-					parameters.GetInt(0),
-					parameters.GetPoint(1).X,
-					parameters.GetPoint(1).Y);
-			});
-			AddAnimationCommand("Offset", delegate(CommandParam parameters) {
-				animationBuilder.Offset(
-					parameters.GetPoint(0).X,
-					parameters.GetPoint(0).Y);
-			});
-			AddAnimationCommand("Flicker", delegate(CommandParam parameters) {
-				// FLICKER <alternateDelay> <on/off>
-
-				bool startOn = true;
-				if (parameters.GetString(1) == "on")
-					startOn = true;
-				else if (parameters.GetString(1) == "off")
-					startOn = false;
-				else
-					ThrowParseError("Must be either on or off for flicker start state");
-
-				animationBuilder.MakeFlicker(parameters.GetInt(0), startOn);
-			});
-
-
-			// SPRITE SHEET.
 			
 			AddCommand("SpriteSheet",
 				"string path, (int cellWidth, int cellHeight), (int spacingX, int spacingY), (int offsetX, int offsetY)",
@@ -716,160 +554,23 @@ namespace ZeldaOracle.Common.Scripts {
 				}
 			});
 
-			// BEGIN/END.
-
-			// Sprite <name> <grid-location> <draw-offset = (0, 0)>
-			AddSpriteCommand("Sprite", delegate(CommandParam parameters) {
-				spriteName = parameters.GetString(0);
-				sprite = new Sprite(
-					spriteBuilder.SpriteSheet,
-					parameters.GetPoint(1),
-					parameters.GetPoint(2, Point2I.Zero));
-				spriteBuilder.Begin(sprite);
-				useTemporary = false;
-			});
-			// TempSprite <name> <grid-location> <draw-offset = (0, 0)>
-			AddSpriteCommand("TempSprite", delegate(CommandParam parameters) {
-				spriteName = parameters.GetString(0);
-				sprite = new Sprite(
-					spriteBuilder.SpriteSheet,
-					parameters.GetPoint(1),
-					parameters.GetPoint(2, Point2I.Zero));
-				spriteBuilder.Begin(sprite);
-				useTemporary = true;
-			});
-			AddSpriteCommand("End", delegate(CommandParam parameters) {
-				if (sprite != null) {
-					spriteBuilder.End();
-					if (useTemporary)
-						resources.AddResource<Sprite>(spriteName, sprite);
-					else
-						Resources.AddResource<Sprite>(spriteName, sprite);
-					sprite = null;
-				}
-			});
-
-			// BUILDING.
-
-			// Add <grid-location> <draw-offset = (0, 0)>
-			AddSpriteCommand("Add", delegate(CommandParam parameters) {
-				spriteBuilder.AddPart(
-					parameters.GetPoint(0).X,
-					parameters.GetPoint(0).Y,
-					parameters.GetPoint(1, Point2I.Zero).X,
-					parameters.GetPoint(1, Point2I.Zero).Y);
-			});
-			// Size <size>
-			AddSpriteCommand("Size", delegate(CommandParam parameters) {
-				spriteBuilder.SetSize(
-					parameters.GetPoint(0).X,
-					parameters.GetPoint(0).Y);
-			});
-
-			// Add each command type as a command.
-			/*
-			for (int i = 0; i < tilesetCommands.Count; i++) {
-				string command = tilesetCommands[i].Name;
-				AddCommand(tilesetCommands[i].Name, delegate(CommandParam parameters) {
-					ReadSpecialCommand(command, parameters);
-				});
-			}
-			for (int i = 0; i < animationCommands.Count; i++) {
-				string command = animationCommands[i].Name;
-				AddCommand(animationCommands[i].Name, delegate(CommandParam parameters) {
-					ReadSpecialCommand(command, parameters);
-				});
-			}
-			for (int i = 0; i < spriteCommands.Count; i++) {
-				string command = spriteCommands[i].Name;
-				AddCommand(spriteCommands[i].Name, delegate(CommandParam parameters) {
-					ReadSpecialCommand(command, parameters);
-				});
-			}*/
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
 
 		// Begins reading the script.
 		protected override void BeginReading() {
 			tileset  = null;
 			tileData = null;
-
-			animation = null;
-			animationName = "";
-			animationBuilder.SpriteSheet = null;
-
-			sprite = null;
-			spriteName = "";
 			spriteBuilder.SpriteSheet = null;
 		}
 
 		// Ends reading the script.
 		protected override void EndReading() {
-			animation = null;
 
-			sprite = null;
 		}
-
-		private void AddTilesetCommand(string name, Action<CommandParam> action) {
-			AddCommand(name, action);
-			//ScriptCommand command = new ScriptCommand(name, action);
-			//tilesetCommands.Add(command);
-		}
-
-		private void AddAnimationCommand(string name, Action<CommandParam> action) {
-			ScriptCommand command = new ScriptCommand(name, action);
-			animationCommands.Add(command);
-		}
-
-		private void AddSpriteCommand(string name, Action<CommandParam> action) {
-			ScriptCommand command = new ScriptCommand(name, action);
-			spriteCommands.Add(command);
-		}
-
-		private void ReadSpecialCommand(string commandName, CommandParam parameters) {
-			bool exists = false;
-			switch (loadingMode) {
-			case LoadingModes.Tilesets:
-				for (int i = 0; i < tilesetCommands.Count; i++) {
-					if (String.Compare(tilesetCommands[i].Name, commandName,
-						StringComparison.CurrentCultureIgnoreCase) == 0) {
-							tilesetCommands[i].Action(parameters);
-						exists = true;
-						break;
-					}
-				}
-				if (!exists)
-					ThrowParseError(commandName + " is not a valid command while loading tilesets", false);
-				break;
-			case LoadingModes.Animations:
-				for (int i = 0; i < animationCommands.Count; i++) {
-					if (String.Compare(animationCommands[i].Name, commandName,
-						StringComparison.CurrentCultureIgnoreCase) == 0) {
-							animationCommands[i].Action(parameters);
-						exists = true;
-						break;
-					}
-				}
-				if (!exists)
-					ThrowParseError(commandName + " is not a valid command while loading animations", false);
-				break;
-			case LoadingModes.Sprites:
-				for (int i = 0; i < spriteCommands.Count; i++) {
-					if (String.Compare(spriteCommands[i].Name, commandName,
-						StringComparison.CurrentCultureIgnoreCase) == 0) {
-							spriteCommands[i].Action(parameters);
-						exists = true;
-						break;
-					}
-				}
-				if (!exists)
-					ThrowParseError(commandName + " is not a valid command while loading sprites", false);
-				break;
-			}
-		}
-
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-
 	}
-} // end namespace
+}

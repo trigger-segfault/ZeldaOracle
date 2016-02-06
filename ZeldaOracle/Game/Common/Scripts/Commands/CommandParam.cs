@@ -74,11 +74,8 @@ namespace ZeldaOracle.Common.Scripts {
 			// Copy array children.
 			this.count = 0;
 			if (type == CommandParamType.Array) {
-				CommandParam copyChild = copy.Children;
-				while (copyChild != null) {
+				foreach (CommandParam copyChild in copy.GetChildren())
 					AddChild(new CommandParam(copyChild));
-					copyChild = copyChild.NextParam;
-				}
 			}
 		}
 
@@ -106,9 +103,11 @@ namespace ZeldaOracle.Common.Scripts {
 
 		// Returns true if this parameter is valid as the given type.
 		public bool IsValidType(CommandParamType checkType) {
+			if (checkType == CommandParamType.Any)
+				return true;
 			if (type == CommandParamType.Array || checkType == CommandParamType.Array)
 				return (type == checkType);
-			if (checkType == CommandParamType.String || checkType == CommandParamType.Any)
+			if (checkType == CommandParamType.String)
 				return true;
 			if (checkType == CommandParamType.Integer) {
 				int intValue;
@@ -272,7 +271,7 @@ namespace ZeldaOracle.Common.Scripts {
 			get {
 				if (type == CommandParamType.Boolean)
 					return (bool) value;
-				else if (type == CommandParamType.String)
+				else if (type == CommandParamType.String || type == CommandParamType.Any)
 					return bool.Parse((string) stringValue);
 				return false;
 			}
@@ -282,7 +281,7 @@ namespace ZeldaOracle.Common.Scripts {
 			get {
 				if (type == CommandParamType.Integer)
 					return (int) value;
-				else if (type == CommandParamType.String)
+				else if (type == CommandParamType.String || type == CommandParamType.Any)
 					return int.Parse((string) stringValue);
 				return 0;
 			}
@@ -292,7 +291,7 @@ namespace ZeldaOracle.Common.Scripts {
 			get {
 				if (type == CommandParamType.Float)
 					return (float) value;
-				else if (type == CommandParamType.String)
+				else if (type == CommandParamType.String || type == CommandParamType.Any)
 					return float.Parse((string) stringValue);
 				return 0.0f;
 			}

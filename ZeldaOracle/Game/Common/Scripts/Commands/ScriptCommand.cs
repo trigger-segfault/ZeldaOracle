@@ -89,8 +89,16 @@ namespace ZeldaOracle.Common.Scripts {
 					defaultIndex++;
 				}
 
+				// Check if the reference is variadic on the last parameter.
+				CommandReferenceParam lastRefChild = reference.GetChildren().LastOrDefault();
+				bool isVariadic = false;
+				if (lastRefChild != null && lastRefChild.IsVariadic)
+					isVariadic = true;
+
 				// Verify the user parameter's child count is within the valid range.
-				if (userParams.ChildCount < defaultIndex || userParams.ChildCount > reference.ChildCount) {
+				if (userParams.ChildCount < defaultIndex ||
+					(userParams.ChildCount > reference.ChildCount && !isVariadic))
+				{
 					newParameters = null;
 					return false;
 				}
@@ -98,7 +106,10 @@ namespace ZeldaOracle.Common.Scripts {
 				// Verify each child paremeter matches the reference.
 				CommandReferenceParam referenceChild = reference.Children;
 				CommandParam userChild = userParams.Children;
-				for (int i = 0; i < reference.ChildCount; i++) {
+				int count = reference.ChildCount;
+				if (isVariadic)
+					count = Math.Max(count, userParams.ChildCount);
+				for (int i = 0; i < count; i++) {
 					CommandParam newChild;
 					if (i < userParams.ChildCount) {
 						if (!AreParametersMatching(referenceChild, userChild, out newChild)) {
@@ -111,12 +122,20 @@ namespace ZeldaOracle.Common.Scripts {
 						newChild = new CommandParam(referenceChild.DefaultValue);
 					}
 					newParameters.AddChild(newChild);
-					referenceChild = referenceChild.NextParam;
+					if (referenceChild.NextParam != null)
+						referenceChild = referenceChild.NextParam;
 				}
 			}
 			else {
-				newParameters = new CommandParam(reference);
-				newParameters.SetValueByParse(userParams.StringValue);
+				if (userParams.Type == CommandParamType.Array) {
+					newParameters = new CommandParam(CommandParamType.Array);
+					foreach (CommandParam userChild in userParams.GetChildren())
+						newParameters.AddChild(new CommandParam(userChild));
+				}
+				else {
+					newParameters = new CommandParam(reference);
+					newParameters.SetValueByParse(userParams.StringValue);
+				}
 			}
 
 			return true;
