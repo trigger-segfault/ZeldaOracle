@@ -16,7 +16,7 @@ using ZeldaOracle.Game.Tiles.EventTiles;
 
 namespace ZeldaOracle.Common.Scripts {
 
-	enum LoadingModes {
+	public enum LoadingModes {
 		Tilesets,
 		Animations,
 		Sprites
@@ -46,8 +46,11 @@ namespace ZeldaOracle.Common.Scripts {
 			this.useTemporary	= false;
 			this.spriteBuilder	= new SpriteBuilder();
 
-			// Load <resource-type>
-			AddCommand("Load", "string resourceType", delegate(CommandParam parameters) {
+			//=====================================================================================
+			// LOADING MODE 
+			//=====================================================================================
+			AddCommand("Load", "string resourceType",
+			delegate(CommandParam parameters) {
 				/*string loadType = parameters.GetString(0).ToLower();
 				if (loadType == "tilesets")
 					loadingMode = LoadingModes.Tilesets;
@@ -58,26 +61,22 @@ namespace ZeldaOracle.Common.Scripts {
 				else
 					ThrowParseError("Invalid Load type", true);*/
 			});
-
-			// BEGIN/END.
-			
-			// Tileset <name>, <sheet-name>, (<width>, <height>)
-			AddCommand("Tileset",
-				"string name, string sheetName, (int width, int height)",
+			//=====================================================================================
+			// TILE/TILESET BEGIN/END 
+			//=====================================================================================
+			AddCommand("Tileset", "string name, string sheetName, (int width, int height)",
 			delegate(CommandParam parameters) {
 				SpriteSheet sheet = Resources.GetSpriteSheet(parameters.GetString(1));
 				tileset = new Tileset(parameters.GetString(0), sheet,
 									  parameters.GetPoint(2));
 			});
-			// EventTileset <name>, (<width>, <height>)
-			AddCommand("EventTileset",
-				"string name, (int width, int height)",
+			//=====================================================================================
+			AddCommand("EventTileset", "string name, (int width, int height)",
 			delegate(CommandParam parameters) {
 				eventTileset = new EventTileset(parameters.GetString(0),
 					null, parameters.GetPoint(1));
 			});
-			// Tile <name>
-			// Tile (<sheetX>, <sheetY>)
+			//=====================================================================================
 			AddCommand("Tile",
 				"string name",
 				"(int sheetX, int sheetY)",
@@ -93,37 +92,35 @@ namespace ZeldaOracle.Common.Scripts {
 				}
 				baseTileData = tileData;
 			});
-			// TempTile <name>
-			AddCommand("TempTile", "string name", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("TempTile", "string name",
+			delegate(CommandParam parameters) {
 				useTemporary = true;
 				tileData = new TileData();
 				tileData.Name = parameters.GetString(0);
 				baseTileData = tileData;
 			});
-			// EventTile <name>
-			AddCommand("EventTile", "string name", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("EventTile", "string name",
+			delegate(CommandParam parameters) {
 				useTemporary = false;
 				eventTileData = new EventTileData();
 				eventTileData.Name = parameters.GetString(0);
 				baseTileData = eventTileData;
 			});
-			// Monster <name> <sprite> <monster-type> <monster-color>
-			AddCommand("Monster",
-				"string name, string sprite, string monsterType, string monsterColor",
+			//=====================================================================================
+			AddCommand("Monster", "string name, string sprite, string monsterType, string monsterColor",
 			delegate(CommandParam parameters) {
 				useTemporary = false;
 				eventTileData = new EventTileData();
 				eventTileData.Clone(Resources.GetResource<EventTileData>("monster"));
 				eventTileData.Name = parameters.GetString(0);
 				baseTileData = eventTileData;
-
-				
-				if (parameters.ChildCount > 1) {
+								
+				if (parameters.ChildCount > 1)
 					eventTileData.Sprite = resources.GetSpriteAnimation(parameters.GetString(1));
-				}
-				if (parameters.ChildCount > 2) {
+				if (parameters.ChildCount > 2)
 					eventTileData.Properties.Set("monster_type", parameters.GetString(2));
-				}
 				if (parameters.ChildCount > 3) {
 					MonsterColor color;
 					if (!Enum.TryParse<MonsterColor>(parameters.GetString(3), true, out color))
@@ -141,22 +138,7 @@ namespace ZeldaOracle.Common.Scripts {
 					eventTileData.Properties.Set("image_variant", imageVariantID);
 				}
 			});
-			// SetTile (<sheetX>, <sheetY>), <name>
-			AddCommand("SetTile",
-				"(int sheetX, int sheetY), string tileName",
-			delegate(CommandParam parameters) {
-				Point2I location = parameters.GetPoint(0);
-
-				if (tileset != null) {
-					tileset.TileData[location.X, location.Y] = 
-						resources.GetResource<TileData>(parameters.GetString(1));
-				}
-				else if (eventTileset != null) {
-					eventTileset.TileData[location.X, location.Y] = 
-						resources.GetResource<EventTileData>(parameters.GetString(1));
-				}
-			});
-			// End
+			//=====================================================================================
 			AddCommand("End", "", delegate(CommandParam parameters) {
 				if (tileData != null) {
 					if (tileData.Tileset == null) {
@@ -187,17 +169,14 @@ namespace ZeldaOracle.Common.Scripts {
 					eventTileset = null;
 				}
 			});
-
-			
-			// TILESETS.
-
-			// Default <default-tile-location(x, y)>
-			AddCommand("Default",
-				"(int defaultSheetX, int defaultSheetY)",
+			//=====================================================================================
+			// TILESET SETUP
+			//=====================================================================================
+			AddCommand("Default", "(int defaultSheetX, int defaultSheetY)",
 			delegate(CommandParam parameters) {
 				tileset.DefaultTile = parameters.GetPoint(0);
 			});
-
+			//=====================================================================================
 			// Config: data to configure tiles with a single character per tile.
 			AddCommand("Config", "", delegate(CommandParam parameters) {
 				string line = NextLine();
@@ -211,16 +190,30 @@ namespace ZeldaOracle.Common.Scripts {
 					y++;
 				}
 			});
+			//=====================================================================================
+			AddCommand("SetTile", "(int sheetX, int sheetY), string tileName",
+			delegate(CommandParam parameters) {
+				Point2I location = parameters.GetPoint(0);
 
-
-			// TILES.
-			
-			// Type <type>
-			AddCommand("Type", "string type", delegate(CommandParam parameters) {
+				if (tileset != null) {
+					tileset.TileData[location.X, location.Y] = 
+						resources.GetResource<TileData>(parameters.GetString(1));
+				}
+				else if (eventTileset != null) {
+					eventTileset.TileData[location.X, location.Y] = 
+						resources.GetResource<EventTileData>(parameters.GetString(1));
+				}
+			});
+			//=====================================================================================
+			// TILES 
+			//=====================================================================================
+			AddCommand("Type", "string type",
+			delegate(CommandParam parameters) {
 				baseTileData.Type = Tile.GetType(parameters.GetString(0), true);
 			});
-			// Flags <flags[]...>
-			AddCommand("Flags", "string flags...", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("Flags", "string flags...",
+			delegate(CommandParam parameters) {
 				for (int i = 0; i < parameters.ChildCount; i++) {
 					TileFlags flags = TileFlags.None;
 					if (Enum.TryParse<TileFlags>(parameters.GetString(i), true, out flags))
@@ -229,16 +222,18 @@ namespace ZeldaOracle.Common.Scripts {
 						ThrowParseError("Invalid tile flag: \"" + parameters.GetString(i) + "\"!");
 				}
 			});
-			// EnvType <type>
-			AddCommand("EnvType", "string envType", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("EnvType", "string envType",
+			delegate(CommandParam parameters) {
 				TileEnvironmentType envType = TileEnvironmentType.Normal;
 				if (Enum.TryParse<TileEnvironmentType>(parameters.GetString(0), true, out envType))
 					tileData.Properties.Set("environment_type", (int) envType);
 				else
 					ThrowParseError("Invalid tile environment type: \"" + parameters.GetString(0) + "\"!");
 			});
-			// CONVEYOR <angle>, <speed>
-			AddCommand("Conveyor", "string angle, float speed", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("Conveyor", "string angle, float speed",
+			delegate(CommandParam parameters) {
 				string str = parameters.GetString(0).ToLower();
 				int angle = -1;
 				if (Angles.TryParse(str, true, out angle))
@@ -250,89 +245,17 @@ namespace ZeldaOracle.Common.Scripts {
 
 				tileData.ConveyorSpeed = parameters.GetFloat(1);
 			});
-			// Properties <(name, value>
-			// Properties <(type, name, value, readable-name, editor-type, category, description)...>
-			// Properties <(type, name, value, readable-name, (editor-type, editor-sub-type), category, description)...>
-			// Properties <(hide, name)...>
-			// Properties <(show, name)...>
-
-			/*AddCommand("Properties", "(string type, string name, any value, string readableName='', string editorType='', string category='', string description='')...",
-			delegate(CommandParam parameters) {
-
-			});*/
-
+			//=====================================================================================
+			// (string type, string name, var value)...
+			// (string type, string name, var value, string readableName, string editorType, string category, string description)...
+			// (string type, string name, var value, string readableName, (string editorType, string editorSubType), string category, string description, bool isHidden = false)...
 			AddCommand("Properties",
 				"(string type, string name, var otherData...)...",
-				//"(string type, string name, var value, string readableName, string editorType, string category, string description)...",
-				//"(string type, string name, var value, string readableName, (string editorType, string editorSubType), string category, string description, bool isHidden = false)...",
-			delegate(CommandParam parameters) {
-				// TODO: handle lists?
-				for (int i = 0; i < parameters.ChildCount; i++) {
-					CommandParam param = parameters[i];
-					string name = param.GetString(1);
-
-					/*if (String.Compare(param.GetString(0), "hide", StringComparison.OrdinalIgnoreCase) == 0) {
-						baseTileData.Properties.GetProperty(name, false).Documentation.IsHidden = true;
-					}
-					else if (String.Compare(param.GetString(0), "show", StringComparison.OrdinalIgnoreCase) == 0) {
-						baseTileData.Properties.GetProperty(name, false).Documentation.IsHidden = false;
-					}
-					else */{
-						// Parse the property type.
-						PropertyType type;
-						if (!Enum.TryParse<PropertyType>(param.GetString(0), true, out type))
-							ThrowParseError("Unknown property type " + name);
-
-						// Parse the property value.
-						object value = null;
-						if (type == PropertyType.String)
-							value = param.GetString(2);
-						else if (type == PropertyType.Integer)
-							value = param.GetInt(2);
-						else if (type == PropertyType.Float)
-							value = param.GetFloat(2);
-						else if (type == PropertyType.Boolean)
-							value = param.GetString(2).Equals("true", StringComparison.OrdinalIgnoreCase);
-						else
-							ThrowParseError("Unsupported property type for " + name);
-						
-						// Set the property.
-						Property property = null;
-						if (value != null)
-							property = baseTileData.Properties.SetGeneric(name, value);
-
-						// Set the property's documentation.
-						if (param.ChildCount > 3) {
-							string editorType = "";
-							string editorSubType = "";
-							if (param[4].Type == CommandParamType.Array) {
-								editorType = param[4].GetString(0);
-								editorSubType = param[4].GetString(1);
-							}
-							else {
-								editorType = param.GetString(4);
-							}
-							
-							PropertyDocumentation documentation = new PropertyDocumentation() {
-								ReadableName	= param.GetString(3),
-								EditorType		= editorType,
-								EditorSubType	= editorSubType,
-								Category		= param.GetString(5),
-								Description		= param.GetString(6),
-								IsEditable		= true,
-								IsHidden		= param.GetBool(7, false),
-							};
-
-							if (property != null)
-								property.Documentation = documentation;
-						}
-					}
-				}
-			});
-			// Event <name>, <readable-name>, <description>, (<param-type-1>, <param-name-1>, <param-type-2>, <param-name-2>...)
+				CommandProperties);
+			//=====================================================================================
 			AddCommand("Event",
-				/*"string name, string readableName, string description",
-				"string name, string readableName, string description, (string params...)",*/
+				"string name, string readableName, string description",
+				"string name, string readableName, string description, (string params...)", // Params = (type1, name1, type2, name2...)
 			delegate(CommandParam parameters) {
 				Property property = Property.CreateString(parameters.GetString(0), "");
 				//property.SetDocumentation(parameters.GetString(1), "script", "", "Events", parameters.GetString(2), true, false);
@@ -361,36 +284,30 @@ namespace ZeldaOracle.Common.Scripts {
 						parameters.GetString(2), // Description
 						scriptParams));
 			});
-			// Sprite <sprite-animation>
-			// Sprite <spritesheet> <x-index> <y-index> <x-offset> <y-offset>
+			//=====================================================================================
 			AddCommand("Sprite",
-				"string spriteOrAnimName",
+				"string spriteOrAnimationName",
 				"string spriteSheetName, (int sourceX, int sourceY), (int offsetX, int offsetY) = (0, 0)",
 			delegate(CommandParam parameters) {
 				if (parameters.ChildCount >= 2) {
-					Console.Write("UH OH!");
-					/*spriteBuilder.Begin(new Sprite(
+					spriteBuilder.Begin(new Sprite(
 						resources.GetResource<SpriteSheet>(parameters.GetString(0)),
 						parameters.GetPoint(1),
 						parameters.GetPoint(2, Point2I.Zero)
 					));
-					baseTileData.Sprite = spriteBuilder.End();*/
+					baseTileData.Sprite = spriteBuilder.End();
 				}
 				else {
 					baseTileData.Sprite = resources.GetSpriteAnimation(parameters.GetString(0));
 				}
 			});
-
-			// Size (<width>, <height>)
+			//=====================================================================================
 			AddCommand("Size", "(int width, int height)", delegate(CommandParam parameters) {
 				tileData.Size = parameters.GetPoint(0);
 			});
-
-			// SpriteIndex <index> <sprite-or-anim> <sprite-animation>
-			// SpriteIndex <index> <sprite-animation> 
-			// SpriteIndex <index> <spritesheet> (<x-index> <y-index>) (<x-offset> <y-offset>)
+			//=====================================================================================
 			AddCommand("SpriteIndex",
-				"int index, string spriteOrAnim, string spriteAnimation",
+				"int index, string spriteOrAnim, string spriteAnimationName",
 				"int index, string spriteAnimationName",
 				"int index, string spriteSheetName, (int sourceX, int sourceY), (int offsetX, int offsetY) = (0, 0)",
 			delegate(CommandParam parameters) {
@@ -428,20 +345,17 @@ namespace ZeldaOracle.Common.Scripts {
 					}
 				}
 			});
-
-			// SpriteList [sprite-animation-1] [sprite-animation-2]...
-			AddCommand("SpriteList", "string spriteAnimations...", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("SpriteList", "string spriteAnimationNames...", delegate(CommandParam parameters) {
 				SpriteAnimation[] spriteList = new SpriteAnimation[parameters.ChildCount];
 				for (int i = 0; i < parameters.ChildCount; i++)
 					spriteList[i] = resources.GetSpriteAnimation(parameters.GetString(i));
 
 				tileData.SpriteList = spriteList;
 			});
-
-			// SpriteObj <sprite-animation>
-			// SpriteObj <spritesheet> <x-index> <y-index> <x-offset> <y-offset>
+			//=====================================================================================
 			AddCommand("SpriteObj",
-				"string spriteOrAnimName",
+				"string spriteAnimationName",
 				"string spriteSheetName, (int sourceX, int sourceY), (int offsetX, int offsetY) = (0, 0)",
 			delegate(CommandParam parameters) {
 				if (parameters.ChildCount >= 2) {
@@ -456,32 +370,36 @@ namespace ZeldaOracle.Common.Scripts {
 					tileData.SpriteAsObject = resources.GetSpriteAnimation(parameters.GetString(0));
 				}
 			});
-
-			// BreakAnim <animation>
-			AddCommand("BreakAnim", "string animationName", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("BreakAnim", "string animationName",
+			delegate(CommandParam parameters) {
 				tileData.BreakAnimation = resources.GetResource<Animation>(parameters.GetString(0));
 			});
-
-			// BreakSound <sound>
-			AddCommand("BreakSound", "string soundName", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("BreakSound", "string soundName",
+			delegate(CommandParam parameters) {
 				tileData.BreakSound = Resources.GetResource<Sound>(parameters.GetString(0));
 			});
-			// Model <collision-model>
-			AddCommand("Model", "string collisionModelName", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("Model", "string collisionModelName",
+			delegate(CommandParam parameters) {
 				tileData.CollisionModel = resources.GetResource<CollisionModel>(parameters.GetString(0));
 			});
-			// Solid <collision-model>
-			AddCommand("Solid", "string collisionModelName", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("Solid", "string collisionModelName",
+			delegate(CommandParam parameters) {
 				tileData.SolidType = TileSolidType.Solid;
 				tileData.CollisionModel = resources.GetResource<CollisionModel>(parameters.GetString(0));
 			});
-			// HalfSolid <collision-model>
-			AddCommand("HalfSolid", "string collisionModelName", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("HalfSolid", "string collisionModelName",
+			delegate(CommandParam parameters) {
 				tileData.SolidType = TileSolidType.HalfSolid;
 				tileData.CollisionModel = resources.GetResource<CollisionModel>(parameters.GetString(0));
 			});
-			// Ledge <collision-model> <direction>
-			AddCommand("Ledge", "string collisionModelName, string ledgeDirection", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("Ledge", "string collisionModelName, string ledgeDirection",
+			delegate(CommandParam parameters) {
 				tileData.SolidType = TileSolidType.Ledge;
 				tileData.CollisionModel = resources.GetResource<CollisionModel>(parameters.GetString(0));
 				string dirName = parameters.GetString(1);
@@ -491,9 +409,8 @@ namespace ZeldaOracle.Common.Scripts {
 				else
 					ThrowParseError("Unknown value for ledge direction: " + dirName);
 			});
-			// Hurt <damage> <(area-x, area-y, area-width, area-height)>
-			AddCommand("Hurt",
-				"int damage, (int areaX, int areaY, int areaWidth, int areaHeight)",
+			//=====================================================================================
+			AddCommand("Hurt", "int damage, (int areaX, int areaY, int areaWidth, int areaHeight)",
 			delegate(CommandParam parameters) {
 				tileData.HurtDamage = parameters.GetInt(0);
 				tileData.HurtArea = new Rectangle2I(
@@ -502,16 +419,17 @@ namespace ZeldaOracle.Common.Scripts {
 					parameters[1].GetInt(2),
 					parameters[1].GetInt(3));
 			});
-			// Clone <tiledata>
-			AddCommand("Clone", "string tileDataName", delegate(CommandParam parameters) {
+
+			AddCommand("Clone", "string tileDataName",
+			delegate(CommandParam parameters) {
 				if (tileData != null)
 					tileData.Clone(resources.GetResource<TileData>(parameters.GetString(0)));
 				else if (eventTileData != null)
 					eventTileData.Clone(resources.GetResource<EventTileData>(parameters.GetString(0)));
 			});
 
-			// SPRITE SHEET.
-			
+			// SPRITE SHEET ---------------------------------------------------------------
+
 			AddCommand("SpriteSheet",
 				"string path, (int cellWidth, int cellHeight), (int spacingX, int spacingY), (int offsetX, int offsetY)",
 				"string name, string path, (int cellWidth, int cellHeight), (int spacingX, int spacingY), (int offsetX, int offsetY)",
@@ -558,13 +476,83 @@ namespace ZeldaOracle.Common.Scripts {
 
 
 		//-----------------------------------------------------------------------------
+		// Script Commands
+		//-----------------------------------------------------------------------------
+
+		private void CommandProperties(CommandParam parameters) {
+			foreach (CommandParam child in parameters.GetChildren())
+				ParseProperty(child);
+		}
+
+		private void ParseProperty(CommandParam param) {
+			string name = param.GetString(1);
+
+			// Parse the property type and value.
+			PropertyType type;
+			if (!Enum.TryParse<PropertyType>(param.GetString(0), true, out type))
+				ThrowParseError("Unknown property type " + name);
+			object value = ParsePropertyValue(param[2], type);
+						
+			// Set the property.
+			Property property = baseTileData.Properties.SetGeneric(name, value);
+
+			// Set the property's documentation.
+			if (param.ChildCount > 3 && property != null) {
+				string editorType = "";
+				string editorSubType = "";
+				if (param[4].Type == CommandParamType.Array) {
+					editorType = param[4].GetString(0);
+					editorSubType = param[4].GetString(1);
+				}
+				else {
+					editorType = param.GetString(4);
+				}
+				
+				property.Documentation = new PropertyDocumentation() {
+					ReadableName	= param.GetString(3),
+					EditorType		= editorType,
+					EditorSubType	= editorSubType,
+					Category		= param.GetString(5),
+					Description		= param.GetString(6),
+					IsEditable		= true,
+					IsHidden		= param.GetBool(7, false),
+				};
+			}
+		}
+
+		private object ParsePropertyValue(CommandParam param, PropertyType type) {
+			if (type == PropertyType.String) {
+				if (param.IsValidType(CommandParamType.String))
+					return param.StringValue;
+			}
+			else if (type == PropertyType.Integer) {
+				if (param.IsValidType(CommandParamType.Integer))
+					return param.IntValue;
+			}
+			else if (type == PropertyType.Float) {
+				if (param.IsValidType(CommandParamType.Float))
+					return param.FloatValue;
+			}
+			else if (type == PropertyType.Boolean) {
+				if (param.IsValidType(CommandParamType.Boolean))
+					return param.BoolValue;
+			}
+			else if (type == PropertyType.List)
+				ThrowParseError("Lists are unsupported as a property type");
+			ThrowParseError("The property value '" + param.StringValue + "' is not of type " + type.ToString());
+			return null;
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
 		// Begins reading the script.
 		protected override void BeginReading() {
-			tileset  = null;
-			tileData = null;
+			//loadingMode	= LoadingModes.Tilesets;
+			tileset		= null;
+			tileData	= null;
 			spriteBuilder.SpriteSheet = null;
 		}
 

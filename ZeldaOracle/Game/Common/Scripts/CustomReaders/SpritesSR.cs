@@ -28,11 +28,10 @@ namespace ZeldaOracle.Common.Scripts {
 			this.resources		= resources;
 			this.useTemporary	= resources != null;
 			this.spriteBuilder	= new SpriteBuilder();
-
-			// SPRITE SHEET.
-
-			// SpriteSheet <name>
-			// SpriteSheet name, path, 
+			
+			//=====================================================================================
+			// SPRITE SHEET
+			//=====================================================================================
 			AddCommand("SpriteSheet",
 				"string name",
 				"string path, (int cellWidth, int cellHeight), (int spacingX, int spacingY), (int offsetX, int offsetY)",
@@ -75,12 +74,10 @@ namespace ZeldaOracle.Common.Scripts {
 					spriteBuilder.SpriteSheet = sheet;
 				}
 			});
-
-			// BEGIN/END.
-			
-			// Sprite <name> <grid-location> <draw-offset = (0, 0)>
-			AddCommand("Sprite",
-				"string name, (int gridLocationX, int gridLocationY), (int drawOffsetX, int drawOffsetY) = (0, 0)",
+			//=====================================================================================
+			// BEGIN/END
+			//=====================================================================================
+			AddCommand("Sprite", "string name, (int gridLocationX, int gridLocationY), (int drawOffsetX, int drawOffsetY) = (0, 0)",
 			delegate(CommandParam parameters) {
 				spriteName = parameters.GetString(0);
 				sprite = new Sprite(
@@ -89,7 +86,9 @@ namespace ZeldaOracle.Common.Scripts {
 					parameters.GetPoint(2, Point2I.Zero));
 				spriteBuilder.Begin(sprite);
 			});
-			AddCommand("End", "", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("End", "",
+			delegate(CommandParam parameters) {
 				if (sprite != null) {
 					spriteBuilder.End();
 					if (useTemporary && resources != null)
@@ -99,12 +98,10 @@ namespace ZeldaOracle.Common.Scripts {
 					sprite = null;
 				}
 			});
-
-			// BUILDING.
-			
-			// Add <grid-location> <draw-offset = (0, 0)>
-			AddCommand("Add",
-				"(int gridLocationX, int gridLocationY), (int drawOffsetX, int drawOffsetY) = (0, 0)",
+			//=====================================================================================
+			// BUILDING
+			//=====================================================================================
+			AddCommand("Add", "(int gridLocationX, int gridLocationY), (int drawOffsetX, int drawOffsetY) = (0, 0)",
 			delegate(CommandParam parameters) {
 				spriteBuilder.AddPart(
 					parameters.GetPoint(0).X,
@@ -112,15 +109,20 @@ namespace ZeldaOracle.Common.Scripts {
 					parameters.GetPoint(1, Point2I.Zero).X,
 					parameters.GetPoint(1, Point2I.Zero).Y);
 			});
-			// Size <size>
-			AddCommand("Size",
-				"(int width, int height)",
+			//=====================================================================================
+			AddCommand("Size", "(int width, int height)",
 			delegate(CommandParam parameters) {
 				spriteBuilder.SetSize(
 					parameters.GetPoint(0).X,
 					parameters.GetPoint(0).Y);
 			});
+			//=====================================================================================
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
 
 		// Begins reading the script.
 		protected override void BeginReading() {

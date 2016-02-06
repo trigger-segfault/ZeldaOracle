@@ -45,6 +45,10 @@ namespace ZeldaOracle.Common.Scripts {
 			});
 		}
 
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
+
 		// Begins reading the script.
 		protected override void BeginReading() {
 		}
@@ -63,4 +67,4 @@ namespace ZeldaOracle.Common.Scripts {
 			set { useTemporary = value; }
 		}
 	}
-} // end namespace
+}

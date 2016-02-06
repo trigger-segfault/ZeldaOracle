@@ -25,9 +25,8 @@ namespace ZeldaOracle.Common.Scripts {
 		public ImagesSR(TemporaryResources resources = null) {
 
 			this.resources	= resources;
-
-			// Image <name>
-			// Image <name> <file-path>
+			
+			//=====================================================================================
 			AddCommand("Image", 
 				"string name",
 				"string name, string filePath",
@@ -41,18 +40,16 @@ namespace ZeldaOracle.Common.Scripts {
 					imageTail = image;
 				}
 			});
-
-			// End
-			AddCommand("End", "", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("End", "",
+			delegate(CommandParam parameters) {
 				if (image != null) {
 					Resources.AddImage(imageName, image);
 					image = null;
 				}
 			});
-
-			// Variant <name> <file-path>
-			AddCommand("Variant",
-				"string name, string filePath",
+			//=====================================================================================
+			AddCommand("Variant", "string name, string filePath",
 			delegate(CommandParam parameters) {
 				Image variant = Resources.LoadImage(Resources.ImageDirectory + parameters.GetString(1), false);
 				variant.VariantName	= parameters.GetString(0);
@@ -63,7 +60,13 @@ namespace ZeldaOracle.Common.Scripts {
 					image = variant;
 				imageTail = variant;
 			});
+			//=====================================================================================
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
 
 		// Begins reading the script.
 		protected override void BeginReading() {

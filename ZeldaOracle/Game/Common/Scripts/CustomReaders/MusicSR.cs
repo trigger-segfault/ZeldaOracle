@@ -24,16 +24,17 @@ namespace ZeldaOracle.Common.Scripts {
 
 		public MusicSR() {
 			
+			//=====================================================================================
 			// Begin creating music.
 			AddCommand("Music", "", delegate(CommandParam parameters) {
 				isCreatingMusic = true;
 			});
-			
+			//=====================================================================================
 			// Finish creating music.
 			AddCommand("End", "", delegate(CommandParam parameters) {
 				isCreatingMusic = false;
 			});
-			
+			//=====================================================================================
 			// Load a song.
 			AddCommand("Song", "string songName, float volume = 1, float pitch = 0, float pan = 0",
 			delegate(CommandParam parameters) {
@@ -44,6 +45,7 @@ namespace ZeldaOracle.Common.Scripts {
 				song.Pitch	= parameters.GetFloat(2);
 				song.Pan	= parameters.GetFloat(3);
 			});
+			//=====================================================================================
 		}
 
 

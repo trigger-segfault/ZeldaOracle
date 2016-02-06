@@ -42,7 +42,9 @@ namespace ZeldaOracle.Common.Scripts {
 
 		public GameFontSR() {
 			
-			AddCommand("Font", "string name", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("Font", "string name",
+			delegate(CommandParam parameters) {
 				String path = parameters.GetString(0);
 
 				Image image = null;
@@ -60,24 +62,26 @@ namespace ZeldaOracle.Common.Scripts {
 				Resources.AddSpriteSheet(path, sheet);
 				Resources.AddGameFont(path, font);
 			});
-			
+			//=====================================================================================
 			AddCommand("Grid", "(int charWidth, int charHeight), (int charSpacingX, int charSpacingY), (int offsetX, int offsetY)",
 			delegate(CommandParam parameters) {
 				font.SpriteSheet.CellSize	= parameters.GetPoint(0);
 				font.SpriteSheet.Spacing	= parameters.GetPoint(1);
 				font.SpriteSheet.Offset		= parameters.GetPoint(2);
 			});
-			
-			AddCommand("Spacing", "int charSpacing, int lineSpacing, int charsPerRow", delegate(CommandParam parameters) {
-				
+			//=====================================================================================
+			AddCommand("Spacing", "int charSpacing, int lineSpacing, int charsPerRow",
+			delegate(CommandParam parameters) {
 				font.CharacterSpacing	= parameters.GetInt(0);
 				font.LineSpacing		= parameters.GetInt(1);
 				font.CharactersPerRow	= parameters.GetInt(2);
 			});
-			
-			AddCommand("End", "", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("End", "",
+			delegate(CommandParam parameters) {
 				font = null;
 			});
+			//=====================================================================================
 		}
 
 	
