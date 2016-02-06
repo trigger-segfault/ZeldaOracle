@@ -470,10 +470,7 @@ namespace ZeldaOracle.Common.Content {
 
 		// Loads a language file.
 		public static Language LoadLanguage(string assetName) {
-			assetName = assetName.Substring(assetName.IndexOf('/') + 1);
-			LanguageSR script = new LanguageSR();
-			LoadScript(assetName, script, Encoding.UTF8);
-			return script.Language;
+			throw new LoadContentException("Language is not supported yet.");
 		}
 
 
