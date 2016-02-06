@@ -34,13 +34,13 @@ namespace ZeldaOracle.Common.Scripts {
 				string path = parameters.GetString(1);
 				Sound sound	= Resources.LoadSound(name, Resources.SoundDirectory + path);
 				sound.name	= name;
-				if (parameters.Count > 2)
+				if (parameters.ChildCount > 2)
 					sound.Volume = parameters.GetFloat(2);
-				if (parameters.Count > 3)
+				if (parameters.ChildCount > 3)
 					sound.Pitch = parameters.GetFloat(3);
-				if (parameters.Count > 4)
+				if (parameters.ChildCount > 4)
 					sound.Pan = parameters.GetFloat(4);
-				if (parameters.Count > 5)
+				if (parameters.ChildCount > 5)
 					sound.IsMuted = parameters.GetBool(5);
 			});
 		}

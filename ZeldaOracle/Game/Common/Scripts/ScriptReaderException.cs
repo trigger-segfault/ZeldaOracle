@@ -6,8 +6,9 @@ using ZeldaOracle.Common.Content;
 
 namespace ZeldaOracle.Common.Scripts {
 	
-	// A helpful exception class for throwing script errors.
+	// A helpful exception class for throwing script reader errors.
 	public class ScriptReaderException : LoadContentException {
+
 		private string	fileName;
 		private int		lineNumber;
 		private int		columnNumber;

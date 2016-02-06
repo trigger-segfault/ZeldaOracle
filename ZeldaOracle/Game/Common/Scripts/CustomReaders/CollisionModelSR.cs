@@ -51,7 +51,7 @@ namespace ZeldaOracle.Common.Scripts {
 			//"float x, string y, bool width, (int a, int b, (string c)) = (0, 1, (hello)), float height = 2.5f",
 			"float x, string y, bool width, (int a, int b, (string c)), float height",
 			delegate(CommandParam parameters) {
-				Console.WriteLine(CommandParamFormatParser.ToString(parameters));
+				Console.WriteLine(CommandParamParser.ToString(parameters));
 			});
 		}
 

@@ -115,14 +115,17 @@ namespace ZeldaOracle.Common.Scripts {
 						return true;
 					}
 					else {
+						// Preemptively append the possible overloads to the error message.
 						for (int j = 0; j < command.ParameterOverloads.Count; j++)
-							matchingFormats.Add(command.Name + " " + command.ParameterOverloads[j].Name);
+							matchingFormats.Add(command.Name + " " +
+								CommandParamParser.ToString(command.ParameterOverloads[j]));
 					}
 				}
 			}
 
 			// Throw an error because the command was not found.
 			if (matchingFormats.Count > 0) {
+				Console.WriteLine(CommandParamParser.ToString(parameters));
 				string msg = "No matching overload found for the command " + commandName + "\n";
 				msg += "Possible overloads include:\n";
 				for (int i = 0; i < matchingFormats.Count; i++) {
@@ -186,11 +189,11 @@ namespace ZeldaOracle.Common.Scripts {
 		protected void CompleteStatement() {
 			if (parameterRoot.Children != null) {
 				// Take the command name from the parameters.
-				string commandName = parameterRoot.Children.Str;
+				string commandName = parameterRoot.Children.StringValue;
 				parameterRoot.LineIndex	= parameterRoot.Children.LineIndex;
 				parameterRoot.CharIndex	= parameterRoot.Children.CharIndex;
 				parameterRoot.Children	= parameterRoot.Children.NextParam;
-				parameterRoot.Count--;
+				parameterRoot.ChildCount--;
 				
 				// Attempt to perform the command.
 				PerformCommand(commandName, parameterRoot);
@@ -212,7 +215,7 @@ namespace ZeldaOracle.Common.Scripts {
 				parameterParent.Children = newParam;
 			else
 				parameter.NextParam = newParam;
-			parameterParent.Count++;
+			parameterParent.ChildCount++;
 			newParam.Parent = parameterParent;
 			parameter = newParam;
 			return newParam;
@@ -347,7 +350,7 @@ namespace ZeldaOracle.Common.Scripts {
 					Console.Write(")");
 				}
 				else
-					Console.Write(p.Str);
+					Console.Write(p.StringValue);
 
 				p = p.NextParam;
 				if (p != null)

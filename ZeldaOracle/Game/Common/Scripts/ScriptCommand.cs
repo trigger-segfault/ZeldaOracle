@@ -6,10 +6,10 @@ using System.Text;
 namespace ZeldaOracle.Common.Scripts {
 	
 	public class ScriptCommand {
+
 		private string name;
 		private Action<CommandParam> action;
-
-		private List<CommandParam> parameterOverloads;
+		private List<CommandReferenceParam> parameterOverloads;
 
 
 		//-----------------------------------------------------------------------------
@@ -19,16 +19,14 @@ namespace ZeldaOracle.Common.Scripts {
 		public ScriptCommand(string name, Action<CommandParam> action) {
 			this.name		= name;
 			this.action		= action;
-			this.parameterOverloads	= new List<CommandParam>();
+			this.parameterOverloads	= new List<CommandReferenceParam>();
 		}
 
 		public ScriptCommand(string name, string[] parameterOverloads, Action<CommandParam> action) :
 			this(name, action)
 		{
-			CommandParamFormatParser parser = new CommandParamFormatParser();
-
 			for (int i = 0; i < parameterOverloads.Length; i++) {
-				CommandParam p = parser.Parse(parameterOverloads[i]);
+				CommandReferenceParam p =  CommandParamParser.ParseReferenceParams(parameterOverloads[i]);
 				p.Name = parameterOverloads[i];
 				this.parameterOverloads.Add(p);
 			}
@@ -40,10 +38,13 @@ namespace ZeldaOracle.Common.Scripts {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
+		// Returns true if the command has the given name, ignoring case.
 		public bool HasName(string commandName) {
 			return (String.Compare(commandName, name, StringComparison.OrdinalIgnoreCase) == 0);
 		}
 		
+		// Returns true if the given user passed-in parameters matches this
+		// command's format, outputting new parameters specified in that format.
 		public bool HasParameters(CommandParam userParameters, out CommandParam newParameters) {
 			if (parameterOverloads.Count == 0) {
 				newParameters = new CommandParam(userParameters);
@@ -56,19 +57,14 @@ namespace ZeldaOracle.Common.Scripts {
 			newParameters = null;
 			return false;
 		}
-
-		/*public bool IsCommand(string commandName, CommandParam userParameters) {
-			// Check if name and parameters are matching.
-			return (HasName(commandName) && HasParameters(userParameters));
-		}*/
-
 		
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		private static bool AreParametersMatching(CommandParam reference, CommandParam userParams, out CommandParam newParameters) {
+		// Recursively check whether the parameters are matching, outputting the new parameters.
+		private static bool AreParametersMatching(CommandReferenceParam reference, CommandParam userParams, out CommandParam newParameters) {
 			newParameters = null;
 
 			if (reference == null) {
@@ -87,24 +83,24 @@ namespace ZeldaOracle.Common.Scripts {
 
 				// Find the child index of the first parameter with a default value.
 				int defaultIndex = 0;
-				for (CommandParam p = reference.Children; p != null; p = p.NextParam) {
+				for (CommandReferenceParam p = reference.Children; p != null; p = p.NextParam) {
 					if (p.DefaultValue != null)
 						break;
 					defaultIndex++;
 				}
 
 				// Verify the user parameter's child count is within the valid range.
-				if (userParams.Count < defaultIndex || userParams.Count > reference.Count) {
+				if (userParams.ChildCount < defaultIndex || userParams.ChildCount > reference.ChildCount) {
 					newParameters = null;
 					return false;
 				}
 
 				// Verify each child paremeter matches the reference.
-				CommandParam referenceChild = reference.Children;
+				CommandReferenceParam referenceChild = reference.Children;
 				CommandParam userChild = userParams.Children;
-				for (int i = 0; i < reference.Count; i++) {
+				for (int i = 0; i < reference.ChildCount; i++) {
 					CommandParam newChild;
-					if (i < userParams.Count) {
+					if (i < userParams.ChildCount) {
 						if (!AreParametersMatching(referenceChild, userChild, out newChild)) {
 							newParameters = null;
 							return false;
@@ -120,133 +116,13 @@ namespace ZeldaOracle.Common.Scripts {
 			}
 			else {
 				newParameters = new CommandParam(reference);
-				newParameters.Name = reference.Name;
-				newParameters.SetValueByParse(userParams.Str);
+				newParameters.SetValueByParse(userParams.StringValue);
 			}
 
 			return true;
 		}
 
-		private static CommandParam ParseParameterFormat(string parametersFormat) {
-			int endCharIndex;
-			return ParseParameterFormat(parametersFormat, out endCharIndex);
-		}
 
-		private static CommandParam ParseParameterFormat(string parametersFormat, out int endCharIndex) {
-			CommandParam parameters = new CommandParam();
-			CommandParam lastChild = null;
-			parameters.Type = CommandParamType.Array;
-
-			List<string> words = new List<string>();
-			string word = "";
-
-			endCharIndex = parametersFormat.Length;
-
-			bool parsingDefaultValue = false;
-
-			for (int i = 0; i < parametersFormat.Length; i++) {
-				char c = parametersFormat[i];
-				
-				// Whitespace
-				if (c == ' ') {
-					if (word.Length > 0 && !parsingDefaultValue) {
-						words.Add(word);
-						word = "";
-					}
-				}
-
-				// Parameter delimiter (comma)
-				else if (c == ',') {
-					if (parsingDefaultValue) {
-						lastChild.SetValueByParse(word);
-					}
-					else {
-						if (word.Length > 0) {
-							words.Add(word);
-							word = "";
-						}
-						if (words.Count == 2) {
-							lastChild = parameters.AddChild(new CommandParam() {
-								Type = ParseCommandParamType(words[0]),
-								Name = words[1]
-							});
-							words.Clear();
-						}
-					}
-				}
-
-				// Parameter array begin
-				else if (c == '(') {
-					// Read array params, and skip to the closing parenthesis.
-					int skipAmount = 0;
-					lastChild = parameters.AddChild(ParseParameterFormat(
-						parametersFormat.Substring(i + 1), out skipAmount));
-					i += skipAmount;
-					word = "";
-					words.Clear();
-				}
-
-				// Parameter array end.
-				else if (c == ')') {
-					endCharIndex = i + 1;
-					break;
-				}
-
-				// Default parameter value.
-				else if (c == '=') {
-					if (!parsingDefaultValue) {
-						parsingDefaultValue = true;
-
-						if (word.Length > 0) {
-							words.Add(word);
-							word = "";
-						}
-						if (words.Count == 2) {
-							parameters.AddChild(new CommandParam() {
-								Type = ParseCommandParamType(words[0]),
-								Name = words[1]
-							});
-							words.Clear();
-						}
-					}
-				}
-				//else if (c == '.') {
-				//}
-				else {
-					word += c;
-				}
-			}
-
-			if (word.Length > 0) {
-				words.Add(word);
-				word = "";
-			}
-			if (words.Count > 0) {
-				parameters.AddChild(new CommandParam() {
-					Type = ParseCommandParamType(words[0]),
-					Name = words[1]
-				});
-			}
-
-			return parameters;
-		}
-
-		private static CommandParamType ParseCommandParamType(string typeName) {
-			typeName = typeName.ToLower();
-			if (typeName == "int" || typeName == "integer")
-				return CommandParamType.Integer;
-			if (typeName == "bool" || typeName == "boolean")
-				return CommandParamType.Boolean;
-			if (typeName == "float")
-				return CommandParamType.Float;
-			if (typeName == "string" || typeName == "str")
-				return CommandParamType.String;
-			if (typeName == "any")
-				return CommandParamType.Any;
-			return CommandParamType.Unknown;
-		}
-
-		
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
@@ -259,7 +135,7 @@ namespace ZeldaOracle.Common.Scripts {
 			get { return action; }
 		}
 
-		public List<CommandParam> ParameterOverloads {
+		public List<CommandReferenceParam> ParameterOverloads {
 			get { return parameterOverloads; }
 		}
 	}

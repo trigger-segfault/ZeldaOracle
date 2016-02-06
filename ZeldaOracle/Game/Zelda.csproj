@@ -182,10 +182,10 @@
     <Compile Include="Common\Scripting\PropertyDocumentation.cs" />
     <Compile Include="Common\Scripting\Property.cs" />
     <Compile Include="Common\Scripting\ZeldaObject.cs" />
-    <Compile Include="Common\Scripts\CommandParamReference.cs" />
+    <Compile Include="Common\Scripts\CommandReferenceParam.cs" />
     <Compile Include="Common\Scripts\CustomReaders\AnimationSR.cs" />
     <Compile Include="Common\Scripts\CommandParam.cs" />
-    <Compile Include="Common\Scripts\CommandParamFormatParser.cs" />
+    <Compile Include="Common\Scripts\CommandParamParser.cs" />
     <Compile Include="Common\Scripts\OLD\GameFontSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\CollisionModelSR.cs" />
     <Compile Include="Common\Scripts\OLD\LanguageSR.cs" />

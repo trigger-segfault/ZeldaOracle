@@ -38,7 +38,7 @@ namespace ZeldaOracle.Common.Scripts {
 				"string path, (int cellWidth, int cellHeight), (int spacingX, int spacingY), (int offsetX, int offsetY)",
 				"string name, string path, (int cellWidth, int cellHeight), (int spacingX, int spacingY), (int offsetX, int offsetY)",
 			delegate(CommandParam parameters) {
-				if (parameters.Count == 1) {
+				if (parameters.ChildCount == 1) {
 					// Start using the given sprite sheet.
 					SpriteSheet sheet;
 					if (useTemporary && resources != null)
@@ -54,7 +54,7 @@ namespace ZeldaOracle.Common.Scripts {
 					string imagePath = parameters.GetString(0);
 					string sheetName = imagePath;
 
-					if (parameters.Count == 5) {
+					if (parameters.ChildCount == 5) {
 						imagePath = parameters.GetString(1);
 						i = 2;
 					}

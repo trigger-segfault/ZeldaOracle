@@ -53,7 +53,7 @@ END;
 
 TILE reward;
 	TYPE			TileReward;
-	SOLID			center;
+	MODEL			center;
 	##SPRITE		reward_heart_piece;
 	PROPERTIES
 		(string, reward, "heart_piece",

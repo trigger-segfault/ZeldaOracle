@@ -27,15 +27,11 @@ namespace ZeldaOracle.Common.Scripts {
 		private CommandParam		children;
 		private int					count;
 		private string				stringValue;
-		private bool				boolValue;
-		private int					intValue;
-		private float				floatValue;
+		private object				value;
 
-		private int					lineIndex; // Line index where this parameter is specified.
-		private int					charIndex; // Character index within the line this parameter is specified.
-		private string				name;	// Only used for command parameters structure.
-
-		private CommandParam		defaultValue;
+		private int					lineIndex;	// Line index where this parameter is specified.
+		private int					charIndex;	// Character index within the line this parameter is specified.
+		private string				name;		// Only used for command parameters structure.
 
 		
 		//-----------------------------------------------------------------------------
@@ -54,35 +50,27 @@ namespace ZeldaOracle.Common.Scripts {
 			this.nextParam		= null;
 			this.type			= type;
 			this.count			= 0;
-			this.stringValue	= "";
-			this.floatValue		= 0.0f;
-			this.intValue		= 0;
-			this.boolValue		= false;
+			this.value			= null;
 			this.charIndex		= -1;
 			this.lineIndex		= -1;
-			this.defaultValue	= null;
 		}
 
 		public CommandParam(string str) :
 			this(CommandParamType.String)
 		{
-			this.stringValue = str;
-
-			float.TryParse(str, out floatValue);
-			int.TryParse(str, out intValue);
-			bool.TryParse(str, out boolValue);
+			this.value			= str;
+			this.stringValue	= str;
 		}
-
+		
 		public CommandParam(CommandParam copy) {
 			this.name			= copy.name;
 			this.type			= copy.Type;
 			this.parent			= null;
-			this.defaultValue	= null;
+			this.nextParam		= null;
+			this.value			= copy.value;
 			this.stringValue	= copy.stringValue;
-			this.floatValue		= copy.floatValue;
-			this.intValue		= copy.intValue;
-			this.boolValue		= copy.boolValue;
 			this.charIndex		= copy.charIndex;
+			this.lineIndex		= copy.lineIndex;
 
 			// Copy array children.
 			this.count = 0;
@@ -95,93 +83,133 @@ namespace ZeldaOracle.Common.Scripts {
 			}
 		}
 
+		public CommandParam(CommandReferenceParam referenceParam) :
+			this()
+		{
+			this.name = referenceParam.Name;
+			this.type = referenceParam.Type;
+
+			// Copy array children.
+			this.count = 0;
+			if (type == CommandParamType.Array) {
+				CommandReferenceParam copyChild = referenceParam.Children;
+				while (copyChild != null) {
+					AddChild(new CommandParam(copyChild));
+					copyChild = copyChild.NextParam;
+				}
+			}
+		}
+
 		
 		//-----------------------------------------------------------------------------
-		// Type Checks
+		// General
 		//-----------------------------------------------------------------------------
 
+		// Returns true if this parameter is valid as the given type.
 		public bool IsValidType(CommandParamType checkType) {
 			if (type == CommandParamType.Array || checkType == CommandParamType.Array)
 				return (type == checkType);
 			if (checkType == CommandParamType.String || checkType == CommandParamType.Any)
 				return true;
-			if (checkType == CommandParamType.Integer)
-				return int.TryParse(stringValue, out intValue);
-			if (checkType == CommandParamType.Float)
-				return float.TryParse(stringValue, out floatValue);
-			if (checkType == CommandParamType.Boolean)
-				return bool.TryParse(stringValue, out boolValue);
+			if (checkType == CommandParamType.Integer) {
+				int intValue;
+				return int.TryParse((string) value, out intValue);
+			}
+			if (checkType == CommandParamType.Float) {
+				float floatValue;
+				return float.TryParse((string) value, out floatValue);
+			}
+			if (checkType == CommandParamType.Boolean) {
+				bool boolValue;
+				return bool.TryParse((string) value, out boolValue);
+			}
 			return false;
+		}
+
+		// Set the value of the parameter by parsing the given string.
+		public void SetValueByParse(string str) {
+			if (type == CommandParamType.String) {
+				this.value = str;
+				this.stringValue = str;
+			}
+			else if (type == CommandParamType.Integer)
+				this.value = int.Parse(str);
+			else if (type == CommandParamType.Float)
+				this.value = float.Parse(str);
+			else if (type == CommandParamType.Boolean)
+				this.value = bool.Parse(str);
 		}
 
 		
 		//-----------------------------------------------------------------------------
-		// Array Parameters
+		// Array Methods
 		//-----------------------------------------------------------------------------
 		
+		// Get an enumerable list of an array paraneter's children.
+		public IEnumerable<CommandParam> GetChildren() {
+			for (CommandParam child = children; child != null; child = child.nextParam)
+				yield return child;
+		}
+
+		// Get the child at the given index.
 		public CommandParam GetParam(int index) {
 			return this[index];
 		}
 
+		// Get an indexed child's string value.
 		public string GetString(int index) {
-			return GetParam(index).Str;
+			return GetParam(index).StringValue;
 		}
 
+		// Get an indexed child's boolean value.
 		public bool GetBool(int index) {
-			return GetParam(index).Boolean;
+			return GetParam(index).BoolValue;
 		}
 		
-
+		// Get an indexed child's boolean value, with a default if the child doesn't exist.
 		public bool GetBool(int index, bool defaultValue) {
 			if (index < count)
-				return GetParam(index).Boolean;
+				return GetParam(index).BoolValue;
 			return defaultValue;
 		}
-		
+				
+		// Get an indexed child's integer value.
 		public int GetInt(int index) {
-			return GetParam(index).Integer;
+			return GetParam(index).IntValue;
 		}
-		
+				
+		// Get an indexed child's float value.
 		public float GetFloat(int index) {
-			return GetParam(index).floatValue;
+			return GetParam(index).FloatValue;
 		}
-		
+				
+		// Get an indexed child's Point value.
 		public Point2I GetPoint(int index) {
 			CommandParam p = GetParam(index);
-			if (p.type == CommandParamType.Array && p.Count == 2)
+			if (p.type == CommandParamType.Array && p.ChildCount == 2)
 				return new Point2I(p.GetInt(0), p.GetInt(1));
 			return Point2I.Zero;
 		}
-		
+				
+		// Get an indexed child's Vector value.
 		public Vector2F GetVector(int index) {
 			CommandParam p = GetParam(index);
-			if (p.type == CommandParamType.Array && p.Count == 2)
+			if (p.type == CommandParamType.Array && p.ChildCount == 2)
 				return new Vector2F(p.GetFloat(0), p.GetFloat(1));
 			return Vector2F.Zero;
 		}
 		
+		// Get an indexed child's Point value, with a default if the child doesn't exist.
 		public Point2I GetPoint(int index, Point2I defaultValue) {
 			if (index >= count)
 				return defaultValue;
 			CommandParam p = GetParam(index);
-			if (p.type == CommandParamType.Array && p.Count == 2)
+			if (p.type == CommandParamType.Array && p.ChildCount == 2)
 				return new Point2I(p.GetInt(0), p.GetInt(1));
 			return Point2I.Zero;
 		}
 		
-		
-		//-----------------------------------------------------------------------------
-		// Array Mutators
-		//-----------------------------------------------------------------------------
-
-		public void SetValueByParse(string value) {
-			stringValue = value;
-			
-			float.TryParse(value, out floatValue);
-			int.TryParse(value, out intValue);
-			bool.TryParse(value, out boolValue);
-		}
-
+		// Add a parameter child.
 		public CommandParam AddChild(CommandParam child) {
 			if (type == CommandParamType.Array) {
 				if (Children == null) {
@@ -213,10 +241,7 @@ namespace ZeldaOracle.Common.Scripts {
 			set { name = value; }
 		}
 		
-		public CommandParam NextParam {
-			get { return nextParam; }
-			set { nextParam = value; }
-		}
+		// Arrays ---------------------------------------------------------------------
 
 		public CommandParam Parent {
 			get { return parent; }
@@ -227,28 +252,63 @@ namespace ZeldaOracle.Common.Scripts {
 			get { return children; }
 			set { children = value; }
 		}
+		
+		public CommandParam NextParam {
+			get { return nextParam; }
+			set { nextParam = value; }
+		}
 
-		public int Count {
+		public int ChildCount {
 			get { return count; }
 			set { count = value; }
 		}
 
-		public bool Boolean {
-			get { return boolValue; }
+		public CommandParam this[int index] {
+			get { return GetChildren().ElementAt(index); }
 		}
 
-		public int Integer {
-			get { return intValue; }
+		// Values ---------------------------------------------------------------------
+
+		public bool BoolValue {
+			get {
+				if (type == CommandParamType.Boolean)
+					return (bool) value;
+				else if (type == CommandParamType.String)
+					return bool.Parse((string) stringValue);
+				return false;
+			}
+		}
+
+		public int IntValue {
+			get {
+				if (type == CommandParamType.Integer)
+					return (int) value;
+				else if (type == CommandParamType.String)
+					return int.Parse((string) stringValue);
+				return 0;
+			}
 		}
 	
-		public float Float {
-			get { return floatValue; }
+		public float FloatValue {
+			get {
+				if (type == CommandParamType.Float)
+					return (float) value;
+				else if (type == CommandParamType.String)
+					return float.Parse((string) stringValue);
+				return 0.0f;
+			}
 		}
 	
-		public string Str {
-			get { return stringValue; }
+		public string StringValue {
+			get {
+				if (type == CommandParamType.String)
+					return (string) stringValue;
+				return value.ToString();
+			}
 		}
-	
+			
+		// Script Reader Info ----------------------------------------------------------------
+
 		public int CharIndex {
 			get { return charIndex; }
 			set { charIndex = value; }
@@ -257,27 +317,6 @@ namespace ZeldaOracle.Common.Scripts {
 		public int LineIndex {
 			get { return lineIndex; }
 			set { lineIndex = value; }
-		}
-
-		public CommandParam this[int index] {
-			get {
-				CommandParam p = children;
-				int i = 0;
-				while (i < index && p != null) {
-					p = p.nextParam;
-					i++;
-				}
-				if (i != index || p == null) {
-					// ERROR!!
-					return null; 
-				}
-				return p;
-			}
-		}
-
-		public CommandParam DefaultValue {
-			get { return defaultValue; }
-			set { defaultValue = value; }
 		}
 	}
 }

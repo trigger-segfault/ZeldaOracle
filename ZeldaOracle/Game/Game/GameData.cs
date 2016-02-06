@@ -39,14 +39,24 @@ namespace ZeldaOracle.Game {
 
 		// Initializes and loads the game content. NOTE: The order here is important.
 		public static void Initialize() {
-			
-			
+			/*
+			CommandParamReference param = CommandParamFormatParser.ParseRefParameters(
+				"string name, (int gridLocationX, int gridLocationY), (int drawOffsetX, int drawOffsetY) = (0, 0)");
+				//"float x, string y, bool width, (int a, int b) = (1, 2), float height, (int hoop) = (0), bool asd");
+				//"float x, string y, bool width, (int a, int b, (string c)), float height");
+
+			Console.WriteLine(CommandParamFormatParser.ToString(param));
+			throw new LoadContentException("END");
+			*/
+
+			/*
 			CommandParamFormatParser parser = new CommandParamFormatParser();
 			//CommandParam param = parser.Parse("int x, int y, int width, int height");
-			CommandParam param = parser.Parse("float x, string y, bool width, (int a, int b, (string c)) = (0, 1, (\"hello\")), float height = 2.5f");
+			CommandParamReference param = parser.Parse("float x, string y, bool width, (int a, int b, (string c)) = (0, 1, (\"hello\")), float height = 2.5f");
 			Console.WriteLine(CommandParamFormatParser.ToString(param));
 			//ScriptCommand sc = new ScriptCommand("test", new string[] { param }, null);
 			//sc.HasParameters(
+			*/
 
 			Console.WriteLine("Loading Collision Models");
 			LoadCollisionModels();

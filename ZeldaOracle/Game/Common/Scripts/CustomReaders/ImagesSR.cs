@@ -36,7 +36,7 @@ namespace ZeldaOracle.Common.Scripts {
 				image		= null;
 				imageTail	= null;
 
-				if (parameters.Count == 2) {
+				if (parameters.ChildCount == 2) {
 					image = Resources.LoadImage(Resources.ImageDirectory + parameters.GetString(1), false);
 					imageTail = image;
 				}

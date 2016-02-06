@@ -139,13 +139,13 @@ namespace ZeldaOracle.Common.Scripts {
 				baseTileData = eventTileData;
 
 				
-				if (parameters.Count > 1) {
+				if (parameters.ChildCount > 1) {
 					eventTileData.Sprite = resources.GetSpriteAnimation(parameters.GetString(1));
 				}
-				if (parameters.Count > 2) {
+				if (parameters.ChildCount > 2) {
 					eventTileData.Properties.Set("monster_type", parameters.GetString(2));
 				}
-				if (parameters.Count > 3) {
+				if (parameters.ChildCount > 3) {
 					MonsterColor color;
 					if (!Enum.TryParse<MonsterColor>(parameters.GetString(3), true, out color))
 						ThrowParseError("Invalid monster color: \"" + parameters.GetString(3) + "\"!");
@@ -242,7 +242,7 @@ namespace ZeldaOracle.Common.Scripts {
 			});
 			// Flags <flags[]...>
 			AddTilesetCommand("Flags", delegate(CommandParam parameters) {
-				for (int i = 0; i < parameters.Count; i++) {
+				for (int i = 0; i < parameters.ChildCount; i++) {
 					TileFlags flags = TileFlags.None;
 					if (Enum.TryParse<TileFlags>(parameters.GetString(i), true, out flags))
 						tileData.Flags |= flags;
@@ -284,7 +284,7 @@ namespace ZeldaOracle.Common.Scripts {
 
 			AddTilesetCommand("Properties", delegate(CommandParam parameters) {
 				// TODO: handle lists.
-				for (int i = 0; i < parameters.Count; i++) {
+				for (int i = 0; i < parameters.ChildCount; i++) {
 					CommandParam param = parameters[i];
 					string name = param.GetString(1);
 
@@ -319,7 +319,7 @@ namespace ZeldaOracle.Common.Scripts {
 							property = baseTileData.Properties.SetGeneric(name, value);
 
 						// Set the property's documentation.
-						if (param.Count > 3) {
+						if (param.ChildCount > 3) {
 							string editorType = "";
 							string editorSubType = "";
 							if (param[4].Type == CommandParamType.Array) {
@@ -355,9 +355,9 @@ namespace ZeldaOracle.Common.Scripts {
 				
 				// Create the event's script parameter list.
 				ScriptParameter[] scriptParams;
-				if (parameters.Count > 3) {
+				if (parameters.ChildCount > 3) {
 					CommandParam paramList = parameters[3];
-					scriptParams = new ScriptParameter[paramList.Count / 2];
+					scriptParams = new ScriptParameter[paramList.ChildCount / 2];
 					for (int i = 0; i < scriptParams.Length; i++) {
 						scriptParams[i] = new ScriptParameter() {
 							Type = paramList.GetString(i * 2),
@@ -381,7 +381,7 @@ namespace ZeldaOracle.Common.Scripts {
 				"string spriteOrAnimName",
 				"string spriteSheetName, (int sourceX, int sourceY), (int offsetX, int offsetY) = (0, 0)",
 			delegate(CommandParam parameters) {
-				if (parameters.Count >= 2) {
+				if (parameters.ChildCount >= 2) {
 					spriteBuilder.Begin(new Sprite(
 						resources.GetResource<SpriteSheet>(parameters.GetString(0)),
 						parameters.GetPoint(1),
@@ -418,7 +418,7 @@ namespace ZeldaOracle.Common.Scripts {
 					}
 					tileData.SpriteList = spriteList;
 				}
-				if (parameters.Count > 2 && parameters[2].Type == CommandParamType.Array) {
+				if (parameters.ChildCount > 2 && parameters[2].Type == CommandParamType.Array) {
 					spriteBuilder.Begin(new Sprite(
 						resources.GetResource<SpriteSheet>(parameters.GetString(1)),
 						parameters.GetPoint(2),
@@ -427,7 +427,7 @@ namespace ZeldaOracle.Common.Scripts {
 					tileData.SpriteList[index] = spriteBuilder.End();
 				}
 				else {
-					if (parameters.Count == 3) {
+					if (parameters.ChildCount == 3) {
 						string typeName = parameters.GetString(1);
 						if (typeName == "sprite")
 							tileData.SpriteList[index] = resources.GetResource<Sprite>(parameters.GetString(2));
@@ -444,8 +444,8 @@ namespace ZeldaOracle.Common.Scripts {
 
 			// SpriteList [sprite-animation-1] [sprite-animation-2]...
 			AddTilesetCommand("SpriteList", delegate(CommandParam parameters) {
-				SpriteAnimation[] spriteList = new SpriteAnimation[parameters.Count];
-				for (int i = 0; i < parameters.Count; i++)
+				SpriteAnimation[] spriteList = new SpriteAnimation[parameters.ChildCount];
+				for (int i = 0; i < parameters.ChildCount; i++)
 					spriteList[i] = resources.GetSpriteAnimation(parameters.GetString(i));
 
 				tileData.SpriteList = spriteList;
@@ -457,7 +457,7 @@ namespace ZeldaOracle.Common.Scripts {
 				"string spriteOrAnimName",
 				"string spriteSheetName, (int sourceX, int sourceY), (int offsetX, int offsetY) = (0, 0)",
 			delegate(CommandParam parameters) {
-				if (parameters.Count >= 2) {
+				if (parameters.ChildCount >= 2) {
 					spriteBuilder.Begin(new Sprite(
 						resources.GetResource<SpriteSheet>(parameters.GetString(0)),
 						parameters.GetPoint(1),
@@ -679,7 +679,7 @@ namespace ZeldaOracle.Common.Scripts {
 				"string name, string path, (int cellWidth, int cellHeight), (int spacingX, int spacingY), (int offsetX, int offsetY)",
 			delegate(CommandParam parameters) {
 			//AddSpriteCommand("SpriteSheet", delegate(CommandParam parameters) {
-				if (parameters.Count == 1) {
+				if (parameters.ChildCount == 1) {
 					// Start using the given sprite sheet.
 					SpriteSheet sheet = Resources.GetResource<SpriteSheet>(parameters.GetString(0));
 					spriteBuilder.SpriteSheet = sheet;
@@ -691,7 +691,7 @@ namespace ZeldaOracle.Common.Scripts {
 					string imagePath = parameters.GetString(0);
 					string sheetName = imagePath;
 
-					if (parameters.Count == 5) {
+					if (parameters.ChildCount == 5) {
 						imagePath = parameters.GetString(1);
 						i = 2;
 					}

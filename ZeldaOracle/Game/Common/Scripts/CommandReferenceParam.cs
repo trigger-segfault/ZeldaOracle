@@ -5,13 +5,13 @@ using System.Text;
 
 namespace ZeldaOracle.Common.Scripts {
 
-	public class CommandParamReference {
+	public class CommandReferenceParam {
 
 		private CommandParamType		type;
 		private string					name;
-		private CommandParamReference	nextParam;
-		private CommandParamReference	parent;
-		private CommandParamReference	children;
+		private CommandReferenceParam	nextParam;
+		private CommandReferenceParam	parent;
+		private CommandReferenceParam	children;
 		private CommandParam			defaultValue;
 		private object					value;
 
@@ -20,14 +20,50 @@ namespace ZeldaOracle.Common.Scripts {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public CommandParamReference() {
-			this.type			= CommandParamType.String;
+		public CommandReferenceParam() :
+			this(CommandParamType.String)
+		{
+		}
+		
+		public CommandReferenceParam(CommandParamType type) {
+			this.type			= type;
 			this.nextParam		= null;
 			this.parent			= null;
 			this.children		= null;
 			this.defaultValue	= null;
 			this.value			= null;
 			this.name			= "";
+			if (type == CommandParamType.Array)
+				value = (int) 0;
+		}
+
+		
+		//-----------------------------------------------------------------------------
+		// Array Methods
+		//-----------------------------------------------------------------------------
+		
+		// Get an enumerable list of an array paraneter's children.
+		public IEnumerable<CommandReferenceParam> GetChildren() {
+			for (CommandReferenceParam child = children; child != null; child = child.nextParam)
+				yield return child;
+		}
+
+		// Add a parameter child.
+		public CommandReferenceParam AddChild(CommandReferenceParam child) {
+			if (type == CommandParamType.Array) {
+				if (children == null) {
+					children = child;
+					value = (int) 1;
+				}
+				else {
+					CommandReferenceParam lastChild = children;
+					while (lastChild.NextParam != null)
+						lastChild = lastChild.NextParam;
+					lastChild.nextParam = child;
+					value = ((int) value + 1);
+				}
+			}
+			return child;
 		}
 		
 		
@@ -67,15 +103,15 @@ namespace ZeldaOracle.Common.Scripts {
 				
 		// Arrays ---------------------------------------------------------------------
 		
-		public CommandParamReference NextParam {
+		public CommandReferenceParam NextParam {
 			get { return nextParam; }
 		}
 
-		public CommandParamReference Parent {
+		public CommandReferenceParam Parent {
 			get { return parent; }
 		}
 
-		public CommandParamReference Children {
+		public CommandReferenceParam Children {
 			get { return children; }
 		}
 
