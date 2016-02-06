@@ -21,7 +21,6 @@ using Keys			= ZeldaOracle.Common.Input.Keys;
 using ZeldaOracle.Game.Main;
 //using ZeldaOracle.Common.Graphics.Particles;
 using ZeldaOracle.Common.Content;
-using ZeldaOracle.Common.Scripts;
 using System.IO;
 //using ParticleGame.Project.Particles;
 

@@ -9,12 +9,13 @@ using ZeldaOracle.Common.Content.ResourceBuilders;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Common.Scripts.Commands;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 
-namespace ZeldaOracle.Common.Scripts {
+namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 	public enum LoadingModes {
 		Tilesets,
@@ -22,7 +23,7 @@ namespace ZeldaOracle.Common.Scripts {
 		Sprites
 	}
 
-	public class TilesetSR : NewScriptReader {
+	public class TilesetSR : ScriptReader {
 
 		private Tileset				tileset;
 		private EventTileset		eventTileset;

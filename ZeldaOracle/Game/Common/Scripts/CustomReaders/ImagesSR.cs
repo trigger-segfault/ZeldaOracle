@@ -6,11 +6,12 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Content.ResourceBuilders;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Scripts.Commands;
 using ZeldaOracle.Game;
 
-namespace ZeldaOracle.Common.Scripts {
+namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
-	public class ImagesSR : NewScriptReader {
+	public class ImagesSR : ScriptReader {
 
 		private Image	image;
 		private Image	imageTail;

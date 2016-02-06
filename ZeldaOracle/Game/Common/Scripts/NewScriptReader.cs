@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using ZeldaOracle.Common.Content;
+using ZeldaOracle.Common.Scripts.Commands;
 
 namespace ZeldaOracle.Common.Scripts {
 	/** <summary>
@@ -11,7 +12,7 @@ namespace ZeldaOracle.Common.Scripts {
 	 * is meant to be implemented to be able to
 	 * interpret text files written in a certain syntax.
 	 * </summary> */
-	public class NewScriptReader {
+	public class ScriptReader {
 		
 		private StreamReader	streamReader;
 		private string			fileName;
@@ -32,7 +33,7 @@ namespace ZeldaOracle.Common.Scripts {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public NewScriptReader() {
+		public ScriptReader() {
 			parameter		= null;
 			parameterRoot	= null;
 			commands		= new List<ScriptCommand>();

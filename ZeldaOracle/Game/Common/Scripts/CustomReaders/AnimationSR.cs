@@ -1,18 +1,17 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Content.ResourceBuilders;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Scripts.Commands;
 using ZeldaOracle.Game;
 
-namespace ZeldaOracle.Common.Scripts {
+namespace ZeldaOracle.Common.Scripts.CustomReaders {
 	/** <summary>
 	 * Script reader for sprite sheets. The script can contain
 	 * information for multiple sprite sheets with corresponding
@@ -28,7 +27,7 @@ namespace ZeldaOracle.Common.Scripts {
 	 * @spritesheet and @end commands.
 	 * </summary>
 	 */
-	public class AnimationSR : NewScriptReader {
+	public class AnimationSR : ScriptReader {
 
 		private AnimationBuilder animationBuilder;
 		private Animation animation;

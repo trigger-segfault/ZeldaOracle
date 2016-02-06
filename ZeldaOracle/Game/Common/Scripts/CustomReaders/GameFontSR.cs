@@ -1,16 +1,15 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Scripts.Commands;
 
-namespace ZeldaOracle.Common.Scripts {
+namespace ZeldaOracle.Common.Scripts.CustomReaders {
 	/*
 	 * FORMAT:
 	 *
@@ -19,7 +18,7 @@ namespace ZeldaOracle.Common.Scripts {
 	 * @spacing [char_spacing] [line_spacing] [chars_per_row]
 	 * @end
 	 */
-	public class GameFontSR : NewScriptReader {
+	public class GameFontSR : ScriptReader {
 
 		// The current font being created.
 		private GameFont font;

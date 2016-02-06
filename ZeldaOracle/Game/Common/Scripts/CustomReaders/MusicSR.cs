@@ -1,21 +1,20 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Scripts.Commands;
 
-namespace ZeldaOracle.Common.Scripts {
+namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
-	public class MusicSR : NewScriptReader {
+	public class MusicSR : ScriptReader {
 
-		private bool isCreatingMusic;
+		//private bool isCreatingMusic; // NOTE: Never used
 
 
 		//-----------------------------------------------------------------------------
@@ -27,12 +26,12 @@ namespace ZeldaOracle.Common.Scripts {
 			//=====================================================================================
 			// Begin creating music.
 			AddCommand("Music", "", delegate(CommandParam parameters) {
-				isCreatingMusic = true;
+				//isCreatingMusic = true;
 			});
 			//=====================================================================================
 			// Finish creating music.
 			AddCommand("End", "", delegate(CommandParam parameters) {
-				isCreatingMusic = false;
+				//isCreatingMusic = false;
 			});
 			//=====================================================================================
 			// Load a song.
@@ -54,11 +53,11 @@ namespace ZeldaOracle.Common.Scripts {
 		//-----------------------------------------------------------------------------
 
 		protected override void BeginReading() {
-			isCreatingMusic = false;
+			//isCreatingMusic = false;
 		}
 
 		protected override void EndReading() {
-			isCreatingMusic = false;
+			//isCreatingMusic = false;
 		}
 	}
 }

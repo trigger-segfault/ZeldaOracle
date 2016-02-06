@@ -1,31 +1,13 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Reflection;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using System.Text;
 using ZeldaOracle.Common.Content;
-using ZeldaOracle.Common.Content.ResourceBuilders;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Scripting;
-using ZeldaOracle.Common.Scripts;
-using ZeldaOracle.Game.Entities;
-using ZeldaOracle.Game.Entities.Monsters;
-using ZeldaOracle.Game.Entities.Projectiles;
-using ZeldaOracle.Game.Items.Ammos;
-using ZeldaOracle.Game.Items.Drops;
-using ZeldaOracle.Game.Items.Weapons;
-using ZeldaOracle.Game.Items.Essences;
-using ZeldaOracle.Game.Items.KeyItems;
-using ZeldaOracle.Game.Items.Equipment;
-using ZeldaOracle.Game.Items;
-using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.Custom;
-using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game {

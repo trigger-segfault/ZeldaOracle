@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Scripts.Commands;
 using ZeldaOracle.Game;
 
-namespace ZeldaOracle.Common.Scripts {
+namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
-	public class CollisionModelSR : NewScriptReader {
+	public class CollisionModelSR : ScriptReader {
 
 		private CollisionModel model;
 		private string	modelName;

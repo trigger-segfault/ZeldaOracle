@@ -1,26 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using XnaSong = Microsoft.Xna.Framework.Media.Song;
-
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Scripts;
+using ZeldaOracle.Common.Scripts.CustomReaders;
 using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
-using Song = ZeldaOracle.Common.Audio.Song;
-using ZeldaOracle.Common.Scripting;
+using Song		= ZeldaOracle.Common.Audio.Song;
+using XnaSong	= Microsoft.Xna.Framework.Media.Song;
 
 namespace ZeldaOracle.Common.Content {
 
@@ -472,12 +470,12 @@ namespace ZeldaOracle.Common.Content {
 		//-----------------------------------------------------------------------------
 
 		// Loads a script file with the given script reader object.
-		public static void LoadScript(string assetName, NewScriptReader sr) {
+		public static void LoadScript(string assetName, ScriptReader sr) {
 			LoadScript(assetName, sr, Encoding.Default);
 		}
 
 		// Loads a script file with the given encoding and script reader object.
-		public static void LoadScript(string assetName, NewScriptReader sr, Encoding encoding) {
+		public static void LoadScript(string assetName, ScriptReader sr, Encoding encoding) {
 			try {
 				Stream stream = TitleContainer.OpenStream(contentManager.RootDirectory + "/" + assetName);
 				StreamReader reader = new StreamReader(stream, encoding);

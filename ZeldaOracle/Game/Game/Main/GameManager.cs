@@ -20,7 +20,6 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Common.Input.Controls;
-using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Game.GameStates;
 using GamePad		= ZeldaOracle.Common.Input.GamePad;
 using Keyboard		= ZeldaOracle.Common.Input.Keyboard;

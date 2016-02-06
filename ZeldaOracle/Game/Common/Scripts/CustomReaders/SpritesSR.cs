@@ -6,11 +6,12 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Content.ResourceBuilders;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Scripts.Commands;
 using ZeldaOracle.Game;
 
-namespace ZeldaOracle.Common.Scripts {
+namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
-	public class SpritesSR : NewScriptReader {
+	public class SpritesSR : ScriptReader {
 
 		private SpriteBuilder spriteBuilder;
 		private Sprite sprite;
