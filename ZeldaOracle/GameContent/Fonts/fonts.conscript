@@ -1,12 +1,12 @@
 
-@font "Fonts/font_large"
-@grid 8 12  1 1  1 1
-@spacing 0 16 16
-@end
+FONT "Fonts/font_large";
+	GRID (8, 12), (1, 1), (1, 1);
+	SPACING 0, 16, 16;
+END;
 
-@font "Fonts/font_small"
-@grid 8 8  1 1  1 1
-@spacing 0 12 16
-@end
+FONT "Fonts/font_small";
+	GRID (8, 8), (1, 1), (1, 1);
+	SPACING 0, 12, 16;
+END;
 
 
