@@ -521,6 +521,7 @@ TILE door_down;		CLONE door; PROPERTIES (integer, direction, 3), (integer, subst
 TILE small_key_door;
 	CLONE			door;
 	TYPE			TileSmallKeyDoor;
+	RESETWHEN		Never;
 	SPRITEINDEX	0,	tile_small_key_door_closed;
 	SPRITEINDEX	1,	tile_small_key_door_open;
 	SPRITEINDEX	2,	tile_small_key_door_close;
@@ -533,8 +534,9 @@ TILE small_key_door_left;	CLONE small_key_door; PROPERTIES (integer, direction, 
 TILE small_key_door_down;	CLONE small_key_door; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
 
 TILE boss_key_door;
-	CLONE		door;
-	TYPE		TileBossKeyDoor;
+	CLONE			door;
+	TYPE			TileBossKeyDoor;
+	RESETWHEN		Never;
 	SPRITEINDEX	0,	tile_boss_key_door_closed;
 	SPRITEINDEX	1,	tile_boss_key_door_open;
 	SPRITEINDEX	2,	tile_boss_key_door_close;
@@ -568,6 +570,7 @@ END;
 TILE locked_block;
 	TYPE		TileLockedBlock;
 	SOLID		block;
+	RESETWHEN	Never;
 	SPRITE		tile_locked_block;
 END;
 
@@ -598,6 +601,7 @@ TILE bombable_wall_down;	CLONE bombable_wall; END;
 TILE minecart_track;
 	TYPE		TileMinecartTrack;
 	FLAGS		NotCoverable;
+	RESETWHEN	LeaveArea;
 	SPRITEINDEX	0, tile_minecart_track_horizontal;			# Horizontal
 	SPRITEINDEX	1, tile_minecart_track_vertical;			# Vertical
 	SPRITEINDEX	2, tile_minecart_track_corner_southwest;	# Right/Up
@@ -644,6 +648,7 @@ END;
 TILE turnstile;
 	TYPE		TileTurnstile;
 	SPRITE		tile_turnstile_base;
+	RESETWHEN	LeaveArea;
 	SIZE		(3, 3);
 	PROPERTIES	(boolean, clockwise, false, "Clockwise", "", "Turnstile", "True if the turnstile is in clockwise mode.");
 END;

@@ -174,6 +174,11 @@ namespace ZeldaOracle.Game.Tiles {
 			set { properties.Set("solidity", (int) value); }
 		}
 
+		public TileResetCondition ResetCondition {
+			get { return properties.GetEnum<TileResetCondition>("reset_condition", TileResetCondition.LeaveRoom); }
+			set { properties.Set("reset_condition", (int) value); }
+		}
+
 		public int ConveyorAngle {
 			get { return properties.GetInteger("conveyor_angle", -1); }
 			set { properties.Set("conveyor_angle", value); }

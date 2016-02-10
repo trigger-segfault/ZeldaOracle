@@ -220,7 +220,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					if (Enum.TryParse<TileFlags>(parameters.GetString(i), true, out flags))
 						tileData.Flags |= flags;
 					else
-						ThrowParseError("Invalid tile flag: \"" + parameters.GetString(i) + "\"!");
+						ThrowParseError("Invalid tile flag: \"" + parameters.GetString(i) + "\"!", parameters[i]);
 				}
 			});
 			//=====================================================================================
@@ -230,7 +230,16 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				if (Enum.TryParse<TileEnvironmentType>(parameters.GetString(0), true, out envType))
 					tileData.Properties.Set("environment_type", (int) envType);
 				else
-					ThrowParseError("Invalid tile environment type: \"" + parameters.GetString(0) + "\"!");
+					ThrowParseError("Invalid tile environment type: \"" + parameters.GetString(0) + "\"!", parameters[0]);
+			});
+			//=====================================================================================
+			AddCommand("ResetWhen", "string resetCondition",
+			delegate(CommandParam parameters) {
+				TileResetCondition envType = TileResetCondition.LeaveRoom;
+				if (Enum.TryParse<TileResetCondition>(parameters.GetString(0), true, out envType))
+					tileData.ResetCondition = envType;
+				else
+					ThrowParseError("Invalid tile reset condition: \"" + parameters.GetString(0) + "\"!", parameters[0]);
 			});
 			//=====================================================================================
 			AddCommand("Conveyor", "string angle, float speed",
@@ -242,7 +251,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				else if (parameters[0].Type == CommandParamType.Integer)
 					tileData.ConveyorAngle = parameters.GetInt(0);
 				else
-					ThrowParseError("Unknown value for conveyor angle: " + str);
+					ThrowParseError("Unknown value for conveyor angle: " + str, parameters[0]);
 
 				tileData.ConveyorSpeed = parameters.GetFloat(1);
 			});

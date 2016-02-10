@@ -25,7 +25,6 @@ namespace ZeldaOracle.Common.Scripts {
 		private CommandParam	parameter;
 		private CommandParam	parameterParent;
 		private CommandParam	parameterRoot;
-
 		private List<ScriptCommand> commands;	// List of possible commands.
 
 
@@ -42,7 +41,7 @@ namespace ZeldaOracle.Common.Scripts {
 		
 
 		//-----------------------------------------------------------------------------
-		// Command Specification
+		// Command Creation
 		//-----------------------------------------------------------------------------
 		
 		// Add a command with no parameter format.

@@ -259,7 +259,7 @@ namespace ZeldaOracle.Game.Control {
 						TileDataInstance data = room.TileData[x, y, i];
 
 						if (data != null && data.IsAtLocation(x, y) &&
-							data.Properties.GetBoolean("enabled", true))
+							data.ModifiedProperties.GetBoolean("enabled", true))
 						{
 							// Place the tile.
 							Tile tile = Tile.CreateTile(data);
@@ -306,8 +306,9 @@ namespace ZeldaOracle.Game.Control {
 				if (entities[i] != Player)
 					entities[i].IsDestroyed = true;
 			}
-			foreach (Tile tile in GetTiles())
+			foreach (Tile tile in GetTiles()) {
 				tile.OnRemoveFromRoom();
+			}
 		}
 		
 

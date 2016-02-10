@@ -279,15 +279,16 @@ namespace ZeldaOracle.Game.Worlds {
 					reader.ReadInt32(),
 					reader.ReadInt32());
 				tile.TileData = tileset.TileData[sheetLocation.X, sheetLocation.Y];
-				ReadProperties(reader, tile.Properties);
-				tile.Properties.BaseProperties = tile.TileData.Properties;
 			}
 			else {
 				// Create tile from a TileData resource.
 				tile.TileData = ReadResource(reader, tileData);
-				ReadProperties(reader, tile.Properties);
-				tile.Properties.BaseProperties = tile.TileData.Properties;
 			}
+
+			// Read the tile's properties.
+			ReadProperties(reader, tile.Properties);
+			tile.Properties.BaseProperties = tile.TileData.Properties;
+			tile.ModifiedProperties.Clone(tile.Properties);
 
 			return tile;
 		}

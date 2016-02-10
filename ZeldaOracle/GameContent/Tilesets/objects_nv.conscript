@@ -21,6 +21,7 @@ LOAD TILESETS;
 TILE chest;
 	TYPE		TileChest;
 	SOLID		block;
+	RESETWHEN	Never;
 	PROPERTIES
 		(integer, spawn_delay_after_poof, 16),
 		(string, reward, "rupees_1",
@@ -54,6 +55,7 @@ END;
 TILE reward;
 	TYPE			TileReward;
 	MODEL			center;
+	RESETWHEN		Never;
 	##SPRITE		reward_heart_piece;
 	PROPERTIES
 		(string, reward, "heart_piece",

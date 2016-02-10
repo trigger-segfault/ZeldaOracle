@@ -4,6 +4,13 @@ using System.Linq;
 using System.Text;
 
 namespace ZeldaOracle.Game.Tiles {
+
+	public enum TileSolidType {
+		NotSolid = 0,
+		Solid,
+		HalfSolid,	// Not solid to units, and certain projectiles can pass over half solids. Half solids include railings.
+		Ledge,
+	}
 	
 	public enum TileEnvironmentType {
 		Normal = 0,
@@ -22,17 +29,15 @@ namespace ZeldaOracle.Game.Tiles {
 		Whirlpool,	// (+water +hole)
 	}
 
-	public enum TileSolidType {
-		NotSolid = 0,
-		Solid,
-		HalfSolid,	// Not solid to units, and certain projectiles can pass over half solids. Half solids include railings.
-		Ledge,
+	public enum TileResetCondition {
+		LeaveRoom = 0,	// Tile resets its state upon leaving the room (default).
+		LeaveArea,		// Tile resets its state upon leaving the area.
+		Never,			// Tile's state is persistant and will never be reset.
 	}
 
 	public struct TileSpawnOptions {
 		public bool PoofEffect { get; set; }
 		public int SpawnDelayAfterPoof { get; set; }
-
 	}
 
 	[Flags]

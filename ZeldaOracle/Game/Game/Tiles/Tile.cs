@@ -471,7 +471,7 @@ namespace ZeldaOracle.Game.Tiles {
 				}
 			}
 		}
-		
+
 		private void UpdateMovement() {
 			// Update movement.
 			if (isMoving) {
@@ -619,7 +619,11 @@ namespace ZeldaOracle.Game.Tiles {
 
 			//tile.properties.SetAll(data.BaseProperties);
 			//tile.properties.SetAll(data.Properties);
-			tile.properties.BaseProperties	= data.Properties;
+			//data.ResetState();
+			//tile.properties.BaseProperties = data.ModifiedProperties;
+			
+			// NOTE: properties.PropertyObject will refer to the tile's TileDataInstance.
+			tile.properties = data.ModifiedProperties;
 			
 			return tile;
 		}

@@ -14,6 +14,7 @@ namespace ZeldaOracle.Game.Tiles {
 		protected Room				room;
 		protected BaseTileData		tileData;
 		protected Properties		properties;
+		protected Properties		modifiedProperties;
 		
 
 		//-----------------------------------------------------------------------------
@@ -21,34 +22,47 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		public BaseTileDataInstance() {
-			room		= null;
-			tileData	= null;
-			properties	= new Properties(this);
+			room				= null;
+			tileData			= null;
+			properties			= new Properties(this);
+			modifiedProperties	= new Properties(this);
 		}
 
 		public BaseTileDataInstance(BaseTileData tileData) {
 			this.room		= null;
 			this.tileData	= tileData;
-			this.properties	= new Properties();
-			this.properties.PropertyObject = this;
+			this.properties	= new Properties(this);
 			this.properties.BaseProperties = tileData.Properties;
+			this.modifiedProperties	= new Properties(this);
+			this.modifiedProperties.BaseProperties = tileData.Properties;
 		}
 
 		public virtual void Clone(BaseTileDataInstance copy) {
 			this.room		= copy.Room;
 			this.tileData	= copy.tileData;
-			this.properties	= new Properties();
-			this.properties.PropertyObject = this;
+			this.properties	= new Properties(this);
 			this.properties.BaseProperties = tileData.Properties;
+			this.modifiedProperties	= new Properties(this);
+			this.modifiedProperties.BaseProperties = tileData.Properties;
 			this.properties.SetAll(copy.properties);
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Mutators
+		//-----------------------------------------------------------------------------
+
+		public void ResetState() {
+			// Copy the properties into the modified properties.
+			modifiedProperties.Clone(properties);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Virtual Methods and properties
+		//-----------------------------------------------------------------------------
+
 		public abstract BaseTileDataInstance Duplicate();
-
-
-		//-----------------------------------------------------------------------------
-		// Virtual properties
-		//-----------------------------------------------------------------------------
 
 		public abstract Point2I GetPosition();
 		
@@ -85,6 +99,10 @@ namespace ZeldaOracle.Game.Tiles {
 				properties = value;
 				properties.PropertyObject = this;
 			}
+		}
+		
+		public Properties ModifiedProperties {
+			get { return modifiedProperties; }
 		}
 
 		public ObjectEventCollection Events {

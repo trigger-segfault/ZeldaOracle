@@ -51,8 +51,8 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public override void OnInitialize() {
-			if (Properties.GetBoolean("minecart", false)) {
-				// Spawn a minecart entity.
+			// Spawn a minecart entity.
+			if (SpawnsMinecart) {
 				Minecart minecart = new Minecart(this);
 				RoomControl.SpawnEntity(minecart, Position);
 			}
@@ -68,8 +68,8 @@ namespace ZeldaOracle.Game.Tiles {
 			int switchedIndex = Properties.GetInteger("switched_track_index", currentIndex);
 
 			if (currentIndex != switchedIndex) {
-				Properties.SetBase("switched_track_index", currentIndex);
-				Properties.SetBase("sprite_index", switchedIndex);
+				Properties.Set("switched_track_index", currentIndex);
+				Properties.Set("sprite_index", switchedIndex);
 			}
 		}
 
@@ -84,6 +84,11 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		public bool IsVertical {
 			get { return (SpriteIndex == 1); }
+		}
+
+		public bool SpawnsMinecart {
+			get { return Properties.GetBoolean("minecart", false); }
+			set { Properties.Set("minecart", value); }
 		}
 	}
 }

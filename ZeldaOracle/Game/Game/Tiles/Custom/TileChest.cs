@@ -34,8 +34,11 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 					RoomControl.GameControl.PushRoomState(new RoomStateReward(reward, (Point2I)Position));
 					
 					AudioSystem.PlaySound(GameData.SOUND_CHEST_OPEN);
-					Properties.SetBase("looted", true);
-					Properties.SetBase("enabled", true); // Opened chest are always spawned.
+					Properties.Set("looted", true);
+					Properties.Set("enabled", true); // Opened chest are always spawned.
+
+					//Properties.SetBase("looted", true);
+					//Properties.SetBase("enabled", true); // Opened chest are always spawned.
 					SpriteIndex = 1;
 				}
 				else {
