@@ -593,7 +593,7 @@ namespace ZeldaOracle.Game.Tiles {
 			tile.size				= data.Size;
 			
 			if (data.SpriteList.Length > 0)
-				tile.graphics.PlaySprite(data.SpriteList[0]);
+				tile.graphics.PlaySpriteAnimation(data.SpriteList[0]);
 
 			int conveyorAngle = data.ConveyorAngle;
 			if (conveyorAngle >= 0)

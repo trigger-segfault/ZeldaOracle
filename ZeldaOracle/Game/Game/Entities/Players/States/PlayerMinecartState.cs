@@ -162,7 +162,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void DrawUnder(RoomGraphics g) {
 			// Draw the minecart below the player.
-			g.DrawAnimation(minecartAnimationPlayer,
+			g.DrawAnimationPlayer(minecartAnimationPlayer,
 				player.Center - new Vector2F(8, 8) - playerOffset, DepthLayer.PlayerAndNPCs);
 
 		}

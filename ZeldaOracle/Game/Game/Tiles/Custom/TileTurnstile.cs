@@ -176,8 +176,8 @@ namespace ZeldaOracle.Game.Tiles {
 		public override void Draw(RoomGraphics g) {
 			base.Draw(g);
 
-			g.DrawAnimation(arrowsAnimationPlayer, Zone.ImageVariantID, Position, Graphics.DepthLayer);
-			g.DrawAnimation(turnstileAnimationPlayer, Zone.ImageVariantID, Position, Graphics.DepthLayer);
+			g.DrawAnimationPlayer(arrowsAnimationPlayer, Zone.ImageVariantID, Position, Graphics.DepthLayer);
+			g.DrawAnimationPlayer(turnstileAnimationPlayer, Zone.ImageVariantID, Position, Graphics.DepthLayer);
 		}
 
 		

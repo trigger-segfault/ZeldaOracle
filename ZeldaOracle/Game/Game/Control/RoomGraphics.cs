@@ -128,13 +128,18 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		// Draw an animation player.
-		public void DrawAnimation(AnimationPlayer animationPlayer, Vector2F position, DepthLayer depth) {
-			DrawAnimation(animationPlayer, 0, position, depth, Vector2F.Zero);
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, Vector2F position, DepthLayer depth) {
+			DrawAnimationPlayer(animationPlayer, 0, position, depth, Vector2F.Zero);
 		}
 		
+		// Draw an animation player at the given playback time.
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, float time, Vector2F position, DepthLayer depth) {
+			DrawAnimationPlayer(animationPlayer, 0, time, position, depth, Vector2F.Zero);
+		}
+
 		// Draw an sprite or animation at the given playback time.
-		public void DrawAnimation(SpriteAnimation spriteAnimation, float time, Vector2F position, DepthLayer depth) {
-			DrawAnimation(spriteAnimation, 0, time, position, depth, Vector2F.Zero);
+		public void DrawSpriteAnimation(SpriteAnimation spriteAnimation, float time, Vector2F position, DepthLayer depth) {
+			DrawSpriteAnimation(spriteAnimation, 0, time, position, depth, Vector2F.Zero);
 		}
 		
 		// Draw an animation at the given playback time.
@@ -153,13 +158,18 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 		
 		// Draw an animation player.
-		public void DrawAnimation(AnimationPlayer animationPlayer, int imageVariant, Vector2F position, DepthLayer depth) {
-			DrawAnimation(animationPlayer, imageVariant, position, depth, Vector2F.Zero);
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, int imageVariant, Vector2F position, DepthLayer depth) {
+			DrawAnimationPlayer(animationPlayer, imageVariant, position, depth, Vector2F.Zero);
+		}
+		
+		// Draw an animation player at the given playback time.
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, int imageVariant, float time, Vector2F position, DepthLayer depth) {
+			DrawAnimationPlayer(animationPlayer, imageVariant, time, position, depth, Vector2F.Zero);
 		}
 		
 		// Draw an sprite or animation at the given playback time.
-		public void DrawAnimation(SpriteAnimation spriteAnimation, int imageVariant, float time, Vector2F position, DepthLayer depth) {
-			DrawAnimation(spriteAnimation, imageVariant, time, position, depth, Vector2F.Zero);
+		public void DrawSpriteAnimation(SpriteAnimation spriteAnimation, int imageVariant, float time, Vector2F position, DepthLayer depth) {
+			DrawSpriteAnimation(spriteAnimation, imageVariant, time, position, depth, Vector2F.Zero);
 		}
 		
 		// Draw an animation at the given playback time.
@@ -178,13 +188,13 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 		
 		// Draw an animation player.
-		public void DrawAnimation(AnimationPlayer animationPlayer, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
-			DrawAnimation(animationPlayer, 0, position, depth, depthOrigin);
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+			DrawAnimationPlayer(animationPlayer, 0, position, depth, depthOrigin);
 		}
 		
 		// Draw an sprite or animation at the given playback time.
-		public void DrawAnimation(SpriteAnimation spriteAnimation, float time, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
-			DrawAnimation(spriteAnimation, 0, time, position, depth, depthOrigin);
+		public void DrawSpriteAnimation(SpriteAnimation spriteAnimation, float time, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+			DrawSpriteAnimation(spriteAnimation, 0, time, position, depth, depthOrigin);
 		}
 		
 		// Draw an animation at the given playback time.
@@ -203,15 +213,20 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 		
 		// Draw an animation player.
-		public void DrawAnimation(AnimationPlayer animationPlayer, int imageVariant, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, int imageVariant, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+			DrawAnimationPlayer(animationPlayer, imageVariant, animationPlayer.PlaybackTime, position, depth, depthOrigin);
+		}
+
+		// Draw an animation player at the given time.
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, int imageVariant, float time, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
 			if (animationPlayer.Sprite != null)
 				DrawSprite(animationPlayer.Sprite, imageVariant, position, depth, depthOrigin);
 			else if (animationPlayer.SubStrip != null)
-				DrawAnimation(animationPlayer.SubStrip, imageVariant, animationPlayer.PlaybackTime, position, depth, depthOrigin);
+				DrawAnimation(animationPlayer.SubStrip, imageVariant, time, position, depth, depthOrigin);
 		}
 		
 		// Draw an sprite or animation at the given playback time.
-		public void DrawAnimation(SpriteAnimation spriteAnimation, int imageVariant, float time, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+		public void DrawSpriteAnimation(SpriteAnimation spriteAnimation, int imageVariant, float time, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
 			if (spriteAnimation.IsAnimation)
 				DrawAnimation(spriteAnimation.Animation, imageVariant, time, position, depth, depthOrigin);
 			else

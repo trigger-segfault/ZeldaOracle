@@ -169,7 +169,7 @@ namespace ZeldaOracle.Game.Entities
 
 			// Draw the sprite/animation.
 			Vector2F drawPosition = Entity.Position - new Vector2F(0, Entity.ZPosition);
-			g.DrawAnimation(animationPlayer, newImageVariant,
+			g.DrawAnimationPlayer(animationPlayer, newImageVariant,
 				drawPosition + drawOffset, layer, entity.Position);
 
 			// Draw the ripples effect.

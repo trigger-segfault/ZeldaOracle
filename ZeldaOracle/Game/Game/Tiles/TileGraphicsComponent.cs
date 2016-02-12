@@ -10,13 +10,13 @@ namespace ZeldaOracle.Game.Tiles {
 
 	public class TileGraphicsComponent {
 		
-		private Tile			tile;				// The tile this component belongs to.
+		private Tile			tile;						// The tile this component belongs to.
 		private AnimationPlayer	animationPlayer;
 		private	bool			isVisible;
 		private DepthLayer		depthLayer;
 		private int				imageVariant;
-		private Point2I			raisedDrawOffset;			// Offset to draw tiles that are slightly raised (EX: pushing pots onto a button)
 		private Point2I			drawOffset;
+		private Point2I			raisedDrawOffset;			// Offset to draw tiles that are slightly raised (EX: pushing pots onto a button)
 		private	bool			syncPlaybackWithRoomTicks;
 		private bool			isAnimatedWhenPaused;		// True if the tile updates its graphics while the room is paused.
 		private Vector2F		absoluteDrawPosition;
@@ -43,24 +43,51 @@ namespace ZeldaOracle.Game.Tiles {
 
 		
 		//-----------------------------------------------------------------------------
-		// Animation
+		// Animation & Sprite Interface
 		//-----------------------------------------------------------------------------
 
-		public void PlaySprite(SpriteAnimation spriteAnimation) {
-			if (spriteAnimation.IsSprite)
-				PlaySprite(spriteAnimation.Sprite);
-			else if (spriteAnimation.IsAnimation)
-				PlayAnimation(spriteAnimation.Animation);
-			else
-				animationPlayer.Clear();
-		}
-		
-		public void PlaySprite(Sprite sprite) {
-			animationPlayer.Play(new Animation(sprite));
+		public void PlayAnimation() {
+			animationPlayer.Play();
 		}
 
+		public void PlaySprite(Sprite sprite) {
+			animationPlayer.Play(sprite);
+		}
+		
 		public void PlayAnimation(Animation animation) {
 			animationPlayer.Play(animation);
+		}
+
+		public void PlaySpriteAnimation(SpriteAnimation spriteAnimation) {
+			animationPlayer.Play(spriteAnimation);
+		}
+		
+		public void SetAnimation(Animation animation) {
+			animationPlayer.SetAnimation(animation);
+		}
+
+		public void SetAnimation(SpriteAnimation spriteAnimation) {
+			animationPlayer.SetSpriteAnimation(spriteAnimation);
+		}
+		
+		public void StopAnimation() {
+			animationPlayer.Stop();
+		}
+		
+		public void PauseAnimation(bool isPaused) {
+			animationPlayer.Pause(isPaused);
+		}
+		
+		public void PauseAnimation() {
+			animationPlayer.Pause();
+		}
+		
+		public void ResumeAnimation() {
+			animationPlayer.Resume();
+		}
+		
+		public void ClearAnimation() {
+			animationPlayer.Clear();
 		}
 		
 
@@ -79,7 +106,8 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public void Update() {
-			if ((tile.GameControl.UpdateRoom || isAnimatedWhenPaused) && tile.GameControl.AnimateRoom) {
+			// Update the animation player.
+			if (tile.GameControl.AnimateRoom && (tile.GameControl.UpdateRoom || isAnimatedWhenPaused)) {
 				animationPlayer.Update();
 			}
 		}
@@ -105,24 +133,22 @@ namespace ZeldaOracle.Game.Tiles {
 			Vector2F drawPosition = (useAbsoluteDrawPosition ? absoluteDrawPosition : tile.Position);
 			drawPosition += (raisedDrawOffset + drawOffset);
 						
-			// Draw sprite as object.
+			// Draw the tile's as-object sprite.
 			if (tile.IsMoving && !tile.SpriteAsObject.IsNull) {
-				g.DrawAnimation(tile.SpriteAsObject, imageVariant,
+				g.DrawSpriteAnimation(tile.SpriteAsObject, imageVariant,
 					tile.RoomControl.GameControl.RoomTicks,
 					drawPosition, depthLayer, tile.Position);
 			}
-			// Draw animation player.
+			// Draw the animation player.
 			else {
 				float playbackTime;
 				if (syncPlaybackWithRoomTicks)
 					playbackTime = tile.RoomControl.GameControl.RoomTicks;
 				else
 					playbackTime = animationPlayer.PlaybackTime;
-
-				if (animationPlayer.Animation != null) {
-					g.DrawAnimation(animationPlayer.SubStrip, imageVariant,
-						playbackTime, drawPosition, depthLayer, tile.Position);
-				}
+				
+				g.DrawAnimationPlayer(animationPlayer, imageVariant,
+					playbackTime, drawPosition, depthLayer, tile.Position);
 			}
 		}
 
@@ -131,9 +157,35 @@ namespace ZeldaOracle.Game.Tiles {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		public Tile Tile {
+			get { return tile; }
+		}
+
+		// Animation Player -----------------------------------------------------------
+
 		public AnimationPlayer AnimationPlayer {
 			get { return animationPlayer; }
-			set { animationPlayer = value; }
+		}
+
+		public int SubStripIndex {
+			get { return animationPlayer.SubStripIndex; }
+			set { animationPlayer.SubStripIndex = value; }
+		}
+
+		public bool IsAnimationDone {
+			get { return animationPlayer.IsDone; }
+		}
+
+		// Graphics Settings ----------------------------------------------------------
+		
+		public bool IsVisible {
+			get { return isVisible; }
+			set { isVisible = value; }
+		}
+
+		public DepthLayer DepthLayer {
+			get { return depthLayer; }
+			set { depthLayer = value; }
 		}
 
 		public Point2I DrawOffset {
@@ -144,20 +196,6 @@ namespace ZeldaOracle.Game.Tiles {
 		public Point2I RaisedDrawOffset {
 			get { return raisedDrawOffset; }
 			set { raisedDrawOffset = value; }
-		}
-
-		public DepthLayer DepthLayer {
-			get { return depthLayer; }
-			set { depthLayer = value; }
-		}
-
-		public int SubStripIndex {
-			get { return animationPlayer.SubStripIndex; }
-			set { animationPlayer.SubStripIndex = value; }
-		}
-
-		public bool IsAnimationDone {
-			get { return animationPlayer.IsDone; }
 		}
 		
 		public bool IsAnimatedWhenPaused {
