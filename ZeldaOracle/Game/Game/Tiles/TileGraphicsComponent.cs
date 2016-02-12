@@ -21,7 +21,6 @@ namespace ZeldaOracle.Game.Tiles {
 		private bool			isAnimatedWhenPaused;		// True if the tile updates its graphics while the room is paused.
 		private Vector2F		absoluteDrawPosition;
 		private bool			useAbsoluteDrawPosition;
-		private SpriteAnimation	customSprite;
 
 
 		//-----------------------------------------------------------------------------
@@ -40,13 +39,25 @@ namespace ZeldaOracle.Game.Tiles {
 			this.isAnimatedWhenPaused		= false;
 			this.absoluteDrawPosition		= Vector2F.Zero;
 			this.useAbsoluteDrawPosition	= false;
-			this.customSprite				= new SpriteAnimation();
 		}
 
 		
 		//-----------------------------------------------------------------------------
 		// Animation
 		//-----------------------------------------------------------------------------
+
+		public void PlaySprite(SpriteAnimation spriteAnimation) {
+			if (spriteAnimation.IsSprite)
+				PlaySprite(spriteAnimation.Sprite);
+			else if (spriteAnimation.IsAnimation)
+				PlayAnimation(spriteAnimation.Animation);
+			else
+				animationPlayer.Animation = null;
+		}
+		
+		public void PlaySprite(Sprite sprite) {
+			animationPlayer.Play(new Animation(sprite));
+		}
 
 		public void PlayAnimation(Animation animation) {
 			animationPlayer.Play(animation);
@@ -89,46 +100,30 @@ namespace ZeldaOracle.Game.Tiles {
 				depthLayer = DepthLayer.TileLayer2;
 			else if (tile.Layer == 2)
 				depthLayer = DepthLayer.TileLayer3;
-
-			SpriteAnimation sprite = customSprite;
-			if (tile.IsMoving && !tile.SpriteAsObject.IsNull)
-				sprite = tile.SpriteAsObject;
 			
+			// Determine draw position.
 			Vector2F drawPosition = (useAbsoluteDrawPosition ? absoluteDrawPosition : tile.Position);
 			drawPosition += (raisedDrawOffset + drawOffset);
-
-			
-			float playbackTime;
-			if (syncPlaybackWithRoomTicks)
-				playbackTime = tile.RoomControl.GameControl.RoomTicks;
-			else
-				playbackTime = animationPlayer.PlaybackTime;
-			
-			if (animationPlayer.Animation != null) {
-				g.DrawAnimation(animationPlayer.SubStrip, imageVariant,
-					playbackTime, drawPosition, depthLayer, tile.Position);
-			}
-			/*
-
-			if (!sprite.IsNull) {
-				g.DrawAnimation(sprite, imageVariant, playbackTime,
-					drawPosition, depthLayer, tile.Position);
-			}
-
-			// Draw the tile.
-			if (animationPlayer.Animation != null) {
-				g.DrawAnimation(animationPlayer, imageVariant,
-					drawPosition, depthLayer, tile.Position);
-			}
-			else if (sprite.IsAnimation) {
-				g.DrawAnimation(sprite.Animation, imageVariant,
+						
+			// Draw sprite as object.
+			if (tile.IsMoving && !tile.SpriteAsObject.IsNull) {
+				g.DrawAnimation(tile.SpriteAsObject, imageVariant,
 					tile.RoomControl.GameControl.RoomTicks,
 					drawPosition, depthLayer, tile.Position);
 			}
-			else if (sprite.IsSprite) {
-				g.DrawSprite(sprite.Sprite, imageVariant,
-					drawPosition, depthLayer, tile.Position);
-			}*/
+			// Draw animation player.
+			else {
+				float playbackTime;
+				if (syncPlaybackWithRoomTicks)
+					playbackTime = tile.RoomControl.GameControl.RoomTicks;
+				else
+					playbackTime = animationPlayer.PlaybackTime;
+
+				if (animationPlayer.Animation != null) {
+					g.DrawAnimation(animationPlayer.SubStrip, imageVariant,
+						playbackTime, drawPosition, depthLayer, tile.Position);
+				}
+			}
 		}
 
 
@@ -183,20 +178,6 @@ namespace ZeldaOracle.Game.Tiles {
 		public bool SyncPlaybackWithRoomTicks {
 			get { return syncPlaybackWithRoomTicks; }
 			set { syncPlaybackWithRoomTicks = value; }
-		}
-
-		public SpriteAnimation CustomSprite {
-			get { return customSprite; }
-			//set { customSprite.Set(value); }
-
-			set {
-				if (value.IsSprite)
-					animationPlayer.Animation = new Animation(value.Sprite);
-				else if (value.IsAnimation)
-					animationPlayer.Animation = value.Animation;
-				else
-					animationPlayer.Animation = null;
-			}
 		}
 	}
 }

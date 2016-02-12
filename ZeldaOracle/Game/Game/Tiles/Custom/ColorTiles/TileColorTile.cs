@@ -27,11 +27,11 @@ namespace ZeldaOracle.Game.Tiles {
 			// Set the sprite.
 			PuzzleColor color = Color;
 			if (color == PuzzleColor.Red)
-				CustomSprite = GameData.SPR_TILE_COLOR_TILE_RED;
+				Graphics.PlaySprite(GameData.SPR_TILE_COLOR_TILE_RED);
 			else if (color == PuzzleColor.Yellow)
-				CustomSprite = GameData.SPR_TILE_COLOR_TILE_YELLOW;
+				Graphics.PlaySprite(GameData.SPR_TILE_COLOR_TILE_YELLOW);
 			else if (color == PuzzleColor.Blue)
-				CustomSprite = GameData.SPR_TILE_COLOR_TILE_BLUE;
+				Graphics.PlaySprite(GameData.SPR_TILE_COLOR_TILE_BLUE);
 		}
 
 

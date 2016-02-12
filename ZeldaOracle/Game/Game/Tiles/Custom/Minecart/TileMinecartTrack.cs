@@ -54,7 +54,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void OnInitialize() {
 			trackIndex = Properties.GetInteger("track_index", 0);
-			CustomSprite = SpriteList[trackIndex];
+			Graphics.PlaySprite(SpriteList[trackIndex]);
 
 			// Spawn a minecart entity.
 			if (SpawnsMinecart) {
@@ -75,7 +75,7 @@ namespace ZeldaOracle.Game.Tiles {
 				Properties.Set("switched_track_index", trackIndex);
 				Properties.Set("track_index", switchedIndex);
 				trackIndex = switchedIndex;
-				CustomSprite = SpriteList[trackIndex];
+				Graphics.PlaySprite(SpriteList[trackIndex]);
 			}
 		}
 

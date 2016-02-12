@@ -318,7 +318,7 @@ namespace ZeldaOracle.Game.Tiles {
 				TileData data = Resources.GetResource<TileData>("dug");
 				Tile dugTile = Tile.CreateTile(data);
 				roomControl.PlaceTile(dugTile, location, layer);
-				Graphics.CustomSprite = GameData.SPR_TILE_DUG;
+				Graphics.PlaySprite(GameData.SPR_TILE_DUG);
 			}
 			else {
 				roomControl.RemoveTile(this);
@@ -593,7 +593,7 @@ namespace ZeldaOracle.Game.Tiles {
 			tile.size				= data.Size;
 			
 			if (data.SpriteList.Length > 0)
-				tile.graphics.CustomSprite = data.SpriteList[0];
+				tile.graphics.PlaySprite(data.SpriteList[0]);
 
 			int conveyorAngle = data.ConveyorAngle;
 			if (conveyorAngle >= 0)
@@ -705,12 +705,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public TileFlags Flags {
 			get { return flags; }
 		}
-
-		public SpriteAnimation CustomSprite {
-			get { return graphics.CustomSprite; }
-			set { graphics.CustomSprite = value; }
-		}
-
+		
 		public SpriteAnimation SpriteAsObject {
 			get { return spriteAsObject; }
 			set { spriteAsObject.Set(value); }
@@ -718,21 +713,6 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public SpriteAnimation[] SpriteList {
 			get { return tileData.SpriteList; }
-		}
-
-		//public SpriteAnimation CurrentSprite {
-			//get {
-				//return CustomSprite;
-				/*if (tileData != null && tileData.SpriteList.Length > 0)
-					return tileData.SpriteList[0];
-					//return tileData.SpriteList[properties.GetInteger("sprite_index")];
-				return new SpriteAnimation();*/
-			//}
-		//}
-		
-		public int SpriteIndex {
-			get { return properties.GetInteger("sprite_index"); }
-			set { properties.Set("sprite_index", value); }
 		}
 
 		public Animation BreakAnimation {

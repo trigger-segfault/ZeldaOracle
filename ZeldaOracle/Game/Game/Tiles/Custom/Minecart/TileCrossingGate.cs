@@ -10,22 +10,9 @@ using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
-	/*
-	 * Sprite Index:
-	 * 0 - horizontal
-	 * 1 - vertical
-	 * 2 - right/up
-	 * 3 - up/left
-	 * 4 - left/down
-	 * 5 - down/right
-	*/
-
+	
 	public class TileCrossingGate : Tile, ZeldaAPI.CrossingGate {
-
-		public const string PROP_RAISED			= "raised";
-		public const string PROP_FACING_LEFT	= "face_left";
-
-
+		
 		private Tile dummySolidTile;
 
 
@@ -34,6 +21,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public TileCrossingGate() {
+			Graphics.SyncPlaybackWithRoomTicks = false;
 		}
 
 

@@ -88,13 +88,13 @@ namespace ZeldaOracle.Game.Tiles {
 			CollisionModel = new CollisionModel(collisionBox);
 
 			if (direction == Directions.Right)
-				CustomSprite = GameData.SPR_TILE_PULL_HANDLE_RIGHT;
+				Graphics.PlaySprite(GameData.SPR_TILE_PULL_HANDLE_RIGHT);
 			else if (direction == Directions.Up)
-				CustomSprite = GameData.SPR_TILE_PULL_HANDLE_UP;
+				Graphics.PlaySprite(GameData.SPR_TILE_PULL_HANDLE_UP);
 			else if (direction == Directions.Left)
-				CustomSprite = GameData.SPR_TILE_PULL_HANDLE_LEFT;
+				Graphics.PlaySprite(GameData.SPR_TILE_PULL_HANDLE_LEFT);
 			else if (direction == Directions.Down)
-				CustomSprite = GameData.SPR_TILE_PULL_HANDLE_DOWN;
+				Graphics.PlaySprite(GameData.SPR_TILE_PULL_HANDLE_DOWN);
 		}
 
 		public override void OnGrab(int direction, ItemBracelet bracelet) {

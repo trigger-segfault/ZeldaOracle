@@ -39,7 +39,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 
 					//Properties.SetBase("looted", true);
 					//Properties.SetBase("enabled", true); // Opened chest are always spawned.
-					CustomSprite = SpriteList[1];
+					Graphics.PlaySprite(SpriteList[1]);
 				}
 				else {
 					RoomControl.GameControl.DisplayMessage("It won't open from this side!");
@@ -52,7 +52,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		public override void OnInitialize() {
 			base.OnInitialize();
 			
-			CustomSprite = SpriteList[IsLooted ? 1 : 0];
+			Graphics.PlaySprite(SpriteList[IsLooted ? 1 : 0]);
 		}
 
 

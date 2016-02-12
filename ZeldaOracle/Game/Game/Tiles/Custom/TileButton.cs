@@ -42,15 +42,15 @@ namespace ZeldaOracle.Game.Tiles {
 
 				// Fire the event.
 				if (isPressed) {
-					//CustomSprite = GameData.SPR_TILE_BUTTON_DOWN;
+					//Graphics.PlaySprite(GameData.SPR_TILE_BUTTON_DOWN);
 					GameControl.FireEvent(this, "event_press", this);
 				}
 				else {
-					//CustomSprite = GameData.SPR_TILE_BUTTON_UP;
+					//Graphics.PlaySprite(GameData.SPR_TILE_BUTTON_UP);
 					GameControl.FireEvent(this, "event_release", this);
 				}
 
-				CustomSprite = SpriteList[isPressed ? 1 : 0];
+				Graphics.PlaySprite(SpriteList[isPressed ? 1 : 0]);
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 			}
 		}
@@ -65,7 +65,7 @@ namespace ZeldaOracle.Game.Tiles {
 			isReleasable	= Properties.GetBoolean("releasable", true);
 			isCovered		= false;
 			uncoverTimer	= 0;
-			CustomSprite	= SpriteList[isPressed ? 1 : 0];
+			Graphics.PlaySprite(SpriteList[isPressed ? 1 : 0]);
 		}
 
 		public override void OnCoverBegin(Tile tile) {

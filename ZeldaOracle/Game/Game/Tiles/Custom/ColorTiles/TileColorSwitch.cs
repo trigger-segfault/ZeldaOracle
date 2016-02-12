@@ -61,11 +61,11 @@ namespace ZeldaOracle.Game.Tiles {
 
 			if (switchState) {
 				color = PuzzleColor.Blue;
-				CustomSprite = GameData.SPR_TILE_COLOR_SWITCH_BLUE;
+				Graphics.PlaySprite(GameData.SPR_TILE_COLOR_SWITCH_BLUE);
 			}
 			else {
 				color = PuzzleColor.Red;
-				CustomSprite = GameData.SPR_TILE_COLOR_SWITCH_RED;
+				Graphics.PlaySprite(GameData.SPR_TILE_COLOR_SWITCH_RED);
 			}
 		}
 

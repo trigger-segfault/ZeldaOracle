@@ -35,10 +35,10 @@ namespace ZeldaOracle.Game.Tiles {
 		public override void SetSwitchState(bool switchState) {
 			base.SetSwitchState(switchState);
 			//if (switchState)
-				//CustomSprite = GameData.SPR_TILE_LEVER_RIGHT;
+				//Graphics.PlaySprite(GameData.SPR_TILE_LEVER_RIGHT);
 			//else
-				//CustomSprite = GameData.SPR_TILE_LEVER_LEFT;
-			CustomSprite = SpriteList[SwitchState ? 1 : 0];
+				//Graphics.PlaySprite(GameData.SPR_TILE_LEVER_LEFT);
+			Graphics.PlaySprite(SpriteList[SwitchState ? 1 : 0]);
 		}
 		
 
