@@ -74,7 +74,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		public void BeginSwitching() {
 			isLifting = true;
 
-			Graphics.Animation = null;
+			Graphics.ClearAnimation();
 			RoomControl.Player.SwitchHookState.BeginSwitch(hookedObject);
 		}
 
@@ -128,7 +128,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			position			= HookStartPosition;
 			physics.Velocity	= Directions.ToVector(direction) * speed;
 
-			Graphics.Animation = GameData.ANIM_PROJECTILE_SWITCH_HOOK;
+			Graphics.SetAnimation(GameData.ANIM_PROJECTILE_SWITCH_HOOK);
 		}
 
 		public override void Intercept() {

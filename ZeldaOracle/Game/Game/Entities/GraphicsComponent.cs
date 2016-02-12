@@ -25,7 +25,6 @@ namespace ZeldaOracle.Game.Entities
 		private Point2I			ripplesDrawOffset;
 		private Point2I			shadowDrawOffset;
 		private int				grassAnimationTicks;
-		private Sprite			sprite;
 		private bool			isFlickering;
 		private int				flickerAlternateDelay;
 		private int				flickerTimer;
@@ -42,7 +41,6 @@ namespace ZeldaOracle.Game.Entities
 		public GraphicsComponent(Entity entity) {
 			this.entity					= entity;
 			this.animationPlayer		= new AnimationPlayer();
-			this.sprite					= null;
 			this.depthLayer				= DepthLayer.None;
 			this.depthLayerInAir		= DepthLayer.None;
 			this.isVisible				= true;
@@ -65,7 +63,7 @@ namespace ZeldaOracle.Game.Entities
 		
 
 		//-----------------------------------------------------------------------------
-		// Animation
+		// Animation & Sprite Interface
 		//-----------------------------------------------------------------------------
 
 		public void PlayAnimation() {
@@ -73,27 +71,27 @@ namespace ZeldaOracle.Game.Entities
 		}
 
 		public void PlaySprite(Sprite sprite) {
-			this.sprite = sprite;
-			animationPlayer.Animation = null;
-		}
-
-		public void PlayAnimation(SpriteAnimation sprite) {
-			if (sprite.IsSprite) {
-				this.sprite = sprite.Sprite;
-				animationPlayer.Animation = null;
-			}
-			else {
-				animationPlayer.Play(sprite.Animation);
-			}
+			animationPlayer.Play(sprite);
 		}
 		
 		public void PlayAnimation(Animation animation) {
 			animationPlayer.Play(animation);
 		}
+
+		public void PlayAnimation(SpriteAnimation spriteAnimation) {
+			animationPlayer.Play(spriteAnimation);
+		}
 		
 		public void PlayAnimation(string animationName) {
-			Animation anim = Resources.GetAnimation(animationName);
-			PlayAnimation(anim);
+			PlayAnimation(Resources.GetAnimation(animationName));
+		}
+
+		public void SetAnimation(Animation animation) {
+			animationPlayer.SetAnimation(animation);
+		}
+
+		public void SetAnimation(SpriteAnimation spriteAnimation) {
+			animationPlayer.SetSpriteAnimation(spriteAnimation);
 		}
 		
 		public void StopAnimation() {
@@ -110,6 +108,10 @@ namespace ZeldaOracle.Game.Entities
 		
 		public void ResumeAnimation() {
 			animationPlayer.Resume();
+		}
+		
+		public void ClearAnimation() {
+			animationPlayer.Clear();
 		}
 
 
@@ -167,18 +169,22 @@ namespace ZeldaOracle.Game.Entities
 
 			// Draw the sprite/animation.
 			Vector2F drawPosition = Entity.Position - new Vector2F(0, Entity.ZPosition);
-			if (animationPlayer.SubStrip != null)
-				g.DrawAnimation(animationPlayer.SubStrip, newImageVariant, animationPlayer.PlaybackTime, drawPosition + drawOffset, layer, entity.Position);
-			else if (sprite != null)
-				g.DrawSprite(sprite, newImageVariant, drawPosition + drawOffset, layer, entity.Position);
-			
+			g.DrawAnimation(animationPlayer, newImageVariant,
+				drawPosition + drawOffset, layer, entity.Position);
+
 			// Draw the ripples effect.
-			if (isRipplesEffectVisible && entity.Physics.IsEnabled && entity.Physics.IsInPuddle)
-				g.DrawAnimation(GameData.ANIM_EFFECT_RIPPLES, entity.GameControl.RoomTicks, entity.Position + ripplesDrawOffset, layer, entity.Position);
+			if (isRipplesEffectVisible && entity.Physics.IsEnabled && entity.Physics.IsInPuddle) {
+				g.DrawAnimation(GameData.ANIM_EFFECT_RIPPLES,
+					entity.GameControl.RoomTicks, entity.Position +
+					ripplesDrawOffset, layer, entity.Position);
+			}
 			
 			// Draw the grass effect.
-			if (isGrassEffectVisible && entity.Physics.IsEnabled &&entity.Physics.IsInGrass)
-				g.DrawAnimation(GameData.ANIM_EFFECT_GRASS, grassAnimationTicks, entity.Position + grassDrawOffset, layer, entity.Position);
+			if (isGrassEffectVisible && entity.Physics.IsEnabled &&entity.Physics.IsInGrass) {
+				g.DrawAnimation(GameData.ANIM_EFFECT_GRASS,
+					grassAnimationTicks, entity.Position +
+					grassDrawOffset, layer, entity.Position);
+			}
 		}
 
 		
@@ -191,6 +197,12 @@ namespace ZeldaOracle.Game.Entities
 			set { entity = value; }
 		}
 
+		// Animation Player -----------------------------------------------------------
+
+		public AnimationPlayer AnimationPlayer {
+			get { return animationPlayer; }
+		}
+
 		public int SubStripIndex {
 			get { return animationPlayer.SubStripIndex; }
 			set { animationPlayer.SubStripIndex = value; }
@@ -198,17 +210,21 @@ namespace ZeldaOracle.Game.Entities
 
 		public bool IsAnimationPlaying {
 			get { return animationPlayer.IsPlaying; }
-			set { animationPlayer.IsPlaying = value; }
 		}
 
 		public bool IsAnimationDone {
 			get { return animationPlayer.IsDone; }
 		}
-
+		
+		public Sprite Sprite {
+			get { return animationPlayer.Sprite; }
+		}
+		
 		public Animation Animation {
 			get { return animationPlayer.Animation; }
-			set { animationPlayer.Animation = value; }
 		}
+
+		// Graphics Settings ----------------------------------------------------------
 
 		public bool IsVisible {
 			get { return isVisible; }
@@ -249,16 +265,6 @@ namespace ZeldaOracle.Game.Entities
 		public bool IsAnimatedWhenPaused {
 			get { return isAnimatedWhenPaused; }
 			set { isAnimatedWhenPaused = value; }
-		}
-
-		public AnimationPlayer AnimationPlayer {
-			get { return animationPlayer;  }
-			set { animationPlayer = value; }
-		}
-
-		public Sprite Sprite {
-			get { return sprite;  }
-			set { sprite = value; }
 		}
 
 		public Point2I GrassDrawOffset {

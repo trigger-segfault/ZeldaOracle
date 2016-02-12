@@ -138,12 +138,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void OnEnterMinecart() {
 			if (Player.Graphics.Animation == GameData.ANIM_PLAYER_CARRY)
-				Player.Graphics.Animation = GameData.ANIM_PLAYER_MINECART_CARRY;
+				Player.Graphics.SetAnimation(GameData.ANIM_PLAYER_MINECART_CARRY);
 		}
 
 		public override void OnExitMinecart() {
 			if (Player.Graphics.Animation == GameData.ANIM_PLAYER_MINECART_CARRY)
-				Player.Graphics.Animation = GameData.ANIM_PLAYER_CARRY;
+				Player.Graphics.SetAnimation(GameData.ANIM_PLAYER_CARRY);
 		}
 
 		public override void OnHurt(DamageInfo damage) {

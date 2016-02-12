@@ -232,7 +232,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 		public override void OnExitMinecart() {
 			if (player.Graphics.Animation == playerSwingAnimationInMinecart)
-				player.Graphics.Animation = playerSwingAnimation;
+				player.Graphics.SetAnimation(playerSwingAnimation);
 		}
 
 		public override void OnEnterMinecart() {
@@ -240,7 +240,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			if (player.Graphics.Animation == playerSwingAnimation ||
 				player.Graphics.Animation == playerSwingAnimationLunge)
 			{
-				player.Graphics.Animation = playerSwingAnimationInMinecart;
+				player.Graphics.SetAnimation(playerSwingAnimationInMinecart);
 				swingCollisionBoxes = swingCollisionBoxesNoLunge;
 			}
 		}

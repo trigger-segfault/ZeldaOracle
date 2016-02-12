@@ -204,7 +204,9 @@ namespace ZeldaOracle.Game.Entities {
 		
 		// Draw an animation player.
 		public void DrawAnimation(AnimationPlayer animationPlayer, int imageVariant, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
-			if (animationPlayer.SubStrip != null)
+			if (animationPlayer.Sprite != null)
+				DrawSprite(animationPlayer.Sprite, imageVariant, position, depth, depthOrigin);
+			else if (animationPlayer.SubStrip != null)
 				DrawAnimation(animationPlayer.SubStrip, imageVariant, animationPlayer.PlaybackTime, position, depth, depthOrigin);
 		}
 		

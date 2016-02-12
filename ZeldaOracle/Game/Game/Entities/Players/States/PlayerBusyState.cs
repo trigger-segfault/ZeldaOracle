@@ -66,7 +66,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnExitMinecart() {
 			base.OnExitMinecart();
 			if (player.Graphics.Animation == animation && animationInMinecart != null)
-				player.Graphics.Animation =  animationInMinecart;
+				player.Graphics.SetAnimation(animationInMinecart);
 		}
 
 		public override void Update() {

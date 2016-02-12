@@ -6,15 +6,17 @@ using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Graphics {
 
-	// TODO: Handle playing sprites.
+	// An AnimationPlayer can play either an animation or a sprite.
+	// Sprites are considered to be endlessly looped animations with a zero-length duration.
 	public class AnimationPlayer {
+
 		private Sprite		sprite;			// The sprite to play.
 		private Animation	animation;		// The animation to play.
-		private Animation	subStrip;		// The actual sub-animation-strip that's playing.
+		private Animation	subStrip;		// The actual sub-animation-strip when playing an animation.
 		private int			subStripIndex;	// The index of the sub-animation-strip.
 		private bool		isPlaying;		// True if the playback is rolling.
 		private float		timer;			// The playback time in ticks.
-		private float		speed;
+		private float		speed;			// The scalar for how fast playback occurs.
 
 
 		//-----------------------------------------------------------------------------
@@ -36,6 +38,7 @@ namespace ZeldaOracle.Common.Graphics {
 		// Playback
 		//-----------------------------------------------------------------------------
 		
+		// Change to the given animation without interrupting playback.
 		public void SetAnimation(Animation animation) {
 			if (this.animation == animation)
 				return;
@@ -45,6 +48,8 @@ namespace ZeldaOracle.Common.Graphics {
 			this.sprite		= null;
 
 			if (animation != null) {
+				// Change the animation and adjust the playback time
+				// based on the new animation's loop mode and duration.
 				if (subStrip.LoopMode == LoopMode.Clamp && timer > subStrip.Duration) {
 					timer = subStrip.Duration;
 				}
@@ -64,13 +69,24 @@ namespace ZeldaOracle.Common.Graphics {
 				isPlaying	= false;
 			}
 		}
-
+		
+		// Change to the given sprite without interrupting playback.
 		public void SetSprite(Sprite sprite) {
 			this.sprite		= sprite;
 			this.animation	= null;
 			this.subStrip	= null;
 			this.timer		= 0.0f;
 			// TODO: this.isPlaying = false; ??
+		}
+
+		// Change to the given sprite or animation without interrupting playback.
+		public void SetSpriteAnimation(SpriteAnimation spriteAnimation) {
+			if (spriteAnimation.IsAnimation)
+				SetAnimation(spriteAnimation.Animation);
+			else if (spriteAnimation.IsSprite)
+				SetSprite(spriteAnimation.Sprite);
+			else
+				Clear();
 		}
 		
 		// Play the given sprite as a repeated animation with no duration.
@@ -89,6 +105,16 @@ namespace ZeldaOracle.Common.Graphics {
 			this.subStrip	= GetSubStrip(subStripIndex);
 			this.isPlaying	= true;
 			this.timer		= 0.0f;
+		}
+		
+		// Play the given animation or sprite from the beginning.
+		public void Play(SpriteAnimation spriteAnimation) {
+			if (spriteAnimation.IsAnimation)
+				Play(spriteAnimation.Animation);
+			else if (spriteAnimation.IsSprite)
+				Play(spriteAnimation.Sprite);
+			else
+				Clear();
 		}
 
 		// Play the animation from the beginning.
@@ -213,6 +239,10 @@ namespace ZeldaOracle.Common.Graphics {
 			get { return subStrip; }
 		}
 
+		public Sprite Sprite {
+			get { return sprite; }
+		}
+
 		// Gets or sets the sub-strip index of the animation to play.
 		public int SubStripIndex {
 			get { return subStripIndex; }
@@ -227,7 +257,7 @@ namespace ZeldaOracle.Common.Graphics {
 		// Get or set the current animation strip.
 		public Animation Animation {
 			get { return animation; }
-			set { SetAnimation(value); }
+			//set { SetAnimation(value); }
 		}
 	}
 }
