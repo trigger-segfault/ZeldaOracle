@@ -26,11 +26,11 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		public void Light() {
-			Light(Properties.GetBoolean("remember_state", false));
+			Light(false);
 		}
 		
 		public void PutOut() {
-			PutOut(Properties.GetBoolean("remember_state", false));
+			PutOut(false);
 		}
 
 		public void Light(bool stayLit) {
@@ -38,11 +38,9 @@ namespace ZeldaOracle.Game.Tiles {
 				IsLit = true;
 				//CustomSprite = GameData.ANIM_TILE_LANTERN;
 				SpriteIndex = 0;
+				Properties.Set("lit", true);
 				GameControl.ExecuteScript(Properties.GetString("event_light", ""), this);
 			}
-			
-			if (stayLit)
-				Properties.SetBase("lit", true);
 		}
 
 		public void PutOut(bool stayLit) {
@@ -50,11 +48,9 @@ namespace ZeldaOracle.Game.Tiles {
 				IsLit = false;
 				//CustomSprite = GameData.SPR_TILE_LANTERN_UNLIT;
 				SpriteIndex = 1;
+				Properties.Set("lit", false);
 				GameControl.ExecuteScript(Properties.GetString("event_put_out", ""), this);
 			}
-
-			if (stayLit)
-				Properties.SetBase("lit", false);
 		}
 
 

@@ -61,6 +61,8 @@
 			this.addLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.testLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.testLevelAtPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.devToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.findAndReplacePropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.buttonNew = new System.Windows.Forms.ToolStripButton();
 			this.buttonLoad = new System.Windows.Forms.ToolStripButton();
@@ -165,15 +167,15 @@
 			this.panelTriggersLevelDisplay = new System.Windows.Forms.Panel();
 			this.contextMenuStripTileInLevel = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
-			this.worldTreeView = new ZeldaEditor.TreeViews.WorldTreeView();
-			this.propertyGrid = new ZeldaEditor.PropertiesEditor.ZeldaPropertyGrid();
-			this.selectRoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator23 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripSeparator24 = new System.Windows.Forms.ToolStripSeparator();
 			this.cutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.copyToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator24 = new System.Windows.Forms.ToolStripSeparator();
+			this.selectRoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.deselectToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.worldTreeView = new ZeldaEditor.TreeViews.WorldTreeView();
+			this.propertyGrid = new ZeldaEditor.PropertiesEditor.ZeldaPropertyGrid();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.toolStrip2.SuspendLayout();
@@ -214,7 +216,8 @@
             this.fileToolStripMenuItem,
             this.editToolStripMenuItem,
             this.viewToolStripMenuItem,
-            this.worldToolStripMenuItem});
+            this.worldToolStripMenuItem,
+            this.devToolsToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Size = new System.Drawing.Size(942, 24);
@@ -500,6 +503,21 @@
 			this.testLevelAtPositionToolStripMenuItem.Size = new System.Drawing.Size(262, 22);
 			this.testLevelAtPositionToolStripMenuItem.Text = "Test World From Location";
 			this.testLevelAtPositionToolStripMenuItem.Click += new System.EventHandler(this.testLevelAtPositionToolStripMenuItem_Click);
+			// 
+			// devToolsToolStripMenuItem
+			// 
+			this.devToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.findAndReplacePropertiesToolStripMenuItem});
+			this.devToolsToolStripMenuItem.Name = "devToolsToolStripMenuItem";
+			this.devToolsToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
+			this.devToolsToolStripMenuItem.Text = "Dev Tools";
+			// 
+			// findAndReplacePropertiesToolStripMenuItem
+			// 
+			this.findAndReplacePropertiesToolStripMenuItem.Name = "findAndReplacePropertiesToolStripMenuItem";
+			this.findAndReplacePropertiesToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+			this.findAndReplacePropertiesToolStripMenuItem.Text = "Refactor Properties...";
+			this.findAndReplacePropertiesToolStripMenuItem.Click += new System.EventHandler(this.findAndReplacePropertiesToolStripMenuItem_Click);
 			// 
 			// toolStrip1
 			// 
@@ -1495,21 +1513,55 @@
             this.selectRoomToolStripMenuItem,
             this.deselectToolStripMenuItem1});
 			this.contextMenuStripTileInLevel.Name = "contextMenuGeneral";
-			this.contextMenuStripTileInLevel.Size = new System.Drawing.Size(153, 170);
+			this.contextMenuStripTileInLevel.Size = new System.Drawing.Size(151, 148);
 			// 
 			// toolStripMenuItem5
 			// 
 			this.toolStripMenuItem5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItem5.Image")));
 			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-			this.toolStripMenuItem5.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(150, 22);
 			this.toolStripMenuItem5.Text = "Edit Properties";
+			// 
+			// toolStripSeparator23
+			// 
+			this.toolStripSeparator23.Name = "toolStripSeparator23";
+			this.toolStripSeparator23.Size = new System.Drawing.Size(147, 6);
+			// 
+			// cutToolStripMenuItem1
+			// 
+			this.cutToolStripMenuItem1.Name = "cutToolStripMenuItem1";
+			this.cutToolStripMenuItem1.Size = new System.Drawing.Size(150, 22);
+			this.cutToolStripMenuItem1.Text = "Cut";
+			// 
+			// copyToolStripMenuItem1
+			// 
+			this.copyToolStripMenuItem1.Name = "copyToolStripMenuItem1";
+			this.copyToolStripMenuItem1.Size = new System.Drawing.Size(150, 22);
+			this.copyToolStripMenuItem1.Text = "Copy";
 			// 
 			// toolStripMenuItem6
 			// 
 			this.toolStripMenuItem6.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItem6.Image")));
 			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(150, 22);
 			this.toolStripMenuItem6.Text = "Delete";
+			// 
+			// toolStripSeparator24
+			// 
+			this.toolStripSeparator24.Name = "toolStripSeparator24";
+			this.toolStripSeparator24.Size = new System.Drawing.Size(147, 6);
+			// 
+			// selectRoomToolStripMenuItem
+			// 
+			this.selectRoomToolStripMenuItem.Name = "selectRoomToolStripMenuItem";
+			this.selectRoomToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+			this.selectRoomToolStripMenuItem.Text = "Select Room";
+			// 
+			// deselectToolStripMenuItem1
+			// 
+			this.deselectToolStripMenuItem1.Name = "deselectToolStripMenuItem1";
+			this.deselectToolStripMenuItem1.Size = new System.Drawing.Size(150, 22);
+			this.deselectToolStripMenuItem1.Text = "Deselect";
 			// 
 			// worldTreeView
 			// 
@@ -1532,40 +1584,6 @@
 			this.propertyGrid.Name = "propertyGrid";
 			this.propertyGrid.Size = new System.Drawing.Size(288, 214);
 			this.propertyGrid.TabIndex = 0;
-			// 
-			// selectRoomToolStripMenuItem
-			// 
-			this.selectRoomToolStripMenuItem.Name = "selectRoomToolStripMenuItem";
-			this.selectRoomToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.selectRoomToolStripMenuItem.Text = "Select Room";
-			// 
-			// toolStripSeparator23
-			// 
-			this.toolStripSeparator23.Name = "toolStripSeparator23";
-			this.toolStripSeparator23.Size = new System.Drawing.Size(149, 6);
-			// 
-			// toolStripSeparator24
-			// 
-			this.toolStripSeparator24.Name = "toolStripSeparator24";
-			this.toolStripSeparator24.Size = new System.Drawing.Size(149, 6);
-			// 
-			// cutToolStripMenuItem1
-			// 
-			this.cutToolStripMenuItem1.Name = "cutToolStripMenuItem1";
-			this.cutToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-			this.cutToolStripMenuItem1.Text = "Cut";
-			// 
-			// copyToolStripMenuItem1
-			// 
-			this.copyToolStripMenuItem1.Name = "copyToolStripMenuItem1";
-			this.copyToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-			this.copyToolStripMenuItem1.Text = "Copy";
-			// 
-			// deselectToolStripMenuItem1
-			// 
-			this.deselectToolStripMenuItem1.Name = "deselectToolStripMenuItem1";
-			this.deselectToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-			this.deselectToolStripMenuItem1.Text = "Deselect";
 			// 
 			// EditorForm
 			// 
@@ -1780,5 +1798,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator24;
 		private System.Windows.Forms.ToolStripMenuItem selectRoomToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem deselectToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem devToolsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem findAndReplacePropertiesToolStripMenuItem;
 	}
 }

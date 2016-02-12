@@ -71,8 +71,7 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 
 			if (state == TileBridgeState.Created || state == TileBridgeState.Creating) {
-				if (rememberState || Properties.GetBoolean("remember_state", false))
-					Properties.SetBase("built", true);
+				Properties.Set("built", true);
 			}
 		}
 
@@ -118,8 +117,7 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 
 			if (state == TileBridgeState.Destroyed || state == TileBridgeState.Destroying) {
-				if (rememberState || Properties.GetBoolean("remember_state", false))
-					Properties.SetBase("built", false);
+				Properties.Set("built", false);
 			}
 		}
 

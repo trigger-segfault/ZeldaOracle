@@ -43,12 +43,7 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return (PuzzleColor) Properties.Get("color", (int) PuzzleColor.Red); }
 			set {
 				bool changed = (value != Color);
-
-				if (Properties.Get("remember_state", false))
-					Properties.SetBase("color", (int) value);
-				else
-					Properties.Set("color", (int) value);
-
+				Properties.Set("color", (int) value);
 				//if (changed)
 					//GameControl.FireEvent(this, "event_color_change", this, ((ZeldaAPI.ColorTile) this).Color);
 			}

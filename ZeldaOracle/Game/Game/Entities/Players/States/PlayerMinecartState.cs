@@ -183,7 +183,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Make the current track tile remember it has a minecart on it.
 			if (trackTile != null)
-				trackTile.SpawnsMinecart = false;
+				trackTile.SpawnsMinecart = true;
 
 			// Hop out of the minecart.
 			Point2I landingTile = tileLocation + Directions.ToPoint(direction);

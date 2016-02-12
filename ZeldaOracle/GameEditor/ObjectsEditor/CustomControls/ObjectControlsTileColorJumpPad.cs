@@ -11,7 +11,6 @@ using ZeldaOracle.Game.Tiles;
 namespace ZeldaEditor.ObjectsEditor.CustomControls {
 	public class ObjectControlsTileColorJumpPad : CustomObjectEditorControl {
 
-		private CheckBox checkBoxRememberState;
 		private ComboBox comboBoxColor;
 
 
@@ -20,8 +19,7 @@ namespace ZeldaEditor.ObjectsEditor.CustomControls {
 		//-----------------------------------------------------------------------------
 
 		public ObjectControlsTileColorJumpPad() {
-			checkBoxRememberState	= AddCheckBox("Remember State");
-			comboBoxColor			= AddComboBox("Color",
+			comboBoxColor = AddComboBox("Color",
 				new ComboBoxItem<PuzzleColor>(PuzzleColor.Red,		"Red"),
 				new ComboBoxItem<PuzzleColor>(PuzzleColor.Yellow,	"Yellow"),
 				new ComboBoxItem<PuzzleColor>(PuzzleColor.Blue,		"Blue"));
@@ -33,13 +31,11 @@ namespace ZeldaEditor.ObjectsEditor.CustomControls {
 		//-----------------------------------------------------------------------------
 
 		public override void SetupObject(IPropertyObject obj) {
-			checkBoxRememberState.Checked = obj.Properties.Get("remember_state", false);
 			ComboBoxItem<PuzzleColor>.SelectComboBoxItem(comboBoxColor, 
 				(PuzzleColor) obj.Properties.Get("color", (int) PuzzleColor.None));
 		}
 
 		public override void ApplyChanges(IPropertyObject obj) {
-			obj.Properties.Set("remember_state", checkBoxRememberState.Checked);
 			obj.Properties.Set("color", (int) ComboBoxItem<PuzzleColor>.GetComboBoxValue(comboBoxColor));
 		}
 	}

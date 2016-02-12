@@ -28,6 +28,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		private Rectangle2I			tileGridArea;
 
+		private TileGraphicsComponent graphics;
+
 		// Internal
 		private RoomControl			roomControl;
 		private bool				isAlive;
@@ -40,7 +42,6 @@ namespace ZeldaOracle.Game.Tiles {
 		private bool				isMoving;
 		private float				movementSpeed;
 		private Vector2F			offset;				// Offset in pixels from its tile location (used for movement).
-		private Point2I				raisedDrawOffset;	// Offset to draw tiles that are slightly raised (EX: pushing pots onto a button)
 
 		private Vector2F			previousOffset;
 		private Point2I				previousLocation;
@@ -107,7 +108,8 @@ namespace ZeldaOracle.Game.Tiles {
 			conveyorVelocity	= Vector2F.Zero;
 			surfaceTile			= null;
 			collisionStyle		= CollisionStyle.Rectangular;
-			raisedDrawOffset	= Point2I.Zero;
+
+			graphics = new TileGraphicsComponent(this);
 		}
 
 
@@ -454,6 +456,9 @@ namespace ZeldaOracle.Game.Tiles {
 			if (!isMoving)
 				CheckSurfaceTile();
 			
+			// Update graphics.
+			graphics.Update();
+
 			// Check if hurting the player.
 			if (HasFlag(TileFlags.HurtPlayer) && roomControl.Player.IsOnGround) {
 				Rectangle2F playerBox = roomControl.Player.Physics.PositionedCollisionBox;
@@ -560,7 +565,9 @@ namespace ZeldaOracle.Game.Tiles {
 
 		}
 
-		public virtual void Draw(Graphics2D g) {
+		public virtual void Draw(RoomGraphics g) {
+			graphics.Draw(g);
+			/*
 			SpriteAnimation sprite = (!customSprite.IsNull ? customSprite : CurrentSprite);
 			if (isMoving && !spriteAsObject.IsNull)
 				sprite = spriteAsObject;
@@ -579,7 +586,7 @@ namespace ZeldaOracle.Game.Tiles {
 			else if (sprite.IsSprite) {
 				// Draw as a sprite.
 				g.DrawSprite(sprite.Sprite, Zone.ImageVariantID, drawPosition);
-			}
+			}*/
 		}
 
 
@@ -650,6 +657,10 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		public GameControl GameControl {
 			get { return roomControl.GameControl; }
+		}
+
+		public TileGraphicsComponent Graphics {
+			get { return graphics; }
 		}
 
 		public Zone Zone {
@@ -801,11 +812,6 @@ namespace ZeldaOracle.Game.Tiles {
 		public DropList DropList {
 			get { return dropList; }
 			set { dropList = value; }
-		}
-
-		public Point2I RaisedDrawOffset {
-			get { return raisedDrawOffset; }
-			set { raisedDrawOffset = value; }
 		}
 
 

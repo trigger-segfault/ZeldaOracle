@@ -171,11 +171,11 @@ namespace ZeldaOracle.Game.Tiles {
 			turnstileAnimationPlayer.Update();
 		}
 
-		public override void Draw(Common.Graphics.Graphics2D g) {
+		public override void Draw(RoomGraphics g) {
 			base.Draw(g);
 
-			g.DrawAnimation(arrowsAnimationPlayer, Zone.ImageVariantID, Position);
-			g.DrawAnimation(turnstileAnimationPlayer, Zone.ImageVariantID, Position);
+			g.DrawAnimation(arrowsAnimationPlayer, Zone.ImageVariantID, Position, Graphics.DepthLayer);
+			g.DrawAnimation(turnstileAnimationPlayer, Zone.ImageVariantID, Position, Graphics.DepthLayer);
 		}
 
 		

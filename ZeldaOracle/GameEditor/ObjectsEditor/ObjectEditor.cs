@@ -99,6 +99,13 @@ namespace ZeldaEditor.ObjectsEditor {
 				new ComboBoxItem<TileEnvironmentType>(TileEnvironmentType.Lavafall,		"Lavafall"),
 			});
 
+			// Reset Conditions.
+			comboBoxResetCondition.Items.AddRange(new ComboBoxItem<TileResetCondition>[] {
+				new ComboBoxItem<TileResetCondition>(TileResetCondition.LeaveRoom,	"Leave Room"),
+				new ComboBoxItem<TileResetCondition>(TileResetCondition.LeaveArea,	"Leave Area"),
+				new ComboBoxItem<TileResetCondition>(TileResetCondition.Never,		"Never"),
+			});
+
 			// Pickupable Bracelet Level.
 			comboBoxBraceletLevel.Items.AddRange(new string[] {
 				"Level 1 (Power Bracelet)",
@@ -231,6 +238,9 @@ namespace ZeldaEditor.ObjectsEditor {
 				TileEnvironmentType envType = (TileEnvironmentType)
 					tile.Properties.GetInteger("environment_type", (int) TileEnvironmentType.Normal);
 				ComboBoxItem<TileEnvironmentType>.SelectComboBoxItem(comboBoxMovementType, envType);
+
+				// Reset condition
+				ComboBoxItem<TileResetCondition>.SelectComboBoxItem(comboBoxResetCondition, tile.ResetCondition);
 				
 				//  Interactions.
 				checkBoxCuttable.Checked			= tile.Flags.HasFlag(TileFlags.Cuttable);
@@ -284,6 +294,11 @@ namespace ZeldaEditor.ObjectsEditor {
 				// Environment Type.
 				tile.Properties.Set("environment_type",
 					(int) ComboBoxItem<TileEnvironmentType>.GetComboBoxValue(comboBoxMovementType));
+				
+
+				// Reset condition
+				tile.ResetCondition = ComboBoxItem<TileResetCondition>
+					.GetComboBoxValue(comboBoxResetCondition);
 
 				//  Interactions.
 				tile.SetFlags(TileFlags.Cuttable,		checkBoxCuttable.Checked);

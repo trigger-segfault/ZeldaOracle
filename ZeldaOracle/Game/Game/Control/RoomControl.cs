@@ -527,7 +527,9 @@ namespace ZeldaOracle.Game.Control {
 			g.Translate(-viewControl.ViewPosition);
 			
 			// Draw tiles.
-			tileManager.DrawTiles(g);
+			roomGraphics.Clear();
+			tileManager.DrawTiles(roomGraphics);
+			roomGraphics.DrawAll(g);
 
 			// DEBUG: Draw debug information over tiles.
 			GameDebug.DrawRoomTiles(g, this);

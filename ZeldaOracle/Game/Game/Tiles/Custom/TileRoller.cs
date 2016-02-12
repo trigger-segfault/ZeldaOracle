@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
@@ -81,6 +82,30 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
+		
+		public override void OnInitialize() {
+			startPosition = (IsVertical ? Location.Y : Location.X);
+			returnTimer = 0;
+			TileRoller roller = this;
+			do {
+				firstRoller = roller;
+				// Don't look any further, this is automatically the first roller.
+				if (roller.Properties.GetBoolean("first_roller"))
+					break;
+				roller = RoomControl.GetTopTile(roller.Location + Directions.ToPoint(IsVertical ? Directions.Left : Directions.Up)) as TileRoller;
+			} while (roller != null);
+
+			nextRoller = RoomControl.GetTopTile(Location + Directions.ToPoint(IsVertical ? Directions.Right : Directions.Down)) as TileRoller;
+			// Don't include the next roller if it's the start of a new group.
+			if (nextRoller != null && nextRoller.Properties.GetBoolean("first_roller"))
+				nextRoller = null;
+
+			pushed = false;
+			pushTimer = 0;
+			
+			animationPlayer.Play(TileData.SpriteList[1].Animation);
+			animationPlayer.PlaybackTime = animationPlayer.Animation.Duration;
+		}
 
 		public override bool OnPush(int direction, float movementSpeed) {
 			return false;
@@ -90,14 +115,15 @@ namespace ZeldaOracle.Game.Tiles {
 			int currentPosition = (IsVertical ? Location.Y : Location.X);
 			if (!IsMoving && RoomControl.GameControl.Inventory.IsWeaponButtonDown(RoomControl.GameControl.Inventory.GetItem("item_bracelet"))) {
 				bool pushableDirection = false;
-				switch (direction) {
-				case Directions.Right: pushableDirection = !IsVertical && currentPosition >= startPosition; break;
-				case Directions.Up: pushableDirection = IsVertical && currentPosition <= startPosition; break;
-				case Directions.Left: pushableDirection = !IsVertical && currentPosition <= startPosition; break;
-				case Directions.Down: pushableDirection = IsVertical && currentPosition >= startPosition; break;
-				}
-				if (pushableDirection) {
 
+				switch (direction) {
+				case Directions.Right:	pushableDirection = !IsVertical && currentPosition >= startPosition; break;
+				case Directions.Up:		pushableDirection =  IsVertical && currentPosition <= startPosition; break;
+				case Directions.Left:	pushableDirection = !IsVertical && currentPosition <= startPosition; break;
+				case Directions.Down:	pushableDirection =  IsVertical && currentPosition >= startPosition; break;
+				}
+
+				if (pushableDirection) {
 					firstRoller.returnTimer = 60;
 					pushed = true;
 					if (pushTimer == PushDelay) {
@@ -125,10 +151,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void Update() {
 			base.Update();
-			if (IsMoving) {
-				animationPlayer.Update();
-			}
-			else {
+
+			animationPlayer.Update();
+
+			if (!IsMoving) {
 				if (!pushed)
 					pushTimer = 0;
 				int currentPosition = (IsVertical ? Location.Y : Location.X);
@@ -153,43 +179,6 @@ namespace ZeldaOracle.Game.Tiles {
 			pushed = false;
 		}
 
-		public override void OnInitialize() {
-			startPosition = (IsVertical ? Location.Y : Location.X);
-			returnTimer = 0;
-			TileRoller roller = this;
-			do {
-				firstRoller = roller;
-				// Don't look any further, this is automatically the first roller.
-				if (roller.Properties.GetBoolean("first_roller"))
-					break;
-				roller = RoomControl.GetTopTile(roller.Location + Directions.ToPoint(IsVertical ? Directions.Left : Directions.Up)) as TileRoller;
-			} while (roller != null);
-
-			nextRoller = RoomControl.GetTopTile(Location + Directions.ToPoint(IsVertical ? Directions.Right : Directions.Down)) as TileRoller;
-			// Don't include the next roller if it's the start of a new group.
-			if (nextRoller != null && nextRoller.Properties.GetBoolean("first_roller"))
-				nextRoller = null;
-
-			pushed = false;
-			pushTimer = 0;
-		}
-
-		public override void Draw(Graphics2D g) {
-
-			SpriteAnimation sprite = (!CustomSprite.IsNull ? CustomSprite : CurrentSprite);
-			if (IsMoving) {
-				g.DrawAnimation(animationPlayer, Position);
-			}
-			else if (sprite.IsAnimation) {
-				// Draw as an animation.
-				g.DrawAnimation(sprite.Animation, Zone.ImageVariantID,
-					RoomControl.GameControl.RoomTicks, Position);
-			}
-			else if (sprite.IsSprite) {
-				// Draw as a sprite.
-				g.DrawSprite(sprite.Sprite, Zone.ImageVariantID, Position);
-			}
-		}
 
 		//-----------------------------------------------------------------------------
 		// Properties

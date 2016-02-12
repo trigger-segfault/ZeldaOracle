@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
 
@@ -399,7 +400,7 @@ namespace ZeldaOracle.Game.Control {
 		}
 		
 		// Draw all tiles in the grid.
-		public void DrawTiles(Graphics2D g) {
+		public void DrawTiles(RoomGraphics g) {
 			for (int i = 0; i < layerCount; i++) {
 				for (int y = 0; y < GridHeight; y++) {
 					for (int x = 0; x < GridWidth; x++) {

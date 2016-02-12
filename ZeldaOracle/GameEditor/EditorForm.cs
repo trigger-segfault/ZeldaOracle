@@ -686,6 +686,12 @@ namespace ZeldaEditor {
 			if (room != null)
 				OpenObjectPropertiesEditor(room);
 		}
+
+		// Find and replace properties
+		private void findAndReplacePropertiesToolStripMenuItem_Click(object sender, EventArgs e) {
+			Form form = new DevTools.PropertyRefactorForm(editorControl);
+			form.Show(this);
+		}
 		
 		//-----------------------------------------------------------------------------
 	}

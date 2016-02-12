@@ -42,6 +42,8 @@ namespace ZeldaOracle.Game.Tiles {
 			this.properties = new Properties();
 			this.properties.PropertyObject = this;
 			this.properties.BaseProperties = tileData.Properties;
+			this.modifiedProperties.PropertyObject = this;
+			this.modifiedProperties.BaseProperties = tileData.Properties;
 		}
 
 		public override void Clone(BaseTileDataInstance copy) {

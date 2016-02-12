@@ -320,7 +320,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private Property ReadProperty(BinaryReader reader) {
 			PropertyType type = (PropertyType) reader.ReadInt32();
 			string name = ReadString(reader);
-
+			
 			if (type == PropertyType.Integer) {
 				return Property.CreateInt(name, reader.ReadInt32());
 			}

@@ -40,10 +40,7 @@ namespace ZeldaOracle.Game.Tiles {
  				color = PuzzleColor.Red;
 
 			// Set the color property.
-			if (Properties.Get("remember_state", false))
-				Properties.SetBase("color", (int) color);
-			else
-				Properties.Set("color", (int) color);
+			Properties.Set("color", (int) color);
 
 			// Set the sprite.
 			if (color == PuzzleColor.Red)

@@ -11,7 +11,6 @@ namespace ZeldaEditor.ObjectsEditor.CustomControls {
 	public class ObjectControlsTileDoor : CustomObjectEditorControl {
 
 		private CheckBox checkBoxOpen;
-		private CheckBox checkBoxRememberState;
 
 
 		//-----------------------------------------------------------------------------
@@ -19,8 +18,7 @@ namespace ZeldaEditor.ObjectsEditor.CustomControls {
 		//-----------------------------------------------------------------------------
 
 		public ObjectControlsTileDoor() {
-			checkBoxOpen			= AddCheckBox("Open");
-			checkBoxRememberState	= AddCheckBox("Remember State");
+			checkBoxOpen = AddCheckBox("Open");
 		}
 
 
@@ -29,13 +27,11 @@ namespace ZeldaEditor.ObjectsEditor.CustomControls {
 		//-----------------------------------------------------------------------------
 
 		public override void SetupObject(IPropertyObject obj) {
-			checkBoxOpen.Checked			= obj.Properties.Get("open", false);
-			checkBoxRememberState.Checked	= obj.Properties.Get("remember_state", false);
+			checkBoxOpen.Checked = obj.Properties.Get("open", false);
 		}
 
 		public override void ApplyChanges(IPropertyObject obj) {
-			obj.Properties.Set("open",				checkBoxOpen.Checked);
-			obj.Properties.Set("remember_state",	checkBoxRememberState.Checked);
+			obj.Properties.Set("open", checkBoxOpen.Checked);
 		}
 	}
 }

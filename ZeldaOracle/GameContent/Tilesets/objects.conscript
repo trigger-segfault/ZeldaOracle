@@ -241,8 +241,7 @@ TILE lantern;
 	SOLID		block;
 	SPRITEINDEX	0, animation,	tile_lantern_lit;
 	SPRITEINDEX	1, sprite,		tile_lantern_unlit;
-	PROPERTIES	(boolean, lit,				true, "Lit", "", "", "Whether the lantern starts lit or not.", false),
-				(boolean, remember_state,	false, "Remember State", "", "", "Will the lantern's lit state be remembered after leaving the room?");
+	PROPERTIES	(boolean, lit, true, "Lit", "", "", "Whether the lantern starts lit or not.", false);
 	EVENT event_light, "Light", "Occurs when the lantern is lighted.", (Lantern, lantern);
 	EVENT event_put_out, "Put Out", "Occurs when the lantern is put out.", (Lantern, lantern);
 END;
@@ -335,8 +334,7 @@ TILE color_jump_pad;
 	SPRITEINDEX	0, tile_color_jump_pad_red;
 	SPRITEINDEX 1, tile_color_jump_pad_yellow;
 	SPRITEINDEX 1, tile_color_jump_pad_blue;
-	PROPERTIES	(integer, color,			0,		"Color",			"", "Color", "The color of the jump pad."),
-				(boolean, remember_state,	false,	"Remember State",	"", "Color", "Will the jump pad's color be remembered after leaving the room?");
+	PROPERTIES	(integer, color, 0, "Color", "", "Color", "The color of the jump pad.");
 	EVENT		event_color_change, "Color Change", "Occurs when the pad's color changes.", (ColorJumpPad, tile, Color, color);
 END;
 
@@ -362,8 +360,7 @@ TILE color_tile;
 	SPRITEINDEX	0, tile_color_tile_red;
 	SPRITEINDEX 1, tile_color_tile_yellow;
 	SPRITEINDEX 1, tile_color_tile_blue;
-	PROPERTIES	(integer, color,			0,		"Color",			"", "Color", "The color of the tile."),
-				(boolean, remember_state,	false,	"Remember State",	"", "Color", "Will the tile's color be remembered after leaving the room?");
+	PROPERTIES	(integer, color, 0, "Color", "", "Color", "The color of the tile.");
 END;
 
 TILE color_tile_red;
@@ -460,7 +457,7 @@ END;
 TILE color_cube_slot;
 	TYPE		TileColorCubeSlot;
 	SPRITE		tile_color_cube_slot;
-	EVENT		on_color_change, "Color Change", "Occurs when the slot's color changes.", (ColorCubeSlot, tile, Color, color);
+	EVENT		event_color_change, "Color Change", "Occurs when the slot's color changes.", (ColorCubeSlot, tile, Color, color);
 END;
 
 # ---- Color Lantern ----------------------------------------------------------
@@ -469,7 +466,7 @@ TILE color_lantern;
 	TYPE		TileColorLantern;
 	SOLID		block;
 	SPRITE		tile_color_lantern;
-	EVENT		on_color_change, "Color Change", "Occurs when the lantern's flame color changes.", (ColorLantern, tile, Color, color);
+	EVENT		event_color_change, "Color Change", "Occurs when the lantern's flame color changes.", (ColorLantern, tile, Color, color);
 END;
 
 # ---- Button -----------------------------------------------------------------
@@ -479,10 +476,9 @@ TILE button;
 	SPRITEINDEX	0, tile_button_up;
 	SPRITEINDEX	1, tile_button_down;
 	PROPERTIES	(boolean, releasable,		true, "Releasable",			"", "Button", "Can the button only be pressed, and not released?"),
-				(boolean, pressed,			false, "Pressed",			"", "Button", "Is the button pressed"),
-				(boolean, remember_state,	false, "Remember State",	"", "Button", "Will the button's state be remembered after leaving the room?");
-	EVENT on_press, "On Press", "Occurs when the button is pressed.", (Button button);
-	EVENT on_release, "On Release", "Occurs when the button is released.", (Button button);
+				(boolean, pressed,			false, "Pressed",			"", "Button", "Is the button pressed");
+	EVENT event_press, "On Press", "Occurs when the button is pressed.", (Button button);
+	EVENT event_release, "On Release", "Occurs when the button is released.", (Button button);
 END;
 
 # ---- Lever ------------------------------------------------------------------
@@ -494,8 +490,7 @@ TILE lever;
 	SPRITEINDEX	0, tile_lever_left;
 	SPRITEINDEX	1, tile_lever_right;
 	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "Lever", "Can the lever only be switched once?"),
-				(boolean, switch_state,		false,	"Switch State",		"", "Lever", "True if the lever is facing left."),
-				(boolean, remember_state,	false,	"Remember State",	"", "Lever", "Will the lever's state be remembered after leaving the room?");
+				(boolean, switch_state,		false,	"Switch State",		"", "Lever", "True if the lever is facing left.");
 	EVENT event_toggle, "Toggle", "Occurs when the lever is toggled.", (Lever, lever);
 END;
 
@@ -508,8 +503,7 @@ TILE door;
 	SPRITEINDEX	1,	tile_door_open;
 	SPRITEINDEX	2,	tile_door_close;
 	PROPERTIES		(boolean, open, false, "Open", "", "Door", "True if the door open."),
-					(integer, direction, 0, "Direction", "direction", "Door", "The direction the door is facing.", false),
-					(boolean, remember_state, false, "Remember State", "", "Door", "Will the door's opened state be remembered after leaving the room?");
+					(integer, direction, 0, "Direction", "direction", "Door", "The direction the door is facing.", false);
 END;
 
 TILE door_right;	CLONE door; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
@@ -525,7 +519,6 @@ TILE small_key_door;
 	SPRITEINDEX	0,	tile_small_key_door_closed;
 	SPRITEINDEX	1,	tile_small_key_door_open;
 	SPRITEINDEX	2,	tile_small_key_door_close;
-	PROPERTIES		(boolean, remember_state, true);
 END;
 
 TILE small_key_door_right;	CLONE small_key_door; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
@@ -540,7 +533,6 @@ TILE boss_key_door;
 	SPRITEINDEX	0,	tile_boss_key_door_closed;
 	SPRITEINDEX	1,	tile_boss_key_door_open;
 	SPRITEINDEX	2,	tile_boss_key_door_close;
-	PROPERTIES	(boolean, remember_state, true);
 END;
 
 TILE boss_key_door_right;	CLONE boss_key_door; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
@@ -550,9 +542,9 @@ TILE boss_key_door_down;	CLONE boss_key_door; PROPERTIES (integer, direction, 3)
 
 TILE minecart_door;
 	CLONE		door;
-	SPRITEINDEX	0,	tile_minecart_door_closed;
-	SPRITEINDEX	1,	tile_minecart_door_open;
-	SPRITEINDEX	2,	tile_minecart_door_close;
+	SPRITEINDEX	0, tile_minecart_door_closed;
+	SPRITEINDEX	1, tile_minecart_door_open;
+	SPRITEINDEX	2, tile_minecart_door_close;
 	TYPE		TileMinecartDoor;
 END;
 

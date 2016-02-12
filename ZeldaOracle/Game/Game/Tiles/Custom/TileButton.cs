@@ -38,19 +38,16 @@ namespace ZeldaOracle.Game.Tiles {
 				this.isPressed = isPressed;
 
 				// Set the pressed property.
-				if (Properties.Get("remember_state", false))
-					Properties.SetBase("pressed", isPressed);
-				else
-					Properties.Set("pressed", isPressed);
+				Properties.Set("pressed", isPressed);
 
 				// Fire the event.
 				if (isPressed) {
 					//CustomSprite = GameData.SPR_TILE_BUTTON_DOWN;
-					GameControl.FireEvent(this, "on_press", this);
+					GameControl.FireEvent(this, "event_press", this);
 				}
 				else {
 					//CustomSprite = GameData.SPR_TILE_BUTTON_UP;
-					GameControl.FireEvent(this, "on_release", this);
+					GameControl.FireEvent(this, "event_release", this);
 				}
 
 				SpriteIndex = (isPressed ? 1 : 0);
@@ -78,7 +75,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public override void OnCoverComplete(Tile tile) {
 			isCovered = true;
 			tilesCovering.Add(tile);
-			tile.RaisedDrawOffset = Point2I.Zero;
+			tile.Graphics.RaisedDrawOffset = Point2I.Zero;
 		}
 
 		public override void OnUncoverBegin(Tile tile) {
@@ -106,7 +103,7 @@ namespace ZeldaOracle.Game.Tiles {
 					// Raise certain tiles (pots) that are partially covering this button.
 					foreach (Tile tile in tilesCovering) {
 						if (tile.Bounds.Contains(Center) && tile.Properties.GetBoolean("raised_on_buttons", false)) {
-							tile.RaisedDrawOffset = new Point2I(0, -GameSettings.TILE_BUTTON_TILE_RAISE_AMOUNT);
+							tile.Graphics.RaisedDrawOffset = new Point2I(0, -GameSettings.TILE_BUTTON_TILE_RAISE_AMOUNT);
 						}
 					}
 				}

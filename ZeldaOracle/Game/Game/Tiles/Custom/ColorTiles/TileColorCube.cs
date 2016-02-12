@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
@@ -82,20 +83,20 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
-		public override void Draw(Graphics2D g) {
+		public override void Draw(RoomGraphics g) {
 
 			SpriteAnimation sprite = (!CustomSprite.IsNull ? CustomSprite : CurrentSprite);
 			if (IsMoving) {
-				g.DrawAnimation(animationPlayer, (Location - offset) * GameSettings.TILE_SIZE);
+				g.DrawAnimation(animationPlayer, (Location - offset) * GameSettings.TILE_SIZE, DepthLayer.TileLayer1);
 			}
 			else if (sprite.IsAnimation) {
 				// Draw as an animation.
 				g.DrawAnimation(sprite.Animation, Zone.ImageVariantID,
-					RoomControl.GameControl.RoomTicks, Position);
+					RoomControl.GameControl.RoomTicks, Position, DepthLayer.TileLayer1);
 			}
 			else if (sprite.IsSprite) {
 				// Draw as a sprite.
-				g.DrawSprite(sprite.Sprite, Zone.ImageVariantID, Position);
+				g.DrawSprite(sprite.Sprite, Zone.ImageVariantID, Position, DepthLayer.TileLayer1);
 			}
 		}
 

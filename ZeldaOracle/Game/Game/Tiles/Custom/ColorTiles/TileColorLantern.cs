@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
@@ -40,11 +41,12 @@ namespace ZeldaOracle.Game.Tiles {
 				flameAnimation = null;
 		}
 
-		public override void Draw(Graphics2D g) {
+		public override void Draw(RoomGraphics g) {
 			base.Draw(g);
 
 			if (flameAnimation != null) {
-				g.DrawAnimation(flameAnimation, GameControl.RoomTicks, Center - new Vector2F(0, 9));
+				g.DrawAnimation(flameAnimation, GameControl.RoomTicks,
+					Center - new Vector2F(0, 9), Graphics.DepthLayer);
 			}
 		}
 
@@ -59,10 +61,9 @@ namespace ZeldaOracle.Game.Tiles {
 				PuzzleColor prevColor = Color;
 				Properties.Set("color", (int) value);
 
+				// Fire the color change event.
 				if (prevColor != value) {
-					GameControl.ExecuteScript(
-						Properties.GetString("on_color_change", ""),
-						this, (ZeldaAPI.Color) value);
+					GameControl.FireEvent(this, "event_color_change", this, (ZeldaAPI.Color) value);
 				}
 
 				if (value == PuzzleColor.Red)

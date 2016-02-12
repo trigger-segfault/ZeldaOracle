@@ -117,7 +117,7 @@ namespace ZeldaOracle.Game.Tiles {
 			base.Update();
 		}
 
-		public override void Draw(Graphics2D g) {
+		public override void Draw(RoomGraphics g) {
 			// Draw the extension bar.
 			if (extendLength > 0.0f) {
 				Sprite spr;
@@ -128,7 +128,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 				for (float length = 0.0f; length < extendLength; length += GameSettings.TILE_SIZE) {
 					Vector2F drawPos = Position - Offset + (Directions.ToVector(direction) * (length + 8.0f));
-					g.DrawSprite(spr, drawPos);
+					g.DrawSprite(spr, drawPos, DepthLayer.TileLayer1);
 				}
 			}
 			

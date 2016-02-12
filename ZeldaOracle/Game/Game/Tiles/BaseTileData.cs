@@ -9,7 +9,7 @@ using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public abstract class BaseTileData {
+	public abstract class BaseTileData : IPropertyObject {
 		
 		protected Type type;
 		protected Tileset tileset;
@@ -28,7 +28,7 @@ namespace ZeldaOracle.Game.Tiles {
 			type			= null;
 			tileset			= null;
 			sheetLocation	= Point2I.Zero;
-			properties		= new Properties();
+			properties		= new Properties(this);
 			events			= new ObjectEventCollection();
 
 			properties.Set("id", "");

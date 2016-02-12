@@ -72,6 +72,8 @@
 			this.buttonApply = new System.Windows.Forms.Button();
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.buttonDone = new System.Windows.Forms.Button();
+			this.comboBoxResetCondition = new System.Windows.Forms.ComboBox();
+			this.label4 = new System.Windows.Forms.Label();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -186,11 +188,13 @@
 			this.groupBox2.Controls.Add(this.numberBoxWidth);
 			this.groupBox2.Controls.Add(this.comboBoxSolidType);
 			this.groupBox2.Controls.Add(this.numberBoxHeight);
+			this.groupBox2.Controls.Add(this.comboBoxResetCondition);
 			this.groupBox2.Controls.Add(this.comboBoxMovementType);
 			this.groupBox2.Controls.Add(this.label3);
 			this.groupBox2.Controls.Add(this.label2);
 			this.groupBox2.Controls.Add(this.label5);
 			this.groupBox2.Controls.Add(this.comboBoxLedgeDirection);
+			this.groupBox2.Controls.Add(this.label4);
 			this.groupBox2.Controls.Add(this.label6);
 			this.groupBox2.Controls.Add(this.comboBoxCollisionModel);
 			this.groupBox2.Controls.Add(this.label7);
@@ -662,6 +666,26 @@
 			this.buttonDone.UseVisualStyleBackColor = true;
 			this.buttonDone.Click += new System.EventHandler(this.buttonDone_Click);
 			// 
+			// comboBoxResetCondition
+			// 
+			this.comboBoxResetCondition.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBoxResetCondition.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxResetCondition.FormattingEnabled = true;
+			this.comboBoxResetCondition.Location = new System.Drawing.Point(116, 207);
+			this.comboBoxResetCondition.Name = "comboBoxResetCondition";
+			this.comboBoxResetCondition.Size = new System.Drawing.Size(151, 21);
+			this.comboBoxResetCondition.TabIndex = 10;
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(8, 210);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(85, 13);
+			this.label4.TabIndex = 1;
+			this.label4.Text = "Reset Condition:";
+			// 
 			// ObjectEditor
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -747,5 +771,7 @@
 		private System.Windows.Forms.SplitContainer splitContainer1;
 		private PropertiesEditor.ZeldaPropertyGrid rawPropertyGrid;
 		private System.Windows.Forms.Button buttonApply;
+		private System.Windows.Forms.ComboBox comboBoxResetCondition;
+		private System.Windows.Forms.Label label4;
 	}
 }

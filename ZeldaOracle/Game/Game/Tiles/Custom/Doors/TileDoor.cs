@@ -56,12 +56,11 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 			else if (isOpen && isPlayerBlockingClose)
 				isPlayerBlockingClose = false;
+
+			Properties.Set("open", true);
 			
 			if (instantaneous)
 				animationPlayer.PlaybackTime = animationPlayer.Animation.Duration;
-
-			if (rememberState || Properties.GetBoolean("remember_state", false))
-				Properties.SetBase("open", true);
 		}
 
 		// Close the door.
@@ -87,12 +86,11 @@ namespace ZeldaOracle.Game.Tiles {
 						AudioSystem.PlaySound(GameData.SOUND_DUNGEON_DOOR);
 				}
 			}
+
+			Properties.Set("open", false);
 			
 			if (instantaneous)
 				animationPlayer.PlaybackTime = animationPlayer.Animation.Duration;
-
-			if (rememberState || Properties.GetBoolean("remember_state", false))
-				Properties.SetBase("open", false);
 		}
 
 		// Find a door that's connected to this one in an adjacent room.
