@@ -38,7 +38,7 @@ namespace ZeldaOracle.Game.Tiles {
 				//CustomSprite = GameData.SPR_TILE_LEVER_RIGHT;
 			//else
 				//CustomSprite = GameData.SPR_TILE_LEVER_LEFT;
-			SpriteIndex = (SwitchState ? 1 : 0);
+			CustomSprite = SpriteList[SwitchState ? 1 : 0];
 		}
 		
 

@@ -30,6 +30,7 @@ namespace ZeldaOracle.Game.Tiles {
 			animationOpen	= GameData.ANIM_TILE_DOOR_OPEN;
 			animationClose	= GameData.ANIM_TILE_DOOR_CLOSE;
 			openCloseSound	= GameData.SOUND_DUNGEON_DOOR;
+			Graphics.SyncPlaybackWithRoomTicks = false;
 		}
 
 

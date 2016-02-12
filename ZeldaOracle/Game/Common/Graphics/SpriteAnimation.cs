@@ -45,7 +45,10 @@ namespace ZeldaOracle.Common.Graphics {
 		}
 
 		public void Set(SpriteAnimation spriteAnimation) {
-			this.value = spriteAnimation.value;
+			if (spriteAnimation != null)
+				value = spriteAnimation.value;
+			else
+				value = null;
 		}
 
 		public void SetNull() {

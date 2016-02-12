@@ -37,7 +37,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (!IsLit) {
 				IsLit = true;
 				//CustomSprite = GameData.ANIM_TILE_LANTERN;
-				SpriteIndex = 0;
+				CustomSprite = SpriteList[0];
 				Properties.Set("lit", true);
 				GameControl.ExecuteScript(Properties.GetString("event_light", ""), this);
 			}
@@ -47,7 +47,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (IsLit) {
 				IsLit = false;
 				//CustomSprite = GameData.SPR_TILE_LANTERN_UNLIT;
-				SpriteIndex = 1;
+				CustomSprite = SpriteList[1];
 				Properties.Set("lit", false);
 				GameControl.ExecuteScript(Properties.GetString("event_put_out", ""), this);
 			}
@@ -66,7 +66,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public override void OnInitialize() {
-			SpriteIndex = (IsLit ? 0 : 1);
+			CustomSprite = SpriteList[IsLit ? 0 : 1];
 			/*if (IsLit)
 				CustomSprite = GameData.ANIM_TILE_LANTERN;
 			else

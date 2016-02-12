@@ -9,7 +9,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 	/*
-	 * Sprite Index:
+	 * Track Index (and sprite index).
 	 * 0 - horizontal
 	 * 1 - vertical
 	 * 2 - right/up
@@ -19,6 +19,9 @@ namespace ZeldaOracle.Game.Tiles {
 	*/
 
 	public class TileMinecartTrack : Tile, ZeldaAPI.MinecartTrack {
+		
+		private int trackIndex;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -34,14 +37,13 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public IEnumerable<int> GetDirections() {
-			int spriteIndex = SpriteIndex;
-			if (spriteIndex == 0 || spriteIndex == 2 || spriteIndex == 5)
+			if (trackIndex == 0 || trackIndex == 2 || trackIndex == 5)
 				yield return Directions.Right;
-			if (spriteIndex == 1 || spriteIndex == 2 || spriteIndex == 3)
+			if (trackIndex == 1 || trackIndex == 2 || trackIndex == 3)
 				yield return Directions.Up;
-			if (spriteIndex == 0 || spriteIndex == 3 || spriteIndex == 4)
+			if (trackIndex == 0 || trackIndex == 3 || trackIndex == 4)
 				yield return Directions.Left;
-			if (spriteIndex == 1 || spriteIndex == 4 || spriteIndex == 5)
+			if (trackIndex == 1 || trackIndex == 4 || trackIndex == 5)
 				yield return Directions.Down;
 		}
 
@@ -51,6 +53,9 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public override void OnInitialize() {
+			trackIndex = Properties.GetInteger("track_index", 0);
+			CustomSprite = SpriteList[trackIndex];
+
 			// Spawn a minecart entity.
 			if (SpawnsMinecart) {
 				Minecart minecart = new Minecart(this);
@@ -64,12 +69,13 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public void SwitchTrackDirection() {
-			int currentIndex = SpriteIndex;
-			int switchedIndex = Properties.GetInteger("switched_track_index", currentIndex);
+			int switchedIndex = Properties.GetInteger("switched_track_index", trackIndex);
 
-			if (currentIndex != switchedIndex) {
-				Properties.Set("switched_track_index", currentIndex);
-				Properties.Set("sprite_index", switchedIndex);
+			if (trackIndex != switchedIndex) {
+				Properties.Set("switched_track_index", trackIndex);
+				Properties.Set("track_index", switchedIndex);
+				trackIndex = switchedIndex;
+				CustomSprite = SpriteList[trackIndex];
 			}
 		}
 
@@ -79,11 +85,11 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public bool IsHorizontal {
-			get { return (SpriteIndex == 0); }
+			get { return (trackIndex == 0); }
 		}
 		
 		public bool IsVertical {
-			get { return (SpriteIndex == 1); }
+			get { return (trackIndex == 1); }
 		}
 
 		public bool SpawnsMinecart {

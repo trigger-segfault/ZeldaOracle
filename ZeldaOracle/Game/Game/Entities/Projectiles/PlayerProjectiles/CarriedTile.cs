@@ -67,7 +67,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			if (!tile.SpriteAsObject.IsNull)
 				Graphics.PlayAnimation(tile.SpriteAsObject);
 			else
-				Graphics.PlayAnimation(tile.CurrentSprite);
+				Graphics.PlayAnimation(tile.CustomSprite);
 		}
 
 		public override void OnLand() {

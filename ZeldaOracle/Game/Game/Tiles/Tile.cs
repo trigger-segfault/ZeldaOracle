@@ -60,7 +60,6 @@ namespace ZeldaOracle.Game.Tiles {
 		private TileDataInstance	tileData;			// The tile data used to create this tile.
 		private TileFlags			flags;
 		private Point2I				size;				// How many tile spaces this tile occupies. NOTE: this isn't supported yet.
-		private SpriteAnimation		customSprite;
 		private SpriteAnimation		spriteAsObject;		// The sprite for the tile if it were picked up, pushed, etc.
 		private Animation			breakAnimation;		// The animation to play when the tile is broken.
 		private Sound				breakSound;			// The sound to play when the tile is broken.
@@ -88,7 +87,6 @@ namespace ZeldaOracle.Game.Tiles {
 			layer				= 0;
 			offset				= Point2I.Zero;
 			size				= Point2I.One;
-			customSprite		= new SpriteAnimation();
 			spriteAsObject		= new SpriteAnimation();
 			isSolid				= false;
 			isMoving			= false;
@@ -320,7 +318,7 @@ namespace ZeldaOracle.Game.Tiles {
 				TileData data = Resources.GetResource<TileData>("dug");
 				Tile dugTile = Tile.CreateTile(data);
 				roomControl.PlaceTile(dugTile, location, layer);
-				customSprite = GameData.SPR_TILE_DUG;
+				Graphics.CustomSprite = GameData.SPR_TILE_DUG;
 			}
 			else {
 				roomControl.RemoveTile(this);
@@ -594,6 +592,9 @@ namespace ZeldaOracle.Game.Tiles {
 			tile.collisionModel		= data.CollisionModel;
 			tile.size				= data.Size;
 			
+			if (data.SpriteList.Length > 0)
+				tile.graphics.CustomSprite = data.SpriteList[0];
+
 			int conveyorAngle = data.ConveyorAngle;
 			if (conveyorAngle >= 0)
 				tile.conveyorVelocity = Angles.ToVector(conveyorAngle, true) * data.ConveyorSpeed;
@@ -706,33 +707,29 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public SpriteAnimation CustomSprite {
-			get { return customSprite; }
-			set {
-				if (value == null)
-					customSprite.SetNull();
-				else
-					customSprite.Set(value);
-			}
+			get { return graphics.CustomSprite; }
+			set { graphics.CustomSprite = value; }
 		}
 
 		public SpriteAnimation SpriteAsObject {
 			get { return spriteAsObject; }
-			set {
-				if (value == null)
-					spriteAsObject.SetNull();
-				else
-					spriteAsObject.Set(value);
-			}
+			set { spriteAsObject.Set(value); }
 		}
 
-		public SpriteAnimation CurrentSprite {
-			get {
-				if (tileData != null && tileData.SpriteList.Length > 0)
-					return tileData.SpriteList[properties.GetInteger("sprite_index")];
-				return new SpriteAnimation();
-			}
+		public SpriteAnimation[] SpriteList {
+			get { return tileData.SpriteList; }
 		}
 
+		//public SpriteAnimation CurrentSprite {
+			//get {
+				//return CustomSprite;
+				/*if (tileData != null && tileData.SpriteList.Length > 0)
+					return tileData.SpriteList[0];
+					//return tileData.SpriteList[properties.GetInteger("sprite_index")];
+				return new SpriteAnimation();*/
+			//}
+		//}
+		
 		public int SpriteIndex {
 			get { return properties.GetInteger("sprite_index"); }
 			set { properties.Set("sprite_index", value); }

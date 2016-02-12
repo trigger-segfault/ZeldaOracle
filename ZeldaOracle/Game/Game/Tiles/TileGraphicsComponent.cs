@@ -16,8 +16,12 @@ namespace ZeldaOracle.Game.Tiles {
 		private DepthLayer		depthLayer;
 		private int				imageVariant;
 		private Point2I			raisedDrawOffset;			// Offset to draw tiles that are slightly raised (EX: pushing pots onto a button)
+		private Point2I			drawOffset;
 		private	bool			syncPlaybackWithRoomTicks;
 		private bool			isAnimatedWhenPaused;		// True if the tile updates its graphics while the room is paused.
+		private Vector2F		absoluteDrawPosition;
+		private bool			useAbsoluteDrawPosition;
+		private SpriteAnimation	customSprite;
 
 
 		//-----------------------------------------------------------------------------
@@ -31,8 +35,12 @@ namespace ZeldaOracle.Game.Tiles {
 			this.depthLayer					= DepthLayer.TileLayer1;
 			this.imageVariant				= -1;
 			this.raisedDrawOffset			= Point2I.Zero;
-			this.syncPlaybackWithRoomTicks	= false;
+			this.drawOffset					= Point2I.Zero;
+			this.syncPlaybackWithRoomTicks	= true;
 			this.isAnimatedWhenPaused		= false;
+			this.absoluteDrawPosition		= Vector2F.Zero;
+			this.useAbsoluteDrawPosition	= false;
+			this.customSprite				= new SpriteAnimation();
 		}
 
 		
@@ -42,6 +50,16 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public void PlayAnimation(Animation animation) {
 			animationPlayer.Play(animation);
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Draw Settings
+		//-----------------------------------------------------------------------------
+
+		public void SetAbsoluteDrawPosition(Vector2F drawPosition) {
+			absoluteDrawPosition = drawPosition;
+			useAbsoluteDrawPosition = true;
 		}
 
 		
@@ -72,11 +90,30 @@ namespace ZeldaOracle.Game.Tiles {
 			else if (tile.Layer == 2)
 				depthLayer = DepthLayer.TileLayer3;
 
-			SpriteAnimation sprite = (!tile.CustomSprite.IsNull ? tile.CustomSprite : tile.CurrentSprite);
+			SpriteAnimation sprite = customSprite;
 			if (tile.IsMoving && !tile.SpriteAsObject.IsNull)
 				sprite = tile.SpriteAsObject;
 			
-			Vector2F drawPosition = tile.Position + raisedDrawOffset;
+			Vector2F drawPosition = (useAbsoluteDrawPosition ? absoluteDrawPosition : tile.Position);
+			drawPosition += (raisedDrawOffset + drawOffset);
+
+			
+			float playbackTime;
+			if (syncPlaybackWithRoomTicks)
+				playbackTime = tile.RoomControl.GameControl.RoomTicks;
+			else
+				playbackTime = animationPlayer.PlaybackTime;
+			
+			if (animationPlayer.Animation != null) {
+				g.DrawAnimation(animationPlayer.SubStrip, imageVariant,
+					playbackTime, drawPosition, depthLayer, tile.Position);
+			}
+			/*
+
+			if (!sprite.IsNull) {
+				g.DrawAnimation(sprite, imageVariant, playbackTime,
+					drawPosition, depthLayer, tile.Position);
+			}
 
 			// Draw the tile.
 			if (animationPlayer.Animation != null) {
@@ -91,7 +128,7 @@ namespace ZeldaOracle.Game.Tiles {
 			else if (sprite.IsSprite) {
 				g.DrawSprite(sprite.Sprite, imageVariant,
 					drawPosition, depthLayer, tile.Position);
-			}
+			}*/
 		}
 
 
@@ -102,6 +139,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public AnimationPlayer AnimationPlayer {
 			get { return animationPlayer; }
 			set { animationPlayer = value; }
+		}
+
+		public Point2I DrawOffset {
+			get { return drawOffset; }
+			set { drawOffset = value; }
 		}
 
 		public Point2I RaisedDrawOffset {
@@ -126,6 +168,35 @@ namespace ZeldaOracle.Game.Tiles {
 		public bool IsAnimatedWhenPaused {
 			get { return isAnimatedWhenPaused; }
 			set { isAnimatedWhenPaused = value; }
+		}
+		
+		public Vector2F AbsoluteDrawPosition {
+			get { return absoluteDrawPosition; }
+			set { absoluteDrawPosition = value; }
+		}
+		
+		public bool UseAbsoluteDrawPosition {
+			get { return useAbsoluteDrawPosition; }
+			set { useAbsoluteDrawPosition = value; }
+		}
+		
+		public bool SyncPlaybackWithRoomTicks {
+			get { return syncPlaybackWithRoomTicks; }
+			set { syncPlaybackWithRoomTicks = value; }
+		}
+
+		public SpriteAnimation CustomSprite {
+			get { return customSprite; }
+			//set { customSprite.Set(value); }
+
+			set {
+				if (value.IsSprite)
+					animationPlayer.Animation = new Animation(value.Sprite);
+				else if (value.IsAnimation)
+					animationPlayer.Animation = value.Animation;
+				else
+					animationPlayer.Animation = null;
+			}
 		}
 	}
 }

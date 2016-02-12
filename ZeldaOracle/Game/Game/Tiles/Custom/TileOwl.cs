@@ -50,7 +50,6 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void OnInitialize() {
 			isActivated = false;
-			SpriteIndex = 0;
 			//CustomSprite = GameData.SPR_TILE_OWL;
 		}
 
@@ -71,7 +70,7 @@ namespace ZeldaOracle.Game.Tiles {
 				}
 
 				if (timer == 49) {
-					SpriteIndex = 1;
+					CustomSprite = SpriteList[1];
 					//CustomSprite = GameData.SPR_TILE_OWL_ACTIVATED;
 				}
 				if (timer == 58) {
@@ -80,7 +79,7 @@ namespace ZeldaOracle.Game.Tiles {
 				}
 				if (timer > 80) {
 					isActivated = false;
-					SpriteIndex = 0;
+					CustomSprite = SpriteList[0];
 					//CustomSprite = GameData.SPR_TILE_OWL;
 				}
 			}

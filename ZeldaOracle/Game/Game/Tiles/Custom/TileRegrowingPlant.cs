@@ -25,6 +25,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public TileRegrowingPlant() {
+			Graphics.SyncPlaybackWithRoomTicks = false;
 		}
 
 

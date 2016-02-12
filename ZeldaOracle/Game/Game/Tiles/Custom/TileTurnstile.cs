@@ -40,6 +40,8 @@ namespace ZeldaOracle.Game.Tiles {
 		public TileTurnstile() {
 			arrowsAnimationPlayer = new AnimationPlayer();
 			turnstileAnimationPlayer = new AnimationPlayer();
+
+			Graphics.SyncPlaybackWithRoomTicks = false;
 		}
 
 

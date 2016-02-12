@@ -36,11 +36,11 @@ namespace ZeldaEditor.ObjectsEditor.CustomControls {
 		//-----------------------------------------------------------------------------
 
 		public override void SetupObject(IPropertyObject obj) {
-			comboBoxColor.SelectedIndex = obj.Properties.Get("sprite_index", 0);
+			comboBoxColor.SelectedIndex = obj.Properties.Get("orientation", 0);
 		}
 
 		public override void ApplyChanges(IPropertyObject obj) {
-			obj.Properties.Set("sprite_index", comboBoxColor.SelectedIndex);
+			obj.Properties.Set("orientation", comboBoxColor.SelectedIndex);
 		}
 	}
 }

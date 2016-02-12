@@ -22,6 +22,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public TileColorBarrier() {
 			Graphics.IsAnimatedWhenPaused = true;
+			Graphics.SyncPlaybackWithRoomTicks = false;
 		}
 
 

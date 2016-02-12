@@ -31,7 +31,8 @@ namespace ZeldaOracle.Game.Tiles {
 	public class TileColorCube : Tile {
 
 		private Point2I offset;
-		
+		private ColorCubeOrientation orientation;
+
 		private const float MOVEMENT_SPEED = 16f / 12f;
 
 
@@ -41,6 +42,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public TileColorCube() {
 			soundMove = GameData.SOUND_SWITCH;
+			
+			Graphics.SyncPlaybackWithRoomTicks = false;
 		}
 
 		//-----------------------------------------------------------------------------
@@ -51,19 +54,21 @@ namespace ZeldaOracle.Game.Tiles {
 			if (base.OnPush(direction, MOVEMENT_SPEED)) {
 				offset = Directions.ToPoint(direction);
 				
-				int spriteIndex = SpriteIndex;
-				int oldSpriteIndex = spriteIndex;
+				ColorCubeOrientation oldOrientation = orientation;
 
 				// Find the new sprite index.
 				if (Directions.IsVertical(direction))
-					SpriteIndex = GMath.Wrap(spriteIndex + 3, 6);
-				else if (spriteIndex % 2 == 0)
-					SpriteIndex = GMath.Wrap(spriteIndex - 1, 6);
+					orientation = (ColorCubeOrientation) GMath.Wrap((int) orientation + 3, 6);
+				else if ((int) orientation % 2 == 0)
+					orientation = (ColorCubeOrientation) GMath.Wrap((int) orientation - 1, 6);
 				else
-					SpriteIndex = GMath.Wrap(spriteIndex + 1, 6);
+					orientation = (ColorCubeOrientation) GMath.Wrap((int) orientation + 1, 6);
 
 				// Play the corresponding animation.
-				Graphics.PlayAnimation(GameData.ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS[oldSpriteIndex, direction]);
+				Graphics.PlayAnimation(GameData.ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS[(int) oldOrientation, direction]);
+
+				// Set an absolute draw position because the animation should not move with the tile.
+				Graphics.SetAbsoluteDrawPosition(Position);
 
 				return true;
 			}
@@ -71,7 +76,11 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public override void OnInitialize() {
-			
+			base.OnInitialize();
+
+			int orientationIndex = Properties.GetInteger("orientation", 0);
+			orientation = (ColorCubeOrientation) orientationIndex;
+			CustomSprite = SpriteList[orientationIndex];
 		}
 
 
@@ -80,7 +89,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		public ColorCubeOrientation ColorOrientation {
-			get { return (ColorCubeOrientation) SpriteIndex; }
+			get { return orientation; }
 		}
 
 		public PuzzleColor TopColor {

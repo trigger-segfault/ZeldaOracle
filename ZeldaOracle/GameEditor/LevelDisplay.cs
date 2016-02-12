@@ -414,6 +414,12 @@ namespace ZeldaEditor {
 					sprite = GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE;
 			}
 			//-----------------------------------------------------------------------------
+			// Color Cube
+			else if (tile.Type == typeof(TileColorCube)) {
+				int orientationIndex = tile.Properties.GetInteger("orientation", 0);
+				sprite = GameData.SPR_COLOR_CUBE_ORIENTATIONS[orientationIndex];
+			}
+			//-----------------------------------------------------------------------------
 			// Crossing Gate.
 			else if (tile.Type == typeof(TileCrossingGate)) {
 				if (tile.Properties.GetBoolean("raised", false))

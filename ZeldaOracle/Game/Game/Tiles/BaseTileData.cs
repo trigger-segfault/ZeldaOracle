@@ -41,7 +41,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 			properties.Set("sprite_index", 0);
 			properties.SetDocumentation("sprite_index", "Sprite Index", "sprite_index", "", "Internal",
-				"The current sprite in the sprite list to draw.", true, true);
+				"The current sprite in the sprite list to draw.");
 
 			properties.Set("substrip_index", 0);
 			properties.SetDocumentation("substrip_index", "Animation Substrip Index", "", "", "Internal",
