@@ -62,12 +62,12 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		public override void Initialize() {
 			base.Initialize();
 			
-			Graphics.ImageVariant = tile.RoomControl.Room.Zone.ImageVariantID;
-
+			Graphics.ImageVariant = tile.Graphics.ImageVariant;
+			
 			if (!tile.SpriteAsObject.IsNull)
-				Graphics.PlayAnimation(tile.SpriteAsObject);
+				Graphics.PlaySpriteAnimation(tile.SpriteAsObject);
 			else
-				Graphics.PlayAnimation(tile.SpriteList[0]); // TODO: Fix this.
+				Graphics.PlaySpriteAnimation(tile.Graphics.AnimationPlayer.SpriteOrSubStrip);
 		}
 
 		public override void OnLand() {

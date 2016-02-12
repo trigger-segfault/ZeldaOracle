@@ -200,27 +200,11 @@ namespace ZeldaOracle.Common.Graphics {
 				return animation; // The index doesn't exist, return the base animation.
 			return subStrip;
 		}
-
-
+		
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
-		// Gets or sets whether the animation is playing.
-		public bool IsPlaying {
-			get { return isPlaying; }
-			set { isPlaying = value; }
-		}
-		
-		// Returns true if the animation is done playing.
-		public bool IsDone {
-			get {
-				if (subStrip == null || !isPlaying || subStrip.LoopMode == LoopMode.Repeat)
-					return false;
-				return (timer >= subStrip.Duration);
-			}
-		}
 		
 		// Get or set the playback speed (default is 1).
 		public float Speed {
@@ -234,15 +218,6 @@ namespace ZeldaOracle.Common.Graphics {
 			set { timer = value; }
 		}
 
-		// Get the sub-strip that's currently active.
-		public Animation SubStrip {
-			get { return subStrip; }
-		}
-
-		public Sprite Sprite {
-			get { return sprite; }
-		}
-
 		// Gets or sets the sub-strip index of the animation to play.
 		public int SubStripIndex {
 			get { return subStripIndex; }
@@ -254,10 +229,55 @@ namespace ZeldaOracle.Common.Graphics {
 			}
 		}
 		
+		// Gets or sets whether the animation is playing.
+		public bool IsPlaying {
+			get { return isPlaying; }
+		}
+		
+		// Returns true if the animation is done playing.
+		public bool IsDone {
+			get {
+				if (subStrip == null || !isPlaying || subStrip.LoopMode == LoopMode.Repeat)
+					return false;
+				return (timer >= subStrip.Duration);
+			}
+		}
+
+		// Get the sub-strip that's currently active.
+		public Animation SubStrip {
+			get { return subStrip; }
+		}
+
+		// Return the sprite.
+		public Sprite Sprite {
+			get { return sprite; }
+		}
+		
+		// Return a sprite animation representing this player's sprite or animation (or NULL).
+		public SpriteAnimation SpriteOrAnimation {
+			get {
+				if (animation != null)
+					return new SpriteAnimation(animation);
+				if (sprite != null)
+					return new SpriteAnimation(sprite);
+				return new SpriteAnimation();
+			}
+		}
+
+		// Return a sprite animation representing this player's sprite or sub-animation-strip (or NULL).
+		public SpriteAnimation SpriteOrSubStrip {
+			get {
+				if (subStrip != null)
+					return new SpriteAnimation(subStrip);
+				if (sprite != null)
+					return new SpriteAnimation(sprite);
+				return new SpriteAnimation();
+			}
+		}
+		
 		// Get or set the current animation strip.
 		public Animation Animation {
 			get { return animation; }
-			//set { SetAnimation(value); }
 		}
 	}
 }

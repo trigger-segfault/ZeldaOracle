@@ -79,7 +79,7 @@ namespace ZeldaOracle.Game.Entities
 			animationPlayer.Play(animation);
 		}
 
-		public void PlayAnimation(SpriteAnimation spriteAnimation) {
+		public void PlaySpriteAnimation(SpriteAnimation spriteAnimation) {
 			animationPlayer.Play(spriteAnimation);
 		}
 		

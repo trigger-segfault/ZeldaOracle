@@ -189,6 +189,11 @@ namespace ZeldaOracle.Game.Tiles {
 			set { depthLayer = value; }
 		}
 
+		public int ImageVariant {
+			get { return imageVariant; }
+			set { imageVariant = value; }
+		}
+
 		public Point2I DrawOffset {
 			get { return drawOffset; }
 			set { drawOffset = value; }

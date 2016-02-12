@@ -84,6 +84,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					player.BeginBusyState(throwDuration);
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 				}
+				else if (isPickingUp) {
+					player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
+					isPickingUp = false;
+				}
 				if (playSound)
 					AudioSystem.PlaySound(GameData.SOUND_PLAYER_THROW);
 			}
@@ -130,7 +134,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.CanJump			= true;
 			player.Movement.CanLedgeJump	= true;
 			player.Movement.CanUseWarpPoint	= true;
-			
+
 			if (!isObjectDropped) {
 				DropObject(false, false);
 			}
