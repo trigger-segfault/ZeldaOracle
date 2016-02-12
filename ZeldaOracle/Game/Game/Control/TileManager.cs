@@ -186,10 +186,18 @@ namespace ZeldaOracle.Game.Control {
 
 		// Return the highest surface tile at the given position.
 		public Tile GetSurfaceTileAtPosition(Vector2F position, bool includePlatforms = false) {
-			foreach (Tile tile in GetTilesAtPosition(position, TileLayerOrder.HighestToLowest)) {
-				if (tile.IsSurface || (includePlatforms && tile.IsPlatform))
+			// Because tiles may have moved this frame, we need to check a 3x3 area.
+			Point2I location = (Point2I) (position / tileGridCellSize);
+			Rectangle2I area = new Rectangle2I(location, Point2I.One);
+			area.Inflate(1, 1);
+
+			foreach (Tile tile in GetTilesInArea(area, TileLayerOrder.HighestToLowest)) {
+				Rectangle2F tileBounds = tile.Bounds;
+				tileBounds.Point -= tile.Velocity;
+				if (tileBounds.Contains(position) && (tile.IsSurface || (includePlatforms && tile.IsPlatform)))
 					return tile;
 			}
+
 			return null;
 		}
 		

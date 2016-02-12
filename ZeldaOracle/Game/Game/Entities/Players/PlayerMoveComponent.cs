@@ -421,26 +421,26 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private void UpdateFallingInHoles() {
 			if (fallingInHole) {
 				holeDoomTimer--;
+				
+				// After a delay, disable the player's motion.
+				if (holeDoomTimer < 0)
+					player.Physics.Velocity = Vector2F.Zero;
 
-				if (doomedToFallInHole) {
-					// The player is doomed to fall in the hole, he cannot escape it.
-					if (holeDoomTimer < 0)
-						player.Physics.Velocity = Vector2F.Zero;
-					
-					// Collide with hole boundries.
-					Rectangle2F holeRect = new Rectangle2F(holeTile.Position, new Vector2F(16, 16));
-					Rectangle2F collisionBox = new Rectangle2F(Vector2F.Zero, Vector2F.One);
-					player.Physics.PerformInsideEdgeCollisions(collisionBox, holeRect);
-				}
-				else if (!player.Physics.IsInHole) {
+				if (!player.Physics.IsInHole) {
 					// Stop falling in a hole.
 					fallingInHole		= false;
 					doomedToFallInHole	= false;
 					holeTile			= null;
 					return;
 				}
+				else if (doomedToFallInHole) {
+					// Collide with hole boundary's inside edges.
+					Rectangle2F collisionBox = new Rectangle2F(-1, -1, 2, 2);
+					player.Physics.PerformInsideEdgeCollisions(collisionBox, holeTile.Bounds);
+				}
 				else {
-					// Check if the player has changed quadrents.
+					// Check if the player has changed quadrents,
+					// which dooms him to fall in the hole.
 					Point2I holeTileLoc = player.RoomControl.GetTileLocation(player.Position);
 					Tile newHoleTile	= player.RoomControl.GetTopTile(holeTileLoc);
 					Point2I newQuadrent	= (Point2I) (player.Position / 8);
@@ -457,12 +457,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 						float dist = 0.25f;
 						
 						// Pull the player in more if he's moving away from the hole.
-						if ((diff < 0 && player.Physics.Velocity[i] > 0.25f) ||
-							(diff > 0 && player.Physics.Velocity[i] < -0.25f))
+						if ((diff < 0.0f && player.Physics.Velocity[i] > 0.25f) ||
+							(diff > 0.0f && player.Physics.Velocity[i] < -0.25f))
 							dist = 0.5f;
 
-						if (!(diff < 0 && player.Physics.Velocity[i] < -0.25f) &&
-							!(diff > 0 && player.Physics.Velocity[i] > 0.25f))
+						if (!(diff < 0.0f && player.Physics.Velocity[i] < -0.25f) &&
+							!(diff > 0.0f && player.Physics.Velocity[i] > 0.25f))
 						{
 							holeSlipVelocity[i] = Math.Sign(diff) * dist;
 						}
@@ -470,11 +470,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 				}
 				player.Position += holeSlipVelocity;
 					
-				// Fall in the hole when close to the center.
+				// Fall in the hole when too close to the center.
 				if (player.Center.DistanceTo(holeTile.Center) <= 1.0f) {
+					AudioSystem.PlaySound(GameData.SOUND_PLAYER_FALL);
 					player.SetPositionByCenter(holeTile.Center);
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_FALL);
-					AudioSystem.PlaySound(GameData.SOUND_PLAYER_FALL);
 					player.RespawnDeath();
 					holeTile			= null;
 					fallingInHole		= false;
@@ -484,7 +484,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			else if (player.Physics.IsInHole && player.CurrentState != player.RespawnDeathState) {
 				// Start falling in a hole.
 				Point2I holeTileLoc = player.RoomControl.GetTileLocation(player.Position);
-				holeTile			= player.RoomControl.GetTopTile(holeTileLoc);
+				holeTile			= player.Physics.TopTile;
 				holeEnterQuadrent	= (Point2I) (player.Position / 8);
 				doomedToFallInHole	= false;
 				fallingInHole		= true;
