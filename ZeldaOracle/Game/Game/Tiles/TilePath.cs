@@ -13,10 +13,10 @@ namespace ZeldaOracle.Game.Tiles {
 		public int Direction { get; set; }
 
 		public TilePathMove() {
-			Distance = 0;
-			Speed = 1.0f;
-			Delay = 0;
-			Direction = Directions.Right;
+			Distance	= 0;
+			Speed		= 1.0f;
+			Delay		= 0;
+			Direction	= Directions.Right;
 		}
 	}
 

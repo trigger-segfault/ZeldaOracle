@@ -427,7 +427,7 @@ namespace ZeldaOracle.Game.Entities {
 			return false;
 		}
 		
-		private bool IsSafeClippingInDirection(Rectangle2F solidBox, int direction) {
+		public bool IsSafeClippingInDirection(Rectangle2F solidBox, int direction) {
 			return (ClipCollisionInfo[direction].IsAllowedClipping &&
 				RoomPhysics.AreEdgesAligned(solidBox,
 				ClipCollisionInfo[direction].CollisionBox, direction));

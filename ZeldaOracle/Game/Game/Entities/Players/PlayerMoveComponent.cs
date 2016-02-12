@@ -553,16 +553,29 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		private bool TryLedgeJump(int ledgeDirection) {
-			Rectangle2F testBounds = player.Physics.PositionedCollisionBox;
-			testBounds.Point += Directions.ToVector(ledgeDirection) * 1.0f;
+			Rectangle2F entityBox = player.Physics.PositionedCollisionBox;
+			entityBox.Point += Directions.ToVector(ledgeDirection) * 1.0f;
 
 			// Check if there any obstructions in front of the player.
-			foreach (Tile tile in player.RoomControl.TileManager.GetTilesTouching(testBounds)) {
+			foreach (Tile tile in player.RoomControl.TileManager.GetTilesTouching(entityBox)) {
 				if ((!tile.IsLedge || tile.LedgeDirection != ledgeDirection) &&
-					tile.IsSolid && tile.CollisionModel != null && CollisionModel.Intersecting(
-					tile.CollisionModel, tile.Position, testBounds, Vector2F.Zero))
+					tile.IsSolid && tile.CollisionModel != null)
 				{
-					return false;
+					// Check collisions with the tile's collision box.
+					// Account for any safe edge-clipping.
+					foreach (Rectangle2F box in tile.CollisionModel.Boxes) {
+						Rectangle2F solidBox = box;
+						solidBox.Point += tile.Position;
+
+						if (entityBox.Intersects(solidBox) &&
+							!player.Physics.IsSafeClippingInDirection(solidBox, (ledgeDirection + 1) % 4) &&
+							!player.Physics.IsSafeClippingInDirection(solidBox, (ledgeDirection + 2) % 4) &&
+							!player.Physics.IsSafeClippingInDirection(solidBox, (ledgeDirection + 3) % 4) &&
+							!player.Physics.CanDodgeCollision(solidBox, ledgeDirection))
+						{
+							return false;
+						}
+					}
 				}
 			}
 

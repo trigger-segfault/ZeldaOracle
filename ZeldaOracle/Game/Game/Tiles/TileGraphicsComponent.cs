@@ -131,7 +131,8 @@ namespace ZeldaOracle.Game.Tiles {
 				depthLayer = DepthLayer.TileLayer3;
 			
 			// Determine draw position.
-			Vector2F drawPosition = (useAbsoluteDrawPosition ? absoluteDrawPosition : tile.Position);
+			Vector2F drawPosition = (useAbsoluteDrawPosition ?
+				absoluteDrawPosition : tile.Position);
 			drawPosition += (raisedDrawOffset + drawOffset);
 						
 			// Draw the tile's as-object sprite.
