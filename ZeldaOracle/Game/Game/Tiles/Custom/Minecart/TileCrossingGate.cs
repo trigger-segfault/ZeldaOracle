@@ -34,7 +34,6 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public TileCrossingGate() {
-			animationPlayer = new AnimationPlayer();
 		}
 
 
@@ -46,7 +45,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (!IsRaised) {
 				Properties.Set("raised", true);
 				dummySolidTile.IsSolid = false;
-				animationPlayer.Play(GameData.ANIM_TILE_CROSSING_GATE_RAISE);
+				Graphics.PlayAnimation(GameData.ANIM_TILE_CROSSING_GATE_RAISE);
 				AudioSystem.PlaySound(GameData.SOUND_CROSSING_GATE);
 			}
 		}
@@ -55,7 +54,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (IsRaised) {
 				Properties.Set("raised", false);
 				dummySolidTile.IsSolid = true;
-				animationPlayer.Play(GameData.ANIM_TILE_CROSSING_GATE_LOWER);
+				Graphics.PlayAnimation(GameData.ANIM_TILE_CROSSING_GATE_LOWER);
 				AudioSystem.PlaySound(GameData.SOUND_CROSSING_GATE);
 			}
 		}
@@ -67,14 +66,14 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void OnInitialize() {
 			if (IsRaised)
-				animationPlayer.Play(GameData.ANIM_TILE_CROSSING_GATE_RAISE);
+				Graphics.PlayAnimation(GameData.ANIM_TILE_CROSSING_GATE_RAISE);
 			else
-				animationPlayer.Play(GameData.ANIM_TILE_CROSSING_GATE_LOWER);
+				Graphics.PlayAnimation(GameData.ANIM_TILE_CROSSING_GATE_LOWER);
 			
 			bool isFacingLeft = Properties.GetBoolean("face_left", false);
 
-			animationPlayer.PlaybackTime = animationPlayer.Animation.Duration;
-			animationPlayer.SubStripIndex = (isFacingLeft ? 1 : 0);
+			Graphics.AnimationPlayer.SkipToEnd();
+			Graphics.SubStripIndex = (isFacingLeft ? 1 : 0);
 
 			CollisionModel = (isFacingLeft ? GameData.MODEL_EDGE_W : GameData.MODEL_EDGE_E);
 
@@ -91,12 +90,6 @@ namespace ZeldaOracle.Game.Tiles {
 			dummySolidTile.SolidType		= TileSolidType.Solid;
 			dummySolidTile.IsSolid			= !IsRaised;
 			RoomControl.PlaceTile(dummySolidTile, trackLocation, Layer);
-		}
-
-		public override void Update() {
-			base.Update();
-			
-			animationPlayer.Update();
 		}
 
 

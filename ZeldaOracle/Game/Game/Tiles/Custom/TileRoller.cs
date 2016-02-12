@@ -31,8 +31,6 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public TileRoller() {
-			animationPlayer = new AnimationPlayer();
-
 			// TODO: Rollers can't be sword-stabbed, aren't pushable diagonally, and are only solid to the player.
 		}
 
@@ -45,8 +43,8 @@ namespace ZeldaOracle.Game.Tiles {
 			if (((IsVertical && Directions.IsVertical(direction)) || (!IsVertical && Directions.IsHorizontal(direction))) && nextRoller != null)
 				nextRoller.PushRoller(direction);
 
-			animationPlayer.Play(TileData.SpriteList[1].Animation);
-			animationPlayer.SubStripIndex = (direction <= 1 ? 0 : 1);
+			Graphics.PlayAnimation(TileData.SpriteList[1].Animation);
+			Graphics.SubStripIndex = (direction <= 1 ? 0 : 1);
 
 			// Only the main roller should start the pushback.
 			if (firstRoller == this)
@@ -103,8 +101,8 @@ namespace ZeldaOracle.Game.Tiles {
 			pushed = false;
 			pushTimer = 0;
 			
-			animationPlayer.Play(TileData.SpriteList[1].Animation);
-			animationPlayer.PlaybackTime = animationPlayer.Animation.Duration;
+			Graphics.PlayAnimation(TileData.SpriteList[1].Animation);
+			Graphics.AnimationPlayer.SkipToEnd();
 		}
 
 		public override bool OnPush(int direction, float movementSpeed) {
@@ -151,8 +149,6 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void Update() {
 			base.Update();
-
-			animationPlayer.Update();
 
 			if (!IsMoving) {
 				if (!pushed)

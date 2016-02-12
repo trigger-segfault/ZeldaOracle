@@ -24,7 +24,6 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public TileSeedBouncer() {
-			animationPlayer = new AnimationPlayer();
 		}
 
 
@@ -34,11 +33,9 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void OnInitialize() {
 			angle = Properties.GetInteger("angle", 0);
-			animationPlayer.Play(GameData.ANIM_TILE_SEED_BOUNCER);
-			animationPlayer.SubStripIndex = angle;
 
-			//Graphics.PlayAnimation(GameData.ANIM_TILE_SEED_BOUNCER);
-			//Graphics.SubStripIndex = angle;
+			Graphics.PlayAnimation(GameData.ANIM_TILE_SEED_BOUNCER);
+			Graphics.SubStripIndex = angle;
 
 			fallsInHoles = false;
 		}
@@ -65,8 +62,7 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return angle; }
 			set {
 				angle = value;
-				animationPlayer.SubStripIndex = angle;
-				//Graphics.SubStripIndex = angle;
+				Graphics.SubStripIndex = angle;
 			}
 		}
 	}

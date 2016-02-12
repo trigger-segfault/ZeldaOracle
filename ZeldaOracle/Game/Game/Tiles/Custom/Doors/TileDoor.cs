@@ -27,7 +27,6 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public TileDoor() {
-			animationPlayer	= new AnimationPlayer();
 			animationOpen	= GameData.ANIM_TILE_DOOR_OPEN;
 			animationClose	= GameData.ANIM_TILE_DOOR_CLOSE;
 			openCloseSound	= GameData.SOUND_DUNGEON_DOOR;
@@ -49,7 +48,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public void Open(bool instantaneous = false, bool rememberState = false) {
 			if (!isOpen) {
 				isOpen = true;
-				animationPlayer.Play(animationOpen);
+				Graphics.PlayAnimation(animationOpen);
 				IsSolid = false;
 				if (!instantaneous && openCloseSound != null)
 					AudioSystem.PlaySound(GameData.SOUND_DUNGEON_DOOR);
@@ -60,7 +59,7 @@ namespace ZeldaOracle.Game.Tiles {
 			Properties.Set("open", true);
 			
 			if (instantaneous)
-				animationPlayer.PlaybackTime = animationPlayer.Animation.Duration;
+				Graphics.AnimationPlayer.SkipToEnd();
 		}
 
 		// Close the door.
@@ -80,7 +79,7 @@ namespace ZeldaOracle.Game.Tiles {
 					}
 
 					isOpen = false;
-					animationPlayer.Play(animationClose);
+					Graphics.PlayAnimation(animationClose);
 					IsSolid = true;
 					if (!instantaneous && openCloseSound != null)
 						AudioSystem.PlaySound(GameData.SOUND_DUNGEON_DOOR);
@@ -90,7 +89,7 @@ namespace ZeldaOracle.Game.Tiles {
 			Properties.Set("open", false);
 			
 			if (instantaneous)
-				animationPlayer.PlaybackTime = animationPlayer.Animation.Duration;
+				Graphics.AnimationPlayer.SkipToEnd();
 		}
 
 		// Find a door that's connected to this one in an adjacent room.
@@ -147,18 +146,17 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 
 			if (isOpen) {
-				animationPlayer.Play(animationOpen);
+				Graphics.PlayAnimation(animationOpen);
 				IsSolid = false;
 			}
 			else {
-				animationPlayer.Play(animationClose);
+				Graphics.PlayAnimation(animationClose);
 				IsSolid = true;
 			}
 
 			// Fast-forward the animation to the end.
-			animationPlayer.PlaybackTime = animationPlayer.Animation.Duration;
-			
-			animationPlayer.SubStripIndex = Properties.GetInteger("direction", 0);
+			Graphics.AnimationPlayer.SkipToEnd();
+			Graphics.SubStripIndex = Properties.GetInteger("direction", 0);
 		}
 
 		public override void Update() {
@@ -172,8 +170,6 @@ namespace ZeldaOracle.Game.Tiles {
 				isPlayerBlockingClose = false;
 				player.MarkRespawn();
 			}
-
-			animationPlayer.Update();
 		}
 
 

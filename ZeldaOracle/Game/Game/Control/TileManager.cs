@@ -370,33 +370,6 @@ namespace ZeldaOracle.Game.Control {
 				if (t.IsAlive)
 					UpdateTileGridArea(t);
 			}
-			/*
-			foreach (Tile t in GetTiles())
-				t.IsUpdated = false;
-			for (int i = 0; i < layerCount; i++) {
-				for (int y = 0; y < GridHeight; y++) {
-					for (int x = 0; x < GridWidth; x++) {
-						Tile t = tiles[x, y, i];
-
-						if (t != null && IsTileAtGridLocation(t, x, y) && !t.IsUpdated) {
-							Point2I prevLocation = t.Location;
-							Vector2F prevOffset = t.Offset;
-
-							t.IsUpdated = true;
-							if (GameControl.UpdateRoom)
-								t.Update();
-							if (GameControl.AnimateRoom)
-								t.UpdateGraphics();
-
-							t.PreviousLocation = prevLocation;
-							t.PreviousOffset = prevOffset;
-							
-							if (t.IsAlive)
-								UpdateTileGridArea(t);
-						}
-					}
-				}
-			}*/
 		}
 		
 		// Draw all tiles in the grid.

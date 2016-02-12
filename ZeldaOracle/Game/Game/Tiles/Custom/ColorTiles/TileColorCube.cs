@@ -40,7 +40,6 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public TileColorCube() {
-			animationPlayer = new AnimationPlayer();
 			soundMove = GameData.SOUND_SWITCH;
 		}
 
@@ -64,7 +63,7 @@ namespace ZeldaOracle.Game.Tiles {
 					SpriteIndex = GMath.Wrap(spriteIndex + 1, 6);
 
 				// Play the corresponding animation.
-				animationPlayer.Play(GameData.ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS[oldSpriteIndex, direction]);
+				Graphics.PlayAnimation(GameData.ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS[oldSpriteIndex, direction]);
 
 				return true;
 			}
@@ -73,31 +72,6 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void OnInitialize() {
 			
-		}
-
-		public override void Update() {
-			base.Update();
-
-			if (IsMoving) {
-				animationPlayer.Update();
-			}
-		}
-
-		public override void Draw(RoomGraphics g) {
-
-			SpriteAnimation sprite = (!CustomSprite.IsNull ? CustomSprite : CurrentSprite);
-			if (IsMoving) {
-				g.DrawAnimation(animationPlayer, (Location - offset) * GameSettings.TILE_SIZE, DepthLayer.TileLayer1);
-			}
-			else if (sprite.IsAnimation) {
-				// Draw as an animation.
-				g.DrawAnimation(sprite.Animation, Zone.ImageVariantID,
-					RoomControl.GameControl.RoomTicks, Position, DepthLayer.TileLayer1);
-			}
-			else if (sprite.IsSprite) {
-				// Draw as a sprite.
-				g.DrawSprite(sprite.Sprite, Zone.ImageVariantID, Position, DepthLayer.TileLayer1);
-			}
 		}
 
 

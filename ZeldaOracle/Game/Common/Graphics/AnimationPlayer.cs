@@ -69,6 +69,11 @@ namespace ZeldaOracle.Common.Graphics {
 			Pause(false);
 		}
 
+		public void SkipToEnd() {
+			if (animation != null)
+				timer = animation.Duration;
+		}
+
 		// Update the animation over the elapsed frames.
 		public void Update() {
 			if (isPlaying && subStrip != null) {

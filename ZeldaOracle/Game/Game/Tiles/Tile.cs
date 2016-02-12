@@ -47,7 +47,6 @@ namespace ZeldaOracle.Game.Tiles {
 		private Point2I				previousLocation;
 		private Tile				surfaceTile;
 
-		protected AnimationPlayer	animationPlayer;
 		private bool				hasMoved;
 		protected TilePath			path;				// The path the tile is currently following.
 		private int					pathTimer;
@@ -98,7 +97,6 @@ namespace ZeldaOracle.Game.Tiles {
 			tileData			= null;
 			moveDirection		= Point2I.Zero; 
 			dropList			= null;
-			animationPlayer		= null;
 			hasMoved			= false;
 			path				= null;
 			pathTimer			= 0;
@@ -108,8 +106,7 @@ namespace ZeldaOracle.Game.Tiles {
 			conveyorVelocity	= Vector2F.Zero;
 			surfaceTile			= null;
 			collisionStyle		= CollisionStyle.Rectangular;
-
-			graphics = new TileGraphicsComponent(this);
+			graphics			= new TileGraphicsComponent(this);
 		}
 
 
@@ -455,9 +452,6 @@ namespace ZeldaOracle.Game.Tiles {
 			UpdateMovement();
 			if (!isMoving)
 				CheckSurfaceTile();
-			
-			// Update graphics.
-			graphics.Update();
 
 			// Check if hurting the player.
 			if (HasFlag(TileFlags.HurtPlayer) && roomControl.Player.IsOnGround) {
@@ -562,31 +556,11 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public virtual void UpdateGraphics() {
-
+			graphics.Update();
 		}
 
 		public virtual void Draw(RoomGraphics g) {
 			graphics.Draw(g);
-			/*
-			SpriteAnimation sprite = (!customSprite.IsNull ? customSprite : CurrentSprite);
-			if (isMoving && !spriteAsObject.IsNull)
-				sprite = spriteAsObject;
-
-			Vector2F drawPosition = Position + raisedDrawOffset;
-
-			if (animationPlayer != null) {
-				g.DrawAnimation(animationPlayer.SubStrip, Zone.ImageVariantID,
-					animationPlayer.PlaybackTime, drawPosition);
-			}
-			else if (sprite.IsAnimation) {
-				// Draw as an animation.
-				g.DrawAnimation(sprite.Animation, Zone.ImageVariantID,
-					RoomControl.GameControl.RoomTicks, drawPosition);
-			}
-			else if (sprite.IsSprite) {
-				// Draw as a sprite.
-				g.DrawSprite(sprite.Sprite, Zone.ImageVariantID, drawPosition);
-			}*/
 		}
 
 
@@ -906,10 +880,6 @@ namespace ZeldaOracle.Game.Tiles {
 		public bool IsAlive {
 			get { return isAlive; }
 			set { isAlive = value; }
-		}
-
-		public AnimationPlayer AnimationPlayer {
-			get { return animationPlayer; }
 		}
 
 		public TileEnvironmentType EnvironmentType {

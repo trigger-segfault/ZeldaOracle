@@ -21,7 +21,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public TileColorBarrier() {
-			animationPlayer = new AnimationPlayer();
+			Graphics.IsAnimatedWhenPaused = true;
 		}
 
 
@@ -34,9 +34,9 @@ namespace ZeldaOracle.Game.Tiles {
 				isRaised	= true;
 				IsSolid		= true;
 				if (color == PuzzleColor.Blue)
-					animationPlayer.Play(GameData.ANIM_TILE_COLOR_BARRIER_BLUE_RAISE);
+					Graphics.PlayAnimation(GameData.ANIM_TILE_COLOR_BARRIER_BLUE_RAISE);
 				else
-					animationPlayer.Play(GameData.ANIM_TILE_COLOR_BARRIER_RED_RAISE);
+					Graphics.PlayAnimation(GameData.ANIM_TILE_COLOR_BARRIER_RED_RAISE);
 
 				// Break any blocks on top of this tile.
 				foreach (Tile tile in RoomControl.TileManager.GetTilesAtLocation(Location)) {
@@ -51,9 +51,9 @@ namespace ZeldaOracle.Game.Tiles {
 				isRaised	= false;
 				IsSolid		= false;
 				if (color == PuzzleColor.Blue)
-					animationPlayer.Play(GameData.ANIM_TILE_COLOR_BARRIER_BLUE_LOWER);
+					Graphics.PlayAnimation(GameData.ANIM_TILE_COLOR_BARRIER_BLUE_LOWER);
 				else
-					animationPlayer.Play(GameData.ANIM_TILE_COLOR_BARRIER_RED_LOWER);
+					Graphics.PlayAnimation(GameData.ANIM_TILE_COLOR_BARRIER_RED_LOWER);
 			}
 		}
 
@@ -75,23 +75,18 @@ namespace ZeldaOracle.Game.Tiles {
 			// Set the sprite.
 			if (isRaised) {
 				if (color == PuzzleColor.Blue)
-					animationPlayer.Play(GameData.ANIM_TILE_COLOR_BARRIER_BLUE_RAISE);
+					Graphics.PlayAnimation(GameData.ANIM_TILE_COLOR_BARRIER_BLUE_RAISE);
 				else
-					animationPlayer.Play(GameData.ANIM_TILE_COLOR_BARRIER_RED_RAISE);
+					Graphics.PlayAnimation(GameData.ANIM_TILE_COLOR_BARRIER_RED_RAISE);
 			}
 			else {
 				if (color == PuzzleColor.Blue)
-					animationPlayer.Play(GameData.ANIM_TILE_COLOR_BARRIER_BLUE_LOWER);
+					Graphics.PlayAnimation(GameData.ANIM_TILE_COLOR_BARRIER_BLUE_LOWER);
 				else
-					animationPlayer.Play(GameData.ANIM_TILE_COLOR_BARRIER_RED_LOWER);
+					Graphics.PlayAnimation(GameData.ANIM_TILE_COLOR_BARRIER_RED_LOWER);
 			}
 
-			animationPlayer.PlaybackTime = animationPlayer.Animation.Duration;
-		}
-
-		public override void UpdateGraphics() {
-			animationPlayer.Update();
-			base.UpdateGraphics();
+			Graphics.AnimationPlayer.SkipToEnd();
 		}
 
 
