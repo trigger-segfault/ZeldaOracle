@@ -110,7 +110,6 @@ namespace ZeldaOracle.Game.Entities {
 			for (int i = 0; i < Directions.Count; i++)
 				collisionInfo[i].Clear();
 
-			this.IsFirstFrame = true;
 			this.MovementCollisions = new bool[4];
 			this.ClipCollisionInfo = new CollisionInfoNew[4];
 			for (int i = 0; i < 4; i++)
@@ -466,7 +465,6 @@ namespace ZeldaOracle.Game.Entities {
 			get { return isEnabled; }
 			set {
 				isEnabled = value;
-				IsFirstFrame = true;
 				if (!isEnabled) {
 					// Clear the collision state.
 					for (int i = 0; i < Directions.Count; i++) {
@@ -773,7 +771,6 @@ namespace ZeldaOracle.Game.Entities {
 			set { hasLanded = value; }
 		}
 		
-		public bool IsFirstFrame { get; set; }
 		public bool[] MovementCollisions { get; set; }
 		public CollisionInfoNew[] ClipCollisionInfo { get; set; }
 		public bool IsDeadlocked { get; set; }

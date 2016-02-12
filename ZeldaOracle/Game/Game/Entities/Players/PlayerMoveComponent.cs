@@ -669,5 +669,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 					player.Graphics.DrawOffset -= new Point2I(0, 3);
 			}
 		}
+
+		public bool IsDoomedToFallInHole {
+			get { return (fallingInHole && doomedToFallInHole); }
+		}
 	}
 }

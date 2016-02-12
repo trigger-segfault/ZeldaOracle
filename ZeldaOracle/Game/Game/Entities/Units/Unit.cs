@@ -160,7 +160,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			Die();
 		}
 
-		public void Knockback(int duration, float speed, Vector2F sourcePosition) {
+		public virtual void Knockback(int duration, float speed, Vector2F sourcePosition) {
 			if (isKnockbackable) {
 				knockbackDuration	= duration;
 				knockbackTimer		= duration;

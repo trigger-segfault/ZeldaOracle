@@ -44,7 +44,7 @@ TILE poison_bubble;
 	ENVTYPE		Ocean;
 	SOLID		block;
 	SPRITE		tile_poison_bubble;
-	HURT		1, (4, -1, 13, 18);
+	HURT		1, (-1, -1, 18, 18);
 END;
 
 # WATERFALL TILES

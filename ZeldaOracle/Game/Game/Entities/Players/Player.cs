@@ -536,8 +536,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 			eventLand = null;
 		}
 
-		public override void Die() {
-			// Don't actually die.
+		public override void Knockback(int duration, float speed, Vector2F sourcePosition) {
+			// Don't apply knockback when doomed to fall in a hole.
+			if (!movement.IsDoomedToFallInHole)
+				base.Knockback(duration, speed, sourcePosition);
+		}
+
+		public override void OnHurt(DamageInfo damage) {
+			base.OnHurt(damage);
+			AudioSystem.PlaySound(GameData.SOUND_PLAYER_HURT);
+			state.OnHurt(damage);
 		}
 
 		public override void OnCrush(bool horizontal) {
@@ -547,6 +555,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 				Graphics.PlayAnimation(GameData.ANIM_PLAYER_CRUSH_HORIZONTAL);
 			else
 				Graphics.PlayAnimation(GameData.ANIM_PLAYER_CRUSH_VERTICAL);
+		}
+
+		public override void Die() {
+			// Don't actually die.
 		}
 
 		public override void OnLand() {
@@ -563,12 +575,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			Physics.Gravity = GameSettings.DEFAULT_GRAVITY;
 			AudioSystem.PlaySound(GameData.SOUND_PLAYER_LAND);
-		}
-
-		public override void OnHurt(DamageInfo damage) {
-			base.OnHurt(damage);
-			AudioSystem.PlaySound(GameData.SOUND_PLAYER_HURT);
-			state.OnHurt(damage);
 		}
 
 		public override void UpdateGraphics() {

@@ -35,7 +35,6 @@ namespace ZeldaOracle.Game.Control {
 				Entity entity = roomControl.Entities[i];
 				if (entity.Physics != null && entity.Physics.IsEnabled) {
 					ProcessEntityPhysics(entity);
-					entity.Physics.IsFirstFrame = false;
 				}
 			}
 		}
@@ -978,10 +977,7 @@ namespace ZeldaOracle.Game.Control {
 			}
 			
 			// Check if surface tile is a hazardous (water/lava/hole).
-			// This is only supposed to be checked upon landing or bouncing,
-			// but it also is checked when the entity's physics are first updated.
-			if (entity.Physics.IsFirstFrame)
-				CheckHazardSurface(entity);
+			CheckHazardSurface(entity);
 		}
 		
 		// Check if the entity is sitting on a hazardous surface (water/lava/hole).
