@@ -36,7 +36,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 
 			float playbackTime = Graphics.AnimationPlayer.PlaybackTime;
 
-			if (playbackTime > 10) {
+			if (playbackTime > 10) { // TODO: magic number
 				// Collide with Monsters.
 				foreach (Monster monster in Physics.GetEntitiesMeeting<Monster>(CollisionBoxType.Soft, -1)) {
 					if (!monster.IsPassable) {

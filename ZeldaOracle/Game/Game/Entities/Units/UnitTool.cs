@@ -146,7 +146,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 		}
 		
 		public void RemoveAnimation() {
-			animationPlayer.Animation = null;
+			animationPlayer.Clear();
 		}
 
 

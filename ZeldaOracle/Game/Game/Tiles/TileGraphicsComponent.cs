@@ -52,7 +52,7 @@ namespace ZeldaOracle.Game.Tiles {
 			else if (spriteAnimation.IsAnimation)
 				PlayAnimation(spriteAnimation.Animation);
 			else
-				animationPlayer.Animation = null;
+				animationPlayer.Clear();
 		}
 		
 		public void PlaySprite(Sprite sprite) {

@@ -142,7 +142,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// Charge up the sword.
 			chargeTimer++;
 			if (chargeTimer == ChargeTime) {
-				player.ToolSword.AnimationPlayer.Animation = GameData.ANIM_SWORD_CHARGED;
+				player.ToolSword.AnimationPlayer.SetAnimation(GameData.ANIM_SWORD_CHARGED);
 				AudioSystem.PlaySound(GameData.SOUND_SWORD_CHARGE);
 			}
 

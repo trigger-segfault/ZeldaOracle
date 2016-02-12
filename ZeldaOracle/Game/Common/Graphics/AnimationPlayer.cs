@@ -8,6 +8,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 	// TODO: Handle playing sprites.
 	public class AnimationPlayer {
+		private Sprite		sprite;			// The sprite to play.
 		private Animation	animation;		// The animation to play.
 		private Animation	subStrip;		// The actual sub-animation-strip that's playing.
 		private int			subStripIndex;	// The index of the sub-animation-strip.
@@ -21,6 +22,7 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 		
 		public AnimationPlayer() {
+			sprite			= null;
 			animation		= null;
 			subStrip		= null;
 			subStripIndex	= 0;
@@ -34,29 +36,71 @@ namespace ZeldaOracle.Common.Graphics {
 		// Playback
 		//-----------------------------------------------------------------------------
 		
+		public void SetAnimation(Animation animation) {
+			if (this.animation == animation)
+				return;
+
+			this.animation	= animation;
+			this.subStrip	= GetSubStrip(subStripIndex);
+			this.sprite		= null;
+
+			if (animation != null) {
+				if (subStrip.LoopMode == LoopMode.Clamp && timer > subStrip.Duration) {
+					timer = subStrip.Duration;
+				}
+				else if (subStrip.LoopMode == LoopMode.Reset && timer >= subStrip.Duration) {
+					timer		= 0.0f;
+					isPlaying	= false;
+				}
+				else if (subStrip.LoopMode == LoopMode.Repeat && timer >= subStrip.Duration) {
+					if (subStrip.Duration > 0)
+						timer %= subStrip.Duration;
+					else
+						timer = 0.0f;
+				}
+			}
+			else {
+				timer		= 0.0f;
+				isPlaying	= false;
+			}
+		}
+
+		public void SetSprite(Sprite sprite) {
+			this.sprite		= sprite;
+			this.animation	= null;
+			this.subStrip	= null;
+			this.timer		= 0.0f;
+			// TODO: this.isPlaying = false; ??
+		}
+		
+		// Play the given sprite as a repeated animation with no duration.
+		public void Play(Sprite sprite) {
+			this.sprite		= sprite;
+			this.animation	= null;
+			this.subStrip	= null;
+			this.isPlaying	= true;
+			this.timer		= 0.0f;
+		}
+		
+		// Play the given animation strip from the beginning.
+		public void Play(Animation animation) {
+			this.animation	= animation;
+			this.sprite		= null;
+			this.subStrip	= GetSubStrip(subStripIndex);
+			this.isPlaying	= true;
+			this.timer		= 0.0f;
+		}
+
 		// Play the animation from the beginning.
 		public void Play() {
 			isPlaying	= true;
 			timer		= 0.0f;
 		}
 		
-		// Play the given animation strip from the beginning.
-		public void Play(Animation animation) {
-			this.animation = animation;
-			subStrip	= GetSubStrip(subStripIndex);
-			isPlaying	= true;
-			timer		= 0.0f;
-		}
-		
 		// Stop the animation and rewind it to the beginning.
 		public void Stop() {
-			isPlaying = false;
-			timer = 0.0f;
-		}
-
-		// Pause (true) or unpause (false) the animation's playback.
-		public void Pause(bool isPaused) {
-			isPlaying = !isPaused;
+			isPlaying	= false;
+			timer		= 0.0f;
 		}
 
 		// Pause the animation's playback.
@@ -69,9 +113,26 @@ namespace ZeldaOracle.Common.Graphics {
 			Pause(false);
 		}
 
+		// Pause (true) or unpause (false) the animation's playback.
+		public void Pause(bool isPaused) {
+			isPlaying = !isPaused;
+		}
+
+		// Fast-forward the playback time to the end of the animation.
 		public void SkipToEnd() {
 			if (animation != null)
 				timer = animation.Duration;
+			else if (sprite != null)
+				timer = 0.0f;
+		}
+
+		// Stop playing and clear (nullify) the current animation and sprite.
+		public void Clear() {
+			sprite		= null;
+			animation	= null;
+			subStrip	= null;
+			isPlaying	= false;
+			timer		= 0.0f;
 		}
 
 		// Update the animation over the elapsed frames.
@@ -102,13 +163,15 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 
 		private Animation GetSubStrip(int index) {
+			if (animation == null)
+				return null;
+
 			Animation subStrip = animation;
 			int i;
 			for (i = 0; subStrip != null && i < index; i++)
 				subStrip = subStrip.NextStrip;
-
 			if (i != index || subStrip == null)
-				return animation; // The index doesn't exist.
+				return animation; // The index doesn't exist, return the base animation.
 			return subStrip;
 		}
 
@@ -132,11 +195,6 @@ namespace ZeldaOracle.Common.Graphics {
 				return (timer >= subStrip.Duration);
 			}
 		}
-
-		// Get the sub-strip that's currently active.
-		public Animation SubStrip {
-			get { return subStrip; }
-		}
 		
 		// Get or set the playback speed (default is 1).
 		public float Speed {
@@ -147,41 +205,12 @@ namespace ZeldaOracle.Common.Graphics {
 		// Get or set the animation playback time.
 		public float PlaybackTime {
 			get { return timer; }
-			set {
-				timer = value;
-			}
+			set { timer = value; }
 		}
-		
-		// Get or set the current animation strip.
-		public Animation Animation {
-			get { return animation; }
-			set {
-				if (animation != value) {
-					animation = value;
 
-					if (animation == null) {
-						subStrip = null;
-						timer = 0.0f;
-					}
-					else {
-						subStrip = GetSubStrip(subStripIndex);
-
-						if (subStrip.LoopMode == LoopMode.Clamp && timer > subStrip.Duration) {
-							timer = subStrip.Duration;
-						}
-						if (subStrip.LoopMode == LoopMode.Reset && timer >= subStrip.Duration) {
-							timer = 0;
-							isPlaying = false;
-						}
-						else if (subStrip.LoopMode == LoopMode.Repeat && timer >= subStrip.Duration) {
-							if (subStrip.Duration > 0)
-								timer %= subStrip.Duration;
-							else
-								timer = 0.0f;
-						}
-					}
-				}
-			}
+		// Get the sub-strip that's currently active.
+		public Animation SubStrip {
+			get { return subStrip; }
 		}
 
 		// Gets or sets the sub-strip index of the animation to play.
@@ -193,6 +222,12 @@ namespace ZeldaOracle.Common.Graphics {
 					subStrip = GetSubStrip(value);
 				}
 			}
+		}
+		
+		// Get or set the current animation strip.
+		public Animation Animation {
+			get { return animation; }
+			set { SetAnimation(value); }
 		}
 	}
 }

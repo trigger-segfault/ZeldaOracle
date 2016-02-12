@@ -123,7 +123,7 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 
 			turnstileAnimationPlayer.Play(GameData.ANIM_TURNSTILE_ROTATE_CLOCKWISE);
-			turnstileAnimationPlayer.PlaybackTime = turnstileAnimationPlayer.Animation.Duration;
+			turnstileAnimationPlayer.SkipToEnd();
 		}
 
 		public override void Update() {

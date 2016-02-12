@@ -88,7 +88,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 				
 				Graphics.StopAnimation();
 				if (grabbing)
-					Graphics.AnimationPlayer.PlaybackTime = 4;
+					Graphics.AnimationPlayer.PlaybackTime = 4; // TODO: magic number
 			}
 		}
 
