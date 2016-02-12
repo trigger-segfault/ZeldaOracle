@@ -12,6 +12,7 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		private Tile			tile;						// The tile this component belongs to.
 		private AnimationPlayer	animationPlayer;
+
 		private	bool			isVisible;
 		private DepthLayer		depthLayer;
 		private int				imageVariant;

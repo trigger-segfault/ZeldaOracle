@@ -12,12 +12,14 @@ namespace ZeldaOracle.Game.Entities
 {
 	public class GraphicsComponent {
 		
-		private	Point2I			drawOffset;
 		private Entity			entity;				// The entity this component belongs to.
 		private AnimationPlayer	animationPlayer;
+
+		private	bool			isVisible;
 		private DepthLayer		depthLayer;
 		private DepthLayer		depthLayerInAir;
-		private	bool			isVisible;
+		private int				imageVariant;
+		private	Point2I			drawOffset;
 		private bool			isGrassEffectVisible;
 		private bool			isRipplesEffectVisible;
 		private bool			isShadowVisible;
@@ -31,7 +33,6 @@ namespace ZeldaOracle.Game.Entities
 		private bool			flickerIsVisible;
 		private bool			isAnimatedWhenPaused;
 		private bool			isHurting;
-		private int				imageVariant;
 
 
 		//-----------------------------------------------------------------------------
@@ -120,7 +121,7 @@ namespace ZeldaOracle.Game.Entities
 		//-----------------------------------------------------------------------------
 		
 		public void Update() {
-			if ((entity.GameControl.UpdateRoom || isAnimatedWhenPaused) && entity.GameControl.AnimateRoom) {
+			if (entity.GameControl.AnimateRoom && (entity.GameControl.UpdateRoom || isAnimatedWhenPaused)) {
 				// Update the animation player.
 				animationPlayer.Update();
 
