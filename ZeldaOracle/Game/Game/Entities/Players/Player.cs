@@ -116,20 +116,21 @@ namespace ZeldaOracle.Game.Entities.Players {
 			bumpKnockbackDuration	= GameSettings.PLAYER_BUMP_KNOCKBACK_DURATION;
 
 			// Physics.
-			Physics.CollisionBox		= new Rectangle2F(-4, -10 + 3, 8, 9);
-			Physics.SoftCollisionBox	= new Rectangle2F(-6, -14 + 3, 12, 13);
-			Physics.CollideWithWorld	= true;
-			Physics.CollideWithEntities	= true;
-			Physics.CollideWithRoomEdge	= true;
+			Physics.CollisionBox			= new Rectangle2F(-4, -10 + 3, 8, 9);
+			Physics.SoftCollisionBox		= new Rectangle2F(-6, -14 + 3, 12, 13);
+			Physics.CollideWithWorld		= true;
+			Physics.CollideWithEntities		= true;
+			Physics.CollideWithRoomEdge		= true;
+			Physics.CheckRadialCollisions	= true;
 			Physics.RoomEdgeCollisionBoxType = CollisionBoxType.Soft;
-			Physics.HasGravity			= true;
-			Physics.AutoDodges			= true;
-			Physics.MovesWithConveyors	= true;
-			Physics.MovesWithPlatforms	= true;
-			Physics.AllowEdgeClipping	= true;
-			Physics.IsCrushable			= true;
-			Physics.EdgeClipAmount		= 1;
-			Physics.CrushMaxGapSize		= 4;
+			Physics.HasGravity				= true;
+			Physics.AutoDodges				= true;
+			Physics.MovesWithConveyors		= true;
+			Physics.MovesWithPlatforms		= true;
+			Physics.AllowEdgeClipping		= true;
+			Physics.IsCrushable				= true;
+			Physics.EdgeClipAmount			= 1;
+			Physics.CrushMaxGapSize			= 4;
 			Physics.CustomTileCollisionCondition = delegate(Tile tile) {
 				if (movement.IsOnColorBarrier && (tile is TileColorBarrier)) {
 					return false;
@@ -204,7 +205,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public PlayerState GetDesiredNaturalState() {
 			if (physics.IsInWater || physics.IsInOcean || physics.IsInLava)
 				return stateSwim;
-			else if (physics.IsOnLadder)
+			else if (physics.IsOnLadder && !RoomControl.IsSideScrolling) // Ladders behave differently in side-scrolling mode.
 				return stateLadder;
 			else
 				return stateNormal;
@@ -559,6 +560,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public override void Die() {
 			// Don't actually die.
+		}
+
+		public override void OnBeginFalling() {
+			base.OnBeginFalling();
+
+			if (RoomControl.IsSideScrolling) {
+				if (state is PlayerNormalState)
+					Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
+			}
 		}
 
 		public override void OnLand() {

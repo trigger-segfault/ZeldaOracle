@@ -13,8 +13,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		protected Room				room;
 		protected BaseTileData		tileData;
-		protected Properties		properties;
-		protected Properties		modifiedProperties;
+		protected Properties		properties;			// The default properties for the tile.
+		protected Properties		modifiedProperties;	// The properties that tiles are spawned with.
 		
 
 		//-----------------------------------------------------------------------------
@@ -55,6 +55,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public void ResetState() {
 			// Copy the properties into the modified properties.
 			modifiedProperties.Clone(properties);
+		}
+
+		public void OverrideDefaultState() {
+			// Copy the modified properties back into the default properties.
+			properties.Clone(modifiedProperties);
 		}
 
 

@@ -236,7 +236,9 @@ namespace ZeldaEditor.Control {
 			if (IsWorldOpen) {
 				WorldFile saveFile = new WorldFile();
 				saveFile.Save(fileName, world);
-				hasMadeChanges = false;
+				hasMadeChanges	= false;
+				worldFilePath	= fileName;
+				worldFileName	= Path.GetFileName(fileName);
 			}
 		}
 
@@ -250,10 +252,10 @@ namespace ZeldaEditor.Control {
 			if (loadedWorld != null) {
 				CloseFile();
 
-				hasMadeChanges = false;
-				worldFilePath = fileName;
-				worldFileName = Path.GetFileName(fileName);
-				needsRecompiling = true;
+				hasMadeChanges		= false;
+				worldFilePath		= fileName;
+				worldFileName		= Path.GetFileName(fileName);
+				needsRecompiling	= true;
 
 				world = loadedWorld;
 				if (world.Levels.Count > 0)

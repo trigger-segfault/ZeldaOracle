@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Control;
+using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
 
@@ -28,7 +29,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		private bool CanLandAtPosition(Vector2F position) {
 			foreach (Tile tile in player.Physics.GetTilesMeeting(position, CollisionBoxType.Hard)) {
-				if (tile.IsSolid && !(tile is TileColorBarrier) && !tile.IsBreakable) {
+				if (tile.IsSolid && tile.CollisionStyle == CollisionStyle.Rectangular && !(tile is TileColorBarrier) && !tile.IsBreakable) {
 					return false;
 				}
 			}

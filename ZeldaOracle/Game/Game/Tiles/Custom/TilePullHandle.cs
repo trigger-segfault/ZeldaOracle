@@ -15,7 +15,7 @@ using ZeldaOracle.Game.Items.Weapons;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TilePullHandle : Tile {
+	public class TilePullHandle : Tile, ZeldaAPI.PullHandle {
 
 		private float extendLength;
 		private float maxExtendLength;
@@ -37,22 +37,33 @@ namespace ZeldaOracle.Game.Tiles {
 
 		
 		//-----------------------------------------------------------------------------
-		// Pull Handle Methods
+		// Handle Extend/Retract
 		//-----------------------------------------------------------------------------
 
 		public void Extend(float amount) {
+			bool wasFullyExtended = IsFullyExtended;
 			SetLength(extendLength + amount);
+			if (!wasFullyExtended && IsFullyExtended)
+				GameControl.FireEvent(this, "event_fully_extend", this);
 		}
 
 		public void Retract(float amount) {
+			bool wasFullyRetracted = IsFullyRetracted;
 			SetLength(extendLength - amount);
+			if (!wasFullyRetracted && IsFullyRetracted)
+				GameControl.FireEvent(this, "event_fully_retract", this);
 		}
 
-		public void SetLength(float length) {
+		private void SetLength(float length) {
 			extendLength = GMath.Clamp(length, 0.0f, maxExtendLength);
 			Offset = Directions.ToVector(direction) *
 				(extendLength + GameSettings.TILE_PULL_HANDLE_WALL_OFFSET);
 		}
+
+		
+		//-----------------------------------------------------------------------------
+		// Player Interaction
+		//-----------------------------------------------------------------------------
 
 		public void EndPull() {
 			isBeingPulled = false;

@@ -64,6 +64,9 @@ namespace ZeldaOracle.Game.Debug {
 		
 		public static void UpdateRoomDebugKeys() {
 
+			if (Keyboard.IsKeyPressed(Keys.P))
+				RoomControl.IsSideScrolling = !RoomControl.IsSideScrolling;
+
 			// C: Change color barrier color.
 			if (Keyboard.IsKeyPressed(Keys.C)) {
 				if (RoomControl.Dungeon != null) {
@@ -443,10 +446,17 @@ namespace ZeldaOracle.Game.Debug {
 
 					for (int i = 0; i < 4; i++) {
 						CollisionInfoNew collisionInfo = entity.Physics.ClipCollisionInfo[i];
+						int axis = Directions.ToAxis(i);
+
+						if (entity.Physics.CollisionInfo[i].IsColliding) {
+							Rectangle2F drawBox = collisionBox;
+							drawBox.ExtendEdge(i, 1);
+							drawBox.ExtendEdge(Directions.Reverse(i), -collisionBox.Size[axis]);
+							g.FillRectangle(drawBox, Color.Magenta);
+						}
 
 						if (collisionInfo.IsColliding && !collisionInfo.IsResolved) {
 							Rectangle2F drawBox = collisionBox;
-							int axis = Directions.ToAxis(i);
 							float penetration = Math.Max(1.0f, GMath.Round(collisionInfo.PenetrationDistance));
 							if (i == Directions.Down || i == Directions.Right)
 								drawBox.Point[axis] += drawBox.Size[axis] - penetration;
@@ -457,6 +467,13 @@ namespace ZeldaOracle.Game.Debug {
 							if (entity.Physics.AllowEdgeClipping && collisionInfo.IsAllowedClipping)
 								penetrationColor = Color.Blue;
 							g.FillRectangle(drawBox, penetrationColor);
+
+						}
+						if (collisionInfo.IsColliding && collisionInfo.IsResolved) {
+							Rectangle2F drawBox2 = collisionBox;
+							drawBox2.ExtendEdge(i, 2);
+							drawBox2.ExtendEdge(Directions.Reverse(i), -collisionBox.Size[axis] - 1);
+							g.FillRectangle(drawBox2, Color.Maroon);
 						}
 					}
 				}

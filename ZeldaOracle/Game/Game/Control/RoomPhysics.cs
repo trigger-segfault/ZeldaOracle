@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Control {
@@ -41,10 +42,14 @@ namespace ZeldaOracle.Game.Control {
 		
 		// Process physics for a single entity.
 		public void ProcessEntityPhysics(Entity entity) {
-			// Initialize the collision state for this frame.
-			InitPhysicsState(entity);
+			bool startedOnGround = entity.IsOnGround;
+
 			// Update Z dynamics
 			UpdateEntityZPosition(entity);
+			
+			// Initialize the collision state for this frame.
+			InitPhysicsState(entity);
+
 			// Check the surface tile beneath the entity.
 			CheckSurfaceTile(entity);
 			// Resolve collisions with solid objects.
@@ -63,6 +68,14 @@ namespace ZeldaOracle.Game.Control {
 					newVelocity[axis] = entity.Physics.Velocity[axis];
 			}
 			entity.Physics.Velocity = newVelocity;
+			
+			// Check for landing and falling in side-scrolling mode.
+			if (IsSideScrolling) {
+				if (!startedOnGround && entity.IsOnGround && entity.Physics.HasGravity)
+					LandEntity(entity);
+				if (startedOnGround && !entity.IsOnGround && entity.Physics.HasGravity)
+					entity.OnBeginFalling();
+			}
 
 			// Change velocity if rebounded.
 			CheckRebound(entity);
@@ -86,6 +99,7 @@ namespace ZeldaOracle.Game.Control {
 			entity.Physics.IsColliding			= false;
 
 			for (int i = 0; i < Directions.Count; i++) {
+				entity.Physics.PreviousCollisionInfo[i] = entity.Physics.CollisionInfo[i];
 				entity.Physics.CollisionInfo[i].Clear();
 				entity.Physics.MovementCollisions[i] = false;
 			}
@@ -101,7 +115,7 @@ namespace ZeldaOracle.Game.Control {
 			if (entity.Physics.CollideWithWorld || entity.Physics.CollideWithEntities) {
 				
 				// Handle circular tile collisions.
-				if (entity.Physics.CollideWithWorld) {
+				if (entity.Physics.CollideWithWorld && entity.Physics.CheckRadialCollisions) {
 					Rectangle2F checkArea = Rectangle2F.Union(
 						Rectangle2F.Translate(entity.Physics.CollisionBox, entity.Position),
 						Rectangle2F.Translate(entity.Physics.CollisionBox, entity.Position + entity.Physics.Velocity));
@@ -661,8 +675,53 @@ namespace ZeldaOracle.Game.Control {
 				Rectangle2F.Translate(entity.Physics.CollisionBox, entity.Position + entity.Physics.Velocity));
 			
 			for (int axis = 0; axis < 2; axis++) {
-				foreach (CollisionCheck check in GetCollisions(entity, checkArea))
+				foreach (CollisionCheck check in GetCollisions(entity, checkArea)) {
 					ResolveMovementCollision(entity, axis, check.SolidObject, check.SolidBox);
+				}
+			}
+			
+			// SPECIAL CASE: Player colliding with tops of ladders in side-scrolling mode.
+			if (IsSideScrolling && (entity is Player)) {
+				foreach (Tile tile in RoomControl.TileManager.GetTilesTouching(checkArea)) {
+					if (tile.IsLadder)
+						ResolveSideScrollTopCollision(entity, tile);
+				}
+			}
+		}
+		
+		private void ResolveSideScrollTopCollision(Entity entity, Tile tile) {
+			Player player = entity as Player;
+			if (player.Movement.IsOnSideScrollLadder)
+				return;
+
+			Rectangle2F solidBox = tile.Bounds;
+			Rectangle2F entityBoxPrev = entity.Physics.PositionedCollisionBox;
+			Rectangle2F entityBox = Rectangle2F.Translate(entityBoxPrev, entity.Physics.Velocity);
+			
+			// Check if there actually is a collision.
+			if (!entityBox.Intersects(solidBox))
+				return;
+			
+			// Make sure this is a top ladder.
+			Tile checkAboveTile = entity.RoomControl.TileManager.GetSurfaceTile(tile.Location - new Point2I(0, 1));
+			if (checkAboveTile != null && checkAboveTile.IsLadder)
+				return;
+			
+			if (entity.Physics.ClipCollisionInfo[Directions.Down].IsColliding) {
+				player.Movement.IsOnSideScrollLadder = true;
+			}
+			else if (!entityBoxPrev.Intersects(solidBox)) {
+				if (Controls.Down.IsDown()) {
+					player.Movement.IsOnSideScrollLadder = true;
+				}
+				else if (entityBox.Center.Y < solidBox.Center.Y && entity.Physics.Velocity.Y >= 0.0f) {
+					entity.Physics.VelocityY = 0.0f;
+					entity.Y = solidBox.Top - entity.Physics.CollisionBox.Bottom;
+					entity.Physics.MovementCollisions[Directions.Down] = true;
+					if (!entity.Physics.CollisionInfo[Directions.Down].IsColliding)
+						entity.Physics.CollisionInfo[Directions.Down].SetCollision(tile, Directions.Down);
+					player.Movement.IsOnSideScrollLadder = true;
+				}
 			}
 		}
 		
@@ -749,7 +808,7 @@ namespace ZeldaOracle.Game.Control {
 				entity.Physics.CollisionInfo[clipDirection].SetCollision(other, clipDirection);
 
 			// Perform collision auto dodging.
-			if (entity.Physics.AutoDodges)
+			if (entity.Physics.AutoDodges && Controls.Arrows[clipDirection].IsDown()) // TEMP: Check arrow key (assuming its the player)
 				PerformCollisionDodge(entity, clipDirection, other, solidBox);
 		}
 
@@ -905,9 +964,37 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		public void UpdateEntityZPosition(Entity entity) {
-			if (entity.ZPosition > 0.0f || entity.Physics.ZVelocity != 0.0f) {
+
+			if (IsSideScrolling) {
+				// Convert any nonzero Z-position into Y-position.
+				if (entity.ZPosition != 0.0f) {
+					entity.Y -= entity.ZPosition;
+					entity.ZPosition = 0.0f;
+				}
+				
+				if (entity.Physics.HasGravity && !entity.Physics.OnGroundOverride) {
+					// Zero jump speed if the entity is colliding below.
+					if (entity.Physics.ZVelocity < 0.0f && entity.Physics.CollisionInfo[Directions.Down].IsColliding)
+						entity.Physics.ZVelocity = 0.0f;
+					// Zero jump speed if the entity is colliding above.
+					// NOTE: this doesn't actually happen in the real game, which is strange.
+					//else if (entity.Physics.ZVelocity > 0.0f && entity.Physics.CollisionInfo[Directions.Up].IsColliding)
+						//entity.Physics.ZVelocity = 0.0f;
+					// Integrate gravity.
+					entity.Physics.ZVelocity -= entity.Physics.Gravity;
+					// Limit to maximum fall speed.
+					if (entity.Physics.ZVelocity < -entity.Physics.MaxFallSpeed && entity.Physics.MaxFallSpeed >= 0.0f)
+						entity.Physics.ZVelocity = -entity.Physics.MaxFallSpeed;
+					// Convert Z-velocity to Y-velocity.
+					entity.Physics.VelocityY = -entity.Physics.ZVelocity;
+				}
+				else {
+					entity.Physics.ZVelocity = 0.0f;
+				}
+			}
+			else if (entity.ZPosition > 0.0f || entity.Physics.ZVelocity != 0.0f) {
 				// Integrate gravity acceleration.
-				if (entity.Physics.HasGravity) {
+				if (entity.Physics.HasGravity && !entity.Physics.OnGroundOverride) {
 					entity.Physics.ZVelocity -= entity.Physics.Gravity;
 					if (entity.Physics.ZVelocity < -entity.Physics.MaxFallSpeed && entity.Physics.MaxFallSpeed >= 0.0f)
 						entity.Physics.ZVelocity = -entity.Physics.MaxFallSpeed;
@@ -1039,6 +1126,10 @@ namespace ZeldaOracle.Game.Control {
 
 		public RoomControl RoomControl {
 			get { return roomControl; }
+		}
+
+		public bool IsSideScrolling {
+			get { return roomControl.IsSideScrolling; }
 		}
 	}
 }

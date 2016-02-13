@@ -95,15 +95,17 @@ namespace ZeldaOracle.Game {
 
 
 		// Player
-		public const float				PLAYER_MOVE_SPEED				= 1.0f;		// Pixels per second.
-		public const float				PLAYER_JUMP_SPEED				= 2.0f;
-		public const float				PLAYER_CAPE_JUMP_SPEED			= 0.5f;
-		public const float				PLAYER_CAPE_REQUIRED_FALLSPEED	= 1.0f;		// Player must be falling this fast to be able to deploy cape.
-		public const float				PLAYER_CAPE_GRAVITY				= 0.04f;	// 0.04 = 1/25
-		public const int				PLAYER_SPRINT_DURATION			= 480;
-		public const float				PLAYER_SPRINT_SPEED_SCALE		= 1.5f;
-		public const int				PLAYER_SPRINT_EFFECT_INTERVAL	= 10;
-		public const float				PLAYER_DEFAULT_PUSH_SPEED		= 0.5f;
+		public const float				PLAYER_MOVE_SPEED					= 1.0f;		// Pixels per second.
+		public const float				PLAYER_JUMP_SPEED					= 2.0f;
+		public const float				PLAYER_CAPE_JUMP_SPEED				= 0.5f;
+		public const float				PLAYER_SIDESCROLL_JUMP_SPEED		= 2.25f;
+		public const float				PLAYER_SIDESCROLL_CAPE_JUMP_SPEED	= 0.5f;
+		public const float				PLAYER_CAPE_REQUIRED_FALLSPEED		= 1.0f;		// Player must be falling this fast to be able to deploy cape.
+		public const float				PLAYER_CAPE_GRAVITY					= 0.04f;	// 0.04 = 1/25
+		public const int				PLAYER_SPRINT_DURATION				= 480;
+		public const float				PLAYER_SPRINT_SPEED_SCALE			= 1.5f;
+		public const int				PLAYER_SPRINT_EFFECT_INTERVAL		= 10;
+		public const float				PLAYER_DEFAULT_PUSH_SPEED			= 0.5f;
 
 		// Monsters
 		public const int				MONSTER_STUN_DURATION		= 400;	// How long a monster gets stunned for (by boomerang/pegasus seeds).

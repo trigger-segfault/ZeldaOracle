@@ -192,6 +192,8 @@ TILE pull_handle;
 	TYPE		TilePullHandle;
 	SPRITE		tile_pull_handle_down;
 	PROPERTIES	(integer, direction, 3, "Direction", "direction", "Handle", "The direction the handle extends in.");
+	EVENT		event_fully_retract, "Retract", "Occurs when the handle is fully retracted into the wall.", (PullHandle, pullHandle);
+	EVENT		event_fully_extend, "Extend", "Occurs when the handle is fully extended from the wall.", (PullHandle, pullHandle);
 END;
 
 TILE seed_bouncer;

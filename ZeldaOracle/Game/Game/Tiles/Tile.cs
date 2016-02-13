@@ -121,6 +121,8 @@ namespace ZeldaOracle.Game.Tiles {
 				hasMoved		= false;
 				velocity		= Vector2F.Zero;
 				
+				graphics.ImageVariant = roomControl.Room.Zone.ImageVariantID;
+
 				// Begin a path if there is one.
 				string pathString = properties.GetString("path", "");
 				TilePath p = TilePath.Parse(pathString);
@@ -904,6 +906,10 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		// Scripting API
 		//-----------------------------------------------------------------------------
+
+		public void OverrideDefaultState() {
+			tileData.OverrideDefaultState();
+		}
 
 		string ZeldaAPI.Tile.Id {
 			get { return properties.GetString("id", ""); }

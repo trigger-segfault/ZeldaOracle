@@ -34,6 +34,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.IsPassable					= true;
 			player.Physics.CollideWithWorld		= false;
 			player.Physics.MovesWithPlatforms	= false;
+			player.Physics.HasGravity			= false;
 			player.Movement.StopMotion();
 		}
 		
@@ -42,6 +43,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.IsPassable					= false;
 			player.Physics.CollideWithWorld		= true;
 			player.Physics.MovesWithPlatforms	= true;
+			player.Physics.HasGravity			= true;
 		}
 
 		public override void Update() {

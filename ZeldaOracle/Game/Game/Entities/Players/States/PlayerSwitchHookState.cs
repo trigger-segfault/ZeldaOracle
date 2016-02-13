@@ -22,6 +22,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private Point2I tileSwitchLocation;
 		private int direction;
 
+		private Vector2F playerPosition;
+		private Vector2F hookedEntityPosition;
+		private Vector2F hookProjectilePosition;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -82,6 +86,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Physics.HasGravity	= false;
 			player.IsStateControlled	= true;
 			
+			hookedEntityPosition	= hookedEntity.Position;
+			playerPosition			= player.Position;
+			hookProjectilePosition	= hookProjectile.Position;
+			
 			AudioSystem.PlaySound(GameData.SOUND_SWITCH_HOOK_SWITCH);
 		}
 
@@ -107,11 +115,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		private void SwitchPositions() {
 			isSwitched = true;
-
+			
 			// Swap player and entity positions.
 			Vector2F tempPosition	= player.Position;
-			player.Position			= hookedEntity.Position;
-			hookedEntity.Position	= tempPosition;
+			player.Position			= hookedEntityPosition;
+			hookedEntity.Position	= playerPosition;
 			hookProjectile.Position	= hookedEntity.Center;
 			player.Direction		= Directions.Reverse(player.Direction);
 
@@ -120,6 +128,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				Vector2F center = (tileSwitchLocation * GameSettings.TILE_SIZE) + new Vector2F(8, 8);
 				hookedEntity.SetPositionByCenter(center);
 			}
+
+			hookedEntityPosition	= hookedEntity.Position;
+			playerPosition			= player.Position;
+			hookProjectilePosition	= hookProjectile.Position;
 
 			hookProjectile.OnSwitchPositions();
 		}
@@ -203,8 +215,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				}
 				
 				// Synchronize z-positions of lifted entities.
+				player.Position				= playerPosition;
 				player.ZPosition			= liftZPosition;
+				hookProjectile.Position		= hookProjectilePosition;
 				hookProjectile.ZPosition	= liftZPosition;
+				hookedEntity.Position		= hookedEntityPosition;
 				hookedEntity.ZPosition		= liftZPosition;
 			}
 			else if (hookProjectile.IsDestroyed) {

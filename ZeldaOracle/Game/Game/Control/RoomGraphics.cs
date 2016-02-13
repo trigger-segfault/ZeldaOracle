@@ -242,9 +242,6 @@ namespace ZeldaOracle.Game.Entities {
 					time %= animation.Duration;
 			}
 
-			position.X = GMath.Round(position.X);
-			position.Y = GMath.Round(position.Y);
-
 			for (int i = 0; i < animation.Frames.Count; ++i) {
 				AnimationFrame frame = animation.Frames[i];
 				if (time < frame.StartTime)
@@ -260,6 +257,10 @@ namespace ZeldaOracle.Game.Entities {
 		
 		// Draw a sprite.
 		public void DrawSprite(Sprite sprite, int imageVariant, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+			// There's a bias of 0.001f to account for rounding inconsistancies with the value 0.5f.
+			position.X = GMath.Round(position.X + 0.001f);
+			position.Y = GMath.Round(position.Y + 0.001f);
+
 			DrawingInstruction instruction = new DrawingInstruction(
 					sprite, imageVariant, position, depthOrigin);
 

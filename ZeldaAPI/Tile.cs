@@ -7,6 +7,7 @@ namespace ZeldaAPI {
 
 	// Base interface for all tiles.
 	public interface Tile {
+		void OverrideDefaultState();
 		string Id { get; }
 		bool IsMovable { get; set; }
 	}
@@ -80,6 +81,9 @@ namespace ZeldaAPI {
 
 	public interface MinecartTrack : Tile {
 		void SwitchTrackDirection();
+	}
+
+	public interface PullHandle : Tile {
 	}
 
 	public interface CrossingGate : Tile {

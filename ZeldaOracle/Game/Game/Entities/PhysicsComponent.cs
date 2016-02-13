@@ -33,6 +33,10 @@ namespace ZeldaOracle.Game.Entities {
 		Crushable				= 0x10000,
 		EdgeClipping			= 0x20000,	// Allow clipping into the edges of tiles.
 		Flying					= 0x40000,	// Flying entities are never considered to be on the ground (even if their Z position is zero)
+
+
+		CheckRadialCollisions	= 0x80000,
+		OnGroundOverride		= 0x100000,	// If this is set, IsOnGround will be true.
 	}
 
 	public enum CollisionBoxType {
@@ -70,6 +74,7 @@ namespace ZeldaOracle.Game.Entities {
 		private Vector2F			reboundVelocity;
 		private bool				isColliding;
 		private CollisionInfo[]		collisionInfo;
+		private CollisionInfo[]		previousCollisionInfo;
 		private bool				hasLanded;
 		private Tile				topTile;			// The top-most tile the entity is located over.
 		private int					ledgeAltitude;		// How many ledges the entity has passed over.
@@ -107,8 +112,11 @@ namespace ZeldaOracle.Game.Entities {
 			this.edgeClipAmount		= 1;
 
 			this.collisionInfo = new CollisionInfo[Directions.Count];
-			for (int i = 0; i < Directions.Count; i++)
+			this.previousCollisionInfo = new CollisionInfo[Directions.Count];
+			for (int i = 0; i < Directions.Count; i++) {
 				collisionInfo[i].Clear();
+				previousCollisionInfo[i].Clear();
+			}
 
 			this.MovementCollisions = new bool[4];
 			this.ClipCollisionInfo = new CollisionInfoNew[4];
@@ -517,7 +525,13 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsInAir {
-			get { return (entity.ZPosition > 0.0f || zVelocity > 0.0f || IsFlying); }
+			get {
+				if (flags.HasFlag(PhysicsFlags.OnGroundOverride))
+					return false;
+				if (entity.RoomControl.IsSideScrolling)
+					return !collisionInfo[Directions.Down].IsColliding;
+				return (entity.ZPosition > 0.0f || zVelocity > 0.0f || IsFlying);
+			}
 		}
 
 		public bool IsOnGround {
@@ -576,6 +590,10 @@ namespace ZeldaOracle.Game.Entities {
 		
 		public CollisionInfo[] CollisionInfo {
 			get { return collisionInfo; }
+		}
+		
+		public CollisionInfo[] PreviousCollisionInfo {
+			get { return previousCollisionInfo; }
 		}
 
 		public IEnumerable<CollisionInfo> GetCollisions() {
@@ -748,6 +766,16 @@ namespace ZeldaOracle.Game.Entities {
 		public bool IsFlying {
 			get { return HasFlags(PhysicsFlags.Flying); }
 			set { SetFlags(PhysicsFlags.Flying, value); }
+		}
+		
+		public bool CheckRadialCollisions {
+			get { return HasFlags(PhysicsFlags.CheckRadialCollisions); }
+			set { SetFlags(PhysicsFlags.CheckRadialCollisions, value); }
+		}
+		
+		public bool OnGroundOverride {
+			get { return HasFlags(PhysicsFlags.OnGroundOverride); }
+			set { SetFlags(PhysicsFlags.OnGroundOverride, value); }
 		}
 		
 

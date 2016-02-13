@@ -60,6 +60,7 @@ public struct Color {
 	public static readonly Color Olive		= new Color(128, 128, 0);
 	public static readonly Color Cyan		= new Color(0, 255, 255);
 	public static readonly Color Maroon		= new Color(128, 0, 0);
+	public static readonly Color Magenta	= new Color(255, 0, 255);
 
 	#endregion
 	//=========== MEMBERS ============

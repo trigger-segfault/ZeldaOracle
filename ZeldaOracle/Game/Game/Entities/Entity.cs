@@ -106,6 +106,9 @@ namespace ZeldaOracle.Game.Entities {
 
 		// Called when the entity lands on the ground.
 		public virtual void OnLand() {}
+		
+		// Called when the entity begins falling (used in side-scrolling mode).
+		public virtual void OnBeginFalling() {}
 
 		// Called when the entity bounces off of the ground.
 		public virtual void OnBounce() {
@@ -296,7 +299,11 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsInAir {
-			get { return (zPosition > 0.0f || (physics.IsEnabled && physics.ZVelocity > 0.0f)); }
+			get {
+				if (Physics.IsEnabled)
+					return Physics.IsInAir;
+				return (zPosition > 0.0f);
+			}
 		}
 
 		public bool IsOnGround {

@@ -108,6 +108,10 @@ IMAGE tileset_town;
 IMAGE tileset_town_extras_16x16;
 	VARIANT present		"Tiles/tileset_town_present_extras_16x16";
 	END;
+
+IMAGE tileset_sidescroll;
+	VARIANT sidescroll_ages_dungeon_1	"Tiles/tileset_sidescroll_ages_dungeon_1";
+	END;
 	
 IMAGE tileset_objects;
 	VARIANT present				"Tiles/tileset_objects_present";

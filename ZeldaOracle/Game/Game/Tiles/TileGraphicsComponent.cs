@@ -33,7 +33,7 @@ namespace ZeldaOracle.Game.Tiles {
 			this.animationPlayer			= new AnimationPlayer();
 			this.isVisible					= true;
 			this.depthLayer					= DepthLayer.TileLayer1;
-			this.imageVariant				= -1;
+			this.imageVariant				= 0;
 			this.raisedDrawOffset			= Point2I.Zero;
 			this.drawOffset					= Point2I.Zero;
 			this.syncPlaybackWithRoomTicks	= true;
@@ -116,11 +116,6 @@ namespace ZeldaOracle.Game.Tiles {
 		public void Draw(RoomGraphics g) {
 			if (!isVisible)
 				return;
-			
-			// Determine the image variant.
-			int imageVariant = this.imageVariant;
-			if (imageVariant < 0)
-				imageVariant = tile.Zone.ImageVariantID;
 
 			// Determine the depth layer based on the tile grid layer.
 			if (tile.Layer == 0)

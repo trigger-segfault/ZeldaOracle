@@ -682,5 +682,7 @@ namespace ZeldaOracle.Game.Control {
 			add { eventRoomTransitioning += value; }
 			remove { eventRoomTransitioning -= value; }
 		}
+
+		public bool IsSideScrolling { get; set; }
 	}
 }

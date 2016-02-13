@@ -54,6 +54,15 @@ namespace ZeldaOracle.Game.Worlds {
 			events.AddEvent("event_all_monsters_dead", "All Monsters Dead", "Occurs when all monsters are dead.");
 			properties.BaseProperties.Set("event_all_monsters_dead", "")
 				.SetDocumentation("All Monsters Dead", "script", "", "Events", "Occurs when all monsters are dead.");
+			
+			// Room Flags:
+			// - sidescroll ??? could be in Zone
+			// - underwater ??? could be in Zone
+			// - discovered
+			// - hiddenFromMap
+			// - boss
+			// - trasure
+			// - signal
 
 			/*if (zone != null)
 				this.properties.Set("zone", zone.ID);*/

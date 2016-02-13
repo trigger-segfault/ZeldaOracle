@@ -63,6 +63,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private Point2I				holeEnterQuadrent;
 		private bool				fallingInHole;
 		private bool				isOnColorBarrier;
+		private bool				isOnSideScrollLadder;
 
 		// Movement modes.
 		private PlayerMotionType	mode;
@@ -110,6 +111,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			holeSlipVelocity		= Vector2F.Zero;
 			fallingInHole			= false;
 			isOnColorBarrier		= false;
+			isOnSideScrollLadder	= false;
 
 			// Controls.
 			analogMode		= false;
@@ -206,10 +208,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 				}
 				
 				// Jump!
-				isCapeDeployed = false;
-				jumpStartTile = player.RoomControl.GetTileLocation(player.Position);
-				player.Physics.Gravity		= GameSettings.DEFAULT_GRAVITY;
-				player.Physics.ZVelocity	= GameSettings.PLAYER_JUMP_SPEED;
+				isOnSideScrollLadder	= false;
+				isCapeDeployed			= false;
+				jumpStartTile			= player.RoomControl.GetTileLocation(player.Position);
+				player.Physics.Gravity	= GameSettings.DEFAULT_GRAVITY;
+				player.Physics.OnGroundOverride = false;
+				if (player.RoomControl.IsSideScrolling)
+					player.Physics.ZVelocity = GameSettings.PLAYER_SIDESCROLL_JUMP_SPEED;
+				else
+					player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
 				if (player.CurrentState is PlayerNormalState)
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_JUMP);
@@ -228,8 +235,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 				GameSettings.DEFAULT_GRAVITY <= -GameSettings.PLAYER_CAPE_REQUIRED_FALLSPEED)
 			{
 				isCapeDeployed = true;
-				player.Physics.Gravity		= GameSettings.PLAYER_CAPE_GRAVITY;
-				player.Physics.ZVelocity	= GameSettings.PLAYER_CAPE_JUMP_SPEED + GameSettings.PLAYER_CAPE_GRAVITY;
+				player.Physics.Gravity = GameSettings.PLAYER_CAPE_GRAVITY;
+				if (player.RoomControl.IsSideScrolling)
+					player.Physics.ZVelocity = GameSettings.PLAYER_SIDESCROLL_CAPE_JUMP_SPEED + GameSettings.PLAYER_CAPE_GRAVITY;
+				else
+					player.Physics.ZVelocity = GameSettings.PLAYER_CAPE_JUMP_SPEED + GameSettings.PLAYER_CAPE_GRAVITY;
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_THROW);
 				if (player.CurrentState is PlayerNormalState)
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CAPE);
@@ -499,7 +509,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public void Update() {
 			// Determine movement mode.
-			if (player.Physics.IsInAir)
+			if (isOnSideScrollLadder)
+				mode = moveModeNormal;
+			else if (player.Physics.IsInAir)
 				mode = moveModeAir;
 			else if (player.Physics.IsInWater)
 				mode = moveModeWater;
@@ -535,7 +547,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Check for ledge jumping (ledges/waterfalls)
 			CollisionInfo collisionInfo = player.Physics.CollisionInfo[moveDirection];
 			if (canLedgeJump && mode.CanLedgeJump && isMoving &&
-				collisionInfo.Type == CollisionType.Tile)
+				collisionInfo.Type == CollisionType.Tile &&
+				!player.RoomControl.IsSideScrolling)
 			{
 				Tile tile = collisionInfo.Tile;
 				if (tile.IsLedge && moveDirection == tile.LedgeDirection && !tile.IsMoving)
@@ -550,6 +563,46 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 			else if (player.IsOnGround)
 				IsOnColorBarrier = false;
+
+			// Check for walking on ladders.
+			if (player.RoomControl.IsSideScrolling) {
+				Rectangle2F pollLadderPosition = new Rectangle2F(player.Position, new Vector2F(1.0f, 1.0f));
+				pollLadderPosition.Y += player.Physics.CollisionBox.Bottom - 1.0f;
+
+				Tile surfaceTile = null;
+				foreach (Tile tile in player.RoomControl.TileManager.GetTilesTouching(pollLadderPosition)) {
+					if (tile.IsLadder) {
+						surfaceTile = tile;
+						break;
+					}
+				}
+				bool onladder = (surfaceTile != null && surfaceTile.IsLadder);
+				
+				if (isOnSideScrollLadder) {
+					if (!onladder)
+						isOnSideScrollLadder = false;
+				}
+				else if (onladder && player.Physics.ZVelocity <= 0.0f && Controls.Up.IsDown()) {
+					isOnSideScrollLadder = true;
+				}
+				
+				if (isOnSideScrollLadder) {
+					bool existsLadderBelow = (player.Physics.TopTile != null && player.Physics.TopTile.IsLadder);
+					Point2I playerTileLocation = player.RoomControl.GetTileLocation(player.Position);
+					Tile checkAboveTile = player.RoomControl.TileManager.GetSurfaceTile(playerTileLocation - new Point2I(0, 1));
+					bool existsLadderAbove = (checkAboveTile != null && checkAboveTile.IsLadder);
+					bool faceUp = existsLadderAbove;
+					if (existsLadderBelow && !existsLadderAbove)
+						faceUp = (player.Y > (playerTileLocation.Y * GameSettings.TILE_SIZE) + 4.0f);
+
+					if (player.CurrentState == player.NormalState && faceUp)
+						player.Direction = Directions.Up;
+				}
+			}
+			else
+				isOnSideScrollLadder = false;
+
+			player.Physics.OnGroundOverride = isOnSideScrollLadder;
 		}
 
 		private bool TryLedgeJump(int ledgeDirection) {
@@ -672,6 +725,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public bool IsDoomedToFallInHole {
 			get { return (fallingInHole && doomedToFallInHole); }
+		}
+
+		public bool IsOnSideScrollLadder {
+			get { return isOnSideScrollLadder; }
+			set {
+				isOnSideScrollLadder = value;
+				player.Physics.OnGroundOverride = value;
+			}
 		}
 	}
 }
