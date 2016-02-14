@@ -673,148 +673,156 @@ namespace ZeldaOracle.Game.Control {
 			Rectangle2F checkArea = Rectangle2F.Union(
 				Rectangle2F.Translate(entity.Physics.CollisionBox, entity.Position),
 				Rectangle2F.Translate(entity.Physics.CollisionBox, entity.Position + entity.Physics.Velocity));
-			
+
 			for (int axis = 0; axis < 2; axis++) {
 				foreach (CollisionCheck check in GetCollisions(entity, checkArea)) {
 					ResolveMovementCollision(entity, axis, check.SolidObject, check.SolidBox);
 				}
 			}
 			
-			// Check for walking on ladders.
-			if (entity is Player) {
-				Player player = roomControl.Player;
-				bool onLadderPrev = player.Movement.IsOnSideScrollLadder;
+			// Check the player's side-scrolling ladder collisions.
+			if (roomControl.IsSideScrolling && (entity is Player))
+				CheckPlayerLadderClimbing((Player) entity);
+		}
 
-				if (player.RoomControl.IsSideScrolling) {
-					player.Movement.HighestSideScrollLadderTile = null;
-					Rectangle2F pollLadderBox = new Rectangle2F(-1, -7, 2, 9);
-					pollLadderBox.Point += entity.PreviousPosition;
-					foreach (Tile tile in RoomControl.TileManager.GetTilesTouching(pollLadderBox)) {
-						if (tile.IsLadder && (player.Movement.HighestSideScrollLadderTile == null ||
-							tile.Bounds.Top < player.Movement.HighestSideScrollLadderTile.Bounds.Top))
-							player.Movement.HighestSideScrollLadderTile = tile;
-					}
-					bool isOnLadder = (player.Movement.HighestSideScrollLadderTile != null);
-					if (!isOnLadder)
-						player.Movement.IsOnSideScrollLadder = false;
-					else if (isOnLadder && player.Physics.VelocityY >= 0.0f && Controls.Up.IsDown())
-						player.Movement.IsOnSideScrollLadder = true;
-				}
-				else
+		// Check the player's side-scrolling ladder collisions.
+		private void CheckPlayerLadderClimbing(Player player) {
+			if (!roomControl.IsSideScrolling)
+				return;
+
+			bool onLadderPrev = player.Movement.IsOnSideScrollLadder;
+
+			// Check if the player is touching a ladder, and whether to begin climbing.
+			player.Movement.HighestSideScrollLadderTile = 
+				GetHighestLadder(player, player.PreviousPosition);
+			if (player.Movement.HighestSideScrollLadderTile == null)
+				player.Movement.IsOnSideScrollLadder = false;
+			else if (player.Physics.VelocityY >= 0.0f && Controls.Up.IsDown())
+				player.Movement.IsOnSideScrollLadder = true;
+					
+			// Collide with ladders.
+			Rectangle2F ladderCheckArea = Rectangle2F.Union(
+				Rectangle2F.Translate(player.Physics.CollisionBox, player.Position),
+				Rectangle2F.Translate(player.Physics.CollisionBox, player.Position + player.Physics.Velocity));
+			foreach (Tile tile in RoomControl.TileManager.GetTilesTouching(ladderCheckArea)) {
+				if (tile.IsLadder)
+					CheckLadderCollision(player, tile);
+			}
+				
+			// Check for climbing off the top of a ladder.
+			if (player.Movement.IsOnSideScrollLadder && player.Movement.HighestSideScrollLadderTile != null)
+				CheckClimbingOffLadderTop(player, player.Movement.HighestSideScrollLadderTile);
+
+			// Check if the player is no longer on a ladder.
+			if (player.Movement.IsOnSideScrollLadder) {
+				player.Movement.HighestSideScrollLadderTile =
+					GetHighestLadder(player, player.Position + player.Physics.Velocity);
+				if (player.Movement.HighestSideScrollLadderTile == null)
 					player.Movement.IsOnSideScrollLadder = false;
+			}
 
-				// SPECIAL CASE: Player colliding with tops of ladders in side-scrolling mode.
-				Rectangle2F ladderCollisionBox = entity.Physics.CollisionBox;
-				checkArea = Rectangle2F.Union(
-					Rectangle2F.Translate(ladderCollisionBox, entity.Position),
-					Rectangle2F.Translate(ladderCollisionBox, entity.Position + entity.Physics.Velocity));
-				if (IsSideScrolling && (entity is Player)) {
-					foreach (Tile tile in RoomControl.TileManager.GetTilesTouching(checkArea)) {
-						if (tile.IsLadder)
-							ResolveSideScrollTopCollision(entity, tile);
-					}
-				}
+			// If the player has begun climbing, set his Y-velocity to zero (no gravity).
+			if (!onLadderPrev && player.Movement.IsOnSideScrollLadder)
+				player.Physics.VelocityY = 0.0f;
 
-				if (player.Movement.IsOnSideScrollLadder) {
-					player.Movement.HighestSideScrollLadderTile = null;
-					Rectangle2F pollLadderBox = new Rectangle2F(-1, -7, 2, 9);
-					pollLadderBox.Point += entity.Position + entity.Physics.Velocity;
-					foreach (Tile tile in RoomControl.TileManager.GetTilesTouching(pollLadderBox)) {
-						if (tile.IsLadder && (player.Movement.HighestSideScrollLadderTile == null ||
-							tile.Bounds.Top < player.Movement.HighestSideScrollLadderTile.Bounds.Top))
-							player.Movement.HighestSideScrollLadderTile = tile;
-					}
-					if (player.Movement.HighestSideScrollLadderTile == null && player.Movement.IsOnSideScrollLadder) {
-						player.Movement.IsOnSideScrollLadder = false;
-						
-						if (entity.Physics.ClipCollisionInfo[Directions.Down].IsAllowedClipping &&
-							!entity.Physics.CollisionInfo[Directions.Down].IsColliding)
-						{
-							entity.Physics.MovementCollisions[Directions.Down] = true;
-							if (!entity.Physics.CollisionInfo[Directions.Down].IsColliding) {
-								entity.Physics.CollisionInfo[Directions.Down].SetCollision(
-									entity.Physics.ClipCollisionInfo[Directions.Down].CollidedObject, Directions.Down);
-							}
-						}
-					}
-
-					// If departed from a ladder, make sure Y-velocity is zero (no gravity).
-					if (!onLadderPrev && player.Movement.IsOnSideScrollLadder)
-						player.Physics.VelocityY = 0.0f;
+			// If the player has stopped climbing, any downwards safe clipping should be
+			// turned into an actual collision now that gravity is affecting the player again.
+			if (onLadderPrev && !player.Movement.IsOnSideScrollLadder) {
+				if (player.Physics.ClipCollisionInfo[Directions.Down].IsAllowedClipping &&
+					!player.Physics.CollisionInfo[Directions.Down].IsColliding)
+				{
+					player.Physics.MovementCollisions[Directions.Down] = true;
+					player.Physics.CollisionInfo[Directions.Down].SetCollision(
+						player.Physics.ClipCollisionInfo[Directions.Down].CollidedObject, Directions.Down);
 				}
 			}
 		}
 		
-		private void ResolveSideScrollTopCollision(Entity entity, Tile tile) {
-			Player player = entity as Player;
-			Rectangle2F solidBox = tile.Bounds;
-			Rectangle2F entityBoxPrev = entity.Physics.PositionedCollisionBox;
-			Rectangle2F entityBox = Rectangle2F.Translate(entityBoxPrev, entity.Physics.Velocity);
+		// Return the top-most ladder the player is colliding with when placed at the given position.
+		private Tile GetHighestLadder(Player player, Vector2F position) {
+			Rectangle2F pollLadderBox = player.Movement.ClimbCollisionBox;
+			pollLadderBox.Point += position;
+			Tile highestLadder = null;
+			foreach (Tile tile in RoomControl.TileManager.GetTilesTouching(pollLadderBox)) {
+				if (tile.IsLadder && (highestLadder == null || tile.Bounds.Top < highestLadder.Bounds.Top))
+					highestLadder = tile;
+			}
+			return highestLadder;
+		}
+
+		// Check for climbing off the top of the ladder.
+		private void CheckClimbingOffLadderTop(Player player, Tile ladderTile) {
+			Rectangle2F entityBoxPrev		= player.Physics.PositionedCollisionBox;
+			Rectangle2F entityBox			= Rectangle2F.Translate(entityBoxPrev, player.Physics.Velocity);
+			Rectangle2F solidBox			= ladderTile.Bounds;
+			Rectangle2F pollLadderBoxPrev	= player.Movement.ClimbCollisionBox;
+			pollLadderBoxPrev.Point += player.Position;
+
+			if (pollLadderBoxPrev.Intersects(solidBox) &&
+				entityBoxPrev.Bottom > solidBox.Top &&
+				entityBox.Bottom <= solidBox.Top)
+			{
+				player.Physics.VelocityY = 0.0f;
+				player.Y = solidBox.Top - player.Physics.CollisionBox.Bottom;
+				player.Physics.MovementCollisions[Directions.Down] = true;
+				if (!player.Physics.CollisionInfo[Directions.Down].IsColliding)
+					player.Physics.CollisionInfo[Directions.Down].SetCollision(ladderTile, Directions.Down);
+				player.Movement.IsOnSideScrollLadder = false;
+			}
+		}
+		
+		private void CheckLadderCollision(Player player, Tile tile) {
+			Rectangle2F solidBox			= tile.Bounds;
+			Rectangle2F entityBoxPrev		= player.Physics.PositionedCollisionBox;
+			Rectangle2F entityBox			= Rectangle2F.Translate(entityBoxPrev, player.Physics.Velocity);
+			Rectangle2F pollLadderBox		= player.Movement.ClimbCollisionBox;
+			Rectangle2F pollLadderBoxPrev	= pollLadderBox;
+			pollLadderBox.Point		+= player.Position + player.Physics.Velocity;
+			pollLadderBoxPrev.Point	+= player.Position;
 			
-			Rectangle2F pollLadderBox = new Rectangle2F(-1, -7, 2, 9);
-			Rectangle2F pollLadderBoxPrev = pollLadderBox;
-			pollLadderBox.Point += entity.Position + entity.Physics.Velocity;
-			pollLadderBoxPrev.Point += entity.Position;
-			
-			Tile checkAboveTile = entity.RoomControl.TileManager.GetSurfaceTile(tile.Location - new Point2I(0, 1));
+			// Check if this tile is a top-most ladder.
+			Tile checkAboveTile = player.RoomControl.TileManager.GetSurfaceTile(tile.Location - new Point2I(0, 1));
 			bool isTopLadder = (checkAboveTile == null || !checkAboveTile.IsLadder);
 
-			// Check if stepping off of a platform onto the ladder.
+			// Check if stepping off of a solid object and onto the ladder.
+			// Make sure the player is not on a flat surface aligned with the ladder top.
 			if (!player.Movement.IsOnSideScrollLadder &&
 				pollLadderBox.Intersects(solidBox) &&
-				entity.Physics.PreviousCollisionInfo[Directions.Down].IsColliding &&
-				entity.Physics.PreviousCollisionInfo[Directions.Down].Tile != tile &&
-				!entity.Physics.CollisionInfo[Directions.Down].IsColliding &&
-				entity.Physics.VelocityY >= 0.0f)
+				player.Physics.PreviousCollisionInfo[Directions.Down].IsColliding &&
+				player.Physics.PreviousCollisionInfo[Directions.Down].Tile != tile &&
+				!player.Physics.CollisionInfo[Directions.Down].IsColliding &&
+				player.Physics.VelocityY >= 0.0f &&
+					(!isTopLadder || entityBoxPrev.Bottom > solidBox.Top ||
+					player.Physics.PreviousCollisionInfo[Directions.Down].Tile == null ||
+					player.Physics.PreviousCollisionInfo[Directions.Down].Tile.Bounds.Top != solidBox.Top))
 			{
-				if (!isTopLadder ||
-					entity.Physics.PreviousCollisionInfo[Directions.Down].Tile == null ||
-					entity.Physics.PreviousCollisionInfo[Directions.Down].Tile.Bounds.Top != solidBox.Top ||
-					entityBoxPrev.Bottom > solidBox.Top)
-				{
-					player.Movement.IsOnSideScrollLadder = true;
-					return;
-				}
-			}
-			
-			// Make sure this is a top ladder.
-			if (!isTopLadder)
-				return;
-
-			if (player.Movement.IsOnSideScrollLadder) {
-				// Check if climbing off the top of the ladder.
-				if ((player.Movement.HighestSideScrollLadderTile == null ||
-					solidBox.Top <= player.Movement.HighestSideScrollLadderTile.Bounds.Top) &&
-					pollLadderBoxPrev.Intersects(solidBox) &&
-					entityBoxPrev.Bottom > solidBox.Top  && entityBox.Bottom <= solidBox.Top)
-				{
-					entity.Physics.VelocityY = 0.0f;
-					entity.Y = solidBox.Top - entity.Physics.CollisionBox.Bottom;
-					entity.Physics.MovementCollisions[Directions.Down] = true;
-					if (!entity.Physics.CollisionInfo[Directions.Down].IsColliding)
-						entity.Physics.CollisionInfo[Directions.Down].SetCollision(tile, Directions.Down);
-					player.Movement.IsOnSideScrollLadder = false;
-				}
+				player.Movement.IsOnSideScrollLadder = true;
 				return;
 			}
-
-			// Check if there actually is a collision.
-			if (!entityBox.Intersects(solidBox))
-				return;
-
-			if (entity.Physics.ClipCollisionInfo[Directions.Down].IsColliding)
-				return;
 			
-			if (entityBoxPrev.Bottom <= solidBox.Top) {
-				if (Controls.Down.IsDown()) {
+			// Make sure the player:
+			//  - This tile is a top-most ladder.
+			//  - The player isn't already climbing a ladder.
+			//  - The player is touching the ladder,
+			//  - The player was previously above the ladder,
+			//  - The player and isn't standing on something else with clipping.
+			if (isTopLadder &&
+				!player.Movement.IsOnSideScrollLadder &&
+				entityBox.Intersects(solidBox) &&
+				entityBoxPrev.Bottom <= solidBox.Top &&
+				!player.Physics.ClipCollisionInfo[Directions.Down].IsColliding)
+			{
+				// If holding the [Down] button, then begin climbing the ladder instead.
+				if (Controls.Down.IsDown() && !Controls.Up.IsDown()) {
 					player.Movement.IsOnSideScrollLadder = true;
 				}
-				else if (entityBox.Center.Y < solidBox.Center.Y && entity.Physics.Velocity.Y >= 0.0f) {
-					entity.Physics.VelocityY = 0.0f;
-					entity.Y = solidBox.Top - entity.Physics.CollisionBox.Bottom;
-					entity.Physics.MovementCollisions[Directions.Down] = true;
-					if (!entity.Physics.CollisionInfo[Directions.Down].IsColliding)
-						entity.Physics.CollisionInfo[Directions.Down].SetCollision(tile, Directions.Down);
+				else {
+					// Collide with the top of the ladder.
+					player.Physics.VelocityY = 0.0f;
+					player.Y = solidBox.Top - player.Physics.CollisionBox.Bottom;
+					player.Physics.MovementCollisions[Directions.Down] = true;
+					if (!player.Physics.CollisionInfo[Directions.Down].IsColliding)
+						player.Physics.CollisionInfo[Directions.Down].SetCollision(tile, Directions.Down);
 				}
 			}
 		}

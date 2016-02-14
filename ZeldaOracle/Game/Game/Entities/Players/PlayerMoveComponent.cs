@@ -64,6 +64,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private bool				fallingInHole;
 		private bool				isOnColorBarrier;
 		private bool				isOnSideScrollLadder;
+		private Rectangle2F			climbCollisionBox;		// Used for checking if on a ladder in side-scroll mode.
 
 		// Movement modes.
 		private PlayerMotionType	mode;
@@ -112,6 +113,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			fallingInHole			= false;
 			isOnColorBarrier		= false;
 			isOnSideScrollLadder	= false;
+			climbCollisionBox		= new Rectangle2F(-1, -7, 2, 9);
 
 			// Controls.
 			analogMode		= false;
@@ -564,60 +566,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 			else if (player.IsOnGround)
 				IsOnColorBarrier = false;
 
-			
+			// Face up if climbing a side-scroll ladder.
 			if (player.RoomControl.IsSideScrolling && isOnSideScrollLadder) {
-				/*bool existsLadderBelow = (player.Physics.TopTile != null && player.Physics.TopTile.IsLadder);
-				Point2I playerTileLocation = player.RoomControl.GetTileLocation(player.Position);
-				Tile checkAboveTile = player.RoomControl.TileManager.GetSurfaceTile(playerTileLocation - new Point2I(0, 1));
-				bool existsLadderAbove = (checkAboveTile != null && checkAboveTile.IsLadder);
-				bool faceUp = existsLadderAbove;*/
-				bool faceUp = true;
+				bool faceUp = false;
 				if (HighestSideScrollLadderTile != null)
 					faceUp = (player.Y > HighestSideScrollLadderTile.Bounds.Top + 4.0f);
-				if (player.CurrentState == player.NormalState && faceUp)
+				if (faceUp && player.CurrentState == player.NormalState)
 					player.Direction = Directions.Up;
 			}
-			/*
-			// Check for walking on ladders.
-			if (player.RoomControl.IsSideScrolling) {
-				Rectangle2F pollLadderPosition = new Rectangle2F(-1, -7, 2, 9);
-				pollLadderPosition.Point += player.Position;
-
-				Tile surfaceTile = null;
-				foreach (Tile tile in player.RoomControl.TileManager.GetTilesTouching(pollLadderPosition)) {
-					if (tile.IsLadder) {
-						surfaceTile = tile;
-						break;
-					}
-				}
-				bool onladder = (surfaceTile != null && surfaceTile.IsLadder);
-				
-				if (isOnSideScrollLadder) {
-					if (!onladder)
-						isOnSideScrollLadder = false;
-				}
-				else if (onladder && player.Physics.ZVelocity <= 0.0f && Controls.Up.IsDown()) {
-					isOnSideScrollLadder = true;
-				}
-				
-				if (isOnSideScrollLadder) {
-					bool existsLadderBelow = (player.Physics.TopTile != null && player.Physics.TopTile.IsLadder);
-					Point2I playerTileLocation = player.RoomControl.GetTileLocation(player.Position);
-					Tile checkAboveTile = player.RoomControl.TileManager.GetSurfaceTile(playerTileLocation - new Point2I(0, 1));
-					bool existsLadderAbove = (checkAboveTile != null && checkAboveTile.IsLadder);
-					bool faceUp = existsLadderAbove;
-					if (existsLadderBelow && !existsLadderAbove)
-						faceUp = (player.Y > (playerTileLocation.Y * GameSettings.TILE_SIZE) + 4.0f);
-
-					if (player.CurrentState == player.NormalState && faceUp)
-						player.Direction = Directions.Up;
-				}
-			}
-			else
-				isOnSideScrollLadder = false;
-
-			player.Physics.OnGroundOverride = isOnSideScrollLadder;
-			*/
 		}
 
 		private bool TryLedgeJump(int ledgeDirection) {
@@ -748,6 +704,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 				isOnSideScrollLadder = value;
 				player.Physics.OnGroundOverride = value;
 			}
+		}
+
+		public Rectangle2F ClimbCollisionBox {
+			get { return climbCollisionBox; }
 		}
 
 		public Tile HighestSideScrollLadderTile {
