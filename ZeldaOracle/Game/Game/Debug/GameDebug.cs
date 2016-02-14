@@ -441,7 +441,10 @@ namespace ZeldaOracle.Game.Debug {
 				if (entity.Physics.IsEnabled && entity.Physics.CollideWithWorld || entity is Player) {
 					// Draw the hard collision box.
 					Rectangle2F collisionBox = entity.Physics.PositionedCollisionBox;
-					g.FillRectangle(collisionBox, Color.Yellow);
+					Color collisionBoxColor = Color.Yellow;
+					if (entity is Player && ((Player) entity).Movement.IsOnSideScrollLadder)
+						collisionBoxColor = new Color(255, 160, 0);
+					g.FillRectangle(collisionBox, collisionBoxColor);
 					collisionBox.Point = GMath.Round(collisionBox.Point);
 
 					for (int i = 0; i < 4; i++) {

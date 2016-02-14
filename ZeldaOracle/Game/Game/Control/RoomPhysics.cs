@@ -683,6 +683,7 @@ namespace ZeldaOracle.Game.Control {
 			// Check for walking on ladders.
 			if (entity is Player) {
 				Player player = roomControl.Player;
+				bool onLadderPrev = player.Movement.IsOnSideScrollLadder;
 
 				if (player.RoomControl.IsSideScrolling) {
 					player.Movement.HighestSideScrollLadderTile = null;
@@ -723,6 +724,23 @@ namespace ZeldaOracle.Game.Control {
 							tile.Bounds.Top < player.Movement.HighestSideScrollLadderTile.Bounds.Top))
 							player.Movement.HighestSideScrollLadderTile = tile;
 					}
+					if (player.Movement.HighestSideScrollLadderTile == null && player.Movement.IsOnSideScrollLadder) {
+						player.Movement.IsOnSideScrollLadder = false;
+						
+						if (entity.Physics.ClipCollisionInfo[Directions.Down].IsAllowedClipping &&
+							!entity.Physics.CollisionInfo[Directions.Down].IsColliding)
+						{
+							entity.Physics.MovementCollisions[Directions.Down] = true;
+							if (!entity.Physics.CollisionInfo[Directions.Down].IsColliding) {
+								entity.Physics.CollisionInfo[Directions.Down].SetCollision(
+									entity.Physics.ClipCollisionInfo[Directions.Down].CollidedObject, Directions.Down);
+							}
+						}
+					}
+
+					// If departed from a ladder, make sure Y-velocity is zero (no gravity).
+					if (!onLadderPrev && player.Movement.IsOnSideScrollLadder)
+						player.Physics.VelocityY = 0.0f;
 				}
 			}
 		}
@@ -745,13 +763,14 @@ namespace ZeldaOracle.Game.Control {
 			if (!player.Movement.IsOnSideScrollLadder &&
 				pollLadderBox.Intersects(solidBox) &&
 				entity.Physics.PreviousCollisionInfo[Directions.Down].IsColliding &&
-					entity.Physics.PreviousCollisionInfo[Directions.Down].Tile != tile &&
+				entity.Physics.PreviousCollisionInfo[Directions.Down].Tile != tile &&
 				!entity.Physics.CollisionInfo[Directions.Down].IsColliding &&
 				entity.Physics.VelocityY >= 0.0f)
 			{
 				if (!isTopLadder ||
 					entity.Physics.PreviousCollisionInfo[Directions.Down].Tile == null ||
-					entity.Physics.PreviousCollisionInfo[Directions.Down].Tile.Bounds.Top != solidBox.Top)
+					entity.Physics.PreviousCollisionInfo[Directions.Down].Tile.Bounds.Top != solidBox.Top ||
+					entityBoxPrev.Bottom > solidBox.Top)
 				{
 					player.Movement.IsOnSideScrollLadder = true;
 					return;
@@ -763,10 +782,9 @@ namespace ZeldaOracle.Game.Control {
 				return;
 
 			if (player.Movement.IsOnSideScrollLadder) {
-			
 				// Check if climbing off the top of the ladder.
-				if (
-					(player.Movement.HighestSideScrollLadderTile == null || solidBox.Top <= player.Movement.HighestSideScrollLadderTile.Bounds.Top) &&
+				if ((player.Movement.HighestSideScrollLadderTile == null ||
+					solidBox.Top <= player.Movement.HighestSideScrollLadderTile.Bounds.Top) &&
 					pollLadderBoxPrev.Intersects(solidBox) &&
 					entityBoxPrev.Bottom > solidBox.Top  && entityBox.Bottom <= solidBox.Top)
 				{
@@ -780,31 +798,12 @@ namespace ZeldaOracle.Game.Control {
 				return;
 			}
 
-			/*
-			// Check if stepping off of a platform onto the ladder.
-			if (pollLadderBox.Intersects(solidBox)) {
-				if (entity.Physics.PreviousCollisionInfo[Directions.Down].IsColliding &&
-					!entity.Physics.CollisionInfo[Directions.Down].IsColliding &&
-					entity.Physics.VelocityY >= 0.0f)
-				{
-					player.Movement.IsOnSideScrollLadder = true;
-					return;
-				}
-			}*/
-			/*
-			// Make sure this is a top ladder.
-			Tile checkAboveTile = entity.RoomControl.TileManager.GetSurfaceTile(tile.Location - new Point2I(0, 1));
-			if (checkAboveTile != null && checkAboveTile.IsLadder)
-				return;*/
-
 			// Check if there actually is a collision.
 			if (!entityBox.Intersects(solidBox))
 				return;
-			
-			if (entity.Physics.ClipCollisionInfo[Directions.Down].IsColliding) {
-				player.Movement.IsOnSideScrollLadder = true;
+
+			if (entity.Physics.ClipCollisionInfo[Directions.Down].IsColliding)
 				return;
-			}
 			
 			if (entityBoxPrev.Bottom <= solidBox.Top) {
 				if (Controls.Down.IsDown()) {
@@ -816,7 +815,6 @@ namespace ZeldaOracle.Game.Control {
 					entity.Physics.MovementCollisions[Directions.Down] = true;
 					if (!entity.Physics.CollisionInfo[Directions.Down].IsColliding)
 						entity.Physics.CollisionInfo[Directions.Down].SetCollision(tile, Directions.Down);
-					//player.Movement.IsOnSideScrollLadder = true;
 				}
 			}
 		}
