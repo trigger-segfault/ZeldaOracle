@@ -517,7 +517,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				mode = moveModeWater;
 			else if (player.Physics.IsOnIce)
 				mode = moveModeIce;
-			else if (player.Physics.IsOnLadder || player.Physics.IsOnStairs)
+			else if (player.Physics.IsOnStairs || (player.Physics.IsOnLadder && !player.RoomControl.IsSideScrolling))
 				mode = moveModeSlow;
 			else if (player.Physics.IsInGrass)
 				mode = moveModeGrass;
@@ -564,10 +564,24 @@ namespace ZeldaOracle.Game.Entities.Players {
 			else if (player.IsOnGround)
 				IsOnColorBarrier = false;
 
+			
+			if (player.RoomControl.IsSideScrolling && isOnSideScrollLadder) {
+				/*bool existsLadderBelow = (player.Physics.TopTile != null && player.Physics.TopTile.IsLadder);
+				Point2I playerTileLocation = player.RoomControl.GetTileLocation(player.Position);
+				Tile checkAboveTile = player.RoomControl.TileManager.GetSurfaceTile(playerTileLocation - new Point2I(0, 1));
+				bool existsLadderAbove = (checkAboveTile != null && checkAboveTile.IsLadder);
+				bool faceUp = existsLadderAbove;*/
+				bool faceUp = true;
+				if (HighestSideScrollLadderTile != null)
+					faceUp = (player.Y > HighestSideScrollLadderTile.Bounds.Top + 4.0f);
+				if (player.CurrentState == player.NormalState && faceUp)
+					player.Direction = Directions.Up;
+			}
+			/*
 			// Check for walking on ladders.
 			if (player.RoomControl.IsSideScrolling) {
-				Rectangle2F pollLadderPosition = new Rectangle2F(player.Position, new Vector2F(1.0f, 1.0f));
-				pollLadderPosition.Y += player.Physics.CollisionBox.Bottom - 1.0f;
+				Rectangle2F pollLadderPosition = new Rectangle2F(-1, -7, 2, 9);
+				pollLadderPosition.Point += player.Position;
 
 				Tile surfaceTile = null;
 				foreach (Tile tile in player.RoomControl.TileManager.GetTilesTouching(pollLadderPosition)) {
@@ -603,6 +617,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				isOnSideScrollLadder = false;
 
 			player.Physics.OnGroundOverride = isOnSideScrollLadder;
+			*/
 		}
 
 		private bool TryLedgeJump(int ledgeDirection) {
@@ -733,6 +748,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 				isOnSideScrollLadder = value;
 				player.Physics.OnGroundOverride = value;
 			}
+		}
+
+		public Tile HighestSideScrollLadderTile {
+			get; set;
 		}
 	}
 }

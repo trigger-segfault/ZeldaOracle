@@ -45,14 +45,17 @@ namespace ZeldaOracle.Game {
 
 			// Add weapons.
 			inventory.AddItems(obtain,
+				// Currently equipped items:
+				new ItemCane(),
+				new ItemFeather(),
+
+				// Items in inventory menu:
 				new ItemSword(),
 				new ItemShield(),
 				new ItemShovel(),
-				new ItemCane(),
 				new ItemMagicRod(),
 				new ItemSwitchHook(),
 				new ItemBracelet(),
-				new ItemFeather(),
 				new ItemBow(),
 				new ItemBombs(),
 				new ItemOcarina(),
@@ -62,11 +65,13 @@ namespace ZeldaOracle.Game {
 				new ItemSeedShooter(),
 				new ItemSlingshot(),
 				
+				// Key items:
 				new ItemWallet(),
 				new ItemMembersCard(),
 				new ItemMagicPotion(),
 				new ItemEssenceSeed(),
 
+				// Essesnces:
 				new ItemEssence1(),
 				new ItemEssence2(),
 				new ItemEssence3(),
@@ -74,7 +79,8 @@ namespace ZeldaOracle.Game {
 				new ItemEssence5(),
 				new ItemEssence6(),
 				new ItemEssence7(),
-				new ItemEssence8());
+				new ItemEssence8()
+			);
 
 			// Add key items.
 			inventory.AddItems(false,
