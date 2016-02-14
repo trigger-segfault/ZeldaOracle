@@ -45,6 +45,7 @@ namespace ZeldaOracle.Game.Control {
 		private TileManager		tileManager;
 		private bool			allMonstersDead;
 		private int				entityIndexCounter;
+		private bool			isSideScrolling;
 
 		private event Action<Player>	eventPlayerRespawn;
 		private event Action<int>		eventRoomTransitioning;
@@ -69,6 +70,7 @@ namespace ZeldaOracle.Game.Control {
 			eventRoomTransitioning	= null;
 			entityCount				= 0;
 			entityIndexCounter		= 0;
+			isSideScrolling			= false;
 		}
 		
 
@@ -231,9 +233,10 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public void BeginRoom(Room room) {
-			this.room			= room;
-			this.roomLocation	= room.Location;
-			this.dungeon		= room.Dungeon;
+			this.room				= room;
+			this.roomLocation		= room.Location;
+			this.dungeon			= room.Dungeon;
+			this.isSideScrolling	= room.Zone.IsSideScrolling;
 
 			// Discover the room.
 			room.IsDiscovered = true;
@@ -683,6 +686,9 @@ namespace ZeldaOracle.Game.Control {
 			remove { eventRoomTransitioning -= value; }
 		}
 
-		public bool IsSideScrolling { get; set; }
+		public bool IsSideScrolling {
+			get { return isSideScrolling; }
+			set { isSideScrolling = value; }
+		}
 	}
 }

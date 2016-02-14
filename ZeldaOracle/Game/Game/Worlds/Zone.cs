@@ -11,6 +11,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private string		name;
 		private int			imageVariantID;
 		private TileData	defaultTileData;
+		private bool		isSideScrolling;
 
 
 		//-----------------------------------------------------------------------------
@@ -22,6 +23,7 @@ namespace ZeldaOracle.Game.Worlds {
 			this.name				= name;
 			this.imageVariantID		= imageVariantID;
 			this.defaultTileData	= defaultTileData;
+			this.isSideScrolling	= false;
 		}
 
 		
@@ -52,6 +54,11 @@ namespace ZeldaOracle.Game.Worlds {
 		public TileData DefaultTileData {
 			get { return defaultTileData; }
 			set { defaultTileData = value; }
+		}
+		
+		public bool IsSideScrolling {
+			get { return isSideScrolling; }
+			set { isSideScrolling = value; }
 		}
 	}
 }
