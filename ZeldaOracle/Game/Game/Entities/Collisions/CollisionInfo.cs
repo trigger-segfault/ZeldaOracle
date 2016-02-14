@@ -67,15 +67,18 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 		// The direction of the collision impact (from the entity's perspective).
 		private int direction;
 		
+		private bool isAutoDodged;
+
 		
 		//-----------------------------------------------------------------------------
 		// Mutators
 		//-----------------------------------------------------------------------------
 		
 		public void Clear() {
-			type		= CollisionType.None;
-			solidObject	= null;
-			direction	= Directions.Right;
+			type			= CollisionType.None;
+			solidObject		= null;
+			direction		= Directions.Right;
+			isAutoDodged	= false;
 		}
 
 		public void SetTileCollision(Tile tile, int direction) {
@@ -113,6 +116,15 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 
 		public bool IsColliding {
 			get { return (type != CollisionType.None); }
+		}
+
+		public bool IsAutoDodged {
+			get { return isAutoDodged; }
+			set { isAutoDodged = value; }
+		}
+
+		public bool IsCollidingAndNotAutoDodged {
+			get { return (IsColliding && !isAutoDodged); }
 		}
 		
 		public int Direction {

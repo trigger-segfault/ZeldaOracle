@@ -24,6 +24,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		private int direction;
 		private int maxDistance;
 		private float playerSpeed;
+		private bool isWaitingForView;
 
 
 		//-----------------------------------------------------------------------------
@@ -57,22 +58,32 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		public override void OnBegin() {
 			base.OnBegin();
 
-			timer		= 0;
-			distance	= 0;
-			maxDistance = GameSettings.VIEW_SIZE[direction % 2];
-			playerSpeed	= TRANSITION_PLAYER_HSPEED;
+			isWaitingForView	= true;
+			timer				= 0;
+			distance			= 0;
+			maxDistance			= GameSettings.VIEW_SIZE[direction % 2];
+			playerSpeed			= TRANSITION_PLAYER_HSPEED;
 			if (Directions.IsVertical(direction))
 				playerSpeed = TRANSITION_PLAYER_VSPEED;
-
-			// Move the player to the new room.
-			Vector2F playerPos = Player.Position - (Directions.ToPoint(direction) * NewRoomControl.RoomBounds.Size);
-			Player.Position = playerPos + Directions.ToVector(direction) * (playerSpeed * ((float) maxDistance / (float) TRANSITION_SPEED));
-			SetupNewRoom();
-			Player.Position = playerPos;
 		}
 
 		public override void Update() {
 			timer++;
+
+			// Wait for the view to pan to the player.
+			if (isWaitingForView) {
+				OldRoomControl.ViewControl.PanTo(Player.Center + Player.ViewFocusOffset);
+				if (OldRoomControl.ViewControl.IsCenteredOnPosition(Player.Center + Player.ViewFocusOffset)) {
+					// Setup the new room and move the player to the new room.
+					Vector2F playerPos = Player.Position - (Directions.ToPoint(direction) * NewRoomControl.RoomBounds.Size);
+					Player.Position = playerPos + Directions.ToVector(direction) * (playerSpeed * ((float) maxDistance / (float) TRANSITION_SPEED));
+					SetupNewRoom();
+					Player.Position = playerPos;
+					isWaitingForView = false;
+					return;
+				}
+				return;
+			}
 
 			// Update HUD.
 			GameControl.HUD.Update();

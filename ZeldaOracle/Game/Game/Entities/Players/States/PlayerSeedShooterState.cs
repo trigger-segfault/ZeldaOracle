@@ -58,9 +58,19 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				// Spawn the seed projectile.
 				SeedProjectile seed = new SeedProjectile(weapon.CurrentSeedType, true);
 				Vector2F spawnOffset = projectilePositions[angle] + new Vector2F(4, 11) - new Vector2F(8, 8);
+				int spawnZPosition = 0;
+
+				if (!player.RoomControl.IsSideScrolling) {
+					spawnZPosition = 5;
+				}
+				else {
+					spawnOffset.Y -= 5.0f;
+					spawnZPosition = 0;
+				}
+
 				Player.ShootFromAngle(seed, angle,
 					GameSettings.SEED_SHOOTER_SHOOT_SPEED,
-					spawnOffset, 5);
+					spawnOffset, spawnZPosition);
 				weapon.SeedTracker.TrackEntity(seed);
 				weapon.UseAmmo();
 				

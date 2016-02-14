@@ -50,6 +50,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			base.Update();
 
 			if (respawning) {
+				// Wait for the view to pan to the player.
 				if (player.RoomControl.ViewControl.IsCenteredOnPosition(player.Center)) {
 					player.Graphics.IsVisible = true;
 					player.Hurt(new DamageInfo(2));

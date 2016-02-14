@@ -92,6 +92,15 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 
 		public override void Initialize() {
 			base.Initialize();
+			
+			if (RoomControl.IsSideScrolling) {
+				Physics.CollisionBox = new Rectangle2F(-1, 0, 2, 1);
+			}
+			else {
+				Physics.CollisionBox = new Rectangle2F(-1, -5, 2, 1);
+			}
+			Physics.SoftCollisionBox = Physics.CollisionBox;
+
 			reboundCounter = 0;
 			tileLocation = new Point2I(-1, -1);
 			Graphics.PlaySprite(GameData.SPR_ITEM_SEEDS[(int) type]);

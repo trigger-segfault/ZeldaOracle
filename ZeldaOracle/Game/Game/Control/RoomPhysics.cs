@@ -50,6 +50,13 @@ namespace ZeldaOracle.Game.Control {
 			// Initialize the collision state for this frame.
 			InitPhysicsState(entity);
 
+			if (roomControl.IsSideScrolling && entity.Physics.PreviousCollisionInfo[Directions.Down].Tile != null) {
+				// NOTE: this needs some checks before execution.
+				Vector2F tileVelocity = entity.Physics.PreviousCollisionInfo[Directions.Down].Tile.Velocity;
+				entity.Y += tileVelocity.Y;
+				entity.Physics.VelocityX += tileVelocity.X;
+			}
+
 			// Check the surface tile beneath the entity.
 			CheckSurfaceTile(entity);
 			// Resolve collisions with solid objects.
@@ -766,10 +773,24 @@ namespace ZeldaOracle.Game.Control {
 			entity.Physics.MovementCollisions[clipDirection] = true;
 			if (!entity.Physics.CollisionInfo[clipDirection].IsColliding)
 				entity.Physics.CollisionInfo[clipDirection].SetCollision(other, clipDirection);
-
-			// Perform collision auto dodging.
-			if (entity.Physics.AutoDodges && Controls.Arrows[clipDirection].IsDown()) // TEMP: Check arrow key (assuming its the player)
-				PerformCollisionDodge(entity, clipDirection, other, solidBox);
+			
+			// Perform collision dodging.
+			bool canDodge = true;
+			if (entity is Player) // TODO: this won't work for when player is knocked back
+				canDodge = ((Player) entity).Movement.AllowMovementControl && Controls.Arrows[clipDirection].IsDown();
+			if (entity.Physics.AutoDodges && canDodge) { 
+				if (roomControl.IsSideScrolling && axis == Axes.X &&
+					(!(entity is Player) || !((Player) entity).Movement.IsOnSideScrollLadder || ((other is Tile) && ((Tile) other).IsInMotion)) &&
+					(entity.IsOnGround || entity.Physics.PreviousCollisionInfo[Directions.Down].IsColliding))
+				{
+					// Step up onto blocks if it is a small enough distance.
+					PerformSideScrollCollisionSnap(entity, clipDirection, other, solidBox);
+				}
+				else {
+					// Auto dodging.
+					PerformCollisionDodge(entity, clipDirection, other, solidBox);
+				}
+			}
 		}
 
 		// Attempt to dodge a collision.
@@ -780,7 +801,7 @@ namespace ZeldaOracle.Game.Control {
 				return false;
 
 			// Can't dodge moving tiles.
-			if (solidObject is Tile && ((Tile) solidObject).IsMoving)
+			if ((solidObject is Tile) && ((Tile) solidObject).IsMoving)
 				return false;
 
 			Rectangle2F entityBox = entity.Physics.PositionedCollisionBox;
@@ -792,10 +813,11 @@ namespace ZeldaOracle.Game.Control {
 				int moveDirection = (direction + (side == 0 ? 1 : 3)) % 4;
 				float distanceToEdge = Math.Abs(entityBox.GetEdge(
 					Directions.Reverse(moveDirection)) - solidBox.GetEdge(moveDirection));
-
+				
 				// Check if the distance to the edge is within dodge range.
 				if (distanceToEdge <= entity.Physics.AutoDodgeDistance) {
 					float moveAmount = Math.Min(entity.Physics.AutoDodgeSpeed, distanceToEdge);
+
 					Vector2F nextPosition = GMath.Round(entity.Position) +
 						(Directions.ToVector(moveDirection) * moveAmount);
 					Vector2F goalPosition = entity.Position + Directions.ToVector(direction) +
@@ -806,12 +828,39 @@ namespace ZeldaOracle.Game.Control {
 						!IsCollidingAt(entity, goalPosition, false, direction, penetrationDistance))
 					{
 						entity.Position += Directions.ToVector(moveDirection) * moveAmount;
+						entity.Physics.CollisionInfo[direction].IsAutoDodged = true;
 						//entity.Physics.MovementCollisions[direction] = false; // TODO: Figure out complications for removing this.
 						return true;
 					}
 				}
 			}
 
+			return false;
+		}
+		
+		// Attempt to snap a collision.
+		private bool PerformSideScrollCollisionSnap(Entity entity, int direction, object solidObject, Rectangle2F solidBox) {
+			Rectangle2F entityBox = entity.Physics.PositionedCollisionBox;
+			float penetrationDistance = GetClipPenetration(
+				entity.Physics.PositionedCollisionBox, solidBox, direction);
+			float distanceToEdge = entityBox.Bottom - solidBox.Top;
+			//Vector2F goalPosition = entity.Position + Directions.ToVector(direction) +
+				//(Directions.ToVector(Directions.Up) * distanceToEdge);
+			
+			Vector2F goalPosition = entity.Position +
+				Directions.ToVector(direction) -
+				new Vector2F(0.0f, distanceToEdge);
+
+			// Check if the distance to the edge is within dodge range.
+			// Make sure the entity is not colliding when placed at the solid object's edge.
+			if (distanceToEdge <= entity.Physics.AutoDodgeDistance &&
+				!IsCollidingAt(entity, goalPosition, false, direction, penetrationDistance))
+			{
+				entity.Position = goalPosition;
+				entity.Physics.MovementCollisions[Directions.Down] = true;
+				entity.Physics.CollisionInfo[Directions.Down].SetCollision(solidObject, Directions.Down);
+				return true;
+			}
 			return false;
 		}
 		
@@ -862,7 +911,7 @@ namespace ZeldaOracle.Game.Control {
 				GetHighestLadder(player, player.PreviousPosition);
 			if (player.Movement.HighestSideScrollLadderTile == null)
 				player.Movement.IsOnSideScrollLadder = false;
-			else if (player.Physics.VelocityY >= 0.0f && Controls.Up.IsDown())
+			else if (player.Physics.VelocityY >= 0.0f && player.Movement.AllowMovementControl && Controls.Up.IsDown())
 				player.Movement.IsOnSideScrollLadder = true;
 					
 			// Collide with ladders.
@@ -877,6 +926,11 @@ namespace ZeldaOracle.Game.Control {
 			// Check for climbing off the top of a ladder.
 			if (player.Movement.IsOnSideScrollLadder && player.Movement.HighestSideScrollLadderTile != null)
 				CheckClimbingOffLadderTop(player, player.Movement.HighestSideScrollLadderTile);
+
+			// Check for climbing to the bottom of a ladder.
+			if (player.Physics.CollisionInfo[Directions.Down].IsCollidingAndNotAutoDodged &&
+				player.Movement.AllowMovementControl && Controls.Down.IsDown())
+				player.Movement.IsOnSideScrollLadder = false;
 
 			// Check if the player is no longer on a ladder.
 			if (player.Movement.IsOnSideScrollLadder) {
@@ -978,7 +1032,7 @@ namespace ZeldaOracle.Game.Control {
 				!player.Physics.ClipCollisionInfo[Directions.Down].IsColliding)
 			{
 				// If holding the [Down] button, then begin climbing the ladder instead.
-				if (Controls.Down.IsDown() && !Controls.Up.IsDown()) {
+				if (player.Movement.AllowMovementControl && Controls.Down.IsDown() && !Controls.Up.IsDown()) {
 					player.Movement.IsOnSideScrollLadder = true;
 				}
 				else {

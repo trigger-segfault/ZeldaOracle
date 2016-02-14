@@ -12,17 +12,19 @@ namespace ZeldaOracle.Game.Entities {
 
 		private Reward reward;
 		private bool showMessage;
+		private bool isDrop;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public CollectibleReward(Reward reward) {
+		public CollectibleReward(Reward reward, bool isDrop = false) {
 			this.reward			= reward;
 			this.showMessage	= !reward.OnlyShowMessageInChest;
 			this.hasDuration	= reward.HasDuration;
 			this.isCollectibleWithItems = reward.IsCollectibleWithItems;
+			this.isDrop			= isDrop;
 
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2I(-4, -9, 8, 8);
@@ -64,6 +66,17 @@ namespace ZeldaOracle.Game.Entities {
 
 		public override void Initialize() {
 			base.Initialize();
+
+			if (RoomControl.IsSideScrolling) {
+				// Drops cannot fall down, but they can rise up.
+				if (isDrop) {
+					Physics.MaxFallSpeed		= 0.0f;
+					Physics.CollideWithWorld	= false;
+				}
+				else {
+					Physics.CollideWithWorld = true;
+				}
+			}
 			
 			hasDuration = reward.HasDuration;
 

@@ -40,7 +40,7 @@ namespace ZeldaOracle.Game.Items.Drops {
 		
 		public Entity CreateDropEntity(GameControl gameControl) {
 			if (reward != null) {
-				return new CollectibleReward(reward);
+				return new CollectibleReward(reward, true);
 			}
 			else if (entityType != null) {
 				// Spawn a new entity.

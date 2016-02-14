@@ -30,14 +30,24 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 				
 				CollectibleReward collectible = new CollectibleReward(reward);
 				collectible.Collected += delegate() {
-					Properties.SetBase("looted", true);
+					Properties.Set("looted", true);
 				};
 
 				// Spawn the reward collectible.
 				RoomControl.SpawnEntity(collectible);
 				collectible.SetPositionByCenter(Center);
-				if (Properties.GetBoolean("spawn_from_ceiling", false))
-					collectible.ZPosition = Center.Y + 8;
+				
+				if (Properties.GetBoolean("spawn_from_ceiling", false)) {
+					collectible.ZPosition						= Center.Y + 8;
+					collectible.Physics.HasGravity				= true;
+					collectible.Physics.CollideWithWorld		= RoomControl.IsSideScrolling;
+				}
+				else {
+					collectible.Physics.CollideWithWorld		= false;
+					collectible.Physics.HasGravity				= false;
+					collectible.Physics.IsDestroyedInHoles		= false;
+					collectible.Physics.IsDestroyedOutsideRoom	= false;
+				}
 			}
 		}
 		

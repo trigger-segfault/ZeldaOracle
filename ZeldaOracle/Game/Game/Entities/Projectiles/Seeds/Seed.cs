@@ -62,11 +62,35 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 			}
 
 			// Spawn the seed effect.
-			DestroyWithSatchelEffect();
+			Entity effect = DestroyWithSatchelEffect();
+
+			if (type == SeedType.Scent) {
+				if (RoomControl.IsSideScrolling)
+					effect.Y += 3;
+			}
+			else if (type == SeedType.Ember) {
+				if (RoomControl.IsSideScrolling)
+					effect.Y += 1;
+				effect.Physics.HasGravity = false;
+			}
+			else if (type == SeedType.Mystery) {
+				if (RoomControl.IsSideScrolling)
+					effect.Y -= 1;
+			}
 		}
 
 		public override void Initialize() {
 			base.Initialize();
+			
+			if (RoomControl.IsSideScrolling) {
+				Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 3);
+				Physics.CollideWithWorld	= true;
+			}
+			else {
+				Physics.CollisionBox = new Rectangle2F(-1, -1, 2, 2);
+			}
+			Physics.SoftCollisionBox = Physics.CollisionBox;
+
 			Graphics.PlaySprite(GameData.SPR_ITEM_SEEDS[(int) type]);
 		}
 	}

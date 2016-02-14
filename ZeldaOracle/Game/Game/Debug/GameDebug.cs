@@ -444,8 +444,10 @@ namespace ZeldaOracle.Game.Debug {
 					Color collisionBoxColor = Color.Yellow;
 					if (entity is Player && ((Player) entity).Movement.IsOnSideScrollLadder)
 						collisionBoxColor = new Color(255, 160, 0);
+					collisionBox.X = GMath.Round(collisionBox.X + 0.001f);
+					collisionBox.Y = GMath.Round(collisionBox.Y + 0.001f);
+					//collisionBox.Point = GMath.Round(collisionBox.Point);
 					g.FillRectangle(collisionBox, collisionBoxColor);
-					collisionBox.Point = GMath.Round(collisionBox.Point);
 
 					for (int i = 0; i < 4; i++) {
 						CollisionInfoNew collisionInfo = entity.Physics.ClipCollisionInfo[i];

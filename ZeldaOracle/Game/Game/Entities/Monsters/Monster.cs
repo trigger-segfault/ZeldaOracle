@@ -303,7 +303,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			AudioSystem.PlaySound(GameData.SOUND_MONSTER_DIE);
 			RoomControl.SpawnEntity(explosion, Center);
 			if (!softKill)
-				Properties.SetBase("dead", true);
+				Properties.Set("dead", true);
 			base.Die();
 		}
 

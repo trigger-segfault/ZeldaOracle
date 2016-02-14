@@ -67,13 +67,13 @@ namespace ZeldaOracle.Game.Tiles {
 				windingOrder = WindingOrder.CounterClockwise;
 				arrowsAnimationPlayer.Play(GameData.ANIM_TURNSTILE_ARROWS_COUNTERCLOCKWISE);
 				turnstileAnimationPlayer.SubStripIndex = 1;
-				Properties.SetBase("clockwise", false);
+				Properties.Set("clockwise", false);
 			}
 			else {
 				windingOrder = WindingOrder.Clockwise;
 				arrowsAnimationPlayer.Play(GameData.ANIM_TURNSTILE_ARROWS_CLOCKWISE);
 				turnstileAnimationPlayer.SubStripIndex = 0;
-				Properties.SetBase("clockwise", true);
+				Properties.Set("clockwise", true);
 			}
 		}
 

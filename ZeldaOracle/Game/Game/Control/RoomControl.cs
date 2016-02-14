@@ -252,7 +252,6 @@ namespace ZeldaOracle.Game.Control {
 				Player.EntityIndex = 0;
 				entities.Add(Player);
 			}
-			roomPhysics.InitPhysicsState(Player);
 
 			// Create the tile grid.
 			tileManager.Initialize(room);
@@ -465,8 +464,10 @@ namespace ZeldaOracle.Game.Control {
 			}
 			
 			// Process Physics.
-			if (GameControl.UpdateRoom)
+			if (GameControl.UpdateRoom) {
 				roomPhysics.ProcessPhysics();
+				Player.CheckRoomTransitions();
+			}
 
 			bool nextAllMonstersDead = AllMonstersDead();
 			if (nextAllMonstersDead && !allMonstersDead)
@@ -527,7 +528,9 @@ namespace ZeldaOracle.Game.Control {
 			Rectangle2I viewRect = new Rectangle2I(0, 0, GameSettings.VIEW_WIDTH, GameSettings.VIEW_HEIGHT);
 			g.DrawSprite(GameData.SPR_HUD_BACKGROUND, GameData.VARIANT_DARK, viewRect);
 
-			g.Translate(-viewControl.ViewPosition);
+			Vector2F viewTranslation = -GMath.Round(viewControl.ViewPosition);
+
+			g.Translate(viewTranslation);
 			
 			// Draw tiles.
 			roomGraphics.Clear();
@@ -551,7 +554,7 @@ namespace ZeldaOracle.Game.Control {
 			// DEBUG: Draw debug information.
 			GameDebug.DrawRoom(g, this);
 			
-			g.Translate(-(position - viewControl.ViewPosition));
+			g.Translate(-(position + viewTranslation));
 		}
 
 		public override void Draw(Graphics2D g) {

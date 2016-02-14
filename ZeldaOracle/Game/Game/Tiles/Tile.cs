@@ -272,7 +272,7 @@ namespace ZeldaOracle.Game.Tiles {
 				SpawnDrop();
 				roomControl.RemoveTile(this);
 				if (properties.GetBoolean("disable_on_destroy", false))
-					Properties.SetBase("enabled", false);
+					Properties.Set("enabled", false); // TODO: this won't exactly work anymore.
 			}
 		}
 
@@ -327,7 +327,7 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 
 			if (properties.GetBoolean("disable_on_destroy", false))
-				Properties.SetBase("enabled", false);
+				Properties.Set("enabled", false); // TODO: this won't exactly work anymore.
 
 			// Spawn drops.
 			Entity dropEntity = SpawnDrop();
@@ -415,7 +415,7 @@ namespace ZeldaOracle.Game.Tiles {
 			
 			// Destroy the tile.
 			if (properties.GetBoolean("disable_on_destroy", false))
-				Properties.SetBase("enabled", false);
+				Properties.Set("enabled", false); // TODO: this won't exactly work anymore.
 			RoomControl.RemoveTile(this);
 		}
 

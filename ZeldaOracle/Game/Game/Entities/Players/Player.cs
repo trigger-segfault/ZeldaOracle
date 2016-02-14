@@ -435,8 +435,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		// Custom collision function for colliding with room edges.
-		private void CheckRoomTransitions() {
-			if (!AllowRoomTransition || IsOnHazardTile())
+		public void CheckRoomTransitions() {
+			if (!AllowRoomTransition || IsOnHazardTile() || IsInAir)
 				return;
 
 			// Check for room edge collisions.
@@ -630,7 +630,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Update superclass.
 			base.Update();
 
-			CheckRoomTransitions();
+			//CheckRoomTransitions(); Moved to RoomControl.Update()
 		}
 
 		public override void Draw(RoomGraphics g) {

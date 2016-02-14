@@ -274,6 +274,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 					moveVector = Angles.ToVector(moveAngle);
 			}
 
+			// Clip Y velocity if side scrolling and not climbing.
+			if (player.RoomControl.IsSideScrolling && !isOnSideScrollLadder) {
+				if (analogMode)
+					moveVector = new Vector2F(analogStick.Position.X, 0.0f);
+				else
+					moveVector = new Vector2F(Angles.ToVector(moveAngle, false).X, 0.0f);
+			}
+
 			return moveVector;
 		}
 
@@ -511,7 +519,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public void Update() {
 			// Determine movement mode.
-			if (isOnSideScrollLadder)
+			if (player.RoomControl.IsSideScrolling && isOnSideScrollLadder)
 				mode = moveModeNormal;
 			else if (player.Physics.IsInAir)
 				mode = moveModeAir;
@@ -519,7 +527,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				mode = moveModeWater;
 			else if (player.Physics.IsOnIce)
 				mode = moveModeIce;
-			else if (player.Physics.IsOnStairs || (player.Physics.IsOnLadder && !player.RoomControl.IsSideScrolling))
+			else if (player.Physics.IsOnStairs || player.Physics.IsOnLadder)
 				mode = moveModeSlow;
 			else if (player.Physics.IsInGrass)
 				mode = moveModeGrass;
@@ -571,7 +579,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				bool faceUp = false;
 				if (HighestSideScrollLadderTile != null)
 					faceUp = (player.Y > HighestSideScrollLadderTile.Bounds.Top + 4.0f);
-				if (faceUp && player.CurrentState == player.NormalState)
+				if (faceUp && allowMovementControl)
 					player.Direction = Directions.Up;
 			}
 		}
@@ -664,6 +672,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		
 		public int MoveAngle {
 			get { return moveAngle; }
+		}
+		
+		public bool AllowMovementControl {
+			get { return allowMovementControl; }
 		}
 
 		public bool IsCapeDeployed {

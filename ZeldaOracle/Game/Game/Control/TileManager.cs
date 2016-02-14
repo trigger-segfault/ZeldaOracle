@@ -54,15 +54,14 @@ namespace ZeldaOracle.Game.Control {
 
 		// Return the tile location that the given position in pixels is situated in.
 		public Point2I GetTileLocation(Vector2F position) {
-			return (Point2I) (position / tileGridCellSize);
+			return (Point2I) GMath.Floor(position / tileGridCellSize);
 		}
 
 		// inflateAmount inflates the output rectangle.
 		public Rectangle2I GetTileAreaFromRect(Rectangle2F rect, int inflateAmount = 0) {
 			Rectangle2I area;
-			rect.Size	= (GMath.Ceiling((rect.Point + rect.Size) / tileGridCellSize) * tileGridCellSize) - rect.Point;
-			area.Point	= (Point2I) (rect.TopLeft / (Vector2F) tileGridCellSize);
-			area.Size	= ((Point2I) (rect.BottomRight / (Vector2F) tileGridCellSize)) - area.Point;
+			area.Point	= (Point2I) GMath.Floor(rect.TopLeft / tileGridCellSize);
+			area.Size	= (Point2I) GMath.Ceiling(rect.BottomRight / tileGridCellSize) - area.Point;
 			if (inflateAmount != 0)
 				area.Inflate(inflateAmount, inflateAmount);
 			return Rectangle2I.Intersect(area, new Rectangle2I(Point2I.Zero, gridDimensions));
@@ -86,7 +85,7 @@ namespace ZeldaOracle.Game.Control {
 		
 		// Return an enumerable list of tiles touching the given point.
 		public IEnumerable<Tile> GetTilesAtPosition(Vector2F position, TileLayerOrder layerOrder = TileLayerOrder.LowestToHighest) {
-			Point2I location = (Point2I) (position / tileGridCellSize);
+			Point2I location = GetTileLocation(position);
 			foreach (Tile tile in GetTilesAtLocation(location, layerOrder)) {
 				if (tile.Bounds.Contains(position))
 					yield return tile;
@@ -187,7 +186,7 @@ namespace ZeldaOracle.Game.Control {
 		// Return the highest surface tile at the given position.
 		public Tile GetSurfaceTileAtPosition(Vector2F position, bool includePlatforms = false) {
 			// Because tiles may have moved this frame, we need to check a 3x3 area.
-			Point2I location = (Point2I) (position / tileGridCellSize);
+			Point2I location = GetTileLocation(position);
 			Rectangle2I area = new Rectangle2I(location, Point2I.One);
 			area.Inflate(1, 1);
 

@@ -572,10 +572,10 @@ TILE webbed_wall;
 	PROPERTIES	(boolean, disable_on_destroy, true);
 END;
 
-TILE webbed_wall_right;	CLONE webbed_wall; END;
-TILE webbed_wall_up;	CLONE webbed_wall; END;
-TILE webbed_wall_left;	CLONE webbed_wall; END;
-TILE webbed_wall_down;	CLONE webbed_wall; END;
+TILE webbed_wall_right;	CLONE webbed_wall; SPRITE tile_webbed_wall_right; END;
+TILE webbed_wall_up;	CLONE webbed_wall; SPRITE tile_webbed_wall_up; END;
+TILE webbed_wall_left;	CLONE webbed_wall; SPRITE tile_webbed_wall_left; END;
+TILE webbed_wall_down;	CLONE webbed_wall; SPRITE tile_webbed_wall_down; END;
 
 TILE bombable_wall;
 	SOLID		block;
@@ -583,10 +583,10 @@ TILE bombable_wall;
 	PROPERTIES	(boolean, disable_on_destroy, true);
 END;
 
-TILE bombable_wall_right;	CLONE bombable_wall; END;
-TILE bombable_wall_up;		CLONE bombable_wall; END;
-TILE bombable_wall_left;	CLONE bombable_wall; END;
-TILE bombable_wall_down;	CLONE bombable_wall; END;
+TILE bombable_wall_right;	CLONE bombable_wall; SPRITE tile_bombable_wall_right; END;
+TILE bombable_wall_up;		CLONE bombable_wall; SPRITE tile_bombable_wall_up; END;
+TILE bombable_wall_left;	CLONE bombable_wall; SPRITE tile_bombable_wall_left; END;
+TILE bombable_wall_down;	CLONE bombable_wall; SPRITE tile_bombable_wall_down; END;
 
 # ---- Minecart Tracks --------------------------------------------------------
 
