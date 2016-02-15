@@ -18,6 +18,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaEditor.Control;
 using ZeldaOracle.Game.Tiles.Custom;
 using ZeldaOracle.Game.Entities.Monsters;
+using System.IO;
 
 namespace ZeldaEditor {
 
@@ -184,7 +185,10 @@ namespace ZeldaEditor {
 			Application.Idle += delegate { Invalidate(); };
 
 			// TEMP: Open this world file upon starting the editor.
-			editorControl.OpenFile("../../../../WorldFiles/temp_world.zwd");
+			if (File.Exists("./temp_world.zwd"))
+				editorControl.OpenFile("temp_world.zwd");
+			else if (File.Exists("../../../../WorldFiles/temp_world.zwd"))
+				editorControl.OpenFile("../../../../WorldFiles/temp_world.zwd");
 			//editorControl.OpenFile("temp_world.zwd");
 
 			UpdateLevel();

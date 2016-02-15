@@ -68,6 +68,8 @@ namespace ZeldaOracle.Game.Entities {
 			base.Initialize();
 
 			if (RoomControl.IsSideScrolling) {
+				Physics.CollideWithRoomEdge = false;
+
 				// Drops cannot fall down, but they can rise up.
 				if (isDrop) {
 					Physics.MaxFallSpeed		= 0.0f;
