@@ -34,9 +34,9 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 					RoomControl.GameControl.PushRoomState(new RoomStateReward(reward, (Point2I)Position));
 					
 					AudioSystem.PlaySound(GameData.SOUND_CHEST_OPEN);
-					Properties.SetBase("looted", true);
-					Properties.SetBase("enabled", true); // Opened chest are always spawned.
-					SpriteIndex = 1;
+					Properties.Set("looted", true);
+					Properties.Set("enabled", true); // Opened chest are always spawned.
+					Graphics.PlaySpriteAnimation(SpriteList[1]);
 				}
 				else {
 					RoomControl.GameControl.DisplayMessage("It won't open from this side!");
@@ -48,8 +48,8 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 
 		public override void OnInitialize() {
 			base.OnInitialize();
-
-			SpriteIndex = (IsLooted ? 1 : 0);
+			
+			Graphics.PlaySpriteAnimation(SpriteList[IsLooted ? 1 : 0]);
 		}
 
 

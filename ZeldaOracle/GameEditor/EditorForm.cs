@@ -22,6 +22,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
 
 using FormsControl = System.Windows.Forms.Control;
+using ZeldaOracle.Game;
 
 namespace ZeldaEditor {
 
@@ -113,6 +114,21 @@ namespace ZeldaEditor {
 		//-----------------------------------------------------------------------------
 		// Methods
 		//-----------------------------------------------------------------------------
+
+		public void OpenObjectPropertiesEditor(IPropertyObject propertyObject) {
+			if (propertyObject != null) {
+				editorControl.OpenObjectProperties(propertyObject);
+
+				if (objectEditorForm == null || objectEditorForm.IsDisposed) {
+					objectEditorForm = new ObjectEditor(editorControl);
+					objectEditorForm.SetObject(propertyObject);
+					objectEditorForm.Show(this);
+				}
+				else {
+					objectEditorForm.SetObject(propertyObject);
+				}
+			}
+		}
 
 		// Prompt the user to save unsaved changes if there are any. Returns
 		// the result of the prompt dialogue (yes/no/cancel), or 'yes' if
@@ -382,6 +398,10 @@ namespace ZeldaEditor {
 			get { return contextMenuGeneral; }
 		}
 
+		public ContextMenuStrip ContextMenuStripTileInLevel {
+			get { return contextMenuStripTileInLevel; }
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// File Menu Buttons
@@ -463,6 +483,7 @@ namespace ZeldaEditor {
 
 		// Delete
 		private void deleteToolStripMenuItem1_Click(object sender, EventArgs e) {
+			editorControl.LevelDisplay.DeleteSelectionGrid();
 			editorControl.CurrentTool.Delete();
 		}
 		
@@ -475,6 +496,7 @@ namespace ZeldaEditor {
 
 		// Deselect
 		private void deselectToolStripMenuItem_Click(object sender, EventArgs e) {
+			editorControl.LevelDisplay.DeselectSelectionGrid();
 			editorControl.CurrentTool.Deselect();
 		}
 		
@@ -483,16 +505,8 @@ namespace ZeldaEditor {
 		// Tile Properties...
 		private void tilePropertiesToolStripMenuItem_Click(object sender, EventArgs e) {
 			IPropertyObject obj = editorControl.PropertyGrid.PropertyObject;
-			if (obj is IPropertyObject) {
-				if (objectEditorForm == null || objectEditorForm.IsDisposed) {
-					objectEditorForm = new ObjectEditor(editorControl);
-					objectEditorForm.SetObject((IPropertyObject) obj);
-					objectEditorForm.Show(this);
-				}
-				else {
-					objectEditorForm.SetObject((IPropertyObject) obj);
-				}
-			}
+			if (obj is IPropertyObject)
+				OpenObjectPropertiesEditor(obj);
 		}
 
 		
@@ -520,7 +534,9 @@ namespace ZeldaEditor {
 			using (LevelAddForm form = new LevelAddForm(editorControl.World)) {
 				if (form.ShowDialog(this) == DialogResult.OK) {
 					Level level = new Level(form.LevelName, form.LevelWidth, form.LevelHeight,
-						form.LevelLayerCount, form.LevelRoomSize, form.LevelZone);
+						GameSettings.DEFAULT_TILE_LAYER_COUNT, form.LevelRoomSize, form.LevelZone);
+					// Setup the level with default tiles.
+					level.FillWithDefaultTiles();
 					editorControl.AddLevel(level, true);
 				}
 			}
@@ -660,29 +676,21 @@ namespace ZeldaEditor {
 			Point2I selectedRoom = editorControl.SelectedRoom;
 			if (selectedRoom.X >= 0 && selectedRoom.Y >= 0) {
 				Room room = editorControl.Level.GetRoomAt(selectedRoom);
-
-				if (objectEditorForm == null || objectEditorForm.IsDisposed)
-					objectEditorForm = new ObjectEditor(editorControl);
-				objectEditorForm.SetObject(room);
-				objectEditorForm.Show(this);
+				OpenObjectPropertiesEditor(room);
 			}
 		}
 		
 		// Open room properties.
 		private void roomPropertiesToolStripMenuItem1_Click(object sender, EventArgs e) {
 			Room room = editorControl.LevelDisplay.SelectedRoom;
+			if (room != null)
+				OpenObjectPropertiesEditor(room);
+		}
 
-			if (room != null) {
-				editorControl.OpenObjectProperties(room);
-				if (objectEditorForm == null || objectEditorForm.IsDisposed) {
-					objectEditorForm = new ObjectEditor(editorControl);
-					objectEditorForm.SetObject(room);
-					objectEditorForm.Show(this);
-				}
-				else {
-					objectEditorForm.SetObject(room);
-				}
-			}
+		// Find and replace properties
+		private void findAndReplacePropertiesToolStripMenuItem_Click(object sender, EventArgs e) {
+			Form form = new DevTools.PropertyRefactorForm(editorControl);
+			form.Show(this);
 		}
 		
 		//-----------------------------------------------------------------------------

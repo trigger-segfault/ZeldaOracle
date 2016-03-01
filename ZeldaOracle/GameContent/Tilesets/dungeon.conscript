@@ -1,24 +1,11 @@
 
 #==============================================================
-# Sprites
+# Sprite Sheets
 #==============================================================
 
 LOAD SPRITES;
 
-SPRITESHEET "tileset_dungeon",					(16, 16), (1, 1), (18, 18);
-
-#==============================================================
-# Animations
-#==============================================================
-
-LOAD ANIMATIONS;
-
-
-#==============================================================
-# Tiles
-#==============================================================
-
-LOAD TILESETS;
+SPRITESHEET "tileset_dungeon", (16, 16), (1, 1), (18, 18);
 
 
 #==============================================================
@@ -98,5 +85,14 @@ TILE ( 8, 4); HALFSOLID inside_corner_ne; END;
 TILE ( 7, 5); HALFSOLID inside_corner_sw; END;
 TILE ( 8, 5); HALFSOLID inside_corner_se; END;
 
+# Color Blocks
+SETTILE ( 9, 6), color_block_red;
+SETTILE (10, 6), color_block_blue;
+SETTILE (11, 6), color_block_yellow;
+
+# Color Statues
+SETTILE ( 9, 7), color_statue_red;
+SETTILE (10, 7), color_statue_blue;
+SETTILE (11, 7), color_statue_yellow;
 
 END;

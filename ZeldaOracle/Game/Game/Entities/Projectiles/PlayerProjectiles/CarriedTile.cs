@@ -62,20 +62,31 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		public override void Initialize() {
 			base.Initialize();
 			
+			Graphics.ImageVariant = tile.Graphics.ImageVariant;
+			
 			if (!tile.SpriteAsObject.IsNull)
-				Graphics.PlayAnimation(tile.SpriteAsObject);
+				Graphics.PlaySpriteAnimation(tile.SpriteAsObject);
 			else
-				Graphics.PlayAnimation(tile.CurrentSprite);
+				Graphics.PlaySpriteAnimation(tile.Graphics.AnimationPlayer.SpriteOrSubStrip);
 		}
 
 		public override void OnLand() {
 			// Collide with monsters.
-			CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
-			for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
-				Monster monster = iterator.CollisionInfo.Entity as Monster;
+			foreach (Monster monster in Physics.GetEntitiesMeeting<Monster>(CollisionBoxType.Soft)) {
 				monster.TriggerInteraction(InteractionType.ThrownObject, this);
 				if (IsDestroyed)
 					return;
+			}
+
+			// Collide with surface tiles.
+			Point2I tileLoc = RoomControl.GetTileLocation(position);
+			if (RoomControl.IsTileInBounds(tileLoc)) {
+				Tile tile = RoomControl.GetTopTile(tileLoc);
+				if (tile != null) {
+					tile.OnHitByThrownObject(this);
+					if (IsDestroyed)
+						return;
+				}
 			}
 
 			Break();

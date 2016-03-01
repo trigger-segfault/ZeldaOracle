@@ -9,7 +9,7 @@ using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public abstract class BaseTileData {
+	public abstract class BaseTileData : IPropertyObject {
 		
 		protected Type type;
 		protected Tileset tileset;
@@ -28,7 +28,7 @@ namespace ZeldaOracle.Game.Tiles {
 			type			= null;
 			tileset			= null;
 			sheetLocation	= Point2I.Zero;
-			properties		= new Properties();
+			properties		= new Properties(this);
 			events			= new ObjectEventCollection();
 
 			properties.Set("id", "");
@@ -41,7 +41,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 			properties.Set("sprite_index", 0);
 			properties.SetDocumentation("sprite_index", "Sprite Index", "sprite_index", "", "Internal",
-				"The current sprite in the sprite list to draw.", true, true);
+				"The current sprite in the sprite list to draw.");
 
 			properties.Set("substrip_index", 0);
 			properties.SetDocumentation("substrip_index", "Animation Substrip Index", "", "", "Internal",

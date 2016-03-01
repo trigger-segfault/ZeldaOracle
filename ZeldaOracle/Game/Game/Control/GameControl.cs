@@ -355,6 +355,10 @@ namespace ZeldaOracle.Game.Control {
 
 				if (!roomControl.Room.IsHiddenFromMap)
 					lastRoomOnMap = roomControl.Room;
+				
+				// Leave the old room.
+				foreach (Room room in oldLevel.GetRooms())
+					room.OnRoomLeave();
 
 				// Respawn all monsters in the previous level.
 				if (roomControl.Level != oldLevel) {

@@ -68,6 +68,10 @@ SPRITE event_tile_warp_entrance,		(0, 0); END;
 SPRITE event_tile_warp_stairs,			(1, 0); END;
 SPRITE event_tile_warp_tunnel,			(2, 0); END;
 SPRITE event_tile_track_intersection,	(3, 0); END;
+SPRITE event_tile_colored_gel,			(0, 1); END;
+SPRITE event_tile_color_tile_puzzle,	(1, 1); END;
+SPRITE event_tile_lava_harden,			(2, 1); END;
+SPRITE event_tile_tile_path_puzzle,		(3, 1); END;
 
 
 #==============================================================
@@ -387,8 +391,21 @@ SPRITE tile_roller_vertical_3,			( 2, 4); END;
 SPRITE tile_arrow_cannon_left,			( 3, 4); END;
 SPRITE tile_arrow_cannon_right,			( 4, 4); END;
 
-SPRITE minecart_horizontal,				(0, 5), (0, -3); ADD (2, 5), (0, -3); END;
-SPRITE minecart_vertical,				(0, 6), (0, -3); ADD (2, 6), (0, -3); END;
+SPRITE minecart_horizontal,				( 0, 5), (0, -3); ADD (2, 5), (0, -3); END;
+SPRITE minecart_vertical,				( 0, 6), (0, -3); ADD (2, 6), (0, -3); END;
+
+SPRITE tile_pull_handle_bar_horizontal,	(10, 5); END;
+SPRITE tile_pull_handle_up,				(11, 5); END;
+SPRITE tile_pull_handle_left,			(12, 5); END;
+SPRITE tile_pull_handle_bar_vertical,	(10, 6); END;
+SPRITE tile_pull_handle_down,			(11, 6); END;
+SPRITE tile_pull_handle_right,			(12, 6); END;
+
+SPRITE tile_seed_bouncer_horizontal,	(12, 7); END;
+SPRITE tile_seed_bouncer_northeast,		(13, 7); END;
+SPRITE tile_seed_bouncer_vertical,		(14, 7); END;
+SPRITE tile_seed_bouncer_northwest,		(15, 7); END;
+
 
 SPRITE turnstile_bars_angled,
 			( 0,  7), ( 0,  0); ADD ( 1,  7), (16,  0); ADD ( 2,  7), (32,  0);

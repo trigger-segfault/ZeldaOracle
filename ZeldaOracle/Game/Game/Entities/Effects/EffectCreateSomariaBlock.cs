@@ -12,7 +12,7 @@ namespace ZeldaOracle.Game.Entities.Effects {
 
 		private Point2I tileLocation;
 		private ItemCane itemCane;
-
+		
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -25,13 +25,6 @@ namespace ZeldaOracle.Game.Entities.Effects {
 			this.tileLocation	= tileLocation;
 			this.position		= (tileLocation * GameSettings.TILE_SIZE) + new Vector2F(8, 8);
 			this.zPosition		= zPosition;
-
-			if (IsOnGround) {
-				// Make this effect solid to the player (as if the somaria block has already been spawned).
-				Physics.CollisionBox = new Rectangle2F(-8, -8, 16, 16);
-				Physics.SoftCollisionBox = new Rectangle2F(-8, -8, 16, 16);
-				EnablePhysics(PhysicsFlags.Solid);
-			}
 			
 			Graphics.DepthLayer	= DepthLayer.EffectSomariaBlockPoof;
 		}
@@ -43,13 +36,25 @@ namespace ZeldaOracle.Game.Entities.Effects {
 
 		// Return true if a somaria block would break when spawned at the given tile location.
 		private bool CanBlockSpawnAtLocation(Point2I location) {
+			if (!RoomControl.IsSideScrolling && IsInAir)
+				return false;
+
+			// TODO: check if there is a solid block below when side-scrolling.
+
 			if (!RoomControl.IsTileInBounds(location))
 				return false;
+
+			foreach (Tile t in RoomControl.TileManager.GetTilesAtPosition(Center)) {
+				if (!t.IsSurface || !t.IsCoverableByBlock || t.IsHoleWaterOrLava)
+					return false;
+			}
+			/*
 			Tile checkTile = RoomControl.GetTopTile(location);
 			if (checkTile == null)
 				return true;
 			return (checkTile.Layer != RoomControl.Room.TopLayer &&
-					checkTile.IsCoverableByBlock && !checkTile.IsHoleWaterOrLava);
+					checkTile.IsCoverableByBlock && !checkTile.IsHoleWaterOrLava);*/
+			return true;
 		}
 		
 
@@ -57,10 +62,21 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
+		public override void Initialize() {
+			base.Initialize();
+
+			if (CanBlockSpawnAtLocation(tileLocation)) {
+				// Make this effect solid to the player (as if the somaria block has already been spawned).
+				Physics.CollisionBox = new Rectangle2F(-8, -8, 16, 16);
+				Physics.SoftCollisionBox = new Rectangle2F(-8, -8, 16, 16);
+				EnablePhysics(PhysicsFlags.Solid);
+			}
+		}
+
 		public override void OnDestroy() {
 			base.OnDestroy();
 
-			if (IsOnGround && CanBlockSpawnAtLocation(tileLocation)) {
+			if (CanBlockSpawnAtLocation(tileLocation)) {
 				// Create the somaria block.
 				TileSomariaBlock tile = (TileSomariaBlock) Tile.CreateTile(itemCane.SomariaBlockTileData);
 				RoomControl.PlaceTileOnHighestLayer(tile, tileLocation);

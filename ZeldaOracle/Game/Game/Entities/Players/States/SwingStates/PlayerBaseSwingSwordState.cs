@@ -43,28 +43,17 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		// Sword Methods
 		//-----------------------------------------------------------------------------
 
-		protected void CutTileAtLocation(Point2I location) {
-			Tile tile = player.RoomControl.GetTopTile(location);
+		protected void CutTilesAtPoint(Vector2F point) {
+			Tile tile = player.RoomControl.TileManager.GetTopTileAtPosition(point);
 			if (tile != null)
 				tile.OnSwordHit(Weapon);
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Virtual Methods
-		//-----------------------------------------------------------------------------
-		
-		// NOTE: this has been moved into the UnitTool class.
-		//public virtual void OnHitMonster(Monster monster) {
-			//monster.TriggerInteraction(monster.HandlerSword, Weapon as ItemSword);
-		//}
-
-
-		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		
 		public override UnitTool GetSwingTool() {
 			return player.ToolSword;
 		}
@@ -73,30 +62,12 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			player.BeginNormalState();
 		}
 
-		public override void OnSwingTilePeak(int angle, Point2I tileLocation) {
-			if ((angle == Directions.ToAngle(SwingDirection) || !limitTilesToDirection) &&
-				player.IsOnGround && player.RoomControl.IsTileInBounds(tileLocation))
+		public override void OnSwingTilePeak(int angle, Vector2F hitPoint) {
+			if ((angle == Directions.ToAngle(SwingDirection)
+				|| !limitTilesToDirection) && player.IsOnGround)
 			{
-				CutTileAtLocation(tileLocation);
+				CutTilesAtPoint(hitPoint);
 			}
 		}
-		
-		// NOTE: this has been moved into the UnitTool class.
-		/*public override void OnSwingEntityPeak(int angle, Rectangle2F collisionBox) {
-			// Collide with entities.
-			for (int i = 0; i < player.RoomControl.EntityCount; i++) {
-				Entity e = player.RoomControl.Entities[i];
-				if (e.Physics.PositionedSoftCollisionBox.Colliding(collisionBox)) {
-					if (e is Collectible && (e as Collectible).IsPickupable && (e as Collectible).IsCollectibleWithItems) {
-						(e as Collectible).Collect();
-					}
-					if (e is Monster) {
-						OnHitMonster((Monster) e);
-						if (!IsActive)
-							return;
-					}
-				}
-			}
-		}*/
 	}
 }

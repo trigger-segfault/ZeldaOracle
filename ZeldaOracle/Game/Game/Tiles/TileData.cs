@@ -42,6 +42,9 @@ namespace ZeldaOracle.Game.Tiles {
 				.SetDocumentation("Collision Model", "collision_model", "", "General", "");
 			properties.Set("environment_type", (int) TileEnvironmentType.Normal)
 				.SetDocumentation("Environment Type", "General", "");
+			properties.Set("reset_condition", (int) TileResetCondition.LeaveRoom)
+				.SetDocumentation("Reset Condition", "General", "The condition for when the tile resets its properties.");
+
 			properties.Set("disable_on_destroy", false)
 				.SetDocumentation("Disable on Destroy", "General", "");
 
@@ -62,6 +65,12 @@ namespace ZeldaOracle.Game.Tiles {
 				.SetDocumentation("Pickupable Bracelet Level", "Interactions", "");
 			properties.Set("cling_on_stab", true)
 				.SetDocumentation("Cling on Stab", "Interactions", "True if a cling effect should be spawned when the tile is stabbed with the sword.");
+			properties.Set("raised_on_buttons", false)
+				.SetDocumentation("Raised on Buttons", "Interactions", "True if a the tile appears raised when pushed onto a button.");
+
+			properties.Set("hurt_area_point", new Point2I(-1, -1));
+			properties.Set("hurt_area_size", new Point2I(18, 18));
+			properties.Set("hurt_damage", 0);
 
 			// Spawning.
 			properties.Set("spawn_from_ceiling", false)
@@ -192,6 +201,11 @@ namespace ZeldaOracle.Game.Tiles {
 			set { properties.Set("solidity", (int) value); }
 		}
 
+		public TileResetCondition ResetCondition {
+			get { return properties.GetEnum<TileResetCondition>("reset_condition", TileResetCondition.LeaveRoom); }
+			set { properties.Set("reset_condition", (int) value); }
+		}
+
 		public int LedgeDirection {
 			get { return properties.GetInteger("ledge_direction", Directions.Down); }
 			set { properties.Set("ledge_direction", value); }
@@ -205,6 +219,23 @@ namespace ZeldaOracle.Game.Tiles {
 		public float ConveyorSpeed {
 			get { return properties.GetFloat("conveyor_speed", 0.0f); }
 			set { properties.Set("conveyor_speed", value); }
+		}
+
+		public Rectangle2I HurtArea {
+			get {
+				return new Rectangle2I(
+					properties.GetPoint("hurt_area_point", new Point2I(-1, -1)),
+					properties.GetPoint("hurt_area_size", new Point2I(18, 18)));
+			}
+			set {
+				properties.Set("hurt_area_point", value.Point);
+				properties.Set("hurt_area_size", value.Size);
+			}
+		}
+
+		public int HurtDamage {
+			get { return properties.GetInteger("hurt_damage", 0); }
+			set { properties.Set("hurt_damage", value); }
 		}
 	}
 }

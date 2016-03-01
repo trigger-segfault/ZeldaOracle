@@ -270,6 +270,17 @@ namespace ZeldaOracle.Common.Geometry {
 			return Bottom;
 		}
 
+		public void ExtendEdge(int direction, int amount) {
+			if (direction == Directions.Right || direction == Directions.Left)
+				Size.X += amount;
+			if (direction == Directions.Down || direction == Directions.Up)
+				Size.Y += amount;
+			if (direction == Directions.Left)
+				Point.X -= amount;
+			if (direction == Directions.Up)
+				Point.Y -= amount;
+		}
+
 		/** <summary> Returns a rectangle with the corners stretched out by the specified amount. </summary> */
 		public Rectangle2I Inflated(Point2I amount) {
 			return new Rectangle2I(Point - amount, Size + amount * 2);
@@ -313,6 +324,14 @@ namespace ZeldaOracle.Common.Geometry {
 				return false;
 			return ((rect.Min >= Min) &&
 					(rect.Max <= Max));
+		}
+
+		// Returns true if this rectangle intersects another.
+		public bool Intersects(Rectangle2I other) {
+			if (IsEmpty && other.IsEmpty)
+				return false;
+			return !(other.Left - Right >= 0 || other.Top - Bottom >= 0 ||
+					 Left - other.Right >= 0 || Top - other.Bottom >= 0);
 		}
 
 

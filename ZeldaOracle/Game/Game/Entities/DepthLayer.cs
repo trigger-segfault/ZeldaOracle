@@ -10,6 +10,10 @@ namespace ZeldaOracle.Game.Entities {
 
 		Shadows,
 
+		TileLayer1,
+		TileLayer2,
+		TileLayer3,
+
 		Collectibles,
 		PlayerSubmerged,
 

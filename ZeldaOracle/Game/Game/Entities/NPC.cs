@@ -72,7 +72,7 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public override void Initialize() {
-			Graphics.PlayAnimation(animationDefault);
+			Graphics.PlaySpriteAnimation(animationDefault);
 
 			sightDistance	= 2;
 			faceDirection	= direction;
@@ -84,7 +84,7 @@ namespace ZeldaOracle.Game.Entities {
 		public override bool OnPlayerAction(int direction) {
 			if (message != null) {
 				if (!animationTalk.IsNull) {
-					Graphics.PlayAnimation(animationTalk);
+					Graphics.PlaySpriteAnimation(animationTalk);
 				}
 				if (flags.HasFlag(NPCFlags.FacePlayerOnTalk)) {
 					faceDirection = Directions.Reverse(direction);
@@ -92,7 +92,7 @@ namespace ZeldaOracle.Game.Entities {
 				}
 				GameControl.DisplayMessage(message, delegate() {
 					if (!animationTalk.IsNull)
-						Graphics.PlayAnimation(animationDefault);
+						Graphics.PlaySpriteAnimation(animationDefault);
 				});
 				return true;
 			}

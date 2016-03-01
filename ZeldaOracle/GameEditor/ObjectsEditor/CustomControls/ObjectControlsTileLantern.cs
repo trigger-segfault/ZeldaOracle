@@ -11,7 +11,6 @@ namespace ZeldaEditor.ObjectsEditor.CustomControls {
 	public class ObjectControlsTileLantern : CustomObjectEditorControl {
 
 		private CheckBox checkBoxLit;
-		private CheckBox checkBoxRememberState;
 
 
 		//-----------------------------------------------------------------------------
@@ -19,8 +18,7 @@ namespace ZeldaEditor.ObjectsEditor.CustomControls {
 		//-----------------------------------------------------------------------------
 
 		public ObjectControlsTileLantern() {
-			checkBoxLit				= AddCheckBox("Lit");
-			checkBoxRememberState	= AddCheckBox("Remember State");
+			checkBoxLit = AddCheckBox("Lit");
 		}
 
 
@@ -30,12 +28,10 @@ namespace ZeldaEditor.ObjectsEditor.CustomControls {
 
 		public override void SetupObject(IPropertyObject obj) {
 			checkBoxLit.Checked = obj.Properties.Get("lit", true);
-			checkBoxRememberState.Checked = obj.Properties.Get("remember_state", false);
 		}
 
 		public override void ApplyChanges(IPropertyObject obj) {
 			obj.Properties.Set("lit", checkBoxLit.Checked);
-			obj.Properties.Set("remember_state", checkBoxRememberState.Checked);
 		}
 	}
 }

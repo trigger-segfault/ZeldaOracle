@@ -35,7 +35,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			
 			Physics.CollisionBox		= new Rectangle2F(-3, -5, 6, 1);
 			Physics.SoftCollisionBox	= new Rectangle2F(-3, -5, 6, 1);
-			Physics.BounceSound			= GameData.SOUND_BOMB_BOUNCE;
+			soundBounce					= GameData.SOUND_BOMB_BOUNCE;
 
 			Graphics.DepthLayer			= DepthLayer.ProjectileBomb;
 			Graphics.DrawOffset			= new Point2I(-8, -13);
@@ -88,6 +88,12 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 
 		public override void Initialize() {
 			base.Initialize();
+
+			if (RoomControl.IsSideScrolling)
+				Physics.CollisionBox = new Rectangle2F(-3, -5, 6, 6);
+			else
+				Physics.CollisionBox = new Rectangle2F(-3, -5, 6, 1);
+			Physics.SoftCollisionBox = Physics.CollisionBox;
 
 			timer		= 0;
 			flashDelay	= GameSettings.BOMB_FLICKER_DELAY;

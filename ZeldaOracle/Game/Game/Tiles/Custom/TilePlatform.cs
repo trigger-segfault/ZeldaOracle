@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.Entities;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -42,14 +43,24 @@ namespace ZeldaOracle.Game.Tiles {
 			base.Update();
 		}
 
-		public override void Draw(Graphics2D g) {
+		public override void Draw(RoomGraphics g) {
 			//base.Draw(g);
 
 			for (int y = 0; y < Height; y++) {
 				for (int x = 0; x < Width; x++) {
-					g.DrawSprite(GameData.SPR_TILE_MOVING_PLATFORM, Zone.ImageVariantID, Position + new Point2I(x, y) * GameSettings.TILE_SIZE);
+					g.DrawSprite(GameData.SPR_TILE_MOVING_PLATFORM, Zone.ImageVariantID,
+						Position + new Point2I(x, y) * GameSettings.TILE_SIZE, DepthLayer.TileLayer1);
 				}
 			}
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Overridden Propreties
+		//-----------------------------------------------------------------------------
+
+		public override bool IsSurface {
+			get { return false; }
 		}
 	}
 }

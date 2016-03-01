@@ -46,9 +46,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 				return;
 
 			// Collide with monsters.
-			CollisionIterator iterator = new CollisionIterator(this, typeof(Monster), CollisionBoxType.Soft);
-			for (iterator.Begin(); iterator.IsGood(); iterator.Next()) {
-				Monster monster = iterator.CollisionInfo.Entity as Monster;
+			foreach (Monster monster in Physics.GetEntitiesMeeting<Monster>(CollisionBoxType.Soft)) {
 				monster.OnSeedHit(this);
 				if (IsDestroyed)
 					return;
@@ -64,11 +62,35 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 			}
 
 			// Spawn the seed effect.
-			DestroyWithSatchelEffect();
+			Entity effect = DestroyWithSatchelEffect();
+
+			if (type == SeedType.Scent) {
+				if (RoomControl.IsSideScrolling)
+					effect.Y += 3;
+			}
+			else if (type == SeedType.Ember) {
+				if (RoomControl.IsSideScrolling)
+					effect.Y += 1;
+				effect.Physics.HasGravity = false;
+			}
+			else if (type == SeedType.Mystery) {
+				if (RoomControl.IsSideScrolling)
+					effect.Y -= 1;
+			}
 		}
 
 		public override void Initialize() {
 			base.Initialize();
+			
+			if (RoomControl.IsSideScrolling) {
+				Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 3);
+				Physics.CollideWithWorld	= true;
+			}
+			else {
+				Physics.CollisionBox = new Rectangle2F(-1, -1, 2, 2);
+			}
+			Physics.SoftCollisionBox = Physics.CollisionBox;
+
 			Graphics.PlaySprite(GameData.SPR_ITEM_SEEDS[(int) type]);
 		}
 	}

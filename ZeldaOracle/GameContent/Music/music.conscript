@@ -1,5 +1,7 @@
 
-@music
-@song "overworld" 1.0 0.0 0.0
-@song "overworld_intro" 1.0 0.0 0.0
-@end
+
+MUSIC;
+SONG "overworld", 1.0, 0.0, 0.0;
+SONG "overworld_intro", 1.0, 0.0, 0.0;
+END;
+

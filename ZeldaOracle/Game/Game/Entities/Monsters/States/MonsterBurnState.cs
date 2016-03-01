@@ -62,7 +62,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 
 		public override void DrawOver(RoomGraphics g) {
 			// Draw the flame effect.
-			g.DrawAnimation(flameAnimationPlayer, monster.Center -
+			g.DrawAnimationPlayer(flameAnimationPlayer, monster.Center -
 				new Vector2F(0, monster.ZPosition), DepthLayer.EffectMonsterBurnFlame);
 		}
 	}

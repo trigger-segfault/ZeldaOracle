@@ -18,17 +18,19 @@ namespace ZeldaOracle.Game.Entities {
 		private	bool				isInitialized;
 		private bool				isAlive;
 		private bool				isInRoom;
+		private int					entityIndex;
 		private Entity				transformedEntity; // The entity this entity has transformed into (bomb -> explosion)
-
 		private Vector2F			previousPosition;
 		private float				previousZPosition;
 
 		protected Vector2F			position;
 		protected float				zPosition;
-		protected PhysicsComponent	physics;
-		protected GraphicsComponent	graphics;
 		protected Point2I			centerOffset;
 		protected int				actionAlignDistance; // How many pixels off of alignment to interact with the entity (based on center positions).
+		protected Sound				soundBounce;
+
+		protected PhysicsComponent	physics;
+		protected GraphicsComponent	graphics;
 
 
 		//-----------------------------------------------------------------------------
@@ -36,11 +38,13 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public Entity() {
+			entityIndex			= -1;
 			roomControl			= null;
 			isAlive				= false;
 			isInRoom			= false;
 			isInitialized		= false;
 			transformedEntity	= null;
+			soundBounce			= null;
 			position			= Vector2F.Zero;
 			zPosition			= 0.0f;
 			previousPosition	= Vector2F.Zero;
@@ -102,6 +106,18 @@ namespace ZeldaOracle.Game.Entities {
 
 		// Called when the entity lands on the ground.
 		public virtual void OnLand() {}
+		
+		// Called when the entity begins falling (used in side-scrolling mode).
+		public virtual void OnBeginFalling() {}
+
+		// Called when the entity bounces off of the ground.
+		public virtual void OnBounce() {
+			if (soundBounce != null)
+				AudioSystem.PlaySound(soundBounce);
+		}
+
+		// Occurs when the entity is crushed between tiles.
+		public virtual void OnCrush(bool horizontal) {}
 
 		// Called when the entity falls in a hole.
 		public virtual void OnFallInHole() {
@@ -150,7 +166,6 @@ namespace ZeldaOracle.Game.Entities {
 			if (!isInitialized) {
 				isInitialized = true;
 				Initialize();
-				physics.Initialize();
 				previousPosition  = position;
 				previousZPosition = zPosition;
 			}
@@ -234,6 +249,11 @@ namespace ZeldaOracle.Game.Entities {
 			get { return isInRoom; }
 		}
 
+		public int EntityIndex {
+			get { return entityIndex; }
+			set { entityIndex = value; }
+		}
+
 		// Gets or sets the position of the entity.
 		public Vector2F Position {
 			get { return position; }
@@ -279,7 +299,11 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsInAir {
-			get { return (zPosition > 0.0f || (physics.IsEnabled && physics.ZVelocity > 0.0f)); }
+			get {
+				if (Physics.IsEnabled)
+					return Physics.IsInAir;
+				return (zPosition > 0.0f);
+			}
 		}
 
 		public bool IsOnGround {
@@ -301,6 +325,11 @@ namespace ZeldaOracle.Game.Entities {
 
 		public Entity TransformedEntity {
 			get { return transformedEntity; }
+		}
+
+		public Sound BounceSound {
+			get { return soundBounce; }
+			set { soundBounce = value; }
 		}
 	}
 }

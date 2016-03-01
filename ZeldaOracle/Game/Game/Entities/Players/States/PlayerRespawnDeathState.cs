@@ -8,6 +8,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerRespawnDeathState : PlayerState {
 
 		private bool respawning;
+		private bool waitForAnimation;
+
+		// Crush: 44 frames of squished. 40 frames of flicker
+		// (blank, normal, blank, squish, blank, squish, blank, normal, (repeat))
 
 
 		//-----------------------------------------------------------------------------
@@ -16,6 +20,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public PlayerRespawnDeathState() {
 			respawning = false;
+			waitForAnimation = true;
 		}
 		
 
@@ -25,29 +30,34 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void OnBegin(PlayerState previousState) {
 			respawning = false;
-			player.IsStateControlled		= true;
-			player.IsPassable				= true;
-			player.Physics.CollideWithWorld	= false;
+			player.IsStateControlled			= true;
+			player.IsPassable					= true;
+			player.Physics.CollideWithWorld		= false;
+			player.Physics.MovesWithPlatforms	= false;
+			player.Physics.HasGravity			= false;
 			player.Movement.StopMotion();
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.IsStateControlled		= false;
-			player.IsPassable				= false;
-			player.Physics.CollideWithWorld = true;
+			player.IsStateControlled			= false;
+			player.IsPassable					= false;
+			player.Physics.CollideWithWorld		= true;
+			player.Physics.MovesWithPlatforms	= true;
+			player.Physics.HasGravity			= true;
 		}
 
 		public override void Update() {
 			base.Update();
 
 			if (respawning) {
+				// Wait for the view to pan to the player.
 				if (player.RoomControl.ViewControl.IsCenteredOnPosition(player.Center)) {
 					player.Graphics.IsVisible = true;
 					player.Hurt(new DamageInfo(2));
 					player.BeginNormalState();
 				}
 			}
-			else if (player.Graphics.IsAnimationDone) {
+			else if (!waitForAnimation || player.Graphics.IsAnimationDone) {
 				player.Graphics.IsVisible = false;
 				respawning = true;
 				player.Respawn();
@@ -63,5 +73,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		public bool WaitForAnimation {
+			get { return waitForAnimation; }
+			set { waitForAnimation = value; }
+		}
 	}
 }

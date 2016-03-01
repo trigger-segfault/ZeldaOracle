@@ -1,6 +1,6 @@
 
 #==============================================================================
-# Sprites
+# Sprite Sheets
 #==============================================================================
 
 LOAD SPRITES;
@@ -8,23 +8,25 @@ LOAD SPRITES;
 SPRITESHEET "tileset_objects",					(16, 16), (1, 1), (18, 18); END;
 SPRITESHEET "tileset_objects_extras_16x16",		(16, 16), (1, 1), (18, 18); END;
 
-#==============================================================================
-# Animations
-#==============================================================================
-
-LOAD ANIMATIONS;
-
-SPRITESHEET "tileset_objects_extras_16x16";
-
-#TEMPANIM lantern_lit; SUBSTRIP repeat;
-#	ADD strip, 16, 4, (0, 3); END;
-
 
 #==============================================================================
 # Tiles
 #==============================================================================
 
 LOAD TILESETS;
+
+
+# Default zone tile for digable ground (for overworlds)
+TILE default_ground;
+	SPRITE		tile_default;
+	FLAGS		Digable;
+END;
+
+# Default zone tile for a hard floor (for dungeons or interiors)
+TILE default_floor;
+	SPRITE		tile_default;
+END;
+
 
 # ---- Bush -------------------------------------------------------------------
 
@@ -163,7 +165,8 @@ TILE pot;
 	SPRITEOBJ	tile_pot_asobject;
 	BREAKANIM	effect_rock_break;
 	BREAKSOUND	rock_shatter;
-	PROPERTIES	(integer, cuttable_sword_level, 1);
+	PROPERTIES	(integer, cuttable_sword_level, 1),
+				(boolean, raised_on_buttons, true);
 END;
 
 TILE dirt_pile;
@@ -185,9 +188,46 @@ TILE dug;
 END;
 
 TILE cracked_floor;
-	TYPE		TileCrackedFloor
+	TYPE		TileCrackedFloor;
 	SPRITE		tile_cracked_floor;
 END;
+
+TILE spiked_floor;
+	TYPE		TileSpikedFloor;
+	SPRITE		tile_spiked_floor;
+END;
+
+TILE cactus;
+	FLAGS		HurtPlayer;
+	SOLID		edge_e;
+	SPRITE		tile_cactus;
+	HURT		1, (4, -1, 13, 18);
+END;
+
+# ---- Bridges ----------------------------------------------------------------
+
+TILE bridge;
+	TYPE		TileBridge;
+	SPRITE		tile_bridge_horizontal;
+	PROPERTIES	(boolean, vertical, false, "Vertical", "", "Bridge", "True if the bridge is vertical."),
+				(integer, bridge_direction, -1, "Bridge Direction", "", "Bridge", "Direction the bridge is in.");
+END;
+
+TILE bridge_horizontal;
+	CLONE		bridge;
+	SPRITE		tile_bridge_horizontal;
+	PROPERTIES	(boolean, vertical, false),
+				(integer, direction, 0);
+END;
+
+TILE bridge_vertical;
+	CLONE		bridge;
+	SPRITE		tile_bridge_vertical;
+	PROPERTIES	(boolean, vertical, true),
+				(integer, direction, 3);
+END;
+
+# ---- Moving Platform --------------------------------------------------------
 
 TILE moving_platform;
 	TYPE		TilePlatform;
@@ -201,8 +241,7 @@ TILE lantern;
 	SOLID		block;
 	SPRITEINDEX	0, animation,	tile_lantern_lit;
 	SPRITEINDEX	1, sprite,		tile_lantern_unlit;
-	PROPERTIES	(boolean, lit,				true, "Lit", "", "", "Whether the lantern starts lit or not.", false),
-				(boolean, remember_state,	false, "Remember State", "", "", "Will the lantern's lit state be remembered after leaving the room?");
+	PROPERTIES	(boolean, lit, true, "Lit", "", "", "Whether the lantern starts lit or not.", false);
 	EVENT event_light, "Light", "Occurs when the lantern is lighted.", (Lantern, lantern);
 	EVENT event_put_out, "Put Out", "Occurs when the lantern is put out.", (Lantern, lantern);
 END;
@@ -295,8 +334,7 @@ TILE color_jump_pad;
 	SPRITEINDEX	0, tile_color_jump_pad_red;
 	SPRITEINDEX 1, tile_color_jump_pad_yellow;
 	SPRITEINDEX 1, tile_color_jump_pad_blue;
-	PROPERTIES	(integer, color,			0,		"Color",			"", "Color", "The color of the jump pad."),
-				(boolean, remember_state,	false,	"Remember State",	"", "Color", "Will the jump pad's color be remembered after leaving the room?");
+	PROPERTIES	(integer, color, 0, "Color", "", "Color", "The color of the jump pad.");
 	EVENT		event_color_change, "Color Change", "Occurs when the pad's color changes.", (ColorJumpPad, tile, Color, color);
 END;
 
@@ -322,8 +360,7 @@ TILE color_tile;
 	SPRITEINDEX	0, tile_color_tile_red;
 	SPRITEINDEX 1, tile_color_tile_yellow;
 	SPRITEINDEX 1, tile_color_tile_blue;
-	PROPERTIES	(integer, color,			0,		"Color",			"", "Color", "The color of the tile."),
-				(boolean, remember_state,	false,	"Remember State",	"", "Color", "Will the tile's color be remembered after leaving the room?");
+	PROPERTIES	(integer, color, 0, "Color", "", "Color", "The color of the tile.");
 END;
 
 TILE color_tile_red;
@@ -350,9 +387,22 @@ TILE color_barrier;
 	PROPERTIES	(integer, color, 0, "Color", "", "Color", "The color of the barrier (red or blue).");
 END;
 
+TILE color_barrier_blue;
+	CLONE		color_barrier;
+	SPRITE		tile_color_barrier_red_lowered;
+	PROPERTIES	(integer, color, 0);
+END;
+
+TILE color_barrier_red;
+	CLONE		color_barrier;
+	SPRITE		tile_color_barrier_blue_raised;
+	PROPERTIES	(integer, color, 2);
+END;
+
 # ---- Color Statue -----------------------------------------------------------
 
 TILE color_statue;
+	TYPE		TileColorStatue;
 	SOLID		block;
 	FLAGS		Movable;
 	PROPERTIES	(integer, color, 0, "Color", "", "", "The color of the statue.");
@@ -376,12 +426,38 @@ TILE color_statue_blue;
 	PROPERTIES	(integer, color, 2);
 END;
 
+# ---- Color Block -----------------------------------------------------------
+
+TILE color_block;
+	TYPE		TileColorBlock;
+	SOLID		block;
+	PROPERTIES	(integer, color, 0, "Color", "", "", "The color of the block.");
+END;
+
+TILE color_block_red;
+	CLONE		color_block;
+	SPRITE		tile_color_block_red;
+	PROPERTIES	(integer, color, 0);
+END;
+
+TILE color_block_yellow;
+	CLONE		color_block;
+	SPRITE		tile_color_block_yellow;
+	PROPERTIES	(integer, color, 1);
+END;
+
+TILE color_block_blue;
+	CLONE		color_block;
+	SPRITE		tile_color_block_blue;
+	PROPERTIES	(integer, color, 2);
+END;
+
 # ---- Color Cube Slot --------------------------------------------------------
 
 TILE color_cube_slot;
 	TYPE		TileColorCubeSlot;
 	SPRITE		tile_color_cube_slot;
-	EVENT		on_color_change, "Color Change", "Occurs when the slot's color changes.", (ColorCubeSlot, tile, Color, color);
+	EVENT		event_color_change, "Color Change", "Occurs when the slot's color changes.", (ColorCubeSlot, tile, Color, color);
 END;
 
 # ---- Color Lantern ----------------------------------------------------------
@@ -390,7 +466,7 @@ TILE color_lantern;
 	TYPE		TileColorLantern;
 	SOLID		block;
 	SPRITE		tile_color_lantern;
-	EVENT		on_color_change, "Color Change", "Occurs when the lantern's flame color changes.", (ColorLantern, tile, Color, color);
+	EVENT		event_color_change, "Color Change", "Occurs when the lantern's flame color changes.", (ColorLantern, tile, Color, color);
 END;
 
 # ---- Button -----------------------------------------------------------------
@@ -400,23 +476,21 @@ TILE button;
 	SPRITEINDEX	0, tile_button_up;
 	SPRITEINDEX	1, tile_button_down;
 	PROPERTIES	(boolean, releasable,		true, "Releasable",			"", "Button", "Can the button only be pressed, and not released?"),
-				(boolean, pressed,			false, "Pressed",			"", "Button", "Is the button pressed"),
-				(boolean, remember_state,	false, "Remember State",	"", "Button", "Will the button's state be remembered after leaving the room?");
-	EVENT on_press, "On Press", "Occurs when the button is pressed.", (Button button);
-	EVENT on_release, "On Release", "Occurs when the button is released.", (Button button);
+				(boolean, pressed,			false, "Pressed",			"", "Button", "Is the button pressed");
+	EVENT event_press, "On Press", "Occurs when the button is pressed.", (Button button);
+	EVENT event_release, "On Release", "Occurs when the button is released.", (Button button);
 END;
 
 # ---- Lever ------------------------------------------------------------------
 
 TILE lever;
-	TYPE TileLever;
-	SOLID block;
-	FLAGS AbsorbSeeds;
+	TYPE		TileLever;
+	HALFSOLID	block;
+	FLAGS		AbsorbSeeds;
 	SPRITEINDEX	0, tile_lever_left;
 	SPRITEINDEX	1, tile_lever_right;
 	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "Lever", "Can the lever only be switched once?"),
-				(boolean, switch_state,		false,	"Switch State",		"", "Lever", "True if the lever is facing left."),
-				(boolean, remember_state,	false,	"Remember State",	"", "Lever", "Will the lever's state be remembered after leaving the room?");
+				(boolean, switch_state,		false,	"Switch State",		"", "Lever", "True if the lever is facing left.");
 	EVENT event_toggle, "Toggle", "Occurs when the lever is toggled.", (Lever, lever);
 END;
 
@@ -429,8 +503,7 @@ TILE door;
 	SPRITEINDEX	1,	tile_door_open;
 	SPRITEINDEX	2,	tile_door_close;
 	PROPERTIES		(boolean, open, false, "Open", "", "Door", "True if the door open."),
-					(integer, direction, 0, "Direction", "direction", "Door", "The direction the door is facing.", false),
-					(boolean, remember_state, false, "Remember State", "", "Door", "Will the door's opened state be remembered after leaving the room?");
+					(integer, direction, 0, "Direction", "direction", "Door", "The direction the door is facing.", false);
 END;
 
 TILE door_right;	CLONE door; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
@@ -442,10 +515,10 @@ TILE door_down;		CLONE door; PROPERTIES (integer, direction, 3), (integer, subst
 TILE small_key_door;
 	CLONE			door;
 	TYPE			TileSmallKeyDoor;
+	RESETWHEN		Never;
 	SPRITEINDEX	0,	tile_small_key_door_closed;
 	SPRITEINDEX	1,	tile_small_key_door_open;
 	SPRITEINDEX	2,	tile_small_key_door_close;
-	PROPERTIES		(boolean, remember_state, true);
 END;
 
 TILE small_key_door_right;	CLONE small_key_door; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
@@ -454,12 +527,12 @@ TILE small_key_door_left;	CLONE small_key_door; PROPERTIES (integer, direction, 
 TILE small_key_door_down;	CLONE small_key_door; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
 
 TILE boss_key_door;
-	CLONE		door;
-	TYPE		TileBossKeyDoor;
+	CLONE			door;
+	TYPE			TileBossKeyDoor;
+	RESETWHEN		Never;
 	SPRITEINDEX	0,	tile_boss_key_door_closed;
 	SPRITEINDEX	1,	tile_boss_key_door_open;
 	SPRITEINDEX	2,	tile_boss_key_door_close;
-	PROPERTIES	(boolean, remember_state, true);
 END;
 
 TILE boss_key_door_right;	CLONE boss_key_door; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
@@ -469,9 +542,9 @@ TILE boss_key_door_down;	CLONE boss_key_door; PROPERTIES (integer, direction, 3)
 
 TILE minecart_door;
 	CLONE		door;
-	SPRITEINDEX	0,	tile_minecart_door_closed;
-	SPRITEINDEX	1,	tile_minecart_door_open;
-	SPRITEINDEX	2,	tile_minecart_door_close;
+	SPRITEINDEX	0, tile_minecart_door_closed;
+	SPRITEINDEX	1, tile_minecart_door_open;
+	SPRITEINDEX	2, tile_minecart_door_close;
 	TYPE		TileMinecartDoor;
 END;
 
@@ -489,6 +562,7 @@ END;
 TILE locked_block;
 	TYPE		TileLockedBlock;
 	SOLID		block;
+	RESETWHEN	Never;
 	SPRITE		tile_locked_block;
 END;
 
@@ -498,10 +572,10 @@ TILE webbed_wall;
 	PROPERTIES	(boolean, disable_on_destroy, true);
 END;
 
-TILE webbed_wall_right;	CLONE webbed_wall; END;
-TILE webbed_wall_up;	CLONE webbed_wall; END;
-TILE webbed_wall_left;	CLONE webbed_wall; END;
-TILE webbed_wall_down;	CLONE webbed_wall; END;
+TILE webbed_wall_right;	CLONE webbed_wall; SPRITE tile_webbed_wall_right; END;
+TILE webbed_wall_up;	CLONE webbed_wall; SPRITE tile_webbed_wall_up; END;
+TILE webbed_wall_left;	CLONE webbed_wall; SPRITE tile_webbed_wall_left; END;
+TILE webbed_wall_down;	CLONE webbed_wall; SPRITE tile_webbed_wall_down; END;
 
 TILE bombable_wall;
 	SOLID		block;
@@ -509,16 +583,17 @@ TILE bombable_wall;
 	PROPERTIES	(boolean, disable_on_destroy, true);
 END;
 
-TILE bombable_wall_right;	CLONE bombable_wall; END;
-TILE bombable_wall_up;		CLONE bombable_wall; END;
-TILE bombable_wall_left;	CLONE bombable_wall; END;
-TILE bombable_wall_down;	CLONE bombable_wall; END;
+TILE bombable_wall_right;	CLONE bombable_wall; SPRITE tile_bombable_wall_right; END;
+TILE bombable_wall_up;		CLONE bombable_wall; SPRITE tile_bombable_wall_up; END;
+TILE bombable_wall_left;	CLONE bombable_wall; SPRITE tile_bombable_wall_left; END;
+TILE bombable_wall_down;	CLONE bombable_wall; SPRITE tile_bombable_wall_down; END;
 
 # ---- Minecart Tracks --------------------------------------------------------
 
 TILE minecart_track;
 	TYPE		TileMinecartTrack;
 	FLAGS		NotCoverable;
+	RESETWHEN	LeaveArea;
 	SPRITEINDEX	0, tile_minecart_track_horizontal;			# Horizontal
 	SPRITEINDEX	1, tile_minecart_track_vertical;			# Vertical
 	SPRITEINDEX	2, tile_minecart_track_corner_southwest;	# Right/Up
@@ -526,32 +601,33 @@ TILE minecart_track;
 	SPRITEINDEX	4, tile_minecart_track_corner_northeast;	# Left/Down
 	SPRITEINDEX	5, tile_minecart_track_corner_northwest;	# Down/Right
 	PROPERTIES	(boolean, minecart, false, "Has Minecart", "", "Minecart", "Does this track currently have a minecart on it?"),
-				(integer, switched_track_index, 0, "Switched Track Index", "", "Minecart", "");
+				(integer, switched_track_index, 0, "Switched Track Index", "", "Minecart", ""),
+				(integer, track_index, 0, "Track Index", "", "Minecart", "");
 END;
 
 TILE minecart_track_corner_northwest;
 	CLONE		minecart_track;
-	PROPERTIES	(integer, sprite_index, 5);
+	PROPERTIES	(integer, track_index, 5);
 END;
 TILE minecart_track_corner_northeast;
 	CLONE		minecart_track;
-	PROPERTIES	(integer, sprite_index, 4);
+	PROPERTIES	(integer, track_index, 4);
 END;
 TILE minecart_track_corner_southwest;
 	CLONE		minecart_track;
-	PROPERTIES	(integer, sprite_index, 2);
+	PROPERTIES	(integer, track_index, 2);
 END;
 TILE minecart_track_corner_southeast;
 	CLONE		minecart_track;
-	PROPERTIES	(integer, sprite_index, 3);
+	PROPERTIES	(integer, track_index, 3);
 END;
 TILE minecart_track_horizontal;
 	CLONE		minecart_track;
-	PROPERTIES	(integer, sprite_index, 0);
+	PROPERTIES	(integer, track_index, 0);
 END;
 TILE minecart_track_vertical;
 	CLONE		minecart_track;
-	PROPERTIES	(integer, sprite_index, 1);
+	PROPERTIES	(integer, track_index, 1);
 END;
 TILE minecart_track_stop;
 	TYPE	TileMinecartStop;
@@ -565,6 +641,7 @@ END;
 TILE turnstile;
 	TYPE		TileTurnstile;
 	SPRITE		tile_turnstile_base;
+	RESETWHEN	LeaveArea;
 	SIZE		(3, 3);
 	PROPERTIES	(boolean, clockwise, false, "Clockwise", "", "Turnstile", "True if the turnstile is in clockwise mode.");
 END;
@@ -609,7 +686,7 @@ SETTILE ( 2, 2), pit;
 SETTILE ( 3, 2), cracked_floor;
 # Soft soil
 # Portal
-# Cactus
+SETTILE ( 6, 2), cactus;
 # Unknown leaf thing
 # Magnet north
 # Magnet south
@@ -636,8 +713,8 @@ SETTILE ( 4, 5), color_lantern;
 SETTILE ( 5, 5), color_jump_pad_red;
 SETTILE ( 6, 5), color_tile_blue;
 SETTILE ( 7, 5), color_tile_red;
-# Color barrier blue
-# Color barrier red
+SETTILE ( 8, 5), color_barrier_blue;
+SETTILE ( 9, 5), color_barrier_red;
 SETTILE (10, 5), moving_platform;
 # Hardened lava
 
@@ -696,9 +773,9 @@ SETTILE (11, 10), minecart_track_corner_southeast;
 SETTILE ( 0, 11), eye_statue;
 # Slate thing
 SETTILE ( 2, 11), locked_block;
-# Floor spikes
-# Bridge horizontal
-# Bridge Vertical
+SETTILE ( 3, 11), spiked_floor;
+SETTILE ( 4, 11), bridge_horizontal;
+SETTILE ( 5, 11), bridge_vertical;
 
 SETTILE (10, 11), minecart_track_horizontal;
 SETTILE (11, 11), minecart_track_vertical;

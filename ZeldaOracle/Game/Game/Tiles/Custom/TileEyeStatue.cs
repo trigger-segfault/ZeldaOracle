@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Game.Entities;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -52,10 +53,10 @@ namespace ZeldaOracle.Game.Tiles {
 			UpdateEyeOffset();
 		}
 
-		public override void Draw(Graphics2D g) {
+		public override void Draw(RoomGraphics g) {
 			base.Draw(g);
 
-			g.DrawSprite(GameData.SPR_TILE_STATUE_EYE, Position + eyeOffset);
+			g.DrawSprite(GameData.SPR_TILE_STATUE_EYE, Position + eyeOffset, DepthLayer.TileLayer1);
 		}
 	}
 }

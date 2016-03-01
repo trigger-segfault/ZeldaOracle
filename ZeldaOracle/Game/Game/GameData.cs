@@ -1,31 +1,13 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Reflection;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using System.Text;
 using ZeldaOracle.Common.Content;
-using ZeldaOracle.Common.Content.ResourceBuilders;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Scripting;
-using ZeldaOracle.Common.Scripts;
-using ZeldaOracle.Game.Entities;
-using ZeldaOracle.Game.Entities.Monsters;
-using ZeldaOracle.Game.Entities.Projectiles;
-using ZeldaOracle.Game.Items.Ammos;
-using ZeldaOracle.Game.Items.Drops;
-using ZeldaOracle.Game.Items.Weapons;
-using ZeldaOracle.Game.Items.Essences;
-using ZeldaOracle.Game.Items.KeyItems;
-using ZeldaOracle.Game.Items.Equipment;
-using ZeldaOracle.Game.Items;
-using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.Custom;
-using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game {
@@ -39,6 +21,17 @@ namespace ZeldaOracle.Game {
 
 		// Initializes and loads the game content. NOTE: The order here is important.
 		public static void Initialize() {
+			/*
+			CommandReferenceParam param = CommandParamParser.ParseReferenceParams(
+				"(any objs...)...");
+				//"any name, (int gridLocationX, int gridLocationY), (int drawOffsetX, any drawOffsetY) = (0, fuck)");
+				//"float x, string y, bool width, (int a, int b) = (1, 2), float height, (int hoop) = (0), bool asd");
+				//"float x, string y, bool width, (int a, int b, (string c)), float height");
+
+			Console.WriteLine(CommandParamParser.ToString(param));
+			throw new LoadContentException("END");
+			*/
+
 			Console.WriteLine("Loading Images");
 			LoadImages();
 
@@ -60,11 +53,11 @@ namespace ZeldaOracle.Game {
 			Console.WriteLine("Loading Music");
 			LoadMusic();
 
-			Console.WriteLine("Loading Zones");
-			LoadZones();
-
 			Console.WriteLine("Loading Tilesets");
 			LoadTilesets();
+
+			Console.WriteLine("Loading Zones");
+			LoadZones();
 		}
 
 
@@ -173,15 +166,22 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		private static void LoadZones() {
-			ZONE_DEFAULT	= new Zone("",			"(none)",		VARIANT_NONE);
-			ZONE_SUMMER		= new Zone("summer",	"Summer",		VARIANT_SUMMER);
-			ZONE_FOREST		= new Zone("forest",	"Forest",		VARIANT_FOREST);
-			ZONE_GRAVEYARD	= new Zone("graveyard",	"Graveyard",	VARIANT_GRAVEYARD);
-			ZONE_INTERIOR	= new Zone("interior",	"Interior",		VARIANT_INTERIOR);
-			ZONE_PRESENT	= new Zone("present", "Present", VARIANT_PRESENT);
-			ZONE_INTERIOR_PRESENT	= new Zone("interior_present", "Interior Present", VARIANT_INTERIOR_PRESENT);
-			ZONE_AGES_DUNGEON_1		= new Zone("ages_dungeon_1", "Ages Dungeon 1", VARIANT_AGES_DUNGEON_1);
-			ZONE_AGES_DUNGEON_4		= new Zone("ages_dungeon_4", "Ages Dungeon 4", VARIANT_AGES_DUNGEON_4);
+			TileData ground = Resources.GetResource<TileData>("default_ground");
+			TileData floor  = Resources.GetResource<TileData>("default_floor");
+			//TileData background  = Resources.GetResource<TileData>("default_background");
+
+			ZONE_DEFAULT			= new Zone("",					"(none)",			VARIANT_NONE,				ground);
+			ZONE_SUMMER				= new Zone("summer",			"Summer",			VARIANT_SUMMER,				ground);
+			ZONE_FOREST				= new Zone("forest",			"Forest",			VARIANT_FOREST,				ground);
+			ZONE_GRAVEYARD			= new Zone("graveyard",			"Graveyard",		VARIANT_GRAVEYARD,			ground);
+			ZONE_INTERIOR			= new Zone("interior",			"Interior",			VARIANT_INTERIOR,			floor);
+			ZONE_PRESENT			= new Zone("present",			"Present",			VARIANT_PRESENT,			floor);
+			ZONE_INTERIOR_PRESENT	= new Zone("interior_present",	"Interior Present",	VARIANT_INTERIOR_PRESENT,	floor);
+			ZONE_AGES_DUNGEON_1		= new Zone("ages_dungeon_1",	"Ages Dungeon 1",	VARIANT_AGES_DUNGEON_1,		floor);
+			ZONE_AGES_DUNGEON_4		= new Zone("ages_dungeon_4",	"Ages Dungeon 4",	VARIANT_AGES_DUNGEON_4,		floor);
+			ZONE_SIDESCROLL_AGES_DUNGEON_1	= new Zone("sidescroll_ages_dungeon_1",	"Ages Dungeon 1",	VARIANT_AGES_DUNGEON_1,		floor);
+			
+			ZONE_SIDESCROLL_AGES_DUNGEON_1.IsSideScrolling = true;
 
 			Resources.AddResource("default",	ZONE_DEFAULT);
 			Resources.AddResource("summer",		ZONE_SUMMER);
@@ -192,6 +192,7 @@ namespace ZeldaOracle.Game {
 			Resources.AddResource("interior_present", ZONE_INTERIOR_PRESENT);
 			Resources.AddResource("ages_dungeon_1", ZONE_AGES_DUNGEON_1);
 			Resources.AddResource("ages_dungeon_4", ZONE_AGES_DUNGEON_4);
+			Resources.AddResource("sidescroll_ages_dungeon_1", ZONE_SIDESCROLL_AGES_DUNGEON_1);
 		}
 
 		//-----------------------------------------------------------------------------
@@ -201,14 +202,18 @@ namespace ZeldaOracle.Game {
 		private static void LoadTilesets() {
 			// Load tilesets and tile data.
 			Resources.LoadTilesets("Tilesets/cliffs.conscript");
+
+			Resources.LoadTilesets("Tilesets/objects_nv.conscript");
+			Resources.LoadTilesets("Tilesets/objects.conscript");
+
 			Resources.LoadTilesets("Tilesets/land.conscript");
 			Resources.LoadTilesets("Tilesets/forest.conscript");
 			Resources.LoadTilesets("Tilesets/water.conscript");
 			Resources.LoadTilesets("Tilesets/town.conscript");
 			Resources.LoadTilesets("Tilesets/interior.conscript");
 			Resources.LoadTilesets("Tilesets/dungeon.conscript");
-			Resources.LoadTilesets("Tilesets/objects.conscript");
-			Resources.LoadTilesets("Tilesets/objects_nv.conscript");
+			Resources.LoadTilesets("Tilesets/sidescroll.conscript");
+			
 			Resources.LoadTilesets("Tilesets/event_tile_data.conscript");
 			// OLD Tilesets:
 			//Resources.LoadTilesets("Tilesets/tile_data.conscript");
@@ -342,6 +347,7 @@ namespace ZeldaOracle.Game {
 		public static Zone ZONE_INTERIOR_PRESENT;
 		public static Zone ZONE_AGES_DUNGEON_1; // Spirit's Grave
 		public static Zone ZONE_AGES_DUNGEON_4; // Skull Dungeon
+		public static Zone ZONE_SIDESCROLL_AGES_DUNGEON_1;
 
 
 		//-----------------------------------------------------------------------------

@@ -15,6 +15,7 @@ using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
+
 	public class PlayerLadderState : PlayerState {
 
 

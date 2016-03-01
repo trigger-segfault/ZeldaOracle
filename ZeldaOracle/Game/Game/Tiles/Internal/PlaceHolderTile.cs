@@ -41,6 +41,7 @@ namespace ZeldaOracle.Game.Tiles.Internal {
 		//-----------------------------------------------------------------------------
 
 		public override void OnInitialize() {
+			fallsInHoles = false;
 		}
 
 		public override void Update() {

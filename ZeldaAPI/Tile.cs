@@ -5,8 +5,11 @@ using System.Text;
 
 namespace ZeldaAPI {
 
+	// Base interface for all tiles.
 	public interface Tile {
+		void OverrideDefaultState();
 		string Id { get; }
+		bool IsMovable { get; set; }
 	}
 	
 	public interface Lantern : Tile {
@@ -32,11 +35,13 @@ namespace ZeldaAPI {
 	public interface ColorTile : Tile {
 		Color Color { get; set; }
 	}
-
-	public interface Door : Tile {
-		void Open(bool instantaneous = false, bool rememberState = false);
-		void Close(bool instantaneous = false, bool rememberState = false);
-		bool IsOpen { get; }
+	
+	public interface ColorStatue : Tile {
+		Color Color { get; }
+	}
+	
+	public interface ColorBlock : Tile {
+		Color Color { get; }
 	}
 
 	public enum DoorState {
@@ -44,7 +49,14 @@ namespace ZeldaAPI {
 		Closed,
 	}
 
+	public interface Door : Tile {
+		void Open(bool instantaneous = false, bool rememberState = false);
+		void Close(bool instantaneous = false, bool rememberState = false);
+		bool IsOpen { get; }
+	}
+
 	public interface Button : Tile {
+		// Nothing yet...
 	}
 
 	public interface Lever : Tile {
@@ -53,10 +65,25 @@ namespace ZeldaAPI {
 	}
 
 	public interface ColorSwitch : Tile {
+		// Nothing yet...
+	}
+
+	public interface SeedBouncer : Tile {
+		void RotateClockwise(int amount = 1);
+		void RotateCounterClockwise(int amount = 1);
+	}
+
+	public interface Bridge : Tile {
+		void BuildBridge(bool instantaneous = false, bool rememberState = false);
+		void DestroyBridge(bool instantaneous = false, bool rememberState = false);
+		bool IsBridgeBuilt { get; }
 	}
 
 	public interface MinecartTrack : Tile {
 		void SwitchTrackDirection();
+	}
+
+	public interface PullHandle : Tile {
 	}
 
 	public interface CrossingGate : Tile {

@@ -12,7 +12,8 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles.EventTiles {
-	public class EventTile {
+
+	public class EventTile : IPropertyObject {
 		
 		private RoomControl				roomControl;
 		private	EventTileDataInstance	eventData;

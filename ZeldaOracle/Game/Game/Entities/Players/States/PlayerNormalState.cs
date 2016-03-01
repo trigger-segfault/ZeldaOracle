@@ -37,7 +37,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public void StopPushing() {
 			pushTimer = 0;
-			player.Graphics.Animation = player.MoveAnimation;
+			player.Graphics.SetAnimation(player.MoveAnimation);
 		}
 
 
@@ -66,13 +66,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 			else {
 				// Update pushing.
-				Tile actionTile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
+				Tile actionTile = player.Physics.GetFacingSolidTile(player.Direction);
 				CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
 				
 				if (player.Movement.CanPush && actionTile != null && player.Movement.IsMoving &&
 					collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving)
 				{
-					player.Graphics.Animation = GameData.ANIM_PLAYER_PUSH;
+					player.Graphics.SetAnimation(GameData.ANIM_PLAYER_PUSH);
 					pushTimer++;
 
 					if (pushTimer > actionTile.PushDelay) {
@@ -87,7 +87,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				}
 				else {
 					pushTimer = 0;
-					player.Graphics.Animation = player.MoveAnimation;
+					player.Graphics.SetAnimation(player.MoveAnimation);
 				}
 			}
 		}

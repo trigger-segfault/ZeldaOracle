@@ -25,25 +25,72 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.GameStates.RoomStates;
+using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Debug {
 	public class GameDebug {
 
-		private static bool DrawCollisionBoxes = false;
+		public static GameControl GameControl {
+			get { return gameControl; }
+			set { gameControl = value; }
+		}
 
+		public static RoomControl RoomControl {
+			get { return gameControl.RoomControl; }
+		}
+
+		public static GameManager GameManager {
+			get { return gameControl.GameManager; }
+		}
+
+		private static GameControl gameControl;
+
+		private static EntityDrawInfo	EntityDebugInfoMode	= EntityDrawInfo.None;
+		private static TileDrawInfo		TileDebugInfoMode	= TileDrawInfo.None;
+
+		private enum EntityDrawInfo {
+			None = 0,
+			CollisionBoxes,
+			CollisionTests,
+			Count,
+		}
+
+		private enum TileDrawInfo {
+			None = 0,
+			CollisionBoxes,
+			GridArea,
+			Count,
+		}
 		
-		public static void UpdateRoomDebugKeys(RoomControl roomControl) {
-			GameControl gameControl = roomControl.GameControl;
+		public static void UpdateRoomDebugKeys() {
 
+			if (Keyboard.IsKeyPressed(Keys.P))
+				RoomControl.IsSideScrolling = !RoomControl.IsSideScrolling;
 
+			// C: Change color barrier color.
+			if (Keyboard.IsKeyPressed(Keys.C)) {
+				if (RoomControl.Dungeon != null) {
+					PuzzleColor c = (RoomControl.Dungeon.ColorSwitchColor == PuzzleColor.Blue ? PuzzleColor.Red : PuzzleColor.Blue);
+					RoomControl.Dungeon.ColorSwitchColor = c;
+					if (RoomControl.GetTilesOfType<TileColorBarrier>().Any())
+						gameControl.PushRoomState(new RoomStateColorBarrier(c));
+				}
+			}
+			// CTRL+R: Restart the game.
+			if (Keyboard.IsKeyPressed(Keys.R) && Keyboard.IsKeyDown(Keys.LControl))
+				GameManager.Restart();
+			// F5: Pause gameplay.
+			if (Keyboard.IsKeyPressed(Keys.F5))
+				GameManager.IsGamePaused = !GameManager.IsGamePaused;
+			// F6: Step gameplay by one frame.
+			if (Keyboard.IsKeyPressed(Keys.F6) && GameManager.IsGamePaused)
+				GameManager.NextFrame();
 			// OPEN BRACKET: open all open doors.
-			if (Keyboard.IsKeyPressed(Keys.OpenBracket)) {
-				gameControl.RoomControl.OpenAllDoors();
-			}
+			if (Keyboard.IsKeyPressed(Keys.OpenBracket))
+				RoomControl.OpenAllDoors();
 			// CLOSE BRACKET: close all doors.
-			else if (Keyboard.IsKeyPressed(Keys.CloseBracket)) {
-				gameControl.RoomControl.CloseAllDoors();
-			}
+			else if (Keyboard.IsKeyPressed(Keys.CloseBracket))
+				RoomControl.CloseAllDoors();
 			// G: Display a test message.
 			if (Keyboard.IsKeyPressed(Keys.G)) {
 				gameControl.DisplayMessage("I was a <red>hero<red> to broken robots 'cause I was one of them, but how can I sing about being damaged if I'm not?<p> That's like <green>Christina Aguilera<green> singing Spanish. Ooh, wait! That's it! I'll fake it!");
@@ -88,12 +135,17 @@ namespace ZeldaOracle.Game.Debug {
 				gameControl.Player.Hurt(new DamageInfo(0, source));
 			}
 			// M: Play music.
-			if (Keyboard.IsKeyPressed(Keys.M)) {
+			/*if (Keyboard.IsKeyPressed(Keys.M)) {
 				AudioSystem.PlaySong("overworld");
 			}
 			// N: Set the volume to max.
 			if (Keyboard.IsKeyPressed(Keys.N)) {
 				AudioSystem.MasterVolume = 1.0f;
+			}*/
+			// N: Noclip mode.
+			if (Keyboard.IsKeyPressed(Keys.N)) {
+				RoomControl.Player.Physics.CollideWithEntities	= !RoomControl.Player.Physics.CollideWithEntities;
+				RoomControl.Player.Physics.CollideWithWorld		= !RoomControl.Player.Physics.CollideWithWorld;
 			}
 			// Q: Spawn a random rupees collectible.
 			if (Keyboard.IsKeyPressed(Keys.Q)) {
@@ -103,9 +155,13 @@ namespace ZeldaOracle.Game.Debug {
 				collectible.Position = gameControl.Player.Position;
 				collectible.ZPosition = 100;
 			}
-			// Y: Show/hide collision boxes.
+			// Y: Cycle entity debug info.
 			if (Keyboard.IsKeyPressed(Keys.Y)) {
-				DrawCollisionBoxes = !DrawCollisionBoxes;
+				EntityDebugInfoMode = (EntityDrawInfo) (((int) EntityDebugInfoMode + 1) % (int) EntityDrawInfo.Count);
+			}
+			// U: Cycle tile debug info.
+			if (Keyboard.IsKeyPressed(Keys.U)) {
+				TileDebugInfoMode = (TileDrawInfo) (((int) TileDebugInfoMode + 1) % (int) TileDrawInfo.Count);
 			}
 			// J: Spawn a heart collectible.
 			if (Keyboard.IsKeyPressed(Keys.K)) {
@@ -131,7 +187,7 @@ namespace ZeldaOracle.Game.Debug {
 				//Monster monster		= new MonsterOctorok();
 				//Monster monster		= new MonsterMoblin();
 				Vector2F position	= new Vector2F(32, 32) + new Vector2F(8, 14);
-				roomControl.SpawnEntity(monster, position);
+				RoomControl.SpawnEntity(monster, position);
 			}
 		}
 
@@ -330,28 +386,120 @@ namespace ZeldaOracle.Game.Debug {
 			return room;
 		}
 
-		public static void DrawRoom(Graphics2D g, RoomControl roomControl) {
-			if (DrawCollisionBoxes) {
-				// Draw entity collision boxes.
-				List<Entity> entities = roomControl.Entities;
-				for (int i = entities.Count - 1; i >= 0; i--) {
-					Entity entity = entities[i];
+		private static void DrawTile(Graphics2D g, Tile tile) {
+			
+			if (TileDebugInfoMode == TileDrawInfo.CollisionBoxes) {
+				if (tile.IsSolid && tile.CollisionModel != null) {
+					foreach (Rectangle2F box in tile.CollisionModel.Boxes) {
+						Rectangle2F r = Rectangle2F.Translate(box, tile.Position);
+						g.FillRectangle(r, Color.Red);
+						//g.DrawRectangle(r, 1, Color.Maroon);
+					}
+				}
+			}
+			else if (TileDebugInfoMode == TileDrawInfo.GridArea) {
+				Rectangle2F tileBounds = (Rectangle2F) tile.TileGridArea;
+				tileBounds.Point *= GameSettings.TILE_SIZE;
+				tileBounds.Size *= GameSettings.TILE_SIZE;
+				Color c = Color.Yellow;
+				if (tile.Layer == 1)
+					c = Color.Blue;
+				else if (tile.Layer == 2)
+					c = Color.Red;
+				g.FillRectangle(tileBounds, c);
 
-					g.FillRectangle(entity.Physics.SoftCollisionBox + entity.Position, new Color(0, 0, 255, 150));
-					g.FillRectangle(entity.Physics.CollisionBox + entity.Position, new Color(255, 0, 0, 150));
-					//g.FillRectangle(new Rectangle2F(entity.Origin, Vector2F.One), Color.White);
-					g.FillRectangle(new Rectangle2F(entity.Position, Vector2F.One), new Color(255, 255, 0));
+				tileBounds = new Rectangle2F(tile.Position, tile.Size * GameSettings.TILE_SIZE);
+				c = Color.Olive;
+				if (tile.Layer == 1)
+					c = Color.Cyan;
+				else if (tile.Layer == 2)
+					c = Color.Maroon;
 
-					if (entity is Unit) {
-						Unit unit = (Unit) entity;
-						foreach (UnitTool tool in unit.EquippedTools) {
-							if (tool.IsPhysicsEnabled) {
-								g.FillRectangle(tool.PositionedCollisionBox, new Color(255, 0, 255, 150));
-							}
+				g.DrawLine(new Line2F(tileBounds.TopLeft, tileBounds.BottomRight - new Point2I(1, 1)), 1, c);
+				g.DrawLine(new Line2F(tileBounds.TopRight - new Point2I(1, 0), tileBounds.BottomLeft - new Point2I(0, 1)), 1, c);
+				g.DrawRectangle(tileBounds, 1, Color.Black);
+			}
+		}
+
+		private static void DrawEntity(Graphics2D g, Entity entity) {
+			
+			if (EntityDebugInfoMode == EntityDrawInfo.CollisionBoxes) {
+				g.FillRectangle(entity.Physics.SoftCollisionBox + entity.Position, new Color(0, 0, 255, 150));
+				g.FillRectangle(entity.Physics.CollisionBox + entity.Position, new Color(255, 0, 0, 150));
+				g.FillRectangle(new Rectangle2F(entity.Position, Vector2F.One), new Color(255, 255, 0));
+
+				if (entity is Unit) {
+					Unit unit = (Unit) entity;
+					foreach (UnitTool tool in unit.EquippedTools) {
+						if (tool.IsPhysicsEnabled) {
+							g.FillRectangle(tool.PositionedCollisionBox, new Color(255, 0, 255, 150));
 						}
 					}
 				}
 			}
+			else if (EntityDebugInfoMode == EntityDrawInfo.CollisionTests) {
+				if (entity.Physics.IsEnabled && entity.Physics.CollideWithWorld || entity is Player) {
+					// Draw the hard collision box.
+					Rectangle2F collisionBox = entity.Physics.PositionedCollisionBox;
+					Color collisionBoxColor = Color.Yellow;
+					if (entity is Player && ((Player) entity).Movement.IsOnSideScrollLadder)
+						collisionBoxColor = new Color(255, 160, 0);
+					collisionBox.X = GMath.Round(collisionBox.X + 0.001f);
+					collisionBox.Y = GMath.Round(collisionBox.Y + 0.001f);
+					//collisionBox.Point = GMath.Round(collisionBox.Point);
+					g.FillRectangle(collisionBox, collisionBoxColor);
+
+					for (int i = 0; i < 4; i++) {
+						CollisionInfoNew collisionInfo = entity.Physics.ClipCollisionInfo[i];
+						int axis = Directions.ToAxis(i);
+
+						if (entity.Physics.CollisionInfo[i].IsColliding) {
+							Rectangle2F drawBox = collisionBox;
+							drawBox.ExtendEdge(i, 1);
+							drawBox.ExtendEdge(Directions.Reverse(i), -collisionBox.Size[axis]);
+							g.FillRectangle(drawBox, Color.Magenta);
+						}
+
+						if (collisionInfo.IsColliding && !collisionInfo.IsResolved) {
+							Rectangle2F drawBox = collisionBox;
+							float penetration = Math.Max(1.0f, GMath.Round(collisionInfo.PenetrationDistance));
+							if (i == Directions.Down || i == Directions.Right)
+								drawBox.Point[axis] += drawBox.Size[axis] - penetration;
+							drawBox.Size[axis] = penetration;
+							
+							// Draw the strip of penetration.
+							Color penetrationColor = Color.Red;
+							if (entity.Physics.AllowEdgeClipping && collisionInfo.IsAllowedClipping)
+								penetrationColor = Color.Blue;
+							g.FillRectangle(drawBox, penetrationColor);
+
+						}
+						if (collisionInfo.IsColliding && collisionInfo.IsResolved) {
+							Rectangle2F drawBox2 = collisionBox;
+							drawBox2.ExtendEdge(i, 2);
+							drawBox2.ExtendEdge(Directions.Reverse(i), -collisionBox.Size[axis] - 1);
+							g.FillRectangle(drawBox2, Color.Maroon);
+						}
+					}
+				}
+				else if (entity.Physics.IsEnabled && entity.Physics.IsSolid) {
+					// Draw the hard collision box.
+					Rectangle2F collisionBox = entity.Physics.PositionedCollisionBox;
+					g.FillRectangle(collisionBox, Color.Olive);
+				}
+			}
+		}
+
+		public static void DrawRoomTiles(Graphics2D g, RoomControl roomControl) {
+			// Draw debug info for tiles.
+			foreach (Tile tile in roomControl.GetTiles())
+				DrawTile(g, tile);
+		}
+
+		public static void DrawRoom(Graphics2D g, RoomControl roomControl) {
+			// Draw debug info for entities.
+			for (int i = roomControl.Entities.Count - 1; i >= 0; i--)
+				DrawEntity(g, roomControl.Entities[i]);
 		}
 	}
 }

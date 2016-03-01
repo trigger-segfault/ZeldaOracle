@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 
 namespace ZeldaOracle.Common.Content {
-	public class Resource {
+
+	// NOTE: This class is unused. It is supposed to be a base class for all resources.
+
+	/*public class Resource {
 		private string resourceName;
 
 		public Resource() {
@@ -15,5 +18,5 @@ namespace ZeldaOracle.Common.Content {
 			get { return resourceName; }
 			set { resourceName = value; }
 		}
-	}
+	}*/
 }

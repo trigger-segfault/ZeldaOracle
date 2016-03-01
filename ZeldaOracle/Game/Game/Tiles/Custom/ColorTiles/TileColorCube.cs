@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
@@ -30,7 +31,8 @@ namespace ZeldaOracle.Game.Tiles {
 	public class TileColorCube : Tile {
 
 		private Point2I offset;
-		
+		private ColorCubeOrientation orientation;
+
 		private const float MOVEMENT_SPEED = 16f / 12f;
 
 
@@ -39,8 +41,9 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public TileColorCube() {
-			animationPlayer = new AnimationPlayer();
 			soundMove = GameData.SOUND_SWITCH;
+			
+			Graphics.SyncPlaybackWithRoomTicks = false;
 		}
 
 		//-----------------------------------------------------------------------------
@@ -51,19 +54,21 @@ namespace ZeldaOracle.Game.Tiles {
 			if (base.OnPush(direction, MOVEMENT_SPEED)) {
 				offset = Directions.ToPoint(direction);
 				
-				int spriteIndex = SpriteIndex;
-				int oldSpriteIndex = spriteIndex;
+				ColorCubeOrientation oldOrientation = orientation;
 
 				// Find the new sprite index.
 				if (Directions.IsVertical(direction))
-					SpriteIndex = GMath.Wrap(spriteIndex + 3, 6);
-				else if (spriteIndex % 2 == 0)
-					SpriteIndex = GMath.Wrap(spriteIndex - 1, 6);
+					orientation = (ColorCubeOrientation) GMath.Wrap((int) orientation + 3, 6);
+				else if ((int) orientation % 2 == 0)
+					orientation = (ColorCubeOrientation) GMath.Wrap((int) orientation - 1, 6);
 				else
-					SpriteIndex = GMath.Wrap(spriteIndex + 1, 6);
+					orientation = (ColorCubeOrientation) GMath.Wrap((int) orientation + 1, 6);
 
 				// Play the corresponding animation.
-				animationPlayer.Play(GameData.ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS[oldSpriteIndex, direction]);
+				Graphics.PlayAnimation(GameData.ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS[(int) oldOrientation, direction]);
+
+				// Set an absolute draw position because the animation should not move with the tile.
+				Graphics.SetAbsoluteDrawPosition(Position);
 
 				return true;
 			}
@@ -71,32 +76,11 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public override void OnInitialize() {
-			
-		}
+			base.OnInitialize();
 
-		public override void Update() {
-			base.Update();
-
-			if (IsMoving) {
-				animationPlayer.Update();
-			}
-		}
-
-		public override void Draw(Graphics2D g) {
-
-			SpriteAnimation sprite = (!CustomSprite.IsNull ? CustomSprite : CurrentSprite);
-			if (IsMoving) {
-				g.DrawAnimation(animationPlayer, (Location - offset) * GameSettings.TILE_SIZE);
-			}
-			else if (sprite.IsAnimation) {
-				// Draw as an animation.
-				g.DrawAnimation(sprite.Animation, Zone.ImageVariantID,
-					RoomControl.GameControl.RoomTicks, Position);
-			}
-			else if (sprite.IsSprite) {
-				// Draw as a sprite.
-				g.DrawSprite(sprite.Sprite, Zone.ImageVariantID, Position);
-			}
+			int orientationIndex = Properties.GetInteger("orientation", 0);
+			orientation = (ColorCubeOrientation) orientationIndex;
+			Graphics.PlaySpriteAnimation(SpriteList[orientationIndex]);
 		}
 
 
@@ -105,7 +89,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		public ColorCubeOrientation ColorOrientation {
-			get { return (ColorCubeOrientation) SpriteIndex; }
+			get { return orientation; }
 		}
 
 		public PuzzleColor TopColor {

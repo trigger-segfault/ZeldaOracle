@@ -6,11 +6,12 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Content.ResourceBuilders;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Scripts.Commands;
 using ZeldaOracle.Game;
 
-namespace ZeldaOracle.Common.Scripts {
+namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
-	public class ImagesSR : NewScriptReader {
+	public class ImagesSR : ScriptReader {
 
 		private Image	image;
 		private Image	imageTail;
@@ -25,30 +26,32 @@ namespace ZeldaOracle.Common.Scripts {
 		public ImagesSR(TemporaryResources resources = null) {
 
 			this.resources	= resources;
-
-			// Image <name>
-			// Image <name> <file-path>
-			AddCommand("Image", delegate(CommandParam parameters) {
+			
+			//=====================================================================================
+			AddCommand("Image", 
+				"string name",
+				"string name, string filePath",
+			delegate(CommandParam parameters) {
 				imageName	= parameters.GetString(0);
 				image		= null;
 				imageTail	= null;
 
-				if (parameters.Count == 2) {
+				if (parameters.ChildCount == 2) {
 					image = Resources.LoadImage(Resources.ImageDirectory + parameters.GetString(1), false);
 					imageTail = image;
 				}
 			});
-
-			// End
-			AddCommand("End", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("End", "",
+			delegate(CommandParam parameters) {
 				if (image != null) {
 					Resources.AddImage(imageName, image);
 					image = null;
 				}
 			});
-
-			// Variant <name> <file-path>
-			AddCommand("Variant", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("Variant", "string name, string filePath",
+			delegate(CommandParam parameters) {
 				Image variant = Resources.LoadImage(Resources.ImageDirectory + parameters.GetString(1), false);
 				variant.VariantName	= parameters.GetString(0);
 
@@ -58,7 +61,13 @@ namespace ZeldaOracle.Common.Scripts {
 					image = variant;
 				imageTail = variant;
 			});
+			//=====================================================================================
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
 
 		// Begins reading the script.
 		protected override void BeginReading() {

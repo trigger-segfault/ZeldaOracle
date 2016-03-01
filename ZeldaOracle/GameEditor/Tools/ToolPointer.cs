@@ -9,6 +9,7 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using FormsControl = System.Windows.Forms.Control;
+using ZeldaOracle.Game;
 
 namespace ZeldaEditor.Tools {
 	public class ToolPointer : EditorTool {
@@ -31,11 +32,11 @@ namespace ZeldaEditor.Tools {
 		//-----------------------------------------------------------------------------
 
 		public override void OnChangeLayer() {
-			Deselect();
+			//Deselect();
 		}
 
 		public override void Cut() {
-			Deselect();
+			//Deselect();
 		}
 		
 		public override void Copy() {
@@ -43,33 +44,24 @@ namespace ZeldaEditor.Tools {
 		}
 		
 		public override void Paste() {
-			Deselect();
+			//Deselect();
 		}
 		
 		public override void Delete() {
-			if (!EditorControl.EventMode) {
-				if (selectedTile != null)
-					selectedTile.Room.RemoveTile(selectedTile);
-			}
-			else {
-				if (selectedEventTile != null)
-					selectedEventTile.Room.RemoveEventTile(selectedEventTile);
-			}
-			Deselect();
+			LevelDisplayControl.DeleteTileSelection();
 		}
 
 		public override void SelectAll() {
-			if (EditorControl.EventMode) {
-				// Select all events.
 
-			}
 		}
 
 		public override void Deselect() {
-			selectedEventTile = null;
-			selectedTile = null;
-			LevelDisplayControl.ClearSelectionBox();
+			selectedEventTile	= null;
+			selectedTile		= null;
+			LevelDisplayControl.DeselectTiles();
+			LevelDisplayControl.DeselectSelectionGrid();
 			EditorControl.PropertyGrid.CloseProperties();
+
 		}
 
 		
@@ -78,60 +70,69 @@ namespace ZeldaEditor.Tools {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin() {
-			selectedTile = null;
-			selectedEventTile = null;
+			selectedTile		= null;
+			selectedEventTile	= null;
 			EditorControl.HighlightMouseTile = false;
 		}
 
 		public override void OnEnd() {
-			selectedTile = null;
-			selectedEventTile = null;
-			Deselect();
+			selectedTile		= null;
+			selectedEventTile	= null;
+		}
+
+		public override void OnMouseDoubleClick(MouseEventArgs e) {
+			base.OnMouseDoubleClick(e);
+			
+			Point2I mousePos = new Point2I(e.X, e.Y);
+			Point2I levelPoint = LevelDisplayControl.SampleLevelPixelPosition(mousePos);
+
+			// Open the object properties form when double clicking on a tile.
+			foreach (BaseTileDataInstance tile in LevelDisplayControl.SelectedTiles) {
+				Rectangle2I bounds = tile.GetBounds();
+				bounds.Point += tile.Room.Location * tile.Room.Size * GameSettings.TILE_SIZE;
+
+				if (bounds.Contains(levelPoint)) {
+					EditorControl.EditorForm.OpenObjectPropertiesEditor(tile);
+					break;
+				}
+			}
 		}
 
 		public override void OnMouseDown(MouseEventArgs e) {
 			base.OnMouseDown(e);
 			
-			Point2I mousePos	= new Point2I(e.X, e.Y);
-			Room	room		= LevelDisplayControl.SampleRoom(mousePos);
-			Point2I tileCoord	= LevelDisplayControl.SampleTileCoordinates(mousePos);
-
-			if (e.Button == MouseButtons.Left && room != null) {
-				if (!editorControl.EventMode) {
-					if (FormsControl.ModifierKeys == Keys.Shift) {
-						selectedRoom = room;
-						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, Point2I.Zero);
-						LevelDisplayControl.SetSelectionBox(levelTileCoord, room.Size);
-						EditorControl.PropertyGrid.OpenProperties(room.Properties, room);
-					}
-					else {
-						// Select tiles.
-						selectedTile = room.GetTile(tileCoord, editorControl.CurrentLayer);
-
-						if (selectedTile != null) {
-							Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
-							LevelDisplayControl.SetSelectionBox(levelTileCoord, Point2I.One);
-							EditorControl.PropertyGrid.OpenProperties(selectedTile.Properties, selectedTile);
+			Point2I mousePos = new Point2I(e.X, e.Y);
+			
+			// Sample the tile at the mouse position.
+			BaseTileDataInstance baseTile = null;
+			if (editorControl.EventMode)
+				baseTile = LevelDisplayControl.SampleEventTile(mousePos);
+			else
+				baseTile = LevelDisplayControl.SampleTile(mousePos, editorControl.CurrentLayer);
+			
+			// Select or deselect the tile.
+			if (e.Button == MouseButtons.Left) {
+				/*if (FormsControl.ModifierKeys == Keys.Control) {
+					if (baseTile != null) {
+						// Add or remove tiles from selection.
+						if (!LevelDisplayControl.IsTileInSelection(baseTile)) {
+							LevelDisplayControl.AddTileToSelection(baseTile);
+							EditorControl.PropertyGrid.OpenProperties(baseTile);
 						}
 						else {
-							LevelDisplayControl.ClearSelectionBox();
-							EditorControl.PropertyGrid.CloseProperties();
+							LevelDisplayControl.RemoveTileFromSelection(baseTile);
 						}
 					}
 				}
-				else {
-					// Select events.
-					selectedEventTile = LevelDisplayControl.SampleEventTile(mousePos);
-
-					if (selectedEventTile != null) {
-						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
-						LevelDisplayControl.SetSelectionBox(levelTileCoord, Point2I.One);
-						EditorControl.PropertyGrid.OpenProperties(selectedEventTile.Properties, selectedEventTile);
+				else */{
+					// Select a new tile, deselecting others.
+					LevelDisplayControl.DeselectTiles();
+					if (baseTile != null) {
+						LevelDisplayControl.AddTileToSelection(baseTile);
+						EditorControl.PropertyGrid.OpenProperties(baseTile);
 					}
-					else {
-						LevelDisplayControl.ClearSelectionBox();
+					else
 						EditorControl.PropertyGrid.CloseProperties();
-					}
 				}
 			}
 		}

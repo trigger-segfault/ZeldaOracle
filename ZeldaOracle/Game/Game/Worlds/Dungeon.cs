@@ -63,6 +63,7 @@ namespace ZeldaOracle.Game.Worlds {
 			properties.BaseProperties.Set("boss_key",	false);
 			properties.BaseProperties.Set("map",		false);
 			properties.BaseProperties.Set("compass",	false);
+			properties.BaseProperties.Set("color_switch_color", (int) PuzzleColor.Blue);
 		}
 
 		public Dungeon(string id, string name) : 
@@ -108,7 +109,8 @@ namespace ZeldaOracle.Game.Worlds {
 			for (int i = 0; i < floorNumberCount; i++)
 				floors[i] = new DungeonFloor(null, lowestFloorNumber + i);
 			foreach (Level level in world.Levels) {
-				floors[level.DungeonFloor - lowestFloorNumber] = new DungeonFloor(level, level.DungeonFloor);
+				if (level.Dungeon == this)
+					floors[level.DungeonFloor - lowestFloorNumber] = new DungeonFloor(level, level.DungeonFloor);
 			}
 
 			return floors;
@@ -216,6 +218,11 @@ namespace ZeldaOracle.Game.Worlds {
 				}
 				return highest;
 			}
+		}
+
+		public PuzzleColor ColorSwitchColor {
+			get { return (PuzzleColor) properties.GetInteger("color_switch_color", (int) PuzzleColor.Blue); }
+			set { properties.Set("color_switch_color", (int) value); }
 		}
 	}
 }

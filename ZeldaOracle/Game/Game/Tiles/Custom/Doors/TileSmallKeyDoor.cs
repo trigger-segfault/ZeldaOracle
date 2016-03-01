@@ -46,12 +46,12 @@ namespace ZeldaOracle.Game.Tiles {
 				RoomControl.SpawnEntity(effect, Center);
 				
 				// Disable this tile forever.
-				Properties.SetBase("enabled", false);
+				Properties.Set("enabled", false);
 				
 				// Unlock doors connected to this one in the adjacent room.
 				TileDataInstance connectedDoor = GetConnectedDoor();
 				if (connectedDoor != null) {
-					connectedDoor.Properties.Set("enabled", false);
+					connectedDoor.ModifiedProperties.Set("enabled", false);
 				}
 				
 				return true;

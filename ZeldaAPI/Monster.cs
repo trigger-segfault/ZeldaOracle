@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 
 namespace ZeldaAPI {
-	public interface Monster {
 
+	public interface Monster {
+		// Nothing yet...
 	}
 }

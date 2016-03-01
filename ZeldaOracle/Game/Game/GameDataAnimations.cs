@@ -29,6 +29,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_TILE_WATER_DEEP;
 		public static Animation ANIM_TILE_PUDDLE;
 		public static Animation ANIM_TILE_LANTERN;
+		public static Animation ANIM_TILE_SPIKED_FLOOR;
 		public static Animation ANIM_TILE_LAVAFALL;
 		public static Animation ANIM_TILE_LAVAFALL_BOTTOM;
 		public static Animation ANIM_TILE_LAVAFALL_TOP;
@@ -46,9 +47,6 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_TILE_BOSS_KEY_DOOR_CLOSE;
 		public static Animation[,] ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS;
 		public static Animation ANIM_TILE_REGROWABLE_PLANT_REGROW;
-		
-		public static Animation ANIM_TILE_CROSSING_GATE_RAISE;
-		public static Animation ANIM_TILE_CROSSING_GATE_LOWER;
 
 		// General tiles.
 		public static Animation ANIM_MINECART;
@@ -56,6 +54,13 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_TURNSTILE_ARROWS_COUNTERCLOCKWISE;
 		public static Animation ANIM_TURNSTILE_ROTATE_CLOCKWISE;
 		public static Animation ANIM_TURNSTILE_ROTATE_COUNTERCLOCKWISE;
+		public static Animation ANIM_TILE_CROSSING_GATE_RAISE;
+		public static Animation ANIM_TILE_CROSSING_GATE_LOWER;
+		public static Animation ANIM_TILE_SEED_BOUNCER;
+		public static Animation ANIM_TILE_COLOR_BARRIER_BLUE_RAISE;
+		public static Animation ANIM_TILE_COLOR_BARRIER_BLUE_LOWER;
+		public static Animation ANIM_TILE_COLOR_BARRIER_RED_RAISE;
+		public static Animation ANIM_TILE_COLOR_BARRIER_RED_LOWER;
 	
 		// Player animations.
 		public static Animation ANIM_PLAYER_DEFAULT;
@@ -85,6 +90,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PLAYER_DROWN;
 		public static Animation ANIM_PLAYER_FALL;
 		public static Animation ANIM_PLAYER_CRUSH_HORIZONTAL;
+		public static Animation ANIM_PLAYER_CRUSH_VERTICAL;
 		public static Animation ANIM_PLAYER_INVISIBLE;
 		public static Animation ANIM_PLAYER_MINECART_IDLE;
 		public static Animation ANIM_PLAYER_MINECART_CARRY;

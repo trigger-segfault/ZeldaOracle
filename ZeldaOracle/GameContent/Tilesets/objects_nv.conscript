@@ -1,6 +1,6 @@
 
 #==============================================================
-# Sprites
+# Sprite Sheets
 #==============================================================
 
 LOAD SPRITES;
@@ -21,6 +21,7 @@ LOAD TILESETS;
 TILE chest;
 	TYPE		TileChest;
 	SOLID		block;
+	RESETWHEN	Never;
 	PROPERTIES
 		(integer, spawn_delay_after_poof, 16),
 		(string, reward, "rupees_1",
@@ -52,8 +53,9 @@ END;
 # ---- Reward -----------------------------------------------------------------
 
 TILE reward;
-	TYPE		TileReward
-	SOLID		center;
+	TYPE			TileReward;
+	MODEL			center;
+	RESETWHEN		Never;
 	##SPRITE		reward_heart_piece;
 	PROPERTIES
 		(string, reward, "heart_piece",
@@ -68,14 +70,14 @@ END;
 
 TILE color_switch;
 	TYPE		TileColorSwitch;
-	SOLID		block;
+	HALFSOLID	block;
 	FLAGS		AbsorbSeeds;
 	SPRITEINDEX	0, tile_color_switch_blue;
 	SPRITEINDEX	1, tile_color_switch_red;
-	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "", "Can the color switch only be switched once?"),
-				(boolean, switch_state,		false,	"Switch State",		"", "", "The switch state of the color switch (false = blue, true = red)."),
-				(boolean, remember_state,	false,	"Remember State",	"", "", "Will the color switch's state be remembered after leaving the room?");
-	EVENT		event_toggle, "Toggle", "Occurs when the Color Switch changes color.", (ColorSwitch, switch);
+	PROPERTIES	(boolean, switch_once,			false,	"Switch Once",			"", "", "Can the color switch only be switched once?"),
+				(boolean, switch_state,			false,	"Switch State",			"", "", "The switch state of the color switch (false = blue, true = red)."),
+				(boolean, sync_with_dungeon,	false,	"Sync With Dungeon",	"", "", "Will the color switch's state be syncronized with other color switches in the dungeon?");
+	EVENT		event_toggle, "Toggle", "Occurs when the Color Switch changes color.", (ColorSwitch, colorSwitch);
 END;
 
 TILE color_switch_blue;
@@ -127,6 +129,7 @@ TILE color_cube;
 	SPRITEINDEX		3, "color_cube", (3, 0);
 	SPRITEINDEX		4, "color_cube", (4, 0);
 	SPRITEINDEX		5, "color_cube", (5, 0);
+	PROPERTIES		(integer, orientation, 0, "Orientation", "", "Color Cube", "The orientation index of the color cube.");
 END;
 
 # ---- Roller -----------------------------------------------------------------
@@ -165,9 +168,9 @@ END;
 TILE crossing_grate;
 	TYPE		TileCrossingGate;
 	SOLID		edge_w;
-	PROPERTIES	(boolean, raised,    false, "Raised",      "", "Crossing Gate", "True if the gate is raised.");
-	PROPERTIES	(boolean, face_left, false, "Facing Left", "", "Crossing Gate", "True if the crossing gate is facing left.");
-	PROPERTIES	(boolean, cling_on_stab, false);
+	PROPERTIES	(boolean, raised,    false, "Raised",      "", "Crossing Gate", "True if the gate is raised."),
+				(boolean, face_left, false, "Facing Left", "", "Crossing Gate", "True if the crossing gate is facing left."),
+				(boolean, cling_on_stab, false);
 END;
 
 TILE crossing_grate_right;
@@ -185,6 +188,22 @@ TILE platform;
 	SPRITE	tile_moving_platform;
 END;
 
+TILE pull_handle;
+	TYPE		TilePullHandle;
+	SPRITE		tile_pull_handle_down;
+	PROPERTIES	(integer, direction, 3, "Direction", "direction", "Handle", "The direction the handle extends in.");
+	EVENT		event_fully_retract, "Retract", "Occurs when the handle is fully retracted into the wall.", (PullHandle, pullHandle);
+	EVENT		event_fully_extend, "Extend", "Occurs when the handle is fully extended from the wall.", (PullHandle, pullHandle);
+END;
+
+TILE seed_bouncer;
+	TYPE		TileSeedBouncer;
+	SPRITE		tile_seed_bouncer;
+	HALFSOLID	block;
+	PROPERTIES	(integer, angle, 0, "Angle", "angle", "Seed Bouncer", "The angle the seed bouncer is facing."),
+				(boolean, cling_on_stab, false);
+END;
+
 
 #==============================================================
 # Tilesets
@@ -200,7 +219,7 @@ SETTILE ( 1, 0), chest_flat;
 SETTILE ( 2, 0), chest_ornate;
 SETTILE ( 3, 0), reward;
 SETTILE ( 4, 0), color_switch_blue;
-# Blue crystal
+SETTILE ( 5, 0), pull_handle;			## TEMP: should be blue crystal
 SETTILE ( 6, 0), trampoline;
 SETTILE ( 7, 0), roller_horizontal;
 SETTILE ( 8, 0), roller_vertical;
@@ -210,5 +229,7 @@ SETTILE (11, 0), platform;
 
 SETTILE ( 0, 1), crossing_grate_right;
 SETTILE ( 1, 1), crossing_grate_left;
+
+SETTILE ( 5, 1), seed_bouncer; ## TEMP: invisible on sprite sheet.
 
 END;

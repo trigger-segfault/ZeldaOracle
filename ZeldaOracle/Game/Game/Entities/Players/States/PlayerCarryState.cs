@@ -84,6 +84,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					player.BeginBusyState(throwDuration);
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 				}
+				else if (isPickingUp) {
+					player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
+					isPickingUp = false;
+				}
 				if (playSound)
 					AudioSystem.PlaySound(GameData.SOUND_PLAYER_THROW);
 			}
@@ -130,7 +134,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.CanJump			= true;
 			player.Movement.CanLedgeJump	= true;
 			player.Movement.CanUseWarpPoint	= true;
-			
+
 			if (!isObjectDropped) {
 				DropObject(false, false);
 			}
@@ -138,12 +142,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void OnEnterMinecart() {
 			if (Player.Graphics.Animation == GameData.ANIM_PLAYER_CARRY)
-				Player.Graphics.Animation = GameData.ANIM_PLAYER_MINECART_CARRY;
+				Player.Graphics.SetAnimation(GameData.ANIM_PLAYER_MINECART_CARRY);
 		}
 
 		public override void OnExitMinecart() {
 			if (Player.Graphics.Animation == GameData.ANIM_PLAYER_MINECART_CARRY)
-				Player.Graphics.Animation = GameData.ANIM_PLAYER_CARRY;
+				Player.Graphics.SetAnimation(GameData.ANIM_PLAYER_CARRY);
 		}
 
 		public override void OnHurt(DamageInfo damage) {
@@ -223,7 +227,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// Handle head bobbing when the player is moving horizontally.
 			float playbackTime = player.Graphics.AnimationPlayer.PlaybackTime;
 			if (!isPickingUp && Directions.IsHorizontal(player.Direction)
-				&& playbackTime >= 2 && playbackTime < 8)
+				&& playbackTime >= 2 && playbackTime < 8) // TODO: magic number
 			{
 				carryObject.ZPosition -= 1;
 			}

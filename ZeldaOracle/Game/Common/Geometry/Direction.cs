@@ -4,6 +4,15 @@ using System.Linq;
 using System.Text;
 
 namespace ZeldaOracle.Common.Geometry {
+	
+	/*[Flags]
+	public enum DirectionMask {
+		None	= 0x0,
+		Right	= 0x1,
+		Up		= 0x2,
+		Left	= 0x4,
+		Down	= 0x8,
+	}*/
 
 	public static class Directions {
 		
@@ -23,7 +32,7 @@ namespace ZeldaOracle.Common.Geometry {
 		public const int West	= 2;
 		public const int South	= 3;
 		
-		
+
 		//-----------------------------------------------------------------------------
 		// Methods
 		//-----------------------------------------------------------------------------
@@ -132,6 +141,18 @@ namespace ZeldaOracle.Common.Geometry {
 			int dir = (int) Math.Round(radians / GMath.HalfPi);
 			return GMath.Wrap(dir, Directions.Count);
 		}
+
+		public static string ToString(int direction) {
+			if (direction == Directions.Right)
+				return "right";
+			if (direction == Directions.Left)
+				return "left";
+			if (direction == Directions.Up)
+				return "up";
+			if (direction == Directions.Down)
+				return "down";
+			return "error";
+		}
 		
 		public static bool TryParse(string value, bool ignoreCase, out int result) {
 			if (ignoreCase)
@@ -150,5 +171,11 @@ namespace ZeldaOracle.Common.Geometry {
 			}
 			return true;
 		}
+		
+		/*public static DirectionMask GetDirectionBit(int direction) {
+			if (direction >= 0 && direction < Count)
+				return (DirectionMask) (1 << direction);
+			return DirectionMask.None;
+		}*/
 	}
 }

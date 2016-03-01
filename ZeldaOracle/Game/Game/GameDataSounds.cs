@@ -92,7 +92,8 @@ namespace ZeldaOracle.Game {
 		public static Sound SOUND_PLAYER_WADE;
 
 		// Tiles ----------------------------------------------------------------------
-
+		
+		public static Sound SOUND_BARRIER;
 		public static Sound SOUND_BLOCK_PUSH;
 		public static Sound SOUND_BLUE_ROLLER;
 		public static Sound SOUND_CHEST_OPEN;

@@ -99,8 +99,9 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_TILE_OWL_ACTIVATED;
 		public static Sprite SPR_TILE_STATUE_EYE;
 		public static Sprite SPR_TILE_SOMARIA_BLOCK;
-		public static Sprite SPR_TILE_REGROWABLE_PLANT_CUT;
-		public static Sprite SPR_TILE_REGROWABLE_PLANT_GROWN;
+		public static Sprite SPR_TILE_REGROWING_PLANT_CUT;
+		public static Sprite SPR_TILE_REGROWING_PLANT_GROWING;
+		public static Sprite SPR_TILE_REGROWING_PLANT_GROWN;
 		public static Sprite SPR_TILE_COLOR_SWITCH_RED;
 		public static Sprite SPR_TILE_COLOR_SWITCH_BLUE;
 		public static Sprite SPR_TILE_COLOR_TILE_RED;
@@ -114,8 +115,16 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_TILE_COLOR_STATUE_BLUE;
 		public static Sprite SPR_TILE_COLOR_BARRIER_RED_RAISED;
 		public static Sprite SPR_TILE_COLOR_BARRIER_RED_LOWERED;
+		public static Sprite SPR_TILE_COLOR_BARRIER_RED_HALFWAY;
 		public static Sprite SPR_TILE_COLOR_BARRIER_BLUE_RAISED;
 		public static Sprite SPR_TILE_COLOR_BARRIER_BLUE_LOWERED;
+		public static Sprite SPR_TILE_COLOR_BARRIER_BLUE_HALFWAY;
+		public static Sprite SPR_TILE_PULL_HANDLE_BAR_HORIZONTAL;
+		public static Sprite SPR_TILE_PULL_HANDLE_UP;
+		public static Sprite SPR_TILE_PULL_HANDLE_LEFT;
+		public static Sprite SPR_TILE_PULL_HANDLE_BAR_VERTICAL;
+		public static Sprite SPR_TILE_PULL_HANDLE_DOWN;
+		public static Sprite SPR_TILE_PULL_HANDLE_RIGHT;
 
 		public static Sprite[] SPR_COLOR_CUBE_ORIENTATIONS;
 

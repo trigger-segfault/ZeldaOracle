@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Scripts.Commands;
 using ZeldaOracle.Game;
 
-namespace ZeldaOracle.Common.Scripts {
+namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
-	public class CollisionModelSR : NewScriptReader {
+	public class CollisionModelSR : ScriptReader {
 
 		private CollisionModel model;
 		private string	modelName;
@@ -22,29 +23,31 @@ namespace ZeldaOracle.Common.Scripts {
 		public CollisionModelSR(TemporaryResources resources = null) {
 
 			this.resources	= resources;
-
-			// Sprite <name>
-			AddCommand("Model", delegate(CommandParam parameters) {
+			
+			//=====================================================================================
+			AddCommand("Model", "string name",
+			delegate(CommandParam parameters) {
 				modelName = parameters.GetString(0);
 				model = new CollisionModel();
 			});
-
-			// End
-			AddCommand("End", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("End", "",
+			delegate(CommandParam parameters) {
 				if (model != null) {
 					Resources.AddResource(modelName, model);
 					model = null;
 				}
 			});
-
-			// Variant <name> <file-path>
-			AddCommand("Add", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("Add", "int x, int y, int width, int height",
+			delegate(CommandParam parameters) {
 				model.AddBox(
 					parameters.GetInt(0),
 					parameters.GetInt(1),
 					parameters.GetInt(2),
 					parameters.GetInt(3));
 			});
+			//=====================================================================================
 		}
 
 		// Begins reading the script.

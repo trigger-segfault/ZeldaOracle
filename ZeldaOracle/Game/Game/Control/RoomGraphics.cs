@@ -21,17 +21,17 @@ namespace ZeldaOracle.Game.Entities {
 
 		private class DrawingInstruction {
 			public Sprite sprite;
-			public float x;
-			public float y;
+			public Vector2F position;
 			public int imageVariant;
 			public DrawingInstruction next;
+			public Vector2F depthOrigin;
 
-			public DrawingInstruction(Sprite sprite, int imageVariant, float x, float y) {
-				this.sprite = sprite;
-				this.x = x;
-				this.y = y;
-				this.imageVariant = imageVariant;
-				this.next = null;
+			public DrawingInstruction(Sprite sprite, int imageVariant, Vector2F position, Vector2F depthOrigin) {
+				this.sprite			= sprite;
+				this.position		= position;
+				this.imageVariant	= imageVariant;
+				this.next			= null;
+				this.depthOrigin	= depthOrigin;
 			}
 		}
 
@@ -43,6 +43,7 @@ namespace ZeldaOracle.Game.Entities {
 		public RoomControl roomControl;
 		private DrawingInstruction[] layerHeads; // The heads of the drawing instruction queues for each layer.
 		private DrawingInstruction[] layerTails; // The tails of the drawing instruction queues for each layer.
+		private int[] layerCounts;
 
 
 		//-----------------------------------------------------------------------------
@@ -53,6 +54,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.roomControl	= roomControl;
 			this.layerHeads		= new DrawingInstruction[(int) DepthLayer.Count];
 			this.layerTails		= new DrawingInstruction[(int) DepthLayer.Count];
+			this.layerCounts	= new int[(int) DepthLayer.Count];
 		}
 
 		
@@ -64,8 +66,9 @@ namespace ZeldaOracle.Game.Entities {
 		public void Clear() {
 			// Clear the instruction queues for each depth layer.
 			for (int i = 0; i < layerHeads.Length; i++) {
-				layerHeads[i] = null;
-				layerTails[i] = null;
+				layerHeads[i]	= null;
+				layerTails[i]	= null;
+				layerCounts[i]	= 0;
 			}
 		}
 
@@ -78,68 +81,166 @@ namespace ZeldaOracle.Game.Entities {
 				while (instruction != null) {
 					g.DrawSprite(instruction.sprite,
 								 instruction.imageVariant,
-								 instruction.x,
-								 instruction.y);
+								 instruction.position.X,
+								 instruction.position.Y);
 					instruction = instruction.next;
 				}
 			}
 		}
 
-		
-		//-----------------------------------------------------------------------------
-		// Entity Drawing Functions
-		//-----------------------------------------------------------------------------
-		
-		// Draw an animation player.
-		public void DrawAnimation(AnimationPlayer animationPlayer, Vector2F position, DepthLayer depth) {
-			DrawAnimation(animationPlayer, 0, position, depth);
+		// Sort a depth layer. Sprites with smaller y coordinates
+		// will be drawn before ones with larger y coordinates.
+		public void SortDepthLayer(DepthLayer layer) {
+			// Check if the layer is empty.
+			int layerIndex = (int) layer;
+			if (layerHeads[layerIndex] == null)
+				return;
+
+			// Create a list of the drawing instructions.
+			List<DrawingInstruction> instructions = new List<DrawingInstruction>(layerCounts[layerIndex]);
+			DrawingInstruction instruction = layerHeads[layerIndex];
+			while (instruction != null) {
+				instructions.Add(instruction);
+				instruction = instruction.next;
+			}
+
+			// Sort the list by depth origin Y.
+			instructions.Sort(delegate(DrawingInstruction a, DrawingInstruction b) {
+				if (Math.Round(a.depthOrigin.Y) < Math.Round(b.depthOrigin.Y))
+					return -1;
+				return 1;
+			});
+
+			// Update the drawing instruction linked list.
+			layerHeads[layerIndex] = instructions[0];
+			layerTails[layerIndex] = instructions[instructions.Count - 1];
+			for (int i = 0; i < instructions.Count; i++) {
+				if (i + 1 < instructions.Count)
+					instructions[i].next = instructions[i + 1];
+				else
+					instructions[i].next = null;
+			}
 		}
 		
+		
+		//-----------------------------------------------------------------------------
+		// Entity Drawing Functions (no variants, no depth origin)
+		//-----------------------------------------------------------------------------
+
+		// Draw an animation player.
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, Vector2F position, DepthLayer depth) {
+			DrawAnimationPlayer(animationPlayer, 0, position, depth, Vector2F.Zero);
+		}
+		
+		// Draw an animation player at the given playback time.
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, float time, Vector2F position, DepthLayer depth) {
+			DrawAnimationPlayer(animationPlayer, 0, time, position, depth, Vector2F.Zero);
+		}
+
 		// Draw an sprite or animation at the given playback time.
-		public void DrawAnimation(SpriteAnimation spriteAnimation, float time, Vector2F position, DepthLayer depth) {
-			DrawAnimation(spriteAnimation, 0, time, position, depth);
+		public void DrawSpriteAnimation(SpriteAnimation spriteAnimation, float time, Vector2F position, DepthLayer depth) {
+			DrawSpriteAnimation(spriteAnimation, 0, time, position, depth, Vector2F.Zero);
 		}
 		
 		// Draw an animation at the given playback time.
 		public void DrawAnimation(Animation animation, float time, Vector2F position, DepthLayer depth) {
-			DrawAnimation(animation, 0, time, position, depth);
+			DrawAnimation(animation, 0, time, position, depth, Vector2F.Zero);
 		}
 		
 		// Draw a sprite.
 		public void DrawSprite(Sprite sprite, Vector2F position, DepthLayer depth) {
-			DrawSprite(sprite, 0, position, depth);
+			DrawSprite(sprite, 0, position, depth, Vector2F.Zero);
 		}
 
 		
 		//-----------------------------------------------------------------------------
-		// Entity Drawing Functions (With Variants)
+		// Entity Drawing Functions (with variants, no depth origin)
 		//-----------------------------------------------------------------------------
 		
 		// Draw an animation player.
-		public void DrawAnimation(AnimationPlayer animationPlayer, int imageVariant, Vector2F position, DepthLayer depth) {
-			if (animationPlayer.SubStrip != null)
-				DrawAnimation(animationPlayer.SubStrip, imageVariant, animationPlayer.PlaybackTime, position, depth);
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, int imageVariant, Vector2F position, DepthLayer depth) {
+			DrawAnimationPlayer(animationPlayer, imageVariant, position, depth, Vector2F.Zero);
+		}
+		
+		// Draw an animation player at the given playback time.
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, int imageVariant, float time, Vector2F position, DepthLayer depth) {
+			DrawAnimationPlayer(animationPlayer, imageVariant, time, position, depth, Vector2F.Zero);
 		}
 		
 		// Draw an sprite or animation at the given playback time.
-		public void DrawAnimation(SpriteAnimation spriteAnimation, int imageVariant, float time, Vector2F position, DepthLayer depth) {
-			if (spriteAnimation.IsAnimation)
-				DrawAnimation(spriteAnimation.Animation, imageVariant, time, position, depth);
-			else
-				DrawSprite(spriteAnimation.Sprite, imageVariant, position, depth);
+		public void DrawSpriteAnimation(SpriteAnimation spriteAnimation, int imageVariant, float time, Vector2F position, DepthLayer depth) {
+			DrawSpriteAnimation(spriteAnimation, imageVariant, time, position, depth, Vector2F.Zero);
 		}
 		
 		// Draw an animation at the given playback time.
 		public void DrawAnimation(Animation animation, int imageVariant, float time, Vector2F position, DepthLayer depth) {
+			DrawAnimation(animation, imageVariant, time, position, depth, Vector2F.Zero);
+		}
+		
+		// Draw a sprite.
+		public void DrawSprite(Sprite sprite, int imageVariant, Vector2F position, DepthLayer depth) {
+			DrawSprite(sprite, imageVariant, position, depth, Vector2F.Zero);
+		}
+
+		
+		//-----------------------------------------------------------------------------
+		// Entity Drawing Functions (no variants, with depth origin)
+		//-----------------------------------------------------------------------------
+		
+		// Draw an animation player.
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+			DrawAnimationPlayer(animationPlayer, 0, position, depth, depthOrigin);
+		}
+		
+		// Draw an sprite or animation at the given playback time.
+		public void DrawSpriteAnimation(SpriteAnimation spriteAnimation, float time, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+			DrawSpriteAnimation(spriteAnimation, 0, time, position, depth, depthOrigin);
+		}
+		
+		// Draw an animation at the given playback time.
+		public void DrawAnimation(Animation animation, float time, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+			DrawAnimation(animation, 0, time, position, depth, depthOrigin);
+		}
+		
+		// Draw a sprite.
+		public void DrawSprite(Sprite sprite, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+			DrawSprite(sprite, 0, position, depth, depthOrigin);
+		}
+
+		
+		//-----------------------------------------------------------------------------
+		// Entity Drawing Functions (with variants, with depth origin)
+		//-----------------------------------------------------------------------------
+		
+		// Draw an animation player.
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, int imageVariant, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+			DrawAnimationPlayer(animationPlayer, imageVariant, animationPlayer.PlaybackTime, position, depth, depthOrigin);
+		}
+
+		// Draw an animation player at the given time.
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, int imageVariant, float time, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+			if (animationPlayer.Sprite != null)
+				DrawSprite(animationPlayer.Sprite, imageVariant, position, depth, depthOrigin);
+			else if (animationPlayer.SubStrip != null)
+				DrawAnimation(animationPlayer.SubStrip, imageVariant, time, position, depth, depthOrigin);
+		}
+		
+		// Draw an sprite or animation at the given playback time.
+		public void DrawSpriteAnimation(SpriteAnimation spriteAnimation, int imageVariant, float time, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+			if (spriteAnimation.IsAnimation)
+				DrawAnimation(spriteAnimation.Animation, imageVariant, time, position, depth, depthOrigin);
+			else
+				DrawSprite(spriteAnimation.Sprite, imageVariant, position, depth, depthOrigin);
+		}
+		
+		// Draw an animation at the given playback time.
+		public void DrawAnimation(Animation animation, int imageVariant, float time, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
 			if (animation.LoopMode == LoopMode.Repeat) {
 				if (animation.Duration == 0)
 					time = 0;
 				else
 					time %= animation.Duration;
 			}
-
-			position.X = GMath.Round(position.X);
-			position.Y = GMath.Round(position.Y);
 
 			for (int i = 0; i < animation.Frames.Count; ++i) {
 				AnimationFrame frame = animation.Frames[i];
@@ -149,15 +250,19 @@ namespace ZeldaOracle.Game.Entities {
 					(time >= animation.Duration &&
 					frame.StartTime + frame.Duration == animation.Duration))
 				{
-					DrawSprite(frame.Sprite, imageVariant, position, depth);
+					DrawSprite(frame.Sprite, imageVariant, position, depth, depthOrigin);
 				}
 			}
 		}
 		
 		// Draw a sprite.
-		public void DrawSprite(Sprite sprite, int imageVariant, Vector2F position, DepthLayer depth) {
+		public void DrawSprite(Sprite sprite, int imageVariant, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+			// There's a bias of 0.001f to account for rounding inconsistancies with the value 0.5f.
+			position.X = GMath.Round(position.X + 0.001f);
+			position.Y = GMath.Round(position.Y + 0.001f);
+
 			DrawingInstruction instruction = new DrawingInstruction(
-					sprite, imageVariant, position.X, position.Y);
+					sprite, imageVariant, position, depthOrigin);
 
 			// Add the instruction to the end of the linked list for its layer.
 			int layerIndex = (int) depth;
@@ -169,6 +274,7 @@ namespace ZeldaOracle.Game.Entities {
 				layerTails[layerIndex].next = instruction;
 				layerTails[layerIndex] = instruction;
 			}
+			layerCounts[layerIndex]++;
 		}
 	}
 }

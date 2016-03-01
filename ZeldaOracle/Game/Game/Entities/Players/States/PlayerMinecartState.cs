@@ -29,7 +29,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private TileMinecartTrack trackTile;
 		private AnimationPlayer minecartAnimationPlayer;
 		private Vector2F playerOffset;
-		private TileDataInstance startingTrackTileData;
 
 
 		//-----------------------------------------------------------------------------
@@ -57,9 +56,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				ExitMinecart(Directions.Reverse(player.Direction));
 				return;
 			}
-			startingTrackTileData = minecart.TrackTile.TileData;
-			if (startingTrackTileData != null)
-				startingTrackTileData.Properties.Set("minecart", false);
+
+			// Remove the miencart from the track.
+			minecart.TrackTile.SpawnsMinecart = false;
 
 			// Determine start direction.
 			foreach (int dir in minecart.TrackTile.GetDirections()) {
@@ -163,7 +162,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void DrawUnder(RoomGraphics g) {
 			// Draw the minecart below the player.
-			g.DrawAnimation(minecartAnimationPlayer,
+			g.DrawAnimationPlayer(minecartAnimationPlayer,
 				player.Center - new Vector2F(8, 8) - playerOffset, DepthLayer.PlayerAndNPCs);
 
 		}
@@ -184,14 +183,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// Make the current track tile remember it has a minecart on it.
 			if (trackTile != null)
-				trackTile.Properties.SetBase("minecart", true);
+				trackTile.SpawnsMinecart = true;
 
 			// Hop out of the minecart.
-			Vector2F landingPoint = 
-				((tileLocation + new Vector2F(0.5f, 0.5f)) * GameSettings.TILE_SIZE) +
-				(Directions.ToVector(direction) * GameSettings.TILE_SIZE);
-			landingPoint -= player.CenterOffset + new Vector2F(0, 2.0f);
-			player.JumpToPosition(landingPoint, 0.0f, 26, null);
+			Point2I landingTile = tileLocation + Directions.ToPoint(direction);
+			player.JumpOutOfMinecart(landingTile);
 		}
 
 		// Update the player's position relative to the minecart.

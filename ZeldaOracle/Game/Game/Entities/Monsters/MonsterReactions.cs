@@ -164,7 +164,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			
 			// Instantly kill the monster.
 			public static void SoftKill(Monster monster, Entity sender, EventArgs args) {
-				monster.Kill(); // TODO: Soft Kill
+				monster.SoftKill();
 			}
 
 			// Damage the monster for 1 damage.

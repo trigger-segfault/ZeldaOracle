@@ -18,6 +18,7 @@
     <XnaOutputType>Game</XnaOutputType>
     <ApplicationIcon>Game.ico</ApplicationIcon>
     <Thumbnail>GameThumbnail.png</Thumbnail>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -30,7 +31,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -182,20 +182,20 @@
     <Compile Include="Common\Scripting\PropertyDocumentation.cs" />
     <Compile Include="Common\Scripting\Property.cs" />
     <Compile Include="Common\Scripting\ZeldaObject.cs" />
-    <Compile Include="Common\Scripts\AnimationSR.cs" />
-    <Compile Include="Common\Scripts\CommandParam.cs" />
-    <Compile Include="Common\Scripts\OLD\GameFontSR.cs" />
-    <Compile Include="Common\Scripts\CollisionModelSR.cs" />
-    <Compile Include="Common\Scripts\OLD\LanguageSR.cs" />
-    <Compile Include="Common\Scripts\OLD\MusicSR.cs" />
+    <Compile Include="Common\Scripts\Commands\CommandReferenceParam.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\AnimationSR.cs" />
+    <Compile Include="Common\Scripts\Commands\CommandParam.cs" />
+    <Compile Include="Common\Scripts\Commands\CommandParamParser.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\GameFontSR.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\CollisionModelSR.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\MusicSR.cs" />
     <Compile Include="Common\Scripts\NewScriptReader.cs" />
-    <Compile Include="Common\Scripts\OLD\ScriptReader.cs" />
-    <Compile Include="Common\Scripts\OLD\SoundsSROld.cs" />
-    <Compile Include="Common\Scripts\OLD\SpriteSheetSROld.cs" />
-    <Compile Include="Common\Scripts\ImagesSR.cs" />
-    <Compile Include="Common\Scripts\SoundsSR.cs" />
-    <Compile Include="Common\Scripts\TilesetSR.cs" />
-    <Compile Include="Common\Scripts\SpritesSR.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\ImagesSR.cs" />
+    <Compile Include="Common\Scripts\Commands\ScriptCommand.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\SoundsSR.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\TilesetSR.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\SpritesSR.cs" />
+    <Compile Include="Common\Scripts\ScriptReaderException.cs" />
     <Compile Include="Common\Translation\Language.cs" />
     <Compile Include="Common\Translation\LetterString.cs" />
     <Compile Include="Common\Translation\FormatCodes.cs" />
@@ -222,11 +222,13 @@
     <Compile Include="Game\Control\Scripting\Script.cs" />
     <Compile Include="Game\Control\Scripting\ScriptManager.cs" />
     <Compile Include="Game\Control\Scripting\ScriptRunner.cs" />
+    <Compile Include="Game\Control\TileManager.cs" />
     <Compile Include="Game\Debug\GameDebug.cs" />
     <Compile Include="Game\Entities\Collectibles\CollectibleReward.cs" />
     <Compile Include="Game\Entities\Collectibles\CollectibleFairy.cs" />
     <Compile Include="Game\Entities\Collectibles\Collectible.cs" />
     <Compile Include="Game\Entities\Collisions\CollisionInfo.cs" />
+    <Compile Include="Game\Entities\Collisions\CollisionStyle.cs" />
     <Compile Include="Game\Entities\Collisions\CollisionTest.cs" />
     <Compile Include="Game\Entities\DamageInfo.cs" />
     <Compile Include="Game\Entities\DepthLayer.cs" />
@@ -272,6 +274,7 @@
     <Compile Include="Game\Entities\NPC.cs" />
     <Compile Include="Game\Entities\Players\PlayerSwimmingSkills.cs" />
     <Compile Include="Game\Entities\Players\PlayerTunics.cs" />
+    <Compile Include="Game\Entities\Players\States\PlayerPullHandleState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerJumpToState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerMagicBoomerangState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerMinecartState.cs" />
@@ -317,6 +320,7 @@
     <Compile Include="Game\Entities\Projectiles\PlayerProjectiles\CarriedTile.cs" />
     <Compile Include="Game\Entities\Projectiles\Projectile.cs" />
     <Compile Include="Game\Entities\Projectiles\Seeds\Seed.cs" />
+    <Compile Include="Game\Control\UnitSystem.cs" />
     <Compile Include="Game\Entities\Units\UnitTool.cs" />
     <Compile Include="Game\GameDataRewards.cs" />
     <Compile Include="Game\GameDataSounds.cs" />
@@ -325,6 +329,7 @@
     <Compile Include="Game\GameStates\RoomStates\RoomStateNormal.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateQueue.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateAction.cs" />
+    <Compile Include="Game\GameStates\RoomStates\RoomStateColorBarrier.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateTurnstile.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateStack.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomState.cs" />
@@ -412,7 +417,10 @@
     <Compile Include="Common\Content\ResourceBuilders\AnimationBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\SpriteBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\TilesetBuilder.cs" />
+    <Compile Include="Game\Tiles\Custom\ColorTiles\IColoredTile.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorBarrier.cs" />
+    <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorBlock.cs" />
+    <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorStatue.cs" />
     <Compile Include="Game\Tiles\Custom\Doors\TileMinecartDoor.cs" />
     <Compile Include="Game\Tiles\Custom\Minecart\TileMinecartStop.cs" />
     <Compile Include="Game\Tiles\Custom\Minecart\TileCrossingGate.cs" />
@@ -420,10 +428,14 @@
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorTile.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorSwitch.cs" />
     <Compile Include="Game\Tiles\Custom\SwitchTileBase.cs" />
+    <Compile Include="Game\Tiles\Custom\TileSeedBouncer.cs" />
+    <Compile Include="Game\Tiles\Custom\TilePullHandle.cs" />
     <Compile Include="Game\Tiles\Custom\TileLever.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorLantern.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorCubeSlot.cs" />
     <Compile Include="Game\Tiles\Custom\TileCrackedFloor.cs" />
+    <Compile Include="Game\Tiles\Custom\TileBridge.cs" />
+    <Compile Include="Game\Tiles\Custom\TileSpikedFloor.cs" />
     <Compile Include="Game\Tiles\Custom\TileTurnstile.cs" />
     <Compile Include="Game\Tiles\Custom\TileRegrowingPlant.cs" />
     <Compile Include="Game\Tiles\Custom\TilePlatform.cs" />
@@ -433,14 +445,15 @@
     <Compile Include="Game\Tiles\Custom\TileLockedBlock.cs" />
     <Compile Include="Game\Tiles\Custom\Doors\TileDoor.cs" />
     <Compile Include="Game\Tiles\Custom\TileButton.cs" />
+    <Compile Include="Game\Tiles\EventTiles\Puzzles\EventColorTilePuzzle.cs" />
     <Compile Include="Game\Tiles\Internal\AppearingTile.cs" />
     <Compile Include="Game\Tiles\Internal\PlaceHolderTile.cs" />
     <Compile Include="Game\Tiles\ITileset.cs" />
     <Compile Include="Game\Tiles\Custom\TileSomariaBlock.cs" />
     <Compile Include="Game\Tiles\BaseTileset.cs" />
     <Compile Include="Game\Tiles\EventTiles\EventTileset.cs" />
+    <Compile Include="Game\Tiles\TileGraphicsComponent.cs" />
     <Compile Include="Game\Tiles\TilePath.cs" />
-    <Compile Include="Game\Tiles\TileSpecialFlags.cs" />
     <Compile Include="Game\Tiles\Custom\TileRoller.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorCube.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorJumpPad.cs" />
@@ -464,8 +477,10 @@
     <Compile Include="Game\Tiles\Custom\TileSign.cs" />
     <Compile Include="Common\Scripting\IPropertyObject.cs" />
     <Compile Include="Game\Worlds\Dungeon.cs" />
+    <Compile Include="Game\Worlds\LevelTileCoord.cs" />
     <Compile Include="Game\Worlds\Room.cs" />
     <Compile Include="Game\Worlds\Level.cs" />
+    <Compile Include="Game\Worlds\TileGrid.cs" />
     <Compile Include="Game\Worlds\World.cs" />
     <Compile Include="Game\Worlds\WorldFile.cs" />
     <Compile Include="Game\Worlds\Zone.cs" />
@@ -512,7 +527,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\Collision\" />
-    <Folder Include="Game\Tiles\EventTiles\Puzzles\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

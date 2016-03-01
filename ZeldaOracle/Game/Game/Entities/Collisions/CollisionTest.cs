@@ -8,7 +8,7 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Entities.Collisions;
 
 namespace ZeldaOracle.Game.Entities.Collisions {
-	
+	/*
 	public class TileCollisionTest {
 		private Rectangle2F			entityCollisionBox;
 		private Rectangle2F			tileCollisionBox;
@@ -99,7 +99,7 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			return tileCollisionBox;
 		}
 	}
-	
+	*/
 	
 	public class CollisionTestSettings {
 		private Rectangle2F			collisionBox1;
@@ -248,7 +248,7 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			return collisionInfo;
 		}
 	}
-
+	/*
 	public class CollisionIterator {
 		private Entity					entity;
 		private CollisionTestSettings	settings;
@@ -412,4 +412,5 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			get { return collisionInfo; }
 		}
 	}
+	*/
 }

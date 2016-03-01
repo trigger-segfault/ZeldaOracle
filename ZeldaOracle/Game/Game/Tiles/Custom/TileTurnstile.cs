@@ -40,6 +40,8 @@ namespace ZeldaOracle.Game.Tiles {
 		public TileTurnstile() {
 			arrowsAnimationPlayer = new AnimationPlayer();
 			turnstileAnimationPlayer = new AnimationPlayer();
+
+			Graphics.SyncPlaybackWithRoomTicks = false;
 		}
 
 
@@ -65,13 +67,13 @@ namespace ZeldaOracle.Game.Tiles {
 				windingOrder = WindingOrder.CounterClockwise;
 				arrowsAnimationPlayer.Play(GameData.ANIM_TURNSTILE_ARROWS_COUNTERCLOCKWISE);
 				turnstileAnimationPlayer.SubStripIndex = 1;
-				Properties.SetBase("clockwise", false);
+				Properties.Set("clockwise", false);
 			}
 			else {
 				windingOrder = WindingOrder.Clockwise;
 				arrowsAnimationPlayer.Play(GameData.ANIM_TURNSTILE_ARROWS_CLOCKWISE);
 				turnstileAnimationPlayer.SubStripIndex = 0;
-				Properties.SetBase("clockwise", true);
+				Properties.Set("clockwise", true);
 			}
 		}
 
@@ -121,7 +123,7 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 
 			turnstileAnimationPlayer.Play(GameData.ANIM_TURNSTILE_ROTATE_CLOCKWISE);
-			turnstileAnimationPlayer.PlaybackTime = turnstileAnimationPlayer.Animation.Duration;
+			turnstileAnimationPlayer.SkipToEnd();
 		}
 
 		public override void Update() {
@@ -140,7 +142,6 @@ namespace ZeldaOracle.Game.Tiles {
 			if (player.IsOnGround) {
 				int direction = -1;
 
-				CollisionInfo[] collisionInfo = player.Physics.CollisionInfo;
 				for (int dir = 0; dir < Directions.Count; dir++) {
 					Rectangle2F sideRect = Rectangle2F.Translate(sideRects[dir], Position);
 
@@ -172,11 +173,11 @@ namespace ZeldaOracle.Game.Tiles {
 			turnstileAnimationPlayer.Update();
 		}
 
-		public override void Draw(Common.Graphics.Graphics2D g) {
+		public override void Draw(RoomGraphics g) {
 			base.Draw(g);
 
-			g.DrawAnimation(arrowsAnimationPlayer, Zone.ImageVariantID, Position);
-			g.DrawAnimation(turnstileAnimationPlayer, Zone.ImageVariantID, Position);
+			g.DrawAnimationPlayer(arrowsAnimationPlayer, Zone.ImageVariantID, Position, Graphics.DepthLayer);
+			g.DrawAnimationPlayer(turnstileAnimationPlayer, Zone.ImageVariantID, Position, Graphics.DepthLayer);
 		}
 
 		

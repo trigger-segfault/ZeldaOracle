@@ -45,14 +45,17 @@ namespace ZeldaOracle.Game {
 
 			// Add weapons.
 			inventory.AddItems(obtain,
+				// Currently equipped items:
+				new ItemCane(),
+				new ItemFeather(),
+
+				// Items in inventory menu:
 				new ItemSword(),
 				new ItemShield(),
 				new ItemShovel(),
-				new ItemCane(),
 				new ItemMagicRod(),
 				new ItemSwitchHook(),
 				new ItemBracelet(),
-				new ItemFeather(),
 				new ItemBow(),
 				new ItemBombs(),
 				new ItemOcarina(),
@@ -62,11 +65,13 @@ namespace ZeldaOracle.Game {
 				new ItemSeedShooter(),
 				new ItemSlingshot(),
 				
+				// Key items:
 				new ItemWallet(),
 				new ItemMembersCard(),
 				new ItemMagicPotion(),
 				new ItemEssenceSeed(),
 
+				// Essesnces:
 				new ItemEssence1(),
 				new ItemEssence2(),
 				new ItemEssence3(),
@@ -74,7 +79,8 @@ namespace ZeldaOracle.Game {
 				new ItemEssence5(),
 				new ItemEssence6(),
 				new ItemEssence7(),
-				new ItemEssence8());
+				new ItemEssence8()
+			);
 
 			// Add key items.
 			inventory.AddItems(false,
@@ -333,21 +339,21 @@ namespace ZeldaOracle.Game {
 			dropsDefault.AddDrop(25, dropsHearts);
 
 			// Drops that are created when a ground tile is dug up.
-			/*DropList dropsDigRupees = new DropList();
+			DropList dropsDigRupees = new DropList();
 			dropsDigRupees.AddDrop(25, dropsRupees);
 			dropsDigRupees.AddDrop(1, rewardManager.GetReward("rupees_100"));
 			DropList dropsDigMonsters = new DropList();
-			dropsDigMonsters.AddDrop(5, typeof(MonsterBeetle)); // TODO: Beetle as a dig Drop
-			dropsDigMonsters.AddDrop(2, typeof(MonsterRope)); // TODO: Rope as a dig Drop
+			dropsDigMonsters.AddDrop(5, typeof(MonsterBeetle));
+			dropsDigMonsters.AddDrop(2, typeof(MonsterRope));
 			DropList dropsDig = dropManager.CreateDropList("dig", 1, 4);
 			dropsDig.AddDrop(46, dropsDigRupees);
 			dropsDig.AddDrop(25, dropsHearts);
-			dropsDig.AddDrop(7, dropsDigMonsters);*/
+			dropsDig.AddDrop(7, dropsDigMonsters);
 			
-			DropList dropsDig = dropManager.CreateDropList("dig", 1, 1);
+			//DropList dropsDig = dropManager.CreateDropList("dig", 1, 1);
 			//dropsDig.AddDrop(1, typeof(MonsterRope));
 			//dropsDig.AddDrop(1, typeof(MonsterBeetle));
-			dropsDig.AddDrop(1, typeof(MonsterLynel));
+			//dropsDig.AddDrop(1, typeof(MonsterLynel));
 		}
 	}
 }

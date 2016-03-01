@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Game.Worlds;
-using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Game.Control;
+using ZeldaOracle.Game.Entities.Collisions;
+using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Entities {
 	
@@ -28,6 +29,14 @@ namespace ZeldaOracle.Game.Entities {
 		AutoDodge				= 0x1000,	// Will move out of the way when colliding with the edges of objects.
 		PassableToOthers		= 0x2000,	// Other entities are unable to check collisions with the entity.
 		MoveWithConveyors		= 0x4000,	// Moves with conveyor tiles.
+		MoveWithPlatforms		= 0x8000,	// Moves with moving platform tiles.
+		Crushable				= 0x10000,
+		EdgeClipping			= 0x20000,	// Allow clipping into the edges of tiles.
+		Flying					= 0x40000,	// Flying entities are never considered to be on the ground (even if their Z position is zero)
+
+
+		CheckRadialCollisions	= 0x80000,
+		OnGroundOverride		= 0x100000,	// If this is set, IsOnGround will be true.
 	}
 
 	public enum CollisionBoxType {
@@ -35,38 +44,7 @@ namespace ZeldaOracle.Game.Entities {
 		Soft	= 1,
 		Custom	= 2,
 	}
-
-
-	public delegate void EntityCollisionHandler(Entity entity);
-
-	public class EntityCollisionHandlerInstance {
-		private Type entityType;
-		private EntityCollisionHandler collisionHandler;
-		private CollisionBoxType collisionBoxType;
-
-		public EntityCollisionHandlerInstance(Type entityType, EntityCollisionHandler handler, CollisionBoxType collisionBoxType) {
-			this.entityType = entityType;
-			this.collisionHandler = handler;
-			this.collisionBoxType = collisionBoxType;
-		}
-		
-		public Type EntityType {
-			get { return entityType; }
-			set { entityType = value; }
-		}
-		
-		public EntityCollisionHandler CollisionHandler {
-			get { return collisionHandler; }
-			set { collisionHandler = value; }
-		}
-
-		public CollisionBoxType CollisionBoxType {
-			get { return collisionBoxType; }
-			set { collisionBoxType = value; }
-		}
-	}
-
-
+	
 	public class PhysicsComponent {
 
 		public delegate bool TileCollisionCondition(Tile tile);
@@ -76,17 +54,19 @@ namespace ZeldaOracle.Game.Entities {
 		private bool					isEnabled;			// Are physics enabled for the entity?
 		private PhysicsFlags			flags;
 		private float					gravity;			// Gravity in pixels per frame^2
-		private float					maxFallSpeed;private Vector2F				velocity;			// XY-Velocity in pixels per frame.
+		private float					maxFallSpeed;
+		private Vector2F				velocity;			// XY-Velocity in pixels per frame.
 		private float					zVelocity;			// Z-Velocity in pixels per frame.
-		private Sound					soundBounce;
-
-		// Collision.
+		
+		// Collision settings.
 		private Rectangle2F				collisionBox;		// The "hard" collision box, used to collide with solid entities/tiles.
 		private Rectangle2F				softCollisionBox;	// The "soft" collision box, used to collide with items, monsters, room edges, etc.
-		private int						autoDodgeDistance;	// The maximum distance allowed to dodge collisions.
-		private Action					customCollisionFunction;
 		private TileCollisionCondition	customTileCollisionCondition;
-		private List<EntityCollisionHandlerInstance> entityCollisionHandlers;
+		private CollisionBoxType		roomEdgeCollisionBoxType;
+		private int						autoDodgeDistance;	// The maximum distance allowed to dodge collisions.
+		private float					autoDodgeSpeed;		// The speed to move at when dodging collisions.
+		private int						edgeClipAmount;
+		private int						crushMaxGapSize;
 
 		// Internal physics state.
 		private Vector2F			previousVelocity;	// XY-Velocity before physics update is called.
@@ -94,6 +74,7 @@ namespace ZeldaOracle.Game.Entities {
 		private Vector2F			reboundVelocity;
 		private bool				isColliding;
 		private CollisionInfo[]		collisionInfo;
+		private CollisionInfo[]		previousCollisionInfo;
 		private bool				hasLanded;
 		private Tile				topTile;			// The top-most tile the entity is located over.
 		private int					ledgeAltitude;		// How many ledges the entity has passed over.
@@ -120,17 +101,27 @@ namespace ZeldaOracle.Game.Entities {
 			this.topTile			= null;
 			this.isColliding		= false;
 			this.autoDodgeDistance	= 6;
-			this.customCollisionFunction	= null;
-			this.entityCollisionHandlers	= new List<EntityCollisionHandlerInstance>();
+			this.autoDodgeSpeed		= 1.0f;
 			this.hasLanded			= false;
 			this.reboundVelocity	= Vector2F.Zero;
 			this.ledgeAltitude		= 0;
 			this.ledgeTileLocation	= new Point2I(-1, -1);
-			this.soundBounce		= null;
+			this.roomEdgeCollisionBoxType = CollisionBoxType.Hard;
+
+			this.crushMaxGapSize	= 0;
+			this.edgeClipAmount		= 1;
 
 			this.collisionInfo = new CollisionInfo[Directions.Count];
-			for (int i = 0; i < Directions.Count; i++)
+			this.previousCollisionInfo = new CollisionInfo[Directions.Count];
+			for (int i = 0; i < Directions.Count; i++) {
 				collisionInfo[i].Clear();
+				previousCollisionInfo[i].Clear();
+			}
+
+			this.MovementCollisions = new bool[4];
+			this.ClipCollisionInfo = new CollisionInfoNew[4];
+			for (int i = 0; i < 4; i++)
+				ClipCollisionInfo[i] = new CollisionInfoNew();
 		}
 		
 
@@ -138,20 +129,10 @@ namespace ZeldaOracle.Game.Entities {
 		// Custom Collision Setup
 		//-----------------------------------------------------------------------------
 
-		public void AddCollisionHandler(Type entityType, CollisionBoxType collisionBoxType, EntityCollisionHandler handler) {
-			entityCollisionHandlers.Add(new EntityCollisionHandlerInstance(
-					entityType, handler, collisionBoxType));
-		}
-		
-		public void HandleEntityCollisions(Type entityType, CollisionBoxType collisionBoxType, EntityCollisionHandler handler) {
-			for (int i = 0; i < entity.RoomControl.EntityCount; i++) {
-				Entity e = entity.RoomControl.Entities[i];
-				if (e.GetType().IsAssignableFrom(entityType) && IsMeetingEntity(e, collisionBoxType)) {
-					handler(e);
-					if (entity.IsDestroyed)
-						return;
-				}
-			}
+		public Rectangle2F GetCollisionBox(CollisionBoxType type) {
+			if (type == CollisionBoxType.Hard)
+				return collisionBox;
+			return softCollisionBox;
 		}
 
 		
@@ -175,199 +156,59 @@ namespace ZeldaOracle.Game.Entities {
 		// Update methods
 		//-----------------------------------------------------------------------------
 
-		public void Initialize() {
-			previousVelocity  = velocity;
-			previousZVelocity = zVelocity;
-		}
-
 		public void Update() {
-			previousVelocity = velocity;
-			previousZVelocity = zVelocity;
+			// Nothing left here....
+			// All moved to RoomPhysics.
+		}
 
-			// Remove frame collision state flags.
-			hasLanded		= false;
-			isColliding		= false;
-			reboundVelocity	= Vector2F.Zero;
-			for (int i = 0; i < Directions.Count; i++)
-				collisionInfo[i].Clear();
-
-			// Perform custom collision handling tests.
-			if (entityCollisionHandlers.Count > 0) {
-				PerformCustomCollisionHandling();
-				if (entity.IsDestroyed)
-					return;
-			}
-
-			// Update Z dynamics.
-			UpdateZVelocity();
-
-			// 1. Collide with solid tiles and entities.
-			if (HasFlags(PhysicsFlags.CollideWorld) || HasFlags(PhysicsFlags.CollideEntities))
-				CheckCollisions();
-			// 2. Collide with room edges.
-			if (HasFlags(PhysicsFlags.CollideRoomEdge) || HasFlags(PhysicsFlags.ReboundRoomEdge))
-				CheckRoomEdgeCollisions(collisionBox);
-			// 3. Custom collision function.
-			if (customCollisionFunction != null) {
-				customCollisionFunction.Invoke();
-				if (entity.IsDestroyed)
-					return;
-			}
-
-			// Apply velocity.
-			entity.Position += velocity;
-			velocity += reboundVelocity;
-
-			// Check ledges.
-			if (HasFlags(PhysicsFlags.LedgePassable))
-				CheckLedges();
-
-			// Keep track of the highest-layer tile the entity is positioned over.
-			topTile = null;
-			foreach (Tile tile in entity.RoomControl.GetTiles()) {
-				Rectangle2F tileRect = new Rectangle2F(tile.Position, tile.Size * GameSettings.TILE_SIZE);
-				if (!tile.IsSolid && tileRect.Contains(entity.Position) &&
-					(topTile == null || tile.Layer > topTile.Layer))
+		
+		//-----------------------------------------------------------------------------
+		// Collision Iteration
+		//-----------------------------------------------------------------------------
+		
+		public IEnumerable<Tile> GetTilesMeeting(CollisionBoxType collisionBoxType) {
+			return GetTilesMeeting(entity.Position, collisionBoxType);
+		}
+		
+		// Return a list of tiles colliding with this entity (solidity is ignored).
+		public IEnumerable<Tile> GetTilesMeeting(Vector2F position, CollisionBoxType collisionBoxType) {
+			// Find the rectangular area of nearby tiles to collide with.
+			Rectangle2F myBox = GetCollisionBox(collisionBoxType);
+			myBox.Point += position;
+			myBox.Inflate(2, 2);
+			Rectangle2I area = entity.RoomControl.GetTileAreaFromRect(myBox, 1);
+			
+			// Iterate the tiles in the area.
+			foreach (Tile t in entity.RoomControl.GetTilesInArea(area)) {
+				if (t.CollisionModel != null &&
+					CollisionModel.Intersecting(t.CollisionModel, t.Position, collisionBox, position))
 				{
-					topTile = tile;
-				}
-			}
-			if (topTile != null) {
-				// TODO: Integrate the surface tile's velocity into our
-				// velocity rather than just moving position.
-				entity.Position += topTile.Velocity;
-				if (MovesWithConveyors && IsOnGround)
-					entity.Position += topTile.ConveyorVelocity;
-			}
-
-			// Check if destroyed outside room.
-			if (HasFlags(PhysicsFlags.DestroyedOutsideRoom) &&
-				!entity.RoomControl.RoomBounds.Contains(entity.Position))
-			{
-				entity.Destroy();
-				return;
-			}
-			
-			// Chec if in hazard tiles.
-			if (IsInHole)
-				entity.OnFallInHole();
-			else if (IsInWater)
-				entity.OnFallInWater();
-			else if (IsInLava)
-				entity.OnFallInLava();
-			if (entity.IsDestroyed)
-				return;
-			
-			if (hasLanded)
-				entity.OnLand();
-		}
-
-		// Update ledge passing, handling changes in altitude.
-		private void CheckLedges() {
-			Point2I prevLocation = entity.RoomControl.GetTileLocation(entity.PreviousPosition + collisionBox.Center);
-			Point2I location = entity.RoomControl.GetTileLocation(entity.Position + collisionBox.Center);
-
-			// When moving over a new tile, check its ledge state.
-			if (location != prevLocation) {
-				ledgeTileLocation = new Point2I(-1, -1);
-
-				if (entity.RoomControl.IsTileInBounds(location)) {
-					Tile tile = entity.RoomControl.GetTopTile(location);
-
-					if (tile != null && tile.IsLedge) {
-						ledgeTileLocation = location;
-						// Adjust ledge altitude.
-						if (IsGoingUpLedge(tile))
-							ledgeAltitude--;
-						else if (IsGoingDownLedge(tile))
-							ledgeAltitude++;
-					}
+					yield return t;
 				}
 			}
 		}
 
-		// Update the z-velocity, position, and gravity of the entity.
-		private void UpdateZVelocity() {
-			if (entity.ZPosition > 0.0f || zVelocity != 0.0f) {
-				// Apply gravity.
-				if (HasFlags(PhysicsFlags.HasGravity)) {
-					zVelocity -= gravity;
-					if (zVelocity < -maxFallSpeed && maxFallSpeed >= 0)
-						zVelocity = -maxFallSpeed;
-				}
-
-				// Apply z-velocity.
-				entity.ZPosition += zVelocity;
-
-				// Check if landed on the ground.
-				if (entity.ZPosition <= 0.0f) {
-					hasLanded = true;
-					entity.ZPosition = 0.0f;
-
-					if (HasFlags(PhysicsFlags.Bounces)) {
-						Bounce();
-					}
-					else {
-						entity.ZPosition = 0.0f;
-						zVelocity = 0.0f;
-					}
-				}
-			}
-			else
-				zVelocity = 0.0f;
-		}
-		
-		private void Bounce() {
-			if (IsInHole) {
-				entity.OnFallInHole();
-			}
-			else if (IsInWater) {
-				entity.OnFallInWater();
-			}
-			else if (IsInLava) {
-				entity.OnFallInLava();
-			}
-			if (entity.IsDestroyed)
-				return;
-
-			if (zVelocity < -1.0f) {
-				// Bounce back into the air.
-				hasLanded = false;
-				entity.ZPosition = 0.1f;
-				zVelocity = -zVelocity * 0.5f;
-			}
-			else {
-				// Stay on the ground.
-				entity.ZPosition = 0.0f;
-				zVelocity = 0;
-				velocity = Vector2F.Zero;
-			}
-			if (soundBounce != null)
-				AudioSystem.PlaySound(soundBounce);
-
-			if (velocity.Length > 0.25)
-				velocity *= 0.5f;
-			else
-				velocity = Vector2F.Zero;
-		}
-
-		private void PerformCustomCollisionHandling() {
-			for (int i = 0; i < entity.RoomControl.EntityCount; i++) {
-				Entity e = entity.RoomControl.Entities[i];
-				for (int j = 0; j < entityCollisionHandlers.Count; j++) {
-					EntityCollisionHandlerInstance handler = entityCollisionHandlers[j];
-					if (e.GetType().IsAssignableFrom(handler.EntityType) &&
-						IsMeetingEntity(e, handler.CollisionBoxType))
-					{
-						entityCollisionHandlers[j].CollisionHandler(e);
-						if (entity.IsDestroyed)
-							return;
-					}
-				}
+		// Return a list of entities colliding with this entity.
+		public IEnumerable<T> GetEntitiesMeeting<T>(CollisionBoxType collisionBoxType, int maxZDistance = 10) where T : Entity {
+			CollisionTestSettings settings = new CollisionTestSettings(typeof(T), collisionBoxType, maxZDistance);
+			for (int i = 0; i < entity.RoomControl.Entities.Count; i++) {
+				T other = entity.RoomControl.Entities[i] as T;
+				if (other != null && CollisionTest.PerformCollisionTest(entity, other, settings).IsColliding)
+					yield return other;
 			}
 		}
 
-		
+		// Return a list of entities colliding with this entity.
+		public IEnumerable<T> GetEntitiesMeeting<T>(Rectangle2I myCollisionBox, CollisionBoxType otherCollisionBoxType, int maxZDistance = 10) where T : Entity {
+			CollisionTestSettings settings = new CollisionTestSettings(typeof(T), myCollisionBox, otherCollisionBoxType, maxZDistance);
+			for (int i = 0; i < entity.RoomControl.Entities.Count; i++) {
+				T other = entity.RoomControl.Entities[i] as T;
+				if (other != null && CollisionTest.PerformCollisionTest(entity, other, settings).IsColliding)
+					yield return other;
+			}
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Collision polls
 		//-----------------------------------------------------------------------------
@@ -378,6 +219,12 @@ namespace ZeldaOracle.Game.Entities {
 				return false;
 			if (tile.IsHalfSolid && flags.HasFlag(PhysicsFlags.HalfSolidPassable))
 				return false;
+			if (tile.IsLedge && PassOverLedges) {
+				if (ledgeAltitude > 0 ||
+					ledgeTileLocation == tile.Location ||
+					IsMovingDownLedge(tile))
+					return false;
+			}
 			if (customTileCollisionCondition != null)
 				return customTileCollisionCondition(tile);
 			return true;
@@ -388,11 +235,6 @@ namespace ZeldaOracle.Game.Entities {
 			if (other == null)// || !other.Physics.IsEnabled)
 				return false;
 			return true;
-		}
-
-		// Returns true if the entity is colliding in the given direction.
-		public bool IsCollidingDirection(int direction) {
-			return collisionInfo[direction].IsColliding;
 		}
 		
 		// Return true if the entity would collide with a solid object using the
@@ -435,30 +277,43 @@ namespace ZeldaOracle.Game.Entities {
 			}
 			return false;
 		}
-		
-		// Return the solid tile that the entity is facing towards if it were at the given position.
-		public Tile GetMeetingSolidTile(Vector2F position, int direction) {
-			Vector2F checkPos = position + Directions.ToPoint(direction);
-			Point2I location  = entity.RoomControl.GetTileLocation(entity.Center);
-			
-			// Check the tile on the player and in front of him.
-			for (int j = 0; j < 2; j++) {
-				if (entity.RoomControl.IsTileInBounds(location)) {
-					for (int i = 0; i < entity.RoomControl.Room.LayerCount; i++) {
-						Tile tile = entity.RoomControl.GetTile(location, i);
+				
+		// Return the closest solid tile positioned directly in front of the entity (if there is one).
+		public Tile GetFacingSolidTile(int direction, float distance = 1.0f) { // TODO: return closest tile.
+			Rectangle2F entityBox = PositionedCollisionBox;
+			entityBox.ExtendEdge(direction, distance);
 
-						if (CanCollideWithTile(tile) && CollisionModel.Intersecting(
-							tile.CollisionModel, tile.Position, collisionBox, checkPos) &&
-							!CanDodgeCollision(tile, direction))
+			Tile closestTile = null;
+			int alignAxis = 1 - Directions.ToAxis(direction);
+			float closestDistance = -1.0f;
+
+			foreach (Tile tile in entity.RoomControl.TileManager.GetTilesTouching(entityBox)) {
+				if (CanCollideWithTile(tile)) {
+					foreach (Rectangle2F box in tile.CollisionModel.Boxes) {
+						Rectangle2F solidBox = box;
+						solidBox.Point += tile.Position;
+
+						if (entityBox.Intersects(solidBox) &&
+							!IsSafeClippingInDirection(solidBox, (direction + 1) % 4) &&
+							!IsSafeClippingInDirection(solidBox, (direction + 2) % 4) &&
+							!IsSafeClippingInDirection(solidBox, (direction + 3) % 4) &&
+							!CanDodgeCollision(solidBox, direction))
 						{
-							return tile;
+							float distToEdge = Math.Max(
+								entityBox.TopLeft[alignAxis] - solidBox.BottomRight[alignAxis],
+								solidBox.TopLeft[alignAxis] - entityBox.BottomRight[alignAxis]);
+							if (closestTile == null || distToEdge < closestDistance) {
+								closestTile = tile;
+								closestDistance = distToEdge;
+								break;
+							}
 						}
 					}
 				}
-				location += Directions.ToPoint(direction);
 			}
-			return null;
+			return closestTile;
 		}
+
 		
 		public bool IsMeetingEntity(Entity other, CollisionBoxType collisionBoxType, int maxZDistance = 10) {
 			if (collisionBoxType == CollisionBoxType.Hard)
@@ -494,22 +349,6 @@ namespace ZeldaOracle.Game.Entities {
 				new CollisionTestSettings(null, myBoxType, otherBoxType, maxZDistance)).IsColliding;
 		}
 
-		private bool IsGoingDownLedge(Tile ledgeTile) {
-			int ledgeDirection = ledgeTile.LedgeDirection;
-			int checkAxis = Directions.ToAxis(ledgeDirection);
-			if (ledgeDirection == Directions.Up || ledgeDirection == Directions.Left)
-				return (velocity[checkAxis] < 0);
-			return (velocity[checkAxis] > 0);
-		}
-
-		private bool IsGoingUpLedge(Tile ledgeTile) {
-			int ledgeDirection = ledgeTile.LedgeDirection;
-			int checkAxis = Directions.ToAxis(ledgeDirection);
-			if (ledgeDirection == Directions.Up || ledgeDirection == Directions.Left)
-				return (velocity[checkAxis] > 0);
-			return (velocity[checkAxis] < 0);
-		}
-
 
 		//-----------------------------------------------------------------------------
 		// Collisions
@@ -542,193 +381,20 @@ namespace ZeldaOracle.Game.Entities {
 			}
 		}
 
-		// Check collisions with room edges.
-		private void CheckRoomEdgeCollisions(Rectangle2F collisionBox) {
-			Rectangle2F roomBounds = entity.RoomControl.RoomBounds;
-			Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position + velocity);
-
-			if (myBox.Left < roomBounds.Left) {
-				isColliding	= true;
-				entity.X	= roomBounds.Left - collisionBox.Left;
-				if (flags.HasFlag(PhysicsFlags.ReboundRoomEdge) && reboundVelocity.X == 0.0f)
-					reboundVelocity.X = -velocity.X;
-				velocity.X	= 0;
-				collisionInfo[Directions.Left].SetRoomEdgeCollision(Directions.Left);
-			}
-			else if (myBox.Right > roomBounds.Right) {
-				isColliding	= true;
-				entity.X	= roomBounds.Right - collisionBox.Right;
-				if (flags.HasFlag(PhysicsFlags.ReboundRoomEdge) && reboundVelocity.X == 0.0f)
-					reboundVelocity.X = -velocity.X;
-				velocity.X	= 0;
-				collisionInfo[Directions.Right].SetRoomEdgeCollision(Directions.Right);
-			}
-			if (myBox.Top < roomBounds.Top) {
-				isColliding	= true;
-				entity.Y	= roomBounds.Top - collisionBox.Top;
-				if (flags.HasFlag(PhysicsFlags.ReboundRoomEdge) && reboundVelocity.Y == 0.0f)
-					reboundVelocity.Y = -velocity.Y;
-				velocity.Y	= 0;
-				collisionInfo[Directions.Up].SetRoomEdgeCollision(Directions.Up);
-			}
-			else if (myBox.Bottom > roomBounds.Bottom) {
-				isColliding	= true;
-				entity.Y	= roomBounds.Bottom - collisionBox.Bottom;
-				if (flags.HasFlag(PhysicsFlags.ReboundRoomEdge) && reboundVelocity.Y == 0.0f)
-					reboundVelocity.Y = -velocity.Y;
-				velocity.Y	= 0;
-				collisionInfo[Directions.Down].SetRoomEdgeCollision(Directions.Down);
-			}
-		}
-
-		// Check collisions with solid tiles and entities.
-		private void CheckCollisions() {
-			// Find the rectangular area of nearby tiles to collide with.
-			Rectangle2F myBox = PositionedCollisionBox;
-			Rectangle2F myBoxNext = Rectangle2F.Translate(myBox, velocity);
-			myBox = Rectangle2F.Union(myBox, myBoxNext);
-			myBox.Inflate(2, 2);
-
-			// Collide with nearby solid tiles HORIZONTALLY and then VERTICALLY.
-			Rectangle2I area = entity.RoomControl.GetTileAreaFromRect(myBox, 1);
-			Room room = entity.RoomControl.Room;
-			for (int axis = 0; axis < 2; ++axis) {
-				// Collide with solid tiles.
-				if (HasFlags(PhysicsFlags.CollideWorld)) {
-					foreach (Tile t in entity.RoomControl.GetTilesInArea(area)) {
-						if (CanCollideWithTile(t))
-							ResolveCollision(axis, t, t.Position, t.CollisionModel);
-					}
-				}
-
-				// Collide with solid entities.
-				if (flags.HasFlag(PhysicsFlags.CollideEntities)) {
-					for (int i = 0; i < entity.RoomControl.EntityCount; i++) {
-						Entity e = entity.RoomControl.Entities[i];
-						if (e.Physics.IsEnabled && e.Physics.IsSolid) {
-							if (CanCollideWithEntity(e))
-								ResolveCollision(axis, e);
-						}
-					}
-				}
-			}
-		}
 		
-		private bool ResolveCollision(int axis, Tile tile, Vector2F modelPos, CollisionModel model) {
-			bool collide = false;
-			for (int i = 0; i < model.Boxes.Count; ++i) {
-				Rectangle2F box = Rectangle2F.Translate((Rectangle2F) model.Boxes[i], modelPos);
-				if (ResolveCollision(axis, tile, box)) {
-					collide = true;
-				}
-			}
-			return collide;
-		}
-
-		private bool ResolveCollision(int axis, Tile tile, Rectangle2F block) {
-			// Check if tile is a ledge we won't collide with.
-			if (tile.IsLedge && flags.HasFlag(PhysicsFlags.LedgePassable)) {
-				if (ledgeAltitude > 0 || tile.Location == ledgeTileLocation || IsGoingDownLedge(tile))
-					return false;
-			}
-
-			if (axis == Axes.X) {
-				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.X + velocity.X, entity.Y);
-				if (myBox.Intersects(block)) {
-					isColliding	= true;
-					if (flags.HasFlag(PhysicsFlags.ReboundSolid) && reboundVelocity.X == 0.0f)
-						reboundVelocity.X = -velocity.X;
-
-					if (myBox.Center.X < block.Center.X) {
-						// TODO: David refactor this hackish 'if statement' to prevent the player from jittering when getting pushed vertically.
-						// See below if statement as well.
-						if (tile.MoveDirection % 2 != 1) {
-							entity.X = block.Left - collisionBox.Right;
-							if (!HasFlags(PhysicsFlags.AutoDodge) || !PerformCollisionDodge(block, Directions.Right))
-								collisionInfo[Directions.Right].SetTileCollision(tile, Directions.Right);
-						}
-					}
-					else {
-						if (tile.MoveDirection % 2 != 1) {
-							entity.X = block.Right - collisionBox.Left;
-							if (!HasFlags(PhysicsFlags.AutoDodge) || !PerformCollisionDodge(block, Directions.Left))
-								collisionInfo[Directions.Left].SetTileCollision(tile, Directions.Left);
-						}
-					}
-
-					velocity.X = 0.0f;
-					return true;
-				}
-			}
-			else if (axis == Axes.Y) {
-				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position + velocity);
-				if (myBox.Intersects(block)) {
-					isColliding	= true;
-					if (flags.HasFlag(PhysicsFlags.ReboundSolid) && reboundVelocity.Y == 0.0f)
-						reboundVelocity.Y = -velocity.Y;
-
-					if (myBox.Center.Y < block.Center.Y) {
-						entity.Y = block.Top - collisionBox.Bottom;
-						if (!HasFlags(PhysicsFlags.AutoDodge) || !PerformCollisionDodge(block, Directions.Down))
-							collisionInfo[Directions.Down].SetTileCollision(tile, Directions.Down);
-					}
-					else {
-						entity.Y = block.Bottom - collisionBox.Top;
-						if (!HasFlags(PhysicsFlags.AutoDodge) || !PerformCollisionDodge(block, Directions.Up))
-							collisionInfo[Directions.Up].SetTileCollision(tile, Directions.Up);
-					}
-
-					velocity.Y = 0.0f;
-					return true;
-				}
-			}
-			return false;
-		}
-		
-		private bool ResolveCollision(int axis, Entity other) {
-			Rectangle2F block = other.Physics.PositionedCollisionBox;
-
-			if (axis == Axes.X) {
-				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.X + velocity.X, entity.Y);
-				if (myBox.Intersects(block)) {
-					isColliding	= true;
-					velocity.X	= 0.0f;
-
-					if (myBox.Center.X < block.Center.X) {
-						entity.X = block.Left - collisionBox.Right;
-						collisionInfo[Directions.Right].SetEntityCollision(other, Directions.Right);
-					}
-					else {
-						entity.X = block.Right - collisionBox.Left;
-						collisionInfo[Directions.Left].SetEntityCollision(other, Directions.Left);
-					}
-					return true;
-				}
-			}
-			else if (axis == Axes.Y) {
-				Rectangle2F myBox = Rectangle2F.Translate(collisionBox, entity.Position + velocity);
-				if (myBox.Intersects(block)) {
-					isColliding	= true;
-					velocity.Y	= 0.0f;
-
-					if (myBox.Center.Y < block.Center.Y) {
-						entity.Y = block.Top - collisionBox.Bottom;
-						collisionInfo[Directions.Down].SetEntityCollision(other, Directions.Down);
-					}
-					else {
-						entity.Y = block.Bottom - collisionBox.Top;
-						collisionInfo[Directions.Up].SetEntityCollision(other, Directions.Up);
-					}
-					return true;
-				}
-			}
-			return false;
-		}
-		
-
 		//-----------------------------------------------------------------------------
-		// Collision Dodging
+		// Internal Collision Tests
 		//-----------------------------------------------------------------------------
+		
+		// Returns true if the entity moving down the ledge.
+		public bool IsMovingDownLedge(Tile ledgeTile) {
+			return velocity.Dot(Directions.ToVector(ledgeTile.LedgeDirection)) > 0.0f;
+		}
+
+		// Returns true if the entity moving up the ledge.
+		public bool IsMovingUpLedge(Tile ledgeTile) {
+			return velocity.Dot(Directions.ToVector(ledgeTile.LedgeDirection)) < 0.0f;
+		}
 
 		public bool CanDodgeCollision(Tile tile, int direction) {
 			if (!CanCollideWithTile(tile))
@@ -746,7 +412,7 @@ namespace ZeldaOracle.Game.Entities {
 				return false; // Only dodge when moving horizontally or vertically.
 
 			float		dodgeDist	= autoDodgeDistance;
-			Rectangle2F	objBox		= Rectangle2F.Translate(collisionBox, entity.Position);
+			Rectangle2F	objBox		= PositionedCollisionBox;
 			Vector2F	pos			= entity.Position;
 			Vector2F	dirVect		= Directions.ToVector(direction);
 
@@ -767,30 +433,27 @@ namespace ZeldaOracle.Game.Entities {
 			}
 			return false;
 		}
+		
+		public bool IsSafeClippingInDirection(Rectangle2F solidBox, int direction) {
+			return (ClipCollisionInfo[direction].IsAllowedClipping &&
+				RoomPhysics.AreEdgesAligned(solidBox,
+				ClipCollisionInfo[direction].CollisionBox, direction));
+		}
 
-		private bool PerformCollisionDodge(Rectangle2F block, int direction) {
-			if (Math.Abs(velocity.X) > 0.001f && Math.Abs(velocity.Y) > 0.001f)
-				return false; // Only dodge when moving horizontally or vertically.
+		private bool IsSafeClippingTileInDirection(Tile tile, int direction) { // TODO!!!!
+			if (!ClipCollisionInfo[direction].IsAllowedClipping)
+				return false;
+			if (ClipCollisionInfo[direction].CollidedObject == tile)
+				return true;
 
-			float		dodgeDist	= autoDodgeDistance;
-			Rectangle2F	objBox		= Rectangle2F.Translate(collisionBox, entity.Position);
-			Vector2F	pos			= entity.Position;
-			Vector2F	dirVect		= Directions.ToVector(direction);
+			Rectangle2F entityBox = PositionedCollisionBox;
 
-			for (int side = 0; side < 2; side++) {
-				int moveDir		= (direction + (side == 0 ? 1 : 3)) % 4;
-				float distance	= Math.Abs(objBox.GetEdge((moveDir + 2) % 4) - block.GetEdge(moveDir));
-
-				if (distance <= dodgeDist) {
-					Vector2F checkPos	= pos + dirVect + (Directions.ToVector(moveDir) * distance);
-					Vector2F gotoPos	= GMath.Round(pos) + Directions.ToVector(moveDir);
-
-					if (!IsPlaceMeetingSolid(checkPos, collisionBox) &&
-						!IsPlaceMeetingSolid(gotoPos, collisionBox))
-					{
-						entity.Position = gotoPos;
-						return true;
-					}
+			foreach (Rectangle2F box in tile.CollisionModel.Boxes) {
+				Rectangle2F solidBox = Rectangle2F.Translate(box, tile.Position);
+				
+				if (RoomPhysics.AreEdgesAligned(solidBox, ClipCollisionInfo[direction].CollisionBox, direction))
+				{
+					return true;
 				}
 			}
 			return false;
@@ -808,7 +471,17 @@ namespace ZeldaOracle.Game.Entities {
 
 		public bool IsEnabled {
 			get { return isEnabled; }
-			set { isEnabled = value; }
+			set {
+				isEnabled = value;
+				if (!isEnabled) {
+					// Clear the collision state.
+					for (int i = 0; i < Directions.Count; i++) {
+						ClipCollisionInfo[i].Reset();
+						ClipCollisionInfo[i].PenetrationDirection = i;
+						collisionInfo[i].Clear();
+					}
+				}
+			}
 		}
 
 		public Vector2F Velocity {
@@ -833,10 +506,12 @@ namespace ZeldaOracle.Game.Entities {
 
 		public Vector2F PreviousVelocity {
 			get { return previousVelocity; }
+			set { previousVelocity = value; }
 		}
 
 		public float PreviousZVelocity {
 			get { return previousZVelocity; }
+			set { previousZVelocity = value; }
 		}
 		
 		public float Gravity {
@@ -850,7 +525,13 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsInAir {
-			get { return (entity.ZPosition > 0.0f || zVelocity > 0.0f); }
+			get {
+				if (flags.HasFlag(PhysicsFlags.OnGroundOverride))
+					return false;
+				if (entity.RoomControl.IsSideScrolling)
+					return !collisionInfo[Directions.Down].IsColliding;
+				return (entity.ZPosition > 0.0f || zVelocity > 0.0f || IsFlying);
+			}
 		}
 
 		public bool IsOnGround {
@@ -861,12 +542,26 @@ namespace ZeldaOracle.Game.Entities {
 			get { return autoDodgeDistance; }
 			set { autoDodgeDistance = value; }
 		}
-
-		public Sound BounceSound {
-			get { return soundBounce; }
-			set { soundBounce = value; }
+		
+		public float AutoDodgeSpeed {
+			get { return autoDodgeSpeed; }
+			set { autoDodgeSpeed = value; }
+		}
+		
+		public CollisionBoxType RoomEdgeCollisionBoxType {
+			get { return roomEdgeCollisionBoxType; }
+			set { roomEdgeCollisionBoxType = value; }
+		}
+		
+		public int EdgeClipAmount {
+			get { return edgeClipAmount; }
+			set { edgeClipAmount = value; }
 		}
 
+		public int CrushMaxGapSize {
+			get { return crushMaxGapSize; }
+			set { crushMaxGapSize = value; }
+		}
 
 		// Collision info.
 
@@ -888,11 +583,6 @@ namespace ZeldaOracle.Game.Entities {
 			get { return Rectangle2F.Translate(softCollisionBox, entity.Position); }
 		}
 
-		public Action CustomCollisionFunction {
-			get { return customCollisionFunction; }
-			set { customCollisionFunction = value; }
-		}
-
 		public TileCollisionCondition CustomTileCollisionCondition {
 			get { return customTileCollisionCondition; }
 			set { customTileCollisionCondition = value; }
@@ -902,10 +592,27 @@ namespace ZeldaOracle.Game.Entities {
 			get { return collisionInfo; }
 		}
 		
-		public bool IsColliding {
-			get { return isColliding; }
+		public CollisionInfo[] PreviousCollisionInfo {
+			get { return previousCollisionInfo; }
 		}
 
+		public IEnumerable<CollisionInfo> GetCollisions() {
+			for (int i = 0; i < collisionInfo.Length; i++) {
+				if (collisionInfo[i].IsColliding)
+					yield return collisionInfo[i];
+			}
+		}
+		
+		public bool IsColliding {
+			get { return isColliding; }
+			set { isColliding = value; }
+		}
+
+
+		public Tile TopTile {
+			get { return topTile; }
+			set { topTile = value; }
+		}
 
 		// Tile Flags.
 
@@ -947,7 +654,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsOnLadder {
-			get { return IsOnGround && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Ladder; }
+			get { return IsOnGround && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Ladder && !entity.RoomControl.IsSideScrolling; }
 		}
 
 		public bool IsOverHalfSolid {
@@ -1041,5 +748,76 @@ namespace ZeldaOracle.Game.Entities {
 			set { SetFlags(PhysicsFlags.MoveWithConveyors, value); }
 		}
 
+		public bool MovesWithPlatforms {
+			get { return HasFlags(PhysicsFlags.MoveWithPlatforms); }
+			set { SetFlags(PhysicsFlags.MoveWithPlatforms, value); }
+		}
+		
+		public bool AllowEdgeClipping {
+			get { return HasFlags(PhysicsFlags.EdgeClipping); }
+			set { SetFlags(PhysicsFlags.EdgeClipping, value); }
+		}
+		
+		public bool IsCrushable {
+			get { return HasFlags(PhysicsFlags.Crushable); }
+			set { SetFlags(PhysicsFlags.Crushable, value); }
+		}
+		
+		public bool IsFlying {
+			get { return HasFlags(PhysicsFlags.Flying); }
+			set { SetFlags(PhysicsFlags.Flying, value); }
+		}
+		
+		public bool CheckRadialCollisions {
+			get { return HasFlags(PhysicsFlags.CheckRadialCollisions); }
+			set { SetFlags(PhysicsFlags.CheckRadialCollisions, value); }
+		}
+		
+		public bool OnGroundOverride {
+			get { return HasFlags(PhysicsFlags.OnGroundOverride); }
+			set { SetFlags(PhysicsFlags.OnGroundOverride, value); }
+		}
+		
+
+		public Vector2F ReboundVelocity {
+			get { return reboundVelocity; }
+			set { reboundVelocity = value; }
+		}
+
+		public int LedgeAltitude {
+			get { return ledgeAltitude; }
+			set { ledgeAltitude = value; }
+		}
+
+		public Point2I LedgeTileLocation {
+			get { return ledgeTileLocation; }
+			set { ledgeTileLocation = value; }
+		}
+
+		public bool HasLanded {
+			get { return hasLanded; }
+			set { hasLanded = value; }
+		}
+		
+		public bool[] MovementCollisions { get; set; }
+		public CollisionInfoNew[] ClipCollisionInfo { get; set; }
+		public bool IsDeadlocked { get; set; }
+
+		private Vector2F netVelocity;
+
+		public Vector2F NetVelocity {
+			get { return  netVelocity; }
+			set { netVelocity = value; }
+		}
+		
+		public float NetVelocityX {
+			get { return netVelocity.X; }
+			set { netVelocity.X = value; }
+		}
+
+		public float NetVelocityY {
+			get { return netVelocity.Y; }
+			set { netVelocity.Y = value; }
+		}
 	}
 }

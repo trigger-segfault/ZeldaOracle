@@ -160,7 +160,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			Die();
 		}
 
-		public void Knockback(int duration, float speed, Vector2F sourcePosition) {
+		public virtual void Knockback(int duration, float speed, Vector2F sourcePosition) {
 			if (isKnockbackable) {
 				knockbackDuration	= duration;
 				knockbackTimer		= duration;
@@ -212,10 +212,6 @@ namespace ZeldaOracle.Game.Entities.Units {
 				invincibleTimer = damage.InvincibleDuration;
 
 			OnHurt(damage);
-		}
-
-		public virtual void RespawnDeath() {
-			
 		}
 
 		public virtual void Death() {
@@ -288,7 +284,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			foreach (UnitTool tool in tools) {
 				if (!tool.DrawAboveUnit) {
 					Vector2F drawPosition = position - new Vector2F(0, zPosition) + Graphics.DrawOffset + tool.DrawOffset;
-					g.DrawAnimation(tool.AnimationPlayer, tool.ImageVariantID, drawPosition, depthLayer);
+					g.DrawAnimationPlayer(tool.AnimationPlayer, tool.ImageVariantID, drawPosition, depthLayer, position);
 				}
 			}
 
@@ -299,7 +295,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			foreach (UnitTool tool in tools) {
 				if (tool.DrawAboveUnit) {
 					Vector2F drawPosition = position - new Vector2F(0, zPosition) + Graphics.DrawOffset + tool.DrawOffset;
-					g.DrawAnimation(tool.AnimationPlayer, tool.ImageVariantID, drawPosition, depthLayer);
+					g.DrawAnimationPlayer(tool.AnimationPlayer, tool.ImageVariantID, drawPosition, depthLayer, position);
 				}
 			}
 		}

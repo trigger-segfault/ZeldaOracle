@@ -1,26 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using XnaSong = Microsoft.Xna.Framework.Media.Song;
-
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Scripts;
+using ZeldaOracle.Common.Scripts.CustomReaders;
 using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
-using Song = ZeldaOracle.Common.Audio.Song;
-using ZeldaOracle.Common.Scripting;
+using Song		= ZeldaOracle.Common.Audio.Song;
+using XnaSong	= Microsoft.Xna.Framework.Media.Song;
 
 namespace ZeldaOracle.Common.Content {
 
@@ -391,13 +389,6 @@ namespace ZeldaOracle.Common.Content {
 			return resource;
 		}
 
-		// Loads a single sprite sheet from a script file.
-		public static SpriteSheet LoadSpriteSheet(string assetName) {
-			SpriteSheetSROld script = new SpriteSheetSROld();
-			LoadScript(assetName, script);
-			return script.Sheet;
-		}
-
 		// Loads/compiles sprite sheets from a script file.
 		public static void LoadSpriteSheets(string assetName) {
 			LoadScript(assetName, new SpritesSR());
@@ -470,10 +461,7 @@ namespace ZeldaOracle.Common.Content {
 
 		// Loads a language file.
 		public static Language LoadLanguage(string assetName) {
-			assetName = assetName.Substring(assetName.IndexOf('/') + 1);
-			LanguageSR script = new LanguageSR();
-			LoadScript(assetName, script, Encoding.UTF8);
-			return script.Language;
+			throw new LoadContentException("Language is not supported yet.");
 		}
 
 

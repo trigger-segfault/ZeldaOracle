@@ -23,7 +23,6 @@ SPRITESHEET "zoneset_large";
 #ANIM tile_lantern; SUBSTRIP repeat;
 	#ADD strip, 16, 4, (1, 8); END;
 	
-
 ANIM tile_lantern_lit; SUBSTRIP repeat;
 	ADD frame, 16, tile_lantern_lit_1;
 	ADD frame, 16, tile_lantern_lit_2;
@@ -31,6 +30,11 @@ ANIM tile_lantern_lit; SUBSTRIP repeat;
 	ADD frame, 16, tile_lantern_lit_4;
 	END;
 	
+ANIM tile_spiked_floor; SUBSTRIP repeat;
+	ADD frame, 15, (7, 8);
+	ADD frame, 15, (6, 8);
+	ADD strip, 15, 4, (5, 8); END;
+
 # Doors
 
 ANIM tile_door_closed;
@@ -83,9 +87,9 @@ ANIM tile_minecart_door_close;
 ANIM tile_minecart_door_open;
 	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_right, (-8, 0);
 					ADD emptyframe, 6;
-	SUBSTRIP clamp;	ADD frame, 6, tile_door_up, (0, 8);
+	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_up, (0, 8);
 					ADD emptyframe, 6;
-	SUBSTRIP clamp;	ADD frame, 6, tile_door_left, (8, 0);
+	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_left, (8, 0);
 					ADD emptyframe, 6;
 	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_down, (0, -8);
 					ADD emptyframe, 6;
@@ -157,7 +161,7 @@ ANIM tile_boss_key_door_open;
 #ANIM tile_boss_door_close;		CLONE tile_door_close; SHIFTSOURCE (3, 0); END;
 
 ANIM tile_regrowable_plant_regrow; SUBSTRIP clamp;
-	ADD frame, 12, (4, 2); END;
+	ADD frame, 12, (1, 5); END;
 	
 ANIM tile_whirlpool; SUBSTRIP repeat;
 	ADD frame, 9, (0, 14); ADD frame, 4, (1, 14); ADD frame, 6, (2, 14); ADD frame, 6, (3, 14);
@@ -168,6 +172,40 @@ ANIM tile_whirlpool; SUBSTRIP repeat;
 
 ANIM tile_poison_bubble; SUBSTRIP repeat;
 	ADD strip, 15, 4, (0, 15); END;
+	
+# FOUNTAINS
+
+ANIM tile_fountain_path_nw; SUBSTRIP repeat;
+	ADD frame, 1, (10, 14); ADD emptyframe, 1;
+	ADD frame, 1, (10, 14); ADD emptyframe, 1;
+	ADD frame, 1, (10, 14); ADD emptyframe, 1;
+	ADD frame, 1, (10, 15); ADD emptyframe, 1;
+	ADD frame, 1, (10, 15); ADD emptyframe, 1;
+	ADD frame, 1, (10, 15); ADD emptyframe, 1;
+	REPEAT 12, 3;
+	INSERT strip, 0, 12, 4, (12, 14); END;
+ANIM tile_fountain_path_ne; SUBSTRIP repeat;
+	ADD frame, 1, (11, 14); ADD emptyframe, 1;
+	ADD frame, 1, (11, 14); ADD emptyframe, 1;
+	ADD frame, 1, (11, 14); ADD emptyframe, 1;
+	ADD frame, 1, (11, 15); ADD emptyframe, 1;
+	ADD frame, 1, (11, 15); ADD emptyframe, 1;
+	ADD frame, 1, (11, 15); ADD emptyframe, 1;
+	REPEAT 12, 3;
+	INSERT strip, 0, 12, 4, (12, 15); END;
+ANIM tile_fountain_path_sw; SUBSTRIP repeat;
+	ADD strip, 12, 4, (12, 16); END;
+ANIM tile_fountain_path_se; SUBSTRIP repeat;
+	ADD strip, 12, 4, (12, 17); END;
+ANIM tile_fountain_dirt_nw; SUBSTRIP repeat;
+	CLONE tile_fountain_path_nw; END;
+ANIM tile_fountain_dirt_ne; SUBSTRIP repeat;
+	CLONE tile_fountain_path_ne; END;
+ANIM tile_fountain_dirt_sw; SUBSTRIP repeat;
+	CLONE tile_fountain_path_sw; END;
+ANIM tile_fountain_dirt_se; SUBSTRIP repeat;
+	CLONE tile_fountain_path_se; END;
+
 
 #==============================================================
 # General Tile Animations
@@ -290,6 +328,36 @@ ANIM turnstile_rotate_counterclockwise;
 		ADD frame, 4, turnstile_bars_angled_clockwise_blue;
 		ADD frame, 4, turnstile_bars_angled_blue;
 	END;
+ANIM tile_pull_handle;
+	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_right;
+	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_up;
+	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_left;
+	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_down; END;
+ANIM tile_seed_bouncer;
+	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_horizontal;
+	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_northeast;
+	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_vertical;
+	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_northwest;
+	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_horizontal;
+	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_northeast;
+	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_vertical;
+	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_northwest; END;
+ANIM tile_color_barrier_blue_raise; SUBSTRIP clamp;
+	ADD frame, 2, tile_color_barrier_blue_lowered;
+	ADD frame, 6, tile_color_barrier_blue_halfway;
+	ADD frame, 1, tile_color_barrier_blue_raised; END;
+ANIM tile_color_barrier_blue_lower; SUBSTRIP clamp;
+	ADD frame, 2, tile_color_barrier_blue_raised;
+	ADD frame, 6, tile_color_barrier_blue_halfway;
+	ADD frame, 1, tile_color_barrier_blue_lowered; END;
+ANIM tile_color_barrier_red_raise; SUBSTRIP clamp;
+	ADD frame, 2, tile_color_barrier_red_lowered;
+	ADD frame, 6, tile_color_barrier_red_halfway;
+	ADD frame, 1, tile_color_barrier_red_raised; END;
+ANIM tile_color_barrier_red_lower; SUBSTRIP clamp;
+	ADD frame, 2, tile_color_barrier_red_raised;
+	ADD frame, 6, tile_color_barrier_red_halfway;
+	ADD frame, 1, tile_color_barrier_red_lowered; END;
 
 #==============================================================
 # Color Cube Animations
@@ -297,55 +365,51 @@ ANIM turnstile_rotate_counterclockwise;
 
 SPRITESHEET "color_cube";
 
-
-# Left Right Animations
+# Left & Right Color Cube Animations
 
 ANIM color_cube_blue_yellow_right; SUBSTRIP clamp;
-	ADD frame, 4, (0, 1), (  4, 0); ADD part, 4, (6, 0), ( 4, -16);   ADD frame, 4, (1, 1), ( 8, 0); ADD part, 4, (7, 0), (8, -16);
-	ADD frame, 4, (2, 1), ( 12, 0); ADD part, 4, (8, 0), (12, -16);   ADD frame, 1, (5, 0), (16, 0); END;
+	ADD frame, 4, (0, 1), (  4, 0); ADD part, 4, (6, 0), (  4, -16);   ADD frame, 4, (1, 1), (  8, 0); ADD part, 4, (7, 0), ( 8, -16);
+	ADD frame, 4, (2, 1), ( 12, 0); ADD part, 4, (8, 0), ( 12, -16);   ADD frame, 1, (5, 0), ( 16, 0); END;
 ANIM color_cube_blue_yellow_left; SUBSTRIP clamp;
 	ADD frame, 4, (8, 3), ( -4, 0); ADD part, 4, (8, 0), ( -4, -16);   ADD frame, 4, (7, 3), ( -8, 0); ADD part, 4, (7, 0), (-8, -16);
-	ADD frame, 5, (6, 3), (-12, 0); ADD part, 4, (6, 0), (-12, -16);   ADD frame, 1, (5, 0), (-16, 0); END;
+	ADD frame, 4, (6, 3), (-12, 0); ADD part, 4, (6, 0), (-12, -16);   ADD frame, 1, (5, 0), (-16, 0); END;
 	
 ANIM color_cube_blue_red_right; SUBSTRIP clamp;
-	ADD frame, 4, (5, 1), (  4, 0); ADD part, 4, (6, 0), ( 4, -16);   ADD frame, 4, (7, 1), ( 8, 0); ADD part, 4, (7, 0), (8, -16);
-	ADD frame, 4, (8, 1), ( 12, 0); ADD part, 4, (8, 0), (12, -16);   ADD frame, 1, (2, 0), (16, 0); END;
+	ADD frame, 4, (5, 1), (  4, 0); ADD part, 4, (6, 0), (  4, -16);   ADD frame, 4, (7, 1), (  8, 0); ADD part, 4, (7, 0), ( 8, -16);
+	ADD frame, 4, (8, 1), ( 12, 0); ADD part, 4, (8, 0), ( 12, -16);   ADD frame, 1, (2, 0), ( 16, 0); END;
 ANIM color_cube_blue_red_left; SUBSTRIP clamp;
 	ADD frame, 4, (2, 2), ( -4, 0); ADD part, 4, (8, 0), ( -4, -16);   ADD frame, 4, (1, 2), ( -8, 0); ADD part, 4, (7, 0), (-8, -16);
-	ADD frame, 5, (0, 2), (-12, 0); ADD part, 4, (6, 0), (-12, -16);   ADD frame, 1, (2, 0), (-16, 0); END;
+	ADD frame, 4, (0, 2), (-12, 0); ADD part, 4, (6, 0), (-12, -16);   ADD frame, 1, (2, 0), (-16, 0); END;
 	
-
 ANIM color_cube_yellow_red_right; SUBSTRIP clamp;
-	ADD frame, 4, (0, 2), (  4, 0); ADD part, 4, (6, 0), ( 4, -16);   ADD frame, 4, (1, 2), ( 8, 0); ADD part, 4, (7, 0), (8, -16);
-	ADD frame, 4, (2, 2), ( 12, 0); ADD part, 4, (8, 0), (12, -16);   ADD frame, 1, (1, 0), (16, 0); END;
+	ADD frame, 4, (0, 2), (  4, 0); ADD part, 4, (6, 0), (  4, -16);   ADD frame, 4, (1, 2), (  8, 0); ADD part, 4, (7, 0), ( 8, -16);
+	ADD frame, 4, (2, 2), ( 12, 0); ADD part, 4, (8, 0), ( 12, -16);   ADD frame, 1, (1, 0), ( 16, 0); END;
 ANIM color_cube_yellow_red_left; SUBSTRIP clamp;
 	ADD frame, 4, (8, 1), ( -4, 0); ADD part, 4, (8, 0), ( -4, -16);   ADD frame, 4, (7, 1), ( -8, 0); ADD part, 4, (7, 0), (-8, -16);
-	ADD frame, 5, (6, 1), (-12, 0); ADD part, 4, (6, 0), (-12, -16);   ADD frame, 1, (1, 0), (-16, 0); END;
+	ADD frame, 4, (6, 1), (-12, 0); ADD part, 4, (6, 0), (-12, -16);   ADD frame, 1, (1, 0), (-16, 0); END;
 
 ANIM color_cube_yellow_blue_right; SUBSTRIP clamp;
-	ADD frame, 4, (5, 2), (  4, 0); ADD part, 4, (6, 0), ( 4, -16);   ADD frame, 4, (7, 2), ( 8, 0); ADD part, 4, (7, 0), (8, -16);
-	ADD frame, 4, (8, 2), ( 12, 0); ADD part, 4, (8, 0), (12, -16);   ADD frame, 1, (4, 0), (16, 0); END;
+	ADD frame, 4, (5, 2), (  4, 0); ADD part, 4, (6, 0), (  4, -16);   ADD frame, 4, (7, 2), (  8, 0); ADD part, 4, (7, 0), ( 8, -16);
+	ADD frame, 4, (8, 2), ( 12, 0); ADD part, 4, (8, 0), ( 12, -16);   ADD frame, 1, (4, 0), ( 16, 0); END;
 ANIM color_cube_yellow_blue_left; SUBSTRIP clamp;
 	ADD frame, 4, (2, 3), ( -4, 0); ADD part, 4, (8, 0), ( -4, -16);   ADD frame, 4, (1, 3), ( -8, 0); ADD part, 4, (7, 0), (-8, -16);
-	ADD frame, 5, (0, 3), (-12, 0); ADD part, 4, (6, 0), (-12, -16);   ADD frame, 1, (4, 0), (-16, 0); END;
+	ADD frame, 4, (0, 3), (-12, 0); ADD part, 4, (6, 0), (-12, -16);   ADD frame, 1, (4, 0), (-16, 0); END;
 	
-
 ANIM color_cube_red_blue_right; SUBSTRIP clamp;
-	ADD frame, 4, (0, 3), (  4, 0); ADD part, 4, (6, 0), ( 4, -16);   ADD frame, 4, (1, 3), ( 8, 0); ADD part, 4, (7, 0), (8, -16);
-	ADD frame, 4, (2, 3), ( 12, 0); ADD part, 4, (8, 0), (12, -16);   ADD frame, 1, (3, 0), (16, 0); END;
+	ADD frame, 4, (0, 3), (  4, 0); ADD part, 4, (6, 0), (  4, -16);   ADD frame, 4, (1, 3), (  8, 0); ADD part, 4, (7, 0), ( 8, -16);
+	ADD frame, 4, (2, 3), ( 12, 0); ADD part, 4, (8, 0), ( 12, -16);   ADD frame, 1, (3, 0), ( 16, 0); END;
 ANIM color_cube_red_blue_left; SUBSTRIP clamp;
 	ADD frame, 4, (8, 2), ( -4, 0); ADD part, 4, (8, 0), ( -4, -16);   ADD frame, 4, (7, 2), ( -8, 0); ADD part, 4, (7, 0), (-8, -16);
-	ADD frame, 5, (6, 2), (-12, 0); ADD part, 4, (6, 0), (-12, -16);   ADD frame, 1, (3, 0), (-16, 0); END;
+	ADD frame, 4, (6, 2), (-12, 0); ADD part, 4, (6, 0), (-12, -16);   ADD frame, 1, (3, 0), (-16, 0); END;
 
 ANIM color_cube_red_yellow_right; SUBSTRIP clamp;
-	ADD frame, 4, (5, 3), (  4, 0); ADD part, 4, (6, 0), ( 4, -16);   ADD frame, 4, (7, 3), ( 8, 0); ADD part, 4, (7, 0), (8, -16);
-	ADD frame, 4, (8, 3), ( 12, 0); ADD part, 4, (8, 0), (12, -16);   ADD frame, 1, (0, 0), (16, 0); END;
+	ADD frame, 4, (5, 3), (  4, 0); ADD part, 4, (6, 0), (  4, -16);   ADD frame, 4, (7, 3), (  8, 0); ADD part, 4, (7, 0), ( 8, -16);
+	ADD frame, 4, (8, 3), ( 12, 0); ADD part, 4, (8, 0), ( 12, -16);   ADD frame, 1, (0, 0), ( 16, 0); END;
 ANIM color_cube_red_yellow_left; SUBSTRIP clamp;
 	ADD frame, 4, (2, 1), ( -4, 0); ADD part, 4, (8, 0), ( -4, -16);   ADD frame, 4, (1, 1), ( -8, 0); ADD part, 4, (7, 0), (-8, -16);
-	ADD frame, 5, (0, 1), (-12, 0); ADD part, 4, (6, 0), (-12, -16);   ADD frame, 1, (0, 0), (-16, 0); END;
+	ADD frame, 4, (0, 1), (-12, 0); ADD part, 4, (6, 0), (-12, -16);   ADD frame, 1, (0, 0), (-16, 0); END;
 
-
-# Up Down Animations
+# Up & Down Color Cube Animations
 
 ANIM color_cube_blue_yellow_up; SUBSTRIP clamp;
 	ADD frame, 4, (11, 2), (0, -4); ADD frame, 4, (10, 2), (0, -8); ADD frame, 4, (9, 2), (0, -12);   ADD frame, 1, (3, 0), (0, -16); END;
@@ -357,7 +421,6 @@ ANIM color_cube_blue_red_up; SUBSTRIP clamp;
 ANIM color_cube_blue_red_down; SUBSTRIP clamp;
 	ADD frame, 4, (9, 1), (0, 4); ADD frame, 4, (10, 1), (0, 8); ADD frame, 4, (11, 1), (0, 12);   ADD frame, 1, (4, 0), (0, 16); END;
 	
-
 ANIM color_cube_yellow_red_up; SUBSTRIP clamp;
 	ADD frame, 4, (11, 3), (0, -4); ADD frame, 4, (10, 3), (0, -8); ADD frame, 4, (9, 3), (0, -12);   ADD frame, 1, (5, 0), (0, -16); END;
 ANIM color_cube_yellow_red_down; SUBSTRIP clamp;
@@ -368,7 +431,6 @@ ANIM color_cube_yellow_blue_up; SUBSTRIP clamp;
 ANIM color_cube_yellow_blue_down; SUBSTRIP clamp;
 	ADD frame, 4, (9, 2), (0, 4); ADD frame, 4, (10, 2), (0, 8); ADD frame, 4, (11, 2), (0, 12);   ADD frame, 1, (0, 0), (0, 16); END;
 	
-
 ANIM color_cube_red_blue_up; SUBSTRIP clamp;
 	ADD frame, 4, (11, 1), (0, -4); ADD frame, 4, (10, 1), (0, -8); ADD frame, 4, (9, 1), (0, -12);   ADD frame, 1, (1, 0), (0, -16); END;
 ANIM color_cube_red_blue_down; SUBSTRIP clamp;
@@ -385,6 +447,19 @@ ANIM color_cube_red_yellow_down; SUBSTRIP clamp;
 #==============================================================
 
 SPRITESHEET "zoneset_small";
+
+# Flowers
+
+ANIM tile_flowers; SUBSTRIP repeat;
+	ADD frame, 16, (3, 10), (0, 0);
+	ADD frame, 16, (0, 10), (0, 0);
+	ADD frame, 16, (1, 10), (0, 0);
+	ADD frame, 16, (2, 10), (0, 0);
+	INSERT strip, 0, 16, 4, (0, 10), (8, 8);
+	INSERT frame, 0, 64, (4, 10), (8, 0);
+	INSERT frame, 0, 64, (5, 10), (0, 8); END;
+
+# Wall Torches
 
 ANIM tile_wall_torch_right; SUBSTRIP repeat;
 	INSERT frame,  0, 16,    (15, 8), (0, 0);
@@ -422,7 +497,7 @@ ANIM tile_wall_torch_down; SUBSTRIP repeat;
 	INSERT frame, 80, 16,    (16, 8), (8, 0);
 	INSERT frame, 0, 96, (17, 9), (0, 8);
 	INSERT frame, 0, 96, (17, 9), (8, 8); END;
-	
+
 # GENERAL LIQUID
 
 ANIM tile_puddle; SUBSTRIP repeat;
@@ -648,7 +723,6 @@ ANIM tile_output_lavafall_right_bottom; SUBSTRIP repeat;
 	INSERT strip, 0, 8, 4, (20, 4), (8, 0); INSERT frame, 0, 32, (11, 9), (0, 0);
 	INSERT frame, 0, 32, (6, 9), (0, 8); INSERT frame, 0, 32, (7, 9), (8, 8); END;
 	
-
 ANIM tile_output_waterfall_left_top; SUBSTRIP repeat;
 	INSERT strip, 0, 8, 4, (20, 2), (0, 8); INSERT frame, 0, 32, (4, 8), (0, 0);
 	INSERT frame, 0, 32, (5, 8), (8, 0); INSERT frame, 0, 32, (10, 8), (8, 8); END;
@@ -669,7 +743,6 @@ ANIM tile_output_lavafall_left_bottom; SUBSTRIP repeat;
 	INSERT strip, 0, 8, 4, (20, 6), (0, 0); INSERT frame, 0, 32, (10, 9), (8, 0);
 	INSERT frame, 0, 32, (4, 9), (0, 8); INSERT frame, 0, 32, (5, 9), (8, 8); END;
 
-	
 ANIM tile_output_waterfall_up_left; SUBSTRIP repeat;
 	INSERT strip, 0, 8, 4, (20, 1), (8, 0); INSERT frame, 0, 32, (0, 8), (0, 0);
 	INSERT frame, 0, 32, (0, 9), (0, 8); INSERT frame, 0, 32, (8, 8), (8, 8); END;
@@ -689,7 +762,6 @@ ANIM tile_output_lavafall_up_mid; SUBSTRIP repeat;
 ANIM tile_output_lavafall_up_right; SUBSTRIP repeat;
 	INSERT strip, 0, 8, 4, (20, 5), (0, 0); INSERT frame, 0, 32, (1, 8), (8, 0);
 	INSERT frame, 0, 32, (9, 8), (0, 8); INSERT frame, 0, 32, (1, 9), (8, 8); END;
-
 
 ANIM tile_output_waterfall_down_left; SUBSTRIP repeat;
 	INSERT strip, 0, 8, 4, (20, 3), (8, 8); INSERT frame, 0, 32, (2, 8), (0, 0);
@@ -814,11 +886,19 @@ ANIM player_drown;
 
 ANIM player_crush_horizontal; SUBSTRIP clamp;
 	ADD frame, 44, (5, 20); ADD part, 44, (6, 20), (0, -16);
-	ADD frame, 1, (7, 20); ADD frame, 1, (6, 0);
-	ADD frame, 1, (7, 20); ADD frame, 1, (5, 20); ADD part, 1, (6, 20), (0, -16);
-	ADD frame, 1, (7, 20); ADD frame, 1, (5, 20); ADD part, 1, (6, 20), (0, -16);
-	ADD frame, 1, (7, 20); ADD frame, 1, (6, 0);
-	REPEAT 10, 5; END;
+	ADD emptyframe, 1; ADD frame, 1, (6, 0);
+	ADD emptyframe, 1; ADD frame, 1, (5, 20); ADD part, 1, (6, 20), (0, -16);
+	ADD emptyframe, 1; ADD frame, 1, (5, 20); ADD part, 1, (6, 20), (0, -16);
+	ADD emptyframe, 1; ADD frame, 1, (6, 0);
+	REPEAT 8, 5; END;
+	
+ANIM player_crush_vertical; SUBSTRIP clamp;
+	ADD frame, 44, (4, 20), (0, -2); ## TODO: this sprite should be centered??
+	ADD emptyframe, 1; ADD frame, 1, (6, 0);
+	ADD emptyframe, 1; ADD frame, 1, (4, 20);
+	ADD emptyframe, 1; ADD frame, 1, (4, 20);
+	ADD emptyframe, 1; ADD frame, 1, (6, 0);
+	REPEAT 8, 5; END;
 
 ANIM player_invisible; SUBSTRIP clamp;
 	ADD frame, 0, (7, 20); END;

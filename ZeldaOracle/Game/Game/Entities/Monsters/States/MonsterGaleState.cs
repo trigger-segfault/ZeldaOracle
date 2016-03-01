@@ -89,7 +89,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 		public override void DrawOver(RoomGraphics g) {
 			// Draw the gale effect.
 			if (timer % 2 == 0 || !isRising) {
-				g.DrawAnimation(galeAnimationPlayer, monsterPosition + monster.CenterOffset -
+				g.DrawAnimationPlayer(galeAnimationPlayer, monsterPosition + monster.CenterOffset -
 					new Vector2F(0, galeZPosition), DepthLayer.EffectMonsterBurnFlame);
 			}
 		}

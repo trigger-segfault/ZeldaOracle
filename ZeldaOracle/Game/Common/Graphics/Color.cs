@@ -56,6 +56,12 @@ public struct Color {
 		get { return new Color(0, 0, 255); }
 	}
 
+	public static readonly Color Yellow		= new Color(255, 255, 0);
+	public static readonly Color Olive		= new Color(128, 128, 0);
+	public static readonly Color Cyan		= new Color(0, 255, 255);
+	public static readonly Color Maroon		= new Color(128, 0, 0);
+	public static readonly Color Magenta	= new Color(255, 0, 255);
+
 	#endregion
 	//=========== MEMBERS ============
 	#region Members

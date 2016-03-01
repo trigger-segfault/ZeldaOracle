@@ -74,7 +74,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 		public void BeginSwitching() {
 			isLifting = true;
 
-			Graphics.Animation = null;
+			Graphics.ClearAnimation();
 			RoomControl.Player.SwitchHookState.BeginSwitch(hookedObject);
 		}
 
@@ -88,7 +88,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 				
 				Graphics.StopAnimation();
 				if (grabbing)
-					Graphics.AnimationPlayer.PlaybackTime = 4;
+					Graphics.AnimationPlayer.PlaybackTime = 4; // TODO: magic number
 			}
 		}
 
@@ -128,7 +128,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			position			= HookStartPosition;
 			physics.Velocity	= Directions.ToVector(direction) * speed;
 
-			Graphics.Animation = GameData.ANIM_PROJECTILE_SWITCH_HOOK;
+			Graphics.SetAnimation(GameData.ANIM_PROJECTILE_SWITCH_HOOK);
 		}
 
 		public override void Intercept() {
@@ -196,10 +196,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 				AudioSystem.LoopSoundWhileActive(GameData.SOUND_SWITCH_HOOK_LOOP);
 
 				// Check for collectibles to pick up.
-				CollisionIterator iterator = new CollisionIterator(this, typeof(Collectible), CollisionBoxType.Soft);
-				iterator.Begin();
-				if (iterator.IsGood()) {
-					Collectible c = iterator.CollisionInfo.Entity as Collectible;
+				foreach (Collectible c in Physics.GetEntitiesMeeting<Collectible>(CollisionBoxType.Soft)) {
 					if (c.IsPickupable && c.IsCollectibleWithItems) {
 						collectible = c;
 						c.Destroy();
@@ -209,11 +206,16 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 
 				// Return after extending to the maximum distance.
 				distance += speed;
-				if (physics.IsColliding || distance >= length)
+				if (distance >= length)
 					BeginReturn(false);
 			}
 
 			base.Update();
+
+			// This should handle room edge collisions.
+			if (!isReturning && !isHooked && !isLifting && physics.IsColliding) {
+				BeginReturn(false);
+			}
 		}
 
 		public override void Draw(RoomGraphics g) {

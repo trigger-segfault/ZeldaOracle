@@ -9,6 +9,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities;
+using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -24,7 +25,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public TileRegrowingPlant() {
-			animationPlayer = new AnimationPlayer();
+			Graphics.SyncPlaybackWithRoomTicks = false;
 		}
 
 
@@ -35,7 +36,7 @@ namespace ZeldaOracle.Game.Tiles {
 		private void Regrow() {
 			regrowTimer = 0;
 			isRegrowing = true;
-			animationPlayer.Play(GameData.ANIM_TILE_REGROWABLE_PLANT_REGROW);
+			Graphics.PlayAnimation(GameData.ANIM_TILE_REGROWABLE_PLANT_REGROW);
 		}
 
 
@@ -48,7 +49,7 @@ namespace ZeldaOracle.Game.Tiles {
 			isGrown = true;
 			isRegrowing = false;
 			SetFlags(TileFlags.Cuttable | TileFlags.Bombable, true);
-			animationPlayer.Play(new Animation(GameData.SPR_TILE_REGROWABLE_PLANT_GROWN));
+			Graphics.PlayAnimation(new Animation(GameData.SPR_TILE_REGROWING_PLANT_GROWN));
 		}
 
 		public override void Break(bool spawnDrops) {
@@ -56,12 +57,13 @@ namespace ZeldaOracle.Game.Tiles {
 				// Spawn the leaves effect and spawn drops.
 				Effect effect = new Effect(GameData.ANIM_EFFECT_LEAVES, DepthLayer.EffectTileBreak, true);
 				RoomControl.SpawnEntity(effect, Center);
-				
+				AudioSystem.PlaySound(GameData.SOUND_LEAVES);
+
 				if (spawnDrops)
 					SpawnDrop();
 
 				isGrown = false;
-				animationPlayer.Play(new Animation(GameData.SPR_TILE_REGROWABLE_PLANT_CUT));
+				Graphics.PlayAnimation(new Animation(GameData.SPR_TILE_REGROWING_PLANT_CUT));
 				regrowTimer = 0;
 				
 				SetFlags(TileFlags.Cuttable | TileFlags.Bombable, false);
@@ -71,8 +73,6 @@ namespace ZeldaOracle.Game.Tiles {
 		public override void Update() {
 			base.Update();
 
-			animationPlayer.Update();
-			
 			if (!isGrown) {
 				if (!isRegrowing) {
 					regrowTimer++;
@@ -80,10 +80,10 @@ namespace ZeldaOracle.Game.Tiles {
 						Regrow();
 					}
 				}
-				else if (animationPlayer.IsDone) {
+				else if (Graphics.IsAnimationDone) {
 					isGrown = true;
 					isRegrowing = false;
-					animationPlayer.Play(new Animation(GameData.SPR_TILE_REGROWABLE_PLANT_GROWN));
+					Graphics.PlayAnimation(new Animation(GameData.SPR_TILE_REGROWING_PLANT_GROWN));
 					SetFlags(TileFlags.Cuttable | TileFlags.Bombable, true);
 				}
 			}

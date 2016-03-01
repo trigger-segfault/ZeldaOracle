@@ -19,6 +19,7 @@ namespace ZeldaOracle.Game.Tiles {
 		protected Animation animationOpen;
 		protected Animation animationClose;
 		protected Sound openCloseSound;
+		private bool hasUpdated;
 
 
 		//-----------------------------------------------------------------------------
@@ -26,10 +27,10 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public TileDoor() {
-			animationPlayer	= new AnimationPlayer();
 			animationOpen	= GameData.ANIM_TILE_DOOR_OPEN;
 			animationClose	= GameData.ANIM_TILE_DOOR_CLOSE;
 			openCloseSound	= GameData.SOUND_DUNGEON_DOOR;
+			Graphics.SyncPlaybackWithRoomTicks = false;
 		}
 
 
@@ -48,43 +49,48 @@ namespace ZeldaOracle.Game.Tiles {
 		public void Open(bool instantaneous = false, bool rememberState = false) {
 			if (!isOpen) {
 				isOpen = true;
-				animationPlayer.Play(animationOpen);
+				Graphics.PlayAnimation(animationOpen);
 				IsSolid = false;
 				if (!instantaneous && openCloseSound != null)
 					AudioSystem.PlaySound(GameData.SOUND_DUNGEON_DOOR);
 			}
 			else if (isOpen && isPlayerBlockingClose)
 				isPlayerBlockingClose = false;
+
+			Properties.Set("open", true);
 			
 			if (instantaneous)
-				animationPlayer.PlaybackTime = animationPlayer.Animation.Duration;
-
-			if (rememberState || Properties.GetBoolean("remember_state", false))
-				Properties.SetBase("open", true);
+				Graphics.AnimationPlayer.SkipToEnd();
 		}
 
 		// Close the door.
 		public void Close(bool instantaneous = false, bool rememberState = false) {
 			if (isOpen) {
 				Player player = RoomControl.Player;
+				bool isTouchingPlayer = CollisionModel.Intersecting(CollisionModel, Position, player.Physics.PositionedCollisionBox);
 
-				if (CollisionModel.Intersecting(CollisionModel, Position, player.Physics.CollisionBox, player.Position)) {
-					isPlayerBlockingClose = true;
+
+				if (isTouchingPlayer && !hasUpdated) {
+						isPlayerBlockingClose = true;
 				}
 				else {
+					if (isTouchingPlayer) {
+						// Damage & respawn the player
+						player.RespawnDeathInstantaneous();
+					}
+
 					isOpen = false;
-					animationPlayer.Play(animationClose);
+					Graphics.PlayAnimation(animationClose);
 					IsSolid = true;
 					if (!instantaneous && openCloseSound != null)
 						AudioSystem.PlaySound(GameData.SOUND_DUNGEON_DOOR);
 				}
 			}
+
+			Properties.Set("open", false);
 			
 			if (instantaneous)
-				animationPlayer.PlaybackTime = animationPlayer.Animation.Duration;
-
-			if (rememberState || Properties.GetBoolean("remember_state", false))
-				Properties.SetBase("open", false);
+				Graphics.AnimationPlayer.SkipToEnd();
 		}
 
 		// Find a door that's connected to this one in an adjacent room.
@@ -126,6 +132,8 @@ namespace ZeldaOracle.Game.Tiles {
 			isOpen = Properties.GetBoolean("open", false);
 			isPlayerBlockingClose = false;
 
+			hasUpdated = false;
+
 			animationOpen = TileData.TileData.SpriteList[1].Animation;
 			animationClose = TileData.TileData.SpriteList[2].Animation;
 
@@ -139,23 +147,23 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 
 			if (isOpen) {
-				animationPlayer.Play(animationOpen);
+				Graphics.PlayAnimation(animationOpen);
 				IsSolid = false;
 			}
 			else {
-				animationPlayer.Play(animationClose);
+				Graphics.PlayAnimation(animationClose);
 				IsSolid = true;
 			}
 
 			// Fast-forward the animation to the end.
-			animationPlayer.PlaybackTime = animationPlayer.Animation.Duration;
-			
-			animationPlayer.SubStripIndex = Properties.GetInteger("direction", 0);
+			Graphics.AnimationPlayer.SkipToEnd();
+			Graphics.SubStripIndex = Properties.GetInteger("direction", 0);
 		}
 
 		public override void Update() {
 			base.Update();
 
+			hasUpdated = true;
 			
 			Player player = RoomControl.Player;
 			if (isPlayerBlockingClose && !CollisionModel.Intersecting(CollisionModel, Position, player.Physics.CollisionBox, player.Position)) {
@@ -163,8 +171,6 @@ namespace ZeldaOracle.Game.Tiles {
 				isPlayerBlockingClose = false;
 				player.MarkRespawn();
 			}
-
-			animationPlayer.Update();
 		}
 
 

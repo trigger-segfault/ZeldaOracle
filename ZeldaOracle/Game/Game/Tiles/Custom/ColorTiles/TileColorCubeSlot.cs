@@ -23,14 +23,14 @@ namespace ZeldaOracle.Game.Tiles {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnCover(Tile tile) {
+		public override void OnCoverComplete(Tile tile) {
 			if (tile is TileColorCube) {
 				TileColorCube colorCube = (TileColorCube) tile;
 				Color = ((TileColorCube) tile).TopColor;
 			}
 		}
 
-		public override void OnUncover(Tile tile) {
+		public override void OnUncoverComplete(Tile tile) {
 			if (tile is TileColorCube) {
 				Color = PuzzleColor.None;
 			}
@@ -50,9 +50,7 @@ namespace ZeldaOracle.Game.Tiles {
 				PuzzleColor prevColor = Color;
 				Properties.Set("color", (int) value);
 				if (prevColor != value) {
-					GameControl.ExecuteScript(
-						Properties.GetString("on_color_change", ""),
-						this, (ZeldaAPI.Color) value);
+					GameControl.FireEvent(this, "event_color_change", this, (ZeldaAPI.Color) value);
 				}
 			}
 		}

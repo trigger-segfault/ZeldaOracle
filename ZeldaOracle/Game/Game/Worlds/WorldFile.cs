@@ -241,7 +241,9 @@ namespace ZeldaOracle.Game.Worlds {
 			// Read tile data for first layer (stored as a grid of tiles).
 			for (int y = 0; y < room.Height; y++) {
 				for (int x = 0; x < room.Width; x++) {
-					room.SetTile(ReadTileData(reader), x, y, 0);
+					TileDataInstance tile = ReadTileData(reader);
+					if (tile != null)
+						room.PlaceTile(tile, new Point2I(x, y), 0);
 				}
 			}
 
@@ -251,7 +253,7 @@ namespace ZeldaOracle.Game.Worlds {
 				int x		= reader.ReadInt32();
 				int y		= reader.ReadInt32();
 				int layer	= reader.ReadInt32();
-				room.SetTile(ReadTileData(reader), x, y, layer);
+				room.PlaceTile(ReadTileData(reader), new Point2I(x, y), layer);
 			}
 
 			// Read event tile data.
@@ -277,15 +279,16 @@ namespace ZeldaOracle.Game.Worlds {
 					reader.ReadInt32(),
 					reader.ReadInt32());
 				tile.TileData = tileset.TileData[sheetLocation.X, sheetLocation.Y];
-				ReadProperties(reader, tile.Properties);
-				tile.Properties.BaseProperties = tile.TileData.Properties;
 			}
 			else {
 				// Create tile from a TileData resource.
 				tile.TileData = ReadResource(reader, tileData);
-				ReadProperties(reader, tile.Properties);
-				tile.Properties.BaseProperties = tile.TileData.Properties;
 			}
+
+			// Read the tile's properties.
+			ReadProperties(reader, tile.Properties);
+			tile.Properties.BaseProperties = tile.TileData.Properties;
+			tile.ModifiedProperties.Clone(tile.Properties);
 
 			return tile;
 		}
@@ -317,7 +320,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private Property ReadProperty(BinaryReader reader) {
 			PropertyType type = (PropertyType) reader.ReadInt32();
 			string name = ReadString(reader);
-
+			
 			if (type == PropertyType.Integer) {
 				return Property.CreateInt(name, reader.ReadInt32());
 			}
@@ -617,7 +620,7 @@ namespace ZeldaOracle.Game.Worlds {
 			for (int y = 0; y < room.Height; y++) {
 				for (int x = 0; x < room.Width; x++) {
 					TileDataInstance tile = room.GetTile(x, y, 0);
-					if (tile != null)
+					if (tile != null && tile.IsAtLocation(x, y))
 						WriteTileData(writer, tile);
 					else
 						writer.Write(-11); // -11 signifies a null tile.
@@ -630,7 +633,7 @@ namespace ZeldaOracle.Game.Worlds {
 				for (int y = 0; y < room.Height; y++) {
 					for (int x = 0; x < room.Width; x++) {
 						TileDataInstance tile = room.GetTile(x, y, i);
-						if (tile != null)
+						if (tile != null && tile.IsAtLocation(x, y))
 							tileDataCount++;
 					}
 				}
@@ -642,7 +645,7 @@ namespace ZeldaOracle.Game.Worlds {
 				for (int y = 0; y < room.Height; y++) {
 					for (int x = 0; x < room.Width; x++) {
 						TileDataInstance tile = room.GetTile(x, y, i);
-						if (tile != null) {
+						if (tile != null && tile.IsAtLocation(x, y)) {
 							writer.Write(x);
 							writer.Write(y);
 							writer.Write(i);

@@ -10,7 +10,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TileColorJumpPad : Tile, ZeldaAPI.ColorJumpPad {
+	public class TileColorJumpPad : Tile, IColoredTile, ZeldaAPI.ColorJumpPad {
 
 		private static List<TileColorJumpPad> markedTiles = new List<TileColorJumpPad>();
 		private static Point2I playerJumpStartTileLocation;
@@ -40,18 +40,15 @@ namespace ZeldaOracle.Game.Tiles {
  				color = PuzzleColor.Red;
 
 			// Set the color property.
-			if (Properties.Get("remember_state", false))
-				Properties.SetBase("color", (int) color);
-			else
-				Properties.Set("color", (int) color);
+			Properties.Set("color", (int) color);
 
 			// Set the sprite.
 			if (color == PuzzleColor.Red)
-				CustomSprite = GameData.SPR_TILE_COLOR_JUMP_PAD_RED;
+				Graphics.PlaySprite(GameData.SPR_TILE_COLOR_JUMP_PAD_RED);
 			else if (color == PuzzleColor.Yellow)
-				CustomSprite = GameData.SPR_TILE_COLOR_JUMP_PAD_YELLOW;
+				Graphics.PlaySprite(GameData.SPR_TILE_COLOR_JUMP_PAD_YELLOW);
 			else if (color == PuzzleColor.Blue)
-				CustomSprite = GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE;
+				Graphics.PlaySprite(GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE);
 				
 			AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
 
@@ -67,11 +64,11 @@ namespace ZeldaOracle.Game.Tiles {
 			// Set the sprite.
 			PuzzleColor color = (PuzzleColor) Properties.Get("color", (int) PuzzleColor.Red);
 			if (color == PuzzleColor.Red)
-				CustomSprite = GameData.SPR_TILE_COLOR_JUMP_PAD_RED;
+				Graphics.PlaySprite(GameData.SPR_TILE_COLOR_JUMP_PAD_RED);
 			else if (color == PuzzleColor.Yellow)
-				CustomSprite = GameData.SPR_TILE_COLOR_JUMP_PAD_YELLOW;
+				Graphics.PlaySprite(GameData.SPR_TILE_COLOR_JUMP_PAD_YELLOW);
 			else if (color == PuzzleColor.Blue)
-				CustomSprite = GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE;
+				Graphics.PlaySprite(GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE);
 			
 			// NOTE: The player automaticlly nullifies his events upon leaving the room.
 			RoomControl.Player.EventJump += OnPlayerJump;

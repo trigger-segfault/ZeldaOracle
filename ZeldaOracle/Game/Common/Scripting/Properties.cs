@@ -24,27 +24,34 @@ namespace ZeldaOracle.Common.Scripting {
 		// Construct an empty properties list.
 		public Properties() {
 			this.map			= new Dictionary<string, Property>();
-			this.baseProperties	= null;
 			this.propertyObject	= null;
+			this.baseProperties	= null;
 		}
 		
 		// Construct an empty properties list with the given property object.
 		public Properties(IPropertyObject propertyObject) {
 			this.map			= new Dictionary<string, Property>();
-			this.baseProperties	= null;
 			this.propertyObject	= propertyObject;
+			this.baseProperties	= null;
 		}
-
+		
 		public Properties(Properties copy) {
-			this.map			= new Dictionary<string, Property>();
-			this.baseProperties = null;
-			this.propertyObject = copy.propertyObject;
+			this.map = new Dictionary<string, Property>();
+			Clone(copy);
+		}
+		
+		public void Clone(Properties copy) {
+			propertyObject = copy.propertyObject;
+			baseProperties = copy.baseProperties;
+
+			// Copy the property map.
+			map.Clear();
 			foreach (Property property in copy.map.Values) {
 				Property p		= new Property(property);
 				p.Properties	= this;
-				p.BaseProperty	= null;
 				map[p.Name]		= p;
 			}
+			ConnectBaseProperties();
 		}
 
 
@@ -432,16 +439,22 @@ namespace ZeldaOracle.Common.Scripting {
 
 		// Link up our properties with their corresponding base properties.
 		private void ConnectBaseProperties() {
-			Property[] properties = map.Values.ToArray();
+			if (baseProperties != null) {
+				// Link properties with base properties.
+				Property[] properties = map.Values.ToArray();
+				foreach (Property property in properties) {
+					Property baseProperty = baseProperties.GetProperty(property.Name, true);
+					property.BaseProperty = baseProperty;
 
-			// Link properties with base properties.
-			foreach (Property property in properties) {
-				Property baseProperty = baseProperties.GetProperty(property.Name, true);
-				property.BaseProperty = baseProperty;
-
-				// Remove a redundant property (one that is equal to its base value).
-				if (baseProperty != null && property.EqualsValue(baseProperty))
-					map.Remove(property.Name);
+					// Remove a redundant property (one that is equal to its base value).
+					if (baseProperty != null && property.EqualsValue(baseProperty))
+						map.Remove(property.Name);
+				}
+			}
+			else {
+				// Nullify all base properties.
+				foreach (Property property in map.Values)
+					property.BaseProperty = null;
 			}
 		}
 

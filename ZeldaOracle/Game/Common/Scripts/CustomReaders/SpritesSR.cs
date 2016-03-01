@@ -6,11 +6,12 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Content.ResourceBuilders;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Scripts.Commands;
 using ZeldaOracle.Game;
 
-namespace ZeldaOracle.Common.Scripts {
+namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
-	public class SpritesSR : NewScriptReader {
+	public class SpritesSR : ScriptReader {
 
 		private SpriteBuilder spriteBuilder;
 		private Sprite sprite;
@@ -28,11 +29,16 @@ namespace ZeldaOracle.Common.Scripts {
 			this.resources		= resources;
 			this.useTemporary	= resources != null;
 			this.spriteBuilder	= new SpriteBuilder();
-
-			// SPRITE SHEET.
-
-			AddCommand("SpriteSheet", delegate(CommandParam parameters) {
-				if (parameters.Count == 1) {
+			
+			//=====================================================================================
+			// SPRITE SHEET
+			//=====================================================================================
+			AddCommand("SpriteSheet",
+				"string name",
+				"string path, (int cellWidth, int cellHeight), (int spacingX, int spacingY), (int offsetX, int offsetY)",
+				"string name, string path, (int cellWidth, int cellHeight), (int spacingX, int spacingY), (int offsetX, int offsetY)",
+			delegate(CommandParam parameters) {
+				if (parameters.ChildCount == 1) {
 					// Start using the given sprite sheet.
 					SpriteSheet sheet;
 					if (useTemporary && resources != null)
@@ -48,7 +54,7 @@ namespace ZeldaOracle.Common.Scripts {
 					string imagePath = parameters.GetString(0);
 					string sheetName = imagePath;
 
-					if (parameters.Count == 5) {
+					if (parameters.ChildCount == 5) {
 						imagePath = parameters.GetString(1);
 						i = 2;
 					}
@@ -69,11 +75,11 @@ namespace ZeldaOracle.Common.Scripts {
 					spriteBuilder.SpriteSheet = sheet;
 				}
 			});
-
-			// BEGIN/END.
-			
-			// Sprite <name> <grid-location> <draw-offset = (0, 0)>
-			AddCommand("Sprite", delegate(CommandParam parameters) {
+			//=====================================================================================
+			// BEGIN/END
+			//=====================================================================================
+			AddCommand("Sprite", "string name, (int gridLocationX, int gridLocationY), (int drawOffsetX, int drawOffsetY) = (0, 0)",
+			delegate(CommandParam parameters) {
 				spriteName = parameters.GetString(0);
 				sprite = new Sprite(
 					spriteBuilder.SpriteSheet,
@@ -81,7 +87,9 @@ namespace ZeldaOracle.Common.Scripts {
 					parameters.GetPoint(2, Point2I.Zero));
 				spriteBuilder.Begin(sprite);
 			});
-			AddCommand("End", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("End", "",
+			delegate(CommandParam parameters) {
 				if (sprite != null) {
 					spriteBuilder.End();
 					if (useTemporary && resources != null)
@@ -91,24 +99,31 @@ namespace ZeldaOracle.Common.Scripts {
 					sprite = null;
 				}
 			});
-
-			// BUILDING.
-			
-			// Add <grid-location> <draw-offset = (0, 0)>
-			AddCommand("Add", delegate(CommandParam parameters) {
+			//=====================================================================================
+			// BUILDING
+			//=====================================================================================
+			AddCommand("Add", "(int gridLocationX, int gridLocationY), (int drawOffsetX, int drawOffsetY) = (0, 0)",
+			delegate(CommandParam parameters) {
 				spriteBuilder.AddPart(
 					parameters.GetPoint(0).X,
 					parameters.GetPoint(0).Y,
 					parameters.GetPoint(1, Point2I.Zero).X,
 					parameters.GetPoint(1, Point2I.Zero).Y);
 			});
-			// Size <size>
-			AddCommand("Size", delegate(CommandParam parameters) {
+			//=====================================================================================
+			AddCommand("Size", "(int width, int height)",
+			delegate(CommandParam parameters) {
 				spriteBuilder.SetSize(
 					parameters.GetPoint(0).X,
 					parameters.GetPoint(0).Y);
 			});
+			//=====================================================================================
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
 
 		// Begins reading the script.
 		protected override void BeginReading() {

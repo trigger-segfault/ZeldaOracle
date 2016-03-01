@@ -16,7 +16,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		private int timer;
 		private int duration;
-		private int equipSlot;
+		private ItemBracelet bracelet;
 
 
 		//-----------------------------------------------------------------------------
@@ -24,7 +24,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerGrabState() {
-			equipSlot	= 0;
+			bracelet	= null;
 			duration	= 10;
 		}
 		
@@ -34,7 +34,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		private bool AttemptPickup() {
-			Tile grabTile = player.Physics.GetMeetingSolidTile(player.Position, player.Direction);
+			Tile grabTile = player.Physics.GetFacingSolidTile(player.Direction);
 			
 			if (grabTile != null) {
 				int minLevel = grabTile.Properties.GetInteger("pickupable_bracelet_level", Item.Level1);
@@ -64,17 +64,31 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			timer = 0;
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_GRAB);
 			player.Graphics.PauseAnimation();
+			
+			player.Movement.StopMotion();
+			
+			// Check if grabbing an instantly pickupable tile.
+			Tile grabTile = player.Physics.GetFacingSolidTile(player.Direction);
+			if (grabTile.HasFlag(TileFlags.Pickupable | TileFlags.InstantPickup)) {
+				if (AttemptPickup())
+					return;
+			}
 		}
 		
 		public override void OnEnd(PlayerState newState) {
 			player.Movement.CanJump = true;
 			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 		}
+		
+		public override void OnHurt(DamageInfo damage) {
+			base.OnHurt(damage);
+			player.BeginNormalState();
+		}
 
 		public override void Update() {
 			base.Update();
 
-			InputControl grabButton = player.Inventory.GetSlotButton(equipSlot);
+			InputControl grabButton = player.Inventory.GetSlotButton(bracelet.CurrentEquipSlot);
 			InputControl pullButton = Controls.Arrows[Directions.Reverse(player.Direction)];
 
 			if (!grabButton.IsDown()) {
@@ -99,9 +113,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public int BraceletEquipSlot {
-			get { return equipSlot; }
-			set { equipSlot = value; }
+		public ItemBracelet Bracelet {
+			get { return bracelet; }
+			set { bracelet = value; }
 		}
 	}
 }

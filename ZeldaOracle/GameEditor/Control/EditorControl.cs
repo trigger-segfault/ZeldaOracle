@@ -236,7 +236,9 @@ namespace ZeldaEditor.Control {
 			if (IsWorldOpen) {
 				WorldFile saveFile = new WorldFile();
 				saveFile.Save(fileName, world);
-				hasMadeChanges = false;
+				hasMadeChanges	= false;
+				worldFilePath	= fileName;
+				worldFileName	= Path.GetFileName(fileName);
 			}
 		}
 
@@ -250,10 +252,10 @@ namespace ZeldaEditor.Control {
 			if (loadedWorld != null) {
 				CloseFile();
 
-				hasMadeChanges = false;
-				worldFilePath = fileName;
-				worldFileName = Path.GetFileName(fileName);
-				needsRecompiling = true;
+				hasMadeChanges		= false;
+				worldFilePath		= fileName;
+				worldFileName		= Path.GetFileName(fileName);
+				needsRecompiling	= true;
 
 				world = loadedWorld;
 				if (world.Levels.Count > 0)
@@ -397,6 +399,23 @@ namespace ZeldaEditor.Control {
 		// Open the properties for the given tile in the property grid.
 		public void OpenObjectProperties(IPropertyObject propertyObject) {
 			PropertyGrid.OpenProperties(propertyObject.Properties, propertyObject);
+		}
+
+		public void OnDeleteObject(IPropertyObject propertyObject) {
+			// Remove any hidden scripts referenced in the tile's propreties.
+			foreach (Property property in propertyObject.Properties.GetProperties()) {
+				PropertyDocumentation doc = property.GetDocumentation();
+
+				// Remove hidden scripts referenced by this property.
+				if (doc.EditorType == "script") {
+					string scriptID = property.StringValue;
+					Script script = world.GetScript(scriptID);
+					if (script != null && script.IsHidden) {
+						world.RemoveScript(script);
+						Console.WriteLine("Removed hidden script: " + scriptID);
+					}
+				}
+			}
 		}
 
 

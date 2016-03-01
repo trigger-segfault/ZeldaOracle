@@ -62,6 +62,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private Vector2F			holeSlipVelocity;
 		private Point2I				holeEnterQuadrent;
 		private bool				fallingInHole;
+		private bool				isOnColorBarrier;
+		private bool				isOnSideScrollLadder;
+		private Rectangle2F			climbCollisionBox;		// Used for checking if on a ladder in side-scroll mode.
 
 		// Movement modes.
 		private PlayerMotionType	mode;
@@ -108,6 +111,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 			holeDoomTimer			= 0;
 			holeSlipVelocity		= Vector2F.Zero;
 			fallingInHole			= false;
+			isOnColorBarrier		= false;
+			isOnSideScrollLadder	= false;
+			climbCollisionBox		= new Rectangle2F(-1, -7, 2, 9);
 
 			// Controls.
 			analogMode		= false;
@@ -204,9 +210,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 				}
 				
 				// Jump!
-				isCapeDeployed = false;
-				jumpStartTile = player.RoomControl.GetTileLocation(player.Position);
-				player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
+				isOnSideScrollLadder	= false;
+				isCapeDeployed			= false;
+				jumpStartTile			= player.RoomControl.GetTileLocation(player.Position);
+				player.Physics.Gravity	= GameSettings.DEFAULT_GRAVITY;
+				player.Physics.OnGroundOverride = false;
+				if (player.RoomControl.IsSideScrolling)
+					player.Physics.ZVelocity = GameSettings.PLAYER_SIDESCROLL_JUMP_SPEED;
+				else
+					player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
 				if (player.CurrentState is PlayerNormalState)
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_JUMP);
@@ -225,7 +237,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 				GameSettings.DEFAULT_GRAVITY <= -GameSettings.PLAYER_CAPE_REQUIRED_FALLSPEED)
 			{
 				isCapeDeployed = true;
-				player.Physics.ZVelocity = GameSettings.PLAYER_CAPE_JUMP_SPEED + GameSettings.PLAYER_CAPE_GRAVITY;
+				player.Physics.Gravity = GameSettings.PLAYER_CAPE_GRAVITY;
+				if (player.RoomControl.IsSideScrolling)
+					player.Physics.ZVelocity = GameSettings.PLAYER_SIDESCROLL_CAPE_JUMP_SPEED + GameSettings.PLAYER_CAPE_GRAVITY;
+				else
+					player.Physics.ZVelocity = GameSettings.PLAYER_CAPE_JUMP_SPEED + GameSettings.PLAYER_CAPE_GRAVITY;
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_THROW);
 				if (player.CurrentState is PlayerNormalState)
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_CAPE);
@@ -256,6 +272,14 @@ namespace ZeldaOracle.Game.Entities.Players {
 					moveVector = analogStick.Position;
 				else
 					moveVector = Angles.ToVector(moveAngle);
+			}
+
+			// Clip Y velocity if side scrolling and not climbing.
+			if (player.RoomControl.IsSideScrolling && !isOnSideScrollLadder) {
+				if (analogMode)
+					moveVector = new Vector2F(analogStick.Position.X, 0.0f);
+				else
+					moveVector = new Vector2F(Angles.ToVector(moveAngle, false).X, 0.0f);
 			}
 
 			return moveVector;
@@ -374,9 +398,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 			
 			// Move animation can be replaced by cape animation.
 			if (player.Graphics.Animation == player.MoveAnimation && player.IsInAir && isCapeDeployed)
-				player.Graphics.Animation = GameData.ANIM_PLAYER_CAPE;
+				player.Graphics.SetAnimation(GameData.ANIM_PLAYER_CAPE);
 			else if (player.IsOnGround && player.Graphics.Animation == GameData.ANIM_PLAYER_CAPE)
-				player.Graphics.Animation = player.MoveAnimation;
+				player.Graphics.SetAnimation(player.MoveAnimation);
 		}
 		
 		// Poll the movement key for the given direction, returning true if
@@ -417,26 +441,26 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private void UpdateFallingInHoles() {
 			if (fallingInHole) {
 				holeDoomTimer--;
+				
+				// After a delay, disable the player's motion.
+				if (holeDoomTimer < 0)
+					player.Physics.Velocity = Vector2F.Zero;
 
-				if (doomedToFallInHole) {
-					// The player is doomed to fall in the hole, he cannot escape it.
-					if (holeDoomTimer < 0)
-						player.Physics.Velocity = Vector2F.Zero;
-					
-					// Collide with hole boundries.
-					Rectangle2F holeRect = new Rectangle2F(holeTile.Position, new Vector2F(16, 16));
-					Rectangle2F collisionBox = new Rectangle2F(Vector2F.Zero, Vector2F.One);
-					player.Physics.PerformInsideEdgeCollisions(collisionBox, holeRect);
-				}
-				else if (!player.Physics.IsInHole) {
+				if (!player.Physics.IsInHole) {
 					// Stop falling in a hole.
 					fallingInHole		= false;
 					doomedToFallInHole	= false;
 					holeTile			= null;
 					return;
 				}
+				else if (doomedToFallInHole) {
+					// Collide with hole boundary's inside edges.
+					Rectangle2F collisionBox = new Rectangle2F(-1, -1, 2, 2);
+					player.Physics.PerformInsideEdgeCollisions(collisionBox, holeTile.Bounds);
+				}
 				else {
-					// Check if the player has changed quadrents.
+					// Check if the player has changed quadrents,
+					// which dooms him to fall in the hole.
 					Point2I holeTileLoc = player.RoomControl.GetTileLocation(player.Position);
 					Tile newHoleTile	= player.RoomControl.GetTopTile(holeTileLoc);
 					Point2I newQuadrent	= (Point2I) (player.Position / 8);
@@ -453,12 +477,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 						float dist = 0.25f;
 						
 						// Pull the player in more if he's moving away from the hole.
-						if ((diff < 0 && player.Physics.Velocity[i] > 0.25f) ||
-							(diff > 0 && player.Physics.Velocity[i] < -0.25f))
+						if ((diff < 0.0f && player.Physics.Velocity[i] > 0.25f) ||
+							(diff > 0.0f && player.Physics.Velocity[i] < -0.25f))
 							dist = 0.5f;
 
-						if (!(diff < 0 && player.Physics.Velocity[i] < -0.25f) &&
-							!(diff > 0 && player.Physics.Velocity[i] > 0.25f))
+						if (!(diff < 0.0f && player.Physics.Velocity[i] < -0.25f) &&
+							!(diff > 0.0f && player.Physics.Velocity[i] > 0.25f))
 						{
 							holeSlipVelocity[i] = Math.Sign(diff) * dist;
 						}
@@ -466,11 +490,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 				}
 				player.Position += holeSlipVelocity;
 					
-				// Fall in the hole when close to the center.
+				// Fall in the hole when too close to the center.
 				if (player.Center.DistanceTo(holeTile.Center) <= 1.0f) {
+					AudioSystem.PlaySound(GameData.SOUND_PLAYER_FALL);
 					player.SetPositionByCenter(holeTile.Center);
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_FALL);
-					AudioSystem.PlaySound(GameData.SOUND_PLAYER_FALL);
 					player.RespawnDeath();
 					holeTile			= null;
 					fallingInHole		= false;
@@ -480,7 +504,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			else if (player.Physics.IsInHole && player.CurrentState != player.RespawnDeathState) {
 				// Start falling in a hole.
 				Point2I holeTileLoc = player.RoomControl.GetTileLocation(player.Position);
-				holeTile			= player.RoomControl.GetTopTile(holeTileLoc);
+				holeTile			= player.Physics.TopTile;
 				holeEnterQuadrent	= (Point2I) (player.Position / 8);
 				doomedToFallInHole	= false;
 				fallingInHole		= true;
@@ -495,13 +519,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public void Update() {
 			// Determine movement mode.
-			if (player.Physics.IsInAir)
+			if (player.RoomControl.IsSideScrolling && isOnSideScrollLadder)
+				mode = moveModeNormal;
+			else if (player.Physics.IsInAir)
 				mode = moveModeAir;
 			else if (player.Physics.IsInWater)
 				mode = moveModeWater;
 			else if (player.Physics.IsOnIce)
 				mode = moveModeIce;
-			else if (player.Physics.IsOnLadder || player.Physics.IsOnStairs)
+			else if (player.Physics.IsOnStairs || player.Physics.IsOnLadder)
 				mode = moveModeSlow;
 			else if (player.Physics.IsInGrass)
 				mode = moveModeGrass;
@@ -531,20 +557,64 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Check for ledge jumping (ledges/waterfalls)
 			CollisionInfo collisionInfo = player.Physics.CollisionInfo[moveDirection];
 			if (canLedgeJump && mode.CanLedgeJump && isMoving &&
-				collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving)
+				collisionInfo.Type == CollisionType.Tile &&
+				!player.RoomControl.IsSideScrolling)
 			{
 				Tile tile = collisionInfo.Tile;
-				
-				if (tile.IsLedge &&
-					moveDirection == tile.LedgeDirection &&
-					collisionInfo.Direction == tile.LedgeDirection)
+				if (tile.IsLedge && moveDirection == tile.LedgeDirection && !tile.IsMoving)
+					TryLedgeJump(tile.LedgeDirection);
+			}
+			
+			// Check for walking on color barriers.
+			if (player.IsOnGround && (player.Physics.TopTile is TileColorBarrier) &&
+				((TileColorBarrier) player.Physics.TopTile).IsRaised)
+			{
+				IsOnColorBarrier = true;
+			}
+			else if (player.IsOnGround)
+				IsOnColorBarrier = false;
+
+			// Face up if climbing a side-scroll ladder.
+			if (player.RoomControl.IsSideScrolling && isOnSideScrollLadder) {
+				bool faceUp = false;
+				if (HighestSideScrollLadderTile != null)
+					faceUp = (player.Y > HighestSideScrollLadderTile.Bounds.Top + 4.0f);
+				if (faceUp && allowMovementControl)
+					player.Direction = Directions.Up;
+			}
+		}
+
+		private bool TryLedgeJump(int ledgeDirection) {
+			Rectangle2F entityBox = player.Physics.PositionedCollisionBox;
+			entityBox.Point += Directions.ToVector(ledgeDirection) * 1.0f;
+
+			// Check if there any obstructions in front of the player.
+			foreach (Tile tile in player.RoomControl.TileManager.GetTilesTouching(entityBox)) {
+				if ((!tile.IsLedge || tile.LedgeDirection != ledgeDirection) &&
+					tile.IsSolid && tile.CollisionModel != null)
 				{
-					// Ledge jump!
-					player.LedgeJumpState.LedgeBeginTile = tile;
-					player.BeginState(player.LedgeJumpState);
-					return;
+					// Check collisions with the tile's collision box.
+					// Account for any safe edge-clipping.
+					foreach (Rectangle2F box in tile.CollisionModel.Boxes) {
+						Rectangle2F solidBox = box;
+						solidBox.Point += tile.Position;
+
+						if (entityBox.Intersects(solidBox) &&
+							!player.Physics.IsSafeClippingInDirection(solidBox, (ledgeDirection + 1) % 4) &&
+							!player.Physics.IsSafeClippingInDirection(solidBox, (ledgeDirection + 2) % 4) &&
+							!player.Physics.IsSafeClippingInDirection(solidBox, (ledgeDirection + 3) % 4) &&
+							!player.Physics.CanDodgeCollision(solidBox, ledgeDirection))
+						{
+							return false;
+						}
+					}
 				}
 			}
+
+			// No obstructions: begin ledge jump!
+			player.LedgeJumpState.LedgeJumpDirection = ledgeDirection;
+			player.BeginState(player.LedgeJumpState);
+			return true;
 		}
 
 		
@@ -603,6 +673,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public int MoveAngle {
 			get { return moveAngle; }
 		}
+		
+		public bool AllowMovementControl {
+			get { return allowMovementControl; }
+		}
 
 		public bool IsCapeDeployed {
 			get { return (player.IsInAir && isCapeDeployed); }
@@ -620,6 +694,36 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public Point2I JumpStartTile {
 			get { return jumpStartTile; }
 			set { jumpStartTile = value; }
+		}
+
+		public bool IsOnColorBarrier {
+			get { return isOnColorBarrier; }
+			set {
+				isOnColorBarrier = value;
+				player.Graphics.DrawOffset = new Point2I(-8, -13); // TODO: magic numbers
+				if (isOnColorBarrier)
+					player.Graphics.DrawOffset -= new Point2I(0, 3);
+			}
+		}
+
+		public bool IsDoomedToFallInHole {
+			get { return (fallingInHole && doomedToFallInHole); }
+		}
+
+		public bool IsOnSideScrollLadder {
+			get { return isOnSideScrollLadder; }
+			set {
+				isOnSideScrollLadder = value;
+				player.Physics.OnGroundOverride = value;
+			}
+		}
+
+		public Rectangle2F ClimbCollisionBox {
+			get { return climbCollisionBox; }
+		}
+
+		public Tile HighestSideScrollLadderTile {
+			get; set;
 		}
 	}
 }

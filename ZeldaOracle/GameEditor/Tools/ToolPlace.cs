@@ -27,35 +27,52 @@ namespace ZeldaEditor.Tools {
 		// Internal methods
 		//-----------------------------------------------------------------------------
 
+		private void ActivateTile(MouseEventArgs e) {
+			Point2I mousePos = new Point2I(e.X, e.Y);
+			Point2I levelTileCoord = LevelDisplayControl.SampleLevelTileCoordinates(mousePos);
+
+			// Limit tiles to the selection box if there is one.
+			if (LevelDisplayControl.SelectionGridArea.IsEmpty ||
+				LevelDisplayControl.SelectionGridArea.Contains(levelTileCoord))
+			{
+				Room room = LevelDisplayControl.Level.GetRoom((LevelTileCoord) levelTileCoord);
+				if (room != null) {
+					Point2I tileLocation = LevelDisplayControl.Level.GetTileLocation((LevelTileCoord) levelTileCoord);
+					ActivateTile(e.Button, room, tileLocation);
+				}
+			}
+		}
+
 		private void ActivateTile(MouseButtons mouseButton, Room room, Point2I tileLocation) {
-			
+			TileDataInstance tile = room.GetTile(tileLocation, EditorControl.CurrentLayer);
+
 			if (mouseButton == MouseButtons.Left) {
 				TileData selectedTilesetTileData = editorControl.SelectedTilesetTileData as TileData;
+
 				if (selectedTilesetTileData != null) {
-					room.CreateTile(
-						selectedTilesetTileData,
-						tileLocation.X, tileLocation.Y, editorControl.CurrentLayer
-					);
+					// Remove the existing tile.
+					if (tile != null) {
+						room.RemoveTile(tile);
+						editorControl.OnDeleteObject(tile);
+					}
+					// Place the new tile.
+					room.PlaceTile(
+						new TileDataInstance(selectedTilesetTileData),
+						tileLocation.X, tileLocation.Y, editorControl.CurrentLayer);
 				}
 			}
 			else if (mouseButton == MouseButtons.Right) {
-				/*if (editorControl.CurrentLayer == 0) {
-					room.CreateTile(
-						editorControl.Tileset.DefaultTileData,
-						tileLocation.X, tileLocation.Y, editorControl.CurrentLayer
-					);
+				// Erase the tile.
+				if (tile != null) {
+					room.RemoveTile(tile);
+					editorControl.OnDeleteObject(tile);
 				}
-				else {*/
-					room.RemoveTile(tileLocation.X, tileLocation.Y, editorControl.CurrentLayer);
-				//}
 			}
 			else if (mouseButton == MouseButtons.Middle) {
 				// Sample the tile.
-				TileDataInstance tile = room.GetTile(tileLocation, EditorControl.CurrentLayer);
 				if (tile != null) {
-					// TODO: Search for the event tile to sample.
-					editorControl.SelectedTilesetTile = -Point2I.One;
-					editorControl.SelectedTilesetTileData = tile.TileData;
+					editorControl.SelectedTilesetTile		= -Point2I.One;
+					editorControl.SelectedTilesetTileData	= tile.TileData;
 				}
 			}
 		}
@@ -88,12 +105,6 @@ namespace ZeldaEditor.Tools {
 				if (EditorControl.EventMode && e.Button == MouseButtons.Left) {
 					EventTileData eventTile = editorControl.SelectedTilesetTileData as EventTileData;
 
-					//EventTileData eventTile = Resources.GetResource<EventTileData>("warp");
-					//EventTileData eventTile = Resources.GetResource<EventTileData>("npc");
-
-					//Point2I mousePos	= new Point2I(e.X, e.Y);
-					//Room room		= LevelDisplayControl.SampleRoom(mousePos);
-
 					if (room != null && eventTile != null) {
 						Point2I roomPos = LevelDisplayControl.GetRoomDrawPosition(room);
 						Point2I pos = (mousePos - roomPos) / 8;
@@ -106,6 +117,7 @@ namespace ZeldaEditor.Tools {
 					EventTileDataInstance eventTile = LevelDisplayControl.SampleEventTile(new Point2I(e.X, e.Y));
 					if (eventTile != null) {
 						eventTile.Room.RemoveEventTile(eventTile);
+						editorControl.OnDeleteObject(eventTile);
 					}
 				}
 				else if (e.Button == MouseButtons.Middle) {
@@ -142,13 +154,8 @@ namespace ZeldaEditor.Tools {
 		}
 
 		public override void OnMouseDragBegin(MouseEventArgs e) {
-			if (!EditorControl.EventMode) {
-				Point2I mousePos	= new Point2I(e.X, e.Y);
-				Room	room		= LevelDisplayControl.SampleRoom(mousePos);
-				Point2I tileCoord	= LevelDisplayControl.SampleTileCoordinates(mousePos);
-				if (room != null)
-					ActivateTile(e.Button, room, tileCoord);
-			}
+			if (!EditorControl.EventMode)
+				ActivateTile(e);
 		}
 
 		public override void OnMouseDragEnd(MouseEventArgs e) {
@@ -157,11 +164,7 @@ namespace ZeldaEditor.Tools {
 
 		public override void OnMouseDragMove(MouseEventArgs e) {
 			if (!EditorControl.EventMode) {
-				Point2I mousePos	= new Point2I(e.X, e.Y);
-				Room	room		= LevelDisplayControl.SampleRoom(mousePos);
-				Point2I tileCoord	= LevelDisplayControl.SampleTileCoordinates(mousePos);
-				if (room != null)
-					ActivateTile(e.Button, room, tileCoord);
+				ActivateTile(e);
 			}
 		}
 	}

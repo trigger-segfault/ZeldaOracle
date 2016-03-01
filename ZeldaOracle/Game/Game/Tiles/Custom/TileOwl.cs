@@ -50,8 +50,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void OnInitialize() {
 			isActivated = false;
-			SpriteIndex = 0;
-			//CustomSprite = GameData.SPR_TILE_OWL;
+			//Graphics.PlaySprite(GameData.SPR_TILE_OWL);
 		}
 
 		public override void Update() {
@@ -71,8 +70,8 @@ namespace ZeldaOracle.Game.Tiles {
 				}
 
 				if (timer == 49) {
-					SpriteIndex = 1;
-					//CustomSprite = GameData.SPR_TILE_OWL_ACTIVATED;
+					Graphics.PlaySpriteAnimation(SpriteList[1]);
+					//Graphics.PlaySprite(GameData.SPR_TILE_OWL_ACTIVATED);
 				}
 				if (timer == 58) {
 					string text = Properties.GetString("text", GameSettings.TEXT_UNDEFINED);
@@ -80,8 +79,8 @@ namespace ZeldaOracle.Game.Tiles {
 				}
 				if (timer > 80) {
 					isActivated = false;
-					SpriteIndex = 0;
-					//CustomSprite = GameData.SPR_TILE_OWL;
+					Graphics.PlaySpriteAnimation(SpriteList[0]);
+					//Graphics.PlaySprite(GameData.SPR_TILE_OWL);
 				}
 			}
 		}

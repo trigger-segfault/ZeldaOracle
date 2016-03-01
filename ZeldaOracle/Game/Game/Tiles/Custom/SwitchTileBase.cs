@@ -33,6 +33,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public virtual void OnToggle(bool switchState) {}
 		
+		public virtual void SetSwitchState(bool switchState) {
+			this.switchState = switchState;
+		}
+
 		public bool Toggle() {
 			bool switchOnce = Properties.Get("switch_once", false);
 			bool hasSwitched = Properties.Get("has_switched", false);
@@ -40,17 +44,12 @@ namespace ZeldaOracle.Game.Tiles {
 			if (!switchOnce || !hasSwitched) {
 				switchState = !switchState;
 
+				SetSwitchState(switchState);
 				OnToggle(switchState);
 				GameControl.FireEvent(this, "event_toggle", this);
-
-				if (Properties.Get("remember_state", false)) {
-					Properties.SetBase("switch_state", switchState);
-					Properties.SetBase("has_switched", true);
-				}
-				else {
-					Properties.Set("switch_state", switchState);
-					Properties.Set("has_switched", true);
-				}
+				
+				Properties.Set("switch_state", switchState);
+				Properties.Set("has_switched", true);
 				return true;
 			}
 			return false;
@@ -65,10 +64,6 @@ namespace ZeldaOracle.Game.Tiles {
 			Toggle();
 		}
 
-		public override void OnBoomerang() {
-			Toggle();
-		}
-
 		public override void OnBombExplode() {
 			Toggle();
 		}
@@ -76,6 +71,10 @@ namespace ZeldaOracle.Game.Tiles {
 		public override bool OnDig(int direction) {
 			Toggle();
 			return false;
+		}
+
+		public override void OnHitByThrownObject(CarriedTile thrownObject) {
+			Toggle();
 		}
 
 		public override void OnHitByProjectile(Projectile projectile) {
@@ -99,10 +98,15 @@ namespace ZeldaOracle.Game.Tiles {
 				if (Toggle())
 					(projectile as SwordBeam).Intercept();
 			}
+			else if (projectile is PlayerBoomerang) {
+				if (Toggle())
+					(projectile as PlayerBoomerang).Intercept();
+			}
 		}
 
 		public override void OnInitialize() {
 			switchState = Properties.Get("switch_state", false);
+			SetSwitchState(switchState);
 		}
 
 

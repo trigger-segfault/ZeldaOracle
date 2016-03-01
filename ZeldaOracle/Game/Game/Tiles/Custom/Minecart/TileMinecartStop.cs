@@ -9,6 +9,8 @@ using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 
+	// This class is referenced by the player's minecart state
+	// to check if the end of the track has been reached.
 	public class TileMinecartStop : Tile {
 
 		//-----------------------------------------------------------------------------
@@ -17,28 +19,6 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public TileMinecartStop() {
 
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Overridden methods
-		//-----------------------------------------------------------------------------
-
-		public override void OnInitialize() {
-
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-
-		public bool IsHorizontal {
-			get { return (SpriteIndex == 0); }
-		}
-		
-		public bool IsVertical {
-			get { return (SpriteIndex == 1); }
 		}
 	}
 }

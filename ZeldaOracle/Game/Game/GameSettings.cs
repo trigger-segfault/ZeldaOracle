@@ -60,6 +60,7 @@ namespace ZeldaOracle.Game {
 		public const float				SLINGSHOT_SEED_SPEED					= 3.0f;
 		public const float				SLINGSHOT_SEED_DEGREE_OFFSET			= 20.0f; // For the 2 extra seed from the hyper slingshot.
 		public const float				SEED_SHOOTER_SHOOT_SPEED				= 3.0f;
+		public const int				SEED_PROJECTILE_REBOUND_COUNT			= 3;
 		public const int				SCENT_POD_DURATION						= 240;
 		public const int				SCENT_POD_FADE_DELAY					= 60;
 		public const int				BOMB_FUSE_TIME							= 108;
@@ -94,15 +95,17 @@ namespace ZeldaOracle.Game {
 
 
 		// Player
-		public const float				PLAYER_MOVE_SPEED				= 1.0f;		// Pixels per second.
-		public const float				PLAYER_JUMP_SPEED				= 2.0f;
-		public const float				PLAYER_CAPE_JUMP_SPEED			= 0.5f;
-		public const float				PLAYER_CAPE_REQUIRED_FALLSPEED	= 1.0f;		// Player must be falling this fast to be able to deploy cape.
-		public const float				PLAYER_CAPE_GRAVITY				= 0.04f;	// 0.04 = 1/25
-		public const int				PLAYER_SPRINT_DURATION			= 480;
-		public const float				PLAYER_SPRINT_SPEED_SCALE		= 1.5f;
-		public const int				PLAYER_SPRINT_EFFECT_INTERVAL	= 10;
-		public const float				PLAYER_DEFAULT_PUSH_SPEED		= 0.5f;
+		public const float				PLAYER_MOVE_SPEED					= 1.0f;		// Pixels per second.
+		public const float				PLAYER_JUMP_SPEED					= 2.0f;
+		public const float				PLAYER_CAPE_JUMP_SPEED				= 0.5f;
+		public const float				PLAYER_SIDESCROLL_JUMP_SPEED		= 2.25f;
+		public const float				PLAYER_SIDESCROLL_CAPE_JUMP_SPEED	= 0.5f;
+		public const float				PLAYER_CAPE_REQUIRED_FALLSPEED		= 1.0f;		// Player must be falling this fast to be able to deploy cape.
+		public const float				PLAYER_CAPE_GRAVITY					= 0.04f;	// 0.04 = 1/25
+		public const int				PLAYER_SPRINT_DURATION				= 480;
+		public const float				PLAYER_SPRINT_SPEED_SCALE			= 1.5f;
+		public const int				PLAYER_SPRINT_EFFECT_INTERVAL		= 10;
+		public const float				PLAYER_DEFAULT_PUSH_SPEED			= 0.5f;
 
 		// Monsters
 		public const int				MONSTER_STUN_DURATION		= 400;	// How long a monster gets stunned for (by boomerang/pegasus seeds).
@@ -110,8 +113,17 @@ namespace ZeldaOracle.Game {
 		public const int				MONSTER_BOOMERANG_DAMAGE	= 1;
 
 		// Tiles
-		public const int				TILE_CRACKED_FLOOR_CRUMBLE_DELAY	= 30;
-		public const float				TILE_ROLLER_MOVE_SPEED				= 0.5f;
+		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.
+		public const int				TILE_BUTTON_UNCOVER_RELEASE_DELAY		= 27;	// Delay between being uncovered and becoming released.
+		public static readonly Rectangle2F	TILE_BUTTON_PLAYER_PRESS_AREA		= new Rectangle2F(0, 5, 16, 16);
+		public const int				TILE_CRACKED_FLOOR_CRUMBLE_DELAY		= 30;
+		public const float				TILE_ROLLER_MOVE_SPEED					= 0.5f;
+		public const float				TILE_PULL_HANDLE_EXTEND_SPEED			= 0.25f;
+		public const float				TILE_PULL_HANDLE_RETRACT_SPEED			= 0.25f;
+		public const int				TILE_PULL_HANDLE_PLAYER_PULL_DURATION	= 40;
+		public const int				TILE_PULL_HANDLE_PLAYER_PAUSE_DURATION	= 20;
+		public const int				TILE_PULL_HANDLE_EXTEND_LENGTH			= 64;
+		public const int				TILE_PULL_HANDLE_WALL_OFFSET			= 8;
 
 
 

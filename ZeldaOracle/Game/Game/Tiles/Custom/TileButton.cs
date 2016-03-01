@@ -13,6 +13,10 @@ namespace ZeldaOracle.Game.Tiles {
 	public class TileButton : Tile, ZeldaAPI.Button {
 
 		private bool isPressed;
+		private bool isReleasable;
+		private HashSet<Tile> tilesCovering; // List of tiles covering this button
+		private bool isCovered;
+		private int uncoverTimer;
 
 
 		//-----------------------------------------------------------------------------
@@ -20,69 +24,102 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public TileButton() {
-
+			tilesCovering = new HashSet<Tile>();
 		}
 
+
 		//-----------------------------------------------------------------------------
-		// Overridden methods
+		// Button Methods
+		//-----------------------------------------------------------------------------
+
+		// Set the pressed state of the button.
+		public void SetPressed(bool isPressed) {
+			if (this.isPressed != isPressed) {
+				this.isPressed = isPressed;
+
+				// Set the pressed property.
+				Properties.Set("pressed", isPressed);
+
+				// Fire the event.
+				if (isPressed) {
+					//Graphics.PlaySprite(GameData.SPR_TILE_BUTTON_DOWN);
+					GameControl.FireEvent(this, "event_press", this);
+				}
+				else {
+					//Graphics.PlaySprite(GameData.SPR_TILE_BUTTON_UP);
+					GameControl.FireEvent(this, "event_release", this);
+				}
+
+				Graphics.PlaySpriteAnimation(SpriteList[isPressed ? 1 : 0]);
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
 		//-----------------------------------------------------------------------------
 		
 		public override void OnInitialize() {
-			isPressed = Properties.Get("pressed", false);
-			//Properties.Set("sprite_index", (isPressed ? 1 : 0));
+			isPressed		= Properties.Get("pressed", false);
+			isReleasable	= Properties.GetBoolean("releasable", true);
+			isCovered		= false;
+			uncoverTimer	= 0;
+			Graphics.PlaySpriteAnimation(SpriteList[isPressed ? 1 : 0]);
+		}
 
-			/*if (isPressed)
-				CustomSprite = GameData.SPR_TILE_BUTTON_DOWN;
+		public override void OnCoverBegin(Tile tile) {
+			tilesCovering.Add(tile);
+		}
+
+		public override void OnCoverComplete(Tile tile) {
+			isCovered = true;
+			tilesCovering.Add(tile);
+			tile.Graphics.RaisedDrawOffset = Point2I.Zero;
+		}
+
+		public override void OnUncoverBegin(Tile tile) {
+			isCovered = false;
+			if (tile.IsMoving)
+				uncoverTimer = GameSettings.TILE_BUTTON_UNCOVER_RELEASE_DELAY;
 			else
-				CustomSprite = GameData.SPR_TILE_BUTTON_UP;*/
-			SpriteIndex = (isPressed ? 1 : 0);
+				uncoverTimer = 0;
+			tilesCovering.Remove(tile);
 		}
 
 		public override void Update() {
 			base.Update();
 
-			bool isDown = false;
+			bool isDown = isCovered;
 
-			// Check if the player is on top of this button.
-			Rectangle2F pressRect = new Rectangle2F(0, 5, 16, 16);
-			pressRect.Point += Position;
-			Player player = RoomControl.Player;
-			if (pressRect.Contains(player.Position))
-				isDown = true;
-
-			// Check if a tile is on top of this button.
-			for (int i = Layer; i < RoomControl.Room.LayerCount; i++) {
-				Tile tile = RoomControl.GetTile(Location, i);
-
-				if (tile != null && tile.IsSolid) {
+			// Update the uncovered state.
+			if (!isCovered) {
+				// There is a small delay between being uncovered and becoming unpressed.
+				uncoverTimer--;
+				if (uncoverTimer > 0) {
 					isDown = true;
 				}
-			}
-
-			// Check if the pressed state has changed.
-			bool releasable = Properties.GetBoolean("releasable", true);
-			if (isPressed != isDown && (isDown || releasable)) {
-				isPressed = isDown;
-
-				// Set the pressed state.
-				if (Properties.Get("remember_state", false))
-					Properties.SetBase("pressed", isPressed);
-				else
-					Properties.Set("pressed", isPressed);
-
-				// Fire the event.
-				if (isPressed) {
-					//CustomSprite = GameData.SPR_TILE_BUTTON_DOWN;
-					GameControl.FireEvent(this, "on_press", this);
-				}
 				else {
-					//CustomSprite = GameData.SPR_TILE_BUTTON_UP;
-					GameControl.FireEvent(this, "on_release", this);
+					// Raise certain tiles (pots) that are partially covering this button.
+					foreach (Tile tile in tilesCovering) {
+						if (tile.Bounds.Contains(Center) && tile.Properties.GetBoolean("raised_on_buttons", false)) {
+							tile.Graphics.RaisedDrawOffset = new Point2I(0, -GameSettings.TILE_BUTTON_TILE_RAISE_AMOUNT);
+						}
+					}
 				}
-				SpriteIndex = (isPressed ? 1 : 0);
-
-				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 			}
+
+			// Check if the player is on top of this button.
+			if (!isDown) {
+				Rectangle2F pressRect = Rectangle2F.Translate(
+					GameSettings.TILE_BUTTON_PLAYER_PRESS_AREA, Position);
+				if (pressRect.Contains(RoomControl.Player.Position))
+					isDown = true;
+			}
+
+			// Check if the pressed state needs to be changed.
+			if (isPressed != isDown && (isDown || isReleasable))
+				SetPressed(isDown);
 		}
 	}
 }

@@ -19,6 +19,10 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
+		
+		public EventTileDataInstance() {
+
+		}
 
 		public EventTileDataInstance(EventTileData tileData, Point2I position) :
 			base(tileData)
@@ -26,11 +30,35 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			this.position	= position;
 			this.sprite		= tileData.Sprite;
 		}
+		
+		public override void Clone(BaseTileDataInstance copy) {
+			base.Clone(copy);
+			if (copy is EventTileDataInstance) {
+				this.position	= ((EventTileDataInstance) copy).position;
+				this.sprite		= new SpriteAnimation(((EventTileDataInstance) copy).sprite);
+			}
+		}
+		
+		public override BaseTileDataInstance Duplicate() {
+			EventTileDataInstance copy = new EventTileDataInstance();
+			copy.Clone(this);
+			return copy;
+		}
 
 
 		//-----------------------------------------------------------------------------
 		// Overridden Properties
 		//-----------------------------------------------------------------------------
+
+		public override Point2I GetPosition() {
+			return position;
+		}
+
+		public override Rectangle2I GetBounds() {
+			return new Rectangle2I(
+					position,
+					Size * GameSettings.TILE_SIZE);
+		}
 
 		// The current sprite/animation to visually display.
 		public override SpriteAnimation CurrentSprite {
@@ -53,7 +81,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		
 		public EventTileData EventTileData {
 			get { return (EventTileData) tileData; }
-			set { tileData = value; }
+			set { base.BaseData = value; }
 		}
 		
 		public Point2I Position {

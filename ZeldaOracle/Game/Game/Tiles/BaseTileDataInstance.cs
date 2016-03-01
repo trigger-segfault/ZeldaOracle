@@ -13,7 +13,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		protected Room				room;
 		protected BaseTileData		tileData;
-		protected Properties		properties;
+		protected Properties		properties;			// The default properties for the tile.
+		protected Properties		modifiedProperties;	// The properties that tiles are spawned with.
 		
 
 		//-----------------------------------------------------------------------------
@@ -21,23 +22,56 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		public BaseTileDataInstance() {
-			room		= null;
-			tileData	= null;
-			properties	= new Properties(this);
+			room				= null;
+			tileData			= null;
+			properties			= new Properties(this);
+			modifiedProperties	= new Properties(this);
 		}
 
 		public BaseTileDataInstance(BaseTileData tileData) {
 			this.room		= null;
 			this.tileData	= tileData;
-			this.properties	= new Properties();
-			this.properties.PropertyObject = this;
+			this.properties	= new Properties(this);
 			this.properties.BaseProperties = tileData.Properties;
+			this.modifiedProperties	= new Properties(this);
+			this.modifiedProperties.BaseProperties = tileData.Properties;
+		}
+
+		public virtual void Clone(BaseTileDataInstance copy) {
+			this.room		= copy.Room;
+			this.tileData	= copy.tileData;
+			this.properties	= new Properties(this);
+			this.properties.BaseProperties = tileData.Properties;
+			this.modifiedProperties	= new Properties(this);
+			this.modifiedProperties.BaseProperties = tileData.Properties;
+			this.properties.SetAll(copy.properties);
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Virtual properties
+		// Mutators
 		//-----------------------------------------------------------------------------
+
+		public void ResetState() {
+			// Copy the properties into the modified properties.
+			modifiedProperties.Clone(properties);
+		}
+
+		public void OverrideDefaultState() {
+			// Copy the modified properties back into the default properties.
+			properties.Clone(modifiedProperties);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Virtual Methods and properties
+		//-----------------------------------------------------------------------------
+
+		public abstract BaseTileDataInstance Duplicate();
+
+		public abstract Point2I GetPosition();
+		
+		public abstract Rectangle2I GetBounds();
 
 		public abstract SpriteAnimation CurrentSprite { get; }
 
@@ -71,6 +105,10 @@ namespace ZeldaOracle.Game.Tiles {
 				properties.PropertyObject = this;
 			}
 		}
+		
+		public Properties ModifiedProperties {
+			get { return modifiedProperties; }
+		}
 
 		public ObjectEventCollection Events {
 			get { return tileData.Events; }
@@ -92,7 +130,7 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return tileData.Tileset; }
 		}
 
-		public string ID {
+		public string Id {
 			get { return properties.GetString("id", ""); }
 		}
 	}
