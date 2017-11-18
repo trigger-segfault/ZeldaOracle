@@ -10,7 +10,7 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 
 namespace ZeldaOracle.Game.Worlds {
-	public class Level : IPropertyObject {
+	public class Level : IPropertyObject, IIDObject {
 
 		private World		world;
 		private Point2I		roomSize;		// The size in tiles of each room in the level.
@@ -42,19 +42,20 @@ namespace ZeldaOracle.Game.Worlds {
 			properties.BaseProperties = new Properties();
 
 			properties.BaseProperties.Set("id", "")
-				.SetDocumentation("ID", "", "", "", "The id used to refer to this level.", false, true);
+				.SetDocumentation("ID", "", "", "General", "The id used to refer to this level.", false, false);
 
 			properties.BaseProperties.Set("dungeon", "")
-				.SetDocumentation("Dungeon", "dungeon", "", "", "The dungeon this level belongs to.");
+				.SetDocumentation("Dungeon", "dungeon", "", "Dungeon", "The dungeon this level belongs to.");
 			properties.BaseProperties.Set("dungeon_floor", 0)
-				.SetDocumentation("Dungeon Floor", "", "", "", "The floor in the dungeon this level belongs to.");
+				.SetDocumentation("Dungeon Floor", "", "", "Dungeon", "The floor in the dungeon this level belongs to.");
 
-			properties.BaseProperties.Set("discovered", false);
+			properties.BaseProperties.Set("discovered", false)
+				.SetDocumentation("Discovered", "", "", "Progress", "True if the level has been visited at least once.");
 
 			properties.Set("id", name);
 
 			properties.BaseProperties.Set("zone", "")
-				.SetDocumentation("Zone", "zone", "", "", "The zone type for this room.", true, false);
+				.SetDocumentation("Zone", "zone", "", "Level", "The zone type for this room.");
 
 			Zone = zone;
 			
@@ -398,13 +399,13 @@ namespace ZeldaOracle.Game.Worlds {
 			//set { zone = value; }
 		}
 
-		public string Id {
+		public string ID {
 			get { return properties.GetString("id"); }
 			set { properties.Set("id", value); }
 		}
 		
 		public Dungeon Dungeon {
-			get { return world.GetDungoen(properties.GetString("dungeon", "")); }
+			get { return world.GetDungeon(properties.GetString("dungeon", "")); }
 			set {
 				if (value == null)
 					properties.Set("dungeon", "");

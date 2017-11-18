@@ -179,8 +179,8 @@ SPRITE tile_lantern_lit_3,			( 7, 7); END;
 SPRITE tile_lantern_lit_4,			( 8, 7); END;
 SPRITE tile_bridge_horizontal,		( 9, 7); END;
 SPRITE tile_bridge_vertical,		(10, 7); END;
-SPRITE tile_minecart_track_corner_northwest,	(11, 7); END;
-SPRITE tile_minecart_track_corner_northeast,	(12, 7); END;
+SPRITE tile_minecart_track_down_right,	(11, 7); END;
+SPRITE tile_minecart_track_down_left,	(12, 7); END;
 
 SPRITE tile_turnstile_base, (13, 7), ( 0,  0); ADD (14, 7), (16,  0); ADD (15, 7), (32,  0);
 				        ADD (13, 8), ( 0, 16); ADD (14, 8), (16, 16); ADD (15, 8), (32, 16);
@@ -197,8 +197,8 @@ SPRITE tile_floor_spikes_3,			( 7, 8); END;
 SPRITE tile_floor_spikes_4,			( 8, 8); END;
 SPRITE tile_color_lantern,			( 9, 8); END;
 SPRITE tile_color_cube_slot,		(10, 8); END;
-SPRITE tile_minecart_track_corner_southwest,	(11, 8); END;
-SPRITE tile_minecart_track_corner_southeast,	(12, 8); END;
+SPRITE tile_minecart_track_up_right,	(11, 8); END;
+SPRITE tile_minecart_track_up_left,		(12, 8); END;
 
 SPRITE tile_floor_tile_monster,			( 8, 9); END;
 SPRITE tile_moving_platform,			( 9, 9); END;

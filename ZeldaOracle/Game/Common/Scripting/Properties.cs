@@ -78,10 +78,10 @@ namespace ZeldaOracle.Common.Scripting {
 		
 		// Get the property with the given name.
 		public Property GetProperty(string name, bool acceptBaseProperties) {
-			KeyValuePair<string, Property> property = map.FirstOrDefault(p => p.Key == name);
-			if (property.Value == null && acceptBaseProperties && baseProperties != null)
+			Property property;
+			if (!map.TryGetValue(name, out property) && acceptBaseProperties && baseProperties != null)
 				return baseProperties.GetProperty(name, true);
-			return property.Value;
+			return property;
 		}
 		
 		// Get the root property with the given name.
@@ -317,6 +317,10 @@ namespace ZeldaOracle.Common.Scripting {
 
 		public Property Set(string name, Property property) {
 			return SetProperty(name, property.ObjectValue, false);
+		}
+
+		public Property Set(string name, object value) {
+			return SetProperty(name, value, false);
 		}
 
 		public Property Set(string name, string value) {

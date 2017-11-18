@@ -41,7 +41,7 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 	}
 
-	public class Dungeon : IPropertyObject {
+	public class Dungeon : IPropertyObject, IIDObject {
 
 		//private string id;
 		private World world;
@@ -57,13 +57,20 @@ namespace ZeldaOracle.Game.Worlds {
 			properties.BaseProperties = new Properties();
 			properties.PropertyObject = this;
 
-			properties.BaseProperties.Set("id",			"");
-			properties.BaseProperties.Set("name",		"");
-			properties.BaseProperties.Set("small_keys",	0);
-			properties.BaseProperties.Set("boss_key",	false);
-			properties.BaseProperties.Set("map",		false);
-			properties.BaseProperties.Set("compass",	false);
-			properties.BaseProperties.Set("color_switch_color", (int) PuzzleColor.Blue);
+			properties.BaseProperties.Set("id",			"")
+				.SetDocumentation("ID", "", "", "General", "The id used to refer to this dungeon.", false, false);
+			properties.BaseProperties.Set("name",		"")
+				.SetDocumentation("Name", "", "", "General", "The name of this dungeon in-game.");
+			properties.BaseProperties.Set("small_keys",	0)
+				.SetDocumentation("Small Keys Held", "", "", "Progress", "The number of held small keys for this dungeon.");
+			properties.BaseProperties.Set("boss_key",	false)
+				.SetDocumentation("Boss Key Obtained", "", "", "Progress", "True if the boss key for this dungeon has been obtained.");
+			properties.BaseProperties.Set("map",		false)
+				.SetDocumentation("Map Obtained", "", "", "Progress", "True if the map for this dungeon has been obtained.");
+			properties.BaseProperties.Set("compass",	false)
+				.SetDocumentation("Compass Obtained", "", "", "Progress", "True if the compass for this dungeon has been obtained.");
+			properties.BaseProperties.Set("color_switch_color", (int) PuzzleColor.Blue)
+				.SetDocumentation("Color Switch Color", "enum", "PuzzleColor", "Puzzle", "");
 		}
 
 		public Dungeon(string id, string name) : 
@@ -182,7 +189,7 @@ namespace ZeldaOracle.Game.Worlds {
 		
 		public string ID {
 			get { return properties.GetString("id", ""); }
-			set { properties.Set("id", value); }
+			 set { properties.Set("id", value); }
 		}
 		
 		public string Name {

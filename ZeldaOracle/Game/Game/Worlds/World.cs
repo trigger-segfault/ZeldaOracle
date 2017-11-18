@@ -7,7 +7,7 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
 
 namespace ZeldaOracle.Game.Worlds {
-	public class World : IPropertyObject {
+	public class World : IPropertyObject, IIDObject {
 
 		private List<Level> levels;
 		private int startLevelIndex;
@@ -15,7 +15,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private Point2I startTileLocation;
 		private Properties properties;
 		private ScriptManager scriptManager;
-		private Dictionary<string, Dungeon> dungeons;
+		private List<Dungeon> dungeons;
 
 		
 		//-----------------------------------------------------------------------------
@@ -30,10 +30,10 @@ namespace ZeldaOracle.Game.Worlds {
 			this.properties.PropertyObject = this;
 			this.properties.BaseProperties = new Properties();
 			
-			this.dungeons = new Dictionary<string, Dungeon>();
+			this.dungeons = new List<Dungeon>();
 
 			this.properties.BaseProperties.Set("id", "world_name")
-				.SetDocumentation("ID", "", "", "", "The id used to refer to this world.", false, true);
+				.SetDocumentation("ID", "", "General", "The ID used to represent the world.", "The id used to refer to this world.", false, false);
 		}
 
 
@@ -41,7 +41,7 @@ namespace ZeldaOracle.Game.Worlds {
 		// Accessors
 		//-----------------------------------------------------------------------------
 		
-		public bool ExistsLevel(string levelID) {
+		public bool ContainsLevel(string levelID) {
 			return (GetLevel(levelID) != null);
 		}
 
@@ -50,21 +50,17 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public Level GetLevel(string levelID) {
-			for (int i = 0; i < levels.Count; i++) {
-				if (levels[i].Properties.GetString("id") == levelID)
-					return levels[i];
-			}
-			return null;
+			return levels.Find(level => { return level.Properties.GetString("id") == levelID; });
 		}
 
 		public int GetLevelIndex(string levelID) {
-			for (int i = 0; i < levels.Count; i++) {
-				if (levels[i].Properties.GetString("id") == levelID)
-					return i;
-			}
-			return -1;
+			return levels.FindIndex(level => { return level.Properties.GetString("id") == levelID; });
 		}
-		
+
+		public IEnumerable<Level> GetLevels() {
+			return levels;
+		}
+
 		public void MoveLevel(int oldIndex, int newIndex, bool relative) {
 			if (relative)
 				newIndex = oldIndex + newIndex;
@@ -84,17 +80,35 @@ namespace ZeldaOracle.Game.Worlds {
 		public Script GetScript(string scriptID) {
 			return ScriptManager.GetScript(scriptID);
 		}
+		
+		public bool ContainsScript(string scriptID) {
+			return scriptManager.ContainsScript(scriptID);
+		}
 
-		public Dungeon GetDungoen(string dungeonID) {
-			if (dungeons.ContainsKey(dungeonID))
-				return dungeons[dungeonID];
-			return null;
+		public bool ContainsDungeon(string dungeonID) {
+			return (GetDungeon(dungeonID) != null);
+		}
+
+		public Dungeon GetDungeon(string dungeonID) {
+			return dungeons.Find(dungeon => { return dungeon.Properties.GetString("id") == dungeonID; });
+		}
+
+		public Dungeon GetDungeonAt(int index) {
+			return dungeons[index];
 		}
 
 		public IEnumerable<Dungeon> GetDungeons() {
-			return dungeons.Values;
+			return dungeons;
 		}
 
+		public void MoveDungeon(int oldIndex, int newIndex, bool relative) {
+			if (relative)
+				newIndex = oldIndex + newIndex;
+
+			Dungeon dungeon = dungeons[oldIndex];
+			dungeons.RemoveAt(oldIndex);
+			dungeons.Insert(newIndex, dungeon);
+		}
 
 		//-----------------------------------------------------------------------------
 		// Mutators
@@ -122,6 +136,36 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+		public bool RenameLevel(Level level, string newLevelID) {
+			if (level.ID != newLevelID) {
+				if (ContainsLevel(newLevelID)) {
+					return false;
+				}
+				level.ID = newLevelID;
+			}
+			return true;
+		}
+
+
+		public void AddDungeon(Dungeon dungeon) {
+			dungeons.Add(dungeon);
+			dungeon.World = this;
+		}
+
+		public void RemoveDungeon(Dungeon dungeon) {
+			dungeons.Remove(dungeon);
+		}
+
+		public bool RenameDungeon(Dungeon dungeon, string newDungeonID) {
+			if (dungeon.ID != newDungeonID) {
+				if (ContainsDungeon(newDungeonID)) {
+					return false;
+				}
+				dungeon.ID = newDungeonID;
+			}
+			return true;
+		}
+
 		public void AddScript(Script script) {
 			scriptManager.AddScript(script);
 		}
@@ -130,13 +174,8 @@ namespace ZeldaOracle.Game.Worlds {
 			scriptManager.RemoveScript(script);
 		}
 
-		public void AddDungeon(Dungeon dungeon) {
-			dungeons.Add(dungeon.ID, dungeon);
-			dungeon.World = this;
-		}
-
-		public void RemoveDungeon(Dungeon dungeon) {
-			dungeons.Remove(dungeon.ID);
+		public bool RenameScript(Script script, string newScriptID) {
+			return scriptManager.RenameScript(script, newScriptID);
 		}
 
 
@@ -152,7 +191,7 @@ namespace ZeldaOracle.Game.Worlds {
 			get { return scriptManager.Scripts; }
 		}
 		
-		public Dictionary<string, Dungeon> Dungeons {
+		public List<Dungeon> Dungeons {
 			get { return dungeons; }
 		}
 
@@ -179,6 +218,10 @@ namespace ZeldaOracle.Game.Worlds {
 			get { return levels.Count; }
 		}
 
+		public int DungeonCount {
+			get { return dungeons.Count; }
+		}
+
 		public Properties Properties {
 			get { return properties; }
 			set {
@@ -187,7 +230,7 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
-		public string Id {
+		public string ID {
 			get { return properties.GetString("id"); }
 			set { properties.Set("id", value); }
 		}

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZeldaEditor.Control;
+using ZeldaEditor.WinForms;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Worlds;
 
@@ -112,7 +113,7 @@ namespace ZeldaEditor.Tools {
 			set { editorControl = value; }
 		}
 
-		public LevelDisplay LevelDisplayControl {
+		public LevelDisplay LevelDisplay {
 			get { return editorControl.LevelDisplay; }
 		}
 

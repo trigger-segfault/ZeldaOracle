@@ -1,27 +1,26 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Xceed.Wpf.Toolkit.PropertyGrid;
+using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 using ZeldaOracle.Common.Content;
 
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
-	public class ResourcePropertyEditor<T> : DropDownPropertyEditor {
-        
-		public override void CreateList(ListBox listBox, object value) {
-			Dictionary<string, T> resourceMap = Resources.GetResourceDictionary<T>();
-			listBox.Items.Add("(none)");
-			foreach (KeyValuePair<string, T> entry in resourceMap) {
-				listBox.Items.Add(entry.Key);
-			}
-		}
+	public class ResourcePropertyEditor<T> : ComboBoxEditor {
 
-		public override object OnItemSelected(ListBox listBox, int index, object value) {
-			if (listBox.SelectedIndex == 0)
-				return "";
-			else 
-				return (string) listBox.Items[index];
+		protected override IEnumerable CreateItemsSource(PropertyItem item) {
+			Dictionary<string, T> resourceMap = Resources.GetResourceDictionary<T>();
+			string[] resourceIds = new string[resourceMap.Count];
+			int index = 0;
+			foreach (var resource in resourceMap) {
+				resourceIds[index] = resource.Key;
+				index++;
+			}
+			return resourceIds;
 		}
 	}
 }

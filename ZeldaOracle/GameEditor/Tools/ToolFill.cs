@@ -126,16 +126,16 @@ namespace ZeldaEditor.Tools {
 		}
 
 		public override void OnBegin() {
-
+			EditorControl.HighlightMouseTile = true;
 		}
 
 		public override void OnMouseDown(MouseEventArgs e) {
 			base.OnMouseDown(e);
 
 			Point2I mousePos	= new Point2I(e.X, e.Y);
-			Room room			= LevelDisplayControl.SampleRoom(mousePos);
-			Point2I tileCoord	= LevelDisplayControl.SampleTileCoordinates(mousePos);
-			Point2I target		= LevelDisplayControl.SampleLevelTileCoordinates(mousePos);
+			Room room			= LevelDisplay.SampleRoom(mousePos);
+			Point2I tileCoord	= LevelDisplay.SampleTileCoordinates(mousePos);
+			Point2I target		= LevelDisplay.SampleLevelTileCoordinates(mousePos);
 			
 			if (!EditorControl.EventMode) {
 				if (e.Button == MouseButtons.Middle) {
@@ -143,8 +143,8 @@ namespace ZeldaEditor.Tools {
 					TileDataInstance selectedTile = room.GetTile(tileCoord, editorControl.CurrentLayer);
 
 					if (selectedTile != null) {
-						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
-						EditorControl.PropertyGrid.OpenProperties(selectedTile.Properties, selectedTile);
+						Point2I levelTileCoord = LevelDisplay.ToLevelTileCoordinates(room, tileCoord);
+						EditorControl.PropertyGrid.OpenProperties(selectedTile);
 						editorControl.SelectedTilesetTile = -Point2I.One;
 						editorControl.SelectedTilesetTileData = selectedTile.TileData;
 					}
@@ -159,6 +159,7 @@ namespace ZeldaEditor.Tools {
 						if (e.Button == MouseButtons.Right)
 							fillData = null;
 						Fill(target, fillData);
+						editorControl.IsModified = true;
 					}
 				}
 
@@ -166,11 +167,11 @@ namespace ZeldaEditor.Tools {
 			else {
 				if (e.Button == MouseButtons.Middle) {
 					// Select events.
-					EventTileDataInstance selectedEventTile = LevelDisplayControl.SampleEventTile(mousePos);
+					EventTileDataInstance selectedEventTile = LevelDisplay.SampleEventTile(mousePos);
 
 					if (selectedEventTile != null) {
-						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
-						EditorControl.PropertyGrid.OpenProperties(selectedEventTile.Properties, selectedEventTile);
+						Point2I levelTileCoord = LevelDisplay.ToLevelTileCoordinates(room, tileCoord);
+						EditorControl.PropertyGrid.OpenProperties(selectedEventTile);
 					}
 					else {
 						EditorControl.PropertyGrid.CloseProperties();

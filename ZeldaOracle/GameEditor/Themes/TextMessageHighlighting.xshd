@@ -1,0 +1,54 @@
+﻿<?xml version="1.0"?>
+<SyntaxDefinition name="TextMessage" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+
+  <RuleSet>
+    <!-- Regular Keywords -->
+    <Keywords fontWeight="bold">
+      <Word>&lt;triangle&gt;</Word>
+      <Word>&lt;square&gt;</Word>
+      <Word>&lt;heart&gt;</Word>
+      <Word>&lt;diamond&gt;</Word>
+      <Word>&lt;club&gt;</Word>
+      <Word>&lt;spade&gt;</Word>
+      <Word>&lt;circle&gt;</Word>
+      <Word>&lt;male&gt;</Word>
+      <Word>&lt;female&gt;</Word>
+      <Word>&lt;music&gt;</Word>
+      <Word>&lt;music-beam&gt;</Word>
+      <Word>&lt;rupee&gt;</Word>
+      <Word>&lt;right-tri&gt;</Word>
+      <Word>&lt;left-tri&gt;</Word>
+      <Word>&lt;invalid&gt;</Word>
+      <Word>&lt;!!&gt;</Word>
+      <Word>&lt;pilcrow&gt;</Word>
+      <Word>&lt;section&gt;</Word>
+      <Word>&lt;cursor&gt;</Word>
+      <Word>&lt;1&gt;</Word>
+      <Word>&lt;up&gt;</Word>
+      <Word>&lt;down&gt;</Word>
+      <Word>&lt;right&gt;</Word>
+      <Word>&lt;left&gt;</Word>
+      <Word>&lt;2&gt;</Word>
+      <Word>&lt;3&gt;</Word>
+      <Word>&lt;up-tri&gt;</Word>
+      <Word>&lt;down-tri&gt;</Word>
+      <Word>&lt;house&gt;</Word>
+      <Word>&lt;&lt;&gt;</Word>
+      <Word>&lt;n&gt;</Word>
+      <Word>&lt;p&gt;</Word>
+    </Keywords>
+    <!-- Color Keywords -->
+    <Keywords foreground="#F80828">
+      <Word>&lt;red&gt;</Word>
+    </Keywords>
+    <Keywords foreground="#10A840">
+      <Word>&lt;green&gt;</Word>
+    </Keywords>
+    <Keywords foreground="#1880F8">
+      <Word>&lt;blue&gt;</Word>
+    </Keywords>
+    <Keywords foreground="#F87808">
+      <Word>&lt;orange&gt;</Word>
+    </Keywords>
+  </RuleSet>
+</SyntaxDefinition>

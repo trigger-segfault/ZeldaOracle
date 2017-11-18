@@ -18,7 +18,7 @@ namespace ZeldaEditor.Control {
 		// Sprite drawing
 		//-----------------------------------------------------------------------------
 
-		public static void DrawSprite(Graphics g, Sprite sprite, Point2I position) {
+		/*public static void DrawSprite(Graphics g, Sprite sprite, Point2I position) {
 			DrawSprite(g, sprite, position.X, position.Y);
 		}
 
@@ -38,9 +38,9 @@ namespace ZeldaEditor.Control {
 				DrawSprite(g, sprite.Animation.GetFrameAsSprite(0), variantID, position.X, position.Y, sourceSize.X, sourceSize.Y);
 			else
 				DrawSprite(g, sprite.Sprite, variantID, position.X, position.Y, sourceSize.X, sourceSize.Y);
-		}
+		}*/
 
-		public static void DrawSprite(Graphics g, Sprite sprite, int x, int y) {
+		/*public static void DrawSprite(Graphics g, Sprite sprite, int x, int y) {
 			for (Sprite part = sprite; part != null; part = part.NextPart) {
 				Bitmap bitmap = EditorResources.GetBitmap(part.Image);
 				Rectangle sourceRect = new Rectangle(
@@ -72,7 +72,7 @@ namespace ZeldaEditor.Control {
 				g.DrawImage(bitmap, x + part.DrawOffset.X,
 					y + part.DrawOffset.Y, sourceRect, GraphicsUnit.Pixel);
 			}
-		}
+		}*/
 
 		/*
 		public void DrawSprite(Sprite sprite, int variantID, Vector2F position, Color color, int depth = 0.0f) {

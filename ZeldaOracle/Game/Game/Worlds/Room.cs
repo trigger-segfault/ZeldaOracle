@@ -8,6 +8,8 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Tiles.Custom;
 using ZeldaOracle.Common.Content;
+using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Game.Control.Scripting;
 
 namespace ZeldaOracle.Game.Worlds {
 	public class Room : IPropertyObject, IEventObject {
@@ -37,15 +39,18 @@ namespace ZeldaOracle.Game.Worlds {
 			this.properties.BaseProperties = new Properties();
 
 			properties.BaseProperties.Set("id", "")
-				.SetDocumentation("ID", "", "", "", "The id used to refer to this room.", true, false);
+				.SetDocumentation("ID", "", "", "General", "The id used to refer to this room.");
 			properties.BaseProperties.Set("music", "")
-				.SetDocumentation("Music", "song", "", "", "The music to play in this room. Select none to choose the default music.", true, false);
+				.SetDocumentation("Music", "song", "", "General", "The music to play in this room. Select none to choose the default music.", true, false);
 			properties.BaseProperties.Set("zone", "")
-				.SetDocumentation("Zone", "zone", "", "", "The zone type for this room.", true, false);
+				.SetDocumentation("Zone", "zone", "", "General", "The zone type for this room.");
 			
-			properties.BaseProperties.Set("discovered", false);
-			properties.BaseProperties.Set("hidden_from_map", false);
-			properties.BaseProperties.Set("boss_room", false);
+			properties.BaseProperties.Set("discovered", false)
+				.SetDocumentation("Discovered", "", "", "Progress", "True if the room has been visited at least once.");
+			properties.BaseProperties.Set("hidden_from_map", false)
+				.SetDocumentation("Hidden From Map", "", "", "Dungeon", "True if this room does not appear on the map even when visited.");
+			properties.BaseProperties.Set("boss_room", false)
+				.SetDocumentation("Is Boss Room", "", "", "Dungeon", "True if this room is shown as the boss room in the dungeon map.");
 
 			events.AddEvent("event_room_start", "Room Start", "Occurs when the room begins.");
 			properties.BaseProperties.Set("event_room_start", "")
@@ -301,6 +306,12 @@ namespace ZeldaOracle.Game.Worlds {
 				else
 					properties.Set("zone", "");*/
 			}
+		}
+
+
+		public string ID {
+			get { return properties.GetString("id"); }
+			set { properties.Set("id", value); }
 		}
 
 		public Dungeon Dungeon {

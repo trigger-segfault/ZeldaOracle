@@ -35,10 +35,10 @@ namespace ZeldaOracle.Common.Translation {
 			FormatCodes.colorCodes			= new Dictionary<string, Color>();
 			FormatCodes.stringCodes			= new Dictionary<string, string>();
 
-			FormatCodes.colorCodes.Add("red", new Color(248, 8, 40));
-			FormatCodes.colorCodes.Add("green", new Color(16, 168, 64));
-			FormatCodes.colorCodes.Add("blue", new Color(24, 128, 248));
-			FormatCodes.colorCodes.Add("orange", new Color(248, 120, 8));
+			FormatCodes.colorCodes.Add("red", new Color(248, 8, 40)); //#FFF80828
+			FormatCodes.colorCodes.Add("green", new Color(16, 168, 64)); //#FF10A840
+			FormatCodes.colorCodes.Add("blue", new Color(24, 128, 248)); //#FF1880F8
+			FormatCodes.colorCodes.Add("orange", new Color(248, 120, 8)); //#FFF87808
 
 			FormatCodes.stringCodes.Add("triangle", "" + (char)1);
 			FormatCodes.stringCodes.Add("square", "" + (char)2);
@@ -50,12 +50,14 @@ namespace ZeldaOracle.Common.Translation {
 			FormatCodes.stringCodes.Add("male", "" + (char)11);
 			FormatCodes.stringCodes.Add("female", "" + (char)12);
 			FormatCodes.stringCodes.Add("music", "" + (char)13);
-			FormatCodes.stringCodes.Add("music2", "" + (char)14);
+			FormatCodes.stringCodes.Add("music-beam", "" + (char)14);
 			FormatCodes.stringCodes.Add("rupee", "" + (char)15);
-			FormatCodes.stringCodes.Add("right2", "" + (char)16);
-			FormatCodes.stringCodes.Add("left2", "" + (char)17);
+			FormatCodes.stringCodes.Add("right-tri", "" + (char)16);
+			FormatCodes.stringCodes.Add("left-tri", "" + (char)17);
 			FormatCodes.stringCodes.Add("invalid", "" + (char)18);
 			FormatCodes.stringCodes.Add("!!", "" + (char)19);
+			FormatCodes.stringCodes.Add("pilcrow", "" + (char)20);
+			FormatCodes.stringCodes.Add("section", "" + (char)21);
 			FormatCodes.stringCodes.Add("cursor", "" + (char)22);
 			FormatCodes.stringCodes.Add("1", "" + (char)23);
 			FormatCodes.stringCodes.Add("up", "" + (char)24);
@@ -64,13 +66,14 @@ namespace ZeldaOracle.Common.Translation {
 			FormatCodes.stringCodes.Add("left", "" + (char)27);
 			FormatCodes.stringCodes.Add("2", "" + (char)28);
 			FormatCodes.stringCodes.Add("3", "" + (char)29);
-			FormatCodes.stringCodes.Add("up2", "" + (char)30);
-			FormatCodes.stringCodes.Add("down2", "" + (char)31);
+			FormatCodes.stringCodes.Add("up-tri", "" + (char)30);
+			FormatCodes.stringCodes.Add("down-tri", "" + (char)31);
+			FormatCodes.stringCodes.Add("house", "" + (char)127);
 			FormatCodes.stringCodes.Add("<", "<");
 			FormatCodes.stringCodes.Add("n", "\n");
 			FormatCodes.stringCodes.Add("p", "" + ParagraphCharacter);
 		}
-
+		
 		//-----------------------------------------------------------------------------
 		// Codes
 		//-----------------------------------------------------------------------------
@@ -110,6 +113,12 @@ namespace ZeldaOracle.Common.Translation {
 
 		// Returns the text formatted without any format codes in.
 		public static LetterString FormatString(string text) {
+			int caretPosition = 0;
+			return FormatString(text, ref caretPosition);
+		}
+		// Returns the text formatted without any format codes in.
+		public static LetterString FormatString(string text, ref int caretPosition) {
+			int originalCaretPosition = caretPosition;
 			int currentCharacter = 0;
 			Color currentColor = Letter.DefaultColor;
 			LetterString letterString = new LetterString();
@@ -118,6 +127,8 @@ namespace ZeldaOracle.Common.Translation {
 			string currentCode = "";
 
 			while (currentCharacter < text.Length) {
+				if (currentCharacter == originalCaretPosition)
+					caretPosition = letterString.Length;
 				if (!inCode && text[currentCharacter] == '<') {
 					// Start string code
 					inCode = true;
@@ -152,8 +163,21 @@ namespace ZeldaOracle.Common.Translation {
 				}
 				currentCharacter++;
 			}
+			if (caretPosition == -1)
+				caretPosition = letterString.Length;
 
 			return letterString;
+		}
+
+		public static IEnumerable<KeyValuePair<string, Color>> GetColorCodes() {
+			foreach (var pair in colorCodes) {
+				yield return pair;
+			}
+		}
+		public static IEnumerable<KeyValuePair<string, string>> GetStringCodes() {
+			foreach (var pair in stringCodes) {
+				yield return pair;
+			}
 		}
 	}
 }

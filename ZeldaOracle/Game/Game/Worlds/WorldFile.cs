@@ -486,7 +486,7 @@ namespace ZeldaOracle.Game.Worlds {
 		
 		private void WriteScript(BinaryWriter writer, Script script) {
 			// Write the name and source code.
-			WriteString(writer, script.Name);
+			WriteString(writer, script.ID);
 			WriteString(writer, script.Code);
 			writer.Write(script.IsHidden);
 			
@@ -532,7 +532,7 @@ namespace ZeldaOracle.Game.Worlds {
 			Script script = new Script();
 
 			// Read the name and source code.
-			script.Name		= ReadString(reader);
+			script.ID       = ReadString(reader);
 			script.Code		= ReadString(reader);
 			script.IsHidden	= reader.ReadBoolean();
 			
@@ -576,7 +576,7 @@ namespace ZeldaOracle.Game.Worlds {
 			
 			// Write the dungeons.
 			writer.Write(world.Dungeons.Count);
-			foreach (Dungeon dungeon in world.Dungeons.Values)
+			foreach (Dungeon dungeon in world.Dungeons)
 				WriteDungeon(writer, dungeon);
 
 			// Write the level data.

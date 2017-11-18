@@ -130,6 +130,7 @@
     <None Include="Common\Debug\RadioButtonMenuItem.cs" />
     <None Include="Common\Debug\ToggleMenuItem.cs" />
     <Compile Include="Common\Scripting\IEventObject.cs" />
+    <Compile Include="Common\Scripting\IIDObject.cs" />
     <Compile Include="Common\Scripting\ObjectEvent.cs" />
     <Compile Include="Common\Scripting\ObjectEventCollection.cs" />
     <Compile Include="Common\Scripting\ScriptingAttributes.cs" />
@@ -498,7 +499,7 @@
       <Name>ZeldaAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\GameContent\ZeldaContent.contentproj">
-      <Name>ZeldaContent %28Content%29</Name>
+      <Name>ZeldaContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>
       <Project>{67B9D68E-33D3-4346-8B69-E9D32EB96EB8}</Project>
     </ProjectReference>

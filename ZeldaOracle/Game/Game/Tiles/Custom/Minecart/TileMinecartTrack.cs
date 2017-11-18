@@ -17,10 +17,50 @@ namespace ZeldaOracle.Game.Tiles {
 	 * 4 - left/down
 	 * 5 - down/right
 	*/
+	
+	/**<summary>The orientations a minecart track can be in.</summary>*/
+	public enum MinecartTrackOrientation {
+		/**<summary>Track goes from left to right.</summary>*/
+		Horizontal = 0,
+		/**<summary>Track goes from top to bottom.</summary>*/
+		Vertical,
+		/**<summary>Track goes from top to right.</summary>*/
+		UpRight,
+		/**<summary>Track goes from top to left.</summary>*/
+		UpLeft,
+		/**<summary>Track goes from bottom to left.</summary>*/
+		DownLeft,
+		/**<summary>Track goes from bottom to right.</summary>*/
+		DownRight
+	}
+
+	public static class MinecartTrackOrientationExtensions {
+		public static bool HasDirection(this MinecartTrackOrientation orientation, int dir) {
+			switch (dir) {
+			case Directions.Right:
+				return orientation == MinecartTrackOrientation.Horizontal ||
+						orientation == MinecartTrackOrientation.UpRight ||
+						orientation == MinecartTrackOrientation.DownRight;
+			case Directions.Up:
+				return orientation == MinecartTrackOrientation.Vertical ||
+						orientation == MinecartTrackOrientation.UpRight ||
+						orientation == MinecartTrackOrientation.UpLeft;
+			case Directions.Left:
+				return orientation == MinecartTrackOrientation.Horizontal ||
+						orientation == MinecartTrackOrientation.UpLeft ||
+						orientation == MinecartTrackOrientation.DownLeft;
+			case Directions.Down:
+				return orientation == MinecartTrackOrientation.Vertical ||
+						orientation == MinecartTrackOrientation.DownRight ||
+						orientation == MinecartTrackOrientation.DownLeft;
+			}
+			return false;
+		}
+	}
 
 	public class TileMinecartTrack : Tile, ZeldaAPI.MinecartTrack {
 		
-		private int trackIndex;
+		private MinecartTrackOrientation trackOrientation;
 
 
 		//-----------------------------------------------------------------------------
@@ -37,14 +77,10 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public IEnumerable<int> GetDirections() {
-			if (trackIndex == 0 || trackIndex == 2 || trackIndex == 5)
-				yield return Directions.Right;
-			if (trackIndex == 1 || trackIndex == 2 || trackIndex == 3)
-				yield return Directions.Up;
-			if (trackIndex == 0 || trackIndex == 3 || trackIndex == 4)
-				yield return Directions.Left;
-			if (trackIndex == 1 || trackIndex == 4 || trackIndex == 5)
-				yield return Directions.Down;
+			for (int dir = 0; dir < 4; dir++) {
+				if (trackOrientation.HasDirection(dir))
+					yield return dir;
+			}
 		}
 
 
@@ -53,8 +89,8 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public override void OnInitialize() {
-			trackIndex = Properties.GetInteger("track_index", 0);
-			Graphics.PlaySpriteAnimation(SpriteList[trackIndex]);
+			trackOrientation = (MinecartTrackOrientation)Properties.GetInteger("track_orientation", 0);
+			Graphics.PlaySpriteAnimation(SpriteList[(int)trackOrientation]);
 
 			// Spawn a minecart entity.
 			if (SpawnsMinecart) {
@@ -69,13 +105,13 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public void SwitchTrackDirection() {
-			int switchedIndex = Properties.GetInteger("switched_track_index", trackIndex);
+			MinecartTrackOrientation switchedOrientation = (MinecartTrackOrientation)Properties.GetInteger("switched_track_orientation", (int)trackOrientation);
 
-			if (trackIndex != switchedIndex) {
-				Properties.Set("switched_track_index", trackIndex);
-				Properties.Set("track_index", switchedIndex);
-				trackIndex = switchedIndex;
-				Graphics.PlaySpriteAnimation(SpriteList[trackIndex]);
+			if (trackOrientation != switchedOrientation) {
+				Properties.Set("switched_track_orientation", (int)trackOrientation);
+				Properties.Set("track_orientation", (int)switchedOrientation);
+				trackOrientation = switchedOrientation;
+				Graphics.PlaySpriteAnimation(SpriteList[(int)trackOrientation]);
 			}
 		}
 
@@ -85,16 +121,21 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public bool IsHorizontal {
-			get { return (trackIndex == 0); }
+			get { return (trackOrientation == MinecartTrackOrientation.Horizontal); }
 		}
 		
 		public bool IsVertical {
-			get { return (trackIndex == 1); }
+			get { return (trackOrientation == MinecartTrackOrientation.Vertical); }
 		}
 
 		public bool SpawnsMinecart {
 			get { return Properties.GetBoolean("minecart", false); }
 			set { Properties.Set("minecart", value); }
 		}
+
+		//-----------------------------------------------------------------------------
+		// API Properties
+		//-----------------------------------------------------------------------------
+
 	}
 }

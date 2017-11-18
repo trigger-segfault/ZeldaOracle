@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Worlds {
-	public class Zone {
+	public class Zone : IIDObject {
 
 		private string		id;
 		private string		name;

@@ -70,73 +70,131 @@ namespace ZeldaOracle.Common.Graphics {
 
 		// Returns the wrapped and formatted string of the text.
 		public WrappedLetterString WrapString(string text, int width) {
-			List<LetterString> lines = new List<LetterString>();
-			List<int> lineLengths = new List<int>();
-			int currentLine = 0;
-			int currentCharacter = 0;
+			int caretLine = 0;
+			return WrapString(text, width, 0, out caretLine);
+		}
 
-			LetterString word = new LetterString();
-			int wordStart = 0;
-			int wordLength = 0;
-			int wordLineCount = 0;
-			bool firstChar = true;
+		// Returns the wrapped and formatted string of the text.
+		public WrappedLetterString WrapString(string text, int width, int caretPosition, out int caretLine) {
+			try {
+				caretLine = -1;
 
-			LetterString letterString = FormatCodes.FormatString(text);
+				List<LetterString> lines = new List<LetterString>();
+				List<int> lineLengths = new List<int>();
+				int currentLine = 0;
+				int currentCharacter = 0;
 
-			while (currentCharacter < letterString.Length) {
-				lines.Add(new LetterString());
-				lineLengths.Add(0);
+				LetterString word = new LetterString();
+				int wordStart = 0;
+				int wordLength = 0;
+				int wordLineCount = 0;
+				bool firstChar = true;
 
-				// Remove starting spaces in the line.
-				while (letterString[currentCharacter].Char == ' ') {
-					currentCharacter++;
-				}
+				//caretPosition = Math.Min(text.Length, caretPosition + 1);
 
-				wordStart = currentCharacter;
-				word.Clear();
-				wordLength = 0;
-				wordLineCount = 0;
-				firstChar = true;
+				string caretChar = (caretPosition >= text.Length ? "end" : "" + text[caretPosition]);
+				char[] charArray = text.ToCharArray();
 
-				do {
-					if (currentCharacter >= letterString.Length || letterString[currentCharacter].Char == ' ' ||
-						letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter || letterString[currentCharacter].Char == '\n')
-					{
-						if (wordLineCount > 0)
-							lines[currentLine].Add(' ');
-						lines[currentLine].AddRange(word);
-						lineLengths[currentLine] += (wordLineCount > 0 ? (characterSpacing + spriteSheet.CellSize.X) : 0) + wordLength;
+				LetterString letterString = FormatCodes.FormatString(text, ref caretPosition);
+				string caret2Char = (caretPosition >= letterString.Length ? "end" : "" + letterString[caretPosition].Char);
+				Console.WriteLine("'" + caretChar + "' - '" + caret2Char + "'");
 
-						wordLineCount++;
-						wordLength = 0;
-						wordStart = currentCharacter + 1;
-						word.Clear();
-						if (currentCharacter < letterString.Length &&
-							(letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter || letterString[currentCharacter].Char == '\n'))
-						{
-							if (letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter)
-								lines[currentLine].Add(letterString[currentCharacter]);
-							currentCharacter++;
-							break;
+				while (currentCharacter < letterString.Length) {
+					lines.Add(new LetterString());
+					lineLengths.Add(0);
+
+					// Remove starting spaces in the line.
+					while (currentCharacter < letterString.Length && letterString[currentCharacter].Char == ' ') {
+						if (currentCharacter == caretPosition)
+							caretLine = currentLine;
+						currentCharacter++;
+					}
+					if (currentCharacter >= letterString.Length) {
+						break;
+					}
+
+					wordStart = currentCharacter;
+					word.Clear();
+					wordLength = 0;
+					wordLineCount = 0;
+					firstChar = true;
+
+					do {
+						if (currentCharacter >= letterString.Length || letterString[currentCharacter].Char == ' ' ||
+							letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter || letterString[currentCharacter].Char == '\n') {
+							if (wordLineCount > 0)
+								lines[currentLine].Add(' ');
+							lines[currentLine].AddRange(word);
+							lineLengths[currentLine] += (wordLineCount > 0 ? (characterSpacing + spriteSheet.CellSize.X) : 0) + wordLength;
+
+							wordLineCount++;
+							wordLength = 0;
+							wordStart = currentCharacter + 1;
+							word.Clear();
+							if (currentCharacter < letterString.Length &&
+								(letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter || letterString[currentCharacter].Char == '\n')) {
+								if (letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter)
+									lines[currentLine].Add(letterString[currentCharacter]);
+								if (currentCharacter == caretPosition)
+									caretLine = currentLine;// + (letterString[currentCharacter].Char == '\n' ? 1 : 0);
+								currentCharacter++;
+								break;
+							}
+						}
+						/*else if (lineLengths[currentLine] + wordLength + characterSpacing + spriteSheet.CellSize.X > width && wordStart == lineStart) {
+							// Cuttoff a word if it has continued since the beginning of the line
+							word[word.Length - 1] = new Letter('-', word[word.Length - 2].Color);
+							wordStart = currentCharacter - 1;
+						}*/
+						else {
+							word.Add(letterString[currentCharacter]);
+							wordLength += (firstChar ? 0 : characterSpacing) + spriteSheet.CellSize.X;
+							firstChar = false;
+						}
+						if (currentCharacter == caretPosition)
+							caretLine = currentLine;
+						currentCharacter++;
+					} while (lineLengths[currentLine] + wordLength + characterSpacing + spriteSheet.CellSize.X <= width);
+
+					if (lineLengths[currentLine] + wordLength + characterSpacing + spriteSheet.CellSize.X > width && wordLineCount == 0) {
+						// Finish the word if it lasted the length if the line
+						if (currentCharacter >= letterString.Length || letterString[currentCharacter].Char == ' ' ||
+							letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter || letterString[currentCharacter].Char == '\n') {
+							if (wordLineCount > 0)
+								lines[currentLine].Add(' ');
+							lines[currentLine].AddRange(word);
+							lineLengths[currentLine] += (wordLineCount > 0 ? (characterSpacing + spriteSheet.CellSize.X) : 0) + wordLength;
+
+							wordLineCount++;
+							wordLength = 0;
+							wordStart = currentCharacter + 1;
+						}
+						else {
+							// Cuttoff a word if it has continued since the beginning of the line
+							word[word.Length - 1] = new Letter('-', word[word.Length - 2].Color);
+							wordStart = currentCharacter - 1;
+							lines[currentLine].AddRange(word);
+							lineLengths[currentLine] = wordLength;
 						}
 					}
-					else {
-						word.Add(letterString[currentCharacter]);
-						wordLength += (firstChar ? 0 : characterSpacing) + spriteSheet.CellSize.X;
-						firstChar = false;
-					}
-					currentCharacter++;
-				} while (lineLengths[currentLine] + wordLength + characterSpacing + spriteSheet.CellSize.X <= width);
 
-				currentCharacter = wordStart;
-				currentLine++;
+					currentCharacter = wordStart;
+					currentLine++;
+				}
+
+				if (caretLine == -1 || caretLine >= lines.Count) {
+					caretLine = lines.Count - 1;
+				}
+
+				WrappedLetterString wrappedString = new WrappedLetterString();
+				wrappedString.Lines = lines.ToArray();
+				wrappedString.LineLengths = lineLengths.ToArray();
+				wrappedString.Bounds = new Rectangle2I(width, (lines.Count - 1) * lineSpacing + spriteSheet.CellSize.Y);
+				return wrappedString;
 			}
-
-			WrappedLetterString wrappedString = new WrappedLetterString();
-			wrappedString.Lines = lines.ToArray();
-			wrappedString.LineLengths = lineLengths.ToArray();
-			wrappedString.Bounds = new Rectangle2I(width, (lines.Count - 1) * lineSpacing + spriteSheet.CellSize.Y);
-			return wrappedString;
+			catch (Exception e) {
+				throw e;
+			}
 		}
 
 	}

@@ -20,7 +20,7 @@ END;
 EVENTTILE npc;
 	TYPE		NPCEvent;
 	SPRITE		npc_shopkeeper;
-	PROPERTIES	(integer, npc_flags,		6 "NPC Options", "enum_flags", "NPC", "The options for the NPC."),
+	PROPERTIES	(integer, npc_flags,		6, "NPC Options", ("enum_flags", "NPCFlags"), "NPC", "The options for the NPC."),
 				(integer, direction,		0, "Direction", "direction", "NPC", "The default direction the NPC faces."),
 				(string,  text,				"<red>undefined<red>", "Text", "text_message", "NPC", "The text to display when the NPC is talked to."),
 				(string,  animation,		"npc_shopkeeper", "Animation", "animation", "NPC", "The animation of the NPC."),

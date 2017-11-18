@@ -10,6 +10,8 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using FormsControl = System.Windows.Forms.Control;
 using ZeldaOracle.Game;
+using Keyboard = System.Windows.Input.Keyboard;
+using ModifierKeys = System.Windows.Input.ModifierKeys;
 
 namespace ZeldaEditor.Tools {
 	public class ToolPointer : EditorTool {
@@ -48,7 +50,7 @@ namespace ZeldaEditor.Tools {
 		}
 		
 		public override void Delete() {
-			LevelDisplayControl.DeleteTileSelection();
+			LevelDisplay.DeleteTileSelection();
 		}
 
 		public override void SelectAll() {
@@ -58,8 +60,8 @@ namespace ZeldaEditor.Tools {
 		public override void Deselect() {
 			selectedEventTile	= null;
 			selectedTile		= null;
-			LevelDisplayControl.DeselectTiles();
-			LevelDisplayControl.DeselectSelectionGrid();
+			LevelDisplay.DeselectTiles();
+			LevelDisplay.DeselectSelectionGrid();
 			EditorControl.PropertyGrid.CloseProperties();
 
 		}
@@ -84,15 +86,16 @@ namespace ZeldaEditor.Tools {
 			base.OnMouseDoubleClick(e);
 			
 			Point2I mousePos = new Point2I(e.X, e.Y);
-			Point2I levelPoint = LevelDisplayControl.SampleLevelPixelPosition(mousePos);
+			Point2I levelPoint = LevelDisplay.SampleLevelPixelPosition(mousePos);
 
 			// Open the object properties form when double clicking on a tile.
-			foreach (BaseTileDataInstance tile in LevelDisplayControl.SelectedTiles) {
+			foreach (BaseTileDataInstance tile in LevelDisplay.SelectedTiles) {
 				Rectangle2I bounds = tile.GetBounds();
 				bounds.Point += tile.Room.Location * tile.Room.Size * GameSettings.TILE_SIZE;
 
 				if (bounds.Contains(levelPoint)) {
-					EditorControl.EditorForm.OpenObjectPropertiesEditor(tile);
+					// TODO: Reimplement
+					//EditorControl.EditorWindow.OpenObjectPropertiesEditor(tile);
 					break;
 				}
 			}
@@ -106,10 +109,17 @@ namespace ZeldaEditor.Tools {
 			// Sample the tile at the mouse position.
 			BaseTileDataInstance baseTile = null;
 			if (editorControl.EventMode)
-				baseTile = LevelDisplayControl.SampleEventTile(mousePos);
+				baseTile = LevelDisplay.SampleEventTile(mousePos);
 			else
-				baseTile = LevelDisplayControl.SampleTile(mousePos, editorControl.CurrentLayer);
-			
+				baseTile = LevelDisplay.SampleTile(mousePos, editorControl.CurrentLayer);
+
+			Room room = null;
+			bool roomSelect = false;
+			if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift)) {
+				room = LevelDisplay.SampleRoom(mousePos, false);
+				roomSelect = true;
+			}
+
 			// Select or deselect the tile.
 			if (e.Button == MouseButtons.Left) {
 				/*if (FormsControl.ModifierKeys == Keys.Control) {
@@ -126,13 +136,21 @@ namespace ZeldaEditor.Tools {
 				}
 				else */{
 					// Select a new tile, deselecting others.
-					LevelDisplayControl.DeselectTiles();
-					if (baseTile != null) {
-						LevelDisplayControl.AddTileToSelection(baseTile);
+					LevelDisplay.DeselectTiles();
+					if (roomSelect) {
+						if (room != null) {
+							LevelDisplay.SelectRoom(room);
+							EditorControl.PropertyGrid.OpenProperties(room);
+						}
+					}
+					else if (baseTile != null) {
+						LevelDisplay.AddTileToSelection(baseTile);
+						// TODO: Reimplement
 						EditorControl.PropertyGrid.OpenProperties(baseTile);
 					}
-					else
+					else {
 						EditorControl.PropertyGrid.CloseProperties();
+					}
 				}
 			}
 		}
@@ -148,13 +166,19 @@ namespace ZeldaEditor.Tools {
 
 			if (!editorControl.EventMode) {
 				// Highlight tiles.
-				TileDataInstance tile = LevelDisplayControl.SampleTile(mousePos, editorControl.CurrentLayer);
+				TileDataInstance tile = LevelDisplay.SampleTile(mousePos, editorControl.CurrentLayer);
 				EditorControl.HighlightMouseTile = (tile != null);
 			}
 			else {
 				// Highlight event tiles.
-				EventTileDataInstance eventTile = LevelDisplayControl.SampleEventTile(mousePos);
+				EventTileDataInstance eventTile = LevelDisplay.SampleEventTile(mousePos);
 				EditorControl.HighlightMouseTile = (eventTile != null);
+				if (eventTile != null) {
+					LevelDisplay.CursorHalfTileLocation =
+						LevelDisplay.SampleLevelHalfTileCoordinates(
+							LevelDisplay.GetRoomDrawPosition(eventTile.Room) + eventTile.Position);
+					LevelDisplay.CursorTileSize = eventTile.Size;
+				}
 			}
 		}
 

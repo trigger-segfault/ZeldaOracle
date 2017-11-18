@@ -594,40 +594,40 @@ TILE minecart_track;
 	TYPE		TileMinecartTrack;
 	FLAGS		NotCoverable;
 	RESETWHEN	LeaveArea;
-	SPRITEINDEX	0, tile_minecart_track_horizontal;			# Horizontal
-	SPRITEINDEX	1, tile_minecart_track_vertical;			# Vertical
-	SPRITEINDEX	2, tile_minecart_track_corner_southwest;	# Right/Up
-	SPRITEINDEX	3, tile_minecart_track_corner_southeast;	# Up/Left
-	SPRITEINDEX	4, tile_minecart_track_corner_northeast;	# Left/Down
-	SPRITEINDEX	5, tile_minecart_track_corner_northwest;	# Down/Right
+	SPRITEINDEX	0, tile_minecart_track_horizontal;	# Horizontal
+	SPRITEINDEX	1, tile_minecart_track_vertical;	# Vertical
+	SPRITEINDEX	2, tile_minecart_track_up_right;	# Right/Up
+	SPRITEINDEX	3, tile_minecart_track_up_left;		# Up/Left
+	SPRITEINDEX	4, tile_minecart_track_down_left;	# Left/Down
+	SPRITEINDEX	5, tile_minecart_track_down_right;	# Down/Right
 	PROPERTIES	(boolean, minecart, false, "Has Minecart", "", "Minecart", "Does this track currently have a minecart on it?"),
-				(integer, switched_track_index, 0, "Switched Track Index", "", "Minecart", ""),
-				(integer, track_index, 0, "Track Index", "", "Minecart", "");
+				(integer, switched_track_orientation, 0, "Switched Track Orientation", ("enum", "MinecartTrackOrientation"), "Minecart", ""),
+				(integer, track_orientation, 0, "Track Orientation", ("enum", "MinecartTrackOrientation"), "Minecart", "");
 END;
 
 TILE minecart_track_corner_northwest;
 	CLONE		minecart_track;
-	PROPERTIES	(integer, track_index, 5);
+	PROPERTIES	(integer, track_orientation, 5);
 END;
 TILE minecart_track_corner_northeast;
 	CLONE		minecart_track;
-	PROPERTIES	(integer, track_index, 4);
+	PROPERTIES	(integer, track_orientation, 4);
 END;
 TILE minecart_track_corner_southwest;
 	CLONE		minecart_track;
-	PROPERTIES	(integer, track_index, 2);
+	PROPERTIES	(integer, track_orientation, 2);
 END;
 TILE minecart_track_corner_southeast;
 	CLONE		minecart_track;
-	PROPERTIES	(integer, track_index, 3);
+	PROPERTIES	(integer, track_orientation, 3);
 END;
 TILE minecart_track_horizontal;
 	CLONE		minecart_track;
-	PROPERTIES	(integer, track_index, 0);
+	PROPERTIES	(integer, track_orientation, 0);
 END;
 TILE minecart_track_vertical;
 	CLONE		minecart_track;
-	PROPERTIES	(integer, track_index, 1);
+	PROPERTIES	(integer, track_orientation, 1);
 END;
 TILE minecart_track_stop;
 	TYPE	TileMinecartStop;

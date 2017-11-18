@@ -10,6 +10,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Worlds;
+using ZeldaEditor.Control;
 
 namespace ZeldaEditor.Scripting {
 
@@ -66,7 +67,7 @@ namespace ZeldaEditor.Scripting {
 		}
 
 		// Create the final code that will be compiled from a script.
-		private static string CreateScriptCompileCode(Script script) {
+		public static string CreateScriptCompileCode(Script script) {
 			// Create the parameters string.
 			string parametersString = "";
 			for (int i = 0; i < script.Parameters.Count; i++) {
@@ -75,17 +76,15 @@ namespace ZeldaEditor.Scripting {
 				parametersString += script.Parameters[i].Type + " " + script.Parameters[i].Name;
 			}
 
-			return
-				"namespace ZeldaAPI.CustomScripts" +
-				"{" +
-					"public class CustomScript : CustomScriptBase" +
-					"{" +
-						"public void RunScript(" + parametersString + ")" +
-						"{" +
+			int scriptStart;
+			return EditorControl.Instance.World.ScriptManager.CreateCode(script, script.Code, out scriptStart);
+				/*"namespace ZeldaAPI.CustomScripts {" +
+					"public class CustomScriptOutput : CustomScript {" +
+						"public void RunScript(" + parametersString + ") {" +
 							script.Code +
 						"}" +
 					"}" +
-				"}";
+				"}";*/
 		}
 	}
 }

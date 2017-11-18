@@ -392,5 +392,12 @@ namespace ZeldaOracle.Common.Translation {
 		public bool IsEmpty {
 			get { return (letters.Count == 0); }
 		}
+
+		public Letter Last() {
+			return letters.Last();
+		}
+		public Letter LastOrDefault() {
+			return letters.LastOrDefault();
+		}
 	}
 }

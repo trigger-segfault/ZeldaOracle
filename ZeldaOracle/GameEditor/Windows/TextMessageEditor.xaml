@@ -1,0 +1,58 @@
+﻿<Window x:Class="ZeldaEditor.Windows.TextMessageEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ZeldaEditor.Controls"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:avalon="clr-namespace:ICSharpCode.AvalonEdit;assembly=ICSharpCode.AvalonEdit"
+        xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        mc:Ignorable="d"
+        Title="Text Message Editor" Width="491" Height="300" Background="#FFF0F0F0" WindowStartupLocation="CenterOwner" ResizeMode="CanResizeWithGrip" SnapsToDevicePixels="True" UseLayoutRounding="True" Icon="/ZeldaEditor;component/Resources/Icons/Sign.png" ShowInTaskbar="False">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/ZeldaEditor;component/Themes/DefaultStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="Save" CanExecute="CanSaveTextMessage" Executed="SaveTextMessage"/>
+    </Window.CommandBindings>
+    <DockPanel x:Name="dockPanel">
+        <ToolBar DockPanel.Dock="Top">
+            <local:ImageButton x:Name="buttonFinish" ToolTip="Finish editing and save changes" Source="/Resources/Icons/Checkmark.png" Click="OnFinished"/>
+            <local:ImageButton x:Name="buttonSave" ToolTip="Save changes" Source="/Resources/Icons/Save.png" Command="Save"/>
+            <Separator/>
+            <local:ImageButton x:Name="buttonUndo" ToolTip="Undo" Source="/Resources/Icons/Undo.png" Command="Undo"/>
+            <local:ImageButton x:Name="buttonRedo" ToolTip="Redo" Source="/Resources/Icons/Redo.png" Command="Redo"/>
+            <Separator/>
+            <local:ImageButton x:Name="buttonCut" ToolTip="Cut" Source="/Resources/Icons/Cut.png" Command="Cut"/>
+            <local:ImageButton x:Name="buttonCopy" ToolTip="Copy" Source="/Resources/Icons/Copy.png" Command="Copy"/>
+            <local:ImageButton x:Name="buttonPaste" ToolTip="Paste" Source="/Resources/Icons/Paste.png" Command="Paste"/>
+            <Separator/>
+            <local:FormatCodesDropdown FormatCodeSelected="OnColorCodeSelected" IsColorCodes="True"/>
+            <local:FormatCodesDropdown FormatCodeSelected="OnStringCodeSelected"/>
+            <Separator/>
+            <local:ImageButton Content="Paragraph" Source="/ZeldaEditor;component/Resources/Icons/Paragraph.png" Click="OnParagraphSelected" ToolTip="Insert paragraph format code"/>
+            <!--<local:ImageButton Content="New Line" Source="/ZeldaEditor;component/Resources/Icons/NewLine.png" Click="OnNewLineSelected" ToolTip="Insert new line format code"/>-->
+        </ToolBar>
+        <StatusBar x:Name="statusBarLocation" DockPanel.Dock="Bottom" Height="20" Background="#FFF0F0F0">
+            <StatusBarItem x:Name="statusLine" Content="Line 4" Padding="3,0"/>
+            <StatusBarItem x:Name="statusColumn" Content="Col 4" Padding="3,0"/>
+            <StatusBarItem x:Name="statusChar" Content="Char 4" Padding="3,0"/>
+            <StatusBarItem HorizontalContentAlignment="Right">
+                <Grid>
+                    
+                </Grid>
+            </StatusBarItem>
+        </StatusBar>
+        <Grid DockPanel.Dock="Bottom" Height="50" Margin="0,0,0,-20">
+            <Button x:Name="buttonNextLine" Content="Next Line" Focusable="True" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,189,0" Width="80" Click="OnNextLine"/>
+            <Border BorderBrush="Gray" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,21,0" BorderThickness="1">
+                <WindowsFormsHost x:Name="host" HorizontalAlignment="Right" VerticalAlignment="Center" Width="144" Height="40" PreviewKeyDown="OnHostPreviewKeyDown" />
+            </Border>
+        </Grid>
+        <avalon:TextEditor x:Name="editor"/>
+    </DockPanel>
+</Window>

@@ -56,20 +56,26 @@ namespace ZeldaEditor.Tools {
 
 			if (!editorControl.EventMode) {
 				// Highlight tiles.
-				TileDataInstance tile = LevelDisplayControl.SampleTile(mousePos, editorControl.CurrentLayer);
+				TileDataInstance tile = LevelDisplay.SampleTile(mousePos, editorControl.CurrentLayer);
 				EditorControl.HighlightMouseTile = (tile != null);
 			}
 			else {
 				// Highlight event tiles.
-				EventTileDataInstance eventTile = LevelDisplayControl.SampleEventTile(mousePos);
+				EventTileDataInstance eventTile = LevelDisplay.SampleEventTile(mousePos);
 				EditorControl.HighlightMouseTile = (eventTile != null);
+				if (eventTile != null) {
+					LevelDisplay.CursorHalfTileLocation =
+						LevelDisplay.SampleLevelHalfTileCoordinates(
+							LevelDisplay.GetRoomDrawPosition(eventTile.Room) + eventTile.Position);
+					LevelDisplay.CursorTileSize = eventTile.Size;
+				}
 			}
 		}
 
 		public override void OnMouseDragBegin(MouseEventArgs e) {
 			Point2I mousePos	= new Point2I(e.X, e.Y);
-			Room	room		= LevelDisplayControl.SampleRoom(mousePos);
-			Point2I tileCoord	= LevelDisplayControl.SampleTileCoordinates(mousePos);
+			Room	room		= LevelDisplay.SampleRoom(mousePos);
+			Point2I tileCoord	= LevelDisplay.SampleTileCoordinates(mousePos);
 			if (room != null)
 				ActivateTile(e.Button, room, tileCoord);
 		}
@@ -83,8 +89,8 @@ namespace ZeldaEditor.Tools {
 
 		public override void OnMouseDragMove(MouseEventArgs e) {
 			Point2I mousePos	= new Point2I(e.X, e.Y);
-			Room	room		= LevelDisplayControl.SampleRoom(mousePos);
-			Point2I tileCoord	= LevelDisplayControl.SampleTileCoordinates(mousePos);
+			Room	room		= LevelDisplay.SampleRoom(mousePos);
+			Point2I tileCoord	= LevelDisplay.SampleTileCoordinates(mousePos);
 			if (room != null)
 				ActivateTile(e.Button, room, tileCoord);
 		}

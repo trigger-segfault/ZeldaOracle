@@ -10,7 +10,7 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles.EventTiles {
 	
-	public class EventTileDataInstance : BaseTileDataInstance {
+	public class EventTileDataInstance : BaseTileDataInstance, IIDObject {
 
 		private Point2I			position;
 		private SpriteAnimation	sprite;
@@ -83,7 +83,11 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			get { return (EventTileData) tileData; }
 			set { base.BaseData = value; }
 		}
-		
+
+		public string ID {
+			get { return properties.GetString("id"); }
+		}
+
 		public Point2I Position {
 			get { return position; }
 			set { position = value; }

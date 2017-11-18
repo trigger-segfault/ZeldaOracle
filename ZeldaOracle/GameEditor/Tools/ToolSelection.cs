@@ -39,30 +39,30 @@ namespace ZeldaEditor.Tools {
 		//-----------------------------------------------------------------------------
 
 		public override void Cut() {
-			LevelDisplayControl.PickupSelectionGrid();
-			if (LevelDisplayControl.SelectionGrid != null) {
-				clipboard = LevelDisplayControl.SelectionGrid;
-				LevelDisplayControl.SelectionGrid = null;
-				LevelDisplayControl.DeselectSelectionGrid();
+			LevelDisplay.PickupSelectionGrid();
+			if (LevelDisplay.SelectionGrid != null) {
+				clipboard = LevelDisplay.SelectionGrid;
+				LevelDisplay.SelectionGrid = null;
+				LevelDisplay.DeselectSelectionGrid();
 			}
 		}
 		
 		public override void Copy() {
-			LevelDisplayControl.PickupSelectionGrid();
-			if (LevelDisplayControl.SelectionGrid != null)
-				clipboard = LevelDisplayControl.SelectionGrid.Duplicate();
+			LevelDisplay.PickupSelectionGrid();
+			if (LevelDisplay.SelectionGrid != null)
+				clipboard = LevelDisplay.SelectionGrid.Duplicate();
 		}
 		
 		public override void Paste() {
 			if (clipboard != null) {
-				LevelDisplayControl.DeselectSelectionGrid();
-				LevelDisplayControl.SetSelectionGrid(
+				LevelDisplay.DeselectSelectionGrid();
+				LevelDisplay.SetSelectionGrid(
 					clipboard.Duplicate(), Point2I.Zero, EditorControl.Level);
 			}
 		}
 		
 		public override void Delete() {
-			LevelDisplayControl.DeleteSelectionGrid();
+			LevelDisplay.DeleteSelectionGrid();
 		}
 
 		public override void SelectAll() {
@@ -71,13 +71,13 @@ namespace ZeldaEditor.Tools {
 
 			Level level = EditorControl.Level;
 			Rectangle2I area = new Rectangle2I(Point2I.Zero, level.Dimensions * level.RoomSize);
-			LevelDisplayControl.SetSelectionGridArea(area, level);
+			LevelDisplay.SetSelectionGridArea(area, level);
 		}
 
 		public override void Deselect() {
 			isCreatingSelectionBox = false;
 			isMovingSelectionBox = false;
-			LevelDisplayControl.DeselectSelectionGrid();
+			LevelDisplay.DeselectSelectionGrid();
 		}
 
 		
@@ -95,14 +95,14 @@ namespace ZeldaEditor.Tools {
 		}
 
 		public override void OnEnd() {
-			LevelDisplayControl.PlaceSelectionGrid();
+			LevelDisplay.PlaceSelectionGrid();
 		}
 
 		public override void OnMouseDragBegin(MouseEventArgs e) {
 
 			Point2I mousePos = new Point2I(e.X, e.Y);
-			Point2I tileCoord = LevelDisplayControl.SampleLevelTileCoordinates(mousePos);
-			Point2I point = LevelDisplayControl.SampleLevelPixelPosition(mousePos);
+			Point2I tileCoord = LevelDisplay.SampleLevelTileCoordinates(mousePos);
+			Point2I point = LevelDisplay.SampleLevelPixelPosition(mousePos);
 
 			if (isCreatingSelectionBox || isMovingSelectionBox)
 				return;
@@ -110,23 +110,23 @@ namespace ZeldaEditor.Tools {
 			// Draw a new selecion box.
 			if (e.Button == MouseButtons.Left) {
 
-				if (EditorControl.Level == LevelDisplayControl.SelectionGridLevel &&
-					LevelDisplayControl.SelectionBox.Contains(point))
+				if (EditorControl.Level == LevelDisplay.SelectionGridLevel &&
+					LevelDisplay.SelectionBox.Contains(point))
 				{
 					// Begin moving the selection box.
 					isMovingSelectionBox	= true;
 					dragBeginPoint			= point;
 					dragBeginTileCoord		= tileCoord;
-					selectionBoxBeginPoint	= LevelDisplayControl.SelectionGridArea.Point;
+					selectionBoxBeginPoint	= LevelDisplay.SelectionGridArea.Point;
 					//LevelDisplayControl.PickupSelectionGrid();
 
 					// Duplicate selection if holding Ctrl.
 					if (System.Windows.Forms.Control.ModifierKeys.HasFlag(KEYMOD_DUPLICATE)) {
-						LevelDisplayControl.DuplicateSelectionGrid();
+						LevelDisplay.DuplicateSelectionGrid();
 					}
 				}
 				else {
-					LevelDisplayControl.PlaceSelectionGrid();
+					LevelDisplay.PlaceSelectionGrid();
 
 					// Create a new selection box.
 					isCreatingSelectionBox	= true;
@@ -150,7 +150,7 @@ namespace ZeldaEditor.Tools {
 						selectionBox = Rectangle2I.Intersect(selectionBox, levelBounds);
 					}
 					
-					LevelDisplayControl.SetSelectionGridArea(selectionBox, level);
+					LevelDisplay.SetSelectionGridArea(selectionBox, level);
 				}
 			}
 		}
@@ -167,11 +167,11 @@ namespace ZeldaEditor.Tools {
 
 		public override void OnMouseDragMove(MouseEventArgs e) {
 			Point2I mousePos = new Point2I(e.X, e.Y);
-			Point2I pointInLevel = LevelDisplayControl.SampleLevelPixelPosition(mousePos);
+			Point2I pointInLevel = LevelDisplay.SampleLevelPixelPosition(mousePos);
 
 			// Update selection box.
 			if (e.Button == MouseButtons.Left && isCreatingSelectionBox) {
-				Point2I tileCoord = LevelDisplayControl.SampleLevelTileCoordinates(mousePos);
+				Point2I tileCoord = LevelDisplay.SampleLevelTileCoordinates(mousePos);
 				Level level = EditorControl.Level;
 				Rectangle2I selectionBox;
 
@@ -196,7 +196,7 @@ namespace ZeldaEditor.Tools {
 					//selectionBox = Rectangle2I.Intersect(selectionBox, levelBounds);
 				}
 				
-				LevelDisplayControl.SetSelectionGridArea(selectionBox, level);
+				LevelDisplay.SetSelectionGridArea(selectionBox, level);
 			}
 			else if (e.Button == MouseButtons.Left && isMovingSelectionBox) {
 				Point2I moveAmount;
@@ -213,7 +213,7 @@ namespace ZeldaEditor.Tools {
 				}
 
 				Point2I selectionBoxPoint = selectionBoxBeginPoint + moveAmount;
-				LevelDisplayControl.MoveSelectionGridArea(selectionBoxPoint);
+				LevelDisplay.MoveSelectionGridArea(selectionBoxPoint);
 			}
 		}
 
@@ -228,11 +228,11 @@ namespace ZeldaEditor.Tools {
 		public override void OnMouseMove(MouseEventArgs e) {
 			// Check if mouse is over selection.
 			Point2I point = new Point2I(e.X, e.Y);
-			Point2I tileCoord = LevelDisplayControl.SampleLevelTileCoordinates(point) * GameSettings.TILE_SIZE;
+			Point2I tileCoord = LevelDisplay.SampleLevelTileCoordinates(point) * GameSettings.TILE_SIZE;
 
 			if (!isCreatingSelectionBox &&
-				EditorControl.Level == LevelDisplayControl.SelectionGridLevel &&
-				LevelDisplayControl.SelectionBox.Contains(tileCoord))
+				EditorControl.Level == LevelDisplay.SelectionGridLevel &&
+				LevelDisplay.SelectionBox.Contains(tileCoord))
 			{
 				MouseCursor = Cursors.SizeAll;
 				editorControl.HighlightMouseTile = false;

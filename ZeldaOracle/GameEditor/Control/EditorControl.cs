@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
@@ -22,16 +21,25 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaEditor.Tools;
 using ZeldaEditor.Scripting;
 using ZeldaOracle.Common.Scripting;
+using System.Windows;
+using System.Windows.Threading;
+using ZeldaEditor.Windows;
+using System.Reflection;
 using ZeldaEditor.PropertiesEditor;
+using ZeldaEditor.WinForms;
+using ZeldaOracle.Common.Translation;
+using System.Windows.Input;
 
 namespace ZeldaEditor.Control {
 
 	public class EditorControl {
 		
+		public static EditorControl Instance { get; private set; }
+
 		private bool isInitialized;
 
 		// Control
-		private EditorForm			editorForm;
+		private EditorWindow		editorWindow;
 		private string				worldFilePath;
 		private string				worldFileName;
 		private World				world;
@@ -43,7 +51,7 @@ namespace ZeldaEditor.Control {
 
 		private Stopwatch			timer;
 		private int					ticks;
-		private bool				hasMadeChanges;
+		private bool				isModified;
 
 		// Settings
 		private bool				playAnimations;
@@ -76,15 +84,17 @@ namespace ZeldaEditor.Control {
 		private Task<ScriptCompileResult>	compileTask;
 		private ScriptCompileCallback		compileCallback;
 
+		private DispatcherTimer             dispatcherTimer;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public EditorControl(EditorForm editorForm) {
-			this.editorForm		= editorForm;
-
-			//this.propertyGridControl	= null;
+		public EditorControl(EditorWindow editorWindow) {
+			Instance = this;
+			this.editorWindow		= editorWindow;
+			
 			this.worldFilePath	= String.Empty;
 			this.worldFileName	= "untitled";
 			this.world			= null;
@@ -98,7 +108,7 @@ namespace ZeldaEditor.Control {
 			this.roomSpacing	= 1;
 			this.playAnimations	= false;
 			this.isInitialized	= false;
-			this.hasMadeChanges	= false;
+			this.isModified	= false;
 			this.needsRecompiling	= false;
 			this.compileTask		= null;
 			this.compileCallback	= null;
@@ -115,6 +125,8 @@ namespace ZeldaEditor.Control {
 			this.selectedTilesetTile		= Point2I.Zero;
 			this.selectedTilesetTileData	= null;
 			this.playerPlaceMode			= false;
+
+			this.dispatcherTimer            = new DispatcherTimer(TimeSpan.FromMilliseconds(1000.0 / 60), DispatcherPriority.ApplicationIdle, delegate { Update(); }, Application.Current.Dispatcher);
 		}
 
 		public void Initialize(ContentManager contentManager, GraphicsDevice graphicsDevice) {
@@ -122,6 +134,7 @@ namespace ZeldaEditor.Control {
 				Resources.Initialize(contentManager, graphicsDevice);
 				GameData.Initialize();
 				EditorResources.Initialize();
+				FormatCodes.Initialize();
 
 				this.inventory		= new Inventory(null);
 				this.rewardManager	= new RewardManager(null);
@@ -138,22 +151,22 @@ namespace ZeldaEditor.Control {
 				GameData.LoadRewards(rewardManager);
 
 				// Create tileset combo box.
-				editorForm.ComboBoxTilesets.Items.Clear();
+				editorWindow.ComboBoxTilesets.Items.Clear();
 				foreach (KeyValuePair<string, Tileset> entry in Resources.GetResourceDictionary<Tileset>()) {
-					editorForm.ComboBoxTilesets.Items.Add(entry.Key);
+					editorWindow.ComboBoxTilesets.Items.Add(entry.Key);
 				}
 				foreach (KeyValuePair<string, EventTileset> entry in Resources.GetResourceDictionary<EventTileset>()) {
-					editorForm.ComboBoxTilesets.Items.Add(entry.Key);
+					editorWindow.ComboBoxTilesets.Items.Add(entry.Key);
 				}
-				editorForm.ComboBoxTilesets.SelectedIndex = 0;
+				editorWindow.ComboBoxTilesets.SelectedIndex = 0;
 				
 				// Create zone combo box.
-				editorForm.ComboBoxZones.Items.Clear();
+				editorWindow.ComboBoxZones.Items.Clear();
 				foreach (KeyValuePair<string, Zone> entry in Resources.GetResourceDictionary<Zone>()) {
 					if (tileset.SpriteSheet.Image.HasVariant(entry.Key))
-						editorForm.ComboBoxZones.Items.Add(entry.Key);
+						editorWindow.ComboBoxZones.Items.Add(entry.Key);
 				}
-				editorForm.ComboBoxZones.SelectedIndex = 0;
+				editorWindow.ComboBoxZones.SelectedIndex = 0;
 
 				// Create tools.
 				tools = new List<EditorTool>();
@@ -168,9 +181,7 @@ namespace ZeldaEditor.Control {
 
 				this.isInitialized = true;
 
-				Application.Idle += delegate {
-					Update();
-				};
+				dispatcherTimer.Start();
 			}
 		}
 
@@ -179,11 +190,11 @@ namespace ZeldaEditor.Control {
 		//-----------------------------------------------------------------------------
 
 		public void UpdateWindowTitle() {
-			editorForm.Text = "Oracle Engine Editor - " + worldFileName;
-			if (hasMadeChanges)
-				editorForm.Text += "*";
+			editorWindow.Title = "Oracle Engine Editor - " + worldFileName;
+			if (isModified)
+				editorWindow.Title += "*";
 			if (level != null)
-				editorForm.Text += " [" + level.Properties.GetString("id") + "]";
+				editorWindow.Title += " [" + level.Properties.GetString("id") + "]";
 		}
 
 		// Called with Application.Idle.
@@ -208,22 +219,24 @@ namespace ZeldaEditor.Control {
 
 		public delegate void ScriptCompileCallback(ScriptCompileResult result);
 
-		public void CompileScript(Script script, ScriptCompileCallback callback) {
+		public void CompileScriptAsync(Script script, ScriptCompileCallback callback) {
 			this.compileCallback = callback;
 			compileTask = ScriptEditorCompiler.CompileScriptAsync(script);
 		}
-		
+
 		private void CompileAllScripts(ScriptCompileCallback callback) {
 			this.compileCallback = callback;
 			string code = world.ScriptManager.CreateCode();
 			compileTask = Task.Run(() => world.ScriptManager.Compile(code));
-			editorForm.statusLabelTask.Text = "Compiling scripts.";
+			editorWindow.StatusBarLabelTask.Content = "Compiling scripts...";
 		}
 				
 		private void OnCompileCompleted(ScriptCompileResult result) {
 			world.ScriptManager.RawAssembly = result.RawAssembly;
 			Console.WriteLine("Compiled scripts with " + result.Errors.Count + " errors and " + result.Warnings.Count + " warnings.");
-			editorForm.statusLabelTask.Text = "";
+			editorWindow.StatusBarLabelTask.Content = "";
+			//ScriptEditor.UpdateAssembly(result.Assembly);
+			//File.Delete(result.FilePath);
 		}
 
 
@@ -236,7 +249,7 @@ namespace ZeldaEditor.Control {
 			if (IsWorldOpen) {
 				WorldFile saveFile = new WorldFile();
 				saveFile.Save(fileName, world);
-				hasMadeChanges	= false;
+				isModified	= false;
 				worldFilePath	= fileName;
 				worldFileName	= Path.GetFileName(fileName);
 			}
@@ -252,7 +265,7 @@ namespace ZeldaEditor.Control {
 			if (loadedWorld != null) {
 				CloseFile();
 
-				hasMadeChanges		= false;
+				isModified		= false;
 				worldFilePath		= fileName;
 				worldFileName		= Path.GetFileName(fileName);
 				needsRecompiling	= true;
@@ -262,13 +275,10 @@ namespace ZeldaEditor.Control {
 					OpenLevel(0);
 
 				RefreshWorldTreeView();
-				editorForm.worldTreeView.ExpandAll();
 			}
 			else {
 				// Display the error.
-				MessageBox.Show(editorForm, "Failed to open world file:\n" +
-					worldFile.ErrorMessage, "Error Opening World",
-					MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				TriggerMessageBox.Show(editorWindow, MessageIcon.Warning, "Failed to open world file:\n" + worldFile.ErrorMessage, "Error Opening World", MessageBoxButton.OK);
 			}
 		}
 
@@ -276,9 +286,9 @@ namespace ZeldaEditor.Control {
 		public void CloseFile() {
 			if (IsWorldOpen) {
 				PropertyGrid.CloseProperties();
-				world			= null;
+				world           = null;
 				level			= null;
-				hasMadeChanges	= false;
+				isModified	= false;
 				worldFilePath	= "";
 				RefreshWorldTreeView();
 			}
@@ -287,32 +297,40 @@ namespace ZeldaEditor.Control {
 		// Open the given level.
 		public void OpenLevel(Level level) {
 			this.level = level;
-			editorForm.LevelDisplay.UpdateLevel();
+			editorWindow.LevelDisplay.UpdateLevel();
 			UpdateWindowTitle();
-			PropertyGrid.OpenProperties(level.Properties, level);
+			PropertyGrid.OpenProperties(level);
 		}
 
 		// Open the given level index in the level display.
 		public void OpenLevel(int index) {
 			level = world.Levels[index];
-			editorForm.LevelDisplay.UpdateLevel();
+			editorWindow.LevelDisplay.UpdateLevel();
 			UpdateWindowTitle();
-			PropertyGrid.OpenProperties(level.Properties, level);
+			PropertyGrid.OpenProperties(level);
 		}
 
 		public void CloseLevel() {
 			level = null;
-			editorForm.LevelDisplay.UpdateLevel();
+			editorWindow.LevelDisplay.UpdateLevel();
 			UpdateWindowTitle();
 			PropertyGrid.CloseProperties();
 		}
 
-		// Add a new level the world, and open it if specified.
+		// Add a new level to the world, and open it if specified.
 		public void AddLevel(Level level, bool openLevel) {
-			world.Levels.Add(level);
-			RefreshWorldTreeView();
+			world.AddLevel(level);
+			editorWindow.TreeViewWorld.RefreshLevels();
 			if (openLevel)
 				OpenLevel(world.Levels.Count - 1);
+		}
+
+		// Add a new dungeon to the world, and open it if specified.
+		public void AddDungeon(Dungeon dungeon, bool openDungeonProperties) {
+			world.AddDungeon(dungeon);
+			editorWindow.TreeViewWorld.RefreshDungeons();
+			if (openDungeonProperties)
+				editorWindow.PropertyGrid.OpenProperties(dungeon);
 		}
 
 		public void AddScript(Script script) {
@@ -336,35 +354,35 @@ namespace ZeldaEditor.Control {
 				}
 
 				// Setup zone combo box for the new tileset.
-				editorForm.ComboBoxZones.Items.Clear();
+				editorWindow.ComboBoxZones.Items.Clear();
 				foreach (KeyValuePair<string, Zone> entry in Resources.GetResourceDictionary<Zone>()) {
 					if (tileset.SpriteSheet.Image.HasVariant(entry.Key)) {
-						editorForm.ComboBoxZones.Items.Add(entry.Key);
+						editorWindow.ComboBoxZones.Items.Add(entry.Key);
 						if (entry.Key == zone.ID)
-							editorForm.ComboBoxZones.SelectedIndex = index;
+							editorWindow.ComboBoxZones.SelectedIndex = index;
 						index++;
 					}
 				}
 			}
 
-			editorForm.TileDisplay.UpdateTileset();
-			editorForm.TileDisplay.UpdateZone();
+			editorWindow.TileDisplay.UpdateTileset();
+			editorWindow.TileDisplay.UpdateZone();
 		}
 
 		public void ChangeZone(string name) {
 			if (name != "(none)") {
 				zone = Resources.GetResource<Zone>(name);
-				editorForm.TileDisplay.UpdateZone();
+				editorWindow.TileDisplay.UpdateZone();
 			}
 		}
 
 		// Test/play the world.
 		public void TestWorld() {
 			if (IsWorldOpen) {
-				string worldPath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "testing.zwd");
+				string worldPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "testing.zwd");
 				WorldFile worldFile = new WorldFile();
 				worldFile.Save(worldPath, world);
-				string exePath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "ZeldaOracle.exe");
+				string exePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ZeldaOracle.exe");
 				Process.Start(exePath, "\"" + worldPath + "\"");
 			}
 		}
@@ -378,17 +396,17 @@ namespace ZeldaEditor.Control {
 					if (world.Levels[levelIndex] == level)
 						break;
 				}
-				string worldPath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "testing.zwd");
+				string worldPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "testing.zwd");
 				WorldFile worldFile = new WorldFile();
 				worldFile.Save(worldPath, world);
-				string exePath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "ZeldaOracle.exe");
+				string exePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ZeldaOracle.exe");
 				Process.Start(exePath, "\"" + worldPath + "\" -test " + levelIndex + " " + roomCoord.X + " " + roomCoord.Y + " " + playerCoord.X + " " + playerCoord.Y);
-				// TODO: editorForm.ButtonTestPlayerPlace.Checked = false;
+				editorWindow.FinishTestWorldFromLocation();
 			}
 		}
 
 		public void RefreshWorldTreeView() {
-			editorForm.worldTreeView.RefreshTree();
+			editorWindow.TreeViewWorld.RefreshTree();
 		}
 
 
@@ -398,7 +416,7 @@ namespace ZeldaEditor.Control {
 
 		// Open the properties for the given tile in the property grid.
 		public void OpenObjectProperties(IPropertyObject propertyObject) {
-			PropertyGrid.OpenProperties(propertyObject.Properties, propertyObject);
+			PropertyGrid.OpenProperties(propertyObject);
 		}
 
 		public void OnDeleteObject(IPropertyObject propertyObject) {
@@ -433,7 +451,7 @@ namespace ZeldaEditor.Control {
 					selectedRoom = -Point2I.One;
 				}
 
-				editorForm.OnToolChange(toolIndex);
+				editorWindow.OnToolChange(toolIndex);
 				tools[currentToolIndex].OnBegin();
 			}
 		}
@@ -459,10 +477,10 @@ namespace ZeldaEditor.Control {
 
 			int i = 0;
 			do {
-				script.Name = "__internal_script_" + i + "__";
+				script.ID = "__internal_script_" + i + "__";
 				i++;
 			}
-			while (world.GetScript(script.Name) != null);
+			while (world.GetScript(script.ID) != null);
 
 			world.AddScript(script);
 			return script;
@@ -485,17 +503,17 @@ namespace ZeldaEditor.Control {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public EditorForm EditorForm {
-			get { return editorForm; }
-			set { editorForm = value; }
+		public EditorWindow EditorWindow {
+			get { return editorWindow; }
+			set { editorWindow = value; }
 		}
 		
 		public ZeldaPropertyGrid PropertyGrid {
-			get { return editorForm.PropertyGrid; }
+			get { return editorWindow.PropertyGrid; }
 		}
-		
+
 		public LevelDisplay LevelDisplay {
-			get { return editorForm.LevelDisplay; }
+			get { return editorWindow.LevelDisplay; }
 		}
 
 		public bool IsWorldOpen {
@@ -549,7 +567,7 @@ namespace ZeldaEditor.Control {
 			get { return selectedTilesetTileData; }
 			set {
 				selectedTilesetTileData = value;
-				editorForm.TileDisplay.Invalidate();
+				editorWindow.TileDisplay.Invalidate();
 			}
 		}
 
@@ -651,8 +669,12 @@ namespace ZeldaEditor.Control {
 			get { return worldFileName; }
 		}
 
-		public bool HasMadeChanges {
-			get { return hasMadeChanges; }
+		public bool IsModified {
+			get { return isModified; }
+			set {
+				isModified = value;
+				CommandManager.InvalidateRequerySuggested();
+			}
 		}
 
 		public bool IsSelectedTileAnEvent {

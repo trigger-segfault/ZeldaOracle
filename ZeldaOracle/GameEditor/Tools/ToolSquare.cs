@@ -45,13 +45,13 @@ namespace ZeldaEditor.Tools {
 
 		public override void SelectAll() {
 			isCreatingSelectionBox = false;
-			LevelDisplayControl.SetSelectionBox(Point2I.Zero,
+			LevelDisplay.SetSelectionBox(Point2I.Zero,
 				EditorControl.Level.RoomSize * EditorControl.Level.Dimensions);
 		}
 
 		public override void Deselect() {
 			isCreatingSelectionBox = false;
-			LevelDisplayControl.ClearSelectionBox();
+			LevelDisplay.ClearSelectionBox();
 		}
 
 		private void ActivateTile(MouseButtons mouseButton, Point2I levelTileCoord) {
@@ -65,6 +65,7 @@ namespace ZeldaEditor.Tools {
 						tileData,
 						tileCoord.X, tileCoord.Y, editorControl.CurrentLayer
 					);
+					editorControl.IsModified = true;
 				}
 
 			}
@@ -77,6 +78,7 @@ namespace ZeldaEditor.Tools {
 				}
 				else {*/
 				room.RemoveTile(tileCoord.X, tileCoord.Y, editorControl.CurrentLayer);
+				editorControl.IsModified = true;
 				//}
 			}
 		}
@@ -92,6 +94,7 @@ namespace ZeldaEditor.Tools {
 
 		public override void OnBegin() {
 			isCreatingSelectionBox = false;
+			EditorControl.HighlightMouseTile = true;
 		}
 
 		public override void OnMouseDragBegin(MouseEventArgs e) {
@@ -99,8 +102,8 @@ namespace ZeldaEditor.Tools {
 			if (e.Button == MouseButtons.Left) {
 				isCreatingSelectionBox = true;
 				Point2I mousePos	= new Point2I(e.X, e.Y);
-				dragBeginTileCoord	= LevelDisplayControl.SampleLevelTileCoordinates(mousePos);
-				LevelDisplayControl.SetSelectionBox(dragBeginTileCoord, Point2I.One);
+				dragBeginTileCoord	= LevelDisplay.SampleLevelTileCoordinates(mousePos);
+				LevelDisplay.SetSelectionBox(dragBeginTileCoord, Point2I.One);
 			}
 		}
 
@@ -108,7 +111,7 @@ namespace ZeldaEditor.Tools {
 			if (e.Button == MouseButtons.Left && isCreatingSelectionBox) {
 				isCreatingSelectionBox = false;
 				Point2I mousePos  = new Point2I(e.X, e.Y);
-				Point2I tileCoord = LevelDisplayControl.SampleLevelTileCoordinates(mousePos);
+				Point2I tileCoord = LevelDisplay.SampleLevelTileCoordinates(mousePos);
 				Point2I minCoord  = GMath.Min(dragBeginTileCoord, tileCoord);
 				Point2I maxCoord  = GMath.Max(dragBeginTileCoord, tileCoord);
 				Point2I totalSize	= editorControl.Level.Dimensions * editorControl.Level.RoomSize;
@@ -117,7 +120,7 @@ namespace ZeldaEditor.Tools {
 						ActivateTile(e.Button, new Point2I(x, y));
 					}
 				}
-				LevelDisplayControl.ClearSelectionBox();
+				LevelDisplay.ClearSelectionBox();
 			}
 		}
 
@@ -125,10 +128,10 @@ namespace ZeldaEditor.Tools {
 			// Update selection box.
 			if (e.Button == MouseButtons.Left && isCreatingSelectionBox) {
 				Point2I mousePos  = new Point2I(e.X, e.Y);
-				Point2I tileCoord = LevelDisplayControl.SampleLevelTileCoordinates(mousePos);
+				Point2I tileCoord = LevelDisplay.SampleLevelTileCoordinates(mousePos);
 				Point2I minCoord  = GMath.Min(dragBeginTileCoord, tileCoord);
 				Point2I maxCoord  = GMath.Max(dragBeginTileCoord, tileCoord);
-				LevelDisplayControl.SetSelectionBox(minCoord, maxCoord - minCoord + Point2I.One);
+				LevelDisplay.SetSelectionBox(minCoord, maxCoord - minCoord + Point2I.One);
 			}
 		}
 	}

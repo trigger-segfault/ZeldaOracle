@@ -1,27 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Design;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Windows;
+using System.Windows.Input;
+using Xceed.Wpf.Toolkit.PropertyGrid;
+using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 using ZeldaEditor.Control;
-using ZeldaEditor.PropertiesEditor.CustomEditors;
-using ZeldaOracle.Common.Audio;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
+using ZeldaEditor.Windows;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
-using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaEditor.PropertiesEditor {
-
 	public class ZeldaPropertyGrid : PropertyGrid {
 
 		private EditorControl editorControl;
 		private IPropertyObject propertyObject;
-		private PropertiesContainer	propertiesContainer;
-		private Dictionary<string, CustomPropertyEditor> typeEditors;
+		private PropertiesContainer propertiesContainer;
+		//private Dictionary<string, CustomPropertyEditor> typeEditors;
 
 
 		//-----------------------------------------------------------------------------
@@ -29,40 +27,20 @@ namespace ZeldaEditor.PropertiesEditor {
 		//-----------------------------------------------------------------------------
 
 		public ZeldaPropertyGrid() {
-			editorControl		= null;
-			propertyObject		= null;
-			propertiesContainer	= new PropertiesContainer(this);
-			typeEditors			= new Dictionary<string, CustomPropertyEditor>();
+			editorControl       = null;
+			propertyObject      = null;
+			propertiesContainer = new PropertiesContainer(this);
+			//typeEditors         = new Dictionary<string, CustomPropertyEditor>();
 
-			this.SelectedObject			= propertiesContainer;
-			this.PropertyValueChanged	+= OnPropertyChange;
+			this.SelectedObject         = propertiesContainer;
+			this.PropertyValueChanged   += OnPropertyChange;
+			this.IsMiscCategoryLabelHidden = false;
+			this.ShowAdvancedOptions = false;
+			this.AdvancedOptionsMenu = null;
 		}
 
 		public void Initialize(EditorControl editorControl) {
 			this.editorControl = editorControl;
-
-			// Create custom property editor types.
-			typeEditors["sprite"]			= new ResourcePropertyEditor<Sprite>();
-			typeEditors["animation"]		= new ResourcePropertyEditor<Animation>();
-			typeEditors["collision_model"]	= new ResourcePropertyEditor<CollisionModel>();
-			typeEditors["song"]				= new ResourcePropertyEditor<Song>();
-			typeEditors["sound"]			= new ResourcePropertyEditor<Sound>();
-			typeEditors["zone"]				= new ResourcePropertyEditor<Zone>();
-			typeEditors["reward"]			= new RewardPropertyEditor(editorControl.RewardManager);
-			typeEditors["text_message"]		= new TextMessagePropertyEditor();
-			typeEditors["script"]			= new ScriptPropertyEditor();
-			typeEditors["sprite_index"]		= new SpriteIndexComboBox();
-			typeEditors["direction"]		= new DirectionPropertyEditor();
-			typeEditors["angle"]			= null;
-			typeEditors["enum"]				= new EnumComboBox();
-			typeEditors["enum_flags"]		= null;
-			typeEditors["dungeon"]			= new DungeonPropertyEditor();
-			typeEditors["level"]			= new LevelPropertyEditor();
-
-			// Initialize the property editors.
-			foreach (CustomPropertyEditor editor in typeEditors.Values.Where(e => e != null)) {
-				editor.Initialize(this);
-			}
 		}
 
 
@@ -70,50 +48,76 @@ namespace ZeldaEditor.PropertiesEditor {
 		// Accessors
 		//-----------------------------------------------------------------------------
 
-		public UITypeEditor GetUITypeEditor(string editorType) {
+		/*public UITypeEditor GetUITypeEditor(string editorType) {
 			if (!typeEditors.ContainsKey(editorType))
 				return null;
 			return typeEditors[editorType];
-		}
+		}*/
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Properties Methods
 		//-----------------------------------------------------------------------------
-		
-		public void OpenProperties(Properties properties, IPropertyObject propertyObject) {
-			OpenProperties(propertyObject);
-		}
+
+		/*public class NewEditor : ITypeEditor {
+
+			public static readonly DependencyProperty ValueProperty =
+				DependencyProperty.Register(
+					"Value", typeof(string), typeof(NewEditor),
+						new FrameworkPropertyMetadata(
+							null,
+							FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+			public string Value {
+				get { return (string)GetValue(ValueProperty); }
+				set { SetValue(ValueProperty, value); }
+			}
+
+			FrameworkElement ITypeEditor.ResolveEditor(PropertyItem propertyItem) {
+				Binding binding = new Binding("Value");
+				binding.Source = propertyItem;
+				binding.Mode = propertyItem.IsReadOnly ? BindingMode.OneWay : BindingMode.TwoWay;
+				BindingOperations.SetBinding(this, LastNameUserControlEditor.ValueProperty, binding);
+				return this;
+			}
+		}*/
 
 		public void OpenProperties(IPropertyObject propertyObject) {
+			editorControl.EditorWindow.UpdatePropertyPreview(propertyObject);
 			this.propertyObject = propertyObject;
 			propertiesContainer.Set(propertyObject.Properties);
-			Refresh();
+			Stopwatch watch = new Stopwatch();
+			watch.Start();
+			UpdateContainerHelper();
+			Console.WriteLine(watch.ElapsedMilliseconds);
 		}
-		
+
+		public void UpdateProperties() {
+			Update();
+		}
+
 		public void RefreshProperties() {
-			Refresh();
+			UpdateContainerHelper();
 		}
-		
+
 		public void CloseProperties() {
 			propertiesContainer.Clear();
-			Refresh();
+			UpdateContainerHelper();
 		}
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Events
 		//-----------------------------------------------------------------------------
 
 		private void OnPropertyChange(object sender, PropertyValueChangedEventArgs e) {
-			CustomPropertyDescriptor propertyDescriptor = e.ChangedItem.PropertyDescriptor as CustomPropertyDescriptor;
+			CustomPropertyDescriptor propertyDescriptor = ((PropertyItem)e.OriginalSource).PropertyDescriptor as CustomPropertyDescriptor;
 			Property property = propertyDescriptor.Property;
 			PropertyDocumentation propertyDoc = property.GetRootDocumentation();
-			
+			editorControl.IsModified = true;
 			// Handle special property editor-types.
 			if (propertyDoc != null && propertyDoc.EditorType == "script") {
 				string oldValue = e.OldValue.ToString();
-				string newValue = e.ChangedItem.Value.ToString();
+				string newValue = e.NewValue as string;
 
 				Script oldScript = editorControl.World.GetScript(oldValue);
 				Script newScript = editorControl.World.GetScript(newValue);
@@ -132,25 +136,31 @@ namespace ZeldaEditor.PropertiesEditor {
 
 				// Show a message if the script is invalid.
 				if (isNewScriptInvalid)
-					MessageBox.Show("'" + newValue + "' is not a valid script name.");
+					TriggerMessageBox.Show(Application.Current.MainWindow, MessageIcon.Warning, "'" + newValue + "' is not a valid script name.", "Invalid Name");
 			}
-
+			else if (property.Name == "id") {
+				editorControl.EditorWindow.UpdatePropertyPreview(propertyObject);
+			}
 		}
-		
+
+		protected override void OnMouseEnter(MouseEventArgs e) {
+			base.OnMouseEnter(e);
+			Focus();
+		}
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
-		public EditorControl EditorControl { 
+
+		public EditorControl EditorControl {
 			get { return editorControl; }
 			set { editorControl = value; }
 		}
 
-		public Properties Properties {
+		public Properties PropertyList {
 			get { return propertyObject.Properties; }
 		}
-		
+
 		public IPropertyObject PropertyObject {
 			get { return propertyObject; }
 		}

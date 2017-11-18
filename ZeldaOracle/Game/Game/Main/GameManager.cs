@@ -79,7 +79,7 @@ namespace ZeldaOracle.Game.Main {
 			Controls.Initialize();
 			ScreenResized();
 
-			AudioSystem.MasterVolume = 0.1f;
+			AudioSystem.MasterVolume = 0.5f;
 
 			// Begin the game state stack with a RoomControl.
 			gameStateStack	= new GameStateStack(new StateDummy());

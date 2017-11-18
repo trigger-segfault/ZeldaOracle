@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.Transitions;
 using ZeldaOracle.Common.Audio;
+using System.ComponentModel;
 
 namespace ZeldaOracle.Game.Tiles.EventTiles {
 
@@ -20,6 +21,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		Stairs		= 2,
 		
 		[ScriptingAttributes.Hidden]
+		[Browsable(false)]
 		Count		= 3,
 	}
 

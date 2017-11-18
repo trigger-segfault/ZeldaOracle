@@ -359,6 +359,9 @@ namespace ZeldaOracle.Game.Control {
 			newControl.gameManager	= gameManager;
 			newControl.room			= nextRoom;
 			newControl.roomLocation	= nextRoom.Location;
+
+			// Also set this here to prevent flickering of small keys in HUD
+			newControl.dungeon      = nextRoom.Dungeon;
 			
 			//               [Exit]                       [Enter]
 			// [RoomOld] -> [RoomOld] -> [Transition] -> [RoomNew] -> [RoomNew]
@@ -590,7 +593,7 @@ namespace ZeldaOracle.Game.Control {
 		public IEnumerable<T> GetTilesOfType<T>() where T : class {
 			foreach (Tile tile in GetTiles()) {
 				if (tile is T)
-					yield return (tile as T);
+					yield return tile as T;
 			}
 		}
 

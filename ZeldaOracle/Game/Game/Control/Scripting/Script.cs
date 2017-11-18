@@ -20,6 +20,8 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		public List<ScriptCompileError> Errors { get; set; }
 		public List<ScriptCompileError> Warnings { get; set; }
 		public byte[] RawAssembly { get; set; }
+		public Assembly Assembly { get; set; }
+		public string FilePath { get; set; }
 
 	}
 
@@ -60,9 +62,9 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		}
 	}
 
-	public class Script {
+	public class Script : IIDObject {
 
-		private string name; // The script's name/identif.
+		private string id; // The script's identifier and name
 		private string code; // User-entered code for the script.
 		private bool isHidden; // Is this script visible in the editor? Hidden scripts are used in object events.
 		private List<ScriptCompileError> errors;
@@ -77,7 +79,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		//-----------------------------------------------------------------------------
 
 		public Script() {
-			name				= "";
+			id   				= "";
 			code				= "";
 			isHidden			= false;
 			errors				= new List<ScriptCompileError>();
@@ -87,7 +89,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		
 		// Copy constructor.
 		public Script(Script copy) {
-			name				= copy.name;
+			id	    			= copy.id;
 			code				= copy.code;
 			isHidden			= copy.isHidden;
 			errors				= new List<ScriptCompileError>();
@@ -105,9 +107,9 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		// Properties
 		//-----------------------------------------------------------------------------
 		
-		public string Name {
-			get { return name; }
-			set { name = value; }
+		public string ID {
+			get { return id; }
+			set { id = value; }
 		}
 
 		public string Code {
