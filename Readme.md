@@ -15,6 +15,8 @@ Project Started: 9/10/2015
 
 [Download Link](http://www.mediafire.com/download/ke7ny7zuh487xir/Zelda+Oracle+Engine+Demo+3.zip) (2/15/2016)
 
+<sup>ZeldaOracle.exe can only be launched from the command line or from within the editor.</sup>
+
 ## Planning
 
 [Google Doc](https://docs.google.com/document/d/1ttofVFRGUmLg7y79PeAXAQOPG_dDkfcC45kMf8m9Qls/edit)
