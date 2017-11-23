@@ -579,9 +579,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (tile != null)
 				tile.OnLand(movement.JumpStartTile);
 			movement.JumpStartTile = -Point2I.One;
-			
-			if (eventLand != null)
-				eventLand(this);
+
+			eventLand?.Invoke(this);
 
 			Physics.Gravity = GameSettings.DEFAULT_GRAVITY;
 			AudioSystem.PlaySound(GameData.SOUND_PLAYER_LAND);

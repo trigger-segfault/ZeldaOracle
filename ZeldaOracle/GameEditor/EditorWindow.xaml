@@ -1,0 +1,213 @@
+﻿<Window x:Class="ZeldaEditor.EditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ZeldaEditor.Controls"
+        xmlns:treeViews="clr-namespace:ZeldaEditor.TreeViews"
+        xmlns:props="clr-namespace:ZeldaEditor.PropertiesEditor"
+        xmlns:cmd="clr-namespace:ZeldaEditor"
+        xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="Oracle Engine Editor" Width="1100" Height="640" SnapsToDevicePixels="True" UseLayoutRounding="True" Icon="Editor.ico" ResizeMode="CanResizeWithGrip" Loaded="OnWindowLoaded" PreviewKeyDown="OnPreviewKeyDown" SizeChanged="OnWindowSizeChanged" Closing="OnWindowClosing">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/ZeldaEditor;component/Themes/DefaultStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="New" CanExecute="CanAlwaysExecute" Executed="OnNewCommand"/>
+        <CommandBinding Command="Open" CanExecute="CanAlwaysExecute" Executed="OnOpenCommand"/>
+        <CommandBinding Command="Save" CanExecute="CanExecuteIsModified" Executed="OnSaveCommand"/>
+        <CommandBinding Command="cmd:EditorCommands.SaveAs" CanExecute="CanExecuteIsWorldOpen" Executed="OnSaveAsCommand"/>
+        <CommandBinding Command="cmd:EditorCommands.Close" CanExecute="CanExecuteIsWorldOpen" Executed="OnCloseCommand"/>
+        <CommandBinding Command="cmd:EditorCommands.Exit" CanExecute="CanAlwaysExecute" Executed="OnExitCommand"/>
+
+        <CommandBinding Command="cmd:EditorCommands.TestWorld" CanExecute="CanExecuteIsWorldOpen" Executed="OnTestWorldCommand"/>
+        <CommandBinding Command="cmd:EditorCommands.TestWorldFromLocation" CanExecute="CanExecuteIsLevelOpen" Executed="OnTestWorldFromLocationCommand"/>
+
+        <CommandBinding Command="cmd:EditorCommands.ShowGrid" CanExecute="CanExecuteIsWorldOpen" Executed="OnShowGridCommand"/>
+        <CommandBinding Command="cmd:EditorCommands.PlayAnimations" CanExecute="CanExecuteIsWorldOpen" Executed="OnPlayAnimationsCommand"/>
+        <CommandBinding Command="cmd:EditorCommands.CycleLayerUp" CanExecute="CanExecuteCycleLayerUp" Executed="OnCycleLayerUpCommand"/>
+        <CommandBinding Command="cmd:EditorCommands.CycleLayerDown" CanExecute="CanExecuteCycleLayerDown" Executed="OnCycleLayerDownCommand"/>
+
+        <CommandBinding Command="cmd:EditorCommands.ResizeLevel" CanExecute="CanExecuteIsLevelOpen" Executed="OnResizeLevelCommand"/>
+        <CommandBinding Command="cmd:EditorCommands.ShiftLevel" CanExecute="CanExecuteIsLevelOpen" Executed="OnShiftLevelCommand"/>
+
+        <CommandBinding Command="Undo" CanExecute="CanExecuteUndo" Executed="OnUndoCommand"/>
+        <CommandBinding Command="Redo" CanExecute="CanExecuteRedo" Executed="OnRedoCommand"/>
+
+        <CommandBinding Command="Copy" CanExecute="CanExecuteCopyCut" Executed="OnCopyCommand"/>
+        <CommandBinding Command="Cut" CanExecute="CanExecuteCopyCut" Executed="OnCutCommand"/>
+        <CommandBinding Command="Paste" CanExecute="CanExecutePaste" Executed="OnPasteCommand"/>
+        <CommandBinding Command="Delete" CanExecute="CanExecuteDeleteDeselect" Executed="OnDeleteCommand"/>
+        <CommandBinding Command="SelectAll" CanExecute="CanExecuteIsLevelOpen" Executed="OnSelectAllCommand"/>
+        <CommandBinding Command="cmd:EditorCommands.Deselect" CanExecute="CanExecuteDeleteDeselect" Executed="OnDeselectCommand"/>
+
+        <CommandBinding Command="cmd:EditorCommands.AddNewLevel" CanExecute="CanExecuteIsWorldOpen" Executed="OnAddNewLevelCommand"/>
+        <CommandBinding Command="cmd:EditorCommands.AddNewDungeon" CanExecute="CanExecuteIsWorldOpen" Executed="OnAddNewDungeonCommand"/>
+        <CommandBinding Command="cmd:EditorCommands.AddNewScript" CanExecute="CanExecuteIsWorldOpen" Executed="OnAddNewScriptCommand"/>
+    </Window.CommandBindings>
+    <DockPanel LastChildFill="True" Grid.RowSpan="2">
+        <Menu x:Name="menu" DockPanel.Dock="Top">
+            <!--Style="{DynamicResource MenuStyle1}"-->
+            <MenuItem Header="_File">
+                <local:ImageMenuItem x:Name="menuItemNew" Header="New World..." Source="Resources/Icons/WorldNew.png" Command="New"/>
+                <Separator/>
+                <local:ImageMenuItem x:Name="menuItemOpen" Header="Open World..." Source="Resources/Icons/Open.png" Command="Open"/>
+                <Separator/>
+                <local:ImageMenuItem x:Name="menuItemClose" Header="Close World" Source="Resources/Icons/WorldClose.png" Command="cmd:EditorCommands.Close"/>
+                <Separator />
+                <local:ImageMenuItem x:Name="menuItemSave" Header="Save World" Source="Resources/Icons/Save.png" Command="Save"/>
+                <local:ImageMenuItem x:Name="menuItemSaveAs" Header="Save World As..." Source="Resources/Icons/SaveAs.png" Command="cmd:EditorCommands.SaveAs"/>
+                <Separator/>
+                <local:ImageMenuItem x:Name="menuItemExit" Header="Exit" Source="Resources/Icons/Exit.png" Command="cmd:EditorCommands.Exit"/>
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <local:ImageMenuItem x:Name="menuItemUndo" Header="_Undo" Source="Resources/Icons/Undo.png" Command="Undo"/>
+                <local:ImageMenuItem x:Name="menuItemRedo" Header="_Redo" Source="Resources/Icons/Redo.png" Command="Redo"/>
+                <Separator/>
+                <local:ImageMenuItem x:Name="menuItemCut" Header="Cu_t" Source="Resources/Icons/Cut.png" Command="Cut"/>
+                <local:ImageMenuItem x:Name="menuItemCopy" Header="_Copy" Source="Resources/Icons/Copy.png" Command="Copy"/>
+                <local:ImageMenuItem x:Name="menuItemPaste" Header="_Paste" Source="Resources/Icons/Paste.png" Command="Paste"/>
+                <local:ImageMenuItem x:Name="menuItemDelete" Header="_Delete" Source="Resources/Icons/Delete.png" Command="Delete"/>
+                <Separator/>
+                <local:ImageMenuItem x:Name="menuItemSelectAll" Header="Select _All" Source="Resources/Icons/SelectAll.png" Command="SelectAll"/>
+                <local:ImageMenuItem x:Name="menuItemDeselect" Header="Dese_lect" Source="Resources/Icons/Deselect.png"  Command="cmd:EditorCommands.Deselect"/>
+                <Separator/>
+                <local:ImageMenuItem x:Name="menuItemTileProperties" Header="Tile Pr_operties..." Command="cmd:EditorCommands.TileProperties"/>
+                <local:ImageMenuItem x:Name="menuItemRoomProperties" Header="Room Properties..." Source="Resources/Icons/Room.png"  Command="cmd:EditorCommands.RoomProperties"/>
+            </MenuItem>
+            <MenuItem Header="_View">
+                <local:ImageMenuItem x:Name="menuItemPlayAnimations" Header="Play Animations" Source="Resources/Icons/ShowAnimations.png" IsCheckable="True" Command="cmd:EditorCommands.PlayAnimations"/>
+                <local:ImageMenuItem x:Name="menuItemShowGrid" Header="Show Grid" Source="Resources/Icons/Grid.png" IsCheckable="True" Command="cmd:EditorCommands.ShowGrid"/>
+                <Separator/>
+                <local:ImageMenuItem x:Name="menuItemCycleLayerUp" Header="Cycle Layer Up" Source="Resources/Icons/LayerCycleUp.png" Command="cmd:EditorCommands.CycleLayerUp" InputGestureText="Page Up"/>
+                <local:ImageMenuItem x:Name="menuItemCycleLayerDown" Header="Cycle Layer Down" Source="Resources/Icons/LayerCycleDown.png" Command="cmd:EditorCommands.CycleLayerDown" InputGestureText="Page Down"/>
+            </MenuItem>
+            <MenuItem Header="_World">
+                <local:ImageMenuItem x:Name="menuItemAddLevel" Header="Add Level..." Source="Resources/Icons/LevelAdd.png" Command="cmd:EditorCommands.AddNewLevel"/>
+                <local:ImageMenuItem x:Name="menuItemTestWorld" Header="Test World" Source="Resources/Icons/RunGame.png" IsCheckable="True"  Command="cmd:EditorCommands.TestWorld"/>
+                <local:ImageMenuItem x:Name="menuItemTestLevelPlace" Header="Test World From Location" Source="Resources/Icons/RunGameAtLocation.png" Command="cmd:EditorCommands.TestWorldFromLocation"/>
+            </MenuItem>
+            <MenuItem Header="Dev Tools">
+                <MenuItem x:Name="menuItemRefactorProperties" Header="Refactor Properties..."/>
+            </MenuItem>
+        </Menu>
+        <ToolBar x:Name="toolBar1" DockPanel.Dock="Top">
+            <local:ImageButton x:Name="buttonNew" Source="Resources/Icons/WorldNew.png" Command="New"/>
+            <local:ImageButton x:Name="buttonOpen" Source="Resources/Icons/Open.png" Command="Open"/>
+            <local:ImageButton x:Name="buttonSave" Source="Resources/Icons/Save.png" Command="Save"/>
+            <local:ImageButton x:Name="buttonSaveAs" Source="Resources/Icons/SaveAs.png"  Command="cmd:EditorCommands.SaveAs"/>
+            <Separator/>
+            <local:ImageButton x:Name="buttonTestLevel" Source="Resources/Icons/RunGame.png" Command="cmd:EditorCommands.TestWorld"/>
+            <local:ImageToggleButton x:Name="buttonTestLevelPlace" Source="Resources/Icons/RunGameAtLocation.png" Command="cmd:EditorCommands.TestWorldFromLocation"/>
+            <Separator/>
+            <local:ImageButton x:Name="buttonAddLevel" Source="Resources/Icons/LevelAdd.png" Command="cmd:EditorCommands.AddNewLevel"/>
+            <local:ImageButton x:Name="buttonAddDungeon" Source="Resources/Icons/DungeonAdd.png" Command="cmd:EditorCommands.AddNewDungeon"/>
+            <local:ImageButton x:Name="buttonAddScript" Source="Resources/Icons/ScriptAdd.png" Command="cmd:EditorCommands.AddNewScript"/>
+            <Separator/>
+            <local:ImageToggleButton x:Name="buttonShowHistory" Source="Resources/Icons/History.png" Click="OnShowHistory" ToolTip="History Window" />
+        </ToolBar>
+        <ToolBar x:Name="toolBar2" DockPanel.Dock="Top">
+            <local:ImageToggleButton x:Name="buttonToolPointer" Source="Resources/Icons/ToolPointer.png" IsChecked="True" Click="OnToolChanged"/>
+            <local:ImageToggleButton x:Name="buttonToolPlace" Source="Resources/Icons/ToolPlace.png" Click="OnToolChanged"/>
+            <local:ImageToggleButton x:Name="buttonToolSquare" Source="Resources/Icons/ToolSquare.png" Click="OnToolChanged"/>
+            <local:ImageToggleButton x:Name="buttonToolFill" Source="Resources/Icons/ToolFill.png" Click="OnToolChanged"/>
+            <local:ImageToggleButton x:Name="buttonToolSelection" Source="Resources/Icons/ToolSelection.png" Click="OnToolChanged"/>
+            <local:ImageToggleButton x:Name="buttonToolEyedropper" Source="Resources/Icons/ToolEyedropper.png" Click="OnToolChanged"/>
+            <Separator/>
+            <local:ImageButton x:Name="buttonToolCopy" Source="Resources/Icons/Copy.png" Command="Copy"/>
+            <local:ImageButton x:Name="buttonToolCut" Source="Resources/Icons/Cut.png" Command="Cut"/>
+            <local:ImageButton x:Name="buttonToolPaste" Source="Resources/Icons/Paste.png" Command="Paste"/>
+            <Separator/>
+            <ComboBox x:Name="comboBoxLayers" SelectedIndex="0" Width="75" SelectionChanged="OnLayerChanged">
+                <ComboBoxItem Content="Layer 1"/>
+                <ComboBoxItem Content="Layer 2"/>
+                <ComboBoxItem Content="Layer 3"/>
+                <ComboBoxItem Content="Events"/>
+            </ComboBox>
+            <local:DropDownButton x:Name="dropDownButtonVisuals">
+                <MenuItem>
+                    <MenuItem.Header>
+                        <Image Stretch="None" Source="Resources/Icons/Visuals.png" />
+                    </MenuItem.Header>
+                    <MenuItem x:Name="dropDownItemHideBelow" Header="Hide Below" Tag="Hide" IsCheckable="True" Click="OnVisualsBelowChecked"/>
+                    <MenuItem x:Name="dropDownItemFadeBelow" Header="Fade Below" Tag="Fade" IsCheckable="True" IsChecked="True" Click="OnVisualsBelowChecked"/>
+                    <MenuItem x:Name="dropDownItemShowBelow" Header="Show Below" Tag="Show" IsCheckable="True" Click="OnVisualsBelowChecked"/>
+                    <Separator/>
+                    <MenuItem x:Name="dropDownItemHideAbove" Header="Hide Above" Tag="Hide" IsCheckable="True" Click="OnVisualsAboveChecked"/>
+                    <MenuItem x:Name="dropDownItemFadeAbove" Header="Fade Above" Tag="Fade" IsCheckable="True" IsChecked="True" Click="OnVisualsAboveChecked"/>
+                    <MenuItem x:Name="dropDownItemShowAbove" Header="Show Above" Tag="Show" IsCheckable="True" Click="OnVisualsAboveChecked"/>
+                    <Separator/>
+                    <MenuItem x:Name="dropDownItemShowRewards" Header="Show Rewards" IsCheckable="True" IsChecked="True" Click="OnShowRewardsChecked"/>
+                    <MenuItem x:Name="dropDownItemShowRoomBorders" Header="Show Room Borders" IsCheckable="True" IsChecked="True" Click="OnShowRoomBordersChecked"/>
+                    <MenuItem x:Name="dropDownItemShowModified" Header="Show Modified Tiles" IsCheckable="True" Click="OnShowModifiedTilesChecked"/>
+                    <MenuItem x:Name="dropDownItemShowEvents" Header="Show Events" IsCheckable="True" Click="OnShowEventsChecked"/>
+                </MenuItem>
+            </local:DropDownButton>
+            <local:ImageToggleButton x:Name="buttonShowGrid" Source="Resources/Icons/Grid.png" Command="cmd:EditorCommands.ShowGrid"/>
+            <local:ImageToggleButton x:Name="buttonPlayAnimations" Source="Resources/Icons/ShowAnimations.png" Command="cmd:EditorCommands.PlayAnimations"/>
+            <Separator/>
+            <local:ImageButton x:Name="buttonResizeLevel" Source="/Resources/Icons/LevelResize.png" ToolTip="Resize level" Command="cmd:EditorCommands.ResizeLevel"/>
+            <local:ImageButton x:Name="buttonShiftLevel" Source="/Resources/Icons/LevelShift.png" ToolTip="Shift level by room" Command="cmd:EditorCommands.ShiftLevel"/>
+        </ToolBar>
+        <StatusBar x:Name="statusBar" DockPanel.Dock="Bottom" Background="#FFF0F0F0">
+            <StatusBarItem x:Name="statusRoomLocation" Content="Room Location"/>
+            <StatusBarItem x:Name="statusTileLocation" Content="Tile Location"/>
+            <StatusBarItem x:Name="statusTask" Content="Compiling Scripts" HorizontalAlignment="Right" Margin="0,0,16,0"/>
+        </StatusBar>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="columnTreeView" Width="220"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*" MinWidth="200"/>
+            </Grid.ColumnDefinitions>
+            <treeViews:WorldTreeView x:Name="treeViewWorld" Grid.Column="0"/>
+            <local:AirspaceGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" ShowsPreview="True" ResizeDirection="Columns"/>
+            <Grid Grid.Column="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="100"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition x:Name="columnProperties" Width="290"/>
+                </Grid.ColumnDefinitions>
+                <Border BorderThickness="1" BorderBrush="#FF828790">
+                    <WindowsFormsHost x:Name="hostLevelDisplay" Grid.Column="0"/>
+                </Border>
+                <local:AirspaceGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" ShowsPreview="True" ResizeDirection="Columns"/>
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" MinHeight="20"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="216" MinHeight="20"/>
+                    </Grid.RowDefinitions>
+                    <Border BorderThickness="1,1,0,1" BorderBrush="#FF828790" Grid.Row="0">
+                        <DockPanel>
+                            <ToolBar DockPanel.Dock="Top" BorderThickness="0">
+                                <ComboBox x:Name="comboBoxTilesets" Width="121" SelectionChanged="OnTilesetChanged"/>
+                                <ComboBox x:Name="comboBoxZones" Width="121" SelectionChanged="OnZoneChanged"/>
+                            </ToolBar>
+                            <Border BorderBrush="#FF828790" BorderThickness="0,1,0,0">
+                                <WindowsFormsHost x:Name="hostTileDisplay"/>
+                            </Border>
+                        </DockPanel>
+                    </Border>
+                    <local:AirspaceGridSplitter Grid.Row="1" HorizontalAlignment="Stretch" ResizeDirection="Rows" ShowsPreview="True"/>
+                    <props:ZeldaPropertyGrid x:Name="propertyGrid" IsVirtualizing="True" Grid.Row="2" BorderThickness="1,1,0,1" BorderBrush="#FF828790" ShowTitle="False" ShowSearchBox="False" VirtualizingPanel.IsVirtualizing="True"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" VerticalAlignment="Top" Margin="116,9,0,0">
+                        <Label Content="Editing:" Padding="0,0,5,0" FontWeight="Bold" Visibility="Collapsed"/>
+                        <ContentControl x:Name="propertyPreviewImage" Height="16" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="16" MaxWidth="32" ClipToBounds="True">
+                            <Image Stretch="None" Source="Resources/Icons/Level.png" />
+                        </ContentControl>
+                        <TextBlock x:Name="propertyPreviewName" Text="Level" Padding="5,0"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

@@ -1,18 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{96DB7016-FE01-4698-A9C2-523F6AA2219E}</ProjectGuid>
+    <ProjectGuid>{AB05C473-9789-441A-B32F-E86154B91C09}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ZeldaEditor</RootNamespace>
     <AssemblyName>ZeldaEditor</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -23,24 +24,35 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Editor.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FastColoredTextBox">
-      <HintPath>..\..\FastColoredTextBox.dll</HintPath>
+    <Reference Include="ICSharpCode.NRefactory, Version=5.0.0.0, Culture=neutral, PublicKeyToken=d4bfe873e7598c49, processorArchitecture=MSIL">
+      <HintPath>..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.NRefactory.Cecil, Version=5.0.0.0, Culture=neutral, PublicKeyToken=d4bfe873e7598c49, processorArchitecture=MSIL">
+      <HintPath>..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.Cecil.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.NRefactory.CSharp, Version=5.0.0.0, Culture=neutral, PublicKeyToken=d4bfe873e7598c49, processorArchitecture=MSIL">
+      <HintPath>..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.CSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.NRefactory.Xml, Version=5.0.0.0, Culture=neutral, PublicKeyToken=d4bfe873e7598c49, processorArchitecture=MSIL">
+      <HintPath>..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.Xml.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Avatar, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
@@ -51,288 +63,275 @@
     <Reference Include="Microsoft.Xna.Framework.Storage, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Xna.Framework.Video, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Cecil.Mdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Cecil.Pdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Cecil.Rocks, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Control\EditorWorld.cs" />
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Controls\AirspaceGridSplitter.cs" />
+    <Compile Include="Controls\DropDownMenuItem.cs" />
+    <Compile Include="Controls\FormatCodesDropdown.cs" />
+    <Compile Include="Controls\HistoryListViewItem.cs" />
+    <Compile Include="Controls\ImageMenuItem.cs" />
+    <Compile Include="Controls\ImageTreeViewItem.cs" />
+    <Compile Include="Controls\PropertyGridEditorBooleanCheckBox.cs" />
+    <Compile Include="Controls\PropertyGridEditorWindowButton.cs" />
+    <Compile Include="Controls\TreeViewLineConverter.cs" />
     <Compile Include="Control\EditorControl.cs" />
     <Compile Include="Control\EditorGraphics.cs" />
+    <Compile Include="Control\EditorImages.cs" />
     <Compile Include="Control\EditorResources.cs" />
-    <Compile Include="Control\PropertyGridControl.cs" />
-    <Compile Include="DevTools\PropertyRefactorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DevTools\PropertyRefactorForm.Designer.cs">
-      <DependentUpon>PropertyRefactorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DungeonAddForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DungeonAddForm.Designer.cs">
-      <DependentUpon>DungeonAddForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ObjectsEditor\CustomControls\CustomObjectEditorControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileCrossingGate.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileDoor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileColorLantern.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileColorCube.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileColorJumpPad.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileSign.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileReward.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileChest.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileLever.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileColorSwitch.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileLantern.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ObjectsEditor\CustomControls\ObjectControlsTileButton.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ObjectsEditor\CustomControls\RewardChooser.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ObjectsEditor\CustomControls\RewardChooser.Designer.cs">
-      <DependentUpon>RewardChooser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ObjectsEditor\CustomControls\UserControl1.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ObjectsEditor\CustomControls\UserControl1.Designer.cs">
-      <DependentUpon>UserControl1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PropertiesEditor\CustomEditors\LevelPropertyEditor.cs" />
-    <Compile Include="PropertiesEditor\CustomEditors\DungeonPropertyEditor.cs" />
-    <Compile Include="PropertiesEditor\ZeldaPropertyGrid.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Scripting\ScriptEditorCompiler.cs" />
+    <Compile Include="Control\EditorWorld.cs" />
+    <Compile Include="Controls\PropertyGridEditorCheckComboBox.cs" />
     <Compile Include="Control\TileDrawModes.cs" />
-    <Compile Include="ObjectsEditor\ObjectEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ObjectsEditor\ObjectEditor.Designer.cs">
-      <DependentUpon>ObjectEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ObjectsEditor\ObjectEditorEventsTab.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ObjectsEditor\ObjectEditorEventsTab.Designer.cs">
-      <DependentUpon>ObjectEditorEventsTab.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PropertiesEditor\CustomEditors\CustomPropertyEditor.cs" />
-    <Compile Include="PropertiesEditor\CustomEditors\DropDownPropertyEditor.cs" />
-    <Compile Include="PropertiesEditor\CustomEditors\DirectionPropertyEditor.cs" />
-    <Compile Include="PropertiesEditor\CustomEditors\EnumComboBox.cs" />
-    <Compile Include="PropertiesEditor\CustomEditors\FormPropertyEditor.cs" />
+    <Compile Include="EditorCommands.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\BooleanPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\DungeonPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\EnumFlagPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\EnumPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\TextMessagePropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\WarpPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\WindowPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\LevelPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\NoneStringConverter.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\Point2IPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\ResourcePropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\ScriptPropertyEditor.cs" />
-    <Compile Include="PropertiesEditor\CustomEditors\TextMessageEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PropertiesEditor\CustomEditors\TextMessageEditorForm.Designer.cs">
-      <DependentUpon>TextMessageEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="RenameForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="RenameForm.Designer.cs">
-      <DependentUpon>RenameForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LevelResizeShiftForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LevelResizeShiftForm.Designer.cs">
-      <DependentUpon>LevelResizeShiftForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PropertiesEditor\CustomEditors\RewardPropertyEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PropertiesEditor\CustomEditors\RewardPropertyEditorForm.Designer.cs">
-      <DependentUpon>RewardPropertyEditorForm.cs</DependentUpon>
-    </Compile>
+    <None Include="PropertiesEditor\CustomEditors\SpriteIndexComboBox.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\RewardPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomProperties.cs" />
-    <Compile Include="Scripting\ScriptEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scripting\ScriptEditor.Designer.cs">
-      <DependentUpon>ScriptEditor.cs</DependentUpon>
-    </Compile>
     <Compile Include="PropertiesEditor\CustomPropertyDescriptor.cs" />
-    <Compile Include="PropertiesEditor\CustomEditors\SpriteIndexComboBox.cs" />
-    <Compile Include="TileDisplay.cs">
+    <Compile Include="PropertiesEditor\ZeldaPropertyGrid.cs" />
+    <Compile Include="Controls\FolderTreeViewItem.cs" />
+    <Compile Include="Undo\ActionChangeProperty.cs" />
+    <Compile Include="Undo\ActionCreateLevel.cs" />
+    <None Include="Tools\ToolSelectionOld.cs" />
+    <Compile Include="Undo\ActionDeleteDungeon.cs" />
+    <Compile Include="Undo\ActionDeleteLevel.cs" />
+    <Compile Include="Undo\ActionEventTile.cs" />
+    <Compile Include="Undo\ActionMoveDungeon.cs" />
+    <Compile Include="Undo\ActionMoveLevel.cs" />
+    <Compile Include="Undo\ActionOpenWorld.cs" />
+    <Compile Include="Undo\ActionResizeLevel.cs" />
+    <Compile Include="Undo\ActionSelection.cs" />
+    <Compile Include="Undo\ActionShiftLevel.cs" />
+    <Compile Include="Undo\ActionSquare.cs" />
+    <Compile Include="Undo\ActionCreateDungeon.cs" />
+    <Compile Include="Undo\EditorAction.cs" />
+    <Compile Include="Undo\ActionPlace.cs" />
+    <Compile Include="Undo\ActionRenameID.cs" />
+    <Compile Include="Util\AlphanumComparatorFast.cs" />
+    <Compile Include="Windows\AddNewDungeonWindow.xaml.cs">
+      <DependentUpon>AddNewDungeonWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AddNewLevelWindow.xaml.cs">
+      <DependentUpon>AddNewLevelWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\HistoryWindow.xaml.cs">
+      <DependentUpon>HistoryWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ResizeLevelWindow.xaml.cs">
+      <DependentUpon>ResizeLevelWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ScriptEditor.xaml.cs">
+      <DependentUpon>ScriptEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Scripting\ScriptEditorCompiler.cs" />
+    <Compile Include="Scripting\ScriptProvider.cs" />
+    <Compile Include="Scripting\ScriptTextEditor.cs" />
+    <Compile Include="Windows\ShiftLevelWindow.xaml.cs">
+      <DependentUpon>ShiftLevelWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\TextMessageDisplay.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="EditorForm.cs">
-      <SubType>Form</SubType>
+    <Compile Include="WinForms\TileDisplay.cs">
+      <SubType>Component</SubType>
     </Compile>
-    <Compile Include="EditorForm.Designer.cs">
-      <DependentUpon>EditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tools\ToolSquare.cs" />
-    <Compile Include="Tools\ToolFill.cs" />
     <Compile Include="Tools\EditorTool.cs" />
     <Compile Include="Tools\ToolEyedrop.cs" />
+    <Compile Include="Tools\ToolFill.cs" />
     <Compile Include="Tools\ToolPlace.cs" />
-    <Compile Include="Tools\ToolSelection.cs" />
     <Compile Include="Tools\ToolPointer.cs" />
-    <Compile Include="TreeViews\IWorldTreeViewNode.cs" />
-    <Compile Include="TreeViews\DungeonTreeNode.cs" />
-    <Compile Include="TreeViews\WorldTreeNode.cs" />
-    <Compile Include="TreeViews\ScriptTreeNode.cs" />
-    <Compile Include="TreeViews\LevelTreeNode.cs" />
-    <Compile Include="WinFormsGraphicsDevice\GraphicsDeviceControl.cs">
+    <Compile Include="Tools\ToolSelection.cs" />
+    <Compile Include="Tools\ToolSquare.cs" />
+    <Compile Include="TreeViews\DungeonTreeViewItem.cs" />
+    <Compile Include="TreeViews\IWorldTreeViewItem.cs" />
+    <Compile Include="TreeViews\LevelTreeViewItem.cs" />
+    <Compile Include="TreeViews\ScriptTreeViewItem.cs" />
+    <Compile Include="TreeViews\WorldTreeViewItem.cs" />
+    <Compile Include="TreeViews\WorldTreeView.xaml.cs">
+      <DependentUpon>WorldTreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ImageButton.cs" />
+    <Compile Include="Controls\DropDownButton.cs" />
+    <Compile Include="Controls\ImageToggleButton.cs" />
+    <Compile Include="Util\BitmapFactory.cs" />
+    <Compile Include="Util\NativeMethods.cs" />
+    <Compile Include="Windows\ErrorMessageBox.xaml.cs">
+      <DependentUpon>ErrorMessageBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\RenameWindow.xaml.cs">
+      <DependentUpon>RenameWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\TextMessageEditor.xaml.cs">
+      <DependentUpon>TextMessageEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\TriggerMessageBox.xaml.cs">
+      <DependentUpon>TriggerMessageBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\GraphicsDeviceControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WinFormsGraphicsDevice\GraphicsDeviceService.cs" />
-    <Compile Include="LevelAddForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LevelAddForm.Designer.cs">
-      <DependentUpon>LevelAddForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LevelDisplay.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WinFormsGraphicsDevice\ServiceContainer.cs" />
-    <Compile Include="TreeViews\WorldTreeView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <EmbeddedResource Include="DevTools\PropertyRefactorForm.resx">
-      <DependentUpon>PropertyRefactorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DungeonAddForm.resx">
-      <DependentUpon>DungeonAddForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ObjectsEditor\CustomControls\CustomObjectEditorControl.resx">
-      <DependentUpon>CustomObjectEditorControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileCrossingGate.resx">
-      <DependentUpon>ObjectControlsTileCrossingGate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileDoor.resx">
-      <DependentUpon>ObjectControlsTileDoor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileColorLantern.resx">
-      <DependentUpon>ObjectControlsTileColorLantern.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileColorCube.resx">
-      <DependentUpon>ObjectControlsTileColorCube.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileColorJumpPad.resx">
-      <DependentUpon>ObjectControlsTileColorJumpPad.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileSign.resx">
-      <DependentUpon>ObjectControlsTileSign.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileReward.resx">
-      <DependentUpon>ObjectControlsTileReward.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileChest.resx">
-      <DependentUpon>ObjectControlsTileChest.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileLever.resx">
-      <DependentUpon>ObjectControlsTileLever.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileColorSwitch.resx">
-      <DependentUpon>ObjectControlsTileColorSwitch.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileLantern.resx">
-      <DependentUpon>ObjectControlsTileLantern.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ObjectsEditor\CustomControls\ObjectControlsTileButton.resx">
-      <DependentUpon>ObjectControlsTileButton.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ObjectsEditor\CustomControls\RewardChooser.resx">
-      <DependentUpon>RewardChooser.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ObjectsEditor\CustomControls\UserControl1.resx">
-      <DependentUpon>UserControl1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ObjectsEditor\ObjectEditor.resx">
-      <DependentUpon>ObjectEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ObjectsEditor\ObjectEditorEventsTab.resx">
-      <DependentUpon>ObjectEditorEventsTab.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PropertiesEditor\CustomEditors\TextMessageEditorForm.resx">
-      <DependentUpon>TextMessageEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RenameForm.resx">
-      <DependentUpon>RenameForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LevelResizeShiftForm.resx">
-      <DependentUpon>LevelResizeShiftForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="EditorForm.resx">
-      <DependentUpon>EditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LevelAddForm.resx">
-      <DependentUpon>LevelAddForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PropertiesEditor\CustomEditors\RewardPropertyEditorForm.resx">
-      <DependentUpon>RewardPropertyEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    <Compile Include="WinForms\GraphicsDeviceService.cs" />
+    <Compile Include="WinForms\ServiceContainer.cs" />
+    <EmbeddedResource Include="Themes\TextMessageHighlighting.xshd" />
+    <Page Include="EditorWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-      <CustomToolNamespace>ZeldaEditor.ResourceProperties</CustomToolNamespace>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
-    <EmbeddedResource Include="Scripting\ScriptEditor.resx">
-      <DependentUpon>ScriptEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
+    <Compile Include="EditorWindow.xaml.cs">
+      <DependentUpon>EditorWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Resource Include="Themes\DefaultStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Resource>
+    <Page Include="Windows\AddNewDungeonWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AddNewLevelWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\HistoryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ResizeLevelWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ScriptEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TreeViews\WorldTreeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ErrorMessageBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\RenameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ShiftLevelWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\TextMessageEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\TriggerMessageBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="WinForms\LevelDisplay.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProjectProperties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProjectProperties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectProperties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="ProjectProperties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ProjectProperties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\EditorLibraries\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj">
+      <Project>{6c55b776-26d4-4db3-a6ab-87e783b2f3d1}</Project>
+      <Name>ICSharpCode.AvalonEdit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EditorLibraries\ICSharpCode.CodeCompletion\ICSharpCode.CodeCompletion.csproj">
+      <Project>{82c28fbb-0408-466a-be20-bd4a3ce76a75}</Project>
+      <Name>ICSharpCode.CodeCompletion</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EditorLibraries\Xceed.Wpf.Toolkit\Xceed.Wpf.Toolkit.csproj">
+      <Project>{72e591d6-8f83-4d8c-8f67-9c325e623234}</Project>
+      <Name>Xceed.Wpf.Toolkit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ZeldaAPI\ZeldaAPI.csproj">
       <Project>{b8b46d20-161d-47d3-810a-69d5ca61c080}</Project>
       <Name>ZeldaAPI</Name>
@@ -343,21 +342,255 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Editor.ico" />
-    <None Include="Resources\arrow-circle-315.png" />
-    <None Include="Resources\arrow-circle-225-left.png" />
-    <None Include="Resources\document-copy.png" />
-    <None Include="Resources\scissors.png" />
-    <None Include="Resources\clipboard-paste.png" />
-    <None Include="Resources\disk.png" />
-    <None Include="Resources\script-text--plus.png" />
-    <None Include="Resources\maps.png" />
-    <None Include="Resources\map--plus.png" />
-    <None Include="Resources\map.png" />
-    <None Include="Resources\script-text.png" />
-    <None Include="Resources\script--exclamation.png" />
-    <None Include="Resources\exclamation.png" />
-    <None Include="Resources\tick.png" />
+    <Resource Include="Editor.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\AppError.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Empty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ErrorIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\InfoIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\QuestionIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\WarningIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ShowAnimations.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Checkmark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Cut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Dungeon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\DungeonAdd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\DungeonGroup.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Github.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Grid.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Level.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\LevelAdd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\LevelGroup.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\LevelResize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\LevelShift.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Minus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Paste.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Rename.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\RunGame.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\RunGameAtLocation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\SaveAs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Script.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ScriptAdd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ScriptError.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ScriptGroup.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ToolEyedropper.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ToolFill.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ToolPlace.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ToolPointer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ToolSelection.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ToolSquare.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Visuals.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\World.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\WorldAdd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\WorldNew.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DevTools\" />
+    <Folder Include="ObjectsEditor\CustomControls\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\MoveDown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\MoveUp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Redo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Undo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Room.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\FolderBlueClosed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\FolderBlueOpen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Sign.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ColorCodes.png" />
+    <Resource Include="Resources\Icons\StringCodes.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\FormatCodeCharacters.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Paragraph.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\NewLine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\CycleLayerDown.png" />
+    <Resource Include="Resources\Icons\CycleLayerUp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Deselect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\SelectAll.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\WorldClose.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Layer.png" />
+    <Resource Include="Resources\Icons\LayerCycleDown.png" />
+    <Resource Include="Resources\Icons\LayerCycleUp.png" />
+    <Resource Include="Resources\Icons\LayerGroup.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\LayerAdd.png" />
+    <Resource Include="Resources\Icons\LayerDelete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\DungeonDuplicate.png" />
+    <Resource Include="Resources\Icons\LevelDelete.png" />
+    <Resource Include="Resources\Icons\LevelDuplicate.png" />
+    <Resource Include="Resources\Icons\Palette.png" />
+    <Resource Include="Resources\Icons\Palettes.png" />
+    <Resource Include="Resources\Icons\ScriptDelete.png" />
+    <Resource Include="Resources\Icons\ScriptDuplicate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\DungeonDelete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cursors\EyedropperCursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cursors\FillCursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cursors\PencilCursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cursors\SelectionCursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cursors\SquareCursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ToolPlaceErase.png" />
+    <Resource Include="Resources\Icons\ToolSquareErase.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ToolFillErase.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Eraser.png" />
+    <Resource Include="Resources\Icons\RoomOld.png" />
+    <Resource Include="Resources\Icons\Tile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Event.png" />
+    <Resource Include="Resources\Icons\Property.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\History.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -10,7 +10,17 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 
 namespace ZeldaOracle.Game.Worlds {
-	public class Level : IPropertyObject {
+
+	public enum CreateTileGridMode {
+		/**<summary>The tile grid will contain the actual tile instances and remove them from the level.</summary>*/
+		Remove,
+		/**<summary>The tile grid will contain copies of the tile instances without removing them.</summary>*/
+		Duplicate,
+		/**<summary>The tile grid will contain the actual tile instances without removing them.</summary>*/
+		Twin
+	}
+
+	public class Level : IPropertyObject, IPropertyObjectContainer, IIDObject {
 
 		private World		world;
 		private Point2I		roomSize;		// The size in tiles of each room in the level.
@@ -20,21 +30,29 @@ namespace ZeldaOracle.Game.Worlds {
 		//private Zone		zone;
 		private Properties	properties;
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		public Level(int width, int height, Point2I roomSize) :
-			this("", width, height, GameSettings.DEFAULT_TILE_LAYER_COUNT, roomSize, null)
-		{
+			this("", width, height, GameSettings.DEFAULT_TILE_LAYER_COUNT, roomSize, null) {
 		}
-		
-		public Level(string name, int width, int height, int layerCount, Point2I roomSize, Zone zone) {
-			this.world			= null;
-			this.roomSize		= roomSize;
+
+		public Level(Point2I dimensions, Point2I roomSize) :
+			this("", dimensions, GameSettings.DEFAULT_TILE_LAYER_COUNT, roomSize, null) {
+		}
+
+		public Level(string id, int width, int height, int layerCount, Point2I roomSize, Zone zone) :
+			this(id, new Point2I(width, height), layerCount, roomSize, zone) {
+			
+		}
+
+		public Level(string id, Point2I dimensions, int layerCount, Point2I roomSize, Zone zone) {
+			this.world          = null;
+			this.roomSize       = roomSize;
 			this.roomLayerCount = layerCount;
-			this.dimensions		= Point2I.Zero;
+			this.dimensions     = Point2I.Zero;
 			//this.zone			= zone;
 
 
@@ -42,30 +60,43 @@ namespace ZeldaOracle.Game.Worlds {
 			properties.BaseProperties = new Properties();
 
 			properties.BaseProperties.Set("id", "")
-				.SetDocumentation("ID", "", "", "", "The id used to refer to this level.", false, true);
+				.SetDocumentation("ID", "", "", "General", "The id used to refer to this level.", false, false);
 
 			properties.BaseProperties.Set("dungeon", "")
-				.SetDocumentation("Dungeon", "dungeon", "", "", "The dungeon this level belongs to.");
+				.SetDocumentation("Dungeon", "dungeon", "", "Dungeon", "The dungeon this level belongs to.");
 			properties.BaseProperties.Set("dungeon_floor", 0)
-				.SetDocumentation("Dungeon Floor", "", "", "", "The floor in the dungeon this level belongs to.");
+				.SetDocumentation("Dungeon Floor", "", "", "Dungeon", "The floor in the dungeon this level belongs to.");
 
-			properties.BaseProperties.Set("discovered", false);
+			properties.BaseProperties.Set("discovered", false)
+				.SetDocumentation("Discovered", "", "", "Progress", "True if the level has been visited at least once.");
 
-			properties.Set("id", name);
+			properties.Set("id", id);
 
 			properties.BaseProperties.Set("zone", "")
-				.SetDocumentation("Zone", "zone", "", "", "The zone type for this room.", true, false);
+				.SetDocumentation("Zone", "zone", "", "Level", "The zone type for this room.");
 
 			Zone = zone;
-			
-			Resize(new Point2I(width, height));
+
+			Resize(dimensions);
 		}
 
+		//-----------------------------------------------------------------------------
+		// Property objects
+		//-----------------------------------------------------------------------------
+
+		public IEnumerable<IPropertyObject> GetPropertyObjects() {
+			yield return this;
+			foreach (Room room in rooms) {
+				foreach (IPropertyObject propertyObject in room.GetPropertyObjects()) {
+					yield return propertyObject;
+				}
+			}
+		}
 
 		//-----------------------------------------------------------------------------
 		// Level Coordinates
 		//-----------------------------------------------------------------------------
-		
+
 		// Return true if the level tile coordinate is within the level's bounds.
 		public bool IsInBounds(LevelTileCoord levelCoord) {
 			return ContainsRoom(GetRoomLocation(levelCoord));
@@ -107,38 +138,37 @@ namespace ZeldaOracle.Game.Worlds {
 
 		// Take tiles from the level and put them into a tile grid.
 		public TileGrid CreateTileGrid(Rectangle2I area) {
-			return CreateTileGrid(area, false);
+			return CreateTileGrid(area, CreateTileGridMode.Remove);
 		}
 		
 		// Take tiles from the level (or duplicate them) and put them into a tile grid.
-		public TileGrid CreateTileGrid(Rectangle2I area, bool duplicate) {
+		public TileGrid CreateTileGrid(Rectangle2I area, CreateTileGridMode mode) {
 			TileGrid tileGrid = new TileGrid(area.Size, roomLayerCount);
 			BaseTileDataInstance[] tiles = GetTilesInArea(area).ToArray();
 
 			foreach (BaseTileDataInstance baseTileOriginal in tiles) {
 				// Duplicate the tile if specified, else remove the original.
 				BaseTileDataInstance baseTile;
-				if (duplicate) {
+				if (mode == CreateTileGridMode.Duplicate) {
 					baseTile = baseTileOriginal.Duplicate();
 				}
 				else {
 					baseTile = baseTileOriginal;
-					baseTileOriginal.Room.Remove(baseTileOriginal);
+					if (mode == CreateTileGridMode.Remove)
+						baseTileOriginal.Room.Remove(baseTileOriginal);
 				}
 
 				// Add the tile to the tile grid.
 				if (baseTile is TileDataInstance) {
 					TileDataInstance tile = (TileDataInstance) baseTile;
-					tile.Location += tile.Room.Location * roomSize;
-					tile.Location -= area.Point;
-					tileGrid.PlaceTile(tile, tile.Location, tile.Layer);
+					Point2I location = tile.Location + tile.Room.Location * roomSize - area.Point;
+					tileGrid.PlaceTile(tile, location, tile.Layer);
 
 				}
 				else if (baseTile is EventTileDataInstance) {
 					EventTileDataInstance eventTile = (EventTileDataInstance) baseTile;
-					eventTile.Position += eventTile.Room.Location * roomSize * GameSettings.TILE_SIZE;
-					eventTile.Position -= area.Point * GameSettings.TILE_SIZE;
-					tileGrid.AddEventTile(eventTile);
+					Point2I position = (eventTile.Room.Location * roomSize - area.Point) * GameSettings.TILE_SIZE;
+					tileGrid.PlaceEventTile(eventTile, position + eventTile.Position);
 				}
 			}
 
@@ -294,21 +324,72 @@ namespace ZeldaOracle.Game.Worlds {
 			dimensions = size;
 		}
 
+		// Resize the dimensions of the room grid.
+		public void Resize(Point2I size, Dictionary<Point2I, Room> restoredRooms) {
+			Room[,] oldRooms = rooms;
+			rooms = new Room[size.X, size.Y];
+
+			for (int x = 0; x < size.X; x++) {
+				for (int y = 0; y < size.Y; y++) {
+					if (oldRooms != null && x < dimensions.X && y < dimensions.Y)
+						rooms[x, y] = oldRooms[x, y];
+					else if (restoredRooms.ContainsKey(new Point2I(x, y)))
+						rooms[x, y] = restoredRooms[new Point2I(x, y)];
+					else
+						rooms[x, y] = new Room(this, x, y, Zone ?? GameData.ZONE_DEFAULT);
+				}
+			}
+
+			dimensions = size;
+		}
+
 		// Shift the room grid.
-		public void Shift(Point2I distance) {
+		public void ShiftRooms(Point2I distance) {
 			Room[,] oldRooms = rooms;
 			rooms = new Room[dimensions.X, dimensions.Y];
 
 			for (int x = 0; x < dimensions.X; x++) {
 				for (int y = 0; y < dimensions.Y; y++) {
 					if (x - distance.X >= 0 && x - distance.X < dimensions.X &&
-						y - distance.Y >= 0 && y - distance.Y < dimensions.Y)
-					{
+						y - distance.Y >= 0 && y - distance.Y < dimensions.Y) {
 						rooms[x, y] = oldRooms[x - distance.X, y - distance.Y];
 						rooms[x, y].Location = new Point2I(x, y);
 					}
 					else
 						rooms[x, y] = new Room(this, x, y, Zone ?? Resources.GetResource<Zone>(""));
+				}
+			}
+		}
+
+		// Shift the room grid.
+		public void ShiftRooms(Point2I distance, Dictionary<Point2I, Room> restoredRooms) {
+			Room[,] oldRooms = rooms;
+			rooms = new Room[dimensions.X, dimensions.Y];
+
+			for (int x = 0; x < dimensions.X; x++) {
+				for (int y = 0; y < dimensions.Y; y++) {
+					Point2I location = new Point2I(x, y);
+					if (x - distance.X >= 0 && x - distance.X < dimensions.X &&
+						y - distance.Y >= 0 && y - distance.Y < dimensions.Y) {
+						rooms[x, y] = oldRooms[x - distance.X, y - distance.Y];
+						rooms[x, y].Location = location;
+					}
+					else if (restoredRooms.ContainsKey(location)) {
+						rooms[x, y] = restoredRooms[location];
+						rooms[x, y].Location = location;
+					}
+					else
+						rooms[x, y] = new Room(this, location, Zone ?? Resources.GetResource<Zone>(""));
+				}
+			}
+		}
+
+		public void ResizeLayerCount(int newLayerCount) {
+			newLayerCount = Math.Max(1, newLayerCount);
+			if (newLayerCount != roomLayerCount) {
+				roomLayerCount = newLayerCount;
+				foreach (Room room in rooms) {
+					room.ResizeLayerCount(newLayerCount);
 				}
 			}
 		}
@@ -328,7 +409,6 @@ namespace ZeldaOracle.Game.Worlds {
 				}
 			}
 		}
-
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -352,7 +432,11 @@ namespace ZeldaOracle.Game.Worlds {
 			get { return dimensions; }
 			set { dimensions = value; }
 		}
-		
+
+		public Point2I Span {
+			get { return dimensions * roomSize; }
+		}
+
 		public int Width {
 			get { return dimensions.X; }
 			set { dimensions.X = value; }
@@ -387,7 +471,7 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public Zone Zone {
-			get { return properties.GetResource<Zone>("zone", null); }
+			get { return properties.GetResource<Zone>("zone", GameData.ZONE_DEFAULT); }
 			set {
 				if (value != null)
 					properties.Set("zone", value.ID);
@@ -398,13 +482,13 @@ namespace ZeldaOracle.Game.Worlds {
 			//set { zone = value; }
 		}
 
-		public string Id {
+		public string ID {
 			get { return properties.GetString("id"); }
 			set { properties.Set("id", value); }
 		}
 		
 		public Dungeon Dungeon {
-			get { return world.GetDungoen(properties.GetString("dungeon", "")); }
+			get { return world.GetDungeon(properties.GetString("dungeon", "")); }
 			set {
 				if (value == null)
 					properties.Set("dungeon", "");

@@ -96,5 +96,14 @@ namespace ZeldaOracle.Game.Tiles {
 		public bool SyncWithDungeon {
 			get { return syncWithDungeon; }
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// API Implementations
+		//-----------------------------------------------------------------------------
+
+		ZeldaAPI.Color ZeldaAPI.ColorSwitch.Color {
+			get { return (ZeldaAPI.Color)color; }
+		}
 	}
 }

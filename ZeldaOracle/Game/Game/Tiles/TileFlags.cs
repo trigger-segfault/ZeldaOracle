@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -42,7 +43,9 @@ namespace ZeldaOracle.Game.Tiles {
 
 	[Flags]
 	public enum TileFlags {
+		[Browsable(false)]
 		None			= 0,
+		[Browsable(false)]
 		Default			= 0,		// Default tile flags (Flags are designed so this value is 0)
 				
 		// General.

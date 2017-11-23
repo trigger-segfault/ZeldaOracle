@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,20 +7,30 @@ using System.Threading.Tasks;
 
 using ZeldaResources = ZeldaOracle.Common.Content.Resources;
 using ZeldaImage = ZeldaOracle.Common.Graphics.Image;
+using ZeldaSprite = ZeldaOracle.Common.Graphics.Sprite;
+using ZeldaAnimation = ZeldaOracle.Common.Graphics.Animation;
+using ZeldaAnimationFrame = ZeldaOracle.Common.Graphics.AnimationFrame;
+using System.Windows.Media.Imaging;
+using ZeldaEditor.Util;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace ZeldaEditor.Control {
+
 	public static class EditorResources {
 
-		private static Dictionary<ZeldaImage, Bitmap> resourceBitmaps;
-		
-		
+		private static Dictionary<KeyValuePair<ZeldaImage, int>, BitmapSource> resourceImages;
+		private static Dictionary<KeyValuePair<ZeldaSprite, int>, BitmapSource> resourceSprites;
+
+
 		//-----------------------------------------------------------------------------
 		// Initialization
 		//-----------------------------------------------------------------------------
 
 		// Initialize the editor resources.
 		public static void Initialize() {
-			resourceBitmaps = new Dictionary<ZeldaImage, Bitmap>();
+			resourceImages = new Dictionary<KeyValuePair<ZeldaImage, int>, BitmapSource>();
+			resourceSprites = new Dictionary<KeyValuePair<ZeldaSprite, int>, BitmapSource>();
 		}
 
 
@@ -31,25 +40,97 @@ namespace ZeldaEditor.Control {
 
 
 		// Get a bitmap from an image resource name.
-		public static Bitmap GetBitmap(string imageName) {
-			return GetBitmap(ZeldaResources.GetImage(imageName));
+		public static BitmapSource GetImage(string imageName, int variantID = -1) {
+			return GetImage(ZeldaResources.GetImage(imageName), variantID);
 		}
 
 
 		// Get a bitmap from an image resource.
-		public static Bitmap GetBitmap(ZeldaImage image) {
+		public static BitmapSource GetImage(ZeldaImage image, int variantID = -1) {
+			if (variantID == -1)
+				variantID = image.VariantID;
+			var pair = new KeyValuePair<ZeldaImage, int>(image, variantID);
 			// If the image's bitmap is already loaded, then return it.
-			if (resourceBitmaps.ContainsKey(image))
-				return resourceBitmaps[image];
+			if (resourceImages.ContainsKey(pair))
+				return resourceImages[pair];
 
 			// Save the XNA image to memory as a png, and load it as a bitmap.
-			MemoryStream ms = new System.IO.MemoryStream();
-			image.Texture.SaveAsPng(ms, image.Texture.Width, image.Texture.Height);
-			Bitmap bitmap = new System.Drawing.Bitmap(ms);
-
+			MemoryStream memoryStream = new MemoryStream();
+			image.GetVariant(variantID).Texture.SaveAsPng(memoryStream, image.Texture.Width, image.Texture.Height);
+			BitmapSource bitmap = BitmapFactory.LoadSourceFromStream(memoryStream);
+			bitmap.Freeze();
 			// Add the new bitmap to the resource map.
-			resourceBitmaps[image] = bitmap;
+			resourceImages[pair] = bitmap;
 			return bitmap;
+		}
+		// Get a bitmap from an image resource name.
+		public static Image GetSpritePart(string spriteName, int variantID = -1) {
+			return GetSpritePart(ZeldaResources.GetSprite(spriteName), variantID);
+		}
+		// Get a bitmap from an image resource.
+		public static Image GetSpritePart(ZeldaSprite sprite, int variantID = -1) {
+			if (variantID == -1)
+				variantID = sprite.Image.VariantID;
+			BitmapSource bitmap;
+			// If the image's bitmap is already loaded, then return it.
+			var pair = new KeyValuePair<ZeldaSprite, int>(sprite, variantID);
+			if (resourceSprites.ContainsKey(pair)) {
+				bitmap = resourceSprites[pair];
+			}
+			else {
+				BitmapSource image = GetImage(sprite.Image, variantID);
+				bitmap = new CroppedBitmap(image, new Int32Rect(sprite.SourceRect.X, sprite.SourceRect.Y, sprite.SourceRect.Width, sprite.SourceRect.Height));
+				bitmap.Freeze();
+				// Add the new bitmap to the resource map.
+				resourceSprites[pair] = bitmap;
+			}
+			Image spriteImage = new Image();
+			spriteImage.Source = bitmap;
+			Canvas.SetLeft(spriteImage, sprite.DrawOffset.X);
+			Canvas.SetTop(spriteImage, sprite.DrawOffset.Y);
+			return spriteImage;
+		}
+		// Get a bitmap from an image resource name.
+		public static Canvas GetSprite(string spriteName, int variantID = -1) {
+			return GetSprite(ZeldaResources.GetSprite(spriteName), variantID);
+		}
+		// Get a bitmap from an image resource.
+		public static Canvas GetSprite(ZeldaSprite sprite, int variantID = -1) {
+			if (variantID == -1)
+				variantID = sprite.Image.VariantID;
+			Canvas canvas = new Canvas();
+			canvas.HorizontalAlignment = HorizontalAlignment.Left;
+			canvas.VerticalAlignment = VerticalAlignment.Top;
+			for (ZeldaSprite part = sprite; part != null; part = part.NextPart) {
+				canvas.Children.Add(GetSpritePart(part, variantID));
+			}
+			return canvas;
+		}
+		// Get a bitmap from an image resource name.
+		public static Canvas GetAnimation(string animationName, int variantID = -1) {
+			return GetAnimation(ZeldaResources.GetAnimation(animationName), variantID);
+		}
+		// Get a bitmap from an image resource.
+		public static Canvas GetAnimation(ZeldaAnimation animation, int variantID = -1) {
+			if (variantID == -1)
+				variantID = animation.Frames[0].Image.VariantID;
+			Canvas canvas = new Canvas();
+			canvas.HorizontalAlignment = HorizontalAlignment.Left;
+			canvas.VerticalAlignment = VerticalAlignment.Top;
+			int time = 0;
+
+			for (int i = 0; i < animation.Frames.Count; ++i) {
+				ZeldaAnimationFrame frame = animation.Frames[i];
+				if (time < frame.StartTime)
+					break;
+				if (time < frame.StartTime + frame.Duration || (time >= animation.Duration && frame.StartTime + frame.Duration == animation.Duration)) {
+					for (ZeldaSprite part = frame.Sprite; part != null; part = part.NextPart) {
+						canvas.Children.Add(GetSpritePart(part, variantID));
+					}
+				}
+			}
+
+			return canvas;
 		}
 	}
 }

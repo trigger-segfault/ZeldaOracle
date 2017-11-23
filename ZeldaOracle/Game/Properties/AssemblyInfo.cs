@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("The Legend of Zelda - Oracle Engine")]
 [assembly: AssemblyProduct("The Legend of Zelda - Oracle Engine")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Zelda Oracle Engine - A zelda game engine")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyCopyright("© Robert Jordan and David Jordan 2015")]
+[assembly: AssemblyCopyright("Copyright © Robert & David Jordan 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

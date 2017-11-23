@@ -8,9 +8,11 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Tiles.Custom;
 using ZeldaOracle.Common.Content;
+using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Game.Control.Scripting;
 
 namespace ZeldaOracle.Game.Worlds {
-	public class Room : IPropertyObject, IEventObject {
+	public class Room : IPropertyObject, IPropertyObjectContainer, IEventObject {
 		
 		private Level							level;		// The level this room is in.
 		private Point2I							location;	// Location within the level.
@@ -25,9 +27,12 @@ namespace ZeldaOracle.Game.Worlds {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public Room(Level level, int x, int y, Zone zone = null) {
+		public Room(Level level, int x, int y, Zone zone = null) :
+			this(level, new Point2I(x, y), zone) { }
+
+		public Room(Level level, Point2I location, Zone zone = null) {
 			this.level		= level;
-			this.location	= new Point2I(x, y);
+			this.location	= location;
 			this.tileData	= new TileDataInstance[level.RoomSize.X, level.RoomSize.Y, level.RoomLayerCount];
 			this.eventData	= new List<EventTileDataInstance>();
 			//this.zone		= zone;
@@ -37,15 +42,18 @@ namespace ZeldaOracle.Game.Worlds {
 			this.properties.BaseProperties = new Properties();
 
 			properties.BaseProperties.Set("id", "")
-				.SetDocumentation("ID", "", "", "", "The id used to refer to this room.", true, false);
+				.SetDocumentation("ID", "", "", "General", "The id used to refer to this room.");
 			properties.BaseProperties.Set("music", "")
-				.SetDocumentation("Music", "song", "", "", "The music to play in this room. Select none to choose the default music.", true, false);
+				.SetDocumentation("Music", "song", "", "General", "The music to play in this room. Select none to choose the default music.", true, false);
 			properties.BaseProperties.Set("zone", "")
-				.SetDocumentation("Zone", "zone", "", "", "The zone type for this room.", true, false);
+				.SetDocumentation("Zone", "zone", "", "General", "The zone type for this room.");
 			
-			properties.BaseProperties.Set("discovered", false);
-			properties.BaseProperties.Set("hidden_from_map", false);
-			properties.BaseProperties.Set("boss_room", false);
+			properties.BaseProperties.Set("discovered", false)
+				.SetDocumentation("Discovered", "", "", "Progress", "True if the room has been visited at least once.");
+			properties.BaseProperties.Set("hidden_from_map", false)
+				.SetDocumentation("Hidden From Map", "", "", "Dungeon", "True if this room does not appear on the map even when visited.");
+			properties.BaseProperties.Set("boss_room", false)
+				.SetDocumentation("Is Boss Room", "", "", "Dungeon", "True if this room is shown as the boss room in the dungeon map.");
 
 			events.AddEvent("event_room_start", "Room Start", "Occurs when the room begins.");
 			properties.BaseProperties.Set("event_room_start", "")
@@ -67,12 +75,32 @@ namespace ZeldaOracle.Game.Worlds {
 			/*if (zone != null)
 				this.properties.Set("zone", zone.ID);*/
 		}
-		
+
+		//-----------------------------------------------------------------------------
+		// Property objects
+		//-----------------------------------------------------------------------------
+
+		public IEnumerable<IPropertyObject> GetPropertyObjects() {
+			yield return this;
+			for (int layer = 0; layer < LayerCount; layer++) {
+				for (int x = 0; x < Width; x++) {
+					for (int y = 0; y < Height; y++) {
+						TileDataInstance tile = tileData[x, y, layer];
+						if (tile != null && tile.IsAtLocation(x, y))
+							yield return tile;
+					}
+				}
+			}
+			foreach (EventTileDataInstance eventTile in eventData) {
+				yield return eventTile;
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Accessors
 		//-----------------------------------------------------------------------------
-		
+
 		public TileDataInstance GetTile(Point2I location, int layer) {
 			return tileData[location.X, location.Y, layer];
 		}
@@ -81,20 +109,16 @@ namespace ZeldaOracle.Game.Worlds {
 			return tileData[x, y, layer];
 		}
 
-		public EventTileDataInstance FindEventTileByID(string id) {
-			for (int i = 0; i < eventData.Count; i++) {
-				if (eventData[i].Id == id)
-					return eventData[i];
-			}
-			return null;
+		public EventTileDataInstance FindEventTileByID(string eventTileID) {
+			return eventData.Find(eventTile => eventTile.ID == eventTileID);
 		}
 
-		public IEnumerable<TileDataInstance> GetTiles(string id) {
-			for (int i = 0; i < LayerCount; i++) {
+		public IEnumerable<TileDataInstance> GetTiles(string tileID) {
+			for (int layer = 0; layer < LayerCount; layer++) {
 				for (int x = 0; x < Width; x++) {
 					for (int y = 0; y < Height; y++) {
-						TileDataInstance tile = tileData[x, y, i];
-						if (tile != null && tile.Id == id)
+						TileDataInstance tile = tileData[x, y, layer];
+						if (tile != null && tile.IsAtLocation(x, y) && tile.ID == tileID)
 							yield return tile;
 					}
 				}
@@ -102,11 +126,11 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public IEnumerable<TileDataInstance> GetTiles() {
-			for (int i = 0; i < LayerCount; i++) {
+			for (int layer = 0; layer < LayerCount; layer++) {
 				for (int x = 0; x < Width; x++) {
 					for (int y = 0; y < Height; y++) {
-						TileDataInstance tile = tileData[x, y, i];
-						if (tile != null)
+						TileDataInstance tile = tileData[x, y, layer];
+						if (tile != null && tile.IsAtLocation(x, y))
 							yield return tile;
 					}
 				}
@@ -133,7 +157,7 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public void PlaceTile(TileDataInstance tile, Point2I location, int layer) {
-			Point2I size = tile.Size;
+			Point2I size = (tile != null ? tile.Size : Point2I.One);
 			for (int x = 0; x < size.X; x++) {
 				for (int y = 0; y < size.Y; y++) {
 					Point2I loc = new Point2I(location.X + x, location.Y + y);
@@ -166,6 +190,12 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+		public void RemoveTile(Point2I location, int layer) {
+			TileDataInstance tile = tileData[location.X, location.Y, layer];
+			if (tile != null)
+				RemoveTile(tile);
+		}
+
 		public void RemoveTile(int x, int y, int layer) {
 			TileDataInstance tile = tileData[x, y, layer];
 			if (tile != null)
@@ -184,8 +214,11 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public TileDataInstance CreateTile(TileData data, int x, int y, int layer) {
-			TileDataInstance dataInstance = new TileDataInstance(data, x, y, layer);
-			dataInstance.Room = this;
+			TileDataInstance dataInstance = null;
+			if (data != null) {
+				dataInstance = new TileDataInstance(data, x, y, layer);
+				dataInstance.Room = this;
+			}
 			PlaceTile(dataInstance, new Point2I(x, y), layer);
 			return dataInstance;
 		}
@@ -209,6 +242,18 @@ namespace ZeldaOracle.Game.Worlds {
 			eventData.Remove(eventTile);
 		}
 
+		internal void ResizeLayerCount(int newLayerCount) {
+			TileDataInstance[,,] oldTileData = tileData;
+			tileData = new TileDataInstance[level.RoomSize.X, level.RoomSize.Y, newLayerCount];
+			int minLayerCount = Math.Min(LayerCount, newLayerCount);
+			for (int x = 0; x < level.RoomSize.X; x++) {
+				for (int y = 0; y < level.RoomSize.Y; y++) {
+					for (int layer = 0; layer < minLayerCount; layer++) {
+						tileData[x, y, layer] = oldTileData[x, y, layer];
+					}
+				}
+			}
+		}
 
 		//-----------------------------------------------------------------------------
 		// Special In-Game Methods
@@ -265,19 +310,19 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		public Point2I Size {
-			get { return level.RoomSize; }
+			get { return new Point2I(tileData.GetLength(0), tileData.GetLength(1)); }
 		}
 
 		public int Width {
-			get { return level.RoomWidth; }
+			get { return tileData.GetLength(0); }
 		}
 
 		public int Height {
-			get { return level.RoomHeight; }
+			get { return tileData.GetLength(1); }
 		}
 
 		public int LayerCount {
-			get { return level.RoomLayerCount; }
+			get { return tileData.GetLength(2); }
 		}
 
 		public int BottomLayer {
@@ -301,6 +346,12 @@ namespace ZeldaOracle.Game.Worlds {
 				else
 					properties.Set("zone", "");*/
 			}
+		}
+
+
+		public string ID {
+			get { return properties.GetString("id"); }
+			set { properties.Set("id", value); }
 		}
 
 		public Dungeon Dungeon {

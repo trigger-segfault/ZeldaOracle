@@ -911,7 +911,7 @@ namespace ZeldaOracle.Game.Tiles {
 			tileData.OverrideDefaultState();
 		}
 
-		string ZeldaAPI.Tile.Id {
+		string ZeldaAPI.Tile.ID {
 			get { return properties.GetString("id", ""); }
 		}
 

@@ -25,15 +25,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Interaction
 		//-----------------------------------------------------------------------------
 		
-		public void Light() {
-			Light(false);
-		}
-		
-		public void PutOut() {
-			PutOut(false);
-		}
-
-		public void Light(bool stayLit) {
+		public void Light(bool stayLit = false) {
 			if (!IsLit) {
 				IsLit = true;
 				//Graphics.PlaySprite(GameData.ANIM_TILE_LANTERN);
@@ -43,7 +35,7 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
-		public void PutOut(bool stayLit) {
+		public void PutOut(bool stayLit = false) {
 			if (IsLit) {
 				IsLit = false;
 				//Graphics.PlaySprite(GameData.SPR_TILE_LANTERN_UNLIT);

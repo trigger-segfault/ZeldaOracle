@@ -27,3 +27,16 @@ MODEL bridge_v_right;		ADD 12,  0,  4, 16; END;
 MODEL bridge_v;				ADD  0,  0,  4, 16; ADD 12,  0,  4, 16; END;
 MODEL center;				ADD  4,  4,  8,  8; END;
 
+# Create the turnstile collision model.
+# It loooks like this: (each character is a quarter-tile)
+# X    X
+#  X  X
+#   XX
+#   XX
+#  X  X
+# X    X
+MODEL turnstile;			ADD  0,  0,  8,  8; ADD  8,  8,  8,  8;
+							ADD 40,  0,  8,  8; ADD 32,  8,  8,  8;
+							ADD  0, 40,  8,  8; ADD  8, 32,  8,  8;
+							ADD 40, 40,  8,  8; ADD 32, 32,  8,  8;
+							ADD 16, 16, 16, 16; END;

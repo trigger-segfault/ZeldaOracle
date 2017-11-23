@@ -21,20 +21,24 @@ namespace ZeldaEditor.PropertiesEditor {
 		private Properties				modifiedProperties;
 		private string					propertyName;
 		private PropertyDocumentation	documentation;
-		private UITypeEditor			editor;
+		private IPropertyObject         propertyObject;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public CustomPropertyDescriptor(PropertyDocumentation documentation, UITypeEditor editor, string propertyName, Properties modifiedProperties) :
-			base(documentation == null ? propertyName : documentation.ReadableName, null)
+		public CustomPropertyDescriptor(IPropertyObject propertyObject, PropertyDocumentation documentation, string propertyName, Properties modifiedProperties, Attribute[] attributes) :
+			base(documentation == null ? propertyName : documentation.ReadableName, attributes)
 		{
+			this.propertyObject     = propertyObject;
 			this.documentation		= documentation;
-			this.editor				= editor;
 			this.propertyName		= propertyName;
 			this.modifiedProperties	= modifiedProperties;
+		}
+
+		public CustomPropertyDescriptor(IPropertyObject propertyObject, PropertyDocumentation documentation, string propertyName, Properties modifiedProperties) :
+			this(propertyObject, documentation, propertyName, modifiedProperties, null) {
 		}
 
 
@@ -44,8 +48,6 @@ namespace ZeldaEditor.PropertiesEditor {
 
 		// Get the editor to use to edit this property.
 		public override object GetEditor(Type editorBaseType) {
-			if (editor != null && editorBaseType == typeof(UITypeEditor))
-				return editor;
 			return base.GetEditor(editorBaseType);
 		}
 
@@ -114,7 +116,7 @@ namespace ZeldaEditor.PropertiesEditor {
 			get {
 				if (documentation != null)
 					return documentation.Category;
-				return "";
+				return "Misc";
 			}
 		}
 
@@ -146,14 +148,15 @@ namespace ZeldaEditor.PropertiesEditor {
 		//-----------------------------------------------------------------------------
 
 		public Property Property {
-			get {
-				return modifiedProperties.GetProperty(propertyName, true);
-				//return property;
-			}
+			get { return modifiedProperties.GetProperty(propertyName, true); }
 		}
 
 		public PropertyDocumentation Documentation {
 			get { return documentation; }
+		}
+
+		public IPropertyObject PropertyObject {
+			get { return propertyObject; }
 		}
 	}
 }

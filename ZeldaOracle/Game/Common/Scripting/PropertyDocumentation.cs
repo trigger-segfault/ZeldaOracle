@@ -28,7 +28,7 @@ namespace ZeldaOracle.Common.Scripting {
 			readableName	= "";
 			editorType		= "";
 			editorSubType	= "";
-			category		= "";
+			category		= "Misc";
 			description		= "";
 			isEditable		= true;
 			isHidden		= false;

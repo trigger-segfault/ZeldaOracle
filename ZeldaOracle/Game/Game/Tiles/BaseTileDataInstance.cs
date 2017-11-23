@@ -9,7 +9,7 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles {
-	public abstract class BaseTileDataInstance : IPropertyObject, IEventObject {
+	public abstract class BaseTileDataInstance : IPropertyObject, IEventObject, IIDObject {
 
 		protected Room				room;
 		protected BaseTileData		tileData;
@@ -45,6 +45,11 @@ namespace ZeldaOracle.Game.Tiles {
 			this.modifiedProperties	= new Properties(this);
 			this.modifiedProperties.BaseProperties = tileData.Properties;
 			this.properties.SetAll(copy.properties);
+
+			foreach (Property property in modifiedProperties.GetProperties()) {
+				if (property.IsDefinedScript)
+					copy.Room.Level.World.ScriptManager.AddReference(property.StringValue, this);
+			}
 		}
 
 
@@ -130,8 +135,16 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return tileData.Tileset; }
 		}
 
-		public string Id {
+		public string ID {
 			get { return properties.GetString("id", ""); }
+		}
+
+		public bool HasModifiedProperties {
+			get { return properties.HasModifiedProperties; }
+		}
+
+		public bool HasModifiedModifiedProperties {
+			get { return modifiedProperties.HasModifiedProperties; }
 		}
 	}
 }

@@ -3,58 +3,57 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using Xceed.Wpf.Toolkit;
+using Xceed.Wpf.Toolkit.PropertyGrid;
+using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
+using ZeldaEditor.Control;
+using ZeldaEditor.Controls;
 using ZeldaEditor.Scripting;
+using ZeldaEditor.Windows;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
-	
+
 	// TODO: update this to reference hidden scripts.
-	public class ScriptPropertyEditor : FormPropertyEditor {
+	public class ScriptPropertyEditor : WindowPropertyEditor {
+		
+		protected override bool IsReadOnly { get { return true; } }
 
-		private bool wasGenerated;
-		private Script script;
-
-		public override Form CreateForm(object value) {
-			string scriptName = (string) value;
-
-			script = null;
-			wasGenerated = false;
+		protected override void OpenWindow(PropertyItem propertyItem) {
+			Script script = null;
+			bool wasGenerated = false;
+			string scriptName = (string)propertyItem.Value;
 
 			// Open the script this property is referencing.
 			if (scriptName.Length > 0)
-				script = EditorControl.World.GetScript(scriptName);
+				script = EditorControl.Instance.World.GetScript(scriptName);
 
 			// If it is null, create a new hidden script.
 			if (script == null) {
-				script = EditorControl.GenerateInternalScript();
+				script = EditorControl.Instance.GenerateInternalScript();
 				wasGenerated = true;
-				
-				if (PropertyGrid.PropertyObject is IEventObject) {
-					ObjectEvent e = ((IEventObject) PropertyGrid.PropertyObject).Events.GetEvent(property.Name);
-					if (e != null)
-						script.Parameters = e.Parameters;
+
+
+				CustomPropertyDescriptor descriptor = (CustomPropertyDescriptor)propertyItem.PropertyDescriptor;
+				if (descriptor.PropertyObject is IEventObject) {
+					ObjectEvent evt = ((IEventObject) descriptor.PropertyObject).Events.GetEvent(descriptor.Name);
+					if (evt != null)
+						script.Parameters = evt.Parameters;
 				}
 			}
 
-			// Open the scrpit editor form.
-			ScriptEditor form = new ScriptEditor(script, EditorControl);
-			return form;
-		}
-
-		public override object OnResultOkay(Form form, object value) {
-			return (form as ScriptEditor).Script.Name;
-		}
-
-		public override object OnResultCancel(Form form, object value) {
-			// If the script was newly generated, delete it completely.
-			if (wasGenerated) {
-				EditorControl.World.RemoveScript(script);
-				return "";
+			bool result = ScriptEditor.Show(Window.GetWindow(Editor), script, EditorControl.Instance, false);
+			if (result) {
+				SetValue(script.ID);
 			}
-			return value;
+			else if (wasGenerated) {
+				EditorControl.Instance.World.RemoveScript(script);
+			}
 		}
 	}
 }

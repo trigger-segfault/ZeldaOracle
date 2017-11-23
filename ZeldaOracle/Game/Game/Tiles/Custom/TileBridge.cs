@@ -11,14 +11,14 @@ using ZeldaOracle.Game.Entities.Players;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public enum TileBridgeState {
-		Creating,
-		Destroying,
-		Created,
-		Destroyed,
-	};
 
 	public class TileBridge : Tile, ZeldaAPI.Bridge {
+		private enum TileBridgeState {
+			Creating,
+			Destroying,
+			Created,
+			Destroyed,
+		};
 
 		private bool isVertical;
 		private int bridgeDirection;

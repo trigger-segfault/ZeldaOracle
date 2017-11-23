@@ -1,0 +1,15 @@
+﻿<Window x:Class="ZeldaEditor.Windows.RenameWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ZeldaEditor.Windows"
+        mc:Ignorable="d"
+        Title="Rename" Height="120" Width="308" Background="#FFF0F0F0" ResizeMode="NoResize" WindowStyle="ToolWindow" Icon="/ZeldaEditor;component/Resources/Icons/Rename.png" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" SnapsToDevicePixels="True" UseLayoutRounding="True">
+    <Grid>
+        <Label Content="Name:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,12,0,0"/>
+        <TextBox x:Name="textBox" Margin="67,14,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="221" />
+        <Button Content="Rename" IsDefault="True" Margin="0,0,101,10" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="OnOK"/>
+        <Button Content="Cancel" IsCancel="True" Margin="0,0,14,10" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+    </Grid>
+</Window>

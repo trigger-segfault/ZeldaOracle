@@ -330,13 +330,19 @@ namespace ZeldaOracle.Common.Scripting {
 
 		// Documentation directly associated with this property.
 		public PropertyDocumentation Documentation {
-			get { return documentation; }
+			get {
+				if (documentation != null)
+					return documentation;
+				else if (baseProperty != null && baseProperty.HasDocumentation)
+					return baseProperty.Documentation;
+				return null;
+			}
 			set { documentation = value; }
 		}
 
 		// Returns true if this property has documentation directly associated with it.
 		public bool HasDocumentation {
-			get { return (documentation != null); }
+			get { return (documentation != null || (baseProperty != null && baseProperty.HasDocumentation)); }
 		}
 
 		// Property Value ------------------------------------------------------------
@@ -436,6 +442,19 @@ namespace ZeldaOracle.Common.Scripting {
 		public Property BaseProperty {
 			get { return baseProperty; }
 			set { baseProperty = value; }
+		}
+
+		public bool IsScript {
+			get {
+				return type == PropertyType.String && HasDocumentation &&
+					Documentation.EditorType == "script";
+			}
+		}
+		public bool IsDefinedScript {
+			get {
+				return type == PropertyType.String && HasDocumentation &&
+					Documentation.EditorType == "script" && StringValue != "";
+			}
 		}
 	}
 }

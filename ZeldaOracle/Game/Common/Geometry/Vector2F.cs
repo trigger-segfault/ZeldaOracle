@@ -556,22 +556,20 @@ namespace ZeldaOracle.Common.Geometry {
 			Vector2F value = Vector2F.Zero;
 
 			if (text.Length > 0) {
-				if (text[0] == '(')
-					text = text.Substring(1);
-				if (text[text.Length - 1] == ')')
-					text = text.Substring(0, text.Length - 1);
+				if (text[0] == '(' && text[text.Length - 1] == ')')
+					text = text.Substring(1, text.Length - 2);
 
 				int commaPos = text.IndexOf(',');
 				if (commaPos == -1)
 					commaPos = text.IndexOf(' ');
 				if (commaPos != -1) {
 
-					string strX = text.Substring(0, commaPos);
-					string strY = text.Substring(commaPos + 1);
+					string strX = text.Substring(0, commaPos).Trim();
+					string strY = text.Substring(commaPos + 1).Trim();
 
 					try {
-						value.X = Single.Parse(strX);
-						value.Y = Single.Parse(strY);
+						value.X = float.Parse(strX);
+						value.Y = float.Parse(strY);
 					} catch (FormatException e) {
 						throw e;
 					} catch (ArgumentNullException e) {

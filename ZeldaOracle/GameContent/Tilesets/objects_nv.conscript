@@ -129,7 +129,7 @@ TILE color_cube;
 	SPRITEINDEX		3, "color_cube", (3, 0);
 	SPRITEINDEX		4, "color_cube", (4, 0);
 	SPRITEINDEX		5, "color_cube", (5, 0);
-	PROPERTIES		(integer, orientation, 0, "Orientation", "", "Color Cube", "The orientation index of the color cube.");
+	PROPERTIES		(integer, orientation, 0, "Orientation", ("enum", "ColorCubeOrientation"), "Color Cube", "The orientation index of the color cube.");
 END;
 
 # ---- Roller -----------------------------------------------------------------

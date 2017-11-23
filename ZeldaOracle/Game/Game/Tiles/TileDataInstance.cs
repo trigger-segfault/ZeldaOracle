@@ -10,7 +10,7 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Tiles {
-	public class TileDataInstance : BaseTileDataInstance, IEventObject {
+	public class TileDataInstance : BaseTileDataInstance, IEventObject, IIDObject {
 
 		private Point2I	location;
 		private int		layer;
@@ -125,7 +125,7 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return location; }
 			set { location = value; }
 		}
-		
+
 		public int Layer {
 			get { return layer; }
 			set { layer = value; }

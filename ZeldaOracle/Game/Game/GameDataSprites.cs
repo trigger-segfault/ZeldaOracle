@@ -125,6 +125,12 @@ namespace ZeldaOracle.Game {
 		public static Sprite SPR_TILE_PULL_HANDLE_BAR_VERTICAL;
 		public static Sprite SPR_TILE_PULL_HANDLE_DOWN;
 		public static Sprite SPR_TILE_PULL_HANDLE_RIGHT;
+		public static Sprite SPR_TILE_MINECART_TRACK_HORIZONTAL;
+		public static Sprite SPR_TILE_MINECART_TRACK_VERTICAL;
+		public static Sprite SPR_TILE_MINECART_TRACK_UP_RIGHT;
+		public static Sprite SPR_TILE_MINECART_TRACK_UP_LEFT;
+		public static Sprite SPR_TILE_MINECART_TRACK_DOWN_LEFT;
+		public static Sprite SPR_TILE_MINECART_TRACK_DOWN_RIGHT;
 
 		public static Sprite[] SPR_COLOR_CUBE_ORIENTATIONS;
 

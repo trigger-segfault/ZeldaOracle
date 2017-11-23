@@ -5,7 +5,8 @@ using System.Reflection;
 using System.Text;
 using System.CodeDom.Compiler;
 using ZeldaOracle.Common.Scripting;
-
+using ZeldaOracle.Common.Util;
+using System.Collections;
 
 namespace ZeldaOracle.Game.Control.Scripting {
 	
@@ -20,6 +21,8 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		public List<ScriptCompileError> Errors { get; set; }
 		public List<ScriptCompileError> Warnings { get; set; }
 		public byte[] RawAssembly { get; set; }
+		public Assembly Assembly { get; set; }
+		public string FilePath { get; set; }
 
 	}
 
@@ -60,14 +63,15 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		}
 	}
 
-	public class Script {
+	public class Script : IIDObject {
 
-		private string name; // The script's name/identif.
+		private string id; // The script's identifier and name
 		private string code; // User-entered code for the script.
 		private bool isHidden; // Is this script visible in the editor? Hidden scripts are used in object events.
 		private List<ScriptCompileError> errors;
 		private List<ScriptCompileError> warnings;
 		private List<ScriptParameter> parameters; // Parameters that are passed into the script.
+		private List<WeakReference> references;
 
 		//private MethodInfo method;
 
@@ -77,21 +81,23 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		//-----------------------------------------------------------------------------
 
 		public Script() {
-			name				= "";
+			id   				= "";
 			code				= "";
 			isHidden			= false;
 			errors				= new List<ScriptCompileError>();
 			warnings			= new List<ScriptCompileError>();
 			parameters			= new List<ScriptParameter>();
+			references          = new List<WeakReference>();
 		}
 		
 		// Copy constructor.
 		public Script(Script copy) {
-			name				= copy.name;
+			id	    			= copy.id;
 			code				= copy.code;
 			isHidden			= copy.isHidden;
 			errors				= new List<ScriptCompileError>();
 			warnings			= new List<ScriptCompileError>();
+			references          = new List<WeakReference>();
 
 			// Copy errors and warnings.
 			for (int i = 0; i < copy.errors.Count; i++)
@@ -100,14 +106,49 @@ namespace ZeldaOracle.Game.Control.Scripting {
 				warnings.Add(new ScriptCompileError(copy.warnings[i]));
 		}
 
+		//-----------------------------------------------------------------------------
+		// References
+		//-----------------------------------------------------------------------------
+
+		public void AddReference(object obj) {
+			var reference = references.Find(r => (r.Target == obj));
+			if (reference == null && obj != null) {
+				references.Add(new WeakReference(obj));
+			}
+		}
+
+		public void RemoveReference(object obj) {
+			int index = references.FindIndex(r => (r.Target == obj));
+			if (index != -1 && obj != null) {
+				references.RemoveAt(index);
+			}
+		}
+
+		public int UpdateReferences() {
+			int count;
+			for (count = 0; count < references.Count; count++) {
+				if (!references[count].IsAlive) {
+					references.RemoveAt(count);
+					count--;
+				}
+			}
+			return count;
+		}
+
+		public IEnumerable GetReferences() {
+			for (int i = 0; i < references.Count; i++) {
+				if (references[i].IsAlive)
+					yield return references[i];
+			}
+		}
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
-		public string Name {
-			get { return name; }
-			set { name = value; }
+
+		public string ID {
+			get { return id; }
+			set { id = value; }
 		}
 
 		public string Code {
@@ -133,6 +174,22 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		public List<ScriptParameter> Parameters {
 			get { return parameters; }
 			set { parameters = value; }
+		}
+
+		public List<WeakReference> References {
+			get { return references; }
+			set { references = value; }
+		}
+
+		public int ReferenceCount {
+			get {
+				int count = 0;
+				for (int i = 0; i < references.Count; i++) {
+					if (references[i].IsAlive)
+						count++;
+				}
+				return count;
+			}
 		}
 
 		public bool HasErrors {

@@ -12,6 +12,8 @@ using ZeldaOracle.Game.Tiles.EventTiles;
 namespace ZeldaEditor.Tools {
 	public class ToolEyedrop : EditorTool {
 
+		private static readonly Cursor EyedropperCursor = LoadCursor("Eyedropper");
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
@@ -36,55 +38,65 @@ namespace ZeldaEditor.Tools {
 			}
 		}
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
+
+		protected override void OnInitialize() {
+			MouseCursor = EyedropperCursor;
+		}
 
 		public override void OnChangeLayer() {
 			
 		}
 
-		public override void OnBegin() {
+		protected override void OnBegin() {
 			EditorControl.HighlightMouseTile = false;
 		}
 
-		public override void OnMouseMove(MouseEventArgs e) {
+		protected override void OnMouseMove(MouseEventArgs e) {
 			base.OnMouseMove(e);
 			
 			Point2I mousePos = new Point2I(e.X, e.Y);
 
 			if (!editorControl.EventMode) {
 				// Highlight tiles.
-				TileDataInstance tile = LevelDisplayControl.SampleTile(mousePos, editorControl.CurrentLayer);
+				TileDataInstance tile = LevelDisplay.SampleTile(mousePos, editorControl.CurrentLayer);
 				EditorControl.HighlightMouseTile = (tile != null);
 			}
 			else {
 				// Highlight event tiles.
-				EventTileDataInstance eventTile = LevelDisplayControl.SampleEventTile(mousePos);
+				EventTileDataInstance eventTile = LevelDisplay.SampleEventTile(mousePos);
 				EditorControl.HighlightMouseTile = (eventTile != null);
+				if (eventTile != null) {
+					LevelDisplay.CursorHalfTileLocation =
+						LevelDisplay.SampleLevelHalfTileCoordinates(
+							LevelDisplay.GetRoomDrawPosition(eventTile.Room) + eventTile.Position);
+					LevelDisplay.CursorTileSize = eventTile.Size;
+				}
 			}
 		}
 
-		public override void OnMouseDragBegin(MouseEventArgs e) {
+		protected override void OnMouseDragBegin(MouseEventArgs e) {
 			Point2I mousePos	= new Point2I(e.X, e.Y);
-			Room	room		= LevelDisplayControl.SampleRoom(mousePos);
-			Point2I tileCoord	= LevelDisplayControl.SampleTileCoordinates(mousePos);
+			Room	room		= LevelDisplay.SampleRoom(mousePos);
+			Point2I tileCoord	= LevelDisplay.SampleTileCoordinates(mousePos);
 			if (room != null)
 				ActivateTile(e.Button, room, tileCoord);
 		}
 
-		public override void OnMouseDragEnd(MouseEventArgs e) {
+		protected override void OnMouseDragEnd(MouseEventArgs e) {
 			// Switch back to place tool.
 			if (e.Button == MouseButtons.Left) {
 				editorControl.ChangeTool(1);
 			}
 		}
 
-		public override void OnMouseDragMove(MouseEventArgs e) {
+		protected override void OnMouseDragMove(MouseEventArgs e) {
 			Point2I mousePos	= new Point2I(e.X, e.Y);
-			Room	room		= LevelDisplayControl.SampleRoom(mousePos);
-			Point2I tileCoord	= LevelDisplayControl.SampleTileCoordinates(mousePos);
+			Room	room		= LevelDisplay.SampleRoom(mousePos);
+			Point2I tileCoord	= LevelDisplay.SampleTileCoordinates(mousePos);
 			if (room != null)
 				ActivateTile(e.Button, room, tileCoord);
 		}

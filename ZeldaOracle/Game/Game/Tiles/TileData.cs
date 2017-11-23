@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Game.Control.Scripting;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -33,17 +34,17 @@ namespace ZeldaOracle.Game.Tiles {
 			properties.SetGeneric("size", Point2I.One)
 				.SetDocumentation("Size", "General", "");
 			properties.Set("flags", (int) TileFlags.Default)
-				.SetDocumentation("Tile Flags", "General", "");
+				.SetDocumentation("Tile Flags", "enum_flags", "TileFlags", "General", "");
 			properties.Set("solidity", (int) TileSolidType.NotSolid)
-				.SetDocumentation("Solid Type", "General", "");
+				.SetDocumentation("Solid Type", "enum", "TileSolidType", "General", "");
 			properties.Set("ledge_direction", Directions.Down)
 				.SetDocumentation("Ledge Direction", "General", "");
 			properties.Set("collision_model", "")
 				.SetDocumentation("Collision Model", "collision_model", "", "General", "");
 			properties.Set("environment_type", (int) TileEnvironmentType.Normal)
-				.SetDocumentation("Environment Type", "General", "");
+				.SetDocumentation("Environment Type", "enum", "TileEnvironmentType", "General", "");
 			properties.Set("reset_condition", (int) TileResetCondition.LeaveRoom)
-				.SetDocumentation("Reset Condition", "General", "The condition for when the tile resets its properties.");
+				.SetDocumentation("Reset Condition", "enum", "TileResetCondition", "General", "The condition for when the tile resets its properties.");
 
 			properties.Set("disable_on_destroy", false)
 				.SetDocumentation("Disable on Destroy", "General", "");

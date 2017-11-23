@@ -10,9 +10,20 @@ using ZeldaOracle.Game;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaEditor.Undo;
+using ZeldaOracle.Common.Graphics;
+using ZeldaEditor.Control;
 
 namespace ZeldaEditor.Tools {
 	public class ToolPlace : EditorTool {
+
+		private static readonly Cursor PencilCursor = LoadCursor("Pencil");
+
+		private ActionPlace tileAction;
+
+		private TileData drawTileData;
+		private TileDataInstance drawTile;
+		private Dictionary<Point2I, TileDataInstance> placedTiles;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -20,6 +31,7 @@ namespace ZeldaEditor.Tools {
 
 		public ToolPlace() {
 			name = "Place Tool";
+			placedTiles = new Dictionary<Point2I, TileDataInstance>();
 		}
 
 
@@ -29,15 +41,15 @@ namespace ZeldaEditor.Tools {
 
 		private void ActivateTile(MouseEventArgs e) {
 			Point2I mousePos = new Point2I(e.X, e.Y);
-			Point2I levelTileCoord = LevelDisplayControl.SampleLevelTileCoordinates(mousePos);
+			Point2I levelTileCoord = LevelDisplay.SampleLevelTileCoordinates(mousePos);
 
 			// Limit tiles to the selection box if there is one.
-			if (LevelDisplayControl.SelectionGridArea.IsEmpty ||
-				LevelDisplayControl.SelectionGridArea.Contains(levelTileCoord))
+			if (LevelDisplay.SelectionGridArea.IsEmpty ||
+				LevelDisplay.SelectionGridArea.Contains(levelTileCoord))
 			{
-				Room room = LevelDisplayControl.Level.GetRoom((LevelTileCoord) levelTileCoord);
+				Room room = Level.GetRoom((LevelTileCoord) levelTileCoord);
 				if (room != null) {
-					Point2I tileLocation = LevelDisplayControl.Level.GetTileLocation((LevelTileCoord) levelTileCoord);
+					Point2I tileLocation = Level.GetTileLocation((LevelTileCoord) levelTileCoord);
 					ActivateTile(e.Button, room, tileLocation);
 				}
 			}
@@ -51,21 +63,25 @@ namespace ZeldaEditor.Tools {
 
 				if (selectedTilesetTileData != null) {
 					// Remove the existing tile.
+					tileAction.AddOverwrittenTile(room.Location * editorControl.Level.RoomSize + tileLocation, tile);
 					if (tile != null) {
 						room.RemoveTile(tile);
-						editorControl.OnDeleteObject(tile);
+						//editorControl.OnDeleteObject(tile);
 					}
 					// Place the new tile.
 					room.PlaceTile(
 						new TileDataInstance(selectedTilesetTileData),
 						tileLocation.X, tileLocation.Y, editorControl.CurrentLayer);
+					editorControl.IsModified = true;
 				}
 			}
 			else if (mouseButton == MouseButtons.Right) {
 				// Erase the tile.
 				if (tile != null) {
+					tileAction.AddOverwrittenTile(room.Location * editorControl.Level.RoomSize + tileLocation, tile);
 					room.RemoveTile(tile);
-					editorControl.OnDeleteObject(tile);
+					//editorControl.OnDeleteObject(tile);
+					editorControl.IsModified = true;
 				}
 			}
 			else if (mouseButton == MouseButtons.Middle) {
@@ -77,95 +93,162 @@ namespace ZeldaEditor.Tools {
 			}
 		}
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
+
+		protected override void OnCancel() {
+			placedTiles.Clear();
+			tileAction = null;
+		}
 
 		public override void OnChangeLayer() {
 			StopDragging();
 		}
 
-		public override void Initialize() {
-
+		protected override void OnInitialize() {
+			MouseCursor = PencilCursor;
 		}
 
-		public override void OnBegin() {
-
+		protected override void OnBegin() {
+			EditorControl.HighlightMouseTile = true;
 		}
 
-		public override void OnMouseDown(MouseEventArgs e) {
-			base.OnMouseDown(e);
+		protected override void OnMouseDown(MouseEventArgs e) {
+			Point2I mousePos    = e.MousePos();
+			Room room			= LevelDisplay.SampleRoom(mousePos);
 
-			Point2I mousePos	= new Point2I(e.X, e.Y);
-			Room room			= LevelDisplayControl.SampleRoom(mousePos);
-			Point2I tileCoord	= LevelDisplayControl.SampleTileCoordinates(mousePos);
+			if (IsDrawing && e.Button.IsOpposite(DragButton)) {
+				Cancel();
+			}
+			else if (editorControl.EventMode && e.Button.IsLeftOrRight()) {
+				if (room == null)
+					return;
 
-			if (editorControl.EventMode) {
-				if (EditorControl.EventMode && e.Button == MouseButtons.Left) {
-					EventTileData eventTile = editorControl.SelectedTilesetTileData as EventTileData;
+				EventTileData eventTileData = GetEventTileData();
+				if (e.Button == MouseButtons.Right)
+					eventTileData = null;
 
-					if (room != null && eventTile != null) {
-						Point2I roomPos = LevelDisplayControl.GetRoomDrawPosition(room);
-						Point2I pos = (mousePos - roomPos) / 8;
-						pos *= 8;
-						//Point2I tileCoord = LevelDisplayControl.SampleTileCoordinates(mousePos);
-						room.CreateEventTile(eventTile, pos);
-					}
-				}
-				else if (EditorControl.EventMode && e.Button == MouseButtons.Right) {
-					EventTileDataInstance eventTile = LevelDisplayControl.SampleEventTile(new Point2I(e.X, e.Y));
-					if (eventTile != null) {
+				Point2I levelHalfTileCoord = LevelDisplay.SampleLevelHalfTileCoordinates(mousePos);
+				Point2I position = (levelHalfTileCoord - room.Location * Level.RoomSize * 2) * (GameSettings.TILE_SIZE / 2);
+				ActionEventTile eventAction = new ActionEventTile(Level, eventTileData, room, position);
+
+				EventTileDataInstance eventTile = LevelDisplay.SampleEventTile(mousePos);
+				if (e.Button == MouseButtons.Left) {
+					while (eventTile != null) {
+						eventAction.AddOverwrittenEventTile(eventTile);
 						eventTile.Room.RemoveEventTile(eventTile);
-						editorControl.OnDeleteObject(eventTile);
+						//editorControl.OnDeleteObject(eventTile);
+						eventTile = LevelDisplay.SampleEventTile(mousePos);
 					}
-				}
-				else if (e.Button == MouseButtons.Middle) {
-					// Select events.
-					EventTileDataInstance selectedEventTile = LevelDisplayControl.SampleEventTile(mousePos);
 
-					if (selectedEventTile != null) {
-						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
-						EditorControl.PropertyGrid.OpenProperties(selectedEventTile.Properties, selectedEventTile);
-					}
-					else {
-						EditorControl.PropertyGrid.CloseProperties();
-					}
+					/*if (eventTileData != null) {
+						room.CreateEventTile(eventTileData, position);
+					}*/
 				}
-			}
-			else {
-				if (e.Button == MouseButtons.Middle) {
-					// Select tiles.
-					TileDataInstance selectedTile = room.GetTile(tileCoord, editorControl.CurrentLayer);
-
-					if (selectedTile != null) {
-						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);
-						EditorControl.PropertyGrid.OpenProperties(selectedTile.Properties, selectedTile);
-					}
-					else {
-						EditorControl.PropertyGrid.CloseProperties();
-					}
+				else if (eventTile != null) {
+					eventAction.AddOverwrittenEventTile(eventTile);
+					eventTile.Room.RemoveEventTile(eventTile);
+					//editorControl.OnDeleteObject(eventTile);
 				}
+				EditorControl.PushAction(eventAction, ActionExecution.PostExecute);
 			}
 		}
 
-		public override void OnMouseMove(MouseEventArgs e) {
-			base.OnMouseMove(e);
-		}
-
-		public override void OnMouseDragBegin(MouseEventArgs e) {
-			if (!EditorControl.EventMode)
-				ActivateTile(e);
-		}
-
-		public override void OnMouseDragEnd(MouseEventArgs e) {
-			
-		}
-
-		public override void OnMouseDragMove(MouseEventArgs e) {
-			if (!EditorControl.EventMode) {
-				ActivateTile(e);
+		protected override void OnMouseDragBegin(MouseEventArgs e) {
+			if (!EditorControl.EventMode && DragButton.IsLeftOrRight()) {
+				IsDrawing = true;
+				drawTileData = GetTileData();
+				if (DragButton == MouseButtons.Left) {
+					drawTile = CreateDrawTile();
+				}
+				else {
+					drawTileData = null;
+					drawTile = null;
+				}
+				tileAction = ActionPlace.CreatePlaceAction(editorControl.Level, editorControl.CurrentLayer, drawTileData);
+				OnMouseDragMove(e);
 			}
+		}
+
+		protected override void OnMouseDragEnd(MouseEventArgs e) {
+			if (IsDrawing) {
+				IsDrawing = false;
+				editorControl.PushAction(tileAction, ActionExecution.Execute);
+				tileAction = null;
+				placedTiles.Clear();
+			}
+		}
+
+		protected override void OnMouseDragMove(MouseEventArgs e) {
+			if (IsDrawing) {
+				Point2I mousePos = e.MousePos();
+				Point2I levelTileCoord = LevelDisplay.SampleLevelTileCoordinates(mousePos);
+				Room room = LevelDisplay.SampleRoom(mousePos);
+				if (room != null && !placedTiles.ContainsKey(levelTileCoord)) {
+					TileDataInstance tile = LevelDisplay.SampleTile(mousePos, editorControl.CurrentLayer);
+					placedTiles.Add(levelTileCoord, drawTile);
+					tileAction.AddOverwrittenTile(levelTileCoord, tile);
+				}
+			}
+		}
+
+		//-----------------------------------------------------------------------------
+		// Virtual drawing
+		//-----------------------------------------------------------------------------
+
+		public override bool DrawHideTile(TileDataInstance tile, Room room, Point2I levelCoord, int layer) {
+			return (IsDrawing && drawTile == null && placedTiles.ContainsKey(levelCoord));
+		}
+
+		public override void DrawTile(Graphics2D g, Room room, Point2I position, Point2I levelCoord, int layer) {
+			if (!EditorControl.EventMode && layer == editorControl.CurrentLayer) {
+				if (!IsDrawing && levelCoord == LevelDisplay.CursorTileLocation) {
+					TileDataInstance tile = CreateDrawTile();
+					if (tile != null)
+						LevelDisplay.DrawTile(g, room, CreateDrawTile(), position, LevelDisplay.FadeAboveColor);
+				}
+				else if (IsDrawing && placedTiles.ContainsKey(levelCoord) && drawTile != null) {
+					LevelDisplay.DrawTile(g, room, drawTile, position, LevelDisplay.NormalColor);
+				}
+			}
+		}
+
+		public override void DrawEventTiles(Graphics2D g) {
+			if (EditorControl.EventMode) {
+				EventTileDataInstance eventTile = CreateDrawEventTile();
+				if (eventTile != null) {
+					Point2I position = LevelDisplay.GetLevelPixelDrawPosition(eventTile.Position);
+					Room room = LevelDisplay.SampleRoom(position);
+					if (room != null)
+						LevelDisplay.DrawEventTile(g, room, eventTile, position, LevelDisplay.FadeAboveColor);
+				}
+			}
+		}
+
+		//-----------------------------------------------------------------------------
+		// Helpers
+		//-----------------------------------------------------------------------------
+
+		private TileDataInstance CreateDrawTile() {
+			TileData tileData = GetTileData();
+			if (tileData != null)
+				return new TileDataInstance(tileData);
+			return null;
+		}
+		private EventTileDataInstance CreateDrawEventTile() {
+			EventTileData eventTileData = GetEventTileData();
+			if (eventTileData != null)
+				return new EventTileDataInstance(eventTileData, LevelDisplay.CursorHalfTileLocation * (GameSettings.TILE_SIZE / 2));
+			return null;
+		}
+
+		private TileData GetTileData() {
+			return editorControl.SelectedTilesetTileData as TileData;
+		}
+		private EventTileData GetEventTileData() {
+			return editorControl.SelectedTilesetTileData as EventTileData;
 		}
 	}
 }

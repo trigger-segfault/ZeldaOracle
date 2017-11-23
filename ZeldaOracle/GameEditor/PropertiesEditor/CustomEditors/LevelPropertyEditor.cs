@@ -7,7 +7,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using ZeldaEditor.Control;
 using ZeldaOracle.Game;
@@ -15,35 +14,26 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Worlds;
+using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
+using System.Collections;
+using Xceed.Wpf.Toolkit.PropertyGrid;
+using System.Windows.Data;
 
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 
-	public class LevelPropertyEditor : DropDownPropertyEditor {
+	public class LevelPropertyEditor : ComboBoxEditor {
 
-		//-----------------------------------------------------------------------------
-		// Constructor
-		//-----------------------------------------------------------------------------
-
-		public LevelPropertyEditor() {
-
+		protected override IValueConverter CreateValueConverter() {
+			return new NoneStringConverter();
 		}
-
-
-		//-----------------------------------------------------------------------------
-		// Overridden Methods
-		//-----------------------------------------------------------------------------
-
-		public override void CreateList(ListBox listBox, object value) {
-			listBox.Items.Add("(none)");
-			foreach (Level level in EditorControl.World.Levels)
-				listBox.Items.Add(level.Id);
-		}
-
-		public override object OnItemSelected(ListBox listBox, int index, object value) {
-			Level level = null;
-			if (index > 0)
-				level = EditorControl.World.GetLevel((string) listBox.Items[index]);
-			return (level != null ? level.Id : "");
+		protected override IEnumerable CreateItemsSource(PropertyItem item) {
+			World world = EditorControl.Instance.World;
+			string[] levelIds = new string[world.LevelCount + 1];
+			levelIds[0] = "(none)";
+			for (int i = 0; i < world.LevelCount; i++) {
+				levelIds[i + 1] = world.GetLevelAt(i).ID;
+			}
+			return levelIds;
 		}
 	}
 }
