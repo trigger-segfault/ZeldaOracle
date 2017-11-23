@@ -8,6 +8,7 @@ using System.Windows.Media;
 using ZeldaEditor.Control;
 //using ZeldaEditor.PropertiesEditor.CustomEditors;
 using ZeldaEditor.Scripting;
+using ZeldaEditor.Undo;
 using ZeldaEditor.Util;
 using ZeldaEditor.Windows;
 using ZeldaOracle.Common.Scripting;
@@ -43,26 +44,37 @@ namespace ZeldaEditor.TreeViews {
 
 		public override void Delete(EditorControl editorControl) {
 			MessageBoxResult result = TriggerMessageBox.Show(editorControl.EditorWindow, MessageIcon.Info,
-				"You are about to delete the script '" + dungeon.ID + "'. This will be permanent. Continue?", "Confirm",
+				"You are about to delete the dungeon '" + dungeon.ID + "'. This will be permanent. Continue?", "Confirm",
 				MessageBoxButton.YesNo);
 
 			if (result == MessageBoxResult.Yes) {
-				editorControl.World.RemoveDungeon(dungeon);
-				editorControl.RefreshWorldTreeView();
-				editorControl.IsModified = true;
+				ActionDeleteDungeon action = new ActionDeleteDungeon(dungeon);
+				editorControl.PushAction(action, ActionExecution.Execute);
+				/*editorControl.World.RemoveDungeon(dungeon);
+				editorControl.EditorWindow.TreeViewWorld.RefreshDungeons();
+				editorControl.IsModified = true;*/
 			}
 		}
 
-		public override void Rename(World world, string name) {
-			world.RenameDungeon(dungeon, name);
+		public override void Rename(EditorControl editorControl, string name) {
+			editorControl.World.RenameDungeon(dungeon, name);
 			Header = dungeon.ID;
+			editorControl.IsModified = true;
 		}
 
-		public override void Duplicate(EditorControl editorControl, string suffix) {
+		public override void Duplicate(EditorControl editorControl) {
 			Dungeon duplicate = new Dungeon(dungeon);
-			duplicate.Name += suffix;
-			editorControl.World.AddDungeon(dungeon);
-			editorControl.RefreshWorldTreeView();
+			duplicate.ID = "";
+			string newName = RenameWindow.Show(Window.GetWindow(this), editorControl.World, duplicate);
+			if (newName != null) {
+				duplicate.ID = newName;
+				editorControl.AddDungeon(duplicate, true);
+				editorControl.EditorWindow.TreeViewWorld.RefreshDungeons();
+			}
+		}
+
+		public Dungeon Dungeon {
+			get { return dungeon; }
 		}
 
 		public override IIDObject IDObject { get { return dungeon; } }

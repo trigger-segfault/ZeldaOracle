@@ -94,7 +94,8 @@ namespace ZeldaOracle.Game.Tiles {
 			//  X  X
 			// X    X
 
-			CollisionModel = new CollisionModel();
+			// Now in collision_models.conscript
+			/*CollisionModel = new CollisionModel();
 			CollisionModel.AddBox( 0,  0, 8, 8);
 			CollisionModel.AddBox( 8,  8, 8, 8);
 			CollisionModel.AddBox(40,  0, 8, 8);
@@ -103,7 +104,7 @@ namespace ZeldaOracle.Game.Tiles {
 			CollisionModel.AddBox( 8, 32, 8, 8);
 			CollisionModel.AddBox(40, 40, 8, 8);
 			CollisionModel.AddBox(32, 32, 8, 8);
-			CollisionModel.AddBox(16, 16, 16, 16); // center.
+			CollisionModel.AddBox(16, 16, 16, 16);*/ // center.
 
 			SolidType		= TileSolidType.Solid;
 			IsSolid			= true;

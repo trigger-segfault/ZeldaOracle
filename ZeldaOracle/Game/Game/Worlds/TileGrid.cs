@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 
 namespace ZeldaOracle.Game.Worlds {
-
+	
 	public class TileGrid {
-
+		
 		private struct TileGridTile {
 			public TileDataInstance Tile { get; set; }
 			public Point2I Location { get; set; }
@@ -29,21 +31,41 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
+		private struct TileGridEvent {
+			public EventTileDataInstance EventTile { get; set; }
+			public Point2I Position { get; set; }
+			
+			public TileGridEvent(EventTileDataInstance eventTile, int x, int y) {
+				this.EventTile	= eventTile;
+				this.Position	= new Point2I(x, y);
+			}
+
+			public void Set(EventTileDataInstance eventTile, int x, int y) {
+				this.EventTile	= eventTile;
+				this.Position	= new Point2I(x, y);
+			}
+
+			public void Clear(int x, int y, int layer) {
+				this.EventTile	= null;
+				this.Position	= new Point2I(x, y);
+			}
+		}
+
 		private Point2I						size;
 		private int							layerCount;
 		private TileGridTile[,,]			tiles;
-		private List<EventTileDataInstance>	eventTiles;
+		private List<TileGridEvent>			eventTiles;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
-
+		
 		public TileGrid(Point2I size, int layerCount) {
 			this.size		= size;
 			this.layerCount	= layerCount;
 			this.tiles		= new TileGridTile[size.X, size.Y, layerCount];
-			this.eventTiles	= new List<EventTileDataInstance>();
+			this.eventTiles	= new List<TileGridEvent>();
 
 			Clear();
 		}
@@ -61,6 +83,12 @@ namespace ZeldaOracle.Game.Worlds {
 			return tiles[x, y, layer].Tile;
 		}
 
+		public TileDataInstance GetTileIfAtLocation(Point2I location, int layer) {
+			TileGridTile tile = tiles[location.X, location.Y, layer];
+			if (tile.Location.X == location.X && tile.Location.Y == location.Y && tile.Layer == layer)
+				return tile.Tile;
+			return null;
+		}
 		public TileDataInstance GetTileIfAtLocation(int x, int y, int layer) {
 			TileGridTile tile = tiles[x, y, layer];
 			if (tile.Location.X == x && tile.Location.Y == y && tile.Layer == layer)
@@ -74,23 +102,38 @@ namespace ZeldaOracle.Game.Worlds {
 				for (int y = 0; y < size.Y; y++) {
 					for (int i = 0; i < layerCount; i++) {
 						TileGridTile tile = tiles[x, y, i];
-						if (tile.Tile != null && tile.Location == new Point2I(x, y))
+						if (tile.Tile != null && tile.Location == new Point2I(x, y)) {
+							tile.Tile.Location = tile.Location;
 							yield return tile.Tile;
+						}
 					}
 				}
 			}
 
 			// Iterate event tiles.
-			foreach (EventTileDataInstance eventTile in eventTiles) {
-				yield return eventTile;
+			foreach (TileGridEvent tile in eventTiles) {
+				tile.EventTile.Position = tile.Position;
+				yield return tile.EventTile;
 			}
 		}
-		
+		public IEnumerable<EventTileDataInstance> GetEventTiles() {
+			// Iterate event tiles.
+			foreach (TileGridEvent tile in eventTiles) {
+				//tile.EventTile.Position = tile.Position;
+				yield return tile.EventTile;
+			}
+		}
+		public IEnumerable<KeyValuePair<Point2I, EventTileDataInstance>> GetEventTilePositions() {
+			// Iterate event tiles.
+			foreach (TileGridEvent tile in eventTiles) {
+				yield return new KeyValuePair<Point2I, EventTileDataInstance>(tile.Position, tile.EventTile);
+			}
+		}
 
 		//-----------------------------------------------------------------------------
 		// Mutators
 		//-----------------------------------------------------------------------------
-		
+
 		public void Clear() {
 			for (int x = 0; x < size.X; x++) {
 				for (int y = 0; y < size.Y; y++) {
@@ -118,6 +161,7 @@ namespace ZeldaOracle.Game.Worlds {
 						if (t.Tile != null)
 							RemoveTile(t);
 						tiles[loc.X, loc.Y, layer].Set(tile, location.X, location.Y, layer);
+
 					}
 				}
 			}
@@ -163,12 +207,17 @@ namespace ZeldaOracle.Game.Worlds {
 				RemoveEventTile((EventTileDataInstance) tile);
 		}
 
-		public void AddEventTile(EventTileDataInstance eventTile) {
-			eventTiles.Add(eventTile);
+		public void PlaceEventTile(EventTileDataInstance eventTile, int x, int y) {
+			PlaceEventTile(eventTile, new Point2I(x, y));
 		}
-		
+		public void PlaceEventTile(EventTileDataInstance eventTile, Point2I position) {
+			eventTiles.Add(new TileGridEvent(eventTile, position.X, position.Y));
+		}
+
 		public void RemoveEventTile(EventTileDataInstance eventTile) {
-			eventTiles.Remove(eventTile);
+			int index = eventTiles.FindIndex(tile => tile.EventTile == eventTile);
+			if (index != -1)
+				eventTiles.RemoveAt(index);
 		}
 
 		// Return a copy of this tile grid.
@@ -190,16 +239,15 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 			
 			// Duplicate event tiles.
-			foreach (EventTileDataInstance eventTile in eventTiles) {
-				EventTileDataInstance copy = new EventTileDataInstance();
-				copy.Clone(eventTile);
-				duplicate.AddEventTile(copy);
+			foreach (TileGridEvent tile in eventTiles) {
+				EventTileDataInstance eventTileCopy = new EventTileDataInstance();
+				eventTileCopy.Clone(tile.EventTile);
+				duplicate.PlaceEventTile(eventTileCopy, tile.Position);
 			}
 
 			return duplicate;
 		}
 
-		
 
 		//-----------------------------------------------------------------------------
 		// Propreties
@@ -219,10 +267,6 @@ namespace ZeldaOracle.Game.Worlds {
 		
 		public Point2I Size {
 			get { return size; }
-		}
-		
-		public List<EventTileDataInstance> EventTiles {
-			get { return eventTiles; }
 		}
 	}
 }

@@ -9,7 +9,7 @@
     <Grid>
         <Label Content="Name:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,12,0,0"/>
         <TextBox x:Name="textBox" Margin="67,14,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="221" />
-        <Button Content="OK" IsDefault="True" Margin="0,0,96,10" Width="75" Height="23" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="OnOK"/>
-        <Button Content="Cancel" IsCancel="True" Margin="0,0,14,10" Width="75" Height="23" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+        <Button Content="Rename" IsDefault="True" Margin="0,0,101,10" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="OnOK"/>
+        <Button Content="Cancel" IsCancel="True" Margin="0,0,14,10" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

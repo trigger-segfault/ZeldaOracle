@@ -489,11 +489,10 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-            <Style TargetType="{x:Type Separator}">
-                <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="{x:Type Separator}">
                 <Setter Property="Background" Value="#FFC6C7C6"/>
                 <Setter Property="Height" Value="1"/>
-                <Setter Property="Margin" Value="0,1,0,0"/>
+                <Setter Property="Margin" Value="0,4,0,3"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Separator}">
@@ -530,6 +529,319 @@
         </Setter>
     </Style>
 
+    <Style TargetType="{x:Type ContextMenu}">
+        <Style.Resources>
+            <Style x:Key="{x:Type MenuItem}" TargetType="{x:Type MenuItem}">
+                <Setter Property="OverridesDefaultStyle" Value="True"/>
+                <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Margin" Value="0,1,0,0"/>
+                <Setter Property="Padding" Value="8,3"/>
+                <Setter Property="DockPanel.Dock" Value="Top"/>
+                <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
+                <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type MenuItem}">
+                            <Grid Background="Transparent" SnapsToDevicePixels="True">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="24" SharedSizeGroup="MenuItemIconColumnGroup" Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition SharedSizeGroup="MenuItemIGTColumnGroup" Width="Auto"/>
+                                    <ColumnDefinition Width="14"/>
+                                </Grid.ColumnDefinitions>
+                                <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.ColumnSpan="4" Margin="1,0"/>
+                                <ContentPresenter x:Name="Icon" Content="{TemplateBinding Icon}" ContentSource="Icon" Margin="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                <Border x:Name="GlyphPanel" BorderBrush="#FF3399FF" BorderThickness="1" Background="#FFE6F0FA" Height="20" Margin="0,1" Visibility="Hidden" Width="20">
+                                    <Path Data="M0,2.5L2.5,5 7,0.5" FlowDirection="LeftToRight" HorizontalAlignment="Center" Stroke="{TemplateBinding Foreground}" StrokeThickness="1.2" VerticalAlignment="Center"/>
+                                </Border>
+                                <ContentPresenter ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" Grid.Column="1" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                <TextBlock Grid.Column="2" HorizontalAlignment="Right" Margin="4,3,2,3" Text="{TemplateBinding InputGestureText}"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="Icon" Value="{x:Null}">
+                                    <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
+                                    <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="IsHighlighted" Value="True">
+                                    <Setter Property="BorderBrush" TargetName="Border" Value="#FF3399FF"/>
+                                    <Setter Property="Background" TargetName="Border" Value="#FFC2E0FF"/>
+                                    <Setter Property="BorderBrush" TargetName="GlyphPanel" Value="#FF3399FF"/>
+                                    <Setter Property="Background" TargetName="GlyphPanel" Value="#FF99CCFF"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="Role" Value="TopLevelHeader">
+                        <Setter Property="Height" Value="20"/>
+                        <Setter Property="Padding" Value="6,0,7,0"/>
+                        <Setter Property="Grid.IsSharedSizeScope" Value="True"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type MenuItem}">
+                                    <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                        <DockPanel x:Name="Header">
+                                            <ContentPresenter x:Name="Icon" Content="{TemplateBinding Icon}" ContentSource="Icon" Margin="4,0,6,0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                            <Path x:Name="GlyphPanel" Data="M0,2.5L2.5,5 7,0.5" FlowDirection="LeftToRight" Margin="4,0,6,0" Stroke="{TemplateBinding Foreground}" StrokeThickness="1.2" Visibility="Collapsed" VerticalAlignment="Center"/>
+                                            <ContentPresenter ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                            <Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" HorizontalOffset="-1" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" Placement="Bottom">
+                                                <Themes:SystemDropShadowChrome x:Name="Shdw" Color="Transparent">
+                                                    <Border x:Name="SubMenuBorder" BorderBrush="Gray" BorderThickness="1" Background="#FFFDFDFD">
+                                                        <Grid>
+                                                            <Rectangle Fill="#FFFDFDFD" HorizontalAlignment="Left" Height="1" Margin="0,-1,0,0" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=Header}"/>
+                                                            <ScrollViewer x:Name="SubMenuScrollViewer" Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer, TypeInTargetAssembly={x:Type FrameworkElement}}}">
+                                                                <Grid RenderOptions.ClearTypeHint="Enabled" Grid.IsSharedSizeScope="True">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition MinWidth="24" SharedSizeGroup="MenuItemIconColumnGroup" Width="Auto"/>
+                                                                        <ColumnDefinition Width="*"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                                                        <Rectangle x:Name="OpaqueRect" Fill="{Binding Background, ElementName=SubMenuBorder}" Height="{Binding ActualHeight, ElementName=SubMenuBorder}" Width="{Binding ActualWidth, ElementName=SubMenuBorder}"/>
+                                                                    </Canvas>
+                                                                    <Rectangle Margin="0,1">
+                                                                        <Rectangle.Fill>
+                                                                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                                                                                <GradientStop Color="White" Offset="0"/>
+                                                                                <GradientStop Color="#FFFFFBFF" Offset="0.5"/>
+                                                                                <GradientStop Color="#FFF7F7F7" Offset="1"/>
+                                                                            </LinearGradientBrush>
+                                                                        </Rectangle.Fill>
+                                                                    </Rectangle>
+                                                                    <ItemsPresenter x:Name="ItemsPresenter" Grid.ColumnSpan="2" KeyboardNavigation.DirectionalNavigation="Cycle" Margin="0,0,0,1" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" KeyboardNavigation.TabNavigation="Cycle"/>
+                                                                </Grid>
+                                                            </ScrollViewer>
+                                                        </Grid>
+                                                    </Border>
+                                                </Themes:SystemDropShadowChrome>
+                                            </Popup>
+                                        </DockPanel>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSuspendingPopupAnimation" Value="True">
+                                            <Setter Property="PopupAnimation" TargetName="PART_Popup" Value="None"/>
+                                        </Trigger>
+                                        <Trigger Property="Icon" Value="{x:Null}">
+                                            <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                                        </Trigger>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
+                                            <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                                        </Trigger>
+                                        <Trigger Property="IsHighlighted" Value="True">
+                                            <Setter Property="BorderBrush" TargetName="Border" Value="#FF3399FF"/>
+                                            <Setter Property="Background" TargetName="Border" Value="#FFC2E0FF"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSubmenuOpen" Value="True">
+                                            <Setter Property="BorderBrush" TargetName="Border" Value="Gray"/>
+                                            <Setter Property="Background" TargetName="Border">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                                        <GradientStop Color="White" Offset="0"/>
+                                                        <GradientStop Color="#FFFFFBFF" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                        <Trigger Property="HasDropShadow" SourceName="PART_Popup" Value="True">
+                                            <Setter Property="Margin" TargetName="Shdw" Value="0,0,5,5"/>
+                                            <Setter Property="SnapsToDevicePixels" TargetName="Shdw" Value="True"/>
+                                            <Setter Property="Color" TargetName="Shdw" Value="#71000000"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                        </Trigger>
+                                        <Trigger Property="CanContentScroll" SourceName="SubMenuScrollViewer" Value="False">
+                                            <Setter Property="Canvas.Top" TargetName="OpaqueRect" Value="{Binding VerticalOffset, ElementName=SubMenuScrollViewer}"/>
+                                            <Setter Property="Canvas.Left" TargetName="OpaqueRect" Value="{Binding HorizontalOffset, ElementName=SubMenuScrollViewer}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                    <Trigger Property="Role" Value="TopLevelItem">
+                        <Setter Property="Margin" Value="0,1"/>
+                        <Setter Property="Padding" Value="7,1,8,2"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type MenuItem}">
+                                    <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                        <DockPanel>
+                                            <ContentPresenter x:Name="Icon" Content="{TemplateBinding Icon}" ContentSource="Icon" Margin="4,0,6,0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                            <Path x:Name="GlyphPanel" Data="M0,2.5L2.5,5 7,0.5" FlowDirection="LeftToRight" Margin="4,0,6,0" Stroke="{TemplateBinding Foreground}" StrokeThickness="1.2" Visibility="Collapsed" VerticalAlignment="Center"/>
+                                            <ContentPresenter ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                        </DockPanel>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="Icon" Value="{x:Null}">
+                                            <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                                        </Trigger>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
+                                            <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                                        </Trigger>
+                                        <Trigger Property="IsHighlighted" Value="True">
+                                            <Setter Property="BorderBrush" TargetName="Border" Value="#FF3399FF"/>
+                                            <Setter Property="Background" TargetName="Border" Value="#FFC2E0FF"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                    <Trigger Property="Role" Value="SubmenuHeader">
+                        <Setter Property="DockPanel.Dock" Value="Top"/>
+                        <Setter Property="Padding" Value="8,3"/>
+                        <Setter Property="Grid.IsSharedSizeScope" Value="True"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type MenuItem}">
+                                    <Grid Background="Transparent" SnapsToDevicePixels="True">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition MinWidth="24" SharedSizeGroup="MenuItemIconColumnGroup" Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition SharedSizeGroup="MenuItemIGTColumnGroup" Width="Auto"/>
+                                            <ColumnDefinition Width="14"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.ColumnSpan="4" Margin="1,0"/>
+                                        <ContentPresenter x:Name="Icon" Content="{TemplateBinding Icon}" ContentSource="Icon" Margin="3" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                        <Border x:Name="GlyphPanel" BorderBrush="#FF3399FF" BorderThickness="1" Background="#FFE6F0FA" Height="20" Margin="0,1" Visibility="Hidden" Width="20">
+                                            <Path Data="M0,2.5L2.5,5 7,0.5" FlowDirection="LeftToRight" HorizontalAlignment="Center" Stroke="{TemplateBinding Foreground}" StrokeThickness="1.2" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ContentPresenter ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" Grid.Column="1" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                        <Path Grid.Column="3" DockPanel.Dock="Right" Data="M0,0L4,3.5 0,7z" Fill="{TemplateBinding Foreground}" Margin="4,0,6,0" VerticalAlignment="Center"/>
+                                        <Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" Placement="Right">
+                                            <Themes:SystemDropShadowChrome x:Name="Shdw" Color="Transparent">
+                                                <Border x:Name="SubMenuBorder" BorderBrush="Gray" BorderThickness="1" Background="#FFFDFDFD" Grid.IsSharedSizeScope="True">
+                                                    <ScrollViewer x:Name="SubMenuScrollViewer" Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer, TypeInTargetAssembly={x:Type FrameworkElement}}}">
+                                                        <Grid RenderOptions.ClearTypeHint="Enabled">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition MinWidth="24" SharedSizeGroup="MenuItemIconColumnGroup" Width="Auto"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                                                <Rectangle x:Name="OpaqueRect" Fill="{Binding Background, ElementName=SubMenuBorder}" Height="{Binding ActualHeight, ElementName=SubMenuBorder}" Width="{Binding ActualWidth, ElementName=SubMenuBorder}"/>
+                                                            </Canvas>
+                                                            <Rectangle Margin="0,1">
+                                                                <Rectangle.Fill>
+                                                                    <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                                                                        <GradientStop Color="White" Offset="0"/>
+                                                                        <GradientStop Color="#FFFFFBFF" Offset="0.5"/>
+                                                                        <GradientStop Color="#FFF7F7F7" Offset="1"/>
+                                                                    </LinearGradientBrush>
+                                                                </Rectangle.Fill>
+                                                            </Rectangle>
+                                                            <ItemsPresenter x:Name="ItemsPresenter" Grid.ColumnSpan="2" KeyboardNavigation.DirectionalNavigation="Cycle" Margin="0,0,0,1" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" KeyboardNavigation.TabNavigation="Cycle"/>
+                                                        </Grid>
+                                                    </ScrollViewer>
+                                                </Border>
+                                            </Themes:SystemDropShadowChrome>
+                                        </Popup>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSuspendingPopupAnimation" Value="True">
+                                            <Setter Property="PopupAnimation" TargetName="PART_Popup" Value="None"/>
+                                        </Trigger>
+                                        <Trigger Property="Icon" Value="{x:Null}">
+                                            <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                                        </Trigger>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
+                                            <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                                        </Trigger>
+                                        <Trigger Property="IsHighlighted" Value="True">
+                                            <Setter Property="BorderBrush" TargetName="Border" Value="#FF3399FF"/>
+                                            <Setter Property="Background" TargetName="Border" Value="#FFC2E0FF"/>
+                                            <Setter Property="BorderBrush" TargetName="GlyphPanel" Value="#FF3399FF"/>
+                                            <Setter Property="Background" TargetName="GlyphPanel" Value="#FF99CCFF"/>
+                                        </Trigger>
+                                        <Trigger Property="HasDropShadow" SourceName="PART_Popup" Value="True">
+                                            <Setter Property="Margin" TargetName="Shdw" Value="0,0,5,5"/>
+                                            <Setter Property="SnapsToDevicePixels" TargetName="Shdw" Value="True"/>
+                                            <Setter Property="Color" TargetName="Shdw" Value="#71000000"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                        </Trigger>
+                                        <Trigger Property="CanContentScroll" SourceName="SubMenuScrollViewer" Value="False">
+                                            <Setter Property="Canvas.Top" TargetName="OpaqueRect" Value="{Binding VerticalOffset, ElementName=SubMenuScrollViewer}"/>
+                                            <Setter Property="Canvas.Left" TargetName="OpaqueRect" Value="{Binding HorizontalOffset, ElementName=SubMenuScrollViewer}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="{x:Type Separator}">
+                <Setter Property="Background" Value="#FFC6C7C6"/>
+                <Setter Property="Height" Value="1"/>
+                <Setter Property="Margin" Value="0,4,0,3"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Separator}">
+                            <Grid SnapsToDevicePixels="True">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="24" SharedSizeGroup="MenuItemIconColumnGroup" Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="1" Margin="8,0,0,0"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Style.Resources>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Themes:SystemDropShadowChrome x:Name="Shdw" Color="Transparent">
+                        <Border x:Name="SubMenuBorder" BorderBrush="Gray" BorderThickness="1" Background="#FFFDFDFD">
+                            <Grid>
+                                <Rectangle Fill="#FFFDFDFD" HorizontalAlignment="Left" Height="1" Margin="0,-1,0,0" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=Header}"/>
+                                <ScrollViewer x:Name="SubMenuScrollViewer" Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer, TypeInTargetAssembly={x:Type FrameworkElement}}}">
+                                    <Grid RenderOptions.ClearTypeHint="Enabled" Grid.IsSharedSizeScope="True">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition MinWidth="24" SharedSizeGroup="MenuItemIconColumnGroup" Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                            <Rectangle x:Name="OpaqueRect" Fill="{Binding Background, ElementName=SubMenuBorder}" Height="{Binding ActualHeight, ElementName=SubMenuBorder}" Width="{Binding ActualWidth, ElementName=SubMenuBorder}"/>
+                                        </Canvas>
+                                        <Rectangle Margin="0,1">
+                                            <Rectangle.Fill>
+                                                <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                                                    <GradientStop Color="White" Offset="0"/>
+                                                    <GradientStop Color="#FFFFFBFF" Offset="0.5"/>
+                                                    <GradientStop Color="#FFF7F7F7" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                        <ItemsPresenter x:Name="ItemsPresenter" Grid.ColumnSpan="2" KeyboardNavigation.DirectionalNavigation="Cycle" Margin="0,0,0,1" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" KeyboardNavigation.TabNavigation="Cycle"/>
+                                    </Grid>
+                                </ScrollViewer>
+                            </Grid>
+                        </Border>
+                    </Themes:SystemDropShadowChrome>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <LinearGradientBrush x:Key="VerticalScrollBarBackground" EndPoint="1,0" StartPoint="0,0">
         <GradientStop Color="#E1E1E1" Offset="0"/>

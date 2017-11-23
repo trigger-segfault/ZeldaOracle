@@ -15,8 +15,8 @@ namespace ZeldaEditor.TreeViews {
 	public abstract class IWorldTreeViewItem : ImageTreeViewItem {
 		public virtual void Open(EditorControl editorControl) {}
 		public virtual void Delete(EditorControl editorControl) {}
-		public virtual void Rename(World world, string name) {}
-		public virtual void Duplicate(EditorControl editorControl, string suffix) {}
+		public virtual void Rename(EditorControl editorControl, string name) {}
+		public virtual void Duplicate(EditorControl editorControl) {}
 		public abstract IIDObject IDObject { get; }
 	}
 }

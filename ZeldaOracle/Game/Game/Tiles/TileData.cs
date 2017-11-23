@@ -36,15 +36,15 @@ namespace ZeldaOracle.Game.Tiles {
 			properties.Set("flags", (int) TileFlags.Default)
 				.SetDocumentation("Tile Flags", "enum_flags", "TileFlags", "General", "");
 			properties.Set("solidity", (int) TileSolidType.NotSolid)
-				.SetDocumentation("Solid Type", "General", "");
+				.SetDocumentation("Solid Type", "enum", "TileSolidType", "General", "");
 			properties.Set("ledge_direction", Directions.Down)
 				.SetDocumentation("Ledge Direction", "General", "");
 			properties.Set("collision_model", "")
 				.SetDocumentation("Collision Model", "collision_model", "", "General", "");
 			properties.Set("environment_type", (int) TileEnvironmentType.Normal)
-				.SetDocumentation("Environment Type", "General", "");
+				.SetDocumentation("Environment Type", "enum", "TileEnvironmentType", "General", "");
 			properties.Set("reset_condition", (int) TileResetCondition.LeaveRoom)
-				.SetDocumentation("Reset Condition", "General", "The condition for when the tile resets its properties.");
+				.SetDocumentation("Reset Condition", "enum", "TileResetCondition", "General", "The condition for when the tile resets its properties.");
 
 			properties.Set("disable_on_destroy", false)
 				.SetDocumentation("Disable on Destroy", "General", "");

@@ -50,6 +50,11 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			scripts.Remove(script.ID);
 		}
 
+		public void RemoveScript(string scriptID) {
+			if (scripts.ContainsKey(scriptID))
+				scripts.Remove(scriptID);
+		}
+
 		public bool RenameScript(Script script, string newScriptID) {
 			if (newScriptID != script.ID) {
 				if (scripts.ContainsKey(newScriptID)) {
@@ -65,6 +70,42 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		public bool ContainsScript(string scriptID) {
 			return scripts.ContainsKey(scriptID);
 		}
+
+		public void AddReference(Script script, object obj) {
+			script.AddReference(obj);
+		}
+
+		public void AddReference(string scriptID, object obj) {
+			if (scripts.ContainsKey(scriptID))
+				AddReference(scripts[scriptID], obj);
+		}
+
+		public void RemoveReference(Script script, object obj) {
+			script.RemoveReference(obj);
+			int count = script.UpdateReferences();
+			if (script.IsHidden && count == 0) {
+				scripts.Remove(script.ID);
+				Console.WriteLine("Deleted unreferenced script '" + script.ID + "'");
+			}
+		}
+
+		public void RemoveReference(string scriptID, object obj) {
+			if (scripts.ContainsKey(scriptID))
+				RemoveReference(scripts[scriptID], obj);
+		}
+
+		/*public bool UpdateReferences() {
+			bool scriptsModified = false;
+			foreach (var pair in scripts) {
+				int count = pair.Value.UpdateReferences();
+				if (pair.Value.IsHidden && count == 0) {
+					scripts.Remove(pair.Key);
+					Console.WriteLine("Deleted unreferenced script '" + pair.Key + "'");
+					scriptsModified = true;
+				}
+			}
+			return scriptsModified;
+		}*/
 
 		// Compile all the scripts into one assembly.
 		public ScriptCompileResult CompileScripts() {

@@ -687,10 +687,14 @@ namespace ZeldaEditor {
 						}
 						// Draw event tiles.
 						if (editorControl.ShowEvents || editorControl.ShouldDrawEvents) {
-							for (int i = 0; i < selectionGrid.EventTiles.Count; i++) {
-								Point2I position = GetLevelTileCoordDrawPosition(selectionGridArea.Point) + selectionGrid.EventTiles[i].Position;
-								DrawEventTile(g, selectionGrid.EventTiles[i], position, Color.White);
+							foreach (EventTileDataInstance eventTile in selectionGrid.GetEventTiles()) {
+								Point2I position = GetLevelPixelDrawPosition(selectionGridArea.Point * GameSettings.TILE_SIZE + eventTile.Position);
+								DrawEventTile(g, eventTile, position, Color.White);
 							}
+							/*for (int i = 0; i < selectionGrid.EventTiles.Count; i++) {
+								Point2I position = GetLevelPixelDrawPosition(selectionGridArea.Point * GameSettings.TILE_SIZE + selectionGrid.EventTiles[i].Position);
+								DrawEventTile(g, selectionGrid.EventTiles[i], position, Color.White);
+							}*/
 						}
 					}
 					

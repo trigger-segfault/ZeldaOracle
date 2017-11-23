@@ -38,19 +38,22 @@ namespace ZeldaEditor.Tools {
 		}
 
 		public override void Cut() {
-			//Deselect();
+			/*editorControl.ToolSelection.Clipboard = LevelDisplay.GetSelectedTilesAsTileGrid(true);
+			UpdateCommands();*/
 		}
 		
 		public override void Copy() {
-
+			/*editorControl.ToolSelection.Clipboard = LevelDisplay.GetSelectedTilesAsTileGrid(false);
+			UpdateCommands();*/
 		}
 		
 		public override void Paste() {
-			//Deselect();
+			
 		}
 		
 		public override void Delete() {
 			LevelDisplay.DeleteTileSelection();
+			UpdateCommands();
 		}
 
 		public override void SelectAll() {
@@ -63,23 +66,24 @@ namespace ZeldaEditor.Tools {
 			LevelDisplay.DeselectTiles();
 			LevelDisplay.DeselectSelectionGrid();
 			EditorControl.PropertyGrid.CloseProperties();
-
+			UpdateCommands();
 		}
 
-		
 		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnBegin() {
+		protected override void OnBegin() {
 			selectedTile		= null;
 			selectedEventTile	= null;
 			EditorControl.HighlightMouseTile = false;
 		}
 
-		public override void OnEnd() {
+		protected override void OnEnd() {
 			selectedTile		= null;
 			selectedEventTile	= null;
+			LevelDisplay.DeselectTiles();
+			LevelDisplay.DeleteSelectionGrid();
 		}
 
 		public override void OnMouseDoubleClick(MouseEventArgs e) {
@@ -101,7 +105,7 @@ namespace ZeldaEditor.Tools {
 			}
 		}
 
-		public override void OnMouseDown(MouseEventArgs e) {
+		protected override void OnMouseDown(MouseEventArgs e) {
 			base.OnMouseDown(e);
 			
 			Point2I mousePos = new Point2I(e.X, e.Y);
@@ -115,7 +119,7 @@ namespace ZeldaEditor.Tools {
 
 			Room room = null;
 			bool roomSelect = false;
-			if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift)) {
+			if (System.Windows.Forms.Control.ModifierKeys.HasFlag(Keys.Shift)) {
 				room = LevelDisplay.SampleRoom(mousePos, false);
 				roomSelect = true;
 			}
@@ -155,11 +159,11 @@ namespace ZeldaEditor.Tools {
 			}
 		}
 
-		public override void OnMouseUp(MouseEventArgs e) {
+		protected override void OnMouseUp(MouseEventArgs e) {
 			base.OnMouseUp(e);
 		}
 
-		public override void OnMouseMove(MouseEventArgs e) {
+		protected override void OnMouseMove(MouseEventArgs e) {
 			base.OnMouseMove(e);
 			
 			Point2I mousePos = new Point2I(e.X, e.Y);
@@ -181,6 +185,9 @@ namespace ZeldaEditor.Tools {
 				}
 			}
 		}
-
+		
+		public override bool CanDeleteDeselect {
+			get { return LevelDisplay.SelectedTiles.Any(); }
+		}
 	}
 }

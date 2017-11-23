@@ -126,10 +126,6 @@ namespace ZeldaOracle.Game.Tiles {
 			set { location = value; }
 		}
 
-		public string ID {
-			get { return properties.GetString("id"); }
-		}
-
 		public int Layer {
 			get { return layer; }
 			set { layer = value; }

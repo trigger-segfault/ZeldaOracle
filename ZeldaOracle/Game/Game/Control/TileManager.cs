@@ -30,7 +30,7 @@ namespace ZeldaOracle.Game.Control {
 
 		public TileManager(RoomControl roomControl) {
 			this.roomControl		= roomControl;
-			this.tileGridCellSize	= new Point2I(GameSettings.TILE_SIZE, GameSettings.TILE_SIZE);
+			this.tileGridCellSize	= new Point2I(GameSettings.TILE_SIZE);
 		}
 
 		public void Initialize(Room room) {

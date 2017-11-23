@@ -196,7 +196,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid {
 			}*/
 		}
 
-		private void SetValueFontWeight() {
+		public void SetValueFontWeight() {
 			if (this.ValueContainer == null)
 				return;
 

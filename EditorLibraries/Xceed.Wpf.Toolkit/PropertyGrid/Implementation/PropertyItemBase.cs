@@ -41,6 +41,8 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid {
 		internal bool _isPropertyGridCategorized;
 		internal bool _isSortedAlphabetically = true;
 
+		public bool IsUpdating { get; set; } = false;
+
 		#region Properties
 
 		#region AdvancedOptionsIcon
@@ -390,6 +392,8 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid {
 		}
 
 		protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e) {
+			if (IsUpdating)
+				return;
 			base.OnPropertyChanged(e);
 
 			// First check that the raised property is actually a real CLR property.

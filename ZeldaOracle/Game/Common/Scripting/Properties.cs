@@ -493,5 +493,9 @@ namespace ZeldaOracle.Common.Scripting {
 			get { return baseProperties; }
 			set { baseProperties = value; ConnectBaseProperties(); }
 		}
+
+		public bool HasModifiedProperties {
+			get { return baseProperties != null && map.Any(); }
+		}
 	}
 }

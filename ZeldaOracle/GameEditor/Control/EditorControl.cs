@@ -29,11 +29,15 @@ using ZeldaEditor.PropertiesEditor;
 using ZeldaEditor.WinForms;
 using ZeldaOracle.Common.Translation;
 using System.Windows.Input;
+using ZeldaEditor.Undo;
+using System.Collections.ObjectModel;
 
 namespace ZeldaEditor.Control {
 
 	public class EditorControl {
-		
+
+		private const int MaxUndos = 30;
+
 		public static EditorControl Instance { get; private set; }
 
 		private bool isInitialized;
@@ -65,6 +69,8 @@ namespace ZeldaEditor.Control {
 		private ToolFill			toolFill;
 		private ToolSelection		toolSelection;
 		private ToolEyedrop			toolEyedrop;
+		private ObservableCollection<EditorAction>	undoActions;
+		private int                 undoPosition;
 
 		// Editing
 		private int				roomSpacing;
@@ -74,6 +80,7 @@ namespace ZeldaEditor.Control {
 		private TileDrawModes	belowTileDrawMode;
 		private bool			showRewards;
 		private bool			showGrid;
+		private bool            showModified;
 		private bool			highlightMouseTile;
 		private Point2I			selectedRoom;
 		private Point2I			selectedTilesetTile;
@@ -84,7 +91,8 @@ namespace ZeldaEditor.Control {
 		private Task<ScriptCompileResult>	compileTask;
 		private ScriptCompileCallback		compileCallback;
 
-		private DispatcherTimer             dispatcherTimer;
+		private DispatcherTimer             compileTimer;
+		private DispatcherTimer             referenceTimer;
 
 
 		//-----------------------------------------------------------------------------
@@ -119,6 +127,7 @@ namespace ZeldaEditor.Control {
 			this.belowTileDrawMode			= TileDrawModes.Fade;
 			this.showRewards				= true;
 			this.showGrid					= false;
+			this.showModified               = false;
 			this.showEvents					= false;
 			this.highlightMouseTile			= true;
 			this.selectedRoom				= -Point2I.One;
@@ -126,7 +135,8 @@ namespace ZeldaEditor.Control {
 			this.selectedTilesetTileData	= null;
 			this.playerPlaceMode			= false;
 
-			this.dispatcherTimer            = new DispatcherTimer(TimeSpan.FromMilliseconds(1000.0 / 60), DispatcherPriority.ApplicationIdle, delegate { Update(); }, Application.Current.Dispatcher);
+			this.compileTimer            = new DispatcherTimer(TimeSpan.FromMilliseconds(100), DispatcherPriority.ApplicationIdle, delegate { Update(); }, Application.Current.Dispatcher);
+			this.referenceTimer          = new DispatcherTimer(TimeSpan.FromMilliseconds(2000), DispatcherPriority.ApplicationIdle, delegate { UpdateReferences(); }, Application.Current.Dispatcher);
 		}
 
 		public void Initialize(ContentManager contentManager, GraphicsDevice graphicsDevice) {
@@ -177,11 +187,18 @@ namespace ZeldaEditor.Control {
 				AddTool(toolSelection	= new ToolSelection());
 				AddTool(toolEyedrop		= new ToolEyedrop());
 				currentToolIndex = 0;
-				tools[currentToolIndex].OnBegin();
+				tools[currentToolIndex].Begin();
+
+				this.undoActions = new ObservableCollection<EditorAction>();
+				this.undoPosition = -1;
 
 				this.isInitialized = true;
 
-				dispatcherTimer.Start();
+				compileTimer.Start();
+
+				foreach (var name in Assembly.GetExecutingAssembly().GetManifestResourceNames()) {
+					Console.WriteLine(name);
+				}
 			}
 		}
 
@@ -211,8 +228,50 @@ namespace ZeldaEditor.Control {
 				CompileAllScripts(OnCompileCompleted);
 			}
 		}
+		// Called with Application.Idle.
+		private void UpdateReferences() {
+			if (world != null) {
+				int count;
+				List<KeyValuePair<string, Script>> scriptsToRemove = new List<KeyValuePair<string, Script>>();
+				foreach (var pair in world.ScriptManager.Scripts) {
+					count = pair.Value.UpdateReferences();
+					if (pair.Value.IsHidden && count == 0)
+						scriptsToRemove.Add(pair);
+				}
+				if (scriptsToRemove.Any()) {
+					foreach (var pair in scriptsToRemove) {
+						world.ScriptManager.RemoveScript(pair.Value);
+						Console.WriteLine("Deleted unreferenced script '" + pair.Key + "'");
+					}
+					editorWindow.TreeViewWorld.RefreshScripts();
+				}
+			}
+		}
 
-		
+		public void AddScriptReference(Script script, object obj) {
+			script.AddReference(obj);
+		}
+
+		public void AddScriptReference(string scriptID, object obj) {
+			if (world.ScriptManager.ContainsScript(scriptID))
+				AddScriptReference(world.ScriptManager.GetScript(scriptID), obj);
+		}
+
+		public void RemoveScriptReference(Script script, object obj) {
+			script.RemoveReference(obj);
+			int count = script.UpdateReferences();
+			if (script.IsHidden && count == 0) {
+				world.ScriptManager.RemoveScript(script);
+				Console.WriteLine("Deleted unreferenced script '" + script.ID + "'");
+			}
+		}
+
+		public void RemoveScriptReference(string scriptID, object obj) {
+			if (world.ScriptManager.ContainsScript(scriptID))
+				RemoveScriptReference(world.ScriptManager.GetScript(scriptID), obj);
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Script Compiling
 		//-----------------------------------------------------------------------------
@@ -275,6 +334,10 @@ namespace ZeldaEditor.Control {
 					OpenLevel(0);
 
 				RefreshWorldTreeView();
+
+				undoActions.Clear();
+				undoPosition = -1;
+				PushAction(new ActionOpenWorld(), ActionExecution.None);
 			}
 			else {
 				// Display the error.
@@ -296,18 +359,20 @@ namespace ZeldaEditor.Control {
 
 		// Open the given level.
 		public void OpenLevel(Level level) {
-			this.level = level;
-			editorWindow.LevelDisplay.UpdateLevel();
-			UpdateWindowTitle();
-			PropertyGrid.OpenProperties(level);
+			if (this.level != level) {
+				this.level = level;
+				editorWindow.LevelDisplay.UpdateLevel();
+				UpdateWindowTitle();
+				PropertyGrid.OpenProperties(level);
+				if (currentLayer >= level.RoomLayerCount)
+					currentLayer = level.RoomLayerCount - 1;
+				editorWindow.UpdateLayers();
+			}
 		}
 
 		// Open the given level index in the level display.
 		public void OpenLevel(int index) {
-			level = world.Levels[index];
-			editorWindow.LevelDisplay.UpdateLevel();
-			UpdateWindowTitle();
-			PropertyGrid.OpenProperties(level);
+			OpenLevel(world.Levels[index]);
 		}
 
 		public void CloseLevel() {
@@ -317,12 +382,29 @@ namespace ZeldaEditor.Control {
 			PropertyGrid.CloseProperties();
 		}
 
+		/*public void ResizeLevel(Level level, Point2I newSize) {
+			if (newSize != level.Dimensions) {
+				PushAction(new ActionResizeLevel(level, newSize));
+				level.Resize(newSize);
+				LevelDisplay.UpdateLevel();
+				IsModified = true;
+			}
+		}
+		public void ShiftLevel(Level level, Point2I distance) {
+			if (distance != Point2I.Zero) {
+				PushAction(new ActionShiftLevel(level, distance));
+				level.ShiftRooms(distance);
+				IsModified = true;
+			}
+		}*/
+
 		// Add a new level to the world, and open it if specified.
 		public void AddLevel(Level level, bool openLevel) {
 			world.AddLevel(level);
 			editorWindow.TreeViewWorld.RefreshLevels();
 			if (openLevel)
-				OpenLevel(world.Levels.Count - 1);
+				OpenLevel(level);
+			isModified = true;
 		}
 
 		// Add a new dungeon to the world, and open it if specified.
@@ -331,12 +413,33 @@ namespace ZeldaEditor.Control {
 			editorWindow.TreeViewWorld.RefreshDungeons();
 			if (openDungeonProperties)
 				editorWindow.PropertyGrid.OpenProperties(dungeon);
+			isModified = true;
 		}
 
 		public void AddScript(Script script) {
 			world.AddScript(script);
-			RefreshWorldTreeView();
+			editorWindow.TreeViewWorld.RefreshScripts();
+			isModified = true;
 		}
+
+		/*public void IntroduceScripts(Dictionary<string, Script> scripts) {
+			bool scriptsAdded = false;
+			foreach (var pair in scripts) {
+				if (pair.Value.IsHidden) {
+					GenerateInternalScript(pair.Value, false);
+					scriptsAdded = true;
+				}
+				else if (world.ContainsScript(pair.Key)) {
+					AddScript(pair.Value);
+					scriptsAdded = true;
+					IsModified = true;
+				}
+			}
+			if (scriptsAdded) {
+				editorWindow.TreeViewWorld.RefreshScripts();
+				IsModified = true;
+			}
+		}*/
 
 		public void ChangeTileset(string name) {
 			if (Resources.ExistsResource<Tileset>(name))
@@ -422,16 +525,14 @@ namespace ZeldaEditor.Control {
 		public void OnDeleteObject(IPropertyObject propertyObject) {
 			// Remove any hidden scripts referenced in the tile's propreties.
 			foreach (Property property in propertyObject.Properties.GetProperties()) {
-				PropertyDocumentation doc = property.GetDocumentation();
-
-				// Remove hidden scripts referenced by this property.
-				if (doc.EditorType == "script") {
-					string scriptID = property.StringValue;
+				if (property.IsDefinedScript) {
+					//RemoveScriptReference(property.StringValue, propertyObject);
+					/*string scriptID = property.StringValue;
 					Script script = world.GetScript(scriptID);
 					if (script != null && script.IsHidden) {
 						world.RemoveScript(script);
 						Console.WriteLine("Removed hidden script: " + scriptID);
-					}
+					}*/
 				}
 			}
 		}
@@ -444,7 +545,7 @@ namespace ZeldaEditor.Control {
 		// Change the current tool to the tool of the given index.
 		public void ChangeTool(int toolIndex) {
 			if (toolIndex != currentToolIndex) {
-				tools[currentToolIndex].OnEnd();
+				tools[currentToolIndex].End();
 
 				currentToolIndex = toolIndex;
 				if (currentToolIndex != 0) {
@@ -452,7 +553,8 @@ namespace ZeldaEditor.Control {
 				}
 
 				editorWindow.OnToolChange(toolIndex);
-				tools[currentToolIndex].OnBegin();
+				tools[currentToolIndex].Begin();
+				CommandManager.InvalidateRequerySuggested();
 			}
 		}
 		
@@ -463,6 +565,94 @@ namespace ZeldaEditor.Control {
 			return tool;
 		}
 
+		public void PushAction(EditorAction action, ActionExecution execution ) {
+			// Ignore if nothing occurred during this action
+			if (action.IgnoreAction)
+				return;
+
+			IsModified = true;
+
+			// Execute the action if requested
+			if (execution == ActionExecution.Execute)
+				action.Execute(this);
+			else if (execution == ActionExecution.PostExecute)
+				action.PostExecute(this);
+
+			if (undoPosition >= 0)
+				undoActions[undoPosition].IsSelected = false;
+
+			while (undoPosition + 1 < undoActions.Count) {
+				undoActions.RemoveAt(undoPosition + 1);
+			}
+			undoActions.Add(action);
+			while (undoActions.Count > MaxUndos) {
+				undoActions.RemoveAt(0);
+			}
+			undoPosition = undoActions.Count - 1;
+			
+			editorWindow.SelectHistoryItem(action);
+		}
+
+		public void PopAction() {
+			while (undoPosition < undoActions.Count) {
+				undoActions.RemoveAt(undoPosition);
+			}
+			undoPosition = undoActions.Count - 1;
+
+			editorWindow.SelectHistoryItem(LastAction);
+		}
+
+		public void Undo() {
+			if (CurrentTool.CancelCountsAsUndo) {
+				CurrentTool.Cancel();
+			}
+			else if (undoPosition > 0) {
+				undoActions[undoPosition].Undo(this);
+				undoActions[undoPosition].IsUndone = true;
+				undoActions[undoPosition].IsSelected = false;
+				undoPosition--;
+				editorWindow.SelectHistoryItem(undoActions[undoPosition]);
+				IsModified = true;
+			}
+		}
+		public void Redo() {
+			if (undoPosition + 1 < undoActions.Count) {
+				CurrentTool.Cancel();
+				undoActions[undoPosition].IsSelected = false;
+				undoPosition++;
+				undoActions[undoPosition].IsUndone = false;
+				undoActions[undoPosition].Redo(this);
+				editorWindow.SelectHistoryItem(undoActions[undoPosition]);
+				IsModified = true;
+			}
+		}
+
+		public void GotoAction(int position) {
+			if (position == -1)
+				return;
+			// Undo
+			while (position < undoPosition) {
+				if (CurrentTool.CancelCountsAsUndo) {
+					CurrentTool.Cancel();
+				}
+				else {
+					undoActions[undoPosition].IsSelected = false;
+					undoActions[undoPosition].Undo(this);
+					undoActions[undoPosition].IsUndone = true;
+					undoPosition--;
+					IsModified = true;
+				}
+			}
+			// Redo
+			while (position > undoPosition) {
+				CurrentTool.Cancel();
+				undoActions[undoPosition].IsSelected = false;
+				undoPosition++;
+				undoActions[undoPosition].IsUndone = false;
+				undoActions[undoPosition].Redo(this);
+				IsModified = true;
+			}
+		}
 
 		//-----------------------------------------------------------------------------
 		// Scripts
@@ -472,7 +662,7 @@ namespace ZeldaEditor.Control {
 			return GenerateInternalScript(new Script());
 		}
 
-		public Script GenerateInternalScript(Script script) {
+		public Script GenerateInternalScript(Script script, bool updateTreeView = true) {
 			script.IsHidden = true;
 
 			int i = 0;
@@ -482,7 +672,8 @@ namespace ZeldaEditor.Control {
 			}
 			while (world.GetScript(script.ID) != null);
 
-			world.AddScript(script);
+			if (updateTreeView)
+				AddScript(script);
 			return script;
 		}
 
@@ -586,7 +777,7 @@ namespace ZeldaEditor.Control {
 
 		public int CurrentToolIndex {
 			get { return currentToolIndex; }
-			set { currentToolIndex = value; }
+			set { ChangeTool(value); }
 		}
 
 		public EditorTool CurrentTool {
@@ -594,6 +785,9 @@ namespace ZeldaEditor.Control {
 				if (tools == null)
 					return null;
 				return tools[currentToolIndex];
+			}
+			set {
+				ChangeTool(tools.IndexOf(value));
 			}
 		}
 
@@ -615,6 +809,11 @@ namespace ZeldaEditor.Control {
 		public bool ShowGrid {
 			get { return showGrid; }
 			set { showGrid = value; }
+		}
+
+		public bool ShowModified {
+			get { return showModified; }
+			set { showModified = value; }
 		}
 
 		public bool ShowEvents {
@@ -688,6 +887,25 @@ namespace ZeldaEditor.Control {
 
 		public bool IsBusyCompiling {
 			get { return (compileTask != null); }
+		}
+
+		public ObservableCollection<EditorAction> UndoActions {
+			get { return undoActions; }
+		}
+
+		public EditorAction LastAction {
+			get { return undoActions[undoPosition]; }
+		}
+
+		public int UndoPosition {
+			get { return undoPosition; }
+		}
+
+		public bool CanUndo {
+			get { return undoPosition > 0 || CurrentTool.CancelCountsAsUndo; }
+		}
+		public bool CanRedo {
+			get { return undoPosition + 1 < undoActions.Count; }
 		}
 	}
 }

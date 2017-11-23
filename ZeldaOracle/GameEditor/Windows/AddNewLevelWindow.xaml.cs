@@ -16,6 +16,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Content;
+using ZeldaEditor.Undo;
 
 namespace ZeldaEditor.Windows {
 	/// <summary>
@@ -23,7 +24,12 @@ namespace ZeldaEditor.Windows {
 	/// </summary>
 	public partial class AddNewLevelWindow : Window {
 
-		private Level level;
+		private string id;
+		private Point2I dimensions;
+		private int layerCount;
+		private Point2I roomSize;
+		private Zone zone;
+		private ActionCreateLevel action;
 		private EditorControl editorControl;
 
 		public AddNewLevelWindow(EditorControl editorControl) {
@@ -73,20 +79,23 @@ namespace ZeldaEditor.Windows {
 				return;
 			}
 			else {
-				Point2I roomSize = (Point2I)(comboBoxRoomSizes.SelectedItem as ComboBoxItem).Tag;
-				Zone zone = ZeldaOracle.Common.Content.Resources.GetResource<Zone>((string)comboBoxZones.SelectedItem);
-				level = new Level(newID, spinnerWidth.Value.Value, spinnerHeight.Value.Value, 3, roomSize, zone);
+				id = newID;
+				dimensions = new Point2I(spinnerWidth.Value.Value, spinnerHeight.Value.Value);
+				layerCount = 3;
+				roomSize = (Point2I)(comboBoxRoomSizes.SelectedItem as ComboBoxItem).Tag;
+				zone = ZeldaOracle.Common.Content.Resources.GetResource<Zone>((string)comboBoxZones.SelectedItem);
+				action = new ActionCreateLevel(newID, dimensions, layerCount, roomSize, zone);
 				DialogResult = true;
 				Close();
 			}
 		}
 
-		public static Level Show(Window owner, EditorControl editorControl) {
+		public static ActionCreateLevel Show(Window owner, EditorControl editorControl) {
 			AddNewLevelWindow window = new AddNewLevelWindow(editorControl);
 			window.Owner = owner;
 			var result = window.ShowDialog();
 			if (result.HasValue && result.Value) {
-				return window.level;
+				return window.action;
 			}
 			return null;
 		}

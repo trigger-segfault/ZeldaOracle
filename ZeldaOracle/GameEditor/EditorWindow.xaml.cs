@@ -16,11 +16,15 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using ZeldaEditor;
 using ZeldaEditor.Control;
+using ZeldaEditor.Controls;
 using ZeldaEditor.PropertiesEditor;
 using ZeldaEditor.Scripting;
+using ZeldaEditor.Tools;
 using ZeldaEditor.TreeViews;
+using ZeldaEditor.Undo;
 using ZeldaEditor.Windows;
 using ZeldaEditor.WinForms;
+using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
@@ -39,6 +43,8 @@ namespace ZeldaEditor {
 		private EditorControl       editorControl;
 
 		private ToggleButton[]      toolButtons;
+
+		private HistoryWindow		historyWindow;
 
 		private bool loaded = false;
 
@@ -78,12 +84,12 @@ namespace ZeldaEditor {
 			statusTask.Content = "";
 
 			// Setup layer combo-box.
-			comboBoxWorldLayers.Items.Clear();
-			comboBoxWorldLayers.Items.Add("Layer 1");
-			comboBoxWorldLayers.Items.Add("Layer 2");
-			comboBoxWorldLayers.Items.Add("Layer 3");
-			comboBoxWorldLayers.Items.Add("Events");
-			comboBoxWorldLayers.SelectedIndex = 0;
+			comboBoxLayers.Items.Clear();
+			comboBoxLayers.Items.Add("Layer 1");
+			comboBoxLayers.Items.Add("Layer 2");
+			comboBoxLayers.Items.Add("Layer 3");
+			comboBoxLayers.Items.Add("Events");
+			comboBoxLayers.SelectedIndex = 0;
 
 			// Create tools.
 			toolButtons = new ToggleButton[] {
@@ -98,6 +104,8 @@ namespace ZeldaEditor {
 			UpdatePropertyPreview(null);
 
 			loaded = true;
+
+			UpdateLayers();
 		}
 
 		//-----------------------------------------------------------------------------
@@ -234,12 +242,12 @@ namespace ZeldaEditor {
 
 		private void OnLayerChanged(object sender, SelectionChangedEventArgs e) {
 			if (!loaded) return;
-			if (comboBoxWorldLayers.SelectedIndex == comboBoxWorldLayers.Items.Count - 1) {
+			if (comboBoxLayers.SelectedIndex == comboBoxLayers.Items.Count - 1) {
 				editorControl.EventMode = true;
 			}
 			else {
 				editorControl.EventMode = false;
-				editorControl.CurrentLayer = comboBoxWorldLayers.SelectedIndex;
+				editorControl.CurrentLayer = comboBoxLayers.SelectedIndex;
 				if (editorControl.CurrentTool != null)
 					editorControl.CurrentTool.OnChangeLayer();
 			}
@@ -269,11 +277,7 @@ namespace ZeldaEditor {
 		public WorldTreeView TreeViewWorld { get { return treeViewWorld; } }
 
 		public ZeldaPropertyGrid PropertyGrid { get { return propertyGrid; } }
-
-		private void OnResizeLevel(object sender, RoutedEventArgs e) {
-			//editorControl.SaveFileAs(editorControl.WorldFilePath);
-		}
-
+		
 		private void OnTilesetChanged(object sender, SelectionChangedEventArgs e) {
 			if (!loaded) return;
 			if (comboBoxTilesets.SelectedIndex != -1) {
@@ -404,9 +408,13 @@ namespace ZeldaEditor {
 			ShowSaveWorldDialog();
 		}
 
-		private void CanExecuteIsOpen(object sender, CanExecuteRoutedEventArgs e) {
+		private void CanExecuteIsWorldOpen(object sender, CanExecuteRoutedEventArgs e) {
 			if (!loaded) return;
 			e.CanExecute = editorControl.IsWorldOpen;
+		}
+		private void CanExecuteIsLevelOpen(object sender, CanExecuteRoutedEventArgs e) {
+			if (!loaded) return;
+			e.CanExecute = editorControl.IsLevelOpen;
 		}
 
 		private void OnCloseCommand(object sender, ExecutedRoutedEventArgs e) {
@@ -470,24 +478,163 @@ namespace ZeldaEditor {
 		}
 
 		private void OnAddNewLevelCommand(object sender, ExecutedRoutedEventArgs e) {
-			Level level = AddNewLevelWindow.Show(this, editorControl);
-			if (level != null) {
-				editorControl.AddLevel(level, true);
-				treeViewWorld.RefreshLevels();
+			EditorAction action = AddNewLevelWindow.Show(this, editorControl);
+			if (action != null) {
+				editorControl.PushAction(action, ActionExecution.Execute);
 			}
 		}
 		private void OnAddNewDungeonCommand(object sender, ExecutedRoutedEventArgs e) {
-			Dungeon dungeon = AddNewDungeonWindow.Show(this, editorControl);
-			if (dungeon != null) {
-				editorControl.AddDungeon(dungeon, true);
-				treeViewWorld.RefreshDungeons();
+			EditorAction action = AddNewDungeonWindow.Show(this, editorControl);
+			if (action != null) {
+				editorControl.PushAction(action, ActionExecution.Execute);
+				/*editorControl.AddDungeon(dungeon, true);
+				treeViewWorld.RefreshDungeons();*/
 			}
 		}
 		private void OnAddNewScriptCommand(object sender, ExecutedRoutedEventArgs e) {
 			Script script = new Script();
 			bool result = ScriptEditor.Show(this, script, EditorControl.Instance, true);
-			editorControl.AddScript(script);
-			treeViewWorld.RefreshScripts();
+			if (result) {
+				editorControl.AddScript(script);
+				treeViewWorld.RefreshScripts();
+			}
+		}
+		private void CanExecuteCycleLayerUp(object sender, CanExecuteRoutedEventArgs e) {
+			if (!loaded) return;
+			e.CanExecute = editorControl.IsLevelOpen && (editorControl.CurrentLayer > 0 || editorControl.EventMode);
+		}
+		private void CanExecuteCycleLayerDown(object sender, CanExecuteRoutedEventArgs e) {
+			if (!loaded) return;
+			e.CanExecute = editorControl.IsLevelOpen && (editorControl.CurrentLayer + 1 < editorControl.Level.RoomLayerCount || !editorControl.EventMode);
+		}
+
+		private void OnCycleLayerUpCommand(object sender, ExecutedRoutedEventArgs e) {
+			comboBoxLayers.SelectedIndex--;
+		}
+
+		private void OnCycleLayerDownCommand(object sender, ExecutedRoutedEventArgs e) {
+			comboBoxLayers.SelectedIndex++;
+		}
+
+		private void OnResizeLevelCommand(object sender, ExecutedRoutedEventArgs e) {
+			Level level = (e.Parameter as Level ?? editorControl.Level);
+			Point2I dimensions = level.Dimensions;
+			bool result = ResizeLevelWindow.Show(this, ref dimensions);
+			if (result) {
+				EditorAction action = new ActionResizeLevel(level, dimensions);
+				editorControl.PushAction(action, ActionExecution.Execute);
+			}
+		}
+		private void OnShiftLevelCommand(object sender, ExecutedRoutedEventArgs e) {
+			Level level = (e.Parameter as Level ?? editorControl.Level);
+			Point2I distance;
+			bool result = ShiftLevelWindow.Show(this, out distance);
+			if (result) {
+				EditorAction action = new ActionShiftLevel(level, distance);
+				editorControl.PushAction(action, ActionExecution.Execute);
+			}
+		}
+
+		public void UpdateLayers() {
+			loaded = false;
+			comboBoxLayers.Items.Clear();
+			if (editorControl.IsLevelOpen) {
+				for (int i = 0; i < editorControl.Level.RoomLayerCount; i++) {
+					comboBoxLayers.Items.Add("Layer " + (i + 1));
+				}
+				comboBoxLayers.Items.Add("Events");
+
+				if (editorControl.EventMode)
+					comboBoxLayers.SelectedIndex = comboBoxLayers.Items.Count - 1;
+				else
+					comboBoxLayers.SelectedIndex = editorControl.CurrentLayer;
+			}
+
+			loaded = true;
+		}
+
+		private void OnShowModifiedTilesChecked(object sender, RoutedEventArgs e) {
+			editorControl.ShowModified = dropDownItemShowModified.IsChecked;
+		}
+
+		private void CanExecuteCopyCut(object sender, CanExecuteRoutedEventArgs e) {
+			if (!loaded) return;
+			e.CanExecute = editorControl.IsLevelOpen && editorControl.CurrentTool.CanCopyCut;
+		}
+		private void CanExecuteDeleteDeselect(object sender, CanExecuteRoutedEventArgs e) {
+			if (!loaded) return;
+			e.CanExecute = editorControl.IsLevelOpen && editorControl.CurrentTool.CanDeleteDeselect;
+		}
+		private void CanExecutePaste(object sender, CanExecuteRoutedEventArgs e) {
+			if (!loaded) return;
+			e.CanExecute = editorControl.ToolSelection.CanPaste;
+		}
+		private void OnCopyCommand(object sender, ExecutedRoutedEventArgs e) {
+			editorControl.CurrentTool.Copy();
+		}
+
+		private void OnCutCommand(object sender, ExecutedRoutedEventArgs e) {
+			editorControl.CurrentTool.Cut();
+		}
+
+		private void OnPasteCommand(object sender, ExecutedRoutedEventArgs e) {
+			editorControl.CurrentTool = editorControl.ToolSelection;
+			editorControl.CurrentTool.Paste();
+		}
+
+		private void OnDeleteCommand(object sender, ExecutedRoutedEventArgs e) {
+			editorControl.CurrentTool.Delete();
+		}
+
+		private void OnSelectAllCommand(object sender, ExecutedRoutedEventArgs e) {
+			editorControl.CurrentTool = editorControl.ToolSelection;
+			editorControl.CurrentTool.SelectAll();
+		}
+
+		private void CanExecuteUndo(object sender, CanExecuteRoutedEventArgs e) {
+			if (!loaded) return;
+			e.CanExecute = editorControl.CanUndo;
+		}
+
+		private void OnUndoCommand(object sender, ExecutedRoutedEventArgs e) {
+			editorControl.Undo();
+		}
+
+		private void CanExecuteRedo(object sender, CanExecuteRoutedEventArgs e) {
+			if (!loaded) return;
+			e.CanExecute = editorControl.CanRedo;
+		}
+
+		private void OnRedoCommand(object sender, ExecutedRoutedEventArgs e) {
+			editorControl.Redo();
+		}
+		
+		private void OnShowHistory(object sender, RoutedEventArgs e) {
+			if (historyWindow == null) {
+				historyWindow = HistoryWindow.Show(this, editorControl, OnHistoryWindowClosed);
+				buttonShowHistory.IsChecked = true;
+			}
+			else {
+				historyWindow.Close();
+				buttonShowHistory.IsChecked = false;
+			}
+		}
+		private void OnHistoryWindowClosed(object sender, EventArgs e) {
+			historyWindow = null;
+			buttonShowHistory.IsChecked = false;
+		}
+
+		public HistoryWindow HistoryWindow {
+			get { return historyWindow; }
+		}
+
+		public void SelectHistoryItem(HistoryListViewItem item) {
+			if (historyWindow != null) {
+				historyWindow.SelectItem(item);
+			}
+			else {
+				item.IsSelected = true;
+			}
 		}
 	}
 }

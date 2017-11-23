@@ -53,13 +53,13 @@ namespace ZeldaEditor.PropertiesEditor {
 			AddEditor<ResourcePropertyEditor<Sprite>>("sprite");
 			AddEditor<ResourcePropertyEditor<Zone>>("zone");
 			AddEditor<RewardPropertyEditor>("reward");
-			//AddEditor<ScriptPropertyEditor>("script");
 			AddEditor<DungeonPropertyEditor>("dungeon");
 			AddEditor<LevelPropertyEditor>("level");
 			AddEditor<EnumPropertyEditor>("enum");
 			AddEditor<EnumFlagPropertyEditor>("enum_flags");
 			AddEditor<ScriptPropertyEditor>("script");
 			AddEditor<TextMessagePropertyEditor>("text_message");
+			AddEditor<WarpPropertyEditor>("warp");
 
 			// Create custom property editor types.
 			/*typeEditors["sprite"]           = new ResourcePropertyEditor<Sprite>();

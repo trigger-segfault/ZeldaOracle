@@ -13,7 +13,7 @@ EVENTTILE warp;
 	SPRITE		event_tile_warp_tunnel;
 	PROPERTIES	(string,  warp_type,				"tunnel",	"Warp Type", ("enum", "WarpType"), "Warp", "The type of warp point."),
 				(string,  destination_level,		"",			"Destination Level", "level", "Warp", "The level where the destination point is in."),
-				(string,  destination_warp_point,	"",			"Destination Warp Point", "", "Warp", "The id of the warp point destination."),
+				(string,  destination_warp_point,	"",			"Destination Warp Point", ("warp", "destination_level"), "Warp", "The id of the warp point destination."),
 				(integer, face_direction,			3,			"Face Direction", "direction", "Warp", "The direction the player should face when entering a room through this Warp Point.");
 END;
 

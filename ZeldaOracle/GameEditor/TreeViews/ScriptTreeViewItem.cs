@@ -45,16 +45,21 @@ namespace ZeldaEditor.TreeViews {
 			}
 		}
 
-		public override void Rename(World world, string name) {
-			world.RenameScript(script, name);
+		public override void Rename(EditorControl editorControl, string name) {
+			editorControl.World.RenameScript(script, name);
 			Header = script.ID;
+			editorControl.IsModified = true;
 		}
 
-		public override void Duplicate(EditorControl editorControl, string suffix) {
-			/*Script duplicate = new Script(script);
-			duplicate.ID += suffix;
-			editorControl.World.AddScript(duplicate);
-			editorControl.RefreshWorldTreeView();*/
+		public override void Duplicate(EditorControl editorControl) {
+			Script duplicate = new Script(script);
+			duplicate.ID = "";
+			string newName = RenameWindow.Show(Window.GetWindow(this), editorControl.World, duplicate);
+			if (newName != null) {
+				duplicate.ID = newName;
+				editorControl.AddScript(duplicate);
+				editorControl.EditorWindow.TreeViewWorld.RefreshScripts();
+			}
 		}
 
 		public override IIDObject IDObject { get { return script; } }

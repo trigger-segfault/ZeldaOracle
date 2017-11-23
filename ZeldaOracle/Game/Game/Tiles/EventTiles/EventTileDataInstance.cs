@@ -24,13 +24,18 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 
 		}
 
-		public EventTileDataInstance(EventTileData tileData, Point2I position) :
+		public EventTileDataInstance(EventTileData tileData) :
 			base(tileData)
 		{
-			this.position	= position;
 			this.sprite		= tileData.Sprite;
 		}
-		
+
+		public EventTileDataInstance(EventTileData tileData, Point2I position) :
+			base(tileData) {
+			this.position   = position;
+			this.sprite     = tileData.Sprite;
+		}
+
 		public override void Clone(BaseTileDataInstance copy) {
 			base.Clone(copy);
 			if (copy is EventTileDataInstance) {
@@ -82,10 +87,6 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		public EventTileData EventTileData {
 			get { return (EventTileData) tileData; }
 			set { base.BaseData = value; }
-		}
-
-		public string ID {
-			get { return properties.GetString("id"); }
 		}
 
 		public Point2I Position {

@@ -61,6 +61,26 @@ namespace ZeldaEditor {
 			new InputGestureCollection() {
 				new KeyGesture(Key.X, ModifierKeys.Control | ModifierKeys.Shift) });
 
+		/**<summary>The command to show the tile properties.</summary>*/
+		public static readonly RoutedUICommand TileProperties = new RoutedUICommand(
+			"TileProperties", "Tile Properties", typeof(EditorCommands),
+			new InputGestureCollection() {
+				new KeyGesture(Key.F4) });
+
+		/**<summary>The command to show the room properties.</summary>*/
+		public static readonly RoutedUICommand RoomProperties = new RoutedUICommand(
+			"RoomProperties", "Room Properties", typeof(EditorCommands),
+			new InputGestureCollection() {
+				new KeyGesture(Key.F4, ModifierKeys.Shift) });
+
+		/**<summary>The command to resize the current level.</summary>*/
+		public static readonly RoutedUICommand ResizeLevel = new RoutedUICommand(
+			"ResizeLevel", "Resize Level", typeof(EditorCommands));
+
+		/**<summary>The command to shift the current level.</summary>*/
+		public static readonly RoutedUICommand ShiftLevel = new RoutedUICommand(
+			"ShiftLevel", "Shift Level", typeof(EditorCommands));
+
 		#endregion
 		//============ TOOLS =============
 		#region Tools
@@ -96,9 +116,9 @@ namespace ZeldaEditor {
 				new KeyGesture(Key.D, ModifierKeys.Control) });
 
 		#endregion
-		//============ EDITOR ============
-		#region Editor
-		
+		//============= VIEW =============
+		#region View
+
 		/**<summary>The command to toggle the grid visibility.</summary>*/
 		public static readonly RoutedUICommand ShowGrid = new RoutedUICommand(
 			"ShowGrid", "Show Grid", typeof(EditorCommands),
@@ -109,17 +129,17 @@ namespace ZeldaEditor {
 		public static readonly RoutedUICommand PlayAnimations = new RoutedUICommand(
 			"PlayAnimations", "Play Animations", typeof(EditorCommands));
 
-		/**<summary>The command to show the tile properties.</summary>*/
-		public static readonly RoutedUICommand TileProperties = new RoutedUICommand(
-			"TileProperties", "Tile Properties", typeof(EditorCommands),
+		/**<summary>The command to cycle a layer up in the level.</summary>*/
+		public static readonly RoutedUICommand CycleLayerUp = new RoutedUICommand(
+			"CycleLayerUp", "Cycle Layer Up", typeof(EditorCommands),
 			new InputGestureCollection() {
-				new KeyGesture(Key.F4) });
+				new KeyGesture(Key.PageUp) });
 
-		/**<summary>The command to show the room properties.</summary>*/
-		public static readonly RoutedUICommand RoomProperties = new RoutedUICommand(
-			"RoomProperties", "Room Properties", typeof(EditorCommands),
+		/**<summary>The command to cycle a layer down in the level.</summary>*/
+		public static readonly RoutedUICommand CycleLayerDown = new RoutedUICommand(
+			"CycleLayerDown", "Cycle Layer Down", typeof(EditorCommands),
 			new InputGestureCollection() {
-				new KeyGesture(Key.F4, ModifierKeys.Shift) });
+				new KeyGesture(Key.PageDown) });
 
 		#endregion
 	}

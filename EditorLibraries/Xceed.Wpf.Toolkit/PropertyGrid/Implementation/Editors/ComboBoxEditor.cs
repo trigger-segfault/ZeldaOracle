@@ -17,6 +17,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors {
 	public abstract class ComboBoxEditor : TypeEditor<System.Windows.Controls.ComboBox> {
@@ -43,6 +44,18 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors {
 	public class PropertyGridEditorComboBox : System.Windows.Controls.ComboBox {
 		static PropertyGridEditorComboBox() {
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(PropertyGridEditorComboBox), new FrameworkPropertyMetadata(typeof(PropertyGridEditorComboBox)));
+		}
+
+		protected override void OnMouseWheel(MouseWheelEventArgs e) {
+			// Prevent accidentally scrolling the combo box when scrolling through the property grid
+			if (!IsDropDownOpen)
+				e.Handled = true;
+		}
+
+		protected override void OnPreviewMouseWheel(MouseWheelEventArgs e) {
+			// Prevent accidentally scrolling the combo box when scrolling through the property grid
+			if (!IsDropDownOpen)
+				e.Handled = true;
 		}
 	}
 }

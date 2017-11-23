@@ -104,7 +104,10 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid {
 
 		public override void UpdateValuesFromSource() {
 			foreach (PropertyItem item in PropertyItems) {
+				item.IsUpdating = true;
 				item.DescriptorDefinition.UpdateValueFromSource();
+				item.SetValueFontWeight();
+				item.IsUpdating = false;
 				//item.ContainerHelper.UpdateValuesFromSource();
 			}
 		}
@@ -357,7 +360,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid {
 #if VS2008
         propertyItem.Value = pd.DefaultValue;
 #else
-					propertyItem.SetCurrentValue(PropertyItem.ValueProperty, pd.DefaultValue);
+					//propertyItem.SetCurrentValue(PropertyItem.ValueProperty, pd.DefaultValue);
 #endif
 				}
 			}

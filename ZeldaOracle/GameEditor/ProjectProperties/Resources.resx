@@ -118,7 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="AppError" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icons\AppError.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="EyedropperCursor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Cursors\EyedropperCursor.cur;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="FillCursor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Cursors\FillCursor.cur;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PencilCursor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Cursors\PencilCursor.cur;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SelectionCursor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Cursors\SelectionCursor.cur;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SquareCursor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Cursors\SquareCursor.cur;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

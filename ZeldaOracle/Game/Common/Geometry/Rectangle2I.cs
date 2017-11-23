@@ -137,22 +137,22 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		public static Rectangle2I operator *(Rectangle2I r, Point2I p) {
-			return new Rectangle2I(r.Point, r.Size * p);
+			return new Rectangle2I(r.Point * p, r.Size * p);
 		}
 		public static Rectangle2I operator *(Rectangle2I r, int i) {
-			return new Rectangle2I(r.Point, r.Size * i);
+			return new Rectangle2I(r.Point * i, r.Size * i);
 		}
 		public static Rectangle2I operator /(Rectangle2I r, Point2I p) {
-			return new Rectangle2I(r.Point, r.Size / p);
+			return new Rectangle2I(r.Point / p, r.Size / p);
 		}
 		public static Rectangle2I operator /(Rectangle2I r, int i) {
-			return new Rectangle2I(r.Point, r.Size / i);
+			return new Rectangle2I(r.Point / i, r.Size / i);
 		}
 		public static Rectangle2I operator %(Rectangle2I r, Point2I p) {
-			return new Rectangle2I(r.Point, r.Size % p);
+			return new Rectangle2I(r.Point % p, r.Size % p);
 		}
 		public static Rectangle2I operator %(Rectangle2I r, int i) {
-			return new Rectangle2I(r.Point, r.Size % i);
+			return new Rectangle2I(r.Point % i, r.Size % i);
 		}
 
 		//--------------------------------

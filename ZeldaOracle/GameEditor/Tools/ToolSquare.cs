@@ -7,12 +7,21 @@ using System.Windows.Forms;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Game;
+using ZeldaEditor.Undo;
+using ZeldaEditor.Control;
+using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaEditor.Tools {
 	public class ToolSquare : EditorTool {
-		private Point2I dragBeginTileCoord;
-		private bool isCreatingSelectionBox;
+		private static readonly Cursor SquareCursor = LoadCursor("Square");
 
+		private Point2I dragBeginTileCoord;
+
+		private ActionSquare action;
+		private TileDataInstance drawTile;
+
+		private Rectangle2I square;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -21,118 +30,130 @@ namespace ZeldaEditor.Tools {
 		public ToolSquare() {
 			name = "Square Tool";
 		}
-
-		
-		//-----------------------------------------------------------------------------
-		// Selection
-		//-----------------------------------------------------------------------------
-
-		public override void Cut() {
-			Deselect();
-		}
-		
-		public override void Copy() {
-
-		}
-		
-		public override void Paste() {
-			Deselect();
-		}
-		
-		public override void Delete() {
-			Deselect();
-		}
-
-		public override void SelectAll() {
-			isCreatingSelectionBox = false;
-			LevelDisplay.SetSelectionBox(Point2I.Zero,
-				EditorControl.Level.RoomSize * EditorControl.Level.Dimensions);
-		}
-
-		public override void Deselect() {
-			isCreatingSelectionBox = false;
-			LevelDisplay.ClearSelectionBox();
-		}
-
-		private void ActivateTile(MouseButtons mouseButton, Point2I levelTileCoord) {
-			Room room = editorControl.Level.GetRoomAt(levelTileCoord / editorControl.Level.RoomSize);
-			Point2I tileCoord = levelTileCoord % editorControl.Level.RoomSize;
-
-			if (mouseButton == MouseButtons.Left) {
-				TileData tileData = editorControl.SelectedTilesetTileData as TileData;
-				if (tileData != null) {
-					room.CreateTile(
-						tileData,
-						tileCoord.X, tileCoord.Y, editorControl.CurrentLayer
-					);
-					editorControl.IsModified = true;
-				}
-
-			}
-			else if (mouseButton == MouseButtons.Right) {
-				/*if (editorControl.CurrentLayer == 0) {
-					room.CreateTile(
-						editorControl.Tileset.DefaultTileData,
-						tileCoord.X, tileCoord.Y, editorControl.CurrentLayer
-					);
-				}
-				else {*/
-				room.RemoveTile(tileCoord.X, tileCoord.Y, editorControl.CurrentLayer);
-				editorControl.IsModified = true;
-				//}
-			}
-		}
-
 		
 		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		public override void Initialize() {
-
+		protected override void OnCancel() {
+			LevelDisplay.ClearSelectionBox();
+			action = null;
 		}
 
-		public override void OnBegin() {
-			isCreatingSelectionBox = false;
+		protected override void OnInitialize() {
+			MouseCursor = SquareCursor;
+		}
+
+		protected override void OnBegin() {
 			EditorControl.HighlightMouseTile = true;
 		}
 
-		public override void OnMouseDragBegin(MouseEventArgs e) {
-			// Draw a new selecion box.
-			if (e.Button == MouseButtons.Left) {
-				isCreatingSelectionBox = true;
-				Point2I mousePos	= new Point2I(e.X, e.Y);
-				dragBeginTileCoord	= LevelDisplay.SampleLevelTileCoordinates(mousePos);
-				LevelDisplay.SetSelectionBox(dragBeginTileCoord, Point2I.One);
+		protected override void OnEnd() {
+			LevelDisplay.ClearSelectionBox();
+			action = null;
+		}
+
+		protected override void OnMouseDown(MouseEventArgs e) {
+			base.OnMouseDown(e);
+			
+			if (DragButton.IsOpposite(e.Button)) {
+				Cancel();
 			}
 		}
 
-		public override void OnMouseDragEnd(MouseEventArgs e) {
-			if (e.Button == MouseButtons.Left && isCreatingSelectionBox) {
-				isCreatingSelectionBox = false;
-				Point2I mousePos  = new Point2I(e.X, e.Y);
-				Point2I tileCoord = LevelDisplay.SampleLevelTileCoordinates(mousePos);
-				Point2I minCoord  = GMath.Min(dragBeginTileCoord, tileCoord);
-				Point2I maxCoord  = GMath.Max(dragBeginTileCoord, tileCoord);
-				Point2I totalSize	= editorControl.Level.Dimensions * editorControl.Level.RoomSize;
+		protected override void OnMouseDragBegin(MouseEventArgs e) {
+			// Draw a new selecion box.
+			if (DragButton.IsLeftOrRight() && !editorControl.EventMode) {
+				IsDrawing = true;
+
+				if (DragButton == MouseButtons.Left)
+					drawTile = CreateDrawTile();
+				else
+					drawTile = null;
+				
+				dragBeginTileCoord	= LevelDisplay.SampleLevelTileCoordinates(e.MousePos());
+				square = new Rectangle2I(dragBeginTileCoord, Point2I.One);
+				LevelDisplay.SetSelectionBox(dragBeginTileCoord * GameSettings.TILE_SIZE, (Point2I)GameSettings.TILE_SIZE);
+			}
+		}
+
+		protected override void OnMouseDragEnd(MouseEventArgs e) {
+			if (IsDrawing) {
+				IsDrawing = false;
+				Point2I levelTileCoord = LevelDisplay.SampleLevelTileCoordinates(e.MousePos());
+				Point2I totalSize   = editorControl.Level.Dimensions * editorControl.Level.RoomSize;
+				Point2I minCoord  = GMath.Max(GMath.Min(dragBeginTileCoord, levelTileCoord), Point2I.Zero);
+				Point2I maxCoord  = GMath.Min(GMath.Max(dragBeginTileCoord, levelTileCoord), totalSize - 1);
+				square = new Rectangle2I(minCoord, maxCoord - minCoord + 1);
+
+				TileData tileData = editorControl.SelectedTilesetTileData as TileData;
+				if (e.Button == MouseButtons.Right)
+					tileData = null;
+				action = new ActionSquare(editorControl.Level, editorControl.CurrentLayer, square, tileData);
 				for (int x = minCoord.X; x <= maxCoord.X && x < totalSize.X; x++) {
 					for (int y = minCoord.Y; y <= maxCoord.Y && y < totalSize.Y; y++) {
-						ActivateTile(e.Button, new Point2I(x, y));
+						levelTileCoord = new Point2I(x, y);
+						Room room = editorControl.Level.GetRoomAt(levelTileCoord / editorControl.Level.RoomSize);
+						Point2I roomCoord = levelTileCoord % editorControl.Level.RoomSize;
+						TileDataInstance tile = room.GetTile(roomCoord, editorControl.CurrentLayer);
+						if (tile != null) {
+							action.AddOverwrittenTile(levelTileCoord, tile);
+						}
 					}
 				}
+				editorControl.PushAction(action, ActionExecution.Execute);
+				action = null;
 				LevelDisplay.ClearSelectionBox();
 			}
 		}
 
-		public override void OnMouseDragMove(MouseEventArgs e) {
+		protected override void OnMouseDragMove(MouseEventArgs e) {
 			// Update selection box.
-			if (e.Button == MouseButtons.Left && isCreatingSelectionBox) {
-				Point2I mousePos  = new Point2I(e.X, e.Y);
-				Point2I tileCoord = LevelDisplay.SampleLevelTileCoordinates(mousePos);
-				Point2I minCoord  = GMath.Min(dragBeginTileCoord, tileCoord);
-				Point2I maxCoord  = GMath.Max(dragBeginTileCoord, tileCoord);
-				LevelDisplay.SetSelectionBox(minCoord, maxCoord - minCoord + Point2I.One);
+			if (IsDrawing) {
+				Point2I levelTileCoord = LevelDisplay.SampleLevelTileCoordinates(e.MousePos());
+				Point2I totalSize   = editorControl.Level.Dimensions * editorControl.Level.RoomSize;
+				Point2I minCoord  = GMath.Max(GMath.Min(dragBeginTileCoord, levelTileCoord), Point2I.Zero);
+				Point2I maxCoord  = GMath.Min(GMath.Max(dragBeginTileCoord, levelTileCoord), totalSize - 1);
+				square = new Rectangle2I(minCoord, maxCoord - minCoord + 1);
+				LevelDisplay.SetSelectionBox(square.Point * GameSettings.TILE_SIZE, square.Size * GameSettings.TILE_SIZE);
 			}
+		}
+
+		//-----------------------------------------------------------------------------
+		// Virtual drawing
+		//-----------------------------------------------------------------------------
+
+		public override bool DrawHideTile(TileDataInstance tile, Room room, Point2I levelCoord, int layer) {
+			return (IsDrawing && drawTile == null && square.Contains(levelCoord));
+		}
+
+		public override void DrawTile(Graphics2D g, Room room, Point2I position, Point2I levelCoord, int layer) {
+			if (!EditorControl.EventMode && layer == editorControl.CurrentLayer) {
+				if (!IsDrawing && levelCoord == LevelDisplay.CursorTileLocation) {
+					TileDataInstance tile = CreateDrawTile();
+					if (tile != null) {
+						LevelDisplay.DrawTile(g, room, tile, position, LevelDisplay.FadeAboveColor);
+					}
+				}
+				else if (IsDrawing && square.Contains(levelCoord) && drawTile != null) {
+					LevelDisplay.DrawTile(g, room, drawTile, position, LevelDisplay.NormalColor);
+				}
+			}
+		}
+
+		//-----------------------------------------------------------------------------
+		// Helpers
+		//-----------------------------------------------------------------------------
+
+		private TileDataInstance CreateDrawTile() {
+			TileData tileData = GetTileData();
+			if (tileData != null)
+				return new TileDataInstance(tileData);
+			return null;
+		}
+
+		private TileData GetTileData() {
+			return editorControl.SelectedTilesetTileData as TileData;
 		}
 	}
 }

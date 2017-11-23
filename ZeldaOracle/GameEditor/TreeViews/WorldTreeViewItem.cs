@@ -29,9 +29,10 @@ namespace ZeldaEditor.TreeViews {
 			editorControl.OpenObjectProperties(world);
 		}
 
-		public override void Rename(World world, string name) {
+		public override void Rename(EditorControl editorControl, string name) {
 			world.ID = name;
 			Header = name;
+			editorControl.IsModified = true;
 		}
 
 		public override IIDObject IDObject { get { return world; } }

@@ -5,10 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Xceed.Wpf.Toolkit.PropertyGrid;
 using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 using ZeldaEditor.Control;
+using ZeldaEditor.PropertiesEditor.CustomEditors;
+using ZeldaEditor.Undo;
 using ZeldaEditor.Windows;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
@@ -126,21 +129,33 @@ namespace ZeldaEditor.PropertiesEditor {
 				// When a script property is changed from a hidden script to something else.
 				if (oldScript != null && oldScript.IsHidden && newScript != oldScript) {
 					// Delete the old script from the world (because it is now unreferenced).
-					editorControl.World.RemoveScript(oldScript);
-					Console.WriteLine("Deleted unreferenced script '" + oldValue + "'");
+					//editorControl.World.RemoveScript(oldScript);
+					editorControl.RemoveScriptReference(oldScript, propertyDescriptor.PropertyObject);
 
 					// Don't allow the user to reference other hidden scripts.
 					if (newScript != null && newScript.IsHidden)
 						isNewScriptInvalid = true;
 				}
 
+				if (newScript != oldScript && newScript != null) {
+					editorControl.AddScriptReference(newScript, propertyDescriptor.PropertyObject);
+				}
+
 				// Show a message if the script is invalid.
 				if (isNewScriptInvalid)
 					TriggerMessageBox.Show(Application.Current.MainWindow, MessageIcon.Warning, "'" + newValue + "' is not a valid script name.", "Invalid Name");
 			}
-			else if (property.Name == "id") {
-				editorControl.EditorWindow.UpdatePropertyPreview(propertyObject);
+
+			ActionChangeProperty action = new ActionChangeProperty(propertyObject, property, e.OldValue, e.NewValue);
+			if (!action.IsEvent && editorControl.LastAction is ActionChangeProperty) {
+				ActionChangeProperty lastAction = editorControl.LastAction as ActionChangeProperty;
+				if (action.PropertyObject == lastAction.PropertyObject && action.PropertyName == lastAction.PropertyName) {
+					action.OldValue = lastAction.OldValue;
+					editorControl.PopAction();
+				}
+				
 			}
+			editorControl.PushAction(action, ActionExecution.None);
 		}
 
 		protected override void OnMouseEnter(MouseEventArgs e) {

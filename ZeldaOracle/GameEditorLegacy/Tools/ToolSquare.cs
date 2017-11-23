@@ -28,7 +28,7 @@ namespace ZeldaEditor.Tools {
 		//-----------------------------------------------------------------------------
 
 		public override void Cut() {
-			Deselect();
+			//Deselect();
 		}
 		
 		public override void Copy() {
@@ -36,11 +36,11 @@ namespace ZeldaEditor.Tools {
 		}
 		
 		public override void Paste() {
-			Deselect();
+			//Deselect();
 		}
 		
 		public override void Delete() {
-			Deselect();
+			//Deselect();
 		}
 
 		public override void SelectAll() {
@@ -91,6 +91,10 @@ namespace ZeldaEditor.Tools {
 		}
 
 		public override void OnBegin() {
+			isCreatingSelectionBox = false;
+		}
+
+		public override void OnEnd() {
 			isCreatingSelectionBox = false;
 		}
 

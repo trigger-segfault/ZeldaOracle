@@ -1,0 +1,20 @@
+﻿<Window x:Class="ZeldaEditor.Windows.ShiftLevelWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ZeldaEditor.Windows"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="Shift Level by Room" Height="138" Width="245" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Icon="/ZeldaEditor;component/Resources/Icons/LevelShift.png" Background="#FFF0F0F0" WindowStyle="ToolWindow" SnapsToDevicePixels="True" UseLayoutRounding="True">
+    <Grid>
+
+        <Label Content="X:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,7,0,0" Width="43" HorizontalContentAlignment="Right"/>
+        <xctk:IntegerUpDown x:Name="spinnerWidth" Value="0" Minimum="-10000" Maximum="10000" VerticalAlignment="Top" Margin="58,10,10,0"/>
+        <Label Content="Y:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,33,0,0" Width="43" HorizontalContentAlignment="Right"/>
+        <xctk:IntegerUpDown x:Name="spinnerHeight" Value="0" Minimum="-10000" Maximum="10000" VerticalAlignment="Top" Margin="58,36,10,0"/>
+
+        <Button Content="Shift" IsDefault="True" Margin="0,0,97,10" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="OnShift"/>
+        <Button Content="Cancel" IsCancel="True" Margin="0,0,10,10" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+    </Grid>
+</Window>

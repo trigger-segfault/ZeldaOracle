@@ -653,7 +653,7 @@ namespace ZeldaEditor {
 		// Shift level node.
 		private void buttonTreeViewShift_Click(object sender, EventArgs e) {
 			if (LevelResizeShiftForm.ShowShift(this, editorControl.Level.Dimensions) == DialogResult.OK) {
-				editorControl.Level.Shift(LevelResizeShiftForm.LevelShift);
+				editorControl.Level.ShiftRooms(LevelResizeShiftForm.LevelShift);
 			}
 		}
 

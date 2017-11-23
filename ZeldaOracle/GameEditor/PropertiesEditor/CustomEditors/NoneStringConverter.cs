@@ -12,11 +12,11 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 		object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture) {
 			if (value is string) {
 				string str = value as string;
-				if (str == "(none)")
-					str = "";
+				if (str == "")
+					str = "(none)";
 				return str;
 			}
-			return null;
+			return "";
 		}
 		object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
 			if (value is string) {
@@ -25,7 +25,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 					str = "";
 				return str;
 			}
-			return null;
+			return "";
 		}
 	}
 }

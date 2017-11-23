@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectGuid>{899DAEC0-CF01-4B30-A6E4-A0DB613978BD}</ProjectGuid>
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ZeldaOracle</RootNamespace>
     <AssemblyName>ZeldaOracle</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
     <XnaProfile>Reach</XnaProfile>
@@ -124,6 +125,7 @@
     <Compile Include="Common\Content\Resources.cs" />
     <Compile Include="Common\Content\TemporaryResources.cs" />
     <Compile Include="Common\Content\TextureLoader.cs" />
+    <None Include="app.config" />
     <None Include="Common\Debug\DebugControllerBase.cs" />
     <None Include="Common\Debug\DebugMenu.cs" />
     <None Include="Common\Debug\DebugMenuItem.cs" />
@@ -131,6 +133,7 @@
     <None Include="Common\Debug\ToggleMenuItem.cs" />
     <Compile Include="Common\Scripting\IEventObject.cs" />
     <Compile Include="Common\Scripting\IIDObject.cs" />
+    <Compile Include="Common\Scripting\IPropertyObjectContainer.cs" />
     <Compile Include="Common\Scripting\ObjectEvent.cs" />
     <Compile Include="Common\Scripting\ObjectEventCollection.cs" />
     <Compile Include="Common\Scripting\ScriptingAttributes.cs" />
@@ -201,6 +204,7 @@
     <Compile Include="Common\Translation\LetterString.cs" />
     <Compile Include="Common\Translation\FormatCodes.cs" />
     <Compile Include="Common\Translation\WrappedLetterString.cs" />
+    <Compile Include="Common\Util\WeakReferenceWrapper.cs" />
     <Compile Include="Game\Control\GameControl.cs" />
     <Compile Include="Game\Control\HUD.cs" />
     <Compile Include="Game\Control\Maps\DungeonMapFloor.cs" />

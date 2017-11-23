@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ZeldaEditor.Control;
+using ZeldaEditor.Undo;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaEditor.Windows {
@@ -19,13 +20,14 @@ namespace ZeldaEditor.Windows {
 	/// Interaction logic for AddNewDungeonWindow.xaml
 	/// </summary>
 	public partial class AddNewDungeonWindow : Window {
-		private Dungeon dungeon;
+		private ActionCreateDungeon action;
 		private EditorControl editorControl;
 
 		public AddNewDungeonWindow(EditorControl editorControl) {
 			InitializeComponent();
 
 			this.editorControl = editorControl;
+			textBoxDungeonID.Focus();
 		}
 
 
@@ -43,18 +45,18 @@ namespace ZeldaEditor.Windows {
 			}
 			else {
 				string name = textBoxDungeonName.Text;
-				dungeon = new Dungeon(newID, name);
+				action = new ActionCreateDungeon(newID, name);
 				DialogResult = true;
 				Close();
 			}
 		}
 
-		public static Dungeon Show(Window owner, EditorControl editorControl) {
+		public static ActionCreateDungeon Show(Window owner, EditorControl editorControl) {
 			AddNewDungeonWindow window = new AddNewDungeonWindow(editorControl);
 			window.Owner = owner;
 			var result = window.ShowDialog();
 			if (result.HasValue && result.Value) {
-				return window.dungeon;
+				return window.action;
 			}
 			return null;
 		}

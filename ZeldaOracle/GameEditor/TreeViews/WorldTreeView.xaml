@@ -24,57 +24,17 @@
                 <local:ImageButton x:Name="buttonMoveDown" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/MoveDown.png" Click="OnMoveDown"/>
             </ToolBar>
             <TreeView x:Name="treeView" BorderThickness="0,1,0,0" AllowDrop="True" SelectedItemChanged="OnSelectionChanged" MouseEnter="OnTreeViewMouseEnter">
-
-                <!--<TreeView.Resources>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="{DynamicResource ResourceKey={x:Static Member=SystemColors.HighlightColorKey}}"/>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="{DynamicResource ResourceKey={x:Static Member=SystemColors.HighlightTextColorKey}}"/>
-                </TreeView.Resources>-->
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
                         <EventSetter Event="PreviewMouseRightButtonDown" Handler="OnTreeViewMouseRightButtonDown"/>
                         <EventSetter Event="MouseDoubleClick"     Handler="OnTreeViewMouseDoubleClick"/>
                         <EventSetter Event="MouseDown"            Handler="OnTreeViewMouseDown"/>
+                        <EventSetter Event="RequestBringIntoView" Handler="OnTreeViewRequestBringIntoView"/>
                         <!--<EventSetter Event="TreeViewItem.MouseMove"        Handler="OnTreeViewMouseMove"/>
                         <EventSetter Event="TreeViewItem.DragOver"         Handler="OnTreeViewDragOver"/>
                         <EventSetter Event="TreeViewItem.Drop"             Handler="OnTreeViewDrop"/>-->
-                        <Style.Resources>
-
-                            <!--<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="DodgerBlue"/>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White"/>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DodgerBlue"/>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="White"/>-->
-                        </Style.Resources>
-                        <!--<Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Foreground" Value="White"/>
-                            </Trigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsSelected" Value="True"/>
-                                    <Condition Property="IsSelectionActive" Value="False"/>
-                                </MultiTrigger.Conditions>
-                                <Setter Property="Foreground" Value="White"/>
-                            </MultiTrigger>
-                        </Style.Triggers>-->
                     </Style>
                 </TreeView.ItemContainerStyle>
-                <local:ImageTreeViewItem Header="World" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/World.png" IsExpanded="True">
-                    <local:ImageTreeViewItem Header="Levels" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/LevelGroup.png" IsExpanded="True">
-                        <local:ImageTreeViewItem Header="Level1" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Level.png"/>
-                        <local:ImageTreeViewItem Header="Level2" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Level.png"/>
-                        <local:ImageTreeViewItem Header="Level3" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Level.png"/>
-                    </local:ImageTreeViewItem>
-                    <local:ImageTreeViewItem Header="Dungeons" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/DungeonGroup.png" IsExpanded="True">
-                        <local:ImageTreeViewItem Header="Dungeon1" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Dungeon.png"/>
-                        <local:ImageTreeViewItem Header="Dungeon2" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Dungeon.png"/>
-                    </local:ImageTreeViewItem>
-                    <local:ImageTreeViewItem Header="Scripts" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/ScriptGroup.png" IsExpanded="True">
-                        <local:ImageTreeViewItem Header="Script1" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Script.png"/>
-                        <local:ImageTreeViewItem Header="Script2" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Script.png"/>
-                        <local:ImageTreeViewItem Header="Script3" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Script.png"/>
-                        <local:ImageTreeViewItem Header="Script4" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/Script.png"/>
-                    </local:ImageTreeViewItem>
-                </local:ImageTreeViewItem>
             </TreeView>
         </DockPanel>
     </Border>

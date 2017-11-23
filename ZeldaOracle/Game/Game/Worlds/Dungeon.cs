@@ -84,6 +84,10 @@ namespace ZeldaOracle.Game.Worlds {
 			this()
 		{
 			properties.SetAll(copy.properties);
+			foreach (Property property in properties.GetProperties()) {
+				if (property.IsDefinedScript)
+					copy.World.ScriptManager.AddReference(property.StringValue, this);
+			}
 		}
 
 

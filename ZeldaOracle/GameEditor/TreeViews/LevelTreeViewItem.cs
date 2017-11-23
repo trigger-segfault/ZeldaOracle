@@ -12,6 +12,7 @@ using System.Windows.Media;
 using ZeldaEditor.Windows;
 using System.Windows;
 using ZeldaOracle.Common.Scripting;
+using ZeldaEditor.Undo;
 
 namespace ZeldaEditor.TreeViews {
 	
@@ -36,8 +37,11 @@ namespace ZeldaEditor.TreeViews {
 				"You are about to delete the level '" + level.ID + "'. This will be permanent. Continue?", "Confirm",
 				MessageBoxButton.YesNo);
 
+
 			if (result == MessageBoxResult.Yes) {
-				int levelIndex = editorControl.World.Levels.IndexOf(level);
+				ActionDeleteLevel action = new ActionDeleteLevel(level);
+				editorControl.PushAction(action, ActionExecution.Execute);
+				/*int levelIndex = editorControl.World.Levels.IndexOf(level);
 				editorControl.World.RemoveLevel(level);
 				editorControl.RefreshWorldTreeView();
 				editorControl.IsModified = true;
@@ -50,17 +54,28 @@ namespace ZeldaEditor.TreeViews {
 				else {
 					editorControl.OpenLevel(Math.Max(0, levelIndex - 1));
 					//worldTreeView.SelectedNode = worldTreeView.Nodes[0].Nodes[0].Nodes[GMath.Max(0, index - 1)];
-				}
+				}*/
 			}
 		}
 
-		public override void Rename(World world, string name) {
-			world.RenameLevel(level, name);
+		public override void Rename(EditorControl editorControl, string name) {
+			editorControl.World.RenameLevel(level, name);
 			Header = level.ID;
+			editorControl.IsModified = true;
 		}
 
-		public override void Duplicate(EditorControl editorControl, string suffix) {
+		public override void Duplicate(EditorControl editorControl) {
+			/*Level duplicate = new Level(level);
+			duplicate.ID = "";
+			string newName = RenameWindow.Show(Window.GetWindow(this), editorControl.World, duplicate);
+			if (newName != null) {
+				duplicate.ID = newName;
+				editorControl.AddLevel(duplicate, true);
+			}*/
+		}
 
+		public Level Level {
+			get { return level; }
 		}
 
 		public override IIDObject IDObject { get { return level; } }

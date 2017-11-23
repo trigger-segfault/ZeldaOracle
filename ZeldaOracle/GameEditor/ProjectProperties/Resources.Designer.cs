@@ -61,12 +61,52 @@ namespace ZeldaEditor.ProjectProperties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static System.Drawing.Icon AppError {
+        internal static byte[] EyedropperCursor {
             get {
-                object obj = ResourceManager.GetObject("AppError", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                object obj = ResourceManager.GetObject("EyedropperCursor", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] FillCursor {
+            get {
+                object obj = ResourceManager.GetObject("FillCursor", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] PencilCursor {
+            get {
+                object obj = ResourceManager.GetObject("PencilCursor", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] SelectionCursor {
+            get {
+                object obj = ResourceManager.GetObject("SelectionCursor", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] SquareCursor {
+            get {
+                object obj = ResourceManager.GetObject("SquareCursor", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }

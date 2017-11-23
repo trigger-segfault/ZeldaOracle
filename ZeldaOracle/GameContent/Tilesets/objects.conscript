@@ -334,7 +334,7 @@ TILE color_jump_pad;
 	SPRITEINDEX	0, tile_color_jump_pad_red;
 	SPRITEINDEX 1, tile_color_jump_pad_yellow;
 	SPRITEINDEX 1, tile_color_jump_pad_blue;
-	PROPERTIES	(integer, color, 0, "Color", "", "Color", "The color of the jump pad.");
+	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the jump pad.");
 	EVENT		event_color_change, "Color Change", "Occurs when the pad's color changes.", (ColorJumpPad, tile, Color, color);
 END;
 
@@ -360,7 +360,7 @@ TILE color_tile;
 	SPRITEINDEX	0, tile_color_tile_red;
 	SPRITEINDEX 1, tile_color_tile_yellow;
 	SPRITEINDEX 1, tile_color_tile_blue;
-	PROPERTIES	(integer, color, 0, "Color", "", "Color", "The color of the tile.");
+	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the tile.");
 END;
 
 TILE color_tile_red;
@@ -384,7 +384,7 @@ TILE color_barrier;
 	TYPE		TileColorBarrier;
 	HALFSOLID	block;
 	SPRITE		tile_color_barrier_red_raised;
-	PROPERTIES	(integer, color, 0, "Color", "", "Color", "The color of the barrier (red or blue).");
+	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the barrier (red or blue).");
 END;
 
 TILE color_barrier_blue;
@@ -405,7 +405,7 @@ TILE color_statue;
 	TYPE		TileColorStatue;
 	SOLID		block;
 	FLAGS		Movable;
-	PROPERTIES	(integer, color, 0, "Color", "", "", "The color of the statue.");
+	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the statue.");
 END;
 
 TILE color_statue_red;
@@ -431,7 +431,7 @@ END;
 TILE color_block;
 	TYPE		TileColorBlock;
 	SOLID		block;
-	PROPERTIES	(integer, color, 0, "Color", "", "", "The color of the block.");
+	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the block.");
 END;
 
 TILE color_block_red;
@@ -640,6 +640,7 @@ END;
 
 TILE turnstile;
 	TYPE		TileTurnstile;
+	SOLID       turnstile;
 	SPRITE		tile_turnstile_base;
 	RESETWHEN	LeaveArea;
 	SIZE		(3, 3);
