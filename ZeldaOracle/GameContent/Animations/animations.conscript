@@ -951,6 +951,36 @@ ANIM player_minecart_swing_big;
 	SUBSTRIP clamp; ADD frame, 12, (2, 23); ADD frame, 9, (4, 24); ADD frame, 13, (1, 23);
 	SUBSTRIP clamp; ADD frame, 12, (1, 23); ADD frame, 9, (6, 24); ADD frame, 13, (5, 23); END;
 	
+## Player in Mermaid form
+
+ANIM player_mermaid_swim; SUBSTRIP repeat;
+	ADD strip, 6, 2, (0, 25);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_mermaid_aim;
+	SUBSTRIP repeat; ADD frame 1, (0, 26); # right
+	SUBSTRIP repeat; ADD frame 1, (3, 27);
+	SUBSTRIP repeat; ADD frame 1, (1, 26); # up
+	SUBSTRIP repeat; ADD frame 1, (2, 27);
+	SUBSTRIP repeat; ADD frame 1, (2, 26); # left
+	SUBSTRIP repeat; ADD frame 1, (1, 27);
+	SUBSTRIP repeat; ADD frame 1, (3, 26); # down
+	SUBSTRIP repeat; ADD frame 1, (0, 27); END;
+ANIM player_mermaid_swing;
+	SUBSTRIP clamp; ADD frame, 3, (4, 27); ADD frame, 3, (0, 26); ADD frame, 8, (0, 26), ( 4,  0); ADD frame, 3, (0, 26);
+	SUBSTRIP clamp; ADD frame, 3, (3, 27); ADD frame, 3, (1, 26); ADD frame, 8, (1, 26), ( 0, -4); ADD frame, 3, (1, 26);
+	SUBSTRIP clamp; ADD frame, 3, (2, 27); ADD frame, 3, (2, 26); ADD frame, 8, (2, 26), (-4,  0); ADD frame, 3, (2, 26);
+	SUBSTRIP clamp; ADD frame, 3, (1, 27); ADD frame, 3, (3, 26); ADD frame, 8, (3, 26), ( 0,  4); ADD frame, 3, (3, 26); END;
+ANIM player_mermaid_spin;
+	SUBSTRIP clamp; ADD frame, 5, (0, 26), ( 3,  0); ADD frame, 5, (3, 26), ( 0,  3); ADD frame, 5, (2, 26), (-3,  0); ADD frame, 5, (1, 26), ( 0, -3); ADD frame, 3, (0, 26), ( 3,  0);
+	SUBSTRIP clamp; ADD frame, 5, (1, 26), ( 0, -3); ADD frame, 3, (0, 26), ( 3,  0); ADD frame, 5, (3, 26), ( 0,  3); ADD frame, 5, (2, 26), (-3,  0); ADD frame, 5, (1, 26), ( 0, -3);
+	SUBSTRIP clamp; ADD frame, 5, (2, 26), (-3,  0); ADD frame, 5, (1, 26), ( 0, -3); ADD frame, 3, (0, 26), ( 3,  0); ADD frame, 5, (3, 26), ( 0,  3); ADD frame, 5, (2, 26), (-3,  0);
+	SUBSTRIP clamp; ADD frame, 5, (3, 26), ( 0,  3); ADD frame, 5, (2, 26), (-3,  0); ADD frame, 5, (1, 26), ( 0, -3); ADD frame, 3, (0, 26), ( 3,  0); ADD frame, 5, (3, 26), ( 0,  3); END;
+ANIM player_mermaid_stab;
+	SUBSTRIP reset; ADD frame, 6, (0, 26), ( 4,  0); ADD frame, 7, (0, 26); ADD frame, 1, (0, 25);
+	SUBSTRIP reset; ADD frame, 6, (1, 26), ( 0, -4); ADD frame, 7, (1, 26); ADD frame, 1, (2, 25);
+	SUBSTRIP reset; ADD frame, 6, (2, 26), (-4,  0); ADD frame, 7, (2, 26); ADD frame, 1, (4, 25);
+	SUBSTRIP reset; ADD frame, 6, (3, 26), ( 0,  4); ADD frame, 7, (3, 26); ADD frame, 1, (6, 25); END;
+
 
 #==============================================================
 # Player Item Animations

@@ -76,6 +76,9 @@ namespace ZeldaOracle.Game.Debug {
 						gameControl.PushRoomState(new RoomStateColorBarrier(c));
 				}
 			}
+			// CTRL+Q: Quit the game
+			if (Keyboard.IsKeyPressed(Keys.Q) && Keyboard.IsKeyDown(Keys.LControl))
+				GameManager.Exit();
 			// CTRL+R: Restart the game.
 			if (Keyboard.IsKeyPressed(Keys.R) && Keyboard.IsKeyDown(Keys.LControl))
 				GameManager.Restart();
