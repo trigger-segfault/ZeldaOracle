@@ -321,11 +321,11 @@ namespace ZeldaOracle.Game.Debug {
 			// Save and load the world.
 			{
 				WorldFile worldFile = new WorldFile();
-				worldFile.Save("Content/Worlds/custom_world.zwd", world);
+				worldFile.Save("Content/Worlds/custom_world.zwd", world, false);
 			}
 			{
 				WorldFile worldFile = new WorldFile();
-				world = worldFile.Load("Content/Worlds/custom_world.zwd");
+				world = worldFile.Load("Content/Worlds/custom_world.zwd", false);
 			}
 			
 			return world;

@@ -20,8 +20,7 @@ namespace ZeldaOracle.Game.Worlds {
 		Twin
 	}
 
-	public class Level : IPropertyObject, IPropertyObjectContainer, IIDObject {
-
+	public class Level : IEventObjectContainer, IIDObject {
 		private World		world;
 		private Point2I		roomSize;		// The size in tiles of each room in the level.
 		private int			roomLayerCount; // The number of tile layers for each room in the level.
@@ -29,6 +28,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private Room[,]		rooms;			// The grid of rooms.
 		//private Zone		zone;
 		private Properties	properties;
+		private EventCollection events;
 
 
 		//-----------------------------------------------------------------------------
@@ -45,7 +45,6 @@ namespace ZeldaOracle.Game.Worlds {
 
 		public Level(string id, int width, int height, int layerCount, Point2I roomSize, Zone zone) :
 			this(id, new Point2I(width, height), layerCount, roomSize, zone) {
-			
 		}
 
 		public Level(string id, Point2I dimensions, int layerCount, Point2I roomSize, Zone zone) {
@@ -54,10 +53,10 @@ namespace ZeldaOracle.Game.Worlds {
 			this.roomLayerCount = layerCount;
 			this.dimensions     = Point2I.Zero;
 			//this.zone			= zone;
-
-
-			properties = new Properties(this);
-			properties.BaseProperties = new Properties();
+			
+			this.events			= new EventCollection(this);
+			this.properties		= new Properties(this);
+			this.properties.BaseProperties	= new Properties();
 
 			properties.BaseProperties.Set("id", "")
 				.SetDocumentation("ID", "", "", "General", "The id used to refer to this level.", false, false);
@@ -81,7 +80,7 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 
 		//-----------------------------------------------------------------------------
-		// Property objects
+		// Property/Event objects
 		//-----------------------------------------------------------------------------
 
 		public IEnumerable<IPropertyObject> GetPropertyObjects() {
@@ -89,6 +88,18 @@ namespace ZeldaOracle.Game.Worlds {
 			foreach (Room room in rooms) {
 				foreach (IPropertyObject propertyObject in room.GetPropertyObjects()) {
 					yield return propertyObject;
+				}
+			}
+		}
+
+		public IEnumerable<IEventObject> GetEventObjects() {
+			yield return this;
+			for (int x = 0; x < Width; x++) {
+				for (int y = 0; y < Height; y++) {
+					//foreach (Room room in rooms) {
+					foreach (IEventObject eventObject in rooms[x, y].GetEventObjects()) {
+						yield return eventObject;
+					}
 				}
 			}
 		}
@@ -505,6 +516,10 @@ namespace ZeldaOracle.Game.Worlds {
 		public bool IsDiscovered {
 			get { return properties.GetBoolean("discovered", false); }
 			set { properties.Set("discovered", value); }
+		}
+		
+		public EventCollection Events {
+			get { return events; }
 		}
 	}
 }

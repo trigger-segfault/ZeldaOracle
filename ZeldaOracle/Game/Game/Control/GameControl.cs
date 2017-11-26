@@ -79,15 +79,18 @@ namespace ZeldaOracle.Game.Control {
 		// Methods
 		//-----------------------------------------------------------------------------
 
-		public void LoadWorld(string fileName) {
+		public void LoadWorld(string fileName, bool recompile) {
 			WorldFile worldFile = new WorldFile();
-			World world = worldFile.Load(fileName);
-			LoadWorld(world);
+			World world = worldFile.Load(fileName, false);
+			LoadWorld(world, recompile);
 		}
 
-		public void LoadWorld(World world) {
+		public void LoadWorld(World world, bool recompile) {
 			this.world = world;
 
+			if (recompile) {
+				world.ScriptManager.CompileAndWriteAssembly(null);
+			}
 			scriptRunner.OnLoadWorld(world);
 		}
 
@@ -140,19 +143,33 @@ namespace ZeldaOracle.Game.Control {
 
 			// Begin the room state.
 			if (gameManager.LaunchParameters.Length > 0) {
-				LoadWorld(gameManager.LaunchParameters[0]);
 
-				if (gameManager.LaunchParameters.Length > 1 && gameManager.LaunchParameters[1] == "-test") {
-					// Launch parameters can define player's start position.
-					int startLevel = Int32.Parse(gameManager.LaunchParameters[2]);
-					int startRoomX = Int32.Parse(gameManager.LaunchParameters[3]);
-					int startRoomY = Int32.Parse(gameManager.LaunchParameters[4]);
-					int startPlayerX = Int32.Parse(gameManager.LaunchParameters[5]);
-					int startPlayerY = Int32.Parse(gameManager.LaunchParameters[6]);
+				int startLevel = 0;
+				Point2I startRoom = Point2I.Zero;
+				Point2I startPlayer = Point2I.Zero;
+				bool test = false;
+				bool recompile = true;
 
-					player.SetPositionByCenter(new Point2I(startPlayerX, startPlayerY) * GameSettings.TILE_SIZE + new Point2I(8, 8));
+				for (int i = 1; i < gameManager.LaunchParameters.Length; i++) {
+					if (gameManager.LaunchParameters[i] == "-test") {
+						test = true;
+						startLevel = Int32.Parse(gameManager.LaunchParameters[i+1]);
+						startRoom.X = Int32.Parse(gameManager.LaunchParameters[i+2]);
+						startRoom.Y = Int32.Parse(gameManager.LaunchParameters[i+3]);
+						startPlayer.X = Int32.Parse(gameManager.LaunchParameters[i+4]);
+						startPlayer.Y = Int32.Parse(gameManager.LaunchParameters[i+5]);
+					}
+					else if (gameManager.LaunchParameters[i] == "-no-compile") {
+						recompile = false;
+					}
+				}
+				
+				LoadWorld(gameManager.LaunchParameters[0], recompile);
+
+				if (test) {
+					player.SetPositionByCenter(startPlayer * GameSettings.TILE_SIZE + new Point2I(8, 8));
 					player.MarkRespawn();
-					roomControl.BeginRoom(world.Levels[startLevel].Rooms[startRoomX, startRoomY]);
+					roomControl.BeginRoom(world.Levels[startLevel].Rooms[startRoom.X, startRoom.Y]);
 				}
 				else {
 					player.SetPositionByCenter(world.StartTileLocation * GameSettings.TILE_SIZE + new Point2I(8, 8));
@@ -161,9 +178,7 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 			else {
-				//WorldFile worldFile = new WorldFile();
-				//world = worldFile.Load("temp_world.zwd");
-				LoadWorld(GameDebug.CreateTestWorld());
+				LoadWorld(GameDebug.CreateTestWorld(), false);
 				player.SetPositionByCenter(world.StartTileLocation * GameSettings.TILE_SIZE + new Point2I(8, 8));
 				player.MarkRespawn();
 				roomControl.BeginRoom(world.StartRoom);
@@ -175,6 +190,8 @@ namespace ZeldaOracle.Game.Control {
 				lastRoomOnMap = roomControl.Room;
 
 			AudioSystem.MasterVolume = 0.04f; // The way David likes it.
+
+			FireEvent(world, "start_game", this);
 		}
 		
 
@@ -182,23 +199,22 @@ namespace ZeldaOracle.Game.Control {
 		// Scripts
 		//-----------------------------------------------------------------------------
 		
-		public void FireEvent(IPropertyObject caller, string eventName, params object[] parameters) {
-			//ObjectEvent objectEvent = caller.Events.GetEvent(eventName);
-			//if (objectEvent != null) {
-			ExecuteScript(caller.Properties.GetString(eventName, ""), parameters);
-			//}
+		public void FireEvent(IEventObject caller, string eventName, params object[] parameters) {
+			Event evnt = caller.Events.GetEvent(eventName);
+			if (evnt != null)
+				ExecuteScript(evnt.InternalScriptID, parameters);
 		}
 
 		// Execute a script with the given name.
-		public void ExecuteScript(string name, params object[] parameters) {
-			if (!String.IsNullOrEmpty(name)) {
-				Script script = world.GetScript(name);
+		public void ExecuteScript(string scriptID, params object[] parameters) {
+			if (!string.IsNullOrEmpty(scriptID)) {
+				Script script = world.GetScript(scriptID);
 				
 				if (script != null) {
 					ExecuteScript(script, parameters);
 				}
 				else {
-					Console.WriteLine("Error trying to execute non-existent script '" + name + "'");
+					Console.WriteLine("Error trying to execute non-existent script '" + scriptID + "'");
 				}
 			}
 		}

@@ -53,7 +53,7 @@ namespace ZeldaOracle.Game.Tiles {
 				
 			AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
 
-			GameControl.FireEvent(this, "event_color_change", this, ((ZeldaAPI.ColorJumpPad) this).Color);
+			GameControl.FireEvent(this, "color_change", this, ((ZeldaAPI.ColorJumpPad) this).Color);
 		}
 
 

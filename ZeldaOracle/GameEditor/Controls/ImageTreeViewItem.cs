@@ -10,6 +10,8 @@ using System.Windows.Media;
 namespace ZeldaEditor.Controls {
 	public class ImageTreeViewItem : TreeViewItem {
 
+		private static ContextMenu NullContextMenu;
+
 		public static readonly DependencyProperty SourceProperty =
 			DependencyProperty.RegisterAttached(
 			"Source", typeof(ImageSource), typeof(ImageTreeViewItem));
@@ -22,6 +24,9 @@ namespace ZeldaEditor.Controls {
 		static ImageTreeViewItem() {
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(ImageTreeViewItem),
 					   new FrameworkPropertyMetadata(typeof(ImageTreeViewItem)));
+
+			NullContextMenu = new ContextMenu();
+			NullContextMenu.Visibility = Visibility.Hidden;
 		}
 
 		public ImageTreeViewItem() : this(null, null, false) {
@@ -31,6 +36,7 @@ namespace ZeldaEditor.Controls {
 			Source = source;
 			Header = name;
 			IsExpanded = expanded;
+			ContextMenu = NullContextMenu;
 		}
 	}
 }

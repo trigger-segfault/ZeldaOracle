@@ -15,6 +15,8 @@ using System.Windows.Input;
 using System.Windows;
 using ZeldaEditor.Windows;
 using ZeldaEditor.Undo;
+using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaEditor.TreeViews {
 	/// <summary>
@@ -28,12 +30,18 @@ namespace ZeldaEditor.TreeViews {
 		private ImageTreeViewItem levelsNode;
 		private ImageTreeViewItem dungeonsNode;
 		private ImageTreeViewItem scriptsNode;
-		private TreeViewItem hiddenScriptsNode;
+
+		private TreeViewItem internalScriptsNode;
+
+		private TreeViewItem customScriptWorldNode;
+		private TreeViewItem customScriptDungeonNode;
+		private Dictionary<string, TreeViewItem> customScriptLevelNodes;
 
 		private ContextMenu contextMenuWorld;
 		private ContextMenu contextMenuLevel;
 		private ContextMenu contextMenuDungeon;
 		private ContextMenu contextMenuScript;
+		private ContextMenu contextMenuEvent;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -44,11 +52,13 @@ namespace ZeldaEditor.TreeViews {
 			editorControl = null;
 			worldNode = null;
 
-			InitWoldContextMenu();
+			InitWorldContextMenu();
 			InitLevelContextMenu();
 			InitDungeonContextMenu();
 			InitScriptContextMenu();
+			InitEventContextMenu();
 
+			customScriptLevelNodes = new Dictionary<string, TreeViewItem>();
 			// Open nodes on double click.
 			// TODO: Reimplement
 			/*NodeMouseDoubleClick += delegate(object sender, TreeNodeMouseClickEventArgs e) {
@@ -86,7 +96,7 @@ namespace ZeldaEditor.TreeViews {
 			treeView.Items.Clear();
 		}
 
-		private void InitWoldContextMenu() {
+		private void InitWorldContextMenu() {
 			ImageMenuItem menuItem;
 			contextMenuWorld = new ContextMenu();
 			menuItem = new ImageMenuItem(EditorImages.Rename, "Rename");
@@ -205,6 +215,20 @@ namespace ZeldaEditor.TreeViews {
 			contextMenuScript.Items.Add(menuItem);
 		}
 
+		private void InitEventContextMenu() {
+			ImageMenuItem menuItem;
+			contextMenuEvent = new ContextMenu();
+			menuItem = new ImageMenuItem(EditorImages.GotoOwner, "Goto Owner");
+			menuItem.Click += OnGotoOwner;
+			contextMenuEvent.Items.Add(menuItem);
+
+			contextMenuEvent.Items.Add(new Separator());
+
+			menuItem = new ImageMenuItem(EditorImages.Edit, "Edit");
+			menuItem.Click += OnEdit;
+			contextMenuEvent.Items.Add(menuItem);
+		}
+
 		//-----------------------------------------------------------------------------
 		// Tree Node Mutators
 		//-----------------------------------------------------------------------------
@@ -240,24 +264,80 @@ namespace ZeldaEditor.TreeViews {
 			}
 		}
 
-		public void RefreshScripts() {
-			bool expanded = (hiddenScriptsNode != null && hiddenScriptsNode.IsExpanded);
-			scriptsNode.Items.Clear();
-			hiddenScriptsNode = new FolderTreeViewItem("Internal", expanded);
+		public void RefreshScripts(bool refreshScripts, bool refreshEvents) {
+			if (refreshEvents) {
+				if (internalScriptsNode == null)
+					internalScriptsNode = new FolderTreeViewItem("Events", false);
+				internalScriptsNode.Items.Clear();
+				
+				TreeViewItem newCustomScriptWorldNode = new FolderTreeViewItem("World", IsNodeExpanded(customScriptWorldNode));
+				TreeViewItem newCustomScriptDungeonNode = new FolderTreeViewItem("Dungeons", IsNodeExpanded(customScriptDungeonNode));
+				Dictionary<string, TreeViewItem> newCustomScriptLevelNodes = new Dictionary<string, TreeViewItem>();
 
-			List<Script> scripts = editorControl.World.Scripts.Values.ToList();
-			scripts.Sort((a, b) => { return AlphanumComparator.Compare(a.ID, b.ID, true); } );
-			foreach (Script script in scripts) {
-				ScriptTreeViewItem scriptNode = new ScriptTreeViewItem(script);
-				scriptNode.ContextMenu = contextMenuScript;
-				if (!script.IsHidden) {
-					scriptsNode.Items.Add(scriptNode);
+				foreach (Event evnt in editorControl.EventCache) {
+					IEventObject eventObject = evnt.Events.EventObject;
+					string level = null;
+					string dungeon = null;
+					EventTreeViewItem eventNode = new EventTreeViewItem(evnt, editorControl);
+					eventNode.ContextMenu = contextMenuEvent;
+					if (eventObject is BaseTileDataInstance) {
+						level = ((BaseTileDataInstance)eventObject).Room.Level.ID;
+					}
+					else if (eventObject is Room) {
+						level = ((Room)eventObject).Level.ID;
+					}
+					else if (eventObject is Level) {
+						level = ((Level)eventObject).ID;
+					}
+					else if (eventObject is Dungeon) {
+						dungeon = ((Dungeon)eventObject).ID;
+					}
+					if (level != null) {
+						if (!newCustomScriptLevelNodes.ContainsKey(level)) {
+							TreeViewItem previous;
+							customScriptLevelNodes.TryGetValue(level, out previous);
+							newCustomScriptLevelNodes.Add(level, new FolderTreeViewItem(
+								"Level '" + level + "'", IsNodeExpanded(previous)));
+						}
+						newCustomScriptLevelNodes[level].Items.Add(eventNode);
+					}
+					else if (dungeon != null) {
+						newCustomScriptDungeonNode.Items.Add(eventNode);
+					}
+					else {
+						newCustomScriptWorldNode.Items.Add(eventNode);
+					}
 				}
-				else {
-					hiddenScriptsNode.Items.Add(scriptNode);
+				customScriptWorldNode = newCustomScriptWorldNode;
+				customScriptDungeonNode = newCustomScriptDungeonNode;
+				customScriptLevelNodes = newCustomScriptLevelNodes;
+
+				if (customScriptWorldNode.Items.Count > 0) {
+					internalScriptsNode.Items.Add(customScriptWorldNode);
+				}
+				if (customScriptDungeonNode.Items.Count > 0) {
+					internalScriptsNode.Items.Add(customScriptDungeonNode);
+				}
+				foreach (TreeViewItem levelNode in customScriptLevelNodes.Values) {
+					internalScriptsNode.Items.Add(levelNode);
 				}
 			}
-			scriptsNode.Items.Add(hiddenScriptsNode);
+
+			if (refreshScripts) {
+				scriptsNode.Items.Clear();
+				List<Script> scripts = editorControl.World.Scripts.Values.ToList();
+				scripts.Sort((a, b) => { return AlphanumComparator.Compare(a.ID, b.ID, true); });
+				foreach (Script script in scripts) {
+					ScriptTreeViewItem scriptNode = new ScriptTreeViewItem(script, editorControl);
+					scriptNode.ContextMenu = contextMenuScript;
+					scriptsNode.Items.Add(scriptNode);
+				}
+				scriptsNode.Items.Add(internalScriptsNode);
+			}
+		}
+
+		private bool IsNodeExpanded(TreeViewItem node, bool defaultExpanded = false) {
+			return (node != null ? node.IsExpanded : defaultExpanded);
 		}
 
 		public void RefreshDungeons() {
@@ -285,7 +365,7 @@ namespace ZeldaEditor.TreeViews {
 
 				RefreshLevels();
 				RefreshDungeons();
-				RefreshScripts();
+				RefreshScripts(true, true);
 			}
 		}
 
@@ -355,6 +435,17 @@ namespace ZeldaEditor.TreeViews {
 			TreeViewItem treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
 
 			//treeViewItem.IsSelected = true;
+		}
+		private void OnGotoOwner(object sender, RoutedEventArgs e) {
+			IEventObject eventObject = (treeView.SelectedItem as EventTreeViewItem).Event.Events.EventObject;
+			if (eventObject is BaseTileDataInstance)
+				editorControl.GotoTile(eventObject as BaseTileDataInstance);
+			else if (eventObject is Room)
+				editorControl.GotoRoom(eventObject as Room);
+			else if (eventObject is Level)
+				editorControl.OpenLevel(eventObject as Level);
+			else
+				editorControl.OpenObjectProperties(eventObject);
 		}
 
 		private void OnEdit(object sender, RoutedEventArgs e) {

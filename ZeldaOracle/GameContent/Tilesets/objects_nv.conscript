@@ -77,7 +77,7 @@ TILE color_switch;
 	PROPERTIES	(boolean, switch_once,			false,	"Switch Once",			"", "", "Can the color switch only be switched once?"),
 				(boolean, switch_state,			false,	"Switch State",			"", "", "The switch state of the color switch (false = blue, true = red)."),
 				(boolean, sync_with_dungeon,	false,	"Sync With Dungeon",	"", "", "Will the color switch's state be syncronized with other color switches in the dungeon?");
-	EVENT		event_toggle, "Toggle", "Occurs when the Color Switch changes color.", (ColorSwitch, colorSwitch);
+	EVENT		toggle, "Toggle", "Switch", "Occurs when the Color Switch changes color.", (ColorSwitch, colorSwitch);
 END;
 
 TILE color_switch_blue;
@@ -192,8 +192,10 @@ TILE pull_handle;
 	TYPE		TilePullHandle;
 	SPRITE		tile_pull_handle_down;
 	PROPERTIES	(integer, direction, 3, "Direction", "direction", "Handle", "The direction the handle extends in.");
-	EVENT		event_fully_retract, "Retract", "Occurs when the handle is fully retracted into the wall.", (PullHandle, pullHandle);
-	EVENT		event_fully_extend, "Extend", "Occurs when the handle is fully extended from the wall.", (PullHandle, pullHandle);
+	EVENT		retracting, "Retracting", "Pull Handle", "Occurs every step that the pull handle is retracting into the wall.", (PullHandle, pullHandle);
+	EVENT		extending, "Extending", "Pull Handle", "Occurs every step that the pull handle is extending from the wall.", (PullHandle, pullHandle);
+	EVENT		fully_retract, "Fully Retracted", "Pull Handle", "Occurs when the handle is fully retracted into the wall.", (PullHandle, pullHandle);
+	EVENT		fully_extend, "Fully Extended", "Pull Handle", "Occurs when the handle is fully extended from the wall.", (PullHandle, pullHandle);
 END;
 
 TILE seed_bouncer;

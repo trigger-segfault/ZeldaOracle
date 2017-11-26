@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ICSharpCode.CodeCompletion;
+using ZeldaEditor.Control;
+using ZeldaOracle.Game.Control.Scripting;
 
 namespace ZeldaEditor.Scripting {
 	/// <summary>
@@ -10,15 +12,9 @@ namespace ZeldaEditor.Scripting {
 	/// </summary>
 	class ScriptProvider : ICSharpScriptProvider {
 		public string GetUsing() {
-			return "" +
-				"using System; " +
-				"using System.Collections.Generic; " +
-				"using System.Linq; " +
-				"using System.Text; " +
-				"using ZeldaAPI; ";
+			return ScriptManager.CreateUsingsString();
 		}
-
-
+		
 		public string GetVars() => null;
 
 		public string GetNamespace() => null;

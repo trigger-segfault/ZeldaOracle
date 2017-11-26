@@ -117,15 +117,3 @@ TILE reward;
 			"Reward", "reward", "",
 			 "The reward to spawn.", false);
 END;
-
-
-#==============================================================
-# TODO: Event Tile Data
-#==============================================================
-
-#EVENT warp;
-#	TYPE		WarpEvent;
-#	PROPERTIES	(warp_type,					"tunnel"),
-#				(destination_level,			""),
-#				(destination_warp_point,	""; END;
-#END;

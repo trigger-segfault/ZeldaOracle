@@ -98,7 +98,8 @@ namespace ZeldaEditor.DevTools {
 			int resultCount = 0;
 			foreach (Property property in GetProperties(findSettings)) {
 				IPropertyObject propertyObject = property.Properties.PropertyObject;
-				property.Name = replaceName;
+				// TODO: Reimplement
+				//property.Name = replaceName;
 				resultCount++;
 			}
 

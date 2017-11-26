@@ -156,7 +156,6 @@ namespace ZeldaEditor.WinForms {
 		public void DeleteTileSelection() {
 			foreach (BaseTileDataInstance tile in selectedTiles) {
 				tile.Room.Remove(tile);
-				editorControl.OnDeleteObject(tile);
 			}
 			selectedTiles.Clear();
 		}
@@ -396,6 +395,11 @@ namespace ZeldaEditor.WinForms {
 			isSelectionRoom = false;
 		}
 
+		public void SetSelectionBox(Room room) {
+			selectionBox = new Rectangle2I(room.Size * GameSettings.TILE_SIZE);
+			selectionBox.Point += room.Location * room.Size * GameSettings.TILE_SIZE;
+			isSelectionRoom = false;
+		}
 		public void SetSelectionBox(BaseTileDataInstance tile) {
 			selectionBox = tile.GetBounds();
 			selectionBox.Point += tile.Room.Location * tile.Room.Size * GameSettings.TILE_SIZE;
@@ -421,6 +425,14 @@ namespace ZeldaEditor.WinForms {
 					selectionBox = Rectangle2I.Union(selectionBox, box);
 			}
 			isSelectionRoom = false;
+		}
+
+		public void CenterViewOnPoint(Point2I point) {
+			this.AutoScrollPosition = new System.Drawing.Point(
+				GMath.Clamp(point.X - ClientSize.Width / 2, HorizontalScroll.Minimum, HorizontalScroll.Maximum),
+				GMath.Clamp(point.Y - ClientSize.Height / 2, VerticalScroll.Minimum, VerticalScroll.Maximum)
+			);
+			
 		}
 
 
@@ -478,7 +490,7 @@ namespace ZeldaEditor.WinForms {
 
 		// Draw a tile.
 		public void DrawTile(Graphics2D g, Room room, TileDataInstance tile, Point2I position, Color drawColor) {
-			if (editorControl.ShowModified && !tile.HasModifiedProperties)
+			if (editorControl.ShowModified && !tile.HasModifiedProperties && !tile.HasDefinedEvents)
 				return;
 
 			Sprite sprite = null;
@@ -642,7 +654,7 @@ namespace ZeldaEditor.WinForms {
 
 		// Draw an event tile.
 		public void DrawEventTile(Graphics2D g, Room room, EventTileDataInstance eventTile, Point2I position, Color drawColor) {
-			if (editorControl.ShowModified && !eventTile.HasModifiedProperties)
+			if (editorControl.ShowModified && !eventTile.HasModifiedProperties && !eventTile.HasDefinedEvents)
 				return;
 
 			SpriteAnimation spr = eventTile.CurrentSprite;

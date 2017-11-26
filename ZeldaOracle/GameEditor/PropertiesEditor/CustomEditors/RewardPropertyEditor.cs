@@ -20,7 +20,14 @@ using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 	public class RewardPropertyEditor : ComboBoxEditor {
-		
+
+		protected EditorControl EditorControl {
+			get { return PropertyDescriptor.EditorControl; }
+		}
+		protected CustomPropertyDescriptor PropertyDescriptor {
+			get { return PropertyItem.PropertyDescriptor as CustomPropertyDescriptor; }
+		}
+
 		protected override ComboBox CreateEditor() {
 			var editor = new PropertyGridEditorComboBox();
 			editor.IsTextSearchEnabled = true;
@@ -29,11 +36,11 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 		}
 
 		protected override IValueConverter CreateValueConverter() {
-			return new RewardValueConverter(EditorControl.Instance.RewardManager, Editor);
+			return new RewardValueConverter(EditorControl.RewardManager, Editor);
 		}
 
 		protected override IEnumerable CreateItemsSource(PropertyItem item) {
-			RewardManager rewardManager = EditorControl.Instance.RewardManager;
+			RewardManager rewardManager = EditorControl.RewardManager;
 			FrameworkElement[] rewardItems = new FrameworkElement[rewardManager.RewardDictionary.Count + 1];
 
 			int index = 0;

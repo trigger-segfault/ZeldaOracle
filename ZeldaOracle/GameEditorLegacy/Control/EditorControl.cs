@@ -215,7 +215,7 @@ namespace ZeldaEditor.Control {
 		
 		private void CompileAllScripts(ScriptCompileCallback callback) {
 			this.compileCallback = callback;
-			string code = world.ScriptManager.CreateCode();
+			string code = world.ScriptManager.CreateCode(world, false);
 			compileTask = Task.Run(() => world.ScriptManager.Compile(code));
 			editorForm.statusLabelTask.Text = "Compiling scripts.";
 		}
@@ -235,7 +235,7 @@ namespace ZeldaEditor.Control {
 		public void SaveFileAs(string fileName) {
 			if (IsWorldOpen) {
 				WorldFile saveFile = new WorldFile();
-				saveFile.Save(fileName, world);
+				saveFile.Save(fileName, world, true);
 				hasMadeChanges	= false;
 				worldFilePath	= fileName;
 				worldFileName	= Path.GetFileName(fileName);
@@ -246,7 +246,7 @@ namespace ZeldaEditor.Control {
 		public void OpenFile(string fileName) {
 			// Load the world.
 			WorldFile worldFile = new WorldFile();
-			World loadedWorld = worldFile.Load(fileName);
+			World loadedWorld = worldFile.Load(fileName, true);
 
 			// Verify the world was loaded successfully.
 			if (loadedWorld != null) {
@@ -363,7 +363,7 @@ namespace ZeldaEditor.Control {
 			if (IsWorldOpen) {
 				string worldPath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "testing.zwd");
 				WorldFile worldFile = new WorldFile();
-				worldFile.Save(worldPath, world);
+				worldFile.Save(worldPath, world, true);
 				string exePath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "ZeldaOracle.exe");
 				Process.Start(exePath, "\"" + worldPath + "\"");
 			}
@@ -380,7 +380,7 @@ namespace ZeldaEditor.Control {
 				}
 				string worldPath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "testing.zwd");
 				WorldFile worldFile = new WorldFile();
-				worldFile.Save(worldPath, world);
+				worldFile.Save(worldPath, world, true);
 				string exePath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "ZeldaOracle.exe");
 				Process.Start(exePath, "\"" + worldPath + "\" -test " + levelIndex + " " + roomCoord.X + " " + roomCoord.Y + " " + playerCoord.X + " " + playerCoord.Y);
 				// TODO: editorForm.ButtonTestPlayerPlace.Checked = false;
@@ -404,7 +404,7 @@ namespace ZeldaEditor.Control {
 		public void OnDeleteObject(IPropertyObject propertyObject) {
 			// Remove any hidden scripts referenced in the tile's propreties.
 			foreach (Property property in propertyObject.Properties.GetProperties()) {
-				PropertyDocumentation doc = property.GetDocumentation();
+				PropertyDocumentation doc = property.Documentation;
 
 				// Remove hidden scripts referenced by this property.
 				if (doc.EditorType == "script") {

@@ -19,15 +19,23 @@ using System.Collections;
 using Xceed.Wpf.Toolkit.PropertyGrid;
 using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 using System.Windows.Data;
+using System.Windows;
 
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 	public class DungeonPropertyEditor : ComboBoxEditor {
+
+		protected EditorControl EditorControl {
+			get { return PropertyDescriptor.EditorControl; }
+		}
+		protected CustomPropertyDescriptor PropertyDescriptor {
+			get { return PropertyItem.PropertyDescriptor as CustomPropertyDescriptor; }
+		}
 
 		protected override IValueConverter CreateValueConverter() {
 			return new NoneStringConverter();
 		}
 		protected override IEnumerable CreateItemsSource(PropertyItem item) {
-			World world = EditorControl.Instance.World;
+			World world = EditorControl.World;
 			string[] dungeonIds = new string[world.DungeonCount + 1];
 			dungeonIds[0] = "(none)";
 			for (int i = 0; i < world.DungeonCount; i++) {

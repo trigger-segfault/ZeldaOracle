@@ -51,7 +51,7 @@ namespace ZeldaEditor.ObjectsEditor {
 			// Create a list of all event properties.
 			List<Property> eventProperties = new List<Property>();
 			foreach (Property property in propertyObject.Properties.GetAllProperties()) {
-				PropertyDocumentation doc = property.GetDocumentation();
+				PropertyDocumentation doc = property.Documentation;
 				if (doc != null && doc.EditorType == "script")
 					eventProperties.Add(property);
 			}
@@ -62,18 +62,18 @@ namespace ZeldaEditor.ObjectsEditor {
 			IEventObject eventObject = objectEditor.PropertyObject as IEventObject;
 
 			if (eventObject != null) {
-				foreach (KeyValuePair<string, ObjectEvent> entry in eventObject.Events.Events) {
-					listBoxEvents.Items.Add(entry.Value.ReadableName);
+				foreach (Event evnt in eventObject.Events.GetEvents()) {
+					listBoxEvents.Items.Add(evnt.FinalReadableName);
 				
-					Property property = objectEditor.PropertyObject.Properties.GetProperty(entry.Value.Name, true);
+					Property property = objectEditor.PropertyObject.Properties.GetProperty(evnt.Name, true);
 
 					InternalObjectEvent objEvent = new InternalObjectEvent();
 					objEvent.Property			= property;
-					objEvent.Id					= entry.Value.Name;
-					objEvent.Name				= entry.Value.ReadableName;
-					objEvent.Description		= entry.Value.Description;
+					objEvent.Id					= evnt.Name;
+					objEvent.Name				= evnt.ReadableName;
+					objEvent.Description		= evnt.Description;
 					objEvent.CustomScriptExists	= false;
-					objEvent.Event				= entry.Value;
+					objEvent.Event				= evnt;
 					
 					if (property != null) {
 						string scriptName = property.StringValue;
@@ -110,7 +110,7 @@ namespace ZeldaEditor.ObjectsEditor {
 			else {
 				for (int i = 0; i < eventProperties.Count; i++) {
 					Property property = eventProperties[i];
-					PropertyDocumentation doc = property.GetRootDocumentation();
+					PropertyDocumentation doc = property.Documentation;
 					string name = (doc != null ? doc.ReadableName : property.Name);
 					listBoxEvents.Items.Add(name);
 
@@ -326,7 +326,7 @@ namespace ZeldaEditor.ObjectsEditor {
 			public Script		CustomScript { get; set; }
 			public Script		ReferencedScript { get; set; }
 			public bool			CustomScriptExists { get; set; }
-			public ObjectEvent	Event { get; set; }
+			public Event	Event { get; set; }
 		}
 	}
 }

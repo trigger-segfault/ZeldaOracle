@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -85,13 +86,19 @@ namespace ZeldaEditor.PropertiesEditor {
 		}*/
 
 		public void OpenProperties(IPropertyObject propertyObject) {
-			editorControl.EditorWindow.UpdatePropertyPreview(propertyObject);
-			this.propertyObject = propertyObject;
-			propertiesContainer.Set(propertyObject.Properties);
-			Stopwatch watch = new Stopwatch();
-			watch.Start();
-			UpdateContainerHelper();
-			Console.WriteLine(watch.ElapsedMilliseconds);
+			if (propertyObject != this.propertyObject) {
+				editorControl.EditorWindow.UpdatePropertyPreview(propertyObject);
+				this.propertyObject = propertyObject;
+				EventCollection events = null;
+				if (propertyObject is IEventObject) {
+					events = (propertyObject as IEventObject).Events;
+				}
+				propertiesContainer.Set(propertyObject.Properties, events);
+				Stopwatch watch = new Stopwatch();
+				watch.Start();
+				UpdateContainerHelper();
+				Console.WriteLine(watch.ElapsedMilliseconds);
+			}
 		}
 
 		public void UpdateProperties() {
@@ -113,7 +120,36 @@ namespace ZeldaEditor.PropertiesEditor {
 		//-----------------------------------------------------------------------------
 
 		private void OnPropertyChange(object sender, PropertyValueChangedEventArgs e) {
-			CustomPropertyDescriptor propertyDescriptor = ((PropertyItem)e.OriginalSource).PropertyDescriptor as CustomPropertyDescriptor;
+			PropertyDescriptor baseDescriptor = ((PropertyItem)e.OriginalSource).PropertyDescriptor;
+			if (baseDescriptor is CustomPropertyDescriptor) {
+				CustomPropertyDescriptor propertyDescriptor = (CustomPropertyDescriptor)baseDescriptor;
+				Property property = propertyDescriptor.Property;
+				ActionChangeProperty action = new ActionChangeProperty(propertyObject, property, e.OldValue, e.NewValue);
+				if (!action.IsEvent && editorControl.LastAction is ActionChangeProperty) {
+					ActionChangeProperty lastAction = editorControl.LastAction as ActionChangeProperty;
+					if (action.PropertyObject == lastAction.PropertyObject && action.PropertyName == lastAction.PropertyName) {
+						action.OldValue = lastAction.OldValue;
+						editorControl.PopAction();
+					}
+
+				}
+				editorControl.PushAction(action, ActionExecution.None);
+			}
+			/*else if (baseDescriptor is CustomEventDescriptor) {
+				CustomEventDescriptor eventDescriptor = (CustomEventDescriptor)baseDescriptor;
+				Event evnt = eventDescriptor.Event;
+				ActionChangeEvent action = new ActionChangeEvent(EventObject, evnt, e.OldValue, e.NewValue);
+				if (!action.IsEvent && editorControl.LastAction is ActionChangeProperty) {
+					ActionChangeProperty lastAction = editorControl.LastAction as ActionChangeProperty;
+					if (action.PropertyObject == lastAction.PropertyObject && action.PropertyName == lastAction.PropertyName) {
+						action.OldValue = lastAction.OldValue;
+						editorControl.PopAction();
+					}
+
+				}
+				editorControl.PushAction(action, ActionExecution.None);
+			}*/
+			/*CustomPropertyDescriptor propertyDescriptor = ((PropertyItem)e.OriginalSource).PropertyDescriptor as CustomPropertyDescriptor;
 			Property property = propertyDescriptor.Property;
 			PropertyDocumentation propertyDoc = property.GetRootDocumentation();
 			editorControl.IsModified = true;
@@ -144,18 +180,7 @@ namespace ZeldaEditor.PropertiesEditor {
 				// Show a message if the script is invalid.
 				if (isNewScriptInvalid)
 					TriggerMessageBox.Show(Application.Current.MainWindow, MessageIcon.Warning, "'" + newValue + "' is not a valid script name.", "Invalid Name");
-			}
-
-			ActionChangeProperty action = new ActionChangeProperty(propertyObject, property, e.OldValue, e.NewValue);
-			if (!action.IsEvent && editorControl.LastAction is ActionChangeProperty) {
-				ActionChangeProperty lastAction = editorControl.LastAction as ActionChangeProperty;
-				if (action.PropertyObject == lastAction.PropertyObject && action.PropertyName == lastAction.PropertyName) {
-					action.OldValue = lastAction.OldValue;
-					editorControl.PopAction();
-				}
-				
-			}
-			editorControl.PushAction(action, ActionExecution.None);
+			}*/
 		}
 
 		protected override void OnMouseEnter(MouseEventArgs e) {
@@ -178,6 +203,10 @@ namespace ZeldaEditor.PropertiesEditor {
 
 		public IPropertyObject PropertyObject {
 			get { return propertyObject; }
+		}
+
+		public IEventObject EventObject {
+			get { return propertyObject as IEventObject; }
 		}
 	}
 }

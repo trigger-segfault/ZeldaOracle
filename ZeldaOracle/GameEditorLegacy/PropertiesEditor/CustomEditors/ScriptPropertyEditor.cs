@@ -33,7 +33,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 				wasGenerated = true;
 				
 				if (PropertyGrid.PropertyObject is IEventObject) {
-					ObjectEvent e = ((IEventObject) PropertyGrid.PropertyObject).Events.GetEvent(property.Name);
+					Event e = ((IEventObject) PropertyGrid.PropertyObject).Events.GetEvent(property.Name);
 					if (e != null)
 						script.Parameters = e.Parameters;
 				}

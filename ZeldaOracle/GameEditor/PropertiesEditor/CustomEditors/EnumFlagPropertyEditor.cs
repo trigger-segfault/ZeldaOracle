@@ -25,7 +25,13 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 
 		Type enumType;
 		PropertyType baseType;
-		PropertyItem propertyItem;
+
+		protected EditorControl EditorControl {
+			get { return PropertyDescriptor.EditorControl; }
+		}
+		protected CustomPropertyDescriptor PropertyDescriptor {
+			get { return PropertyItem.PropertyDescriptor as CustomPropertyDescriptor; }
+		}
 
 		protected override void SetValueDependencyProperty() {
 			base.ValueProperty = CheckComboBox.SelectedValueProperty;
@@ -40,7 +46,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 		}
 
 		private void CheckComboBox_Loaded(object sender, System.Windows.RoutedEventArgs e) {
-			base.ResolveValueBinding(propertyItem);
+			base.ResolveValueBinding(PropertyItem);
 		}
 
 		protected override void ResolveValueBinding(PropertyItem propertyItem) {
@@ -48,14 +54,12 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 		}
 		
 		private void SetItemsSource(PropertyItem propertyItem) {
-			this.propertyItem = propertyItem;
 			base.Editor.ItemsSource = this.CreateItemsSource(propertyItem);
 		}
 
 		protected IEnumerable CreateItemsSource(PropertyItem propertyItem) {
-			CustomPropertyDescriptor propertyDescriptor = (CustomPropertyDescriptor)propertyItem.PropertyDescriptor;
-			baseType = propertyDescriptor.Property.Type;
-			string typeName = propertyDescriptor.Documentation.EditorSubType;
+			baseType = PropertyDescriptor.Property.Type;
+			string typeName = PropertyDescriptor.Documentation.EditorSubType;
 			enumType = GetTypeByName(typeName);
 			return GetValues(enumType);
 		}

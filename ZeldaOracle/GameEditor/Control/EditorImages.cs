@@ -16,7 +16,13 @@ namespace ZeldaEditor.Control {
 		public static readonly BitmapSource Rename			= LoadIcon("Rename");
 		public static readonly BitmapSource Edit            = LoadIcon("Edit");
 		public static readonly BitmapSource Event			= LoadIcon("Event");
+		public static readonly BitmapSource EventEdit		= LoadIcon("EventEdit");
+		public static readonly BitmapSource EventAdd        = LoadIcon("EventAdd");
+		public static readonly BitmapSource EventError		= LoadIcon("EventError");
+		public static readonly BitmapSource EventWarning	= LoadIcon("EventWarning");
+		public static readonly BitmapSource EventDelete		= LoadIcon("EventDelete");
 		public static readonly BitmapSource Property		= LoadIcon("Property");
+		public static readonly BitmapSource GotoOwner		= LoadIcon("GotoOwner");
 
 
 		public static readonly BitmapSource Eraser			= LoadIcon("Eraser");
@@ -52,7 +58,9 @@ namespace ZeldaEditor.Control {
 		public static readonly BitmapSource ScriptAdd		= LoadIcon("ScriptAdd");
 		public static readonly BitmapSource ScriptDelete	= LoadIcon("ScriptDelete");
 		public static readonly BitmapSource ScriptDuplicate	= LoadIcon("ScriptDuplicate");
+		public static readonly BitmapSource ScriptEdit		= LoadIcon("ScriptEdit");
 		public static readonly BitmapSource ScriptError		= LoadIcon("ScriptError");
+		public static readonly BitmapSource ScriptWarning	= LoadIcon("ScriptWarning");
 		public static readonly BitmapSource ScriptGroup     = LoadIcon("ScriptGroup");
 
 		public static readonly BitmapSource MoveUp			= LoadIcon("MoveUp");

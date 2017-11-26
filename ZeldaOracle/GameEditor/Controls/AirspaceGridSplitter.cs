@@ -39,6 +39,7 @@ namespace ZeldaEditor.Controls {
 					airspaceWindow.Opacity = DragOpacity;
 					airspaceWindow.AllowsTransparency = true;
 					airspaceWindow.IsHitTestVisible = false;
+					airspaceWindow.ShowInTaskbar = false;
 					airspaceWindow.Owner = Window.GetWindow(this);
 					airspaceWindow.Closed += OnAirspaceWindowClosed;
 

@@ -493,10 +493,10 @@ namespace ZeldaEditor {
 		}
 		private void OnAddNewScriptCommand(object sender, ExecutedRoutedEventArgs e) {
 			Script script = new Script();
-			bool result = ScriptEditor.Show(this, script, EditorControl.Instance, true);
+			bool result = ScriptEditor.ShowRegularEditor(this, script, editorControl, true);
 			if (result) {
-				editorControl.AddScript(script);
-				treeViewWorld.RefreshScripts();
+				EditorAction action = ActionChangeScript.CreateDefineScriptAction(script.ID, script.Code);
+				editorControl.PushAction(action, ActionExecution.Execute);
 			}
 		}
 		private void CanExecuteCycleLayerUp(object sender, CanExecuteRoutedEventArgs e) {
@@ -636,5 +636,7 @@ namespace ZeldaEditor {
 				item.IsSelected = true;
 			}
 		}
+
+		public EditorControl EditorControl { get { return editorControl; } }
 	}
 }

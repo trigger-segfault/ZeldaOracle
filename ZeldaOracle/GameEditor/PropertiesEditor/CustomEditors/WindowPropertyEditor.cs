@@ -15,15 +15,8 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 	
 	public abstract class WindowPropertyEditor : TypeEditor<PropertyGridEditorWindowButton> {
 		
-		private PropertyItem propertyItem;
-
 		protected override void SetValueDependencyProperty() {
 			base.ValueProperty = PropertyGridEditorWindowButton.TextProperty;
-		}
-
-		public override FrameworkElement ResolveEditor(PropertyItem propertyItem) {
-			this.propertyItem = propertyItem;
-			return base.ResolveEditor(propertyItem);
 		}
 
 		protected override PropertyGridEditorWindowButton CreateEditor() {
@@ -35,10 +28,10 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 
 		protected abstract bool IsReadOnly { get; }
 
-		protected abstract void OpenWindow(PropertyItem propertyItem);
+		protected abstract void OpenWindow();
 
 		private void OnOpenWindow(object sender, RoutedEventArgs e) {
-			OpenWindow(propertyItem);
+			OpenWindow();
 		}
 
 		protected void SetValue(string value) {

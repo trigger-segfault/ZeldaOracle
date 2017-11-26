@@ -9,26 +9,26 @@ namespace ZeldaOracle.Common.Scripting {
 
 	public class Properties {
 
-		// The object that holds these properties.
+		/**<summary>The object that holds these properties.</summary>*/
 		private IPropertyObject propertyObject;
-		// The properties from which these properties derive from (can be null).
+		/**<summary>The properties from which these properties derive from (can be null).</summary>*/
 		private Properties baseProperties;
-		// The property map.
+		/**<summary>The property map.</summary>*/
 		private Dictionary<string, Property> map;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
-		
-		// Construct an empty properties list.
+
+		/**<summary>Construct an empty properties list.</summary>*/
 		public Properties() {
 			this.map			= new Dictionary<string, Property>();
 			this.propertyObject	= null;
 			this.baseProperties	= null;
 		}
-		
-		// Construct an empty properties list with the given property object.
+
+		/**<summary>Construct an empty properties list with the given property object.</summary>*/
 		public Properties(IPropertyObject propertyObject) {
 			this.map			= new Dictionary<string, Property>();
 			this.propertyObject	= propertyObject;
@@ -58,15 +58,15 @@ namespace ZeldaOracle.Common.Scripting {
 		//-----------------------------------------------------------------------------
 		// Basic accessors
 		//-----------------------------------------------------------------------------
-		
-		// Get an enumerable list of all the modified properties.
+
+		/**<summary>Get an enumerable list of all the modified properties.</summary>*/
 		public IEnumerable<Property> GetProperties() {
 			foreach (Property property in map.Values) {
 				yield return property;
 			}
 		}
-		
-		// Get an enumerable list of all properties and base properties.
+
+		/**<summary>Get an enumerable list of all properties and base properties.</summary>*/
 		public IEnumerable<Property> GetAllProperties() {
 			for (Properties properties = this; properties != null; properties = properties.baseProperties) {
 				foreach (Property property in properties.map.Values) {
@@ -75,21 +75,26 @@ namespace ZeldaOracle.Common.Scripting {
 				}
 			}
 		}
-		
-		// Get the property with the given name.
+
+		/**<summary>Get the property with the given name.</summary>*/
 		public Property GetProperty(string name, bool acceptBaseProperties) {
 			Property property;
 			if (!map.TryGetValue(name, out property) && acceptBaseProperties && baseProperties != null)
 				return baseProperties.GetProperty(name, true);
 			return property;
 		}
-		
-		// Get the root property with the given name.
+
+		/**<summary>Get the root property with the given name.</summary>*/
 		public Property GetRootProperty(string name) {
 			Property property = GetProperty(name, true);
 			if (property != null)
 				return property.GetRootProperty();
 			return null;
+		}
+
+		public void RemoveProperty(string name) {
+			if (map.ContainsKey(name))
+				map.Remove(name);
 		}
 		
 
@@ -317,10 +322,6 @@ namespace ZeldaOracle.Common.Scripting {
 
 		public Property Set(string name, Property property) {
 			return SetProperty(name, property.ObjectValue, false);
-		}
-
-		public Property Set(string name, object value) {
-			return SetProperty(name, value, false);
 		}
 
 		public Property Set(string name, string value) {

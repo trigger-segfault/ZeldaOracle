@@ -7,7 +7,7 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
 
 namespace ZeldaOracle.Game.Worlds {
-	public class World : IPropertyObject, IPropertyObjectContainer, IIDObject {
+	public class World : IEventObjectContainer, IIDObject {
 
 		private List<Level> levels;
 		private int startLevelIndex;
@@ -16,6 +16,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private Properties properties;
 		private ScriptManager scriptManager;
 		private List<Dungeon> dungeons;
+		private EventCollection events;
 
 		
 		//-----------------------------------------------------------------------------
@@ -23,17 +24,20 @@ namespace ZeldaOracle.Game.Worlds {
 		//-----------------------------------------------------------------------------
 
 		public World() {
-			this.levels = new List<Level>();
-			this.scriptManager = new ScriptManager();
+			this.dungeons		= new List<Dungeon>();
+			this.levels			= new List<Level>();
+			this.scriptManager	= new ScriptManager();
 
-			this.properties = new Properties();
-			this.properties.PropertyObject = this;
+			this.events			= new EventCollection(this);
+			this.properties		= new Properties(this);
 			this.properties.BaseProperties = new Properties();
-			
-			this.dungeons = new List<Dungeon>();
+
 
 			this.properties.BaseProperties.Set("id", "world_name")
-				.SetDocumentation("ID", "", "", "General", "The ID used to represent the world.", true, false);
+				.SetDocumentation("ID", "", "", "General", "The ID used for saves to identify the world.", true, true);
+
+			this.events.AddEvent("start_game", "Start Game", "Initialization",
+				"Called when the game first starts.", new ScriptParameter("Game", "game"));
 		}
 
 
@@ -129,6 +133,28 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 			foreach (Dungeon dungeon in dungeons) {
 				yield return dungeon;
+			}
+		}
+
+		public IEnumerable<IEventObject> GetEventObjects() {
+			yield return this;
+			foreach (Level level in levels) {
+				foreach (IEventObject eventObject in level.GetEventObjects()) {
+					yield return eventObject;
+				}
+			}
+			foreach (Dungeon dungeon in dungeons) {
+				yield return dungeon;
+			}
+		}
+
+		public IEnumerable<Event> GetDefinedEvents() {
+			foreach (IEventObject eventObject in GetEventObjects()) {
+				foreach (Event evnt in eventObject.Events.GetEvents()) {
+					if (evnt.IsDefined) {
+						yield return evnt;
+					}
+				}
 			}
 		}
 
@@ -279,6 +305,10 @@ namespace ZeldaOracle.Game.Worlds {
 
 		public ScriptManager ScriptManager {
 			get { return scriptManager; }
+		}
+
+		public EventCollection Events {
+			get { return events; }
 		}
 	}
 }

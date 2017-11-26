@@ -110,6 +110,7 @@ namespace ICSharpCode.CodeCompletion {
 					// Open code completion after the user has pressed dot:
 					completionWindow = new CompletionWindow(TextArea);
 					completionWindow.CloseWhenCaretAtBeginning = controlSpace;
+					completionWindow.Closing += (o, args) => completionWindow = null;
 					completionWindow.StartOffset -= results.TriggerWordLength;
 					//completionWindow.EndOffset -= results.TriggerWordLength;
 
@@ -121,8 +122,8 @@ namespace ICSharpCode.CodeCompletion {
 						//completionWindow.CompletionList.IsFiltering = false;
 						completionWindow.CompletionList.SelectItem(results.TriggerWord);
 					}
-					completionWindow.Show();
-					completionWindow.Closed += (o, args) => completionWindow = null;
+					if (completionWindow != null)
+						completionWindow.Show();
 				}
 			}//end if
 

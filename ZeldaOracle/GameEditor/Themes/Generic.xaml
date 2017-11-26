@@ -957,8 +957,8 @@
     <Style x:Key="{x:Type TreeViewItem}"
          TargetType="{x:Type TreeViewItem}">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-        <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        <!--<Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>-->
         <Setter Property="Padding" Value="1,0,0,0"/>
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>
@@ -976,14 +976,14 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
 
+                        <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
                         <!-- Connecting Lines -->
-                        <Rectangle x:Name="HorLn" Height="1" Stroke="#8888"  Margin="10,0,0,0" SnapsToDevicePixels="true"/>
-                        <Rectangle x:Name="VerLn" Width="1" Stroke="#8888" Grid.RowSpan="2" SnapsToDevicePixels="true"/>
+                        <Rectangle x:Name="HorLn" Height="1" Stroke="#8888"  Margin="10,0,0,0" SnapsToDevicePixels="true" IsHitTestVisible="False"/>
+                        <Rectangle x:Name="VerLn" Width="1" Stroke="#8888" Grid.RowSpan="2" SnapsToDevicePixels="true" IsHitTestVisible="False"/>
                         <ToggleButton x:Name="Expander" Style="{StaticResource ExpandCollapseToggleStyle}" IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press"/>
                         <Border Name="Bd" Grid.Column="1" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
                             <ContentPresenter x:Name="PART_Header" ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                         </Border>
-                        <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
                     </Grid>
                     <ControlTemplate.Triggers>
 
@@ -1036,8 +1036,8 @@
 
     <Style TargetType="{x:Type local:ImageTreeViewItem}">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-        <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        <!--<Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>-->
         <Setter Property="Padding" Value="1,0,0,0"/>
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>
@@ -1057,8 +1057,8 @@
 
                         <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
                         <!-- Connecting Lines -->
-                        <Rectangle x:Name="HorLn" Height="1" Stroke="#8888"  Margin="10,0,-10,0" SnapsToDevicePixels="true"/>
-                        <Rectangle x:Name="VerLn" Width="1" Stroke="#8888" Margin="0,-10,0,10" Grid.RowSpan="2" SnapsToDevicePixels="true"/>
+                        <Rectangle x:Name="HorLn" Height="1" Stroke="#8888"  Margin="10,0,-10,0" SnapsToDevicePixels="true" IsHitTestVisible="False"/>
+                        <Rectangle x:Name="VerLn" Width="1" Stroke="#8888" Margin="0,-10,0,10" Grid.RowSpan="2" SnapsToDevicePixels="true" IsHitTestVisible="False"/>
                         <ToggleButton x:Name="Expander" Style="{StaticResource ExpandCollapseToggleStyle}" IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press"/>
                         <Border Name="Bd" Grid.Column="1" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
                             <StackPanel Orientation="Horizontal">

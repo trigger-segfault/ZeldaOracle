@@ -297,7 +297,7 @@ namespace ZeldaOracle.Game.Control {
 			viewControl.ViewSize = GameSettings.VIEW_SIZE;
 
 			// Fire the RoomStart event.
-			GameControl.FireEvent(room, "event_room_start");
+			GameControl.FireEvent(room, "room_start");
 
 			allMonstersDead = false;
 		}
@@ -474,7 +474,7 @@ namespace ZeldaOracle.Game.Control {
 
 			bool nextAllMonstersDead = AllMonstersDead();
 			if (nextAllMonstersDead && !allMonstersDead)
-				GameControl.FireEvent(room, "event_all_monsters_dead");
+				GameControl.FireEvent(room, "all_monsters_dead");
 			allMonstersDead = nextAllMonstersDead;
 		}
 

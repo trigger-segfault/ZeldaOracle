@@ -15,7 +15,7 @@ namespace ZeldaEditor.Undo {
 		private int index;
 
 		public ActionDeleteDungeon(Dungeon dungeon) {
-			ActionName = "Delete Dungeon";
+			ActionName = "Delete '" + dungeon.ID + "' Dungeon";
 			ActionIcon = EditorImages.DungeonDelete;
 			this.dungeon = dungeon;
 		}
@@ -28,11 +28,13 @@ namespace ZeldaEditor.Undo {
 		public override void Undo(EditorControl editorControl) {
 			editorControl.World.InsertDungeon(index, dungeon);
 			editorControl.EditorWindow.TreeViewWorld.RefreshDungeons();
+			editorControl.NeedsNewEventCache = true;
 		}
 
 		public override void Redo(EditorControl editorControl) {
 			editorControl.World.RemoveDungeonAt(index);
 			editorControl.EditorWindow.TreeViewWorld.RefreshDungeons();
+			editorControl.NeedsNewEventCache = true;
 		}
 	}
 }

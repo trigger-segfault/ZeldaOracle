@@ -11,11 +11,18 @@ using ZeldaEditor.Windows;
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 	public class TextMessagePropertyEditor : WindowPropertyEditor {
 
+		protected EditorControl EditorControl {
+			get { return PropertyDescriptor.EditorControl; }
+		}
+		protected CustomPropertyDescriptor PropertyDescriptor {
+			get { return PropertyItem.PropertyDescriptor as CustomPropertyDescriptor; }
+		}
+
 		protected override bool IsReadOnly { get { return false; } }
 
-		protected override void OpenWindow(PropertyItem propertyItem) {
-			string message = (string)propertyItem.Value;
-			string result = TextMessageEditor.Show(Window.GetWindow(Editor), message, EditorControl.Instance);
+		protected override void OpenWindow() {
+			string message = (string)PropertyItem.Value;
+			string result = TextMessageEditor.Show(Window.GetWindow(Editor), message, EditorControl);
 
 			if (result != null)
 				SetValue(result);

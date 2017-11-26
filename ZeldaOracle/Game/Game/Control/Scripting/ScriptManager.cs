@@ -8,6 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Control.Scripting {
 
@@ -71,57 +72,27 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			return scripts.ContainsKey(scriptID);
 		}
 
-		public void AddReference(Script script, object obj) {
-			script.AddReference(obj);
-		}
-
-		public void AddReference(string scriptID, object obj) {
-			if (scripts.ContainsKey(scriptID))
-				AddReference(scripts[scriptID], obj);
-		}
-
-		public void RemoveReference(Script script, object obj) {
-			script.RemoveReference(obj);
-			int count = script.UpdateReferences();
-			if (script.IsHidden && count == 0) {
-				scripts.Remove(script.ID);
-				Console.WriteLine("Deleted unreferenced script '" + script.ID + "'");
-			}
-		}
-
-		public void RemoveReference(string scriptID, object obj) {
-			if (scripts.ContainsKey(scriptID))
-				RemoveReference(scripts[scriptID], obj);
-		}
-
-		/*public bool UpdateReferences() {
-			bool scriptsModified = false;
-			foreach (var pair in scripts) {
-				int count = pair.Value.UpdateReferences();
-				if (pair.Value.IsHidden && count == 0) {
-					scripts.Remove(pair.Key);
-					Console.WriteLine("Deleted unreferenced script '" + pair.Key + "'");
-					scriptsModified = true;
-				}
-			}
-			return scriptsModified;
-		}*/
-
 		// Compile all the scripts into one assembly.
-		public ScriptCompileResult CompileScripts() {
-			return Compile(CreateCode());
+		public void CompileAndWriteAssembly(World world) {
+			var result = Compile(CreateCode(world, false));
+			rawAssembly = result.RawAssembly;
 		}
 
 		// Compile all the scripts into one assembly.
-		public ScriptCompileResult Compile(string code) {
+		public ScriptCompileResult CompileScripts(World world, bool includeErrors) {
+			return Compile(CreateCode(world, includeErrors));
+		}
+
+		// Compile all the scripts into one assembly.
+		public ScriptCompileResult Compile(string code, bool generateAssembly = true, int firstLineStart = 0) {
 			ScriptCompileResult result	= new ScriptCompileResult();
 			string pathToAssembly = "";
 			bool hasErrors = false;
 			
 			// Setup the compile options.
 			CompilerParameters options	= new CompilerParameters();
-			options.GenerateExecutable	= false;	// We want a Dll (Class Library)
-			options.GenerateInMemory	= false;	// Save the assembly to a file.
+			options.GenerateExecutable	= false;				// We want a Dll (Class Library)
+			options.GenerateInMemory	= !generateAssembly;	// Save the assembly to a file.
 			options.OutputAssembly		= "ZWD2CompiledScript.dll";
 
 			// Add the assembly references.
@@ -134,9 +105,25 @@ namespace ZeldaOracle.Game.Control.Scripting {
 				CompilerResults csResult = csProvider.CompileAssemblyFromSource(options, code);
 				pathToAssembly	= csResult.PathToAssembly;
 				hasErrors		= csResult.Errors.HasErrors;
-				
+
+				// Disable System.IO access
+				int index = code.IndexOf("System.IO");
+				if (index != -1) {
+					int line = code.Take(index).Count(c => c == '\n') + 1;
+					int column = 0;
+					for (int i = index; i >= 0; i--, column++) {
+						if (code[i] == '\n')
+							break;
+					}
+					if (line == 0)
+						column -= firstLineStart;
+					result.Errors.Add(new ScriptCompileError(line, column, "", "System.IO is not allowed", false));
+				}
+
 				// Copy warnings and errors into the ScriptComileResult result.
 				foreach (CompilerError csError in csResult.Errors) {
+					if (csError.Line == 0)
+						csError.Column -= firstLineStart;
 					ScriptCompileError error = new ScriptCompileError(csError.Line,
 						csError.Column, csError.ErrorNumber, csError.ErrorText, csError.IsWarning);
 					if (error.IsWarning)
@@ -148,79 +135,115 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			
 			// If the compile was successful, then load the created.
 			// DLL file into memory and then delete the file.
-			if (!hasErrors) {
-				result.FilePath = pathToAssembly;
-				result.Assembly = Assembly.LoadFile(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), pathToAssembly));
+			if (!hasErrors && generateAssembly) {
 				result.RawAssembly = File.ReadAllBytes(pathToAssembly);
-				//rawAssembly = result.RawAssembly;
-			}
-			else {
-				//rawAssembly = null;
+				File.Delete(pathToAssembly);
 			}
 
 			return result;
 		}
 
-		public string CreateCode() {
+		public string CreateCode(World world, bool includeErrors) {
 			// Begin class and namespace.
-			string code = 
-				"namespace ZeldaAPI.CustomScripts {" +
-					"public class CustomScript : CustomScriptBase {";
+			string code = CreateUsingsString() + CreateClassString();
 
 			// Script methods.
-			foreach (KeyValuePair<string, Script> entry in scripts) {
-				Script script = entry.Value;
-				if (!script.HasErrors) {
-					code += "public void RunScript_" + script.ID + "(" + CreateParametersString(script.Parameters) + ") {" +
+			foreach (Script script in scripts.Values) {
+				if (!script.HasErrors || includeErrors) {
+					code += CreateMethodString(script);
+					/*code += "public void RunScript_" + script.ID + "(" + CreateParametersString(script.Parameters) + ") {" +
 							script.Code +
-						"}";
+						"}";*/
 				}
 				else {
+					code += CreateEmptyMethodString(script);
 					Console.WriteLine(" ! Script '{0}' has errors!", script.ID);
+				}
+			}
+			if (world != null) {
+				int internalID = 0;
+				foreach (IEventObject eventObject in world.GetEventObjects()) {
+					foreach (Event evnt in eventObject.Events.GetEvents()) {
+						if (evnt.IsDefined) {
+							if ((!evnt.Script.HasErrors || includeErrors)) {
+								string existingScript = evnt.GetExistingScript(scripts);
+								if (existingScript == null) {
+									evnt.Script.ID = "__internal_script_" + internalID + "__";
+									code += CreateMethodString(evnt.Script);
+									internalID++;
+								}
+							}
+							else {
+								code += CreateEmptyMethodString(evnt.Script);
+							}
+						}
+					}
 				}
 			}
 
 			// Close class and namespace.
-			code += "}" +
-				"}";
+			code += CreateClosingClassString();
 
 			return code;
 		}
 
-		public string CreateCode(Script newScript, string newCode, out int scriptStart) {
+		public string CreateTestScriptCode(Script newScript, string newCode, out int scriptStart) {
 			// Begin class and namespace.
-			string code =
-				"namespace ZeldaAPI.CustomScripts {" +
-					"public class CustomScript : CustomScriptBase {";
-			scriptStart = 0;
+			string code = CreateUsingsString() + CreateClassString();
+
+			code += CreateTestMethodHeadString(newScript);
+			scriptStart = code.Length;
+			code += newCode + "}";
+
 			// Script methods.
 			foreach (KeyValuePair<string, Script> entry in scripts) {
 				Script script = entry.Value;
-				if (!script.HasErrors) {
-					code += "public void RunScript_" + script.ID + "(" + CreateParametersString(script.Parameters) + ") {\n";
-					if (script == newScript) {
-						scriptStart = code.Length;
-						code += newCode;
-					}
-					else {
-						code += script.Code;
-					}
-					code += "}";
-				}
-				else {
-					Console.WriteLine(" ! Script '{0}' has errors!", script.ID);
+				if (script == newScript)
+					continue;
+				if (!script.IsHidden) {
+					code += CreateEmptyMethodString(script);
 				}
 			}
 
 			// Close class and namespace.
-			code += "}" +
-				"}";
+			code += CreateClosingClassString();
 
 			return code;
+		}
+
+		public static string CreateUsingsString() {
+			return	"using System.Collections.Generic; " +
+					"using Console = System.Console; " +
+					"using ZeldaAPI; ";
+		}
+
+		public static string CreateClassString() {
+			return	"namespace ZeldaAPI.CustomScripts {" +
+						"public class CustomScript : CustomScriptBase { ";
+		}
+
+		public static string CreateClosingClassString() {
+			return		"}" +
+					"}";
+		}
+
+		public static string CreateTestMethodHeadString(Script script) {
+			string name = (script.ID.StartsWith("__") || string.IsNullOrWhiteSpace(script.ID) ? "__internal_script__" : script.ID);
+			return	"public void " + name + "(" + CreateParametersString(script.Parameters) + ") { ";
+		}
+		public static string CreateMethodString(Script script, string newCode = null) {
+			return	"public void " + script.ID + "(" + CreateParametersString(script.Parameters) + ") { " +
+						(newCode ?? script.Code) + 
+					"}";
+		}
+		public static string CreateEmptyMethodString(Script script) {
+			return "public void " + script.ID + "(" + CreateParametersString(script.Parameters) + ") { " +
+						"" +
+					"} ";
 		}
 
 		// Encapsulate the code inside a namsapce, class, and method.
-		private static string CreateParametersString(List<ScriptParameter> scriptParameters) {
+		public static string CreateParametersString(List<ScriptParameter> scriptParameters) {
 			string parametersString = "";
 			for (int i = 0; i < scriptParameters.Count; i++) {
 				if (i > 0)

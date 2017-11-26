@@ -46,7 +46,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 				SetSwitchState(switchState);
 				OnToggle(switchState);
-				GameControl.FireEvent(this, "event_toggle", this);
+				GameControl.FireEvent(this, "toggle", this);
 				
 				Properties.Set("switch_state", switchState);
 				Properties.Set("has_switched", true);

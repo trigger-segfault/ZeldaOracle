@@ -43,11 +43,13 @@ namespace ZeldaEditor.Undo {
 		public override void Undo(EditorControl editorControl) {
 			editorControl.OpenLevel(level);
 			level.ShiftRooms(-distance, cutoffRooms);
+			editorControl.NeedsNewEventCache = true;
 		}
 
 		public override void Redo(EditorControl editorControl) {
 			editorControl.OpenLevel(level);
 			level.ShiftRooms(distance);
+			editorControl.NeedsNewEventCache = true;
 		}
 
 		public override bool IgnoreAction { get { return distance == Point2I.Zero; } }

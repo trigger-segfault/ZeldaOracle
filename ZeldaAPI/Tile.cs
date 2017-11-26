@@ -126,6 +126,13 @@ namespace ZeldaAPI {
 
 	/**<summary>Access to a pull handle tile.</summary>*/
 	public interface PullHandle : Tile {
+
+		/**<summary>True if the pull handle has been extended away from the wall as far as possible.</summary>*/
+		bool IsFullyExtended { get; }
+		/**<summary>True if the pull handle has retracted all the way into the wall.</summary>*/
+		bool IsFullyRetracted { get; }
+		/**<summary>Gets the distance the pull handle is extended to in pixels.</summary>*/
+		float ExtendDistance { get; }
 	}
 
 	/**<summary>Access to a minecart crossing gate tile.</summary>*/

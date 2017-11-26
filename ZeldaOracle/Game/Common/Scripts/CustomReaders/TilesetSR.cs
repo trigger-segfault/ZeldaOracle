@@ -264,18 +264,18 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				CommandProperties);
 			//=====================================================================================
 			AddCommand("Event",
-				"string name, string readableName, string description",
-				"string name, string readableName, string description, (string params...)", // Params = (type1, name1, type2, name2...)
+				"string name, string readableName, string category, string description",
+				"string name, string readableName, string category, string description, (string params...)", // Params = (type1, name1, type2, name2...)
 			delegate(CommandParam parameters) {
 				Property property = Property.CreateString(parameters.GetString(0), "");
 				//property.SetDocumentation(parameters.GetString(1), "script", "", "Events", parameters.GetString(2), true, false);
-				baseTileData.Properties.Set(property.Name, property)
-					.SetDocumentation(parameters.GetString(1), "script", "", "Events", parameters.GetString(2), true, false);
+				//baseTileData.Properties.Set(property.Name, property)
+				//	.SetDocumentation(parameters.GetString(1), "script", "", "Events", parameters.GetString(2), true, false);
 				
 				// Create the event's script parameter list.
 				ScriptParameter[] scriptParams;
-				if (parameters.ChildCount > 3) {
-					CommandParam paramList = parameters[3];
+				if (parameters.ChildCount > 4) {
+					CommandParam paramList = parameters[4];
 					scriptParams = new ScriptParameter[paramList.ChildCount / 2];
 					for (int i = 0; i < scriptParams.Length; i++) {
 						scriptParams[i] = new ScriptParameter() {
@@ -288,11 +288,12 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					scriptParams = new ScriptParameter[0];
 
 				// Add the event to the tile-data.
-				baseTileData.Events.AddEvent(new ObjectEvent(
+				baseTileData.Events.AddEvent(
 						parameters.GetString(0), // Name
 						parameters.GetString(1), // Readable name
-						parameters.GetString(2), // Description
-						scriptParams));
+						parameters.GetString(2), // Category
+						parameters.GetString(3), // Description
+						scriptParams);
 			});
 			//=====================================================================================
 			AddCommand("Sprite",
@@ -518,15 +519,15 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					editorType = param.GetString(4);
 				}
 				
-				property.Documentation = new PropertyDocumentation() {
-					ReadableName	= param.GetString(3),
-					EditorType		= editorType,
-					EditorSubType	= editorSubType,
-					Category		= param.GetString(5),
-					Description		= param.GetString(6),
-					IsEditable		= true,
-					IsHidden		= param.GetBool(7, false),
-				};
+				property.SetDocumentation(
+					readableName:	param.GetString(3),
+					editorType:		editorType,
+					editorSubType:	editorSubType,
+					category:		param.GetString(5),
+					description:	param.GetString(6),
+					isReadOnly:		false,
+					isBrowsable:	param.GetBool(7, false)
+				);
 			}
 		}
 

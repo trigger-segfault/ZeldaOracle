@@ -46,7 +46,7 @@ namespace ZeldaOracle.Game.Tiles {
 				bool changed = (value != Color);
 				Properties.Set("color", (int) value);
 				//if (changed)
-					//GameControl.FireEvent(this, "event_color_change", this, ((ZeldaAPI.ColorTile) this).Color);
+					//GameControl.FireEvent(this, "color_change", this, ((ZeldaAPI.ColorTile) this).Color);
 			}
 		}
 		

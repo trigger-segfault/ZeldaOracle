@@ -91,7 +91,7 @@ namespace ZeldaEditor.PropertiesEditor {
 		public override bool IsReadOnly {
 			get {
 				if (documentation != null)
-					return !documentation.IsEditable;
+					return !documentation.IsReadOnly;
 				return false;
 			}
 		}
@@ -100,7 +100,7 @@ namespace ZeldaEditor.PropertiesEditor {
 		public override bool IsBrowsable {
 			get {
 				if (documentation != null)
-					return !documentation.IsHidden;
+					return !documentation.IsBrowsable;
 				return true;
 			}
 		}

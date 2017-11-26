@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZeldaEditor.Controls"
+        xmlns:cmd="clr-namespace:ZeldaEditor"
         mc:Ignorable="d"
         Title="History" Height="207.387" Width="183.676" Background="#FFF0F0F0" WindowStyle="ToolWindow" Icon="/ZeldaEditor;component/Resources/Icons/Rename.png" ShowInTaskbar="False" SnapsToDevicePixels="True" UseLayoutRounding="True" Loaded="OnWindowLoaded" Closing="OnWindowClosing">
     <Window.Resources>
@@ -11,7 +12,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/ZeldaEditor;component/Themes/DefaultStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <SolidColorBrush x:Key="ListBorder" Color="#828790"/>
             <Style x:Key="NoBorderListViewStyle" TargetType="{x:Type ListView}">
                 <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
                 <Setter Property="BorderBrush" Value="{x:Null}"/>
@@ -52,6 +52,7 @@
     <Window.CommandBindings>
         <CommandBinding Command="Undo" CanExecute="CanExecuteUndo" Executed="OnUndoCommand"/>
         <CommandBinding Command="Redo" CanExecute="CanExecuteRedo" Executed="OnRedoCommand"/>
+        <CommandBinding Command="cmd:EditorCommands.RedoSecondary" CanExecute="CanExecuteRedo" Executed="OnRedoCommand"/>
     </Window.CommandBindings>
     <DockPanel>
         <Border DockPanel.Dock="Bottom" Height="26" Background="#FFDCE7F5" BorderThickness="0,1,0,0" BorderBrush="#FF365D90">

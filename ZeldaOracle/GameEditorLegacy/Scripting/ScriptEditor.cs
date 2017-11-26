@@ -419,9 +419,9 @@ namespace ZeldaEditor.Scripting {
 
 				// Description.
 				string description = "No description available.";
-				ZeldaAPI.Attributes.Description descriptionAttribute = methodInfo.GetCustomAttribute<ZeldaAPI.Attributes.Description>();
-				if (descriptionAttribute != null)
-					description = descriptionAttribute.Text;
+				//ZeldaAPI.Attributes.Description descriptionAttribute = methodInfo.GetCustomAttribute<ZeldaAPI.Attributes.Description>();
+				//if (descriptionAttribute != null)
+				//	description = descriptionAttribute.Text;
 				
 				yield return new MethodAutocompleteItem(methodInfo.Name)
 				{

@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using ZeldaEditor.Control;
 //using ZeldaEditor.PropertiesEditor.CustomEditors;
 using ZeldaEditor.Scripting;
+using ZeldaEditor.Undo;
 using ZeldaEditor.Util;
 using ZeldaEditor.Windows;
 using ZeldaOracle.Common.Scripting;
@@ -18,18 +19,29 @@ using ZeldaOracle.Game.Worlds;
 namespace ZeldaEditor.TreeViews {
 	
 	public class ScriptTreeViewItem : IWorldTreeViewItem {
-		private Script script;
+		protected Script script;
 		
-		public ScriptTreeViewItem(Script script) {
+		public ScriptTreeViewItem(Script script, EditorControl editorControl) {
 			this.script = script;
-			Source = (script.HasErrors ? EditorImages.ScriptError : EditorImages.Script);
+			if (script != null)
+				Source = ((script.HasErrors && !editorControl.NoScriptErrors) ?
+					EditorImages.ScriptError : ((script.HasWarnings && !editorControl.NoScriptWarnings) ?
+					EditorImages.ScriptWarning : EditorImages.Script));
 			Header				= script.ID;
 			Tag					= "script";
 		}
 
 		public override void Open(EditorControl editorControl) {
-			if (ScriptEditor.Show(editorControl.EditorWindow, script, editorControl, false)) {
-				editorControl.EditorWindow.TreeViewWorld.RefreshScripts();
+			string scriptName = script.ID;
+			string oldCode = script.Code;
+			if (ScriptEditor.ShowRegularEditor(editorControl.EditorWindow, script, editorControl, false)) {
+				bool deleted = editorControl.World.GetScript(scriptName) == null;
+				EditorAction action;
+				if (deleted)
+					action = ActionChangeScript.CreateUndefineScriptAction(scriptName, oldCode);
+				else
+					action = ActionChangeScript.CreateChangeScriptAction(scriptName, oldCode, script.Code);
+				editorControl.PushAction(action, ActionExecution.PostExecute);
 			}
 		}
 
@@ -39,9 +51,8 @@ namespace ZeldaEditor.TreeViews {
 				MessageBoxButton.YesNo);
 
 			if (result == MessageBoxResult.Yes) {
-				editorControl.World.RemoveScript(script);
-				editorControl.EditorWindow.TreeViewWorld.RefreshScripts();
-				editorControl.IsModified = true;
+				EditorAction action = ActionChangeScript.CreateUndefineScriptAction(script.ID, script.Code);
+				editorControl.PushAction(action, ActionExecution.Execute);
 			}
 		}
 
@@ -58,7 +69,7 @@ namespace ZeldaEditor.TreeViews {
 			if (newName != null) {
 				duplicate.ID = newName;
 				editorControl.AddScript(duplicate);
-				editorControl.EditorWindow.TreeViewWorld.RefreshScripts();
+				editorControl.EditorWindow.TreeViewWorld.RefreshScripts(true, false);
 			}
 		}
 

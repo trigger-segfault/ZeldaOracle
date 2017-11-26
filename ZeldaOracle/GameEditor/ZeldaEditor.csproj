@@ -116,7 +116,6 @@
     <Compile Include="Control\EditorGraphics.cs" />
     <Compile Include="Control\EditorImages.cs" />
     <Compile Include="Control\EditorResources.cs" />
-    <Compile Include="Control\EditorWorld.cs" />
     <Compile Include="Controls\PropertyGridEditorCheckComboBox.cs" />
     <Compile Include="Control\TileDrawModes.cs" />
     <Compile Include="EditorCommands.cs" />
@@ -131,13 +130,16 @@
     <Compile Include="PropertiesEditor\CustomEditors\NoneStringConverter.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\Point2IPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\ResourcePropertyEditor.cs" />
-    <Compile Include="PropertiesEditor\CustomEditors\ScriptPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\EventPropertyEditor.cs" />
     <None Include="PropertiesEditor\CustomEditors\SpriteIndexComboBox.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\RewardPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEventDescriptor.cs" />
     <Compile Include="PropertiesEditor\CustomProperties.cs" />
     <Compile Include="PropertiesEditor\CustomPropertyDescriptor.cs" />
     <Compile Include="PropertiesEditor\ZeldaPropertyGrid.cs" />
     <Compile Include="Controls\FolderTreeViewItem.cs" />
+    <Compile Include="TreeViews\EventTreeViewItem.cs" />
+    <Compile Include="Undo\ActionChangeEvent.cs" />
     <Compile Include="Undo\ActionChangeProperty.cs" />
     <Compile Include="Undo\ActionCreateLevel.cs" />
     <None Include="Tools\ToolSelectionOld.cs" />
@@ -152,6 +154,7 @@
     <Compile Include="Undo\ActionShiftLevel.cs" />
     <Compile Include="Undo\ActionSquare.cs" />
     <Compile Include="Undo\ActionCreateDungeon.cs" />
+    <Compile Include="Undo\ActionChangeScript.cs" />
     <Compile Include="Undo\EditorAction.cs" />
     <Compile Include="Undo\ActionPlace.cs" />
     <Compile Include="Undo\ActionRenameID.cs" />
@@ -171,7 +174,6 @@
     <Compile Include="Windows\ScriptEditor.xaml.cs">
       <DependentUpon>ScriptEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Scripting\ScriptEditorCompiler.cs" />
     <Compile Include="Scripting\ScriptProvider.cs" />
     <Compile Include="Scripting\ScriptTextEditor.cs" />
     <Compile Include="Windows\ShiftLevelWindow.xaml.cs">
@@ -591,6 +593,23 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\History.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\EventAdd.png" />
+    <Resource Include="Resources\Icons\EventDelete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\EventEdit.png" />
+    <Resource Include="Resources\Icons\ScriptEdit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\EventError.png" />
+    <Resource Include="Resources\Icons\EventWarning.png" />
+    <Resource Include="Resources\Icons\ScriptWarning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Console.png" />
+    <Resource Include="Resources\Icons\GotoOwner.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

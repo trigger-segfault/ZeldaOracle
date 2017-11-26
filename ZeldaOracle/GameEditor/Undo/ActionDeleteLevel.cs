@@ -15,7 +15,7 @@ namespace ZeldaEditor.Undo {
 		private int index;
 
 		public ActionDeleteLevel(Level level) {
-			ActionName = "Delete Level";
+			ActionName = "Delete '" + level.ID + "' Level";
 			ActionIcon = EditorImages.LevelDelete ;
 			this.level = level;
 		}
@@ -29,6 +29,7 @@ namespace ZeldaEditor.Undo {
 			editorControl.World.InsertLevel(index, level);
 			editorControl.OpenLevel(level);
 			editorControl.EditorWindow.TreeViewWorld.RefreshLevels();
+			editorControl.NeedsNewEventCache = true;
 		}
 
 		public override void Redo(EditorControl editorControl) {
@@ -42,6 +43,7 @@ namespace ZeldaEditor.Undo {
 				}
 			}
 			editorControl.EditorWindow.TreeViewWorld.RefreshLevels();
+			editorControl.NeedsNewEventCache = true;
 		}
 	}
 }

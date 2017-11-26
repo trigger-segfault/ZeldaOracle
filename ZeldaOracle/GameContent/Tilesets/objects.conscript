@@ -242,8 +242,8 @@ TILE lantern;
 	SPRITEINDEX	0, animation,	tile_lantern_lit;
 	SPRITEINDEX	1, sprite,		tile_lantern_unlit;
 	PROPERTIES	(boolean, lit, true, "Lit", "", "", "Whether the lantern starts lit or not.", false);
-	EVENT event_light, "Light", "Occurs when the lantern is lighted.", (Lantern, lantern);
-	EVENT event_put_out, "Put Out", "Occurs when the lantern is put out.", (Lantern, lantern);
+	EVENT		light, "Light", "Lanturn", "Occurs when the lantern is lighted.", (Lantern, lantern);
+	EVENT		put_out, "Put Out", "Lanturn", "Occurs when the lantern is put out.", (Lantern, lantern);
 END;
 
 # ---- Signs ------------------------------------------------------------------
@@ -335,7 +335,7 @@ TILE color_jump_pad;
 	SPRITEINDEX 1, tile_color_jump_pad_yellow;
 	SPRITEINDEX 1, tile_color_jump_pad_blue;
 	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the jump pad.");
-	EVENT		event_color_change, "Color Change", "Occurs when the pad's color changes.", (ColorJumpPad, tile, Color, color);
+	EVENT		color_change, "Color Change", "Color", "Occurs when the pad's color changes.", (ColorJumpPad, tile, Color, color);
 END;
 
 TILE color_jump_pad_red;
@@ -457,7 +457,7 @@ END;
 TILE color_cube_slot;
 	TYPE		TileColorCubeSlot;
 	SPRITE		tile_color_cube_slot;
-	EVENT		event_color_change, "Color Change", "Occurs when the slot's color changes.", (ColorCubeSlot, tile, Color, color);
+	EVENT		color_change, "Color Change", "Color", "Occurs when the slot's color changes.", (ColorCubeSlot, tile, Color, color);
 END;
 
 # ---- Color Lantern ----------------------------------------------------------
@@ -466,7 +466,7 @@ TILE color_lantern;
 	TYPE		TileColorLantern;
 	SOLID		block;
 	SPRITE		tile_color_lantern;
-	EVENT		event_color_change, "Color Change", "Occurs when the lantern's flame color changes.", (ColorLantern, tile, Color, color);
+	EVENT		color_change, "Color Change", "Color", "Occurs when the lantern's flame color changes.", (ColorLantern, tile, Color, color);
 END;
 
 # ---- Button -----------------------------------------------------------------
@@ -477,8 +477,8 @@ TILE button;
 	SPRITEINDEX	1, tile_button_down;
 	PROPERTIES	(boolean, releasable,		true, "Releasable",			"", "Button", "Can the button only be pressed, and not released?"),
 				(boolean, pressed,			false, "Pressed",			"", "Button", "Is the button pressed");
-	EVENT event_press, "On Press", "Occurs when the button is pressed.", (Button button);
-	EVENT event_release, "On Release", "Occurs when the button is released.", (Button button);
+	EVENT		press, "Press", "Switch", "Occurs when the button is pressed.", (Button button);
+	EVENT		release, "Release", "Switch", "Occurs when the button is released.", (Button button);
 END;
 
 # ---- Lever ------------------------------------------------------------------
@@ -491,7 +491,7 @@ TILE lever;
 	SPRITEINDEX	1, tile_lever_right;
 	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "Lever", "Can the lever only be switched once?"),
 				(boolean, switch_state,		false,	"Switch State",		"", "Lever", "True if the lever is facing left.");
-	EVENT event_toggle, "Toggle", "Occurs when the lever is toggled.", (Lever, lever);
+	EVENT		toggle, "Toggle", "Switch", "Occurs when the lever is toggled.", (Lever, lever);
 END;
 
 # ---- Doors ------------------------------------------------------------------
