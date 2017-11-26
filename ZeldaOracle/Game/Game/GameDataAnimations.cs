@@ -104,6 +104,7 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PLAYER_MERMAID_SWING;
 		public static Animation ANIM_PLAYER_MERMAID_SPIN;
 		public static Animation ANIM_PLAYER_MERMAID_STAB;
+		public static Animation ANIM_PLAYER_MERMAID_THROW;
 
 		// Monster animations.
 		public static Animation ANIM_MONSTER_OCTOROK;

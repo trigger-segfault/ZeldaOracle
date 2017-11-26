@@ -46,11 +46,11 @@ namespace ZeldaOracle.Game {
 			// Add weapons.
 			inventory.AddItems(obtain,
 				// Currently equipped items:
-				new ItemCane(),
+				new ItemSword(),
 				new ItemFeather(),
 
 				// Items in inventory menu:
-				new ItemSword(),
+				new ItemCane(),
 				new ItemShield(),
 				new ItemShovel(),
 				new ItemMagicRod(),

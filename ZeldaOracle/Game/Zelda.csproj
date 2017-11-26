@@ -286,6 +286,7 @@
     <Compile Include="Game\Entities\Players\States\PlayerJumpToState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerMagicBoomerangState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerMinecartState.cs" />
+    <Compile Include="Game\Entities\Players\States\PlayerUnderwaterState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSwitchHookState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSeedShooterState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerRespawnDeathState.cs" />

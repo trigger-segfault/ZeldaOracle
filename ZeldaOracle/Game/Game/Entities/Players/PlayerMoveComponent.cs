@@ -523,7 +523,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				mode = moveModeNormal;
 			else if (player.Physics.IsInAir)
 				mode = moveModeAir;
-			else if (player.Physics.IsInWater)
+			else if (player.Physics.IsInWater || player.RoomControl.IsUnderwater)
 				mode = moveModeWater;
 			else if (player.Physics.IsOnIce)
 				mode = moveModeIce;

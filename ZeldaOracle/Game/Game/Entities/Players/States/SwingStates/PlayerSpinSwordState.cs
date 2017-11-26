@@ -45,8 +45,9 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			lunge					= false;
 			swingAnglePullBack		= 0;
 			swingAngleDurations		= new int[] { 3, 2, 3, 2, 3, 2, 3, 2, 5 };
-			weaponSwingAnimation	= GameData.ANIM_SWORD_SPIN;
-			playerSwingAnimation	= GameData.ANIM_PLAYER_SPIN;
+			weaponSwingAnimation			= GameData.ANIM_SWORD_SPIN;
+			playerSwingAnimation			= GameData.ANIM_PLAYER_SPIN;
+			playerSwingAnimationUnderwater	= GameData.ANIM_PLAYER_MERMAID_SPIN;
 			
 			// Will always spin clockwise.
 			swingWindingOrders = new WindingOrder[] {

@@ -46,6 +46,7 @@ namespace ZeldaOracle.Game.Control {
 		private bool			allMonstersDead;
 		private int				entityIndexCounter;
 		private bool			isSideScrolling;
+		private bool			isUnderwater;
 
 		private event Action<Player>	eventPlayerRespawn;
 		private event Action<int>		eventRoomTransitioning;
@@ -71,6 +72,7 @@ namespace ZeldaOracle.Game.Control {
 			entityCount				= 0;
 			entityIndexCounter		= 0;
 			isSideScrolling			= false;
+			isUnderwater			= true;
 		}
 		
 
@@ -692,9 +694,16 @@ namespace ZeldaOracle.Game.Control {
 			remove { eventRoomTransitioning -= value; }
 		}
 
+		// Are we in a side-scrolling room?
 		public bool IsSideScrolling {
 			get { return isSideScrolling; }
 			set { isSideScrolling = value; }
+		}
+
+		// Are we in an underwater room?
+		public bool IsUnderwater{
+			get { return isUnderwater; }
+			set { isUnderwater = value; }
 		}
 	}
 }

@@ -151,7 +151,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			player.Movement.CanJump			= false;
 			player.Movement.MoveCondition	= PlayerMoveCondition.NoControl;
-			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
+
+			if (player.RoomControl.IsUnderwater)
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MERMAID_THROW);
+			else
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 		}
 		
 		public override void OnEnd(PlayerState newState) {
