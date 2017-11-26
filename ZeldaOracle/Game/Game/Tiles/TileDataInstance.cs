@@ -10,7 +10,7 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Tiles {
-	public class TileDataInstance : BaseTileDataInstance, IEventObject, IIDObject {
+	public class TileDataInstance : BaseTileDataInstance {
 
 		private Point2I	location;
 		private int		layer;
@@ -25,25 +25,17 @@ namespace ZeldaOracle.Game.Tiles {
 			this.location	= Point2I.Zero;
 			this.layer		= 0;
 			this.tileData	= null;
-			this.properties = new Properties();
-			this.properties.PropertyObject = this;
 		}
 
 		public TileDataInstance(TileData tileData) :
-			this(tileData, -1, -1, -1)
-		{
+			this(tileData, -1, -1, -1) {
 		}
 
-		public TileDataInstance(TileData tileData, int x, int y, int layer) {
+		public TileDataInstance(TileData tileData, int x, int y, int layer) :
+			base(tileData) {
 			this.room		= null;
 			this.location	= new Point2I(x, y);
 			this.layer		= layer;
-			this.tileData	= tileData;
-			this.properties = new Properties();
-			this.properties.PropertyObject = this;
-			this.properties.BaseProperties = tileData.Properties;
-			this.modifiedProperties.PropertyObject = this;
-			this.modifiedProperties.BaseProperties = tileData.Properties;
 		}
 
 		public override void Clone(BaseTileDataInstance copy) {

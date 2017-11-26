@@ -13,16 +13,18 @@ namespace ZeldaOracle.Game.Tiles {
 
 	public class TileData : BaseTileData {
 
+
 		private SpriteAnimation[]	spriteList;
 		//private Point2I				size;
 		private SpriteAnimation		spriteAsObject;
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
 		private Sound				breakSound;
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
+
 
 		public TileData() {
 			spriteList			= new SpriteAnimation[0];
@@ -31,7 +33,7 @@ namespace ZeldaOracle.Game.Tiles {
 			breakAnimation		= null;
 
 			// General.
-			properties.SetGeneric("size", Point2I.One)
+			properties.Set("size", Point2I.One)
 				.SetDocumentation("Size", "General", "");
 			properties.Set("flags", (int) TileFlags.Default)
 				.SetDocumentation("Tile Flags", "enum_flags", "TileFlags", "General", "");
@@ -82,9 +84,10 @@ namespace ZeldaOracle.Game.Tiles {
 				.SetDocumentation("Spawn Delay after Poof", "Spawning", "");
 
 			// Events.
-			properties.Set("on_move", "")
+			/*properties.Set("on_move", "")
 				.SetDocumentation("On Move", "script", "", "Events",
-				"Occurs when the tile is moved.", true, false);
+				"Occurs when the tile is moved.", true, false);*/
+			events.AddEvent("moved", "Moved", "Movement", "Occurs when the tile is moved.");
 		}
 		
 		public TileData(TileFlags flags) : this() {
@@ -114,7 +117,7 @@ namespace ZeldaOracle.Game.Tiles {
 				spriteAsObject		= new SpriteAnimation(copyTileData.spriteAsObject);
 				breakAnimation		= copyTileData.breakAnimation;
 				breakSound			= copyTileData.breakSound;
-				events				= new ObjectEventCollection(copyTileData.events);
+				//events				= new EventCollection(copyTileData.events);
 
 				if (copyTileData.spriteList.Length > 0) {
 					spriteList = new SpriteAnimation[copyTileData.spriteList.Length];

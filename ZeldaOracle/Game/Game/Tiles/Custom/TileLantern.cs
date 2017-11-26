@@ -31,7 +31,7 @@ namespace ZeldaOracle.Game.Tiles {
 				//Graphics.PlaySprite(GameData.ANIM_TILE_LANTERN);
 				Graphics.PlaySpriteAnimation(SpriteList[0]);
 				Properties.Set("lit", true);
-				GameControl.ExecuteScript(Properties.GetString("event_light", ""), this);
+				GameControl.FireEvent(this, "light", this);
 			}
 		}
 
@@ -41,7 +41,7 @@ namespace ZeldaOracle.Game.Tiles {
 				//Graphics.PlaySprite(GameData.SPR_TILE_LANTERN_UNLIT);
 				Graphics.PlaySpriteAnimation(SpriteList[1]);
 				Properties.Set("lit", false);
-				GameControl.ExecuteScript(Properties.GetString("event_put_out", ""), this);
+				GameControl.FireEvent(this, "put_out", this);
 			}
 		}
 

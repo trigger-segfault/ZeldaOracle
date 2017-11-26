@@ -41,21 +41,19 @@ namespace ZeldaOracle.Game.Worlds {
 		}
 	}
 
-	public class Dungeon : IPropertyObject, IIDObject {
-
-		//private string id;
+	public class Dungeon : IEventObject, IIDObject {
 		private World world;
 		private Properties properties;
-		
+		private EventCollection events;
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
 		public Dungeon() {
-			properties = new Properties();
-			properties.BaseProperties = new Properties();
-			properties.PropertyObject = this;
+			this.events		= new EventCollection(this);
+			this.properties	= new Properties(this);
+			this.properties.BaseProperties	= new Properties();
 
 			properties.BaseProperties.Set("id",			"")
 				.SetDocumentation("ID", "", "", "General", "The id used to refer to this dungeon.", false, false);
@@ -84,10 +82,6 @@ namespace ZeldaOracle.Game.Worlds {
 			this()
 		{
 			properties.SetAll(copy.properties);
-			foreach (Property property in properties.GetProperties()) {
-				if (property.IsDefinedScript)
-					copy.World.ScriptManager.AddReference(property.StringValue, this);
-			}
 		}
 
 
@@ -234,6 +228,10 @@ namespace ZeldaOracle.Game.Worlds {
 		public PuzzleColor ColorSwitchColor {
 			get { return (PuzzleColor) properties.GetInteger("color_switch_color", (int) PuzzleColor.Blue); }
 			set { properties.Set("color_switch_color", (int) value); }
+		}
+
+		public EventCollection Events {
+			get { return events; }
 		}
 	}
 }

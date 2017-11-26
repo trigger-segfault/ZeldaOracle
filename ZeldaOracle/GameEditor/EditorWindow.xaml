@@ -41,6 +41,7 @@
 
         <CommandBinding Command="Undo" CanExecute="CanExecuteUndo" Executed="OnUndoCommand"/>
         <CommandBinding Command="Redo" CanExecute="CanExecuteRedo" Executed="OnRedoCommand"/>
+        <CommandBinding Command="cmd:EditorCommands.RedoSecondary" CanExecute="CanExecuteRedo" Executed="OnRedoCommand"/>
 
         <CommandBinding Command="Copy" CanExecute="CanExecuteCopyCut" Executed="OnCopyCommand"/>
         <CommandBinding Command="Cut" CanExecute="CanExecuteCopyCut" Executed="OnCutCommand"/>
@@ -100,31 +101,31 @@
             </MenuItem>
         </Menu>
         <ToolBar x:Name="toolBar1" DockPanel.Dock="Top">
-            <local:ImageButton x:Name="buttonNew" Source="Resources/Icons/WorldNew.png" Command="New"/>
-            <local:ImageButton x:Name="buttonOpen" Source="Resources/Icons/Open.png" Command="Open"/>
-            <local:ImageButton x:Name="buttonSave" Source="Resources/Icons/Save.png" Command="Save"/>
-            <local:ImageButton x:Name="buttonSaveAs" Source="Resources/Icons/SaveAs.png"  Command="cmd:EditorCommands.SaveAs"/>
+            <local:ImageButton x:Name="buttonNew" Source="Resources/Icons/WorldNew.png" ToolTip="New World (Ctrl+N)" Command="New"/>
+            <local:ImageButton x:Name="buttonOpen" Source="Resources/Icons/Open.png" ToolTip="Open World (Ctrl+O)" Command="Open"/>
+            <local:ImageButton x:Name="buttonSave" Source="Resources/Icons/Save.png" ToolTip="Save World (Ctrl+S)" Command="Save"/>
+            <local:ImageButton x:Name="buttonSaveAs" Source="Resources/Icons/SaveAs.png" ToolTip="Save World As (Ctrl+Shift+S)" Command="cmd:EditorCommands.SaveAs"/>
             <Separator/>
-            <local:ImageButton x:Name="buttonTestLevel" Source="Resources/Icons/RunGame.png" Command="cmd:EditorCommands.TestWorld"/>
-            <local:ImageToggleButton x:Name="buttonTestLevelPlace" Source="Resources/Icons/RunGameAtLocation.png" Command="cmd:EditorCommands.TestWorldFromLocation"/>
+            <local:ImageButton x:Name="buttonTestLevel" Source="Resources/Icons/RunGame.png" ToolTip="Test World (F5)" Command="cmd:EditorCommands.TestWorld"/>
+            <local:ImageToggleButton x:Name="buttonTestLevelPlace" Source="Resources/Icons/RunGameAtLocation.png" ToolTip="Test World From Location (Shift+F5)" Command="cmd:EditorCommands.TestWorldFromLocation"/>
             <Separator/>
-            <local:ImageButton x:Name="buttonAddLevel" Source="Resources/Icons/LevelAdd.png" Command="cmd:EditorCommands.AddNewLevel"/>
-            <local:ImageButton x:Name="buttonAddDungeon" Source="Resources/Icons/DungeonAdd.png" Command="cmd:EditorCommands.AddNewDungeon"/>
-            <local:ImageButton x:Name="buttonAddScript" Source="Resources/Icons/ScriptAdd.png" Command="cmd:EditorCommands.AddNewScript"/>
+            <local:ImageButton x:Name="buttonAddLevel" Source="Resources/Icons/LevelAdd.png" ToolTip="Add New Level (Ctrl+Shift+L)" Command="cmd:EditorCommands.AddNewLevel"/>
+            <local:ImageButton x:Name="buttonAddDungeon" Source="Resources/Icons/DungeonAdd.png" ToolTip="Add New Dungeon (Ctrl+Shift+D)" Command="cmd:EditorCommands.AddNewDungeon"/>
+            <local:ImageButton x:Name="buttonAddScript" Source="Resources/Icons/ScriptAdd.png" ToolTip="Add New Script (Ctrl+Shift+X)" Command="cmd:EditorCommands.AddNewScript"/>
             <Separator/>
-            <local:ImageToggleButton x:Name="buttonShowHistory" Source="Resources/Icons/History.png" Click="OnShowHistory" ToolTip="History Window" />
+            <local:ImageToggleButton x:Name="buttonShowHistory" Source="Resources/Icons/History.png" ToolTip="History Window" Click="OnShowHistory" />
         </ToolBar>
         <ToolBar x:Name="toolBar2" DockPanel.Dock="Top">
-            <local:ImageToggleButton x:Name="buttonToolPointer" Source="Resources/Icons/ToolPointer.png" IsChecked="True" Click="OnToolChanged"/>
-            <local:ImageToggleButton x:Name="buttonToolPlace" Source="Resources/Icons/ToolPlace.png" Click="OnToolChanged"/>
-            <local:ImageToggleButton x:Name="buttonToolSquare" Source="Resources/Icons/ToolSquare.png" Click="OnToolChanged"/>
-            <local:ImageToggleButton x:Name="buttonToolFill" Source="Resources/Icons/ToolFill.png" Click="OnToolChanged"/>
-            <local:ImageToggleButton x:Name="buttonToolSelection" Source="Resources/Icons/ToolSelection.png" Click="OnToolChanged"/>
-            <local:ImageToggleButton x:Name="buttonToolEyedropper" Source="Resources/Icons/ToolEyedropper.png" Click="OnToolChanged"/>
+            <local:ImageToggleButton x:Name="buttonToolPointer" Source="Resources/Icons/ToolPointer.png" ToolTip="Pointer Tool (M)" IsChecked="True" Click="OnToolChanged"/>
+            <local:ImageToggleButton x:Name="buttonToolPlace" Source="Resources/Icons/ToolPlace.png" ToolTip="Place Tool (P)" Click="OnToolChanged"/>
+            <local:ImageToggleButton x:Name="buttonToolSquare" Source="Resources/Icons/ToolSquare.png" ToolTip="Square Tool (O)" Click="OnToolChanged"/>
+            <local:ImageToggleButton x:Name="buttonToolFill" Source="Resources/Icons/ToolFill.png" ToolTip="Fill Tool (F)" Click="OnToolChanged"/>
+            <local:ImageToggleButton x:Name="buttonToolSelection" Source="Resources/Icons/ToolSelection.png" ToolTip="Selection Tool (S)" Click="OnToolChanged"/>
+            <local:ImageToggleButton x:Name="buttonToolEyedropper" Source="Resources/Icons/ToolEyedropper.png" ToolTip="Eyedropper Tool (K)" Click="OnToolChanged"/>
             <Separator/>
-            <local:ImageButton x:Name="buttonToolCopy" Source="Resources/Icons/Copy.png" Command="Copy"/>
-            <local:ImageButton x:Name="buttonToolCut" Source="Resources/Icons/Cut.png" Command="Cut"/>
-            <local:ImageButton x:Name="buttonToolPaste" Source="Resources/Icons/Paste.png" Command="Paste"/>
+            <local:ImageButton x:Name="buttonToolCopy" Source="Resources/Icons/Copy.png" ToolTip="Copy (Ctrl+C)" Command="Copy"/>
+            <local:ImageButton x:Name="buttonToolCut" Source="Resources/Icons/Cut.png" ToolTip="Cut (Ctrl+X)" Command="Cut"/>
+            <local:ImageButton x:Name="buttonToolPaste" Source="Resources/Icons/Paste.png" ToolTip="Cut (Ctrl+V)" Command="Paste"/>
             <Separator/>
             <ComboBox x:Name="comboBoxLayers" SelectedIndex="0" Width="75" SelectionChanged="OnLayerChanged">
                 <ComboBoxItem Content="Layer 1"/>
@@ -151,11 +152,11 @@
                     <MenuItem x:Name="dropDownItemShowEvents" Header="Show Events" IsCheckable="True" Click="OnShowEventsChecked"/>
                 </MenuItem>
             </local:DropDownButton>
-            <local:ImageToggleButton x:Name="buttonShowGrid" Source="Resources/Icons/Grid.png" Command="cmd:EditorCommands.ShowGrid"/>
-            <local:ImageToggleButton x:Name="buttonPlayAnimations" Source="Resources/Icons/ShowAnimations.png" Command="cmd:EditorCommands.PlayAnimations"/>
+            <local:ImageToggleButton x:Name="buttonShowGrid" Source="Resources/Icons/Grid.png" ToolTip="Show Grid (Ctrl+G)" Command="cmd:EditorCommands.ShowGrid"/>
+            <local:ImageToggleButton x:Name="buttonPlayAnimations" Source="Resources/Icons/ShowAnimations.png" ToolTip="Play Animations (Ctrl+P)" Command="cmd:EditorCommands.PlayAnimations"/>
             <Separator/>
-            <local:ImageButton x:Name="buttonResizeLevel" Source="/Resources/Icons/LevelResize.png" ToolTip="Resize level" Command="cmd:EditorCommands.ResizeLevel"/>
-            <local:ImageButton x:Name="buttonShiftLevel" Source="/Resources/Icons/LevelShift.png" ToolTip="Shift level by room" Command="cmd:EditorCommands.ShiftLevel"/>
+            <local:ImageButton x:Name="buttonResizeLevel" Source="/Resources/Icons/LevelResize.png" ToolTip="Resize Level" Command="cmd:EditorCommands.ResizeLevel"/>
+            <local:ImageButton x:Name="buttonShiftLevel" Source="/Resources/Icons/LevelShift.png" ToolTip="Shift Level by Room" Command="cmd:EditorCommands.ShiftLevel"/>
         </ToolBar>
         <StatusBar x:Name="statusBar" DockPanel.Dock="Bottom" Background="#FFF0F0F0">
             <StatusBarItem x:Name="statusRoomLocation" Content="Room Location"/>

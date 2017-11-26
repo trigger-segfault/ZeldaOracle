@@ -99,7 +99,7 @@ namespace ZeldaEditor.Control {
 		public void OnPropertyChange(object sender, PropertyValueChangedEventArgs e) {
 			CustomPropertyDescriptor propertyDescriptor = e.ChangedItem.PropertyDescriptor as CustomPropertyDescriptor;
 			Property property = propertyDescriptor.Property;
-			PropertyDocumentation propertyDoc = property.GetRootDocumentation();
+			PropertyDocumentation propertyDoc = property.Documentation;
 			
 			// Handle special property editor-types.
 			if (propertyDoc != null && propertyDoc.EditorType == "script") {

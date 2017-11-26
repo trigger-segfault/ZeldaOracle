@@ -237,5 +237,13 @@ namespace ZeldaEditor.Windows {
 			editor.IsModified = false;
 			saved = true;
 		}
+
+		private void OnRedoCommand(object sender, ExecutedRoutedEventArgs e) {
+			editor.Redo();
+		}
+
+		private void CanExecuteRedo(object sender, CanExecuteRoutedEventArgs e) {
+			e.CanExecute = editor.CanRedo;
+		}
 	}
 }

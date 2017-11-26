@@ -50,8 +50,8 @@ namespace ZeldaEditor.PropertiesEditor {
 
 		public void AddProperties(Properties properties) {
 			foreach (Property property in  properties.GetAllProperties()) {
-				PropertyDocumentation doc = property.GetDocumentation();
-				if (doc == null || !doc.IsHidden)
+				PropertyDocumentation doc = property.Documentation;
+				if (doc == null || !doc.IsBrowsable)
 					propertyList.Add(property);
 			}
 		}
@@ -101,8 +101,8 @@ namespace ZeldaEditor.PropertiesEditor {
 					Property property	= propertyList[i];
 					string name			= property.Name;
 					UITypeEditor editor = null;
-					PropertyDocumentation documentation = property.GetDocumentation();
-					
+					PropertyDocumentation documentation = property.Documentation;
+
 					// Find the editor.
 					if (documentation != null)
 						editor = obj.PropertyGrid.GetUITypeEditor(documentation.EditorType);

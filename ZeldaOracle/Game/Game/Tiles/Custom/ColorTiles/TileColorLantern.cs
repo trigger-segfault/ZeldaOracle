@@ -64,7 +64,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 				// Fire the color change event.
 				if (prevColor != value) {
-					GameControl.FireEvent(this, "event_color_change", this, (ZeldaAPI.Color) value);
+					GameControl.FireEvent(this, "color_change", this, (ZeldaAPI.Color) value);
 				}
 
 				if (value == PuzzleColor.Red)

@@ -7,6 +7,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:avalon="clr-namespace:ICSharpCode.AvalonEdit;assembly=ICSharpCode.AvalonEdit"
         xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:cmd="clr-namespace:ZeldaEditor"
         mc:Ignorable="d"
         Title="Text Message Editor" Width="491" Height="300" Background="#FFF0F0F0" WindowStartupLocation="CenterOwner" ResizeMode="CanResizeWithGrip" SnapsToDevicePixels="True" UseLayoutRounding="True" Icon="/ZeldaEditor;component/Resources/Icons/Sign.png" ShowInTaskbar="False">
     <Window.Resources>
@@ -18,6 +19,7 @@
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="Save" CanExecute="CanSaveTextMessage" Executed="SaveTextMessage"/>
+        <CommandBinding Command="cmd:EditorCommands.RedoSecondary" CanExecute="CanExecuteRedo" Executed="OnRedoCommand"/>
     </Window.CommandBindings>
     <DockPanel x:Name="dockPanel">
         <ToolBar DockPanel.Dock="Top">

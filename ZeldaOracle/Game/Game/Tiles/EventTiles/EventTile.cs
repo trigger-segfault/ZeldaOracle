@@ -13,7 +13,7 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles.EventTiles {
 
-	public class EventTile : IPropertyObject {
+	public class EventTile : IEventObject {
 		
 		private RoomControl				roomControl;
 		private	EventTileDataInstance	eventData;
@@ -139,6 +139,10 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		// Get the properties for this event.
 		public Properties Properties {
 			get { return properties; }
+		}
+
+		public EventCollection Events {
+			get { return eventData.Events; }
 		}
 	}
 }

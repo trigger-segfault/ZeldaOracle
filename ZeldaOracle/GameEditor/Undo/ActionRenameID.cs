@@ -36,7 +36,8 @@ namespace ZeldaEditor.Undo {
 			}
 			else if (idObject is Script) {
 				editorControl.World.RenameScript((Script)idObject, oldID);
-				editorControl.EditorWindow.TreeViewWorld.RefreshScripts();
+				editorControl.EditorWindow.TreeViewWorld.RefreshScripts(true, false);
+				editorControl.ScriptRenamed(newID, oldID);
 			}
 			else if (idObject is World) {
 				editorControl.World.ID = oldID;
@@ -55,7 +56,8 @@ namespace ZeldaEditor.Undo {
 			}
 			else if (idObject is Script) {
 				editorControl.World.RenameScript((Script)idObject, newID);
-				editorControl.EditorWindow.TreeViewWorld.RefreshScripts();
+				editorControl.EditorWindow.TreeViewWorld.RefreshScripts(true, false);
+				editorControl.ScriptRenamed(oldID, newID);
 			}
 			else if (idObject is World) {
 				editorControl.World.ID = newID;

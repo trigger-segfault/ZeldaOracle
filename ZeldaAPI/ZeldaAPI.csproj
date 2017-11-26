@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomScriptBase.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="TileEnums.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Monster.cs" />

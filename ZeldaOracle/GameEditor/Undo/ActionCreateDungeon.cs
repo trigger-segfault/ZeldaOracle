@@ -15,7 +15,7 @@ namespace ZeldaEditor.Undo {
 		private string name;
 
 		public ActionCreateDungeon(string id, string name) {
-			ActionName = "Create Dungeon";
+			ActionName = "Create '" + id + "' Dungeon";
 			ActionIcon = EditorImages.DungeonAdd;
 			this.id = id;
 			this.name = name;

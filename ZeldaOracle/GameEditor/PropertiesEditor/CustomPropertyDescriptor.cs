@@ -18,9 +18,9 @@ using ZeldaEditor.Control;
 namespace ZeldaEditor.PropertiesEditor {
 	
 	public class CustomPropertyDescriptor : PropertyDescriptor {
+		private EditorControl           editorControl;
 		private Properties				modifiedProperties;
 		private string					propertyName;
-		private PropertyDocumentation	documentation;
 		private IPropertyObject         propertyObject;
 
 
@@ -28,17 +28,17 @@ namespace ZeldaEditor.PropertiesEditor {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public CustomPropertyDescriptor(IPropertyObject propertyObject, PropertyDocumentation documentation, string propertyName, Properties modifiedProperties, Attribute[] attributes) :
-			base(documentation == null ? propertyName : documentation.ReadableName, attributes)
+		public CustomPropertyDescriptor(EditorControl editorControl, IPropertyObject propertyObject, string propertyName, Properties modifiedProperties, Attribute[] attributes) :
+			base(modifiedProperties.GetProperty(propertyName, true).FinalReadableName, attributes)
 		{
+			this.editorControl      = editorControl;
 			this.propertyObject     = propertyObject;
-			this.documentation		= documentation;
 			this.propertyName		= propertyName;
 			this.modifiedProperties	= modifiedProperties;
 		}
 
-		public CustomPropertyDescriptor(IPropertyObject propertyObject, PropertyDocumentation documentation, string propertyName, Properties modifiedProperties) :
-			this(propertyObject, documentation, propertyName, modifiedProperties, null) {
+		public CustomPropertyDescriptor(EditorControl editorControl, IPropertyObject propertyObject, string propertyName, Properties modifiedProperties) :
+			this(editorControl, propertyObject, propertyName, modifiedProperties, null) {
 		}
 
 
@@ -91,20 +91,12 @@ namespace ZeldaEditor.PropertiesEditor {
 			
 		// Is the property read-only?
 		public override bool IsReadOnly {
-			get {
-				if (documentation != null)
-					return !documentation.IsEditable;
-				return false;
-			}
+			get { return Property.IsReadOnly; }
 		}
 			
 		// Should the property be listed in the property grid?
 		public override bool IsBrowsable {
-			get {
-				if (documentation != null)
-					return !documentation.IsHidden;
-				return true;
-			}
+			get { return Property.IsBrowsable; }
 		}
 
 		public override Type ComponentType {
@@ -113,29 +105,17 @@ namespace ZeldaEditor.PropertiesEditor {
 
 		// Get the category this property should be listed under.
 		public override string Category {
-			get {
-				if (documentation != null)
-					return documentation.Category;
-				return "Misc";
-			}
+			get { return Property.Category; }
 		}
 
 		// Get the description for the property.
 		public override string Description {
-			get {
-				if (documentation != null)
-					return documentation.Description;
-				return "";
-			}
+			get { return Property.Description; }
 		}
 
 		// Get the display name for the property.
 		public override string Name {
-			get {
-				if (documentation != null)
-					return documentation.ReadableName;
-				return propertyName;
-			}
+			get { return Property.FinalReadableName; }
 		}
 			
 		public override Type PropertyType {
@@ -152,11 +132,15 @@ namespace ZeldaEditor.PropertiesEditor {
 		}
 
 		public PropertyDocumentation Documentation {
-			get { return documentation; }
+			get { return Property.Documentation; }
 		}
 
 		public IPropertyObject PropertyObject {
 			get { return propertyObject; }
+		}
+
+		public EditorControl EditorControl {
+			get { return editorControl; }
 		}
 	}
 }

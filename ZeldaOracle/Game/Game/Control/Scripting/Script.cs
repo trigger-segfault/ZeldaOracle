@@ -21,8 +21,6 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		public List<ScriptCompileError> Errors { get; set; }
 		public List<ScriptCompileError> Warnings { get; set; }
 		public byte[] RawAssembly { get; set; }
-		public Assembly Assembly { get; set; }
-		public string FilePath { get; set; }
 
 	}
 
@@ -71,7 +69,6 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		private List<ScriptCompileError> errors;
 		private List<ScriptCompileError> warnings;
 		private List<ScriptParameter> parameters; // Parameters that are passed into the script.
-		private List<WeakReference> references;
 
 		//private MethodInfo method;
 
@@ -87,7 +84,6 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			errors				= new List<ScriptCompileError>();
 			warnings			= new List<ScriptCompileError>();
 			parameters			= new List<ScriptParameter>();
-			references          = new List<WeakReference>();
 		}
 		
 		// Copy constructor.
@@ -95,51 +91,16 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			id	    			= copy.id;
 			code				= copy.code;
 			isHidden			= copy.isHidden;
+			// Paremters are never modified so they can be referenced in multiple places
+			parameters          = copy.parameters;
 			errors				= new List<ScriptCompileError>();
 			warnings			= new List<ScriptCompileError>();
-			references          = new List<WeakReference>();
 
 			// Copy errors and warnings.
 			for (int i = 0; i < copy.errors.Count; i++)
 				errors.Add(new ScriptCompileError(copy.errors[i]));
 			for (int i = 0; i < copy.warnings.Count; i++)
 				warnings.Add(new ScriptCompileError(copy.warnings[i]));
-		}
-
-		//-----------------------------------------------------------------------------
-		// References
-		//-----------------------------------------------------------------------------
-
-		public void AddReference(object obj) {
-			var reference = references.Find(r => (r.Target == obj));
-			if (reference == null && obj != null) {
-				references.Add(new WeakReference(obj));
-			}
-		}
-
-		public void RemoveReference(object obj) {
-			int index = references.FindIndex(r => (r.Target == obj));
-			if (index != -1 && obj != null) {
-				references.RemoveAt(index);
-			}
-		}
-
-		public int UpdateReferences() {
-			int count;
-			for (count = 0; count < references.Count; count++) {
-				if (!references[count].IsAlive) {
-					references.RemoveAt(count);
-					count--;
-				}
-			}
-			return count;
-		}
-
-		public IEnumerable GetReferences() {
-			for (int i = 0; i < references.Count; i++) {
-				if (references[i].IsAlive)
-					yield return references[i];
-			}
 		}
 
 		//-----------------------------------------------------------------------------
@@ -176,20 +137,8 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			set { parameters = value; }
 		}
 
-		public List<WeakReference> References {
-			get { return references; }
-			set { references = value; }
-		}
-
-		public int ReferenceCount {
-			get {
-				int count = 0;
-				for (int i = 0; i < references.Count; i++) {
-					if (references[i].IsAlive)
-						count++;
-				}
-				return count;
-			}
+		public int ParameterCount {
+			get { return parameters.Count; }
 		}
 
 		public bool HasErrors {

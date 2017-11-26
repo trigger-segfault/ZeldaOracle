@@ -22,6 +22,11 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors {
 	public abstract class TypeEditor<T> : ITypeEditor where T : FrameworkElement, new() {
 		#region Properties
 
+		protected PropertyItem PropertyItem {
+			get;
+			set;
+		}
+
 		protected T Editor {
 			get;
 			set;
@@ -36,6 +41,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors {
 		#region ITypeEditor Members
 
 		public virtual FrameworkElement ResolveEditor(PropertyItem propertyItem) {
+			PropertyItem = propertyItem;
 			Editor = this.CreateEditor();
 			SetValueDependencyProperty();
 			SetControlProperties(propertyItem);

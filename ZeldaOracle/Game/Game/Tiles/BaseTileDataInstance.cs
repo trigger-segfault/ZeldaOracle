@@ -9,12 +9,13 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles {
-	public abstract class BaseTileDataInstance : IPropertyObject, IEventObject, IIDObject {
+	public abstract class BaseTileDataInstance : IEventObject, IIDObject {
 
 		protected Room				room;
 		protected BaseTileData		tileData;
 		protected Properties		properties;			// The default properties for the tile.
-		protected Properties		modifiedProperties;	// The properties that tiles are spawned with.
+		protected Properties		modifiedProperties; // The properties that tiles are spawned with.
+		protected EventCollection   events;
 		
 
 		//-----------------------------------------------------------------------------
@@ -22,34 +23,34 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 		
 		public BaseTileDataInstance() {
-			room				= null;
-			tileData			= null;
-			properties			= new Properties(this);
-			modifiedProperties	= new Properties(this);
+			this.room				= null;
+			this.tileData			= null;
+			this.properties							= new Properties(this);
+			this.modifiedProperties					= new Properties(this);
+			this.events								= new EventCollection(this);
 		}
 
 		public BaseTileDataInstance(BaseTileData tileData) {
 			this.room		= null;
 			this.tileData	= tileData;
-			this.properties	= new Properties(this);
-			this.properties.BaseProperties = tileData.Properties;
-			this.modifiedProperties	= new Properties(this);
-			this.modifiedProperties.BaseProperties = tileData.Properties;
+			this.properties							= new Properties(this);
+			this.properties.BaseProperties			= tileData.Properties;
+			this.modifiedProperties					= new Properties(this);
+			this.modifiedProperties.BaseProperties	= tileData.Properties;
+			this.events								= new EventCollection(tileData.Events, this);
+			this.events.EventObject					= this;
 		}
 
 		public virtual void Clone(BaseTileDataInstance copy) {
 			this.room		= copy.Room;
 			this.tileData	= copy.tileData;
-			this.properties	= new Properties(this);
-			this.properties.BaseProperties = tileData.Properties;
-			this.modifiedProperties	= new Properties(this);
-			this.modifiedProperties.BaseProperties = tileData.Properties;
+			this.properties							= new Properties(this);
+			this.properties.BaseProperties			= tileData.Properties;
+			this.modifiedProperties					= new Properties(this);
+			this.modifiedProperties.BaseProperties	= tileData.Properties;
 			this.properties.SetAll(copy.properties);
-
-			foreach (Property property in modifiedProperties.GetProperties()) {
-				if (property.IsDefinedScript)
-					copy.Room.Level.World.ScriptManager.AddReference(property.StringValue, this);
-			}
+			this.events								= new EventCollection(copy.Events, this);
+			this.events.EventObject					= this;
 		}
 
 
@@ -96,10 +97,14 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return tileData; }
 			set {
 				tileData = value;
-				if (tileData == null)
+				if (tileData == null) {
 					properties.BaseProperties = null;
-				else
+					events = new EventCollection(this);
+				}
+				else {
 					properties.BaseProperties = tileData.Properties;
+					events = new EventCollection(value.Events, this);
+				}
 			}
 		}
 		
@@ -115,8 +120,8 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return modifiedProperties; }
 		}
 
-		public ObjectEventCollection Events {
-			get { return tileData.Events; }
+		public EventCollection Events {
+			get { return events; }
 		}
 
 		public Properties BaseProperties {
@@ -141,6 +146,10 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public bool HasModifiedProperties {
 			get { return properties.HasModifiedProperties; }
+		}
+
+		public bool HasDefinedEvents {
+			get { return events.HasDefinedEvents; }
 		}
 
 		public bool HasModifiedModifiedProperties {

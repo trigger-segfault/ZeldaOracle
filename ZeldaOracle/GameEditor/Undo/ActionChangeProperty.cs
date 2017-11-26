@@ -21,7 +21,7 @@ namespace ZeldaEditor.Undo {
 		public ActionChangeProperty(IPropertyObject propertyObject, Property property, object oldValue, object newValue) {
 			this.propertyObject = propertyObject;
 			this.propertyName = property.Name;
-			this.isEvent = property.IsScript;
+			this.isEvent = false;
 			string realName = property.Name;
 			if (property.HasDocumentation && !string.IsNullOrWhiteSpace(property.Documentation.ReadableName))
 				realName = property.Documentation.ReadableName;

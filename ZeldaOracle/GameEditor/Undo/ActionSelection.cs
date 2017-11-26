@@ -66,8 +66,6 @@ namespace ZeldaEditor.Undo {
 			editorControl.OpenLevel(level);
 			switch (mode) {
 			case SelectionModes.Move:
-				//UpdateTileGridLocations();
-				//UpdateOverwrittenTileGridLocations();
 				level.PlaceTileGrid(overwrittenTileGrid, (LevelTileCoord)end);
 				level.PlaceTileGrid(tileGrid, (LevelTileCoord)start);
 				break;
@@ -76,17 +74,16 @@ namespace ZeldaEditor.Undo {
 				level.PlaceTileGrid(tileGrid, (LevelTileCoord)start);
 				break;
 			case SelectionModes.Duplicate:
-				//UpdateOverwrittenTileGridLocations();
 				level.PlaceTileGrid(overwrittenTileGrid, (LevelTileCoord)end);
 				break;
 			}
+			editorControl.NeedsNewEventCache = true;
 		}
 
 		public override void Redo(EditorControl editorControl) {
 			editorControl.OpenLevel(level);
 			switch (mode) {
 			case SelectionModes.Move:
-				//UpdateTileGridLocations();
 				level.RemoveArea(new Rectangle2I(start, tileGrid.Size));
 				level.PlaceTileGrid(tileGrid, (LevelTileCoord)end);
 				break;
@@ -94,33 +91,10 @@ namespace ZeldaEditor.Undo {
 				level.RemoveArea(new Rectangle2I(start, tileGrid.Size));
 				break;
 			case SelectionModes.Duplicate:
-				//UpdateTileGridLocations();
 				level.PlaceTileGrid(tileGrid, (LevelTileCoord)end);
 				break;
 			}
-		}
-
-		private void UpdateTileGridLocations() {
-			for (int x = 0; x < tileGrid.Width; x++) {
-				for (int y = 0; y < tileGrid.Height; y++) {
-					for (int layer = 0; layer < tileGrid.LayerCount; layer++) {
-						TileDataInstance tile = tileGrid.GetTile(x, y, layer);
-						if (tile != null)
-							tile.Location = new Point2I(x, y);
-					}
-				}
-			}
-		}
-		private void UpdateOverwrittenTileGridLocations() {
-			for (int x = 0; x < overwrittenTileGrid.Width; x++) {
-				for (int y = 0; y < overwrittenTileGrid.Height; y++) {
-					for (int layer = 0; layer < overwrittenTileGrid.LayerCount; layer++) {
-						TileDataInstance tile = overwrittenTileGrid.GetTile(x, y, layer);
-						if (tile != null)
-							tile.Location = new Point2I(x, y);
-					}
-				}
-			}
+			editorControl.NeedsNewEventCache = true;
 		}
 
 		public override bool IgnoreAction {

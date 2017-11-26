@@ -12,7 +12,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Control.Scripting;
 
 namespace ZeldaOracle.Game.Worlds {
-	public class Room : IPropertyObject, IPropertyObjectContainer, IEventObject {
+	public class Room : IEventObjectContainer {
 		
 		private Level							level;		// The level this room is in.
 		private Point2I							location;	// Location within the level.
@@ -20,7 +20,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private List<EventTileDataInstance>		eventData;
 		//private Zone							zone;
 		private Properties						properties;
-		private ObjectEventCollection			events;
+		private EventCollection					events;
 
 
 		//-----------------------------------------------------------------------------
@@ -36,9 +36,8 @@ namespace ZeldaOracle.Game.Worlds {
 			this.tileData	= new TileDataInstance[level.RoomSize.X, level.RoomSize.Y, level.RoomLayerCount];
 			this.eventData	= new List<EventTileDataInstance>();
 			//this.zone		= zone;
-			this.events		= new ObjectEventCollection();
-			this.properties	= new Properties();
-			this.properties.PropertyObject = this;
+			this.events		= new EventCollection(this);
+			this.properties	= new Properties(this);
 			this.properties.BaseProperties = new Properties();
 
 			properties.BaseProperties.Set("id", "")
@@ -55,13 +54,13 @@ namespace ZeldaOracle.Game.Worlds {
 			properties.BaseProperties.Set("boss_room", false)
 				.SetDocumentation("Is Boss Room", "", "", "Dungeon", "True if this room is shown as the boss room in the dungeon map.");
 
-			events.AddEvent("event_room_start", "Room Start", "Occurs when the room begins.");
-			properties.BaseProperties.Set("event_room_start", "")
-				.SetDocumentation("Room Start", "script", "", "Events", "Occurs when the room begins.");
+			events.AddEvent("room_start", "Room Start", "Transition", "Occurs when the room begins.");
+			//properties.BaseProperties.Set("event_room_start", "")
+			//	.SetDocumentation("Room Start", "script", "", "Events", "Occurs when the room begins.");
 			
-			events.AddEvent("event_all_monsters_dead", "All Monsters Dead", "Occurs when all monsters are dead.");
-			properties.BaseProperties.Set("event_all_monsters_dead", "")
-				.SetDocumentation("All Monsters Dead", "script", "", "Events", "Occurs when all monsters are dead.");
+			events.AddEvent("all_monsters_dead", "All Monsters Dead", "Monster", "Occurs when all monsters are dead.");
+			//properties.BaseProperties.Set("event_all_monsters_dead", "")
+			//	.SetDocumentation("All Monsters Dead", "script", "", "Events", "Occurs when all monsters are dead.");
 			
 			// Room Flags:
 			// - sidescroll ??? could be in Zone
@@ -81,6 +80,22 @@ namespace ZeldaOracle.Game.Worlds {
 		//-----------------------------------------------------------------------------
 
 		public IEnumerable<IPropertyObject> GetPropertyObjects() {
+			yield return this;
+			for (int layer = 0; layer < LayerCount; layer++) {
+				for (int x = 0; x < Width; x++) {
+					for (int y = 0; y < Height; y++) {
+						TileDataInstance tile = tileData[x, y, layer];
+						if (tile != null && tile.IsAtLocation(x, y))
+							yield return tile;
+					}
+				}
+			}
+			foreach (EventTileDataInstance eventTile in eventData) {
+				yield return eventTile;
+			}
+		}
+
+		public IEnumerable<IEventObject> GetEventObjects() {
 			yield return this;
 			for (int layer = 0; layer < LayerCount; layer++) {
 				for (int x = 0; x < Width; x++) {
@@ -366,7 +381,7 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 		
-		public ObjectEventCollection Events {
+		public EventCollection Events {
 			get { return events; }
 		}
 		

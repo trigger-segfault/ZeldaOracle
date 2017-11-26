@@ -71,6 +71,7 @@ namespace ZeldaEditor.Undo {
 					}
 				}
 			}
+			editorControl.NeedsNewEventCache = true;
 		}
 
 		public override void Redo(EditorControl editorControl) {
@@ -84,6 +85,7 @@ namespace ZeldaEditor.Undo {
 					room.CreateTile(placedTile, tileLocation, layer);
 				}
 			}
+			editorControl.NeedsNewEventCache = true;
 		}
 	}
 }

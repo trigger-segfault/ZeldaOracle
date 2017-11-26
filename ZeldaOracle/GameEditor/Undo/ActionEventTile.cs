@@ -40,6 +40,9 @@ namespace ZeldaEditor.Undo {
 			this.placedRoom = room;
 			this.overwrittenEventTiles = new List<EventTileInfo>();
 		}
+		public ActionEventTile(Level level) :
+			this(level, null, null, Point2I.Zero) {
+		}
 
 		public void AddOverwrittenEventTile(EventTileDataInstance eventTile) {
 			overwrittenEventTiles.Add(new EventTileInfo(eventTile));
@@ -49,7 +52,8 @@ namespace ZeldaEditor.Undo {
 			foreach (var eventTileInfo in overwrittenEventTiles) {
 				eventTileInfo.Room.RemoveEventTile(eventTileInfo.EventTile);
 			}
-			placedEventTileInfo = new EventTileInfo(placedRoom.CreateEventTile(placedEventTileData, placedPosition));
+			if (placedEventTileData != null)
+				placedEventTileInfo = new EventTileInfo(placedRoom.CreateEventTile(placedEventTileData, placedPosition));
 		}
 
 		public override void PostExecute(EditorControl editorControl) {
@@ -65,6 +69,7 @@ namespace ZeldaEditor.Undo {
 			}
 			if (placedEventTileInfo.EventTile != null)
 				placedEventTileInfo.Room.RemoveEventTile(placedEventTileInfo.EventTile);
+			editorControl.NeedsNewEventCache = true;
 		}
 
 		public override void Redo(EditorControl editorControl) {
@@ -74,6 +79,7 @@ namespace ZeldaEditor.Undo {
 			}
 			if (placedEventTileInfo.EventTile != null)
 				placedEventTileInfo.Room.AddEventTile(placedEventTileInfo.EventTile);
+			editorControl.NeedsNewEventCache = true;
 		}
 
 		public override bool IgnoreAction { get { return !overwrittenEventTiles.Any() && placedEventTileData == null; } }

@@ -10,7 +10,7 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles.EventTiles {
 	
-	public class EventTileDataInstance : BaseTileDataInstance, IIDObject {
+	public class EventTileDataInstance : BaseTileDataInstance {
 
 		private Point2I			position;
 		private SpriteAnimation	sprite;

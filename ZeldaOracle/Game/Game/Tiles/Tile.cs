@@ -24,7 +24,7 @@ using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 	
-	public class Tile : IPropertyObject, ZeldaAPI.Tile {
+	public class Tile : IEventObject, ZeldaAPI.Tile {
 
 		private Rectangle2I			tileGridArea;
 
@@ -191,9 +191,6 @@ namespace ZeldaOracle.Game.Tiles {
 			Point2I oldLocation = location;
 			RoomControl.MoveTile(this, location + moveDirection, newLayer);
 			offset = -Directions.ToVector(direction) * GameSettings.TILE_SIZE;
-
-			// Fire the OnMove event.
-			GameControl.ExecuteScript(properties.GetString("on_move", ""));
 
 			return true;
 		}
@@ -488,6 +485,10 @@ namespace ZeldaOracle.Game.Tiles {
 						CheckSurfaceTile();
 						if (IsDestroyed)
 							return;
+
+						// Fire the Moved event.
+						GameControl.FireEvent(this, "moved");
+
 						OnCompleteMovement();
 					}
 					else {
@@ -752,7 +753,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public Properties Properties {
 			get { return properties; }
 		}
-		
+
+		public EventCollection Events {
+			get { return tileData.Events; }
+		}
+
 		// Get the original tile data from which this was created.
 		public TileDataInstance TileData {
 			get { return tileData; }

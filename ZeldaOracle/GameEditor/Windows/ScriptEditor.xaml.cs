@@ -30,6 +30,7 @@ namespace ZeldaEditor.Windows {
 		private EditorControl               editorControl;
 		private Script                      script;
 		private bool                        newScript;
+		private bool                        internalScript;
 		private Task<ScriptCompileResult>   compileTask;        // The async task that compiles the code as it changes.
 		private bool                        needsRecompiling;   // Has the code changed and needs to be recompiled?
 		private ScriptCompileError          displayedError;
@@ -52,17 +53,18 @@ namespace ZeldaEditor.Windows {
 			completion = new CSharpCompletion(new ScriptProvider(), assemblies);
 		}
 
-		public ScriptEditor(Script script, EditorControl editorControl, bool newScript) {
+		public ScriptEditor(Script script, EditorControl editorControl, bool newScript, bool internalScript) {
 			InitializeComponent();
 			this.loaded = false;
 			this.script = script;
 			this.editorControl = editorControl;
 			this.newScript = newScript;
+			this.internalScript = internalScript;
 			this.previousName = script.ID;
 			this.previousCode = script.Code;
 			autoCompile = true;
 			compileOnClose = true;
-			needsRecompiling = false;
+			needsRecompiling = true;
 			compileTask = null;
 
 			if (script.HasErrors) {
@@ -76,6 +78,10 @@ namespace ZeldaEditor.Windows {
 				statusError.Visibility = Visibility.Hidden;
 			}
 
+			if (internalScript) {
+				script.ID = "__internal_script__";
+				textBoxName.IsEnabled = false;
+			}
 			Title = "Script Editor: " + script.ID;
 			textBoxName.Text = script.ID;
 
@@ -126,8 +132,15 @@ namespace ZeldaEditor.Windows {
 			}
 		}
 
-		public static bool Show(Window owner, Script script, EditorControl editorControl, bool newScript) {
-			ScriptEditor editor = new ScriptEditor(script, editorControl, newScript);
+		public static bool ShowRegularEditor(Window owner, Script script, EditorControl editorControl, bool newScript) {
+			ScriptEditor editor = new ScriptEditor(script, editorControl, newScript, false);
+			editor.Owner = owner;
+			var result = editor.ShowDialog();
+			return result.HasValue && result.Value;
+		}
+
+		public static bool ShowCustomEditor(Window owner, Script script, EditorControl editorControl, bool newScript) {
+			ScriptEditor editor = new ScriptEditor(script, editorControl, newScript, true);
 			editor.Owner = owner;
 			var result = editor.ShowDialog();
 			return result.HasValue && result.Value;
@@ -151,7 +164,8 @@ namespace ZeldaEditor.Windows {
 				}
 			}
 
-			if (DialogResult.HasValue && DialogResult.Value && editor.IsModified) {
+			if (DialogResult.HasValue && DialogResult.Value) {
+				editorControl.EditorWindow.TreeViewWorld.RefreshScripts(!script.IsHidden, script.IsHidden);
 				editorControl.NeedsRecompiling = true;
 			}
 		}
@@ -159,12 +173,12 @@ namespace ZeldaEditor.Windows {
 		private bool UpdateScript() {
 			string newID = textBoxName.Text;
 			Script containedID = null;
-			if (string.IsNullOrWhiteSpace(newID)) {
+			if (!internalScript && string.IsNullOrWhiteSpace(newID)) {
 				TriggerMessageBox.Show(this, MessageIcon.Warning,
 					"Script ID cannot be empty or whitespace!", "Invalid ID");
 				return false;
 			}
-			else if (script.ID != newID) {
+			else if (!internalScript && script.ID != newID) {
 				if (!ScriptManager.IsValidScriptName(newID)) {
 					TriggerMessageBox.Show(this, MessageIcon.Warning,
 						"Script ID must start with a letter or underscore and can only contain letters, digits, and underscores!", "Invalid Script ID");
@@ -178,10 +192,12 @@ namespace ZeldaEditor.Windows {
 				return false;
 			}
 			else {
-				if (newScript)
-					script.ID = newID;
-				else
-					editorControl.World.RenameScript(script, newID);
+				if (!internalScript) {
+					if (newScript)
+						script.ID = newID;
+					else
+						editorControl.World.RenameScript(script, newID);
+				}
 				previousName = newID;
 				previousCode = editor.Text;
 				script.Code = editor.Text;
@@ -212,7 +228,7 @@ namespace ZeldaEditor.Windows {
 		private void BeginCompilingScript() {
 			script.Code = editor.Text;
 
-			editorControl.CompileScriptAsync(script, OnCompileComplete);
+			editorControl.CompileScriptAsync(script, OnCompileComplete, true);
 
 			//compileTask = ScriptEditorCompiler.CompileScriptAsync(script);
 			needsRecompiling = false;
@@ -254,9 +270,7 @@ namespace ZeldaEditor.Windows {
 					statusError.Visibility = Visibility.Hidden;
 				}
 
-				// Update the world-tree-view's scripts (if there is an error icon for a failed compile).
-				if (!script.IsHidden)
-					editorControl.EditorWindow.TreeViewWorld.RefreshScripts();
+				//if (!script.IsHidden)
 			});
 		}
 
@@ -275,13 +289,23 @@ namespace ZeldaEditor.Windows {
 				result = TriggerMessageBox.Show(this, MessageIcon.Warning, "Are you sure you want to delete this script?", "Delete Script", MessageBoxButton.YesNo);
 
 			if (result == MessageBoxResult.Yes) {
-				if (!newScript) {
+				if (!newScript && !internalScript) {
 					editorControl.World.ScriptManager.RemoveScript(script);
 					script.ID = "";
 				}
-				DialogResult = true;
+				script.Code = "";
+				if (!newScript)
+					DialogResult = true;
 				Close();
 			}
+		}
+
+		private void OnRedoCommand(object sender, ExecutedRoutedEventArgs e) {
+			editor.Redo();
+		}
+
+		private void CanExecuteRedo(object sender, CanExecuteRoutedEventArgs e) {
+			e.CanExecute = editor.CanRedo;
 		}
 	}
 }

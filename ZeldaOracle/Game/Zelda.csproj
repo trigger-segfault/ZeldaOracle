@@ -131,11 +131,14 @@
     <None Include="Common\Debug\DebugMenuItem.cs" />
     <None Include="Common\Debug\RadioButtonMenuItem.cs" />
     <None Include="Common\Debug\ToggleMenuItem.cs" />
+    <Compile Include="Common\Scripting\EventDocumentation.cs" />
+    <Compile Include="Common\Scripting\EventDocumentationCollection.cs" />
     <Compile Include="Common\Scripting\IEventObject.cs" />
+    <Compile Include="Common\Scripting\IEventObjectContainer.cs" />
     <Compile Include="Common\Scripting\IIDObject.cs" />
     <Compile Include="Common\Scripting\IPropertyObjectContainer.cs" />
-    <Compile Include="Common\Scripting\ObjectEvent.cs" />
-    <Compile Include="Common\Scripting\ObjectEventCollection.cs" />
+    <Compile Include="Common\Scripting\Event.cs" />
+    <Compile Include="Common\Scripting\EventCollection.cs" />
     <Compile Include="Common\Scripting\ScriptingAttributes.cs" />
     <Compile Include="Common\Geometry\Align.cs" />
     <Compile Include="Common\Geometry\Angle.cs" />
@@ -185,7 +188,7 @@
     <Compile Include="Common\Scripting\Properties.cs" />
     <Compile Include="Common\Scripting\PropertyDocumentation.cs" />
     <Compile Include="Common\Scripting\Property.cs" />
-    <Compile Include="Common\Scripting\ZeldaObject.cs" />
+    <None Include="Common\Scripting\ZeldaObject.cs" />
     <Compile Include="Common\Scripts\Commands\CommandReferenceParam.cs" />
     <Compile Include="Common\Scripts\CustomReaders\AnimationSR.cs" />
     <Compile Include="Common\Scripts\Commands\CommandParam.cs" />

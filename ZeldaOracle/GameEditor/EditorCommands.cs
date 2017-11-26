@@ -9,7 +9,7 @@ namespace ZeldaEditor {
 	/**<summary>A collection of commands for use in the editor window.</summary>*/
 	public static class EditorCommands {
 		//=========== GENERAL ============
-		#region Gemeral
+		#region General
 
 		/**<summary>The command to exit the editor.</summary>*/
 		public static readonly RoutedUICommand Exit = new RoutedUICommand(
@@ -26,6 +26,12 @@ namespace ZeldaEditor {
 		/**<summary>The command to close the current world.</summary>*/
 		public static readonly RoutedUICommand Close = new RoutedUICommand(
 			"Close", "Close", typeof(EditorCommands));
+
+		/**<summary>The secondary keybinding for the undo command.</summary>*/
+		public static readonly RoutedUICommand RedoSecondary = new RoutedUICommand(
+			"RedoSecondary", "Redo", typeof(EditorCommands),
+			new InputGestureCollection() {
+				new KeyGesture(Key.Z, ModifierKeys.Control | ModifierKeys.Shift) });
 
 		#endregion
 		//============ WORLD =============
@@ -127,7 +133,9 @@ namespace ZeldaEditor {
 
 		/**<summary>The command to toggle animations.</summary>*/
 		public static readonly RoutedUICommand PlayAnimations = new RoutedUICommand(
-			"PlayAnimations", "Play Animations", typeof(EditorCommands));
+			"PlayAnimations", "Play Animations", typeof(EditorCommands),
+			new InputGestureCollection() {
+				new KeyGesture(Key.P, ModifierKeys.Control) });
 
 		/**<summary>The command to cycle a layer up in the level.</summary>*/
 		public static readonly RoutedUICommand CycleLayerUp = new RoutedUICommand(

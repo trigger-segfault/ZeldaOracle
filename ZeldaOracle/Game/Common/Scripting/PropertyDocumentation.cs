@@ -16,8 +16,8 @@ namespace ZeldaOracle.Common.Scripting {
 		private string	editorSubType; // Example: for enums, there needs to be a subtype for which enum.
 		private string	category;
 		private string	description;
-		private bool	isEditable;
-		private bool	isHidden;
+		private bool	isReadOnly;
+		private bool	isBrowsable;
 
 
 		//-----------------------------------------------------------------------------
@@ -25,77 +25,72 @@ namespace ZeldaOracle.Common.Scripting {
 		//-----------------------------------------------------------------------------
 
 		public PropertyDocumentation() {
-			readableName	= "";
-			editorType		= "";
-			editorSubType	= "";
-			category		= "Misc";
-			description		= "";
-			isEditable		= true;
-			isHidden		= false;
+			this.readableName	= "";
+			this.editorType		= "";
+			this.editorSubType	= "";
+			this.category		= "Misc";
+			this.description	= "";
+			this.isReadOnly		= false;
+			this.isBrowsable	= true;
+		}
+
+		public PropertyDocumentation(string readableName, string category, string description) {
+			this.readableName   = readableName;
+			this.editorType     = "";
+			this.editorSubType  = "";
+			this.category       = category;
+			this.description    = description;
+			this.isReadOnly     = false;
+			this.isBrowsable    = true;
 		}
 
 		public PropertyDocumentation(string readableName, string editorType, string editorSubType,
-				string category, string description, bool isEditable, bool isHidden)
+				string category, string description, bool isReadOnly = false, bool isBrowsable = true)
 		{
 			this.readableName	= readableName;
 			this.editorType		= editorType;
 			this.editorSubType	= editorSubType;
 			this.category		= category;
 			this.description	= description;
-			this.isEditable		= isEditable;
-			this.isHidden		= isHidden;
+			this.isReadOnly		= isReadOnly;
+			this.isBrowsable	= isBrowsable;
 		}
-
-		public PropertyDocumentation(PropertyDocumentation copy) {
-			readableName	= copy.readableName;
-			editorType		= copy.editorType;
-			editorSubType	= copy.editorSubType;
-			category		= copy.category;
-			description		= copy.description;
-			isEditable		= copy.isEditable;
-			isHidden		= copy.isHidden;
-		}
-
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
+		
+		/**<summary>Gets the readable name of the property.</summary>*/
 		public string ReadableName {
 			get { return readableName; }
-			set { readableName = value; }
 		}
-
+		/**<summary>Gets the editor type of the property.</summary>*/
 		public string EditorType {
 			get { return editorType; }
-			set { editorType = value; }
 		}
-
+		/**<summary>Gets the editor subtype used for enum and enum_flags editor types.</summary>*/
 		public string EditorSubType {
 			get { return editorSubType; }
-			set { editorSubType = value; }
 		}
-
+		/**<summary>Gets the category of the property.</summary>*/
 		public string Category {
-			get { return category; }
-			set { category = value; }
+			get {
+				if (string.IsNullOrWhiteSpace(category))
+					return "Misc";
+				return category;
+			}
 		}
-
+		/**<summary>Gets the description of what the property does.</summary>*/
 		public string Description {
 			get { return description; }
-			set { description = value; }
 		}
-		
-		// Can the property be edited using the property editor?
-		public bool IsEditable {
-			get { return isEditable; }
-			set { isEditable = value; }
+		/**<summary>Can the property be edited using the property editor?</summary>*/
+		public bool IsReadOnly {
+			get { return isReadOnly; }
 		}
-
-		// Is the property not shown in the property editor?
-		public bool IsHidden {
-			get { return isHidden; }
-			set { isHidden = value; }
+		/**<summary>Is the property not shown in the property editor?</summary>*/
+		public bool IsBrowsable {
+			get { return isBrowsable; }
 		}
 	}
 }

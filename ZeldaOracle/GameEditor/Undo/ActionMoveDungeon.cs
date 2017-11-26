@@ -15,7 +15,7 @@ namespace ZeldaEditor.Undo {
 		private int distance;
 
 		public ActionMoveDungeon(Dungeon dungeon, int distance) {
-			ActionName = "Move Dungeon";
+			ActionName = "Move '" + dungeon.ID + "' Dungeon";
 			ActionIcon = (distance < 0 ? EditorImages.MoveUp : EditorImages.MoveDown);
 			this.dungeon = dungeon;
 			this.distance = distance;

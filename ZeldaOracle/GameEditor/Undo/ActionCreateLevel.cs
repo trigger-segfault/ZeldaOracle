@@ -18,7 +18,7 @@ namespace ZeldaEditor.Undo {
 		private Zone zone;
 
 		public ActionCreateLevel(string id, Point2I dimensions, int layerCount, Point2I roomSize, Zone zone) {
-			ActionName = "Create Level";
+			ActionName = "Create '" + id + "' Level";
 			ActionIcon = EditorImages.LevelAdd;
 			this.id = id;
 			this.dimensions = dimensions;

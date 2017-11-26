@@ -50,6 +50,7 @@ namespace ZeldaEditor.Undo {
 				Room room = level.GetRoomAt(roomLocation);
 				room.PlaceTile(pair.Value, tileLocation, layer);
 			}
+			editorControl.NeedsNewEventCache = true;
 		}
 
 		public override void Redo(EditorControl editorControl) {
@@ -60,6 +61,7 @@ namespace ZeldaEditor.Undo {
 				Room room = level.GetRoomAt(roomLocation);
 				room.CreateTile(placedTile, tileLocation, layer);
 			}
+			editorControl.NeedsNewEventCache = true;
 		}
 
 		public override bool IgnoreAction { get { return !overwrittenTiles.Any(); } }

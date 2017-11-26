@@ -36,8 +36,8 @@ EVENTTILE color_tile_puzzle;
 	TYPE		EventColorTilePuzzle;
 	SPRITE		event_tile_color_tile_puzzle;
 	PROPERTIES	(boolean, solve_once, false, "Solve Once", "", "Puzzle", "Can the puzzle only be solved once and not unsolved?");
-	EVENT		solved, "Solved", "Occurs when the puzzle is solved.";
-	EVENT		unsolve, "Unsolve", "Occurs when the puzzle is unsolved (is no longer considered solved).";
+	EVENT		solved, "Solved", "Puzzle", "Occurs when the puzzle is solved.";
+	EVENT		unsolve, "Unsolve", "Puzzle", "Occurs when the puzzle is unsolved (is no longer considered solved).";
 END;
 
 
@@ -53,7 +53,7 @@ EVENTTILE monster;
 				(string,  monster_type, MonsterOctorok, "Monster Type", "", "Monster", "The type of monster."),
 				(boolean, dead, false);
 
-	EVENT		event_die, "Die", "Occurs when the monster dies.", (Monster, monster);
+	EVENT		die, "Die", "Monster", "Occurs when the monster dies.", (Monster, monster);
 END;
 
 MONSTER monster_octorok_red,			"monster_octorok",				MonsterOctorok,			red;	END;

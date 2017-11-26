@@ -15,7 +15,7 @@ namespace ZeldaOracle.Game.Tiles {
 		protected Tileset tileset;
 		protected Point2I sheetLocation;	// TODO: remove this, maybe?
 		protected Properties properties;
-		protected ObjectEventCollection events;
+		protected EventDocumentationCollection events;
 		private string name;
 
 		
@@ -29,22 +29,22 @@ namespace ZeldaOracle.Game.Tiles {
 			tileset			= null;
 			sheetLocation	= Point2I.Zero;
 			properties		= new Properties(this);
-			events			= new ObjectEventCollection();
+			events			= new EventDocumentationCollection();
 
-			properties.Set("id", "");
-			properties.SetDocumentation("id", "ID", "", "", "General",
+			properties.Set("id", "")
+				.SetDocumentation("ID", "General",
 				"The id used to refer to this tile.");
 
-			properties.Set("enabled", true);
-			properties.SetDocumentation("enabled", "Enabled", "", "", "General",
+			properties.Set("enabled", true)
+				.SetDocumentation("Enabled", "General",
 				"True if the tile is spawned upon entering the room.");
 
-			properties.Set("sprite_index", 0);
-			properties.SetDocumentation("sprite_index", "Sprite Index", "sprite_index", "", "Internal",
+			properties.Set("sprite_index", 0)
+				.SetDocumentation("Sprite Index", "sprite_index", "", "Internal",
 				"The current sprite in the sprite list to draw.");
 
-			properties.Set("substrip_index", 0);
-			properties.SetDocumentation("substrip_index", "Animation Substrip Index", "", "", "Internal",
+			properties.Set("substrip_index", 0)
+				.SetDocumentation("Animation Substrip Index", "", "", "Internal",
 				"The index of the substrip for dynamic animations.", true, true);
 		}
 
@@ -52,13 +52,15 @@ namespace ZeldaOracle.Game.Tiles {
 			type				= copy.type;
 			tileset				= copy.tileset;
 			sheetLocation		= copy.sheetLocation;
-			properties			= new Properties();
+			properties			= new Properties(this);
 			properties.SetAll(copy.properties);
+			events              = new EventDocumentationCollection(copy.events);
 		}
 
 		public virtual void Clone(BaseTileData copy) {
 			type		= copy.type;
 			properties	= new Properties(copy.properties);
+			events		= new EventDocumentationCollection(copy.events);
 			//properties.SetAll(copy.properties);
 		}
 		
@@ -110,7 +112,7 @@ namespace ZeldaOracle.Game.Tiles {
 			set { properties = value; }
 		}
 
-		public ObjectEventCollection Events {
+		public EventDocumentationCollection Events {
 			get { return events; }
 		}
 

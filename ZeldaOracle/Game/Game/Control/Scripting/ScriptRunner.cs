@@ -60,7 +60,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 			// Find the script method infos.
 			foreach (string scriptName in world.Scripts.Keys) {
-				scriptMethods[scriptName] = type.GetMethod("RunScript_" + scriptName);
+				scriptMethods[scriptName] = type.GetMethod(scriptName);
 			}
 
 			return true;

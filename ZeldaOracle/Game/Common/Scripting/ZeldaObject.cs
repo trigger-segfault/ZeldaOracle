@@ -9,12 +9,12 @@ namespace ZeldaOracle.Common.Scripting {
 	// It's supposed to serve as a base class for property objects.
 	public class ZeldaObject {
 		private Properties properties;
-		private ObjectEventCollection events;
+		private EventCollection events;
 
 
 		public ZeldaObject() {
 			properties = new Properties();
-			events = new ObjectEventCollection();
+			events = new EventCollection();
 		}
 
 
@@ -23,7 +23,7 @@ namespace ZeldaOracle.Common.Scripting {
 			set { properties = value; }
 		}
 		
-		public ObjectEventCollection Events {
+		public EventCollection Events {
 			get { return events; }
 			set { events = value; }
 		}

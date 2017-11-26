@@ -17,7 +17,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 	public class TilePullHandle : Tile, ZeldaAPI.PullHandle {
 
-		private float extendLength;
+		private float extendDistance;
 		private float maxExtendLength;
 		private int direction;
 		private bool isBeingPulled;
@@ -42,22 +42,28 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public void Extend(float amount) {
 			bool wasFullyExtended = IsFullyExtended;
-			SetLength(extendLength + amount);
-			if (!wasFullyExtended && IsFullyExtended)
-				GameControl.FireEvent(this, "event_fully_extend", this);
+			SetLength(extendDistance + amount);
+			if (!wasFullyExtended) {
+				GameControl.FireEvent(this, "extending", this);
+				if (IsFullyExtended)
+					GameControl.FireEvent(this, "fully_extend", this);
+			}
 		}
 
 		public void Retract(float amount) {
 			bool wasFullyRetracted = IsFullyRetracted;
-			SetLength(extendLength - amount);
-			if (!wasFullyRetracted && IsFullyRetracted)
-				GameControl.FireEvent(this, "event_fully_retract", this);
+			SetLength(extendDistance - amount);
+			if (!wasFullyRetracted) {
+				GameControl.FireEvent(this, "retracting", this);
+				if (IsFullyRetracted)
+					GameControl.FireEvent(this, "fully_retract", this);
+			}
 		}
 
 		private void SetLength(float length) {
-			extendLength = GMath.Clamp(length, 0.0f, maxExtendLength);
+			extendDistance = GMath.Clamp(length, 0.0f, maxExtendLength);
 			Offset = Directions.ToVector(direction) *
-				(extendLength + GameSettings.TILE_PULL_HANDLE_WALL_OFFSET);
+				(extendDistance + GameSettings.TILE_PULL_HANDLE_WALL_OFFSET);
 		}
 
 		
@@ -85,7 +91,7 @@ namespace ZeldaOracle.Game.Tiles {
 			base.OnInitialize();
 
 			direction		= Properties.GetInteger("direction", Directions.Down);
-			extendLength	= 0.0f;
+			extendDistance	= 0.0f;
 			isBeingPulled	= false;
 
 			SetLength(0.0f);
@@ -130,14 +136,14 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void Draw(RoomGraphics g) {
 			// Draw the extension bar.
-			if (extendLength > 0.0f) {
+			if (extendDistance > 0.0f) {
 				Sprite spr;
 				if (Directions.IsHorizontal(direction))
 					spr = GameData.SPR_TILE_PULL_HANDLE_BAR_HORIZONTAL;
 				else
 					spr = GameData.SPR_TILE_PULL_HANDLE_BAR_VERTICAL;
 
-				for (float length = 0.0f; length < extendLength; length += GameSettings.TILE_SIZE) {
+				for (float length = 0.0f; length < extendDistance; length += GameSettings.TILE_SIZE) {
 					Vector2F drawPos = Position - Offset + (Directions.ToVector(direction) * (length + 8.0f));
 					g.DrawSprite(spr, drawPos, DepthLayer.TileLayer1);
 				}
@@ -160,11 +166,15 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public bool IsFullyExtended {
-			get { return (extendLength >= maxExtendLength); }
+			get { return (extendDistance >= maxExtendLength); }
 		}
 
 		public bool IsFullyRetracted {
-			get { return (extendLength <= 0.0f); }
+			get { return (extendDistance <= 0.0f); }
+		}
+
+		public float ExtendDistance {
+			get { return extendDistance; }
 		}
 	}
 }
