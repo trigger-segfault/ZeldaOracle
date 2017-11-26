@@ -179,9 +179,12 @@ namespace ZeldaOracle.Game {
 			ZONE_INTERIOR_PRESENT	= new Zone("interior_present",	"Interior Present",	VARIANT_INTERIOR_PRESENT,	floor);
 			ZONE_AGES_DUNGEON_1		= new Zone("ages_dungeon_1",	"Ages Dungeon 1",	VARIANT_AGES_DUNGEON_1,		floor);
 			ZONE_AGES_DUNGEON_4		= new Zone("ages_dungeon_4",	"Ages Dungeon 4",	VARIANT_AGES_DUNGEON_4,		floor);
-			ZONE_SIDESCROLL_AGES_DUNGEON_1	= new Zone("sidescroll_ages_dungeon_1",	"Ages Dungeon 1",	VARIANT_AGES_DUNGEON_1,		floor);
-			
+
+			ZONE_SIDESCROLL_AGES_DUNGEON_1	= new Zone("sidescroll_ages_dungeon_1",	"Ages Dungeon 1", VARIANT_AGES_DUNGEON_1, floor);
 			ZONE_SIDESCROLL_AGES_DUNGEON_1.IsSideScrolling = true;
+			
+			ZONE_UNDERWATER_PRESENT	= new Zone("underwater_present", "Underwater Present", VARIANT_UNDERWATER_PRESENT, ground);
+			ZONE_UNDERWATER_PRESENT.IsUnderwater = true;
 
 			Resources.AddResource("default",	ZONE_DEFAULT);
 			Resources.AddResource("summer",		ZONE_SUMMER);
@@ -193,6 +196,7 @@ namespace ZeldaOracle.Game {
 			Resources.AddResource("ages_dungeon_1", ZONE_AGES_DUNGEON_1);
 			Resources.AddResource("ages_dungeon_4", ZONE_AGES_DUNGEON_4);
 			Resources.AddResource("sidescroll_ages_dungeon_1", ZONE_SIDESCROLL_AGES_DUNGEON_1);
+			Resources.AddResource("underwater_present", ZONE_UNDERWATER_PRESENT);
 		}
 
 		//-----------------------------------------------------------------------------
@@ -299,6 +303,7 @@ namespace ZeldaOracle.Game {
 		public static int VARIANT_INTERIOR;
 		public static int VARIANT_PRESENT;
 		public static int VARIANT_INTERIOR_PRESENT;
+		public static int VARIANT_UNDERWATER_PRESENT;
 		public static int VARIANT_AGES_DUNGEON_1;
 		public static int VARIANT_AGES_DUNGEON_2;
 		public static int VARIANT_AGES_DUNGEON_3;
@@ -348,6 +353,7 @@ namespace ZeldaOracle.Game {
 		public static Zone ZONE_AGES_DUNGEON_1; // Spirit's Grave
 		public static Zone ZONE_AGES_DUNGEON_4; // Skull Dungeon
 		public static Zone ZONE_SIDESCROLL_AGES_DUNGEON_1;
+		public static Zone ZONE_UNDERWATER_PRESENT;
 
 
 		//-----------------------------------------------------------------------------

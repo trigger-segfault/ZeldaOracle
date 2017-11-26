@@ -63,12 +63,31 @@ namespace ZeldaOracle.Game.Debug {
 		}
 		
 		public static void UpdateRoomDebugKeys() {
+			bool ctrl = (Keyboard.IsKeyDown(Keys.LControl) ||
+				Keyboard.IsKeyDown(Keys.RControl));
+			
+			// CTRL+Q: Quit the game
+			if (ctrl && Keyboard.IsKeyPressed(Keys.Q))
+				GameManager.Exit();
+			// CTRL+R: Restart the game.
+			if (ctrl && Keyboard.IsKeyPressed(Keys.R))
+				GameManager.Restart();
+			// F5: Pause gameplay.
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.F5))
+				GameManager.IsGamePaused = !GameManager.IsGamePaused;
+			// F6: Step gameplay by one frame.
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.F6) && GameManager.IsGamePaused)
+				GameManager.NextFrame();
 
-			if (Keyboard.IsKeyPressed(Keys.P))
+			// Ctrl+U: Toggle side scrolling
+			if (ctrl && Keyboard.IsKeyPressed(Keys.I))
 				RoomControl.IsSideScrolling = !RoomControl.IsSideScrolling;
+			// Ctrl+U: Toggle underwater
+			if (ctrl && Keyboard.IsKeyPressed(Keys.U))
+				RoomControl.IsUnderwater = !RoomControl.IsUnderwater;
 
 			// C: Change color barrier color.
-			if (Keyboard.IsKeyPressed(Keys.C)) {
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.C)) {
 				if (RoomControl.Dungeon != null) {
 					PuzzleColor c = (RoomControl.Dungeon.ColorSwitchColor == PuzzleColor.Blue ? PuzzleColor.Red : PuzzleColor.Blue);
 					RoomControl.Dungeon.ColorSwitchColor = c;
@@ -76,30 +95,19 @@ namespace ZeldaOracle.Game.Debug {
 						gameControl.PushRoomState(new RoomStateColorBarrier(c));
 				}
 			}
-			// CTRL+Q: Quit the game
-			if (Keyboard.IsKeyPressed(Keys.Q) && Keyboard.IsKeyDown(Keys.LControl))
-				GameManager.Exit();
-			// CTRL+R: Restart the game.
-			if (Keyboard.IsKeyPressed(Keys.R) && Keyboard.IsKeyDown(Keys.LControl))
-				GameManager.Restart();
-			// F5: Pause gameplay.
-			if (Keyboard.IsKeyPressed(Keys.F5))
-				GameManager.IsGamePaused = !GameManager.IsGamePaused;
-			// F6: Step gameplay by one frame.
-			if (Keyboard.IsKeyPressed(Keys.F6) && GameManager.IsGamePaused)
-				GameManager.NextFrame();
 			// OPEN BRACKET: open all open doors.
-			if (Keyboard.IsKeyPressed(Keys.OpenBracket))
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.OpenBracket))
 				RoomControl.OpenAllDoors();
 			// CLOSE BRACKET: close all doors.
-			else if (Keyboard.IsKeyPressed(Keys.CloseBracket))
+			else if (!ctrl && Keyboard.IsKeyPressed(Keys.CloseBracket))
 				RoomControl.CloseAllDoors();
+
 			// G: Display a test message.
-			if (Keyboard.IsKeyPressed(Keys.G)) {
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.G)) {
 				gameControl.DisplayMessage("I was a <red>hero<red> to broken robots 'cause I was one of them, but how can I sing about being damaged if I'm not?<p> That's like <green>Christina Aguilera<green> singing Spanish. Ooh, wait! That's it! I'll fake it!");
 			}
 			// INSERT: Fill all ammo.
-			if (Keyboard.IsKeyPressed(Keys.Insert)) {
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.Insert)) {
 				gameControl.Inventory.FillAllAmmo();
 				Dungeon dungeon = gameControl.RoomControl.Dungeon;
 				if (dungeon != null) {
@@ -110,21 +118,21 @@ namespace ZeldaOracle.Game.Debug {
 				}
 			}
 			// DELETE: Empty all ammo.
-			if (Keyboard.IsKeyPressed(Keys.Delete)) {
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.Delete)) {
 				gameControl.Inventory.EmptyAllAmmo();
 			}
 			// HOME: Set the player's health to max.
-			if (Keyboard.IsKeyPressed(Keys.Home)) {
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.Home)) {
 				gameControl.Player.MaxHealth = 4 * 14;
 				gameControl.Player.Health = gameControl.Player.MaxHealth;
 			}
 			// END: Set the player's health to 3 hearts.
-			if (Keyboard.IsKeyPressed(Keys.End)) {
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.End)) {
 				gameControl.Player.Health = 4 * 3;
 			}
 			
 			// T: Cycle which tunic the player is wearing.
-			if (Keyboard.IsKeyPressed(Keys.T)) {
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.T)) {
 				switch (gameControl.Player.Tunic) {
 				case PlayerTunics.GreenTunic:	gameControl.Player.Tunic = PlayerTunics.RedTunic; break;
 				case PlayerTunics.RedTunic:		gameControl.Player.Tunic = PlayerTunics.BlueTunic; break;
@@ -132,7 +140,7 @@ namespace ZeldaOracle.Game.Debug {
 				}
 			}
 			// H: Hurt the player in a random direction.
-			if (Keyboard.IsKeyPressed(Keys.H)) {
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.H)) {
 				float angle = GRandom.NextFloat(GMath.FullAngle);
 				Vector2F source = gameControl.Player.Center +  new Vector2F(5.0f, angle, true);
 				gameControl.Player.Hurt(new DamageInfo(0, source));
@@ -146,12 +154,12 @@ namespace ZeldaOracle.Game.Debug {
 				AudioSystem.MasterVolume = 1.0f;
 			}*/
 			// N: Noclip mode.
-			if (Keyboard.IsKeyPressed(Keys.N)) {
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.N)) {
 				RoomControl.Player.Physics.CollideWithEntities	= !RoomControl.Player.Physics.CollideWithEntities;
 				RoomControl.Player.Physics.CollideWithWorld		= !RoomControl.Player.Physics.CollideWithWorld;
 			}
 			// Q: Spawn a random rupees collectible.
-			if (Keyboard.IsKeyPressed(Keys.Q)) {
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.Q)) {
 				int[] rupees = { 1, 5, 20, 100, 200 };//, 5, 20, 100, 200 };
 				int rupee = GRandom.NextInt(rupees.Length);
 				Collectible collectible = gameControl.RewardManager.SpawnCollectible("rupees_" + rupees[rupee].ToString());
@@ -159,33 +167,33 @@ namespace ZeldaOracle.Game.Debug {
 				collectible.ZPosition = 100;
 			}
 			// Y: Cycle entity debug info.
-			if (Keyboard.IsKeyPressed(Keys.Y)) {
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.Y)) {
 				EntityDebugInfoMode = (EntityDrawInfo) (((int) EntityDebugInfoMode + 1) % (int) EntityDrawInfo.Count);
 			}
 			// U: Cycle tile debug info.
-			if (Keyboard.IsKeyPressed(Keys.U)) {
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.U)) {
 				TileDebugInfoMode = (TileDrawInfo) (((int) TileDebugInfoMode + 1) % (int) TileDrawInfo.Count);
 			}
 			// J: Spawn a heart collectible.
-			if (Keyboard.IsKeyPressed(Keys.K)) {
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.K)) {
 				Collectible collectible = gameControl.RewardManager.SpawnCollectible("hearts_1");
 				collectible.Position = gameControl.Player.Position;
 				collectible.ZPosition = 100;
 			}
 			// B: Spawn bomb collectibles.
-			if (Keyboard.IsKeyPressed(Keys.B)) {
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.B)) {
 				Collectible collectible = gameControl.RewardManager.SpawnCollectible("ammo_bombs_5");
 				collectible.Position = gameControl.Player.Position;
 				collectible.ZPosition = 100;
 			}
 			// J: Spawn arrow collectibles.
-			if (Keyboard.IsKeyPressed(Keys.J)) {
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.J)) {
 				Collectible collectible = gameControl.RewardManager.SpawnCollectible("ammo_arrows_5");
 				collectible.Position = gameControl.Player.Position;
 				collectible.ZPosition = 100;
 			}
 			// 0: Spawn a monster.
-			if (Keyboard.IsKeyPressed(Keys.D0) || Keyboard.IsKeyPressed(Keys.Add)) {
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.D0) || Keyboard.IsKeyPressed(Keys.Add)) {
 				Monster monster		= new TestMonster();
 				//Monster monster		= new MonsterOctorok();
 				//Monster monster		= new MonsterMoblin();

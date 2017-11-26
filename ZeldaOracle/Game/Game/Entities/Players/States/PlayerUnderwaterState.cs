@@ -32,6 +32,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
+		// Always allow state changes, because this is the "Normal" state for
+		// underwater rooms.
 		public override bool RequestStateChange(PlayerState newState) {
 			return true;
 		}
@@ -42,7 +44,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.AutoAccelerate	= false;
 			player.MoveAnimation			= GameData.ANIM_PLAYER_MERMAID_SWIM;
 			player.Graphics.PlayAnimation(player.MoveAnimation);
-			Console.WriteLine("BEGIN UNDERWATER STATE");
 		}
 		
 		public override void OnEnd(PlayerState newState) {
@@ -50,6 +51,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.MoveSpeedScale	= 1.0f;
 			player.Movement.AutoAccelerate	= false;
 			player.Graphics.DepthLayer		= DepthLayer.PlayerAndNPCs;
+			player.MoveAnimation			= GameData.ANIM_PLAYER_DEFAULT;
 		}
 
 		public override void Update() {

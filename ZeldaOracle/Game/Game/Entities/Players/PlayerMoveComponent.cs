@@ -383,7 +383,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 				(player.Graphics.Animation == player.MoveAnimation ||
 				player.Graphics.Animation == GameData.ANIM_PLAYER_DEFAULT ||
 				player.Graphics.Animation == GameData.ANIM_PLAYER_CARRY ||
-				player.Graphics.Animation == GameData.ANIM_PLAYER_MINECART_IDLE))
+				player.Graphics.Animation == GameData.ANIM_PLAYER_MINECART_IDLE ||
+				player.Graphics.Animation == GameData.ANIM_PLAYER_MERMAID_SWIM))
 			{
 				// Play/stop the move animation.
 				if (isMoving || isSprinting) {

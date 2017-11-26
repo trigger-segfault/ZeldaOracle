@@ -239,6 +239,7 @@ namespace ZeldaOracle.Game.Control {
 			this.roomLocation		= room.Location;
 			this.dungeon			= room.Dungeon;
 			this.isSideScrolling	= room.Zone.IsSideScrolling;
+			this.isUnderwater		= room.Zone.IsUnderwater;
 
 			// Discover the room.
 			room.IsDiscovered = true;

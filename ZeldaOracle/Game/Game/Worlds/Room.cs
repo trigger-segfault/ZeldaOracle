@@ -63,8 +63,6 @@ namespace ZeldaOracle.Game.Worlds {
 			//	.SetDocumentation("All Monsters Dead", "script", "", "Events", "Occurs when all monsters are dead.");
 			
 			// Room Flags:
-			// - sidescroll ??? could be in Zone
-			// - underwater ??? could be in Zone
 			// - discovered
 			// - hiddenFromMap
 			// - boss
