@@ -570,6 +570,26 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 		
+		public Level ConnectedLevelAbove {
+			get { return world.GetLevel(properties.GetString("connected_level_above", "")); }
+			set {
+				if (value == null)
+					properties.Set("connected_level_above", "");
+				else
+					properties.Set("connected_level_above", value.ID);
+			}
+		}
+		
+		public Level ConnectedLevelBelow {
+			get { return world.GetLevel(properties.GetString("connected_level_below", "")); }
+			set {
+				if (value == null)
+					properties.Set("connected_level_below", "");
+				else
+					properties.Set("connected_level_below", value.ID);
+			}
+		}
+		
 		public int DungeonFloor {
 			get { return properties.GetInteger("dungeon_floor", 0); }
 			set { properties.Set("dungeon_floor", value); }
