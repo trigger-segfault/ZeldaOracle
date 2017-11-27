@@ -27,17 +27,14 @@ namespace ZeldaOracle.Game.Worlds {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public Room(Level level, int x, int y, Zone zone = null) :
-			this(level, new Point2I(x, y), zone) { }
+		public Room() {
+			this.level      = null;
+			this.location   = Point2I.Zero;
+			this.tileData   = new TileDataInstance[0, 0, 0];
+			this.eventData  = new List<EventTileDataInstance>();
 
-		public Room(Level level, Point2I location, Zone zone = null) {
-			this.level		= level;
-			this.location	= location;
-			this.tileData	= new TileDataInstance[level.RoomSize.X, level.RoomSize.Y, level.RoomLayerCount];
-			this.eventData	= new List<EventTileDataInstance>();
-			//this.zone		= zone;
-			this.events		= new EventCollection(this);
-			this.properties	= new Properties(this);
+			this.events     = new EventCollection(this);
+			this.properties = new Properties(this);
 			this.properties.BaseProperties = new Properties();
 
 			properties.BaseProperties.Set("id", "")
@@ -46,7 +43,7 @@ namespace ZeldaOracle.Game.Worlds {
 				.SetDocumentation("Music", "song", "", "General", "The music to play in this room. Select none to choose the default music.", true, false);
 			properties.BaseProperties.Set("zone", "")
 				.SetDocumentation("Zone", "zone", "", "General", "The zone type for this room.");
-			
+
 			properties.BaseProperties.Set("discovered", false)
 				.SetDocumentation("Discovered", "", "", "Progress", "True if the room has been visited at least once.");
 			properties.BaseProperties.Set("hidden_from_map", false)
@@ -54,17 +51,26 @@ namespace ZeldaOracle.Game.Worlds {
 			properties.BaseProperties.Set("boss_room", false)
 				.SetDocumentation("Is Boss Room", "", "", "Dungeon", "True if this room is shown as the boss room in the dungeon map.");
 
+
 			events.AddEvent("room_start", "Room Start", "Transition", "Occurs when the room begins.");
-			//properties.BaseProperties.Set("event_room_start", "")
-			//	.SetDocumentation("Room Start", "script", "", "Events", "Occurs when the room begins.");
-			
 			events.AddEvent("all_monsters_dead", "All Monsters Dead", "Monster", "Occurs when all monsters are dead.");
+		}
+
+		public Room(Level level, int x, int y, Zone zone = null) :
+			this(level, new Point2I(x, y), zone) { }
+
+		public Room(Level level, Point2I location, Zone zone = null) :
+			this()
+		{
+			this.level		= level;
+			this.location	= location;
+			this.tileData	= new TileDataInstance[level.RoomSize.X, level.RoomSize.Y, level.RoomLayerCount];
+			//this.zone		= zone;
+
 			//properties.BaseProperties.Set("event_all_monsters_dead", "")
 			//	.SetDocumentation("All Monsters Dead", "script", "", "Events", "Occurs when all monsters are dead.");
 			
 			// Room Flags:
-			// - sidescroll ??? could be in Zone
-			// - underwater ??? could be in Zone
 			// - discovered
 			// - hiddenFromMap
 			// - boss
@@ -73,6 +79,29 @@ namespace ZeldaOracle.Game.Worlds {
 
 			/*if (zone != null)
 				this.properties.Set("zone", zone.ID);*/
+		}
+
+		public Room(Room copy) :
+			this()
+		{
+			properties.SetAll(copy.properties);
+			events.SetAll(copy.events);
+
+			this.level      = copy.level;
+			this.location   = copy.location;
+			this.tileData	= new TileDataInstance[level.RoomSize.X, level.RoomSize.Y, level.RoomLayerCount];
+			for (int layer = 0; layer < LayerCount; layer++) {
+				for (int x = 0; x < Width; x++) {
+					for (int y = 0; y < Height; y++) {
+						TileDataInstance tile = copy.tileData[x, y, layer];
+						if (tile != null && tile.IsAtLocation(x, y))
+							PlaceTile(new TileDataInstance(tile), x, y, layer);
+					}
+				}
+			}
+			foreach (EventTileDataInstance eventTile in copy.eventData) {
+				AddEventTile(new EventTileDataInstance(eventTile));
+			}
 		}
 
 		//-----------------------------------------------------------------------------

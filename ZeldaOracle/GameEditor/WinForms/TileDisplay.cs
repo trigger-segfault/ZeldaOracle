@@ -14,16 +14,17 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Audio;
 using ZeldaEditor.Control;
+using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 
 namespace ZeldaEditor.WinForms {
 
 	public class TileDisplay : GraphicsDeviceControl {
 
 		private static ContentManager content;
-		private static Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch;
+		private static SpriteBatch spriteBatch;
 
 		private EditorWindow	editorWindow;
-		private EditorControl editorControl;
+		private EditorControl	editorControl;
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -31,7 +32,7 @@ namespace ZeldaEditor.WinForms {
 
 		protected override void Initialize() {
 			content		= new ContentManager(Services, "Content");
-			spriteBatch	= new Microsoft.Xna.Framework.Graphics.SpriteBatch(GraphicsDevice);
+			spriteBatch	= new SpriteBatch(GraphicsDevice);
 
 			editorControl.Initialize(content, GraphicsDevice);
 
@@ -74,18 +75,14 @@ namespace ZeldaEditor.WinForms {
 					}
 				}
 			}
-			return new Point2I(-1, -1);
+			return -Point2I.One;
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Events
 		//-----------------------------------------------------------------------------
-
-		private void OnLeftClickTile() {
-
-		}
-
+		
 		private void OnMouseDown(object sender, MouseEventArgs e) {
 			Point2I mousePos = ScrollPosition + e.Location;
 			Point2I newSelectedTile = GetTileCoord(mousePos);
@@ -104,13 +101,13 @@ namespace ZeldaEditor.WinForms {
 		}
 
 		private void OnMouseMove(object sender, MouseEventArgs e) {
-
+			
 		}
 		private void OnMouseLeave(object sender, EventArgs e) {
 			
 		}
 		private void OnMouseEnter(object sender, EventArgs e) {
-			this.Focus();
+			
 		}
 
 		public void UpdateTileset() {

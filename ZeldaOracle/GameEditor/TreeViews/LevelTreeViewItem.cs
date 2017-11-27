@@ -19,12 +19,13 @@ namespace ZeldaEditor.TreeViews {
 	public class LevelTreeViewItem : IWorldTreeViewItem {
 		private Level level;
 		
-		public LevelTreeViewItem(Level level) {
+		public LevelTreeViewItem(Level level, EditorControl editorControl) {
 			this.level = level;
 			Source  = EditorImages.Level;
 			Header				= level.ID;
 			Tag             = "level";
-			
+			if (level == editorControl.Level)
+				FontWeight = FontWeights.Bold;
 		}
 
 		public override void Open(EditorControl editorControl) {
@@ -33,28 +34,14 @@ namespace ZeldaEditor.TreeViews {
 		}
 
 		public override void Delete(EditorControl editorControl) {
-			MessageBoxResult result = TriggerMessageBox.Show(editorControl.EditorWindow, MessageIcon.Info,
-				"You are about to delete the level '" + level.ID + "'. This will be permanent. Continue?", "Confirm",
+			MessageBoxResult result = TriggerMessageBox.Show(editorControl.EditorWindow, MessageIcon.Warning,
+				"Are you sure you want to delete the level '" + level.ID + "'?", "Confirm",
 				MessageBoxButton.YesNo);
 
 
 			if (result == MessageBoxResult.Yes) {
 				ActionDeleteLevel action = new ActionDeleteLevel(level);
 				editorControl.PushAction(action, ActionExecution.Execute);
-				/*int levelIndex = editorControl.World.Levels.IndexOf(level);
-				editorControl.World.RemoveLevel(level);
-				editorControl.RefreshWorldTreeView();
-				editorControl.IsModified = true;
-
-				if (editorControl.World.LevelCount == 0) {
-					editorControl.CloseLevel();
-					//worldTreeView.SelectedNode = worldTreeView.Nodes[0].Nodes[0];
-					//treeViewLevels_AfterSelect(null, new TreeViewEventArgs(worldTreeView.SelectedNode));
-				}
-				else {
-					editorControl.OpenLevel(Math.Max(0, levelIndex - 1));
-					//worldTreeView.SelectedNode = worldTreeView.Nodes[0].Nodes[0].Nodes[GMath.Max(0, index - 1)];
-				}*/
 			}
 		}
 
@@ -65,13 +52,13 @@ namespace ZeldaEditor.TreeViews {
 		}
 
 		public override void Duplicate(EditorControl editorControl) {
-			/*Level duplicate = new Level(level);
-			duplicate.ID = "";
+			// Dummy level for the rename window
+			Level duplicate = new Level();
 			string newName = RenameWindow.Show(Window.GetWindow(this), editorControl.World, duplicate);
 			if (newName != null) {
-				duplicate.ID = newName;
-				editorControl.AddLevel(duplicate, true);
-			}*/
+				EditorAction action = new ActionDuplicateLevel(level, newName);
+				editorControl.PushAction(action, ActionExecution.Execute);
+			}
 		}
 
 		public Level Level {

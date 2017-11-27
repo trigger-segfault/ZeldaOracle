@@ -11,6 +11,7 @@ using ZeldaOracle.Game;
 using ZeldaEditor.Undo;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles.EventTiles;
+using Key = System.Windows.Input.Key;
 
 namespace ZeldaEditor.Tools {
 
@@ -40,15 +41,14 @@ namespace ZeldaEditor.Tools {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ToolSelection() {
-			name = "Selection Tool";
+		public ToolSelection() : base("Selection Tool", Key.S) {
 			clipboard = null;
 			mode = SelectionModes.Move;
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Selection
+		// Overridden Clipboard Methods
 		//-----------------------------------------------------------------------------
 
 		public override void Cut() {
@@ -125,54 +125,13 @@ namespace ZeldaEditor.Tools {
 			}
 		}
 
+
 		//-----------------------------------------------------------------------------
-		// Overridden Methods
+		// Overridden State Methods
 		//-----------------------------------------------------------------------------
-
-		protected override void OnCancel() {
-			isCreatingSelectionBox = false;
-			isMovingSelectionBox = false;
-			ClearSelection();
-		}
-
-		public override bool CancelCountsAsUndo {
-			get { return !selectionGridArea.IsEmpty && !isCreatingSelectionBox; }
-		}
-
+		
 		protected override void OnInitialize() {
 			MouseCursor = SelectionCursor;
-		}
-
-		protected void Finish() {
-			if (selectionGrid != null && !isCreatingSelectionBox) {
-				Point2I end = selectionGridArea.Point;
-				if (start != end || (mode != SelectionModes.Move && mode != SelectionModes.Duplicate)) {
-					EditorAction undo = null;
-					switch (mode) {
-					case SelectionModes.Move:
-						undo = ActionSelection.CreateMoveAction(Level, start, end, selectionGrid,
-							Level.CreateTileGrid(selectionGridArea, CreateTileGridMode.Twin));
-						break;
-					case SelectionModes.Delete:
-					case SelectionModes.Cut:
-						undo = ActionSelection.CreateDeleteAction(Level, start, selectionGrid,
-							mode == SelectionModes.Cut);
-						break;
-					case SelectionModes.Duplicate:
-					case SelectionModes.Paste:
-						undo = ActionSelection.CreateDuplicateAction(Level, end, selectionGrid,
-							Level.CreateTileGrid(selectionGridArea, CreateTileGridMode.Twin),
-							mode == SelectionModes.Paste);
-						break;
-					}
-					editorControl.PushAction(undo, ActionExecution.Execute);
-				}
-				else {
-					Level.PlaceTileGrid(selectionGrid, (LevelTileCoord)selectionGridArea.Point);
-				}
-				selectionGrid = null;
-			}
-			IsDrawing = false;
 		}
 
 		protected override void OnBegin() {
@@ -185,12 +144,24 @@ namespace ZeldaEditor.Tools {
 			ClearSelection();
 		}
 
+		protected override void OnCancel() {
+			isCreatingSelectionBox = false;
+			isMovingSelectionBox = false;
+			ClearSelection();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Mouse Methods
+		//-----------------------------------------------------------------------------
+
 		protected override void OnMouseDown(MouseEventArgs e) {
 			if (e.Button == MouseButtons.Right) {
 				Finish();
 				ClearSelection();
 			}
 		}
+
 		protected override void OnMouseDragBegin(MouseEventArgs e) {
 
 			Point2I mousePos = e.MousePos();
@@ -328,47 +299,36 @@ namespace ZeldaEditor.Tools {
 
 			if ((!isCreatingSelectionBox && selectionGridArea.Contains(tileCoord)) || isMovingSelectionBox) {
 				MouseCursor = DraggingCursor;
-				editorControl.HighlightMouseTile = false;
+				EditorControl.HighlightMouseTile = false;
 			}
 			else {
 				MouseCursor = SelectionCursor;
-				editorControl.HighlightMouseTile = true;
+				EditorControl.HighlightMouseTile = true;
 			}
 
 			base.OnMouseMove(e);
 		}
 
+		
+		//-----------------------------------------------------------------------------
+		// Overridden Properties
+		//-----------------------------------------------------------------------------
+		
+		public override bool CancelCountsAsUndo {
+			get { return !selectionGridArea.IsEmpty && !isCreatingSelectionBox; }
+		}
 
 		public override bool CanCopyCut {
 			get { return !selectionGridArea.IsEmpty && !isCreatingSelectionBox; }
 		}
+
 		public override bool CanDeleteDeselect {
 			get { return !selectionGridArea.IsEmpty && !isCreatingSelectionBox; }
 		}
 
-		public bool CanPaste {
-			get { return clipboard != null; }
-		}
-
-		public TileGrid Clipboard {
-			get { return clipboard; }
-			set { clipboard = value; }
-		}
-
-		private void UpdateSelectionBox() {
-			LevelDisplay.SetSelectionBox(selectionGridArea * GameSettings.TILE_SIZE);
-		}
-		private void ClearSelection() {
-			IsDrawing = false;
-			isCreatingSelectionBox = false;
-			isMovingSelectionBox = false;
-			selectionGridArea = Rectangle2I.Zero;
-			selectionGrid = null;
-			LevelDisplay.ClearSelectionBox();
-		}
 
 		//-----------------------------------------------------------------------------
-		// Virtual drawing
+		// Overridden Drawing Methods
 		//-----------------------------------------------------------------------------
 
 		public override bool DrawHideTile(TileDataInstance tile, Room room, Point2I levelCoord, int layer) {
@@ -389,6 +349,7 @@ namespace ZeldaEditor.Tools {
 				}
 			}
 		}
+
 		public override bool DrawHideEventTile(EventTileDataInstance eventTile, Room room, Point2I levelPosition) {
 			if (selectionGrid != null) {
 				if (mode != SelectionModes.Duplicate && mode != SelectionModes.Paste &&
@@ -409,6 +370,70 @@ namespace ZeldaEditor.Tools {
 						LevelDisplay.DrawEventTile(g, room, eventPair.Value, position, LevelDisplay.NormalColor);
 				}
 			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		protected void Finish() {
+			if (selectionGrid != null && !isCreatingSelectionBox) {
+				Point2I end = selectionGridArea.Point;
+				if (start != end || (mode != SelectionModes.Move && mode != SelectionModes.Duplicate)) {
+					EditorAction undo = null;
+					switch (mode) {
+					case SelectionModes.Move:
+						undo = ActionSelection.CreateMoveAction(Level, start, end, selectionGrid,
+							Level.CreateTileGrid(selectionGridArea, CreateTileGridMode.Twin));
+						break;
+					case SelectionModes.Delete:
+					case SelectionModes.Cut:
+						undo = ActionSelection.CreateDeleteAction(Level, start, selectionGrid,
+							mode == SelectionModes.Cut);
+						break;
+					case SelectionModes.Duplicate:
+					case SelectionModes.Paste:
+						undo = ActionSelection.CreateDuplicateAction(Level, end, selectionGrid,
+							Level.CreateTileGrid(selectionGridArea, CreateTileGridMode.Twin),
+							mode == SelectionModes.Paste);
+						break;
+					}
+					EditorControl.PushAction(undo, ActionExecution.Execute);
+				}
+				else {
+					Level.PlaceTileGrid(selectionGrid, (LevelTileCoord)selectionGridArea.Point);
+				}
+				selectionGrid = null;
+			}
+			IsDrawing = false;
+		}
+
+		private void UpdateSelectionBox() {
+			LevelDisplay.SetSelectionBox(selectionGridArea * GameSettings.TILE_SIZE);
+		}
+
+		private void ClearSelection() {
+			IsDrawing = false;
+			isCreatingSelectionBox = false;
+			isMovingSelectionBox = false;
+			selectionGridArea = Rectangle2I.Zero;
+			selectionGrid = null;
+			LevelDisplay.ClearSelectionBox();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Tool-Specific Properties
+		//-----------------------------------------------------------------------------
+
+		public TileGrid Clipboard {
+			get { return clipboard; }
+			set { clipboard = value; }
+		}
+
+		public bool CanPaste {
+			get { return clipboard != null; }
 		}
 	}
 }

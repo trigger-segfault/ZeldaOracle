@@ -459,7 +459,7 @@ namespace ZeldaEditor.Control {
 
 			int i = 0;
 			do {
-				script.ID = "__internal_script_" + i + "__";
+				script.ID = ScriptManager.CreateInternalScriptName(i);
 				i++;
 			}
 			while (world.GetScript(script.ID) != null);

@@ -14,25 +14,25 @@ using ZeldaEditor.Windows;
 namespace ZeldaEditor {
 	/**<summary>The application class.</summary>*/
 	public partial class App : Application {
-		//=========== MEMBERS ============
-		#region Members
-
 		/**<summary>The last exception. Used to prevent multiple error windows for the same error.</summary>*/
 		private static object lastException = null;
 
-		#endregion
-		//========= CONSTRUCTORS =========
-		#region Constructors
+
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
 
 		/**<summary>Constructs the app and sets up embedded assembly resolving.</summary>*/
 		public App() {
 			AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssemblies;
 		}
 
-		#endregion
-		//============ EVENTS ============
-		#region Events
 
+		//-----------------------------------------------------------------------------
+		// Event Handlers
+		//-----------------------------------------------------------------------------
+
+		/**<summary>Resolves assemblies that may be embedded in the executable.</summary>*/
 		private Assembly OnResolveAssemblies(object sender, ResolveEventArgs args) {
 			var executingAssembly = Assembly.GetExecutingAssembly();
 			var assemblyName = new AssemblyName(args.Name);
@@ -51,11 +51,15 @@ namespace ZeldaEditor {
 				return Assembly.Load(assemblyRawBytes);
 			}
 		}
+
+		/**<summary>Hook the AppDomain and TaskScheduler unhandled exception events.</summary>*/
 		private void OnAppStartup(object sender, StartupEventArgs e) {
 			// Catch exceptions not in a UI thread
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnAppDomainUnhandledException);
 			TaskScheduler.UnobservedTaskException += OnTaskSchedulerUnobservedTaskException;
 		}
+
+		/**<summary>Show an exception window for an exception that occurred in a dispatcher thread.</summary>*/
 		private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {
 			if (e.Exception != lastException) {
 				lastException = e.Exception;
@@ -64,6 +68,8 @@ namespace ZeldaEditor {
 				e.Handled = true;
 			}
 		}
+
+		/**<summary>Show an exception window for an exception that occurred in the AppDomain.</summary>*/
 		private void OnAppDomainUnhandledException(object sender, UnhandledExceptionEventArgs e) {
 			if (e.ExceptionObject != lastException) {
 				lastException = e.ExceptionObject;
@@ -73,6 +79,8 @@ namespace ZeldaEditor {
 				});
 			}
 		}
+
+		/**<summary>Show an exception window for an exception that occurred in a task.</summary>*/
 		private void OnTaskSchedulerUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e) {
 			if (e.Exception != lastException) {
 				lastException = e.Exception;
@@ -83,6 +91,5 @@ namespace ZeldaEditor {
 			}
 		}
 
-		#endregion
 	}
 }

@@ -15,9 +15,10 @@ namespace ZeldaEditor.Undo {
 		private enum ChangeScriptModes {
 			ChangeScript,
 			DefineScript,
-			UndefineScript
+			UndefineScript,
+			DuplicateScript
 		}
-		
+
 		private string scriptName;
 		private string oldCode;
 		private string newCode;
@@ -56,14 +57,27 @@ namespace ZeldaEditor.Undo {
 			return action;
 		}
 
+		public static ActionChangeScript CreateDuplicateScriptAction(string scriptName, string newCode) {
+			ActionChangeScript action = new ActionChangeScript(scriptName);
+			action.ActionName = "Duplicate" + action.ActionName;
+			action.ActionIcon = EditorImages.ScriptDuplicate;
+			action.newCode = newCode;
+			action.mode = ChangeScriptModes.DuplicateScript;
+			return action;
+		}
+
 		public override void PostExecute(EditorControl editorControl) {
 			switch (mode) {
+			case ChangeScriptModes.DefineScript:
+			case ChangeScriptModes.DuplicateScript:
+				editorControl.ScriptRenamed(null, scriptName);
+				break;
 			case ChangeScriptModes.UndefineScript:
 				editorControl.ScriptRenamed(scriptName, null);
 				break;
 			}
 			if (mode != ChangeScriptModes.ChangeScript) {
-				editorControl.EditorWindow.TreeViewWorld.RefreshScripts(true, false);
+				editorControl.EditorWindow.WorldTreeView.RefreshScripts(true, false);
 			}
 		}
 
@@ -73,7 +87,9 @@ namespace ZeldaEditor.Undo {
 				editorControl.World.GetScript(scriptName).Code = oldCode;
 				break;
 			case ChangeScriptModes.DefineScript:
+			case ChangeScriptModes.DuplicateScript:
 				editorControl.World.RemoveScript(scriptName);
+				editorControl.ScriptRenamed(scriptName, null);
 				break;
 			case ChangeScriptModes.UndefineScript:
 				Script script = new Script();
@@ -84,7 +100,7 @@ namespace ZeldaEditor.Undo {
 				break;
 			}
 			if (mode != ChangeScriptModes.ChangeScript) {
-				editorControl.EditorWindow.TreeViewWorld.RefreshScripts(true, false);
+				editorControl.EditorWindow.WorldTreeView.RefreshScripts(true, false);
 			}
 		}
 
@@ -94,10 +110,12 @@ namespace ZeldaEditor.Undo {
 				editorControl.World.GetScript(scriptName).Code = newCode;
 				break;
 			case ChangeScriptModes.DefineScript:
+			case ChangeScriptModes.DuplicateScript:
 				Script script = new Script();
 				script.ID = scriptName;
 				script.Code = newCode;
 				editorControl.World.AddScript(script);
+				editorControl.ScriptRenamed(null, scriptName);
 				break;
 			case ChangeScriptModes.UndefineScript:
 				editorControl.World.RemoveScript(scriptName);
@@ -105,7 +123,7 @@ namespace ZeldaEditor.Undo {
 				break;
 			}
 			if (mode != ChangeScriptModes.ChangeScript) {
-				editorControl.EditorWindow.TreeViewWorld.RefreshScripts(true, false);
+				editorControl.EditorWindow.WorldTreeView.RefreshScripts(true, false);
 			}
 		}
 		

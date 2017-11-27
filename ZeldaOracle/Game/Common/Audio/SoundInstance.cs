@@ -10,9 +10,7 @@ using Microsoft.Xna.Framework.Media;
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Audio {
-	/** <summary>
-	 * A structure for storing a sound effect instance.
-	 * </summary> */
+	/**<summary>A structure for storing a sound effect instance.</summary>*/
 	public class SoundInstance {
 
 		// Containment

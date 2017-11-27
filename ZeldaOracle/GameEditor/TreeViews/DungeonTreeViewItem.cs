@@ -43,8 +43,8 @@ namespace ZeldaEditor.TreeViews {
 		}
 
 		public override void Delete(EditorControl editorControl) {
-			MessageBoxResult result = TriggerMessageBox.Show(editorControl.EditorWindow, MessageIcon.Info,
-				"You are about to delete the dungeon '" + dungeon.ID + "'. This will be permanent. Continue?", "Confirm",
+			MessageBoxResult result = TriggerMessageBox.Show(editorControl.EditorWindow, MessageIcon.Warning,
+				"Are you sure you want to delete the dungeon '" + dungeon.ID + "'?", "Confirm",
 				MessageBoxButton.YesNo);
 
 			if (result == MessageBoxResult.Yes) {
@@ -63,13 +63,12 @@ namespace ZeldaEditor.TreeViews {
 		}
 
 		public override void Duplicate(EditorControl editorControl) {
-			Dungeon duplicate = new Dungeon(dungeon);
-			duplicate.ID = "";
+			// Dummy dungeon for the rename window
+			Dungeon duplicate = new Dungeon();
 			string newName = RenameWindow.Show(Window.GetWindow(this), editorControl.World, duplicate);
 			if (newName != null) {
-				duplicate.ID = newName;
-				editorControl.AddDungeon(duplicate, true);
-				editorControl.EditorWindow.TreeViewWorld.RefreshDungeons();
+				EditorAction action = new ActionDuplicateDungeon(dungeon, newName);
+				editorControl.PushAction(action, ActionExecution.Execute);
 			}
 		}
 

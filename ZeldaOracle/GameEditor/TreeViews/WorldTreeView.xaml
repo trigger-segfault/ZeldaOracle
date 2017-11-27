@@ -23,9 +23,10 @@
                 <local:ImageButton x:Name="buttonMoveUp" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/MoveUp.png" ToolTip="Move Up" Click="OnMoveUp"/>
                 <local:ImageButton x:Name="buttonMoveDown" Source="pack://application:,,,/ZeldaEditor;component/Resources/Icons/MoveDown.png" ToolTip="Move Down" Click="OnMoveDown"/>
             </ToolBar>
-            <TreeView x:Name="treeView" BorderThickness="0,1,0,0" AllowDrop="True" SelectedItemChanged="OnSelectionChanged" MouseEnter="OnTreeViewMouseEnter">
+            <TreeView x:Name="treeView" BorderThickness="0,1,0,0" AllowDrop="True" SelectedItemChanged="OnSelectionChanged">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
+                        <!--<Setter Property="KeyboardNavigation.DirectionalNavigation" Value="None"/>-->
                         <EventSetter Event="PreviewMouseRightButtonDown" Handler="OnTreeViewMouseRightButtonDown"/>
                         <EventSetter Event="MouseDoubleClick"     Handler="OnTreeViewMouseDoubleClick"/>
                         <EventSetter Event="MouseDown"            Handler="OnTreeViewMouseDown"/>

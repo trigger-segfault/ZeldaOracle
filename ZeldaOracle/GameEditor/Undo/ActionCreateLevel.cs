@@ -38,13 +38,13 @@ namespace ZeldaEditor.Undo {
 					editorControl.OpenLevel(Math.Max(0, levelIndex - 1));
 				}
 			}
-			editorControl.EditorWindow.TreeViewWorld.RefreshLevels();
+			editorControl.EditorWindow.WorldTreeView.RefreshLevels();
 		}
 
 		public override void Redo(EditorControl editorControl) {
 			Level level = new Level(id, dimensions, layerCount, roomSize, zone);
 			editorControl.World.AddLevel(level);
-			editorControl.EditorWindow.TreeViewWorld.RefreshLevels();
+			editorControl.EditorWindow.WorldTreeView.RefreshLevels();
 			editorControl.OpenLevel(level);
 		}
 	}

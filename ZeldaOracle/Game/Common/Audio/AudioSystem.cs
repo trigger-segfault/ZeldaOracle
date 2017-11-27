@@ -12,9 +12,7 @@ using ZeldaOracle.Common.Content;
 using Song = ZeldaOracle.Common.Audio.Song;
 
 namespace ZeldaOracle.Common.Audio {
-	/** <summary>
-	* A static class for game-related audio functions and management.
-	* </summary> */
+	/**<summary>A static class for game-related audio functions and management.</summary>*/
 	public static class AudioSystem {
 
 		//-----------------------------------------------------------------------------

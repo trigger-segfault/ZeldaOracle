@@ -34,12 +34,11 @@ namespace ZeldaOracle.Common.Content {
 		}
 	}
 
-	/** <summary>
-	 * The Resources class serves as a resource manager.
-	 * It has methods to load in resources from the game
-	 * content and stores them in key/value maps.
-	 * </summary> 
-	 */
+	///<summary>
+	/// The Resources class serves as a resource manager.
+	/// It has methods to load in resources from the game
+	/// content and stores them in key/value maps.
+	///</summary>
 	public class Resources {
 	
 		// CONTAINMENT:

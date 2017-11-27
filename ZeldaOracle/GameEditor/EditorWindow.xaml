@@ -12,7 +12,7 @@
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Oracle Engine Editor" Width="1100" Height="640" SnapsToDevicePixels="True" UseLayoutRounding="True" Icon="Editor.ico" ResizeMode="CanResizeWithGrip" Loaded="OnWindowLoaded" PreviewKeyDown="OnPreviewKeyDown" SizeChanged="OnWindowSizeChanged" Closing="OnWindowClosing">
+        Title="Oracle Engine Editor" Width="1100" Height="640" SnapsToDevicePixels="True" UseLayoutRounding="True" Icon="Editor.ico" ResizeMode="CanResizeWithGrip" Loaded="OnWindowLoaded" PreviewKeyDown="OnPreviewKeyDown" SizeChanged="OnWindowSizeChanged" Closing="OnWindowClosing" PreviewMouseWheel="OnPreviewMouseWheel">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -117,6 +117,7 @@
         </ToolBar>
         <ToolBar x:Name="toolBar2" DockPanel.Dock="Top">
             <local:ImageToggleButton x:Name="buttonToolPointer" Source="Resources/Icons/ToolPointer.png" ToolTip="Pointer Tool (M)" IsChecked="True" Click="OnToolChanged"/>
+            <local:ImageToggleButton x:Name="buttonToolPan" Source="Resources/Icons/ToolPan.png" ToolTip="Pan Tool (H)" Click="OnToolChanged"/>
             <local:ImageToggleButton x:Name="buttonToolPlace" Source="Resources/Icons/ToolPlace.png" ToolTip="Place Tool (P)" Click="OnToolChanged"/>
             <local:ImageToggleButton x:Name="buttonToolSquare" Source="Resources/Icons/ToolSquare.png" ToolTip="Square Tool (O)" Click="OnToolChanged"/>
             <local:ImageToggleButton x:Name="buttonToolFill" Source="Resources/Icons/ToolFill.png" ToolTip="Fill Tool (F)" Click="OnToolChanged"/>
@@ -159,9 +160,9 @@
             <local:ImageButton x:Name="buttonShiftLevel" Source="/Resources/Icons/LevelShift.png" ToolTip="Shift Level by Room" Command="cmd:EditorCommands.ShiftLevel"/>
         </ToolBar>
         <StatusBar x:Name="statusBar" DockPanel.Dock="Bottom" Background="#FFF0F0F0">
-            <StatusBarItem x:Name="statusRoomLocation" Content="Room Location"/>
-            <StatusBarItem x:Name="statusTileLocation" Content="Tile Location"/>
-            <StatusBarItem x:Name="statusTask" Content="Compiling Scripts" HorizontalAlignment="Right" Margin="0,0,16,0"/>
+            <StatusBarItem x:Name="statusRoomLocation" Content="Room (?, ?)"/>
+            <StatusBarItem x:Name="statusTileLocation" Content="Tile (?, ?)"/>
+            <StatusBarItem x:Name="statusTask" Content="Compiling Scripts..." HorizontalAlignment="Right" Margin="0,0,16,0"/>
         </StatusBar>
         <Grid>
             <Grid.ColumnDefinitions>

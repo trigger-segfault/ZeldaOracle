@@ -6,35 +6,34 @@ using System.Text;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Scripting;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public interface ITileset {
-		// Return the tile data at the given location.
+	/**<summary>A tileset interface used by tile-based tilesets and event tile-based tilesets.</summary>*/
+	public interface ITileset : IIDObject {
+		/**<summary>Return the tile data at the given location.</summary>*/
 		BaseTileData GetTileData(int x, int y);
 
-		// Return the tile data at the given location.
+		/**<summary>Return the tile data at the given location.</summary>*/
 		BaseTileData GetTileData(Point2I location);
 
-		// The string identifier for the tileset.
-		string ID { get; }
-
-		// The dimensions of the tileset.
+		/**<summary>The dimensions of the tileset.</summary>*/
 		Point2I Size { get; }
 
-		// The size of an individual tile cell.
+		/**<summary>The size of an individual tile cell.</summary>*/
 		Point2I CellSize { get; }
-		
-		// The amount of spacing between tiles.
+
+		/**<summary>The amount of spacing between tiles.</summary>*/
 		Point2I Spacing { get; }
-		
-		// Get the width of the tileset.
+
+		/**<summary>Get the width of the tileset.</summary>*/
 		int Width { get; }
-		
-		// Get the height of the tileset.
+
+		/**<summary>Get the height of the tileset.</summary>*/
 		int Height { get; }
 
-		// The sprite sheet that represents the tileset.
+		/**<summary>The sprite sheet that represents the tileset.</summary>*/
 		SpriteSheet SpriteSheet { get; }
 	}
 }

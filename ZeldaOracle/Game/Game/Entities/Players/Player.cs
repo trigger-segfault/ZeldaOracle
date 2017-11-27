@@ -67,6 +67,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerNormalState			stateNormal;
 		private PlayerBusyState				stateBusy;
 		private PlayerSwimState				stateSwim;
+		private PlayerUnderwaterState		stateUnderwater;
 		private PlayerLedgeJumpState		stateLedgeJump;
 		private PlayerLadderState			stateLadder;
 		private PlayerSwingSwordState		stateSwingSword;
@@ -108,7 +109,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			centerOffset			= new Point2I(0, -5);
 			Health					= 4 * 3;
 			MaxHealth				= 4 * 3;
-			swimmingSkills			= PlayerSwimmingSkills.CantSwim;
+			swimmingSkills			= PlayerSwimmingSkills.CannotSwim;
 			tunic					= PlayerTunics.GreenTunic;
 			moveAnimation			= GameData.ANIM_PLAYER_DEFAULT;
 			knockbackSpeed			= GameSettings.PLAYER_KNOCKBACK_SPEED;
@@ -152,6 +153,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateNormal			= new PlayerNormalState();
 			stateBusy			= new PlayerBusyState();
 			stateSwim			= new PlayerSwimState();
+			stateUnderwater		= new PlayerUnderwaterState();
 			stateLadder			= new PlayerLadderState();
 			stateLedgeJump		= new PlayerLedgeJumpState();
 			stateSwingSword		= new PlayerSwingSwordState();
@@ -207,6 +209,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 				return stateSwim;
 			else if (physics.IsOnLadder && !RoomControl.IsSideScrolling) // Ladders behave differently in side-scrolling mode.
 				return stateLadder;
+			else if (RoomControl.IsUnderwater)
+				return stateUnderwater;
 			else
 				return stateNormal;
 		}
@@ -522,12 +526,18 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public override void OnEnterRoom() {
+			// Update information about the tile we are standing on.
+			Physics.TopTile = RoomControl.TileManager
+				.GetSurfaceTileAtPosition(position, Physics.MovesWithPlatforms);
+
+			// Notify the state.
 			if (specialState != null && specialState.IsActive)
 				stateMinecart.OnEnterRoom();
 			state.OnEnterRoom();
 		}
 
 		public override void OnLeaveRoom() {
+			// Notify the state.
 			if (specialState != null && specialState.IsActive)
 				stateMinecart.OnLeaveRoom();
 			state.OnLeaveRoom();
@@ -566,7 +576,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			base.OnBeginFalling();
 
 			if (RoomControl.IsSideScrolling) {
-				if (state is PlayerNormalState)
+				if (state == stateNormal)
 					Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
 			}
 		}
@@ -764,6 +774,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerSwimState SwimState {
 			get { return stateSwim; }
+		}
+
+		public PlayerUnderwaterState UnderwaterState {
+			get { return stateUnderwater; }
 		}
 
 		public PlayerLedgeJumpState LedgeJumpState {

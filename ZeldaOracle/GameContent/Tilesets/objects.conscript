@@ -210,21 +210,21 @@ TILE bridge;
 	TYPE		TileBridge;
 	SPRITE		tile_bridge_horizontal;
 	PROPERTIES	(boolean, vertical, false, "Vertical", "", "Bridge", "True if the bridge is vertical."),
-				(integer, bridge_direction, -1, "Bridge Direction", "", "Bridge", "Direction the bridge is in.");
+				(integer, bridge_direction, -1, "Bridge Direction", "direction", "Bridge", "Direction the bridge is in.");
 END;
 
 TILE bridge_horizontal;
 	CLONE		bridge;
 	SPRITE		tile_bridge_horizontal;
 	PROPERTIES	(boolean, vertical, false),
-				(integer, direction, 0);
+				(integer, bridge_direction, 0);
 END;
 
 TILE bridge_vertical;
 	CLONE		bridge;
 	SPRITE		tile_bridge_vertical;
 	PROPERTIES	(boolean, vertical, true),
-				(integer, direction, 3);
+				(integer, bridge_direction, 3);
 END;
 
 # ---- Moving Platform --------------------------------------------------------

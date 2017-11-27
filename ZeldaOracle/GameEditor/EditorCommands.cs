@@ -8,8 +8,10 @@ using System.Windows.Input;
 namespace ZeldaEditor {
 	/**<summary>A collection of commands for use in the editor window.</summary>*/
 	public static class EditorCommands {
-		//=========== GENERAL ============
-		#region General
+
+		//-----------------------------------------------------------------------------
+		// General
+		//-----------------------------------------------------------------------------
 
 		/**<summary>The command to exit the editor.</summary>*/
 		public static readonly RoutedUICommand Exit = new RoutedUICommand(
@@ -27,15 +29,16 @@ namespace ZeldaEditor {
 		public static readonly RoutedUICommand Close = new RoutedUICommand(
 			"Close", "Close", typeof(EditorCommands));
 
-		/**<summary>The secondary keybinding for the undo command.</summary>*/
+		/**<summary>The secondary keybinding for the redo command.</summary>*/
 		public static readonly RoutedUICommand RedoSecondary = new RoutedUICommand(
 			"RedoSecondary", "Redo", typeof(EditorCommands),
 			new InputGestureCollection() {
 				new KeyGesture(Key.Z, ModifierKeys.Control | ModifierKeys.Shift) });
 
-		#endregion
-		//============ WORLD =============
-		#region World
+
+		//-----------------------------------------------------------------------------
+		// World
+		//-----------------------------------------------------------------------------
 
 		/**<summary>The command to test the current world.</summary>*/
 		public static readonly RoutedUICommand TestWorld = new RoutedUICommand(
@@ -87,33 +90,10 @@ namespace ZeldaEditor {
 		public static readonly RoutedUICommand ShiftLevel = new RoutedUICommand(
 			"ShiftLevel", "Shift Level", typeof(EditorCommands));
 
-		#endregion
-		//============ TOOLS =============
-		#region Tools
 
-		/**<summary>The command to switch to the pointer tool.</summary>*/
-		public static readonly RoutedUICommand PointerTool = new RoutedUICommand(
-			"PointerTool", "Pointer Tool", typeof(EditorCommands));
-
-		/**<summary>The command to switch to the place tool.</summary>*/
-		public static readonly RoutedUICommand PlaceTool = new RoutedUICommand(
-			"PlaceTool", "Place Tool", typeof(EditorCommands));
-
-		/**<summary>The command to switch to the square tool.</summary>*/
-		public static readonly RoutedUICommand SquareTool = new RoutedUICommand(
-			"SquareTool", "Square Tool", typeof(EditorCommands));
-
-		/**<summary>The command to switch to the fill tool.</summary>*/
-		public static readonly RoutedUICommand FillTool = new RoutedUICommand(
-			"FillTool", "Fill Tool", typeof(EditorCommands));
-
-		/**<summary>The command to switch to the select tool.</summary>*/
-		public static readonly RoutedUICommand SelectTool = new RoutedUICommand(
-			"SelectTool", "Select Tool", typeof(EditorCommands));
-
-		/**<summary>The command to switch to the eyedropper tool.</summary>*/
-		public static readonly RoutedUICommand EyedropperTool = new RoutedUICommand(
-			"EyedropperTool", "Eyedropper Tool", typeof(EditorCommands));
+		//-----------------------------------------------------------------------------
+		// Tools
+		//-----------------------------------------------------------------------------
 
 		/**<summary>The command to deselect the current selection.</summary>*/
 		public static readonly RoutedUICommand Deselect = new RoutedUICommand(
@@ -121,9 +101,10 @@ namespace ZeldaEditor {
 			new InputGestureCollection() {
 				new KeyGesture(Key.D, ModifierKeys.Control) });
 
-		#endregion
-		//============= VIEW =============
-		#region View
+
+		//-----------------------------------------------------------------------------
+		// View
+		//-----------------------------------------------------------------------------
 
 		/**<summary>The command to toggle the grid visibility.</summary>*/
 		public static readonly RoutedUICommand ShowGrid = new RoutedUICommand(
@@ -149,6 +130,5 @@ namespace ZeldaEditor {
 			new InputGestureCollection() {
 				new KeyGesture(Key.PageDown) });
 
-		#endregion
 	}
 }

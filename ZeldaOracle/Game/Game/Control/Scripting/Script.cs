@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Text;
 using System.CodeDom.Compiler;
 using ZeldaOracle.Common.Scripting;
-using ZeldaOracle.Common.Util;
 using System.Collections;
 
 namespace ZeldaOracle.Game.Control.Scripting {

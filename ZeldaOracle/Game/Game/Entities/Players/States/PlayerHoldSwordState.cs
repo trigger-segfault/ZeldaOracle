@@ -106,7 +106,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			if (weapon.IsEquipped && weapon.IsButtonDown()) {
 				player.Movement.IsStrafing		= true;
 				player.Movement.MoveCondition	= PlayerMoveCondition.FreeMovement;
-				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
+				if (player.RoomControl.IsUnderwater)
+					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MERMAID_SWIM);
+				else
+					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
 				
 				player.EquipTool(player.ToolSword);
 

@@ -7,11 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zelda", "ZeldaOracle\Game\Z
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeldaContent", "ZeldaOracle\GameContent\ZeldaContent.contentproj", "{67B9D68E-33D3-4346-8B69-E9D32EB96EB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeldaAPI", "ZeldaAPI\ZeldaAPI.csproj", "{B8B46D20-161D-47D3-810A-69D5CA61C080}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeldaEditorLegacy", "ZeldaOracle\GameEditorLegacy\ZeldaEditorLegacy.csproj", "{96DB7016-FE01-4698-A9C2-523F6AA2219E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeldaAPI", "ZeldaOracle\GameAPI\ZeldaAPI.csproj", "{B8B46D20-161D-47D3-810A-69D5CA61C080}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeldaEditor", "ZeldaOracle\GameEditor\ZeldaEditor.csproj", "{AB05C473-9789-441A-B32F-E86154B91C09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeldaEditorLegacy", "ZeldaOracle\GameEditorLegacy\ZeldaEditorLegacy.csproj", "{96DB7016-FE01-4698-A9C2-523F6AA2219E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EditorLibraries", "EditorLibraries", "{716D90A1-1162-4EF9-8BFE-B7CD39C233F7}"
 EndProject

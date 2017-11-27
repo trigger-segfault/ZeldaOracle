@@ -23,13 +23,13 @@ namespace ZeldaEditor.Undo {
 
 		public override void Undo(EditorControl editorControl) {
 			editorControl.World.RemoveDungeon(id);
-			editorControl.EditorWindow.TreeViewWorld.RefreshDungeons();
+			editorControl.EditorWindow.WorldTreeView.RefreshDungeons();
 		}
 
 		public override void Redo(EditorControl editorControl) {
 			Dungeon dungeon = new Dungeon(id, name);
 			editorControl.World.AddDungeon(dungeon);
-			editorControl.EditorWindow.TreeViewWorld.RefreshDungeons();
+			editorControl.EditorWindow.WorldTreeView.RefreshDungeons();
 		}
 	}
 }

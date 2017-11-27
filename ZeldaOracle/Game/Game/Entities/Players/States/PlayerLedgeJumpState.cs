@@ -116,8 +116,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnEnterRoom() {
 			if (ledgeExtendsToNextRoom) {
 				hasRoomChanged = true;
-				
-				// Find the landing position, calculating the movement distance in pixels.
+
+				// Find the landing position, calculating the movement
+				// distance in pixels.
 				Vector2F pos = player.Position;
 				int distance = 0;
 				while (!CanLandAtPosition(pos)) {

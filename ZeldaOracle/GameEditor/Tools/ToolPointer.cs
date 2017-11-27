@@ -10,6 +10,7 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game;
 using ZeldaEditor.Undo;
+using Key = System.Windows.Input.Key;
 
 namespace ZeldaEditor.Tools {
 	public class ToolPointer : EditorTool {
@@ -22,18 +23,14 @@ namespace ZeldaEditor.Tools {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ToolPointer() {
-			name = "Pointer Tool";
+		public ToolPointer() : base("Pointer Tool", Key.M) {
+			
 		}
 
 		
 		//-----------------------------------------------------------------------------
 		// Selection
 		//-----------------------------------------------------------------------------
-
-		public override void OnChangeLayer() {
-			//Deselect();
-		}
 
 		public override void Cut() {
 			/*editorControl.ToolSelection.Clipboard = LevelDisplay.GetSelectedTilesAsTileGrid(true);
@@ -53,12 +50,12 @@ namespace ZeldaEditor.Tools {
 			if (selectedTile != null) {
 				ActionPlace action = ActionPlace.CreatePlaceAction(selectedTile.Room.Level, selectedTile.Layer, null);
 				action.AddOverwrittenTile(selectedTile.Location + selectedTile.Room.Location * selectedTile.Room.Size, selectedTile);
-				editorControl.PushAction(action, ActionExecution.Execute);
+				EditorControl.PushAction(action, ActionExecution.Execute);
 			}
 			else if (selectedEventTile != null) {
 				ActionEventTile action = new ActionEventTile(selectedEventTile.Room.Level);
 				action.AddOverwrittenEventTile(selectedEventTile);
-				editorControl.PushAction(action, ActionExecution.Execute);
+				EditorControl.PushAction(action, ActionExecution.Execute);
 			}
 			selectedEventTile   = null;
 			selectedTile        = null;
@@ -74,12 +71,12 @@ namespace ZeldaEditor.Tools {
 			selectedEventTile	= null;
 			selectedTile		= null;
 			selectedRoom        = null;
-			//EditorControl.PropertyGrid.CloseProperties();
 			UpdateCommands();
 		}
 
+
 		//-----------------------------------------------------------------------------
-		// Overridden Methods
+		// Overridden State Methods
 		//-----------------------------------------------------------------------------
 
 		protected override void OnBegin() {
@@ -90,23 +87,23 @@ namespace ZeldaEditor.Tools {
 		}
 
 		protected override void OnEnd() {
-			selectedTile		= null;
-			selectedEventTile	= null;
-			selectedRoom        = null;
 			LevelDisplay.ClearSelectionBox();
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Overridden Mouse Methods
+		//-----------------------------------------------------------------------------
+
 		protected override void OnMouseDown(MouseEventArgs e) {
-			base.OnMouseDown(e);
-			
-			Point2I mousePos = new Point2I(e.X, e.Y);
+			Point2I mousePos = e.MousePos();
 			
 			// Sample the tile at the mouse position.
 			BaseTileDataInstance baseTile = null;
-			if (editorControl.EventMode)
+			if (EditorControl.EventMode)
 				baseTile = LevelDisplay.SampleEventTile(mousePos);
 			else
-				baseTile = LevelDisplay.SampleTile(mousePos, editorControl.CurrentLayer);
+				baseTile = LevelDisplay.SampleTile(mousePos, EditorControl.CurrentLayer);
 
 
 			// Select or deselect the tile.
@@ -117,11 +114,7 @@ namespace ZeldaEditor.Tools {
 					room = LevelDisplay.SampleRoom(mousePos, false);
 					roomSelect = true;
 				}
-
-				selectedTile = null;
-				selectedEventTile = null;
-				selectedRoom = null;
-				LevelDisplay.DeselectTiles();
+				
 				if (roomSelect) {
 					if (room != null) {
 						selectedRoom = room;
@@ -145,18 +138,12 @@ namespace ZeldaEditor.Tools {
 			}
 		}
 
-		protected override void OnMouseUp(MouseEventArgs e) {
-			base.OnMouseUp(e);
-		}
-
 		protected override void OnMouseMove(MouseEventArgs e) {
-			base.OnMouseMove(e);
-			
-			Point2I mousePos = new Point2I(e.X, e.Y);
+			Point2I mousePos = e.MousePos();
 
-			if (!editorControl.EventMode) {
+			if (!EditorControl.EventMode) {
 				// Highlight tiles.
-				TileDataInstance tile = LevelDisplay.SampleTile(mousePos, editorControl.CurrentLayer);
+				TileDataInstance tile = LevelDisplay.SampleTile(mousePos, EditorControl.CurrentLayer);
 				EditorControl.HighlightMouseTile = (tile != null);
 				LevelDisplay.CursorTileSize = (tile != null ? tile.Size : Point2I.One);
 			}
@@ -175,10 +162,20 @@ namespace ZeldaEditor.Tools {
 				}
 			}
 		}
-		
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Properties
+		//-----------------------------------------------------------------------------
+
 		public override bool CanDeleteDeselect {
-			get { return LevelDisplay.SelectedTiles.Any(); }
+			get { return selectedTile != null || selectedEventTile != null || selectedRoom != null; }
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Tool-Specific Methods
+		//-----------------------------------------------------------------------------
 
 		public void GotoTile(BaseTileDataInstance baseTile) {
 			selectedTile = null;
@@ -199,6 +196,7 @@ namespace ZeldaEditor.Tools {
 			LevelDisplay.SetSelectionBox(baseTile);
 			LevelDisplay.CenterViewOnPoint(pixelPosition);
 		}
+
 		public void GotoRoom(Room room) {
 			selectedTile = null;
 			selectedEventTile = null;

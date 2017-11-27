@@ -99,7 +99,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.SyncAnimationWithDirection = false;
 			player.Movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
 
-			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_AIM);
+			if (player.RoomControl.IsUnderwater)
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MERMAID_AIM);
+			else
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_AIM);
+
 			player.Graphics.SubStripIndex = angle;
 			player.EquipTool(player.ToolVisual);
 			player.ToolVisual.PlayAnimation(GameData.ANIM_SEED_SHOOTER);

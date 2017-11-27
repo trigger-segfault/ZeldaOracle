@@ -15,6 +15,8 @@ using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Game.GameStates.Transitions;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerSwimState : PlayerState {
@@ -22,6 +24,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		private bool	isSubmerged;
 		private int		submergedTimer;
 		private int		submergedDuration;
+		private bool	isDiving;
 
 
 		//-----------------------------------------------------------------------------
@@ -34,11 +37,59 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			submergedTimer		= 0;
 			isNaturalState		= true;
 		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Internal methods
+		//-----------------------------------------------------------------------------
+
+		// Check if it is possible to dive from the player's current location.
+		private bool CanDive() {
+			Level surfaceLevel = player.RoomControl.Level.ConnectedLevelBelow;
+			if (surfaceLevel == null)
+				return false;
+			Point2I roomLocation = player.RoomControl.Room.Location;
+			if (!surfaceLevel.ContainsRoom(roomLocation))
+				return false;
+			return true;
+		}
+
+		// Dive to the level below the current level. This will transition
+		// to the room located directly below this room in the same room
+		// location. The level below is expected to be underwater but this is
+		// not required.
+		private void Dive() {
+			Level surfaceLevel = player.RoomControl.Level.ConnectedLevelBelow;
+			Point2I roomLocation = player.RoomControl.Room.Location;
+			Room connectedRoom = surfaceLevel.GetRoomAt(roomLocation);
+
+			isDiving = true;
+
+			player.Movement.StopMotion();
+			player.RoomControl.TransitionToRoom(
+				connectedRoom,
+				new RoomTransitionFade());
+		}
 
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
+
+		public override void OnEnterRoom() {
+			if (isDiving)
+			{
+				// Snap the player's position to the nearest tile location.
+				Vector2F snappedCenter = (player.Center - new Vector2F(8, 8));
+				snappedCenter = GMath.Round(snappedCenter, new Vector2F(16, 16));
+				snappedCenter += new Vector2F(8, 8);
+				player.SetPositionByCenter(snappedCenter);
+
+				// Change to standing animation and face downwards.
+				player.Direction = Directions.Down;
+				player.BeginState(player.UnderwaterState);
+			}
+		}
 
 		public override bool RequestStateChange(PlayerState newState) {
 			return true;
@@ -49,7 +100,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.MoveSpeedScale = 1.0f;
 			player.Movement.AutoAccelerate = false;
 
-			isSubmerged = false;
+			isDiving	= false;
+			isSubmerged	= false;
+
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_SWIM);
 
 			// Create a splash effect.
@@ -84,27 +137,19 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			isSubmerged = false;
-			player.Movement.CanJump = true;
-			player.Movement.MoveSpeedScale = 1.0f;
-			player.Movement.AutoAccelerate = false;
-			player.Graphics.DepthLayer = DepthLayer.PlayerAndNPCs;
+			player.Movement.CanJump			= true;
+			player.Movement.MoveSpeedScale	= 1.0f;
+			player.Movement.AutoAccelerate	= false;
+			player.Graphics.DepthLayer		= DepthLayer.PlayerAndNPCs;
+			
+			isDiving	= false;
+			isSubmerged	= false;
 		}
 
 		public override void Update() {
 
-			// Slow down movement over time from strokes
-			if (player.Movement.MoveSpeedScale > 1.0f)
-				player.Movement.MoveSpeedScale -= 0.025f;
-			
-			// Stroking scales the movement speed.
-			if (player.Movement.MoveSpeedScale <= 1.4f && Controls.A.IsPressed()) {
-				AudioSystem.PlaySound(GameData.SOUND_PLAYER_SWIM);
-				player.Movement.MoveSpeedScale = 2.0f;
-			}
-
-			// Auto accelerate during the beginning of a stroke.
-			player.Movement.AutoAccelerate = IsStroking;
+			// TODO: Code duplication with PlayerUnderwaterState
+			// TODO: magic numbers
 
 			// Update the submerge state.
 			if (isSubmerged) {
@@ -127,12 +172,31 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH, DepthLayer.EffectSplash, true);
 				splash.Position = player.Center + new Vector2F(0, 4);
 				player.RoomControl.SpawnEntity(splash);
-
+				
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 
 				// Change player depth to lowest.
 				player.Graphics.DepthLayer = DepthLayer.PlayerSubmerged;
+
+				if (player.Physics.IsInOcean && CanDive())
+				{
+					Dive();
+					return;
+				}
 			}
+
+			// Slow down movement over time from strokes
+			if (player.Movement.MoveSpeedScale > 1.0f)
+				player.Movement.MoveSpeedScale -= 0.025f;
+			
+			// Stroking scales the movement speed.
+			if (player.Movement.MoveSpeedScale <= 1.4f && Controls.A.IsPressed()) {
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_SWIM);
+				player.Movement.MoveSpeedScale = 2.0f;
+			}
+
+			// Auto accelerate during the beginning of a stroke.
+			player.Movement.AutoAccelerate = IsStroking;
 
 			base.Update();
 		}

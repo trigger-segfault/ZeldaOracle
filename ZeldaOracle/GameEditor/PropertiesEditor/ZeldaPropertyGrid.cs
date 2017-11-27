@@ -14,6 +14,7 @@ using ZeldaEditor.Control;
 using ZeldaEditor.PropertiesEditor.CustomEditors;
 using ZeldaEditor.Undo;
 using ZeldaEditor.Windows;
+using ZeldaEditor.WinForms;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
 
@@ -24,7 +25,7 @@ namespace ZeldaEditor.PropertiesEditor {
 		private IPropertyObject propertyObject;
 		private PropertiesContainer propertiesContainer;
 		//private Dictionary<string, CustomPropertyEditor> typeEditors;
-
+		private WpfMouseWheelMessageFilter messageFilter;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -41,6 +42,10 @@ namespace ZeldaEditor.PropertiesEditor {
 			this.IsMiscCategoryLabelHidden = false;
 			this.ShowAdvancedOptions = false;
 			this.AdvancedOptionsMenu = null;
+			FocusManager.SetIsFocusScope(this, true);
+
+			this.messageFilter = new WpfMouseWheelMessageFilter(this);
+			this.messageFilter.AddFilter();
 		}
 
 		public void Initialize(EditorControl editorControl) {
@@ -125,7 +130,7 @@ namespace ZeldaEditor.PropertiesEditor {
 				CustomPropertyDescriptor propertyDescriptor = (CustomPropertyDescriptor)baseDescriptor;
 				Property property = propertyDescriptor.Property;
 				ActionChangeProperty action = new ActionChangeProperty(propertyObject, property, e.OldValue, e.NewValue);
-				if (!action.IsEvent && editorControl.LastAction is ActionChangeProperty) {
+				if (editorControl.LastAction is ActionChangeProperty) {
 					ActionChangeProperty lastAction = editorControl.LastAction as ActionChangeProperty;
 					if (action.PropertyObject == lastAction.PropertyObject && action.PropertyName == lastAction.PropertyName) {
 						action.OldValue = lastAction.OldValue;
@@ -183,10 +188,6 @@ namespace ZeldaEditor.PropertiesEditor {
 			}*/
 		}
 
-		protected override void OnMouseEnter(MouseEventArgs e) {
-			base.OnMouseEnter(e);
-			Focus();
-		}
 
 		//-----------------------------------------------------------------------------
 		// Properties

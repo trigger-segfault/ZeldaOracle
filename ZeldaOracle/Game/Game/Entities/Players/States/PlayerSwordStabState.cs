@@ -36,7 +36,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.MoveCondition = PlayerMoveCondition.NoControl; // TODO: allows sideways movement for stabbing when jumping.
 			player.EquipTool(player.ToolVisual);
 			player.ToolVisual.PlayAnimation(GameData.ANIM_SWORD_STAB);
-			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_STAB);
+
+			if (player.RoomControl.IsUnderwater)
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MERMAID_STAB);
+			else
+				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_STAB);
+
 			player.ToolVisual.AnimationPlayer.SubStripIndex = player.Direction;
 		}
 		

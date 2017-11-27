@@ -33,7 +33,11 @@ namespace ZeldaEditor.WinForms {
 		// However many GraphicsDeviceControl instances you have, they all share
 		// the same underlying GraphicsDevice, managed by this helper service.
 		GraphicsDeviceService graphicsDeviceService;
+		
+		bool isMouseOver;
 
+		WinFormsMouseWheelMessageFilter messageFilter;
+		
 
 		#endregion
 
@@ -56,6 +60,12 @@ namespace ZeldaEditor.WinForms {
 		public ServiceContainer Services {
 			get { return services; }
 		}
+
+
+		public bool IsMouseOver {
+			get { return isMouseOver; }
+		}
+
 
 		ServiceContainer services = new ServiceContainer();
 
@@ -81,6 +91,9 @@ namespace ZeldaEditor.WinForms {
 				// Give derived classes a chance to initialize themselves.
 				Initialize();
 			}
+
+			messageFilter = new WinFormsMouseWheelMessageFilter(this);
+			messageFilter.AddFilter();
 
 			base.OnCreateControl();
 		}
@@ -256,6 +269,23 @@ namespace ZeldaEditor.WinForms {
 		/// other color over the top using the XNA Framework GraphicsDevice.
 		/// </summary>
 		protected override void OnPaintBackground(PaintEventArgs pevent) {
+		}
+
+
+		#endregion
+
+		#region Is Mouse Over
+
+
+		protected override void OnMouseEnter(EventArgs e) {
+			Application.AddMessageFilter(messageFilter);
+			base.OnMouseEnter(e);
+			isMouseOver = true;
+		}
+
+		protected override void OnMouseLeave(EventArgs e) {
+			base.OnMouseLeave(e);
+			isMouseOver = false;
 		}
 
 

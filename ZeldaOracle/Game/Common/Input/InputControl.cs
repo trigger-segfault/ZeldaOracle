@@ -1,9 +1,7 @@
 using System;
 
 namespace ZeldaOracle.Common.Input {
-	/** <summary>
-	 * A class to store control data.
-	 * </summary> */
+	/**<summary>A class to store control data.</summary>*/
 	public class InputControl {
 
 		//-----------------------------------------------------------------------------

@@ -99,6 +99,12 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_PLAYER_MINECART_SWING;
 		public static Animation ANIM_PLAYER_MINECART_SWING_NOLUNGE;
 		public static Animation ANIM_PLAYER_MINECART_SWING_BIG;
+		public static Animation ANIM_PLAYER_MERMAID_SWIM;
+		public static Animation ANIM_PLAYER_MERMAID_AIM;
+		public static Animation ANIM_PLAYER_MERMAID_SWING;
+		public static Animation ANIM_PLAYER_MERMAID_SPIN;
+		public static Animation ANIM_PLAYER_MERMAID_STAB;
+		public static Animation ANIM_PLAYER_MERMAID_THROW;
 
 		// Monster animations.
 		public static Animation ANIM_MONSTER_OCTOROK;
@@ -254,7 +260,7 @@ namespace ZeldaOracle.Game {
 		// Animations Loading
 		//-----------------------------------------------------------------------------
 
-		private static void LoadAnimations() {
+		public static void LoadAnimations() {
 			Resources.LoadAnimations("Animations/animations.conscript");
 
 			// Create gale effect animation.

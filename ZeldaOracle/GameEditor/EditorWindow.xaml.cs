@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,7 +47,7 @@ namespace ZeldaEditor {
 
 		private HistoryWindow		historyWindow;
 
-		private bool loaded = false;
+		private bool suppressEvents = false;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -85,15 +86,11 @@ namespace ZeldaEditor {
 
 			// Setup layer combo-box.
 			comboBoxLayers.Items.Clear();
-			comboBoxLayers.Items.Add("Layer 1");
-			comboBoxLayers.Items.Add("Layer 2");
-			comboBoxLayers.Items.Add("Layer 3");
-			comboBoxLayers.Items.Add("Events");
-			comboBoxLayers.SelectedIndex = 0;
 
 			// Create tools.
 			toolButtons = new ToggleButton[] {
 				buttonToolPointer,
+				buttonToolPan,
 				buttonToolPlace,
 				buttonToolSquare,
 				buttonToolFill,
@@ -103,9 +100,7 @@ namespace ZeldaEditor {
 
 			UpdatePropertyPreview(null);
 
-			loaded = true;
-
-			UpdateLayers();
+			suppressEvents = true;
 		}
 
 		//-----------------------------------------------------------------------------
@@ -113,7 +108,13 @@ namespace ZeldaEditor {
 		//-----------------------------------------------------------------------------
 
 		private void OnWindowLoaded(object sender, RoutedEventArgs e) {
-			
+			buttonToolPointer.Tag = editorControl.ToolPointer;
+			buttonToolPan.Tag = editorControl.ToolPan;
+			buttonToolPlace.Tag = editorControl.ToolPlace;
+			buttonToolSquare.Tag = editorControl.ToolSquare;
+			buttonToolFill.Tag = editorControl.ToolFill;
+			buttonToolSelection.Tag = editorControl.ToolSelection;
+			buttonToolEyedropper.Tag = editorControl.ToolEyedropper;
 		}
 
 		// Prompt the user to save unsaved changes if there are any. Returns
@@ -143,10 +144,10 @@ namespace ZeldaEditor {
 		// Attempt to save the world automatically first, or open a dialogue
 		// if the world isn't from a file.
 		private void SaveWorld() {
-			if (editorControl.IsWorldFromFile)
-				editorControl.SaveFileAs(editorControl.WorldFilePath); // Save to file.
-			else
+			if (editorControl.IsUntitled)
 				ShowSaveWorldDialog(); // Open Save as dialogue
+			else
+				editorControl.SaveWorld(); // Save to file.
 		}
 
 		// Open a save file dialogue to save the world.
@@ -158,7 +159,7 @@ namespace ZeldaEditor {
 			var result = dialog.ShowDialog(this);
 			if (result.HasValue && result.Value) {
 				Console.WriteLine("Saving file as " + dialog.FileName + ".");
-				editorControl.SaveFileAs(dialog.FileName);
+				editorControl.SaveWorldAs(dialog.FileName);
 			}
 		}
 
@@ -172,7 +173,7 @@ namespace ZeldaEditor {
 			var result = dialog.ShowDialog(this);
 			if (result.HasValue && result.Value) {
 				Console.WriteLine("Opened file " + dialog.FileName + ".");
-				editorControl.OpenFile(dialog.FileName);
+				editorControl.OpenWorld(dialog.FileName);
 			}
 		}
 
@@ -183,11 +184,6 @@ namespace ZeldaEditor {
 		private void OnWindowClosing(object sender, System.ComponentModel.CancelEventArgs e) {
 			if (PromptSaveChanges() == MessageBoxResult.Cancel)
 				e.Cancel = true;
-		}
-
-		public void OnToolChange(int toolIndex) {
-			for (int i = 0; i < toolButtons.Length; i++)
-				toolButtons[i].IsChecked = (i == toolIndex);
 		}
 
 		//-----------------------------------------------------------------------------
@@ -232,54 +228,24 @@ namespace ZeldaEditor {
 			editorControl.ShowEvents = dropDownItemShowEvents.IsChecked;
 		}
 
-		private void OnShowGridChecked(object sender, RoutedEventArgs e) {
-			editorControl.ShowGrid = buttonShowGrid.IsChecked.Value;
-		}
-
-		private void OnPlayAnimationsChecked(object sender, RoutedEventArgs e) {
-			editorControl.PlayAnimations = buttonPlayAnimations.IsChecked.Value;
-		}
-
 		private void OnLayerChanged(object sender, SelectionChangedEventArgs e) {
-			if (!loaded) return;
+			if (!suppressEvents) return;
 			if (comboBoxLayers.SelectedIndex == comboBoxLayers.Items.Count - 1) {
 				editorControl.EventMode = true;
 			}
 			else {
 				editorControl.EventMode = false;
 				editorControl.CurrentLayer = comboBoxLayers.SelectedIndex;
-				if (editorControl.CurrentTool != null)
-					editorControl.CurrentTool.OnChangeLayer();
 			}
-			// TODO: Reimplement
-			//if (editorControl.PropertyGrid != null)
-			//	editorControl.PropertyGrid.CloseProperties();
 			levelDisplay.Focus();
 		}
 
 		private void OnToolChanged(object sender, RoutedEventArgs e) {
-			for (int i = 0; i < toolButtons.Length; i++) {
-				if (toolButtons[i] == sender)
-					editorControl.ChangeTool(i);
-			}
+			editorControl.CurrentTool = (EditorTool) ((ToggleButton)sender).Tag;
 		}
-
-		public StatusBarItem StatusBarLabelRoomLoc { get { return statusRoomLocation; } }
-		public StatusBarItem StatusBarLabelTileLoc { get { return statusTileLocation; } }
-		public StatusBarItem StatusBarLabelTask { get { return statusTask; } }
-		public ToggleButton ButtonTestLevelPlace { get { return buttonTestLevelPlace; } }
-		public ComboBox ComboBoxTilesets { get { return comboBoxTilesets; } }
-		public ComboBox ComboBoxZones { get { return comboBoxZones; } }
-
-		public LevelDisplay LevelDisplay { get { return levelDisplay; } }
-		public TileDisplay TileDisplay { get { return tileDisplay; } }
-
-		public WorldTreeView TreeViewWorld { get { return treeViewWorld; } }
-
-		public ZeldaPropertyGrid PropertyGrid { get { return propertyGrid; } }
 		
 		private void OnTilesetChanged(object sender, SelectionChangedEventArgs e) {
-			if (!loaded) return;
+			if (!suppressEvents) return;
 			if (comboBoxTilesets.SelectedIndex != -1) {
 				editorControl.ChangeTileset(comboBoxTilesets.SelectedItem as string);
 			}
@@ -287,7 +253,7 @@ namespace ZeldaEditor {
 		}
 
 		private void OnZoneChanged(object sender, SelectionChangedEventArgs e) {
-			if (!loaded) return;
+			if (!suppressEvents) return;
 			if (comboBoxZones.SelectedIndex != -1) {
 				editorControl.ChangeZone(comboBoxZones.SelectedItem as string);
 			}
@@ -370,14 +336,6 @@ namespace ZeldaEditor {
 			}
 		}
 
-		private void OnTestLevelPlace(object sender, RoutedEventArgs e) {
-			editorControl.PlayerPlaceMode = buttonTestLevelPlace.IsChecked.Value;
-		}
-
-		private void OnTestWorld(object sender, RoutedEventArgs e) {
-			editorControl.TestWorld();
-		}
-
 		private void CanAlwaysExecute(object sender, CanExecuteRoutedEventArgs e) {
 			e.CanExecute = true;
 		}
@@ -396,7 +354,7 @@ namespace ZeldaEditor {
 
 
 		private void CanExecuteIsModified(object sender, CanExecuteRoutedEventArgs e) {
-			if (!loaded) return;
+			if (!suppressEvents) return;
 			e.CanExecute = editorControl.IsModified;
 		}
 
@@ -409,17 +367,17 @@ namespace ZeldaEditor {
 		}
 
 		private void CanExecuteIsWorldOpen(object sender, CanExecuteRoutedEventArgs e) {
-			if (!loaded) return;
+			if (!suppressEvents) return;
 			e.CanExecute = editorControl.IsWorldOpen;
 		}
 		private void CanExecuteIsLevelOpen(object sender, CanExecuteRoutedEventArgs e) {
-			if (!loaded) return;
+			if (!suppressEvents) return;
 			e.CanExecute = editorControl.IsLevelOpen;
 		}
 
 		private void OnCloseCommand(object sender, ExecutedRoutedEventArgs e) {
 			if (PromptSaveChanges() != MessageBoxResult.Cancel) {
-				editorControl.CloseFile();
+				editorControl.CloseWorld();
 			}
 		}
 
@@ -446,12 +404,11 @@ namespace ZeldaEditor {
 			buttonPlayAnimations.IsChecked = editorControl.PlayAnimations;
 		}
 		private void OnDeselectCommand(object sender, ExecutedRoutedEventArgs e) {
-			levelDisplay.DeselectSelectionGrid();
 			editorControl.CurrentTool.Deselect();
 		}
 		private void CanExecuteDeselect(object sender, CanExecuteRoutedEventArgs e) {
-			if (!loaded) return;
-			e.CanExecute = levelDisplay.SelectedTiles.Any();
+			if (!suppressEvents) return;
+			e.CanExecute = editorControl.CurrentTool.CanDeleteDeselect;
 		}
 
 		public void FinishTestWorldFromLocation() {
@@ -460,14 +417,38 @@ namespace ZeldaEditor {
 		}
 
 		private void OnPreviewKeyDown(object sender, KeyEventArgs e) {
-			if (!(FocusManager.GetFocusedElement(this) is TextBox) && Keyboard.Modifiers == ModifierKeys.None) {
-				switch (e.Key) {
-				case Key.M: OnToolChanged(buttonToolPointer, null); break;
-				case Key.P: OnToolChanged(buttonToolPlace, null); break;
-				case Key.O: OnToolChanged(buttonToolSquare, null); break;
-				case Key.F: OnToolChanged(buttonToolFill, null); break;
-				case Key.S: OnToolChanged(buttonToolSelection, null); break;
-				case Key.K: OnToolChanged(buttonToolEyedropper, null); break;
+			if (!(FocusManager.GetFocusedElement(this) is TextBox) && !(FocusManager.GetFocusedElement(propertyGrid) is TextBox)) {
+				if (Keyboard.Modifiers == ModifierKeys.None) {
+					foreach (EditorTool tool in editorControl.Tools) {
+						if (e.Key == tool.HotKey) {
+							editorControl.CurrentTool = tool;
+							return;
+						}
+					}
+				}
+
+				// Force commands and inputs to execute even when another control may have a command using that key gesture
+				foreach (InputBinding inputBinding in this.InputBindings) {
+					KeyGesture keyGesture = inputBinding.Gesture as KeyGesture;
+					if (keyGesture != null && keyGesture.Key == e.Key && keyGesture.Modifiers == Keyboard.Modifiers) {
+						if (inputBinding.Command != null) {
+							inputBinding.Command.Execute(0);
+							e.Handled = true;
+						}
+					}
+				}
+
+				foreach (CommandBinding cb in this.CommandBindings) {
+					RoutedCommand command = cb.Command as RoutedCommand;
+					if (command != null) {
+						foreach (InputGesture inputGesture in command.InputGestures) {
+							KeyGesture keyGesture = inputGesture as KeyGesture;
+							if (keyGesture != null && keyGesture.Key == e.Key && keyGesture.Modifiers == Keyboard.Modifiers) {
+								command.Execute(0, this);
+								e.Handled = true;
+							}
+						}
+					}
 				}
 			}
 		}
@@ -487,8 +468,6 @@ namespace ZeldaEditor {
 			EditorAction action = AddNewDungeonWindow.Show(this, editorControl);
 			if (action != null) {
 				editorControl.PushAction(action, ActionExecution.Execute);
-				/*editorControl.AddDungeon(dungeon, true);
-				treeViewWorld.RefreshDungeons();*/
 			}
 		}
 		private void OnAddNewScriptCommand(object sender, ExecutedRoutedEventArgs e) {
@@ -500,20 +479,20 @@ namespace ZeldaEditor {
 			}
 		}
 		private void CanExecuteCycleLayerUp(object sender, CanExecuteRoutedEventArgs e) {
-			if (!loaded) return;
-			e.CanExecute = editorControl.IsLevelOpen && (editorControl.CurrentLayer > 0 || editorControl.EventMode);
+			if (!suppressEvents) return;
+			e.CanExecute = editorControl.IsLevelOpen && (editorControl.CurrentLayer + 1 < editorControl.Level.RoomLayerCount || !editorControl.EventMode);
 		}
 		private void CanExecuteCycleLayerDown(object sender, CanExecuteRoutedEventArgs e) {
-			if (!loaded) return;
-			e.CanExecute = editorControl.IsLevelOpen && (editorControl.CurrentLayer + 1 < editorControl.Level.RoomLayerCount || !editorControl.EventMode);
+			if (!suppressEvents) return;
+			e.CanExecute = editorControl.IsLevelOpen && (editorControl.CurrentLayer > 0 || editorControl.EventMode);
 		}
 
 		private void OnCycleLayerUpCommand(object sender, ExecutedRoutedEventArgs e) {
-			comboBoxLayers.SelectedIndex--;
+			comboBoxLayers.SelectedIndex++;
 		}
 
 		private void OnCycleLayerDownCommand(object sender, ExecutedRoutedEventArgs e) {
-			comboBoxLayers.SelectedIndex++;
+			comboBoxLayers.SelectedIndex--;
 		}
 
 		private void OnResizeLevelCommand(object sender, ExecutedRoutedEventArgs e) {
@@ -536,7 +515,7 @@ namespace ZeldaEditor {
 		}
 
 		public void UpdateLayers() {
-			loaded = false;
+			suppressEvents = false;
 			comboBoxLayers.Items.Clear();
 			if (editorControl.IsLevelOpen) {
 				for (int i = 0; i < editorControl.Level.RoomLayerCount; i++) {
@@ -550,7 +529,7 @@ namespace ZeldaEditor {
 					comboBoxLayers.SelectedIndex = editorControl.CurrentLayer;
 			}
 
-			loaded = true;
+			suppressEvents = true;
 		}
 
 		private void OnShowModifiedTilesChecked(object sender, RoutedEventArgs e) {
@@ -558,15 +537,15 @@ namespace ZeldaEditor {
 		}
 
 		private void CanExecuteCopyCut(object sender, CanExecuteRoutedEventArgs e) {
-			if (!loaded) return;
+			if (!suppressEvents) return;
 			e.CanExecute = editorControl.IsLevelOpen && editorControl.CurrentTool.CanCopyCut;
 		}
 		private void CanExecuteDeleteDeselect(object sender, CanExecuteRoutedEventArgs e) {
-			if (!loaded) return;
+			if (!suppressEvents) return;
 			e.CanExecute = editorControl.IsLevelOpen && editorControl.CurrentTool.CanDeleteDeselect;
 		}
 		private void CanExecutePaste(object sender, CanExecuteRoutedEventArgs e) {
-			if (!loaded) return;
+			if (!suppressEvents) return;
 			e.CanExecute = editorControl.ToolSelection.CanPaste;
 		}
 		private void OnCopyCommand(object sender, ExecutedRoutedEventArgs e) {
@@ -592,7 +571,7 @@ namespace ZeldaEditor {
 		}
 
 		private void CanExecuteUndo(object sender, CanExecuteRoutedEventArgs e) {
-			if (!loaded) return;
+			if (!suppressEvents) return;
 			e.CanExecute = editorControl.CanUndo;
 		}
 
@@ -601,14 +580,39 @@ namespace ZeldaEditor {
 		}
 
 		private void CanExecuteRedo(object sender, CanExecuteRoutedEventArgs e) {
-			if (!loaded) return;
+			if (!suppressEvents) return;
 			e.CanExecute = editorControl.CanRedo;
 		}
 
 		private void OnRedoCommand(object sender, ExecutedRoutedEventArgs e) {
 			editorControl.Redo();
 		}
-		
+
+
+
+
+		private void OnPreviewMouseWheel(object sender, MouseWheelEventArgs e) {
+			if (treeViewWorld.IsMouseOverTreeView) {
+				treeViewWorld.FocusOnTreeView();
+			}
+			else if (propertyGrid.IsMouseOver) {
+				propertyGrid.Focus();
+			}
+		}
+
+		/*private void OnMouseWheel(object sender, MouseWheelEventArgs e) {
+			if (levelDisplay.IsMouseOver) {
+				levelDisplay.Focus();
+			}
+			else if (tileDisplay.IsMouseOver) {
+				tileDisplay.Focus();
+			}
+		}*/
+
+		//-----------------------------------------------------------------------------
+		// History Window
+		//-----------------------------------------------------------------------------
+
 		private void OnShowHistory(object sender, RoutedEventArgs e) {
 			if (historyWindow == null) {
 				historyWindow = HistoryWindow.Show(this, editorControl, OnHistoryWindowClosed);
@@ -619,14 +623,16 @@ namespace ZeldaEditor {
 				buttonShowHistory.IsChecked = false;
 			}
 		}
+
 		private void OnHistoryWindowClosed(object sender, EventArgs e) {
 			historyWindow = null;
 			buttonShowHistory.IsChecked = false;
 		}
 
-		public HistoryWindow HistoryWindow {
-			get { return historyWindow; }
-		}
+
+		//-----------------------------------------------------------------------------
+		// Interface Mutators
+		//-----------------------------------------------------------------------------
 
 		public void SelectHistoryItem(HistoryListViewItem item) {
 			if (historyWindow != null) {
@@ -637,6 +643,81 @@ namespace ZeldaEditor {
 			}
 		}
 
-		public EditorControl EditorControl { get { return editorControl; } }
+		public void UpdateCurrentTool() {
+			for (int i = 0; i < toolButtons.Length; i++)
+				toolButtons[i].IsChecked = (toolButtons[i].Tag == editorControl.CurrentTool);
+		}
+
+		// Status Bar -----------------------------------------------------------------
+
+		public void SetStatusBarLevelLocations(Point2I roomLocation, Point2I tileLocation) {
+			statusRoomLocation.Content = "Room " + roomLocation;
+			statusTileLocation.Content = "Tile " + tileLocation;
+		}
+
+		public void SetStatusBarInvalidLevelLocations() {
+			statusRoomLocation.Content = "Room (?, ?)";
+			statusTileLocation.Content = "Tile (?, ?)";
+		}
+
+		public void SetStatusBarTask(string task) {
+			statusTask.Content = task;
+		}
+
+		public void ClearStatusBarTask() {
+			statusTask.Content = "";
+		}
+		
+		// Combo Boxes ----------------------------------------------------------------
+
+		public void SetTilesetsItemsSource(IEnumerable<string> tilesets, int selectedIndex) {
+			suppressEvents = false;
+			comboBoxTilesets.ItemsSource = tilesets;
+			comboBoxTilesets.SelectedIndex = selectedIndex;
+			suppressEvents = true;
+		}
+
+		public void SetZonesItemsSource(IEnumerable<string> zones, int selectedIndex) {
+			suppressEvents = false;
+			comboBoxZones.ItemsSource = zones;
+			comboBoxZones.SelectedIndex = selectedIndex;
+			suppressEvents = true;
+		}
+
+		public void SetLayersItemsSource(IEnumerable<string> layers, int selectedIndex) {
+			suppressEvents = false;
+			comboBoxLayers.ItemsSource = layers;
+			comboBoxLayers.SelectedIndex = selectedIndex;
+			suppressEvents = true;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public EditorControl EditorControl {
+			get { return editorControl; }
+		}
+
+		public HistoryWindow HistoryWindow {
+			get { return historyWindow; }
+		}
+		
+		public LevelDisplay LevelDisplay {
+			get { return levelDisplay; }
+		}
+
+		public TileDisplay TileDisplay {
+			get { return tileDisplay; }
+		}
+
+		public WorldTreeView WorldTreeView {
+			get { return treeViewWorld; }
+		}
+
+		public ZeldaPropertyGrid PropertyGrid {
+			get { return propertyGrid; }
+		}
 	}
 }

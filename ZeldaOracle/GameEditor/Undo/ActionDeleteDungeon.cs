@@ -27,14 +27,16 @@ namespace ZeldaEditor.Undo {
 
 		public override void Undo(EditorControl editorControl) {
 			editorControl.World.InsertDungeon(index, dungeon);
-			editorControl.EditorWindow.TreeViewWorld.RefreshDungeons();
-			editorControl.NeedsNewEventCache = true;
+			editorControl.EditorWindow.WorldTreeView.RefreshDungeons();
+			if (dungeon.Events.HasDefinedEvents)
+				editorControl.NeedsNewEventCache = true;
 		}
 
 		public override void Redo(EditorControl editorControl) {
 			editorControl.World.RemoveDungeonAt(index);
-			editorControl.EditorWindow.TreeViewWorld.RefreshDungeons();
-			editorControl.NeedsNewEventCache = true;
+			editorControl.EditorWindow.WorldTreeView.RefreshDungeons();
+			if (dungeon.Events.HasDefinedEvents)
+				editorControl.NeedsNewEventCache = true;
 		}
 	}
 }

@@ -40,7 +40,7 @@ namespace ZeldaOracle.Game.Tiles {
 			properties.Set("solidity", (int) TileSolidType.NotSolid)
 				.SetDocumentation("Solid Type", "enum", "TileSolidType", "General", "");
 			properties.Set("ledge_direction", Directions.Down)
-				.SetDocumentation("Ledge Direction", "General", "");
+				.SetDocumentation("Ledge Direction", "direction", "", "General", "");
 			properties.Set("collision_model", "")
 				.SetDocumentation("Collision Model", "collision_model", "", "General", "");
 			properties.Set("environment_type", (int) TileEnvironmentType.Normal)
@@ -53,15 +53,17 @@ namespace ZeldaOracle.Game.Tiles {
 
 			// Motion.
 			properties.Set("path", "")
-				.SetDocumentation("Path", "Motion", "A path the tile follows in.");
-			properties.Set("conveyor_angle", -1);
-			properties.Set("conveyor_speed", 0.0f);
-			
+				.SetDocumentation("Path", "path", "", "Motion", "A path the tile follows in.");
+			properties.Set("conveyor_angle", -1)
+				.SetDocumentation("Conveyor Angle", "angle", "", "Motion", "");
+			properties.Set("conveyor_speed", 0.0f)
+				.SetDocumentation("Conveyor Speed", "Motion", "");
+
 			// Interaction Options.
 			properties.Set("move_once", false)
 				.SetDocumentation("Move Once", "Interactions", "");
 			properties.Set("move_direction", -1)
-				.SetDocumentation("Move Direction", "Interactions", "");
+				.SetDocumentation("Move Direction", "direction", "", "Interactions", "");
 			properties.Set("cuttable_sword_level", 0)
 				.SetDocumentation("Cuttable Sword Level", "Interactions", "");
 			properties.Set("pickupable_bracelet_level", 0)

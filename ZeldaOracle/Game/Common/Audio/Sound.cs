@@ -11,10 +11,7 @@ using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Audio {
 	
-	/** <summary>
-	 * A structure for storing a sound effect.
-	 * </summary>
-	 */
+	/**<summary>A structure for storing a sound effect.</summary>*/
 	public class Sound {
 
 		// Containment

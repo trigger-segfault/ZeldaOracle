@@ -336,7 +336,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ZeldaAPI\ZeldaAPI.csproj">
+    <ProjectReference Include="..\GameAPI\ZeldaAPI.csproj">
       <Project>{b8b46d20-161d-47d3-810a-69d5ca61c080}</Project>
       <Name>ZeldaAPI</Name>
     </ProjectReference>

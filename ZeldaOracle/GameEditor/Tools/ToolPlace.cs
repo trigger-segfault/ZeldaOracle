@@ -13,6 +13,7 @@ using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaEditor.Undo;
 using ZeldaOracle.Common.Graphics;
 using ZeldaEditor.Control;
+using Key = System.Windows.Input.Key;
 
 namespace ZeldaEditor.Tools {
 	public class ToolPlace : EditorTool {
@@ -29,84 +30,15 @@ namespace ZeldaEditor.Tools {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ToolPlace() {
-			name = "Place Tool";
+		public ToolPlace() : base("Place Tool", Key.P) {
 			placedTiles = new Dictionary<Point2I, TileDataInstance>();
 		}
 
-
+		
 		//-----------------------------------------------------------------------------
-		// Internal methods
+		// Overridden State Methods
 		//-----------------------------------------------------------------------------
-
-		private void ActivateTile(MouseEventArgs e) {
-			Point2I mousePos = new Point2I(e.X, e.Y);
-			Point2I levelTileCoord = LevelDisplay.SampleLevelTileCoordinates(mousePos);
-
-			// Limit tiles to the selection box if there is one.
-			if (LevelDisplay.SelectionGridArea.IsEmpty ||
-				LevelDisplay.SelectionGridArea.Contains(levelTileCoord))
-			{
-				Room room = Level.GetRoom((LevelTileCoord) levelTileCoord);
-				if (room != null) {
-					Point2I tileLocation = Level.GetTileLocation((LevelTileCoord) levelTileCoord);
-					ActivateTile(e.Button, room, tileLocation);
-				}
-			}
-		}
-
-		private void ActivateTile(MouseButtons mouseButton, Room room, Point2I tileLocation) {
-			TileDataInstance tile = room.GetTile(tileLocation, EditorControl.CurrentLayer);
-
-			if (mouseButton == MouseButtons.Left) {
-				TileData selectedTilesetTileData = editorControl.SelectedTilesetTileData as TileData;
-
-				if (selectedTilesetTileData != null) {
-					// Remove the existing tile.
-					tileAction.AddOverwrittenTile(room.Location * editorControl.Level.RoomSize + tileLocation, tile);
-					if (tile != null) {
-						room.RemoveTile(tile);
-						//editorControl.OnDeleteObject(tile);
-					}
-					// Place the new tile.
-					room.PlaceTile(
-						new TileDataInstance(selectedTilesetTileData),
-						tileLocation.X, tileLocation.Y, editorControl.CurrentLayer);
-					editorControl.IsModified = true;
-				}
-			}
-			else if (mouseButton == MouseButtons.Right) {
-				// Erase the tile.
-				if (tile != null) {
-					tileAction.AddOverwrittenTile(room.Location * editorControl.Level.RoomSize + tileLocation, tile);
-					room.RemoveTile(tile);
-					//editorControl.OnDeleteObject(tile);
-					editorControl.IsModified = true;
-				}
-			}
-			else if (mouseButton == MouseButtons.Middle) {
-				// Sample the tile.
-				if (tile != null) {
-					editorControl.SelectedTilesetTile		= -Point2I.One;
-					editorControl.SelectedTilesetTileData	= tile.TileData;
-				}
-			}
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Overridden Methods
-		//-----------------------------------------------------------------------------
-
-		protected override void OnCancel() {
-			placedTiles.Clear();
-			tileAction = null;
-		}
-
-		public override void OnChangeLayer() {
-			StopDragging();
-		}
-
+		
 		protected override void OnInitialize() {
 			MouseCursor = PencilCursor;
 		}
@@ -115,6 +47,16 @@ namespace ZeldaEditor.Tools {
 			EditorControl.HighlightMouseTile = true;
 		}
 
+		protected override void OnCancel() {
+			placedTiles.Clear();
+			tileAction = null;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Mouse Methods
+		//-----------------------------------------------------------------------------
+
 		protected override void OnMouseDown(MouseEventArgs e) {
 			Point2I mousePos    = e.MousePos();
 			Room room			= LevelDisplay.SampleRoom(mousePos);
@@ -122,7 +64,7 @@ namespace ZeldaEditor.Tools {
 			if (IsDrawing && e.Button.IsOpposite(DragButton)) {
 				Cancel();
 			}
-			else if (editorControl.EventMode && e.Button.IsLeftOrRight()) {
+			else if (EditorControl.EventMode && e.Button.IsLeftOrRight()) {
 				if (room == null)
 					return;
 
@@ -139,18 +81,12 @@ namespace ZeldaEditor.Tools {
 					while (eventTile != null) {
 						eventAction.AddOverwrittenEventTile(eventTile);
 						eventTile.Room.RemoveEventTile(eventTile);
-						//editorControl.OnDeleteObject(eventTile);
 						eventTile = LevelDisplay.SampleEventTile(mousePos);
 					}
-
-					/*if (eventTileData != null) {
-						room.CreateEventTile(eventTileData, position);
-					}*/
 				}
 				else if (eventTile != null) {
 					eventAction.AddOverwrittenEventTile(eventTile);
 					eventTile.Room.RemoveEventTile(eventTile);
-					//editorControl.OnDeleteObject(eventTile);
 				}
 				EditorControl.PushAction(eventAction, ActionExecution.PostExecute);
 			}
@@ -167,7 +103,7 @@ namespace ZeldaEditor.Tools {
 					drawTileData = null;
 					drawTile = null;
 				}
-				tileAction = ActionPlace.CreatePlaceAction(editorControl.Level, editorControl.CurrentLayer, drawTileData);
+				tileAction = ActionPlace.CreatePlaceAction(Level, EditorControl.CurrentLayer, drawTileData);
 				OnMouseDragMove(e);
 			}
 		}
@@ -175,7 +111,7 @@ namespace ZeldaEditor.Tools {
 		protected override void OnMouseDragEnd(MouseEventArgs e) {
 			if (IsDrawing) {
 				IsDrawing = false;
-				editorControl.PushAction(tileAction, ActionExecution.Execute);
+				EditorControl.PushAction(tileAction, ActionExecution.Execute);
 				tileAction = null;
 				placedTiles.Clear();
 			}
@@ -187,23 +123,31 @@ namespace ZeldaEditor.Tools {
 				Point2I levelTileCoord = LevelDisplay.SampleLevelTileCoordinates(mousePos);
 				Room room = LevelDisplay.SampleRoom(mousePos);
 				if (room != null && !placedTiles.ContainsKey(levelTileCoord)) {
-					TileDataInstance tile = LevelDisplay.SampleTile(mousePos, editorControl.CurrentLayer);
+					TileDataInstance tile = LevelDisplay.SampleTile(mousePos, EditorControl.CurrentLayer);
 					placedTiles.Add(levelTileCoord, drawTile);
 					tileAction.AddOverwrittenTile(levelTileCoord, tile);
 				}
 			}
 		}
 
+
 		//-----------------------------------------------------------------------------
-		// Virtual drawing
+		// Overridden Properties
+		//-----------------------------------------------------------------------------
+
+		public override bool CancelOnLayerChange { get { return true; } }
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Drawing Methods
 		//-----------------------------------------------------------------------------
 
 		public override bool DrawHideTile(TileDataInstance tile, Room room, Point2I levelCoord, int layer) {
-			return (IsDrawing && drawTile == null && placedTiles.ContainsKey(levelCoord));
+			return (IsDrawing && drawTile == null && placedTiles.ContainsKey(levelCoord) && layer == EditorControl.CurrentLayer);
 		}
 
 		public override void DrawTile(Graphics2D g, Room room, Point2I position, Point2I levelCoord, int layer) {
-			if (!EditorControl.EventMode && layer == editorControl.CurrentLayer) {
+			if (!EditorControl.EventMode && layer == EditorControl.CurrentLayer) {
 				if (!IsDrawing && levelCoord == LevelDisplay.CursorTileLocation) {
 					TileDataInstance tile = CreateDrawTile();
 					if (tile != null)
@@ -227,8 +171,9 @@ namespace ZeldaEditor.Tools {
 			}
 		}
 
+
 		//-----------------------------------------------------------------------------
-		// Helpers
+		// Internal Methods
 		//-----------------------------------------------------------------------------
 
 		private TileDataInstance CreateDrawTile() {
@@ -237,6 +182,7 @@ namespace ZeldaEditor.Tools {
 				return new TileDataInstance(tileData);
 			return null;
 		}
+
 		private EventTileDataInstance CreateDrawEventTile() {
 			EventTileData eventTileData = GetEventTileData();
 			if (eventTileData != null)
@@ -245,10 +191,11 @@ namespace ZeldaEditor.Tools {
 		}
 
 		private TileData GetTileData() {
-			return editorControl.SelectedTilesetTileData as TileData;
+			return EditorControl.SelectedTilesetTileData as TileData;
 		}
+
 		private EventTileData GetEventTileData() {
-			return editorControl.SelectedTilesetTileData as EventTileData;
+			return EditorControl.SelectedTilesetTileData as EventTileData;
 		}
 	}
 }

@@ -23,10 +23,10 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		public CollisionModel(CollisionModel copy) {
-			bounds = Rectangle2I.Zero;
-			boxes = new List<Rectangle2I>();
+			this.boxes = new List<Rectangle2I>();
 			for (int i = 0; i < copy.boxes.Count; ++i)
-				boxes.Add(copy.boxes[i]);
+				this.boxes.Add(copy.boxes[i]);
+			this.bounds = copy.bounds;
 		}
 
 

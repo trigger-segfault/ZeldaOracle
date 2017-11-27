@@ -65,6 +65,8 @@ namespace ZeldaEditor.PropertiesEditor {
 			AddEditor<EnumFlagPropertyEditor>("enum_flags");
 			AddEditor<TextMessagePropertyEditor>("text_message");
 			AddEditor<WarpPropertyEditor>("warp");
+			AddEditor<DirectionPropertyEditor>("direction");
+			AddEditor<AnglePropertyEditor>("angle");
 		}
 
 		public void AddEditor<Editor>(string typeName) where Editor : ITypeEditor {

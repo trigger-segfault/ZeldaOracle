@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 
 namespace ZeldaOracle.Common.Scripting {
-
 	/**<summary>The collection of definable events.</summary>*/
 	public class EventCollection {
 		/**<summary>The object that holds these events.</summary>*/
@@ -35,8 +34,8 @@ namespace ZeldaOracle.Common.Scripting {
 		public EventCollection(EventCollection copy, IEventObject eventObject) {
 			this.eventObject	= eventObject;
 			this.events			= new Dictionary<string, Event>();
-			foreach (KeyValuePair<string, Event> pair in copy.events) {
-				AddEvent(new Event(pair.Value));
+			foreach (Event evnt in copy.events.Values) {
+				AddEvent(new Event(evnt));
 			}
 		}
 
@@ -45,10 +44,18 @@ namespace ZeldaOracle.Common.Scripting {
 		// Accessors
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Gets an enumerable list for all event documentations.</summary>*/
+		/**<summary>Gets an enumerable list for all events.</summary>*/
 		public IEnumerable<Event> GetEvents() {
 			foreach (Event evnt in events.Values) {
 				yield return evnt;
+			}
+		}
+
+		/**<summary>Gets an enumerable list for all defined events.</summary>*/
+		public IEnumerable<Event> GetDefinedEvents() {
+			foreach (Event evnt in events.Values) {
+				if (evnt.IsDefined)
+					yield return evnt;
 			}
 		}
 
@@ -83,6 +90,15 @@ namespace ZeldaOracle.Common.Scripting {
 		public void AddEvent(Event e) {
 			events.Add(e.Name, e);
 			e.Events = this;
+		}
+
+		/**<summary>Sets all defined events in the collection.</summary>*/
+		public void SetAll(EventCollection events) {
+			foreach (Event evnt in events.GetDefinedEvents()) {
+				Event newEvent = new Event(evnt);
+				newEvent.Events = this;
+				this.events[evnt.Name] = newEvent;
+			}
 		}
 
 

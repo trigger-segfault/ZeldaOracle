@@ -15,106 +15,77 @@ using ZeldaEditor.Util;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
+using Key = System.Windows.Input.Key;
 
 namespace ZeldaEditor.Tools {
 	public abstract class EditorTool {
-		protected EditorControl editorControl;
-		protected string		name;
+		private EditorControl	editorControl;
+		private string			name;
 		private bool			isDragging;
 		private MouseButtons	dragButton;
 		private Cursor			mouseCursor;
 		private bool            isDrawing;
+		private Key				hotKey;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
-
-		static EditorTool() {
-
-		}
-
-		public EditorTool() {
-			name = "";
+		
+		protected EditorTool(string name, Key hotKey) {
+			this.name       = name;
+			this.hotKey     = hotKey;
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Methods
+		// Internal Methods
 		//-----------------------------------------------------------------------------
 
 		protected static Cursor LoadCursor(string name) {
-			try {
-				ResourceManager rm = new ResourceManager("ZeldaEditor.g", Assembly.GetExecutingAssembly());
-				var input = (Stream)rm.GetObject("resources/cursors/" + name.ToLower() + "cursor.cur");
-				input.Position = 0;
-				string path = "CustomCursor.cur";
-				using (Stream output = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write)) {
-					output.SetLength(0);
-					byte[] buffer = new byte[8 * 1024];
-					int len;
-					while ((len = input.Read(buffer, 0, buffer.Length)) > 0) {
-						output.Write(buffer, 0, len);
-					}
+			ResourceManager rm = new ResourceManager("ZeldaEditor.g", Assembly.GetExecutingAssembly());
+			var input = (Stream)rm.GetObject("resources/cursors/" + name.ToLower() + "cursor.cur");
+			input.Position = 0;
+			string path = "CustomCursor.cur";
+			using (Stream output = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write)) {
+				output.SetLength(0);
+				byte[] buffer = new byte[8 * 1024];
+				int len;
+				while ((len = input.Read(buffer, 0, buffer.Length)) > 0) {
+					output.Write(buffer, 0, len);
 				}
-				Cursor cursor = NativeMethods.LoadCustomCursor(path);
-				File.Delete("CustomCursor.cur");
-				return cursor;
 			}
-			catch (Exception ex) {
-				throw ex;
-			}
+			Cursor cursor = NativeMethods.LoadCustomCursor(path);
+			File.Delete("CustomCursor.cur");
+			return cursor;
 		}
+
+		protected void StopDragging() {
+			isDragging = false;
+		}
+
+		protected void UpdateCommands() {
+			System.Windows.Input.CommandManager.InvalidateRequerySuggested();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// State Methods
+		//-----------------------------------------------------------------------------
 
 		public void Initialize(EditorControl editorControl) {
 			this.editorControl = editorControl;
 			this.mouseCursor = Cursors.Default;
 			OnInitialize();
 		}
-
-		public void StopDragging() {
-			isDragging = false;
-		}
-
-		public void UpdateCommands() {
-			System.Windows.Input.CommandManager.InvalidateRequerySuggested();
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Virtual methods
-		//-----------------------------------------------------------------------------
 		
-
-		public virtual bool CancelCountsAsUndo { get { return false; } }
-
-		// Called when the current layer is changed (or switched to events).
-		public virtual void OnChangeLayer() {}
-
-		public virtual void Cut() {}
-
-		public virtual void Copy() {}
-
-		public virtual void Paste() {}
-
-		public virtual void Delete() {}
-
-		public virtual void SelectAll() {}
-
-		public virtual void Deselect() {}
-
-
-		protected virtual void OnInitialize() {}
-
 		public void Begin() {
 			OnBegin();
 		}
 
 		public void End() {
-			if (isDragging) {
-				isDragging = false;
-			}
 			Cancel();
+			OnEnd();
 		}
 
 		public void Cancel() {
@@ -123,17 +94,16 @@ namespace ZeldaEditor.Tools {
 			isDragging = false;
 		}
 
-		protected virtual void OnBegin() { }
+		// Called when the current layer is changed (or switched to events).
+		public virtual void LayerChanged() {
+			if (CancelOnLayerChange)
+				Cancel();
+		}
 
-		protected virtual void OnEnd() { }
 
-		protected virtual void OnCancel() { }
-
-		protected virtual void OnMouseDragBegin(MouseEventArgs e) {}
-
-		protected virtual void OnMouseDragEnd(MouseEventArgs e) {}
-
-		protected virtual void OnMouseDragMove(MouseEventArgs e) {}
+		//-----------------------------------------------------------------------------
+		// Mouse Methods
+		//-----------------------------------------------------------------------------
 
 		public void MouseDown(MouseEventArgs e) {
 			OnMouseDown(e);
@@ -158,6 +128,7 @@ namespace ZeldaEditor.Tools {
 					editorControl.PropertyGrid.CloseProperties();
 			}
 		}
+
 		public void MouseUp(MouseEventArgs e) {
 			OnMouseUp(e);
 			if (isDragging && e.Button.HasFlag(dragButton)) {
@@ -166,6 +137,7 @@ namespace ZeldaEditor.Tools {
 				dragButton = MouseButtons.None;
 			}
 		}
+
 		public void MouseMove(MouseEventArgs e) {
 			OnMouseMove(e);
 			if (isDragging && e.Button.HasFlag(dragButton)) {
@@ -173,26 +145,74 @@ namespace ZeldaEditor.Tools {
 			}
 		}
 
-		protected virtual void OnMouseDown(MouseEventArgs e) {
-			
+		public void MouseDoubleClick(MouseEventArgs e) {
+			OnMouseDoubleClick(e);
 		}
 
-		protected virtual void OnMouseUp(MouseEventArgs e) {
-			
-		}
+		//-----------------------------------------------------------------------------
+		// Virtual Clipboard Methods
+		//-----------------------------------------------------------------------------
 
-		protected virtual void OnMouseMove(MouseEventArgs e) {
-			
-		}
+		public virtual void Cut() { }
+
+		public virtual void Copy() { }
+
+		public virtual void Paste() { }
+
+		public virtual void Delete() { }
+
+		public virtual void SelectAll() { }
+
+		public virtual void Deselect() { }
+
+
+		//-----------------------------------------------------------------------------
+		// Virtual State Methods
+		//-----------------------------------------------------------------------------
+
+		protected virtual void OnInitialize() { }
+
+		protected virtual void OnBegin() { }
+
+		protected virtual void OnEnd() { }
+
+		protected virtual void OnCancel() { }
+
 		
-		public virtual void OnMouseDoubleClick(MouseEventArgs e) { }
+		//-----------------------------------------------------------------------------
+		// Virtual Mouse Methods
+		//-----------------------------------------------------------------------------
+
+		protected virtual void OnMouseDown(MouseEventArgs e) { }
+
+		protected virtual void OnMouseUp(MouseEventArgs e) { }
+
+		protected virtual void OnMouseMove(MouseEventArgs e) { }
+
+		protected virtual void OnMouseDoubleClick(MouseEventArgs e) { }
+
+		protected virtual void OnMouseDragBegin(MouseEventArgs e) { }
+
+		protected virtual void OnMouseDragEnd(MouseEventArgs e) { }
+
+		protected virtual void OnMouseDragMove(MouseEventArgs e) { }
+
+
+		//-----------------------------------------------------------------------------
+		// Virtual Properties
+		//-----------------------------------------------------------------------------
+
+		public virtual bool CancelOnLayerChange { get { return false; } }
+
+		public virtual bool CancelCountsAsUndo { get { return false; } }
 
 		public virtual bool CanCopyCut { get { return false; } }
 
 		public virtual bool CanDeleteDeselect { get { return false; } }
 
+
 		//-----------------------------------------------------------------------------
-		// Virtual drawing
+		// Virtual Drawing
 		//-----------------------------------------------------------------------------
 
 		public virtual bool DrawHideTile(TileDataInstance tile, Room room, Point2I levelCoord, int layer) {
@@ -203,19 +223,9 @@ namespace ZeldaEditor.Tools {
 		}
 
 		public virtual void DrawTile(Graphics2D g, Room room, Point2I position, Point2I levelCoord, int layer) { }
+
 		public virtual void DrawEventTiles(Graphics2D g) { }
-		/*public virtual void DrawEventOverride(Point2I levelPosition, out TileDrawModes drawMode) {
-			drawMode = TileDrawModes.Default;
-		}
-
-		public virtual IEnumerable<KeyValuePair<Point2I, EventTileDataInstance>> DrawEventTiles(out TileDrawModes drawMode) {
-			drawMode = TileDrawModes.DontOverride;
-			return null;
-		}
-
-		public virtual void DrawAboveTiles(Graphics2D g, Rectangle2I viewport) { }
-
-		public virtual void DrawAboveGrid(Graphics2D g, Rectangle2I viewport) { }*/
+		
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -223,12 +233,14 @@ namespace ZeldaEditor.Tools {
 
 		public string Name {
 			get { return name; }
-			set { name = value; }
+		}
+
+		public Key HotKey {
+			get { return hotKey; }
 		}
 
 		public EditorControl EditorControl {
 			get { return editorControl; }
-			set { editorControl = value; }
 		}
 
 		public LevelDisplay LevelDisplay {
@@ -259,13 +271,16 @@ namespace ZeldaEditor.Tools {
 	}
 
 	public static class MouseExtensions {
+
 		public static bool IsLeftOrRight(this MouseButtons button) {
 			return button == MouseButtons.Left || button == MouseButtons.Right;
 		}
+
 		public static bool IsOpposite(this MouseButtons button, MouseButtons otherButton) {
 			return  (button == MouseButtons.Left && otherButton == MouseButtons.Right) ||
 					(button == MouseButtons.Right && otherButton == MouseButtons.Left);
 		}
+
 		public static Point2I MousePos(this MouseEventArgs e) {
 			return new Point2I(e.X, e.Y);
 		}

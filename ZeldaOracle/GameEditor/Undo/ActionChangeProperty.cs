@@ -14,19 +14,17 @@ namespace ZeldaEditor.Undo {
 
 		private IPropertyObject propertyObject;
 		private string propertyName;
-		private bool isEvent;
 		private object oldValue;
 		private object newValue;
 
 		public ActionChangeProperty(IPropertyObject propertyObject, Property property, object oldValue, object newValue) {
 			this.propertyObject = propertyObject;
 			this.propertyName = property.Name;
-			this.isEvent = false;
 			string realName = property.Name;
 			if (property.HasDocumentation && !string.IsNullOrWhiteSpace(property.Documentation.ReadableName))
 				realName = property.Documentation.ReadableName;
-			ActionName = "Change '" + realName + "' " + (isEvent ? "Event" : "Property");
-			ActionIcon = (isEvent ? EditorImages.Event : EditorImages.Property);
+			ActionName = "Change '" + realName + "' " + "Property";
+			ActionIcon = EditorImages.Property;
 			this.oldValue = oldValue;
 			this.newValue = newValue;
 		}
@@ -50,9 +48,6 @@ namespace ZeldaEditor.Undo {
 		}
 		public string PropertyName {
 			get { return propertyName; }
-		}
-		public bool IsEvent {
-			get { return isEvent; }
 		}
 		public object OldValue {
 			get { return oldValue; }

@@ -12,6 +12,7 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaEditor.Undo;
 using ZeldaOracle.Common.Graphics;
+using Key = System.Windows.Input.Key;
 
 namespace ZeldaEditor.Tools {
 	public class ToolFill : EditorTool {
@@ -24,18 +25,73 @@ namespace ZeldaEditor.Tools {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ToolFill() {
-			name = "Fill Tool";
+		public ToolFill() : base("Fill Tool", Key.F) {
+			
 		}
 
 
 		//-----------------------------------------------------------------------------
-		// Internal methods
+		// Overridden State Methods
+		//-----------------------------------------------------------------------------
+
+		protected override void OnInitialize() {
+			MouseCursor = FillCursor;
+		}
+
+		protected override void OnBegin() {
+			EditorControl.HighlightMouseTile = true;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Mouse Methods
+		//-----------------------------------------------------------------------------
+
+		protected override void OnMouseDown(MouseEventArgs e) {
+			Point2I mousePos	= new Point2I(e.X, e.Y);
+			Room room			= LevelDisplay.SampleRoom(mousePos);
+			Point2I tileCoord	= LevelDisplay.SampleTileCoordinates(mousePos);
+			Point2I target		= LevelDisplay.SampleLevelTileCoordinates(mousePos);
+			
+			if (!EditorControl.EventMode && e.Button.IsLeftOrRight()) {
+				if ((EditorControl.CurrentLayer == 0 || GetTileAt(target) != null)) {
+					// Fill tiles.
+					TileData fillData = EditorControl.SelectedTilesetTileData as TileData;
+					if (fillData != null) {
+						if (e.Button == MouseButtons.Right)
+							fillData = null;
+						action = ActionPlace.CreateFillAction(Level, EditorControl.CurrentLayer, fillData);
+						Fill(target, fillData);
+						EditorControl.PushAction(action, ActionExecution.None);
+						action = null;
+					}
+				}
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Drawing Methods
+		//-----------------------------------------------------------------------------
+
+		public override void DrawTile(Graphics2D g, Room room, Point2I position, Point2I levelCoord, int layer) {
+			if (!EditorControl.EventMode && layer == EditorControl.CurrentLayer) {
+				if (levelCoord == LevelDisplay.CursorTileLocation) {
+					TileDataInstance tile = CreateDrawTile();
+					if (tile != null)
+						LevelDisplay.DrawTile(g, room, CreateDrawTile(), position, LevelDisplay.FadeAboveColor);
+				}
+			}
+		}
+
+		
+		//-----------------------------------------------------------------------------
+		// Internal Methods
 		//-----------------------------------------------------------------------------
 
 		private TileDataInstance GetTileAt(Point2I levelTileCoord) {
-			return editorControl.Level.GetRoomAt(levelTileCoord / editorControl.Level.RoomSize)
-				.GetTile(levelTileCoord % editorControl.Level.RoomSize, editorControl.CurrentLayer);
+			return Level.GetRoomAt(levelTileCoord / Level.RoomSize)
+				.GetTile(levelTileCoord % Level.RoomSize, EditorControl.CurrentLayer);
 		}
 
 		private bool Matches(TileDataInstance targetTile, Point2I current) {
@@ -52,7 +108,7 @@ namespace ZeldaEditor.Tools {
 		}
 
 		private void Fill(Point2I target, TileData fillData) {
-			Point2I totalSize = editorControl.Level.Dimensions * editorControl.Level.RoomSize;
+			Point2I totalSize = Level.Dimensions * Level.RoomSize;
 			TileDataInstance targetTile = GetTileAt(target);
 			Point2I point;
 
@@ -109,74 +165,14 @@ namespace ZeldaEditor.Tools {
 		}
 
 		private void ReplaceTile(Point2I levelTileCoord, TileData tileData) {
-			Room room = editorControl.Level.GetRoomAt(levelTileCoord / editorControl.Level.RoomSize);
-			Point2I tileCoord = levelTileCoord % editorControl.Level.RoomSize;
+			Room room = Level.GetRoomAt(levelTileCoord / Level.RoomSize);
+			Point2I tileCoord = levelTileCoord % Level.RoomSize;
 
-			TileDataInstance oldTile = room.GetTile(tileCoord, editorControl.CurrentLayer);
+			TileDataInstance oldTile = room.GetTile(tileCoord, EditorControl.CurrentLayer);
 			action.AddOverwrittenTile(levelTileCoord, oldTile);
 
-			room.CreateTile(tileData, tileCoord, editorControl.CurrentLayer);
+			room.CreateTile(tileData, tileCoord, EditorControl.CurrentLayer);
 		}
-
-
-		//-----------------------------------------------------------------------------
-		// Overridden Methods
-		//-----------------------------------------------------------------------------
-
-		public override void OnChangeLayer() {
-			StopDragging();
-		}
-
-		protected override void OnInitialize() {
-			MouseCursor = FillCursor;
-		}
-
-		protected override void OnBegin() {
-			EditorControl.HighlightMouseTile = true;
-		}
-
-		protected override void OnMouseDown(MouseEventArgs e) {
-			base.OnMouseDown(e);
-
-			Point2I mousePos	= new Point2I(e.X, e.Y);
-			Room room			= LevelDisplay.SampleRoom(mousePos);
-			Point2I tileCoord	= LevelDisplay.SampleTileCoordinates(mousePos);
-			Point2I target		= LevelDisplay.SampleLevelTileCoordinates(mousePos);
-			
-			if (!EditorControl.EventMode && e.Button.IsLeftOrRight()) {
-				if ((editorControl.CurrentLayer == 0 || GetTileAt(target) != null)) {
-					// Fill tiles.
-					TileData fillData = editorControl.SelectedTilesetTileData as TileData;
-					if (fillData != null) {
-						if (e.Button == MouseButtons.Right)
-							fillData = null;
-						action = ActionPlace.CreateFillAction(editorControl.Level, editorControl.CurrentLayer, fillData);
-						Fill(target, fillData);
-						editorControl.PushAction(action, ActionExecution.None);
-						action = null;
-					}
-				}
-
-			}
-		}
-
-		//-----------------------------------------------------------------------------
-		// Virtual drawing
-		//-----------------------------------------------------------------------------
-		
-		public override void DrawTile(Graphics2D g, Room room, Point2I position, Point2I levelCoord, int layer) {
-			if (!EditorControl.EventMode && layer == editorControl.CurrentLayer) {
-				if (levelCoord == LevelDisplay.CursorTileLocation) {
-					TileDataInstance tile = CreateDrawTile();
-					if (tile != null)
-						LevelDisplay.DrawTile(g, room, CreateDrawTile(), position, LevelDisplay.FadeAboveColor);
-				}
-			}
-		}
-
-		//-----------------------------------------------------------------------------
-		// Helpers
-		//-----------------------------------------------------------------------------
 
 		private TileDataInstance CreateDrawTile() {
 			TileData tileData = GetTileData();
@@ -185,7 +181,7 @@ namespace ZeldaEditor.Tools {
 			return null;
 		}
 		private TileData GetTileData() {
-			return editorControl.SelectedTilesetTileData as TileData;
+			return EditorControl.SelectedTilesetTileData as TileData;
 		}
 
 	}

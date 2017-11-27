@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ZeldaEditor.Controls"
         xmlns:cmd="clr-namespace:ZeldaEditor"
         mc:Ignorable="d"
-        Title="History" Height="207.387" Width="183.676" Background="#FFF0F0F0" WindowStyle="ToolWindow" Icon="/ZeldaEditor;component/Resources/Icons/Rename.png" ShowInTaskbar="False" SnapsToDevicePixels="True" UseLayoutRounding="True" Loaded="OnWindowLoaded" Closing="OnWindowClosing">
+        Title="History" Height="240" Width="200" Background="#FFF0F0F0" WindowStyle="ToolWindow" Icon="/ZeldaEditor;component/Resources/Icons/Rename.png" ShowInTaskbar="False" SnapsToDevicePixels="True" UseLayoutRounding="True" Loaded="OnWindowLoaded" Closing="OnWindowClosing">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

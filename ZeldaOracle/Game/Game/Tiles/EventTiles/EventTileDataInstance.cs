@@ -36,6 +36,12 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			this.sprite     = tileData.Sprite;
 		}
 
+		public EventTileDataInstance(EventTileDataInstance eventTile) :
+			this()
+		{
+			Clone(eventTile);
+		}
+
 		public override void Clone(BaseTileDataInstance copy) {
 			base.Clone(copy);
 			if (copy is EventTileDataInstance) {

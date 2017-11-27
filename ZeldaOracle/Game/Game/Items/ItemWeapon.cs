@@ -89,18 +89,21 @@ namespace ZeldaOracle.Game.Items {
 		public virtual bool IsUsable() {
 			if (Player.IsInMinecart && !flags.HasFlag(ItemFlags.UsableInMinecart))
 				return false;
-			if (Player.IsInAir && !flags.HasFlag(ItemFlags.UsableWhileJumping))
+			else if (Player.IsInAir && !flags.HasFlag(ItemFlags.UsableWhileJumping))
 				return false;
-			if (Player.Physics.IsInHole && !flags.HasFlag(ItemFlags.UsableWhileInHole))
+			else if (Player.Physics.IsInHole && !flags.HasFlag(ItemFlags.UsableWhileInHole))
 				return false;
-			if (((Player.CurrentState is PlayerHoldSwordState) ||
+			else if (((Player.CurrentState is PlayerHoldSwordState) ||
 				(Player.CurrentState is PlayerSwingState) ||
 				(Player.CurrentState is PlayerSpinSwordState)) &&
 				flags.HasFlag(ItemFlags.UsableWithSword))
 			{
 				return true;
 			}
-			return (Player.CurrentState is PlayerNormalState);
+			else if (Player.CurrentState is PlayerUnderwaterState)
+				return flags.HasFlag(ItemFlags.UsableUnderwater);
+			else
+				return (Player.CurrentState is PlayerNormalState);
 		}
 
 		// Immediately interrupt this item (ex: if the player falls in a hole).

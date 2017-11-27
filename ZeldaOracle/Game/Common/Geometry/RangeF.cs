@@ -6,81 +6,82 @@ using System.Text;
 using Microsoft.Xna.Framework.Content;
 
 namespace ZeldaOracle.Common.Geometry {
-	/** <summary>
-	 * The floating precision range between a min and a max.
-	 * </summary> */
+	/**<summary>The floating precision range between a min and a max.</summary>*/
 	public struct RangeF {
-	
-		// The minimum value in the range.
-		public float Min;
-		// The maximum value in the range.
-		public float Max;
 
-		
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
-		
-		// A range positioned at (0 to 0).
-		public static readonly RangeF Zero = new RangeF(0.0f, 0.0f);
 
-		// Returns a range positioned at (Float.Min - Float.Max).
-		public static readonly RangeF Full = new RangeF(Single.NegativeInfinity, Single.PositiveInfinity);
+		/**<summary>A range positioned at (0 to 0).</summary>*/
+		public static readonly RangeF Zero = new RangeF(0f, 0f);
+		/**<summary>Returns a range positioned at (Float.Min - Float.Max).</summary>*/
+		public static readonly RangeF Full = new RangeF(float.NegativeInfinity, float.PositiveInfinity);
+
+
+		//-----------------------------------------------------------------------------
+		// Members
+		//-----------------------------------------------------------------------------
+
+		/**<summary>The minimum value in the range.</summary>*/
+		public float Min;
+		/**<summary>The maximum value in the range.</summary>*/
+		public float Max;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		// Constructs a range between the 2 values.
+		/**<summary>Constructs a range between the 2 values.</summary>*/
 		public RangeF(float min, float max) {
 			this.Min	= min;
 			this.Max	= max;
 		}
-		// Constructs a range with a single value.
+		/**<summary>Constructs a range with a single value.</summary>*/
 		public RangeF(float single) {
 			this.Min	= single;
 			this.Max	= single;
 		}
-		// Constructs a copy of the specified range.
+		/**<summary>Constructs a copy of the specified range.</summary>*/
 		public RangeF(RangeF r) {
 			this.Min	= r.Min;
 			this.Max	= r.Max;
 		}
-		
+
 
 		//-----------------------------------------------------------------------------
 		// General
 		//-----------------------------------------------------------------------------
 
-		// Outputs a string representing this range as (min - max).
+		/**<summary>Outputs a string representing this range as (min - max).</summary>*/
 		public override string ToString() {
 			return "(" + Min + ", " + Max + ")";
 		}
 
-		// Outputs a string representing this range as (min - max).
+		/**<summary>Outputs a string representing this range as (min - max).</summary>*/
 		public string ToString(IFormatProvider provider) {
 			return "(" + Min.ToString(provider) + ", " + Max.ToString(provider) + ")";
 		}
 
-		// Outputs a string representing this range as (min - max).
+		/**<summary>Outputs a string representing this range as (min - max).</summary>*/
 		public string ToString(string format, IFormatProvider provider) {
 			return "(" + Min.ToString(format, provider) + ", " + Max.ToString(format, provider) + ")";
 		}
 
-		// Outputs a string representing this range as (min - max).
+		/**<summary>Outputs a string representing this range as (min - max).</summary>*/
 		public string ToString(string format) {
 			return "(" + Min.ToString(format) + ", " + Max.ToString(format) + ")";
 		}
 
-		// Returns true if the specified range has the same min and max values.
+		/**<summary>Returns true if the specified range has the same min and max values.</summary>*/
 		public override bool Equals(object obj) {
 			if (obj is RangeF)
 				return (Min == ((RangeF)obj).Min && Max == ((RangeF)obj).Max);
 			return false;
 		}
 
-		// Returns the hash code for this range.
+		/**<summary>Returns the hash code for this range.</summary>*/
 		public override int GetHashCode() {
 			return base.GetHashCode();
 		}
@@ -132,60 +133,82 @@ namespace ZeldaOracle.Common.Geometry {
 		public static bool operator !=(RangeF r1, float f2) {
 			return (r1.Min != f2 || r1.Max != f2);
 		}
-				
+
+
+		//-----------------------------------------------------------------------------
+		// Implicit Conversions
+		//-----------------------------------------------------------------------------
+
+		/**<summary>Convert from a RangeI to a RangeF.</summary>*/
+		public static implicit operator RangeF(RangeI r) {
+			return new RangeF(r.Min, r.Max);
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Explicit Conversions
+		//-----------------------------------------------------------------------------
+
+		/**<summary>Convert from a RangeF to a RangeI.</summary>*/
+		public static explicit operator RangeI(RangeF r) {
+			return new RangeI((int)r.Min, (int)r.Max);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		// Gets the range between the min and max values.
+		/**<summary>Gets the range between the min and max values.</summary>*/
 		[ContentSerializerIgnore]
 		public float Range {
 			get { return Max - Min; }
 		}
 
-		// Gets or sets the min or max coordinate from the index.
+		/**<summary>Gets or sets the min or max coordinate from the index.</summary>*/
 		[ContentSerializerIgnore]
 		public float this[int index] {
 			get {
-				if (index < 0 || index > 1)
-					throw new System.IndexOutOfRangeException("RangeF[index] must be either 0 or 1.");
+				if (index == 0)
+					return Min;
+				else if (index == 1)
+					return Max;
 				else
-					return (index == 0 ? Min : Max);
+					throw new IndexOutOfRangeException("RangeF[index] must be either 0 or 1.");
 			}
 			set {
-				if (index < 0 || index > 1)
-					throw new System.IndexOutOfRangeException("RangeF[index] must be either 0 or 1.");
-				else if (index == 0)
+				if (index == 0)
 					Min = value;
-				else
+				else if (index == 1)
 					Max = value;
+				else
+					throw new IndexOutOfRangeException("RangeF[index] must be either 0 or 1.");
 			}
 		}
 
-		// Returns true if the range has the values of (0 - 0).
+		/**<summary>Returns true if the range has the values of (0 - 0).</summary>*/
 		public bool IsZero {
-			get { return (Min == 0.0f && Max == 0.0f); }
+			get { return (Min == 0f && Max == 0f); }
 		}
 
-		// Returns true if the min and max values are the same.
+		/**<summary>Returns true if the min and max values are the same.</summary>*/
 		public bool IsSingle {
 			get { return (Min == Max); }
 		}
 
+		/**<summary>Gets the middle of the range.</summary>*/
 		public float Mean {
 			get { return (Max + Min) * 0.5f; }
 		}
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Contains
 		//-----------------------------------------------------------------------------
 
-		// Returns true if the specified value is inside this range.
+		/**<summary>Returns true if the specified value is inside this range.</summary>*/
 		public bool Contains(float value) {
-			return ((value >= Min) &&
-					(value <=  Max));
+			return ((value >= Min) && (value <=  Max));
 		}
 
 	}

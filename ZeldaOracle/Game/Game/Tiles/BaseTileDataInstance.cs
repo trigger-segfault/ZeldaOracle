@@ -38,7 +38,6 @@ namespace ZeldaOracle.Game.Tiles {
 			this.modifiedProperties					= new Properties(this);
 			this.modifiedProperties.BaseProperties	= tileData.Properties;
 			this.events								= new EventCollection(tileData.Events, this);
-			this.events.EventObject					= this;
 		}
 
 		public virtual void Clone(BaseTileDataInstance copy) {
@@ -50,7 +49,6 @@ namespace ZeldaOracle.Game.Tiles {
 			this.modifiedProperties.BaseProperties	= tileData.Properties;
 			this.properties.SetAll(copy.properties);
 			this.events								= new EventCollection(copy.Events, this);
-			this.events.EventObject					= this;
 		}
 
 

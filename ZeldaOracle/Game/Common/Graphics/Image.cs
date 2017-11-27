@@ -11,9 +11,7 @@ using XnaColor		= Microsoft.Xna.Framework.Color;
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Graphics {
-	/** <summary>
-	 * An image containing a texture.
-	 * </summary> */
+	/**<summary>An image containing a texture.</summary>*/
 	public class Image {
 
 		// The texture of the image.

@@ -23,7 +23,13 @@ namespace ZeldaEditor.TreeViews {
 		
 		public ScriptTreeViewItem(Script script, EditorControl editorControl) {
 			this.script = script;
-			if (script != null)
+			if (script != null) {
+				Source = EditorImages.Script;
+				if (script.HasErrors && !editorControl.NoScriptErrors)
+					Source = EditorImages.ScriptError;
+				else if (script.HasWarnings && !editorControl.NoScriptWarnings)
+					Source = EditorImages.ScriptWarning;
+			}
 				Source = ((script.HasErrors && !editorControl.NoScriptErrors) ?
 					EditorImages.ScriptError : ((script.HasWarnings && !editorControl.NoScriptWarnings) ?
 					EditorImages.ScriptWarning : EditorImages.Script));
@@ -46,8 +52,8 @@ namespace ZeldaEditor.TreeViews {
 		}
 
 		public override void Delete(EditorControl editorControl) {
-			MessageBoxResult result = TriggerMessageBox.Show(editorControl.EditorWindow, MessageIcon.Info,
-				"You are about to delete the script '" + script.ID + "'. This will be permanent. Continue?", "Confirm",
+			MessageBoxResult result = TriggerMessageBox.Show(editorControl.EditorWindow, MessageIcon.Warning,
+				"Are you sure you want to delete the script '" + script.ID + "'?", "Confirm",
 				MessageBoxButton.YesNo);
 
 			if (result == MessageBoxResult.Yes) {
@@ -63,13 +69,12 @@ namespace ZeldaEditor.TreeViews {
 		}
 
 		public override void Duplicate(EditorControl editorControl) {
-			Script duplicate = new Script(script);
-			duplicate.ID = "";
+			// Dummy script for the rename window
+			Script duplicate = new Script();
 			string newName = RenameWindow.Show(Window.GetWindow(this), editorControl.World, duplicate);
 			if (newName != null) {
-				duplicate.ID = newName;
-				editorControl.AddScript(duplicate);
-				editorControl.EditorWindow.TreeViewWorld.RefreshScripts(true, false);
+				EditorAction action = ActionChangeScript.CreateDuplicateScriptAction(newName, script.Code);
+				editorControl.PushAction(action, ActionExecution.Execute);
 			}
 		}
 

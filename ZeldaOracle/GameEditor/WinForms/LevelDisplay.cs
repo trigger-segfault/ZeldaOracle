@@ -20,20 +20,20 @@ using ZeldaOracle.Game.Entities.Monsters;
 using System.IO;
 using System.Threading;
 using System.Windows.Threading;
-using MinecartTrackOrientation = ZeldaAPI.MinecartTrackOrientation;
 using ZeldaEditor.Tools;
+using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 
 namespace ZeldaEditor.WinForms {
 
 	public class LevelDisplay : GraphicsDeviceControl {
 
-		private static ContentManager content;
-		private static Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch;
-
 		public readonly Color NormalColor = Color.White;
 		public readonly Color FadeAboveColor = new Color(200, 200, 200, 100);
 		public readonly Color FadeBelowColor = new Color(200, 200, 200, 150);
 		public readonly Color HideColor = Color.Transparent;
+
+		private static ContentManager content;
+		private static SpriteBatch spriteBatch;
 
 		private EditorWindow	editorWindow;
 		private EditorControl	editorControl;
@@ -45,121 +45,13 @@ namespace ZeldaEditor.WinForms {
 		private Rectangle2I		selectionBox;
 		private Room			selectedRoom;
 		private bool            isSelectionRoom;
-
-		private HashSet<BaseTileDataInstance> selectedTiles;
-		private TileGrid	selectionGrid;
-		private Rectangle2I	selectionGridArea;
-		private Level		selectionGridLevel;
-		//private Point2I		selectionGridLocation;
+		
 		private DispatcherTimer dispatcherTimer;
-
-
-		//-----------------------------------------------------------------------------
-		// Selection Grid
-		//-----------------------------------------------------------------------------
-
-		public Rectangle2I SelectionGridArea {
-			get { return selectionGridArea; }
-		}
-
-		public void SetSelectionGrid(TileGrid tileGrid, Point2I location, Level level) {
-			PlaceSelectionGrid();
-			selectionGridArea	= new Rectangle2I(location, tileGrid.Size);
-			selectionGridLevel	= level;
-			selectionGrid		= tileGrid;
-			SetSelectionBox(selectionGridArea.Point * GameSettings.TILE_SIZE,
-							selectionGridArea.Size  * GameSettings.TILE_SIZE);
-		}
-
-		public void SetSelectionGridArea(Rectangle2I area, Level level) {
-			PlaceSelectionGrid();
-			selectionGridArea  = area;
-			selectionGridLevel = level;
-			SetSelectionBox(selectionGridArea.Point * GameSettings.TILE_SIZE,
-							selectionGridArea.Size  * GameSettings.TILE_SIZE);
-		}
-
-		public void MoveSelectionGridArea(Point2I newLocation) {
-			if (newLocation != selectionGridArea.Point) {
-				PickupSelectionGrid();
-				selectionGridArea.Point = newLocation;
-				SetSelectionBox(selectionGridArea.Point * GameSettings.TILE_SIZE,
-								selectionGridArea.Size  * GameSettings.TILE_SIZE);
-			}
-		}
-
-		public void PlaceSelectionGrid() {
-			if (selectionGrid != null) {
-				selectionGridLevel.PlaceTileGrid(
-					selectionGrid, (LevelTileCoord) selectionGridArea.Point);
-				selectionGrid = null;
-				editorControl.IsModified = true;
-				Console.WriteLine("Placed selection grid");
-			}
-		}
-
-		public void PickupSelectionGrid() {
-			if (selectionGrid == null && !selectionGridArea.IsEmpty) {
-				selectionGrid = Level.CreateTileGrid(selectionGridArea);
-				Console.WriteLine("Picked up selection grid");
-			}
-		}
 		
-		public void DuplicateSelectionGrid() {
-			PickupSelectionGrid();
-			if (selectionGrid != null) {
-				TileGrid oldGrid = selectionGrid;
-				selectionGrid = selectionGrid.Duplicate();
-				selectionGridLevel.PlaceTileGrid(
-					oldGrid, (LevelTileCoord) selectionGridArea.Point);
-				Console.WriteLine("Duplicated Selection grid");
-			}
-		}
-		
-		public void DeleteSelectionGrid() {
-			PickupSelectionGrid();
-			if (selectionGrid != null) {
-				selectionGrid = null;
-				selectionGridArea = Rectangle2I.Zero;
-				selectionBox = Rectangle2I.Zero;
-			}
-		}
-		
-		public void DeselectSelectionGrid() {
-			PlaceSelectionGrid();
-			selectionGridArea = Rectangle2I.Zero;
-			selectionBox = Rectangle2I.Zero;
-		}
-
 		//-----------------------------------------------------------------------------
 		// Individual Tile Selection
 		//-----------------------------------------------------------------------------
-
-		public bool IsTileInSelection(BaseTileDataInstance tile) {
-			return selectedTiles.Contains(tile);
-		}
-
-		public void AddTileToSelection(BaseTileDataInstance tile) {
-			selectedTiles.Add(tile);
-			selectedRoom = tile.Room;
-			isSelectionRoom = false;
-		}
-
-		public void RemoveTileFromSelection(BaseTileDataInstance tile) {
-			selectedTiles.Remove(tile);
-		}
-
-		public void DeselectTiles() {
-			selectedTiles.Clear();
-		}
-
-		public void DeleteTileSelection() {
-			foreach (BaseTileDataInstance tile in selectedTiles) {
-				tile.Room.Remove(tile);
-			}
-			selectedTiles.Clear();
-		}
-
+		
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
@@ -167,22 +59,10 @@ namespace ZeldaEditor.WinForms {
 		protected override void Initialize() {
 			try {
 				content     = new ContentManager(Services, "Content");
-				spriteBatch = new Microsoft.Xna.Framework.Graphics.SpriteBatch(GraphicsDevice);
-
-				selectedRoom = null;
-				selectedTiles = new HashSet<BaseTileDataInstance>();
-				selectionGrid = null;
+				spriteBatch = new SpriteBatch(GraphicsDevice);
 
 				editorControl.Initialize(content, GraphicsDevice);
-
-				//this.ContextMenuStrip = editorControl.EditorForm.ContextMenuStripTileInLevel;
-
-				/*levelRenderTarget = new Microsoft.Xna.Framework.Graphics.RenderTarget2D(
-					GraphicsDevice, 2048, 2048, false,
-					Microsoft.Xna.Framework.Graphics.SurfaceFormat.Color,
-					Microsoft.Xna.Framework.Graphics.DepthFormat.None, 0,
-					Microsoft.Xna.Framework.Graphics.RenderTargetUsage.PreserveContents);*/
-
+				
 				// Wire the events.
 				MouseEnter          += OnMouseEnter;
 				MouseMove           += OnMouseMove;
@@ -195,11 +75,11 @@ namespace ZeldaEditor.WinForms {
 
 				// TEMP: Open this world file upon starting the editor.
 				if (File.Exists("./temp_world.zwd"))
-					editorControl.OpenFile("temp_world.zwd");
+					editorControl.OpenWorld("temp_world.zwd");
 				else if (File.Exists("../../../../WorldFiles/temp_world.zwd"))
-					editorControl.OpenFile("../../../../WorldFiles/temp_world.zwd");
+					editorControl.OpenWorld("../../../../WorldFiles/temp_world.zwd");
 				else if (File.Exists("../../../WorldFiles/temp_world.zwd"))
-					editorControl.OpenFile("../../../WorldFiles/temp_world.zwd");
+					editorControl.OpenWorld("../../../WorldFiles/temp_world.zwd");
 				//editorControl.OpenFile("temp_world.zwd");
 
 				UpdateLevel();
@@ -212,38 +92,13 @@ namespace ZeldaEditor.WinForms {
 					DispatcherPriority.Render,
 					delegate { Invalidate(); },
 					System.Windows.Application.Current.Dispatcher);
-				/*drawThread = new Thread(() => {
-					try {
-						int ticks, lastTicks = 0;
-						while (true) {
-							//Invalidate();
-							//Thread.Sleep(15);
-							ticks = (int)((double)Stopwatch.GetTimestamp() / Stopwatch.Frequency * 60);
-							if (ticks != lastTicks) {
-								lastTicks = ticks;
-								Invalidate();
-							}
-							Thread.Sleep(2);
-						}
-					}
-					catch { }
-				});*/
-				//drawThread.Start();
-				FrameWatch.Start();
-				/*System.Windows.Media.CompositionTarget.Rendering += delegate {
-					Console.WriteLine("Frame Time: " + FrameWatch.ElapsedMilliseconds);
-					FrameWatch.Restart();
-				};*/
 			}
 			catch (Exception e) {
 				throw e;
 			}
 		}
 
-		Stopwatch FrameWatch = new Stopwatch();
-
 		protected override void Dispose(bool disposing) {
-			//drawThread.Abort();
 			if (disposing) {
 				content.Unload();
 			}
@@ -382,57 +237,29 @@ namespace ZeldaEditor.WinForms {
 		// Set the selection box
 		public void SetSelectionBox(Rectangle2I box) {
 			selectionBox = box;
-			Point2I roomLoc = GMath.Clamp(box.Point / Level.RoomSize, Point2I.Zero, Level.Dimensions);
-			selectedRoom = Level.GetRoomAt(roomLoc);
-			isSelectionRoom = false;
 		}
 
 		// Set the selection box
 		public void SetSelectionBox(Point2I start, Point2I size) {
 			selectionBox = new Rectangle2I(start, size);
-			Point2I roomLoc = GMath.Clamp(start / Level.RoomSize, Point2I.Zero, Level.Dimensions);
-			selectedRoom = Level.GetRoomAt(roomLoc);
-			isSelectionRoom = false;
 		}
 
 		public void SetSelectionBox(Room room) {
 			selectionBox = new Rectangle2I(room.Size * GameSettings.TILE_SIZE);
 			selectionBox.Point += room.Location * room.Size * GameSettings.TILE_SIZE;
-			isSelectionRoom = false;
 		}
 		public void SetSelectionBox(BaseTileDataInstance tile) {
 			selectionBox = tile.GetBounds();
 			selectionBox.Point += tile.Room.Location * tile.Room.Size * GameSettings.TILE_SIZE;
-			isSelectionRoom = false;
-		}
-
-		public void SelectRoom(Room room) {
-			isSelectionRoom = true;
-			selectedRoom = room;
-			DeselectTiles();
-		}
-
-		public void SetSelectionBoxToSelectedTiles() {
-			selectionBox = Rectangle2I.Zero;
-
-			foreach (BaseTileDataInstance tile in selectedTiles) {
-				Rectangle2I box = tile.GetBounds();
-				box.Point += tile.Room.Location * tile.Room.Size * GameSettings.TILE_SIZE;
-
-				if (selectionBox.IsEmpty)
-					selectionBox = box;
-				else
-					selectionBox = Rectangle2I.Union(selectionBox, box);
-			}
-			isSelectionRoom = false;
 		}
 
 		public void CenterViewOnPoint(Point2I point) {
-			this.AutoScrollPosition = new System.Drawing.Point(
+			ScrollPosition = point - new Point2I(ClientSize.Width, ClientSize.Height) / 2;
+
+			/*this.AutoScrollPosition = new System.Drawing.Point(
 				GMath.Clamp(point.X - ClientSize.Width / 2, HorizontalScroll.Minimum, HorizontalScroll.Maximum),
 				GMath.Clamp(point.Y - ClientSize.Height / 2, VerticalScroll.Minimum, VerticalScroll.Maximum)
-			);
-			
+			);*/
 		}
 
 
@@ -759,108 +586,11 @@ namespace ZeldaEditor.WinForms {
 							DrawRoom(g, Level.GetRoomAt(x, y));
 							g.ResetTranslation();
 						}
-						/*g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
-						g.Translate((Vector2F)(new Point2I(x, y) * ((Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing)));
-						DrawRoom(g, Level.GetRoomAt(x, y));
-						g.ResetTranslation();*/
 					}
 				}
 
 				CurrentTool.DrawEventTiles(g);
-				/*TileDrawModes overrideDrawMode;
-				IEnumerable<KeyValuePair<Point2I, EventTileDataInstance>> toolEvents = CurrentTool.DrawEventTiles(out overrideDrawMode);
 
-				if (toolEvents != null && overrideDrawMode != TileDrawModes.DontOverride && overrideDrawMode != TileDrawModes.Hide) {
-					Color color = NormalColor;
-					if (overrideDrawMode == TileDrawModes.Fade)
-						color = FadeBelowColor;
-
-					foreach (var eventPair in toolEvents) {
-						Point2I drawPosition = GetLevelPixelDrawPosition(eventPair.Value.Position);
-						Room room = SampleRoom(drawPosition, true);
-						DrawEventTile(g, room, eventPair.Value, eventPair.Value.Position, color);
-					}
-				}*/
-
-				// Draw selection grid.
-				if (selectionGridLevel == Level && !selectionGridArea.IsEmpty) {
-					g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
-
-					if (selectionGrid != null) {
-						Rectangle2I clientBounds = Rectangle2I.Zero;
-						bool inView = false;
-						for (int x = 0; x < selectionGrid.Width; x++) {
-							int drawX = GetLevelTileCoordDrawPosition(new Point2I(selectionGridArea.X + x, 0)).X - HorizontalScroll.Value;
-							if (drawX + GameSettings.TILE_SIZE >= 0) {
-								clientBounds.X = x;
-								inView = true;
-								break;
-							}
-							else if (drawX >= ClientSize.Width) {
-								break;
-							}
-						}
-						if (inView) {
-							inView = false;
-							for (int y = 0; y < selectionGrid.Height; y++) {
-								int drawY = GetLevelTileCoordDrawPosition(new Point2I(0, selectionGridArea.Y + y)).Y - VerticalScroll.Value;
-								if (drawY + GameSettings.TILE_SIZE >= 0) {
-									clientBounds.Y = y;
-									inView = true;
-									break;
-								}
-								else if (drawY >= ClientSize.Height) {
-									break;
-								}
-							}
-						}
-						if (inView) {
-							for (int x = selectionGrid.Width - 1; x >= 0; x--) {
-								int drawX = GetLevelTileCoordDrawPosition(new Point2I(selectionGridArea.X + x, 0)).X - HorizontalScroll.Value;
-								if (drawX < ClientSize.Width) {
-									clientBounds.Width = x - clientBounds.X + 1;
-									break;
-								}
-							}
-							for (int y = selectionGrid.Height - 1; y >= 0; y--) {
-								int drawY = GetLevelTileCoordDrawPosition(new Point2I(0, selectionGridArea.Y + y)).Y - VerticalScroll.Value;
-								if (drawY < ClientSize.Height) {
-									clientBounds.Height = y - clientBounds.Y + 1;
-									break;
-								}
-							}
-							Point2I start = GetLevelTileCoordDrawPosition(selectionGridArea.Point + clientBounds.TopLeft);
-							Point2I end = GetLevelTileCoordDrawPosition(selectionGridArea.Point + clientBounds.BottomRight);
-							g.FillRectangle(new Rectangle2I(start, end - start), Color.White);
-							for (int i = 0; i < selectionGrid.LayerCount; i++) {
-								for (int y = clientBounds.Top; y < clientBounds.Bottom; y++) {
-									for (int x = clientBounds.Left; x < clientBounds.Right; x++) {
-										Point2I position = GetLevelTileCoordDrawPosition(selectionGridArea.Point + new Point2I(x, y));
-										TileDataInstance tile = selectionGrid.GetTileIfAtLocation(x, y, i);
-
-										// Draw tile.
-										if (tile != null)
-											DrawTile(g, tile.Room, tile, position, Color.White);
-									}
-								}
-							}
-						}
-						// Draw event tiles.
-						if (editorControl.ShowEvents || editorControl.ShouldDrawEvents) {
-							foreach (EventTileDataInstance eventTile in selectionGrid.GetEventTiles()) {
-								Point2I position = GetLevelPixelDrawPosition(selectionGridArea.Point * GameSettings.TILE_SIZE + eventTile.Position);
-								DrawEventTile(g, eventTile.Room, eventTile, position, Color.White);
-							}
-							/*for (int i = 0; i < selectionGrid.EventTiles.Count; i++) {
-								Point2I position = GetLevelPixelDrawPosition(selectionGridArea.Point * GameSettings.TILE_SIZE + selectionGrid.EventTiles[i].Position);
-								DrawEventTile(g, selectionGrid.EventTiles[i], position, Color.White);
-							}*/
-						}
-					}
-
-					g.ResetTranslation();
-				}
-				
 				g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
 				Point2I span = Level.Span;
 				Point2I drawSpan = GetRoomDrawPosition(Level.Dimensions);
@@ -909,51 +639,27 @@ namespace ZeldaEditor.WinForms {
 				}
 				g.ResetTranslation();
 
-
-				//if (selectionGridLevel == Level && !selectionGridArea.IsEmpty) {
+				
+				if (!selectionBox.IsEmpty) {
 					g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
-					
-					// Draw the selection box.
-					if (!selectionBox.IsEmpty) {
-						Point2I start = GetLevelPixelDrawPosition(selectionBox.TopLeft);
-						Point2I end   = GetLevelPixelDrawPosition(selectionBox.BottomRight);
-						Rectangle2I box = new Rectangle2I(start, end - start);
 
-						g.DrawRectangle(box, 1, ZeldaOracle.Common.Graphics.Color.White);
-						g.DrawRectangle(box.Inflated(1, 1), 1, ZeldaOracle.Common.Graphics.Color.Black);
-						g.DrawRectangle(box.Inflated(-1, -1), 1, ZeldaOracle.Common.Graphics.Color.Black);
-					}
+					// Draw the selection box.
+					Point2I start = GetLevelPixelDrawPosition(selectionBox.TopLeft);
+					Point2I end   = GetLevelPixelDrawPosition(selectionBox.BottomRight);
+					Rectangle2I box = new Rectangle2I(start, end - start);
+
+					g.DrawRectangle(box, 1, Color.White);
+					g.DrawRectangle(box.Inflated(1, 1), 1, Color.Black);
+					g.DrawRectangle(box.Inflated(-1, -1), 1, Color.Black);
 
 					g.ResetTranslation();
-				//}
+				}
 
 				// Draw the highlight box.
 				if (editorControl.HighlightMouseTile && cursorHalfTileLocation >= Point2I.Zero) {
 					g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
 					Rectangle2I box = new Rectangle2I(GetLevelHalfTileCoordDrawPosition(cursorHalfTileLocation), cursorTileSize * 16);
-					g.DrawRectangle(box.Inflated(1, 1), 1, ZeldaOracle.Common.Graphics.Color.White);
-					g.ResetTranslation();
-				}
-
-				// Draw selected tiles.
-				foreach (BaseTileDataInstance tile in selectedTiles) {
-					g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
-					Rectangle2I bounds = tile.GetBounds();
-					bounds.Point += GetRoomDrawPosition(tile.Room);
-					g.DrawRectangle(bounds, 1, ZeldaOracle.Common.Graphics.Color.White);
-					g.DrawRectangle(bounds.Inflated(1, 1), 1, ZeldaOracle.Common.Graphics.Color.Black);
-					g.DrawRectangle(bounds.Inflated(-1, -1), 1, ZeldaOracle.Common.Graphics.Color.Black);
-					g.ResetTranslation();
-				}
-
-				if (isSelectionRoom) {
-					g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
-					Rectangle2I bounds = new Rectangle2I(
-						GetRoomDrawPosition(selectedRoom),
-						Level.RoomSize * GameSettings.TILE_SIZE);
-					g.DrawRectangle(bounds, 1, ZeldaOracle.Common.Graphics.Color.White);
-					g.DrawRectangle(bounds.Inflated(1, 1), 1, ZeldaOracle.Common.Graphics.Color.Black);
-					g.DrawRectangle(bounds.Inflated(-1, -1), 1, ZeldaOracle.Common.Graphics.Color.Black);
+					g.DrawRectangle(box.Inflated(1, 1), 1, Color.White);
 					g.ResetTranslation();
 				}
 
@@ -989,19 +695,16 @@ namespace ZeldaEditor.WinForms {
 		// Form Events
 		//-----------------------------------------------------------------------------
 
-
 		private void OnMouseEnter(object sender, EventArgs e) {
-			Focus();
-		}
 
+		}
 		private void OnMouseLeave(object sender, EventArgs e) {
 			// Clear any highlighted tile/rooms.
 			highlightedRoom = new Point2I(-1000);
 			highlightedTile = new Point2I(-2000);
 			cursorHalfTileLocation	= new Point2I(-4000);
 			cursorPixelLocation = new Point2I(-32000);
-			editorWindow.StatusBarLabelRoomLoc.Content = "Room (?, ?)";
-			editorWindow.StatusBarLabelTileLoc.Content = "Tile (?, ?)";
+			editorWindow.SetStatusBarInvalidLevelLocations();
 		}
 
 		private void OnMouseDown(object sender, MouseEventArgs e) {
@@ -1069,13 +772,11 @@ namespace ZeldaEditor.WinForms {
 
 				// Update the status bar for tile and room coordinates.
 				if (Level.ContainsRoom(highlightedRoom)) {
-					editorWindow.StatusBarLabelRoomLoc.Content = "Room " + highlightedRoom.ToString();
-					editorWindow.StatusBarLabelTileLoc.Content = "Tile " + highlightedTile.ToString();
+					editorWindow.SetStatusBarLevelLocations(highlightedRoom, highlightedTile);
 					return;
 				}
 			}
-			editorWindow.StatusBarLabelRoomLoc.Content = "Room (?, ?)";
-			editorWindow.StatusBarLabelTileLoc.Content = "Tile (?, ?)";
+			editorWindow.SetStatusBarInvalidLevelLocations();
 		}
 
 		private void OnMouseDoubleClick(object sender, MouseEventArgs e) {
@@ -1085,7 +786,7 @@ namespace ZeldaEditor.WinForms {
 				// Notify the current tool.
 				if (!editorControl.PlayerPlaceMode) {
 					e = new MouseEventArgs(e.Button, e.Clicks, mousePos.X, mousePos.Y, e.Delta);
-					CurrentTool.OnMouseDoubleClick(e);
+					CurrentTool.MouseDoubleClick(e);
 				}
 			}
 		}
@@ -1128,10 +829,6 @@ namespace ZeldaEditor.WinForms {
 			get { return editorControl.World; }
 		}
 
-		public Point2I ScrollPosition {
-			get { return new Point2I(HorizontalScroll.Value, VerticalScroll.Value); }
-		}
-
 		public Rectangle2I SelectionBox {
 			get { return selectionBox; }
 			set {
@@ -1139,23 +836,6 @@ namespace ZeldaEditor.WinForms {
 				Point2I roomLoc = GMath.Clamp(value.Point / Level.RoomSize, Point2I.Zero, Level.Dimensions);
 				selectedRoom = Level.GetRoomAt(roomLoc);
 			}
-		}
-
-		public Room SelectedRoom {
-			get { return selectedRoom; }
-		}
-
-		public HashSet<BaseTileDataInstance> SelectedTiles {
-			get { return selectedTiles; }
-		}
-
-		public TileGrid SelectionGrid {
-			get { return selectionGrid; }
-			set { selectionGrid = value; }
-		}
-
-		public Level SelectionGridLevel {
-			get { return selectionGridLevel; }
 		}
 
 		public Point2I CursorTileLocation {
@@ -1181,6 +861,16 @@ namespace ZeldaEditor.WinForms {
 		public EditorTool CurrentTool {
 			get { return editorControl.CurrentTool; }
 		}
-	}
+
+		public Point2I ScrollPosition {
+			get { return new Point2I(HorizontalScroll.Value, VerticalScroll.Value); }
+			set {
+				AutoScrollPosition = new System.Drawing.Point(
+					GMath.Clamp(value.X, HorizontalScroll.Minimum, HorizontalScroll.Maximum),
+					GMath.Clamp(value.Y, VerticalScroll.Minimum, VerticalScroll.Maximum)
+				);
+			}
+		}
+	}				
 }
 

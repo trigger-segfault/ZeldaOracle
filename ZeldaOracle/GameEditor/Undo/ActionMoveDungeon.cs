@@ -24,13 +24,13 @@ namespace ZeldaEditor.Undo {
 		public override void Undo(EditorControl editorControl) {
 			int index = editorControl.World.IndexOfDungeon(dungeon);
 			editorControl.World.MoveDungeon(index, -distance, true);
-			editorControl.EditorWindow.TreeViewWorld.RefreshDungeons();
+			editorControl.EditorWindow.WorldTreeView.RefreshDungeons();
 		}
 
 		public override void Redo(EditorControl editorControl) {
 			int index = editorControl.World.IndexOfDungeon(dungeon);
 			editorControl.World.MoveDungeon(index, distance, true);
-			editorControl.EditorWindow.TreeViewWorld.RefreshDungeons();
+			editorControl.EditorWindow.WorldTreeView.RefreshDungeons();
 		}
 
 		public override bool IgnoreAction { get { return distance == 0; } }

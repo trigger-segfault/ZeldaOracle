@@ -29,5 +29,10 @@ namespace ZeldaEditor.Util {
 			fi.SetValue(curs, true);
 			return curs;
 		}
+
+		public const int WM_MOUSEWHEEL = 0x020A;
+
+		[DllImport("user32.dll")]
+		public static extern int SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
 	}
 }

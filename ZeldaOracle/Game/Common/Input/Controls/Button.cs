@@ -13,31 +13,31 @@ using ZeldaOracle.Common.Input;
 using GamePad		= ZeldaOracle.Common.Input.GamePad;
 
 namespace ZeldaOracle.Common.Input.Controls {
-public class Button : ControlHandler {
+	public class Button : ControlHandler {
 
-	public Buttons ButtonCode;
-	public int Player;
+		public Buttons ButtonCode;
+		public int Player;
 
-	public Button(Buttons buttonCode, int player = 0) {
-		this.ButtonCode		= buttonCode;
-		this.Player			= player;
-	}
+		public Button(Buttons buttonCode, int player = 0) {
+			this.ButtonCode		= buttonCode;
+			this.Player			= player;
+		}
 
-	public override bool Pressed() {
-		return GamePad.IsButtonPressed(ButtonCode, Player);
-	}
-	public override bool Released() {
-		return GamePad.IsButtonReleased(ButtonCode, Player);
-	}
-	public override bool Down() {
-		return GamePad.IsButtonDown(ButtonCode, Player);
-	}
-	public override bool Up() {
-		return GamePad.IsButtonUp(ButtonCode, Player);
-	}
+		public override bool Pressed() {
+			return GamePad.IsButtonPressed(ButtonCode, Player);
+		}
+		public override bool Released() {
+			return GamePad.IsButtonReleased(ButtonCode, Player);
+		}
+		public override bool Down() {
+			return GamePad.IsButtonDown(ButtonCode, Player);
+		}
+		public override bool Up() {
+			return GamePad.IsButtonUp(ButtonCode, Player);
+		}
 
-	public override string Name {
-		get { return GamePad.GetButtonName(ButtonCode); }
+		public override string Name {
+			get { return GamePad.GetButtonName(ButtonCode); }
+		}
 	}
-}
 }

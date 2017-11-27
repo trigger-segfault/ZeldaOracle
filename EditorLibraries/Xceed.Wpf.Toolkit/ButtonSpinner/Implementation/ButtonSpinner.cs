@@ -240,13 +240,13 @@ namespace Xceed.Wpf.Toolkit {
 		protected override void OnMouseWheel(MouseWheelEventArgs e) {
 			base.OnMouseWheel(e);
 
-			if (!e.Handled && this.AllowSpin) {
+			/*if (!e.Handled && this.AllowSpin) {
 				if (e.Delta != 0) {
 					var spinnerEventArgs = new SpinEventArgs( Spinner.SpinnerSpinEvent, ( e.Delta < 0 ) ? SpinDirection.Decrease : SpinDirection.Increase, true );
 					this.OnSpin(spinnerEventArgs);
 					e.Handled = spinnerEventArgs.Handled;
 				}
-			}
+			}*/
 		}
 
 		/// <summary>

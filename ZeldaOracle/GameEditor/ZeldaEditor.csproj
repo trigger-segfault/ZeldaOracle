@@ -119,7 +119,9 @@
     <Compile Include="Controls\PropertyGridEditorCheckComboBox.cs" />
     <Compile Include="Control\TileDrawModes.cs" />
     <Compile Include="EditorCommands.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\AnglePropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\BooleanPropertyEditor.cs" />
+    <Compile Include="PropertiesEditor\CustomEditors\DirectionPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\DungeonPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\EnumFlagPropertyEditor.cs" />
     <Compile Include="PropertiesEditor\CustomEditors\EnumPropertyEditor.cs" />
@@ -138,13 +140,15 @@
     <Compile Include="PropertiesEditor\CustomPropertyDescriptor.cs" />
     <Compile Include="PropertiesEditor\ZeldaPropertyGrid.cs" />
     <Compile Include="Controls\FolderTreeViewItem.cs" />
+    <Compile Include="Tools\ToolPan.cs" />
     <Compile Include="TreeViews\EventTreeViewItem.cs" />
     <Compile Include="Undo\ActionChangeEvent.cs" />
     <Compile Include="Undo\ActionChangeProperty.cs" />
     <Compile Include="Undo\ActionCreateLevel.cs" />
-    <None Include="Tools\ToolSelectionOld.cs" />
     <Compile Include="Undo\ActionDeleteDungeon.cs" />
     <Compile Include="Undo\ActionDeleteLevel.cs" />
+    <Compile Include="Undo\ActionDuplicateDungeon.cs" />
+    <Compile Include="Undo\ActionDuplicateLevel.cs" />
     <Compile Include="Undo\ActionEventTile.cs" />
     <Compile Include="Undo\ActionMoveDungeon.cs" />
     <Compile Include="Undo\ActionMoveLevel.cs" />
@@ -179,6 +183,7 @@
     <Compile Include="Windows\ShiftLevelWindow.xaml.cs">
       <DependentUpon>ShiftLevelWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WinForms\MouseWheelMessageFilter.cs" />
     <Compile Include="WinForms\TextMessageDisplay.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -292,29 +297,11 @@
     <Compile Include="WinForms\LevelDisplay.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ProjectProperties\AssemblyInfo.cs">
+    <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ProjectProperties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="ProjectProperties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="ProjectProperties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <None Include="packages.config">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="ProjectProperties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
@@ -334,7 +321,7 @@
       <Project>{72e591d6-8f83-4d8c-8f67-9c325e623234}</Project>
       <Name>Xceed.Wpf.Toolkit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ZeldaAPI\ZeldaAPI.csproj">
+    <ProjectReference Include="..\GameAPI\ZeldaAPI.csproj">
       <Project>{b8b46d20-161d-47d3-810a-69d5ca61c080}</Project>
       <Name>ZeldaAPI</Name>
     </ProjectReference>
@@ -526,10 +513,6 @@
     <Resource Include="Resources\Icons\NewLine.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Icons\CycleLayerDown.png" />
-    <Resource Include="Resources\Icons\CycleLayerUp.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Icons\Deselect.png" />
   </ItemGroup>
   <ItemGroup>
@@ -540,8 +523,8 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\Layer.png" />
-    <Resource Include="Resources\Icons\LayerCycleDown.png" />
     <Resource Include="Resources\Icons\LayerCycleUp.png" />
+    <Resource Include="Resources\Icons\LayerCycleDown.png" />
     <Resource Include="Resources\Icons\LayerGroup.png" />
   </ItemGroup>
   <ItemGroup>
@@ -610,6 +593,13 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\Console.png" />
     <Resource Include="Resources\Icons\GotoOwner.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ToolPan.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cursors\HandClosedCursor.cur" />
+    <Resource Include="Resources\Cursors\HandOpenCursor.cur" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

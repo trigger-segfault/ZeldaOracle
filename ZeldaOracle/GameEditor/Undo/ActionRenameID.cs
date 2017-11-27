@@ -28,40 +28,40 @@ namespace ZeldaEditor.Undo {
 		public override void Undo(EditorControl editorControl) {
 			if (idObject is Level) {
 				editorControl.World.RenameLevel((Level)idObject, oldID);
-				editorControl.EditorWindow.TreeViewWorld.RefreshLevels();
+				editorControl.EditorWindow.WorldTreeView.RefreshLevels();
 			}
 			else if (idObject is Dungeon) {
 				editorControl.World.RenameDungeon((Dungeon)idObject, oldID);
-				editorControl.EditorWindow.TreeViewWorld.RefreshDungeons();
+				editorControl.EditorWindow.WorldTreeView.RefreshDungeons();
 			}
 			else if (idObject is Script) {
 				editorControl.World.RenameScript((Script)idObject, oldID);
-				editorControl.EditorWindow.TreeViewWorld.RefreshScripts(true, false);
+				editorControl.EditorWindow.WorldTreeView.RefreshScripts(true, false);
 				editorControl.ScriptRenamed(newID, oldID);
 			}
 			else if (idObject is World) {
 				editorControl.World.ID = oldID;
-				editorControl.EditorWindow.TreeViewWorld.RefreshWorld();
+				editorControl.EditorWindow.WorldTreeView.RefreshWorld();
 			}
 		}
 
 		public override void Redo(EditorControl editorControl) {
 			if (idObject is Level) {
 				editorControl.World.RenameLevel((Level)idObject, newID);
-				editorControl.EditorWindow.TreeViewWorld.RefreshLevels();
+				editorControl.EditorWindow.WorldTreeView.RefreshLevels();
 			}
 			else if (idObject is Dungeon) {
 				editorControl.World.RenameDungeon((Dungeon)idObject, newID);
-				editorControl.EditorWindow.TreeViewWorld.RefreshDungeons();
+				editorControl.EditorWindow.WorldTreeView.RefreshDungeons();
 			}
 			else if (idObject is Script) {
 				editorControl.World.RenameScript((Script)idObject, newID);
-				editorControl.EditorWindow.TreeViewWorld.RefreshScripts(true, false);
+				editorControl.EditorWindow.WorldTreeView.RefreshScripts(true, false);
 				editorControl.ScriptRenamed(oldID, newID);
 			}
 			else if (idObject is World) {
 				editorControl.World.ID = newID;
-				editorControl.EditorWindow.TreeViewWorld.RefreshWorld();
+				editorControl.EditorWindow.WorldTreeView.RefreshWorld();
 			}
 		}
 

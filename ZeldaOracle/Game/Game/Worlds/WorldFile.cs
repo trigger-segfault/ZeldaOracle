@@ -271,8 +271,7 @@ namespace ZeldaOracle.Game.Worlds {
 			int roomWidth		= reader.ReadInt32();
 			int roomHeight		= reader.ReadInt32();
 			int roomLayerCount	= reader.ReadInt32();
-			Level level = new Level(width, height, new Point2I(roomWidth, roomHeight));
-			level.RoomLayerCount = roomLayerCount;
+			Level level = new Level(new Point2I(width, height), roomLayerCount, new Point2I(roomWidth, roomHeight));
 
 			// Read the level's properties.
 			ReadProperties(reader, level.Properties);
@@ -282,7 +281,7 @@ namespace ZeldaOracle.Game.Worlds {
 			for (int y = 0; y < level.Height; y++) {
 				for (int x = 0; x < level.Width; x++) {
 					Room room = new Room(level, x, y);
-					ReadRoom(reader, room, world);
+					ReadRoom(reader, room, level, world);
 					level.Rooms[x, y] = room;
 				}
 			}
@@ -290,7 +289,7 @@ namespace ZeldaOracle.Game.Worlds {
 			return level;
 		}
 		
-		private void ReadRoom(BinaryReader reader, Room room, World world) {
+		private void ReadRoom(BinaryReader reader, Room room, Level level, World world) {
 			// Read the dimensions.
 			int width  = reader.ReadInt32();
 			int height = reader.ReadInt32();
@@ -575,7 +574,7 @@ namespace ZeldaOracle.Game.Worlds {
 						if (evnt.IsDefined) {
 							string existingScript = evnt.GetExistingScript(world.ScriptManager.Scripts);
 							if (existingScript == null) {
-								evnt.Script.ID = "__internal_script_" + internalID + "__";
+								evnt.Script.ID = ScriptManager.CreateInternalScriptName(internalID);
 								evnt.InternalScriptID = evnt.Script.ID;
 								internalScripts.Add(evnt.Script);
 								internalID++;

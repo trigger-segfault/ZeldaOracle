@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
+using Key = System.Windows.Input.Key;
 
 namespace ZeldaEditor.Tools {
 	public class ToolEyedrop : EditorTool {
@@ -18,52 +19,36 @@ namespace ZeldaEditor.Tools {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ToolEyedrop() {
-			name = "Eyedrop Tool";
+		public ToolEyedrop() : base("Eyedropper Tool", Key.K) {
+			
 		}
 
-
+		
 		//-----------------------------------------------------------------------------
-		// Internal methods
+		// Overridden State Methods
 		//-----------------------------------------------------------------------------
-
-		private void ActivateTile(MouseButtons mouseButton, Room room, Point2I tileLocation) {
-			if (mouseButton == MouseButtons.Left) {
-				// Sample the tile.
-				TileDataInstance tile = room.GetTile(tileLocation, editorControl.CurrentLayer);
-				if (tile != null) {
-					editorControl.SelectedTilesetTile = -Point2I.One;
-					editorControl.SelectedTilesetTileData = tile.TileData;
-				}
-			}
-		}
-
-
-		//-----------------------------------------------------------------------------
-		// Overridden Methods
-		//-----------------------------------------------------------------------------
-
+		
 		protected override void OnInitialize() {
 			MouseCursor = EyedropperCursor;
-		}
-
-		public override void OnChangeLayer() {
-			
 		}
 
 		protected override void OnBegin() {
 			EditorControl.HighlightMouseTile = false;
 		}
 
-		protected override void OnMouseMove(MouseEventArgs e) {
-			base.OnMouseMove(e);
-			
-			Point2I mousePos = new Point2I(e.X, e.Y);
 
-			if (!editorControl.EventMode) {
+		//-----------------------------------------------------------------------------
+		// Overridden Mouse Methods
+		//-----------------------------------------------------------------------------
+
+		protected override void OnMouseMove(MouseEventArgs e) {
+			Point2I mousePos = e.MousePos();
+
+			if (!EditorControl.EventMode) {
 				// Highlight tiles.
-				TileDataInstance tile = LevelDisplay.SampleTile(mousePos, editorControl.CurrentLayer);
+				TileDataInstance tile = LevelDisplay.SampleTile(mousePos, EditorControl.CurrentLayer);
 				EditorControl.HighlightMouseTile = (tile != null);
+				LevelDisplay.CursorTileSize = (tile != null ? tile.Size : Point2I.One);
 			}
 			else {
 				// Highlight event tiles.
@@ -79,26 +64,37 @@ namespace ZeldaEditor.Tools {
 		}
 
 		protected override void OnMouseDragBegin(MouseEventArgs e) {
-			Point2I mousePos	= new Point2I(e.X, e.Y);
-			Room	room		= LevelDisplay.SampleRoom(mousePos);
-			Point2I tileCoord	= LevelDisplay.SampleTileCoordinates(mousePos);
-			if (room != null)
-				ActivateTile(e.Button, room, tileCoord);
+			OnMouseDragMove(e);
 		}
 
 		protected override void OnMouseDragEnd(MouseEventArgs e) {
-			// Switch back to place tool.
-			if (e.Button == MouseButtons.Left) {
-				editorControl.ChangeTool(1);
+			// Switch back to last placement-based tool.
+			if (DragButton == MouseButtons.Left) {
+				if (EditorControl.PreviousTool is ToolFill)
+					EditorControl.CurrentTool = EditorControl.ToolFill;
+				else if (EditorControl.PreviousTool is ToolSquare)
+					EditorControl.CurrentTool = EditorControl.ToolSquare;
+				else
+					EditorControl.CurrentTool = EditorControl.ToolPlace;
 			}
 		}
 
 		protected override void OnMouseDragMove(MouseEventArgs e) {
-			Point2I mousePos	= new Point2I(e.X, e.Y);
-			Room	room		= LevelDisplay.SampleRoom(mousePos);
-			Point2I tileCoord	= LevelDisplay.SampleTileCoordinates(mousePos);
-			if (room != null)
-				ActivateTile(e.Button, room, tileCoord);
+			Point2I mousePos	= e.MousePos();
+
+			if (DragButton == MouseButtons.Left) {
+				// Sample the tile.
+				if (!EditorControl.EventMode) {
+					TileDataInstance tile = LevelDisplay.SampleTile(mousePos, EditorControl.CurrentLayer);
+					if (tile != null) {
+						EditorControl.SelectedTilesetTile = -Point2I.One;
+						EditorControl.SelectedTilesetTileData = tile.TileData;
+					}
+				}
+				else {
+					EventTileDataInstance eventTile = LevelDisplay.SampleEventTile(mousePos);
+				}
+			}
 		}
 	}
 }

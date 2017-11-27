@@ -207,7 +207,6 @@
     <Compile Include="Common\Translation\LetterString.cs" />
     <Compile Include="Common\Translation\FormatCodes.cs" />
     <Compile Include="Common\Translation\WrappedLetterString.cs" />
-    <Compile Include="Common\Util\WeakReferenceWrapper.cs" />
     <Compile Include="Game\Control\GameControl.cs" />
     <Compile Include="Game\Control\HUD.cs" />
     <Compile Include="Game\Control\Maps\DungeonMapFloor.cs" />
@@ -227,6 +226,7 @@
     <Compile Include="Game\Control\RoomControl.cs" />
     <Compile Include="Game\Control\RoomGraphics.cs" />
     <Compile Include="Game\Control\RoomPhysics.cs" />
+    <Compile Include="Game\Control\RoomVisualEffect.cs" />
     <Compile Include="Game\Control\Scripting\Script.cs" />
     <Compile Include="Game\Control\Scripting\ScriptManager.cs" />
     <Compile Include="Game\Control\Scripting\ScriptRunner.cs" />
@@ -286,6 +286,7 @@
     <Compile Include="Game\Entities\Players\States\PlayerJumpToState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerMagicBoomerangState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerMinecartState.cs" />
+    <Compile Include="Game\Entities\Players\States\PlayerUnderwaterState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSwitchHookState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerSeedShooterState.cs" />
     <Compile Include="Game\Entities\Players\States\PlayerRespawnDeathState.cs" />
@@ -501,7 +502,7 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ZeldaAPI\ZeldaAPI.csproj">
+    <ProjectReference Include="..\GameAPI\ZeldaAPI.csproj">
       <Project>{b8b46d20-161d-47d3-810a-69d5ca61c080}</Project>
       <Name>ZeldaAPI</Name>
     </ProjectReference>

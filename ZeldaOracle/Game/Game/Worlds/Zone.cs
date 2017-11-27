@@ -13,6 +13,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private int			imageVariantID;
 		private TileData	defaultTileData;
 		private bool		isSideScrolling;
+		private bool		isUnderwater;
 
 
 		//-----------------------------------------------------------------------------
@@ -25,6 +26,7 @@ namespace ZeldaOracle.Game.Worlds {
 			this.imageVariantID		= imageVariantID;
 			this.defaultTileData	= defaultTileData;
 			this.isSideScrolling	= false;
+			this.isUnderwater		= false;
 		}
 
 		
@@ -60,6 +62,11 @@ namespace ZeldaOracle.Game.Worlds {
 		public bool IsSideScrolling {
 			get { return isSideScrolling; }
 			set { isSideScrolling = value; }
+		}
+		
+		public bool IsUnderwater {
+			get { return isUnderwater; }
+			set { isUnderwater = value; }
 		}
 	}
 }

@@ -14,9 +14,9 @@ namespace ZeldaOracle.Game.Worlds {
 	public enum CreateTileGridMode {
 		/**<summary>The tile grid will contain the actual tile instances and remove them from the level.</summary>*/
 		Remove,
-		/**<summary>The tile grid will contain copies of the tile instances without removing them.</summary>*/
+		/**<summary>The tile grid will contain copies of the tile instances without removing them from the level.</summary>*/
 		Duplicate,
-		/**<summary>The tile grid will contain the actual tile instances without removing them.</summary>*/
+		/**<summary>The tile grid will contain the actual tile instances without removing them from the level.</summary>*/
 		Twin
 	}
 
@@ -35,28 +35,14 @@ namespace ZeldaOracle.Game.Worlds {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public Level(int width, int height, Point2I roomSize) :
-			this("", width, height, GameSettings.DEFAULT_TILE_LAYER_COUNT, roomSize, null) {
-		}
-
-		public Level(Point2I dimensions, Point2I roomSize) :
-			this("", dimensions, GameSettings.DEFAULT_TILE_LAYER_COUNT, roomSize, null) {
-		}
-
-		public Level(string id, int width, int height, int layerCount, Point2I roomSize, Zone zone) :
-			this(id, new Point2I(width, height), layerCount, roomSize, zone) {
-		}
-
-		public Level(string id, Point2I dimensions, int layerCount, Point2I roomSize, Zone zone) {
+		public Level() {
 			this.world          = null;
-			this.roomSize       = roomSize;
-			this.roomLayerCount = layerCount;
+			this.roomSize       = Point2I.Zero;
 			this.dimensions     = Point2I.Zero;
-			//this.zone			= zone;
-			
-			this.events			= new EventCollection(this);
-			this.properties		= new Properties(this);
-			this.properties.BaseProperties	= new Properties();
+
+			this.events         = new EventCollection(this);
+			this.properties     = new Properties(this);
+			this.properties.BaseProperties  = new Properties();
 
 			properties.BaseProperties.Set("id", "")
 				.SetDocumentation("ID", "", "", "General", "The id used to refer to this level.", false, false);
@@ -69,14 +55,66 @@ namespace ZeldaOracle.Game.Worlds {
 			properties.BaseProperties.Set("discovered", false)
 				.SetDocumentation("Discovered", "", "", "Progress", "True if the level has been visited at least once.");
 
-			properties.Set("id", id);
-
 			properties.BaseProperties.Set("zone", "")
 				.SetDocumentation("Zone", "zone", "", "Level", "The zone type for this room.");
+			properties.BaseProperties.Set("connected_level_above", "")
+				.SetDocumentation("Connected Level Above", "level", "", "Level", "The level that is above this one.");
+			properties.BaseProperties.Set("connected_level_below", "")
+				.SetDocumentation("Connected Level Below", "level", "", "Level", "The level that is below this one.");
+		}
+
+		public Level(int width, int height, Point2I roomSize) :
+			this("", width, height, GameSettings.DEFAULT_TILE_LAYER_COUNT, roomSize, null) {
+		}
+
+		public Level(Point2I dimensions, Point2I roomSize) :
+			this("", dimensions, GameSettings.DEFAULT_TILE_LAYER_COUNT, roomSize, null) {
+		}
+
+		public Level(int width, int height, int layerCount, Point2I roomSize) :
+			this("", width, height, layerCount, roomSize, null) {
+		}
+
+		public Level(Point2I dimensions, int layerCount, Point2I roomSize) :
+			this("", dimensions, layerCount, roomSize, null) {
+		}
+
+		public Level(string id, int width, int height, int layerCount, Point2I roomSize, Zone zone) :
+			this(id, new Point2I(width, height), layerCount, roomSize, zone) {
+		}
+
+		public Level(string id, Point2I dimensions, int layerCount, Point2I roomSize, Zone zone) :
+			this()
+		{
+			this.roomSize       = roomSize;
+			this.roomLayerCount = layerCount;
+			this.dimensions     = Point2I.Zero;
+
+			properties.Set("id", id);
 
 			Zone = zone;
 
 			Resize(dimensions);
+		}
+
+		public Level(Level copy) :
+			this()
+		{
+			properties.SetAll(copy.properties);
+			events.SetAll(copy.events);
+
+			this.world          = copy.world;
+			this.roomSize       = copy.roomSize;
+			this.roomLayerCount	= copy.roomLayerCount;
+			this.dimensions     = copy.dimensions;
+
+			this.rooms = new Room[Width, Height];
+			for (int x = 0; x < Width; x++) {
+				for (int y = 0; y < Height; y++) {
+					rooms[x, y] = new Room(copy.rooms[x, y]);
+					rooms[x, y].Level = this;
+				}
+			}
 		}
 
 		//-----------------------------------------------------------------------------
@@ -505,6 +543,30 @@ namespace ZeldaOracle.Game.Worlds {
 					properties.Set("dungeon", "");
 				else
 					properties.Set("dungeon", value.ID);
+			}
+		}
+		public string DungeonID {
+			get { return properties.GetString("dungeon", ""); }
+			set { properties.Set("dungeon", value); }
+		}
+		
+		public Level ConnectedLevelAbove {
+			get { return world.GetLevel(properties.GetString("connected_level_above", "")); }
+			set {
+				if (value == null)
+					properties.Set("connected_level_above", "");
+				else
+					properties.Set("connected_level_above", value.ID);
+			}
+		}
+		
+		public Level ConnectedLevelBelow {
+			get { return world.GetLevel(properties.GetString("connected_level_below", "")); }
+			set {
+				if (value == null)
+					properties.Set("connected_level_below", "");
+				else
+					properties.Set("connected_level_below", value.ID);
 			}
 		}
 		

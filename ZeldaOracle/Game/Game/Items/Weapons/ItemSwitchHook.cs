@@ -25,9 +25,10 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.description	= new string[] { "User and target trade places.", "Switches places from a distance." };
 			this.level			= 0;
 			this.maxLevel		= Item.Level2;
-			this.flags			= ItemFlags.UsableWithSword;
-			
-			sprite = new Sprite[] {
+			this.flags			=
+				ItemFlags.UsableWithSword |
+				ItemFlags.UsableUnderwater;
+			this.sprite = new Sprite[] {
 				GameData.SPR_ITEM_ICON_SWITCH_HOOK,
 				GameData.SPR_ITEM_ICON_SWITCH_HOOK
 			};

@@ -37,15 +37,16 @@ using ZeldaOracle.Game.Debug;
 
 
 namespace ZeldaOracle.Game.Main {
-
-	// The class that manages the framework of the game.
+	/**<summary>The class that manages the framework of the game.</summary>*/
 	public class GameManager {
-	
-		private GameBase		gameBase;			// The base game running the XNA framework.
-		public int				gameScale;			// The game scale used to alter screen size and mouse properties.
+		/**<summary>The base game running the XNA framework.</summary>*/
+		private GameBase		gameBase;
+		/**<summary>The game scale used to alter screen size and mouse properties.</summary>*/
+		public int				gameScale;
 		private GameControl		gameControl;
 		private GameStateStack	gameStateStack;
-		private int				elapsedTicks;		// The number of ticks since the start of the game.
+		/**<summary>The number of ticks since the start of the game.</summary>*/
+		private int				elapsedTicks;
 		private bool			debugMode;
 		private string[]		launchParameters;
 		private bool			isGamePaused;
@@ -56,12 +57,13 @@ namespace ZeldaOracle.Game.Main {
 		//-----------------------------------------------------------------------------
 	
 		public const string GameName = "The Legend of Zelda - Oracle Engine";
-	
+
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
+		/**<summary>Constructs the game manager.</summary>*/
 		public GameManager(string[] launchParameters) {
 			this.gameBase = null;
 			this.gameScale = 4;
@@ -69,7 +71,7 @@ namespace ZeldaOracle.Game.Main {
 			this.launchParameters = launchParameters;
 		}
 
-		// Initializes the game manager.
+		/**<summary>Initializes the game manager.</summary>*/
 		public void Initialize(GameBase gameBase) {
 			this.gameBase = gameBase;
 
@@ -86,20 +88,22 @@ namespace ZeldaOracle.Game.Main {
 			gameStateStack.Begin(this);
 			gameControl		= new GameControl(this);
 			gameControl.StartGame();
+
+			GameDebug.GameControl = gameControl;
+			GameDebug.OnGameStart();
 		}
 
-		// Uninitializes the game manager.
+		/**<summary>Uninitializes the game manager.</summary>*/
 		public void Uninitialize() {
-
 			this.gameBase = null;
 		}
 
-	
+
 		//-----------------------------------------------------------------------------
 		// Content
 		//-----------------------------------------------------------------------------
 
-		// Called to load game manager content.
+		/**<summary>Called to load game manager content.</summary>*/
 		public void LoadContent(ContentManager content, GameBase gameBase) {
 			this.gameBase = gameBase;
 			
@@ -110,47 +114,51 @@ namespace ZeldaOracle.Game.Main {
 			GameData.RenderTargetGameTemp = new RenderTarget2D(gameBase.GraphicsDevice, GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT);
 		}
 
-		// Called to unload game manager content.
+		/**<summary>Called to unload game manager content.</summary>*/
 		public void UnloadContent(ContentManager content) {
 		
 		}
 
-	
+
 		//-----------------------------------------------------------------------------
 		// Gameplay
 		//-----------------------------------------------------------------------------
 
+		/**<summary>Exits the game.</summary>*/
 		public void Exit() {
 			gameBase.Exit();
 		}
 
+		/**<summary>Restarts the game.</summary>*/
 		public void Restart() {
 			while (gameStateStack.Count > 1)
 				gameStateStack.Pop();
 			gameControl.StartGame();
+			GameDebug.GameControl = gameControl;
+			GameDebug.OnGameStart();
 		}
 
-	
+
 		//-----------------------------------------------------------------------------
-		// Game state management
+		// Game State Management
 		//-----------------------------------------------------------------------------
 
-		// Push a new game-state onto the stack and begin it.
+		/**<summary>Push a new game-state onto the stack and begin it.</summary>*/
 		public void PushGameState(GameState state) {
 			gameStateStack.Push(state);
 		}
-	
-		// Push a queue of game states.
+
+		/**<summary>Push a queue of game states.</summary>*/
 		public void QueueGameStates(params GameState[] states) {
 			PushGameState(new GameStateQueue(states));
 		}
-	
-		// End the top-most game state in the stack.
+
+		/**<summary>End the top-most game state in the stack.</summary>*/
 		public void PopGameState() {
 			gameStateStack.Pop();
 		}
-	
-		// End the given number of states in the stack from the top down.
+
+		/**<summary>End the given number of states in the stack from the top down.</summary>*/
 		public void PopGameStates(int amount) {
 			gameStateStack.Pop(amount);
 		}
@@ -160,7 +168,7 @@ namespace ZeldaOracle.Game.Main {
 		// Management
 		//-----------------------------------------------------------------------------
 
-		// Called when the screen has been resized.
+		/**<summary>Called when the screen has been resized.</summary>*/
 		public void ScreenResized() {
 
 		}
@@ -170,7 +178,7 @@ namespace ZeldaOracle.Game.Main {
 		// Updating
 		//-----------------------------------------------------------------------------
 
-		// Called every step to update the game.
+		/**<summary>Called every step to update the game.</summary>*/
 		public void Update(float timeDelta) {
 			//prop.Update(1.0 / 60.0, new Point2I(ScreenSize.X - Property<int>.Width, ScreenSize.Y / 2));
 			
@@ -196,16 +204,17 @@ namespace ZeldaOracle.Game.Main {
 			GameDebug.UpdateRoomDebugKeys();
 		}
 
+		/**<summary>Updates the game by one frame.</summary>*/
 		public void NextFrame() {
 			gameStateStack.Update();
 		}
-	
-	
+
+
 		//-----------------------------------------------------------------------------
 		// Drawing
 		//-----------------------------------------------------------------------------
 
-		// Called every step to draw the game.
+		/**<summary>Called every step to draw the game.</summary>*/
 		public void Draw(Graphics2D g) {
 			g.UseIntegerPrecision = true;
 			
@@ -224,84 +233,91 @@ namespace ZeldaOracle.Game.Main {
 			g.End();
 		}
 
-	
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-	
-		// Containment
 
-		// Gets the base game running the XNA framework.
+		// Containment ----------------------------------------------------------------
+
+		/**<summary>Gets the base game running the XNA framework.</summary>*/
 		public GameBase GameBase {
 			get { return gameBase; }
 		}
 
-		// Returns true if the game is running in windows.
+		/**<summary>Gets the game controller.</summary>*/
+		public GameControl GameControl {
+			get { return gameControl; }
+		}
+
+		/**<summary>Gets the current game state.</summary>*/
+		public GameState CurrentGameState {
+			get { return gameStateStack.CurrentGameState; }
+		}
+
+		/**<summary>Returns true if the game is running in windows.</summary>*/
 		public bool IsWindows {
 			get { return gameBase.IsWindows; }
 		}
 
-		// Returns true if the game is running on the Xbox 360.
+		/**<summary>Returns true if the game is running on the Xbox 360.</summary>*/
 		public bool IsXbox {
 			get { return gameBase.IsXbox; }
 		}
+		
+		// Information ----------------------------------------------------------------
 
-		// Information
-
-		// Gets the current framerate of the game.
+		/**<summary>Gets the current framerate of the game.</summary>*/
 		public double FPS {
 			get { return gameBase.FPS; }
 		}
 
-		// Gets if the game is currently in debug mode.
+		/**<summary>Gets if the game is currently in debug mode.</summary>*/
 		public bool DebugMode {
 			get { return debugMode; }
 			set { debugMode = value; }
 		}
 
-		// Gets or sets if the game is in fullscreen mode.
+		/**<summary>Gets or sets if the game is in fullscreen mode.</summary>*/
 		public bool IsFullScreen {
 			get { return gameBase.IsFullScreen; }
 			set { gameBase.IsFullScreen = value; }
 		}
 
-		// Gets the true size of the screen.
+		/**<summary>Gets the true size of the screen.</summary>*/
 		public Point2I ScreenSize {
 			get {
 				return new Point2I(gameBase.GraphicsDevice.Viewport.Width,
 								   gameBase.GraphicsDevice.Viewport.Height);
 			}
 		}
-		//  Gets the size of the screen based on the game scale.
+
+		/**<summary>Gets the size of the screen based on the game scale.</summary>*/
 		public Point2I GameScreenSize {
 			get {
 				return new Point2I(gameBase.GraphicsDevice.Viewport.Width,
 								   gameBase.GraphicsDevice.Viewport.Height) / gameScale;
 			}
 		}
-		// Gets or sets the draw scale of the game.
+
+		/**<summary>Gets or sets the draw scale of the game.</summary>*/
 		public int GameScale {
 			get { return gameScale; }
 			set { gameScale = GMath.Max(1, value); }
 		}
 
-		public GameControl GameControl {
-			get { return gameControl; }
-		}
-
+		/**<summary>Gets the ellapsed ticks since the start of the game.</summary>*/
 		public int ElapsedTicks {
 			get { return elapsedTicks; }
 		}
 
+		/**<summary>Gets or sets if the game is paused.</summary>*/
 		public bool IsGamePaused {
 			get { return isGamePaused; }
 			set { isGamePaused = value; }
 		}
 
-		public GameState CurrentGameState {
-			get { return gameStateStack.CurrentGameState; }
-		}
-
+		/**<summary>Gets the launch parameters for the application.</summary>*/
 		public string[] LaunchParameters {
 			get { return launchParameters; }
 		}

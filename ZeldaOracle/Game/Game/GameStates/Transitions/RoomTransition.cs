@@ -36,8 +36,6 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		protected void EndTransition() {
 			//gameManager.PopGameState(); // Pop this state
 			//gameManager.PushGameState(roomNew);
-			Player.MarkRespawn();
-			Player.OnEnterRoom();
 			End();
 		}
 
@@ -46,12 +44,22 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		}
 		
 		protected void SetupNewRoom() {
+			// Move the player from the old room to the new room.
+			// RoomControl.BeginRoom() will update the player's RoomControl
+			// reference.
 			OldRoomControl.Entities.Remove(Player);
 			NewRoomControl.BeginRoom();
-			Player.RoomControl = NewRoomControl;
+
 			if (eventSetupNewRoom != null)
 				eventSetupNewRoom.Invoke(roomNew);
-			NewRoomControl.ViewControl.CenterOn(Player.Center + Player.ViewFocusOffset);
+
+			NewRoomControl.ViewControl.CenterOn(
+				Player.Center + Player.ViewFocusOffset);
+
+			// Mark the player's respawn point in the new room.
+			Player.MarkRespawn();
+
+			Player.OnEnterRoom();
 		}
 		
 

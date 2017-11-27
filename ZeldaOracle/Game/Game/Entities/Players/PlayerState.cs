@@ -30,10 +30,29 @@ namespace ZeldaOracle.Game.Entities.Players
 		//-----------------------------------------------------------------------------
 		// Virtual methods
 		//-----------------------------------------------------------------------------
-		
+
+		//
+		// This function returns whether or not the player is allowed to
+		// automatically change a new state. This is called when the player 
+		// is not in his natural state, and then requests to change back to
+		// his natural state.
+		//
+		// The default implementation makes this State allow changing to any
+		// state that is not the Normal state, unless this state is a natural
+		// state, then it allows changing to any other state.
+		//
+		// For example, when the player is swinging his sword, he should not
+		// transition back to the Normal state until he is done. But if the
+		// player falls in water, then he should transition to the Swim state,
+		// interrupting his swing.
+		//
 		public virtual bool RequestStateChange(PlayerState newState) {
-			if (!isNaturalState && newState is PlayerNormalState)
+			if (!isNaturalState &&
+				(newState is PlayerNormalState ||
+				newState is PlayerUnderwaterState)) // "normal" state for underwater rooms
+			{
 				return false;
+			}
 			return true;
 		}
 

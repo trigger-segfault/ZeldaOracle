@@ -11,14 +11,14 @@ using ZeldaOracle.Game;
 using ZeldaEditor.Undo;
 using ZeldaEditor.Control;
 using ZeldaOracle.Common.Graphics;
+using Key = System.Windows.Input.Key;
 
 namespace ZeldaEditor.Tools {
 	public class ToolSquare : EditorTool {
 		private static readonly Cursor SquareCursor = LoadCursor("Square");
 
 		private Point2I dragBeginTileCoord;
-
-		private ActionSquare action;
+		
 		private TileDataInstance drawTile;
 
 		private Rectangle2I square;
@@ -27,18 +27,14 @@ namespace ZeldaEditor.Tools {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ToolSquare() {
-			name = "Square Tool";
+		public ToolSquare() : base("Square Tool", Key.O) {
+			
 		}
 		
-		//-----------------------------------------------------------------------------
-		// Overridden Methods
-		//-----------------------------------------------------------------------------
 
-		protected override void OnCancel() {
-			LevelDisplay.ClearSelectionBox();
-			action = null;
-		}
+		//-----------------------------------------------------------------------------
+		// Overridden State Methods
+		//-----------------------------------------------------------------------------
 
 		protected override void OnInitialize() {
 			MouseCursor = SquareCursor;
@@ -50,8 +46,16 @@ namespace ZeldaEditor.Tools {
 
 		protected override void OnEnd() {
 			LevelDisplay.ClearSelectionBox();
-			action = null;
 		}
+
+		protected override void OnCancel() {
+			LevelDisplay.ClearSelectionBox();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Mouse Methods
+		//-----------------------------------------------------------------------------
 
 		protected override void OnMouseDown(MouseEventArgs e) {
 			base.OnMouseDown(e);
@@ -63,7 +67,7 @@ namespace ZeldaEditor.Tools {
 
 		protected override void OnMouseDragBegin(MouseEventArgs e) {
 			// Draw a new selecion box.
-			if (DragButton.IsLeftOrRight() && !editorControl.EventMode) {
+			if (DragButton.IsLeftOrRight() && !EditorControl.EventMode) {
 				IsDrawing = true;
 
 				if (DragButton == MouseButtons.Left)
@@ -81,28 +85,27 @@ namespace ZeldaEditor.Tools {
 			if (IsDrawing) {
 				IsDrawing = false;
 				Point2I levelTileCoord = LevelDisplay.SampleLevelTileCoordinates(e.MousePos());
-				Point2I totalSize   = editorControl.Level.Dimensions * editorControl.Level.RoomSize;
+				Point2I totalSize   = Level.Dimensions * Level.RoomSize;
 				Point2I minCoord  = GMath.Max(GMath.Min(dragBeginTileCoord, levelTileCoord), Point2I.Zero);
 				Point2I maxCoord  = GMath.Min(GMath.Max(dragBeginTileCoord, levelTileCoord), totalSize - 1);
 				square = new Rectangle2I(minCoord, maxCoord - minCoord + 1);
 
-				TileData tileData = editorControl.SelectedTilesetTileData as TileData;
+				TileData tileData = EditorControl.SelectedTilesetTileData as TileData;
 				if (e.Button == MouseButtons.Right)
 					tileData = null;
-				action = new ActionSquare(editorControl.Level, editorControl.CurrentLayer, square, tileData);
+				ActionSquare action = new ActionSquare(Level, EditorControl.CurrentLayer, square, tileData);
 				for (int x = minCoord.X; x <= maxCoord.X && x < totalSize.X; x++) {
 					for (int y = minCoord.Y; y <= maxCoord.Y && y < totalSize.Y; y++) {
 						levelTileCoord = new Point2I(x, y);
-						Room room = editorControl.Level.GetRoomAt(levelTileCoord / editorControl.Level.RoomSize);
-						Point2I roomCoord = levelTileCoord % editorControl.Level.RoomSize;
-						TileDataInstance tile = room.GetTile(roomCoord, editorControl.CurrentLayer);
+						Room room = Level.GetRoomAt(levelTileCoord / Level.RoomSize);
+						Point2I roomCoord = levelTileCoord % Level.RoomSize;
+						TileDataInstance tile = room.GetTile(roomCoord, EditorControl.CurrentLayer);
 						if (tile != null) {
 							action.AddOverwrittenTile(levelTileCoord, tile);
 						}
 					}
 				}
-				editorControl.PushAction(action, ActionExecution.Execute);
-				action = null;
+				EditorControl.PushAction(action, ActionExecution.Execute);
 				LevelDisplay.ClearSelectionBox();
 			}
 		}
@@ -111,7 +114,7 @@ namespace ZeldaEditor.Tools {
 			// Update selection box.
 			if (IsDrawing) {
 				Point2I levelTileCoord = LevelDisplay.SampleLevelTileCoordinates(e.MousePos());
-				Point2I totalSize   = editorControl.Level.Dimensions * editorControl.Level.RoomSize;
+				Point2I totalSize   = Level.Dimensions * Level.RoomSize;
 				Point2I minCoord  = GMath.Max(GMath.Min(dragBeginTileCoord, levelTileCoord), Point2I.Zero);
 				Point2I maxCoord  = GMath.Min(GMath.Max(dragBeginTileCoord, levelTileCoord), totalSize - 1);
 				square = new Rectangle2I(minCoord, maxCoord - minCoord + 1);
@@ -119,16 +122,24 @@ namespace ZeldaEditor.Tools {
 			}
 		}
 
+
 		//-----------------------------------------------------------------------------
-		// Virtual drawing
+		// Overridden Properties
+		//-----------------------------------------------------------------------------
+
+		public override bool CancelOnLayerChange { get { return true; } }
+
+
+		//-----------------------------------------------------------------------------
+		// Overridden Drawing Methods
 		//-----------------------------------------------------------------------------
 
 		public override bool DrawHideTile(TileDataInstance tile, Room room, Point2I levelCoord, int layer) {
-			return (IsDrawing && drawTile == null && square.Contains(levelCoord));
+			return (IsDrawing && drawTile == null && square.Contains(levelCoord) && layer == EditorControl.CurrentLayer);
 		}
 
 		public override void DrawTile(Graphics2D g, Room room, Point2I position, Point2I levelCoord, int layer) {
-			if (!EditorControl.EventMode && layer == editorControl.CurrentLayer) {
+			if (!EditorControl.EventMode && layer == EditorControl.CurrentLayer) {
 				if (!IsDrawing && levelCoord == LevelDisplay.CursorTileLocation) {
 					TileDataInstance tile = CreateDrawTile();
 					if (tile != null) {
@@ -142,7 +153,7 @@ namespace ZeldaEditor.Tools {
 		}
 
 		//-----------------------------------------------------------------------------
-		// Helpers
+		// Internal Methods
 		//-----------------------------------------------------------------------------
 
 		private TileDataInstance CreateDrawTile() {
@@ -153,7 +164,7 @@ namespace ZeldaEditor.Tools {
 		}
 
 		private TileData GetTileData() {
-			return editorControl.SelectedTilesetTileData as TileData;
+			return EditorControl.SelectedTilesetTileData as TileData;
 		}
 	}
 }

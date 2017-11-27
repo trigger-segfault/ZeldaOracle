@@ -95,6 +95,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		protected Animation			playerSwingAnimation;
 		protected Animation			playerSwingAnimationLunge;
 		protected Animation			playerSwingAnimationInMinecart;
+		protected Animation			playerSwingAnimationUnderwater;
 		private Dictionary<int, Action>	timedActions;
 
 	
@@ -124,6 +125,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			this.playerSwingAnimationLunge		= GameData.ANIM_PLAYER_SWING;
 			this.playerSwingAnimation			= GameData.ANIM_PLAYER_MINECART_SWING;
 			this.playerSwingAnimationInMinecart	= GameData.ANIM_PLAYER_MINECART_SWING;
+			this.playerSwingAnimationUnderwater	= GameData.ANIM_PLAYER_MERMAID_SWING;
 			
 			this.swingWindingOrders = new WindingOrder[] {
 				WindingOrder.Clockwise,
@@ -160,6 +162,11 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			if (player.IsInMinecart) {
 				playerTool.PlayAnimation(weaponSwingAnimation);
 				player.Graphics.PlayAnimation(playerSwingAnimationInMinecart);
+				swingCollisionBoxes = swingCollisionBoxesNoLunge;
+			}
+			else if (player.RoomControl.IsUnderwater) {
+				playerTool.PlayAnimation(weaponSwingAnimation);
+				player.Graphics.PlayAnimation(playerSwingAnimationUnderwater);
 				swingCollisionBoxes = swingCollisionBoxesNoLunge;
 			}
 			else if (lunge) {
@@ -222,12 +229,14 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		public override void OnBegin(PlayerState previousState) {
 			player.Movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
 			playerTool = player.ToolVisual;
+			playerTool.DrawAboveUnit = false;
 			Swing(player.UseDirection);
 		}
 		
 		public override void OnEnd(PlayerState newState) {
 			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 			player.UnequipTool(playerTool);
+			playerTool.DrawAboveUnit = true;
 		}
 
 		public override void OnExitMinecart() {

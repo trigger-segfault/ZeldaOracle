@@ -17,6 +17,7 @@ using ZeldaEditor.Windows;
 using ZeldaEditor.Undo;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Tiles;
+using ZeldaEditor.WinForms;
 
 namespace ZeldaEditor.TreeViews {
 	/// <summary>
@@ -42,6 +43,8 @@ namespace ZeldaEditor.TreeViews {
 		private ContextMenu contextMenuDungeon;
 		private ContextMenu contextMenuScript;
 		private ContextMenu contextMenuEvent;
+
+		private WpfMouseWheelMessageFilter messageFilter;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -94,6 +97,9 @@ namespace ZeldaEditor.TreeViews {
 			};*/
 
 			treeView.Items.Clear();
+
+			this.messageFilter = new WpfMouseWheelMessageFilter(treeView);
+			this.messageFilter.AddFilter();
 		}
 
 		private void InitWorldContextMenu() {
@@ -250,21 +256,33 @@ namespace ZeldaEditor.TreeViews {
 		//-----------------------------------------------------------------------------
 
 		public void RefreshWorld() {
+			if (treeView.Items.Count == 0) {
+				RefreshTree();
+				return;
+			}
 			worldNode.Header = editorControl.World.ID;
 		}
 
 		public void RefreshLevels() {
+			if (treeView.Items.Count == 0) {
+				RefreshTree();
+				return;
+			}
 			levelsNode.Items.Clear();
 			World world = editorControl.World;
 
 			for (int i = 0; i < world.Levels.Count; i++) {
-				LevelTreeViewItem levelNode = new LevelTreeViewItem(world.Levels[i]);
+				LevelTreeViewItem levelNode = new LevelTreeViewItem(world.Levels[i], editorControl);
 				levelNode.ContextMenu = contextMenuLevel;
 				levelsNode.Items.Add(levelNode);
 			}
 		}
 
 		public void RefreshScripts(bool refreshScripts, bool refreshEvents) {
+			if (treeView.Items.Count == 0) {
+				RefreshTree();
+				return;
+			}
 			if (refreshEvents) {
 				if (internalScriptsNode == null)
 					internalScriptsNode = new FolderTreeViewItem("Events", false);
@@ -341,6 +359,10 @@ namespace ZeldaEditor.TreeViews {
 		}
 
 		public void RefreshDungeons() {
+			if (treeView.Items.Count == 0) {
+				RefreshTree();
+				return;
+			}
 			dungeonsNode.Items.Clear();
 
 			foreach (Dungeon dungeon in editorControl.World.Dungeons) {
@@ -549,6 +571,13 @@ namespace ZeldaEditor.TreeViews {
 		}
 		private void OnTreeViewRequestBringIntoView(object sender, RequestBringIntoViewEventArgs e) {
 			e.Handled = true;
+		}
+
+		public bool IsMouseOverTreeView {
+			get { return treeView.IsMouseOver; }
+		}
+		public void FocusOnTreeView() {
+			treeView.Focus();
 		}
 	}
 }

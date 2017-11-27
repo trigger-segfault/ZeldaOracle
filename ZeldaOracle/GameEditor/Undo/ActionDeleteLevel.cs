@@ -28,8 +28,9 @@ namespace ZeldaEditor.Undo {
 		public override void Undo(EditorControl editorControl) {
 			editorControl.World.InsertLevel(index, level);
 			editorControl.OpenLevel(level);
-			editorControl.EditorWindow.TreeViewWorld.RefreshLevels();
-			editorControl.NeedsNewEventCache = true;
+			editorControl.EditorWindow.WorldTreeView.RefreshLevels();
+			if (level.Events.HasDefinedEvents)
+				editorControl.NeedsNewEventCache = true;
 		}
 
 		public override void Redo(EditorControl editorControl) {
@@ -42,8 +43,9 @@ namespace ZeldaEditor.Undo {
 					editorControl.OpenLevel(Math.Max(0, index - 1));
 				}
 			}
-			editorControl.EditorWindow.TreeViewWorld.RefreshLevels();
-			editorControl.NeedsNewEventCache = true;
+			editorControl.EditorWindow.WorldTreeView.RefreshLevels();
+			if (level.Events.HasDefinedEvents)
+				editorControl.NeedsNewEventCache = true;
 		}
 	}
 }

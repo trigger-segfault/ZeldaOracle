@@ -34,10 +34,10 @@ namespace ZeldaEditor.Windows {
 		private Task<ScriptCompileResult>   compileTask;        // The async task that compiles the code as it changes.
 		private bool                        needsRecompiling;   // Has the code changed and needs to be recompiled?
 		private ScriptCompileError          displayedError;
-		private String                      previousName;       // The name of the script when the editor was opened.
-		private String                      previousCode;       // The code of the script when the editor was opened.
-		private bool                        autoCompile;
-		private bool                        compileOnClose;
+		private string                      previousName;       // The name of the script when the editor was opened.
+		private string                      previousCode;       // The code of the script when the editor was opened.
+		//private bool                        autoCompile;
+		//private bool                        compileOnClose;
 		private DispatcherTimer             timer;
 		private bool                        loaded;
 
@@ -62,8 +62,8 @@ namespace ZeldaEditor.Windows {
 			this.internalScript = internalScript;
 			this.previousName = script.ID;
 			this.previousCode = script.Code;
-			autoCompile = true;
-			compileOnClose = true;
+			//autoCompile = true;
+			//compileOnClose = true;
 			needsRecompiling = true;
 			compileTask = null;
 
@@ -79,11 +79,14 @@ namespace ZeldaEditor.Windows {
 			}
 
 			if (internalScript) {
-				script.ID = "__internal_script__";
+				Title = "Script Editor: __internal_script__";
+				textBoxName.Text = "__internal_script__";
 				textBoxName.IsEnabled = false;
 			}
-			Title = "Script Editor: " + script.ID;
-			textBoxName.Text = script.ID;
+			else {
+				Title = "Script Editor: " + script.ID;
+				textBoxName.Text = script.ID;
+			}
 
 			editor.Completion = completion;
 			editor.Document.FileName = "dummyFileName.cs";
@@ -115,6 +118,7 @@ namespace ZeldaEditor.Windows {
 			if (!loaded) return;
 			UpdateStatusBar();
 		}
+
 		private void OnTextChanged(object sender, EventArgs e) {
 			needsRecompiling = true;
 			UpdateStatusBar();
@@ -165,7 +169,7 @@ namespace ZeldaEditor.Windows {
 			}
 
 			if (DialogResult.HasValue && DialogResult.Value) {
-				editorControl.EditorWindow.TreeViewWorld.RefreshScripts(!script.IsHidden, script.IsHidden);
+				editorControl.EditorWindow.WorldTreeView.RefreshScripts(!script.IsHidden, script.IsHidden);
 				editorControl.NeedsRecompiling = true;
 			}
 		}
