@@ -526,12 +526,18 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public override void OnEnterRoom() {
+			// Update information about the tile we are standing on.
+			Physics.TopTile = RoomControl.TileManager
+				.GetSurfaceTileAtPosition(position, Physics.MovesWithPlatforms);
+
+			// Notify the state.
 			if (specialState != null && specialState.IsActive)
 				stateMinecart.OnEnterRoom();
 			state.OnEnterRoom();
 		}
 
 		public override void OnLeaveRoom() {
+			// Notify the state.
 			if (specialState != null && specialState.IsActive)
 				stateMinecart.OnLeaveRoom();
 			state.OnLeaveRoom();

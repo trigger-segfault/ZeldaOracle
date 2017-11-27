@@ -73,6 +73,10 @@ namespace ZeldaOracle.Game.Worlds {
 
 			properties.BaseProperties.Set("zone", "")
 				.SetDocumentation("Zone", "zone", "", "Level", "The zone type for this room.");
+			properties.BaseProperties.Set("connected_level_above", "")
+				.SetDocumentation("Connected Level Above", "level", "", "Level", "The level that is above this one.");
+			properties.BaseProperties.Set("connected_level_below", "")
+				.SetDocumentation("Connected Level Below", "level", "", "Level", "The level that is below this one.");
 
 			Zone = zone;
 
@@ -505,6 +509,26 @@ namespace ZeldaOracle.Game.Worlds {
 					properties.Set("dungeon", "");
 				else
 					properties.Set("dungeon", value.ID);
+			}
+		}
+		
+		public Level ConnectedLevelAbove {
+			get { return world.GetLevel(properties.GetString("connected_level_above", "")); }
+			set {
+				if (value == null)
+					properties.Set("connected_level_above", "");
+				else
+					properties.Set("connected_level_above", value.ID);
+			}
+		}
+		
+		public Level ConnectedLevelBelow {
+			get { return world.GetLevel(properties.GetString("connected_level_below", "")); }
+			set {
+				if (value == null)
+					properties.Set("connected_level_below", "");
+				else
+					properties.Set("connected_level_below", value.ID);
 			}
 		}
 		

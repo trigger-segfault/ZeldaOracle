@@ -86,11 +86,13 @@ namespace ZeldaOracle.Game.Main {
 			gameStateStack.Begin(this);
 			gameControl		= new GameControl(this);
 			gameControl.StartGame();
+
+			GameDebug.GameControl = gameControl;
+			GameDebug.OnGameStart();
 		}
 
 		// Uninitializes the game manager.
 		public void Uninitialize() {
-
 			this.gameBase = null;
 		}
 
@@ -128,6 +130,8 @@ namespace ZeldaOracle.Game.Main {
 			while (gameStateStack.Count > 1)
 				gameStateStack.Pop();
 			gameControl.StartGame();
+			GameDebug.GameControl = gameControl;
+			GameDebug.OnGameStart();
 		}
 
 	

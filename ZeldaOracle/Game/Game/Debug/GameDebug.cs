@@ -61,6 +61,18 @@ namespace ZeldaOracle.Game.Debug {
 			GridArea,
 			Count,
 		}
+
+		public static void OnGameStart() {
+			Player player = GameControl.RoomControl.Player;
+
+			// Allow the player to swim in water and ocean.
+			player.SwimmingSkills =
+				PlayerSwimmingSkills.CanSwimInWater |
+				PlayerSwimmingSkills.CanSwimInOcean;
+
+			// Equip the sword and feather.
+			// TODO
+		}
 		
 		public static void UpdateRoomDebugKeys() {
 			bool ctrl = (Keyboard.IsKeyDown(Keys.LControl) ||

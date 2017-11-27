@@ -63,6 +63,13 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			distance			= 0;
 			maxDistance			= GameSettings.VIEW_SIZE[direction % 2];
 			playerSpeed			= TRANSITION_PLAYER_HSPEED;
+
+			// Because this transition uses render targets, we need to disable
+			// visual room effects which would need to use the same render
+			// targets.
+			NewRoomControl.DisableVisualEffect = true;
+			OldRoomControl.DisableVisualEffect = true;
+
 			if (Directions.IsVertical(direction))
 				playerSpeed = TRANSITION_PLAYER_VSPEED;
 		}
@@ -72,13 +79,28 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 
 			// Wait for the view to pan to the player.
 			if (isWaitingForView) {
-				OldRoomControl.ViewControl.PanTo(Player.Center + Player.ViewFocusOffset);
-				if (OldRoomControl.ViewControl.IsCenteredOnPosition(Player.Center + Player.ViewFocusOffset)) {
-					// Setup the new room and move the player to the new room.
-					Vector2F playerPos = Player.Position - (Directions.ToPoint(direction) * NewRoomControl.RoomBounds.Size);
-					Player.Position = playerPos + Directions.ToVector(direction) * (playerSpeed * ((float) maxDistance / (float) TRANSITION_SPEED));
+				OldRoomControl.ViewControl.PanTo(
+					Player.Center + Player.ViewFocusOffset);
+
+				if (OldRoomControl.ViewControl.IsCenteredOnPosition(
+					Player.Center + Player.ViewFocusOffset))
+				{
+					// Convert the player's position from the old room to the
+					// new room.
+					Vector2F playerPosInNewRoom = Player.Position -
+						(Directions.ToPoint(direction) *
+						NewRoomControl.RoomBounds.Size);
+
+					// Setup the new room while pretending the player is in his
+					// final position after transitioning.
+					Vector2F totalMovement = Directions.ToVector(direction) *
+						(playerSpeed * ((float) maxDistance / (float) TRANSITION_SPEED));
+					Player.Position = playerPosInNewRoom + totalMovement;
 					SetupNewRoom();
-					Player.Position = playerPos;
+
+					// Move the player back a bit so we can smoothly transition
+					// them between the room border.
+					Player.Position -= totalMovement;
 					isWaitingForView = false;
 					return;
 				}
@@ -97,6 +119,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 				if (distance >= maxDistance) {
 					DestroyOldRoom();
 					EndTransition();
+					NewRoomControl.DisableVisualEffect = false;
 				}
 			}
 		}
@@ -110,7 +133,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 				DrawRooms(g);
 			}
 			else {
-				// Fade between zones.
+				// Fade between different zones.
 
 				// Switch to the temp render target to draw the new zone.
 				g.End();
@@ -131,7 +154,8 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 				// Draw the temp render target (with the new zone) at an opacity.
 				float opacity = (float) distance / (float) maxDistance;
 				Color color = Color.White * opacity;
-				g.DrawImage(GameData.RenderTargetGameTemp, Vector2F.Zero, Vector2F.Zero, Vector2F.One, 0.0, color);
+				g.DrawImage(GameData.RenderTargetGameTemp, Vector2F.Zero,
+					Vector2F.Zero, Vector2F.One, 0.0, color);
 			}
 			
 			// Draw the HUD.

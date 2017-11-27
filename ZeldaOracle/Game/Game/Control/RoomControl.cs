@@ -32,21 +32,24 @@ namespace ZeldaOracle.Game.Control {
 	// Handles the main Zelda gameplay within a room.
 	public class RoomControl : GameState, ZeldaAPI.Room {
 
-		private Room			room;
-		private Point2I			roomLocation;
-		private Dungeon			dungeon;
-		private List<Entity>	entities;
-		private List<EventTile>	eventTiles;
-		private ViewControl		viewControl;
-		private int				requestedTransitionDirection;
-		private int				entityCount;
-		private RoomGraphics	roomGraphics;
-		private RoomPhysics		roomPhysics;
-		private TileManager		tileManager;
-		private bool			allMonstersDead;
-		private int				entityIndexCounter;
-		private bool			isSideScrolling;
-		private bool			isUnderwater;
+		private Room				room;
+		private Point2I				roomLocation;
+		private Dungeon				dungeon;
+		private List<Entity>		entities;
+		private List<EventTile>		eventTiles;
+		private ViewControl			viewControl;
+		private int					requestedTransitionDirection;
+		private int					entityCount;
+		private RoomGraphics		roomGraphics;
+		private RoomPhysics			roomPhysics;
+		private TileManager			tileManager;
+		private bool				allMonstersDead;
+		private int					entityIndexCounter;
+		private bool				isSideScrolling;
+		private bool				isUnderwater;
+		private RoomVisualEffect	visualEffect;
+		private RoomVisualEffect	visualEffectUnderwater;
+		private bool				disableVisualEffect;
 
 		private event Action<Player>	eventPlayerRespawn;
 		private event Action<int>		eventRoomTransitioning;
@@ -57,15 +60,15 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		public RoomControl() {
-			room			= null;
-			dungeon			= null;
-			roomLocation	= Point2I.Zero;
-			entities		= new List<Entity>();
-			eventTiles		= new List<EventTile>();
-			viewControl		= new ViewControl();
-			tileManager		= new TileManager(this);
-			roomGraphics	= new RoomGraphics(this);
-			roomPhysics		= new RoomPhysics(this);
+			room					= null;
+			dungeon					= null;
+			roomLocation			= Point2I.Zero;
+			entities				= new List<Entity>();
+			eventTiles				= new List<EventTile>();
+			viewControl				= new ViewControl();
+			tileManager				= new TileManager(this);
+			roomGraphics			= new RoomGraphics(this);
+			roomPhysics				= new RoomPhysics(this);
 			requestedTransitionDirection = 0;
 			eventPlayerRespawn		= null;
 			eventRoomTransitioning	= null;
@@ -73,6 +76,11 @@ namespace ZeldaOracle.Game.Control {
 			entityIndexCounter		= 0;
 			isSideScrolling			= false;
 			isUnderwater			= true;
+			visualEffect			= null;
+			disableVisualEffect		= false;
+
+			visualEffectUnderwater	= new RoomVisualEffect();
+			visualEffectUnderwater.RoomControl = this;
 		}
 		
 
@@ -240,6 +248,10 @@ namespace ZeldaOracle.Game.Control {
 			this.dungeon			= room.Dungeon;
 			this.isSideScrolling	= room.Zone.IsSideScrolling;
 			this.isUnderwater		= room.Zone.IsUnderwater;
+			if (this.isUnderwater)
+				visualEffect = visualEffectUnderwater;
+			else
+				visualEffect = null;
 
 			// Discover the room.
 			room.IsDiscovered = true;
@@ -356,7 +368,9 @@ namespace ZeldaOracle.Game.Control {
 			}
 		}
 		
-		public void TransitionToRoom(Room nextRoom, RoomTransition transition, GameState exitState, GameState enterState, EventTileDataInstance warpTile) {
+		public void TransitionToRoom(Room nextRoom, RoomTransition transition,
+			GameState exitState, GameState enterState, EventTileDataInstance warpTile)
+		{
 			// Create the new room control.
 			RoomControl newControl = new RoomControl();
 			newControl.gameManager	= gameManager;
@@ -364,7 +378,7 @@ namespace ZeldaOracle.Game.Control {
 			newControl.roomLocation	= nextRoom.Location;
 
 			// Also set this here to prevent flickering of small keys in HUD
-			newControl.dungeon      = nextRoom.Dungeon;
+			newControl.dungeon = nextRoom.Dungeon;
 			
 			//               [Exit]                       [Enter]
 			// [RoomOld] -> [RoomOld] -> [Transition] -> [RoomNew] -> [RoomNew]
@@ -489,7 +503,11 @@ namespace ZeldaOracle.Game.Control {
 			GameControl.AnimateRoom	= roomState.AnimateRoom;
 
 			viewControl.ShakeOffset = Vector2F.Zero;
-
+			
+			// Update the current visual effect.
+			if (visualEffect != null && !disableVisualEffect)
+				visualEffect.Update();
+			
 			// Update entities, tiles, and event tiles.
 			UpdateObjects();
 
@@ -528,8 +546,16 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public void DrawRoom(Graphics2D g, Vector2F position) {
-			g.Translate(position);
-			
+			// If drawing a visual effect over the room, then
+			// begin rendering to the temp render target.
+			if (visualEffect != null && !disableVisualEffect) {
+				g.End();
+				g.SetRenderTarget(GameData.RenderTargetGameTemp);
+				g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+			}
+			else
+				g.Translate(position);
+
 			// Draw background (in the color of the HUD.
 			Rectangle2I viewRect = new Rectangle2I(0, 0, GameSettings.VIEW_WIDTH, GameSettings.VIEW_HEIGHT);
 			g.DrawSprite(GameData.SPR_HUD_BACKGROUND, GameData.VARIANT_DARK, viewRect);
@@ -542,6 +568,14 @@ namespace ZeldaOracle.Game.Control {
 			roomGraphics.Clear();
 			tileManager.DrawTiles(roomGraphics);
 			roomGraphics.DrawAll(g);
+			
+			// Now render the visual effect.
+			if (visualEffect != null && !disableVisualEffect) {
+				g.End();
+				g.SetRenderTarget(GameData.RenderTargetGame);
+				g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+				visualEffect.Render(g, GameData.RenderTargetGameTemp, position);
+			}
 
 			// DEBUG: Draw debug information over tiles.
 			GameDebug.DrawRoomTiles(g, this);
@@ -564,7 +598,7 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public override void Draw(Graphics2D g) {
-			DrawRoom(g, new Vector2F(0, 16));	// Draw the room.
+			DrawRoom(g, new Vector2F(0, 16));	// Draw the room (offset to make room for the HUD).
 			GameControl.HUD.Draw(g, false);		// Draw the HUD.
 			GameControl.DrawRoomState(g);		// Draw the current room state.
 		}
@@ -702,9 +736,15 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		// Are we in an underwater room?
-		public bool IsUnderwater{
+		public bool IsUnderwater {
 			get { return isUnderwater; }
 			set { isUnderwater = value; }
+		}
+
+		// Are we in an underwater room?
+		public bool DisableVisualEffect {
+			get { return disableVisualEffect; }
+			set { disableVisualEffect = value; }
 		}
 	}
 }

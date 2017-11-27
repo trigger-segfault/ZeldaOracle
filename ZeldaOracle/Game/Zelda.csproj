@@ -227,6 +227,7 @@
     <Compile Include="Game\Control\RoomControl.cs" />
     <Compile Include="Game\Control\RoomGraphics.cs" />
     <Compile Include="Game\Control\RoomPhysics.cs" />
+    <Compile Include="Game\Control\RoomVisualEffect.cs" />
     <Compile Include="Game\Control\Scripting\Script.cs" />
     <Compile Include="Game\Control\Scripting\ScriptManager.cs" />
     <Compile Include="Game\Control\Scripting\ScriptRunner.cs" />

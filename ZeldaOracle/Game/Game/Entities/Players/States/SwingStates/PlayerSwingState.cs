@@ -229,12 +229,14 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		public override void OnBegin(PlayerState previousState) {
 			player.Movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
 			playerTool = player.ToolVisual;
+			playerTool.DrawAboveUnit = false;
 			Swing(player.UseDirection);
 		}
 		
 		public override void OnEnd(PlayerState newState) {
 			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 			player.UnequipTool(playerTool);
+			playerTool.DrawAboveUnit = true;
 		}
 
 		public override void OnExitMinecart() {
