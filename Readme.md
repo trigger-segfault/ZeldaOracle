@@ -1,5 +1,4 @@
-<img src="https://raw.githubusercontent.com/trigger-death/ZeldaOracle/master/WebResources/Oracle%20Engine%20Title.png"/>
-
+<p align="center"><img src="https://raw.githubusercontent.com/trigger-death/ZeldaOracle/master/WebResources/Oracle%20Engine%20Title.png"/></p>
 
 ## Authors:
 * Robert Jordan (trigger_death)
@@ -20,3 +19,7 @@ Project Started: 9/10/2015
 ## Planning
 
 [Google Doc](https://docs.google.com/document/d/1ttofVFRGUmLg7y79PeAXAQOPG_dDkfcC45kMf8m9Qls/edit)
+
+## Preview
+
+![Editor Preview](https://i.imgur.com/1PO7zBv.png)
