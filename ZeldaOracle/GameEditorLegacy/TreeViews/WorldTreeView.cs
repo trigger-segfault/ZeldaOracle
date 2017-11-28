@@ -120,8 +120,8 @@ namespace ZeldaEditor.TreeViews {
 			levelsNode.Nodes.Clear();
 			World world = editorControl.World;
 			
-			for (int i = 0; i < world.Levels.Count; i++) {
-				TreeNode levelNode = new LevelTreeNode(world.Levels[i]);
+			for (int i = 0; i < world.LevelCount; i++) {
+				TreeNode levelNode = new LevelTreeNode(world.GetLevelAt(i));
 				levelNode.ContextMenuStrip = editorControl.EditorForm.contextMenuLevelSelect;
 				levelsNode.Nodes.Add(levelNode);
 			}
@@ -142,7 +142,7 @@ namespace ZeldaEditor.TreeViews {
 		public void RefreshDungeons() {
 			dungeonsNode.Nodes.Clear();
 			
-			foreach (Dungeon dungeon in editorControl.World.Dungeons) {
+			foreach (Dungeon dungeon in editorControl.World.GetDungeons()) {
 				DungeonTreeNode dungeonNode = new DungeonTreeNode(dungeon);
 				//dungeonNode.ContextMenuStrip = editorControl.EditorForm.contextMenuDungeonNode;
 				dungeonsNode.Nodes.Add(dungeonNode);

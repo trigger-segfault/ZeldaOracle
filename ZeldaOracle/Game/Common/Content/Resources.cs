@@ -22,8 +22,8 @@ using XnaSong	= Microsoft.Xna.Framework.Media.Song;
 
 namespace ZeldaOracle.Common.Content {
 
-	// An fatal exception that's thrown during the games LoadContent function
-	// This is used to end the game before updates start happening.
+	/// <summary>A fatal exception that's thrown during the games LoadContent function
+	/// This is used to end the game before updates start happening.</summary>
 	public class LoadContentException : Exception {
 		public LoadContentException(string message) :
 			base(message) {
@@ -34,40 +34,40 @@ namespace ZeldaOracle.Common.Content {
 		}
 	}
 
-	///<summary>
+	/// <summary>
 	/// The Resources class serves as a resource manager.
 	/// It has methods to load in resources from the game
 	/// content and stores them in key/value maps.
-	///</summary>
+	/// </summary>
 	public class Resources {
-	
+
 		// CONTAINMENT:
-		// The game's content manager.
+		/// <summary>The game's content manager.</summary>
 		private static ContentManager contentManager;
-		// The game's graphics device.
+		/// <summary>The game's graphics device.</summary>
 		private static GraphicsDevice graphicsDevice;
-		// A map of the resource dictionaries by resource type.
+		/// <summary>A map of the resource dictionaries by resource type.</summary>
 		private static Dictionary<Type, object> resourceDictionaries;
 
 		// GRAPHICS:
-		// The collection of loaded images.
+		/// <summary>The collection of loaded images.</summary>
 		private static Dictionary<string, Image> images;
-		// The collection of loaded real fonts.
+		/// <summary>The collection of loaded real fonts.</summary>
 		private static Dictionary<string, RealFont> realFonts;
-		// The collection of loaded game fonts.
+		/// <summary>The collection of loaded game fonts.</summary>
 		private static Dictionary<string, GameFont> gameFonts;
-		// The collection of loaded sprite sheets.
+		/// <summary>The collection of loaded sprite sheets.</summary>
 		private static Dictionary<string, SpriteSheet> spriteSheets;
-		// The collection of loaded sprites.
+		/// <summary>The collection of loaded sprites.</summary>
 		private static Dictionary<string, Sprite> sprites;
-		// The collection of loaded animations.
+		/// <summary>The collection of loaded animations.</summary>
 		private static Dictionary<string, Animation> animations;
-		// The collection of loaded shaders.
+		/// <summary>The collection of loaded shaders.</summary>
 		private static Dictionary<string, Effect> shaders;
-		// The texture loader for loading images from file.
+		/// <summary>The texture loader for loading images from file.</summary>
 		private static TextureLoader textureLoader;
 
-		// The collection of loaded collision models.
+		/// <summary>The collection of loaded collision models.</summary>
 		private static Dictionary<string, CollisionModel> collisionModels;
 		private static Dictionary<string, Tileset> tilesets;
 		private static Dictionary<string, TileData> tileData;
@@ -77,52 +77,52 @@ namespace ZeldaOracle.Common.Content {
 		private static Dictionary<string, PropertyAction> propertyActions;
 
 		// SOUNDS:
-		// The collection of loaded sound effects.
+		/// <summary>The collection of loaded sound effects.</summary>
 		private static Dictionary<string, Sound> sounds;
-		// The collection of loaded songs.
+		/// <summary>The collection of loaded songs.</summary>
 		private static Dictionary<string, Song> songs;
 
 		// LANGUAGES:
-		// The collection of loaded languages.
+		/// <summary>The collection of loaded languages.</summary>
 		private static List<Language> languages;
 
 		// SETTINGS:
-		// True if the resource manager should output load information to the console.
+		/// <summary>True if the resource manager should output load information to the console.</summary>
 		private static bool verboseOutput;
-		
-	
+
+
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
 
 		// Graphics
-		// The directory for storing images.
+		/// <summary>The directory for storing images.</summary>
 		public const string ImageDirectory = "Images/";
-		// The directory for storing fonts.
+		/// <summary>The directory for storing fonts.</summary>
 		public const string FontDirectory = "Fonts/";
-		// The directory for storing sprite sheets.
+		/// <summary>The directory for storing sprite sheets.</summary>
 		public const string SpriteSheetDirectory = "SpriteSheets/";
-		// The directory for storing animations.
+		/// <summary>The directory for storing animations.</summary>
 		public const string AnimationDirectory = "Animations/";
-		// The directory for storing shaders.
+		/// <summary>The directory for storing shaders.</summary>
 		public const string ShaderDirectory = "Shaders/";
 
 		// Sounds
-		// The directory for storing sounds.
+		/// <summary>The directory for storing sounds.</summary>
 		public const string SoundDirectory = "Sounds/";
-		// The directory for storing songs.
+		/// <summary>The directory for storing songs.</summary>
 		public const string MusicDirectory = "Music/";
 
 		// Languages
-		// The directory for storing languages.
+		/// <summary>The directory for storing languages.</summary>
 		public const string LanguageDirectory = "Languages/";
-	
-	
+
+
 		//-----------------------------------------------------------------------------
 		// Initialization
 		//-----------------------------------------------------------------------------
 
-		// Initializes the resource manager.
+		/// <summary>Initializes the resource manager.</summary>
 		public static void Initialize(ContentManager contentManager, GraphicsDevice graphicsDevice) {
 			// Containment
 			Resources.contentManager	= contentManager;
@@ -177,32 +177,32 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries[typeof(PropertyAction)]	= propertyActions;
 		}
 
-	
+
 		//-----------------------------------------------------------------------------
 		// Generic Resource Methods
 		//-----------------------------------------------------------------------------
-	
-		// Does the a resource with the given name and type exist?
-		public static bool ExistsResource<T>(T resource) {
-			if (!ExistsResourceType<T>())
+
+		/// <summary>Does the a resource with the given name and type exist?</summary>
+		public static bool ContainsResource<T>(T resource) {
+			if (!ContainsResourceType<T>())
 				return false; // This type of resource doesn't exist!
 			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
 			return dictionary.ContainsValue(resource);
 		}
 
-		// Does the a resource with the given name and type exist?
-		public static bool ExistsResource<T>(string name) {
-			if (!ExistsResourceType<T>())
+		/// <summary>Does the a resource with the given name and type exist?</summary>
+		public static bool ContainsResource<T>(string name) {
+			if (!ContainsResourceType<T>())
 				return false; // This type of resource doesn't exist!
 			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
 			return dictionary.ContainsKey(name);
 		}
 
-		// Get the resource with the given name and type.
+		/// <summary>Get the resource with the given name and type.</summary>
 		public static T GetResource<T>(string name) {
 			if (name.Length == 0)
 				return default(T);
-			if (!ExistsResourceType<T>())
+			if (!ContainsResourceType<T>())
 				return default(T); // This type of resource doesn't exist!
 			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
 			//if (!dictionary.ContainsKey(name))
@@ -210,37 +210,37 @@ namespace ZeldaOracle.Common.Content {
 			return dictionary[name];
 		}
 
-		// Get the resource with the given name and type.
+		/// <summary>Get the resource with the given name and type.</summary>
 		public static string GetResourceName<T>(T resource) where T : class {
-			if (!ExistsResourceType<T>())
+			if (!ContainsResourceType<T>())
 				return ""; // This type of resource doesn't exist!
 			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
 			return dictionary.FirstOrDefault(x => x.Value == resource).Key;
 		}
 
-		// Get the dictionary used to store the given type of resources.
+		/// <summary>Get the dictionary used to store the given type of resources.</summary>
 		public static Dictionary<string, T> GetResourceDictionary<T>() {
-			if (!ExistsResourceType<T>())
+			if (!ContainsResourceType<T>())
 				return null; // This type of resource doesn't exist!
 			return (Dictionary<string, T>) resourceDictionaries[typeof(T)];
 		}
-	
-		// Is the given type of resource handled by this class?
-		public static bool ExistsResourceType<T>() {
+
+		/// <summary>Is the given type of resource handled by this class?</summary>
+		public static bool ContainsResourceType<T>() {
 			return resourceDictionaries.ContainsKey(typeof(T));
 		}
 
-		// Add the given resource under the given name.
+		/// <summary>Add the given resource under the given name.</summary>
 		public static void AddResource<T>(string assetName, T resource) {
-			if (!ExistsResourceType<T>())
+			if (!ContainsResourceType<T>())
 				return; // This type of resource doesn't exist!
 			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
 			dictionary.Add(assetName, resource);
 		}
 
-		// Add the given resource under the given name.
+		/// <summary>Add the given resource under the given name.</summary>
 		public static void SetResource<T>(string assetName, T resource) {
-			if (!ExistsResourceType<T>())
+			if (!ContainsResourceType<T>())
 				return; // This type of resource doesn't exist!
 			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
 			dictionary[assetName] = resource;
@@ -251,7 +251,7 @@ namespace ZeldaOracle.Common.Content {
 		// Resource Accessors
 		//-----------------------------------------------------------------------------
 
-		// Gets a sprite or animation depending on which one exists.
+		/// <summary>Gets a sprite or animation depending on which one exists.</summary>
 		public static SpriteAnimation GetSpriteAnimation(string name) {
 			if (sprites.ContainsKey(name))
 				return sprites[name];
@@ -259,87 +259,87 @@ namespace ZeldaOracle.Common.Content {
 				return animations[name];
 		}
 
-		// Gets the image with the specified name.
+		/// <summary>Gets the image with the specified name.</summary>
 		public static Image GetImage(string name) {
 			return images[name];
 		}
 
-		// Returns true if an image with the specified name exists.
-		public static bool ImageExists(string name) {
+		/// <summary>Returns true if an image with the specified name exists.</summary>
+		public static bool ContainsImage(string name) {
 			return images.ContainsKey(name);
 		}
 
-		// Gets the real font with the specified name.
+		/// <summary>Gets the real font with the specified name.</summary>
 		public static RealFont GetRealFont(string name) {
 			return realFonts[name];
 		}
 
-		// Returns true if a real font with the specified name exists.
-		public static bool RealFontExists(string name) {
+		/// <summary>Returns true if a real font with the specified name exists.</summary>
+		public static bool ContainsRealFont(string name) {
 			return realFonts.ContainsKey(name);
 		}
 
-		// Gets the game font with the specified name.
+		/// <summary>Gets the game font with the specified name.</summary>
 		public static GameFont GetGameFont(string name) {
 			return gameFonts[name];
 		}
 
-		// Returns true if a game font with the specified name exists.
-		public static bool GameFontExists(string name) {
+		/// <summary>Returns true if a game font with the specified name exists.</summary>
+		public static bool ContainsGameFont(string name) {
 			return gameFonts.ContainsKey(name);
 		}
 
-		// Gets the sprite sheet with the specified name.
+		/// <summary>Gets the sprite sheet with the specified name.</summary>
 		public static SpriteSheet GetSpriteSheet(string name) {
 			return spriteSheets[name];
 		}
 
-		// Returns true if a sprite sheet with the specified name exists.
-		public static bool SpriteSheetExists(string name) {
+		/// <summary>Returns true if a sprite sheet with the specified name exists.</summary>
+		public static bool ContainsSpriteSheet(string name) {
 			return spriteSheets.ContainsKey(name);
 		}
 
-		// Gets the sprite with the specified name.
+		/// <summary>Gets the sprite with the specified name.</summary>
 		public static Sprite GetSprite(string name) {
 			return sprites[name];
 		}
 
-		// Returns true if a sprite with the specified name exists.
-		public static bool SpriteExists(string name) {
+		/// <summary>Returns true if a sprite with the specified name exists.</summary>
+		public static bool ContainsSprite(string name) {
 			return sprites.ContainsKey(name);
 		}
 
-		// Gets the animation with the specified name.
+		/// <summary>Gets the animation with the specified name.</summary>
 		public static Animation GetAnimation(string name) {
 			return animations[name];
 		}
 
-		// Returns true if an animation with the specified name exists.
-		public static bool AnimationExists(string name) {
+		/// <summary>Returns true if an animation with the specified name exists.</summary>
+		public static bool ContainsAnimation(string name) {
 			return animations.ContainsKey(name);
 		}
 
-		// Gets the shader with the specified name.
+		/// <summary>Gets the shader with the specified name.</summary>
 		public static Effect GetShader(string name) {
 			return shaders[name];
 		}
 
-		// Returns true if a shader with the specified name exists.
-		public static bool ShaderExists(string name) {
+		/// <summary>Returns true if a shader with the specified name exists.</summary>
+		public static bool ContainsShader(string name) {
 			return shaders.ContainsKey(name);
 		}
 
-		// Gets the sound with the specified name.
+		/// <summary>Gets the sound with the specified name.</summary>
 		public static Sound GetSound(string name) {
 			return sounds[name];
 		}
 
-		// Gets the song with the specified name.
+		/// <summary>Gets the song with the specified name.</summary>
 		public static Song GetSong(string name) {
 			return songs[name];
 		}
 
-		// Gets the language with the specified name.
+		/// <summary>Gets the language with the specified name.</summary>
 		public static Language GetLanguage(string name) {
 			foreach (Language language in languages) {
 				if (language.Name == name)
@@ -348,12 +348,12 @@ namespace ZeldaOracle.Common.Content {
 			return null;
 		}
 
-	
+
 		//-----------------------------------------------------------------------------
 		// Resource Loading
 		//-----------------------------------------------------------------------------
 
-		// Loads the image with the specified asset name.
+		/// <summary>Loads the image with the specified asset name.</summary>
 		public static Image LoadImage(string assetName, bool addToRegistry = true) {
 			string name = assetName.Substring(assetName.IndexOf('/') + 1);
 			Image resource = new Image(contentManager.Load<Texture2D>(assetName), name);
@@ -362,7 +362,7 @@ namespace ZeldaOracle.Common.Content {
 			return resource;
 		}
 
-		// Loads the image with the specified asset name.
+		/// <summary>Loads the image with the specified asset name.</summary>
 		public static Image LoadImageFromFile(string assetName, bool addToRegistry = true) {
 			string name = assetName.Substring(assetName.IndexOf('/') + 1);
 			name = name.Substring(0, name.LastIndexOf('.'));
@@ -372,7 +372,7 @@ namespace ZeldaOracle.Common.Content {
 			return resource;
 		}
 
-		// Loads the real font with the specified asset name.
+		/// <summary>Loads the real font with the specified asset name.</summary>
 		public static RealFont LoadRealFont(string assetName) {
 			string name = assetName.Substring(assetName.IndexOf('/') + 1);
 			RealFont resource = new RealFont(contentManager.Load<SpriteFont>(assetName), name);
@@ -380,7 +380,7 @@ namespace ZeldaOracle.Common.Content {
 			return resource;
 		}
 
-		// Loads a shader (Effect).
+		/// <summary>Loads a shader (Effect).</summary>
 		public static Effect LoadShader(string assetName) {
 			string name = assetName.Substring(assetName.IndexOf('/') + 1);
 			Effect resource = contentManager.Load<Effect>(assetName);
@@ -388,44 +388,44 @@ namespace ZeldaOracle.Common.Content {
 			return resource;
 		}
 
-		// Loads/compiles sprite sheets from a script file.
+		/// <summary>Loads/compiles sprite sheets from a script file.</summary>
 		public static void LoadSpriteSheets(string assetName) {
 			LoadScript(assetName, new SpritesSR());
 		}
 
-		// Loads/compiles images from a script file.
+		/// <summary>Loads/compiles images from a script file.</summary>
 		public static void LoadImagesFromScript(string assetName) {
 			LoadScript(assetName, new ImagesSR());
 		}
 
-		// Loads the game font with the specified asset name.
+		/// <summary>Loads the game font with the specified asset name.</summary>
 		public static GameFont LoadGameFont(string assetName) {
 			GameFontSR script = new GameFontSR();
 			LoadScript(assetName, script);
 			return script.Font;
 		}
 
-		// Loads/compiles game fonts from a script file.
+		/// <summary>Loads/compiles game fonts from a script file.</summary>
 		public static void LoadGameFonts(string assetName) {
 			LoadScript(assetName, new GameFontSR());
 		}
 
-		// Loads/compiles animations from a script file.
+		/// <summary>Loads/compiles animations from a script file.</summary>
 		public static void LoadAnimations(string assetName) {
 			LoadScript(assetName, new AnimationSR());
 		}
 
-		// Loads/compiles collision models from a script file.
+		/// <summary>Loads/compiles collision models from a script file.</summary>
 		public static void LoadCollisionModels(string assetName) {
 			LoadScript(assetName, new CollisionModelSR());
 		}
 
-		// Loads/compiles tilesets from a script file.
+		/// <summary>Loads/compiles tilesets from a script file.</summary>
 		public static void LoadTilesets(string assetName) {
 			LoadScript(assetName, new TilesetSR());
 		}
 
-		// Loads a sound effect.
+		/// <summary>Loads a sound effect.</summary>
 		public static Sound LoadSound(string assetName) {
 			string name = assetName.Substring(assetName.IndexOf('/') + 1);
 			Sound resource = new Sound(contentManager.Load<SoundEffect>(assetName), assetName, name);
@@ -433,14 +433,14 @@ namespace ZeldaOracle.Common.Content {
 			return resource;
 		}
 
-		// Loads a sound effect.
+		/// <summary>Loads a sound effect.</summary>
 		public static Sound LoadSound(string name, string assetPath) {
 			Sound resource = new Sound(contentManager.Load<SoundEffect>(assetPath), assetPath, name);
 			sounds.Add(name, resource);
 			return resource;
 		}
 
-		// Loads a song.
+		/// <summary>Loads a song.</summary>
 		public static Song LoadSong(string assetName) {
 			string name = assetName.Substring(assetName.IndexOf('/') + 1);
 			Song resource = new Song(contentManager.Load<SoundEffect>(assetName), assetName, name);
@@ -448,17 +448,17 @@ namespace ZeldaOracle.Common.Content {
 			return resource;
 		}
 
-		// Loads a sounds file.
+		/// <summary>Loads a sounds file.</summary>
 		public static void LoadSounds(string assetName) {
 			LoadScript(assetName, new SoundsSR());
 		}
 
-		// Loads a music file.
+		/// <summary>Loads a music file.</summary>
 		public static void LoadMusic(string assetName) {
 			LoadScript(assetName, new MusicSR());
 		}
 
-		// Loads a language file.
+		/// <summary>Loads a language file.</summary>
 		public static Language LoadLanguage(string assetName) {
 			throw new LoadContentException("Language is not supported yet.");
 		}
@@ -468,12 +468,12 @@ namespace ZeldaOracle.Common.Content {
 		// Scripts
 		//-----------------------------------------------------------------------------
 
-		// Loads a script file with the given script reader object.
+		/// <summary>Loads a script file with the given script reader object.</summary>
 		public static void LoadScript(string assetName, ScriptReader sr) {
 			LoadScript(assetName, sr, Encoding.Default);
 		}
 
-		// Loads a script file with the given encoding and script reader object.
+		/// <summary>Loads a script file with the given encoding and script reader object.</summary>
 		public static void LoadScript(string assetName, ScriptReader sr, Encoding encoding) {
 			try {
 				Stream stream = TitleContainer.OpenStream(contentManager.RootDirectory + "/" + assetName);
@@ -490,69 +490,69 @@ namespace ZeldaOracle.Common.Content {
 		//-----------------------------------------------------------------------------
 		// Resource Adding.
 		//-----------------------------------------------------------------------------
-		
-		// Adds the specified animation.
+
+		/// <summary>Adds the specified animation.</summary>
 		public static void AddImage(string assetName, Image image) {
 			images.Add(assetName, image);
 		}
 
-		// Adds the specified sprite sheet.
+		/// <summary>Adds the specified sprite sheet.</summary>
 		public static void AddSpriteSheet(string assetName, SpriteSheet sheet) {
 			spriteSheets.Add(assetName, sheet);
 		}
 
-		// Adds the specified sprite.
+		/// <summary>Adds the specified sprite.</summary>
 		public static void AddSprite(string assetName, Sprite sprite) {
 			sprites.Add(assetName, sprite);
 		}
 
-		// Adds the specified game font.
+		/// <summary>Adds the specified game font.</summary>
 		public static void AddGameFont(string assetName, GameFont font) {
 			gameFonts.Add(assetName, font);
 		}
 
-		// Adds the specified animation.
+		/// <summary>Adds the specified animation.</summary>
 		public static void AddAnimation(string assetName, Animation animation) {
 			animations.Add(assetName, animation);
 		}
 
-		// Adds the specified language.
+		/// <summary>Adds the specified language.</summary>
 		public static void AddLanguage(Language language) {
 			languages.Add(language);
 		}
 
-	
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		// Gets the content manager.
+		/// <summary>Gets the content manager.</summary>
 		public static ContentManager ContentManager {
 			get { return contentManager; }
 		}
 
-		// Gets or sets if the resource manager should output load information to the console.
+		/// <summary>Gets or sets if the resource manager should output load information to the console.</summary>
 		public static bool VerboseOutput {
 			get { return verboseOutput; }
 			set { verboseOutput = value; }
 		}
 
-		// Gets the dictionary of tilesets.
+		/// <summary>Gets the dictionary of tilesets.</summary>
 		public static Dictionary<string, Tileset> Tilesets {
 			get { return tilesets; }
 		}
 
-		// Gets the dictionary of sounds.
+		/// <summary>Gets the dictionary of sounds.</summary>
 		public static Dictionary<string, Sound> Sounds {
 			get { return sounds; }
 		}
 
-		// Gets the list of langauges.
+		/// <summary>Gets the list of langauges.</summary>
 		public static List<Language> Languages {
 			get { return languages; }
 		}
 
-		// Gets the list of sprite sheets.
+		/// <summary>Gets the list of sprite sheets.</summary>
 		public static SpriteSheet[] SpriteSheets {
 			get {
 				SpriteSheet[] sheets = new SpriteSheet[spriteSheets.Count];
@@ -561,7 +561,7 @@ namespace ZeldaOracle.Common.Content {
 			}
 		}
 
-		// Gets the number of sprite sheets.
+		/// <summary>Gets the number of sprite sheets.</summary>
 		public static int SpriteSheetCount {
 			get { return spriteSheets.Count; }
 		}

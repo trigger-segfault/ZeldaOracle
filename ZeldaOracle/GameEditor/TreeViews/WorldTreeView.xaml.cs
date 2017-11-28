@@ -271,8 +271,8 @@ namespace ZeldaEditor.TreeViews {
 			levelsNode.Items.Clear();
 			World world = editorControl.World;
 
-			for (int i = 0; i < world.Levels.Count; i++) {
-				LevelTreeViewItem levelNode = new LevelTreeViewItem(world.Levels[i], editorControl);
+			for (int i = 0; i < world.LevelCount; i++) {
+				LevelTreeViewItem levelNode = new LevelTreeViewItem(world.GetLevelAt(i), editorControl);
 				levelNode.ContextMenu = contextMenuLevel;
 				levelsNode.Items.Add(levelNode);
 			}
@@ -365,7 +365,7 @@ namespace ZeldaEditor.TreeViews {
 			}
 			dungeonsNode.Items.Clear();
 
-			foreach (Dungeon dungeon in editorControl.World.Dungeons) {
+			foreach (Dungeon dungeon in editorControl.World.GetDungeons()) {
 				DungeonTreeViewItem dungeonNode = new DungeonTreeViewItem(dungeon);
 				dungeonNode.ContextMenu = contextMenuDungeon;
 				dungeonsNode.Items.Add(dungeonNode);
@@ -375,7 +375,7 @@ namespace ZeldaEditor.TreeViews {
 		public void RefreshTree() {
 			World world = editorControl.World;
 
-			if (world == null) {
+			if (!editorControl.IsWorldOpen) {
 				treeView.Items.Clear(); // Don't show a tree if no world is open.
 			}
 			else {
@@ -383,12 +383,11 @@ namespace ZeldaEditor.TreeViews {
 				if (treeView.Items.Count == 0)
 					CreateTreeSkeleton();
 
-				worldNode.Header = world.ID;
-
 				RefreshLevels();
 				RefreshDungeons();
 				RefreshScripts(true, true);
 			}
+			UpdateButtons();
 		}
 
 
@@ -400,14 +399,35 @@ namespace ZeldaEditor.TreeViews {
 		private void CreateTreeSkeleton() {
 			World world = editorControl.World;
 
-			worldNode           = new WorldTreeViewItem(world);
+			if (worldNode != null) {
+				worldNode.Items.Clear();
+			}
+			else {
+				worldNode           = new WorldTreeViewItem(world);
+				worldNode.Header    = editorControl.World.ID;
+			}
 
-			levelsNode          = new ImageTreeViewItem(EditorImages.LevelGroup, "Levels", true);
-			levelsNode.Tag      = "levels";
-			dungeonsNode        = new ImageTreeViewItem(EditorImages.DungeonGroup, "Dungeons", true);
-			dungeonsNode.Tag    = "dungeons";
-			scriptsNode         = new ImageTreeViewItem(EditorImages.ScriptGroup, "Scripts", true);
-			scriptsNode.Tag		= "scripts";
+			if (levelsNode != null) {
+				levelsNode.Items.Clear();
+			}
+			else {
+				levelsNode          = new ImageTreeViewItem(EditorImages.LevelGroup, "Levels", true);
+				levelsNode.Tag      = "levels";
+			}
+			if (dungeonsNode != null) {
+				dungeonsNode.Items.Clear();
+			}
+			else {
+				dungeonsNode        = new ImageTreeViewItem(EditorImages.DungeonGroup, "Dungeons", true);
+				dungeonsNode.Tag    = "dungeons";
+			}
+			if (scriptsNode != null) {
+				scriptsNode.Items.Clear();
+			}
+			else {
+				scriptsNode         = new ImageTreeViewItem(EditorImages.ScriptGroup, "Scripts", true);
+				scriptsNode.Tag     = "scripts";
+			}
 
 
 			treeView.Items.Clear();
@@ -429,7 +449,11 @@ namespace ZeldaEditor.TreeViews {
 			set { editorControl = value; }
 		}
 
-		private void OnSelectionChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<object> e) {
+		public bool IsMouseOverTreeView {
+			get { return treeView.IsMouseOver; }
+		}
+
+		private void OnSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
 			UpdateButtons();
 		}
 		
@@ -447,7 +471,7 @@ namespace ZeldaEditor.TreeViews {
 			}
 		}
 
-		static TreeViewItem VisualUpwardSearch(DependencyObject source) {
+		private static TreeViewItem VisualUpwardSearch(DependencyObject source) {
 			while (source != null && !(source is TreeViewItem))
 				source = VisualTreeHelper.GetParent(source);
 
@@ -467,7 +491,7 @@ namespace ZeldaEditor.TreeViews {
 			else if (eventObject is Level)
 				editorControl.OpenLevel(eventObject as Level);
 			else
-				editorControl.OpenObjectProperties(eventObject);
+				editorControl.OpenProperties(eventObject);
 		}
 
 		private void OnEdit(object sender, RoutedEventArgs e) {
@@ -549,11 +573,14 @@ namespace ZeldaEditor.TreeViews {
 				buttonEdit.IsEnabled = true;
 				buttonRename.IsEnabled = true;
 			}
-			else if (treeView.SelectedItem is IWorldTreeViewItem) {
+			else if (treeView.SelectedItem is IWorldTreeViewItem)
+			{
 				buttonEdit.IsEnabled = true;
-				buttonRename.IsEnabled = true;
 				buttonDuplicate.IsEnabled = true;
 				buttonDelete.IsEnabled = true;
+
+				if (!(treeView.SelectedItem is EventTreeViewItem))
+					buttonRename.IsEnabled = true;
 
 				if (!(treeView.SelectedItem is ScriptTreeViewItem)) {
 					TreeViewItem parent = GetParentNode(treeView.SelectedItem);
@@ -573,9 +600,6 @@ namespace ZeldaEditor.TreeViews {
 			e.Handled = true;
 		}
 
-		public bool IsMouseOverTreeView {
-			get { return treeView.IsMouseOver; }
-		}
 		public void FocusOnTreeView() {
 			treeView.Focus();
 		}

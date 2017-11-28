@@ -4,24 +4,24 @@ using System.Linq;
 using System.Text;
 
 namespace ZeldaOracle.Common.Input.Controls {
-	/**<summary>A control class for holding down multiple inputs.</summary>*/
+	/// <summary>A control class for holding down multiple inputs.</summary>
 	public class ComboControl : ControlHandler {
 
 		//=========== MEMBERS ============
 		#region Members
 
-		/**<summary>The list of controls to be held down.</summary>*/
+		/// <summary>The list of controls to be held down.</summary>
 		public ControlHandler[] Controls;
 
 		#endregion
 		//========= CONSTRUCTORS =========
 		#region Constructors
 
-		/**<summary>Constructs the default control combo.</summary>*/
+		/// <summary>Constructs the default control combo.</summary>
 		public ComboControl() {
 			this.Controls		= new ControlHandler[0];
 		}
-		/**<summary>Constructs a control combo with the specified controls.</summary>*/
+		/// <summary>Constructs a control combo with the specified controls.</summary>
 		public ComboControl(ControlHandler[] controls) {
 			this.Controls		= controls;
 		}
@@ -30,7 +30,7 @@ namespace ZeldaOracle.Common.Input.Controls {
 		//========== PROPERTIES ==========
 		#region Properties
 
-		/**<summary>Gets the name of the control.</summary>*/
+		/// <summary>Gets the name of the control.</summary>
 		public override string Name {
 			get {
 				string name = "";
@@ -45,7 +45,7 @@ namespace ZeldaOracle.Common.Input.Controls {
 		//============ EVENTS ============
 		#region Events
 
-		/**<summary>Returns true if the control was pressed.</summary>*/
+		/// <summary>Returns true if the control was pressed.</summary>
 		public override bool Pressed() {
 			bool pressed = false;
 			for (int i = 0; i < Controls.Length; i++) {
@@ -56,7 +56,7 @@ namespace ZeldaOracle.Common.Input.Controls {
 			}
 			return pressed;
 		}
-		/**<summary>Returns true if the control was released.</summary>*/
+		/// <summary>Returns true if the control was released.</summary>
 		public override bool Released() {
 			bool released = false;
 			for (int i = 0; i < Controls.Length; i++) {
@@ -67,7 +67,7 @@ namespace ZeldaOracle.Common.Input.Controls {
 			}
 			return released;
 		}
-		/**<summary>Returns true if the control is down.</summary>*/
+		/// <summary>Returns true if the control is down.</summary>
 		public override bool Down() {
 			for (int i = 0; i < Controls.Length; i++) {
 				if (Controls[i].Up())
@@ -75,7 +75,7 @@ namespace ZeldaOracle.Common.Input.Controls {
 			}
 			return true;
 		}
-		/**<summary>Returns true if the control is up.</summary>*/
+		/// <summary>Returns true if the control is up.</summary>
 		public override bool Up() {
 			for (int i = 0; i < Controls.Length; i++) {
 				if (Controls[i].Up())

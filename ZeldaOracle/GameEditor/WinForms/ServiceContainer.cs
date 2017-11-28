@@ -19,20 +19,16 @@ namespace ZeldaEditor.WinForms {
 	/// ContentManager uses it to locate the IGraphicsDeviceService implementation.
 	/// </summary>
 	public class ServiceContainer : IServiceProvider {
-		Dictionary<Type, object> services = new Dictionary<Type, object>();
+		/// <summary>The collection of services.</summary>
+		private Dictionary<Type, object> services = new Dictionary<Type, object>();
+		
 
-
-		/// <summary>
-		/// Adds a new service to the collection.
-		/// </summary>
+		/// <summary>Adds a new service to the collection.</summary>
 		public void AddService<T>(T service) {
 			services.Add(typeof(T), service);
 		}
-
-
-		/// <summary>
-		/// Looks up the specified service.
-		/// </summary>
+		
+		/// <summary>Looks up the specified service.</summary>
 		public object GetService(Type serviceType) {
 			object service;
 

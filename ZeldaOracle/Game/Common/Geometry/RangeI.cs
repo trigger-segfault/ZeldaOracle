@@ -6,16 +6,16 @@ using System.Text;
 using Microsoft.Xna.Framework.Content;
 
 namespace ZeldaOracle.Common.Geometry {
-	/**<summary>The int precision range between a min and a max.</summary>*/
+	/// <summary>The int precision range between a min and a max.</summary>
 	public struct RangeI {
 
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Returns a range positioned between (0 - 0).</summary>*/
+		/// <summary>Returns a range positioned between (0 - 0).</summary>
 		public static RangeI Zero = new RangeI(0, 0);
-		/**<summary>Returns a range positioned between (Int.Min - Int.Max).</summary>*/
+		/// <summary>Returns a range positioned between (Int.Min - Int.Max).</summary>
 		public static readonly RangeI Full = new RangeI(int.MinValue, int.MaxValue);
 
 
@@ -23,9 +23,9 @@ namespace ZeldaOracle.Common.Geometry {
 		// Members
 		//-----------------------------------------------------------------------------
 
-		/**<summary>The minimum value in the range.</summary>*/
+		/// <summary>The minimum value in the range.</summary>
 		public int Min;
-		/**<summary>The maximum value in the range.</summary>*/
+		/// <summary>The maximum value in the range.</summary>
 		public int Max;
 
 
@@ -33,19 +33,19 @@ namespace ZeldaOracle.Common.Geometry {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Constructs a range between the 2 values.</summary>*/
+		/// <summary>Constructs a range between the 2 values.</summary>
 		public RangeI(int min, int max) {
 			this.Min	= min;
 			this.Max	= max;
 		}
 
-		/**<summary>Constructs a range with a single value.</summary>*/
+		/// <summary>Constructs a range with a single value.</summary>
 		public RangeI(int single) {
 			this.Min	= single;
 			this.Max	= single;
 		}
 
-		/**<summary>Constructs a copy of the specified range.</summary>*/
+		/// <summary>Constructs a copy of the specified range.</summary>
 		public RangeI(RangeI r) {
 			this.Min	= r.Min;
 			this.Max	= r.Max;
@@ -56,34 +56,34 @@ namespace ZeldaOracle.Common.Geometry {
 		// General
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Outputs a string representing this range as (min - max).</summary>*/
+		/// <summary>Outputs a string representing this range as (min - max).</summary>
 		public override string ToString() {
 			return "(" + Min + ", " + Max + ")";
 		}
 
-		/**<summary>Outputs a string representing this range as (min - max).</summary>*/
+		/// <summary>Outputs a string representing this range as (min - max).</summary>
 		public string ToString(IFormatProvider provider) {
 			return "(" + Min.ToString(provider) + ", " + Max.ToString(provider) + ")";
 		}
 
-		/**<summary>Outputs a string representing this range as (min - max).</summary>*/
+		/// <summary>Outputs a string representing this range as (min - max).</summary>
 		public string ToString(string format, IFormatProvider provider) {
 			return "(" + Min.ToString(format, provider) + ", " + Max.ToString(format, provider) + ")";
 		}
 
-		/**<summary>Outputs a string representing this range as (min - max).</summary>*/
+		/// <summary>Outputs a string representing this range as (min - max).</summary>
 		public string ToString(string format) {
 			return "(" + Min.ToString(format) + ", " + Max.ToString(format) + ")";
 		}
 
-		/**<summary>Returns true if the specified range has the same min and max values.</summary>*/
+		/// <summary>Returns true if the specified range has the same min and max values.</summary>
 		public override bool Equals(object obj) {
 			if (obj is RangeI)
 				return (Min == ((RangeI)obj).Min && Max == ((RangeI)obj).Max);
 			return false;
 		}
 
-		/**<summary>Returns the hash code for this range.</summary>*/
+		/// <summary>Returns the hash code for this range.</summary>
 		public override int GetHashCode() {
 			return base.GetHashCode();
 		}
@@ -132,13 +132,13 @@ namespace ZeldaOracle.Common.Geometry {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Gets the range between the min and max values.</summary>*/
+		/// <summary>Gets the range between the min and max values.</summary>
 		[ContentSerializerIgnore]
 		public int Range {
 			get { return Max - Min; }
 		}
 
-		/**<summary>Gets or sets the min or max coordinate from the index.</summary>*/
+		/// <summary>Gets or sets the min or max coordinate from the index.</summary>
 		[ContentSerializerIgnore]
 		public int this[int index] {
 			get {
@@ -159,17 +159,17 @@ namespace ZeldaOracle.Common.Geometry {
 			}
 		}
 
-		/**<summary>Returns true if the range has the values of (0 - 0).</summary>*/
+		/// <summary>Returns true if the range has the values of (0 - 0).</summary>
 		public bool IsZero {
 			get { return (Min == 0 && Max == 0); }
 		}
 
-		/**<summary>Returns true if the min and max values are the same.</summary>*/
+		/// <summary>Returns true if the min and max values are the same.</summary>
 		public bool IsSingle {
 			get { return (Min == Max); }
 		}
 
-		/**<summary>Gets the middle of the range.</summary>*/
+		/// <summary>Gets the middle of the range.</summary>
 		public int Mean {
 			get { return (Max + Min) / 2; }
 		}
@@ -179,7 +179,7 @@ namespace ZeldaOracle.Common.Geometry {
 		// Contains
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Returns true if the specified value is inside this range.</summary>*/
+		/// <summary>Returns true if the specified value is inside this range.</summary>
 		public bool Contains(int value) {
 			return ((value >= Min) &&
 					(value <=  Max));

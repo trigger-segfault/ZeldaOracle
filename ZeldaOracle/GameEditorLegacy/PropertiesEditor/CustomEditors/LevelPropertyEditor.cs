@@ -35,7 +35,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 
 		public override void CreateList(ListBox listBox, object value) {
 			listBox.Items.Add("(none)");
-			foreach (Level level in EditorControl.World.Levels)
+			foreach (Level level in EditorControl.World.GetLevels())
 				listBox.Items.Add(level.ID);
 		}
 

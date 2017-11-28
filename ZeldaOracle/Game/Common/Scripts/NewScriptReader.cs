@@ -7,11 +7,11 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Scripts.Commands;
 
 namespace ZeldaOracle.Common.Scripts {
-	/** <summary>
-	 * A script reader is an abstract object that
-	 * is meant to be implemented to be able to
-	 * interpret text files written in a certain syntax.
-	 *</summary>*/
+	/// <summary>
+	/// A script reader is an abstract object that
+	/// is meant to be implemented to be able to
+	/// interpret text files written in a certain syntax.
+	/// <summary>
 	public class ScriptReader {
 		
 		private StreamReader	streamReader;

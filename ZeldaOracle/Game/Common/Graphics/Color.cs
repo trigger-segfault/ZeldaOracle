@@ -13,209 +13,210 @@ using GdiColor		= System.Drawing.Color;
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Graphics {
-	/**<summary>A structure for storing color data.</summary>*/
+	/// <summary>A structure for storing color data.</summary>
 	public struct Color {
 
-		//========== CONSTANTS ===========
-		#region Constants
+		//-----------------------------------------------------------------------------
+		// Constants
+		//-----------------------------------------------------------------------------
 
-		/**<summary>R:255 G:255 B:255 A:255.</summary>*/
-		public static Color White {
-			get { return new Color(255, 255, 255, 255); }
-		}
+		/// <summary>R:255 G:255 B:255 A:0.</summary>
+		public static readonly Color TransparentWhite	= new Color(255, 255, 255, 0);
+		/// <summary>R:0 G:0 B:0 A:0.</summary>
+		public static readonly Color Transparent		= new Color(0, 0, 0, 0);
 
-		/**<summary>R:0 G:0 B:0 A:255.</summary>*/
-		public static Color Black {
-			get { return new Color(0, 0, 0, 255); }
-		}
+		/// <summary>R:255 G:255 B:255 A:255.</summary>
+		public static readonly Color White      = new Color(255, 255, 255, 255);
+		/// <summary>R:0 G:0 B:0 A:255.</summary>
+		public static readonly Color Black      = new Color(0, 0, 0, 255);
 
-		/**<summary>R:255 G:255 B:255 A:0.</summary>*/
-		public static Color TransparentWhite {
-			get { return new Color(255, 255, 255, 0); }
-		}
+		/// <summary>R:255 G:0 B:0 A:255.</summary>
+		public static readonly Color Red		= new Color(255, 0, 0);
+		/// <summary>R:0 G:255 B:0 A:255.</summary>
+		public static readonly Color Green		= new Color(0, 255, 0);
+		/// <summary>R:0 G:0 B:255 A:255.</summary>
+		public static readonly Color Blue		= new Color(0, 0, 255);
 
-		/**<summary>R:0 G:0 B:0 A:0.</summary>*/
-		public static Color Transparent {
-			get { return new Color(0, 0, 0, 0); }
-		}
-
-		// R:255 G:0 B:0 A:255.
-		public static Color Red {
-			get { return new Color(255, 0, 0); }
-		}
-
-		// R:0 G:255 B:0 A:255.
-		public static Color Green {
-			get { return new Color(0, 255, 0); }
-		}
-
-		// R:0 G:0 B:255 A:255.
-		public static Color Blue {
-			get { return new Color(0, 0, 255); }
-		}
-
+		/// <summary>R:255 G:255 B:0 A:255.</summary>
 		public static readonly Color Yellow		= new Color(255, 255, 0);
+		/// <summary>R:128 G:128 B:0 A:255.</summary>
 		public static readonly Color Olive		= new Color(128, 128, 0);
+		/// <summary>R:0 G:255 B:255 A:255.</summary>
 		public static readonly Color Cyan		= new Color(0, 255, 255);
+		/// <summary>R:128 G:0 B:0 A:255.</summary>
 		public static readonly Color Maroon		= new Color(128, 0, 0);
+		/// <summary>R:255 G:0 B:255 A:255.</summary>
 		public static readonly Color Magenta	= new Color(255, 0, 255);
 
-		#endregion
-		//=========== MEMBERS ============
-		#region Members
 
-		/**<summary>The alpha value of the color.</summary>*/
-		private byte a;
-		/**<summary>The red value of the color.</summary>*/
-		private byte r;
-		/**<summary>The green value of the color.</summary>*/
-		private byte g;
-		/**<summary>The blue value of the color.</summary>*/
-		private byte b;
+		//-----------------------------------------------------------------------------
+		// Members
+		//-----------------------------------------------------------------------------
 
-		#endregion
-		//========= CONSTRUCTORS =========
-		#region Constructors
+		/// <summary>The alpha value of the color.</summary>
+		public byte A;
+		/// <summary>The red value of the color.</summary>
+		public byte R;
+		/// <summary>The green value of the color.</summary>
+		public byte G;
+		/// <summary>The blue value of the color.</summary>
+		public byte B;
 
-		/**<summary>Constructs a color with the specified values.</summary>*/
+
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Constructs a color with the specified values.</summary>
 		public Color(int red, int green, int blue, bool asHsv = false) {
 			if (asHsv) {
-				this.r = 0;
-				this.g = 0;
-				this.b = 0;
-				this.a = 255;
+				this.R = 0;
+				this.G = 0;
+				this.B = 0;
+				this.A = 255;
 				this.SetHSV(red, green, blue);
 			}
 			else {
-				this.r	= (byte)GMath.Clamp(red, 0, 255);
-				this.g	= (byte)GMath.Clamp(green, 0, 255);
-				this.b	= (byte)GMath.Clamp(blue, 0, 255);
-				this.a	= 255;
+				this.R	= (byte)GMath.Clamp(red, 0, 255);
+				this.G	= (byte)GMath.Clamp(green, 0, 255);
+				this.B	= (byte)GMath.Clamp(blue, 0, 255);
+				this.A	= 255;
 			}
 		}
-		/**<summary>Constructs a color with the specified values.</summary>*/
+
+		/// <summary>Constructs a color with the specified values.</summary>
 		public Color(int red, int green, int blue, int alpha, bool asHsv = false) {
 			if (asHsv) {
-				this.r = 0;
-				this.g = 0;
-				this.b = 0;
-				this.a = (byte)GMath.Clamp(alpha, 0, 255);
+				this.R = 0;
+				this.G = 0;
+				this.B = 0;
+				this.A = (byte)GMath.Clamp(alpha, 0, 255);
 				this.SetHSV(red, green, blue);
 			}
 			else {
-				this.r	= (byte)GMath.Clamp(red, 0, 255);
-				this.g	= (byte)GMath.Clamp(green, 0, 255);
-				this.b	= (byte)GMath.Clamp(blue, 0, 255);
-				this.a	= (byte)GMath.Clamp(alpha, 0, 255);
+				this.R	= (byte)GMath.Clamp(red, 0, 255);
+				this.G	= (byte)GMath.Clamp(green, 0, 255);
+				this.B	= (byte)GMath.Clamp(blue, 0, 255);
+				this.A	= (byte)GMath.Clamp(alpha, 0, 255);
 			}
 		}
 
-		/**<summary>Constructs a color with the specified values.</summary>*/
+		/// <summary>Constructs a color with the specified values.</summary>
 		public Color(float red, float green, float blue, bool asHsv = false) {
 			if (asHsv) {
-				this.r = 0;
-				this.g = 0;
-				this.b = 0;
-				this.a = 255;
+				this.R = 0;
+				this.G = 0;
+				this.B = 0;
+				this.A = 255;
 				this.SetHSV(red, green, blue);
 			}
 			else {
-				this.r	= (byte)(GMath.Clamp(red, 0f, 1f) * 255f);
-				this.g	= (byte)(GMath.Clamp(green, 0f, 1f) * 255f);
-				this.b	= (byte)(GMath.Clamp(blue, 0f, 1f) * 255f);
-				this.a	= 255;
+				this.R	= (byte)(GMath.Clamp(red, 0f, 1f) * 255f);
+				this.G	= (byte)(GMath.Clamp(green, 0f, 1f) * 255f);
+				this.B	= (byte)(GMath.Clamp(blue, 0f, 1f) * 255f);
+				this.A	= 255;
 			}
 		}
-		/**<summary>Constructs a color with the specified values.</summary>*/
+
+		/// <summary>Constructs a color with the specified values.</summary>
 		public Color(float red, float green, float blue, float alpha, bool asHsv = false) {
 			if (asHsv) {
-				this.r	= 0;
-				this.g	= 0;
-				this.b	= 0;
-				this.a	= (byte)(GMath.Clamp(alpha, 0f, 1f) * 255f);
+				this.R	= 0;
+				this.G	= 0;
+				this.B	= 0;
+				this.A	= (byte)(GMath.Clamp(alpha, 0f, 1f) * 255f);
 				this.SetHSV(red, green, blue);
 			}
 			else {
-				this.r	= (byte)(GMath.Clamp(red, 0f, 1f) * 255f);
-				this.g	= (byte)(GMath.Clamp(green, 0f, 1f) * 255f);
-				this.b	= (byte)(GMath.Clamp(blue, 0f, 1f) * 255f);
-				this.a	= (byte)(GMath.Clamp(alpha, 0f, 1f) * 255f);
+				this.R	= (byte)(GMath.Clamp(red, 0f, 1f) * 255f);
+				this.G	= (byte)(GMath.Clamp(green, 0f, 1f) * 255f);
+				this.B	= (byte)(GMath.Clamp(blue, 0f, 1f) * 255f);
+				this.A	= (byte)(GMath.Clamp(alpha, 0f, 1f) * 255f);
 			}
 		}
 
-		/**<summary>Constructs a color with the specified values.</summary>*/
+		/// <summary>Constructs a color with the specified values.</summary>
 		public Color(double red, double green, double blue, bool asHsv = false) {
 			if (asHsv) {
-				this.r = 0;
-				this.g = 0;
-				this.b = 0;
-				this.a = 255;
+				this.R = 0;
+				this.G = 0;
+				this.B = 0;
+				this.A = 255;
 				this.SetHSV(red, green, blue);
 			}
 			else {
-				this.r	= (byte)(GMath.Clamp(red, 0.0, 1.0) * 255.0);
-				this.g	= (byte)(GMath.Clamp(green, 0.0, 1.0) * 255.0);
-				this.b	= (byte)(GMath.Clamp(blue, 0.0, 1.0) * 255.0);
-				this.a	= 255;
+				this.R	= (byte)(GMath.Clamp(red, 0.0, 1.0) * 255.0);
+				this.G	= (byte)(GMath.Clamp(green, 0.0, 1.0) * 255.0);
+				this.B	= (byte)(GMath.Clamp(blue, 0.0, 1.0) * 255.0);
+				this.A	= 255;
 			}
 		}
-		/**<summary>Constructs a color with the specified values.</summary>*/
+
+		/// <summary>Constructs a color with the specified values.</summary>
 		public Color(double red, double green, double blue, double alpha, bool asHsv = false) {
 			if (asHsv) {
-				this.r	= 0;
-				this.g	= 0;
-				this.b	= 0;
-				this.a	= (byte)(GMath.Clamp(alpha, 0.0, 1.0) * 255.0);
+				this.R	= 0;
+				this.G	= 0;
+				this.B	= 0;
+				this.A	= (byte)(GMath.Clamp(alpha, 0.0, 1.0) * 255.0);
 				this.SetHSV(red, green, blue);
 			}
 			else {
-				this.r	= (byte)(GMath.Clamp(red, 0.0, 1.0) * 255.0);
-				this.g	= (byte)(GMath.Clamp(green, 0.0, 1.0) * 255.0);
-				this.b	= (byte)(GMath.Clamp(blue, 0.0, 1.0) * 255.0);
-				this.a	= (byte)(GMath.Clamp(alpha, 0.0, 1.0) * 255.0);
+				this.R	= (byte)(GMath.Clamp(red, 0.0, 1.0) * 255.0);
+				this.G	= (byte)(GMath.Clamp(green, 0.0, 1.0) * 255.0);
+				this.B	= (byte)(GMath.Clamp(blue, 0.0, 1.0) * 255.0);
+				this.A	= (byte)(GMath.Clamp(alpha, 0.0, 1.0) * 255.0);
 			}
 		}
-		/**<summary>Constructs a copy of the specified color.</summary>*/
+
+		/// <summary>Constructs a copy of the specified color.</summary>
 		public Color(Color color) {
-			this.r	= color.r;
-			this.g	= color.g;
-			this.b	= color.b;
-			this.a	= color.a;
+			this.R	= color.R;
+			this.G	= color.G;
+			this.B	= color.B;
+			this.A	= color.A;
 		}
 
-		#endregion
-		//=========== GENERAL ============
-		#region General
 
-		/**<summary>Outputs a string representing this color.</summary>*/
+		//-----------------------------------------------------------------------------
+		// General
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Outputs a string representing this color.</summary>
 		public override string ToString() {
-			return "(" + r + ", " + g + ", " + b + ", " + a + ")";
+			return "(R:" + R + " G:" + G + " B:" + B + " A:" + A + ")";
 		}
-		/**<summary>Outputs a string representing this color.</summary>*/
+
+		/// <summary>Outputs a string representing this color.</summary>
 		public string ToString(IFormatProvider provider) {
 			// TODO: Write formatting for Color.ToString(format).
 
-			return "(" + r + ", " + g + ", " + b + ", " + a + ")";
+			return "(R:" + R + " G:" + G + " B:" + B + " A:" + A + ")";
 		}
-		/**<summary>Outputs a string representing this color.</summary>*/
+
+		/// <summary>Outputs a string representing this color.</summary>
 		public string ToString(string format, IFormatProvider provider) {
-			return "(" + r + ", " + g + ", " + b + ", " + a + ")";
+			return "(R:" + R + " G:" + G + " B:" + B + " A:" + A + ")";
 		}
-		/**<summary>Outputs a string representing this color.</summary>*/
+
+		/// <summary>Outputs a string representing this color.</summary>
 		public string ToString(string format) {
-			return "(" + r + ", " + g + ", " + b + ", " + a + ")";
+			return "(R:" + R + " G:" + G + " B:" + B + " A:" + A + ")";
 		}
-		/**<summary>Returns true if the specified color has the same rgba values.</summary>*/
+
+		/// <summary>Returns true if the specified color has the same rgba values.</summary>
 		public override bool Equals(object obj) {
 			if (obj is Color)
-				return (r == ((Color)obj).r && g == ((Color)obj).g && b == ((Color)obj).b && a == ((Color)obj).a);
+				return (R == ((Color)obj).R && G == ((Color)obj).G && B == ((Color)obj).B && A == ((Color)obj).A);
 			return false;
 		}
-		/**<summary>Returns the hash code for this color.</summary>*/
+
+		/// <summary>Returns the hash code for this color.</summary>
 		public override int GetHashCode() {
 			return base.GetHashCode();
 		}
-		/**<summary>Parses the color.</summary>*/
+
+		/// <summary>Parses the color.</summary>
 		public static Color Parse(string text) {
 			Color value = Color.White;
 
@@ -243,10 +244,10 @@ namespace ZeldaOracle.Common.Graphics {
 						try {
 							byte v = Byte.Parse(str);
 							switch (i) {
-							case 0: value.r = v; break;
-							case 1: value.g = v; break;
-							case 2: value.b = v; break;
-							case 3: value.a = v; break;
+							case 0: value.R = v; break;
+							case 1: value.G = v; break;
+							case 2: value.B = v; break;
+							case 3: value.A = v; break;
 							}
 						}
 						catch (FormatException e) {
@@ -275,144 +276,123 @@ namespace ZeldaOracle.Common.Graphics {
 			return value;
 		}
 
-		#endregion
-		//========== OPERATORS ===========
-		#region Operators
+
+		//-----------------------------------------------------------------------------
+		// Operators
+		//-----------------------------------------------------------------------------
+
+		public static bool operator ==(Color a, Color b) {
+			return (a.R == b.R && a.G == b.G && a.B == b.B && a.A == b.A);
+		}
+
+		public static bool operator !=(Color a, Color b) {
+			return (a.R != b.R || a.G != b.G || a.B != b.B || a.A != b.A);
+		}
+
+		public static Color operator *(Color a, float scalar) {
+			return new Color(
+				(byte) (GMath.Clamp((a.R / 255.0f) * scalar, 0.0f, 1.0f) * 255),
+				(byte) (GMath.Clamp((a.G / 255.0f) * scalar, 0.0f, 1.0f) * 255),
+				(byte) (GMath.Clamp((a.B / 255.0f) * scalar, 0.0f, 1.0f) * 255),
+				(byte) (GMath.Clamp((a.A / 255.0f) * scalar, 0.0f, 1.0f) * 255));
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Conversions
+		//-----------------------------------------------------------------------------
 
 		public static explicit operator Color(XnaColor c) {
 			return new Color(c.R, c.G, c.B, c.A);
 		}
+
 		public static implicit operator XnaColor(Color c) {
-			return new XnaColor(c.r, c.g, c.b, c.a);
+			return new XnaColor(c.R, c.G, c.B, c.A);
 		}
+
 		public static explicit operator Color(GdiColor c) {
 			return new Color(c.R, c.G, c.B, c.A);
 		}
+
 		public static implicit operator GdiColor(Color c) {
 			return GdiColor.FromArgb(c.A, c.R, c.G, c.B);
 		}
-		public static bool operator ==(Color a, Color b) {
-			return (a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a);
-		}
-		public static bool operator !=(Color a, Color b) {
-			return (a.r != b.r || a.g != b.g || a.b != b.b || a.a != b.a);
-		}
-		public static Color operator *(Color a, float scalar) {
-			return new Color(
-				(byte) (GMath.Clamp((a.r / 255.0f) * scalar, 0.0f, 1.0f) * 255),
-				(byte) (GMath.Clamp((a.g / 255.0f) * scalar, 0.0f, 1.0f) * 255),
-				(byte) (GMath.Clamp((a.b / 255.0f) * scalar, 0.0f, 1.0f) * 255),
-				(byte) (GMath.Clamp((a.a / 255.0f) * scalar, 0.0f, 1.0f) * 255));
-		}
 
-		#endregion
-		//========== PROPERTIES ==========
-		#region Properties
-		//--------------------------------
-		#region RGBA
 
-		/**<summary>Gets or sets the red value of the color.</summary>*/
-		[ContentSerializer(Optional = true)]
-		public byte R {
-			get { return r; }
-			set { r = value; }
-		}
-		/**<summary>Gets or sets the green value of the color.</summary>*/
-		[ContentSerializer(Optional = true)]
-		public byte G {
-			get { return g; }
-			set { g = value; }
-		}
-		/**<summary>Gets or sets the blue value of the color.</summary>*/
-		[ContentSerializer(Optional = true)]
-		public byte B {
-			get { return b; }
-			set { b = value; }
-		}
-		/**<summary>Gets or sets the alpha value of the color.</summary>*/
-		[ContentSerializer(Optional = true)]
-		public byte A {
-			get { return a; }
-			set { a = value; }
-		}
-		/**<summary>Gets the packed color with all the values inside an unsigned int.</summary>*/
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+
+		/// <summary>Gets the packed color with all the values inside an unsigned int.</summary>
 		public uint PackedColor {
-			get { return (((uint)a) << 12) + (((uint)r) << 8) + (((uint)g) << 8) + ((uint)b); }
+			get { return (((uint)A) << 12) + (((uint)R) << 8) + (((uint)G) << 8) + ((uint)B); }
 		}
-
-		#endregion
-		//--------------------------------
-		#region HSV
-
-		/**<summary>Gets or sets hue of the color.</summary>*/
-		[ContentSerializer(Optional = true)]
+		
+		/// <summary>Gets or sets hue of the color.</summary>
 		public int Hue {
 			get {
-				byte max = GMath.Max(r, GMath.Max(g, b));
+				byte max = GMath.Max(R, GMath.Max(G, B));
 
-				if (max == r)
-					return   0 + ((int)(g - b) * 60 / 255);
-				else if (max == g)
-					return 120 + ((int)(b - r) * 60 / 255);
+				if (max == R)
+					return   0 + ((int)(G - B) * 60 / 255);
+				else if (max == G)
+					return 120 + ((int)(B - R) * 60 / 255);
 				else
-					return 240 + ((int)(r - g) * 60 / 255);
+					return 240 + ((int)(R - G) * 60 / 255);
 			}
 			set { SetHSV(value, Sat, Val); }
 		}
-		/**<summary>Gets or sets the saturation of the color.</summary>*/
-		[ContentSerializer(Optional = true)]
+
+		/// <summary>Gets or sets the saturation of the color.</summary>
 		public int Sat {
 			get {
-				byte max = (byte)((int)GMath.Max(r, GMath.Max(g, b)) * 100 / 255);
-				byte min = (byte)((int)GMath.Min(r, GMath.Min(g, b)) * 100 / 255);
+				byte max = (byte)((int)GMath.Max(R, GMath.Max(G, B)) * 100 / 255);
+				byte min = (byte)((int)GMath.Min(R, GMath.Min(G, B)) * 100 / 255);
 				byte c = (byte)(max - min);
 				return (c != 0 ? c * 100 / max : 0);
 			}
 			set { SetHSV(Hue, value, Val); }
 		}
-		/**<summary>Gets or sets the brightness of the color.</summary>*/
-		[ContentSerializer(Optional = true)]
+
+		/// <summary>Gets or sets the value of the color.</summary>
 		public int Val {
-			get { return ((int)GMath.Max(r, GMath.Max(g, b)) * 100 / 255); }
+			get { return ((int)GMath.Max(R, GMath.Max(G, B)) * 100 / 255); }
 			set { SetHSV(Hue, Sat, value); }
 		}
 
-		#endregion
-		//--------------------------------
-		#endregion
-		//========== MANAGEMENT ==========
-		#region Management
-		//--------------------------------
-		#region RGB
 
-		/**<summary>Sets the rgb values of the color.</summary>*/
+		//-----------------------------------------------------------------------------
+		// Management
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Sets the rgb values of the color.</summary>
 		public void SetRGB(int red, int green, int blue) {
-			r = (byte)GMath.Clamp(red, 0, 255);
-			g = (byte)GMath.Clamp(green, 0, 255);
-			b = (byte)GMath.Clamp(blue, 0, 255);
+			R = (byte)GMath.Clamp(red, 0, 255);
+			G = (byte)GMath.Clamp(green, 0, 255);
+			B = (byte)GMath.Clamp(blue, 0, 255);
 		}
-		/**<summary>Sets the rgb values of the color.</summary>*/
+
+		/// <summary>Sets the rgb values of the color.</summary>
 		public void SetRGB(float red, float green, float blue) {
-			r = (byte)(GMath.Clamp(red, 0f, 1f) * 255f);
-			g = (byte)(GMath.Clamp(green, 0f, 1f) * 255f);
-			b = (byte)(GMath.Clamp(blue, 0f, 1f) * 255f);
+			R = (byte)(GMath.Clamp(red, 0f, 1f) * 255f);
+			G = (byte)(GMath.Clamp(green, 0f, 1f) * 255f);
+			B = (byte)(GMath.Clamp(blue, 0f, 1f) * 255f);
 		}
-		/**<summary>Sets the rgb values of the color.</summary>*/
+
+		/// <summary>Sets the rgb values of the color.</summary>
 		public void SetRGB(double red, double green, double blue) {
-			r = (byte)(GMath.Clamp(red, 0.0, 1.0) * 255.0);
-			g = (byte)(GMath.Clamp(green, 0.0, 1.0) * 255.0);
-			b = (byte)(GMath.Clamp(blue, 0.0, 1.0) * 255.0);
+			R = (byte)(GMath.Clamp(red, 0.0, 1.0) * 255.0);
+			G = (byte)(GMath.Clamp(green, 0.0, 1.0) * 255.0);
+			B = (byte)(GMath.Clamp(blue, 0.0, 1.0) * 255.0);
 		}
-
-		#endregion
-		//--------------------------------
-		#region HSV
-
-		/**<summary>Sets the hsv values of the color.</summary>*/
+		
+		/// <summary>Sets the hsv values of the color.</summary>
 		public void SetHSV(int hue, int sat, int val) {
 			SetHSV((float)hue / 360f, (float)sat / 100f, (float)val / 100f);
 		}
-		/**<summary>Sets the hsv values of the color.</summary>*/
+
+		/// <summary>Sets the hsv values of the color.</summary>
 		public void SetHSV(float hue, float sat, float val) {
 			hue = GMath.Clamp(hue, 0f, 1f);
 			sat = GMath.Clamp(sat, 0f, 1f);
@@ -426,21 +406,18 @@ namespace ZeldaOracle.Common.Graphics {
 			byte b3 = (byte)(255f * val * (1f - sat * (1f - (hue2 - hueI))));
 
 			switch ((int)hueI) {
-			case 0: r = b0; g = b3; b = b1; break;
-			case 1: r = b2; g = b0; b = b1; break;
-			case 2: r = b1; g = b0; b = b3; break;
-			case 3: r = b1; g = b2; b = b0; break;
-			case 4: r = b3; g = b1; b = b0; break;
-			case 5: r = b0; g = b1; b = b2; break;
+			case 0: R = b0; G = b3; B = b1; break;
+			case 1: R = b2; G = b0; B = b1; break;
+			case 2: R = b1; G = b0; B = b3; break;
+			case 3: R = b1; G = b2; B = b0; break;
+			case 4: R = b3; G = b1; B = b0; break;
+			case 5: R = b0; G = b1; B = b2; break;
 			}
 		}
-		/**<summary>Sets the hsv values of the color.</summary>*/
+
+		/// <summary>Sets the hsv values of the color.</summary>
 		public void SetHSV(double hue, double sat, double val) {
 			SetHSV((float)hue, (float)sat, (float)val);
 		}
-
-		#endregion
-		//--------------------------------
-		#endregion
 	}
 } // End namespace

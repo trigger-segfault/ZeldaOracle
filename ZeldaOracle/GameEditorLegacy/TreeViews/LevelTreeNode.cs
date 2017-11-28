@@ -35,7 +35,7 @@ namespace ZeldaEditor.TreeViews {
 				MessageBoxDefaultButton.Button2);
 
 			if (result == DialogResult.Yes) {
-				int levelIndex = editorControl.World.Levels.IndexOf(level);
+				int levelIndex = editorControl.World.IndexOfLevel(level);
 				editorControl.World.RemoveLevel(level);
 				editorControl.RefreshWorldTreeView();
 

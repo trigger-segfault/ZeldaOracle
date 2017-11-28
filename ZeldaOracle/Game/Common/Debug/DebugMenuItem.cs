@@ -15,7 +15,7 @@ using Keyboard		= ZeldaOracle.Common.Input.Keyboard;
 using Keys			= ZeldaOracle.Common.Input.Keys;
 
 namespace ZeldaOracle.Common.Debug {
-	/**<summary>The menu item class used for the debug menu.</summary>*/
+	/// <summary>The menu item class used for the debug menu.</summary>
 	public class DebugMenuItem {
 
 		//========== CONSTANTS ===========
@@ -25,32 +25,32 @@ namespace ZeldaOracle.Common.Debug {
 		//========== DELEGATES ===========
 		#region Delegates
 
-		/**<summary>The delegate called when the menu item is clicked.</summary>*/
+		/// <summary>The delegate called when the menu item is clicked.</summary>
 		public delegate void MenuItemAction();
 
 		#endregion
 		//=========== MEMBERS ============
 		#region Members
 
-		/**<summary>The root debug menu.</summary>*/
+		/// <summary>The root debug menu.</summary>
 		private DebugMenuItem root;
 
-		/**<summary>The text of the menu item.</summary>*/
+		/// <summary>The text of the menu item.</summary>
 		private string text;
-		/**<summary>The index of the menu item.</summary>*/
+		/// <summary>The index of the menu item.</summary>
 		private int index;
-		/**<summary>The hotkey used by the menu item.</summary>*/
+		/// <summary>The hotkey used by the menu item.</summary>
 		private HotKey hotkey;
-		/**<summary>The action called when the menu item is clicked.</summary>*/
+		/// <summary>The action called when the menu item is clicked.</summary>
 		private MenuItemAction action;
-		/**<summary>The list of menu items in this menu item.</summary>*/
+		/// <summary>The list of menu items in this menu item.</summary>
 		private List<DebugMenuItem> items;
 
 		#endregion
 		//========= CONSTRUCTORS =========
 		#region Constructors
 
-		/**<summary>Constructs a menu item with the specified text.</summary>*/
+		/// <summary>Constructs a menu item with the specified text.</summary>
 		public DebugMenuItem(string text) {
 			this.root			= null;
 
@@ -61,7 +61,7 @@ namespace ZeldaOracle.Common.Debug {
 			this.items			= new List<DebugMenuItem>();
 		}
 
-		/**<summary>Constructs a menu item with the specified text, action, and hotkey.</summary>*/
+		/// <summary>Constructs a menu item with the specified text, action, and hotkey.</summary>
 		public DebugMenuItem(string text, HotKey hotkey, MenuItemAction action) {
 			this.root			= null;
 
@@ -76,16 +76,16 @@ namespace ZeldaOracle.Common.Debug {
 		//============ ITEMS =============
 		#region Items
 
-		/**<summary>Adds the specified menu item to the list of menu items.</summary>*/
+		/// <summary>Adds the specified menu item to the list of menu items.</summary>
 		public DebugMenuItem AddItem(string text) {
 			return AddItem(new DebugMenuItem(text, null, null));
 		}
-		/**<summary>Adds the specified menu item to the list of menu items.</summary>*/
+		/// <summary>Adds the specified menu item to the list of menu items.</summary>
 		public DebugMenuItem AddItem(string text, HotKey hotkey, MenuItemAction action) {
 			return AddItem(new DebugMenuItem(text, hotkey, action));
 		}
 
-		/**<summary>Adds the specified menu item to the list of menu items.</summary>*/
+		/// <summary>Adds the specified menu item to the list of menu items.</summary>
 		public DebugMenuItem AddItem(DebugMenuItem item) {
 			item.Root  = this;
 			item.Index = items.Count;
@@ -97,7 +97,7 @@ namespace ZeldaOracle.Common.Debug {
 		//=========== ACTIONS ============
 		#region Actions
 
-		/**<summary>Called when the menu item is pressed.</summary>*/
+		/// <summary>Called when the menu item is pressed.</summary>
 		public void Press() {
 			if (action != null)
 				action();
@@ -107,34 +107,34 @@ namespace ZeldaOracle.Common.Debug {
 		//========== PROPERTIES ==========
 		#region Properties
 
-		/**<summary>The root debug menu.</summary>*/
+		/// <summary>The root debug menu.</summary>
 		public DebugMenuItem Root {
 			get { return root; }
 			set { root = value; }
 		}
-		/**<summary>The text of the menu item.</summary>*/
+		/// <summary>The text of the menu item.</summary>
 		public string Text {
 			get { return text; }
 			set { text = value; }
 		}
-		/**<summary>The index of the menu item.</summary>*/
+		/// <summary>The index of the menu item.</summary>
 		public int Index {
 			get { return index; }
 			set { index = value; }
 		}
-		/**<summary>The hotkey used by the menu item.</summary>*/
+		/// <summary>The hotkey used by the menu item.</summary>
 		public HotKey HotKey {
 			get { return hotkey; }
 			set {
 				HotKey = value ?? new HotKey();
 			}
 		}
-		/**<summary>The action called when the menu item is clicked.</summary>*/
+		/// <summary>The action called when the menu item is clicked.</summary>
 		public MenuItemAction Action {
 			get { return action; }
 			set { action = value; }
 		}
-		/**<summary>The list of menu items in this menu item.</summary>*/
+		/// <summary>The list of menu items in this menu item.</summary>
 		public List<DebugMenuItem> Items {
 			get { return items; }
 		}

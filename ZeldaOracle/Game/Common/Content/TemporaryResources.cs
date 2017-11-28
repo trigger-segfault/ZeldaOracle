@@ -61,24 +61,24 @@ namespace ZeldaOracle.Common.Content {
 		//-----------------------------------------------------------------------------
 
 		// Does the a resource with the given name and type exist?
-		public bool ExistsResource<T>(T resource) {
-			if (!ExistsResourceType<T>())
+		public bool ContainsResource<T>(T resource) {
+			if (!ContainsResourceType<T>())
 				return false; // This type of resource doesn't exist!
 			Dictionary<string, T> dictionary = (Dictionary<string, T>)resourceDictionaries[typeof(T)];
-			return dictionary.ContainsValue(resource) || Resources.ExistsResource<T>(resource);
+			return dictionary.ContainsValue(resource) || Resources.ContainsResource<T>(resource);
 		}
 
 		// Does the a resource with the given name and type exist?
-		public bool ExistsResource<T>(string name) {
-			if (!ExistsResourceType<T>())
+		public bool ContainsResource<T>(string name) {
+			if (!ContainsResourceType<T>())
 				return false; // This type of resource doesn't exist!
 			Dictionary<string, T> dictionary = (Dictionary<string, T>)resourceDictionaries[typeof(T)];
-			return dictionary.ContainsKey(name) || Resources.ExistsResource<T>(name);
+			return dictionary.ContainsKey(name) || Resources.ContainsResource<T>(name);
 		}
 
 		// Get the resource with the given name and type.
 		public T GetResource<T>(string name) {
-			if (!ExistsResourceType<T>())
+			if (!ContainsResourceType<T>())
 				return default(T); // This type of resource doesn't exist!
 			Dictionary<string, T> dictionary = (Dictionary<string, T>)resourceDictionaries[typeof(T)];
 			if (!dictionary.ContainsKey(name))
@@ -88,7 +88,7 @@ namespace ZeldaOracle.Common.Content {
 
 		// Get the resource with the given name and type.
 		public string GetResourceName<T>(T resource) where T : class {
-			if (!ExistsResourceType<T>())
+			if (!ContainsResourceType<T>())
 				return ""; // This type of resource doesn't exist!
 			Dictionary<string, T> dictionary = (Dictionary<string, T>)resourceDictionaries[typeof(T)];
 			if (!dictionary.ContainsValue(resource))
@@ -98,19 +98,19 @@ namespace ZeldaOracle.Common.Content {
 
 		// Get the dictionary used to store the given type of resources.
 		public Dictionary<string, T> GetResourceDictionary<T>() {
-			if (!ExistsResourceType<T>())
+			if (!ContainsResourceType<T>())
 				return null; // This type of resource doesn't exist!
 			return (Dictionary<string, T>)resourceDictionaries[typeof(T)];
 		}
 
 		// Is the given type of resource handled by this class?
-		public bool ExistsResourceType<T>() {
+		public bool ContainsResourceType<T>() {
 			return resourceDictionaries.ContainsKey(typeof(T));
 		}
 
 		// Add the given resource under the given name.
 		public void AddResource<T>(string assetName, T resource) {
-			if (!ExistsResourceType<T>())
+			if (!ContainsResourceType<T>())
 				return; // This type of resource doesn't exist!
 			Dictionary<string, T> dictionary = (Dictionary<string, T>)resourceDictionaries[typeof(T)];
 			dictionary.Add(assetName, resource);

@@ -12,15 +12,15 @@ using ZeldaOracle.Game.Tiles.EventTiles;
 namespace ZeldaOracle.Game.Worlds {
 
 	public enum CreateTileGridMode {
-		/**<summary>The tile grid will contain the actual tile instances and remove them from the level.</summary>*/
+		/// <summary>The tile grid will contain the actual tile instances and remove them from the level.</summary>
 		Remove,
-		/**<summary>The tile grid will contain copies of the tile instances without removing them from the level.</summary>*/
+		/// <summary>The tile grid will contain copies of the tile instances without removing them from the level.</summary>
 		Duplicate,
-		/**<summary>The tile grid will contain the actual tile instances without removing them from the level.</summary>*/
+		/// <summary>The tile grid will contain the actual tile instances without removing them from the level.</summary>
 		Twin
 	}
 
-	public class Level : IEventObjectContainer, IIDObject {
+	public class Level : IEventObjectContainer, IEventObject, IIDObject {
 		private World		world;
 		private Point2I		roomSize;		// The size in tiles of each room in the level.
 		private int			roomLayerCount; // The number of tile layers for each room in the level.
@@ -230,27 +230,25 @@ namespace ZeldaOracle.Game.Worlds {
 			Rectangle2I area = new Rectangle2I((Point2I) location, tileGrid.Size);
 			RemoveArea(area);
 
-			// Place tiles.
-			foreach (BaseTileDataInstance baseTile in tileGrid.GetTiles()) {
-				if (baseTile is TileDataInstance) {
-					TileDataInstance tile = (TileDataInstance) baseTile;
-					LevelTileCoord coord = (LevelTileCoord) ((Point2I) location + tile.Location);
-					Room room = GetRoom(coord);
+			// Place tiles
+			foreach (TileDataInstance tile in tileGrid.GetTilesAtLocation()) {
+				LevelTileCoord coord = (LevelTileCoord) ((Point2I) location + tile.Location);
+				Room room = GetRoom(coord);
 
-					if (room != null) {
-						tile.Location = GetTileLocation(coord);
-						room.PlaceTile(tile, tile.Location, tile.Layer);
-					}
+				if (room != null) {
+					tile.Location = GetTileLocation(coord);
+					room.PlaceTile(tile, tile.Location, tile.Layer);
 				}
-				else if (baseTile is EventTileDataInstance) {
-					EventTileDataInstance eventTile = (EventTileDataInstance) baseTile;
-					eventTile.Position += (Point2I) location * GameSettings.TILE_SIZE;
-					Point2I roomLocation = eventTile.Position / (roomSize * GameSettings.TILE_SIZE);
-					Room room = GetRoomAt(roomLocation);
-					if (room != null) {
-						eventTile.Position -= roomLocation * roomSize * GameSettings.TILE_SIZE;
-						room.AddEventTile(eventTile);
-					}
+			}
+
+			// Place event tiles
+			foreach (EventTileDataInstance eventTile in tileGrid.GetEventTilesAtPosition()) {
+				eventTile.Position += (Point2I) location * GameSettings.TILE_SIZE;
+				Point2I roomLocation = eventTile.Position / (roomSize * GameSettings.TILE_SIZE);
+				Room room = GetRoomAt(roomLocation);
+				if (room != null) {
+					eventTile.Position -= roomLocation * roomSize * GameSettings.TILE_SIZE;
+					room.AddEventTile(eventTile);
 				}
 			}
 		}

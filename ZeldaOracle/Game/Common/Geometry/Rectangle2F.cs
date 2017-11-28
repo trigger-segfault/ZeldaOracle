@@ -14,14 +14,14 @@ using GdiRectangle	= System.Drawing.Rectangle;
 using GdiRectangleF	= System.Drawing.RectangleF;
 
 namespace ZeldaOracle.Common.Geometry {
-	/**<summary>The 2D floating precision rectangle with numerous operations and functions.</summary>*/
+	/// <summary>The 2D floating precision rectangle with numerous operations and functions.</summary>
 	public struct Rectangle2F {
 
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Returns an empty rectangle.</summary>*/
+		/// <summary>Returns an empty rectangle.</summary>
 		public static readonly Rectangle2F Zero = new Rectangle2F(0.0f, 0.0f, 0.0f, 0.0f);
 
 
@@ -29,10 +29,10 @@ namespace ZeldaOracle.Common.Geometry {
 		// Members
 		//-----------------------------------------------------------------------------
 
-		/**<summary>The position of the rectangle.</summary>*/
+		/// <summary>The position of the rectangle.</summary>
 		[ContentSerializerIgnore]
 		public Vector2F Point;
-		/**<summary>The size of the rectangle.</summary>*/
+		/// <summary>The size of the rectangle.</summary>
 		[ContentSerializerIgnore]
 		public Vector2F Size;
 
@@ -41,49 +41,49 @@ namespace ZeldaOracle.Common.Geometry {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Constructs a rectangle with the specified position and size.</summary>*/
+		/// <summary>Constructs a rectangle with the specified position and size.</summary>
 		public Rectangle2F(float x, float y, float width, float height) {
 			this.Point	= new Vector2F(x, y);
 			this.Size	= new Vector2F(width, height);
 		}
 
-		/**<summary>Constructs a rectangle with the specified position and size.</summary>*/
+		/// <summary>Constructs a rectangle with the specified position and size.</summary>
 		public Rectangle2F(Vector2F point, float width, float height) {
 			this.Point	= point;
 			this.Size	= new Vector2F(width, height);
 		}
 
-		/**<summary>Constructs a rectangle with the specified position and size.</summary>*/
+		/// <summary>Constructs a rectangle with the specified position and size.</summary>
 		public Rectangle2F(float x, float y, Vector2F size) {
 			this.Point	= new Vector2F(x, y);
 			this.Size	= size;
 		}
 
-		/**<summary>Constructs a rectangle with the specified position and size.</summary>*/
+		/// <summary>Constructs a rectangle with the specified position and size.</summary>
 		public Rectangle2F(Vector2F point, Vector2F size) {
 			this.Point	= point;
 			this.Size	= size;
 		}
 
-		/**<summary>Constructs a rectangle with the specified size.</summary>*/
+		/// <summary>Constructs a rectangle with the specified size.</summary>
 		public Rectangle2F(float size) {
 			this.Point	= Vector2F.Zero;
 			this.Size	= new Vector2F(size);
 		}
 
-		/**<summary>Constructs a rectangle with the specified size.</summary>*/
+		/// <summary>Constructs a rectangle with the specified size.</summary>
 		public Rectangle2F(float width, float height) {
 			this.Point	= Vector2F.Zero;
 			this.Size	= new Vector2F(width, height);
 		}
 
-		/**<summary>Constructs a rectangle with the specified size.</summary>*/
+		/// <summary>Constructs a rectangle with the specified size.</summary>
 		public Rectangle2F(Vector2F size) {
 			this.Point	= Vector2F.Zero;
 			this.Size	= size;
 		}
 
-		/**<summary>Constructs a copy of the specified rectangle.</summary>*/
+		/// <summary>Constructs a copy of the specified rectangle.</summary>
 		public Rectangle2F(Rectangle2F r) {
 			this.Point	= r.Point;
 			this.Size	= r.Size;
@@ -94,34 +94,34 @@ namespace ZeldaOracle.Common.Geometry {
 		// Geneal Methods
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Outputs a string representing this rectangle.</summary>*/
+		/// <summary>Outputs a string representing this rectangle.</summary>
 		public override string ToString() {
 			return "((" + X + "," + Y + "), (" + Width + "x" + Height + "))";
 		}
 
-		/**<summary>Outputs a string representing this rectangle.</summary>*/
+		/// <summary>Outputs a string representing this rectangle.</summary>
 		public string ToString(IFormatProvider provider) {
 			return "((" + X + "," + Y + "), (" + Width + "x" + Height + "))";
 		}
 
-		/**<summary>Outputs a string representing this rectangle.</summary>*/
+		/// <summary>Outputs a string representing this rectangle.</summary>
 		public string ToString(string format) {
 			return "((" + X + "," + Y + "), (" + Width + "x" + Height + "))";
 		}
 
-		/**<summary>Outputs a string representing this rectangle.</summary>*/
+		/// <summary>Outputs a string representing this rectangle.</summary>
 		public string ToString(string format, IFormatProvider provider) {
 			return "((" + X + "," + Y + "), (" + Width + "x" + Height + "))";
 		}
 
-		/**<summary>Returns true if the specified rectangle has the same x and y coordinates.</summary>*/
+		/// <summary>Returns true if the specified rectangle has the same x and y coordinates.</summary>
 		public override bool Equals(object obj) {
 			if (obj is Rectangle2F)
 				return (Point == ((Rectangle2F)obj).Point && Size == ((Rectangle2F)obj).Size);
 			return false;
 		}
 
-		/**<summary>Returns the hash code for this rectangle.</summary>*/
+		/// <summary>Returns the hash code for this rectangle.</summary>
 		public override int GetHashCode() {
 			return base.GetHashCode();
 		}
@@ -256,7 +256,7 @@ namespace ZeldaOracle.Common.Geometry {
 			return Bottom;
 		}
 
-		/**<summary>Returns the point on the rectangle based on the its perimeter.</summary>*/
+		/// <summary>Returns the point on the rectangle based on the its perimeter.</summary>
 		public Vector2F PositionAt(float length, bool asRatio = false) {
 			if (asRatio)
 				length *= Perimeter;
@@ -270,12 +270,12 @@ namespace ZeldaOracle.Common.Geometry {
 			return Point;
 		}
 
-		/**<summary>Returns a rectangle with the corners stretched out by the specified amount.</summary>*/
+		/// <summary>Returns a rectangle with the corners stretched out by the specified amount.</summary>
 		public Rectangle2F Inflated(Vector2F amount) {
 			return new Rectangle2F(Point - amount, Size + amount * 2.0f);
 		}
 
-		/**<summary>Returns a rectangle with the corners stretched out by the specified amount.</summary>*/
+		/// <summary>Returns a rectangle with the corners stretched out by the specified amount.</summary>
 		public Rectangle2F Inflated(float x, float y) {
 			return new Rectangle2F(Point - new Vector2F(x, y), Size + new Vector2F(x * 2.0f, y * 2.0f));
 		}
@@ -285,13 +285,13 @@ namespace ZeldaOracle.Common.Geometry {
 		// Contains
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Returns true if the specified vector is inside this rectangle.</summary>*/
+		/// <summary>Returns true if the specified vector is inside this rectangle.</summary>
 		public bool Contains(Vector2F point) {
 			return ((point <  Max) &&
 					(point >= Min));
 		}
 
-		/**<summary>Returns true if the specified line is inside this rectangle.</summary>*/
+		/// <summary>Returns true if the specified line is inside this rectangle.</summary>
 		public bool Contains(Line2F line) {
 			if (IsEmpty || line.IsEmpty)
 				return false;
@@ -299,7 +299,7 @@ namespace ZeldaOracle.Common.Geometry {
 					(line.Max >= Min));
 		}
 
-		/**<summary>Returns true if the specified rectangle is inside this rectangle.</summary>*/
+		/// <summary>Returns true if the specified rectangle is inside this rectangle.</summary>
 		public bool Contains(Rectangle2F rect) {
 			if (IsEmpty || rect.IsEmpty)
 				return false;
@@ -312,13 +312,13 @@ namespace ZeldaOracle.Common.Geometry {
 		// Collision
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Returns true if the specified vector is colliding with this rectangle.</summary>*/
+		/// <summary>Returns true if the specified vector is colliding with this rectangle.</summary>
 		public bool Colliding(Vector2F point) {
 			return ((point <  Max) &&
 					(point >= Min));
 		}
 
-		/**<summary>Returns true if the specified line is colliding with this rectangle.</summary>*/
+		/// <summary>Returns true if the specified line is colliding with this rectangle.</summary>
 		public bool Colliding(Line2F line) {
 			if (IsEmpty || line.IsEmpty)
 				return false;
@@ -333,7 +333,7 @@ namespace ZeldaOracle.Common.Geometry {
 			return false;
 		}
 
-		/**<summary>Returns true if the specified rectangle is colliding with this rectangle.</summary>*/
+		/// <summary>Returns true if the specified rectangle is colliding with this rectangle.</summary>
 		public bool Colliding(Rectangle2F rect) {
 			if (IsEmpty || rect.IsEmpty)
 				return false;
@@ -341,7 +341,7 @@ namespace ZeldaOracle.Common.Geometry {
 					(rect.Max > Min));
 		}
 
-		/**<summary>Return whether this and another rectangle are intersecting.</summary>*/
+		/// <summary>Return whether this and another rectangle are intersecting.</summary>
 		public bool Intersects(Rectangle2F other) {
 			if (IsEmpty && other.IsEmpty)
 				return false;
@@ -354,12 +354,12 @@ namespace ZeldaOracle.Common.Geometry {
 		// Mutators
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Stretches the corners of the rectangle out by the specified amount.</summary>*/
+		/// <summary>Stretches the corners of the rectangle out by the specified amount.</summary>
 		public void Inflate(Vector2F amount) {
 			Point -= amount;
 			Size += amount * 2.0f;
 		}
-		/**<summary>Stretches the corners of the rectangle out by the specified amount.</summary>*/
+		/// <summary>Stretches the corners of the rectangle out by the specified amount.</summary>
 		public void Inflate(float x, float y) {
 			Point.X -= x;
 			Point.Y -= y;
@@ -383,8 +383,8 @@ namespace ZeldaOracle.Common.Geometry {
 		// Static methods
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Returns the intersection between two rectangles.
-		 * <para>Returns the Empty rect if there is no intersection.</para></summary>*/
+		/// <summary>Returns the intersection between two rectangles.
+		/// <para>Returns the Empty rect if there is no intersection.</para><summary>
 		public static Rectangle2F Intersect(Rectangle2F r1, Rectangle2F r2) {
 			float x1 = Math.Max(r1.Left,   r2.Left);
 			float y1 = Math.Max(r1.Top,    r2.Top);
@@ -395,7 +395,7 @@ namespace ZeldaOracle.Common.Geometry {
 			return Rectangle2F.Zero;
 		}
 
-		/**<summary>Creates a new rectangle that exactly contains two other rectangles.</summary>*/
+		/// <summary>Creates a new rectangle that exactly contains two other rectangles.</summary>
 		public static Rectangle2F Union(Rectangle2F r1, Rectangle2F r2) {
 			float x1 = Math.Min(r1.Left,   r2.Left);
 			float y1 = Math.Min(r1.Top,    r2.Top);
@@ -404,14 +404,14 @@ namespace ZeldaOracle.Common.Geometry {
 			return new Rectangle2F(x1, y1, x2 - x1, y2 - y1);
 		}
 
-		/**<summary>Creates a copy of a rectangle translated by an amount.</summary>*/
+		/// <summary>Creates a copy of a rectangle translated by an amount.</summary>
 		public static Rectangle2F Translate(Rectangle2F r, float x, float y) {
 			r.Point.X += x;
 			r.Point.Y += y;
 			return r;
 		}
 
-		/**<summary>Creates a copy of a rectangle translated by an amount.</summary>*/
+		/// <summary>Creates a copy of a rectangle translated by an amount.</summary>
 		public static Rectangle2F Translate(Rectangle2F r, Vector2F amount) {
 			r.Point += amount;
 			return r;
@@ -422,78 +422,78 @@ namespace ZeldaOracle.Common.Geometry {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Gets or sets the x position of the rectangle.</summary>*/
+		/// <summary>Gets or sets the x position of the rectangle.</summary>
 		public float X {
 			get { return Point.X; }
 			set { Point.X = value; }
 		}
 
-		/**<summary>Gets or sets the y position of the rectangle.</summary>*/
+		/// <summary>Gets or sets the y position of the rectangle.</summary>
 		public float Y {
 			get { return Point.Y; }
 			set { Point.Y = value; }
 		}
 
-		/**<summary>Gets or sets the width of the rectangle.</summary>*/
+		/// <summary>Gets or sets the width of the rectangle.</summary>
 		[ContentSerializer(ElementName = "W")]
 		public float Width {
 			get { return Size.X; }
 			set { Size.X = value; }
 		}
 
-		/**<summary>Gets or sets the height of the rectangle.</summary>*/
+		/// <summary>Gets or sets the height of the rectangle.</summary>
 		[ContentSerializer(ElementName = "H")]
 		public float Height {
 			get { return Size.Y; }
 			set { Size.Y = value; }
 		}
 
-		/**<summary>Returns true if the rectangle has an size of zero.</summary>*/
+		/// <summary>Returns true if the rectangle has an size of zero.</summary>
 		public bool IsEmpty {
 			get { return Size.IsZero; }
 		}
 
-		/**<summary>Gets the center of the rectangle.</summary>*/
+		/// <summary>Gets the center of the rectangle.</summary>
 		public Vector2F Center {
 			get { return Point + Size / 2; }
 		}
 
-		/**<summary>Gets the bounding box of the rectangle.</summary>*/
+		/// <summary>Gets the bounding box of the rectangle.</summary>
 		public Rectangle2F Bounds {
 			get { return this; }
 		}
 
-		/**<summary>Gets the maximum point of the rectangle.</summary>*/
+		/// <summary>Gets the maximum point of the rectangle.</summary>
 		public Vector2F Max {
 			get { return GMath.Max(Point, Point + Size); }
 		}
 
-		/**<summary>Gets the minimum point of the rectangle.</summary>*/
+		/// <summary>Gets the minimum point of the rectangle.</summary>
 		public Vector2F Min {
 			get { return GMath.Min(Point, Point + Size); }
 		}
 
-		/**<summary>Gets the area of the rectangle.</summary>*/
+		/// <summary>Gets the area of the rectangle.</summary>
 		public float Area {
 			get { return GMath.Abs(Size.X * Size.Y); }
 		}
 
-		/**<summary>Gets the perimeter of the rectangle.</summary>*/
+		/// <summary>Gets the perimeter of the rectangle.</summary>
 		public float Perimeter {
 			get { return GMath.Abs(Size.X * 2) + GMath.Abs(Size.Y * 2); }
 		}
 
-		/**<summary>Gets the number of points in the rectangle.</summary>*/
+		/// <summary>Gets the number of points in the rectangle.</summary>
 		public int NumPoints {
 			get { return 2; }
 		}
 
-		/**<summary>Gets the number of lines in the rectangle.</summary>*/
+		/// <summary>Gets the number of lines in the rectangle.</summary>
 		public int NumLines {
 			get { return 1; }
 		}
 
-		/**<summary>Gets the list of points in the rectangle.</summary>*/
+		/// <summary>Gets the list of points in the rectangle.</summary>
 		public Vector2F[] Points {
 			get {
 				return new Vector2F[] {
@@ -505,7 +505,7 @@ namespace ZeldaOracle.Common.Geometry {
 			}
 		}
 
-		/**<summary>Gets the list of lines in the rectangle.</summary>*/
+		/// <summary>Gets the list of lines in the rectangle.</summary>
 		public Line2F[] Lines {
 			get {
 				return new Line2F[] {

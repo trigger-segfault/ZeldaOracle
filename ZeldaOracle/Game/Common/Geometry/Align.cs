@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace ZeldaOracle.Common.Geometry {
-	/**<summary>An enumeration for different alignments.</summary>*/
+	/// <summary>An enumeration for different alignments.</summary>
 	[Flags]
 	public enum Align {
 

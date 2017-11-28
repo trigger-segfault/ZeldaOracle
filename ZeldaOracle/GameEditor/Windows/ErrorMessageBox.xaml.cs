@@ -7,27 +7,27 @@ using System.Windows.Input;
 using System.Windows.Navigation;
 
 namespace ZeldaEditor.Windows {
-	/**<summary>Shows an error that occured in the program.</summary>*/
+	/// <summary>Shows an error that occured in the program.</summary>
 	public partial class ErrorMessageBox : Window {
 		//=========== MEMBERS ============
 		#region Members
 
-		/**<summary>The exception that was raised.</summary>*/
+		/// <summary>The exception that was raised.</summary>
 		private Exception exception = null;
-		/**<summary>The non-exception object that was raised.</summary>*/
+		/// <summary>The non-exception object that was raised.</summary>
 		private object exceptionObject = null;
-		/**<summary>True if viewing the full exception.</summary>*/
+		/// <summary>True if viewing the full exception.</summary>
 		private bool viewingFull = false;
-		/**<summary>The timer for changing the copy button back to its original text.</summary>*/
+		/// <summary>The timer for changing the copy button back to its original text.</summary>
 		private Timer copyTimer = new Timer(1000);
-		/**<summary>The text of the copy to clipboard button.</summary>*/
+		/// <summary>The text of the copy to clipboard button.</summary>
 		private readonly string copyText;
 
 		#endregion
 		//========= CONSTRUCTORS =========
 		#region Constructors
 
-		/**<summary>Constructs the error message box with an exception.</summary>*/
+		/// <summary>Constructs the error message box with an exception.</summary>
 		public ErrorMessageBox(Exception exception, bool alwaysContinue) {
 			InitializeComponent();
 
@@ -41,7 +41,7 @@ namespace ZeldaEditor.Windows {
 				this.buttonContinue.IsDefault = true;
 			}
 		}
-		/**<summary>Constructs the error message box with an exception object.</summary>*/
+		/// <summary>Constructs the error message box with an exception object.</summary>
 		public ErrorMessageBox(object exceptionObject, bool alwaysContinue) {
 			InitializeComponent();
 			
@@ -142,13 +142,13 @@ namespace ZeldaEditor.Windows {
 		//=========== SHOWING ============
 		#region Showing
 
-		/**<summary>Shows an error message box with an exception.</summary>*/
+		/// <summary>Shows an error message box with an exception.</summary>
 		public static bool Show(Exception exception, bool alwaysContinue = false) {
 			ErrorMessageBox messageBox = new ErrorMessageBox(exception, alwaysContinue);
 			var result = messageBox.ShowDialog();
 			return result.HasValue && result.Value;
 		}
-		/**<summary>Shows an error message box with an exception object.</summary>*/
+		/// <summary>Shows an error message box with an exception object.</summary>
 		public static bool Show(object exceptionObject, bool alwaysContinue = false) {
 			ErrorMessageBox messageBox = new ErrorMessageBox(exceptionObject, alwaysContinue);
 			var result = messageBox.ShowDialog();

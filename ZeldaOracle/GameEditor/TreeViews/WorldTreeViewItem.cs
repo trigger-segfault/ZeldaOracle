@@ -26,7 +26,7 @@ namespace ZeldaEditor.TreeViews {
 		}
 
 		public override void Open(EditorControl editorControl) {
-			editorControl.OpenObjectProperties(world);
+			editorControl.OpenProperties(world);
 		}
 
 		public override void Rename(EditorControl editorControl, string name) {

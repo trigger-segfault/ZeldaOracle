@@ -6,15 +6,15 @@ using System.Text;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	/**<summary>The colors types for use with puzzles.</summary>*/
+	/// <summary>The colors types for use with puzzles.</summary>
 	public enum PuzzleColor {
-		/**<summary>No puzzle color.</summary>*/
+		/// <summary>No puzzle color.</summary>
 		None = -1,
-		/**<summary>Red puzzle color.</summary>*/
+		/// <summary>Red puzzle color.</summary>
 		Red,
-		/**<summary>Yellow puzzle color.</summary>*/
+		/// <summary>Yellow puzzle color.</summary>
 		Yellow,
-		/**<summary>Blue puzzle color.</summary>*/
+		/// <summary>Blue puzzle color.</summary>
 		Blue
 	}
 

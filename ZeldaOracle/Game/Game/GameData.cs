@@ -77,7 +77,7 @@ namespace ZeldaOracle.Game {
 			foreach (FieldInfo field in fields) {
 				string name = field.Name.ToLower().Remove(0, prefix.Length);
 				
-				if (Resources.ExistsResource<T>(name)) {
+				if (Resources.ContainsResource<T>(name)) {
 					field.SetValue(null, Resources.GetResource<T>(name));
 				}
 				else if (field.GetValue(null) != null) {
