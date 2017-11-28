@@ -77,13 +77,16 @@ namespace ZeldaOracle.Game.Debug {
 		public static void UpdateRoomDebugKeys() {
 			bool ctrl = (Keyboard.IsKeyDown(Keys.LControl) ||
 				Keyboard.IsKeyDown(Keys.RControl));
-			
+
 			// CTRL+Q: Quit the game
 			if (ctrl && Keyboard.IsKeyPressed(Keys.Q))
 				GameManager.Exit();
 			// CTRL+R: Restart the game.
 			if (ctrl && Keyboard.IsKeyPressed(Keys.R))
 				GameManager.Restart();
+			// CTRL+R: Toggle console window.
+			if (ctrl && Keyboard.IsKeyPressed(Keys.T))
+				GameManager.IsConsoleOpen = !GameManager.IsConsoleOpen;
 			// F5: Pause gameplay.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.F5))
 				GameManager.IsGamePaused = !GameManager.IsGamePaused;
@@ -355,7 +358,7 @@ namespace ZeldaOracle.Game.Debug {
 		}
 
 		
-		// Load a level from an java level file.
+		// Load a level from a Java level file.
 		public static Level LoadJavaLevel(string filename) {
             BinaryReader bin = new BinaryReader(File.OpenRead(filename));
 			int width	= bin.ReadByte();
@@ -376,7 +379,7 @@ namespace ZeldaOracle.Game.Debug {
 			return level;
 		}
 		
-		// Load a single room from an java level file.
+		// Load a single room from an Java level file.
 		public static Room LoadJavaRoom(BinaryReader bin, Level level, int locX, int locY) {
 			byte width		= bin.ReadByte();
 			byte height		= bin.ReadByte();

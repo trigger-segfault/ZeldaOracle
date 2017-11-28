@@ -719,5 +719,9 @@ namespace ZeldaEditor {
 		public ZeldaPropertyGrid PropertyGrid {
 			get { return propertyGrid; }
 		}
+
+		private void OnDebugConsole(object sender, RoutedEventArgs e) {
+			editorControl.DebugConsole = menuItemDebugConsole.IsChecked;
+		}
 	}
 }

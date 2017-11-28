@@ -38,7 +38,7 @@ namespace ZeldaEditor.Undo {
 		}
 
 		public void AddOverwrittenTile(Point2I point, TileDataInstance tile) {
-			if (!overwrittenTiles.ContainsKey(point))
+			if ((tile != null || placedTile != null) && !overwrittenTiles.ContainsKey(point))
 				overwrittenTiles.Add(point, tile);
 		}
 
