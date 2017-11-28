@@ -32,11 +32,13 @@ namespace ZeldaEditor.WinForms {
 
 		// However many GraphicsDeviceControl instances you have, they all share
 		// the same underlying GraphicsDevice, managed by this helper service.
-		GraphicsDeviceService graphicsDeviceService;
-		
-		bool isMouseOver;
+		private GraphicsDeviceService graphicsDeviceService;
 
-		WinFormsMouseWheelMessageFilter messageFilter;
+		/// <summary>True if the mouse is over the control.</summary>
+		private bool isMouseOver;
+
+		/// <summary>The message filter for capturing scroll focus.</summary>
+		private WinFormsMouseWheelMessageFilter messageFilter;
 		
 
 		#endregion
@@ -44,14 +46,11 @@ namespace ZeldaEditor.WinForms {
 		#region Properties
 
 
-		/// <summary>
-		/// Gets a GraphicsDevice that can be used to draw onto this control.
-		/// </summary>
+		/// <summary>Gets a GraphicsDevice that can be used to draw onto this control.</summary>
 		public GraphicsDevice GraphicsDevice {
 			get { return graphicsDeviceService.GraphicsDevice; }
 		}
-
-
+		
 		/// <summary>
 		/// Gets an IServiceProvider containing our IGraphicsDeviceService.
 		/// This can be used with components such as the ContentManager,
@@ -61,13 +60,14 @@ namespace ZeldaEditor.WinForms {
 			get { return services; }
 		}
 
-
+		/// <summary>Returns true if the mouse is over the control.</summary>
 		public bool IsMouseOver {
 			get { return isMouseOver; }
 		}
 
 
-		ServiceContainer services = new ServiceContainer();
+		/// <summary>The IServiceProvider containing our IGraphicsDeviceService.</summary>
+		private ServiceContainer services = new ServiceContainer();
 
 
 		#endregion
@@ -75,9 +75,7 @@ namespace ZeldaEditor.WinForms {
 		#region Initialization
 
 
-		/// <summary>
-		/// Initializes the control.
-		/// </summary>
+		/// <summary>Initializes the control.</summary>
 		protected override void OnCreateControl() {
 			// Don't initialize the graphics device if we are running in the designer.
 			if (!DesignMode) {
@@ -99,9 +97,7 @@ namespace ZeldaEditor.WinForms {
 		}
 
 
-		/// <summary>
-		/// Disposes the control.
-		/// </summary>
+		/// <summary>Disposes the control.</summary>
 		protected override void Dispose(bool disposing) {
 			if (graphicsDeviceService != null) {
 				graphicsDeviceService.Release(disposing);
@@ -117,9 +113,7 @@ namespace ZeldaEditor.WinForms {
 		#region Paint
 
 
-		/// <summary>
-		/// Redraws the control in response to a WinForms paint message.
-		/// </summary>
+		/// <summary>Redraws the control in response to a WinForms paint message.</summary>
 		protected override void OnPaint(PaintEventArgs e) {
 			if (ClientSize.Width > 0 && ClientSize.Height > 0) {
 				string beginDrawError = BeginDraw();
@@ -144,7 +138,7 @@ namespace ZeldaEditor.WinForms {
 		/// if this was not possible, which can happen if the graphics device is
 		/// lost, or if we are running inside the Form designer.
 		/// </summary>
-		string BeginDraw() {
+		private string BeginDraw() {
 			// If we have no graphics device, we must be running in the designer.
 			if (graphicsDeviceService == null) {
 				return Text + "\n\n" + GetType();
@@ -185,7 +179,7 @@ namespace ZeldaEditor.WinForms {
 		/// the finished image onto the screen, using the appropriate WinForms
 		/// control handle to make sure it shows up in the right place.
 		/// </summary>
-		void EndDraw() {
+		private void EndDraw() {
 			try {
 				Rectangle sourceRectangle = new Rectangle(0, 0, Math.Max(0, ClientSize.Width),
 																Math.Max(0, ClientSize.Height));
@@ -206,7 +200,7 @@ namespace ZeldaEditor.WinForms {
 		/// that the device is not lost. Returns an error string if the device
 		/// could not be reset.
 		/// </summary>
-		string HandleDeviceReset() {
+		private string HandleDeviceReset() {
 			bool deviceNeedsReset = false;
 
 			switch (GraphicsDevice.GraphicsDeviceStatus) {
@@ -268,8 +262,7 @@ namespace ZeldaEditor.WinForms {
 		/// flickering when our OnPaint implementation then immediately draws some
 		/// other color over the top using the XNA Framework GraphicsDevice.
 		/// </summary>
-		protected override void OnPaintBackground(PaintEventArgs pevent) {
-		}
+		protected override void OnPaintBackground(PaintEventArgs pevent) { }
 
 
 		#endregion
@@ -294,15 +287,12 @@ namespace ZeldaEditor.WinForms {
 		#region Abstract Methods
 
 
-		/// <summary>
-		/// Derived classes override this to initialize their drawing code.
-		/// </summary>
+		/// <summary>Derived classes override this to initialize their drawing code.</summary>
 		protected virtual void Initialize() { }
 
 
-		/// <summary>
-		/// Derived classes override this to draw themselves using the GraphicsDevice.
-		/// </summary>
+		/// <summary>Derived classes override this to draw themselves using
+		/// the GraphicsDevice.</summary>
 		protected virtual void Draw() { }
 
 

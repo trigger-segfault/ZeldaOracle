@@ -6,33 +6,35 @@ using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Translation {
 
-	// A letter string formatted and wrapped into multiple lines.
+	/// <summary>A letter string formatted and wrapped into multiple lines.</summary>
 	public class WrappedLetterString {
 
-		// The formatted lines of the wrapped string.
-		public LetterString[] Lines;
-		// The lengths of each line.
-		public int[] LineLengths;
-		// The bounds of the entire wrapped string.
-		public Rectangle2I Bounds;
+		/// <summary>The formatted lines of the wrapped string.</summary>
+		public LetterString[] Lines { get; set; }
+		/// <summary>The lengths of each line.</summary>
+		public int[] LineLengths { get; set; }
+		/// <summary>The bounds of the entire wrapped string.</summary>
+		public Rectangle2I Bounds { get; set; }
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		// Constructs the default wrapped string.
+		/// <summary>Constructs the default wrapped string.</summary>
 		public WrappedLetterString() {
 			this.Lines = null;
 			this.LineLengths = null;
 			this.Bounds = Rectangle2I.Zero;
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		// Gets the number of lines in the wrapped string
-		public int NumLines {
+		/// <summary>Gets the number of lines in the wrapped string.</summary>
+		public int LineCount {
 			get { return Lines.Length; }
 		}
 	}

@@ -152,6 +152,7 @@
     <Compile Include="Undo\ActionEventTile.cs" />
     <Compile Include="Undo\ActionMoveDungeon.cs" />
     <Compile Include="Undo\ActionMoveLevel.cs" />
+    <Compile Include="Undo\ActionNewWorld.cs" />
     <Compile Include="Undo\ActionOpenWorld.cs" />
     <Compile Include="Undo\ActionResizeLevel.cs" />
     <Compile Include="Undo\ActionSelection.cs" />
@@ -171,6 +172,9 @@
     </Compile>
     <Compile Include="Windows\HistoryWindow.xaml.cs">
       <DependentUpon>HistoryWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\RefactorWindow.xaml.cs">
+      <DependentUpon>RefactorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ResizeLevelWindow.xaml.cs">
       <DependentUpon>ResizeLevelWindow.xaml</DependentUpon>
@@ -253,6 +257,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\HistoryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\RefactorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -600,6 +608,11 @@
   <ItemGroup>
     <Resource Include="Resources\Cursors\HandClosedCursor.cur" />
     <Resource Include="Resources\Cursors\HandOpenCursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\EventRefactor.png" />
+    <Resource Include="Resources\Icons\PropertyRefactor.png" />
+    <Resource Include="Resources\Icons\Resources.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

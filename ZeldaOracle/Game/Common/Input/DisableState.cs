@@ -1,7 +1,7 @@
 using System;
 
 namespace ZeldaOracle.Common.Input {
-	/**<summary>The disabled states a control can be in.</summary>*/
+	/// <summary>The disabled states a control can be in.</summary>
 	public enum DisableState {
 		
 		Enabled					= 0,

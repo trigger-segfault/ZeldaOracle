@@ -117,6 +117,7 @@ namespace ZeldaEditor.PropertiesEditor {
 		public void CloseProperties() {
 			propertiesContainer.Clear();
 			UpdateContainerHelper();
+			editorControl.EditorWindow.UpdatePropertyPreview(propertyObject);
 		}
 
 

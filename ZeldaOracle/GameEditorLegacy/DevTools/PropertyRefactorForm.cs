@@ -98,8 +98,7 @@ namespace ZeldaEditor.DevTools {
 			int resultCount = 0;
 			foreach (Property property in GetProperties(findSettings)) {
 				IPropertyObject propertyObject = property.Properties.PropertyObject;
-				// TODO: Reimplement
-				//property.Name = replaceName;
+				property.Name = replaceName;
 				resultCount++;
 			}
 
@@ -133,7 +132,7 @@ namespace ZeldaEditor.DevTools {
 
 			// Search placed tiles.
 			if (scope == ObjectFindScope.EntireWorld) {
-				foreach (Level level in editorControl.World.Levels) {
+				foreach (Level level in editorControl.World.GetLevels()) {
 					foreach (IPropertyObject obj in GetPropertyObjectsInLevel(level))
 						yield return obj;
 				}

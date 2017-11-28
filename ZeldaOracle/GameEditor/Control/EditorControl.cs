@@ -1,16 +1,24 @@
-﻿using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Threading;
+
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Common.Translation;
+
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Items;
@@ -18,21 +26,14 @@ using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
-using ZeldaEditor.Tools;
-using ZeldaEditor.Scripting;
-using ZeldaOracle.Common.Scripting;
-using System.Windows;
-using System.Windows.Threading;
-using ZeldaEditor.Windows;
-using System.Reflection;
+
 using ZeldaEditor.PropertiesEditor;
-using ZeldaEditor.WinForms;
-using ZeldaOracle.Common.Translation;
-using System.Windows.Input;
-using ZeldaEditor.Undo;
-using System.Collections.ObjectModel;
-using System.Threading;
+using ZeldaEditor.Tools;
 using ZeldaEditor.TreeViews;
+using ZeldaEditor.Undo;
+using ZeldaEditor.Windows;
+using ZeldaEditor.WinForms;
+
 
 namespace ZeldaEditor.Control {
 
@@ -106,7 +107,7 @@ namespace ZeldaEditor.Control {
 		private DispatcherTimer             updateTimer;
 		
 		private bool						needsRecompiling;
-		private Task<ScriptCompileResult>   compileTask;
+		private Task<ScriptCompileResult>	compileTask;
 		private CancellationTokenSource		compileCancellationToken;
 		private ScriptCompileCallback       compileCallback;
 		private List<string>                scriptsToRecompile;
@@ -172,7 +173,9 @@ namespace ZeldaEditor.Control {
 
 		}
 
-		public void Initialize(ContentManager contentManager, GraphicsDevice graphicsDevice) {
+		public void Initialize(ContentManager contentManager,
+			GraphicsDevice graphicsDevice)
+		{
 			if (!isInitialized) {
 				Resources.Initialize(contentManager, graphicsDevice);
 				GameData.Initialize();
@@ -217,7 +220,6 @@ namespace ZeldaEditor.Control {
 				this.isInitialized = true;
 
 				this.updateTimer            = new DispatcherTimer(TimeSpan.FromMilliseconds(100), DispatcherPriority.ApplicationIdle, delegate { Update(); }, Application.Current.Dispatcher);
-				//updateTimer.Start();
 				needsNewEventCache = true;
 				needsRecompiling = true;
 			}
@@ -349,7 +351,7 @@ namespace ZeldaEditor.Control {
 				needsNewEventCache	= true;
 
 				world = loadedWorld;
-				if (world.Levels.Count > 0)
+				if (world.LevelCount > 0)
 					OpenLevel(0);
 				eventCache.Clear();
 				RefreshWorldTreeView();
@@ -368,24 +370,30 @@ namespace ZeldaEditor.Control {
 		// Close the world file.
 		public void CloseWorld() {
 			if (IsWorldOpen) {
-				CurrentTool.Cancel();
+				CurrentTool.End();
+				CurrentTool.Begin();
 				PropertyGrid.CloseProperties();
 				world           = null;
 				level			= null;
-				isModified	= false;
+				LevelDisplay.UpdateLevel();
 				worldFilePath   = "";
+				IsModified		= false;
 				eventCache.Clear();
 				RefreshWorldTreeView();
+				UpdateLayers();
+				editorWindow.CloseAllToolWindows();
 			}
 		}
 
 		// Test/play the world.
 		public void TestWorld() {
 			if (IsWorldOpen) {
-				string worldPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "testing.zwd");
+				string worldPath = Path.Combine(Path.GetDirectoryName(
+					Assembly.GetExecutingAssembly().Location), "testing.zwd");
 				WorldFile worldFile = new WorldFile();
 				worldFile.Save(worldPath, world, true);
-				string exePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ZeldaOracle.exe");
+				string exePath = Path.Combine(Path.GetDirectoryName(
+					Assembly.GetExecutingAssembly().Location), "ZeldaOracle.exe");
 				string arguments = "\"" + worldPath + "\"";
 				if (debugConsole)
 					arguments += " -console";
@@ -397,15 +405,13 @@ namespace ZeldaEditor.Control {
 		public void TestWorld(Point2I roomCoord, Point2I playerCoord) {
 			if (IsWorldOpen) {
 				playerPlaceMode = false;
-				int levelIndex = 0;
-				for (levelIndex = 0; levelIndex < world.Levels.Count; levelIndex++) {
-					if (world.Levels[levelIndex] == level)
-						break;
-				}
-				string worldPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "testing.zwd");
+				int levelIndex = world.IndexOfLevel(level);
+				string worldPath = Path.Combine(Path.GetDirectoryName(
+					Assembly.GetExecutingAssembly().Location), "testing.zwd");
 				WorldFile worldFile = new WorldFile();
 				worldFile.Save(worldPath, world, true);
-				string exePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ZeldaOracle.exe");
+				string exePath = Path.Combine(Path.GetDirectoryName(
+					Assembly.GetExecutingAssembly().Location), "ZeldaOracle.exe");
 				string arguments = "\"" + worldPath + "\"";
 				arguments += " -test " + levelIndex + " " + roomCoord.X + " " + roomCoord.Y + " " + playerCoord.X + " " + playerCoord.Y;
 				if (debugConsole)
@@ -415,69 +421,10 @@ namespace ZeldaEditor.Control {
 			}
 		}
 
-		/*public void ResizeLevel(Level level, Point2I newSize) {
-			if (newSize != level.Dimensions) {
-				PushAction(new ActionResizeLevel(level, newSize));
-				level.Resize(newSize);
-				LevelDisplay.UpdateLevel();
-				IsModified = true;
-			}
-		}
-		public void ShiftLevel(Level level, Point2I distance) {
-			if (distance != Point2I.Zero) {
-				PushAction(new ActionShiftLevel(level, distance));
-				level.ShiftRooms(distance);
-				IsModified = true;
-			}
-		}*/
-
-		// Add a new level to the world, and open it if specified.
-		/*public void AddLevel(Level level, bool openLevel) {
-			world.AddLevel(level);
-			editorWindow.TreeViewWorld.RefreshLevels();
-			if (openLevel)
-				OpenLevel(level);
-			IsModified = true;
-		}
-
-		// Add a new dungeon to the world, and open it if specified.
-		public void AddDungeon(Dungeon dungeon, bool openDungeonProperties) {
-			world.AddDungeon(dungeon);
-			editorWindow.TreeViewWorld.RefreshDungeons();
-			if (openDungeonProperties)
-				editorWindow.PropertyGrid.OpenProperties(dungeon);
-			IsModified = true;
-		}
-
-		public void AddScript(Script script) {
-			world.AddScript(script);
-			editorWindow.TreeViewWorld.RefreshScripts(true, false);
-			IsModified = true;
-		}*/
-
-		/*public void IntroduceScripts(Dictionary<string, Script> scripts) {
-			bool scriptsAdded = false;
-			foreach (var pair in scripts) {
-				if (pair.Value.IsHidden) {
-					GenerateInternalScript(pair.Value, false);
-					scriptsAdded = true;
-				}
-				else if (world.ContainsScript(pair.Key)) {
-					AddScript(pair.Value);
-					scriptsAdded = true;
-					IsModified = true;
-				}
-			}
-			if (scriptsAdded) {
-				editorWindow.TreeViewWorld.RefreshScripts();
-				IsModified = true;
-			}
-		}*/
-
 		public void ChangeTileset(string name) {
-			if (Resources.ExistsResource<Tileset>(name))
+			if (Resources.ContainsResource<Tileset>(name))
 				tileset = Resources.GetResource<Tileset>(name);
-			else if (Resources.ExistsResource<EventTileset>(name))
+			else if (Resources.ContainsResource<EventTileset>(name))
 				tileset = Resources.GetResource<EventTileset>(name);
 			
 			if (tileset.SpriteSheet != null) {
@@ -496,19 +443,70 @@ namespace ZeldaEditor.Control {
 			}
 		}
 
+		// Open the properties for the given tile in the property grid.
+		public void OpenProperties(IPropertyObject propertyObject) {
+			PropertyGrid.OpenProperties(propertyObject);
+		}
+
 		public void RefreshWorldTreeView() {
 			editorWindow.WorldTreeView.RefreshTree();
 		}
 
 
 		//-----------------------------------------------------------------------------
+		// Level Display
+		//-----------------------------------------------------------------------------
+
+		// Open the given level.
+		public void OpenLevel(Level level) {
+			if (this.level != level) {
+				this.level = level;
+				CurrentTool.End();
+				CurrentTool.Begin();
+				LevelDisplay.UpdateLevel();
+				UpdateWindowTitle();
+				PropertyGrid.OpenProperties(level);
+				if (currentLayer >= level.RoomLayerCount)
+					currentLayer = level.RoomLayerCount - 1;
+				UpdateLayers();
+				WorldTreeView.RefreshLevels();
+			}
+		}
+
+		// Open the given level index in the level display.
+		public void OpenLevel(int index) {
+			OpenLevel(world.GetLevelAt(index));
+		}
+
+		public void CloseLevel() {
+			level = null;
+			LevelDisplay.UpdateLevel();
+			CurrentTool.End();
+			CurrentTool.Begin();
+			UpdateWindowTitle();
+			UpdateLayers();
+		}
+
+		public void GotoTile(BaseTileDataInstance tile) {
+			OpenLevel(tile.Room.Level);
+			CurrentTool = toolPointer;
+			toolPointer.GotoTile(tile);
+			OpenProperties(tile);
+		}
+
+		public void GotoRoom(Room room) {
+			OpenLevel(room.Level);
+			CurrentTool = toolPointer;
+			toolPointer.GotoRoom(room);
+			OpenProperties(room);
+		}
+
+		
+		//-----------------------------------------------------------------------------
 		// Tiles
 		//-----------------------------------------------------------------------------
 
-		// Open the properties for the given tile in the property grid.
-		public void OpenObjectProperties(IPropertyObject propertyObject) {
-			PropertyGrid.OpenProperties(propertyObject);
-		}
+
 
 		//-----------------------------------------------------------------------------
 		// Tools
@@ -539,10 +537,12 @@ namespace ZeldaEditor.Control {
 			return tool;
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Undo Actions
 		//-----------------------------------------------------------------------------
-		
+
+		/// <summary>Pushes the action to the list and performs the specified execution.</summary>
 		public void PushAction(EditorAction action, ActionExecution execution ) {
 			// Ignore if nothing occurred during this action
 			if (action.IgnoreAction)
@@ -571,6 +571,7 @@ namespace ZeldaEditor.Control {
 			editorWindow.SelectHistoryItem(action);
 		}
 
+		/// <summary>Pops the last action from the list.</summary>
 		public void PopAction() {
 			while (undoPosition < undoActions.Count) {
 				undoActions.RemoveAt(undoPosition);
@@ -580,6 +581,7 @@ namespace ZeldaEditor.Control {
 			editorWindow.SelectHistoryItem(LastAction);
 		}
 
+		/// <summary>Undos the last executed action.</summary>
 		public void Undo() {
 			if (CurrentTool.CancelCountsAsUndo) {
 				CurrentTool.Cancel();
@@ -594,6 +596,7 @@ namespace ZeldaEditor.Control {
 			}
 		}
 
+		/// <summary>Redos the next undone action.</summary>
 		public void Redo() {
 			if (undoPosition + 1 < undoActions.Count) {
 				CurrentTool.Cancel();
@@ -606,6 +609,7 @@ namespace ZeldaEditor.Control {
 			}
 		}
 
+		/// <summary>Navigates to the action at the specified position in the list.</summary>
 		public void GotoAction(int position) {
 			if (position == -1)
 				return;
@@ -633,53 +637,14 @@ namespace ZeldaEditor.Control {
 			}
 		}
 
-		//-----------------------------------------------------------------------------
-		// Level Display
-		//-----------------------------------------------------------------------------
-		
-		// Open the given level.
-		public void OpenLevel(Level level) {
-			if (this.level != level) {
-				this.level = level;
-				CurrentTool.End();
-				CurrentTool.Begin();
-				LevelDisplay.UpdateLevel();
-				UpdateWindowTitle();
-				PropertyGrid.OpenProperties(level);
-				if (currentLayer >= level.RoomLayerCount)
-					currentLayer = level.RoomLayerCount - 1;
-				UpdateLayers();
-				WorldTreeView.RefreshLevels();
+		/// <summary>Clears all undo actions except the original action.
+		/// AKA: Open World or New World.</summary>
+		public void PopToOriginalAction() {
+			while (undoActions.Count > 1) {
+				undoActions.RemoveAt(1);
 			}
-		}
-
-		// Open the given level index in the level display.
-		public void OpenLevel(int index) {
-			OpenLevel(world.Levels[index]);
-		}
-
-		public void CloseLevel() {
-			level = null;
-			LevelDisplay.UpdateLevel();
-			CurrentTool.End();
-			CurrentTool.Begin();
-			UpdateWindowTitle();
-			PropertyGrid.CloseProperties();
-			UpdateLayers();
-		}
-
-		public void GotoTile(BaseTileDataInstance tile) {
-			OpenLevel(tile.Room.Level);
-			CurrentTool = toolPointer;
-			toolPointer.GotoTile(tile);
-			OpenObjectProperties(tile);
-		}
-
-		public void GotoRoom(Room room) {
-			OpenLevel(room.Level);
-			CurrentTool = toolPointer;
-			toolPointer.GotoRoom(room);
-			OpenObjectProperties(room);
+			undoPosition = 0;
+			editorWindow.SelectHistoryItem(undoActions[undoPosition]);
 		}
 
 
@@ -859,11 +824,13 @@ namespace ZeldaEditor.Control {
 		private List<Event> ReloadEventCache() {
 			List<Event> cache = new List<Event>();
 			int internalID = 0;
-			foreach (Event evnt in world.GetDefinedEvents()) {
-				if (evnt.GetExistingScript(world.ScriptManager.Scripts) == null) {
-					evnt.InternalScriptID = ScriptManager.CreateInternalScriptName(internalID);
-					cache.Add(evnt);
-					internalID++;
+			if (IsWorldOpen) {
+				foreach (Event evnt in world.GetDefinedEvents()) {
+					if (evnt.GetExistingScript(world.ScriptManager.Scripts) == null) {
+						evnt.InternalScriptID = ScriptManager.CreateInternalScriptName(internalID);
+						cache.Add(evnt);
+						internalID++;
+					}
 				}
 			}
 			return cache;

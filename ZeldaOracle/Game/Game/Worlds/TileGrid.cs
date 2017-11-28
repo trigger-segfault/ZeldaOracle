@@ -89,6 +89,7 @@ namespace ZeldaOracle.Game.Worlds {
 				return tile.Tile;
 			return null;
 		}
+
 		public TileDataInstance GetTileIfAtLocation(int x, int y, int layer) {
 			TileGridTile tile = tiles[x, y, layer];
 			if (tile.Location.X == x && tile.Location.Y == y && tile.Layer == layer)
@@ -96,7 +97,25 @@ namespace ZeldaOracle.Game.Worlds {
 			return null;
 		}
 
-		public IEnumerable<BaseTileDataInstance> GetTiles() {
+		public IEnumerable<BaseTileDataInstance> GetAllTiles() {
+			// Iterate tiles.
+			for (int x = 0; x < size.X; x++) {
+				for (int y = 0; y < size.Y; y++) {
+					for (int i = 0; i < layerCount; i++) {
+						TileGridTile tile = tiles[x, y, i];
+						if (tile.Tile != null && tile.Location == new Point2I(x, y))
+							yield return tile.Tile;
+					}
+				}
+			}
+
+			// Iterate event tiles.
+			foreach (TileGridEvent tile in eventTiles) {
+				yield return tile.EventTile;
+			}
+		}
+
+		public IEnumerable<BaseTileDataInstance> GetAllTilesAtLocation() {
 			// Iterate tiles.
 			for (int x = 0; x < size.X; x++) {
 				for (int y = 0; y < size.Y; y++) {
@@ -116,14 +135,51 @@ namespace ZeldaOracle.Game.Worlds {
 				yield return tile.EventTile;
 			}
 		}
+
+		public IEnumerable<BaseTileDataInstance> GetTiles() {
+			// Iterate tiles.
+			for (int x = 0; x < size.X; x++) {
+				for (int y = 0; y < size.Y; y++) {
+					for (int i = 0; i < layerCount; i++) {
+						TileGridTile tile = tiles[x, y, i];
+						if (tile.Tile != null && tile.Location == new Point2I(x, y))
+							yield return tile.Tile;
+					}
+				}
+			}
+		}
+
+		public IEnumerable<BaseTileDataInstance> GetTilesAtLocation() {
+			// Iterate tiles.
+			for (int x = 0; x < size.X; x++) {
+				for (int y = 0; y < size.Y; y++) {
+					for (int i = 0; i < layerCount; i++) {
+						TileGridTile tile = tiles[x, y, i];
+						if (tile.Tile != null && tile.Location == new Point2I(x, y)) {
+							tile.Tile.Location = tile.Location;
+							yield return tile.Tile;
+						}
+					}
+				}
+			}
+		}
+
 		public IEnumerable<EventTileDataInstance> GetEventTiles() {
 			// Iterate event tiles.
 			foreach (TileGridEvent tile in eventTiles) {
-				//tile.EventTile.Position = tile.Position;
 				yield return tile.EventTile;
 			}
 		}
-		public IEnumerable<KeyValuePair<Point2I, EventTileDataInstance>> GetEventTilePositions() {
+
+		public IEnumerable<EventTileDataInstance> GetEventTilesAtPosition() {
+			// Iterate event tiles.
+			foreach (TileGridEvent tile in eventTiles) {
+				tile.EventTile.Position = tile.Position;
+				yield return tile.EventTile;
+			}
+		}
+
+		public IEnumerable<KeyValuePair<Point2I, EventTileDataInstance>> GetEventTilesAndPositions() {
 			// Iterate event tiles.
 			foreach (TileGridEvent tile in eventTiles) {
 				yield return new KeyValuePair<Point2I, EventTileDataInstance>(tile.Position, tile.EventTile);

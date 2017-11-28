@@ -1,7 +1,7 @@
 using System;
 
 namespace ZeldaOracle.Common.Input {
-	/**<summary>The control codes for each of the buttons on a gamepad.</summary>*/
+	/// <summary>The control codes for each of the buttons on a gamepad.</summary>
 	public enum Buttons {
 		
 		None				= 0,

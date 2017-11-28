@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,13 +10,14 @@ using System.Text;
 using System.Threading.Tasks;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Worlds;
+using CSharpCodeProvider = Microsoft.CSharp.CSharpCodeProvider;
 
 namespace ZeldaOracle.Game.Control.Scripting {
-	/**<summary>The manager for storing and compiling scripts.</summary>*/
+	/// <summary>The manager for storing and compiling scripts.</summary>
 	public class ScriptManager {
-		/**<summary>The collection of scripts.</summary>*/
+		/// <summary>The collection of scripts.</summary>
 		private Dictionary<string, Script> scripts;
-		/**<summary>The raw data for the compiled script assembly.</summary>*/
+		/// <summary>The raw data for the compiled script assembly.</summary>
 		private byte[] rawAssembly;
 
 
@@ -23,7 +25,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Constructs the script manager.</summary>*/
+		/// <summary>Constructs the script manager.</summary>
 		public ScriptManager() {
 			scripts		= new Dictionary<string, Script>();
 			rawAssembly = null;
@@ -34,19 +36,19 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		// Accessors
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Gets the script with the specified ID.</summary>*/
+		/// <summary>Gets the script with the specified ID.</summary>
 		public Script GetScript(string scriptID) {
 			Script script;
 			scripts.TryGetValue(scriptID, out script);
 			return script;
 		}
 
-		/**<summary>Returns true if the script exists in the collection.</summary>*/
+		/// <summary>Returns true if the script exists in the collection.</summary>
 		public bool ContainsScript(Script script) {
 			return scripts.ContainsKey(script.ID);
 		}
 
-		/**<summary>Returns true if a script with the specified ID exists.</summary>*/
+		/// <summary>Returns true if a script with the specified ID exists.</summary>
 		public bool ContainsScript(string scriptID) {
 			return scripts.ContainsKey(scriptID);
 		}
@@ -56,22 +58,22 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		// Mutators
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Adds the script from the collection.</summary>*/
+		/// <summary>Adds the script from the collection.</summary>
 		public void AddScript(Script script) {
 			scripts.Add(script.ID, script);
 		}
 
-		/**<summary>Removes the script from the collection.</summary>*/
+		/// <summary>Removes the script from the collection.</summary>
 		public void RemoveScript(Script script) {
 			scripts.Remove(script.ID);
 		}
 
-		/**<summary>Removes the script with the specified id from the collection.</summary>*/
+		/// <summary>Removes the script with the specified id from the collection.</summary>
 		public void RemoveScript(string scriptID) {
 			scripts.Remove(scriptID);
 		}
 
-		/**<summary>Renames the specified script.</summary>*/
+		/// <summary>Renames the specified script.</summary>
 		public bool RenameScript(Script script, string newScriptID) {
 			if (newScriptID != script.ID) {
 				if (scripts.ContainsKey(newScriptID)) {
@@ -84,7 +86,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			return true;
 		}
 
-		/**<summary>Renames the script with the specified ID.</summary>*/
+		/// <summary>Renames the script with the specified ID.</summary>
 		public bool RenameScript(string oldScriptID, string newScriptID) {
 			return RenameScript(scripts[oldScriptID], newScriptID);
 		}
@@ -94,27 +96,30 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		// Compiling
 		//-----------------------------------------------------------------------------
 		
-		/**<summary>Compile all the scripts and save the result to the raw assembly data.</summary>*/
+		/// <summary>Compile all the scripts and save the result to the raw
+		/// assembly data.</summary>
 		public void CompileAndWriteAssembly(World world) {
 			var result = Compile(CreateCode(world, false));
 			rawAssembly = result.RawAssembly;
 		}
 
-		/**<summary>Compile all the scripts into one assembly.</summary>*/
+		/// <summary>Compile all the scripts into one assembly.</summary>
 		public ScriptCompileResult CompileScripts(World world, bool includeErrors) {
 			return Compile(CreateCode(world, includeErrors));
 		}
 
-		/**<summary>Compile the specified code.</summary>*/
-		public ScriptCompileResult Compile(string code, bool generateAssembly = true, int firstLineStart = 0) {
+		/// <summary>Compile the specified code.</summary>
+		public ScriptCompileResult Compile(string code, bool generateAssembly = true,
+			int firstLineStart = 0)
+		{
 			ScriptCompileResult result	= new ScriptCompileResult();
 			string pathToAssembly = "";
 			bool hasErrors = false;
 			
 			// Setup the compile options.
 			CompilerParameters options	= new CompilerParameters();
-			options.GenerateExecutable	= false;				// We want a Dll (Class Library)
-			options.GenerateInMemory	= !generateAssembly;	// Save the assembly to a file.
+			options.GenerateExecutable	= false;			 // We want a Dll (Class Library)
+			options.GenerateInMemory    = !generateAssembly; // Save the assembly to a file.
 			options.OutputAssembly		=
 				Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().Location) + "Scripts.dll";
 
@@ -124,7 +129,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			// Create a C# code provider and compile the code.
 			// The 'using' statement is necessary so the created DLL file isn't
 			// locked when we try to load its contents.
-			using (Microsoft.CSharp.CSharpCodeProvider csProvider = new Microsoft.CSharp.CSharpCodeProvider()) {
+			using (CSharpCodeProvider csProvider = new CSharpCodeProvider()) {
 				CompilerResults csResult = csProvider.CompileAssemblyFromSource(options, code);
 				pathToAssembly	= csResult.PathToAssembly;
 				hasErrors		= csResult.Errors.HasErrors;
@@ -162,8 +167,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 				result.RawAssembly = File.ReadAllBytes(pathToAssembly);
 				try {
 					File.Delete(pathToAssembly);
-				}
-				catch { }
+				} catch { }
 			}
 
 			return result;
@@ -174,7 +178,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		// Code
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Creates code used in compiling all scripts.</summary>*/
+		/// <summary>Creates code used in compiling all scripts.</summary>
 		public string CreateCode(World world, bool includeErrors) {
 			// Begin class and namespace.
 			string code = CreateUsingsString() + CreateClassString();
@@ -218,7 +222,7 @@ namespace ZeldaOracle.Game.Control.Scripting {
 			return code;
 		}
 
-		/**<summary>Creates code for testing a single script.</summary>*/
+		/// <summary>Creates code for testing a single script.</summary>
 		public string CreateTestScriptCode(Script newScript, string newCode, out int scriptStart) {
 			// Begin class and namespace.
 			string code = CreateUsingsString() + CreateClassString();
@@ -250,51 +254,51 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 		// Code -----------------------------------------------------------------------
 
-		/**<summary>Creates a name for an internal script.</summary>*/
+		/// <summary>Creates a name for an internal script.</summary>
 		public static string CreateInternalScriptName(int internalID) {
 			return "__internal_script_" + internalID + "__";
 		}
 
-		/**<summary>Creates the default usings.</summary>*/
+		/// <summary>Creates the default usings.</summary>
 		public static string CreateUsingsString() {
 			return	"using System.Collections.Generic; " +
 					"using Console = System.Console; " +
 					"using ZeldaAPI; ";
 		}
 
-		/**<summary>Creates the opening namespace and class.</summary>*/
+		/// <summary>Creates the opening namespace and class.</summary>
 		public static string CreateClassString() {
 			return	"namespace ZeldaAPI.CustomScripts {" +
 						"public class CustomScript : CustomScriptBase { ";
 		}
 
-		/**<summary>Creates the closing braces for the class and namespace.</summary>*/
+		/// <summary>Creates the closing braces for the class and namespace.</summary>
 		public static string CreateClosingClassString() {
 			return		"}" +
 					"}";
 		}
 
-		/**<summary>Creates a method head used for testing a script.</summary>*/
+		/// <summary>Creates a method head used for testing a script.</summary>
 		public static string CreateTestMethodHeadString(Script script) {
 			string name = (script.IsHidden ? "__internal_script__" : script.ID);
 			return	"public void " + name + "(" + CreateParametersString(script.Parameters) + ") { ";
 		}
 
-		/**<summary>Creates a method from the script.</summary>*/
+		/// <summary>Creates a method from the script.</summary>
 		public static string CreateMethodString(Script script, string newCode = null) {
 			return	"public void " + script.ID + "(" + CreateParametersString(script.Parameters) + ") { " +
 						(newCode ?? script.Code) + 
 					"}";
 		}
 
-		/**<summary>Creates an empty method from the script.</summary>*/
+		/// <summary>Creates an empty method from the script.</summary>
 		public static string CreateEmptyMethodString(Script script) {
 			return "public void " + script.ID + "(" + CreateParametersString(script.Parameters) + ") { " +
 						"" +
 					"} ";
 		}
 
-		/**<summary>Lists the parameters in a string for placing in a function declaration.</summary>*/
+		/// <summary>Lists the parameters in a string for placing in a function declaration.</summary>
 		public static string CreateParametersString(List<ScriptParameter> scriptParameters) {
 			string parametersString = "";
 			for (int i = 0; i < scriptParameters.Count; i++) {
@@ -307,12 +311,12 @@ namespace ZeldaOracle.Game.Control.Scripting {
 
 		// Misc -----------------------------------------------------------------------
 		
-		/**<summary>Get the assembly for the Zelda API.</summary>*/
+		/// <summary>Get the assembly for the Zelda API.</summary>
 		private static Assembly GetZeldaAPIAssembly() {
 			return Assembly.GetAssembly(typeof(ZeldaAPI.Game));
 		}
 
-		/**<summary>Returns true if the script has a valid function name.</summary>*/
+		/// <summary>Returns true if the script has a valid function name.</summary>
 		public static bool IsValidScriptName(string name) {
 			if (name.Length == 0)
 				return false;
@@ -333,18 +337,18 @@ namespace ZeldaOracle.Game.Control.Scripting {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Gets the collection of scripts.</summary>*/
-		public Dictionary<string, Script> Scripts {
-			get { return scripts; }
+		/// <summary>Gets the collection of scripts.</summary>
+		public ReadOnlyDictionary<string, Script> Scripts {
+			get { return new ReadOnlyDictionary<string, Script>(scripts); }
 		}
 
-		/**<summary>Gets the raw data for the compiled script assembly.</summary>*/
+		/// <summary>Gets the raw data for the compiled script assembly.</summary>
 		public byte[] RawAssembly {
 			get { return rawAssembly; }
 			set { rawAssembly = value; }
 		}
 
-		/**<summary>Gets the number of scripts stored in the script manager.</summary>*/
+		/// <summary>Gets the number of scripts stored in the script manager.</summary>
 		public int ScriptCount {
 			get { return scripts.Count; }
 		}

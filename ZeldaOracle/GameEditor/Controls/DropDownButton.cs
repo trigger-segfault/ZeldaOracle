@@ -12,7 +12,7 @@ namespace ZeldaEditor.Controls {
 	public class DropDownButton : Menu {
 
 
-		/**<summary>The dependency property for RCT remap colors.</summary>*/
+		/// <summary>The dependency property for RCT remap colors.</summary>
 		public static readonly DependencyProperty HeaderProperty =
 			MenuItem.HeaderProperty.AddOwner(typeof(DropDownButton));
 		

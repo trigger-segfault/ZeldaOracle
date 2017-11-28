@@ -100,11 +100,11 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			AddCommand("Clone", "string animationName",
 			delegate(CommandParam parameters) {
-				if (useTemporary && resources != null && resources.ExistsResource<Animation>(parameters.GetString(0))) {
+				if (useTemporary && resources != null && resources.ContainsResource<Animation>(parameters.GetString(0))) {
 					animationBuilder.CreateClone(resources.GetResource<Animation>(parameters.GetString(0)));
 					animation = animationBuilder.Animation;
 				}
-				if (Resources.ExistsResource<Animation>(parameters.GetString(0))) {
+				if (Resources.ContainsResource<Animation>(parameters.GetString(0))) {
 					animationBuilder.CreateClone(Resources.GetResource<Animation>(parameters.GetString(0)));
 					animation = animationBuilder.Animation;
 				}

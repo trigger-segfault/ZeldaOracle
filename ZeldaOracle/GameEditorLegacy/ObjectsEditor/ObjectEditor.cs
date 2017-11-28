@@ -269,7 +269,7 @@ namespace ZeldaEditor.ObjectsEditor {
 
 		public void ApplyChanges() {
 			// Id.
-			propertyObject.Properties.Exists("id");
+			propertyObject.Properties.Contains("id");
 			propertyObject.Properties.Set("id", textBoxId.Text);
 
 			// Spawn Type.

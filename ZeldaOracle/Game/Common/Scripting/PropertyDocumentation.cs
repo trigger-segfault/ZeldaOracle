@@ -60,19 +60,19 @@ namespace ZeldaOracle.Common.Scripting {
 		// Properties
 		//-----------------------------------------------------------------------------
 		
-		/**<summary>Gets the readable name of the property.</summary>*/
+		/// <summary>Gets the readable name of the property.</summary>
 		public string ReadableName {
 			get { return readableName; }
 		}
-		/**<summary>Gets the editor type of the property.</summary>*/
+		/// <summary>Gets the editor type of the property.</summary>
 		public string EditorType {
 			get { return editorType; }
 		}
-		/**<summary>Gets the editor subtype used for enum and enum_flags editor types.</summary>*/
+		/// <summary>Gets the editor subtype used for enum and enum_flags editor types.</summary>
 		public string EditorSubType {
 			get { return editorSubType; }
 		}
-		/**<summary>Gets the category of the property.</summary>*/
+		/// <summary>Gets the category of the property.</summary>
 		public string Category {
 			get {
 				if (string.IsNullOrWhiteSpace(category))
@@ -80,15 +80,15 @@ namespace ZeldaOracle.Common.Scripting {
 				return category;
 			}
 		}
-		/**<summary>Gets the description of what the property does.</summary>*/
+		/// <summary>Gets the description of what the property does.</summary>
 		public string Description {
 			get { return description; }
 		}
-		/**<summary>Can the property be edited using the property editor?</summary>*/
+		/// <summary>Can the property be edited using the property editor?<summary>
 		public bool IsReadOnly {
 			get { return isReadOnly; }
 		}
-		/**<summary>Is the property not shown in the property editor?</summary>*/
+		/// <summary>Is the property not shown in the property editor?<summary>
 		public bool IsBrowsable {
 			get { return isBrowsable; }
 		}

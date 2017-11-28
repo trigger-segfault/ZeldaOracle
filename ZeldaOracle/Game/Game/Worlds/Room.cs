@@ -12,7 +12,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Control.Scripting;
 
 namespace ZeldaOracle.Game.Worlds {
-	public class Room : IEventObjectContainer {
+	public class Room : IEventObjectContainer, IEventObject {
 		
 		private Level							level;		// The level this room is in.
 		private Point2I							location;	// Location within the level.

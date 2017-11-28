@@ -225,12 +225,12 @@ namespace ZeldaOracle.Game.Debug {
 			world.StartTileLocation	= new Point2I(3, 2);
 			
 			// Load the levels from java level files.
-			world.Levels.Add(LoadJavaLevel("Content/Worlds/test_level.zwd"));
-			world.Levels.Add(LoadJavaLevel("Content/Worlds/interiors.zwd"));
-			world.Levels.Add(LoadJavaLevel("Content/Worlds/big_interiors.zwd"));
-			world.Levels[0].Properties.Set("id", "overworld");
-			world.Levels[1].Properties.Set("id", "interiors");
-			world.Levels[2].Properties.Set("id", "big_interiors");
+			world.AddLevel(LoadJavaLevel("Content/Worlds/test_level.zwd"));
+			world.AddLevel(LoadJavaLevel("Content/Worlds/interiors.zwd"));
+			world.AddLevel(LoadJavaLevel("Content/Worlds/big_interiors.zwd"));
+			world.GetLevelAt(0).Properties.Set("id", "overworld");
+			world.GetLevelAt(1).Properties.Set("id", "interiors");
+			world.GetLevelAt(2).Properties.Set("id", "big_interiors");
 
 			TileData tdBlock		= Resources.GetResource<TileData>("movable_block");
 			TileData tdDiamond		= Resources.GetResource<TileData>("diamond_rock");
@@ -251,7 +251,7 @@ namespace ZeldaOracle.Game.Debug {
 			EventTileDataInstance e;
 
 			// Setup the overworld rooms.
-			level = world.Levels[0];
+			level = world.GetLevelAt(0);
 			r = level.GetRoomAt(2, 1);
 			t = r.CreateTile(tdOwl, 8, 1, 1);
 				t.Properties.Set("text", "Hello, World!");
@@ -328,7 +328,7 @@ namespace ZeldaOracle.Game.Debug {
 			}*/
 			
 			// Setup the interior rooms.
-			level = world.Levels[1];
+			level = world.GetLevelAt(1);
 			r = level.GetRoomAt(2, 1);
 			r.Zone = GameData.ZONE_INTERIOR;
 			r.CreateTile(tdPot, 1, 2, 1);

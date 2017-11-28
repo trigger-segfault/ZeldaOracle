@@ -39,7 +39,7 @@ namespace ZeldaEditor.TreeViews {
 
 		public override void Open(EditorControl editorControl) {
 			// Open the dungeon's properties.
-			editorControl.OpenObjectProperties(dungeon);
+			editorControl.OpenProperties(dungeon);
 		}
 
 		public override void Delete(EditorControl editorControl) {

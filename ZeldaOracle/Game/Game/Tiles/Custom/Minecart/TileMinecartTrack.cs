@@ -18,19 +18,19 @@ namespace ZeldaOracle.Game.Tiles {
 	 * 5 - down/right
 	*/
 	
-	/**<summary>The orientations a minecart track can be in.</summary>*/
+	/// <summary>The orientations a minecart track can be in.</summary>
 	public enum MinecartTrackOrientation {
-		/**<summary>Track goes from left to right.</summary>*/
+		/// <summary>Track goes from left to right.</summary>
 		Horizontal = 0,
-		/**<summary>Track goes from top to bottom.</summary>*/
+		/// <summary>Track goes from top to bottom.</summary>
 		Vertical,
-		/**<summary>Track goes from top to right.</summary>*/
+		/// <summary>Track goes from top to right.</summary>
 		UpRight,
-		/**<summary>Track goes from top to left.</summary>*/
+		/// <summary>Track goes from top to left.</summary>
 		UpLeft,
-		/**<summary>Track goes from bottom to left.</summary>*/
+		/// <summary>Track goes from bottom to left.</summary>
 		DownLeft,
-		/**<summary>Track goes from bottom to right.</summary>*/
+		/// <summary>Track goes from bottom to right.</summary>
 		DownRight
 	}
 

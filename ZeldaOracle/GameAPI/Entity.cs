@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ZeldaAPI {
 
-	/**<summary>Access to an entity.</summary>*/
+	/// <summary>Access to an entity.</summary>
 	public interface Entity {
 		// Nothing yet...
 	}

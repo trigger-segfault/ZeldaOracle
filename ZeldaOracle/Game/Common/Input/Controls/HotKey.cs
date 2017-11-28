@@ -20,27 +20,27 @@ namespace ZeldaOracle.Common.Input.Controls {
 		//=========== MEMBERS ============
 		#region Members
 
-		/**<summary>The main key to be pressed.</summary>*/
+		/// <summary>The main key to be pressed.</summary>
 		public Keys KeyCode;
-		/**<summary>True if the ctrl key has to be down.</summary>*/
+		/// <summary>True if the ctrl key has to be down.</summary>
 		public bool Ctrl;
-		/**<summary>True if the shift key has to be down.</summary>*/
+		/// <summary>True if the shift key has to be down.</summary>
 		public bool Shift;
-		/**<summary>True if the Key key has to be down.</summary>*/
+		/// <summary>True if the Key key has to be down.</summary>
 		public bool Alt;
 
 		#endregion
 		//========= CONSTRUCTORS =========
 		#region Constructors
 
-		/**<summary>Constructs the default hotkey.</summary>*/
+		/// <summary>Constructs the default hotkey.</summary>
 		public HotKey() {
 			this.KeyCode		= Keys.None;
 			this.Ctrl			= false;
 			this.Shift			= false;
 			this.Alt			= false;
 		}
-		/**<summary>Constructs a hotkey with the specified modifiers.</summary>*/
+		/// <summary>Constructs a hotkey with the specified modifiers.</summary>
 		public HotKey(Keys keyCode, bool ctrl = false, bool shift = false, bool alt = false) {
 			this.KeyCode		= keyCode;
 			this.Ctrl			= ctrl;
@@ -52,7 +52,7 @@ namespace ZeldaOracle.Common.Input.Controls {
 		//========== PROPERTIES ==========
 		#region Properties
 
-		/**<summary>Gets the name of the control.</summary>*/
+		/// <summary>Gets the name of the control.</summary>
 		public override string Name {
 			get {
 				if (KeyCode == Keys.None)
@@ -72,28 +72,28 @@ namespace ZeldaOracle.Common.Input.Controls {
 		//============ EVENTS ============
 		#region Events
 
-		/**<summary>Returns true if the control was pressed.</summary>*/
+		/// <summary>Returns true if the control was pressed.</summary>
 		public override bool Pressed() {
 			return (Ctrl == (Keyboard.IsKeyDown(Keys.LCtrl) || Keyboard.IsKeyDown(Keys.RCtrl))) &&
 				(Shift == (Keyboard.IsKeyDown(Keys.LShift) || Keyboard.IsKeyDown(Keys.RShift))) &&
 				(Alt == (Keyboard.IsKeyDown(Keys.LAlt) || Keyboard.IsKeyDown(Keys.RAlt))) &&
 				Keyboard.IsKeyPressed(KeyCode);
 		}
-		/**<summary>Returns true if the control was released.</summary>*/
+		/// <summary>Returns true if the control was released.</summary>
 		public override bool Released() {
 			return (Ctrl == (Keyboard.IsKeyDown(Keys.LCtrl) || Keyboard.IsKeyDown(Keys.RCtrl))) &&
 				(Shift == (Keyboard.IsKeyDown(Keys.LShift) || Keyboard.IsKeyDown(Keys.RShift))) &&
 				(Alt == (Keyboard.IsKeyDown(Keys.LAlt) || Keyboard.IsKeyDown(Keys.RAlt))) &&
 				Keyboard.IsKeyReleased(KeyCode);
 		}
-		/**<summary>Returns true if the control is down.</summary>*/
+		/// <summary>Returns true if the control is down.</summary>
 		public override bool Down() {
 			return (Ctrl == (Keyboard.IsKeyDown(Keys.LCtrl) || Keyboard.IsKeyDown(Keys.RCtrl))) &&
 				(Shift == (Keyboard.IsKeyDown(Keys.LShift) || Keyboard.IsKeyDown(Keys.RShift))) &&
 				(Alt == (Keyboard.IsKeyDown(Keys.LAlt) || Keyboard.IsKeyDown(Keys.RAlt))) &&
 				Keyboard.IsKeyDown(KeyCode);
 		}
-		/**<summary>Returns true if the control is up.</summary>*/
+		/// <summary>Returns true if the control is up.</summary>
 		public override bool Up() {
 			return (Ctrl != (Keyboard.IsKeyDown(Keys.LCtrl) || Keyboard.IsKeyDown(Keys.RCtrl))) ||
 				(Shift != (Keyboard.IsKeyDown(Keys.LShift) || Keyboard.IsKeyDown(Keys.RShift))) ||

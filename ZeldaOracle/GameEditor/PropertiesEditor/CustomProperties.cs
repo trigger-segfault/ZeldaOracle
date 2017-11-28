@@ -131,52 +131,52 @@ namespace ZeldaEditor.PropertiesEditor {
 		// ICustomTypeDescriptor
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Gets the Attributes for the object.</summary>*/
+		/// <summary>Gets the Attributes for the object.</summary>
 		AttributeCollection ICustomTypeDescriptor.GetAttributes() {
 			return new AttributeCollection(null);
 		}
 
-		/**<summary>Gets the Class name.</summary>*/
+		/// <summary>Gets the Class name.</summary>
 		string ICustomTypeDescriptor.GetClassName() {
 			return null;
 		}
 
-		/**<summary>Gets the component Nam.e</summary>*/
+		/// <summary>Gets the component Nam.e</summary>
 		string ICustomTypeDescriptor.GetComponentName() {
 			return null;
 		}
 
-		/**<summary>Gets the Type Converter.</summary>*/
+		/// <summary>Gets the Type Converter.</summary>
 		TypeConverter ICustomTypeDescriptor.GetConverter() {
 			return null;
 		}
 
-		/**<summary>Gets the Default Event.</summary>*/
+		/// <summary>Gets the Default Event.</summary>
 		EventDescriptor ICustomTypeDescriptor.GetDefaultEvent() {
 			return null;
 		}
 
-		/**<summary>Gets the Default Property.</summary>*/
+		/// <summary>Gets the Default Property.</summary>
 		PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty() {
 			return null;
 		}
 
-		/**<summary>Gets the Editor.</summary>*/
+		/// <summary>Gets the Editor.</summary>
 		object ICustomTypeDescriptor.GetEditor(Type editorBaseType) {
 			return null;
 		}
 
-		/**<summary>Gets the Events.</summary>*/
+		/// <summary>Gets the Events.</summary>
 		EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes) {
 			return new EventDescriptorCollection(null);
 		}
 
-		/**<summary>Gets the events.</summary>*/
+		/// <summary>Gets the events.</summary>
 		EventDescriptorCollection ICustomTypeDescriptor.GetEvents() {
 			return new EventDescriptorCollection(null);
 		}
 
-		/**<summary>Gets the properties.</summary>*/
+		/// <summary>Gets the properties.</summary>
 		PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes) {
 			if (propertyGrid.IsEvents) {
 				return CollectEvents();
@@ -252,12 +252,12 @@ namespace ZeldaEditor.PropertiesEditor {
 		}
 
 
-		/**<summary>gets the Properties.</summary>*/
+		/// <summary>gets the Properties.</summary>
 		PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties() {
 			return ((ICustomTypeDescriptor)this).GetProperties(null);
 		}
 
-		/**<summary>Gets the property owner.</summary>*/
+		/// <summary>Gets the property owner.</summary>
 		object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd) {
 			return this;
 		}

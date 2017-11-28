@@ -14,16 +14,16 @@ using GdiRectangle	= System.Drawing.Rectangle;
 using GdiRectangleF	= System.Drawing.RectangleF;
 
 namespace ZeldaOracle.Common.Geometry {
-	/**<summary>The 2D integer precision point with basic operations and functions.</summary>*/
+	/// <summary>The 2D integer precision point with basic operations and functions.</summary>
 	public struct Point2I {
 
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Returns a point positioned at (0, 0).</summary>*/
+		/// <summary>Returns a point positioned at (0, 0).</summary>
 		public static readonly Point2I Zero = new Point2I(0, 0);
-		/**<summary>Returns a point positioned at (1, 1).</summary>*/
+		/// <summary>Returns a point positioned at (1, 1).</summary>
 		public static readonly Point2I One = new Point2I(1, 1);
 
 
@@ -31,9 +31,9 @@ namespace ZeldaOracle.Common.Geometry {
 		// Members
 		//-----------------------------------------------------------------------------
 
-		/**<summary>The x coordinate of the point.</summary>*/
+		/// <summary>The x coordinate of the point.</summary>
 		public int X;
-		/**<summary>The y coordinate of the point.</summary>*/
+		/// <summary>The y coordinate of the point.</summary>
 		public int Y;
 
 
@@ -41,25 +41,25 @@ namespace ZeldaOracle.Common.Geometry {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Constructs a point positioned at the specified coordinates.</summary>*/
+		/// <summary>Constructs a point positioned at the specified coordinates.</summary>
 		public Point2I(int x, int y) {
 			this.X	= x;
 			this.Y	= y;
 		}
 
-		/**<summary>Constructs a point positioned at the specified coordinates.</summary>*/
+		/// <summary>Constructs a point positioned at the specified coordinates.</summary>
 		public Point2I(int uniform) {
 			this.X	= uniform;
 			this.Y	= uniform;
 		}
 
-		/**<summary>Constructs a copy of the specified point.</summary>*/
+		/// <summary>Constructs a copy of the specified point.</summary>
 		public Point2I(Point2I p) {
 			this.X	= p.X;
 			this.Y	= p.Y;
 		}
 
-		/**<summary>Constructs a copy of the specified point.</summary>*/
+		/// <summary>Constructs a copy of the specified point.</summary>
 		public Point2I(Vector2F v) {
 			this.X	= (int)v.X;
 			this.Y	= (int)v.Y;
@@ -70,41 +70,41 @@ namespace ZeldaOracle.Common.Geometry {
 		// General
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Outputs a string representing this point as (x, y).</summary>*/
+		/// <summary>Outputs a string representing this point as (x, y).</summary>
 		public override string ToString() {
 			return "(" + X + ", " + Y + ")";
 		}
 
-		/**<summary>Outputs a string representing this point as (x, y).</summary>*/
+		/// <summary>Outputs a string representing this point as (x, y).</summary>
 		public string ToString(IFormatProvider provider) {
 			// TODO: Write formatting for Point2I.ToString(format).
 
 			return "(" + X.ToString(provider) + ", " + Y.ToString(provider) + ")";
 		}
 
-		/**<summary>Outputs a string representing this point as (x, y).</summary>*/
+		/// <summary>Outputs a string representing this point as (x, y).</summary>
 		public string ToString(string format, IFormatProvider provider) {
 			return "(" + X.ToString(format, provider) + ", " + Y.ToString(format, provider) + ")";
 		}
 
-		/**<summary>Outputs a string representing this point as (x, y).</summary>*/
+		/// <summary>Outputs a string representing this point as (x, y).</summary>
 		public string ToString(string format) {
 			return "(" + X.ToString(format) + ", " + Y.ToString(format) + ")";
 		}
 
-		/**<summary>Returns true if the specified point has the same x and y coordinates.</summary>*/
+		/// <summary>Returns true if the specified point has the same x and y coordinates.</summary>
 		public override bool Equals(object obj) {
 			if (obj is Point2I)
 				return (X == ((Point2I)obj).X && Y == ((Point2I)obj).Y);
 			return false;
 		}
 
-		/**<summary>Returns the hash code for this point.</summary>*/
+		/// <summary>Returns the hash code for this point.</summary>
 		public override int GetHashCode() {
 			return base.GetHashCode();
 		}
 
-		/**<summary>Parses the point.</summary>*/
+		/// <summary>Parses the point.</summary>
 		public static Point2I Parse(string text) {
 			Point2I value = Point2I.Zero;
 
@@ -362,7 +362,7 @@ namespace ZeldaOracle.Common.Geometry {
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Clamps the point with given bounds of the rectangle. Clamp is exclusive.</summary>*/
+		/// <summary>Clamps the point with given bounds of the rectangle. Clamp is exclusive.</summary>
 		public static Point2I Clamp(Point2I value, Rectangle2I bounds) {
 			if (bounds.IsEmpty)
 				return Point2I.Zero;
@@ -376,7 +376,7 @@ namespace ZeldaOracle.Common.Geometry {
 		// Properties
 		//-----------------------------------------------------------------------------
 		
-		/**<summary>Gets or sets the direction of the point.</summary>*/
+		/// <summary>Gets or sets the direction of the point.</summary>
 		[ContentSerializerIgnore]
 		public float Direction {
 			get {
@@ -391,7 +391,7 @@ namespace ZeldaOracle.Common.Geometry {
 			}
 		}
 
-		/**<summary>Gets or sets the length of the point.</summary>*/
+		/// <summary>Gets or sets the length of the point.</summary>
 		[ContentSerializerIgnore]
 		public float Length {
 			get {
@@ -410,7 +410,7 @@ namespace ZeldaOracle.Common.Geometry {
 			}
 		}
 
-		/**<summary>Gets or sets the x or y coordinate from the index.</summary>*/
+		/// <summary>Gets or sets the x or y coordinate from the index.</summary>
 		[ContentSerializerIgnore]
 		public int this[int coordinate] {
 			get {
@@ -431,13 +431,13 @@ namespace ZeldaOracle.Common.Geometry {
 			}
 		}
 
-		/**<summary>Returns true if the point is positioned at (0, 0).</summary>*/
+		/// <summary>Returns true if the point is positioned at (0, 0).</summary>
 		[ContentSerializerIgnore]
 		public bool IsZero {
 			get { return (X == 0 && Y == 0); }
 		}
 
-		/**<summary>Returns the perpendicular point.</summary>*/
+		/// <summary>Returns the perpendicular point.</summary>
 		[ContentSerializerIgnore]
 		public Point2I Perpendicular {
 			get { return new Point2I(-Y, X); }

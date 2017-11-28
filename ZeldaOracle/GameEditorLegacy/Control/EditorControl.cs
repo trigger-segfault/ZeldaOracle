@@ -258,7 +258,7 @@ namespace ZeldaEditor.Control {
 				needsRecompiling	= true;
 
 				world = loadedWorld;
-				if (world.Levels.Count > 0)
+				if (world.LevelCount > 0)
 					OpenLevel(0);
 
 				RefreshWorldTreeView();
@@ -294,7 +294,7 @@ namespace ZeldaEditor.Control {
 
 		// Open the given level index in the level display.
 		public void OpenLevel(int index) {
-			level = world.Levels[index];
+			level = world.GetLevelAt(index);
 			editorForm.LevelDisplay.UpdateLevel();
 			UpdateWindowTitle();
 			PropertyGrid.OpenProperties(level.Properties, level);
@@ -309,10 +309,10 @@ namespace ZeldaEditor.Control {
 
 		// Add a new level the world, and open it if specified.
 		public void AddLevel(Level level, bool openLevel) {
-			world.Levels.Add(level);
+			world.AddLevel(level);
 			RefreshWorldTreeView();
 			if (openLevel)
-				OpenLevel(world.Levels.Count - 1);
+				OpenLevel(world.LevelCount - 1);
 		}
 
 		public void AddScript(Script script) {
@@ -321,9 +321,9 @@ namespace ZeldaEditor.Control {
 		}
 
 		public void ChangeTileset(string name) {
-			if (Resources.ExistsResource<Tileset>(name))
+			if (Resources.ContainsResource<Tileset>(name))
 				tileset = Resources.GetResource<Tileset>(name);
-			else if (Resources.ExistsResource<EventTileset>(name))
+			else if (Resources.ContainsResource<EventTileset>(name))
 				tileset = Resources.GetResource<EventTileset>(name);
 			
 			if (tileset.SpriteSheet != null) {
@@ -373,11 +373,7 @@ namespace ZeldaEditor.Control {
 		public void TestWorld(Point2I roomCoord, Point2I playerCoord) {
 			if (IsWorldOpen) {
 				playerPlaceMode = false;
-				int levelIndex = 0;
-				for (levelIndex = 0; levelIndex < world.Levels.Count; levelIndex++) {
-					if (world.Levels[levelIndex] == level)
-						break;
-				}
+				int levelIndex = world.IndexOfLevel(level);
 				string worldPath = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "testing.zwd");
 				WorldFile worldFile = new WorldFile();
 				worldFile.Save(worldPath, world, true);

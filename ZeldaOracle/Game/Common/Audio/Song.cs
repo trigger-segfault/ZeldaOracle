@@ -12,40 +12,35 @@ using ZeldaOracle.Common.Geometry;
 using Song = ZeldaOracle.Common.Audio.Song;
 
 namespace ZeldaOracle.Common.Audio {
-	/**<summary>A structure for storing a song.</summary>*/
+	/// <summary>A structure for storing a song.</summary>
 	public class Song {
-
-		//========== CONSTANTS ===========
-		#region Constants
-
-		#endregion
-		//=========== MEMBERS ============
-		#region Members
-	
 		// Containment
-		/**<summary>The base sound effect class contained by this song.</summary>*/
+		/// <summary>The base sound effect class contained by this song.</summary>
 		private SoundEffect soundEffect;
-		/**<summary>The sound effect instance currently playing.</summary>*/
+		/// <summary>The sound effect instance currently playing.</summary>
 		private SongInstance soundInstance;
-		/**<summary>The name of the song.</summary>*/
+		/// <summary>The name of the song.</summary>
 		internal string name;
-		/**<summary>The file path of the song.</summary>*/
+		/// <summary>The file path of the song.</summary>
 		private string filePath;
 
 		// Settings
-		/**<summary>The default volume of the song.</summary>*/
+		/// <summary>The default volume of the song.</summary>
 		private float volume;
-		/**<summary>The default pitch of the song.</summary>*/
+		/// <summary>The default pitch of the song.</summary>
 		private float pitch;
-		/**<summary>The default pan of the song.</summary>*/
+		/// <summary>The default pan of the song.</summary>
 		private float pan;
 
-		#endregion
-		//========= CONSTRUCTORS =========
-		#region Constructors
 
-		/**<summary>Constructs the default song.</summary>*/
-		public Song(SoundEffect song, string filePath, string name, float volume = 1.0f, float pitch = 0.0f, float pan = 0.0f) {
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Constructs the song.</summary>
+		public Song(SoundEffect song, string filePath, string name, float volume = 1.0f,
+			float pitch = 0.0f, float pan = 0.0f)
+		{
 			// Containment
 			this.soundEffect	= song;
 			this.soundInstance	= null;
@@ -58,30 +53,77 @@ namespace ZeldaOracle.Common.Audio {
 			this.pan			= pan;
 		}
 
-		#endregion
-		//========== PROPERTIES ==========
-		#region Properties
-		//--------------------------------
-		#region Containment
 
-		/**<summary>Gets the sound effect contained by this song.</summary>*/
+		//-----------------------------------------------------------------------------
+		// Management
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Updates the sound instance.</summary>
+		internal void UpdateSoundInstance() {
+			if (soundInstance != null)
+				soundInstance.Update();
+		}
+
+		/// <summary>Plays the song.</summary>
+		public SongInstance Play(bool looped = false) {
+			soundInstance = new SongInstance(soundEffect.CreateInstance(), this, looped);
+			soundInstance.Play();
+			return soundInstance;
+		}
+
+		/// <summary>Plays the song.</summary>
+		public SongInstance Play(bool looped, float volume, float pitch = 0.0f,
+			float pan = 0.0f)
+		{
+			soundInstance = new SongInstance(soundEffect.CreateInstance(),
+				this, looped, volume, pitch, pan);
+			soundInstance.Play();
+			return soundInstance;
+		}
+
+		/// <summary>Stops the song.</summary>
+		public void Stop() {
+			if (soundInstance != null) {
+				soundInstance.Stop();
+				soundInstance = null;
+			}
+		}
+
+		/// <summary>Resumes the song.</summary>
+		public void Resume() {
+			soundInstance.Resume();
+		}
+
+		/// <summary>Pauses the song.</summary>
+		public void Pause() {
+			soundInstance.Pause();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		// Containment ----------------------------------------------------------------
+
+		/// <summary>Gets the sound effect contained by this song.</summary>
 		public SoundEffect SoundEffect {
 			get { return soundEffect; }
 		}
-		/**<summary>Gets the name of the song.</summary>*/
+
+		/// <summary>Gets the name of the song.</summary>
 		public string Name {
 			get { return name; }
 		}
-		/**<summary>Gets the file path of the song.</summary>*/
+
+		/// <summary>Gets the file path of the song.</summary>
 		public string FilePath {
 			get { return filePath; }
 		}
+		
+		// Settings -------------------------------------------------------------------
 
-		#endregion
-		//--------------------------------
-		#region Settings
-
-		/**<summary>Gets or sets the default volume of the sound between 0 and 1.</summary>*/
+		/// <summary>Gets or sets the default volume of the sound between 0 and 1.</summary>
 		public float Volume {
 			get { return volume; }
 			set {
@@ -89,7 +131,8 @@ namespace ZeldaOracle.Common.Audio {
 				AudioSystem.UpdateMusic();
 			}
 		}
-		/**<summary>Gets or sets the default pitch of the sound between -1 and 1.</summary>*/
+
+		/// <summary>Gets or sets the default pitch of the sound between -1 and 1.</summary>
 		public float Pitch {
 			get { return pitch; }
 			set {
@@ -97,7 +140,8 @@ namespace ZeldaOracle.Common.Audio {
 				AudioSystem.UpdateMusic();
 			}
 		}
-		/**<summary>Gets or sets the default pan of the sound between -1 and 1.</summary>*/
+
+		/// <summary>Gets or sets the default pan of the sound between -1 and 1.</summary>
 		public float Pan {
 			get { return pan; }
 			set {
@@ -105,12 +149,10 @@ namespace ZeldaOracle.Common.Audio {
 				AudioSystem.UpdateMusic();
 			}
 		}
+		
+		// Playback -------------------------------------------------------------------
 
-		#endregion
-		//--------------------------------
-		#region Playback
-
-		/**<summary>Returns true if the song is currently playing.</summary>*/
+		/// <summary>Returns true if the song is currently playing.</summary>
 		public bool IsPlaying {
 			get {
 				if (soundInstance != null)
@@ -118,7 +160,8 @@ namespace ZeldaOracle.Common.Audio {
 				return false;
 			}
 		}
-		/**<summary>Returns true if the song is currently paused.</summary>*/
+
+		/// <summary>Returns true if the song is currently paused.</summary>
 		public bool IsPaused {
 			get {
 				if (soundInstance != null)
@@ -126,7 +169,8 @@ namespace ZeldaOracle.Common.Audio {
 				return false;
 			}
 		}
-		/**<summary>Returns true if the song is currently stopped.</summary>*/
+
+		/// <summary>Returns true if the song is currently stopped.</summary>
 		public bool IsStopped {
 			get {
 				if (soundInstance != null)
@@ -134,50 +178,5 @@ namespace ZeldaOracle.Common.Audio {
 				return true;
 			}
 		}
-
-		#endregion
-		//--------------------------------
-		#endregion
-		//========== MANAGEMENT ==========
-		#region Management
-		//--------------------------------
-		#region Playback
-
-		/**<summary>Updates the sound instance.</summary>*/
-		internal void UpdateSoundInstance() {
-			if (soundInstance != null)
-				soundInstance.Update();
-		}
-		/**<summary>Plays the song.</summary>*/
-		public SongInstance Play(bool looped = false) {
-			soundInstance = new SongInstance(soundEffect.CreateInstance(), this, looped);
-			soundInstance.Play();
-			return soundInstance;
-		}
-		/**<summary>Plays the song.</summary>*/
-		public SongInstance Play(bool looped, float volume, float pitch = 0.0f, float pan = 0.0f) {
-			soundInstance = new SongInstance(soundEffect.CreateInstance(), this, looped, volume, pitch, pan);
-			soundInstance.Play();
-			return soundInstance;
-		}
-		/**<summary>Stops the song.</summary>*/
-		public void Stop() {
-			if (soundInstance != null) {
-				soundInstance.Stop();
-				soundInstance = null;
-			}
-		}
-		/**<summary>Resumes the song.</summary>*/
-		public void Resume() {
-			soundInstance.Resume();
-		}
-		/**<summary>Pauses the song.</summary>*/
-		public void Pause() {
-			soundInstance.Pause();
-		}
-
-		#endregion
-		//--------------------------------
-		#endregion
 	}
 } // End namespace
