@@ -20,7 +20,8 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Common.Input.Controls;
-using ZeldaOracle.Game.GameStates;
+using ZeldaOracle.Common.Translation;
+using ZeldaOracle.Common.Util;
 using GamePad		= ZeldaOracle.Common.Input.GamePad;
 using Keyboard		= ZeldaOracle.Common.Input.Keyboard;
 using Mouse			= ZeldaOracle.Common.Input.Mouse;
@@ -31,8 +32,8 @@ using Color			= ZeldaOracle.Common.Graphics.Color;
 using Song			= ZeldaOracle.Common.Audio.Song;
 
 using ZeldaOracle.Game.Control;
-using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Game.Control.Menus;
+using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.Debug;
 
 
@@ -43,20 +44,29 @@ namespace ZeldaOracle.Game.Main {
 		private GameBase		gameBase;
 		/**<summary>The game scale used to alter screen size and mouse properties.</summary>*/
 		public int				gameScale;
+		/**<summary>The controller for the game.</summary>*/
 		private GameControl		gameControl;
+		/**<summary>The stack for game states.</summary>*/
 		private GameStateStack	gameStateStack;
 		/**<summary>The number of ticks since the start of the game.</summary>*/
 		private int				elapsedTicks;
+		/**<summary>True if the game is in debug mode.</summary>*/
 		private bool			debugMode;
+		/**<summary>The launch parameters for the process.</summary>*/
 		private string[]		launchParameters;
+		/**<summary>True if the game is hard-paused (not in a pause menu).</summary>*/
 		private bool			isGamePaused;
-
+		/**<summary>True if a console window as been allocated for this game.</summary>*/
+		private bool            isConsoleOpen;
 
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
-	
+
+		/**<summary>The default game window title.</summary>*/
 		public const string GameName = "The Legend of Zelda - Oracle Engine";
+		/**<summary>The default debug console window title.</summary>*/
+		public const string ConsoleName = "The Legend of Zelda - Oracle Engine (Debug Console)";
 
 
 		//-----------------------------------------------------------------------------
@@ -64,17 +74,21 @@ namespace ZeldaOracle.Game.Main {
 		//-----------------------------------------------------------------------------
 
 		/**<summary>Constructs the game manager.</summary>*/
-		public GameManager(string[] launchParameters) {
-			this.gameBase = null;
-			this.gameScale = 4;
-			this.debugMode = false;
-			this.launchParameters = launchParameters;
+		public GameManager(string[] launchParameters, GameBase gameBase) {
+			this.gameBase			= gameBase;
+			this.gameScale			= 4;
+			this.debugMode			= false;
+			this.launchParameters	= launchParameters;
+			this.isGamePaused       = false;
+			this.isConsoleOpen      = false;
+
+			this.gameBase.Window.Title = GameName;
+
+			ReadLaunchParameters();
 		}
 
 		/**<summary>Initializes the game manager.</summary>*/
-		public void Initialize(GameBase gameBase) {
-			this.gameBase = gameBase;
-
+		public void Initialize() {
 			elapsedTicks = 0;
 
 			FormatCodes.Initialize();
@@ -104,9 +118,7 @@ namespace ZeldaOracle.Game.Main {
 		//-----------------------------------------------------------------------------
 
 		/**<summary>Called to load game manager content.</summary>*/
-		public void LoadContent(ContentManager content, GameBase gameBase) {
-			this.gameBase = gameBase;
-			
+		public void LoadContent(ContentManager content) {
 			GameData.Initialize();
 
 			// Setup the render targets
@@ -171,6 +183,20 @@ namespace ZeldaOracle.Game.Main {
 		/**<summary>Called when the screen has been resized.</summary>*/
 		public void ScreenResized() {
 
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Launch Parameters
+		//-----------------------------------------------------------------------------
+
+		/**<summary>Reads the launch parameters and makes any necissary changes.</summary>*/
+		private void ReadLaunchParameters() {
+			for (int i = 1; i < launchParameters.Length; i++) {
+				if (launchParameters[i] == "-console") {
+					IsConsoleOpen = true;
+				}
+			}
 		}
 
 
@@ -272,12 +298,6 @@ namespace ZeldaOracle.Game.Main {
 			get { return gameBase.FPS; }
 		}
 
-		/**<summary>Gets if the game is currently in debug mode.</summary>*/
-		public bool DebugMode {
-			get { return debugMode; }
-			set { debugMode = value; }
-		}
-
 		/**<summary>Gets or sets if the game is in fullscreen mode.</summary>*/
 		public bool IsFullScreen {
 			get { return gameBase.IsFullScreen; }
@@ -311,15 +331,55 @@ namespace ZeldaOracle.Game.Main {
 			get { return elapsedTicks; }
 		}
 
+		/**<summary>Gets the launch parameters for the application.</summary>*/
+		public string[] LaunchParameters {
+			get { return launchParameters; }
+		}
+
+		// Debug ----------------------------------------------------------------------
+
+		/**<summary>Gets if the game is currently in debug mode.</summary>*/
+		public bool DebugMode {
+			get { return debugMode; }
+			set { debugMode = value; }
+		}
+
 		/**<summary>Gets or sets if the game is paused.</summary>*/
 		public bool IsGamePaused {
 			get { return isGamePaused; }
 			set { isGamePaused = value; }
 		}
+		
+		/**<summary>Opens or closes a console window for the game.</summary>*/
+		public bool IsConsoleOpen {
+			get { return isConsoleOpen; }
+			set {
+				if (value != isConsoleOpen) {
+					isConsoleOpen = value;
+					if (isConsoleOpen) {
+						NativeMethods.AllocConsole();
+						// stdout's handle seems to always be equal to 7
+						IntPtr defaultStdout = new IntPtr(7);
+						IntPtr currentStdout = NativeMethods.GetStdHandle(NativeMethods.StdOutputHandle);
 
-		/**<summary>Gets the launch parameters for the application.</summary>*/
-		public string[] LaunchParameters {
-			get { return launchParameters; }
+						if (currentStdout != defaultStdout)
+							// reset stdout
+							NativeMethods.SetStdHandle(NativeMethods.StdOutputHandle, defaultStdout);
+
+						// reopen stdout
+						TextWriter writer = new StreamWriter(Console.OpenStandardOutput()) {
+							AutoFlush = true
+						};
+						Console.SetOut(writer);
+
+						NativeMethods.SetConsoleTitle(ConsoleName);
+						gameBase.Form.Activate();
+					}
+					else {
+						NativeMethods.FreeConsole();
+					}
+				}
+			}
 		}
 
 	}

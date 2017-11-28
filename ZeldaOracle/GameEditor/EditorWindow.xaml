@@ -96,6 +96,9 @@
                 <local:ImageMenuItem x:Name="menuItemTestWorld" Header="Test World" Source="Resources/Icons/RunGame.png" IsCheckable="True"  Command="cmd:EditorCommands.TestWorld"/>
                 <local:ImageMenuItem x:Name="menuItemTestLevelPlace" Header="Test World From Location" Source="Resources/Icons/RunGameAtLocation.png" Command="cmd:EditorCommands.TestWorldFromLocation"/>
             </MenuItem>
+            <MenuItem Header="_Debug">
+                <local:ImageMenuItem x:Name="menuItemDebugConsole" Header="Debug Console" Source="Resources/Icons/Console.png" Click="OnDebugConsole" IsCheckable="True" />
+            </MenuItem>
             <MenuItem Header="Dev Tools">
                 <MenuItem x:Name="menuItemRefactorProperties" Header="Refactor Properties..."/>
             </MenuItem>

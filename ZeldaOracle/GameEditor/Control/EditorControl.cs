@@ -70,6 +70,9 @@ namespace ZeldaEditor.Control {
 		// Settings
 		private bool				playAnimations;
 		private bool				eventMode;
+
+		// Debug
+		private bool                debugConsole;
 		
 		// Tools
 		private List<EditorTool>	tools;
@@ -383,7 +386,10 @@ namespace ZeldaEditor.Control {
 				WorldFile worldFile = new WorldFile();
 				worldFile.Save(worldPath, world, true);
 				string exePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ZeldaOracle.exe");
-				Process.Start(exePath, "\"" + worldPath + "\"");
+				string arguments = "\"" + worldPath + "\"";
+				if (debugConsole)
+					arguments += " -console";
+				Process.Start(exePath, arguments);
 			}
 		}
 
@@ -400,7 +406,11 @@ namespace ZeldaEditor.Control {
 				WorldFile worldFile = new WorldFile();
 				worldFile.Save(worldPath, world, true);
 				string exePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ZeldaOracle.exe");
-				Process.Start(exePath, "\"" + worldPath + "\" -test " + levelIndex + " " + roomCoord.X + " " + roomCoord.Y + " " + playerCoord.X + " " + playerCoord.Y);
+				string arguments = "\"" + worldPath + "\"";
+				arguments += " -test " + levelIndex + " " + roomCoord.X + " " + roomCoord.Y + " " + playerCoord.X + " " + playerCoord.Y;
+				if (debugConsole)
+					arguments += " -console";
+				Process.Start(exePath, arguments);
 				editorWindow.FinishTestWorldFromLocation();
 			}
 		}
@@ -1182,6 +1192,11 @@ namespace ZeldaEditor.Control {
 
 		public bool NoScriptWarnings {
 			get { return noScriptWarnings; }
+		}
+
+		public bool DebugConsole {
+			get { return debugConsole; }
+			set { debugConsole = value; }
 		}
 	}
 }

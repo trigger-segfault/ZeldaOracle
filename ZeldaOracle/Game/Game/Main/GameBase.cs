@@ -105,7 +105,8 @@ namespace ZeldaOracle.Game.Main {
 			this.graphics.PreferredBackBufferHeight	= windowSize.Y;
 			
 			Form.Icon = new Icon("Game.ico");
-			Form.MinimumSize = new System.Drawing.Size(32, 32);
+			Form.MinimumSize = new Size(32, 32);
+			Form.Shown += OnWindowShown;
 		}
 
 		/// <summary>
@@ -115,14 +116,14 @@ namespace ZeldaOracle.Game.Main {
 		/// and initialize them as well.
 		/// </summary>
 		protected override void Initialize() {
+			game = new GameManager(launchParameters, this);
+
 			Console.WriteLine("Begin Initialize");
 
 			Console.WriteLine("Initializing Input");
 			Keyboard.Initialize();
 			Mouse.Initialize();
 			GamePad.Initialize();
-
-			game = new GameManager(launchParameters);
 			
 			base.Initialize();
 
@@ -133,7 +134,7 @@ namespace ZeldaOracle.Game.Main {
 			}
 
 			// Create and initialize the game.
-			game.Initialize(this);
+			game.Initialize();
 
 			Window.ClientSizeChanged += OnClientSizeChanged;
 
@@ -161,7 +162,7 @@ namespace ZeldaOracle.Game.Main {
 				AudioSystem.Initialize();
 				Resources.Initialize(Content, GraphicsDevice);
 
-				game.LoadContent(Content, this);
+				game.LoadContent(Content);
 
 				base.LoadContent();
 
@@ -179,7 +180,7 @@ namespace ZeldaOracle.Game.Main {
 		/// all content.
 		/// </summary>
 		protected override void UnloadContent() {
-			System.Console.WriteLine("Begin Unload Content");
+			Console.WriteLine("Begin Unload Content");
 
 			AudioSystem.Uninitialize();
 			//Resources.Uninitialize();
@@ -188,13 +189,19 @@ namespace ZeldaOracle.Game.Main {
 
 			base.UnloadContent();
 
-			System.Console.WriteLine("End Unload Content");
+			Console.WriteLine("End Unload Content");
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Events
 		//-----------------------------------------------------------------------------
+		
+		/**<summary>Called when the window is shown for the first time.
+		 * This event is primarily used to steal focus from the debug console on startup.</summary>*/
+		private void OnWindowShown(object sender, EventArgs e) {
+			Form.Activate();
+		}
 
 		/**<summary>Called when the window has been manually resized.</summary>*/
 		private void OnClientSizeChanged(object sender, EventArgs e) {
@@ -215,7 +222,7 @@ namespace ZeldaOracle.Game.Main {
 		//-----------------------------------------------------------------------------
 		// Updating
 		//-----------------------------------------------------------------------------
-		
+
 		/// <summary>
 		/// Allows the game to run logic such as updating the world,
 		/// checking for collisions, gathering input, and playing audio.
