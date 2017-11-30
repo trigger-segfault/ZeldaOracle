@@ -45,7 +45,7 @@ namespace ZeldaOracle.Common.Input.Controls {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		// Gets the button if it is the active control
+		/// <summary>Gets the button if it is the active control</summary>
 		public InputControl Button {
 			get { return inputControl; }
 		}

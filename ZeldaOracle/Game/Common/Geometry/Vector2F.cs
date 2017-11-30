@@ -116,20 +116,20 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Parse a string containing a vector.</summary>
-		public static Vector2F Parse(string text) {
+		public static Vector2F Parse(string s) {
 			Vector2F value = Vector2F.Zero;
 
-			if (text.Length > 0) {
-				if (text[0] == '(' && text[text.Length - 1] == ')')
-					text = text.Substring(1, text.Length - 2);
+			if (s.Length > 0) {
+				if (s[0] == '(' && s[s.Length - 1] == ')')
+					s = s.Substring(1, s.Length - 2);
 
-				int commaPos = text.IndexOf(',');
+				int commaPos = s.IndexOf(',');
 				if (commaPos == -1)
-					commaPos = text.IndexOf(' ');
+					commaPos = s.IndexOf(' ');
 				if (commaPos != -1) {
 
-					string strX = text.Substring(0, commaPos).Trim();
-					string strY = text.Substring(commaPos + 1).Trim();
+					string strX = s.Substring(0, commaPos).Trim();
+					string strY = s.Substring(commaPos + 1).Trim();
 
 					try {
 						value.X = float.Parse(strX);
@@ -155,6 +155,20 @@ namespace ZeldaOracle.Common.Geometry {
 
 			return value;
 		}
+
+		/// <summary>Tries to parse the vector and returns whether the parsing was
+		/// successful or not.</summary>
+		public static bool TryParse(string s, out Vector2F result) {
+			try {
+				result = Parse(s);
+				return true;
+			}
+			catch {
+				result = Vector2F.Zero;
+				return false;
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Operators

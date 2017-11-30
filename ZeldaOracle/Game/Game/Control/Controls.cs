@@ -7,8 +7,7 @@ using ZeldaOracle.Common.Input.Controls;
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Game.Main {
-
-	// The controls for the game
+	/// <summary>The controls for the game.</summary>
 	public class Controls {
 
 		private static MultiGameButton[] arrows;
@@ -27,39 +26,44 @@ namespace ZeldaOracle.Game.Main {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		// Initializes the controls for the game
-		public static void Initialize() {
-
+		/// <summary>Loads the controls from settings.</summary>
+		public static void LoadControls(UserSettings userSettings) {
 			Controls.arrows = new MultiGameButton[4];
-			Controls.arrows[Directions.Up]		= new MultiGameButton(new GameButton(Keys.Up), new GameButton(Buttons.LeftStickUp));
-			Controls.arrows[Directions.Down]	= new MultiGameButton(new GameButton(Keys.Down), new GameButton(Buttons.LeftStickDown));
-			Controls.arrows[Directions.Left]	= new MultiGameButton(new GameButton(Keys.Left), new GameButton(Buttons.LeftStickLeft));
-			Controls.arrows[Directions.Right]	= new MultiGameButton(new GameButton(Keys.Right), new GameButton(Buttons.LeftStickRight));
+			Controls.arrows[Directions.Up]      = CreateMultiGameButton(userSettings,
+				userSettings.Keyboard.Up, userSettings.GamePad.Up);
+			Controls.arrows[Directions.Down]    = CreateMultiGameButton(userSettings,
+				userSettings.Keyboard.Down, userSettings.GamePad.Down);
+			Controls.arrows[Directions.Left]    = CreateMultiGameButton(userSettings,
+				userSettings.Keyboard.Left, userSettings.GamePad.Left);
+			Controls.arrows[Directions.Right]   = CreateMultiGameButton(userSettings,
+				userSettings.Keyboard.Right, userSettings.GamePad.Right);
 
-			Controls.analogMovement	= GamePad.GetStick(Buttons.LeftStick);
+			if (userSettings.GamePad.Enabled)
+				Controls.analogMovement = GamePad.GetStick(userSettings.GamePad.AnalogStick);
+			else
+				Controls.analogMovement = GamePad.GetStick(AnalogSticks.None);
 
-			/*
-			Controls.a				= new MultiGameButton(new GameButton(Keys.X), new GameButton(Buttons.A));
-			Controls.b				= new MultiGameButton(new GameButton(Keys.Z), new GameButton(Buttons.B));
-			Controls.x				= new MultiGameButton(new GameButton(Keys.S), new GameButton(Buttons.X));
-			Controls.y				= new MultiGameButton(new GameButton(Keys.A), new GameButton(Buttons.Y));
-			Controls.start			= new MultiGameButton(new GameButton(Keys.Enter), new GameButton(Buttons.Start));
-			Controls.select			= new MultiGameButton(new GameButton(Keys.Backslash), new GameButton(Buttons.Back));
-			*/
+			Controls.a              = CreateMultiGameButton(userSettings,
+				userSettings.Keyboard.A, userSettings.GamePad.A);
+			Controls.b              = CreateMultiGameButton(userSettings,
+				userSettings.Keyboard.B, userSettings.GamePad.B);
+			Controls.x              = CreateMultiGameButton(userSettings,
+				userSettings.Keyboard.X, userSettings.GamePad.X);
+			Controls.y              = CreateMultiGameButton(userSettings,
+				userSettings.Keyboard.Y, userSettings.GamePad.Y);
 
-			// David's preffered control scheme:
-			Controls.a				= new MultiGameButton(new GameButton(Keys.Z), new GameButton(Buttons.A));
-			Controls.b				= new MultiGameButton(new GameButton(Keys.X), new GameButton(Buttons.B));
-			Controls.x				= new MultiGameButton(new GameButton(Keys.S), new GameButton(Buttons.X));
-			Controls.y				= new MultiGameButton(new GameButton(Keys.A), new GameButton(Buttons.Y));
-			Controls.start			= new MultiGameButton(new GameButton(Keys.Enter), new GameButton(Buttons.Start));
-			Controls.select			= new MultiGameButton(new GameButton(Keys.RShift), new GameButton(Buttons.Back));
+			Controls.start          = CreateMultiGameButton(userSettings,
+				userSettings.Keyboard.Start, userSettings.GamePad.Start);
+			Controls.select         = CreateMultiGameButton(userSettings,
+				userSettings.Keyboard.Select, userSettings.GamePad.Select);
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Updating
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Updates the controls.</summary>
 		public static void Update() {
 			for (int i = 0; i < 4; i++) {
 				arrows[i].Update();
@@ -74,16 +78,17 @@ namespace ZeldaOracle.Game.Main {
 			select.Update();
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Accessors
 		//-----------------------------------------------------------------------------
 
-		// Gets the arrow controls
+		/// <summary>Gets the arrow controls.</summary>
 		public static InputControl GetArrowControl(int direction) {
 			return arrows[direction].Button;
 		}
 
-		// Gets the analog direction controls
+		/// <summary>Gets the analog direction controls.</summary>
 		public static bool GetAnalogDirection(int direction) {
 			switch (direction) {
 			case Directions.Right:	return analogMovement.Position.X > 0f;
@@ -96,9 +101,34 @@ namespace ZeldaOracle.Game.Main {
 
 
 		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Creates a multi game button from the user settings and specified inputs.</summary>
+		public static MultiGameButton CreateMultiGameButton(UserSettings userSettings,
+			Keys key, Buttons button)
+		{
+			GameButton[] gameButtons;
+			if (userSettings.Keyboard.Enabled && userSettings.GamePad.Enabled) {
+				gameButtons = new GameButton[] { new GameButton(key), new GameButton(button) };
+			}
+			else if (userSettings.GamePad.Enabled) {
+				gameButtons = new GameButton[] { new GameButton(button) };
+			}
+			else { // Also enable keyboard if both inputs are disabled
+				gameButtons = new GameButton[] { new GameButton(key) };
+			}
+			return new MultiGameButton(gameButtons);
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		// Movement -------------------------------------------------------------------
+
+		/// <summary>Gets the arrow buttons.</summary>
 		public static InputControl[] Arrows {
 			get {
 				InputControl[] arrows = new InputControl[4];
@@ -109,52 +139,62 @@ namespace ZeldaOracle.Game.Main {
 			}
 		}
 
-		// Gets the up button
+		/// <summary>Gets the up button.</summary>
 		public static InputControl Up {
 			get { return arrows[Directions.Up].Button; }
 		}
-		// Gets the down button
+		/// <summary>Gets the down button.</summary>
 		public static InputControl Down {
 			get { return arrows[Directions.Down].Button; }
 		}
-		// Gets the left button
+
+		/// <summary>Gets the left button.</summary>
 		public static InputControl Left {
 			get { return arrows[Directions.Left].Button; }
 		}
-		// Gets the right button
+
+		/// <summary>Gets the right button.</summary>
 		public static InputControl Right {
 			get { return arrows[Directions.Right].Button; }
 		}
-		// Gets the analog movement control
+
+		/// <summary>Gets the analog movement control.</summary>
 		public static AnalogStick AnalogMovement {
 			get { return analogMovement; }
 		}
 
-		// Gets the A button
+		// Buttons --------------------------------------------------------------------
+
+		/// <summary>Gets the A button.</summary>
 		public static InputControl A {
 			get { return a.Button; }
 		}
-		// Gets the B button
+
+		/// <summary>Gets the B button.</summary>
 		public static InputControl B {
 			get { return b.Button; }
 		}
-		// Gets the X button
+
+		/// <summary>Gets the X button.</summary>
 		public static InputControl X {
 			get { return x.Button; }
 		}
-		// Gets the Y button
+
+		/// <summary>Gets the Y button.</summary>
 		public static InputControl Y {
 			get { return y.Button; }
 		}
+		
+		// Menus ----------------------------------------------------------------------
 
-		// Gets the start button
+		/// <summary>Gets the start button.</summary>
 		public static InputControl Start {
 			get { return start.Button; }
 		}
-		// Gets the select button
+
+		/// <summary>Gets the select button.</summary>
 		public static InputControl Select {
 			get { return select.Button; }
 		}
-		
 	}
 }

@@ -63,24 +63,24 @@ namespace ZeldaOracle.Common.Input {
 				for (int j = 0; j < NumTriggers; j++)
 					triggers[i, j] = new Trigger();
 
-				buttons[i, (int)Buttons.LeftStickRight]		= sticks[i, (int)Buttons.LeftStick].Right;
-				buttons[i, (int)Buttons.LeftStickDown]		= sticks[i, (int)Buttons.LeftStick].Down;
-				buttons[i, (int)Buttons.LeftStickLeft]		= sticks[i, (int)Buttons.LeftStick].Left;
-				buttons[i, (int)Buttons.LeftStickUp]		= sticks[i, (int)Buttons.LeftStick].Up;
+				buttons[i, (int)Buttons.LeftStickRight]		= sticks[i, (int)AnalogSticks.LeftStick].Right;
+				buttons[i, (int)Buttons.LeftStickDown]		= sticks[i, (int)AnalogSticks.LeftStick].Down;
+				buttons[i, (int)Buttons.LeftStickLeft]		= sticks[i, (int)AnalogSticks.LeftStick].Left;
+				buttons[i, (int)Buttons.LeftStickUp]		= sticks[i, (int)AnalogSticks.LeftStick].Up;
 
-				buttons[i, (int)Buttons.RightStickRight]	= sticks[i, (int)Buttons.RightStick].Right;
-				buttons[i, (int)Buttons.RightStickDown]		= sticks[i, (int)Buttons.RightStick].Down;
-				buttons[i, (int)Buttons.RightStickLeft]		= sticks[i, (int)Buttons.RightStick].Left;
-				buttons[i, (int)Buttons.RightStickUp]		= sticks[i, (int)Buttons.RightStick].Up;
+				buttons[i, (int)Buttons.RightStickRight]	= sticks[i, (int)AnalogSticks.RightStick].Right;
+				buttons[i, (int)Buttons.RightStickDown]		= sticks[i, (int)AnalogSticks.RightStick].Down;
+				buttons[i, (int)Buttons.RightStickLeft]		= sticks[i, (int)AnalogSticks.RightStick].Left;
+				buttons[i, (int)Buttons.RightStickUp]		= sticks[i, (int)AnalogSticks.RightStick].Up;
 
-				buttons[i, (int)Buttons.DPadRight]			= sticks[i, (int)Buttons.DPad].Right;
-				buttons[i, (int)Buttons.DPadDown]			= sticks[i, (int)Buttons.DPad].Down;
-				buttons[i, (int)Buttons.DPadLeft]			= sticks[i, (int)Buttons.DPad].Left;
-				buttons[i, (int)Buttons.DPadUp]				= sticks[i, (int)Buttons.DPad].Up;
-				sticks[i, (int)Buttons.DPad].DirectionDeadZone	= Vector2F.Zero;
+				buttons[i, (int)Buttons.DPadRight]			= sticks[i, (int)AnalogSticks.DPad].Right;
+				buttons[i, (int)Buttons.DPadDown]			= sticks[i, (int)AnalogSticks.DPad].Down;
+				buttons[i, (int)Buttons.DPadLeft]			= sticks[i, (int)AnalogSticks.DPad].Left;
+				buttons[i, (int)Buttons.DPadUp]				= sticks[i, (int)AnalogSticks.DPad].Up;
+				sticks[i, (int)AnalogSticks.DPad].DirectionDeadZone	= Vector2F.Zero;
 
-				buttons[i, (int)Buttons.LeftTriggerButton]	= triggers[i, (int)Buttons.LeftTrigger].Button;
-				buttons[i, (int)Buttons.RightTriggerButton]	= triggers[i, (int)Buttons.RightTrigger].Button;
+				buttons[i, (int)Buttons.LeftTriggerButton]	= triggers[i, (int)Triggers.LeftTrigger].Button;
+				buttons[i, (int)Buttons.RightTriggerButton]	= triggers[i, (int)Triggers.RightTrigger].Button;
 			}
 		}
 		/// <summary>Uninitializes the keyboard listener.</summary>
@@ -127,23 +127,23 @@ namespace ZeldaOracle.Common.Input {
 					dPad.X /= GMath.Sqrt(2.0f);
 					dPad.Y /= GMath.Sqrt(2.0f);
 				}
-				sticks[i, (int)Buttons.DPad].Update(1, dPad);
+				sticks[i, (int)AnalogSticks.DPad].Update(1, dPad);
 
 				Vector2F stick = Vector2F.Zero;
 
 				stick = XnaGamePad.GetState(player).ThumbSticks.Left;
 				stick.Y *= -1;
-				sticks[i, (int)Buttons.LeftStick].Update(1, stick);
+				sticks[i, (int) AnalogSticks.LeftStick].Update(1, stick);
 
 				stick = XnaGamePad.GetState(player).ThumbSticks.Right;
 				stick.Y *= -1;
-				sticks[i, (int)Buttons.RightStick].Update(1, stick);
+				sticks[i, (int) AnalogSticks.RightStick].Update(1, stick);
 
 
 				float trigger = XnaGamePad.GetState(player).Triggers.Left;
-				triggers[i, (int)Buttons.LeftTrigger].Update(1, trigger);
+				triggers[i, (int)Triggers.LeftTrigger].Update(1, trigger);
 				trigger = XnaGamePad.GetState(player).Triggers.Right;
-				triggers[i, (int)Buttons.RightTrigger].Update(1, trigger);
+				triggers[i, (int) Triggers.RightTrigger].Update(1, trigger);
 			}
 		}
 		/// <summary>Resets all the button states.</summary>
@@ -269,7 +269,7 @@ namespace ZeldaOracle.Common.Input {
 		#region Special Control Events
 
 		/// <summary>Gets the position of the specified analog stick.</summary>
-		public static Vector2F GetStickPosition(Buttons buttonCode, int player = 0) {
+		public static Vector2F GetStickPosition(AnalogSticks buttonCode, int player = 0) {
 			return sticks[player, (int)buttonCode].Position;
 		}
 		/// <summary>Gets the position of the specified analog stick.</summary>
@@ -277,7 +277,7 @@ namespace ZeldaOracle.Common.Input {
 			return sticks[player, buttonCode].Position;
 		}
 		/// <summary>Gets the position of the specified trigger.</summary>
-		public static double GetTriggerPressure(Buttons buttonCode, int player = 0) {
+		public static double GetTriggerPressure(Triggers buttonCode, int player = 0) {
 			return triggers[player, (int)buttonCode].Pressure;
 		}
 		/// <summary>Gets the position of the specified trigger.</summary>
@@ -298,7 +298,7 @@ namespace ZeldaOracle.Common.Input {
 			return buttons[player, buttonCode];
 		}
 		/// <summary>Gets the control for the specified gamepad analog stick.</summary>
-		public static AnalogStick GetStick(Buttons buttonCode, int player = 0) {
+		public static AnalogStick GetStick(AnalogSticks buttonCode, int player = 0) {
 			return sticks[player, (int)buttonCode];
 		}
 		/// <summary>Gets the control for the specified gamepad analog stick.</summary>
@@ -306,7 +306,7 @@ namespace ZeldaOracle.Common.Input {
 			return sticks[player, buttonCode];
 		}
 		/// <summary>Gets the control for the specified gamepad trigger.</summary>
-		public static Trigger GetTrigger(Buttons buttonCode, int player = 0) {
+		public static Trigger GetTrigger(Triggers buttonCode, int player = 0) {
 			return triggers[player, (int)buttonCode];
 		}
 		/// <summary>Gets the control for the specified gamepad trigger.</summary>
