@@ -83,7 +83,7 @@ namespace ZeldaOracle.Game.Main {
 			this.launchParameters	= launchParameters;
 			this.isGamePaused       = false;
 			this.isConsoleOpen      = false;
-			this.userSettings       = new UserSettings();
+			this.userSettings       = null;
 
 			this.gameBase.Window.Title = GameName;
 
@@ -97,6 +97,7 @@ namespace ZeldaOracle.Game.Main {
 			FormatCodes.Initialize();
 			ScreenResized();
 
+			userSettings	= new UserSettings();
 			// Controls is initialized in here
 			LoadUserSettings();
 
