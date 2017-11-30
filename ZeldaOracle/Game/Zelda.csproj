@@ -131,6 +131,13 @@
     <None Include="Common\Debug\DebugMenuItem.cs" />
     <None Include="Common\Debug\RadioButtonMenuItem.cs" />
     <None Include="Common\Debug\ToggleMenuItem.cs" />
+    <Compile Include="Common\Ini\IniDocument.cs" />
+    <Compile Include="Common\Ini\IniEnums.cs" />
+    <Compile Include="Common\Ini\IniSection.cs" />
+    <Compile Include="Common\Ini\IniProperty.cs" />
+    <Compile Include="Common\Ini\IniReflectionSettings.cs" />
+    <Compile Include="Common\Input\AnalogSticks.cs" />
+    <Compile Include="Common\Input\Triggers.cs" />
     <Compile Include="Common\Scripting\EventDocumentation.cs" />
     <Compile Include="Common\Scripting\EventDocumentationCollection.cs" />
     <Compile Include="Common\Scripting\IEventObject.cs" />
@@ -418,6 +425,7 @@
     <Compile Include="Game\Items\Weapons\ItemOcarina.cs" />
     <Compile Include="Game\Control\Controls.cs" />
     <Compile Include="Game\Items\Weapons\SeedBasedItem.cs" />
+    <Compile Include="Game\UserSettings.cs" />
     <Compile Include="Game\Main\GameBase.cs" />
     <Compile Include="Game\GameData.cs" />
     <Compile Include="Game\Main\GameManager.cs" />

@@ -105,20 +105,20 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		/// <summary>Parses the point.</summary>
-		public static Point2I Parse(string text) {
+		public static Point2I Parse(string s) {
 			Point2I value = Point2I.Zero;
 
-			if (text.Length > 0) {
-				if (text[0] == '(' && text[text.Length - 1] == ')')
-					text = text.Substring(1, text.Length - 2);
+			if (s.Length > 0) {
+				if (s[0] == '(' && s[s.Length - 1] == ')')
+					s = s.Substring(1, s.Length - 2);
 
-				int commaPos = text.IndexOf(',');
+				int commaPos = s.IndexOf(',');
 				if (commaPos == -1)
-					commaPos = text.IndexOf(' ');
+					commaPos = s.IndexOf(' ');
 				if (commaPos != -1) {
 
-					string strX = text.Substring(0, commaPos).Trim();
-					string strY = text.Substring(commaPos + 1).Trim();
+					string strX = s.Substring(0, commaPos).Trim();
+					string strY = s.Substring(commaPos + 1).Trim();
 
 					try {
 						value.X = int.Parse(strX);
@@ -141,7 +141,20 @@ namespace ZeldaOracle.Common.Geometry {
 
 			return value;
 		}
-		
+
+		/// <summary>Tries to parse the point and returns whether the parsing was
+		/// successful or not.</summary>
+		public static bool TryParse(string s, out Point2I result) {
+			try {
+				result = Parse(s);
+				return true;
+			}
+			catch {
+				result = Point2I.Zero;
+				return false;
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Operators

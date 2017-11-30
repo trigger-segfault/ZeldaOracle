@@ -43,11 +43,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		// Internal
 		private Player				player;
-		private AnalogStick			analogStick;
 		private float				analogAngle;
 		private bool				allowMovementControl;	// Is the player allowed to control his movement?
 		private bool				analogMode;				// True if the analog stick is active.
-		private InputControl[]		moveButtons;			// The 4 movement controls for each direction.
 		private bool[]				moveAxes;				// Which axes the player is moving on.
 		private bool				isMoving;				// Is the player holding down a movement key?
 		private Vector2F			motion;					// The vector that's driving the player's velocity.
@@ -117,13 +115,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Controls.
 			analogMode		= false;
-			analogStick		= GamePad.GetStick(Buttons.LeftStick);
 			analogAngle		= 0.0f;
-			moveButtons		= new InputControl[4];
-			moveButtons[Directions.Up]		= Controls.Up;
-			moveButtons[Directions.Down]	= Controls.Down;
-			moveButtons[Directions.Left]	= Controls.Left;
-			moveButtons[Directions.Right]	= Controls.Right;
 
 			// Normal movement.
 			moveModeNormal = new PlayerMotionType();
@@ -251,11 +243,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private Vector2F PollMovementKeys(bool allowMovementControl) {
 			Vector2F moveVector = Vector2F.Zero;
 			isMoving	= false;
-			analogMode	= !analogStick.Position.IsZero;
+			analogMode	= !Controls.AnalogMovement.Position.IsZero;
 
 			if (analogMode) {
 				// Check analog stick.
-				analogAngle = analogStick.Position.Direction;
+				analogAngle = Controls.AnalogMovement.Position.Direction;
 				CheckAnalogStick(allowMovementControl);
 			}
 			else {
@@ -269,7 +261,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Update movement or acceleration.
 			if (allowMovementControl && (isMoving || autoAccelerate)) {
 				if (analogMode)
-					moveVector = analogStick.Position;
+					moveVector = Controls.AnalogMovement.Position;
 				else
 					moveVector = Angles.ToVector(moveAngle);
 			}
@@ -277,7 +269,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Clip Y velocity if side scrolling and not climbing.
 			if (player.RoomControl.IsSideScrolling && !isOnSideScrollLadder) {
 				if (analogMode)
-					moveVector = new Vector2F(analogStick.Position.X, 0.0f);
+					moveVector = new Vector2F(Controls.AnalogMovement.Position.X, 0.0f);
 				else
 					moveVector = new Vector2F(Angles.ToVector(moveAngle, false).X, 0.0f);
 			}
@@ -407,7 +399,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// Poll the movement key for the given direction, returning true if
 		// it is down. This also manages the strafing behavior of movement.
 		private bool CheckMoveKey(int dir, bool allowMovementControl) {
-			if (moveButtons[dir].IsDown()) {
+			if (Controls.GetArrowControl(dir).IsDown()) {
 				if (allowMovementControl)
 					isMoving = true;
 			
@@ -418,9 +410,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 					moveDirection = dir;
 					moveAngle = dir * 2;
 
-					if (moveButtons[(dir + 1) % 4].IsDown())
+					if (Controls.GetArrowControl((dir + 1) % 4).IsDown())
 						moveAngle = (moveAngle + 1) % 8;
-					if (moveButtons[(dir + 3) % 4].IsDown())
+					if (Controls.GetArrowControl((dir + 3) % 4).IsDown())
 						moveAngle = (moveAngle + 7) % 8;
 				}
 				return true;

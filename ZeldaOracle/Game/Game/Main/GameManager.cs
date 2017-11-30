@@ -58,6 +58,8 @@ namespace ZeldaOracle.Game.Main {
 		private bool			isGamePaused;
 		/// <summary>True if a console window as been allocated for this game.</summary>
 		private bool            isConsoleOpen;
+		/// <summary>The user settings for the game.</summary>
+		private UserSettings userSettings;
 
 		//-----------------------------------------------------------------------------
 		// Constants
@@ -81,6 +83,7 @@ namespace ZeldaOracle.Game.Main {
 			this.launchParameters	= launchParameters;
 			this.isGamePaused       = false;
 			this.isConsoleOpen      = false;
+			this.userSettings       = new UserSettings();
 
 			this.gameBase.Window.Title = GameName;
 
@@ -92,10 +95,10 @@ namespace ZeldaOracle.Game.Main {
 			elapsedTicks = 0;
 
 			FormatCodes.Initialize();
-			Controls.Initialize();
 			ScreenResized();
 
-			AudioSystem.MasterVolume = 0.5f;
+			// Controls is initialized in here
+			LoadUserSettings();
 
 			// Begin the game state stack with a RoomControl.
 			gameStateStack	= new GameStateStack(new StateDummy());
@@ -129,6 +132,22 @@ namespace ZeldaOracle.Game.Main {
 		/// <summary>Called to unload game manager content.</summary>
 		public void UnloadContent(ContentManager content) {
 		
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Settings
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Loads the user settings and updates any settings that
+		/// reference them.</summary>
+		public bool LoadUserSettings() {
+			bool result = userSettings.Load();
+
+			// User settings are still valid even when they fail to load.
+			Controls.LoadControls(userSettings);
+
+			return result;
 		}
 
 

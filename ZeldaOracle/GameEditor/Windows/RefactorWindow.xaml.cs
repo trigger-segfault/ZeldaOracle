@@ -77,7 +77,8 @@ namespace ZeldaEditor.Windows {
 				Application.Current.Dispatcher);
 
 			textBoxFind.Focus();
-			
+
+			buttonReplaceAll.IsEnabled = false;
 			buttonReplaceAll.Content = "Remove All";
 			labelCount.Content = "Searching...";
 			Title = "Refactor " + GetPluralName(2);
@@ -188,6 +189,7 @@ namespace ZeldaEditor.Windows {
 				"Refactor " + GetPluralName(2));
 
 			if (count > 0) {
+				editorControl.PopToOriginalAction();
 				editorControl.PropertyGrid.RefreshProperties();
 			}
 		}
@@ -202,6 +204,14 @@ namespace ZeldaEditor.Windows {
 		//-----------------------------------------------------------------------------
 
 		private bool CheckCanReplace() {
+			if (editorControl.UndoPosition > 0) {
+				var result = TriggerMessageBox.Show(this, MessageIcon.Warning, "Refactoring " +
+					"is not supported as an undo action. If you continue with refactoring, " +
+					"all previous undo actions will be purged. Are you sure you want to continue?",
+					"Continue Refactor", MessageBoxButton.YesNo);
+				if (result == MessageBoxResult.No)
+					return false;
+			}
 			if (!editorControl.IsWorldOpen) {
 				TriggerMessageBox.Show(this, MessageIcon.Warning, "Cannot refactor without an open world!", "Can't Refactor");
 				return false;
