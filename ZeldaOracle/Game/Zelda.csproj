@@ -265,6 +265,7 @@
     <Compile Include="Game\Entities\Monsters\BasicMonster - Copy.cs" />
     <Compile Include="Game\Entities\Monsters\BasicMonster.cs" />
     <Compile Include="Game\Entities\Monsters\JumpMonsters\MonsterZolGreen.cs" />
+    <Compile Include="Game\Entities\Monsters\MonsterBuzzBlob.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterBeetle.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterThwomp.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterBladeTrap.cs" />
@@ -283,6 +284,7 @@
     <Compile Include="Game\Entities\Monsters\States\MonsterNormalState.cs" />
     <Compile Include="Game\Entities\Monsters\States\MonsterGaleState.cs" />
     <Compile Include="Game\Entities\Monsters\States\MonsterBusyState.cs" />
+    <Compile Include="Game\Entities\Monsters\States\MonsterElectrocuteState.cs" />
     <Compile Include="Game\Entities\Monsters\States\MonsterStunState.cs" />
     <Compile Include="Game\Entities\Monsters\States\MonsterBurnState.cs" />
     <Compile Include="Game\Entities\Monsters\States\MonsterState.cs" />

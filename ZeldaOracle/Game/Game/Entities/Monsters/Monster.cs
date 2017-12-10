@@ -436,5 +436,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public bool IsStunned {
 			get { return (state is MonsterStunState); }
 		}
+		
+		public MonsterState CurrentState {
+			get { return state; }
+		}
+
 	}
 }

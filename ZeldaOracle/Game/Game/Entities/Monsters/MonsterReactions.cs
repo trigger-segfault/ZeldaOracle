@@ -274,6 +274,20 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				monster.RoomControl.SpawnEntity(effect, effectPos);
 				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 			}
+
+			// Damage the monster for 1 damage.
+			public static void Electrocute(Monster monster, Entity sender, EventArgs args) {
+				// TODO: electrocute
+				Console.WriteLine("ELECTROCUTE");
+
+				MonsterBuzzBlob buzzBlob = monster as MonsterBuzzBlob;
+
+				buzzBlob.OnElectrocute();
+
+				// Buzzblob animates for 60 frames
+				// Player is frozen for 45 frames (screen effect cuts off at same point)
+
+			}
 			
 
 			//-----------------------------------------------------------------------------
