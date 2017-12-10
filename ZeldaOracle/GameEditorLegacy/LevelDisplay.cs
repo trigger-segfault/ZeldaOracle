@@ -28,8 +28,6 @@ namespace ZeldaEditor {
 		private static ContentManager content;
 		private static Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch;
 
-		private Microsoft.Xna.Framework.Graphics.RenderTarget2D levelRenderTarget;
-
 		private EditorForm		editorForm;
 		private EditorControl	editorControl;
 		private Point2I			highlightedRoom;
@@ -536,7 +534,7 @@ namespace ZeldaEditor {
 			}*/
 
 			// Draw rewards.
-			if (editorControl.ShowRewards && tile.Properties.Exists("reward") &&
+			if (editorControl.ShowRewards && tile.Properties.Contains("reward") &&
 				editorControl.RewardManager.HasReward(tile.Properties.GetString("reward")))
 			{
 				Animation anim = editorControl.RewardManager.GetReward(tile.Properties.GetString("reward")).Animation;

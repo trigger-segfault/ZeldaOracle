@@ -26,14 +26,14 @@ using Buttons		= ZeldaOracle.Common.Input.Buttons;
 using Keys			= ZeldaOracle.Common.Input.Keys;
 
 namespace ZeldaOracle.Common.Debug {
-	/**<summary>The different modes of controlling the debug menu.</summary>*/
+	/// <summary>The different modes of controlling the debug menu.</summary>
 	internal enum MenuControlMode {
 		Keyboard,
 		Mouse,
 		GamePad
 	}
 
-	/**<summary>The container for all debug menus and menu items.</summary>*/
+	/// <summary>The container for all debug menus and menu items.</summary>
 	public class DebugMenu {
 
 		//========== CONSTANTS ===========
@@ -51,34 +51,34 @@ namespace ZeldaOracle.Common.Debug {
 		//=========== MEMBERS ============
 		#region Members
 
-		/**<summary>The root debug menu.</summary>*/
+		/// <summary>The root debug menu.</summary>
 		private DebugMenuItem menu;
-		/**<summary>The path to the current menu item.</summary>*/
+		/// <summary>The path to the current menu item.</summary>
 		private List<int> currentPath;
-		/**<summary>The currently selected menu item.</summary>*/
+		/// <summary>The currently selected menu item.</summary>
 		private DebugMenuItem currentItem;
-		/**<summary>The current menu item being hovered over by the mouse.</summary>*/
+		/// <summary>The current menu item being hovered over by the mouse.</summary>
 		private DebugMenuItem mouseHoverItem;
-		/**<summary>True if the mouse is hovering over an item.</summary>*/
+		/// <summary>True if the mouse is hovering over an item.</summary>
 		private bool mouseHover;
-		/**<summary>The current menu control mode.</summary>*/
+		/// <summary>The current menu control mode.</summary>
 		private MenuControlMode controlMode;
 
-		/**<summary>True if the menu is open.</summary>*/
+		/// <summary>True if the menu is open.</summary>
 		private bool open;
 
-		/**<summary>The font used for the menu text.</summary>*/
+		/// <summary>The font used for the menu text.</summary>
 		internal RealFont debugMenuFont;
-		/**<summary>The bold font used for the menu text.</summary>*/
+		/// <summary>The bold font used for the menu text.</summary>
 		internal RealFont debugMenuFontBold;
-		/**<summary>The sprite sheet used for the menu items.</summary>*/
+		/// <summary>The sprite sheet used for the menu items.</summary>
 		//internal SpriteAtlas debugMenuSprites;
 
 		#endregion
 		//========= CONSTRUCTORS =========
 		#region Constructors
 
-		/**<summary>Constructs the main debug menu.</summary>*/
+		/// <summary>Constructs the main debug menu.</summary>
 		public DebugMenu() {
 			this.menu				= new DebugMenuItem("root");
 
@@ -110,19 +110,19 @@ namespace ZeldaOracle.Common.Debug {
 		//========== PROPERTIES ==========
 		#region Properties
 
-		/**<summary>Gets the root debug menu.</summary>*/
+		/// <summary>Gets the root debug menu.</summary>
 		public DebugMenuItem Root {
 			get { return menu; }
 		}
-		/**<summary>Gets the current menu.</summary>*/
+		/// <summary>Gets the current menu.</summary>
 		public DebugMenuItem CurrentMenu {
 			get { return currentItem.Root; }
 		}
-		/**<summary>Gets the current menu item.</summary>*/
+		/// <summary>Gets the current menu item.</summary>
 		public DebugMenuItem CurrentItem {
 			get { return currentItem; }
 		}
-		/**<summary>Returns true if the menu is open.</summary>*/
+		/// <summary>Returns true if the menu is open.</summary>
 		public bool IsOpen {
 			get { return open; }
 		}
@@ -131,7 +131,7 @@ namespace ZeldaOracle.Common.Debug {
 		//=========== UPDATING ===========
 		#region Updating
 
-		/**<summary>Updates the debug menu while it's open.</summary>*/
+		/// <summary>Updates the debug menu while it's open.</summary>
 		public void Update() {
 
 			if (Mouse.IsMouseMoved()) {
@@ -176,7 +176,7 @@ namespace ZeldaOracle.Common.Debug {
 				UpdateGamePadControls();
 			}
 		}
-		/**<summary>Updates the debug menu with mouse controls.</summary>*/
+		/// <summary>Updates the debug menu with mouse controls.</summary>
 		private void UpdateMouseControls() {
 			// Open submenus when highlighted.
 			if (mouseHoverItem != CurrentMenu && mouseHoverItem != null) {
@@ -206,7 +206,7 @@ namespace ZeldaOracle.Common.Debug {
 				}
 			}
 		}
-		/**<summary>Updates the debug menu with keyboard controls.</summary>*/
+		/// <summary>Updates the debug menu with keyboard controls.</summary>
 		private void UpdateKeyboardControls() {
 			Keys keyNextItem = Keys.Down;
 			Keys keyPrevItem = Keys.Up;
@@ -268,7 +268,7 @@ namespace ZeldaOracle.Common.Debug {
 					StepIntoSubMenu();
 			}
 		}
-		/**<summary>Updates the debug menu with gamepad controls.</summary>*/
+		/// <summary>Updates the debug menu with gamepad controls.</summary>
 		private void UpdateGamePadControls() {
 			/*Keys keyNextItem = Keys.Down;
 			Keys keyPrevItem = Keys.Up;
@@ -353,11 +353,11 @@ namespace ZeldaOracle.Common.Debug {
 		//============ MENUS =============
 		#region Menus
 	
-		/**<summary>Checks for pressed hotkeys.</summary>*/
+		/// <summary>Checks for pressed hotkeys.</summary>
 		public void CheckHotkeys() {
 			CheckHotkeys(menu);
 		}
-		/**<summary>Checks for pressed hotkeys.</summary>*/
+		/// <summary>Checks for pressed hotkeys.</summary>
 		public void CheckHotkeys(DebugMenuItem item) {
 			for (int i = 0; i < item.Items.Count; ++i) {
 				if (item.Items[i].HotKey.Pressed())
@@ -365,34 +365,34 @@ namespace ZeldaOracle.Common.Debug {
 				CheckHotkeys(item.Items[i]);
 			}
 		}
-		/**<summary>Selects the next menu item.</summary>*/
+		/// <summary>Selects the next menu item.</summary>
 		private void SelectNextItem() {
 			int n = currentItem.Root.Items.Count;
 
 			currentPath[currentPath.Count - 1] = (currentPath[currentPath.Count - 1] + 1) % n;
 			currentItem = CurrentMenu.Items[currentPath[currentPath.Count - 1]];
 		}
-		/**<summary>Selects the previous menu item.</summary>*/
+		/// <summary>Selects the previous menu item.</summary>
 		private void SelectPreviousItem() {
 			int n = currentItem.Root.Items.Count;
 			currentPath[currentPath.Count - 1] = (currentPath[currentPath.Count - 1] + n - 1) % n;
 			currentItem = CurrentMenu.Items[currentPath[currentPath.Count - 1]];
 		}
-		/**<summary>Steps into the sub menu of the menu item.</summary>*/
+		/// <summary>Steps into the sub menu of the menu item.</summary>
 		private void StepIntoSubMenu() {
 			if (currentItem.Items.Count > 0) {
 				currentItem = currentItem.Items[0];
 				currentPath.Add(0);
 			}
 		}
-		/**<summary>Steps out of the sub menu of the menu item.</summary>*/
+		/// <summary>Steps out of the sub menu of the menu item.</summary>
 		private void StepOutOfSubMenu() {
 			if (CurrentMenu.Root != null) {
 				currentItem = CurrentMenu;
 				currentPath.RemoveAt(currentPath.Count - 1);
 			}
 		}
-		/**<summary>Reconstructs the menu item path.</summary>*/
+		/// <summary>Reconstructs the menu item path.</summary>
 		private void ReconstructPath(DebugMenuItem item) {
 			DebugMenuItem menu = item.Root;
 			if (menu == null)
@@ -412,7 +412,7 @@ namespace ZeldaOracle.Common.Debug {
 		//=========== DRAWING ============
 		#region Drawing
 
-		/**<summary>Draws the debug menus.</summary>*/
+		/// <summary>Draws the debug menus.</summary>
 		public void Draw(Graphics2D g) {
 			mouseHover = false;
 
@@ -422,7 +422,7 @@ namespace ZeldaOracle.Common.Debug {
 				mouseHoverItem = null;
 			}
 		}
-		/**<summary>Draws the debug menu.</summary>*/
+		/// <summary>Draws the debug menu.</summary>
 		private void DrawMenu(Graphics2D g, DebugMenuItem item, int pathIndex, Point2I position) {
 
 			if (pathIndex >= currentPath.Count)

@@ -96,7 +96,7 @@ namespace ZeldaOracle.Game.Worlds {
 			int highestFloorNumber = int.MinValue;
 			bool foundAny = false;
 
-			foreach (Level level in world.Levels) {
+			foreach (Level level in world.GetLevels()) {
 				if (level.DungeonID == ID) {
 					foundAny = true;
 					if (level.DungeonFloor < lowestFloorNumber)
@@ -114,7 +114,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 			for (int i = 0; i < floorNumberCount; i++)
 				floors[i] = new DungeonFloor(null, lowestFloorNumber + i);
-			foreach (Level level in world.Levels) {
+			foreach (Level level in world.GetLevels()) {
 				if (level.DungeonID == ID)
 					floors[level.DungeonFloor - lowestFloorNumber] = new DungeonFloor(level, level.DungeonFloor);
 			}
@@ -173,7 +173,7 @@ namespace ZeldaOracle.Game.Worlds {
 		public int LowestFloorNumber {
 			get {
 				int lowest = Int32.MaxValue;
-				foreach (Level level in world.Levels) {
+				foreach (Level level in world.GetLevels()) {
 					if (level.DungeonID == ID && level.DungeonFloor < lowest)
 						lowest = level.DungeonFloor;
 				}
@@ -184,7 +184,7 @@ namespace ZeldaOracle.Game.Worlds {
 		public int HighestFloorNumber {
 			get {
 				int highest = Int32.MinValue;
-				foreach (Level level in world.Levels) {
+				foreach (Level level in world.GetLevels()) {
 					if (level.DungeonID == ID && level.DungeonFloor > highest)
 						highest = level.DungeonFloor;
 				}

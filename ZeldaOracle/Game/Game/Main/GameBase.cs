@@ -32,42 +32,42 @@ using Buttons		= ZeldaOracle.Common.Input.Buttons;
 using MouseButtons	= ZeldaOracle.Common.Input.MouseButtons;
 
 namespace ZeldaOracle.Game.Main {
-	/**<summary>The class that manages the XNA aspects of the game.</summary>*/
+	/// <summary>The class that manages the XNA aspects of the game.</summary>
 	public class GameBase : XnaGame {
 
 		// Graphics:
-		/**<summary>The graphics manager.</summary>*/
+		/// <summary>The graphics manager.</summary>
 		private GraphicsDeviceManager graphics;
-		/**<summary>The sprite batch to draw to.</summary>*/
+		/// <summary>The sprite batch to draw to.</summary>
 		private SpriteBatch spriteBatch;
-		/**<summary>True if the game is in fullscreen mode.</summary>*/
+		/// <summary>True if the game is in fullscreen mode.</summary>
 		private bool fullScreen;
-		/**<summary>The current size of the non-fullscreen window.</summary>*/
+		/// <summary>The current size of the non-fullscreen window.</summary>
 		private Point2I windowSize;
-		/**<summary>True if the window size has been changed.</summary>*/
+		/// <summary>True if the window size has been changed.</summary>
 		private bool windowSizeChanged;
 
 		// Game:
-		/**<summary>The instance of the game manager class.</summary>*/
+		/// <summary>The instance of the game manager class.</summary>
 		private GameManager game;
-		/**<summary>True if a screenshot was requested.</summary>*/
+		/// <summary>True if a screenshot was requested.</summary>
 		private bool screenShotRequested;
-		/**<summary>The name of the requested screenshot.</summary>*/
+		/// <summary>The name of the requested screenshot.</summary>
 		private string screenShotName;
 
 		private int slowTimer;
 
 		// Frame Rate:
-		/**<summary>The total number of frames passed since the last frame rate check.</summary>*/
+		/// <summary>The total number of frames passed since the last frame rate check.</summary>
 		private int totalFrames;
-		/**<summary>The amount of time passed since the last frame rate check.</summary>*/
+		/// <summary>The amount of time passed since the last frame rate check.</summary>
 		private double elapsedTime;
-		/**<summary>The current frame rate of the game.</summary>*/
+		/// <summary>The current frame rate of the game.</summary>
 		private double fps;
 
 		private bool isContentLoaded;
 
-		/**<summary>The launch parameters for the game.</summary>*/
+		/// <summary>The launch parameters for the game.</summary>
 		private string[] launchParameters;
 
 
@@ -75,7 +75,7 @@ namespace ZeldaOracle.Game.Main {
 		// Initialization
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Constructs the game base class.</summary>*/
+		/// <summary>Constructs the game base class.</summary>
 		public GameBase(string[] launchParameters) {
 			// Graphics
 			this.graphics				= new GraphicsDeviceManager(this);
@@ -105,7 +105,8 @@ namespace ZeldaOracle.Game.Main {
 			this.graphics.PreferredBackBufferHeight	= windowSize.Y;
 			
 			Form.Icon = new Icon("Game.ico");
-			Form.MinimumSize = new System.Drawing.Size(32, 32);
+			Form.MinimumSize = new Size(32, 32);
+			Form.Shown += OnWindowShown;
 		}
 
 		/// <summary>
@@ -115,14 +116,14 @@ namespace ZeldaOracle.Game.Main {
 		/// and initialize them as well.
 		/// </summary>
 		protected override void Initialize() {
+			game = new GameManager(launchParameters, this);
+
 			Console.WriteLine("Begin Initialize");
 
 			Console.WriteLine("Initializing Input");
 			Keyboard.Initialize();
 			Mouse.Initialize();
 			GamePad.Initialize();
-
-			game = new GameManager(launchParameters);
 			
 			base.Initialize();
 
@@ -133,7 +134,7 @@ namespace ZeldaOracle.Game.Main {
 			}
 
 			// Create and initialize the game.
-			game.Initialize(this);
+			game.Initialize();
 
 			Window.ClientSizeChanged += OnClientSizeChanged;
 
@@ -161,7 +162,7 @@ namespace ZeldaOracle.Game.Main {
 				AudioSystem.Initialize();
 				Resources.Initialize(Content, GraphicsDevice);
 
-				game.LoadContent(Content, this);
+				game.LoadContent(Content);
 
 				base.LoadContent();
 
@@ -179,7 +180,7 @@ namespace ZeldaOracle.Game.Main {
 		/// all content.
 		/// </summary>
 		protected override void UnloadContent() {
-			System.Console.WriteLine("Begin Unload Content");
+			Console.WriteLine("Begin Unload Content");
 
 			AudioSystem.Uninitialize();
 			//Resources.Uninitialize();
@@ -188,15 +189,21 @@ namespace ZeldaOracle.Game.Main {
 
 			base.UnloadContent();
 
-			System.Console.WriteLine("End Unload Content");
+			Console.WriteLine("End Unload Content");
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Events
 		//-----------------------------------------------------------------------------
+		
+		/// <summary>Called when the window is shown for the first time.
+		/// This event is primarily used to steal focus from the debug console on startup.</summary>
+		private void OnWindowShown(object sender, EventArgs e) {
+			Form.Activate();
+		}
 
-		/**<summary>Called when the window has been manually resized.</summary>*/
+		/// <summary>Called when the window has been manually resized.</summary>
 		private void OnClientSizeChanged(object sender, EventArgs e) {
 			Console.WriteLine("OnClientSizeChanged");
 			windowSizeChanged = true;
@@ -215,7 +222,7 @@ namespace ZeldaOracle.Game.Main {
 		//-----------------------------------------------------------------------------
 		// Updating
 		//-----------------------------------------------------------------------------
-		
+
 		/// <summary>
 		/// Allows the game to run logic such as updating the world,
 		/// checking for collisions, gathering input, and playing audio.
@@ -282,7 +289,7 @@ namespace ZeldaOracle.Game.Main {
 			//windowSizeChanged = false;
 		}
 
-		/**<summary>Called every step to update the frame rate.</summary>*/
+		/// <summary>Called every step to update the frame rate.</summary>
 		protected void UpdateFrameRate(GameTime gameTime) {
 
 			// FPS Counter from:
@@ -295,7 +302,7 @@ namespace ZeldaOracle.Game.Main {
 			}
 		}
 
-		/**<summary>Called every step to update the fullscreen toggle.</summary>*/
+		/// <summary>Called every step to update the fullscreen toggle.</summary>
 		protected void UpdateFullScreen() {
 
 			#if WINDOWS
@@ -333,7 +340,7 @@ namespace ZeldaOracle.Game.Main {
 			#endif
 		}
 
-		/**<summary>Called every step to update the screenshot requests.</summary>*/
+		/// <summary>Called every step to update the screenshot requests.</summary>
 		protected void UpdateScreenShot() {
 			if (screenShotRequested) {
 				screenShotRequested = false;
@@ -346,7 +353,7 @@ namespace ZeldaOracle.Game.Main {
 		// Drawing
 		//-----------------------------------------------------------------------------
 
-		/**<summary>This is called when the game should draw itself.</summary>*/
+		/// <summary>This is called when the game should draw itself.</summary>
 		protected override void Draw(GameTime gameTime) {
 			GraphicsDevice.Clear(Color.Black);
 
@@ -359,7 +366,7 @@ namespace ZeldaOracle.Game.Main {
 			base.Draw(gameTime);
 		}
 
-		/**<summary>Called every step to update the frame rate during the draw step.</summary>*/
+		/// <summary>Called every step to update the frame rate during the draw step.</summary>
 		protected void DrawUpdatedFrameRate(GameTime gameTime) {
 			totalFrames++;
 		}
@@ -369,13 +376,13 @@ namespace ZeldaOracle.Game.Main {
 		// Management
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Requests a screen shot to be taken at the end of the step.</summary>*/
+		/// <summary>Requests a screen shot to be taken at the end of the step.</summary>
 		public void TakeScreenShot(string fileName = "") {
 			screenShotRequested = true;
 			screenShotName		= fileName;
 		}
 
-		/**<summary>Takes a screenshot of the game and saves it as a png.</summary>*/
+		/// <summary>Takes a screenshot of the game and saves it as a png.</summary>
 		private void SaveScreenShot() {
 			// Screenshot function taken from http://clifton.me/screenshot-xna-csharp/
 			#if WINDOWS
@@ -430,7 +437,7 @@ namespace ZeldaOracle.Game.Main {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		/**<summary>Returns true if the game is running on Windows.</summary>*/
+		/// <summary>Returns true if the game is running on Windows.</summary>
 		public bool IsWindows {
 			get {
 				#if WINDOWS
@@ -441,7 +448,7 @@ namespace ZeldaOracle.Game.Main {
 			}
 		}
 
-		/**<summary>Returns true if the game is running on the Xbox 360.</summary>*/
+		/// <summary>Returns true if the game is running on the Xbox 360.</summary>
 		public bool IsXbox {
 			get {
 				#if XBOX
@@ -452,12 +459,12 @@ namespace ZeldaOracle.Game.Main {
 			}
 		}
 
-		/**<summary>The current frame rate of the game.</summary>*/
+		/// <summary>The current frame rate of the game.</summary>
 		public double FPS {
 			get { return fps; }
 		}
 
-		/**<summary>Gets or sets if the game should be in fullscreen.</summary>*/
+		/// <summary>Gets or sets if the game should be in fullscreen.</summary>
 		public bool IsFullScreen {
 			get { return fullScreen; }
 			set {
@@ -468,7 +475,7 @@ namespace ZeldaOracle.Game.Main {
 		}
 
 		#if WINDOWS
-		/**<summary>Gets the Windows form of the XNA game.</summary>*/
+		/// <summary>Gets the Windows form of the XNA game.</summary>
 		public Form Form {
 			get {
 				#if WINDOWS

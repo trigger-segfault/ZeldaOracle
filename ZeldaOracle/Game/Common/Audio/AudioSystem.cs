@@ -12,15 +12,15 @@ using ZeldaOracle.Common.Content;
 using Song = ZeldaOracle.Common.Audio.Song;
 
 namespace ZeldaOracle.Common.Audio {
-	/**<summary>A static class for game-related audio functions and management.</summary>*/
+	/// <summary>A static class for game-related audio functions and management.</summary>
 	public static class AudioSystem {
 
 		//-----------------------------------------------------------------------------
 		// Constants
 		//-----------------------------------------------------------------------------
 
-		// The maximum number of sounds that can play simultaneously.
-		public const int MaxNumSounds	= 600;
+		/// <summary>The maximum number of sounds that can play simultaneously.</summary>
+		public const int MaxSoundInstances = 200;
 
 
 		//-----------------------------------------------------------------------------
@@ -28,43 +28,43 @@ namespace ZeldaOracle.Common.Audio {
 		//-----------------------------------------------------------------------------
 
 		// Containment
-		// The current song playing.
+		/// <summary>The current song playing.</summary>
 		private static Song currentSong;
 
 		// Playback
-		// The master volume of the game.
+		/// <summary>The master volume of the game.</summary>
 		private static float masterVolume;
-		// The master pitch of the game.
+		/// <summary>The master pitch of the game.</summary>
 		private static float masterPitch;
-		// The master pan of the game.
+		/// <summary>The master pan of the game.</summary>
 		private static float masterPan;
-		// True if the game is muted.
+		/// <summary>True if the game is muted.</summary>
 		private static bool masterMuted;
 
-		// The volume of the game sounds.
+		/// <summary>The volume of the game sounds.</summary>
 		private static float soundVolume;
-		// The pitch of the game sounds.
+		/// <summary>The pitch of the game sounds.</summary>
 		private static float soundPitch;
-		// The pan of the game sounds.
+		/// <summary>The pan of the game sounds.</summary>
 		private static float soundPan;
-		// True if the game sounds are muted.
+		/// <summary>True if the game sounds are muted.</summary>
 		private static bool soundMuted;
 
-		// The volume of the game music.
+		/// <summary>The volume of the game music.</summary>
 		private static float musicVolume;
-		// The pitch of the game music.
+		/// <summary>The pitch of the game music.</summary>
 		private static float musicPitch;
-		// The pan of the game music.
+		/// <summary>The pan of the game music.</summary>
 		private static float musicPan;
-		// True if the game music is muted.
+		/// <summary>True if the game music is muted.</summary>
 		private static bool musicMuted;
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Initialization / Uninitialization
 		//-----------------------------------------------------------------------------
 
-		// Initializes the audio manager.
+		/// <summary>Initializes the audio manager.</summary>
 		public static void Initialize() {
 			// Containment
 			currentSong			= null;
@@ -86,7 +86,7 @@ namespace ZeldaOracle.Common.Audio {
 			musicMuted			= false;
 		}
 
-		// Uninitializes the audio manager.
+		/// <summary>Uninitializes the audio manager.</summary>
 		public static void Uninitialize() {
 			//sounds.Stop();
 
@@ -94,14 +94,14 @@ namespace ZeldaOracle.Common.Audio {
 			currentSong		= null;
 		}
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		// Settings
+		// Settings -------------------------------------------------------------------
 
-		// Gets or sets the master volume of the game between 0 and 1.
+		/// <summary>Gets or sets the master volume of the game between 0 and 1.</summary>
 		public static float MasterVolume {
 			get { return masterVolume; }
 			set {
@@ -112,7 +112,7 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		// Gets or sets the master pitch of the game between -1 and 1.
+		/// <summary>Gets or sets the master pitch of the game between -1 and 1.</summary>
 		public static float MasterPitch {
 			get { return masterPitch; }
 			set {
@@ -122,7 +122,7 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		// Gets or sets the master pan of the game between -1 and 1.
+		/// <summary>Gets or sets the master pan of the game between -1 and 1.</summary>
 		public static float MasterPan {
 			get { return masterPan; }
 			set {
@@ -132,7 +132,7 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		// Gets or sets if the game is muted.
+		/// <summary>Gets or sets if the game is muted.
 		public static bool IsMasterMuted {
 			get { return masterMuted; }
 			set {
@@ -142,7 +142,7 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		// Gets or sets the default volume of the sound between 0 and 1.
+		/// <summary>Gets or sets the default volume of the sound between 0 and 1.</summary>
 		public static float SoundVolume {
 			get { return soundVolume; }
 			set {
@@ -152,7 +152,7 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		// Gets or sets the default pitch of the sound between -1 and 1.
+		/// <summary>Gets or sets the default pitch of the sound between -1 and 1.</summary>
 		public static float SoundPitch {
 			get { return soundPitch; }
 			set {
@@ -162,7 +162,7 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		// Gets or sets the default pan of the sound between -1 and 1.
+		/// <summary>Gets or sets the default pan of the sound between -1 and 1.</summary>
 		public static float SoundPan {
 			get { return soundPan; }
 			set {
@@ -172,7 +172,7 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		// Gets or sets if the default sound will be muted.
+		/// <summary>Gets or sets if the default sound will be muted.</summary>
 		public static bool IsSoundMuted {
 			get { return soundMuted; }
 			set {
@@ -181,7 +181,7 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		// Gets or sets the default volume of the sound between 0 and 1.
+		/// <summary>Gets or sets the default volume of the sound between 0 and 1.</summary>
 		public static float MusicVolume {
 			get { return musicVolume; }
 			set {
@@ -190,7 +190,7 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		// Gets or sets the default pitch of the sound between -1 and 1.
+		/// <summary>Gets or sets the default pitch of the sound between -1 and 1.</summary>
 		public static float MusicPitch {
 			get { return musicPitch; }
 			set {
@@ -199,7 +199,7 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		// Gets or sets the default pan of the sound between -1 and 1.
+		/// <summary>Gets or sets the default pan of the sound between -1 and 1.</summary>
 		public static float MusicPan {
 			get { return musicPan; }
 			set {
@@ -208,7 +208,7 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		// Gets or sets if the default sound will be muted.
+		/// <summary>Gets or sets if the default sound will be muted.</summary>
 		public static bool IsMusicMuted {
 			get { return musicMuted; }
 			set {
@@ -217,14 +217,14 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 		
-		// Playback
+		// Playback -------------------------------------------------------------------
 
-		// Gets the current song playing.
+		/// <summary>Gets the current song playing.</summary>
 		public static Song CurrentSong {
 			get { return currentSong; }
 		}
 
-		// Returns true if the music in the game is playing.
+		/// <summary>Returns true if the music in the game is playing.</summary>
 		public static bool IsMusicPlaying {
 			get {
 				if (currentSong != null)
@@ -233,7 +233,7 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		// Returns true if the music in the game is paused.
+		/// <summary>Returns true if the music in the game is paused.</summary>
 		public static bool IsMusicPaused {
 			get {
 				if (currentSong != null)
@@ -242,7 +242,7 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		// Returns true if the music in the game is stopped.
+		/// <summary>Returns true if the music in the game is stopped.</summary>
 		public static bool IsMusicStopped {
 			get {
 				if (currentSong != null)
@@ -251,12 +251,12 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Updating
 		//-----------------------------------------------------------------------------
 
-		// Called every step to update the audio manager.
+		/// <summary>Called every step to update the audio manager.</summary>
 		public static void Update(GameTime gameTime) {
 			if (currentSong != null)
 				currentSong.UpdateSoundInstance();
@@ -266,12 +266,12 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Playback
 		//-----------------------------------------------------------------------------
 
-		// Plays the specified song.
+		/// <summary>Plays the specified song.</summary>
 		public static void PlaySong(Song song, bool looped = true) {
 			if (currentSong != null)
 				currentSong.Stop();
@@ -280,7 +280,7 @@ namespace ZeldaOracle.Common.Audio {
 			song.Play(looped);
 		}
 
-		// Plays the specified song.
+		/// <summary>Plays the specified song.</summary>
 		public static void PlaySong(Song song, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f) {
 			if (currentSong != null)
 				currentSong.Stop();
@@ -289,76 +289,77 @@ namespace ZeldaOracle.Common.Audio {
 			song.Play(looped, volume, pitch, pan);
 		}
 
-		// Plays the song with the specified name.
+		/// <summary>Plays the song with the specified name.</summary>
 		public static void PlaySong(string name, bool looped = true) {
 			PlaySong(Resources.GetSong(name), looped);
 		}
 
-		// Plays the song with the specified name.
+		/// <summary>Plays the song with the specified name.</summary>
 		public static void PlaySong(string name, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f) {
 			PlaySong(Resources.GetSong(name), looped, volume, pitch, pan);
 		}
 
-		// Plays the specified sound effect.
+		/// <summary>Plays the specified sound effect.</summary>
 		public static SoundInstance PlaySound(Sound sound, bool looped = false) {
 			return sound.Play(looped);
 		}
 
-		// Plays the specified sound effect.
+		/// <summary>Plays the specified sound effect.</summary>
 		public static SoundInstance PlaySound(Sound sound, bool looped, float volume = 1.0f, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
 			return sound.Play(looped, volume, pitch, pan, muted);
 		}
 
-		// Plays the sound effect with the specified name.
+		/// <summary>Plays the sound effect with the specified name.</summary>
 		public static SoundInstance PlaySound(string name, bool looped = false) {
 			return PlaySound(Resources.GetSound(name), looped);
 		}
 
-		// Plays the sound effect with the specified name.
+		/// <summary>Plays the sound effect with the specified name.</summary>
 		public static SoundInstance PlaySound(string name, bool looped, float volume = 1.0f, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
 			return PlaySound(Resources.GetSound(name), looped, volume, pitch, pan, muted);
 		}
 
-		// Plays the specified sound effect.
+		/// <summary>Plays the specified sound effect.</summary>
 		public static SoundInstance PlayRandomSound(params Sound[] soundList) {
 			return PlaySound(soundList[GRandom.NextInt(soundList.Length)]);
 		}
 
-		// Plays the specified sound effect.
+		/// <summary>Plays the specified sound effect.</summary>
 		public static SoundInstance PlayRandomSound(params string[] soundList) {
 			return PlaySound(soundList[GRandom.NextInt(soundList.Length)]);
 		}
 
+		/// <summary></summary>
 		public static void LoopSoundWhileActive(Sound sound) {
 			sound.LoopWhileActive();
 		}
 
-		// Stops the specified sound effect.
+		/// <summary>Stops the specified sound effect.</summary>
 		public static void StopSound(Sound sound) {
 			sound.Stop();
 		}
 
-		// Stops the sound effect with the specified name.
+		/// <summary>Stops the sound effect with the specified name.</summary>
 		public static void StopSound(string name) {
 			StopSound(Resources.GetSound(name));
 		}
 
-		// Returns true if the song with the specified name is playing.
+		/// <summary>Returns true if the song with the specified name is playing.</summary>
 		public static bool IsSongPlaying(Song song) {
 			return song.IsPlaying;
 		}
 
-		// Returns true if the song with the specified name is playing.
+		/// <summary>Returns true if the song with the specified name is playing.</summary>
 		public static bool IsSongPlaying(string name) {
 			return IsSongPlaying(Resources.GetSong(name));
 		}
 
-		// Returns true if the sound with the specified name is playing.
+		/// <summary>Returns true if the sound with the specified name is playing.</summary>
 		public static bool IsSoundPlaying(Sound sound) {
 			return sound.IsPlaying;
 		}
 
-		// Returns true if the sound with the specified name is playing.
+		/// <summary>Returns true if the sound with the specified name is playing.</summary>
 		public static bool IsSoundPlaying(string name) {
 			return IsSoundPlaying(Resources.GetSound(name));
 		}
@@ -367,58 +368,58 @@ namespace ZeldaOracle.Common.Audio {
 		// Sound Playback
 		//-----------------------------------------------------------------------------
 
-		// Updates the sounds.
+		/// <summary>Updates the sounds.</summary>
 		internal static void UpdateSounds() {
 			foreach (KeyValuePair<string, Sound> entry in Resources.Sounds) {
 				entry.Value.UpdateSoundInstances();
 			}
 		}
 
-		// Stops every sound in the group.
+		/// <summary>Stops every sound in the group.</summary>
 		public static void StopAllSounds() {
 			foreach (KeyValuePair<string, Sound> entry in Resources.Sounds) {
 				entry.Value.Stop();
 			}
 		}
 
-		// Pauses every sound in the group.
+		/// <summary>Pauses every sound in the group.</summary>
 		public static void PauseAllSounds() {
 			foreach (KeyValuePair<string, Sound> entry in Resources.Sounds) {
 				entry.Value.Pause();
 			}
 		}
 
-		// Resumes every sound in the group.
+		/// <summary>Resumes every sound in the group.</summary>
 		public static void ResumeAllSounds() {
 			foreach (KeyValuePair<string, Sound> entry in Resources.Sounds) {
 				entry.Value.Resume();
 			}
 		}
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Music Playback
 		//-----------------------------------------------------------------------------
 
-		// Updates the music.
+		/// <summary>Updates the music.</summary>
 		internal static void UpdateMusic() {
 			if (currentSong != null)
 				currentSong.UpdateSoundInstance();
 		}
 
-		// Pauses the current playing song.
+		/// <summary>Pauses the current playing song.</summary>
 		public static void PauseMusic() {
 			if (currentSong != null)
 				currentSong.Pause();
 		}
 
-		// Resumes the current playing song.
+		/// <summary>Resumes the current playing song.</summary>
 		public static void ResumeMusic() {
 			if (currentSong != null)
 				currentSong.Pause();
 		}
 
-		// Stops the current song.
+		/// <summary>Stops the current song.</summary>
 		public static void StopMusic() {
 			if (currentSong != null)
 				currentSong.Stop();

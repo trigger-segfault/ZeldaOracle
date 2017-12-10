@@ -23,12 +23,13 @@ namespace ZeldaEditor.TreeViews {
 
 		public EventTreeViewItem(Event evnt, EditorControl editorControl) : base(evnt.Script, editorControl) {
 			this.evnt = evnt;
-			if (script != null)
-				Source = ((script.HasErrors && !editorControl.NoScriptErrors) ?
-					EditorImages.EventError : ((script.HasWarnings && !editorControl.NoScriptWarnings) ?
-					EditorImages.EventWarning : EditorImages.Event));
-			else
-				Source = EditorImages.Event;
+			Source = EditorImages.Event;
+			if (script != null) {
+				if (script.HasErrors && !editorControl.NoScriptErrors)
+					Source = EditorImages.EventError;
+				else if (script.HasWarnings && !editorControl.NoScriptWarnings)
+					Source = EditorImages.EventWarning;
+			}
 			Header              = "'" + evnt.FinalReadableName + "' Event";// (" + evnt.InternalScriptID + ")";
 			Tag                 = "event";
 			ToolTip = evnt.InternalScriptID;

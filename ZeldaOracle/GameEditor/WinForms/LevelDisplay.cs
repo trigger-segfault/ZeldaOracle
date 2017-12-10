@@ -471,7 +471,7 @@ namespace ZeldaEditor.WinForms {
 			}*/
 
 			// Draw rewards.
-			if (editorControl.ShowRewards && tile.Properties.Exists("reward") &&
+			if (editorControl.ShowRewards && tile.Properties.Contains("reward") &&
 				editorControl.RewardManager.HasReward(tile.Properties.GetString("reward")))
 			{
 				Animation anim = editorControl.RewardManager.GetReward(tile.Properties.GetString("reward")).Animation;
@@ -589,7 +589,9 @@ namespace ZeldaEditor.WinForms {
 					}
 				}
 
+				g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
 				CurrentTool.DrawEventTiles(g);
+				g.ResetTranslation();
 
 				g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
 				Point2I span = Level.Span;

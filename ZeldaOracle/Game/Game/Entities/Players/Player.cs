@@ -116,8 +116,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Unit properties.
 			centerOffset			= new Point2I(0, -5);
+			MaxHealth               = 4 * 3;
 			Health					= 4 * 3;
-			MaxHealth				= 4 * 3;
 			swimmingSkills			= PlayerSwimmingSkills.CannotSwim;
 			tunic					= PlayerTunics.GreenTunic;
 			moveAnimation			= GameData.ANIM_PLAYER_DEFAULT;

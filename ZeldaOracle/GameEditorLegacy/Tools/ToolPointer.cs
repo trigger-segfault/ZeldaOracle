@@ -13,9 +13,6 @@ using ZeldaOracle.Game;
 
 namespace ZeldaEditor.Tools {
 	public class ToolPointer : EditorTool {
-		private TileDataInstance selectedTile;
-		private EventTileDataInstance selectedEventTile;
-		private Room selectedRoom;
 
 
 		//-----------------------------------------------------------------------------
@@ -56,8 +53,6 @@ namespace ZeldaEditor.Tools {
 		}
 
 		public override void Deselect() {
-			selectedEventTile	= null;
-			selectedTile		= null;
 			LevelDisplayControl.DeselectTiles();
 			LevelDisplayControl.DeselectSelectionGrid();
 			EditorControl.PropertyGrid.CloseProperties();
@@ -70,14 +65,11 @@ namespace ZeldaEditor.Tools {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin() {
-			selectedTile		= null;
-			selectedEventTile	= null;
 			EditorControl.HighlightMouseTile = false;
 		}
 
 		public override void OnEnd() {
-			selectedTile		= null;
-			selectedEventTile	= null;
+
 		}
 
 		public override void OnMouseDoubleClick(MouseEventArgs e) {

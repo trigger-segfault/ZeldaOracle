@@ -21,7 +21,9 @@ namespace ZeldaEditor.Control {
 		public static readonly BitmapSource EventError		= LoadIcon("EventError");
 		public static readonly BitmapSource EventWarning	= LoadIcon("EventWarning");
 		public static readonly BitmapSource EventDelete		= LoadIcon("EventDelete");
+		public static readonly BitmapSource EventRefactor	= LoadIcon("EventRefactor");
 		public static readonly BitmapSource Property		= LoadIcon("Property");
+		public static readonly BitmapSource PropertyRefactor= LoadIcon("PropertyRefactor");
 		public static readonly BitmapSource GotoOwner		= LoadIcon("GotoOwner");
 
 
@@ -41,6 +43,7 @@ namespace ZeldaEditor.Control {
 
 		public static readonly BitmapSource Open			= LoadIcon("Open");
 		public static readonly BitmapSource World			= LoadIcon("World");
+		public static readonly BitmapSource WorldNew		= LoadIcon("WorldNew");
 		public static readonly BitmapSource Room			= LoadIcon("Room");
 		public static readonly BitmapSource Level			= LoadIcon("Level");
 		public static readonly BitmapSource LevelAdd		= LoadIcon("LevelAdd");

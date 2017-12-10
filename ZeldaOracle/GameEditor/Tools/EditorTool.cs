@@ -120,7 +120,8 @@ namespace ZeldaEditor.Tools {
 				if (editorControl.EventMode)
 					selectedTile = LevelDisplay.SampleEventTile(e.MousePos());
 				else
-					selectedTile = LevelDisplay.SampleTile(e.MousePos(), editorControl.CurrentLayer);
+					selectedTile = LevelDisplay.SampleTile(e.MousePos(),
+						editorControl.CurrentLayer);
 
 				if (selectedTile != null)
 					editorControl.PropertyGrid.OpenProperties(selectedTile);

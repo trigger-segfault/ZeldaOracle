@@ -23,16 +23,13 @@ namespace ZeldaEditor.TreeViews {
 		
 		public ScriptTreeViewItem(Script script, EditorControl editorControl) {
 			this.script = script;
+			Source = EditorImages.Script;
 			if (script != null) {
-				Source = EditorImages.Script;
 				if (script.HasErrors && !editorControl.NoScriptErrors)
 					Source = EditorImages.ScriptError;
 				else if (script.HasWarnings && !editorControl.NoScriptWarnings)
 					Source = EditorImages.ScriptWarning;
 			}
-				Source = ((script.HasErrors && !editorControl.NoScriptErrors) ?
-					EditorImages.ScriptError : ((script.HasWarnings && !editorControl.NoScriptWarnings) ?
-					EditorImages.ScriptWarning : EditorImages.Script));
 			Header				= script.ID;
 			Tag					= "script";
 		}

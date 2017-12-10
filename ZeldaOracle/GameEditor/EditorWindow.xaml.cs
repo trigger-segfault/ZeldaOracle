@@ -46,6 +46,7 @@ namespace ZeldaEditor {
 		private ToggleButton[]      toolButtons;
 
 		private HistoryWindow		historyWindow;
+		private RefactorWindow      refactorWindow;
 
 		private bool suppressEvents = false;
 
@@ -514,24 +515,6 @@ namespace ZeldaEditor {
 			}
 		}
 
-		public void UpdateLayers() {
-			suppressEvents = false;
-			comboBoxLayers.Items.Clear();
-			if (editorControl.IsLevelOpen) {
-				for (int i = 0; i < editorControl.Level.RoomLayerCount; i++) {
-					comboBoxLayers.Items.Add("Layer " + (i + 1));
-				}
-				comboBoxLayers.Items.Add("Events");
-
-				if (editorControl.EventMode)
-					comboBoxLayers.SelectedIndex = comboBoxLayers.Items.Count - 1;
-				else
-					comboBoxLayers.SelectedIndex = editorControl.CurrentLayer;
-			}
-
-			suppressEvents = true;
-		}
-
 		private void OnShowModifiedTilesChecked(object sender, RoutedEventArgs e) {
 			editorControl.ShowModified = dropDownItemShowModified.IsChecked;
 		}
@@ -592,6 +575,7 @@ namespace ZeldaEditor {
 
 
 		private void OnPreviewMouseWheel(object sender, MouseWheelEventArgs e) {
+			// Steal focus from the current control when scrolling over a scrollable area
 			if (treeViewWorld.IsMouseOverTreeView) {
 				treeViewWorld.FocusOnTreeView();
 			}
@@ -609,11 +593,16 @@ namespace ZeldaEditor {
 			}
 		}*/
 
+		private void OnDebugConsole(object sender, RoutedEventArgs e) {
+			editorControl.DebugConsole = menuItemDebugConsole.IsChecked;
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// History Window
 		//-----------------------------------------------------------------------------
 
-		private void OnShowHistory(object sender, RoutedEventArgs e) {
+		private void OnHistoryCommand(object sender, ExecutedRoutedEventArgs e) {
 			if (historyWindow == null) {
 				historyWindow = HistoryWindow.Show(this, editorControl, OnHistoryWindowClosed);
 				buttonShowHistory.IsChecked = true;
@@ -627,12 +616,59 @@ namespace ZeldaEditor {
 		private void OnHistoryWindowClosed(object sender, EventArgs e) {
 			historyWindow = null;
 			buttonShowHistory.IsChecked = false;
+			// Hack to fix minimizing to Visual Studio after closing
+			// a tool window that has called a message box.
+			Activate();
 		}
 
 
 		//-----------------------------------------------------------------------------
+		// Refactor Window
+		//-----------------------------------------------------------------------------
+
+		private void OnRefactorPropertiesCommand(object sender, ExecutedRoutedEventArgs e) {
+			menuItemRefactorProperties.IsChecked = true;
+			menuItemRefactorEvents.IsChecked = false;
+			if (refactorWindow != null && refactorWindow.RefactorType == RefactorType.Events) {
+				refactorWindow.Close();
+			}
+			if (refactorWindow == null) {
+				refactorWindow = RefactorWindow.Show(this, editorControl, RefactorType.Properties, OnRefactorWindowClosed);
+			}
+		}
+		private void OnRefactorEventsCommand(object sender, ExecutedRoutedEventArgs e) {
+			menuItemRefactorProperties.IsChecked = false;
+			menuItemRefactorEvents.IsChecked = true;
+			if (refactorWindow != null && refactorWindow.RefactorType == RefactorType.Properties) {
+				refactorWindow.Close();
+			}
+			if (refactorWindow == null) {
+				refactorWindow = RefactorWindow.Show(this, editorControl, RefactorType.Events, OnRefactorWindowClosed);
+			}
+		}
+
+		private void OnRefactorWindowClosed(object sender, EventArgs e) {
+			if (refactorWindow.RefactorType == RefactorType.Properties)
+				menuItemRefactorProperties.IsChecked = false;
+			else
+				menuItemRefactorEvents.IsChecked = false;
+			refactorWindow = null;
+			// Hack to fix minimizing to Visual Studio after closing
+			// a tool window that has called a message box.
+			Activate();
+		}
+		
+
+		//-----------------------------------------------------------------------------
 		// Interface Mutators
 		//-----------------------------------------------------------------------------
+
+		public void CloseAllToolWindows() {
+			if (historyWindow != null)
+				historyWindow.Close();
+			if (refactorWindow != null)
+				refactorWindow.Close();
+		}
 
 		public void SelectHistoryItem(HistoryListViewItem item) {
 			if (historyWindow != null) {

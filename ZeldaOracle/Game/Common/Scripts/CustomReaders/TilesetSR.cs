@@ -463,7 +463,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						i = 2;
 					}
 
-					if (Resources.ImageExists(imagePath))
+					if (Resources.ContainsImage(imagePath))
 						image = Resources.GetResource<Image>(imagePath);
 					else
 						image = Resources.LoadImage(Resources.ImageDirectory + imagePath);

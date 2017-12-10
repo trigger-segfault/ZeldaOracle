@@ -25,15 +25,15 @@ using System.IO;
 //using ParticleGame.Project.Particles;
 
 namespace GameFramework.MyGame.Debug {
-	/**<summary>The controller for game debugging.</summary>*/
+	/// <summary>The controller for game debugging.</summary>
 	public class DebugController : DebugControllerBase {
 
 		//=========== MEMBERS ============
 		#region Members
 
-		/**<summary>The game manager.</summary>*/
+		/// <summary>The game manager.</summary>
 		private GameManager game;
-		/**<summary>True if the frame rate is displayed.</summary>*/
+		/// <summary>True if the frame rate is displayed.</summary>
 		private bool showFPS;
 
 		public bool nextStep;
@@ -43,7 +43,7 @@ namespace GameFramework.MyGame.Debug {
 		//========= CONSTRUCTORS =========
 		#region Constructors
 
-		/**<summary>Constructs the game debugger.</summary>*/
+		/// <summary>Constructs the game debugger.</summary>
 		public DebugController(GameManager game) {
 
 			this.game = game;
@@ -57,7 +57,7 @@ namespace GameFramework.MyGame.Debug {
 		//========== PROPERTIES ==========
 		#region Properties
 
-		/**<summary>Gets or sets if the frame rate is displayed.</summary>*/
+		/// <summary>Gets or sets if the frame rate is displayed.</summary>
 		public bool ShowFPS {
 			get { return showFPS; }
 			set { showFPS = value; }
@@ -67,7 +67,7 @@ namespace GameFramework.MyGame.Debug {
 		//=========== UPDATING ===========
 		#region Updating
 
-		/**<summary>Called every step to update the debug controller.</summary>*/
+		/// <summary>Called every step to update the debug controller.</summary>
 		public override void Update() {
 			base.Update();
 		}
@@ -76,7 +76,7 @@ namespace GameFramework.MyGame.Debug {
 		//=========== DRAWING ============
 		#region Drawing
 
-		/**<summary>Called every step to draw debug information.</summary>*/
+		/// <summary>Called every step to draw debug information.</summary>
 		public override void Draw(Graphics2D g) {
 			DrawSideInfo(g);
 

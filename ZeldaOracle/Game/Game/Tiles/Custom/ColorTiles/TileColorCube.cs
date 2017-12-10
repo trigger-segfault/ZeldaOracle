@@ -11,19 +11,19 @@ using ZeldaOracle.Game.Entities.Projectiles;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	/**<summary>The color cube's sprite index has the value of one of these orientations.</summary>*/
+	/// <summary>The color cube's sprite index has the value of one of these orientations.</summary>
 	public enum ColorCubeOrientation {
-		/**<summary>Blue on top with yellow on the side.</summary>*/
+		/// <summary>Blue on top with yellow on the side.</summary>
 		BlueYellow = 0,
-		/**<summary>Blue on top with red on the side.</summary>*/
+		/// <summary>Blue on top with red on the side.</summary>
 		BlueRed,
-		/**<summary>Yellow on top with red on the side.</summary>*/
+		/// <summary>Yellow on top with red on the side.</summary>
 		YellowRed,
-		/**<summary>Yellow on top with blue on the side.</summary>*/
+		/// <summary>Yellow on top with blue on the side.</summary>
 		YellowBlue,
-		/**<summary>Red on top with blue on the side.</summary>*/
+		/// <summary>Red on top with blue on the side.</summary>
 		RedBlue,
-		/**<summary>Red on top with yellow on the side.</summary>*/
+		/// <summary>Red on top with yellow on the side.</summary>
 		RedYellow
 	}
 

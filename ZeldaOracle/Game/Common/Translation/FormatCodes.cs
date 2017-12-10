@@ -6,30 +6,44 @@ using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaOracle.Common.Translation {
 
-	// The string code types available.
+	/// <summary>The format code types available.</summary>
 	public enum FormatCodeType {
+		/// <summary>This is not a format code.</summary>
 		None,
+		/// <summary>The format code outputs to to changing the current text color.</summary>
 		Color,
+		/// <summary>The format code outputs to a character or string.</summary>
 		String,
+		/// <summary>The format code outputs to a string representation of a variable.</summary>
 		Variable
 	}
 
-	// A static class for managing string format codes.
+	/// <summary>A static class for managing string format codes.</summary>
 	public class FormatCodes {
-		
-		// The character used to mark a new paragraph.
+
+		//-----------------------------------------------------------------------------
+		// Constants
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The character used to mark a new paragraph.</summary>
 		public const char ParagraphCharacter = (char)128;
 
-		// The list of color codes.
+
+		//-----------------------------------------------------------------------------
+		// Members
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The list of color codes.</summary>
 		private static Dictionary<string, Color> colorCodes;
-		// The list of string codes.
+		/// <summary>The list of string codes.</summary>
 		private static Dictionary<string, string> stringCodes;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		// Initializes the format codes
+		/// <summary>Initializes the format codes.</summary>
 		public static void Initialize() {
 
 			FormatCodes.colorCodes			= new Dictionary<string, Color>();
@@ -73,12 +87,13 @@ namespace ZeldaOracle.Common.Translation {
 			FormatCodes.stringCodes.Add("n", "\n");
 			FormatCodes.stringCodes.Add("p", "" + ParagraphCharacter);
 		}
-		
+
+
 		//-----------------------------------------------------------------------------
 		// Codes
 		//-----------------------------------------------------------------------------
 
-		// Gets the string code type.
+		/// <summary>Gets the string code type.</summary>
 		public static FormatCodeType GetFormatCodeType(string code) {
 			if (colorCodes.ContainsKey(code) || code.StartsWith("color:"))
 				return FormatCodeType.Color;
@@ -89,7 +104,7 @@ namespace ZeldaOracle.Common.Translation {
 			return FormatCodeType.None;
 		}
 
-		// Gets the string representation of the code.
+		/// <summary>Gets the string representation of the code.</summary>
 		public static string GetFormatCodeString(string code) {
 			if (stringCodes.ContainsKey(code)) {
 				return stringCodes[code];
@@ -100,7 +115,7 @@ namespace ZeldaOracle.Common.Translation {
 			return "";
 		}
 
-		// Gets the color of the color code.
+		/// <summary>Gets the color of the color code.</summary>
 		public static Color GetFormatCodeColor(string code) {
 			if (colorCodes.ContainsKey(code)) {
 				return colorCodes[code];
@@ -111,12 +126,15 @@ namespace ZeldaOracle.Common.Translation {
 			return Letter.DefaultColor;
 		}
 
-		// Returns the text formatted without any format codes in.
+		/// <summary>Returns the text formatted without any format codes in.</summary>
 		public static LetterString FormatString(string text) {
 			int caretPosition = 0;
 			return FormatString(text, ref caretPosition);
 		}
-		// Returns the text formatted without any format codes in.
+
+		/// <summary>Returns the text formatted without any format codes in.</summary>
+		/// <param name="caretPosition">Used to convert the input caret position to the
+		/// output caret position after formatting.</param>
 		public static LetterString FormatString(string text, ref int caretPosition) {
 			int originalCaretPosition = caretPosition;
 			int currentCharacter = 0;
@@ -169,11 +187,14 @@ namespace ZeldaOracle.Common.Translation {
 			return letterString;
 		}
 
+		/// <summary>Gets the enumeration of color codes.</summary>
 		public static IEnumerable<KeyValuePair<string, Color>> GetColorCodes() {
 			foreach (var pair in colorCodes) {
 				yield return pair;
 			}
 		}
+
+		/// <summary>Gets the enumeration of string codes.</summary>
 		public static IEnumerable<KeyValuePair<string, string>> GetStringCodes() {
 			foreach (var pair in stringCodes) {
 				yield return pair;

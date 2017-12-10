@@ -7,25 +7,25 @@ using Microsoft.Xna.Framework;
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Input.Controls {
-	/**<summary>A class to store analog stick data.</summary>*/
+	/// <summary>A class to store analog stick data.</summary>
 	public class AnalogStick {
 
 		//=========== MEMBERS ============
 
-		/**<summary>The 4 directional controls.</summary>*/
+		/// <summary>The 4 directional controls.</summary>
 		private InputControl[] directions;
-		/**<summary>The disabled state of the control.</summary>*/
+		/// <summary>The disabled state of the control.</summary>
 		private DisableState disabledState;
-		/**<summary>The position of the analog stick.</summary>*/
+		/// <summary>The position of the analog stick.</summary>
 		private Vector2F position;
-		/**<summary>The dead zone of the analog stick.</summary>*/
+		/// <summary>The dead zone of the analog stick.</summary>
 		private double deadZone;
-		/**<summary>The dead zone for the directional controls.</summary>*/
+		/// <summary>The dead zone for the directional controls.</summary>
 		private Vector2F directionDeadZone		= new Vector2F(0.83f, 0.83f);
 
 		//========= CONSTRUCTORS =========
 
-		/**<summary>Constructs the default control.</summary>*/
+		/// <summary>Constructs the default control.</summary>
 		public AnalogStick() {
 			this.directions			= new InputControl[4];
 			this.disabledState		= DisableState.Enabled;
@@ -39,40 +39,40 @@ namespace ZeldaOracle.Common.Input.Controls {
 
 		//========== PROPERTIES ==========
 
-		/**<summary>The position of the analog stick.</summary>*/
+		/// <summary>The position of the analog stick.</summary>
 		public Vector2F Position {
 			get { return position; }
 		}
-		/**<summary>The dead zone of the analog stick.</summary>*/
+		/// <summary>The dead zone of the analog stick.</summary>
 		public double DeadZone {
 			get { return deadZone; }
 			set { deadZone = GMath.Max(0.0, GMath.Min(1.0, GMath.Abs(value))); }
 		}
-		/**<summary>The dead zone for the directional controls.</summary>*/
+		/// <summary>The dead zone for the directional controls.</summary>
 		public Vector2F DirectionDeadZone {
 			get { return directionDeadZone; }
 			set { directionDeadZone = value; }
 		}
-		/**<summary>The right control of the analog stick.</summary>*/
+		/// <summary>The right control of the analog stick.</summary>
 		public InputControl Right {
 			get { return directions[0]; }
 		}
-		/**<summary>The down control of the analog stick.</summary>*/
+		/// <summary>The down control of the analog stick.</summary>
 		public InputControl Down {
 			get { return directions[1]; }
 		}
-		/**<summary>The Left control of the analog stick.</summary>*/
+		/// <summary>The Left control of the analog stick.</summary>
 		public InputControl Left {
 			get { return directions[2]; }
 		}
-		/**<summary>The up control of the analog stick.</summary>*/
+		/// <summary>The up control of the analog stick.</summary>
 		public InputControl Up {
 			get { return directions[3]; }
 		}
 
 		//=========== UPDATING ===========
 
-		/**<summary>Called every step to update the control state.</summary>*/
+		/// <summary>Called every step to update the control state.</summary>
 		public void Update(int time, Vector2F position) {
 			// Apply the dead zone to the position
 			if (position.Length <= deadZone) {
@@ -100,19 +100,19 @@ namespace ZeldaOracle.Common.Input.Controls {
 
 		//========== MANAGEMENT ==========
 
-		/**<summary>Resets the control state.</summary>*/
+		/// <summary>Resets the control state.</summary>
 		public void Reset(bool release = false) {
 			position = Vector2F.Zero;
 			for (int i = 0; i < 4; i++)
 				directions[i].Reset(release);
 		}
-		/**<summary>Enables the control.</summary>*/
+		/// <summary>Enables the control.</summary>
 		public void Enable() {
 			disabledState = DisableState.Enabled;
 			for (int i = 0; i < 4; i++)
 				directions[i].Enable();
 		}
-		/**<summary>Disables the control.</summary>*/
+		/// <summary>Disables the control.</summary>
 		public void Disable(bool untilRelease = false) {
 			if (untilRelease) {
 				if (!position.IsZero)
@@ -130,11 +130,11 @@ namespace ZeldaOracle.Common.Input.Controls {
 
 		//======== CONTROL STATES ========
 
-		/**<summary>Returns true if the analog stick is centered.</summary>*/
+		/// <summary>Returns true if the analog stick is centered.</summary>
 		public bool IsZero() {
 			return position.IsZero;
 		}
-		/**<summary>Returns true if the analog stick is disabled.</summary>*/
+		/// <summary>Returns true if the analog stick is disabled.</summary>
 		public bool IsDisabled() {
 			return (disabledState != DisableState.Enabled);
 		}

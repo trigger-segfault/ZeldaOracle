@@ -53,6 +53,10 @@
         <CommandBinding Command="cmd:EditorCommands.AddNewLevel" CanExecute="CanExecuteIsWorldOpen" Executed="OnAddNewLevelCommand"/>
         <CommandBinding Command="cmd:EditorCommands.AddNewDungeon" CanExecute="CanExecuteIsWorldOpen" Executed="OnAddNewDungeonCommand"/>
         <CommandBinding Command="cmd:EditorCommands.AddNewScript" CanExecute="CanExecuteIsWorldOpen" Executed="OnAddNewScriptCommand"/>
+
+        <CommandBinding Command="cmd:EditorCommands.History" CanExecute="CanExecuteIsWorldOpen" Executed="OnHistoryCommand"/>
+        <CommandBinding Command="cmd:EditorCommands.RefactorProperties" CanExecute="CanExecuteIsWorldOpen" Executed="OnRefactorPropertiesCommand"/>
+        <CommandBinding Command="cmd:EditorCommands.RefactorEvents" CanExecute="CanExecuteIsWorldOpen" Executed="OnRefactorEventsCommand"/>
     </Window.CommandBindings>
     <DockPanel LastChildFill="True" Grid.RowSpan="2">
         <Menu x:Name="menu" DockPanel.Dock="Top">
@@ -96,8 +100,12 @@
                 <local:ImageMenuItem x:Name="menuItemTestWorld" Header="Test World" Source="Resources/Icons/RunGame.png" IsCheckable="True"  Command="cmd:EditorCommands.TestWorld"/>
                 <local:ImageMenuItem x:Name="menuItemTestLevelPlace" Header="Test World From Location" Source="Resources/Icons/RunGameAtLocation.png" Command="cmd:EditorCommands.TestWorldFromLocation"/>
             </MenuItem>
+            <MenuItem Header="_Debug">
+                <local:ImageMenuItem x:Name="menuItemDebugConsole" Header="Debug Console" Source="Resources/Icons/Console.png" Click="OnDebugConsole" IsCheckable="True" />
+            </MenuItem>
             <MenuItem Header="Dev Tools">
-                <MenuItem x:Name="menuItemRefactorProperties" Header="Refactor Properties..."/>
+                <local:ImageMenuItem x:Name="menuItemRefactorProperties" Header="Refactor Properties..." Source="Resources/Icons/PropertyRefactor.png" IsCheckable="True" Command="cmd:EditorCommands.RefactorProperties" />
+                <local:ImageMenuItem x:Name="menuItemRefactorEvents" Header="Refactor Events..." Source="Resources/Icons/EventRefactor.png" IsCheckable="True" Command="cmd:EditorCommands.RefactorEvents"/>
             </MenuItem>
         </Menu>
         <ToolBar x:Name="toolBar1" DockPanel.Dock="Top">
@@ -113,7 +121,7 @@
             <local:ImageButton x:Name="buttonAddDungeon" Source="Resources/Icons/DungeonAdd.png" ToolTip="Add New Dungeon (Ctrl+Shift+D)" Command="cmd:EditorCommands.AddNewDungeon"/>
             <local:ImageButton x:Name="buttonAddScript" Source="Resources/Icons/ScriptAdd.png" ToolTip="Add New Script (Ctrl+Shift+X)" Command="cmd:EditorCommands.AddNewScript"/>
             <Separator/>
-            <local:ImageToggleButton x:Name="buttonShowHistory" Source="Resources/Icons/History.png" ToolTip="History Window" Click="OnShowHistory" />
+            <local:ImageToggleButton x:Name="buttonShowHistory" Source="Resources/Icons/History.png" ToolTip="History Window" Command="cmd:EditorCommands.History" />
         </ToolBar>
         <ToolBar x:Name="toolBar2" DockPanel.Dock="Top">
             <local:ImageToggleButton x:Name="buttonToolPointer" Source="Resources/Icons/ToolPointer.png" ToolTip="Pointer Tool (M)" IsChecked="True" Click="OnToolChanged"/>

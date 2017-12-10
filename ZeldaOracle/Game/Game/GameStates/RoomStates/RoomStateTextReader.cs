@@ -114,7 +114,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 
 					if (currentChar >= wrappedString.Lines[currentLine].Length) {
 						windowLinesLeft--;
-						if (currentLine + 1 == wrappedString.NumLines) {
+						if (currentLine + 1 == wrappedString.LineCount) {
 							state = TextReaderState.Finished;
 						}
 						else if (wrappedString.Lines[currentLine].EndsWith(FormatCodes.ParagraphCharacter)) {

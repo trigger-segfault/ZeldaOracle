@@ -11,31 +11,30 @@ using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Audio {
 	
-	/**<summary>A structure for storing a sound effect.</summary>*/
+	/// <summary>A structure for storing a sound effect.</summary>
 	public class Sound {
-
 		// Containment
-		// The sound effect class contained by this sound.
+		/// <summary>The sound effect class contained by this sound.</summary>
 		private SoundEffect soundEffect;
-		// The name of the sound effect.
+		/// <summary>The name of the sound effect.</summary>
 		internal string name;
-		// The file path of the sound.
+		/// <summary>The file path of the sound.</summary>
 		private string filePath;
 
 		// Settings
-		// The default volume of the sound effect.
+		/// <summary>The default volume of the sound effect.</summary>
 		private float volume;
-		// The default pitch of the sound effect.
+		/// <summary>The default pitch of the sound effect.</summary>
 		private float pitch;
-		// The default pan of the sound effect.
+		/// <summary>The default pan of the sound effect.</summary>
 		private float pan;
-		// True if the sound effect is muted.
+		/// <summary>True if the sound effect is muted.</summary>
 		private bool muted;
 
 		private int maxInstances;
 
 		// Sound Instances
-		// The list of sound instances currently active.
+		/// <summary>The list of sound instances currently active.</summary>
 		private List<SoundInstance> sounds;
 
 
@@ -43,9 +42,10 @@ namespace ZeldaOracle.Common.Audio {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		// Constructs the default sound.
+		/// <summary>Constructs the sound.</summary>
 		public Sound(SoundEffect soundEffect, string filePath, string name,
-			float volume = 1.0f, float pitch = 0.0f, float pan = 0.0f, bool isMuted = false)
+			float volume = 1.0f, float pitch = 0.0f, float pan = 0.0f,
+			bool isMuted = false)
 		{
 			// Containment
 			this.soundEffect	= soundEffect;
@@ -68,7 +68,7 @@ namespace ZeldaOracle.Common.Audio {
 		// Management
 		//-----------------------------------------------------------------------------
 
-		// Updates the sound.
+		/// <summary>Updates the sound.</summary>
 		internal void Update() {
 			for (int i = 0; i < sounds.Count; i++) {
 				SoundInstance sound = sounds[i];
@@ -87,14 +87,14 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		// Updates the sound instances.
+		/// <summary>Updates the sound instances.</summary>
 		internal void UpdateSoundInstances() {
 			for (int i = 0; i < sounds.Count; i++) {
 				sounds[i].Update();
 			}
 		}
 
-		// Remove any extra sound instances currently playing.
+		/// <summary>Remove any extra sound instances currently playing.</summary>
 		private void RemoveExtraInstances() {
 			while (sounds.Count > maxInstances) {
 				if (!sounds[0].IsStopped)
@@ -108,7 +108,7 @@ namespace ZeldaOracle.Common.Audio {
 		// Playback
 		//-----------------------------------------------------------------------------
 
-		// Plays the sound.
+		/// <summary>Plays the sound.</summary>
 		public SoundInstance Play(bool looped = false) {
 			SoundInstance soundInstance = new SoundInstance(soundEffect.CreateInstance(), this, looped, volume, pitch, pan, muted);
 			soundInstance.Play();
@@ -117,7 +117,7 @@ namespace ZeldaOracle.Common.Audio {
 			return soundInstance;
 		}
 
-		// Plays the sound.
+		/// <summary>Plays the sound.</summary>
 		public SoundInstance Play(bool looped, float volume, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
 			SoundInstance soundInstance = new SoundInstance(soundEffect.CreateInstance(), this, looped, volume, pitch, pan, muted);
 			soundInstance.Play();
@@ -144,19 +144,19 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		// Stops the sound.
+		/// <summary>Stops the sound.</summary>
 		public void Stop() {
 			for (int i = 0; i < sounds.Count; i++)
 				sounds[i].Stop();
 		}
 
-		// Resumes the sound.
+		/// <summary>Resumes the sound.</summary>
 		public void Resume() {
 			for (int i = 0; i < sounds.Count; i++)
 				sounds[i].Resume();
 		}
 
-		// Pauses the sound.
+		/// <summary>Pauses the sound.</summary>
 		public void Pause() {
 			for (int i = 0; i < sounds.Count; i++)
 				sounds[i].Pause();
@@ -166,25 +166,25 @@ namespace ZeldaOracle.Common.Audio {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
+
 		// Information ----------------------------------------------------------------
 
-		// Gets the sound effect contained by this sound.
+		/// <summary>Gets the sound effect contained by this sound.</summary>
 		public SoundEffect SoundEffect {
 			get { return soundEffect; }
 		}
 
-		// Gets the name of the sound.
+		/// <summary>Gets the name of the sound.</summary>
 		public string Name {
 			get { return name; }
 		}
 
-		// Gets the file path of the sound.
+		/// <summary>Gets the file path of the sound.</summary>
 		public string FilePath {
 			get { return filePath; }
 		}
 
-		// Gets the list of sound instances of this sound.
+		/// <summary>Gets the list of sound instances of this sound.</summary>
 		public SoundInstance[] Instances {
 			get {
 				SoundInstance[] soundInstanceList = new SoundInstance[sounds.Count];
@@ -195,31 +195,31 @@ namespace ZeldaOracle.Common.Audio {
 
 		// Settings -------------------------------------------------------------------
 
-		// Gets or sets the default volume of the sound between 0 and 1.
+		/// <summary>Gets or sets the default volume of the sound between 0 and 1.</summary>
 		public float Volume {
 			get { return volume; }
 			set { volume = GMath.Clamp(value, 0.0f, 1.0f); UpdateSoundInstances(); }
 		}
 
-		// Gets or sets the default pitch of the sound between -1 and 1.
+		/// <summary>Gets or sets the default pitch of the sound between -1 and 1.</summary>
 		public float Pitch {
 			get { return pitch; }
 			set { pitch = GMath.Clamp(value, -1.0f, 1.0f); UpdateSoundInstances(); }
 		}
 
-		// Gets or sets the default pan of the sound between -1 and 1.
+		/// <summary>Gets or sets the default pan of the sound between -1 and 1.</summary>
 		public float Pan {
 			get { return pan; }
 			set { pan = GMath.Clamp(value, -1.0f, 1.0f); UpdateSoundInstances(); }
 		}
 
-		// Gets or sets if the sound is muted.
+		/// <summary>Gets or sets if the sound is muted.</summary>
 		public bool IsMuted {
 			get { return muted; }
 			set { muted = value; UpdateSoundInstances(); }
 		}
 
-		// Gets or sets the maximum number of sound instances playing at once.
+		/// <summary>Gets or sets the maximum number of sound instances playing at once.</summary>
 		public int MaxInstances {
 			get { return maxInstances; }
 			set {
@@ -231,10 +231,10 @@ namespace ZeldaOracle.Common.Audio {
 				}
 			}
 		}
-		
+
 		// Playback -------------------------------------------------------------------
 
-		// Returns true if the sound is currently playing.
+		/// <summary>Returns true if the sound is currently playing.</summary>
 		public bool IsPlaying {
 			get {
 				for (int i = 0; i < sounds.Count; i++) {
@@ -245,7 +245,7 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		// Returns true if the sound is currently paused.
+		/// <summary>Returns true if the sound is currently paused.</summary>
 		public bool IsPaused {
 			get {
 				for (int i = 0; i < sounds.Count; i++) {
@@ -256,7 +256,7 @@ namespace ZeldaOracle.Common.Audio {
 			}
 		}
 
-		// Returns true if the sound is currently stopped.
+		/// <summary>Returns true if the sound is currently stopped.</summary>
 		public bool IsStopped {
 			get {
 				for (int i = 0; i < sounds.Count; i++) {

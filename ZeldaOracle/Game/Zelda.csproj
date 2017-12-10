@@ -131,6 +131,13 @@
     <None Include="Common\Debug\DebugMenuItem.cs" />
     <None Include="Common\Debug\RadioButtonMenuItem.cs" />
     <None Include="Common\Debug\ToggleMenuItem.cs" />
+    <Compile Include="Common\Ini\IniDocument.cs" />
+    <Compile Include="Common\Ini\IniEnums.cs" />
+    <Compile Include="Common\Ini\IniSection.cs" />
+    <Compile Include="Common\Ini\IniProperty.cs" />
+    <Compile Include="Common\Ini\IniReflectionSettings.cs" />
+    <Compile Include="Common\Input\AnalogSticks.cs" />
+    <Compile Include="Common\Input\Triggers.cs" />
     <Compile Include="Common\Scripting\EventDocumentation.cs" />
     <Compile Include="Common\Scripting\EventDocumentationCollection.cs" />
     <Compile Include="Common\Scripting\IEventObject.cs" />
@@ -207,6 +214,7 @@
     <Compile Include="Common\Translation\LetterString.cs" />
     <Compile Include="Common\Translation\FormatCodes.cs" />
     <Compile Include="Common\Translation\WrappedLetterString.cs" />
+    <Compile Include="Common\Util\NativeMethods.cs" />
     <Compile Include="Game\Control\GameControl.cs" />
     <Compile Include="Game\Control\HUD.cs" />
     <Compile Include="Game\Control\Maps\DungeonMapFloor.cs" />
@@ -331,10 +339,10 @@
     <Compile Include="Game\Entities\Projectiles\Seeds\Seed.cs" />
     <Compile Include="Game\Control\UnitSystem.cs" />
     <Compile Include="Game\Entities\Units\UnitTool.cs" />
-    <Compile Include="Game\GameDataRewards.cs" />
-    <Compile Include="Game\GameDataSounds.cs" />
-    <Compile Include="Game\GameDataSprites.cs" />
-    <Compile Include="Game\GameDataAnimations.cs" />
+    <Compile Include="Game\GameData.Rewards.cs" />
+    <Compile Include="Game\GameData.Sounds.cs" />
+    <Compile Include="Game\GameData.Sprites.cs" />
+    <Compile Include="Game\GameData.Animations.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateNormal.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateQueue.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateAction.cs" />
@@ -417,6 +425,7 @@
     <Compile Include="Game\Items\Weapons\ItemOcarina.cs" />
     <Compile Include="Game\Control\Controls.cs" />
     <Compile Include="Game\Items\Weapons\SeedBasedItem.cs" />
+    <Compile Include="Game\UserSettings.cs" />
     <Compile Include="Game\Main\GameBase.cs" />
     <Compile Include="Game\GameData.cs" />
     <Compile Include="Game\Main\GameManager.cs" />

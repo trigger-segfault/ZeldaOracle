@@ -89,19 +89,19 @@ namespace ZeldaEditor.WinForms {
 
 			Restart();
 			if (caretLine == 0)
-				currentLine = Math.Min(1, wrappedString.NumLines - 1);
+				currentLine = Math.Min(1, wrappedString.LineCount - 1);
 			else
 				currentLine = Math.Max(0, caretLine);
-			windowLine = GMath.Clamp(wrappedString.NumLines - 1, 0, 1);
+			windowLine = GMath.Clamp(wrappedString.LineCount - 1, 0, 1);
 
 			if (currentLine > 0 && wrappedString.Lines[currentLine - 1].LastOrDefault().Char == FormatCodes.ParagraphCharacter) {
-				if (currentLine + 1 < wrappedString.NumLines)
+				if (currentLine + 1 < wrappedString.LineCount)
 					currentLine++;
 				else
 					windowLine = 0;
 			}
 
-			if (currentLine + 1 >= wrappedString.NumLines)
+			if (currentLine + 1 >= wrappedString.LineCount)
 				state = TextReaderState.Finished;
 			else if (wrappedString.Lines[currentLine].LastOrDefault().Char == FormatCodes.ParagraphCharacter)
 				state = TextReaderState.PressToEndParagraph;
@@ -127,7 +127,7 @@ namespace ZeldaEditor.WinForms {
 			this.currentChar        = 0;
 			this.state              = TextReaderState.WritingLine;
 
-			if (this.wrappedString.NumLines == 0) {
+			if (this.wrappedString.LineCount == 0) {
 				this.state = TextReaderState.Finished;
 				MessageFinished(this, new EventArgs());
 			}
@@ -197,7 +197,7 @@ namespace ZeldaEditor.WinForms {
 
 						if (currentChar >= wrappedString.Lines[currentLine].Length) {
 							windowLinesLeft--;
-							if (currentLine + 1 == wrappedString.NumLines) {
+							if (currentLine + 1 == wrappedString.LineCount) {
 								state = TextReaderState.Finished;
 								MessageFinished(this, new EventArgs());
 							}
@@ -290,7 +290,7 @@ namespace ZeldaEditor.WinForms {
 			Point2I pos = Point2I.Zero;
 
 			Rectangle2I bounds = BoxBounds;
-			bounds += pos;
+			bounds.Point += pos;
 
 			g.FillRectangle(bounds, Color.Black);
 
@@ -302,7 +302,7 @@ namespace ZeldaEditor.WinForms {
 					g.DrawLetterString(GameData.FONT_LARGE, wrappedString.Lines[currentLine - windowLine + i], pos + new Point2I(8, 6 + 16 * i), TextColor);
 			}
 			// Draw the currently writting line.
-			if (currentLine < wrappedString.NumLines)
+			if (currentLine < wrappedString.LineCount)
 				g.DrawLetterString(GameData.FONT_LARGE, wrappedString.Lines[currentLine].Substring(0, currentChar), pos + new Point2I(8, 6 + 16 * windowLine), TextColor);
 
 			// Draw the next line arrow.

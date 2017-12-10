@@ -169,7 +169,7 @@ namespace ZeldaOracle.Game.Control {
 				if (test) {
 					player.SetPositionByCenter(startPlayer * GameSettings.TILE_SIZE + new Point2I(8, 8));
 					player.MarkRespawn();
-					roomControl.BeginRoom(world.Levels[startLevel].Rooms[startRoom.X, startRoom.Y]);
+					roomControl.BeginRoom(world.GetLevelAt(startLevel).Rooms[startRoom.X, startRoom.Y]);
 				}
 				else {
 					player.SetPositionByCenter(world.StartTileLocation * GameSettings.TILE_SIZE + new Point2I(8, 8));
@@ -188,8 +188,6 @@ namespace ZeldaOracle.Game.Control {
 			
 			if (!roomControl.Room.IsHiddenFromMap)
 				lastRoomOnMap = roomControl.Room;
-
-			AudioSystem.MasterVolume = 0.04f; // The way David likes it.
 
 			FireEvent(world, "start_game", this);
 		}

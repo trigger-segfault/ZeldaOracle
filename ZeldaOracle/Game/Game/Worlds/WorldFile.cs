@@ -228,7 +228,7 @@ namespace ZeldaOracle.Game.Worlds {
 						property = eventObject.Properties.GetProperty(evnt.Name + "ed", false);
 
 					if (property != null) {
-						eventObject.Properties.RemoveProperty(property.Name);
+						eventObject.Properties.RemoveProperty(property.Name, false);
 						if (!string.IsNullOrWhiteSpace(property.StringValue))
 							ReadLegacyEvent(evnt, property.StringValue, world);
 					}
@@ -380,6 +380,9 @@ namespace ZeldaOracle.Game.Worlds {
 				if (editorMode) {
 					if (!string.IsNullOrWhiteSpace(eventScriptID)) {
 						Script script = world.GetScript(eventScriptID);
+						Event evnt = events.GetEvent(eventName);
+						if (evnt == null)
+							evnt = new Event(eventName, script.Parameters.ToArray());
 						if (script.IsHidden) {
 							events.GetEvent(eventName).Script = script;
 							world.RemoveScript(eventScriptID);
@@ -690,14 +693,14 @@ namespace ZeldaOracle.Game.Worlds {
 			WriteEvents(writer, world.Events);
 
 			// Write the dungeons.
-			writer.Write(world.Dungeons.Count);
-			foreach (Dungeon dungeon in world.Dungeons)
-				WriteDungeon(writer, dungeon);
+			writer.Write(world.DungeonCount);
+			for (int i = 0; i < world.DungeonCount; i++)
+					WriteDungeon(writer, world.GetDungeonAt(i));
 
 			// Write the level data.
-			writer.Write(world.Levels.Count);
-			for (int i = 0; i < world.Levels.Count; i++)
-				WriteLevel(writer, world.Levels[i]);
+			writer.Write(world.LevelCount);
+			for (int i = 0; i < world.LevelCount; i++)
+				WriteLevel(writer, world.GetLevelAt(i));
 		}
 
 		private void WriteDungeon(BinaryWriter writer, Dungeon dungeon) {

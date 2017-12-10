@@ -32,11 +32,11 @@ namespace ZeldaEditor.WinForms {
 		#region Fields
 
 
-		// Singleton device service instance.
+		/// <summary>Singleton device service instance.</summary>
 		static GraphicsDeviceService singletonInstance;
 
 
-		// Keep track of how many controls are sharing the singletonInstance.
+		/// <summary>Keep track of how many controls are sharing the singletonInstance.</summary>
 		static int referenceCount;
 
 
@@ -47,7 +47,7 @@ namespace ZeldaEditor.WinForms {
 		/// Constructor is private, because this is a singleton class:
 		/// client controls should use the public AddRef method instead.
 		/// </summary>
-		GraphicsDeviceService(IntPtr windowHandle, int width, int height) {
+		private GraphicsDeviceService(IntPtr windowHandle, int width, int height) {
 			parameters = new PresentationParameters();
 
 			parameters.BackBufferWidth = Math.Max(width, 1);
@@ -64,9 +64,7 @@ namespace ZeldaEditor.WinForms {
 		}
 
 
-		/// <summary>
-		/// Gets a reference to the singleton instance.
-		/// </summary>
+		/// <summary>Gets a reference to the singleton instance.</summary>
 		public static GraphicsDeviceService AddRef(IntPtr windowHandle,
 												   int width, int height) {
 			// Increment the "how many controls sharing the device" reference count.
@@ -81,9 +79,7 @@ namespace ZeldaEditor.WinForms {
 		}
 
 
-		/// <summary>
-		/// Releases a reference to the singleton instance.
-		/// </summary>
+		/// <summary>Releases a reference to the singleton instance.</summary>
 		public void Release(bool disposing) {
 			// Decrement the "how many controls sharing the device" reference count.
 			if (Interlocked.Decrement(ref referenceCount) == 0) {
@@ -120,18 +116,17 @@ namespace ZeldaEditor.WinForms {
 		}
 
 
-		/// <summary>
-		/// Gets the current graphics device.
-		/// </summary>
+		/// <summary>Gets the current graphics device.</summary>
 		public GraphicsDevice GraphicsDevice {
 			get { return graphicsDevice; }
 		}
 
-		GraphicsDevice graphicsDevice;
+		/// <summary>The current graphics device.</summary>
+		private GraphicsDevice graphicsDevice;
 
 
-		// Store the current device settings.
-		PresentationParameters parameters;
+		/// <summary>Store the current device settings.</summary>
+		private PresentationParameters parameters;
 
 
 		// IGraphicsDeviceService events.

@@ -77,13 +77,16 @@ namespace ZeldaOracle.Game.Debug {
 		public static void UpdateRoomDebugKeys() {
 			bool ctrl = (Keyboard.IsKeyDown(Keys.LControl) ||
 				Keyboard.IsKeyDown(Keys.RControl));
-			
+
 			// CTRL+Q: Quit the game
 			if (ctrl && Keyboard.IsKeyPressed(Keys.Q))
 				GameManager.Exit();
 			// CTRL+R: Restart the game.
 			if (ctrl && Keyboard.IsKeyPressed(Keys.R))
 				GameManager.Restart();
+			// CTRL+R: Toggle console window.
+			if (ctrl && Keyboard.IsKeyPressed(Keys.T))
+				GameManager.IsConsoleOpen = !GameManager.IsConsoleOpen;
 			// F5: Pause gameplay.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.F5))
 				GameManager.IsGamePaused = !GameManager.IsGamePaused;
@@ -222,12 +225,12 @@ namespace ZeldaOracle.Game.Debug {
 			world.StartTileLocation	= new Point2I(3, 2);
 			
 			// Load the levels from java level files.
-			world.Levels.Add(LoadJavaLevel("Content/Worlds/test_level.zwd"));
-			world.Levels.Add(LoadJavaLevel("Content/Worlds/interiors.zwd"));
-			world.Levels.Add(LoadJavaLevel("Content/Worlds/big_interiors.zwd"));
-			world.Levels[0].Properties.Set("id", "overworld");
-			world.Levels[1].Properties.Set("id", "interiors");
-			world.Levels[2].Properties.Set("id", "big_interiors");
+			world.AddLevel(LoadJavaLevel("Content/Worlds/test_level.zwd"));
+			world.AddLevel(LoadJavaLevel("Content/Worlds/interiors.zwd"));
+			world.AddLevel(LoadJavaLevel("Content/Worlds/big_interiors.zwd"));
+			world.GetLevelAt(0).Properties.Set("id", "overworld");
+			world.GetLevelAt(1).Properties.Set("id", "interiors");
+			world.GetLevelAt(2).Properties.Set("id", "big_interiors");
 
 			TileData tdBlock		= Resources.GetResource<TileData>("movable_block");
 			TileData tdDiamond		= Resources.GetResource<TileData>("diamond_rock");
@@ -248,7 +251,7 @@ namespace ZeldaOracle.Game.Debug {
 			EventTileDataInstance e;
 
 			// Setup the overworld rooms.
-			level = world.Levels[0];
+			level = world.GetLevelAt(0);
 			r = level.GetRoomAt(2, 1);
 			t = r.CreateTile(tdOwl, 8, 1, 1);
 				t.Properties.Set("text", "Hello, World!");
@@ -325,7 +328,7 @@ namespace ZeldaOracle.Game.Debug {
 			}*/
 			
 			// Setup the interior rooms.
-			level = world.Levels[1];
+			level = world.GetLevelAt(1);
 			r = level.GetRoomAt(2, 1);
 			r.Zone = GameData.ZONE_INTERIOR;
 			r.CreateTile(tdPot, 1, 2, 1);
@@ -355,7 +358,7 @@ namespace ZeldaOracle.Game.Debug {
 		}
 
 		
-		// Load a level from an java level file.
+		// Load a level from a Java level file.
 		public static Level LoadJavaLevel(string filename) {
             BinaryReader bin = new BinaryReader(File.OpenRead(filename));
 			int width	= bin.ReadByte();
@@ -376,7 +379,7 @@ namespace ZeldaOracle.Game.Debug {
 			return level;
 		}
 		
-		// Load a single room from an java level file.
+		// Load a single room from an Java level file.
 		public static Room LoadJavaRoom(BinaryReader bin, Level level, int locX, int locY) {
 			byte width		= bin.ReadByte();
 			byte height		= bin.ReadByte();
