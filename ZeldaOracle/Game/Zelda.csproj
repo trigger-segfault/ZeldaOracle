@@ -265,6 +265,7 @@
     <Compile Include="Game\Entities\Monsters\BasicMonster.cs" />
     <Compile Include="Game\Entities\Monsters\JumpMonsters\MonsterZolGreen.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterBeetle.cs" />
+    <Compile Include="Game\Entities\Monsters\MonsterThwomp.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterBladeTrap.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterGibdo.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterLynel.cs" />

@@ -29,6 +29,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			shootSpeed			= 2.0f;
 			projectileShootOdds	= 5; // 1 in 5 chance to shoot between movements.
 			shootPauseDuration	= 5;
+
+			// TODO: Boomerang = cling & intercept
 		}
 
 		public override void Initialize() {

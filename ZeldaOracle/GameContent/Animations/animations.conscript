@@ -1538,13 +1538,42 @@ ANIM monster_pols_voice; SUBSTRIP repeat;
 	ADD frame, 1, (14, 12); END;
 ANIM monster_pols_voice_jump; SUBSTRIP repeat;
 	ADD frame, 1, (15, 12); END;
+ANIM monster_thwomp_OLD;
+	SUBSTRIP repeat;
+	ADD frame, 1, (0, 13), ( 0,  0);
+	ADD part,  1, (1, 13), (16,  0);
+	ADD part,  1, (0, 14), ( 0, 16);
+	ADD part,  1, (1, 14), (16, 16); 
+	END;
+ANIM monster_thwomp_crush; SUBSTRIP repeat;
+	ADD frame, 1, (2, 13), ( 0,  0);
+	ADD part,  1, (3, 13), (16,  0);
+	ADD part,  1, (2, 14), ( 0, 16);
+	ADD part,  1, (3, 14), (16, 16); END;
+ANIM monster_thwomp_eye; SUBSTRIP repeat;
+	ADD frame, 8, (4, 13);
+	MAKEDYNAMIC 8, (1, 0); END;
+ANIM monster_thwimp; SUBSTRIP repeat;
+	ADD frame, 1, (12, 13); END;
+ANIM monster_thwimp_crush; SUBSTRIP repeat;
+	ADD frame, 1, (13, 13); END;
+	
+ANIM monster_thwomp;
+	SUBSTRIP repeat; ADD frame, 1, (0, 13), ( 0,  0); ADD part,  1, (1, 13), (16,  0); ADD part,  1, (0, 14), ( 0, 16); ADD part,  1, (1, 14), (16, 16); ADD part, 1, ( 4, 13), (8, 6);
+	SUBSTRIP repeat; ADD frame, 1, (0, 13), ( 0,  0); ADD part,  1, (1, 13), (16,  0); ADD part,  1, (0, 14), ( 0, 16); ADD part,  1, (1, 14), (16, 16); ADD part, 1, ( 5, 13), (8, 6);
+	SUBSTRIP repeat; ADD frame, 1, (0, 13), ( 0,  0); ADD part,  1, (1, 13), (16,  0); ADD part,  1, (0, 14), ( 0, 16); ADD part,  1, (1, 14), (16, 16); ADD part, 1, ( 6, 13), (8, 6);
+	SUBSTRIP repeat; ADD frame, 1, (0, 13), ( 0,  0); ADD part,  1, (1, 13), (16,  0); ADD part,  1, (0, 14), ( 0, 16); ADD part,  1, (1, 14), (16, 16); ADD part, 1, ( 7, 13), (8, 6);
+	SUBSTRIP repeat; ADD frame, 1, (0, 13), ( 0,  0); ADD part,  1, (1, 13), (16,  0); ADD part,  1, (0, 14), ( 0, 16); ADD part,  1, (1, 14), (16, 16); ADD part, 1, ( 8, 13), (8, 6);
+	SUBSTRIP repeat; ADD frame, 1, (0, 13), ( 0,  0); ADD part,  1, (1, 13), (16,  0); ADD part,  1, (0, 14), ( 0, 16); ADD part,  1, (1, 14), (16, 16); ADD part, 1, ( 9, 13), (8, 6);
+	SUBSTRIP repeat; ADD frame, 1, (0, 13), ( 0,  0); ADD part,  1, (1, 13), (16,  0); ADD part,  1, (0, 14), ( 0, 16); ADD part,  1, (1, 14), (16, 16); ADD part, 1, (10, 13), (8, 6);
+	SUBSTRIP repeat; ADD frame, 1, (0, 13), ( 0,  0); ADD part,  1, (1, 13), (16,  0); ADD part,  1, (0, 14), ( 0, 16); ADD part,  1, (1, 14), (16, 16); ADD part, 1, (11, 13), (8, 6);
+	END;
 
 ANIM monster_sword_hold;
 	SUBSTRIP repeat; ADD frame, 8, (0, 15), ( 8,  4); ADD frame, 8, (0, 15), ( 10,   4);
 	SUBSTRIP repeat; ADD frame, 8, (1, 15), ( 4, -8); ADD frame, 8, (1, 15), ( 4,  -10);
 	SUBSTRIP repeat; ADD frame, 8, (2, 15), (-8,  4); ADD frame, 8, (2, 15), (-10,   4);
 	SUBSTRIP repeat; ADD frame, 8, (3, 15), (-4,  7); ADD frame, 8, (3, 15), ( -4,   9); END;
-
 
 #==============================================================
 # Non-Colored Monster Animations

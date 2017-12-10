@@ -108,9 +108,16 @@ namespace ZeldaOracle.Game {
 		public const float				PLAYER_DEFAULT_PUSH_SPEED			= 0.5f;
 
 		// Monsters
-		public const int				MONSTER_STUN_DURATION		= 400;	// How long a monster gets stunned for (by boomerang/pegasus seeds).
-		public const int				MONSTER_STUN_SHAKE_DURATION	= 60;	// How long the monster shakes at the end of being stunned.
-		public const int				MONSTER_BOOMERANG_DAMAGE	= 1;
+		public const int				MONSTER_STUN_DURATION					= 400;	// How long a monster gets stunned for (by boomerang/pegasus seeds).
+		public const int				MONSTER_STUN_SHAKE_DURATION				= 60;	// How long the monster shakes at the end of being stunned.
+		public const int				MONSTER_BOOMERANG_DAMAGE				= 1;
+		public const int				MONSTER_THWOMP_CRUSH_MIN_ALIGNMENT		= 5; // TODO
+		public const float				MONSTER_THWOMP_CRUSH_ACCELERATION		= 0.2f;
+		public const float				MONSTER_THWOMP_CRUSH_INITIAL_SPEED		= 0.5f;
+		public const float				MONSTER_THWOMP_CRUSH_MAX_SPEED			= 2.5f;
+		public const float				MONSTER_THWOMP_RAISE_SPEED				= 0.5f;
+		public const int				MONSTER_THWOMP_HIT_SHAKE_DURATION		= 46;
+		public const int				MONSTER_THWOMP_HIT_WAIT_DURATION		= 46 + 16;
 
 		// Tiles
 		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.

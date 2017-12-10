@@ -71,7 +71,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		public void AddFrame(AnimationFrame frame) {
 			int index = 0;
-			while (index < frames.Count && frame.StartTime > frames[index].StartTime)
+			while (index < frames.Count && frame.StartTime >= frames[index].StartTime)
 				++index;
 			frames.Insert(index, frame);
 			duration = Math.Max(duration, frame.StartTime + frame.Duration);
