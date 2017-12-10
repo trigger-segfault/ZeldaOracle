@@ -746,5 +746,9 @@ namespace ZeldaOracle.Game.Control {
 			get { return disableVisualEffect; }
 			set { disableVisualEffect = value; }
 		}
+
+		public Zone Zone {
+			get { return room.Zone; }
+		}
 	}
 }

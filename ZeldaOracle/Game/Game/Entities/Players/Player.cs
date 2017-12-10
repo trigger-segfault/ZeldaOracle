@@ -19,6 +19,7 @@ using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Game.Entities.Players.States.SwingStates;
 using ZeldaOracle.Game.Entities.Players.Tools;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Entities.Players {
 	

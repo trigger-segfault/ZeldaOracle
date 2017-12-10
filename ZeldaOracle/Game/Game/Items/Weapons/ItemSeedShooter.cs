@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Items.Ammos;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 
@@ -28,8 +29,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.name			= new string[] { "Seed Shooter" };
 			this.description	= new string[] { "Used to bounce seeds around." };
 			this.currentAmmo	= 0;
-			this.sprite			= new Sprite[] { GameData.SPR_ITEM_ICON_SEED_SHOOTER };
-			this.spriteEquipped	= new Sprite[] { GameData.SPR_ITEM_ICON_SEED_SHOOTER_EQUIPPED };
+			this.sprite			= new ISprite[] { GameData.SPR_ITEM_ICON_SEED_SHOOTER };
+			this.spriteEquipped	= new ISprite[] { GameData.SPR_ITEM_ICON_SEED_SHOOTER_EQUIPPED };
 			this.flags			=
 				ItemFlags.UsableInMinecart |
 				ItemFlags.UsableUnderwater |

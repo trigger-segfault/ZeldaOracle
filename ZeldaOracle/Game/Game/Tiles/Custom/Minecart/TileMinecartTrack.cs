@@ -90,7 +90,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void OnInitialize() {
 			trackOrientation = (MinecartTrackOrientation)Properties.GetInteger("track_orientation", 0);
-			Graphics.PlaySpriteAnimation(SpriteList[(int)trackOrientation]);
+			Graphics.PlayAnimation(SpriteList[(int)trackOrientation]);
 
 			// Spawn a minecart entity.
 			if (SpawnsMinecart) {
@@ -111,7 +111,7 @@ namespace ZeldaOracle.Game.Tiles {
 				Properties.Set("switched_track_orientation", (int)trackOrientation);
 				Properties.Set("track_orientation", (int)switchedOrientation);
 				trackOrientation = switchedOrientation;
-				Graphics.PlaySpriteAnimation(SpriteList[(int)trackOrientation]);
+				Graphics.PlayAnimation(SpriteList[(int)trackOrientation]);
 			}
 		}
 

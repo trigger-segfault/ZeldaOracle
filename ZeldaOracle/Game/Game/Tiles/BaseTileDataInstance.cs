@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Tiles {
 	public abstract class BaseTileDataInstance : IEventObject, IIDObject {
@@ -77,9 +78,9 @@ namespace ZeldaOracle.Game.Tiles {
 		
 		public abstract Rectangle2I GetBounds();
 
-		public abstract SpriteAnimation CurrentSprite { get; }
+		public abstract ISprite CurrentSprite { get; }
 
-		public abstract SpriteAnimation Sprite { get; set; }
+		public abstract ISprite Sprite { get; set; }
 
 
 		//-----------------------------------------------------------------------------

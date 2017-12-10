@@ -96,12 +96,12 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 
 			if (rewardManager.HasReward(name)) {
 				Reward reward = rewardManager.GetReward(name);
-				ZeldaOracle.Common.Graphics.Sprite sprite = null;
+				ZeldaOracle.Common.Graphics.SpriteOld sprite = null;
 
 				Point2I position = (Point2I) e.Bounds.Location + new Point2I(2, 2);
 
-				if (reward != null && reward.Animation != null)
-					sprite = reward.Animation.Frames[0].Sprite;
+				if (reward != null && reward.Sprite != null)
+					sprite = reward.Sprite.Frames[0].Sprite;
 				if (sprite != null) {
 					EditorGraphics.DrawSprite(e.Graphics, sprite, position);
 				}

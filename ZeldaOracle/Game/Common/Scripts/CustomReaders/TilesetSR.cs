@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Content.ResourceBuilders;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Scripts.Commands;
 using ZeldaOracle.Game;
@@ -31,7 +32,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		private TileData			tileData;
 		private EventTileData		eventTileData;
 		//private LoadingModes		loadingMode;
-		private SpriteBuilder		spriteBuilder;
 		private TemporaryResources	resources;
 		private bool				useTemporary;
 
@@ -45,7 +45,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//this.loadingMode	= LoadingModes.Tilesets;
 			this.resources		= new TemporaryResources();
 			this.useTemporary	= false;
-			this.spriteBuilder	= new SpriteBuilder();
 
 			//=====================================================================================
 			// LOADING MODE 
@@ -67,7 +66,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			AddCommand("Tileset", "string name, string sheetName, (int width, int height)",
 			delegate(CommandParam parameters) {
-				SpriteSheet sheet = Resources.GetSpriteSheet(parameters.GetString(1));
+				SpriteSheet sheet = Resources.GetSpriteSheet(parameters.GetString(1)) as SpriteSheet;
 				tileset = new Tileset(parameters.GetString(0), sheet,
 									  parameters.GetPoint(2));
 			});
@@ -119,7 +118,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				baseTileData = eventTileData;
 								
 				if (parameters.ChildCount > 1)
-					eventTileData.Sprite = resources.GetSpriteAnimation(parameters.GetString(1));
+					eventTileData.Sprite = resources.GetResource<ISprite>(parameters.GetString(1));
 				if (parameters.ChildCount > 2)
 					eventTileData.Properties.Set("monster_type", parameters.GetString(2));
 				if (parameters.ChildCount > 3) {
@@ -301,15 +300,15 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string spriteSheetName, (int sourceX, int sourceY), (int offsetX, int offsetY) = (0, 0)",
 			delegate(CommandParam parameters) {
 				if (parameters.ChildCount >= 2) {
-					spriteBuilder.Begin(new Sprite(
-						resources.GetResource<SpriteSheet>(parameters.GetString(0)),
-						parameters.GetPoint(1),
-						parameters.GetPoint(2, Point2I.Zero)
-					));
-					baseTileData.Sprite = spriteBuilder.End();
+					baseTileData.Sprite = resources.GetResource<ISpriteSheet>(parameters.GetString(0))
+						.GetSprite(parameters.GetPoint(1));
+					Point2I drawOffset = parameters.GetPoint(2);
+					if (!drawOffset.IsZero) {
+						baseTileData.Sprite = new OffsetSprite(baseTileData.Sprite, drawOffset);
+					}
 				}
 				else {
-					baseTileData.Sprite = resources.GetSpriteAnimation(parameters.GetString(0));
+					baseTileData.Sprite = resources.GetResource<ISprite>(parameters.GetString(0));
 				}
 			});
 			//=====================================================================================
@@ -324,7 +323,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			delegate(CommandParam parameters) {
 				int index = parameters.GetInt(0);
 				if (tileData.SpriteList.Length <= index) {
-					SpriteAnimation[] spriteList = new SpriteAnimation[index + 1];
+					ISprite[] spriteList = new ISprite[index + 1];
 					for (int i = 0; i < spriteList.Length; i++) {
 						if (i < tileData.SpriteList.Length)
 							spriteList[i] = tileData.SpriteList[i];
@@ -334,33 +333,34 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					tileData.SpriteList = spriteList;
 				}
 				if (parameters.ChildCount > 2 && parameters[2].Type == CommandParamType.Array) {
-					spriteBuilder.Begin(new Sprite(
-						resources.GetResource<SpriteSheet>(parameters.GetString(1)),
-						parameters.GetPoint(2),
-						parameters.GetPoint(3, Point2I.Zero)
-					));
-					tileData.SpriteList[index] = spriteBuilder.End();
+					ISprite sprite = resources.GetResource<ISpriteSheet>(parameters.GetString(1))
+						.GetSprite(parameters.GetPoint(2));
+					Point2I drawOffset = parameters.GetPoint(3);
+					if (!drawOffset.IsZero) {
+						sprite = new OffsetSprite(sprite, drawOffset);
+					}
+					tileData.SpriteList[index] = sprite;
 				}
 				else {
 					if (parameters.ChildCount == 3) {
 						string typeName = parameters.GetString(1);
 						if (typeName == "sprite")
-							tileData.SpriteList[index] = resources.GetResource<Sprite>(parameters.GetString(2));
+							tileData.SpriteList[index] = resources.GetResource<ISprite>(parameters.GetString(2));
 						else if (typeName == "animation")
 							tileData.SpriteList[index] = resources.GetResource<Animation>(parameters.GetString(2));
 						else
 							ThrowParseError("Unknown sprite/animation type '" + typeName + "' (expected \"sprite\" or \"animation\")");
 					}
 					else {
-						tileData.SpriteList[index] = resources.GetSpriteAnimation(parameters.GetString(1));
+						tileData.SpriteList[index] = resources.GetResource<ISprite>(parameters.GetString(1));
 					}
 				}
 			});
 			//=====================================================================================
 			AddCommand("SpriteList", "string spriteAnimationNames...", delegate(CommandParam parameters) {
-				SpriteAnimation[] spriteList = new SpriteAnimation[parameters.ChildCount];
+				ISprite[] spriteList = new ISprite[parameters.ChildCount];
 				for (int i = 0; i < parameters.ChildCount; i++)
-					spriteList[i] = resources.GetSpriteAnimation(parameters.GetString(i));
+					spriteList[i] = resources.GetResource<ISprite>(parameters.GetString(i));
 
 				tileData.SpriteList = spriteList;
 			});
@@ -370,21 +370,21 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string spriteSheetName, (int sourceX, int sourceY), (int offsetX, int offsetY) = (0, 0)",
 			delegate(CommandParam parameters) {
 				if (parameters.ChildCount >= 2) {
-					spriteBuilder.Begin(new Sprite(
-						resources.GetResource<SpriteSheet>(parameters.GetString(0)),
-						parameters.GetPoint(1),
-						parameters.GetPoint(2, Point2I.Zero)
-					));
-					tileData.SpriteAsObject = spriteBuilder.End();
+					baseTileData.Sprite = resources.GetResource<ISpriteSheet>(parameters.GetString(0))
+						.GetSprite(parameters.GetPoint(1));
+					Point2I drawOffset = parameters.GetPoint(2);
+					if (!drawOffset.IsZero) {
+						baseTileData.Sprite = new OffsetSprite(baseTileData.Sprite, drawOffset);
+					}
 				}
 				else {
-					tileData.SpriteAsObject = resources.GetSpriteAnimation(parameters.GetString(0));
+					tileData.SpriteAsObject = resources.GetResource<ISprite>(parameters.GetString(0));
 				}
 			});
 			//=====================================================================================
 			AddCommand("BreakAnim", "string animationName",
 			delegate(CommandParam parameters) {
-				tileData.BreakAnimation = resources.GetResource<Animation>(parameters.GetString(0));
+				tileData.BreakAnimation = resources.GetResource<ISprite>(parameters.GetString(0)) as Animation;
 			});
 			//=====================================================================================
 			AddCommand("BreakSound", "string soundName",
@@ -448,8 +448,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//AddSpriteCommand("SpriteSheet", delegate(CommandParam parameters) {
 				if (parameters.ChildCount == 1) {
 					// Start using the given sprite sheet.
-					SpriteSheet sheet = Resources.GetResource<SpriteSheet>(parameters.GetString(0));
-					spriteBuilder.SpriteSheet = sheet;
+					SpriteSheet sheet = Resources.GetResource<ISpriteSheet>(parameters.GetString(0)) as SpriteSheet;
 				}
 				else {
 					int i = 1;
@@ -476,10 +475,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 							parameters.GetPoint(i + 2),
 							parameters.GetPoint(i + 1));
 					if (useTemporary)
-						resources.AddResource<SpriteSheet>(sheetName, sheet);
+						resources.AddResource<ISpriteSheet>(sheetName, sheet);
 					else
-						Resources.AddResource<SpriteSheet>(sheetName, sheet);
-					spriteBuilder.SpriteSheet = sheet;
+						Resources.AddResource<ISpriteSheet>(sheetName, sheet);
 				}
 			});
 
@@ -564,7 +562,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//loadingMode	= LoadingModes.Tilesets;
 			tileset		= null;
 			tileData	= null;
-			spriteBuilder.SpriteSheet = null;
 		}
 
 		// Ends reading the script.

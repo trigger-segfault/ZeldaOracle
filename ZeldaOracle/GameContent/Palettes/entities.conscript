@@ -1,0 +1,35 @@
+PALETTE		entities, entities;
+
+COLOR	tan_green, light	(248,208,136);
+COLOR	tan_green, dark		( 16,168, 64);
+
+LOOKUP	tan_blue, light		tan_green, light;
+COLOR	tan_blue, dark		( 24,128,248);
+
+LOOKUP	tan_red, light		tan_green, light;
+COLOR	tan_red, dark		(248,  8, 40);
+
+LOOKUP	tan_orange, light	tan_green, light;
+COLOR	tan_orange, dark	(248,120,  8);
+
+COLOR	shaded_red, light	(248,176, 48);
+COLOR	shaded_red, dark	(216,  0,  0);
+
+COLOR	shaded_blue, light	(112,168,248);
+COLOR	shaded_blue, dark	(  0,  0,248);
+
+LOOKUP	hurt, light			shaded_red, black;
+LOOKUP	hurt, dark			shaded_red, dark,
+LOOKUP	hurt, black			shaded_red, light;
+
+LOOKUP	color_cube_yellow_red, light	shaded_red, light;
+LOOKUP	color_cube_yellow_red, dark		shaded_red, dark;
+LOOKUP	color_cube_red_blue, light		shaded_red, dark;
+LOOKUP	color_cube_red_blue, dark		tan_blue, dark;
+LOOKUP	color_cube_blue_yellow, light	tan_blue, dark;
+LOOKUP	color_cube_blue_yellow, dark	shaded_red, light;
+
+COLOR	maku_seed, light	(216,128,160);
+COLOR	maku_seed, dark		(160,  0, 88);
+
+END;

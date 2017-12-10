@@ -44,7 +44,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (((IsVertical && Directions.IsVertical(direction)) || (!IsVertical && Directions.IsHorizontal(direction))) && nextRoller != null)
 				nextRoller.PushRoller(direction);
 
-			Graphics.PlayAnimation(TileData.SpriteList[1].Animation);
+			Graphics.PlayAnimation(TileData.SpriteList[1]);
 			Graphics.SubStripIndex = (direction <= 1 ? 0 : 1);
 
 			// Only the main roller should start the pushback.
@@ -102,7 +102,7 @@ namespace ZeldaOracle.Game.Tiles {
 			pushed = false;
 			pushTimer = 0;
 			
-			Graphics.PlayAnimation(TileData.SpriteList[1].Animation);
+			Graphics.PlayAnimation(TileData.SpriteList[1]);
 			Graphics.AnimationPlayer.SkipToEnd();
 		}
 

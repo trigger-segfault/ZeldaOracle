@@ -64,10 +64,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			
 			Graphics.ImageVariant = tile.Graphics.ImageVariant;
 			
-			if (!tile.SpriteAsObject.IsNull)
-				Graphics.PlaySpriteAnimation(tile.SpriteAsObject);
+			if (tile.SpriteAsObject != null)
+				Graphics.PlayAnimation(tile.SpriteAsObject);
 			else
-				Graphics.PlaySpriteAnimation(tile.Graphics.AnimationPlayer.SpriteOrSubStrip);
+				Graphics.PlayAnimation(tile.Graphics.AnimationPlayer.SpriteOrSubStrip);
 		}
 
 		public override void OnLand() {

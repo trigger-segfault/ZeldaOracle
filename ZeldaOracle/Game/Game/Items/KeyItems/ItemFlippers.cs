@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Entities.Players;
 
 namespace ZeldaOracle.Game.Items.KeyItems {
@@ -20,7 +21,7 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 			this.description = new string[] { "Hit the beach.", "The skin of the mythical beast." };
 			this.maxLevel = Item.Level2;
 			this.slot = new Point2I(0, 0);
-			this.sprite = new Sprite[] {
+			this.sprite = new ISprite[] {
 				GameData.SPR_ITEM_ICON_FLIPPERS_1,
 				GameData.SPR_ITEM_ICON_FLIPPERS_2
 			};

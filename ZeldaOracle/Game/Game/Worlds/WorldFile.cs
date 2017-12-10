@@ -14,6 +14,7 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Worlds {
 
@@ -59,7 +60,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private List<ResourceInfo<Tileset>>			tilesets;
 		private List<ResourceInfo<Type>>			tileTypes;
 		private List<ResourceInfo<CollisionModel>>	collisionModels;
-		private List<ResourceInfo<Sprite>>			sprites;
+		private List<ResourceInfo<ISprite>>			sprites;
 		private List<ResourceInfo<Animation>>		animations;
 		private List<ResourceInfo<TileData>>		tileData;
 		private List<ResourceInfo<EventTileData>>	eventTileData;
@@ -91,7 +92,7 @@ namespace ZeldaOracle.Game.Worlds {
 			zones			= new List<ResourceInfo<Zone>>();
 			tilesets		= new List<ResourceInfo<Tileset>>();
 			collisionModels	= new List<ResourceInfo<CollisionModel>>();
-			sprites			= new List<ResourceInfo<Sprite>>();
+			sprites			= new List<ResourceInfo<ISprite>>();
 			animations		= new List<ResourceInfo<Animation>>();
 			tileData		= new List<ResourceInfo<TileData>>();
 			eventTileData	= new List<ResourceInfo<EventTileData>>();

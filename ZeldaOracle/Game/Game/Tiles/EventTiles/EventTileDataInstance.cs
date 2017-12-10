@@ -7,13 +7,14 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Tiles.EventTiles {
 	
 	public class EventTileDataInstance : BaseTileDataInstance {
 
 		private Point2I			position;
-		private SpriteAnimation	sprite;
+		private ISprite			sprite;
 		
 
 		//-----------------------------------------------------------------------------
@@ -46,7 +47,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			base.Clone(copy);
 			if (copy is EventTileDataInstance) {
 				this.position	= ((EventTileDataInstance) copy).position;
-				this.sprite		= new SpriteAnimation(((EventTileDataInstance) copy).sprite);
+				this.sprite		= ((EventTileDataInstance) copy).sprite;
 			}
 		}
 		
@@ -72,15 +73,16 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		}
 
 		// The current sprite/animation to visually display.
-		public override SpriteAnimation CurrentSprite {
+		public override ISprite CurrentSprite {
 			get {
-				if (sprite.IsAnimation)
-					return sprite.Animation.GetSubstrip(SubStripIndex);
+				if (sprite is Animation) {
+					return ((Animation) sprite).GetSubstrip(SubStripIndex);
+				}
 				return sprite;
 			}
 		}
 
-		public override SpriteAnimation Sprite {
+		public override ISprite Sprite {
 			get { return sprite; }
 			set { sprite = value; }
 		}

@@ -5,13 +5,14 @@ using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Control;
 
 namespace ZeldaOracle.Game.Items.Rewards {
 	public class Reward {
 
 		protected string id;
-		protected Animation animation;
+		protected ISprite sprite;
 		protected string message;
 		protected bool hasDuration;
 		protected bool isCollectibleWithItems;
@@ -26,7 +27,7 @@ namespace ZeldaOracle.Game.Items.Rewards {
 
 		public Reward() {
 			this.id				= "";
-			this.animation		= null;
+			this.sprite			= null;
 			this.message		= "";
 			this.hasDuration	= false;
 			this.isCollectibleWithItems	= false;
@@ -45,25 +46,14 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			return true;
 		}
 
-		protected void InitAnimation(SpriteAnimation animation) {
-			if (animation.IsSprite)
-				InitSprite(animation.Sprite);
-			else if (animation.IsAnimation)
-				InitAnimation(animation.Animation);
-			else
-				this.animation = null;
-		}
-
-		protected void InitSprite(Sprite sprite) {
-			if (sprite.SourceRect.Width == 8 && sprite.DrawOffset.X == 0) {
-				sprite = new Sprite(sprite);
-				sprite.DrawOffset = new Point2I(4, sprite.DrawOffset.Y);
+		protected void InitSprite(ISprite sprite) {
+			Rectangle2I bounds = sprite.Bounds;
+			if (bounds.Width == 8 && bounds.X == 0) {
+				this.sprite = new OffsetSprite(sprite, new Point2I(4, 0));
 			}
-			InitAnimation(new Animation(sprite));
-		}
-		
-		protected void InitAnimation(Animation animation) {
-			this.animation = animation;
+			else {
+				this.sprite = sprite;
+			}
 		}
 
 
@@ -75,8 +65,8 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			get { return id; }
 		}
 
-		public Animation Animation {
-			get { return animation; }
+		public ISprite Sprite {
+			get { return sprite; }
 		}
 
 		public string Message {

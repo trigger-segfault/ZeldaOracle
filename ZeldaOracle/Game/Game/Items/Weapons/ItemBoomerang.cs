@@ -10,6 +10,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemBoomerang : ItemWeapon {
@@ -30,7 +31,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword | ItemFlags.UsableWhileInHole;
 			this.boomerangTracker	= new EntityTracker<Boomerang>(1);
 
-			sprite = new Sprite[] {
+			sprite = new ISprite[] {
 				GameData.SPR_ITEM_ICON_BOOMERANG_1,
 				GameData.SPR_ITEM_ICON_BOOMERANG_2
 			};

@@ -20,6 +20,7 @@ using ZeldaOracle.Game.Tiles.Custom;
 using ZeldaOracle.Game.Entities.Monsters;
 using System.IO;
 using System.Threading;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaEditor {
 
@@ -439,8 +440,8 @@ namespace ZeldaEditor {
 		
 		// Draw a tile.
 		private void DrawTile(Graphics2D g, TileDataInstance tile, Point2I position, Color drawColor) {
-			Sprite sprite = null;
-			Animation animation = null;
+			SpriteOld sprite = null;
+			AnimationOld animation = null;
 			float playbackTime = editorControl.Ticks;
 			int substripIndex = tile.Properties.GetInteger("substrip_index", 0);
 			
@@ -453,9 +454,9 @@ namespace ZeldaEditor {
 						for (int x = 0; x < tile.Size.X; x++) {
 							Point2I drawPos = position +
 								(new Point2I(x, y) * GameSettings.TILE_SIZE);
-							g.DrawAnimation(tile.CurrentSprite,
-								tile.Room.Zone.ImageVariantID,
-								editorControl.Ticks, position, drawColor);
+							g.DrawISprite(tile.CurrentSprite,
+								new SpriteDrawSettings(tile.Room.Zone.ImageVariantID, editorControl.Ticks),
+								position, drawColor);
 						}
 					}
 				}
@@ -537,7 +538,7 @@ namespace ZeldaEditor {
 			if (editorControl.ShowRewards && tile.Properties.Contains("reward") &&
 				editorControl.RewardManager.HasReward(tile.Properties.GetString("reward")))
 			{
-				Animation anim = editorControl.RewardManager.GetReward(tile.Properties.GetString("reward")).Animation;
+				AnimationOld anim = editorControl.RewardManager.GetReward(tile.Properties.GetString("reward")).Sprite;
 				g.DrawAnimation(anim, editorControl.Ticks, position, drawColor);
 			}
 		}

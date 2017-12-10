@@ -1,0 +1,139 @@
+PALETTE		dungeon, dungeon_ages_1;
+
+COLOR	red, light		(248,248,136);
+COLOR	red, medium		(248,  8, 40);
+COLOR	red, dark		(104,  0,  0);
+
+LOOKUP	blue, light		red, light;
+COLOR	blue, medium	( 24,128,248);
+COLOR	blue, dark		(  0, 64,128);
+
+LOOKUP	yellow, light	red, light; # Undefined
+COLOR	yellow, medium	(248,192, 48);
+COLOR	yellow, dark	(144, 72, 40);
+
+COLOR	chest, light	(248,208,136);
+COLOR	chest, medium	(232,  8, 24);
+COLOR	chest, dark		(104,  8, 40);
+
+LOOKUP	lanturn, all		chest, all;
+
+#==============================================================
+# General
+#==============================================================
+
+COLOR	floor, light	(144,128, 88);
+COLOR	floor, medium	(112, 80, 56);
+COLOR	floor, dark		( 80, 56, 32);
+
+COLOR	wall, light		(168,136,136);
+COLOR	wall, medium	(120, 88, 88);
+COLOR	wall, dark		( 88, 56, 56);
+
+LOOKUP	ceiling, all		wall, light;
+
+COLOR	stairs, light	(208,168, 56);
+LOOKUP	stairs, medium	stairs, light;
+LOOKUP	stairs, dark	stairs, dark;
+
+#==============================================================
+# Structures
+#==============================================================
+
+COLOR	barrier, light	(232,160, 72);
+COLOR	barrier, medium	(200, 72,  0);
+COLOR	barrier, dark	(104,  0,  0);
+
+LOOKUP	block, all		barrier, all;
+
+LOOKUP	torch, all		barrier, all;
+
+LOOKUP	torch_light, all	chest, all;
+
+COLOR	door, light		(248,248,136);
+COLOR	door, medium	( 88,136,184);
+COLOR	door, dark		(  0, 64,128);
+
+LOOKUP	lever, all		door, all;
+
+LOOKUP	button, all		floor, all;
+
+LOOKUP	object, light	floor, light;
+COLOR	object, medium	(208,168, 56);
+COLOR	object, dark	(144, 72, 40);
+
+LOOKUP	statue, all		door, all;
+
+LOOKUP	statue_alt, all	door, all;
+
+LOOKUP	armos, all		object, all;
+LOOKUP	armos_alt, all	object, all;
+
+LOOKUP	bridge, all		floor, all;
+
+LOOKUP	locked_block, all		barrier, all;
+
+LOOKUP	bush, light		floor, light;
+COLOR	bush, medium	(248,184,136);
+LOOKUP	bush, dark		default, black;
+
+LOOKUP	bush_regrow, light		floor, light;
+COLOR	bush_regrow, medium		(248,184,136);
+COLOR	bush_regrow, dark		( 16,168, 64);
+
+LOOKUP	web, all			floor, all;
+
+LOOKUP	dirt, all			floor, all;
+
+LOOKUP	hardened_lava, all	barrier, all;
+
+LOOKUP	attack_tile, all		barrier, all;
+
+LOOKUP	turnstile, all		object, all;
+
+LOOKUP	spikes, all		barrier, all;
+
+LOOKUP	arrow_shooter, all		barrier, all;
+
+LOOKUP	minecart_track, all		floor, all;
+
+#==============================================================
+# Liquids
+#==============================================================
+
+LOOKUP	water, all		blue, all;
+
+LOOKUP	lava, all			red, all;
+
+LOOKUP	sand, all			floor, all;
+
+#==============================================================
+# Entrance
+#==============================================================
+
+LOOKUP	entrance_column, all		wall, all;
+
+LOOKUP	entrance_brick, all		door, all;
+
+LOOKUP	entrance_tile, all		barrier, all;
+
+#==============================================================
+# Essense Room
+#==============================================================
+
+LOOKUP	essense_brick, all	object, all;
+
+LOOKUP	essense_tile, all		door, all;
+
+#==============================================================
+# Fancy Tiles
+#==============================================================
+
+LOOKUP	fancy_tile_1, all		object, all;
+LOOKUP	fancy_tile_2, all		barrier, all;
+LOOKUP	fancy_tile_3, all		object, all;
+LOOKUP	fancy_tile_4, all		floor, all;
+LOOKUP	fancy_tile_5, all		door, all;
+
+
+END;

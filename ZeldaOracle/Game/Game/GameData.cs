@@ -9,6 +9,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Common.Scripts.CustomReaders;
 
 namespace ZeldaOracle.Game {
 	
@@ -31,6 +32,12 @@ namespace ZeldaOracle.Game {
 			Console.WriteLine(CommandParamParser.ToString(param));
 			throw new LoadContentException("END");
 			*/
+
+			Console.WriteLine("Loading Palette Dictionaries");
+			LoadPaletteDictionaries();
+
+			Console.WriteLine("Loading Palettes");
+			LoadPalettes();
 
 			Console.WriteLine("Loading Images");
 			LoadImages();
@@ -58,6 +65,14 @@ namespace ZeldaOracle.Game {
 
 			Console.WriteLine("Loading Zones");
 			LoadZones();
+
+			Console.WriteLine("Loading Palettes");
+			LoadPalettes();
+
+			Console.WriteLine("Loading Shaders");
+			LoadShaders();
+
+			//Resources.LoadScript("Palettes/dungeon_ages_1_converter.conscript", new PaletteConverterSR());
 		}
 
 
@@ -273,6 +288,39 @@ namespace ZeldaOracle.Game {
 			FONT_SMALL = Resources.GetGameFont("Fonts/font_small");
 		}
 
+		//-----------------------------------------------------------------------------
+		// Palette Loading
+		//-----------------------------------------------------------------------------
+
+		// Loads the palette dictionaries.
+		private static void LoadPaletteDictionaries() {
+			Resources.LoadPaletteDictionaries("Palettes/Dictionaries/tile_palette_dictionary.conscript");
+			Resources.LoadPaletteDictionaries("Palettes/Dictionaries/entity_palette_dictionary.conscript");
+
+			PAL_DICTIONARY_TILES = Resources.GetPaletteDictionary("tiles");
+			PAL_DICTIONARY_ENTITIES = Resources.GetPaletteDictionary("entities");
+		}
+
+		// Loads the palettes.
+		private static void LoadPalettes() {
+			//Resources.LoadPalettes("Palettes/dungeon_ages_1.conscript");
+
+			//PAL_DUNGEON_AGES_1 = Resources.GetPalette("dungeon_ages_1");
+		}
+
+		//-----------------------------------------------------------------------------
+		// Shader Loading
+		//-----------------------------------------------------------------------------
+
+		// Loads the shaders.
+		private static void LoadShaders() {
+			PALETTE_SHADER		= Resources.LoadShader("Shaders/palette_shader");
+			PALETTE_LERP_SHADER	= Resources.LoadShader("Shaders/palette_lerp_shader");
+			//GameSettings.DRAW_MODE_DEFAULT.Effect = PALETTE_LERP_SHADER;
+		}
+
+		public static Effect PALETTE_SHADER;
+		public static Effect PALETTE_LERP_SHADER;
 
 		//-----------------------------------------------------------------------------
 		// Tilesets
@@ -362,6 +410,15 @@ namespace ZeldaOracle.Game {
 
 		public static GameFont FONT_LARGE;
 		public static GameFont FONT_SMALL;
+
+
+		//-----------------------------------------------------------------------------
+		// Palettes
+		//-----------------------------------------------------------------------------
+		
+		public static PaletteDictionary PAL_DICTIONARY_TILES;
+		public static PaletteDictionary PAL_DICTIONARY_ENTITIES;
+		public static Palette PAL_DUNGEON_AGES_1;
 
 
 		//-----------------------------------------------------------------------------

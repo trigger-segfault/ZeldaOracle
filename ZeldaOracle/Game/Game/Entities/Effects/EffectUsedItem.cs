@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Effects {
@@ -14,18 +15,14 @@ namespace ZeldaOracle.Game.Entities.Effects {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public EffectUsedItem(Sprite sprite) :
+		public EffectUsedItem(ISprite sprite) :
 			base()
 		{
 			// Create an animation of the sprite rising with two key-frames.
-			Sprite spr1 = new Sprite(sprite);
-			spr1.DrawOffset += new Point2I(-sprite.SourceRect.Width / 2, -12);
-			Sprite spr2 = new Sprite(sprite);
-			spr2.DrawOffset += new Point2I(-sprite.SourceRect.Width / 2, -20);
-			
+			Rectangle2I bounds = sprite.Bounds;
 			Animation animation = new Animation(LoopMode.Reset);
-			animation.AddFrame(0, 8, spr1);
-			animation.AddFrame(8, 20, spr2);
+			animation.AddFrame(0, 8, sprite, new Point2I(-bounds.Width / 2, -12));
+			animation.AddFrame(8, 20, sprite, new Point2I(-bounds.Width / 2, -20));
 			
 			// Play the animation.
 			destroyTimer = -1;

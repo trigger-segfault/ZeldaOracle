@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items.Essences {
 	public class ItemEssence7 : ItemEssence {
@@ -17,7 +18,7 @@ namespace ZeldaOracle.Game.Items.Essences {
 			this.name = new string[] { "Rolling Sea" };
 			this.description = new string[] { "The song of the sea forms a wave that carries heros into adventure." };
 			this.slot = 6;
-			this.sprite = new Sprite[] { GameData.SPR_ITEM_ICON_ESSENCE_7 };
+			this.sprite = new ISprite[] { GameData.SPR_ITEM_ICON_ESSENCE_7 };
 		}
 
 	}

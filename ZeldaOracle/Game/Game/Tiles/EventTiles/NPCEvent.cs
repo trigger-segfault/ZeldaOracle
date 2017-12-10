@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Worlds;

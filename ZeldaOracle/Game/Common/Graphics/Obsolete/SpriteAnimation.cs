@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Common.Graphics {
 
@@ -19,11 +20,11 @@ namespace ZeldaOracle.Common.Graphics {
 			this.value = null;
 		}
 
-		public SpriteAnimation(Sprite sprite) {
+		public SpriteAnimation(SpriteOld sprite) {
 			this.value = sprite;
 		}
 
-		public SpriteAnimation(Animation animation) {
+		public SpriteAnimation(AnimationOld animation) {
 			this.value = animation;
 		}
 
@@ -36,11 +37,11 @@ namespace ZeldaOracle.Common.Graphics {
 		// Mutators
 		//-----------------------------------------------------------------------------
 
-		public void Set(Sprite sprite) {
+		public void Set(SpriteOld sprite) {
 			this.value = sprite;
 		}
 
-		public void Set(Animation animation) {
+		public void Set(AnimationOld animation) {
 			this.value = animation;
 		}
 
@@ -60,11 +61,11 @@ namespace ZeldaOracle.Common.Graphics {
 		// Operators
 		//-----------------------------------------------------------------------------
 
-		public static implicit operator SpriteAnimation(Sprite sprite) {
+		public static implicit operator SpriteAnimation(SpriteOld sprite) {
 			return new SpriteAnimation(sprite);
 		}
 
-		public static implicit operator SpriteAnimation(Animation animation) {
+		public static implicit operator SpriteAnimation(AnimationOld animation) {
 			return new SpriteAnimation(animation);
 		}
 
@@ -75,12 +76,17 @@ namespace ZeldaOracle.Common.Graphics {
 
 		// Gets if the value is a sprite.
 		public bool IsSprite {
-			get { return value is Sprite; }
+			get { return value is SpriteOld; }
 		}
 
 		// Gets if the value is an animation.
 		public bool IsAnimation {
-			get { return value is Animation; }
+			get { return value is AnimationOld; }
+		}
+
+		// Gets if the value is a sprite interface.
+		public bool IsISprite {
+			get { return value is ISprite; }
 		}
 
 		// Gets if the value is null.
@@ -97,20 +103,30 @@ namespace ZeldaOracle.Common.Graphics {
 		}
 
 		// Gets or sets the value as a sprite.
-		public Sprite Sprite {
+		public SpriteOld Sprite {
 			get {
-				if (value is Sprite)
-					return (Sprite)value;
+				if (value is SpriteOld)
+					return (SpriteOld)value;
+				return null;
+			}
+			set { this.value = value; }
+		}
+
+		// Gets or sets the value as a sprite interface.
+		public ISprite ISprite {
+			get {
+				if (value is ISprite)
+					return (ISprite) value;
 				return null;
 			}
 			set { this.value = value; }
 		}
 
 		// Gets or sets the value as an animation.
-		public Animation Animation {
+		public AnimationOld Animation {
 			get {
-				if (value is Animation)
-					return (Animation)value;
+				if (value is AnimationOld)
+					return (AnimationOld)value;
 				return null;
 			}
 			set { this.value = value; }

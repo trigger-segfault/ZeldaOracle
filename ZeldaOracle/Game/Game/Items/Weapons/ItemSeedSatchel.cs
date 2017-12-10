@@ -12,6 +12,7 @@ using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Game.Items.Ammos;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 
@@ -39,12 +40,12 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.galeSeedTracker	= new EntityTracker<Seed>(1);
 			this.mysterySeedTracker	= new EntityTracker<Seed>(1);
 
-			sprite = new Sprite[] {
+			sprite = new ISprite[] {
 				GameData.SPR_ITEM_ICON_SATCHEL,
 				GameData.SPR_ITEM_ICON_SATCHEL,
 				GameData.SPR_ITEM_ICON_SATCHEL,
 			};
-			spriteEquipped = new Sprite[] {
+			spriteEquipped = new ISprite[] {
 				GameData.SPR_ITEM_ICON_SATCHEL_EQUIPPED,
 				GameData.SPR_ITEM_ICON_SATCHEL_EQUIPPED,
 				GameData.SPR_ITEM_ICON_SATCHEL_EQUIPPED,

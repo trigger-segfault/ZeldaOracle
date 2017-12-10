@@ -6,6 +6,7 @@ using System.Text;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -65,7 +66,7 @@ namespace ZeldaOracle.Game.Tiles {
 			TileData tileData		= new TileData();
 			tileData.Tileset		= this;
 			tileData.SheetLocation	= location;
-			tileData.Sprite			= new Sprite(sheet, location);
+			tileData.Sprite			= new BasicSprite(sheet, location);
 			return tileData;
 		}
 

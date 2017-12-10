@@ -16,6 +16,7 @@ using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 using ZeldaEditor.Control;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
@@ -50,9 +51,8 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 				Canvas canvasSprite = null;
 				Reward reward = rewardPair.Value;
 
-				if (reward != null && reward.Animation != null) {
-					Sprite sprite = reward.Animation.Frames[0].Sprite;
-					canvasSprite = EditorResources.GetSprite(sprite);
+				if (reward != null && reward.Sprite != null) {
+					canvasSprite = EditorResources.GetSprite(reward.Sprite);
 				}
 
 				rewardItems[index] = CreateListItem(canvasSprite, reward.ID);

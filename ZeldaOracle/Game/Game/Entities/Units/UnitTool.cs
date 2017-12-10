@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Projectiles;

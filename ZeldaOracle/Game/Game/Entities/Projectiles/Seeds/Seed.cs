@@ -91,7 +91,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 			}
 			Physics.SoftCollisionBox = Physics.CollisionBox;
 
-			Graphics.PlaySprite(GameData.SPR_ITEM_SEEDS[(int) type]);
+			Graphics.PlayAnimation(GameData.SPR_ITEM_SEEDS[(int) type]);
 		}
 	}
 }

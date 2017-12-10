@@ -5,12 +5,13 @@ using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemShield : ItemWeapon {
 
-		private Animation	shieldAnimation;
-		private Animation	shieldBlockAnimation;
+		private Animation   shieldAnimation;
+		private Animation   shieldBlockAnimation;
 		private bool		isShieldBlocking;
 
 
@@ -25,7 +26,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.maxLevel		= Item.Level3;
 			this.flags			= ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword | ItemFlags.UsableWhileInHole;
 
-			this.sprite = new Sprite[] {
+			this.sprite = new ISprite[] {
 				GameData.SPR_ITEM_ICON_SHIELD_1,
 				GameData.SPR_ITEM_ICON_SHIELD_2,
 				GameData.SPR_ITEM_ICON_SHIELD_3

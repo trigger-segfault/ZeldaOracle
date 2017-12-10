@@ -33,7 +33,7 @@ using ZeldaEditor.TreeViews;
 using ZeldaEditor.Undo;
 using ZeldaEditor.Windows;
 using ZeldaEditor.WinForms;
-
+using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaEditor.Control {
 
@@ -55,63 +55,63 @@ namespace ZeldaEditor.Control {
 		private bool isInitialized;
 
 		// Control
-		private EditorWindow		editorWindow;
-		private string				worldFilePath;
-		private World				world;
-		private Level				level;
-		private ITileset			tileset;
-		private Zone				zone;
-		private RewardManager		rewardManager;
-		private Inventory			inventory;
+		private EditorWindow        editorWindow;
+		private string              worldFilePath;
+		private World               world;
+		private Level               level;
+		private ITileset            tileset;
+		private Zone                zone;
+		private RewardManager       rewardManager;
+		private Inventory           inventory;
 
-		private Stopwatch			timer;
-		private int					ticks;
-		private bool				isModified;
+		private Stopwatch           timer;
+		private int                 ticks;
+		private bool                isModified;
 
 		// Settings
-		private bool				playAnimations;
-		private bool				eventMode;
+		private bool                playAnimations;
+		private bool                eventMode;
 
 		// Debug
 		private bool                debugConsole;
-		
+
 		// Tools
-		private List<EditorTool>	tools;
-		private ToolPointer			toolPointer;
-		private ToolPan			    toolPan;
-		private ToolPlace			toolPlace;
-		private	ToolSquare			toolSquare;
-		private ToolFill			toolFill;
-		private ToolSelection		toolSelection;
-		private ToolEyedrop			toolEyedropper;
-		private ObservableCollection<EditorAction>	undoActions;
+		private List<EditorTool>    tools;
+		private ToolPointer         toolPointer;
+		private ToolPan             toolPan;
+		private ToolPlace           toolPlace;
+		private ToolSquare          toolSquare;
+		private ToolFill            toolFill;
+		private ToolSelection       toolSelection;
+		private ToolEyedrop         toolEyedropper;
+		private ObservableCollection<EditorAction>  undoActions;
 		private int                 undoPosition;
-		
+
 		// Editing
-		private int				roomSpacing;
-		private int				currentLayer;
-		private int				currentToolIndex;
-		private int				previousToolIndex;
-		private TileDrawModes	aboveTileDrawMode;
-		private TileDrawModes	belowTileDrawMode;
-		private bool			showRewards;
-		private bool			showGrid;
+		private int             roomSpacing;
+		private int             currentLayer;
+		private int             currentToolIndex;
+		private int             previousToolIndex;
+		private TileDrawModes   aboveTileDrawMode;
+		private TileDrawModes   belowTileDrawMode;
+		private bool            showRewards;
+		private bool            showGrid;
 		private bool            showModified;
-		private bool			highlightMouseTile;
-		private Point2I			selectedRoom;
-		private Point2I			selectedTilesetTile;
-		private BaseTileData	selectedTilesetTileData;
-		private bool			playerPlaceMode;
-		private bool			showEvents;
+		private bool            highlightMouseTile;
+		private Point2I         selectedRoom;
+		private Point2I         selectedTilesetTile;
+		private BaseTileData    selectedTilesetTileData;
+		private bool            playerPlaceMode;
+		private bool            showEvents;
 
 		private DispatcherTimer             updateTimer;
-		
-		private bool						needsRecompiling;
-		private Task<ScriptCompileResult>	compileTask;
-		private CancellationTokenSource		compileCancellationToken;
+
+		private bool                        needsRecompiling;
+		private Task<ScriptCompileResult>   compileTask;
+		private CancellationTokenSource     compileCancellationToken;
 		private ScriptCompileCallback       compileCallback;
 		private List<string>                scriptsToRecompile;
-		private List<Event>					eventsToRecompile;
+		private List<Event>                 eventsToRecompile;
 		private bool                        isCompilingForScriptEditor;
 		private Script                      currentCompilingScript;
 
@@ -121,6 +121,9 @@ namespace ZeldaEditor.Control {
 
 		private bool                        noScriptErrors;
 		private bool                        noScriptWarnings;
+
+
+		private PaletteShader               paletteShader;
 
 
 		//-----------------------------------------------------------------------------
@@ -153,7 +156,7 @@ namespace ZeldaEditor.Control {
 			this.eventCacheTask = null;
 			this.needsNewEventCache = false;
 			this.currentCompilingScript = null;
-			this.noScriptErrors		= false;
+			this.noScriptErrors     = false;
 			this.noScriptWarnings   = false;
 
 			this.currentLayer               = 0;
@@ -174,24 +177,24 @@ namespace ZeldaEditor.Control {
 		}
 
 		public void Initialize(ContentManager contentManager,
-			GraphicsDevice graphicsDevice)
-		{
+			GraphicsDevice graphicsDevice) {
 			if (!isInitialized) {
 				Resources.Initialize(contentManager, graphicsDevice);
 				GameData.Initialize();
 				EditorResources.Initialize();
 				FormatCodes.Initialize();
+				paletteShader = new PaletteShader(GameData.PALETTE_LERP_SHADER);
 
-				this.inventory		= new Inventory(null);
-				this.rewardManager	= new RewardManager(null);
-				this.timer			= Stopwatch.StartNew();
-				this.ticks			= 0;
-				this.roomSpacing	= 1;
+				this.inventory      = new Inventory(null);
+				this.rewardManager  = new RewardManager(null);
+				this.timer          = Stopwatch.StartNew();
+				this.ticks          = 0;
+				this.roomSpacing    = 1;
 				this.playAnimations = false;
-				this.tileset		= GameData.TILESET_CLIFFS;
-				this.zone			= GameData.ZONE_PRESENT;
+				this.tileset        = GameData.TILESET_CLIFFS;
+				this.zone           = GameData.ZONE_PRESENT;
 				this.selectedTilesetTileData = this.tileset.GetTileData(0, 0);
-				this.eventMode		= false;
+				this.eventMode      = false;
 
 				GameData.LoadInventory(inventory);
 				GameData.LoadRewards(rewardManager);
@@ -204,13 +207,13 @@ namespace ZeldaEditor.Control {
 
 				// Create tools.
 				tools = new List<EditorTool>();
-				AddTool(toolPointer		= new ToolPointer());
+				AddTool(toolPointer     = new ToolPointer());
 				AddTool(toolPan         = new ToolPan());
-				AddTool(toolPlace		= new ToolPlace());
-				AddTool(toolSquare		= new ToolSquare());
-				AddTool(toolFill		= new ToolFill());
-				AddTool(toolSelection	= new ToolSelection());
-				AddTool(toolEyedropper	= new ToolEyedrop());
+				AddTool(toolPlace       = new ToolPlace());
+				AddTool(toolSquare      = new ToolSquare());
+				AddTool(toolFill        = new ToolFill());
+				AddTool(toolSelection   = new ToolSelection());
+				AddTool(toolEyedropper  = new ToolEyedrop());
 				currentToolIndex = 0;
 				tools[currentToolIndex].Begin();
 
@@ -302,7 +305,7 @@ namespace ZeldaEditor.Control {
 						index = zones.Count - 1;
 				}
 			}
-			
+
 			editorWindow.SetZonesItemsSource(zones, index);
 		}
 
@@ -331,7 +334,7 @@ namespace ZeldaEditor.Control {
 			if (IsWorldOpen) {
 				WorldFile saveFile = new WorldFile();
 				saveFile.Save(fileName, world, true);
-				worldFilePath	= fileName;
+				worldFilePath   = fileName;
 				IsModified      = false;
 			}
 		}
@@ -346,9 +349,9 @@ namespace ZeldaEditor.Control {
 			if (loadedWorld != null) {
 				CloseWorld();
 
-				worldFilePath		= fileName;
-				needsRecompiling	= true;
-				needsNewEventCache	= true;
+				worldFilePath       = fileName;
+				needsRecompiling    = true;
+				needsNewEventCache  = true;
 
 				world = loadedWorld;
 				if (world.LevelCount > 0)
@@ -374,10 +377,10 @@ namespace ZeldaEditor.Control {
 				CurrentTool.Begin();
 				PropertyGrid.CloseProperties();
 				world           = null;
-				level			= null;
+				level           = null;
 				LevelDisplay.UpdateLevel();
 				worldFilePath   = "";
-				IsModified		= false;
+				IsModified      = false;
 				eventCache.Clear();
 				RefreshWorldTreeView();
 				UpdateLayers();
@@ -426,7 +429,7 @@ namespace ZeldaEditor.Control {
 				tileset = Resources.GetResource<Tileset>(name);
 			else if (Resources.ContainsResource<EventTileset>(name))
 				tileset = Resources.GetResource<EventTileset>(name);
-			
+
 			if (tileset.SpriteSheet != null) {
 				// Setup zone combo box for the new tileset.
 				UpdateZones();
@@ -501,7 +504,7 @@ namespace ZeldaEditor.Control {
 			OpenProperties(room);
 		}
 
-		
+
 		//-----------------------------------------------------------------------------
 		// Tiles
 		//-----------------------------------------------------------------------------
@@ -511,7 +514,7 @@ namespace ZeldaEditor.Control {
 		//-----------------------------------------------------------------------------
 		// Tools
 		//-----------------------------------------------------------------------------
-		
+
 		// Change the current tool to the tool of the given index.
 		public void ChangeTool(int toolIndex) {
 			if (toolIndex != currentToolIndex) {
@@ -529,7 +532,7 @@ namespace ZeldaEditor.Control {
 				CommandManager.InvalidateRequerySuggested();
 			}
 		}
-		
+
 		// Add a new tool to the list of tools and initialize it.
 		private EditorTool AddTool(EditorTool tool) {
 			tool.Initialize(this);
@@ -543,7 +546,7 @@ namespace ZeldaEditor.Control {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Pushes the action to the list and performs the specified execution.</summary>
-		public void PushAction(EditorAction action, ActionExecution execution ) {
+		public void PushAction(EditorAction action, ActionExecution execution) {
 			// Ignore if nothing occurred during this action
 			if (action.IgnoreAction)
 				return;
@@ -567,7 +570,7 @@ namespace ZeldaEditor.Control {
 				undoActions.RemoveAt(0);
 			}
 			undoPosition = undoActions.Count - 1;
-			
+
 			editorWindow.SelectHistoryItem(action);
 		}
 
@@ -709,7 +712,7 @@ namespace ZeldaEditor.Control {
 				CompileNextScript();
 			}
 		}
-		
+
 		private void CompileAllScriptsAsync(ScriptCompileCallback callback) {
 			compileCancellationToken = new CancellationTokenSource();
 			compileCallback = callback;
@@ -729,7 +732,7 @@ namespace ZeldaEditor.Control {
 
 			noScriptErrors = !result.Errors.Any();
 			noScriptWarnings = !result.Warnings.Any();
-			
+
 			if (!HasScriptsToCheck || (noScriptErrors && noScriptWarnings)) {
 				editorWindow.ClearStatusBarTask();
 				editorWindow.WorldTreeView.RefreshScripts(true, true);
@@ -742,8 +745,8 @@ namespace ZeldaEditor.Control {
 			compileTask = null;
 			compileCancellationToken = null;
 
-			currentCompilingScript.Errors	= result.Errors;
-			currentCompilingScript.Warnings	= result.Warnings;
+			currentCompilingScript.Errors   = result.Errors;
+			currentCompilingScript.Warnings = result.Warnings;
 			currentCompilingScript = null;
 
 			if (!HasScriptsToCheck) {
@@ -874,7 +877,7 @@ namespace ZeldaEditor.Control {
 			get { return editorWindow; }
 			set { editorWindow = value; }
 		}
-		
+
 		public ZeldaPropertyGrid PropertyGrid {
 			get { return editorWindow.PropertyGrid; }
 		}
@@ -893,6 +896,10 @@ namespace ZeldaEditor.Control {
 
 		public Inventory Inventory {
 			get { return inventory; }
+		}
+
+		public PaletteShader PaletteShader {
+			get { return paletteShader; }
 		}
 
 		// World ----------------------------------------------------------------------

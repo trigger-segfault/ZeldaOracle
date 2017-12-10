@@ -57,7 +57,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin() {
-			animationPlayer.Play(reward.Animation);
+			animationPlayer.Play(reward.Sprite);
 			timer = -1;
 		}
 

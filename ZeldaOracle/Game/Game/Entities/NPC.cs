@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Main;
@@ -31,9 +32,9 @@ namespace ZeldaOracle.Game.Entities {
 		// player (excluding the center tile).
 		private int sightDistance;
 		// The default animation to play.
-		private SpriteAnimation animationDefault;
+		private ISprite animationDefault;
 		// The animation to play when being talked to.
-		private SpriteAnimation animationTalk;
+		private ISprite animationTalk;
 
 		private Message message;
 
@@ -72,7 +73,7 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		public override void Initialize() {
-			Graphics.PlaySpriteAnimation(animationDefault);
+			Graphics.PlayAnimation(animationDefault);
 
 			sightDistance	= 2;
 			faceDirection	= direction;
@@ -83,16 +84,16 @@ namespace ZeldaOracle.Game.Entities {
 
 		public override bool OnPlayerAction(int direction) {
 			if (message != null) {
-				if (!animationTalk.IsNull) {
-					Graphics.PlaySpriteAnimation(animationTalk);
+				if (animationTalk != null) {
+					Graphics.PlayAnimation(animationTalk);
 				}
 				if (flags.HasFlag(NPCFlags.FacePlayerOnTalk)) {
 					faceDirection = Directions.Reverse(direction);
 					Graphics.SubStripIndex = faceDirection;
 				}
 				GameControl.DisplayMessage(message, delegate() {
-					if (!animationTalk.IsNull)
-						Graphics.PlaySpriteAnimation(animationDefault);
+					if (animationTalk != null)
+						Graphics.PlayAnimation(animationDefault);
 				});
 				return true;
 			}
@@ -160,12 +161,12 @@ namespace ZeldaOracle.Game.Entities {
 			set { message = value; }
 		}
 
-		public SpriteAnimation DefaultAnimation {
+		public ISprite DefaultAnimation {
 			get { return animationDefault; }
 			set { animationDefault = value; }
 		}
 
-		public SpriteAnimation TalkAnimation {
+		public ISprite TalkAnimation {
 			get { return animationTalk; }
 			set { animationTalk = value; }
 		}

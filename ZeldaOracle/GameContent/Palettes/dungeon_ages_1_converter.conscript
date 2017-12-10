@@ -1,0 +1,115 @@
+
+CONVERT	"tileset_dungeon" "ages_dungeon_1" "dungeon";
+
+TILE	wall (light, medium, dark);
+TILE	wall (light, medium, dark);
+TILE	wall (light, medium, dark);
+TILE	dirt (light, medium);
+TILE	fancy_tile_1 (light, medium);
+TILE	fancy_tile_2 (medium, dark);
+TILE	fancy_tile_3 (medium, dark);
+TILE	fancy_tile_4 (light, medium,  dark);
+TILE	fancy_tile_5 (medium, dark);
+TILE	barrier (light, medium, dark),
+		barrier (light, medium, dark),
+		barrier (light, medium, dark),
+		floor	(light, medium);
+TILE	barrier (light, medium, dark),
+		barrier (light, medium, dark),
+		floor	(light, medium),
+		floor	(light, medium);
+TILE	barrier (light, medium, dark),
+		barrier (light, medium, dark),
+		floor	(light, medium),
+		barrier (light, medium, dark);
+TILE	wall (light, medium, dark);
+TILE	ceiling (light);
+TILE	wall (light, medium, dark);
+SKIP;
+SKIP;
+SKIP;
+SKIP;
+SKIP;
+SKIP;
+TILE	barrier (light, medium, dark),
+		floor	(light, medium),
+		barrier (light, medium, dark),
+		floor	(light, medium);
+TILE	barrier (light, medium, dark);
+TILE	floor	(light, medium),
+		barrier (light, medium, dark),
+		floor	(light, medium),
+		barrier (light, medium, dark);
+TILE	wall (light, medium, dark);
+TILE	wall (light, medium, dark);
+TILE	wall (light, medium, dark);
+TILE	statue (light, medium, dark);
+TILE	statue (medium, dark);
+TILE	statue (light, medium, dark);
+TILE	block (medium, dark);
+TILE	barrier (light, medium, dark),
+		floor	(light, medium),
+		floor	(light, medium),
+		floor	(light, medium);
+TILE	floor	(light, medium),
+		barrier (light, medium, dark),
+		floor	(light, medium),
+		floor	(light, medium);
+TILE	barrier (light, medium, dark),
+		floor	(light, medium),
+		barrier (light, medium, dark),
+		barrier (light, medium, dark);
+TILE	floor	(light, medium),
+		floor	(light, medium),
+		barrier (light, medium, dark),
+		barrier (light, medium, dark);
+TILE	floor	(light, medium),
+		barrier (light, medium, dark),
+		barrier (light, medium, dark),
+		barrier (light, medium, dark);
+TILE	wall (light, medium, dark);
+TILE	stairs (medium);
+TILE	wall (light, medium, dark);
+TILE	floor (light, medium, dark);
+TILE	floor (light, medium, dark);
+TILE	wall (light, medium, dark);
+TILE	wall (light, medium, dark);
+TILE	floor	(light, medium),
+		floor	(light, medium),
+		barrier (light, medium, dark),
+		floor	(light, medium);
+TILE	floor	(light, medium),
+		floor	(light, medium),
+		floor	(light, medium),
+		barrier (light, medium, dark);
+SKIP;
+SKIP;
+SKIP;
+		
+TILE	stairs (medium);
+TILE	floor (light, medium);
+TILE	stairs (medium);
+TILE	floor (light, medium, dark);
+TILE	floor (light, medium, dark);
+TILE	floor (light, medium, dark);
+TILE	floor (light, medium, dark);
+SKIP;
+SKIP;
+SKIP;
+SKIP;
+SKIP;
+TILE	wall (light, medium, dark);
+TILE	stairs (medium);
+TILE	wall (light, medium, dark);
+TILE	floor (medium, dark);
+TILE	floor (medium, dark);
+SKIP;
+SKIP;
+SKIP;
+SKIP;
+SKIP;
+SKIP;
+SKIP;
+
+
+END;

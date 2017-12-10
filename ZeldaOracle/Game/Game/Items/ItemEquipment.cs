@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items {
 	public class ItemEquipment : Item {
 
 		protected bool isEquipped;
-		protected Sprite[] spriteEquipped;
+		protected ISprite[] spriteEquipped;
 
 
 		//-----------------------------------------------------------------------------
@@ -55,7 +56,7 @@ namespace ZeldaOracle.Game.Items {
 		
 		// Draws the item inside the inventory.
 		protected override void DrawSprite(Graphics2D g, Point2I position, int lightOrDark) {
-			Sprite spr = sprite[level];
+			ISprite spr = sprite[level];
 			if (inventory.IsWeaponEquipped(this) && spriteEquipped != null)
 				spr = spriteEquipped[level];
 			g.DrawSprite(spr, lightOrDark, position);

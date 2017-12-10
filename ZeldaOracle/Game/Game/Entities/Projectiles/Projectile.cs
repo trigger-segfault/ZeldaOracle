@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Monsters;
@@ -28,7 +29,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		protected Entity	owner;
 		protected bool		syncAnimationWithAngle;
 		protected bool		syncAnimationWithDirection;
-		protected Animation	crashAnimation;
+		protected Animation crashAnimation;
 		protected bool		bounceOnCrash;
 		protected ProjectileType projectileType;
 

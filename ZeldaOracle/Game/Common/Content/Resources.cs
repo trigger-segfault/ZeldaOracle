@@ -17,8 +17,9 @@ using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 using ZeldaOracle.Game.Worlds;
-using Song		= ZeldaOracle.Common.Audio.Song;
-using XnaSong	= Microsoft.Xna.Framework.Media.Song;
+using Song = ZeldaOracle.Common.Audio.Song;
+using XnaSong = Microsoft.Xna.Framework.Media.Song;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Common.Content {
 
@@ -57,15 +58,22 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>The collection of loaded game fonts.</summary>
 		private static Dictionary<string, GameFont> gameFonts;
 		/// <summary>The collection of loaded sprite sheets.</summary>
-		private static Dictionary<string, SpriteSheet> spriteSheets;
+		private static Dictionary<string, ISpriteSheet> spriteSheets;
 		/// <summary>The collection of loaded sprites.</summary>
-		private static Dictionary<string, Sprite> sprites;
+		private static Dictionary<string, ISprite> sprites;
 		/// <summary>The collection of loaded animations.</summary>
 		private static Dictionary<string, Animation> animations;
+		/// <summary>The collection of loaded palette dictionaries.</summary>
+		private static Dictionary<string, PaletteDictionary> paletteDictionaries;
+		/// <summary>The collection of loaded palettes.</summary>
+		private static Dictionary<string, Palette> palettes;
 		/// <summary>The collection of loaded shaders.</summary>
 		private static Dictionary<string, Effect> shaders;
 		/// <summary>The texture loader for loading images from file.</summary>
 		private static TextureLoader textureLoader;
+
+		/// <summary>The database for creating paletted sprites.</summary>
+		private static PalettedSpriteDatabase palettedSpriteDatabase;
 
 		/// <summary>The collection of loaded collision models.</summary>
 		private static Dictionary<string, CollisionModel> collisionModels;
@@ -104,6 +112,8 @@ namespace ZeldaOracle.Common.Content {
 		public const string SpriteSheetDirectory = "SpriteSheets/";
 		/// <summary>The directory for storing animations.</summary>
 		public const string AnimationDirectory = "Animations/";
+		/// <summary>The directory for storing palettes and palette dictionaries.</summary>
+		public const string PaletteDirectory = "Palettes/";
 		/// <summary>The directory for storing shaders.</summary>
 		public const string ShaderDirectory = "Shaders/";
 
@@ -132,11 +142,14 @@ namespace ZeldaOracle.Common.Content {
 			images				= new Dictionary<string, Image>();
 			realFonts			= new Dictionary<string, RealFont>();
 			gameFonts			= new Dictionary<string, GameFont>();
-			spriteSheets		= new Dictionary<string, SpriteSheet>();
-			sprites				= new Dictionary<string, Sprite>();
+			spriteSheets		= new Dictionary<string, ISpriteSheet>();
+			sprites				= new Dictionary<string, ISprite>();
 			animations			= new Dictionary<string, Animation>();
 			shaders				= new Dictionary<string, Effect>();
-			textureLoader		= new TextureLoader(graphicsDevice);
+			paletteDictionaries = new Dictionary<string, PaletteDictionary>();
+			palettes            = new Dictionary<string, Palette>();
+			palettedSpriteDatabase  = new PalettedSpriteDatabase();
+			textureLoader       = new TextureLoader(graphicsDevice);
 
 			// Sounds
 			sounds				= new Dictionary<string, Sound>();
@@ -162,8 +175,8 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries[typeof(Image)]				= images;
 			resourceDictionaries[typeof(RealFont)]			= realFonts;
 			resourceDictionaries[typeof(GameFont)]			= gameFonts;
-			resourceDictionaries[typeof(SpriteSheet)]		= spriteSheets;
-			resourceDictionaries[typeof(Sprite)]			= sprites;
+			resourceDictionaries[typeof(ISpriteSheet)]		= spriteSheets;
+			resourceDictionaries[typeof(ISprite)]			= sprites;
 			resourceDictionaries[typeof(Animation)]			= animations;
 			resourceDictionaries[typeof(Effect)]			= shaders;
 			resourceDictionaries[typeof(Sound)]				= sounds;
@@ -175,6 +188,8 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries[typeof(EventTileData)]		= eventTileData;
 			resourceDictionaries[typeof(Zone)]				= zones;
 			resourceDictionaries[typeof(PropertyAction)]	= propertyActions;
+			resourceDictionaries[typeof(PaletteDictionary)] = paletteDictionaries;
+			resourceDictionaries[typeof(Palette)]           = palettes;
 		}
 
 
@@ -236,6 +251,9 @@ namespace ZeldaOracle.Common.Content {
 				return; // This type of resource doesn't exist!
 			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
 			dictionary.Add(assetName, resource);
+			// TODO: Properly implement a way to separate animations from sprites.
+			if (resource is Animation)
+				animations.Add(assetName, resource as Animation);
 		}
 
 		/// <summary>Add the given resource under the given name.</summary>
@@ -244,6 +262,9 @@ namespace ZeldaOracle.Common.Content {
 				return; // This type of resource doesn't exist!
 			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
 			dictionary[assetName] = resource;
+			// TODO: Properly implement a way to separate animations from sprites.
+			if (resource is Animation)
+				animations[assetName] = resource as Animation;
 		}
 
 
@@ -252,7 +273,7 @@ namespace ZeldaOracle.Common.Content {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets a sprite or animation depending on which one exists.</summary>
-		public static SpriteAnimation GetSpriteAnimation(string name) {
+		public static ISprite GetSpriteAnimation(string name) {
 			if (sprites.ContainsKey(name))
 				return sprites[name];
 			else
@@ -290,7 +311,7 @@ namespace ZeldaOracle.Common.Content {
 		}
 
 		/// <summary>Gets the sprite sheet with the specified name.</summary>
-		public static SpriteSheet GetSpriteSheet(string name) {
+		public static ISpriteSheet GetSpriteSheet(string name) {
 			return spriteSheets[name];
 		}
 
@@ -300,7 +321,7 @@ namespace ZeldaOracle.Common.Content {
 		}
 
 		/// <summary>Gets the sprite with the specified name.</summary>
-		public static Sprite GetSprite(string name) {
+		public static ISprite GetSprite(string name) {
 			return sprites[name];
 		}
 
@@ -317,6 +338,26 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>Returns true if an animation with the specified name exists.</summary>
 		public static bool ContainsAnimation(string name) {
 			return animations.ContainsKey(name);
+		}
+
+		/// <summary>Gets the palette dictionary with the specified name.</summary>
+		public static PaletteDictionary GetPaletteDictionary(string name) {
+			return paletteDictionaries[name];
+		}
+
+		/// <summary>Returns true if a palette dictionary with the specified name exists.</summary>
+		public static bool ContainsPaletteDictionary(string name) {
+			return paletteDictionaries.ContainsKey(name);
+		}
+
+		/// <summary>Gets the palette with the specified name.</summary>
+		public static Palette GetPalette(string name) {
+			return palettes[name];
+		}
+
+		/// <summary>Returns true if a palette with the specified name exists.</summary>
+		public static bool ContainsPalette(string name) {
+			return palettes.ContainsKey(name);
 		}
 
 		/// <summary>Gets the shader with the specified name.</summary>
@@ -380,6 +421,16 @@ namespace ZeldaOracle.Common.Content {
 			return resource;
 		}
 
+		/// <summary>Loads/compiles palette dictionaries from a script file.</summary>
+		public static void LoadPaletteDictionaries(string assetName) {
+			LoadScript(assetName, new PaletteDictionarySR());
+		}
+
+		/// <summary>Loads/compiles palettes from a script file.</summary>
+		public static void LoadPalettes(string assetName) {
+			LoadScript(assetName, new PaletteSR());
+		}
+
 		/// <summary>Loads a shader (Effect).</summary>
 		public static Effect LoadShader(string assetName) {
 			string name = assetName.Substring(assetName.IndexOf('/') + 1);
@@ -390,7 +441,7 @@ namespace ZeldaOracle.Common.Content {
 
 		/// <summary>Loads/compiles sprite sheets from a script file.</summary>
 		public static void LoadSpriteSheets(string assetName) {
-			LoadScript(assetName, new SpritesSR());
+			LoadScript(assetName, new ISpritesSR());
 		}
 
 		/// <summary>Loads/compiles images from a script file.</summary>
@@ -412,7 +463,8 @@ namespace ZeldaOracle.Common.Content {
 
 		/// <summary>Loads/compiles animations from a script file.</summary>
 		public static void LoadAnimations(string assetName) {
-			LoadScript(assetName, new AnimationSR());
+			// TODO: Phase out separation of animations and sprites
+			LoadScript(assetName, new ISpritesSR());
 		}
 
 		/// <summary>Loads/compiles collision models from a script file.</summary>
@@ -502,8 +554,11 @@ namespace ZeldaOracle.Common.Content {
 		}
 
 		/// <summary>Adds the specified sprite.</summary>
-		public static void AddSprite(string assetName, Sprite sprite) {
+		public static void AddSprite(string assetName, ISprite sprite) {
 			sprites.Add(assetName, sprite);
+			// TODO: Properly implement a way to separate animations from sprites.
+			if (sprite is Animation)
+				animations.Add(assetName, sprite as Animation);
 		}
 
 		/// <summary>Adds the specified game font.</summary>
@@ -514,6 +569,16 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>Adds the specified animation.</summary>
 		public static void AddAnimation(string assetName, Animation animation) {
 			animations.Add(assetName, animation);
+		}
+
+		/// <summary>Adds the specified palette dictionary.</summary>
+		public static void AddPaletteDictionary(string assetName, PaletteDictionary dictionary) {
+			paletteDictionaries.Add(assetName, dictionary);
+		}
+
+		/// <summary>Adds the specified palette.</summary>
+		public static void AddPalette(string assetName, Palette palette) {
+			palettes.Add(assetName, palette);
 		}
 
 		/// <summary>Adds the specified language.</summary>
@@ -553,9 +618,9 @@ namespace ZeldaOracle.Common.Content {
 		}
 
 		/// <summary>Gets the list of sprite sheets.</summary>
-		public static SpriteSheet[] SpriteSheets {
+		public static ISpriteSheet[] SpriteSheets {
 			get {
-				SpriteSheet[] sheets = new SpriteSheet[spriteSheets.Count];
+				ISpriteSheet[] sheets = new ISpriteSheet[spriteSheets.Count];
 				spriteSheets.Values.CopyTo(sheets, 0);
 				return sheets;
 			}
@@ -564,6 +629,14 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>Gets the number of sprite sheets.</summary>
 		public static int SpriteSheetCount {
 			get { return spriteSheets.Count; }
+		}
+
+		public static GraphicsDevice GraphicsDevice {
+			get { return graphicsDevice; }
+		}
+
+		public static PalettedSpriteDatabase PalettedSpriteDatabase {
+			get { return palettedSpriteDatabase; }
 		}
 	}
 } // end namespace

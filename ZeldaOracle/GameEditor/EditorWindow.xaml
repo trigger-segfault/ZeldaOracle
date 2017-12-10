@@ -170,6 +170,7 @@
         <StatusBar x:Name="statusBar" DockPanel.Dock="Bottom" Background="#FFF0F0F0">
             <StatusBarItem x:Name="statusRoomLocation" Content="Room (?, ?)"/>
             <StatusBarItem x:Name="statusTileLocation" Content="Tile (?, ?)"/>
+            <StatusBarItem x:Name="statusFPS" Content="FPS 60.0"/>
             <StatusBarItem x:Name="statusTask" Content="Compiling Scripts..." HorizontalAlignment="Right" Margin="0,0,16,0"/>
         </StatusBar>
         <Grid>

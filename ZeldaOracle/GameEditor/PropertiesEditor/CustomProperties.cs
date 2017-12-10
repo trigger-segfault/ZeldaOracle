@@ -21,6 +21,7 @@ using ZeldaEditor.PropertiesEditor.CustomEditors;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Tiles;
 using System.Diagnostics;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaEditor.PropertiesEditor {
 	
@@ -56,7 +57,7 @@ namespace ZeldaEditor.PropertiesEditor {
 			AddEditor<ResourcePropertyEditor<CollisionModel>>("collision_model");
 			AddEditor<ResourcePropertyEditor<Song>>("song");
 			AddEditor<ResourcePropertyEditor<Sound>>("sound");
-			AddEditor<ResourcePropertyEditor<Sprite>>("sprite");
+			AddEditor<ResourcePropertyEditor<ISprite>>("sprite");
 			AddEditor<ResourcePropertyEditor<Zone>>("zone");
 			AddEditor<RewardPropertyEditor>("reward");
 			AddEditor<DungeonPropertyEditor>("dungeon");

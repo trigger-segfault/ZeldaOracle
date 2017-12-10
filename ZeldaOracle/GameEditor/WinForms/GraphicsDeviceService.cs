@@ -59,7 +59,7 @@ namespace ZeldaEditor.WinForms {
 			parameters.IsFullScreen = false;
 
 			graphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter,
-												GraphicsProfile.Reach,
+												GraphicsProfile.HiDef,
 												parameters);
 		}
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Tiles;
 
@@ -36,7 +37,7 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 
 			tileData.SheetLocation = new Point2I(tileX, tileY);
 			tileData.Tileset = tileset;
-			tileData.Sprite = new Sprite(tileset.SpriteSheet, tileX, tileY, 0, 0);
+			tileData.Sprite = tileset.SpriteSheet.GetSprite(tileX, tileY);
 
 			tileset.TileData[tileX, tileY] = tileData;
 			return this;
@@ -71,27 +72,13 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 			return this;
 		}
 		
-		public TilesetBuilder SetSprite(SpriteAnimation spriteAnimation) {
-			tileData.Sprite = spriteAnimation;
+		public TilesetBuilder SetSprite(ISprite sprite) {
+			tileData.Sprite = sprite;
 			return this;
 		}
-
-		public TilesetBuilder SetAnims(params Animation[] animations) {
-			SpriteAnimation[] spriteAnimations = new SpriteAnimation[animations.Length];
-			for (int i = 0; i < animations.Length; i++)
-				spriteAnimations[i] = animations[i];
-			return this;
-		}
-
-		public TilesetBuilder SetSprites(params Sprite[] sprites) {
-			SpriteAnimation[] spriteAnimations = new SpriteAnimation[sprites.Length];
-			for (int i = 0; i < sprites.Length; i++)
-				spriteAnimations[i] = sprites[i];
-			return this;
-		}
-
-		public TilesetBuilder SetSpriteAnims(params SpriteAnimation[] spriteAnims) {
-			SpriteAnimation[] spriteAnimations = new SpriteAnimation[spriteAnims.Length];
+		
+		public TilesetBuilder SetSprites(params ISprite[] spriteAnims) {
+			ISprite[] spriteAnimations = new ISprite[spriteAnims.Length];
 			for (int i = 0; i < spriteAnims.Length; i++)
 				spriteAnimations[i] = spriteAnims[i];
 			return this;

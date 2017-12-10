@@ -8,15 +8,16 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Control.Scripting;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Tiles {
 
 	public class TileData : BaseTileData {
 
 
-		private SpriteAnimation[]	spriteList;
+		private ISprite[]			spriteList;
 		//private Point2I				size;
-		private SpriteAnimation		spriteAsObject;
+		private ISprite				spriteAsObject;
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
 		private Sound				breakSound;
 
@@ -27,9 +28,9 @@ namespace ZeldaOracle.Game.Tiles {
 
 
 		public TileData() {
-			spriteList			= new SpriteAnimation[0];
+			spriteList			= new ISprite[0];
 			//size				= Point2I.One;
-			spriteAsObject		= new SpriteAnimation();
+			spriteAsObject      = null;
 			breakAnimation		= null;
 
 			// General.
@@ -103,12 +104,12 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public TileData(TileData copy) : base(copy) {
 			//size				= copy.size;
-			spriteAsObject		= new SpriteAnimation(copy.spriteAsObject);
+			spriteAsObject		= copy.spriteAsObject;
 			breakAnimation		= copy.breakAnimation;
-			spriteList			= new SpriteAnimation[copy.spriteList.Length];
+			spriteList			= new ISprite[copy.spriteList.Length];
 			
 			for (int i = 0; i < spriteList.Length; i++)
-				spriteList[i] = new SpriteAnimation(copy.spriteList[i]);
+				spriteList[i] = copy.spriteList[i];
 		}
 
 		public override void Clone(BaseTileData copy) {
@@ -116,15 +117,15 @@ namespace ZeldaOracle.Game.Tiles {
 			if (copy is TileData) {
 				TileData copyTileData = (TileData) copy;
 				//size				= copyTileData.size;
-				spriteAsObject		= new SpriteAnimation(copyTileData.spriteAsObject);
+				spriteAsObject		= copyTileData.spriteAsObject;
 				breakAnimation		= copyTileData.breakAnimation;
 				breakSound			= copyTileData.breakSound;
 				//events				= new EventCollection(copyTileData.events);
 
 				if (copyTileData.spriteList.Length > 0) {
-					spriteList = new SpriteAnimation[copyTileData.spriteList.Length];
+					spriteList = new ISprite[copyTileData.spriteList.Length];
 					for (int i = 0; i < spriteList.Length; i++) {
-						spriteList[i] = new SpriteAnimation(copyTileData.spriteList[i]);
+						spriteList[i] = copyTileData.spriteList[i];
 					}
 				}
 			}
@@ -135,18 +136,18 @@ namespace ZeldaOracle.Game.Tiles {
 		// Overridden Properties
 		//-----------------------------------------------------------------------------
 
-		public override SpriteAnimation Sprite {
+		public override ISprite Sprite {
 			get {
 				if (spriteList.Length > 0)
 					return spriteList[0];
-				return new SpriteAnimation();
+				return null;
 			}
 			set {
 				if (value == null)
-					spriteList = new SpriteAnimation[0];
+					spriteList = new ISprite[0];
 				else
-					spriteAsObject.Set(value);
-				spriteList = new SpriteAnimation[] { value };
+					spriteAsObject = value;
+				spriteList = new ISprite[] { value };
 			}
 		}
 
@@ -155,7 +156,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public SpriteAnimation[] SpriteList {
+		public ISprite[] SpriteList {
 			get { return spriteList; }
 			set { spriteList = value; }
 		}
@@ -172,13 +173,13 @@ namespace ZeldaOracle.Game.Tiles {
 			set { properties.Set("flags", (int) value); }
 		}
 
-		public SpriteAnimation SpriteAsObject {
+		public ISprite SpriteAsObject {
 			get { return spriteAsObject; }
 			set {
 				if (value == null)
-					spriteAsObject.SetNull();
+					spriteAsObject = null;
 				else
-					spriteAsObject.Set(value);
+					spriteAsObject = value;
 			}
 		}
 

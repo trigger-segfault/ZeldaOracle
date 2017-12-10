@@ -101,7 +101,9 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns the hash code for this point.</summary>
 		public override int GetHashCode() {
-			return base.GetHashCode();
+			unchecked {
+				return ushort.MaxValue * X ^ Y;
+			}
 		}
 
 		/// <summary>Parses the point.</summary>

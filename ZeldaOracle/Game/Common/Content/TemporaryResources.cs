@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.EventTiles;
 
@@ -17,9 +18,9 @@ namespace ZeldaOracle.Common.Content {
 		// The collection of loaded images.
 		private Dictionary<string, Image> images;
 		// The collection of loaded sprite sheets.
-		private Dictionary<string, SpriteSheet> spriteSheets;
+		private Dictionary<string, ISpriteSheet> spriteSheets;
 		// The collection of loaded sprites.
-		private Dictionary<string, Sprite> sprites;
+		private Dictionary<string, ISprite> sprites;
 		// The collection of loaded animations.
 		private Dictionary<string, Animation> animations;
 
@@ -37,8 +38,8 @@ namespace ZeldaOracle.Common.Content {
 
 		public TemporaryResources() {
 			this.images				= new Dictionary<string, Image>();
-			this.spriteSheets		= new Dictionary<string, SpriteSheet>();
-			this.sprites			= new Dictionary<string, Sprite>();
+			this.spriteSheets		= new Dictionary<string, ISpriteSheet>();
+			this.sprites			= new Dictionary<string, ISprite>();
 			this.animations			= new Dictionary<string, Animation>();
 			this.collisionModels	= new Dictionary<string, CollisionModel>();
 			this.tileData			= new Dictionary<string, TileData>();
@@ -47,8 +48,8 @@ namespace ZeldaOracle.Common.Content {
 			// Setup the resource dictionary lookup map.
 			this.resourceDictionaries = new Dictionary<Type, object>();
 			this.resourceDictionaries[typeof(Image)]			= images;
-			this.resourceDictionaries[typeof(SpriteSheet)]		= spriteSheets;
-			this.resourceDictionaries[typeof(Sprite)]			= sprites;
+			this.resourceDictionaries[typeof(ISpriteSheet)]		= spriteSheets;
+			this.resourceDictionaries[typeof(ISprite)]			= sprites;
 			this.resourceDictionaries[typeof(Animation)]		= animations;
 			this.resourceDictionaries[typeof(CollisionModel)]	= collisionModels;
 			this.resourceDictionaries[typeof(TileData)]			= tileData;
@@ -99,7 +100,7 @@ namespace ZeldaOracle.Common.Content {
 		// Get the dictionary used to store the given type of resources.
 		public Dictionary<string, T> GetResourceDictionary<T>() {
 			if (!ContainsResourceType<T>())
-				return null; // This type of resource doesn't exist!
+				resourceDictionaries[typeof(T)] = new Dictionary<string, T>(); // This type of resource doesn't exist!
 			return (Dictionary<string, T>)resourceDictionaries[typeof(T)];
 		}
 
@@ -110,24 +111,14 @@ namespace ZeldaOracle.Common.Content {
 
 		// Add the given resource under the given name.
 		public void AddResource<T>(string assetName, T resource) {
-			if (!ContainsResourceType<T>())
-				return; // This type of resource doesn't exist!
-			Dictionary<string, T> dictionary = (Dictionary<string, T>)resourceDictionaries[typeof(T)];
+			Dictionary<string, T> dictionary = GetResourceDictionary<T>();
 			dictionary.Add(assetName, resource);
 		}
 
-
-		//-----------------------------------------------------------------------------
-		// Resource Accessors
-		//-----------------------------------------------------------------------------
-
-		// Gets a sprite or animation depending on which one exists.
-		public SpriteAnimation GetSpriteAnimation(string name) {
-			if (sprites.ContainsKey(name))
-				return sprites[name];
-			else if (animations.ContainsKey(name))
-				return animations[name];
-			return Resources.GetSpriteAnimation(name);
+		// Add the given resource under the given name.
+		public void SetResource<T>(string assetName, T resource) {
+			Dictionary<string, T> dictionary = GetResourceDictionary<T>();
+			dictionary[assetName] = resource;
 		}
 	}
 }

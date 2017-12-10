@@ -10,20 +10,22 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 		private string name;
 		private Action<CommandParam> action;
 		private List<CommandReferenceParam> parameterOverloads;
+		private int[] modes;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ScriptCommand(string name, Action<CommandParam> action) {
+		public ScriptCommand(string name, int[] modes, Action<CommandParam> action) {
 			this.name		= name;
 			this.action		= action;
 			this.parameterOverloads	= new List<CommandReferenceParam>();
+			this.modes      = modes;
 		}
 
-		public ScriptCommand(string name, string[] parameterOverloads, Action<CommandParam> action) :
-			this(name, action)
+		public ScriptCommand(string name, int[] modes, string[] parameterOverloads, Action<CommandParam> action) :
+			this(name, modes, action)
 		{
 			for (int i = 0; i < parameterOverloads.Length; i++) {
 				CommandReferenceParam p =  CommandParamParser.ParseReferenceParams(parameterOverloads[i]);
@@ -156,6 +158,10 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 
 		public List<CommandReferenceParam> ParameterOverloads {
 			get { return parameterOverloads; }
+		}
+
+		public int[] Modes {
+			get { return modes; }
 		}
 	}
 }

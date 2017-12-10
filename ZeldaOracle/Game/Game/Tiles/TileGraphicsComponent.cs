@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Entities;
 
 namespace ZeldaOracle.Game.Tiles {
@@ -51,24 +52,12 @@ namespace ZeldaOracle.Game.Tiles {
 			animationPlayer.Play();
 		}
 
-		public void PlaySprite(Sprite sprite) {
+		public void PlayAnimation(ISprite sprite) {
 			animationPlayer.Play(sprite);
-		}
-		
-		public void PlayAnimation(Animation animation) {
-			animationPlayer.Play(animation);
-		}
-
-		public void PlaySpriteAnimation(SpriteAnimation spriteAnimation) {
-			animationPlayer.Play(spriteAnimation);
 		}
 		
 		public void SetAnimation(Animation animation) {
 			animationPlayer.SetAnimation(animation);
-		}
-
-		public void SetAnimation(SpriteAnimation spriteAnimation) {
-			animationPlayer.SetSpriteAnimation(spriteAnimation);
 		}
 		
 		public void StopAnimation() {
@@ -131,9 +120,9 @@ namespace ZeldaOracle.Game.Tiles {
 			drawPosition += (raisedDrawOffset + drawOffset);
 						
 			// Draw the tile's as-object sprite.
-			if (tile.IsMoving && !tile.SpriteAsObject.IsNull) {
-				g.DrawSpriteAnimation(tile.SpriteAsObject, imageVariant,
-					tile.RoomControl.GameControl.RoomTicks,
+			if (tile.IsMoving && tile.SpriteAsObject != null) {
+				g.DrawISprite(tile.SpriteAsObject, new SpriteDrawSettings(imageVariant,
+					tile.RoomControl.GameControl.RoomTicks),
 					drawPosition, depthLayer, tile.Position);
 			}
 			// Draw the animation player.

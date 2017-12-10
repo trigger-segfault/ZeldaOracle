@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items.Essences {
 	public class ItemEssence8 : ItemEssence {
@@ -17,7 +18,7 @@ namespace ZeldaOracle.Game.Items.Essences {
 			this.name = new string[] { "Falling Star" };
 			this.description = new string[] { "Its eternal light acts as guide to the other essences." };
 			this.slot = 7;
-			this.sprite = new Sprite[] { GameData.SPR_ITEM_ICON_ESSENCE_8 };
+			this.sprite = new ISprite[] { GameData.SPR_ITEM_ICON_ESSENCE_8 };
 		}
 
 	}

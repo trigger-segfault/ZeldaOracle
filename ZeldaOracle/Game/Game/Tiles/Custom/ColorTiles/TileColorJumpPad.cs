@@ -45,11 +45,11 @@ namespace ZeldaOracle.Game.Tiles {
 
 			// Set the sprite.
 			if (color == PuzzleColor.Red)
-				Graphics.PlaySprite(GameData.SPR_TILE_COLOR_JUMP_PAD_RED);
+				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_RED);
 			else if (color == PuzzleColor.Yellow)
-				Graphics.PlaySprite(GameData.SPR_TILE_COLOR_JUMP_PAD_YELLOW);
+				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_YELLOW);
 			else if (color == PuzzleColor.Blue)
-				Graphics.PlaySprite(GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE);
+				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE);
 				
 			AudioSystem.PlaySound(GameData.SOUND_GET_ITEM);
 
@@ -65,11 +65,11 @@ namespace ZeldaOracle.Game.Tiles {
 			// Set the sprite.
 			PuzzleColor color = (PuzzleColor) Properties.Get("color", (int) PuzzleColor.Red);
 			if (color == PuzzleColor.Red)
-				Graphics.PlaySprite(GameData.SPR_TILE_COLOR_JUMP_PAD_RED);
+				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_RED);
 			else if (color == PuzzleColor.Yellow)
-				Graphics.PlaySprite(GameData.SPR_TILE_COLOR_JUMP_PAD_YELLOW);
+				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_YELLOW);
 			else if (color == PuzzleColor.Blue)
-				Graphics.PlaySprite(GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE);
+				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE);
 			
 			// NOTE: The player automaticlly nullifies his events upon leaving the room.
 			RoomControl.Player.EventJump += OnPlayerJump;

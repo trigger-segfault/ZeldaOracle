@@ -12,6 +12,7 @@ using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -105,13 +106,13 @@ namespace ZeldaOracle.Game.Tiles {
 			CollisionModel = new CollisionModel(collisionBox);
 
 			if (direction == Directions.Right)
-				Graphics.PlaySprite(GameData.SPR_TILE_PULL_HANDLE_RIGHT);
+				Graphics.PlayAnimation(GameData.SPR_TILE_PULL_HANDLE_RIGHT);
 			else if (direction == Directions.Up)
-				Graphics.PlaySprite(GameData.SPR_TILE_PULL_HANDLE_UP);
+				Graphics.PlayAnimation(GameData.SPR_TILE_PULL_HANDLE_UP);
 			else if (direction == Directions.Left)
-				Graphics.PlaySprite(GameData.SPR_TILE_PULL_HANDLE_LEFT);
+				Graphics.PlayAnimation(GameData.SPR_TILE_PULL_HANDLE_LEFT);
 			else if (direction == Directions.Down)
-				Graphics.PlaySprite(GameData.SPR_TILE_PULL_HANDLE_DOWN);
+				Graphics.PlayAnimation(GameData.SPR_TILE_PULL_HANDLE_DOWN);
 		}
 
 		public override void OnGrab(int direction, ItemBracelet bracelet) {
@@ -137,7 +138,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public override void Draw(RoomGraphics g) {
 			// Draw the extension bar.
 			if (extendDistance > 0.0f) {
-				Sprite spr;
+				ISprite spr;
 				if (Directions.IsHorizontal(direction))
 					spr = GameData.SPR_TILE_PULL_HANDLE_BAR_HORIZONTAL;
 				else
@@ -145,7 +146,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 				for (float length = 0.0f; length < extendDistance; length += GameSettings.TILE_SIZE) {
 					Vector2F drawPos = Position - Offset + (Directions.ToVector(direction) * (length + 8.0f));
-					g.DrawSprite(spr, drawPos, DepthLayer.TileLayer1);
+					g.DrawISprite(spr, drawPos, DepthLayer.TileLayer1);
 				}
 			}
 			

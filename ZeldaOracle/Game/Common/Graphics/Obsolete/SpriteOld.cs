@@ -7,7 +7,7 @@ using ZeldaOracle.Common.Geometry;
 namespace ZeldaOracle.Common.Graphics {
 
 	// A sprite representing a portion of an image
-	public class Sprite {
+	public class SpriteOld {
 
 		// The image used by the sprite.
 		private Image image;
@@ -15,37 +15,38 @@ namespace ZeldaOracle.Common.Graphics {
 		private Rectangle2I sourceRect;
 		// The draw offset of the sprite.
 		private Point2I drawOffset;
+
 		// For compound sprites (made up of multiple sub-sprites).
-		private Sprite nextPart;
+		private SpriteOld nextPart;
 		
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 		
-		public Sprite() {
+		public SpriteOld() {
 			this.image			= null;
 			this.sourceRect		= Rectangle2I.Zero;
 			this.drawOffset		= Point2I.Zero;
 			this.nextPart		= null;
 		}
 
-		public Sprite(SpriteSheet sheet, int indexX, int indexY) :
+		public SpriteOld(SpriteSheet sheet, int indexX, int indexY) :
 			this(sheet, new Point2I(indexX, indexY), Point2I.Zero)
 		{
 		}
 
-		public Sprite(SpriteSheet sheet, int indexX, int indexY, int drawOffsetX, int drawOffsetY) :
+		public SpriteOld(SpriteSheet sheet, int indexX, int indexY, int drawOffsetX, int drawOffsetY) :
 			this(sheet, new Point2I(indexX, indexY), new Point2I(drawOffsetX, drawOffsetY))
 		{
 		}
 
-		public Sprite(SpriteSheet sheet, Point2I index) :
+		public SpriteOld(SpriteSheet sheet, Point2I index) :
 			this(sheet, index, Point2I.Zero)
 		{
 		}
 
-		public Sprite(SpriteSheet sheet, Point2I index, Point2I drawOffset) {
+		public SpriteOld(SpriteSheet sheet, Point2I index, Point2I drawOffset) {
 			this.image			= sheet.Image;
 			this.sourceRect		= new Rectangle2I(
 				sheet.Offset.X + (index.X * (sheet.CellSize.X + sheet.Spacing.X)),
@@ -60,35 +61,35 @@ namespace ZeldaOracle.Common.Graphics {
 
 
 
-		public Sprite(Image image, int sourceX, int sourceY, int sourceWidth, int sourceHeight) :
+		public SpriteOld(Image image, int sourceX, int sourceY, int sourceWidth, int sourceHeight) :
 			this(image, new Rectangle2I(sourceX, sourceY, sourceWidth, sourceHeight), Point2I.Zero)
 		{
 		}
 
-		public Sprite(Image image, int sourceX, int sourceY, int sourceWidth, int sourceHeight, int drawOffsetX, int drawOffsetY) :
+		public SpriteOld(Image image, int sourceX, int sourceY, int sourceWidth, int sourceHeight, int drawOffsetX, int drawOffsetY) :
 			this(image, new Rectangle2I(sourceX, sourceY, sourceWidth, sourceHeight), Point2I.Zero)
 		{
 		}
 
-		public Sprite(Image image, Rectangle2I sourceRect) :
+		public SpriteOld(Image image, Rectangle2I sourceRect) :
 			this(image, sourceRect, Point2I.Zero)
 		{
 		}
 
-		public Sprite(Image image, Rectangle2I sourceRect, Point2I drawOffset) {
+		public SpriteOld(Image image, Rectangle2I sourceRect, Point2I drawOffset) {
 			this.image			= image;
 			this.sourceRect		= sourceRect;
 			this.drawOffset		= drawOffset;
 			this.nextPart		= null;
 		}
 
-		public Sprite(Sprite copy) {
+		public SpriteOld(SpriteOld copy) {
 			this.image			= copy.image;
 			this.sourceRect		= copy.sourceRect;
 			this.drawOffset		= copy.drawOffset;
 			this.nextPart		= null;
 			if (copy.nextPart != null)
-				this.nextPart	= new Sprite(copy.nextPart); // This is recursive.
+				this.nextPart	= new SpriteOld(copy.nextPart); // This is recursive.
 		}
 
 		
@@ -96,13 +97,18 @@ namespace ZeldaOracle.Common.Graphics {
 		// Mutators
 		//-----------------------------------------------------------------------------
 		
-		public void Set(Sprite copy) {
+		public void Set(SpriteOld copy) {
 			this.image		= copy.image;
 			this.sourceRect	= copy.sourceRect;
 			this.drawOffset	= copy.drawOffset;
 			this.nextPart	= null;
-			if (copy.nextPart != null)
-				this.nextPart.Set(copy.nextPart); // This is recursive.
+			if (copy.nextPart != null) {
+				// This is recursive.
+				if (this.nextPart == null)
+					this.nextPart = new SpriteOld(copy.nextPart); 
+				else
+					this.nextPart.Set(copy.nextPart);
+			}
 		}
 
 		
@@ -129,7 +135,7 @@ namespace ZeldaOracle.Common.Graphics {
 		}
 		
 		// Gets the next part of the sprite.
-		public Sprite NextPart {
+		public SpriteOld NextPart {
 			get { return nextPart; }
 			set { nextPart = value; }
 		}

@@ -12,6 +12,7 @@ using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 
@@ -33,7 +34,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword | ItemFlags.UsableWhileInHole;
 			this.arrowTracker	= new EntityTracker<Arrow>(2);
 
-			sprite = new Sprite[] {
+			sprite = new ISprite[] {
 				GameData.SPR_ITEM_ICON_BOW,
 				GameData.SPR_ITEM_ICON_BOW,
 				GameData.SPR_ITEM_ICON_BOW

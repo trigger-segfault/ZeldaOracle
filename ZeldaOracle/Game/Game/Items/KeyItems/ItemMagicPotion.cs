@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items.KeyItems {
 	public class ItemMagicPotion : ItemSecondary {
@@ -18,7 +19,7 @@ namespace ZeldaOracle.Game.Items.KeyItems {
 			this.name = new string[] { "Magic Potion" };
 			this.description = new string[] { "Fill your hearts!" };
 			this.slot = new Point2I(1, 0);
-			this.sprite = new Sprite[] { GameData.SPR_ITEM_ICON_MAGIC_POTION };
+			this.sprite = new ISprite[] { GameData.SPR_ITEM_ICON_MAGIC_POTION };
 		}
 
 	}

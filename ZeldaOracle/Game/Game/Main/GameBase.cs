@@ -161,7 +161,7 @@ namespace ZeldaOracle.Game.Main {
 
 				AudioSystem.Initialize();
 				Resources.Initialize(Content, GraphicsDevice);
-
+				
 				game.LoadContent(Content);
 
 				base.LoadContent();
@@ -240,9 +240,6 @@ namespace ZeldaOracle.Game.Main {
 				game.ScreenResized();
 				windowSizeChanged = false;
 			}
-
-			// Update the frame rate.
-			UpdateFrameRate(gameTime);
 
 			// Update the listeners.
 			if (Form.Focused) {
@@ -358,7 +355,10 @@ namespace ZeldaOracle.Game.Main {
 			GraphicsDevice.Clear(Color.Black);
 
 			// Update the frame rate
-			DrawUpdatedFrameRate(gameTime);
+			IncrementTotalFrames(gameTime);
+
+			// Update the frame rate.
+			UpdateFrameRate(gameTime);
 
 			// Render the game
 			Graphics2D g = new Graphics2D(spriteBatch);
@@ -367,7 +367,7 @@ namespace ZeldaOracle.Game.Main {
 		}
 
 		/// <summary>Called every step to update the frame rate during the draw step.</summary>
-		protected void DrawUpdatedFrameRate(GameTime gameTime) {
+		protected void IncrementTotalFrames(GameTime gameTime) {
 			totalFrames++;
 		}
 
@@ -436,6 +436,11 @@ namespace ZeldaOracle.Game.Main {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
+		
+		/// <summary>Returns the stored sprite batch class.</summary>
+		public SpriteBatch SpriteBatch {
+			get { return spriteBatch; }
+		}
 
 		/// <summary>Returns true if the game is running on Windows.</summary>
 		public bool IsWindows {

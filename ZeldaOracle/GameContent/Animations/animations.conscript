@@ -4,9 +4,9 @@
 # UI Animations
 #==============================================================
 
-SPRITESHEET "menu_small";
+Source "menu_small";
 
-ANIM ui_map_cursor; SUBSTRIP repeat;
+ANIM ui_map_cursor_link; SUBSTRIP repeat;
 	INSERT frame 0, 32, (10, 4), (-4, -4);
 	INSERT frame 0, 32, (11, 4), ( 4, -4);
 	INSERT frame 0, 32, (10, 5), (-4,  4);
@@ -18,7 +18,7 @@ ANIM ui_map_cursor; SUBSTRIP repeat;
 # Large Tile Animations
 #==============================================================
 
-SPRITESHEET "zoneset_large";
+Source "zoneset_large";
 
 #ANIM tile_lantern; SUBSTRIP repeat;
 	#ADD strip, 16, 4, (1, 8); END;
@@ -211,7 +211,7 @@ ANIM tile_fountain_dirt_se; SUBSTRIP repeat;
 # General Tile Animations
 #==============================================================
 
-SPRITESHEET "general_tiles";
+Source "general_tiles";
 
 ANIM tile_trampoline_bounce; SUBSTRIP clamp;
 	ADD frame, 12, (4, 3);
@@ -363,7 +363,7 @@ ANIM tile_color_barrier_red_lower; SUBSTRIP clamp;
 # Color Cube Animations
 #==============================================================
 
-SPRITESHEET "color_cube";
+Source "color_cube";
 
 # Left & Right Color Cube Animations
 
@@ -446,7 +446,7 @@ ANIM color_cube_red_yellow_down; SUBSTRIP clamp;
 # Small Tile Animations
 #==============================================================
 
-SPRITESHEET "zoneset_small";
+Source "zoneset_small";
 
 # Flowers
 
@@ -788,7 +788,7 @@ ANIM tile_output_lavafall_down_right; SUBSTRIP repeat;
 # Player Animations
 #==============================================================
 
-SPRITESHEET "player";
+Source "player";
 
 ANIM player_default; SUBSTRIP repeat;
 	ADD frame, 2, (0, 0); ADD frame, 6, (1, 0); ADD frame, 4, (0, 0);
@@ -989,7 +989,7 @@ ANIM player_mermaid_stab;
 # Player Item Animations
 #==============================================================
 
-SPRITESHEET "player_items";
+Source "player_items";
 
 ANIM sword_hold;
 	SUBSTRIP repeat; ADD frame, 4, (0, 0), ( 12,   4);
@@ -1095,7 +1095,7 @@ ANIM slingshot_2;
 # Projectile + Item Animations
 #==============================================================
 
-SPRITESHEET "player_items";
+Source "player_items";
 
 ANIM projectile_player_arrow; SUBSTRIP repeat;
 	ADD frame, 1, (0, 11), (-8, -8);
@@ -1137,7 +1137,7 @@ ANIM projectile_magic_rod_fire; SUBSTRIP repeat;
 # Monster Items & Projectiles
 #==============================================================
 	
-SPRITESHEET "monster_items";
+Source "monster_items";
 
 ANIM projectile_monster_arrow; SUBSTRIP repeat;
 	ADD frame, 1, (0, 0), (-8, -8);
@@ -1164,7 +1164,7 @@ ANIM projectile_monster_rock; SUBSTRIP repeat;
 # Effect Animations
 #==============================================================
 
-SPRITESHEET "basic_effects";
+Source "basic_effects";
 
 ANIM effect_dirt;
 	SUBSTRIP reset;  ADD frame, 1, (5, 0), (-12,  -9); ADD part, 1, (5, 0), ( -8,  -3); # right
@@ -1223,7 +1223,7 @@ ANIM item_scent_pod; SUBSTRIP repeat;
 # Color effects Animations
 #==============================================================
 
-SPRITESHEET "color_effects";
+Source "color_effects";
 
 ANIM effect_lava_splash; SUBSTRIP reset;
 	ADD frame, 2, (4,  3), (-7, -13); ADD part, 2, (4,  3), ( -9, -13);
@@ -1341,7 +1341,7 @@ ANIM effect_color_flame_yellow; SUBSTRIP repeat;
 # NPC Animations
 #==============================================================
 
-SPRITESHEET "npcs";
+Source "npcs";
 
 ANIM npc_1; SUBSTRIP repeat; ADD strip, 16, 2, (0, 0); MAKEDYNAMIC 4, (2, 0); END;
 ANIM npc_2; SUBSTRIP repeat; ADD strip, 16, 2, (0, 1); MAKEDYNAMIC 4, (2, 0); END;
@@ -1359,7 +1359,7 @@ MAKEDYNAMIC 4, (2, 0); END;
 # Color Monster Animations
 #==============================================================
 
-SPRITESHEET "color_monsters";
+Source "color_monsters";
 
 ANIM monster_octorok; SUBSTRIP repeat;
 	ADD strip, 8, 2, (0, 0);
@@ -1550,7 +1550,7 @@ ANIM monster_sword_hold;
 # Non-Colored Monster Animations
 #==============================================================
 
-SPRITESHEET "basic_monsters";
+Source "basic_monsters";
 
 ANIM monster_ghini; SUBSTRIP repeat;
 	ADD strip, 8, 2, (0, 1);
@@ -1561,7 +1561,7 @@ ANIM monster_ghini; SUBSTRIP repeat;
 # Collectible Animations
 #==============================================================
 
-SPRITESHEET "items_small";
+Source "items_small";
 
 ANIM collectible_fairy;
 	SUBSTRIP repeat; ADD frame, 1, (14, 3), (-4, -8);

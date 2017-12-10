@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Common.Graphics {
 
@@ -10,8 +11,7 @@ namespace ZeldaOracle.Common.Graphics {
 	// Sprites are considered to be endlessly looped animations with a zero-length duration.
 	public class AnimationPlayer {
 
-		private Sprite		sprite;			// The sprite to play.
-		private Animation	animation;		// The animation to play.
+		private ISprite		sprite;			// The sprite to play.
 		private Animation	subStrip;		// The actual sub-animation-strip when playing an animation.
 		private int			subStripIndex;	// The index of the sub-animation-strip.
 		private bool		isPlaying;		// True if the playback is rolling.
@@ -25,7 +25,6 @@ namespace ZeldaOracle.Common.Graphics {
 		
 		public AnimationPlayer() {
 			sprite			= null;
-			animation		= null;
 			subStrip		= null;
 			subStripIndex	= 0;
 			isPlaying		= false;
@@ -40,12 +39,12 @@ namespace ZeldaOracle.Common.Graphics {
 		
 		// Change to the given animation without interrupting playback.
 		public void SetAnimation(Animation animation) {
-			if (this.animation == animation)
+			if (sprite == animation)
 				return;
 
-			this.animation	= animation;
+			this.sprite		= animation;
 			this.subStrip	= GetSubStrip(subStripIndex);
-			this.sprite		= null;
+			//this.sprite		= null;
 
 			if (animation != null) {
 				// Change the animation and adjust the playback time
@@ -71,50 +70,37 @@ namespace ZeldaOracle.Common.Graphics {
 		}
 		
 		// Change to the given sprite without interrupting playback.
-		public void SetSprite(Sprite sprite) {
-			this.sprite		= sprite;
-			this.animation	= null;
-			this.subStrip	= null;
-			this.timer		= 0.0f;
-			// TODO: this.isPlaying = false; ??
-		}
-
-		// Change to the given sprite or animation without interrupting playback.
-		public void SetSpriteAnimation(SpriteAnimation spriteAnimation) {
-			if (spriteAnimation.IsAnimation)
-				SetAnimation(spriteAnimation.Animation);
-			else if (spriteAnimation.IsSprite)
-				SetSprite(spriteAnimation.Sprite);
-			else
-				Clear();
+		public void SetSprite(ISprite sprite) {
+			if (sprite is Animation) {
+				SetAnimation(sprite as Animation);
+			}
+			else {
+				this.sprite     = sprite;
+				this.subStrip   = null;
+				this.timer      = 0.0f;
+				// TODO: this.isPlaying = false; ??
+			}
 		}
 		
 		// Play the given sprite as a repeated animation with no duration.
-		public void Play(Sprite sprite) {
-			this.sprite		= sprite;
-			this.animation	= null;
-			this.subStrip	= null;
-			this.isPlaying	= true;
-			this.timer		= 0.0f;
+		public void Play(ISprite sprite) {
+			if (sprite is Animation) {
+				Play(sprite as Animation);
+			}
+			else {
+				this.sprite     = sprite;
+				this.subStrip   = null;
+				this.isPlaying  = true;
+				this.timer      = 0.0f;
+			}
 		}
 		
 		// Play the given animation strip from the beginning.
 		public void Play(Animation animation) {
-			this.animation	= animation;
-			this.sprite		= null;
+			this.sprite		= animation;
 			this.subStrip	= GetSubStrip(subStripIndex);
 			this.isPlaying	= true;
 			this.timer		= 0.0f;
-		}
-		
-		// Play the given animation or sprite from the beginning.
-		public void Play(SpriteAnimation spriteAnimation) {
-			if (spriteAnimation.IsAnimation)
-				Play(spriteAnimation.Animation);
-			else if (spriteAnimation.IsSprite)
-				Play(spriteAnimation.Sprite);
-			else
-				Clear();
 		}
 
 		// Play the animation from the beginning.
@@ -146,8 +132,8 @@ namespace ZeldaOracle.Common.Graphics {
 
 		// Fast-forward the playback time to the end of the animation.
 		public void SkipToEnd() {
-			if (animation != null)
-				timer = animation.Duration;
+			if (Animation != null)
+				timer = Animation.Duration;
 			else if (sprite != null)
 				timer = 0.0f;
 		}
@@ -155,7 +141,6 @@ namespace ZeldaOracle.Common.Graphics {
 		// Stop playing and clear (nullify) the current animation and sprite.
 		public void Clear() {
 			sprite		= null;
-			animation	= null;
 			subStrip	= null;
 			isPlaying	= false;
 			timer		= 0.0f;
@@ -179,7 +164,7 @@ namespace ZeldaOracle.Common.Graphics {
 				else if (subStrip.LoopMode == LoopMode.Clamp && timer > subStrip.Duration) {
 					// Hang on the last frame.
 					timer = subStrip.Duration;
-				}	
+				}
 			}
 		}
 		
@@ -189,15 +174,15 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 
 		private Animation GetSubStrip(int index) {
-			if (animation == null)
+			if (Animation == null)
 				return null;
 
-			Animation subStrip = animation;
+			Animation subStrip = Animation;
 			int i;
 			for (i = 0; subStrip != null && i < index; i++)
 				subStrip = subStrip.NextStrip;
 			if (i != index || subStrip == null)
-				return animation; // The index doesn't exist, return the base animation.
+				return Animation; // The index doesn't exist, return the base animation.
 			return subStrip;
 		}
 		
@@ -249,35 +234,22 @@ namespace ZeldaOracle.Common.Graphics {
 		}
 
 		// Return the sprite.
-		public Sprite Sprite {
+		public ISprite Sprite {
 			get { return sprite; }
-		}
-		
-		// Return a sprite animation representing this player's sprite or animation (or NULL).
-		public SpriteAnimation SpriteOrAnimation {
-			get {
-				if (animation != null)
-					return new SpriteAnimation(animation);
-				if (sprite != null)
-					return new SpriteAnimation(sprite);
-				return new SpriteAnimation();
-			}
 		}
 
 		// Return a sprite animation representing this player's sprite or sub-animation-strip (or NULL).
-		public SpriteAnimation SpriteOrSubStrip {
+		public ISprite SpriteOrSubStrip {
 			get {
 				if (subStrip != null)
-					return new SpriteAnimation(subStrip);
-				if (sprite != null)
-					return new SpriteAnimation(sprite);
-				return new SpriteAnimation();
+					return subStrip;
+				return sprite;
 			}
 		}
 		
 		// Get or set the current animation strip.
 		public Animation Animation {
-			get { return animation; }
+			get { return sprite as Animation; }
 		}
 	}
 }

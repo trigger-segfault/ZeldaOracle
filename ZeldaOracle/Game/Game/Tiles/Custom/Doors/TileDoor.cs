@@ -10,6 +10,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -134,8 +135,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 			hasUpdated = false;
 
-			animationOpen = TileData.TileData.SpriteList[1].Animation;
-			animationClose = TileData.TileData.SpriteList[2].Animation;
+			animationOpen = TileData.TileData.SpriteList[1] as Animation;
+			animationClose = TileData.TileData.SpriteList[2] as Animation;
 
 			// A closed door will start open if the player is colliding with door.
 			if (!isOpen) {

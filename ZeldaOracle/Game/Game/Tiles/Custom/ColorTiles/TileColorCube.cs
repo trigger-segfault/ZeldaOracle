@@ -79,7 +79,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 			int orientationIndex = Properties.GetInteger("orientation", 0);
 			orientation = (ColorCubeOrientation) orientationIndex;
-			Graphics.PlaySpriteAnimation(SpriteList[orientationIndex]);
+			Graphics.PlayAnimation(SpriteList[orientationIndex]);
 		}
 
 

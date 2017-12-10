@@ -103,7 +103,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 
 			reboundCounter = 0;
 			tileLocation = new Point2I(-1, -1);
-			Graphics.PlaySprite(GameData.SPR_ITEM_SEEDS[(int) type]);
+			Graphics.PlayAnimation(GameData.SPR_ITEM_SEEDS[(int) type]);
 			CheckInitialCollision();
 		}
 

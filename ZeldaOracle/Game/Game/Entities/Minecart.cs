@@ -52,14 +52,14 @@ namespace ZeldaOracle.Game.Entities {
 
 			if (minecartTrack != null) {
 				if (minecartTrack.IsHorizontal)
-					Graphics.PlaySprite(GameData.SPR_MINECART_HORIZONTAL);
+					Graphics.PlayAnimation(GameData.SPR_MINECART_HORIZONTAL);
 				else
-					Graphics.PlaySprite(GameData.SPR_MINECART_VERTICAL);
+					Graphics.PlayAnimation(GameData.SPR_MINECART_VERTICAL);
 
 				Position = minecartTrack.Position;
 			}
 			else
-				Graphics.PlaySprite(GameData.SPR_MINECART_HORIZONTAL);
+				Graphics.PlayAnimation(GameData.SPR_MINECART_HORIZONTAL);
 		}
 
 		public override void Update() {

@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Tiles {
 	public class TileDataInstance : BaseTileDataInstance {
@@ -96,16 +97,16 @@ namespace ZeldaOracle.Game.Tiles {
 					Size * GameSettings.TILE_SIZE);
 		}
 		
-		public override SpriteAnimation Sprite {
+		public override ISprite Sprite {
 			get { return tileData.Sprite; }
 			set { } // Don't see a need to set this.
 		}
 
-		public override SpriteAnimation CurrentSprite {
+		public override ISprite CurrentSprite {
 			get {
 				if (TileData.SpriteList.Length > 0)
 					return TileData.SpriteList[properties.GetInteger("sprite_index")];
-				return new SpriteAnimation();
+				return null;
 			}
 		}
 
@@ -134,11 +135,11 @@ namespace ZeldaOracle.Game.Tiles {
 			set { properties.Set("size", value); }
 		}
 
-		public SpriteAnimation[] SpriteList {
+		public ISprite[] SpriteList {
 			get { return TileData.SpriteList; }
 		}
 
-		public SpriteAnimation SpriteAsObject {
+		public ISprite SpriteAsObject {
 			get { return TileData.SpriteAsObject; }
 		}
 

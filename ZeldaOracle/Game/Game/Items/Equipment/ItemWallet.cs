@@ -37,7 +37,7 @@ namespace ZeldaOracle.Game.Items.Equipment {
 			inventory.AddAmmo(
 				new Ammo(
 					"rupees", "Rupees", "A currency.",
-					new Sprite(GameData.SHEET_ITEMS_SMALL, new Point2I(5, 3)),
+					GameData.SHEET_ITEMS_SMALL.GetSprite(5, 3),
 					0, maxAmounts[level]
 				),
 				false

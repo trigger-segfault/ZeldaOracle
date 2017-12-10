@@ -38,7 +38,7 @@ namespace ZeldaOracle.Game.Tiles {
 				//Graphics.PlaySprite(GameData.SPR_TILE_LEVER_RIGHT);
 			//else
 				//Graphics.PlaySprite(GameData.SPR_TILE_LEVER_LEFT);
-			Graphics.PlaySpriteAnimation(SpriteList[SwitchState ? 1 : 0]);
+			Graphics.PlayAnimation(SpriteList[SwitchState ? 1 : 0]);
 		}
 		
 

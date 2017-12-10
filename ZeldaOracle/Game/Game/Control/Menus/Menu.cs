@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.Main;
 
@@ -67,10 +68,10 @@ namespace ZeldaOracle.Game.Control.Menus {
 		//-----------------------------------------------------------------------------
 
 		public virtual void DrawSlotCursor(Graphics2D g, Slot slot) {
-			Sprite tR = new Sprite(GameData.SHEET_MENU_SMALL_LIGHT, new Point2I(9, 0));
-			Sprite bR = new Sprite(GameData.SHEET_MENU_SMALL_LIGHT, new Point2I(9, 1));
-			Sprite tL = new Sprite(GameData.SHEET_MENU_SMALL_LIGHT, new Point2I(10, 0));
-			Sprite bL = new Sprite(GameData.SHEET_MENU_SMALL_LIGHT, new Point2I(10, 1));
+			ISprite tR = GameData.SHEET_MENU_SMALL_LIGHT.GetSprite(9, 0);
+			ISprite bR = GameData.SHEET_MENU_SMALL_LIGHT.GetSprite(9, 1);
+			ISprite tL = GameData.SHEET_MENU_SMALL_LIGHT.GetSprite(10, 0);
+			ISprite bL = GameData.SHEET_MENU_SMALL_LIGHT.GetSprite(10, 1);
 
 			g.DrawSprite(tR, slot.Position + new Point2I(-8, 0));
 			g.DrawSprite(bR, slot.Position + new Point2I(-8, 8));

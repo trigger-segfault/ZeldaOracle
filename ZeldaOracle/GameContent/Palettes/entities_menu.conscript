@@ -1,0 +1,28 @@
+PALETTE		entities, entities_menu;
+
+COLOR	default, black		( 16, 16, 16);
+
+COLOR	tan_green, light	(248,224,152);
+COLOR	tan_green, dark		( 32,184, 80);
+
+LOOKUP	tan_blue, light		tan_green, light;
+COLOR	tan_blue, dark		( 40,144,248);
+
+LOOKUP	tan_red, light		tan_green, light;
+COLOR	tan_red, dark		(248, 24, 46);
+
+LOOKUP	tan_orange, light	tan_green, light;
+COLOR	tan_orange, dark	(248,136, 24);
+
+COLOR	shaded_red, light	(248,192, 64);
+COLOR	shaded_red, dark	(232, 16, 16);
+
+COLOR	shaded_blue, light	(128,184,248);
+COLOR	shaded_blue, dark	( 16, 16,248);
+
+LOOKUP	hurt, light			shaded_red, black;
+LOOKUP	hurt, dark			shaded_red, dark,
+LOOKUP	hurt, black			shaded_red, light;
+
+
+END;

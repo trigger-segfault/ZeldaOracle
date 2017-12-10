@@ -6,6 +6,7 @@ using ZeldaAPI;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
@@ -46,7 +47,7 @@ namespace ZeldaOracle.Game.Tiles {
 			base.Draw(g);
 
 			if (flameAnimation != null) {
-				g.DrawAnimation(flameAnimation, GameControl.RoomTicks,
+				g.DrawISprite(flameAnimation, new SpriteDrawSettings((float) GameControl.RoomTicks),
 					Center - new Vector2F(0, 9), Graphics.DepthLayer);
 			}
 		}

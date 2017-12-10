@@ -8,6 +8,7 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -48,7 +49,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 			for (int y = 0; y < Height; y++) {
 				for (int x = 0; x < Width; x++) {
-					g.DrawSprite(GameData.SPR_TILE_MOVING_PLATFORM, Zone.ImageVariantID,
+					g.DrawISprite(GameData.SPR_TILE_MOVING_PLATFORM, new SpriteDrawSettings(Zone.ImageVariantID),
 						Position + new Point2I(x, y) * GameSettings.TILE_SIZE, DepthLayer.TileLayer1);
 				}
 			}

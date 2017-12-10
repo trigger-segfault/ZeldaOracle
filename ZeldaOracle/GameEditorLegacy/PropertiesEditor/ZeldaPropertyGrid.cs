@@ -42,8 +42,8 @@ namespace ZeldaEditor.PropertiesEditor {
 			this.editorControl = editorControl;
 
 			// Create custom property editor types.
-			typeEditors["sprite"]			= new ResourcePropertyEditor<Sprite>();
-			typeEditors["animation"]		= new ResourcePropertyEditor<Animation>();
+			typeEditors["sprite"]			= new ResourcePropertyEditor<SpriteOld>();
+			typeEditors["animation"]		= new ResourcePropertyEditor<AnimationOld>();
 			typeEditors["collision_model"]	= new ResourcePropertyEditor<CollisionModel>();
 			typeEditors["song"]				= new ResourcePropertyEditor<Song>();
 			typeEditors["sound"]			= new ResourcePropertyEditor<Sound>();

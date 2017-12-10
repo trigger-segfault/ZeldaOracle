@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Control.Menus;
 
 namespace ZeldaOracle.Game.Items {
@@ -19,14 +20,14 @@ namespace ZeldaOracle.Game.Items {
 
 		private bool isObtained;
 		protected bool isStolen;
-		protected Sprite sprite;
+		protected ISprite sprite;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public Ammo(string id, string name, string description, Sprite sprite, int amount, int maxAmount) {
+		public Ammo(string id, string name, string description, ISprite sprite, int amount, int maxAmount) {
 			this.id				= id;
 			this.name			= name;
 			this.description	= description;
@@ -101,7 +102,7 @@ namespace ZeldaOracle.Game.Items {
 			get { return amount == 0; }
 		}
 
-		public Sprite Sprite {
+		public ISprite Sprite {
 			get { return sprite; }
 		}
 	}

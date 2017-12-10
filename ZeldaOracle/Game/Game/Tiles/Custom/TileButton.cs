@@ -50,7 +50,7 @@ namespace ZeldaOracle.Game.Tiles {
 					GameControl.FireEvent(this, "release", this);
 				}
 
-				Graphics.PlaySpriteAnimation(SpriteList[isPressed ? 1 : 0]);
+				Graphics.PlayAnimation(SpriteList[isPressed ? 1 : 0]);
 				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
 			}
 		}
@@ -65,7 +65,7 @@ namespace ZeldaOracle.Game.Tiles {
 			isReleasable	= Properties.GetBoolean("releasable", true);
 			isCovered		= false;
 			uncoverTimer	= 0;
-			Graphics.PlaySpriteAnimation(SpriteList[isPressed ? 1 : 0]);
+			Graphics.PlayAnimation(SpriteList[isPressed ? 1 : 0]);
 		}
 
 		public override void OnCoverBegin(Tile tile) {

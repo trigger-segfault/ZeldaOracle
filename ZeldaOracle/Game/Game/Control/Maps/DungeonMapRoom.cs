@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.Custom;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Control.Maps {
 	
@@ -22,7 +23,7 @@ namespace ZeldaOracle.Game.Control.Maps {
 		private bool	hasTreasure;
 		private bool	isBossRoom;
 		private bool	isDiscovered;
-		private Sprite	sprite;
+		private ISprite	sprite;
 
 
 		//-----------------------------------------------------------------------------
@@ -61,7 +62,7 @@ namespace ZeldaOracle.Game.Control.Maps {
 			};
 			
 			// Determine the sprite to draw for this room based on its connections.
-			Sprite[] connectedSprites = new Sprite[16] {
+			ISprite[] connectedSprites = new ISprite[16] {
 				GameData.SPR_UI_MAP_ROOM_NONE,
 				GameData.SPR_UI_MAP_ROOM_RIGHT,
 				GameData.SPR_UI_MAP_ROOM_UP,
@@ -160,7 +161,7 @@ namespace ZeldaOracle.Game.Control.Maps {
 			get { return isDiscovered; }
 		}
 
-		public Sprite Sprite {
+		public ISprite Sprite {
 			get { return sprite; }
 		}
 

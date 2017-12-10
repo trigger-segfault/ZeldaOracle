@@ -25,8 +25,15 @@ namespace ZeldaOracle.Common.Scripts {
 		private CommandParam	parameter;
 		private CommandParam	parameterParent;
 		private CommandParam	parameterRoot;
-		private List<ScriptCommand> commands;	// List of possible commands.
+		private string			commandPrefix;
 
+		private List<ScriptCommand> commands;   // List of possible commands.
+		private Dictionary<string, CommandPrefix> commandPrefixes;
+
+		/// <summary>The current mode of the reader used to determine valid commands.</summary>
+		private int             mode;
+
+		private TemporaryResources tempResources;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -35,13 +42,16 @@ namespace ZeldaOracle.Common.Scripts {
 		public ScriptReader() {
 			parameter		= null;
 			parameterRoot	= null;
+			commandPrefix   = null;
 			commands		= new List<ScriptCommand>();
+			commandPrefixes	= new Dictionary<string, CommandPrefix>();
 			lines			= new List<string>();
+			tempResources   = new TemporaryResources();
 		}
 		
 
 		//-----------------------------------------------------------------------------
-		// Command Creation
+		// Command Creation (No Modes)
 		//-----------------------------------------------------------------------------
 		
 		// Add a command with no parameter format.
@@ -81,12 +91,161 @@ namespace ZeldaOracle.Common.Scripts {
 		
 		// Add a command that handles the given list of overloads.
 		protected void AddCommand(string name, string[] parameterOverloads, Action<CommandParam> action) {
-			AddCommand(new ScriptCommand(name, parameterOverloads, action));
+			AddCommand(new ScriptCommand(name, null, parameterOverloads, action));
 		}
-		
+
+
+		//-----------------------------------------------------------------------------
+		// Command Creation (Single Mode)
+		//-----------------------------------------------------------------------------
+
+		// Add a command with no parameter format.
+		protected void AddCommand(string name, int mode, Action<CommandParam> action) {
+			AddCommand(name, mode, new string[] { }, action);
+		}
+
+		// Add a command with one parameter format.
+		protected void AddCommand(string name, int mode, string params1, Action<CommandParam> action) {
+			AddCommand(name, mode, new string[] { params1 }, action);
+		}
+
+		// Add a command that handles 2 overloads.
+		protected void AddCommand(string name, int mode, string params1, string params2, Action<CommandParam> action) {
+			AddCommand(name, mode, new string[] { params1, params2 }, action);
+		}
+
+		// Add a command that handles 3 overloads.
+		protected void AddCommand(string name, int mode, string params1, string params2, string params3, Action<CommandParam> action) {
+			AddCommand(name, mode, new string[] { params1, params2, params3 }, action);
+		}
+
+		// Add a command that handles 4 overloads.
+		protected void AddCommand(string name, int mode, string params1, string params2, string params3, string params4, Action<CommandParam> action) {
+			AddCommand(name, mode, new string[] { params1, params2, params3, params4 }, action);
+		}
+
+		// Add a command that handles 5 overloads.
+		protected void AddCommand(string name, int mode, string params1, string params2, string params3, string params4, string params5, Action<CommandParam> action) {
+			AddCommand(name, mode, new string[] { params1, params2, params3, params4, params5 }, action);
+		}
+
+		// Add a command that handles 6 overloads.
+		protected void AddCommand(string name, int mode, string params1, string params2, string params3, string params4, string params5, string params6, Action<CommandParam> action) {
+			AddCommand(name, mode, new string[] { params1, params2, params3, params4, params5, params6 }, action);
+		}
+
+		// Add a command that handles the given list of overloads.
+		protected void AddCommand(string name, int mode, string[] parameterOverloads, Action<CommandParam> action) {
+			AddCommand(new ScriptCommand(name, new int[] { mode }, parameterOverloads, action));
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Command Creation (Multiple Modes)
+		//-----------------------------------------------------------------------------
+
+		// Add a command with no parameter format.
+		protected void AddCommand(string name, int[] modes, Action<CommandParam> action) {
+			AddCommand(name, modes, new string[] { }, action);
+		}
+
+		// Add a command with one parameter format.
+		protected void AddCommand(string name, int[] modes, string params1, Action<CommandParam> action) {
+			AddCommand(name, modes, new string[] { params1 }, action);
+		}
+
+		// Add a command that handles 2 overloads.
+		protected void AddCommand(string name, int[] modes, string params1, string params2, Action<CommandParam> action) {
+			AddCommand(name, modes, new string[] { params1, params2 }, action);
+		}
+
+		// Add a command that handles 3 overloads.
+		protected void AddCommand(string name, int[] modes, string params1, string params2, string params3, Action<CommandParam> action) {
+			AddCommand(name, modes, new string[] { params1, params2, params3 }, action);
+		}
+
+		// Add a command that handles 4 overloads.
+		protected void AddCommand(string name, int[] modes, string params1, string params2, string params3, string params4, Action<CommandParam> action) {
+			AddCommand(name, modes, new string[] { params1, params2, params3, params4 }, action);
+		}
+
+		// Add a command that handles 5 overloads.
+		protected void AddCommand(string name, int[] modes, string params1, string params2, string params3, string params4, string params5, Action<CommandParam> action) {
+			AddCommand(name, modes, new string[] { params1, params2, params3, params4, params5 }, action);
+		}
+
+		// Add a command that handles 6 overloads.
+		protected void AddCommand(string name, int[] modes, string params1, string params2, string params3, string params4, string params5, string params6, Action<CommandParam> action) {
+			AddCommand(name, modes, new string[] { params1, params2, params3, params4, params5, params6 }, action);
+		}
+
+		// Add a command that handles the given list of overloads.
+		protected void AddCommand(string name, int[] modes, string[] parameterOverloads, Action<CommandParam> action) {
+			AddCommand(new ScriptCommand(name, modes, parameterOverloads, action));
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Command Creation (Final)
+		//-----------------------------------------------------------------------------
+
 		// Add a script command.
 		protected void AddCommand(ScriptCommand command) {
 			commands.Add(command);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Command Prefix Creation
+		//-----------------------------------------------------------------------------
+
+		protected void AddCommandPrefix(string prefix, params int[] modes) {
+			if (string.IsNullOrWhiteSpace(prefix))
+				throw new ArgumentNullException("Command prefix cannot be null or whitespace in script reader!");
+			if (commandPrefixes.ContainsKey(prefix))
+				throw new ArgumentException("Command prefix '" + prefix + "' already exists in script reader!");
+			commandPrefixes.Add(prefix, new CommandPrefix(prefix, modes));
+		}
+
+		//-----------------------------------------------------------------------------
+		// Resources
+		//-----------------------------------------------------------------------------
+
+		protected T GetResource<T>(string name) {
+			if (name.StartsWith("temp_")) {
+				if (!tempResources.ContainsResource<T>(name))
+					ThrowCommandParseError("Resource with name '" + name + "' does not exist!");
+				return tempResources.GetResource<T>(name);
+			}
+			else {
+				if (!Resources.ContainsResource<T>(name))
+					ThrowCommandParseError("Resource with name '" + name + "' does not exist!");
+				return Resources.GetResource<T>(name);
+			}
+		}
+
+		protected T SetResource<T>(string name, T resource) {
+			if (name.StartsWith("temp_")) {
+				tempResources.SetResource<T>(name, resource);
+			}
+			else {
+				Resources.SetResource<T>(name, resource);
+			}
+			return resource;
+		}
+
+		protected T AddResource<T>(string name, T resource) {
+			if (name.StartsWith("temp_")) {
+				if (tempResources.ContainsResource<T>(name))
+					ThrowCommandParseError("Resource with name '" + name + "' already exists!");
+				tempResources.AddResource<T>(name, resource);
+			}
+			else {
+				if (Resources.ContainsResource<T>(name))
+					ThrowCommandParseError("Resource with name '" + name + "' already exists!");
+				Resources.AddResource<T>(name, resource);
+			}
+			return resource;
 		}
 
 
@@ -101,16 +260,18 @@ namespace ZeldaOracle.Common.Scripts {
 		protected virtual void EndReading() {}
 		
 		// Reads a line in the script as a command.
-		protected virtual bool PerformCommand(string commandName, CommandParam parameters) {
+		protected virtual bool PerformCommand(string commandName, CommandParam parameters, string commandPrefix) {
 			List<string> matchingFormats = new List<string>();
 			CommandParam newParams = null;
 
 			// Search for the correct command.
 			for (int i = 0; i < commands.Count; i++) {
 				ScriptCommand command = commands[i];
-				if (command.HasName(commandName)) {
-					if (command.HasParameters(parameters, out newParams)) {
+				if (command.HasName(commandName) && MatchesMode(mode, command.Modes)) {
+					if (command.HasParameters(parameters, out newParams))
+					{
 						// Run the command.
+						newParams.Prefix = commandPrefix ?? "";
 						command.Action(newParams);
 						return true;
 					}
@@ -196,7 +357,7 @@ namespace ZeldaOracle.Common.Scripts {
 				parameterRoot.ChildCount--;
 				
 				// Attempt to perform the command.
-				PerformCommand(commandName, parameterRoot);
+				PerformCommand(commandName, parameterRoot, commandPrefix);
 			}
 
 			// Reset the parameter list.
@@ -204,10 +365,20 @@ namespace ZeldaOracle.Common.Scripts {
 			parameterParent.Type = CommandParamType.Array;
 			parameterRoot	= parameterParent;
 			parameter		= null;
+			commandPrefix   = null;
 		}
 
 		// Add a new command parameter child to the current parent parameter.
 		private CommandParam AddParam() {
+			// If this is the beginning of the command, check for prefixes
+			if (parameterParent == parameterRoot && parameter == null && commandPrefix == null) {
+				if (commandPrefixes.ContainsKey(word)) {
+					if (MatchesMode(mode, commandPrefixes[word].Modes)) {
+						commandPrefix = word;
+						return null;
+					}
+				}
+			}
 			CommandParam newParam = new CommandParam(word);
 			newParam.CharIndex = wordCharIndex;
 			newParam.LineIndex = lineIndex;
@@ -358,6 +529,17 @@ namespace ZeldaOracle.Common.Scripts {
 			}
 		}
 
+		private static bool MatchesMode(int mode, int[] modes) {
+			if (modes != null && modes.Length > 0) {
+				for (int i = 0; i < modes.Length; i++) {
+					if (modes[i] == mode)
+						return true;
+				}
+				return false;
+			}
+			return true;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -365,6 +547,12 @@ namespace ZeldaOracle.Common.Scripts {
 
 		public List<ScriptCommand> ScriptCommands {
 			get { return commands; }
+		}
+
+		/// <summary>Gets or sets the current mode of the reader used to determine valid commands.</summary>
+		protected int Mode {
+			get { return mode; }
+			set { mode = value; }
 		}
 	}
 }

@@ -70,7 +70,7 @@ namespace ZeldaOracle.Game.Tiles {
 				}
 
 				if (timer == 49) {
-					Graphics.PlaySpriteAnimation(SpriteList[1]);
+					Graphics.PlayAnimation(SpriteList[1]);
 					//Graphics.PlaySprite(GameData.SPR_TILE_OWL_ACTIVATED);
 				}
 				if (timer == 58) {
@@ -79,7 +79,7 @@ namespace ZeldaOracle.Game.Tiles {
 				}
 				if (timer > 80) {
 					isActivated = false;
-					Graphics.PlaySpriteAnimation(SpriteList[0]);
+					Graphics.PlayAnimation(SpriteList[0]);
 					//Graphics.PlaySprite(GameData.SPR_TILE_OWL);
 				}
 			}

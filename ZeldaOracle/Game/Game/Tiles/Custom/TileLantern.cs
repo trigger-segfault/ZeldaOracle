@@ -29,7 +29,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (!IsLit) {
 				IsLit = true;
 				//Graphics.PlaySprite(GameData.ANIM_TILE_LANTERN);
-				Graphics.PlaySpriteAnimation(SpriteList[0]);
+				Graphics.PlayAnimation(SpriteList[0]);
 				Properties.Set("lit", true);
 				GameControl.FireEvent(this, "light", this);
 			}
@@ -39,7 +39,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (IsLit) {
 				IsLit = false;
 				//Graphics.PlaySprite(GameData.SPR_TILE_LANTERN_UNLIT);
-				Graphics.PlaySpriteAnimation(SpriteList[1]);
+				Graphics.PlayAnimation(SpriteList[1]);
 				Properties.Set("lit", false);
 				GameControl.FireEvent(this, "put_out", this);
 			}
@@ -58,7 +58,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public override void OnInitialize() {
-			Graphics.PlaySpriteAnimation(SpriteList[IsLit ? 0 : 1]);
+			Graphics.PlayAnimation(SpriteList[IsLit ? 0 : 1]);
 			/*if (IsLit)
 				Graphics.PlaySprite(GameData.ANIM_TILE_LANTERN);
 			else

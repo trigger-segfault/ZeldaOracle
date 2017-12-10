@@ -6,6 +6,7 @@ using System.Reflection;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -69,7 +70,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Abstract Properties
 		//-----------------------------------------------------------------------------
 
-		public abstract SpriteAnimation Sprite { get; set; }
+		public abstract ISprite Sprite { get; set; }
 
 
 		//-----------------------------------------------------------------------------

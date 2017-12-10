@@ -4,20 +4,21 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Control.Menus {
 	public class CustomSlotItem : ISlotItem {
 
 		private string name;
 		private string description;
-		private Sprite sprite;
+		private ISprite sprite;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public CustomSlotItem(string name, string description, Sprite sprite) {
+		public CustomSlotItem(string name, string description, ISprite sprite) {
 			this.name			= name;
 			this.description	= description;
 			this.sprite			= sprite;

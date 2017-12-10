@@ -9,6 +9,7 @@ using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemFeather : ItemWeapon {
@@ -26,7 +27,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.maxLevel		= Item.Level2;
 			this.flags			= ItemFlags.UsableWhileJumping | ItemFlags.UsableWithSword;
 
-			sprite = new Sprite[] {
+			sprite = new ISprite[] {
 				GameData.SPR_ITEM_ICON_FEATHER,
 				GameData.SPR_ITEM_ICON_CAPE
 			};

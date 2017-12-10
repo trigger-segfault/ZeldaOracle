@@ -1,0 +1,17 @@
+PALETTEDICTIONARY	entity, entities;
+ENTITY	tan_green;
+ENTITY	tan_blue;
+ENTITY	tan_red;
+ENTITY	tan_orange;
+ENTITY	shaded_red;
+ENTITY	shaded_blue;
+
+ENTITY	hurt;
+
+ENTITY	color_cube_yellow_red;
+ENTITY	color_cube_red_blue;
+ENTITY	color_cube_blue_yellow;
+
+ENTITY	maku_seed;
+
+END;

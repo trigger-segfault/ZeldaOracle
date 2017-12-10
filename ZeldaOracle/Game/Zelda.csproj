@@ -14,7 +14,7 @@
     </TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
-    <XnaProfile>Reach</XnaProfile>
+    <XnaProfile>HiDef</XnaProfile>
     <XnaCrossPlatformGroupID>29897e00-93f9-4090-bb53-143c6ebcd2cb</XnaCrossPlatformGroupID>
     <XnaOutputType>Game</XnaOutputType>
     <ApplicationIcon>Game.ico</ApplicationIcon>
@@ -131,6 +131,24 @@
     <None Include="Common\Debug\DebugMenuItem.cs" />
     <None Include="Common\Debug\RadioButtonMenuItem.cs" />
     <None Include="Common\Debug\ToggleMenuItem.cs" />
+    <None Include="Common\Graphics\Obsolete\AnimationOld.cs" />
+    <None Include="Common\Graphics\Obsolete\AnimationFrameOld.cs" />
+    <Compile Include="Common\Graphics\Sprites\SpriteSet.cs" />
+    <Compile Include="Common\Graphics\Sprites\CompositeSprite.cs" />
+    <Compile Include="Common\Graphics\Sprites\BasicSprite.cs" />
+    <Compile Include="Common\Graphics\Sprites\EmptySprite.cs" />
+    <Compile Include="Common\Graphics\Sprites\ISprite.cs" />
+    <Compile Include="Common\Graphics\Sprites\PalettedSpriteDatabase.cs" />
+    <Compile Include="Common\Graphics\Sprites\ISpriteSheet.cs" />
+    <Compile Include="Common\Graphics\Sprites\OffsetSprite.cs" />
+    <Compile Include="Common\Graphics\Sprites\SpriteDrawSettings.cs" />
+    <Compile Include="Common\Graphics\Sprites\SpritePart.cs" />
+    <Compile Include="Common\Graphics\Sprites\StyleDefinitions.cs" />
+    <Compile Include="Common\Graphics\Sprites\StyleGroups.cs" />
+    <Compile Include="Common\Graphics\Sprites\StyleSprite.cs" />
+    <Compile Include="Common\Graphics\Palette.cs" />
+    <Compile Include="Common\Graphics\PaletteDictionary.cs" />
+    <Compile Include="Common\Graphics\PaletteShader.cs" />
     <Compile Include="Common\Ini\IniDocument.cs" />
     <Compile Include="Common\Ini\IniEnums.cs" />
     <Compile Include="Common\Ini\IniSection.cs" />
@@ -159,8 +177,8 @@
     <Compile Include="Common\Geometry\Rectangle2F.cs" />
     <Compile Include="Common\Geometry\Rectangle2I.cs" />
     <Compile Include="Common\Geometry\Vector2F.cs" />
-    <Compile Include="Common\Graphics\Animation.cs" />
-    <Compile Include="Common\Graphics\AnimationFrame.cs" />
+    <Compile Include="Common\Graphics\Sprites\Animation.cs" />
+    <Compile Include="Common\Graphics\Sprites\AnimationFrame.cs" />
     <Compile Include="Common\Graphics\AnimationPlayer.cs" />
     <Compile Include="Common\Graphics\Color.cs" />
     <Compile Include="Common\Graphics\DrawMode.cs" />
@@ -168,9 +186,9 @@
     <Compile Include="Common\Graphics\GameFont.cs" />
     <Compile Include="Common\Graphics\Graphics2D.cs" />
     <Compile Include="Common\Graphics\Image.cs" />
-    <Compile Include="Common\Graphics\Sprite.cs" />
-    <Compile Include="Common\Graphics\SpriteAnimation.cs" />
-    <Compile Include="Common\Graphics\SpriteSheet.cs" />
+    <None Include="Common\Graphics\Obsolete\SpriteOld.cs" />
+    <None Include="Common\Graphics\Obsolete\SpriteAnimation.cs" />
+    <Compile Include="Common\Graphics\Sprites\SpriteSheet.cs" />
     <Compile Include="Common\Input\Controls\AnalogStick.cs" />
     <Compile Include="Common\Input\Buttons.cs" />
     <Compile Include="Common\Input\Controls\Button.cs" />
@@ -196,19 +214,27 @@
     <Compile Include="Common\Scripting\PropertyDocumentation.cs" />
     <Compile Include="Common\Scripting\Property.cs" />
     <None Include="Common\Scripting\ZeldaObject.cs" />
+    <Compile Include="Common\Scripts\Commands\CommandPrefix.cs" />
     <Compile Include="Common\Scripts\Commands\CommandReferenceParam.cs" />
-    <Compile Include="Common\Scripts\CustomReaders\AnimationSR.cs" />
+    <None Include="Common\Scripts\CustomReaders\AnimationSR.cs" />
     <Compile Include="Common\Scripts\Commands\CommandParam.cs" />
     <Compile Include="Common\Scripts\Commands\CommandParamParser.cs" />
     <Compile Include="Common\Scripts\CustomReaders\GameFontSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\CollisionModelSR.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\ISpritesSR.Animation.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\ISpritesSR.BasicEmpty.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\ISpritesSR.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\ISpritesSR.Style.cs" />
     <Compile Include="Common\Scripts\CustomReaders\MusicSR.cs" />
-    <Compile Include="Common\Scripts\NewScriptReader.cs" />
+    <None Include="Common\Scripts\CustomReaders\PaletteConverterSR.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\PaletteDictionarySR.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\PaletteSR.cs" />
+    <Compile Include="Common\Scripts\ScriptReader.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ImagesSR.cs" />
     <Compile Include="Common\Scripts\Commands\ScriptCommand.cs" />
     <Compile Include="Common\Scripts\CustomReaders\SoundsSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\TilesetSR.cs" />
-    <Compile Include="Common\Scripts\CustomReaders\SpritesSR.cs" />
+    <None Include="Common\Scripts\CustomReaders\SpritesSR.cs" />
     <Compile Include="Common\Scripts\ScriptReaderException.cs" />
     <Compile Include="Common\Translation\Language.cs" />
     <Compile Include="Common\Translation\LetterString.cs" />
@@ -353,6 +379,7 @@
     <Compile Include="Game\GameStates\RoomStates\RoomStateReward.cs" />
     <Compile Include="Game\GameStates\RoomStates\RoomStateTextReader.cs" />
     <Compile Include="Game\Control\ViewControl.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\ISpritesSR.Composite.cs" />
     <None Include="Game\Debug\DebugController.cs" />
     <Compile Include="Game\Entities\Effects\Effect.cs" />
     <Compile Include="Game\Entities\Entity.cs" />
@@ -433,7 +460,7 @@
     <Compile Include="Game\Main\Program.cs" />
     <Compile Include="Game\Entities\Players\Player.cs" />
     <Compile Include="Common\Content\ResourceBuilders\AnimationBuilder.cs" />
-    <Compile Include="Common\Content\ResourceBuilders\SpriteBuilder.cs" />
+    <None Include="Common\Content\ResourceBuilders\SpriteBuilder.cs" />
     <Compile Include="Common\Content\ResourceBuilders\TilesetBuilder.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\IColoredTile.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorBarrier.cs" />

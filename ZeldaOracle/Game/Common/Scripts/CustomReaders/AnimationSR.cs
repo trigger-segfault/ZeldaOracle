@@ -10,6 +10,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripts.Commands;
 using ZeldaOracle.Game;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
 	/** <summary>
@@ -100,11 +101,11 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			AddCommand("Clone", "string animationName",
 			delegate(CommandParam parameters) {
-				if (useTemporary && resources != null && resources.ContainsResource<Animation>(parameters.GetString(0))) {
+				if (useTemporary && resources != null && resources.ContainsResource<AnimationOld>(parameters.GetString(0))) {
 					animationBuilder.CreateClone(resources.GetResource<Animation>(parameters.GetString(0)));
 					animation = animationBuilder.Animation;
 				}
-				if (Resources.ContainsResource<Animation>(parameters.GetString(0))) {
+				if (Resources.ContainsResource<AnimationOld>(parameters.GetString(0))) {
 					animationBuilder.CreateClone(Resources.GetResource<Animation>(parameters.GetString(0)));
 					animation = animationBuilder.Animation;
 				}
@@ -136,29 +137,26 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						parameters.GetPoint(5, new Point2I(1, 0)).Y);
 				}
 				else if (parameters.GetString(0) == "frame") {
-					Sprite spr;
+					ISprite spr;
 					Point2I offset = parameters.GetPoint(3, Point2I.Zero);
 					if (parameters[2].Type == CommandParamType.Array) {
-						spr = new Sprite(animationBuilder.SpriteSheet, parameters.GetPoint(2), offset);
+						spr = animationBuilder.SpriteSheet.GetSprite(parameters.GetPoint(2));
 					}
 					else {
-						spr = new Sprite(Resources.GetResource<Sprite>(parameters.GetString(2)));
-						for (Sprite part = spr; part != null; part = part.NextPart)
-							part.DrawOffset += offset;
+						spr = Resources.GetResource<ISprite>(parameters.GetString(2));
 					}
-					animationBuilder.AddFrame(parameters.GetInt(1), spr);
+					animationBuilder.AddFrame(parameters.GetInt(1), spr, offset);
 				}
 				else if (parameters.GetString(0) == "part") {
-					Sprite spr;
+					ISprite spr;
 					Point2I offset = parameters.GetPoint(3, Point2I.Zero);
 					if (parameters[2].Type == CommandParamType.Array) {
-						spr = new Sprite(animationBuilder.SpriteSheet, parameters.GetPoint(2), offset);
+						spr = animationBuilder.SpriteSheet.GetSprite(parameters.GetPoint(2));
 					}
 					else {
-						spr = new Sprite(Resources.GetResource<Sprite>(parameters.GetString(2)));
-						spr.DrawOffset = offset;
+						spr = Resources.GetResource<ISprite>(parameters.GetString(2));
 					}
-					animationBuilder.AddPart(parameters.GetInt(1), spr);
+					animationBuilder.AddPart(parameters.GetInt(1), spr, offset);
 				}
 				else if (parameters.GetString(0) == "emptyframe") {
 					animationBuilder.AddEmptyFrame(parameters.GetInt(1));
@@ -170,7 +168,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("Insert",
 				"string strip, int time, int duration, int stripLength, (int sourceX, int sourceY), (int offsetX, int offsetY) = (0, 0), (int nextSourceX, int nextSourceY) = (1, 0)",
 				"string frame, int time, int duration, (int sourceX, int sourceY), (int offsetX, int offsetY) = (0, 0)",
-			delegate(CommandParam parameters) {
+				"string frame, int time, int duration, string spriteName, (int offsetX, int offsetY) = (0, 0)",
+			delegate (CommandParam parameters) {
 				if (parameters.GetString(0) == "strip") {
 					animationBuilder.InsertFrameStrip(
 						parameters.GetInt(1),
@@ -184,13 +183,22 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						parameters.GetPoint(6, new Point2I(1, 0)).Y);
 				}
 				else if (parameters.GetString(0) == "frame") {
-					animationBuilder.InsertFrame(
-						parameters.GetInt(1),
-						parameters.GetInt(2),
-						parameters.GetPoint(3).X,
-						parameters.GetPoint(3).Y,
-						parameters.GetPoint(4, Point2I.Zero).X,
-						parameters.GetPoint(4, Point2I.Zero).Y);
+					if (parameters[3].Type == CommandParamType.Array) {
+						animationBuilder.InsertFrame(
+							parameters.GetInt(1),
+							parameters.GetInt(2),
+							parameters.GetPoint(3).X,
+							parameters.GetPoint(3).Y,
+							parameters.GetPoint(4, Point2I.Zero).X,
+							parameters.GetPoint(4, Point2I.Zero).Y);
+					}
+					else {
+						animationBuilder.InsertFrame(
+							parameters.GetInt(1),
+							parameters.GetInt(2),
+							GetResource<ISprite>(parameters.GetString(3)),
+							parameters.GetPoint(4, Point2I.Zero));
+					}
 				}
 				else
 					ThrowParseError("Unknown insert type '" + parameters.GetString(0) + "' for animation");

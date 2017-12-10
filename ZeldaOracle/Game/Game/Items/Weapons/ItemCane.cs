@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemCane : ItemWeapon {
@@ -25,7 +26,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.description	= new string[] { "Used to create blocks." };
 			this.maxLevel		= Item.Level1;
 			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWhileInHole;
-			this.sprite			= new Sprite[] { GameData.SPR_ITEM_ICON_CANE };
+			this.sprite			= new ISprite[] { GameData.SPR_ITEM_ICON_CANE };
 
 			this.somariaBlockTile		= null;
 			this.somariaBlockTileData	= null;

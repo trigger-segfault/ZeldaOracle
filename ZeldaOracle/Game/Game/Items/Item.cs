@@ -8,6 +8,7 @@ using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control.Menus;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items {
 	public abstract class Item : ISlotItem {
@@ -23,7 +24,7 @@ namespace ZeldaOracle.Game.Items {
 		protected bool			isObtained;
 		protected bool			isStolen;
 
-		protected Sprite[]		sprite;
+		protected ISprite[]		sprite;
 
 
 		//-----------------------------------------------------------------------------

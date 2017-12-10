@@ -21,6 +21,7 @@ using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Tiles {
 	
@@ -60,7 +61,7 @@ namespace ZeldaOracle.Game.Tiles {
 		private TileDataInstance	tileData;			// The tile data used to create this tile.
 		private TileFlags			flags;
 		private Point2I				size;				// How many tile spaces this tile occupies. NOTE: this isn't supported yet.
-		private SpriteAnimation		spriteAsObject;		// The sprite for the tile if it were picked up, pushed, etc.
+		private ISprite				spriteAsObject;		// The sprite for the tile if it were picked up, pushed, etc.
 		private Animation			breakAnimation;		// The animation to play when the tile is broken.
 		private Sound				breakSound;			// The sound to play when the tile is broken.
 		private int					pushDelay;			// Number of ticks of pushing before the player can move this tile.
@@ -87,7 +88,7 @@ namespace ZeldaOracle.Game.Tiles {
 			layer				= 0;
 			offset				= Point2I.Zero;
 			size				= Point2I.One;
-			spriteAsObject		= new SpriteAnimation();
+			spriteAsObject      = null;
 			isSolid				= false;
 			isMoving			= false;
 			pushDelay			= 20;
@@ -317,7 +318,7 @@ namespace ZeldaOracle.Game.Tiles {
 				TileData data = Resources.GetResource<TileData>("dug");
 				Tile dugTile = Tile.CreateTile(data);
 				roomControl.PlaceTile(dugTile, location, layer);
-				Graphics.PlaySprite(GameData.SPR_TILE_DUG);
+				Graphics.PlayAnimation(GameData.SPR_TILE_DUG);
 			}
 			else {
 				roomControl.RemoveTile(this);
@@ -596,7 +597,7 @@ namespace ZeldaOracle.Game.Tiles {
 			tile.size				= data.Size;
 			
 			if (data.SpriteList.Length > 0)
-				tile.graphics.PlaySpriteAnimation(data.SpriteList[0]);
+				tile.graphics.PlayAnimation(data.SpriteList[0]);
 
 			int conveyorAngle = data.ConveyorAngle;
 			if (conveyorAngle >= 0)
@@ -709,12 +710,12 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return flags; }
 		}
 		
-		public SpriteAnimation SpriteAsObject {
+		public ISprite SpriteAsObject {
 			get { return spriteAsObject; }
-			set { spriteAsObject.Set(value); }
+			set { spriteAsObject = value; }
 		}
 
-		public SpriteAnimation[] SpriteList {
+		public ISprite[] SpriteList {
 			get { return tileData.SpriteList; }
 		}
 

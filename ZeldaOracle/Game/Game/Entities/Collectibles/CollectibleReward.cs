@@ -82,7 +82,7 @@ namespace ZeldaOracle.Game.Entities {
 			
 			hasDuration = reward.HasDuration;
 
-			Graphics.PlayAnimation(reward.Animation);
+			Graphics.PlayAnimation(reward.Sprite);
 		}
 
 		public override void OnLand() {

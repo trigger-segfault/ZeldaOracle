@@ -6,6 +6,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.Transitions;
 using ZeldaOracle.Game.Items;
@@ -176,7 +177,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 			if (inSubMenu) {
 				Point2I maxSize = new Point2I(ammoSlotGroup.NumSlots * 24 + 8, 32);
 				Point2I menuPos = new Point2I((160 - (ammoSlotGroup.NumSlots * 24 + 8)) / 2 + (maxSize.X - ammoMenuSize.X) / 2, DrawAmmoMenuAtTop ? 16 : 56);
-				Sprite ammoMenuSprite = new Sprite(GameData.SHEET_MENU_SMALL_LIGHT, new Point2I(1, 4));
+				ISprite ammoMenuSprite = GameData.SHEET_MENU_SMALL_LIGHT.GetSprite(1, 4);
 				g.DrawSprite(ammoMenuSprite, new Rectangle2I(menuPos, ammoMenuSize));
 				if (IsAmmoMenuFullyOpen) {
 					ammoSlotGroup.Draw(g);
@@ -192,7 +193,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 				base.DrawSlotCursor(g, slot);
 			}
 			else if (IsAmmoMenuFullyOpen) {
-				Sprite arrowSprite = new Sprite(GameData.SHEET_MENU_SMALL_LIGHT, new Point2I(5, 5));
+				ISprite arrowSprite = GameData.SHEET_MENU_SMALL_LIGHT.GetSprite(5, 5);
 				g.DrawSprite(arrowSprite, slot.Position + new Point2I(4, 20));
 			}
 		}

@@ -7,20 +7,18 @@ using System.Threading.Tasks;
 
 using ZeldaResources = ZeldaOracle.Common.Content.Resources;
 using ZeldaImage = ZeldaOracle.Common.Graphics.Image;
-using ZeldaSprite = ZeldaOracle.Common.Graphics.Sprite;
-using ZeldaAnimation = ZeldaOracle.Common.Graphics.Animation;
-using ZeldaAnimationFrame = ZeldaOracle.Common.Graphics.AnimationFrame;
 using System.Windows.Media.Imaging;
 using ZeldaEditor.Util;
 using System.Windows;
 using System.Windows.Controls;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaEditor.Control {
 
 	public static class EditorResources {
 
 		private static Dictionary<KeyValuePair<ZeldaImage, int>, BitmapSource> resourceImages;
-		private static Dictionary<KeyValuePair<ZeldaSprite, int>, BitmapSource> resourceSprites;
+		private static Dictionary<KeyValuePair<SpritePart, int>, BitmapSource> resourceSprites;
 
 
 		//-----------------------------------------------------------------------------
@@ -30,7 +28,7 @@ namespace ZeldaEditor.Control {
 		// Initialize the editor resources.
 		public static void Initialize() {
 			resourceImages = new Dictionary<KeyValuePair<ZeldaImage, int>, BitmapSource>();
-			resourceSprites = new Dictionary<KeyValuePair<ZeldaSprite, int>, BitmapSource>();
+			resourceSprites = new Dictionary<KeyValuePair<SpritePart, int>, BitmapSource>();
 		}
 
 
@@ -63,17 +61,11 @@ namespace ZeldaEditor.Control {
 			resourceImages[pair] = bitmap;
 			return bitmap;
 		}
-		// Get a bitmap from an image resource name.
-		public static Image GetSpritePart(string spriteName, int variantID = -1) {
-			return GetSpritePart(ZeldaResources.GetSprite(spriteName), variantID);
-		}
 		// Get a bitmap from an image resource.
-		public static Image GetSpritePart(ZeldaSprite sprite, int variantID = -1) {
-			if (variantID == -1)
-				variantID = sprite.Image.VariantID;
+		public static Image GetSpritePart(SpritePart sprite, int variantID = -1) {
 			BitmapSource bitmap;
 			// If the image's bitmap is already loaded, then return it.
-			var pair = new KeyValuePair<ZeldaSprite, int>(sprite, variantID);
+			var pair = new KeyValuePair<SpritePart, int>(sprite, variantID);
 			if (resourceSprites.ContainsKey(pair)) {
 				bitmap = resourceSprites[pair];
 			}
@@ -95,31 +87,32 @@ namespace ZeldaEditor.Control {
 			return GetSprite(ZeldaResources.GetSprite(spriteName), variantID);
 		}
 		// Get a bitmap from an image resource.
-		public static Canvas GetSprite(ZeldaSprite sprite, int variantID = -1) {
-			if (variantID == -1)
-				variantID = sprite.Image.VariantID;
+		public static Canvas GetSprite(ISprite sprite, int variantID = -1, StyleDefinitions styleDefinitions = null) {
 			Canvas canvas = new Canvas();
 			canvas.HorizontalAlignment = HorizontalAlignment.Left;
 			canvas.VerticalAlignment = VerticalAlignment.Top;
-			for (ZeldaSprite part = sprite; part != null; part = part.NextPart) {
+			/*for (ZeldaSprite part = sprite; part != null; part = part.NextPart) {
+				canvas.Children.Add(GetSpritePart(part, variantID));
+			}*/
+			foreach (SpritePart part in sprite.GetParts(new SpriteDrawSettings(styleDefinitions, variantID))) {
 				canvas.Children.Add(GetSpritePart(part, variantID));
 			}
 			return canvas;
 		}
 		// Get a bitmap from an image resource name.
-		public static Canvas GetAnimation(string animationName, int variantID = -1) {
+		/*public static Canvas GetAnimation(string animationName, int variantID) {
 			return GetAnimation(ZeldaResources.GetAnimation(animationName), variantID);
 		}
 		// Get a bitmap from an image resource.
-		public static Canvas GetAnimation(ZeldaAnimation animation, int variantID = -1) {
-			if (variantID == -1)
-				variantID = animation.Frames[0].Image.VariantID;
+		public static Canvas GetAnimation(ZeldaAnimation animation, int variantID) {
+			//if (variantID == -1)
+			//	variantID = animation.Frames[0].Image.VariantID;
 			Canvas canvas = new Canvas();
 			canvas.HorizontalAlignment = HorizontalAlignment.Left;
 			canvas.VerticalAlignment = VerticalAlignment.Top;
 			int time = 0;
 
-			for (int i = 0; i < animation.Frames.Count; ++i) {
+			for (int i = 0; i < animation.FrameCount; ++i) {
 				ZeldaAnimationFrame frame = animation.Frames[i];
 				if (time < frame.StartTime)
 					break;
@@ -131,6 +124,6 @@ namespace ZeldaEditor.Control {
 			}
 
 			return canvas;
-		}
+		}*/
 	}
 }

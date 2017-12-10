@@ -14,7 +14,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 	public class SpritesSR : ScriptReader {
 
 		private SpriteBuilder spriteBuilder;
-		private Sprite sprite;
+		private SpriteOld sprite;
 		private string spriteName;
 		private TemporaryResources resources;
 		private bool useTemporary;
@@ -81,7 +81,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("Sprite", "string name, (int gridLocationX, int gridLocationY), (int drawOffsetX, int drawOffsetY) = (0, 0)",
 			delegate(CommandParam parameters) {
 				spriteName = parameters.GetString(0);
-				sprite = new Sprite(
+				sprite = new SpriteOld(
 					spriteBuilder.SpriteSheet,
 					parameters.GetPoint(1),
 					parameters.GetPoint(2, Point2I.Zero));
@@ -93,9 +93,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				if (sprite != null) {
 					spriteBuilder.End();
 					if (useTemporary && resources != null)
-						resources.AddResource<Sprite>(spriteName, sprite);
+						resources.AddResource<SpriteOld>(spriteName, sprite);
 					else
-						Resources.AddResource<Sprite>(spriteName, sprite);
+						Resources.AddResource<SpriteOld>(spriteName, sprite);
 					sprite = null;
 				}
 			});

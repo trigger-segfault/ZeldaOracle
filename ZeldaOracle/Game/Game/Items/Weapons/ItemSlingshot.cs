@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Items.Ammos;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 
@@ -30,8 +31,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.maxLevel		= Item.Level2;
 			this.currentAmmo	= 0;
 			this.flags			= ItemFlags.UsableInMinecart | ItemFlags.UsableWhileJumping | ItemFlags.UsableWhileInHole;
-			this.sprite			= new Sprite[] { GameData.SPR_ITEM_ICON_SLINGSHOT_1, GameData.SPR_ITEM_ICON_SLINGSHOT_2 };
-			this.spriteEquipped	= new Sprite[] { GameData.SPR_ITEM_ICON_SLINGSHOT_1, GameData.SPR_ITEM_ICON_SLINGSHOT_2_EQUIPPED };
+			this.sprite			= new ISprite[] { GameData.SPR_ITEM_ICON_SLINGSHOT_1, GameData.SPR_ITEM_ICON_SLINGSHOT_2 };
+			this.spriteEquipped	= new ISprite[] { GameData.SPR_ITEM_ICON_SLINGSHOT_1, GameData.SPR_ITEM_ICON_SLINGSHOT_2_EQUIPPED };
 			this.seedTracker	= new EntityTracker<SeedProjectile>(3);
 		}
 

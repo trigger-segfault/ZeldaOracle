@@ -12,6 +12,7 @@ using ZeldaOracle.Game.Entities.Monsters.Tools;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 

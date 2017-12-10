@@ -15,8 +15,9 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		//-----------------------------------------------------------------------------
 
 		public RewardHeartContainer() {
+			InitSprite(GameData.SPR_REWARD_HEART_CONTAINER);
+
 			this.id				= "heart_container";
-			this.animation		= new Animation(GameData.SPR_REWARD_HEART_CONTAINER);
 			this.message		= "You got a <red>Heart Container<red>!";
 			this.hasDuration	= false;
 			this.holdType		= RewardHoldTypes.TwoHands;

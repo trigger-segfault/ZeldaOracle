@@ -16,8 +16,9 @@ namespace ZeldaOracle.Common.Graphics {
 		private Matrix transform;
 
 
-
-		// ================== CONSTRUCTORS ================== //
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
 
 		public DrawMode() {
 			sortMode          = SpriteSortMode.Immediate;
@@ -40,8 +41,9 @@ namespace ZeldaOracle.Common.Graphics {
 		}
 
 
-
-		// ================== PROPERTIES =================== //
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
 
 		public SpriteSortMode SortMode {
 			get { return sortMode; }

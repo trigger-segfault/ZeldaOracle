@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Common.Content.ResourceBuilders {
 
 	public class SpriteBuilder {
-		private Sprite sprite;
-		private Sprite spriteBegin;
+		private SpriteOld sprite;
+		private SpriteOld spriteBegin;
 		private SpriteSheet sheet;
 
 
@@ -28,20 +29,20 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 		// Begin/End
 		//-----------------------------------------------------------------------------
 
-		public SpriteBuilder Begin(Sprite sprite) {
+		public SpriteBuilder Begin(SpriteOld sprite) {
 			this.sprite = sprite;
 			this.spriteBegin = sprite;
 			return this;
 		}
 		
 		public SpriteBuilder Begin() {
-			sprite = new Sprite();
+			sprite = new SpriteOld();
 			spriteBegin = sprite;
 			return this;
 		}
 
-		public Sprite End() {
-			Sprite temp = spriteBegin;
+		public SpriteOld End() {
+			SpriteOld temp = spriteBegin;
 			sprite = null;
 			spriteBegin = null;
 			return temp;
@@ -53,7 +54,7 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 		//-----------------------------------------------------------------------------
 
 		public SpriteBuilder AddPart(int sheetX, int sheetY, int offsetX = 0, int offsetY = 0) {
-			sprite.NextPart = new Sprite(sheet, sheetX, sheetY, offsetX, offsetY);
+			sprite.NextPart = new SpriteOld(sheet, sheetX, sheetY, offsetX, offsetY);
 			sprite = sprite.NextPart;
 			return this;
 		}
@@ -79,14 +80,14 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 		}
 		
 		public SpriteBuilder Offset(int x, int y) {
-			for (Sprite spr = spriteBegin; spr != null; spr = spr.NextPart) {
+			for (SpriteOld spr = spriteBegin; spr != null; spr = spr.NextPart) {
 				spr.DrawOffset += new Point2I(x, y);
 			}
 			return this;
 		}
 
 		public SpriteBuilder Offset(Point2I offset) {
-			for (Sprite spr = spriteBegin; spr != null; spr = spr.NextPart) {
+			for (SpriteOld spr = spriteBegin; spr != null; spr = spr.NextPart) {
 				spr.DrawOffset += offset;
 			}
 			return this;
@@ -102,7 +103,7 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 			set { sheet = value; }
 		}
 
-		public Sprite Sprite {
+		public SpriteOld Sprite {
 			get { return sprite; }
 			set { sprite = value; }
 		}

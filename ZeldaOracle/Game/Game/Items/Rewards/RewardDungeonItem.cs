@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Worlds;
 
@@ -16,8 +17,8 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public RewardDungeonItem(string id, SpriteAnimation animation, RewardHoldTypes holdType, string message) {
-			InitAnimation(animation);
+		public RewardDungeonItem(string id, ISprite sprite, RewardHoldTypes holdType, string message) {
+			InitSprite(sprite);
 
 			this.id				= id;
 			this.message		= message;

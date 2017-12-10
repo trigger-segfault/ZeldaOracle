@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Entities.Collisions;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Units;

@@ -5,36 +5,35 @@ using System.Text;
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Graphics {
-	
-	public struct AnimationFrame {
+	public struct AnimationFrameOld {
 		// Start time in ticks.
 		private int startTime;
 		// Duration in ticks.
 		private int duration;
 		// The sprite used in the frame.
-		private Sprite sprite;
+		private SpriteOld sprite;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 		
-		public AnimationFrame(int startTime, int duration, Sprite sprite) {
+		public AnimationFrameOld(int startTime, int duration, SpriteOld sprite) {
 			this.startTime	= startTime;
 			this.duration	= duration;
 			this.sprite		= sprite;
 		}
 
-		public AnimationFrame(int startTime, int duration, Image image, Rectangle2I sourceRect, Point2I drawOffset) {
+		public AnimationFrameOld(int startTime, int duration, Image image, Rectangle2I sourceRect, Point2I drawOffset) {
 			this.startTime	= startTime;
 			this.duration	= duration;
-			this.sprite		= new Sprite(image, sourceRect, drawOffset);
+			this.sprite		= new SpriteOld(image, sourceRect, drawOffset);
 		}
 
-		public AnimationFrame(AnimationFrame copy) {
+		public AnimationFrameOld(AnimationFrameOld copy) {
 			this.startTime	= copy.startTime;
 			this.duration	= copy.duration;
-			this.sprite		= new Sprite(copy.sprite);
+			this.sprite		= new SpriteOld(copy.sprite);
 		}
 
 		
@@ -56,7 +55,7 @@ namespace ZeldaOracle.Common.Graphics {
 			set { duration = value; }
 		}
 
-		public Sprite Sprite {
+		public SpriteOld Sprite {
 			get { return sprite; }
 			set { sprite = value; }
 		}

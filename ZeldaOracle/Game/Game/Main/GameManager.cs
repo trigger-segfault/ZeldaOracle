@@ -296,6 +296,11 @@ namespace ZeldaOracle.Game.Main {
 			get { return gameControl; }
 		}
 
+		/// <summary>Returns the stored sprite batch class.</summary>
+		public SpriteBatch SpriteBatch {
+			get { return gameBase.SpriteBatch; }
+		}
+
 		/// <summary>Gets the current game state.</summary>
 		public GameState CurrentGameState {
 			get { return gameStateStack.CurrentGameState; }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
 
@@ -16,7 +17,7 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		// UI animations.
-		public static Animation ANIM_UI_MAP_CURSOR;
+		public static Animation ANIM_UI_MAP_CURSOR_LINK;
 
 		// Tile animations.
 		public static Animation ANIM_TILE_WATER;
@@ -264,12 +265,11 @@ namespace ZeldaOracle.Game {
 			Resources.LoadAnimations("Animations/animations.conscript");
 
 			// Create gale effect animation.
-			SpriteSheet sheet = Resources.GetSpriteSheet("color_effects");
 			ANIM_EFFECT_SEED_GALE = new Animation();
 			for (int i = 0; i < 12; i++) {
 				int y = 1 + (((5 - (i % 4)) % 4) * 4);
-				ANIM_EFFECT_SEED_GALE.AddFrame(i, 1, new Sprite(
-					GameData.SHEET_COLOR_EFFECTS, ((i % 6) < 3 ? 4 : 5), y, -8, -8));
+				ANIM_EFFECT_SEED_GALE.AddFrame(i, 1, 
+					((SpriteSheet) GameData.SHEET_COLOR_EFFECTS).GetSprite(((i % 6) < 3 ? 4 : 5), y, -8, -8));
 			}
 			Resources.SetResource("effect_seed_gale", ANIM_EFFECT_SEED_GALE);
 

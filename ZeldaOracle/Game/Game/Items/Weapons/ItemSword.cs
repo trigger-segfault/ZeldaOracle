@@ -8,6 +8,7 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemSword : ItemWeapon {
@@ -30,7 +31,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				ItemFlags.UsableWhileJumping | 
 				ItemFlags.UsableWhileInHole;
 			this.beamTracker	= new EntityTracker<SwordBeam>(1);
-			this.sprite			= new Sprite[] {
+			this.sprite			= new ISprite[] {
 				GameData.SPR_ITEM_ICON_SWORD_1,
 				GameData.SPR_ITEM_ICON_SWORD_2,
 				GameData.SPR_ITEM_ICON_SWORD_3

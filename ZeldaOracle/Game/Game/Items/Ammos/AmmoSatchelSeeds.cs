@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items.Ammos {
 	public class AmmoSatchelSeeds : Ammo {
@@ -13,7 +14,7 @@ namespace ZeldaOracle.Game.Items.Ammos {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public AmmoSatchelSeeds(string id, string name, string description, Sprite sprite, int amount, int maxAmount)
+		public AmmoSatchelSeeds(string id, string name, string description, ISprite sprite, int amount, int maxAmount)
 			: base(id, name, description, sprite, amount, maxAmount)
 		{
 		}

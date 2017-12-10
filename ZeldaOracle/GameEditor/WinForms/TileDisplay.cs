@@ -15,6 +15,7 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Audio;
 using ZeldaEditor.Control;
 using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaEditor.WinForms {
 
@@ -142,17 +143,17 @@ namespace ZeldaEditor.WinForms {
 						if (tileData != null) {
 							int spacing = 1;
 							Vector2F drawPos = new Vector2F(x, y) * (Tileset.CellSize + spacing);
-							SpriteAnimation spr = tileData.Sprite;
-							
+							ISprite spr = tileData.Sprite;
+
 							int imageVariantID = tileData.Properties.GetInteger("image_variant", Zone.ImageVariantID);
 							if (imageVariantID < 0)
 								imageVariantID = Zone.ImageVariantID;
-							if (spr.IsAnimation) {
+							if (spr is Animation) {
 								int substripIndex = tileData.Properties.GetInteger("substrip_index", 0);
-								spr.Animation = spr.Animation.GetSubstrip(substripIndex);
+								spr = ((Animation) spr).GetSubstrip(substripIndex);
 							}
 
-							g.DrawAnimation(tileData.Sprite, imageVariantID, 0.0f, drawPos, Color.White);
+							g.DrawISprite(spr, new SpriteDrawSettings(Zone.StyleDefinitions, Zone.ImageVariantID), drawPos, Color.White);
 						}
 					}
 				}

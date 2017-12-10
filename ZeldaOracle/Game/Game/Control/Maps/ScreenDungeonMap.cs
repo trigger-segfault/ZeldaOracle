@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.Custom;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Control.Maps {
 
@@ -54,14 +55,14 @@ namespace ZeldaOracle.Game.Control.Maps {
 				return;
 
 			// Determine the sprite to draw for the room.
-			Sprite sprite = null;
+			ISprite sprite = null;
 			if (room.IsDiscovered)
 				sprite = room.Sprite;
 			else if (dungeon.HasMap)
 				sprite = GameData.SPR_UI_MAP_UNDISCOVERED_ROOM;
 
 			// Determine extra sprite to draw for the room (treasure, boss, or player).
-			Sprite extraSprite = null;
+			ISprite extraSprite = null;
 			if (playerRoomLocation == room.Location && playerFloorNumber == room.Floor.FloorNumber &&
 				(cursorTimer >= 32 || isChangingFloors || room.Floor != viewFloor))
 			{

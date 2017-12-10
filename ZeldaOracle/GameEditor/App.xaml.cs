@@ -6,10 +6,12 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using ZeldaEditor.Windows;
+using WinFormsApplication = System.Windows.Forms.Application;
 
 namespace ZeldaEditor {
 	/// <summary>The application class.</summary>
@@ -57,6 +59,7 @@ namespace ZeldaEditor {
 			// Catch exceptions not in a UI thread
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnAppDomainUnhandledException);
 			TaskScheduler.UnobservedTaskException += OnTaskSchedulerUnobservedTaskException;
+			WinFormsApplication.ThreadException += OnWinFormsThreadException;
 		}
 
 		/// <summary>Show an exception window for an exception that occurred in a dispatcher thread.</summary>
@@ -82,6 +85,17 @@ namespace ZeldaEditor {
 
 		/// <summary>Show an exception window for an exception that occurred in a task.</summary>
 		private void OnTaskSchedulerUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e) {
+			if (e.Exception != lastException) {
+				lastException = e.Exception;
+				Dispatcher.Invoke(() => {
+					if (ErrorMessageBox.Show(e.Exception))
+						Environment.Exit(0);
+				});
+			}
+		}
+
+		/// <summary>Show an exception window for an exception that occurred in winforms.</summary>
+		private void OnWinFormsThreadException(object sender, ThreadExceptionEventArgs e) {
 			if (e.Exception != lastException) {
 				lastException = e.Exception;
 				Dispatcher.Invoke(() => {

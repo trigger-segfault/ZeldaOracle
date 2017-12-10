@@ -28,6 +28,7 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 		private int					count;
 		private string				stringValue;
 		private object				value;
+		private string              commandPrefix;
 
 		private int					lineIndex;	// Line index where this parameter is specified.
 		private int					charIndex;	// Character index within the line this parameter is specified.
@@ -53,6 +54,7 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 			this.value			= null;
 			this.charIndex		= -1;
 			this.lineIndex		= -1;
+			this.commandPrefix  = null;
 		}
 
 		public CommandParam(string str) :
@@ -70,6 +72,7 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 			this.stringValue	= copy.stringValue;
 			this.charIndex		= copy.charIndex;
 			this.lineIndex		= copy.lineIndex;
+			this.commandPrefix  = copy.commandPrefix;
 
 			// Copy array children.
 			this.count = 0;
@@ -138,11 +141,23 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 				this.value = bool.Parse(str);
 		}
 
-		
+
+		//-----------------------------------------------------------------------------
+		// Prefix
+		//-----------------------------------------------------------------------------
+
+		public bool HasPrefix(string prefix = null) {
+			if (prefix == null)
+				return !string.IsNullOrEmpty(commandPrefix);
+			else
+				return string.Compare(commandPrefix, prefix, true) == 0;
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Array Methods
 		//-----------------------------------------------------------------------------
-		
+
 		// Get an enumerable list of an array paraneter's children.
 		public IEnumerable<CommandParam> GetChildren() {
 			for (CommandParam child = children; child != null; child = child.nextParam)
@@ -237,6 +252,11 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 		public string Name {
 			get { return name; }
 			set { name = value; }
+		}
+
+		public string Prefix {
+			get { return commandPrefix; }
+			set { commandPrefix = value; }
 		}
 		
 		// Arrays ---------------------------------------------------------------------

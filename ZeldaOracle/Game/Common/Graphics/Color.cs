@@ -322,8 +322,7 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
-
+		
 		/// <summary>Gets the packed color with all the values inside an unsigned int.</summary>
 		public uint PackedColor {
 			get { return (((uint)A) << 12) + (((uint)R) << 8) + (((uint)G) << 8) + ((uint)B); }
@@ -361,6 +360,10 @@ namespace ZeldaOracle.Common.Graphics {
 			set { SetHSV(Hue, Sat, value); }
 		}
 
+		/// <summary>Gets the total of the RGB channels.</summary>
+		public int Total {
+			get { return R + G + B; }
+		}
 
 		//-----------------------------------------------------------------------------
 		// Management
@@ -418,6 +421,26 @@ namespace ZeldaOracle.Common.Graphics {
 		/// <summary>Sets the hsv values of the color.</summary>
 		public void SetHSV(double hue, double sat, double val) {
 			SetHSV((float)hue, (float)sat, (float)val);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Converts the color to a 15-bit GameBoy Color color.</summary>
+		public static Color ToGBCColor(int r, int g, int b) {
+			return ToGBCColor(new Color(r, g, b));
+		}
+
+		/// <summary>Converts the color to a 15-bit GameBoy Color color.</summary>
+		public static Color ToGBCColor(float r, float g, float b) {
+			return ToGBCColor(new Color(r, g, b));
+		}
+
+		/// <summary>Converts the color to a 15-bit GameBoy Color color.</summary>
+		public static Color ToGBCColor(Color color) {
+			return new Color(color.R & 0xF8, color.G & 0xF8, color.B & 0xF8);
 		}
 	}
 } // End namespace

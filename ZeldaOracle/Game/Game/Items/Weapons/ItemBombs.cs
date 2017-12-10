@@ -8,6 +8,7 @@ using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items {
 	public class ItemBombs : ItemWeapon {
@@ -29,7 +30,7 @@ namespace ZeldaOracle.Game.Items {
 
 			this.flags			= ItemFlags.UsableWhileInHole;
 
-			sprite = new Sprite[] {
+			sprite = new ISprite[] {
 				GameData.SPR_ITEM_ICON_BOMB,
 				GameData.SPR_ITEM_ICON_BOMB,
 				GameData.SPR_ITEM_ICON_BOMB,

@@ -56,7 +56,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public override void Draw(RoomGraphics g) {
 			base.Draw(g);
 
-			g.DrawSprite(GameData.SPR_TILE_STATUE_EYE, Position + eyeOffset, DepthLayer.TileLayer1);
+			g.DrawISprite(GameData.SPR_TILE_STATUE_EYE, Position + eyeOffset, DepthLayer.TileLayer1);
 		}
 	}
 }

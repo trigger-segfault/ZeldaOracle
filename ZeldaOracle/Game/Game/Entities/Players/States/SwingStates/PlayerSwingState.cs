@@ -15,6 +15,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Entities.Units;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 	public class PlayerSwingState : PlayerState {
@@ -91,11 +92,11 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		protected Rectangle2I[,]	swingCollisionBoxesLunge;
 		protected Rectangle2I[,]	swingCollisionBoxesNoLunge;
 		protected Animation			weaponSwingAnimationLunge;
-		protected Animation			weaponSwingAnimation;
-		protected Animation			playerSwingAnimation;
-		protected Animation			playerSwingAnimationLunge;
-		protected Animation			playerSwingAnimationInMinecart;
-		protected Animation			playerSwingAnimationUnderwater;
+		protected Animation         weaponSwingAnimation;
+		protected Animation         playerSwingAnimation;
+		protected Animation         playerSwingAnimationLunge;
+		protected Animation         playerSwingAnimationInMinecart;
+		protected Animation         playerSwingAnimationUnderwater;
 		private Dictionary<int, Action>	timedActions;
 
 	

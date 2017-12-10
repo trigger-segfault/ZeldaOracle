@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Entities
 {
@@ -33,6 +34,7 @@ namespace ZeldaOracle.Game.Entities
 		private bool			flickerIsVisible;
 		private bool			isAnimatedWhenPaused;
 		private bool			isHurting;
+		private string          colorGroup;
 
 
 		//-----------------------------------------------------------------------------
@@ -71,28 +73,20 @@ namespace ZeldaOracle.Game.Entities
 			animationPlayer.Play();
 		}
 
-		public void PlaySprite(Sprite sprite) {
+		public void PlayAnimation(ISprite sprite) {
 			animationPlayer.Play(sprite);
 		}
 		
 		public void PlayAnimation(Animation animation) {
 			animationPlayer.Play(animation);
 		}
-
-		public void PlaySpriteAnimation(SpriteAnimation spriteAnimation) {
-			animationPlayer.Play(spriteAnimation);
-		}
 		
-		public void PlayAnimation(string animationName) {
+		/*public void PlayAnimation(string animationName) {
 			PlayAnimation(Resources.GetAnimation(animationName));
-		}
+		}*/
 
 		public void SetAnimation(Animation animation) {
 			animationPlayer.SetAnimation(animation);
-		}
-
-		public void SetAnimation(SpriteAnimation spriteAnimation) {
-			animationPlayer.SetSpriteAnimation(spriteAnimation);
 		}
 		
 		public void StopAnimation() {
@@ -159,7 +153,7 @@ namespace ZeldaOracle.Game.Entities
 			if (isShadowVisible && entity.ZPosition >= 1 &&
 				entity.GameControl.RoomTicks % 2 == 0 && !entity.RoomControl.IsSideScrolling)
 			{
-				g.DrawSprite(GameData.SPR_SHADOW, Entity.Position + shadowDrawOffset, DepthLayer.Shadows);
+				g.DrawISprite(GameData.SPR_SHADOW, Entity.Position + shadowDrawOffset, DepthLayer.Shadows);
 			}
 
 			if (isFlickering && !flickerIsVisible)
@@ -177,15 +171,15 @@ namespace ZeldaOracle.Game.Entities
 
 			// Draw the ripples effect.
 			if (isRipplesEffectVisible && entity.Physics.IsEnabled && entity.Physics.IsInPuddle) {
-				g.DrawAnimation(GameData.ANIM_EFFECT_RIPPLES,
-					entity.GameControl.RoomTicks, entity.Position +
+				g.DrawISprite(GameData.ANIM_EFFECT_RIPPLES,
+					new SpriteDrawSettings((float) entity.GameControl.RoomTicks), entity.Position +
 					ripplesDrawOffset, layer, entity.Position);
 			}
 			
 			// Draw the grass effect.
-			if (isGrassEffectVisible && entity.Physics.IsEnabled &&entity.Physics.IsInGrass) {
-				g.DrawAnimation(GameData.ANIM_EFFECT_GRASS,
-					grassAnimationTicks, entity.Position +
+			if (isGrassEffectVisible && entity.Physics.IsEnabled && entity.Physics.IsInGrass) {
+				g.DrawISprite(GameData.ANIM_EFFECT_GRASS,
+					new SpriteDrawSettings((float) grassAnimationTicks), entity.Position +
 					grassDrawOffset, layer, entity.Position);
 			}
 		}
@@ -219,7 +213,7 @@ namespace ZeldaOracle.Game.Entities
 			get { return animationPlayer.IsDone; }
 		}
 		
-		public Sprite Sprite {
+		public ISprite Sprite {
 			get { return animationPlayer.Sprite; }
 		}
 		
@@ -316,6 +310,11 @@ namespace ZeldaOracle.Game.Entities
 					return depthLayerInAir;
 				return depthLayer;
 			}
+		}
+
+		public string ColorGroup {
+			get { return colorGroup; }
+			set { colorGroup = null; }
 		}
 	}
 }

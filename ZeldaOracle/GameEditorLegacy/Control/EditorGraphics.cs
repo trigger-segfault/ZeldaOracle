@@ -18,30 +18,30 @@ namespace ZeldaEditor.Control {
 		// Sprite drawing
 		//-----------------------------------------------------------------------------
 
-		public static void DrawSprite(Graphics g, Sprite sprite, Point2I position) {
+		public static void DrawSprite(Graphics g, SpriteOld sprite, Point2I position) {
 			DrawSprite(g, sprite, position.X, position.Y);
 		}
 
-		public static void DrawSprite(Graphics g, Sprite sprite, int variantID, Point2I position) {
+		public static void DrawSprite(Graphics g, SpriteOld sprite, int variantID, Point2I position) {
 			DrawSprite(g, sprite, variantID, position.X, position.Y);
 		}
 
 		public static void DrawSprite(Graphics g, SpriteAnimation sprite, int variantID, Point2I position) {
 			if (sprite.IsAnimation)
-				DrawSprite(g, sprite.Animation.GetFrameAsSprite(0), variantID, position.X, position.Y);
+				DrawSprite(g, sprite.Animation.GetFrameAsCompositeSprite(0), variantID, position.X, position.Y);
 			else
 				DrawSprite(g, sprite.Sprite, variantID, position.X, position.Y);
 		}
 
 		public static void DrawSprite(Graphics g, SpriteAnimation sprite, int variantID, Point2I position, Point2I sourceSize) {
 			if (sprite.IsAnimation)
-				DrawSprite(g, sprite.Animation.GetFrameAsSprite(0), variantID, position.X, position.Y, sourceSize.X, sourceSize.Y);
+				DrawSprite(g, sprite.Animation.GetFrameAsCompositeSprite(0), variantID, position.X, position.Y, sourceSize.X, sourceSize.Y);
 			else
 				DrawSprite(g, sprite.Sprite, variantID, position.X, position.Y, sourceSize.X, sourceSize.Y);
 		}
 
-		public static void DrawSprite(Graphics g, Sprite sprite, int x, int y) {
-			for (Sprite part = sprite; part != null; part = part.NextPart) {
+		public static void DrawSprite(Graphics g, SpriteOld sprite, int x, int y) {
+			for (SpriteOld part = sprite; part != null; part = part.NextPart) {
 				Bitmap bitmap = EditorResources.GetBitmap(part.Image);
 				Rectangle sourceRect = new Rectangle(
 					part.SourceRect.X, part.SourceRect.Y,
@@ -51,8 +51,8 @@ namespace ZeldaEditor.Control {
 			}
 		}
 	
-		public static void DrawSprite(Graphics g, Sprite sprite, int variantID, int x, int y) {
-			for (Sprite part = sprite; part != null; part = part.NextPart) {
+		public static void DrawSprite(Graphics g, SpriteOld sprite, int variantID, int x, int y) {
+			for (SpriteOld part = sprite; part != null; part = part.NextPart) {
 				Bitmap bitmap = EditorResources.GetBitmap(part.Image.GetVariant(variantID));
 				Rectangle sourceRect = new Rectangle(
 					part.SourceRect.X, part.SourceRect.Y,
@@ -62,8 +62,8 @@ namespace ZeldaEditor.Control {
 			}
 		}
 
-		public static void DrawSprite(Graphics g, Sprite sprite, int variantID, int x, int y, int srcwidth, int srcheight) {
-			for (Sprite part = sprite; part != null; part = part.NextPart) {
+		public static void DrawSprite(Graphics g, SpriteOld sprite, int variantID, int x, int y, int srcwidth, int srcheight) {
+			for (SpriteOld part = sprite; part != null; part = part.NextPart) {
 				Bitmap bitmap = EditorResources.GetBitmap(part.Image.GetVariant(variantID));
 				Rectangle sourceRect = new Rectangle(
 					part.SourceRect.X, part.SourceRect.Y,

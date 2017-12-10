@@ -10,6 +10,7 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemSwitchHook : ItemWeapon {
@@ -28,7 +29,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.flags			=
 				ItemFlags.UsableWithSword |
 				ItemFlags.UsableUnderwater;
-			this.sprite = new Sprite[] {
+			this.sprite = new ISprite[] {
 				GameData.SPR_ITEM_ICON_SWITCH_HOOK,
 				GameData.SPR_ITEM_ICON_SWITCH_HOOK
 			};

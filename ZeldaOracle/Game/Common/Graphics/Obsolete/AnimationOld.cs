@@ -2,66 +2,69 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ZeldaOracle.Common.Graphics {
-	
-	// Modes for how looping should be handled for an animation.
-	public enum LoopMode {
-		Clamp,	// Remain on the last frame when completed.
-		Reset,	// Reset back to the beginning and stop.
-		Repeat,	// Keep looping back and playing from the beginning endlessly.
+
+	/// <summary>Modes for how looping should be handled for an animation.</summary>
+	public enum LoopModeOld {
+		/// <summary>Remain on the last frame when completed.</summary>
+		Clamp,
+		/// <summary>Reset back to the beginning and stop.</summary>
+		Reset,
+		/// <summary>Keep looping back and playing from the beginning endlessly.</summary>
+		Repeat
 	}
 
-
-	public class Animation {
+	public class AnimationOld {
 
 		// The list of frames.
-		private List<AnimationFrame> frames;
+		private List<AnimationFrameOld> frames;
 		// Duratin in ticks.
 		private int duration;
 		// This creates a linked list of animations for its variations (like for different directions).
-		private Animation nextStrip;
+		private AnimationOld nextStrip;
 		// How looping should be handled.
-		private LoopMode loopMode;
+		private LoopModeOld loopMode;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public Animation() {
-			this.frames		= new List<AnimationFrame>();
+		public AnimationOld() {
+			this.frames		= new List<AnimationFrameOld>();
 			this.duration	= 0;
 			this.nextStrip	= null;
-			this.loopMode	= LoopMode.Repeat;
+			this.loopMode	= LoopModeOld.Repeat;
 		}
 
-		public Animation(Sprite sprite) {
-			this.frames		= new List<AnimationFrame>();
+		public AnimationOld(SpriteOld sprite) {
+			this.frames		= new List<AnimationFrameOld>();
 			this.duration	= 0;
 			this.nextStrip	= null;
-			this.loopMode	= LoopMode.Repeat;
+			this.loopMode	= LoopModeOld.Repeat;
 
-			this.frames.Add(new AnimationFrame(0, 0, sprite));
+			this.frames.Add(new AnimationFrameOld(0, 0, sprite));
 		}
 		
-		public Animation(LoopMode loopMode) {
-			this.frames		= new List<AnimationFrame>();
+		public AnimationOld(LoopModeOld loopMode) {
+			this.frames		= new List<AnimationFrameOld>();
 			this.duration	= 0;
 			this.nextStrip	= null;
 			this.loopMode	= loopMode;
 		}
 
-		public Animation(Animation copy) {
-			frames		= new List<AnimationFrame>();
+		public AnimationOld(AnimationOld copy) {
+			frames		= new List<AnimationFrameOld>();
 			nextStrip	= null;
 			duration	= copy.duration;
 			loopMode	= copy.loopMode;
 
 			for (int i = 0; i < copy.frames.Count; i++)
-				frames.Add(new AnimationFrame(copy.frames[i]));
+				frames.Add(new AnimationFrameOld(copy.frames[i]));
 			if (copy.nextStrip != null)
-				nextStrip = new Animation(copy.nextStrip);
+				nextStrip = new AnimationOld(copy.nextStrip);
 		}
 
 
@@ -69,7 +72,7 @@ namespace ZeldaOracle.Common.Graphics {
 		// Mutators
 		//-----------------------------------------------------------------------------
 
-		public void AddFrame(AnimationFrame frame) {
+		public void AddFrame(AnimationFrameOld frame) {
 			int index = 0;
 			while (index < frames.Count && frame.StartTime > frames[index].StartTime)
 				++index;
@@ -77,13 +80,13 @@ namespace ZeldaOracle.Common.Graphics {
 			duration = Math.Max(duration, frame.StartTime + frame.Duration);
 		}
 
-		public void AddFrame(int startTime, int duration, Sprite sprite) {
-			AddFrame(new AnimationFrame(startTime, duration, sprite));
+		public void AddFrame(int startTime, int duration, SpriteOld sprite) {
+			AddFrame(new AnimationFrameOld(startTime, duration, sprite));
 		}
 
 		public void SwitchSpriteSheet(SpriteSheet sheet) {
-			foreach (AnimationFrame frame in frames) {
-				Sprite sprite = frame.Sprite;
+			foreach (AnimationFrameOld frame in frames) {
+				SpriteOld sprite = frame.Sprite;
 				while (sprite != null) {
 					sprite.Image = sheet.Image;
 					sprite = sprite.NextPart;
@@ -98,17 +101,17 @@ namespace ZeldaOracle.Common.Graphics {
 		// Sprites
 		//-----------------------------------------------------------------------------
 
-		public Sprite GetFrameAsSprite(int time) {
-			Sprite sprite = null;
-			Sprite currentSprite = null;
+		public SpriteOld GetFrameAsSprite(int time) {
+			SpriteOld sprite = null;
+			SpriteOld currentSprite = null;
 			for (int i = 0; i < frames.Count; i++) {
 				if (frames[i].StartTime <= time && frames[i].StartTime + frames[i].Duration - 1 >= time) {
 					if (sprite == null) {
-						sprite = new Sprite(frames[i].Sprite);
+						sprite = new SpriteOld(frames[i].Sprite);
 						currentSprite = sprite;
 					}
 					else {
-						currentSprite.NextPart = new Sprite(frames[i].Sprite);
+						currentSprite.NextPart = new SpriteOld(frames[i].Sprite);
 						currentSprite = currentSprite.NextPart;
 					}
 				}
@@ -116,8 +119,8 @@ namespace ZeldaOracle.Common.Graphics {
 			return sprite;
 		}
 
-		public Animation GetSubstrip(int index) {
-			Animation substrip = this;
+		public AnimationOld GetSubstrip(int index) {
+			AnimationOld substrip = this;
 			for (int i = 0; i < index; i++) {
 				substrip = substrip.nextStrip;
 				if (substrip == null)
@@ -131,7 +134,7 @@ namespace ZeldaOracle.Common.Graphics {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public AnimationFrame this[int index] {
+		public AnimationFrameOld this[int index] {
 			get { return frames[index]; }
 		}
 
@@ -140,19 +143,23 @@ namespace ZeldaOracle.Common.Graphics {
 			set { duration = value; }
 		}
 
-		public List<AnimationFrame> Frames {
+		public List<AnimationFrameOld> Frames {
 			get { return frames; }
 			set { frames = value; }
 		}
 
-		public Animation NextStrip {
+		public AnimationOld NextStrip {
 			get { return nextStrip; }
 			set { nextStrip = value; }
 		}
 
-		public LoopMode LoopMode {
+		public LoopModeOld LoopMode {
 			get { return loopMode; }
 			set { loopMode = value; }
+		}
+
+		public int FrameCount {
+			get { return frames.Count; }
 		}
 	}
 }

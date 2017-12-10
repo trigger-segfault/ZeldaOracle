@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Microsoft.Win32;
 using ZeldaEditor;
 using ZeldaEditor.Control;
@@ -27,6 +28,7 @@ using ZeldaEditor.Windows;
 using ZeldaEditor.WinForms;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
@@ -49,6 +51,8 @@ namespace ZeldaEditor {
 		private RefactorWindow      refactorWindow;
 
 		private bool suppressEvents = false;
+
+		private DispatcherTimer updateTimer;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -102,11 +106,21 @@ namespace ZeldaEditor {
 			UpdatePropertyPreview(null);
 
 			suppressEvents = true;
+
+			updateTimer = new DispatcherTimer(
+				TimeSpan.FromSeconds(0.4),
+				DispatcherPriority.ApplicationIdle,
+				delegate { Update(); },
+				Dispatcher);
 		}
 
 		//-----------------------------------------------------------------------------
 		// Methods
 		//-----------------------------------------------------------------------------
+		
+		private void Update() {
+			statusFPS.Content = "FPS " + levelDisplay.FPS.ToString("0.0");
+		}
 
 		private void OnWindowLoaded(object sender, RoutedEventArgs e) {
 			buttonToolPointer.Tag = editorControl.ToolPointer;
@@ -301,11 +315,9 @@ namespace ZeldaEditor {
 			}
 			else if (obj is TileDataInstance) {
 				TileDataInstance tile = obj as TileDataInstance;
-				SpriteAnimation currentSprite = tile.CurrentSprite;
-				if (currentSprite.IsSprite)
-					canvas = EditorResources.GetSprite(currentSprite.Sprite, tile.Room.Zone.ImageVariantID);
-				else if (currentSprite.IsAnimation)
-					canvas = EditorResources.GetAnimation(currentSprite.Animation, tile.Room.Zone.ImageVariantID);
+				ISprite currentSprite = tile.CurrentSprite;
+				if (currentSprite != null)
+					canvas = EditorResources.GetSprite(currentSprite, tile.Room.Zone.ImageVariantID);
 				if (canvas != null) {
 					canvas.Height = 16;
 					canvas.MinWidth = 16;
@@ -317,11 +329,9 @@ namespace ZeldaEditor {
 			}
 			else if (obj is EventTileDataInstance) {
 				EventTileDataInstance tile = obj as EventTileDataInstance;
-				SpriteAnimation currentSprite = tile.CurrentSprite;
-				if (currentSprite.IsSprite)
-					canvas = EditorResources.GetSprite(currentSprite.Sprite, tile.Room.Zone.ImageVariantID);
-				else if (currentSprite.IsAnimation)
-					canvas = EditorResources.GetAnimation(currentSprite.Animation, tile.Room.Zone.ImageVariantID);
+				ISprite currentSprite = tile.CurrentSprite;
+				if (currentSprite != null)
+					canvas = EditorResources.GetSprite(currentSprite, tile.Room.Zone.ImageVariantID);
 				if (canvas != null) {
 					canvas.Height = 16;
 					canvas.MinWidth = 16;

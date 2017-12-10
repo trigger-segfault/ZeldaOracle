@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Players.States;
 using ZeldaOracle.Game.Tiles;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Items.Weapons {
 	public class ItemBracelet : ItemWeapon {
@@ -28,7 +29,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 			this.maxLevel		= 1;
 			this.flags			= ItemFlags.None;
 
-			sprite = new Sprite[] {
+			sprite = new ISprite[] {
 				GameData.SPR_ITEM_ICON_BRACELET,
 				GameData.SPR_ITEM_ICON_POWER_GLOVES
 			};

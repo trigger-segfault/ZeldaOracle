@@ -119,7 +119,10 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 		/// <summary>Returns the hash code for this rectangle.</summary>
 		public override int GetHashCode() {
-			return base.GetHashCode();
+			return (int) ((uint) X ^
+						(((uint) Y << 13) | ((uint) Y >> 19)) ^
+						(((uint) Width << 26) | ((uint) Width >>  6)) ^
+						(((uint) Height <<  7) | ((uint) Height >> 25)));
 		}
 
 

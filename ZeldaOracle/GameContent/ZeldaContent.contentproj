@@ -59,9 +59,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\Editor\" />
+    <Folder Include="Images\Tiles\Database\" />
     <Folder Include="Languages\" />
     <Folder Include="Particles\" />
-    <Folder Include="Shaders\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Fonts\font_debug_menu.spritefont">
@@ -71,6 +71,42 @@
     </Compile>
     <None Include="Animations\animations.conscript">
       <Name>animations</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\entities.conscript">
+      <Name>entities</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\Dictionaries\tile_palette_dictionary.conscript">
+      <Name>tile_palette_dictionary</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\dungeon_ages_1_converter.conscript">
+      <Name>dungeon_ages_1_converter</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\dungeon_ages_1.conscript">
+      <Name>dungeon_ages_1</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\Dictionaries\entity_palette_dictionary.conscript">
+      <Name>entity_palette_dictionary</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\entities_menu.conscript">
+      <Name>entities_menu</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\Dictionaries\overworld_dictionary.conscript">
+      <Name>overworld_dictionary</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SpriteSheets\isprites_cliffs.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>isprites_cliffs</Name>
+    </None>
+    <None Include="SpriteSheets\isprites.conscript">
+      <Name>isprites</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Tilesets\cliffs.conscript">
@@ -1189,6 +1225,20 @@
       <Name>tileset_sidescroll_ages_dungeon_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Shaders\palette_shader.fx">
+      <Name>palette_shader</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Shaders\palette_lerp_shader.fx">
+      <Name>palette_lerp_shader</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

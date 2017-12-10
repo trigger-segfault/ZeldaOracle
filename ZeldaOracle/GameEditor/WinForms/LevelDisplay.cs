@@ -21,7 +21,15 @@ using System.IO;
 using System.Threading;
 using System.Windows.Threading;
 using ZeldaEditor.Tools;
+using DrawMode = ZeldaOracle.Common.Graphics.DrawMode;
 using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
+
+using Effect = Microsoft.Xna.Framework.Graphics.Effect;
+using Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D;
+using XnaColor = Microsoft.Xna.Framework.Color;
+using Matrix = Microsoft.Xna.Framework.Matrix;
+using SurfaceFormat = Microsoft.Xna.Framework.Graphics.SurfaceFormat;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaEditor.WinForms {
 
@@ -47,19 +55,49 @@ namespace ZeldaEditor.WinForms {
 		private bool            isSelectionRoom;
 		
 		private DispatcherTimer dispatcherTimer;
-		
+
+		private Texture2D palette;
+		private Effect paletteShader;
+		private DrawMode paletteDrawMode;
+
+		// Frame Rate:
+		/// <summary>The total number of frames passed since the last frame rate check.</summary>
+		private int totalFrames;
+		/// <summary>The amount of time passed since the last frame rate check.</summary>
+		private double elapsedTime;
+		/// <summary>The current frame rate of the game.</summary>
+		private double fps;
+
+		private Stopwatch fpsWatch;
+
+
 		//-----------------------------------------------------------------------------
 		// Individual Tile Selection
 		//-----------------------------------------------------------------------------
-		
+
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
-		
+
 		protected override void Initialize() {
 			try {
 				content     = new ContentManager(Services, "Content");
 				spriteBatch = new SpriteBatch(GraphicsDevice);
+
+				palette = new Texture2D(GraphicsDevice, 256, 256, false, SurfaceFormat.Color);
+
+				XnaColor[] colorData = new XnaColor[256*256];
+
+				for (int y = 0; y < 256; y++) {
+					for (int x = 0; x < 256; x++) {
+						colorData[x + y * 256] = new XnaColor(x, y, 0);
+					}
+				}
+				palette.SetData<XnaColor>(colorData);
+
+				paletteShader = content.Load<Effect>("Shaders/palette_shader");
+				paletteDrawMode = new DrawMode(GameSettings.DRAW_MODE_DEFAULT);
+				paletteDrawMode.Effect = paletteShader;
 
 				editorControl.Initialize(content, GraphicsDevice);
 				
@@ -70,6 +108,11 @@ namespace ZeldaEditor.WinForms {
 				MouseUp             += OnMouseUp;
 				MouseLeave          += OnMouseLeave;
 				MouseDoubleClick    += OnMouseDoubleClick;
+
+				totalFrames = 0;
+				elapsedTime = 0.0;
+				fps = 0.0;
+				fpsWatch = Stopwatch.StartNew();
 
 				this.ResizeRedraw = true;
 
@@ -320,24 +363,23 @@ namespace ZeldaEditor.WinForms {
 			if (editorControl.ShowModified && !tile.HasModifiedProperties && !tile.HasDefinedEvents)
 				return;
 
-			Sprite sprite = null;
-			Animation animation = null;
+			ISprite sprite = null;
 			float playbackTime = editorControl.Ticks;
 			int substripIndex =  tile.Properties.GetInteger("substrip_index", 0);
 			
 			//-----------------------------------------------------------------------------
 			// Platform.
 			if (tile.Type == typeof(TilePlatform)) {
-				SpriteAnimation currentSprite = tile.CurrentSprite;
-				if (!currentSprite.IsNull) {
+				ISprite currentSprite = tile.CurrentSprite;
+				if (currentSprite != null) {
 					// Draw the tile once per point within its size.
 					for (int y = 0; y < tile.Size.Y; y++) {
 						for (int x = 0; x < tile.Size.X; x++) {
 							Point2I drawPos = position +
 								(new Point2I(x, y) * GameSettings.TILE_SIZE);
-							g.DrawAnimation(currentSprite,
-								room.Zone.ImageVariantID,
-								editorControl.Ticks, drawPos, drawColor);
+							g.DrawISprite(currentSprite,
+								new SpriteDrawSettings(room.Zone.ImageVariantID,
+								editorControl.Ticks), drawPos, drawColor);
 						}
 					}
 				}
@@ -364,9 +406,9 @@ namespace ZeldaEditor.WinForms {
 			// Crossing Gate.
 			else if (tile.Type == typeof(TileCrossingGate)) {
 				if (tile.Properties.GetBoolean("raised", false))
-					animation = GameData.ANIM_TILE_CROSSING_GATE_LOWER;
+					sprite = GameData.ANIM_TILE_CROSSING_GATE_LOWER;
 				else
-					animation = GameData.ANIM_TILE_CROSSING_GATE_RAISE;
+					sprite = GameData.ANIM_TILE_CROSSING_GATE_RAISE;
 				substripIndex = (tile.Properties.GetBoolean("face_left", false) ? 1 : 0);
 				playbackTime = 0.0f;
 			}
@@ -374,7 +416,7 @@ namespace ZeldaEditor.WinForms {
 			// Lantern.
 			else if (tile.Type == typeof(TileLantern)) {
 				if (tile.Properties.GetBoolean("lit", true))
-					animation = GameData.ANIM_TILE_LANTERN;
+					sprite = GameData.ANIM_TILE_LANTERN;
 				else
 					sprite = GameData.SPR_TILE_LANTERN_UNLIT;
 			}
@@ -382,7 +424,7 @@ namespace ZeldaEditor.WinForms {
 			// Chest.
 			else if (tile.Type == typeof(TileChest)) {
 				bool isLooted = tile.Properties.GetBoolean("looted", false);
-				sprite = tile.SpriteList[isLooted ? 1 : 0].Sprite;
+				sprite = tile.SpriteList[isLooted ? 1 : 0];
 			}
 			//-----------------------------------------------------------------------------
 			// Pull Handle.
@@ -423,12 +465,8 @@ namespace ZeldaEditor.WinForms {
 			}*/
 			//-----------------------------------------------------------------------------
 
-			if (animation == null && sprite == null) {
-				SpriteAnimation currentSprite = tile.CurrentSprite;
-				if (currentSprite.IsAnimation)
-					animation = currentSprite.Animation;
-				else if (currentSprite.IsSprite)
-					sprite = currentSprite.Sprite;
+			if (sprite == null) {
+				sprite = tile.CurrentSprite;
 			}
 			/*if (animation == null && sprite == null && tile.CurrentSprite.IsAnimation)
 				animation = tile.CurrentSprite.Animation;
@@ -436,12 +474,14 @@ namespace ZeldaEditor.WinForms {
 				sprite = tile.CurrentSprite.Sprite;*/
 
 			// Draw the custom sprite/animation
-			if (animation != null) {
-				g.DrawAnimation(animation.GetSubstrip(substripIndex),
-					room.Zone.ImageVariantID, playbackTime, position, drawColor);
+			if (sprite is Animation) {
+				g.DrawISprite(((Animation) sprite).GetSubstrip(substripIndex),
+					new SpriteDrawSettings(room.Zone.StyleDefinitions, room.Zone.ImageVariantID, playbackTime),
+					position, drawColor);
 			}
 			else if (sprite != null) {
-				g.DrawSprite(sprite, room.Zone.ImageVariantID, position, drawColor);
+				g.DrawISprite(sprite, new SpriteDrawSettings(room.Zone.StyleDefinitions,
+					room.Zone.ImageVariantID), position, drawColor);
 			}
 
 
@@ -458,10 +498,10 @@ namespace ZeldaEditor.WinForms {
 					arrowAnimation = GameData.ANIM_TURNSTILE_ARROWS_COUNTERCLOCKWISE;
 					turnstileAnimation = GameData.ANIM_TURNSTILE_ROTATE_COUNTERCLOCKWISE;
 				}
-				g.DrawAnimation(arrowAnimation.GetSubstrip(substripIndex),
-					room.Zone.ImageVariantID, playbackTime, position, drawColor);
-				g.DrawAnimation(turnstileAnimation.GetSubstrip(clockwise ? 0 : 1),
-					room.Zone.ImageVariantID, 16, position, drawColor);
+				g.DrawISprite(arrowAnimation.GetSubstrip(substripIndex),
+					new SpriteDrawSettings(room.Zone.StyleDefinitions, room.Zone.ImageVariantID, playbackTime), position, drawColor);
+				g.DrawISprite(turnstileAnimation.GetSubstrip(clockwise ? 0 : 1),
+					new SpriteDrawSettings(room.Zone.StyleDefinitions,  room.Zone.ImageVariantID, 16f), position, drawColor);
 			}
 			//-----------------------------------------------------------------------------
 
@@ -474,8 +514,9 @@ namespace ZeldaEditor.WinForms {
 			if (editorControl.ShowRewards && tile.Properties.Contains("reward") &&
 				editorControl.RewardManager.HasReward(tile.Properties.GetString("reward")))
 			{
-				Animation anim = editorControl.RewardManager.GetReward(tile.Properties.GetString("reward")).Animation;
-				g.DrawAnimation(anim, editorControl.Ticks, position, drawColor);
+				sprite = editorControl.RewardManager.GetReward(tile.Properties.GetString("reward")).Sprite;
+				g.DrawISprite(sprite, new SpriteDrawSettings(room.Zone.StyleDefinitions,
+					(float)editorControl.Ticks), position, drawColor);
 			}
 		}
 
@@ -484,7 +525,7 @@ namespace ZeldaEditor.WinForms {
 			if (editorControl.ShowModified && !eventTile.HasModifiedProperties && !eventTile.HasDefinedEvents)
 				return;
 
-			SpriteAnimation spr = eventTile.CurrentSprite;
+			ISprite sprite = eventTile.CurrentSprite;
 			int imageVariantID = eventTile.Properties.GetInteger("image_variant");
 			if (imageVariantID < 0)
 				imageVariantID = room.Zone.ImageVariantID;
@@ -497,16 +538,23 @@ namespace ZeldaEditor.WinForms {
 				string warpTypeStr = eventTile.Properties.GetString("warp_type", "tunnel");
 				WarpType warpType = (WarpType) Enum.Parse(typeof(WarpType), warpTypeStr, true);
 				if (warpType == WarpType.Entrance)
-					spr = GameData.SPR_EVENT_TILE_WARP_ENTRANCE;
+					sprite = GameData.SPR_EVENT_TILE_WARP_ENTRANCE;
 				else if (warpType == WarpType.Tunnel)
-					spr = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
+					sprite = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
 				else if (warpType == WarpType.Stairs)
-					spr = GameData.SPR_EVENT_TILE_WARP_STAIRS;
+					sprite = GameData.SPR_EVENT_TILE_WARP_STAIRS;
 			}
 
 			// Draw the sprite.
-			if (!spr.IsNull) {
-				g.DrawAnimation(spr, imageVariantID, editorControl.Ticks, position, drawColor);
+			if (sprite is Animation) {
+				g.DrawISprite(((Animation) sprite).GetSubstrip(eventTile.SubStripIndex),
+					new SpriteDrawSettings(room.Zone.StyleDefinitions, room.Zone.ImageVariantID,
+					(float) editorControl.Ticks), position, drawColor);
+			}
+			else if (sprite != null) {
+				g.DrawISprite(sprite, new SpriteDrawSettings(
+					room.Zone.StyleDefinitions, imageVariantID, (float) editorControl.Ticks),
+					position, drawColor);
 			}
 			else {
 				Rectangle2I r = new Rectangle2I(position, eventTile.Size * GameSettings.TILE_SIZE);
@@ -792,7 +840,20 @@ namespace ZeldaEditor.WinForms {
 				}
 			}
 		}
-
+		
+		/// <summary>Called every step to update the frame rate.</summary>
+		private void UpdateFrameRate() {
+			// FPS Counter from:
+			// http://www.david-amador.com/2009/11/how-to-do-a-xna-fps-counter/
+			elapsedTime     = fpsWatch.ElapsedMilliseconds;
+			if (elapsedTime >= 1000.0) {
+				fps         = (double) totalFrames * 1000.0 / elapsedTime;
+				totalFrames = 0;
+				elapsedTime = 0.0;
+				fpsWatch.Restart();
+			}
+			totalFrames++;
+		}
 
 		//-----------------------------------------------------------------------------
 		// Overriden methods
@@ -802,10 +863,15 @@ namespace ZeldaEditor.WinForms {
 			Stopwatch watch = new Stopwatch();
 			watch.Start();
 			editorControl.UpdateTicks();
-			
+			UpdateFrameRate();
+			//GraphicsDevice.Textures[1] = Resources.GetPalette("dungeon_ages_1").PaletteTexture;
 			Graphics2D g = new Graphics2D(spriteBatch);
+			//g.Begin(paletteDrawMode);
 			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+			//GameSettings.DRAW_MODE_DEFAULT.Effect.CurrentTechnique.Passes[0].Apply();
+			//paletteShader.CurrentTechnique.Passes[0].Apply();
 			DrawLevel(g);
+			//g.DrawImage(palette, Point2I.Zero);
 			g.End();
 		}
 
@@ -872,6 +938,10 @@ namespace ZeldaEditor.WinForms {
 					GMath.Clamp(value.Y, VerticalScroll.Minimum, VerticalScroll.Maximum)
 				);
 			}
+		}
+
+		public double FPS {
+			get { return fps; }
 		}
 	}				
 }
