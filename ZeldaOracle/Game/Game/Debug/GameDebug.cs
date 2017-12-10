@@ -43,6 +43,8 @@ namespace ZeldaOracle.Game.Debug {
 			get { return gameControl.GameManager; }
 		}
 
+		public static DevSettings DevSettings { get; set; } = new DevSettings();
+
 		private static GameControl gameControl;
 
 		private static EntityDrawInfo	EntityDebugInfoMode	= EntityDrawInfo.None;
@@ -60,6 +62,11 @@ namespace ZeldaOracle.Game.Debug {
 			CollisionBoxes,
 			GridArea,
 			Count,
+		}
+
+		public static void LoadDevSettings() {
+			// Load the development settings.
+			DevSettings.Load();
 		}
 
 		public static void OnGameStart() {

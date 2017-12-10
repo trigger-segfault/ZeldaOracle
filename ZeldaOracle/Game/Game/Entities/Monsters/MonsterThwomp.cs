@@ -11,7 +11,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		Raise,	// Moving up back to idle positio.
 	}
 
-	public class MonsterThwomp: Monster {
+	public class MonsterThwomp : Monster {
 
 		private CrushState crushState;
 		private Vector2F hoverPosition;
@@ -27,7 +27,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isStunnable		= false;
 			isGaleable		= false;
 			IsKnockbackable	= false;
-			
+
+			Physics.HasGravity = false;
+
+			centerOffset = Point2I.Zero;
+			Graphics.DrawOffset = new Point2I(-8, -8);
+			Physics.CollisionBox = new Rectangle2F(-8, -8, 32, 32);
+			Physics.SoftCollisionBox = Physics.CollisionBox.Inflated(-2, -2);
+			Physics.IsSolid = true;
+
 			// Interactions (Tools)
 			SetReaction(InteractionType.Sword,			SenderReactions.Bump, Reactions.ClingEffect);
 			SetReaction(InteractionType.SwordSpin,		SenderReactions.Bump, Reactions.ClingEffect);
