@@ -22,6 +22,15 @@ using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Players {
 	
+	public struct PlayerAnimationSet {
+		public Animation Swing;
+		public Animation Spin;
+		public Animation Stab;
+		public Animation Aim;
+		public Animation Throw;
+		public Animation Default;
+	}
+
 	public class Player : Unit {
 
 		// The current direction that the player wants to face to use items.
@@ -740,6 +749,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public bool IsInMinecart {
 			get { return (stateMinecart.IsActive); }
+		}
+
+		public bool IsUnderwater {
+			get { return RoomControl.IsUnderwater; }
 		}
 
 		// Events.
