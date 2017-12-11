@@ -15,20 +15,16 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 		private Animation monsterAnimation;
 		private Animation resumeAnimation;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 		
 		public MonsterElectrocuteState(Animation monsterAnimation) {
-			this.animateDuration		= 60;
-			this.freezePlayerDuration	= 45;
+			this.animateDuration		= GameSettings.MONSTER_ELECTROCUTE_ANIMATE_DURATION;
+			this.freezePlayerDuration	= GameSettings.MONSTER_ELECTROCUTE_FREEZE_DURATION;
 			this.monsterAnimation		= monsterAnimation;
 		}
-
-		//public MonsterElectrocuteState(int stunDuration) {
-		//	this.stunDuration	= stunDuration;
-		//	this.shakeDuration	= GameSettings.MONSTER_STUN_SHAKE_DURATION;
-		//}
 
 
 		//-----------------------------------------------------------------------------
@@ -43,27 +39,39 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 			monster.Graphics.PlayAnimation(monsterAnimation);
 			monster.RoomControl.Player.Freeze();
 			//monster.DisablePhysics();
-
-			// TODO: Freeze player.
 		}
 
 		public override void OnEnd(MonsterState newState) {
 			monster.Graphics.PlayAnimation(resumeAnimation);
-			monster.RoomControl.Player.Unfreeze();
-
-			//monster.Graphics.ResumeAnimation();
 			//monster.EnablePhysics();
 		}
 
 		public override void Update() {
 			timer++;
 
-			if (timer > animateDuration) {
-				monster.BeginNormalState();
+			// Update screen shake
+			// 5 frames before first screen flash
+			// Each screen flash is 8 frames long, with 8 frames between them
+			// There are 3 screen flashes.
+			if (timer >= 5) {
+				int flashIndex = ((timer - 5) / 8);
+
+				if (flashIndex % 2 == 0 && flashIndex <= 4) {
+					if (GRandom.NextBool()) {
+						monster.RoomControl.ViewControl.ShakeOffset = new Vector2F(
+							(float) GRandom.NextInt(-2, 2),
+							(float) GRandom.NextInt(-2, 2));
+					}
+				}
 			}
 
 			if (timer == freezePlayerDuration) {
-				// TODO: Unfreeze player
+				monster.RoomControl.Player.Unfreeze();
+				monster.RoomControl.ViewControl.ShakeOffset = Vector2F.Zero;
+			}
+
+			if (timer > animateDuration) {
+				monster.BeginNormalState();
 			}
 		}
 	}
