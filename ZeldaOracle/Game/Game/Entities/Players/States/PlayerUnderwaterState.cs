@@ -65,10 +65,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			if (isResurfacing)
 			{
 				// Snap the player's position to the nearest tile location.
-				Vector2F snappedCenter = (player.Center - new Vector2F(8, 8));
-				snappedCenter = GMath.Round(snappedCenter, new Vector2F(16, 16));
-				snappedCenter += new Vector2F(8, 8);
-				player.SetPositionByCenter(snappedCenter);
+				player.Position = GMath.Floor(player.Position /
+					new Vector2F(GameSettings.TILE_SIZE)) *
+					new Vector2F(GameSettings.TILE_SIZE) +
+					new Vector2F(GameSettings.TILE_SIZE / 2) - player.CenterOffset;
 
 				// Change to standing animation and face downwards.
 				//player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
@@ -78,7 +78,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		// Always allow state changes, because this is the "Normal" state for
-		// underwater rooms. Every other state takes precidence over the
+		// underwater rooms. Every other state takes precidence over the player's
 		// "Normal" state
 		public override bool RequestStateChange(PlayerState newState) {
 			return true;

@@ -24,7 +24,7 @@ namespace ZeldaOracle.Game.Tiles {
 		private bool isBeingPulled;
 		private float retractSpeed;
 		private float extendSpeed;
-
+		
 		
 		//-----------------------------------------------------------------------------
 		// Constructor

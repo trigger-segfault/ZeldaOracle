@@ -149,9 +149,15 @@ namespace ZeldaOracle.Game.Control {
 				Point2I startPlayer = Point2I.Zero;
 				bool test = false;
 				bool recompile = true;
+				bool devMode = false;
+				String worldPath;
 
-				for (int i = 1; i < gameManager.LaunchParameters.Length; i++) {
-					if (gameManager.LaunchParameters[i] == "-test") {
+				// Parse the command line arguments.
+				for (int i = 0; i < gameManager.LaunchParameters.Length; i++) {
+					if (gameManager.LaunchParameters[i] == "-dev") {
+						devMode = true;
+					}
+					else if (gameManager.LaunchParameters[i] == "-test") {
 						test = true;
 						startLevel = Int32.Parse(gameManager.LaunchParameters[i+1]);
 						startRoom.X = Int32.Parse(gameManager.LaunchParameters[i+2]);
@@ -163,13 +169,32 @@ namespace ZeldaOracle.Game.Control {
 						recompile = false;
 					}
 				}
-				
-				LoadWorld(gameManager.LaunchParameters[0], recompile);
 
+				if (devMode) {
+					GameDebug.LoadDevSettings();
+					worldPath = GameDebug.DevSettings.StartLocation.WorldFile;
+				}
+				else {
+					worldPath = gameManager.LaunchParameters[0];
+				}
+
+				// Load the world file.
+				LoadWorld(worldPath, recompile);
+
+				// Begin the starting room.
 				if (test) {
 					player.SetPositionByCenter(startPlayer * GameSettings.TILE_SIZE + new Point2I(8, 8));
 					player.MarkRespawn();
 					roomControl.BeginRoom(world.GetLevelAt(startLevel).Rooms[startRoom.X, startRoom.Y]);
+				}
+				else if (devMode && GameDebug.DevSettings.StartLocation.Level != "default") {
+					Level level = world.GetLevel(GameDebug.DevSettings.StartLocation.Level);
+					player.SetPositionByCenter(
+						GameDebug.DevSettings.StartLocation.Location *
+						GameSettings.TILE_SIZE + new Point2I(8, 8));
+					player.MarkRespawn();
+					roomControl.BeginRoom(level.GetRoomAt(
+						GameDebug.DevSettings.StartLocation.Room));
 				}
 				else {
 					player.SetPositionByCenter(world.StartTileLocation * GameSettings.TILE_SIZE + new Point2I(8, 8));

@@ -121,8 +121,8 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_MONSTER_IRON_MASK_NAKED;
 		public static Animation ANIM_MONSTER_IRON_MASK_MASK;
 		public static Animation ANIM_MONSTER_BUZZ_BLOB;
-		public static Animation ANIM_MONSTER_CUKEMAN;
 		public static Animation ANIM_MONSTER_BUZZ_BLOB_ELECTROCUTE;
+		public static Animation ANIM_MONSTER_CUKEMAN;
 		public static Animation ANIM_MONSTER_LYNEL;
 		public static Animation ANIM_MONSTER_ROPE;
 		public static Animation ANIM_MONSTER_CROW;
@@ -177,6 +177,11 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_MONSTER_POLS_VOICE;
 		public static Animation ANIM_MONSTER_POLS_VOICE_JUMP;
 		public static Animation ANIM_MONSTER_GHINI;
+		public static Animation ANIM_MONSTER_THWOMP;
+		public static Animation ANIM_MONSTER_THWOMP_CRUSH;
+		public static Animation ANIM_MONSTER_THWOMP_EYE;
+		public static Animation ANIM_MONSTER_THWIMP;
+		public static Animation ANIM_MONSTER_THWIMP_CRUSH;
 
 		// Monster items.
 		public static Animation ANIM_MONSTER_SWORD_HOLD;

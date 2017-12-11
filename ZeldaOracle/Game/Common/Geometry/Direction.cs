@@ -13,6 +13,88 @@ namespace ZeldaOracle.Common.Geometry {
 		Left	= 0x4,
 		Down	= 0x8,
 	}*/
+	
+	// Ideas for a smarter orientation method
+	/*
+	public enum DirectionEnum {
+		Right	= 0,
+		Up		= 1,
+		Left	= 2,
+		Down	= 3,
+		East	= 0,
+		North	= 1,
+		West	= 2,
+		South	= 3,
+	}
+
+	public enum AngleEnum {
+		Right	= 0,
+		Up		= 1,
+		Left	= 2,
+		Down	= 3,
+		East	= 0,
+		North	= 1,
+		West	= 2,
+		South	= 3,
+	}
+
+	public struct Orientation {
+		private int index;
+		private int count;
+
+		public Orientation(int index, int count) {
+			this.index = index;
+			this.count = count;
+		}
+
+		//public static implicit operator Orientation(int index) {
+			//return new Orientation(index, 4);
+		//}
+		public static implicit operator Orientation(DirectionEnum direction) {
+			return new Orientation((int) direction, 4);
+		}
+		public static implicit operator Orientation(AngleEnum angle) {
+			return new Orientation((int) angle, 8);
+		}
+
+		// Return a unit vector in the given direction.
+		public Vector2F ToVector() {
+			float radians = (index / (float) count) * GMath.DoublePi;
+			return new Vector2F(GMath.Cos(radians), -GMath.Sin(radians));
+		}
+
+		// Return the given direction flipped horizontally over the y-axis.
+		public void FlipHorizontal() {
+			int west = ((count * 4) / 3);
+			index = (west + count - index) % count;
+		}
+		
+		// Return the given direction flipped vertically over the x-axis.
+		public void FlipVertical() {
+			index = (count - index) % count;
+		}
+	}
+	*/
+
+	public enum OrientationStyle {
+		None,		// Not-applicable
+		Direction,	// 4 directions
+		Angle,		// 8 angles
+	};
+
+	public static class Orientations {
+		
+
+		// Return a unit vector in the given direction.
+		public static Vector2F ToVector(int orientation, OrientationStyle style) {
+			if (style == OrientationStyle.Direction)
+				return Directions.ToVector(orientation);
+			else if (style == OrientationStyle.Angle)
+				return Angles.ToVector(orientation);
+			return Vector2F.Zero;
+		}
+	}
+
 
 	public static class Directions {
 		

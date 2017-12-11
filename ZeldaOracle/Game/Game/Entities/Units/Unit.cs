@@ -31,6 +31,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 		// The direction the unit is facing.
 		protected int		direction;
 		protected bool		syncAnimationWithDirection;
+		protected OrientationStyle orientationStyle;
 
 		protected int		health;
 		protected int		healthMax;
@@ -75,8 +76,10 @@ namespace ZeldaOracle.Game.Entities.Units {
 			knockbackVelocity		= Vector2F.Zero;
 			tools					= new HashSet<UnitTool>();
 			
-			syncAnimationWithDirection = false;
-			direction		= Directions.Right;
+			orientationStyle			= OrientationStyle.Direction;
+			direction					= Directions.Right;
+			syncAnimationWithDirection	= false;
+
 			health			= 1;
 			healthMax		= 1;
 			direction		= Directions.Right;
@@ -342,6 +345,15 @@ namespace ZeldaOracle.Game.Entities.Units {
 		}
 		
 		public int Direction {
+			get { return direction; }
+			set {
+				direction = value;
+				if (syncAnimationWithDirection)
+					graphics.SubStripIndex = direction;
+			}
+		}
+		
+		public int Angle {
 			get { return direction; }
 			set {
 				direction = value;

@@ -12,16 +12,16 @@ namespace ZeldaOracle.Common.Geometry {
 		// Constants
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Represents the ratio of the circumference of a circle to its diameter, specified by the constant, π.</summary>
+		/// <summary>Represents the ratio of the circumference of a circle to its diameter, specified by the constant, pi.</summary>
 		public const float Pi = 3.14159265358979323846f;
 		/// <summary>Represents the natural logarithmic base, specified by the constant, e.</summary>
 		public const float E = 2.71828182845904523536f;
 
-		/// <summary>Returns double the value of π.</summary>
+		/// <summary>Returns double the value of pi.</summary>
 		public const float DoublePi = Pi * 2f;
-		/// <summary>Returns half the value of π.</summary>
+		/// <summary>Returns half the value of pi.</summary>
 		public const float HalfPi = Pi * 0.5f;
-		/// <summary>Returns a quarter of the value of π.</summary>
+		/// <summary>Returns a quarter of the value of pi.</summary>
 		public const float QuarterPi = Pi * 0.25f;
 	
 		/// <summary>Quarter of an angle in either radians or degrees.</summary>

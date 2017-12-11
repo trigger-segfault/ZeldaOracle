@@ -40,7 +40,9 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 		// Check if the player is allowed to jump.
 		public override bool IsUsable() {
-			return (Player.Movement.CanJump && !Player.IsInMinecart);
+			return (Player.Movement.CanJump &&
+					!Player.IsInMinecart &&
+					!Player.IsUnderwater);
 		}
 
 		// Jump when on ground.

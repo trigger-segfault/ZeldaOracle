@@ -164,7 +164,10 @@ namespace ZeldaOracle.Common.Ini {
 			var properties = type.GetProperties(
 				BindingFlags.Public | BindingFlags.Instance);
 			foreach (PropertyInfo propertyInfo in properties) {
-				LoadProperty(section.Get(propertyInfo.Name), propertyInfo, instance);
+				if (section.Contains(propertyInfo.Name))
+					LoadProperty(section.Get(propertyInfo.Name), propertyInfo, instance);
+				else
+					ResetProperty(propertyInfo, instance);
 			}
 		}
 
@@ -179,6 +182,9 @@ namespace ZeldaOracle.Common.Ini {
 				catch {
 					return false;
 				}
+			}
+			else if (PropertyIs<string>(propertyInfo)) {
+				value = property.GetString();
 			}
 			else if (PropertyIs<bool>(propertyInfo)) {
 				bool tryValue;
@@ -286,7 +292,7 @@ namespace ZeldaOracle.Common.Ini {
 		}
 
 		/// <summary>Resets the property to its default value.</summary>
-		private void ResetProperty(PropertyInfo propertyInfo, object instance) {
+		private static void ResetProperty(PropertyInfo propertyInfo, object instance) {
 			var attribute = propertyInfo.GetCustomAttribute<DefaultValueAttribute>();
 			if (attribute != null)
 				propertyInfo.SetValue(instance, attribute.Value);

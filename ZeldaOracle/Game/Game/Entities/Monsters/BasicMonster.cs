@@ -14,6 +14,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Entities.Units;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 
@@ -47,6 +48,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		protected RangeI	stopTime;
 		protected RangeI	moveTime;
 		protected bool		movesInAir;
+		protected int		facePlayerOdds;
+		protected int		numMoveAngles;
 
 		// Charging.
 		protected ChargeType chargeType;
@@ -109,8 +112,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			changeDirectionsOnCollide	= true;
 			syncAnimationWithDirection	= true;
 			movesInAir					= false;
+			facePlayerOdds				= 4;
+			orientationStyle			= OrientationStyle.Direction;
+			numMoveAngles				= Directions.Count;
 			stopTime.Set(30, 60);
 			moveTime.Set(30, 50);
+
+			//Orientation x = DirectionEnum.Up;
 
 			chargeType			= ChargeType.None;
 			chargeDuration		= RangeI.Zero;
@@ -126,31 +134,33 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		
 		protected void ChangeDirection() {
 			
-			if (GRandom.NextInt(4) == 0) {
+			if (facePlayerOdds > 0 && GRandom.NextInt(facePlayerOdds) == 0) {
 				FacePlayer();
 				return;
 			}
 
-			direction = (direction + 1 + GRandom.NextInt(3)) % 4;
+			direction = (direction + 1 + GRandom.NextInt(numMoveAngles - 1)) % numMoveAngles;
 
 			List<int> possibleDirections = new List<int>();
 
-			for (int i = 0; i < Directions.Count; i++) {
+			for (int i = 0; i < numMoveAngles; i++) {
+				Vector2F v = Orientations.ToVector(i, orientationStyle);
+
 				if (!Physics.IsPlaceMeetingSolid(position +
-					(Directions.ToVector(i) * moveSpeed), Physics.CollisionBox))
+					(v * moveSpeed), Physics.CollisionBox))
 				{
 					possibleDirections.Add(i);
 				}
 			}
 
 			if (possibleDirections.Count == 0)
-				direction = GRandom.NextInt(Directions.Count);
+				direction = GRandom.NextInt(numMoveAngles);
 			else
 				direction = possibleDirections[GRandom.NextInt(possibleDirections.Count)];
 		}
 		
 		protected void FaceRandomDirection() {
-			direction = GRandom.NextInt(Directions.Count);
+			direction = GRandom.NextInt(numMoveAngles);
 		}
 
 		protected void FacePlayer() {
@@ -162,7 +172,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isMoving = true;
 			speed = moveSpeed;
 			moveTimer = GRandom.NextInt(moveTime.Min, moveTime.Max);
-			Physics.Velocity = Directions.ToVector(direction) * speed;
+			Physics.Velocity = Orientations.ToVector(direction, orientationStyle) * speed;
+
 			ChangeDirection();
 
 			if (!Graphics.IsAnimationPlaying || Graphics.Animation != animationMove)
@@ -258,7 +269,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		protected void UpdateMovingState() {
-			Physics.Velocity = Directions.ToVector(direction) * speed;
+			Physics.Velocity = Orientations.ToVector(direction, orientationStyle) * speed;
 			
 			// Stop moving after a duration.
 			if (moveTimer <= 0) {

@@ -23,6 +23,15 @@ using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Entities.Players {
 	
+	public struct PlayerAnimationSet {
+		public Animation Swing;
+		public Animation Spin;
+		public Animation Stab;
+		public Animation Aim;
+		public Animation Throw;
+		public Animation Default;
+	}
+
 	public class Player : Unit {
 
 		// The current direction that the player wants to face to use items.
@@ -44,6 +53,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerState previousSpecialState;
 		// The movement component for the player.
 		private PlayerMoveComponent movement;
+
+		private bool isFrozen;
 
 		private Animation moveAnimation;
 
@@ -301,6 +312,17 @@ namespace ZeldaOracle.Game.Entities.Players {
 			movement.ChooseAnimation();
 		}
 
+		public void Freeze() {
+			isFrozen = true;
+			Movement.StopMotion();
+			Graphics.PauseAnimation();
+		}
+
+		public void Unfreeze() {
+			isFrozen = false;
+			Graphics.ResumeAnimation();
+		}
+
 		public void RespawnDeath() {
 			stateRespawnDeath.WaitForAnimation = true;
 			BeginState(stateRespawnDeath);
@@ -513,7 +535,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 			autoRoomTransition	= false;
 			isStateControlled	= false;
 			syncAnimationWithDirection = true;
-			
+			isFrozen			= false;
+
 			// Initialize tools.
 			toolShield.Initialize(this);
 			toolSword.Initialize(this);
@@ -609,38 +632,39 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public override void Update() {
-			// Pre-state update.
-			if (!isStateControlled) {
-				movement.Update();
-				UpdateUseDirections();
-				CheckPressInteractions();
-				RequestNaturalState();
-			}
+			if (!isFrozen) {
+
+				// Pre-state update.
+				if (!isStateControlled) {
+					movement.Update();
+					UpdateUseDirections();
+					CheckPressInteractions();
+					RequestNaturalState();
+				}
 			
-			// Update the current player states.
-			state.Update();
-			if (specialState != null && specialState.IsActive)
-				specialState.Update();
+				// Update the current player states.
+				state.Update();
+				if (specialState != null && specialState.IsActive)
+					specialState.Update();
 
-			// Post-state update.
-			if (!isStateControlled) {
-				UpdateEquippedItems();
+				// Post-state update.
+				if (!isStateControlled) {
+					UpdateEquippedItems();
+				}
+
+				// Handle SHIELD holding.
+				if (Graphics.Animation == GameData.ANIM_PLAYER_SHIELD_BLOCK ||
+					Graphics.Animation == GameData.ANIM_PLAYER_SHIELD_LARGE_BLOCK)
+				{
+					EquipTool(toolShield);
+				}
+				else if (toolShield.IsEquipped) {
+					UnequipTool(toolShield);
+				}
+
+				// Update superclass.
+				base.Update();
 			}
-
-			// Handle SHIELD holding.
-			if (Graphics.Animation == GameData.ANIM_PLAYER_SHIELD_BLOCK ||
-				Graphics.Animation == GameData.ANIM_PLAYER_SHIELD_LARGE_BLOCK)
-			{
-				EquipTool(toolShield);
-			}
-			else if (toolShield.IsEquipped) {
-				UnequipTool(toolShield);
-			}
-
-			// Update superclass.
-			base.Update();
-
-			//CheckRoomTransitions(); Moved to RoomControl.Update()
 		}
 
 		public override void Draw(RoomGraphics g) {
@@ -741,6 +765,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public bool IsInMinecart {
 			get { return (stateMinecart.IsActive); }
+		}
+
+		public bool IsUnderwater {
+			get { return RoomControl.IsUnderwater; }
 		}
 
 		// Events.
@@ -865,6 +893,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		
 		public PlayerToolVisual ToolVisual {
 			get { return toolVisual; }
+		}
+
+		public bool IsFrozen {
+			get { return isFrozen; }
+			set { isFrozen = value; }
 		}
 	}
 }

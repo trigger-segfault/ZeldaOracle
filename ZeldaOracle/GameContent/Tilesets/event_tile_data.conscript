@@ -78,7 +78,9 @@ MONSTER monster_sand_crab,				"monster_sand_crab",			MonsterSandCrab,		orange;	E
 MONSTER monster_shrouded_stalfos,		"monster_shrouded_stalfos",		MonsterShroudedStalfos,	green;	END;
 MONSTER monster_ghini,					"monster_ghini",				MonsterGhini,			red;	END;
 MONSTER monster_zol_green,				"monster_zol",					MonsterZolGreen,		green;	END;
-
+MONSTER monster_thwomp,					"monster_thwomp",				MonsterThwomp,			blue;	END;
+MONSTER monster_thwimp,					"monster_thwimp",				MonsterThwomp,			blue;	END;
+MONSTER monster_buzz_blob,				"monster_buzz_blob",			MonsterBuzzBlob,		green;	END;
 
 #==============================================================================
 # Event Tileset
@@ -116,6 +118,9 @@ SETTILE (11, 0), monster_blade_trap_red;
 SETTILE (11, 1), monster_blade_trap_blue;
 SETTILE (11, 2), monster_blade_trap_green;
 SETTILE (11, 3), monster_blade_trap_orange;
+SETTILE (10, 4), monster_thwomp;
+SETTILE (11, 4), monster_thwimp;
+SETTILE ( 9, 4), monster_buzz_blob;
 
 END;
 

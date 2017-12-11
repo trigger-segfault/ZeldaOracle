@@ -41,6 +41,12 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			return image.GetHashCode() + sourceRect.GetHashCode() + drawOffset.GetHashCode();
 		}
 
+		public override bool Equals(object obj)
+		{
+			return (obj is SpritePart && 
+				(this == (SpritePart) obj));
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Operators
