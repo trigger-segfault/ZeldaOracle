@@ -12,7 +12,7 @@ using ZeldaOracle.Game;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
-	public partial class ISpritesSR : ScriptReader {
+	public partial class ISpriteSR : ScriptReader {
 
 		//-----------------------------------------------------------------------------
 		// Classes
@@ -57,11 +57,14 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		// Override
 		//-----------------------------------------------------------------------------
 
-		public ISpritesSR() {
+		public ISpriteSR() {
 			
 			this.source         = null;
 			this.sprite         = null;
+			this.paletteArgs.ColorMapping = new Dictionary<Color, ColorGroupSubtypePair>();
+			this.paletteArgs.IgnoreColors = new HashSet<Color>();
 			this.animationBuilder = new AnimationBuilder();
+			this.animationBuilder.PaletteArgs = paletteArgs;
 
 			//=====================================================================================
 			// Prefixes
@@ -127,6 +130,62 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				animationBuilder.Source = source;
 			});
 			//=====================================================================================
+			// SPRITE SET
+			//=====================================================================================
+			AddCommand("SPRITESET", (int) Modes.Root,
+				"string name",
+				"string name, (int width, int height)",
+			delegate (CommandParam parameters) {
+				bool continueSprite = parameters.HasPrefix("continue");
+				if (!continueSprite && parameters.HasPrefix())
+					ThrowCommandParseError("Invalid use of prefix");
+				spriteName = parameters.GetString(0);
+				if (continueSprite) {
+					if (parameters.ChildCount == 2)
+						ThrowCommandParseError("Invalid use of prefix");
+					spriteSet = GetResource<ISpriteSheet>(spriteName) as SpriteSet;
+					if (spriteSet == null) {
+						spriteName = null;
+						ThrowCommandParseError("SpriteSet with name '" + spriteName + "' does not exist in resources!");
+					}
+				}
+				else {
+					if (parameters.ChildCount == 1)
+						ThrowCommandParseError("This command requires the CONTINUE prefix!");
+					spriteSet = new SpriteSet(parameters.GetPoint(1));
+					AddResource<ISpriteSheet>(spriteName, spriteSet);
+				}
+				Mode |= Modes.SpriteSet;
+			});
+			//=====================================================================================
+			AddCommand("INSERT", (int) Modes.SpriteSet,
+				"(int insertX, int insertY), string name",
+				"(int insertX, int insertY), (int indexX, int indexY)",
+				"(int insertX, int insertY), string sourceName, (int indexX, int indexY)",
+			delegate (CommandParam parameters) {
+				bool continueSprite = parameters.HasPrefix("continue");
+				if (parameters.HasPrefix()) {
+					ThrowCommandParseError("Invalid use of prefix");
+				}
+				if (parameters.ChildCount == 1 && parameters.GetParam(1).Type == CommandParamType.String) {
+					ISprite spriteResource = GetResource<ISprite>(parameters.GetString(1));
+					spriteSet.SetSprite(parameters.GetPoint(0), spriteResource);
+				}
+				else {
+					ISpriteSheet newSource = source;
+
+					Point2I index;
+					if (parameters.GetParam(1).Type == CommandParamType.String) {
+						newSource = GetResource<ISpriteSheet>(parameters.GetString(1));
+						index = parameters.GetPoint(2);
+					}
+					else {
+						index = parameters.GetPoint(1);
+					}
+
+					spriteSet.SetSprite(parameters.GetPoint(0), newSource.GetSprite(index));
+				}
+			});
 			//=====================================================================================
 			// PALETTE
 			//=====================================================================================
@@ -198,6 +257,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			AddCommand("END", "",
 			delegate (CommandParam parameters) {
+				if (parameters.HasPrefix()) {
+					ThrowCommandParseError("Invalid use of prefix");
+				}
 				if (Mode != Modes.Root) {
 					if ((Mode & Modes.SpriteMask) != 0) {
 						if (Mode.HasFlag(Modes.SpriteSet)) {
@@ -216,6 +278,20 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				}
 			});
 			//=====================================================================================
+			// ADD NAME
+			//=====================================================================================
+			AddCommand("NAME", (int) Modes.Root,
+				"string name, (int indexX, int indexY)",
+			delegate (CommandParam parameters) {
+				if (parameters.HasPrefix()) {
+					ThrowCommandParseError("Invalid use of prefix");
+				}
+				if (SourceMode == SourceModes.None) {
+					ThrowCommandParseError("Cannot name sprite with no source sprite sheet set!");
+				}
+				AddResource<ISprite>(parameters.GetString(0), source.GetSprite(parameters.GetPoint(1)));
+			});
+			//=====================================================================================
 			AddBasicCommands();
 			AddCompositeCommands();
 			AddStyleCommands();
@@ -228,16 +304,21 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		// Begins reading the script.
+		/// <summary>Begins reading the script.</summary>
 		protected override void BeginReading() {
 			sprite = null;
 			spriteName = "";
 			animationBuilder.Source = null;
 		}
 
-		// Ends reading the script.
+		/// <summary>Ends reading the script.</summary>
 		protected override void EndReading() {
 			sprite = null;
+		}
+		
+		/// <summary>Creates a new script reader of the derived type.</summary>
+		protected override ScriptReader CreateNew() {
+			return new ISpriteSR();
 		}
 
 
@@ -245,6 +326,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		// Internal Methods
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Parses the color from a string with error handling.</summary>
 		private Color ParseColor(CommandParam colorParam) {
 			if (colorParam.ChildCount <= 4) {
 				int a = 255;
@@ -266,6 +348,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			return Color.Black;
 		}
 
+		/// <summary>Parses the lookup subtype from a string with error handling.</summary>
 		private LookupSubtypes ParseSubtype(string subtypeStr) {
 			LookupSubtypes subtype;
 			if (!Enum.TryParse(subtypeStr, true, out subtype))
@@ -279,6 +362,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			return subtype;
 		}
 
+		/// <summary>Continues a sprite that already exists.</summary>
 		private T ContinueSprite<T>(string name) where T : class, ISprite {
 			sprite = GetResource<ISprite>(name) as T;
 			if (sprite == null) {
@@ -288,8 +372,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			return sprite as T;
 		}
 
+		/// <summary>Gets a sprite and confirms its type.</summary>
 		private T GetSprite<T>(string name) where T : class, ISprite {
-			sprite = GetResource<ISprite>(name) as T;
+			ISprite sprite = GetResource<ISprite>(name) as T;
 			if (sprite == null) {
 				spriteName = null;
 				ThrowCommandParseError(typeof(T).Name + " with name '" + name + "' does not exist in resources!");
@@ -297,27 +382,18 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			return sprite as T;
 		}
 
-		private ISprite GetSprite<T1, T2>(string name)
-			where T1 : class, ISprite where T2 : class, ISprite
-		{
-			sprite = GetResource<ISprite>(name);
-			if (!(sprite is T1) && !(sprite is T2)) {
-				spriteName = null;
-				ThrowCommandParseError(typeof(T1).Name + " or " + typeof(T2) + " with name '" + name + "' does not exist in resources!");
-			}
-			return sprite;
-		}
-
 
 		//-----------------------------------------------------------------------------
 		// Internal Properties
 		//-----------------------------------------------------------------------------
 
+		/// <summary>The mode of the ISprite script reader.</summary>
 		private new Modes Mode {
 			get { return (Modes) base.Mode; }
 			set { base.Mode = (int) value; }
 		}
 
+		/// <summary>The type of the current source sprite sheet.</summary>
 		private SourceModes SourceMode {
 			get {
 				if (source is SpriteSheet)
@@ -329,37 +405,45 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			}
 		}
 
-
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-
-		public SpriteSheet SpriteSheet {
+		/// <summary>Gets the source as a sprite sheet.</summary>
+		private SpriteSheet SpriteSheet {
 			get { return source as SpriteSheet; }
 		}
 
-		public SpriteSet SpriteSet {
+		/// <summary>Gets the source as a sprite set.</summary>
+		private SpriteSet SpriteSet {
 			get { return source as SpriteSet; }
 		}
 
-		public EmptySprite EmptySprite {
+		/// <summary>Gets the sprite set being edited.</summary>
+		private SpriteSet EditingSpriteSet {
+			get { return spriteSet; }
+		}
+
+		/// <summary>Gets the current sprite as an empty sprite.</summary>
+		private EmptySprite EmptySprite {
 			get { return sprite as EmptySprite; }
 		}
 
-		public BasicSprite BasicSprite {
+		/// <summary>Gets the current sprite as a basic sprite.</summary>
+		private BasicSprite BasicSprite {
 			get { return sprite as BasicSprite; }
 		}
 
-		public CompositeSprite CompositeSprite {
+		/// <summary>Gets the current sprite as a composite sprite.</summary>
+		private CompositeSprite CompositeSprite {
 			get { return sprite as CompositeSprite; }
 		}
 
-		public StyleSprite StyleSprite {
+		/// <summary>Gets the current sprite as a style sprite.</summary>
+		private StyleSprite StyleSprite {
 			get { return sprite as StyleSprite; }
 		}
 
-		public Animation Animation {
+		/// <summary>Gets the current sprite as an animation.</summary>
+		private Animation Animation {
 			get { return sprite as Animation; }
 		}
+		
 	}
 } // end namespace

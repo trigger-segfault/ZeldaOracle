@@ -1,4 +1,4 @@
-PALETTE		tile_dictionary, dungeon_ages_1;
+PALETTE		tile_dictionary, present;
 
 CLONE	"tiles_default";
 
@@ -16,16 +16,16 @@ COLOR	wall, dark			( 88, 56, 56);
 
 LOOKUP	ceiling, all		wall, light;
 
-COLOR	stairs, light		(208,168, 56);
-LOOKUP	stairs, medium		stairs, light;
-LOOKUP	stairs, dark		stairs, light;
+COLOR	stairs, light		(248,208,136);
+COLOR	stairs, medium		(232,  8, 24);
+COLOR	stairs, dark		(104,  8, 40);
 
 LOOKUP	floor_staircase, all	floor, all;
 LOOKUP	wall_staircase, all		floor, all;
 
-COLOR	railings, light		(232,160, 72);
-COLOR	railings, medium	(200, 72,  0);
-COLOR	railings, dark		(104,  0,  0);
+COLOR	railings, light		(248,248,192);
+COLOR	railings, medium	( 32,176,248);
+COLOR	railings, dark		(  0, 80,176);
 
 LOOKUP	torch_base, all		railings, all;
 LOOKUP	torch_light, all	chest, all;
@@ -127,5 +127,12 @@ LOOKUP	fancy_tile_3, all		pot, all;
 LOOKUP	fancy_tile_4, all		floor, all;
 LOOKUP	fancy_tile_5, all		door, all;
 
+#==============================================================
+# Nature
+#==============================================================
+
+COLOR	cliff, light	(248,224, 16);
+COLOR	cliff, medium	(200,136,  8);
+COLOR	cliff, dark		(128, 80,  0);
 
 END;

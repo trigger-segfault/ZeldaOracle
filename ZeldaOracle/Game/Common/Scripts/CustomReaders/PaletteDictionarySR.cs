@@ -22,6 +22,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		public PaletteDictionarySR() {
 
 			//=====================================================================================
+			// BEGIN/END
+			//=====================================================================================
 			AddCommand("PALETTEDICTIONARY", "string type, string name",
 			delegate (CommandParam parameters) {
 				if (dictionary != null)
@@ -43,10 +45,14 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				dictionary = null;
 			});
 			//=====================================================================================
+			// BUILDING
+			//=====================================================================================
 			AddCommand("TILE", "string name",
 			delegate (CommandParam parameters) {
 				if (dictionary == null)
 					ThrowCommandParseError("Must start a PALETTEDICTIONARY before defining a tile!");
+				if (dictionary.PaletteType != PaletteTypes.Tile)
+					ThrowCommandParseError("Palette dictionary is not a tile dictionary!");
 				dictionary.Add(parameters.GetString(0), paletteIndex);
 				paletteIndex += 4;
 			});
@@ -55,6 +61,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			delegate (CommandParam parameters) {
 				if (dictionary == null)
 					ThrowCommandParseError("Must start a PALETTEDICTIONARY before defining a tile!");
+				if (dictionary.PaletteType != PaletteTypes.Entity)
+					ThrowCommandParseError("Palette dictionary is not an entity dictionary!");
 				dictionary.Add(parameters.GetString(0), paletteIndex);
 				paletteIndex += 4;
 			});
@@ -65,7 +73,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		// Begins reading the script.
+		/// <summary>Begins reading the script.</summary>
 		protected override void BeginReading() {
 			dictionary		= null;
 			assetName		= "";
@@ -73,9 +81,14 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			type            = PaletteTypes.Tile;
 		}
 
-		// Ends reading the script.
+		/// <summary>Ends reading the script.</summary>
 		protected override void EndReading() {
 
+		}
+
+		/// <summary>Creates a new script reader of the derived type.</summary>
+		protected override ScriptReader CreateNew() {
+			return new PaletteDictionarySR();
 		}
 	}
 }

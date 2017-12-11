@@ -128,6 +128,8 @@ namespace ZeldaEditor.WinForms {
 		protected override void Draw() {
 			Graphics2D g = new Graphics2D(spriteBatch);
 			//g.SetRenderTarget(GameData.RenderTargetGame);
+			GameData.PaletteShader.TilePalette = Zone.Palette;
+			GameData.PaletteShader.ApplyPalettes();
 			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 
 			Point2I selectedTileLocation = GetSelectedTileLocation();
@@ -135,7 +137,7 @@ namespace ZeldaEditor.WinForms {
 			// Draw the tileset.
 			g.Clear(Color.White);
 			g.Translate(-this.HorizontalScroll.Value, -this.VerticalScroll.Value);
-			if (Tileset.SpriteSheet == null) {
+			//if (Tileset.SpriteSheet == null) {
 				// Draw each tile's sprite seperately.
 				for (int y = 0; y < Tileset.Height; y++) {
 					for (int x = 0; x < Tileset.Width; x++) {
@@ -157,13 +159,13 @@ namespace ZeldaEditor.WinForms {
 						}
 					}
 				}
-			}
-			else {
+			//}
+			/*else {
 				// Draw the spritesheet's image.
 				g.Translate(-Tileset.SpriteSheet.Offset);
 				g.DrawImage(Tileset.SpriteSheet.Image.GetVariant(Zone.ImageVariantID), Point2I.Zero);
 				g.ResetTranslation();
-			}
+			}*/
 
 
 			// Draw the selection box.

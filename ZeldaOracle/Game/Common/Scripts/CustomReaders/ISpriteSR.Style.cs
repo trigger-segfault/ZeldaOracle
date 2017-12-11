@@ -9,7 +9,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripts.Commands;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
-	public partial class ISpritesSR : ScriptReader {
+	public partial class ISpriteSR : ScriptReader {
 
 		/// <summary>Adds CompositeSprite commands to the script reader.</summary>
 		public void AddStyleCommands() {
@@ -20,8 +20,11 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("STYLE", (int) Modes.Root,
 				"string name, string styleGroup",
 			delegate (CommandParam parameters) {
+				bool continueSprite = parameters.HasPrefix("continue");
+				if (!continueSprite && parameters.HasPrefix())
+					ThrowCommandParseError("Invalid use of prefix");
 				spriteName = parameters.GetString(0);
-				if (parameters.HasPrefix("continue")) {
+				if (continueSprite) {
 					ContinueSprite<StyleSprite>(spriteName);
 				}
 				else {
@@ -37,18 +40,10 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string styleGroup",
 			delegate (CommandParam parameters) {
 				if (parameters.HasPrefix("dynamic")) {
-					for (int x = 0; x < SpriteSet.Width; x++) {
-						for (int y = 0; y < SpriteSet.Height; y++) {
-							SpriteSet.SetSprite(x, y, new StyleSprite(parameters.GetString(0)));
+					for (int x = 0; x < EditingSpriteSet.Width; x++) {
+						for (int y = 0; y < EditingSpriteSet.Height; y++) {
+							EditingSpriteSet.SetSprite(x, y, new StyleSprite(parameters.GetString(0)));
 						}
-					}
-					spriteName = parameters.GetString(0);
-					if (parameters.HasPrefix("continue")) {
-						ContinueSprite<StyleSprite>(spriteName);
-					}
-					else {
-						sprite = 
-						AddResource<ISprite>(spriteName, sprite);
 					}
 					Mode |= Modes.StyleSprite;
 				}
@@ -119,15 +114,16 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				if (SourceMode != SourceModes.SpriteSheet) {
 					ThrowCommandParseError("Cannot add sprite style with no sprite sheet source!");
 				}
-				for (int x = 0; x < SpriteSet.Width; x++) {
-					for (int y = 0; y < SpriteSet.Height; y++) {
+				for (int x = 0; x < EditingSpriteSet.Width; x++) {
+					for (int y = 0; y < EditingSpriteSet.Height; y++) {
 						ISprite sprite = source.GetSprite(parameters.GetPoint(1) + new Point2I(x, y));
 						if (paletteArgs.Dictionary != null && SourceMode == SourceModes.SpriteSheet) {
 							paletteArgs.Image = SpriteSheet.Image;
 							paletteArgs.SourceRect = SpriteSheet.GetSourceRect(parameters.GetPoint(1) + new Point2I(x, y));
 							sprite = Resources.PalettedSpriteDatabase.AddSprite(paletteArgs);
 						}
-						SpriteSet.SetSprite(x, y, new StyleSprite(parameters.GetString(0)));
+						StyleSprite styleSprite = EditingSpriteSet.GetSprite(x, y) as StyleSprite;
+						styleSprite.AddStyle(parameters.GetString(0), sprite);
 					}
 				}
 			});

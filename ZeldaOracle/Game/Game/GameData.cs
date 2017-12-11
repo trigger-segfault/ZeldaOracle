@@ -10,6 +10,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Scripts.CustomReaders;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game {
 	
@@ -65,9 +66,6 @@ namespace ZeldaOracle.Game {
 
 			Console.WriteLine("Loading Zones");
 			LoadZones();
-
-			Console.WriteLine("Loading Palettes");
-			LoadPalettes();
 
 			Console.WriteLine("Loading Shaders");
 			LoadShaders();
@@ -186,20 +184,33 @@ namespace ZeldaOracle.Game {
 			//TileData background  = Resources.GetResource<TileData>("default_background");
 
 			ZONE_DEFAULT			= new Zone("",					"(none)",			VARIANT_NONE,				ground);
+			ZONE_DEFAULT.PaletteID = "present";
 			ZONE_SUMMER				= new Zone("summer",			"Summer",			VARIANT_SUMMER,				ground);
+			ZONE_SUMMER.PaletteID = "present";
 			ZONE_FOREST				= new Zone("forest",			"Forest",			VARIANT_FOREST,				ground);
+			ZONE_FOREST.PaletteID = "present";
 			ZONE_GRAVEYARD			= new Zone("graveyard",			"Graveyard",		VARIANT_GRAVEYARD,			ground);
+			ZONE_GRAVEYARD.PaletteID = "present";
 			ZONE_INTERIOR			= new Zone("interior",			"Interior",			VARIANT_INTERIOR,			floor);
+			ZONE_INTERIOR.PaletteID = "dungeon_ages_1";
 			ZONE_PRESENT			= new Zone("present",			"Present",			VARIANT_PRESENT,			floor);
+			ZONE_PRESENT.StyleDefinitions.SetStyle(StyleGroups.Cliffs, "past");
+			ZONE_PRESENT.StyleDefinitions.SetStyle(StyleGroups.Railings, "past");
+			ZONE_PRESENT.PaletteID	= "present";
 			ZONE_INTERIOR_PRESENT	= new Zone("interior_present",	"Interior Present",	VARIANT_INTERIOR_PRESENT,	floor);
+			ZONE_INTERIOR_PRESENT.PaletteID = "dungeon_ages_1";
 			ZONE_AGES_DUNGEON_1		= new Zone("ages_dungeon_1",	"Ages Dungeon 1",	VARIANT_AGES_DUNGEON_1,		floor);
+			ZONE_AGES_DUNGEON_1.PaletteID = "dungeon_ages_1";
 			ZONE_AGES_DUNGEON_4		= new Zone("ages_dungeon_4",	"Ages Dungeon 4",	VARIANT_AGES_DUNGEON_4,		floor);
+			ZONE_AGES_DUNGEON_4.PaletteID = "dungeon_ages_1";
 
 			ZONE_SIDESCROLL_AGES_DUNGEON_1	= new Zone("sidescroll_ages_dungeon_1",	"Ages Dungeon 1", VARIANT_AGES_DUNGEON_1, floor);
 			ZONE_SIDESCROLL_AGES_DUNGEON_1.IsSideScrolling = true;
-			
+			ZONE_SIDESCROLL_AGES_DUNGEON_1.PaletteID = "dungeon_ages_1";
+
 			ZONE_UNDERWATER_PRESENT	= new Zone("underwater_present", "Underwater Present", VARIANT_UNDERWATER_PRESENT, ground);
 			ZONE_UNDERWATER_PRESENT.IsUnderwater = true;
+			ZONE_UNDERWATER_PRESENT.PaletteID = "present";
 
 			Resources.AddResource("default",	ZONE_DEFAULT);
 			Resources.AddResource("summer",		ZONE_SUMMER);
@@ -294,18 +305,16 @@ namespace ZeldaOracle.Game {
 
 		// Loads the palette dictionaries.
 		private static void LoadPaletteDictionaries() {
-			Resources.LoadPaletteDictionaries("Palettes/Dictionaries/tile_palette_dictionary.conscript");
-			Resources.LoadPaletteDictionaries("Palettes/Dictionaries/entity_palette_dictionary.conscript");
+			Resources.LoadPaletteDictionaries("Palettes/Dictionaries/palette_dictionaries.conscript");
 
-			PAL_DICTIONARY_TILES = Resources.GetPaletteDictionary("tiles");
-			PAL_DICTIONARY_ENTITIES = Resources.GetPaletteDictionary("entities");
+			IntegrateResources<PaletteDictionary>("PAL_");
 		}
 
 		// Loads the palettes.
 		private static void LoadPalettes() {
-			//Resources.LoadPalettes("Palettes/dungeon_ages_1.conscript");
+			Resources.LoadPalettes("Palettes/palettes.conscript");
 
-			//PAL_DUNGEON_AGES_1 = Resources.GetPalette("dungeon_ages_1");
+			IntegrateResources<Palette>("PAL_");
 		}
 
 		//-----------------------------------------------------------------------------
@@ -316,7 +325,12 @@ namespace ZeldaOracle.Game {
 		private static void LoadShaders() {
 			PALETTE_SHADER		= Resources.LoadShader("Shaders/palette_shader");
 			PALETTE_LERP_SHADER	= Resources.LoadShader("Shaders/palette_lerp_shader");
-			//GameSettings.DRAW_MODE_DEFAULT.Effect = PALETTE_LERP_SHADER;
+			
+			GameSettings.DRAW_MODE_DEFAULT.Effect = PALETTE_LERP_SHADER;
+
+			PaletteShader = new PaletteShader(PALETTE_LERP_SHADER);
+			PaletteShader.TilePalette = PAL_TILES_DEFAULT;
+			PaletteShader.EntityPalette = PAL_ENTITIES_DEFAULT;
 		}
 
 		public static Effect PALETTE_SHADER;
@@ -416,14 +430,24 @@ namespace ZeldaOracle.Game {
 		// Palettes
 		//-----------------------------------------------------------------------------
 		
-		public static PaletteDictionary PAL_DICTIONARY_TILES;
-		public static PaletteDictionary PAL_DICTIONARY_ENTITIES;
+		public static PaletteDictionary PAL_TILE_DICTIONARY;
+		public static PaletteDictionary PAL_ENTITY_DICTIONARY;
+		
+		public static Palette PAL_ENTITIES_DEFAULT;
+		public static Palette PAL_ENTITIES_MENU;
+		public static Palette PAL_ENTITIES_ELECTROCUTED;
+
+		public static Palette PAL_TILES_DEFAULT;
+		public static Palette PAL_PRESENT;
 		public static Palette PAL_DUNGEON_AGES_1;
+		public static Palette PAL_TILES_ELECTROCUTED;
 
 
 		//-----------------------------------------------------------------------------
 		// Render Targets
 		//-----------------------------------------------------------------------------
+
+		public static PaletteShader PaletteShader;
 
 		public static RenderTarget2D RenderTargetGame;
 		public static RenderTarget2D RenderTargetGameTemp;

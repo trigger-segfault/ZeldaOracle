@@ -136,7 +136,7 @@ namespace ZeldaOracle.Game.Control {
 			// Create the room control.
 			roomControl = new RoomControl();
 			gameManager.PushGameState(roomControl);
-			
+
 			// Load the world.
 			//WorldFile worldFile = new WorldFile();
 			//world = worldFile.Load("Content/Worlds/temp_world.zwd");
@@ -183,9 +183,11 @@ namespace ZeldaOracle.Game.Control {
 				player.MarkRespawn();
 				roomControl.BeginRoom(world.StartRoom);
 			}
+			GameData.PaletteShader.TilePalette = roomControl.Zone.Palette;
+			GameData.PaletteShader.TileRatio = 0f;
 			roomStateStack = new RoomStateStack(new RoomStateNormal());
 			roomStateStack.Begin(this);
-			
+
 			if (!roomControl.Room.IsHiddenFromMap)
 				lastRoomOnMap = roomControl.Room;
 

@@ -3,8 +3,6 @@
 # Sprite Sheets
 #==============================================================================
 
-LOAD SPRITES;
-	
 SPRITESHEET "tileset_objects",					(16, 16), (1, 1), (18, 18); END;
 SPRITESHEET "tileset_objects_extras_16x16",		(16, 16), (1, 1), (18, 18); END;
 
@@ -12,9 +10,6 @@ SPRITESHEET "tileset_objects_extras_16x16",		(16, 16), (1, 1), (18, 18); END;
 #==============================================================================
 # Tiles
 #==============================================================================
-
-LOAD TILESETS;
-
 
 # Default zone tile for digable ground (for overworlds)
 TILE default_ground;

@@ -9,7 +9,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripts.Commands;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
-	public partial class ISpritesSR : ScriptReader {
+	public partial class ISpriteSR : ScriptReader {
 
 		/// <summary>Adds CompositeSprite commands to the script reader.</summary>
 		public void AddAnimationCommands() {

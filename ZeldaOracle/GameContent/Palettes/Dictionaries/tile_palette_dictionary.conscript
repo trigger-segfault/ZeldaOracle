@@ -1,8 +1,4 @@
-PALETTEDICTIONARY	tile, tiles;
-
-#==============================================================
-# General
-#==============================================================
+PALETTEDICTIONARY tile, tile_dictionary;
 
 #==============================================================
 # Structure
@@ -12,56 +8,64 @@ TILE	floor;
 TILE	wall;
 TILE	ceiling;
 TILE	stairs;
+TILE	floor_staircase;
+TILE	wall_staircase;
 TILE	railings;
-TILE	torch;
+TILE	torch_base;
 TILE	torch_light;
 TILE	statue;
 TILE	statue_alt;
+
+TILE	vertical_wall;
 
 #==============================================================
 # Objects
 #==============================================================
 
-TILE	bracelet_rock;
-TILE	bracelet_rock_pickup;
-TILE	switch_rock;
-TILE	switch_rock_pickup;
-TILE	crystal_rock;
-TILE	crystal_rock_pickup;
 TILE	pot;
-TILE	pot_pickup;
+TILE	pot_asobject;
 TILE	sign;
-TILE	sign_pickup;
+TILE	sign_asobject;
+TILE	bracelet_rock;
+TILE	bracelet_rock_asobject;
+TILE	switch_rock;
+TILE	switch_rock_asobject;
+TILE	crystal_rock;
+TILE	crystal_rock_asobject;
+TILE	magnet_stone;
+TILE	block;
+TILE	block_asobject;
+TILE	armos;
+TILE	armos_asobject;
+TILE	armos_alt;
+TILE	armos_alt_asobject;
+
 TILE	bush;
-TILE	bush_pickup;
+TILE	bush_asobject;
 TILE	bush_regrow;
 TILE	mushroom;
-TILE	mushroom_pickup;
+TILE	mushroom_asobject;
 TILE	flower_red;
 TILE	flower_blue;
 TILE	flower_pink;
 TILE	flower_water;
-TILE	magnet_stone;
-TILE	block;
-TILE	block_move;
-TILE	armos;
-TILE	armos_alt;
 
 #==============================================================
 # Puzzle
 #==============================================================
 
-TILE	chest;
-TILE	lanturn;
 TILE	puzzle_red;
 TILE	puzzle_blue;
 TILE	puzzle_yellow;
+TILE	chest;
+TILE	lanturn;
 TILE	door;
+TILE	locked_block;
 TILE	turnstile;
 TILE	lever;
 TILE	button;
 TILE	hardened_lava;
-TILE	attack_tile;
+TILE	tile_monster;
 TILE	spikes;
 TILE	arrow_shooter;
 TILE	minecart_track;
@@ -72,36 +76,46 @@ TILE	bridge;
 # Fluids
 #==============================================================
 
+TILE	ice;
 TILE	water;
 TILE	lava;
 TILE	sand;
 TILE	poison_bubble;
 
 #==============================================================
-# Overworld
+# Nature
 #==============================================================
 
-TILE	cliffs;
+TILE	cliff;
 TILE	tree_trunk;
 TILE	tree_leaves;
 TILE	tree_trunk_and_leaves;
 TILE	grass;
 TILE	dirt;
-TILE	gray_dirt;
+TILE	dirt_alt;
 TILE	boulder;
+TILE	grass_flower;
+TILE	grass_flower_alt;
+TILE	cactus;
 
+TILE	hole;
+TILE	hole_alt;
 
 #==============================================================
 # Town
 #==============================================================
 
+TILE	roof_brown;
 TILE	roof_red;
 TILE	roof_blue;
 TILE	roof_green;
+TILE	roof_chimney;
+TILE	house_wall;
+TILE	vasu_sign;
 
 
 #==============================================================
-# Dungeon
+# Decoration
 #==============================================================
 
 TILE	dungeon_entrance_column;
@@ -109,11 +123,15 @@ TILE	dungeon_entrance_brick;
 TILE	dungeon_entrance_tile;
 TILE	dungeon_essense_brick;
 TILE	dungeon_essense_tile;
-TILE	locked_block;
 TILE	fancy_tile_1;
 TILE	fancy_tile_2;
 TILE	fancy_tile_3;
 TILE	fancy_tile_4;
 TILE	fancy_tile_5;
+TILE	fancy_tile_6;
+TILE	fancy_tile_7;
+TILE	fancy_tile_8;
+TILE	fancy_tile_9;
+TILE	fancy_tile_10;
 
 END;

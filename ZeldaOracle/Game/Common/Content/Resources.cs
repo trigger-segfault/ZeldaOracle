@@ -112,7 +112,9 @@ namespace ZeldaOracle.Common.Content {
 		public const string SpriteSheetDirectory = "SpriteSheets/";
 		/// <summary>The directory for storing animations.</summary>
 		public const string AnimationDirectory = "Animations/";
-		/// <summary>The directory for storing palettes and palette dictionaries.</summary>
+		/// <summary>The directory for storing palette dictionaries.</summary>
+		public const string PaletteDictionaryDirectory = "Palettes/Dictionaries/";
+		/// <summary>The directory for storing palettes.</summary>
 		public const string PaletteDirectory = "Palettes/";
 		/// <summary>The directory for storing shaders.</summary>
 		public const string ShaderDirectory = "Shaders/";
@@ -441,12 +443,12 @@ namespace ZeldaOracle.Common.Content {
 
 		/// <summary>Loads/compiles sprite sheets from a script file.</summary>
 		public static void LoadSpriteSheets(string assetName) {
-			LoadScript(assetName, new ISpritesSR());
+			LoadScript(assetName, new ISpriteSR());
 		}
 
 		/// <summary>Loads/compiles images from a script file.</summary>
 		public static void LoadImagesFromScript(string assetName) {
-			LoadScript(assetName, new ImagesSR());
+			LoadScript(assetName, new ImageSR());
 		}
 
 		/// <summary>Loads the game font with the specified asset name.</summary>
@@ -464,7 +466,7 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>Loads/compiles animations from a script file.</summary>
 		public static void LoadAnimations(string assetName) {
 			// TODO: Phase out separation of animations and sprites
-			LoadScript(assetName, new ISpritesSR());
+			LoadScript(assetName, new ISpriteSR());
 		}
 
 		/// <summary>Loads/compiles collision models from a script file.</summary>
@@ -502,7 +504,7 @@ namespace ZeldaOracle.Common.Content {
 
 		/// <summary>Loads a sounds file.</summary>
 		public static void LoadSounds(string assetName) {
-			LoadScript(assetName, new SoundsSR());
+			LoadScript(assetName, new SoundSR());
 		}
 
 		/// <summary>Loads a music file.</summary>
@@ -528,7 +530,8 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>Loads a script file with the given encoding and script reader object.</summary>
 		public static void LoadScript(string assetName, ScriptReader sr, Encoding encoding) {
 			try {
-				Stream stream = TitleContainer.OpenStream(contentManager.RootDirectory + "/" + assetName);
+				string path = Path.Combine(contentManager.RootDirectory, assetName);
+				Stream stream = TitleContainer.OpenStream(path);
 				StreamReader reader = new StreamReader(stream, encoding);
 				sr.ReadScript(reader, assetName);
 				stream.Close();

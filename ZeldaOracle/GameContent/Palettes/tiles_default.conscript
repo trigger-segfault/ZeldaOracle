@@ -1,0 +1,217 @@
+PALETTE tile_dictionary, tiles_default;
+
+#==============================================================
+# Structure
+#==============================================================
+
+COLOR	floor, light		(144,128, 88);
+COLOR	floor, medium		(112, 80, 56);
+COLOR	floor, dark			( 80, 56, 32);
+
+COLOR	wall, light			(168,136,136);
+COLOR	wall, medium		(120, 88, 88);
+COLOR	wall, dark			( 88, 56, 56);
+
+LOOKUP	ceiling, all		wall, light;
+
+COLOR	stairs, light		(208,168, 56);
+LOOKUP	stairs, medium		stairs, light;
+LOOKUP	stairs, dark		stairs, light;
+
+LOOKUP	floor_staircase, all	floor, all;
+LOOKUP	wall_staircase, all		floor, all;
+
+COLOR	railings, light		(232,160, 72);
+COLOR	railings, medium	(200, 72,  0);
+COLOR	railings, dark		(104,  0,  0);
+
+LOOKUP	torch_base, all		railings, all;
+LOOKUP	torch_light, all	chest, all;
+
+COLOR	statue, light		(248,248,136);
+COLOR	statue, medium		( 88,136,184);
+COLOR	statue, dark		(  0, 64,128);
+
+LOOKUP	statue_alt, all		statue, all;
+
+#==============================================================
+# Objects
+#==============================================================
+
+LOOKUP	pot, light			floor, light;
+COLOR	pot, medium			(208,168, 56);
+COLOR	pot, dark			(144, 72, 40);
+
+LOOKUP	sign, all			pot, all;
+
+LOOKUP	bracelet_rock, all	pot, all;
+LOOKUP	switch_rock, all	pot, all;
+LOOKUP	crystal_rock, all	pot, all;
+LOOKUP	magnet_stone, all	pot, all;
+
+LOOKUP	block, all			railings, all;
+LOOKUP	armos, all			pot, all;
+LOOKUP	armos_alt, all		armos, all;
+
+LOOKUP	pot_asobject, all		pot, all;
+COLOR	pot_asobject, light		(0, 0, 0, 0);
+
+LOOKUP	sign_asobject, all		sign, all;
+COLOR	sign_asobject, light	(0, 0, 0, 0);
+
+LOOKUP	bracelet_rock_asobject, all		bracelet_rock, all;
+COLOR	bracelet_rock_asobject, light	(0, 0, 0, 0);
+
+LOOKUP	switch_rock_asobject, all		switch_rock, all;
+COLOR	switch_rock_asobject, light		(0, 0, 0, 0);
+
+LOOKUP	cystal_rock_asobject, all		cystal_rock, all;
+COLOR	cystal_rock_asobject, light		(0, 0, 0, 0);
+
+LOOKUP	block_asobject, all		block, all;
+COLOR	block_asobject, light	(0, 0, 0, 0);
+
+LOOKUP	armos_asobject, all		armos, all;
+COLOR	armos_asobject, light	(0, 0, 0, 0);
+
+LOOKUP	armos_alt_asobject, all		armos_alt, all;
+COLOR	armos_alt_asobject, light	(0, 0, 0, 0);
+
+LOOKUP	bush_asobject, all		bush, all;
+COLOR	bush_asobject, light	(0, 0, 0, 0);
+
+LOOKUP	mushroom_asobject, all		bush, all;
+COLOR	mushroom_asobject, light	(0, 0, 0, 0);
+
+#==============================================================
+# Puzzle
+#==============================================================
+
+COLOR	puzzle_red, light		(248,248,136);
+COLOR	puzzle_red, medium		(248,  8, 40);
+COLOR	puzzle_red, dark		(104,  0,  0);
+
+LOOKUP	puzzle_blue, light		red, light;
+COLOR	puzzle_blue, medium		( 24,128,248);
+COLOR	puzzle_blue, dark		(  0, 64,128);
+
+LOOKUP	puzzle_yellow, light	red, light; # Undefined
+COLOR	puzzle_yellow, medium	(248,192, 48);
+COLOR	puzzle_yellow, dark		(144, 72, 40);
+
+COLOR	chest, light			(248,208,136);
+COLOR	chest, medium			(232,  8, 24);
+COLOR	chest, dark				(104,  8, 40);
+
+LOOKUP	lanturn, all			chest, all;
+
+#==============================================================
+# Fluids
+#==============================================================
+
+LOOKUP	ice, all				water, all;
+
+COLOR	poison_bubble, light	(160, 192, 120);
+COLOR	poison_bubble, medium	(56, 144, 128);
+COLOR	poison_bubble, dark		(72, 32, 128);
+
+#==============================================================
+# Nature
+#==============================================================
+
+LOOKUP	hole_alt, all			hole, all;
+
+#==============================================================
+# Structures
+#==============================================================
+
+
+LOOKUP	block, all		barrier, all;
+
+COLOR	door, light		(248,248,136);
+COLOR	door, medium	( 88,136,184);
+COLOR	door, dark		(  0, 64,128);
+
+LOOKUP	lever, all		door, all;
+
+LOOKUP	button, all		floor, all;
+
+LOOKUP	object, light	floor, light;
+COLOR	object, medium	(208,168, 56);
+COLOR	object, dark	(144, 72, 40);
+
+LOOKUP	statue, all		door, all;
+
+LOOKUP	statue_alt, all	door, all;
+
+LOOKUP	armos, all		object, all;
+LOOKUP	armos_alt, all	object, all;
+
+LOOKUP	bridge, all		floor, all;
+
+LOOKUP	locked_block, all		barrier, all;
+
+LOOKUP	bush, light		floor, light;
+COLOR	bush, medium	(248,184,136);
+LOOKUP	bush, dark		default, black;
+
+LOOKUP	bush_regrow, light		floor, light;
+COLOR	bush_regrow, medium		(248,184,136);
+COLOR	bush_regrow, dark		( 16,168, 64);
+
+LOOKUP	web, all			floor, all;
+
+LOOKUP	dirt, all			floor, all;
+
+LOOKUP	hardened_lava, all	barrier, all;
+
+LOOKUP	attack_tile, all		barrier, all;
+
+LOOKUP	turnstile, all		object, all;
+
+LOOKUP	spikes, all		barrier, all;
+
+LOOKUP	arrow_shooter, all		barrier, all;
+
+LOOKUP	minecart_track, all		floor, all;
+
+#==============================================================
+# Liquids
+#==============================================================
+
+LOOKUP	water, all		blue, all;
+
+LOOKUP	lava, all			red, all;
+
+LOOKUP	sand, all			floor, all;
+
+#==============================================================
+# Entrance
+#==============================================================
+
+LOOKUP	entrance_column, all		wall, all;
+
+LOOKUP	entrance_brick, all		door, all;
+
+LOOKUP	entrance_tile, all		barrier, all;
+
+#==============================================================
+# Essense Room
+#==============================================================
+
+LOOKUP	essense_brick, all	object, all;
+
+LOOKUP	essense_tile, all		door, all;
+
+#==============================================================
+# Fancy Tiles
+#==============================================================
+
+LOOKUP	fancy_tile_1, all		object, all;
+LOOKUP	fancy_tile_2, all		barrier, all;
+LOOKUP	fancy_tile_3, all		object, all;
+LOOKUP	fancy_tile_4, all		floor, all;
+LOOKUP	fancy_tile_5, all		door, all;
+
+
+END;

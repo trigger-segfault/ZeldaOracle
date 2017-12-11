@@ -64,7 +64,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				this.index          = 0;
 				this.size           = size;
 				this.images         = new List<Image>();
-				this.dimensions     = GMath.Min(Point2I.One, size / MaxImageSize);
+				this.dimensions     = GMath.Max(Point2I.One, MaxImageSize / size);
 			}
 
 			public BasicSprite AddSprite(SpritePaletteArgs args) {
@@ -80,6 +80,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 				// Modify the original sprite's colors based on the mapping
 				XnaColor[] colorData = new XnaColor[args.SourceRect.Area];
+				//XnaColor[] colorData = new XnaColor[currentImage.Width * currentImage.Height];
 				XnaRectangle rect = (XnaRectangle) args.SourceRect;
 				args.Image.Texture.GetData<XnaColor>(0, rect, colorData, 0, colorData.Length);
 				for (int i = 0; i < colorData.Length; i++) {
@@ -110,7 +111,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				get { return images.Last(); }
 			}
 			private Rectangle2I CurrentSourceRect {
-				get { return new Rectangle2I(index % dimensions.X, index / dimensions.Y, size); }
+				get { return new Rectangle2I((index % dimensions.X) * size.X, (index / dimensions.Y) * size.Y, size); }
 			}
 		}
 

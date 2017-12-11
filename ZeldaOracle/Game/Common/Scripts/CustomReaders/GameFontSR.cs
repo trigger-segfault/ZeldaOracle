@@ -83,21 +83,25 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 		}
 
-	
+
 		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		// Begins reading the script.
+		/// <summary>Begins reading the script.</summary>
 		protected override void BeginReading() {
 			font		= null;
 			finalFont	= null;
 		}
 
-		// Ends reading the script.
+		/// <summary>Ends reading the script.</summary>
 		protected override void EndReading() {
 			font = null;
 		}
-
+		
+		/// <summary>Creates a new script reader of the derived type.</summary>
+		protected override ScriptReader CreateNew() {
+			return new GameFontSR();
+		}
 	}
 }

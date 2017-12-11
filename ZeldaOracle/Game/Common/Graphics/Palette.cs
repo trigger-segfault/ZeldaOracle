@@ -70,13 +70,6 @@ namespace ZeldaOracle.Common.Graphics {
 				}
 				set { color = value; }
 			}
-
-			/*public static implicit operator Color(PaletteColor paletteColor) {
-				return paletteColor.Color;
-			}
-			public static implicit operator PaletteColor(Color color) {
-				return new PaletteColor(color);
-			}*/
 		}
 
 		private struct LookupPair {
@@ -170,7 +163,7 @@ namespace ZeldaOracle.Common.Graphics {
 			Color[] defaultGroup = PaletteGroupToColorGroup(colorGroups["default"]);
 			for (int i = 0; i < PaletteDictionary.MaxColorGroups; i++) {
 				int index = i * PaletteDictionary.ColorGroupSize;
-				for (int j = 0; i < PaletteDictionary.ColorGroupSize; j++) {
+				for (int j = 0; j < PaletteDictionary.ColorGroupSize; j++) {
 					colorData[index + j] = defaultGroup[j];
 				}
 			}
@@ -256,15 +249,18 @@ namespace ZeldaOracle.Common.Graphics {
 			}
 
 			LookupPair[] lookupGroup;
+			PaletteColor[] colorGroup;
+			colorGroups.TryGetValue(name, out colorGroup);
 			if (!lookupGroups.TryGetValue(name, out lookupGroup)) {
 				lookupGroup = new LookupPair[PaletteDictionary.ColorGroupSize];
 				lookupGroups[name] = lookupGroup;
 			}
 			if (subtype != LookupSubtypes.All) {
 				lookupGroup[(int) subtype] = new LookupPair(lookupName, lookupSubtype);
-				
 				// Check if color group is unreferenced and we can remove it
-				if (colorGroups.ContainsKey(name)) {
+				if (colorGroup != null) {
+					colorGroup[(int) subtype] = PaletteColor.Undefined;
+
 					for (int j = 0; j < PaletteDictionary.ColorGroupSize; j++) {
 						if (lookupGroup[j].IsUndefined) // Nope, end the function here
 							return LookupResult.Success;
@@ -282,7 +278,7 @@ namespace ZeldaOracle.Common.Graphics {
 				}
 
 				// Remove the unreferenced color group
-				if (colorGroups.ContainsKey(name)) {
+				if (colorGroup != null) {
 					colorGroups.Remove(name);
 				}
 			}

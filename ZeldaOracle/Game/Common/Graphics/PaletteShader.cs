@@ -8,7 +8,6 @@ using Microsoft.Xna.Framework.Graphics;
 namespace ZeldaOracle.Common.Graphics {
 	public class PaletteShader {
 		private Effect shader;
-		private SpriteBatch spriteBatch;
 
 		private Palette tilePalette;
 		private Palette entityPalette;
@@ -22,8 +21,14 @@ namespace ZeldaOracle.Common.Graphics {
 		public void ApplyPalettes() {
 			shader.GraphicsDevice.Textures[1] = tilePalette.PaletteTexture;
 			shader.GraphicsDevice.Textures[2] = entityPalette.PaletteTexture;
-			shader.GraphicsDevice.Textures[3] = tilePaletteLerp.PaletteTexture;
-			shader.GraphicsDevice.Textures[4] = entityPaletteLerp.PaletteTexture;
+			if (tilePaletteLerp != null)
+				shader.GraphicsDevice.Textures[3] = tilePaletteLerp.PaletteTexture;
+			else
+				shader.GraphicsDevice.Textures[3] = tilePalette.PaletteTexture;
+			if (entityPaletteLerp != null)
+				shader.GraphicsDevice.Textures[4] = entityPaletteLerp.PaletteTexture;
+			else
+				shader.GraphicsDevice.Textures[4] = entityPalette.PaletteTexture;
 		}
 
 		public void Apply() {

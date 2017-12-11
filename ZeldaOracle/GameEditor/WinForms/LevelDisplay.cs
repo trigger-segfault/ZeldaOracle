@@ -622,6 +622,8 @@ namespace ZeldaEditor.WinForms {
 		public void DrawLevel(Graphics2D g) {
 			g.Clear(new Color(175, 175, 180)); // Gray background.
 
+			Palette lastPalette = null;
+
 			// Draw the level if it is open.
 			if (editorControl.IsLevelOpen) {
 				// Draw the rooms.
@@ -631,7 +633,16 @@ namespace ZeldaEditor.WinForms {
 						if (roomPosition + (Level.RoomSize * GameSettings.TILE_SIZE) >= 0 && roomPosition < new Point2I(ClientSize.Width, ClientSize.Height)) {
 							g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
 							g.Translate((Vector2F)(new Point2I(x, y) * ((Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing)));
-							DrawRoom(g, Level.GetRoomAt(x, y));
+							Room room = Level.GetRoomAt(x, y);
+							Palette newPalette = room.Zone.Palette;
+							if (lastPalette != newPalette) {
+								g.End();
+								GameData.PaletteShader.TilePalette = newPalette;
+								GameData.PaletteShader.ApplyPalettes();
+								g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+							}
+							lastPalette = newPalette;
+							DrawRoom(g, room);
 							g.ResetTranslation();
 						}
 					}

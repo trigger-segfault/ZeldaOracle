@@ -131,6 +131,13 @@ namespace ZeldaOracle.Game {
 		// Draw modes
 		//-----------------------------------------------------------------------------
 
+		public static DrawMode DRAW_MODE_BASIC = new DrawMode() {
+			BlendState      = BlendState.AlphaBlend,
+			SortMode        = SpriteSortMode.Deferred,
+			SamplerState    = SamplerState.PointClamp
+		};
+
+		// Effect is set to PAL_LERP_SHADER
 		public static DrawMode DRAW_MODE_DEFAULT = new DrawMode() {
 			BlendState		= BlendState.AlphaBlend,
 			SortMode		= SpriteSortMode.Deferred,

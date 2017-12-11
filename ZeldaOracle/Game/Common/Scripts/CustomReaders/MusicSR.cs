@@ -52,12 +52,19 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Begins reading the script.</summary>
 		protected override void BeginReading() {
 			//isCreatingMusic = false;
 		}
 
+		/// <summary>Ends reading the script.</summary>
 		protected override void EndReading() {
 			//isCreatingMusic = false;
+		}
+
+		/// <summary>Creates a new script reader of the derived type.</summary>
+		protected override ScriptReader CreateNew() {
+			return new MusicSR();
 		}
 	}
 }

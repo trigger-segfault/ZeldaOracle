@@ -124,13 +124,12 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		}
 
 		public void ReplaceSprite(int index, ISprite sprite) {
-			sprites.RemoveAt(index);
-			sprites.Insert(index, new OffsetSprite(sprite));
+			sprites[index].Sprite = sprite;
 		}
 
 		public void ReplaceSprite(int index, ISprite sprite, Point2I drawOffset) {
-			sprites.RemoveAt(index);
-			sprites.Insert(index, new OffsetSprite(sprite, drawOffset));
+			sprites[index].Sprite = sprite;
+			sprites[index].DrawOffset = drawOffset;
 		}
 
 		public void RemoveSprite(int index) {

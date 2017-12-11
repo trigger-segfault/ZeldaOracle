@@ -1,0 +1,29 @@
+#==============================================================
+# Tiles Default
+#==============================================================
+
+PALETTE tile_dictionary, tiles_electrocuted;
+
+COLOR	default, light		(248,248,248);
+COLOR	default, medium		( 16, 32, 48);
+COLOR	default, dark		(248,248,120);
+
+END;
+
+
+#==============================================================
+# Entities Default
+#==============================================================
+
+PALETTE entity_dictionary, entities_electrocuted;
+
+COLOR	default, light		(248,248,248);
+COLOR	default, dark		(248,248,120);
+
+#==============================================================
+# UI elements that are colored as tiles in-game
+#==============================================================
+
+COLOR	ui_hud, dark		( 16, 32, 48);
+
+END;

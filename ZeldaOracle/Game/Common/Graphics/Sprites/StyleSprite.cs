@@ -57,12 +57,14 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
 		public IEnumerable<SpritePart> GetParts(SpriteDrawSettings settings) {
-			string style = settings.Styles.GetStyle(styleGroup);
-			if (style != null) {
-				ISprite sprite;
-				styles.TryGetValue(style, out sprite);
-				if (sprite != null)
-					return sprite.GetParts(settings);
+			if (settings.Styles != null) {
+				string style = settings.Styles.GetStyle(styleGroup);
+				if (style != null) {
+					ISprite sprite;
+					styles.TryGetValue(style, out sprite);
+					if (sprite != null)
+						return sprite.GetParts(settings);
+				}
 			}
 			return defaultSprite.GetParts(settings);
 		}

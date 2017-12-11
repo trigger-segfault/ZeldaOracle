@@ -9,7 +9,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripts.Commands;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
-	public partial class ISpritesSR : ScriptReader {
+	public partial class ISpriteSR : ScriptReader {
 
 		/// <summary>Adds CompositeSprite commands to the script reader.</summary>
 		public void AddCompositeCommands() {
@@ -20,8 +20,11 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("COMPOSITE", (int) Modes.Root,
 				"string name",
 			delegate (CommandParam parameters) {
+				bool continueSprite = parameters.HasPrefix("continue");
+				if (!continueSprite && parameters.HasPrefix())
+					ThrowCommandParseError("Invalid use of prefix");
 				spriteName = parameters.GetString(0);
-				if (parameters.HasPrefix("continue")) {
+				if (continueSprite) {
 					ContinueSprite<CompositeSprite>(spriteName);
 				}
 				else {
@@ -85,15 +88,26 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				}
 			});
 			//=====================================================================================
+			// NOTE: Unlike other drawOffset functions. Not setting the draw offset 
+			// will cause the new sprite to retain the last sprite's draw offset.
 			AddCommand("REPLACE", (int) Modes.CompositeSprite,
-				"int index, string name, (int drawOffsetX, int drawOffsetY) = (0, 0)",
-				"int index, (int indexX, int indexY), (int drawOffsetX, int drawOffsetY) = (0, 0)",
+				"int index, string name",
+				"int index, string name, (int drawOffsetX, int drawOffsetY)",
+				"int index, (int indexX, int indexY)",
+				"int index, (int indexX, int indexY), (int drawOffsetX, int drawOffsetY)",
 			delegate (CommandParam parameters) {
-				if (parameters.GetParam(0).Name == "name") {
-					CompositeSprite.ReplaceSprite(
-						parameters.GetInt(0),
-						GetResource<ISprite>(parameters.GetString(1)),
-						parameters.GetPoint(2, Point2I.Zero));
+				if (parameters.GetParam(1).Name == "name") {
+					if (parameters.ChildCount == 2) {
+						CompositeSprite.ReplaceSprite(
+							parameters.GetInt(0),
+							GetResource<ISprite>(parameters.GetString(1)));
+					}
+					else {
+						CompositeSprite.ReplaceSprite(
+							parameters.GetInt(0),
+							GetResource<ISprite>(parameters.GetString(1)),
+							parameters.GetPoint(2, Point2I.Zero));
+					}
 				}
 				else if (SourceMode != SourceModes.None) {
 					ISprite sprite = source.GetSprite(parameters.GetPoint(1));
@@ -102,10 +116,15 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						paletteArgs.SourceRect = SpriteSheet.GetSourceRect(parameters.GetPoint(1));
 						sprite = Resources.PalettedSpriteDatabase.AddSprite(paletteArgs);
 					}
-					CompositeSprite.ReplaceSprite(
-						parameters.GetInt(0),
-						sprite,
-						parameters.GetPoint(2, Point2I.Zero));
+					if (parameters.ChildCount == 2) {
+						CompositeSprite.ReplaceSprite(
+							parameters.GetInt(0), sprite);
+					}
+					else {
+						CompositeSprite.ReplaceSprite(
+							parameters.GetInt(0), sprite,
+							parameters.GetPoint(2, Point2I.Zero));
+					}
 				}
 				else {
 					ThrowCommandParseError("Cannot replace sprite with no sprite sheet source!");

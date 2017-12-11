@@ -17,7 +17,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 		public const string Lanturn = "lanturn";
 
-		public const string OverworldRailings = "overworld_railings";
+		public const string Railings = "railings";
 
 		public const string DungeonFloor = "dungeon_floor";
 
@@ -30,6 +30,11 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public const string FancyTile3 = "fancy_tile_3";
 		public const string FancyTile4 = "fancy_tile_4";
 		public const string FancyTile5 = "fancy_tile_5";
+		public const string FancyTile6 = "fancy_tile_6";
+		public const string FancyTile7 = "fancy_tile_7";
+		public const string FancyTile8 = "fancy_tile_8";
+		public const string FancyTile9 = "fancy_tile_9";
+		public const string FancyTile10 = "fancy_tile_10";
 
 		public const string Chest = "chest";
 

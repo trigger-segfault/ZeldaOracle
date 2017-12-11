@@ -20,6 +20,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		public PaletteSR() {
 
 			//=====================================================================================
+			// BEGIN/END
+			//=====================================================================================
 			AddCommand("PALETTE", "string dictionary, string name",
 			delegate (CommandParam parameters) {
 				if (palette != null)
@@ -28,6 +30,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				PaletteDictionary dictionary = Resources.GetPaletteDictionary(parameters.GetString(0));
 				palette = new Palette(Resources.GraphicsDevice, dictionary);
 				assetName = parameters.GetString(1);
+				AddResource<Palette>(assetName, palette);
 			});
 			//=====================================================================================
 			AddCommand("END",
@@ -36,9 +39,10 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					ThrowCommandParseError("Must start a PALETTE before calling end!");
 
 				palette.UpdatePalette();
-				Resources.AddPalette(assetName, palette);
 				palette = null;
 			});
+			//=====================================================================================
+			// BUILDING
 			//=====================================================================================
 			AddCommand("COLOR", "string name, string subtype, (int r, int g, int b)",
 						"string name, string subtype, (int r, int g, int b, int a)",
@@ -76,6 +80,18 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					parameters.GetString(0), subtype,
 					parameters.GetString(2), lookupSubtype);
 			});
+			//=====================================================================================
+			// CLONING
+			//=====================================================================================
+			AddCommand("CLONE", "string paletteName",
+			delegate (CommandParam parameters) {
+				if (palette == null)
+					ThrowCommandParseError("Must start a PALETTE before calling CLONE!");
+
+				palette = new Palette(GetResource<Palette>(parameters.GetString(0)));
+				SetResource<Palette>(assetName, palette);
+			});
+			//=====================================================================================
 		}
 
 
@@ -83,6 +99,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		// Internal Methods
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Parses the lookup subtype from a string with error handling.</summary>
 		private LookupSubtypes ParseSubtype(string subtypeStr) {
 			LookupSubtypes subtype;
 			if (!Enum.TryParse(subtypeStr, true, out subtype))
@@ -101,15 +118,20 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		// Begins reading the script.
+		/// <summary>Begins reading the script.</summary>
 		protected override void BeginReading() {
 			palette			= null;
 			assetName		= "";
 		}
 
-		// Ends reading the script.
+		/// <summary>Ends reading the script.</summary>
 		protected override void EndReading() {
 
+		}
+
+		/// <summary>Creates a new script reader of the derived type.</summary>
+		protected override ScriptReader CreateNew() {
+			return new PaletteSR();
 		}
 	}
 }

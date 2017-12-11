@@ -73,8 +73,24 @@
       <Name>animations</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Palettes\entities.conscript">
-      <Name>entities</Name>
+    <None Include="Palettes\Dictionaries\palette_dictionaries.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>palette_dictionaries</Name>
+    </None>
+    <None Include="Palettes\palettes.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>palettes</Name>
+    </None>
+    <None Include="Palettes\present.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>present</Name>
+    </None>
+    <None Include="Palettes\electrocuted.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>electrocuted</Name>
+    </None>
+    <None Include="Palettes\entities_default.conscript">
+      <Name>entities_default</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Palettes\Dictionaries\tile_palette_dictionary.conscript">
@@ -97,16 +113,20 @@
       <Name>entities_menu</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Palettes\Dictionaries\overworld_dictionary.conscript">
-      <Name>overworld_dictionary</Name>
+    <None Include="Palettes\tiles_default.conscript">
+      <Name>tiles_default</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="SpriteSheets\isprites_cliffs.conscript">
+    <None Include="SpriteSheets\Styles\cliffs.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>isprites_cliffs</Name>
+      <Name>cliffs</Name>
     </None>
-    <None Include="SpriteSheets\isprites.conscript">
-      <Name>isprites</Name>
+    <None Include="SpriteSheets\Styles\cliffs_temp.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>cliffs_temp</Name>
+    </None>
+    <None Include="SpriteSheets\Styles\cliffs_tiles.conscript">
+      <Name>cliffs_tiles</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Tilesets\cliffs.conscript">
@@ -1239,6 +1259,88 @@
       <Name>palette_lerp_shader</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\Tiles\Styles\bombable_walls.png">
+      <Name>bombable_walls</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\chests.png">
+      <Name>chests</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\cliffs.png">
+      <Name>cliffs</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\cracked_floors.png">
+      <Name>cracked_floors</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\dungeon_floors.png">
+      <Name>dungeon_floors</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\dungeon_walls.png">
+      <Name>dungeon_walls</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\dungeon_walls_jabu_jabu.png">
+      <Name>dungeon_walls_jabu_jabu</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\fancy_tiles.png">
+      <Name>fancy_tiles</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\floor_staircases.png">
+      <Name>floor_staircases</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\lanturns.png">
+      <Name>lanturns</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\railings.png">
+      <Name>railings</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\stairs.png">
+      <Name>stairs</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\torch_bases.png">
+      <Name>torch_bases</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\trees.png">
+      <Name>trees</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\tunnels.png">
+      <Name>tunnels</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\vines.png">
+      <Name>vines</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

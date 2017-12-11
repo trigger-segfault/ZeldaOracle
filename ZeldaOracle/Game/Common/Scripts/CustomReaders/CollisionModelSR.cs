@@ -50,15 +50,25 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 		}
 
-		// Begins reading the script.
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Begins reading the script.</summary>
 		protected override void BeginReading() {
 			modelName	= "";
 			model		= null;
 		}
 
-		// Ends reading the script.
+		/// <summary>Ends reading the script.</summary>
 		protected override void EndReading() {
 
+		}
+
+		/// <summary>Creates a new script reader of the derived type.</summary>
+		protected override ScriptReader CreateNew() {
+			return new CollisionModelSR();
 		}
 	}
 }

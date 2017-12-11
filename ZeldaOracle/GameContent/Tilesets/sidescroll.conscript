@@ -3,8 +3,6 @@
 # Sprite Sheets
 #==============================================================
 
-LOAD SPRITES;
-
 SPRITESHEET "tileset_sidescroll", (16, 16), (1, 1), (18, 18);
 
 
@@ -12,14 +10,9 @@ SPRITESHEET "tileset_sidescroll", (16, 16), (1, 1), (18, 18);
 # Tiles
 #==============================================================
 
-LOAD TILESETS;
-
-
 #==============================================================
 # Tilesets
 #==============================================================
-
-LOAD TILESETS;
 
 TILESET sidescroll, tileset_sidescroll, (12, 14);
 DEFAULT (0, 7);

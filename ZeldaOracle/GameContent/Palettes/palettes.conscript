@@ -1,0 +1,10 @@
+
+
+LOAD "tiles_default.conscript" false;
+LOAD "present.conscript" false;
+LOAD "dungeon_ages_1.conscript" false;
+
+LOAD "entities_default.conscript" false;
+LOAD "entities_menu.conscript" false;
+
+LOAD "electrocuted.conscript" false;

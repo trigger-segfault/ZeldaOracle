@@ -3,8 +3,6 @@
 # Sprite Sheets
 #==============================================================
 
-LOAD SPRITES;
-	
 SPRITESHEET "tileset_objects_nv",				"Tiles/tileset_objects_nv",					(16, 16), (1, 1), (18, 18); END;
 SPRITESHEET "tileset_objects_nv_extras_16x16",	"Tiles/tileset_objects_nv_extras_16x16",	(16, 16), (1, 1), (18, 18); END;
 
@@ -12,8 +10,6 @@ SPRITESHEET "tileset_objects_nv_extras_16x16",	"Tiles/tileset_objects_nv_extras_
 #==============================================================
 # Tiles
 #==============================================================
-
-LOAD TILESETS;
 
 
 # ---- Chests -----------------------------------------------------------------
@@ -134,7 +130,7 @@ END;
 
 # ---- Roller -----------------------------------------------------------------
 
-TEMPTILE roller;
+TILE temp_roller;
 	TYPE		TileRoller;
 	FLAGS		movable, notgrabbable;
 	SOLID		block;
@@ -148,7 +144,7 @@ TEMPTILE roller;
 END;
 
 TILE roller_horizontal;
-	CLONE		roller;
+	CLONE		temp_roller;
 	SPRITEINDEX	0, tile_roller_horizontal;
 	SPRITEINDEX	1, tile_roller_horizontal_roll;
 	PROPERTIES	(boolean, vertical, "false"),
@@ -156,7 +152,7 @@ TILE roller_horizontal;
 END;
 
 TILE roller_vertical;
-	CLONE		roller;
+	CLONE		temp_roller;
 	SPRITEINDEX	0, tile_roller_vertical;
 	SPRITEINDEX	1, tile_roller_vertical_roll;
 	PROPERTIES	(boolean, vertical, "true"),

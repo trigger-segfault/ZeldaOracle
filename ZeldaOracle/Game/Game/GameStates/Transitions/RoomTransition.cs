@@ -37,6 +37,9 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			//gameManager.PopGameState(); // Pop this state
 			//gameManager.PushGameState(roomNew);
 			End();
+
+			GameData.PaletteShader.TilePalette = NewRoomControl.Zone.Palette;
+			GameData.PaletteShader.TileRatio = 0f;
 		}
 
 		protected void DestroyOldRoom() {

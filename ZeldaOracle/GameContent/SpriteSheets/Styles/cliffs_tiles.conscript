@@ -1,0 +1,553 @@
+
+
+COMPOSITE "tile_cliff_corner_outside_nw_railing_corner_inside_nw";
+	COMBINE "temp_cliff_corner_outside_nw";
+	ADD "temp_8x8_railing_corner_inside_nw" (8, 8); END;
+
+COMPOSITE "tile_cliff_face_n_railing_horizontal";
+	COMBINE "temp_cliff_face_n";
+	ADD "temp_8x8_railing_horizontal" (0, 8);
+	ADD "temp_8x8_railing_horizontal" (8, 8); END;
+	
+COMPOSITE "tile_cliff_corner_outside_ne_railing_corner_inside_ne";
+	COMBINE "temp_cliff_corner_outside_ne";
+	ADD "temp_8x8_railing_corner_inside_ne" (0, 8); END;
+
+COMPOSITE "tile_cliff_face_w_railing_vertical";
+	COMBINE "temp_cliff_face_w";
+	ADD "temp_8x8_railing_vertical" (8, 0);
+	ADD "temp_8x8_railing_vertical" (8, 8); END;
+
+COMPOSITE "tile_cliff_face_e_railing_vertical";
+	COMBINE "temp_cliff_face_e";
+	ADD "temp_8x8_railing_vertical" (0, 0);
+	ADD "temp_8x8_railing_vertical" (0, 8); END;
+	
+COMPOSITE "tile_cliff_corner_outside_sw_railing_corner_inside_sw";
+	COMBINE "temp_cliff_corner_outside_sw";
+	ADD "temp_8x8_railing_corner_inside_sw" (8, 0); END;
+
+COMPOSITE "tile_cliff_face_s_railing_horizontal";
+	COMBINE "temp_cliff_face_s";
+	ADD "temp_8x8_railing_horizontal" (0, 0);
+	ADD "temp_8x8_railing_horizontal" (8, 0); END;
+	
+COMPOSITE "tile_cliff_corner_outside_se_railing_corner_inside_se";
+	COMBINE "temp_cliff_corner_outside_se";
+	ADD "temp_8x8_railing_corner_inside_se" (0, 0); END;
+
+COMPOSITE "tile_cliff_face_front_corner_left";
+	COMBINE "temp_cliff_corner_outside_sw_bottom_half";
+	ADD "temp_8x8_cliff_corner_outside_sw" (0, 0);
+	ADD "temp_8x8_cliff_face_2_s" (8, 0); END;
+	
+COMPOSITE "tile_cliff_face_front";
+	COMBINE "temp_cliff_face_s";
+	ADD "temp_8x8_cliff_face_1_s" (0, 0);
+	ADD "temp_8x8_cliff_face_2_s" (8, 0); END;
+
+COMPOSITE "tile_cliff_face_front_corner_right";
+	COMBINE "temp_cliff_corner_outside_se_bottom_half";
+	ADD "temp_8x8_cliff_face_1_s" (0, 0);
+	ADD "temp_8x8_cliff_corner_outside_se" (8, 0); END;
+
+COMPOSITE "tile_cliff_face_front_corner_left_ground";
+	COMBINE "temp_cliff_corner_outside_ground_sw_bottom_half";
+	ADD "temp_8x8_cliff_corner_outside_sw" (0, 0);
+	ADD "temp_8x8_cliff_face_2_s" (8, 0); END;
+
+COMPOSITE "tile_cliff_face_front_corner_right_ground";
+	COMBINE "temp_cliff_corner_outside_ground_se_bottom_half";
+	ADD "temp_8x8_cliff_face_1_s" (0, 0);
+	ADD "temp_8x8_cliff_corner_outside_se" (8, 0); END;
+
+COMPOSITE "tile_cliff_column_top_back";
+	COMBINE "temp_cliff_corner_outside_nw_left_half";
+	COMBINE "temp_cliff_corner_outside_ne_right_half"; END;
+
+COMPOSITE "tile_cliff_column_top";
+	COMBINE "temp_cliff_face_w";
+	COMBINE "temp_cliff_face_e"; END;
+
+COMPOSITE "tile_cliff_column_top_front";
+	COMBINE "temp_cliff_corner_outside_sw_left_half";
+	COMBINE "temp_cliff_corner_outside_se_right_half"; END;
+
+COMPOSITE "tile_cliff_column";
+	ADD "temp_8x8_cliff_corner_outside_sw" (0, 0);
+	ADD "temp_8x8_cliff_corner_outside_sw" (0, 8);
+	ADD "temp_8x8_cliff_corner_outside_se" (8, 0);
+	ADD "temp_8x8_cliff_corner_outside_se" (8, 8); END;
+	
+COMPOSITE "tile_cliff_column_ground";
+	ADD "temp_8x8_cliff_corner_outside_sw" (0, 0);
+	ADD "temp_8x8_cliff_corner_outside_ground_sw" (0, 8);
+	ADD "temp_8x8_cliff_corner_outside_se" (8, 0);
+	ADD "temp_8x8_cliff_corner_outside_ground_se" (8, 8); END;
+
+
+COMPOSITE "tile_cliff_corner_outside_nw_railing_vertical_cap_n";
+	COMBINE "temp_cliff_corner_outside_nw";
+	ADD "temp_8x8_railing_vertical_cap_n" (8, 8); END;
+
+COMPOSITE "tile_cliff_corner_outside_ne_railing_vertical_cap_n";
+	COMBINE "temp_cliff_corner_outside_ne";
+	ADD "temp_8x8_railing_vertical_cap_n" (0, 8); END;
+
+COMPOSITE "tile_cliff_corner_outside_sw_railing_vertical_cap_s";
+	COMBINE "temp_cliff_corner_outside_sw";
+	ADD "temp_8x8_railing_vertical_cap_s" (8, 0); END;
+
+COMPOSITE "tile_cliff_corner_outside_se_railing_vertical_cap_s";
+	COMBINE "temp_cliff_corner_outside_se";
+	ADD "temp_8x8_railing_vertical_cap_s" (0, 0); END;
+
+COMPOSITE "tile_cliff_corner_outside_ground_nw_railing_vertical_cap_n";
+	COMBINE "temp_cliff_corner_outside_ground_nw";
+	ADD "temp_8x8_railing_vertical_cap_n" (8, 8); END;
+
+COMPOSITE "tile_cliff_corner_outside_ground_ne_railing_vertical_cap_n";
+	COMBINE "temp_cliff_corner_outside_ground_ne";
+	ADD "temp_8x8_railing_vertical_cap_n" (0, 8); END;
+
+COMPOSITE "tile_cliff_corner_outside_ground_sw_railing_vertical_cap_s";
+	COMBINE "temp_cliff_corner_outside_ground_sw";
+	ADD "temp_8x8_railing_vertical_cap_s" (8, 0); END;
+
+COMPOSITE "tile_cliff_corner_outside_ground_se_railing_vertical_cap_s";
+	COMBINE "temp_cliff_corner_outside_ground_se";
+	ADD "temp_8x8_railing_vertical_cap_s" (0, 0); END;
+
+	
+COMPOSITE "tile_cliff_corner_outside_nw_railing_horizontal_cap_w";
+	COMBINE "temp_cliff_corner_outside_nw";
+	ADD "temp_8x8_railing_horizontal_cap_w" (8, 8); END;
+
+COMPOSITE "tile_cliff_corner_outside_ne_railing_horizontal_cap_e";
+	COMBINE "temp_cliff_corner_outside_ne";
+	ADD "temp_8x8_railing_horizontal_cap_e" (0, 8); END;
+
+COMPOSITE "tile_cliff_corner_outside_sw_railing_horizontal_cap_w";
+	COMBINE "temp_cliff_corner_outside_sw";
+	ADD "temp_8x8_railing_horizontal_cap_w" (8, 0); END;
+
+COMPOSITE "tile_cliff_corner_outside_se_railing_horizontal_cap_e";
+	COMBINE "temp_cliff_corner_outside_se";
+	ADD "temp_8x8_railing_horizontal_cap_e" (0, 0); END;
+
+COMPOSITE "tile_cliff_corner_outside_ground_nw_railing_horizontal_cap_w";
+	COMBINE "temp_cliff_corner_outside_ground_nw";
+	ADD "temp_8x8_railing_horizontal_cap_w" (8, 8); END;
+
+COMPOSITE "tile_cliff_corner_outside_ground_ne_railing_horizontal_cap_e";
+	COMBINE "temp_cliff_corner_outside_ground_ne";
+	ADD "temp_8x8_railing_horizontal_cap_e" (0, 8); END;
+
+COMPOSITE "tile_cliff_corner_outside_ground_sw_railing_horizontal_cap_w";
+	COMBINE "temp_cliff_corner_outside_ground_sw";
+	ADD "temp_8x8_railing_horizontal_cap_w" (8, 0); END;
+
+COMPOSITE "tile_cliff_corner_outside_ground_se_railing_horizontal_cap_e";
+	COMBINE "temp_cliff_corner_outside_ground_se";
+	ADD "temp_8x8_railing_horizontal_cap_e" (0, 0); END;
+
+
+COMPOSITE "tile_cliff_corner_outside_nw_left_half_railing_vertical_long_cap_n";
+	COMBINE "temp_cliff_corner_outside_nw_left_half";
+	COMBINE "temp_railing_vertical_long_cap_n" (8, 0); END;
+
+COMPOSITE "tile_cliff_corner_outside_ne_right_half_railing_vertical_long_cap_n";
+	COMBINE "temp_cliff_corner_outside_ne_right_half";
+	COMBINE "temp_railing_vertical_long_cap_n" (0, 0); END;
+
+COMPOSITE "tile_cliff_corner_outside_sw_left_half_railing_vertical_long_cap_s";
+	COMBINE "temp_cliff_corner_outside_sw_left_half";
+	COMBINE "temp_railing_vertical_long_cap_s" (8, 0); END;
+
+COMPOSITE "tile_cliff_corner_outside_se_right_half_railing_vertical_long_cap_s";
+	COMBINE "temp_cliff_corner_outside_se_right_half";
+	COMBINE "temp_railing_vertical_long_cap_s" (0, 0); END;
+
+
+COMPOSITE "tile_cliff_corner_outside_ground_nw_left_half_railing_vertical_long_cap_n";
+	COMBINE "temp_cliff_corner_outside_ground_nw_left_half";
+	COMBINE "temp_railing_vertical_long_cap_n" (8, 0); END;
+
+COMPOSITE "tile_cliff_corner_outside_ground_ne_right_half_railing_vertical_long_cap_n";
+	COMBINE "temp_cliff_corner_outside_ground_ne_right_half";
+	COMBINE "temp_railing_vertical_long_cap_n" (0, 0); END;
+
+COMPOSITE "tile_cliff_corner_outside_ground_sw_left_half_railing_vertical_long_cap_s";
+	COMBINE "temp_cliff_corner_outside_ground_sw_left_half";
+	COMBINE "temp_railing_vertical_long_cap_s" (8, 0); END;
+
+COMPOSITE "tile_cliff_corner_outside_ground_se_right_half_railing_vertical_long_cap_s";
+	COMBINE "temp_cliff_corner_outside_ground_se_right_half";
+	COMBINE "temp_railing_vertical_long_cap_s" (0, 0); END;
+	
+
+COMPOSITE "tile_cliff_corner_outside_nw_left_half_railing_vertical_long_cap";
+	COMBINE "temp_cliff_corner_outside_nw_left_half";
+	COMBINE "temp_railing_vertical_long_cap" (8, 0); END;
+
+COMPOSITE "tile_cliff_corner_outside_ne_right_half_railing_vertical_long_cap";
+	COMBINE "temp_cliff_corner_outside_ne_right_half";
+	COMBINE "temp_railing_vertical_long_cap" (0, 0); END;
+
+COMPOSITE "tile_cliff_corner_outside_sw_left_half_railing_vertical_long_cap";
+	COMBINE "temp_cliff_corner_outside_sw_left_half";
+	COMBINE "temp_railing_vertical_long_cap" (8, 0); END;
+
+COMPOSITE "tile_cliff_corner_outside_se_right_half_railing_vertical_long_cap";
+	COMBINE "temp_cliff_corner_outside_se_right_half";
+	COMBINE "temp_railing_vertical_long_cap" (0, 0); END;
+
+
+COMPOSITE "tile_cliff_corner_outside_ground_nw_left_half_railing_vertical_long_cap";
+	COMBINE "temp_cliff_corner_outside_ground_nw_left_half";
+	COMBINE "temp_railing_vertical_long_cap" (8, 0); END;
+
+COMPOSITE "tile_cliff_corner_outside_ground_ne_right_half_railing_vertical_long_cap";
+	COMBINE "temp_cliff_corner_outside_ground_ne_right_half";
+	COMBINE "temp_railing_vertical_long_cap" (0, 0); END;
+
+COMPOSITE "tile_cliff_corner_outside_ground_sw_left_half_railing_vertical_long_cap";
+	COMBINE "temp_cliff_corner_outside_ground_sw_left_half";
+	COMBINE "temp_railing_vertical_long_cap" (8, 0); END;
+
+COMPOSITE "tile_cliff_corner_outside_ground_se_right_half_railing_vertical_long_cap";
+	COMBINE "temp_cliff_corner_outside_ground_se_right_half";
+	COMBINE "temp_railing_vertical_long_cap" (0, 0); END;
+
+
+COMPOSITE "tile_cliff_corner_outside_nw_top_half_railing_horizontal_long_cap_w";
+	COMBINE "temp_cliff_corner_outside_nw_top_half";
+	COMBINE "temp_railing_horizontal_long_cap_w" (0, 8); END;
+	
+COMPOSITE "tile_cliff_corner_outside_ne_top_half_railing_horizontal_long_cap_e";
+	COMBINE "temp_cliff_corner_outside_ne_top_half";
+	COMBINE "temp_railing_horizontal_long_cap_e" (0, 8); END;
+
+COMPOSITE "tile_cliff_corner_outside_sw_bottom_half_railing_horizontal_long_cap_w";
+	COMBINE "temp_cliff_corner_outside_sw_bottom_half";
+	COMBINE "temp_railing_horizontal_long_cap_w" (0, 0); END;
+	
+COMPOSITE "tile_cliff_corner_outside_se_bottom_half_railing_horizontal_long_cap_e";
+	COMBINE "temp_cliff_corner_outside_se_bottom_half";
+	COMBINE "temp_railing_horizontal_long_cap_e" (0, 0); END;
+
+
+COMPOSITE "tile_cliff_corner_outside_ground_nw_top_half_railing_horizontal_long_cap_w";
+	COMBINE "temp_cliff_corner_outside_ground_nw_top_half";
+	COMBINE "temp_railing_horizontal_long_cap_w" (0, 8); END;
+	
+COMPOSITE "tile_cliff_corner_outside_ground_ne_top_half_railing_horizontal_long_cap_e";
+	COMBINE "temp_cliff_corner_outside_ground_ne_top_half";
+	COMBINE "temp_railing_horizontal_long_cap_e" (0, 8); END;
+
+COMPOSITE "tile_cliff_corner_outside_ground_sw_bottom_half_railing_horizontal_long_cap_w";
+	COMBINE "temp_cliff_corner_outside_ground_sw_bottom_half";
+	COMBINE "temp_railing_horizontal_long_cap_w" (0, 0); END;
+	
+COMPOSITE "tile_cliff_corner_outside_ground_se_bottom_half_railing_horizontal_long_cap_e";
+	COMBINE "temp_cliff_corner_outside_ground_se_bottom_half";
+	COMBINE "temp_railing_horizontal_long_cap_e" (0, 0); END;
+	
+
+COMPOSITE "tile_cliff_corner_outside_nw_top_half_railing_horizontal_long_cap";
+	COMBINE "temp_cliff_corner_outside_nw_top_half";
+	COMBINE "temp_railing_horizontal_long_cap" (0, 8); END;
+	
+COMPOSITE "tile_cliff_corner_outside_ne_top_half_railing_horizontal_long_cap";
+	COMBINE "temp_cliff_corner_outside_ne_top_half";
+	COMBINE "temp_railing_horizontal_long_cap" (0, 8); END;
+
+COMPOSITE "tile_cliff_corner_outside_sw_bottom_half_railing_horizontal_long_cap";
+	COMBINE "temp_cliff_corner_outside_sw_bottom_half";
+	COMBINE "temp_railing_horizontal_long_cap" (0, 0); END;
+	
+COMPOSITE "tile_cliff_corner_outside_se_bottom_half_railing_horizontal_long_cap";
+	COMBINE "temp_cliff_corner_outside_se_bottom_half";
+	COMBINE "temp_railing_horizontal_long_cap" (0, 0); END;
+
+
+COMPOSITE "tile_cliff_corner_outside_ground_nw_top_half_railing_horizontal_long_cap";
+	COMBINE "temp_cliff_corner_outside_ground_nw_top_half";
+	COMBINE "temp_railing_horizontal_long_cap" (0, 8); END;
+	
+COMPOSITE "tile_cliff_corner_outside_ground_ne_top_half_railing_horizontal_long_cap";
+	COMBINE "temp_cliff_corner_outside_ground_ne_top_half";
+	COMBINE "temp_railing_horizontal_long_cap" (0, 8); END;
+
+COMPOSITE "tile_cliff_corner_outside_ground_sw_bottom_half_railing_horizontal_long_cap";
+	COMBINE "temp_cliff_corner_outside_ground_sw_bottom_half";
+	COMBINE "temp_railing_horizontal_long_cap" (0, 0); END;
+	
+COMPOSITE "tile_cliff_corner_outside_ground_se_bottom_half_railing_horizontal_long_cap";
+	COMBINE "temp_cliff_corner_outside_ground_se_bottom_half";
+	COMBINE "temp_railing_horizontal_long_cap" (0, 0); END;
+	
+
+COMPOSITE "tile_cliff_corner_outside_ground_nw_railing_corner_inside_nw";
+	COMBINE "temp_cliff_corner_outside_ground_nw";
+	ADD "temp_8x8_railing_corner_inside_nw" (8, 8); END;
+	
+COMPOSITE "tile_cliff_corner_outside_ground_ne_railing_corner_inside_ne";
+	COMBINE "temp_cliff_corner_outside_ground_ne";
+	ADD "temp_8x8_railing_corner_inside_ne" (0, 8); END;
+	
+COMPOSITE "tile_cliff_corner_outside_ground_sw_railing_corner_inside_sw";
+	COMBINE "temp_cliff_corner_outside_ground_sw";
+	ADD "temp_8x8_railing_corner_inside_sw" (8, 0); END;
+	
+COMPOSITE "tile_cliff_corner_outside_ground_se_railing_corner_inside_se";
+	COMBINE "temp_cliff_corner_outside_ground_se";
+	ADD "temp_8x8_railing_corner_inside_se" (0, 0); END;
+	
+
+COMPOSITE "tile_cliff_column_top_back_railing_vertical_cap_n_right_side";
+	COMBINE "temp_cliff_corner_outside_nw_left_half";
+	ADD "temp_8x8_cliff_corner_outside_ne" (8, 0);
+	ADD "temp_8x8_railing_vertical_cap_n" (8, 8); END;
+	
+COMPOSITE "tile_cliff_column_top_back_railing_vertical_cap_n_left_side";
+	COMBINE "temp_cliff_corner_outside_ne_right_half";
+	ADD "temp_8x8_cliff_corner_outside_nw" (0, 0);
+	ADD "temp_8x8_railing_vertical_cap_n" (0, 8); END;
+	
+COMPOSITE "tile_cliff_column_top_front_railing_vertical_cap_s_right_side";
+	COMBINE "temp_cliff_corner_outside_sw_left_half";
+	ADD "temp_8x8_cliff_corner_outside_se" (8, 8);
+	ADD "temp_8x8_railing_vertical_cap_s" (8, 0); END;
+	
+COMPOSITE "tile_cliff_column_top_front_railing_vertical_cap_s_left_side";
+	COMBINE "temp_cliff_corner_outside_se_right_half";
+	ADD "temp_8x8_cliff_corner_outside_sw" (0, 8);
+	ADD "temp_8x8_railing_vertical_cap_s" (0, 0); END;
+	
+
+COMPOSITE "tile_cliff_column_ground_top_back_railing_vertical_cap_n_right_side";
+	COMBINE "temp_cliff_corner_outside_ground_nw_left_half";
+	ADD "temp_8x8_cliff_corner_outside_ground_ne" (8, 0);
+	ADD "temp_8x8_railing_vertical_cap_n" (8, 8); END;
+	
+COMPOSITE "tile_cliff_column_ground_top_back_railing_vertical_cap_n_left_side";
+	COMBINE "temp_cliff_corner_outside_ground_ne_right_half";
+	ADD "temp_8x8_cliff_corner_outside_ground_nw" (0, 0);
+	ADD "temp_8x8_railing_vertical_cap_n" (0, 8); END;
+	
+COMPOSITE "tile_cliff_column_ground_top_front_railing_vertical_cap_s_right_side";
+	COMBINE "temp_cliff_corner_outside_ground_sw_left_half";
+	ADD "temp_8x8_cliff_corner_outside_ground_se" (8, 8);
+	ADD "temp_8x8_railing_vertical_cap_s" (8, 0); END;
+	
+COMPOSITE "tile_cliff_column_ground_top_front_railing_vertical_cap_s_left_side";
+	COMBINE "temp_cliff_corner_outside_ground_se_right_half";
+	ADD "temp_8x8_cliff_corner_outside_ground_sw" (0, 8);
+	ADD "temp_8x8_railing_vertical_cap_s" (0, 0); END;
+
+	
+
+COMPOSITE "tile_cliff_column_top_back_railing_horizontal_long_cap";
+	ADD "temp_8x8_cliff_corner_outside_nw" (0, 0);
+	ADD "temp_8x8_cliff_corner_outside_ne" (8, 0);
+	COMBINE "temp_railing_horizontal_long_cap" (0, 8); END;
+	
+COMPOSITE "tile_cliff_column_top_front_railing_horizontal_long_cap";
+	ADD "temp_8x8_cliff_corner_outside_sw" (0, 8);
+	ADD "temp_8x8_cliff_corner_outside_se" (8, 8);
+	COMBINE "temp_railing_horizontal_long_cap" (0, 0); END;
+	
+COMPOSITE "tile_cliff_column_ground_top_back_horizontal_long_cap";
+	ADD "temp_8x8_cliff_corner_outside_ground_nw" (0, 0);
+	ADD "temp_8x8_cliff_corner_outside_ground_ne" (8, 0);
+	COMBINE "temp_railing_horizontal_long_cap" (0, 8); END;
+	
+COMPOSITE "tile_cliff_column_ground_top_front_horizontal_long_cap";
+	ADD "temp_8x8_cliff_corner_outside_ground_sw" (0, 8);
+	ADD "temp_8x8_cliff_corner_outside_ground_se" (8, 8);
+	COMBINE "temp_railing_horizontal_long_cap" (0, 0); END;
+
+
+COMPOSITE "tile_cliff_face_w_railing_vertical_long_cap_n";
+	COMBINE	"temp_cliff_face_w";
+	COMBINE "temp_railing_vertical_long_cap_n" (8, 0); END;
+
+COMPOSITE "tile_cliff_face_e_railing_vertical_long_cap_n";
+	COMBINE	"temp_cliff_face_e";
+	COMBINE "temp_railing_vertical_long_cap_n" (0, 0); END;
+
+COMPOSITE "tile_cliff_face_w_railing_vertical_long_cap_s";
+	COMBINE	"temp_cliff_face_w";
+	COMBINE "temp_railing_vertical_long_cap_s" (8, 0); END;
+
+COMPOSITE "tile_cliff_face_e_railing_vertical_long_cap_s";
+	COMBINE	"temp_cliff_face_e";
+	COMBINE "temp_railing_vertical_long_cap_s" (0, 0); END;
+
+COMPOSITE "tile_cliff_face_w_railing_vertical_long_cap";
+	COMBINE	"temp_cliff_face_w";
+	COMBINE "temp_railing_vertical_long_cap" (8, 0); END;
+
+COMPOSITE "tile_cliff_face_e_railing_vertical_long_cap";
+	COMBINE	"temp_cliff_face_e";
+	COMBINE "temp_railing_vertical_long_cap" (0, 0); END;
+	
+
+COMPOSITE "tile_cliff_face_n_railing_horizontal_long_cap_w";
+	COMBINE	"temp_cliff_face_n";
+	COMBINE "temp_railing_horizontal_long_cap_w" (0, 8); END;
+	
+COMPOSITE "tile_cliff_face_s_railing_horizontal_long_cap_w";
+	COMBINE	"temp_cliff_face_s";
+	COMBINE "temp_railing_horizontal_long_cap_w" (0, 0); END;
+
+COMPOSITE "tile_cliff_face_n_railing_horizontal_long_cap_e";
+	COMBINE	"temp_cliff_face_n";
+	COMBINE "temp_railing_horizontal_long_cap_e" (0, 8); END;
+	
+COMPOSITE "tile_cliff_face_s_railing_horizontal_long_cap_e";
+	COMBINE	"temp_cliff_face_s";
+	COMBINE "temp_railing_horizontal_long_cap_e" (0, 0); END;
+
+COMPOSITE "tile_cliff_face_n_railing_horizontal_long_cap";
+	COMBINE	"temp_cliff_face_n";
+	COMBINE "temp_railing_horizontal_long_cap" (0, 8); END;
+	
+COMPOSITE "tile_cliff_face_s_railing_horizontal_long_cap";
+	COMBINE	"temp_cliff_face_s";
+	COMBINE "temp_railing_horizontal_long_cap" (0, 0); END;
+
+
+COMPOSITE "tile_cliff_face_e_corner_inside_nw_railing_vertical_long_cap_n";
+	COMBINE "temp_cliff_face_e_corner_inside_nw";
+	COMBINE "temp_railing_vertical_long_cap_n" (0, 0); END;
+	
+COMPOSITE "tile_cliff_face_w_corner_inside_ne_railing_vertical_long_cap_n";
+	COMBINE "temp_cliff_face_w_corner_inside_ne";
+	COMBINE "temp_railing_vertical_long_cap_n" (8, 0); END;
+	
+COMPOSITE "tile_cliff_face_e_corner_inside_nw_railing_vertical_long_cap";
+	COMBINE "temp_cliff_face_e_corner_inside_nw";
+	COMBINE "temp_railing_vertical_long_cap" (0, 0); END;
+	
+COMPOSITE "tile_cliff_face_w_corner_inside_ne_railing_vertical_long_cap";
+	COMBINE "temp_cliff_face_w_corner_inside_ne";
+	COMBINE "temp_railing_vertical_long_cap" (8, 0); END;
+
+COMPOSITE "tile_cliff_column_top_corner_inside_nw";
+	COMBINE "temp_cliff_face_w";
+	COMBINE "temp_cliff_face_e_corner_inside_nw"; END;
+
+COMPOSITE "tile_cliff_column_top_corner_inside_ne";
+	COMBINE "temp_cliff_face_e";
+	COMBINE "temp_cliff_face_w_corner_inside_ne"; END;
+
+COMPOSITE "tile_cliff_column_top_corner_inside_ne_nw";
+	COMBINE "temp_cliff_face_w_corner_inside_ne";
+	COMBINE "temp_cliff_face_e_corner_inside_nw"; END;
+
+COMPOSITE "tile_cliff_column_ground_top_back";
+	COMBINE "temp_cliff_corner_outside_ground_nw_left_half";
+	COMBINE "temp_cliff_corner_outside_ground_ne_right_half"; END;
+
+
+COMPOSITE "tile_cliff_corner_inside_nw_railing_corner_outside_nw";
+	ADD "temp_8x8_cliff_corner_inside_nw" (8, 8);
+	ADD "temp_8x8_railing_corner_outside_nw" (0, 0);
+	ADD "temp_8x8_railing_horizontal" (8, 0);
+	ADD "temp_8x8_railing_vertical" (0, 8); END;
+	
+COMPOSITE "tile_cliff_corner_inside_ne_railing_corner_outside_ne";
+	ADD "temp_8x8_cliff_corner_inside_ne" (0, 8);
+	ADD "temp_8x8_railing_corner_outside_ne" (8, 0);
+	ADD "temp_8x8_railing_horizontal" (0, 0);
+	ADD "temp_8x8_railing_vertical" (8, 8); END;
+
+COMPOSITE "tile_cliff_corner_inside_sw_railing_corner_outside_sw";
+	ADD "temp_8x8_cliff_corner_inside_sw" (8, 0);
+	ADD "temp_8x8_railing_corner_outside_sw" (0, 8);
+	ADD "temp_8x8_railing_horizontal" (8, 8);
+	ADD "temp_8x8_railing_vertical" (0, 0); END;
+	
+COMPOSITE "tile_cliff_corner_inside_se_railing_corner_outside_se";
+	ADD "temp_8x8_cliff_corner_inside_se" (0, 0);
+	ADD "temp_8x8_railing_corner_outside_se" (8, 8);
+	ADD "temp_8x8_railing_horizontal" (0, 8);
+	ADD "temp_8x8_railing_vertical" (8, 0); END;
+
+
+COMPOSITE "tile_cliff_corner_inside_nw_railing_corner_outside_nw_cap_s";
+	ADD "temp_8x8_cliff_corner_inside_nw" (8, 8);
+	ADD "temp_8x8_railing_corner_outside_nw" (0, 0);
+	ADD "temp_8x8_railing_horizontal" (8, 0);
+	ADD "temp_8x8_railing_vertical_cap_s" (0, 8); END;
+	
+COMPOSITE "tile_cliff_corner_inside_ne_railing_corner_outside_ne_cap_s";
+	ADD "temp_8x8_cliff_corner_inside_ne" (0, 8);
+	ADD "temp_8x8_railing_corner_outside_ne" (8, 0);
+	ADD "temp_8x8_railing_horizontal" (0, 0);
+	ADD "temp_8x8_railing_vertical_cap_s" (8, 8); END;
+
+COMPOSITE "tile_cliff_corner_inside_sw_railing_corner_outside_sw_cap_n";
+	ADD "temp_8x8_cliff_corner_inside_sw" (8, 0);
+	ADD "temp_8x8_railing_corner_outside_sw" (0, 8);
+	ADD "temp_8x8_railing_horizontal" (8, 8);
+	ADD "temp_8x8_railing_vertical_cap_n" (0, 0); END;
+	
+COMPOSITE "tile_cliff_corner_inside_se_railing_corner_outside_se_cap_n";
+	ADD "temp_8x8_cliff_corner_inside_se" (0, 0);
+	ADD "temp_8x8_railing_corner_outside_se" (8, 8);
+	ADD "temp_8x8_railing_horizontal" (0, 8);
+	ADD "temp_8x8_railing_vertical_cap_n" (8, 0); END;
+
+
+COMPOSITE "tile_cliff_corner_inside_nw_railing_corner_outside_nw_cap_e";
+	ADD "temp_8x8_cliff_corner_inside_nw" (8, 8);
+	ADD "temp_8x8_railing_corner_outside_nw" (0, 0);
+	ADD "temp_8x8_railing_horizontal_cap_e" (8, 0);
+	ADD "temp_8x8_railing_vertical" (0, 8); END;
+	
+COMPOSITE "tile_cliff_corner_inside_ne_railing_corner_outside_ne_cap_w";
+	ADD "temp_8x8_cliff_corner_inside_ne" (0, 8);
+	ADD "temp_8x8_railing_corner_outside_ne" (8, 0);
+	ADD "temp_8x8_railing_horizontal_cap_w" (0, 0);
+	ADD "temp_8x8_railing_vertical" (8, 8); END;
+
+COMPOSITE "tile_cliff_corner_inside_sw_railing_corner_outside_sw_cap_e";
+	ADD "temp_8x8_cliff_corner_inside_sw" (8, 0);
+	ADD "temp_8x8_railing_corner_outside_sw" (0, 8);
+	ADD "temp_8x8_railing_horizontal_cap_e" (8, 8);
+	ADD "temp_8x8_railing_vertical" (0, 0); END;
+	
+COMPOSITE "tile_cliff_corner_inside_se_railing_corner_outside_se_cap_w";
+	ADD "temp_8x8_cliff_corner_inside_se" (0, 0);
+	ADD "temp_8x8_railing_corner_outside_se" (8, 8);
+	ADD "temp_8x8_railing_horizontal_cap_w" (0, 8);
+	ADD "temp_8x8_railing_vertical" (8, 0); END;
+
+
+COMPOSITE "tile_cliff_corner_inside_nw_railing_corner_outside_nw_cap";
+	ADD "temp_8x8_cliff_corner_inside_nw" (8, 8);
+	ADD "temp_8x8_railing_corner_outside_nw" (0, 0);
+	ADD "temp_8x8_railing_horizontal_cap_e" (8, 0);
+	ADD "temp_8x8_railing_vertical_cap_s" (0, 8); END;
+	
+COMPOSITE "tile_cliff_corner_inside_ne_railing_corner_outside_ne_cap";
+	ADD "temp_8x8_cliff_corner_inside_ne" (0, 8);
+	ADD "temp_8x8_railing_corner_outside_ne" (8, 0);
+	ADD "temp_8x8_railing_horizontal_cap_w" (0, 0);
+	ADD "temp_8x8_railing_vertical_cap_s" (8, 8); END;
+
+COMPOSITE "tile_cliff_corner_inside_sw_railing_corner_outside_sw_cap";
+	ADD "temp_8x8_cliff_corner_inside_sw" (8, 0);
+	ADD "temp_8x8_railing_corner_outside_sw" (0, 8);
+	ADD "temp_8x8_railing_horizontal_cap_e" (8, 8);
+	ADD "temp_8x8_railing_vertical_cap_n" (0, 0); END;
+	
+COMPOSITE "tile_cliff_corner_inside_se_railing_corner_outside_se_cap";
+	ADD "temp_8x8_cliff_corner_inside_se" (0, 0);
+	ADD "temp_8x8_railing_corner_outside_se" (8, 8);
+	ADD "temp_8x8_railing_horizontal_cap_w" (0, 8);
+	ADD "temp_8x8_railing_vertical_cap_n" (8, 0); END;
+	

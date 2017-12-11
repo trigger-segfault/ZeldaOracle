@@ -9,7 +9,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripts.Commands;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
-	public partial class ISpritesSR : ScriptReader {
+	public partial class ISpriteSR : ScriptReader {
 
 		/// <summary>Adds CompositeSprite commands to the script reader.</summary>
 		public void AddBasicCommands() {
@@ -23,17 +23,19 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				if (parameters.HasPrefix()) {
 					ThrowCommandParseError("Invalid use of prefix");
 				}
-				string spriteName = parameters.GetString(0);
-				AddResource<ISprite>(spriteName, new EmptySprite());
+				spriteName = parameters.GetString(0);
+				sprite = new EmptySprite();
+				AddResource<ISprite>(spriteName, sprite);
+				Mode |= Modes.EmptySprite;
 			});
 			//=====================================================================================
 			AddCommand("EMPTY", (int) Modes.SpriteSet,
 				"",
 			delegate (CommandParam parameters) {
 				if (parameters.HasPrefix("dynamic")) {
-					for (int x = 0; x < SpriteSet.Width; x++) {
-						for (int y = 0; y < SpriteSet.Height; y++) {
-							SpriteSet.SetSprite(x, y, new EmptySprite());
+					for (int x = 0; x < EditingSpriteSet.Width; x++) {
+						for (int y = 0; y < EditingSpriteSet.Height; y++) {
+							EditingSpriteSet.SetSprite(x, y, new EmptySprite());
 						}
 					}
 				}
@@ -61,8 +63,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				if (continueSprite) {
 					ContinueSprite<BasicSprite>(spriteName);
 					SetResource<ISprite>(spriteName, sprite);
-					sprite = null;
-					spriteName = null;
 				}
 				else {
 					if (paletteArgs.Dictionary != null) {
@@ -82,8 +82,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					ThrowCommandParseError("SOURCE must be specified as a sprite sheet when building a BASIC sprite!");
 				}
 				if (parameters.HasPrefix("dynamic")) {
-					for (int x = 0; x < SpriteSet.Width; x++) {
-						for (int y = 0; y < SpriteSet.Height; y++) {
+					for (int x = 0; x < EditingSpriteSet.Width; x++) {
+						for (int y = 0; y < EditingSpriteSet.Height; y++) {
 							ISprite sprite = new BasicSprite(
 								SpriteSheet,
 								parameters.GetPoint(0) + new Point2I(x, y),
@@ -93,7 +93,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 								paletteArgs.SourceRect = SpriteSheet.GetSourceRect(parameters.GetPoint(0) + new Point2I(x, y));
 								sprite = Resources.PalettedSpriteDatabase.AddSprite(paletteArgs);
 							}
-							SpriteSet.SetSprite(x, y, sprite);
+							EditingSpriteSet.SetSprite(x, y, sprite);
 						}
 					}
 				}
@@ -101,6 +101,52 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					ThrowCommandParseError("BASIC (int gridLocationX, int gridLocationY), " +
 						"(int drawOffsetX, int drawOffsetY) = (0, 0) must only be called with DYNAMIC prefix!");
 				}
+			});
+			//=====================================================================================
+			// OFFSET SETUP
+			//=====================================================================================
+			AddCommand("OFFSET", (int) Modes.Root,
+				"string name, string spriteName, (int drawOffsetX, int drawOffsetY)",
+				"string name, (int indexX, int indexY), (int drawOffsetX, int drawOffsetY)",
+				"string name, string sourceName, (int indexX, int indexY), (int drawOffsetX, int drawOffsetY)",
+			delegate (CommandParam parameters) {
+				bool continueSprite = parameters.HasPrefix("continue");
+				if (!continueSprite && parameters.HasPrefix())
+					ThrowCommandParseError("Invalid use of prefix");
+				ISprite newSprite;
+				if (parameters.ChildCount == 3 && parameters.GetParam(1).Type == CommandParamType.String) {
+					ISprite resourceSprite = GetResource<ISprite>(parameters.GetString(1));
+					newSprite = new OffsetSprite(resourceSprite, parameters.GetPoint(2));
+				}
+				else {
+					if (SourceMode != SourceModes.None) {
+						ThrowCommandParseError("Cannot build an offset sprite from source when no source is set!");
+					}
+					ISpriteSheet newSource = source;
+					Point2I index;
+					Point2I drawOffset;
+					if (parameters.GetParam(1).Type == CommandParamType.String) {
+						source = GetResource<ISpriteSheet>(parameters.GetString(1));
+						index = parameters.GetPoint(2);
+						drawOffset = parameters.GetPoint(3);
+					}
+					else {
+						index = parameters.GetPoint(1);
+						drawOffset = parameters.GetPoint(2);
+					}
+					
+					newSprite = new OffsetSprite(newSource.GetSprite(index), drawOffset);
+				}
+				if (continueSprite) {
+					ContinueSprite<OffsetSprite>(spriteName);
+					sprite = newSprite;
+					SetResource<ISprite>(spriteName, sprite);
+				}
+				else {
+					sprite = newSprite;
+					AddResource<ISprite>(spriteName, sprite);
+				}
+				Mode |= Modes.OffsetSprite;
 			});
 			//=====================================================================================
 			// BUILDING

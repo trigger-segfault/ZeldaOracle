@@ -1,0 +1,4 @@
+
+
+LOAD "tile_palette_dictionary.conscript" false;
+LOAD "entity_palette_dictionary.conscript" false;

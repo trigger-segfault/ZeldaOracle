@@ -268,6 +268,7 @@ namespace ZeldaOracle.Game.Main {
 			g.SetRenderTarget(GameData.RenderTargetGame);
 			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 			g.Clear(Color.Black);
+			GameData.PaletteShader.ApplyPalettes();
 			gameStateStack.Draw(g);
 			g.End();
 

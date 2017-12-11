@@ -58,6 +58,10 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		public override void OnBegin() {
 			base.OnBegin();
 
+			if (IsChangingPalette) {
+				GameData.PaletteShader.LerpTilePalette = NewRoomControl.Zone.Palette;
+			}
+
 			isWaitingForView	= true;
 			timer				= 0;
 			distance			= 0;
@@ -115,6 +119,9 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 				distance += TRANSITION_SPEED;
 				Player.Position += (Vector2F) Directions.ToPoint(direction) * playerSpeed;
 
+				if (IsChangingPalette)
+					GameData.PaletteShader.TileRatio = (float) distance / maxDistance;
+
 				// Check if we are done panning.
 				if (distance >= maxDistance) {
 					DestroyOldRoom();
@@ -162,5 +169,13 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			GameControl.HUD.Draw(g, false);
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Internal Properties
+		//-----------------------------------------------------------------------------
+
+		private bool IsChangingPalette {
+			get { return OldRoomControl.Zone.PaletteID != NewRoomControl.Zone.PaletteID; }
+		}
 	}
 }

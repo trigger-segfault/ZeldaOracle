@@ -11,7 +11,7 @@ using ZeldaOracle.Game;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
-	public class ImagesSR : ScriptReader {
+	public class ImageSR : ScriptReader {
 
 		private Image	image;
 		private Image	imageTail;
@@ -23,7 +23,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		// Override
 		//-----------------------------------------------------------------------------
 
-		public ImagesSR(TemporaryResources resources = null) {
+		public ImageSR(TemporaryResources resources = null) {
 
 			this.resources	= resources;
 			
@@ -69,16 +69,21 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		// Begins reading the script.
+		/// <summary>Begins reading the script.</summary>
 		protected override void BeginReading() {
 			imageName	= "";
 			image		= null;
 			imageTail	= null;
 		}
 
-		// Ends reading the script.
+		/// <summary>Ends reading the script.</summary>
 		protected override void EndReading() {
 
+		}
+
+		/// <summary>Creates a new script reader of the derived type.</summary>
+		protected override ScriptReader CreateNew() {
+			return new ImageSR();
 		}
 	}
 }

@@ -12,10 +12,11 @@ namespace ZeldaOracle.Common.Scripts {
 	/// is meant to be implemented to be able to
 	/// interpret text files written in a certain syntax.
 	/// <summary>
-	public class ScriptReader {
+	public abstract class ScriptReader {
 		
 		private StreamReader	streamReader;
 		private string			fileName;
+		private string          directory;
 		private List<string>	lines;
 		private string			line;			// The string of the current line.
 		private int				lineIndex;
@@ -47,49 +48,62 @@ namespace ZeldaOracle.Common.Scripts {
 			commandPrefixes	= new Dictionary<string, CommandPrefix>();
 			lines			= new List<string>();
 			tempResources   = new TemporaryResources();
+
+			//=====================================================================================
+			// SUB SCRIPT READERS 
+			//=====================================================================================
+			AddCommand("LOAD",
+				"string relativeScriptPath, bool useTempResources",
+				"string relativeScriptPath",
+			delegate (CommandParam parameters) {
+				Resources.LoadScript(
+					Path.Combine(directory, parameters.GetString(0)),
+					CreateNew(parameters.GetBool(1)));
+			});
+			//=====================================================================================
 		}
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Command Creation (No Modes)
 		//-----------------------------------------------------------------------------
-		
-		// Add a command with no parameter format.
+
+		/// <summary>Add a command with no parameter format.</summary>
 		protected void AddCommand(string name, Action<CommandParam> action) {
 			AddCommand(name, new string[] {}, action);
 		}
 
-		// Add a command with one parameter format.
+		/// <summary>Add a command with one parameter format.</summary>
 		protected void AddCommand(string name, string params1, Action<CommandParam> action) {
 			AddCommand(name, new string[] { params1 }, action);
 		}
-		
-		// Add a command that handles 2 overloads.
+
+		/// <summary>Add a command that handles 2 overloads.</summary>
 		protected void AddCommand(string name, string params1, string params2, Action<CommandParam> action) {
 			AddCommand(name, new string[] { params1, params2 }, action);
 		}
-		
-		// Add a command that handles 3 overloads.
+
+		/// <summary>Add a command that handles 3 overloads.</summary>
 		protected void AddCommand(string name, string params1, string params2, string params3, Action<CommandParam> action) {
 			AddCommand(name, new string[] { params1, params2, params3 }, action);
 		}
-		
-		// Add a command that handles 4 overloads.
+
+		/// <summary>Add a command that handles 4 overloads.</summary>
 		protected void AddCommand(string name, string params1, string params2, string params3, string params4, Action<CommandParam> action) {
 			AddCommand(name, new string[] { params1, params2, params3, params4 }, action);
 		}
-		
-		// Add a command that handles 5 overloads.
+
+		/// <summary>Add a command that handles 5 overloads.</summary>
 		protected void AddCommand(string name, string params1, string params2, string params3, string params4, string params5, Action<CommandParam> action) {
 			AddCommand(name, new string[] { params1, params2, params3, params4, params5 }, action);
 		}
-		
-		// Add a command that handles 6 overloads.
+
+		/// <summary>Add a command that handles 6 overloads.</summary>
 		protected void AddCommand(string name, string params1, string params2, string params3, string params4, string params5, string params6, Action<CommandParam> action) {
 			AddCommand(name, new string[] { params1, params2, params3, params4, params5, params6 }, action);
 		}
-		
-		// Add a command that handles the given list of overloads.
+
+		/// <summary>Add a command that handles the given list of overloads.</summary>
 		protected void AddCommand(string name, string[] parameterOverloads, Action<CommandParam> action) {
 			AddCommand(new ScriptCommand(name, null, parameterOverloads, action));
 		}
@@ -99,42 +113,42 @@ namespace ZeldaOracle.Common.Scripts {
 		// Command Creation (Single Mode)
 		//-----------------------------------------------------------------------------
 
-		// Add a command with no parameter format.
+		/// <summary>Add a command with no parameter format.</summary>
 		protected void AddCommand(string name, int mode, Action<CommandParam> action) {
 			AddCommand(name, mode, new string[] { }, action);
 		}
 
-		// Add a command with one parameter format.
+		/// <summary>Add a command with one parameter format.</summary>
 		protected void AddCommand(string name, int mode, string params1, Action<CommandParam> action) {
 			AddCommand(name, mode, new string[] { params1 }, action);
 		}
 
-		// Add a command that handles 2 overloads.
+		/// <summary>Add a command that handles 2 overloads.</summary>
 		protected void AddCommand(string name, int mode, string params1, string params2, Action<CommandParam> action) {
 			AddCommand(name, mode, new string[] { params1, params2 }, action);
 		}
 
-		// Add a command that handles 3 overloads.
+		/// <summary>Add a command that handles 3 overloads.</summary>
 		protected void AddCommand(string name, int mode, string params1, string params2, string params3, Action<CommandParam> action) {
 			AddCommand(name, mode, new string[] { params1, params2, params3 }, action);
 		}
 
-		// Add a command that handles 4 overloads.
+		/// <summary>Add a command that handles 4 overloads.</summary>
 		protected void AddCommand(string name, int mode, string params1, string params2, string params3, string params4, Action<CommandParam> action) {
 			AddCommand(name, mode, new string[] { params1, params2, params3, params4 }, action);
 		}
 
-		// Add a command that handles 5 overloads.
+		/// <summary>Add a command that handles 5 overloads.</summary>
 		protected void AddCommand(string name, int mode, string params1, string params2, string params3, string params4, string params5, Action<CommandParam> action) {
 			AddCommand(name, mode, new string[] { params1, params2, params3, params4, params5 }, action);
 		}
 
-		// Add a command that handles 6 overloads.
+		/// <summary>Add a command that handles 6 overloads.</summary>
 		protected void AddCommand(string name, int mode, string params1, string params2, string params3, string params4, string params5, string params6, Action<CommandParam> action) {
 			AddCommand(name, mode, new string[] { params1, params2, params3, params4, params5, params6 }, action);
 		}
 
-		// Add a command that handles the given list of overloads.
+		/// <summary>Add a command that handles the given list of overloads.</summary>
 		protected void AddCommand(string name, int mode, string[] parameterOverloads, Action<CommandParam> action) {
 			AddCommand(new ScriptCommand(name, new int[] { mode }, parameterOverloads, action));
 		}
@@ -144,42 +158,42 @@ namespace ZeldaOracle.Common.Scripts {
 		// Command Creation (Multiple Modes)
 		//-----------------------------------------------------------------------------
 
-		// Add a command with no parameter format.
+		/// <summary>Add a command with no parameter format.</summary>
 		protected void AddCommand(string name, int[] modes, Action<CommandParam> action) {
 			AddCommand(name, modes, new string[] { }, action);
 		}
 
-		// Add a command with one parameter format.
+		/// <summary>Add a command with one parameter format.</summary>
 		protected void AddCommand(string name, int[] modes, string params1, Action<CommandParam> action) {
 			AddCommand(name, modes, new string[] { params1 }, action);
 		}
 
-		// Add a command that handles 2 overloads.
+		/// <summary>Add a command that handles 2 overloads.</summary>
 		protected void AddCommand(string name, int[] modes, string params1, string params2, Action<CommandParam> action) {
 			AddCommand(name, modes, new string[] { params1, params2 }, action);
 		}
 
-		// Add a command that handles 3 overloads.
+		/// <summary>Add a command that handles 3 overloads.</summary>
 		protected void AddCommand(string name, int[] modes, string params1, string params2, string params3, Action<CommandParam> action) {
 			AddCommand(name, modes, new string[] { params1, params2, params3 }, action);
 		}
 
-		// Add a command that handles 4 overloads.
+		/// <summary>Add a command that handles 4 overloads.</summary>
 		protected void AddCommand(string name, int[] modes, string params1, string params2, string params3, string params4, Action<CommandParam> action) {
 			AddCommand(name, modes, new string[] { params1, params2, params3, params4 }, action);
 		}
 
-		// Add a command that handles 5 overloads.
+		/// <summary>Add a command that handles 5 overloads.</summary>
 		protected void AddCommand(string name, int[] modes, string params1, string params2, string params3, string params4, string params5, Action<CommandParam> action) {
 			AddCommand(name, modes, new string[] { params1, params2, params3, params4, params5 }, action);
 		}
 
-		// Add a command that handles 6 overloads.
+		/// <summary>Add a command that handles 6 overloads.</summary>
 		protected void AddCommand(string name, int[] modes, string params1, string params2, string params3, string params4, string params5, string params6, Action<CommandParam> action) {
 			AddCommand(name, modes, new string[] { params1, params2, params3, params4, params5, params6 }, action);
 		}
 
-		// Add a command that handles the given list of overloads.
+		/// <summary>Add a command that handles the given list of overloads.</summary>
 		protected void AddCommand(string name, int[] modes, string[] parameterOverloads, Action<CommandParam> action) {
 			AddCommand(new ScriptCommand(name, modes, parameterOverloads, action));
 		}
@@ -189,7 +203,7 @@ namespace ZeldaOracle.Common.Scripts {
 		// Command Creation (Final)
 		//-----------------------------------------------------------------------------
 
-		// Add a script command.
+		/// <summary>Add a script command.</summary>
 		protected void AddCommand(ScriptCommand command) {
 			commands.Add(command);
 		}
@@ -199,6 +213,7 @@ namespace ZeldaOracle.Common.Scripts {
 		// Command Prefix Creation
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Add a script command prefix.</summary>
 		protected void AddCommandPrefix(string prefix, params int[] modes) {
 			if (string.IsNullOrWhiteSpace(prefix))
 				throw new ArgumentNullException("Command prefix cannot be null or whitespace in script reader!");
@@ -207,10 +222,13 @@ namespace ZeldaOracle.Common.Scripts {
 			commandPrefixes.Add(prefix, new CommandPrefix(prefix, modes));
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Resources
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets the resource with the specified name.
+		/// <para>Does error handling and temporary resources with "temp_" prefix.</para></summary>
 		protected T GetResource<T>(string name) {
 			if (name.StartsWith("temp_")) {
 				if (!tempResources.ContainsResource<T>(name))
@@ -224,6 +242,19 @@ namespace ZeldaOracle.Common.Scripts {
 			}
 		}
 
+		/// <summary>Returns true if a resource with the specified name exists.
+		/// <para>Does temporary resources with "temp_" prefix.</para></summary>
+		protected bool ContainsResource<T>(string name) {
+			if (name.StartsWith("temp_")) {
+				return tempResources.ContainsResource<T>(name);
+			}
+			else {
+				return Resources.ContainsResource<T>(name);
+			}
+		}
+
+		/// <summary>Sets the resource with the specified name.
+		/// <para>Does error handling and temporary resources with "temp_" prefix.</para></summary>
 		protected T SetResource<T>(string name, T resource) {
 			if (name.StartsWith("temp_")) {
 				tempResources.SetResource<T>(name, resource);
@@ -234,6 +265,8 @@ namespace ZeldaOracle.Common.Scripts {
 			return resource;
 		}
 
+		/// <summary>Adds the resource with the specified name.
+		/// <para>Does error handling and temporary resources with "temp_" prefix.</para></summary>
 		protected T AddResource<T>(string name, T resource) {
 			if (name.StartsWith("temp_")) {
 				if (tempResources.ContainsResource<T>(name))
@@ -253,13 +286,13 @@ namespace ZeldaOracle.Common.Scripts {
 		// Virtual methods
 		//-----------------------------------------------------------------------------
 
-		// Begins reading the script.
+		/// <summary>Begins reading the script.</summary>
 		protected virtual void BeginReading() {}
 
-		// Ends reading the script.
+		/// <summary>Ends reading the script.</summary>
 		protected virtual void EndReading() {}
-		
-		// Reads a line in the script as a command.
+
+		/// <summary>Reads a line in the script as a command.</summary>
 		protected virtual bool PerformCommand(string commandName, CommandParam parameters, string commandPrefix) {
 			List<string> matchingFormats = new List<string>();
 			CommandParam newParams = null;
@@ -303,22 +336,37 @@ namespace ZeldaOracle.Common.Scripts {
 			return false;
 		}
 
-		
+		//-----------------------------------------------------------------------------
+		// Abstract methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Creates a new script reader of the derived type and sets up temporary resources.</summary>
+		private ScriptReader CreateNew(bool useTempResources) {
+			ScriptReader sr = CreateNew();
+			if (useTempResources)
+				sr.tempResources = this.tempResources;
+			return sr;
+		}
+
+		/// <summary>Creates a new script reader of the derived type.</summary>
+		protected abstract ScriptReader CreateNew();
+
+
 		//-----------------------------------------------------------------------------
 		// Errors
 		//-----------------------------------------------------------------------------
 
-		// Throw a parse error exception, optionally showing a caret.
+		/// <summary>Throw a parse error exception, optionally showing a caret.</summary>
 		protected void ThrowParseError(string message, bool showCaret = true) {
 			throw new ScriptReaderException(message, fileName, lines[lineIndex], lineIndex + 1, charIndex + 1, showCaret);
 		}
 
-		// Throw a parse error exception for a specific argument.
+		/// <summary>Throw a parse error exception for a specific argument.</summary>
 		protected void ThrowParseError(string message, CommandParam param) {
 			throw new ScriptReaderException(message, fileName, lines[param.LineIndex], param.LineIndex + 1, param.CharIndex + 1, true);
 		}
 
-		// Throw a parse error exception pointing to the command name.
+		/// <summary>Throw a parse error exception pointing to the command name.</summary>
 		protected void ThrowCommandParseError(string message) {
 			throw new ScriptReaderException(message, fileName, lines[parameterRoot.LineIndex], parameterRoot.LineIndex + 1, parameterRoot.CharIndex + 1, true);
 		}
@@ -328,7 +376,7 @@ namespace ZeldaOracle.Common.Scripts {
 		// Parsing methods
 		//-----------------------------------------------------------------------------
 
-		// Return true if the given character is allowed for keywords
+		/// <summary>Return true if the given character is allowed for keywords.</summary>
 		private bool IsValidKeywordCharacter(char c) {
 			string validKeywordSymbols = "$_.-+";
 
@@ -339,14 +387,14 @@ namespace ZeldaOracle.Common.Scripts {
 			return false;
 		}
 
-		// Attempt to add a completed word, if it is not empty.
+		/// <summary>Attempt to add a completed word, if it is not empty.</summary>
 		protected void CompleteWord(bool completeIfEmpty = false) {
 			if (word.Length > 0 || completeIfEmpty)
 				AddParam();
 			word = "";
 		}
-		
-		// Complete the current statement being parsed, looking for a command.
+
+		/// <summary>Complete the current statement being parsed, looking for a command.</summary>
 		protected void CompleteStatement() {
 			if (parameterRoot.Children != null) {
 				// Take the command name from the parameters.
@@ -368,7 +416,7 @@ namespace ZeldaOracle.Common.Scripts {
 			commandPrefix   = null;
 		}
 
-		// Add a new command parameter child to the current parent parameter.
+		/// <summary>Add a new command parameter child to the current parent parameter.</summary>
 		private CommandParam AddParam() {
 			// If this is the beginning of the command, check for prefixes
 			if (parameterParent == parameterRoot && parameter == null && commandPrefix == null) {
@@ -392,7 +440,7 @@ namespace ZeldaOracle.Common.Scripts {
 			return newParam;
 		}
 
-		// Parse a single line in the script.
+		/// <summary>Parse a single line in the script.</summary>
 		protected void ParseLine(string line) {
 			bool quotes	= false;
 			word		= "";
@@ -475,7 +523,7 @@ namespace ZeldaOracle.Common.Scripts {
 			CompleteWord();
 		}
 
-		// Read the next line from the file.
+		/// <summary>Read the next line from the file.</summary>
 		protected string NextLine() {
 			lineIndex++;
 			line = streamReader.ReadLine();
@@ -483,9 +531,10 @@ namespace ZeldaOracle.Common.Scripts {
 			return line;
 		}
 
-		// Parse and interpret the given text stream as a script, line by line.
+		/// <summary>Parse and interpret the given text stream as a script, line by line.</summary>
 		public void ReadScript(StreamReader reader, string path) {
 			this.fileName = path;
+			this.directory = Path.GetDirectoryName(path);
 			this.streamReader = reader;
 
 			BeginReading();

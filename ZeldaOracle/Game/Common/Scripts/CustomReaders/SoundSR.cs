@@ -9,21 +9,14 @@ using ZeldaOracle.Game;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
-	public class SoundsSR : ScriptReader {
-
-		private TemporaryResources resources;
-		private bool useTemporary;
-
-
+	public class SoundSR : ScriptReader {
+		
 		//-----------------------------------------------------------------------------
-		// Override
+		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public SoundsSR(TemporaryResources resources = null) {
-
-			this.resources		= resources;
-			this.useTemporary	= resources != null;
-
+		public SoundSR() {
+			
 			// Sound <name> <path> <volume=1> <pitch=0> <pan=0> <muted=false>
 			AddCommand("Sound",
 				"string name, string path, float volume = 1, float pitch = 0, float pan = 0, bool muted = false",
@@ -47,22 +40,18 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		// Begins reading the script.
+		/// <summary>Begins reading the script.</summary>
 		protected override void BeginReading() {
 		}
 
-		// Ends reading the script.
+		/// <summary>Ends reading the script.</summary>
 		protected override void EndReading() {
 		}
-
-
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-
-		public bool UseTemporaryResources {
-			get { return useTemporary; }
-			set { useTemporary = value; }
+		
+		/// <summary>Creates a new script reader of the derived type.</summary>
+		protected override ScriptReader CreateNew() {
+			return new SoundSR();
 		}
+		
 	}
 }
