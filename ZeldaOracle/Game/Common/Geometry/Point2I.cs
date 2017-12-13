@@ -246,72 +246,24 @@ namespace ZeldaOracle.Common.Geometry {
 			return (p1.X == p2.X && p1.Y == p2.Y);
 		}
 
-		public static bool operator ==(int i1, Point2I p2) {
-			return (i1 == p2.X && i1 == p2.Y);
-		}
-
-		public static bool operator ==(Point2I p1, int i2) {
-			return (p1.X == i2 && p1.Y == i2);
-		}
-
 		public static bool operator !=(Point2I p1, Point2I p2) {
 			return (p1.X != p2.X || p1.Y != p2.Y);
-		}
-
-		public static bool operator !=(int i1, Point2I p2) {
-			return (i1 != p2.X || i1 != p2.Y);
-		}
-
-		public static bool operator !=(Point2I p1, int i2) {
-			return (p1.X != i2 || p1.Y != i2);
 		}
 
 		public static bool operator <(Point2I p1, Point2I p2) {
 			return (p1.X < p2.X && p1.Y < p2.Y);
 		}
 
-		public static bool operator <(int i1, Point2I p2) {
-			return (i1 < p2.X && i1 < p2.Y);
-		}
-
-		public static bool operator <(Point2I p1, int i2) {
-			return (p1.X < i2 && p1.Y < i2);
-		}
-
 		public static bool operator >(Point2I p1, Point2I p2) {
 			return (p1.X > p2.X && p1.Y > p2.Y);
-		}
-
-		public static bool operator >(int i1, Point2I p2) {
-			return (i1 > p2.X && i1 > p2.Y);
-		}
-
-		public static bool operator >(Point2I p1, int i2) {
-			return (p1.X > i2 && p1.Y > i2);
 		}
 
 		public static bool operator <=(Point2I p1, Point2I p2) {
 			return (p1.X <= p2.X && p1.Y <= p2.Y);
 		}
 
-		public static bool operator <=(int i1, Point2I p2) {
-			return (i1 <= p2.X && i1 <= p2.Y);
-		}
-
-		public static bool operator <=(Point2I p1, int i2) {
-			return (p1.X <= i2 && p1.Y <= i2);
-		}
-
 		public static bool operator >=(Point2I p1, Point2I p2) {
 			return (p1.X >= p2.X && p1.Y >= p2.Y);
-		}
-
-		public static bool operator >=(int i1, Point2I p2) {
-			return (i1 >= p2.X && i1 >= p2.Y);
-		}
-
-		public static bool operator >=(Point2I p1, int i2) {
-			return (p1.X >= i2 && p1.Y >= i2);
 		}
 
 

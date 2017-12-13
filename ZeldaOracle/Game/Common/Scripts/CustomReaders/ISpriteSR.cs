@@ -33,10 +33,12 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			BasicSprite		= 1 << 3,
 			OffsetSprite	= 1 << 4,
 			StyleSprite		= 1 << 5,
-			CompositeSprite	= 1 << 6,
-			Animation		= 1 << 7,
+			ColorSprite		= 1 << 6,
+			CompositeSprite	= 1 << 7,
+			Animation		= 1 << 8,
 			SpriteMask		= EmptySprite | BasicSprite | OffsetSprite |
-							StyleSprite | CompositeSprite | Animation
+							  StyleSprite | ColorSprite | CompositeSprite |
+							  Animation
 		}
 
 		//-----------------------------------------------------------------------------
@@ -50,8 +52,10 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		
 		private SpriteSet spriteSet;
 		
-		private ISpriteSheet source;
+		private ISpriteSource source;
 		private ISprite sprite;
+
+		private bool singular;
 
 		//-----------------------------------------------------------------------------
 		// Override
@@ -61,7 +65,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			
 			this.source         = null;
 			this.sprite         = null;
-			this.paletteArgs.ColorMapping = new Dictionary<Color, ColorGroupSubtypePair>();
+			this.paletteArgs.ColorMapping = new Dictionary<Color, Dictionary<int, ColorGroupSubtypePair>>();
+			this.paletteArgs.IndexedPossibleColorGroups = new int[0];
+			this.paletteArgs.PossibleColorGroups = new string[0];
 			this.paletteArgs.IgnoreColors = new HashSet<Color>();
 			this.animationBuilder = new AnimationBuilder();
 			this.animationBuilder.PaletteArgs = paletteArgs;
@@ -73,6 +79,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommandPrefix("CONTINUE", (int) Modes.Root);
 			// Used to initialize a grid in a spriteset when starting a sprite.
 			AddCommandPrefix("DYNAMIC", (int) Modes.SpriteSet);
+			// Used to initialize a singlular in a spriteset when starting a sprite.
+			AddCommandPrefix("SINGLE", (int) Modes.SpriteSet);
 			//=====================================================================================
 			// SOURCE
 			//=====================================================================================
@@ -86,11 +94,10 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					source = null;
 					return;
 				}
-				if (!Resources.ContainsResource<ISpriteSheet>(name)) {
+				if (!Resources.ContainsResource<ISpriteSource>(name)) {
 					ThrowCommandParseError("No sprite sheet with the name '" + name + "' exists in resources!");
 				}
-				source = Resources.GetResource<ISpriteSheet>(name);
-				animationBuilder.Source = source;
+				source = Resources.GetResource<ISpriteSource>(name);
 			});
 			//=====================================================================================
 			// SPRITE SHEET
@@ -125,9 +132,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						parameters.GetPoint(i + 0),
 						parameters.GetPoint(i + 2),
 						parameters.GetPoint(i + 1));
-				AddResource<ISpriteSheet>(sheetName, sheet);
+				AddResource<ISpriteSource>(sheetName, sheet);
 				source = sheet;
-				animationBuilder.Source = source;
 			});
 			//=====================================================================================
 			// SPRITE SET
@@ -143,7 +149,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				if (continueSprite) {
 					if (parameters.ChildCount == 2)
 						ThrowCommandParseError("Invalid use of prefix");
-					spriteSet = GetResource<ISpriteSheet>(spriteName) as SpriteSet;
+					spriteSet = GetResource<ISpriteSource>(spriteName) as SpriteSet;
 					if (spriteSet == null) {
 						spriteName = null;
 						ThrowCommandParseError("SpriteSet with name '" + spriteName + "' does not exist in resources!");
@@ -153,50 +159,61 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					if (parameters.ChildCount == 1)
 						ThrowCommandParseError("This command requires the CONTINUE prefix!");
 					spriteSet = new SpriteSet(parameters.GetPoint(1));
-					AddResource<ISpriteSheet>(spriteName, spriteSet);
+					AddResource<ISpriteSource>(spriteName, spriteSet);
 				}
 				Mode |= Modes.SpriteSet;
 			});
 			//=====================================================================================
 			AddCommand("INSERT", (int) Modes.SpriteSet,
-				"(int insertX, int insertY), string name",
+				"(int insertX, int insertY), string spriteName",
+				// Int needs to go before string as int/float defaults to string.
 				"(int insertX, int insertY), (int indexX, int indexY)",
-				"(int insertX, int insertY), string sourceName, (int indexX, int indexY)",
+				"(int insertX, int insertY), (string spriteName, string definition)",
+				"(int insertX, int insertY), ((int indexX, int indexY), string definition)",
+				"(int insertX, int insertY), (string sourceName, (int indexX, int indexY))",
+				"(int insertX, int insertY), (string sourceName, (int indexX, int indexY), string definition)",
 			delegate (CommandParam parameters) {
-				bool continueSprite = parameters.HasPrefix("continue");
 				if (parameters.HasPrefix()) {
 					ThrowCommandParseError("Invalid use of prefix");
 				}
-				if (parameters.ChildCount == 1 && parameters.GetParam(1).Type == CommandParamType.String) {
-					ISprite spriteResource = GetResource<ISprite>(parameters.GetString(1));
-					spriteSet.SetSprite(parameters.GetPoint(0), spriteResource);
+				ISprite insertSprite = GetSpriteFromParams(parameters, 1);
+				EditingSpriteSet.SetSprite(parameters.GetPoint(0), insertSprite);
+			});
+			//=====================================================================================
+			AddCommand("APPEND", (int) Modes.SpriteSet,
+				"(int insertX, int insertY), string spriteName, (int drawOffsetX, int drawOffsettY) = (0, 0)",
+				// Int needs to go before string as int/float defaults to string.
+				"(int insertX, int insertY), (int indexX, int indexY), (int drawOffsetX, int drawOffsettY) = (0, 0)",
+				"(int insertX, int insertY), (string spriteName, string definition), (int drawOffsetX, int drawOffsettY) = (0, 0)",
+				"(int insertX, int insertY), ((int indexX, int indexY), string definition), (int drawOffsetX, int drawOffsettY) = (0, 0)",
+				"(int insertX, int insertY), (string sourceName, (int indexX, int indexY)), (int drawOffsetX, int drawOffsettY) = (0, 0)",
+				"(int insertX, int insertY), (string sourceName, (int indexX, int indexY), string definition), (int drawOffsetX, int drawOffsettY) = (0, 0)",
+			delegate (CommandParam parameters) {
+				if (parameters.HasPrefix()) {
+					ThrowCommandParseError("Invalid use of prefix");
 				}
-				else {
-					ISpriteSheet newSource = source;
-
-					Point2I index;
-					if (parameters.GetParam(1).Type == CommandParamType.String) {
-						newSource = GetResource<ISpriteSheet>(parameters.GetString(1));
-						index = parameters.GetPoint(2);
-					}
-					else {
-						index = parameters.GetPoint(1);
-					}
-
-					spriteSet.SetSprite(parameters.GetPoint(0), newSource.GetSprite(index));
+				Point2I editPoint = parameters.GetPoint(0);
+				Point2I drawOffset = parameters.GetPoint(2);
+				ISprite editSprite = EditingSpriteSet.GetSprite(editPoint);
+				CompositeSprite composite = editSprite as CompositeSprite;
+				if (composite == null) {
+					composite = new CompositeSprite();
+					composite.AddSprite(editSprite);
+					EditingSpriteSet.SetSprite(editPoint, composite);
 				}
+				composite.AddSprite(GetSpriteFromParams(parameters, 1), drawOffset);
 			});
 			//=====================================================================================
 			// PALETTE
 			//=====================================================================================
-			AddCommand("PALETTEDICTIONARY", "", "string name",
+			AddCommand("PALETTEDICTIONARY", "string name",
 			delegate (CommandParam parameters) {
 				if (parameters.HasPrefix()) {
 					ThrowCommandParseError("Invalid use of prefix");
 				}
 				string name = parameters.GetString(0);
 				if (name.ToLower() == "none") {
-					source = null;
+					paletteArgs.Dictionary = null;
 					return;
 				}
 				if (!Resources.ContainsResource<PaletteDictionary>(name)) {
@@ -208,25 +225,70 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			AddCommand("MAPPEDCOLORS",
 				"(string colorGroup, (string subtype, (int r, int g, int b...))...)...",
+				"string palette, (string colorGroups...)",
 			delegate (CommandParam parameters) {
 				if (parameters.HasPrefix()) {
 					ThrowCommandParseError("Invalid use of prefix");
 				}
 				paletteArgs.ColorMapping.Clear();
-				for (int i = 0; i < parameters.ChildCount; i++) {
-					CommandParam groupParam = parameters.GetParam(i);
-					if (!paletteArgs.Dictionary.Contains(groupParam.GetString(0))) {
-						ThrowCommandParseError("Specified color group does not exist in palette dictionary!");
-					}
-					string colorGroup = groupParam.GetString(0);
-					for (int j = 1; j < groupParam.ChildCount; j++) {
-						CommandParam param = groupParam.GetParam(j);
-						LookupSubtypes subtype = ParseSubtype(param.GetString(0));
-						Color color = ParseColor(param.GetParam(1));
-						if (paletteArgs.ColorMapping.ContainsKey(color)) {
-							ThrowCommandParseError("Color already defined in MAPPEDCOLORS!");
+				if (parameters.GetParam(0).Type == CommandParamType.Array) {
+					int count = parameters.ChildCount;
+					paletteArgs.IndexedPossibleColorGroups = new int[count];
+					paletteArgs.PossibleColorGroups = new string[count];
+					for (int i = 0; i < count; i++) {
+						CommandParam groupParam = parameters.GetParam(i);
+						string colorGroup = groupParam.GetString(0);
+						if (!paletteArgs.Dictionary.Contains(colorGroup)) {
+							ThrowCommandParseError("Color group '" + colorGroup + "' does not exist in palette dictionary!");
 						}
-						paletteArgs.ColorMapping.Add(color, new ColorGroupSubtypePair(colorGroup, subtype, paletteArgs.Dictionary));
+						for (int j = 1; j < groupParam.ChildCount; j++) {
+							CommandParam param = groupParam.GetParam(j);
+							LookupSubtypes subtype = ParseSubtype(param.GetString(0));
+							Color color = ParseColor(param.GetParam(1));
+							/*if (paletteArgs.ColorMapping.ContainsKey(color)) {
+								ThrowCommandParseError("Color already defined in MAPPEDCOLORS!");
+							}*/
+							Dictionary<int, ColorGroupSubtypePair> subMapping;
+							if (!paletteArgs.ColorMapping.ContainsKey(color)) {
+								subMapping = new Dictionary<int, ColorGroupSubtypePair>();
+								paletteArgs.ColorMapping.Add(color, subMapping);
+							}
+							else {
+								subMapping = paletteArgs.ColorMapping[color];
+							}
+							subMapping.Add(i, new ColorGroupSubtypePair(colorGroup, subtype, paletteArgs.Dictionary));
+						}
+						paletteArgs.IndexedPossibleColorGroups[i] = i;
+						paletteArgs.PossibleColorGroups[i] = colorGroup;
+					}
+				}
+				else {
+					Palette palette = GetResource<Palette>(parameters.GetString(0));
+					var groupsParam = parameters.GetParam(1);
+					int count = groupsParam.ChildCount;
+					paletteArgs.IndexedPossibleColorGroups = new int[count];
+					paletteArgs.PossibleColorGroups = new string[count];
+					for (int i = 0; i < count; i++) {
+						string colorGroup = groupsParam.GetString(i);
+						if (!paletteArgs.Dictionary.Contains(colorGroup)) {
+							ThrowCommandParseError("Color group '" + colorGroup + "' does not exist in palette dictionary!");
+						}
+						for (int j = 0; j < PaletteDictionary.ColorGroupSize; j++) {
+							LookupSubtypes subtype = (LookupSubtypes) j;
+							Color color = palette.LookupColor(colorGroup, subtype);
+
+							Dictionary<int, ColorGroupSubtypePair> subMapping;
+							if (!paletteArgs.ColorMapping.ContainsKey(color)) {
+								subMapping = new Dictionary<int, ColorGroupSubtypePair>();
+								paletteArgs.ColorMapping.Add(color, subMapping);
+							}
+							else {
+								subMapping = paletteArgs.ColorMapping[color];
+							}
+							subMapping.Add(i, new ColorGroupSubtypePair(colorGroup, subtype, paletteArgs.Dictionary));
+						}
+						paletteArgs.IndexedPossibleColorGroups[i] = i;
+						paletteArgs.PossibleColorGroups[i] = colorGroup;
 					}
 				}
 				animationBuilder.PaletteArgs = paletteArgs;
@@ -249,6 +311,24 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						Color color = ParseColor(parameters.GetParam(i));
 						paletteArgs.IgnoreColors.Add(color);
 					}
+				}
+				animationBuilder.PaletteArgs = paletteArgs;
+			});
+			//=====================================================================================
+			AddCommand("CHUNKSIZE",
+				"string none",
+				"(int width, int height)",
+			delegate (CommandParam parameters) {
+				if (parameters.HasPrefix()) {
+					ThrowCommandParseError("Invalid use of prefix");
+				}
+				if (parameters.GetParam(0).Name == "none") {
+					if (string.Compare(parameters.GetString(0), "none", true) != 0)
+						ThrowCommandParseError("Must specify 'none' or a width and height!");
+					paletteArgs.ChunkSize = Point2I.Zero;
+				}
+				else {
+					paletteArgs.ChunkSize = parameters.GetPoint(0);
 				}
 				animationBuilder.PaletteArgs = paletteArgs;
 			});
@@ -295,6 +375,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddBasicCommands();
 			AddCompositeCommands();
 			AddStyleCommands();
+			AddColorCommands();
 			AddAnimationCommands();
 			//=====================================================================================
 		}
@@ -308,7 +389,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		protected override void BeginReading() {
 			sprite = null;
 			spriteName = "";
-			animationBuilder.Source = null;
 		}
 
 		/// <summary>Ends reading the script.</summary>
@@ -372,14 +452,131 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			return sprite as T;
 		}
 
+		/// <summary>Gets a sprite.</summary>
+		private ISprite GetSprite(string name) {
+			ISprite sprite = GetResource<ISprite>(name);
+			if (sprite == null) {
+				ThrowCommandParseError("Sprite with name '" + name + "' does not exist in resources!");
+			}
+			return sprite;
+		}
+
+		/// <summary>Gets a sprite.</summary>
+		private ISprite GetSprite(ISpriteSource source, Point2I index) {
+			if (SourceMode == SourceModes.None)
+				ThrowCommandParseError("Cannot get sprite from source with no sprite sheet source!");
+			if (SourceMode == SourceModes.SpriteSheet && paletteArgs.Dictionary != null) {
+				paletteArgs.Image = SpriteSheet.Image;
+				paletteArgs.SourceRect = SpriteSheet.GetSourceRect(index);
+				return Resources.PalettedSpriteDatabase.AddSprite(paletteArgs);
+			}
+			ISprite sprite = source.GetSprite(index);
+			if (sprite == null) {
+				ThrowCommandParseError("Sprite at source index '" + index + "' does not exist!");
+			}
+			return sprite;
+		}
+
 		/// <summary>Gets a sprite and confirms its type.</summary>
 		private T GetSprite<T>(string name) where T : class, ISprite {
-			ISprite sprite = GetResource<ISprite>(name) as T;
+			T sprite = GetResource<ISprite>(name) as T;
 			if (sprite == null) {
-				spriteName = null;
 				ThrowCommandParseError(typeof(T).Name + " with name '" + name + "' does not exist in resources!");
 			}
-			return sprite as T;
+			return sprite;
+		}
+
+		/// <summary>Gets a sprite and confirms its type.</summary>
+		private T GetSprite<T>(ISpriteSource source, Point2I index) where T : class, ISprite {
+			if (SourceMode == SourceModes.None)
+				ThrowCommandParseError("Cannot get sprite from source with no sprite sheet source!");
+			T sprite = source.GetSprite(index) as T;
+			if (sprite == null) {
+				ThrowCommandParseError(typeof(T).Name + " at source index '" + index + "' does not exist!");
+			}
+			return sprite;
+		}
+
+		/// <summary>Gets the sprite of a definition sprite.</summary>
+		private ISprite GetDefinedSprite(string name, string definition) {
+			return GetDefinedSprite(GetSprite<DefinitionSprite>(name), definition);
+		}
+
+		/// <summary>Gets the sprite of a definition sprite.</summary>
+		private ISprite GetDefinedSprite(ISpriteSource source, Point2I index, string definition) {
+			return GetDefinedSprite(GetSprite<DefinitionSprite>(source, index), definition);
+		}
+
+		/// <summary>Gets the sprite of a definition sprite.</summary>
+		private ISprite GetDefinedSprite(DefinitionSprite sprite, string definition) {
+			ISprite defSprite = sprite.Get(definition);
+			if (defSprite == null)
+				ThrowCommandParseError("Defined sprite with definition '" + definition + "' does not exist!");
+			return defSprite;
+		}
+
+		/// <summary>Gets the sprite from one of the many parameter overloads.</summary>
+		private ISprite GetSpriteFromParams(CommandParam param, int startIndex = 0) {
+			ISpriteSource source;
+			Point2I index;
+			string definition;
+			return GetSpriteFromParams(param, startIndex, out source, out index, out definition);
+		}
+
+		/// <summary>Gets the sprite from one of the many parameter overloads and returns the source.</summary>
+		private ISprite GetSpriteFromParams(CommandParam param, int startIndex, out ISpriteSource source, out Point2I index, out string definition) {
+			// 1: string spriteName
+			// 2: (int indexX, int indexY)
+			// 3: (string animationName, int substrip)
+			// 4: (string spriteName, string definition)
+			// 5: ((int indexX, int indexY), string definition)
+			// 6: (string sourceName, (int indexX, int indexY))
+			// 7: (string sourceName, (int indexX, int indexY), string definition)
+			source = null;
+			index = Point2I.Zero;
+			definition = null;
+
+			var param0 = param.GetParam(startIndex);
+			if (param0.Type == CommandParamType.String) {
+				// Overload 1:
+				return GetResource<ISprite>(param.GetString(startIndex));
+			}
+			else if (param0.GetParam(0).Type == CommandParamType.String) {
+				if (param0.GetParam(1).Type == CommandParamType.Integer) {
+					// Overload 3:
+					return GetSprite<Animation>(param0.GetString(0)).GetSubstrip(param0.GetInt(1));
+				}
+				else if (param0.GetParam(1).Type == CommandParamType.String) {
+					// Overload 4:
+					return GetDefinedSprite(param0.GetString(0), param0.GetString(1));
+				}
+				else if (param0.ChildCount == 2) {
+					// Overload 6:
+					source = GetResource<ISpriteSource>(param0.GetString(0));
+					index = param0.GetPoint(1);
+					return GetSprite(this.source, index);
+				}
+				else {
+					// Overload 7:
+					source = GetResource<ISpriteSource>(param0.GetString(0));
+					index = param0.GetPoint(1);
+					definition = param0.GetString(2);
+					return GetDefinedSprite(source, index, definition);
+				}
+			}
+			else if (param0.GetParam(0).Type == CommandParamType.Integer) {
+				// Overload 2:
+				source = this.source;
+				index = param.GetPoint(startIndex);
+				return GetSprite(this.source, index);
+			}
+			else {
+				// Overload 5:
+				source = this.source;
+				index = param0.GetPoint(0);
+				definition = param0.GetString(1);
+				return GetDefinedSprite(this.source, index, definition);
+			}
 		}
 
 
@@ -430,9 +627,19 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			get { return sprite as BasicSprite; }
 		}
 
+		/// <summary>Gets the current sprite as an offset sprite.</summary>
+		private OffsetSprite OffsetSprite {
+			get { return sprite as OffsetSprite; }
+		}
+
 		/// <summary>Gets the current sprite as a composite sprite.</summary>
 		private CompositeSprite CompositeSprite {
 			get { return sprite as CompositeSprite; }
+		}
+
+		/// <summary>Gets the current sprite as a color sprite.</summary>
+		private ColorSprite ColorSprite {
+			get { return sprite as ColorSprite; }
 		}
 
 		/// <summary>Gets the current sprite as a style sprite.</summary>

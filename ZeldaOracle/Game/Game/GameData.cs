@@ -194,8 +194,8 @@ namespace ZeldaOracle.Game {
 			ZONE_INTERIOR			= new Zone("interior",			"Interior",			VARIANT_INTERIOR,			floor);
 			ZONE_INTERIOR.PaletteID = "dungeon_ages_1";
 			ZONE_PRESENT			= new Zone("present",			"Present",			VARIANT_PRESENT,			floor);
-			ZONE_PRESENT.StyleDefinitions.SetStyle(StyleGroups.Cliffs, "past");
-			ZONE_PRESENT.StyleDefinitions.SetStyle(StyleGroups.Railings, "past");
+			ZONE_PRESENT.StyleDefinitions.Set(StyleGroups.Cliffs, "past");
+			ZONE_PRESENT.StyleDefinitions.Set(StyleGroups.Railings, "past");
 			ZONE_PRESENT.PaletteID	= "present";
 			ZONE_INTERIOR_PRESENT	= new Zone("interior_present",	"Interior Present",	VARIANT_INTERIOR_PRESENT,	floor);
 			ZONE_INTERIOR_PRESENT.PaletteID = "dungeon_ages_1";
@@ -331,6 +331,7 @@ namespace ZeldaOracle.Game {
 			PaletteShader = new PaletteShader(PALETTE_LERP_SHADER);
 			PaletteShader.TilePalette = PAL_TILES_DEFAULT;
 			PaletteShader.EntityPalette = PAL_ENTITIES_DEFAULT;
+			//PaletteShader.EntityPalette = PAL_ENTITIES_ELECTROCUTED;
 		}
 
 		public static Effect PALETTE_SHADER;

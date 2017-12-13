@@ -1,0 +1,424 @@
+
+#==============================================================
+# Sprite Sheets
+#==============================================================
+
+SPRITESHEET "player",						(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "Units/Player/player_items",	(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY "entity_dictionary";
+
+SOURCE "player";
+
+MAPPEDCOLORS "entities_default", ("green");
+
+SPRITESET "set_player" (8, 30);
+	DYNAMIC COLOR "", ("green", "red", "blue", "hurt"), (0, 0); END;
+
+	# Combine multi-part sprites
+
+	SOURCE "set_player";
+
+	APPEND (5, 20), (6, 20), (0, -16);
+END;
+
+MAPPEDCOLORS "entities_default",
+	("green", "red", "blue", "orange", "shaded_red", "shaded_blue");
+
+SOURCE "player_items";
+
+SPRITESET "set_player_items" (8, 12);
+	DYNAMIC COLOR "", ("green", "red", "blue", "inverse_red"), (0, 0), (0, 0), (8, 1); END;
+	DYNAMIC COLOR "", ("shaded_blue", "shaded_red"), (0, 1), (0, 1), (4, 1); END;
+
+
+
+
+
+	DYNAMIC BASIC (0, 2), (0, 0), (0, 2), (8, 4); END;
+
+	DYNAMIC COLOR "", ("blue", "red"), (0, 6), (0, 6), (4, 1); END;
+
+	SINGLE	BASIC (4, 6); END;
+
+	SINGLE	COLOR "", ("inverse_red", "red", "orange"), (5, 6); END;
+
+	SINGLE	COLOR "", ("shaded_blue", "shaded_red"), (6, 6); END;
+
+	SINGLE	BASIC (7, 6); END;
+
+	DYNAMIC	BASIC (0, 7), (0, 0), (0, 7), (8, 3); END;
+
+	#SOURCE "set_player_items";
+
+	# Combine Biggoron Sword Parts
+
+	APPEND (0, 2), (4, 1), (16, 0);
+	APPEND (2, 2), (5, 1), (0, -16);
+	APPEND (4, 2), (6, 1), (-16, 0);
+	APPEND (6, 2), (7, 1), (0, 16);
+END;
+
+PALETTEDICTIONARY none;
+
+#==============================================================
+# Player Items
+#==============================================================
+
+SOURCE "set_player_items";
+
+NAME tile_somaria_block, (7, 6); END;
+
+
+#==============================================================
+# Player Animations
+#==============================================================
+
+SOURCE "set_player";
+
+ANIM player_default; SUBSTRIP repeat;
+	ADD frame, 2, (0, 0); ADD frame, 6, (1, 0); ADD frame, 4, (0, 0);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_shield; SUBSTRIP repeat;
+	ADD frame, 2, (0, 1); ADD frame, 6, (1, 1); ADD frame, 4, (0, 1);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_shield_block; SUBSTRIP repeat;
+	ADD frame, 2, (0, 2); ADD frame, 6, (1, 2); ADD frame, 4, (0, 2);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_carry; SUBSTRIP repeat;
+	ADD frame, 2, (0, 5); ADD frame, 6, (1, 5); ADD frame, 4, (0, 5);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_push; SUBSTRIP repeat;
+	ADD strip, 6, 2, (0, 6);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_swim; SUBSTRIP repeat;
+	ADD strip, 6, 2, (0, 13);
+	MAKEDYNAMIC 4, (2, 0);
+	OFFSET (0, 2); END;
+ANIM player_submerged; SUBSTRIP repeat;
+	ADD frame, 16, (0, 21), (0, 4);
+	ADD frame, 16, (1, 21), (0, 4); END;
+ANIM player_grab; SUBSTRIP repeat;
+	ADD frame, 1, (0, 7);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_dig; SUBSTRIP clamp;
+	ADD frame, 8, (0, 9);
+	ADD frame, 16, (1, 9);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_throw; SUBSTRIP repeat;
+	ADD frame, 1, (0, 4);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_fall; SUBSTRIP clamp;
+	ADD frame, 16, (1, 20);
+	ADD frame, 10, (2, 20);
+	ADD frame, 11, (3, 20); END;
+ANIM player_shield_large;
+	SUBSTRIP repeat; ADD frame, 2, (0, 3); ADD frame, 6, (1, 3); ADD frame, 4, (0, 3);
+	SUBSTRIP repeat; ADD frame, 2, (2, 1); ADD frame, 6, (3, 1); ADD frame, 4, (2, 1);
+	MAKEDYNAMIC 3, (2, 0); END;
+ANIM player_shield_large_block;
+	SUBSTRIP repeat; ADD frame, 2, (0, 2); ADD frame, 6, (1, 2); ADD frame, 4, (0, 2);
+	MAKEDYNAMIC 3, (2, 0);
+	SUBSTRIP repeat; ADD frame, 2, (2, 3); ADD frame, 6, (3, 3); ADD frame, 4, (2, 3);
+	END;
+ANIM player_pull;
+	SUBSTRIP repeat; ADD frame, 1, (1, 7), (-4, 0);
+	SUBSTRIP repeat; ADD frame, 1, (3, 7), (0, 2);
+	SUBSTRIP repeat; ADD frame, 1, (5, 7), (4, 0);
+	SUBSTRIP repeat; ADD frame, 1, (7, 7), (0, -1); END;
+ANIM player_jump;
+	SUBSTRIP clamp; ADD frame, 9, (0, 11); ADD frame, 9, (1, 11); ADD frame, 6, (2, 11); ADD frame, 6, (1, 0);
+	SUBSTRIP clamp; ADD frame, 9, (3, 11); ADD frame, 9, (4, 11); ADD frame, 6, (5, 11); ADD frame, 6, (3, 0);
+	SUBSTRIP clamp; ADD frame, 9, (0, 12); ADD frame, 9, (1, 12); ADD frame, 6, (2, 12); ADD frame, 6, (5, 0);
+	SUBSTRIP clamp; ADD frame, 9, (3, 12); ADD frame, 9, (4, 12); ADD frame, 6, (5, 12); ADD frame, 6, (7, 0); END;
+ANIM player_cape; SUBSTRIP repeat;
+	ADD frame, 1, (0, 10);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_swing;
+	SUBSTRIP clamp; ADD frame, 3, (4, 8); ADD frame, 3, (0, 4); ADD frame, 8, (0, 4), ( 4,  0); ADD frame, 3, (0, 4);
+	SUBSTRIP clamp; ADD frame, 3, (3, 8); ADD frame, 3, (2, 4); ADD frame, 8, (2, 4), ( 0, -4); ADD frame, 3, (2, 4);
+	SUBSTRIP clamp; ADD frame, 3, (2, 8); ADD frame, 3, (4, 4); ADD frame, 8, (4, 4), (-4,  0); ADD frame, 3, (4, 4);
+	SUBSTRIP clamp; ADD frame, 3, (1, 8); ADD frame, 3, (6, 4); ADD frame, 8, (6, 4), ( 0,  4); ADD frame, 3, (6, 4); END;
+ANIM player_swing_nolunge;
+	SUBSTRIP clamp; ADD frame, 3, (4, 8); ADD frame, 14, (0, 4);
+	SUBSTRIP clamp; ADD frame, 3, (3, 8); ADD frame, 14, (2, 4);
+	SUBSTRIP clamp; ADD frame, 3, (2, 8); ADD frame, 14, (4, 4);
+	SUBSTRIP clamp; ADD frame, 3, (1, 8); ADD frame, 14, (6, 4); END;
+ANIM player_swing_big;
+	SUBSTRIP clamp; ADD frame, 12, (4, 8); ADD frame, 9, (0, 4); ADD frame, 13, (5, 8);
+	SUBSTRIP clamp; ADD frame, 12, (3, 8); ADD frame, 9, (2, 4); ADD frame, 13, (6, 8);
+	SUBSTRIP clamp; ADD frame, 12, (2, 8); ADD frame, 9, (4, 4); ADD frame, 13, (1, 8);
+	SUBSTRIP clamp; ADD frame, 12, (1, 8); ADD frame, 9, (6, 4); ADD frame, 13, (5, 8); END;
+ANIM player_spin;
+	SUBSTRIP clamp; ADD frame, 5, (0, 4), ( 3,  0); ADD frame, 5, (6, 4), ( 0,  3); ADD frame, 5, (4, 4), (-3,  0); ADD frame, 5, (2, 4), ( 0, -3); ADD frame, 3, (0, 4), ( 3,  0);
+	SUBSTRIP clamp; ADD frame, 5, (2, 4), ( 0, -3); ADD frame, 3, (0, 4), ( 3,  0); ADD frame, 5, (6, 4), ( 0,  3); ADD frame, 5, (4, 4), (-3,  0); ADD frame, 5, (2, 4), ( 0, -3);
+	SUBSTRIP clamp; ADD frame, 5, (4, 4), (-3,  0); ADD frame, 5, (2, 4), ( 0, -3); ADD frame, 3, (0, 4), ( 3,  0); ADD frame, 5, (6, 4), ( 0,  3); ADD frame, 5, (4, 4), (-3,  0);
+	SUBSTRIP clamp; ADD frame, 5, (6, 4), ( 0,  3); ADD frame, 5, (4, 4), (-3,  0); ADD frame, 5, (2, 4), ( 0, -3); ADD frame, 3, (0, 4), ( 3,  0); ADD frame, 5, (6, 4), ( 0,  3); END;
+ANIM player_stab;
+	SUBSTRIP reset; ADD frame, 6, (0, 4), ( 4,  0); ADD frame, 7, (0, 4); ADD frame, 1, (1, 0);
+	SUBSTRIP reset; ADD frame, 6, (2, 4), ( 0, -4); ADD frame, 7, (2, 4); ADD frame, 1, (3, 0);
+	SUBSTRIP reset; ADD frame, 6, (4, 4), (-4,  0); ADD frame, 7, (4, 4); ADD frame, 1, (5, 0);
+	SUBSTRIP reset; ADD frame, 6, (6, 4), ( 0,  4); ADD frame, 7, (6, 4); ADD frame, 1, (7, 0); END;
+ANIM player_raise_one_hand; SUBSTRIP clamp;
+	ADD frame, 0, (0, 16); END;
+ANIM player_raise_two_hands; SUBSTRIP clamp;
+	ADD frame, 0, (1, 16); END;
+
+ANIM player_drown;
+	SUBSTRIP clamp; ADD frame, 8, (0, 13), (0, 2); ADD frame, 17, (0, 21), (0, 4);
+	SUBSTRIP clamp; ADD frame, 8, (2, 13), (0, 2); ADD frame, 17, (0, 21), (0, 4);
+	SUBSTRIP clamp; ADD frame, 8, (4, 13), (0, 2); ADD frame, 17, (0, 21), (0, 4);
+	SUBSTRIP clamp; ADD frame, 8, (6, 13), (0, 2); ADD frame, 17, (0, 21), (0, 4); END;
+
+ANIM player_crush_horizontal; SUBSTRIP clamp;
+	ADD frame, 44, (5, 20); #ADD part, 44, (6, 20), (0, -16);
+	ADD emptyframe, 1; ADD frame, 1, (6, 0);
+	ADD emptyframe, 1; ADD frame, 1, (5, 20); #ADD part, 1, (6, 20), (0, -16);
+	ADD emptyframe, 1; ADD frame, 1, (5, 20); #ADD part, 1, (6, 20), (0, -16);
+	ADD emptyframe, 1; ADD frame, 1, (6, 0);
+	REPEAT 8, 5; END;
+	
+ANIM player_crush_vertical; SUBSTRIP clamp;
+	ADD frame, 44, (4, 20), (0, -2); ## TODO: this sprite should be centered??
+	ADD emptyframe, 1; ADD frame, 1, (6, 0);
+	ADD emptyframe, 1; ADD frame, 1, (4, 20);
+	ADD emptyframe, 1; ADD frame, 1, (4, 20);
+	ADD emptyframe, 1; ADD frame, 1, (6, 0);
+	REPEAT 8, 5; END;
+
+ANIM player_invisible; SUBSTRIP clamp;
+	ADD frame, 0, (7, 20); END;
+	
+ANIM player_aim;
+	SUBSTRIP repeat; ADD frame 1, (0, 4); # right
+	SUBSTRIP repeat; ADD frame 1, (3, 8);
+	SUBSTRIP repeat; ADD frame 1, (2, 4); # up
+	SUBSTRIP repeat; ADD frame 1, (2, 8);
+	SUBSTRIP repeat; ADD frame 1, (4, 4); # left
+	SUBSTRIP repeat; ADD frame 1, (1, 8);
+	SUBSTRIP repeat; ADD frame 1, (6, 4); # down
+	SUBSTRIP repeat; ADD frame 1, (0, 8);
+	END;
+
+## Player in Minecart Animations
+
+ANIM player_minecart_idle; SUBSTRIP repeat;
+	ADD frame, 1, (0, 22);
+	MAKEDYNAMIC 4, (1, 0); END;
+ANIM player_minecart_carry; SUBSTRIP repeat;
+	ADD frame, 1, (4, 22);
+	MAKEDYNAMIC 4, (1, 0); END;
+ANIM player_minecart_throw; SUBSTRIP repeat;
+	ADD frame, 1, (0, 24);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_minecart_aim;
+	SUBSTRIP repeat; ADD frame 1, (0, 24); # right
+	SUBSTRIP repeat; ADD frame 1, (3, 23);
+	SUBSTRIP repeat; ADD frame 1, (2, 24); # up
+	SUBSTRIP repeat; ADD frame 1, (2, 23);
+	SUBSTRIP repeat; ADD frame 1, (4, 24); # left
+	SUBSTRIP repeat; ADD frame 1, (1, 23);
+	SUBSTRIP repeat; ADD frame 1, (6, 24); # down
+	SUBSTRIP repeat; ADD frame 1, (0, 23);
+	END;
+ANIM player_minecart_swing;
+	SUBSTRIP clamp; ADD frame, 3, (4, 23); ADD frame, 3, (0, 24); ADD frame, 8, (0, 24), ( 4,  0); ADD frame, 3, (0, 24);
+	SUBSTRIP clamp; ADD frame, 3, (3, 23); ADD frame, 3, (2, 24); ADD frame, 8, (2, 24), ( 0, -4); ADD frame, 3, (2, 24);
+	SUBSTRIP clamp; ADD frame, 3, (2, 23); ADD frame, 3, (4, 24); ADD frame, 8, (4, 24), (-4,  0); ADD frame, 3, (4, 24);
+	SUBSTRIP clamp; ADD frame, 3, (1, 23); ADD frame, 3, (6, 24); ADD frame, 8, (6, 24), ( 0,  4); ADD frame, 3, (6, 24); END;
+ANIM player_minecart_swing_nolunge;
+	SUBSTRIP clamp; ADD frame, 3, (4, 23); ADD frame, 14, (0, 24);
+	SUBSTRIP clamp; ADD frame, 3, (3, 23); ADD frame, 14, (2, 24);
+	SUBSTRIP clamp; ADD frame, 3, (2, 23); ADD frame, 14, (4, 24);
+	SUBSTRIP clamp; ADD frame, 3, (1, 23); ADD frame, 14, (6, 24); END;
+ANIM player_minecart_swing_big;
+	SUBSTRIP clamp; ADD frame, 12, (4, 23); ADD frame, 9, (0, 24); ADD frame, 13, (5, 23);
+	SUBSTRIP clamp; ADD frame, 12, (3, 23); ADD frame, 9, (2, 24); ADD frame, 13, (6, 23);
+	SUBSTRIP clamp; ADD frame, 12, (2, 23); ADD frame, 9, (4, 24); ADD frame, 13, (1, 23);
+	SUBSTRIP clamp; ADD frame, 12, (1, 23); ADD frame, 9, (6, 24); ADD frame, 13, (5, 23); END;
+	
+## Player in Mermaid form
+
+ANIM player_mermaid_swim; SUBSTRIP repeat;
+	ADD strip, 6, 2, (0, 25);
+	MAKEDYNAMIC 4, (2, 0); END;
+ANIM player_mermaid_throw; SUBSTRIP repeat;
+	ADD frame, 1, (0, 26);
+	MAKEDYNAMIC 4, (1, 0); END;
+ANIM player_mermaid_aim;
+	SUBSTRIP repeat; ADD frame 1, (0, 26); # right
+	SUBSTRIP repeat; ADD frame 1, (3, 27);
+	SUBSTRIP repeat; ADD frame 1, (1, 26); # up
+	SUBSTRIP repeat; ADD frame 1, (2, 27);
+	SUBSTRIP repeat; ADD frame 1, (2, 26); # left
+	SUBSTRIP repeat; ADD frame 1, (1, 27);
+	SUBSTRIP repeat; ADD frame 1, (3, 26); # down
+	SUBSTRIP repeat; ADD frame 1, (0, 27); END;
+ANIM player_mermaid_swing;
+	SUBSTRIP clamp; ADD frame, 3, (4, 27); ADD frame, 3, (0, 26); ADD frame, 8, (0, 26), ( 4,  0); ADD frame, 3, (0, 26);
+	SUBSTRIP clamp; ADD frame, 3, (3, 27); ADD frame, 3, (1, 26); ADD frame, 8, (1, 26), ( 0, -4); ADD frame, 3, (1, 26);
+	SUBSTRIP clamp; ADD frame, 3, (2, 27); ADD frame, 3, (2, 26); ADD frame, 8, (2, 26), (-4,  0); ADD frame, 3, (2, 26);
+	SUBSTRIP clamp; ADD frame, 3, (1, 27); ADD frame, 3, (3, 26); ADD frame, 8, (3, 26), ( 0,  4); ADD frame, 3, (3, 26); END;
+ANIM player_mermaid_spin;
+	SUBSTRIP clamp; ADD frame, 5, (0, 26), ( 3,  0); ADD frame, 5, (3, 26), ( 0,  3); ADD frame, 5, (2, 26), (-3,  0); ADD frame, 5, (1, 26), ( 0, -3); ADD frame, 3, (0, 26), ( 3,  0);
+	SUBSTRIP clamp; ADD frame, 5, (1, 26), ( 0, -3); ADD frame, 3, (0, 26), ( 3,  0); ADD frame, 5, (3, 26), ( 0,  3); ADD frame, 5, (2, 26), (-3,  0); ADD frame, 5, (1, 26), ( 0, -3);
+	SUBSTRIP clamp; ADD frame, 5, (2, 26), (-3,  0); ADD frame, 5, (1, 26), ( 0, -3); ADD frame, 3, (0, 26), ( 3,  0); ADD frame, 5, (3, 26), ( 0,  3); ADD frame, 5, (2, 26), (-3,  0);
+	SUBSTRIP clamp; ADD frame, 5, (3, 26), ( 0,  3); ADD frame, 5, (2, 26), (-3,  0); ADD frame, 5, (1, 26), ( 0, -3); ADD frame, 3, (0, 26), ( 3,  0); ADD frame, 5, (3, 26), ( 0,  3); END;
+ANIM player_mermaid_stab;
+	SUBSTRIP reset; ADD frame, 6, (0, 26), ( 4,  0); ADD frame, 7, (0, 26); ADD frame, 1, (0, 25);
+	SUBSTRIP reset; ADD frame, 6, (1, 26), ( 0, -4); ADD frame, 7, (1, 26); ADD frame, 1, (2, 25);
+	SUBSTRIP reset; ADD frame, 6, (2, 26), (-4,  0); ADD frame, 7, (2, 26); ADD frame, 1, (4, 25);
+	SUBSTRIP reset; ADD frame, 6, (3, 26), ( 0,  4); ADD frame, 7, (3, 26); ADD frame, 1, (6, 25); END;
+
+
+#==============================================================
+# Player Item Animations
+#==============================================================
+
+SOURCE "set_player_items";
+
+ANIM sword_hold;
+	SUBSTRIP repeat; ADD frame, 4, (0, 0), ( 12,   4);
+	SUBSTRIP repeat; ADD frame, 4, (2, 0), ( -4, -12);
+	SUBSTRIP repeat; ADD frame, 4, (4, 0), (-12,   4);
+	SUBSTRIP repeat; ADD frame, 4, (6, 0), (  3,  14); END;
+ANIM sword_charged;
+	SUBSTRIP repeat; ADD frame, 4, ((0, 0), "inverse_red"), ( 12,   4); ADD frame, 4, (0, 0), ( 12,   4);
+	SUBSTRIP repeat; ADD frame, 4, ((2, 0), "inverse_red"), ( -4, -12); ADD frame, 4, (2, 0), ( -4, -12);
+	SUBSTRIP repeat; ADD frame, 4, ((4, 0), "inverse_red"), (-12,   4); ADD frame, 4, (4, 0), (-12,   4);
+	SUBSTRIP repeat; ADD frame, 4, ((6, 0), "inverse_red"), (  3,  14); ADD frame, 4, (6, 0), (  3,  14); END;
+ANIM sword_swing;
+	SUBSTRIP clamp;  ADD frame, 3, (2, 0), (  0, -16); ADD frame, 3, (1, 0), ( 13, -13); ADD frame, 8, (0, 0), ( 20,   4); ADD frame, 3, (0, 0), ( 12,   4);
+	SUBSTRIP clamp;  ADD frame, 3, (0, 0), ( 16,   0); ADD frame, 3, (1, 0), ( 13, -13); ADD frame, 8, (2, 0), ( -4, -20); ADD frame, 3, (2, 0), ( -4, -12);
+	SUBSTRIP clamp;  ADD frame, 3, (2, 0), (  0, -16); ADD frame, 3, (3, 0), (-13, -13); ADD frame, 8, (4, 0), (-20,   4); ADD frame, 3, (4, 0), (-12,   4);
+	SUBSTRIP clamp;  ADD frame, 3, (4, 0), (-15,   2); ADD frame, 3, (5, 0), (-13,  15); ADD frame, 8, (6, 0), (  3,  20); ADD frame, 3, (6, 0), (  3,  14); END;
+ANIM magic_rod_swing;
+	CLONE sword_swing;
+	SHIFTSOURCE (0, 3);
+	END;
+ANIM cane_swing;
+	CLONE sword_swing;
+	SHIFTSOURCE (0, 4);
+	END;
+ANIM sword_minecart_swing;
+	SUBSTRIP clamp;  ADD frame, 3, (2, 0), (  0, -16); ADD frame, 3, (1, 0), ( 13, -13); ADD frame, 11, (0, 0), ( 12,   4);
+	SUBSTRIP clamp;  ADD frame, 3, (0, 0), ( 16,   0); ADD frame, 3, (1, 0), ( 13, -13); ADD frame, 11, (2, 0), ( -4, -12);
+	SUBSTRIP clamp;  ADD frame, 3, (2, 0), (  0, -16); ADD frame, 3, (3, 0), (-13, -13); ADD frame, 11, (4, 0), (-12,   4);
+	SUBSTRIP clamp;  ADD frame, 3, (4, 0), (-15,   2); ADD frame, 3, (5, 0), (-13,  15); ADD frame, 11, (6, 0), (  3,  14); END;
+ANIM magic_rod_minecart_swing;
+	CLONE sword_minecart_swing;
+	SHIFTSOURCE (0, 3);
+	END;
+ANIM cane_minecart_swing;
+	CLONE sword_minecart_swing;
+	SHIFTSOURCE (0, 4);
+	END;
+ANIM sword_spin;
+	SUBSTRIP clamp;  ADD frame, 3, (0, 0), ( 19,   4); ADD frame, 2, (7, 0), ( 16,  16); ADD frame, 3, (6, 0), (  3,  19);
+					 ADD frame, 2, (5, 0), (-13,  15); ADD frame, 3, (4, 0), (-19,   4); ADD frame, 2, (3, 0), (-13, -13);
+					 ADD frame, 3, (2, 0), ( -4, -19); ADD frame, 2, (1, 0), ( 16, -16); ADD frame, 3, (0, 0), ( 19,   4);
+	SUBSTRIP clamp;  ADD frame, 3, (2, 0), ( -4, -19); ADD frame, 2, (1, 0), ( 16, -16); ADD frame, 3, (0, 0), ( 19,   4);
+					 ADD frame, 2, (7, 0), ( 16,  16); ADD frame, 3, (6, 0), (  3,  19); ADD frame, 2, (5, 0), (-13,  15);
+					 ADD frame, 3, (4, 0), (-19,   4); ADD frame, 2, (3, 0), (-13, -13); ADD frame, 3, (2, 0), ( -4, -19);
+	SUBSTRIP clamp;  ADD frame, 3, (4, 0), (-19,   4); ADD frame, 2, (3, 0), (-13, -13); ADD frame, 3, (2, 0), ( -4, -19);
+					 ADD frame, 2, (1, 0), ( 16, -16); ADD frame, 3, (0, 0), ( 19,   4); ADD frame, 2, (7, 0), ( 16,  16);
+					 ADD frame, 3, (6, 0), (  3,  19); ADD frame, 2, (5, 0), (-13,  15); ADD frame, 3, (4, 0), (-19,   4);
+	SUBSTRIP clamp;  ADD frame, 3, (6, 0), (  3,  19); ADD frame, 2, (5, 0), (-13,  15); ADD frame, 3, (4, 0), (-19,   4);
+					 ADD frame, 2, (3, 0), (-13, -13); ADD frame, 3, (2, 0), ( -4, -19); ADD frame, 2, (1, 0), ( 16, -16);
+					 ADD frame, 3, (0, 0), ( 19,   4); ADD frame, 2, (7, 0), ( 16,  16); ADD frame, 3, (6, 0), (  3,  19);
+					 END;
+ANIM sword_stab;
+	SUBSTRIP clamp;  ADD frame, 6, (0, 0), ( 20,   4); ADD frame, 8, (0, 0), ( 12,   4);
+	SUBSTRIP clamp;  ADD frame, 6, (2, 0), ( -4, -20); ADD frame, 8, (2, 0), ( -4, -12);
+	SUBSTRIP clamp;  ADD frame, 6, (4, 0), (-20,   4); ADD frame, 8, (4, 0), (-14,   4);
+	SUBSTRIP clamp;  ADD frame, 6, (6, 0), (  3,  20); ADD frame, 8, (6, 0), (  3,  14); END;
+
+ANIM big_sword_swing;
+	SUBSTRIP clamp;	ADD frame, 12, (2, 2), ( -2, -16); #ADD part, 12, (5, 1), ( -2, -32);
+					ADD frame,  5, (1, 2), ( 16, -16);
+					ADD frame,  4, (0, 2), ( 16,   0); #ADD part,  4, (4, 1), ( 32,   0);
+					ADD frame,  4, (7, 2), ( 16,  16);
+					ADD frame,  9, (6, 2), (  1,  16); #ADD part,  9, (7, 1), (  1,  32);
+	SUBSTRIP clamp;	ADD frame, 12, (0, 2), ( 16,   0); #ADD part, 12, (4, 1), ( 32,   0);
+					ADD frame,  5, (1, 2), ( 16, -16);
+					ADD frame,  4, (2, 2), ( -2, -16); #ADD part,  4, (5, 1), ( -2, -32);
+					ADD frame,  4, (3, 2), (-13, -13);
+					ADD frame,  9, (4, 2), (-16,   0); #ADD part,  9, (6, 1), (-32,   0);
+	SUBSTRIP clamp;	ADD frame, 12, (2, 2), ( -2, -16); #ADD part, 12, (5, 1), ( -2, -32);
+					ADD frame,  5, (3, 2), (-13, -13);
+					ADD frame,  4, (4, 2), (-16,   0); #ADD part,  4, (6, 1), (-32,   0);
+					ADD frame,  4, (5, 2), (-13,  15);
+					ADD frame,  9, (6, 2), (  1,  16); #ADD part,  9, (7, 1), (  1,  32);
+	SUBSTRIP clamp;	ADD frame, 12, (4, 2), (-16,   0); #ADD part, 12, (6, 1), (-32,   0);
+					ADD frame,  5, (5, 2), (-13,  15);
+					ADD frame,  4, (6, 2), (  1,  16); #ADD part,  4, (7, 1), (  1,  32);
+					ADD frame,  4, (7, 2), ( 16,  16);
+					ADD frame,  9, (0, 2), ( 16,   0); END; #ADD part,  9, (4, 1), ( 32,   0); END;
+
+ANIM seed_shooter;
+	SUBSTRIP repeat; ADD frame 1, (0, 5), ( 14,   4);
+	SUBSTRIP repeat; ADD frame 1, (1, 5), ( 14,  -8);
+	SUBSTRIP repeat; ADD frame 1, (2, 5), ( -4, -14);
+	SUBSTRIP repeat; ADD frame 1, (3, 5), (-11, -14);
+	SUBSTRIP repeat; ADD frame 1, (4, 5), (-14,   4);
+	SUBSTRIP repeat; ADD frame 1, (5, 5), (-11,  11);
+	SUBSTRIP repeat; ADD frame 1, (6, 5), (  3,  14);
+	SUBSTRIP repeat; ADD frame 1, (7, 5), ( 14,  11);
+	END;
+ANIM slingshot_1;
+	SUBSTRIP repeat; ADD frame, 9, ((0, 6), "blue"), (12, 0);
+	SUBSTRIP repeat; ADD frame, 9, ((1, 6), "blue"), (-4, -12);
+	SUBSTRIP repeat; ADD frame, 9, ((2, 6), "blue"), (-12, 0);
+	SUBSTRIP repeat; ADD frame, 9, ((3, 6), "blue"), (3, 13); END;
+ANIM slingshot_2;
+	SUBSTRIP repeat; ADD frame, 9, ((0, 6), "red"), (12, 0);
+	SUBSTRIP repeat; ADD frame, 9, ((1, 6), "red"), (-4, -12);
+	SUBSTRIP repeat; ADD frame, 9, ((2, 6), "red"), (-12, 0);
+	SUBSTRIP repeat; ADD frame, 9, ((3, 6), "red"), (3, 13); END;
+
+
+#==============================================================
+# Projectile + Item Animations
+#==============================================================
+
+SOURCE "set_player_items";
+
+ANIM projectile_player_arrow; SUBSTRIP repeat;
+	ADD frame, 1, (0, 9), (-8, -8);
+	MAKEDYNAMIC 8, (1, 0);
+	END;
+ANIM projectile_player_arrow_crash; SUBSTRIP reset;
+	ADD strip, 6, 4, (0, 9), (-8, -8), 0, (2, 0);
+	END;
+ANIM item_bomb; SUBSTRIP repeat;
+	ADD frame, 4, ((6, 6), "shaded_blue");
+	ADD frame, 4, ((6, 6), "shaded_red");
+	END;
+ANIM projectile_sword_beam; SUBSTRIP repeat;
+	ADD frame, 4, ((0, 1), "shaded_blue"); ADD frame, 4, ((0, 1), "shaded_red"); OFFSET (-8, -8);
+	MAKEDYNAMIC 4, (1, 0);
+	END;
+ANIM projectile_player_boomerang_1; SUBSTRIP repeat;
+	ADD frame, 2, (0, 8); ADD frame, 2, (3, 8);
+	ADD frame, 2, (2, 8); ADD frame, 2, (1, 8);
+	OFFSET (-8, -8); END;
+ANIM projectile_player_boomerang_2; SUBSTRIP repeat;
+	ADD frame, 2, (4, 8); ADD frame, 2, (7, 8);
+	ADD frame, 2, (6, 8); ADD frame, 2, (5, 8);
+	OFFSET (-8, -8); END;
+ANIM projectile_switch_hook;
+	SUBSTRIP repeat; ADD frame, 4, (0, 7); ADD frame, 4, (1, 7); OFFSET (-3, -8);
+	SUBSTRIP repeat; ADD frame, 4, (2, 7); ADD frame, 4, (3, 7); OFFSET (-8, -13);
+	SUBSTRIP repeat; ADD frame, 4, (4, 7); ADD frame, 4, (5, 7); OFFSET (-13, -8);
+	SUBSTRIP repeat; ADD frame, 4, (6, 7); ADD frame, 4, (7, 7); OFFSET (-8, -3);
+	END;
+ANIM projectile_magic_rod_fire; SUBSTRIP repeat;
+	ADD frame, 2, ((5, 6), "inverse_red");
+	ADD frame, 2, ((5, 6), "red");
+	ADD frame, 2, ((5, 6), "orange");
+	OFFSET (-8, -8); END;
+

@@ -80,15 +80,6 @@ namespace ZeldaOracle.Game.Control.Menus {
 			UpdateDescription();
 
 			if (!inSubMenu) {
-				// DEBUG: Level up items
-				if (Keyboard.IsKeyPressed(Keys.L)) {
-					if (currentSlotGroup.CurrentSlot.SlotItem is Item) {
-						Item item = currentSlotGroup.CurrentSlot.SlotItem as Item;
-						item.Level = (item.Level + 1) % (item.MaxLevel + 1);
-						ResetDescription();
-					}
-				}
-
 				for (int i = 0; i < 4; i++) {
 					if (Controls.Arrows[i].IsPressed()) {
 						ResetDescription();

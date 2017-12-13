@@ -51,7 +51,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			timer++;
 			if (timer == TRANSITION_SPLIT_BEGIN_DELAY) {
 				// Switch rooms.
-				SetupNewRoom();
+				SetupNewRoom(true);
 				DestroyOldRoom();
 			}
 			else if (timer >= TRANSITION_SPLIT_BEGIN_DELAY + TRANSITION_SPLIT_MOVE_DELAY) {

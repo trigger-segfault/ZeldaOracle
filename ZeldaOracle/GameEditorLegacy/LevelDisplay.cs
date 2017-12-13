@@ -646,7 +646,7 @@ namespace ZeldaEditor {
 				for (int x = 0; x < Level.Width; x++) {
 					for (int y = 0; y < Level.Height; y++) {
 						Point2I roomPosition = GetRoomDrawPosition(new Point2I(x, y)) - new Point2I(HorizontalScroll.Value, VerticalScroll.Value);
-						if (roomPosition + (Level.RoomSize * GameSettings.TILE_SIZE) >= 0 && roomPosition < new Point2I(ClientSize.Width, ClientSize.Height)) {
+						if (roomPosition + (Level.RoomSize * GameSettings.TILE_SIZE) >= Point2I.Zero && roomPosition < new Point2I(ClientSize.Width, ClientSize.Height)) {
 							g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
 							g.Translate((Vector2F)(new Point2I(x, y) * ((Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing)));
 							DrawRoom(g, Level.GetRoomAt(x, y));

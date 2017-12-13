@@ -267,8 +267,6 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		public static void LoadAnimations() {
-			Resources.LoadAnimations("Animations/animations.conscript");
-
 			// Create gale effect animation.
 			ANIM_EFFECT_SEED_GALE = new Animation();
 			for (int i = 0; i < 12; i++) {

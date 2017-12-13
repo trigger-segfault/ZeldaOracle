@@ -7,7 +7,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Common.Graphics {
 	/// <summary>A grid of defined sprites that can come from anywhere.</summary>
-	public class SpriteSet : ISpriteSheet {
+	public class SpriteSet : ISpriteSource {
 		/// <summary>The grid of defined sprites.</summary>
 		private ISprite[,] sprites;
 

@@ -213,7 +213,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Returns the hash code for this color.</summary>
 		public override int GetHashCode() {
-			return base.GetHashCode();
+			unchecked { return (int) PackedColor; }
 		}
 
 		/// <summary>Parses the color.</summary>

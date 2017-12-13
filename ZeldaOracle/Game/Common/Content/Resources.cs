@@ -58,7 +58,7 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>The collection of loaded game fonts.</summary>
 		private static Dictionary<string, GameFont> gameFonts;
 		/// <summary>The collection of loaded sprite sheets.</summary>
-		private static Dictionary<string, ISpriteSheet> spriteSheets;
+		private static Dictionary<string, ISpriteSource> spriteSheets;
 		/// <summary>The collection of loaded sprites.</summary>
 		private static Dictionary<string, ISprite> sprites;
 		/// <summary>The collection of loaded animations.</summary>
@@ -109,9 +109,7 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>The directory for storing fonts.</summary>
 		public const string FontDirectory = "Fonts/";
 		/// <summary>The directory for storing sprite sheets.</summary>
-		public const string SpriteSheetDirectory = "SpriteSheets/";
-		/// <summary>The directory for storing animations.</summary>
-		public const string AnimationDirectory = "Animations/";
+		public const string SpriteDirectory = "Sprites/";
 		/// <summary>The directory for storing palette dictionaries.</summary>
 		public const string PaletteDictionaryDirectory = "Palettes/Dictionaries/";
 		/// <summary>The directory for storing palettes.</summary>
@@ -144,7 +142,7 @@ namespace ZeldaOracle.Common.Content {
 			images				= new Dictionary<string, Image>();
 			realFonts			= new Dictionary<string, RealFont>();
 			gameFonts			= new Dictionary<string, GameFont>();
-			spriteSheets		= new Dictionary<string, ISpriteSheet>();
+			spriteSheets		= new Dictionary<string, ISpriteSource>();
 			sprites				= new Dictionary<string, ISprite>();
 			animations			= new Dictionary<string, Animation>();
 			shaders				= new Dictionary<string, Effect>();
@@ -177,7 +175,7 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries[typeof(Image)]				= images;
 			resourceDictionaries[typeof(RealFont)]			= realFonts;
 			resourceDictionaries[typeof(GameFont)]			= gameFonts;
-			resourceDictionaries[typeof(ISpriteSheet)]		= spriteSheets;
+			resourceDictionaries[typeof(ISpriteSource)]		= spriteSheets;
 			resourceDictionaries[typeof(ISprite)]			= sprites;
 			resourceDictionaries[typeof(Animation)]			= animations;
 			resourceDictionaries[typeof(Effect)]			= shaders;
@@ -313,7 +311,7 @@ namespace ZeldaOracle.Common.Content {
 		}
 
 		/// <summary>Gets the sprite sheet with the specified name.</summary>
-		public static ISpriteSheet GetSpriteSheet(string name) {
+		public static ISpriteSource GetSpriteSheet(string name) {
 			return spriteSheets[name];
 		}
 
@@ -621,9 +619,9 @@ namespace ZeldaOracle.Common.Content {
 		}
 
 		/// <summary>Gets the list of sprite sheets.</summary>
-		public static ISpriteSheet[] SpriteSheets {
+		public static ISpriteSource[] SpriteSheets {
 			get {
-				ISpriteSheet[] sheets = new ISpriteSheet[spriteSheets.Count];
+				ISpriteSource[] sheets = new ISpriteSource[spriteSheets.Count];
 				spriteSheets.Values.CopyTo(sheets, 0);
 				return sheets;
 			}

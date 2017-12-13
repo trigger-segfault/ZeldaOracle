@@ -100,7 +100,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 					Vector2F totalMovement = Directions.ToVector(direction) *
 						(playerSpeed * ((float) maxDistance / (float) TRANSITION_SPEED));
 					Player.Position = playerPosInNewRoom + totalMovement;
-					SetupNewRoom();
+					SetupNewRoom(false);
 
 					// Move the player back a bit so we can smoothly transition
 					// them between the room border.

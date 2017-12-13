@@ -84,9 +84,9 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			}
 			for (int i = 0; i < frames.Count; ++i) {
 				AnimationFrame frame = frames[i];
-				if (time < frame.StartTime)
-					yield break;
-				if (time < frame.StartTime + frame.Duration || (time >= duration && frame.StartTime + frame.Duration == duration)) {
+				//if (time < frame.StartTime)
+				//	yield break;
+				if (time >= frame.StartTime && (time < frame.EndTime || (time >= duration && frame.StartTime + frame.Duration == duration))) {
 					foreach (SpritePart sprite in frame.Sprite.GetParts(settings)) {
 						SpritePart offsetSprite = sprite;
 						offsetSprite.DrawOffset += frame.DrawOffset;
@@ -107,9 +107,9 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			float time = settings.PlaybackTime;
 			for (int i = 0; i < frames.Count; ++i) {
 				AnimationFrame frame = frames[i];
-				if (time < frame.StartTime)
-					return bounds;
-				if (time < frame.StartTime + frame.Duration || (time >= duration && frame.StartTime + frame.Duration == duration)) {
+				//if (time < frame.StartTime)
+				//	return bounds;
+				if (time >= frame.StartTime && (time < frame.EndTime || (time >= duration && frame.StartTime + frame.Duration == duration))) {
 					if (bounds.IsEmpty)
 						bounds = frame.Sprite.GetBounds(settings) + frame.DrawOffset;
 					else
@@ -173,26 +173,37 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 		public void AddFrame(AnimationFrame frame) {
 			int index = 0;
-			while (index < frames.Count && frame.StartTime > frames[index].StartTime)
-				++index;
+			while (index < frames.Count && frame.Depth >= frames[index].Depth) {
+				if (frame.StartTime < frames[index].StartTime && frame.Depth == frames[index].Depth)
+					break;
+				index++;
+			}
 			frames.Insert(index, frame);
 			duration = Math.Max(duration, frame.EndTime);
 		}
 
-		public void AddFrame(int startTime, int duration, ISprite sprite) {
-			AddFrame(new AnimationFrame(startTime, duration, sprite));
+		public void AddFrame(int startTime, int duration, ISprite sprite, int depth = 0) {
+			AddFrame(new AnimationFrame(startTime, duration, sprite, depth));
 		}
 
-		public void AddFrame(int startTime, int duration, ISprite sprite, Point2I drawOffset) {
-			AddFrame(new AnimationFrame(startTime, duration, sprite, drawOffset));
+		public void AddFrame(int startTime, int duration, ISprite sprite, Point2I drawOffset, int depth = 0) {
+			AddFrame(new AnimationFrame(startTime, duration, sprite, drawOffset, depth));
 		}
 
-		public void AddFrame(int startTime, int duration, ISpriteSheet source, Point2I index) {
-			AddFrame(new AnimationFrame(startTime, duration, source, index));
+		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index, int depth = 0) {
+			AddFrame(new AnimationFrame(startTime, duration, source, index, depth));
 		}
 
-		public void AddFrame(int startTime, int duration, ISpriteSheet source, Point2I index, Point2I drawOffset) {
-			AddFrame(new AnimationFrame(startTime, duration, source, index, drawOffset));
+		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index, string definition, int depth = 0) {
+			AddFrame(new AnimationFrame(startTime, duration, source, index, definition, depth));
+		}
+
+		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index, Point2I drawOffset, int depth = 0) {
+			AddFrame(new AnimationFrame(startTime, duration, source, index, drawOffset, depth));
+		}
+
+		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index, string definition, Point2I drawOffset, int depth = 0) {
+			AddFrame(new AnimationFrame(startTime, duration, source, index, definition, drawOffset, depth));
 		}
 
 		public void RemoveFrameAt(int index) {

@@ -63,7 +63,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			AddCommand("Tileset", "string name, string sheetName, (int width, int height)",
 			delegate(CommandParam parameters) {
-				SpriteSheet sheet = GetResource<ISpriteSheet>(parameters.GetString(1)) as SpriteSheet;
+				SpriteSheet sheet = GetResource<ISpriteSource>(parameters.GetString(1)) as SpriteSheet;
 				tileset = new Tileset(parameters.GetString(0), sheet,
 									  parameters.GetPoint(2));
 			});
@@ -280,7 +280,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string spriteSheetName, (int sourceX, int sourceY), (int offsetX, int offsetY) = (0, 0)",
 			delegate(CommandParam parameters) {
 				if (parameters.ChildCount >= 2) {
-					baseTileData.Sprite = GetResource<ISpriteSheet>(parameters.GetString(0))
+					baseTileData.Sprite = GetResource<ISpriteSource>(parameters.GetString(0))
 						.GetSprite(parameters.GetPoint(1));
 					Point2I drawOffset = parameters.GetPoint(2);
 					if (!drawOffset.IsZero) {
@@ -321,7 +321,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					tileData.SpriteList = spriteList;
 				}
 				if (parameters.ChildCount > 2 && parameters[2].Type == CommandParamType.Array) {
-					ISprite sprite = GetResource<ISpriteSheet>(parameters.GetString(1))
+					ISprite sprite = GetResource<ISpriteSource>(parameters.GetString(1))
 						.GetSprite(parameters.GetPoint(2));
 					Point2I drawOffset = parameters.GetPoint(3);
 					if (!drawOffset.IsZero) {
@@ -358,7 +358,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string spriteSheetName, (int sourceX, int sourceY), (int offsetX, int offsetY) = (0, 0)",
 			delegate(CommandParam parameters) {
 				if (parameters.ChildCount >= 2) {
-					baseTileData.Sprite = GetResource<ISpriteSheet>(parameters.GetString(0))
+					baseTileData.Sprite = GetResource<ISpriteSource>(parameters.GetString(0))
 						.GetSprite(parameters.GetPoint(1));
 					Point2I drawOffset = parameters.GetPoint(2);
 					if (!drawOffset.IsZero) {
@@ -436,7 +436,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//AddSpriteCommand("SpriteSheet", delegate(CommandParam parameters) {
 				if (parameters.ChildCount == 1) {
 					// Start using the given sprite sheet.
-					SpriteSheet sheet = GetResource<ISpriteSheet>(parameters.GetString(0)) as SpriteSheet;
+					SpriteSheet sheet = GetResource<ISpriteSource>(parameters.GetString(0)) as SpriteSheet;
 				}
 				else {
 					int i = 1;
@@ -462,7 +462,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 							parameters.GetPoint(i + 0),
 							parameters.GetPoint(i + 2),
 							parameters.GetPoint(i + 1));
-					AddResource<ISpriteSheet>(sheetName, sheet);
+					AddResource<ISpriteSource>(sheetName, sheet);
 				}
 			});
 
