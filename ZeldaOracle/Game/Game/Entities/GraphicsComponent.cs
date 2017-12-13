@@ -34,7 +34,7 @@ namespace ZeldaOracle.Game.Entities
 		private bool			flickerIsVisible;
 		private bool			isAnimatedWhenPaused;
 		private bool			isHurting;
-		private string          colorGroup;
+		private ColorDefinitions colorDefinitions;
 
 
 		//-----------------------------------------------------------------------------
@@ -62,6 +62,7 @@ namespace ZeldaOracle.Game.Entities
 			this.imageVariant			= GameData.VARIANT_NONE;
 			this.isAnimatedWhenPaused	= false;
 			this.isHurting				= false;
+			this.colorDefinitions       = new ColorDefinitions();
 		}
 		
 
@@ -159,14 +160,21 @@ namespace ZeldaOracle.Game.Entities
 			if (isFlickering && !flickerIsVisible)
 				return;
 
+			ColorDefinitions finalColorDefinitions = colorDefinitions;
+
 			// Change the variant if hurting.
 			int newImageVariant = imageVariant;
-			if (isHurting && entity.GameControl.RoomTicks % 8 >= 4)
+			if (isHurting && entity.GameControl.RoomTicks % 8 >= 4) {
 				newImageVariant = GameData.VARIANT_HURT;
+				finalColorDefinitions = ColorDefinitions.All("hurt");
+			}
 
 			// Draw the sprite/animation.
 			Vector2F drawPosition = Entity.Position - new Vector2F(0, Entity.ZPosition);
-			g.DrawAnimationPlayer(animationPlayer, newImageVariant,
+			//g.DrawAnimationPlayer(animationPlayer, newImageVariant,
+			//	drawPosition + drawOffset, layer, entity.Position);
+			g.DrawISprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(
+				finalColorDefinitions, newImageVariant, animationPlayer.PlaybackTime),
 				drawPosition + drawOffset, layer, entity.Position);
 
 			// Draw the ripples effect.
@@ -312,9 +320,9 @@ namespace ZeldaOracle.Game.Entities
 			}
 		}
 
-		public string ColorGroup {
-			get { return colorGroup; }
-			set { colorGroup = null; }
+		public ColorDefinitions ColorDefinitions {
+			get { return colorDefinitions; }
+			set { colorDefinitions = null; }
 		}
 	}
 }

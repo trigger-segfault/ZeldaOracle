@@ -1,0 +1,54 @@
+PALETTEDICTIONARY entity, entity_dictionary;
+
+#==============================================================
+# Standard
+#==============================================================
+
+ENTITY	green;
+ENTITY	blue;
+ENTITY	red;
+ENTITY	orange;
+ENTITY	shaded_red;
+ENTITY	shaded_blue;
+ENTITY	shaded_pink;
+ENTITY	shaded_brown;
+ENTITY	shaded_purple;
+ENTITY	shaded_green;
+ENTITY	desaturated_green;
+
+
+#==============================================================
+# Special
+#==============================================================
+
+ENTITY	inverse_red;
+ENTITY	inverse_blue;
+ENTITY	hurt;
+
+ENTITY	possesses_blue;
+ENTITY	possessed_red;
+ENTITY	dark_link;
+
+
+#==============================================================
+# Color Cube
+#==============================================================
+
+ENTITY	color_cube_yellow_red;
+ENTITY	color_cube_red_blue;
+ENTITY	color_cube_blue_yellow;
+
+
+#==============================================================
+# Unique
+#==============================================================
+
+ENTITY	maku_seed;
+
+#==============================================================
+# UI elements that are colored as tiles in-game
+#==============================================================
+
+ENTITY	ui_hud;
+
+END;

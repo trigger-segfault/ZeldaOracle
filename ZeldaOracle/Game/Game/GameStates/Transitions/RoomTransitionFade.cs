@@ -51,7 +51,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			if (timer > TRANSITION_FADE_DURATION) {
 				if (isBeginningFade) {
 					// Switch rooms.
-					SetupNewRoom();
+					SetupNewRoom(true);
 					DestroyOldRoom();
 					isBeginningFade = false;
 					timer = 0;

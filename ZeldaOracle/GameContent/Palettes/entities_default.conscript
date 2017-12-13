@@ -4,17 +4,17 @@ PALETTE entity_dictionary, entities_default;
 # Standard
 #==============================================================
 
-COLOR	tan_green, light	(248,208,136);
-COLOR	tan_green, dark		( 16,168, 64);
+COLOR	green, light	(248,208,136);
+COLOR	green, dark		( 16,168, 64);
 
-LOOKUP	tan_blue, light		tan_green, light;
-COLOR	tan_blue, dark		( 24,128,248);
+LOOKUP	blue, light		green, light;
+COLOR	blue, dark		( 24,128,248);
 
-LOOKUP	tan_red, light		tan_green, light;
-COLOR	tan_red, dark		(248,  8, 40);
+LOOKUP	red, light		green, light;
+COLOR	red, dark		(248,  8, 40);
 
-LOOKUP	tan_orange, light	tan_green, light;
-COLOR	tan_orange, dark	(248,120,  8);
+LOOKUP	orange, light	green, light;
+COLOR	orange, dark	(248,120,  8);
 
 COLOR	shaded_red, light	(248,176, 48);
 COLOR	shaded_red, dark	(216,  0,  0);
@@ -22,14 +22,47 @@ COLOR	shaded_red, dark	(216,  0,  0);
 COLOR	shaded_blue, light	(112,168,248);
 COLOR	shaded_blue, dark	(  0,  0,248);
 
+COLOR	shaded_pink, light	(248,120,168);
+COLOR	shaded_pink, dark	(200, 24, 56);
+
+COLOR	shaded_purple, light	(240,200,240);
+COLOR	shaded_purple, dark		(176,  0,216);
+
+COLOR	shaded_brown, light		(248,184,136);
+COLOR	shaded_brown, dark		(136, 80, 32);
+
+COLOR	shaded_green, light		(200,248,200);
+COLOR	shaded_green, dark		(  0,144,  0);
+
+COLOR	desaturated_green, light	(168,248,292);
+COLOR	desaturated_green, dark		( 56,152,112);
+
 
 #==============================================================
 # Special
 #==============================================================
 
-LOOKUP	hurt, light			shaded_red, black;
-LOOKUP	hurt, dark			shaded_red, dark;
-LOOKUP	hurt, black			shaded_red, light;
+LOOKUP	inverse_red, light	shaded_red, black;
+LOOKUP	inverse_red, dark	shaded_red, dark;
+LOOKUP	inverse_red, black	shaded_red, light;
+
+LOOKUP	inverse_blue, light	shaded_blue, black;
+LOOKUP	inverse_blue, dark	shaded_blue, dark;
+LOOKUP	inverse_blue, black	shaded_blue, light;
+
+LOOKUP	hurt, light			inverse_red, light;
+LOOKUP	hurt, dark			inverse_red, dark;
+LOOKUP	hurt, black			inverse_red, black;
+
+
+COLOR	possessed_blue, light	(208,240,248);
+COLOR	possessed_blue, dark	( 64,168,240);
+
+LOOKUP	possessed_red, light	possessed_blue, light;
+COLOR	possessed_red, dark		(240, 40, 88);
+
+COLOR	dark_link, light	(248, 88, 88);
+COLOR	dark_link, dark		(144,144,144);
 
 
 #==============================================================
@@ -39,8 +72,8 @@ LOOKUP	hurt, black			shaded_red, light;
 LOOKUP	color_cube_yellow_red, light	shaded_red, light;
 LOOKUP	color_cube_yellow_red, dark		shaded_red, dark;
 LOOKUP	color_cube_red_blue, light		shaded_red, dark;
-LOOKUP	color_cube_red_blue, dark		tan_blue, dark;
-LOOKUP	color_cube_blue_yellow, light	tan_blue, dark;
+LOOKUP	color_cube_red_blue, dark		blue, dark;
+LOOKUP	color_cube_blue_yellow, light	blue, dark;
 LOOKUP	color_cube_blue_yellow, dark	shaded_red, light;
 
 
@@ -55,7 +88,7 @@ COLOR	maku_seed, dark		(160,  0, 88);
 # UI elements that are colored as tiles in-game
 #==============================================================
 
-LOOKUP	ui_hud, light		tan_green, light;
+LOOKUP	ui_hud, light		green, light;
 COLOR	ui_hud, dark		(232,  8, 24);
 
 END;

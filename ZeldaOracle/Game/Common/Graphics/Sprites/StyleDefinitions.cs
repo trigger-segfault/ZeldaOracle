@@ -28,6 +28,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		/// <summary>An empty collection of style definitions.</summary>
 		public static readonly StyleDefinitions Empty = new StyleDefinitions();
 
+
 		//-----------------------------------------------------------------------------
 		// Members
 		//-----------------------------------------------------------------------------

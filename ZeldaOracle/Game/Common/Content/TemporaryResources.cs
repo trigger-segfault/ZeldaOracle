@@ -18,7 +18,7 @@ namespace ZeldaOracle.Common.Content {
 		// The collection of loaded images.
 		private Dictionary<string, Image> images;
 		// The collection of loaded sprite sheets.
-		private Dictionary<string, ISpriteSheet> spriteSheets;
+		private Dictionary<string, ISpriteSource> spriteSheets;
 		// The collection of loaded sprites.
 		private Dictionary<string, ISprite> sprites;
 		// The collection of loaded animations.
@@ -38,7 +38,7 @@ namespace ZeldaOracle.Common.Content {
 
 		public TemporaryResources() {
 			this.images				= new Dictionary<string, Image>();
-			this.spriteSheets		= new Dictionary<string, ISpriteSheet>();
+			this.spriteSheets		= new Dictionary<string, ISpriteSource>();
 			this.sprites			= new Dictionary<string, ISprite>();
 			this.animations			= new Dictionary<string, Animation>();
 			this.collisionModels	= new Dictionary<string, CollisionModel>();
@@ -48,7 +48,7 @@ namespace ZeldaOracle.Common.Content {
 			// Setup the resource dictionary lookup map.
 			this.resourceDictionaries = new Dictionary<Type, object>();
 			this.resourceDictionaries[typeof(Image)]			= images;
-			this.resourceDictionaries[typeof(ISpriteSheet)]		= spriteSheets;
+			this.resourceDictionaries[typeof(ISpriteSource)]		= spriteSheets;
 			this.resourceDictionaries[typeof(ISprite)]			= sprites;
 			this.resourceDictionaries[typeof(Animation)]		= animations;
 			this.resourceDictionaries[typeof(CollisionModel)]	= collisionModels;

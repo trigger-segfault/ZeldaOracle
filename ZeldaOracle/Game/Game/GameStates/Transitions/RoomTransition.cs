@@ -38,15 +38,15 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			//gameManager.PushGameState(roomNew);
 			End();
 
-			GameData.PaletteShader.TilePalette = NewRoomControl.Zone.Palette;
-			GameData.PaletteShader.TileRatio = 0f;
+			// Call this now incase it hasn't been called yet. (Like in push transition)
+			SetupNewRoomPalette();
 		}
 
 		protected void DestroyOldRoom() {
 			OldRoomControl.DestroyRoom();
 		}
-		
-		protected void SetupNewRoom() {
+
+		protected void SetupNewRoom(bool setupPalette) {
 			// Move the player from the old room to the new room.
 			// RoomControl.BeginRoom() will update the player's RoomControl
 			// reference.
@@ -63,6 +63,20 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			Player.MarkRespawn();
 
 			Player.OnEnterRoom();
+
+			if (setupPalette) {
+				SetupNewRoomPalette();
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		private void SetupNewRoomPalette() {
+			GameData.PaletteShader.TilePalette = NewRoomControl.Zone.Palette;
+			GameData.PaletteShader.TileRatio = 0f;
 		}
 		
 

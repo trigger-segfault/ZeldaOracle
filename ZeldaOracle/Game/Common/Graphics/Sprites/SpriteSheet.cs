@@ -7,7 +7,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Common.Graphics {
 	/// <summary>A grid of sprites defined in an image.</summary>
-	public class SpriteSheet : ISpriteSheet {
+	public class SpriteSheet : ISpriteSource {
 
 		/// <summary>The image used to get the sprites from.</summary>
 		private Image	image;
@@ -55,12 +55,12 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 		
 		/// <summary>Gets the sprite at the specified index in the sheet.</summary>
-		ISprite ISpriteSheet.GetSprite(int indexX, int indexY) {
+		ISprite ISpriteSource.GetSprite(int indexX, int indexY) {
 			return new BasicSprite(image, GetSourceRect(indexX, indexY));
 		}
 
 		/// <summary>Gets the sprite at the specified index in the sheet.</summary>
-		ISprite ISpriteSheet.GetSprite(Point2I index) {
+		ISprite ISpriteSource.GetSprite(Point2I index) {
 			return new BasicSprite(image, GetSourceRect(index));
 		}
 

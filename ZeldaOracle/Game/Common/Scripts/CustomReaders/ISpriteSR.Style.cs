@@ -38,18 +38,28 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			AddCommand("STYLE", (int) Modes.SpriteSet,
 				"string styleGroup",
+				"string styleGroup, (int indexX, int indexY)",
 			delegate (CommandParam parameters) {
+				if (parameters.HasPrefix() && (parameters.ChildCount == 1) != parameters.HasPrefix("dynamic"))
+					ThrowCommandParseError("Invalid use of prefix with overload!");
+				string styleGroup = parameters.GetString(0);
 				if (parameters.HasPrefix("dynamic")) {
 					for (int x = 0; x < EditingSpriteSet.Width; x++) {
 						for (int y = 0; y < EditingSpriteSet.Height; y++) {
-							EditingSpriteSet.SetSprite(x, y, new StyleSprite(parameters.GetString(0)));
+							EditingSpriteSet.SetSprite(x, y, new StyleSprite(styleGroup));
 						}
 					}
-					Mode |= Modes.StyleSprite;
+					singular = false;
+				}
+				else if (parameters.HasPrefix("single")) {
+					sprite = new StyleSprite(styleGroup);
+					EditingSpriteSet.SetSprite(parameters.GetPoint(1), sprite);
+					singular = true;
 				}
 				else {
-					ThrowCommandParseError("STYLE (string name, string styleGroup) must only be called with DYNAMIC prefix!");
+					ThrowCommandParseError("STYLE(string styleGroup) must only be called with DYNAMIC or SINGLE prefix!");
 				}
+				Mode |= Modes.StyleSprite;
 			});
 			//=====================================================================================
 			// BUILDING
@@ -59,7 +69,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string style, (int indexX, int indexY)",
 			delegate (CommandParam parameters) {
 				if (parameters.GetParam(1).Name == "name") {
-					StyleSprite.AddStyle(parameters.GetString(0),
+					StyleSprite.Add(parameters.GetString(0),
 						GetResource<ISprite>(parameters.GetString(1)));
 				}
 				else if (SourceMode != SourceModes.None) {
@@ -69,7 +79,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						paletteArgs.SourceRect = SpriteSheet.GetSourceRect(parameters.GetPoint(1));
 						sprite = Resources.PalettedSpriteDatabase.AddSprite(paletteArgs);
 					}
-					StyleSprite.AddStyle(parameters.GetString(0),
+					StyleSprite.Add(parameters.GetString(0),
 						sprite);
 				}
 				else {
@@ -82,7 +92,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string style, (int indexX, int indexY)",
 			delegate (CommandParam parameters) {
 				if (parameters.GetParam(1).Name == "name") {
-					StyleSprite.SetStyle(parameters.GetString(0),
+					StyleSprite.Set(parameters.GetString(0),
 						GetResource<ISprite>(parameters.GetString(1)));
 				}
 				else if (SourceMode != SourceModes.None) {
@@ -92,7 +102,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						paletteArgs.SourceRect = SpriteSheet.GetSourceRect(parameters.GetPoint(1));
 						sprite = Resources.PalettedSpriteDatabase.AddSprite(paletteArgs);
 					}
-					StyleSprite.SetStyle(parameters.GetString(0),
+					StyleSprite.Set(parameters.GetString(0),
 						sprite);
 				}
 				else {
@@ -103,27 +113,47 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("REMOVE", (int) Modes.StyleSprite,
 				"string style",
 			delegate (CommandParam parameters) {
-				StyleSprite.RemoveStyle(parameters.GetString(0));
+				StyleSprite.Remove(parameters.GetString(0));
 			});
 			//=====================================================================================
 			// BUILDING SpriteSet
 			//=====================================================================================
 			AddCommand("ADD", (int) (Modes.SpriteSet |  Modes.StyleSprite),
 				"string style, (int indexX, int indexY)",
+				"string style, (int indexX, int indexY), (int startX, int startY), (int width, int height)",
 			delegate (CommandParam parameters) {
 				if (SourceMode != SourceModes.SpriteSheet) {
 					ThrowCommandParseError("Cannot add sprite style with no sprite sheet source!");
 				}
-				for (int x = 0; x < EditingSpriteSet.Width; x++) {
-					for (int y = 0; y < EditingSpriteSet.Height; y++) {
-						ISprite sprite = source.GetSprite(parameters.GetPoint(1) + new Point2I(x, y));
+
+				Point2I start = parameters.GetPoint(2, Point2I.Zero);
+				Point2I dimensions = parameters.GetPoint(3, EditingSpriteSet.Dimensions);
+				if (dimensions.X == 0) dimensions.X = EditingSpriteSet.Width;
+				if (dimensions.Y == 0) dimensions.Y = EditingSpriteSet.Height;
+				if (singular) {
+					if (parameters.ChildCount != 2)
+						ThrowCommandParseError("Invalid use of overload with SINGLE!");
+					dimensions = Point2I.One;
+					ISprite sprite = source.GetSprite(parameters.GetPoint(1));
+					if (paletteArgs.Dictionary != null && SourceMode == SourceModes.SpriteSheet) {
+						paletteArgs.Image = SpriteSheet.Image;
+						paletteArgs.SourceRect = SpriteSheet.GetSourceRect(parameters.GetPoint(1));
+						sprite = Resources.PalettedSpriteDatabase.AddSprite(paletteArgs);
+					}
+					StyleSprite.Add(parameters.GetString(0), sprite);
+				}
+
+				for (int x = 0; x < dimensions.X; x++) {
+					for (int y = 0; y < dimensions.Y; y++) {
+						Point2I point = new Point2I(x, y);
+						ISprite sprite = source.GetSprite(parameters.GetPoint(1) + point);
 						if (paletteArgs.Dictionary != null && SourceMode == SourceModes.SpriteSheet) {
 							paletteArgs.Image = SpriteSheet.Image;
-							paletteArgs.SourceRect = SpriteSheet.GetSourceRect(parameters.GetPoint(1) + new Point2I(x, y));
+							paletteArgs.SourceRect = SpriteSheet.GetSourceRect(parameters.GetPoint(1) + point);
 							sprite = Resources.PalettedSpriteDatabase.AddSprite(paletteArgs);
 						}
-						StyleSprite styleSprite = EditingSpriteSet.GetSprite(x, y) as StyleSprite;
-						styleSprite.AddStyle(parameters.GetString(0), sprite);
+						StyleSprite styleSprite = EditingSpriteSet.GetSprite(start + point) as StyleSprite;
+						styleSprite.Add(parameters.GetString(0), sprite);
 					}
 				}
 			});

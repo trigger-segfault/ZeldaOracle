@@ -23,6 +23,7 @@ using ZeldaOracle.Game.Control.Menus;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.Entities.Collisions;
@@ -84,6 +85,8 @@ namespace ZeldaOracle.Game.Debug {
 		public static void UpdateRoomDebugKeys() {
 			bool ctrl = (Keyboard.IsKeyDown(Keys.LControl) ||
 				Keyboard.IsKeyDown(Keys.RControl));
+			bool shift = (Keyboard.IsKeyDown(Keys.LShift) ||
+				Keyboard.IsKeyDown(Keys.RShift));
 
 			// CTRL+Q: Quit the game
 			if (ctrl && Keyboard.IsKeyPressed(Keys.Q))
@@ -107,6 +110,21 @@ namespace ZeldaOracle.Game.Debug {
 			// Ctrl+U: Toggle underwater
 			if (ctrl && Keyboard.IsKeyPressed(Keys.U))
 				RoomControl.IsUnderwater = !RoomControl.IsUnderwater;
+
+			// L: Level-up item in menu
+			if (Keyboard.IsKeyPressed(Keys.L)) {
+				if (GameManager.CurrentGameState is InventoryMenu) {
+					InventoryMenu menu = ((InventoryMenu) GameManager.CurrentGameState);
+					ISlotItem slotItem = menu.CurrentSlotGroup.CurrentSlot.SlotItem;
+					if (slotItem is Item) {
+						Item item = (Item) slotItem;
+						int oldLevel = item.Level;
+						item.Level = (item.Level + 1) % (item.MaxLevel + 1);
+						if (item.Level != oldLevel)
+							menu.ResetDescription();
+					}
+				}
+			}
 
 			// C: Change color barrier color.
 			if (!ctrl && Keyboard.IsKeyPressed(Keys.C)) {

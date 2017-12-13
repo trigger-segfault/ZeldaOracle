@@ -13,31 +13,31 @@ namespace ZeldaOracle.Game {
 		// Sprite Sheets
 		//-----------------------------------------------------------------------------
 
-		public static ISpriteSheet SHEET_MENU_SMALL;
-		public static ISpriteSheet SHEET_MENU_LARGE;
-		public static ISpriteSheet SHEET_MENU_SMALL_LIGHT;
-		public static ISpriteSheet SHEET_MENU_LARGE_LIGHT;
-		public static ISpriteSheet SHEET_ITEMS_SMALL;
-		public static ISpriteSheet SHEET_ITEMS_LARGE;
-		public static ISpriteSheet SHEET_ITEMS_SMALL_LIGHT;
-		public static ISpriteSheet SHEET_ITEMS_LARGE_LIGHT;
+		public static ISpriteSource SHEET_MENU_SMALL;
+		public static ISpriteSource SHEET_MENU_LARGE;
+		public static ISpriteSource SHEET_MENU_SMALL_LIGHT;
+		public static ISpriteSource SHEET_MENU_LARGE_LIGHT;
+		public static ISpriteSource SHEET_ITEMS_SMALL;
+		public static ISpriteSource SHEET_ITEMS_LARGE;
+		public static ISpriteSource SHEET_ITEMS_SMALL_LIGHT;
+		public static ISpriteSource SHEET_ITEMS_LARGE_LIGHT;
 
-		public static ISpriteSheet SHEET_BASIC_EFFECTS;
-		public static ISpriteSheet SHEET_COLOR_EFFECTS;
+		public static ISpriteSource SHEET_BASIC_EFFECTS;
+		public static ISpriteSource SHEET_COLOR_EFFECTS;
 
-		public static ISpriteSheet SHEET_PLAYER;
-		public static ISpriteSheet SHEET_PLAYER_RED;
-		public static ISpriteSheet SHEET_PLAYER_BLUE;
-		public static ISpriteSheet SHEET_PLAYER_HURT;
+		public static ISpriteSource SHEET_PLAYER;
+		public static ISpriteSource SHEET_PLAYER_RED;
+		public static ISpriteSource SHEET_PLAYER_BLUE;
+		public static ISpriteSource SHEET_PLAYER_HURT;
 		//public static ISpriteSheet SHEET_MONSTERS;
 		//public static ISpriteSheet SHEET_MONSTERS_HURT;
-		public static ISpriteSheet SHEET_PLAYER_ITEMS;
+		public static ISpriteSource SHEET_PLAYER_ITEMS;
 	
-		public static ISpriteSheet SHEET_ZONESET_LARGE;
-		public static ISpriteSheet SHEET_ZONESET_SMALL;
-		public static ISpriteSheet SHEET_TILESET_OVERWORLD;
-		public static ISpriteSheet SHEET_TILESET_INTERIOR;
-		public static ISpriteSheet SHEET_GENERAL_TILES;
+		public static ISpriteSource SHEET_ZONESET_LARGE;
+		public static ISpriteSource SHEET_ZONESET_SMALL;
+		public static ISpriteSource SHEET_TILESET_OVERWORLD;
+		public static ISpriteSource SHEET_TILESET_INTERIOR;
+		public static ISpriteSource SHEET_GENERAL_TILES;
 
 
 		//-----------------------------------------------------------------------------
@@ -290,10 +290,11 @@ namespace ZeldaOracle.Game {
 
 		// Loads the sprites and sprite-sheets.
 		private static void LoadSprites() {
-			Resources.LoadSpriteSheets("SpriteSheets/sprites.conscript");
-			IntegrateResources<ISpriteSheet>("SHEET_");
+			Resources.LoadSpriteSheets("Sprites/sprites.conscript");
+			IntegrateResources<ISpriteSource>("SHEET_");
 			IntegrateResources<ISprite>("SPR_");
-			
+			IntegrateResources<Animation>("ANIM_");
+
 			// TEMPORARY: Create sprite arrays here.
 			SPR_ITEM_SEEDS = new ISprite[] {
 				SPR_ITEM_SEED_EMBER,

@@ -625,9 +625,18 @@ namespace ZeldaOracle.Game.Entities.Players {
 			
 			// Sync the graphics image variant with the current tunic.
 			switch (tunic) {
-			case PlayerTunics.GreenTunic:	Graphics.ImageVariant = GameData.VARIANT_GREEN;	break;
-			case PlayerTunics.RedTunic:		Graphics.ImageVariant = GameData.VARIANT_RED;	break;
-			case PlayerTunics.BlueTunic:	Graphics.ImageVariant = GameData.VARIANT_BLUE;	break;
+			case PlayerTunics.GreenTunic:
+				Graphics.ColorDefinitions.SetAll("green");
+				Graphics.ImageVariant = GameData.VARIANT_GREEN;
+				break;
+			case PlayerTunics.RedTunic:
+				Graphics.ColorDefinitions.SetAll("red");
+				Graphics.ImageVariant = GameData.VARIANT_RED;
+				break;
+			case PlayerTunics.BlueTunic:
+				Graphics.ColorDefinitions.SetAll("blue");
+				Graphics.ImageVariant = GameData.VARIANT_BLUE;
+				break;
 			}
 		}
 

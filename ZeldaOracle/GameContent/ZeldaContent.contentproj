@@ -58,6 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Animations\" />
     <Folder Include="Images\Editor\" />
     <Folder Include="Images\Tiles\Database\" />
     <Folder Include="Languages\" />
@@ -69,7 +70,7 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
-    <None Include="Animations\animations.conscript">
+    <None Include="Sprites\animations.conscript">
       <Name>animations</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -93,8 +94,8 @@
       <Name>entities_default</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Palettes\Dictionaries\tile_palette_dictionary.conscript">
-      <Name>tile_palette_dictionary</Name>
+    <None Include="Palettes\Dictionaries\tile_dictionary.conscript">
+      <Name>tile_dictionary</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Palettes\dungeon_ages_1_converter.conscript">
@@ -105,8 +106,8 @@
       <Name>dungeon_ages_1</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Palettes\Dictionaries\entity_palette_dictionary.conscript">
-      <Name>entity_palette_dictionary</Name>
+    <None Include="Palettes\Dictionaries\entity_dictionary.conscript">
+      <Name>entity_dictionary</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Palettes\entities_menu.conscript">
@@ -117,17 +118,25 @@
       <Name>tiles_default</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="SpriteSheets\Styles\cliffs.conscript">
+    <None Include="Sprites\Tiles\color_cube.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>color_cube</Name>
+    </None>
+    <None Include="Sprites\Tiles\Styles\cliffs.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>cliffs</Name>
     </None>
-    <None Include="SpriteSheets\Styles\cliffs_temp.conscript">
+    <None Include="Sprites\Tiles\Styles\cliffs_temp.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>cliffs_temp</Name>
     </None>
-    <None Include="SpriteSheets\Styles\cliffs_tiles.conscript">
+    <None Include="Sprites\Tiles\Styles\cliffs_tiles.conscript">
       <Name>cliffs_tiles</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Units\Player\player.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>player</Name>
     </None>
     <None Include="Tilesets\cliffs.conscript">
       <Name>cliffs</Name>
@@ -193,12 +202,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>images</Name>
     </None>
-    <None Include="SpriteSheets\sprites.conscript">
+    <None Include="Sprites\sprites.conscript">
       <Name>sprites</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SpriteSheets\sheet_debug_menu.conscript">
-      <Name>sheet_debug_menu_script</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Tilesets\water.conscript">
@@ -257,13 +262,6 @@
       <Name>font_debug_menu_bold_2</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="SpriteSheets\sheet_debug_menu.png">
-      <Name>sheet_debug_menu</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -1339,6 +1337,13 @@
     </Compile>
     <Compile Include="Images\Tiles\Styles\vines.png">
       <Name>vines</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\Units\Player\player_items.png">
+      <Name>player_items</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

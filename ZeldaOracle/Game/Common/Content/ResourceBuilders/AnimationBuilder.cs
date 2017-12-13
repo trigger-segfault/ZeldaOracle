@@ -11,7 +11,6 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 	public class AnimationBuilder {
 		
 		private Animation			animation;
-		private ISpriteSheet		source;
 		private SpritePaletteArgs	paletteArgs;
 
 
@@ -21,7 +20,6 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 		
 		public AnimationBuilder() {
 			animation = null;
-			source = null;
 		}
 		
 
@@ -45,8 +43,7 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 			return this;
 		}
 
-		public Animation End()
-		{
+		public Animation End() {
 			Animation temp = animation;
 			animation = null;
 			return temp;
@@ -56,85 +53,61 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 		// Building
 		//-----------------------------------------------------------------------------
 
-		public AnimationBuilder InsertFrameStrip(int time, int duration, Point2I index, int length, Point2I drawOffset, Point2I relative) {
-			if (relative.IsZero)
-				relative = new Point2I(1, 0);
+		public AnimationBuilder InsertFrameStrip(int time, int duration, ISpriteSource source, Point2I index, string definition, int length, Point2I drawOffset, int depth, Point2I relative) {
+			//if (relative.IsZero)
+			//	relative = new Point2I(1, 0);
 			for (int i = 0; i < length; ++i)
-				InsertFrame(time + (duration * i), duration, index + (i * relative), drawOffset);
+				InsertFrame(time + (duration * i), duration, source, index + (i * relative), definition, drawOffset, depth);
 			return this;
 		}
 
-		public AnimationBuilder AddFrameStrip(int duration, Point2I index, int length, Point2I drawOffset, Point2I relative) {
-			return InsertFrameStrip(animation.Duration, duration, index, length, drawOffset, relative);
+		public AnimationBuilder AddFrameStrip(int duration, ISpriteSource source, Point2I index, string definition, int length, Point2I drawOffset, int depth, Point2I relative) {
+			return InsertFrameStrip(animation.Duration, duration, source, index, definition, length, drawOffset, depth, relative);
 		}
 
-		public AnimationBuilder AddFrame(int duration, Point2I index, Point2I drawOffset) {
-			return InsertFrame(animation.Duration, duration, index, drawOffset);
+		public AnimationBuilder AddFrame(int duration, ISpriteSource source, Point2I index, string definition, Point2I drawOffset, int depth) {
+			return InsertFrame(animation.Duration, duration, source, index, definition, drawOffset, depth);
 		}
 
-		public AnimationBuilder AddFrame(int duration, ISprite sprite) {
-			return InsertFrame(animation.Duration, duration, sprite, Point2I.Zero);
+		public AnimationBuilder AddFrame(int duration, ISprite sprite, Point2I drawOffset, int depth) {
+			return InsertFrame(animation.Duration, duration, sprite, drawOffset, depth);
+		}
+		
+		public AnimationBuilder AddPart(int duration, ISpriteSource source, Point2I index, string definition, Point2I drawOffset, int depth) {
+			AnimationFrame prevFrame = animation.LastFrame();
+			return InsertFrame(prevFrame.StartTime, prevFrame.Duration, source, index, definition, drawOffset, depth);
 		}
 
-		public AnimationBuilder AddFrame(int duration, ISprite sprite, Point2I drawOffset) {
-			return InsertFrame(animation.Duration, duration, sprite, drawOffset);
+		public AnimationBuilder AddPart(int duration, ISprite sprite, Point2I drawOffset, int depth) {
+			AnimationFrame prevFrame = animation.LastFrame();
+			return InsertFrame(prevFrame.StartTime, duration, sprite, drawOffset, depth);
 		}
 
 		public AnimationBuilder AddEmptyFrame(int duration) {
-			return AddFrame(duration, new EmptySprite());
+			return InsertFrame(animation.Duration, duration, new EmptySprite(), Point2I.Zero, 0);
 		}
 
-		public AnimationBuilder AddPart(Point2I index, Point2I drawOffset) {
-			AnimationFrame prevFrame = animation.LastFrame();
-			return AddPart(prevFrame.Duration, index, drawOffset);
-		}
-
-		public AnimationBuilder AddPart(ISprite sprite) {
-			//assert(m_strip->getNumFrames() > 0);
-			AnimationFrame prevFrame = animation.LastFrame();
-			return InsertFrame(prevFrame.StartTime, prevFrame.Duration, sprite);
-		}
-
-		public AnimationBuilder AddPart(ISprite sprite, Point2I drawOffset) {
-			//assert(m_strip->getNumFrames() > 0);
-			AnimationFrame prevFrame = animation.LastFrame();
-			return InsertFrame(prevFrame.StartTime, prevFrame.Duration, sprite, drawOffset);
-		}
-
-		public AnimationBuilder AddPart(int duration, Point2I index, Point2I drawOffset) {
-			AnimationFrame prevFrame = animation.LastFrame();
-			return InsertFrame(prevFrame.StartTime, prevFrame.Duration, index, drawOffset);
-		}
-
-		public AnimationBuilder AddPart(int duration, ISprite sprite) {
-			return AddPart(duration, sprite, Point2I.Zero);
-		}
-
-		public AnimationBuilder AddPart(int duration, ISprite sprite, Point2I drawOffset) {
-			//assert(m_strip->getNumFrames() > 0);
-			AnimationFrame prevFrame = animation.LastFrame();
-			return InsertFrame(prevFrame.StartTime, duration, sprite, drawOffset);
-		}
-		
-		public AnimationBuilder InsertFrame(int time, int duration, Point2I index, Point2I drawOffset) {
+		public AnimationBuilder InsertFrame(int time, int duration, ISpriteSource source, Point2I index, string definition, Point2I drawOffset, int depth) {
 			if (paletteArgs.Dictionary != null && source is SpriteSheet) {
-				paletteArgs.Image = SpriteSheet.Image;
-				paletteArgs.SourceRect = SpriteSheet.GetSourceRect(index);
+				SpriteSheet spriteSheet = (SpriteSheet) source;
+				paletteArgs.Image = spriteSheet.Image;
+				paletteArgs.SourceRect = spriteSheet.GetSourceRect(index);
 				ISprite sprite = Resources.PalettedSpriteDatabase.AddSprite(paletteArgs);
-				return InsertFrame(time, duration, sprite, drawOffset);
+				return InsertFrame(time, duration, sprite, drawOffset, depth);
 			}
 			else {
-				animation.AddFrame(time, duration, source, index, drawOffset);
+				animation.AddFrame(time, duration, source, index, definition, drawOffset, depth);
 				return this;
 			}
 		}
 
-		public AnimationBuilder InsertFrame(int time, int duration, ISprite sprite) {
-			return InsertFrame(time, duration, sprite, Point2I.Zero);
+		public AnimationBuilder InsertFrame(int time, int duration, ISprite sprite, Point2I drawOffset, int depth) {
+			animation.AddFrame(time, duration, sprite, drawOffset, depth);
+			return this;
 		}
 
-		public AnimationBuilder InsertFrame(int time, int duration, ISprite sprite, Point2I drawOffset) {
-			animation.AddFrame(time, duration, sprite, drawOffset);
+		public AnimationBuilder AddFrame(AnimationFrame frame) {
+			animation.AddFrame(frame);
 			return this;
 		}
 
@@ -192,7 +165,18 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 		public AnimationBuilder ShiftSourcePositions(Point2I offset) {
 			for (Animation anim = animation; anim != null; anim = anim.NextStrip) {
 				for (int i = 0; i < anim.FrameCount; i++)
-					anim.GetFrameAt(i).DrawOffset += offset * (SpriteSheet.CellSize + SpriteSheet.Spacing);
+					anim.GetFrameAt(i).SourceIndex += offset;
+			}
+			return this;
+		}
+
+		public AnimationBuilder ChangeDefinition(string definition) {
+			for (Animation anim = animation; anim != null; anim = anim.NextStrip) {
+				for (int i = 0; i < anim.FrameCount; i++) {
+					AnimationFrame frame = anim.GetFrameAt(i);
+					if (frame.SourceDefinition != null)
+						frame.SourceDefinition = definition;
+				}
 			}
 			return this;
 		}
@@ -276,20 +260,6 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
-		public SpriteSheet SpriteSheet {
-			get { return source as SpriteSheet; }
-			set { source = value; }
-		}
-		public SpriteSet SpriteSet {
-			get { return source as SpriteSet; }
-			set { source = value; }
-		}
-
-		public ISpriteSheet Source {
-			get { return source; }
-			set { source = value; }
-		}
 
 		public Animation Animation {
 			get { return animation; }

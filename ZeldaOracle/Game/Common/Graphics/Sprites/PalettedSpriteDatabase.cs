@@ -30,9 +30,13 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public Image Image { get; set; }
 		public Rectangle2I SourceRect { get; set; }
 		public Point2I DrawOffset { get; set; }
-		public Dictionary<Color, ColorGroupSubtypePair> ColorMapping { get; set; }
+		public Dictionary<Color, Dictionary<int, ColorGroupSubtypePair>> ColorMapping { get; set; }
+		public int[] IndexedPossibleColorGroups { get; set; }
+		public string[] PossibleColorGroups { get; set; }
 		public HashSet<Color> IgnoreColors { get; set; }
 		public PaletteDictionary Dictionary { get; set; }
+		public Point2I ChunkSize { get; set; }
+		public Color[] DefaultMapping { get; set; }
 	}
 
 	public class UnspecifiedColorException : Exception {
@@ -40,6 +44,14 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 		public UnspecifiedColorException(Color color) {
 			this.Color = color;
+		}
+	}
+
+	public class NoMatchingColorGroupsException : Exception {
+		public HashSet<Color> Colors { get; set; }
+
+		public NoMatchingColorGroupsException(HashSet<Color> colors) {
+			this.Colors = colors;
 		}
 	}
 
@@ -70,7 +82,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			public BasicSprite AddSprite(SpritePaletteArgs args) {
 				// Do we need to create a new image
 				Image currentImage;
-				if (index % IndeciesPerImage == 0) {
+				if (ImageIndex == 0) {
 					currentImage = new Image(Resources.GraphicsDevice, dimensions * size);
 					images.Add(currentImage);
 				}
@@ -78,20 +90,115 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 					currentImage = CurrentImage;
 				}
 
+				// The list of already scanned colors
+				HashSet<Color> scannedColors = new HashSet<Color>();
+
+				Color defaultTransparent = Color.Transparent;
+				Color defaultBlack = Color.Black;
+				if (args.DefaultMapping != null) {
+					defaultTransparent = args.DefaultMapping[(int) LookupSubtypes.Transparent];
+					defaultBlack = args.DefaultMapping[(int) LookupSubtypes.Black];
+				}
+
 				// Modify the original sprite's colors based on the mapping
-				XnaColor[] colorData = new XnaColor[args.SourceRect.Area];
+					XnaColor[] colorData = new XnaColor[args.SourceRect.Area];
+				Point2I rectSize = args.SourceRect.Size;
 				//XnaColor[] colorData = new XnaColor[currentImage.Width * currentImage.Height];
 				XnaRectangle rect = (XnaRectangle) args.SourceRect;
 				args.Image.Texture.GetData<XnaColor>(0, rect, colorData, 0, colorData.Length);
-				for (int i = 0; i < colorData.Length; i++) {
+				Point2I chunkSize = args.ChunkSize;
+				if (chunkSize.IsZero)
+					chunkSize = rectSize;
+				Point2I numChunks = (rectSize + chunkSize - 1) / chunkSize;
+				for (int chunkX = 0; chunkX < numChunks.X; chunkX++) {
+					for (int chunkY = 0; chunkY < numChunks.Y; chunkY++) {
+						scannedColors.Clear();
+						HashSet<int> possibleGroups = new HashSet<int>(args.IndexedPossibleColorGroups);
+
+						for (int x = 0; x < chunkSize.X; x++) {
+							int ix = chunkX * chunkSize.X + x;
+							if (ix >= rectSize.X) break;
+							for (int y = 0; y < chunkSize.Y; y++) {
+								int iy = chunkY * chunkSize.Y + y;
+								if (iy >= rectSize.Y) break;
+								int index = ix + iy * rectSize.X;
+								Color color = (Color) colorData[index];
+								if (color.A == 0) {
+									color = Color.Transparent;
+									colorData[index] = color;
+								}
+								if (!scannedColors.Contains(color)) {
+									scannedColors.Add(color);
+									Dictionary<int, ColorGroupSubtypePair> dict;
+									if (args.ColorMapping.TryGetValue(color, out dict)) {
+										possibleGroups.RemoveWhere(s => !dict.ContainsKey(s));
+										if (!possibleGroups.Any())
+											throw new NoMatchingColorGroupsException(scannedColors);
+									}
+									else if (args.IgnoreColors.Contains(color)) {
+										// Carry on
+									}
+									else if (color == Color.Black || (args.Dictionary.PaletteType == PaletteTypes.Entity && color.A == 0)) {
+										// All groups are valid here
+									}
+									else {
+										throw new UnspecifiedColorException(color);
+									}
+								}
+							}
+						}
+
+						int indexedFinalColorGroup = -1;
+						string finalColorGroup = null;
+						for (int i = 0; i < args.IndexedPossibleColorGroups.Length; i++) {
+							int index = args.IndexedPossibleColorGroups[i];
+							if (possibleGroups.Contains(index)) {
+								indexedFinalColorGroup = index;
+								finalColorGroup = args.PossibleColorGroups[i];
+								break;
+							}
+						}
+						Dictionary<Color, Color> finalColorMapping = new Dictionary<Color, Color>();
+						bool transparentDefined = args.Dictionary.PaletteType != PaletteTypes.Entity;
+						bool blackDefined = false;
+						foreach (var pair in args.ColorMapping) {
+							if (pair.Value.ContainsKey(indexedFinalColorGroup)) {
+								ColorGroupSubtypePair colorGroupPair = pair.Value[indexedFinalColorGroup];
+								if (!transparentDefined && colorGroupPair.Subtype == LookupSubtypes.Transparent)
+									transparentDefined = true;
+								else if (!blackDefined && colorGroupPair.Subtype == LookupSubtypes.Black)
+									blackDefined = true;
+								if (args.DefaultMapping != null)
+									finalColorMapping.Add(pair.Key, args.DefaultMapping[(int) colorGroupPair.Subtype]);
+								else
+									finalColorMapping.Add(pair.Key, colorGroupPair.MappedColor);
+							}
+						}
+						if (!transparentDefined)
+							finalColorMapping.Add(Color.Transparent, args.Dictionary.GetMappedColor(finalColorGroup, LookupSubtypes.Transparent));
+						if (!blackDefined)
+							finalColorMapping.Add(Color.Black, args.Dictionary.GetMappedColor(finalColorGroup, LookupSubtypes.Black));
+
+						for (int x = 0; x < chunkSize.X; x++) {
+							int ix = chunkX * chunkSize.X + x;
+							if (ix >= rectSize.X) break;
+							for (int y = 0; y < chunkSize.Y; y++) {
+								int iy = chunkY * chunkSize.Y + y;
+								if (iy >= rectSize.Y) break;
+								int index = ix + iy * rectSize.X;
+								colorData[index] = finalColorMapping[(Color) colorData[index]];
+							}
+						}
+					}
+				}
+				/*for (int i = 0; i < colorData.Length; i++) {
 					Color color = (Color)colorData[i];
 					if (args.ColorMapping.ContainsKey(color)) {
 						colorData[i] = args.ColorMapping[color].MappedColor;
 					}
 					else if (!args.IgnoreColors.Contains(color)) {
-						throw new UnspecifiedColorException(color);
 					}
-				}
+				}*/
 
 				// Save the mapping to the database image
 				rect = (XnaRectangle) CurrentSourceRect;
@@ -110,8 +217,11 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			private Image CurrentImage {
 				get { return images.Last(); }
 			}
+			private int ImageIndex {
+				get { return index % IndeciesPerImage; }
+			}
 			private Rectangle2I CurrentSourceRect {
-				get { return new Rectangle2I((index % dimensions.X) * size.X, (index / dimensions.Y) * size.Y, size); }
+				get { return new Rectangle2I((ImageIndex % dimensions.X) * size.X, (ImageIndex / dimensions.Y) * size.Y, size); }
 			}
 		}
 

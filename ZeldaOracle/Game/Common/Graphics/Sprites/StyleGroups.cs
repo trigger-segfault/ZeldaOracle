@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ZeldaOracle.Common.Graphics.Sprites {
-	public class StyleGroups {
+	public static class StyleGroups {
 
 		//-----------------------------------------------------------------------------
 		// Constants

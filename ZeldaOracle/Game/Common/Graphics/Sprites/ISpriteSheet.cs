@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Graphics.Sprites {
-	public interface ISpriteSheet {
+	public interface ISpriteSource {
 
-		/// <summary>Gets the sprite at the specified index in the sheet.</summary>
+		/// <summary>Gets the sprite at the specified index in the sprite source.</summary>
 		ISprite GetSprite(int indexX, int indexY);
 
-		/// <summary>Gets the sprite at the specified index in the sheet.</summary>
+		/// <summary>Gets the sprite at the specified index in the sprite source.</summary>
 		ISprite GetSprite(Point2I index);
 	}
 }

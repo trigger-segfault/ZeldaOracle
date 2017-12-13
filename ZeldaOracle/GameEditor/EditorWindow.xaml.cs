@@ -317,7 +317,8 @@ namespace ZeldaEditor {
 				TileDataInstance tile = obj as TileDataInstance;
 				ISprite currentSprite = tile.CurrentSprite;
 				if (currentSprite != null)
-					canvas = EditorResources.GetSprite(currentSprite, tile.Room.Zone.ImageVariantID);
+					canvas = EditorResources.GetSprite(currentSprite, tile.Room.Zone.ImageVariantID,
+						tile.Room.Zone.StyleDefinitions);
 				if (canvas != null) {
 					canvas.Height = 16;
 					canvas.MinWidth = 16;
@@ -331,7 +332,8 @@ namespace ZeldaEditor {
 				EventTileDataInstance tile = obj as EventTileDataInstance;
 				ISprite currentSprite = tile.CurrentSprite;
 				if (currentSprite != null)
-					canvas = EditorResources.GetSprite(currentSprite, tile.Room.Zone.ImageVariantID);
+					canvas = EditorResources.GetSprite(currentSprite, tile.Room.Zone.ImageVariantID,
+						tile.Room.Zone.StyleDefinitions);
 				if (canvas != null) {
 					canvas.Height = 16;
 					canvas.MinWidth = 16;

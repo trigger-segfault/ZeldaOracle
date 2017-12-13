@@ -108,5 +108,13 @@ namespace ZeldaOracle.Game.Control.Menus {
 				}
 			}
 		}
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public SlotGroup CurrentSlotGroup {
+			get { return currentSlotGroup; }
+		}
 	}
 }

@@ -106,8 +106,8 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>The default color group for enitities.</summary>
 		public static readonly Color[] DefaultEntity = new Color[PaletteDictionary.ColorGroupSize] {
-			Color.Transparent,
 			Color.ToGBCColor(0.66f, 0.66f, 0.66f),
+			Color.Transparent,
 			Color.ToGBCColor(0.33f, 0.33f, 0.33f),
 			Color.Black
 		};
@@ -148,10 +148,14 @@ namespace ZeldaOracle.Common.Graphics {
 			this.dictionary     = new PaletteDictionary(copy.dictionary);
 
 			this.paletteTexture		= new Texture2D(copy.paletteTexture.GraphicsDevice, Dimensions.X, Dimensions.Y);
-			this.colorGroups		= new Dictionary<string, PaletteColor[]>(copy.colorGroups);
-			this.lookupGroups       = new Dictionary<string, LookupPair[]>(copy.lookupGroups);
+			this.colorGroups		= new Dictionary<string, PaletteColor[]>();
+			this.lookupGroups       = new Dictionary<string, LookupPair[]>();
+			foreach (var pair in copy.colorGroups)
+				this.colorGroups.Add(pair.Key, (PaletteColor[]) pair.Value.Clone());
+			foreach (var pair in copy.lookupGroups)
+				this.lookupGroups.Add(pair.Key, (LookupPair[]) pair.Value.Clone());
 		}
-
+		
 
 		//-----------------------------------------------------------------------------
 		// Initialization
