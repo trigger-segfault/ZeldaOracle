@@ -9,11 +9,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ConscriptDesigner</RootNamespace>
     <AssemblyName>ConscriptDesigner</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -35,6 +36,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.Avatar, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.Net, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Storage, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Video, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -58,9 +69,91 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Anchorables\ConscriptEditor.xaml.cs">
+      <DependentUpon>ConscriptEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Anchorables\IAnchorable.cs" />
+    <Compile Include="Anchorables\ImageDisplay.xaml.cs">
+      <DependentUpon>ImageDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Anchorables\OutputTerminal.xaml.cs">
+      <DependentUpon>OutputTerminal.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Anchorables\ProjectExplorer.xaml.cs">
+      <DependentUpon>ProjectExplorer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Anchorables\RequestCloseAnchorable.cs" />
+    <Compile Include="Commands.cs" />
+    <Compile Include="Content\ContentExtensions.cs" />
+    <Compile Include="Content\ContentSpriteFont.cs" />
+    <Compile Include="Content\ContentXmlInfo.cs" />
+    <Compile Include="Content\Exceptions.cs" />
+    <Compile Include="Content\ContentShader.cs" />
+    <Compile Include="Content\ContentSound.cs" />
+    <Compile Include="Content\Xnb\PngConverter.cs" />
+    <Compile Include="Content\Xnb\WavConverter.cs" />
+    <Compile Include="Content\Xnb\XCompress.cs" />
+    <Compile Include="Content\Xnb\XnbExtensions.cs" />
+    <Compile Include="Controls\FolderTreeViewItem.cs" />
+    <Compile Include="Controls\ImageButton.cs" />
+    <Compile Include="Controls\ImageMenuItem.cs" />
+    <Compile Include="Controls\ImageToggleButton.cs" />
+    <Compile Include="Controls\ImageTreeViewItem.cs" />
+    <Compile Include="Controls\TreeViewLineConverter.cs" />
+    <Compile Include="Content\ContentImage.cs" />
+    <Compile Include="Content\ContentRoot.cs" />
+    <Compile Include="Content\ContentScript.cs" />
+    <Compile Include="Content\ContentTypes.cs" />
+    <Compile Include="Control\DesignerControl.cs" />
+    <Compile Include="Content\ContentFile.cs" />
+    <Compile Include="Content\ContentFolder.cs" />
+    <Compile Include="Control\DesignerImages.cs" />
+    <Compile Include="Util\AlphanumComparatorFast.cs" />
+    <Compile Include="Util\BitmapFactory.cs" />
+    <Compile Include="Util\ClipboardListener.cs" />
+    <Compile Include="Util\Extensions.cs" />
+    <Compile Include="Util\NativeMethods.cs" />
+    <Compile Include="Util\PathHelper.cs" />
     <Compile Include="Windows\ErrorMessageBox.xaml.cs">
       <DependentUpon>ErrorMessageBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\RenameFileWindow.xaml.cs">
+      <DependentUpon>RenameFileWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SaveChangesWindow.xaml.cs">
+      <DependentUpon>SaveChangesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\TriggerMessageBox.xaml.cs">
+      <DependentUpon>TriggerMessageBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\DummyGraphicsDeviceControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WinForms\GraphicsDeviceControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WinForms\GraphicsDeviceService.cs" />
+    <Compile Include="WinForms\ImageDisplay.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WinForms\MouseWheelMessageFilter.cs" />
+    <Compile Include="WinForms\ServiceContainer.cs" />
+    <Page Include="Anchorables\ConscriptEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Anchorables\ImageDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Anchorables\OutputTerminal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Anchorables\ProjectExplorer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -85,36 +178,60 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Windows\RenameFileWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\SaveChangesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\TriggerMessageBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\" />
+    <Resource Include="Resources\Icons\Checkmark.png" />
+    <Resource Include="Resources\Icons\ConscriptFile.png" />
+    <Resource Include="Resources\Icons\Content.png" />
+    <Resource Include="Resources\Icons\Copy.png" />
+    <Resource Include="Resources\Icons\Cut.png" />
+    <Resource Include="Resources\Icons\Delete.png" />
+    <Resource Include="Resources\Icons\Empty.png" />
+    <Resource Include="Resources\Icons\ErrorIcon.png" />
+    <Resource Include="Resources\Icons\Exit.png" />
+    <Resource Include="Resources\Icons\File.png" />
+    <Resource Include="Resources\Icons\FolderAdd.png" />
+    <Resource Include="Resources\Icons\FolderBlueClosed.png" />
+    <Resource Include="Resources\Icons\FolderBlueOpen.png" />
+    <Resource Include="Resources\Icons\FolderClosed.png" />
+    <Resource Include="Resources\Icons\FolderOpen.png" />
+    <Resource Include="Resources\Icons\ImageFile.png" />
+    <Resource Include="Resources\Icons\InfoIcon.png" />
+    <Resource Include="Resources\Icons\Minus.png" />
+    <Resource Include="Resources\Icons\MoveDown.png" />
+    <Resource Include="Resources\Icons\MoveUp.png" />
+    <Resource Include="Resources\Icons\Open.png" />
+    <Resource Include="Resources\Icons\Paste.png" />
+    <Resource Include="Resources\Icons\Plus.png" />
+    <Resource Include="Resources\Icons\QuestionIcon.png" />
+    <Resource Include="Resources\Icons\Redo.png" />
+    <Resource Include="Resources\Icons\Rename.png" />
+    <Resource Include="Resources\Icons\SelectAll.png" />
+    <Resource Include="Resources\Icons\SoundFile.png" />
+    <Resource Include="Resources\Icons\Undo.png" />
+    <Resource Include="Resources\Icons\WarningIcon.png" />
+    <Resource Include="Resources\Icons\World.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\EditorLibraries\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj">
@@ -133,6 +250,35 @@
       <Project>{899daec0-cf01-4b30-a6e4-a0db613978bd}</Project>
       <Name>Zelda</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ContentAdd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Compile.png" />
+    <Resource Include="Resources\Icons\ContentFile.png" />
+    <Resource Include="Resources\Icons\ContentProject.png" />
+    <Resource Include="Resources\Icons\SaveAll.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ShaderFile.png" />
+    <Resource Include="Resources\Icons\WorldFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Build.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ConscriptFileAdd.png" />
+    <Resource Include="Resources\Icons\FileAdd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ContentProjectRemove.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\SpriteFontFile.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

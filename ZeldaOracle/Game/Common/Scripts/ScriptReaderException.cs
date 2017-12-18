@@ -15,12 +15,15 @@ namespace ZeldaOracle.Common.Scripts {
 		private string	line;
 		private bool	showCaret;
 
+		private string  scriptStackTrace;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public ScriptReaderException(string message, string fileName, string line, int lineNumber, int columnNumber, bool showCaret) :
+		public ScriptReaderException(string message, string fileName, string line,
+			int lineNumber, int columnNumber, bool showCaret, string scriptStackTrace = "") :
 			base(message)
 		{
 			this.fileName		= fileName;
@@ -28,6 +31,7 @@ namespace ZeldaOracle.Common.Scripts {
 			this.lineNumber		= lineNumber;
 			this.columnNumber	= columnNumber;
 			this.showCaret		= showCaret;
+			this.scriptStackTrace   = scriptStackTrace;
 		}
 
 
@@ -60,6 +64,9 @@ namespace ZeldaOracle.Common.Scripts {
 
 			Console.WriteLine(Message);
 			Console.WriteLine("------------------------------------------------------------------");
+			if (!string.IsNullOrEmpty(scriptStackTrace)) {
+				Console.WriteLine(scriptStackTrace);
+			}
 		}
 	}
 }

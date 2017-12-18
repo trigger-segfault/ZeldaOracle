@@ -164,5 +164,12 @@ namespace ZeldaOracle.Game {
 			SortMode		= SpriteSortMode.Deferred,
 			SamplerState	= SamplerState.PointClamp
 		};
+
+		//-----------------------------------------------------------------------------
+		// Designer/Editor Settings
+		//-----------------------------------------------------------------------------
+
+		public static bool EditorMode { get; set; } = false;
+		public static bool DesignerMode { get; set; } = false;
 	}
 }

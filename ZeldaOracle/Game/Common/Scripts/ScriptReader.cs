@@ -301,11 +301,18 @@ namespace ZeldaOracle.Common.Scripts {
 			for (int i = 0; i < commands.Count; i++) {
 				ScriptCommand command = commands[i];
 				if (command.HasName(commandName) && MatchesMode(mode, command.Modes)) {
-					if (command.HasParameters(parameters, out newParams))
-					{
+					if (command.HasParameters(parameters, out newParams)) {
 						// Run the command.
 						newParams.Prefix = commandPrefix ?? "";
-						command.Action(newParams);
+						try {
+							command.Action(newParams);
+						}
+						catch (LoadContentException ex) {
+							throw ex;
+						}
+						catch (Exception ex) {
+							throw new ScriptReaderException(ex.Message, fileName, lines[lineIndex], lineIndex + 1, charIndex + 1, true, ex.StackTrace);
+						}
 						return true;
 					}
 					else {

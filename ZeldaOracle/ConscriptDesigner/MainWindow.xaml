@@ -3,31 +3,64 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ConscriptDesigner"
+        xmlns:cmd="clr-namespace:ConscriptDesigner"
+        xmlns:local="clr-namespace:ConscriptDesigner.Controls"
+        xmlns:anchors="clr-namespace:ConscriptDesigner.Anchorables"
         xmlns:avalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <avalonDock:DockingManager x:Name="dockingManager">
+        Title="Conscript Designer" Height="657.7" Width="1029" SnapsToDevicePixels="True" UseLayoutRounding="True" Loaded="OnLoaded" Closing="OnClosing" Icon="Resources/Icons/ConscriptFile.png">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/ConscriptDesigner;component/Themes/DefaultStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="Save" CanExecute="CanSave" Executed="OnSaveCommand"/>
+        <CommandBinding Command="cmd:Commands.SaveAll" CanExecute="CanAlwaysExecute" Executed="OnSaveAllCommand"/>
+        <CommandBinding Command="cmd:Commands.Exit" CanExecute="CanAlwaysExecute" Executed="OnExitCommand"/>
+
+        <CommandBinding Command="cmd:Commands.RunConscripts" CanExecute="CanExecuteIsBusy" Executed="OnRunConscriptsCommand"/>
+        <CommandBinding Command="cmd:Commands.CompileContent" CanExecute="CanExecuteIsBusy" Executed="OnCompileContentCommand"/>
+    </Window.CommandBindings>
+    <DockPanel>
+        <WindowsFormsHost x:Name="dummyHost" Height="0" Width="0">
+
+        </WindowsFormsHost>
+        <ToolBar DockPanel.Dock="Top">
+            <local:ImageButton Source="Resources/Icons/Save.png" ToolTip="Save File" Command="Save"/>
+            <local:ImageButton Source="Resources/Icons/SaveAll.png" ToolTip="Save All Files" Command="cmd:Commands.SaveAll"/>
+            <Separator/>
+            <local:ImageButton Source="Resources/Icons/Undo.png" ToolTip="Undo (Ctr+Z)" Command="Undo"/>
+            <local:ImageButton Source="Resources/Icons/Redo.png" ToolTip="Redo (Ctrl+Y/Ctrl+Shift+Z)" Command="Redo"/>
+            <Separator/>
+            <local:ImageButton Source="Resources/Icons/Build.png" Content="Run Conscripts" Command="cmd:Commands.RunConscripts"/>
+            <local:ImageButton Source="Resources/Icons/Compile.png" Content="Compile Content" Command="cmd:Commands.CompileContent" />
+        </ToolBar>
+        <avalonDock:DockingManager x:Name="dockingManager" ActiveContentChanged="OnActiveAnchorableChanged">
             <avalonDock:LayoutRoot>
                 <avalonDock:LayoutPanel Orientation="Horizontal">
-                    <avalonDock:LayoutDocumentPane/>
-                    <avalonDock:LayoutAnchorablePane DockWidth="150">
-                        <avalonDock:LayoutAnchorable Title="Sample Tool Pane">
-                            <TextBox/>
+                    <avalonDock:LayoutAnchorablePane x:Name="leftPane" DockWidth="300">
+                        <avalonDock:LayoutAnchorable Title="Project Explorer">
+                            <anchors:ProjectExplorer x:Name="projectTreeView">
+
+                            </anchors:ProjectExplorer>
                         </avalonDock:LayoutAnchorable>
                     </avalonDock:LayoutAnchorablePane>
-                </avalonDock:LayoutPanel>
-                <avalonDock:LayoutRoot.LeftSide>
-                    <avalonDock:LayoutAnchorSide>
-                        <avalonDock:LayoutAnchorGroup>
-                            <avalonDock:LayoutAnchorable Title="Autohidden Content">
-                                <TextBox/>
+                    <avalonDock:LayoutPanel Orientation="Vertical">
+                        <avalonDock:LayoutDocumentPane x:Name="documentPane">
+                        </avalonDock:LayoutDocumentPane>
+                        <avalonDock:LayoutAnchorablePane x:Name="bottomPane" DockHeight="160">
+                            <avalonDock:LayoutAnchorable Title="Output Console" IsActive="True">
+                                <anchors:OutputTerminal x:Name="outputTerminal"/>
                             </avalonDock:LayoutAnchorable>
-                        </avalonDock:LayoutAnchorGroup>
-                    </avalonDock:LayoutAnchorSide>
-                </avalonDock:LayoutRoot.LeftSide>
+                        </avalonDock:LayoutAnchorablePane>
+                    </avalonDock:LayoutPanel>
+                </avalonDock:LayoutPanel>
+
             </avalonDock:LayoutRoot>
         </avalonDock:DockingManager>
-    </Grid>
+    </DockPanel>
 </Window>
