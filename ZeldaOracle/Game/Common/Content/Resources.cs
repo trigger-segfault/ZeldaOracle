@@ -192,6 +192,34 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries[typeof(Palette)]           = palettes;
 		}
 
+		public static void Uninitialize() {
+			// Have we initialized yet?
+			if (images == null) return;
+			
+			contentManager.Unload();
+
+			images = null;
+			realFonts = null;
+			gameFonts = null;
+			spriteSheets = null;
+			sprites = null;
+			animations = null;
+			shaders = null;
+			sounds = null;
+			songs = null;
+			collisionModels = null;
+			tilesets = null;
+			tileData = null;
+			eventTilesets = null;
+			eventTileData = null;
+			zones = null;
+			propertyActions = null;
+			paletteDictionaries = null;
+			palettes = null;
+			resourceDictionaries = null;
+			palettedSpriteDatabase = null;
+			textureLoader = null;
+		}
 
 		//-----------------------------------------------------------------------------
 		// Generic Resource Methods
