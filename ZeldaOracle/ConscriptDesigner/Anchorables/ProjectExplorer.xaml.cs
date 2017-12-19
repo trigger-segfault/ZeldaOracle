@@ -34,21 +34,46 @@ namespace ConscriptDesigner.Anchorables {
 
 		private static ProjectExplorer instance;
 
-		public ProjectExplorer() {
+		private RequestCloseAnchorable anchorable;
+
+		public ProjectExplorer(RequestCloseAnchorable anchorable) {
 			InitializeComponent();
 			instance = this;
+			this.anchorable = anchorable;
+			anchorable.Title = "Project Explorer";
+
+		}
+
+		public void Cleanup() {
+			// Make sure the Project's tree view item no longer has a parent
+			treeView.Items.Clear();
+		}
+
+		public ContentRoot Project {
+			get { return project; }
+			set {
+				dragging = false;
+				draggedItem = null;
+				treeView.Items.Clear();
+				if (value != null) {
+					treeView.Items.Add(value.TreeViewItem);
+					value.TreeView = treeView;
+				}
+				else if (project != null) {
+					project.TreeView = null;
+				}
+				project = value;
+			}
+		}
+
+		public RequestCloseAnchorable Anchorable {
+			get { return anchorable; }
 		}
 
 		private void OnSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
 			
 		}
-
-		public void Initialize(ContentRoot project) {
-			treeView.Items.Add(project.TreeViewItem);
-			this.project = project;
-			project.TreeView = treeView;
-		}
-
+		
 		private void OnTreeViewPreviewMouseDown(object sender, MouseButtonEventArgs e) {
 			if (e.ChangedButton == MouseButton.Left) {
 				lastMouseDown = e.GetPosition(treeView);

@@ -22,12 +22,19 @@ namespace ConscriptDesigner.Anchorables {
 
 		private const int MaxLines = 300;
 
-		public OutputTerminal() {
-			InitializeComponent();
+		private RequestCloseAnchorable anchorable;
 
+		public OutputTerminal(RequestCloseAnchorable anchorable) {
+			InitializeComponent();
+			this.anchorable = anchorable;
+			anchorable.Title = "Output Console";
 			AppendLine("");
 
 			Console.SetOut(new OutputTextWriter(this));
+		}
+
+		public RequestCloseAnchorable Anchorable {
+			get { return anchorable; }
 		}
 
 		public void Close() {

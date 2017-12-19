@@ -9,7 +9,7 @@ using Xceed.Wpf.AvalonDock.Layout;
 namespace ConscriptDesigner.Anchorables {
 	public interface IContentAnchorable {
 
-		RequestCloseAnchorable Anchorable { get; }
+		RequestCloseDocument Anchorable { get; }
 
 		ContentFile ContentFile { get; }
 

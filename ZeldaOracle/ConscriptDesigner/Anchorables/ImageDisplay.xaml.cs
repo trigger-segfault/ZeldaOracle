@@ -22,10 +22,10 @@ namespace ConscriptDesigner.Anchorables {
 	/// </summary>
 	public partial class ImageDisplay : UserControl, IContentAnchorable {
 
-		private RequestCloseAnchorable anchorable;
+		private RequestCloseDocument anchorable;
 		private ContentImage file;
 
-		public ImageDisplay(ContentImage file, RequestCloseAnchorable anchorable) {
+		public ImageDisplay(ContentImage file, RequestCloseDocument anchorable) {
 			InitializeComponent();
 			this.file = file;
 			this.anchorable = anchorable;
@@ -35,7 +35,7 @@ namespace ConscriptDesigner.Anchorables {
 			this.image.Height = source.PixelHeight;
 		}
 
-		public RequestCloseAnchorable Anchorable {
+		public RequestCloseDocument Anchorable {
 			get { return anchorable; }
 		}
 		public ContentFile ContentFile {

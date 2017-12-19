@@ -1,0 +1,21 @@
+﻿<?xml version="1.0"?>
+<SyntaxDefinition name="Conscript" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+  <Color name="Comment" foreground="Green" exampleText="// comment" />
+
+  <RuleSet name="CommentMarkerSet">
+    <Keywords fontWeight="bold" foreground="Red">
+      <Word>TODO</Word>
+      <Word>FIXME</Word>
+    </Keywords>
+    <Keywords fontWeight="bold" foreground="#E0E000">
+      <Word>HACK</Word>
+      <Word>UNDONE</Word>
+    </Keywords>
+  </RuleSet>
+
+  <RuleSet>
+    <Span color="Comment" ruleSet="CommentMarkerSet">
+      <Begin>\#</Begin>
+    </Span>
+  </RuleSet>
+</SyntaxDefinition>

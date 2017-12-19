@@ -563,7 +563,7 @@ namespace ZeldaOracle.Common.Content {
 				stream.Close();
 			}
 			catch (FileNotFoundException) {
-				Console.WriteLine("Error loading file \"" + assetName + "\"");
+				throw new LoadContentException("Error loading file \"" + assetName + "\"");
 			}
 		}
 

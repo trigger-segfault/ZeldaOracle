@@ -22,7 +22,7 @@ namespace ConscriptDesigner.Content {
 		private string name;
 		private ContentXmlInfo xmlInfo;
 		private ImageTreeViewItem treeViewItem;
-		private RequestCloseAnchorable anchorable;
+		private RequestCloseDocument anchorable;
 
 		private DateTime lastModified;
 
@@ -344,7 +344,7 @@ namespace ConscriptDesigner.Content {
 			}
 		}
 
-		public RequestCloseAnchorable Anchorable {
+		public RequestCloseDocument Anchorable {
 			get { return anchorable; }
 			set {
 				if (anchorable != null) {

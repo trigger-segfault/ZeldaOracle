@@ -14,22 +14,17 @@ using ConscriptDesigner.Anchorables;
 using ConscriptDesigner.Content;
 using ConscriptDesigner.Util;
 using ConscriptDesigner.Windows;
+using Microsoft.Win32;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Xceed.Wpf.AvalonDock.Layout;
 using ZeldaOracle.Common.Content;
+using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Game;
 
 namespace ConscriptDesigner.Control {
 	public static class DesignerControl {
 		
-		//-----------------------------------------------------------------------------
-		// Constants
-		//-----------------------------------------------------------------------------
-
-		public const string ContentProjectFile = @"..\..\..\..\..\GameContent\ZeldaContent.contentproj";
-
-
 		//-----------------------------------------------------------------------------
 		// Members
 		//-----------------------------------------------------------------------------
@@ -38,11 +33,11 @@ namespace ConscriptDesigner.Control {
 		private static ContentRoot project;
 		private static GraphicsDevice graphicsDevice;
 		private static ContentManager contentManager;
-		private static Task<LoadContentException> busyTask;
-		private static LoadContentException lastError;
+		private static Task<ScriptReaderException> busyTask;
+		private static ScriptReaderException lastScriptError;
 		private static DispatcherTimer updateTimer;
-		private static HashSet<RequestCloseAnchorable> openAnchorables;
-		private static List<RequestCloseAnchorable> closingAnchorables;
+		private static HashSet<IRequestClosePanel> openAnchorables;
+		private static List<IRequestClosePanel> closingAnchorables;
 
 		private static ClipboardListener clipboardListener;
 
@@ -54,10 +49,10 @@ namespace ConscriptDesigner.Control {
 			clipboardListener = new ClipboardListener();
 			GameSettings.DesignerMode = true;
 			DesignerControl.mainWindow = mainWindow;
-			openAnchorables = new HashSet<RequestCloseAnchorable>();
-			closingAnchorables = new List<RequestCloseAnchorable>();
-			project = new ContentRoot();
-			project.LoadContentProject(ContentProjectFile);
+			openAnchorables = new HashSet<IRequestClosePanel>();
+			closingAnchorables = new List<IRequestClosePanel>();
+			//project = new ContentRoot();
+			//project.LoadContentProject(ContentProjectFile);
 			updateTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.2), DispatcherPriority.ApplicationIdle, delegate { Update(); }, Application.Current.Dispatcher);
 		}
 
@@ -66,13 +61,13 @@ namespace ConscriptDesigner.Control {
 		// Anchorables
 		//-----------------------------------------------------------------------------
 		
-		public static RequestCloseAnchorable CreateDocumentAnchorable() {
-			RequestCloseAnchorable anchorable = new RequestCloseAnchorable();
-			mainWindow.DockAnchorableToDocument(anchorable);
+		public static RequestCloseDocument CreateDocumentAnchorable() {
+			RequestCloseDocument anchorable = new RequestCloseDocument();
+			mainWindow.DockDocument(anchorable);
 			return anchorable;
 		}
 
-		public static RequestCloseAnchorable GetActiveAnchorable() {
+		public static IRequestClosePanel GetActiveAnchorable() {
 			foreach (var anchorable in openAnchorables) {
 				if (anchorable.IsActive)
 					return anchorable;
@@ -88,7 +83,7 @@ namespace ConscriptDesigner.Control {
 			return null;
 		}
 
-		public static IEnumerable<RequestCloseAnchorable> GetOpenAnchorables() {
+		public static IEnumerable<IRequestClosePanel> GetOpenAnchorables() {
 			return openAnchorables;
 		}
 
@@ -109,15 +104,15 @@ namespace ConscriptDesigner.Control {
 			}
 		}
 		
-		public static void AddOpenAnchorable(RequestCloseAnchorable anchorable) {
+		public static void AddOpenAnchorable(IRequestClosePanel anchorable) {
 			openAnchorables.Add(anchorable);
 		}
 
-		public static void RemoveOpenAnchorable(RequestCloseAnchorable anchorable) {
+		public static void RemoveOpenAnchorable(IRequestClosePanel anchorable) {
 			openAnchorables.Remove(anchorable);
 		}
 
-		public static void AddClosingAnchorable(RequestCloseAnchorable anchorable) {
+		public static void AddClosingAnchorable(IRequestClosePanel anchorable) {
 			closingAnchorables.Add(anchorable);
 		}
 
@@ -129,7 +124,7 @@ namespace ConscriptDesigner.Control {
 		public static void Update() {
 			if (busyTask != null) {
 				if (busyTask.IsCompleted) {
-					lastError = busyTask.Result;
+					lastScriptError = busyTask.Result;
 					busyTask = null;
 					CommandManager.InvalidateRequerySuggested();
 				}
@@ -137,7 +132,7 @@ namespace ConscriptDesigner.Control {
 			if (closingAnchorables.Any()) {
 				List<IContentAnchorable> needsSaving = new List<IContentAnchorable>();
 				List<string> needsSavingFiles = new List<string>();
-				foreach (RequestCloseAnchorable anchorable in closingAnchorables) {
+				foreach (IRequestClosePanel anchorable in closingAnchorables) {
 					if (anchorable.Content is IContentAnchorable) {
 						var content = (IContentAnchorable) anchorable.Content;
 						if (content.IsModified) {
@@ -156,7 +151,7 @@ namespace ConscriptDesigner.Control {
 					}
 				}
 				if (result != MessageBoxResult.Cancel) {
-					foreach (RequestCloseAnchorable anchorable in closingAnchorables) {
+					foreach (IRequestClosePanel anchorable in closingAnchorables) {
 						anchorable.ForceClose();
 					}
 				}
@@ -176,8 +171,10 @@ namespace ConscriptDesigner.Control {
 		// Internal
 		//-----------------------------------------------------------------------------
 
-		private static LoadContentException CompileContentTask() {
-			mainWindow.OutputTerminal.Clear();
+		private static ScriptReaderException CompileContentTask() {
+			mainWindow.Dispatcher.Invoke(SaveAll);
+			if (mainWindow.OutputTerminal != null)
+				mainWindow.OutputTerminal.Clear();
 			try {
 				Stopwatch watch = Stopwatch.StartNew();
 				foreach (ContentFile file in project.GetAllFiles()) {
@@ -201,8 +198,10 @@ namespace ConscriptDesigner.Control {
 			return null;
 		}
 
-		private static LoadContentException RunConscriptsTask() {
-			mainWindow.OutputTerminal.Clear();
+		private static ScriptReaderException RunConscriptsTask() {
+			mainWindow.Dispatcher.Invoke(SaveAll);
+			if (mainWindow.OutputTerminal != null)
+				mainWindow.OutputTerminal.Clear();
 			Resources.Uninitialize();
 			
 			try {
@@ -214,10 +213,14 @@ namespace ConscriptDesigner.Control {
 				Console.WriteLine("----------------------------------------------------------------");
 				Console.WriteLine("Finished! Duration: " + watch.Elapsed.RoundUpToNearestSecond().ToString(@"hh\:mm\:ss"));
 			}
-			catch (LoadContentException ex) {
+			catch (ScriptReaderException ex) {
 				ex.PrintMessage();
 				Console.WriteLine("Stack Trace:\n" + ex.StackTrace);
 				return ex;
+			}
+			catch (LoadContentException ex) {
+				ex.PrintMessage();
+				Console.WriteLine("Stack Trace:\n" + ex.StackTrace);
 			}
 			catch (Exception ex) {
 				Console.WriteLine(ex.Message);
@@ -229,6 +232,9 @@ namespace ConscriptDesigner.Control {
 		private static void UpdateContentFolder(ContentFolder folder) {
 			HashSet<string> existingFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 			foreach (string file in Directory.GetFiles(folder.OutputFilePath)) {
+				existingFiles.Add(Path.GetFileName(file));
+			}
+			foreach (string file in Directory.GetDirectories(folder.OutputFilePath)) {
 				existingFiles.Add(Path.GetFileName(file));
 			}
 			foreach (ContentFile file in folder.GetLocalFiles()) {
@@ -248,7 +254,7 @@ namespace ConscriptDesigner.Control {
 						Directory.CreateDirectory(outPath);
 					UpdateContentFolder((ContentFolder) file);
 				}
-				else if (file.ShouldCopyToOutput && File.GetLastWriteTimeUtc(inPath) != File.GetLastWriteTimeUtc(outPath)) {
+				else if (file.ShouldCopyToOutput) {
 					File.Copy(inPath, outPath, true);
 				}
 			}
@@ -268,7 +274,7 @@ namespace ConscriptDesigner.Control {
 		// Commands
 		//-----------------------------------------------------------------------------
 
-		public static bool RequestClose() {
+		public static bool RequestSaveAll(out bool errorOccurred) {
 			List<IContentAnchorable> needsSaving = new List<IContentAnchorable>();
 			List<string> needsSavingFiles = new List<string>();
 			if (project.IsProjectModified)
@@ -278,13 +284,13 @@ namespace ConscriptDesigner.Control {
 				needsSavingFiles.Add(content.ContentFile.Path);
 			}
 			MessageBoxResult result = MessageBoxResult.Yes;
-			bool errorOccurred = false;
+			errorOccurred = false;
 			if (needsSavingFiles.Any()) {
 				result = SaveChangesWindow.Show(mainWindow, needsSavingFiles);
 				if (result == MessageBoxResult.Yes) {
 					try {
-					if (project.IsProjectModified)
-						project.SaveContentProject();
+						if (project.IsProjectModified)
+							project.SaveContentProject();
 					}
 					catch (Exception ex) {
 						ShowExceptionMessage(ex, "save", project.Name);
@@ -304,12 +310,21 @@ namespace ConscriptDesigner.Control {
 					}
 				}
 			}
-			if (errorOccurred) {
-				result = TriggerMessageBox.Show(mainWindow, MessageIcon.Question, "Would you still like to close after an error occured?",
-					"Continue closing?", MessageBoxButton.YesNo);
-				return (result != MessageBoxResult.No);
-			}
 			return (result != MessageBoxResult.Cancel);
+		}
+
+		public static bool RequestClose() {
+			if (IsProjectOpen) {
+				bool errorOccurred = false;
+				bool result = RequestSaveAll(out errorOccurred);
+				if (errorOccurred) {
+					MessageBoxResult result2 = TriggerMessageBox.Show(mainWindow, MessageIcon.Question, "Would you still like to close after an error occured?",
+					"Continue closing?", MessageBoxButton.YesNo);
+					return (result2 != MessageBoxResult.No);
+				}
+				return result;
+			}
+			return true;
 		}
 
 		public static void Undo() {
@@ -322,6 +337,59 @@ namespace ConscriptDesigner.Control {
 			var content = GetActiveContent();
 			if (content != null) content.Redo();
 			CommandManager.InvalidateRequerySuggested();
+		}
+
+		public static void Close() {
+			bool errorOccurred = false;
+			bool result = RequestSaveAll(out errorOccurred);
+			if (errorOccurred) {
+				MessageBoxResult result2 = TriggerMessageBox.Show(mainWindow, MessageIcon.Question, "Would you still like to close the project after an error occured?",
+					"Continue closing?", MessageBoxButton.YesNo);
+				result = (result2 != MessageBoxResult.No);
+			}
+			if (result) {
+				foreach (IRequestClosePanel anchorable in openAnchorables) {
+					if (anchorable is RequestCloseDocument) {
+						anchorable.ForceClose();
+					}
+				}
+				if (mainWindow.ProjectExplorer != null)
+					mainWindow.ProjectExplorer.Cleanup();
+				if (mainWindow.OutputTerminal != null)
+					mainWindow.OutputTerminal.Clear();
+				project = null;
+				CommandManager.InvalidateRequerySuggested();
+			}
+		}
+
+		public static void OpenProject(string path) {
+			try {
+				ContentRoot newProject = new ContentRoot();
+				newProject.LoadContentProject(path);
+				project = newProject;
+				mainWindow.OpenProjectExplorer();
+				mainWindow.OpenOutputConsole();
+				if (mainWindow.ProjectExplorer != null)
+					mainWindow.ProjectExplorer.Project = newProject;
+				CommandManager.InvalidateRequerySuggested();
+			}
+			catch (Exception ex) {
+				ShowExceptionMessage(ex, "open", Path.GetFileName(path));
+			}
+		}
+
+		public static void Open() {
+			if (IsProjectOpen) {
+				Close();
+			}
+			OpenFileDialog dialog = new OpenFileDialog();
+			dialog.Filter = "Content Project Files|*.contentproj";
+			dialog.FilterIndex = 0;
+			dialog.CheckFileExists = true;
+			var result = dialog.ShowDialog(mainWindow);
+			if (result.HasValue && result.Value) {
+				OpenProject(dialog.FileName);
+			}
 		}
 
 		public static void Save() {
@@ -390,11 +458,7 @@ namespace ConscriptDesigner.Control {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
-		public static string ContentProjectDirectory {
-			get { return Path.GetDirectoryName(ContentProjectFile); }
-		}
-
+		
 		public static string DesignerContentDirectory {
 			get { return Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), contentManager.RootDirectory); }
 		}
@@ -423,6 +487,14 @@ namespace ConscriptDesigner.Control {
 
 		public static bool IsBusy {
 			get { return busyTask != null; }
+		}
+
+		public static bool IsInTextEditor {
+			get { return GetActiveContent() is ConscriptEditor; }
+		}
+
+		public static bool IsProjectOpen {
+			get { return project != null; }
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="ZeldaEditor.Windows.ErrorMessageBox"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Title="Unhandled Exception" SnapsToDevicePixels="True" UseLayoutRounding="True" SizeToContent="WidthAndHeight" PreviewKeyDown="OnPreviewKeyDown" Closing="OnWindowClosing">
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Title="Unhandled Exception" SnapsToDevicePixels="True" UseLayoutRounding="True" SizeToContent="WidthAndHeight" PreviewKeyDown="OnPreviewKeyDown" Closing="OnWindowClosing" Icon="/ZeldaEditor;component/Resources/Icons/AppError.ico">
     
     <Grid x:Name="clientArea" Width="504" Height="230">
         <Label Margin="18,15,18,0" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Padding="0">

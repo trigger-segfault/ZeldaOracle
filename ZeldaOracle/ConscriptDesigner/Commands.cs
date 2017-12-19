@@ -12,11 +12,9 @@ namespace ConscriptDesigner {
 		// General
 		//-----------------------------------------------------------------------------
 
-		/// <summary>The command to exit the designer.</summary>
-		public static readonly RoutedUICommand Exit = new RoutedUICommand(
-			"Exit", "Exit", typeof(Commands),
-			new InputGestureCollection() {
-				new KeyGesture(Key.W, ModifierKeys.Control) });
+		/// <summary>The command to close the current project.</summary>
+		public static readonly RoutedUICommand Close = new RoutedUICommand(
+			"Close", "Close Project", typeof(Commands));
 
 		/// <summary>The command to save all files open in the designer.</summary>
 		public static readonly RoutedUICommand SaveAll = new RoutedUICommand(
@@ -24,15 +22,53 @@ namespace ConscriptDesigner {
 			new InputGestureCollection() {
 				new KeyGesture(Key.S, ModifierKeys.Control | ModifierKeys.Shift) });
 
+		/// <summary>The command to exit the designer.</summary>
+		public static readonly RoutedUICommand Exit = new RoutedUICommand(
+			"Exit", "Exit", typeof(Commands),
+			new InputGestureCollection() {
+				new KeyGesture(Key.W, ModifierKeys.Control) });
+
+
+		//-----------------------------------------------------------------------------
+		// Edit
+		//-----------------------------------------------------------------------------
+
 		/// <summary>The secondary keybinding for the redo command.</summary>
 		public static readonly RoutedUICommand RedoSecondary = new RoutedUICommand(
 			"RedoSecondary", "Redo", typeof(Commands),
 			new InputGestureCollection() {
 				new KeyGesture(Key.Z, ModifierKeys.Control | ModifierKeys.Shift) });
 
-		
+		/// <summary>The command to goto a specific line in a text editor.</summary>
+		public static readonly RoutedUICommand GotoLine = new RoutedUICommand(
+			"GotoLine", "Go To Line", typeof(Commands),
+			new InputGestureCollection() {
+				new KeyGesture(Key.G, ModifierKeys.Control) });
+
+
 		//-----------------------------------------------------------------------------
-		// World
+		// View
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The command to toggle the project explorer window.</summary>
+		public static readonly RoutedUICommand ProjectExplorer = new RoutedUICommand(
+			"ProjectExplorer", "Project Explorer", typeof(Commands));
+
+		/// <summary>The command to toggle the output console window.</summary>
+		public static readonly RoutedUICommand OutputConsole = new RoutedUICommand(
+			"OutputConsole", "Output Console", typeof(Commands));
+
+		/// <summary>The command to toggle the sprite browser window.</summary>
+		public static readonly RoutedUICommand SpriteBrowser = new RoutedUICommand(
+			"SpriteBrowser", "Sprite Browser", typeof(Commands));
+
+		/// <summary>The command to toggle the tile browser window.</summary>
+		public static readonly RoutedUICommand TileBrowser = new RoutedUICommand(
+			"TileBrowser", "Tile Browser", typeof(Commands));
+
+
+		//-----------------------------------------------------------------------------
+		// Project
 		//-----------------------------------------------------------------------------
 
 		/// <summary>The command to test the current conscripts.</summary>

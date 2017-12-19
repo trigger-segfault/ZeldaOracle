@@ -8,22 +8,15 @@ using ConscriptDesigner.Control;
 using Xceed.Wpf.AvalonDock.Layout;
 
 namespace ConscriptDesigner.Anchorables {
-	public class RequestCloseAnchorable : LayoutAnchorable, IRequestClosePanel {
+	public class RequestCloseDocument : LayoutDocument, IRequestClosePanel {
 
 		private bool forceClosed;
 
-		public RequestCloseAnchorable() {
+		public RequestCloseDocument() {
 			Closing += OnAnchorableClosing;
 			Closed += OnAnchorableClosed;
-			Hiding += OnAnchorableHiding;
 			forceClosed = false;
 			DesignerControl.AddOpenAnchorable(this);
-		}
-
-		private void OnAnchorableHiding(object sender, CancelEventArgs e) {
-			// HACK: We don't want the X button to hide anchorables when not in the document viewer
-			e.Cancel = true;
-			Close();
 		}
 
 		private void OnAnchorableClosed(object sender, EventArgs e) {
