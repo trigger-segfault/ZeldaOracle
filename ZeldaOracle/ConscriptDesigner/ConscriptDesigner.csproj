@@ -35,6 +35,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Conscript.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Avatar, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
@@ -76,6 +79,7 @@
     <Compile Include="Anchorables\ImageDisplay.xaml.cs">
       <DependentUpon>ImageDisplay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Anchorables\IRequestClosePanel.cs" />
     <Compile Include="Anchorables\OutputTerminal.xaml.cs">
       <DependentUpon>OutputTerminal.xaml</DependentUpon>
     </Compile>
@@ -83,6 +87,7 @@
       <DependentUpon>ProjectExplorer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Anchorables\RequestCloseAnchorable.cs" />
+    <Compile Include="Anchorables\RequestCloseDocument.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="Content\ContentExtensions.cs" />
     <Compile Include="Content\ContentSpriteFont.cs" />
@@ -199,6 +204,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EmbeddedResource Include="Themes\ConscriptHighlighting.xshd" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\Checkmark.png" />
@@ -237,6 +243,10 @@
     <ProjectReference Include="..\..\EditorLibraries\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj">
       <Project>{6c55b776-26d4-4db3-a6ab-87e783b2f3d1}</Project>
       <Name>ICSharpCode.AvalonEdit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EditorLibraries\Xceed.Wpf.AvalonDock.Themes.VS2010\Xceed.Wpf.AvalonDock.Themes.VS2010.csproj">
+      <Project>{b3fc3e21-5f2d-4581-aea2-59f671cffc21}</Project>
+      <Name>Xceed.Wpf.AvalonDock.Themes.VS2010</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\EditorLibraries\Xceed.Wpf.AvalonDock\Xceed.Wpf.AvalonDock.csproj">
       <Project>{db81988f-e0f2-45a0-a1fd-8c37f3d35244}</Project>
@@ -279,6 +289,27 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\SpriteFontFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Console.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Sprite.png" />
+    <Resource Include="Resources\Icons\Tile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Find.png" />
+    <Resource Include="Resources\Icons\GotoLine.png" />
+    <Resource Include="Resources\Icons\Replace.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\AppError.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Conscript.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

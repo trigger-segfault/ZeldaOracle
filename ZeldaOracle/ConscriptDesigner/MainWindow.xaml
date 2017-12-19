@@ -9,7 +9,7 @@
         xmlns:avalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
         mc:Ignorable="d"
-        Title="Conscript Designer" Height="657.7" Width="1029" SnapsToDevicePixels="True" UseLayoutRounding="True" Loaded="OnLoaded" Closing="OnClosing" Icon="Resources/Icons/ConscriptFile.png">
+        Title="Zelda Conscript Designer" Height="657" Width="1029" SnapsToDevicePixels="True" UseLayoutRounding="True" Loaded="OnLoaded" Closing="OnClosing" Icon="Conscript.ico">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,17 +18,66 @@
         </ResourceDictionary>
     </Window.Resources>
     <Window.CommandBindings>
+        <CommandBinding Command="Open" CanExecute="CanAlwaysExecute" Executed="OnOpenCommand"/>
         <CommandBinding Command="Save" CanExecute="CanSave" Executed="OnSaveCommand"/>
-        <CommandBinding Command="cmd:Commands.SaveAll" CanExecute="CanAlwaysExecute" Executed="OnSaveAllCommand"/>
+        <CommandBinding Command="cmd:Commands.SaveAll" CanExecute="CanExecuteIsProjectOpen" Executed="OnSaveAllCommand"/>
+        <CommandBinding Command="cmd:Commands.Close" CanExecute="CanExecuteIsProjectOpen" Executed="OnCloseCommand"/>
         <CommandBinding Command="cmd:Commands.Exit" CanExecute="CanAlwaysExecute" Executed="OnExitCommand"/>
 
         <CommandBinding Command="cmd:Commands.RunConscripts" CanExecute="CanExecuteIsBusy" Executed="OnRunConscriptsCommand"/>
         <CommandBinding Command="cmd:Commands.CompileContent" CanExecute="CanExecuteIsBusy" Executed="OnCompileContentCommand"/>
+        <CommandBinding Command="cmd:Commands.RedoSecondary" CanExecute="CanRedo" Executed="OnRedoCommand"/>
+
+        <CommandBinding Command="Find" CanExecute="CanExecuteIsProjectOpen" Executed="OnFindCommand"/>
+        <CommandBinding Command="Replace" CanExecute="CanExecuteIsProjectOpen" Executed="OnReplaceCommand"/>
+        <CommandBinding Command="cmd:Commands.GotoLine" CanExecute="CanExecuteInTextEditor" Executed="OnGotoLineCommand"/>
+
+        <CommandBinding Command="cmd:Commands.ProjectExplorer" CanExecute="CanAlwaysExecute" Executed="OnProjectExplorerCommand"/>
+        <CommandBinding Command="cmd:Commands.OutputConsole" CanExecute="CanAlwaysExecute" Executed="OnOutputConsoleCommand"/>
     </Window.CommandBindings>
     <DockPanel>
         <WindowsFormsHost x:Name="dummyHost" Height="0" Width="0">
 
         </WindowsFormsHost>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <local:ImageMenuItem Header="Open Project" Source="/Resources/Icons/Open.png" Command="Open"/>
+                <local:ImageMenuItem Header="Save" Source="/Resources/Icons/Save.png" Command="Save"/>
+                <local:ImageMenuItem Header="Save All" Source="/Resources/Icons/SaveAll.png" Command="cmd:Commands.SaveAll"/>
+                <Separator/>
+                <local:ImageMenuItem Header="Close Project" Source="/Resources/Icons/Close.png" Command="cmd:Commands.Close"/>
+                <Separator/>
+                <local:ImageMenuItem Header="Exit" Source="/Resources/Icons/Exit.png" Command="cmd:Commands.Exit"/>
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <local:ImageMenuItem Header="Undo" Source="/Resources/Icons/Undo.png" Command="Undo"/>
+                <local:ImageMenuItem Header="Redo" Source="/Resources/Icons/Redo.png" Command="Redo"/>
+                <Separator/>
+                <local:ImageMenuItem Header="Cut" Source="/Resources/Icons/Cut.png" Command="Cut"/>
+                <local:ImageMenuItem Header="Copy" Source="/Resources/Icons/Copy.png" Command="Copy"/>
+                <local:ImageMenuItem Header="Paste" Source="/Resources/Icons/Paste.png" Command="Paste"/>
+                <local:ImageMenuItem Header="Delete" Source="/Resources/Icons/Delete.png" Command="Delete"/>
+                <Separator/>
+                <local:ImageMenuItem Header="SelectAll" Source="/Resources/Icons/SelectAll.png" Command="SelectAll"/>
+                <Separator/>
+                <local:ImageMenuItem Header="Find" Source="/Resources/Icons/Find.png" Command="Find"/>
+                <local:ImageMenuItem Header="Replace" Source="/Resources/Icons/Replace.png" Command="Replace"/>
+                <local:ImageMenuItem Header="Go To Line..." Source="/Resources/Icons/GotoLine.png" Command="cmd:Commands.GotoLine"/>
+            </MenuItem>
+            <MenuItem Header="_View">
+                <local:ImageMenuItem Header="Project Explorer" Source="/Resources/Icons/ContentProject.png" Command="cmd:Commands.ProjectExplorer"/>
+                <local:ImageMenuItem Header="Output Console" Source="/Resources/Icons/Console.png" Command="cmd:Commands.OutputConsole"/>
+                <local:ImageMenuItem Header="Sprite Browser" Source="/Resources/Icons/Sprite.png" Command="cmd:Commands.SpriteBrowser"/>
+                <local:ImageMenuItem Header="Tile Browser" Source="/Resources/Icons/Tile.png" Command="cmd:Commands.TileBrowser"/>
+            </MenuItem>
+            <MenuItem Header="_Project">
+                <local:ImageMenuItem Header="Run Conscripts" Source="/Resources/Icons/Build.png" IsCheckable="True" Command="cmd:Commands.RunConscripts"/>
+                <local:ImageMenuItem Header="Compile Content" Source="/Resources/Icons/Compile.png" IsCheckable="True" Command="cmd:Commands.CompileContent"/>
+            </MenuItem>
+            <MenuItem Header="Help">
+                
+            </MenuItem>
+        </Menu>
         <ToolBar DockPanel.Dock="Top">
             <local:ImageButton Source="Resources/Icons/Save.png" ToolTip="Save File" Command="Save"/>
             <local:ImageButton Source="Resources/Icons/SaveAll.png" ToolTip="Save All Files" Command="cmd:Commands.SaveAll"/>
@@ -39,27 +88,20 @@
             <local:ImageButton Source="Resources/Icons/Build.png" Content="Run Conscripts" Command="cmd:Commands.RunConscripts"/>
             <local:ImageButton Source="Resources/Icons/Compile.png" Content="Compile Content" Command="cmd:Commands.CompileContent" />
         </ToolBar>
-        <avalonDock:DockingManager x:Name="dockingManager" ActiveContentChanged="OnActiveAnchorableChanged">
+        <avalonDock:DockingManager x:Name="dockingManager" ActiveContentChanged="OnActiveAnchorableChanged" UseLayoutRounding="True">
+            <avalonDock:DockingManager.Theme>
+                <avalonDock:VS2010Theme/>
+            </avalonDock:DockingManager.Theme>
             <avalonDock:LayoutRoot>
-                <avalonDock:LayoutPanel Orientation="Horizontal">
-                    <avalonDock:LayoutAnchorablePane x:Name="leftPane" DockWidth="300">
-                        <avalonDock:LayoutAnchorable Title="Project Explorer">
-                            <anchors:ProjectExplorer x:Name="projectTreeView">
-
-                            </anchors:ProjectExplorer>
-                        </avalonDock:LayoutAnchorable>
-                    </avalonDock:LayoutAnchorablePane>
-                    <avalonDock:LayoutPanel Orientation="Vertical">
-                        <avalonDock:LayoutDocumentPane x:Name="documentPane">
-                        </avalonDock:LayoutDocumentPane>
-                        <avalonDock:LayoutAnchorablePane x:Name="bottomPane" DockHeight="160">
-                            <avalonDock:LayoutAnchorable Title="Output Console" IsActive="True">
-                                <anchors:OutputTerminal x:Name="outputTerminal"/>
-                            </avalonDock:LayoutAnchorable>
-                        </avalonDock:LayoutAnchorablePane>
+                <avalonDock:LayoutPanel Orientation="Vertical">
+                    <avalonDock:LayoutPanel Orientation="Horizontal">
+                        <avalonDock:LayoutAnchorablePane x:Name="LeftDockablePane" DockWidth="250" />
+                        <avalonDock:LayoutPanel Orientation="Vertical">
+                            <avalonDock:LayoutDocumentPane x:Name="documentPane"/>
+                            <avalonDock:LayoutAnchorablePane x:Name="BottomDockablePane" DockHeight="200" />
+                        </avalonDock:LayoutPanel>
                     </avalonDock:LayoutPanel>
                 </avalonDock:LayoutPanel>
-
             </avalonDock:LayoutRoot>
         </avalonDock:DockingManager>
     </DockPanel>

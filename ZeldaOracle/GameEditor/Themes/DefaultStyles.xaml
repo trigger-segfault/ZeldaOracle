@@ -6,6 +6,8 @@
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
                     xmlns:props="clr-namespace:ZeldaEditor.PropertiesEditor">
 
+    <PopupAnimation x:Key="{x:Static SystemParameters.MenuPopupAnimationKey}">None</PopupAnimation>
+
     <Style TargetType="{x:Type Image}">
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">

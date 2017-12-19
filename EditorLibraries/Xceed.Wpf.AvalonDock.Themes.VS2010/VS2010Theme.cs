@@ -21,12 +21,12 @@ using System.Text;
 
 namespace Xceed.Wpf.AvalonDock.Themes
 {
-    public class AeroTheme : Theme
+    public class VS2010Theme : Theme
     {
         public override Uri GetResourceUri()
         {
             return new Uri(
-                "/Xceed.Wpf.AvalonDock.Themes.Aero;component/Theme.xaml", 
+                "/Xceed.Wpf.AvalonDock.Themes.VS2010;component/Theme.xaml", 
                 UriKind.Relative);  
         }
     }

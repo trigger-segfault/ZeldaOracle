@@ -12,7 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using System.Xml;
 using ConscriptDesigner.Content;
+using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Indentation;
 using Xceed.Wpf.AvalonDock.Layout;
 
@@ -22,15 +26,27 @@ namespace ConscriptDesigner.Anchorables {
 	/// </summary>
 	public partial class ConscriptEditor : UserControl, IContentAnchorable {
 
-		private RequestCloseAnchorable anchorable;
+		private RequestCloseDocument anchorable;
 		private ContentScript file;
+		private static IHighlightingDefinition highlightingDefinition;
 
-		public ConscriptEditor(ContentScript file, RequestCloseAnchorable anchorable) {
+		private DispatcherTimer modifiedTimer;
+		private bool isTitleModified;
+
+		static ConscriptEditor() {
+			var fullName = "ConscriptDesigner.Themes.ConscriptHighlighting.xshd";
+			using (var stream = typeof(ConscriptEditor).Assembly.GetManifestResourceStream(fullName))
+			using (var reader = new XmlTextReader(stream))
+				highlightingDefinition = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+		}
+
+		public ConscriptEditor(ContentScript file, RequestCloseDocument anchorable) {
 			InitializeComponent();
 			this.file = file;
 			this.anchorable = anchorable;
 			this.editor.Load(file.FilePath);
 			this.editor.TextChanged += OnTextChanged;
+			this.isTitleModified = false;
 
 			editor.TextArea.Margin = new Thickness(4, 4, 0, 4);
 			editor.TextArea.TextView.Options.AllowScrollBelowDocument = true;
@@ -39,20 +55,32 @@ namespace ConscriptDesigner.Anchorables {
 			editor.TextArea.SelectionCornerRadius = 0;
 			editor.TextArea.SelectionBorder = null;
 			editor.FontFamily = new FontFamily("Lucida Console");
-			editor.FontSize = 12.667;
+			editor.FontSize = 12;
 			editor.TextChanged += OnTextChanged;
 			TextOptions.SetTextFormattingMode(editor, TextFormattingMode.Display);
 			editor.IsModified = false;
 			editor.TextArea.IndentationStrategy = new DefaultIndentationStrategy();
 			editor.ShowLineNumbers = true;
+			editor.SyntaxHighlighting = highlightingDefinition;
+
+			modifiedTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.05), DispatcherPriority.ApplicationIdle,
+				delegate { CheckModified(); }, Dispatcher);
+			modifiedTimer.Stop();
 		}
 
-		private void OnTextChanged(object sender, EventArgs e) {
-			UpdateTitle();
+		private void CheckModified() {
+			modifiedTimer.Stop();
+			if (IsModified != isTitleModified)
+				UpdateTitle();
 			CommandManager.InvalidateRequerySuggested();
 		}
 
+		private void OnTextChanged(object sender, EventArgs e) {
+			modifiedTimer.Start();
+		}
+
 		public void UpdateTitle() {
+			isTitleModified = IsModified;
 			anchorable.Title = file.Name + (editor.IsModified ? "*" : "");
 		}
 
@@ -72,15 +100,11 @@ namespace ConscriptDesigner.Anchorables {
 
 		public void Undo() {
 			editor.Undo();
-			editor.IsModified = true;
-			UpdateTitle();
-			CommandManager.InvalidateRequerySuggested();
+			modifiedTimer.Start();
 		}
 		public void Redo() {
 			editor.Redo();
-			editor.IsModified = true;
-			UpdateTitle();
-			CommandManager.InvalidateRequerySuggested();
+			modifiedTimer.Start();
 		}
 
 		public bool IsModified {
@@ -95,7 +119,7 @@ namespace ConscriptDesigner.Anchorables {
 			get { return editor.CanRedo; }
 		}
 
-		public RequestCloseAnchorable Anchorable {
+		public RequestCloseDocument Anchorable {
 			get { return anchorable; }
 		}
 

@@ -4,6 +4,8 @@
                     xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
                     xmlns:System="clr-namespace:System;assembly=mscorlib">
 
+    <PopupAnimation x:Key="{x:Static SystemParameters.MenuPopupAnimationKey}">None</PopupAnimation>
+
     <Style TargetType="{x:Type Image}">
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
