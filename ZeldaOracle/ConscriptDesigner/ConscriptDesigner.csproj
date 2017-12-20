@@ -81,6 +81,14 @@
     <Compile Include="Anchorables\ProjectExplorer.cs" />
     <Compile Include="Anchorables\Base\RequestCloseAnchorable.cs" />
     <Compile Include="Anchorables\Base\RequestCloseDocument.cs" />
+    <Compile Include="Anchorables\SpriteBrowser.cs" />
+    <Compile Include="Anchorables\SpriteBrowserControl.xaml.cs">
+      <DependentUpon>SpriteBrowserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Anchorables\SpriteSourceBrowser.cs" />
+    <Compile Include="Anchorables\SpriteSourceBrowserControl.xaml.cs">
+      <DependentUpon>SpriteSourceBrowserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Commands.cs" />
     <Compile Include="Content\ContentSpriteFont.cs" />
     <Compile Include="Content\ContentXmlInfo.cs" />
@@ -136,6 +144,18 @@
     </Compile>
     <Compile Include="WinForms\MouseWheelMessageFilter.cs" />
     <Compile Include="WinForms\ServiceContainer.cs" />
+    <Compile Include="WinForms\SpritePreview.cs" />
+    <Compile Include="WinForms\SpriteSourcePreview.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Page Include="Anchorables\SpriteBrowserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Anchorables\SpriteSourceBrowserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -287,6 +307,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Conscript.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ShowAnimations.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\PlayAnimations.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\SpriteSource.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -22,62 +22,53 @@ using System.Collections.ObjectModel;
 using System.Windows.Markup;
 using Xceed.Wpf.AvalonDock.Controls;
 
-namespace Xceed.Wpf.AvalonDock.Layout
-{
-    [ContentProperty("Children")]
-    [Serializable]
-    public class LayoutAnchorSide : LayoutGroup<LayoutAnchorGroup>
-    {
-        public LayoutAnchorSide()
-        {
-        }
+namespace Xceed.Wpf.AvalonDock.Layout {
+	[ContentProperty("Children")]
+	[Serializable]
+	public class LayoutAnchorSide : LayoutGroup<LayoutAnchorGroup> {
+		public LayoutAnchorSide() {
+		}
 
-        protected override bool GetVisibility()
-        {
-            return Children.Count > 0;
-        }
+		protected override bool GetVisibility() {
+			return Children.Count > 0;
+		}
 
 
-        protected override void OnParentChanged(ILayoutContainer oldValue, ILayoutContainer newValue)
-        {
- 	        base.OnParentChanged(oldValue, newValue);
+		protected override void OnParentChanged(ILayoutContainer oldValue, ILayoutContainer newValue) {
+			base.OnParentChanged(oldValue, newValue);
 
-            UpdateSide();
-        }
+			UpdateSide();
+		}
 
-        private void UpdateSide()
-        {
-            if (Root.LeftSide == this)
-                Side = AnchorSide.Left;
-            else if (Root.TopSide == this)
-                Side = AnchorSide.Top;
-            else if (Root.RightSide == this)
-                Side = AnchorSide.Right;
-            else if (Root.BottomSide == this)
-                Side = AnchorSide.Bottom;
-        }
+		private void UpdateSide() {
+			if (Root.LeftSide == this)
+				Side = AnchorSide.Left;
+			else if (Root.TopSide == this)
+				Side = AnchorSide.Top;
+			else if (Root.RightSide == this)
+				Side = AnchorSide.Right;
+			else if (Root.BottomSide == this)
+				Side = AnchorSide.Bottom;
+		}
 
 
-        #region Side
+		#region Side
 
-        private AnchorSide _side;
-        public AnchorSide Side
-        {
-            get { return _side; }
-            private set
-            {
-                if (_side != value)
-                {
-                    RaisePropertyChanging("Side");
-                    _side = value;
-                    RaisePropertyChanged("Side");
-                }
-            }
-        }
+		private AnchorSide _side;
+		public AnchorSide Side {
+			get { return _side; }
+			private set {
+				if (_side != value) {
+					RaisePropertyChanging("Side");
+					_side = value;
+					RaisePropertyChanged("Side");
+				}
+			}
+		}
 
-        #endregion
+		#endregion
 
 
 
-    }
+	}
 }

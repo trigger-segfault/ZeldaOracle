@@ -22,31 +22,25 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows;
 
-namespace Xceed.Wpf.AvalonDock.Controls
-{
-    public class ContextMenuEx : ContextMenu
-    {
-        static ContextMenuEx()
-        {
-        }
+namespace Xceed.Wpf.AvalonDock.Controls {
+	public class ContextMenuEx : ContextMenu {
+		static ContextMenuEx() {
+		}
 
-        public ContextMenuEx()
-        {
+		public ContextMenuEx() {
 
-        }
+		}
 
-        protected override System.Windows.DependencyObject GetContainerForItemOverride()
-        {
-            return new MenuItemEx();
-        }
+		protected override System.Windows.DependencyObject GetContainerForItemOverride() {
+			return new MenuItemEx();
+		}
 
-        protected override void OnOpened(System.Windows.RoutedEventArgs e)
-        {
-            BindingOperations.GetBindingExpression(this, ItemsSourceProperty).UpdateTarget();
+		protected override void OnOpened(System.Windows.RoutedEventArgs e) {
+			BindingOperations.GetBindingExpression(this, ItemsSourceProperty).UpdateTarget();
 
-            base.OnOpened(e);
-        }
+			base.OnOpened(e);
+		}
 
 
-    }
+	}
 }

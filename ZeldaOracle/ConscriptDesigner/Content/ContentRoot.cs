@@ -109,7 +109,7 @@ namespace ConscriptDesigner.Content {
 					try {
 						file.UpdateLastModified();
 					}
-					catch (Exception ex) {
+					catch (Exception) {
 						//file.IsMissing = true;
 						someMissing = true;
 					}

@@ -22,20 +22,18 @@ using System.Windows;
 using System.Windows.Media;
 using Xceed.Wpf.AvalonDock.Layout;
 
-namespace Xceed.Wpf.AvalonDock.Controls
-{
-    internal interface IDropTarget
-    {
-        Geometry GetPreviewPath(OverlayWindow overlayWindow, LayoutFloatingWindow floatingWindow);
+namespace Xceed.Wpf.AvalonDock.Controls {
+	internal interface IDropTarget {
+		Geometry GetPreviewPath(OverlayWindow overlayWindow, LayoutFloatingWindow floatingWindow);
 
-        bool HitTest(Point dragPoint);
+		bool HitTest(Point dragPoint);
 
-        DropTargetType Type { get; }
+		DropTargetType Type { get; }
 
-        void Drop(LayoutFloatingWindow floatingWindow);
+		void Drop(LayoutFloatingWindow floatingWindow);
 
-        void DragEnter();
+		void DragEnter();
 
-        void DragLeave();
-    }
+		void DragLeave();
+	}
 }

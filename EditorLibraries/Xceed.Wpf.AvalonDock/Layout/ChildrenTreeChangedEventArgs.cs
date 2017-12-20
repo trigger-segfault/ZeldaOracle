@@ -19,28 +19,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Xceed.Wpf.AvalonDock.Layout
-{
-    public enum ChildrenTreeChange
-    {
-        /// <summary>
-        /// Direct insert/remove operation has been perfomed to the group
-        /// </summary>
-        DirectChildrenChanged,
+namespace Xceed.Wpf.AvalonDock.Layout {
+	public enum ChildrenTreeChange {
+		/// <summary>
+		/// Direct insert/remove operation has been perfomed to the group
+		/// </summary>
+		DirectChildrenChanged,
 
-        /// <summary>
-        /// An element below in the hierarchy as been added/removed
-        /// </summary>
-        TreeChanged
-    }
+		/// <summary>
+		/// An element below in the hierarchy as been added/removed
+		/// </summary>
+		TreeChanged
+	}
 
-    public class ChildrenTreeChangedEventArgs : EventArgs
-    {
-        public ChildrenTreeChangedEventArgs(ChildrenTreeChange change)
-        {
-            Change = change;
-        }
+	public class ChildrenTreeChangedEventArgs : EventArgs {
+		public ChildrenTreeChangedEventArgs(ChildrenTreeChange change) {
+			Change = change;
+		}
 
-        public ChildrenTreeChange Change { get; private set; }
-    }
+		public ChildrenTreeChange Change { get; private set; }
+	}
 }

@@ -22,33 +22,27 @@ using System.Windows.Controls;
 using System.Windows;
 using Xceed.Wpf.AvalonDock.Layout;
 
-namespace Xceed.Wpf.AvalonDock.Controls
-{
-    public abstract class OverlayArea : IOverlayWindowArea
-    {
-        internal OverlayArea(IOverlayWindow overlayWindow)
-        {
-            _overlayWindow = overlayWindow;
-        }
+namespace Xceed.Wpf.AvalonDock.Controls {
+	public abstract class OverlayArea : IOverlayWindowArea {
+		internal OverlayArea(IOverlayWindow overlayWindow) {
+			_overlayWindow = overlayWindow;
+		}
 
-        IOverlayWindow _overlayWindow;
+		IOverlayWindow _overlayWindow;
 
-        Rect? _screenDetectionArea;
-        Rect IOverlayWindowArea.ScreenDetectionArea
-        {
-            get
-            {
-                return _screenDetectionArea.Value;
-            }
-        }
+		Rect? _screenDetectionArea;
+		Rect IOverlayWindowArea.ScreenDetectionArea {
+			get {
+				return _screenDetectionArea.Value;
+			}
+		}
 
-        protected void SetScreenDetectionArea(Rect rect)
-        {
-            _screenDetectionArea = rect;
-        }
+		protected void SetScreenDetectionArea(Rect rect) {
+			_screenDetectionArea = rect;
+		}
 
 
 
 
-    }
+	}
 }

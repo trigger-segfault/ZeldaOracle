@@ -125,5 +125,20 @@ namespace ZeldaOracle.Common.Graphics {
 			get { return spacing; }
 			set { spacing = value; }
 		}
+
+		/// <summary>Calculates the dimensions of the sprite sheet.</summary>
+		public Point2I Dimensions {
+			get { return (image.Size - offset) / (cellSize + spacing); }
+		}
+
+		/// <summary>Gets the width of the sprite sheet.</summary>
+		public int Width {
+			get { return Dimensions.X; }
+		}
+
+		/// <summary>Gets the height of the sprite sheet.</summary>
+		public int Height {
+			get { return Dimensions.Y; }
+		}
 	}
 }

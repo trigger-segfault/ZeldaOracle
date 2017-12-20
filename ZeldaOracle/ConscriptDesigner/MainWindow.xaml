@@ -26,6 +26,7 @@
 
         <CommandBinding Command="cmd:Commands.RunConscripts" CanExecute="CanExecuteIsBusy" Executed="OnRunConscriptsCommand"/>
         <CommandBinding Command="cmd:Commands.CompileContent" CanExecute="CanExecuteIsBusy" Executed="OnCompileContentCommand"/>
+        <CommandBinding Command="cmd:Commands.CancelBuild" CanExecute="CanExecuteIsBuilding" Executed="OnCancelBuildCommand"/>
         <CommandBinding Command="cmd:Commands.RedoSecondary" CanExecute="CanRedo" Executed="OnRedoCommand"/>
 
         <CommandBinding Command="Find" CanExecute="CanExecuteIsProjectOpen" Executed="OnFindCommand"/>
@@ -34,6 +35,8 @@
 
         <CommandBinding Command="cmd:Commands.ProjectExplorer" CanExecute="CanAlwaysExecute" Executed="OnProjectExplorerCommand"/>
         <CommandBinding Command="cmd:Commands.OutputConsole" CanExecute="CanAlwaysExecute" Executed="OnOutputConsoleCommand"/>
+        <CommandBinding Command="cmd:Commands.SpriteBrowser" CanExecute="CanAlwaysExecute" Executed="OnSpriteBrowserCommand"/>
+        <CommandBinding Command="cmd:Commands.SpriteSourceBrowser" CanExecute="CanAlwaysExecute" Executed="OnSpriteSourceBrowserCommand"/>
     </Window.CommandBindings>
     <DockPanel>
         <WindowsFormsHost x:Name="dummyHost" Height="0" Width="0">
@@ -68,6 +71,7 @@
                 <local:ImageMenuItem Header="Project Explorer" Source="/Resources/Icons/ContentProject.png" Command="cmd:Commands.ProjectExplorer"/>
                 <local:ImageMenuItem Header="Output Console" Source="/Resources/Icons/Console.png" Command="cmd:Commands.OutputConsole"/>
                 <local:ImageMenuItem Header="Sprite Browser" Source="/Resources/Icons/Sprite.png" Command="cmd:Commands.SpriteBrowser"/>
+                <local:ImageMenuItem Header="Sprite Source Browser" Source="/Resources/Icons/SpriteSource.png" Command="cmd:Commands.SpriteSourceBrowser"/>
                 <local:ImageMenuItem Header="Tile Browser" Source="/Resources/Icons/Tile.png" Command="cmd:Commands.TileBrowser"/>
             </MenuItem>
             <MenuItem Header="_Project">

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -34,6 +35,8 @@ namespace ConscriptDesigner.Control {
 		private static GraphicsDevice graphicsDevice;
 		private static ContentManager contentManager;
 		private static Task<ScriptReaderException> busyTask;
+		private static Thread busyThread;
+		private static bool busyTaskIsConscripts;
 		private static ScriptReaderException lastScriptError;
 		private static DispatcherTimer updateTimer;
 		private static DispatcherTimer modifiedTimer;
@@ -53,6 +56,17 @@ namespace ConscriptDesigner.Control {
 			modifiedTimer = new DispatcherTimer(TimeSpan.FromSeconds(3), DispatcherPriority.ApplicationIdle, delegate { CheckForOutdatedFiles(); }, Application.Current.Dispatcher);
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Events
+		//-----------------------------------------------------------------------------
+
+		public static event EventHandler FinishedBuilding;
+
+		public static event EventHandler ProjectOpened;
+		public static event EventHandler ProjectClosed;
+		public static event EventHandler ResourcesUnloaded;
+		public static event EventHandler ResourcesLoaded;
 
 		//-----------------------------------------------------------------------------
 		// Anchorables
@@ -122,7 +136,12 @@ namespace ConscriptDesigner.Control {
 				if (busyTask.IsCompleted) {
 					lastScriptError = busyTask.Result;
 					busyTask = null;
+					busyThread = null;
 					CommandManager.InvalidateRequerySuggested();
+					if (FinishedBuilding != null)
+						FinishedBuilding(null, EventArgs.Empty);
+					if (busyTaskIsConscripts && ResourcesLoaded != null)
+						ResourcesLoaded(null, EventArgs.Empty);
 				}
 			}
 			if (mainWindow.IsActive && mainWindow.OwnedWindows.Count == 0 && closingAnchorables.Any()) {
@@ -226,6 +245,7 @@ namespace ConscriptDesigner.Control {
 		//-----------------------------------------------------------------------------
 
 		private static ScriptReaderException CompileContentTask() {
+			busyThread = Thread.CurrentThread;
 			mainWindow.Dispatcher.Invoke(() => SaveAll(true));
 			if (mainWindow.OutputConsole != null)
 				mainWindow.OutputConsole.Clear();
@@ -245,6 +265,7 @@ namespace ConscriptDesigner.Control {
 				Console.WriteLine("----------------------------------------------------------------");
 				Console.WriteLine("Finished! Duration: " + watch.Elapsed.RoundUpToNearestSecond().ToString(@"hh\:mm\:ss"));
 			}
+			catch (ThreadAbortException) { }
 			catch (Exception ex) {
 				Console.WriteLine(ex.Message);
 				Console.WriteLine("Stack Trace:\n" + ex.StackTrace);
@@ -253,6 +274,7 @@ namespace ConscriptDesigner.Control {
 		}
 
 		private static ScriptReaderException RunConscriptsTask() {
+			busyThread = Thread.CurrentThread;
 			mainWindow.Dispatcher.Invoke(() => SaveAll(true));
 			if (mainWindow.OutputConsole != null)
 				mainWindow.OutputConsole.Clear();
@@ -267,6 +289,7 @@ namespace ConscriptDesigner.Control {
 				Console.WriteLine("----------------------------------------------------------------");
 				Console.WriteLine("Finished! Duration: " + watch.Elapsed.RoundUpToNearestSecond().ToString(@"hh\:mm\:ss"));
 			}
+			catch (ThreadAbortException) { }
 			catch (ScriptReaderException ex) {
 				ex.PrintMessage();
 				Console.WriteLine("Stack Trace:\n" + ex.StackTrace);
@@ -298,18 +321,19 @@ namespace ConscriptDesigner.Control {
 					continue;
 				string outName = Path.GetFileName(outPath);
 				if (existingFiles.Contains(outName)) {
-					if (file.ShouldCopyToOutput && File.GetLastWriteTimeUtc(inPath) != File.GetLastWriteTimeUtc(outPath)) {
+					if (file.ShouldCopyToOutput /*&& File.GetLastWriteTimeUtc(inPath) != File.GetLastWriteTimeUtc(outPath)*/) {
 						File.Copy(inPath, outPath, true);
 					}
 					existingFiles.Remove(outName);
 				}
-				else if (file.IsFolder) {
+				else if (file.ShouldCopyToOutput) {
+					File.Copy(inPath, outPath, true);
+				}
+
+				if (file.IsFolder) {
 					if (!Directory.Exists(outPath))
 						Directory.CreateDirectory(outPath);
 					UpdateContentFolder((ContentFolder) file);
-				}
-				else if (file.ShouldCopyToOutput) {
-					File.Copy(inPath, outPath, true);
 				}
 			}
 
@@ -413,6 +437,11 @@ namespace ConscriptDesigner.Control {
 						mainWindow.OutputConsole.Clear();
 					project.Cleanup();
 					project = null;
+					if (ResourcesUnloaded != null)
+						ResourcesUnloaded(null, EventArgs.Empty);
+					if (ProjectClosed != null)
+						ProjectClosed(null, EventArgs.Empty);
+					Resources.Uninitialize();
 					CommandManager.InvalidateRequerySuggested();
 				}
 			}
@@ -430,6 +459,9 @@ namespace ConscriptDesigner.Control {
 				mainWindow.OpenOutputConsole();
 				if (mainWindow.ProjectExplorer != null)
 					mainWindow.ProjectExplorer.Project = newProject;
+				RunConscripts();
+				if (ProjectOpened != null)
+					ProjectOpened(null, EventArgs.Empty);
 				CommandManager.InvalidateRequerySuggested();
 			}
 			catch (Exception ex) {
@@ -484,15 +516,32 @@ namespace ConscriptDesigner.Control {
 
 		public static void RunConscripts() {
 			if (busyTask == null) {
-				busyTask = Task.Run(() => { return RunConscriptsTask(); });
+				busyTaskIsConscripts = true;
+				if (ResourcesUnloaded != null)
+					ResourcesUnloaded(null, EventArgs.Empty);
+				busyTask = Task.Run(() => RunConscriptsTask());
 				CommandManager.InvalidateRequerySuggested();
 			}
 		}
 
 		public static void CompileContent() {
 			if (busyTask == null) {
-				busyTask = Task.Run(() => { return CompileContentTask(); });
+				busyTaskIsConscripts = false;
+				busyTask = Task.Run(() => CompileContentTask());
 				CommandManager.InvalidateRequerySuggested();
+			}
+		}
+
+		public static void CancelBuild() {
+			if (busyTask != null && busyThread != null) {
+				busyThread.Abort();
+				busyThread = null;
+				busyTask = null;
+				CommandManager.InvalidateRequerySuggested();
+				if (mainWindow.OutputConsole != null)
+					mainWindow.OutputConsole.NewLine();
+				Console.WriteLine("----------------------------------------------------------------");
+				Console.WriteLine("Canceled!");
 			}
 		}
 

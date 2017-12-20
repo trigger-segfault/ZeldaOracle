@@ -20,17 +20,14 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 
-namespace Xceed.Wpf.AvalonDock.Themes
-{
-    public abstract class Theme : DependencyObject
-    {
-        public Theme()
-        {
+namespace Xceed.Wpf.AvalonDock.Themes {
+	public abstract class Theme : DependencyObject {
+		public Theme() {
 
-        }
+		}
 
-        public abstract Uri GetResourceUri();
+		public abstract Uri GetResourceUri();
 
 
-    }
+	}
 }

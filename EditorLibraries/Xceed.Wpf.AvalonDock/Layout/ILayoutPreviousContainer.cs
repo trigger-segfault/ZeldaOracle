@@ -19,12 +19,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Xceed.Wpf.AvalonDock.Layout
-{
-    interface ILayoutPreviousContainer
-    {
-        ILayoutContainer PreviousContainer { get; set; }
+namespace Xceed.Wpf.AvalonDock.Layout {
+	interface ILayoutPreviousContainer {
+		ILayoutContainer PreviousContainer { get; set; }
 
-        string PreviousContainerId { get; set; }
-    }
+		string PreviousContainerId { get; set; }
+	}
 }

@@ -19,16 +19,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Xceed.Wpf.AvalonDock.Layout
-{
-    public enum AnchorSide
-    {
-        Left,
+namespace Xceed.Wpf.AvalonDock.Layout {
+	public enum AnchorSide {
+		Left,
 
-        Top,
+		Top,
 
-        Right,
+		Right,
 
-        Bottom
-    }
+		Bottom
+	}
 }

@@ -27,8 +27,10 @@ namespace ConscriptDesigner {
 
 		private bool supressEvents;
 
-		private OutputConsole outputConsole;
 		private ProjectExplorer projectExplorer;
+		private OutputConsole outputConsole;
+		private SpriteBrowser spriteBrowser;
+		private SpriteSourceBrowser spriteSourceBrowser;
 
 		private DispatcherTimer checkOutdatedTimer;
 
@@ -58,6 +60,10 @@ namespace ConscriptDesigner {
 
 		private void OnLoaded(object sender, RoutedEventArgs e) {
 			DesignerControl.Initialize(this);
+			DesignerControl.FinishedBuilding += OnFinishedBuilding;
+			DesignerControl.ProjectClosed += OnProjectClosed;
+			DesignerControl.ResourcesLoaded += OnResourcesLoaded;
+			DesignerControl.ResourcesUnloaded += OnResourcesUnloaded;
 			supressEvents = false;
 			
 			OnOutputConsoleCommand();
@@ -77,6 +83,29 @@ namespace ConscriptDesigner {
 		private void OnClosing(object sender, CancelEventArgs e) {
 			e.Cancel = !DesignerControl.RequestClose();
 		}
+
+		private void OnProjectClosed(object sender, EventArgs e) {
+			OnResourcesUnloaded(sender, e);
+		}
+
+		private void OnResourcesLoaded(object sender, EventArgs e) {
+			if (spriteBrowser != null)
+				spriteBrowser.RefreshList();
+			if (spriteSourceBrowser != null)
+				spriteSourceBrowser.RefreshList();
+		}
+
+		private void OnResourcesUnloaded(object sender, EventArgs e) {
+			if (spriteBrowser != null)
+				spriteBrowser.ClearList();
+			if (spriteSourceBrowser != null)
+				spriteSourceBrowser.ClearList();
+		}
+
+		private void OnFinishedBuilding(object sender, EventArgs e) {
+			if (spriteBrowser != null)
+				spriteBrowser.RefreshList();
+		}
 		
 		private void OnActiveAnchorableChanged(object sender, EventArgs e) {
 			CommandManager.InvalidateRequerySuggested();
@@ -84,13 +113,14 @@ namespace ConscriptDesigner {
 
 		private void OnAnchorableClosed(object sender, EventArgs e) {
 			IRequestCloseAnchorable anchorable = sender as IRequestCloseAnchorable;
-			if (anchorable is ProjectExplorer) {
-				projectExplorer.Clear();
+			if (anchorable is ProjectExplorer)
 				projectExplorer = null;
-			}
-			else if (anchorable is OutputConsole) {
+			else if (anchorable is OutputConsole)
 				outputConsole = null;
-			}
+			else if (anchorable is SpriteBrowser)
+				spriteBrowser = null;
+			else if (anchorable is SpriteSourceBrowser)
+				spriteSourceBrowser = null;
 		}
 
 
@@ -104,6 +134,14 @@ namespace ConscriptDesigner {
 
 		public void OpenOutputConsole() {
 			OnOutputConsoleCommand();
+		}
+
+		public void OpenSpriteBrowser() {
+			OnSpriteBrowserCommand();
+		}
+
+		public void OpenSpriteSourceBrowser() {
+			OnSpriteSourceBrowserCommand();
 		}
 
 		public void DockDocument(RequestCloseDocument anchorable) {
@@ -185,11 +223,37 @@ namespace ConscriptDesigner {
 			}
 		}
 
-		private void OnSpriteBrowserCommand(object sender, ExecutedRoutedEventArgs e) {
-
+		private void OnSpriteBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
+			if (spriteBrowser == null) {
+				spriteBrowser = new SpriteBrowser();
+				spriteBrowser.Closed += OnAnchorableClosed;
+				spriteBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
+				var pane = spriteBrowser.Parent as LayoutAnchorablePane;
+				pane.DockWidth = new GridLength(250);
+				if (DesignerControl.IsProjectOpen && !DesignerControl.IsBusy)
+					spriteBrowser.RefreshList();
+			}
+			else {
+				spriteBrowser.IsActive = true;
+			}
 		}
 
-		private void OnTileBrowserCommand(object sender, ExecutedRoutedEventArgs e) {
+		private void OnSpriteSourceBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
+			if (spriteSourceBrowser == null) {
+				spriteSourceBrowser = new SpriteSourceBrowser();
+				spriteSourceBrowser.Closed += OnAnchorableClosed;
+				spriteSourceBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
+				var pane = spriteSourceBrowser.Parent as LayoutAnchorablePane;
+				pane.DockWidth = new GridLength(250);
+				if (DesignerControl.IsProjectOpen && !DesignerControl.IsBusy)
+					spriteSourceBrowser.RefreshList();
+			}
+			else {
+				spriteSourceBrowser.IsActive = true;
+			}
+		}
+
+		private void OnTileBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
 
 		}
 
@@ -199,6 +263,10 @@ namespace ConscriptDesigner {
 
 		private void OnCompileContentCommand(object sender, ExecutedRoutedEventArgs e) {
 			DesignerControl.CompileContent();
+		}
+
+		private void OnCancelBuildCommand(object sender, ExecutedRoutedEventArgs e) {
+			DesignerControl.CancelBuild();
 		}
 
 
@@ -240,6 +308,11 @@ namespace ConscriptDesigner {
 			e.CanExecute = DesignerControl.IsProjectOpen;
 		}
 
+		private void CanExecuteIsBuilding(object sender, CanExecuteRoutedEventArgs e) {
+			if (supressEvents) return;
+			e.CanExecute = DesignerControl.IsBusy;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -251,6 +324,14 @@ namespace ConscriptDesigner {
 
 		public OutputConsole OutputConsole {
 			get { return outputConsole; }
+		}
+
+		public SpriteBrowser SpriteBrowser {
+			get { return spriteBrowser; }
+		}
+
+		public SpriteSourceBrowser SpriteSourceBrowser {
+			get { return spriteSourceBrowser; }
 		}
 	}
 }

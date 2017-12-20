@@ -23,122 +23,102 @@ using System.Diagnostics;
 using System.Xml.Serialization;
 using System.Xml;
 
-namespace Xceed.Wpf.AvalonDock.Layout
-{
-    [ContentProperty("RootDocument")]
-    [Serializable]
-    public class LayoutDocumentFloatingWindow : LayoutFloatingWindow
-    {
-        public LayoutDocumentFloatingWindow()
-        {
+namespace Xceed.Wpf.AvalonDock.Layout {
+	[ContentProperty("RootDocument")]
+	[Serializable]
+	public class LayoutDocumentFloatingWindow : LayoutFloatingWindow {
+		public LayoutDocumentFloatingWindow() {
 
-        }
+		}
 
-        #region RootDocument
+		#region RootDocument
 
-        private LayoutDocument _rootDocument = null;
-        public LayoutDocument RootDocument
-        {
-            get { return _rootDocument; }
-            set
-            {
-                if (_rootDocument != value)
-                {
-                    RaisePropertyChanging("RootDocument");
-                    _rootDocument = value;
-                    if (_rootDocument != null)
-                        _rootDocument.Parent = this;
-                    RaisePropertyChanged("RootDocument");
+		private LayoutDocument _rootDocument = null;
+		public LayoutDocument RootDocument {
+			get { return _rootDocument; }
+			set {
+				if (_rootDocument != value) {
+					RaisePropertyChanging("RootDocument");
+					_rootDocument = value;
+					if (_rootDocument != null)
+						_rootDocument.Parent = this;
+					RaisePropertyChanged("RootDocument");
 
-                    if (RootDocumentChanged != null)
-                        RootDocumentChanged(this, EventArgs.Empty);
-                }
-            }
-        }
+					if (RootDocumentChanged != null)
+						RootDocumentChanged(this, EventArgs.Empty);
+				}
+			}
+		}
 
 
-        public event EventHandler RootDocumentChanged;
+		public event EventHandler RootDocumentChanged;
 
-        #endregion
+		#endregion
 
-        public override IEnumerable<ILayoutElement> Children
-        {
-            get
-            {
-                if (RootDocument == null)
-                    yield break;
+		public override IEnumerable<ILayoutElement> Children {
+			get {
+				if (RootDocument == null)
+					yield break;
 
-                yield return RootDocument;
-            }
-        }
+				yield return RootDocument;
+			}
+		}
 
-        public override void RemoveChild(ILayoutElement element)
-        {
-            Debug.Assert(element == RootDocument && element != null);
-            RootDocument = null;
-        }
+		public override void RemoveChild(ILayoutElement element) {
+			Debug.Assert(element == RootDocument && element != null);
+			RootDocument = null;
+		}
 
-        public override void ReplaceChild(ILayoutElement oldElement, ILayoutElement newElement)
-        {
-            Debug.Assert(oldElement == RootDocument && oldElement != null);
-            RootDocument = newElement as LayoutDocument;
-        }
+		public override void ReplaceChild(ILayoutElement oldElement, ILayoutElement newElement) {
+			Debug.Assert(oldElement == RootDocument && oldElement != null);
+			RootDocument = newElement as LayoutDocument;
+		}
 
-        public override int ChildrenCount
-        {
-            get { return RootDocument != null ? 1 : 0; }
-        }
+		public override int ChildrenCount {
+			get { return RootDocument != null ? 1 : 0; }
+		}
 
-        public override bool IsValid
-        {
-            get { return RootDocument != null; }
-        }
+		public override bool IsValid {
+			get { return RootDocument != null; }
+		}
 
-        public override void ReadXml( XmlReader reader )
-        {
-          reader.MoveToContent();
-          if( reader.IsEmptyElement )
-          {
-            reader.Read();
-            return;
-          }
+		public override void ReadXml(XmlReader reader) {
+			reader.MoveToContent();
+			if (reader.IsEmptyElement) {
+				reader.Read();
+				return;
+			}
 
-          var localName = reader.LocalName;
-          reader.Read();
+			var localName = reader.LocalName;
+			reader.Read();
 
-          while( true )
-          {
-            if( reader.LocalName.Equals(localName) && (reader.NodeType == XmlNodeType.EndElement) )
-            {
-              break;
-            }
+			while (true) {
+				if (reader.LocalName.Equals(localName) && (reader.NodeType == XmlNodeType.EndElement)) {
+					break;
+				}
 
-            if( reader.NodeType == XmlNodeType.Whitespace )
-            {
-              reader.Read();
-              continue;
-            }
+				if (reader.NodeType == XmlNodeType.Whitespace) {
+					reader.Read();
+					continue;
+				}
 
-            XmlSerializer serializer;
-            if( reader.LocalName.Equals( "LayoutDocument" ) )
-            {
-              serializer = new XmlSerializer( typeof( LayoutDocument ) );
-            }
-            else
-            {
-              var type = LayoutRoot.FindType( reader.LocalName );
-              if( type == null )
-              {
-                throw new ArgumentException( "AvalonDock.LayoutDocumentFloatingWindow doesn't know how to deserialize " + reader.LocalName );
-              }
-              serializer = new XmlSerializer( type );
-            }
+				XmlSerializer serializer;
+				if (reader.LocalName.Equals("LayoutDocument")) {
+					serializer = new XmlSerializer(typeof(LayoutDocument));
+				}
+				else {
+					var type = LayoutRoot.FindType( reader.LocalName );
+					if (type == null) {
+						throw new ArgumentException("AvalonDock.LayoutDocumentFloatingWindow doesn't know how to deserialize " + reader.LocalName);
+					}
+					serializer = new XmlSerializer(type);
+				}
 
-            RootDocument = ( LayoutDocument )serializer.Deserialize( reader );
-          }
+				RootDocument = (LayoutDocument) serializer.Deserialize(reader);
+			}
 
-          reader.ReadEndElement();
-        }
+			reader.ReadEndElement();
+		}
 
 #if TRACE
         public override void ConsoleDump(int tab)
@@ -149,6 +129,6 @@ namespace Xceed.Wpf.AvalonDock.Layout
           RootDocument.ConsoleDump(tab + 1);
         }
 #endif
-  }
+	}
 
 }

@@ -57,6 +57,7 @@ namespace ConscriptDesigner.Util {
 		/// <summary>Initializes the clipboard listener.</summary>
 		static ClipboardHelper() {
 			listener = new ClipboardListener();
+			listener.ClipboardChanged += OnClipboardChanged;
 		}
 
 
@@ -72,6 +73,17 @@ namespace ConscriptDesigner.Util {
 			else
 				return !data.GetFormats().Any();
 		}
+
+		//-----------------------------------------------------------------------------
+		// Event Handlers
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Called to fire the clipboard changed event.</summary>
+		private static void OnClipboardChanged(object sender, EventArgs e) {
+			if (ClipboardChanged != null)
+				ClipboardChanged(null, e);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Events

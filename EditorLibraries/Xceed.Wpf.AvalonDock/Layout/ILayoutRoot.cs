@@ -20,24 +20,22 @@ using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
 
-namespace Xceed.Wpf.AvalonDock.Layout
-{
-    public interface ILayoutRoot
-    {
-        DockingManager Manager { get; }
+namespace Xceed.Wpf.AvalonDock.Layout {
+	public interface ILayoutRoot {
+		DockingManager Manager { get; }
 
-        LayoutPanel RootPanel { get; }
+		LayoutPanel RootPanel { get; }
 
-        LayoutAnchorSide TopSide { get; }
-        LayoutAnchorSide LeftSide { get; }
-        LayoutAnchorSide RightSide { get; }
-        LayoutAnchorSide BottomSide { get; }
+		LayoutAnchorSide TopSide { get; }
+		LayoutAnchorSide LeftSide { get; }
+		LayoutAnchorSide RightSide { get; }
+		LayoutAnchorSide BottomSide { get; }
 
-        LayoutContent ActiveContent { get; set; }
+		LayoutContent ActiveContent { get; set; }
 
-        void CollectGarbage();
+		void CollectGarbage();
 
-        ObservableCollection<LayoutFloatingWindow> FloatingWindows { get; }
-        ObservableCollection<LayoutAnchorable> Hidden { get; }
-    }
+		ObservableCollection<LayoutFloatingWindow> FloatingWindows { get; }
+		ObservableCollection<LayoutAnchorable> Hidden { get; }
+	}
 }

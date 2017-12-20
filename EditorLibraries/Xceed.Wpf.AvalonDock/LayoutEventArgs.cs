@@ -20,19 +20,15 @@ using System.Linq;
 using System.Text;
 using Xceed.Wpf.AvalonDock.Layout;
 
-namespace Xceed.Wpf.AvalonDock
-{
-    class LayoutEventArgs : EventArgs
-    {
-        public LayoutEventArgs(LayoutRoot layoutRoot)
-        {
-            LayoutRoot = layoutRoot;
-        }
+namespace Xceed.Wpf.AvalonDock {
+	class LayoutEventArgs : EventArgs {
+		public LayoutEventArgs(LayoutRoot layoutRoot) {
+			LayoutRoot = layoutRoot;
+		}
 
-        public LayoutRoot LayoutRoot
-        {
-            get;
-            private set;
-        }
-    }
+		public LayoutRoot LayoutRoot {
+			get;
+			private set;
+		}
+	}
 }

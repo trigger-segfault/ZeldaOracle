@@ -115,6 +115,13 @@ namespace ConscriptDesigner.Anchorables {
 			});
 		}
 
+		/// <summary>Creates a new line if the current line isn't empty.</summary>
+		public void NewLine() {
+			TextBlock textBlock = (TextBlock) stackPanel.Children[stackPanel.Children.Count - 1];
+			if (textBlock.Text != "")
+				AppendLine("");
+		}
+
 		/// <summary>Write a line to the console.</summary>
 		public void WriteLine(string line) {
 			Write(line + "\n");

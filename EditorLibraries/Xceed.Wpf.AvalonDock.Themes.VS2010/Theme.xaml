@@ -606,6 +606,8 @@
 
     <Style x:Key="{x:Type avalonDockControls:OverlayWindow}" TargetType="{x:Type avalonDockControls:OverlayWindow}">
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type avalonDockControls:OverlayWindow}">
@@ -1037,6 +1039,8 @@
         <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor33}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor33}"/>
         <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
         <Setter Property="shell:WindowChrome.WindowChrome">
             <Setter.Value>
                 <shell:WindowChrome
@@ -1200,7 +1204,9 @@
     <Style x:Key="{x:Type avalonDockControls:LayoutAnchorableFloatingWindowControl}" TargetType="{x:Type avalonDockControls:LayoutAnchorableFloatingWindowControl}">
         <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor5}"/>
        <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor16}"/>
-       <Setter Property="BorderThickness" Value="4"/>
+        <Setter Property="BorderThickness" Value="4"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
         <Setter Property="shell:WindowChrome.WindowChrome">
             <Setter.Value>
                 <shell:WindowChrome
@@ -1352,6 +1358,8 @@
 
     <Style x:Key="{x:Type avalonDockControls:LayoutAutoHideWindowControl}" TargetType="{x:Type avalonDockControls:LayoutAutoHideWindowControl}">
         <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor5}"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
     </Style>
 
 

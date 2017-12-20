@@ -20,18 +20,16 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 
-namespace Xceed.Wpf.AvalonDock.Controls
-{
-    internal interface IOverlayWindowHost
-    {
-        bool HitTest(Point dragPoint);
+namespace Xceed.Wpf.AvalonDock.Controls {
+	internal interface IOverlayWindowHost {
+		bool HitTest(Point dragPoint);
 
-        IOverlayWindow ShowOverlayWindow(LayoutFloatingWindowControl draggingWindow);
+		IOverlayWindow ShowOverlayWindow(LayoutFloatingWindowControl draggingWindow);
 
-        void HideOverlayWindow();
+		void HideOverlayWindow();
 
-        IEnumerable<IDropArea> GetDropAreas(LayoutFloatingWindowControl draggingWindow);
+		IEnumerable<IDropArea> GetDropAreas(LayoutFloatingWindowControl draggingWindow);
 
-        DockingManager Manager { get; }
-    }
+		DockingManager Manager { get; }
+	}
 }
