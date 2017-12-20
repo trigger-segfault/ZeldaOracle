@@ -40,6 +40,9 @@ namespace ZeldaOracle.Game {
 			Console.WriteLine("Loading Palettes");
 			LoadPalettes();
 
+			Console.WriteLine("Loading Shaders");
+			LoadShaders();
+
 			Console.WriteLine("Loading Images");
 			LoadImages();
 
@@ -51,11 +54,9 @@ namespace ZeldaOracle.Game {
 
 			Console.WriteLine("Loading Collision Models");
 			LoadCollisionModels();
-
-			if (!GameSettings.DesignerMode) {
-				Console.WriteLine("Loading Fonts");
-				LoadFonts();
-			}
+			
+			Console.WriteLine("Loading Fonts");
+			LoadFonts();
 
 			Console.WriteLine("Loading Sound Effects");
 			LoadSounds();
@@ -68,11 +69,6 @@ namespace ZeldaOracle.Game {
 
 			Console.WriteLine("Loading Zones");
 			LoadZones();
-
-			if (!GameSettings.DesignerMode) {
-				Console.WriteLine("Loading Shaders");
-				LoadShaders();
-			}
 
 			//Resources.LoadScript("Palettes/dungeon_ages_1_converter.conscript", new PaletteConverterSR());
 		}

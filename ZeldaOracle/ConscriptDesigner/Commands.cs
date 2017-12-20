@@ -62,6 +62,10 @@ namespace ConscriptDesigner {
 		public static readonly RoutedUICommand SpriteBrowser = new RoutedUICommand(
 			"SpriteBrowser", "Sprite Browser", typeof(Commands));
 
+		/// <summary>The command to toggle the sprite sourcebrowser window.</summary>
+		public static readonly RoutedUICommand SpriteSourceBrowser = new RoutedUICommand(
+			"SpriteSourceBrowser", "Sprite Source Browser", typeof(Commands));
+
 		/// <summary>The command to toggle the tile browser window.</summary>
 		public static readonly RoutedUICommand TileBrowser = new RoutedUICommand(
 			"TileBrowser", "Tile Browser", typeof(Commands));
@@ -82,5 +86,11 @@ namespace ConscriptDesigner {
 			"CompileContent", "Compile Content", typeof(Commands),
 			new InputGestureCollection() {
 				new KeyGesture(Key.F5, ModifierKeys.Shift) });
+
+		/// <summary>The command to cancel builds.</summary>
+		public static readonly RoutedUICommand CancelBuild = new RoutedUICommand(
+			"CancelBuild", "Cancel Build", typeof(Commands),
+			new InputGestureCollection() {
+				new KeyGesture(Key.Cancel, ModifierKeys.Control) });
 	}
 }

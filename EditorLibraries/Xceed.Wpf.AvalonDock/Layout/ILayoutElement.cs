@@ -20,11 +20,9 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 
-namespace Xceed.Wpf.AvalonDock.Layout
-{
-    public interface ILayoutElement : INotifyPropertyChanged, INotifyPropertyChanging
-    {
-        ILayoutContainer Parent { get; }
-        ILayoutRoot Root { get; }
-    }
+namespace Xceed.Wpf.AvalonDock.Layout {
+	public interface ILayoutElement : INotifyPropertyChanged, INotifyPropertyChanging {
+		ILayoutContainer Parent { get; }
+		ILayoutRoot Root { get; }
+	}
 }

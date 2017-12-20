@@ -20,10 +20,8 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 
-namespace Xceed.Wpf.AvalonDock.Layout
-{
-    public interface ILayoutPanelElement : ILayoutElement
-    {
-        bool IsVisible { get; }
-    }
+namespace Xceed.Wpf.AvalonDock.Layout {
+	public interface ILayoutPanelElement : ILayoutElement {
+		bool IsVisible { get; }
+	}
 }

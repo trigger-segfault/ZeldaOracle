@@ -258,5 +258,21 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public int FrameCount {
 			get { return frames.Count; }
 		}
+
+		public bool HasSubstrips {
+			get { return nextStrip != null; }
+		}
+
+		public int SubstripCount {
+			get {
+				Animation substrip = this;
+				int count = 0;
+				do {
+					substrip = substrip.nextStrip;
+					count++;
+				} while (substrip != null);
+				return count;
+			}
+		}
 	}
 }

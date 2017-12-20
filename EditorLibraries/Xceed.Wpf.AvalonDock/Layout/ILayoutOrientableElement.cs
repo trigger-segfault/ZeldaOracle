@@ -20,10 +20,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Controls;
 
-namespace Xceed.Wpf.AvalonDock.Layout
-{
-    public interface ILayoutOrientableGroup : ILayoutGroup
-    {
-        Orientation Orientation { get; set; }
-    }
+namespace Xceed.Wpf.AvalonDock.Layout {
+	public interface ILayoutOrientableGroup : ILayoutGroup {
+		Orientation Orientation { get; set; }
+	}
 }

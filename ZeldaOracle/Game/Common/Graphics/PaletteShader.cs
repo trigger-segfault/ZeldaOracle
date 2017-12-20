@@ -35,6 +35,10 @@ namespace ZeldaOracle.Common.Graphics {
 			shader.CurrentTechnique.Passes[0].Apply();
 		}
 
+		public Effect Effect {
+			get { return shader; }
+		}
+
 		public Palette TilePalette {
 			get { return tilePalette; }
 			set {

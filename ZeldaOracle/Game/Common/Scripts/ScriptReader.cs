@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Scripts.Commands;
+using System.Threading;
 
 namespace ZeldaOracle.Common.Scripts {
 	/// <summary>
@@ -307,6 +308,7 @@ namespace ZeldaOracle.Common.Scripts {
 						try {
 							command.Action(newParams);
 						}
+						catch (ThreadAbortException) { }
 						catch (LoadContentException ex) {
 							throw ex;
 						}

@@ -20,10 +20,8 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 
-namespace Xceed.Wpf.AvalonDock.Controls
-{
-    internal interface IOverlayWindowArea
-    {
-        Rect ScreenDetectionArea { get; }
-    }
+namespace Xceed.Wpf.AvalonDock.Controls {
+	internal interface IOverlayWindowArea {
+		Rect ScreenDetectionArea { get; }
+	}
 }

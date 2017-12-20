@@ -20,28 +20,22 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 
-namespace Xceed.Wpf.AvalonDock.Themes
-{
-  public abstract class DictionaryTheme : Theme
-  {
-    public DictionaryTheme()
-    {
-    }
+namespace Xceed.Wpf.AvalonDock.Themes {
+	public abstract class DictionaryTheme : Theme {
+		public DictionaryTheme() {
+		}
 
-    public DictionaryTheme( ResourceDictionary themeResourceDictionary )
-    {
-      this.ThemeResourceDictionary = themeResourceDictionary;
-    }
+		public DictionaryTheme(ResourceDictionary themeResourceDictionary) {
+			this.ThemeResourceDictionary = themeResourceDictionary;
+		}
 
-    public ResourceDictionary ThemeResourceDictionary
-    {
-      get;
-      private set;
-    }
+		public ResourceDictionary ThemeResourceDictionary {
+			get;
+			private set;
+		}
 
-    public override Uri GetResourceUri()
-    {
-      return null;
-    }
-  }
+		public override Uri GetResourceUri() {
+			return null;
+		}
+	}
 }

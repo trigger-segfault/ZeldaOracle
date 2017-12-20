@@ -557,10 +557,10 @@ namespace ZeldaOracle.Common.Content {
 		public static void LoadScript(string assetName, ScriptReader sr, Encoding encoding) {
 			try {
 				string path = Path.Combine(contentManager.RootDirectory, assetName);
-				Stream stream = TitleContainer.OpenStream(path);
-				StreamReader reader = new StreamReader(stream, encoding);
-				sr.ReadScript(reader, assetName);
-				stream.Close();
+				using (Stream stream = TitleContainer.OpenStream(path)) {
+					StreamReader reader = new StreamReader(stream, encoding);
+					sr.ReadScript(reader, assetName);
+				}
 			}
 			catch (FileNotFoundException) {
 				throw new LoadContentException("Error loading file \"" + assetName + "\"");

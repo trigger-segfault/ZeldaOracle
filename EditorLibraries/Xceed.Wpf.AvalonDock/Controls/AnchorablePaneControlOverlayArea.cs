@@ -21,23 +21,20 @@ using System.Text;
 using System.Windows;
 using Xceed.Wpf.AvalonDock.Layout;
 
-namespace Xceed.Wpf.AvalonDock.Controls
-{
-    public class AnchorablePaneControlOverlayArea : OverlayArea
-    {
-        internal AnchorablePaneControlOverlayArea(
-            IOverlayWindow overlayWindow, 
-            LayoutAnchorablePaneControl anchorablePaneControl)
-            : base(overlayWindow)
-        {
+namespace Xceed.Wpf.AvalonDock.Controls {
+	public class AnchorablePaneControlOverlayArea : OverlayArea {
+		internal AnchorablePaneControlOverlayArea(
+			IOverlayWindow overlayWindow,
+			LayoutAnchorablePaneControl anchorablePaneControl)
+			: base(overlayWindow) {
 
-            _anchorablePaneControl = anchorablePaneControl;
-            base.SetScreenDetectionArea(new Rect(
-                _anchorablePaneControl.PointToScreenDPI(new Point()),
-                _anchorablePaneControl.TransformActualSizeToAncestor()));
+			_anchorablePaneControl = anchorablePaneControl;
+			base.SetScreenDetectionArea(new Rect(
+				_anchorablePaneControl.PointToScreenDPI(new Point()),
+				_anchorablePaneControl.TransformActualSizeToAncestor()));
 
-        }
+		}
 
-        LayoutAnchorablePaneControl _anchorablePaneControl;
-    }
+		LayoutAnchorablePaneControl _anchorablePaneControl;
+	}
 }

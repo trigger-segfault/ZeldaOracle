@@ -143,7 +143,7 @@
     <Compile Include="Common\Graphics\Sprites\EmptySprite.cs" />
     <Compile Include="Common\Graphics\Sprites\ISprite.cs" />
     <Compile Include="Common\Graphics\Sprites\PalettedSpriteDatabase.cs" />
-    <Compile Include="Common\Graphics\Sprites\ISpriteSheet.cs" />
+    <Compile Include="Common\Graphics\Sprites\ISpriteSource.cs" />
     <Compile Include="Common\Graphics\Sprites\OffsetSprite.cs" />
     <Compile Include="Common\Graphics\Sprites\SpriteDrawSettings.cs" />
     <Compile Include="Common\Graphics\Sprites\SpritePart.cs" />

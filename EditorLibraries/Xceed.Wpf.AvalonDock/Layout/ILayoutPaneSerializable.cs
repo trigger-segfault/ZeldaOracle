@@ -19,10 +19,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Xceed.Wpf.AvalonDock.Layout
-{
-    interface ILayoutPaneSerializable
-    {
-        string Id { get; set; }
-    }
+namespace Xceed.Wpf.AvalonDock.Layout {
+	interface ILayoutPaneSerializable {
+		string Id { get; set; }
+	}
 }

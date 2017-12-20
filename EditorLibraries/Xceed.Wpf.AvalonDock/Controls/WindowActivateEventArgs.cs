@@ -19,19 +19,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Xceed.Wpf.AvalonDock.Controls
-{
-    class WindowActivateEventArgs : EventArgs
-    {
-        public WindowActivateEventArgs(IntPtr hwndActivating)
-        {
-            HwndActivating = hwndActivating;
-        }
+namespace Xceed.Wpf.AvalonDock.Controls {
+	class WindowActivateEventArgs : EventArgs {
+		public WindowActivateEventArgs(IntPtr hwndActivating) {
+			HwndActivating = hwndActivating;
+		}
 
-        public IntPtr HwndActivating
-        {
-            get;
-            private set;
-        }
-    }
+		public IntPtr HwndActivating {
+			get;
+			private set;
+		}
+	}
 }
