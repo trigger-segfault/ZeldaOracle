@@ -36,38 +36,33 @@ namespace ConscriptDesigner.Control {
 		private static Task<ScriptReaderException> busyTask;
 		private static ScriptReaderException lastScriptError;
 		private static DispatcherTimer updateTimer;
-		private static HashSet<IRequestClosePanel> openAnchorables;
-		private static List<IRequestClosePanel> closingAnchorables;
-
-		private static ClipboardListener clipboardListener;
+		private static DispatcherTimer modifiedTimer;
+		private static List<IRequestCloseAnchorable> openAnchorables;
+		private static List<IRequestCloseAnchorable> closingAnchorables;
 
 		//-----------------------------------------------------------------------------
 		// Initialization
 		//-----------------------------------------------------------------------------
 
 		public static void Initialize(MainWindow mainWindow) {
-			clipboardListener = new ClipboardListener();
 			GameSettings.DesignerMode = true;
 			DesignerControl.mainWindow = mainWindow;
-			openAnchorables = new HashSet<IRequestClosePanel>();
-			closingAnchorables = new List<IRequestClosePanel>();
-			//project = new ContentRoot();
-			//project.LoadContentProject(ContentProjectFile);
-			updateTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.2), DispatcherPriority.ApplicationIdle, delegate { Update(); }, Application.Current.Dispatcher);
+			openAnchorables = new List<IRequestCloseAnchorable>();
+			closingAnchorables = new List<IRequestCloseAnchorable>();
+			updateTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.05), DispatcherPriority.ApplicationIdle, delegate { Update(); }, Application.Current.Dispatcher);
+			modifiedTimer = new DispatcherTimer(TimeSpan.FromSeconds(3), DispatcherPriority.ApplicationIdle, delegate { CheckForOutdatedFiles(); }, Application.Current.Dispatcher);
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Anchorables
 		//-----------------------------------------------------------------------------
-		
-		public static RequestCloseDocument CreateDocumentAnchorable() {
-			RequestCloseDocument anchorable = new RequestCloseDocument();
-			mainWindow.DockDocument(anchorable);
-			return anchorable;
+
+		public static void DockDocument(RequestCloseDocument document) {
+			mainWindow.DockDocument(document);
 		}
 
-		public static IRequestClosePanel GetActiveAnchorable() {
+		public static IRequestCloseAnchorable GetActiveAnchorable() {
 			foreach (var anchorable in openAnchorables) {
 				if (anchorable.IsActive)
 					return anchorable;
@@ -75,44 +70,45 @@ namespace ConscriptDesigner.Control {
 			return null;
 		}
 
-		public static IContentAnchorable GetActiveContent() {
+		public static ContentFile GetActiveContentFile() {
 			foreach (var anchorable in openAnchorables) {
-				if (anchorable.IsActive)
-					return anchorable.Content as IContentAnchorable;
+				if (anchorable.IsActive) {
+					if (anchorable is IContentFileContainer) {
+						return ((IContentFileContainer) anchorable).File;
+					}
+					break;
+				}
 			}
 			return null;
 		}
 
-		public static IEnumerable<IRequestClosePanel> GetOpenAnchorables() {
+		public static IEnumerable<IRequestCloseAnchorable> GetOpenAnchorables() {
 			return openAnchorables;
 		}
 
-		public static IEnumerable<IContentAnchorable> GetOpenContent() {
+		public static IEnumerable<ContentFile> GetOpenContentFiles() {
 			foreach (var anchorable in openAnchorables) {
-				if (anchorable.Content is IContentAnchorable)
-					yield return (IContentAnchorable) anchorable.Content;
+				if (anchorable is IContentFileContainer)
+					yield return ((IContentFileContainer) anchorable).File;
 			}
 		}
 
-		public static IEnumerable<IContentAnchorable> GetModifiedContent() {
-			foreach (var anchorable in openAnchorables) {
-				if (anchorable.Content is IContentAnchorable) {
-					var content = (IContentAnchorable) anchorable.Content;
-					if (content.IsModified)
-						yield return content;
-				}
+		public static IEnumerable<ContentFile> GetModifiedContentFiles() {
+			foreach (ContentFile file in project.GetAllFiles()) {
+				if (file.IsModified)
+					yield return file;
 			}
 		}
 		
-		public static void AddOpenAnchorable(IRequestClosePanel anchorable) {
+		public static void AddOpenAnchorable(IRequestCloseAnchorable anchorable) {
 			openAnchorables.Add(anchorable);
 		}
 
-		public static void RemoveOpenAnchorable(IRequestClosePanel anchorable) {
+		public static void RemoveOpenAnchorable(IRequestCloseAnchorable anchorable) {
 			openAnchorables.Remove(anchorable);
 		}
 
-		public static void AddClosingAnchorable(IRequestClosePanel anchorable) {
+		public static void AddClosingAnchorable(IRequestCloseAnchorable anchorable) {
 			closingAnchorables.Add(anchorable);
 		}
 
@@ -129,34 +125,91 @@ namespace ConscriptDesigner.Control {
 					CommandManager.InvalidateRequerySuggested();
 				}
 			}
-			if (closingAnchorables.Any()) {
-				List<IContentAnchorable> needsSaving = new List<IContentAnchorable>();
+			if (mainWindow.IsActive && mainWindow.OwnedWindows.Count == 0 && closingAnchorables.Any()) {
+				List<ContentFile> needsSaving = new List<ContentFile>();
 				List<string> needsSavingFiles = new List<string>();
-				foreach (IRequestClosePanel anchorable in closingAnchorables) {
-					if (anchorable.Content is IContentAnchorable) {
-						var content = (IContentAnchorable) anchorable.Content;
-						if (content.IsModified) {
-							needsSaving.Add(content);
-							needsSavingFiles.Add(content.ContentFile.Path);
+				foreach (IRequestCloseAnchorable anchorable in closingAnchorables) {
+					if (anchorable is IContentFileContainer) {
+						var content = (IContentFileContainer) anchorable;
+						if (content.File.IsModified) {
+							needsSaving.Add(content.File);
+							needsSavingFiles.Add(content.File.Path);
 						}
 					}
 				}
 				MessageBoxResult result = MessageBoxResult.Yes;
+				bool errorOccurred = false;
 				if (needsSaving.Any()) {
-					result = SaveChangesWindow.Show(mainWindow, needsSavingFiles);
+					result = SaveChangesWindow.Show(mainWindow, needsSavingFiles, false);
 					if (result == MessageBoxResult.Yes) {
-						foreach (IContentAnchorable content in needsSaving) {
-							content.Save();
+						foreach (ContentFile file in needsSaving) {
+							if (!file.Save(true))
+								errorOccurred = true;
 						}
 					}
 				}
+				if (errorOccurred) {
+					result = TriggerMessageBox.Show(mainWindow, MessageIcon.Error,
+						"An error occurred while trying to save the modified files. " +
+						"Would you still like to close them?", "Save Error", MessageBoxButton.YesNo);
+					if (result == MessageBoxResult.No)
+						result = MessageBoxResult.Cancel;
+				}
 				if (result != MessageBoxResult.Cancel) {
-					foreach (IRequestClosePanel anchorable in closingAnchorables) {
+					foreach (IRequestCloseAnchorable anchorable in closingAnchorables) {
 						anchorable.ForceClose();
 					}
 				}
 				closingAnchorables.Clear();
 				CommandManager.InvalidateRequerySuggested();
+			}
+		}
+
+		public static void CheckForOutdatedFiles(bool force = false) {
+			if (IsProjectOpen && (mainWindow.IsActive || force)) {
+				if (project.IsFileOutdated()) {
+					var result = TriggerMessageBox.Show(mainWindow, MessageIcon.Warning,
+						"The content project file has been modified outside the designer. " +
+						"Would you like to reload the project?", "Reload Project", MessageBoxButton.YesNo);
+					if (result == MessageBoxResult.Yes) {
+						OpenProject(project.ProjectFile);
+					}
+					else {
+						project.UpdateLastModified();
+						project.IsProjectModified = true;
+					}
+				}
+				else {
+					List<ContentFile> files = new List<ContentFile>();
+					List<string> fileNames = new List<string>();
+					foreach (ContentFile file in project.GetAllFiles()) {
+						if (file.IsOpen && file.IsFileOutdated()) {
+							files.Add(file);
+							fileNames.Add(file.Path);
+						}
+					}
+					if (files.Any()) {
+						bool errorOccurred = false;
+						var result = SaveChangesWindow.Show(mainWindow, fileNames, true);
+						foreach (ContentFile file in files) {
+							if (result == MessageBoxResult.Yes) {
+								if (!file.Reload(true)) {
+									errorOccurred = true;
+									file.IsModifiedOverride = true;
+									file.UpdateLastModified();
+								}
+							}
+							else {
+								file.IsModifiedOverride = true;
+								file.UpdateLastModified();
+							}
+						}
+						if (errorOccurred) {
+							TriggerMessageBox.Show(mainWindow, MessageIcon.Error, "An error occurred while " +
+								"trying to save all modified files!", "Save Error");
+						}
+					}
+				}
 			}
 		}
 
@@ -167,14 +220,15 @@ namespace ConscriptDesigner.Control {
 				ErrorMessageBox.Show(ex, true);
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Internal
 		//-----------------------------------------------------------------------------
 
 		private static ScriptReaderException CompileContentTask() {
-			mainWindow.Dispatcher.Invoke(SaveAll);
-			if (mainWindow.OutputTerminal != null)
-				mainWindow.OutputTerminal.Clear();
+			mainWindow.Dispatcher.Invoke(() => SaveAll(true));
+			if (mainWindow.OutputConsole != null)
+				mainWindow.OutputConsole.Clear();
 			try {
 				Stopwatch watch = Stopwatch.StartNew();
 				foreach (ContentFile file in project.GetAllFiles()) {
@@ -199,9 +253,9 @@ namespace ConscriptDesigner.Control {
 		}
 
 		private static ScriptReaderException RunConscriptsTask() {
-			mainWindow.Dispatcher.Invoke(SaveAll);
-			if (mainWindow.OutputTerminal != null)
-				mainWindow.OutputTerminal.Clear();
+			mainWindow.Dispatcher.Invoke(() => SaveAll(true));
+			if (mainWindow.OutputConsole != null)
+				mainWindow.OutputConsole.Clear();
 			Resources.Uninitialize();
 			
 			try {
@@ -275,18 +329,18 @@ namespace ConscriptDesigner.Control {
 		//-----------------------------------------------------------------------------
 
 		public static bool RequestSaveAll(out bool errorOccurred) {
-			List<IContentAnchorable> needsSaving = new List<IContentAnchorable>();
+			List<ContentFile> needsSaving = new List<ContentFile>();
 			List<string> needsSavingFiles = new List<string>();
 			if (project.IsProjectModified)
 				needsSavingFiles.Add(project.Name);
-			foreach (var content in GetModifiedContent()) {
-				needsSaving.Add(content);
-				needsSavingFiles.Add(content.ContentFile.Path);
+			foreach (ContentFile file in GetModifiedContentFiles()) {
+				needsSaving.Add(file);
+				needsSavingFiles.Add(file.Path);
 			}
 			MessageBoxResult result = MessageBoxResult.Yes;
 			errorOccurred = false;
 			if (needsSavingFiles.Any()) {
-				result = SaveChangesWindow.Show(mainWindow, needsSavingFiles);
+				result = SaveChangesWindow.Show(mainWindow, needsSavingFiles, false);
 				if (result == MessageBoxResult.Yes) {
 					try {
 						if (project.IsProjectModified)
@@ -297,12 +351,13 @@ namespace ConscriptDesigner.Control {
 						errorOccurred = true;
 					}
 					if (!errorOccurred) {
-						foreach (IContentAnchorable content in needsSaving) {
+						foreach (ContentFile file in needsSaving) {
 							try {
-								content.Save();
+								if (!file.Save(true))
+									errorOccurred = true;
 							}
-							catch (Exception ex) {
-								ShowExceptionMessage(ex, "save", content.ContentFile.Name);
+							catch (Exception) {
+								//ShowExceptionMessage(ex, "save", file.Name);
 								errorOccurred = true;
 								break;
 							}
@@ -328,41 +383,45 @@ namespace ConscriptDesigner.Control {
 		}
 
 		public static void Undo() {
-			var content = GetActiveContent();
-			if (content != null) content.Undo();
+			var file = GetActiveContentFile();
+			if (file != null) file.Undo();
 			CommandManager.InvalidateRequerySuggested();
 		}
 
 		public static void Redo() {
-			var content = GetActiveContent();
-			if (content != null) content.Redo();
+			var file = GetActiveContentFile();
+			if (file != null) file.Redo();
 			CommandManager.InvalidateRequerySuggested();
 		}
 
 		public static void Close() {
-			bool errorOccurred = false;
-			bool result = RequestSaveAll(out errorOccurred);
-			if (errorOccurred) {
-				MessageBoxResult result2 = TriggerMessageBox.Show(mainWindow, MessageIcon.Question, "Would you still like to close the project after an error occured?",
+			if (IsProjectOpen) {
+				bool errorOccurred = false;
+				bool result = RequestSaveAll(out errorOccurred);
+				if (errorOccurred) {
+					MessageBoxResult result2 = TriggerMessageBox.Show(mainWindow, MessageIcon.Question, "Would you still like to close the project after an error occured?",
 					"Continue closing?", MessageBoxButton.YesNo);
-				result = (result2 != MessageBoxResult.No);
-			}
-			if (result) {
-				foreach (IRequestClosePanel anchorable in openAnchorables) {
-					if (anchorable is RequestCloseDocument) {
-						anchorable.ForceClose();
-					}
+					result = (result2 != MessageBoxResult.No);
 				}
-				if (mainWindow.ProjectExplorer != null)
-					mainWindow.ProjectExplorer.Cleanup();
-				if (mainWindow.OutputTerminal != null)
-					mainWindow.OutputTerminal.Clear();
-				project = null;
-				CommandManager.InvalidateRequerySuggested();
+				if (result) {
+					while (openAnchorables.Any()) {
+						openAnchorables[0].ForceClose();
+					}
+					if (mainWindow.ProjectExplorer != null)
+						mainWindow.ProjectExplorer.Clear();
+					if (mainWindow.OutputConsole != null)
+						mainWindow.OutputConsole.Clear();
+					project.Cleanup();
+					project = null;
+					CommandManager.InvalidateRequerySuggested();
+				}
 			}
 		}
 
 		public static void OpenProject(string path) {
+			if (IsProjectOpen) {
+				Close();
+			}
 			try {
 				ContentRoot newProject = new ContentRoot();
 				newProject.LoadContentProject(path);
@@ -393,24 +452,33 @@ namespace ConscriptDesigner.Control {
 		}
 
 		public static void Save() {
-			var content = GetActiveContent();
+			var file = GetActiveContentFile();
 			try {
-				if (content != null) content.Save();
+				if (file != null) file.Save(false);
 			}
 			catch (Exception ex) {
-				var result = TriggerMessageBox.Show(mainWindow, MessageIcon.Error, "An error occurred while trying to save '" +
-					content.ContentFile.Name + "'! Would you like to see the error?", MessageBoxButton.YesNo);
-				if (result == MessageBoxResult.Yes)
-					ErrorMessageBox.Show(ex, true);
+				ShowExceptionMessage(ex, "save", file.Name);
 			}
 			CommandManager.InvalidateRequerySuggested();
 		}
 
-		public static void SaveAll() {
-			foreach (var content in GetModifiedContent()) {
-				content.Save();
+		public static void SaveAll(bool excludeProject = false) {
+			bool errorOccurred = false;
+			foreach (var file in GetModifiedContentFiles()) {
+				if (!file.Save(true))
+					errorOccurred = true;
 			}
-			project.SaveContentProject();
+			try {
+				if (!excludeProject && project.IsProjectModified)
+					project.SaveContentProject();
+			}
+			catch (Exception ex) {
+				ShowExceptionMessage(ex, "save", project.Name);
+			}
+			if (errorOccurred) {
+				TriggerMessageBox.Show(mainWindow, MessageIcon.Error, "An error occurred while " +
+					"trying to save all files!", "Save Error");
+			}
 			CommandManager.InvalidateRequerySuggested();
 		}
 
@@ -435,21 +503,21 @@ namespace ConscriptDesigner.Control {
 
 		public static bool CanSave {
 			get {
-				var content = GetActiveContent();
+				var content = GetActiveContentFile();
 				return (content != null ? content.IsModified : false);
 			}
 		}
 
 		public static bool CanUndo {
 			get {
-				var content = GetActiveContent();
+				var content = GetActiveContentFile();
 				return (content != null ? content.CanUndo : false);
 			}
 		}
 
 		public static bool CanRedo {
 			get {
-				var content = GetActiveContent();
+				var content = GetActiveContentFile();
 				return (content != null ? content.CanRedo : false);
 			}
 		}
@@ -481,16 +549,12 @@ namespace ConscriptDesigner.Control {
 			set { contentManager = value; }
 		}
 
-		public static ClipboardListener ClipboardListener {
-			get { return clipboardListener; }
-		}
-
 		public static bool IsBusy {
 			get { return busyTask != null; }
 		}
 
 		public static bool IsInTextEditor {
-			get { return GetActiveContent() is ConscriptEditor; }
+			get { return GetActiveContentFile() is ContentScript; }
 		}
 
 		public static bool IsProjectOpen {

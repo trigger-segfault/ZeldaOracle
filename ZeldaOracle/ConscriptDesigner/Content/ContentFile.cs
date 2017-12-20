@@ -14,33 +14,46 @@ using System.Windows;
 using System.Windows.Input;
 using Xceed.Wpf.AvalonDock.Layout;
 using ConscriptDesigner.Anchorables;
+using ConscriptDesigner.Util;
 
 namespace ConscriptDesigner.Content {
+	/// <summary>The base file for all content project files.</summary>
 	public class ContentFile : IComparable {
 
+		/// <summary>The parent of the content file.</summary>
 		private ContentFolder parent;
+		/// <summary>The name of the content file.</summary>
 		private string name;
-		private ContentXmlInfo xmlInfo;
-		private ImageTreeViewItem treeViewItem;
-		private RequestCloseDocument anchorable;
-
+		/// <summary>True if the content file is cut.</summary>
+		private bool cut;
+		/// <summary>Overrides if the file is modified.</summary>
+		private bool modifiedOverride;
+		/// <summary>The time the content file was last modified at in UTC.</summary>
 		private DateTime lastModified;
 
-		private bool cut;
+		/// <summary>The XML info of the content file.</summary>
+		private ContentXmlInfo xmlInfo;
+		/// <summary>The tree view item of the content file.</summary>
+		private ImageTreeViewItem treeViewItem;
+		/// <summary>The document of the content file.</summary>
+		private ContentFileDocument document;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Conscructs the content file.</summary>
 		public ContentFile(string name) {
 			this.name = name;
 			this.parent = null;
 			this.xmlInfo = new ContentXmlInfo();
 			TreeViewItem = new ImageTreeViewItem(DesignerImages.File, name, false);
 			XmlInfo.ElementName = "None";
-			this.anchorable = null;
+			this.document = null;
 			this.cut = false;
+			this.modifiedOverride = false;
+			this.lastModified = new DateTime();
 		}
 
 
@@ -48,41 +61,65 @@ namespace ConscriptDesigner.Content {
 		// IComparable Overloads
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Compares the content files to one another.</summary>
 		int IComparable.CompareTo(object obj) {
 			return CompareTo(obj as ContentFile);
 		}
+
+		/// <summary>Compares the content files to one another.</summary>
 		public virtual int CompareTo(ContentFile file) {
 			if (file.IsFolder) {
-				return string.Compare(Path, file.Path) + 10000;
+				return AlphanumComparator.Compare(Path, file.Path, true) + 10000;
 			}
-			return string.Compare(Path, file.Path);
+			return AlphanumComparator.Compare(Path, file.Path, true);
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// File Modified
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns true if the file has been modified outside of the designer.</summary>
+		public bool IsFileOutdated() {
+			if (!IsFolder) {
+				if (File.Exists(FilePath))
+					return File.GetLastWriteTimeUtc(FilePath) != lastModified;
+			}
+			else if (IsRoot) {
+				if (File.Exists(((ContentRoot) this).ProjectFile))
+					return File.GetLastWriteTimeUtc(((ContentRoot) this).ProjectFile) != lastModified;
+			}
+			return false;
+		}
+
+		/// <summary>Updates the last modified time for the file.</summary>
+		public void UpdateLastModified() {
+			if (!IsFolder) {
+				lastModified = File.GetLastWriteTimeUtc(FilePath);
+			}
+			else if (IsRoot) {
+				lastModified = File.GetLastWriteTimeUtc(((ContentRoot) this).ProjectFile);
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Building
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Compiles the content file as an xnb asset.</summary>
 		public virtual bool Compile() {
 			return false;
 		}
 
-		public void Resort() {
-			treeViewItem.Items.SortDescriptions.Clear();
-			treeViewItem.Items.SortDescriptions.Add(new SortDescription("Tag", ListSortDirection.Ascending));
-			treeViewItem.Items.Refresh();
-		}
 
-		private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e) {
-			if (e.Source is TreeViewItem && ((TreeViewItem) e.Source).IsSelected) {
-				Open();
-			}
-		}
-
-		private static object GetParent(DependencyObject obj, Type expectedType) {
-			var parent = VisualTreeHelper.GetParent(obj);
-			while (parent != null && parent.GetType() != expectedType)
-				parent = VisualTreeHelper.GetParent(parent);
-
-			return parent;
-		}
-
-		public void UpdateXmlInfo() {
+		//-----------------------------------------------------------------------------
+		// ContentRoot-Exclusive
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Updates the files' XML info for saving.
+		/// This should only be called by ContentRoot.</summary>
+		internal void UpdateXmlInfo() {
 			XmlInfo.Include = Path.Replace('/', '\\');
 			if (!IsFolder)
 				xmlInfo.Name = IOPath.GetFileNameWithoutExtension(name);
@@ -90,66 +127,155 @@ namespace ConscriptDesigner.Content {
 				XmlInfo.Include += "\\";
 		}
 
-		public void Open() {
+
+		//-----------------------------------------------------------------------------
+		// Actions
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Opens the content file.</summary>
+		public bool Open(bool silentFail) {
 			if (IsOpen) {
 				// Focus on the already-existing anchorable
-				Anchorable.IsActive = true;
+				Document.IsActive = true;
+				return true;
 			}
 			else {
 				try {
+					UpdateLastModified();
 					OnOpen();
 					if (IsOpen)
-						Anchorable.IsActive = true;
+						document.IsActive = true;
+					return true;
 				}
 				catch (Exception ex) {
-					DesignerControl.ShowExceptionMessage(ex, "open", name);
-					if (Anchorable != null)
-						Anchorable.ForceClose();
+					if (!silentFail)
+						DesignerControl.ShowExceptionMessage(ex, "open", name);
+					if (IsOpen)
+						document.ForceClose();
+					return false;
 				}
 			}
 		}
 
+		/// <summary>Closes the content file.</summary>
 		public void Close(bool forceClose = false) {
 			if (IsOpen) {
 				if (forceClose)
-					anchorable.ForceClose();
+					document.ForceClose();
 				else
-					anchorable.Close();
+					document.Close();
 				// OnClose() will be called by anchorable event
 			}
 		}
+
+		/// <summary>Reloads the content file.</summary>
+		public bool Reload(bool silentFail) {
+			try {
+				if (IsOpen) {
+					OnReload();
+					if (IsOpen)
+						document.IsActive = true;
+					UpdateLastModified();
+					modifiedOverride = false;
+					return true;
+				}
+				else {
+					return Open(silentFail);
+				}
+			}
+			catch (Exception ex) {
+				if (!silentFail)
+					DesignerControl.ShowExceptionMessage(ex, "reload", name);
+				if (IsOpen)
+					document.ForceClose();
+				return false;
+			}
+		}
+
+		/// <summary>Saves the content file.</summary>
+		public bool Save(bool silentFail) {
+			if (IsOpen) {
+				try {
+					OnSave();
+					UpdateLastModified();
+					modifiedOverride = false;
+					return true;
+				}
+				catch (Exception ex) {
+					if (!silentFail)
+						DesignerControl.ShowExceptionMessage(ex, "save", name);
+					if (IsOpen)
+						document.ForceClose();
+					return false;
+				}
+			}
+			return true;
+		}
+		
+		/// <summary>Undoes the last action.</summary>
+		public void Undo() {
+			if (IsOpen) {
+				OnUndo();
+			}
+		}
+
+		/// <summary>Redoes the last action.</summary>
+		public void Redo() {
+			if (IsOpen) {
+				OnRedo();
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Virtual Events
 		//-----------------------------------------------------------------------------
 
-		protected virtual void OnOpen() {
+		/// <summary>Called when the file is opened.</summary>
+		protected virtual void OnOpen() { }
 
-		}
+		/// <summary>Called when the file is closed.</summary>
+		protected virtual void OnClose() { }
 
-		protected virtual void OnClose() {
+		/// <summary>Called when the file is reloaded.</summary>
+		protected virtual void OnReload() { }
 
-		}
+		/// <summary>Called when the file is saved.</summary>
+		protected virtual void OnSave() { }
 
-		protected virtual void OnDelete() {
+		/// <summary>Called when the file is deleted.</summary>
+		protected virtual void OnDelete() { }
 
-		}
+		/// <summary>Called when the file is moved.</summary>
+		protected virtual void OnMove() { }
 
-		protected virtual void OnMove() {
-
-		}
-
+		/// <summary>Called when the file is renamed.</summary>
 		protected virtual void OnRename() {
 			if (IsOpen) {
-				Anchorable.Title = name;
+				Document.Title = name;
 			}
 		}
 
+		/// <summary>Called during undo.</summary>
+		protected virtual void OnUndo() { }
+
+		/// <summary>Called during redo.</summary>
+		protected virtual void OnRedo() { }
+
+		/// <summary>Called when the modified override is changed.</summary>
+		protected virtual void OnModifiedChanged() { }
+
+		//-----------------------------------------------------------------------------
+		// Event Handlers
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Called when the anchorable is closed.</summary>
 		private void OnAnchorableClosed(object sender, EventArgs e) {
-			anchorable = null;
+			document = null;
 			OnClose();
 		}
 
+		/// <summary>Called when the context menu is opening to update if paste is enabled.</summary>
 		private void OnContextMenuOpening(object sender, ContextMenuEventArgs e) {
 			foreach (object item in treeViewItem.ContextMenu.Items) {
 				if (item is MenuItem) {
@@ -159,11 +285,21 @@ namespace ConscriptDesigner.Content {
 				}
 			}
 		}
-		
+
+		/// <summary>Called when the tree view item is double clicked.</summary>
+		private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e) {
+			// Double click event is glitchy. Make sure we're not opening the file more than once.
+			if (e.Source is TreeViewItem && ((TreeViewItem) e.Source).IsSelected) {
+				Open(false);
+			}
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Virtual Context Menu
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Creates the context menu for the tree view item.</summary>
 		protected virtual void CreateContextMenu(ContextMenu menu) {
 			AddExcludeContextMenuItem(menu);
 			AddSeparatorContextMenuItem(menu);
@@ -173,13 +309,15 @@ namespace ConscriptDesigner.Content {
 
 
 		//-----------------------------------------------------------------------------
-		// Context Menu
+		// Context Menu Creators
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Adds a separator to the context menu.</summary>
 		protected void AddSeparatorContextMenuItem(ContextMenu menu) {
 			menu.Items.Add(new Separator());
 		}
 
+		/// <summary>Adds an add menu to the context menu.</summary>
 		protected void AddAddContextMenuItem(ContextMenu menu) {
 			ImageMenuItem item = new ImageMenuItem(DesignerImages.Plus, "Add");
 			menu.Items.Add(item);
@@ -195,18 +333,21 @@ namespace ConscriptDesigner.Content {
 			item.Items.Add(subItem);
 		}
 
+		/// <summary>Adds an open file item to the context menu.</summary>
 		protected void AddOpenContextMenuItem(ContextMenu menu) {
 			ImageMenuItem item = new ImageMenuItem(DesignerImages.Open, "Open");
-			item.Click += delegate { Open(); };
+			item.Click += delegate { Open(false); };
 			menu.Items.Add(item);
 		}
 
+		/// <summary>Adds an exclude file item to the context menu.</summary>
 		protected void AddExcludeContextMenuItem(ContextMenu menu) {
 			ImageMenuItem item = new ImageMenuItem(DesignerImages.ContentProjectRemove, "Exclude From Project");
 			item.Click += delegate { Root.Exclude(Path); };
 			menu.Items.Add(item);
 		}
 
+		/// <summary>Adds clipboard items to the context menu.</summary>
 		protected void AddClipboardContextMenuItems(ContextMenu menu, bool includePaste) {
 			ImageMenuItem item = new ImageMenuItem(DesignerImages.Cut, "Cut");
 			item.Click += delegate { Root.Cut(Path); };
@@ -221,33 +362,55 @@ namespace ConscriptDesigner.Content {
 			item.Click += delegate { Root.RequestDelete(Path); };
 			menu.Items.Add(item);
 		}
+
+		/// <summary>Adds a paste item to the context menu.</summary>
 		protected void AddPasteContextMenuItem(ContextMenu menu) {
 			ImageMenuItem item = new ImageMenuItem(DesignerImages.Paste, "Paste");
 			item.Tag = "Paste";
 			item.Click += delegate { Root.RequestPaste(Path); };
 			menu.Items.Add(item);
 		}
+
+		/// <summary>Adds a rename item to the context menu.</summary>
 		protected void AddRenameContextMenuItem(ContextMenu menu) {
 			ImageMenuItem item = new ImageMenuItem(DesignerImages.Rename, "Rename");
 			item.Click += delegate { Root.RequestRename(Path); };
 			menu.Items.Add(item);
 		}
-
+		
 
 		//-----------------------------------------------------------------------------
 		// Virtual Properties
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets the type of the content file.</summary>
 		public virtual ContentTypes ContentType {
 			get { return ContentTypes.Unknown; }
 		}
-		
+
+		/// <summary>Gets if the content file should be compiled.</summary>
 		public virtual bool ShouldCompile {
 			get { return false; }
 		}
 
+		/// <summary>Gets if the content file should be copied to the content folder as is.</summary>
 		public virtual bool ShouldCopyToOutput {
 			get { return (XmlInfo.CopyToOutputDirectory == "PreserveNewest" || XmlInfo.CopyToOutputDirectory == "Always"); }
+		}
+
+		/// <summary>Gets if the file is modified.</summary>
+		protected virtual bool IsModifiedInternal {
+			get { return false; }
+		}
+
+		/// <summary>Gets if the content file can undo any actions.</summary>
+		public virtual bool CanUndo {
+			get { return false; }
+		}
+
+		/// <summary>Gets if the content file can redo any actions.</summary>
+		public virtual bool CanRedo {
+			get { return false; }
 		}
 
 
@@ -255,6 +418,7 @@ namespace ConscriptDesigner.Content {
 		// Properties
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets or sets the filename of the content file.</summary>
 		public string Name {
 			get { return name; }
 			set {
@@ -264,6 +428,7 @@ namespace ConscriptDesigner.Content {
 			}
 		}
 
+		/// <summary>Gets the project-local path of the content file.</summary>
 		public string Path {
 			get {
 				if (parent != null) {
@@ -276,6 +441,8 @@ namespace ConscriptDesigner.Content {
 				throw new Exception("Content file is not in the file system!");
 			}
 		}
+
+		/// <summary>Gets the project-local directory of the content file.</summary>
 		public string Directory {
 			get {
 				if (parent != null)
@@ -286,6 +453,7 @@ namespace ConscriptDesigner.Content {
 			}
 		}
 
+		/// <summary>Gets the full file path of the content file.</summary>
 		public string FilePath {
 			get {
 				if (parent != null)
@@ -296,6 +464,7 @@ namespace ConscriptDesigner.Content {
 			}
 		}
 
+		/// <summary>Gets the full directory path of the content file.</summary>
 		public string FileDirectory {
 			get {
 				if (parent != null)
@@ -306,6 +475,8 @@ namespace ConscriptDesigner.Content {
 			}
 		}
 
+		/// <summary>Gets the output filename of the content file.
+		/// Used for when copied to the designer's content folder.</summary>
 		public string OutputFileName {
 			get {
 				if (XmlInfo.ElementName == "Compile")
@@ -318,6 +489,8 @@ namespace ConscriptDesigner.Content {
 			}
 		}
 
+		/// <summary>Gets the output file path of the content file.
+		/// Used for when copied to the designer's content folder.</summary>
 		public string OutputFilePath {
 			get {
 				if (parent != null)
@@ -328,6 +501,8 @@ namespace ConscriptDesigner.Content {
 			}
 		}
 
+		/// <summary>Gets or sets the tree view item for the content file.
+		/// This should only be set in the constructor.</summary>
 		public ImageTreeViewItem TreeViewItem {
 			get { return treeViewItem; }
 			protected set {
@@ -335,53 +510,64 @@ namespace ConscriptDesigner.Content {
 				treeViewItem.Tag = this;
 				treeViewItem.Items.SortDescriptions.Clear();
 				treeViewItem.Items.SortDescriptions.Add(new SortDescription("Tag", ListSortDirection.Ascending));
-				treeViewItem.Items.IsLiveSorting = true;
 				treeViewItem.MouseDoubleClick += OnMouseDoubleClick;
-				//treeViewItem.PreviewMouseRightButtonDown += OnPreviewMouseRightButtonDown;
 				treeViewItem.ContextMenu = new ContextMenu();
 				CreateContextMenu(treeViewItem.ContextMenu);
 				treeViewItem.ContextMenuOpening += OnContextMenuOpening;
 			}
 		}
 
-		public RequestCloseDocument Anchorable {
-			get { return anchorable; }
+		/// <summary>Gets or sets the anchorable document of the content file.</summary>
+		public ContentFileDocument Document {
+			get { return document; }
 			set {
-				if (anchorable != null) {
-					anchorable.Closed -= OnAnchorableClosed;
+				if (document != null) {
+					document.Closed -= OnAnchorableClosed;
+					document.ForceClose();
 				}
-				anchorable = value;
-				if (anchorable != null) {
-					anchorable.Closed += OnAnchorableClosed;
+				document = value;
+				if (document != null) {
+					document.Closed += OnAnchorableClosed;
+					DesignerControl.DockDocument(document);
 				}
 			}
 		}
 
-		public ContentXmlInfo XmlInfo {
+		/// <summary>Gets or sets the XML info of the content file.
+		/// This should only be set by ContentRoot.</summary>
+		internal ContentXmlInfo XmlInfo {
 			get { return xmlInfo; }
 			set { xmlInfo = value; }
 		}
 
+		/// <summary>Gets if the file is open.</summary>
 		public bool IsOpen {
-			get { return anchorable != null; }
+			get { return document != null; }
 		}
 
+		/// <summary>Gets if this file is a folder.</summary>
 		public bool IsFolder {
 			get { return this is ContentFolder; }
 		}
 
+		/// <summary>Gets if this file is the root project folder.</summary>
 		public bool IsRoot {
 			get { return this is ContentRoot; }
 		}
 
+		/// <summary>Gets or sets the parent of the content file.
+		/// The setter should only be called by ContentRoot.</summary>
 		public ContentFolder Parent {
 			get { return parent; }
-			set {
+			internal set {
+				bool moved = (parent != null && value != null) ;
 				parent = value;
-				OnMove();
+				if (moved)
+					OnMove();
 			}
 		}
 
+		/// <summary>Gets the root container of the content file.</summary>
 		public ContentRoot Root {
 			get {
 				if (parent != null)
@@ -392,12 +578,36 @@ namespace ConscriptDesigner.Content {
 			}
 		}
 
+		/// <summary>Gets or sets if the file has been cut in the project explorer.
+		/// The setter should only be called by ContentRoot.</summary>
 		public bool IsCut {
 			get { return cut; }
-			set {
+			internal set {
 				cut = value;
 				treeViewItem.ImageOpacity = (cut ? 0.5 : 1.0);
 			}
+		}
+
+		/// <summary>Gets or sets when the file was last modified.</summary>
+		/*public DateTime LastModified {
+			get { return lastModified; }
+			internal set { lastModified = value; }
+		}*/
+
+		/// <summary>Gets or sets and overrides if the file is modified.</summary>
+		public bool IsModifiedOverride {
+			get { return modifiedOverride; }
+			set {
+				if (value != modifiedOverride) {
+					modifiedOverride = value;
+					OnModifiedChanged();
+				}
+			}
+		}
+
+		/// <summary>Overrides if the file is modified.</summary>
+		public bool IsModified {
+			get { return modifiedOverride || IsModifiedInternal; }
 		}
 	}
 }

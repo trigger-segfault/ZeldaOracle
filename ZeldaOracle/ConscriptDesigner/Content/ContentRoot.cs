@@ -18,48 +18,61 @@ using System.Windows.Input;
 using ConscriptDesigner.Util;
 
 namespace ConscriptDesigner.Content {
+	/// <summary>The root content folder that handles the content project and all operations.</summary>
 	public class ContentRoot : ContentFolder {
+		
+		//-----------------------------------------------------------------------------
+		// Members
+		//-----------------------------------------------------------------------------
 
-		private const string XmlNamespace = @"http://schemas.microsoft.com/developer/msbuild/2003";
-
+		/// <summary>The path to the content project file.</summary>
+		private string contentFile;
+		/// <summary>True if the project file has been modified and needs to be saved.</summary>
 		private bool projectModified;
-
+		/// <summary>The the currently cut file in the project explorer.</summary>
+		private ContentFile cutFile;
+		/// <summary>The loaded XML document for the project file.</summary>
 		private XmlDocument xmlDoc;
+		/// <summary>The loaded XML project file root element.</summary>
 		private XmlElement xmlProject;
+		/// <summary>The namespace manager for accessing elements in the XML document.</summary>
 		private XmlNamespaceManager xmlns;
 
-		private string contentFile;
 
-		private TreeView treeView;
-		
-		private ContentFile cutFile;
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
 
+		/// <summary>Constructs the root content folder.</summary>
 		public ContentRoot() :
-			base("Content Project") {
-			projectModified = false;
-			xmlDoc = null;
-			xmlProject = null;
-			xmlns = null;
+			base("ContentProject.contentproj")
+		{
+			this.projectModified = false;
 			this.contentFile = "";
-			TreeViewItem = new ImageTreeViewItem(DesignerImages.ContentProject, "Content Project", true);
 			this.cutFile = null;
-			DesignerControl.ClipboardListener.ClipboardChanged += OnClipboardChanged;
+
+			this.xmlDoc = null;
+			this.xmlProject = null;
+			this.xmlns = null;
+
+			TreeViewItem = new ImageTreeViewItem(DesignerImages.ContentProject, "ContentProject.contentproj", true);
+			ClipboardHelper.ClipboardChanged += OnClipboardChanged;
 		}
 
-		private void OnClipboardChanged(object sender, EventArgs e) {
-			// Only clear the cut file if the clipboard is no longer empty
-			if (cutFile != null && Clipboard.GetDataObject().GetFormats().Any()) {
-				cutFile.IsCut = false;
-				cutFile = null;
-			}
+		/// <summary>Cleans up the content root events.</summary>
+		public void Cleanup() {
+			ClipboardHelper.ClipboardChanged -= OnClipboardChanged;
 		}
 
-		public override ContentTypes ContentType {
-			get { return ContentTypes.Project; }
-		}
 
-		public bool LoadContentProject(string path) {
+		//-----------------------------------------------------------------------------
+		// Loading
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Loads the content project from the XML file.</summary>
+		public void LoadContentProject(string path) {
 			Files.Clear();
+			TreeViewItem.Items.Clear();
 			Name = IOPath.GetFileName(path);
 			contentFile = path;
 			try {
@@ -77,7 +90,7 @@ namespace ConscriptDesigner.Content {
 					ContentXmlInfo xmlInfo = new ContentXmlInfo();
 					xmlInfo.Read(item);
 
-					string include = xmlInfo.Include.TrimEnd('/', '\\');
+					string include = PathHelper.TrimEnd(xmlInfo.Include);
 					string directory = IOPath.GetDirectoryName(include);
 					ContentFolder parent = EnsureContentFolderExists(directory);
 					ContentFile file = CreateContentFileFromXml(xmlInfo);
@@ -90,81 +103,87 @@ namespace ConscriptDesigner.Content {
 					return false;
 				});
 
-				return true;
-			}
-			catch (Exception) {
-				return false;
-			}
-		}
-
-		public bool SaveContentProject() {
-			try {
-
-				// Remove previous content definitions then redefine them
-				ForEachContentElement((XmlElement item) => {
-					return true;
-				});
-
-				// Order the files by type for convenience
-				List<ContentFile> folders = new List<ContentFile>();
-				List<ContentFile> conscripts = new List<ContentFile>();
-				List<ContentFile> images = new List<ContentFile>();
-				List<ContentFile> sounds = new List<ContentFile>();
-				List<ContentFile> shaders = new List<ContentFile>();
-				List<ContentFile> spriteFonts = new List<ContentFile>();
-				List<ContentFile> unknown = new List<ContentFile>();
+				bool someMissing = false;
 
 				foreach (ContentFile file in GetAllFiles()) {
-					file.UpdateXmlInfo();
-					switch (file.ContentType) {
-					case ContentTypes.Folder:
-						if (((ContentFolder) file).IsEmpty)
-							folders.Add(file);
-						break;
-					case ContentTypes.Conscript: conscripts.Add(file); break;
-					case ContentTypes.Image: images.Add(file); break;
-					case ContentTypes.Sound: sounds.Add(file); break;
-					case ContentTypes.Shader: shaders.Add(file); break;
-					case ContentTypes.SpriteFont: spriteFonts.Add(file); break;
-					case ContentTypes.Unknown: unknown.Add(file); break;
+					try {
+						file.UpdateLastModified();
+					}
+					catch (Exception ex) {
+						//file.IsMissing = true;
+						someMissing = true;
 					}
 				}
 
-				folders.Sort();
-				conscripts.Sort();
-				images.Sort();
-				sounds.Sort();
-				shaders.Sort();
-				spriteFonts.Sort();
-				unknown.Sort();
+				if (someMissing) {
+					TriggerMessageBox.Show(DesignerControl.MainWindow, MessageIcon.Warning,
+						"Some project files could not be found!", "Missing Files");
+				}
 
-				xmlProject.AppendChild(CreateItemGroupElement(folders));
-				xmlProject.AppendChild(CreateItemGroupElement(conscripts));
-				xmlProject.AppendChild(CreateItemGroupElement(images));
-				xmlProject.AppendChild(CreateItemGroupElement(sounds));
-				xmlProject.AppendChild(CreateItemGroupElement(shaders));
-				xmlProject.AppendChild(CreateItemGroupElement(spriteFonts));
-				xmlProject.AppendChild(CreateItemGroupElement(unknown));
+				UpdateLastModified();
+			}
+			catch (Exception ex) {
+				Name = "ContentProject.contentproj";
+				contentFile = "";
+				throw ex;
+			}
+		}
 
-				xmlDoc.Save(contentFile);
-
+		/// <summary>Saves the content project from the XML file.</summary>
+		public void SaveContentProject() {
+			// Remove previous content definitions then redefine them
+			ForEachContentElement((XmlElement item) => {
 				return true;
-			}
-			catch (Exception) {
-				return false;
-			}
-		}
+			});
 
+			// Order the files by type for convenience
+			List<ContentFile> folders = new List<ContentFile>();
+			List<ContentFile> conscripts = new List<ContentFile>();
+			List<ContentFile> images = new List<ContentFile>();
+			List<ContentFile> sounds = new List<ContentFile>();
+			List<ContentFile> shaders = new List<ContentFile>();
+			List<ContentFile> spriteFonts = new List<ContentFile>();
+			List<ContentFile> unknown = new List<ContentFile>();
 
-		private XmlElement CreateItemGroupElement(IEnumerable<ContentFile> files) {
-			XmlElement itemGroup = xmlDoc.CreateElement("", "ItemGroup", XmlNamespace);
-			foreach (ContentFile file in files) {
+			foreach (ContentFile file in GetAllFiles()) {
 				file.UpdateXmlInfo();
-				itemGroup.AppendChild(file.XmlInfo.Write(xmlDoc));
+				switch (file.ContentType) {
+				case ContentTypes.Folder:
+					if (((ContentFolder) file).IsEmpty)
+						folders.Add(file);
+					break;
+				case ContentTypes.Conscript: conscripts.Add(file); break;
+				case ContentTypes.Image: images.Add(file); break;
+				case ContentTypes.Sound: sounds.Add(file); break;
+				case ContentTypes.Shader: shaders.Add(file); break;
+				case ContentTypes.SpriteFont: spriteFonts.Add(file); break;
+				case ContentTypes.Unknown: unknown.Add(file); break;
+				}
 			}
-			return itemGroup;
+
+			folders.Sort();
+			conscripts.Sort();
+			images.Sort();
+			sounds.Sort();
+			shaders.Sort();
+			spriteFonts.Sort();
+			unknown.Sort();
+
+			xmlProject.AppendChild(CreateItemGroupElement(folders));
+			xmlProject.AppendChild(CreateItemGroupElement(conscripts));
+			xmlProject.AppendChild(CreateItemGroupElement(images));
+			xmlProject.AppendChild(CreateItemGroupElement(sounds));
+			xmlProject.AppendChild(CreateItemGroupElement(shaders));
+			xmlProject.AppendChild(CreateItemGroupElement(spriteFonts));
+			xmlProject.AppendChild(CreateItemGroupElement(unknown));
+
+			xmlDoc.Save(contentFile);
+			projectModified = false;
+
+			UpdateLastModified();
 		}
 
+		/// <summary>Enumerates through every valid item ground element. Return true to remove the item.</summary>
 		private void ForEachContentElement(Func<XmlElement, bool> function) {
 			XmlNodeList itemGroups = xmlProject.SelectNodes("ns:ItemGroup", xmlns);
 			for (int i = 0; i < itemGroups.Count; i++) {
@@ -188,10 +207,21 @@ namespace ConscriptDesigner.Content {
 			}
 		}
 
+		/// <summary>Creates an ItemGroup element from the list of files.</summary>
+		private XmlElement CreateItemGroupElement(IEnumerable<ContentFile> files) {
+			XmlElement itemGroup = xmlDoc.CreateElement("", "ItemGroup", ContentXmlInfo.XmlNamespace);
+			foreach (ContentFile file in files) {
+				file.UpdateXmlInfo();
+				itemGroup.AppendChild(file.XmlInfo.Write(xmlDoc));
+			}
+			return itemGroup;
+		}
+
+		/// <summary>Creates a content file from the XML info.</summary>
 		private static ContentFile CreateContentFileFromXml(ContentXmlInfo xmlInfo) {
 			ContentFile file;
 			if (xmlInfo.ElementName == "Folder") {
-				string folderName = IOPath.GetFileName(xmlInfo.Include.TrimEnd('/', '\\'));
+				string folderName = IOPath.GetFileName(PathHelper.TrimEnd(xmlInfo.Include));
 				file = new ContentFolder(folderName);
 			}
 			else {
@@ -201,6 +231,7 @@ namespace ConscriptDesigner.Content {
 			return file;
 		}
 
+		/// <summary>Creates a content file from the file path.</summary>
 		private static ContentFile CreateContentFileFromPath(string path) {
 			string ext = IOPath.GetExtension(path).ToLower();
 			string name = IOPath.GetFileName(path);
@@ -225,6 +256,7 @@ namespace ConscriptDesigner.Content {
 			}
 		}
 
+		/// <summary>Ensures the content folder exists.</summary>
 		private ContentFolder EnsureContentFolderExists(string path) {
 			FixPath(ref path);
 			if (string.IsNullOrEmpty(path))
@@ -259,20 +291,31 @@ namespace ConscriptDesigner.Content {
 			return parent.Files[name] as ContentFolder;
 		}
 
-		private static string NormalizePath(string path) {
-			return IOPath.GetFullPath(new Uri(path).LocalPath)
-					   .TrimEnd(IOPath.DirectorySeparatorChar, IOPath.AltDirectorySeparatorChar)
-					   .ToUpperInvariant();
+
+		//-----------------------------------------------------------------------------
+		// Event Handlers
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Clear the cut file when the clipboard changes.</summary>
+		private void OnClipboardChanged(object sender, EventArgs e) {
+			// Only clear the cut file if the clipboard is no longer empty
+			if (cutFile != null && !ClipboardHelper.IsEmpty()) {
+				cutFile.IsCut = false;
+				cutFile = null;
+			}
 		}
+		
 
 		//-----------------------------------------------------------------------------
 		// Accessors
 		//-----------------------------------------------------------------------------
-		
+
+		/// <summary>Returns true if the project contains the file.</summary>
 		public bool Contains(string path) {
 			return Get(path) != null;
 		}
 
+		/// <summary>Gets the project-contained file.</summary>
 		public ContentFile Get(string path) {
 			FixPath(ref path);
 			if (path == "")
@@ -280,6 +323,7 @@ namespace ConscriptDesigner.Content {
 			return GetFile(this, path);
 		}
 
+		/// <summary>Gets the project-contained folder.</summary>
 		public ContentFolder GetFolder(string path) {
 			FixPath(ref path);
 			if (path == "")
@@ -292,6 +336,7 @@ namespace ConscriptDesigner.Content {
 		// Mutators
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Includes the file in the project.</summary>
 		public void Include(string filePath, string newDirectory, bool catchExceptions = false) {
 			string name = IOPath.GetFileName(filePath);
 			ContentFolder parent = GetFolder(newDirectory);
@@ -306,12 +351,9 @@ namespace ConscriptDesigner.Content {
 			//if (File.Exists(newFilePath) || IODirectory.Exists(newFilePath))
 			//	throw new FileAlreadyExistsException(name);
 
-			if (NormalizePath(filePath) != NormalizePath(newFilePath)) {
+			if (!PathHelper.IsPathTheSame(filePath, newFilePath)) {
 				try {
-					if (IODirectory.Exists(filePath))
-						PathHelper.CopyDirectory(filePath, newFilePath);
-					else
-						File.Copy(filePath, newFilePath, true);
+					PathHelper.CopyFileOrDirectory(filePath, newFilePath, true);
 				}
 				catch (Exception ex) {
 					if (catchExceptions)
@@ -330,6 +372,7 @@ namespace ConscriptDesigner.Content {
 			projectModified = true;
 		}
 
+		/// <summary>Excludes the file from the project.</summary>
 		public void Exclude(string path) {
 			string name = IOPath.GetFileName(path);
 			ContentFile file = Get(path);
@@ -343,6 +386,7 @@ namespace ConscriptDesigner.Content {
 			projectModified = true;
 		}
 
+		/// <summary>Replaces the existing file with a new file.</summary>
 		public void Replace(string filePath, string newPath, bool catchExceptions = false) {
 			string name = IOPath.GetFileName(newPath);
 			string newDirectory = IOPath.GetDirectoryName(newPath);
@@ -354,7 +398,7 @@ namespace ConscriptDesigner.Content {
 				throw new FileDoesNotExistException(name);
 
 			bool isFolder = IODirectory.Exists(filePath);
-			if (isFolder == (!IODirectory.Exists(newFilePath) && File.Exists(newFilePath))) {
+			if (isFolder != IODirectory.Exists(newFilePath)) {
 				if (!catchExceptions)
 					throw new DirectoryFileMismatchException(IOPath.GetFileName(filePath), name);
 				TriggerMessageBox.Show(DesignerControl.MainWindow, MessageIcon.Warning,
@@ -362,10 +406,7 @@ namespace ConscriptDesigner.Content {
 			}
 
 			try {
-				if (IODirectory.Exists(filePath))
-					PathHelper.CopyDirectory(filePath, newFilePath);
-				else
-					File.Copy(filePath, newFilePath, true);
+				PathHelper.CopyFileOrDirectory(filePath, newFilePath, true);
 			}
 			catch (Exception ex) {
 				if (catchExceptions)
@@ -390,6 +431,7 @@ namespace ConscriptDesigner.Content {
 			projectModified = true;
 		}
 
+		/// <summary>Moves the file to the new directory.</summary>
 		public void Move(string path, string newDirectory, bool catchExceptions = false) {
 			FixPath(ref path, ref newDirectory);
 			string name = IOPath.GetFileName(path);
@@ -433,6 +475,7 @@ namespace ConscriptDesigner.Content {
 			projectModified = true;
 		}
 
+		/// <summary>Renames the file to the new name.</summary>
 		public void Rename(string path, string newName, bool catchExceptions = false) {
 			FixPath(ref path);
 			string name = IOPath.GetFileName(path);
@@ -464,6 +507,7 @@ namespace ConscriptDesigner.Content {
 			projectModified = true;
 		}
 
+		/// <summary>Cuts the file.</summary>
 		public void Cut(string path) {
 			FixPath(ref path);
 			Clipboard.Clear();
@@ -478,6 +522,7 @@ namespace ConscriptDesigner.Content {
 			CommandManager.InvalidateRequerySuggested();
 		}
 
+		/// <summary>Copies the file.</summary>
 		public void Copy(string path) {
 			if (cutFile != null)
 				cutFile.IsCut = false;
@@ -496,9 +541,10 @@ namespace ConscriptDesigner.Content {
 		// Dialog Mutators
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Requests the user to create a new conscript file in the directory.</summary>
 		public void NewConscript(string directory) {
 			string name = RenameFileWindow.Show(DesignerControl.MainWindow, "Add",
-				"New Conscript", "new_conscript.conscript", directory, this);
+				"New Conscript", "conscript.conscript", directory, this);
 			if (name != null) {
 				string filePath = IOPath.Combine(ProjectDirectory, directory, name);
 				try {
@@ -524,6 +570,7 @@ namespace ConscriptDesigner.Content {
 			}
 		}
 
+		/// <summary>Requests the user to add an existing file into the directory.</summary>
 		public void AddExisting(string directory) {
 			OpenFileDialog dialog = new OpenFileDialog();
 			dialog.Filter = "Content Files|*.conscript;*.png;*.jpg;*.gif;*.wav;*.fx|" +
@@ -550,7 +597,7 @@ namespace ConscriptDesigner.Content {
 						"A project file with the name '" + name + "' already exists!", "File Already Exists");
 					return;
 				}
-				else if (NormalizePath(filePath) != NormalizePath(newFilePath)) {
+				else if (!PathHelper.IsPathTheSame(filePath, newFilePath)) {
 					if (File.Exists(filePath)) {
 						TriggerMessageBox.Show(DesignerControl.MainWindow, MessageIcon.Warning,
 							"A file with the name '" + name + "' already exists!", "File Already Exists");
@@ -568,6 +615,7 @@ namespace ConscriptDesigner.Content {
 			}
 		}
 
+		/// <summary>Requests the user to create a new folder in the directory.</summary>
 		public void NewFolder(string directory) {
 			string name = RenameFileWindow.Show(DesignerControl.MainWindow, "Add",
 				"New Folder", "Folder", directory, this);
@@ -596,6 +644,7 @@ namespace ConscriptDesigner.Content {
 			}
 		}
 
+		/// <summary>Requests the user to paste the clipboard's file drop or cut file.</summary>
 		public void RequestPaste(string directory) {
 			ContentFolder parent = GetFolder(directory);
 			if (parent == null)
@@ -618,28 +667,7 @@ namespace ConscriptDesigner.Content {
 					string filePath = cutFile.FilePath;
 					string newFilePath = IOPath.Combine(parent.FilePath, cutFile.Name);
 					try {
-						if (IODirectory.Exists(filePath)) {
-							PathHelper.CopyDirectory(filePath, newFilePath);
-							try {
-								IODirectory.Delete(filePath, true);
-							}
-							catch (Exception ex) {
-								DesignerControl.ShowExceptionMessage(ex, "paste", cutFile.Name);
-								IODirectory.Delete(newFilePath, true);
-								return;
-							}
-						}
-						else {
-							File.Copy(filePath, newFilePath);
-							try {
-								File.Delete(filePath);
-							}
-							catch (Exception ex) {
-								DesignerControl.ShowExceptionMessage(ex, "paste", cutFile.Name);
-								File.Delete(newFilePath);
-								return;
-							}
-						}
+						PathHelper.MoveFileOrDirectory(filePath, newFilePath);
 					}
 					catch (Exception ex) {
 						DesignerControl.ShowExceptionMessage(ex, "paste", cutFile.Name);
@@ -649,7 +677,6 @@ namespace ConscriptDesigner.Content {
 
 				cutFile.Parent.Files.Remove(cutFile.Name);
 				cutFile.Parent.TreeViewItem.Items.Remove(cutFile.TreeViewItem);
-
 				parent.Files.Add(cutFile.Name, cutFile);
 				parent.TreeViewItem.Items.Add(cutFile.TreeViewItem);
 				cutFile.Parent = parent;
@@ -670,6 +697,7 @@ namespace ConscriptDesigner.Content {
 			CommandManager.InvalidateRequerySuggested();
 		}
 
+		/// <summary>Requests the user to drop/paste the list of files.</summary>
 		public void RequestDrop(IEnumerable<string> files, string directory) {
 			ContentFolder folder = GetFolder(directory);
 			if (folder == null)
@@ -678,14 +706,17 @@ namespace ConscriptDesigner.Content {
 			List<string> filesToReplace = new List<string>();
 			List<string> foldersToMerge = new List<string>();
 			List<string> filesToInclude = new List<string>();
+			List<string> filesToCopyName = new List<string>();
 			foreach (string file in files) {
 				string name = IOPath.GetFileName(file);
 				string newPath = IOPath.Combine(folder.Path, name);
 				string newFilePath = IOPath.Combine(folder.FilePath, name);
 				bool isFolder = IODirectory.Exists(file);
-				if (NormalizePath(file) == NormalizePath(newFilePath)) {
+				if (PathHelper.IsPathTheSame(file, newFilePath)) {
 					if (!Contains(newPath))
 						filesToInclude.Add(file);
+					else
+						filesToCopyName.Add(file);
 				}
 				else if (File.Exists(newFilePath)) {
 					if (!isFolder)
@@ -719,7 +750,7 @@ namespace ConscriptDesigner.Content {
 						"Would you like to replace them?", "Replace Files", MessageBoxButton.YesNoCancel);
 			}
 
-			if (foldersToMerge.Any()) {
+			if (foldersToMerge.Any() && replaceResult != MessageBoxResult.Cancel) {
 				mergeResult = TriggerMessageBox.Show(DesignerControl.MainWindow, MessageIcon.Warning,
 						"Some folders have the same name as folders in this directory. " +
 						"Would you like to merge them?", "Merge Folders", MessageBoxButton.YesNoCancel);
@@ -758,6 +789,18 @@ namespace ConscriptDesigner.Content {
 					}
 				}
 
+				foreach (string file in filesToCopyName) {
+					try {
+						string newFile = PathHelper.GetCopyName(file);
+						PathHelper.CopyFileOrDirectory(file, newFile, false);
+						Include(newFile, folder.Path);
+					}
+					catch (Exception ex) {
+						DesignerControl.ShowExceptionMessage(ex, "copy", IOPath.GetFileName(file));
+						return;
+					}
+				}
+
 				foreach (string file in filesToInclude) {
 					try {
 						Include(file, folder.Path);
@@ -771,6 +814,7 @@ namespace ConscriptDesigner.Content {
 			CommandManager.InvalidateRequerySuggested();
 		}
 
+		/// <summary>Requests the user to delete the file.</summary>
 		public void RequestDelete(string path) {
 			var result = TriggerMessageBox.Show(DesignerControl.MainWindow, MessageIcon.Warning,
 				"Are you sure you want to delete '" + IOPath.GetFileName(path) + "'?", "Delete File",
@@ -796,6 +840,7 @@ namespace ConscriptDesigner.Content {
 			}
 		}
 
+		/// <summary>Requests the user to rename the file.</summary>
 		public void RequestRename(string path) {
 			string oldName = IOPath.GetFileName(path);
 			string directory = IOPath.GetDirectoryName(path);
@@ -833,6 +878,7 @@ namespace ConscriptDesigner.Content {
 		// Override Context Menu
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Creates the context menu for the tree view item.</summary>
 		protected override void CreateContextMenu(ContextMenu menu) {
 			AddAddContextMenuItem(menu);
 			AddSeparatorContextMenuItem(menu);
@@ -840,39 +886,29 @@ namespace ConscriptDesigner.Content {
 		}
 
 
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
 
-
-		/*public void Copy(string path) {
-			
-		}
-
-		public void Paste(string newDirectory) {
-			string name = IOPath.GetFileName(path);
-			ContentFile file = Get(path);
-			if (file == null)
-				throw new FileDoesNotExistException(name);
-			file.Parent.Files.Remove(name);
-			file.Parent.TreeViewItem.Items.Remove(file.TreeViewItem);
-			file.Parent = null;
-		}*/
-
-
-
-		public static void FixPath(ref string path) {
+		/// <summary>Fixes the path separators for Get operations.</summary>
+		private static void FixPath(ref string path) {
 			path = path.Replace('\\', '/');
 		}
 
-		public static bool IsSubdirectory(string directory, string subdirectory) {
-			FixPath(ref directory, ref subdirectory);
-			return subdirectory.StartsWith(directory, StringComparison.CurrentCultureIgnoreCase);
-		}
-
-		public static void FixPath(ref string path1, ref string path2) {
+		/// <summary>Fixes the path separators for Get operations.</summary>
+		private static void FixPath(ref string path1, ref string path2) {
 			path1 = path1.Replace('\\', '/');
 			path2 = path2.Replace('\\', '/');
 		}
 
-		public static ContentFile GetFile(ContentFolder folder, string path) {
+		/// <summary>Returns true if the directory contains the subdirectory.</summary>
+		private static bool IsSubdirectory(string directory, string subdirectory) {
+			FixPath(ref directory, ref subdirectory);
+			return subdirectory.StartsWith(directory, StringComparison.CurrentCultureIgnoreCase);
+		}
+
+		/// <summary>Searches for the file with the specified path recursively.</summary>
+		private static ContentFile GetFile(ContentFolder folder, string path) {
 			int index = path.IndexOf('/');
 			string name = (index != -1 ? path.Substring(0, index) : path);
 			string nextPath = (index != -1 ? path.Substring(index + 1) : "");
@@ -888,41 +924,46 @@ namespace ConscriptDesigner.Content {
 			// Return either null or the file result
 			return file;
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Override Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the type of the content file.</summary>
+		public override ContentTypes ContentType {
+			get { return ContentTypes.Project; }
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns true if paste can be used in the project explorer.</summary>
 		public bool CanPaste {
 			get { return Clipboard.ContainsFileDropList() || cutFile != null; }
 		}
 
-		public TreeView TreeView {
-			get { return treeView; }
-			set { treeView = value; }
-		}
-
-		public bool IsFileSelected {
-			get { return SelectedFile != null; }
-		}
-
+		/// <summary>Gets the currently cut file.</summary>
 		public ContentFile CutFile {
 			get { return cutFile; }
 		}
 
-		public ContentFile SelectedFile {
-			get {
-				TreeViewItem item = treeView.SelectedItem as TreeViewItem;
-				if (item != null)
-					return (ContentFile) item.Tag;
-				return null;
-			}
-		}
-
+		/// <summary>Gets or sets if the project is modified.</summary>
 		public bool IsProjectModified {
 			get { return projectModified; }
+			set { projectModified = value; }
 		}
 
-		public string ProjectDirectory {
-			get { return IOPath.GetDirectoryName(contentFile); }
-		}
+		/// <summary>Gets the project file.</summary>
 		public string ProjectFile {
 			get { return contentFile; }
+		}
+
+		/// <summary>Gets the project root folder.</summary>
+		public string ProjectDirectory {
+			get { return IOPath.GetDirectoryName(contentFile); }
 		}
 	}
 }

@@ -72,24 +72,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Anchorables\ConscriptEditor.xaml.cs">
-      <DependentUpon>ConscriptEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Anchorables\IAnchorable.cs" />
-    <Compile Include="Anchorables\ImageDisplay.xaml.cs">
-      <DependentUpon>ImageDisplay.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Anchorables\IRequestClosePanel.cs" />
-    <Compile Include="Anchorables\OutputTerminal.xaml.cs">
-      <DependentUpon>OutputTerminal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Anchorables\ProjectExplorer.xaml.cs">
-      <DependentUpon>ProjectExplorer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Anchorables\RequestCloseAnchorable.cs" />
-    <Compile Include="Anchorables\RequestCloseDocument.cs" />
+    <Compile Include="Anchorables\ConscriptEditor.cs" />
+    <Compile Include="Anchorables\Base\ContentFileDocument.cs" />
+    <Compile Include="Anchorables\Base\IContentFileContainer.cs" />
+    <Compile Include="Anchorables\ImageDisplay.cs" />
+    <Compile Include="Anchorables\Base\IRequestCloseAnchorable.cs" />
+    <Compile Include="Anchorables\OutputConsole.cs" />
+    <Compile Include="Anchorables\ProjectExplorer.cs" />
+    <Compile Include="Anchorables\Base\RequestCloseAnchorable.cs" />
+    <Compile Include="Anchorables\Base\RequestCloseDocument.cs" />
     <Compile Include="Commands.cs" />
-    <Compile Include="Content\ContentExtensions.cs" />
     <Compile Include="Content\ContentSpriteFont.cs" />
     <Compile Include="Content\ContentXmlInfo.cs" />
     <Compile Include="Content\Exceptions.cs" />
@@ -99,6 +91,7 @@
     <Compile Include="Content\Xnb\WavConverter.cs" />
     <Compile Include="Content\Xnb\XCompress.cs" />
     <Compile Include="Content\Xnb\XnbExtensions.cs" />
+    <Compile Include="Controls\DraggableImageTreeView.cs" />
     <Compile Include="Controls\FolderTreeViewItem.cs" />
     <Compile Include="Controls\ImageButton.cs" />
     <Compile Include="Controls\ImageMenuItem.cs" />
@@ -115,7 +108,7 @@
     <Compile Include="Control\DesignerImages.cs" />
     <Compile Include="Util\AlphanumComparatorFast.cs" />
     <Compile Include="Util\BitmapFactory.cs" />
-    <Compile Include="Util\ClipboardListener.cs" />
+    <Compile Include="Util\ClipboardHelper.cs" />
     <Compile Include="Util\Extensions.cs" />
     <Compile Include="Util\NativeMethods.cs" />
     <Compile Include="Util\PathHelper.cs" />
@@ -143,22 +136,6 @@
     </Compile>
     <Compile Include="WinForms\MouseWheelMessageFilter.cs" />
     <Compile Include="WinForms\ServiceContainer.cs" />
-    <Page Include="Anchorables\ConscriptEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Anchorables\ImageDisplay.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Anchorables\OutputTerminal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Anchorables\ProjectExplorer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

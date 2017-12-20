@@ -5,13 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ConscriptDesigner.Anchorables {
-	public interface IRequestClosePanel {
+	public interface IRequestCloseAnchorable {
 
 		void ForceClose();
 
 		void Close();
-
-		object Content { get; set; }
 
 		bool IsActive { get; set; }
 

@@ -567,6 +567,17 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 		}
 		#endregion
 
+		/// <summary></summary>
+		public static readonly DependencyProperty LineSpacingProperty =
+			DependencyProperty.Register("LineSpacing", typeof(double), typeof(TextView),
+										new FrameworkPropertyMetadata(1.0));
+
+		/// <summary></summary>
+		public double LineSpacing {
+			get { return (double) GetValue(LineSpacingProperty); }
+			set { SetValue(LineSpacingProperty, value); }
+		}
+
 		/// <summary>
 		/// LinkTextUnderlinedBrush dependency property.
 		/// </summary>
@@ -1496,7 +1507,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 			else {
 				wideSpaceWidth = FontSize / 2;
 				defaultBaseline = FontSize;
-				defaultLineHeight = FontSize + 3;
+				defaultLineHeight = (FontSize + 3);
 			}
 			// Update heightTree.DefaultLineHeight, if a document is loaded.
 			if (heightTree != null)
@@ -1937,7 +1948,8 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 				|| e.Property == Control.FontSizeProperty
 				|| e.Property == Control.FontStretchProperty
 				|| e.Property == Control.FontStyleProperty
-				|| e.Property == Control.FontWeightProperty) {
+				|| e.Property == Control.FontWeightProperty
+				|| e.Property == LineSpacingProperty) {
 				// changing font properties requires recreating cached elements
 				RecreateCachedElements();
 				// and we need to re-measure the font metrics:

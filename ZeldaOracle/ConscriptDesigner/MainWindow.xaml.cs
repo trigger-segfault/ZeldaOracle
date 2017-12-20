@@ -27,8 +27,10 @@ namespace ConscriptDesigner {
 
 		private bool supressEvents;
 
-		private OutputTerminal outputTerminal;
+		private OutputConsole outputConsole;
 		private ProjectExplorer projectExplorer;
+
+		private DispatcherTimer checkOutdatedTimer;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -39,6 +41,14 @@ namespace ConscriptDesigner {
 			InitializeComponent();
 
 			dummyHost.Child = new DummyGraphicsDeviceControl();
+			Application.Current.Activated += OnApplicationActivated;
+
+			this.checkOutdatedTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.1),
+				DispatcherPriority.ApplicationIdle, delegate {
+					DesignerControl.CheckForOutdatedFiles(true);
+					checkOutdatedTimer.Stop();
+				}, Dispatcher);
+			this.checkOutdatedTimer.Stop();
 		}
 
 
@@ -59,6 +69,11 @@ namespace ConscriptDesigner {
 			}
 		}
 
+		private void OnApplicationActivated(object sender, EventArgs e) {
+			// HACK: Prevent text editor keeping mouse down focus after closing any dialogs.
+			checkOutdatedTimer.Start();
+		}
+
 		private void OnClosing(object sender, CancelEventArgs e) {
 			e.Cancel = !DesignerControl.RequestClose();
 		}
@@ -68,13 +83,13 @@ namespace ConscriptDesigner {
 		}
 
 		private void OnAnchorableClosed(object sender, EventArgs e) {
-			IRequestClosePanel anchorable = sender as IRequestClosePanel;
-			if (anchorable.Content is ProjectExplorer) {
-				projectExplorer.Cleanup();
+			IRequestCloseAnchorable anchorable = sender as IRequestCloseAnchorable;
+			if (anchorable is ProjectExplorer) {
+				projectExplorer.Clear();
 				projectExplorer = null;
 			}
-			else if (anchorable.Content is OutputTerminal) {
-				outputTerminal = null;
+			else if (anchorable is OutputConsole) {
+				outputConsole = null;
 			}
 		}
 
@@ -145,32 +160,28 @@ namespace ConscriptDesigner {
 
 		private void OnProjectExplorerCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
 			if (projectExplorer == null) {
-				RequestCloseAnchorable anchorable = new RequestCloseAnchorable();
-				anchorable.Closed += OnAnchorableClosed;
-				projectExplorer = new ProjectExplorer(anchorable);
+				projectExplorer = new ProjectExplorer();
 				projectExplorer.Project = DesignerControl.Project;
-				anchorable.Content = projectExplorer;
-				anchorable.AddToLayout(dockingManager, AnchorableShowStrategy.Left);
-				var pane = anchorable.Parent as LayoutAnchorablePane;
+				projectExplorer.Closed += OnAnchorableClosed;
+				projectExplorer.AddToLayout(dockingManager, AnchorableShowStrategy.Left);
+				var pane = projectExplorer.Parent as LayoutAnchorablePane;
 				pane.DockWidth = new GridLength(300);
 			}
 			else {
-				projectExplorer.Anchorable.IsActive = true;
+				projectExplorer.IsActive = true;
 			}
 		}
 
 		private void OnOutputConsoleCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
-			if (outputTerminal == null) {
-				RequestCloseAnchorable anchorable = new RequestCloseAnchorable();
-				anchorable.Closed += OnAnchorableClosed;
-				outputTerminal = new OutputTerminal(anchorable);
-				anchorable.Content = outputTerminal;
-				anchorable.AddToLayout(dockingManager, AnchorableShowStrategy.Bottom);
-				var pane = anchorable.Parent as LayoutAnchorablePane;
+			if (outputConsole == null) {
+				outputConsole = new OutputConsole();
+				outputConsole.Closed += OnAnchorableClosed;
+				outputConsole.AddToLayout(dockingManager, AnchorableShowStrategy.Bottom);
+				var pane = outputConsole.Parent as LayoutAnchorablePane;
 				pane.DockHeight = new GridLength(180);
 			}
 			else {
-				outputTerminal.Anchorable.IsActive = true;
+				outputConsole.IsActive = true;
 			}
 		}
 
@@ -238,8 +249,8 @@ namespace ConscriptDesigner {
 			get { return projectExplorer; }
 		}
 
-		public OutputTerminal OutputTerminal {
-			get { return outputTerminal; }
+		public OutputConsole OutputConsole {
+			get { return outputConsole; }
 		}
 	}
 }
