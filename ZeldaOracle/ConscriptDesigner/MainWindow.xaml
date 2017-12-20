@@ -71,8 +71,8 @@
                 <local:ImageMenuItem Header="Tile Browser" Source="/Resources/Icons/Tile.png" Command="cmd:Commands.TileBrowser"/>
             </MenuItem>
             <MenuItem Header="_Project">
-                <local:ImageMenuItem Header="Run Conscripts" Source="/Resources/Icons/Build.png" IsCheckable="True" Command="cmd:Commands.RunConscripts"/>
-                <local:ImageMenuItem Header="Compile Content" Source="/Resources/Icons/Compile.png" IsCheckable="True" Command="cmd:Commands.CompileContent"/>
+                <local:ImageMenuItem Header="Run Conscripts" Source="/Resources/Icons/Build.png" Command="cmd:Commands.RunConscripts"/>
+                <local:ImageMenuItem Header="Compile Content" Source="/Resources/Icons/Compile.png" Command="cmd:Commands.CompileContent"/>
             </MenuItem>
             <MenuItem Header="Help">
                 

@@ -1,8 +1,15 @@
 ﻿<?xml version="1.0"?>
 <SyntaxDefinition name="Conscript" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
   <Color name="Comment" foreground="Green" exampleText="// comment" />
+  <Color name="NumericLiteral" foreground="#BE009F" exampleText="1024, 1.0, 0x8888" />
+  <Color name="StringLiteral" foreground="#FF5D00" exampleText="&quot;text&quot;" />
+  <Color name="TrueFalse" foreground="Red" exampleText="true" />
+  <Color name="Types" foreground="Blue" exampleText="integer" />
+  <Color name="Commands" fontWeight="bold" exampleText="ADD" />
+  <Color name="Prefixes" fontWeight="bold" fontStyle="italic" exampleText="CONTINUE" />
+  <Color name="CommandKeywords" fontStyle="italic" exampleText="frame" />
 
-  <RuleSet name="CommentMarkerSet">
+  <RuleSet name="CommentMarkerSet" ignoreCase="true">
     <Keywords fontWeight="bold" foreground="Red">
       <Word>TODO</Word>
       <Word>FIXME</Word>
@@ -17,5 +24,215 @@
     <Span color="Comment" ruleSet="CommentMarkerSet">
       <Begin>\#</Begin>
     </Span>
+
+    <Keywords color="TrueFalse">
+      <Word>true</Word>
+      <Word>false</Word>
+    </Keywords>
+
+    <Keywords color="Types">
+      <Word>boolean</Word>
+      <Word>integer</Word>
+      <Word>string</Word>
+      <Word>point</Word>
+      <Word>float</Word>
+    </Keywords>
+
+
+    <Rule color="NumericLiteral">
+      \b0[xX][0-9a-fA-F]+\b  # hex number
+      |
+      (	\b\d+(\.[0-9]*)?\b   #number with optional floating point
+      |	\b\.[0-9]+\b           #or just starting with floating point
+      )
+    </Rule>
+    
+    <Span color="StringLiteral">
+      <Begin>"</Begin>
+      <End>"</End>
+      <RuleSet>
+        <!-- span for escape sequences -->
+        <Span begin="\\" end="."/>
+      </RuleSet>
+    </Span>
+
+    <!--ScriptReader-->
+    <Keywords color="Commands">
+      <Word>LOAD</Word>
+    </Keywords>
+    
+    <!--CollisionModelSR-->
+    <Keywords color="Commands">
+      <Word>MODEL</Word>
+      <Word>END</Word>
+      <Word>ADD</Word>
+    </Keywords>
+
+    <!--GameFontSR-->
+    <Keywords color="Commands">
+      <Word>FONT</Word>
+      <Word>GRID</Word>
+      <Word>SPACING</Word>
+      <Word>END</Word>
+    </Keywords>
+
+    <!--ImageSR-->
+    <Keywords color="Commands">
+      <Word>IMAGE</Word>
+      <Word>END</Word>
+      <Word>VARIANT</Word>
+    </Keywords>
+
+    <!--ISpriteSR.Animations-->
+    <Keywords color="Commands">
+      <Word>ANIMATION</Word>
+      <Word>ANIM</Word>
+      <Word>SUBSTRIP</Word>
+      <Word>CLONE</Word>
+      <Word>ADD</Word>
+      <Word>INSERT</Word>
+      <Word>COMBINE</Word>
+      <Word>MAKEQUAD</Word>
+      <Word>MAKEDYNAMIC</Word>
+      <Word>OFFSET</Word>
+      <Word>FLICKER</Word>
+      <Word>REPEAT</Word>
+      <Word>REWIND</Word>
+      <Word>SHIFTSOURCE</Word>
+      <Word>CHANGEDEFINITION</Word>
+    </Keywords>
+
+    <!--ISpriteSR.Animations-->
+    <Keywords color="CommandKeywords">
+      <Word>strip</Word>
+      <Word>emptyframe</Word>
+      <Word>frame</Word>
+      <Word>part</Word>
+    </Keywords>
+
+    <!--ISpriteSR.BasicEmptyOffset-->
+    <Keywords color="Commands">
+      <Word>EMPTY</Word>
+      <Word>BASIC</Word>
+      <Word>OFFSET</Word>
+      <Word>SIZE</Word>
+    </Keywords>
+
+    <!--ISpriteSR.Color-->
+    <Keywords color="Commands">
+      <Word>COLOR</Word>
+    </Keywords>
+
+    <!--ISpriteSR.Composite-->
+    <Keywords color="Commands">
+      <Word>COMPOSITE</Word>
+      <Word>ADD</Word>
+      <Word>INSERT</Word>
+      <Word>REPLACE</Word>
+      <Word>REMOVE</Word>
+      <Word>COMBINE</Word>
+      <Word>SIZE</Word>
+      <Word>OFFSET</Word>
+    </Keywords>
+
+    <!--ISpriteSR.Style-->
+    <Keywords color="Commands">
+      <Word>STYLE</Word>
+      <Word>ADD</Word>
+      <Word>REPLACE</Word>
+      <Word>REMOVE</Word>
+      <Word>REMOVE</Word>
+      <Word>COMBINE</Word>
+      <Word>SIZE</Word>
+      <Word>OFFSET</Word>
+    </Keywords>
+
+    <!--ISpriteSR-->
+    <Keywords color="Commands">
+      <Word>SOURCE</Word>
+      <Word>SPRITESHEET</Word>
+      <Word>SPRITESET</Word>
+      <Word>INSERT</Word>
+      <Word>APPEND</Word>
+      <Word>PALETTEDICTIONARY</Word>
+      <Word>MAPPEDCOLORS</Word>
+      <Word>IGNORECOLORS</Word>
+      <Word>CHUNKSIZE</Word>
+      <Word>END</Word>
+      <Word>NAME</Word>
+    </Keywords>
+
+    <!--ISpriteSR Prefixes-->
+    <Keywords color="Prefixes">
+      <Word>CONTINUE</Word>
+      <Word>DYNAMIC</Word>
+      <Word>SINGLE</Word>
+    </Keywords>
+
+    <!--MusicSR-->
+    <Keywords color="Commands">
+      <Word>MUSIC</Word>
+      <Word>END</Word>
+      <Word>SONG</Word>
+    </Keywords>
+
+    <!--PaletteDictionarySR-->
+    <Keywords color="Commands">
+      <Word>PALETTEDICTIONARY</Word>
+      <Word>END</Word>
+      <Word>TILE</Word>
+      <Word>ENTITY</Word>
+    </Keywords>
+
+    <!--PaletteSR-->
+    <Keywords color="Commands">
+      <Word>PALETTE</Word>
+      <Word>END</Word>
+      <Word>COLOR</Word>
+      <Word>LOOKUP</Word>
+      <Word>CLONE</Word>
+    </Keywords>
+
+    <!--SoundSR-->
+    <Keywords color="Commands">
+      <Word>SOUND</Word>
+    </Keywords>
+
+    <!--TilesetSR-->
+    <Keywords color="Commands">
+      <Word>TILESET</Word>
+      <Word>EVENTTILESET</Word>
+      <Word>TILE</Word>
+      <Word>EVENTTILE</Word>
+      <Word>MONSTER</Word>
+      <Word>END</Word>
+      <Word>DEFAULT</Word>
+      <Word>CONFIG</Word>
+      <Word>SETTILE</Word>
+      <Word>TYPE</Word>
+      <Word>FLAGS</Word>
+      <Word>ENVTYPE</Word>
+      <Word>RESETWHEN</Word>
+      <Word>CONVEYOR</Word>
+      <Word>PROPERTIES</Word>
+      <Word>EVENT</Word>
+      <Word>SPRITE</Word>
+      <Word>SAMESPRITE</Word>
+      <Word>SIZE</Word>
+      <Word>SPRITEINDEX</Word>
+      <Word>SPRITELIST</Word>
+      <Word>SPRITEOBJ</Word>
+      <Word>BREAKANIM</Word>
+      <Word>BREAKSOUND</Word>
+      <Word>MODEL</Word>
+      <Word>SOLID</Word>
+      <Word>HALFSOLID</Word>
+      <Word>LEDGE</Word>
+      <Word>HURT</Word>
+      <Word>CLONE</Word>
+      <Word>SPRITESHEET</Word>
+    </Keywords>
   </RuleSet>
+  
+  
 </SyntaxDefinition>

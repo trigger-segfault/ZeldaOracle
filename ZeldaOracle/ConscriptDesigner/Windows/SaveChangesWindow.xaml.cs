@@ -20,10 +20,17 @@ namespace ConscriptDesigner.Windows {
 	public partial class SaveChangesWindow : Window {
 		private MessageBoxResult result;
 
-		private SaveChangesWindow(IEnumerable<string> files) {
+		private SaveChangesWindow(IEnumerable<string> files, bool reload) {
 			InitializeComponent();
 			foreach (var file in files) {
 				listView.Items.Add(file);
+			}
+
+			if (reload) {
+				button3.Visibility = Visibility.Collapsed;
+				Title = "Reload Files";
+				textBlockMessage.Text = "The following files have been modified " +
+					"outside of the program. Would you like to reload them?";
 			}
 		}
 
@@ -33,8 +40,8 @@ namespace ConscriptDesigner.Windows {
 			Close();
 		}
 
-		public static MessageBoxResult Show(Window owner, IEnumerable<string> files) {
-			SaveChangesWindow window = new SaveChangesWindow(files);
+		public static MessageBoxResult Show(Window owner, IEnumerable<string> files, bool reload) {
+			SaveChangesWindow window = new SaveChangesWindow(files, reload);
 			window.Owner = owner;
 			var result = window.ShowDialog();
 			if (result.HasValue && result.Value)

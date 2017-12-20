@@ -53,6 +53,5 @@ namespace ConscriptDesigner.Util {
 		/// <summary>To find message-only windows, specify HWND_MESSAGE in the
 		/// hwndParent parameter of the FindWindowEx function.</summary>
 		public static IntPtr HWND_MESSAGE = new IntPtr(-3);
-
 	}
 }

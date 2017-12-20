@@ -270,7 +270,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 			this.textLines = textLines.AsReadOnly();
 			Height = 0;
 			foreach (TextLine line in textLines)
-				Height += line.Height;
+				Height += line.Height * textView.LineSpacing;
 		}
 
 		/// <summary>
@@ -342,9 +342,9 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 					case VisualYPosition.LineTop:
 						return pos;
 					case VisualYPosition.LineMiddle:
-						return pos + tl.Height / 2;
+						return pos + tl.Height / 2 * textView.LineSpacing;
 					case VisualYPosition.LineBottom:
-						return pos + tl.Height;
+						return pos + tl.Height * textView.LineSpacing;
 					case VisualYPosition.TextTop:
 						return pos + tl.Baseline - textView.DefaultBaseline;
 					case VisualYPosition.TextBottom:
@@ -358,7 +358,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 					}
 				}
 				else {
-					pos += tl.Height;
+					pos += tl.Height * textView.LineSpacing;
 				}
 			}
 			throw new ArgumentException("textLine is not a line in this VisualLine");
@@ -387,7 +387,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 			const double epsilon = 0.0001;
 			double pos = this.VisualTop;
 			foreach (TextLine tl in TextLines) {
-				pos += tl.Height;
+				pos += tl.Height * textView.LineSpacing;
 				if (visualTop + epsilon < pos)
 					return tl;
 			}
@@ -701,7 +701,7 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 		internal VisualLineDrawingVisual Render() {
 			Debug.Assert(phase == LifetimePhase.Live);
 			if (visual == null)
-				visual = new VisualLineDrawingVisual(this);
+				visual = new VisualLineDrawingVisual(this, textView.LineSpacing);
 			return visual;
 		}
 	}
@@ -711,13 +711,13 @@ namespace ICSharpCode.AvalonEdit.Rendering {
 		public readonly double Height;
 		internal bool IsAdded;
 
-		public VisualLineDrawingVisual(VisualLine visualLine) {
+		public VisualLineDrawingVisual(VisualLine visualLine, double lineSpacing) {
 			this.VisualLine = visualLine;
 			var drawingContext = RenderOpen();
 			double pos = 0;
 			foreach (TextLine textLine in visualLine.TextLines) {
 				textLine.Draw(drawingContext, new Point(0, pos), InvertAxes.None);
-				pos += textLine.Height;
+				pos += textLine.Height * lineSpacing;
 			}
 			this.Height = pos;
 			drawingContext.Close();

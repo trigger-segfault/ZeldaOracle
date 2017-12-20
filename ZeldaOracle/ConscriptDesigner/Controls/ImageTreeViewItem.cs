@@ -5,10 +5,37 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace ConscriptDesigner.Controls {
+
+	public class ItemMouseButtonEventArgs : RoutedEventArgs {
+		public MouseButtonEventArgs Args { get; set; }
+
+		public ItemMouseButtonEventArgs(RoutedEvent routedEvent, MouseButtonEventArgs e) :
+			base(routedEvent)
+		{
+			this.Args = e;
+		}
+	}
+
+	public delegate void ItemMouseButtonEventHandler(object sender, ItemMouseButtonEventArgs e);
+
 	public class ImageTreeViewItem : TreeViewItem {
+
+		//-----------------------------------------------------------------------------
+		// Routed Events
+		//-----------------------------------------------------------------------------
+
+		public static readonly RoutedEvent ItemMouseDownEvent = EventManager.RegisterRoutedEvent(
+			"ItemMouseDown", RoutingStrategy.Bubble, typeof(ItemMouseButtonEventHandler),
+			typeof(ImageTreeViewItem));
+
+		public event ItemMouseButtonEventHandler ItemMouseDown {
+			add { AddHandler(ItemMouseDownEvent, value); }
+			remove { RemoveHandler(ItemMouseDownEvent, value); }
+		}
 
 		private static ContextMenu NullContextMenu;
 
@@ -57,6 +84,14 @@ namespace ConscriptDesigner.Controls {
 			Header = name;
 			IsExpanded = expanded;
 			ContextMenu = NullContextMenu;
+		}
+
+		public override void OnApplyTemplate() {
+			((FrameworkElement) GetTemplateChild("Bd")).PreviewMouseDown += OnItemPreviewMouseDown;
+		}
+
+		private void OnItemPreviewMouseDown(object sender, MouseButtonEventArgs e) {
+			RaiseEvent(new ItemMouseButtonEventArgs(ItemMouseDownEvent, e));
 		}
 	}
 }
