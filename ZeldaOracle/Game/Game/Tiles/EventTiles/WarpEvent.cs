@@ -12,6 +12,7 @@ using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.Transitions;
 using ZeldaOracle.Common.Audio;
 using System.ComponentModel;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Tiles.EventTiles {
 
@@ -181,6 +182,30 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			}
 			else {
 				warpEnabled = true;
+			}
+		}
+
+		
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the event tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, EventTileDataDrawArgs args) {
+			WarpType warpType = args.Properties.GetEnum<WarpType>("warp_type", WarpType.Tunnel);
+			ISprite sprite = null;
+			if (warpType == WarpType.Entrance)
+				sprite = GameData.SPR_EVENT_TILE_WARP_ENTRANCE;
+			else if (warpType == WarpType.Tunnel)
+				sprite = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
+			else if (warpType == WarpType.Stairs)
+				sprite = GameData.SPR_EVENT_TILE_WARP_STAIRS;
+			if (sprite != null) {
+				g.DrawISprite(
+					sprite,
+					args.SpriteDrawSettings,
+					args.Position,
+					args.Color);
 			}
 		}
 

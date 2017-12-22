@@ -7,6 +7,7 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Common.Audio;
+using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -120,6 +121,16 @@ namespace ZeldaOracle.Game.Tiles {
 			// Check if the pressed state needs to be changed.
 			if (isPressed != isDown && (isDown || isReleasable))
 				SetPressed(isDown);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
+			Tile.DrawTileData(g, args);
 		}
 	}
 }

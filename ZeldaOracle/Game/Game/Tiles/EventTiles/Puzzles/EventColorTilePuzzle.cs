@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control;
 
 namespace ZeldaOracle.Game.Tiles.EventTiles.Puzzles {
@@ -103,6 +104,16 @@ namespace ZeldaOracle.Game.Tiles.EventTiles.Puzzles {
 			}
 
 			base.Update();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Draws the event tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, EventTileDataDrawArgs args) {
+			EventTile.DrawTileData(g, args);
 		}
 	}
 }

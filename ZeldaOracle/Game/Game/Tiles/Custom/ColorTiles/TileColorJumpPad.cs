@@ -5,6 +5,8 @@ using System.Text;
 using ZeldaAPI;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Projectiles;
@@ -106,11 +108,35 @@ namespace ZeldaOracle.Game.Tiles {
 
 
 		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
+			PuzzleColor tileColor = args.Properties.GetEnum<PuzzleColor>("color", PuzzleColor.Red);
+			ISprite sprite = null;
+			if (tileColor == PuzzleColor.Red)
+				sprite = GameData.SPR_TILE_COLOR_JUMP_PAD_RED;
+			else if (tileColor == PuzzleColor.Yellow)
+				sprite = GameData.SPR_TILE_COLOR_JUMP_PAD_YELLOW;
+			else if (tileColor == PuzzleColor.Blue)
+				sprite = GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE;
+			if (sprite != null) {
+				g.DrawISprite(
+					sprite,
+					args.SpriteDrawSettings,
+					args.Position,
+					args.Color);
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
 		public PuzzleColor Color {
-			get { return (PuzzleColor) Properties.Get("color", (int) PuzzleColor.Red); }
+			get { return Properties.GetEnum<PuzzleColor>("color", PuzzleColor.Red); }
 			set { Properties.Set("color", (int) value); }
 		}
 		

@@ -17,6 +17,7 @@ namespace ZeldaOracle.Game.Tiles {
 		protected Point2I sheetLocation;	// TODO: remove this, maybe?
 		protected Properties properties;
 		protected EventDocumentationCollection events;
+		private ISprite previewSprite;
 		private string name;
 
 		
@@ -31,6 +32,7 @@ namespace ZeldaOracle.Game.Tiles {
 			sheetLocation	= Point2I.Zero;
 			properties		= new Properties(this);
 			events			= new EventDocumentationCollection();
+			previewSprite	= null;
 
 			properties.Set("id", "")
 				.SetDocumentation("ID", "General",
@@ -42,11 +44,11 @@ namespace ZeldaOracle.Game.Tiles {
 
 			properties.Set("sprite_index", 0)
 				.SetDocumentation("Sprite Index", "sprite_index", "", "Internal",
-				"The current sprite in the sprite list to draw.");
+				"The current sprite in the sprite list to draw.", true, false);
 
 			properties.Set("substrip_index", 0)
 				.SetDocumentation("Animation Substrip Index", "", "", "Internal",
-				"The index of the substrip for dynamic animations.", true, true);
+				"The index of the substrip for dynamic animations.", true, false);
 		}
 
 		public BaseTileData(BaseTileData copy) {
@@ -120,6 +122,15 @@ namespace ZeldaOracle.Game.Tiles {
 		public string Name {
 			get { return name; }
 			set { name = value; }
+		}
+
+		public bool HasPreviewSprite {
+			get { return previewSprite != null; }
+		}
+
+		public ISprite PreviewSprite {
+			get { return previewSprite; }
+			set { previewSprite = value; }
 		}
 	}
 }

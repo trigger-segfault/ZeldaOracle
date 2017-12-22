@@ -253,7 +253,7 @@ namespace ZeldaOracle.Common.Scripting {
 				if (p.Type == PropertyType.Integer)
 					return (E) Enum.ToObject(typeof(E), p.IntValue);
 				else if (p.Type == PropertyType.String)
-					return (E) Enum.Parse(typeof(E), p.StringValue);
+					return (E) Enum.Parse(typeof(E), p.StringValue, true);
 				else
 					throw new InvalidOperationException("Property type does not support enums.");
 			}

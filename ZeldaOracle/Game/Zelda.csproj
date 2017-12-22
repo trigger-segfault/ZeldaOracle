@@ -134,8 +134,6 @@
     <None Include="Common\Graphics\Obsolete\AnimationOld.cs" />
     <None Include="Common\Graphics\Obsolete\AnimationFrameOld.cs" />
     <Compile Include="Common\Graphics\Sprites\ColorationGroups.cs" />
-    <None Include="Common\Graphics\Sprites\ColorDefinitions.cs" />
-    <None Include="Common\Graphics\Sprites\ColorSprite.cs" />
     <Compile Include="Common\Graphics\Sprites\GroupDefinitions.cs" />
     <Compile Include="Common\Graphics\Sprites\SpriteSet.cs" />
     <Compile Include="Common\Graphics\Sprites\CompositeSprite.cs" />
@@ -147,7 +145,6 @@
     <Compile Include="Common\Graphics\Sprites\OffsetSprite.cs" />
     <Compile Include="Common\Graphics\Sprites\SpriteDrawSettings.cs" />
     <Compile Include="Common\Graphics\Sprites\SpritePart.cs" />
-    <None Include="Common\Graphics\Sprites\StyleDefinitions.cs" />
     <Compile Include="Common\Graphics\Sprites\StyleGroups.cs" />
     <Compile Include="Common\Graphics\Sprites\DefinitionSprite.cs" />
     <Compile Include="Common\Graphics\Palette.cs" />
@@ -246,6 +243,7 @@
     <Compile Include="Common\Translation\FormatCodes.cs" />
     <Compile Include="Common\Translation\WrappedLetterString.cs" />
     <Compile Include="Common\Util\NativeMethods.cs" />
+    <Compile Include="Common\Util\ReflectionHelper.cs" />
     <Compile Include="Game\Control\GameControl.cs" />
     <Compile Include="Game\Control\HUD.cs" />
     <Compile Include="Game\Control\Maps\DungeonMapFloor.cs" />
@@ -461,6 +459,7 @@
     <Compile Include="Game\Items\Weapons\ItemOcarina.cs" />
     <Compile Include="Game\Control\Controls.cs" />
     <Compile Include="Game\Items\Weapons\SeedBasedItem.cs" />
+    <Compile Include="Game\Tiles\TileDataDrawing.cs" />
     <Compile Include="Game\UserSettings.cs" />
     <Compile Include="Game\Main\GameBase.cs" />
     <Compile Include="Game\GameData.cs" />

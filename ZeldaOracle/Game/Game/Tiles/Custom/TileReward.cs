@@ -64,6 +64,23 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 
 
 		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
+			Reward reward = args.RewardManager.GetReward(args.Properties.GetString("reward"));
+			if (reward != null) {
+				g.DrawISprite(
+					reward.Sprite,
+					args.SpriteDrawSettings,
+					args.Position,
+					args.Color);
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 

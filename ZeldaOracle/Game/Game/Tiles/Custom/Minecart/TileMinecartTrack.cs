@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
@@ -89,7 +91,7 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public override void OnInitialize() {
-			trackOrientation = (MinecartTrackOrientation)Properties.GetInteger("track_orientation", 0);
+			trackOrientation = Properties.GetEnum("track_orientation", MinecartTrackOrientation.Horizontal);
 			Graphics.PlayAnimation(SpriteList[(int)trackOrientation]);
 
 			// Spawn a minecart entity.
@@ -105,13 +107,39 @@ namespace ZeldaOracle.Game.Tiles {
 		//-----------------------------------------------------------------------------
 
 		public void SwitchTrackDirection() {
-			MinecartTrackOrientation switchedOrientation = (MinecartTrackOrientation)Properties.GetInteger("switched_track_orientation", (int)trackOrientation);
+			MinecartTrackOrientation switchedOrientation = Properties.GetEnum("switched_track_orientation", trackOrientation);
 
 			if (trackOrientation != switchedOrientation) {
 				Properties.Set("switched_track_orientation", (int)trackOrientation);
 				Properties.Set("track_orientation", (int)switchedOrientation);
 				trackOrientation = switchedOrientation;
 				Graphics.PlayAnimation(SpriteList[(int)trackOrientation]);
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
+			MinecartTrackOrientation orientation = args.Properties.GetEnum("track_orientation", MinecartTrackOrientation.Horizontal);
+			ISprite sprite = null;
+			switch (orientation) {
+			case MinecartTrackOrientation.Horizontal: sprite = GameData.SPR_TILE_MINECART_TRACK_HORIZONTAL; break;
+			case MinecartTrackOrientation.Vertical: sprite = GameData.SPR_TILE_MINECART_TRACK_VERTICAL; break;
+			case MinecartTrackOrientation.UpRight: sprite = GameData.SPR_TILE_MINECART_TRACK_UP_RIGHT; break;
+			case MinecartTrackOrientation.UpLeft: sprite = GameData.SPR_TILE_MINECART_TRACK_UP_LEFT; break;
+			case MinecartTrackOrientation.DownLeft: sprite = GameData.SPR_TILE_MINECART_TRACK_DOWN_LEFT; break;
+			case MinecartTrackOrientation.DownRight: sprite = GameData.SPR_TILE_MINECART_TRACK_DOWN_RIGHT; break;
+			}
+			if (sprite != null) {
+				g.DrawISprite(
+					sprite,
+					args.SpriteDrawSettings,
+					args.Position,
+					args.Color);
 			}
 		}
 

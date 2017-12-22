@@ -41,6 +41,17 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 
 
 		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the event tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, EventTileDataDrawArgs args) {
+			int direction = args.Properties.GetInteger("direction", 0);
+			EventTile.DrawTileDataIndex(g, args, substripIndex: direction);
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 	}

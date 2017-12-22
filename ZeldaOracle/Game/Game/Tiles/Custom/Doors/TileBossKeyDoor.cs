@@ -60,5 +60,16 @@ namespace ZeldaOracle.Game.Tiles {
 
 			return false;
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
+			int direction = args.Properties.GetInteger("direction", 0);
+			Tile.DrawTileDataIndex(g, args, substripIndex: direction);
+		}
 	}
 }

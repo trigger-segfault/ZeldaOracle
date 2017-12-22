@@ -13,6 +13,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.Entities.Collisions;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Tiles {
 
@@ -181,7 +182,38 @@ namespace ZeldaOracle.Game.Tiles {
 			g.DrawAnimationPlayer(turnstileAnimationPlayer, Zone.ImageVariantID, Position, Graphics.DepthLayer);
 		}
 
-		
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
+			Tile.DrawTileData(g, args);
+			int substripIndex = args.Properties.GetInteger("substrip_index");
+			bool clockwise = args.Properties.GetBoolean("clockwise", false);
+			Animation arrowAnimation, turnstileAnimation;
+			if (clockwise) {
+				arrowAnimation = GameData.ANIM_TURNSTILE_ARROWS_CLOCKWISE;
+				turnstileAnimation = GameData.ANIM_TURNSTILE_ROTATE_CLOCKWISE;
+			}
+			else {
+				arrowAnimation = GameData.ANIM_TURNSTILE_ARROWS_COUNTERCLOCKWISE;
+				turnstileAnimation = GameData.ANIM_TURNSTILE_ROTATE_COUNTERCLOCKWISE;
+			}
+			g.DrawISprite(
+				arrowAnimation.GetSubstrip(clockwise ? 0 : 1),
+				args.SpriteDrawSettings,
+				args.Position,
+				args.Color);
+			g.DrawISprite(
+				turnstileAnimation.GetSubstrip(clockwise ? 0 : 1),
+				new SpriteDrawSettings(args.Zone.StyleDefinitions, args.Zone.ImageVariantID, 16f),
+				args.Position,
+				args.Color);
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------

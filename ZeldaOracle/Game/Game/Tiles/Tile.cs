@@ -24,8 +24,20 @@ using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Tiles {
-	
+
 	public class Tile : IEventObject, ZeldaAPI.Tile {
+
+		//-----------------------------------------------------------------------------
+		// Static Members
+		//-----------------------------------------------------------------------------
+
+		private static Dictionary<Type, TileDrawFunction> drawFunctions;
+
+
+
+		//-----------------------------------------------------------------------------
+		// Members
+		//-----------------------------------------------------------------------------
 
 		private Rectangle2I			tileGridArea;
 
@@ -623,11 +635,63 @@ namespace ZeldaOracle.Game.Tiles {
 				.FirstOrDefault(t => t.Name.Equals(typeName, comparision));
 		}
 
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
+			int spriteIndex = args.Properties.GetInteger("sprite_index", 0);
+			ISprite sprite = args.Tile.GetSpriteIndex(spriteIndex);
+			if (sprite is Animation) {
+				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
+				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
+			}
+			if (sprite != null) {
+				g.DrawISprite(
+					sprite,
+					args.SpriteDrawSettings,
+					args.Position,
+					args.Color);
+			}
+		}
+
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public static void DrawTileDataWithOffset(Graphics2D g, TileDataDrawArgs args, Point2I offset) {
+			ISprite sprite = args.Tile.GetSpriteIndex(args.Properties.GetInteger("sprite_index"));
+			if (sprite is Animation) {
+				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
+				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
+			}
+			if (sprite != null) {
+				g.DrawISprite(
+					sprite,
+					args.SpriteDrawSettings,
+					args.Position + offset,
+					args.Color);
+			}
+		}
+
+		/// <summary>Draws the tile data to display in the editor with the specified sprite index.</summary>
+		public static void DrawTileDataIndex(Graphics2D g, TileDataDrawArgs args, int spriteIndex = -1, int substripIndex = -1) {
+			if (spriteIndex == -1)
+				spriteIndex = args.Properties.GetInteger("sprite_index", 0);
+			ISprite sprite = args.Tile.GetSpriteIndex(spriteIndex);
+			if (sprite is Animation) {
+				if (substripIndex == -1)
+					substripIndex = args.Properties.GetInteger("substrip_index", 0);
+				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
+			}
+			if (sprite != null) {
+				g.DrawISprite(
+					sprite,
+					args.SpriteDrawSettings,
+					args.Position,
+					args.Color);
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
+
 		// Returns the room control this tlie belongs to.
 		public RoomControl RoomControl {
 			get { return roomControl; }

@@ -177,14 +177,19 @@ namespace ConscriptDesigner.WinForms {
 			UpdateHoverSprite();
 		}
 
+		private Point2I RoundSize(Point2I size) {
+			return ((size + 7) / 8) * 8;
+		}
+
 		private void AddSprite(string name, ISprite sprite, int substripIndex = 0) {
 			SpriteInfo spr = new SpriteInfo(name, sprite, substripIndex);
 			sprites.Add(spr);
-			if (!spriteSizes.ContainsKey(spr.Bounds.Size)) {
-				spriteSizes.Add(spr.Bounds.Size, new List<SpriteInfo>());
-				orderedSpriteSizes.Add(spr.Bounds.Size);
+			Point2I size = RoundSize(spr.Bounds.Size);
+			if (!spriteSizes.ContainsKey(size)) {
+				spriteSizes.Add(size, new List<SpriteInfo>());
+				orderedSpriteSizes.Add(size);
 			}
-			spriteSizes[spr.Bounds.Size].Add(spr);
+			spriteSizes[size].Add(spr);
 		}
 
 		private List<SpriteInfo> GetSizeList() {
@@ -290,7 +295,7 @@ namespace ConscriptDesigner.WinForms {
 					}
 				}
 				if (hover != -Point2I.One) {
-					Rectangle2I selectRect = new Rectangle2I(hover - 1, spriteSize + 2);
+					Rectangle2I selectRect = new Rectangle2I(hover - 1, hoverSprite.Bounds.Size + 2);
 					g.DrawRectangle(selectRect, 1, Color.Black);
 					g.DrawRectangle(selectRect.Inflated(1, 1), 1, Color.White);
 					g.DrawRectangle(selectRect.Inflated(2, 2), 1, Color.Black);

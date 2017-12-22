@@ -16,7 +16,6 @@ namespace ZeldaOracle.Game.Tiles {
 
 
 		private ISprite[]			spriteList;
-		//private Point2I				size;
 		private ISprite				spriteAsObject;
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
 		private Sound				breakSound;
@@ -29,7 +28,6 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public TileData() {
 			spriteList			= new ISprite[0];
-			//size				= Point2I.One;
 			spriteAsObject      = null;
 			breakAnimation		= null;
 
@@ -130,7 +128,18 @@ namespace ZeldaOracle.Game.Tiles {
 				}
 			}
 		}
-		
+
+
+		//-----------------------------------------------------------------------------
+		// Accessors
+		//-----------------------------------------------------------------------------
+
+		public ISprite GetSpriteIndex(int index) {
+			if (index < spriteList.Length)
+				return spriteList[index];
+			return null;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Overridden Properties
