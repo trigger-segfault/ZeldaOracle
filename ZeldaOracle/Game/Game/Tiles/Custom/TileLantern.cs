@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
@@ -63,6 +64,17 @@ namespace ZeldaOracle.Game.Tiles {
 				Graphics.PlaySprite(GameData.ANIM_TILE_LANTERN);
 			else
 				Graphics.PlaySprite(GameData.SPR_TILE_LANTERN_UNLIT);*/
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
+			bool lit = args.Properties.GetBoolean("lit", false);
+			Tile.DrawTileDataIndex(g, args, lit ? 0 : 1);
 		}
 
 

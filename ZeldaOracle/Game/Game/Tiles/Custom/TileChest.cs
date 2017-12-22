@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.GameStates;
 using ZeldaOracle.Game.GameStates.RoomStates;
@@ -50,6 +51,27 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			base.OnInitialize();
 			
 			Graphics.PlayAnimation(SpriteList[IsLooted ? 1 : 0]);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
+			bool looted = args.Properties.GetBoolean("looted", false);
+			Tile.DrawTileDataIndex(g, args, looted ? 1 : 0);
+			if (args.Extras) {
+				Reward reward = args.RewardManager.GetReward(args.Properties.GetString("reward"));
+				if (reward != null) {
+					g.DrawISprite(
+						reward.Sprite,
+						args.SpriteDrawSettings,
+						args.Position,
+						args.Color);
+				}
+			}
 		}
 
 

@@ -54,11 +54,36 @@ namespace ZeldaOracle.Game.Tiles {
 
 
 		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
+			Tile.DrawTileData(g, args);
+			PuzzleColor color = args.Properties.GetEnum<PuzzleColor>("color", PuzzleColor.None);
+			ISprite flameAnimation = null;
+			if (color == PuzzleColor.Red)
+				flameAnimation = GameData.ANIM_EFFECT_COLOR_FLAME_RED;
+			else if (color == PuzzleColor.Blue)
+				flameAnimation = GameData.ANIM_EFFECT_COLOR_FLAME_BLUE;
+			else if (color == PuzzleColor.Yellow)
+				flameAnimation = GameData.ANIM_EFFECT_COLOR_FLAME_YELLOW;
+			if (flameAnimation != null) {
+				g.DrawISprite(
+					flameAnimation,
+					args.SpriteDrawSettings,
+					args.Position + new Point2I(8, -1),
+					args.Color);
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
 		public PuzzleColor Color {
-			get { return (PuzzleColor) Properties.GetInteger("color", (int) PuzzleColor.None); }
+			get { return Properties.GetEnum<PuzzleColor>("color", PuzzleColor.None); }
 			set {
 				PuzzleColor prevColor = Color;
 				Properties.Set("color", (int) value);

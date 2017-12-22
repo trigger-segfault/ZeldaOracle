@@ -84,9 +84,20 @@ namespace ZeldaOracle.Game.Tiles {
 
 
 		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
+			int orientationIndex = args.Properties.GetInteger("orientation", 0);
+			Tile.DrawTileDataIndex(g, args, orientationIndex);
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
+
 		public ColorCubeOrientation ColorOrientation {
 			get { return orientation; }
 		}

@@ -363,6 +363,9 @@ namespace ZeldaEditor.WinForms {
 			if (editorControl.ShowModified && !tile.HasModifiedProperties && !tile.HasDefinedEvents)
 				return;
 
+			TileDataDrawing.DrawTile(g, tile, position, room.Zone, drawColor);
+			return;
+
 			ISprite sprite = null;
 			float playbackTime = editorControl.Ticks;
 			int substripIndex =  tile.Properties.GetInteger("substrip_index", 0);
@@ -525,6 +528,9 @@ namespace ZeldaEditor.WinForms {
 			if (editorControl.ShowModified && !eventTile.HasModifiedProperties && !eventTile.HasDefinedEvents)
 				return;
 
+			TileDataDrawing.DrawTile(g, eventTile, position, room.Zone, drawColor);
+			return;
+
 			ISprite sprite = eventTile.CurrentSprite;
 			int imageVariantID = eventTile.Properties.GetInteger("image_variant");
 			if (imageVariantID < 0)
@@ -535,8 +541,7 @@ namespace ZeldaEditor.WinForms {
 				eventTile.SubStripIndex = eventTile.Properties.GetInteger("direction", 0);
 			}
 			else if (eventTile.Type == typeof(WarpEvent)) {
-				string warpTypeStr = eventTile.Properties.GetString("warp_type", "tunnel");
-				WarpType warpType = (WarpType) Enum.Parse(typeof(WarpType), warpTypeStr, true);
+				WarpType warpType = eventTile.Properties.GetEnum<WarpType>("warp_type", WarpType.Tunnel);
 				if (warpType == WarpType.Entrance)
 					sprite = GameData.SPR_EVENT_TILE_WARP_ENTRANCE;
 				else if (warpType == WarpType.Tunnel)
@@ -875,6 +880,10 @@ namespace ZeldaEditor.WinForms {
 			watch.Start();
 			editorControl.UpdateTicks();
 			UpdateFrameRate();
+			TileDataDrawing.RewardManager = editorControl.RewardManager;
+			TileDataDrawing.PlaybackTime = editorControl.Ticks;
+			TileDataDrawing.Extras = editorControl.ShowRewards;
+			TileDataDrawing.Level = Level;
 			//GraphicsDevice.Textures[1] = Resources.GetPalette("dungeon_ages_1").PaletteTexture;
 			Graphics2D g = new Graphics2D(spriteBatch);
 			//g.Begin(paletteDrawMode);

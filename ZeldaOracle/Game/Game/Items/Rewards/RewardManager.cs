@@ -55,7 +55,9 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		}
 
 		public Reward GetReward(string id) {
-			return rewards[id];
+			Reward reward;
+			rewards.TryGetValue(id, out reward);
+			return reward;
 		}
 
 		public bool HasReward(string id) {

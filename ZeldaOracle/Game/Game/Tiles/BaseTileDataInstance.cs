@@ -154,5 +154,13 @@ namespace ZeldaOracle.Game.Tiles {
 		public bool HasModifiedModifiedProperties {
 			get { return modifiedProperties.HasModifiedProperties; }
 		}
+
+		public bool HasPreviewSprite {
+			get { return tileData.HasPreviewSprite; }
+		}
+
+		public ISprite PreviewSprite {
+			get { return tileData.PreviewSprite; }
+		}
 	}
 }

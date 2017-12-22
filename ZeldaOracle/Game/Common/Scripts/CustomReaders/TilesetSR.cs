@@ -509,7 +509,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					category:		param.GetString(5),
 					description:	param.GetString(6),
 					isReadOnly:		false,
-					isBrowsable:	param.GetBool(7, false)
+					isBrowsable:	param.GetBool(7, true)
 				);
 			}
 		}

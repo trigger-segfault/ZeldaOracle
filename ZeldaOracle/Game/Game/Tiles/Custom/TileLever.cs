@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
@@ -40,7 +41,18 @@ namespace ZeldaOracle.Game.Tiles {
 				//Graphics.PlaySprite(GameData.SPR_TILE_LEVER_LEFT);
 			Graphics.PlayAnimation(SpriteList[SwitchState ? 1 : 0]);
 		}
+
 		
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
+			bool switchState = args.Properties.GetBoolean("switch_state", false);
+			Tile.DrawTileDataIndex(g, args, switchState ? 1 : 0);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Scripting API

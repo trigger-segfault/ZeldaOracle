@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Projectiles;
@@ -78,6 +79,29 @@ namespace ZeldaOracle.Game.Tiles {
 			dummySolidTile.SolidType		= TileSolidType.Solid;
 			dummySolidTile.IsSolid			= !IsRaised;
 			RoomControl.PlaceTile(dummySolidTile, trackLocation, Layer);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
+			bool raised = args.Properties.GetBoolean("raised", false);
+			bool faceLeft = args.Properties.GetBoolean("face_left", false);
+			Animation animation = null;
+			if (raised)
+				animation = GameData.ANIM_TILE_CROSSING_GATE_LOWER;
+			else
+				animation = GameData.ANIM_TILE_CROSSING_GATE_RAISE;
+			if (animation != null) {
+				g.DrawISprite(
+					animation.GetSubstrip(faceLeft ? 1 : 0),
+					new SpriteDrawSettings(args.Zone.StyleDefinitions, args.Zone.ImageVariantID, 0f),
+					args.Position,
+					args.Color);
+			}
 		}
 
 

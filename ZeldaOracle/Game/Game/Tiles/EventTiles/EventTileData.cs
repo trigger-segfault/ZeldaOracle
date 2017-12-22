@@ -29,7 +29,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			
 			properties.Set("image_variant", 0)
 				.SetDocumentation("Image Variant ID", "", "", "Internal",
-				"The image variant to draw the sprtie with.", true, true);
+				"The image variant to draw the sprtie with.", true, false);
 		}
 		
 		public EventTileData(Type type) :

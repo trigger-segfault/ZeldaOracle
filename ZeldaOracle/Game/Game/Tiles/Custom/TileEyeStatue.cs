@@ -58,5 +58,20 @@ namespace ZeldaOracle.Game.Tiles {
 
 			g.DrawISprite(GameData.SPR_TILE_STATUE_EYE, Position + eyeOffset, DepthLayer.TileLayer1);
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
+			Tile.DrawTileData(g, args);
+			g.DrawISprite(
+					GameData.SPR_TILE_STATUE_EYE,
+					args.SpriteDrawSettings,
+					args.Position,
+					args.Color);
+		}
 	}
 }

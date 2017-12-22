@@ -153,11 +153,35 @@ namespace ZeldaOracle.Game.Tiles {
 			base.Draw(g);
 		}
 
-		
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
+			int direction = args.Properties.GetInteger("direction", Directions.Down);
+			ISprite sprite = null;
+			if (direction == Directions.Right)
+				sprite = GameData.SPR_TILE_PULL_HANDLE_RIGHT;
+			else if (direction == Directions.Up)
+				sprite = GameData.SPR_TILE_PULL_HANDLE_UP;
+			else if (direction == Directions.Left)
+				sprite = GameData.SPR_TILE_PULL_HANDLE_LEFT;
+			else if (direction == Directions.Down)
+				sprite = GameData.SPR_TILE_PULL_HANDLE_DOWN;
+			g.DrawISprite(
+				sprite,
+				args.SpriteDrawSettings,
+				args.Position,
+				args.Color);
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
+
 		public float ExtendSpeed {
 			get { return extendSpeed; }
 		}

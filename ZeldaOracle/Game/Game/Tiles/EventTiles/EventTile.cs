@@ -10,6 +10,7 @@ using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Worlds;
+using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Tiles.EventTiles {
 
@@ -103,8 +104,77 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			
 			return tile;
 		}
-
 		
+		/// <summary>Draws the event tile data to display in the editor.</summary>
+		public static void DrawTileData(Graphics2D g, EventTileDataDrawArgs args) {
+			ISprite sprite = args.EventTile.Sprite;
+			if (sprite is Animation) {
+				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
+				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
+			}
+			if (sprite != null) {
+				int imageVariantID = args.Properties.GetInteger("image_variant");
+				if (imageVariantID < 0)
+					imageVariantID = args.Zone.ImageVariantID;
+				g.DrawISprite(
+					sprite,
+					new SpriteDrawSettings(args.Zone.StyleDefinitions, imageVariantID, args.Time),
+					args.Position,
+					args.Color);
+			}
+			else {
+				Rectangle2I r = new Rectangle2I(args.Position, args.EventTile.Size * GameSettings.TILE_SIZE);
+				g.FillRectangle(r, Color.Blue);
+			}
+		}
+
+		/// <summary>Draws the event tile data to display in the editor.</summary>
+		public static void DrawTileDataWithOffset(Graphics2D g, EventTileDataDrawArgs args, Point2I offset) {
+			ISprite sprite = args.EventTile.Sprite;
+			if (sprite is Animation) {
+				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
+				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
+			}
+			if (sprite != null) {
+				int imageVariantID = args.Properties.GetInteger("image_variant");
+				if (imageVariantID < 0)
+					imageVariantID = args.Zone.ImageVariantID;
+				g.DrawISprite(
+					sprite,
+					new SpriteDrawSettings(args.Zone.StyleDefinitions, imageVariantID, args.Time),
+					args.Position,
+					args.Color);
+			}
+			else {
+				Rectangle2I r = new Rectangle2I(args.Position, args.EventTile.Size * GameSettings.TILE_SIZE);
+				g.FillRectangle(r, Color.Blue);
+			}
+		}
+
+		/// <summary>Draws the event tile data to display in the editor with the specified sprite index.</summary>
+		public static void DrawTileDataIndex(Graphics2D g, EventTileDataDrawArgs args, int substripIndex = -1) {
+			ISprite sprite = args.EventTile.Sprite;
+			if (sprite is Animation) {
+				if (substripIndex == -1)
+					substripIndex = args.Properties.GetInteger("substrip_index", 0);
+				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
+			}
+			if (sprite != null) {
+				int imageVariantID = args.Properties.GetInteger("image_variant");
+				if (imageVariantID < 0)
+					imageVariantID = args.Zone.ImageVariantID;
+				g.DrawISprite(
+					sprite,
+					new SpriteDrawSettings(args.Zone.StyleDefinitions, imageVariantID, args.Time),
+					args.Position,
+					args.Color);
+			}
+			else {
+				Rectangle2I r = new Rectangle2I(args.Position, args.EventTile.Size * GameSettings.TILE_SIZE);
+				g.FillRectangle(r, Color.Blue);
+			}
+		}
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------

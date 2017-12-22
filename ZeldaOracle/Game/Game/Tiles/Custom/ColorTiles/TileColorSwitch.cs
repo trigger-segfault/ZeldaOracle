@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Players;
@@ -82,6 +84,30 @@ namespace ZeldaOracle.Game.Tiles {
 			if (syncWithDungeon && RoomControl.Dungeon != null) {
 				SetSwitchState(RoomControl.Dungeon.ColorSwitchColor == PuzzleColor.Blue);
 			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Static Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
+			bool syncWithDungeon = args.Properties.GetBoolean("sync_with_dungeon", false);
+			bool switchState = args.Properties.GetBoolean("switch_state", false);
+			if (syncWithDungeon && args.Level != null) {
+				Dungeon dungeon = args.Level.Dungeon;
+				if (dungeon != null)
+					switchState = dungeon.ColorSwitchColor == PuzzleColor.Blue;
+			}
+			ISprite sprite = GameData.SPR_TILE_COLOR_SWITCH_RED;
+			if (switchState)
+				sprite = GameData.SPR_TILE_COLOR_SWITCH_BLUE;
+			g.DrawISprite(
+				sprite,
+				args.SpriteDrawSettings,
+				args.Position,
+				args.Color);
 		}
 
 
