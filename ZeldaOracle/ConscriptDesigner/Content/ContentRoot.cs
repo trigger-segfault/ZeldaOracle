@@ -16,6 +16,7 @@ using Microsoft.Win32;
 using System.Collections.Specialized;
 using System.Windows.Input;
 using ConscriptDesigner.Util;
+using ZeldaOracle.Common.Util;
 
 namespace ConscriptDesigner.Content {
 	/// <summary>The root content folder that handles the content project and all operations.</summary>

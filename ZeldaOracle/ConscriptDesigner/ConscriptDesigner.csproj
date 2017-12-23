@@ -152,7 +152,6 @@
     <Compile Include="Util\ClipboardHelper.cs" />
     <Compile Include="Util\Extensions.cs" />
     <Compile Include="Util\NativeMethods.cs" />
-    <Compile Include="Util\PathHelper.cs" />
     <Compile Include="Windows\ErrorMessageBox.xaml.cs">
       <DependentUpon>ErrorMessageBox.xaml</DependentUpon>
     </Compile>
