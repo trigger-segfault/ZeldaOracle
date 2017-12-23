@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConscriptDesigner.Util {
+namespace ZeldaOracle.Common.Util {
 	/// <summary>A helper with extra methods for paths, files, and directories.</summary>
 	public static class PathHelper {
 		/// <summary>Returns true if the fileName has valid characters.</summary>
@@ -83,7 +83,7 @@ namespace ConscriptDesigner.Util {
 
 		/// <summary>Returns a path that can be compared with another normalized path.</summary>
 		public static string NormalizePath(string path) {
-			return Path.GetFullPath(new Uri(path).LocalPath)
+			return Path.GetFullPath(path)
 					   .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
 					   .ToUpperInvariant();
 		}

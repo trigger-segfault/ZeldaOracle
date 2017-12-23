@@ -16,6 +16,7 @@ using Microsoft.Win32;
 using System.Collections.Specialized;
 using System.Windows.Input;
 using ConscriptDesigner.Util;
+using ZeldaOracle.Common.Util;
 
 namespace ConscriptDesigner.Content {
 	/// <summary>The root content folder that handles the content project and all operations.</summary>
@@ -548,7 +549,7 @@ namespace ConscriptDesigner.Content {
 			if (name != null) {
 				string filePath = IOPath.Combine(ProjectDirectory, directory, name);
 				try {
-					File.Create(filePath);
+					using (File.Create(filePath)) { }
 				}
 				catch (Exception ex) {
 					DesignerControl.ShowExceptionMessage(ex, "create", name);

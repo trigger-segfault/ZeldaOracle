@@ -6,6 +6,7 @@ using System.IO;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Scripts.Commands;
 using System.Threading;
+using ZeldaOracle.Common.Util;
 
 namespace ZeldaOracle.Common.Scripts {
 	/// <summary>
@@ -36,6 +37,7 @@ namespace ZeldaOracle.Common.Scripts {
 		private int             mode;
 
 		private TemporaryResources tempResources;
+		private HashSet<string> scriptCallStack;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -49,6 +51,7 @@ namespace ZeldaOracle.Common.Scripts {
 			commandPrefixes	= new Dictionary<string, CommandPrefix>();
 			lines			= new List<string>();
 			tempResources   = new TemporaryResources();
+			scriptCallStack	= new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
 			//=====================================================================================
 			// SUB SCRIPT READERS 
@@ -57,9 +60,9 @@ namespace ZeldaOracle.Common.Scripts {
 				"string relativeScriptPath, bool useTempResources",
 				"string relativeScriptPath",
 			delegate (CommandParam parameters) {
-				Resources.LoadScript(
-					Path.Combine(directory, parameters.GetString(0)),
-					CreateNew(parameters.GetBool(1)));
+				ScriptReader reader = CreateNew(parameters.GetBool(1));
+				string path = Path.Combine(directory, parameters.GetString(0));
+				Resources.LoadScript(path, reader);
 			});
 			//=====================================================================================
 		}
@@ -352,6 +355,7 @@ namespace ZeldaOracle.Common.Scripts {
 		/// <summary>Creates a new script reader of the derived type and sets up temporary resources.</summary>
 		private ScriptReader CreateNew(bool useTempResources) {
 			ScriptReader sr = CreateNew();
+			sr.scriptCallStack = scriptCallStack;
 			if (useTempResources)
 				sr.tempResources = this.tempResources;
 			return sr;
@@ -546,6 +550,17 @@ namespace ZeldaOracle.Common.Scripts {
 			this.directory = Path.GetDirectoryName(path);
 			this.streamReader = reader;
 
+			string normalizedPath = PathHelper.NormalizePath(path);
+
+			// Check to make sure we don't enter an infinite loop by calling the same script twice
+			if (scriptCallStack.Contains(normalizedPath)) {
+				throw new Exception("Infinite loop detected! '" + Path.GetFileName(path) +
+					"' has already been called!");
+			}
+
+			// Add the script to the call stack
+			scriptCallStack.Add(normalizedPath);
+
 			BeginReading();
 
 			// Setup the parsing variables.
@@ -563,6 +578,10 @@ namespace ZeldaOracle.Common.Scripts {
 			}
 
 			EndReading();
+
+
+			// Remove the script from the call stack
+			scriptCallStack.Remove(normalizedPath);
 		}
 
 

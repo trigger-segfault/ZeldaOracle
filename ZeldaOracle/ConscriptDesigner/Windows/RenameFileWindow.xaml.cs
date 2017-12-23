@@ -17,6 +17,7 @@ using ConscriptDesigner.Control;
 using Path = System.IO.Path;
 using System.IO;
 using ConscriptDesigner.Util;
+using ZeldaOracle.Common.Util;
 
 namespace ConscriptDesigner.Windows {
 	/// <summary>

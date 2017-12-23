@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 using ConscriptDesigner.Windows;
 using WinFormsApplication = System.Windows.Forms.Application;
@@ -60,6 +61,28 @@ namespace ConscriptDesigner {
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnAppDomainUnhandledException);
 			TaskScheduler.UnobservedTaskException += OnTaskSchedulerUnobservedTaskException;
 			WinFormsApplication.ThreadException += OnWinFormsThreadException;
+
+			EventManager.RegisterClassHandler(typeof(TextBox),
+				TextBox.PreviewMouseLeftButtonDownEvent,
+				new RoutedEventHandler(OnTextBoxSelectivelyIgnoreMouseButton));
+
+			EventManager.RegisterClassHandler(typeof(TextBox),
+				TextBox.GotFocusEvent,
+				new RoutedEventHandler(OnTextBoxGotFocus));
+		}
+
+		private void OnTextBoxSelectivelyIgnoreMouseButton(object sender, RoutedEventArgs e) {
+			TextBox tb = (sender as TextBox);
+			if (tb != null) {
+				if (!tb.IsKeyboardFocusWithin) {
+					e.Handled = true;
+					tb.Focus();
+				}
+			}
+		}
+
+		private void OnTextBoxGotFocus(object sender, RoutedEventArgs e) {
+			(sender as TextBox).SelectAll();
 		}
 
 		/// <summary>Show an exception window for an exception that occurred in a dispatcher thread.</summary>

@@ -42,7 +42,7 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 
 		// Returns true if the command has the given name, ignoring case.
 		public bool HasName(string commandName) {
-			return (String.Compare(commandName, name, StringComparison.OrdinalIgnoreCase) == 0);
+			return (string.Compare(commandName, name, StringComparison.OrdinalIgnoreCase) == 0);
 		}
 		
 		// Returns true if the given user passed-in parameters matches this

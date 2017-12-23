@@ -44,7 +44,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			AddCommand("Font", "string name",
 			delegate(CommandParam parameters) {
-				String path = parameters.GetString(0);
+				string path = parameters.GetString(0);
 
 				Image image = null;
 				if (path.EndsWith(".png")) {

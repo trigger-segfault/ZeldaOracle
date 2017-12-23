@@ -665,7 +665,7 @@ namespace ZeldaEditor {
 			else
 				menuItemRefactorEvents.IsChecked = false;
 			refactorWindow = null;
-			// Hack to fix minimizing to Visual Studio after closing
+			// HACK: Prevent minimizing to Visual Studio after closing
 			// a tool window that has called a message box.
 			Activate();
 		}

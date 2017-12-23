@@ -26,10 +26,13 @@ namespace ZeldaOracle.Common.Content {
 	/// <summary>A fatal exception that's thrown during the games LoadContent function
 	/// This is used to end the game before updates start happening.</summary>
 	public class LoadContentException : Exception {
+
+		/// <summary>Constructs the load content exception.</summary>
 		public LoadContentException(string message) :
 			base(message) {
 		}
 
+		/// <summary>Prints the exception message.</summary>
 		public virtual void PrintMessage() {
 			Console.WriteLine(Message);
 		}
@@ -563,7 +566,7 @@ namespace ZeldaOracle.Common.Content {
 				}
 			}
 			catch (FileNotFoundException) {
-				throw new LoadContentException("Error loading file \"" + assetName + "\"");
+				throw new LoadContentException("Error loading file '" + assetName + "'!");
 			}
 		}
 

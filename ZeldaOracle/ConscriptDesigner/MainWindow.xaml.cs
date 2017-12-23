@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using ConscriptDesigner.Anchorables;
 using ConscriptDesigner.Control;
+using ConscriptDesigner.Windows;
 using ConscriptDesigner.WinForms;
 using Xceed.Wpf.AvalonDock.Layout;
 
@@ -32,7 +33,11 @@ namespace ConscriptDesigner {
 		private SpriteBrowser spriteBrowser;
 		private SpriteSourceBrowser spriteSourceBrowser;
 
+		private FindAndReplaceWindow findAndReplace;
+
 		private DispatcherTimer checkOutdatedTimer;
+
+		private IRequestCloseAnchorable activeAnchorable;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -86,6 +91,8 @@ namespace ConscriptDesigner {
 
 		private void OnProjectClosed(object sender, EventArgs e) {
 			OnResourcesUnloaded(sender, e);
+			if (findAndReplace != null)
+				findAndReplace.Close();
 		}
 
 		private void OnResourcesLoaded(object sender, EventArgs e) {
@@ -108,6 +115,13 @@ namespace ConscriptDesigner {
 		}
 		
 		private void OnActiveAnchorableChanged(object sender, EventArgs e) {
+			foreach (IRequestCloseAnchorable anchorable in DesignerControl.GetOpenAnchorables()) {
+				if (anchorable.IsActive) {
+					activeAnchorable = anchorable;
+					return;
+				}
+			}
+			activeAnchorable = null;
 			CommandManager.InvalidateRequerySuggested();
 		}
 
@@ -121,6 +135,16 @@ namespace ConscriptDesigner {
 				spriteBrowser = null;
 			else if (anchorable is SpriteSourceBrowser)
 				spriteSourceBrowser = null;
+		}
+
+		private void OnWindowClosed(object sender, EventArgs e) {
+			Window window = sender as Window;
+			if (window is FindAndReplaceWindow)
+				findAndReplace = null;
+
+			// HACK: Prevent minimizing to Visual Studio after closing
+			// a tool window that has called a message box.
+			Activate();
 		}
 
 
@@ -185,11 +209,33 @@ namespace ConscriptDesigner {
 		}
 
 		private void OnFindCommand(object sender, ExecutedRoutedEventArgs e) {
-
+			if (findAndReplace == null) {
+				FindAndReplaceWindow.Show(this, false, OnWindowClosed);
+			}
+			else {
+				findAndReplace.FindMode();
+			}
 		}
 
 		private void OnReplaceCommand(object sender, ExecutedRoutedEventArgs e) {
+			if (findAndReplace == null) {
+				FindAndReplaceWindow.Show(this, true, OnWindowClosed);
+			}
+			else {
+				findAndReplace.ReplaceMode();
+			}
+		}
 
+		private void OnFindNextCommand(object sender, ExecutedRoutedEventArgs e) {
+			findAndReplace.FindNext();
+		}
+
+		private void OnReplaceNextCommand(object sender, ExecutedRoutedEventArgs e) {
+			findAndReplace.ReplaceNext();
+		}
+
+		private void OnReplaceAllCommand(object sender, ExecutedRoutedEventArgs e) {
+			findAndReplace.ReplaceAll();
 		}
 
 		private void OnGotoLineCommand(object sender, ExecutedRoutedEventArgs e) {
@@ -269,11 +315,15 @@ namespace ConscriptDesigner {
 			DesignerControl.CancelBuild();
 		}
 
+		private void OnGotoErrorCommand(object sender, ExecutedRoutedEventArgs e) {
+			DesignerControl.GotoError();
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Can Execute Commands
 		//-----------------------------------------------------------------------------
-		
+
 		private void CanAlwaysExecute(object sender, CanExecuteRoutedEventArgs e) {
 			e.CanExecute = true;
 		}
@@ -313,6 +363,16 @@ namespace ConscriptDesigner {
 			e.CanExecute = DesignerControl.IsBusy;
 		}
 
+		private void CanExecuteHasError(object sender, CanExecuteRoutedEventArgs e) {
+			if (supressEvents) return;
+			e.CanExecute = DesignerControl.HasError;
+		}
+
+		private void CanExecuteIsFindAndReplaceOpen(object sender, CanExecuteRoutedEventArgs e) {
+			if (supressEvents) return;
+			e.CanExecute = findAndReplace != null;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -332,6 +392,14 @@ namespace ConscriptDesigner {
 
 		public SpriteSourceBrowser SpriteSourceBrowser {
 			get { return spriteSourceBrowser; }
+		}
+
+		public IRequestCloseAnchorable ActiveAnchorable {
+			get { return activeAnchorable; }
+		}
+
+		public FindAndReplaceWindow FindAndReplaceWindow {
+			get { return findAndReplace; }
 		}
 	}
 }

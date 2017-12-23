@@ -45,6 +45,24 @@ namespace ConscriptDesigner {
 			new InputGestureCollection() {
 				new KeyGesture(Key.G, ModifierKeys.Control) });
 
+		/// <summary>The command to find the next match with the find and replace window.</summary>
+		public static readonly RoutedUICommand FindNext = new RoutedUICommand(
+			"FindNext", "Find Next", typeof(Commands),
+			new InputGestureCollection() {
+				new KeyGesture(Key.F3, ModifierKeys.Control) });
+
+		/// <summary>The command to find the next match or replace the current match with the find and replace window.</summary>
+		public static readonly RoutedUICommand ReplaceNext = new RoutedUICommand(
+			"ReplaceNext", "Replace Next", typeof(Commands),
+			new InputGestureCollection() {
+				new KeyGesture(Key.R, ModifierKeys.Alt) });
+
+		/// <summary>The command to replace all matches with the find and replace window.</summary>
+		public static readonly RoutedUICommand ReplaceAll = new RoutedUICommand(
+			"ReplaceAll", "Replace All", typeof(Commands),
+			new InputGestureCollection() {
+				new KeyGesture(Key.A, ModifierKeys.Alt) });
+
 
 		//-----------------------------------------------------------------------------
 		// View
@@ -92,5 +110,9 @@ namespace ConscriptDesigner {
 			"CancelBuild", "Cancel Build", typeof(Commands),
 			new InputGestureCollection() {
 				new KeyGesture(Key.Cancel, ModifierKeys.Control) });
+
+		/// <summary>The command to view the location of the last error.</summary>
+		public static readonly RoutedUICommand GotoError = new RoutedUICommand(
+			"GotoError", "Go To Error", typeof(Commands));
 	}
 }

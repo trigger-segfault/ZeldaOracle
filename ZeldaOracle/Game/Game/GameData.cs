@@ -107,7 +107,7 @@ namespace ZeldaOracle.Game {
 			foreach (KeyValuePair<string, T> entry in dictionary) {
 				string name = prefix.ToLower() + entry.Key;
 				FieldInfo matchingField = fields.FirstOrDefault(
-					field => String.Compare(field.Name, name, true) == 0);
+					field => string.Compare(field.Name, name, true) == 0);
 				
 				if (matchingField == null) {
 					//Console.WriteLine("** WARNING: Resource \"" + name + "\" does not have a corresponding field.");
@@ -152,7 +152,7 @@ namespace ZeldaOracle.Game {
 					// Find the field with this name.
 					string name = prefix.ToLower() + subimg.VariantName;
 					FieldInfo matchingField = fields.FirstOrDefault(
-						field => String.Compare(field.Name, name, true) == 0);
+						field => string.Compare(field.Name, name, true) == 0);
 						
 					// Set the image's variant ID to the field's value.
 					if (matchingField != null)

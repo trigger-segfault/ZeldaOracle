@@ -279,11 +279,11 @@ namespace ICSharpCode.AvalonEdit.Editing {
 		object currentDragDescriptor;
 
 		void StartDrag() {
-			// prevent nested StartDrag calls
-			mode = MouseSelectionMode.Drag;
-
 			// mouse capture and Drag'n'Drop doesn't mix
 			textArea.ReleaseMouseCapture();
+
+			// prevent nested StartDrag calls
+			mode = MouseSelectionMode.Drag;
 
 			DataObject dataObject = textArea.Selection.CreateDataObject(textArea);
 
