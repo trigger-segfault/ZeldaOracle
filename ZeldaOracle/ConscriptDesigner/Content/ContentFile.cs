@@ -81,15 +81,18 @@ namespace ConscriptDesigner.Content {
 
 		/// <summary>Returns true if the file has been modified outside of the designer.</summary>
 		public bool IsFileOutdated() {
+			bool outdated = false;
 			if (!IsFolder) {
 				if (File.Exists(FilePath))
-					return File.GetLastWriteTimeUtc(FilePath) != lastModified;
+					outdated = File.GetLastWriteTimeUtc(FilePath) != lastModified;
 			}
 			else if (IsRoot) {
 				if (File.Exists(((ContentRoot) this).ProjectFile))
-					return File.GetLastWriteTimeUtc(((ContentRoot) this).ProjectFile) != lastModified;
+					outdated = File.GetLastWriteTimeUtc(((ContentRoot) this).ProjectFile) != lastModified;
 			}
-			return false;
+			if (outdated)
+				OnFileOutdated();
+			return outdated;
 		}
 
 		/// <summary>Updates the last modified time for the file.</summary>
@@ -194,22 +197,19 @@ namespace ConscriptDesigner.Content {
 
 		/// <summary>Saves the content file.</summary>
 		public bool Save(bool silentFail) {
-			if (IsOpen) {
-				try {
-					OnSave();
-					UpdateLastModified();
-					modifiedOverride = false;
-					return true;
-				}
-				catch (Exception ex) {
-					if (!silentFail)
-						DesignerControl.ShowExceptionMessage(ex, "save", name);
-					if (IsOpen)
-						document.ForceClose();
-					return false;
-				}
+			try {
+				OnSave();
+				UpdateLastModified();
+				modifiedOverride = false;
+				return true;
 			}
-			return true;
+			catch (Exception ex) {
+				if (!silentFail)
+					DesignerControl.ShowExceptionMessage(ex, "save", name);
+				if (IsOpen)
+					document.ForceClose();
+				return false;
+			}
 		}
 		
 		/// <summary>Undoes the last action.</summary>
@@ -264,6 +264,10 @@ namespace ConscriptDesigner.Content {
 
 		/// <summary>Called when the modified override is changed.</summary>
 		protected virtual void OnModifiedChanged() { }
+		
+		/// <summary>Called when the file becomes outdated.</summary>
+		protected virtual void OnFileOutdated() { }
+
 
 		//-----------------------------------------------------------------------------
 		// Event Handlers

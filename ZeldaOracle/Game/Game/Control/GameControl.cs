@@ -150,7 +150,7 @@ namespace ZeldaOracle.Game.Control {
 				bool test = false;
 				bool recompile = true;
 				bool devMode = false;
-				String worldPath;
+				string worldPath;
 
 				// Parse the command line arguments.
 				for (int i = 0; i < gameManager.LaunchParameters.Length; i++) {

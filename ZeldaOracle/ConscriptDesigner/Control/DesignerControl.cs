@@ -77,21 +77,13 @@ namespace ConscriptDesigner.Control {
 		}
 
 		public static IRequestCloseAnchorable GetActiveAnchorable() {
-			foreach (var anchorable in openAnchorables) {
-				if (anchorable.IsActive)
-					return anchorable;
-			}
-			return null;
+			return mainWindow.ActiveAnchorable;
 		}
 
 		public static ContentFile GetActiveContentFile() {
-			foreach (var anchorable in openAnchorables) {
-				if (anchorable.IsActive) {
-					if (anchorable is IContentFileContainer) {
-						return ((IContentFileContainer) anchorable).File;
-					}
-					break;
-				}
+			IRequestCloseAnchorable anchorable = mainWindow.ActiveAnchorable;
+			if (anchorable is IContentFileContainer) {
+				return ((IContentFileContainer) anchorable).File;
 			}
 			return null;
 		}
@@ -134,7 +126,8 @@ namespace ConscriptDesigner.Control {
 		public static void Update() {
 			if (busyTask != null) {
 				if (busyTask.IsCompleted) {
-					lastScriptError = busyTask.Result;
+					if (busyTaskIsConscripts)
+						lastScriptError = busyTask.Result;
 					busyTask = null;
 					busyThread = null;
 					CommandManager.InvalidateRequerySuggested();
@@ -545,6 +538,27 @@ namespace ConscriptDesigner.Control {
 			}
 		}
 
+		public static void GotoError() {
+			if (HasError) {
+				ContentFile file = project.Get(lastScriptError.FileName);
+				if (file != null) {
+					ContentScript script = file as ContentScript;
+					if (script == null) {
+						TriggerMessageBox.Show(mainWindow, MessageIcon.Warning, "Cannot go to the error " +
+						"location because the offending file is not a conscript!", "Not a Conscript");
+					}
+					else {
+						script.GotoLocation(lastScriptError.LineNumber, lastScriptError.ColumnNumber);
+					}
+				}
+				else {
+					TriggerMessageBox.Show(mainWindow, MessageIcon.Warning, "Cannot go to the error " +
+						"location because the offending file no longer exists in the project!",
+						"Missing File");
+				}
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Command Properties
@@ -608,6 +622,10 @@ namespace ConscriptDesigner.Control {
 
 		public static bool IsProjectOpen {
 			get { return project != null; }
+		}
+
+		public static bool HasError {
+			get { return lastScriptError != null; }
 		}
 	}
 }

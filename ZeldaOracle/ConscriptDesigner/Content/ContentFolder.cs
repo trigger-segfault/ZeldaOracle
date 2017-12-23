@@ -60,11 +60,32 @@ namespace ConscriptDesigner.Content {
 			}
 		}
 
+		/// <summary>Enumerates all files within this folder only in order.</summary>
+		public IEnumerable<ContentFile> GetLocalOrderedFiles() {
+			foreach (object item in TreeViewItem.Items) {
+				yield return (ContentFile) ((ImageTreeViewItem) item).Tag;
+			}
+		}
+
 		/// <summary>Enumerates all files within this and all subfolders.</summary>
 		public IEnumerable<ContentFile> GetAllFiles() {
 			return GetAllFiles(this);
 		}
 
+		/// <summary>Enumerates all files within this and all subfolders in order.</summary>
+		public IEnumerable<ContentFile> GetAllOrderedFiles() {
+			return GetAllOrderedFiles(this);
+		}
+
+		/// <summary>Gets the index of the specified content file.</summary>
+		public int IndexOfFile(ContentFile file) {
+			return TreeViewItem.Items.IndexOf(file.TreeViewItem);
+		}
+
+		/// <summary>Gets the file at the specified index in the ordered list.</summary>
+		public ContentFile GetFileAt(int index) {
+			return (ContentFile) ((ImageTreeViewItem) TreeViewItem.Items[index]).Tag;
+		}
 
 		//-----------------------------------------------------------------------------
 		// Mutators
@@ -94,6 +115,20 @@ namespace ConscriptDesigner.Content {
 				}
 			}
 		}
+
+		/// <summary>Enumerates all files within this and all subfolders in order.</summary>
+		private static IEnumerable<ContentFile> GetAllOrderedFiles(ContentFolder folder) {
+			foreach (object item in folder.TreeViewItem.Items) {
+				ContentFile file = (ContentFile) ((ImageTreeViewItem) item).Tag;
+				yield return file;
+				if (file.IsFolder) {
+					foreach (ContentFile subFile in GetAllOrderedFiles((ContentFolder) file)) {
+						yield return subFile;
+					}
+				}
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Override Context Menu
@@ -127,6 +162,11 @@ namespace ConscriptDesigner.Content {
 		/// <summary>The collection of files in the folder. This should only be accessed by ContentRoot.</summary>
 		internal Dictionary<string, ContentFile> Files {
 			get { return files; }
+		}
+
+		/// <summary>Gets the number of files in this folder only.</summary>
+		public int LocalFileCount {
+			get { return files.Count; }
 		}
 
 		/// <summary>Gets if the folder is empty.</summary>

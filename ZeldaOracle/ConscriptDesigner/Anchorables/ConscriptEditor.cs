@@ -10,10 +10,12 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using System.Xml;
 using ConscriptDesigner.Content;
+using ConscriptDesigner.Controls;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Indentation;
+using ICSharpCode.NRefactory;
 
 namespace ConscriptDesigner.Anchorables {
 	public class ConscriptEditor : ContentFileDocument {
@@ -36,6 +38,8 @@ namespace ConscriptDesigner.Anchorables {
 		/// <summary>The timer to update if the file is modified.
 		/// Needed because it doesn't always change right after an action.</summary>
 		private DispatcherTimer modifiedTimer;
+		/// <summary>Navigate after a short pause to ensure focus.</summary>
+		private DispatcherTimer navigateTimer;
 		/// <summary>True if the title is currently displayed as modified.</summary>
 		private bool isTitleModified;
 
@@ -72,6 +76,10 @@ namespace ConscriptDesigner.Anchorables {
 			this.editor.TextArea.IndentationStrategy = new DefaultIndentationStrategy();
 			this.editor.ShowLineNumbers = true;
 			this.editor.SyntaxHighlighting = highlightingDefinition;
+			//this.editor.TextArea.TextView.Margin = new Thickness(10, 0, 0, 0);
+			this.editor.TextArea.TextView.BackgroundRenderers.Add(
+				new HighlightCurrentLineBackgroundRenderer(this.editor));
+			//this.editor.TextArea.Options.HighlightCurrentLine = true;
 			TextOptions.SetTextFormattingMode(this.editor, TextFormattingMode.Display);
 			border.Child = this.editor;
 
@@ -79,11 +87,14 @@ namespace ConscriptDesigner.Anchorables {
 				TimeSpan.FromSeconds(0.05),
 				DispatcherPriority.ApplicationIdle,
 				delegate { CheckModified(); }, Dispatcher);
+			
 			this.modifiedTimer.Stop();
 
 			Title = file.Name;
 			Content = border;
+
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Event Handlers
@@ -111,6 +122,33 @@ namespace ConscriptDesigner.Anchorables {
 		public void UpdateTitle() {
 			isTitleModified = (editor.IsModified || File.IsModifiedOverride);
 			Title = File.Name + (isTitleModified ? "*" : "");
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Script Navigatiuon
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Navigates to the location in the file.</summary>
+		public void GotoLocation(int line, int column) {
+			StartNavigateTimer(() => {
+				editor.Focus();
+				editor.TextArea.Caret.Line = line;
+				editor.TextArea.Caret.Column = column;
+				editor.ScrollTo(line, column);
+			});
+		}
+
+		/// <summary>Selects text in the editor.</summary>
+		public void SelectText(int start, int length, bool focus) {
+			StartNavigateTimer(() => {
+				if (focus)
+					editor.Focus();
+				editor.TextArea.Caret.Offset = start;
+				editor.Select(start, length);
+				TextLocation loc = editor.Document.GetLocation(start);
+				editor.ScrollTo(loc.Line, loc.Column);
+			});
 		}
 
 
@@ -143,11 +181,33 @@ namespace ConscriptDesigner.Anchorables {
 			modifiedTimer.Start();
 		}
 
+		/// <summary>Focuses on the editor.</summary>
+		public void FocusEditor() {
+			editor.Focus();
+		}
+
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Calls a navigation action after a short pause to ensure focus.</summary>
+		private void StartNavigateTimer(Action action) {
+			if (navigateTimer != null)
+				navigateTimer.Stop();
+			navigateTimer = new DispatcherTimer(
+				TimeSpan.FromSeconds(0.05),
+				DispatcherPriority.ApplicationIdle,
+				delegate {
+					action();
+					navigateTimer.Stop();
+					navigateTimer = null;
+				}, Dispatcher);
+		}
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
+
 		/// <summary>Returns true if the editor considers the text to be modified.</summary>
 		public bool IsModified {
 			get { return editor.IsModified; }
@@ -161,6 +221,31 @@ namespace ConscriptDesigner.Anchorables {
 		/// <summary>Returns true if the editor can redo.</summary>
 		public bool CanRedo {
 			get { return editor.CanRedo; }
+		}
+
+		/// <summary>Gets the text from the editor.</summary>
+		public string Text {
+			get { return editor.Text; }
+		}
+
+		/// <summary>Gets the text selected in the editor.</summary>
+		public string SelectedText {
+			get { return editor.TextArea.Selection.GetText(); }
+		}
+
+		/// <summary>Gets the start of the selection.</summary>
+		public int SelectedStart {
+			get { return editor.SelectionStart; }
+		}
+
+		/// <summary>Gets the end of the selection.</summary>
+		public int SelectedEnd {
+			get { return editor.SelectionStart + editor.SelectionLength; }
+		}
+
+		/// <summary>Gets the text editor control.</summary>
+		public TextEditor TextEditor {
+			get { return editor; }
 		}
 	}
 }

@@ -548,7 +548,7 @@ namespace ConscriptDesigner.Content {
 			if (name != null) {
 				string filePath = IOPath.Combine(ProjectDirectory, directory, name);
 				try {
-					File.Create(filePath);
+					using (File.Create(filePath)) { }
 				}
 				catch (Exception ex) {
 					DesignerControl.ShowExceptionMessage(ex, "create", name);
