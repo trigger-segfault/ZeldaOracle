@@ -11,12 +11,8 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using ConscriptDesigner.Content;
-using ConscriptDesigner.Control;
-using Path = System.IO.Path;
 using System.IO;
-using ConscriptDesigner.Util;
 using ZeldaOracle.Common.Util;
 
 namespace ConscriptDesigner.Windows {
@@ -24,12 +20,26 @@ namespace ConscriptDesigner.Windows {
 	/// Interaction logic for RenameFileWindow.xaml
 	/// </summary>
 	public partial class RenameFileWindow : Window {
-		
+
+		//-----------------------------------------------------------------------------
+		// Members
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The directory of the file.</summary>
 		private string directory;
+		/// <summary>The extension of the file.</summary>
 		private string extension;
+		/// <summary>The original file name.</summary>
 		private string name;
+		/// <summary>The root content project.</summary>
 		private ContentRoot root;
 
+
+		//-----------------------------------------------------------------------------
+		// Showing
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Constructs the rename window.</summary>
 		public RenameFileWindow(string action, string title, string name, string directory, ContentRoot root) {
 			InitializeComponent();
 
@@ -45,6 +55,11 @@ namespace ConscriptDesigner.Windows {
 			buttonRename.Content = action;
 			Title = title;
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Event Handlers
+		//-----------------------------------------------------------------------------
 
 		private void OnOK(object sender = null, RoutedEventArgs e = null) {
 			string newName = textBox.Text + extension;
@@ -85,6 +100,12 @@ namespace ConscriptDesigner.Windows {
 			}
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Showing
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Shows the rename window.</summary>
 		public static string Show(Window owner, string action, string title, string name, string directory, ContentRoot root) {
 			RenameFileWindow window = new RenameFileWindow(action, title, name, directory, root);
 			window.Owner = owner;

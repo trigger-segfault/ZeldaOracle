@@ -49,7 +49,7 @@ namespace ConscriptDesigner {
 		public static readonly RoutedUICommand FindNext = new RoutedUICommand(
 			"FindNext", "Find Next", typeof(Commands),
 			new InputGestureCollection() {
-				new KeyGesture(Key.F3, ModifierKeys.Control) });
+				new KeyGesture(Key.F3) });
 
 		/// <summary>The command to find the next match or replace the current match with the find and replace window.</summary>
 		public static readonly RoutedUICommand ReplaceNext = new RoutedUICommand(

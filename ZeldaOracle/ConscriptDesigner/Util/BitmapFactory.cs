@@ -74,7 +74,5 @@ namespace ConscriptDesigner.Util {
 		public static WriteableBitmap CreateWriteable(int width, int height, PixelFormat format) {
 			return new WriteableBitmap(width, height, 96, 96, format, null);
 		}
-
-		// TODO: FromFile
 	}
 }

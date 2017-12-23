@@ -11,6 +11,7 @@ using System.Windows.Threading;
 using System.Xml;
 using ConscriptDesigner.Content;
 using ConscriptDesigner.Controls;
+using ConscriptDesigner.Controls.TextEditing;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;

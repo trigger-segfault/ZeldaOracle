@@ -8,7 +8,7 @@ using System.Windows.Media;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Rendering;
 
-namespace ConscriptDesigner.Controls {
+namespace ConscriptDesigner.Controls.TextEditing {
 
 	/// <summary>Highlights the line even when the text editor doesn't have focus.
 	/// https://stackoverflow.com/questions/5072761/avalonedit-highlight-current-line-even-when-not-focused </summary>

@@ -50,6 +50,10 @@ namespace ConscriptDesigner.Control {
 		public static void Initialize(MainWindow mainWindow) {
 			GameSettings.DesignerMode = true;
 			DesignerControl.mainWindow = mainWindow;
+			mainWindow.ActiveAnchorableChanged += delegate {
+				if (ActiveAnchorableChanged != null)
+					ActiveAnchorableChanged(null, EventArgs.Empty);
+			};
 			openAnchorables = new List<IRequestCloseAnchorable>();
 			closingAnchorables = new List<IRequestCloseAnchorable>();
 			updateTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.05), DispatcherPriority.ApplicationIdle, delegate { Update(); }, Application.Current.Dispatcher);
@@ -67,6 +71,8 @@ namespace ConscriptDesigner.Control {
 		public static event EventHandler ProjectClosed;
 		public static event EventHandler ResourcesUnloaded;
 		public static event EventHandler ResourcesLoaded;
+
+		public static event EventHandler ActiveAnchorableChanged;
 
 		//-----------------------------------------------------------------------------
 		// Anchorables
@@ -137,7 +143,7 @@ namespace ConscriptDesigner.Control {
 						ResourcesLoaded(null, EventArgs.Empty);
 				}
 			}
-			if (mainWindow.IsActive && mainWindow.OwnedWindows.Count == 0 && closingAnchorables.Any()) {
+			if (closingAnchorables.Any()) {
 				List<ContentFile> needsSaving = new List<ContentFile>();
 				List<string> needsSavingFiles = new List<string>();
 				foreach (IRequestCloseAnchorable anchorable in closingAnchorables) {

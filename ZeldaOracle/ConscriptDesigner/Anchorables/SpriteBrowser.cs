@@ -10,6 +10,7 @@ namespace ConscriptDesigner.Anchorables {
 		
 		private SpriteBrowserControl browser;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
@@ -38,6 +39,7 @@ namespace ConscriptDesigner.Anchorables {
 		public void ClearList() {
 			browser.ClearList();
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Event Handlers
