@@ -33,7 +33,7 @@ namespace ConscriptDesigner {
 		private SpriteBrowser spriteBrowser;
 		private SpriteSourceBrowser spriteSourceBrowser;
 
-		private FindAndReplaceWindow findAndReplace;
+		private FindReplaceWindow findAndReplace;
 
 		private DispatcherTimer checkOutdatedTimer;
 
@@ -57,6 +57,13 @@ namespace ConscriptDesigner {
 				}, Dispatcher);
 			this.checkOutdatedTimer.Stop();
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Events
+		//-----------------------------------------------------------------------------
+		
+		public event EventHandler ActiveAnchorableChanged;
 
 
 		//-----------------------------------------------------------------------------
@@ -115,14 +122,16 @@ namespace ConscriptDesigner {
 		}
 		
 		private void OnActiveAnchorableChanged(object sender, EventArgs e) {
+			activeAnchorable = null;
 			foreach (IRequestCloseAnchorable anchorable in DesignerControl.GetOpenAnchorables()) {
 				if (anchorable.IsActive) {
 					activeAnchorable = anchorable;
-					return;
+					break;
 				}
 			}
-			activeAnchorable = null;
 			CommandManager.InvalidateRequerySuggested();
+			if (ActiveAnchorableChanged != null)
+				ActiveAnchorableChanged(this, EventArgs.Empty);
 		}
 
 		private void OnAnchorableClosed(object sender, EventArgs e) {
@@ -139,7 +148,7 @@ namespace ConscriptDesigner {
 
 		private void OnWindowClosed(object sender, EventArgs e) {
 			Window window = sender as Window;
-			if (window is FindAndReplaceWindow)
+			if (window is FindReplaceWindow)
 				findAndReplace = null;
 
 			// HACK: Prevent minimizing to Visual Studio after closing
@@ -210,7 +219,7 @@ namespace ConscriptDesigner {
 
 		private void OnFindCommand(object sender, ExecutedRoutedEventArgs e) {
 			if (findAndReplace == null) {
-				FindAndReplaceWindow.Show(this, false, OnWindowClosed);
+				findAndReplace = FindReplaceWindow.Show(this, false, OnWindowClosed);
 			}
 			else {
 				findAndReplace.FindMode();
@@ -219,7 +228,7 @@ namespace ConscriptDesigner {
 
 		private void OnReplaceCommand(object sender, ExecutedRoutedEventArgs e) {
 			if (findAndReplace == null) {
-				FindAndReplaceWindow.Show(this, true, OnWindowClosed);
+				findAndReplace = FindReplaceWindow.Show(this, true, OnWindowClosed);
 			}
 			else {
 				findAndReplace.ReplaceMode();
@@ -398,7 +407,7 @@ namespace ConscriptDesigner {
 			get { return activeAnchorable; }
 		}
 
-		public FindAndReplaceWindow FindAndReplaceWindow {
+		public FindReplaceWindow FindAndReplaceWindow {
 			get { return findAndReplace; }
 		}
 	}

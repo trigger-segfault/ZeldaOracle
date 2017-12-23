@@ -133,11 +133,13 @@
     <Compile Include="Content\Xnb\XnbExtensions.cs" />
     <Compile Include="Controls\DraggableImageTreeView.cs" />
     <Compile Include="Controls\FolderTreeViewItem.cs" />
-    <Compile Include="Controls\HighlightCurrentLineBackgroundRenderer.cs" />
+    <Compile Include="Controls\TextEditing\ColorizeSearchResultsBackgroundRenderer.cs" />
+    <Compile Include="Controls\TextEditing\HighlightCurrentLineBackgroundRenderer.cs" />
     <Compile Include="Controls\ImageButton.cs" />
     <Compile Include="Controls\ImageMenuItem.cs" />
     <Compile Include="Controls\ImageToggleButton.cs" />
     <Compile Include="Controls\ImageTreeViewItem.cs" />
+    <Compile Include="Controls\TextEditing\NoIndentationStrategy.cs" />
     <Compile Include="Controls\TreeViewLineConverter.cs" />
     <Compile Include="Content\ContentImage.cs" />
     <Compile Include="Content\ContentRoot.cs" />
@@ -155,8 +157,8 @@
     <Compile Include="Windows\ErrorMessageBox.xaml.cs">
       <DependentUpon>ErrorMessageBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\FindAndReplaceWindow.xaml.cs">
-      <DependentUpon>FindAndReplaceWindow.xaml</DependentUpon>
+    <Compile Include="Windows\FindReplaceWindow.xaml.cs">
+      <DependentUpon>FindReplaceWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\RenameFileWindow.xaml.cs">
       <DependentUpon>RenameFileWindow.xaml</DependentUpon>
@@ -174,9 +176,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="WinForms\GraphicsDeviceService.cs" />
-    <Compile Include="WinForms\ImageDisplay.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="WinForms\MouseWheelMessageFilter.cs" />
     <Compile Include="WinForms\ServiceContainer.cs" />
     <Compile Include="WinForms\SpritePreview.cs" />
@@ -215,7 +214,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\FindAndReplaceWindow.xaml">
+    <Page Include="Windows\FindReplaceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

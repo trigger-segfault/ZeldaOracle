@@ -20,8 +20,10 @@ namespace ConscriptDesigner.Windows {
 
 	/// <summary>A custom message box that doesn't look like shite.</summary>
 	public partial class TriggerMessageBox : Window {
-		//=========== MEMBERS ============
-		#region Members
+
+		//-----------------------------------------------------------------------------
+		// Members
+		//-----------------------------------------------------------------------------
 
 		/// <summary>The result of from pressing one of the message box buttons.</summary>
 		private MessageBoxResult result;
@@ -32,9 +34,10 @@ namespace ConscriptDesigner.Windows {
 		/// <summary>The icon of the message.</summary>
 		private MessageIcon icon;
 
-		#endregion
-		//========= CONSTRUCTORS =========
-		#region Constructors
+
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Constructs and sets up the message box.</summary>
 		private TriggerMessageBox(MessageIcon icon, string title, string message, MessageBoxButton buttons, string buttonName1 = null, string buttonName2 = null, string buttonName3 = null) {
@@ -134,9 +137,35 @@ namespace ConscriptDesigner.Windows {
 			this.textBlockMessage.Text = message;
 		}
 
-		#endregion
-		//=========== HELPERS ============
-		#region Helpers
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the button at the specified index.</summary>
+		private Button GetButtonAt(int index) {
+			switch (index) {
+			case 0: return button1;
+			case 1: return button2;
+			case 2: return button3;
+			}
+			return null;
+		}
+
+		/// <summary>Gets the index of the button.</summary>
+		private int IndexOfButton(Button button) {
+			if (button == button1)
+				return 0;
+			else if (button == button2)
+				return 1;
+			else if (button == button3)
+				return 2;
+			return -1;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Internal Properties
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the number of message box buttons.</summary>
 		private int ButtonCount {
@@ -153,29 +182,11 @@ namespace ConscriptDesigner.Windows {
 				return 3;
 			}
 		}
-		/// <summary>Gets the button at the specified index.</summary>
-		private Button GetButtonAt(int index) {
-			switch (index) {
-			case 0: return button1;
-			case 1: return button2;
-			case 2: return button3;
-			}
-			return null;
-		}
-		/// <summary>Gets the index of the button.</summary>
-		private int IndexOfButton(Button button) {
-			if (button == button1)
-				return 0;
-			else if (button == button2)
-				return 1;
-			else if (button == button3)
-				return 2;
-			return -1;
-		}
 
-		#endregion
-		//============ EVENTS ============
-		#region Events
+
+		//-----------------------------------------------------------------------------
+		// Event Handlers
+		//-----------------------------------------------------------------------------
 
 		private void OnWindowLoaded(object sender, RoutedEventArgs e) {
 			clientArea.Width = Math.Max(minWidth, Math.Max(textBlockMessage.ActualWidth + 60, stackPanelButtons.ActualWidth + 10));
@@ -190,10 +201,12 @@ namespace ConscriptDesigner.Windows {
 			}
 			#endregion
 		}
+
 		private void OnButtonClicked(object sender, RoutedEventArgs e) {
 			result = (MessageBoxResult)((Button)sender).Tag;
 			Close();
 		}
+
 		private void OnPreviewKeyDown(object sender, KeyEventArgs e) {
 			var button = FocusManager.GetFocusedElement(this) as Button;
 			switch (e.Key) {
@@ -212,22 +225,26 @@ namespace ConscriptDesigner.Windows {
 			}
 		}
 
-		#endregion
-		//=========== SHOWING ============
-		#region Showing
+
+		//-----------------------------------------------------------------------------
+		// Showing
+		//-----------------------------------------------------------------------------
 
 		/// <summary>Shows the message box.</summary>
 		public static MessageBoxResult Show(Window window, MessageIcon icon, string message) {
 			return Show(window, icon, message, "", MessageBoxButton.OK);
 		}
+
 		/// <summary>Shows the message box.</summary>
 		public static MessageBoxResult Show(Window window, MessageIcon icon, string message, string title) {
 			return Show(window, icon, message, title, MessageBoxButton.OK);
 		}
+
 		/// <summary>Shows the message box.</summary>
 		public static MessageBoxResult Show(Window window, MessageIcon icon, string message, MessageBoxButton buttons) {
 			return Show(window, icon, message, "", buttons);
 		}
+
 		/// <summary>Shows the message box.</summary>
 		public static MessageBoxResult Show(Window window, MessageIcon icon, string message, string title, MessageBoxButton buttons, string buttonName1 = null, string buttonName2 = null, string buttonName3 = null) {
 			TriggerMessageBox messageBox = new TriggerMessageBox(icon, title, message, buttons, buttonName1, buttonName2, buttonName3);
@@ -238,7 +255,5 @@ namespace ConscriptDesigner.Windows {
 			messageBox.ShowDialog();
 			return messageBox.result;
 		}
-
-		#endregion
 	}
 }

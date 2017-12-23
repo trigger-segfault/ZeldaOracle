@@ -10,6 +10,7 @@ namespace ConscriptDesigner.Anchorables {
 
 		private SpriteSourceBrowserControl browser;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------

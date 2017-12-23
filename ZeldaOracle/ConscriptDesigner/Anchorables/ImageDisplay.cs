@@ -17,6 +17,7 @@ namespace ConscriptDesigner.Anchorables {
 		/// <summary>The scroll viewer for the image.</summary>
 		private ScrollViewer scrollViewer;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
