@@ -120,6 +120,8 @@ namespace ZeldaOracle.Game {
 		public const float				MONSTER_THWOMP_RAISE_SPEED				= 0.5f;
 		public const int				MONSTER_THWOMP_HIT_SHAKE_DURATION		= 46;
 		public const int				MONSTER_THWOMP_HIT_WAIT_DURATION		= 46 + 16;
+		public const float				MONSTER_BEAMOS_SHOOT_SPEED				= 8.0f;
+		public const int				MONSTER_BEAMOS_SHOOT_ANGLE_COUNT		= 24;
 
 		// Tiles
 		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.

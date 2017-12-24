@@ -484,10 +484,14 @@ namespace ZeldaOracle.Common.Graphics {
 
 		// Draws the specified rectangle.
 		public void DrawRectangle(Rectangle2F rect, float thickness, Color color, float depth = 0.0f) {
-			DrawLine(new Line2F(rect.Point, rect.Point + new Vector2F(rect.Width - 1, 0.0f)), thickness, color, depth);
-			DrawLine(new Line2F(rect.Point, rect.Point + new Vector2F(0.0f, rect.Height - 1)), thickness, color, depth);
-			DrawLine(new Line2F(rect.Point + rect.Size - Vector2F.One, rect.Point + new Vector2F(rect.Width - 1, 0.0f)), thickness, color, depth);
-			DrawLine(new Line2F(rect.Point + rect.Size - Vector2F.One, rect.Point + new Vector2F(0.0f, rect.Height - 1)), thickness, color, depth);
+			FillRectangle(new Rectangle2F(rect.Left, rect.Top, rect.Width, 1.0f), color, depth);
+			FillRectangle(new Rectangle2F(rect.Left, rect.Bottom - 1, rect.Width, 1.0f), color, depth);
+			FillRectangle(new Rectangle2F(rect.Left, rect.Top + 1, 1.0f, rect.Height - 2), color, depth);
+			FillRectangle(new Rectangle2F(rect.Right - 1, rect.Top + 1, 1.0f, rect.Height - 2), color, depth);
+			//DrawLine(new Line2F(rect.Point, rect.Point + new Vector2F(rect.Width - 1, 0.0f)), thickness, color, depth);
+			//DrawLine(new Line2F(rect.Point, rect.Point + new Vector2F(0.0f, rect.Height - 1)), thickness, color, depth);
+			//DrawLine(new Line2F(rect.Point + rect.Size - Vector2F.One, rect.Point + new Vector2F(rect.Width - 1, 0.0f)), thickness, color, depth);
+			//DrawLine(new Line2F(rect.Point + rect.Size - Vector2F.One, rect.Point + new Vector2F(0.0f, rect.Height - 1)), thickness, color, depth);
 		}
 
 		// Draws the specified filled rectangle.

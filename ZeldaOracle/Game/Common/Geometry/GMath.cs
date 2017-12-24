@@ -19,6 +19,7 @@ namespace ZeldaOracle.Common.Geometry {
 
 		/// <summary>Returns double the value of pi.</summary>
 		public const float DoublePi = Pi * 2f;
+		public const float TwoPi = Pi * 2f;
 		/// <summary>Returns half the value of pi.</summary>
 		public const float HalfPi = Pi * 0.5f;
 		/// <summary>Returns a quarter of the value of pi.</summary>

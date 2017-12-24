@@ -46,6 +46,7 @@ namespace ZeldaOracle.Game.Entities {
 		InAirCollectibles,
 		
 		ProjectileSwordBeam,
+		ProjectileBeam,
 		ProjectileBomb,
 		EffectSprintPuff,
 		EffectCrackedFloorCrumble,

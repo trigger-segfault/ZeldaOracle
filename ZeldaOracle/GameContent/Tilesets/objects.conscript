@@ -642,6 +642,12 @@ TILE turnstile;
 	PROPERTIES	(boolean, clockwise, false, "Clockwise", "", "Turnstile", "True if the turnstile is in clockwise mode.");
 END;
 
+# ---- Monsters ---------------------------------------------------------------
+
+TILE monster_beamos;
+	SOLID		block;
+	FLAGS		Burnable, AbsorbSeeds;
+END;
 
 #==============================================================
 # Tilesets

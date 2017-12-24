@@ -355,6 +355,7 @@
     <Compile Include="Game\Entities\Players\Tools\PlayerToolSword.cs" />
     <Compile Include="Game\Entities\Players\Tools\PlayerToolVisual.cs" />
     <Compile Include="Game\Entities\Players\Tools\PlayerToolShield.cs" />
+    <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\BeamProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\PlayerProjectiles\PlayerBoomerang.cs" />
     <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\MagicProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\MonsterBoomerang.cs" />
@@ -461,6 +462,7 @@
     <Compile Include="Game\Items\Weapons\ItemOcarina.cs" />
     <Compile Include="Game\Control\Controls.cs" />
     <Compile Include="Game\Items\Weapons\SeedBasedItem.cs" />
+    <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterBeamos.cs" />
     <Compile Include="Game\Tiles\TileDataDrawing.cs" />
     <Compile Include="Game\UserSettings.cs" />
     <Compile Include="Game\Main\GameBase.cs" />

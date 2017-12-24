@@ -44,10 +44,13 @@ namespace ZeldaOracle.Game.Debug {
 			get { return gameControl.GameManager; }
 		}
 
-		public static DevSettings DevSettings { get; set; } = new DevSettings();
 
 		private static GameControl gameControl;
+		private static bool showTileCursor = false;
+		private static Vector2F mousePosition;
+		private static Point2I mouseLocation;
 
+		public static DevSettings DevSettings { get; set; } = new DevSettings();
 		private static EntityDrawInfo	EntityDebugInfoMode	= EntityDrawInfo.None;
 		private static TileDrawInfo		TileDebugInfoMode	= TileDrawInfo.None;
 
@@ -239,6 +242,32 @@ namespace ZeldaOracle.Game.Debug {
 				//Monster monster		= new MonsterMoblin();
 				Vector2F position	= new Vector2F(32, 32) + new Vector2F(8, 14);
 				RoomControl.SpawnEntity(monster, position);
+			}
+
+			mousePosition = Mouse.GetPosition();
+			mousePosition.X /= (float) GameControl.GameManager.GameBase.Window.ClientBounds.Width;
+			mousePosition.X *= GameSettings.VIEW_WIDTH;
+			mousePosition.Y /= (float) GameControl.GameManager.GameBase.Window.ClientBounds.Height;
+			mousePosition.Y *= GameSettings.SCREEN_HEIGHT;
+			mousePosition.Y -= 16.0f; // HUD
+			mousePosition += RoomControl.ViewControl.Position;
+			mouseLocation = RoomControl.GetTileLocation(mousePosition);
+
+			if (ctrl)
+				showTileCursor = true;
+			else
+				showTileCursor = false;
+
+			if (ctrl && Mouse.IsButtonPressed(MouseButtons.Left))
+			{
+				//RoomControl.SpawnTile(
+				//monster_beamos
+
+				TileData tileData = new TileData(typeof(TileMonsterBeamos), TileFlags.None);
+				tileData.CollisionModel = GameData.MODEL_BLOCK;
+				tileData.SolidType = TileSolidType.Solid;
+				RoomControl.SpawnTile(new TileDataInstance(tileData, 
+					mouseLocation.X, mouseLocation.Y, 2), false);
 			}
 		}
 
@@ -551,6 +580,14 @@ namespace ZeldaOracle.Game.Debug {
 			// Draw debug info for entities.
 			for (int i = roomControl.Entities.Count - 1; i >= 0; i--)
 				DrawEntity(g, roomControl.Entities[i]);
+
+			if (showTileCursor)
+			{
+				Rectangle2I mouseTileRec = new Rectangle2I(
+					mouseLocation * GameSettings.TILE_SIZE,
+					new Point2I(GameSettings.TILE_SIZE, GameSettings.TILE_SIZE));
+				g.DrawRectangle(mouseTileRec, 1, Color.Red);
+			}
 		}
 	}
 }

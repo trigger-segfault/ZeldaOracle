@@ -14,6 +14,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 	
 	public class Arrow : Projectile {
 		
+		protected int damage;
+
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
@@ -22,6 +25,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			// General.
 			syncAnimationWithAngle	= true;
 			projectileType			= ProjectileType.Physical;
+			damage					= GameSettings.PROJECTILE_ARROW_DAMAGE;
 
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 1);
@@ -62,7 +66,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		}
 
 		public override void OnCollidePlayer(Player player) {
-			player.Hurt(GameSettings.PROJECTILE_ARROW_DAMAGE, Center);
+			player.Hurt(damage, Center);
 			Destroy();
 		}
 
