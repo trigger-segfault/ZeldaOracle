@@ -35,7 +35,7 @@
         <CommandBinding Command="cmd:Commands.FindNext" CanExecute="CanExecuteIsFindAndReplaceOpen" Executed="OnFindNextCommand"/>
         <CommandBinding Command="cmd:Commands.ReplaceNext" CanExecute="CanExecuteIsFindAndReplaceOpen" Executed="OnReplaceNextCommand"/>
         <CommandBinding Command="cmd:Commands.ReplaceAll" CanExecute="CanExecuteIsFindAndReplaceOpen" Executed="OnReplaceAllCommand"/>
-        <CommandBinding Command="cmd:Commands.GotoLine" CanExecute="CanExecuteInTextEditor" Executed="OnGotoLineCommand"/>
+        <CommandBinding Command="cmd:Commands.GotoLine" CanExecute="CanExecuteIsInTextEditor" Executed="OnGotoLineCommand"/>
 
         <CommandBinding Command="cmd:Commands.ProjectExplorer" CanExecute="CanAlwaysExecute" Executed="OnProjectExplorerCommand"/>
         <CommandBinding Command="cmd:Commands.OutputConsole" CanExecute="CanAlwaysExecute" Executed="OnOutputConsoleCommand"/>
@@ -82,33 +82,36 @@
                 <local:ImageMenuItem Header="Run Conscripts" Source="/Resources/Icons/Build.png" Command="cmd:Commands.RunConscripts"/>
                 <local:ImageMenuItem Header="Compile Content" Source="/Resources/Icons/Compile.png" Command="cmd:Commands.CompileContent"/>
             </MenuItem>
+            <MenuItem Header="_Options">
+            
+            </MenuItem>
             <MenuItem Header="Help">
                 
             </MenuItem>
         </Menu>
         <ToolBar DockPanel.Dock="Top">
-            <local:ImageButton Source="Resources/Icons/Save.png" ToolTip="Save File" Command="Save"/>
-            <local:ImageButton Source="Resources/Icons/SaveAll.png" ToolTip="Save All Files" Command="cmd:Commands.SaveAll"/>
+            <local:ImageButton Source="Resources/Icons/Save.png" ToolTip="Save File (Ctrl+S)" Command="Save"/>
+            <local:ImageButton Source="Resources/Icons/SaveAll.png" ToolTip="Save All Files (Ctrl+Shift+S)" Command="cmd:Commands.SaveAll"/>
             <Separator/>
             <local:ImageButton Source="Resources/Icons/Undo.png" ToolTip="Undo (Ctr+Z)" Command="Undo"/>
             <local:ImageButton Source="Resources/Icons/Redo.png" ToolTip="Redo (Ctrl+Y/Ctrl+Shift+Z)" Command="Redo"/>
             <Separator/>
-            <local:ImageButton Source="Resources/Icons/Build.png" Content="Run Conscripts" Command="cmd:Commands.RunConscripts"/>
-            <local:ImageButton Source="Resources/Icons/Compile.png" Content="Compile Content" Command="cmd:Commands.CompileContent" />
+            <local:ImageButton Source="Resources/Icons/Build.png" Content="Run Conscripts" Command="cmd:Commands.RunConscripts" ToolTip="Run Conscripts (F5)"/>
+            <local:ImageButton Source="Resources/Icons/Compile.png" Content="Compile Content" Command="cmd:Commands.CompileContent" ToolTip="Compile Content (Shift+F5)" />
             <Separator/>
             <local:ImageButton Source="Resources/Icons/ErrorGoto.png" Content="Go To Error" Command="cmd:Commands.GotoError" />
         </ToolBar>
-        <avalonDock:DockingManager x:Name="dockingManager" ActiveContentChanged="OnActiveAnchorableChanged" UseLayoutRounding="True">
+        <avalonDock:DockingManager x:Name="dockingManager" ActiveContentChanged="OnActiveAnchorableChanged" UseLayoutRounding="True" AllowMixedOrientation="True">
             <avalonDock:DockingManager.Theme>
                 <avalonDock:VS2010Theme/>
             </avalonDock:DockingManager.Theme>
             <avalonDock:LayoutRoot>
                 <avalonDock:LayoutPanel Orientation="Vertical">
                     <avalonDock:LayoutPanel Orientation="Horizontal">
-                        <avalonDock:LayoutAnchorablePane x:Name="LeftDockablePane" DockWidth="250" />
+                        <avalonDock:LayoutAnchorablePane DockWidth="250" />
                         <avalonDock:LayoutPanel Orientation="Vertical">
-                            <avalonDock:LayoutDocumentPane x:Name="documentPane"/>
-                            <avalonDock:LayoutAnchorablePane x:Name="BottomDockablePane" DockHeight="200" />
+                            <avalonDock:LayoutDocumentPane/>
+                            <avalonDock:LayoutAnchorablePane DockHeight="200" />
                         </avalonDock:LayoutPanel>
                     </avalonDock:LayoutPanel>
                 </avalonDock:LayoutPanel>

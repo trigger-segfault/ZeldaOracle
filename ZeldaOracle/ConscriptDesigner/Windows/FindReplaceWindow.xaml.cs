@@ -411,6 +411,10 @@ namespace ConscriptDesigner.Windows {
 			ReplaceAll();
 		}
 
+		private void OnEscapeCloseCommand(object sender, ExecutedRoutedEventArgs e) {
+			Close();
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Commands Can Execute

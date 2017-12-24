@@ -43,6 +43,7 @@ namespace ConscriptDesigner.Control {
 		private static List<IRequestCloseAnchorable> openAnchorables;
 		private static List<IRequestCloseAnchorable> closingAnchorables;
 
+
 		//-----------------------------------------------------------------------------
 		// Initialization
 		//-----------------------------------------------------------------------------
@@ -146,10 +147,13 @@ namespace ConscriptDesigner.Control {
 			if (closingAnchorables.Any()) {
 				List<ContentFile> needsSaving = new List<ContentFile>();
 				List<string> needsSavingFiles = new List<string>();
+				bool activeClosing = false;
 				foreach (IRequestCloseAnchorable anchorable in closingAnchorables) {
+					if (anchorable.IsActive)
+						activeClosing = true;
 					if (anchorable is IContentFileContainer) {
 						var content = (IContentFileContainer) anchorable;
-						if (content.File.IsModified) {
+						if (content.File != null && content.File.IsModified) {
 							needsSaving.Add(content.File);
 							needsSavingFiles.Add(content.File.Path);
 						}
@@ -176,6 +180,9 @@ namespace ConscriptDesigner.Control {
 				if (result != MessageBoxResult.Cancel) {
 					foreach (IRequestCloseAnchorable anchorable in closingAnchorables) {
 						anchorable.ForceClose();
+					}
+					if (activeClosing) {
+						mainWindow.InvalidateActiveAnchorable();
 					}
 				}
 				closingAnchorables.Clear();
@@ -427,6 +434,7 @@ namespace ConscriptDesigner.Control {
 					result = (result2 != MessageBoxResult.No);
 				}
 				if (result) {
+					//mainWindow.SaveLayout();
 					while (openAnchorables.Any()) {
 						openAnchorables[0].ForceClose();
 					}
@@ -454,6 +462,7 @@ namespace ConscriptDesigner.Control {
 				ContentRoot newProject = new ContentRoot();
 				newProject.LoadContentProject(path);
 				project = newProject;
+				//mainWindow.LoadLayout();
 				mainWindow.OpenProjectExplorer();
 				mainWindow.OpenOutputConsole();
 				if (mainWindow.ProjectExplorer != null)
@@ -565,6 +574,10 @@ namespace ConscriptDesigner.Control {
 			}
 		}
 
+		public static void PlaySound(ContentSound sound) {
+			mainWindow.PlaySound(sound);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Command Properties
@@ -632,6 +645,10 @@ namespace ConscriptDesigner.Control {
 
 		public static bool HasError {
 			get { return lastScriptError != null; }
+		}
+
+		public static string LayoutFile {
+			get { return project.ProjectFile + ".designer.layout.user"; }
 		}
 	}
 }

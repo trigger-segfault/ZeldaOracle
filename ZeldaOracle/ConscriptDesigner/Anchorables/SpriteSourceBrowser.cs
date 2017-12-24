@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Xml;
+using ConscriptDesigner.Control;
 
 namespace ConscriptDesigner.Anchorables {
 	public class SpriteSourceBrowser : RequestCloseAnchorable {
@@ -39,6 +41,17 @@ namespace ConscriptDesigner.Anchorables {
 		public void ClearList() {
 			browser.ClearList();
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// XML Serialization
+		//-----------------------------------------------------------------------------
+
+		public override void ReadXml(XmlReader reader) {
+			base.ReadXml(reader);
+			DesignerControl.MainWindow.SpriteSourceBrowser = this;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Event Handlers

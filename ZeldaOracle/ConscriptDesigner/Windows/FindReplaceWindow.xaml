@@ -14,6 +14,8 @@
         <CommandBinding Command="cmd:Commands.FindNext" CanExecute="CanAlwaysExecute" Executed="OnFindNextCommand"/>
         <CommandBinding Command="cmd:Commands.ReplaceNext" CanExecute="CanAlwaysExecute" Executed="OnReplaceNextCommand"/>
         <CommandBinding Command="cmd:Commands.ReplaceAll" CanExecute="CanAlwaysExecute" Executed="OnReplaceAllCommand"/>
+
+        <CommandBinding Command="cmd:Commands.EscapeClose" CanExecute="CanAlwaysExecute" Executed="OnEscapeCloseCommand"/>
     </Window.CommandBindings>
     <Grid Margin="0,4">
         <Grid.RowDefinitions>
@@ -34,7 +36,7 @@
                     <TextBlock Margin="3">Text to Find:</TextBlock>
                     <TextBox Margin="3" Name="textBoxFind" TextChanged="OnFindTextChanged" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Margin="5" HorizontalAlignment="Right" Width="80" Content="Find Next" Click="OnFindNext" IsDefault="True" />
+                        <Button Margin="5" HorizontalAlignment="Right" Width="80" Content="Find Next" Click="OnFindNext" IsDefault="True" ToolTip="(F3)" />
                     </StackPanel>
                 </StackPanel>
             </TabItem>
@@ -45,8 +47,8 @@
                     <TextBlock Margin="3" Text="Replace with:" />
                     <TextBox Margin="3" Name="textBoxReplace" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Margin="5" HorizontalAlignment="Right" Width="80" Content="Find Next" Click="OnFindNext" IsDefault="True" />
-                        <Button Margin="5" HorizontalAlignment="Right" Width="80" Content="Replace" Click="OnReplaceNext" />
+                        <Button Margin="5" HorizontalAlignment="Right" Width="80" Content="Find Next" Click="OnFindNext" IsDefault="True" ToolTip="(F3)" />
+                        <Button Margin="5" HorizontalAlignment="Right" Width="80" Content="Replace" Click="OnReplaceNext" ToolTip="(Alt+R)" />
                         <Button Margin="5" HorizontalAlignment="Right" Width="80" Content="Replace All" Click="OnReplaceAll" />
                     </StackPanel>
                 </StackPanel>

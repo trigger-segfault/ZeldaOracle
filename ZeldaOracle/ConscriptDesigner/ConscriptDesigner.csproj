@@ -80,6 +80,10 @@
       <HintPath>..\..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NAudio, Version=1.8.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NAudio.1.8.4\lib\net35\NAudio.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -160,6 +164,12 @@
     <Compile Include="Windows\FindReplaceWindow.xaml.cs">
       <DependentUpon>FindReplaceWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\GotoWindow.xaml.cs">
+      <DependentUpon>GotoWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\PlaybackWindow.xaml.cs">
+      <DependentUpon>PlaybackWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\RenameFileWindow.xaml.cs">
       <DependentUpon>RenameFileWindow.xaml</DependentUpon>
     </Compile>
@@ -215,6 +225,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\FindReplaceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\GotoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\PlaybackWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -358,6 +376,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\ErrorGoto.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ErrorGoto2.png" />
+    <Resource Include="Resources\Icons\Pause.png" />
+    <Resource Include="Resources\Icons\Play.png" />
+    <Resource Include="Resources\Icons\Stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Loop.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

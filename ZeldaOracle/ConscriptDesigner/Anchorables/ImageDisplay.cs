@@ -22,27 +22,43 @@ namespace ConscriptDesigner.Anchorables {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Constructs the image display.</summary>
-		public ImageDisplay(ContentImage file) :
-			base(file)
-		{
+		/// <summary>Constructs the image display for serialization.</summary>
+		public ImageDisplay() {
 			Border border = CreateBorder();
 			this.scrollViewer = new ScrollViewer();
 			this.scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
 			this.scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
 			this.scrollViewer.Background = Brushes.White;
 			border.Child = this.scrollViewer;
-
-			BitmapSource source = BitmapFactory.LoadSourceFromFile(file.FilePath);
+			
 			this.image = new Image();
-			this.image.Source = source;
-			this.image.Width = source.PixelWidth;
-			this.image.Height = source.PixelHeight;
 			this.scrollViewer.Content = this.image;
-
-			Title = file.Name;
+			
 			Content = border;
 		}
+
+		/// <summary>Constructs the image display.</summary>
+		public ImageDisplay(ContentImage file) :
+			this()
+		{
+			LoadFile(file);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// ContentFileDocument Overrides
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Completes setup after loading the content file.</summary>
+		protected override void OnLoadFile(ContentFile loadFile) {
+			ContentImage file = loadFile as ContentImage;
+			if (file == null)
+				Close();
+
+			Reload();
+			Title = file.Name;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Actions

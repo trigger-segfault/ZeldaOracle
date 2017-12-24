@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Xml;
+using ConscriptDesigner.Control;
 
 namespace ConscriptDesigner.Anchorables {
 	public class OutputConsole : RequestCloseAnchorable {
@@ -87,6 +89,16 @@ namespace ConscriptDesigner.Anchorables {
 			
 			Title = "Output Console";
 			Content = border;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// XML Serialization
+		//-----------------------------------------------------------------------------
+
+		public override void ReadXml(XmlReader reader) {
+			base.ReadXml(reader);
+			DesignerControl.MainWindow.OutputConsole = this;
 		}
 
 

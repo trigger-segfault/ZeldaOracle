@@ -37,6 +37,16 @@ namespace ConscriptDesigner.Content {
 
 
 		//-----------------------------------------------------------------------------
+		// Override Events
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Called when the file is opened.</summary>
+		protected override void OnOpen() {
+			DesignerControl.PlaySound(this);
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Override Properties
 		//-----------------------------------------------------------------------------
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,10 +16,13 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using ConscriptDesigner.Anchorables;
+using ConscriptDesigner.Content;
 using ConscriptDesigner.Control;
 using ConscriptDesigner.Windows;
 using ConscriptDesigner.WinForms;
 using Xceed.Wpf.AvalonDock.Layout;
+using Xceed.Wpf.AvalonDock.Layout.Serialization;
+using Xceed.Wpf.AvalonDock.Themes;
 
 namespace ConscriptDesigner {
 	/// <summary>
@@ -33,11 +37,13 @@ namespace ConscriptDesigner {
 		private SpriteBrowser spriteBrowser;
 		private SpriteSourceBrowser spriteSourceBrowser;
 
-		private FindReplaceWindow findAndReplace;
+		private FindReplaceWindow findReplaceWindow;
+		private PlaybackWindow playbackWindow;
 
 		private DispatcherTimer checkOutdatedTimer;
 
 		private IRequestCloseAnchorable activeAnchorable;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -94,12 +100,15 @@ namespace ConscriptDesigner {
 
 		private void OnClosing(object sender, CancelEventArgs e) {
 			e.Cancel = !DesignerControl.RequestClose();
+			if (!e.Cancel && DesignerControl.IsProjectOpen) {
+				//SaveLayout();
+			}
 		}
 
 		private void OnProjectClosed(object sender, EventArgs e) {
 			OnResourcesUnloaded(sender, e);
-			if (findAndReplace != null)
-				findAndReplace.Close();
+			if (findReplaceWindow != null)
+				findReplaceWindow.Close();
 		}
 
 		private void OnResourcesLoaded(object sender, EventArgs e) {
@@ -121,7 +130,8 @@ namespace ConscriptDesigner {
 				spriteBrowser.RefreshList();
 		}
 		
-		private void OnActiveAnchorableChanged(object sender, EventArgs e) {
+		private void OnActiveAnchorableChanged(object sender = null, EventArgs e = null) {
+			IRequestCloseAnchorable oldAnchorable = activeAnchorable;
 			activeAnchorable = null;
 			foreach (IRequestCloseAnchorable anchorable in DesignerControl.GetOpenAnchorables()) {
 				if (anchorable.IsActive) {
@@ -130,7 +140,7 @@ namespace ConscriptDesigner {
 				}
 			}
 			CommandManager.InvalidateRequerySuggested();
-			if (ActiveAnchorableChanged != null)
+			if (ActiveAnchorableChanged != null && activeAnchorable != oldAnchorable)
 				ActiveAnchorableChanged(this, EventArgs.Empty);
 		}
 
@@ -144,12 +154,15 @@ namespace ConscriptDesigner {
 				spriteBrowser = null;
 			else if (anchorable is SpriteSourceBrowser)
 				spriteSourceBrowser = null;
+			CommandManager.InvalidateRequerySuggested();
 		}
 
 		private void OnWindowClosed(object sender, EventArgs e) {
 			Window window = sender as Window;
 			if (window is FindReplaceWindow)
-				findAndReplace = null;
+				findReplaceWindow = null;
+			if (window is PlaybackWindow)
+				playbackWindow = null;
 
 			// HACK: Prevent minimizing to Visual Studio after closing
 			// a tool window that has called a message box.
@@ -184,6 +197,87 @@ namespace ConscriptDesigner {
 				docPane.Children.Add(anchorable);
 		}
 
+		public void InvalidateActiveAnchorable() {
+			OnActiveAnchorableChanged();
+		}
+
+		public void LoadLayout() {
+			if (File.Exists(DesignerControl.LayoutFile)) {
+				try {
+					var serializer = new XmlLayoutSerializer(dockingManager);
+					using (var stream = new StreamReader(DesignerControl.LayoutFile))
+						serializer.Deserialize(stream);
+					//dockingManager.Theme = new VS2010Theme();
+					return;
+				}
+				catch (Exception) {
+
+				}
+			}
+			BuildDefaultLayoutRoot();
+			OpenProjectExplorer();
+			OpenOutputConsole();
+		}
+
+		public void SaveLayout() {
+			try {
+				var serializer = new XmlLayoutSerializer(dockingManager);
+				using (var stream = new StreamWriter(DesignerControl.LayoutFile))
+					serializer.Serialize(stream);
+			}
+			catch (Exception) {
+
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Actions
+		//-----------------------------------------------------------------------------
+		
+		public void PlaySound(ContentSound sound) {
+			if (playbackWindow == null) {
+				playbackWindow = PlaybackWindow.Show(this, sound, OnWindowClosed);
+			}
+			else {
+				playbackWindow.PlaySound(sound);
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		private void BuildDefaultLayoutRoot() {
+			/*LayoutRoot root = new LayoutRoot();
+			root.RootPanel.Children.Clear();
+
+			LayoutPanel panel1 = new LayoutPanel();
+			panel1.Orientation = Orientation.Vertical;
+			root.RootPanel = panel1;
+
+			LayoutPanel panel2 = new LayoutPanel();
+			panel2.Orientation = Orientation.Horizontal;
+			panel1.Children.Add(panel2);
+
+			LayoutAnchorablePane anchorablePane1 = new LayoutAnchorablePane();
+			anchorablePane1.DockWidth = new GridLength(250);
+			panel2.Children.Add(anchorablePane1);
+
+			LayoutPanel panel3 = new LayoutPanel();
+			panel3.Orientation = Orientation.Vertical;
+			panel2.Children.Add(panel3);
+
+			LayoutDocumentPane documentPane = new LayoutDocumentPane();
+			panel3.Children.Add(documentPane);
+
+			LayoutAnchorablePane anchorablePane2 = new LayoutAnchorablePane();
+			anchorablePane2.DockHeight = new GridLength(200);
+			panel3.Children.Add(anchorablePane2);
+
+			dockingManager.Layout = root;*/
+		}
 
 		//-----------------------------------------------------------------------------
 		// Commands
@@ -218,37 +312,37 @@ namespace ConscriptDesigner {
 		}
 
 		private void OnFindCommand(object sender, ExecutedRoutedEventArgs e) {
-			if (findAndReplace == null) {
-				findAndReplace = FindReplaceWindow.Show(this, false, OnWindowClosed);
+			if (findReplaceWindow == null) {
+				findReplaceWindow = FindReplaceWindow.Show(this, false, OnWindowClosed);
 			}
 			else {
-				findAndReplace.FindMode();
+				findReplaceWindow.FindMode();
 			}
 		}
 
 		private void OnReplaceCommand(object sender, ExecutedRoutedEventArgs e) {
-			if (findAndReplace == null) {
-				findAndReplace = FindReplaceWindow.Show(this, true, OnWindowClosed);
+			if (findReplaceWindow == null) {
+				findReplaceWindow = FindReplaceWindow.Show(this, true, OnWindowClosed);
 			}
 			else {
-				findAndReplace.ReplaceMode();
+				findReplaceWindow.ReplaceMode();
 			}
 		}
 
 		private void OnFindNextCommand(object sender, ExecutedRoutedEventArgs e) {
-			findAndReplace.FindNext();
+			findReplaceWindow.FindNext();
 		}
 
 		private void OnReplaceNextCommand(object sender, ExecutedRoutedEventArgs e) {
-			findAndReplace.ReplaceNext();
+			findReplaceWindow.ReplaceNext();
 		}
 
 		private void OnReplaceAllCommand(object sender, ExecutedRoutedEventArgs e) {
-			findAndReplace.ReplaceAll();
+			findReplaceWindow.ReplaceAll();
 		}
 
 		private void OnGotoLineCommand(object sender, ExecutedRoutedEventArgs e) {
-
+			GotoWindow.Show(this);
 		}
 
 		private void OnProjectExplorerCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
@@ -357,7 +451,7 @@ namespace ConscriptDesigner {
 			e.CanExecute = !DesignerControl.IsBusy && DesignerControl.IsProjectOpen;
 		}
 
-		private void CanExecuteInTextEditor(object sender, CanExecuteRoutedEventArgs e) {
+		private void CanExecuteIsInTextEditor(object sender, CanExecuteRoutedEventArgs e) {
 			if (supressEvents) return;
 			e.CanExecute = DesignerControl.IsInTextEditor;
 		}
@@ -379,7 +473,7 @@ namespace ConscriptDesigner {
 
 		private void CanExecuteIsFindAndReplaceOpen(object sender, CanExecuteRoutedEventArgs e) {
 			if (supressEvents) return;
-			e.CanExecute = findAndReplace != null;
+			e.CanExecute = findReplaceWindow != null;
 		}
 
 
@@ -389,18 +483,22 @@ namespace ConscriptDesigner {
 
 		public ProjectExplorer ProjectExplorer {
 			get { return projectExplorer; }
+			set { projectExplorer = value; }
 		}
 
 		public OutputConsole OutputConsole {
 			get { return outputConsole; }
+			set { outputConsole = value; }
 		}
 
 		public SpriteBrowser SpriteBrowser {
 			get { return spriteBrowser; }
+			set { spriteBrowser = value; }
 		}
 
 		public SpriteSourceBrowser SpriteSourceBrowser {
 			get { return spriteSourceBrowser; }
+			set { spriteSourceBrowser = value; }
 		}
 
 		public IRequestCloseAnchorable ActiveAnchorable {
@@ -408,7 +506,7 @@ namespace ConscriptDesigner {
 		}
 
 		public FindReplaceWindow FindAndReplaceWindow {
-			get { return findAndReplace; }
+			get { return findReplaceWindow; }
 		}
 	}
 }

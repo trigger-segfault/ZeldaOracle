@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Xml;
 using ConscriptDesigner.Content;
+using ConscriptDesigner.Control;
 using ConscriptDesigner.Controls;
 
 namespace ConscriptDesigner.Anchorables {
@@ -50,6 +52,37 @@ namespace ConscriptDesigner.Anchorables {
 			treeView.Items.Clear();
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// XML Serialization
+		//-----------------------------------------------------------------------------
+
+		public override void ReadXml(XmlReader reader) {
+			DesignerControl.MainWindow.ProjectExplorer = this;
+			Project = DesignerControl.Project;
+			if (reader.MoveToAttribute("ExpandedFolders")) {
+				string expandedFolders = reader.Value;
+				string[] folders = expandedFolders.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+				foreach (string folder in folders) {
+					ContentFolder file = project.GetFolder(folder);
+					if (file != null)
+						file.TreeViewItem.IsExpanded = true;
+				}
+			}
+			base.ReadXml(reader);
+		}
+		
+		public override void WriteXml(XmlWriter writer) {
+			base.WriteXml(writer);
+			string expandedFolders = "";
+			foreach (ContentFile file in project.GetAllFiles()) {
+				if (file.IsFolder && file.TreeViewItem.IsExpanded)
+					expandedFolders += file.Path + "|";
+			}
+			writer.WriteAttributeString("ExpandedFolders", expandedFolders);
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Event Handlers
 		//-----------------------------------------------------------------------------
@@ -76,7 +109,8 @@ namespace ConscriptDesigner.Anchorables {
 				target = target.Parent;
 
 			if (e.IsFileDrop) {
-				Project.RequestPaste(target.Path);
+				List<string> files = new List<string>();
+				Project.RequestDrop(e.Files, target.Path);
 			}
 			else {
 				ContentFile source = e.Item.File();
