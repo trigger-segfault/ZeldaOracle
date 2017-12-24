@@ -44,6 +44,7 @@ namespace ConscriptDesigner.Anchorables {
 		/// <summary>True if the title is currently displayed as modified.</summary>
 		private bool isTitleModified;
 
+
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
@@ -55,15 +56,12 @@ namespace ConscriptDesigner.Anchorables {
 			using (var reader = new XmlTextReader(stream))
 				highlightingDefinition = HighlightingLoader.Load(reader, HighlightingManager.Instance);
 		}
-		
-		/// <summary>Constructs the conscript editor.</summary>
-		public ConscriptEditor(ContentScript file) :
-			base(file)
-		{
+
+		/// <summary>Constructs the conscript editor for serialization.</summary>
+		public ConscriptEditor() {
 			Border border = CreateBorder();
 			this.editor = new TextEditor();
 			this.editor.TextArea.TextView.LineSpacing = 1.24;
-			this.editor.Load(file.FilePath);
 			this.editor.TextChanged += OnTextChanged;
 			this.isTitleModified = false;
 
@@ -88,15 +86,35 @@ namespace ConscriptDesigner.Anchorables {
 				TimeSpan.FromSeconds(0.05),
 				DispatcherPriority.ApplicationIdle,
 				delegate { CheckModified(); }, Dispatcher);
-			
+
 			this.modifiedTimer.Stop();
 
-			Title = file.Name;
 			Content = border;
+		}
 
+		/// <summary>Constructs the conscript editor.</summary>
+		public ConscriptEditor(ContentScript file) :
+			this()
+		{
+			LoadFile(file);
 		}
 
 
+		//-----------------------------------------------------------------------------
+		// ContentFileDocument Overrides
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Completes setup after loading the content file.</summary>
+		protected override void OnLoadFile(ContentFile loadFile) {
+			ContentScript file = loadFile as ContentScript;
+			if (file == null)
+				Close();
+
+			this.editor.Load(file.FilePath);
+			Title = file.Name;
+		}
+
+		
 		//-----------------------------------------------------------------------------
 		// Event Handlers
 		//-----------------------------------------------------------------------------

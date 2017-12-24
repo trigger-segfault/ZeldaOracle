@@ -28,6 +28,12 @@ namespace ConscriptDesigner {
 			new InputGestureCollection() {
 				new KeyGesture(Key.W, ModifierKeys.Control) });
 
+		/// <summary>The command to escape-close a window.</summary>
+		public static readonly RoutedUICommand EscapeClose = new RoutedUICommand(
+			"EscapeClose", "Close Window", typeof(Commands),
+			new InputGestureCollection() {
+				new KeyGesture(Key.Escape) });
+
 
 		//-----------------------------------------------------------------------------
 		// Edit

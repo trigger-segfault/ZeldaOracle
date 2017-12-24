@@ -50,6 +50,7 @@ namespace ConscriptDesigner.Controls {
 		public bool IsFileDrop { get; }
 		public ImageTreeViewItem Item { get; }
 		public ImageTreeViewItem Target { get; }
+		public string[] Files { get; }
 
 		public TreeViewDropEventArgs(RoutedEvent routedEvent, ImageTreeViewItem item, ImageTreeViewItem target) :
 			base(routedEvent)
@@ -57,14 +58,16 @@ namespace ConscriptDesigner.Controls {
 			this.IsFileDrop = false;
 			this.Item		= item;
 			this.Target		= target;
+			this.Files      = null;
 		}
 
-		public TreeViewDropEventArgs(RoutedEvent routedEvent, ImageTreeViewItem target) :
+		public TreeViewDropEventArgs(RoutedEvent routedEvent, ImageTreeViewItem target, string[] files) :
 			base(routedEvent)
 		{
 			this.IsFileDrop = true;
 			this.Item		= null;
 			this.Target		= target;
+			this.Files      = files;
 		}
 	}
 
@@ -275,10 +278,13 @@ namespace ConscriptDesigner.Controls {
 
 			if (fileDrop || (draggedItem != null && IsValidDropTarget(draggedItem, dropTarget))) {
 				TreeViewDropEventArgs drop;
-				if (fileDrop)
-					drop = new TreeViewDropEventArgs(DropItemEvent, dropTarget);
-				else
+				if (fileDrop) {
+					string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+					drop = new TreeViewDropEventArgs(DropItemEvent, dropTarget, files);
+				}
+				else {
 					drop = new TreeViewDropEventArgs(DropItemEvent, draggedItem, dropTarget);
+				}
 
 				// Drop the item
 				RaiseEvent(drop);

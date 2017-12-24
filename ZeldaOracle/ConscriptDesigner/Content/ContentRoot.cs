@@ -485,15 +485,16 @@ namespace ConscriptDesigner.Content {
 				throw new FileDoesNotExistException(name);
 			string filePath = file.FilePath;
 			string newPath = IOPath.Combine(IOPath.GetDirectoryName(path), newName);
-			string newFilePath = IOPath.Combine(file.Parent.FilePath, newName);
+			string newFilePath = IOPath.Combine(file.FileDirectory, newName);
 			if (file.Parent.Files.ContainsKey(newName))
 				throw new FileAlreadyExistsException(newName);
 
 			try {
-				if (file.IsFolder)
+				PathHelper.MoveFileOrDirectory(filePath, newFilePath);
+				/*if (file.IsFolder)
 					IODirectory.Move(filePath, newFilePath);
 				else
-					File.Move(filePath, newFilePath);
+					File.Move(filePath, newFilePath);*/
 			}
 			catch (Exception ex) {
 				if (catchExceptions)
@@ -845,22 +846,22 @@ namespace ConscriptDesigner.Content {
 		public void RequestRename(string path) {
 			string oldName = IOPath.GetFileName(path);
 			string directory = IOPath.GetDirectoryName(path);
-			string name = RenameFileWindow.Show(DesignerControl.MainWindow, "Rename",
+			string newName = RenameFileWindow.Show(DesignerControl.MainWindow, "Rename",
 				"Rename File", oldName, directory, this);
-			if (name != null) {
+			if (newName != null) {
 
 				ContentFile file = Get(path);
 				if (file == null)
 					throw new FileDoesNotExistException(oldName);
 
-				if (string.Compare(oldName, name, true) == 0) {
-					file.Name = name;
+				if (string.Compare(oldName, newName, true) == 0) {
+					file.Name = newName;
 				}
 				else {
-					string oldFilePath = IOPath.Combine(ProjectDirectory, directory, oldName);
-					string filePath = IOPath.Combine(ProjectDirectory, directory, name);
+					string filePath = IOPath.Combine(ProjectDirectory, directory, oldName);
+					string newFilePath = IOPath.Combine(ProjectDirectory, directory, newName);
 					try {
-						File.Move(oldFilePath, filePath);
+						PathHelper.MoveFileOrDirectory(filePath, newFilePath);
 					}
 					catch (Exception ex) {
 						DesignerControl.ShowExceptionMessage(ex, "rename", oldName);
@@ -868,7 +869,8 @@ namespace ConscriptDesigner.Content {
 					}
 				}
 				file.Parent.Files.Remove(oldName);
-				file.Parent.Files.Add(name, file);
+				file.Name = newName;
+				file.Parent.Files.Add(newName, file);
 				file.Parent.Resort();
 				file.TreeViewItem.IsSelected = true;
 				projectModified = true;
