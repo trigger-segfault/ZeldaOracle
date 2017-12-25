@@ -24,6 +24,20 @@ using ICSharpCode.NRefactory;
 using ZeldaOracle.Common.Util;
 
 namespace ConscriptDesigner.Windows {
+
+	/// <summary>A scope for searching the project in.</summary>
+	public enum FindScopes {
+		None = -1,
+		[Description("Current Document")]
+		CurrentDocument,
+		//[Description("Selection")]
+		//Selection,
+		[Description("All Open Documents")]
+		AllOpenDocuments,
+		[Description("Entire Project")]
+		EntireProject
+	}
+
 	/// <summary>
 	/// Interaction logic for FindAndReplaceDialog.xaml
 	/// </summary>
@@ -101,32 +115,19 @@ namespace ConscriptDesigner.Windows {
 			}
 		}
 
-		/// <summary>A scope for searching the project in.</summary>
-		private enum Scopes {
-			None = -1,
-			[Description("Current Document")]
-			CurrentDocument,
-			//[Description("Selection")]
-			//Selection,
-			[Description("All Open Documents")]
-			AllOpenDocuments,
-			[Description("Entire Project")]
-			EntireProject
-		}
-
 
 		//-----------------------------------------------------------------------------
 		// Static Members
 		//-----------------------------------------------------------------------------
 
-		private static bool lastCaseSensitive = true;
-		private static bool lastWholeWord = false;
-		private static bool lastRegex = false;
-		private static bool lastWrapSearch = true;
-		private static bool lastSearchUp = false;
-		private static bool lastLiveSearch = true;
+		//private static bool lastCaseSensitive = true;
+		//private static bool lastWholeWord = false;
+		//private static bool lastRegex = false;
+		//private static bool lastWrapSearch = true;
+		//private static bool lastSearchUp = false;
+		//private static bool lastLiveSearch = true;
 		private static string lastReplaceText = "";
-		private static Scopes lastScope = Scopes.CurrentDocument;
+		//private static FindScopes lastScope = FindScopes.CurrentDocument;
 
 
 		//-----------------------------------------------------------------------------
@@ -140,6 +141,8 @@ namespace ConscriptDesigner.Windows {
 		/// <summary>Used as a hack to focus on the find text box after changing modes.</summary>
 		private DispatcherTimer focusTimer;
 
+		private bool suppressEvents;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -147,29 +150,32 @@ namespace ConscriptDesigner.Windows {
 
 		/// <summary>Constructs the find and replace window.</summary>
 		public FindReplaceWindow(bool replace) {
+			suppressEvents = true;
 			InitializeComponent();
 
-			checkBoxCaseSensitive.IsChecked = lastCaseSensitive;
-			checkBoxWholeWord.IsChecked = lastWholeWord;
-			checkBoxRegex.IsChecked = lastRegex;
-			checkBoxWrapSearch.IsChecked = lastWrapSearch;
-			checkBoxSearchUp.IsChecked = lastSearchUp;
-			checkBoxLiveSearch.IsChecked = lastLiveSearch;
+			checkBoxCaseSensitive.IsChecked = ProjectUserSettings.FindAndReplace.MatchCase;
+			checkBoxWholeWord.IsChecked = ProjectUserSettings.FindAndReplace.MatchWord;
+			checkBoxRegex.IsChecked = ProjectUserSettings.FindAndReplace.RegularExpressions;
+			checkBoxWrapSearch.IsChecked = true;
+			checkBoxSearchUp.IsChecked = ProjectUserSettings.FindAndReplace.SearchUp;
+			checkBoxLiveSearch.IsChecked = ProjectUserSettings.FindAndReplace.LiveSearch;
 			textBoxReplace.Text = lastReplaceText;
 
 			searchColorizor = new ColorizeSearchResultsBackgroundRenderer();
 
-			Scopes[] scopes = (Scopes[])Enum.GetValues(typeof(Scopes));
-			foreach (Scopes scope in scopes) {
-				if (scope == Scopes.None)
+			FindScopes[] scopes = (FindScopes[])Enum.GetValues(typeof(FindScopes));
+			foreach (FindScopes scope in scopes) {
+				if (scope == FindScopes.None)
 					continue;
 				ComboBoxItem item = new ComboBoxItem();
 				item.Content = scope.ToDescription();
 				item.Tag = scope;
 				comboBoxScope.Items.Add(item);
-				if (scope == lastScope)
+				if (scope == ProjectUserSettings.FindAndReplace.Scope)
 					comboBoxScope.SelectedItem = item;
 			}
+			if (comboBoxScope.SelectedIndex == -1)
+				comboBoxScope.SelectedIndex = 0;
 
 			ContentScript script = ActiveScript;
 			if (script != null && script.IsOpen) {
@@ -196,6 +202,7 @@ namespace ConscriptDesigner.Windows {
 			DesignerControl.ActiveAnchorableChanged += OnActiveAnchorableChanged;
 			lastScript = null;
 			OnActiveAnchorableChanged();
+			suppressEvents = false;
 		}
 
 
@@ -430,16 +437,15 @@ namespace ConscriptDesigner.Windows {
 		//-----------------------------------------------------------------------------
 		
 		private void OnClosing(object sender, CancelEventArgs e) {
-			lastCaseSensitive = checkBoxCaseSensitive.IsChecked == true;
-			lastWholeWord = checkBoxWholeWord.IsChecked == true;
-			lastRegex = checkBoxRegex.IsChecked == true;
-			lastWrapSearch = checkBoxWrapSearch.IsChecked == true;
-			lastSearchUp = checkBoxSearchUp.IsChecked == true;
-			lastLiveSearch = checkBoxLiveSearch.IsChecked == true;
+			//lastCaseSensitive = checkBoxCaseSensitive.IsChecked == true;
+			//lastWholeWord = checkBoxWholeWord.IsChecked == true;
+			//lastRegex = checkBoxRegex.IsChecked == true;
+			//lastWrapSearch = checkBoxWrapSearch.IsChecked == true;
+			//lastSearchUp = checkBoxSearchUp.IsChecked == true;
+			//lastLiveSearch = checkBoxLiveSearch.IsChecked == true;
 			lastReplaceText = textBoxReplace.Text;
-			lastScope = Scope;
-			if (lastScript != null && lastScript.IsOpen)
-				lastScript.TextEditor.TextArea.TextView.BackgroundRenderers.Remove(searchColorizor);
+			//lastScope = Scope;
+			UnhookScript(lastScript);
 		}
 
 		private void OnActiveAnchorableChanged(object sender = null, EventArgs e = null) {
@@ -477,13 +483,23 @@ namespace ConscriptDesigner.Windows {
 			FindFirstResult();
 		}
 
-		private void OnCheckboxChanged(object sender, RoutedEventArgs e) {
+		private void OnSearchCheckboxChanged(object sender, RoutedEventArgs e) {
 			UpdateSearch();
 			FindFirstResult();
+			OnCheckboxChanged();
+		}
+
+		private void OnCheckboxChanged(object sender = null, RoutedEventArgs e = null) {
+			ProjectUserSettings.FindAndReplace.MatchCase = checkBoxCaseSensitive.IsChecked == true;
+			ProjectUserSettings.FindAndReplace.MatchWord = checkBoxWholeWord.IsChecked == true;
+			ProjectUserSettings.FindAndReplace.RegularExpressions = checkBoxRegex.IsChecked == true;
+			ProjectUserSettings.FindAndReplace.SearchUp = checkBoxSearchUp.IsChecked == true;
+			ProjectUserSettings.FindAndReplace.LiveSearch = checkBoxLiveSearch.IsChecked == true;
 		}
 
 		private void OnScopeChanged(object sender, SelectionChangedEventArgs e) {
-
+			if (suppressEvents) return;
+			ProjectUserSettings.FindAndReplace.Scope = Scope;
 		}
 
 		
@@ -493,27 +509,28 @@ namespace ConscriptDesigner.Windows {
 
 		/// <summary>Hooks the scripts text editor.</summary>
 		private void HookScript(ContentScript script) {
-			if (script == null) return;
+			if (script == null || !script.IsOpen) return;
 			script.TextEditor.TextChanged += OnTextEditorTextChanged;
 			script.TextEditor.TextArea.TextView.BackgroundRenderers.Add(searchColorizor);
 		}
 
 		/// <summary>Unhooks the scripts text editor.</summary>
 		private void UnhookScript(ContentScript script) {
-			if (script == null) return;
+			if (script == null || !script.IsOpen) return;
 			script.TextEditor.TextChanged -= OnTextEditorTextChanged;
 			script.TextEditor.TextArea.TextView.BackgroundRenderers.Remove(searchColorizor);
 		}
 
 		/// <summary>Finds the next script in the list.</summary>
 		private ContentScript FindNextScript(ContentFile active = null, ContentFile startFile = null,
-			bool replaceAll = false, Scopes scope = Scopes.None) {
+			bool replaceAll = false, FindScopes scope = FindScopes.None)
+		{
 			if (active == null) {
 				active = DesignerControl.GetActiveContentFile();
 			}
-			if (scope == Scopes.None)
+			if (scope == FindScopes.None)
 				scope = Scope;
-			if (scope != Scopes.AllOpenDocuments && scope != Scopes.EntireProject)
+			if (scope != FindScopes.AllOpenDocuments && scope != FindScopes.EntireProject)
 				return active as ContentScript;
 			ContentScript result = null;
 			if (active == null) {
@@ -531,7 +548,7 @@ namespace ConscriptDesigner.Windows {
 
 		/// <summary>Finds the next script by searching down through folders from the starting file.</summary>
 		private ContentScript FindNextScriptSearchDown(ContentFolder folder, ContentFile startChild,
-			ContentFile startFile, Scopes scope) {
+			ContentFile startFile, FindScopes scope) {
 			bool searchUp = checkBoxSearchUp.IsChecked == true;
 			int startIndex = folder.IndexOfFile(startChild);
 			startIndex += (searchUp ? -1 : 1);
@@ -546,7 +563,7 @@ namespace ConscriptDesigner.Windows {
 
 		/// <summary>Finds the next script by searching up through a folder and subfolders.</summary>
 		private ContentScript FindNextScriptSearchUp(ContentFolder folder, ContentFile startFile,
-			Scopes scope, int startIndex = -1) {
+			FindScopes scope, int startIndex = -1) {
 			bool searchUp = checkBoxSearchUp.IsChecked == true;
 			ContentScript result = null;
 			if (searchUp) {
@@ -557,7 +574,7 @@ namespace ConscriptDesigner.Windows {
 					if (file == startFile)
 						return startFile as ContentScript;
 					if (file is ContentScript) {
-						if (file.IsOpen || scope == Scopes.EntireProject)
+						if (file.IsOpen || scope == FindScopes.EntireProject)
 							return (ContentScript) file;
 					}
 					else if (file.IsFolder)
@@ -572,7 +589,7 @@ namespace ConscriptDesigner.Windows {
 					if (file == startFile)
 						return startFile as ContentScript;
 					if (file is ContentScript) {
-						if (file.IsOpen || scope == Scopes.EntireProject)
+						if (file.IsOpen || scope == FindScopes.EntireProject)
 							return (ContentScript) file;
 					}
 					else if (file.IsFolder)
@@ -586,7 +603,8 @@ namespace ConscriptDesigner.Windows {
 		private bool FindNext(string searchText, out ContentScript script, out Selection selection,
 			ContentFile startFile = null, Selection? startSelectionIn = null, ContentFile currentFile = null,
 			Selection? currentSelectionIn = null, bool replaceAll = false, bool replace = false,
-			Scopes scope = Scopes.None) {
+			FindScopes scope = FindScopes.None)
+		{
 			selection = Selection.Empty;
 			script = null;
 
@@ -730,7 +748,15 @@ namespace ConscriptDesigner.Windows {
 				options |= RegexOptions.IgnoreCase;
 
 			if (checkBoxRegex.IsChecked == true) {
-				return new Regex(textToFind, options);
+				try {
+					return new Regex(textToFind, options);
+				}
+				catch (Exception) {
+					string pattern = Regex.Escape(textToFind);
+					if (checkBoxWholeWord.IsChecked == true)
+						pattern = "\\b" + pattern + "\\b";
+					return new Regex(pattern, options);
+				}
 			}
 			else {
 				string pattern = Regex.Escape(textToFind);
@@ -750,7 +776,7 @@ namespace ConscriptDesigner.Windows {
 				Selection currentSelection = Selection.FromStart(editor.SelectionStart);
 				if (FindNext(find, out script, out selection, currentFile: lastScript,
 					startSelectionIn: currentSelection, currentSelectionIn: currentSelection,
-					scope: Scopes.CurrentDocument)) {
+					scope: FindScopes.CurrentDocument)) {
 					lastScript.SelectText(selection.Start, selection.Length, false);
 				}
 			}
@@ -798,8 +824,8 @@ namespace ConscriptDesigner.Windows {
 		}
 
 		/// <summary>Gets the current find scope.</summary>
-		private Scopes Scope {
-			get { return (Scopes) ((ComboBoxItem) comboBoxScope.SelectedItem).Tag; }
+		private FindScopes Scope {
+			get { return (FindScopes) ((ComboBoxItem) comboBoxScope.SelectedItem).Tag; }
 		}
 	}
 }

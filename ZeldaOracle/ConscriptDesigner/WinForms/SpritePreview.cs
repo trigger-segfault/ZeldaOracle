@@ -166,7 +166,6 @@ namespace ConscriptDesigner.WinForms {
 				spriteSize = orderedSpriteSizes[0];
 			}
 			UpdateSpriteSize(spriteSize);
-			//this.font = Resources.GetResource<GameFont>("Fonts/font_large");
 			if (GameData.PaletteShader != null && !GameData.PaletteShader.Effect.IsDisposed) {
 				GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
 				GameData.PaletteShader.TilePalette = GameData.PAL_PRESENT;

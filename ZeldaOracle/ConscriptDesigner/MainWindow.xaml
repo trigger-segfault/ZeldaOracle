@@ -9,7 +9,7 @@
         xmlns:avalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
         mc:Ignorable="d"
-        Title="Zelda Conscript Designer" Height="657" Width="1029" SnapsToDevicePixels="True" UseLayoutRounding="True" Loaded="OnLoaded" Closing="OnClosing" Icon="Conscript.ico">
+        Title="Zelda Conscript Designer" Height="657" Width="1029" SnapsToDevicePixels="True" UseLayoutRounding="True" Loaded="OnLoaded" Closing="OnClosing" Icon="Conscript.ico" Background="#FF293955" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -42,80 +42,87 @@
         <CommandBinding Command="cmd:Commands.SpriteBrowser" CanExecute="CanAlwaysExecute" Executed="OnSpriteBrowserCommand"/>
         <CommandBinding Command="cmd:Commands.SpriteSourceBrowser" CanExecute="CanAlwaysExecute" Executed="OnSpriteSourceBrowserCommand"/>
     </Window.CommandBindings>
-    <DockPanel>
-        <WindowsFormsHost x:Name="dummyHost" Height="0" Width="0">
-
-        </WindowsFormsHost>
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <local:ImageMenuItem Header="Open Project" Source="/Resources/Icons/Open.png" Command="Open"/>
-                <local:ImageMenuItem Header="Save" Source="/Resources/Icons/Save.png" Command="Save"/>
-                <local:ImageMenuItem Header="Save All" Source="/Resources/Icons/SaveAll.png" Command="cmd:Commands.SaveAll"/>
-                <Separator/>
-                <local:ImageMenuItem Header="Close Project" Source="/Resources/Icons/Close.png" Command="cmd:Commands.Close"/>
-                <Separator/>
-                <local:ImageMenuItem Header="Exit" Source="/Resources/Icons/Exit.png" Command="cmd:Commands.Exit"/>
-            </MenuItem>
-            <MenuItem Header="_Edit">
-                <local:ImageMenuItem Header="Undo" Source="/Resources/Icons/Undo.png" Command="Undo"/>
-                <local:ImageMenuItem Header="Redo" Source="/Resources/Icons/Redo.png" Command="Redo"/>
-                <Separator/>
-                <local:ImageMenuItem Header="Cut" Source="/Resources/Icons/Cut.png" Command="Cut"/>
-                <local:ImageMenuItem Header="Copy" Source="/Resources/Icons/Copy.png" Command="Copy"/>
-                <local:ImageMenuItem Header="Paste" Source="/Resources/Icons/Paste.png" Command="Paste"/>
-                <local:ImageMenuItem Header="Delete" Source="/Resources/Icons/Delete.png" Command="Delete"/>
-                <Separator/>
-                <local:ImageMenuItem Header="SelectAll" Source="/Resources/Icons/SelectAll.png" Command="SelectAll"/>
-                <Separator/>
-                <local:ImageMenuItem Header="Find" Source="/Resources/Icons/Find.png" Command="Find"/>
-                <local:ImageMenuItem Header="Replace" Source="/Resources/Icons/Replace.png" Command="Replace"/>
-                <local:ImageMenuItem Header="Go To Line..." Source="/Resources/Icons/GotoLine.png" Command="cmd:Commands.GotoLine"/>
-            </MenuItem>
-            <MenuItem Header="_View">
-                <local:ImageMenuItem Header="Project Explorer" Source="/Resources/Icons/ContentProject.png" Command="cmd:Commands.ProjectExplorer"/>
-                <local:ImageMenuItem Header="Output Console" Source="/Resources/Icons/Console.png" Command="cmd:Commands.OutputConsole"/>
-                <local:ImageMenuItem Header="Sprite Browser" Source="/Resources/Icons/Sprite.png" Command="cmd:Commands.SpriteBrowser"/>
-                <local:ImageMenuItem Header="Sprite Source Browser" Source="/Resources/Icons/SpriteSource.png" Command="cmd:Commands.SpriteSourceBrowser"/>
-                <local:ImageMenuItem Header="Tile Browser" Source="/Resources/Icons/Tile.png" Command="cmd:Commands.TileBrowser"/>
-            </MenuItem>
-            <MenuItem Header="_Project">
-                <local:ImageMenuItem Header="Run Conscripts" Source="/Resources/Icons/Build.png" Command="cmd:Commands.RunConscripts"/>
-                <local:ImageMenuItem Header="Compile Content" Source="/Resources/Icons/Compile.png" Command="cmd:Commands.CompileContent"/>
-            </MenuItem>
-            <MenuItem Header="_Options">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" x:Name="splash">
+            <Label Content="Loading" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="36" Foreground="White"/>
+            <Label Content="Conscript Designer" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="36" Foreground="White"/>
+        </StackPanel>
+        <DockPanel x:Name="dockPanel">
+            <WindowsFormsHost x:Name="dummyHost" Height="0" Width="0" />
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <local:ImageMenuItem Header="Open Project" Source="/Resources/Icons/Open.png" Command="Open"/>
+                    <local:ImageMenuItem Header="Save" Source="/Resources/Icons/Save.png" Command="Save"/>
+                    <local:ImageMenuItem Header="Save All" Source="/Resources/Icons/SaveAll.png" Command="cmd:Commands.SaveAll"/>
+                    <Separator/>
+                    <local:ImageMenuItem Header="Close Project" Source="/Resources/Icons/Close.png" Command="cmd:Commands.Close"/>
+                    <Separator/>
+                    <local:ImageMenuItem Header="Exit" Source="/Resources/Icons/Exit.png" Command="cmd:Commands.Exit"/>
+                </MenuItem>
+                <MenuItem Header="_Edit">
+                    <local:ImageMenuItem Header="Undo" Source="/Resources/Icons/Undo.png" Command="Undo"/>
+                    <local:ImageMenuItem Header="Redo" Source="/Resources/Icons/Redo.png" Command="Redo"/>
+                    <Separator/>
+                    <local:ImageMenuItem Header="Cut" Source="/Resources/Icons/Cut.png" Command="Cut"/>
+                    <local:ImageMenuItem Header="Copy" Source="/Resources/Icons/Copy.png" Command="Copy"/>
+                    <local:ImageMenuItem Header="Paste" Source="/Resources/Icons/Paste.png" Command="Paste"/>
+                    <local:ImageMenuItem Header="Delete" Source="/Resources/Icons/Delete.png" Command="Delete"/>
+                    <Separator/>
+                    <local:ImageMenuItem Header="SelectAll" Source="/Resources/Icons/SelectAll.png" Command="SelectAll"/>
+                    <Separator/>
+                    <local:ImageMenuItem Header="Find" Source="/Resources/Icons/Find.png" Command="Find"/>
+                    <local:ImageMenuItem Header="Replace" Source="/Resources/Icons/Replace.png" Command="Replace"/>
+                    <local:ImageMenuItem Header="Go To Line..." Source="/Resources/Icons/GotoLine.png" Command="cmd:Commands.GotoLine"/>
+                </MenuItem>
+                <MenuItem Header="_View">
+                    <local:ImageMenuItem Header="Project Explorer" Source="/Resources/Icons/ContentProject.png" Command="cmd:Commands.ProjectExplorer"/>
+                    <local:ImageMenuItem Header="Output Console" Source="/Resources/Icons/Console.png" Command="cmd:Commands.OutputConsole"/>
+                    <Separator/>
+                    <local:ImageMenuItem Header="Sprite Browser" Source="/Resources/Icons/Sprite.png" Command="cmd:Commands.SpriteBrowser"/>
+                    <local:ImageMenuItem Header="Sprite Source Browser" Source="/Resources/Icons/SpriteSource.png" Command="cmd:Commands.SpriteSourceBrowser"/>
+                    <local:ImageMenuItem Header="Tile Data Browser" Source="/Resources/Icons/Tile.png" Command="cmd:Commands.TileBrowser"/>
+                </MenuItem>
+                <MenuItem Header="_Project">
+                    <local:ImageMenuItem Header="Run Conscripts" Source="/Resources/Icons/Build.png" Command="cmd:Commands.RunConscripts"/>
+                    <local:ImageMenuItem Header="Compile Content" Source="/Resources/Icons/Compile.png" Command="cmd:Commands.CompileContent"/>
+                    <Separator/>
+                    <local:ImageMenuItem Header="Go To Error" Source="/Resources/Icons/ErrorGoto.png" Command="cmd:Commands.GotoError"/>
+                </MenuItem>
+                <MenuItem Header="_Options">
             
-            </MenuItem>
-            <MenuItem Header="Help">
+                </MenuItem>
+                <MenuItem Header="Help">
                 
-            </MenuItem>
-        </Menu>
-        <ToolBar DockPanel.Dock="Top">
-            <local:ImageButton Source="Resources/Icons/Save.png" ToolTip="Save File (Ctrl+S)" Command="Save"/>
-            <local:ImageButton Source="Resources/Icons/SaveAll.png" ToolTip="Save All Files (Ctrl+Shift+S)" Command="cmd:Commands.SaveAll"/>
-            <Separator/>
-            <local:ImageButton Source="Resources/Icons/Undo.png" ToolTip="Undo (Ctr+Z)" Command="Undo"/>
-            <local:ImageButton Source="Resources/Icons/Redo.png" ToolTip="Redo (Ctrl+Y/Ctrl+Shift+Z)" Command="Redo"/>
-            <Separator/>
-            <local:ImageButton Source="Resources/Icons/Build.png" Content="Run Conscripts" Command="cmd:Commands.RunConscripts" ToolTip="Run Conscripts (F5)"/>
-            <local:ImageButton Source="Resources/Icons/Compile.png" Content="Compile Content" Command="cmd:Commands.CompileContent" ToolTip="Compile Content (Shift+F5)" />
-            <Separator/>
-            <local:ImageButton Source="Resources/Icons/ErrorGoto.png" Content="Go To Error" Command="cmd:Commands.GotoError" />
-        </ToolBar>
-        <avalonDock:DockingManager x:Name="dockingManager" ActiveContentChanged="OnActiveAnchorableChanged" UseLayoutRounding="True" AllowMixedOrientation="True">
-            <avalonDock:DockingManager.Theme>
-                <avalonDock:VS2010Theme/>
-            </avalonDock:DockingManager.Theme>
-            <avalonDock:LayoutRoot>
-                <avalonDock:LayoutPanel Orientation="Vertical">
-                    <avalonDock:LayoutPanel Orientation="Horizontal">
-                        <avalonDock:LayoutAnchorablePane DockWidth="250" />
-                        <avalonDock:LayoutPanel Orientation="Vertical">
-                            <avalonDock:LayoutDocumentPane/>
-                            <avalonDock:LayoutAnchorablePane DockHeight="200" />
+                </MenuItem>
+            </Menu>
+            <ToolBar DockPanel.Dock="Top">
+                <local:ImageButton Source="Resources/Icons/Save.png" ToolTip="Save File (Ctrl+S)" Command="Save"/>
+                <local:ImageButton Source="Resources/Icons/SaveAll.png" ToolTip="Save All Files (Ctrl+Shift+S)" Command="cmd:Commands.SaveAll"/>
+                <Separator/>
+                <local:ImageButton Source="Resources/Icons/Undo.png" ToolTip="Undo (Ctr+Z)" Command="Undo"/>
+                <local:ImageButton Source="Resources/Icons/Redo.png" ToolTip="Redo (Ctrl+Y/Ctrl+Shift+Z)" Command="Redo"/>
+                <Separator/>
+                <local:ImageButton Source="Resources/Icons/Build.png" Content="Run Conscripts" Command="cmd:Commands.RunConscripts" ToolTip="Run Conscripts (F5)"/>
+                <local:ImageButton Source="Resources/Icons/Compile.png" Content="Compile Content" Command="cmd:Commands.CompileContent" ToolTip="Compile Content (Shift+F5)" />
+                <Separator/>
+                <local:ImageButton Source="Resources/Icons/ErrorGoto.png" Content="Go To Error" Command="cmd:Commands.GotoError" />
+            </ToolBar>
+            <avalonDock:DockingManager x:Name="dockingManager" ActiveContentChanged="OnActiveAnchorableChanged" UseLayoutRounding="True" AllowMixedOrientation="True">
+                <avalonDock:DockingManager.Theme>
+                    <avalonDock:VS2010Theme/>
+                </avalonDock:DockingManager.Theme>
+                <avalonDock:LayoutRoot>
+                    <avalonDock:LayoutPanel Orientation="Vertical">
+                        <avalonDock:LayoutPanel Orientation="Horizontal">
+                            <avalonDock:LayoutAnchorablePane DockWidth="250" />
+                            <avalonDock:LayoutPanel Orientation="Vertical">
+                                <avalonDock:LayoutDocumentPane/>
+                                <avalonDock:LayoutAnchorablePane DockHeight="200" />
+                            </avalonDock:LayoutPanel>
                         </avalonDock:LayoutPanel>
                     </avalonDock:LayoutPanel>
-                </avalonDock:LayoutPanel>
-            </avalonDock:LayoutRoot>
-        </avalonDock:DockingManager>
-    </DockPanel>
+                </avalonDock:LayoutRoot>
+            </avalonDock:DockingManager>
+        </DockPanel>
+    </Grid>
 </Window>

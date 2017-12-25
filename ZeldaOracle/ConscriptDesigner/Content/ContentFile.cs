@@ -136,17 +136,18 @@ namespace ConscriptDesigner.Content {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Opens the content file.</summary>
-		public bool Open(bool silentFail) {
+		public bool Open(bool silentFail, bool activate = true) {
 			if (IsOpen) {
 				// Focus on the already-existing anchorable
-				Document.IsActive = true;
+				if (activate)
+					Document.IsActive = true;
 				return true;
 			}
 			else {
 				try {
 					UpdateLastModified();
 					OnOpen();
-					if (IsOpen)
+					if (IsOpen && activate)
 						document.IsActive = true;
 					return true;
 				}
