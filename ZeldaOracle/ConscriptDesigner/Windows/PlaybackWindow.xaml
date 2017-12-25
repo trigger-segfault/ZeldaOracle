@@ -36,7 +36,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="1.2*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Separator Height="20" VerticalAlignment="Top" Margin="10,0,0,0" />
             <StackPanel Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Margin="0" Grid.Column="1">

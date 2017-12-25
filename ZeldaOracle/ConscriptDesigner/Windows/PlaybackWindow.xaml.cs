@@ -86,8 +86,8 @@ namespace ConscriptDesigner.Windows {
 		// Static Members
 		//-----------------------------------------------------------------------------
 
-		private static double lastVolume = 1.0;
-		private static bool lastLooping = false;
+		//private static double lastVolume = 1.0;
+		//private static bool lastLooping = false;
 
 
 		//-----------------------------------------------------------------------------
@@ -119,11 +119,11 @@ namespace ConscriptDesigner.Windows {
 			this.waveOut = new WaveOut();
 			this.waveOut.PlaybackStopped += OnPlaybackStopped;
 
-			this.looping = lastLooping;
-			this.toggleButtonLooping.IsChecked = lastLooping;
+			this.looping = ProjectUserSettings.Playback.Looping;
+			this.toggleButtonLooping.IsChecked = ProjectUserSettings.Playback.Looping;
 			this.soundLoaded = false;
-			this.spinnerVolume.Value = lastVolume;
-			this.waveOut.Volume = (float)lastVolume;
+			this.spinnerVolume.Value = ProjectUserSettings.Playback.Volume;
+			this.waveOut.Volume = (float) ProjectUserSettings.Playback.Volume;
 			this.updateTimer = new DispatcherTimer(
 				TimeSpan.FromSeconds(0.01),
 				DispatcherPriority.ApplicationIdle,
@@ -222,9 +222,9 @@ namespace ConscriptDesigner.Windows {
 		//-----------------------------------------------------------------------------
 
 		private void OnClosing(object sender, CancelEventArgs e) {
-			if (spinnerVolume.Value.HasValue)
-				lastVolume = spinnerVolume.Value.Value;
-			lastLooping = looping;
+			//if (spinnerVolume.Value.HasValue)
+			//	lastVolume = spinnerVolume.Value.Value;
+			//lastLooping = looping;
 			updateTimer.Stop();
 			startTimer.Stop();
 			waveOut.Stop();
@@ -289,6 +289,7 @@ namespace ConscriptDesigner.Windows {
 
 		private void OnLoopingChanged(object sender, RoutedEventArgs e) {
 			looping = toggleButtonLooping.IsChecked == true;
+			ProjectUserSettings.Playback.Looping = looping;
 			if (looper != null)
 				looper.EnableLooping = looping;
 		}
@@ -305,8 +306,10 @@ namespace ConscriptDesigner.Windows {
 
 		private void OnVolumeChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
 			if (suppressEvents) return;
-			if (spinnerVolume.Value.HasValue)
+			if (spinnerVolume.Value.HasValue) {
+				ProjectUserSettings.Playback.Volume = spinnerVolume.Value.Value;
 				waveOut.Volume = (float) spinnerVolume.Value.Value;
+			}
 		}
 
 

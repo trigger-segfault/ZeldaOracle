@@ -11,8 +11,9 @@ namespace ConscriptDesigner.WinForms {
 
 
 		protected override void Initialize() {
-			DesignerControl.GraphicsDevice	= GraphicsDevice;
-			DesignerControl.ContentManager	= new ContentManager(Services, "Content");
+			DesignerControl.SetGraphics(
+				GraphicsDevice,
+				new ContentManager(Services, "Content"));
 		}
 	}
 }

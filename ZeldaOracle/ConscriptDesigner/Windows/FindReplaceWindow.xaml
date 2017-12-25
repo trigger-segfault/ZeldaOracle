@@ -55,12 +55,12 @@
             </TabItem>
         </TabControl>
 
-        <CheckBox Grid.Row="2" Grid.Column="0" Margin="10,2" Name="checkBoxCaseSensitive" Content="Match case" IsTabStop="False" Click="OnCheckboxChanged" />
-        <CheckBox Grid.Row="3" Grid.Column="0" Margin="10,2" Name="checkBoxWholeWord" Content="Match whole word" IsTabStop="False" Click="OnCheckboxChanged" />
-        <CheckBox Grid.Row="2" Grid.Column="1" Margin="10,2" Name="checkBoxRegex" Content="Regular Expression" IsChecked="false" IsTabStop="False" Click="OnCheckboxChanged" />
+        <CheckBox Grid.Row="2" Grid.Column="0" Margin="10,2" Name="checkBoxCaseSensitive" Content="Match case" IsTabStop="False" Click="OnSearchCheckboxChanged" />
+        <CheckBox Grid.Row="3" Grid.Column="0" Margin="10,2" Name="checkBoxWholeWord" Content="Match whole word" IsTabStop="False" Click="OnSearchCheckboxChanged" />
+        <CheckBox Grid.Row="2" Grid.Column="1" Margin="10,2" Name="checkBoxRegex" Content="Regular Expression" IsChecked="false" IsTabStop="False" Click="OnSearchCheckboxChanged" />
         <CheckBox Grid.Row="3" Grid.Column="1" Margin="10,2" Name="checkBoxWrapSearch" Content="Wrap search" IsChecked="True" IsTabStop="False" Visibility="Hidden" />
-        <CheckBox Grid.Row="3" Grid.Column="1" Margin="10,2" Name="checkBoxSearchUp" Content="Search up" IsChecked="false" IsTabStop="False" />
-        <CheckBox Grid.Row="4" Grid.Column="1" Margin="10,2" Name="checkBoxLiveSearch" Content="Live search" IsChecked="false" IsTabStop="False" />
+        <CheckBox Grid.Row="3" Grid.Column="1" Margin="10,2" Name="checkBoxSearchUp" Content="Search up" IsChecked="false" IsTabStop="False" Click="OnCheckboxChanged" />
+        <CheckBox Grid.Row="4" Grid.Column="1" Margin="10,2" Name="checkBoxLiveSearch" Content="Live search" IsChecked="false" IsTabStop="False" Click="OnCheckboxChanged" />
         <ComboBox x:Name="comboBoxScope" Grid.Row="5" Grid.ColumnSpan="2" Margin="10,2" IsTabStop="False" SelectionChanged="OnScopeChanged"/>
     </Grid>
 </Window>

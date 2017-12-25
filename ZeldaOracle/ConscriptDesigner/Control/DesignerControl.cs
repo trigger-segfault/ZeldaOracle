@@ -61,6 +61,13 @@ namespace ConscriptDesigner.Control {
 			modifiedTimer = new DispatcherTimer(TimeSpan.FromSeconds(3), DispatcherPriority.ApplicationIdle, delegate { CheckForOutdatedFiles(); }, Application.Current.Dispatcher);
 		}
 
+		public static void SetGraphics(GraphicsDevice graphicsDevice, ContentManager contentManager) {
+			DesignerControl.graphicsDevice = graphicsDevice;
+			DesignerControl.contentManager = contentManager;
+			if (IsProjectOpen) {
+				RunConscripts();
+			}
+		}
 
 		//-----------------------------------------------------------------------------
 		// Events
@@ -435,13 +442,14 @@ namespace ConscriptDesigner.Control {
 				}
 				if (result) {
 					//mainWindow.SaveLayout();
+					ProjectUserSettings.Save();
 					while (openAnchorables.Any()) {
 						openAnchorables[0].ForceClose();
 					}
-					if (mainWindow.ProjectExplorer != null)
-						mainWindow.ProjectExplorer.Clear();
 					if (mainWindow.OutputConsole != null)
 						mainWindow.OutputConsole.Clear();
+					if (mainWindow.ProjectExplorer != null)
+						mainWindow.ProjectExplorer.Clear();
 					project.Cleanup();
 					project = null;
 					if (ResourcesUnloaded != null)
@@ -459,17 +467,21 @@ namespace ConscriptDesigner.Control {
 				Close();
 			}
 			try {
+				while (openAnchorables.Any()) {
+					openAnchorables[0].ForceClose();
+				}
 				ContentRoot newProject = new ContentRoot();
 				newProject.LoadContentProject(path);
 				project = newProject;
 				//mainWindow.LoadLayout();
-				mainWindow.OpenProjectExplorer();
-				mainWindow.OpenOutputConsole();
-				if (mainWindow.ProjectExplorer != null)
-					mainWindow.ProjectExplorer.Project = newProject;
-				RunConscripts();
+				if (IsGraphicsLoaded)
+					RunConscripts();
 				if (ProjectOpened != null)
 					ProjectOpened(null, EventArgs.Empty);
+				if (!ProjectUserSettings.Load()) {
+					mainWindow.OpenOutputConsole();
+					mainWindow.OpenProjectExplorer();
+				}
 				CommandManager.InvalidateRequerySuggested();
 			}
 			catch (Exception ex) {
@@ -623,12 +635,10 @@ namespace ConscriptDesigner.Control {
 
 		public static GraphicsDevice GraphicsDevice {
 			get { return graphicsDevice; }
-			set { graphicsDevice = value; }
 		}
 
 		public static ContentManager ContentManager {
 			get { return contentManager; }
-			set { contentManager = value; }
 		}
 
 		public static bool IsBusy {
@@ -647,8 +657,12 @@ namespace ConscriptDesigner.Control {
 			get { return lastScriptError != null; }
 		}
 
-		public static string LayoutFile {
-			get { return project.ProjectFile + ".designer.layout.user"; }
+		public static string ProjectSettingsFile {
+			get { return project.ProjectFile + ".designer.user"; }
+		}
+
+		public static bool IsGraphicsLoaded {
+			get { return graphicsDevice != null && contentManager != null; }
 		}
 	}
 }

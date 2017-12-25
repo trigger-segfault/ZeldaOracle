@@ -126,6 +126,7 @@
       <DependentUpon>SpriteSourceBrowserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Commands.cs" />
+    <Compile Include="ProjectUserSettings.cs" />
     <Compile Include="Content\ContentSpriteFont.cs" />
     <Compile Include="Content\ContentXmlInfo.cs" />
     <Compile Include="Content\Exceptions.cs" />

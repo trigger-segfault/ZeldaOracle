@@ -670,5 +670,9 @@ namespace ZeldaOracle.Common.Content {
 		public static PalettedSpriteDatabase PalettedSpriteDatabase {
 			get { return palettedSpriteDatabase; }
 		}
+
+		public static bool IsLoaded {
+			get { return resourceDictionaries != null; }
+		}
 	}
 } // end namespace

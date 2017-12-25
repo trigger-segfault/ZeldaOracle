@@ -23,6 +23,7 @@ using ConscriptDesigner.WinForms;
 using Xceed.Wpf.AvalonDock.Layout;
 using Xceed.Wpf.AvalonDock.Layout.Serialization;
 using Xceed.Wpf.AvalonDock.Themes;
+using ZeldaResources = ZeldaOracle.Common.Content.Resources;
 
 namespace ConscriptDesigner {
 	/// <summary>
@@ -41,6 +42,8 @@ namespace ConscriptDesigner {
 		private PlaybackWindow playbackWindow;
 
 		private DispatcherTimer checkOutdatedTimer;
+		private DispatcherTimer loadedTimer;
+		private DispatcherTimer displayTimer;
 
 		private IRequestCloseAnchorable activeAnchorable;
 
@@ -53,7 +56,12 @@ namespace ConscriptDesigner {
 			supressEvents = true;
 			InitializeComponent();
 
-			dummyHost.Child = new DummyGraphicsDeviceControl();
+			// Splash window mode
+			Width = 400;
+			Height = 260;
+			WindowStyle = WindowStyle.None;
+			ResizeMode = ResizeMode.NoResize;
+
 			Application.Current.Activated += OnApplicationActivated;
 
 			this.checkOutdatedTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.1),
@@ -63,12 +71,47 @@ namespace ConscriptDesigner {
 				}, Dispatcher);
 			this.checkOutdatedTimer.Stop();
 		}
+		
+		private void Initialize() {
+			dummyHost.Child = new DummyGraphicsDeviceControl();
+			string[] args = Environment.GetCommandLineArgs();
+			if (args.Length > 1) {
+				DesignerControl.OpenProject(args[1]);
+			}
+
+			Visibility = Visibility.Collapsed;
+			displayTimer = new DispatcherTimer(
+				TimeSpan.FromMilliseconds(0.1),
+				DispatcherPriority.ApplicationIdle,
+				delegate {
+					DisplayWindow();
+					displayTimer.Stop();
+					displayTimer = null;
+				}, Dispatcher);
+		}
+
+		private void DisplayWindow() {
+			// Disable splash window mode
+			WindowStyle = WindowStyle.SingleBorderWindow;
+			ResizeMode = ResizeMode.CanResize;
+			splash.Visibility = Visibility.Collapsed;
+			dockPanel.Visibility = Visibility.Visible;
+
+			// Center window
+			Width = ProjectUserSettings.Window.Width;
+			Height = ProjectUserSettings.Window.Height;
+			Left = (SystemParameters.PrimaryScreenWidth - Width) / 2;
+			Top = (SystemParameters.PrimaryScreenHeight - Height) / 2;
+			if (ProjectUserSettings.Window.Maximized)
+				WindowState = WindowState.Maximized;
+			Visibility = Visibility.Visible;
+		}
 
 
 		//-----------------------------------------------------------------------------
 		// Events
 		//-----------------------------------------------------------------------------
-		
+
 		public event EventHandler ActiveAnchorableChanged;
 
 
@@ -83,14 +126,18 @@ namespace ConscriptDesigner {
 			DesignerControl.ResourcesLoaded += OnResourcesLoaded;
 			DesignerControl.ResourcesUnloaded += OnResourcesUnloaded;
 			supressEvents = false;
-			
+
 			OnOutputConsoleCommand();
 			OnProjectExplorerCommand();
 
-			string[] args = Environment.GetCommandLineArgs();
-			if (args.Length > 1) {
-				DesignerControl.OpenProject(args[1]);
-			}
+			loadedTimer = new DispatcherTimer(
+				TimeSpan.FromSeconds(0.1),
+				DispatcherPriority.ApplicationIdle,
+				delegate {
+					Initialize();
+					loadedTimer.Stop();
+					loadedTimer = null;
+				}, Dispatcher);
 		}
 
 		private void OnApplicationActivated(object sender, EventArgs e) {
@@ -100,8 +147,16 @@ namespace ConscriptDesigner {
 
 		private void OnClosing(object sender, CancelEventArgs e) {
 			e.Cancel = !DesignerControl.RequestClose();
-			if (!e.Cancel && DesignerControl.IsProjectOpen) {
-				//SaveLayout();
+			if (!e.Cancel) {
+				if (DesignerControl.IsProjectOpen) {
+					//SaveLayout();
+					ProjectUserSettings.Save();
+				}
+				// Prevent the output console from throwing an
+				// exception from still trying to be written to.
+				if (outputConsole != null) {
+					outputConsole.ForceClose();
+				}
 			}
 		}
 
@@ -202,10 +257,10 @@ namespace ConscriptDesigner {
 		}
 
 		public void LoadLayout() {
-			if (File.Exists(DesignerControl.LayoutFile)) {
+			if (File.Exists(DesignerControl.ProjectSettingsFile)) {
 				try {
 					var serializer = new XmlLayoutSerializer(dockingManager);
-					using (var stream = new StreamReader(DesignerControl.LayoutFile))
+					using (var stream = new StreamReader(DesignerControl.ProjectSettingsFile))
 						serializer.Deserialize(stream);
 					//dockingManager.Theme = new VS2010Theme();
 					return;
@@ -222,11 +277,19 @@ namespace ConscriptDesigner {
 		public void SaveLayout() {
 			try {
 				var serializer = new XmlLayoutSerializer(dockingManager);
-				using (var stream = new StreamWriter(DesignerControl.LayoutFile))
+				using (var stream = new StreamWriter(DesignerControl.ProjectSettingsFile))
 					serializer.Serialize(stream);
 			}
 			catch (Exception) {
 
+			}
+		}
+
+		public IEnumerable<ContentFile> GetOrderedOpenContentFiles() {
+			foreach (var descendant in dockingManager.Layout.Descendents()) {
+				if (descendant is IContentFileContainer) {
+					yield return ((IContentFileContainer) descendant).File;
+				}
 			}
 		}
 
@@ -379,7 +442,7 @@ namespace ConscriptDesigner {
 				spriteBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
 				var pane = spriteBrowser.Parent as LayoutAnchorablePane;
 				pane.DockWidth = new GridLength(250);
-				if (DesignerControl.IsProjectOpen && !DesignerControl.IsBusy)
+				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
 					spriteBrowser.RefreshList();
 			}
 			else {
@@ -394,7 +457,7 @@ namespace ConscriptDesigner {
 				spriteSourceBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
 				var pane = spriteSourceBrowser.Parent as LayoutAnchorablePane;
 				pane.DockWidth = new GridLength(250);
-				if (DesignerControl.IsProjectOpen && !DesignerControl.IsBusy)
+				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
 					spriteSourceBrowser.RefreshList();
 			}
 			else {
