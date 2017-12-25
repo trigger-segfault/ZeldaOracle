@@ -582,28 +582,7 @@ namespace ZeldaEditor {
 		private void OnRedoCommand(object sender, ExecutedRoutedEventArgs e) {
 			editorControl.Redo();
 		}
-
-
-
-
-		private void OnPreviewMouseWheel(object sender, MouseWheelEventArgs e) {
-			// Steal focus from the current control when scrolling over a scrollable area
-			if (treeViewWorld.IsMouseOverTreeView) {
-				treeViewWorld.FocusOnTreeView();
-			}
-			else if (propertyGrid.IsMouseOver) {
-				propertyGrid.Focus();
-			}
-		}
-
-		/*private void OnMouseWheel(object sender, MouseWheelEventArgs e) {
-			if (levelDisplay.IsMouseOver) {
-				levelDisplay.Focus();
-			}
-			else if (tileDisplay.IsMouseOver) {
-				tileDisplay.Focus();
-			}
-		}*/
+		
 
 		private void OnDebugConsole(object sender, RoutedEventArgs e) {
 			editorControl.DebugConsole = menuItemDebugConsole.IsChecked;

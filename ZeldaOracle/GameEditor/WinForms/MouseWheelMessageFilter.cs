@@ -19,7 +19,10 @@ namespace ZeldaEditor.WinForms {
 
 		public bool PreFilterMessage(ref Message m) {
 			if (m.Msg == NativeMethods.WM_MOUSEWHEEL) {
-				if (element.IsMouseOver && !element.IsFocused) {
+				var focusElement = FocusManager.GetFocusedElement(element);
+				if (element.IsMouseOver && !element.IsFocused &&
+					focusElement != element && focusElement == null)
+				{
 					element.Focus();
 					HwndSource hwndSource = (HwndSource)HwndSource.FromVisual(element);
 					NativeMethods.SendMessage(hwndSource.Handle, m.Msg, m.WParam, m.LParam);

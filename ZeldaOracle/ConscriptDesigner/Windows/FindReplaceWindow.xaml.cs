@@ -143,6 +143,8 @@ namespace ConscriptDesigner.Windows {
 
 		private bool suppressEvents;
 
+		/// <summary>True if the current find textbox has invalid regex.</summary>
+		private bool regexError;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -161,7 +163,8 @@ namespace ConscriptDesigner.Windows {
 			checkBoxLiveSearch.IsChecked = ProjectUserSettings.FindAndReplace.LiveSearch;
 			textBoxReplace.Text = lastReplaceText;
 
-			searchColorizor = new ColorizeSearchResultsBackgroundRenderer();
+			this.searchColorizor = new ColorizeSearchResultsBackgroundRenderer();
+			this.regexError = false;
 
 			FindScopes[] scopes = (FindScopes[])Enum.GetValues(typeof(FindScopes));
 			foreach (FindScopes scope in scopes) {
@@ -202,6 +205,7 @@ namespace ConscriptDesigner.Windows {
 			DesignerControl.ActiveAnchorableChanged += OnActiveAnchorableChanged;
 			lastScript = null;
 			OnActiveAnchorableChanged();
+			UpdateFindTextBox();
 			suppressEvents = false;
 		}
 
@@ -243,7 +247,7 @@ namespace ConscriptDesigner.Windows {
 		/// <summary>Finds the next search result.</summary>
 		public void FindNext() {
 			string find = SearchText;
-			if (string.IsNullOrEmpty(find)) {
+			if (string.IsNullOrEmpty(find) || regexError) {
 				SystemSounds.Asterisk.Play();
 				return;
 			}
@@ -265,7 +269,7 @@ namespace ConscriptDesigner.Windows {
 
 			string find = textBoxReplaceFind.Text;
 			string replace = textBoxReplace.Text;
-			if (string.IsNullOrEmpty(find)) {
+			if (string.IsNullOrEmpty(find) || regexError) {
 				SystemSounds.Asterisk.Play();
 				return;
 			}
@@ -279,9 +283,9 @@ namespace ConscriptDesigner.Windows {
 				ContentScript startScript = (ContentScript) startFile;
 				if (startScript.IsOpen) {
 					TextEditor editor = startScript.TextEditor;
-					Regex regex = GetRegex(find);
 					string input = editor.TextArea.Selection.GetText();
 					int start = editor.SelectionStart;
+					Regex regex = GetRegex(find);
 					Match match = regex.Match(input);
 					if (match.Success && match.Index == 0 && match.Length == input.Length) {
 						editor.Document.Replace(editor.SelectionStart,
@@ -314,7 +318,7 @@ namespace ConscriptDesigner.Windows {
 
 			string find = textBoxReplaceFind.Text;
 			string replace = textBoxReplace.Text;
-			if (string.IsNullOrEmpty(find)) {
+			if (string.IsNullOrEmpty(find) || regexError) {
 				SystemSounds.Asterisk.Play();
 				return;
 			}
@@ -330,9 +334,9 @@ namespace ConscriptDesigner.Windows {
 				startScript = (ContentScript) startFile;
 				if (startScript.IsOpen) {
 					TextEditor editor = startScript.TextEditor;
-					Regex regex = GetRegex(find);
 					string input = editor.TextArea.Selection.GetText();
 					int start = editor.SelectionStart;
+					Regex regex = GetRegex(find);
 					Match match = regex.Match(input);
 					if (match.Success && match.Index == 0 && match.Length == input.Length) {
 						editor.BeginChange();
@@ -479,6 +483,7 @@ namespace ConscriptDesigner.Windows {
 		}
 
 		private void OnFindTextChanged(object sender, TextChangedEventArgs e) {
+			UpdateFindTextBox();
 			UpdateSearch();
 			FindFirstResult();
 		}
@@ -487,6 +492,7 @@ namespace ConscriptDesigner.Windows {
 			UpdateSearch();
 			FindFirstResult();
 			OnCheckboxChanged();
+			UpdateFindTextBox();
 		}
 
 		private void OnCheckboxChanged(object sender = null, RoutedEventArgs e = null) {
@@ -607,6 +613,9 @@ namespace ConscriptDesigner.Windows {
 		{
 			selection = Selection.Empty;
 			script = null;
+
+			if (regexError)
+				return false;
 
 			Match match = Match.Empty;
 			Regex regex = GetRegex(searchText);
@@ -730,6 +739,25 @@ namespace ConscriptDesigner.Windows {
 			return false;
 		}
 
+		/// <summary>Updates if the find text box displays a regex error or not.</summary>
+		private void UpdateFindTextBox() {
+			string find = textBoxFind.Text;
+			Regex regex = GetRegex(find);
+			regexError = regex == null;
+			if (regex == null) {
+				textBoxFind.ToolTip = "Regular Expression is malformed";
+				textBoxFind.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+				textBoxFind.Background = new SolidColorBrush(Color.FromRgb(255, 102, 102));
+				textBoxFind.CaretBrush = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+			}
+			else {
+				textBoxFind.ToolTip = null;
+				textBoxFind.Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+				textBoxFind.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+				textBoxFind.CaretBrush = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+			}
+		}
+
 		/// <summary>Navigates to the selection in the text editor.</summary>
 		private void NavigateToSelection(ContentScript script, Selection selection) {
 			if (!script.IsOpen) {
@@ -752,10 +780,7 @@ namespace ConscriptDesigner.Windows {
 					return new Regex(textToFind, options);
 				}
 				catch (Exception) {
-					string pattern = Regex.Escape(textToFind);
-					if (checkBoxWholeWord.IsChecked == true)
-						pattern = "\\b" + pattern + "\\b";
-					return new Regex(pattern, options);
+					return null;
 				}
 			}
 			else {
@@ -768,7 +793,7 @@ namespace ConscriptDesigner.Windows {
 
 		/// <summary>Used for live searching while typing.</summary>
 		private void FindFirstResult() {
-			if (lastScript != null && checkBoxLiveSearch.IsChecked == true) {
+			if (lastScript != null && checkBoxLiveSearch.IsChecked == true && !regexError) {
 				TextEditor editor = lastScript.TextEditor;
 				string find = SearchText;
 				ContentScript script;
@@ -785,10 +810,9 @@ namespace ConscriptDesigner.Windows {
 		/// <summary>Updates the search results and highlighting.</summary>
 		private void UpdateSearch() {
 			string find = SearchText;
-			Regex regex = null;
 			searchColorizor.CurrentResults.Clear();
-			if (!string.IsNullOrEmpty(find) && lastScript != null) {
-				regex = GetRegex(find);
+			if (!string.IsNullOrEmpty(find) && lastScript != null && !regexError) {
+				Regex regex = GetRegex(find);
 				string text = lastScript.LoadedText;
 				Match match = regex.Match(text);
 
