@@ -43,7 +43,12 @@
             <TabItem Header="Replace" IsTabStop="False">
                 <StackPanel>
                     <TextBlock Margin="3">Text to Find:</TextBlock>
-                    <TextBox Margin="3" Name="textBoxReplaceFind" Text="{Binding ElementName=textBoxFind, Path=Text, Mode=TwoWay}" TextChanged="OnFindTextChanged"/>
+                    <TextBox Margin="3" Name="textBoxReplaceFind" TextChanged="OnFindTextChanged"
+                             Text="{Binding ElementName=textBoxFind, Path=Text}"
+                             Background="{Binding ElementName=textBoxFind, Path=Background}"
+                             Foreground="{Binding ElementName=textBoxFind, Path=Foreground}"
+                             CaretBrush="{Binding ElementName=textBoxFind, Path=CaretBrush}"
+                             ToolTip="{Binding ElementName=textBoxFind, Path=ToolTip}"/>
                     <TextBlock Margin="3" Text="Replace with:" />
                     <TextBox Margin="3" Name="textBoxReplace" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

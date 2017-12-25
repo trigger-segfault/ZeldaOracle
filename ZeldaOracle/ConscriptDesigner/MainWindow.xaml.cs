@@ -61,6 +61,7 @@ namespace ConscriptDesigner {
 			Height = 260;
 			WindowStyle = WindowStyle.None;
 			ResizeMode = ResizeMode.NoResize;
+			dockPanel.Visibility = Visibility.Hidden;
 
 			Application.Current.Activated += OnApplicationActivated;
 

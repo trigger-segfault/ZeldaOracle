@@ -115,9 +115,12 @@ namespace ZeldaEditor.PropertiesEditor {
 		}
 
 		public void CloseProperties() {
-			propertiesContainer.Clear();
-			UpdateContainerHelper();
-			editorControl.EditorWindow.UpdatePropertyPreview(propertyObject);
+			if (propertyObject != null) {
+				propertyObject = null;
+				propertiesContainer.Clear();
+				UpdateContainerHelper();
+				editorControl.EditorWindow.UpdatePropertyPreview(propertyObject);
+			}
 		}
 
 
