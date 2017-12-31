@@ -30,8 +30,13 @@ namespace ZeldaOracle.Common.Scripts {
 		private CommandParam	parameterRoot;
 		private string			commandPrefix;
 
+		private string          parameterName;
+		private CommandParam    namedParameter;
+
 		private List<ScriptCommand> commands;   // List of possible commands.
 		private Dictionary<string, CommandPrefix> commandPrefixes;
+
+		private CommandParamDefinitions typeDefinitions;
 
 		/// <summary>The current mode of the reader used to determine valid commands.</summary>
 		private int             mode;
@@ -52,15 +57,28 @@ namespace ZeldaOracle.Common.Scripts {
 			lines			= new List<string>();
 			tempResources   = new TemporaryResources();
 			scriptCallStack	= new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+			parameterName   = null;
+			typeDefinitions	= new CommandParamDefinitions();
 
 			//=====================================================================================
 			// SUB SCRIPT READERS 
+			//=====================================================================================
+			AddType("Color",
+				"(int r, int g, int b)",
+				"(int r, int g, int b, int a)"
+			);
+			AddType("Point",
+				"(int x, int y)"
+			);
+			AddType("Vector",
+				"(float x, float y)"
+			);
 			//=====================================================================================
 			AddCommand("LOAD",
 				"string relativeScriptPath, bool useTempResources",
 				"string relativeScriptPath",
 			delegate (CommandParam parameters) {
-				ScriptReader reader = CreateNew(parameters.GetBool(1));
+				ScriptReader reader = CreateNew(parameters.GetBool(1, false));
 				string path = Path.Combine(directory, parameters.GetString(0));
 				Resources.LoadScript(path, reader);
 			});
@@ -109,7 +127,7 @@ namespace ZeldaOracle.Common.Scripts {
 
 		/// <summary>Add a command that handles the given list of overloads.</summary>
 		protected void AddCommand(string name, string[] parameterOverloads, Action<CommandParam> action) {
-			AddCommand(new ScriptCommand(name, null, parameterOverloads, action));
+			AddCommand(new ScriptCommand(name, null, parameterOverloads, action, typeDefinitions));
 		}
 
 
@@ -154,7 +172,7 @@ namespace ZeldaOracle.Common.Scripts {
 
 		/// <summary>Add a command that handles the given list of overloads.</summary>
 		protected void AddCommand(string name, int mode, string[] parameterOverloads, Action<CommandParam> action) {
-			AddCommand(new ScriptCommand(name, new int[] { mode }, parameterOverloads, action));
+			AddCommand(new ScriptCommand(name, new int[] { mode }, parameterOverloads, action, typeDefinitions));
 		}
 
 
@@ -199,7 +217,7 @@ namespace ZeldaOracle.Common.Scripts {
 
 		/// <summary>Add a command that handles the given list of overloads.</summary>
 		protected void AddCommand(string name, int[] modes, string[] parameterOverloads, Action<CommandParam> action) {
-			AddCommand(new ScriptCommand(name, modes, parameterOverloads, action));
+			AddCommand(new ScriptCommand(name, modes, parameterOverloads, action, typeDefinitions));
 		}
 
 
@@ -210,6 +228,15 @@ namespace ZeldaOracle.Common.Scripts {
 		/// <summary>Add a script command.</summary>
 		protected void AddCommand(ScriptCommand command) {
 			commands.Add(command);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Type Definition Creation
+		//-----------------------------------------------------------------------------
+
+		protected void AddType(string name, params string[] parameterOverloads) {
+			typeDefinitions.Add(new CommandParamDefinition(name, parameterOverloads, typeDefinitions));
 		}
 
 
@@ -305,7 +332,7 @@ namespace ZeldaOracle.Common.Scripts {
 			for (int i = 0; i < commands.Count; i++) {
 				ScriptCommand command = commands[i];
 				if (command.HasName(commandName) && MatchesMode(mode, command.Modes)) {
-					if (command.HasParameters(parameters, out newParams)) {
+					if (command.HasParameters(parameters, out newParams, typeDefinitions)) {
 						// Run the command.
 						newParams.Prefix = commandPrefix ?? "";
 						try {
@@ -313,7 +340,7 @@ namespace ZeldaOracle.Common.Scripts {
 						}
 						catch (ThreadAbortException) { }
 						catch (LoadContentException ex) {
-							throw ex;
+							//throw ex;
 						}
 						catch (Exception ex) {
 							throw new ScriptReaderException(ex.Message, fileName, lines[lineIndex], lineIndex + 1, charIndex + 1, true, ex.StackTrace);
@@ -393,7 +420,7 @@ namespace ZeldaOracle.Common.Scripts {
 		private bool IsValidKeywordCharacter(char c) {
 			string validKeywordSymbols = "$_.-+";
 
-			if (Char.IsLetterOrDigit(c))
+			if (char.IsLetterOrDigit(c))
 				return true;
 			if (validKeywordSymbols.IndexOf(c) >= 0)
 				return true;
@@ -404,6 +431,16 @@ namespace ZeldaOracle.Common.Scripts {
 		protected void CompleteWord(bool completeIfEmpty = false) {
 			if (word.Length > 0 || completeIfEmpty)
 				AddParam();
+			word = "";
+		}
+
+		/// <summary>Attempt to name the upcoming parameter.</summary>
+		private void NameParameter() {
+			if (word.Length == 0)
+				ThrowParseError("Unexpected symbol ':'!");
+			if (parameterName != null)
+				ThrowParseError("Parameter already named!");
+			parameterName = word;
 			word = "";
 		}
 
@@ -448,6 +485,19 @@ namespace ZeldaOracle.Common.Scripts {
 			else
 				parameter.NextParam = newParam;
 			parameterParent.ChildCount++;
+			if (parameterName != null) {
+				newParam.Name = parameterName;
+				if (namedParameter == null)
+					parameterParent.NamedChildren = newParam;
+				else
+					namedParameter.NextParam = newParam;
+				parameterName = null;
+				namedParameter = newParam;
+				parameterParent.NamedChildCount++;
+			}
+			else if (parameter != null && !string.IsNullOrEmpty(parameter.Name)) {
+				ThrowParseError("All parameters after the first named parameter must be named!");
+			}
 			newParam.Parent = parameterParent;
 			parameter = newParam;
 			return newParam;
@@ -475,6 +525,10 @@ namespace ZeldaOracle.Common.Scripts {
 						word += c;
 				}
 
+				// Ending for a named parameter
+				else if (c == ':')
+					NameParameter();
+
 				// Whitespace and commas (parameter delimiters).
 				else if (c == ' ' || c == '\t' || c == ',')
 					CompleteWord();
@@ -495,14 +549,14 @@ namespace ZeldaOracle.Common.Scripts {
 				// Opening quotes.
 				else if (word.Length == 0 && c == '\"')
 					quotes = true;
-					
+
 				// Opening parenthesis: begin an array parameter.
 				else if (word.Length == 0 && c == '(') {
 					parameterParent = AddParam();
 					parameterParent.Type = CommandParamType.Array;
 					parameter = null;
 				}
-					
+
 				// Closing parenthesis.
 				else if (c == ')') {
 					CompleteWord();
@@ -511,6 +565,10 @@ namespace ZeldaOracle.Common.Scripts {
 					}
 					else {
 						parameter = parameterParent;
+						if (string.IsNullOrEmpty(parameterParent.Name))
+							namedParameter = null;
+						else
+							namedParameter = parameterParent;
 						parameterParent = parameterParent.Parent;
 					}
 				}

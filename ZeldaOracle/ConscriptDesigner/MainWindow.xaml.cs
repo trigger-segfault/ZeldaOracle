@@ -37,6 +37,7 @@ namespace ConscriptDesigner {
 		private OutputConsole outputConsole;
 		private SpriteBrowser spriteBrowser;
 		private SpriteSourceBrowser spriteSourceBrowser;
+		private TileDataBrowser tileDataBrowser;
 
 		private FindReplaceWindow findReplaceWindow;
 		private PlaybackWindow playbackWindow;
@@ -72,7 +73,14 @@ namespace ConscriptDesigner {
 				}, Dispatcher);
 			this.checkOutdatedTimer.Stop();
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Setup
+		//-----------------------------------------------------------------------------
 		
+		// HACK: This function is used to setup loading of the layout
+		// in a way that prevents GraphicsDevice.Reset from failing.
 		private void Initialize() {
 			dummyHost.Child = new DummyGraphicsDeviceControl();
 			string[] args = Environment.GetCommandLineArgs();
@@ -172,6 +180,8 @@ namespace ConscriptDesigner {
 				spriteBrowser.RefreshList();
 			if (spriteSourceBrowser != null)
 				spriteSourceBrowser.RefreshList();
+			if (tileDataBrowser != null)
+				tileDataBrowser.RefreshList();
 		}
 
 		private void OnResourcesUnloaded(object sender, EventArgs e) {
@@ -179,6 +189,8 @@ namespace ConscriptDesigner {
 				spriteBrowser.ClearList();
 			if (spriteSourceBrowser != null)
 				spriteSourceBrowser.ClearList();
+			if (tileDataBrowser != null)
+				tileDataBrowser.ClearList();
 		}
 
 		private void OnFinishedBuilding(object sender, EventArgs e) {
@@ -210,6 +222,8 @@ namespace ConscriptDesigner {
 				spriteBrowser = null;
 			else if (anchorable is SpriteSourceBrowser)
 				spriteSourceBrowser = null;
+			else if (anchorable is TileDataBrowser)
+				tileDataBrowser = null;
 			CommandManager.InvalidateRequerySuggested();
 		}
 
@@ -244,6 +258,10 @@ namespace ConscriptDesigner {
 
 		public void OpenSpriteSourceBrowser() {
 			OnSpriteSourceBrowserCommand();
+		}
+
+		public void OpenTileDataBrowser() {
+			OnTileDataBrowserCommand();
 		}
 
 		public void DockDocument(RequestCloseDocument anchorable) {
@@ -466,8 +484,19 @@ namespace ConscriptDesigner {
 			}
 		}
 
-		private void OnTileBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
-
+		private void OnTileDataBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
+			if (tileDataBrowser == null) {
+				tileDataBrowser = new TileDataBrowser();
+				tileDataBrowser.Closed += OnAnchorableClosed;
+				tileDataBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
+				var pane = tileDataBrowser.Parent as LayoutAnchorablePane;
+				pane.DockWidth = new GridLength(250);
+				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
+					tileDataBrowser.RefreshList();
+			}
+			else {
+				tileDataBrowser.IsActive = true;
+			}
 		}
 
 		private void OnRunConscriptsCommand(object sender, ExecutedRoutedEventArgs e) {
@@ -563,6 +592,11 @@ namespace ConscriptDesigner {
 		public SpriteSourceBrowser SpriteSourceBrowser {
 			get { return spriteSourceBrowser; }
 			set { spriteSourceBrowser = value; }
+		}
+
+		public TileDataBrowser TileDataBrowser {
+			get { return tileDataBrowser; }
+			set { tileDataBrowser = value; }
 		}
 
 		public IRequestCloseAnchorable ActiveAnchorable {

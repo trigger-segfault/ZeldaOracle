@@ -136,6 +136,8 @@ namespace ConscriptDesigner {
 							DesignerControl.MainWindow.OpenSpriteBrowser();
 						if (anchorables.SelectSingleNode("SpriteSourceBrowser") != null)
 							DesignerControl.MainWindow.OpenSpriteSourceBrowser();
+						if (anchorables.SelectSingleNode("TileDataBrowser") != null)
+							DesignerControl.MainWindow.OpenTileDataBrowser();
 					}
 
 					XmlNode documents = root.SelectSingleNode("Documents");
@@ -253,6 +255,8 @@ namespace ConscriptDesigner {
 					anchorables.AppendChild(doc.CreateElement("SpriteBrowser"));
 				if (DesignerControl.MainWindow.SpriteSourceBrowser != null)
 					anchorables.AppendChild(doc.CreateElement("SpriteSourceBrowser"));
+				if (DesignerControl.MainWindow.TileDataBrowser != null)
+					anchorables.AppendChild(doc.CreateElement("TileDataBrowser"));
 
 				XmlElement documents = doc.CreateElement("Documents");
 				root.AppendChild(documents);

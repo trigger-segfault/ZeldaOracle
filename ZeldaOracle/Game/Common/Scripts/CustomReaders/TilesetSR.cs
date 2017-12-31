@@ -33,6 +33,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		private TileData			tileData;
 		private EventTileData		eventTileData;
 		//private LoadingModes		loadingMode;
+		private ISpriteSource source;
 
 
 		//-----------------------------------------------------------------------------
@@ -48,16 +49,34 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			//AddCommand("Load", "string resourceType",
 			//delegate(CommandParam parameters) {
-				/*string loadType = parameters.GetString(0).ToLower();
-				if (loadType == "tilesets")
-					loadingMode = LoadingModes.Tilesets;
-				else if (loadType == "animations")
-					loadingMode = LoadingModes.Animations;
-				else if (loadType == "sprites")
-					loadingMode = LoadingModes.Sprites;
-				else
-					ThrowParseError("Invalid Load type", true);*/
+			/*string loadType = parameters.GetString(0).ToLower();
+			if (loadType == "tilesets")
+				loadingMode = LoadingModes.Tilesets;
+			else if (loadType == "animations")
+				loadingMode = LoadingModes.Animations;
+			else if (loadType == "sprites")
+				loadingMode = LoadingModes.Sprites;
+			else
+				ThrowParseError("Invalid Load type", true);*/
 			//});
+			//=====================================================================================
+			// SOURCE
+			//=====================================================================================
+			AddCommand("SOURCE", "string name",
+			delegate (CommandParam parameters) {
+				if (parameters.HasPrefix()) {
+					ThrowCommandParseError("Invalid use of prefix");
+				}
+				string name = parameters.GetString(0);
+				if (name.ToLower() == "none") {
+					source = null;
+					return;
+				}
+				if (!ContainsResource<ISpriteSource>(name)) {
+					ThrowCommandParseError("No sprite source with the name '" + name + "' exists in resources!");
+				}
+				source = Resources.GetResource<ISpriteSource>(name);
+			});
 			//=====================================================================================
 			// TILE/TILESET BEGIN/END 
 			//=====================================================================================
@@ -128,6 +147,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("End", "", delegate(CommandParam parameters) {
 				if (tileData != null) {
 					if (tileData.Tileset == null) {
+						AddResource<BaseTileData>(tileData.Name, tileData);
 						AddResource<TileData>(tileData.Name, tileData);
 					}
 					tileData = null;
@@ -135,6 +155,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				}
 				else if (eventTileData != null) {
 					if (eventTileData.Tileset == null) {
+						AddResource<BaseTileData>(eventTileData.Name, eventTileData);
 						AddResource<EventTileData>(eventTileData.Name, eventTileData);
 					}
 					eventTileData = null;
@@ -418,13 +439,26 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					parameters[1].GetInt(2),
 					parameters[1].GetInt(3));
 			});
-
+			//=====================================================================================
 			AddCommand("Clone", "string tileDataName",
 			delegate(CommandParam parameters) {
 				if (tileData != null)
 					tileData.Clone(GetResource<TileData>(parameters.GetString(0)));
 				else if (eventTileData != null)
 					eventTileData.Clone(GetResource<EventTileData>(parameters.GetString(0)));
+			});
+			//=====================================================================================
+			AddCommand("Preview", new string[] {
+				"string spriteName, (int drawOffsetX, int drawOffsetY) = (0, 0)",
+				// Int needs to go before string as int/float defaults to string.
+				"(int indexX, int indexY)",
+				"(string animationName, int substrip)",
+				"(string spriteName, string definition)",
+				"((int indexX, int indexY), string definition)",
+				"(string sourceName, (int indexX, int indexY))",
+				"(string sourceName, (int indexX, int indexY), string definition)",
+			}, delegate (CommandParam parameters) {
+				baseTileData.PreviewSprite = GetSpriteFromParams(parameters);
 			});
 
 			// SPRITE SHEET ---------------------------------------------------------------
@@ -538,6 +572,129 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		}
 
 
+		/// <summary>Gets a sprite.</summary>
+		private ISprite GetSprite(string name) {
+			ISprite sprite = GetResource<ISprite>(name);
+			if (sprite == null) {
+				ThrowCommandParseError("Sprite with name '" + name + "' does not exist in resources!");
+			}
+			return sprite;
+		}
+
+		/// <summary>Gets a sprite.</summary>
+		private ISprite GetSprite(ISpriteSource source, Point2I index) {
+			if (source == null)
+				ThrowCommandParseError("Cannot get sprite from source with no sprite sheet source!");
+			ISprite sprite = source.GetSprite(index);
+			if (sprite == null) {
+				ThrowCommandParseError("Sprite at source index '" + index + "' does not exist!");
+			}
+			return sprite;
+		}
+
+		/// <summary>Gets a sprite and confirms its type.</summary>
+		private T GetSprite<T>(string name) where T : class, ISprite {
+			T sprite = GetResource<ISprite>(name) as T;
+			if (sprite == null) {
+				ThrowCommandParseError(typeof(T).Name + " with name '" + name + "' does not exist in resources!");
+			}
+			return sprite;
+		}
+
+		/// <summary>Gets a sprite and confirms its type.</summary>
+		private T GetSprite<T>(ISpriteSource source, Point2I index) where T : class, ISprite {
+			if (source == null)
+				ThrowCommandParseError("Cannot get sprite from source with no sprite sheet source!");
+			T sprite = source.GetSprite(index) as T;
+			if (sprite == null) {
+				ThrowCommandParseError(typeof(T).Name + " at source index '" + index + "' does not exist!");
+			}
+			return sprite;
+		}
+
+		/// <summary>Gets the sprite of a definition sprite.</summary>
+		private ISprite GetDefinedSprite(string name, string definition) {
+			return GetDefinedSprite(GetSprite<DefinitionSprite>(name), definition);
+		}
+
+		/// <summary>Gets the sprite of a definition sprite.</summary>
+		private ISprite GetDefinedSprite(ISpriteSource source, Point2I index, string definition) {
+			return GetDefinedSprite(GetSprite<DefinitionSprite>(source, index), definition);
+		}
+
+		/// <summary>Gets the sprite of a definition sprite.</summary>
+		private ISprite GetDefinedSprite(DefinitionSprite sprite, string definition) {
+			ISprite defSprite = sprite.Get(definition);
+			if (defSprite == null)
+				ThrowCommandParseError("Defined sprite with definition '" + definition + "' does not exist!");
+			return defSprite;
+		}
+
+		/// <summary>Gets the sprite from one of the many parameter overloads.</summary>
+		private ISprite GetSpriteFromParams(CommandParam param, int startIndex = 0) {
+			ISpriteSource source;
+			Point2I index;
+			string definition;
+			return GetSpriteFromParams(param, startIndex, out source, out index, out definition);
+		}
+
+		/// <summary>Gets the sprite from one of the many parameter overloads and returns the source.</summary>
+		private ISprite GetSpriteFromParams(CommandParam param, int startIndex, out ISpriteSource source, out Point2I index, out string definition) {
+			// 1: string spriteName
+			// 2: (int indexX, int indexY)
+			// 3: (string animationName, int substrip)
+			// 4: (string spriteName, string definition)
+			// 5: ((int indexX, int indexY), string definition)
+			// 6: (string sourceName, (int indexX, int indexY))
+			// 7: (string sourceName, (int indexX, int indexY), string definition)
+			source = null;
+			index = Point2I.Zero;
+			definition = null;
+
+			var param0 = param.GetParam(startIndex);
+			if (param0.Type == CommandParamType.String) {
+				// Overload 1:
+				return GetResource<ISprite>(param.GetString(startIndex));
+			}
+			else if (param0.GetParam(0).Type == CommandParamType.String) {
+				if (param0.GetParam(1).Type == CommandParamType.Integer) {
+					// Overload 3:
+					return GetSprite<Animation>(param0.GetString(0)).GetSubstrip(param0.GetInt(1));
+				}
+				else if (param0.GetParam(1).Type == CommandParamType.String) {
+					// Overload 4:
+					return GetDefinedSprite(param0.GetString(0), param0.GetString(1));
+				}
+				else if (param0.ChildCount == 2) {
+					// Overload 6:
+					source = GetResource<ISpriteSource>(param0.GetString(0));
+					index = param0.GetPoint(1);
+					return GetSprite(this.source, index);
+				}
+				else {
+					// Overload 7:
+					source = GetResource<ISpriteSource>(param0.GetString(0));
+					index = param0.GetPoint(1);
+					definition = param0.GetString(2);
+					return GetDefinedSprite(source, index, definition);
+				}
+			}
+			else if (param0.GetParam(0).Type == CommandParamType.Integer) {
+				// Overload 2:
+				source = this.source;
+				index = param.GetPoint(startIndex);
+				return GetSprite(this.source, index);
+			}
+			else {
+				// Overload 5:
+				source = this.source;
+				index = param0.GetPoint(0);
+				definition = param0.GetString(1);
+				return GetDefinedSprite(this.source, index, definition);
+			}
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
@@ -557,6 +714,21 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		/// <summary>Creates a new script reader of the derived type.</summary>
 		protected override ScriptReader CreateNew() {
 			return new TilesetSR();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Gets the source as a sprite sheet.</summary>
+		private SpriteSheet SpriteSheet {
+			get { return source as SpriteSheet; }
+		}
+
+		/// <summary>Gets the source as a sprite set.</summary>
+		private SpriteSet SpriteSet {
+			get { return source as SpriteSet; }
 		}
 	}
 }

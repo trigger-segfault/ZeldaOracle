@@ -41,6 +41,7 @@
         <CommandBinding Command="cmd:Commands.OutputConsole" CanExecute="CanAlwaysExecute" Executed="OnOutputConsoleCommand"/>
         <CommandBinding Command="cmd:Commands.SpriteBrowser" CanExecute="CanAlwaysExecute" Executed="OnSpriteBrowserCommand"/>
         <CommandBinding Command="cmd:Commands.SpriteSourceBrowser" CanExecute="CanAlwaysExecute" Executed="OnSpriteSourceBrowserCommand"/>
+        <CommandBinding Command="cmd:Commands.TileDataBrowser" CanExecute="CanAlwaysExecute" Executed="OnTileDataBrowserCommand"/>
     </Window.CommandBindings>
     <Grid>
         <StackPanel VerticalAlignment="Center" x:Name="splash">
@@ -80,7 +81,7 @@
                     <Separator/>
                     <local:ImageMenuItem Header="Sprite Browser" Source="/Resources/Icons/Sprite.png" Command="cmd:Commands.SpriteBrowser"/>
                     <local:ImageMenuItem Header="Sprite Source Browser" Source="/Resources/Icons/SpriteSource.png" Command="cmd:Commands.SpriteSourceBrowser"/>
-                    <local:ImageMenuItem Header="Tile Data Browser" Source="/Resources/Icons/Tile.png" Command="cmd:Commands.TileBrowser"/>
+                    <local:ImageMenuItem Header="Tile Data Browser" Source="/Resources/Icons/Tile.png" Command="cmd:Commands.TileDataBrowser"/>
                 </MenuItem>
                 <MenuItem Header="_Project">
                     <local:ImageMenuItem Header="Run Conscripts" Source="/Resources/Icons/Build.png" Command="cmd:Commands.RunConscripts"/>

@@ -89,12 +89,17 @@ namespace ZeldaOracle.Common.Graphics {
 			return new BasicSprite(image, GetSourceRect(index));
 		}
 
-		public BasicSprite GetSprite(int indexX, int indexY, int drawOffsetX, int drawOffsetY) {
-			return new BasicSprite(image, GetSourceRect(indexX, indexY), new Point2I(drawOffsetX, drawOffsetY));
+		public BasicSprite GetSprite(int indexX, int indexY, int drawOffsetX, int drawOffsetY,
+			Flip flip = Flip.None, Rotation rotation = Rotation.None)
+		{
+			return new BasicSprite(image, GetSourceRect(indexX, indexY),
+				new Point2I(drawOffsetX, drawOffsetY), flip, rotation);
 		}
 
-		public BasicSprite GetSprite(Point2I index, Point2I drawOffset) {
-			return new BasicSprite(image, GetSourceRect(index), drawOffset);
+		public BasicSprite GetSprite(Point2I index, Point2I drawOffset, Flip flip = Flip.None,
+			Rotation rotation = Rotation.None)
+		{
+			return new BasicSprite(image, GetSourceRect(index), drawOffset, flip, rotation);
 		}
 
 

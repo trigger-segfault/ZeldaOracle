@@ -222,7 +222,11 @@ namespace ZeldaEditor.Control {
 
 				this.isInitialized = true;
 
-				this.updateTimer            = new DispatcherTimer(TimeSpan.FromMilliseconds(100), DispatcherPriority.ApplicationIdle, delegate { Update(); }, Application.Current.Dispatcher);
+				this.updateTimer		= new DispatcherTimer(
+					TimeSpan.FromMilliseconds(100),
+					DispatcherPriority.ApplicationIdle,
+					delegate { Update(); },
+					Application.Current.Dispatcher);
 				needsNewEventCache = true;
 				needsRecompiling = true;
 			}

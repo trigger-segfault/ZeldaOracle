@@ -22,6 +22,7 @@ using Xceed.Wpf.AvalonDock.Layout;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Game;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ConscriptDesigner.Control {
 	public static class DesignerControl {
@@ -42,6 +43,8 @@ namespace ConscriptDesigner.Control {
 		private static DispatcherTimer modifiedTimer;
 		private static List<IRequestCloseAnchorable> openAnchorables;
 		private static List<IRequestCloseAnchorable> closingAnchorables;
+
+		private static RewardManager rewardManager;
 
 
 		//-----------------------------------------------------------------------------
@@ -299,6 +302,11 @@ namespace ConscriptDesigner.Control {
 
 				Resources.Initialize(contentManager, graphicsDevice);
 				GameData.Initialize();
+
+				Console.WriteLine("Loading Rewards");
+				rewardManager = new RewardManager(null);
+				GameData.LoadRewards(rewardManager);
+
 				Console.WriteLine("----------------------------------------------------------------");
 				Console.WriteLine("Finished! Duration: " + watch.Elapsed.RoundUpToNearestSecond().ToString(@"hh\:mm\:ss"));
 			}
@@ -663,6 +671,10 @@ namespace ConscriptDesigner.Control {
 
 		public static bool IsGraphicsLoaded {
 			get { return graphicsDevice != null && contentManager != null; }
+		}
+
+		public static RewardManager RewardManager {
+			get { return rewardManager; }
 		}
 	}
 }

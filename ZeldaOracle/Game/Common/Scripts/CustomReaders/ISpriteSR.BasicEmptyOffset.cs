@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripts.Commands;
 
@@ -29,159 +30,179 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				Mode |= Modes.EmptySprite;
 			});
 			//=====================================================================================
-			AddCommand("EMPTY", (int) Modes.SpriteSet,
-				"",
-				"(int indexX, int indexY)",
-				"(int startX, int startY), (int width, int height)",
+			AddCommand("MULTIPLE EMPTY", (int) Modes.SpriteSet,
+				"Point start = (0, 0), Point span = (0, 0)",
 			delegate (CommandParam parameters) {
-				if (parameters.HasPrefix() && (parameters.ChildCount != 1) != parameters.HasPrefix("dynamic"))
-					ThrowCommandParseError("Invalid use of prefix with overload!");
-				if (parameters.HasPrefix("dynamic")) {
+				editingSetStart = parameters.GetPoint(0);
+				editingSetDimensions = parameters.GetPoint(1);
+				if (editingSetDimensions.X == 0) editingSetDimensions.X = editingSpriteSet.Width;
+				if (editingSetDimensions.Y == 0) editingSetDimensions.Y = editingSpriteSet.Height;
 
-					Point2I start = parameters.GetPoint(0, Point2I.Zero);
-					Point2I dimensions = parameters.GetPoint(1, EditingSpriteSet.Dimensions);
-					if (dimensions.X == 0) dimensions.X = EditingSpriteSet.Width;
-					if (dimensions.Y == 0) dimensions.Y = EditingSpriteSet.Height;
-
-					for (int x = 0; x < dimensions.X; x++) {
-						for (int y = 0; y < dimensions.Y; y++) {
-							EditingSpriteSet.SetSprite(start + new Point2I(x, y), new EmptySprite());
-						}
+				for (int x = 0; x < editingSpriteSet.Width; x++) {
+					for (int y = 0; y < editingSpriteSet.Height; y++) {
+						EmptySprite emptySprite = new EmptySprite();
+						editingSpriteSet.SetSprite(editingSetStart + new Point2I(x, y), emptySprite);
 					}
-					singular = false;
 				}
-				else if (parameters.HasPrefix("single")) {
-					sprite = new EmptySprite();
-					EditingSpriteSet.SetSprite(parameters.GetPoint(0), sprite);
-					singular = true;
-				}
-				else {
-					ThrowCommandParseError("EMPTY (void) must only be called with DYNAMIC or SINGLE prefix!");
-				}
+
+				singular = false;
+				Mode |= Modes.EmptySprite;
+			});
+			//=====================================================================================
+			AddCommand("SINGLE EMPTY", (int) Modes.SpriteSet,
+				"Point setIndex",
+			delegate (CommandParam parameters) {
+				editingSetStart = parameters.GetPoint(0);
+				editingSetDimensions = Point2I.One;
+
+				sprite = new EmptySprite();
+				editingSpriteSet.SetSprite(editingSetStart, sprite);
+
+				singular = false;
 				Mode |= Modes.EmptySprite;
 			});
 			//=====================================================================================
 			// BASIC SETUP
 			//=====================================================================================
 			AddCommand("BASIC", (int)Modes.Root,
-				"string name, (int indexX, int indexY), (int drawOffsetX, int drawOffsetY) = (0, 0)",
+				"string name, Point sourceIndex, Point drawOffset = (0, 0), string flip = none, string rotation = none",
 			delegate (CommandParam parameters) {
-				if (SourceMode != SourceModes.SpriteSheet) {
-					ThrowCommandParseError("SOURCE must be specified as a sprite sheet when building a BASIC sprite!");
-				}
-				bool continueSprite = parameters.HasPrefix("continue");
-				if (!continueSprite && parameters.HasPrefix())
-					ThrowCommandParseError("Invalid use of prefix");
 				spriteName = parameters.GetString(0);
-				sprite = new BasicSprite(
-					SpriteSheet,
+				sprite = BuildBasicSprite(
+					source,
 					parameters.GetPoint(1),
-					parameters.GetPoint(2, Point2I.Zero));
-				if (continueSprite) {
-					ContinueSprite<BasicSprite>(spriteName);
-					SetResource<ISprite>(spriteName, sprite);
-				}
-				else {
-					if (paletteArgs.Dictionary != null) {
-						paletteArgs.Image = SpriteSheet.Image;
-						paletteArgs.SourceRect = SpriteSheet.GetSourceRect(parameters.GetPoint(1));
-						sprite = Resources.PalettedSpriteDatabase.AddSprite(paletteArgs);
-					}
-					AddResource<ISprite>(spriteName, sprite);
-				}
+					parameters.GetPoint(2),
+					ParseFlip(parameters.GetString(3)),
+					ParseRotation(parameters.GetString(4)));
+				AddResource<ISprite>(spriteName, sprite);
 				Mode |= Modes.BasicSprite;
 			});
 			//=====================================================================================
-			AddCommand("BASIC", (int) Modes.SpriteSet,
-				"(int indexX, int indexY), (int drawOffsetX, int drawOffsetY) = (0, 0)",
-				"(int indexX, int indexY), (int drawOffsetX, int drawOffsetY), (int startX, int startY), (int width, int height)",
+			/*AddCommand("CONTINUE BASIC", (int) Modes.Root,
+				"string name",
 			delegate (CommandParam parameters) {
-				if (SourceMode != SourceModes.SpriteSheet) {
-					ThrowCommandParseError("SOURCE must be specified as a sprite sheet when building a BASIC sprite!");
-				}
-				if (parameters.HasPrefix() && parameters.ChildCount != 2 && parameters.HasPrefix("single"))
-					ThrowCommandParseError("Invalid use of prefix with overload!");
-				if (parameters.HasPrefix("dynamic")) {
+				if (parameters.HasPrefix())
+					ThrowCommandParseError("Invalid use of prefix");
+				spriteName = parameters.GetString(0);
+				ContinueSprite<BasicSprite>(spriteName);
+				SetResource<ISprite>(spriteName, sprite);
+				Mode |= Modes.BasicSprite;
+			});*/
+			//=====================================================================================
+			AddCommand("MULTIPLE BASIC", (int) Modes.SpriteSet,
+				"Point sourceIndex, Point start = (0, 0), Point span = (0, 0), " +
+					"Point drawOffset = (0, 0), string flip = none, string rotation = none",
+			delegate (CommandParam parameters) {
+				Point2I sourceIndex = parameters.GetPoint(0);
+				editingSetStart = parameters.GetPoint(1);
+				editingSetDimensions = parameters.GetPoint(2);
+				if (editingSetDimensions.X == 0) editingSetDimensions.X = editingSpriteSet.Width;
+				if (editingSetDimensions.Y == 0) editingSetDimensions.Y = editingSpriteSet.Height;
 
-					Point2I start = parameters.GetPoint(2, Point2I.Zero);
-					Point2I dimensions = parameters.GetPoint(3, EditingSpriteSet.Dimensions);
-					if (dimensions.X == 0) dimensions.X = EditingSpriteSet.Width;
-					if (dimensions.Y == 0) dimensions.Y = EditingSpriteSet.Height;
+				Point2I drawOffset = parameters.GetPoint(3);
+				Flip flip = ParseFlip(parameters.GetString(4));
+				Rotation rotation = ParseRotation(parameters.GetString(5));
 
-					for (int x = 0; x < dimensions.X; x++) {
-						for (int y = 0; y < dimensions.Y; y++) {
-							Point2I point = new Point2I(x, y);
-							ISprite sprite = new BasicSprite(
-								SpriteSheet,
-								parameters.GetPoint(0) + point,
-								parameters.GetPoint(1, Point2I.Zero));
-							if (paletteArgs.Dictionary != null) {
-								paletteArgs.Image = SpriteSheet.Image;
-								paletteArgs.SourceRect = SpriteSheet.GetSourceRect(parameters.GetPoint(0) + point);
-								sprite = Resources.PalettedSpriteDatabase.AddSprite(paletteArgs);
-							}
-							EditingSpriteSet.SetSprite(start + point, sprite);
-						}
+				for (int x = 0; x < editingSetDimensions.X; x++) {
+					for (int y = 0; y < editingSetDimensions.Y; y++) {
+						Point2I point = new Point2I(x, y);
+						BasicSprite basicSprite = BuildBasicSprite(
+							source,
+							sourceIndex + point,
+							drawOffset,
+							flip,
+							rotation);
+						editingSpriteSet.SetSprite(editingSetStart + point, basicSprite);
 					}
-					singular = false;
 				}
-				else if (parameters.HasPrefix("single")) {
-					sprite = new BasicSprite(
-								SpriteSheet,
-								parameters.GetPoint(0),
-								parameters.GetPoint(1, Point2I.Zero));
-					if (paletteArgs.Dictionary != null) {
-						paletteArgs.Image = SpriteSheet.Image;
-						paletteArgs.SourceRect = SpriteSheet.GetSourceRect(parameters.GetPoint(0));
-						sprite = Resources.PalettedSpriteDatabase.AddSprite(paletteArgs);
-					}
-					EditingSpriteSet.SetSprite(parameters.GetPoint(0), sprite);
-					singular = true;
-				}
-				else {
-					ThrowCommandParseError("BASIC (int gridLocationX, int gridLocationY), " +
-						"(int drawOffsetX, int drawOffsetY) = (0, 0) must only be called with DYNAMIC prefix!");
-				}
+
+				singular = false;
+				Mode |= Modes.BasicSprite;
+			});
+			//=====================================================================================
+			AddCommand("SINGLE BASIC", (int) Modes.SpriteSet,
+				"Point sourceIndex",
+			delegate (CommandParam parameters) {
+				Point2I sourceIndex = parameters.GetPoint(0);
+				editingSetStart = sourceIndex;
+				editingSetDimensions = Point2I.One;
+
+				sprite = BuildBasicSprite(
+							source,
+							sourceIndex,
+							Point2I.Zero);
+				editingSpriteSet.SetSprite(editingSetStart, sprite);
+
+				singular = true;
+				Mode |= Modes.BasicSprite;
+			});
+			//=====================================================================================
+			AddCommand("SINGLE BASIC", (int) Modes.SpriteSet,
+				"Point sourceIndex, Point2I setIndex, Point drawOffset = (0, 0), string flip = none, string rotation = none",
+			delegate (CommandParam parameters) {
+				Point2I sourceIndex = parameters.GetPoint(0);
+				editingSetStart = parameters.GetPoint(1);
+				editingSetDimensions = Point2I.One;
+
+				Point2I drawOffset = parameters.GetPoint(2);
+				Flip flip = ParseFlip(parameters.GetString(3));
+				Rotation rotation = ParseRotation(parameters.GetString(4));
+
+				sprite = BuildBasicSprite(
+							source,
+							sourceIndex,
+							drawOffset,
+							flip,
+							rotation);
+				editingSpriteSet.SetSprite(editingSetStart, sprite);
+
+				singular = true;
 				Mode |= Modes.BasicSprite;
 			});
 			//=====================================================================================
 			// OFFSET SETUP
 			//=====================================================================================
 			AddCommand("OFFSET", (int) Modes.Root, new string[] {
-				"string name, string spriteName, (int drawOffsetX, int drawOffsetY)",
+				"string name, Sprite sprite, Point drawOffset = (0, 0), string flip = none, string rotation = none",
 				// Int needs to go before string as int/float defaults to string.
-				"string name, (int indexX, int indexY), (int drawOffsetX, int drawOffsetY)",
-				"string name, (string spriteName, string definition), (int drawOffsetX, int drawOffsetY)",
-				"string name, ((int indexX, int indexY), string definition), (int drawOffsetX, int drawOffsetY)",
-				"string name, (string sourceName, (int indexX, int indexY)), (int drawOffsetX, int drawOffsetY)",
-				"string name, (string sourceName, (int indexX, int indexY), string definition), (int drawOffsetX, int drawOffsetY)",
-				"string name, (int drawOffsetX, int drawOffsetY)",
+				/*"string name, (int indexX, int indexY), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
+				"string name, (string spriteName, string definition), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
+				"string name, ((int indexX, int indexY), string definition), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
+				"string name, (string sourceName, (int indexX, int indexY)), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
+				"string name, (string sourceName, (int indexX, int indexY), string definition), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
+				"string name, drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",*/
+			}, delegate (CommandParam parameters) {
+				spriteName = parameters.GetString(0);
+				Point2I drawOffset = parameters.GetPoint(2);
+				Flip flip = ParseFlip(parameters.GetString(3));
+				Rotation rotation = ParseRotation(parameters.GetString(4));
+				ISprite spriteToOffset = GetSpriteFromParams(parameters, 1);
+				sprite = new OffsetSprite(spriteToOffset, drawOffset, flip, rotation);
+				AddResource<ISprite>(spriteName, sprite);
+				Mode |= Modes.OffsetSprite;
+			});
+			//=====================================================================================
+			/*AddCommand("CONTINUE OFFSET", (int) Modes.Root, new string[] {
+				"string name, Point drawOffset = (0, 0), string flip = none, string rotation = none",
 			}, delegate (CommandParam parameters) {
 				bool continueSprite = parameters.HasPrefix("continue");
 				if (!continueSprite && parameters.HasPrefix())
 					ThrowCommandParseError("Invalid use of prefix");
 				spriteName = parameters.GetString(0);
-				Point2I drawOffset = parameters.GetPoint(parameters.ChildCount - 1);
-				if (continueSprite) {
-					if (parameters.ChildCount != 2)
-						ThrowCommandParseError("Cannot use CONTINUE with this overload!");
-					ContinueSprite<OffsetSprite>(spriteName);
-					OffsetSprite.DrawOffset += drawOffset;
-				}
-				else {
-					if (parameters.ChildCount != 3)
-						ThrowCommandParseError("Must use CONTINUE with this overload!");
-					ISprite spriteToOffset = GetSpriteFromParams(parameters, 1);
-					sprite = new OffsetSprite(spriteToOffset, drawOffset);
-					AddResource<ISprite>(spriteName, sprite);
-				}
+				Point2I drawOffset = parameters.GetPoint(1);
+				Flip flip = ParseFlip(parameters.GetString(2));
+				Rotation rotation = ParseRotation(parameters.GetString(3));
+				ContinueSprite<OffsetSprite>(spriteName);
+				OffsetSprite.DrawOffset += drawOffset;
+				OffsetSprite.FlipEffects = Flipping.Add(OffsetSprite.FlipEffects, flip);
+				OffsetSprite.Rotation = Rotating.Add(OffsetSprite.Rotation, rotation);
 				Mode |= Modes.OffsetSprite;
-			});
+			});*/
 			//=====================================================================================
 			// BUILDING
 			//=====================================================================================
 			AddCommand("SIZE", (int) Modes.BasicSprite,
-				"(int width, int height)",
+				"Point size",
 			delegate (CommandParam parameters) {
 				BasicSprite.SourceRect = new Rectangle2I(
 					BasicSprite.SourceRect.Point, parameters.GetPoint(0));

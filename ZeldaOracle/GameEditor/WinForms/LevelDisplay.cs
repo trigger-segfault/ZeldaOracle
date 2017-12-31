@@ -137,7 +137,7 @@ namespace ZeldaEditor.WinForms {
 					System.Windows.Application.Current.Dispatcher);
 			}
 			catch (Exception e) {
-				throw e;
+				//throw e;
 			}
 		}
 

@@ -2,8 +2,8 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET "sheet_style_cliffs"	"Tiles/Styles/cliffs"	(8, 8), (1, 1), (18, 18); END;
-SPRITESHEET "sheet_style_railings"	"Tiles/Styles/railings"	(8, 8), (1, 1), (18, 18); END;
+SPRITESHEET "sheet_cliffs"			"Tiles/Styles/cliffs"			(8, 8), (1, 1), (18, 18); END;
+SPRITESHEET "sheet_cliff_railings"	"Tiles/Styles/cliff_railings"	(8, 8), (1, 1), (18, 18); END;
 
 
 #==============================================================
@@ -20,9 +20,9 @@ MAPPEDCOLORS	("cliff",
 					(dark,		(128, 80,  0)),
 					(black,		(  0,  0,  0)));
 
-SOURCE "sheet_style_cliffs";
-SPRITESET set_overworld_cliffs (10, 4);
-	DYNAMIC STYLE "cliffs";
+SOURCE "sheet_cliffs";
+SPRITESET set_cliffs (10, 4);
+	MULTIPLE STYLE "cliffs";
 		ADD "present"	(0, 0);
 		ADD "seasons"	(0, 4);
 		ADD "past"		(0, 8);
@@ -37,9 +37,9 @@ MAPPEDCOLORS	("railings",
 					(dark,		(104,  8, 40)),
 					(black,		(  0,  0,  0)));
 		
-SOURCE "sheet_style_railings";
-SPRITESET set_overworld_railings (5, 3);
-	DYNAMIC STYLE "railings";
+SOURCE "sheet_cliff_railings";
+SPRITESET set_cliff_railings (5, 3);
+	MULTIPLE STYLE "railings";
 		ADD "present"	(0, 0);
 		ADD "seasons"	(0, 3);
 		ADD "past"		(0, 6);
@@ -50,7 +50,7 @@ END;
 # Temporary 8x8's
 #==============================================================
 
-SOURCE "set_overworld_cliffs";
+SOURCE "set_cliffs";
 
 NAME "temp_8x8_cliff_corner_outside_ground_nw"		(0, 0);
 NAME "temp_8x8_cliff_corner_outside_ground_ne"		(1, 0);
@@ -95,7 +95,7 @@ NAME "temp_8x8_cliff_wall_face_1_w"					(9, 2);
 NAME "temp_8x8_cliff_wall_face_2_w"					(9, 3);
 
 
-SOURCE "set_overworld_railings";
+SOURCE "set_cliff_railings";
 
 NAME "temp_8x8_railing_corner_inside_nw"		(0, 0);
 NAME "temp_8x8_railing_corner_inside_ne"		(1, 0);

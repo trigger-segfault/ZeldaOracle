@@ -91,8 +91,8 @@ namespace ConscriptDesigner {
 			"SpriteSourceBrowser", "Sprite Source Browser", typeof(Commands));
 
 		/// <summary>The command to toggle the tile browser window.</summary>
-		public static readonly RoutedUICommand TileBrowser = new RoutedUICommand(
-			"TileBrowser", "Tile Browser", typeof(Commands));
+		public static readonly RoutedUICommand TileDataBrowser = new RoutedUICommand(
+			"TileDataBrowser", "Tile Data Browser", typeof(Commands));
 
 
 		//-----------------------------------------------------------------------------

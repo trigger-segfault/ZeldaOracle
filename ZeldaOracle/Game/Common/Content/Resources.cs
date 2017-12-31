@@ -80,6 +80,7 @@ namespace ZeldaOracle.Common.Content {
 
 		/// <summary>The collection of loaded collision models.</summary>
 		private static Dictionary<string, CollisionModel> collisionModels;
+		private static Dictionary<string, BaseTileData> baseTileData;
 		private static Dictionary<string, Tileset> tilesets;
 		private static Dictionary<string, TileData> tileData;
 		private static Dictionary<string, EventTileset> eventTilesets;
@@ -162,6 +163,7 @@ namespace ZeldaOracle.Common.Content {
 			languages			= new List<Language>();
 
 			collisionModels		= new Dictionary<string, CollisionModel>();
+			baseTileData        = new Dictionary<string, BaseTileData>();
 			tilesets			= new Dictionary<string, Tileset>();
 			tileData			= new Dictionary<string, TileData>();
 			eventTilesets		= new Dictionary<string, EventTileset>();
@@ -185,6 +187,7 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries[typeof(Sound)]				= sounds;
 			resourceDictionaries[typeof(Song)]				= songs;
 			resourceDictionaries[typeof(CollisionModel)]	= collisionModels;
+			resourceDictionaries[typeof(BaseTileData)]		= baseTileData;
 			resourceDictionaries[typeof(Tileset)]			= tilesets;
 			resourceDictionaries[typeof(TileData)]			= tileData;
 			resourceDictionaries[typeof(EventTileset)]		= eventTilesets;

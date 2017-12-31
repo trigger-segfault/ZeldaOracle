@@ -18,7 +18,7 @@ MAPPEDCOLORS "entities_default",
 CHUNKSIZE (8, 16);
 
 SPRITESET "set_color_cube" (12, 4);
-	DYNAMIC BASIC (0, 0); END;
+	MULTIPLE BASIC (0, 0); END;
 
 	# Append the top tips of the color cube to the rolling sprites
 	

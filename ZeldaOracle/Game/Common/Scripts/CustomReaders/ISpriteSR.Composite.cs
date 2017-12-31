@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripts.Commands;
 
@@ -21,34 +22,42 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string name",
 			delegate (CommandParam parameters) {
 				bool continueSprite = parameters.HasPrefix("continue");
-				if (!continueSprite && parameters.HasPrefix())
+				if (parameters.HasPrefix())
 					ThrowCommandParseError("Invalid use of prefix");
 				spriteName = parameters.GetString(0);
-				if (continueSprite) {
-					ContinueSprite<CompositeSprite>(spriteName);
-				}
-				else {
-					sprite = new CompositeSprite();
-					AddResource<ISprite>(spriteName, sprite);
-				}
+				sprite = new CompositeSprite();
+				AddResource<ISprite>(spriteName, sprite);
+				Mode |= Modes.CompositeSprite;
+			});
+			//=====================================================================================
+			AddCommand("CONTINUE COMPOSITE", (int) Modes.Root,
+				"string name",
+			delegate (CommandParam parameters) {
+				if (parameters.HasPrefix())
+					ThrowCommandParseError("Invalid use of prefix");
+				spriteName = parameters.GetString(0);
+				ContinueSprite<CompositeSprite>(spriteName);
 				Mode |= Modes.CompositeSprite;
 			});
 			//=====================================================================================
 			// BUILDING
 			//=====================================================================================
 			AddCommand("ADD", (int) Modes.CompositeSprite, new string[] {
-				"string spriteName, (int drawOffsetX, int drawOffsetY) = (0, 0)",
+				"Sprite sprite, Point drawOffset = (0, 0), string flip = none, string rotation = none",
+				/*"string spriteName, drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
 				// Int needs to go before string as int/float defaults to string.
-				"(int indexX, int indexY), (int drawOffsetX, int drawOffsetY) = (0, 0)",
-				"(string animationName, int substrip), (int drawOffsetX, int drawOffsetY) = (0, 0)",
-				"(string spriteName, string definition), (int drawOffsetX, int drawOffsetY) = (0, 0)",
-				"((int indexX, int indexY), string definition), (int drawOffsetX, int drawOffsetY) = (0, 0)",
-				"(string sourceName, (int indexX, int indexY)), (int drawOffsetX, int drawOffsetY) = (0, 0)",
-				"(string sourceName, (int indexX, int indexY), string definition), (int drawOffsetX, int drawOffsetY) = (0, 0)",
+				"(int indexX, int indexY), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
+				"(string animationName, int substrip), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
+				"(string spriteName, string definition), drawOffset(int x, int y) = (0, 0), string flip = none, string rotation = none",
+				"((int indexX, int indexY), string definition), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
+				"(string sourceName, (int indexX, int indexY)), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
+				"(string sourceName, (int indexX, int indexY), string definition), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",*/
 			}, delegate (CommandParam parameters) {
 				ISprite addSprite = GetSpriteFromParams(parameters);
 				Point2I drawOffset = parameters.GetPoint(1);
-				CompositeSprite.AddSprite(addSprite, drawOffset);
+				Flip flip = ParseFlip(parameters.GetString(2));
+				Rotation rotation = ParseRotation(parameters.GetString(3));
+				CompositeSprite.AddSprite(addSprite, drawOffset, flip, rotation);
 				/*if (parameters.GetParam(0).Type == CommandParamType.String) {
 
 				}
@@ -74,19 +83,21 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("INSERT", (int) Modes.CompositeSprite, new string[] {
-				"int index, string spriteName, (int drawOffsetX, int drawOffsetY) = (0, 0)",
+				"int index, Sprite sprite, Point drawOffset = (0, 0), string flip = none, string rotation = none",
 				// Int needs to go before string as int/float defaults to string.
-				"int index, (int indexX, int indexY), (int drawOffsetX, int drawOffsetY) = (0, 0)",
-				"int index, (string animationName, int substrip), (int drawOffsetX, int drawOffsetY) = (0, 0)",
-				"int index, (string spriteName, string definition), (int drawOffsetX, int drawOffsetY) = (0, 0)",
-				"int index, ((int indexX, int indexY), string definition), (int drawOffsetX, int drawOffsetY) = (0, 0)",
-				"int index, (string sourceName, (int indexX, int indexY)), (int drawOffsetX, int drawOffsetY) = (0, 0)",
-				"int index, (string sourceName, (int indexX, int indexY), string definition), (int drawOffsetX, int drawOffsetY) = (0, 0)",
+				/*"int index, (int indexX, int indexY), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
+				"int index, (string animationName, int substrip), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
+				"int index, (string spriteName, string definition), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
+				"int index, ((int indexX, int indexY), string definition), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
+				"int index, (string sourceName, (int indexX, int indexY)), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
+				"int index, (string sourceName, (int indexX, int indexY), string definition), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",*/
 			}, delegate (CommandParam parameters) {
 				int index = parameters.GetInt(0);
 				ISprite addSprite = GetSpriteFromParams(parameters, 1);
 				Point2I drawOffset = parameters.GetPoint(2);
-				CompositeSprite.InsertSprite(index, addSprite, drawOffset);
+				Flip flip = ParseFlip(parameters.GetString(3));
+				Rotation rotation = ParseRotation(parameters.GetString(4));
+				CompositeSprite.InsertSprite(index, addSprite, drawOffset, flip, rotation);
 				/*if (parameters.GetParam(1).Name == "name") {
 					CompositeSprite.InsertSprite(
 						parameters.GetInt(0),
@@ -113,21 +124,21 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			// NOTE: Unlike other drawOffset functions. Not setting the draw offset 
 			// will cause the new sprite to retain the last sprite's draw offset.
 			AddCommand("REPLACE", (int) Modes.CompositeSprite, new string[] {
-				"int index, string spriteName",
-				"int index, string spriteName, (int drawOffsetX, int drawOffsetY)",
+				"int index, Sprite sprite",
+				"int index, Sprite sprite, Point drawOffset = (0, 0), string flip = none, string rotation = none",
 				// Int needs to go before string as int/float defaults to string.
-				"int index, (int indexX, int indexY)",
-				"int index, (int indexX, int indexY), (int drawOffsetX, int drawOffsetY)",
+				/*"int index, (int indexX, int indexY)",
+				"int index, (int indexX, int indexY), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
 				"int index, (string animationName, int substrip)",
-				"int index, (string animationName, int substrip), (int drawOffsetX, int drawOffsetY)",
+				"int index, (string animationName, int substrip), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
 				"int index, (string spriteName, string definition)",
-				"int index, (string spriteName, string definition), (int drawOffsetX, int drawOffsetY)",
+				"int index, (string spriteName, string definition), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
 				"int index, ((int indexX, int indexY), string definition)",
-				"int index, ((int indexX, int indexY), string definition), (int drawOffsetX, int drawOffsetY)",
+				"int index, ((int indexX, int indexY), string definition), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
 				"int index, (string sourceName, (int indexX, int indexY))",
-				"int index, (string sourceName, (int indexX, int indexY)), (int drawOffsetX, int drawOffsetY)",
+				"int index, (string sourceName, (int indexX, int indexY)), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
 				"int index, (string sourceName, (int indexX, int indexY), string definition)",
-				"int index, (string sourceName, (int indexX, int indexY), string definition), (int drawOffsetX, int drawOffsetY)",
+				"int index, (string sourceName, (int indexX, int indexY), string definition), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",*/
 			}, delegate (CommandParam parameters) {
 				int index = parameters.GetInt(0);
 				ISprite addSprite = GetSpriteFromParams(parameters, 1);
@@ -136,7 +147,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				}
 				else {
 					Point2I drawOffset = parameters.GetPoint(2);
-					CompositeSprite.ReplaceSprite(index, addSprite, drawOffset);
+					Flip flip = ParseFlip(parameters.GetString(3));
+					Rotation rotation = ParseRotation(parameters.GetString(4));
+					CompositeSprite.ReplaceSprite(index, addSprite, drawOffset, flip, rotation);
 				}
 				/*if (parameters.GetParam(1).Name == "name") {
 					if (parameters.ChildCount == 2) {
@@ -180,8 +193,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("COMBINE", (int) Modes.CompositeSprite,
-				"string compositeSpriteName, (int drawOffsetX, int drawOffsetY) = (0, 0)",
-				"int index, string compositeSpriteName, (int drawOffsetX, int drawOffsetY) = (0, 0)",
+				"string compositeSpriteName, Point drawOffset = (0, 0)",
+				"int index, string compositeSpriteName, Point drawOffset = (0, 0)",
 			delegate (CommandParam parameters) {
 				if (parameters.GetParam(0).Type == CommandParamType.String) {
 					CompositeSprite combineSprite = GetSprite<CompositeSprite>(parameters.GetString(0));
@@ -202,7 +215,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("SIZE", (int) Modes.CompositeSprite,
-				"(int width, int height)",
+				"Point size",
 			delegate (CommandParam parameters) {
 				if (CompositeSprite.SpriteCount > 0) {
 					OffsetSprite sprite = CompositeSprite.LastSprite();
@@ -220,7 +233,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("Offset", (int) Modes.CompositeSprite,
-				"(int offsetX, int offsetY)",
+				"Point offset",
 			delegate (CommandParam parameters) {
 				//var subSprites = CompositeSprite.GetSprites();
 				foreach (OffsetSprite subSprite in CompositeSprite.GetSprites()) {

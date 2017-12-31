@@ -125,6 +125,10 @@
     <Compile Include="Anchorables\SpriteSourceBrowserControl.xaml.cs">
       <DependentUpon>SpriteSourceBrowserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Anchorables\TileDataBrowser.cs" />
+    <Compile Include="Anchorables\TileDataBrowserControl.xaml.cs">
+      <DependentUpon>TileDataBrowserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Commands.cs" />
     <Compile Include="ProjectUserSettings.cs" />
     <Compile Include="Content\ContentSpriteFont.cs" />
@@ -193,11 +197,18 @@
     <Compile Include="WinForms\SpriteSourcePreview.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="WinForms\TileDataPreview.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Page Include="Anchorables\SpriteBrowserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Anchorables\SpriteSourceBrowserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Anchorables\TileDataBrowserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1290,11 +1290,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Styles\dungeon_walls_jabu_jabu.png">
-      <Name>dungeon_walls_jabu_jabu</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Tiles\Styles\fancy_tiles.png">
       <Name>fancy_tiles</Name>
       <Importer>TextureImporter</Importer>
@@ -1310,18 +1305,13 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Styles\railings.png">
-      <Name>railings</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Tiles\Styles\stairs.png">
       <Name>stairs</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Styles\torch_bases.png">
-      <Name>torch_bases</Name>
+    <Compile Include="Images\Tiles\Styles\torches.png">
+      <Name>torches</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -1344,6 +1334,13 @@
   <ItemGroup>
     <Compile Include="Images\Units\Player\player_items.png">
       <Name>player_items</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\Tiles\Styles\cliff_railings.png">
+      <Name>cliff_railings</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

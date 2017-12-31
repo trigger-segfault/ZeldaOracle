@@ -27,6 +27,8 @@ namespace ZeldaOracle.Common.Content {
 		// OTHER:
 		// The collection of loaded collision models.
 		private Dictionary<string, CollisionModel> collisionModels;
+		// The collection of loaded base tile data strucures.
+		private Dictionary<string, BaseTileData> baseTileData;
 		// The collection of loaded tile data strucures.
 		private Dictionary<string, TileData> tileData;
 		// The collection of loaded event tile data strucures.
@@ -42,16 +44,18 @@ namespace ZeldaOracle.Common.Content {
 			this.sprites			= new Dictionary<string, ISprite>();
 			this.animations			= new Dictionary<string, Animation>();
 			this.collisionModels	= new Dictionary<string, CollisionModel>();
+			this.baseTileData       = new Dictionary<string, BaseTileData>();
 			this.tileData			= new Dictionary<string, TileData>();
 			this.eventTileData		= new Dictionary<string, EventTileData>();
 
 			// Setup the resource dictionary lookup map.
 			this.resourceDictionaries = new Dictionary<Type, object>();
 			this.resourceDictionaries[typeof(Image)]			= images;
-			this.resourceDictionaries[typeof(ISpriteSource)]		= spriteSheets;
+			this.resourceDictionaries[typeof(ISpriteSource)]	= spriteSheets;
 			this.resourceDictionaries[typeof(ISprite)]			= sprites;
 			this.resourceDictionaries[typeof(Animation)]		= animations;
 			this.resourceDictionaries[typeof(CollisionModel)]	= collisionModels;
+			this.resourceDictionaries[typeof(BaseTileData)]		= baseTileData;
 			this.resourceDictionaries[typeof(TileData)]			= tileData;
 			this.resourceDictionaries[typeof(EventTileData)]	= eventTileData;
 		}

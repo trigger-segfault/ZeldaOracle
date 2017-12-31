@@ -133,6 +133,8 @@
     <None Include="Common\Debug\ToggleMenuItem.cs" />
     <None Include="Common\Graphics\Obsolete\AnimationOld.cs" />
     <None Include="Common\Graphics\Obsolete\AnimationFrameOld.cs" />
+    <Compile Include="Common\Graphics\Flipping.cs" />
+    <Compile Include="Common\Graphics\Rotating.cs" />
     <Compile Include="Common\Graphics\Sprites\ColorationGroups.cs" />
     <Compile Include="Common\Graphics\Sprites\GroupDefinitions.cs" />
     <Compile Include="Common\Graphics\Sprites\SpriteSet.cs" />
@@ -215,6 +217,7 @@
     <Compile Include="Common\Scripting\PropertyDocumentation.cs" />
     <Compile Include="Common\Scripting\Property.cs" />
     <None Include="Common\Scripting\ZeldaObject.cs" />
+    <Compile Include="Common\Scripts\Commands\CommandParamDefinition.cs" />
     <Compile Include="Common\Scripts\Commands\CommandPrefix.cs" />
     <Compile Include="Common\Scripts\Commands\CommandReferenceParam.cs" />
     <None Include="Common\Scripts\CustomReaders\AnimationSR.cs" />
