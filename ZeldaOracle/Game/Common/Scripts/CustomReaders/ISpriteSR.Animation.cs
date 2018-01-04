@@ -91,7 +91,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("ADD emptyframe", (int) Modes.Animation,
 				"int duration",
 			delegate (CommandParam parameters) {
-				animationBuilder.AddEmptyFrame(parameters.GetInt(1));
+				animationBuilder.AddEmptyFrame(parameters.GetInt(0));
 			});
 			//=====================================================================================
 			AddCommand("ADD strip", (int) Modes.Animation,
@@ -100,25 +100,25 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			delegate (CommandParam parameters) {
 				Point2I sourceIndex;
 				string definition = null;
-				var subParam = parameters.GetParam(3);
+				var subParam = parameters.GetParam(2);
 				if (subParam.GetParam(0).Type == CommandParamType.Array) {
 					sourceIndex = subParam.GetPoint(0);
 					definition = subParam.GetString(1);
 				}
 				else {
-					sourceIndex = parameters.GetPoint(3);
+					sourceIndex = parameters.GetPoint(2);
 				}
 				animationBuilder.AddFrameStrip(
-					parameters.GetInt(1),
+					parameters.GetInt(0),
 					source,
 					sourceIndex,
 					definition,
-					parameters.GetInt(2),
-					parameters.GetPoint(4),
+					parameters.GetInt(1),
+					parameters.GetPoint(3),
 					Flip.None,
 					Rotation.None,
-					parameters.GetInt(5),
-					parameters.GetPoint(6));
+					parameters.GetInt(4),
+					parameters.GetPoint(5));
 			});
 			//=====================================================================================
 			AddCommand("ADD frame", (int) Modes.Animation,
@@ -127,26 +127,26 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				ISpriteSource source;
 				Point2I index;
 				string definition;
-				ISprite addSprite = GetSpriteFromParams(parameters, 2, out source, out index, out definition);
+				ISprite addSprite = GetSpriteFromParams(parameters, 1, out source, out index, out definition);
 				if (source != null) {
 					animationBuilder.AddFrame(
-						parameters.GetInt(1),
+						parameters.GetInt(0),
 						source,
 						index,
 						definition,
-						parameters.GetPoint(3),
+						parameters.GetPoint(2),
 						Flip.None,
 						Rotation.None,
-						parameters.GetInt(4));
+						parameters.GetInt(3));
 				}
 				else {
 					animationBuilder.AddFrame(
-						parameters.GetInt(1),
+						parameters.GetInt(0),
 						addSprite,
-						parameters.GetPoint(3),
+						parameters.GetPoint(2),
 						Flip.None,
 						Rotation.None,
-						parameters.GetInt(4));
+						parameters.GetInt(3));
 				}
 			});
 			//=====================================================================================
@@ -156,26 +156,26 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				ISpriteSource source;
 				Point2I index;
 				string definition;
-				ISprite addSprite = GetSpriteFromParams(parameters, 2, out source, out index, out definition);
+				ISprite addSprite = GetSpriteFromParams(parameters, 1, out source, out index, out definition);
 				if (source != null) {
 					animationBuilder.AddPart(
-						parameters.GetInt(1),
+						parameters.GetInt(0),
 						source,
 						index,
 						definition,
-						parameters.GetPoint(3),
+						parameters.GetPoint(2),
 						Flip.None,
 						Rotation.None,
-						parameters.GetInt(4));
+						parameters.GetInt(3));
 				}
 				else {
 					animationBuilder.AddPart(
-						parameters.GetInt(1),
+						parameters.GetInt(0),
 						addSprite,
-						parameters.GetPoint(3),
+						parameters.GetPoint(2),
 						Flip.None,
 						Rotation.None,
-						parameters.GetInt(4));
+						parameters.GetInt(3));
 				}
 			});
 			//=====================================================================================

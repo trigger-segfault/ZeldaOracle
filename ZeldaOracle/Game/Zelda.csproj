@@ -218,7 +218,6 @@
     <Compile Include="Common\Scripting\Property.cs" />
     <None Include="Common\Scripting\ZeldaObject.cs" />
     <Compile Include="Common\Scripts\Commands\CommandParamDefinition.cs" />
-    <Compile Include="Common\Scripts\Commands\CommandPrefix.cs" />
     <Compile Include="Common\Scripts\Commands\CommandReferenceParam.cs" />
     <None Include="Common\Scripts\CustomReaders\AnimationSR.cs" />
     <Compile Include="Common\Scripts\Commands\CommandParam.cs" />

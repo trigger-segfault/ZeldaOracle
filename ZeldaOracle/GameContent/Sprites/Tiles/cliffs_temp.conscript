@@ -6,23 +6,32 @@
 COMPOSITE "temp_cliff_corner_outside_ground_nw";
 	ADD "temp_8x8_cliff_corner_outside_ground_nw" (0, 0);
 	ADD "temp_8x8_cliff_face_2_n" (8, 0);
-	ADD "temp_8x8_cliff_face_2_w" (0, 8); END;
+	ADD "temp_8x8_cliff_face_w" (0, 8); END;
 	
 COMPOSITE "temp_cliff_corner_outside_ground_ne";
 	ADD "temp_8x8_cliff_corner_outside_ground_ne" (8, 0);
 	ADD "temp_8x8_cliff_face_1_n" (0, 0);
-	ADD "temp_8x8_cliff_face_1_e" (8, 8); END;
+	ADD "temp_8x8_cliff_face_e" (8, 8); END;
 	
 COMPOSITE "temp_cliff_corner_outside_ground_sw";
 	ADD "temp_8x8_cliff_corner_outside_ground_sw" (0, 8);
 	ADD "temp_8x8_cliff_face_1_s" (8, 8);
-	ADD "temp_8x8_cliff_face_1_w" (0, 0); END;
+	ADD "temp_8x8_cliff_face_w" (0, 0); END;
 	
 COMPOSITE "temp_cliff_corner_outside_ground_se";
 	ADD "temp_8x8_cliff_corner_outside_ground_se" (8, 8);
 	ADD "temp_8x8_cliff_face_2_s" (0, 8);
-	ADD "temp_8x8_cliff_face_2_e" (8, 0); END;
+	ADD "temp_8x8_cliff_face_e" (8, 0); END;
 	
+	
+COMPOSITE "temp_cliff_corner_outside_dark_sw";
+	COMBINE "temp_cliff_corner_outside_ground_sw";
+	REPLACE 0 "temp_8x8_cliff_face_corner_left"; END;
+	
+COMPOSITE "temp_cliff_corner_outside_dark_se";
+	COMBINE "temp_cliff_corner_outside_ground_se";
+	REPLACE 0 "temp_8x8_cliff_face_corner_right"; END;
+
 
 COMPOSITE "temp_cliff_corner_outside_nw";
 	COMBINE "temp_cliff_corner_outside_ground_nw";
@@ -34,11 +43,11 @@ COMPOSITE "temp_cliff_corner_outside_ne";
 	
 COMPOSITE "temp_cliff_corner_outside_sw";
 	COMBINE "temp_cliff_corner_outside_ground_sw";
-	REPLACE 0 "temp_8x8_cliff_corner_outside_sw"; END;
+	REPLACE 0 "temp_8x8_cliff_face_corner_left"; END;
 	
 COMPOSITE "temp_cliff_corner_outside_se";
 	COMBINE "temp_cliff_corner_outside_ground_se";
-	REPLACE 0 "temp_8x8_cliff_corner_outside_se"; END;
+	REPLACE 0 "temp_8x8_cliff_face_corner_right"; END;
 
 	
 COMPOSITE "temp_cliff_corner_outside_ground_nw_left_half";
@@ -58,6 +67,15 @@ COMPOSITE "temp_cliff_corner_outside_ground_se_right_half";
 	REMOVE 1; END;
 	
 	
+COMPOSITE "temp_cliff_corner_outside_dark_sw_left_half";
+	COMBINE "temp_cliff_corner_outside_dark_sw";
+	REMOVE 1; END;
+	
+COMPOSITE "temp_cliff_corner_outside_dark_se_right_half";
+	COMBINE "temp_cliff_corner_outside_dark_se";
+	REMOVE 1; END;
+	
+	
 COMPOSITE "temp_cliff_corner_outside_ground_nw_top_half";
 	COMBINE "temp_cliff_corner_outside_ground_nw";
 	REMOVE 2; END;
@@ -74,6 +92,15 @@ COMPOSITE "temp_cliff_corner_outside_ground_se_bottom_half";
 	COMBINE "temp_cliff_corner_outside_ground_se";
 	REMOVE 2; END;
 	
+	
+COMPOSITE "temp_cliff_corner_outside_dark_sw_bottom_half";
+	COMBINE "temp_cliff_corner_outside_dark_sw";
+	REMOVE 2; END;
+	
+COMPOSITE "temp_cliff_corner_outside_dark_se_bottom_half";
+	COMBINE "temp_cliff_corner_outside_dark_se";
+	REMOVE 2; END;
+
 
 COMPOSITE "temp_cliff_corner_outside_nw_left_half";
 	COMBINE "temp_cliff_corner_outside_ground_nw";
@@ -118,21 +145,21 @@ COMPOSITE "temp_cliff_face_s";
 	ADD "temp_8x8_cliff_face_1_s" (8, 8); END;
 
 COMPOSITE "temp_cliff_face_w";
-	ADD	"temp_8x8_cliff_face_1_w" (0, 0);
-	ADD "temp_8x8_cliff_face_2_w" (0, 8); END;
+	ADD	"temp_8x8_cliff_face_w" (0, 0);
+	ADD "temp_8x8_cliff_face_w" (0, 8); END;
 
 COMPOSITE "temp_cliff_face_e";
-	ADD	"temp_8x8_cliff_face_1_e" (8, 0);
-	ADD "temp_8x8_cliff_face_2_e" (8, 8); END;
+	ADD	"temp_8x8_cliff_face_e" (8, 0);
+	ADD "temp_8x8_cliff_face_e" (8, 8); END;
 	
 
 COMPOSITE "temp_cliff_face_e_corner_inside_nw";
 	ADD "temp_8x8_cliff_corner_inside_nw" (8, 0);
-	ADD "temp_8x8_cliff_face_1_e" (8, 8); END;
+	ADD "temp_8x8_cliff_face_e" (8, 8); END;
 
 COMPOSITE "temp_cliff_face_w_corner_inside_ne";
 	ADD "temp_8x8_cliff_corner_inside_ne" (0, 0);
-	ADD "temp_8x8_cliff_face_2_w" (0, 8); END;
+	ADD "temp_8x8_cliff_face_w" (0, 8); END;
 	
 
 #==============================================================

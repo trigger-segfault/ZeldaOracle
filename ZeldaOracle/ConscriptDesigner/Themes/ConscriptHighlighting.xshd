@@ -102,12 +102,17 @@
       <Word>CHANGEDEFINITION</Word>
     </Keywords>
 
-    <!--ISpriteSR.Animations-->
+    <!--ISpriteSR Keywords-->
     <Keywords color="CommandKeywords">
       <Word>strip</Word>
       <Word>emptyframe</Word>
       <Word>frame</Word>
       <Word>part</Word>
+      <Word>clamp</Word>
+      <Word>reset</Word>
+      <Word>repeat</Word>
+      <Word>none</Word>
+      <Word>null</Word>
     </Keywords>
 
     <!--ISpriteSR.BasicEmptyOffset-->
@@ -165,7 +170,7 @@
     <!--ISpriteSR Prefixes-->
     <Keywords color="Prefixes">
       <Word>CONTINUE</Word>
-      <Word>DYNAMIC</Word>
+      <Word>MULTIPLE</Word>
       <Word>SINGLE</Word>
     </Keywords>
 

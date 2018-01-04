@@ -22,7 +22,7 @@ MAPPEDCOLORS	("cliff",
 
 SOURCE "sheet_cliffs";
 SPRITESET set_cliffs (10, 4);
-	MULTIPLE STYLE "cliffs";
+	MULTIPLE STYLE "cliffs", (0, 0), (10, 4);
 		ADD "present"	(0, 0);
 		ADD "seasons"	(0, 4);
 		ADD "past"		(0, 8);
@@ -39,7 +39,7 @@ MAPPEDCOLORS	("railings",
 		
 SOURCE "sheet_cliff_railings";
 SPRITESET set_cliff_railings (5, 3);
-	MULTIPLE STYLE "railings";
+	MULTIPLE STYLE "railings", (0, 0), (5, 3);
 		ADD "present"	(0, 0);
 		ADD "seasons"	(0, 3);
 		ADD "past"		(0, 6);
@@ -68,10 +68,10 @@ NAME "temp_8x8_cliff_face_1_n"						(2, 2);
 NAME "temp_8x8_cliff_face_2_n"						(3, 2);
 NAME "temp_8x8_cliff_face_1_s"						(2, 3);
 NAME "temp_8x8_cliff_face_2_s"						(3, 3);
-NAME "temp_8x8_cliff_face_1_e"						(4, 0);
-NAME "temp_8x8_cliff_face_2_e"						(4, 1);
-NAME "temp_8x8_cliff_face_1_w"						(4, 2);
-NAME "temp_8x8_cliff_face_2_w"						(4, 3);
+NAME "temp_8x8_cliff_face_e"						(4, 0);
+NAME "temp_8x8_cliff_face_w"						(4, 2);
+NAME "temp_8x8_cliff_face_corner_right"				(4, 1);
+NAME "temp_8x8_cliff_face_corner_left"				(4, 3);
 
 NAME "temp_8x8_cliff_wall_corner_outside_ground_nw"	(5, 0);
 NAME "temp_8x8_cliff_wall_corner_outside_ground_ne"	(6, 0);

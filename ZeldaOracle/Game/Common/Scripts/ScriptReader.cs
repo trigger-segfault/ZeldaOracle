@@ -34,7 +34,6 @@ namespace ZeldaOracle.Common.Scripts {
 		private CommandParam    namedParameter;
 
 		private List<ScriptCommand> commands;   // List of possible commands.
-		private Dictionary<string, CommandPrefix> commandPrefixes;
 
 		private CommandParamDefinitions typeDefinitions;
 
@@ -53,7 +52,6 @@ namespace ZeldaOracle.Common.Scripts {
 			parameterRoot	= null;
 			commandPrefix   = null;
 			commands		= new List<ScriptCommand>();
-			commandPrefixes	= new Dictionary<string, CommandPrefix>();
 			lines			= new List<string>();
 			tempResources   = new TemporaryResources();
 			scriptCallStack	= new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -241,20 +239,6 @@ namespace ZeldaOracle.Common.Scripts {
 
 
 		//-----------------------------------------------------------------------------
-		// Command Prefix Creation
-		//-----------------------------------------------------------------------------
-
-		/// <summary>Add a script command prefix.</summary>
-		protected void AddCommandPrefix(string prefix, params int[] modes) {
-			if (string.IsNullOrWhiteSpace(prefix))
-				throw new ArgumentNullException("Command prefix cannot be null or whitespace in script reader!");
-			if (commandPrefixes.ContainsKey(prefix))
-				throw new ArgumentException("Command prefix '" + prefix + "' already exists in script reader!");
-			commandPrefixes.Add(prefix, new CommandPrefix(prefix, modes));
-		}
-
-
-		//-----------------------------------------------------------------------------
 		// Resources
 		//-----------------------------------------------------------------------------
 
@@ -331,7 +315,7 @@ namespace ZeldaOracle.Common.Scripts {
 			// Search for the correct command.
 			for (int i = 0; i < commands.Count; i++) {
 				ScriptCommand command = commands[i];
-				if (command.HasName(commandName) && MatchesMode(mode, command.Modes)) {
+				if (command.HasName(commandName, parameters) && MatchesMode(mode, command.Modes)) {
 					if (command.HasParameters(parameters, out newParams, typeDefinitions)) {
 						// Run the command.
 						newParams.Prefix = commandPrefix ?? "";
@@ -340,7 +324,7 @@ namespace ZeldaOracle.Common.Scripts {
 						}
 						catch (ThreadAbortException) { }
 						catch (LoadContentException ex) {
-							//throw ex;
+							throw ex;
 						}
 						catch (Exception ex) {
 							throw new ScriptReaderException(ex.Message, fileName, lines[lineIndex], lineIndex + 1, charIndex + 1, true, ex.StackTrace);
@@ -350,7 +334,7 @@ namespace ZeldaOracle.Common.Scripts {
 					else {
 						// Preemptively append the possible overloads to the error message.
 						for (int j = 0; j < command.ParameterOverloads.Count; j++)
-							matchingFormats.Add(command.Name + " " +
+							matchingFormats.Add(command.FullName + " " +
 								CommandParamParser.ToString(command.ParameterOverloads[j]));
 					}
 				}
@@ -468,15 +452,6 @@ namespace ZeldaOracle.Common.Scripts {
 
 		/// <summary>Add a new command parameter child to the current parent parameter.</summary>
 		private CommandParam AddParam() {
-			// If this is the beginning of the command, check for prefixes
-			if (parameterParent == parameterRoot && parameter == null && commandPrefix == null) {
-				if (commandPrefixes.ContainsKey(word)) {
-					if (MatchesMode(mode, commandPrefixes[word].Modes)) {
-						commandPrefix = word;
-						return null;
-					}
-				}
-			}
 			CommandParam newParam = new CommandParam(word);
 			newParam.CharIndex = wordCharIndex;
 			newParam.LineIndex = lineIndex;

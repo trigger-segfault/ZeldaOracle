@@ -7,7 +7,7 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 	
 	public class ScriptCommand {
 
-		private string name;
+		private string[] names;
 		private Action<CommandParam> action;
 		private List<CommandReferenceParam> parameterOverloads;
 		private int[] modes;
@@ -18,7 +18,7 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 		//-----------------------------------------------------------------------------
 
 		public ScriptCommand(string name, int[] modes, Action<CommandParam> action) {
-			this.name       = name.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries)[0];
+			this.names		= name.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 			this.action		= action;
 			this.parameterOverloads	= new List<CommandReferenceParam>();
 			this.modes      = modes;
@@ -28,18 +28,8 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 			CommandParamDefinitions typeDefinitions) :
 			this(name, modes, action)
 		{
-			string frontConstsStr = "";
-			string[] frontConsts = name.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-			for (int i = 1; i < frontConsts.Length; i++) {
-				if (i > 1)
-					frontConstsStr += ", ";
-				frontConstsStr += "const " + frontConsts[i];
-			}
 			for (int i = 0; i < parameterOverloads.Length; i++) {
-				string front = frontConstsStr;
-				if (!string.IsNullOrEmpty(frontConstsStr) && !string.IsNullOrWhiteSpace(parameterOverloads[i]))
-					front += ", ";
-				CommandReferenceParam p =  CommandParamParser.ParseReferenceParams(front + parameterOverloads[i], typeDefinitions);
+				CommandReferenceParam p =  CommandParamParser.ParseReferenceParams(parameterOverloads[i], typeDefinitions);
 				p.Name = parameterOverloads[i];
 				this.parameterOverloads.Add(p);
 			}
@@ -52,21 +42,41 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 		//-----------------------------------------------------------------------------
 
 		// Returns true if the command has the given name, ignoring case.
-		public bool HasName(string commandName) {
-			return (string.Compare(commandName, name, StringComparison.OrdinalIgnoreCase) == 0);
+		public bool HasName(string commandName, CommandParam parameters) {
+			if (string.Compare(commandName, names[0], StringComparison.OrdinalIgnoreCase) == 0 &&
+				parameters.ChildCount + 1 >= names.Length)
+			{
+				CommandParam child = parameters.Children;
+				for (int i = 1; i < names.Length; i++) {
+					if (string.Compare(child.StringValue, names[i], StringComparison.OrdinalIgnoreCase) != 0)
+						return false;
+					child = child.NextParam;
+				}
+				return true;
+			}
+			return false;
 		}
 		
 		// Returns true if the given user passed-in parameters matches this
 		// command's format, outputting new parameters specified in that format.
-		public bool HasParameters(CommandParam userParameters, out CommandParam newParameters, CommandParamDefinitions defs) {
+		public bool HasParameters(CommandParam userParameters, out CommandParam newParameters, CommandParamDefinitions typeDefinitions) {
 			if (parameterOverloads.Count == 0) {
 				newParameters = new CommandParam(userParameters);
 				return true;
 			}
+			var originalChildren = userParameters.Children;
+			int originalChildCount = userParameters.ChildCount;
+			if (names.Length > 1) {
+				userParameters.Children = userParameters.GetParam(names.Length - 1);
+				userParameters.ChildCount -= names.Length - 1;
+			}
 			for (int i = 0; i < parameterOverloads.Count; i++) {
-				if (AreParametersMatching(parameterOverloads[i], userParameters, out newParameters, defs))
+				// Strip the parameters that are part of the command name
+				if (AreParametersMatching(parameterOverloads[i], userParameters, out newParameters, typeDefinitions))
 					return true;
 			}
+			userParameters.Children = originalChildren;
+			userParameters.ChildCount = originalChildCount;
 			newParameters = null;
 			return false;
 		}
@@ -77,7 +87,7 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 		//-----------------------------------------------------------------------------
 
 		// Recursively check whether the parameters are matching, outputting the new parameters.
-		public static bool AreParametersMatching(CommandReferenceParam reference, CommandParam userParams, out CommandParam newParameters, CommandParamDefinitions defs) {
+		public static bool AreParametersMatching(CommandReferenceParam reference, CommandParam userParams, out CommandParam newParameters, CommandParamDefinitions typeDefinitions) {
 			newParameters = null;
 
 			if (reference == null) {
@@ -86,9 +96,9 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 			}
 
 			if (reference.HasCustomType) {
-				CommandParamDefinition def = defs.Get(reference.CustomTypeName);
+				CommandParamDefinition def = typeDefinitions.Get(reference.CustomTypeName);
 				for (int i = 0; i < def.ParameterOverloads.Count; i++) {
-					if (AreParametersMatching(def.ParameterOverloads[i].Children, userParams, out newParameters, defs))
+					if (AreParametersMatching(def.ParameterOverloads[i].Children, userParams, out newParameters, typeDefinitions))
 						return true;
 				}
 			}
@@ -159,7 +169,7 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 								newChild = new CommandParam(referenceChild.DefaultValue);
 							}
 							else {
-								if (!AreParametersMatching(referenceChild, namedParam, out newChild, defs)) {
+								if (!AreParametersMatching(referenceChild, namedParam, out newChild, typeDefinitions)) {
 									newParameters = null;
 									return false;
 								}
@@ -168,7 +178,7 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 							namedParamMode = true;
 						}
 						else {
-							if (!AreParametersMatching(referenceChild, userChild, out newChild, defs)) {
+							if (!AreParametersMatching(referenceChild, userChild, out newChild, typeDefinitions)) {
 								newParameters = null;
 								return false;
 							}
@@ -209,8 +219,11 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public string Name {
-			get { return name; }
+		public string[] Names {
+			get { return names; }
+		}
+		public string FullName {
+			get { return string.Join(" ", names); }
 		}
 
 		public Action<CommandParam> Action {

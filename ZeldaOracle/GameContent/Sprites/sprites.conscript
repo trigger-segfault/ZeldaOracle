@@ -1,6 +1,6 @@
 
 
-LOAD "Tiles/Styles/cliffs.conscript" false;
+LOAD "Tiles/cliffs.conscript" false;
 LOAD "Tiles/color_cube.conscript" false;
 LOAD "Units/Player/player.conscript" false;
 

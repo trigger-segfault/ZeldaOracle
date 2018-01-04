@@ -63,6 +63,7 @@
     <Folder Include="Images\Tiles\Database\" />
     <Folder Include="Languages\" />
     <Folder Include="Particles\" />
+    <Folder Include="Sprites\Tiles\Styles\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Fonts\font_debug_menu.spritefont">
@@ -122,15 +123,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>color_cube</Name>
     </None>
-    <None Include="Sprites\Tiles\Styles\cliffs.conscript">
+    <None Include="Sprites\Tiles\cliffs.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>cliffs</Name>
     </None>
-    <None Include="Sprites\Tiles\Styles\cliffs_temp.conscript">
+    <None Include="Sprites\Tiles\cliffs_temp.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>cliffs_temp</Name>
     </None>
-    <None Include="Sprites\Tiles\Styles\cliffs_tiles.conscript">
+    <None Include="Sprites\Tiles\cliffs_tiles.conscript">
       <Name>cliffs_tiles</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

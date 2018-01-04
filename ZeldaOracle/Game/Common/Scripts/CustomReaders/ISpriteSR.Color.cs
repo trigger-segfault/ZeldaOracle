@@ -142,11 +142,11 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			if (SourceMode != SourceModes.SpriteSheet && sprite.DefaultSprite == null)
 				ThrowCommandParseError("Cannot create color sprite with a source that is not a sprite sheet!");
 
-			if (defaultMappings == null) {
+			if (sprite.DefaultSprite == null) {
 				paletteArgs.Image = SpriteSheet.Image;
-				if (sprite.DefaultSprite == null)
-					paletteArgs.SourceRect = SpriteSheet.GetSourceRect(sourceIndex);
-
+				paletteArgs.SourceRect = SpriteSheet.GetSourceRect(sourceIndex);
+			}
+			if (defaultMappings == null) {
 				int colorCount = colorParams.ChildCount;
 				defaultMappings = new Color[colorCount][];
 				for (int i = 0; i < colorCount; i++) {
@@ -162,12 +162,12 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			for (int i = 0; i < colorParams.ChildCount; i++) {
 				paletteArgs.DefaultMapping = defaultMappings[i];
 				ISprite coloredSprite;
-				if (ColorSprite.DefaultSprite == null) {
+				if (sprite.DefaultSprite == null) {
 					coloredSprite = Resources.PalettedSpriteDatabase.AddSprite(paletteArgs);
 				}
 				else {
 					coloredSprite = Resources.PalettedSpriteDatabase.RepaletteSprite(
-						(BasicSprite) ColorSprite.DefaultSprite, paletteArgs);
+						(BasicSprite) sprite.DefaultSprite, paletteArgs);
 				}
 
 				sprite.Add(colorParams.GetString(i), coloredSprite);
