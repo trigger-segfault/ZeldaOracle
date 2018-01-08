@@ -56,6 +56,15 @@
       </RuleSet>
     </Span>
 
+    <!--ISpriteSR Clone Prefix-->
+    <Rule color="Prefixes">
+      \bCLONE\s+BASIC\b
+      |
+      (	\bCLONE\s+MULTIPLE\b
+      | \bCLONE\s+SINGLE\b
+      )
+    </Rule>
+
     <!--ScriptReader-->
     <Keywords color="Commands">
       <Word>LOAD</Word>
@@ -108,11 +117,18 @@
       <Word>emptyframe</Word>
       <Word>frame</Word>
       <Word>part</Word>
+      <Word>static</Word>
       <Word>clamp</Word>
       <Word>reset</Word>
       <Word>repeat</Word>
       <Word>none</Word>
       <Word>null</Word>
+      <Word>light</Word>
+      <Word>medium</Word>
+      <Word>dark</Word>
+      <Word>black</Word>
+      <Word>transparent</Word>
+      <Word>all</Word>
     </Keywords>
 
     <!--ISpriteSR.BasicEmptyOffset-->
@@ -121,11 +137,15 @@
       <Word>BASIC</Word>
       <Word>OFFSET</Word>
       <Word>SIZE</Word>
+      <Word>SOURCERECT</Word>
+      <Word>DRAWOFFSET</Word>
     </Keywords>
 
     <!--ISpriteSR.Color-->
     <Keywords color="Commands">
       <Word>COLOR</Word>
+      <Word>COLORSTYLE</Word>
+      <Word>COLORMULTISTYLE</Word>
     </Keywords>
 
     <!--ISpriteSR.Composite-->
@@ -150,6 +170,7 @@
       <Word>COMBINE</Word>
       <Word>SIZE</Word>
       <Word>OFFSET</Word>
+      <Word>STYLEPREVIEW</Word>
     </Keywords>
 
     <!--ISpriteSR-->

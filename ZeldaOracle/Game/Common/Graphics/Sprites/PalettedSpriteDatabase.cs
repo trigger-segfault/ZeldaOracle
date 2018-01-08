@@ -41,17 +41,35 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 	public class UnspecifiedColorException : Exception {
 		public Color Color { get; set; }
+		public Point2I Point { get; set; }
 
-		public UnspecifiedColorException(Color color) {
+		public UnspecifiedColorException(Color color, Point2I point) :
+			base("Unspecified color " + color + " at " + point + "!")
+		{
 			this.Color = color;
+			this.Point = point;
 		}
 	}
 
 	public class NoMatchingColorGroupsException : Exception {
 		public HashSet<Color> Colors { get; set; }
 
-		public NoMatchingColorGroupsException(HashSet<Color> colors) {
+		public NoMatchingColorGroupsException(HashSet<Color> colors) :
+			base("No matching color group with the following colors: " + ListColors(colors) + "!")
+		{
 			this.Colors = colors;
+		}
+
+		private static string ListColors(HashSet<Color> colors) {
+			string str = "";
+			bool first = true;
+			foreach (Color color in colors) {
+				if (!first)
+					str += ", ";
+				str += color;
+				first = true;
+			}
+			return str;
 		}
 	}
 
@@ -63,7 +81,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			private static readonly Point2I MaxImageSize = new Point2I(512, 512);
 
 			/// <summary>The index for the next-defined sprite.</summary>
-			private int index;
+			private int spriteIndex;
 			/// <summary>The spritesheet dimensions of the image.</summary>
 			private Point2I dimensions;
 			/// <summary>The size of the sprites.</summary>
@@ -73,7 +91,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 
 			public PalettedSpriteDatabaseImage(Point2I size) {
-				this.index          = 0;
+				this.spriteIndex	= 0;
 				this.size           = size;
 				this.images         = new List<Image>();
 				this.dimensions     = GMath.Max(Point2I.One, MaxImageSize / size);
@@ -117,7 +135,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				// Create a new sprite from the database
 				BasicSprite sprite = new BasicSprite(currentImage, CurrentSourceRect, args.DrawOffset);
 
-				index++;
+				spriteIndex++;
 				return sprite;
 			}
 
@@ -196,12 +214,13 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 										// All groups are valid here
 									}
 									else if (color.A == 0) {
-										if (args.Dictionary.PaletteType != PaletteTypes.Entity && scannedColors.Count > ignoredColors.Count) {
-											throw new UnspecifiedColorException(color);
+										transparentOnly = (scannedColors.Count + 1 > ignoredColors.Count);
+										if (args.Dictionary.PaletteType != PaletteTypes.Entity && !transparentOnly) {
+											throw new UnspecifiedColorException(color, args.SourceRect.Point + new Point2I(ix, iy));
 										}
 									}
 									else {
-										throw new UnspecifiedColorException(color);
+										throw new UnspecifiedColorException(color, args.SourceRect.Point + new Point2I(ix, iy));
 									}
 								}
 							}
@@ -263,7 +282,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				// Create a new sprite from the database
 				BasicSprite sprite = new BasicSprite(currentImage, CurrentSourceRect, args.DrawOffset);
 
-				index++;
+				spriteIndex++;
 				return sprite;
 			}
 
@@ -274,10 +293,10 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				get { return images.Last(); }
 			}
 			private int ImageIndex {
-				get { return index % IndeciesPerImage; }
+				get { return spriteIndex % IndeciesPerImage; }
 			}
 			private Rectangle2I CurrentSourceRect {
-				get { return new Rectangle2I((ImageIndex % dimensions.X) * size.X, (ImageIndex / dimensions.Y) * size.Y, size); }
+				get { return new Rectangle2I((ImageIndex % dimensions.X) * size.X, (ImageIndex / dimensions.X) * size.Y, size); }
 			}
 		}
 

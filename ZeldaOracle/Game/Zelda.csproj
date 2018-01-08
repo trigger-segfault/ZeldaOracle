@@ -227,6 +227,8 @@
     <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.Animation.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.BasicEmptyOffset.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.Color.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.ColorMultiStyle.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\ISPriteSR.ColorStyle.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.Style.cs" />
     <Compile Include="Common\Scripts\CustomReaders\MusicSR.cs" />

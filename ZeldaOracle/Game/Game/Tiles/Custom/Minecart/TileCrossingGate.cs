@@ -58,6 +58,7 @@ namespace ZeldaOracle.Game.Tiles {
 				Graphics.PlayAnimation(GameData.ANIM_TILE_CROSSING_GATE_RAISE);
 			else
 				Graphics.PlayAnimation(GameData.ANIM_TILE_CROSSING_GATE_LOWER);
+			Graphics.AnimationPlayer.SkipToEnd();
 			
 			bool isFacingLeft = Properties.GetBoolean("face_left", false);
 

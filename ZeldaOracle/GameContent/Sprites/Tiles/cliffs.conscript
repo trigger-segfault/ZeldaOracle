@@ -2,8 +2,11 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET "sheet_cliffs"			"Tiles/Styles/cliffs"			(8, 8), (1, 1), (18, 18); END;
-SPRITESHEET "sheet_cliff_railings"	"Tiles/Styles/cliff_railings"	(8, 8), (1, 1), (18, 18); END;
+SPRITESHEET "sheet_cliffs"			"Tiles/Styles/cliffs"			( 8,  8), (1, 1), (18, 18); END;
+SPRITESHEET "sheet_cliff_parts"		"Tiles/Styles/cliff_parts"		( 8,  8), (1, 1), (18, 18); END;
+SPRITESHEET "sheet_vines"			"Tiles/Styles/vines"			(16,  8), (1, 1), (18, 18); END;
+SPRITESHEET "sheet_cliff_railings"	"Tiles/Styles/cliff_railings"	( 8,  8), (1, 1), (18, 18); END;
+SPRITESHEET "stairs"				"Tiles/Styles/stairs"			(16, 16), (1, 1), (18, 18); END;
 
 
 #==============================================================
@@ -13,15 +16,11 @@ SPRITESHEET "sheet_cliff_railings"	"Tiles/Styles/cliff_railings"	(8, 8), (1, 1),
 PALETTEDICTIONARY	"tile_dictionary";
 
 # Cliffs ======================================================
-
-MAPPEDCOLORS	("cliff",
-					(light,		(248,224, 16)),
-					(medium,	(200,136,  8)),
-					(dark,		(128, 80,  0)),
-					(black,		(  0,  0,  0)));
+				
+MAPPEDCOLORS	"present", ("cliff");
 
 SOURCE "sheet_cliffs";
-SPRITESET set_cliffs (10, 4);
+SPRITESET "set_cliffs" (10, 4);
 	MULTIPLE STYLE "cliffs", (0, 0), (10, 4);
 		ADD "present"	(0, 0);
 		ADD "seasons"	(0, 4);
@@ -29,16 +28,36 @@ SPRITESET set_cliffs (10, 4);
 		END;
 END;
 
+SOURCE "sheet_cliff_parts";
+SPRITESET "set_cliff_parts" (2, 6);
+	MULTIPLE BASIC (0, 0); END;
+END;
+
+MAPPEDCOLORS "present", ("cliff", "vines_light", "vines_dark", "vines_base");
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+SOURCE "sheet_vines";
+SPRITESET "set_vines" (3, 6);
+	MULTIPLE STYLE "vines" (0, 0), (1, 6);
+		ADD "ages"		(0, 0);
+		ADD "seasons"	(1, 0);
+		ADD "maku_tree"	(2, 0);
+		END;
+	MULTIPLE STYLE "vine_cliffs" (1, 0), (1, 5);
+		ADD "ages"			(3, 0);
+		ADD	"seasons"		(4, 0);
+		ADD "seasons_alt"	(5, 0);
+		END;
+	MULTIPLE BASIC (6, 0), (2, 0), (1, 3); END;
+END;
+
 # Railings ====================================================
 
-MAPPEDCOLORS	("railings",
-					(light,		(248,208,136)),
-					(medium,	(232,  8, 24)),
-					(dark,		(104,  8, 40)),
-					(black,		(  0,  0,  0)));
+MAPPEDCOLORS	"present", ("railings");
 		
 SOURCE "sheet_cliff_railings";
-SPRITESET set_cliff_railings (5, 3);
+SPRITESET "set_cliff_railings" (5, 3);
 	MULTIPLE STYLE "railings", (0, 0), (5, 3);
 		ADD "present"	(0, 0);
 		ADD "seasons"	(0, 3);
@@ -94,6 +113,40 @@ NAME "temp_8x8_cliff_wall_face_2_e"					(9, 1);
 NAME "temp_8x8_cliff_wall_face_1_w"					(9, 2);
 NAME "temp_8x8_cliff_wall_face_2_w"					(9, 3);
 
+SOURCE "set_cliff_parts";
+
+NAME "temp_8x8_cliff_hole_corner_left"			(0, 0);
+NAME "temp_8x8_cliff_hole_corner_right"			(1, 0);
+NAME "temp_8x8_cliff_hole_corner_alt_left"		(0, 1);
+NAME "temp_8x8_cliff_hole_corner_alt_right"		(1, 1);
+
+NAME "temp_8x8_cliff_sea_nw"					(0, 2);
+NAME "temp_8x8_cliff_sea_ne"					(1, 2);
+NAME "temp_8x8_cliff_sea_sw"					(0, 3);
+NAME "temp_8x8_cliff_sea_se"					(1, 3);
+NAME "temp_8x8_cliff_sea_border_nw"				(0, 4);
+NAME "temp_8x8_cliff_sea_border_ne"				(1, 4);
+NAME "temp_8x8_cliff_sea_border_sw"				(0, 5);
+NAME "temp_8x8_cliff_sea_border_se"				(1, 5);
+
+SOURCE "set_vines";
+
+NAME "temp_8x16_vines_top_hole"					(0, 0);
+NAME "temp_8x16_vines_top"						(0, 1);
+NAME "temp_8x16_vines_1"						(0, 2);
+NAME "temp_8x16_vines_2"						(0, 3);
+NAME "temp_8x16_vines_bottom"					(0, 4);
+NAME "temp_8x16_vines_base"						(0, 5);
+
+NAME "temp_8x16_vine_cliff_top"					(1, 0);
+NAME "temp_8x16_vine_cliff_top_dirt"			(1, 1);
+NAME "temp_8x16_vine_cliff_1"					(1, 2);
+NAME "temp_8x16_vine_cliff_2"					(1, 3);
+NAME "temp_8x16_vine_cliff_bottom"				(1, 4);
+
+NAME "temp_8x16_cliff_ladder_top"				(2, 0);
+NAME "temp_8x16_cliff_ladder"					(2, 1);
+NAME "temp_8x16_cliff_ladder_bottom"			(2, 2);
 
 SOURCE "set_cliff_railings";
 

@@ -37,6 +37,7 @@ namespace ConscriptDesigner {
 		private OutputConsole outputConsole;
 		private SpriteBrowser spriteBrowser;
 		private SpriteSourceBrowser spriteSourceBrowser;
+		private StyleBrowser styleBrowser;
 		private TileDataBrowser tileDataBrowser;
 
 		private FindReplaceWindow findReplaceWindow;
@@ -180,6 +181,8 @@ namespace ConscriptDesigner {
 				spriteBrowser.RefreshList();
 			if (spriteSourceBrowser != null)
 				spriteSourceBrowser.RefreshList();
+			if (styleBrowser != null)
+				styleBrowser.RefreshList();
 			if (tileDataBrowser != null)
 				tileDataBrowser.RefreshList();
 		}
@@ -189,13 +192,15 @@ namespace ConscriptDesigner {
 				spriteBrowser.ClearList();
 			if (spriteSourceBrowser != null)
 				spriteSourceBrowser.ClearList();
+			if (styleBrowser != null)
+				styleBrowser.ClearList();
 			if (tileDataBrowser != null)
 				tileDataBrowser.ClearList();
 		}
 
 		private void OnFinishedBuilding(object sender, EventArgs e) {
-			if (spriteBrowser != null)
-				spriteBrowser.RefreshList();
+			//if (spriteBrowser != null)
+			//	spriteBrowser.RefreshList();
 		}
 		
 		private void OnActiveAnchorableChanged(object sender = null, EventArgs e = null) {
@@ -222,6 +227,8 @@ namespace ConscriptDesigner {
 				spriteBrowser = null;
 			else if (anchorable is SpriteSourceBrowser)
 				spriteSourceBrowser = null;
+			else if (anchorable is StyleBrowser)
+				styleBrowser = null;
 			else if (anchorable is TileDataBrowser)
 				tileDataBrowser = null;
 			CommandManager.InvalidateRequerySuggested();
@@ -258,6 +265,10 @@ namespace ConscriptDesigner {
 
 		public void OpenSpriteSourceBrowser() {
 			OnSpriteSourceBrowserCommand();
+		}
+
+		public void OpenStyleBrowser() {
+			OnStyleBrowserCommand();
 		}
 
 		public void OpenTileDataBrowser() {
@@ -484,6 +495,21 @@ namespace ConscriptDesigner {
 			}
 		}
 
+		private void OnStyleBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
+			if (styleBrowser == null) {
+				styleBrowser = new StyleBrowser();
+				styleBrowser.Closed += OnAnchorableClosed;
+				styleBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
+				var pane = styleBrowser.Parent as LayoutAnchorablePane;
+				pane.DockWidth = new GridLength(250);
+				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
+					styleBrowser.RefreshList();
+			}
+			else {
+				styleBrowser.IsActive = true;
+			}
+		}
+
 		private void OnTileDataBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
 			if (tileDataBrowser == null) {
 				tileDataBrowser = new TileDataBrowser();
@@ -592,6 +618,11 @@ namespace ConscriptDesigner {
 		public SpriteSourceBrowser SpriteSourceBrowser {
 			get { return spriteSourceBrowser; }
 			set { spriteSourceBrowser = value; }
+		}
+
+		public StyleBrowser StyleBrowser {
+			get { return styleBrowser; }
+			set { styleBrowser = value; }
 		}
 
 		public TileDataBrowser TileDataBrowser {

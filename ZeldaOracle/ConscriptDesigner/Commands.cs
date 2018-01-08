@@ -86,9 +86,13 @@ namespace ConscriptDesigner {
 		public static readonly RoutedUICommand SpriteBrowser = new RoutedUICommand(
 			"SpriteBrowser", "Sprite Browser", typeof(Commands));
 
-		/// <summary>The command to toggle the sprite sourcebrowser window.</summary>
+		/// <summary>The command to toggle the sprite source browser window.</summary>
 		public static readonly RoutedUICommand SpriteSourceBrowser = new RoutedUICommand(
 			"SpriteSourceBrowser", "Sprite Source Browser", typeof(Commands));
+
+		/// <summary>The command to toggle the style browser window.</summary>
+		public static readonly RoutedUICommand StyleBrowser = new RoutedUICommand(
+			"StyleBrowser", "Style Browser", typeof(Commands));
 
 		/// <summary>The command to toggle the tile browser window.</summary>
 		public static readonly RoutedUICommand TileDataBrowser = new RoutedUICommand(

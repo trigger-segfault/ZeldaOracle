@@ -1,0 +1,40 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_tunnels"				"Tiles/Styles/tunnels"				(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+MAPPEDCOLORS	"present", ("wall");
+	
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+SOURCE "temp_sheet_tunnels";
+SPRITESET "set_tunnels" (4, 1);
+	MULTIPLE STYLE "tunnel";
+		ADD "tunnel_1"			(0, 0);
+		ADD "tunnel_2"			(0, 1);
+		ADD "tunnel_3"			(0, 2);
+		ADD "tunnel_4"			(0, 3);
+		ADD "tunnel_5"			(0, 4);
+		ADD "tunnel_6"			(0, 5);
+		ADD "tunnel_7"			(0, 6);
+		ADD "tunnel_8"			(0, 7);
+		ADD "tunnel_9"			(0, 8);
+		ADD "tunnel_10"			(0, 9);
+		END;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_tunnels";
+NAME "tile_tunnel_down"			(0, 0);
+NAME "tile_tunnel_up"			(1, 0);
+NAME "tile_tunnel_left"			(2, 0);
+NAME "tile_tunnel_right"		(3, 0);

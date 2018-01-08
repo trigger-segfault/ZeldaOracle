@@ -59,26 +59,20 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			// BUILDING
 			//=====================================================================================
-			AddCommand("SubStrip", (int) Modes.Animation,
+			AddCommand("SUBSTRIP", (int) Modes.Animation,
 				"string loopMode",
 			delegate (CommandParam parameters) {
 				LoopMode loopMode = LoopMode.Repeat;
-				if (parameters.GetString(0) == "reset")
-					loopMode = LoopMode.Reset;
-				else if (parameters.GetString(0) == "repeat" || parameters.GetString(0) == "loop")
-					loopMode = LoopMode.Repeat;
-				else if (parameters.GetString(0) == "clamp")
-					loopMode = LoopMode.Clamp;
-				else
+				if (!Enum.TryParse(parameters.GetString(0), true, out loopMode))
 					ThrowParseError("Unknown loop mode '" + parameters.GetString(0) + "' for animation", parameters[0]);
-
+				
 				animationBuilder.CreateSubStrip();
 				animationBuilder.SetLoopMode(loopMode);
 				if (Animation == null)
 					sprite = animationBuilder.Animation;
 			});
 			//=====================================================================================
-			AddCommand("Clone", (int) Modes.Animation,
+			AddCommand("CLONE", (int) Modes.Animation,
 				"string animationName",
 			delegate (CommandParam parameters) {
 				animationBuilder.CreateClone(GetSprite<Animation>(parameters.GetString(0)));
@@ -179,208 +173,107 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				}
 			});
 			//=====================================================================================
-			/*AddCommand("Add", (int) Modes.Animation, new string[] {
-				"string emptyFrame, int duration",
-				"string strip, int duration, int stripLength, (int indexX, int indexY), (int drawOffsetX, int drawOffsetY) = (0, 0), int depth = 0, (int nextIndexX, int nextIndexY) = (1, 0)",
-				"string frameOrPart, int duration, string spriteName, (int drawOffsetX, int drawOffsetY) = (0, 0), int depth = 0",
-				// Int needs to go before string as int/float defaults to string.
-				"string frameOrPart, int duration, (int indexX, int indexY), (int drawOffsetX, int drawOffsetY) = (0, 0), int depth = 0",
-				"string frameOrPart, int duration, (string animationName, int substrip), (int drawOffsetX, int drawOffsetY) = (0, 0), int depth = 0",
-				"string frameOrPart, int duration, (string spriteName, string definition), (int drawOffsetX, int drawOffsetY) = (0, 0), int depth = 0",
-				"string frameOrPart, int duration, ((int indexX, int indexY), string definition), (int drawOffsetX, int drawOffsetY) = (0, 0), int depth = 0",
-				"string frameOrPart, int duration, (string sourceName, (int indexX, int indexY)), (int drawOffsetX, int drawOffsetY) = (0, 0), int depth = 0",
-				"string frameOrPart, int duration, (string sourceName, (int indexX, int indexY), string definition), (int drawOffsetX, int drawOffsetY) = (0, 0), int depth = 0",
-			}, delegate (CommandParam parameters) {
-				if (parameters.GetParam(0).Name == "strip") {
-					if (string.Compare(parameters.GetString(0), "strip", true) == 0) {
-						Point2I index;
-						string definition = null;
-						var subParam = parameters.GetParam(3);
-						if (subParam.GetParam(0).Type == CommandParamType.Array) {
-							index = subParam.GetPoint(0);
-							definition = subParam.GetString(1);
-						}
-						else {
-							index = parameters.GetPoint(3);
-						}
-						animationBuilder.AddFrameStrip(
-							parameters.GetInt(1),
-							source,
-							index,
-							definition,
-							parameters.GetInt(2),
-							parameters.GetPoint(4),
-							Flip.None,
-							Rotation.None,
-							parameters.GetInt(5),
-							parameters.GetPoint(6, new Point2I(1, 0)));
-					}
-					else {
-						ThrowCommandParseError("Must specify 'strip' as the first argument for this overload!");
-					}
-				}
-				else if (parameters.GetParam(0).Name == "frameOrPart") {
-					ISpriteSource source;
-					Point2I index;
-					string definition;
-					if (string.Compare(parameters.GetString(0), "frame", true) == 0) {
-						ISprite addSprite = GetSpriteFromParams(parameters, 2, out source, out index, out definition);
-						if (source != null) {
-							animationBuilder.AddFrame(
-								parameters.GetInt(1),
-								source,
-								index,
-								definition,
-								parameters.GetPoint(3),
-								Flip.None,
-								Rotation.None,
-								parameters.GetInt(4));
-						}
-						else {
-							animationBuilder.AddFrame(
-								parameters.GetInt(1),
-								addSprite,
-								parameters.GetPoint(3),
-								Flip.None,
-								Rotation.None,
-								parameters.GetInt(4));
-						}
-					}
-					else if (parameters.GetString(0) == "part") {
-						ISprite addSprite = GetSpriteFromParams(parameters, 2, out source, out index, out definition);
-						if (source != null) {
-							animationBuilder.AddPart(
-								parameters.GetInt(1),
-								source,
-								index,
-								definition,
-								parameters.GetPoint(3),
-								Flip.None,
-								Rotation.None,
-								parameters.GetInt(4));
-						}
-						else {
-							animationBuilder.AddPart(
-								parameters.GetInt(1),
-								addSprite,
-								parameters.GetPoint(3),
-								Flip.None,
-								Rotation.None,
-								parameters.GetInt(4));
-						}
-					}
-					else {
-						ThrowCommandParseError("Must specify 'frame' or 'part' as the first argument for this overload!");
-					}
-				}
-				else if (parameters.GetParam(0).Name == "emptyFrame") {
-					if (string.Compare(parameters.GetString(0), "emptyframe", true) == 0) {
-						animationBuilder.AddEmptyFrame(parameters.GetInt(1));
-					}
-					else {
-						ThrowCommandParseError("Must specify 'emptyframe' as the first argument for this overload!");
-					}
+			AddCommand("ADD static", (int) Modes.Animation,
+				"Sprite sprite, Point drawOffset = (0, 0), int depth = 0",
+			delegate (CommandParam parameters) {
+				ISpriteSource source;
+				Point2I index;
+				string definition;
+				ISprite addSprite = GetSpriteFromParams(parameters, 0, out source, out index, out definition);
+				if (source != null) {
+					animationBuilder.AddStatic(
+						source,
+						index,
+						definition,
+						parameters.GetPoint(1),
+						Flip.None,
+						Rotation.None,
+						parameters.GetInt(2));
 				}
 				else {
-					ThrowParseError("Unknown add type '" + parameters.GetString(0) + "' for animation");
-				}
-			});*/
-			//=====================================================================================
-			AddCommand("Insert", (int) Modes.Animation, new string[] {
-				"string strip, int time, int duration, int stripLength, (int indexX, int indexY), (int drawOffsetX, int drawOffsetY) = (0, 0), int depth = 0, (int nextIndexX, int nextIndexY) = (1, 0)",
-				"string strip, int time, int duration, int stripLength, ((int indexX, int indexY), string definition), (int drawOffsetX, int drawOffsetY) = (0, 0), int depth = 0, (int nextIndexX, int nextIndexY) = (1, 0)",
-				"string frame, int time, int duration, string spriteName, (int drawOffsetX, int drawOffsetY) = (0, 0), int depth = 0",
-				// Int needs to go before string as int/float defaults to string.
-				"string frame, int time, int duration, (int indexX, int indexY), (int drawOffsetX, int drawOffsetY) = (0, 0), int depth = 0",
-				"string frame, int time, int duration, (string animationName, int substrip), (int drawOffsetX, int drawOffsetY) = (0, 0), int depth = 0",
-				"string frame, int time, int duration, (string spriteName, string definition), (int drawOffsetX, int drawOffsetY) = (0, 0), int depth = 0",
-				"string frame, int time, int duration, ((int indexX, int indexY), string definition), (int drawOffsetX, int drawOffsetY) = (0, 0), int depth = 0",
-				"string frame, int time, int duration, (string sourceName, (int indexX, int indexY)), (int drawOffsetX, int drawOffsetY) = (0, 0), int depth = 0",
-				"string frame, int time, int duration, (string sourceName, (int indexX, int indexY), string definition), (int drawOffsetX, int drawOffsetY) = (0, 0), int depth = 0",
-			}, delegate (CommandParam parameters) {
-				if (parameters.GetParam(0).Name == "strip") {
-					if (string.Compare(parameters.GetString(0), "strip", true) == 0) {
-						Point2I index;
-						string definition = null;
-						var subParam = parameters.GetParam(4);
-						if (subParam.GetParam(0).Type == CommandParamType.Array) {
-							index = subParam.GetPoint(0);
-							definition = subParam.GetString(1);
-						}
-						else {
-							index = parameters.GetPoint(4);
-						}
-						animationBuilder.InsertFrameStrip(
-							parameters.GetInt(1),
-							parameters.GetInt(2),
-							source,
-							index,
-							definition,
-							parameters.GetInt(3),
-							parameters.GetPoint(5),
-							Flip.None,
-							Rotation.None,
-							parameters.GetInt(6),
-							parameters.GetPoint(7, new Point2I(1, 0)));
-					}
-					else {
-						ThrowCommandParseError("Must specify 'strip' as the first argument for this overload!");
-					}
-				}
-				else if (parameters.GetParam(0).Name == "frame") {
-					ISpriteSource source;
-					Point2I index;
-					string definition;
-					if (string.Compare(parameters.GetString(0), "frame", true) == 0) {
-						ISprite addSprite = GetSpriteFromParams(parameters, 3, out source, out index, out definition);
-						if (source != null) {
-							animationBuilder.InsertFrame(
-								parameters.GetInt(1),
-								parameters.GetInt(2),
-								source,
-								index,
-								definition,
-								parameters.GetPoint(4),
-								Flip.None,
-								Rotation.None,
-								parameters.GetInt(5));
-						}
-						else {
-							animationBuilder.InsertFrame(
-								parameters.GetInt(1),
-								parameters.GetInt(2),
-								addSprite,
-								parameters.GetPoint(4),
-								Flip.None,
-								Rotation.None,
-								parameters.GetInt(5));
-						}
-					}
-					else {
-						ThrowCommandParseError("Must specify 'frame' as the first argument for this overload!");
-					}
-				}
-				else {
-					ThrowParseError("Unknown insert type '" + parameters.GetString(0) + "' for animation");
+					animationBuilder.AddStatic(
+						addSprite,
+						parameters.GetPoint(1),
+						Flip.None,
+						Rotation.None,
+						parameters.GetInt(2));
 				}
 			});
 			//=====================================================================================
-			// TODO: Implement Animation Combine
-			AddCommand("Combine", (int) Modes.Animation,
-				"string animationName, (int offsetX, int offsetY) = (0, 0), int depthOffset = 0",
-				"(string animationName, int substrip), (int offsetX, int offsetY) = (0, 0), int depthOffset = 0",
-				"int timeOffset, string animationName, (int offsetX, int offsetY) = (0, 0), int depthOffset = 0",
-				"int timeOffset, (string animationName, int substrip), (int offsetX, int offsetY) = (0, 0), int depthOffset = 0",
+			AddCommand("INSERT strip", (int) Modes.Animation,
+				"int time, int duration, int stripLength, Point sourceIndex, Point drawOffset = (0, 0), int depth = 0, Point relative = (1, 0)",
+				"int time, int duration, int stripLength, (Point sourceIndex, string definition), Point drawOffset = (0, 0), int depth = 0, Point relative = (1, 0)",
+			delegate (CommandParam parameters) {
+				Point2I index;
+				string definition = null;
+				var subParam = parameters.GetParam(3);
+				if (subParam.GetParam(0).Type == CommandParamType.Array) {
+					index = subParam.GetPoint(0);
+					definition = subParam.GetString(1);
+				}
+				else {
+					index = parameters.GetPoint(3);
+				}
+				animationBuilder.InsertFrameStrip(
+					parameters.GetInt(0),
+					parameters.GetInt(1),
+					source,
+					index,
+					definition,
+					parameters.GetInt(2),
+					parameters.GetPoint(4),
+					Flip.None,
+					Rotation.None,
+					parameters.GetInt(5),
+					parameters.GetPoint(6, new Point2I(1, 0)));
+			});
+			//=====================================================================================
+			AddCommand("INSERT frame", (int) Modes.Animation,
+				"int time, int duration, Sprite sprite, Point drawOffset = (0, 0), int depth = 0",
+			delegate (CommandParam parameters) {
+				ISpriteSource source;
+				Point2I index;
+				string definition;
+				ISprite addSprite = GetSpriteFromParams(parameters, 2, out source, out index, out definition);
+				if (source != null) {
+					animationBuilder.InsertFrame(
+						parameters.GetInt(0),
+						parameters.GetInt(1),
+						source,
+						index,
+						definition,
+						parameters.GetPoint(3),
+						Flip.None,
+						Rotation.None,
+						parameters.GetInt(4));
+				}
+				else {
+					animationBuilder.InsertFrame(
+						parameters.GetInt(0),
+						parameters.GetInt(1),
+						addSprite,
+						parameters.GetPoint(3),
+						Flip.None,
+						Rotation.None,
+						parameters.GetInt(4));
+				}
+			});
+			//=====================================================================================
+			AddCommand("COMBINE", (int) Modes.Animation,
+				"string animationName, Point drawOffset = (0, 0), int depthOffset = 0",
+				"(string animationName, int substrip), Point drawOffset = (0, 0), int depthOffset = 0",
+				"int timeOffset, string animationName, Point drawOffset = (0, 0), int depthOffset = 0",
+				"int timeOffset, (string animationName, int substrip), Point drawOffset = (0, 0), int depthOffset = 0",
 			delegate (CommandParam parameters) {
 				int paramOffset = 0;
 				int timeOffset = 0;
-				if (parameters.GetParam(0).Type == CommandParamType.Integer) {
+				if (parameters.GetParam(0).IsValidType(CommandParamType.Integer)) {
 					paramOffset = 1;
 					timeOffset = parameters.GetInt(0);
 				}
 				string animationName;
 				int substrip = 0;
-				if (parameters.GetParam(paramOffset).Type == CommandParamType.String) {
+				if (parameters.GetParam(paramOffset).IsValidType(CommandParamType.String)) {
 					animationName = parameters.GetString(paramOffset);
 				}
 				else {
@@ -388,43 +281,37 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					animationName = subParam.GetString(0);
 					substrip = subParam.GetInt(1);
 				}
-				Animation combineAnim = GetSprite<Animation>(animationName);
-				combineAnim = combineAnim.GetSubstrip(substrip);
 				Point2I drawOffset = parameters.GetPoint(paramOffset + 1);
 				int depthOffset = parameters.GetInt(paramOffset + 2);
-				foreach (AnimationFrame frame in combineAnim.GetFrames()) {
-					AnimationFrame newFrame = new AnimationFrame(frame);
-					newFrame.Depth		+= depthOffset;
-					newFrame.DrawOffset	+= drawOffset;
-					newFrame.StartTime	+= timeOffset;
-					Animation.AddFrame(newFrame);
-				}
+				Animation combineAnim = GetSprite<Animation>(animationName);
+				animationBuilder.Combine(combineAnim, substrip, timeOffset, drawOffset, depthOffset);
+				combineAnim = combineAnim.GetSubstrip(substrip);
 			});
 			//=====================================================================================
 			// MODIFICATIONS
 			//=====================================================================================
-			AddCommand("MakeQuad", (int) Modes.Animation,
+			AddCommand("MAKEQUAD", (int) Modes.Animation,
 				"",
 			delegate (CommandParam parameters) {
 				animationBuilder.MakeQuad();
 			});
 			//=====================================================================================
-			AddCommand("MakeDynamic", (int) Modes.Animation,
-				"int numSubstrips, (int nextSourceX, int nextSourceY)",
+			AddCommand("MAKEDYNAMIC", (int) Modes.Animation,
+				"int numSubstrips, Point relative",
 			delegate (CommandParam parameters) {
 				animationBuilder.MakeDynamic(
 					parameters.GetInt(0),
 					parameters.GetPoint(1));
 			});
 			//=====================================================================================
-			AddCommand("Offset", (int) Modes.Animation,
-				"(int offsetX, int offsetY)",
+			AddCommand("OFFSET", (int) Modes.Animation,
+				"Point offset",
 			delegate (CommandParam parameters) {
 				animationBuilder.Offset(
 					parameters.GetPoint(0));
 			});
 			//=====================================================================================
-			AddCommand("Flicker", (int) Modes.Animation,
+			AddCommand("FLICKER", (int) Modes.Animation,
 				"int alternateDelay, string startOnOrOff",
 			delegate (CommandParam parameters) {
 				// FLICKER <alternateDelay> <on/off>
@@ -440,7 +327,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				animationBuilder.MakeFlicker(parameters.GetInt(0), startOn);
 			});
 			//=====================================================================================
-			AddCommand("Repeat", (int) Modes.Animation,
+			AddCommand("REPEAT", (int) Modes.Animation,
 				"int numRepeats",
 				"int numFrames, int numRepeats",
 			delegate (CommandParam parameters) {
@@ -451,26 +338,26 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			// Rewinds back to the first animation (if currently on a latter substrip).
-			AddCommand("Rewind", (int) Modes.Animation,
+			AddCommand("REWIND", (int) Modes.Animation,
 				"",
 			delegate (CommandParam parameters) {
 				animationBuilder.Animation = Animation;
 			});
 			//=====================================================================================
 			// Shifts the source positions of all sprites in the animation.
-			AddCommand("ShiftSource", (int) Modes.Animation,
-				"(int shiftX, int shiftY)",
+			AddCommand("SHIFTSOURCE", (int) Modes.Animation,
+				"Point relative",
 			delegate (CommandParam parameters) {
 				animationBuilder.ShiftSourcePositions(
 					parameters.GetPoint(0));
 			});
 			//=====================================================================================
 			// Changes the definition for all definition sprites
-			AddCommand("ChangeDefinition", (int) Modes.Animation,
+			AddCommand("CHANGEDEFINITION", (int) Modes.Animation,
 				"string definition",
 			delegate (CommandParam parameters) {
-				animationBuilder.ShiftSourcePositions(
-					parameters.GetPoint(0));
+				animationBuilder.ChangeDefinition(
+					parameters.GetString(0));
 			});
 			//=====================================================================================
 		}

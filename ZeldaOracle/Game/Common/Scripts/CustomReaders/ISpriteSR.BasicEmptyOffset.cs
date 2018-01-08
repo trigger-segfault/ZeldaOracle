@@ -78,16 +78,27 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				Mode |= Modes.BasicSprite;
 			});
 			//=====================================================================================
-			/*AddCommand("CONTINUE BASIC", (int) Modes.Root,
+			AddCommand("CONTINUE BASIC", (int) Modes.Root,
 				"string name",
 			delegate (CommandParam parameters) {
-				if (parameters.HasPrefix())
-					ThrowCommandParseError("Invalid use of prefix");
 				spriteName = parameters.GetString(0);
 				ContinueSprite<BasicSprite>(spriteName);
 				SetResource<ISprite>(spriteName, sprite);
 				Mode |= Modes.BasicSprite;
-			});*/
+			});
+			//=====================================================================================
+			AddCommand("CLONE BASIC", (int) Modes.Root,
+				"string name, Sprite sprite",
+			delegate (CommandParam parameters) {
+				spriteName = parameters.GetString(0);
+				sprite = GetSpriteFromParams(parameters) as BasicSprite;
+				if (sprite == null) {
+					ThrowCommandParseError("Sprite is not a BasicSprite!");
+				}
+				AddResource<ISprite>(spriteName, sprite);
+
+				Mode |= Modes.BasicSprite;
+			});
 			//=====================================================================================
 			AddCommand("MULTIPLE BASIC", (int) Modes.SpriteSet,
 				"Point sourceIndex, Point start = (0, 0), Point span = (0, 0), " +
@@ -120,40 +131,98 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				Mode |= Modes.BasicSprite;
 			});
 			//=====================================================================================
-			AddCommand("SINGLE BASIC", (int) Modes.SpriteSet,
-				"Point sourceIndex",
+			AddCommand("CONTINUE MULTIPLE BASIC", (int) Modes.SpriteSet,
+				"Point start = (0, 0), Point span = (0, 0)",
+			delegate (CommandParam parameters) {
+				editingSetStart = parameters.GetPoint(0);
+				editingSetDimensions = parameters.GetPoint(1);
+				if (editingSetDimensions.X == 0) editingSetDimensions.X = editingSpriteSet.Width;
+				if (editingSetDimensions.Y == 0) editingSetDimensions.Y = editingSpriteSet.Height;
+
+				for (int x = 0; x < editingSetDimensions.X; x++) {
+					for (int y = 0; y < editingSetDimensions.Y; y++) {
+						GetSprite<BasicSprite>(editingSpriteSet, editingSetStart + new Point2I(x, y));
+					}
+				}
+
+				singular = false;
+				Mode |= Modes.BasicSprite;
+			});
+			//=====================================================================================
+			AddCommand("CLONE MULTIPLE BASIC", (int) Modes.SpriteSet,
+				"Point sourceIndex, Point start = (0, 0), Point span = (0, 0)",
 			delegate (CommandParam parameters) {
 				Point2I sourceIndex = parameters.GetPoint(0);
-				editingSetStart = sourceIndex;
+				editingSetStart = parameters.GetPoint(1);
+				editingSetDimensions = parameters.GetPoint(2);
+				if (editingSetDimensions.X == 0) editingSetDimensions.X = editingSpriteSet.Width;
+				if (editingSetDimensions.Y == 0) editingSetDimensions.Y = editingSpriteSet.Height;
+
+				for (int x = 0; x < editingSetDimensions.X; x++) {
+					for (int y = 0; y < editingSetDimensions.Y; y++) {
+						Point2I point = new Point2I(x, y);
+						BasicSprite basicSprite = new BasicSprite(
+							GetSprite<BasicSprite>(source, sourceIndex + point));
+						editingSpriteSet.SetSprite(editingSetStart + point, basicSprite);
+					}
+				}
+
+				singular = false;
+				Mode |= Modes.BasicSprite;
+			});
+			//=====================================================================================
+			AddCommand("SINGLE BASIC", (int) Modes.SpriteSet,
+				"Point sourceIndex",
+				"Point sourceIndex, Point2I setIndex, Point drawOffset = (0, 0), string flip = none, string rotation = none",
+			delegate (CommandParam parameters) {
+				Point2I sourceIndex = parameters.GetPoint(0);
+				editingSetStart = parameters.GetPoint(1, sourceIndex);
 				editingSetDimensions = Point2I.One;
 
-				sprite = BuildBasicSprite(
+				if (parameters.ChildCount > 1) {
+					Point2I drawOffset = parameters.GetPoint(2);
+					Flip flip = ParseFlip(parameters.GetString(3));
+					Rotation rotation = ParseRotation(parameters.GetString(4));
+
+					sprite = BuildBasicSprite(
+								source,
+								sourceIndex,
+								drawOffset,
+								flip,
+								rotation);
+				}
+				else {
+					sprite = BuildBasicSprite(
 							source,
 							sourceIndex,
 							Point2I.Zero);
+				}
 				editingSpriteSet.SetSprite(editingSetStart, sprite);
 
 				singular = true;
 				Mode |= Modes.BasicSprite;
 			});
 			//=====================================================================================
-			AddCommand("SINGLE BASIC", (int) Modes.SpriteSet,
-				"Point sourceIndex, Point2I setIndex, Point drawOffset = (0, 0), string flip = none, string rotation = none",
+			AddCommand("CONTINUE SINGLE BASIC", (int) Modes.SpriteSet,
+				"Point setIndex",
+			delegate (CommandParam parameters) {
+				editingSetStart = parameters.GetPoint(0);
+				editingSetDimensions = Point2I.One;
+
+				sprite = GetSprite<BasicSprite>(editingSpriteSet, editingSetStart);
+
+				singular = true;
+				Mode |= Modes.BasicSprite;
+			});
+			//=====================================================================================
+			AddCommand("CLONE SINGLE BASIC", (int) Modes.SpriteSet,
+				"Point sourceIndex, Point2I setIndex",
 			delegate (CommandParam parameters) {
 				Point2I sourceIndex = parameters.GetPoint(0);
 				editingSetStart = parameters.GetPoint(1);
 				editingSetDimensions = Point2I.One;
 
-				Point2I drawOffset = parameters.GetPoint(2);
-				Flip flip = ParseFlip(parameters.GetString(3));
-				Rotation rotation = ParseRotation(parameters.GetString(4));
-
-				sprite = BuildBasicSprite(
-							source,
-							sourceIndex,
-							drawOffset,
-							flip,
-							rotation);
+				sprite = GetSprite<BasicSprite>(source, sourceIndex);
 				editingSpriteSet.SetSprite(editingSetStart, sprite);
 
 				singular = true;
@@ -206,6 +275,59 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			delegate (CommandParam parameters) {
 				BasicSprite.SourceRect = new Rectangle2I(
 					BasicSprite.SourceRect.Point, parameters.GetPoint(0));
+			});
+			//=====================================================================================
+			AddCommand("SOURCERECT", (int) Modes.BasicSprite,
+				"Point point, Point size",
+			delegate (CommandParam parameters) {
+				BasicSprite.SourceRect = new Rectangle2I(
+					BasicSprite.SourceRect.Point + parameters.GetPoint(0),
+					parameters.GetPoint(1));
+			});
+			//=====================================================================================
+			AddCommand("DRAWOFFSET", (int) Modes.BasicSprite,
+				"Point drawOffset",
+			delegate (CommandParam parameters) {
+				BasicSprite.DrawOffset = parameters.GetPoint(0);
+			});
+			//=====================================================================================
+			AddCommand("SIZE", (int) (Modes.SpriteSet | Modes.BasicSprite),
+				"Point size",
+			delegate (CommandParam parameters) {
+				for (int x = 0; x < editingSetDimensions.X; x++) {
+					for (int y = 0; y <  editingSetDimensions.Y; y++) {
+						Point2I point = new Point2I(x, y);
+						BasicSprite basicSprite = GetSprite<BasicSprite>(editingSpriteSet, editingSetStart + point);
+						basicSprite.SourceRect = new Rectangle2I(
+							BasicSprite.SourceRect.Point, parameters.GetPoint(0));
+					}
+				}
+			});
+			//=====================================================================================
+			AddCommand("SOURCERECT", (int) (Modes.SpriteSet | Modes.BasicSprite),
+				"Point point, Point size",
+			delegate (CommandParam parameters) {
+				for (int x = 0; x < editingSetDimensions.X; x++) {
+					for (int y = 0; y <  editingSetDimensions.Y; y++) {
+						Point2I point = new Point2I(x, y);
+						BasicSprite basicSprite = GetSprite<BasicSprite>(editingSpriteSet, editingSetStart + point);
+						basicSprite.SourceRect = new Rectangle2I(
+							basicSprite.SourceRect.Point + parameters.GetPoint(0),
+							parameters.GetPoint(1));
+					}
+				}
+			});
+			//=====================================================================================
+			AddCommand("DRAWOFFSET", (int) (Modes.SpriteSet | Modes.BasicSprite),
+				"Point drawOffset",
+			delegate (CommandParam parameters) {
+				for (int x = 0; x < editingSetDimensions.X; x++) {
+					for (int y = 0; y <  editingSetDimensions.Y; y++) {
+						Point2I point = new Point2I(x, y);
+						BasicSprite basicSprite = GetSprite<BasicSprite>(editingSpriteSet, editingSetStart + point);
+						basicSprite.DrawOffset = parameters.GetPoint(0);
+					}
+				}
 			});
 			//=====================================================================================
 		}

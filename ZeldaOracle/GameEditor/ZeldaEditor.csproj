@@ -173,6 +173,9 @@
     <Compile Include="Windows\HistoryWindow.xaml.cs">
       <DependentUpon>HistoryWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\LocateResourceWindow.xaml.cs">
+      <DependentUpon>LocateResourceWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\RefactorWindow.xaml.cs">
       <DependentUpon>RefactorWindow.xaml</DependentUpon>
     </Compile>
@@ -257,6 +260,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\HistoryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\LocateResourceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

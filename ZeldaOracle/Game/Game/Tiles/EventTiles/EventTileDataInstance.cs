@@ -34,7 +34,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		public EventTileDataInstance(EventTileData tileData, Point2I position) :
 			base(tileData) {
 			this.position   = position;
-			this.sprite     = tileData.Sprite;
+			this.sprite     = (tileData != null ? tileData.Sprite : null);
 		}
 
 		public EventTileDataInstance(EventTileDataInstance eventTile) :

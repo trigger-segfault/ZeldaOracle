@@ -1,0 +1,67 @@
+﻿#==============================================================
+# Sprite Sheets
+#==============================================================
+
+SPRITESHEET	"temp_sheet_stairs"	"Tiles/Styles/stairs"			(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_staircases"	"Tiles/Styles/staircases"	(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+MAPPEDCOLORS	"present" ("stairs");
+
+SPRITESET "set_stairs" (4, 2);
+	SOURCE "temp_sheet_stairs";
+	MULTIPLE STYLE "stairs", (0, 0), (4, 1);
+		ADD "overworld"		(0, 0);
+		ADD	"border"		(0, 1);
+		ADD	"interior"		(0, 2);
+		ADD "dungeon"		(0, 3);
+		END;
+	
+	SOURCE "temp_sheet_staircases";
+	
+	MAPPEDCOLORS	"present" ("floor_staircase");
+	MULTIPLE STYLE "staircases" (0, 1), (2, 1);
+		ADD "dungeon"		(0, 0);
+		ADD	"natural"		(0, 1);
+		ADD "maku_tree"		(0, 2);
+		END;
+		
+	MAPPEDCOLORS	"present" ("wall_staircase");
+	MULTIPLE STYLE "staircases" (2, 1), (2, 1);
+		ADD "dungeon"		(2, 0);
+		ADD	"natural"		(2, 1);
+		ADD "maku_tree"		(2, 2);
+		END;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_stairs";
+
+NAME "tile_stairs_up_n"		(0, 0);
+NAME "tile_stairs_up_s"		(1, 0);
+NAME "tile_stairs_up_e"		(2, 0);
+NAME "tile_stairs_up_w"		(3, 0);
+
+NAME "tile_floor_staircase_up"		(0, 1);
+NAME "tile_floor_staircase_down"	(1, 1);
+NAME "tile_wall_staircase_up"		(2, 1);
+NAME "tile_wall_staircase_down"		(3, 1);
+
+#==============================================================
+# Style Previews
+#==============================================================
+
+COMPOSITE "temp_staircase_preview";
+	ADD (0, 1), (0, 0); ADD (1, 1), (16, 0); ADD (2, 1), (0, 16); ADD (3, 1), (16, 16); END;
+	
+STYLEPREVIEW "staircases", "temp_staircase_preview";

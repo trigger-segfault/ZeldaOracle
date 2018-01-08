@@ -35,7 +35,7 @@ namespace ZeldaEditor.WinForms {
 			content		= new ContentManager(Services, "Content");
 			spriteBatch	= new SpriteBatch(GraphicsDevice);
 
-			editorControl.Initialize(content, GraphicsDevice);
+			editorControl.SetGraphics(GraphicsDevice, content);
 
 			// Wire the events.
 			MouseMove	+= OnMouseMove;
@@ -47,7 +47,7 @@ namespace ZeldaEditor.WinForms {
 			//Application.Idle += delegate { Invalidate(); };
 			this.ResizeRedraw = true;
 			
-			UpdateTileset();
+			//UpdateTileset();
 		}
 
 		protected override void Dispose(bool disposing) {

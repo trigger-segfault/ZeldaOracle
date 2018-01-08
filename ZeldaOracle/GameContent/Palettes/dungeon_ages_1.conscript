@@ -1,4 +1,4 @@
-PALETTE		tile_dictionary, dungeon_ages_1;
+﻿PALETTE		tile_dictionary, dungeon_ages_1;
 
 CLONE	"tiles_default";
 
@@ -60,7 +60,7 @@ LOOKUP	bush, light			pot, light;
 COLOR	bush, medium		(248,184,136);
 COLOR	bush, dark			( 16,168, 64);
 
-LOOKUP	bush_regrow, all	bush, all;
+LOOKUP	regrowable_bush, all	bush, all;
 
 
 #==============================================================
@@ -79,7 +79,7 @@ LOOKUP	puzzle_blue, all		statue, all;
 #COLOR	chest;
 
 # Keep Default
-#LOOKUP	lanturn, all		chest, all;
+#LOOKUP	lantern, all		chest, all;
 
 LOOKUP	door, all			statue, all;
 

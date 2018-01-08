@@ -1,4 +1,4 @@
-PALETTE tile_dictionary, tiles_default;
+﻿PALETTE tile_dictionary, tiles_default;
 
 #==============================================================
 # Structure
@@ -91,11 +91,11 @@ COLOR	puzzle_red, light		(248,248,136);
 COLOR	puzzle_red, medium		(248,  8, 40);
 COLOR	puzzle_red, dark		(104,  0,  0);
 
-LOOKUP	puzzle_blue, light		red, light;
+LOOKUP	puzzle_blue, light		puzzle_red, light;
 COLOR	puzzle_blue, medium		( 24,128,248);
 COLOR	puzzle_blue, dark		(  0, 64,128);
 
-LOOKUP	puzzle_yellow, light	red, light; # Undefined
+LOOKUP	puzzle_yellow, light	puzzle_red, light; # Undefined
 COLOR	puzzle_yellow, medium	(248,192, 48);
 COLOR	puzzle_yellow, dark		(144, 72, 40);
 
@@ -103,7 +103,7 @@ COLOR	chest, light			(248,208,136);
 COLOR	chest, medium			(232,  8, 24);
 COLOR	chest, dark				(104,  8, 40);
 
-LOOKUP	lanturn, all			chest, all;
+LOOKUP	lantern, all			chest, all;
 
 #==============================================================
 # Fluids
@@ -155,9 +155,9 @@ LOOKUP	bush, light		floor, light;
 COLOR	bush, medium	(248,184,136);
 LOOKUP	bush, dark		default, black;
 
-LOOKUP	bush_regrow, light		floor, light;
-COLOR	bush_regrow, medium		(248,184,136);
-COLOR	bush_regrow, dark		( 16,168, 64);
+LOOKUP	regrowable_bush, light		floor, light;
+COLOR	regrowable_bush, medium		(248,184,136);
+COLOR	regrowable_bush, dark		( 16,168, 64);
 
 LOOKUP	web, all			floor, all;
 
@@ -212,6 +212,11 @@ LOOKUP	fancy_tile_2, all		barrier, all;
 LOOKUP	fancy_tile_3, all		object, all;
 LOOKUP	fancy_tile_4, all		floor, all;
 LOOKUP	fancy_tile_5, all		door, all;
+LOOKUP	fancy_tile_6, all		floor, all;
+LOOKUP	fancy_tile_7, all		floor, all;
+LOOKUP	fancy_tile_8, all		floor, all;
+LOOKUP	fancy_tile_9, all		floor, all;
+LOOKUP	fancy_tile_10, all		floor, all;
 
 
 END;

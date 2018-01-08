@@ -99,7 +99,7 @@ namespace ZeldaEditor.WinForms {
 				paletteDrawMode = new DrawMode(GameSettings.DRAW_MODE_DEFAULT);
 				paletteDrawMode.Effect = paletteShader;
 
-				editorControl.Initialize(content, GraphicsDevice);
+				editorControl.SetGraphics(GraphicsDevice, content);
 				
 				// Wire the events.
 				MouseEnter          += OnMouseEnter;
@@ -117,12 +117,12 @@ namespace ZeldaEditor.WinForms {
 				this.ResizeRedraw = true;
 
 				// TEMP: Open this world file upon starting the editor.
-				if (File.Exists("./temp_world.zwd"))
+				/*if (File.Exists("./temp_world.zwd"))
 					editorControl.OpenWorld("temp_world.zwd");
 				else if (File.Exists("../../../../WorldFiles/temp_world.zwd"))
 					editorControl.OpenWorld("../../../../WorldFiles/temp_world.zwd");
 				else if (File.Exists("../../../WorldFiles/temp_world.zwd"))
-					editorControl.OpenWorld("../../../WorldFiles/temp_world.zwd");
+					editorControl.OpenWorld("../../../WorldFiles/temp_world.zwd");*/
 				//editorControl.OpenFile("temp_world.zwd");
 
 				UpdateLevel();

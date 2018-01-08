@@ -123,6 +123,7 @@ namespace ZeldaEditor {
 		}
 
 		private void OnWindowLoaded(object sender, RoutedEventArgs e) {
+			editorControl.Initialize();
 			buttonToolPointer.Tag = editorControl.ToolPointer;
 			buttonToolPan.Tag = editorControl.ToolPan;
 			buttonToolPlace.Tag = editorControl.ToolPlace;

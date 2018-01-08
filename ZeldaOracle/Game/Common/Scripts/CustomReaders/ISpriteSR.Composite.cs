@@ -196,20 +196,20 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string compositeSpriteName, Point drawOffset = (0, 0)",
 				"int index, string compositeSpriteName, Point drawOffset = (0, 0)",
 			delegate (CommandParam parameters) {
-				if (parameters.GetParam(0).Type == CommandParamType.String) {
-					CompositeSprite combineSprite = GetSprite<CompositeSprite>(parameters.GetString(0));
-					foreach (OffsetSprite part in combineSprite.GetSprites()) {
-						CompositeSprite.AddSprite(part.Sprite,
-							part.DrawOffset + parameters.GetPoint(1));
-					}
-				}
-				else {
+				if (parameters.GetParam(0).IsValidType(CommandParamType.Integer)) {
 					CompositeSprite combineSprite = GetSprite<CompositeSprite>(parameters.GetString(1));
 					int index = parameters.GetInt(0);
 					foreach (OffsetSprite part in combineSprite.GetSprites()) {
 						CompositeSprite.InsertSprite(index, part.Sprite,
 							part.DrawOffset + parameters.GetPoint(2));
 						index++;
+					}
+				}
+				else {
+					CompositeSprite combineSprite = GetSprite<CompositeSprite>(parameters.GetString(0));
+					foreach (OffsetSprite part in combineSprite.GetSprites()) {
+						CompositeSprite.AddSprite(part.Sprite,
+							part.DrawOffset + parameters.GetPoint(1));
 					}
 				}
 			});

@@ -18,6 +18,16 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		// Classes
 		//-----------------------------------------------------------------------------
 
+		private struct ColorStyleGroup {
+			public string StyleGroup { get; set; }
+			public string ColorGroup { get; set; }
+
+			public ColorStyleGroup(string styleGroup, string colorGroup) {
+				this.StyleGroup	= styleGroup;
+				this.ColorGroup	= colorGroup;
+			}
+		}
+
 		private enum SourceModes {
 			None,
 			SpriteSheet,
@@ -36,9 +46,10 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			ColorSprite		= 1 << 6,
 			CompositeSprite	= 1 << 7,
 			Animation		= 1 << 8,
+			MultiStyle		= 1 << 9,
 			SpriteMask		= EmptySprite | BasicSprite | OffsetSprite |
 							  StyleSprite | ColorSprite | CompositeSprite |
-							  Animation
+							  Animation | MultiStyle
 		}
 
 		//-----------------------------------------------------------------------------
@@ -53,6 +64,11 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		private SpriteSet editingSpriteSet;
 		private Point2I editingSetStart;
 		private Point2I editingSetDimensions;
+
+		// ColorStyle
+		private string editingStyleGroup;
+		private List<string> editingColorGroups;
+		private List<ColorStyleGroup> editingColorStyleGroups;
 		
 		private ISpriteSource source;
 		private ISprite sprite;
@@ -73,6 +89,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			this.paletteArgs.IgnoreColors = new HashSet<Color>();
 			this.animationBuilder = new AnimationBuilder();
 			this.animationBuilder.PaletteArgs = paletteArgs;
+			this.editingColorGroups = new List<string>();
+			this.editingColorStyleGroups = new List<ColorStyleGroup>();
 
 			//=====================================================================================
 			// Type Definitions
@@ -202,7 +220,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				}
 				Point2I editPoint = parameters.GetPoint(0);
 				Point2I drawOffset = parameters.GetPoint(2);
-				ISprite editSprite = EditingSpriteSet.GetSprite(editPoint);
+				ISprite editSprite = editingSpriteSet.GetSprite(editPoint);
 				CompositeSprite composite = editSprite as CompositeSprite;
 				if (composite == null) {
 					composite = new CompositeSprite();
@@ -308,14 +326,15 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				animationBuilder.PaletteArgs = paletteArgs;
 			});
 			//=====================================================================================
-			AddCommand("IGNORECOLORS", "Color colors...",
+			AddCommand("IGNORECOLORS", "(Color colors...)",
 			delegate (CommandParam parameters) {
 				if (parameters.HasPrefix()) {
 					ThrowCommandParseError("Invalid use of prefix");
 				}
 				paletteArgs.IgnoreColors.Clear();
-				for (int i = 0; i < parameters.ChildCount; i++) {
-					Color color = ParseColor(parameters, i);
+				var colorParams = parameters.GetParam(0);
+				for (int i = 0; i < colorParams.ChildCount; i++) {
+					Color color = ParseColor(colorParams, i);
 					paletteArgs.IgnoreColors.Add(color);
 				}
 				animationBuilder.PaletteArgs = paletteArgs;
@@ -376,6 +395,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCompositeCommands();
 			AddStyleCommands();
 			AddColorCommands();
+			AddColorStyleCommands();
+			AddColorMultiStyleCommands();
 			AddAnimationCommands();
 			//=====================================================================================
 		}
@@ -586,16 +607,22 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			definition = null;
 
 			var param0 = param.GetParam(startIndex);
-			if (param0.Type == CommandParamType.String) {
+			if (param0.IsValidType(CommandParamType.String)) {
 				// Overload 1:
 				return GetResource<ISprite>(param.GetString(startIndex));
 			}
-			else if (param0.GetParam(0).Type == CommandParamType.String) {
-				if (param0.GetParam(1).Type == CommandParamType.Integer) {
+			else if (param0.GetParam(0).IsValidType(CommandParamType.Integer)) {
+				// Overload 2:
+				source = this.source;
+				index = param.GetPoint(startIndex);
+				return GetSprite(this.source, index);
+			}
+			else if (param0.GetParam(0).IsValidType(CommandParamType.String)) {
+				if (param0.GetParam(1).IsValidType(CommandParamType.Integer)) {
 					// Overload 3:
 					return GetSprite<Animation>(param0.GetString(0)).GetSubstrip(param0.GetInt(1));
 				}
-				else if (param0.GetParam(1).Type == CommandParamType.String) {
+				else if (param0.GetParam(1).IsValidType(CommandParamType.String)) {
 					// Overload 4:
 					return GetDefinedSprite(param0.GetString(0), param0.GetString(1));
 				}
@@ -612,12 +639,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					definition = param0.GetString(2);
 					return GetDefinedSprite(source, index, definition);
 				}
-			}
-			else if (param0.GetParam(0).Type == CommandParamType.Integer) {
-				// Overload 2:
-				source = this.source;
-				index = param.GetPoint(startIndex);
-				return GetSprite(this.source, index);
 			}
 			else {
 				// Overload 5:
@@ -683,11 +704,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		/// <summary>Gets the source as a sprite set.</summary>
 		private SpriteSet SpriteSet {
 			get { return source as SpriteSet; }
-		}
-
-		/// <summary>Gets the sprite set being edited.</summary>
-		private SpriteSet EditingSpriteSet {
-			get { return editingSpriteSet; }
 		}
 
 		/// <summary>Gets the current sprite as an empty sprite.</summary>

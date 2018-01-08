@@ -99,6 +99,18 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 			AnimationFrame prevFrame = animation.LastFrame();
 			return InsertFrame(prevFrame.StartTime, duration, sprite, drawOffset, flip, rotation, depth);
 		}
+		
+		public AnimationBuilder AddStatic(ISpriteSource source, Point2I index, string definition,
+			Point2I drawOffset, Flip flip, Rotation rotation, int depth)
+		{
+			return InsertFrame(0, animation.Duration, source, index, definition, drawOffset, flip, rotation, depth);
+		}
+
+		public AnimationBuilder AddStatic(ISprite sprite, Point2I drawOffset, Flip flip,
+			Rotation rotation, int depth)
+		{
+			return InsertFrame(0, animation.Duration, sprite, drawOffset, flip, rotation, depth);
+		}
 
 		public AnimationBuilder AddEmptyFrame(int duration) {
 			return InsertFrame(animation.Duration, duration, new EmptySprite(), Point2I.Zero, Flip.None, Rotation.None, 0);
@@ -148,6 +160,17 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 			return this;
 		}
 
+		public AnimationBuilder Combine(Animation combineAnim, int substrip, int timeOffset, Point2I drawOffset, int depthOffset) {
+			combineAnim = combineAnim.GetSubstrip(substrip);
+			foreach (AnimationFrame frame in combineAnim.GetFrames()) {
+				AnimationFrame newFrame = new AnimationFrame(frame);
+				newFrame.Depth      += depthOffset;
+				newFrame.DrawOffset += drawOffset;
+				newFrame.StartTime  += timeOffset;
+				animation.AddFrame(newFrame);
+			}
+			return this;
+		}
 		
 		//-----------------------------------------------------------------------------
 		// Midifications

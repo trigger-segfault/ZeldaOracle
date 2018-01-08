@@ -12,8 +12,10 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		Clamp,
 		/// <summary>Reset back to the beginning and stop.</summary>
 		Reset,
-		/// <summary>Keep looping back and playing from the beginning endlessly.</summary>
-		Repeat
+		/// <summary>Keep looping back and playing from the beginning endlessly. Same as Loop.</summary>
+		Repeat,
+		/// <summary>Keep looping back and playing from the beginning endlessly. Same as Repeat.</summary>
+		Loop
 	}
 
 

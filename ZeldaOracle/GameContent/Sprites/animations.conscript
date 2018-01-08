@@ -37,121 +37,121 @@ ANIM tile_spiked_floor; SUBSTRIP repeat;
 
 # Doors
 
-ANIM tile_door_closed;
-	SUBSTRIP repeat; ADD frame, 1, tile_door_right;
-	SUBSTRIP repeat; ADD frame, 1, tile_door_up;
-	SUBSTRIP repeat; ADD frame, 1, tile_door_left;
-	SUBSTRIP repeat; ADD frame, 1, tile_door_down;
-	END;
+#ANIM tile_door_closed;
+#	SUBSTRIP repeat; ADD frame, 1, tile_door_right;
+#	SUBSTRIP repeat; ADD frame, 1, tile_door_up;
+#	SUBSTRIP repeat; ADD frame, 1, tile_door_left;
+#	SUBSTRIP repeat; ADD frame, 1, tile_door_down;
+#	END;
 
-ANIM tile_door_close;
-	SUBSTRIP clamp;	ADD frame, 6, tile_door_right, (-8, 0);
-					ADD frame, 6, tile_door_right;
-	SUBSTRIP clamp;	ADD frame, 6, tile_door_up, (0, 8);
-					ADD frame, 6, tile_door_up;
-	SUBSTRIP clamp;	ADD frame, 6, tile_door_left, (8, 0);
-					ADD frame, 6, tile_door_left;
-	SUBSTRIP clamp;	ADD frame, 6, tile_door_down, (0, -8);
-					ADD frame, 6, tile_door_down;
-	END;
+#ANIM tile_door_close;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_door_right, (-8, 0);
+#					ADD frame, 6, tile_door_right;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_door_up, (0, 8);
+#					ADD frame, 6, tile_door_up;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_door_left, (8, 0);
+#					ADD frame, 6, tile_door_left;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_door_down, (0, -8);
+#					ADD frame, 6, tile_door_down;
+#	END;
 	
-ANIM tile_door_open;
-	SUBSTRIP clamp;	ADD frame, 6, tile_door_right, (-8, 0);
-					ADD emptyframe, 6;
-	SUBSTRIP clamp;	ADD frame, 6, tile_door_up, (0, 8);
-					ADD emptyframe, 6;
-	SUBSTRIP clamp;	ADD frame, 6, tile_door_left, (8, 0);
-					ADD emptyframe, 6;
-	SUBSTRIP clamp;	ADD frame, 6, tile_door_down, (0, -8);
-					ADD emptyframe, 6;
-	END;
+#ANIM tile_door_open;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_door_right, (-8, 0);
+#					ADD emptyframe, 6;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_door_up, (0, 8);
+#					ADD emptyframe, 6;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_door_left, (8, 0);
+#					ADD emptyframe, 6;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_door_down, (0, -8);
+#					ADD emptyframe, 6;
+#	END;
 
-ANIM tile_minecart_door_closed;
-	SUBSTRIP repeat; ADD frame, 1, tile_minecart_door_right;
-	SUBSTRIP repeat; ADD frame, 1, tile_minecart_door_up;
-	SUBSTRIP repeat; ADD frame, 1, tile_minecart_door_left;
-	SUBSTRIP repeat; ADD frame, 1, tile_minecart_door_down;
-	END;
+#ANIM tile_minecart_door_closed;
+#	SUBSTRIP repeat; ADD frame, 1, tile_minecart_door_right;
+#	SUBSTRIP repeat; ADD frame, 1, tile_minecart_door_up;
+#	SUBSTRIP repeat; ADD frame, 1, tile_minecart_door_left;
+#	SUBSTRIP repeat; ADD frame, 1, tile_minecart_door_down;
+#	END;
 
-ANIM tile_minecart_door_close;
-	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_right, (-8, 0);
-					ADD frame, 6, tile_minecart_door_right;
-	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_up, (0, 8);
-					ADD frame, 6, tile_minecart_door_up;
-	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_left, (8, 0);
-					ADD frame, 6, tile_minecart_door_left;
-	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_down, (0, -8);
-					ADD frame, 6, tile_minecart_door_down;
-	END;
+#ANIM tile_minecart_door_close;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_right, (-8, 0);
+#					ADD frame, 6, tile_minecart_door_right;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_up, (0, 8);
+#					ADD frame, 6, tile_minecart_door_up;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_left, (8, 0);
+#					ADD frame, 6, tile_minecart_door_left;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_down, (0, -8);
+#					ADD frame, 6, tile_minecart_door_down;
+#	END;
 	
-ANIM tile_minecart_door_open;
-	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_right, (-8, 0);
-					ADD emptyframe, 6;
-	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_up, (0, 8);
-					ADD emptyframe, 6;
-	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_left, (8, 0);
-					ADD emptyframe, 6;
-	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_down, (0, -8);
-					ADD emptyframe, 6;
-	END;
+#ANIM tile_minecart_door_open;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_right, (-8, 0);
+#					ADD emptyframe, 6;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_up, (0, 8);
+#					ADD emptyframe, 6;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_left, (8, 0);
+#					ADD emptyframe, 6;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_minecart_door_down, (0, -8);
+#					ADD emptyframe, 6;
+#	END;
 
-ANIM tile_small_key_door_closed;
-	SUBSTRIP repeat; ADD frame, 1, tile_small_key_door_right;
-	SUBSTRIP repeat; ADD frame, 1, tile_small_key_door_up;
-	SUBSTRIP repeat; ADD frame, 1, tile_small_key_door_left;
-	SUBSTRIP repeat; ADD frame, 1, tile_small_key_door_down;
-	END;
+#ANIM tile_small_key_door_closed;
+#	SUBSTRIP repeat; ADD frame, 1, tile_small_key_door_right;
+#	SUBSTRIP repeat; ADD frame, 1, tile_small_key_door_up;
+#	SUBSTRIP repeat; ADD frame, 1, tile_small_key_door_left;
+#	SUBSTRIP repeat; ADD frame, 1, tile_small_key_door_down;
+#	END;
 
-ANIM tile_small_key_door_close;
-	SUBSTRIP clamp;	ADD frame, 6, tile_small_key_door_right, (-8, 0);
-					ADD frame, 6, tile_small_key_door_right;
-	SUBSTRIP clamp;	ADD frame, 6, tile_small_key_door_up, (0, 8);
-					ADD frame, 6, tile_small_key_door_up;
-	SUBSTRIP clamp;	ADD frame, 6, tile_small_key_door_left, (8, 0);
-					ADD frame, 6, tile_small_key_door_left;
-	SUBSTRIP clamp;	ADD frame, 6, tile_small_key_door_down, (0, -8);
-					ADD frame, 6, tile_small_key_door_down;
-	END;
+#ANIM tile_small_key_door_close;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_small_key_door_right, (-8, 0);
+#					ADD frame, 6, tile_small_key_door_right;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_small_key_door_up, (0, 8);
+#					ADD frame, 6, tile_small_key_door_up;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_small_key_door_left, (8, 0);
+#					ADD frame, 6, tile_small_key_door_left;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_small_key_door_down, (0, -8);
+#					ADD frame, 6, tile_small_key_door_down;
+#	END;
 	
-ANIM tile_small_key_door_open;
-	SUBSTRIP clamp;	ADD frame, 6, tile_small_key_door_right, (-8, 0);
-					ADD emptyframe, 6;
-	SUBSTRIP clamp;	ADD frame, 6, tile_small_key_door_up, (0, 8);
-					ADD emptyframe, 6;
-	SUBSTRIP clamp;	ADD frame, 6, tile_small_key_door_left, (8, 0);
-					ADD emptyframe, 6;
-	SUBSTRIP clamp;	ADD frame, 6, tile_small_key_door_down, (0, -8);
-					ADD emptyframe, 6;
-	END;
+#ANIM tile_small_key_door_open;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_small_key_door_right, (-8, 0);
+#					ADD emptyframe, 6;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_small_key_door_up, (0, 8);
+#					ADD emptyframe, 6;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_small_key_door_left, (8, 0);
+#					ADD emptyframe, 6;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_small_key_door_down, (0, -8);
+#					ADD emptyframe, 6;
+#	END;
 
-ANIM tile_boss_key_door_closed;
-	SUBSTRIP repeat; ADD frame, 1, tile_boss_key_door_right;
-	SUBSTRIP repeat; ADD frame, 1, tile_boss_key_door_up;
-	SUBSTRIP repeat; ADD frame, 1, tile_boss_key_door_left;
-	SUBSTRIP repeat; ADD frame, 1, tile_boss_key_door_down;
-	END;
+#ANIM tile_boss_key_door_closed;
+#	SUBSTRIP repeat; ADD frame, 1, tile_boss_key_door_right;
+#	SUBSTRIP repeat; ADD frame, 1, tile_boss_key_door_up;
+#	SUBSTRIP repeat; ADD frame, 1, tile_boss_key_door_left;
+#	SUBSTRIP repeat; ADD frame, 1, tile_boss_key_door_down;
+#	END;
 
-ANIM tile_boss_key_door_close;
-	SUBSTRIP clamp;	ADD frame, 6, tile_boss_key_door_right, (-8, 0);
-					ADD frame, 6, tile_boss_key_door_right;
-	SUBSTRIP clamp;	ADD frame, 6, tile_boss_key_door_up, (0, 8);
-					ADD frame, 6, tile_boss_key_door_up;
-	SUBSTRIP clamp;	ADD frame, 6, tile_boss_key_door_left, (8, 0);
-					ADD frame, 6, tile_boss_key_door_left;
-	SUBSTRIP clamp;	ADD frame, 6, tile_boss_key_door_down, (0, -8);
-					ADD frame, 6, tile_boss_key_door_down;
-	END;
+#ANIM tile_boss_key_door_close;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_boss_key_door_right, (-8, 0);
+#					ADD frame, 6, tile_boss_key_door_right;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_boss_key_door_up, (0, 8);
+#					ADD frame, 6, tile_boss_key_door_up;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_boss_key_door_left, (8, 0);
+#					ADD frame, 6, tile_boss_key_door_left;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_boss_key_door_down, (0, -8);
+#					ADD frame, 6, tile_boss_key_door_down;
+#	END;
 	
-ANIM tile_boss_key_door_open;
-	SUBSTRIP clamp;	ADD frame, 6, tile_boss_key_door_right, (-8, 0);
-					ADD emptyframe, 6;
-	SUBSTRIP clamp;	ADD frame, 6, tile_boss_key_door_up, (0, 8);
-					ADD emptyframe, 6;
-	SUBSTRIP clamp;	ADD frame, 6, tile_boss_key_door_left, (8, 0);
-					ADD emptyframe, 6;
-	SUBSTRIP clamp;	ADD frame, 6, tile_boss_key_door_down, (0, -8);
-					ADD emptyframe, 6;
-	END;
+#ANIM tile_boss_key_door_open;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_boss_key_door_right, (-8, 0);
+#					ADD emptyframe, 6;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_boss_key_door_up, (0, 8);
+#					ADD emptyframe, 6;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_boss_key_door_left, (8, 0);
+#					ADD emptyframe, 6;
+#	SUBSTRIP clamp;	ADD frame, 6, tile_boss_key_door_down, (0, -8);
+#					ADD emptyframe, 6;
+#	END;
 
 #ANIM tile_locked_door_open;		CLONE tile_door_open; SHIFTSOURCE (1, 0); END;
 #ANIM tile_minecart_door_open;	CLONE tile_door_open; SHIFTSOURCE (2, 0); END;
@@ -160,8 +160,8 @@ ANIM tile_boss_key_door_open;
 #ANIM tile_minecart_door_close;	CLONE tile_door_close; SHIFTSOURCE (2, 0); END;
 #ANIM tile_boss_door_close;		CLONE tile_door_close; SHIFTSOURCE (3, 0); END;
 
-ANIM tile_regrowable_plant_regrow; SUBSTRIP clamp;
-	ADD frame, 12, (1, 5); END;
+#ANIM tile_regrowable_regrowable_bush; SUBSTRIP clamp;
+#	ADD frame, 12, (1, 5); END;
 	
 ANIM tile_whirlpool; SUBSTRIP repeat;
 	ADD frame, 9, (0, 14); ADD frame, 4, (1, 14); ADD frame, 6, (2, 14); ADD frame, 6, (3, 14);
@@ -209,151 +209,151 @@ ANIM tile_fountain_dirt_se; SUBSTRIP repeat;
 
 SOURCE "general_tiles";
 
-ANIM tile_trampoline_bounce; SUBSTRIP clamp;
-	ADD frame, 12, (4, 3);
-	ADD frame,  2, (3, 3);
-	ADD frame,  8, (5, 3);
-	ADD frame,  1, (3, 3); END;
-ANIM tile_roller_horizontal_roll;
-	SUBSTRIP clamp; ADD frame, 9, (0, 3); ADD frame, 12, (1, 3); ADD frame, 10, (2, 3); ADD frame, 1, (0, 3);
-	SUBSTRIP clamp; ADD frame, 9, (0, 3); ADD frame, 12, (2, 3); ADD frame, 10, (1, 3); ADD frame, 1, (0, 3); END;
-ANIM tile_roller_vertical_roll;
-	SUBSTRIP clamp; ADD frame, 9, (0, 4); ADD frame, 12, (2, 4); ADD frame, 10, (1, 4); ADD frame, 1, (0, 4);
-	SUBSTRIP clamp; ADD frame, 9, (0, 4); ADD frame, 12, (1, 4); ADD frame, 10, (2, 4); ADD frame, 1, (0, 4); END;
+#ANIM tile_trampoline_bounce; SUBSTRIP clamp;
+#	ADD frame, 12, (4, 3);
+#	ADD frame,  2, (3, 3);
+#	ADD frame,  8, (5, 3);
+#	ADD frame,  1, (3, 3); END;
+#ANIM tile_roller_horizontal_roll;
+#	SUBSTRIP clamp; ADD frame, 9, (0, 3); ADD frame, 12, (1, 3); ADD frame, 10, (2, 3); ADD frame, 1, (0, 3);
+#	SUBSTRIP clamp; ADD frame, 9, (0, 3); ADD frame, 12, (2, 3); ADD frame, 10, (1, 3); ADD frame, 1, (0, 3); END;
+#ANIM tile_roller_vertical_roll;
+#	SUBSTRIP clamp; ADD frame, 9, (0, 4); ADD frame, 12, (2, 4); ADD frame, 10, (1, 4); ADD frame, 1, (0, 4);
+#	SUBSTRIP clamp; ADD frame, 9, (0, 4); ADD frame, 12, (1, 4); ADD frame, 10, (2, 4); ADD frame, 1, (0, 4); END;
 	
-ANIM tile_crossing_gate_raise;
-	SUBSTRIP clamp; ## right
-		ADD frame, 8, (4, 5), (9, -16);
-		ADD part,  8, (4, 6), (9, 0);
-		ADD part,  8, (9, 5), (16, 0);
-
-		ADD frame, 8, (4, 5), (9, -16);
-		ADD part,  8, (4, 6), (9, 0);
-		ADD part,  8, (7, 5), (16, -16);
-		ADD part,  8, (7, 6), (16, 0);
-		
-		ADD frame, 8, (3, 5), (9, -16);
-		ADD part,  8, (3, 6), (9, 0);
-
-	SUBSTRIP clamp; ## left
-		ADD frame, 8, (6, 5), (0, -16);
-		ADD part,  8, (6, 6), (0, 0);
-		ADD part,  8, (9, 6), (-16, 0);
-
-		ADD frame, 8, (6, 5), (0, -16);
-		ADD part,  8, (6, 6), (0, 0);
-		ADD part,  8, (8, 5), (-16, -16);
-		ADD part,  8, (8, 6), (-16, 0);
-		
-		ADD frame, 8, (5, 5), (0, -16);
-		ADD part,  8, (5, 6), (0, 0);
-	END;
+#ANIM tile_crossing_gate_raise;
+#	SUBSTRIP clamp; ## right
+#		ADD frame, 8, (4, 5), (9, -16);
+#		ADD part,  8, (4, 6), (9, 0);
+#		ADD part,  8, (9, 5), (16, 0);
+#
+#		ADD frame, 8, (4, 5), (9, -16);
+#		ADD part,  8, (4, 6), (9, 0);
+#		ADD part,  8, (7, 5), (16, -16);
+#		ADD part,  8, (7, 6), (16, 0);
+#		
+#		ADD frame, 8, (3, 5), (9, -16);
+#		ADD part,  8, (3, 6), (9, 0);
+#
+#	SUBSTRIP clamp; ## left
+#		ADD frame, 8, (6, 5), (0, -16);
+#		ADD part,  8, (6, 6), (0, 0);
+#		ADD part,  8, (9, 6), (-16, 0);
+#
+#		ADD frame, 8, (6, 5), (0, -16);
+#		ADD part,  8, (6, 6), (0, 0);
+#		ADD part,  8, (8, 5), (-16, -16);
+#		ADD part,  8, (8, 6), (-16, 0);
+#		
+#		ADD frame, 8, (5, 5), (0, -16);
+#		ADD part,  8, (5, 6), (0, 0);
+#	END;
 	
-ANIM tile_crossing_gate_lower;
-	SUBSTRIP clamp; ## right
-		ADD frame, 8, (3, 5), (9, -16);
-		ADD part,  8, (3, 6), (9, 0);
-
-		ADD frame, 8, (4, 5), (9, -16);
-		ADD part,  8, (4, 6), (9, 0);
-		ADD part,  8, (7, 5), (16, -16);
-		ADD part,  8, (7, 6), (16, 0);
-
-		ADD frame, 8, (4, 5), (9, -16);
-		ADD part,  8, (4, 6), (9, 0);
-		ADD part,  8, (9, 5), (16, 0);
-		
-	SUBSTRIP clamp; ## left
-		ADD frame, 8, (5, 5), (0, -16);
-		ADD part,  8, (5, 6), (0, 0);
-
-		ADD frame, 8, (6, 5), (0, -16);
-		ADD part,  8, (6, 6), (0, 0);
-		ADD part,  8, (8, 5), (-16, -16);
-		ADD part,  8, (8, 6), (-16, 0);
-
-		ADD frame, 8, (6, 5), (0, -16);
-		ADD part,  8, (6, 6), (0, 0);
-		ADD part,  8, (9, 6), (-16, 0);
-	END;
+#ANIM tile_crossing_gate_lower;
+#	SUBSTRIP clamp; ## right
+#		ADD frame, 8, (3, 5), (9, -16);
+#		ADD part,  8, (3, 6), (9, 0);
+#
+#		ADD frame, 8, (4, 5), (9, -16);
+#		ADD part,  8, (4, 6), (9, 0);
+#		ADD part,  8, (7, 5), (16, -16);
+#		ADD part,  8, (7, 6), (16, 0);
+#
+#		ADD frame, 8, (4, 5), (9, -16);
+#		ADD part,  8, (4, 6), (9, 0);
+#		ADD part,  8, (9, 5), (16, 0);
+#		
+#	SUBSTRIP clamp; ## left
+#		ADD frame, 8, (5, 5), (0, -16);
+#		ADD part,  8, (5, 6), (0, 0);
+#
+#		ADD frame, 8, (6, 5), (0, -16);
+#		ADD part,  8, (6, 6), (0, 0);
+#		ADD part,  8, (8, 5), (-16, -16);
+#		ADD part,  8, (8, 6), (-16, 0);
+#
+#		ADD frame, 8, (6, 5), (0, -16);
+#		ADD part,  8, (6, 6), (0, 0);
+#		ADD part,  8, (9, 6), (-16, 0);
+#	END;
 	
 	
-ANIM minecart;
-	SUBSTRIP repeat; # horizontal
-		ADD frame, 6, (1, 5), (0, -3); ADD part, 6, (2, 5), (0, -2); 
-		ADD frame, 6, (0, 5), (0, -3); ADD part, 6, (2, 5), (0, -3); 
-	SUBSTRIP repeat; # vertical
-		ADD frame, 6, (1, 6), (0, -3); ADD part, 6 (2, 6), (-1, -3);
-		ADD frame, 6, (0, 6), (0, -3); ADD part, 6 (2, 6), (0, -3);
-	END;
+#ANIM minecart;
+#	SUBSTRIP repeat; # horizontal
+#		ADD frame, 6, (1, 5), (0, -3); ADD part, 6, (2, 5), (0, -2); 
+#		ADD frame, 6, (0, 5), (0, -3); ADD part, 6, (2, 5), (0, -3); 
+#	SUBSTRIP repeat; # vertical
+#		ADD frame, 6, (1, 6), (0, -3); ADD part, 6 (2, 6), (-1, -3);
+#		ADD frame, 6, (0, 6), (0, -3); ADD part, 6 (2, 6), (0, -3);
+#	END;
 
 
-ANIM turnstile_arrows_clockwise; SUBSTRIP repeat;
-	ADD frame, 12, (3, 7), (16,  0);
-	ADD frame, 12, (5, 7), (32, 16);
-	ADD frame, 12, (5, 9), (16, 32);
-	ADD frame, 12, (3, 9), ( 0, 16);
-	END;
-ANIM turnstile_arrows_counterclockwise; SUBSTRIP repeat;
-	ADD frame, 12, (3, 10), (16,  0);
-	ADD frame, 12, (3, 12), ( 0, 16);
-	ADD frame, 12, (5, 12), (16, 32);
-	ADD frame, 12, (5, 10), (32, 16);
-	END;
-ANIM turnstile_rotate_clockwise;
-	SUBSTRIP clamp;
-		ADD frame, 4, turnstile_bars_angled_clockwise;
-		ADD frame, 4, turnstile_bars_straight;
-		ADD frame, 4, turnstile_bars_angled_counterclockwise;
-		ADD frame, 4, turnstile_bars_angled;
-	SUBSTRIP clamp;
-		ADD frame, 4, turnstile_bars_angled_clockwise_blue;
-		ADD frame, 4, turnstile_bars_straight_blue;
-		ADD frame, 4, turnstile_bars_angled_counterclockwise_blue;
-		ADD frame, 4, turnstile_bars_angled_blue;
-	END;
-ANIM turnstile_rotate_counterclockwise;
-	SUBSTRIP clamp;
-		ADD frame, 4, turnstile_bars_angled_counterclockwise;
-		ADD frame, 4, turnstile_bars_straight;
-		ADD frame, 4, turnstile_bars_angled_clockwise;
-		ADD frame, 4, turnstile_bars_angled;
-	SUBSTRIP clamp;
-		ADD frame, 4, turnstile_bars_angled_counterclockwise_blue;
-		ADD frame, 4, turnstile_bars_straight_blue;
-		ADD frame, 4, turnstile_bars_angled_clockwise_blue;
-		ADD frame, 4, turnstile_bars_angled_blue;
-	END;
-ANIM tile_pull_handle;
-	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_right;
-	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_up;
-	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_left;
-	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_down; END;
-ANIM tile_seed_bouncer;
-	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_horizontal;
-	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_northeast;
-	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_vertical;
-	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_northwest;
-	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_horizontal;
-	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_northeast;
-	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_vertical;
-	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_northwest; END;
-ANIM tile_color_barrier_blue_raise; SUBSTRIP clamp;
-	ADD frame, 2, tile_color_barrier_blue_lowered;
-	ADD frame, 6, tile_color_barrier_blue_halfway;
-	ADD frame, 1, tile_color_barrier_blue_raised; END;
-ANIM tile_color_barrier_blue_lower; SUBSTRIP clamp;
-	ADD frame, 2, tile_color_barrier_blue_raised;
-	ADD frame, 6, tile_color_barrier_blue_halfway;
-	ADD frame, 1, tile_color_barrier_blue_lowered; END;
-ANIM tile_color_barrier_red_raise; SUBSTRIP clamp;
-	ADD frame, 2, tile_color_barrier_red_lowered;
-	ADD frame, 6, tile_color_barrier_red_halfway;
-	ADD frame, 1, tile_color_barrier_red_raised; END;
-ANIM tile_color_barrier_red_lower; SUBSTRIP clamp;
-	ADD frame, 2, tile_color_barrier_red_raised;
-	ADD frame, 6, tile_color_barrier_red_halfway;
-	ADD frame, 1, tile_color_barrier_red_lowered; END;
+#ANIM turnstile_arrows_clockwise; SUBSTRIP repeat;
+#	ADD frame, 12, (3, 7), (16,  0);
+#	ADD frame, 12, (5, 7), (32, 16);
+#	ADD frame, 12, (5, 9), (16, 32);
+#	ADD frame, 12, (3, 9), ( 0, 16);
+#	END;
+#ANIM turnstile_arrows_counterclockwise; SUBSTRIP repeat;
+#	ADD frame, 12, (3, 10), (16,  0);
+#	ADD frame, 12, (3, 12), ( 0, 16);
+#	ADD frame, 12, (5, 12), (16, 32);
+#	ADD frame, 12, (5, 10), (32, 16);
+#	END;
+#ANIM turnstile_rotate_clockwise;
+#	SUBSTRIP clamp;
+#		ADD frame, 4, turnstile_bars_angled_clockwise;
+#		ADD frame, 4, turnstile_bars_straight;
+#		ADD frame, 4, turnstile_bars_angled_counterclockwise;
+#		ADD frame, 4, turnstile_bars_angled;
+#	SUBSTRIP clamp;
+#		ADD frame, 4, turnstile_bars_angled_clockwise_blue;
+#		ADD frame, 4, turnstile_bars_straight_blue;
+#		ADD frame, 4, turnstile_bars_angled_counterclockwise_blue;
+#		ADD frame, 4, turnstile_bars_angled_blue;
+#	END;
+#ANIM turnstile_rotate_counterclockwise;
+#	SUBSTRIP clamp;
+#		ADD frame, 4, turnstile_bars_angled_counterclockwise;
+#		ADD frame, 4, turnstile_bars_straight;
+#		ADD frame, 4, turnstile_bars_angled_clockwise;
+#		ADD frame, 4, turnstile_bars_angled;
+#	SUBSTRIP clamp;
+#		ADD frame, 4, turnstile_bars_angled_counterclockwise_blue;
+#		ADD frame, 4, turnstile_bars_straight_blue;
+#		ADD frame, 4, turnstile_bars_angled_clockwise_blue;
+#		ADD frame, 4, turnstile_bars_angled_blue;
+#	END;
+#ANIM tile_pull_handle;
+#	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_right;
+#	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_up;
+#	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_left;
+#	SUBSTRIP repeat; ADD frame, 1, tile_pull_handle_down; END;
+#ANIM tile_seed_bouncer;
+#	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_horizontal;
+#	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_northeast;
+#	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_vertical;
+#	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_northwest;
+#	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_horizontal;
+#	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_northeast;
+#	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_vertical;
+#	SUBSTRIP repeat; ADD frame, 1, tile_seed_bouncer_northwest; END;
+#ANIM tile_color_barrier_blue_raise; SUBSTRIP clamp;
+#	ADD frame, 2, tile_color_barrier_blue_lowered;
+#	ADD frame, 6, tile_color_barrier_blue_halfway;
+#	ADD frame, 1, tile_color_barrier_blue_raised; END;
+#ANIM tile_color_barrier_blue_lower; SUBSTRIP clamp;
+#	ADD frame, 2, tile_color_barrier_blue_raised;
+#	ADD frame, 6, tile_color_barrier_blue_halfway;
+#	ADD frame, 1, tile_color_barrier_blue_lowered; END;
+#ANIM tile_color_barrier_red_raise; SUBSTRIP clamp;
+#	ADD frame, 2, tile_color_barrier_red_lowered;
+#	ADD frame, 6, tile_color_barrier_red_halfway;
+#	ADD frame, 1, tile_color_barrier_red_raised; END;
+#ANIM tile_color_barrier_red_lower; SUBSTRIP clamp;
+#	ADD frame, 2, tile_color_barrier_red_raised;
+#	ADD frame, 6, tile_color_barrier_red_halfway;
+#	ADD frame, 1, tile_color_barrier_red_lowered; END;
 
 
 #==============================================================

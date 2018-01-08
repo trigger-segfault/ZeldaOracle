@@ -12,7 +12,7 @@ using ZeldaOracle.Common.Scripts.Commands;
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
 	public partial class ISpriteSR : ScriptReader {
 
-		/// <summary>Adds CompositeSprite commands to the script reader.</summary>
+		/// <summary>Adds ColorSprite commands to the script reader.</summary>
 		public void AddColorCommands() {
 
 			//=====================================================================================
@@ -26,7 +26,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				Point2I sourceIndex = parameters.GetPoint(3);
 
 				spriteName = parameters.GetString(0);
-				sprite = new ColorSprite(parameters.GetString(1));
+				sprite = new ColorSprite(colorationGroup);
 				AddResource<ISprite>(spriteName, sprite);
 				
 				ColorizeColorSprite(ColorSprite, colorParams, sourceIndex);
@@ -131,6 +131,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 		}
 
+
 		//-----------------------------------------------------------------------------
 		// Internal Methods
 		//-----------------------------------------------------------------------------
@@ -167,7 +168,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				}
 				else {
 					coloredSprite = Resources.PalettedSpriteDatabase.RepaletteSprite(
-						(BasicSprite) sprite.DefaultSprite, paletteArgs);
+						sprite.DefaultBasicSprite, paletteArgs);
 				}
 
 				sprite.Add(colorParams.GetString(i), coloredSprite);

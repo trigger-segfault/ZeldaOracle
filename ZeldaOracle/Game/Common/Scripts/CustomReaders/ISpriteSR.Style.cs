@@ -11,7 +11,7 @@ using ZeldaOracle.Common.Scripts.Commands;
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
 	public partial class ISpriteSR : ScriptReader {
 
-		/// <summary>Adds CompositeSprite commands to the script reader.</summary>
+		/// <summary>Adds StyleSprite commands to the script reader.</summary>
 		public void AddStyleCommands() {
 
 			//=====================================================================================
@@ -25,6 +25,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				spriteName = parameters.GetString(0);
 				sprite = new StyleSprite(styleGroup);
 				AddResource<ISprite>(spriteName, sprite);
+				Resources.RegisterStyleGroup(styleGroup);
+
 				Mode |= Modes.StyleSprite;
 			});
 			//=====================================================================================
@@ -47,11 +49,12 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				if (editingSetDimensions.X == 0) editingSetDimensions.X = editingSpriteSet.Width;
 				if (editingSetDimensions.Y == 0) editingSetDimensions.Y = editingSpriteSet.Height;
 
-				for (int x = 0; x < editingSpriteSet.Width; x++) {
-					for (int y = 0; y < editingSpriteSet.Height; y++) {
+				for (int x = 0; x < editingSetDimensions.X; x++) {
+					for (int y = 0; y < editingSetDimensions.Y; y++) {
 						editingSpriteSet.SetSprite(editingSetStart + new Point2I(x, y), new StyleSprite(styleGroup));
 					}
 				}
+				Resources.RegisterStyleGroup(styleGroup);
 
 				singular = false;
 				Mode |= Modes.StyleSprite;
@@ -65,8 +68,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				if (editingSetDimensions.X == 0) editingSetDimensions.X = editingSpriteSet.Width;
 				if (editingSetDimensions.Y == 0) editingSetDimensions.Y = editingSpriteSet.Height;
 
-				for (int x = 0; x < editingSpriteSet.Width; x++) {
-					for (int y = 0; y < editingSpriteSet.Height; y++) {
+				for (int x = 0; x < editingSetDimensions.X; x++) {
+					for (int y = 0; y < editingSetDimensions.Y; y++) {
 						GetSprite<StyleSprite>(editingSpriteSet, editingSetStart + new Point2I(x, y));
 					}
 				}
@@ -83,7 +86,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				editingSetDimensions = Point2I.One;
 
 				sprite = new StyleSprite(styleGroup);
-				EditingSpriteSet.SetSprite(editingSetStart, sprite);
+				editingSpriteSet.SetSprite(editingSetStart, sprite);
+				Resources.RegisterStyleGroup(styleGroup);
 
 				singular = true;
 				Mode |= Modes.StyleSprite;
@@ -107,7 +111,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string style, Sprite sprite",
 			delegate (CommandParam parameters) {
 				string style = parameters.GetString(0);
-				StyleSprite.Add(style, GetSpriteFromParams(parameters, 1));
+				ISprite styledSprite = GetSpriteFromParams(parameters, 1);
+				StyleSprite.Add(style, styledSprite);
+				Resources.RegisterStylePreview(StyleSprite.Group, style, styledSprite);
 			});
 			//=====================================================================================
 			AddCommand("REPLACE", (int) Modes.StyleSprite,
@@ -136,9 +142,31 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					for (int y = 0; y < editingSetDimensions.Y; y++) {
 						Point2I point = new Point2I(x, y);
 						StyleSprite styleSprite = GetSprite<StyleSprite>(editingSpriteSet, editingSetStart + point);
-						styleSprite.Add(style, GetSprite(source, sourceIndex + point));
+						ISprite styledSprite = GetSprite(source, sourceIndex + point);
+						styleSprite.Add(style, styledSprite);
+						if (point.IsZero)
+							Resources.RegisterStylePreview(styleSprite.Group, style, styledSprite);
 					}
 				}
+			});
+			//=====================================================================================
+			// Style Preview
+			//=====================================================================================
+			AddCommand("STYLEPREVIEW", (int) Modes.Root,
+				"string styleGroup, string style, Sprite sprite",
+			delegate (CommandParam parameters) {
+				string styleGroup = parameters.GetString(0);
+				string style = parameters.GetString(1);
+				ISprite preview = GetSpriteFromParams(parameters, 2);
+				Resources.SetStylePreview(styleGroup, style, preview);
+			});
+			//=====================================================================================
+			AddCommand("STYLEPREVIEW", (int) Modes.Root,
+				"string styleGroup, Sprite sprite",
+			delegate (CommandParam parameters) {
+				string styleGroup = parameters.GetString(0);
+				ISprite preview = GetSpriteFromParams(parameters, 1);
+				Resources.SetStylePreview(styleGroup, preview);
 			});
 			//=====================================================================================
 		}

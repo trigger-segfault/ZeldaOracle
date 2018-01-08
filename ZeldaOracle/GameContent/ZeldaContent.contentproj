@@ -58,185 +58,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Animations\" />
-    <Folder Include="Images\Editor\" />
-    <Folder Include="Images\Tiles\Database\" />
-    <Folder Include="Languages\" />
-    <Folder Include="Particles\" />
-    <Folder Include="Sprites\Tiles\Styles\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Fonts\font_debug_menu.spritefont">
-      <Name>font_debug_menu</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
-    </Compile>
-    <None Include="Sprites\animations.conscript">
-      <Name>animations</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Palettes\Dictionaries\palette_dictionaries.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>palette_dictionaries</Name>
-    </None>
-    <None Include="Palettes\palettes.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>palettes</Name>
-    </None>
-    <None Include="Palettes\present.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>present</Name>
-    </None>
-    <None Include="Palettes\electrocuted.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>electrocuted</Name>
-    </None>
-    <None Include="Palettes\entities_default.conscript">
-      <Name>entities_default</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Palettes\Dictionaries\tile_dictionary.conscript">
-      <Name>tile_dictionary</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Palettes\dungeon_ages_1_converter.conscript">
-      <Name>dungeon_ages_1_converter</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Palettes\dungeon_ages_1.conscript">
-      <Name>dungeon_ages_1</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Palettes\Dictionaries\entity_dictionary.conscript">
-      <Name>entity_dictionary</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Palettes\entities_menu.conscript">
-      <Name>entities_menu</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Palettes\tiles_default.conscript">
-      <Name>tiles_default</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Sprites\Tiles\color_cube.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>color_cube</Name>
-    </None>
-    <None Include="Sprites\Tiles\cliffs.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>cliffs</Name>
-    </None>
-    <None Include="Sprites\Tiles\cliffs_temp.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>cliffs_temp</Name>
-    </None>
-    <None Include="Sprites\Tiles\cliffs_tiles.conscript">
-      <Name>cliffs_tiles</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Sprites\Units\Player\player.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>player</Name>
-    </None>
-    <None Include="Tilesets\cliffs.conscript">
-      <Name>cliffs</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Tilesets\dungeon.conscript">
-      <Name>dungeon</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Tilesets\forest.conscript">
-      <Name>forest</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Tilesets\interior.conscript">
-      <Name>interior</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Tilesets\land.conscript">
-      <Name>land</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Tilesets\objects.conscript">
-      <Name>objects</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Tilesets\objects_nv.conscript">
-      <Name>objects_nv</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Tilesets\event_tile_data.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>event_tile_data</Name>
-    </None>
-    <None Include="Tilesets\sidescroll.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>sidescroll</Name>
-    </None>
-    <None Include="Tilesets\town.conscript">
-      <Name>town</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Tilesets\tile_data.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>tile_data</Name>
-    </None>
-    <None Include="Data\collision_models.conscript">
-      <Name>collision_models</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Fonts\fonts.conscript">
-      <Name>fonts</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Music\music.conscript">
-      <Name>music_script</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Sounds\sounds.conscript">
-      <Name>sounds_script</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Images\images.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>images</Name>
-    </None>
-    <None Include="Sprites\sprites.conscript">
-      <Name>sprites</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Tilesets\water.conscript">
-      <Name>water</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Worlds\big_interiors.zwd">
-      <Name>big_interiors</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Worlds\interiors.zwd">
-      <Name>interiors</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Worlds\ledge_jump_world.zwd">
-      <Name>ledge_jump_world</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Worlds\custom_world.zwd">
-      <Name>custom_world</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Worlds\test_level.zwd">
-      <Name>test_level</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Worlds\world1.zwd">
-      <Name>world1</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
@@ -258,16 +79,207 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
+  <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
   <ItemGroup>
-    <Compile Include="Fonts\font_debug_menu_bold.spritefont">
-      <Name>font_debug_menu_bold_2</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
-    </Compile>
+    <Folder Include="Animations\" />
+    <Folder Include="Images\Editor\" />
+    <Folder Include="Images\Tiles\Database\" />
+    <Folder Include="Languages\" />
+    <Folder Include="Particles\" />
+    <Folder Include="Sprites\Tiles\Styles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\collision_models.conscript">
+      <Name>collision_models</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Fonts\fonts.conscript">
+      <Name>fonts</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Images\images.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>images</Name>
+    </None>
+    <None Include="Music\music.conscript">
+      <Name>music</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\Dictionaries\entity_dictionary.conscript">
+      <Name>entity_dictionary</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\Dictionaries\palette_dictionaries.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>palette_dictionaries</Name>
+    </None>
+    <None Include="Palettes\Dictionaries\tile_dictionary.conscript">
+      <Name>tile_dictionary</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\dungeon_ages_1.conscript">
+      <Name>dungeon_ages_1</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\dungeon_ages_1_converter.conscript">
+      <Name>dungeon_ages_1_converter</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\electrocuted.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>electrocuted</Name>
+    </None>
+    <None Include="Palettes\entities_default.conscript">
+      <Name>entities_default</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\entities_menu.conscript">
+      <Name>entities_menu</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\palettes.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>palettes</Name>
+    </None>
+    <None Include="Palettes\present.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>present</Name>
+    </None>
+    <None Include="Palettes\tiles_default.conscript">
+      <Name>tiles_default</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\sounds.conscript">
+      <Name>sounds</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\animations.conscript">
+      <Name>animations</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\sprites.conscript">
+      <Name>sprites</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\cliffs.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>cliffs</Name>
+    </None>
+    <None Include="Sprites\Tiles\cliffs_temp.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>cliffs_temp</Name>
+    </None>
+    <None Include="Sprites\Tiles\cliffs_tiles.conscript">
+      <Name>cliffs_tiles</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\color_cube.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>color_cube</Name>
+    </None>
+    <None Include="Sprites\Tiles\doors.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>doors</Name>
+    </None>
+    <None Include="Sprites\Tiles\floors_tiles.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>floors_tiles</Name>
+    </None>
+    <None Include="Sprites\Tiles\objects_tiles.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>objects_tiles</Name>
+    </None>
+    <None Include="Sprites\Tiles\puzzle_objects_tiles.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>puzzle_objects_tiles</Name>
+    </None>
+    <None Include="Sprites\Tiles\stairs_tiles.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>stairs_tiles</Name>
+    </None>
+    <None Include="Sprites\Tiles\tunnels.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>tunnels</Name>
+    </None>
+    <None Include="Sprites\Tiles\turnstile.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>turnstile</Name>
+    </None>
+    <None Include="Sprites\Tiles\walls.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>walls</Name>
+    </None>
+    <None Include="Sprites\Units\Player\player.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>player</Name>
+    </None>
+    <None Include="Tilesets\cliffs.conscript">
+      <Name>cliffs</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tilesets\dungeon.conscript">
+      <Name>dungeon</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tilesets\event_tile_data.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>event_tile_data</Name>
+    </None>
+    <None Include="Tilesets\forest.conscript">
+      <Name>forest</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tilesets\interior2.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>interior2</Name>
+    </None>
+    <None Include="Tilesets\interior.conscript">
+      <Name>interior</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tilesets\land.conscript">
+      <Name>land</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tilesets\objects.conscript">
+      <Name>objects</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tilesets\objects_nv.conscript">
+      <Name>objects_nv</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tilesets\overworld.conscript">
+      <Name>overworld</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tilesets\sidescroll.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>sidescroll</Name>
+    </None>
+    <None Include="Tilesets\tile_data.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>tile_data</Name>
+    </None>
+    <None Include="Tilesets\town.conscript">
+      <Name>town</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tilesets\water.conscript">
+      <Name>water</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Fonts\font_debug_menu.png">
-      <Name>font_debug_menu_2</Name>
+      <Name>font_debug_menu</Name>
       <Importer>TextureImporter</Importer>
       <Processor>FontTextureProcessor</Processor>
     </Compile>
@@ -276,42 +288,16 @@
       <Importer>TextureImporter</Importer>
       <Processor>FontTextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Units\Player\player.png">
-      <Name>player</Name>
+    <Compile Include="Images\Effects\basic_effects.png">
+      <Name>basic_effects</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\tileset.png">
-      <Name>tileset</Name>
+    <Compile Include="Images\Effects\color_effects.png">
+      <Name>color_effects</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\player_items.png">
-      <Name>player_items</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Tilesets\overworld.conscript">
-      <Name>overworld</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\zoneset.png">
-      <Name>zoneset</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Images\Fonts\font_large.png">
       <Name>font_large</Name>
       <Importer>TextureImporter</Importer>
@@ -327,217 +313,13 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Items\items_small.png">
-      <Name>items_small</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\UI\menu_large.png">
-      <Name>menu_large</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\UI\menu_small.png">
-      <Name>menu_small</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\sheet_icons_thin.png">
-      <Name>sheet_icons_thin</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\sheet_menu_small.png">
-      <Name>sheet_menu_small</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\UI\menu_weapons_b.png">
-      <Name>menu_weapons_b</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Units\Player\player_blue.png">
-      <Name>player_blue</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Units\Player\player_hurt.png">
-      <Name>player_hurt</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Units\Player\player_red.png">
-      <Name>player_red</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Pickups\get_heart.wav">
-      <Name>get_heart</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-    <Compile Include="Sounds\Pickups\get_rupee.wav">
-      <Name>get_rupee</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-    <Compile Include="Sounds\Pickups\get_rupee_loop.wav">
-      <Name>get_rupee_loop</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\UI\menu_close.wav">
-      <Name>menu_close</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-    <Compile Include="Sounds\UI\menu_open.wav">
-      <Name>menu_open</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\UI\menu_cursor_move.wav">
-      <Name>menu_cursor_move</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-    <Compile Include="Sounds\UI\menu_select.wav">
-      <Name>menu_select</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\UI\menu_next.wav">
-      <Name>menu_next</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\UI\menu_essences_a.png">
-      <Name>menu_essences_a</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\UI\menu_essences_b.png">
-      <Name>menu_essences_b</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\UI\menu_key_items_a.png">
-      <Name>menu_key_items_a</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\UI\menu_key_items_b.png">
-      <Name>menu_key_items_b</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\UI\menu_weapons_a.png">
-      <Name>menu_weapons_a</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Music\overworld_intro.wav">
-      <Name>overworld_intro</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Music\overworld.wav">
-      <Name>overworld</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Items\sword_slash_1.wav">
-      <Name>sword_slash_1</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-    <Compile Include="Sounds\Items\sword_slash_2.wav">
-      <Name>sword_slash_2</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-    <Compile Include="Sounds\Items\sword_slash_3.wav">
-      <Name>sword_slash_3</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Effects\basic_effects.png">
-      <Name>basic_effects</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Effects\color_effects.png">
-      <Name>color_effects</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\general_tiles.png">
-      <Name>general_tiles</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\overworld_graveyard.png">
-      <Name>overworld_graveyard</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\zoneset_graveyard.png">
-      <Name>zoneset_graveyard</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\overworld_forest.png">
-      <Name>overworld_forest</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\zoneset_forest.png">
-      <Name>zoneset_forest</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\zoneset_interior.png">
-      <Name>zoneset_interior</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Images\Items\items_large_light.png">
       <Name>items_large_light</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Items\items_small.png">
+      <Name>items_small</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -546,104 +328,366 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\UI\menu_large_light.png">
-      <Name>menu_large_light</Name>
+    <Compile Include="Images\player_items.png">
+      <Name>player_items</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\UI\menu_small_light.png">
-      <Name>menu_small_light</Name>
+    <Compile Include="Images\sheet_icons_thin.png">
+      <Name>sheet_icons_thin</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Tilesets\interior2.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>interior2</Name>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\tileset_interior.png">
-      <Name>tileset_interior</Name>
+    <Compile Include="Images\sheet_menu_small.png">
+      <Name>sheet_menu_small</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\event_tiles.png">
-      <Name>event_tiles</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Images\Tiles\color_cube.png">
       <Name>color_cube</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\tileset_water_present.png">
-      <Name>tileset_water_present</Name>
+    <Compile Include="Images\Tiles\event_tiles.png">
+      <Name>event_tiles</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_water_present_extras_16x16.png">
-      <Name>tileset_water_present_extras_16x16</Name>
+    <Compile Include="Images\Tiles\general_tiles.png">
+      <Name>general_tiles</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_water_present_extras_8x8.png">
-      <Name>tileset_water_present_extras_8x8</Name>
+    <Compile Include="Images\Tiles\overworld_forest.png">
+      <Name>overworld_forest</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\tileset_land_present.png">
-      <Name>tileset_land_present</Name>
+    <Compile Include="Images\Tiles\overworld_graveyard.png">
+      <Name>overworld_graveyard</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\tileset_land_present_extras_8x8.png">
-      <Name>tileset_land_present_extras_8x8</Name>
+    <Compile Include="Images\Tiles\Styles\armos.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>armos</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\black_8x8.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>black_8x8</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\blocks.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>blocks</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\burnable_trees.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>burnable_trees</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\bushes.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>bushes</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\buttons.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>buttons</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\ceilings.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>ceilings</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\chests.png">
+      <Name>chests</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="Images\Tiles\Styles\cliff_parts.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>cliff_parts</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\cliff_railings.png">
+      <Name>cliff_railings</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\cliffs.png">
+      <Name>cliffs</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\cracked_floors.png">
+      <Name>cracked_floors</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\doors.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>doors</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\floors_bricks.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>floors_bricks</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\floors_bright_patterns.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>floors_bright_patterns</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\floors_dungeon.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>floors_dungeon</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\floors_interior.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>floors_interior</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\floors_misc_patterns.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>floors_misc_patterns</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\floors_overworld.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>floors_overworld</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\floors_square_patterns.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>floors_square_patterns</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\floors_square_tiles.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>floors_square_tiles</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\fluids.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>fluids</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\grasses.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>grasses</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\graves.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>graves</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\holes.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>holes</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\lanterns.png">
+      <Name>lanterns</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\magnet_stones.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>magnet_stones</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\minecart_tracks.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>minecart_tracks</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\natural_objects.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>natural_objects</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\pots.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>pots</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\puzzle_color_tiles.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>puzzle_color_tiles</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\puzzle_entity_tiles.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>puzzle_entity_tiles</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\puzzle_objects.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>puzzle_objects</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\railings.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>railings</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\signs.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>signs</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\snow_piles.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>snow_piles</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\staircases.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>staircases</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\stairs.png">
+      <Name>stairs</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\switch_rocks.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>switch_rocks</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\terrain.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>terrain</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\tile_monsters.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>tile_monsters</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\torches.png">
+      <Name>torches</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\traps.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>traps</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\trees.png">
+      <Name>trees</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\tunnels.png">
+      <Name>tunnels</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\turnstile.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>turnstile</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\vines.png">
+      <Name>vines</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\wall_mini_columns.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>wall_mini_columns</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\walls.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>walls</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\walls_jabu_jabu.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>walls_jabu_jabu</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\water_rocks.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>water_rocks</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset.png">
+      <Name>tileset</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="Images\Tiles\tileset_cliffs_present.png">
       <Name>tileset_cliffs_present</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="Images\Tiles\tileset_dungeon_ages_dungeon_1.png">
+      <Name>tileset_dungeon_ages_dungeon_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_dungeon_ages_dungeon_4.png">
+      <Name>tileset_dungeon_ages_dungeon_4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="Images\Tiles\tileset_forest_present.png">
       <Name>tileset_forest_present</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\tileset_town_present.png">
-      <Name>tileset_town_present</Name>
+    <Compile Include="Images\Tiles\tileset_interior.png">
+      <Name>tileset_interior</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_town_present_extras_16x16.png">
-      <Name>tileset_town_present_extras_16x16</Name>
+    <Compile Include="Images\Tiles\tileset_interior_interior_present.png">
+      <Name>tileset_interior_interior_present</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="Images\Tiles\tileset_land_present.png">
+      <Name>tileset_land_present</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_land_present_extras_8x8.png">
+      <Name>tileset_land_present_extras_8x8</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_objects_ages_dungeon_1.png">
+      <Name>tileset_objects_ages_dungeon_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_objects_ages_dungeon_1_extras_16x16.png">
+      <Name>tileset_objects_ages_dungeon_1_extras_16x16</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_objects_interior_present.png">
+      <Name>tileset_objects_interior_present</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_objects_interior_present_extras_16x16.png">
+      <Name>tileset_objects_interior_present_extras_16x16</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="Images\Tiles\tileset_objects_nv.png">
       <Name>tileset_objects_nv</Name>
       <Importer>TextureImporter</Importer>
@@ -664,66 +708,18 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Units\NPCs\npcs_red.png">
-      <Name>npcs_red</Name>
+    <Compile Include="Images\Tiles\tileset_sidescroll_ages_dungeon_1.png">
+      <Name>tileset_sidescroll_ages_dungeon_1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\tileset_interior_interior_present.png">
-      <Name>tileset_interior_interior_present</Name>
+    <Compile Include="Images\Tiles\tileset_town_present.png">
+      <Name>tileset_town_present</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_objects_interior_present.png">
-      <Name>tileset_objects_interior_present</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\tileset_objects_interior_present_extras_16x16.png">
-      <Name>tileset_objects_interior_present_extras_16x16</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\tileset_water_interior_present.png">
-      <Name>tileset_water_interior_present</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\tileset_water_interior_present_extras_16x16.png">
-      <Name>tileset_water_interior_present_extras_16x16</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\tileset_water_interior_present_extras_8x8.png">
-      <Name>tileset_water_interior_present_extras_8x8</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Items\shield.wav">
-      <Name>shield</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\tileset_dungeon_ages_dungeon_1.png">
-      <Name>tileset_dungeon_ages_dungeon_1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\tileset_objects_ages_dungeon_1.png">
-      <Name>tileset_objects_ages_dungeon_1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\tileset_objects_ages_dungeon_1_extras_16x16.png">
-      <Name>tileset_objects_ages_dungeon_1_extras_16x16</Name>
+    <Compile Include="Images\Tiles\tileset_town_present_extras_16x16.png">
+      <Name>tileset_town_present_extras_16x16</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -732,18 +728,161 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_water_ages_dungeon_1_extras_16x16.png">
-      <Name>tileset_water_ages_dungeon_1_extras_16x16</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Tiles\tileset_water_ages_dungeon_1_extras_8x8.png">
       <Name>tileset_water_ages_dungeon_1_extras_8x8</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="Images\Tiles\tileset_water_ages_dungeon_1_extras_16x16.png">
+      <Name>tileset_water_ages_dungeon_1_extras_16x16</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_water_interior_present.png">
+      <Name>tileset_water_interior_present</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_water_interior_present_extras_8x8.png">
+      <Name>tileset_water_interior_present_extras_8x8</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_water_interior_present_extras_16x16.png">
+      <Name>tileset_water_interior_present_extras_16x16</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_water_present.png">
+      <Name>tileset_water_present</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_water_present_extras_8x8.png">
+      <Name>tileset_water_present_extras_8x8</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\tileset_water_present_extras_16x16.png">
+      <Name>tileset_water_present_extras_16x16</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\zoneset.png">
+      <Name>zoneset</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\zoneset_ages_dungeon_1.png">
+      <Name>zoneset_ages_dungeon_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\zoneset_ages_dungeon_4.png">
+      <Name>zoneset_ages_dungeon_4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\zoneset_forest.png">
+      <Name>zoneset_forest</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\zoneset_graveyard.png">
+      <Name>zoneset_graveyard</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\zoneset_interior.png">
+      <Name>zoneset_interior</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\zoneset_interior_present.png">
+      <Name>zoneset_interior_present</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\zoneset_present.png">
+      <Name>zoneset_present</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Zonesets\zoneset_ages_dungeon_1.png">
+      <Name>zoneset_ages_dungeon_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Zonesets\zoneset_ages_dungeon_4.png">
+      <Name>zoneset_ages_dungeon_4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Zonesets\zoneset_interior_present.png">
+      <Name>zoneset_interior_present</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Zonesets\zoneset_present.png">
+      <Name>zoneset_present</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\UI\menu_essences_a.png">
+      <Name>menu_essences_a</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\UI\menu_essences_b.png">
+      <Name>menu_essences_b</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\UI\menu_key_items_a.png">
+      <Name>menu_key_items_a</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\UI\menu_key_items_b.png">
+      <Name>menu_key_items_b</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\UI\menu_large.png">
+      <Name>menu_large</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\UI\menu_large_light.png">
+      <Name>menu_large_light</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\UI\menu_small.png">
+      <Name>menu_small</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\UI\menu_small_light.png">
+      <Name>menu_small_light</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\UI\menu_weapons_a.png">
+      <Name>menu_weapons_a</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\UI\menu_weapons_b.png">
+      <Name>menu_weapons_b</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\UI\screen_dungeon_map.png">
+      <Name>screen_dungeon_map</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="Images\Units\Monsters\color_monsters_blue.png">
       <Name>color_monsters_blue</Name>
       <Importer>TextureImporter</Importer>
@@ -769,6 +908,11 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="Images\Units\Monsters\monster_items.png">
+      <Name>monster_items</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="Images\Units\Monsters\monsters.png">
       <Name>monsters</Name>
       <Importer>TextureImporter</Importer>
@@ -779,148 +923,233 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Units\Monsters\monster_items.png">
-      <Name>monster_items</Name>
+    <Compile Include="Images\Units\NPCs\npcs_red.png">
+      <Name>npcs_red</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\UI\screen_dungeon_map.png">
-      <Name>screen_dungeon_map</Name>
+    <Compile Include="Images\Units\Player\player.png">
+      <Name>player</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\zoneset_ages_dungeon_1.png">
-      <Name>zoneset_ages_dungeon_1</Name>
+    <Compile Include="Images\Units\Player\player_blue.png">
+      <Name>player_blue</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\zoneset_ages_dungeon_4.png">
-      <Name>zoneset_ages_dungeon_4</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\zoneset_present.png">
-      <Name>zoneset_present</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\zoneset_interior_present.png">
-      <Name>zoneset_interior_present</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Player\player_jump.wav">
-      <Name>player_jump</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Player\player_land.wav">
-      <Name>player_land</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Player\player_pickup.wav">
-      <Name>player_pickup</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Player\player_swim.wav">
-      <Name>player_swim</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Player\player_throw.wav">
-      <Name>player_throw</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Player\player_wade.wav">
-      <Name>player_wade</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Player\player_hurt.wav">
+    <Compile Include="Images\Units\Player\player_hurt.png">
       <Name>player_hurt</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Units\Player\player_items.png">
+      <Name>player_items</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Units\Player\player_red.png">
+      <Name>player_red</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sounds\Player\player_fall.wav">
-      <Name>player_fall</Name>
+    <Compile Include="Music\overworld.wav">
+      <Name>overworld</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Items\sword_charge.wav">
-      <Name>sword_charge</Name>
+    <Compile Include="Music\overworld_intro.wav">
+      <Name>overworld_intro</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Items\sword_beam.wav">
-      <Name>sword_beam</Name>
+    <Compile Include="Sounds\Effects\appear_vanish.wav">
+      <Name>appear_vanish</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Items\sword_spin.wav">
-      <Name>sword_spin</Name>
+    <Compile Include="Sounds\Effects\effect_cling.wav">
+      <Name>effect_cling</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Items\shovel.wav">
-      <Name>shovel</Name>
+    <Compile Include="Sounds\Effects\fire.wav">
+      <Name>fire</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="Sounds\Effects\gale_seed.wav">
+      <Name>gale_seed</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Effects\leaves.wav">
+      <Name>leaves</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Effects\mystery_seed.wav">
+      <Name>mystery_seed</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Effects\object_fall.wav">
+      <Name>object_fall</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Effects\rock_shatter.wav">
+      <Name>rock_shatter</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Effects\scent_seed.wav">
+      <Name>scent_seed</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Effects\scent_seed_pod.wav">
+      <Name>scent_seed_pod</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\biggoron_sword.wav">
+      <Name>biggoron_sword</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\bomb_bounce.wav">
+      <Name>bomb_bounce</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\bomb_explode.wav">
+      <Name>bomb_explode</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\boomerang_loop.wav">
+      <Name>boomerang_loop</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\fire_rod.wav">
+      <Name>fire_rod</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\key_bounce.wav">
+      <Name>key_bounce</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\seed_shooter.wav">
+      <Name>seed_shooter</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\shield.wav">
+      <Name>shield</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
     <Compile Include="Sounds\Items\shield_deflect.wav">
       <Name>shield_deflect</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Tiles\chest_open.wav">
-      <Name>chest_open</Name>
+    <Compile Include="Sounds\Items\shoot_projectile.wav">
+      <Name>shoot_projectile</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="Sounds\Items\shovel.wav">
+      <Name>shovel</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\switch_hook_loop.wav">
+      <Name>switch_hook_loop</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\switch_hook_switch.wav">
+      <Name>switch_hook_switch</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\sword_beam.wav">
+      <Name>sword_beam</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\sword_charge.wav">
+      <Name>sword_charge</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\sword_slash_1.wav">
+      <Name>sword_slash_1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\sword_slash_2.wav">
+      <Name>sword_slash_2</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\sword_slash_3.wav">
+      <Name>sword_slash_3</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Items\sword_spin.wav">
+      <Name>sword_spin</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Misc\dungeon_signal.wav">
+      <Name>dungeon_signal</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Misc\fanfare_essence.wav">
+      <Name>fanfare_essence</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Misc\fanfare_item.wav">
+      <Name>fanfare_item</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Misc\low_health_loop.wav">
+      <Name>low_health_loop</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Misc\minecart_loop.wav">
+      <Name>minecart_loop</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Misc\room_exit.wav">
+      <Name>room_exit</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Misc\secret.wav">
+      <Name>secret</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Misc\secret_long.wav">
+      <Name>secret_long</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
     <Compile Include="Sounds\Monster\monster_die.wav">
       <Name>monster_die</Name>
       <Importer>WavImporter</Importer>
@@ -936,13 +1165,136 @@
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="Sounds\Items\shoot_projectile.wav">
-      <Name>shoot_projectile</Name>
+    <Compile Include="Sounds\Pickups\get_heart.wav">
+      <Name>get_heart</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="Sounds\Pickups\get_item.wav">
+      <Name>get_item</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Pickups\get_rupee.wav">
+      <Name>get_rupee</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Pickups\get_rupee_loop.wav">
+      <Name>get_rupee_loop</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Player\player_fall.wav">
+      <Name>player_fall</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Player\player_hurt.wav">
+      <Name>player_hurt</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Player\player_jump.wav">
+      <Name>player_jump</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Player\player_land.wav">
+      <Name>player_land</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Player\player_pickup.wav">
+      <Name>player_pickup</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Player\player_swim.wav">
+      <Name>player_swim</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Player\player_throw.wav">
+      <Name>player_throw</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Player\player_wade.wav">
+      <Name>player_wade</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Tiles\barrier.wav">
+      <Name>barrier</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Tiles\block_push.wav">
+      <Name>block_push</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Tiles\blue_roller.wav">
+      <Name>blue_roller</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Tiles\chest_open.wav">
+      <Name>chest_open</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Tiles\crossing_gate.wav">
+      <Name>crossing_gate</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Tiles\dungeon_door.wav">
+      <Name>dungeon_door</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Tiles\floor_crumble.wav">
+      <Name>floor_crumble</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Tiles\switch.wav">
+      <Name>switch</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Tiles\turnstile.wav">
+      <Name>turnstile</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\UI\menu_close.wav">
+      <Name>menu_close</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\UI\menu_cursor_move.wav">
+      <Name>menu_cursor_move</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\UI\menu_next.wav">
+      <Name>menu_next</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\UI\menu_open.wav">
+      <Name>menu_open</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\UI\menu_select.wav">
+      <Name>menu_select</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
     <Compile Include="Sounds\UI\text_continue.wav">
       <Name>text_continue</Name>
       <Importer>WavImporter</Importer>
@@ -955,403 +1307,42 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sounds\Effects\appear_vanish.wav">
-      <Name>appear_vanish</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
+    <Compile Include="Shaders\palette_lerp_shader.fx">
+      <Name>palette_lerp_shader</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Tiles\block_push.wav">
-      <Name>block_push</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Items\bomb_explode.wav">
-      <Name>bomb_explode</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Items\bomb_bounce.wav">
-      <Name>bomb_bounce</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Effects\mystery_seed.wav">
-      <Name>mystery_seed</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Items\seed_shooter.wav">
-      <Name>seed_shooter</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Items\switch_hook_switch.wav">
-      <Name>switch_hook_switch</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Items\switch_hook_loop.wav">
-      <Name>switch_hook_loop</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Effects\effect_cling.wav">
-      <Name>effect_cling</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Misc\fanfare_item.wav">
-      <Name>fanfare_item</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Tiles\blue_roller.wav">
-      <Name>blue_roller</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Effects\object_fall.wav">
-      <Name>object_fall</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Items\boomerang_loop.wav">
-      <Name>boomerang_loop</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Effects\leaves.wav">
-      <Name>leaves</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Tiles\dungeon_door.wav">
-      <Name>dungeon_door</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Tiles\crossing_gate.wav">
-      <Name>crossing_gate</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Misc\room_exit.wav">
-      <Name>room_exit</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Misc\minecart_loop.wav">
-      <Name>minecart_loop</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Items\key_bounce.wav">
-      <Name>key_bounce</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Effects\rock_shatter.wav">
-      <Name>rock_shatter</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Effects\scent_seed_pod.wav">
-      <Name>scent_seed_pod</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Effects\scent_seed.wav">
-      <Name>scent_seed</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Effects\gale_seed.wav">
-      <Name>gale_seed</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Effects\fire.wav">
-      <Name>fire</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Items\biggoron_sword.wav">
-      <Name>biggoron_sword</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Items\fire_rod.wav">
-      <Name>fire_rod</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Tiles\floor_crumble.wav">
-      <Name>floor_crumble</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Misc\dungeon_signal.wav">
-      <Name>dungeon_signal</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Pickups\get_item.wav">
-      <Name>get_item</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Misc\secret.wav">
-      <Name>secret</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-    <Compile Include="Sounds\Misc\secret_long.wav">
-      <Name>secret_long</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Tiles\switch.wav">
-      <Name>switch</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Misc\low_health_loop.wav">
-      <Name>low_health_loop</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Misc\fanfare_essence.wav">
-      <Name>fanfare_essence</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\Zonesets\zoneset_present.png">
-      <Name>zoneset_present</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\Zonesets\zoneset_ages_dungeon_1.png">
-      <Name>zoneset_ages_dungeon_1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\Zonesets\zoneset_interior_present.png">
-      <Name>zoneset_interior_present</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\Zonesets\zoneset_ages_dungeon_4.png">
-      <Name>zoneset_ages_dungeon_4</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\tileset_dungeon_ages_dungeon_4.png">
-      <Name>tileset_dungeon_ages_dungeon_4</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Tiles\turnstile.wav">
-      <Name>turnstile</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Tiles\barrier.wav">
-      <Name>barrier</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\tileset_sidescroll_ages_dungeon_1.png">
-      <Name>tileset_sidescroll_ages_dungeon_1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Shaders\palette_shader.fx">
       <Name>palette_shader</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Compile Include="Shaders\palette_lerp_shader.fx">
-      <Name>palette_lerp_shader</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
-    </Compile>
+    <None Include="Worlds\big_interiors.zwd">
+      <Name>big_interiors</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Worlds\custom_world.zwd">
+      <Name>custom_world</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Worlds\interiors.zwd">
+      <Name>interiors</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Worlds\ledge_jump_world.zwd">
+      <Name>ledge_jump_world</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Worlds\test_level.zwd">
+      <Name>test_level</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Worlds\world1.zwd">
+      <Name>world1</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\Styles\bombable_walls.png">
-      <Name>bombable_walls</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\chests.png">
-      <Name>chests</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\cliffs.png">
-      <Name>cliffs</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\cracked_floors.png">
-      <Name>cracked_floors</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\dungeon_floors.png">
-      <Name>dungeon_floors</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\dungeon_walls.png">
-      <Name>dungeon_walls</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\fancy_tiles.png">
-      <Name>fancy_tiles</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\floor_staircases.png">
-      <Name>floor_staircases</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\lanturns.png">
-      <Name>lanturns</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\stairs.png">
-      <Name>stairs</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\torches.png">
-      <Name>torches</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\trees.png">
-      <Name>trees</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\tunnels.png">
-      <Name>tunnels</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\vines.png">
-      <Name>vines</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Units\Player\player_items.png">
-      <Name>player_items</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Images\Tiles\Styles\cliff_railings.png">
-      <Name>cliff_railings</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
-  <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

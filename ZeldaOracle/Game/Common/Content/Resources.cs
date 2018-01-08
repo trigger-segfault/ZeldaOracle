@@ -102,6 +102,10 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>True if the resource manager should output load information to the console.</summary>
 		private static bool verboseOutput;
 
+		// STYLE PREVIEWS:
+		/// <summary>The list of registered style groups along with their previews for each style.</summary>
+		private static Dictionary<string, Dictionary<string, ISprite>> registeredStyles;
+
 
 		//-----------------------------------------------------------------------------
 		// Constants
@@ -175,6 +179,9 @@ namespace ZeldaOracle.Common.Content {
 			// Settings
 			verboseOutput		= false;
 
+			// Style previews
+			registeredStyles	= new Dictionary<string, Dictionary<string, ISprite>>();
+
 			// Setup the resource dictionary lookup map.
 			resourceDictionaries = new Dictionary<Type, object>();
 			resourceDictionaries[typeof(Image)]				= images;
@@ -225,6 +232,8 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries = null;
 			palettedSpriteDatabase = null;
 			textureLoader = null;
+
+			registeredStyles = null;
 		}
 
 		//-----------------------------------------------------------------------------
@@ -256,7 +265,9 @@ namespace ZeldaOracle.Common.Content {
 			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
 			//if (!dictionary.ContainsKey(name))
 			//	return default(T); // A resource with the given name doesn't exist!
-			return dictionary[name];
+			T result;
+			dictionary.TryGetValue(name, out result);
+			return result;
 		}
 
 		/// <summary>Get the resource with the given name and type.</summary>
@@ -272,6 +283,55 @@ namespace ZeldaOracle.Common.Content {
 			if (!ContainsResourceType<T>())
 				return null; // This type of resource doesn't exist!
 			return (Dictionary<string, T>) resourceDictionaries[typeof(T)];
+		}
+
+		/// <summary>Gets the list of resource keys for the given type of resource.</summary>
+		public static List<string> GetResourceKeyList(Type type) {
+			if (type == typeof(Image))
+				return GetResourceKeyList<Image>();
+			if (type == typeof(RealFont))
+				return GetResourceKeyList<RealFont>();
+			if (type == typeof(GameFont))
+				return GetResourceKeyList<GameFont>();
+			if (type == typeof(ISpriteSource))
+				return GetResourceKeyList<ISpriteSource>();
+			if (type == typeof(ISprite))
+				return GetResourceKeyList<ISprite>();
+			if (type == typeof(Animation))
+				return GetResourceKeyList<Animation>();
+			if (type == typeof(Effect))
+				return GetResourceKeyList<Effect>();
+			if (type == typeof(Sound))
+				return GetResourceKeyList<Sound>();
+			if (type == typeof(Song))
+				return GetResourceKeyList<Song>();
+
+			if (type == typeof(CollisionModel))
+				return GetResourceKeyList<CollisionModel>();
+			if (type == typeof(BaseTileData))
+				return GetResourceKeyList<BaseTileData>();
+			if (type == typeof(Tileset))
+				return GetResourceKeyList<Tileset>();
+			if (type == typeof(TileData))
+				return GetResourceKeyList<TileData>();
+			if (type == typeof(EventTileset))
+				return GetResourceKeyList<EventTileset>();
+			if (type == typeof(EventTileData))
+				return GetResourceKeyList<EventTileData>();
+			if (type == typeof(Zone))
+				return GetResourceKeyList<Zone>();
+
+			if (type == typeof(PaletteDictionary))
+				return GetResourceKeyList<PaletteDictionary>();
+			if (type == typeof(Palette))
+				return GetResourceKeyList<Palette>();
+
+			return new List<string>();
+		}
+
+		/// <summary>Gets the list of resource keys for the given type of resource.</summary>
+		public static List<string> GetResourceKeyList<T>() {
+			return ((Dictionary<string, T>) resourceDictionaries[typeof(T)]).Keys.ToList();
 		}
 
 		/// <summary>Is the given type of resource handled by this class?</summary>
@@ -619,6 +679,60 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>Adds the specified language.</summary>
 		public static void AddLanguage(Language language) {
 			languages.Add(language);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Style Previews
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the preview sprite for the specified style group's style.</summary>
+		public static ISprite GetStylePreview(string styleGroup, string style) {
+			Dictionary<string, ISprite> styles;
+			if (registeredStyles.TryGetValue(styleGroup, out styles)) {
+				ISprite preview;
+				if (styles.TryGetValue(style, out preview))
+					return preview;
+			}
+			return null;
+		}
+
+		/// <summary>Registers the style group if it does not exist.</summary>
+		public static void RegisterStyleGroup(string styleGroup) {
+			if (!registeredStyles.ContainsKey(styleGroup)) {
+				registeredStyles.Add(styleGroup, new Dictionary<string, ISprite>());
+			}
+		}
+
+		/// <summary>Registers the style group style's preview sprite if it does not exist.</summary>
+		public static void RegisterStylePreview(string styleGroup, string style, ISprite preview) {
+			Dictionary<string, ISprite> styles;
+			if (registeredStyles.TryGetValue(styleGroup, out styles) && !styles.ContainsKey(style)) {
+				styles.Add(style, preview);
+			}
+		}
+
+		/// <summary>Sets the style group style's preview sprite.</summary>
+		public static void SetStylePreview(string styleGroup, string style, ISprite preview) {
+			Dictionary<string, ISprite> styles;
+			if (registeredStyles.TryGetValue(styleGroup, out styles) && !styles.ContainsKey(style)) {
+				styles[style] = preview;
+			}
+		}
+
+		/// <summary>Sets the style group's preview sprite for all styles.</summary>
+		public static void SetStylePreview(string styleGroup, ISprite preview) {
+			Dictionary<string, ISprite> styles;
+			if (registeredStyles.TryGetValue(styleGroup, out styles)) {
+				foreach (string style in styles.Keys.ToArray()) {
+					styles[style] = preview;
+				}
+			}
+		}
+
+		/// <summary>Gets the dictionary of registered style groups, styles, and previews.</summary>
+		public static Dictionary<string, Dictionary<string, ISprite>> GetRegisteredStyles() {
+			return registeredStyles;
 		}
 
 
