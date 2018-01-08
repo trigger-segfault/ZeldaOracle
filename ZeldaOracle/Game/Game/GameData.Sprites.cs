@@ -99,9 +99,9 @@ namespace ZeldaOracle.Game {
 		public static ISprite SPR_TILE_OWL_ACTIVATED;
 		public static ISprite SPR_TILE_STATUE_EYE;
 		public static ISprite SPR_TILE_SOMARIA_BLOCK;
-		public static ISprite SPR_TILE_BUSH_REGROW_CUT;
+		public static ISprite SPR_TILE_REGROWABLE_BUSH_CUT;
 		public static ISprite SPR_TILE_BUSH_REGROW_GROWING;
-		public static ISprite SPR_TILE_BUSH_REGROW;
+		public static ISprite SPR_TILE_REGROWABLE_BUSH;
 		public static ISprite SPR_TILE_COLOR_SWITCH_RED;
 		public static ISprite SPR_TILE_COLOR_SWITCH_BLUE;
 		public static ISprite SPR_TILE_COLOR_TILE_RED;
@@ -282,7 +282,9 @@ namespace ZeldaOracle.Game {
 		public static ISprite SPR_EVENT_TILE_WARP_TUNNEL;
 		public static ISprite SPR_EVENT_TILE_WARP_ENTRANCE;
 		public static ISprite SPR_EVENT_TILE_TRACK_INTERSECTION;
-		
+
+		public static ISprite SPR_TURNSTILE_BARS_CLOCKWISE;
+		public static ISprite SPR_TURNSTILE_BARS_COUNTERCLOCKWISE;
 
 		//-----------------------------------------------------------------------------
 		// Sprite Loading

@@ -13,7 +13,7 @@ using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Tiles {
 
-	public class TileRegrowingPlant : Tile {
+	public class TileRegrowableBush : Tile {
 
 		private int regrowTimer;
 		private bool isRegrowing;
@@ -24,7 +24,7 @@ namespace ZeldaOracle.Game.Tiles {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public TileRegrowingPlant() {
+		public TileRegrowableBush() {
 			Graphics.SyncPlaybackWithRoomTicks = false;
 		}
 
@@ -49,7 +49,7 @@ namespace ZeldaOracle.Game.Tiles {
 			isGrown = true;
 			isRegrowing = false;
 			SetFlags(TileFlags.Cuttable | TileFlags.Bombable, true);
-			Graphics.PlayAnimation(GameData.SPR_TILE_BUSH_REGROW);
+			Graphics.PlayAnimation(GameData.SPR_TILE_REGROWABLE_BUSH);
 		}
 
 		public override void Break(bool spawnDrops) {
@@ -63,7 +63,7 @@ namespace ZeldaOracle.Game.Tiles {
 					SpawnDrop();
 
 				isGrown = false;
-				Graphics.PlayAnimation(GameData.SPR_TILE_BUSH_REGROW_CUT);
+				Graphics.PlayAnimation(GameData.SPR_TILE_REGROWABLE_BUSH_CUT);
 				regrowTimer = 0;
 				
 				SetFlags(TileFlags.Cuttable | TileFlags.Bombable, false);
@@ -83,7 +83,7 @@ namespace ZeldaOracle.Game.Tiles {
 				else if (Graphics.IsAnimationDone) {
 					isGrown = true;
 					isRegrowing = false;
-					Graphics.PlayAnimation(GameData.SPR_TILE_BUSH_REGROW);
+					Graphics.PlayAnimation(GameData.SPR_TILE_REGROWABLE_BUSH);
 					SetFlags(TileFlags.Cuttable | TileFlags.Bombable, true);
 				}
 			}

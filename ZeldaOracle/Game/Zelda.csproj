@@ -496,7 +496,7 @@
     <Compile Include="Game\Tiles\Custom\TileBridge.cs" />
     <Compile Include="Game\Tiles\Custom\TileSpikedFloor.cs" />
     <Compile Include="Game\Tiles\Custom\TileTurnstile.cs" />
-    <Compile Include="Game\Tiles\Custom\TileRegrowingPlant.cs" />
+    <Compile Include="Game\Tiles\Custom\TileRegrowableBush.cs" />
     <Compile Include="Game\Tiles\Custom\TilePlatform.cs" />
     <Compile Include="Game\Tiles\Custom\TileEyeStatue.cs" />
     <Compile Include="Game\Tiles\Custom\Doors\TileBossKeyDoor.cs" />

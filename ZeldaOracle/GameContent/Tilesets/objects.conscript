@@ -34,8 +34,8 @@ TILE bush;
 	BREAKSOUND	leaves;
 END;
 
-TILE regrowing_plant;
-	TYPE		TileRegrowingPlant;
+TILE regrowable_bush;
+	TYPE		TileRegrowableBush;
 	MODEL		block;
 	FLAGS		Cuttable, Bombable;
 	SPRITE		tile_regrowable_bush;
@@ -642,7 +642,7 @@ TILESET objects, tileset_objects, (12, 13);
 DEFAULT (0, 3);
 
 SETTILE ( 0, 0), bush;
-SETTILE ( 1, 0), regrowing_plant;
+SETTILE ( 1, 0), regrowable_bush;
 SETTILE ( 2, 0), flowers_red;
 SETTILE ( 3, 0), flowers_blue;
 SETTILE ( 4, 0), flowers_pink;

@@ -53,7 +53,7 @@ ANIMATION "turnstile_arrows_counterclockwise"; SUBSTRIP repeat;
 	ADD frame, 12, (3, 3), (32, 16);
 	END;
 	
-COMPOSITE "turnstile_bars_orange";
+COMPOSITE "turnstile_bars_clockwise";
 		ADD (( 3,  0), "shaded_red"), ( 0,  0); ADD (( 4,  0), "shaded_red"), (16,  0);
 		ADD (( 5,  0), "shaded_red"), (32,  0); ADD (( 3,  1), "shaded_red"), ( 0, 16);
 		ADD (( 4,  1), "shaded_red"), (16, 16); ADD (( 5,  1), "shaded_red"), (32, 16);
@@ -76,7 +76,7 @@ COMPOSITE "temp_turnstile_bars_counterclockwise_orange";
 		ADD	((12,  2), "shaded_red"), ( 0, 32); ADD ((13,  2), "shaded_red"), (16, 32);
 		ADD ((14,  2), "shaded_red"), (32, 32); END;
 		
-COMPOSITE "turnstile_bars_blue";
+COMPOSITE "turnstile_bars_counterclockwise";
 		ADD (( 3,  0), "shaded_blue"), ( 0,  0); ADD (( 4,  0), "shaded_blue"), (16,  0);
 		ADD (( 5,  0), "shaded_blue"), (32,  0); ADD (( 3,  1), "shaded_blue"), ( 0, 16);
 		ADD (( 4,  1), "shaded_blue"), (16, 16); ADD (( 5,  1), "shaded_blue"), (32, 16);
@@ -104,13 +104,13 @@ ANIMATION "turnstile_rotate_clockwise";
 		ADD frame, 4, "temp_turnstile_bars_clockwise_orange";
 		ADD frame, 4, "temp_turnstile_bars_straight_orange";
 		ADD frame, 4, "temp_turnstile_bars_counterclockwise_orange";
-		ADD frame, 4, "turnstile_bars_orange";
+		ADD frame, 4, "turnstile_bars_clockwise";
 	END;
 ANIMATION "turnstile_rotate_counterclockwise";
 	SUBSTRIP clamp;
 		ADD frame, 4, "temp_turnstile_bars_counterclockwise_blue";
 		ADD frame, 4, "temp_turnstile_bars_straight_blue";
 		ADD frame, 4, "temp_turnstile_bars_clockwise_blue";
-		ADD frame, 4, "turnstile_bars_blue";
+		ADD frame, 4, "turnstile_bars_counterclockwise";
 	END;
 	
