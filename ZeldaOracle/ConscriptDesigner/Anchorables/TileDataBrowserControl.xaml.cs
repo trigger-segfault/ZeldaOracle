@@ -30,6 +30,7 @@ namespace ConscriptDesigner.Anchorables {
 			this.suppressEvents = true;
 			InitializeComponent();
 
+			this.buttonShowAnimations.IsChecked = false;
 			this.tileDataPreview = new TileDataPreview();
 			this.tileDataPreview.Refreshed += OnSpritePreviewRefreshed;
 			this.tileDataPreview.HoverTileDataChanged += OnHoverTileDataChanged;

@@ -61,7 +61,8 @@ namespace ConscriptDesigner.WinForms {
 
 		private void OnMouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
 			mouse = new Point2I(e.X + HorizontalScroll.Value, e.Y + VerticalScroll.Value);
-			UpdateHoverSprite();
+			if (source != null)
+				UpdateHoverSprite();
 		}
 
 		private void UpdateHoverSprite() {

@@ -12,15 +12,10 @@ SPRITESHEET "tileset_objects_extras_16x16",		(16, 16), (1, 1), (18, 18); END;
 #==============================================================================
 
 # Default zone tile for digable ground (for overworlds)
-TILE default_ground;
-	SPRITE		tile_default;
-	FLAGS		Digable;
-END;
+TILE ground; SAMESPRITE; FLAGS Digable; END;
 
 # Default zone tile for a hard floor (for dungeons or interiors)
-TILE default_floor;
-	SPRITE		tile_default;
-END;
+TILE floor; SAMESPRITE; END;
 
 
 # ---- Bush -------------------------------------------------------------------
@@ -164,9 +159,9 @@ TILE dirt_pile;
 END;
 
 # This tile is used by Cracked floors
-TILE pit;
+TILE hole;
 	ENVTYPE		Hole;
-	SPRITE		tile_pit;
+	SPRITE		tile_hole;
 END;
 
 # This tile is used by the Shovel.
@@ -250,11 +245,11 @@ TILE sign;
 			"The text to display when the sign is read from the front.", false);
 END;
 
-TILE sign_alt;
-	CLONE		sign;
-	SPRITE		tile_sign_alt;
-	SPRITEOBJ	tile_sign_alt_asobject;
-END;
+#TILE sign_alt;
+#	CLONE		sign;
+#	SPRITE		tile_sign_alt;
+#	SPRITEOBJ	tile_sign_alt_asobject;
+#END;
 
 # ---- Movable Blocks ---------------------------------------------------------
 
@@ -278,23 +273,23 @@ TILE armos_alt;
 	SPRITEOBJ	tile_armos_alt_asobject;
 END;
 
-TILE tombstone;
+TILE grave;
 	CLONE		movable_block;
 	SPRITE		tile_grave;
 	SPRITEOBJ	tile_grave_asobject;
 END;
 
-TILE tombstone_alt;
-	CLONE		tombstone;
-	SPRITE		tile_grave_alt;
-	SPRITEOBJ	tile_grave_alt_asobject;
-END;
+#TILE tombstone_alt;
+#	CLONE		tombstone;
+#	SPRITE		tile_grave_alt;
+#	SPRITEOBJ	tile_grave_alt_asobject;
+#END;
 
-TILE fairy_statue;
-	CLONE		movable_block;
-	SPRITE		tile_fairy_statue;
-	SPRITEOBJ	tile_fairy_statue_asobject;
-END;
+#TILE fairy_statue;
+#	CLONE		movable_block;
+#	SPRITE		tile_fairy_statue;
+#	SPRITEOBJ	tile_fairy_statue_asobject;
+#END;
 
 TILE ice_block;
 	CLONE		movable_block;
@@ -659,17 +654,17 @@ SETTILE ( 1, 1), switch_rock;
 SETTILE ( 2, 1), crystal_rock;
 SETTILE ( 3, 1), pot;
 SETTILE ( 4, 1), sign;
-SETTILE ( 5, 1), sign_alt;
+#SETTILE ( 5, 1), sign_alt;
 SETTILE ( 6, 1), movable_block;
 SETTILE ( 7, 1), bombable_block;
 SETTILE ( 8, 1), armos;
-SETTILE ( 9, 1), tombstone;
-SETTILE (10, 1), fairy_statue;
+SETTILE ( 9, 1), grave;
+#SETTILE (10, 1), fairy_statue;
 SETTILE (11, 1), ice_block;
 
 SETTILE ( 0, 2), dirt_pile;
 SETTILE ( 1, 2), dug;
-SETTILE ( 2, 2), pit;
+SETTILE ( 2, 2), hole;
 SETTILE ( 3, 2), cracked_floor;
 # Soft soil
 # Portal
@@ -747,7 +742,7 @@ SETTILE (11, 9), minecart_track_corner_northeast;
 SETTILE ( 0, 10), wall_webbed_down;
 SETTILE ( 1, 10), wall_webbed_right;
 SETTILE ( 2, 10), wall_bombable_down;
-SETTILE ( 3, 9), wall_bombable_right;
+SETTILE ( 3, 10), wall_bombable_right;
 # Wall down
 # Wall right
 # Keyhole wall down

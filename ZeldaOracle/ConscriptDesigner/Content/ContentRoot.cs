@@ -883,6 +883,59 @@ namespace ConscriptDesigner.Content {
 				projectModified = true;
 			}
 		}
+		
+		/// <summary>Moves the file to the new directory and shows error messages when needed.</summary>
+		public void RequestMove(string path, string newDirectory) {
+			FixPath(ref path, ref newDirectory);
+			string name = IOPath.GetFileName(path);
+			string newPath = IOPath.Combine(newDirectory, name);
+			ContentFile file = Get(path);
+			if (file == null)
+				throw new FileDoesNotExistException(name);
+			string filePath = file.FilePath;
+			ContentFolder parent = GetFolder(newDirectory);
+			if (parent == file.Parent)
+				return;
+			if (parent == null)
+				throw new DirectoryDoesNotExistException(newDirectory);
+			string newFilePath = IOPath.Combine(parent.FilePath, name);
+			if (parent.Files.ContainsKey(name)) {
+				TriggerMessageBox.Show(DesignerControl.MainWindow, MessageIcon.Warning,
+						"A content file with the same name already exists in this directory!",
+						"Content File Already Exists");
+				return;
+			}
+			else if (PathHelper.Exists(newFilePath)) {
+				TriggerMessageBox.Show(DesignerControl.MainWindow, MessageIcon.Warning,
+						"A file with the same name already exists in this directory!",
+						"File Already Exists");
+				return;
+			}
+			if (file.IsFolder && IsSubdirectory(file.Path, parent.Path))
+				throw new DirectoryIsSubdirectoryException(file.Name, parent.Name);
+
+			try {
+				if (file.IsFolder)
+					IODirectory.Move(filePath, newFilePath);
+				else
+					File.Move(filePath, newFilePath);
+			}
+			catch (Exception ex) {
+				DesignerControl.ShowExceptionMessage(ex, "move", name);
+				return;
+			}
+
+			file.Parent.Files.Remove(file.Name);
+			parent.Files.Add(file.Name, file);
+
+			file.Parent.TreeViewItem.Items.Remove(file.TreeViewItem);
+			parent.TreeViewItem.Items.Add(file.TreeViewItem);
+
+			file.Parent = parent;
+			parent.Resort();
+
+			projectModified = true;
+		}
 
 		//-----------------------------------------------------------------------------
 		// Override Context Menu

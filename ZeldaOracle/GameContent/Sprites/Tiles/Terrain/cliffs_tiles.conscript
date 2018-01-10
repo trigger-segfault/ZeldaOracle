@@ -647,6 +647,34 @@ COMPOSITE "tile_cliff_corner_inside_se_railing_corner_outside_se_cap";
 	ADD "temp_8x8_railing_horizontal_cap_w" (0, 8);
 	ADD "temp_8x8_railing_vertical_cap_n" (8, 0); END;
 	
+COMPOSITE "temp_preview_cliff_style";
+	ADD "tile_cliff_corner_outside_nw_railing_corner_inside_nw", (0, 0);
+	ADD "tile_cliff_face_n_railing_horizontal", (16, 0);
+	ADD "tile_cliff_corner_outside_ground_ne_railing_corner_inside_ne", (32, 0);
+	ADD "tile_cliff_corner_outside_sw_railing_corner_inside_sw", (0, 16);
+	ADD "tile_cliff_face_s_railing_horizontal", (16, 16);
+	ADD "tile_cliff_corner_outside_se_railing_corner_inside_se", (32, 16);
+	ADD "tile_cliff_face_front_corner_left_dark", (0, 32);
+	ADD "tile_cliff_face_front", (16, 32);
+	ADD "tile_cliff_face_front_corner_right_ground", (32, 32);
+	END;
+	
+COMPOSITE "temp_preview_railing_style";
+	ADD "tile_cliff_corner_outside_ground_nw_railing_corner_inside_nw", (0, 0);
+	ADD "tile_cliff_face_n_railing_horizontal", (16, 0);
+	ADD "tile_cliff_corner_outside_ground_ne_railing_corner_inside_ne", (32, 0);
+	ADD "tile_cliff_face_w_railing_vertical", (0, 16);
+	ADD "tile_cliff_corner_inside_nw_railing_corner_outside_nw", (16, 16);
+	ADD "tile_cliff_corner_outside_ground_se_railing_corner_inside_se", (32, 16);
+	ADD "tile_cliff_corner_outside_ground_sw_railing_vertical_cap_s", (0, 32);
+	ADD "tile_cliff_corner_outside_ground_se_railing_vertical_cap_s", (16, 32);
+	END;
+	
+	
+STYLEPREVIEW "cliff", "temp_preview_cliff_style";
+STYLEPREVIEW "railing", "temp_preview_railing_style";
+
+
 #==============================================================
 # Cliffs Sea
 #==============================================================
@@ -747,169 +775,100 @@ COMPOSITE "tile_cliff_corner_inside_se_sea";
 # Cliff Holes
 #==============================================================
 
-COMPOSITE "tile_cliff_hole";
-	COMBINE "temp_cliff_hole" (0, 0);
-	COMBINE "temp_cliff_hole" (0, 8); END;
 	
 COMPOSITE "tile_cliff_hole_corner_left";
-	COMBINE "temp_cliff_hole_corner_left" (0, 0);
-	COMBINE "temp_cliff_hole" (0, 8); END;
+	COMBINE "temp_cliff_cave_left" (0, 0);
+	COMBINE "temp_cliff_cave_mid" (0, 8); END;
 	
-COMPOSITE "tile_cliff_hole_corner_right";
-	COMBINE "temp_cliff_hole_corner_right" (0, 0);
-	COMBINE "temp_cliff_hole" (0, 8); END;
+COMPOSITE "tile_cliff_cave_mid";
+	COMBINE "temp_cliff_cave_mid" (0, 0);
+	COMBINE "temp_cliff_cave_mid" (0, 8); END;
+	
+COMPOSITE "tile_cliff_cave_right";
+	COMBINE "temp_cliff_cave_right" (0, 0);
+	COMBINE "temp_cliff_cave_mid" (0, 8); END;
 
-COMPOSITE "tile_cliff_hole_corner_both";
-	COMBINE "temp_cliff_hole_corner_both" (0, 0);
-	COMBINE "temp_cliff_hole" (0, 8); END;
+COMPOSITE "tile_cliff_cave_both";
+	COMBINE "temp_cliff_cave_both" (0, 0);
+	COMBINE "temp_cliff_cave_mid" (0, 8); END;
 	
-COMPOSITE "tile_cliff_hole_spaced";
+COMPOSITE "tile_cliff_cave_spaced_left";
 	COMBINE "temp_cliff_face_s_top" (0, 0);
-	COMBINE "temp_cliff_hole" (0, 8); END;
+	COMBINE "temp_cliff_cave_left" (0, 8); END;
 	
-COMPOSITE "tile_cliff_hole_spaced_corner_left";
+COMPOSITE "tile_cliff_cave_spaced_mid";
 	COMBINE "temp_cliff_face_s_top" (0, 0);
-	COMBINE "temp_cliff_hole_corner_left" (0, 8); END;
+	COMBINE "temp_cliff_cave_mid" (0, 8); END;
 	
-COMPOSITE "tile_cliff_hole_spaced_corner_right";
+COMPOSITE "tile_cliff_cave_spaced_right";
 	COMBINE "temp_cliff_face_s_top" (0, 0);
-	COMBINE "temp_cliff_hole_corner_right" (0, 8); END;
+	COMBINE "temp_cliff_cave_right" (0, 8); END;
 
-COMPOSITE "tile_cliff_hole_spaced_corner_both";
+COMPOSITE "tile_cliff_cave_spaced_both";
 	COMBINE "temp_cliff_face_s_top" (0, 0);
-	COMBINE "temp_cliff_hole_corner_both" (0, 8); END;
+	COMBINE "temp_cliff_cave_both" (0, 8); END;
 	
 	
-COMPOSITE "tile_cliff_hole_spaced_railing";
+COMPOSITE "tile_cliff_cave_left_railing";
 	COMBINE "temp_railing_horizontal_long" (0, 0);
-	COMBINE "temp_cliff_hole" (0, 8); END;
+	COMBINE "temp_cliff_cave_left" (0, 8); END;
 	
-COMPOSITE "tile_cliff_hole_spaced_corner_left_railing";
+COMPOSITE "tile_cliff_caved_mid_railing";
 	COMBINE "temp_railing_horizontal_long" (0, 0);
-	COMBINE "temp_cliff_hole_corner_left" (0, 8); END;
+	COMBINE "temp_cliff_cave_mid" (0, 8); END;
 	
-COMPOSITE "tile_cliff_hole_spaced_corner_right_railing";
+COMPOSITE "tile_cliff_cave_right_railing";
 	COMBINE "temp_railing_horizontal_long" (0, 0);
-	COMBINE "temp_cliff_hole_corner_right" (0, 8); END;
+	COMBINE "temp_cliff_cave_right" (0, 8); END;
 
-COMPOSITE "tile_cliff_hole_spaced_corner_both_railing";
+COMPOSITE "tile_cliff_cave_both_railing";
 	COMBINE "temp_railing_horizontal_long" (0, 0);
-	COMBINE "temp_cliff_hole_corner_both" (0, 8); END;
+	COMBINE "temp_cliff_cave_both" (0, 8); END;
 	
-COMPOSITE "tile_cliff_hole_spaced_railing_cap_w";
+COMPOSITE "tile_cliff_cave_left_railing_cap_w";
 	COMBINE "temp_railing_horizontal_long_cap_w" (0, 0);
-	COMBINE "temp_cliff_hole" (0, 8); END;
+	COMBINE "temp_cliff_cave_left" (0, 8); END;
 	
-COMPOSITE "tile_cliff_hole_spaced_corner_left_railing_cap_w";
+COMPOSITE "tile_cliff_cave_mid_railing_cap_w";
 	COMBINE "temp_railing_horizontal_long_cap_w" (0, 0);
-	COMBINE "temp_cliff_hole_corner_left" (0, 8); END;
+	COMBINE "temp_cliff_cave_mid" (0, 8); END;
 	
-COMPOSITE "tile_cliff_hole_spaced_corner_right_railing_cap_w";
+COMPOSITE "tile_cliff_cave_right_railing_cap_w";
 	COMBINE "temp_railing_horizontal_long_cap_w" (0, 0);
-	COMBINE "temp_cliff_hole_corner_right" (0, 8); END;
+	COMBINE "temp_cliff_cave_right" (0, 8); END;
 
-COMPOSITE "tile_cliff_hole_spaced_corner_both_railing_cap_w";
+COMPOSITE "tile_cliff_cave_both_railing_cap_w";
 	COMBINE "temp_railing_horizontal_long_cap_w" (0, 0);
-	COMBINE "temp_cliff_hole_corner_both" (0, 8); END;
+	COMBINE "temp_cliff_cave_both" (0, 8); END;
 	
-COMPOSITE "tile_cliff_hole_spaced_railing_cap_e";
+COMPOSITE "tile_cliff_cave_mid_railing_cap_e";
 	COMBINE "temp_railing_horizontal_long_cap_e" (0, 0);
-	COMBINE "temp_cliff_hole" (0, 8); END;
+	COMBINE "temp_cliff_cave_mid" (0, 8); END;
 	
-COMPOSITE "tile_cliff_hole_spaced_corner_left_railing_cap_e";
+COMPOSITE "tile_cliff_cave_left_railing_cap_e";
 	COMBINE "temp_railing_horizontal_long_cap_e" (0, 0);
-	COMBINE "temp_cliff_hole_corner_left" (0, 8); END;
+	COMBINE "temp_cliff_cave_left" (0, 8); END;
 	
-COMPOSITE "tile_cliff_hole_spaced_corner_right_railing_cap_e";
+COMPOSITE "tile_cliff_cave_right_railing_cap_e";
 	COMBINE "temp_railing_horizontal_long_cap_e" (0, 0);
-	COMBINE "temp_cliff_hole_corner_right" (0, 8); END;
+	COMBINE "temp_cliff_cave_right" (0, 8); END;
 
-COMPOSITE "tile_cliff_hole_spaced_corner_both_railing_cap_e";
+COMPOSITE "tile_cliff_cave_both_railing_cap_e";
 	COMBINE "temp_railing_horizontal_long_cap_e" (0, 0);
-	COMBINE "temp_cliff_hole_corner_both" (0, 8); END;
+	COMBINE "temp_cliff_cave_both" (0, 8); END;
 	
-COMPOSITE "tile_cliff_hole_spaced_railing_cap";
+COMPOSITE "tile_cliff_cave_mid_railing_cap";
 	COMBINE "temp_railing_horizontal_long_cap" (0, 0);
-	COMBINE "temp_cliff_hole" (0, 8); END;
+	COMBINE "temp_cliff_cave_mid" (0, 8); END;
 	
-COMPOSITE "tile_cliff_hole_spaced_corner_left_railing_cap";
+COMPOSITE "tile_cliff_cave_left_railing_cap";
 	COMBINE "temp_railing_horizontal_long_cap" (0, 0);
-	COMBINE "temp_cliff_hole_corner_left" (0, 8); END;
+	COMBINE "temp_cliff_cave_left" (0, 8); END;
 	
-COMPOSITE "tile_cliff_hole_spaced_corner_right_railing_cap";
+COMPOSITE "tile_cliff_cave_right_railing_cap";
 	COMBINE "temp_railing_horizontal_long_cap" (0, 0);
-	COMBINE "temp_cliff_hole_corner_right" (0, 8); END;
+	COMBINE "temp_cliff_cave_right" (0, 8); END;
 
-COMPOSITE "tile_cliff_hole_spaced_corner_both_railing_cap";
+COMPOSITE "tile_cliff_cave_both_railing_cap";
 	COMBINE "temp_railing_horizontal_long_cap" (0, 0);
-	COMBINE "temp_cliff_hole_corner_both" (0, 8); END;
-
-#==============================================================
-# Vines and Ladders
-#==============================================================
-
-COMPOSITE "tile_cliff_ladder_top";
-	ADD "temp_8x16_cliff_ladder_top" (0, 0);
-	ADD "temp_8x16_cliff_ladder" (0, 8); END;
-	
-COMPOSITE "tile_cliff_ladder";
-	ADD "temp_8x16_cliff_ladder" (0, 0);
-	ADD "temp_8x16_cliff_ladder" (0, 8); END;
-	
-COMPOSITE "tile_cliff_ladder_bottom";
-	ADD "temp_8x16_cliff_ladder" (0, 0);
-	ADD "temp_8x16_cliff_ladder_bottom" (0, 8); END;
-	
-	
-COMPOSITE "tile_vine_cliff_top";
-	ADD "temp_8x16_vine_cliff_top" (0, 0);
-	ADD "temp_8x16_vine_cliff_2" (0, 8); END;
-	
-COMPOSITE "tile_vine_cliff_top_dirt";
-	ADD "temp_8x16_vine_cliff_top_dirt" (0, 0);
-	ADD "temp_8x16_vine_cliff_2" (0, 8); END;
-	
-COMPOSITE "tile_vine_cliff";
-	ADD "temp_8x16_vine_cliff_1" (0, 0);
-	ADD "temp_8x16_vine_cliff_2" (0, 8); END;
-	
-COMPOSITE "tile_vine_cliff_bottom";
-	ADD "temp_8x16_vine_cliff_1" (0, 0);
-	ADD "temp_8x16_vine_cliff_bottom" (0, 8); END;
-	
-	
-COMPOSITE "tile_vines_top_hole";
-	ADD "temp_8x16_vines_top_hole" (0, 0);
-	ADD "temp_8x16_vines_2" (0, 8); END;
-	
-COMPOSITE "tile_vines_top_hole_spaced";
-	COMBINE "temp_cliff_hole" (0, 0);
-	ADD "temp_8x16_vines_top_hole" (0, 8); END;
-	
-COMPOSITE "tile_vines_top_hole_spaced_corner_left";
-	COMBINE "temp_cliff_hole_corner_alt_left" (0, 0);
-	ADD "temp_8x16_vines_top_hole" (0, 8); END;
-	
-COMPOSITE "tile_vines_top_hole_spaced_corner_right";
-	COMBINE "temp_cliff_hole_corner_alt_right" (0, 0);
-	ADD "temp_8x16_vines_top_hole" (0, 8); END;
-	
-COMPOSITE "tile_vines_top_hole_spaced_corner_both";
-	COMBINE "temp_cliff_hole_corner_alt_both" (0, 0);
-	ADD "temp_8x16_vines_top_hole" (0, 8); END;
-	
-COMPOSITE "tile_vines_top";
-	ADD "temp_8x16_vines_top" (0, 0);
-	ADD "temp_8x16_vines_2" (0, 8); END;
-	
-COMPOSITE "tile_vines";
-	ADD "temp_8x16_vines_1" (0, 0);
-	ADD "temp_8x16_vines_2" (0, 8); END;
-	
-COMPOSITE "tile_vines_bottom";
-	ADD "temp_8x16_vines_1" (0, 0);
-	ADD "temp_8x16_vines_bottom" (0, 8); END;
-	
-	
-	
-	
+	COMBINE "temp_cliff_cave_both" (0, 8); END;

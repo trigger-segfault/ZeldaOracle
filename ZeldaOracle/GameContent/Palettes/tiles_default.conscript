@@ -111,9 +111,10 @@ LOOKUP	lantern, all			chest, all;
 
 LOOKUP	ice, all				water, all;
 
-COLOR	poison_bubble, light	(160, 192, 120);
-COLOR	poison_bubble, medium	(56, 144, 128);
-COLOR	poison_bubble, dark		(72, 32, 128);
+COLOR	poison_bubble, light	(160,192,120);
+COLOR	poison_bubble, medium	( 56,144,128);
+COLOR	poison_bubble, dark		( 72, 32,128);
+COLOR	poison_bubble, black	(  0, 40, 40);
 
 #==============================================================
 # Nature

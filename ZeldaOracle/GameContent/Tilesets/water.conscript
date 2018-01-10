@@ -14,112 +14,135 @@ SPRITESHEET "tileset_water_extras_8x8",		(8, 8), (1, 1), (18, 18);
 
 # GENERAL WATER TILES
 
-TILE puddle;		ENVTYPE Puddle;		SPRITE tile_puddle; END;
-TILE water;			ENVTYPE Water;		SPRITE tile_water; END;
-TILE ice;			ENVTYPE Ice;		SPRITE tile_ice; END;
-TILE deep_water;	ENVTYPE DeepWater;	SPRITE tile_water_deep; END;
-TILE ocean_shore;	ENVTYPE Puddle;		SPRITE tile_ocean_shore; END;
-TILE ocean;			ENVTYPE Ocean;		SPRITE tile_ocean; END;
+TILE "puddle"; SAMESPRITE; ENVTYPE Puddle; END;
+TILE "water"; SAMESPRITE; ENVTYPE Water;END;
+TILE "ice"; SAMESPRITE; ENVTYPE Ice;END;
+TILE "deep_water"; SAMESPRITE; ENVTYPE DeepWater;END;
+TILE "ocean_shore"; SAMESPRITE; ENVTYPE Puddle;END;
+TILE "ocean"; SAMESPRITE; ENVTYPE Ocean;END;
 
-TILE lava_1;		ENVTYPE Lava;		SPRITE tile_lava_1; END;
-TILE lava_2;		ENVTYPE Lava;		SPRITE tile_lava_2; END;
-TILE lava_3;		ENVTYPE Lava;		SPRITE tile_lava_3; END;
-TILE lava_4;		ENVTYPE Lava;		SPRITE tile_lava_4; END;
-TILE lava_5;		ENVTYPE Lava;		SPRITE tile_lava_5; END;
+TILE "lava_1"; SAMESPRITE; ENVTYPE Lava; END;
+TILE "lava_2"; SAMESPRITE; ENVTYPE Lava; END;
+TILE "lava_3"; SAMESPRITE; ENVTYPE Lava; END;
+TILE "lava_4"; SAMESPRITE; ENVTYPE Lava; END;
+TILE "lava_5"; SAMESPRITE; ENVTYPE Lava; END;
 
 # HURT TILES
 
-TILE whirlpool;					ENVTYPE Whirlpool; SPRITE tile_whirlpool; END;
-TILE underwater_hole_top;		ENVTYPE Hole; SPRITE tile_underwater_hole_top; END;
-TILE underwater_hole;			ENVTYPE Hole; END;
-TILE underwater_hole_bottom;	ENVTYPE Hole; SPRITE tile_underwater_hole_bottom; END;
-TILE underwater_hole_both;		ENVTYPE Hole; SPRITE tile_underwater_hole_both; END;
+TILE "whirlpool"; SAMESPRITE;ENVTYPE Whirlpool; END;
+TILE "underwater_hole_top"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "underwater_hole_mid"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "underwater_hole_bottom"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "underwater_hole_both"; SAMESPRITE; ENVTYPE Hole; END;
 
-TILE poison_bubble;
+TILE "poison_bubble";
 	FLAGS		HurtPlayer;
 	ENVTYPE		Ocean;
 	SOLID		block;
-	SPRITE		tile_poison_bubble;
+	SAMESPRITE;
 	HURT		1, (-1, -1, 18, 18);
 END;
 
 # WATERFALL TILES
 
-TILE waterfall_top;				ENVTYPE Waterfall; LEDGE edge_s, down; SPRITE tile_waterfall_start; END;
-TILE waterfall_rocks;			SOLID block; SPRITE tile_waterfall_rocks; END;
-TILE waterfall;					ENVTYPE Waterfall; LEDGE block, down; SPRITE tile_waterfall; END;
-TILE waterfall_bottom;			ENVTYPE Waterfall; LEDGE block, down; SPRITE tile_waterfall_finish; END;
-TILE waterfall_bottom_rocks;	ENVTYPE Waterfall; SOLID block; SPRITE tile_waterfall_rocks_finish; END;
+TILE "waterfall_down_start"; SAMESPRITE; ENVTYPE Waterfall; LEDGE edge_s, down; END;
+TILE "waterfall_down_rocks"; SAMESPRITE; SOLID block; END;
+TILE "waterfall_down"; SAMESPRITE; ENVTYPE Waterfall; LEDGE block, down; END;
+TILE "waterfall_down_finish"; SAMESPRITE; ENVTYPE Waterfall; LEDGE block, down; END;
+TILE "waterfall_down_rocks_finish"; SAMESPRITE; ENVTYPE Waterfall; SOLID block; END;
 
-TILE lavafall_start;			ENVTYPE Lavafall; LEDGE edge_s, down; SPRITE tile_lavafall_start; END;
-TILE lavafall_rocks;			ENVTYPE Lavafall; SOLID block; SPRITE tile_lavafall_rocks; END;
-TILE lavafall;					ENVTYPE Lavafall; LEDGE block, down; SPRITE tile_lavafall; END;
-TILE lavafall_bottom;			ENVTYPE Lavafall; LEDGE block, down; SPRITE tile_lavafall_finish; END;
-TILE lavafall_bottom_rocks;		ENVTYPE Lavafall; SOLID block; SPRITE tile_lavafall_rocks_finish; END;
+TILE "lavafall_down_start"; SAMESPRITE; ENVTYPE Lavafall; LEDGE edge_s, down; END;
+TILE "lavafall_down_rocks"; SAMESPRITE; ENVTYPE Lavafall; SOLID block; END;
+TILE "lavafall_down"; SAMESPRITE; ENVTYPE Lavafall; LEDGE block, down; END;
+TILE "lavafall_down_finish"; SAMESPRITE; ENVTYPE Lavafall; LEDGE block, down; END;
+TILE "lavafall_down_rocks_finish"; SAMESPRITE; ENVTYPE Lavafall; SOLID block; END;
 
-TILE waterfall_top_cave_left;	SPRITE tile_waterfall_start_cave_left; END;
-TILE waterfall_top_cave_middle;	SPRITE tile_waterfall_start_cave_mid; END;
-TILE waterfall_top_cave_right;	SPRITE tile_waterfall_start_cave_right; END;
-TILE waterfall_top_cave_both;	SPRITE tile_waterfall_start_cave_both; END;
+TILE "waterfall_down_start_cave_left"; SAMESPRITE; END;
+TILE "waterfall_down_start_cave_mid"; SAMESPRITE; END;
+TILE "waterfall_down_start_cave_right"; SAMESPRITE; END;
+TILE "waterfall_down_start_cave_both"; SAMESPRITE; END;
 
-TILE lavafall_top_cave_left;	SPRITE tile_lavafall_start_cave_left; END;
-TILE lavafall_top_cave_middle;	SPRITE tile_lavafall_start_cave_mid; END;
-TILE lavafall_top_cave_right;	SPRITE tile_lavafall_start_cave_right; END;
-TILE lavafall_top_cave_both;	SPRITE tile_lavafall_start_cave_both; END;
+TILE "lavafall_down_start_cave_left"; SAMESPRITE; END;
+TILE "lavafall_down_start_cave_mid"; SAMESPRITE; END;
+TILE "lavafall_down_start_cave_right"; SAMESPRITE; END;
+TILE "lavafall_down_start_cave_both"; SAMESPRITE; END;
 
 # CURRENT TILES
 
-TILE water_current_left;		CONVEYOR left,		0.75; ENVTYPE Water; SPRITE tile_water_current_left; END;
-TILE water_current_right;		CONVEYOR right,		0.75; ENVTYPE Water; SPRITE tile_water_current_right; END;
-TILE water_current_up;			CONVEYOR up,		0.75; ENVTYPE Water; SPRITE tile_water_current_up; END;
-TILE water_current_down;		CONVEYOR down,		0.75; ENVTYPE Water; SPRITE tile_water_current_down; END;
+TILE "water_current_left"; SAMESPRITE; CONVEYOR left,		0.75; ENVTYPE Water; END;
+TILE "water_current_right"; SAMESPRITE; CONVEYOR right,		0.75; ENVTYPE Water; END;
+TILE "water_current_up"; SAMESPRITE; CONVEYOR up,		0.75; ENVTYPE Water; END;
+TILE "water_current_down"; SAMESPRITE; CONVEYOR down,		0.75; ENVTYPE Water; END;
 
-TILE underwater_current_left;	CONVEYOR left,		0.75; SPRITE tile_underwater_current_left; END;
-TILE underwater_current_right;	CONVEYOR right,		0.75; SPRITE tile_underwater_current_right; END;
-TILE underwater_current_up;		CONVEYOR up,		0.75; SPRITE tile_underwater_current_up; END;
-TILE underwater_current_down;	CONVEYOR down,		0.75; SPRITE tile_underwater_current_down; END;
+TILE "underwater_current_left"; SAMESPRITE; CONVEYOR left,		0.75; END;
+TILE "underwater_current_right"; SAMESPRITE; CONVEYOR right,		0.75; END;
+TILE "underwater_current_up"; SAMESPRITE; CONVEYOR up,		0.75; END;
+TILE "underwater_current_down"; SAMESPRITE; CONVEYOR down,		0.75; END;
 
-TILE sand_current_left;			CONVEYOR left,		0.5; SPRITE tile_sand_current_left; END;
-TILE sand_current_right;		CONVEYOR right,		0.5; SPRITE tile_sand_current_right; END;
-TILE sand_current_up;			CONVEYOR up,		0.5; SPRITE tile_sand_current_up; END;
-TILE sand_current_down;			CONVEYOR down,		0.5; SPRITE tile_sand_current_down; END;
+TILE "sand_current_left"; SAMESPRITE; CONVEYOR left,		0.5; END;
+TILE "sand_current_right"; SAMESPRITE; CONVEYOR right,		0.5; END;
+TILE "sand_current_up"; SAMESPRITE; CONVEYOR up,		0.5; END;
+TILE "sand_current_down"; SAMESPRITE; CONVEYOR down,		0.5; END;
 
-TILE quicksand_down_right;		CONVEYOR DownRight,	0.5; SPRITE tile_quicksand_down_right; END;
-TILE quicksand_down_left;		CONVEYOR DownLeft,	0.5; SPRITE tile_quicksand_down_left; END;
-TILE quicksand_up_right;		CONVEYOR UpRight,	0.5; SPRITE tile_quicksand_up_right; END;
-TILE quicksand_up_left;			CONVEYOR UpLeft,	0.5; SPRITE tile_quicksand_up_left; END;
+TILE "quicksand_down_right"; SAMESPRITE; CONVEYOR DownRight,	0.5; END;
+TILE "quicksand_down_left"; SAMESPRITE; CONVEYOR DownLeft,	0.5;  END;
+TILE "quicksand_up_right"; SAMESPRITE; CONVEYOR UpRight,	0.5; END;
+TILE "quicksand_up_left"; SAMESPRITE; CONVEYOR UpLeft,	0.5; END;
 
 # OUTPUT TILES
 
-TILE output_waterfall_left_top;		SOLID block; SPRITELIST tile_output_waterfall_left_top,		tile_output_empty_left_top; END;
-TILE output_waterfall_left_middle;	SOLID block; SPRITELIST tile_output_waterfall_left_mid,		tile_output_empty_left_mid; END;
-TILE output_waterfall_left_bottom;	SOLID block; SPRITELIST tile_output_waterfall_left_bottom,	tile_output_empty_left_bottom; END;
-TILE output_waterfall_right_top;	SOLID block; SPRITELIST tile_output_waterfall_right_top,	tile_output_empty_right_top; END;
-TILE output_waterfall_right_middle;	SOLID block; SPRITELIST tile_output_waterfall_right_mid,	tile_output_empty_right_mid; END;
-TILE output_waterfall_right_bottom;	SOLID block; SPRITELIST tile_output_waterfall_right_bottom,	tile_output_empty_right_bottom; END;
+TILE "output_waterfall_left_top";		SOLID block; SPRITELIST "tile_output_waterfall_left_top",		"tile_output_empty_left_top"; END;
+TILE "output_waterfall_left_middle";	SOLID block; SPRITELIST "tile_output_waterfall_left_mid",		"tile_output_empty_left_mid"; END;
+TILE "output_waterfall_left_bottom";	SOLID block; SPRITELIST "tile_output_waterfall_left_bottom",	"tile_output_empty_left_bottom"; END;
+TILE "output_waterfall_right_top";		SOLID block; SPRITELIST "tile_output_waterfall_right_top",		"tile_output_empty_right_top"; END;
+TILE "output_waterfall_right_middle";	SOLID block; SPRITELIST "tile_output_waterfall_right_mid",		"tile_output_empty_right_mid"; END;
+TILE "output_waterfall_right_bottom";	SOLID block; SPRITELIST "tile_output_waterfall_right_bottom",	"tile_output_empty_right_bottom"; END;
 
-TILE output_lavafall_left_top;		SOLID block; SPRITELIST tile_output_lavafall_left_top,		tile_output_empty_left_top; END;
-TILE output_lavafall_left_middle;	SOLID block; SPRITELIST tile_output_lavafall_left_mid,		tile_output_empty_left_mid; END;
-TILE output_lavafall_left_bottom;	SOLID block; SPRITELIST tile_output_lavafall_left_bottom,	tile_output_empty_left_bottom; END;
-TILE output_lavafall_right_top;		SOLID block; SPRITELIST tile_output_lavafall_right_top,		tile_output_empty_right_top; END;
-TILE output_lavafall_right_middle;	SOLID block; SPRITELIST tile_output_lavafall_right_mid,		tile_output_empty_right_mid; END;
-TILE output_lavafall_right_bottom;	SOLID block; SPRITELIST tile_output_lavafall_right_bottom,	tile_output_empty_right_bottom; END;
+TILE "output_lavafall_left_top";		SOLID block; SPRITELIST "tile_output_lavafall_left_top",		"tile_output_empty_left_top"; END;
+TILE "output_lavafall_left_middle";		SOLID block; SPRITELIST "tile_output_lavafall_left_mid",		"tile_output_empty_left_mid"; END;
+TILE "output_lavafall_left_bottom";		SOLID block; SPRITELIST "tile_output_lavafall_left_bottom",		"tile_output_empty_left_bottom"; END;
+TILE "output_lavafall_right_top";		SOLID block; SPRITELIST "tile_output_lavafall_right_top",		"tile_output_empty_right_top"; END;
+TILE "output_lavafall_right_middle";	SOLID block; SPRITELIST "tile_output_lavafall_right_mid",		"tile_output_empty_right_mid"; END;
+TILE "output_lavafall_right_bottom";	SOLID block; SPRITELIST "tile_output_lavafall_right_bottom",	"tile_output_empty_right_bottom"; END;
 
-TILE output_waterfall_up_left;		SOLID block; SPRITELIST tile_output_waterfall_up_left,		tile_output_empty_up_left; END;
-TILE output_waterfall_up_middle;	SOLID block; SPRITELIST tile_output_waterfall_up_mid,		tile_output_empty_up_mid; END;
-TILE output_waterfall_up_right;		SOLID block; SPRITELIST tile_output_waterfall_up_right,		tile_output_empty_up_right; END;
-TILE output_waterfall_down_left;	SOLID block; SPRITELIST tile_output_waterfall_down_left,	tile_output_empty_down_left; END;
-TILE output_waterfall_down_middle;	SOLID block; SPRITELIST tile_output_waterfall_down_mid,		tile_output_empty_down_mid; END;
-TILE output_waterfall_down_right;	SOLID block; SPRITELIST tile_output_waterfall_down_right,	tile_output_empty_down_right; END;
+TILE "output_waterfall_up_left";		SOLID block; SPRITELIST "tile_output_waterfall_up_left",		"tile_output_empty_up_left"; END;
+TILE "output_waterfall_up_middle";		SOLID block; SPRITELIST "tile_output_waterfall_up_mid",			"tile_output_empty_up_mid"; END;
+TILE "output_waterfall_up_right";		SOLID block; SPRITELIST "tile_output_waterfall_up_right",		"tile_output_empty_up_right"; END;
+TILE "output_waterfall_down_left";		SOLID block; SPRITELIST "tile_output_waterfall_down_left",		"tile_output_empty_down_left"; END;
+TILE "output_waterfall_down_middle";	SOLID block; SPRITELIST "tile_output_waterfall_down_mid",		"tile_output_empty_down_mid"; END;
+TILE "output_waterfall_down_right";		SOLID block; SPRITELIST "tile_output_waterfall_down_right",		"tile_output_empty_down_right"; END;
 
-TILE output_lavafall_up_left;		SOLID block; SPRITELIST tile_output_lavafall_up_left,		tile_output_empty_up_left; END;
-TILE output_lavafall_up_middle;		SOLID block; SPRITELIST tile_output_lavafall_up_mid,		tile_output_empty_up_mid; END;
-TILE output_lavafall_up_right;		SOLID block; SPRITELIST tile_output_lavafall_up_right,		tile_output_empty_up_right; END;
-TILE output_lavafall_down_left;		SOLID block; SPRITELIST tile_output_lavafall_down_left,		tile_output_empty_down_left; END;
-TILE output_lavafall_down_middle;	SOLID block; SPRITELIST tile_output_lavafall_down_mid,		tile_output_empty_down_mid; END;
-TILE output_lavafall_down_right;	SOLID block; SPRITELIST tile_output_lavafall_down_right,	tile_output_empty_down_right; END;
+TILE "output_lavafall_up_left";			SOLID block; SPRITELIST "tile_output_lavafall_up_left",			"tile_output_empty_up_left"; END;
+TILE "output_lavafall_up_middle";		SOLID block; SPRITELIST "tile_output_lavafall_up_mid",			"tile_output_empty_up_mid"; END;
+TILE "output_lavafall_up_right";		SOLID block; SPRITELIST "tile_output_lavafall_up_right",		"tile_output_empty_up_right"; END;
+TILE "output_lavafall_down_left";		SOLID block; SPRITELIST "tile_output_lavafall_down_left",		"tile_output_empty_down_left"; END;
+TILE "output_lavafall_down_middle";		SOLID block; SPRITELIST "tile_output_lavafall_down_mid",		"tile_output_empty_down_mid"; END;
+TILE "output_lavafall_down_right";		SOLID block; SPRITELIST "tile_output_lavafall_down_right",		"tile_output_empty_down_right"; END;
 
+TILE "water_boulder"; SAMESPRITE; SOLID block; END;
+TILE "water_rocks"; SAMESPRITE; SOLID block; END;
+TILE "lilypad_right"; SAMESPRITE; SOLID block; END;
+TILE "lilypad_left"; SAMESPRITE; SOLID block; END;
+TILE "armos_sunk_deep"; SAMESPRITE; SOLID block; END;
+TILE "armos_sunk_shallow"; SAMESPRITE; SOLID block; END;
 
+TILE "water_roots_right"; SAMESPRITE; SOLID block; END;
+TILE "water_roots_left"; SAMESPRITE; SOLID block; END;
+TILE "water_tree_top_left_behind"; SAMESPRITE; SOLID block; END;
+TILE "water_tree_top_right_behind"; SAMESPRITE; SOLID block; END;
+TILE "water_tree_top_left"; SAMESPRITE; SOLID block; END;
+TILE "water_tree_top_right"; SAMESPRITE; SOLID block; END;
+TILE "water_tree_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "water_tree_bottom_right"; SAMESPRITE; SOLID block; END;
+
+TILE "water_roots_alt_right"; SAMESPRITE; SOLID block; END;
+TILE "water_roots_alt_left"; SAMESPRITE; SOLID block; END;
+TILE "water_tree_alt_top_left_behind"; SAMESPRITE; SOLID block; END;
+TILE "water_tree_alt_top_right_behind"; SAMESPRITE; SOLID block; END;
+TILE "water_tree_alt_top_left"; SAMESPRITE; SOLID block; END;
+TILE "water_tree_alt_top_right"; SAMESPRITE; SOLID block; END;
+TILE "water_tree_alt_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "water_tree_alt_bottom_right"; SAMESPRITE; SOLID block; END;
 
 #==============================================================================
 # Tilesets
@@ -140,103 +163,129 @@ END;
 
 # GENERAL WATER TILES
 
-SETTILE (0, 0), puddle;
-SETTILE (1, 0), water;
-SETTILE (0, 1), ice;
-SETTILE (1, 1), deep_water;
-SETTILE (2, 0), ocean_shore;
-SETTILE (2, 1), ocean;
+SETTILE (0, 0), "puddle";
+SETTILE (1, 0), "water";
+SETTILE (0, 1), "ice";
+SETTILE (1, 1), "deep_water";
+SETTILE (2, 0), "ocean_shore";
+SETTILE (2, 1), "ocean";
 
-SETTILE (6, 5), lava_1;
-SETTILE (7, 5), lava_2;
-SETTILE (6, 6), lava_3;
-SETTILE (7, 6), lava_4;
-SETTILE (6, 7), lava_5;
+SETTILE (0, 2), "water_boulder";
+SETTILE (1, 2), "water_rocks";
+SETTILE (0, 3), "water_rocks";
+SETTILE (1, 3), "water_rocks";
+SETTILE (2, 2), "water_roots_right";
+SETTILE (3, 2), "water_roots_left";
+SETTILE (2, 3), "water_roots_alt_right";
+SETTILE (3, 3), "water_roots_alt_left";
+SETTILE (0, 4), "armos_sunk_deep";
+SETTILE (1, 4), "armos_sunk_shallow";
+SETTILE (2, 4), "lilypad_right";
+SETTILE (3, 4), "lilypad_left";
+
+SETTILE (8, 0), "water_tree_alt_top_left_behind";
+SETTILE (9, 0), "water_tree_alt_top_right_behind";
+SETTILE (8, 1), "water_tree_alt_top_left";
+SETTILE (9, 1), "water_tree_alt_top_right";
+SETTILE (8, 2), "water_tree_alt_bottom_left";
+SETTILE (9, 2), "water_tree_alt_bottom_right";
+SETTILE (10, 0), "water_tree_top_left_behind";
+SETTILE (11, 0), "water_tree_top_right_behind";
+SETTILE (10, 1), "water_tree_top_left";
+SETTILE (11, 1), "water_tree_top_right";
+SETTILE (10, 2), "water_tree_bottom_left";
+SETTILE (11, 2), "water_tree_bottom_right";
+
+SETTILE (6, 5), "lava_1";
+SETTILE (7, 5), "lava_2";
+SETTILE (6, 6), "lava_3";
+SETTILE (7, 6), "lava_4";
+SETTILE (6, 7), "lava_5";
 
 # HURT TILES
 
-SETTILE (3, 0), whirlpool;
-SETTILE (3, 1), poison_bubble;
-SETTILE (8, 5), underwater_hole_top;
-SETTILE (8, 6), underwater_hole;
-SETTILE (8, 7), underwater_hole_bottom;
-SETTILE (8, 8), underwater_hole_both;
+SETTILE (3, 0), "whirlpool";
+SETTILE (3, 1), "poison_bubble";
+SETTILE (8, 5), "underwater_hole_top";
+SETTILE (8, 6), "underwater_hole_mid";
+SETTILE (8, 7), "underwater_hole_bottom";
+SETTILE (8, 8), "underwater_hole_both";
 
 # WATERFALL TILES
 
-SETTILE ( 6, 0), waterfall_top;
-SETTILE ( 6, 1), waterfall_rocks;
-SETTILE ( 6, 2), waterfall;
-SETTILE ( 6, 3), waterfall_bottom;
-SETTILE ( 6, 4), waterfall_bottom_rocks;
+SETTILE ( 6, 0), "waterfall_down_start";
+SETTILE ( 6, 1), "waterfall_down_rocks";
+SETTILE ( 6, 2), "waterfall_down";
+SETTILE ( 6, 3), "waterfall_down_finish";
+SETTILE ( 6, 4), "waterfall_down_rocks_finish";
 
-SETTILE ( 7, 0), lavafall_start;
-SETTILE ( 7, 1), lavafall_rocks;
-SETTILE ( 7, 2), lavafall;
-SETTILE ( 7, 3), lavafall_bottom;
-SETTILE ( 7, 4), lavafall_bottom_rocks;
+SETTILE ( 8, 3), "waterfall_down_start_cave_left";
+SETTILE ( 9, 3), "waterfall_down_start_cave_mid";
+SETTILE (10, 3), "waterfall_down_start_cave_right";
+SETTILE (11, 3), "waterfall_down_start_cave_both";
 
-SETTILE ( 8, 3), waterfall_top_cave_left;
-SETTILE ( 9, 3), waterfall_top_cave_middle;
-SETTILE (10, 3), waterfall_top_cave_right;
-SETTILE (11, 3), waterfall_top_cave_both;
+SETTILE ( 7, 0), "lavafall_down_start";
+SETTILE ( 7, 1), "lavafall_down_rocks";
+SETTILE ( 7, 2), "lavafall_down";
+SETTILE ( 7, 3), "lavafall_down_finish";
+SETTILE ( 7, 4), "lavafall_down_rocks_finish";
 
-SETTILE ( 8, 4), lavafall_top_cave_left;
-SETTILE ( 9, 4), lavafall_top_cave_middle;
-SETTILE (10, 4), lavafall_top_cave_right;
-SETTILE (11, 4), lavafall_top_cave_both;
+SETTILE ( 8, 4), "lavafall_down_start_cave_left";
+SETTILE ( 9, 4), "lavafall_down_start_cave_mid";
+SETTILE (10, 4), "lavafall_down_start_cave_right";
+SETTILE (11, 4), "lavafall_down_start_cave_both";
 
 # CURRENT TILES
 
-SETTILE (4, 0), water_current_left;
-SETTILE (5, 0), water_current_right;
-SETTILE (4, 1), water_current_up;
-SETTILE (5, 1), water_current_down;
+SETTILE (4, 0), "water_current_left";
+SETTILE (5, 0), "water_current_right";
+SETTILE (4, 1), "water_current_up";
+SETTILE (5, 1), "water_current_down";
 
-SETTILE (4, 2), underwater_current_left;
-SETTILE (5, 2), underwater_current_right;
-SETTILE (4, 3), underwater_current_up;
-SETTILE (5, 3), underwater_current_down;
+SETTILE (4, 2), "underwater_current_left";
+SETTILE (5, 2), "underwater_current_right";
+SETTILE (4, 3), "underwater_current_up";
+SETTILE (5, 3), "underwater_current_down";
 
-SETTILE (4, 4), sand_current_left;
-SETTILE (5, 4), sand_current_right;
-SETTILE (4, 5), sand_current_up;
-SETTILE (5, 5), sand_current_down;
+SETTILE (4, 4), "sand_current_left";
+SETTILE (5, 4), "sand_current_right";
+SETTILE (4, 5), "sand_current_up";
+SETTILE (5, 5), "sand_current_down";
 
-SETTILE (4, 6), quicksand_down_right;
-SETTILE (5, 6), quicksand_down_left;
-SETTILE (4, 7), quicksand_up_right;
-SETTILE (5, 7), quicksand_up_left;
+SETTILE (4, 6), "quicksand_down_right";
+SETTILE (5, 6), "quicksand_down_left";
+SETTILE (4, 7), "quicksand_up_right";
+SETTILE (5, 7), "quicksand_up_left";
 
 # OUTPUT TILES
 
-SETTILE ( 0, 5), output_waterfall_left_top;
-SETTILE ( 0, 6), output_waterfall_left_middle;
-SETTILE ( 0, 7), output_waterfall_left_bottom;
-SETTILE ( 1, 5), output_waterfall_right_top;
-SETTILE ( 1, 6), output_waterfall_right_middle;
-SETTILE ( 1, 7), output_waterfall_right_bottom;
+SETTILE ( 0, 5), "output_waterfall_left_top";
+SETTILE ( 0, 6), "output_waterfall_left_middle";
+SETTILE ( 0, 7), "output_waterfall_left_bottom";
+SETTILE ( 1, 5), "output_waterfall_right_top";
+SETTILE ( 1, 6), "output_waterfall_right_middle";
+SETTILE ( 1, 7), "output_waterfall_right_bottom";
 
-SETTILE ( 2, 5), output_lavafall_left_top;
-SETTILE ( 2, 6), output_lavafall_left_middle;
-SETTILE ( 2, 7), output_lavafall_left_bottom;
-SETTILE ( 3, 5), output_lavafall_right_top;
-SETTILE ( 3, 6), output_lavafall_right_middle;
-SETTILE ( 3, 7), output_lavafall_right_bottom;
+SETTILE ( 2, 5), "output_lavafall_left_top";
+SETTILE ( 2, 6), "output_lavafall_left_middle";
+SETTILE ( 2, 7), "output_lavafall_left_bottom";
+SETTILE ( 3, 5), "output_lavafall_right_top";
+SETTILE ( 3, 6), "output_lavafall_right_middle";
+SETTILE ( 3, 7), "output_lavafall_right_bottom";
 
-SETTILE ( 9, 5), output_waterfall_up_left;
-SETTILE (10, 5), output_waterfall_up_middle;
-SETTILE (11, 5), output_waterfall_up_right;
-SETTILE ( 9, 6), output_waterfall_down_left;
-SETTILE (10, 6), output_waterfall_down_middle;
-SETTILE (11, 6), output_waterfall_down_right;
+SETTILE ( 9, 5), "output_waterfall_up_left";
+SETTILE (10, 5), "output_waterfall_up_middle";
+SETTILE (11, 5), "output_waterfall_up_right";
+SETTILE ( 9, 6), "output_waterfall_down_left";
+SETTILE (10, 6), "output_waterfall_down_middle";
+SETTILE (11, 6), "output_waterfall_down_right";
 
-SETTILE ( 9, 7), output_lavafall_up_left;
-SETTILE (10, 7), output_lavafall_up_middle;
-SETTILE (11, 7), output_lavafall_up_right;
-SETTILE ( 9, 8), output_lavafall_down_left;
-SETTILE (10, 8), output_lavafall_down_middle;
-SETTILE (11, 8), output_lavafall_down_right;
+SETTILE ( 9, 7), "output_lavafall_up_left";
+SETTILE (10, 7), "output_lavafall_up_middle";
+SETTILE (11, 7), "output_lavafall_up_right";
+SETTILE ( 9, 8), "output_lavafall_down_left";
+SETTILE (10, 8), "output_lavafall_down_middle";
+SETTILE (11, 8), "output_lavafall_down_right";
 
 
 END;

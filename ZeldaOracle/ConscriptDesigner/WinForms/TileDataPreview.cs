@@ -219,7 +219,12 @@ namespace ConscriptDesigner.WinForms {
 					int x = 1 + column * (GameSettings.TILE_SIZE + 1);
 					int y = 1 + row * (GameSettings.TILE_SIZE + 1);
 
-					TileDataDrawing.DrawTile(g, tile, new Point2I(x, y), zone);
+					try {
+						TileDataDrawing.DrawTile(g, tile, new Point2I(x, y), zone);
+					}
+					catch (Exception ex) {
+
+					}
 					//g.DrawISprite(tile.Sprite, settings);
 					if (tile == hoverTileData) {
 						hover = new Point2I(x, y);

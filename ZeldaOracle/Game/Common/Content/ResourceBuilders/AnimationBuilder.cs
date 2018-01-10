@@ -213,12 +213,12 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 			}
 			return this;
 		}
-
-		public AnimationBuilder ChangeDefinition(string definition) {
+		
+		public AnimationBuilder ChangeDefinition(string oldDefinition, string definition, bool all) {
 			for (Animation anim = animation; anim != null; anim = anim.NextStrip) {
 				for (int i = 0; i < anim.FrameCount; i++) {
 					AnimationFrame frame = anim.GetFrameAt(i);
-					if (frame.SourceDefinition != null)
+					if (all || frame.SourceDefinition == oldDefinition)
 						frame.SourceDefinition = definition;
 				}
 			}

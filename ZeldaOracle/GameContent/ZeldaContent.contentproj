@@ -168,18 +168,6 @@
       <Name>sprites</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sprites\Tiles\cliffs.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>cliffs</Name>
-    </None>
-    <None Include="Sprites\Tiles\cliffs_temp.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>cliffs_temp</Name>
-    </None>
-    <None Include="Sprites\Tiles\cliffs_tiles.conscript">
-      <Name>cliffs_tiles</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Sprites\Tiles\color_cube.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>color_cube</Name>
@@ -192,6 +180,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>floors_tiles</Name>
     </None>
+    <None Include="Sprites\Tiles\holes.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>holes</Name>
+    </None>
+    <None Include="Sprites\Tiles\lights.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>lights</Name>
+    </None>
     <None Include="Sprites\Tiles\objects_tiles.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>objects_tiles</Name>
@@ -203,6 +199,42 @@
     <None Include="Sprites\Tiles\stairs_tiles.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>stairs_tiles</Name>
+    </None>
+    <None Include="Sprites\Tiles\terrain.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>terrain</Name>
+    </None>
+    <None Include="Sprites\Tiles\Terrain\cliffs.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>cliffs</Name>
+    </None>
+    <None Include="Sprites\Tiles\Terrain\cliffs_temp.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>cliffs_temp</Name>
+    </None>
+    <None Include="Sprites\Tiles\Terrain\cliffs_tiles.conscript">
+      <Name>cliffs_tiles</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Terrain\fluids.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>fluids</Name>
+    </None>
+    <None Include="Sprites\Tiles\Terrain\ground.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>ground</Name>
+    </None>
+    <None Include="Sprites\Tiles\Terrain\obstacles.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>obstacles</Name>
+    </None>
+    <None Include="Sprites\Tiles\Terrain\sand.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>sand</Name>
+    </None>
+    <None Include="Sprites\Tiles\Terrain\vines.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>vines</Name>
     </None>
     <None Include="Sprites\Tiles\tunnels.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -267,6 +299,10 @@
     <None Include="Tilesets\tile_data.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>tile_data</Name>
+    </None>
+    <None Include="Tilesets\tilesets.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>tilesets</Name>
     </None>
     <None Include="Tilesets\town.conscript">
       <Name>town</Name>
@@ -408,21 +444,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Styles\cliff_parts.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>cliff_parts</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\cliff_railings.png">
-      <Name>cliff_railings</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\cliffs.png">
-      <Name>cliffs</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Tiles\Styles\cracked_floors.png">
       <Name>cracked_floors</Name>
       <Importer>TextureImporter</Importer>
@@ -472,11 +493,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Name>floors_square_tiles</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\fluids.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>fluids</Name>
     </Compile>
     <Compile Include="Images\Tiles\Styles\grasses.png">
       <Importer>TextureImporter</Importer>
@@ -563,10 +579,50 @@
       <Processor>TextureProcessor</Processor>
       <Name>switch_rocks</Name>
     </Compile>
-    <Compile Include="Images\Tiles\Styles\terrain.png">
+    <Compile Include="Images\Tiles\Styles\terrain_cliff_parts.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-      <Name>terrain</Name>
+      <Name>terrain_cliff_parts</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\terrain_cliff_railings.png">
+      <Name>terrain_cliff_railings</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\terrain_cliffs.png">
+      <Name>terrain_cliffs</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\terrain_fluids.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>terrain_fluids</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\terrain_ground.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>terrain_ground</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\terrain_obstacles.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>terrain_obstacles</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\terrain_sand.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>terrain_sand</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\terrain_vines.png">
+      <Name>terrain_vines</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\terrain_water_obstacles.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>terrain_water_obstacles</Name>
     </Compile>
     <Compile Include="Images\Tiles\Styles\tile_monsters.png">
       <Importer>TextureImporter</Importer>
@@ -597,11 +653,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Name>turnstile</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\vines.png">
-      <Name>vines</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
     </Compile>
     <Compile Include="Images\Tiles\Styles\wall_mini_columns.png">
       <Importer>TextureImporter</Importer>

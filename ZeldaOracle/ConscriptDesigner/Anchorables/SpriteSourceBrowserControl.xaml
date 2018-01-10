@@ -24,8 +24,8 @@
             <ComboBox x:Name="comboBoxSpriteSources" HorizontalAlignment="Stretch" Margin="0,1" SelectionChanged="OnSpriteSourceChanged" VerticalAlignment="Center"/>
         </ToolBar>
         <ToolBar DockPanel.Dock="Top">
-            <local:ImageToggleButton x:Name="buttonShowAnimations" Source="/ConscriptDesigner;component/Resources/Icons/ShowAnimations.png" Click="OnToggleAnimations" />
-            <local:ImageButton x:Name="buttonRestartAnimations" Source="/ConscriptDesigner;component/Resources/Icons/PlayAnimations.png" Click="OnRestartAnimations" IsEnabled="False"/>
+            <local:ImageToggleButton x:Name="buttonShowAnimations" Source="/ConscriptDesigner;component/Resources/Icons/ShowAnimations.png" Click="OnToggleAnimations" Focusable="False" IsTabStop="False" />
+            <local:ImageButton x:Name="buttonRestartAnimations" Source="/ConscriptDesigner;component/Resources/Icons/PlayAnimations.png" Click="OnRestartAnimations" IsEnabled="False" Focusable="False" IsTabStop="False"/>
         </ToolBar>
         <!--<StatusBar DockPanel.Dock="Bottom" Background="#FFF0F0F0">
             <StatusBarItem Height="44" VerticalContentAlignment="Top">

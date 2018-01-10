@@ -1,0 +1,101 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_obstacles"			"Tiles/Styles/terrain_obstacles"		(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_water_obstacles"	"Tiles/Styles/terrain_water_obstacles"	(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+MAPPEDCOLORS	"present", ("sand", "grave");
+
+SOURCE "temp_sheet_obstacles";
+SPRITESET "set_obstacles", (3, 5);
+	MULTIPLE COLOR "", ("dirt", "dirt_alt"), (0, 0), (0, 0), (3, 1); END;
+	
+	MULTIPLE BASIC (0, 1), (0, 1), (2, 1); END;
+	
+	MULTIPLE BASIC (0, 2), (0, 2), (2, 3); END;
+END;
+
+MAPPEDCOLORS	"present", ("water", "water_vegetation", "poison_bubble");
+
+SOURCE "temp_sheet_water_obstacles";
+SPRITESET "set_water_obstacles", (6, 5);
+	MULTIPLE STYLE "poison_bubble", (0, 0), (4, 1);
+		ADD "abovewater"		(0, 0);
+		ADD "underwater"		(0, 1);
+		END;
+		
+	MULTIPLE BASIC (0, 2), (0, 1), (4, 1); END;
+	
+	MULTIPLE COLOR "", ("water", "water_vegetation"), (0, 3), (0, 2), (2, 1); END;
+		
+	MULTIPLE BASIC (2, 3), (2, 2), (2, 1); END;
+	MULTIPLE BASIC (0, 4), (0, 3), (3, 1); END;
+	
+	MULTIPLE COLOR "", ("water", "water_vegetation"), (4, 0), (4, 0), (2, 3); END;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_obstacles";
+NAME "tile_boulder"						((0, 0), "dirt");
+NAME "tile_boulder_interior"			((1, 0), "dirt");
+NAME "tile_boulder_dungeon"				((2, 0), "dirt");
+NAME "tile_boulder_alt"					((0, 0), "dirt_alt");
+NAME "tile_boulder_alt_interior"		((1, 0), "dirt_alt");
+NAME "tile_boulder_alt_dungeon"			((2, 0), "dirt_alt");
+
+NAME "tile_coconut_northwest"			(0, 1);
+NAME "tile_coconut_northeast"			(1, 1);
+NAME "tile_tombstone_hole_right"		(0, 2);
+NAME "tile_tombstone_hole_left"			(1, 2);
+NAME "tile_tombstone_filled_right"		(0, 3);
+NAME "tile_tombstone_filled_left"		(1, 3);
+NAME "tile_tombstone_subrosia"			(0, 4);
+NAME "tile_tombstone_subrosia_dirt"		(1, 4);
+
+SOURCE "set_water_obstacles";
+ANIMATION "tile_whirlpool"; SUBSTRIP repeat;
+	ADD frame, 9, (0, 1); ADD frame, 4, (1, 1); ADD frame, 6, (2, 1); ADD frame, 6, (3, 1);
+	ADD frame, 6, (0, 1); ADD frame, 7, (1, 1); ADD frame, 5, (2, 1); ADD frame, 5, (3, 1);
+	ADD frame, 7, (0, 1); ADD frame, 5, (1, 1); ADD frame, 9, (2, 1); ADD frame, 3, (3, 1);
+	ADD frame, 7, (0, 1); ADD frame, 7, (1, 1); ADD frame, 5, (2, 1); ADD frame, 7, (3, 1);
+	ADD frame, 5, (0, 1); ADD frame, 5, (1, 1); ADD frame, 8, (2, 1); ADD frame, 4, (3, 1); END;
+	
+ANIMATION "tile_poison_bubble"; SUBSTRIP repeat;
+	ADD strip, 15, 4, (0, 0); END;
+	
+STYLEPREVIEW "poison_bubble", "tile_poison_bubble";
+
+NAME "tile_water_roots_right"			((0, 2), "water");
+NAME "tile_water_roots_left"			((1, 2), "water");
+NAME "tile_water_roots_alt_right"		((0, 2), "water_vegetation");
+NAME "tile_water_roots_alt_left"		((1, 2), "water_vegetation");
+NAME "tile_lilypad_right"				(0, 3);
+NAME "tile_lilypad_left"				(1, 3);
+NAME "tile_armos_sunk_deep"				(2, 2);
+NAME "tile_armos_sunk_shallow"			(3, 2);
+NAME "tile_water_boulder"				(2, 3);
+
+NAME "tile_water_tree_top_left_behind"		((4, 0), "water");
+NAME "tile_water_tree_top_right_behind"		((5, 0), "water");
+NAME "tile_water_tree_top_left"				((4, 1), "water");
+NAME "tile_water_tree_top_right"			((5, 1), "water");
+NAME "tile_water_tree_bottom_left"			((4, 2), "water");
+NAME "tile_water_tree_bottom_right"			((5, 2), "water");
+NAME "tile_water_tree_alt_top_left_behind"	((4, 0), "water_vegetation");
+NAME "tile_water_tree_alt_top_right_behind"	((5, 0), "water_vegetation");
+NAME "tile_water_tree_alt_top_left"			((4, 1), "water_vegetation");
+NAME "tile_water_tree_alt_top_right"		((5, 1), "water_vegetation");
+NAME "tile_water_tree_alt_bottom_left"		((4, 2), "water_vegetation");
+NAME "tile_water_tree_alt_bottom_right"		((5, 2), "water_vegetation");

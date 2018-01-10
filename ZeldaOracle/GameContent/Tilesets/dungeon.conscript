@@ -5,6 +5,68 @@
 
 SPRITESHEET "tileset_dungeon", (16, 16), (1, 1), (18, 18);
 
+#==============================================================
+# Tiles
+#==============================================================
+
+TILE "wall_outside_nw"; SAMESPRITE; SOLID block; END;
+TILE "wall_up"; SAMESPRITE; LEDGE block, up; END;
+TILE "wall_outside_ne"; SAMESPRITE; SOLID block; END;
+TILE "wall_left"; SAMESPRITE; LEDGE block, left; END;
+TILE "wall_right"; SAMESPRITE; LEDGE block, right; END;
+TILE "wall_outside_sw"; SAMESPRITE; SOLID block; END;
+TILE "wall_down"; SAMESPRITE; LEDGE block, down; END;
+TILE "wall_outside_se"; SAMESPRITE; SOLID block; END;
+TILE "wall_inside_nw"; SAMESPRITE; SOLID block; END;
+TILE "wall_inside_ne"; SAMESPRITE; SOLID block; END;
+TILE "wall_inside_sw"; SAMESPRITE; SOLID block; END;
+TILE "wall_inside_se"; SAMESPRITE; SOLID block; END;
+TILE "ceiling"; SAMESPRITE; SOLID block; END;
+TILE "stairs_down"; SAMESPRITE; ENVTYPE Stairs; END;
+TILE "stairs_up"; SAMESPRITE; ENVTYPE Stairs; END;
+TILE "stairs_left"; SAMESPRITE; ENVTYPE Stairs; END;
+TILE "stairs_right"; SAMESPRITE; ENVTYPE Stairs; END;
+
+TILE "fancy_tile_1"; SAMESPRITE; END;
+TILE "fancy_tile_2"; SAMESPRITE; END;
+TILE "fancy_tile_3"; SAMESPRITE; END;
+TILE "fancy_tile_4"; SAMESPRITE; END;
+TILE "fancy_tile_5"; SAMESPRITE; END;
+TILE "fancy_tile_6"; SAMESPRITE; END;
+TILE "fancy_tile_7"; SAMESPRITE; END;
+TILE "fancy_tile_8"; SAMESPRITE; END;
+TILE "fancy_tile_9"; SAMESPRITE; END;
+TILE "fancy_tile_10"; SAMESPRITE; END;
+
+TILE "statue"; SAMESPRITE; END;
+TILE "eye_statue_broken"; SAMESPRITE; END;
+TILE "essense_statue"; SAMESPRITE; END;
+TILE "block"; SPRITE "tile_movable_block"; END;
+
+TILE "jump_ledge_down"; SAMESPRITE; SOLID bridge_h_bottom; END;
+TILE "jump_ledge_up"; SAMESPRITE; SOLID bridge_h_top; END;
+TILE "jump_ledge_left"; SAMESPRITE; SOLID bridge_v_left; END;
+TILE "jump_ledge_right"; SAMESPRITE; SOLID bridge_v_right; END;
+
+TILE "pit_top"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "pit_mid"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "pit_bottom"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "pit_both"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "hole_top"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "hole_mid"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "hole_bottom"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "hole_both"; SAMESPRITE; ENVTYPE Hole; END;
+
+TILE "wall_staircase_up"; SAMESPRITE; SOLID doorway; END;
+TILE "wall_staircase_down"; SAMESPRITE; SOLID doorway; END;
+TILE "floor_staircase_up"; SAMESPRITE; END;
+TILE "floor_staircase_down"; SAMESPRITE; END;
+
+TILE "wall_torch_down"; SAMESPRITE; SOLID block; END;
+TILE "wall_torch_up"; SAMESPRITE; SOLID block; END;
+TILE "wall_torch_left"; SAMESPRITE; SOLID block; END;
+TILE "wall_torch_right"; SAMESPRITE; SOLID block; END;
+TILE "armos_statue"; SPRITE "tile_armos"; SPRITEOBJ "tile_armos_asobject"; SOLID block; END;
 
 #==============================================================
 # Tilesets
@@ -26,10 +88,67 @@ S.SHH.......
 END;
 
 # Ledges
-TILE (1, 0); LEDGE block, up; END;
-TILE (0, 1); LEDGE block, left; END;
-TILE (2, 1); LEDGE block, right; END;
-TILE (1, 2); LEDGE block, down; END;
+
+SETTILE (0, 0), "wall_outside_nw";
+SETTILE (1, 0), "wall_up";
+SETTILE (2, 0), "wall_outside_ne";
+SETTILE (0, 1), "wall_left";
+SETTILE (1, 1), "ceiling";
+SETTILE (2, 1), "wall_right";
+SETTILE (0, 2), "wall_outside_sw";
+SETTILE (1, 2), "wall_down";
+SETTILE (2, 2), "wall_outside_se";
+SETTILE (0, 3), "wall_inside_nw";
+SETTILE (1, 3), "stairs_down";
+SETTILE (2, 3), "wall_inside_ne";
+SETTILE (0, 4), "stairs_right";
+SETTILE (1, 4), "floor";
+SETTILE (2, 4), "stairs_left";
+SETTILE (0, 5), "wall_inside_sw";
+SETTILE (1, 5), "stairs_up";
+SETTILE (2, 5), "wall_inside_se";
+
+SETTILE (4, 0), "fancy_tile_1";
+SETTILE (5, 0), "fancy_tile_2";
+SETTILE (6, 0), "fancy_tile_3";
+SETTILE (7, 0), "fancy_tile_4";
+SETTILE (8, 0), "fancy_tile_5";
+
+SETTILE (4, 1), "fancy_tile_6";
+SETTILE (5, 1), "fancy_tile_7";
+SETTILE (6, 1), "fancy_tile_8";
+SETTILE (7, 1), "fancy_tile_9";
+SETTILE (8, 1), "fancy_tile_10";
+
+SETTILE (3, 2), "eye_statue_broken";
+SETTILE (4, 2), "statue";
+SETTILE (5, 2), "essense_statue";
+SETTILE (6, 2), "block";
+
+SETTILE (3, 3), "jump_ledge_down";
+SETTILE (3, 4), "jump_ledge_up";
+SETTILE (4, 3), "jump_ledge_right";
+SETTILE (4, 4), "jump_ledge_left";
+
+SETTILE (5, 3), "wall_staircase_up";
+SETTILE (6, 3), "wall_staircase_down";
+SETTILE (5, 4), "floor_staircase_up";
+SETTILE (6, 4), "floor_staircase_down";
+
+SETTILE (3, 5), "pit_top";
+SETTILE (3, 6), "pit_mid";
+SETTILE (3, 7), "pit_bottom";
+SETTILE (3, 8), "pit_both";
+SETTILE (4, 5), "hole_top";
+SETTILE (4, 6), "hole_mid";
+SETTILE (4, 7), "hole_bottom";
+SETTILE (4, 8), "hole_both";
+
+SETTILE (5, 5), "wall_torch_up";
+SETTILE (5, 6), "wall_torch_down";
+SETTILE (6, 5), "wall_torch_left";
+SETTILE (6, 6), "wall_torch_right";
+SETTILE (7, 6), "armos_statue";
 
 TILE (1, 9); LEDGE block, up; END;
 TILE (0, 10); LEDGE block, left; END;
@@ -44,14 +163,14 @@ TILE (1, 14); LEDGE block, down; END;
 # Irregular Collision Models
 TILE (0, 7); SOLID edge_s; END;
 TILE (2, 7); SOLID edge_s; END;
-TILE (5, 3); SOLID doorway; END;
-TILE (6, 3); SOLID doorway; END;
+#TILE (5, 3); SOLID doorway; END;
+#TILE (6, 3); SOLID doorway; END;
 
 # Wall Torches
-TILE (5, 5); SOLID block; SPRITE tile_wall_torch_up; END;
-TILE (6, 5); SOLID block; SPRITE tile_wall_torch_left; END;
-TILE (5, 6); SOLID block; SPRITE tile_wall_torch_down; END;
-TILE (6, 6); SOLID block; SPRITE tile_wall_torch_right; END;
+#TILE (5, 5); SOLID block; SPRITE tile_wall_torch_up; END;
+#TILE (6, 5); SOLID block; SPRITE tile_wall_torch_left; END;
+#TILE (5, 6); SOLID block; SPRITE tile_wall_torch_down; END;
+#TILE (6, 6); SOLID block; SPRITE tile_wall_torch_right; END;
 
 # Railings 1
 TILE ( 9, 0); HALFSOLID corner_nw; END;
@@ -82,13 +201,13 @@ TILE ( 7, 5); HALFSOLID inside_corner_sw; END;
 TILE ( 8, 5); HALFSOLID inside_corner_se; END;
 
 # Color Blocks
-SETTILE ( 9, 6), color_block_red;
-SETTILE (10, 6), color_block_blue;
-SETTILE (11, 6), color_block_yellow;
+SETTILE ( 9, 6), "color_block_red";
+SETTILE (10, 6), "color_block_blue";
+SETTILE (11, 6), "color_block_yellow";
 
 # Color Statues
-SETTILE ( 9, 7), color_statue_red;
-SETTILE (10, 7), color_statue_blue;
-SETTILE (11, 7), color_statue_yellow;
+SETTILE ( 9, 7), "color_statue_red";
+SETTILE (10, 7), "color_statue_blue";
+SETTILE (11, 7), "color_statue_yellow";
 
 END;

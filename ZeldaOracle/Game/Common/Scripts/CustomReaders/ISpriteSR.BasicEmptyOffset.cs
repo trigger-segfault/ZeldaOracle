@@ -173,7 +173,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			AddCommand("SINGLE BASIC", (int) Modes.SpriteSet,
 				"Point sourceIndex",
-				"Point sourceIndex, Point2I setIndex, Point drawOffset = (0, 0), string flip = none, string rotation = none",
+				"Point sourceIndex, Point setIndex, Point drawOffset = (0, 0), string flip = none, string rotation = none",
 			delegate (CommandParam parameters) {
 				Point2I sourceIndex = parameters.GetPoint(0);
 				editingSetStart = parameters.GetPoint(1, sourceIndex);
@@ -216,7 +216,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("CLONE SINGLE BASIC", (int) Modes.SpriteSet,
-				"Point sourceIndex, Point2I setIndex",
+				"Point sourceIndex, Point setIndex",
 			delegate (CommandParam parameters) {
 				Point2I sourceIndex = parameters.GetPoint(0);
 				editingSetStart = parameters.GetPoint(1);

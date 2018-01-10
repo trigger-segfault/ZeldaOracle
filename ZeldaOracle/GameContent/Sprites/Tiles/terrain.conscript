@@ -1,0 +1,9 @@
+﻿
+LOAD "Terrain/cliffs.conscript", true;
+LOAD "Terrain/cliffs_temp.conscript", true;
+LOAD "Terrain/cliffs_tiles.conscript", true;
+LOAD "Terrain/ground.conscript", true;
+LOAD "Terrain/sand.conscript", true;
+LOAD "Terrain/vines.conscript", true;
+LOAD "Terrain/fluids.conscript", true;
+LOAD "Terrain/obstacles.conscript", true;

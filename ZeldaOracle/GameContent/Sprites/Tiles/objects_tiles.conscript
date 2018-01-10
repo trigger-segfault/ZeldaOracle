@@ -82,8 +82,10 @@ SPRITESET "set_grasses" (1, 2);
 	
 	MAPPEDCOLORS	"present", ("grass");
 	SINGLE STYLE "grass" (0, 1);
-		ADD "normal"		(0, 1);
-		ADD "maku_tree"		(0, 2);
+		ADD "present"		(0, 1);
+		ADD "past"			(0, 2);
+		ADD "seasons"		(0, 3);
+		ADD "maku_tree"		(0, 4);
 		END;
 END;
 
@@ -211,6 +213,11 @@ NAME "tile_movable_block"			(0, 0);
 NAME "tile_movable_block_asobject"	(1, 0);
 NAME "tile_bombable_block"			(2, 0);
 
+COMPOSITE "temp_preview_block_style";
+	ADD "tile_movable_block", (0, 0); ADD "tile_bombable_block", (16, 0); END;
+
+STYLEPREVIEW "block", "temp_preview_block_style";
+
 # Burnable Trees ==============================================
 
 SOURCE "temp_sheet_burnable_trees";
@@ -257,6 +264,10 @@ SOURCE "set_magnet_stones";
 NAME "tile_magnet_stone_north"		(0, 0);
 NAME "tile_magnet_stone_south"		(1, 0);
 
+COMPOSITE "temp_preview_magnet_stone_style";
+	ADD "tile_magnet_stone_north", (0, 0); ADD "tile_magnet_stone_south", (16, 0); END;
+	
+STYLEPREVIEW "magnet_stone", "temp_preview_magnet_stone_style";
 
 # Pots ========================================================
 
@@ -292,6 +303,8 @@ NAME "tile_flowers_blue"			((2, 0), "flower_blue");
 NAME "tile_flowers_pink"			((2, 0), "flower_pink");
 NAME "tile_flower"					(2, 1);
 NAME "tile_flower_water"			(2, 2);
+COMPOSITE "tile_jump_flower";
+	COMBINE "tile_ground"; REMOVE 3; REMOVE 2; ADD (2, 3); END;
 
 NAME "tile_ages_portal"				(3, 0);
 NAME "tile_soft_soil"				(3, 1);

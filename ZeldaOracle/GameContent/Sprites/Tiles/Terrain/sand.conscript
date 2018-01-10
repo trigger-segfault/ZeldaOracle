@@ -1,0 +1,259 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_sand"				"Tiles/Styles/terrain_sand"			(8, 8), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+SOURCE "temp_sheet_sand";
+SPRITESET "set_sand", (10, 12);
+	MAPPEDCOLORS	"present", ("sand");
+	MULTIPLE STYLE "sandflow", (0, 0), (8, 4);
+		ADD "northwest"		(0, 0);
+		ADD "northeast"		(0, 4);
+		END;
+END;
+
+#==============================================================
+# Temp
+#==============================================================
+
+SOURCE "set_sand";
+
+NAME "temp_8x8_sand_fade_nw"					(0, 0);
+NAME "temp_8x8_sand_fade_n_1"					(1, 0);
+NAME "temp_8x8_sand_fade_n_2"					(2, 0);
+NAME "temp_8x8_sand_fade_ne"					(3, 0);
+NAME "temp_8x8_sand_fade_w_1"					(0, 1);
+NAME "temp_8x8_sand_fade_w_2"					(0, 2);
+NAME "temp_8x8_sand_fade_e_1"					(3, 1);
+NAME "temp_8x8_sand_fade_e_2"					(3, 2);
+NAME "temp_8x8_sand_fade_sw"					(0, 3);
+NAME "temp_8x8_sand_fade_s_1"					(1, 3);
+NAME "temp_8x8_sand_fade_s_2"					(2, 3);
+NAME "temp_8x8_sand_fade_se"					(3, 3);
+NAME "temp_8x8_sand_1"							(1, 1);
+NAME "temp_8x8_sand_2"							(2, 1);
+NAME "temp_8x8_sand_3"							(1, 2);
+NAME "temp_8x8_sand_4"							(2, 2);
+
+NAME "temp_8x8_sand_fade_inside_nw"				(4, 0);
+NAME "temp_8x8_sand_fade_inside_n_1"			(5, 0);
+NAME "temp_8x8_sand_fade_inside_n_2"			(6, 0);
+NAME "temp_8x8_sand_fade_inside_ne"				(7, 0);
+NAME "temp_8x8_sand_fade_inside_w_1"			(4, 1);
+NAME "temp_8x8_sand_fade_inside_w_2"			(4, 2);
+NAME "temp_8x8_sand_fade_inside_e_1"			(7, 1);
+NAME "temp_8x8_sand_fade_inside_e_2"			(7, 2);
+NAME "temp_8x8_sand_fade_inside_sw"				(4, 3);
+NAME "temp_8x8_sand_fade_inside_s_1"			(5, 3);
+NAME "temp_8x8_sand_fade_inside_s_2"			(6, 3);
+NAME "temp_8x8_sand_fade_inside_se"				(7, 3);
+
+#==============================================================
+# Tiles
+#==============================================================
+	
+COMPOSITE "tile_sand";
+	ADD "temp_8x8_sand_1", (0, 0);
+	ADD "temp_8x8_sand_2", (8, 0);
+	ADD "temp_8x8_sand_3", (0, 8);
+	ADD "temp_8x8_sand_4", (8, 8);
+	END;
+	
+COMPOSITE "tile_sand_fade_nw";
+	COMBINE "tile_ground_blank";
+	REPLACE 3, "temp_8x8_sand_fade_nw";
+	END;
+	
+COMPOSITE "tile_sand_fade_n";
+	COMBINE "tile_ground_blank";
+	REPLACE 2, "temp_8x8_sand_fade_n_1";
+	REPLACE 3, "temp_8x8_sand_fade_n_2";
+	END;
+	
+COMPOSITE "tile_sand_fade_ne";
+	COMBINE "tile_ground_blank";
+	REPLACE 2, "temp_8x8_sand_fade_ne";
+	END;
+	
+COMPOSITE "tile_sand_fade_w";
+	COMBINE "tile_ground_blank";
+	REPLACE 1, "temp_8x8_sand_fade_w_1";
+	REPLACE 3, "temp_8x8_sand_fade_w_2";
+	END;
+	
+COMPOSITE "tile_sand_fade_e";
+	COMBINE "tile_ground_blank";
+	REPLACE 0, "temp_8x8_sand_fade_e_1";
+	REPLACE 2, "temp_8x8_sand_fade_e_2";
+	END;
+	
+COMPOSITE "tile_sand_fade_sw";
+	COMBINE "tile_ground_blank";
+	REPLACE 1, "temp_8x8_sand_fade_sw";
+	END;
+	
+COMPOSITE "tile_sand_fade_s";
+	COMBINE "tile_ground_blank";
+	REPLACE 0, "temp_8x8_sand_fade_s_1";
+	REPLACE 1, "temp_8x8_sand_fade_s_2";
+	END;
+	
+COMPOSITE "tile_sand_fade_se";
+	COMBINE "tile_ground_blank";
+	REPLACE 0, "temp_8x8_sand_fade_se";
+	END;
+	
+	
+COMPOSITE "tile_sand_border_outside_nw";
+	COMBINE "tile_sand_fade_nw";
+	REPLACE 0, "temp_8x8_sand_border_outside_nw";
+	REPLACE 1, "temp_8x8_sand_border_n";
+	REPLACE 2, "temp_8x8_sand_border_w";
+	END;
+	
+COMPOSITE "tile_sand_border_n";
+	COMBINE "tile_sand_fade_n";
+	REPLACE 0, "temp_8x8_sand_border_n";
+	REPLACE 1, "temp_8x8_sand_border_n";
+	END;
+	
+COMPOSITE "tile_sand_border_outside_ne";
+	COMBINE "tile_sand_fade_ne";
+	REPLACE 0, "temp_8x8_sand_border_n";
+	REPLACE 1, "temp_8x8_sand_border_outside_ne";
+	REPLACE 3, "temp_8x8_sand_border_e";
+	END;
+	
+COMPOSITE "tile_sand_border_w";
+	COMBINE "tile_sand_fade_w";
+	REPLACE 0, "temp_8x8_sand_border_w";
+	REPLACE 2, "temp_8x8_sand_border_w";
+	END;
+	
+COMPOSITE "tile_sand_border_e";
+	COMBINE "tile_sand_fade_e";
+	REPLACE 1, "temp_8x8_sand_border_e";
+	REPLACE 3, "temp_8x8_sand_border_e";
+	END;
+	
+COMPOSITE "tile_sand_border_outside_sw";
+	COMBINE "tile_sand_fade_sw";
+	REPLACE 0, "temp_8x8_sand_border_w";
+	REPLACE 2, "temp_8x8_sand_border_outside_sw";
+	REPLACE 3, "temp_8x8_sand_border_s";
+	END;
+	
+COMPOSITE "tile_sand_border_s";
+	COMBINE "tile_sand_fade_s";
+	REPLACE 2, "temp_8x8_sand_border_s";
+	REPLACE 3, "temp_8x8_sand_border_s";
+	END;
+	
+COMPOSITE "tile_sand_border_outside_se";
+	COMBINE "tile_sand_fade_se";
+	REPLACE 1, "temp_8x8_sand_border_e";
+	REPLACE 2, "temp_8x8_sand_border_s";
+	REPLACE 3, "temp_8x8_sand_border_outside_se";
+	END;
+	
+COMPOSITE "tile_sand_border_outside_nsw";
+	ADD "temp_8x8_sand_border_outside_nw", (0, 0);
+	ADD "temp_8x8_sand_border_n", (8, 0);
+	ADD "temp_8x8_sand_border_outside_sw", (0, 8);
+	ADD "temp_8x8_sand_border_s", (8, 8);
+	END;
+	
+COMPOSITE "tile_sand_border_ns";
+	ADD "temp_8x8_sand_border_n", (0, 0);
+	ADD "temp_8x8_sand_border_n", (8, 0);
+	ADD "temp_8x8_sand_border_s", (0, 8);
+	ADD "temp_8x8_sand_border_s", (8, 8);
+	END;
+	
+COMPOSITE "tile_sand_border_outside_nse";
+	ADD "temp_8x8_sand_border_n", (0, 0);
+	ADD "temp_8x8_sand_border_outside_ne", (8, 0);
+	ADD "temp_8x8_sand_border_s", (0, 8);
+	ADD "temp_8x8_sand_border_outside_se", (8, 8);
+	END;
+	
+COMPOSITE "tile_sand_border_outside_new";
+	ADD "temp_8x8_sand_border_outside_nw", (0, 0);
+	ADD "temp_8x8_sand_border_outside_ne", (8, 0);
+	ADD "temp_8x8_sand_border_w", (0, 8);
+	ADD "temp_8x8_sand_border_e", (8, 8);
+	END;
+	
+COMPOSITE "tile_sand_border_ew";
+	ADD "temp_8x8_sand_border_w", (0, 0);
+	ADD "temp_8x8_sand_border_e", (8, 0);
+	ADD "temp_8x8_sand_border_w", (0, 8);
+	ADD "temp_8x8_sand_border_e", (8, 8);
+	END;
+	
+COMPOSITE "tile_sand_border_outside_sew";
+	ADD "temp_8x8_sand_border_w", (0, 0);
+	ADD "temp_8x8_sand_border_e", (8, 0);
+	ADD "temp_8x8_sand_border_outside_sw", (0, 8);
+	ADD "temp_8x8_sand_border_outside_se", (8, 8);
+	END;
+	
+COMPOSITE "tile_sand_border_nsew";
+	ADD "temp_8x8_sand_border_outside_nw", (0, 0);
+	ADD "temp_8x8_sand_border_outside_ne", (8, 0);
+	ADD "temp_8x8_sand_border_outside_sw", (0, 8);
+	ADD "temp_8x8_sand_border_outside_se", (8, 8);
+	END;
+	
+COMPOSITE "tile_sand_border_inside_nw";
+	ADD "temp_8x8_sand_border_inside_nw", (8, 8);
+	ADD "temp_8x8_sand_fade_inside_nw", (0, 0);
+	ADD "temp_8x8_sand_fade_inside_n_1", (8, 0);
+	ADD "temp_8x8_sand_fade_inside_w_1", (0, 8);
+	END;
+	
+COMPOSITE "tile_sand_border_inside_ne";
+	ADD "temp_8x8_sand_border_inside_ne", (0, 8);
+	ADD "temp_8x8_sand_fade_inside_ne", (8, 0);
+	ADD "temp_8x8_sand_fade_inside_n_2", (0, 0);
+	ADD "temp_8x8_sand_fade_inside_e_1", (8, 8);
+	END;
+	
+COMPOSITE "tile_sand_border_inside_sw";
+	ADD "temp_8x8_sand_border_inside_sw", (8, 0);
+	ADD "temp_8x8_sand_fade_inside_sw", (0, 8);
+	ADD "temp_8x8_sand_fade_inside_s_1", (8, 8);
+	ADD "temp_8x8_sand_fade_inside_w_2", (0, 0);
+	END;
+	
+COMPOSITE "tile_sand_border_inside_se";
+	ADD "temp_8x8_sand_border_inside_se", (0, 0);
+	ADD "temp_8x8_sand_fade_inside_se", (8, 8);
+	ADD "temp_8x8_sand_fade_inside_s_2", (0, 8);
+	ADD "temp_8x8_sand_fade_inside_e_2", (8, 0);
+	END;
+	
+COMPOSITE "temp_preview_sandflow_style";
+	ADD "tile_sand_border_outside_nw", (0, 0);
+	ADD "tile_sand_border_n", (16, 0);
+	ADD "tile_sand_border_outside_ne", (32, 0);
+	ADD "tile_sand_border_w", (0, 16);
+	ADD "tile_sand", (16, 16);
+	ADD "tile_sand_border_e", (32, 16);
+	ADD "tile_sand_border_outside_sw", (0, 32,);
+	ADD "tile_sand_border_s", (16, 32,);
+	ADD "tile_sand_border_outside_se", (32, 32,);
+	END;
+	
+STYLEPREVIEW "sandflow", "temp_preview_sandflow_style";
+	
+	

@@ -61,6 +61,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		/// <summary>Gets the drawable parts for the sprite.</summary>
 		public IEnumerable<SpritePart> GetParts(SpriteDrawSettings settings) {
 			Rectangle2I bounds = Bounds;
+			if (sprite == null)
+				yield break;
 			foreach (SpritePart part in sprite.GetParts(settings)) {
 				yield return new SpritePart(part, drawOffset, flipEffects, rotation, bounds);
 			}
@@ -73,12 +75,18 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		
 		/// <summary>Gets the draw boundaries of the sprite.</summary>
 		public Rectangle2I GetBounds(SpriteDrawSettings settings) {
+			if (sprite == null)
+				return Rectangle2I.Zero;
 			return sprite.GetBounds(settings) + drawOffset;
 		}
 
 		/// <summary>Gets the draw boundaries of the sprite.</summary>
 		public Rectangle2I Bounds {
-			get { return sprite.Bounds + drawOffset; }
+			get {
+				if (sprite == null)
+					return Rectangle2I.Zero;
+				return sprite.Bounds + drawOffset;
+			}
 		}
 
 		//-----------------------------------------------------------------------------

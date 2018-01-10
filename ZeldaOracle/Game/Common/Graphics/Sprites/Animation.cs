@@ -87,6 +87,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			}
 			for (int i = 0; i < frames.Count; ++i) {
 				AnimationFrame frame = frames[i];
+				if (frame.Sprite == null)
+					continue;
 				if (time >= frame.StartTime && (time < frame.EndTime || (time >= duration && frame.StartTime + frame.Duration == duration))) {
 					foreach (SpritePart part in frame.OffsetSprite.GetParts(settings)) {
 						yield return part;
@@ -106,6 +108,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			float time = settings.PlaybackTime;
 			for (int i = 0; i < frames.Count; ++i) {
 				AnimationFrame frame = frames[i];
+				if (frame.Sprite == null)
+					continue;
 				//if (time < frame.StartTime)
 				//	return bounds;
 				if (time >= frame.StartTime && (time < frame.EndTime || (time >= duration && frame.StartTime + frame.Duration == duration))) {
@@ -123,6 +127,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			get {
 				Rectangle2I bounds = Rectangle2I.Zero;
 				foreach (AnimationFrame frame in frames) {
+					if (frame.Sprite == null)
+						continue;
 					if (bounds.IsEmpty)
 						bounds = frame.Sprite.Bounds + frame.DrawOffset;
 					else

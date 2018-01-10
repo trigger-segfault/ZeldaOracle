@@ -47,10 +47,10 @@ END;
 
 SOURCE "set_stairs";
 
-NAME "tile_stairs_up_n"		(0, 0);
-NAME "tile_stairs_up_s"		(1, 0);
-NAME "tile_stairs_up_e"		(2, 0);
-NAME "tile_stairs_up_w"		(3, 0);
+NAME "tile_stairs_down"				(0, 0);
+NAME "tile_stairs_up"				(1, 0);
+NAME "tile_stairs_left"				(2, 0);
+NAME "tile_stairs_right"			(3, 0);
 
 NAME "tile_floor_staircase_up"		(0, 1);
 NAME "tile_floor_staircase_down"	(1, 1);

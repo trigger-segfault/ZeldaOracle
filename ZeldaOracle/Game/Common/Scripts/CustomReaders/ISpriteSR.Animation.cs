@@ -354,10 +354,19 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			// Changes the definition for all definition sprites
 			AddCommand("CHANGEDEFINITION", (int) Modes.Animation,
-				"string definition",
+				"const all, string newDefinition",
 			delegate (CommandParam parameters) {
-				animationBuilder.ChangeDefinition(
-					parameters.GetString(0));
+				string definition = parameters.GetString(1);
+				animationBuilder.ChangeDefinition(null, definition, true);
+			});
+			//=====================================================================================
+			// Changes the definition for all definition sprites
+			AddCommand("CHANGEDEFINITION", (int) Modes.Animation,
+				"string oldDefinition, string newDefinition",
+			delegate (CommandParam parameters) {
+				string oldDefinition = parameters.GetString(0);
+				string definition = parameters.GetString(1);
+				animationBuilder.ChangeDefinition(oldDefinition, definition, false);
 			});
 			//=====================================================================================
 		}

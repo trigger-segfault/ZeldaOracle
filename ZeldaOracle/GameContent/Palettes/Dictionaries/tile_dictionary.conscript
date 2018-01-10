@@ -94,6 +94,7 @@ TILE	web;
 TILE	bridge;
 TILE	ice_crystal_pit;
 TILE	lava_mouth;
+TILE	output;
 
 #==============================================================
 # Fluids
@@ -102,6 +103,7 @@ TILE	lava_mouth;
 TILE	ice;
 TILE	ice_cracked;
 TILE	water;
+TILE	water_vegetation;
 TILE	lava;
 TILE	sand;
 TILE	poison_bubble;
@@ -115,6 +117,7 @@ TILE	tree_trunk;
 TILE	tree_leaves;
 TILE	tree_trunk_leaves;
 TILE	grass_field;
+TILE	grass_border;
 TILE	dirt;
 TILE	dirt_alt;
 TILE	grass_flower;

@@ -1,0 +1,87 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_lanterns"				"Tiles/Styles/lanterns"					(16, 8), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_torches"				"Tiles/Styles/torches"					(8, 8), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+MAPPEDCOLORS	"present", ("lantern_light", "lantern_base");
+
+SOURCE "temp_sheet_lanterns";
+SPRITESET "set_lanterns", (6, 1);
+	MULTIPLE STYLE "lantern";
+		ADD "overworld"		(0, 0);
+		ADD "dungeon"		(0, 1);
+		ADD "cave"			(0, 2);
+		ADD "interior"		(0, 3);
+		END;
+END;
+
+MAPPEDCOLORS	"present", ("torch_light", "torch_base");
+SOURCE "temp_sheet_torches";
+SPRITESET "set_torches", (4, 2);
+	MULTIPLE BASIC (0, 0), (0, 0), (4, 1); END;
+
+	MULTIPLE STYLE "wall_torch", (0, 1), (4, 1);
+		ADD "dungeon"		(0, 1);
+		ADD "interior"		(0, 2);
+		ADD "sea"			(0, 3);
+		ADD "subrosia"		(0, 4);
+		END;
+END;
+
+#==============================================================
+# 8x8's
+#==============================================================
+
+SOURCE "set_torches";
+ANIMATION "torch_light_8x8"; SUBSTRIP repeat;
+	ADD strip, 16, 4, (0, 0), (0, 0);
+	ADD frame, 16,    (2, 0), (0, 0);
+	ADD frame, 16,    (1, 0), (0, 0); END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_lanterns";
+COMPOSITE "tile_lantern_unlit";
+	ADD (0, 0), (0, 0);
+	ADD (5, 0), (0, 8);
+	END;
+	
+ANIMATION "tile_lantern_lit"; SUBSTRIP repeat;
+	ADD strip, 16, 4, (1, 0);
+	ADD static, (5, 0), (0, 8);
+	END;
+
+ANIMATION "temp_preview_lantern_style"; SUBSTRIP repeat;
+	COMBINE "tile_lantern_lit", (0, 0);
+	ADD static, "tile_lantern_unlit", (16, 0);
+	END;
+	
+STYLEPREVIEW "lantern", "temp_preview_lantern_style";
+
+SOURCE "set_torches";
+ANIMATION "tile_wall_torch_down"; SUBSTRIP repeat;
+	COMBINE "torch_light_8x8", (0, 0); ADD static, (0, 1), (0, 8);
+	COMBINE "torch_light_8x8", (8, 0); ADD static, (0, 1), (8, 8); END;
+ANIMATION "tile_wall_torch_up"; SUBSTRIP repeat;
+	COMBINE "torch_light_8x8", (0, 8); ADD static, (1, 1), (0, 0);
+	COMBINE "torch_light_8x8", (8, 8); ADD static, (1, 1), (8, 0); END;
+ANIMATION "tile_wall_torch_left"; SUBSTRIP repeat;
+	COMBINE "torch_light_8x8", (8, 0); ADD static, (2, 1), (0, 0);
+	COMBINE "torch_light_8x8", (8, 8); ADD static, (2, 1), (0, 8); END;
+ANIMATION "tile_wall_torch_right"; SUBSTRIP repeat;
+	COMBINE "torch_light_8x8", (0, 0); ADD static, (3, 1), (8, 0);
+	COMBINE "torch_light_8x8", (0, 8); ADD static, (3, 1), (8, 8); END;
+	
+STYLEPREVIEW "wall_torch", "tile_wall_torch_down";

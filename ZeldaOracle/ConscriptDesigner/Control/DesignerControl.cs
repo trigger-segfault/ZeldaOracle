@@ -301,11 +301,12 @@ namespace ConscriptDesigner.Control {
 				UpdateContentFolder(project);
 
 				Resources.Initialize(contentManager, graphicsDevice);
-				GameData.Initialize();
-
-				Console.WriteLine("Loading Rewards");
 				rewardManager = new RewardManager(null);
-				GameData.LoadRewards(rewardManager);
+				GameData.Initialize(rewardManager);
+
+				//Console.WriteLine("Loading Rewards");
+				//rewardManager = new RewardManager(null);
+				//GameData.LoadRewards(rewardManager);
 
 				Console.WriteLine("----------------------------------------------------------------");
 				Console.WriteLine("Finished! Duration: " + watch.Elapsed.RoundUpToNearestSecond().ToString(@"hh\:mm\:ss"));

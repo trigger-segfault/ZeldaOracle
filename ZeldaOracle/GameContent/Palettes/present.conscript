@@ -144,6 +144,7 @@ LOOKUP	bridge, all			floor, all;
 
 LOOKUP	ice_crystal_pit, all	stairs, all;
 LOOKUP	lava_mouth, all			stairs, all;
+LOOKUP	output, all			cliff, all;
 
 #==============================================================
 # Fluids
@@ -152,6 +153,8 @@ LOOKUP	lava_mouth, all			stairs, all;
 COLOR	water, light	(248,248,192);
 COLOR	water, medium	( 32,176,248);
 COLOR	water, dark		(  0, 80,176);
+LOOKUP	water_vegetation, all	water, all;
+COLOR	water_vegetation, dark	( 48,136,112);
 
 LOOKUP	ice, all			water, all;
 LOOKUP	ice_cracked, all	snow, all;
@@ -182,6 +185,8 @@ LOOKUP	grass_field, light	cliff, light;
 COLOR	grass_field, medium	(128,224, 16);
 COLOR	grass_field, dark	( 48,136,  0);
 
+LOOKUP	grass_border, all	grass_field, all;
+
 COLOR	vines_light, light	( 40,128,  0);
 LOOKUP	vines_light, medium	cliff, light;
 LOOKUP	vines_light, dark	cliff, dark;
@@ -198,9 +203,9 @@ LOOKUP	hole, all			cliff, all;
 LOOKUP	hole_alt, all		cliff, all;
 
 LOOKUP	grass_flower, all			grass_field, all;
-COLOR	grass_flower_alt, light		(240, 40,160);
+LOOKUP	grass_flower_alt, light		water, light;
 LOOKUP	grass_flower_alt, medium	grass_field, medium;
-LOOKUP	grass_flower_alt, dark		grass_field, dark;
+LOOKUP	grass_flower_alt, dark		flower_pink, dark;
 
 LOOKUP	seedling_sprout, all		grass_field, all;
 

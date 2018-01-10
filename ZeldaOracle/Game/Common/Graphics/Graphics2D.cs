@@ -207,6 +207,8 @@ namespace ZeldaOracle.Common.Graphics {
 			if (sprite == null) return;
 			foreach (SpritePart part in sprite.GetParts(new SpriteDrawSettings(variantID))) {
 				Image image = part.Image.GetVariant(variantID);
+				if (image.Texture.IsDisposed)
+					Console.Write("");
 				spriteBatch.Draw(image, NewPos(position) + (Vector2) part.CenterDrawOffset, (Rectangle) part.SourceRect,
 					XnaColor.White, part.RotationRadians, (Vector2) part.Center, 1.0f, (SpriteEffects) part.FlipEffects, depth);
 			}
@@ -223,6 +225,8 @@ namespace ZeldaOracle.Common.Graphics {
 		public void DrawSprite(ISprite sprite, Vector2F position, float depth = 0.0f) {
 			if (sprite == null) return;
 			foreach (SpritePart part in sprite.GetParts(SpriteDrawSettings.Default)) {
+				if (part.Image.Texture.IsDisposed)
+					Console.Write("");
 				spriteBatch.Draw(part.Image, NewPos(position) + (Vector2) part.CenterDrawOffset, (Rectangle) part.SourceRect,
 					XnaColor.White, part.RotationRadians, (Vector2) part.Center, 1.0f, (SpriteEffects) part.FlipEffects, depth);
 			}
@@ -236,6 +240,8 @@ namespace ZeldaOracle.Common.Graphics {
 			if (sprite == null) return;
 			foreach (SpritePart part in sprite.GetParts(new SpriteDrawSettings(variantID))) {
 				Image image = part.Image.GetVariant(variantID);
+				if (image.Texture.IsDisposed)
+					Console.Write("");
 				destination.Point = NewPos(destination.Point) + (Vector2F) part.DrawOffset;
 				spriteBatch.Draw(image, (Rectangle) destination, (Rectangle) part.SourceRect,
 					XnaColor.White, 0.0f, Vector2.Zero, SpriteEffects.None, depth);
@@ -246,6 +252,8 @@ namespace ZeldaOracle.Common.Graphics {
 			if (sprite == null) return;
 			foreach (SpritePart part in sprite.GetParts(new SpriteDrawSettings(variantID))) {
 				Image image = part.Image.GetVariant(variantID);
+				if (image.Texture.IsDisposed)
+					Console.Write("");
 				spriteBatch.Draw(image, NewPos(position) + (Vector2) part.CenterDrawOffset, (Rectangle) part.SourceRect,
 					(XnaColor) color, part.RotationRadians, (Vector2) part.Center, 1.0f, (SpriteEffects) part.FlipEffects, depth);
 			}
@@ -262,6 +270,8 @@ namespace ZeldaOracle.Common.Graphics {
 		public void DrawSprite(ISprite sprite, Vector2F position, Color color, float depth = 0.0f) {
 			if (sprite == null) return;
 			foreach (SpritePart part in sprite.GetParts(SpriteDrawSettings.Default)) {
+				if (part.Image.Texture.IsDisposed)
+					Console.Write("");
 				spriteBatch.Draw(part.Image, NewPos(position) + (Vector2) part.CenterDrawOffset, (Rectangle)part.SourceRect,
 					(XnaColor)color, part.RotationRadians, (Vector2) part.Center, 1.0f, (SpriteEffects) part.FlipEffects, depth);
 			}
@@ -276,6 +286,8 @@ namespace ZeldaOracle.Common.Graphics {
 			foreach (SpritePart part in sprite.GetParts(new SpriteDrawSettings(variantID))) {
 				Image image = part.Image.GetVariant(variantID);
 				destination.Point = NewPos(destination.Point) + (Vector2F)part.DrawOffset;
+				if (image.Texture.IsDisposed)
+					Console.Write("");
 				spriteBatch.Draw(image, (Rectangle)destination, (Rectangle)part.SourceRect,
 					(XnaColor) color, 0.0f, Vector2.Zero, SpriteEffects.None, depth);
 			}
@@ -393,6 +405,8 @@ namespace ZeldaOracle.Common.Graphics {
 			if (sprite == null) return;
 			foreach (SpritePart part in sprite.GetParts(settings)) {
 				Image image = part.Image.GetVariant(settings.VariantID);
+				if (image.Texture.IsDisposed)
+					Console.Write("");
 				spriteBatch.Draw(image, NewPos(position) + (Vector2) part.CenterDrawOffset, (Rectangle) part.SourceRect,
 					(XnaColor) color, part.RotationRadians, (Vector2) part.Center, 1.0f, (SpriteEffects) part.FlipEffects, depth);
 			}
@@ -402,6 +416,8 @@ namespace ZeldaOracle.Common.Graphics {
 			if (sprite == null) return;
 			foreach (SpritePart part in sprite.GetParts(settings)) {
 				Image image = part.Image.GetVariant(settings.VariantID);
+				if (image.Texture.IsDisposed)
+					Console.Write("");
 				destination.Point = NewPos(destination.Point) + part.CenterDrawOffset;
 				spriteBatch.Draw(image, (Rectangle) destination, (Rectangle) part.SourceRect,
 					(XnaColor) color, part.RotationRadians, (Vector2) part.Center, (SpriteEffects) part.FlipEffects, depth);

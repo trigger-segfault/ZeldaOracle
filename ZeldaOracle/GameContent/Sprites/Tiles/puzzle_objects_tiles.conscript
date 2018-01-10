@@ -166,11 +166,21 @@ SOURCE "set_chests";
 NAME "tile_chest"				(0, 0);
 NAME "tile_chest_opened"		(1, 0);
 
+COMPOSITE "temp_preview_chest_style";
+	ADD "tile_chest", (0, 0); ADD "tile_chest_opened", (16, 0); END;
+
+STYLEPREVIEW "chest", "temp_preview_chest_style";
+
 # Buttons =====================================================
 
 SOURCE "set_buttons";
 NAME "tile_button_up"			(0, 0);
 NAME "tile_button_down"			(1, 0);
+
+COMPOSITE "temp_preview_button_style";
+	ADD "tile_button_up", (0, 0); ADD "tile_button_down", (16, 0); END;
+
+STYLEPREVIEW "button", "temp_preview_button_style";
 
 # Minecart Tracks =============================================
 
@@ -414,24 +424,19 @@ ANIMATION "tile_pull_handle";
 	SUBSTRIP repeat; ADD frame, 1, "tile_pull_handle_left";
 	SUBSTRIP repeat; ADD frame, 1, "tile_pull_handle_down"; END;
 
-NAME "tile_trampoline"						(0, 4);
-NAME "tile_trampoline_normal"				("tile_trampoline", "blue");
-NAME "tile_trampoline_super"				("tile_trampoline", "red");
+NAME "tile_trampoline"						((0, 4), "blue");
+NAME "tile_trampoline_super"				((0, 4), "red");
 
-ANIMATION "tile_trampoline_bounce";
-	SUBSTRIP clamp;
-		ADD frame, 12, (1, 4); ADD frame,  2, (0, 4);
-		ADD frame,  8, (2, 4); ADD frame,  1, (0, 4); END;
-		
-ANIMATION "tile_trampoline_normal_bounce";
-	SUBSTRIP clamp;
-		ADD frame, 12, ((1, 4), "blue"); ADD frame,  2, ((0, 4), "blue");
-		ADD frame,  8, ((2, 4), "blue"); ADD frame,  1, ((0, 4), "blue"); END;
+ANIMATION "tile_trampoline_bounce"; SUBSTRIP clamp;
+	ADD frame, 12, (1, 4); ADD frame,  2, (0, 4);
+	ADD frame,  8, (2, 4); ADD frame,  1, (0, 4);
+	CHANGEDEFINITION all, "blue";
+	END;
 		
 ANIMATION "tile_trampoline_super_bounce";
-	SUBSTRIP clamp;
-		ADD frame, 12, ((1, 4), "red"); ADD frame,  2, ((0, 4), "red");
-		ADD frame,  8, ((2, 4), "red"); ADD frame,  1, ((0, 4), "red"); END;
+	CLONE "tile_trampoline_bounce";
+	CHANGEDEFINITION all, "red";
+	END;
 		
 NAME "tile_shatter_crystal"					(3, 4);
 NAME "tile_shatter_crystal_broken"			(4, 4);
