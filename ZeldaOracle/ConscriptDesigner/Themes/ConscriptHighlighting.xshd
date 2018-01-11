@@ -244,6 +244,7 @@
       <Word>EVENT</Word>
       <Word>SPRITE</Word>
       <Word>SAMESPRITE</Word>
+      <Word>SAMESPRITEOBJ</Word>
       <Word>SIZE</Word>
       <Word>SPRITEINDEX</Word>
       <Word>SPRITELIST</Word>

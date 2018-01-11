@@ -62,7 +62,7 @@ TILE	mushroom_asobject;
 TILE	flower_red;
 TILE	flower_blue;
 TILE	flower_pink;
-TILE	flower_water;
+TILE	water_flower;
 
 TILE	ages_portal;
 TILE	soft_soil;
@@ -86,7 +86,7 @@ TILE	lever;
 TILE	button;
 TILE	hardened_lava;
 TILE	tile_monster;
-TILE	spikes;
+TILE	floor_spikes;
 TILE	arrow_shooter;
 TILE	fire_shooter;
 TILE	minecart_track;
@@ -156,7 +156,7 @@ TILE	roof_green;
 TILE	roof_chimney;
 TILE	house_wall;
 TILE	vasu_sign;
-
+TILE	witch_hut;
 
 #==============================================================
 # Decoration

@@ -91,9 +91,9 @@ COLOR	flower_blue, dark		(  0,168,248);
 LOOKUP	flower_pink, all		flower_red, all;
 COLOR	flower_pink, dark		(240, 40,160);
 
-LOOKUP	flower_water, light		water, light;
-LOOKUP	flower_water, medium	water, medium;
-LOOKUP	flower_water, dark		flower_pink, dark;
+LOOKUP	water_flower, light		water, light;
+LOOKUP	water_flower, medium	water, medium;
+LOOKUP	water_flower, dark		flower_pink, dark;
 
 LOOKUP	ages_portal, all		cliff, all;
 LOOKUP	soft_soil, all			cliff, all;
@@ -134,7 +134,7 @@ LOOKUP	lever, all			chest, all;
 LOOKUP	button, all			water, all;
 LOOKUP	hardened_lava, all	cliff, all;
 LOOKUP	tile_monster, all	cliff, all;
-LOOKUP	spikes, all			cliff, all;
+LOOKUP	floor_spikes, all			cliff, all;
 LOOKUP	arrow_shooter, all	stairs, all;
 LOOKUP	fire_shooter, all	stairs, all;
 LOOKUP	minecart_track, all	floor, all;
@@ -222,6 +222,12 @@ LOOKUP	jump_flower, all		grass_field, all;
 
 LOOKUP	thicK_brush, all		grass_field, all;
 LOOKUP	hedges, all				grass_field, all;
+
+#==============================================================
+# Town
+#==============================================================
+
+LOOKUP	witch_hut, all			stairs, all;
 
 #==============================================================
 # Decoration

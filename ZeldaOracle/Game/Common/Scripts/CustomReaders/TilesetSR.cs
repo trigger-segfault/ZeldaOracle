@@ -313,12 +313,20 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				}
 			});
 			//=====================================================================================
-			AddCommand("SameSprite",
+			AddCommand("SAMESPRITE",
 				"",
 			delegate (CommandParam parameters) {
 				if (baseTileData == null)
-					ThrowCommandParseError("Cannot call SpriteSame without editing tile data");
+					ThrowCommandParseError("Cannot call SAMESPRITE without editing tile data");
 				baseTileData.Sprite = GetResource<ISprite>("tile_" + baseTileData.Name);
+			});
+			//=====================================================================================
+			AddCommand("SAMESPRITEOBJ",
+				"",
+			delegate (CommandParam parameters) {
+				if (tileData == null)
+					ThrowCommandParseError("Cannot call SAMESPRITEOBJ without editing tile data");
+				tileData.SpriteAsObject = GetResource<ISprite>("tile_" + baseTileData.Name + "_asobject");
 			});
 			//=====================================================================================
 			AddCommand("Size", "(int width, int height)", delegate(CommandParam parameters) {

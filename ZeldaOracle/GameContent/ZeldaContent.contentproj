@@ -236,6 +236,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>vines</Name>
     </None>
+    <None Include="Sprites\Tiles\trees.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>trees</Name>
+    </None>
     <None Include="Sprites\Tiles\tunnels.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>tunnels</Name>

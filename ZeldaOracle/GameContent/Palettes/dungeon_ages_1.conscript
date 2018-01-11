@@ -89,7 +89,7 @@ LOOKUP	lever, all			statue, all;
 LOOKUP	button, all			floor, all;
 LOOKUP	hardened_lava, all	pot, all;
 LOOKUP	tile_monster, all	railings, all;
-LOOKUP	spikes, all			railings, all;
+LOOKUP	floor_spikes, all			railings, all;
 LOOKUP	arrow_shooter, all	railings, all;
 LOOKUP	minecart_track, all	floor, all;
 LOOKUP	web, all			floor, all;

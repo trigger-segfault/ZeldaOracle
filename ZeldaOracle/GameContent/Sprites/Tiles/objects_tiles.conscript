@@ -173,7 +173,7 @@ SPRITESET "set_natural_objects" (5, 4);
 	MAPPEDCOLORS	"present", ("flower_pink");
 	SINGLE COLOR	"", ("flower_red", "flower_blue", "flower_pink"), (2, 0); END;
 	
-	MAPPEDCOLORS	"present", ("flower_pink", "flower_water");
+	MAPPEDCOLORS	"present", ("flower_pink", "water_flower");
 	MULTIPLE BASIC	(2, 1), (2, 1), (1, 2); END;
 	
 	MAPPEDCOLORS	"present", ("ages_portal");
@@ -302,7 +302,7 @@ NAME "tile_flowers_red"				((2, 0), "flower_red");
 NAME "tile_flowers_blue"			((2, 0), "flower_blue");
 NAME "tile_flowers_pink"			((2, 0), "flower_pink");
 NAME "tile_flower"					(2, 1);
-NAME "tile_flower_water"			(2, 2);
+NAME "tile_water_flower"			(2, 2);
 COMPOSITE "tile_jump_flower";
 	COMBINE "tile_ground"; REMOVE 3; REMOVE 2; ADD (2, 3); END;
 

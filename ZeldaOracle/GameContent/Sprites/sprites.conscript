@@ -5,6 +5,7 @@ SOURCE "temp_sheet_black_8x8";
 BASIC "black_8x8" (0, 0); END;
 
 LOAD "Tiles/terrain.conscript" false;
+LOAD "Tiles/trees.conscript" false;
 LOAD "Tiles/stairs_tiles.conscript" false;
 LOAD "Tiles/objects_tiles.conscript" false;
 LOAD "Tiles/puzzle_objects_tiles.conscript" false;
@@ -88,7 +89,7 @@ BASIC event_tile_tile_path_puzzle,		(3, 1); END;
 # Tile Sprites
 #==============================================================
 
-SOURCE "color_cube";
+#SOURCE "color_cube";
 
 #BASIC color_cube_blue_yellow,		(0, 0); END;
 #BASIC color_cube_blue_red,			(1, 0); END;
@@ -156,8 +157,8 @@ SOURCE "zoneset_large";
 #BASIC tile_grave_asobject,					(11, 3); END;
 #BASIC tile_grave_alt_asobject,				(12, 3); END;
 
-BASIC tile_default,					( 0, 4); END;
-BASIC tile_background,				( 1, 4); END;
+#BASIC tile_default,					( 0, 4); END;
+#BASIC tile_background,				( 1, 4); END;
 #BASIC tile_grass,					( 2, 4); END;
 #BASIC tile_leaves,					( 3, 4); END;
 #BASIC tile_dug,						( 4, 4); END;

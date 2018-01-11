@@ -170,7 +170,7 @@ LOOKUP	attack_tile, all		barrier, all;
 
 LOOKUP	turnstile, all		object, all;
 
-LOOKUP	spikes, all		barrier, all;
+LOOKUP	floor_spikes, all		barrier, all;
 
 LOOKUP	arrow_shooter, all		barrier, all;
 

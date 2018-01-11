@@ -68,7 +68,7 @@ SPRITESET "set_traps", (5, 4);
 	MAPPEDCOLORS	"present", ("fire_shooter");
 	MULTIPLE BASIC (2, 2), (2, 2), (2, 2); END;
 	
-	MAPPEDCOLORS	"present", ("spikes");
+	MAPPEDCOLORS	"present", ("floor_spikes");
 	MULTIPLE BASIC (4, 0), (4, 0), (1, 4); END;
 END;
 
@@ -215,7 +215,7 @@ NAME "tile_fire_shooter_down"				(2, 3);
 NAME "tile_fire_shooter_left"				(3, 2);
 NAME "tile_fire_shooter_right"				(3, 3);
 
-ANIMATION "tile_spikes";
+ANIMATION "tile_floor_spikes";
 	ADD strip, 15, 4, (4, 0), relative: (0, 1);
 	ADD frame, 15, (4, 2); ADD frame, 15, (4, 1); END;
 	
