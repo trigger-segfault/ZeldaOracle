@@ -1,0 +1,93 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_doors"					"Tiles/Styles/doors"					(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+# Chests ======================================================
+
+MAPPEDCOLORS	"tiles_default", ("door");
+
+SOURCE "temp_sheet_doors";
+SPRITESET "set_doors", (8, 6);
+	MULTIPLE BASIC (0, 0) (0, 1), (4, 5); END;
+	
+	# Door raising
+	SOURCE "set_doors";
+	CLONE MULTIPLE BASIC (0, 1), (4, 1), (1, 5);
+		SOURCERECT (0, 8), (16, 8);
+		DRAWOFFSET (0, 0);
+		END;
+		
+	CLONE MULTIPLE BASIC (1, 1), (5, 1), (1, 5);
+		SOURCERECT (0, 0), (16, 8);
+		DRAWOFFSET (0, 8);
+		END;
+		
+	CLONE MULTIPLE BASIC (2, 1), (6, 1), (1, 5);
+		SOURCERECT (0, 0), (8, 16);
+		DRAWOFFSET (8, 0);
+		END;
+		
+	CLONE MULTIPLE BASIC (3, 1), (7, 1), (1, 5);
+		SOURCERECT (8, 0), (8, 16);
+		DRAWOFFSET (0, 0);
+		END;
+		
+	MULTIPLE STYLE "door", (0, 0), (8, 1);
+		ADD "dungeon"	(0, 2);
+		ADD "interior"	(0, 1);
+		END;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_doors";
+ANIMATION "tile_door_closed";
+	SUBSTRIP repeat; ADD frame, 1, (3, 0);
+	SUBSTRIP repeat; ADD frame, 1, (1, 0);
+	SUBSTRIP repeat; ADD frame, 1, (2, 0);
+	SUBSTRIP repeat; ADD frame, 1, (0, 0); END;
+	
+ANIMATION "tile_door_close";
+	SUBSTRIP clamp; ADD frame, 6, (7, 0); ADD frame, 6, (3, 0);
+	SUBSTRIP clamp; ADD frame, 6, (5, 0); ADD frame, 6, (1, 0);
+	SUBSTRIP clamp; ADD frame, 6, (6, 0); ADD frame, 6, (2, 0);
+	SUBSTRIP clamp; ADD frame, 6, (4, 0); ADD frame, 6, (0, 0); END;
+	
+ANIMATION "tile_door_open";
+	SUBSTRIP clamp; ADD frame, 6, (7, 0); ADD emptyframe, 6;
+	SUBSTRIP clamp; ADD frame, 6, (5, 0); ADD emptyframe, 6;
+	SUBSTRIP clamp; ADD frame, 6, (6, 0); ADD emptyframe, 6;
+	SUBSTRIP clamp; ADD frame, 6, (4, 0); ADD emptyframe, 6; END;
+	
+ANIMATION "tile_minecart_door_closed";
+	CLONE "tile_door_closed"; SHIFTSOURCE (0, 3); END;
+ANIMATION "tile_minecart_door_close";
+	CLONE "tile_door_close"; SHIFTSOURCE (0, 3); END;
+ANIMATION "tile_minecart_door_open";
+	CLONE "tile_door_open"; SHIFTSOURCE (0, 3); END;
+	
+ANIMATION "tile_small_key_door_closed";
+	CLONE "tile_door_closed"; SHIFTSOURCE (0, 4); END;
+ANIMATION "tile_small_key_door_close";
+	CLONE "tile_door_close"; SHIFTSOURCE (0, 4); END;
+ANIMATION "tile_small_key_door_open";
+	CLONE "tile_door_open"; SHIFTSOURCE (0, 4); END;
+	
+ANIMATION "tile_boss_key_door_closed";
+	CLONE "tile_door_closed"; SHIFTSOURCE (0, 5); END;
+ANIMATION "tile_boss_key_door_close";
+	CLONE "tile_door_close"; SHIFTSOURCE (0, 5); END;
+ANIMATION "tile_boss_key_door_open";
+	CLONE "tile_door_open"; SHIFTSOURCE (0, 5); END;

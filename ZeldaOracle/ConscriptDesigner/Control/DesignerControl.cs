@@ -22,6 +22,8 @@ using Xceed.Wpf.AvalonDock.Layout;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Game;
+using ZeldaOracle.Game.Items.Rewards;
+using ZeldaOracle.Game.Worlds;
 
 namespace ConscriptDesigner.Control {
 	public static class DesignerControl {
@@ -43,6 +45,12 @@ namespace ConscriptDesigner.Control {
 		private static List<IRequestCloseAnchorable> openAnchorables;
 		private static List<IRequestCloseAnchorable> closingAnchorables;
 
+		private static RewardManager rewardManager;
+
+		private static Zone previewZone;
+		private static string previewZoneID;
+		private static List<string> previewZones;
+
 
 		//-----------------------------------------------------------------------------
 		// Initialization
@@ -59,6 +67,10 @@ namespace ConscriptDesigner.Control {
 			closingAnchorables = new List<IRequestCloseAnchorable>();
 			updateTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.05), DispatcherPriority.ApplicationIdle, delegate { Update(); }, Application.Current.Dispatcher);
 			modifiedTimer = new DispatcherTimer(TimeSpan.FromSeconds(3), DispatcherPriority.ApplicationIdle, delegate { CheckForOutdatedFiles(); }, Application.Current.Dispatcher);
+
+			previewZone = null;
+			previewZoneID = "";
+			previewZones = new List<string>();
 		}
 
 		public static void SetGraphics(GraphicsDevice graphicsDevice, ContentManager contentManager) {
@@ -81,6 +93,8 @@ namespace ConscriptDesigner.Control {
 		public static event EventHandler ResourcesLoaded;
 
 		public static event EventHandler ActiveAnchorableChanged;
+
+		public static event EventHandler PreviewZoneChanged;
 
 		//-----------------------------------------------------------------------------
 		// Anchorables
@@ -147,8 +161,11 @@ namespace ConscriptDesigner.Control {
 					CommandManager.InvalidateRequerySuggested();
 					if (FinishedBuilding != null)
 						FinishedBuilding(null, EventArgs.Empty);
-					if (busyTaskIsConscripts && ResourcesLoaded != null)
-						ResourcesLoaded(null, EventArgs.Empty);
+					if (busyTaskIsConscripts) {
+						LoadPreviewZones();
+						if (ResourcesLoaded != null)
+							ResourcesLoaded(null, EventArgs.Empty);
+					}
 				}
 			}
 			if (closingAnchorables.Any()) {
@@ -292,13 +309,19 @@ namespace ConscriptDesigner.Control {
 			if (mainWindow.OutputConsole != null)
 				mainWindow.OutputConsole.Clear();
 			Resources.Uninitialize();
-			
+
 			try {
 				Stopwatch watch = Stopwatch.StartNew();
 				UpdateContentFolder(project);
 
 				Resources.Initialize(contentManager, graphicsDevice);
-				GameData.Initialize();
+				rewardManager = new RewardManager(null);
+				GameData.Initialize(rewardManager);
+
+				//Console.WriteLine("Loading Rewards");
+				//rewardManager = new RewardManager(null);
+				//GameData.LoadRewards(rewardManager);
+
 				Console.WriteLine("----------------------------------------------------------------");
 				Console.WriteLine("Finished! Duration: " + watch.Elapsed.RoundUpToNearestSecond().ToString(@"hh\:mm\:ss"));
 			}
@@ -358,6 +381,18 @@ namespace ConscriptDesigner.Control {
 				else
 					File.Delete(Path.Combine(folder.OutputFilePath, leftoverFile));
 			}
+		}
+		
+		private static void LoadPreviewZones() {
+			foreach (var pair in Resources.GetResourceDictionary<Zone>()) {
+				previewZones.Add(pair.Key);
+			}
+			previewZones.Sort((a, b) => AlphanumComparator.Compare(a, b, true));
+			if (!Resources.ContainsResource<Zone>(previewZoneID)) {
+				if (previewZones.Any())
+					previewZoneID = previewZones[0];
+			}
+			previewZone = Resources.GetResource<Zone>(previewZoneID);
 		}
 
 
@@ -539,6 +574,8 @@ namespace ConscriptDesigner.Control {
 				busyTaskIsConscripts = true;
 				if (ResourcesUnloaded != null)
 					ResourcesUnloaded(null, EventArgs.Empty);
+				previewZones.Clear();
+				previewZone = null;
 				busyTask = Task.Run(() => RunConscriptsTask());
 				CommandManager.InvalidateRequerySuggested();
 			}
@@ -663,6 +700,30 @@ namespace ConscriptDesigner.Control {
 
 		public static bool IsGraphicsLoaded {
 			get { return graphicsDevice != null && contentManager != null; }
+		}
+
+		public static RewardManager RewardManager {
+			get { return rewardManager; }
+		}
+
+		public static IEnumerable<string> PreviewZones {
+			get { return previewZones; }
+		}
+
+		public static string PreviewZoneID {
+			get { return previewZoneID; }
+			set {
+				if (previewZoneID != value) {
+					previewZoneID = value;
+					previewZone = Resources.GetResource<Zone>(previewZoneID);
+					if (PreviewZoneChanged != null)
+						PreviewZoneChanged(null, EventArgs.Empty);
+				}
+			}
+		}
+
+		public static Zone PreviewZone {
+			get { return previewZone; }
 		}
 	}
 }

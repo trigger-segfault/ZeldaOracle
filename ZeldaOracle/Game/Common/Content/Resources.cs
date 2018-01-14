@@ -38,6 +38,25 @@ namespace ZeldaOracle.Common.Content {
 		}
 	}
 
+	public class StyleGroupCollection {
+		public string Group { get; }
+		public HashSet<string> Styles { get; }
+		public ISprite Preview { get; set; }
+
+		public bool HasPreview {
+			get { return Preview != null; }
+		}
+		public bool HasStyles {
+			get { return Styles.Any(); }
+		}
+
+		public StyleGroupCollection(string group, StyleSprite preview) {
+			this.Group		= group;
+			this.Styles		= new HashSet<string>();
+			this.Preview	= preview;
+		}
+	}
+
 	/// <summary>
 	/// The Resources class serves as a resource manager.
 	/// It has methods to load in resources from the game
@@ -80,6 +99,7 @@ namespace ZeldaOracle.Common.Content {
 
 		/// <summary>The collection of loaded collision models.</summary>
 		private static Dictionary<string, CollisionModel> collisionModels;
+		private static Dictionary<string, BaseTileData> baseTileData;
 		private static Dictionary<string, Tileset> tilesets;
 		private static Dictionary<string, TileData> tileData;
 		private static Dictionary<string, EventTileset> eventTilesets;
@@ -100,6 +120,10 @@ namespace ZeldaOracle.Common.Content {
 		// SETTINGS:
 		/// <summary>True if the resource manager should output load information to the console.</summary>
 		private static bool verboseOutput;
+
+		// STYLE PREVIEWS:
+		/// <summary>The list of registered style groups along with their previews for each style.</summary>
+		private static Dictionary<string, StyleGroupCollection> registeredStyles;
 
 
 		//-----------------------------------------------------------------------------
@@ -162,6 +186,7 @@ namespace ZeldaOracle.Common.Content {
 			languages			= new List<Language>();
 
 			collisionModels		= new Dictionary<string, CollisionModel>();
+			baseTileData        = new Dictionary<string, BaseTileData>();
 			tilesets			= new Dictionary<string, Tileset>();
 			tileData			= new Dictionary<string, TileData>();
 			eventTilesets		= new Dictionary<string, EventTileset>();
@@ -172,6 +197,9 @@ namespace ZeldaOracle.Common.Content {
 
 			// Settings
 			verboseOutput		= false;
+
+			// Style previews
+			registeredStyles	= new Dictionary<string, StyleGroupCollection>();
 
 			// Setup the resource dictionary lookup map.
 			resourceDictionaries = new Dictionary<Type, object>();
@@ -185,6 +213,7 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries[typeof(Sound)]				= sounds;
 			resourceDictionaries[typeof(Song)]				= songs;
 			resourceDictionaries[typeof(CollisionModel)]	= collisionModels;
+			resourceDictionaries[typeof(BaseTileData)]		= baseTileData;
 			resourceDictionaries[typeof(Tileset)]			= tilesets;
 			resourceDictionaries[typeof(TileData)]			= tileData;
 			resourceDictionaries[typeof(EventTileset)]		= eventTilesets;
@@ -222,6 +251,8 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries = null;
 			palettedSpriteDatabase = null;
 			textureLoader = null;
+
+			registeredStyles = null;
 		}
 
 		//-----------------------------------------------------------------------------
@@ -245,15 +276,17 @@ namespace ZeldaOracle.Common.Content {
 		}
 
 		/// <summary>Get the resource with the given name and type.</summary>
-		public static T GetResource<T>(string name) {
-			if (name.Length == 0)
+		public static T GetResource<T>(string name, bool allowEmptyNames = false) {
+			if (name.Length == 0 && !allowEmptyNames)
 				return default(T);
 			if (!ContainsResourceType<T>())
 				return default(T); // This type of resource doesn't exist!
 			Dictionary<string, T> dictionary = (Dictionary<string, T>) resourceDictionaries[typeof(T)];
 			//if (!dictionary.ContainsKey(name))
 			//	return default(T); // A resource with the given name doesn't exist!
-			return dictionary[name];
+			T result;
+			dictionary.TryGetValue(name, out result);
+			return result;
 		}
 
 		/// <summary>Get the resource with the given name and type.</summary>
@@ -269,6 +302,55 @@ namespace ZeldaOracle.Common.Content {
 			if (!ContainsResourceType<T>())
 				return null; // This type of resource doesn't exist!
 			return (Dictionary<string, T>) resourceDictionaries[typeof(T)];
+		}
+
+		/// <summary>Gets the list of resource keys for the given type of resource.</summary>
+		public static List<string> GetResourceKeyList(Type type) {
+			if (type == typeof(Image))
+				return GetResourceKeyList<Image>();
+			if (type == typeof(RealFont))
+				return GetResourceKeyList<RealFont>();
+			if (type == typeof(GameFont))
+				return GetResourceKeyList<GameFont>();
+			if (type == typeof(ISpriteSource))
+				return GetResourceKeyList<ISpriteSource>();
+			if (type == typeof(ISprite))
+				return GetResourceKeyList<ISprite>();
+			if (type == typeof(Animation))
+				return GetResourceKeyList<Animation>();
+			if (type == typeof(Effect))
+				return GetResourceKeyList<Effect>();
+			if (type == typeof(Sound))
+				return GetResourceKeyList<Sound>();
+			if (type == typeof(Song))
+				return GetResourceKeyList<Song>();
+
+			if (type == typeof(CollisionModel))
+				return GetResourceKeyList<CollisionModel>();
+			if (type == typeof(BaseTileData))
+				return GetResourceKeyList<BaseTileData>();
+			if (type == typeof(Tileset))
+				return GetResourceKeyList<Tileset>();
+			if (type == typeof(TileData))
+				return GetResourceKeyList<TileData>();
+			if (type == typeof(EventTileset))
+				return GetResourceKeyList<EventTileset>();
+			if (type == typeof(EventTileData))
+				return GetResourceKeyList<EventTileData>();
+			if (type == typeof(Zone))
+				return GetResourceKeyList<Zone>();
+
+			if (type == typeof(PaletteDictionary))
+				return GetResourceKeyList<PaletteDictionary>();
+			if (type == typeof(Palette))
+				return GetResourceKeyList<Palette>();
+
+			return new List<string>();
+		}
+
+		/// <summary>Gets the list of resource keys for the given type of resource.</summary>
+		public static List<string> GetResourceKeyList<T>() {
+			return ((Dictionary<string, T>) resourceDictionaries[typeof(T)]).Keys.ToList();
 		}
 
 		/// <summary>Is the given type of resource handled by this class?</summary>
@@ -508,6 +590,13 @@ namespace ZeldaOracle.Common.Content {
 			LoadScript(assetName, new TilesetSR());
 		}
 
+		/// <summary>Loads/compiles zones from a script file.</summary>
+		/// <param name="postTileData">Set to false when loading zones right after palettes in-case of an error
+		/// in order to continue previewing sprites with a specific zone.</param>
+		public static void LoadZones(string assetName, bool postTileData) {
+			LoadScript(assetName, new ZoneSR(postTileData));
+		}
+
 		/// <summary>Loads a sound effect.</summary>
 		public static Sound LoadSound(string assetName) {
 			string name = assetName.Substring(assetName.IndexOf('/') + 1);
@@ -616,6 +705,87 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>Adds the specified language.</summary>
 		public static void AddLanguage(Language language) {
 			languages.Add(language);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Style Previews
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the preview sprite for the specified style group's style.</summary>
+		public static ISprite GetStylePreview(string styleGroup) {
+			StyleGroupCollection collection;
+			if (registeredStyles.TryGetValue(styleGroup, out collection)) {
+				return collection.Preview;
+			}
+			return null;
+		}
+
+		/// <summary>Returns true if the specified style group is registered.</summary>
+		public static bool ContainsStyleGroup(string styleGroup) {
+			StyleGroupCollection collection;
+			if (registeredStyles.TryGetValue(styleGroup, out collection)) {
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>Returns true if the specified style group's style is registered.</summary>
+		public static bool ContainsStyle(string styleGroup, string style) {
+			StyleGroupCollection collection;
+			if (registeredStyles.TryGetValue(styleGroup, out collection)) {
+				return collection.Styles.Contains(style);
+			}
+			return false;
+		}
+
+		/// <summary>Registers the style group if it does not exist.</summary>
+		public static void RegisterStyleGroup(string styleGroup, StyleSprite originalSprite) {
+			if (!registeredStyles.ContainsKey(styleGroup)) {
+				registeredStyles.Add(styleGroup, new StyleGroupCollection(styleGroup, originalSprite));
+			}
+		}
+
+		/// <summary>Registers the style group's preview if it does not exist.</summary>
+		public static void RegisterStylePreview(string styleGroup, ISprite preview) {
+			StyleGroupCollection collection;
+			if (registeredStyles.TryGetValue(styleGroup, out collection)) {
+				if (!collection.HasPreview)
+					collection.Preview = preview;
+			}
+			else {
+				throw new Exception("Unknown style group '" + styleGroup + "'!");
+			}
+		}
+
+		/// <summary>Registers the style group's style and preview sprite if it does not exist.</summary>
+		public static void RegisterStyle(string styleGroup, string style) {
+			StyleGroupCollection collection;
+			if (registeredStyles.TryGetValue(styleGroup, out collection)) {
+				if (!collection.Styles.Contains(style))
+					collection.Styles.Add(style);
+			}
+			else {
+				throw new Exception("Unknown style group '" + styleGroup + "'!");
+			}
+		}
+
+		/// <summary>Sets the style group's preview sprite for all styles.</summary>
+		public static void SetStylePreview(string styleGroup, ISprite preview) {
+			StyleGroupCollection collection;
+			if (registeredStyles.TryGetValue(styleGroup, out collection)) {
+				collection.Preview = preview;
+			}
+			else {
+				throw new Exception("Unknown style group '" + styleGroup + "'!");
+			}
+		}
+
+		/// <summary>Gets the collection of registered style groups, styles, and previews.</summary>
+		public static IEnumerable<StyleGroupCollection> GetRegisteredStyles() {
+			foreach (var pair in registeredStyles) {
+				yield return pair.Value;
+			}
 		}
 
 

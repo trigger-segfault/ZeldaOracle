@@ -1,0 +1,180 @@
+﻿#==============================================================
+# Sprite Sheets
+#==============================================================
+
+SPRITESHEET	"temp_sheet_floors_overworld"		"Tiles/Styles/floors_overworld"			(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_floors_square_tiles"	"Tiles/Styles/floors_square_tiles"		(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_floors_interior"		"Tiles/Styles/floors_interior"			(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_floors_dungeon"			"Tiles/Styles/floors_dungeon"			(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_floors_bricks"			"Tiles/Styles/floors_bricks"			(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_floors_square_patterns"	"Tiles/Styles/floors_square_patterns"	(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_floors_bright_patterns"	"Tiles/Styles/floors_bright_patterns"	(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_floors_misc_patterns"	"Tiles/Styles/floors_misc_patterns"		(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Setup
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS	((255, 0, 0), (1, 1, 1));
+
+MAPPEDCOLORS	"tiles_default", ("floor");
+
+#==============================================================
+# Color Multistyle
+#==============================================================
+
+COLORMULTISTYLE "floor_styles", (("floor", "floor"),
+	("fancy_tile_1", "fancy_tile_1"), ("fancy_tile_2", "fancy_tile_2"),
+	("fancy_tile_3", "fancy_tile_3"), ("fancy_tile_4", "fancy_tile_4"),
+	("fancy_tile_5", "fancy_tile_5"), ("fancy_tile_6", "fancy_tile_6"),
+	("fancy_tile_7", "fancy_tile_7"), ("fancy_tile_8", "fancy_tile_8"),
+	("fancy_tile_9", "fancy_tile_9"), ("fancy_tile_10", "fancy_tile_10"));
+	
+# Overworld ===================================================
+	
+	SOURCE "temp_sheet_floors_overworld";
+	ADD "overworld_diamond"			(0, 0);
+	ADD "overworld_brick"			(1, 0);
+	
+# Square Tiles ================================================
+
+	SOURCE "temp_sheet_floors_square_tiles";
+	ADD "square_tiles_1"			(0, 0);
+	ADD "square_tiles_2"			(1, 0);
+	ADD "square_tiles_3"			(2, 0);
+	ADD "square_tiles_4"			(3, 0);
+	ADD "square_tiles_5"			(0, 1);
+	ADD "square_tiles_6"			(1, 1);
+	ADD "square_tiles_7"			(2, 1);
+	
+# Interior ====================================================
+
+	SOURCE "temp_sheet_floors_interior";
+	ADD "interior_wood"				(0, 0);
+	ADD "interior_wood_alt"			(1, 0);
+	ADD "interior_fancy"			(2, 0);
+	ADD "interior_board_cover"		(3, 0);
+	ADD "interior_zora"				(0, 1);
+	ADD "interior_subrosia"			(1, 1);
+	ADD "interior_cave_alt_1"		(2, 1);
+	ADD "interior_cave_alt_2"		(3, 1);
+	ADD "interior_fairy"			(0, 2);
+	
+# Dungeon =====================================================
+
+	SOURCE "temp_sheet_floors_dungeon";
+	ADD "dungeon_spirits_grave"		(0, 0);
+	ADD "dungeon_wing_dungeon"		(1, 0);
+	ADD "dungeon_moonlit_grotto"	(2, 0);
+	ADD "dungeon_skull_dungeon"		(3, 0);
+	ADD "dungeon_crown_dungeon"		(0, 1);
+	ADD "dungeon_mermaids_cave"		(1, 1);
+	ADD "dungeon_jabu_jabu"			(2, 1);
+	ADD "dungeon_ancient_tomb"		(3, 1);
+	ADD "dungeon_gnarled_root"		(0, 2);
+	ADD "dungeon_snakes_remains"	(1, 2);
+	ADD "dungeon_poison_moths_lair"	(2, 2);
+	ADD "dungeon_dancing_dragon"	(3, 2);
+	ADD "dungeon_unicorns_cave"		(0, 3);
+	ADD "dungeon_ancient_ruins"		(1, 3);
+	ADD "dungeon_explorers_crypt"	(2, 3);
+	ADD "dungeon_sword_n_shield"	(3, 3);
+	ADD "dungeon_black_tower"		(0, 4);
+	ADD "dungeon_maku_path"			(1, 4);
+	ADD "dungeon_maku_path_alt_1"	(2, 4);
+	ADD "dungeon_maku_path_alt_2"	(3, 4);
+	ADD "dungeon_ganons_dungeon"		(0, 5);
+	ADD "dungeon_ganons_dungeon_alt"	(1, 5);
+	ADD "dungeon_queen_ambis_palace"	(2, 5);
+	ADD "dungeon_bones"					(3, 5);
+	
+# Bricks ======================================================
+
+	SOURCE "temp_sheet_floors_bricks";
+	ADD "bricks_diagonal_northeast"	(0, 0);
+	ADD "bricks_diagonal_northwest"	(1, 0);
+	ADD "bricks_diagonal_southeast"	(2, 0);
+	ADD "bricks_diagonal_southwest"	(3, 0);
+	ADD "bricks_triangle_up"		(0, 1);
+	ADD "bricks_triangle_down"		(1, 1);
+	ADD "bricks_triangle_square"	(2, 1);
+	ADD "bricks_light"				(3, 1);
+	ADD "bricks_damond"				(0, 2);
+	ADD "bricks_diamond_cracked"	(1, 2);
+	ADD "bricks_deep_northeast"		(2, 2);
+	ADD "bricks_deep_northwest"		(3, 2);
+	
+# Square Patterns =============================================
+
+	SOURCE "temp_sheet_floors_square_patterns";
+	ADD "square_pattern_1"			(0, 0);
+	ADD "square_pattern_2"			(1, 0);
+	ADD "square_pattern_3"			(2, 0);
+	ADD "square_pattern_4"			(3, 0);
+	ADD "square_pattern_5"			(0, 1);
+	ADD "square_pattern_6"			(1, 1);
+	ADD "square_pattern_7"			(2, 1);
+	ADD "square_pattern_8"			(3, 1);
+	ADD "square_pattern_9"			(0, 2);
+	ADD "square_pattern_10"			(1, 2);
+	ADD "square_pattern_11"			(2, 2);
+	ADD "square_pattern_12"			(3, 2);
+	ADD "square_pattern_13"			(0, 3);
+	ADD "square_pattern_14"			(1, 3);
+	
+# Bright Patterns =============================================
+
+	SOURCE "temp_sheet_floors_bright_patterns";
+	ADD "bright_pattern_1"			(0, 0);
+	ADD "bright_pattern_2"			(1, 0);
+	ADD "bright_pattern_3"			(2, 0);
+	ADD "bright_pattern_4"			(3, 0);
+	ADD "bright_pattern_5"			(0, 1);
+	ADD "bright_pattern_6"			(1, 1);
+	ADD "bright_pattern_7"			(2, 1);
+	ADD "bright_pattern_8"			(3, 1);
+	ADD "bright_pattern_9"			(0, 2);
+	ADD "bright_pattern_10"			(1, 2);
+
+# Misc Patterns ===============================================
+
+	SOURCE "temp_sheet_floors_misc_patterns";
+	ADD "misc_pattern_1"			(0, 0);
+	ADD "misc_pattern_2"			(1, 0);
+	ADD "misc_pattern_3"			(2, 0);
+	ADD "misc_pattern_4"			(3, 0);
+	
+END; # COLORMULTISTYLE
+
+
+#==============================================================
+# Tiles
+#==============================================================
+
+NAME "tile_floor"			("floor_styles", "floor");
+NAME "tile_fancy_tile_1"	("floor_styles", "fancy_tile_1");
+NAME "tile_fancy_tile_2"	("floor_styles", "fancy_tile_2");
+NAME "tile_fancy_tile_3"	("floor_styles", "fancy_tile_3");
+NAME "tile_fancy_tile_4"	("floor_styles", "fancy_tile_4");
+NAME "tile_fancy_tile_5"	("floor_styles", "fancy_tile_5");
+NAME "tile_fancy_tile_6"	("floor_styles", "fancy_tile_6");
+NAME "tile_fancy_tile_7"	("floor_styles", "fancy_tile_7");
+NAME "tile_fancy_tile_8"	("floor_styles", "fancy_tile_8");
+NAME "tile_fancy_tile_9"	("floor_styles", "fancy_tile_9");
+NAME "tile_fancy_tile_10"	("floor_styles", "fancy_tile_10");
+
+SOURCE "temp_sheet_floors_bricks";
+COLOR "temp_entrance_brick_left", "", ("entrance_brick"), (0, 0); END;
+COLOR "temp_entrance_brick_right", "", ("entrance_brick"), (1, 0); END;
+COLOR "temp_entrance_brick_mid", "", ("entrance_brick"), (0, 1); END;
+COLOR "temp_entrance_brick_light", "", ("entrance_brick"), (3, 1); END;
+COLOR "temp_essense_brick", "", ("essense_brick"), (2, 1); END;
+
+NAME "entrance_brick_left"			("temp_entrance_brick_left", "entrance_brick");
+NAME "entrance_brick_right"			("temp_entrance_brick_right", "entrance_brick");
+NAME "entrance_brick_mid"			("temp_entrance_brick_mid", "entrance_brick");
+NAME "entrance_brick_light"			("temp_entrance_brick_light", "entrance_brick");
+NAME "tile_essense_brick"			("temp_essense_brick", "essense_brick");
+

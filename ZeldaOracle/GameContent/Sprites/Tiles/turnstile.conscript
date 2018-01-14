@@ -1,0 +1,116 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_turnstile"				"Tiles/Styles/turnstile"				(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+SOURCE "temp_sheet_turnstile";
+SPRITESET "set_turnstile" (15, 4);
+	PALETTEDICTIONARY	"tile_dictionary";
+	MAPPEDCOLORS	"tiles_default", ("railing", "turnstile");
+	CHUNKSIZE		(8, 8);
+	MULTIPLE BASIC	(0, 0), (0, 0), (3, 3); END;
+	CHUNKSIZE		none;
+	
+	PALETTEDICTIONARY	"entity_dictionary";
+	MAPPEDCOLORS	"entities_default", ("shaded_blue", "shaded_red");
+	MULTIPLE COLOR	"", ("shaded_blue", "shaded_red"), (3, 0), (3, 0), (12, 3); END;
+	
+	MULTIPLE BASIC	(0, 3), (0, 3), (8, 1); END;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_turnstile";
+COMPOSITE "tile_turnstile";
+	ADD (0, 0), (0, 0); ADD (1, 0), (16, 0); ADD (2, 0), (32, 0);
+	ADD (0, 1), (0, 16); ADD (1, 1), (16, 16); ADD (2, 1), (32, 16);
+	ADD (0, 2), (0, 32); ADD (1, 2), (16, 32); ADD (2, 2), (32, 32); END;
+	
+	
+#==============================================================
+# Parts
+#==============================================================
+
+ANIMATION "turnstile_arrows_clockwise"; SUBSTRIP repeat;
+	ADD frame, 12, (4, 3), (16,  0);
+	ADD frame, 12, (5, 3), (32, 16);
+	ADD frame, 12, (6, 3), (16, 32);
+	ADD frame, 12, (7, 3), ( 0, 16);
+	END;
+ANIMATION "turnstile_arrows_counterclockwise"; SUBSTRIP repeat;
+	ADD frame, 12, (0, 3), (16,  0);
+	ADD frame, 12, (1, 3), ( 0, 16);
+	ADD frame, 12, (2, 3), (16, 32);
+	ADD frame, 12, (3, 3), (32, 16);
+	END;
+	
+COMPOSITE "turnstile_bars_clockwise";
+		ADD (( 3,  0), "shaded_red"), ( 0,  0); ADD (( 4,  0), "shaded_red"), (16,  0);
+		ADD (( 5,  0), "shaded_red"), (32,  0); ADD (( 3,  1), "shaded_red"), ( 0, 16);
+		ADD (( 4,  1), "shaded_red"), (16, 16); ADD (( 5,  1), "shaded_red"), (32, 16);
+		ADD	(( 3,  2), "shaded_red"), ( 0, 32); ADD (( 4,  2), "shaded_red"), (16, 32);
+		ADD (( 5,  2), "shaded_red"), (32, 32); END;
+COMPOSITE "temp_turnstile_bars_straight_orange";
+		ADD (( 7,  0), "shaded_red"), (16,  0); ADD (( 6,  1), "shaded_red"), ( 0, 16);
+		ADD (( 7,  1), "shaded_red"), (16, 16); ADD (( 8,  1), "shaded_red"), (32, 16);
+		ADD (( 7,  2), "shaded_red"), (16, 32); END;
+COMPOSITE "temp_turnstile_bars_clockwise_orange";
+		ADD (( 9,  0), "shaded_red"), ( 0,  0); ADD ((10,  0), "shaded_red"), (16,  0);
+		ADD ((11,  0), "shaded_red"), (32,  0); ADD (( 9,  1), "shaded_red"), ( 0, 16);
+		ADD ((10,  1), "shaded_red"), (16, 16); ADD ((11,  1), "shaded_red"), (32, 16);
+		ADD	(( 9,  2), "shaded_red"), ( 0, 32); ADD ((10,  2), "shaded_red"), (16, 32);
+		ADD ((11,  2), "shaded_red"), (32, 32); END;
+COMPOSITE "temp_turnstile_bars_counterclockwise_orange";
+		ADD ((12,  0), "shaded_red"), ( 0,  0); ADD ((13,  0), "shaded_red"), (16,  0);
+		ADD ((14,  0), "shaded_red"), (32,  0); ADD ((12,  1), "shaded_red"), ( 0, 16);
+		ADD ((13,  1), "shaded_red"), (16, 16); ADD ((14,  1), "shaded_red"), (32, 16);
+		ADD	((12,  2), "shaded_red"), ( 0, 32); ADD ((13,  2), "shaded_red"), (16, 32);
+		ADD ((14,  2), "shaded_red"), (32, 32); END;
+		
+COMPOSITE "turnstile_bars_counterclockwise";
+		ADD (( 3,  0), "shaded_blue"), ( 0,  0); ADD (( 4,  0), "shaded_blue"), (16,  0);
+		ADD (( 5,  0), "shaded_blue"), (32,  0); ADD (( 3,  1), "shaded_blue"), ( 0, 16);
+		ADD (( 4,  1), "shaded_blue"), (16, 16); ADD (( 5,  1), "shaded_blue"), (32, 16);
+		ADD	(( 3,  2), "shaded_blue"), ( 0, 32); ADD (( 4,  2), "shaded_blue"), (16, 32);
+		ADD (( 5,  2), "shaded_blue"), (32, 32); END;
+COMPOSITE "temp_turnstile_bars_straight_blue";
+		ADD (( 7,  0), "shaded_blue"), (16,  0); ADD (( 6,  1), "shaded_blue"), ( 0, 16);
+		ADD (( 7,  1), "shaded_blue"), (16, 16); ADD (( 8,  1), "shaded_blue"), (32, 16);
+		ADD (( 7,  2), "shaded_blue"), (16, 32); END;
+COMPOSITE "temp_turnstile_bars_clockwise_blue";
+		ADD (( 9,  0), "shaded_blue"), ( 0,  0); ADD ((10,  0), "shaded_blue"), (16,  0);
+		ADD ((11,  0), "shaded_blue"), (32,  0); ADD (( 9,  1), "shaded_blue"), ( 0, 16);
+		ADD ((10,  1), "shaded_blue"), (16, 16); ADD ((11,  1), "shaded_blue"), (32, 16);
+		ADD	(( 9,  2), "shaded_blue"), ( 0, 32); ADD ((10,  2), "shaded_blue"), (16, 32);
+		ADD ((11,  2), "shaded_blue"), (32, 32); END;
+COMPOSITE "temp_turnstile_bars_counterclockwise_blue";
+		ADD ((12,  0), "shaded_blue"), ( 0,  0); ADD ((13,  0), "shaded_blue"), (16,  0);
+		ADD ((14,  0), "shaded_blue"), (32,  0); ADD ((12,  1), "shaded_blue"), ( 0, 16);
+		ADD ((13,  1), "shaded_blue"), (16, 16); ADD ((14,  1), "shaded_blue"), (32, 16);
+		ADD	((12,  2), "shaded_blue"), ( 0, 32); ADD ((13,  2), "shaded_blue"), (16, 32);
+		ADD ((14,  2), "shaded_blue"), (32, 32); END;
+		
+ANIMATION "turnstile_rotate_clockwise";
+	SUBSTRIP clamp;
+		ADD frame, 4, "temp_turnstile_bars_clockwise_orange";
+		ADD frame, 4, "temp_turnstile_bars_straight_orange";
+		ADD frame, 4, "temp_turnstile_bars_counterclockwise_orange";
+		ADD frame, 4, "turnstile_bars_clockwise";
+	END;
+ANIMATION "turnstile_rotate_counterclockwise";
+	SUBSTRIP clamp;
+		ADD frame, 4, "temp_turnstile_bars_counterclockwise_blue";
+		ADD frame, 4, "temp_turnstile_bars_straight_blue";
+		ADD frame, 4, "temp_turnstile_bars_clockwise_blue";
+		ADD frame, 4, "turnstile_bars_counterclockwise";
+	END;
+	

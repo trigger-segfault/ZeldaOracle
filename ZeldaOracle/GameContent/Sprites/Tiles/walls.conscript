@@ -1,0 +1,297 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_walls"					"Tiles/Styles/walls"					(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_walls_jabu_jabu"		"Tiles/Styles/walls_jabu_jabu"			(8, 8), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_ceilings"				"Tiles/Styles/ceilings"					(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+SOURCE "temp_sheet_walls";
+SPRITESET "set_walls", (20, 2);
+	MAPPEDCOLORS	"tiles_default", ("wall");
+	MULTIPLE STYLE "wall", (0, 0), (16, 1);
+		ADD "dungeon_spirits_grave"			(0, 0);
+		ADD "dungeon_wing_dungeon"			(0, 1);
+		ADD "dungeon_moonlit_grotto"		(0, 2);
+		ADD "dungeon_skull_dungeon"			(0, 3);
+		ADD "dungeon_crown_dungeon"			(0, 4);
+		ADD "dungeon_mermaids_cave"			(0, 5);
+		ADD "dungeon_jabu_jabu"				(0, 6);
+		ADD "dungeon_ancient_tomb"			(0, 7);
+		ADD "dungeon_gnarled_root"			(0, 8);
+		ADD "dungeon_snakes_remains"		(0, 9);
+		ADD "dungeon_poison_moths_lair"		(0, 10);
+		ADD "dungeon_dancing_dragon"		(0, 11);
+		ADD "dungeon_unicorns_cave"			(0, 12);
+		ADD "dungeon_ancient_ruins"			(0, 13);
+		ADD "dungeon_explorers_crypt"		(0, 14);
+		ADD "dungeon_sword_n_shield_ice"	(0, 15);
+		ADD "dungeon_sword_n_shield_fire"	(0, 16);
+		ADD "overworld"						(0, 17);
+		ADD "cave"							(0, 18);
+		ADD "interior"						(0, 19);
+		ADD "interior_past"					(0, 20);
+		ADD "sea"							(0, 21);
+		ADD "subrosia"						(0, 22);
+		ADD "temple"						(0, 23);
+		ADD "dungeon_queen_ambis_palace"	(0, 24);
+		ADD "dungeon_black_tower"			(0, 25);
+		ADD "dungeon_onox_dungeon"			(0, 26);
+		ADD "dungeon_maku_path"				(0, 27);
+		ADD "graveyard"						(0, 28);
+		END;
+		
+		
+	MAPPEDCOLORS	"tiles_default", ("wall_alt");
+	MULTIPLE STYLE "wall_alt", (0, 1), (16, 1);
+		ADD "dungeon_spirits_grave"			(0, 0);
+		ADD "dungeon_wing_dungeon"			(0, 1);
+		ADD "dungeon_moonlit_grotto"		(0, 2);
+		ADD "dungeon_skull_dungeon"			(0, 3);
+		ADD "dungeon_crown_dungeon"			(0, 4);
+		ADD "dungeon_mermaids_cave"			(0, 5);
+		ADD "dungeon_jabu_jabu"				(0, 6);
+		ADD "dungeon_ancient_tomb"			(0, 7);
+		ADD "dungeon_gnarled_root"			(0, 8);
+		ADD "dungeon_snakes_remains"		(0, 9);
+		ADD "dungeon_poison_moths_lair"		(0, 10);
+		ADD "dungeon_dancing_dragon"		(0, 11);
+		ADD "dungeon_unicorns_cave"			(0, 12);
+		ADD "dungeon_ancient_ruins"			(0, 13);
+		ADD "dungeon_explorers_crypt"		(0, 14);
+		ADD "dungeon_sword_n_shield_ice"	(0, 15);
+		ADD "dungeon_sword_n_shield_fire"	(0, 16);
+		ADD "overworld"						(0, 17);
+		ADD "cave"							(0, 18);
+		ADD "interior"						(0, 19);
+		ADD "interior_past"					(0, 20);
+		ADD "sea"							(0, 21);
+		ADD "subrosia"						(0, 22);
+		ADD "temple"						(0, 23);
+		ADD "dungeon_queen_ambis_palace"	(0, 24);
+		ADD "dungeon_black_tower"			(0, 25);
+		ADD "dungeon_onox_dungeon"			(0, 26);
+		ADD "dungeon_maku_path"				(0, 27);
+		ADD "graveyard"						(0, 28);
+		END;
+		
+	SOURCE "set_walls";
+	MULTIPLE STYLE "wall", (16, 0), (4, 1);
+		ADD "default"						(0, 0);
+		END;
+END;
+
+SOURCE "temp_sheet_ceilings";
+SPRITESET "set_ceilings", (1, 2);
+	MAPPEDCOLORS	"tiles_default", ("wall");
+	SINGLE STYLE "ceiling", (0, 0);
+		ADD "light"			(0, 0);
+		ADD "medium"		(0, 1);
+		ADD "dark"			(0, 2);
+		ADD "black"			(0, 3);
+		END;
+		
+	MAPPEDCOLORS	"tiles_default", ("wall_alt");
+	SINGLE STYLE "ceiling_alt", (0, 1);
+		ADD "light"			(0, 0);
+		ADD "medium"		(0, 1);
+		ADD "dark"			(0, 2);
+		ADD "black"			(0, 3);
+		END;
+END;
+
+MAPPEDCOLORS	"tiles_default", ("wall");
+	
+SOURCE "temp_sheet_walls_jabu_jabu";
+SPRITESET "set_walls_jabu_jabu", (16, 4);
+	MULTIPLE BASIC (0, 0), (0, 0), (4, 2); END;
+	MULTIPLE BASIC (4, 0), (4, 0), (12, 4); END;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_ceilings";
+NAME "tile_ceiling"						(0, 0);
+NAME "tile_ceiling_alt"					(0, 1);
+
+SOURCE "set_walls";
+NAME "tile_wall_down"					(0, 0);
+NAME "tile_wall_up"						(1, 0);
+NAME "tile_wall_left"					(2, 0);
+NAME "tile_wall_right"					(3, 0);
+NAME "tile_wall_down_alt"				(16, 0);
+NAME "tile_wall_up_alt"					(17, 0);
+NAME "tile_wall_left_alt"				(18, 0);
+NAME "tile_wall_right_alt"				(19, 0);
+NAME "tile_wall_outside_sw"		(4, 0);
+NAME "tile_wall_outside_se"		(5, 0);
+NAME "tile_wall_outside_nw"		(6, 0);
+NAME "tile_wall_outside_ne"		(7, 0);
+NAME "tile_wall_inside_sw"		(8, 0);
+NAME "tile_wall_inside_se"		(9, 0);
+NAME "tile_wall_inside_nw"		(10, 0);
+NAME "tile_wall_inside_ne"		(11, 0);
+NAME "tile_wall_bombable_down"			(12, 0);
+NAME "tile_wall_bombable_up"			(13, 0);
+NAME "tile_wall_bombable_left"			(14, 0);
+NAME "tile_wall_bombable_right"			(15, 0);
+
+NAME "tile_wall_alt_down"				(0, 1);
+NAME "tile_wall_alt_up"					(1, 1);
+NAME "tile_wall_alt_left"				(2, 1);
+NAME "tile_wall_alt_right"				(3, 1);
+NAME "tile_wall_alt_corner_outside_sw"	(4, 1);
+NAME "tile_wall_alt_corner_outside_se"	(5, 1);
+NAME "tile_wall_alt_corner_outside_nw"	(6, 1);
+NAME "tile_wall_alt_corner_outside_ne"	(7, 1);
+NAME "tile_wall_alt_corner_inside_sw"	(8, 1);
+NAME "tile_wall_alt_corner_inside_se"	(9, 1);
+NAME "tile_wall_alt_corner_inside_nw"	(10, 1);
+NAME "tile_wall_alt_corner_inside_ne"	(11, 1);
+NAME "tile_wall_alt_bombable_down"		(12, 1);
+NAME "tile_wall_alt_bombable_up"		(13, 1);
+NAME "tile_wall_alt_bombable_left"		(14, 1);
+NAME "tile_wall_alt_bombable_right"		(15, 1);
+
+#==============================================================
+# Jabu Jabu
+#==============================================================
+
+SOURCE "set_walls_jabu_jabu";
+
+# Yes, the order for left/right is different in the spritesheet.
+# Yes, even though the order is different, the animation is synced.
+
+	END;
+	
+ANIMATION "temp_jabu_jabu_static_bottom";
+	SUBSTRIP repeat; ADD frame, 1, (0, 0);
+	MAKEDYNAMIC 4, (1, 0);
+	END;
+	
+ANIMATION "temp_jabu_jabu_static_top";
+	CLONE "temp_jabu_jabu_static_bottom";
+	SHIFTSOURCE (0, 1);
+	END;
+	
+ANIMATION "temp_jabu_jabu_anim_bottom_1";
+	SUBSTRIP repeat;
+		ADD frame, 12, (4, 0); ADD frame, 13, (4, 1);
+		ADD frame, 12, (4, 2); ADD frame, 11, (4, 3);
+	MAKEDYNAMIC 4, (1, 0);
+	END;
+	
+ANIMATION "temp_jabu_jabu_anim_bottom_2";
+	CLONE "temp_jabu_jabu_anim_bottom_1";
+	SHIFTSOURCE (4, 0);
+	END;
+	
+ANIMATION "temp_jabu_jabu_anim_top";
+	CLONE "temp_jabu_jabu_anim_bottom_2";
+	SHIFTSOURCE (4, 0);
+	END;
+	
+ANIMATION "jabu_jabu_wall";
+	SUBSTRIP repeat;
+		COMBINE ("temp_jabu_jabu_anim_top", 0), (0, 0);
+		ADD static, ("temp_jabu_jabu_static_top", 0), (8, 0);
+		ADD static, ("temp_jabu_jabu_static_bottom", 0), (0, 8);
+		ADD static, ("temp_jabu_jabu_static_bottom", 0), (8, 8);
+	SUBSTRIP repeat;
+		COMBINE ("temp_jabu_jabu_anim_top", 1), (8, 8);
+		ADD static, ("temp_jabu_jabu_static_top", 1), (0, 8);
+		ADD static, ("temp_jabu_jabu_static_bottom", 1), (0, 0);
+		ADD static, ("temp_jabu_jabu_static_bottom", 1), (8, 0);
+	SUBSTRIP repeat;
+		COMBINE ("temp_jabu_jabu_anim_top", 2), (8, 8);
+		ADD static, ("temp_jabu_jabu_static_top", 2), (8, 0);
+		ADD static, ("temp_jabu_jabu_static_bottom", 2), (0, 0);
+		ADD static, ("temp_jabu_jabu_static_bottom", 2), (0, 8);
+	SUBSTRIP repeat;
+		COMBINE ("temp_jabu_jabu_anim_top", 3), (0, 0);
+		ADD static, ("temp_jabu_jabu_static_top", 3), (0, 8);
+		ADD static, ("temp_jabu_jabu_static_bottom", 3), (8, 0);
+		ADD static, ("temp_jabu_jabu_static_bottom", 3), (8, 8);
+	END;
+	
+ANIMATION "jabu_jabu_wall_alt";
+	SUBSTRIP repeat;
+		COMBINE ("temp_jabu_jabu_anim_bottom_1", 0), (0, 8);
+		COMBINE ("temp_jabu_jabu_anim_bottom_2", 0), (8, 8);
+		ADD static, ("temp_jabu_jabu_static_top", 0), (0, 0);
+		ADD static, ("temp_jabu_jabu_static_top", 0), (8, 0);
+	SUBSTRIP repeat;
+		COMBINE ("temp_jabu_jabu_anim_bottom_1", 1), (0, 0);
+		COMBINE ("temp_jabu_jabu_anim_bottom_2", 1), (8, 0);
+		ADD static, ("temp_jabu_jabu_static_top", 1), (0, 8);
+		ADD static, ("temp_jabu_jabu_static_top", 1), (8, 8);
+	SUBSTRIP repeat;
+		COMBINE ("temp_jabu_jabu_anim_bottom_1", 2), (0, 8);
+		COMBINE ("temp_jabu_jabu_anim_bottom_2", 2), (0, 0);
+		ADD static, ("temp_jabu_jabu_static_top", 2), (8, 0);
+		ADD static, ("temp_jabu_jabu_static_top", 2), (8, 8);
+	SUBSTRIP repeat;
+		COMBINE ("temp_jabu_jabu_anim_bottom_1", 3), (8, 8);
+		COMBINE ("temp_jabu_jabu_anim_bottom_2", 3), (8, 0);
+		ADD static, ("temp_jabu_jabu_static_top", 3), (0, 0);
+		ADD static, ("temp_jabu_jabu_static_top", 3), (0, 8);
+	END;
+	
+CONTINUE STYLE "tile_wall_down";
+	REPLACE "dungeon_jabu_jabu", ("jabu_jabu_wall", 0); END;
+CONTINUE STYLE "tile_wall_up";
+	REPLACE "dungeon_jabu_jabu", ("jabu_jabu_wall", 1); END;
+CONTINUE STYLE "tile_wall_left";
+	REPLACE "dungeon_jabu_jabu", ("jabu_jabu_wall", 2); END;
+CONTINUE STYLE "tile_wall_right";
+	REPLACE "dungeon_jabu_jabu", ("jabu_jabu_wall", 3); END;
+	
+CONTINUE STYLE "tile_wall_down_alt";
+	ADD "dungeon_jabu_jabu", ("jabu_jabu_wall_alt", 0); END;
+CONTINUE STYLE "tile_wall_up_alt";
+	ADD "dungeon_jabu_jabu", ("jabu_jabu_wall_alt", 1); END;
+CONTINUE STYLE "tile_wall_left_alt";
+	ADD "dungeon_jabu_jabu", ("jabu_jabu_wall_alt", 2); END;
+CONTINUE STYLE "tile_wall_right_alt";
+	ADD "dungeon_jabu_jabu", ("jabu_jabu_wall_alt", 3); END;
+	
+#==============================================================
+# Style Previews
+#==============================================================
+
+COMPOSITE "temp_wall_style_preview";
+	ADD "tile_wall_outside_nw", (0, 0);
+	ADD "tile_wall_up_alt", (16, 0);
+	ADD "tile_wall_outside_ne", (32, 0);
+	ADD "tile_wall_bombable_left", (0, 16);
+	ADD "tile_ceiling", (16, 16);
+	ADD "tile_wall_right", (32, 16);
+	ADD "tile_wall_outside_sw", (0, 32);
+	ADD "tile_wall_down", (16, 32);
+	ADD "tile_wall_outside_se", (32, 32);
+	END;
+	
+COMPOSITE "temp_wall_alt_style_preview";
+	ADD "tile_wall_alt_corner_outside_nw", (0, 0);
+	ADD "tile_wall_alt_up", (16, 0);
+	ADD "tile_wall_alt_corner_outside_ne", (32, 0);
+	ADD "tile_wall_alt_bombable_left", (0, 16);
+	ADD "tile_ceiling_alt", (16, 16);
+	ADD "tile_wall_alt_right", (32, 16);
+	ADD "tile_wall_alt_corner_outside_sw", (0, 32);
+	ADD "tile_wall_alt_down", (16, 32);
+	ADD "tile_wall_alt_corner_outside_se", (32, 32);
+	END;
+	
+STYLEPREVIEW "wall" "temp_wall_style_preview";
+STYLEPREVIEW "wall_alt" "temp_wall_alt_style_preview";

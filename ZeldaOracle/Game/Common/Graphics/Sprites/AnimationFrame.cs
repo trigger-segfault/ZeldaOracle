@@ -11,10 +11,15 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		private int startTime;
 		/// <summary>Duration in ticks.</summary>
 		private int duration;
-		/// <summary>The sprite used in the frame.</summary>
-		private ISprite sprite;
+		/// <summary>The offset sprite containing the sprite used in the frame.</summary>
+		private OffsetSprite sprite;
+		//private ISprite sprite;
 		/// <summary>The draw offset of the frame.</summary>
-		private Point2I drawOffset;
+		//private Point2I drawOffset;
+		/// <summary>The flipping applied to the sprite.</summary>
+		//private Flip flipEffects;
+		/// <summary>The number of 90-degree rotations for the sprite.</summary>
+		//private Rotation rotation;
 		/// <summary>The source of the sprite.</summary>
 		private ISpriteSource source;
 		/// <summary>The source index of the sprite.</summary>
@@ -32,95 +37,85 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public AnimationFrame() {
 			this.startTime		= 0;
 			this.duration		= 0;
-			this.sprite			= null;
-			this.drawOffset		= Point2I.Zero;
-			this.source         = null;
-			this.sourceIndex    = Point2I.Zero;
+			this.sprite			= new OffsetSprite();
+			this.source			= null;
+			this.sourceIndex	= Point2I.Zero;
 			this.sourceDefinition = null;
 			this.depth			= 0;
 		}
 
-		public AnimationFrame(int startTime, int duration, ISprite sprite, int depth = 0) {
+		public AnimationFrame(int startTime, int duration, ISprite sprite, Flip flip = Flip.None,
+			Rotation rotation = Rotation.None, int depth = 0) :
+			this(startTime, duration, sprite, Point2I.Zero, flip, rotation, depth)
+		{
+		}
+
+		public AnimationFrame(int startTime, int duration, ISprite sprite, Point2I drawOffset,
+			Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0)
+		{
 			this.startTime		= startTime;
 			this.duration		= duration;
-			this.sprite			= sprite;
-			this.drawOffset		= Point2I.Zero;
+			this.sprite			= new OffsetSprite(sprite, drawOffset, flip, rotation);
 			this.source			= null;
 			this.sourceIndex	= Point2I.Zero;
 			this.sourceDefinition = null;
 			this.depth			= depth;
 		}
 
-		public AnimationFrame(int startTime, int duration, ISprite sprite, Point2I drawOffset, int depth = 0) {
+		public AnimationFrame(int startTime, int duration, ISpriteSource source, Point2I sourceIndex,
+			Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0) :
+			this(startTime, duration, source, sourceIndex, null, Point2I.Zero, flip, rotation, depth)
+		{
+		}
+
+		public AnimationFrame(int startTime, int duration, ISpriteSource source, Point2I sourceIndex,
+			string sourceDefinition, Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0) :
+			this(startTime, duration, source, sourceIndex, sourceDefinition, Point2I.Zero, flip, rotation, depth)
+		{
+		}
+
+		public AnimationFrame(int startTime, int duration, ISpriteSource source, Point2I sourceIndex,
+			Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0) :
+			this(startTime, duration, source, sourceIndex, null, drawOffset, flip, rotation, depth)
+		{
+		}
+
+		public AnimationFrame(int startTime, int duration, ISpriteSource source, Point2I sourceIndex,
+			string sourceDefinition, Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None,
+			int depth = 0)
+		{
 			this.startTime		= startTime;
 			this.duration		= duration;
-			this.sprite			= sprite;
-			this.drawOffset		= drawOffset;
-			this.source			= null;
-			this.sourceIndex	= Point2I.Zero;
-			this.sourceDefinition = null;
-			this.depth			= depth;
-		}
-
-		public AnimationFrame(int startTime, int duration, ISpriteSource source, Point2I sourceIndex, int depth = 0) {
-			this.startTime		= startTime;
-			this.duration		= duration;
-			this.sprite			= source.GetSprite(sourceIndex);
-			this.drawOffset		= Point2I.Zero;
-			this.source			= source;
-			this.sourceIndex	= sourceIndex;
-			this.sourceDefinition = null;
-			this.depth			= depth;
-		}
-
-		public AnimationFrame(int startTime, int duration, ISpriteSource source, Point2I sourceIndex, string sourceDefinition, int depth = 0) {
-			this.startTime      = startTime;
-			this.duration       = duration;
-			this.sprite         = source.GetSprite(sourceIndex);
-			this.drawOffset     = Point2I.Zero;
-			this.source         = source;
-			this.sourceIndex    = sourceIndex;
-			this.sourceDefinition = sourceDefinition;
-			this.depth          = depth;
-			if (sourceDefinition != null)
-				this.sprite     = ((DefinitionSprite) sprite).Get(sourceDefinition);
-		}
-
-		public AnimationFrame(int startTime, int duration, ISpriteSource source, Point2I sourceIndex, Point2I drawOffset, int depth = 0) {
-			this.startTime      = startTime;
-			this.duration       = duration;
-			this.sprite         = source.GetSprite(sourceIndex);
-			this.drawOffset     = drawOffset;
-			this.source         = source;
-			this.sourceIndex    = sourceIndex;
-			this.sourceDefinition = null;
-			this.depth          = depth;
-		}
-
-		public AnimationFrame(int startTime, int duration, ISpriteSource source, Point2I sourceIndex, string sourceDefinition, Point2I drawOffset, int depth = 0) {
-			this.startTime		= startTime;
-			this.duration		= duration;
-			this.sprite			= source.GetSprite(sourceIndex);
-			this.drawOffset		= drawOffset;
+			this.sprite			= new OffsetSprite(null, drawOffset, flip, rotation);
 			this.source			= source;
 			this.sourceIndex	= sourceIndex;
 			this.sourceDefinition = sourceDefinition;
 			this.depth			= depth;
-			if (sourceDefinition != null)
-				this.sprite		= ((DefinitionSprite) sprite).Get(sourceDefinition);
+			UpdateSource();
 		}
 
 		public AnimationFrame(AnimationFrame copy) {
 			this.startTime		= copy.startTime;
 			this.duration		= copy.duration;
-			this.sprite			= copy.sprite;
-			this.drawOffset		= copy.drawOffset;
+			this.sprite         = new OffsetSprite(copy.sprite);
 			this.source			= copy.source;
 			this.sourceIndex	= copy.sourceIndex;
 			this.sourceDefinition = copy.sourceDefinition;
 			this.depth          = copy.depth;
 		}
-		
+
+		//-----------------------------------------------------------------------------
+		// Internal methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Updates the sprite from the source members.</summary>
+		private void UpdateSource() {
+			sprite.Sprite = source.GetSprite(sourceIndex);
+			if (sourceDefinition != null)
+				sprite.Sprite = ((DefinitionSprite) sprite.Sprite).Get(sourceDefinition);
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
@@ -142,20 +137,38 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			set { duration = value; }
 		}
 
+		/// <summary>Gets the offset sprite containing this frame.</summary>
+		public OffsetSprite OffsetSprite {
+			get { return sprite; }
+		}
+
 		/// <summary>Gets or sets the sprite of the frame.</summary>
 		public ISprite Sprite {
-			get { return sprite; }
+			get { return sprite.Sprite; }
 			set {
-				sprite = value;
+				sprite.Sprite = value;
 				source = null;
 				sourceIndex = Point2I.Zero;
+				sourceDefinition = null;
 			}
 		}
 
 		/// <summary>Gets or sets the draw offset of the frame.</summary>
 		public Point2I DrawOffset {
-			get { return drawOffset; }
-			set { drawOffset = value; }
+			get { return sprite.DrawOffset; }
+			set { sprite.DrawOffset = value; }
+		}
+
+		/// <summary>Gets or sets the flipping applied to the frame.</summary>
+		public Flip FlipEffects {
+			get { return sprite.FlipEffects; }
+			set { sprite.FlipEffects = value; }
+		}
+
+		/// <summary>Gets or sets the number of 90-degree rotations for the frame.</summary>
+		public Rotation Rotation {
+			get { return sprite.Rotation; }
+			set { sprite.Rotation = value; }
 		}
 
 		/// <summary>Gets or sets the draw depth of the frame.</summary>
@@ -174,13 +187,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			get { return source; }
 			set {
 				source = value;
-				if (value == null)
-					sourceIndex = Point2I.Zero;
-				else {
-					sprite = source.GetSprite(sourceIndex);
-					if (sourceDefinition != null)
-						sprite = ((DefinitionSprite) sprite).Get(sourceDefinition);
-				}
+				if (source != null)
+					UpdateSource();
 			}
 		}
 
@@ -188,12 +196,9 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public Point2I SourceIndex {
 			get { return sourceIndex; }
 			set {
-				if (source != null) {
-					sourceIndex = value;
-					sprite = source.GetSprite(value);
-					if (sourceDefinition != null)
-						sprite = ((DefinitionSprite) sprite).Get(sourceDefinition);
-				}
+				sourceIndex = value;
+				if (source != null)
+					UpdateSource();
 			}
 		}
 
@@ -201,12 +206,9 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public string SourceDefinition {
 			get { return sourceDefinition; }
 			set {
-				if (source != null) {
-					sourceDefinition = value;
-					sprite = source.GetSprite(sourceIndex);
-					if (sourceDefinition != null)
-						sprite = ((DefinitionSprite) sprite).Get(sourceDefinition);
-				}
+				sourceDefinition = value;
+				if (source != null)
+					UpdateSource();
 			}
 		}
 	}

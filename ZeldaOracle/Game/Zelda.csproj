@@ -133,6 +133,8 @@
     <None Include="Common\Debug\ToggleMenuItem.cs" />
     <None Include="Common\Graphics\Obsolete\AnimationOld.cs" />
     <None Include="Common\Graphics\Obsolete\AnimationFrameOld.cs" />
+    <Compile Include="Common\Graphics\Flipping.cs" />
+    <Compile Include="Common\Graphics\Rotating.cs" />
     <Compile Include="Common\Graphics\Sprites\ColorationGroups.cs" />
     <Compile Include="Common\Graphics\Sprites\GroupDefinitions.cs" />
     <Compile Include="Common\Graphics\Sprites\SpriteSet.cs" />
@@ -215,7 +217,7 @@
     <Compile Include="Common\Scripting\PropertyDocumentation.cs" />
     <Compile Include="Common\Scripting\Property.cs" />
     <None Include="Common\Scripting\ZeldaObject.cs" />
-    <Compile Include="Common\Scripts\Commands\CommandPrefix.cs" />
+    <Compile Include="Common\Scripts\Commands\CommandParamDefinition.cs" />
     <Compile Include="Common\Scripts\Commands\CommandReferenceParam.cs" />
     <None Include="Common\Scripts\CustomReaders\AnimationSR.cs" />
     <Compile Include="Common\Scripts\Commands\CommandParam.cs" />
@@ -225,12 +227,15 @@
     <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.Animation.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.BasicEmptyOffset.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.Color.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.ColorMultiStyle.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\ISPriteSR.ColorStyle.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.Style.cs" />
     <Compile Include="Common\Scripts\CustomReaders\MusicSR.cs" />
     <None Include="Common\Scripts\CustomReaders\PaletteConverterSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\PaletteDictionarySR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\PaletteSR.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\ZoneSR.cs" />
     <Compile Include="Common\Scripts\ScriptReader.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ImageSR.cs" />
     <Compile Include="Common\Scripts\Commands\ScriptCommand.cs" />
@@ -494,7 +499,7 @@
     <Compile Include="Game\Tiles\Custom\TileBridge.cs" />
     <Compile Include="Game\Tiles\Custom\TileSpikedFloor.cs" />
     <Compile Include="Game\Tiles\Custom\TileTurnstile.cs" />
-    <Compile Include="Game\Tiles\Custom\TileRegrowingPlant.cs" />
+    <Compile Include="Game\Tiles\Custom\TileRegrowableBush.cs" />
     <Compile Include="Game\Tiles\Custom\TilePlatform.cs" />
     <Compile Include="Game\Tiles\Custom\TileEyeStatue.cs" />
     <Compile Include="Game\Tiles\Custom\Doors\TileBossKeyDoor.cs" />

@@ -18,6 +18,27 @@ using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Worlds {
 
+	public class LocateResourceEventArgs : EventArgs {
+		// In
+		public Type Type { get; }
+		public string OldName { get; }
+
+		// Out
+		public string NewName { get; set; }
+		public bool SkipRemaining { get; set; }
+
+
+		public LocateResourceEventArgs(Type type, string name) {
+			this.Type			= type;
+			this.OldName		= name;
+
+			this.NewName		= null;
+			this.SkipRemaining	= false;
+		}
+	}
+
+	public delegate void LocateResourceEventHandler(LocateResourceEventArgs e);
+
 	public class WorldFileException : Exception {
 		public WorldFileException(string message) :
 			base("")
@@ -67,10 +88,11 @@ namespace ZeldaOracle.Game.Worlds {
 		
 		private string errorMessage;
 		private Exception exception;
+		private bool skipRemainingResources;
 
 
 		//private int[]			zones;
-		
+
 		private static bool VerifyMagic(char[] magic) {
 			if (magic.Length != MAGIC.Length)
 				return false;
@@ -80,6 +102,12 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 			return true;
 		}
+
+		//-----------------------------------------------------------------------------
+		// Events
+		//-----------------------------------------------------------------------------
+
+		public event LocateResourceEventHandler LocateResource;
 
 
 		//-----------------------------------------------------------------------------
@@ -130,7 +158,8 @@ namespace ZeldaOracle.Game.Worlds {
 
 		private World Load(BinaryReader reader) {
 			Clear();
-			
+			skipRemainingResources = false;
+
 			World world = null;
 
 			try {
@@ -315,13 +344,17 @@ namespace ZeldaOracle.Game.Worlds {
 				int x		= reader.ReadInt32();
 				int y		= reader.ReadInt32();
 				int layer	= reader.ReadInt32();
-				room.PlaceTile(ReadTileData(reader, world), new Point2I(x, y), layer);
+				TileDataInstance tile = ReadTileData(reader, world);
+				if (tile != null)
+					room.PlaceTile(tile, new Point2I(x, y), layer);
 			}
 
 			// Read event tile data.
 			int eventTileDataCount = reader.ReadInt32();
 			for (int i = 0; i < eventTileDataCount; i++) {
-				room.AddEventTile(ReadEventTileData(reader, world));
+				EventTileDataInstance eventTileData = ReadEventTileData(reader, world);
+				if (eventTileData != null)
+					room.AddEventTile(eventTileData);
 			}
 		}
 
@@ -338,9 +371,11 @@ namespace ZeldaOracle.Game.Worlds {
 			if (tileset != null) {
 				// Create tile from a tileset.
 				Point2I sheetLocation = new Point2I(
-					reader.ReadInt32(),
-					reader.ReadInt32());
-				tile.TileData = tileset.TileData[sheetLocation.X, sheetLocation.Y];
+					reader.ReadInt32(), reader.ReadInt32());
+				try {
+					tile.TileData = tileset.TileData[sheetLocation.X, sheetLocation.Y];
+				}
+				catch (Exception e) { }
 			}
 			else {
 				// Create tile from a TileData resource.
@@ -350,25 +385,28 @@ namespace ZeldaOracle.Game.Worlds {
 			// Read the tile's properties.
 			ReadProperties(reader, tile.Properties);
 			ReadEvents(reader, tile.Events, world);
-			tile.Properties.BaseProperties = tile.TileData.Properties;
+			if (tile.TileData != null)
+				tile.Properties.BaseProperties = tile.TileData.Properties;
 			tile.ModifiedProperties.Clone(tile.Properties);
 
-			return tile;
+			return (tile.TileData != null ? tile : null);
 		}
 
 		private EventTileDataInstance ReadEventTileData(BinaryReader reader, World world) {
 			EventTileData tileData = ReadResource(reader, eventTileData);
+			if (tileData == null)
+				return null;
 			Point2I position = new Point2I(
-				reader.ReadInt32(),
-				reader.ReadInt32());
+				reader.ReadInt32(), reader.ReadInt32());
 
 			EventTileDataInstance eventTile = new EventTileDataInstance(tileData, position);
 			ReadProperties(reader, eventTile.Properties);
 			ReadEvents(reader, eventTile.Events, world);
 			eventTile.Properties.PropertyObject = eventTile;
-			eventTile.Properties.BaseProperties = eventTile.EventTileData.Properties;
+			if (tileData != null)
+				eventTile.Properties.BaseProperties = eventTile.EventTileData.Properties;
 
-			return eventTile;
+			return (eventTile.EventTileData != null ? eventTile : null);
 		}
 
 		private void ReadEvents(BinaryReader reader, EventCollection events, World world) {
@@ -502,6 +540,14 @@ namespace ZeldaOracle.Game.Worlds {
 				int index = reader.ReadInt32();
 				string name = strings[index];
 				T resource = Resources.GetResource<T>(name);
+				if (resource == null && !skipRemainingResources && LocateResource != null) {
+					LocateResourceEventArgs e = new LocateResourceEventArgs(typeof(T), name);
+					LocateResource(e);
+					if (!e.SkipRemaining && e.NewName != null) {
+						resource = Resources.GetResource<T>(e.NewName);
+					}
+					skipRemainingResources = e.SkipRemaining;
+				}
 				list.Add(new ResourceInfo<T>(resource, index));
 			}
 		}

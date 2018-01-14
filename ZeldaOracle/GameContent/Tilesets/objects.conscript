@@ -1,4 +1,4 @@
-
+﻿
 #==============================================================================
 # Sprite Sheets
 #==============================================================================
@@ -12,15 +12,10 @@ SPRITESHEET "tileset_objects_extras_16x16",		(16, 16), (1, 1), (18, 18); END;
 #==============================================================================
 
 # Default zone tile for digable ground (for overworlds)
-TILE default_ground;
-	SPRITE		tile_default;
-	FLAGS		Digable;
-END;
+TILE ground; SAMESPRITE; FLAGS Digable; END;
 
 # Default zone tile for a hard floor (for dungeons or interiors)
-TILE default_floor;
-	SPRITE		tile_default;
-END;
+TILE floor; SAMESPRITE; END;
 
 
 # ---- Bush -------------------------------------------------------------------
@@ -28,17 +23,16 @@ END;
 TILE bush;
 	SOLID		block;
 	FLAGS		Pickupable, Bombable, Burnable, Switchable, Cuttable, AbsorbSeeds, Boomerangable;
-	SPRITE		tile_bush;
-	SPRITEOBJ	tile_bush_asobject;
+	SAMESPRITE; SAMESPRITEOBJ;
 	BREAKANIM	effect_leaves;
 	BREAKSOUND	leaves;
 END;
 
-TILE regrowing_plant;
-	TYPE		TileRegrowingPlant;
+TILE regrowable_bush;
+	TYPE		TileRegrowableBush;
 	MODEL		block;
 	FLAGS		Cuttable, Bombable;
-	SPRITE		tile_regrowing_plant_grown;
+	SAMESPRITE;
 	BREAKANIM	effect_leaves;
 	BREAKSOUND	leaves;
 END;
@@ -46,8 +40,7 @@ END;
 TILE flowers_red;
 	SOLID		block;
 	FLAGS		Cuttable, Boomerangable;
-	SPRITE		tile_flowers_red;
-	SPRITEOBJ	tile_flowers_red_asobject;
+	SAMESPRITE;
 	BREAKANIM	effect_leaves;
 	BREAKSOUND	leaves;
 END;
@@ -55,8 +48,7 @@ END;
 TILE flowers_blue;
 	SOLID		block;
 	FLAGS		Cuttable, Boomerangable;
-	SPRITE		tile_flowers_blue;
-	SPRITEOBJ	tile_flowers_blue_asobject;
+	SAMESPRITE;
 	BREAKANIM	effect_leaves;
 	BREAKSOUND	leaves;
 END;
@@ -64,8 +56,7 @@ END;
 TILE flowers_pink;
 	SOLID		block;
 	FLAGS		Cuttable, Boomerangable;
-	SPRITE		tile_flowers_pink;
-	SPRITEOBJ	tile_flowers_pink_asobject;
+	SAMESPRITE;
 	BREAKANIM	effect_leaves;
 	BREAKSOUND	leaves;
 END;
@@ -73,8 +64,7 @@ END;
 TILE flower;
 	SOLID		block;
 	FLAGS		Cuttable, Boomerangable;
-	SPRITE		tile_flower;
-	SPRITEOBJ	tile_flower_asobject;
+	SAMESPRITE;
 	BREAKANIM	effect_leaves;
 	BREAKSOUND	leaves;
 END;
@@ -82,8 +72,7 @@ END;
 TILE water_flower;
 	SOLID		block;
 	FLAGS		Cuttable, Boomerangable;
-	SPRITE		tile_water_flower;
-	SPRITEOBJ	tile_water_flower_asobject;
+	SAMESPRITE;
 	BREAKANIM	effect_leaves;
 	BREAKSOUND	leaves;
 END;
@@ -91,64 +80,58 @@ END;
 TILE mushroom;
 	SOLID		block;
 	FLAGS		Pickupable;
-	SPRITE		tile_mushroom;
-	SPRITEOBJ	tile_mushroom_asobject;
+	SAMESPRITE; SAMESPRITEOBJ;
 END;
 
-TILE seed;
+TILE seedling;
 	SOLID		block;
 	FLAGS		Pickupable, Cuttable, Switchable, Movable;
-	SPRITE		tile_seed;
-	SPRITEOBJ	tile_seed_asobject;
+	SAMESPRITE;
 	BREAKANIM	effect_rock_break;
 	BREAKSOUND	rock_shatter;
 END;
 
 TILE burnable_tree;
 	SOLID		block;
-	SPRITE		tile_burnable_tree;
-	SPRITEOBJ	tile_burnable_tree_asobject;
+	SAMESPRITE;
 	FLAGS		Burnable, AbsorbSeeds;
 END;
 
 TILE grass;
 	FLAGS		Cuttable, Burnable, Bombable, Boomerangable;
 	ENVTYPE		Grass;
-	SPRITE		tile_grass;
+	SAMESPRITE;
 	BREAKANIM	effect_grass_leaves;
 	BREAKSOUND	leaves;
 END;
 
 TILE leaves;
 	FLAGS		Cuttable, Burnable, Bombable, Boomerangable;
-	SPRITE		tile_leaves;
+	SAMESPRITE;
 	BREAKANIM	effect_grass_leaves;
 	BREAKSOUND	leaves;
 END;
 
-TILE rock;
+TILE bracelet_rock;
 	SOLID		block;
 	FLAGS		Pickupable;
-	SPRITE		tile_rock;
-	SPRITEOBJ	tile_rock_asobject;
+	SAMESPRITE; SAMESPRITEOBJ;
 	BREAKANIM	effect_rock_break;
 	BREAKSOUND	rock_shatter;
 END;
 
-TILE diamond_rock;
+TILE switch_rock;
 	SOLID		block;
 	FLAGS		Switchable, SwitchStays;
-	SPRITE		tile_diamond_rock;
-	SPRITEOBJ	tile_diamond_rock_asobject;
+	SAMESPRITE; SAMESPRITEOBJ;
 	BREAKANIM	effect_rock_break;
 	BREAKSOUND	rock_shatter;
 END;
 
-TILE crystal;
+TILE crystal_rock;
 	SOLID		block;
 	FLAGS		Cuttable;
-	SPRITE		tile_crystal;
-	SPRITEOBJ	tile_crystal_asobject;
+	SAMESPRITE; SAMESPRITEOBJ;
 	BREAKANIM	effect_rock_break;
 	BREAKSOUND	rock_shatter;
 END;
@@ -156,8 +139,7 @@ END;
 TILE pot;
 	SOLID		block;
 	FLAGS		Cuttable, Movable, Pickupable, Switchable;
-	SPRITE		tile_pot;
-	SPRITEOBJ	tile_pot_asobject;
+	SAMESPRITE; SAMESPRITEOBJ;
 	BREAKANIM	effect_rock_break;
 	BREAKSOUND	rock_shatter;
 	PROPERTIES	(integer, cuttable_sword_level, 1),
@@ -167,35 +149,32 @@ END;
 TILE dirt_pile;
 	SOLID		block;
 	FLAGS		Digable;
-	SPRITE		tile_dirt_pile;
-	SPRITEOBJ	tile_dirt_pile_asobject;
+	SAMESPRITE;
 END;
 
 # This tile is used by Cracked floors
-TILE pit;
+TILE hole;
 	ENVTYPE		Hole;
-	SPRITE		tile_pit;
+	SAMESPRITE;
 END;
 
 # This tile is used by the Shovel.
-TILE dug;
-	SPRITE		tile_dug;
-END;
+TILE dug; SAMESPRITE; END;
 
 TILE cracked_floor;
 	TYPE		TileCrackedFloor;
-	SPRITE		tile_cracked_floor;
+	SAMESPRITE;
 END;
 
-TILE spiked_floor;
+TILE floor_spikes;
 	TYPE		TileSpikedFloor;
-	SPRITE		tile_spiked_floor;
+	SAMESPRITE;
 END;
 
 TILE cactus;
 	FLAGS		HurtPlayer;
 	SOLID		edge_e;
-	SPRITE		tile_cactus;
+	SAMESPRITE;
 	HURT		1, (4, -1, 13, 18);
 END;
 
@@ -210,14 +189,14 @@ END;
 
 TILE bridge_horizontal;
 	CLONE		bridge;
-	SPRITE		tile_bridge_horizontal;
+	SAMESPRITE;
 	PROPERTIES	(boolean, vertical, false),
 				(integer, bridge_direction, 0);
 END;
 
 TILE bridge_vertical;
 	CLONE		bridge;
-	SPRITE		tile_bridge_vertical;
+	SAMESPRITE;
 	PROPERTIES	(boolean, vertical, true),
 				(integer, bridge_direction, 3);
 END;
@@ -226,7 +205,7 @@ END;
 
 TILE moving_platform;
 	TYPE		TilePlatform;
-	SPRITE		tile_moving_platform;
+	SAMESPRITE;
 END;
 
 # ---- Lantern ----------------------------------------------------------------
@@ -247,8 +226,7 @@ TILE sign;
 	TYPE		TileSign;
 	SOLID		block;
 	FLAGS		Pickupable, Burnable, Cuttable, Switchable, Boomerangable;
-	SPRITE		tile_sign;
-	SPRITEOBJ	tile_sign_asobject;
+	SAMESPRITE; SAMESPRITEOBJ;
 	BREAKANIM	effect_sign_break;
 	BREAKSOUND	rock_shatter;
 	PROPERTIES
@@ -258,56 +236,51 @@ TILE sign;
 			"The text to display when the sign is read from the front.", false);
 END;
 
-TILE sign_alt;
-	CLONE		sign;
-	SPRITE		tile_sign_alt;
-	SPRITEOBJ	tile_sign_alt_asobject;
-END;
+#TILE sign_alt;
+#	CLONE		sign;
+#	SPRITE		tile_sign_alt;
+#	SPRITEOBJ	tile_sign_alt_asobject;
+#END;
 
 # ---- Movable Blocks ---------------------------------------------------------
 
 TILE movable_block;
 	SOLID		block;
 	FLAGS		Movable;
-	SPRITE		tile_movable_block;
-	SPRITEOBJ	tile_movable_block_asobject;
+	SAMESPRITE; SAMESPRITEOBJ;
 	PROPERTIES	(boolean, move_once, true);
 END;
 
-TILE armos_statue;
+TILE armos;
 	CLONE		movable_block;
-	SPRITE		tile_armos_statue;
-	SPRITEOBJ	tile_armos_statue_asobject;
+	SAMESPRITE; SAMESPRITEOBJ;
 END;
 
-TILE armos_statue_alt;
-	CLONE		armos_statue;
-	SPRITE		tile_armos_statue_alt;
-	SPRITEOBJ	tile_armos_statue_alt_asobject;
+TILE armos_alt;
+	CLONE		armos;
+	SAMESPRITE; SAMESPRITEOBJ;
 END;
 
-TILE tombstone;
+TILE grave;
 	CLONE		movable_block;
-	SPRITE		tile_tombstone;
-	SPRITEOBJ	tile_tombstone_asobject;
+	SAMESPRITE; SAMESPRITEOBJ;
 END;
 
-TILE tombstone_alt;
-	CLONE		tombstone;
-	SPRITE		tile_tombstone_alt;
-	SPRITEOBJ	tile_tombstone_alt_asobject;
-END;
+#TILE tombstone_alt;
+#	CLONE		tombstone;
+#	SPRITE		tile_grave_alt;
+#	SPRITEOBJ	tile_grave_alt_asobject;
+#END;
 
-TILE fairy_statue;
-	CLONE		movable_block;
-	SPRITE		tile_fairy_statue;
-	SPRITEOBJ	tile_fairy_statue_asobject;
-END;
+#TILE fairy_statue;
+#	CLONE		movable_block;
+#	SPRITE		tile_fairy_statue;
+#	SPRITEOBJ	tile_fairy_statue_asobject;
+#END;
 
 TILE ice_block;
 	CLONE		movable_block;
-	SPRITE		tile_ice_block;
-	SPRITEOBJ	tile_ice_block_asobject;
+	SAMESPRITE; SAMESPRITEOBJ;
 END;
 
 # ---- Bombable Block ---------------------------------------------------------
@@ -315,8 +288,7 @@ END;
 TILE bombable_block;
 	SOLID		block;
 	FLAGS		Bombable;
-	SPRITE		tile_bombable_block;
-	SPRITEOBJ	tile_bombable_block_asobject;
+	SAMESPRITE;
 	BREAKANIM	effect_rock_break;
 	BREAKSOUND	rock_shatter;
 END;
@@ -558,30 +530,30 @@ TILE locked_block;
 	TYPE		TileLockedBlock;
 	SOLID		block;
 	RESETWHEN	Never;
-	SPRITE		tile_locked_block;
+	SAMESPRITE;
 END;
 
-TILE webbed_wall;
+TILE wall_webbed;
 	SOLID		block;
 	FLAGS		Burnable;
 	PROPERTIES	(boolean, disable_on_destroy, true);
 END;
 
-TILE webbed_wall_right;	CLONE webbed_wall; SPRITE tile_webbed_wall_right; END;
-TILE webbed_wall_up;	CLONE webbed_wall; SPRITE tile_webbed_wall_up; END;
-TILE webbed_wall_left;	CLONE webbed_wall; SPRITE tile_webbed_wall_left; END;
-TILE webbed_wall_down;	CLONE webbed_wall; SPRITE tile_webbed_wall_down; END;
+TILE wall_webbed_right;	CLONE wall_webbed; SPRITE tile_wall_webbed_right; END;
+TILE wall_webbed_up;	CLONE wall_webbed; SPRITE tile_wall_webbed_up; END;
+TILE wall_webbed_left;	CLONE wall_webbed; SPRITE tile_wall_webbed_left; END;
+TILE wall_webbed_down;	CLONE wall_webbed; SPRITE tile_wall_webbed_down; END;
 
-TILE bombable_wall;
+TILE wall_bombable;
 	SOLID		block;
 	FLAGS		Burnable;
 	PROPERTIES	(boolean, disable_on_destroy, true);
 END;
 
-TILE bombable_wall_right;	CLONE bombable_wall; SPRITE tile_bombable_wall_right; END;
-TILE bombable_wall_up;		CLONE bombable_wall; SPRITE tile_bombable_wall_up; END;
-TILE bombable_wall_left;	CLONE bombable_wall; SPRITE tile_bombable_wall_left; END;
-TILE bombable_wall_down;	CLONE bombable_wall; SPRITE tile_bombable_wall_down; END;
+TILE wall_bombable_right;	CLONE wall_bombable; SPRITE tile_wall_bombable_right; END;
+TILE wall_bombable_up;		CLONE wall_bombable; SPRITE tile_wall_bombable_up; END;
+TILE wall_bombable_left;	CLONE wall_bombable; SPRITE tile_wall_bombable_left; END;
+TILE wall_bombable_down;	CLONE wall_bombable; SPRITE tile_wall_bombable_down; END;
 
 # ---- Minecart Tracks --------------------------------------------------------
 
@@ -636,7 +608,7 @@ END;
 TILE turnstile;
 	TYPE		TileTurnstile;
 	SOLID       turnstile;
-	SPRITE		tile_turnstile_base;
+	SAMESPRITE;
 	RESETWHEN	LeaveArea;
 	SIZE		(3, 3);
 	PROPERTIES	(boolean, clockwise, false, "Clockwise", "", "Turnstile", "True if the turnstile is in clockwise mode.");
@@ -657,34 +629,34 @@ TILESET objects, tileset_objects, (12, 13);
 DEFAULT (0, 3);
 
 SETTILE ( 0, 0), bush;
-SETTILE ( 1, 0), regrowing_plant;
+SETTILE ( 1, 0), regrowable_bush;
 SETTILE ( 2, 0), flowers_red;
 SETTILE ( 3, 0), flowers_blue;
 SETTILE ( 4, 0), flowers_pink;
 SETTILE ( 5, 0), flower;
 SETTILE ( 6, 0), water_flower;
 SETTILE ( 7, 0), mushroom;
-SETTILE ( 8, 0), seed;
+SETTILE ( 8, 0), seedling;
 SETTILE ( 9, 0), burnable_tree;
 SETTILE (10, 0), grass;
 SETTILE (11, 0), leaves;
 
-SETTILE ( 0, 1), rock;
-SETTILE ( 1, 1), diamond_rock;
-SETTILE ( 2, 1), crystal;
+SETTILE ( 0, 1), bracelet_rock;
+SETTILE ( 1, 1), switch_rock;
+SETTILE ( 2, 1), crystal_rock;
 SETTILE ( 3, 1), pot;
 SETTILE ( 4, 1), sign;
-SETTILE ( 5, 1), sign_alt;
+#SETTILE ( 5, 1), sign_alt;
 SETTILE ( 6, 1), movable_block;
 SETTILE ( 7, 1), bombable_block;
-SETTILE ( 8, 1), armos_statue;
-SETTILE ( 9, 1), tombstone;
-SETTILE (10, 1), fairy_statue;
+SETTILE ( 8, 1), armos;
+SETTILE ( 9, 1), grave;
+#SETTILE (10, 1), fairy_statue;
 SETTILE (11, 1), ice_block;
 
 SETTILE ( 0, 2), dirt_pile;
 SETTILE ( 1, 2), dug;
-SETTILE ( 2, 2), pit;
+SETTILE ( 2, 2), hole;
 SETTILE ( 3, 2), cracked_floor;
 # Soft soil
 # Portal
@@ -746,10 +718,10 @@ SETTILE ( 7, 8), boss_key_door_right;
 # Wall slate hole down
 # Wall slate hole right
 
-SETTILE ( 0, 9), webbed_wall_up;
-SETTILE ( 1, 9), webbed_wall_left;
-SETTILE ( 2, 9), bombable_wall_up;
-SETTILE ( 3, 9), bombable_wall_left;
+SETTILE ( 0, 9), wall_webbed_up;
+SETTILE ( 1, 9), wall_webbed_left;
+SETTILE ( 2, 9), wall_bombable_up;
+SETTILE ( 3, 9), wall_bombable_left;
 # Wall up
 # Wall left
 # Keyhole wall up
@@ -759,10 +731,10 @@ SETTILE ( 3, 9), bombable_wall_left;
 SETTILE (10, 9), minecart_track_corner_northwest;
 SETTILE (11, 9), minecart_track_corner_northeast;
 
-SETTILE ( 0, 10), webbed_wall_down;
-SETTILE ( 1, 10), webbed_wall_right;
-SETTILE ( 2, 10), bombable_wall_down;
-SETTILE ( 3, 9), bombable_wall_right;
+SETTILE ( 0, 10), wall_webbed_down;
+SETTILE ( 1, 10), wall_webbed_right;
+SETTILE ( 2, 10), wall_bombable_down;
+SETTILE ( 3, 10), wall_bombable_right;
 # Wall down
 # Wall right
 # Keyhole wall down
@@ -775,7 +747,7 @@ SETTILE (11, 10), minecart_track_corner_southeast;
 SETTILE ( 0, 11), eye_statue;
 # Slate thing
 SETTILE ( 2, 11), locked_block;
-SETTILE ( 3, 11), spiked_floor;
+SETTILE ( 3, 11), floor_spikes;
 SETTILE ( 4, 11), bridge_horizontal;
 SETTILE ( 5, 11), bridge_vertical;
 

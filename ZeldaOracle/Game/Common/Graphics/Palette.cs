@@ -113,7 +113,7 @@ namespace ZeldaOracle.Common.Graphics {
 		};
 
 		/// <summary>The maximum allowed lookups before reaching a defined color.</summary>
-		public const int MaxLookupDepth = 10;
+		public const int MaxLookupDepth = 20;
 
 		//-----------------------------------------------------------------------------
 		// Members
@@ -187,6 +187,8 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Looks up the color with the specified name and subtype.</summary>
 		public Color LookupColor(string name, LookupSubtypes subtype) {
+			if (!dictionary.Contains(name))
+				throw new ArgumentException("Unknown color group '" + name + "'!");
 			while (lookupGroups.ContainsKey(name)) {
 				LookupPair lookupPair = lookupGroups[name][(int) subtype];
 				if (!lookupPair.IsUndefined) {
@@ -218,7 +220,9 @@ namespace ZeldaOracle.Common.Graphics {
 			if (subtype != LookupSubtypes.All && lookupSubtype == LookupSubtypes.All)
 				throw new ArgumentException("Mismatch, cannot assign a single color to a lookup subtype of all.");
 			if (name == lookupName && (subtype == lookupSubtype || subtype == LookupSubtypes.All))
-				return LookupResult.InfiniteLoop;
+				throw new ArgumentException("Infinite loop detected in color lookup!");
+			if (!dictionary.Contains(name))
+				throw new ArgumentException("Unknown color group '" + name + "'!");
 
 			// Do a for loop only if lookupSubtype is All
 			LookupSubtypes i = (lookupSubtype == LookupSubtypes.All ? LookupSubtypes.Light : lookupSubtype);
@@ -229,16 +233,16 @@ namespace ZeldaOracle.Common.Graphics {
 				while (lookupGroups.ContainsKey(nextName)) {
 					LookupPair lookupPair = lookupGroups[nextName][(int) nextSubtype];
 					if (!lookupPair.IsUndefined) {
-						if (depth == 10) {
-							return LookupResult.MaxLookupDepth;
+						if (depth == MaxLookupDepth) {
+							throw new ArgumentException("Maximum lookup depth of 20 hit!");
 						}
 						if (lookupPair.Name == name) {
 							if (subtype == LookupSubtypes.All) {
 								if (lookupSubtype == LookupSubtypes.All)
-									return LookupResult.InfiniteLoop;
+									throw new ArgumentException("Infinite loop detected in color lookup!");
 							}
 							else if (lookupPair.Subtype == subtype)
-								return LookupResult.InfiniteLoop;
+								throw new ArgumentException("Infinite loop detected in color lookup!");
 						}
 						nextName = lookupPair.Name;
 						nextSubtype = lookupPair.Subtype;
@@ -292,6 +296,8 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Sets the name and subtype to a color.</summary>
 		public void SetColor(string name, LookupSubtypes subtype, Color color) {
+			if (!dictionary.Contains(name))
+				throw new ArgumentException("Unknown color group '" + name + "'!");
 			PaletteColor[] colorGroup;
 			if (!colorGroups.TryGetValue(name, out colorGroup)) {
 				colorGroup = new PaletteColor[PaletteDictionary.ColorGroupSize];
@@ -311,6 +317,22 @@ namespace ZeldaOracle.Common.Graphics {
 				}
 				if (lookupGroup != null)
 					lookupGroups.Remove(name);
+			}
+		}
+
+		/// <summary>Resets and removes the lookup from the color.</summary>
+		public void Reset(string name, LookupSubtypes subtype) {
+			if (!dictionary.Contains(name))
+				throw new ArgumentException("Unknown color group '" + name + "'!");
+			LookupPair[] lookupGroup;
+			if (lookupGroups.TryGetValue(name, out lookupGroup)) {
+				if (subtype == LookupSubtypes.All) {
+					for (int i = 0; i < PaletteDictionary.ColorGroupSize; i++)
+						lookupGroup[i] = LookupPair.Undefined;
+				}
+				else {
+					lookupGroup[(int) subtype] = LookupPair.Undefined;
+				}
 			}
 		}
 

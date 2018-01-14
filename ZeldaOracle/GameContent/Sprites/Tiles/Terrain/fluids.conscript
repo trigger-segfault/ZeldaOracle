@@ -1,0 +1,582 @@
+﻿#==============================================================
+# Sprite Sheets
+#==============================================================
+
+SPRITESHEET	"temp_sheet_fluids"	"Tiles/Styles/terrain_fluids"			(8, 8), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+
+SOURCE "temp_sheet_fluids";
+SPRITESET "set_fluids", (30, 12);
+	MAPPEDCOLORS	"tiles_default", ("water", "lava");
+	MULTIPLE BASIC (1, 0), (1, 0), (3, 1); END;
+	
+	MULTIPLE STYLE "water", (0, 1), (4, 1);
+		ADD "overworld"			(0, 1);
+		ADD "interior"			(0, 2);
+		END;
+		
+	MULTIPLE STYLE "water", (0, 2), (4, 1);
+		ADD "overworld"			(0, 2);
+		ADD "interior"			(0, 3);
+		END;
+		
+	MULTIPLE STYLE "water", (4, 0), (4, 4);
+		ADD "overworld"			(4, 0);
+		ADD "interior"			(4, 4);
+		END;
+		
+	MULTIPLE BASIC (0, 4), (0, 4), (4, 4); END;
+	
+	MULTIPLE BASIC (8, 4), (8, 4), (8, 4); END;
+	SINGLE STYLE "water", (13, 8);
+		ADD "overworld"			(13, 8);
+		ADD "interior"			(13, 9);
+		END;
+		
+	SINGLE COLOR "", ("lava"), (13, 9); END;
+	
+	MULTIPLE STYLE "water", (16, 0), (2, 4);
+		ADD "overworld"			(16, 0);
+		ADD "interior"			(16, 4);
+		END;
+		
+	MULTIPLE COLOR "", ("lava"), (16, 4), (16, 4), (2, 4); END;
+	
+	MULTIPLE STYLE "water", (18, 0), (8, 4);
+		ADD "overworld"			(18, 0);
+		ADD "interior"			(18, 4);
+		END;
+		
+	MULTIPLE COLORSTYLE "water", "", ("lava"), (18, 4), (4, 4);
+		ADD "overworld"			(18, 8);
+		ADD "interior"			(18, 4);
+		END;
+		
+	MULTIPLE COLOR "", ("lava"), (22, 4), (22, 4), (4, 4); END;
+	
+	MULTIPLE BASIC (26, 0), (26, 0), (4, 5); END;
+	
+	MULTIPLE STYLE "water_rocks", (26, 5), (4, 1);
+		ADD "present"			(26, 5);
+		ADD "past"				(26, 6);
+		ADD "seasons"			(26, 7);
+		END;
+		
+	MAPPEDCOLORS	"tiles_default", ("sand");
+	MULTIPLE BASIC (8, 0), (8, 0), (8, 4); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("output");
+	MULTIPLE BASIC (0, 8), (0, 8), (12, 2); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("hardened_lava");
+	SINGLE STYLE "hardened_lava", (12, 8);
+		ADD "ages"				(12, 8);
+		ADD "seasons"			(12, 9);
+		END;
+END;
+
+#==============================================================
+# Temporary
+#==============================================================
+
+SOURCE "set_fluids";
+
+NAME "temp_8x8_hardened_lava"		(12, 8);
+
+#==============================================================
+# 8x8s
+#==============================================================
+
+
+ANIMATION "puddle_8x8";
+	ADD strip, 16, 3, (1, 0); ADD frame, 16, (2, 0); END;
+	
+ANIMATION "water_8x8";
+	ADD strip, 16, 4, (0, 1); END;
+	
+ANIMATION "deep_water_8x8";
+	ADD strip, 16, 4, (0, 2); END;
+	
+ANIMATION "water_current_8x8";
+	SUBSTRIP repeat;
+		ADD frame, 6, (4, 0); ADD frame, 6, (5, 0); ADD frame, 5, (6, 0); ADD frame, 7, (7, 0);
+		ADD frame, 5, (4, 0); ADD frame, 8, (5, 0); ADD frame, 4, (6, 0); ADD frame, 7, (7, 0);
+		ADD frame, 5, (4, 0); ADD frame, 7, (5, 0); ADD frame, 6, (6, 0); ADD frame, 6, (7, 0);
+		ADD frame, 5, (4, 0); ADD frame, 7, (5, 0); ADD frame, 5, (6, 0); ADD frame, 8, (7, 0);
+		ADD frame, 4, (4, 0); ADD frame, 7, (5, 0); ADD frame, 5, (6, 0); ADD frame, 7, (7, 0);
+	SUBSTRIP repeat; COMBINE ("water_current_8x8", 0); SHIFTSOURCE (0, 1);
+	SUBSTRIP repeat; COMBINE ("water_current_8x8", 0); SHIFTSOURCE (0, 2);
+	SUBSTRIP repeat; COMBINE ("water_current_8x8", 0); SHIFTSOURCE (0, 3);
+	END;
+	
+ANIMATION "underwater_current_8x8";
+	SUBSTRIP repeat;
+		ADD frame, 13, (8, 4); ADD frame, 11, (9, 4); ADD frame, 12, (10, 4); ADD frame, 12, (11, 4);
+		ADD frame, 12, (8, 4); ADD frame, 13, (9, 4); ADD frame, 11, (10, 4); ADD frame, 12, (11, 4);
+		ADD frame, 12, (8, 4); ADD frame, 12, (9, 4); ADD frame, 13, (10, 4); ADD frame, 11, (11, 4);
+		ADD frame, 12, (8, 4); ADD frame, 12, (9, 4); ADD frame, 12, (10, 4); ADD frame, 13, (11, 4);
+		ADD frame, 11, (8, 4); ADD frame, 12, (9, 4); ADD frame, 12, (10, 4); ADD frame, 12, (11, 4);
+	SUBSTRIP repeat; COMBINE ("underwater_current_8x8", 0); SHIFTSOURCE (0, 1);
+	SUBSTRIP repeat; COMBINE ("underwater_current_8x8", 0); SHIFTSOURCE (0, 2);
+	SUBSTRIP repeat; COMBINE ("underwater_current_8x8", 0); SHIFTSOURCE (0, 3);
+	END;
+	
+ANIMATION "underwater_hole_8x8";
+	SUBSTRIP repeat;
+		ADD frame, 14, (12, 4); ADD frame, 15, (13, 4); ADD frame, 15, (14, 4); ADD frame, 15, (15, 4);
+	SUBSTRIP repeat; COMBINE ("underwater_hole_8x8", 0); SHIFTSOURCE (0, 1);
+	SUBSTRIP repeat; COMBINE ("underwater_hole_8x8", 0); SHIFTSOURCE (0, 2);
+	SUBSTRIP repeat; COMBINE ("underwater_hole_8x8", 0); SHIFTSOURCE (0, 3);
+	END;
+	
+ANIMATION "quicksand_8x8";
+	SUBSTRIP repeat; ADD strip, 4, 4, (12, 0);
+	SUBSTRIP repeat; COMBINE ("quicksand_8x8", 0); SHIFTSOURCE (0, 1);
+	SUBSTRIP repeat; COMBINE ("quicksand_8x8", 0); SHIFTSOURCE (0, 2);
+	SUBSTRIP repeat; COMBINE ("quicksand_8x8", 0); SHIFTSOURCE (0, 3);
+	END;
+	
+ANIMATION "sand_current_8x8";
+	SUBSTRIP repeat; ADD strip, 15, 4, (8, 0);
+	SUBSTRIP repeat; COMBINE ("sand_current_8x8", 0); SHIFTSOURCE (0, 1);
+	SUBSTRIP repeat; COMBINE ("sand_current_8x8", 0); SHIFTSOURCE (0, 2);
+	SUBSTRIP repeat; COMBINE ("sand_current_8x8", 0); SHIFTSOURCE (0, 3);
+	END;
+	
+ANIMATION "lava_1_8x8";
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 0), (0, 0);
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 2), (0, 0);
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 1), (0, 0);
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 3), (0, 0);
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 3), (0, 0);
+	END;
+	
+ANIMATION "lava_2_8x8";
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 1), (0, 0);
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 3), (0, 0);
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 0), (0, 0);
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 2), (0, 0);
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 1), (0, 0);
+	END;
+	
+ANIMATION "lava_3_8x8";
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 2), (0, 0);
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 0), (0, 0);
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 3), (0, 0);
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 1), (0, 0);
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 4), (0, 0);
+	END;
+	
+ANIMATION "lava_4_8x8";
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 3), (0, 0);
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 1), (0, 0);
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 2), (0, 0);
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 0), (0, 0);
+	SUBSTRIP repeat; INSERT strip, 0, 15, 4, (26, 3), (0, 0);
+	END;
+	
+ANIMATION "waterfall_start_16x8";
+	INSERT strip, 0, 8, 4, (16, 0), (0, 0), relative: (0, 1);
+	INSERT strip, 0, 8, 4, (17, 0), (8, 0), relative: (0, 1); END;
+	
+ANIMATION "lavafall_start_16x8";
+	INSERT strip, 0, 8, 4, (16, 4), (0, 0), relative: (0, 1);
+	INSERT strip, 0, 8, 4, (17, 4), (8, 0), relative: (0, 1); END;
+	
+ANIMATION "waterfall_8x8";
+	SUBSTRIP repeat; ADD strip, 8, 4, (22, 0);
+	SUBSTRIP repeat; COMBINE ("waterfall_8x8", 0); SHIFTSOURCE (0, 1);
+	SUBSTRIP repeat; COMBINE ("waterfall_8x8", 0); SHIFTSOURCE (0, 2);
+	SUBSTRIP repeat; COMBINE ("waterfall_8x8", 0); SHIFTSOURCE (0, 3);
+	END;
+	
+ANIMATION "lavafall_8x8";
+	SUBSTRIP repeat; ADD strip, 8, 4, (22, 4);
+	SUBSTRIP repeat; COMBINE ("lavafall_8x8", 0); SHIFTSOURCE (0, 1);
+	SUBSTRIP repeat; COMBINE ("lavafall_8x8", 0); SHIFTSOURCE (0, 2);
+	SUBSTRIP repeat; COMBINE ("lavafall_8x8", 0); SHIFTSOURCE (0, 3);
+	END;
+	
+ANIMATION "waterfall_finish_8x8";
+	SUBSTRIP repeat; ADD strip, 8, 4, (18, 0);
+	SUBSTRIP repeat; COMBINE ("waterfall_finish_8x8", 0); SHIFTSOURCE (0, 1);
+	SUBSTRIP repeat; COMBINE ("waterfall_finish_8x8", 0); SHIFTSOURCE (0, 2);
+	SUBSTRIP repeat; COMBINE ("waterfall_finish_8x8", 0); SHIFTSOURCE (0, 3);
+	END;
+	
+ANIMATION "lavafall_finish_8x8";
+	SUBSTRIP repeat; ADD strip, 8, 4, (18, 4);
+	SUBSTRIP repeat; COMBINE ("lavafall_finish_8x8", 0); SHIFTSOURCE (0, 1);
+	SUBSTRIP repeat; COMBINE ("lavafall_finish_8x8", 0); SHIFTSOURCE (0, 2);
+	SUBSTRIP repeat; COMBINE ("lavafall_finish_8x8", 0); SHIFTSOURCE (0, 3);
+	END;
+	
+NAME "waterfall_rock_8x8"			(13, 8);
+NAME "lavafall_rock_8x8"			(13, 9);
+
+NAME "water_rock_1_8x8"				(26, 5);
+NAME "water_rock_2_8x8"				(27, 5);
+NAME "water_rock_3_8x8"				(28, 5);
+NAME "water_rock_4_8x8"				(29, 5);
+	
+#==============================================================
+# Tiles
+#==============================================================
+
+ANIMATION "tile_puddle"; SUBSTRIP repeat;
+	COMBINE "puddle_8x8"; MAKEQUAD; END;
+	
+ANIMATION "tile_water"; SUBSTRIP repeat;
+	COMBINE "water_8x8"; MAKEQUAD; END;
+	
+ANIMATION "tile_deep_water"; SUBSTRIP repeat;
+	COMBINE "deep_water_8x8"; MAKEQUAD; END;
+
+ANIMATION "tile_ocean"; SUBSTRIP repeat;
+	INSERT strip, 0, 16, 4, (0, 4), (0, 0), relative: (0, 1);
+	INSERT strip, 0, 16, 4, (1, 4), (8, 0), relative: (0, 1);
+	INSERT strip, 0, 16, 4, (0, 4), (0, 8), relative: (0, 1);
+	INSERT strip, 0, 16, 4, (1, 4), (8, 8), relative: (0, 1); END;
+
+ANIMATION "tile_ocean_shore"; SUBSTRIP repeat;
+	INSERT strip, 0, 16, 4, (2, 4), (0, 0), relative: (0, 1);
+	INSERT strip, 0, 16, 4, (3, 4), (8, 0), relative: (0, 1);
+	INSERT strip, 0, 16, 4, (0, 4), (0, 8), relative: (0, 1);
+	INSERT strip, 0, 16, 4, (1, 4), (8, 8), relative: (0, 1); END;
+	
+ANIMATION "tile_water_current_right"; SUBSTRIP repeat;
+	COMBINE ("water_current_8x8", 0); MAKEQUAD; END;
+ANIMATION "tile_water_current_up"; SUBSTRIP repeat;
+	COMBINE ("water_current_8x8", 1); MAKEQUAD; END;
+ANIMATION "tile_water_current_left"; SUBSTRIP repeat;
+	COMBINE ("water_current_8x8", 2); MAKEQUAD; END;
+ANIMATION "tile_water_current_down"; SUBSTRIP repeat;
+	COMBINE ("water_current_8x8", 3); MAKEQUAD; END;
+	
+ANIMATION "tile_underwater_current_right"; SUBSTRIP repeat;
+	COMBINE ("underwater_current_8x8", 0); MAKEQUAD; END;
+ANIMATION "tile_underwater_current_up"; SUBSTRIP repeat;
+	COMBINE ("underwater_current_8x8", 1); MAKEQUAD; END;
+ANIMATION "tile_underwater_current_left"; SUBSTRIP repeat;
+	COMBINE ("underwater_current_8x8", 2); MAKEQUAD; END;
+ANIMATION "tile_underwater_current_down"; SUBSTRIP repeat;
+	COMBINE ("underwater_current_8x8", 3); MAKEQUAD; END;
+	
+ANIMATION "tile_underwater_hole_top"; SUBSTRIP repeat;
+	COMBINE ("underwater_hole_8x8", 1), (0, 0);
+	COMBINE ("underwater_hole_8x8", 1), (8, 0);
+	ADD static, "black_8x8", (0, 8); ADD static, "black_8x8", (8, 8); END;
+	
+COMPOSITE "tile_underwater_hole_mid";
+	ADD "black_8x8", (0, 0); ADD "black_8x8", (8, 0);
+	ADD "black_8x8", (0, 8); ADD "black_8x8", (8, 8); END;
+	
+ANIMATION "tile_underwater_hole_bottom"; SUBSTRIP repeat;
+	COMBINE ("underwater_hole_8x8", 3), (0, 8);
+	COMBINE ("underwater_hole_8x8", 3), (8, 8);
+	ADD static, "black_8x8", (0, 0); ADD static, "black_8x8", (8, 0); END;
+	
+ANIMATION "tile_underwater_hole_both"; SUBSTRIP repeat;
+	COMBINE ("underwater_hole_8x8", 1), (0, 0);
+	COMBINE ("underwater_hole_8x8", 1), (8, 0);
+	COMBINE ("underwater_hole_8x8", 3), (0, 8);
+	COMBINE ("underwater_hole_8x8", 3), (8, 8); END;
+	
+ANIMATION "tile_sand_current_right"; SUBSTRIP repeat;
+	COMBINE ("sand_current_8x8", 0); MAKEQUAD; END;
+ANIMATION "tile_sand_current_up"; SUBSTRIP repeat;
+	COMBINE ("sand_current_8x8", 1); MAKEQUAD; END;
+ANIMATION "tile_sand_current_left"; SUBSTRIP repeat;
+	COMBINE ("sand_current_8x8", 2); MAKEQUAD; END;
+ANIMATION "tile_sand_current_down"; SUBSTRIP repeat;
+	COMBINE ("sand_current_8x8", 3); MAKEQUAD; END;
+	
+ANIMATION "tile_quicksand_down_right"; SUBSTRIP repeat;
+	COMBINE ("quicksand_8x8", 0); MAKEQUAD; END;
+ANIMATION "tile_quicksand_down_left"; SUBSTRIP repeat;
+	COMBINE ("quicksand_8x8", 1); MAKEQUAD; END;
+ANIMATION "tile_quicksand_up_right"; SUBSTRIP repeat;
+	COMBINE ("quicksand_8x8", 2); MAKEQUAD; END;
+ANIMATION "tile_quicksand_up_left"; SUBSTRIP repeat;
+	COMBINE ("quicksand_8x8", 3); MAKEQUAD; END;
+	
+ANIMATION "tile_lava_1"; SUBSTRIP repeat;
+	COMBINE ("lava_1_8x8", 0), (0, 0); COMBINE ("lava_2_8x8", 0), (8, 0);
+	COMBINE ("lava_3_8x8", 0), (0, 8); COMBINE ("lava_4_8x8", 0), (8, 8); END;
+ANIMATION "tile_lava_2"; SUBSTRIP repeat;
+	COMBINE ("lava_1_8x8", 1), (0, 0); COMBINE ("lava_2_8x8", 1), (8, 0);
+	COMBINE ("lava_3_8x8", 1), (0, 8); COMBINE ("lava_4_8x8", 1), (8, 8); END;
+ANIMATION "tile_lava_3"; SUBSTRIP repeat;
+	COMBINE ("lava_1_8x8", 2), (0, 0); COMBINE ("lava_2_8x8", 2), (8, 0);
+	COMBINE ("lava_3_8x8", 2), (0, 8); COMBINE ("lava_4_8x8", 2), (8, 8); END;
+ANIMATION "tile_lava_4"; SUBSTRIP repeat;
+	COMBINE ("lava_1_8x8", 3), (0, 0); COMBINE ("lava_2_8x8", 3), (8, 0);
+	COMBINE ("lava_3_8x8", 3), (0, 8); COMBINE ("lava_4_8x8", 3), (8, 8); END;
+ANIMATION "tile_lava_5"; SUBSTRIP repeat;
+	COMBINE ("lava_1_8x8", 4), (0, 0); COMBINE ("lava_2_8x8", 4), (8, 0);
+	COMBINE ("lava_3_8x8", 4), (0, 8); COMBINE ("lava_4_8x8", 4), (8, 8); END;
+	
+ANIMATION "tile_waterfall_right"; SUBSTRIP repeat;
+	COMBINE ("waterfall_8x8", 0); MAKEQUAD; END;
+ANIMATION "tile_waterfall_up"; SUBSTRIP repeat;
+	COMBINE ("waterfall_8x8", 1); MAKEQUAD; END;
+ANIMATION "tile_waterfall_left"; SUBSTRIP repeat;
+	COMBINE ("waterfall_8x8", 2); MAKEQUAD; END;
+ANIMATION "tile_waterfall_down"; SUBSTRIP repeat;
+	COMBINE ("waterfall_8x8", 3); MAKEQUAD; END;
+	
+ANIMATION "tile_waterfall_right_finish"; SUBSTRIP repeat;
+	COMBINE ("waterfall_8x8", 0), (0, 0); COMBINE ("waterfall_finish_8x8", 0), (8, 0);
+	COMBINE ("waterfall_8x8", 0), (0, 8); COMBINE ("waterfall_finish_8x8", 0), (8, 8); END;
+ANIMATION "tile_waterfall_up_finish"; SUBSTRIP repeat;
+	COMBINE ("waterfall_8x8", 1), (0, 8); COMBINE ("waterfall_finish_8x8", 1), (0, 0);
+	COMBINE ("waterfall_8x8", 1), (8, 8); COMBINE ("waterfall_finish_8x8", 1), (8, 0); END;
+ANIMATION "tile_waterfall_left_finish"; SUBSTRIP repeat;
+	COMBINE ("waterfall_8x8", 2), (8, 0); COMBINE ("waterfall_finish_8x8", 2), (0, 0);
+	COMBINE ("waterfall_8x8", 2), (8, 8); COMBINE ("waterfall_finish_8x8", 2), (0, 8); END;
+ANIMATION "tile_waterfall_down_finish"; SUBSTRIP repeat;
+	COMBINE ("waterfall_8x8", 3), (0, 0); COMBINE ("waterfall_finish_8x8", 3), (0, 8);
+	COMBINE ("waterfall_8x8", 3), (8, 0); COMBINE ("waterfall_finish_8x8", 3), (8, 8); END;
+
+ANIMATION "tile_waterfall_down_start"; SUBSTRIP repeat;
+	COMBINE "waterfall_start_16x8", (0, 0);
+	COMBINE ("waterfall_8x8", 3), (0, 8); COMBINE ("waterfall_8x8", 3), (8, 8); END;
+	
+ANIMATION "tile_waterfall_down_rocks_finish"; SUBSTRIP repeat;
+	COMBINE ("waterfall_8x8", 3), (0, 0); ADD static, "waterfall_rock_8x8", (0, 8);
+	COMBINE ("waterfall_8x8", 3), (8, 0); COMBINE ("waterfall_finish_8x8", 3), (8, 8); END;
+ANIMATION "tile_waterfall_down_rocks"; SUBSTRIP repeat;
+	COMBINE ("waterfall_8x8", 3), (0, 0); ADD static, "waterfall_rock_8x8", (0, 8);
+	COMBINE ("waterfall_8x8", 3), (8, 8); ADD static, "waterfall_rock_8x8", (8, 0); END;
+	
+ANIMATION "tile_waterfall_down_start_cave_left"; SUBSTRIP repeat;
+	COMBINE "waterfall_start_16x8", (0, 8);
+	ADD static, "temp_cliff_hole_corner_alt_left" (0, 0); END;
+ANIMATION "tile_waterfall_down_start_cave_mid"; SUBSTRIP repeat;
+	COMBINE "waterfall_start_16x8", (0, 8);
+	ADD static, "temp_cliff_cave_mid" (0, 0); END;
+ANIMATION "tile_waterfall_down_start_cave_right"; SUBSTRIP repeat;
+	COMBINE "waterfall_start_16x8", (0, 8);
+	ADD static, "temp_cliff_hole_corner_alt_right" (0, 0); END;
+ANIMATION "tile_waterfall_down_start_cave_both"; SUBSTRIP repeat;
+	COMBINE "waterfall_start_16x8", (0, 8);
+	ADD static, "temp_cliff_hole_corner_alt_both" (0, 0); END;
+	
+ANIMATION "tile_lavafall_right"; SUBSTRIP repeat;
+	COMBINE ("lavafall_8x8", 0); MAKEQUAD; END;
+ANIMATION "tile_lavafall_up"; SUBSTRIP repeat;
+	COMBINE ("lavafall_8x8", 1); MAKEQUAD; END;
+ANIMATION "tile_lavafall_left"; SUBSTRIP repeat;
+	COMBINE ("lavafall_8x8", 2); MAKEQUAD; END;
+ANIMATION "tile_lavafall_down"; SUBSTRIP repeat;
+	COMBINE ("lavafall_8x8", 3); MAKEQUAD; END;
+	
+ANIMATION "tile_lavafall_right_finish"; SUBSTRIP repeat;
+	COMBINE ("lavafall_8x8", 0), (0, 0); COMBINE ("lavafall_finish_8x8", 0), (8, 0);
+	COMBINE ("lavafall_8x8", 0), (0, 8); COMBINE ("lavafall_finish_8x8", 0), (8, 8); END;
+ANIMATION "tile_lavafall_up_finish"; SUBSTRIP repeat;
+	COMBINE ("lavafall_8x8", 1), (0, 8); COMBINE ("lavafall_finish_8x8", 1), (0, 0);
+	COMBINE ("lavafall_8x8", 1), (8, 8); COMBINE ("lavafall_finish_8x8", 1), (8, 0); END;
+ANIMATION "tile_lavafall_left_finish"; SUBSTRIP repeat;
+	COMBINE ("lavafall_8x8", 2), (8, 0); COMBINE ("lavafall_finish_8x8", 2), (0, 0);
+	COMBINE ("lavafall_8x8", 2), (8, 8); COMBINE ("lavafall_finish_8x8", 2), (0, 8); END;
+ANIMATION "tile_lavafall_down_finish"; SUBSTRIP repeat;
+	COMBINE ("lavafall_8x8", 3), (0, 0); COMBINE ("lavafall_finish_8x8", 3), (0, 8);
+	COMBINE ("lavafall_8x8", 3), (8, 0); COMBINE ("lavafall_finish_8x8", 3), (8, 8); END;
+
+ANIMATION "tile_lavafall_down_start"; SUBSTRIP repeat;
+	COMBINE "lavafall_start_16x8", (0, 0);
+	COMBINE ("lavafall_8x8", 3), (0, 8); COMBINE ("lavafall_8x8", 3), (8, 8); END;
+	
+ANIMATION "tile_lavafall_down_rocks_finish"; SUBSTRIP repeat;
+	COMBINE ("lavafall_8x8", 3), (0, 0); ADD static, "lavafall_rock_8x8", (0, 8);
+	COMBINE ("lavafall_8x8", 3), (8, 0); COMBINE ("lavafall_finish_8x8", 3), (8, 8); END;
+ANIMATION "tile_lavafall_down_rocks"; SUBSTRIP repeat;
+	COMBINE ("lavafall_8x8", 3), (0, 0); ADD static, "lavafall_rock_8x8", (0, 8);
+	COMBINE ("lavafall_8x8", 3), (8, 8); ADD static, "lavafall_rock_8x8", (8, 0); END;
+	
+ANIMATION "tile_lavafall_down_start_cave_left"; SUBSTRIP repeat;
+	COMBINE "lavafall_start_16x8", (0, 8);
+	ADD static, "temp_cliff_hole_corner_alt_left" (0, 0); END;
+ANIMATION "tile_lavafall_down_start_cave_mid"; SUBSTRIP repeat;
+	COMBINE "lavafall_start_16x8", (0, 8);
+	ADD static, "temp_cliff_cave_mid" (0, 0); END;
+ANIMATION "tile_lavafall_down_start_cave_right"; SUBSTRIP repeat;
+	COMBINE "lavafall_start_16x8", (0, 8);
+	ADD static, "temp_cliff_hole_corner_alt_right" (0, 0); END;
+ANIMATION "tile_lavafall_down_start_cave_both"; SUBSTRIP repeat;
+	COMBINE "lavafall_start_16x8", (0, 8);
+	ADD static, "temp_cliff_hole_corner_alt_both" (0, 0); END;
+	
+COMPOSITE "tile_hardened_lava";
+	ADD "temp_8x8_hardened_lava", (0, 0); ADD "temp_8x8_hardened_lava", (8, 0);
+	ADD "temp_8x8_hardened_lava", (0, 8); ADD "temp_8x8_hardened_lava", (8, 8); END;
+	
+COMPOSITE "temp_preview_water_style";
+	ADD "tile_waterfall_down_start", (0, 0); ADD "tile_lavafall_down_start", (16, 0);
+	ADD "tile_waterfall_down_rocks", (0, 16); ADD "tile_lavafall_down_rocks", (16, 16);
+	ADD "tile_waterfall_down_finish", (0, 32); ADD "tile_lavafall_down_finish", (16, 32);
+	ADD "tile_water", (0, 48); ADD "tile_lava_1", (16, 48);
+	ADD "tile_deep_water", (0, 64); ADD "tile_lava_2", (16, 64);
+	END;
+	
+COMPOSITE "tile_water_rocks";
+	ADD "water_rock_1_8x8", (0, 0); ADD "water_rock_3_8x8", (8, 0);
+	ADD "water_rock_3_8x8", (0, 8); ADD "water_rock_1_8x8", (8, 8); END;
+	
+STYLEPREVIEW "water", "temp_preview_water_style";
+STYLEPREVIEW "water_rocks", "tile_water_rocks";
+STYLEPREVIEW "hardened_lava", "tile_hardened_lava";
+
+COMPOSITE "temp_output_right_top";
+	ADD (6, 8), (0, 0); ADD (7, 8), (8, 0); ADD (11, 8), (0, 8); END;
+COMPOSITE "temp_output_right_mid";
+	ADD (11, 9), (0, 0); ADD (11, 8), (0, 8); END;
+COMPOSITE "temp_output_right_bottom";
+	ADD (6, 9), (0, 8); ADD (7, 9), (8, 8); ADD (11, 9), (0, 0); END;
+	
+COMPOSITE "temp_output_left_top";
+	ADD (4, 8), (0, 0); ADD (5, 8), (8, 0); ADD (10, 8), (8, 8); END;
+COMPOSITE "temp_output_left_mid";
+	ADD (10, 9), (8, 0); ADD (10, 8), (8, 8); END;
+COMPOSITE "temp_output_left_bottom";
+	ADD (4, 9), (0, 8); ADD (5, 9), (8, 8); ADD (10, 9), (8, 0); END;
+	
+COMPOSITE "temp_output_up_left";
+	ADD (0, 8), (0, 0); ADD (0, 9), (0, 8); ADD (8, 8), (8, 8); END;
+COMPOSITE "temp_output_up_mid";
+	ADD (9, 8), (0, 8); ADD (8, 8), (8, 8); END;
+COMPOSITE "temp_output_up_right";
+	ADD (1, 8), (8, 0); ADD (1, 9), (8, 8); ADD (9, 8), (0, 8); END;
+	
+COMPOSITE "temp_output_down_left";
+	ADD (2, 8), (0, 0); ADD (2, 9), (0, 8); ADD (8, 9), (8, 0); END;
+COMPOSITE "temp_output_down_mid";
+	ADD (9, 9), (0, 0); ADD (8, 9), (8, 0); END;
+COMPOSITE "temp_output_down_right";
+	ADD (3, 8), (8, 0); ADD (3, 9), (8, 8); ADD (9, 9), (0, 0); END;
+
+COMPOSITE "tile_output_empty_right_top";
+	COMBINE "temp_output_right_top"; ADD "black_8x8", (8, 8); END;
+COMPOSITE "tile_output_empty_right_mid";
+	COMBINE "temp_output_right_mid"; ADD "black_8x8", (8, 0); ADD "black_8x8", (8, 8); END;
+COMPOSITE "tile_output_empty_right_bottom";
+	COMBINE "temp_output_right_bottom"; ADD "black_8x8", (8, 0); END;
+	
+ANIMATION "tile_output_waterfall_right_top"; SUBSTRIP repeat;
+	COMBINE ("waterfall_8x8", 0), (8, 8);
+	ADD static, "temp_output_right_top"; END;
+ANIMATION "tile_output_waterfall_right_mid"; SUBSTRIP repeat;
+	COMBINE ("waterfall_8x8", 0), (8, 0);
+	COMBINE ("waterfall_8x8", 0), (8, 8);
+	ADD static, "temp_output_right_mid"; END;
+ANIMATION "tile_output_waterfall_right_bottom"; SUBSTRIP repeat;
+	COMBINE ("waterfall_8x8", 0), (8, 0);
+	ADD static, "temp_output_right_bottom"; END;
+
+ANIMATION "tile_output_lavafall_right_top"; SUBSTRIP repeat;
+	COMBINE ("lavafall_8x8", 0), (8, 8);
+	ADD static, "temp_output_right_top"; END;
+ANIMATION "tile_output_lavafall_right_mid"; SUBSTRIP repeat;
+	COMBINE ("lavafall_8x8", 0), (8, 0);
+	COMBINE ("lavafall_8x8", 0), (8, 8);
+	ADD static, "temp_output_right_mid"; END;
+ANIMATION "tile_output_lavafall_right_bottom"; SUBSTRIP repeat;
+	COMBINE ("lavafall_8x8", 0), (8, 0);
+	ADD static, "temp_output_right_bottom"; END;
+	
+COMPOSITE "tile_output_empty_left_top";
+	COMBINE "temp_output_left_top"; ADD "black_8x8", (0, 8); END;
+COMPOSITE "tile_output_empty_left_mid";
+	COMBINE "temp_output_left_mid"; ADD "black_8x8", (0, 0); ADD "black_8x8", (0, 8); END;
+COMPOSITE "tile_output_empty_left_bottom";
+	COMBINE "temp_output_left_bottom"; ADD "black_8x8", (0, 0); END;
+	
+ANIMATION "tile_output_waterfall_left_top"; SUBSTRIP repeat;
+	COMBINE ("waterfall_8x8", 2), (0, 8);
+	ADD static, "temp_output_left_top"; END;
+ANIMATION "tile_output_waterfall_left_mid"; SUBSTRIP repeat;
+	COMBINE ("waterfall_8x8", 2), (0, 0);
+	COMBINE ("waterfall_8x8", 2), (0, 8);
+	ADD static, "temp_output_left_mid"; END;
+ANIMATION "tile_output_waterfall_left_bottom"; SUBSTRIP repeat;
+	COMBINE ("waterfall_8x8", 2), (0, 0);
+	ADD static, "temp_output_left_bottom"; END;
+	
+ANIMATION "tile_output_lavafall_left_top"; SUBSTRIP repeat;
+	COMBINE ("lavafall_8x8", 2), (0, 8);
+	ADD static, "temp_output_left_top"; END;
+ANIMATION "tile_output_lavafall_left_mid"; SUBSTRIP repeat;
+	COMBINE ("lavafall_8x8", 2), (0, 0);
+	COMBINE ("lavafall_8x8", 2), (0, 8);
+	ADD static, "temp_output_left_mid"; END;
+ANIMATION "tile_output_lavafall_left_bottom"; SUBSTRIP repeat;
+	COMBINE ("lavafall_8x8", 2), (0, 0);
+	ADD static, "temp_output_left_bottom"; END;
+	
+COMPOSITE "tile_output_empty_up_left";
+	COMBINE "temp_output_up_left"; ADD "black_8x8", (8, 0); END;
+COMPOSITE "tile_output_empty_up_mid";
+	COMBINE "temp_output_up_mid"; ADD "black_8x8", (0, 0); ADD "black_8x8", (8, 0); END;
+COMPOSITE "tile_output_empty_up_right";
+	COMBINE "temp_output_up_right"; ADD "black_8x8", (0, 0); END;
+	
+ANIMATION "tile_output_waterfall_up_left";
+	COMBINE ("waterfall_8x8", 1), (8, 0);
+	ADD static, "temp_output_up_left"; END;
+ANIMATION "tile_output_waterfall_up_mid";
+	COMBINE ("waterfall_8x8", 1), (0, 0);
+	COMBINE ("waterfall_8x8", 1), (8, 0);
+	ADD static, "temp_output_up_mid"; END;
+ANIMATION "tile_output_waterfall_up_right";
+	COMBINE ("waterfall_8x8", 1), (0, 0);
+	ADD static, "temp_output_up_right"; END;
+
+ANIMATION "tile_output_lavafall_up_left";
+	COMBINE ("lavafall_8x8", 1), (8, 0);
+	ADD static, "temp_output_up_left"; END;
+ANIMATION "tile_output_lavafall_up_mid";
+	COMBINE ("lavafall_8x8", 1), (0, 0);
+	COMBINE ("lavafall_8x8", 1), (8, 0);
+	ADD static, "temp_output_up_mid"; END;
+ANIMATION "tile_output_lavafall_up_right";
+	COMBINE ("lavafall_8x8", 1), (0, 0);
+	ADD static, "temp_output_up_right"; END;
+
+COMPOSITE "tile_output_empty_down_left";
+	COMBINE "temp_output_down_left"; ADD "black_8x8", (8, 8); END;
+COMPOSITE "tile_output_empty_down_mid";
+	COMBINE "temp_output_down_mid"; ADD "black_8x8", (0, 8); ADD "black_8x8", (8, 8); END;
+COMPOSITE "tile_output_empty_down_right";
+	COMBINE "temp_output_down_right"; ADD "black_8x8", (0, 8); END;
+
+ANIMATION "tile_output_waterfall_down_left";
+	COMBINE ("waterfall_8x8", 3), (8, 8);
+	ADD static, "temp_output_down_left"; END;
+ANIMATION "tile_output_waterfall_down_mid";
+	COMBINE ("waterfall_8x8", 3), (0, 8);
+	COMBINE ("waterfall_8x8", 3), (8, 8);
+	ADD static, "temp_output_down_mid"; END;
+ANIMATION "tile_output_waterfall_down_right";
+	COMBINE ("waterfall_8x8", 3), (0, 8);
+	ADD static, "temp_output_down_right"; END;
+
+ANIMATION "tile_output_lavafall_down_left";
+	COMBINE ("lavafall_8x8", 3), (8, 8);
+	ADD static, "temp_output_down_left"; END;
+ANIMATION "tile_output_lavafall_down_mid";
+	COMBINE ("lavafall_8x8", 3), (0, 8);
+	COMBINE ("lavafall_8x8", 3), (8, 8);
+	ADD static, "temp_output_down_mid"; END;
+ANIMATION "tile_output_lavafall_down_right";
+	COMBINE ("lavafall_8x8", 3), (0, 8);
+	ADD static, "temp_output_down_right"; END;
+

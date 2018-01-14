@@ -12,6 +12,8 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game;
 using System.Windows.Threading;
 using System.Diagnostics;
+using ZeldaOracle.Game.Worlds;
+using ConscriptDesigner.Control;
 
 namespace ConscriptDesigner.WinForms {
 
@@ -73,6 +75,7 @@ namespace ConscriptDesigner.WinForms {
 			this.orderedSpriteSizes = new List<Point2I>();
 			this.columns = 1;
 			this.ResizeRedraw = true;
+			this.AutoScroll = true;
 			this.ticks = 0;
 			this.animating = false;
 			this.mouse = -Point2I.One;
@@ -94,7 +97,15 @@ namespace ConscriptDesigner.WinForms {
 		public event EventHandler HoverSpriteChanged;
 
 		private void OnClientSizeChanged(object sender, EventArgs e) {
-			UpdateHeight();
+			this.HorizontalScroll.Value = 0;
+			this.VerticalScroll.Value = 0;
+		}
+
+		private void TimerUpdate() {
+			if (animating)
+				Invalidate();
+			if (ClientSize.Width != AutoScrollMinSize.Width)
+				UpdateHeight();
 		}
 
 		private void OnMouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
@@ -126,7 +137,7 @@ namespace ConscriptDesigner.WinForms {
 			this.dispatcherTimer = new DispatcherTimer(
 				TimeSpan.FromMilliseconds(15),
 				DispatcherPriority.Render,
-				delegate { if (animating) Invalidate(); },
+				delegate { TimerUpdate(); },
 				System.Windows.Application.Current.Dispatcher);
 		}
 
@@ -212,16 +223,16 @@ namespace ConscriptDesigner.WinForms {
 		public void RestartAnimations() {
 			ticks = 0;
 		}
-
+		
 		private void UpdateHeight() {
 			columns = Math.Max(1, (ClientSize.Width - 1) / (spriteSize.X + 1));
 			int height = ((filteredSprites.Count + columns - 1) / columns) * (spriteSize.Y + 1);
+			
+			this.AutoScrollMinSize = new Size(ClientSize.Width, height);
+			HorizontalScroll.Value = 0;
+			VerticalScroll.Value = 0;
 			if (!animating)
 				Invalidate();
-
-			this.AutoScrollMinSize = new Size(ClientSize.Width, height);
-			this.HorizontalScroll.Value = 0;
-			this.VerticalScroll.Value = 0;
 		}
 
 		public void UpdateSpriteSize(Point2I spriteSize) {
@@ -276,6 +287,19 @@ namespace ConscriptDesigner.WinForms {
 			g.Clear(Color.White);
 			Point2I hover = -Point2I.One;
 			if (sprites.Any()) {
+
+				if (GameData.PaletteShader != null && !GameData.PaletteShader.Effect.IsDisposed) {
+					GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
+					GameData.PaletteShader.TilePalette = GameData.PAL_TILES_DEFAULT;
+					if (DesignerControl.PreviewZone != null && DesignerControl.PreviewZone.Palette != null)
+						GameData.PaletteShader.TilePalette = DesignerControl.PreviewZone.Palette;
+					GameData.PaletteShader.ApplyPalettes();
+				}
+				if (DesignerControl.PreviewZone != null) {
+					settings.VariantID = DesignerControl.PreviewZone.ImageVariantID;
+					settings.Styles = DesignerControl.PreviewZone.StyleDefinitions;
+				}
+
 				g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 				g.Translate(-HorizontalScroll.Value, -VerticalScroll.Value);
 				int startRow = (VerticalScroll.Value + 1) / (spriteSize.Y + 1);

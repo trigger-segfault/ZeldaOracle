@@ -22,7 +22,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			// BEGIN/END
 			//=====================================================================================
-			AddCommand("PALETTE", "string dictionary, string name",
+			AddCommand("PALETTE", 0,
+				"string dictionary, string name",
 			delegate (CommandParam parameters) {
 				if (palette != null)
 					ThrowCommandParseError("Must end previous PALETTE!");
@@ -31,25 +32,24 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				palette = new Palette(Resources.GraphicsDevice, dictionary);
 				assetName = parameters.GetString(1);
 				AddResource<Palette>(assetName, palette);
+				Mode = 1;
 			});
 			//=====================================================================================
-			AddCommand("END",
+			AddCommand("END", 1,
 			delegate (CommandParam parameters) {
 				if (palette == null)
 					ThrowCommandParseError("Must start a PALETTE before calling end!");
 
 				palette.UpdatePalette();
 				palette = null;
+				Mode = 0;
 			});
 			//=====================================================================================
 			// BUILDING
 			//=====================================================================================
-			AddCommand("COLOR", "string name, string subtype, (int r, int g, int b)",
-						"string name, string subtype, (int r, int g, int b, int a)",
+			AddCommand("COLOR", 1,
+				"string name, string subtype, Color color",
 			delegate (CommandParam parameters) {
-				if (palette == null)
-					ThrowCommandParseError("Must start a PALETTE before defining a color!");
-
 				LookupSubtypes subtype = ParseSubtype(parameters.GetString(1));
 
 				CommandParam colorParam = parameters.GetParam(2);
@@ -68,11 +68,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				palette.SetColor(parameters.GetString(0), subtype, color);
 			});
 			//=====================================================================================
-			AddCommand("LOOKUP", "string name, string subtype, string lookupName, string lookupSubtype",
+			AddCommand("LOOKUP", 1,
+				"string name, string subtype, string lookupName, string lookupSubtype",
 			delegate (CommandParam parameters) {
-				if (palette == null)
-					ThrowCommandParseError("Must start a PALETTE before defining a color!");
-
 				LookupSubtypes subtype = ParseSubtype(parameters.GetString(1));
 				LookupSubtypes lookupSubtype = ParseSubtype(parameters.GetString(3));
 				
@@ -81,13 +79,19 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					parameters.GetString(2), lookupSubtype);
 			});
 			//=====================================================================================
+			AddCommand("RESET", 1,
+				"string name, string subtype",
+			delegate (CommandParam parameters) {
+				LookupSubtypes subtype = ParseSubtype(parameters.GetString(1));
+
+				palette.Reset(parameters.GetString(0), subtype);
+			});
+			//=====================================================================================
 			// CLONING
 			//=====================================================================================
-			AddCommand("CLONE", "string paletteName",
+			AddCommand("CLONE", 1,
+				"string paletteName",
 			delegate (CommandParam parameters) {
-				if (palette == null)
-					ThrowCommandParseError("Must start a PALETTE before calling CLONE!");
-
 				palette = new Palette(GetResource<Palette>(parameters.GetString(0)));
 				SetResource<Palette>(assetName, palette);
 			});

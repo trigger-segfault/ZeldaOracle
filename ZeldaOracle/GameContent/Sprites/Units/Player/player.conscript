@@ -14,10 +14,10 @@ PALETTEDICTIONARY "entity_dictionary";
 
 SOURCE "player";
 
-MAPPEDCOLORS "entities_default", ("green");
+MAPPEDCOLORS	"entities_default", ("green");
 
 SPRITESET "set_player" (8, 30);
-	DYNAMIC COLOR "", ("green", "red", "blue", "hurt"), (0, 0); END;
+	MULTIPLE COLOR "", ("green", "red", "blue", "hurt"), (0, 0); END;
 
 	# Combine multi-part sprites
 
@@ -26,22 +26,22 @@ SPRITESET "set_player" (8, 30);
 	APPEND (5, 20), (6, 20), (0, -16);
 END;
 
-MAPPEDCOLORS "entities_default",
+MAPPEDCOLORS	"entities_default",
 	("green", "red", "blue", "orange", "shaded_red", "shaded_blue");
 
 SOURCE "player_items";
 
 SPRITESET "set_player_items" (8, 12);
-	DYNAMIC COLOR "", ("green", "red", "blue", "inverse_red"), (0, 0), (0, 0), (8, 1); END;
-	DYNAMIC COLOR "", ("shaded_blue", "shaded_red"), (0, 1), (0, 1), (4, 1); END;
+	MULTIPLE COLOR "", ("green", "red", "blue", "inverse_red"), (0, 0), (0, 0), (8, 1); END;
+	MULTIPLE COLOR "", ("shaded_blue", "shaded_red"), (0, 1), (0, 1), (4, 1); END;
 
 
 
 
 
-	DYNAMIC BASIC (0, 2), (0, 0), (0, 2), (8, 4); END;
+	MULTIPLE BASIC (0, 2), (0, 2), (8, 4); END;
 
-	DYNAMIC COLOR "", ("blue", "red"), (0, 6), (0, 6), (4, 1); END;
+	MULTIPLE COLOR "", ("blue", "red"), (0, 6), (0, 6), (4, 1); END;
 
 	SINGLE	BASIC (4, 6); END;
 
@@ -51,7 +51,7 @@ SPRITESET "set_player_items" (8, 12);
 
 	SINGLE	BASIC (7, 6); END;
 
-	DYNAMIC	BASIC (0, 7), (0, 0), (0, 7), (8, 3); END;
+	MULTIPLE BASIC (0, 7), (0, 7), (8, 3); END;
 
 	#SOURCE "set_player_items";
 

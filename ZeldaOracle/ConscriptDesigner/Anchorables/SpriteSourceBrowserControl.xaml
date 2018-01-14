@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-              xmlns:local="clr-namespace:ConscriptDesigner.Controls"
+             xmlns:local="clr-namespace:ConscriptDesigner.Controls"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="350" d:DesignWidth="250">
@@ -24,8 +24,16 @@
             <ComboBox x:Name="comboBoxSpriteSources" HorizontalAlignment="Stretch" Margin="0,1" SelectionChanged="OnSpriteSourceChanged" VerticalAlignment="Center"/>
         </ToolBar>
         <ToolBar DockPanel.Dock="Top">
-            <local:ImageToggleButton x:Name="buttonShowAnimations" Source="/ConscriptDesigner;component/Resources/Icons/ShowAnimations.png" Click="OnToggleAnimations" />
-            <local:ImageButton x:Name="buttonRestartAnimations" Source="/ConscriptDesigner;component/Resources/Icons/PlayAnimations.png" Click="OnRestartAnimations" IsEnabled="False"/>
+            <ToolBar.Resources>
+                <Style TargetType="{x:Type ToolBarPanel}">
+                    <Setter Property="Orientation" Value="Vertical"/>
+                </Style>
+            </ToolBar.Resources>
+            <ComboBox x:Name="comboBoxZones" HorizontalAlignment="Stretch" Margin="0,1" SelectionChanged="OnZoneChanged" VerticalAlignment="Center"/>
+        </ToolBar>
+        <ToolBar DockPanel.Dock="Top">
+            <local:ImageToggleButton x:Name="buttonShowAnimations" Source="/ConscriptDesigner;component/Resources/Icons/ShowAnimations.png" Click="OnToggleAnimations" Focusable="False" IsTabStop="False" />
+            <local:ImageButton x:Name="buttonRestartAnimations" Source="/ConscriptDesigner;component/Resources/Icons/PlayAnimations.png" Click="OnRestartAnimations" IsEnabled="False" Focusable="False" IsTabStop="False"/>
         </ToolBar>
         <!--<StatusBar DockPanel.Dock="Bottom" Background="#FFF0F0F0">
             <StatusBarItem Height="44" VerticalContentAlignment="Top">

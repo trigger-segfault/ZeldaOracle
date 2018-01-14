@@ -14,6 +14,10 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		private Rectangle2I sourceRect;
 		/// <summary>The draw offset of the sprite.</summary>
 		private Point2I drawOffset;
+		/// <summary>The flipping applied to the sprite.</summary>
+		private Flip flipEffects;
+		/// <summary>The number of 90-degree rotations for the sprite.</summary>
+		private Rotation rotation;
 
 
 		//-----------------------------------------------------------------------------
@@ -24,61 +28,48 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			this.image			= null;
 			this.sourceRect		= Rectangle2I.Zero;
 			this.drawOffset		= Point2I.Zero;
+			this.flipEffects	= Flip.None;
+			this.rotation		= Rotation.None;
 		}
 
-		public BasicSprite(SpriteSheet sheet, int indexX, int indexY) :
-			this(sheet, new Point2I(indexX, indexY), Point2I.Zero)
+		public BasicSprite(SpriteSheet sheet, Point2I index, Flip flip = Flip.None,
+			Rotation rotation = Rotation.None) :
+			this(sheet, index, Point2I.Zero, flip)
 		{
 		}
 
-		public BasicSprite(SpriteSheet sheet, int indexX, int indexY, int drawOffsetX, int drawOffsetY) :
-			this(sheet, new Point2I(indexX, indexY), new Point2I(drawOffsetX, drawOffsetY))
+		public BasicSprite(SpriteSheet sheet, Point2I index, Point2I drawOffset,
+			Flip flip = Flip.None, Rotation rotation = Rotation.None)
+		{
+			this.image			= sheet.Image;
+			this.sourceRect		= sheet.GetSourceRect(index);
+			this.drawOffset		= drawOffset;
+			this.flipEffects	= flip;
+			this.rotation		= rotation;
+		}
+
+		public BasicSprite(Image image, Rectangle2I sourceRect, Flip flip = Flip.None,
+			Rotation rotation = Rotation.None) :
+			this(image, sourceRect, Point2I.Zero, flip)
 		{
 		}
 
-		public BasicSprite(SpriteSheet sheet, Point2I index) :
-			this(sheet, index, Point2I.Zero)
+		public BasicSprite(Image image, Rectangle2I sourceRect, Point2I drawOffset,
+			Flip flip = Flip.None, Rotation rotation = Rotation.None)
 		{
-		}
-
-		public BasicSprite(SpriteSheet sheet, Point2I index, Point2I drawOffset) {
-			this.image          = sheet.Image;
-			this.sourceRect     = new Rectangle2I(
-				sheet.Offset.X + (index.X * (sheet.CellSize.X + sheet.Spacing.X)),
-				sheet.Offset.Y + (index.Y * (sheet.CellSize.Y + sheet.Spacing.Y)),
-				sheet.CellSize.X,
-				sheet.CellSize.Y
-			);
-			this.drawOffset     = drawOffset;
-		}
-
-
-
-		public BasicSprite(Image image, int sourceX, int sourceY, int sourceWidth, int sourceHeight) :
-			this(image, new Rectangle2I(sourceX, sourceY, sourceWidth, sourceHeight), Point2I.Zero)
-		{
-		}
-
-		public BasicSprite(Image image, int sourceX, int sourceY, int sourceWidth, int sourceHeight, int drawOffsetX, int drawOffsetY) :
-			this(image, new Rectangle2I(sourceX, sourceY, sourceWidth, sourceHeight), new Point2I(drawOffsetX, drawOffsetY))
-		{
-		}
-
-		public BasicSprite(Image image, Rectangle2I sourceRect) :
-			this(image, sourceRect, Point2I.Zero)
-		{
-		}
-
-		public BasicSprite(Image image, Rectangle2I sourceRect, Point2I drawOffset) {
-			this.image          = image;
-			this.sourceRect     = sourceRect;
-			this.drawOffset     = drawOffset;
+			this.image			= image;
+			this.sourceRect		= sourceRect;
+			this.drawOffset		= drawOffset;
+			this.flipEffects	= flip;
+			this.rotation		= rotation;
 		}
 
 		public BasicSprite(BasicSprite copy) {
 			this.image			= copy.image;
 			this.sourceRect		= copy.sourceRect;
 			this.drawOffset		= copy.drawOffset;
+			this.flipEffects	= copy.flipEffects;
+			this.rotation		= copy.rotation;
 		}
 
 
@@ -88,7 +79,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
 		public IEnumerable<SpritePart> GetParts(SpriteDrawSettings settings) {
-			yield return new SpritePart(image, sourceRect, drawOffset);
+			yield return new SpritePart(image, sourceRect, drawOffset, flipEffects, rotation);
 		}
 
 		/// <summary>Clones the sprite.</summary>
@@ -127,6 +118,18 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public Point2I DrawOffset {
 			get { return drawOffset; }
 			set { drawOffset = value; }
+		}
+
+		/// <summary>Gets or sets the flipping applied to the sprite.</summary>
+		public Flip FlipEffects {
+			get { return flipEffects; }
+			set { flipEffects = value; }
+		}
+
+		/// <summary>Gets or sets the number of 90-degree rotations for the sprite.</summary>
+		public Rotation Rotation {
+			get { return rotation; }
+			set { rotation = value; }
 		}
 	}
 }

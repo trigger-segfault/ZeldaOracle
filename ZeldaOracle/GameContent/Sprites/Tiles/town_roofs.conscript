@@ -1,0 +1,234 @@
+﻿#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_town_roofs";
+NAME "tile_roof_brown_top_left_dark"			(8, 0);
+NAME "tile_roof_brown_top_left_light"			(9, 2);
+NAME "tile_roof_brown_top_mid"					(9, 0);
+NAME "tile_roof_brown_top_right_dark"			(10, 0);
+NAME "tile_roof_brown_top_right_light"			(10, 2);
+NAME "tile_roof_brown_bottom_left"				(8, 1);
+NAME "tile_roof_brown_bottom_mid"				(9, 1);
+NAME "tile_roof_brown_bottom_right"				(10, 1);
+NAME "tile_chimney"								(8, 2);
+NAME "tile_vasu_sign"							(8, 3);
+
+NAME "tile_roof_tiled_red_mid"					((6, 0), "roof_red");
+NAME "tile_roof_tiled_red_right"				((7, 0), "roof_red");
+
+NAME "tile_roof_red_top_left_dark"				((0, 0), "roof_red");
+NAME "tile_roof_red_top_mid"					((1, 0), "roof_red");
+NAME "tile_roof_red_top_right_dark"				((2, 0), "roof_red");
+NAME "tile_roof_red_bottom_left"				((0, 1), "roof_red");
+NAME "tile_roof_red_bottom_mid"					((1, 1), "roof_red");
+NAME "tile_roof_red_bottom_right"				((2, 1), "roof_red");
+NAME "tile_roof_red_both_left_dark"				((0, 2), "roof_red");
+NAME "tile_roof_red_both_mid"					((1, 2), "roof_red");
+NAME "tile_roof_red_both_right_dark"			((2, 2), "roof_red");
+NAME "tile_roof_red_both_both_dark"				((0, 3), "roof_red");
+COMPOSITE "tile_roof_red_top_left_light";
+	ADD "tile_roof_red_top_left_dark"; COMBINE "temp_roof_red_left_light"; END;
+COMPOSITE "tile_roof_red_top_right_light";
+	ADD "tile_roof_red_top_right_dark"; COMBINE "temp_roof_red_right_light"; END;
+COMPOSITE "tile_roof_red_both_left_light";
+	ADD "tile_roof_red_both_left_dark"; COMBINE "temp_roof_red_left_light"; END;
+COMPOSITE "tile_roof_red_both_right_light";
+	ADD "tile_roof_red_both_right_dark"; COMBINE "temp_roof_red_right_light"; END;
+COMPOSITE "tile_roof_red_both_both_light";
+	ADD "tile_roof_red_both_both_dark";
+	COMBINE "temp_roof_red_left_light"; COMBINE "temp_roof_red_right_light"; END;
+
+NAME "tile_roof_red_clock_top_left_dark"		((3, 0), "roof_red");
+NAME "tile_roof_red_clock_top_mid"				((4, 0), "roof_red");
+NAME "tile_roof_red_clock_top_right_dark"		((5, 0), "roof_red");
+NAME "tile_roof_red_clock_bottom_left"			((3, 1), "roof_red");
+NAME "tile_roof_red_clock_bottom_mid"			((4, 1), "roof_red");
+NAME "tile_roof_red_clock_bottom_right"			((5, 1), "roof_red");
+COMPOSITE "tile_roof_red_clock_top_left_light";
+	ADD "tile_roof_red_clock_top_left_dark"; COMBINE "temp_roof_red_left_light"; END;
+COMPOSITE "tile_roof_red_clock_top_right_light";
+	ADD "tile_roof_red_clock_top_right_dark"; COMBINE "temp_roof_red_right_light"; END;
+
+NAME "tile_roof_red_boxing_top_left_dark"		((3, 2), "roof_red");
+NAME "tile_roof_red_boxing_top_mid"				((4, 2), "roof_red");
+NAME "tile_roof_red_boxing_top_right_dark"		((5, 2), "roof_red");
+NAME "tile_roof_red_boxing_bottom_left"			((3, 3), "roof_red");
+NAME "tile_roof_red_boxing_bottom_mid"			((4, 3), "roof_red");
+NAME "tile_roof_red_boxing_bottom_right"		((5, 3), "roof_red");
+COMPOSITE "tile_roof_red_boxing_top_left_light";
+	ADD "tile_roof_red_boxing_top_left_dark"; COMBINE "temp_roof_red_left_light"; END;
+COMPOSITE "tile_roof_red_boxing_top_right_light";
+	ADD "tile_roof_red_boxing_top_right_dark"; COMBINE "temp_roof_red_right_light"; END;
+
+NAME "tile_roof_red_mask_both_left_dark"		((1, 3), "roof_red");
+NAME "tile_roof_red_mask_both_right_dark"		((2, 3), "roof_red");
+COMPOSITE "tile_roof_red_mask_both_left_light";
+	ADD "tile_roof_red_mask_both_left_dark"; COMBINE "temp_roof_red_left_light"; END;
+COMPOSITE "tile_roof_red_mask_both_right_light";
+	ADD "tile_roof_red_mask_both_right_dark"; COMBINE "temp_roof_red_right_light"; END;
+
+COMPOSITE "tile_roof_red_bottom_mid_shop_left";
+	ADD "tile_roof_red_bottom_mid"; COMBINE "temp_shop_sign_left"; END;
+COMPOSITE "tile_roof_red_bottom_mid_shop_mid";
+	ADD "tile_roof_red_bottom_mid"; COMBINE "temp_shop_sign_mid"; END;
+COMPOSITE "tile_roof_red_bottom_mid_shop_right";
+	ADD "tile_roof_red_bottom_mid"; COMBINE "temp_shop_sign_right"; END;
+COMPOSITE "tile_roof_red_bottom_left_shop_left";
+	ADD "tile_roof_red_bottom_left"; COMBINE "temp_shop_sign_left"; END;
+COMPOSITE "tile_roof_red_bottom_right_shop_right";
+	ADD "tile_roof_red_bottom_right"; COMBINE "temp_shop_sign_right"; END;
+	
+NAME "tile_roof_tiled_blue_mid"					((6, 0), "roof_blue");
+NAME "tile_roof_tiled_blue_right"				((7, 0), "roof_blue");
+
+NAME "tile_roof_blue_top_left_dark"				((0, 0), "roof_blue");
+NAME "tile_roof_blue_top_mid"					((1, 0), "roof_blue");
+NAME "tile_roof_blue_top_right_dark"			((2, 0), "roof_blue");
+NAME "tile_roof_blue_bottom_left"				((0, 1), "roof_blue");
+NAME "tile_roof_blue_bottom_mid"				((1, 1), "roof_blue");
+NAME "tile_roof_blue_bottom_right"				((2, 1), "roof_blue");
+NAME "tile_roof_blue_both_left_dark"			((0, 2), "roof_blue");
+NAME "tile_roof_blue_both_mid"					((1, 2), "roof_blue");
+NAME "tile_roof_blue_both_right_dark"			((2, 2), "roof_blue");
+NAME "tile_roof_blue_both_both_dark"			((0, 3), "roof_blue");
+COMPOSITE "tile_roof_blue_top_left_light";
+	ADD "tile_roof_blue_top_left_dark"; COMBINE "temp_roof_blue_left_light"; END;
+COMPOSITE "tile_roof_blue_top_right_light";
+	ADD "tile_roof_blue_top_right_dark"; COMBINE "temp_roof_blue_right_light"; END;
+COMPOSITE "tile_roof_blue_both_left_light";
+	ADD "tile_roof_blue_both_left_dark"; COMBINE "temp_roof_blue_left_light"; END;
+COMPOSITE "tile_roof_blue_both_right_light";
+	ADD "tile_roof_blue_both_right_dark"; COMBINE "temp_roof_blue_right_light"; END;
+COMPOSITE "tile_roof_blue_both_both_light";
+	ADD "tile_roof_blue_both_both_dark";
+	COMBINE "temp_roof_blue_left_light"; COMBINE "temp_roof_blue_right_light"; END;
+COMPOSITE "tile_roof_blue_top_left_water";
+	ADD "tile_roof_blue_top_left_dark"; COMBINE "temp_roof_blue_left_water"; END;
+COMPOSITE "tile_roof_blue_top_right_water";
+	ADD "tile_roof_blue_top_right_dark"; COMBINE "temp_roof_blue_right_water"; END;
+COMPOSITE "tile_roof_blue_both_left_water";
+	ADD "tile_roof_blue_both_left_dark"; COMBINE "temp_roof_blue_left_water"; END;
+COMPOSITE "tile_roof_blue_both_right_water";
+	ADD "tile_roof_blue_both_right_dark"; COMBINE "temp_roof_blue_right_water"; END;
+COMPOSITE "tile_roof_blue_both_both_water";
+	ADD "tile_roof_blue_both_both_dark";
+	COMBINE "temp_roof_blue_left_water"; COMBINE "temp_roof_blue_right_water"; END;
+
+NAME "tile_roof_blue_clock_top_left_dark"		((3, 0), "roof_blue");
+NAME "tile_roof_blue_clock_top_mid"				((4, 0), "roof_blue");
+NAME "tile_roof_blue_clock_top_right_dark"		((5, 0), "roof_blue");
+NAME "tile_roof_blue_clock_bottom_left"			((3, 1), "roof_blue");
+NAME "tile_roof_blue_clock_bottom_mid"			((4, 1), "roof_blue");
+NAME "tile_roof_blue_clock_bottom_right"		((5, 1), "roof_blue");
+COMPOSITE "tile_roof_blue_clock_top_left_light";
+	ADD "tile_roof_blue_clock_top_left_dark"; COMBINE "temp_roof_blue_left_light"; END;
+COMPOSITE "tile_roof_blue_clock_top_right_light";
+	ADD "tile_roof_blue_clock_top_right_dark"; COMBINE "temp_roof_blue_right_light"; END;
+COMPOSITE "tile_roof_blue_clock_top_left_water";
+	ADD "tile_roof_blue_clock_top_left_dark"; COMBINE "temp_roof_blue_left_water"; END;
+COMPOSITE "tile_roof_blue_clock_top_right_water";
+	ADD "tile_roof_blue_clock_top_right_dark"; COMBINE "temp_roof_blue_right_water"; END;
+
+NAME "tile_roof_blue_boxing_top_left_dark"		((3, 2), "roof_blue");
+NAME "tile_roof_blue_boxing_top_mid"			((4, 2), "roof_blue");
+NAME "tile_roof_blue_boxing_top_right_dark"		((5, 2), "roof_blue");
+NAME "tile_roof_blue_boxing_bottom_left"		((3, 3), "roof_blue");
+NAME "tile_roof_blue_boxing_bottom_mid"			((4, 3), "roof_blue");
+NAME "tile_roof_blue_boxing_bottom_right"		((5, 3), "roof_blue");
+COMPOSITE "tile_roof_blue_boxing_top_left_light";
+	ADD "tile_roof_blue_boxing_top_left_dark"; COMBINE "temp_roof_blue_left_light"; END;
+COMPOSITE "tile_roof_blue_boxing_top_right_light";
+	ADD "tile_roof_blue_boxing_top_right_dark"; COMBINE "temp_roof_blue_right_light"; END;
+COMPOSITE "tile_roof_blue_boxing_top_left_water";
+	ADD "tile_roof_blue_boxing_top_left_dark"; COMBINE "temp_roof_blue_left_water"; END;
+COMPOSITE "tile_roof_blue_boxing_top_right_water";
+	ADD "tile_roof_blue_boxing_top_right_dark"; COMBINE "temp_roof_blue_right_water"; END;
+
+NAME "tile_roof_blue_mask_both_left_dark"		((1, 3), "roof_blue");
+NAME "tile_roof_blue_mask_both_right_dark"		((2, 3), "roof_blue");
+COMPOSITE "tile_roof_blue_mask_both_left_light";
+	ADD "tile_roof_blue_mask_both_left_dark"; COMBINE "temp_roof_blue_left_light"; END;
+COMPOSITE "tile_roof_blue_mask_both_right_light";
+	ADD "tile_roof_blue_mask_both_right_dark"; COMBINE "temp_roof_blue_right_light"; END;
+COMPOSITE "tile_roof_blue_mask_both_left_water";
+	ADD "tile_roof_blue_mask_both_left_dark"; COMBINE "temp_roof_blue_left_water"; END;
+COMPOSITE "tile_roof_blue_mask_both_right_water";
+	ADD "tile_roof_blue_mask_both_right_dark"; COMBINE "temp_roof_blue_right_water"; END;
+
+COMPOSITE "tile_roof_blue_bottom_mid_shop_left";
+	ADD "tile_roof_blue_bottom_mid"; COMBINE "temp_shop_sign_left"; END;
+COMPOSITE "tile_roof_blue_bottom_mid_shop_mid";
+	ADD "tile_roof_blue_bottom_mid"; COMBINE "temp_shop_sign_mid"; END;
+COMPOSITE "tile_roof_blue_bottom_mid_shop_right";
+	ADD "tile_roof_blue_bottom_mid"; COMBINE "temp_shop_sign_right"; END;
+COMPOSITE "tile_roof_blue_bottom_left_shop_left";
+	ADD "tile_roof_blue_bottom_left"; COMBINE "temp_shop_sign_left"; END;
+COMPOSITE "tile_roof_blue_bottom_right_shop_right";
+	ADD "tile_roof_blue_bottom_right"; COMBINE "temp_shop_sign_right"; END;
+	
+	
+NAME "tile_roof_tiled_green_mid"				((6, 0), "roof_green");
+NAME "tile_roof_tiled_green_right"				((7, 0), "roof_green");
+
+NAME "tile_roof_green_top_left_dark"			((0, 0), "roof_green");
+NAME "tile_roof_green_top_mid"					((1, 0), "roof_green");
+NAME "tile_roof_green_top_right_dark"			((2, 0), "roof_green");
+NAME "tile_roof_green_bottom_left"				((0, 1), "roof_green");
+NAME "tile_roof_green_bottom_mid"				((1, 1), "roof_green");
+NAME "tile_roof_green_bottom_right"				((2, 1), "roof_green");
+NAME "tile_roof_green_both_left_dark"			((0, 2), "roof_green");
+NAME "tile_roof_green_both_mid"					((1, 2), "roof_green");
+NAME "tile_roof_green_both_right_dark"			((2, 2), "roof_green");
+NAME "tile_roof_green_both_both_dark"			((0, 3), "roof_green");
+COMPOSITE "tile_roof_green_top_left_light";
+	ADD "tile_roof_green_top_left_dark"; COMBINE "temp_roof_green_left_light"; END;
+COMPOSITE "tile_roof_green_top_right_light";
+	ADD "tile_roof_green_top_right_dark"; COMBINE "temp_roof_green_right_light"; END;
+COMPOSITE "tile_roof_green_both_left_light";
+	ADD "tile_roof_green_both_left_dark"; COMBINE "temp_roof_green_left_light"; END;
+COMPOSITE "tile_roof_green_both_right_light";
+	ADD "tile_roof_green_both_right_dark"; COMBINE "temp_roof_green_right_light"; END;
+COMPOSITE "tile_roof_green_both_both_light";
+	ADD "tile_roof_green_both_both_dark";
+	COMBINE "temp_roof_green_left_light"; COMBINE "temp_roof_green_right_light"; END;
+
+NAME "tile_roof_green_clock_top_left_dark"		((3, 0), "roof_green");
+NAME "tile_roof_green_clock_top_mid"			((4, 0), "roof_green");
+NAME "tile_roof_green_clock_top_right_dark"		((5, 0), "roof_green");
+NAME "tile_roof_green_clock_bottom_left"		((3, 1), "roof_green");
+NAME "tile_roof_green_clock_bottom_mid"			((4, 1), "roof_green");
+NAME "tile_roof_green_clock_bottom_right"		((5, 1), "roof_green");
+COMPOSITE "tile_roof_green_clock_top_left_light";
+	ADD "tile_roof_green_clock_top_left_dark"; COMBINE "temp_roof_green_left_light"; END;
+COMPOSITE "tile_roof_green_clock_top_right_light";
+	ADD "tile_roof_green_clock_top_right_dark"; COMBINE "temp_roof_green_right_light"; END;
+
+NAME "tile_roof_green_boxing_top_left_dark"		((3, 2), "roof_green");
+NAME "tile_roof_green_boxing_top_mid"			((4, 2), "roof_green");
+NAME "tile_roof_green_boxing_top_right_dark"	((5, 2), "roof_green");
+NAME "tile_roof_green_boxing_bottom_left"		((3, 3), "roof_green");
+NAME "tile_roof_green_boxing_bottom_mid"		((4, 3), "roof_green");
+NAME "tile_roof_green_boxing_bottom_right"		((5, 3), "roof_green");
+COMPOSITE "tile_roof_green_boxing_top_left_light";
+	ADD "tile_roof_green_boxing_top_left_dark"; COMBINE "temp_roof_green_left_light"; END;
+COMPOSITE "tile_roof_green_boxing_top_right_light";
+	ADD "tile_roof_green_boxing_top_right_dark"; COMBINE "temp_roof_green_right_light"; END;
+
+NAME "tile_roof_green_mask_both_left_dark"		((1, 3), "roof_green");
+NAME "tile_roof_green_mask_both_right_dark"		((2, 3), "roof_green");
+COMPOSITE "tile_roof_green_mask_both_left_light";
+	ADD "tile_roof_green_mask_both_left_dark"; COMBINE "temp_roof_green_left_light"; END;
+COMPOSITE "tile_roof_green_mask_both_right_light";
+	ADD "tile_roof_green_mask_both_right_dark"; COMBINE "temp_roof_green_right_light"; END;
+
+COMPOSITE "tile_roof_green_bottom_mid_shop_left";
+	ADD "tile_roof_green_bottom_mid"; COMBINE "temp_shop_sign_left"; END;
+COMPOSITE "tile_roof_green_bottom_mid_shop_mid";
+	ADD "tile_roof_green_bottom_mid"; COMBINE "temp_shop_sign_mid"; END;
+COMPOSITE "tile_roof_green_bottom_mid_shop_right";
+	ADD "tile_roof_green_bottom_mid"; COMBINE "temp_shop_sign_right"; END;
+COMPOSITE "tile_roof_green_bottom_left_shop_left";
+	ADD "tile_roof_green_bottom_left"; COMBINE "temp_shop_sign_left"; END;
+COMPOSITE "tile_roof_green_bottom_right_shop_right";
+	ADD "tile_roof_green_bottom_right"; COMBINE "temp_shop_sign_right"; END;

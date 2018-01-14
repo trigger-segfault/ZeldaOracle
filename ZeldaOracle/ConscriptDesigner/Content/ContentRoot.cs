@@ -30,8 +30,10 @@ namespace ConscriptDesigner.Content {
 		private string contentFile;
 		/// <summary>True if the project file has been modified and needs to be saved.</summary>
 		private bool projectModified;
-		/// <summary>The the currently cut file in the project explorer.</summary>
+		/// <summary>The currently cut file in the project explorer.</summary>
 		private ContentFile cutFile;
+		/// <summary>True if the current files were directly copied from the project explorer.</summary>
+		private bool copiedFromExplorer;
 		/// <summary>The loaded XML document for the project file.</summary>
 		private XmlDocument xmlDoc;
 		/// <summary>The loaded XML project file root element.</summary>
@@ -51,6 +53,7 @@ namespace ConscriptDesigner.Content {
 			this.projectModified = false;
 			this.contentFile = "";
 			this.cutFile = null;
+			this.copiedFromExplorer = false;
 
 			this.xmlDoc = null;
 			this.xmlProject = null;
@@ -300,9 +303,11 @@ namespace ConscriptDesigner.Content {
 		/// <summary>Clear the cut file when the clipboard changes.</summary>
 		private void OnClipboardChanged(object sender, EventArgs e) {
 			// Only clear the cut file if the clipboard is no longer empty
-			if (cutFile != null && !ClipboardHelper.IsEmpty()) {
-				cutFile.IsCut = false;
+			if (!ClipboardHelper.IsEmpty()) {
+				if (cutFile != null)
+					cutFile.IsCut = false;
 				cutFile = null;
+				copiedFromExplorer = false;
 			}
 		}
 		
@@ -521,6 +526,7 @@ namespace ConscriptDesigner.Content {
 				throw new FileDoesNotExistException(name);
 			cutFile = file;
 			file.IsCut = true;
+			copiedFromExplorer = false;
 			CommandManager.InvalidateRequerySuggested();
 		}
 
@@ -535,6 +541,7 @@ namespace ConscriptDesigner.Content {
 			StringCollection files = new StringCollection();
 			files.Add(file.FilePath);
 			Clipboard.SetFileDropList(files);
+			copiedFromExplorer = true;
 			CommandManager.InvalidateRequerySuggested();
 		}
 
@@ -717,7 +724,7 @@ namespace ConscriptDesigner.Content {
 				if (PathHelper.IsPathTheSame(file, newFilePath)) {
 					if (!Contains(newPath))
 						filesToInclude.Add(file);
-					else
+					else if (copiedFromExplorer)
 						filesToCopyName.Add(file);
 				}
 				else if (File.Exists(newFilePath)) {
@@ -875,6 +882,59 @@ namespace ConscriptDesigner.Content {
 				file.TreeViewItem.IsSelected = true;
 				projectModified = true;
 			}
+		}
+		
+		/// <summary>Moves the file to the new directory and shows error messages when needed.</summary>
+		public void RequestMove(string path, string newDirectory) {
+			FixPath(ref path, ref newDirectory);
+			string name = IOPath.GetFileName(path);
+			string newPath = IOPath.Combine(newDirectory, name);
+			ContentFile file = Get(path);
+			if (file == null)
+				throw new FileDoesNotExistException(name);
+			string filePath = file.FilePath;
+			ContentFolder parent = GetFolder(newDirectory);
+			if (parent == file.Parent)
+				return;
+			if (parent == null)
+				throw new DirectoryDoesNotExistException(newDirectory);
+			string newFilePath = IOPath.Combine(parent.FilePath, name);
+			if (parent.Files.ContainsKey(name)) {
+				TriggerMessageBox.Show(DesignerControl.MainWindow, MessageIcon.Warning,
+						"A content file with the same name already exists in this directory!",
+						"Content File Already Exists");
+				return;
+			}
+			else if (PathHelper.Exists(newFilePath)) {
+				TriggerMessageBox.Show(DesignerControl.MainWindow, MessageIcon.Warning,
+						"A file with the same name already exists in this directory!",
+						"File Already Exists");
+				return;
+			}
+			if (file.IsFolder && IsSubdirectory(file.Path, parent.Path))
+				throw new DirectoryIsSubdirectoryException(file.Name, parent.Name);
+
+			try {
+				if (file.IsFolder)
+					IODirectory.Move(filePath, newFilePath);
+				else
+					File.Move(filePath, newFilePath);
+			}
+			catch (Exception ex) {
+				DesignerControl.ShowExceptionMessage(ex, "move", name);
+				return;
+			}
+
+			file.Parent.Files.Remove(file.Name);
+			parent.Files.Add(file.Name, file);
+
+			file.Parent.TreeViewItem.Items.Remove(file.TreeViewItem);
+			parent.TreeViewItem.Items.Add(file.TreeViewItem);
+
+			file.Parent = parent;
+			parent.Resort();
+
+			projectModified = true;
 		}
 
 		//-----------------------------------------------------------------------------

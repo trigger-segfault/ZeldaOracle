@@ -12,8 +12,10 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		Clamp,
 		/// <summary>Reset back to the beginning and stop.</summary>
 		Reset,
-		/// <summary>Keep looping back and playing from the beginning endlessly.</summary>
-		Repeat
+		/// <summary>Keep looping back and playing from the beginning endlessly. Same as Loop.</summary>
+		Repeat,
+		/// <summary>Keep looping back and playing from the beginning endlessly. Same as Repeat.</summary>
+		Loop
 	}
 
 
@@ -75,6 +77,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
 		public IEnumerable<SpritePart> GetParts(SpriteDrawSettings settings) {
+			Rectangle2I bounds = Bounds;
 			float time = settings.PlaybackTime;
 			if (loopMode == LoopMode.Repeat) {
 				if (duration == 0)
@@ -84,13 +87,11 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			}
 			for (int i = 0; i < frames.Count; ++i) {
 				AnimationFrame frame = frames[i];
-				//if (time < frame.StartTime)
-				//	yield break;
+				if (frame.Sprite == null)
+					continue;
 				if (time >= frame.StartTime && (time < frame.EndTime || (time >= duration && frame.StartTime + frame.Duration == duration))) {
-					foreach (SpritePart sprite in frame.Sprite.GetParts(settings)) {
-						SpritePart offsetSprite = sprite;
-						offsetSprite.DrawOffset += frame.DrawOffset;
-						yield return offsetSprite;
+					foreach (SpritePart part in frame.OffsetSprite.GetParts(settings)) {
+						yield return part;
 					}
 				}
 			}
@@ -107,6 +108,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			float time = settings.PlaybackTime;
 			for (int i = 0; i < frames.Count; ++i) {
 				AnimationFrame frame = frames[i];
+				if (frame.Sprite == null)
+					continue;
 				//if (time < frame.StartTime)
 				//	return bounds;
 				if (time >= frame.StartTime && (time < frame.EndTime || (time >= duration && frame.StartTime + frame.Duration == duration))) {
@@ -124,6 +127,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			get {
 				Rectangle2I bounds = Rectangle2I.Zero;
 				foreach (AnimationFrame frame in frames) {
+					if (frame.Sprite == null)
+						continue;
 					if (bounds.IsEmpty)
 						bounds = frame.Sprite.Bounds + frame.DrawOffset;
 					else
@@ -182,28 +187,41 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			duration = Math.Max(duration, frame.EndTime);
 		}
 
-		public void AddFrame(int startTime, int duration, ISprite sprite, int depth = 0) {
-			AddFrame(new AnimationFrame(startTime, duration, sprite, depth));
+		public void AddFrame(int startTime, int duration, ISprite sprite, Flip flip = Flip.None,
+			Rotation rotation = Rotation.None, int depth = 0)
+		{
+			AddFrame(new AnimationFrame(startTime, duration, sprite, flip, rotation, depth));
 		}
 
-		public void AddFrame(int startTime, int duration, ISprite sprite, Point2I drawOffset, int depth = 0) {
-			AddFrame(new AnimationFrame(startTime, duration, sprite, drawOffset, depth));
+		public void AddFrame(int startTime, int duration, ISprite sprite, Point2I drawOffset,
+			Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0)
+		{
+			AddFrame(new AnimationFrame(startTime, duration, sprite, drawOffset, flip, rotation, depth));
 		}
 
-		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index, int depth = 0) {
-			AddFrame(new AnimationFrame(startTime, duration, source, index, depth));
+		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index,
+			Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0)
+		{
+			AddFrame(new AnimationFrame(startTime, duration, source, index, flip, rotation, depth));
 		}
 
-		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index, string definition, int depth = 0) {
-			AddFrame(new AnimationFrame(startTime, duration, source, index, definition, depth));
+		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index,
+			string definition, Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0)
+		{
+			AddFrame(new AnimationFrame(startTime, duration, source, index, definition, flip, rotation, depth));
 		}
 
-		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index, Point2I drawOffset, int depth = 0) {
-			AddFrame(new AnimationFrame(startTime, duration, source, index, drawOffset, depth));
+		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index,
+			Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0)
+		{
+			AddFrame(new AnimationFrame(startTime, duration, source, index, drawOffset, flip, rotation, depth));
 		}
 
-		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index, string definition, Point2I drawOffset, int depth = 0) {
-			AddFrame(new AnimationFrame(startTime, duration, source, index, definition, drawOffset, depth));
+		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index,
+			string definition, Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None,
+			int depth = 0)
+		{
+			AddFrame(new AnimationFrame(startTime, duration, source, index, definition, drawOffset, flip, rotation, depth));
 		}
 
 		public void RemoveFrameAt(int index) {

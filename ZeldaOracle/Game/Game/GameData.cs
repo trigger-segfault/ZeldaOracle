@@ -11,6 +11,7 @@ using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Scripts.CustomReaders;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game.Items.Rewards;
 
 namespace ZeldaOracle.Game {
 	
@@ -22,7 +23,7 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		// Initializes and loads the game content. NOTE: The order here is important.
-		public static void Initialize() {
+		public static void Initialize(RewardManager rewardManager = null) {
 			/*
 			CommandReferenceParam param = CommandParamParser.ParseReferenceParams(
 				"(any objs...)...");
@@ -42,6 +43,9 @@ namespace ZeldaOracle.Game {
 
 			Console.WriteLine("Loading Shaders");
 			LoadShaders();
+
+			Console.WriteLine("Pre-Loading Zones");
+			LoadZonesPreTileData();
 
 			Console.WriteLine("Loading Images");
 			LoadImages();
@@ -64,11 +68,17 @@ namespace ZeldaOracle.Game {
 			Console.WriteLine("Loading Music");
 			LoadMusic();
 
+			// CONSCRIPT DESIGNER ONLY
+			if (rewardManager != null) {
+				Console.WriteLine("Loading Rewards");
+				LoadRewards(rewardManager);
+			}
+
 			Console.WriteLine("Loading Tilesets");
 			LoadTilesets();
 
 			Console.WriteLine("Loading Zones");
-			LoadZones();
+			LoadZonesPostTileData();
 
 			//Resources.LoadScript("Palettes/dungeon_ages_1_converter.conscript", new PaletteConverterSR());
 		}
@@ -158,7 +168,7 @@ namespace ZeldaOracle.Game {
 					if (matchingField != null)
 						subimg.VariantID = (int) matchingField.GetValue(null);
 					else
-						Console.WriteLine("** WARNING: Uknown variant \"" + subimg.VariantName + "\".");
+						Console.WriteLine("** WARNING: Unknown variant \"" + subimg.VariantName + "\".");
 				}
 			}
 		}
@@ -178,9 +188,9 @@ namespace ZeldaOracle.Game {
 		// Zone Loading
 		//-----------------------------------------------------------------------------
 
-		private static void LoadZones() {
-			TileData ground = Resources.GetResource<TileData>("default_ground");
-			TileData floor  = Resources.GetResource<TileData>("default_floor");
+		private static void LoadZonesOld() {
+			TileData ground = Resources.GetResource<TileData>("ground");
+			TileData floor  = Resources.GetResource<TileData>("floor");
 			//TileData background  = Resources.GetResource<TileData>("default_background");
 
 			ZONE_DEFAULT			= new Zone("",					"(none)",			VARIANT_NONE,				ground);
@@ -225,13 +235,26 @@ namespace ZeldaOracle.Game {
 			Resources.AddResource("underwater_present", ZONE_UNDERWATER_PRESENT);
 		}
 
+		private static void LoadZonesPreTileData() {
+			Resources.LoadZones("Zones/zones.conscript", false);
+			IntegrateResources<Zone>("ZONE_");
+			ZONE_DEFAULT = Resources.GetResource<Zone>("", true);
+		}
+
+		private static void LoadZonesPostTileData() {
+			Resources.LoadZones("Zones/zones.conscript", true);
+			IntegrateResources<Zone>("ZONE_");
+			ZONE_DEFAULT = Resources.GetResource<Zone>("", true);
+		}
+
 		//-----------------------------------------------------------------------------
 		// Tliesets Loading
 		//-----------------------------------------------------------------------------
 
 		private static void LoadTilesets() {
 			// Load tilesets and tile data.
-			Resources.LoadTilesets("Tilesets/cliffs.conscript");
+			Resources.LoadTilesets("Tilesets/tilesets.conscript");
+			/*Resources.LoadTilesets("Tilesets/cliffs.conscript");
 
 			Resources.LoadTilesets("Tilesets/objects_nv.conscript");
 			Resources.LoadTilesets("Tilesets/objects.conscript");
@@ -244,7 +267,7 @@ namespace ZeldaOracle.Game {
 			Resources.LoadTilesets("Tilesets/dungeon.conscript");
 			Resources.LoadTilesets("Tilesets/sidescroll.conscript");
 			
-			Resources.LoadTilesets("Tilesets/event_tile_data.conscript");
+			Resources.LoadTilesets("Tilesets/event_tile_data.conscript");*/
 			// OLD Tilesets:
 			//Resources.LoadTilesets("Tilesets/tile_data.conscript");
 			//Resources.LoadTilesets("Tilesets/overworld.conscript");

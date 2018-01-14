@@ -58,6 +58,9 @@ namespace ZeldaEditor.Control {
 		private EditorWindow        editorWindow;
 		private string              worldFilePath;
 		private World               world;
+		/// <summary>Set to true during world file load if the world should be flagged as
+		/// modified because a resource was located.</summary>
+		private bool                worldFileLocatedResource;
 		private Level               level;
 		private ITileset            tileset;
 		private Zone                zone;
@@ -176,56 +179,71 @@ namespace ZeldaEditor.Control {
 
 		}
 
-		public void Initialize(ContentManager contentManager,
-			GraphicsDevice graphicsDevice) {
+		public void SetGraphics(GraphicsDevice graphicsDevice, ContentManager contentManager) {
 			if (!isInitialized) {
+				isInitialized = true;
 				Resources.Initialize(contentManager, graphicsDevice);
-				GameData.Initialize();
-				EditorResources.Initialize();
-				FormatCodes.Initialize();
-				paletteShader = new PaletteShader(GameData.PALETTE_LERP_SHADER);
-
-				this.inventory      = new Inventory(null);
-				this.rewardManager  = new RewardManager(null);
-				this.timer          = Stopwatch.StartNew();
-				this.ticks          = 0;
-				this.roomSpacing    = 1;
-				this.playAnimations = false;
-				this.tileset        = GameData.TILESET_CLIFFS;
-				this.zone           = GameData.ZONE_PRESENT;
-				this.selectedTilesetTileData = this.tileset.GetTileData(0, 0);
-				this.eventMode      = false;
-
-				GameData.LoadInventory(inventory);
-				GameData.LoadRewards(rewardManager);
-
-				// Create tileset combo box.
-				UpdateTilesets();
-
-				// Create zone combo box.
-				UpdateZones();
-
-				// Create tools.
-				tools = new List<EditorTool>();
-				AddTool(toolPointer     = new ToolPointer());
-				AddTool(toolPan         = new ToolPan());
-				AddTool(toolPlace       = new ToolPlace());
-				AddTool(toolSquare      = new ToolSquare());
-				AddTool(toolFill        = new ToolFill());
-				AddTool(toolSelection   = new ToolSelection());
-				AddTool(toolEyedropper  = new ToolEyedrop());
-				currentToolIndex = 0;
-				tools[currentToolIndex].Begin();
-
-				this.undoActions = new ObservableCollection<EditorAction>();
-				this.undoPosition = -1;
-
-				this.isInitialized = true;
-
-				this.updateTimer            = new DispatcherTimer(TimeSpan.FromMilliseconds(100), DispatcherPriority.ApplicationIdle, delegate { Update(); }, Application.Current.Dispatcher);
-				needsNewEventCache = true;
-				needsRecompiling = true;
 			}
+		}
+
+		public void Initialize() {
+			GameData.Initialize();
+			EditorResources.Initialize();
+			FormatCodes.Initialize();
+			paletteShader = new PaletteShader(GameData.PALETTE_LERP_SHADER);
+
+			this.inventory      = new Inventory(null);
+			this.rewardManager  = new RewardManager(null);
+			this.timer          = Stopwatch.StartNew();
+			this.ticks          = 0;
+			this.roomSpacing    = 1;
+			this.playAnimations = false;
+			this.tileset        = GameData.TILESET_CLIFFS;
+			this.zone           = GameData.ZONE_PRESENT;
+			this.selectedTilesetTileData = this.tileset.GetTileData(0, 0);
+			this.eventMode      = false;
+
+			GameData.LoadInventory(inventory);
+			GameData.LoadRewards(rewardManager);
+
+			// Create tileset combo box.
+			UpdateTilesets();
+
+			// Create zone combo box.
+			UpdateZones();
+
+			// Create tools.
+			tools = new List<EditorTool>();
+			AddTool(toolPointer     = new ToolPointer());
+			AddTool(toolPan         = new ToolPan());
+			AddTool(toolPlace       = new ToolPlace());
+			AddTool(toolSquare      = new ToolSquare());
+			AddTool(toolFill        = new ToolFill());
+			AddTool(toolSelection   = new ToolSelection());
+			AddTool(toolEyedropper  = new ToolEyedrop());
+			currentToolIndex = 0;
+			tools[currentToolIndex].Begin();
+
+			this.undoActions = new ObservableCollection<EditorAction>();
+			this.undoPosition = -1;
+
+			this.isInitialized = true;
+
+			this.updateTimer		= new DispatcherTimer(
+				TimeSpan.FromMilliseconds(100),
+				DispatcherPriority.ApplicationIdle,
+				delegate { Update(); },
+				Application.Current.Dispatcher);
+			needsNewEventCache = true;
+			needsRecompiling = true;
+			
+			// TEMP: Open this world file upon starting the editor.
+			if (File.Exists("./temp_world.zwd"))
+				OpenWorld("temp_world.zwd");
+			else if (File.Exists("../../../../WorldFiles/temp_world.zwd"))
+				OpenWorld("../../../../WorldFiles/temp_world.zwd");
+			else if (File.Exists("../../../WorldFiles/temp_world.zwd"))
+				OpenWorld("../../../WorldFiles/temp_world.zwd");
 		}
 
 		//-----------------------------------------------------------------------------
@@ -343,6 +361,8 @@ namespace ZeldaEditor.Control {
 		public void OpenWorld(string fileName) {
 			// Load the world.
 			WorldFile worldFile = new WorldFile();
+			worldFile.LocateResource += OnWorldLocateResource;
+			worldFileLocatedResource = false;
 			World loadedWorld = worldFile.Load(fileName, true);
 
 			// Verify the world was loaded successfully.
@@ -362,12 +382,17 @@ namespace ZeldaEditor.Control {
 				undoActions.Clear();
 				undoPosition = -1;
 				PushAction(new ActionOpenWorld(), ActionExecution.None);
-				IsModified          = false;
+				IsModified          = worldFileLocatedResource;
 			}
 			else {
 				// Display the error.
 				TriggerMessageBox.Show(editorWindow, MessageIcon.Warning, "Failed to open world file:\n" + worldFile.ErrorMessage, "Error Opening World", MessageBoxButton.OK);
 			}
+		}
+
+		private void OnWorldLocateResource(LocateResourceEventArgs e) {
+			LocateResourceWindow.Show(editorWindow, e);
+			worldFileLocatedResource = true;
 		}
 
 		// Close the world file.
@@ -705,11 +730,16 @@ namespace ZeldaEditor.Control {
 					compileTask = null;
 				}
 			}
-			else if (needsRecompiling) {
-				CompileAllScriptsAsync(OnCompileCompleted);
+			else if (IsWorldOpen) {
+				if (needsRecompiling) {
+					CompileAllScriptsAsync(OnCompileCompleted);
+				}
+				else if (HasScriptsToCheck) {
+					CompileNextScript();
+				}
 			}
-			else if (HasScriptsToCheck) {
-				CompileNextScript();
+			else {
+				needsRecompiling = false;
 			}
 		}
 
@@ -925,7 +955,7 @@ namespace ZeldaEditor.Control {
 		}
 
 		public bool IsUntitled {
-			get { return !string.IsNullOrEmpty(worldFilePath); }
+			get { return string.IsNullOrEmpty(worldFilePath); }
 		}
 
 		public bool IsModified {

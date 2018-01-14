@@ -12,13 +12,13 @@ PALETTEDICTIONARY "entity_dictionary";
 
 SOURCE "color_cube";
 
-MAPPEDCOLORS "entities_default",
+MAPPEDCOLORS	"entities_default",
 	("color_cube_yellow_red", "color_cube_red_blue", "color_cube_blue_yellow");
 
 CHUNKSIZE (8, 16);
 
 SPRITESET "set_color_cube" (12, 4);
-	DYNAMIC BASIC (0, 0); END;
+	MULTIPLE BASIC (0, 0); END;
 
 	# Append the top tips of the color cube to the rolling sprites
 	

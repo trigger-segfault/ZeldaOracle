@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.Xna.Framework;
+using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaOracle.Common.Geometry {
 	/// <summary>A static class for advanced game-related mathematical functions and calculations.</summary>
@@ -1296,5 +1297,31 @@ namespace ZeldaOracle.Common.Geometry {
 			return Math.Tanh(a);
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Graphics
+		//-----------------------------------------------------------------------------
+
+		public static Point2I FlipAndRotate(Point2I drawOffset, Flip flip, Rotation rotation, Point2I size, Rectangle2I bounds) {
+			return FlipAndRotate(drawOffset, flip, rotation, (Vector2F) (bounds.Size - size) / 2f - bounds.Point);
+		}
+
+		public static Point2I FlipAndRotate(Point2I drawOffset, Flip flip, Rotation rotation, Vector2F origin) {
+			Vector2F tempDrawOffset = drawOffset - origin;
+			switch (rotation) {
+			case Rotation.Clockwise90:
+				tempDrawOffset = new Vector2F(-tempDrawOffset.Y, tempDrawOffset.X); break;
+			case Rotation.Clockwise180:
+				tempDrawOffset = -tempDrawOffset; break;
+			case Rotation.Clockwise270:
+				tempDrawOffset = new Vector2F(tempDrawOffset.Y, -tempDrawOffset.X); break;
+			}
+			if (flip.HasFlag(Flip.Horizontal))
+				tempDrawOffset.X = -tempDrawOffset.X;
+			if (flip.HasFlag(Flip.Vertical))
+				tempDrawOffset.Y = -tempDrawOffset.Y;
+
+			return (Point2I) GMath.Floor(tempDrawOffset + origin);
+		}
 	}
 } // End namespace

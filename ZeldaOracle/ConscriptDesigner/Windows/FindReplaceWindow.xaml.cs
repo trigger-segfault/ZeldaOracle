@@ -180,11 +180,6 @@ namespace ConscriptDesigner.Windows {
 			if (comboBoxScope.SelectedIndex == -1)
 				comboBoxScope.SelectedIndex = 0;
 
-			ContentScript script = ActiveScript;
-			if (script != null && script.IsOpen) {
-				textBoxFind.Text = script.TextEditor.TextArea.Selection.GetText();
-			}
-
 			focusTimer = new DispatcherTimer(
 				TimeSpan.FromSeconds(0.05),
 				DispatcherPriority.ApplicationIdle,
@@ -234,6 +229,11 @@ namespace ConscriptDesigner.Windows {
 			// HACK: Focus on the textbox after a split second.
 			// Otherwise the tabitem will steal focus.
 			focusTimer.Start();
+
+			ContentScript script = ActiveScript;
+			if (script != null && script.IsOpen && script.TextEditor.SelectionLength > 0) {
+				textBoxFind.Text = script.TextEditor.TextArea.Selection.GetText();
+			}
 		}
 
 		/// <summary>Switches to replace mode.</summary>
@@ -242,6 +242,11 @@ namespace ConscriptDesigner.Windows {
 			// HACK: Focus on the textbox after a split second.
 			// Otherwise the tabitem will steal focus.
 			focusTimer.Start();
+
+			ContentScript script = ActiveScript;
+			if (script != null && script.IsOpen) {
+				textBoxFind.Text = script.TextEditor.TextArea.Selection.GetText();
+			}
 		}
 
 		/// <summary>Finds the next search result.</summary>
@@ -447,6 +452,7 @@ namespace ConscriptDesigner.Windows {
 			//lastWrapSearch = checkBoxWrapSearch.IsChecked == true;
 			//lastSearchUp = checkBoxSearchUp.IsChecked == true;
 			//lastLiveSearch = checkBoxLiveSearch.IsChecked == true;
+			DesignerControl.ActiveAnchorableChanged -= OnActiveAnchorableChanged;
 			lastReplaceText = textBoxReplace.Text;
 			//lastScope = Scope;
 			UnhookScript(lastScript);
@@ -524,7 +530,9 @@ namespace ConscriptDesigner.Windows {
 		private void UnhookScript(ContentScript script) {
 			if (script == null || !script.IsOpen) return;
 			script.TextEditor.TextChanged -= OnTextEditorTextChanged;
-			script.TextEditor.TextArea.TextView.BackgroundRenderers.Remove(searchColorizor);
+			if (!script.TextEditor.TextArea.TextView.BackgroundRenderers.Remove(searchColorizor))
+				throw new InvalidOperationException();
+			script.TextEditor.TextArea.TextView.InvalidateLayer(KnownLayer.Selection);
 		}
 
 		/// <summary>Finds the next script in the list.</summary>
@@ -812,7 +820,7 @@ namespace ConscriptDesigner.Windows {
 			string find = SearchText;
 			searchColorizor.CurrentResults.Clear();
 			if (!string.IsNullOrEmpty(find) && lastScript != null && !regexError) {
-				Regex regex = GetRegex(find);
+				Regex regex = GetRegex(find, true);
 				string text = lastScript.LoadedText;
 				Match match = regex.Match(text);
 

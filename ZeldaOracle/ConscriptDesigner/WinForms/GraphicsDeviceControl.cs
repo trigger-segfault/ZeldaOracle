@@ -26,7 +26,7 @@ namespace ConscriptDesigner.WinForms {
 	/// a Windows Form. Derived classes can override the Initialize and Draw
 	/// methods to add their own drawing code.
 	/// </summary>
-	public class GraphicsDeviceControl : ScrollableControl {
+	public class GraphicsDeviceControl : Panel {
 		#region Fields
 
 

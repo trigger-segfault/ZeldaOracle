@@ -65,6 +65,7 @@ namespace ConscriptDesigner.Anchorables {
 			this.editor.TextChanged += OnTextChanged;
 			this.isTitleModified = false;
 
+			this.editor.PreviewMouseDown += OnPreviewMouseDown;
 			this.editor.TextArea.Margin = new Thickness(4, 4, 0, 4);
 			this.editor.TextArea.TextView.Options.AllowScrollBelowDocument = true;
 			this.editor.TextArea.SelectionCornerRadius = 0;
@@ -130,6 +131,12 @@ namespace ConscriptDesigner.Anchorables {
 		/// <summary>Called when the text is changed in order to update the title.</summary>
 		private void OnTextChanged(object sender, EventArgs e) {
 			modifiedTimer.Start();
+		}
+
+		/// <summary>HACK: Fix AvalonDock's broken tab focusing where programmatically
+		/// changing the current document may cause it to change back.</summary>
+		private void OnPreviewMouseDown(object sender, MouseButtonEventArgs e) {
+			File.Document.IsActive = true;
 		}
 
 

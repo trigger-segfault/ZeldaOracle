@@ -216,6 +216,27 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public override ISprite Clone() {
 			return new ColorSprite(this);
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the default basic sprite. Digs into contained styled sprites if needed.</summary>
+		public BasicSprite DefaultBasicSprite {
+			get {
+				if (DefaultSprite is BasicSprite)
+					return (BasicSprite) DefaultSprite;
+				else if (DefaultSprite is StyleSprite)
+					return (BasicSprite) ((StyleSprite) DefaultSprite).DefaultSprite;
+				return null;
+			}
+		}
+
+		/// <summary>Gets the default sprite as a style sprite.</summary>
+		public StyleSprite DefaultStyleSprite {
+			get { return (StyleSprite) DefaultSprite; }
+		}
 	}
 
 	public class StyleSprite : DefinitionSprite {

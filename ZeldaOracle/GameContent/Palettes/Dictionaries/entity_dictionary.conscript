@@ -25,7 +25,7 @@ ENTITY	inverse_red;
 ENTITY	inverse_blue;
 ENTITY	hurt;
 
-ENTITY	possesses_blue;
+ENTITY	possessed_blue;
 ENTITY	possessed_red;
 ENTITY	dark_link;
 

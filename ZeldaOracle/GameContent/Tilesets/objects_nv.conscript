@@ -18,6 +18,8 @@ TILE chest;
 	TYPE		TileChest;
 	SOLID		block;
 	RESETWHEN	Never;
+	SPRITEINDEX		0, tile_chest;
+	SPRITEINDEX		1, tile_chest_opened;
 	PROPERTIES
 		(integer, spawn_delay_after_poof, 16),
 		(string, reward, "rupees_1",
@@ -28,23 +30,23 @@ TILE chest;
 			"True if the item has been taken from the chest.", false);
 END;
 
-TILE chest_curved;
-	CLONE			chest;
-	SPRITEINDEX		0, tile_chest_curved;
-	SPRITEINDEX		1, tile_chest_curved_opened;
-END;
+#TILE chest_curved;
+#	CLONE			chest;
+#	SPRITEINDEX		0, tile_chest_curved;
+#	SPRITEINDEX		1, tile_chest_curved_opened;
+#END;
 
-TILE chest_flat;
-	CLONE			chest;
-	SPRITEINDEX		0, tile_chest_flat;
-	SPRITEINDEX		1, tile_chest_flat_opened;
-END;
+#TILE chest_flat;
+#	CLONE			chest;
+#	SPRITEINDEX		0, tile_chest_flat;
+#	SPRITEINDEX		1, tile_chest_flat_opened;
+#END;
 
-TILE chest_ornate;
-	CLONE			chest;
-	SPRITEINDEX		0, tile_chest_ornate;
-	SPRITEINDEX		1, tile_chest_ornate_opened;
-END;
+#TILE chest_ornate;
+#	CLONE			chest;
+#	SPRITEINDEX		0, tile_chest_ornate;
+#	SPRITEINDEX		1, tile_chest_ornate_opened;
+#END;
 
 # ---- Reward -----------------------------------------------------------------
 
@@ -212,9 +214,9 @@ DEFAULT (0, 0);
 
 # Rewards
 
-SETTILE ( 0, 0), chest_curved;
-SETTILE ( 1, 0), chest_flat;
-SETTILE ( 2, 0), chest_ornate;
+SETTILE ( 0, 0), chest;
+SETTILE ( 1, 0), chest;
+SETTILE ( 2, 0), chest;
 SETTILE ( 3, 0), reward;
 SETTILE ( 4, 0), color_switch_blue;
 SETTILE ( 5, 0), pull_handle;			## TEMP: should be blue crystal

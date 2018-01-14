@@ -35,11 +35,10 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
 		public IEnumerable<SpritePart> GetParts(SpriteDrawSettings settings) {
+			Rectangle2I bounds = Bounds;
 			foreach (OffsetSprite sprite in sprites) {
-				foreach (SpritePart part in sprite.Sprite.GetParts(settings)) {
-					SpritePart offsetPart = part;
-					offsetPart.DrawOffset += sprite.DrawOffset;
-					yield return offsetPart;
+				foreach (SpritePart part in sprite.GetParts(settings)) {
+					yield return part;
 				}
 			}
 		}
@@ -107,29 +106,31 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			sprites.Clear();
 		}
 
-		public void AddSprite(ISprite sprite) {
-			sprites.Add(new OffsetSprite(sprite));
+		public void AddSprite(ISprite sprite, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
+			sprites.Add(new OffsetSprite(sprite, flip, rotation));
 		}
 
-		public void AddSprite(ISprite sprite, Point2I drawOffset) {
-			sprites.Add(new OffsetSprite(sprite, drawOffset));
+		public void AddSprite(ISprite sprite, Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
+			sprites.Add(new OffsetSprite(sprite, drawOffset, flip, rotation));
 		}
 
-		public void InsertSprite(int index, ISprite sprite) {
-			sprites.Insert(index, new OffsetSprite(sprite));
+		public void InsertSprite(int index, ISprite sprite, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
+			sprites.Insert(index, new OffsetSprite(sprite, flip, rotation));
 		}
 
-		public void InsertSprite(int index, ISprite sprite, Point2I drawOffset) {
-			sprites.Insert(index, new OffsetSprite(sprite, drawOffset));
+		public void InsertSprite(int index, ISprite sprite, Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
+			sprites.Insert(index, new OffsetSprite(sprite, drawOffset, flip, rotation));
 		}
 
 		public void ReplaceSprite(int index, ISprite sprite) {
 			sprites[index].Sprite = sprite;
 		}
 
-		public void ReplaceSprite(int index, ISprite sprite, Point2I drawOffset) {
+		public void ReplaceSprite(int index, ISprite sprite, Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
 			sprites[index].Sprite = sprite;
 			sprites[index].DrawOffset = drawOffset;
+			sprites[index].FlipEffects = flip;
+			sprites[index].Rotation = rotation;
 		}
 
 		public void RemoveSprite(int index) {

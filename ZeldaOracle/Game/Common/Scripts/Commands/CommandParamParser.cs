@@ -27,7 +27,9 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 				result += ")";
 			}
 			else {
-				if (param.Type == CommandParamType.String)
+				if (param.Type == CommandParamType.Const)
+					result += "const";
+				else if (param.Type == CommandParamType.String)
 					result += "string";
 				else if (param.Type == CommandParamType.Integer)
 					result += "int";
@@ -37,6 +39,8 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 					result += "bool";
 				else if (param.Type == CommandParamType.Any)
 					result += "var";
+				else if (param.HasCustomType)
+					result += param.CustomTypeName;
 				result += " " + param.Name;
 			}
 
@@ -57,6 +61,8 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 			string result = "";
 
 			if (param.Type == CommandParamType.Array) {
+				if (!string.IsNullOrEmpty(param.Name))
+					result += param.Name + " ";
 				result += "(";
 				CommandParam child = param.Children;
 				while (child != null) {
@@ -87,13 +93,13 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 		//-----------------------------------------------------------------------------
 
 		// Parse a string as value parameters.
-		public static CommandParam ParseValueParams(string format) {
-			return ParseParameters(format, true).ValParamStack.Peek();
+		public static CommandParam ParseValueParams(string format, CommandParamDefinitions typeDefinitions) {
+			return ParseParameters(format, true, typeDefinitions).ValParamStack.Peek();
 		}
 		
 		// Parse a string as reference parameters.
-		public static CommandReferenceParam ParseReferenceParams(string format) {
-			return ParseParameters(format, false).RefParamStack.Peek();
+		public static CommandReferenceParam ParseReferenceParams(string format, CommandParamDefinitions typeDefinitions) {
+			return ParseParameters(format, false, typeDefinitions).RefParamStack.Peek();
 		}
 		
 
@@ -109,15 +115,19 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 			public string Token { get; set; }
 			public bool IsParsingValue { get; set; }
 			public bool IsParsingDefaultValue { get; set; }
+			public CommandParamDefinitions TypeDefinitions { get; set; }
+			public bool IsParsingCustom { get; set; }
 		}
 
-		private static ParseData ParseParameters(string format, bool parseValue) {
+		private static ParseData ParseParameters(string format, bool parseValue, CommandParamDefinitions typeDefinitions) {
 			ParseData parseData = new ParseData();
 			parseData.RefParamStack		= new Stack<CommandReferenceParam>();
 			parseData.ValParamStack		= new Stack<CommandParam>();
 			parseData.Tokens			= new List<string>();
 			parseData.Token				= "";
 			parseData.IsParsingValue	= parseValue;
+			parseData.TypeDefinitions	= typeDefinitions;
+			parseData.IsParsingCustom	= false;
 
 			// Create the root parameter.
 			if (parseData.IsParsingValue)
@@ -163,8 +173,13 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 							.AddChild(new CommandParam(CommandParamType.Array)));
 					}
 					else {
+						var param = new CommandReferenceParam(CommandParamType.Array);
+						if (parseData.Tokens.Count == 1) {
+							param.Name = parseData.Tokens[0];
+							parseData.Tokens.Clear();
+						}
 						parseData.RefParamStack.Push(parseData.RefParamStack.Peek()
-							.AddChild(new CommandReferenceParam(CommandParamType.Array)));
+							.AddChild(param));
 					}
 				}
 
@@ -173,16 +188,20 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 					CompleteToken(parseData);
 					if (parseData.IsParsingValue)
 						parseData.ValParamStack.Pop();
-					if (!parseData.IsParsingValue || (parseData.IsParsingValue && parseData.IsParsingDefaultValue))
+					if (!parseData.IsParsingValue || (parseData.IsParsingValue && parseData.IsParsingDefaultValue)) {
 						parseData.RefParamStack.Pop();
+
+					}
 				}
 
 				// Default parameter value.
 				else if (c == '=') {
+					var refChild = parseData.RefParamStack.Peek().GetChildren().Last();
 					parseData.IsParsingValue = true;
 					parseData.IsParsingDefaultValue = true;
+					parseData.IsParsingCustom = refChild.HasCustomType;
 					CommandReferenceParam refParent = new CommandReferenceParam(CommandParamType.Array);
-					refParent.AddChild(parseData.RefParamStack.Peek().GetChildren().Last());
+					refParent.AddChild(refChild);
 					parseData.RefParamStack.Push(refParent);
 					parseData.ValParamStack.Push(new CommandParam(CommandParamType.Array));
 				}
@@ -213,7 +232,7 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 
 				if (data.IsParsingValue && data.Token.Length > 0) {
 					CommandParam p;
-					if (data.IsParsingDefaultValue) {
+					if (data.IsParsingDefaultValue && !data.IsParsingCustom) {
 						CommandReferenceParam refParam = data.RefParamStack
 							.Peek().GetChildren().ElementAt(data.ValParamStack.Peek().ChildCount);
 						p = new CommandParam(refParam);
@@ -227,11 +246,14 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 				}
 				if (!data.IsParsingValue) {
 					if (data.Token.Length > 0 && data.Tokens.Count == 2) {
-						data.RefParamStack.Peek().AddChild(new CommandReferenceParam() {
-							Type		= ParseCommandParamType(data.Tokens[0]),
-							Name		= data.Tokens[1],
-							IsVariadic	= isVariadic
-						});
+						var refChild = new CommandReferenceParam() {
+							Type        = ParseCommandParamType(data.Tokens[0], data.TypeDefinitions),
+							Name        = data.Tokens[1],
+							IsVariadic  = isVariadic
+						};
+						if (data.TypeDefinitions.Contains(data.Tokens[0]))
+							refChild.CustomTypeName = data.Tokens[0];
+						data.RefParamStack.Peek().AddChild(refChild);
 						data.Tokens.Clear();
 					}
 					else if (isVariadic) {
@@ -249,13 +271,28 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 				data.IsParsingValue = false;
 				data.IsParsingDefaultValue = false;
 				data.RefParamStack.Pop();
-				data.RefParamStack.Peek().GetChildren().Last().DefaultValue = 
-					data.ValParamStack.Peek().Children;
+				CommandReferenceParam refParam = data.RefParamStack.Peek().GetChildren().Last();
+				refParam.DefaultValue =  data.ValParamStack.Peek().Children;
 				data.ValParamStack.Clear();
+				if (data.IsParsingCustom) {
+					CommandParamDefinition def = data.TypeDefinitions.Get(refParam.CustomTypeName);
+					CommandParam newDefaultParams = null;
+					for (int i = 0; i < def.ParameterOverloads.Count; i++) {
+						if (ScriptCommand.AreParametersMatching(def.ParameterOverloads[i].Children, refParam.DefaultValue, out newDefaultParams, data.TypeDefinitions))
+							break;
+					}
+					if (newDefaultParams != null)
+						refParam.DefaultValue = newDefaultParams;
+				}
+				data.IsParsingCustom = false;
 			}
 		}
 
-		private static CommandParamType ParseCommandParamType(string typeName) {
+		private static CommandParamType ParseCommandParamType(string typeName, CommandParamDefinitions typeDefinitions) {
+			// Custom types should match casing
+			CommandParamDefinition def = typeDefinitions.Get(typeName);
+			if (def != null) return CommandParamType.Custom;
+
 			typeName = typeName.ToLower();
 			if (typeName == "int" || typeName == "integer")
 				return CommandParamType.Integer;
@@ -265,6 +302,8 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 				return CommandParamType.Float;
 			if (typeName == "string" || typeName == "str")
 				return CommandParamType.String;
+			if (typeName == "const")
+				return CommandParamType.Const;
 			if (typeName == "any" || typeName == "var" || typeName == "?")
 				return CommandParamType.Any;
 			return CommandParamType.Unknown;

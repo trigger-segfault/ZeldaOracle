@@ -9,6 +9,7 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 
 		private CommandParamType		type;
 		private string					name;
+		private string					typeName;
 		private CommandReferenceParam	nextParam;
 		private CommandReferenceParam	parent;
 		private CommandReferenceParam	children;
@@ -28,6 +29,7 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 		
 		public CommandReferenceParam(CommandParamType type) {
 			this.type			= type;
+			this.typeName		= null;
 			this.nextParam		= null;
 			this.parent			= null;
 			this.children		= null;
@@ -100,6 +102,15 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 		public string Name {
 			get { return name; }
 			set { name = value; }
+		}
+		
+		public string CustomTypeName {
+			get { return typeName; }
+			set { typeName = value; }
+		}
+
+		public bool HasCustomType {
+			get { return typeName != null; }
 		}
 		
 		public bool IsVariadic {

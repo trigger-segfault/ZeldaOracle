@@ -33,7 +33,7 @@ namespace ConscriptDesigner.Anchorables {
 		//-----------------------------------------------------------------------------
 		// Control
 		//-----------------------------------------------------------------------------
-		
+
 		public void RefreshList() {
 			browser.RefreshList();
 		}

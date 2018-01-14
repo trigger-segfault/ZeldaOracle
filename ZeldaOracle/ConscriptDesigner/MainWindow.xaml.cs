@@ -37,6 +37,9 @@ namespace ConscriptDesigner {
 		private OutputConsole outputConsole;
 		private SpriteBrowser spriteBrowser;
 		private SpriteSourceBrowser spriteSourceBrowser;
+		private StyleBrowser styleBrowser;
+		private TileDataBrowser tileDataBrowser;
+		private TilesetBrowser tilesetBrowser;
 
 		private FindReplaceWindow findReplaceWindow;
 		private PlaybackWindow playbackWindow;
@@ -72,7 +75,14 @@ namespace ConscriptDesigner {
 				}, Dispatcher);
 			this.checkOutdatedTimer.Stop();
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Setup
+		//-----------------------------------------------------------------------------
 		
+		// HACK: This function is used to setup loading of the layout
+		// in a way that prevents GraphicsDevice.Reset from failing.
 		private void Initialize() {
 			dummyHost.Child = new DummyGraphicsDeviceControl();
 			string[] args = Environment.GetCommandLineArgs();
@@ -172,6 +182,12 @@ namespace ConscriptDesigner {
 				spriteBrowser.RefreshList();
 			if (spriteSourceBrowser != null)
 				spriteSourceBrowser.RefreshList();
+			if (styleBrowser != null)
+				styleBrowser.RefreshList();
+			if (tileDataBrowser != null)
+				tileDataBrowser.RefreshList();
+			if (tilesetBrowser != null)
+				tilesetBrowser.RefreshList();
 		}
 
 		private void OnResourcesUnloaded(object sender, EventArgs e) {
@@ -179,11 +195,16 @@ namespace ConscriptDesigner {
 				spriteBrowser.ClearList();
 			if (spriteSourceBrowser != null)
 				spriteSourceBrowser.ClearList();
+			if (styleBrowser != null)
+				styleBrowser.ClearList();
+			if (tileDataBrowser != null)
+				tileDataBrowser.ClearList();
+			if (tilesetBrowser != null)
+				tilesetBrowser.ClearList();
 		}
 
 		private void OnFinishedBuilding(object sender, EventArgs e) {
-			if (spriteBrowser != null)
-				spriteBrowser.RefreshList();
+			
 		}
 		
 		private void OnActiveAnchorableChanged(object sender = null, EventArgs e = null) {
@@ -210,6 +231,12 @@ namespace ConscriptDesigner {
 				spriteBrowser = null;
 			else if (anchorable is SpriteSourceBrowser)
 				spriteSourceBrowser = null;
+			else if (anchorable is StyleBrowser)
+				styleBrowser = null;
+			else if (anchorable is TileDataBrowser)
+				tileDataBrowser = null;
+			else if (anchorable is TilesetBrowser)
+				tilesetBrowser = null;
 			CommandManager.InvalidateRequerySuggested();
 		}
 
@@ -244,6 +271,18 @@ namespace ConscriptDesigner {
 
 		public void OpenSpriteSourceBrowser() {
 			OnSpriteSourceBrowserCommand();
+		}
+
+		public void OpenStyleBrowser() {
+			OnStyleBrowserCommand();
+		}
+
+		public void OpenTileDataBrowser() {
+			OnTileDataBrowserCommand();
+		}
+
+		public void OpenTilesetBrowser() {
+			OnTilesetBrowserCommand();
 		}
 
 		public void DockDocument(RequestCloseDocument anchorable) {
@@ -466,8 +505,49 @@ namespace ConscriptDesigner {
 			}
 		}
 
-		private void OnTileBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
+		private void OnStyleBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
+			if (styleBrowser == null) {
+				styleBrowser = new StyleBrowser();
+				styleBrowser.Closed += OnAnchorableClosed;
+				styleBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
+				var pane = styleBrowser.Parent as LayoutAnchorablePane;
+				pane.DockWidth = new GridLength(250);
+				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
+					styleBrowser.RefreshList();
+			}
+			else {
+				styleBrowser.IsActive = true;
+			}
+		}
 
+		private void OnTileDataBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
+			if (tileDataBrowser == null) {
+				tileDataBrowser = new TileDataBrowser();
+				tileDataBrowser.Closed += OnAnchorableClosed;
+				tileDataBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
+				var pane = tileDataBrowser.Parent as LayoutAnchorablePane;
+				pane.DockWidth = new GridLength(250);
+				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
+					tileDataBrowser.RefreshList();
+			}
+			else {
+				tileDataBrowser.IsActive = true;
+			}
+		}
+
+		private void OnTilesetBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
+			if (tilesetBrowser == null) {
+				tilesetBrowser = new TilesetBrowser();
+				tilesetBrowser.Closed += OnAnchorableClosed;
+				tilesetBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
+				var pane = tilesetBrowser.Parent as LayoutAnchorablePane;
+				pane.DockWidth = new GridLength(250);
+				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
+					tilesetBrowser.RefreshList();
+			}
+			else {
+				tilesetBrowser.IsActive = true;
+			}
 		}
 
 		private void OnRunConscriptsCommand(object sender, ExecutedRoutedEventArgs e) {
@@ -563,6 +643,21 @@ namespace ConscriptDesigner {
 		public SpriteSourceBrowser SpriteSourceBrowser {
 			get { return spriteSourceBrowser; }
 			set { spriteSourceBrowser = value; }
+		}
+
+		public StyleBrowser StyleBrowser {
+			get { return styleBrowser; }
+			set { styleBrowser = value; }
+		}
+
+		public TileDataBrowser TileDataBrowser {
+			get { return tileDataBrowser; }
+			set { tileDataBrowser = value; }
+		}
+
+		public TilesetBrowser TilesetBrowser {
+			get { return tilesetBrowser; }
+			set { tilesetBrowser = value; }
 		}
 
 		public IRequestCloseAnchorable ActiveAnchorable {

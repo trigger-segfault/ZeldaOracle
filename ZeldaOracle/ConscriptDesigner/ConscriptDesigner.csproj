@@ -125,6 +125,18 @@
     <Compile Include="Anchorables\SpriteSourceBrowserControl.xaml.cs">
       <DependentUpon>SpriteSourceBrowserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Anchorables\StyleBrowser.cs" />
+    <Compile Include="Anchorables\StyleBrowserControl.xaml.cs">
+      <DependentUpon>StyleBrowserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Anchorables\TileDataBrowser.cs" />
+    <Compile Include="Anchorables\TileDataBrowserControl.xaml.cs">
+      <DependentUpon>TileDataBrowserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Anchorables\TilesetBrowser.cs" />
+    <Compile Include="Anchorables\TilesetBrowserControl.xaml.cs">
+      <DependentUpon>TilesetBrowserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Commands.cs" />
     <Compile Include="ProjectUserSettings.cs" />
     <Compile Include="Content\ContentSpriteFont.cs" />
@@ -193,11 +205,32 @@
     <Compile Include="WinForms\SpriteSourcePreview.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="WinForms\StylePreview.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WinForms\TileDataPreview.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WinForms\TilesetPreview.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Page Include="Anchorables\SpriteBrowserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Anchorables\SpriteSourceBrowserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Anchorables\StyleBrowserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Anchorables\TileDataBrowserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Anchorables\TilesetBrowserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -258,7 +291,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <EmbeddedResource Include="Themes\ConscriptHighlighting.xshd" />
+    <EmbeddedResource Include="Themes\ConscriptHighlighting.xshd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

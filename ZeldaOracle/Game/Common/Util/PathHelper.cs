@@ -100,7 +100,7 @@ namespace ZeldaOracle.Common.Util {
 
 		/// <summary>Returns a file path with copy appended to the filename.</summary>
 		public static string GetCopyName(string path) {
-			string newPath = Path.ChangeExtension(path, "") + " - Copy";
+			string newPath = Path.GetFileNameWithoutExtension(path) + " - Copy";
 			string ext = Path.GetExtension(path);
 
 			int index = 1;

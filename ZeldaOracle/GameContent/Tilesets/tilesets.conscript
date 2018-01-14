@@ -1,0 +1,12 @@
+﻿
+LOAD "objects_nv.conscript", true;
+LOAD "objects.conscript", true;
+LOAD "land.conscript", true;
+LOAD "forest.conscript", true;
+LOAD "water.conscript", true;
+LOAD "interior.conscript", true;
+LOAD "dungeon.conscript", true;
+LOAD "cliffs.conscript", true;
+LOAD "town.conscript", true;
+LOAD "sidescroll.conscript", true;
+LOAD "event_tile_data.conscript", true;

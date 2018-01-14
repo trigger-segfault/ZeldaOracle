@@ -1,4 +1,4 @@
-PALETTE		tile_dictionary, present;
+﻿PALETTE		tile_dictionary, present;
 
 CLONE	"tiles_default";
 
@@ -6,61 +6,99 @@ CLONE	"tiles_default";
 # Structure
 #==============================================================
 
-COLOR	floor, light		(144,128, 88);
-COLOR	floor, medium		(112, 80, 56);
-COLOR	floor, dark			( 80, 56, 32);
-
-COLOR	wall, light			(168,136,136);
-COLOR	wall, medium		(120, 88, 88);
-COLOR	wall, dark			( 88, 56, 56);
-
-LOOKUP	ceiling, all		wall, light;
+#LOOKUP	floor, all			cliff, all;
+#LOOKUP	wall, all			cliff, all;
+#LOOKUP	wall_alt, all		cliff, all;
 
 COLOR	stairs, light		(248,208,136);
 COLOR	stairs, medium		(232,  8, 24);
 COLOR	stairs, dark		(104,  8, 40);
 
-LOOKUP	floor_staircase, all	floor, all;
-LOOKUP	wall_staircase, all		floor, all;
+LOOKUP	floor_staircase, all	cliff, all;
+LOOKUP	wall_staircase, all		cliff, all;
 
-COLOR	railings, light		(248,248,192);
-COLOR	railings, medium	( 32,176,248);
-COLOR	railings, dark		(  0, 80,176);
+COLOR	railing, light		(248,248,192);
+COLOR	railing, medium		( 32,176,248);
+COLOR	railing, dark		(  0, 80,176);
 
-LOOKUP	torch_base, all		railings, all;
-LOOKUP	torch_light, all	chest, all;
+LOOKUP	wall_torch_base, all		railing, all;
+LOOKUP	wall_torch_light, all	chest, all;
 
-COLOR	statue, light		(248,248,136);
-COLOR	statue, medium		( 88,136,184);
-COLOR	statue, dark		(  0, 64,128);
+LOOKUP	statue, all			water, all;
+LOOKUP	statue_alt, all		grave, all;
 
-LOOKUP	statue_alt, all		statue, all;
+LOOKUP	eye_statue, all			statue, all;
+LOOKUP	essense_statue, all		statue, all;
+LOOKUP	plaque, all				statue, all;
 
+LOOKUP	tiled, all			cliff, all;
+LOOKUP	tiled_alt, all		grave, all;
 
 #==============================================================
 # Objects
 #==============================================================
 
-LOOKUP	pot, light			floor, light;
-COLOR	pot, medium			(208,168, 56);
-COLOR	pot, dark			(144, 72, 40);
+LOOKUP	pot, all			cliff, all;
+LOOKUP	pot_asobject, all	cliff, all;
+COLOR	pot_asobject, light	(0, 0, 0, 0);
 
 LOOKUP	sign, all			pot, all;
+LOOKUP	sign_asobject, all	pot_asobject, all;
 
-LOOKUP	bracelet_rock, all	pot, all;
-LOOKUP	switch_rock, all	pot, all;
-LOOKUP	crystal_rock, all	pot, all;
-LOOKUP	magnet_stone, all	pot, all;
+LOOKUP	bracelet_rock, all			pot, all;
+LOOKUP	bracelet_rock_asobject, all	pot_asobject, all;
+LOOKUP	switch_rock, all			pot, all;
+LOOKUP	switch_rock_asobject, all	pot_asobject, all;
+LOOKUP	crystal_rock, all			pot, all;
+LOOKUP	crystal_rock_asobject, all	pot_asobject, all;
+LOOKUP	magnet_stone, all			pot, all;
 
-LOOKUP	block, all			railings, all;
-LOOKUP	armos, all			pot, all;
-LOOKUP	armos_alt, all		armos, all;
+LOOKUP	block, all					bush, all;
+LOOKUP	block_asobject, all			bush_asobject, all;
 
-LOOKUP	bush, light			pot, light;
-COLOR	bush, medium		(248,184,136);
-COLOR	bush, dark			( 16,168, 64);
+LOOKUP	grave, light			cliff, light;
+COLOR	grave, medium			(176,152,104);
+COLOR	grave, dark				(112, 72, 72);
 
-LOOKUP	bush_regrow, all	bush, all;
+LOOKUP	grave_asobject, all		grave, all;
+COLOR	grave_asobject, light	(0, 0, 0, 0);
+
+LOOKUP	armos, all				cliff, all;
+LOOKUP	armos_alt, all			grave, all;
+LOOKUP	dirt_pile, all			cliff, all;
+
+#LOOKUP	bush, all				grass_field, all;
+#LOOKUP	bush_asobject, all		bush, all;
+#COLOR	bush_asobject, light	(0, 0, 0, 0);
+
+LOOKUP	grass, all				grass_field, all;
+LOOKUP	leaves, all				grass_field, all;
+
+LOOKUP	mushroom, light			cliff, light;
+LOOKUP	mushroom, medium		flower_red, dark;
+LOOKUP	mushroom, dark			grass_field, medium;
+
+LOOKUP	mushroom_asobject, all		mushroom, all;
+COLOR	mushroom_asobject, light	(0, 0, 0, 0);
+
+LOOKUP	flower_red, light		grass_field, light;
+LOOKUP	flower_red, medium		grass_field, medium;
+COLOR	flower_red, dark		(248,  0,  0);
+
+LOOKUP	flower_blue, all		flower_red, all;
+COLOR	flower_blue, dark		(  0,168,248);
+
+LOOKUP	flower_pink, all		flower_red, all;
+COLOR	flower_pink, dark		(240, 40,160);
+
+LOOKUP	water_flower, light		water, light;
+LOOKUP	water_flower, medium	water, medium;
+LOOKUP	water_flower, dark		flower_pink, dark;
+
+LOOKUP	ages_portal, all		cliff, all;
+LOOKUP	soft_soil, all			cliff, all;
+LOOKUP	soft_soil_sprout, all	tree_trunk_leaves, all;
+LOOKUP	cactus, all				grass_field, all;
 
 
 #==============================================================
@@ -70,7 +108,8 @@ LOOKUP	bush_regrow, all	bush, all;
 # Keep Default
 #COLOR	puzzle_red;
 
-LOOKUP	puzzle_blue, all		statue, all;
+# Keep Default
+#COLOR	puzzle_blue
 
 # Keep Default
 #LOOKUP	puzzle_yellow, light	red, light;
@@ -79,53 +118,51 @@ LOOKUP	puzzle_blue, all		statue, all;
 #COLOR	chest;
 
 # Keep Default
-#LOOKUP	lanturn, all		chest, all;
+#LOOKUP	lantern, all		chest, all;
 
-LOOKUP	door, all			statue, all;
+LOOKUP	door, all			water, all;
 
-LOOKUP	locked_block, all	railings, all;
-LOOKUP	turnstile, all		pot, all;
-LOOKUP	lever, all			statue, all;
-LOOKUP	button, all			floor, all;
-LOOKUP	hardened_lava, all	pot, all;
-LOOKUP	tile_monster, all	railings, all;
-LOOKUP	spikes, all			railings, all;
-LOOKUP	arrow_shooter, all	railings, all;
+LOOKUP	lantern_light, all	chest, all;
+
+LOOKUP	lantern_base, light		lantern_light, light;
+COLOR	lantern_base, medium	(144, 96,208);
+COLOR	lantern_base, dark		(104, 48,136);
+
+LOOKUP	locked_block, all	water, all;
+LOOKUP	turnstile, all		grave, all;
+LOOKUP	lever, all			chest, all;
+LOOKUP	button, all			water, all;
+LOOKUP	hardened_lava, all	cliff, all;
+LOOKUP	tile_monster, all	cliff, all;
+LOOKUP	floor_spikes, all			cliff, all;
+LOOKUP	arrow_shooter, all	stairs, all;
+LOOKUP	fire_shooter, all	stairs, all;
 LOOKUP	minecart_track, all	floor, all;
-LOOKUP	web, all			floor, all;
+LOOKUP	web, all			grave, all;
+LOOKUP	web, light			stairs, light;
 LOOKUP	bridge, all			floor, all;
 
+LOOKUP	ice_crystal_pit, all	stairs, all;
+LOOKUP	lava_mouth, all			stairs, all;
+LOOKUP	output, all			cliff, all;
 
 #==============================================================
 # Fluids
 #==============================================================
 
-COLOR	water, light	(248,248,136);
-COLOR	water, medium	( 88,136,184);
-COLOR	water, dark		(  0, 64,128);
+COLOR	water, light	(248,248,192);
+COLOR	water, medium	( 32,176,248);
+COLOR	water, dark		(  0, 80,176);
+LOOKUP	water_vegetation, all	water, all;
+COLOR	water_vegetation, dark	( 48,136,112);
 
-LOOKUP	ice, all		water, all;
-LOOKUP	lava, all		puzzle_red, all;
-LOOKUP	sand, all		floor, all;
+LOOKUP	ice, all			water, all;
+LOOKUP	ice_cracked, all	snow, all;
+LOOKUP	lava, all			puzzle_red, all;
+LOOKUP	sand, all			cliff, all;
 
 # Keep Default
-#COLOR	poison_bubble;	
-
-#==============================================================
-# Decoration
-#==============================================================
-
-LOOKUP	dungeon_entrance_column, all	wall, all;
-LOOKUP	dungeon_entrance_brick, all		statue, all;
-LOOKUP	dungeon_entrance_tile, all		railings, all;
-LOOKUP	dungeon_essense_brick, all		object, all;
-LOOKUP	dungeon_essense_tile, all		door, all;
-
-LOOKUP	fancy_tile_1, all		pot, all;
-LOOKUP	fancy_tile_2, all		railings, all;
-LOOKUP	fancy_tile_3, all		pot, all;
-LOOKUP	fancy_tile_4, all		floor, all;
-LOOKUP	fancy_tile_5, all		door, all;
+#COLOR	poison_bubble;
 
 #==============================================================
 # Nature
@@ -134,5 +171,91 @@ LOOKUP	fancy_tile_5, all		door, all;
 COLOR	cliff, light	(248,224, 16);
 COLOR	cliff, medium	(200,136,  8);
 COLOR	cliff, dark		(128, 80,  0);
+
+LOOKUP	dirt, all		cliff, all;
+LOOKUP	dirt_alt, all	grave, all;
+
+LOOKUP	tree_trunk, all		cliff, all;
+LOOKUP	tree_leaves, all	grass_field, all;
+LOOKUP	tree_trunk_leaves, light	tree_trunk, medium;
+LOOKUP	tree_trunk_leaves, medium	tree_leaves, medium;
+LOOKUP	tree_trunk_leaves, dark		tree_leaves, dark;
+
+LOOKUP	grass_field, light	cliff, light;
+COLOR	grass_field, medium	(128,224, 16);
+COLOR	grass_field, dark	( 48,136,  0);
+
+LOOKUP	grass_border, all	grass_field, all;
+
+COLOR	vines_light, light	( 40,128,  0);
+LOOKUP	vines_light, medium	cliff, light;
+LOOKUP	vines_light, dark	cliff, dark;
+
+LOOKUP	vines_dark, light	vines_light, light;
+COLOR	vines_dark, medium	(216,152,  0);
+LOOKUP	vines_dark, dark	cliff, dark;
+
+LOOKUP	vines_base, light	grass_field, light;
+LOOKUP	vines_base, medium	grass_field, medium;
+LOOKUP	vines_base, dark	grass_field, dark;
+
+LOOKUP	hole, all			cliff, all;
+LOOKUP	hole_alt, all		cliff, all;
+
+LOOKUP	grass_flower, all			grass_field, all;
+LOOKUP	grass_flower_alt, light		water, light;
+LOOKUP	grass_flower_alt, medium	grass_field, medium;
+LOOKUP	grass_flower_alt, dark		flower_pink, dark;
+
+LOOKUP	seedling_sprout, all		grass_field, all;
+
+COLOR	snow, light			(248,240,248);
+COLOR	snow, medium		(144,128,248);
+COLOR	snow, dark			( 80, 56,224);
+COLOR	snow, black			(  8, 48,104);
+
+LOOKUP	snow_entrance, light	snow, light;
+LOOKUP	snow_entrance, medium	snow, dark;
+LOOKUP	snow_entrance, dark		snow, black;
+
+LOOKUP	jump_flower, all		grass_field, all;
+
+LOOKUP	thick_brush, all		grass_field, all;
+LOOKUP	hedges, all				grass_field, all;
+
+#==============================================================
+# Interior
+#==============================================================
+
+LOOKUP	shop_side_railing, all	grass_field, all;
+LOOKUP	shop_front_railing, all	water, all;
+
+#==============================================================
+# Town
+#==============================================================
+
+LOOKUP	witch_hut, all			stairs, all;
+
+#==============================================================
+# Decoration
+#==============================================================
+
+LOOKUP	entrance_column, all	cliff, all;
+LOOKUP	entrance_brick, all		water, all;
+LOOKUP	entrance_tile, all		stairs, all;
+LOOKUP	essense_brick, all		stairs, all;
+LOOKUP	essense_tile, all		water, all;
+LOOKUP	entrance_light, all		water, all;
+
+LOOKUP	fancy_tile_1, all		cliff, all;
+LOOKUP	fancy_tile_2, all		cliff, all;
+LOOKUP	fancy_tile_3, all		cliff, all;
+LOOKUP	fancy_tile_4, all		cliff, all;
+LOOKUP	fancy_tile_5, all		cliff, all;
+LOOKUP	fancy_tile_6, all		statue_block, all;
+LOOKUP	fancy_tile_7, all		statue_block, all;
+LOOKUP	fancy_tile_8, all		statue_block, all;
+LOOKUP	fancy_tile_9, all		statue_block, all;
+LOOKUP	fancy_tile_10, all		statue_block, all;
 
 END;

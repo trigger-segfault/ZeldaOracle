@@ -9,6 +9,8 @@ SPRITESHEET "tileset_cliffs", (16, 16), (1, 1), (18, 18);
 # Tiles
 #==============================================================
 
+TILE "cliff_railing_square"; SAMESPRITE; SOLID block; END;
+
 TILE "cliff_corner_outside_nw_railing_corner_inside_nw"; SAMESPRITE; SOLID block; END;
 TILE "cliff_face_n_railing_horizontal"; SAMESPRITE; SOLID block; END;
 TILE "cliff_corner_outside_ne_railing_corner_inside_ne"; SAMESPRITE; SOLID block; END;
@@ -154,6 +156,73 @@ TILE "cliff_corner_inside_ne_railing_corner_outside_ne_cap"; SAMESPRITE; SOLID b
 TILE "cliff_corner_inside_sw_railing_corner_outside_sw_cap"; SAMESPRITE; SOLID block; END;
 TILE "cliff_corner_inside_se_railing_corner_outside_se_cap"; SAMESPRITE; SOLID block; END;
 
+TILE "cliff_cave_left"; SAMESPRITE; END;
+TILE "cliff_cave_mid"; SAMESPRITE; END;
+TILE "cliff_cave_right"; SAMESPRITE; END;
+TILE "cliff_cave_both"; SAMESPRITE; END;
+
+TILE "cliff_cave_spaced_left"; SAMESPRITE; SOLID edge_n; END;
+TILE "cliff_cave_spaced_mid"; SAMESPRITE; SOLID edge_n; END;
+TILE "cliff_cave_spaced_right"; SAMESPRITE; SOLID edge_n; END;
+TILE "cliff_cave_spaced_both"; SAMESPRITE; SOLID edge_n; END;
+
+TILE "cliff_cave_left_railing"; SAMESPRITE; SOLID edge_n; END;
+TILE "cliff_cave_mid_railing"; SAMESPRITE; SOLID edge_n; END;
+TILE "cliff_cave_right_railing"; SAMESPRITE; SOLID edge_n; END;
+TILE "cliff_cave_both_railing"; SAMESPRITE; SOLID edge_n; END;
+TILE "cliff_cave_left_railing_cap_w"; SAMESPRITE; SOLID edge_n; END;
+TILE "cliff_cave_mid_railing_cap_w"; SAMESPRITE; SOLID edge_n; END;
+TILE "cliff_cave_right_railing_cap_w"; SAMESPRITE; SOLID edge_n; END;
+TILE "cliff_cave_both_railing_cap_w"; SAMESPRITE; SOLID edge_n; END;
+TILE "cliff_cave_left_railing_cap_e"; SAMESPRITE; SOLID edge_n; END;
+TILE "cliff_cave_mid_railing_cap_e"; SAMESPRITE; SOLID edge_n; END;
+TILE "cliff_cave_right_railing_cap_e"; SAMESPRITE; SOLID edge_n; END;
+TILE "cliff_cave_both_railing_cap_e"; SAMESPRITE; SOLID edge_n; END;
+TILE "cliff_cave_left_railing_cap"; SAMESPRITE; SOLID edge_n; END;
+TILE "cliff_cave_mid_railing_cap"; SAMESPRITE; SOLID edge_n; END;
+TILE "cliff_cave_right_railing_cap"; SAMESPRITE; SOLID edge_n; END;
+TILE "cliff_cave_both_railing_cap"; SAMESPRITE; SOLID edge_n; END;
+
+TILE "cliff_ladder_top"; SAMESPRITE; ENVTYPE Ladder; END;
+TILE "cliff_ladder"; SAMESPRITE; ENVTYPE Ladder; END;
+TILE "cliff_ladder_bottom"; SAMESPRITE; ENVTYPE Ladder; END;
+
+TILE "vine_cliff_top"; SAMESPRITE; LEDGE edge_s, down; END;
+TILE "vine_cliff_top_dirt"; SAMESPRITE; LEDGE edge_s, down; END;
+TILE "vine_cliff"; SAMESPRITE; LEDGE edge_s, down; END;
+TILE "vine_cliff_bottom"; SAMESPRITE; LEDGE edge_s, down; END;
+TILE "vine_cliff_top_bottom"; SAMESPRITE; LEDGE edge_s, down; END;
+TILE "vine_cliff_top_dirt_bottom"; SAMESPRITE; LEDGE edge_s, down; END;
+
+
+TILE "vines_top_cave"; SAMESPRITE; ENVTYPE Ladder; END;
+TILE "vines_top_cave_left"; SAMESPRITE; END;
+TILE "vines_top_cave_mid"; SAMESPRITE; END;
+TILE "vines_top_cave_right"; SAMESPRITE; END;
+TILE "vines_top_cave_both"; SAMESPRITE; END;
+TILE "vines_top"; SAMESPRITE; ENVTYPE Ladder; END;
+TILE "vines"; SAMESPRITE; ENVTYPE Ladder; END;
+TILE "vines_bottom"; SAMESPRITE; ENVTYPE Ladder; END;
+TILE "vines_top_cave_bottom"; SAMESPRITE; ENVTYPE Ladder; END;
+TILE "vines_top_bottom"; SAMESPRITE; ENVTYPE Ladder; END;
+
+TILE "vines_base_dirt"; SAMESPRITE; END;
+TILE "vines_base_dirt_dark"; SAMESPRITE; END;
+TILE "vines_base_dirt_dark_rough"; SAMESPRITE; END;
+TILE "vines_base_sand"; SAMESPRITE; END;
+
+TILE "vines_top_ground"; SAMESPRITE; END;
+TILE "vines_top_dirt"; SAMESPRITE; END;
+TILE "vines_top_dirt_dark"; SAMESPRITE; END;
+TILE "vines_top_dirt_dark_rough"; SAMESPRITE; END;
+TILE "vines_top_sand"; SAMESPRITE; END;
+
+TILE "vine_cliff_top_spaced_ground"; SAMESPRITE; END;
+TILE "vine_cliff_top_spaced_dirt"; SAMESPRITE; END;
+TILE "vine_cliff_top_spaced_sand"; SAMESPRITE; END;
+TILE "vine_cliff_top_dirt_dark"; SAMESPRITE; END;
+TILE "vine_cliff_top_dirt_dark_rough"; SAMESPRITE; END;
+
 #==============================================================
 # Tilesets
 #==============================================================
@@ -219,149 +288,212 @@ TILE (2, 5); SOLID doorway; END;
 
 # Style Tiles
 
-SETTILE (0,0) "cliff_corner_outside_nw_railing_corner_inside_nw";
-SETTILE (1,0) "cliff_face_n_railing_horizontal";
-SETTILE (2,0) "cliff_corner_outside_ne_railing_corner_inside_ne";
-SETTILE (0,1) "cliff_face_w_railing_vertical";
-SETTILE (2,1) "cliff_face_e_railing_vertical";
-SETTILE (0,2) "cliff_corner_outside_sw_railing_corner_inside_sw";
-SETTILE (1,2) "cliff_face_s_railing_horizontal";
-SETTILE (2,2) "cliff_corner_outside_se_railing_corner_inside_se";
+SETTILE (0,0), "cliff_corner_outside_nw_railing_corner_inside_nw";
+SETTILE (1,0), "cliff_face_n_railing_horizontal";
+SETTILE (2,0), "cliff_corner_outside_ne_railing_corner_inside_ne";
+SETTILE (0,1), "cliff_face_w_railing_vertical";
+SETTILE (2,1), "cliff_face_e_railing_vertical";
+SETTILE (0,2), "cliff_corner_outside_sw_railing_corner_inside_sw";
+SETTILE (1,2), "cliff_face_s_railing_horizontal";
+SETTILE (2,2), "cliff_corner_outside_se_railing_corner_inside_se";
 
-SETTILE (0,3) "cliff_face_front_corner_left";
+SETTILE (0,3), "cliff_face_front_corner_left";
 
-SETTILE (1,3) "cliff_face_front";
+SETTILE (1,3), "cliff_face_front";
 
-SETTILE (2,3) "cliff_face_front_corner_right";
-SETTILE (0,4) "cliff_face_front_corner_left_ground";
-SETTILE (2,4) "cliff_face_front_corner_right_ground";
+SETTILE (2,3), "cliff_face_front_corner_right";
+SETTILE (0,4), "cliff_face_front_corner_left_ground";
+SETTILE (2,4), "cliff_face_front_corner_right_ground";
 
-SETTILE (3,0) "cliff_column_top_back";
-SETTILE (3,1) "cliff_column_top";
-SETTILE (3,2) "cliff_column_top_front";
-SETTILE (3,3) "cliff_column";
-SETTILE (3,4) "cliff_column_ground";
+SETTILE (3,0), "cliff_column_top_back";
+SETTILE (3,1), "cliff_column_top";
+SETTILE (3,2), "cliff_column_top_front";
+SETTILE (3,3), "cliff_column";
+SETTILE (3,4), "cliff_column_ground";
 
-SETTILE (4,0) "cliff_corner_outside_nw_railing_vertical_cap_n";
-SETTILE (5,0) "cliff_corner_outside_ne_railing_vertical_cap_n";
-SETTILE (4,1) "cliff_corner_outside_sw_railing_vertical_cap_s";
-SETTILE (5,1) "cliff_corner_outside_se_railing_vertical_cap_s";
-SETTILE (6,0) "cliff_corner_outside_ground_nw_railing_vertical_cap_n";
-SETTILE (7,6) "cliff_corner_outside_ground_ne_railing_vertical_cap_n";
-SETTILE (6,1) "cliff_corner_outside_ground_sw_railing_vertical_cap_s";
-SETTILE (7,1) "cliff_corner_outside_ground_se_railing_vertical_cap_s";
+SETTILE (4,0), "cliff_corner_outside_nw_railing_vertical_cap_n";
+SETTILE (5,0), "cliff_corner_outside_ne_railing_vertical_cap_n";
+SETTILE (4,1), "cliff_corner_outside_sw_railing_vertical_cap_s";
+SETTILE (5,1), "cliff_corner_outside_se_railing_vertical_cap_s";
+SETTILE (6,0), "cliff_corner_outside_ground_nw_railing_vertical_cap_n";
+SETTILE (7,0), "cliff_corner_outside_ground_ne_railing_vertical_cap_n";
+SETTILE (6,1), "cliff_corner_outside_ground_sw_railing_vertical_cap_s";
+SETTILE (7,1), "cliff_corner_outside_ground_se_railing_vertical_cap_s";
 
-SETTILE (8,0) "cliff_corner_outside_nw_railing_horizontal_cap_w";
-SETTILE (9,0) "cliff_corner_outside_ne_railing_horizontal_cap_e";
-SETTILE (8,1) "cliff_corner_outside_sw_railing_horizontal_cap_w";
-SETTILE (9,1) "cliff_corner_outside_se_railing_horizontal_cap_e";
-SETTILE (10,0) "cliff_corner_outside_ground_nw_railing_horizontal_cap_w";
-SETTILE (11,0) "cliff_corner_outside_ground_ne_railing_horizontal_cap_e";
-SETTILE (10,1) "cliff_corner_outside_ground_sw_railing_horizontal_cap_w";
-SETTILE (11,1) "cliff_corner_outside_ground_se_railing_horizontal_cap_e";
-
-
-SETTILE (4,2) "cliff_corner_outside_nw_left_half_railing_vertical_long_cap_n";
-SETTILE (5,2) "cliff_corner_outside_ne_right_half_railing_vertical_long_cap_n";
-SETTILE (4,3) "cliff_corner_outside_sw_left_half_railing_vertical_long_cap_s";
-SETTILE (5,3) "cliff_corner_outside_se_right_half_railing_vertical_long_cap_s";
-SETTILE (6,2) "cliff_corner_outside_ground_nw_left_half_railing_vertical_long_cap_n";
-SETTILE (7,2) "cliff_corner_outside_ground_ne_right_half_railing_vertical_long_cap_n";
-SETTILE (6,3) "cliff_corner_outside_ground_sw_left_half_railing_vertical_long_cap_s";
-SETTILE (7,3) "cliff_corner_outside_ground_se_right_half_railing_vertical_long_cap_s";
-
-SETTILE (8,2) "cliff_corner_outside_nw_left_half_railing_vertical_long_cap";
-SETTILE (9,2) "cliff_corner_outside_ne_right_half_railing_vertical_long_cap";
-SETTILE (8,3) "cliff_corner_outside_sw_left_half_railing_vertical_long_cap";
-SETTILE (9,3) "cliff_corner_outside_se_right_half_railing_vertical_long_cap";
-SETTILE (10,2) "cliff_corner_outside_ground_nw_left_half_railing_vertical_long_cap";
-SETTILE (11,2) "cliff_corner_outside_ground_ne_right_half_railing_vertical_long_cap";
-SETTILE (10,3) "cliff_corner_outside_ground_sw_left_half_railing_vertical_long_cap";
-SETTILE (11,3) "cliff_corner_outside_ground_se_right_half_railing_vertical_long_cap";
+SETTILE (8,0), "cliff_corner_outside_nw_railing_horizontal_cap_w";
+SETTILE (9,0), "cliff_corner_outside_ne_railing_horizontal_cap_e";
+SETTILE (8,1), "cliff_corner_outside_sw_railing_horizontal_cap_w";
+SETTILE (9,1), "cliff_corner_outside_se_railing_horizontal_cap_e";
+SETTILE (10,0), "cliff_corner_outside_ground_nw_railing_horizontal_cap_w";
+SETTILE (11,0), "cliff_corner_outside_ground_ne_railing_horizontal_cap_e";
+SETTILE (10,1), "cliff_corner_outside_ground_sw_railing_horizontal_cap_w";
+SETTILE (11,1), "cliff_corner_outside_ground_se_railing_horizontal_cap_e";
 
 
-SETTILE (4,4) "cliff_corner_outside_nw_top_half_railing_horizontal_long_cap_w";
-SETTILE (5,4) "cliff_corner_outside_ne_top_half_railing_horizontal_long_cap_e";
-SETTILE (4,5) "cliff_corner_outside_sw_bottom_half_railing_horizontal_long_cap_w";
-SETTILE (5,5) "cliff_corner_outside_se_bottom_half_railing_horizontal_long_cap_e";
-SETTILE (6,4) "cliff_corner_outside_ground_nw_top_half_railing_horizontal_long_cap_w";
-SETTILE (7,4) "cliff_corner_outside_ground_ne_top_half_railing_horizontal_long_cap_e";
-SETTILE (6,5) "cliff_corner_outside_ground_sw_bottom_half_railing_horizontal_long_cap_w";
-SETTILE (7,5) "cliff_corner_outside_ground_se_bottom_half_railing_horizontal_long_cap_e";
+SETTILE (4,2), "cliff_corner_outside_nw_left_half_railing_vertical_long_cap_n";
+SETTILE (5,2), "cliff_corner_outside_ne_right_half_railing_vertical_long_cap_n";
+SETTILE (4,3), "cliff_corner_outside_sw_left_half_railing_vertical_long_cap_s";
+SETTILE (5,3), "cliff_corner_outside_se_right_half_railing_vertical_long_cap_s";
+SETTILE (6,2), "cliff_corner_outside_ground_nw_left_half_railing_vertical_long_cap_n";
+SETTILE (7,2), "cliff_corner_outside_ground_ne_right_half_railing_vertical_long_cap_n";
+SETTILE (6,3), "cliff_corner_outside_ground_sw_left_half_railing_vertical_long_cap_s";
+SETTILE (7,3), "cliff_corner_outside_ground_se_right_half_railing_vertical_long_cap_s";
 
-SETTILE (8,4) "cliff_corner_outside_nw_top_half_railing_horizontal_long_cap";
-SETTILE (9,4) "cliff_corner_outside_ne_top_half_railing_horizontal_long_cap";
-SETTILE (8,5) "cliff_corner_outside_sw_bottom_half_railing_horizontal_long_cap";
-SETTILE (9,5) "cliff_corner_outside_se_bottom_half_railing_horizontal_long_cap";
-SETTILE (10,4) "cliff_corner_outside_ground_nw_top_half_railing_horizontal_long_cap";
-SETTILE (11,4) "cliff_corner_outside_ground_ne_top_half_railing_horizontal_long_cap";
-SETTILE (10,5) "cliff_corner_outside_ground_sw_bottom_half_railing_horizontal_long_cap";
-SETTILE (11,5) "cliff_corner_outside_ground_se_bottom_half_railing_horizontal_long_cap";
-
-
-SETTILE (4,6) "cliff_corner_outside_ground_nw_railing_corner_inside_nw";
-SETTILE (5,6) "cliff_corner_outside_ground_ne_railing_corner_inside_ne";
-SETTILE (4,7) "cliff_corner_outside_ground_sw_railing_corner_inside_sw";
-SETTILE (5,7) "cliff_corner_outside_ground_se_railing_corner_inside_se";
-
-SETTILE (6,6) "cliff_column_top_back_railing_vertical_cap_n_right_side";
-SETTILE (7,6) "cliff_column_top_back_railing_vertical_cap_n_left_side";
-SETTILE (6,7) "cliff_column_top_front_railing_vertical_cap_s_right_side";
-SETTILE (7,7) "cliff_column_top_front_railing_vertical_cap_s_left_side";
-
-SETTILE (8,6) "cliff_column_ground_top_back_railing_vertical_cap_n_right_side";
-SETTILE (9,6) "cliff_column_ground_top_back_railing_vertical_cap_n_left_side";
-SETTILE (8,7) "cliff_column_ground_top_front_railing_vertical_cap_s_right_side";
-SETTILE (9,7) "cliff_column_ground_top_front_railing_vertical_cap_s_left_side";
+SETTILE (8,2), "cliff_corner_outside_nw_left_half_railing_vertical_long_cap";
+SETTILE (9,2), "cliff_corner_outside_ne_right_half_railing_vertical_long_cap";
+SETTILE (8,3), "cliff_corner_outside_sw_left_half_railing_vertical_long_cap";
+SETTILE (9,3), "cliff_corner_outside_se_right_half_railing_vertical_long_cap";
+SETTILE (10,2), "cliff_corner_outside_ground_nw_left_half_railing_vertical_long_cap";
+SETTILE (11,2), "cliff_corner_outside_ground_ne_right_half_railing_vertical_long_cap";
+SETTILE (10,3), "cliff_corner_outside_ground_sw_left_half_railing_vertical_long_cap";
+SETTILE (11,3), "cliff_corner_outside_ground_se_right_half_railing_vertical_long_cap";
 
 
-SETTILE (10,6) "cliff_column_top_back_railing_horizontal_long_cap";
-SETTILE (10,7) "cliff_column_top_front_railing_horizontal_long_cap";
-SETTILE (11,6) "cliff_column_ground_top_back_horizontal_long_cap";
-SETTILE (11,7) "cliff_column_ground_top_front_horizontal_long_cap";
+SETTILE (4,4), "cliff_corner_outside_nw_top_half_railing_horizontal_long_cap_w";
+SETTILE (5,4), "cliff_corner_outside_ne_top_half_railing_horizontal_long_cap_e";
+SETTILE (4,5), "cliff_corner_outside_sw_bottom_half_railing_horizontal_long_cap_w";
+SETTILE (5,5), "cliff_corner_outside_se_bottom_half_railing_horizontal_long_cap_e";
+SETTILE (6,4), "cliff_corner_outside_ground_nw_top_half_railing_horizontal_long_cap_w";
+SETTILE (7,4), "cliff_corner_outside_ground_ne_top_half_railing_horizontal_long_cap_e";
+SETTILE (6,5), "cliff_corner_outside_ground_sw_bottom_half_railing_horizontal_long_cap_w";
+SETTILE (7,5), "cliff_corner_outside_ground_se_bottom_half_railing_horizontal_long_cap_e";
 
-SETTILE (0,6) "cliff_face_w_railing_vertical_long_cap_n";
-SETTILE (1,6) "cliff_face_e_railing_vertical_long_cap_n";
-SETTILE (0,7) "cliff_face_w_railing_vertical_long_cap_s";
-SETTILE (1,7) "cliff_face_e_railing_vertical_long_cap_s";
-SETTILE (0,8) "cliff_face_w_railing_vertical_long_cap";
-SETTILE (1,8) "cliff_face_e_railing_vertical_long_cap";
+SETTILE (8,4), "cliff_corner_outside_nw_top_half_railing_horizontal_long_cap";
+SETTILE (9,4), "cliff_corner_outside_ne_top_half_railing_horizontal_long_cap";
+SETTILE (8,5), "cliff_corner_outside_sw_bottom_half_railing_horizontal_long_cap";
+SETTILE (9,5), "cliff_corner_outside_se_bottom_half_railing_horizontal_long_cap";
+SETTILE (10,4), "cliff_corner_outside_ground_nw_top_half_railing_horizontal_long_cap";
+SETTILE (11,4), "cliff_corner_outside_ground_ne_top_half_railing_horizontal_long_cap";
+SETTILE (10,5), "cliff_corner_outside_ground_sw_bottom_half_railing_horizontal_long_cap";
+SETTILE (11,5), "cliff_corner_outside_ground_se_bottom_half_railing_horizontal_long_cap";
 
-SETTILE (2,6) "cliff_face_n_railing_horizontal_long_cap_w";
-SETTILE (2,7) "cliff_face_s_railing_horizontal_long_cap_w";
-SETTILE (3,6) "cliff_face_n_railing_horizontal_long_cap_e";
-SETTILE (3,7) "cliff_face_s_railing_horizontal_long_cap_e";
-SETTILE (2,8) "cliff_face_n_railing_horizontal_long_cap";
-SETTILE (3,8) "cliff_face_s_railing_horizontal_long_cap";
 
-SETTILE (4,8) "cliff_face_e_corner_inside_nw_railing_vertical_long_cap_n";
-SETTILE (5,8) "cliff_face_w_corner_inside_ne_railing_vertical_long_cap_n";
-SETTILE (6,8) "cliff_face_e_corner_inside_nw_railing_vertical_long_cap";
-SETTILE (7,8) "cliff_face_w_corner_inside_ne_railing_vertical_long_cap";
+SETTILE (4,6), "cliff_corner_outside_ground_nw_railing_corner_inside_nw";
+SETTILE (5,6), "cliff_corner_outside_ground_ne_railing_corner_inside_ne";
+SETTILE (4,7), "cliff_corner_outside_ground_sw_railing_corner_inside_sw";
+SETTILE (5,7), "cliff_corner_outside_ground_se_railing_corner_inside_se";
 
-SETTILE (8,8) "cliff_column_top_corner_inside_nw";
-SETTILE (9,8) "cliff_column_top_corner_inside_ne";
-SETTILE (10,8) "cliff_column_top_corner_inside_ne_nw";
-SETTILE (11,8) "cliff_column_ground_top_back";
+SETTILE (6,6), "cliff_column_top_back_railing_vertical_cap_n_right_side";
+SETTILE (7,6), "cliff_column_top_back_railing_vertical_cap_n_left_side";
+SETTILE (6,7), "cliff_column_top_front_railing_vertical_cap_s_right_side";
+SETTILE (7,7), "cliff_column_top_front_railing_vertical_cap_s_left_side";
 
-SETTILE (0,9) "cliff_corner_inside_nw_railing_corner_outside_nw";
-SETTILE (1,9) "cliff_corner_inside_ne_railing_corner_outside_ne";
-SETTILE (0,10) "cliff_corner_inside_sw_railing_corner_outside_sw";
-SETTILE (1,10) "cliff_corner_inside_se_railing_corner_outside_se";
+SETTILE (8,6), "cliff_column_ground_top_back_railing_vertical_cap_n_right_side";
+SETTILE (9,6), "cliff_column_ground_top_back_railing_vertical_cap_n_left_side";
+SETTILE (8,7), "cliff_column_ground_top_front_railing_vertical_cap_s_right_side";
+SETTILE (9,7), "cliff_column_ground_top_front_railing_vertical_cap_s_left_side";
 
-SETTILE (2,9) "cliff_corner_inside_nw_railing_corner_outside_nw_cap_s";
-SETTILE (3,9) "cliff_corner_inside_ne_railing_corner_outside_ne_cap_s";
-SETTILE (2,10) "cliff_corner_inside_sw_railing_corner_outside_sw_cap_n";
-SETTILE (3,10) "cliff_corner_inside_se_railing_corner_outside_se_cap_n";
 
-SETTILE (4,9) "cliff_corner_inside_nw_railing_corner_outside_nw_cap_e";
-SETTILE (5,9) "cliff_corner_inside_ne_railing_corner_outside_ne_cap_w";
-SETTILE (4,10) "cliff_corner_inside_sw_railing_corner_outside_sw_cap_e";
-SETTILE (5,10) "cliff_corner_inside_se_railing_corner_outside_se_cap_w";
+SETTILE (10,6), "cliff_column_top_back_railing_horizontal_long_cap";
+SETTILE (10,7), "cliff_column_top_front_railing_horizontal_long_cap";
+SETTILE (11,6), "cliff_column_ground_top_back_horizontal_long_cap";
+SETTILE (11,7), "cliff_column_ground_top_front_horizontal_long_cap";
 
-SETTILE (6,9) "cliff_corner_inside_nw_railing_corner_outside_nw_cap";
-SETTILE (7,9) "cliff_corner_inside_ne_railing_corner_outside_ne_cap";
-SETTILE (6,10) "cliff_corner_inside_sw_railing_corner_outside_sw_cap";
-SETTILE (7,10) "cliff_corner_inside_se_railing_corner_outside_se_cap";
+SETTILE (0,6), "cliff_face_w_railing_vertical_long_cap_n";
+SETTILE (1,6), "cliff_face_e_railing_vertical_long_cap_n";
+SETTILE (0,7), "cliff_face_w_railing_vertical_long_cap_s";
+SETTILE (1,7), "cliff_face_e_railing_vertical_long_cap_s";
+SETTILE (0,8), "cliff_face_w_railing_vertical_long_cap";
+SETTILE (1,8), "cliff_face_e_railing_vertical_long_cap";
+
+SETTILE (2,6), "cliff_face_n_railing_horizontal_long_cap_w";
+SETTILE (2,7), "cliff_face_s_railing_horizontal_long_cap_w";
+SETTILE (3,6), "cliff_face_n_railing_horizontal_long_cap_e";
+SETTILE (3,7), "cliff_face_s_railing_horizontal_long_cap_e";
+SETTILE (2,8), "cliff_face_n_railing_horizontal_long_cap";
+SETTILE (3,8), "cliff_face_s_railing_horizontal_long_cap";
+
+SETTILE (4,8), "cliff_face_e_corner_inside_nw_railing_vertical_long_cap_n";
+SETTILE (5,8), "cliff_face_w_corner_inside_ne_railing_vertical_long_cap_n";
+SETTILE (6,8), "cliff_face_e_corner_inside_nw_railing_vertical_long_cap";
+SETTILE (7,8), "cliff_face_w_corner_inside_ne_railing_vertical_long_cap";
+
+SETTILE (8,8), "cliff_column_top_corner_inside_nw";
+SETTILE (9,8), "cliff_column_top_corner_inside_ne";
+SETTILE (10,8), "cliff_column_top_corner_inside_ne_nw";
+SETTILE (11,8), "cliff_column_ground_top_back";
+
+SETTILE (0,9), "cliff_corner_inside_nw_railing_corner_outside_nw";
+SETTILE (1,9), "cliff_corner_inside_ne_railing_corner_outside_ne";
+SETTILE (0,10), "cliff_corner_inside_sw_railing_corner_outside_sw";
+SETTILE (1,10), "cliff_corner_inside_se_railing_corner_outside_se";
+
+SETTILE (2,9), "cliff_corner_inside_nw_railing_corner_outside_nw_cap_s";
+SETTILE (3,9), "cliff_corner_inside_ne_railing_corner_outside_ne_cap_s";
+SETTILE (2,10), "cliff_corner_inside_sw_railing_corner_outside_sw_cap_n";
+SETTILE (3,10), "cliff_corner_inside_se_railing_corner_outside_se_cap_n";
+
+SETTILE (4,9), "cliff_corner_inside_nw_railing_corner_outside_nw_cap_e";
+SETTILE (5,9), "cliff_corner_inside_ne_railing_corner_outside_ne_cap_w";
+SETTILE (4,10), "cliff_corner_inside_sw_railing_corner_outside_sw_cap_e";
+SETTILE (5,10), "cliff_corner_inside_se_railing_corner_outside_se_cap_w";
+
+SETTILE (6,9), "cliff_corner_inside_nw_railing_corner_outside_nw_cap";
+SETTILE (7,9), "cliff_corner_inside_ne_railing_corner_outside_ne_cap";
+SETTILE (6,10), "cliff_corner_inside_sw_railing_corner_outside_sw_cap";
+SETTILE (7,10), "cliff_corner_inside_se_railing_corner_outside_se_cap";
+
+SETTILE (0,11), "cliff_cave_both_railing_cap_w";
+SETTILE (1,11), "cliff_cave_both_railing";
+SETTILE (2,11), "cliff_cave_both_railing_cap_e";
+SETTILE (3,11), "cliff_cave_both_railing_cap";
+
+SETTILE (0,12), "cliff_cave_left_railing_cap_w";
+SETTILE (1,12), "cliff_cave_left_railing";
+SETTILE (2,12), "cliff_cave_left_railing_cap_e";
+SETTILE (3,12), "cliff_cave_left_railing_cap";
+
+SETTILE (0,13), "cliff_cave_right_railing_cap_w";
+SETTILE (1,13), "cliff_cave_right_railing";
+SETTILE (2,13), "cliff_cave_right_railing_cap_e";
+SETTILE (3,13), "cliff_cave_right_railing_cap";
+
+SETTILE (0,14), "cliff_cave_mid_railing_cap_w";
+SETTILE (1,14), "cliff_cave_mid_railing";
+SETTILE (2,14), "cliff_cave_mid_railing_cap_e";
+SETTILE (3,14), "cliff_cave_mid_railing_cap";
+
+SETTILE (4,11), "cliff_cave_left";
+SETTILE (5,11), "cliff_cave_mid";
+SETTILE (6,11), "cliff_cave_right";
+SETTILE (7,11), "cliff_cave_both";
+
+SETTILE (4,12), "vines_top_cave_left";
+SETTILE (5,12), "vines_top_cave_mid";
+SETTILE (6,12), "vines_top_cave_right";
+SETTILE (7,12), "vines_top_cave_both";
+
+SETTILE (4,13), "vines_top_cave_left";
+SETTILE (5,13), "vines_top_cave_mid";
+SETTILE (6,13), "vines_top_cave_right";
+SETTILE (7,13), "vines_top_cave_both";
+
+SETTILE (4,14), "cliff_cave_spaced_left";
+SETTILE (5,14), "cliff_cave_spaced_mid";
+SETTILE (6,14), "cliff_cave_spaced_right";
+SETTILE (7,14), "cliff_cave_spaced_both";
+
+SETTILE (8,9), "cliff_ladder_top";
+SETTILE (8,10), "cliff_ladder";
+SETTILE (8,11), "cliff_ladder_bottom";
+
+SETTILE (9,9), "vine_cliff_top_dirt";
+SETTILE (9,10), "vine_cliff";
+SETTILE (9,11), "vine_cliff_bottom";
+
+SETTILE (10,9), "vines_top";
+SETTILE (10,10), "vines";
+SETTILE (10,11), "vines_bottom";
+SETTILE (11,9), "vines_top";
+SETTILE (11,10), "vines_bottom";
+SETTILE (11,11), "vines_base_dirt";
+
+SETTILE (8,12), "stairs_down";
+SETTILE (9,12), "stairs_left";
+SETTILE (10,12), "stairs_up";
+SETTILE (11,12), "stairs_right";
+
+SETTILE (1,4), "tunnel_down";
+SETTILE (1,1), "cliff_railing_square";
 
 END;

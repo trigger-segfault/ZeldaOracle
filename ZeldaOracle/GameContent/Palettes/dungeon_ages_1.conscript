@@ -1,4 +1,4 @@
-PALETTE		tile_dictionary, dungeon_ages_1;
+﻿PALETTE		tile_dictionary, dungeon_ages_1;
 
 CLONE	"tiles_default";
 
@@ -14,25 +14,22 @@ COLOR	wall, light			(168,136,136);
 COLOR	wall, medium		(120, 88, 88);
 COLOR	wall, dark			( 88, 56, 56);
 
-LOOKUP	ceiling, all		wall, light;
-
-COLOR	stairs, light		(208,168, 56);
-LOOKUP	stairs, medium		stairs, light;
-LOOKUP	stairs, dark		stairs, light;
+LOOKUP	stairs, all		pot, all;
 
 LOOKUP	floor_staircase, all	floor, all;
-LOOKUP	wall_staircase, all		floor, all;
+LOOKUP	wall_staircase, all		wall, all;
 
-COLOR	railings, light		(232,160, 72);
-COLOR	railings, medium	(200, 72,  0);
-COLOR	railings, dark		(104,  0,  0);
+COLOR	railing, light		(232,160, 72);
+COLOR	railing, medium		(200, 72,  0);
+COLOR	railing, dark		(104,  0,  0);
 
-LOOKUP	torch_base, all		railings, all;
-LOOKUP	torch_light, all	chest, all;
+LOOKUP	wall_torch_base, all	railing, all;
+LOOKUP	wall_torch_light, all	chest, all;
 
 COLOR	statue, light		(248,248,136);
 COLOR	statue, medium		( 88,136,184);
 COLOR	statue, dark		(  0, 64,128);
+RESET	statue, black;
 
 LOOKUP	statue_alt, all		statue, all;
 
@@ -52,15 +49,15 @@ LOOKUP	switch_rock, all	pot, all;
 LOOKUP	crystal_rock, all	pot, all;
 LOOKUP	magnet_stone, all	pot, all;
 
-LOOKUP	block, all			railings, all;
+LOOKUP	block, all			railing, all;
 LOOKUP	armos, all			pot, all;
 LOOKUP	armos_alt, all		armos, all;
 
 LOOKUP	bush, light			pot, light;
-COLOR	bush, medium		(248,184,136);
-COLOR	bush, dark			( 16,168, 64);
+COLOR	bush, medium		( 16,168, 64);
+COLOR	bush, dark			(248,184,136);
 
-LOOKUP	bush_regrow, all	bush, all;
+LOOKUP	regrowable_bush, all	bush, all;
 
 
 #==============================================================
@@ -79,18 +76,18 @@ LOOKUP	puzzle_blue, all		statue, all;
 #COLOR	chest;
 
 # Keep Default
-#LOOKUP	lanturn, all		chest, all;
+#LOOKUP	lantern, all		chest, all;
 
 LOOKUP	door, all			statue, all;
 
-LOOKUP	locked_block, all	railings, all;
+LOOKUP	locked_block, all	railing, all;
 LOOKUP	turnstile, all		pot, all;
 LOOKUP	lever, all			statue, all;
 LOOKUP	button, all			floor, all;
 LOOKUP	hardened_lava, all	pot, all;
-LOOKUP	tile_monster, all	railings, all;
-LOOKUP	spikes, all			railings, all;
-LOOKUP	arrow_shooter, all	railings, all;
+LOOKUP	tile_monster, all	railing, all;
+LOOKUP	floor_spikes, all			railing, all;
+LOOKUP	arrow_shooter, all	railing, all;
 LOOKUP	minecart_track, all	floor, all;
 LOOKUP	web, all			floor, all;
 LOOKUP	bridge, all			floor, all;
@@ -115,14 +112,14 @@ LOOKUP	sand, all		floor, all;
 # Decoration
 #==============================================================
 
-LOOKUP	dungeon_entrance_column, all	wall, all;
-LOOKUP	dungeon_entrance_brick, all		statue, all;
-LOOKUP	dungeon_entrance_tile, all		railings, all;
-LOOKUP	dungeon_essense_brick, all		object, all;
-LOOKUP	dungeon_essense_tile, all		door, all;
+LOOKUP	entrance_column, all	wall, all;
+LOOKUP	entrance_brick, all		statue, all;
+LOOKUP	entrance_tile, all		railing, all;
+LOOKUP	essense_brick, all		pot, all;
+LOOKUP	essense_tile, all		door, all;
 
 LOOKUP	fancy_tile_1, all		pot, all;
-LOOKUP	fancy_tile_2, all		railings, all;
+LOOKUP	fancy_tile_2, all		railing, all;
 LOOKUP	fancy_tile_3, all		pot, all;
 LOOKUP	fancy_tile_4, all		floor, all;
 LOOKUP	fancy_tile_5, all		door, all;

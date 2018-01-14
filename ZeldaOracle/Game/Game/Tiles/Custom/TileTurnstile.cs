@@ -67,13 +67,15 @@ namespace ZeldaOracle.Game.Tiles {
 			if (windingOrder == WindingOrder.Clockwise) {
 				windingOrder = WindingOrder.CounterClockwise;
 				arrowsAnimationPlayer.Play(GameData.ANIM_TURNSTILE_ARROWS_COUNTERCLOCKWISE);
-				turnstileAnimationPlayer.SubStripIndex = 1;
+				turnstileAnimationPlayer.Play(GameData.SPR_TURNSTILE_BARS_COUNTERCLOCKWISE);
+				//turnstileAnimationPlayer.SubStripIndex = 1;
 				Properties.Set("clockwise", false);
 			}
 			else {
 				windingOrder = WindingOrder.Clockwise;
 				arrowsAnimationPlayer.Play(GameData.ANIM_TURNSTILE_ARROWS_CLOCKWISE);
-				turnstileAnimationPlayer.SubStripIndex = 0;
+				turnstileAnimationPlayer.Play(GameData.SPR_TURNSTILE_BARS_CLOCKWISE);
+				//turnstileAnimationPlayer.SubStripIndex = 0;
 				Properties.Set("clockwise", true);
 			}
 		}
@@ -117,15 +119,17 @@ namespace ZeldaOracle.Game.Tiles {
 
 			if (windingOrder == WindingOrder.Clockwise) {
 				arrowsAnimationPlayer.Play(GameData.ANIM_TURNSTILE_ARROWS_CLOCKWISE);
-				turnstileAnimationPlayer.SubStripIndex = 0;
+				turnstileAnimationPlayer.Play(GameData.SPR_TURNSTILE_BARS_CLOCKWISE);
+				//turnstileAnimationPlayer.SubStripIndex = 0;
 			}
 			else {
 				arrowsAnimationPlayer.Play(GameData.ANIM_TURNSTILE_ARROWS_COUNTERCLOCKWISE);
-				turnstileAnimationPlayer.SubStripIndex = 1;
+				turnstileAnimationPlayer.Play(GameData.SPR_TURNSTILE_BARS_COUNTERCLOCKWISE);
+				//turnstileAnimationPlayer.SubStripIndex = 1;
 			}
 
-			turnstileAnimationPlayer.Play(GameData.ANIM_TURNSTILE_ROTATE_CLOCKWISE);
-			turnstileAnimationPlayer.SkipToEnd();
+			//turnstileAnimationPlayer.Play(GameData.ANIM_TURNSTILE_ROTATE_CLOCKWISE);
+			//turnstileAnimationPlayer.SkipToEnd();
 		}
 
 		public override void Update() {
@@ -202,12 +206,12 @@ namespace ZeldaOracle.Game.Tiles {
 				turnstileAnimation = GameData.ANIM_TURNSTILE_ROTATE_COUNTERCLOCKWISE;
 			}
 			g.DrawISprite(
-				arrowAnimation.GetSubstrip(clockwise ? 0 : 1),
+				arrowAnimation,//.GetSubstrip(clockwise ? 0 : 1),
 				args.SpriteDrawSettings,
 				args.Position,
 				args.Color);
 			g.DrawISprite(
-				turnstileAnimation.GetSubstrip(clockwise ? 0 : 1),
+				turnstileAnimation,//.GetSubstrip(clockwise ? 0 : 1),
 				new SpriteDrawSettings(args.Zone.StyleDefinitions, args.Zone.ImageVariantID, 16f),
 				args.Position,
 				args.Color);

@@ -114,7 +114,7 @@ namespace ConscriptDesigner.Anchorables {
 			}
 			else {
 				ContentFile source = e.Item.File();
-				Project.Move(source.Path, target.Path, true);
+				Project.RequestMove(source.Path, target.Path);
 				e.Item.IsSelected = true;
 			}
 		}
