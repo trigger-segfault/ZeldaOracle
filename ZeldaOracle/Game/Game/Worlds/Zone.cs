@@ -29,9 +29,22 @@ namespace ZeldaOracle.Game.Worlds {
 
 			properties.Set("id", "");
 			properties.Set("name", "");
-			properties.Set("palette", "");
+			properties.Set("palette", "tiles_default");
 			properties.Set("side_scrolling", false);
 			properties.Set("underwater", false);
+		}
+
+		public Zone(string id) :
+			this()
+		{
+			properties.Set("id", id);
+		}
+
+		public Zone(string id, string name) :
+			this()
+		{
+			properties.Set("id", id);
+			properties.Set("name", name);
 		}
 
 		public Zone(string id, string name, int imageVariantID, TileData defaultTileData) :
@@ -49,6 +62,7 @@ namespace ZeldaOracle.Game.Worlds {
 		{
 			this.imageVariantID		= copy.imageVariantID;
 			this.defaultTileData    = copy.defaultTileData;
+			this.styles             = new StyleDefinitions(copy.styles);
 			this.properties.SetAll(copy.properties);
 		}
 

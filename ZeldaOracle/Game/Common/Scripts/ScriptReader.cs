@@ -244,7 +244,7 @@ namespace ZeldaOracle.Common.Scripts {
 
 		/// <summary>Gets the resource with the specified name.
 		/// <para>Does error handling and temporary resources with "temp_" prefix.</para></summary>
-		protected T GetResource<T>(string name) {
+		protected T GetResource<T>(string name, bool allowEmptyNames = false) {
 			if (name.StartsWith("temp_")) {
 				if (!tempResources.ContainsResource<T>(name))
 					ThrowCommandParseError("Resource with name '" + name + "' does not exist!");
@@ -253,7 +253,7 @@ namespace ZeldaOracle.Common.Scripts {
 			else {
 				if (!Resources.ContainsResource<T>(name))
 					ThrowCommandParseError("Resource with name '" + name + "' does not exist!");
-				return Resources.GetResource<T>(name);
+				return Resources.GetResource<T>(name, allowEmptyNames);
 			}
 		}
 
@@ -447,6 +447,7 @@ namespace ZeldaOracle.Common.Scripts {
 			parameterParent.Type = CommandParamType.Array;
 			parameterRoot	= parameterParent;
 			parameter		= null;
+			namedParameter  = null;
 			commandPrefix   = null;
 		}
 

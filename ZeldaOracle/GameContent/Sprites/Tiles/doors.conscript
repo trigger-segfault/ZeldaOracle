@@ -14,7 +14,7 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 # Chests ======================================================
 
-MAPPEDCOLORS	"present", ("door");
+MAPPEDCOLORS	"tiles_default", ("door");
 
 SOURCE "temp_sheet_doors";
 SPRITESET "set_doors", (8, 6);

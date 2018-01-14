@@ -12,7 +12,7 @@ PALETTEDICTIONARY	"tile_dictionary";
 
 IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
-MAPPEDCOLORS	"present", ("tree_trunk", "tree_leaves", "tree_trunk_leaves", "snow", "snow_entrance", "witch_hut");
+MAPPEDCOLORS	"tiles_default", ("tree_trunk", "tree_leaves", "tree_trunk_leaves", "snow", "snow_entrance", "witch_hut");
 CHUNKSIZE		(8, 8);
 
 SOURCE "temp_sheet_trees";
@@ -76,26 +76,26 @@ NAME "tile_tree_house_entrance"				(1, 8);
 NAME "tile_tree_horizon_left"				(0, 9);
 NAME "tile_tree_horizon_right"				(1, 9);
 
-NAME "tile_tree_alt_top_left"				(0, 0);
-NAME "tile_tree_alt_top_right"				(1, 0);
-NAME "tile_tree_alt_bottom_left"			(0, 1);
-NAME "tile_tree_alt_bottom_right"			(1, 1);
-NAME "tile_tree_alt_house_top_left"			(0, 2);
-NAME "tile_tree_alt_house_top_right"		(1, 2);
-NAME "tile_tree_alt_dirt_top_left"			(0, 3);
-NAME "tile_tree_alt_dirt_top_right"			(1, 3);
-NAME "tile_tree_alt_dirt_bottom_left"		(0, 4);
-NAME "tile_tree_alt_dirt_bottom_right"		(1, 4);
-NAME "tile_tree_alt_dirt_house_top_left"	(0, 5);
-NAME "tile_tree_alt_dirt_house_top_right"	(1, 5);
-NAME "tile_tree_alt_top_left_behind"		(0, 6);
-NAME "tile_tree_alt_top_right_behind"		(1, 6);
-NAME "tile_tree_alt_house_top_left_behind"	(0, 7);
-NAME "tile_tree_alt_house_top_right_behind"	(1, 7);
-NAME "tile_tree_alt_house_top_mid"			(0, 8);
-NAME "tile_tree_alt_house_entrance"			(1, 8);
-NAME "tile_tree_alt_horizon_left"			(0, 9);
-NAME "tile_tree_alt_horizon_right"			(1, 9);
+NAME "tile_tree_alt_top_left"				(2, 0);
+NAME "tile_tree_alt_top_right"				(3, 0);
+NAME "tile_tree_alt_bottom_left"			(2, 1);
+NAME "tile_tree_alt_bottom_right"			(3, 1);
+NAME "tile_tree_alt_house_top_left"			(2, 2);
+NAME "tile_tree_alt_house_top_right"		(3, 2);
+NAME "tile_tree_alt_dirt_top_left"			(2, 3);
+NAME "tile_tree_alt_dirt_top_right"			(3, 3);
+NAME "tile_tree_alt_dirt_bottom_left"		(2, 4);
+NAME "tile_tree_alt_dirt_bottom_right"		(3, 4);
+NAME "tile_tree_alt_dirt_house_top_left"	(2, 5);
+NAME "tile_tree_alt_dirt_house_top_right"	(3, 5);
+NAME "tile_tree_alt_top_left_behind"		(2, 6);
+NAME "tile_tree_alt_top_right_behind"		(3, 6);
+NAME "tile_tree_alt_house_top_left_behind"	(2, 7);
+NAME "tile_tree_alt_house_top_right_behind"	(3, 7);
+NAME "tile_tree_alt_house_top_mid"			(2, 8);
+NAME "tile_tree_alt_house_entrance"			(3, 8);
+NAME "tile_tree_alt_horizon_left"			(2, 9);
+NAME "tile_tree_alt_horizon_right"			(3, 9);
 
 NAME "tile_palm_tree_top_left"				(0, 10);
 NAME "tile_palm_tree_top_right"				(1, 10);

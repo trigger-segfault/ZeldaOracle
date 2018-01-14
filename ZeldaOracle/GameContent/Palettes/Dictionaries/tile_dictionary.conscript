@@ -8,13 +8,12 @@ TILE	floor;
 TILE	wall;
 TILE	wall_alt;
 TILE	wall_column;
-TILE	ceiling;
 TILE	stairs;
 TILE	floor_staircase;
 TILE	wall_staircase;
-TILE	railings;
-TILE	torch_base;
-TILE	torch_light;
+TILE	railing;
+TILE	wall_torch_base;
+TILE	wall_torch_light;
 TILE	statue;
 TILE	statue_alt;
 
@@ -26,6 +25,12 @@ TILE	vertical_wall;
 
 TILE	tunnel_light;
 TILE	entrance_light;
+
+TILE	tiled;
+TILE	tiled_alt;
+
+TILE	hole;
+TILE	hole_alt;
 
 #==============================================================
 # Objects
@@ -41,7 +46,6 @@ TILE	switch_rock;
 TILE	switch_rock_asobject;
 TILE	crystal_rock;
 TILE	crystal_rock_asobject;
-TILE	magnet_stone;
 TILE	block;
 TILE	block_asobject;
 TILE	armos;
@@ -50,6 +54,8 @@ TILE	armos_alt;
 TILE	armos_alt_asobject;
 TILE	grave;
 TILE	grave_asobject;
+
+TILE	magnet_stone;
 TILE	dirt_pile;
 TILE	grass;
 TILE	leaves;
@@ -89,11 +95,11 @@ TILE	tile_monster;
 TILE	floor_spikes;
 TILE	arrow_shooter;
 TILE	fire_shooter;
-TILE	minecart_track;
-TILE	web;
-TILE	bridge;
-TILE	ice_crystal_pit;
 TILE	lava_mouth;
+TILE	ice_crystal_pit;
+TILE	web;
+TILE	minecart_track;
+TILE	bridge;
 TILE	output;
 
 #==============================================================
@@ -112,19 +118,18 @@ TILE	poison_bubble;
 # Nature
 #==============================================================
 
-TILE	cliff;
-TILE	tree_trunk;
-TILE	tree_leaves;
-TILE	tree_trunk_leaves;
 TILE	grass_field;
 TILE	grass_border;
 TILE	dirt;
 TILE	dirt_alt;
+
+TILE	cliff;
+TILE	tree_trunk;
+TILE	tree_leaves;
+TILE	tree_trunk_leaves;
 TILE	grass_flower;
 TILE	grass_flower_alt;
 
-TILE	hole;
-TILE	hole_alt;
 
 TILE	vines_light;
 TILE	vines_dark;
@@ -136,7 +141,7 @@ TILE	snow;
 TILE	snow_entrance; # Single use for tree-house
 
 TILE	jump_flower;
-TILE	thicK_brush;
+TILE	thick_brush;
 TILE	hedges;
 
 #==============================================================
@@ -146,6 +151,13 @@ TILE	hedges;
 TILE	coral;
 
 #==============================================================
+# Interior
+#==============================================================
+
+TILE	shop_side_railing;
+TILE	shop_front_railing;
+
+#==============================================================
 # Town
 #==============================================================
 
@@ -153,10 +165,27 @@ TILE	roof_brown;
 TILE	roof_red;
 TILE	roof_blue;
 TILE	roof_green;
-TILE	roof_chimney;
+TILE	chimney;
 TILE	house_wall;
-TILE	vasu_sign;
 TILE	witch_hut;
+
+TILE	library;
+TILE	statue_block;
+TILE	stone_block;
+TILE	brick_block;
+
+TILE	gate;
+
+TILE	fence;
+
+TILE	fountain;
+TILE	fountain_water;
+TILE	shop_sign;
+TILE	vasu_sign;
+
+TILE	planter;
+TILE	planter_flower_red;
+TILE	planter_flower_blue;
 
 #==============================================================
 # Decoration

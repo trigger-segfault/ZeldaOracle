@@ -1,0 +1,224 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_floors_square_tiles_8x8"	"Tiles/Styles/floors_square_tiles_8x8"	(8, 8), (1, 1), (18, 18); END;
+
+#==============================================================
+# 8x8
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+MAPPEDCOLORS	"tiles_default", ("tiled");
+
+COLORSTYLE "temp_tiled", "tiled", "", ("tiled", "tiled_alt");
+	ADD "square_tiles_1"			(0, 0);
+	ADD "square_tiles_2"			(1, 0);
+	ADD "square_tiles_3"			(2, 0);
+	ADD "square_tiles_4"			(3, 0);
+	ADD "square_tiles_5"			(0, 1);
+	ADD "square_tiles_6"			(1, 1);
+	ADD "square_tiles_7"			(2, 1);
+	END;
+	
+STYLE "tiled_8x8", "tiled_color";
+	ADD "normal"		("temp_tiled", "tiled");
+	ADD "alt"			("temp_tiled", "tiled_alt");
+	END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+COMPOSITE "tile_tiled_square";
+	ADD "tiled_8x8", (0, 0); ADD "tiled_8x8", (8, 0);
+	ADD "tiled_8x8", (0, 8); ADD "tiled_8x8", (8, 8); END;
+	
+COMPOSITE "tile_floor_tiled_outside_nw";
+	ADD "tile_floor";
+	ADD "tiled_8x8", (0, 0); ADD "tiled_8x8", (8, 0);
+	ADD "tiled_8x8", (0, 8); END;
+COMPOSITE "tile_floor_tiled_n";
+	ADD "tile_floor";
+	ADD "tiled_8x8", (0, 0); ADD "tiled_8x8", (8, 0); END;
+COMPOSITE "tile_floor_tiled_outside_ne";
+	ADD "tile_floor";
+	ADD "tiled_8x8", (0, 0); ADD "tiled_8x8", (8, 0);
+	ADD "tiled_8x8", (8, 8); END;
+	
+COMPOSITE "tile_floor_tiled_w";
+	ADD "tile_floor";
+	ADD "tiled_8x8", (0, 0);
+	ADD "tiled_8x8", (0, 8); END;
+COMPOSITE "tile_floor_tiled_e";
+	ADD "tile_floor";
+	ADD "tiled_8x8", (8, 0);
+	ADD "tiled_8x8", (8, 8); END;
+	
+COMPOSITE "tile_floor_tiled_outside_sw";
+	ADD "tile_floor";
+	ADD "tiled_8x8", (0, 0);
+	ADD "tiled_8x8", (0, 8); ADD "tiled_8x8", (8, 8); END;
+COMPOSITE "tile_floor_tiled_s";
+	ADD "tile_floor";
+	ADD "tiled_8x8", (0, 8); ADD "tiled_8x8", (8, 8); END;
+COMPOSITE "tile_floor_tiled_outside_se";
+	ADD "tile_floor";
+	ADD "tiled_8x8", (8, 0);
+	ADD "tiled_8x8", (0, 8); ADD "tiled_8x8", (8, 8); END;
+	
+COMPOSITE "tile_floor_tiled_inside_nw";
+	ADD "tile_floor";
+	ADD "tiled_8x8", (0, 0); END;
+COMPOSITE "tile_floor_tiled_inside_ne";
+	ADD "tile_floor";
+	ADD "tiled_8x8", (8, 0); END;
+COMPOSITE "tile_floor_tiled_inside_sw";
+	ADD "tile_floor";
+	ADD "tiled_8x8", (0, 8); END;
+COMPOSITE "tile_floor_tiled_inside_se";
+	ADD "tile_floor";
+	ADD "tiled_8x8", (8, 8); END;
+	
+COMPOSITE "tile_floor_tiled_diagonal_left";
+	ADD "tile_floor";
+	ADD "tiled_8x8", (0, 0);
+	ADD "tiled_8x8", (8, 8); END;
+COMPOSITE "tile_floor_tiled_diagonal_right";
+	ADD "tile_floor";
+	ADD "tiled_8x8", (8, 0);
+	ADD "tiled_8x8", (0, 8); END;
+	
+COMPOSITE "tile_ground_tiled_outside_nw";
+	COMBINE "tile_ground";
+	REPLACE 0, "tiled_8x8"; REPLACE 1, "tiled_8x8";
+	REPLACE 2, "tiled_8x8"; END;
+COMPOSITE "tile_ground_tiled_n";
+	COMBINE "tile_ground";
+	REPLACE 0, "tiled_8x8"; REPLACE 1, "tiled_8x8"; END;
+COMPOSITE "tile_ground_tiled_outside_ne";
+	COMBINE "tile_ground";
+	REPLACE 0, "tiled_8x8"; REPLACE 1, "tiled_8x8";
+	REPLACE 3, "tiled_8x8"; END;
+	
+COMPOSITE "tile_ground_tiled_w";
+	COMBINE "tile_ground";
+	REPLACE 0, "tiled_8x8";
+	REPLACE 2, "tiled_8x8"; END;
+COMPOSITE "tile_ground_tiled_e";
+	COMBINE "tile_ground";
+	REPLACE 1, "tiled_8x8";
+	REPLACE 3, "tiled_8x8"; END;
+	
+COMPOSITE "tile_ground_tiled_outside_sw";
+	COMBINE "tile_ground";
+	REPLACE 0, "tiled_8x8";
+	REPLACE 2, "tiled_8x8"; REPLACE 3, "tiled_8x8"; END;
+COMPOSITE "tile_ground_tiled_s";
+	COMBINE "tile_ground";
+	REPLACE 2, "tiled_8x8"; REPLACE 3, "tiled_8x8"; END;
+COMPOSITE "tile_ground_tiled_outside_se";
+	COMBINE "tile_ground";
+	REPLACE 1, "tiled_8x8";
+	REPLACE 2, "tiled_8x8"; REPLACE 3, "tiled_8x8"; END;
+	
+COMPOSITE "tile_ground_tiled_inside_nw";
+	COMBINE "tile_ground";
+	REPLACE 0, "tiled_8x8"; END;
+COMPOSITE "tile_ground_tiled_inside_ne";
+	COMBINE "tile_ground";
+	REPLACE 1, "tiled_8x8"; END;
+COMPOSITE "tile_ground_tiled_inside_sw";
+	COMBINE "tile_ground";
+	REPLACE 2, "tiled_8x8"; END;
+COMPOSITE "tile_ground_tiled_inside_se";
+	COMBINE "tile_ground";
+	REPLACE 3, "tiled_8x8"; END;
+	
+COMPOSITE "tile_ground_tiled_diagonal_left";
+	COMBINE "tile_ground";
+	REPLACE 0, "tiled_8x8";
+	REPLACE 3, "tiled_8x8"; END;
+COMPOSITE "tile_ground_tiled_diagonal_right";
+	COMBINE "tile_ground";
+	REPLACE 1, "tiled_8x8";
+	REPLACE 2, "tiled_8x8"; END;
+	
+	
+COMPOSITE "tile_dirt_tiled_outside_nw";
+	COMBINE "tile_dirt_dark_rough";
+	REPLACE 0, "tiled_8x8"; REPLACE 1, "tiled_8x8";
+	REPLACE 2, "tiled_8x8"; END;
+COMPOSITE "tile_dirt_tiled_n";
+	COMBINE "tile_dirt_dark_rough";
+	REPLACE 0, "tiled_8x8"; REPLACE 1, "tiled_8x8"; END;
+COMPOSITE "tile_dirt_tiled_outside_ne";
+	COMBINE "tile_dirt_dark_rough";
+	REPLACE 0, "tiled_8x8"; REPLACE 1, "tiled_8x8";
+	REPLACE 3, "tiled_8x8"; END;
+	
+COMPOSITE "tile_dirt_tiled_w";
+	COMBINE "tile_dirt_dark_rough";
+	REPLACE 0, "tiled_8x8";
+	REPLACE 2, "tiled_8x8"; END;
+COMPOSITE "tile_dirt_tiled_e";
+	COMBINE "tile_dirt_dark_rough";
+	REPLACE 1, "tiled_8x8";
+	REPLACE 3, "tiled_8x8"; END;
+	
+COMPOSITE "tile_dirt_tiled_outside_sw";
+	COMBINE "tile_dirt_dark_rough";
+	REPLACE 0, "tiled_8x8";
+	REPLACE 2, "tiled_8x8"; REPLACE 3, "tiled_8x8"; END;
+COMPOSITE "tile_dirt_tiled_s";
+	COMBINE "tile_dirt_dark_rough";
+	REPLACE 1, "dirt_dark_8x8";
+	REPLACE 2, "tiled_8x8"; REPLACE 3, "tiled_8x8"; END;
+COMPOSITE "tile_dirt_tiled_outside_se";
+	COMBINE "tile_dirt_dark_rough";
+	REPLACE 1, "tiled_8x8";
+	REPLACE 2, "tiled_8x8"; REPLACE 3, "tiled_8x8"; END;
+	
+COMPOSITE "tile_dirt_tiled_inside_nw";
+	COMBINE "tile_dirt_dark_rough";
+	REPLACE 1, "dirt_dark_8x8";
+	REPLACE 0, "tiled_8x8"; END;
+COMPOSITE "tile_dirt_tiled_inside_ne";
+	COMBINE "tile_dirt_dark_rough";
+	REPLACE 1, "tiled_8x8"; END;
+COMPOSITE "tile_dirt_tiled_inside_sw";
+	COMBINE "tile_dirt_dark_rough";
+	REPLACE 0, "dirt_dark_8x8";
+	REPLACE 2, "tiled_8x8"; END;
+COMPOSITE "tile_dirt_tiled_inside_se";
+	COMBINE "tile_dirt_dark_rough";
+	REPLACE 3, "tiled_8x8"; END;
+	
+COMPOSITE "tile_dirt_tiled_diagonal_left";
+	COMBINE "tile_dirt_dark_rough";
+	REPLACE 2, "dirt_dark_8x8";
+	REPLACE 0, "tiled_8x8";
+	REPLACE 3, "tiled_8x8"; END;
+COMPOSITE "tile_dirt_tiled_diagonal_right";
+	COMBINE "tile_dirt_dark_rough";
+	REPLACE 0, "dirt_dark_8x8";
+	REPLACE 1, "tiled_8x8";
+	REPLACE 2, "tiled_8x8"; END;
+	
+COMPOSITE "temp_preview_tiled_style";
+	ADD "tile_tiled_square", (0, 0);
+	ADD "tile_ground_tiled_w", (0, 16);
+	ADD "tile_ground_tiled_outside_nw", (0, 32);
+	ADD "tile_ground_tiled_diagonal_left", (16, 0);
+	ADD "tile_ground_tiled_diagonal_left", (16, 16);
+	ADD "tile_ground_tiled_inside_se", (16, 32);
+	ADD "tile_ground", (32, 0);
+	ADD "tile_ground_tiled_inside_ne", (32, 16);
+	ADD "tile_ground", (32, 32);
+	END;
+	
+STYLEPREVIEW "tiled", "temp_preview_tiled_style";
+STYLEPREVIEW "tiled_color", "temp_preview_tiled_style";

@@ -15,7 +15,7 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 SOURCE "temp_sheet_fluids";
 SPRITESET "set_fluids", (30, 12);
-	MAPPEDCOLORS	"present", ("water", "lava");
+	MAPPEDCOLORS	"tiles_default", ("water", "lava");
 	MULTIPLE BASIC (1, 0), (1, 0), (3, 1); END;
 	
 	MULTIPLE STYLE "water", (0, 1), (4, 1);
@@ -70,13 +70,13 @@ SPRITESET "set_fluids", (30, 12);
 		ADD "seasons"			(26, 7);
 		END;
 		
-	MAPPEDCOLORS	"present", ("sand");
+	MAPPEDCOLORS	"tiles_default", ("sand");
 	MULTIPLE BASIC (8, 0), (8, 0), (8, 4); END;
 	
-	MAPPEDCOLORS	"present", ("output");
+	MAPPEDCOLORS	"tiles_default", ("output");
 	MULTIPLE BASIC (0, 8), (0, 8), (12, 2); END;
 	
-	MAPPEDCOLORS	"present", ("hardened_lava");
+	MAPPEDCOLORS	"tiles_default", ("hardened_lava");
 	SINGLE STYLE "hardened_lava", (12, 8);
 		ADD "ages"				(12, 8);
 		ADD "seasons"			(12, 9);

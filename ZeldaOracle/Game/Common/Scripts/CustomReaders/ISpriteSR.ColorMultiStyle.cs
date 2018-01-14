@@ -28,7 +28,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					CommandParam colorStyle = colorStyleParams.GetParam(i);
 					editingColorStyleGroups.Add(new ColorStyleGroup(
 						colorStyle.GetString(0), colorStyle.GetString(1)));
-					Resources.RegisterStyleGroup(colorStyle.GetString(0));
+					Resources.RegisterStyleGroup(colorStyle.GetString(0), null);
 				}
 
 				spriteName = parameters.GetString(0);
@@ -60,7 +60,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						CommandParam colorStyle = colorStyleParams.GetParam(i);
 						editingColorStyleGroups.Add(new ColorStyleGroup(
 							colorStyle.GetString(0), colorStyle.GetString(1)));
-						Resources.RegisterStyleGroup(colorStyle.GetString(0));
+						Resources.RegisterStyleGroup(colorStyle.GetString(0), null);
 					}
 					foreach (DefinedSprite definition in ColorSprite.DefaultStyleSprite.GetDefinitions()) {
 						defaultMappings = ColorizeColorMultiStyleSprite(
@@ -83,7 +83,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					CommandParam colorStyle = colorStyleParams.GetParam(i);
 					editingColorStyleGroups.Add(new ColorStyleGroup(
 						colorStyle.GetString(0), colorStyle.GetString(1)));
-					Resources.RegisterStyleGroup(colorStyle.GetString(0));
+					Resources.RegisterStyleGroup(colorStyle.GetString(0), null);
 				}
 
 				editingSetStart = parameters.GetPoint(1);
@@ -126,7 +126,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						CommandParam colorStyle = colorStyleParams.GetParam(i);
 						editingColorStyleGroups.Add(new ColorStyleGroup(
 							colorStyle.GetString(0), colorStyle.GetString(1)));
-						Resources.RegisterStyleGroup(colorStyle.GetString(0));
+						Resources.RegisterStyleGroup(colorStyle.GetString(0), null);
 					}
 					for (int x = 0; x < editingSetDimensions.X; x++) {
 						for (int y = 0; y < editingSetDimensions.Y; y++) {
@@ -169,7 +169,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					CommandParam colorStyle = colorStyleParams.GetParam(i);
 					editingColorStyleGroups.Add(new ColorStyleGroup(
 						colorStyle.GetString(0), colorStyle.GetString(1)));
-					Resources.RegisterStyleGroup(colorStyle.GetString(0));
+					Resources.RegisterStyleGroup(colorStyle.GetString(0), null);
 				}
 
 				Mode |= Modes.ColorSprite | Modes.StyleSprite | Modes.MultiStyle;
@@ -199,7 +199,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						CommandParam colorStyle = colorStyleParams.GetParam(i);
 						editingColorStyleGroups.Add(new ColorStyleGroup(
 							colorStyle.GetString(0), colorStyle.GetString(1)));
-						Resources.RegisterStyleGroup(colorStyle.GetString(0));
+						Resources.RegisterStyleGroup(colorStyle.GetString(0), null);
 					}
 					foreach (DefinedSprite definition in ColorSprite.DefaultStyleSprite.GetDefinitions()) {
 						defaultMappings = ColorizeColorMultiStyleSprite(
@@ -282,6 +282,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				if (!sprite.Contains(colorGroup)) {
 					styleSprite = new StyleSprite(styleGroup);
 					sprite.Add(colorGroup, styleSprite);
+					Resources.RegisterStylePreview(styleGroup, styleSprite);
 				}
 				else {
 					styleSprite = (StyleSprite) sprite.Get(colorGroup);
@@ -297,7 +298,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 							(BasicSprite) sprite.DefaultStyleSprite.Get(style), paletteArgs);
 					}
 
-					Resources.RegisterStylePreview(styleGroup, style, coloredStyledSprite);
+					Resources.RegisterStyle(styleGroup, style);
 					styleSprite.Add(style, coloredStyledSprite);
 				}
 			}

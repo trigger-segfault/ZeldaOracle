@@ -27,6 +27,14 @@
                     <Setter Property="Orientation" Value="Vertical"/>
                 </Style>
             </ToolBar.Resources>
+            <ComboBox x:Name="comboBoxZones" HorizontalAlignment="Stretch" Margin="0,1" SelectionChanged="OnZoneChanged" VerticalAlignment="Center"/>
+        </ToolBar>
+        <ToolBar DockPanel.Dock="Top">
+            <ToolBar.Resources>
+                <Style TargetType="{x:Type ToolBarPanel}">
+                    <Setter Property="Orientation" Value="Vertical"/>
+                </Style>
+            </ToolBar.Resources>
             <xctk:WatermarkTextBox x:Name="textBoxSearch" Height="22" VerticalAlignment="Center" Watermark="Search" VerticalContentAlignment="Center" TextChanged="OnSearchTextChanged" Padding="3,0" Margin="0" KeepWatermarkOnGotFocus="True"/>
         </ToolBar>
         <StatusBar DockPanel.Dock="Bottom" Background="#FFF0F0F0">

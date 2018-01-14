@@ -9,7 +9,7 @@ SPRITESHEET "temp_sheet_tunnels"				"Tiles/Styles/tunnels"				(16, 16), (1, 1), 
 #==============================================================
 
 PALETTEDICTIONARY	"tile_dictionary";
-MAPPEDCOLORS	"present", ("wall");
+MAPPEDCOLORS	"tiles_default", ("wall");
 	
 IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 

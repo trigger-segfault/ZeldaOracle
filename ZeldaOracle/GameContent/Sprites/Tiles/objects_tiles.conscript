@@ -4,7 +4,6 @@
 
 SPRITESHEET	"temp_sheet_armos"				"Tiles/Styles/armos"			(16, 16), (1, 1), (18, 18); END;
 SPRITESHEET	"temp_sheet_blocks"				"Tiles/Styles/blocks"			(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_burnable_trees"		"Tiles/Styles/burnable_trees"	(16, 16), (1, 1), (18, 18); END;
 SPRITESHEET	"temp_sheet_bushes"				"Tiles/Styles/bushes"			(16, 16), (1, 1), (18, 18); END;
 SPRITESHEET	"temp_sheet_chests"				"Tiles/Styles/chests"			(16, 16), (1, 1), (18, 18); END;
 SPRITESHEET	"temp_sheet_grasses"			"Tiles/Styles/grasses"			(16, 16), (1, 1), (18, 18); END;
@@ -29,7 +28,7 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 SOURCE "temp_sheet_armos";
 
-MAPPEDCOLORS	"present" ("armos", "armos_asobject");
+MAPPEDCOLORS	"tiles_default", ("armos", "armos_asobject");
 
 SPRITESET "set_armos_colors" (2, 1);
 	SINGLE COLORSTYLE "armos", "", ("armos", "armos_alt"), (0, 0);
@@ -46,7 +45,7 @@ END;
 
 SOURCE "temp_sheet_blocks";
 
-MAPPEDCOLORS	"present", ("block", "block_asobject");
+MAPPEDCOLORS	"tiles_default", ("block", "block_asobject");
 
 SPRITESET "set_blocks" (3, 1);
 	MULTIPLE STYLE "block";
@@ -62,10 +61,10 @@ END;
 SOURCE "temp_sheet_bushes";
 
 SPRITESET "set_bushes" (3, 2);
-	MAPPEDCOLORS	"present", ("regrowable_bush");
+	MAPPEDCOLORS	"tiles_default", ("regrowable_bush");
 	MULTIPLE BASIC (0, 0), (0, 0), (3, 1); END;
 	
-	MAPPEDCOLORS	"present", ("bush", "bush_asobject");
+	MAPPEDCOLORS	"tiles_default", ("bush", "bush_asobject");
 	MULTIPLE STYLE "bush" (0, 1), (2, 1);
 		ADD "overworld"		(0, 1);
 		ADD "inside"		(0, 2);
@@ -77,10 +76,10 @@ END;
 SOURCE "temp_sheet_grasses";
 
 SPRITESET "set_grasses" (1, 2);
-	MAPPEDCOLORS	"present", ("leaves");
+	MAPPEDCOLORS	"tiles_default", ("leaves");
 	SINGLE BASIC (0, 0); END;
 	
-	MAPPEDCOLORS	"present", ("grass");
+	MAPPEDCOLORS	"tiles_default", ("grass");
 	SINGLE STYLE "grass" (0, 1);
 		ADD "present"		(0, 1);
 		ADD "past"			(0, 2);
@@ -93,7 +92,7 @@ END;
 
 SOURCE "temp_sheet_graves";
 
-MAPPEDCOLORS	"present", ("grave", "grave_asobject");
+MAPPEDCOLORS	"tiles_default", ("grave", "grave_asobject");
 
 SPRITESET "set_graves" (2, 1);
 	MULTIPLE STYLE "grave";
@@ -107,13 +106,13 @@ END;
 
 SOURCE "temp_sheet_magnet_stones";
 
-MAPPEDCOLORS	"present", ("magnet_stone");
+MAPPEDCOLORS	"tiles_default", ("magnet_stone");
 
 SPRITESET "set_magnet_stones" (2, 1);
 	MULTIPLE STYLE "magnet_stone";
 		ADD "normal"		(0, 0);
 		ADD "subrosia"		(0, 1);
-		ADD	"sidescrolling"	(0, 2);
+		ADD	"sidescroll"	(0, 2);
 		END;
 END;
 
@@ -121,12 +120,12 @@ END;
 
 SOURCE "temp_sheet_pots";
 
-MAPPEDCOLORS	"present", ("pot", "pot_asobject");
+MAPPEDCOLORS	"tiles_default", ("pot", "pot_asobject");
 
 SPRITESET "set_pots" (2, 1);
 	MULTIPLE STYLE "pot";
 		ADD "normal"		(0, 0);
-		ADD	"sidescrolling"	(0, 1);
+		ADD	"sidescroll"	(0, 1);
 		END;
 END;
 
@@ -134,7 +133,7 @@ END;
 
 SOURCE "temp_sheet_signs";
 
-MAPPEDCOLORS	"present", ("sign", "sign_asobject");
+MAPPEDCOLORS	"tiles_default", ("sign", "sign_asobject");
 
 SPRITESET "set_signs" (2, 1);
 	MULTIPLE STYLE "sign";
@@ -148,50 +147,55 @@ END;
 
 SOURCE "temp_sheet_switch_rocks";
 
-MAPPEDCOLORS	"present", ("switch_rock", "switch_rock_asobject");
+MAPPEDCOLORS	"tiles_default", ("switch_rock", "switch_rock_asobject");
 
 SPRITESET "set_switch_rocks" (2, 1);
 	MULTIPLE STYLE "switch_rock";
 		ADD "normal"		(0, 0);
-		ADD	"sidescrolling"	(0, 1);
+		ADD	"sidescroll"	(0, 1);
 		END;
 END;
 
 # Natural Objects =============================================
 
 SOURCE "temp_sheet_natural_objects";
-SPRITESET "set_natural_objects" (5, 4);
-	MAPPEDCOLORS	"present", ("bracelet_rock");
+SPRITESET "set_natural_objects" (5, 5);
+	MAPPEDCOLORS	"tiles_default", ("bracelet_rock");
 	MULTIPLE BASIC	(0, 0), (0, 0), (2, 1); END;
 	
-	MAPPEDCOLORS	"present", ("crystal_rock", "mushroom");
+	MAPPEDCOLORS	"tiles_default", ("crystal_rock", "mushroom");
 	MULTIPLE BASIC	(0, 1), (0, 1), (2, 2); END;
 	
-	MAPPEDCOLORS	"present", ("dirt_pile");
-	SINGLE BASIC	(0, 3); END;
+	MAPPEDCOLORS	"tiles_default", ("dirt_pile");
+	SINGLE BASIC	(0, 4); END;
 	
-	MAPPEDCOLORS	"present", ("flower_pink");
+	MAPPEDCOLORS	"tiles_default", ("flower_pink");
 	SINGLE COLOR	"", ("flower_red", "flower_blue", "flower_pink"), (2, 0); END;
 	
-	MAPPEDCOLORS	"present", ("flower_pink", "water_flower");
+	MAPPEDCOLORS	"tiles_default", ("flower_pink", "water_flower");
 	MULTIPLE BASIC	(2, 1), (2, 1), (1, 2); END;
 	
-	MAPPEDCOLORS	"present", ("ages_portal");
+	MAPPEDCOLORS	"tiles_default", ("ages_portal");
 	SINGLE BASIC	(3, 0); END;
 	
-	MAPPEDCOLORS	"present", ("soft_soil", "soft_soil_sprout", "cactus");
+	MAPPEDCOLORS	"tiles_default", ("soft_soil", "soft_soil_sprout", "cactus");
 	MULTIPLE BASIC	(3, 1), (3, 1), (1, 3); END;
 	
-	MAPPEDCOLORS	"present", ("ice", "ice_cracked");
+	MAPPEDCOLORS	"tiles_default", ("ice", "ice_cracked");
 	MULTIPLE BASIC	(4, 0), (4, 0), (1, 3); END;
 	
-	MAPPEDCOLORS	"present", ("seedling_sprout");
+	MAPPEDCOLORS	"tiles_default", ("seedling_sprout");
 	SINGLE BASIC	(4, 3); END;
 	
 	CHUNKSIZE		(16, 8);
-	MAPPEDCOLORS	"present", ("jump_flower");
+	MAPPEDCOLORS	"tiles_default", ("jump_flower");
 	SINGLE BASIC	(2, 3); END;
 	CHUNKSIZE		none;
+	
+	MAPPEDCOLORS	"tiles_default", ("tree_trunk", "tree_trunk_leaves");
+	CHUNKSIZE (16, 8);
+	MULTIPLE BASIC (0, 3), (0, 3), (2, 1); END;
+	CHUNKSIZE none;
 END;
 
 #==============================================================
@@ -220,18 +224,6 @@ STYLEPREVIEW "block", "temp_preview_block_style";
 
 # Burnable Trees ==============================================
 
-SOURCE "temp_sheet_burnable_trees";
-
-MAPPEDCOLORS	"present", ("tree_trunk", "tree_trunk_leaves");
-
-CHUNKSIZE (16, 8);
-
-STYLE "tile_burnable_tree", "ground";
-	ADD "normal"	(0, 0);
-	ADD "dirt"		(0, 1);
-	END;
-	
-CHUNKSIZE none;
 
 # Bushes ======================================================
 
@@ -296,7 +288,7 @@ NAME "tile_crystal_rock"			(0, 1);
 NAME "tile_crystal_rock_asobject"	(1, 1);
 NAME "tile_mushroom"				(0, 2);
 NAME "tile_mushroom_asobject"		(1, 2);
-NAME "tile_dirt_pile"				(0, 3);
+NAME "tile_dirt_pile"				(0, 4);
 
 NAME "tile_flowers_red"				((2, 0), "flower_red");
 NAME "tile_flowers_blue"			((2, 0), "flower_blue");
@@ -316,3 +308,6 @@ NAME "tile_ice_block"				(4, 0);
 NAME "tile_ice_block_asobject"		(4, 0);
 NAME "tile_ice"						(4, 1);
 NAME "tile_ice_cracked"				(4, 2);
+
+NAME "tile_burnable_tree"			(0, 3);
+NAME "tile_burnable_tree_dirt"		(1, 3);

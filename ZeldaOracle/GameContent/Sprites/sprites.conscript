@@ -11,10 +11,16 @@ LOAD "Tiles/objects_tiles.conscript" false;
 LOAD "Tiles/puzzle_objects_tiles.conscript" false;
 LOAD "Tiles/doors.conscript" false;
 LOAD "Tiles/floors_tiles.conscript" false;
+LOAD "Tiles/tiled.conscript" false;
+LOAD "Tiles/railings.conscript" false;
+LOAD "Tiles/entrances.conscript" false;
 LOAD "Tiles/walls.conscript" false;
 LOAD "Tiles/tunnels.conscript" false;
 LOAD "Tiles/turnstile.conscript" false;
 LOAD "Tiles/holes.conscript" false;
+LOAD "Tiles/snow_mounds.conscript" false;
+LOAD "Tiles/town.conscript" false;
+LOAD "Tiles/bridges.conscript" false;
 LOAD "Tiles/lights.conscript" false;
 LOAD "Tiles/color_cube.conscript" false;
 LOAD "Units/Player/player.conscript" false;
@@ -293,42 +299,42 @@ COMPOSITE tile_fountain_4;
 
 SOURCE "zoneset_small";
 
-BASIC tile8x8_black,			(0, 0); END;
-BASIC tile8x8_puddle_1,			(1, 0); END;
-BASIC tile8x8_puddle_2,			(2, 0); END;
-BASIC tile8x8_puddle_3,			(3, 0); END;
+#BASIC tile8x8_black,			(0, 0); END;
+#BASIC tile8x8_puddle_1,			(1, 0); END;
+#BASIC tile8x8_puddle_2,			(2, 0); END;
+#BASIC tile8x8_puddle_3,			(3, 0); END;
 
-BASIC tile8x8_water_1,			(0, 1); END;
-BASIC tile8x8_water_2,			(1, 1); END;
-BASIC tile8x8_water_3,			(2, 1); END;
-BASIC tile8x8_water_4,			(3, 1); END;
+#BASIC tile8x8_water_1,			(0, 1); END;
+#BASIC tile8x8_water_2,			(1, 1); END;
+#BASIC tile8x8_water_3,			(2, 1); END;
+#BASIC tile8x8_water_4,			(3, 1); END;
 
-BASIC tile8x8_deep_water_1,	(0, 2); END;
-BASIC tile8x8_deep_water_2,	(1, 2); END;
-BASIC tile8x8_deep_water_3,	(2, 2); END;
-BASIC tile8x8_deep_water_4,	(3, 2); END;
+#BASIC tile8x8_deep_water_1,	(0, 2); END;
+#BASIC tile8x8_deep_water_2,	(1, 2); END;
+#BASIC tile8x8_deep_water_3,	(2, 2); END;
+#BASIC tile8x8_deep_water_4,	(3, 2); END;
 
-BASIC tile8x8_wall_torch_light_1,		(14, 8); END;
-BASIC tile8x8_wall_torch_light_2,		(15, 8); END;
-BASIC tile8x8_wall_torch_light_3,		(16, 8); END;
-BASIC tile8x8_wall_torch_light_4,		(17, 8); END;
+#BASIC tile8x8_wall_torch_light_1,		(14, 8); END;
+#BASIC tile8x8_wall_torch_light_2,		(15, 8); END;
+#BASIC tile8x8_wall_torch_light_3,		(16, 8); END;
+#BASIC tile8x8_wall_torch_light_4,		(17, 8); END;
 
-BASIC tile8x8_wall_torch_holder_right,	(14, 9); END;
-BASIC tile8x8_wall_torch_holder_up,		(14, 9); END;
-BASIC tile8x8_wall_torch_holder_left,	(14, 9); END;
-BASIC tile8x8_wall_torch_holder_down,	(14, 9); END;
+#BASIC tile8x8_wall_torch_holder_right,	(14, 9); END;
+#BASIC tile8x8_wall_torch_holder_up,		(14, 9); END;
+#BASIC tile8x8_wall_torch_holder_left,	(14, 9); END;
+#BASIC tile8x8_wall_torch_holder_down,	(14, 9); END;
 
-BASIC tile8x8_flower_1,				(0, 10); END;
-BASIC tile8x8_flower_2,				(1, 10); END;
-BASIC tile8x8_flower_3,				(2, 10); END;
-BASIC tile8x8_flower_4,				(3, 10); END;
-BASIC tile8x8_grass_tuft_right,		(4, 10); END;
-BASIC tile8x8_grass_tuft_left,		(5, 10); END;
+#BASIC tile8x8_flower_1,				(0, 10); END;
+#BASIC tile8x8_flower_2,				(1, 10); END;
+#BASIC tile8x8_flower_3,				(2, 10); END;
+#BASIC tile8x8_flower_4,				(3, 10); END;
+#BASIC tile8x8_grass_tuft_right,		(4, 10); END;
+#BASIC tile8x8_grass_tuft_left,		(5, 10); END;
 
-BASIC tile8x8_waterfall_rock,		(16, 6); END;
+#BASIC tile8x8_waterfall_rock,		(16, 6); END;
 
-BASIC tile8x8_lavafall_rock,		(16, 7); END;
-BASIC tile8x8_hardened_lava,		(17, 7); END;
+#BASIC tile8x8_lavafall_rock,		(16, 7); END;
+#BASIC tile8x8_hardened_lava,		(17, 7); END;
 
 
 

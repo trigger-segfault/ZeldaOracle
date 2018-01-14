@@ -12,31 +12,10 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game;
 using System.Windows.Threading;
 using System.Diagnostics;
+using ConscriptDesigner.Control;
+using ConscriptDesigner.Util;
 
 namespace ConscriptDesigner.WinForms {
-
-	public class StyleInfo {
-		public string Style { get; set; }
-		public ISprite Sprite { get; set; }
-		public Rectangle2I Bounds { get; set; }
-
-		public int SubstripIndex { get; set; }
-
-		public bool HasSubstrips {
-			get {
-				if (Sprite is Animation)
-					return (SubstripIndex != 0 || ((Animation) Sprite).HasSubstrips);
-				return false;
-			}
-		}
-
-		public StyleInfo(string style, ISprite sprite, int substripIndex = 0) {
-			this.Style = style;
-			this.Sprite = sprite;
-			this.Bounds = this.Sprite.Bounds;
-			this.SubstripIndex = substripIndex;
-		}
-	}
 
 	public class StylePreview : GraphicsDeviceControl {
 
@@ -46,32 +25,32 @@ namespace ConscriptDesigner.WinForms {
 		private bool animating;
 		private SpriteBatch spriteBatch;
 
-		private List<StyleInfo> sprites;
+		private List<SpriteInfo> sprites;
 
 		private int columns;
 
 		private string styleGroup;
 		private Point2I spriteSize;
-		private Dictionary<string, List<StyleInfo>> styleGroups;
+		private Dictionary<string, List<SpriteInfo>> styleGroups;
 		private List<string> orderedStyleGroups;
 
-		private List<StyleInfo> filteredSprites;
+		private List<SpriteInfo> filteredSprites;
 
 		private string filter;
 
 		Stopwatch watch = new Stopwatch();
 		double lastSeconds;
-		StyleInfo hoverSprite;
+		SpriteInfo hoverSprite;
 
 		private Point2I mouse;
 
 		public StylePreview() {
-			this.sprites = new List<StyleInfo>();
+			this.sprites = new List<SpriteInfo>();
 			this.spriteBatch = null;
 			this.styleGroup = "";
-			this.styleGroups = new Dictionary<string, List<StyleInfo>>();
+			this.styleGroups = new Dictionary<string, List<SpriteInfo>>();
 			this.filter = "";
-			this.filteredSprites = new List<StyleInfo>();
+			this.filteredSprites = new List<SpriteInfo>();
 			this.orderedStyleGroups = new List<string>();
 			this.columns = 1;
 			this.ResizeRedraw = true;
@@ -86,6 +65,13 @@ namespace ConscriptDesigner.WinForms {
 			watch = Stopwatch.StartNew();
 			lastSeconds = 0;
 		}
+		
+		private void TimerUpdate() {
+			if (animating)
+				Invalidate();
+			if (ClientSize.Width != AutoScrollMinSize.Width)
+				UpdateHeight();
+		}
 
 		private void OnMouseLeave(object sender, EventArgs e) {
 			mouse = -Point2I.One;
@@ -96,7 +82,8 @@ namespace ConscriptDesigner.WinForms {
 		public event EventHandler HoverSpriteChanged;
 
 		private void OnClientSizeChanged(object sender, EventArgs e) {
-			UpdateHeight();
+			HorizontalScroll.Value = 0;
+			VerticalScroll.Value = 0;
 		}
 
 		private void OnMouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
@@ -108,7 +95,7 @@ namespace ConscriptDesigner.WinForms {
 			int column = mouse.X / (spriteSize.X + 1);
 			int row = mouse.Y / (spriteSize.Y + 1);
 			int index = row * columns + column;
-			StyleInfo newHoverSprite = null;
+			SpriteInfo newHoverSprite = null;
 			if (mouse >= Point2I.Zero && index < filteredSprites.Count) {
 				newHoverSprite = filteredSprites[index];
 			}
@@ -128,7 +115,7 @@ namespace ConscriptDesigner.WinForms {
 			this.dispatcherTimer = new DispatcherTimer(
 				TimeSpan.FromMilliseconds(15),
 				DispatcherPriority.Render,
-				delegate { if (animating) Invalidate(); },
+				delegate { TimerUpdate(); },
 				System.Windows.Application.Current.Dispatcher);
 		}
 
@@ -147,15 +134,13 @@ namespace ConscriptDesigner.WinForms {
 			sprites.Clear();
 			styleGroups.Clear();
 			orderedStyleGroups.Clear();
-			foreach (var groupPair in Resources.GetRegisteredStyles()) {
-				string group = groupPair.Key;
-				var styles = groupPair.Value;
-				AddStyleGroup(group);
-				foreach (var pair in styles) {
-					AddStyle(group, pair.Key, pair.Value);
+			foreach (StyleGroupCollection collection in Resources.GetRegisteredStyles()) {
+				AddStyleGroup(collection.Group);
+				foreach (string style in collection.Styles) {
+					AddStyle(collection.Group, style, collection.Preview);
 				}
 			}
-			orderedStyleGroups.Sort(StringComparer.OrdinalIgnoreCase);
+			orderedStyleGroups.Sort((a, b) => AlphanumComparator.Compare(a, b, true));
 			if (!styleGroups.ContainsKey(styleGroup) && orderedStyleGroups.Any()) {
 				styleGroup = orderedStyleGroups[0];
 			}
@@ -172,22 +157,22 @@ namespace ConscriptDesigner.WinForms {
 
 		private void AddStyleGroup(string styleGroup) {
 			if (!styleGroups.ContainsKey(styleGroup)) {
-				styleGroups.Add(styleGroup, new List<StyleInfo>());
+				styleGroups.Add(styleGroup, new List<SpriteInfo>());
 				orderedStyleGroups.Add(styleGroup);
 			}
 		}
 
-		private void AddStyle(string styleGroup, string style, ISprite sprite, int substripIndex = 0) {
-			StyleInfo spr = new StyleInfo(style, sprite, substripIndex);
+		private void AddStyle(string styleGroup, string style, ISprite sprite) {
+			SpriteInfo spr = new SpriteInfo(style, sprite);
 			sprites.Add(spr);
 			Point2I size = spr.Bounds.Size;
 			styleGroups[styleGroup].Add(spr);
 		}
 
-		private List<StyleInfo> GetStyleList() {
+		private List<SpriteInfo> GetStyleList() {
 			if (styleGroups.ContainsKey(styleGroup))
 				return styleGroups[styleGroup];
-			return new List<StyleInfo>();
+			return new List<SpriteInfo>();
 		}
 
 		public bool Animating {
@@ -209,12 +194,12 @@ namespace ConscriptDesigner.WinForms {
 		private void UpdateHeight() {
 			columns = Math.Max(1, (ClientSize.Width - 1) / (spriteSize.X + 1));
 			int height = ((filteredSprites.Count + columns - 1) / columns) * (spriteSize.Y + 1);
+
+			AutoScrollMinSize = new Size(ClientSize.Width, height);
+			HorizontalScroll.Value = 0;
+			VerticalScroll.Value = 0;
 			if (!animating)
 				Invalidate();
-
-			this.AutoScrollMinSize = new Size(ClientSize.Width, height);
-			this.HorizontalScroll.Value = 0;
-			this.VerticalScroll.Value = 0;
 		}
 
 		public void UpdateStyleGroup(string styleGroup) {
@@ -225,9 +210,9 @@ namespace ConscriptDesigner.WinForms {
 
 		private void UpdateSpriteSize() {
 			spriteSize = Point2I.One;
-			List<StyleInfo> styles;
+			List<SpriteInfo> styles;
 			if (styleGroups.TryGetValue(styleGroup, out styles)) {
-				foreach (StyleInfo style in styles) {
+				foreach (SpriteInfo style in styles) {
 					spriteSize = GMath.Max(spriteSize, style.Bounds.Size);
 				}
 			}
@@ -235,10 +220,10 @@ namespace ConscriptDesigner.WinForms {
 
 		public void UpdateFilter(string filter) {
 			this.filter = filter;
-			filteredSprites = new List<StyleInfo>();
+			filteredSprites = new List<SpriteInfo>();
 			if (HasFilter) {
 				foreach (var spr in GetStyleList()) {
-					if (spr.Style.Contains(filter)) {
+					if (spr.Name.Contains(filter)) {
 						filteredSprites.Add(spr);
 					}
 				}
@@ -264,7 +249,7 @@ namespace ConscriptDesigner.WinForms {
 			return orderedStyleGroups;
 		}
 
-		public StyleInfo HoverSprite {
+		public SpriteInfo HoverSprite {
 			get { return hoverSprite; }
 		}
 
@@ -274,26 +259,39 @@ namespace ConscriptDesigner.WinForms {
 			}
 			lastSeconds = watch.Elapsed.TotalSeconds;
 
-			List<StyleInfo> sprites = filteredSprites;
+			List<SpriteInfo> sprites = filteredSprites;
 			SpriteDrawSettings settings = new SpriteDrawSettings((float)ticks);
 			Graphics2D g = new Graphics2D(spriteBatch);
 			g.Clear(Color.White);
 			Point2I hover = -Point2I.One;
 			if (sprites.Any()) {
+				if (GameData.PaletteShader != null && !GameData.PaletteShader.Effect.IsDisposed) {
+					GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
+					GameData.PaletteShader.TilePalette = GameData.PAL_TILES_DEFAULT;
+					if (DesignerControl.PreviewZone != null && DesignerControl.PreviewZone.Palette != null)
+						GameData.PaletteShader.TilePalette = DesignerControl.PreviewZone.Palette;
+					GameData.PaletteShader.ApplyPalettes();
+				}
+				if (DesignerControl.PreviewZone != null) {
+					settings.VariantID = DesignerControl.PreviewZone.ImageVariantID;
+					settings.Styles = DesignerControl.PreviewZone.StyleDefinitions;
+				}
+
 				g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 				g.Translate(-HorizontalScroll.Value, -VerticalScroll.Value);
+
 				int startRow = (VerticalScroll.Value + 1) / (spriteSize.Y + 1);
 				int startIndex = startRow * columns;
 				int endRow = (VerticalScroll.Value + ClientSize.Height + 1 + spriteSize.Y) / (spriteSize.Y + 1);
 				int endIndex = (endRow + 1) * columns;
 				string originalStyle = settings.Styles.Get(styleGroup);
 				for (int i = startIndex; i < endIndex && i < sprites.Count; i++) {
-					StyleInfo sprite = sprites[i];
+					SpriteInfo sprite = sprites[i];
 					int row = i / columns;
 					int column = i % columns;
 					int x = 1 + column * (spriteSize.X + 1);
 					int y = 1 + row * (spriteSize.Y + 1);
-					settings.Styles.Set(styleGroup, sprite.Style);
+					settings.Styles.Set(styleGroup, sprite.Name);
 					g.DrawISprite(sprite.Sprite, settings, new Vector2F(x, y) - sprite.Bounds.Point);
 					if (sprite == hoverSprite) {
 						hover = new Point2I(x, y);

@@ -33,7 +33,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				spriteName = parameters.GetString(0);
 				sprite = new ColorSprite(colorationGroup);
 				AddResource<ISprite>(spriteName, sprite);
-				Resources.RegisterStyleGroup(editingStyleGroup);
+				Resources.RegisterStyleGroup(editingStyleGroup, null);
 
 				Mode |= Modes.ColorSprite | Modes.StyleSprite;
 			});
@@ -92,7 +92,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						editingSpriteSet.SetSprite(editingSetStart + new Point2I(x, y), new ColorSprite(colorationGroup));
 					}
 				}
-				Resources.RegisterStyleGroup(editingStyleGroup);
+				Resources.RegisterStyleGroup(editingStyleGroup, null);
 
 				singular = false;
 				Mode |= Modes.ColorSprite | Modes.StyleSprite;
@@ -162,7 +162,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				for (int i = 0; i < colorParams.ChildCount; i++) {
 					editingColorGroups.Add(colorParams.GetString(i));
 				}
-				Resources.RegisterStyleGroup(editingStyleGroup);
+				Resources.RegisterStyleGroup(editingStyleGroup, null);
 
 				Mode |= Modes.ColorSprite | Modes.StyleSprite;
 			});
@@ -271,6 +271,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				if (!sprite.Contains(colorGroup)) {
 					styleSprite = new StyleSprite(editingStyleGroup);
 					sprite.Add(colorGroup, styleSprite);
+					Resources.RegisterStylePreview(editingStyleGroup, styleSprite);
 				}
 				else {
 					styleSprite = (StyleSprite) sprite.Get(colorGroup);
@@ -286,7 +287,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 							(BasicSprite) sprite.DefaultStyleSprite.Get(style), paletteArgs);
 					}
 
-					Resources.RegisterStylePreview(editingStyleGroup, style, coloredStyledSprite);
+					Resources.RegisterStyle(editingStyleGroup, style);
 					styleSprite.Add(style, coloredStyledSprite);
 				}
 			}

@@ -16,7 +16,7 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 SPRITESET "set_holes", (3, 1);
 	SOURCE "temp_sheet_holes";
-	MAPPEDCOLORS	"present", ("hole");
+	MAPPEDCOLORS	"tiles_default", ("hole");
 	MULTIPLE COLORSTYLE "hole", "", ("hole", "hole_alt"), (0, 0), (2, 1);
 		ADD "normal"		(0, 0);
 		ADD "interior"		(0, 1);
@@ -24,7 +24,7 @@ SPRITESET "set_holes", (3, 1);
 		END;
 		
 	SOURCE "temp_sheet_cracked_floors";
-	MAPPEDCOLORS	"present", ("floor");
+	MAPPEDCOLORS	"tiles_default", ("floor");
 	SINGLE STYLE	"cracked_floor", (2, 0);
 		ADD "pattern_1"				(0, 0);
 		ADD "pattern_1_checkered"	(1, 0);

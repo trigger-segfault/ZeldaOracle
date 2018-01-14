@@ -12,7 +12,7 @@ PALETTEDICTIONARY "entity_dictionary";
 
 SOURCE "color_cube";
 
-MAPPEDCOLORS "entities_default",
+MAPPEDCOLORS	"entities_default",
 	("color_cube_yellow_red", "color_cube_red_blue", "color_cube_blue_yellow");
 
 CHUNKSIZE (8, 16);

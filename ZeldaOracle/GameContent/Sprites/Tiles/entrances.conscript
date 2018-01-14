@@ -1,0 +1,158 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_entrance_columns"			"Tiles/Styles/entrance_columns"			(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_entrance_lights"			"Tiles/Styles/entrance_lights"			(8, 8), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_floors_square_tiles_8x8"	"Tiles/Styles/floors_square_tiles_8x8"	(8, 8), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+MAPPEDCOLORS	"tiles_default", ("entrance_column");
+CHUNKSIZE		(8, 8);
+
+SOURCE "temp_sheet_entrance_columns";
+SPRITESET "set_entrance_columns", (4, 2);
+	MULTIPLE BASIC (0, 0); END;
+END;
+
+MAPPEDCOLORS	"tiles_default", ("entrance_brick");
+SOURCE "temp_sheet_entrance_lights";
+SPRITESET "set_entrance_lights", (5, 4);
+	MULTIPLE COLOR "", ("entrance_brick"), (0, 0); END;
+END;
+
+MAPPEDCOLORS	"tiles_default", ("floor");
+SOURCE "temp_sheet_floors_square_tiles_8x8";
+SPRITESET "set_floors_square_tiles_8x8", (4, 4);
+	SINGLE COLOR "", ("entrance_tile", "essense_tile"), (0, 0); END;
+END;
+	
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_entrance_columns";
+
+NAME "entrance_column_bottom_down"			(0, 1);
+NAME "entrance_column_bottom_up"			(1, 0);
+NAME "entrance_column_bottom_left"			(2, 0);
+NAME "entrance_column_bottom_right"			(3, 1);
+
+NAME "tile_entrance_column_top_down"		(0, 0);
+NAME "tile_entrance_column_top_up"			(1, 1);
+NAME "tile_entrance_column_top_left"		(3, 0);
+NAME "tile_entrance_column_top_right"		(2, 1);
+
+COMPOSITE "tile_floor_entrance_column_bottom_down";
+	ADD "tile_floor"; ADD "entrance_column_bottom_down"; END;
+COMPOSITE "tile_floor_entrance_column_bottom_up";
+	ADD "tile_floor"; ADD "entrance_column_bottom_up"; END;
+COMPOSITE "tile_floor_entrance_column_bottom_left";
+	ADD "tile_floor"; ADD "entrance_column_bottom_left"; END;
+COMPOSITE "tile_floor_entrance_column_bottom_right";
+	ADD "tile_floor"; ADD "entrance_column_bottom_right"; END;
+
+SOURCE "set_entrance_lights";
+NAME "entrance_light_up_left_8x8"			(0, 0);
+NAME "entrance_light_up_right_8x8"			(1, 0);
+NAME "entrance_light_down_left_8x8"			(0, 1);
+NAME "entrance_light_down_right_8x8"		(1, 1);
+NAME "entrance_light_left_top_8x8"			(2, 0);
+NAME "entrance_light_left_bottom_8x8"		(2, 1);
+NAME "entrance_light_right_top_8x8"			(2, 0);
+NAME "entrance_light_right_bottom_8x8"		(2, 1);
+
+NAME "entrance_light_alt_up_left_8x8"		(0, 2);
+NAME "entrance_light_alt_up_right_8x8"		(1, 2);
+NAME "entrance_light_alt_down_left_8x8"		(0, 3);
+NAME "entrance_light_alt_down_right_8x8"	(1, 3);
+NAME "entrance_light_alt_left_top_8x8"		(2, 2);
+NAME "entrance_light_alt_left_bottom_8x8"	(2, 3);
+NAME "entrance_light_alt_right_top_8x8"		(2, 2);
+NAME "entrance_light_alt_right_bottom_8x8"	(2, 3);
+
+NAME "entrance_light_8x8"					(4, 0);
+
+SOURCE "set_floors_square_tiles_8x8";
+NAME "entrance_tile_8x8"					((0, 0), "entrance_tile");
+NAME "essense_tile_8x8"						((0, 0), "essense_tile");
+
+COMPOSITE "tile_entrance_brick_left";
+	ADD "entrance_brick_left"; ADD "entrance_tile_8x8", (0, 0);
+	ADD "entrance_tile_8x8", (8, 0); ADD "entrance_tile_8x8", (0, 8); END;
+	END;
+COMPOSITE "tile_entrance_brick_mid";
+	ADD "entrance_brick_mid";
+	ADD "entrance_tile_8x8", (0, 0); ADD "entrance_tile_8x8", (8, 0);
+	END;
+COMPOSITE "tile_entrance_brick_right";
+	ADD "entrance_brick_right"; ADD "entrance_tile_8x8", (0, 0);
+	ADD "entrance_tile_8x8", (8, 0); ADD "entrance_tile_8x8", (8, 8); END;
+	END;
+	
+COMPOSITE "tile_entrance_brick_column_left";
+	ADD "entrance_brick_left";
+	ADD "entrance_column_bottom_up";
+	ADD "entrance_tile_8x8", (0, 0);
+	END;
+COMPOSITE "tile_entrance_brick_column_right";
+	ADD "entrance_brick_right";
+	ADD "entrance_column_bottom_up";
+	ADD "entrance_tile_8x8", (8, 0);
+	END;
+	
+COMPOSITE "tile_entrance_brick_light";
+	ADD "entrance_brick_light";
+	ADD "entrance_light_up_left_8x8", (0, 8); ADD "entrance_light_up_right_8x8", (8, 8); END;
+COMPOSITE "tile_entrance_brick_light_back";
+	ADD "entrance_light_8x8", (0, 0); ADD "entrance_light_8x8", (8, 0);
+	ADD "entrance_light_8x8", (0, 8); ADD "entrance_light_8x8", (8, 8); END;
+	
+COMPOSITE "tile_essense_brick_outside_nw";
+	ADD "tile_essense_brick"; ADD "essense_tile_8x8", (0, 0);
+	ADD "essense_tile_8x8", (8, 0); ADD "essense_tile_8x8", (0, 8); END;
+	
+COMPOSITE "tile_essense_brick_n";
+	ADD "tile_essense_brick";
+	ADD "essense_tile_8x8", (0, 0); ADD "essense_tile_8x8", (8, 0); END;
+	
+COMPOSITE "tile_essense_brick_outside_ne";
+	ADD "tile_essense_brick"; ADD "essense_tile_8x8", (0, 0);
+	ADD "essense_tile_8x8", (8, 0); ADD "essense_tile_8x8", (8, 8); END;
+	
+COMPOSITE "tile_essense_brick_w";
+	ADD "tile_essense_brick";
+	ADD "essense_tile_8x8", (0, 0); ADD "essense_tile_8x8", (0, 8); END;
+	
+COMPOSITE "tile_essense_brick_e";
+	ADD "tile_essense_brick";
+	ADD "essense_tile_8x8", (8, 0); ADD "essense_tile_8x8", (8, 8); END;
+	
+COMPOSITE "tile_essense_brick_outside_sw";
+	ADD "tile_essense_brick"; ADD "essense_tile_8x8", (0, 0);
+	ADD "essense_tile_8x8", (0, 8); ADD "essense_tile_8x8", (8, 8); END;
+	
+COMPOSITE "tile_essense_brick_s";
+	ADD "tile_essense_brick";
+	ADD "essense_tile_8x8", (0, 8); ADD "essense_tile_8x8", (8, 8); END;
+	
+COMPOSITE "tile_essense_brick_outside_se";
+	ADD "tile_essense_brick"; ADD "essense_tile_8x8", (8, 0);
+	ADD "essense_tile_8x8", (0, 8); ADD "essense_tile_8x8", (8, 8); END;
+	
+COMPOSITE "tile_essense_brick_inside_nw";
+	ADD "tile_essense_brick"; ADD "essense_tile_8x8", (8, 8); END;
+COMPOSITE "tile_essense_brick_inside_ne";
+	ADD "tile_essense_brick"; ADD "essense_tile_8x8", (0, 8); END;
+COMPOSITE "tile_essense_brick_inside_sw";
+	ADD "tile_essense_brick"; ADD "essense_tile_8x8", (8, 0); END;
+COMPOSITE "tile_essense_brick_inside_se";
+	ADD "tile_essense_brick"; ADD "essense_tile_8x8", (0, 0); END;

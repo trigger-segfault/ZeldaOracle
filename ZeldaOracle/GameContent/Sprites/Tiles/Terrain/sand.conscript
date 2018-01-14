@@ -14,7 +14,7 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 SOURCE "temp_sheet_sand";
 SPRITESET "set_sand", (10, 12);
-	MAPPEDCOLORS	"present", ("sand");
+	MAPPEDCOLORS	"tiles_default", ("sand");
 	MULTIPLE STYLE "sandflow", (0, 0), (8, 4);
 		ADD "northwest"		(0, 0);
 		ADD "northeast"		(0, 4);

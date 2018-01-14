@@ -12,8 +12,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ConscriptDesigner.Control;
+using ConscriptDesigner.Util;
 using ConscriptDesigner.WinForms;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Game.Worlds;
+using ZeldaResources = ZeldaOracle.Common.Content.Resources;
 
 namespace ConscriptDesigner.Anchorables {
 	/// <summary>
@@ -35,6 +39,8 @@ namespace ConscriptDesigner.Anchorables {
 			this.host.Child = this.spritePreview;
 			this.suppressEvents = false;
 
+			DesignerControl.PreviewZoneChanged += OnPreviewZoneChanged;
+
 			OnHoverSpriteChanged();
 		}
 
@@ -54,6 +60,7 @@ namespace ConscriptDesigner.Anchorables {
 		}
 
 		public void Dispose() {
+			DesignerControl.PreviewZoneChanged -= OnPreviewZoneChanged;
 			spritePreview.Dispose();
 		}
 
@@ -77,6 +84,8 @@ namespace ConscriptDesigner.Anchorables {
 					comboBoxSpriteSizes.SelectedItem = item;
 				}
 			}
+			comboBoxZones.ItemsSource = DesignerControl.PreviewZones;
+			comboBoxZones.SelectedItem = DesignerControl.PreviewZoneID;
 			suppressEvents = false;
 		}
 
@@ -100,6 +109,17 @@ namespace ConscriptDesigner.Anchorables {
 
 		private void OnRestartAnimations(object sender, RoutedEventArgs e) {
 			spritePreview.RestartAnimations();
+		}
+
+		private void OnZoneChanged(object sender, SelectionChangedEventArgs e) {
+			DesignerControl.PreviewZoneID = (string) comboBoxZones.SelectedItem;
+		}
+
+		private void OnPreviewZoneChanged(object sender, EventArgs e) {
+			suppressEvents = true;
+			comboBoxZones.SelectedItem = DesignerControl.PreviewZoneID;
+			suppressEvents = false;
+			spritePreview.Invalidate();
 		}
 	}
 }

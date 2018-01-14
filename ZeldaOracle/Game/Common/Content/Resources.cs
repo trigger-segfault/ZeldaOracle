@@ -38,6 +38,25 @@ namespace ZeldaOracle.Common.Content {
 		}
 	}
 
+	public class StyleGroupCollection {
+		public string Group { get; }
+		public HashSet<string> Styles { get; }
+		public ISprite Preview { get; set; }
+
+		public bool HasPreview {
+			get { return Preview != null; }
+		}
+		public bool HasStyles {
+			get { return Styles.Any(); }
+		}
+
+		public StyleGroupCollection(string group, StyleSprite preview) {
+			this.Group		= group;
+			this.Styles		= new HashSet<string>();
+			this.Preview	= preview;
+		}
+	}
+
 	/// <summary>
 	/// The Resources class serves as a resource manager.
 	/// It has methods to load in resources from the game
@@ -104,7 +123,7 @@ namespace ZeldaOracle.Common.Content {
 
 		// STYLE PREVIEWS:
 		/// <summary>The list of registered style groups along with their previews for each style.</summary>
-		private static Dictionary<string, Dictionary<string, ISprite>> registeredStyles;
+		private static Dictionary<string, StyleGroupCollection> registeredStyles;
 
 
 		//-----------------------------------------------------------------------------
@@ -180,7 +199,7 @@ namespace ZeldaOracle.Common.Content {
 			verboseOutput		= false;
 
 			// Style previews
-			registeredStyles	= new Dictionary<string, Dictionary<string, ISprite>>();
+			registeredStyles	= new Dictionary<string, StyleGroupCollection>();
 
 			// Setup the resource dictionary lookup map.
 			resourceDictionaries = new Dictionary<Type, object>();
@@ -257,8 +276,8 @@ namespace ZeldaOracle.Common.Content {
 		}
 
 		/// <summary>Get the resource with the given name and type.</summary>
-		public static T GetResource<T>(string name) {
-			if (name.Length == 0)
+		public static T GetResource<T>(string name, bool allowEmptyNames = false) {
+			if (name.Length == 0 && !allowEmptyNames)
 				return default(T);
 			if (!ContainsResourceType<T>())
 				return default(T); // This type of resource doesn't exist!
@@ -571,6 +590,13 @@ namespace ZeldaOracle.Common.Content {
 			LoadScript(assetName, new TilesetSR());
 		}
 
+		/// <summary>Loads/compiles zones from a script file.</summary>
+		/// <param name="postTileData">Set to false when loading zones right after palettes in-case of an error
+		/// in order to continue previewing sprites with a specific zone.</param>
+		public static void LoadZones(string assetName, bool postTileData) {
+			LoadScript(assetName, new ZoneSR(postTileData));
+		}
+
 		/// <summary>Loads a sound effect.</summary>
 		public static Sound LoadSound(string assetName) {
 			string name = assetName.Substring(assetName.IndexOf('/') + 1);
@@ -687,52 +713,79 @@ namespace ZeldaOracle.Common.Content {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the preview sprite for the specified style group's style.</summary>
-		public static ISprite GetStylePreview(string styleGroup, string style) {
-			Dictionary<string, ISprite> styles;
-			if (registeredStyles.TryGetValue(styleGroup, out styles)) {
-				ISprite preview;
-				if (styles.TryGetValue(style, out preview))
-					return preview;
+		public static ISprite GetStylePreview(string styleGroup) {
+			StyleGroupCollection collection;
+			if (registeredStyles.TryGetValue(styleGroup, out collection)) {
+				return collection.Preview;
 			}
 			return null;
 		}
 
+		/// <summary>Returns true if the specified style group is registered.</summary>
+		public static bool ContainsStyleGroup(string styleGroup) {
+			StyleGroupCollection collection;
+			if (registeredStyles.TryGetValue(styleGroup, out collection)) {
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>Returns true if the specified style group's style is registered.</summary>
+		public static bool ContainsStyle(string styleGroup, string style) {
+			StyleGroupCollection collection;
+			if (registeredStyles.TryGetValue(styleGroup, out collection)) {
+				return collection.Styles.Contains(style);
+			}
+			return false;
+		}
+
 		/// <summary>Registers the style group if it does not exist.</summary>
-		public static void RegisterStyleGroup(string styleGroup) {
+		public static void RegisterStyleGroup(string styleGroup, StyleSprite originalSprite) {
 			if (!registeredStyles.ContainsKey(styleGroup)) {
-				registeredStyles.Add(styleGroup, new Dictionary<string, ISprite>());
+				registeredStyles.Add(styleGroup, new StyleGroupCollection(styleGroup, originalSprite));
 			}
 		}
 
-		/// <summary>Registers the style group style's preview sprite if it does not exist.</summary>
-		public static void RegisterStylePreview(string styleGroup, string style, ISprite preview) {
-			Dictionary<string, ISprite> styles;
-			if (registeredStyles.TryGetValue(styleGroup, out styles) && !styles.ContainsKey(style)) {
-				styles.Add(style, preview);
+		/// <summary>Registers the style group's preview if it does not exist.</summary>
+		public static void RegisterStylePreview(string styleGroup, ISprite preview) {
+			StyleGroupCollection collection;
+			if (registeredStyles.TryGetValue(styleGroup, out collection)) {
+				if (!collection.HasPreview)
+					collection.Preview = preview;
+			}
+			else {
+				throw new Exception("Unknown style group '" + styleGroup + "'!");
 			}
 		}
 
-		/// <summary>Sets the style group style's preview sprite.</summary>
-		public static void SetStylePreview(string styleGroup, string style, ISprite preview) {
-			Dictionary<string, ISprite> styles;
-			if (registeredStyles.TryGetValue(styleGroup, out styles) && !styles.ContainsKey(style)) {
-				styles[style] = preview;
+		/// <summary>Registers the style group's style and preview sprite if it does not exist.</summary>
+		public static void RegisterStyle(string styleGroup, string style) {
+			StyleGroupCollection collection;
+			if (registeredStyles.TryGetValue(styleGroup, out collection)) {
+				if (!collection.Styles.Contains(style))
+					collection.Styles.Add(style);
+			}
+			else {
+				throw new Exception("Unknown style group '" + styleGroup + "'!");
 			}
 		}
 
 		/// <summary>Sets the style group's preview sprite for all styles.</summary>
 		public static void SetStylePreview(string styleGroup, ISprite preview) {
-			Dictionary<string, ISprite> styles;
-			if (registeredStyles.TryGetValue(styleGroup, out styles)) {
-				foreach (string style in styles.Keys.ToArray()) {
-					styles[style] = preview;
-				}
+			StyleGroupCollection collection;
+			if (registeredStyles.TryGetValue(styleGroup, out collection)) {
+				collection.Preview = preview;
+			}
+			else {
+				throw new Exception("Unknown style group '" + styleGroup + "'!");
 			}
 		}
 
-		/// <summary>Gets the dictionary of registered style groups, styles, and previews.</summary>
-		public static Dictionary<string, Dictionary<string, ISprite>> GetRegisteredStyles() {
-			return registeredStyles;
+		/// <summary>Gets the collection of registered style groups, styles, and previews.</summary>
+		public static IEnumerable<StyleGroupCollection> GetRegisteredStyles() {
+			foreach (var pair in registeredStyles) {
+				yield return pair.Value;
+			}
 		}
 
 

@@ -13,10 +13,10 @@ PALETTEDICTIONARY	"tile_dictionary";
 
 IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
-MAPPEDCOLORS	"present" ("stairs");
 
 SPRITESET "set_stairs" (4, 2);
 	SOURCE "temp_sheet_stairs";
+	MAPPEDCOLORS	"tiles_default", ("stairs");
 	MULTIPLE STYLE "stairs", (0, 0), (4, 1);
 		ADD "overworld"		(0, 0);
 		ADD	"border"		(0, 1);
@@ -26,18 +26,20 @@ SPRITESET "set_stairs" (4, 2);
 	
 	SOURCE "temp_sheet_staircases";
 	
-	MAPPEDCOLORS	"present" ("floor_staircase");
-	MULTIPLE STYLE "staircases" (0, 1), (2, 1);
-		ADD "dungeon"		(0, 0);
+	MAPPEDCOLORS	"tiles_default", ("floor_staircase");
+	MULTIPLE STYLE "staircase" (0, 1), (2, 1);
+		ADD "interior"		(0, 0);
 		ADD	"natural"		(0, 1);
-		ADD "maku_tree"		(0, 2);
+		ADD "natural_dark"	(0, 2);
+		ADD "maku_tree"		(0, 3);
 		END;
 		
-	MAPPEDCOLORS	"present" ("wall_staircase");
-	MULTIPLE STYLE "staircases" (2, 1), (2, 1);
-		ADD "dungeon"		(2, 0);
+	MAPPEDCOLORS	"tiles_default", ("wall_staircase");
+	MULTIPLE STYLE "staircase" (2, 1), (2, 1);
+		ADD "interior"		(2, 0);
 		ADD	"natural"		(2, 1);
-		ADD "maku_tree"		(2, 2);
+		ADD	"natural_dark"	(2, 2);
+		ADD "maku_tree"		(2, 3);
 		END;
 END;
 
@@ -64,4 +66,4 @@ NAME "tile_wall_staircase_down"		(3, 1);
 COMPOSITE "temp_staircase_preview";
 	ADD (0, 1), (0, 0); ADD (1, 1), (16, 0); ADD (2, 1), (0, 16); ADD (3, 1), (16, 16); END;
 	
-STYLEPREVIEW "staircases", "temp_staircase_preview";
+STYLEPREVIEW "staircase", "temp_staircase_preview";

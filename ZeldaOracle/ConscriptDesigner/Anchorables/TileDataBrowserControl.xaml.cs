@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ConscriptDesigner.Control;
 using ConscriptDesigner.WinForms;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Tiles;
@@ -37,6 +38,8 @@ namespace ConscriptDesigner.Anchorables {
 			this.host.Child = this.tileDataPreview;
 			this.suppressEvents = false;
 
+			DesignerControl.PreviewZoneChanged += OnPreviewZoneChanged;
+
 			OnHoverTileDataChanged();
 		}
 
@@ -61,10 +64,13 @@ namespace ConscriptDesigner.Anchorables {
 		}
 
 		public void Dispose() {
+			DesignerControl.PreviewZoneChanged -= OnPreviewZoneChanged;
 			tileDataPreview.Dispose();
 		}
 
 		public void RefreshList() {
+			comboBoxZones.ItemsSource = DesignerControl.PreviewZones;
+			comboBoxZones.SelectedItem = DesignerControl.PreviewZoneID;
 			tileDataPreview.RefreshList();
 		}
 
@@ -99,6 +105,17 @@ namespace ConscriptDesigner.Anchorables {
 
 		private void OnRestartAnimations(object sender, RoutedEventArgs e) {
 			tileDataPreview.RestartAnimations();
+		}
+
+		private void OnZoneChanged(object sender, SelectionChangedEventArgs e) {
+			DesignerControl.PreviewZoneID = (string) comboBoxZones.SelectedItem;
+		}
+
+		private void OnPreviewZoneChanged(object sender, EventArgs e) {
+			suppressEvents = true;
+			comboBoxZones.SelectedItem = DesignerControl.PreviewZoneID;
+			suppressEvents = false;
+			tileDataPreview.Invalidate();
 		}
 	}
 }

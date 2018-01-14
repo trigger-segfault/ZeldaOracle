@@ -20,7 +20,7 @@
     </Keywords>
   </RuleSet>
 
-  <RuleSet>
+  <RuleSet ignoreCase="true">
     <Span color="Comment" ruleSet="CommentMarkerSet">
       <Begin>\#</Begin>
     </Span>
@@ -110,7 +110,7 @@
       <Word>SHIFTSOURCE</Word>
       <Word>CHANGEDEFINITION</Word>
     </Keywords>
-
+      
     <!--ISpriteSR Keywords-->
     <Keywords color="CommandKeywords">
       <Word>strip</Word>
@@ -217,6 +217,7 @@
       <Word>COLOR</Word>
       <Word>LOOKUP</Word>
       <Word>CLONE</Word>
+      <Word>RESET</Word>
     </Keywords>
 
     <!--SoundSR-->
@@ -258,6 +259,20 @@
       <Word>HURT</Word>
       <Word>CLONE</Word>
       <Word>SPRITESHEET</Word>
+    </Keywords>
+
+    <!--ZoneSR-->
+    <Keywords color="Commands">
+      <Word>ZONE</Word>
+      <Word>END</Word>
+      <Word>CLONE</Word>
+      <Word>NAME</Word>
+      <Word>SIDESCROLLING</Word>
+      <Word>UNDERWATER</Word>
+      <Word>DEFAULTTILE</Word>
+      <Word>IMAGEVARIANT</Word>
+      <Word>PALETTE</Word>
+      <Word>SETSTYLE</Word>
     </Keywords>
   </RuleSet>
   

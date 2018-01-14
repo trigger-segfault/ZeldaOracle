@@ -59,6 +59,13 @@ namespace ConscriptDesigner.WinForms {
 			lastSeconds = 0;
 		}
 
+		private void TimerUpdate() {
+			if (animating)
+				Invalidate();
+			if (ClientSize.Width != AutoScrollMinSize.Width)
+				UpdateHeight();
+		}
+
 		private void OnMouseLeave(object sender, EventArgs e) {
 			mouse = -Point2I.One;
 			UpdateHoverTileData();
@@ -68,7 +75,8 @@ namespace ConscriptDesigner.WinForms {
 		public event EventHandler HoverTileDataChanged;
 
 		private void OnClientSizeChanged(object sender, EventArgs e) {
-			UpdateHeight();
+			HorizontalScroll.Value = 0;
+			VerticalScroll.Value = 0;
 		}
 
 		private void OnMouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
@@ -100,7 +108,7 @@ namespace ConscriptDesigner.WinForms {
 			this.dispatcherTimer = new DispatcherTimer(
 				TimeSpan.FromMilliseconds(15),
 				DispatcherPriority.Render,
-				delegate { if (animating) Invalidate(); },
+				delegate { TimerUpdate(); },
 				System.Windows.Application.Current.Dispatcher);
 		}
 
@@ -154,12 +162,12 @@ namespace ConscriptDesigner.WinForms {
 		private void UpdateHeight() {
 			columns = Math.Max(1, (ClientSize.Width - 1) / (GameSettings.TILE_SIZE + 1));
 			int height = ((filteredTileData.Count + columns - 1) / columns) * (GameSettings.TILE_SIZE + 1);
+
+			AutoScrollMinSize = new Size(ClientSize.Width, height);
+			HorizontalScroll.Value = 0;
+			VerticalScroll.Value = 0;
 			if (!animating)
 				Invalidate();
-
-			this.AutoScrollMinSize = new Size(ClientSize.Width, height);
-			this.HorizontalScroll.Value = 0;
-			this.VerticalScroll.Value = 0;
 		}
 
 		public void UpdateFilter(string filter) {
@@ -196,7 +204,6 @@ namespace ConscriptDesigner.WinForms {
 			lastSeconds = watch.Elapsed.TotalSeconds;
 
 			List<BaseTileData> tileData = filteredTileData;
-			SpriteDrawSettings settings = new SpriteDrawSettings((float)ticks);
 			Graphics2D g = new Graphics2D(spriteBatch);
 			g.Clear(Color.White);
 			Point2I hover = -Point2I.One;
@@ -205,7 +212,16 @@ namespace ConscriptDesigner.WinForms {
 				TileDataDrawing.Level = null;
 				TileDataDrawing.PlaybackTime = ticks;
 				TileDataDrawing.RewardManager = DesignerControl.RewardManager;
-				Zone zone = GameData.ZONE_PRESENT;
+				if (GameData.PaletteShader != null && !GameData.PaletteShader.Effect.IsDisposed) {
+					GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
+					GameData.PaletteShader.TilePalette = GameData.PAL_TILES_DEFAULT;
+					if (DesignerControl.PreviewZone != null && DesignerControl.PreviewZone.Palette != null)
+						GameData.PaletteShader.TilePalette = DesignerControl.PreviewZone.Palette;
+					GameData.PaletteShader.ApplyPalettes();
+				}
+
+				Zone zone = (DesignerControl.PreviewZone ?? new Zone());
+
 				g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 				g.Translate(-HorizontalScroll.Value, -VerticalScroll.Value);
 				int startRow = (VerticalScroll.Value + 1) / (GameSettings.TILE_SIZE + 1);

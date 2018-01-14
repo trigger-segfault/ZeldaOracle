@@ -12,6 +12,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game;
+using ConscriptDesigner.Control;
 
 namespace ConscriptDesigner.WinForms {
 	public class SpriteSourcePreview : GraphicsDeviceControl {
@@ -167,6 +168,18 @@ namespace ConscriptDesigner.WinForms {
 			if (hoverSprite != -Point2I.One)
 				hover = 1 + hoverSprite * (spriteSize + 1);
 			if (source != null && spriteSize != Point2I.Zero) {
+				if (GameData.PaletteShader != null && !GameData.PaletteShader.Effect.IsDisposed) {
+					GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
+					GameData.PaletteShader.TilePalette = GameData.PAL_TILES_DEFAULT;
+					if (DesignerControl.PreviewZone != null && DesignerControl.PreviewZone.Palette != null)
+						GameData.PaletteShader.TilePalette = DesignerControl.PreviewZone.Palette;
+					GameData.PaletteShader.ApplyPalettes();
+				}
+				if (DesignerControl.PreviewZone != null) {
+					settings.VariantID = DesignerControl.PreviewZone.ImageVariantID;
+					settings.Styles = DesignerControl.PreviewZone.StyleDefinitions;
+				}
+
 				g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 				g.Translate(-HorizontalScroll.Value, -VerticalScroll.Value);
 				for (int indexX = 0; indexX < source.Width; indexX++) {

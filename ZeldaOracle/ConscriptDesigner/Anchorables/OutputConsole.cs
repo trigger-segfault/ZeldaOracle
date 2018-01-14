@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 using System.Xml;
 using ConscriptDesigner.Control;
 
@@ -39,7 +40,7 @@ namespace ConscriptDesigner.Anchorables {
 
 			/// <summary>Write a character to the console.</summary>
 			public override void Write(char value) {
-				console.Write(new string(value, 1));
+				console.Write(value);
 			}
 		}
 
@@ -60,7 +61,10 @@ namespace ConscriptDesigner.Anchorables {
 		private ScrollViewer scrollViewer;
 		/// <summary>The stack panel for each line of text.</summary>
 		private VirtualizingStackPanel stackPanel;
-
+		/// <summary>The timer to flush the buffer.</summary>
+		private DispatcherTimer updateTimer;
+		/// <summary>The buffer for the text to be added to the output console.</summary>
+		private string buffer;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -83,14 +87,21 @@ namespace ConscriptDesigner.Anchorables {
 			this.scrollViewer.Content = this.stackPanel;
 
 
+			buffer = "";
+			updateTimer = new DispatcherTimer(
+				TimeSpan.FromMilliseconds(16),
+				DispatcherPriority.Render,
+				delegate { UpdateTimer(); },
+				Application.Current.Dispatcher);
+
 			Closed += OnAnchorableClosed;
 			AppendLine("");
 			Console.SetOut(new OutputTextWriter(this));
 			
 			Title = "Output Console";
 			Content = border;
-		}
 
+		}
 
 		//-----------------------------------------------------------------------------
 		// XML Serialization
@@ -105,6 +116,11 @@ namespace ConscriptDesigner.Anchorables {
 		//-----------------------------------------------------------------------------
 		// Event Handlers
 		//-----------------------------------------------------------------------------
+
+		/// <summary>Flushes the buffer into the console log.</summary>
+		private void UpdateTimer() {
+			FlushBuffer();
+		}
 
 		/// <summary>Called when closing to re-establish the proper console output channel.</summary>
 		private void OnAnchorableClosed(object sender, EventArgs e) {
@@ -141,19 +157,30 @@ namespace ConscriptDesigner.Anchorables {
 
 		/// <summary>Write text to the console.</summary>
 		public void Write(string text) {
-			Dispatcher.Invoke(() => {
-				string[] lines = text.Replace("\r", "").Split('\n');
-				AppendText(lines[0]);
-				for (int i = 1; i < lines.Length; i++) {
-					AppendLine(lines[i]);
-				}
-			});
+			buffer += text;
+		}
+
+		/// <summary>Write a character to the console.</summary>
+		public void Write(char c) {
+			buffer += new string(c, 1);
 		}
 
 
 		//-----------------------------------------------------------------------------
 		// Internal Methods
 		//-----------------------------------------------------------------------------
+
+		/// <summary>Flushes the buffer into the console log.</summary>
+		private void FlushBuffer() {
+			Dispatcher.Invoke(() => {
+				string[] lines = buffer.Replace("\r", "").Split('\n');
+				AppendText(lines[0]);
+				for (int i = 1; i < lines.Length; i++) {
+					AppendLine(lines[i]);
+				}
+				buffer = "";
+			});
+		}
 
 		/// <summary>Appends text to the last line in the stack panel.</summary>
 		private void AppendText(string text) {

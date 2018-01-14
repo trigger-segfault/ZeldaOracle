@@ -235,6 +235,7 @@
     <None Include="Common\Scripts\CustomReaders\PaletteConverterSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\PaletteDictionarySR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\PaletteSR.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\ZoneSR.cs" />
     <Compile Include="Common\Scripts\ScriptReader.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ImageSR.cs" />
     <Compile Include="Common\Scripts\Commands\ScriptCommand.cs" />

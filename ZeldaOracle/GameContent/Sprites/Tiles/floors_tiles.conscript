@@ -17,9 +17,9 @@ SPRITESHEET	"temp_sheet_floors_misc_patterns"	"Tiles/Styles/floors_misc_patterns
 
 PALETTEDICTIONARY	"tile_dictionary";
 
-IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+IGNORECOLORS	((255, 0, 0), (1, 1, 1));
 
-MAPPEDCOLORS "present", ("floor");
+MAPPEDCOLORS	"tiles_default", ("floor");
 
 #==============================================================
 # Color Multistyle
@@ -46,6 +46,8 @@ COLORMULTISTYLE "floor_styles", (("floor", "floor"),
 	ADD "square_tiles_3"			(2, 0);
 	ADD "square_tiles_4"			(3, 0);
 	ADD "square_tiles_5"			(0, 1);
+	ADD "square_tiles_6"			(1, 1);
+	ADD "square_tiles_7"			(2, 1);
 	
 # Interior ====================================================
 
@@ -135,9 +137,7 @@ COLORMULTISTYLE "floor_styles", (("floor", "floor"),
 	ADD "bright_pattern_8"			(3, 1);
 	ADD "bright_pattern_9"			(0, 2);
 	ADD "bright_pattern_10"			(1, 2);
-	ADD "bright_pattern_11"			(2, 2);
-	
-#==============================================================
+
 # Misc Patterns ===============================================
 
 	SOURCE "temp_sheet_floors_misc_patterns";
@@ -164,3 +164,17 @@ NAME "tile_fancy_tile_7"	("floor_styles", "fancy_tile_7");
 NAME "tile_fancy_tile_8"	("floor_styles", "fancy_tile_8");
 NAME "tile_fancy_tile_9"	("floor_styles", "fancy_tile_9");
 NAME "tile_fancy_tile_10"	("floor_styles", "fancy_tile_10");
+
+SOURCE "temp_sheet_floors_bricks";
+COLOR "temp_entrance_brick_left", "", ("entrance_brick"), (0, 0); END;
+COLOR "temp_entrance_brick_right", "", ("entrance_brick"), (1, 0); END;
+COLOR "temp_entrance_brick_mid", "", ("entrance_brick"), (0, 1); END;
+COLOR "temp_entrance_brick_light", "", ("entrance_brick"), (3, 1); END;
+COLOR "temp_essense_brick", "", ("essense_brick"), (2, 1); END;
+
+NAME "entrance_brick_left"			("temp_entrance_brick_left", "entrance_brick");
+NAME "entrance_brick_right"			("temp_entrance_brick_right", "entrance_brick");
+NAME "entrance_brick_mid"			("temp_entrance_brick_mid", "entrance_brick");
+NAME "entrance_brick_light"			("temp_entrance_brick_light", "entrance_brick");
+NAME "tile_essense_brick"			("temp_essense_brick", "essense_brick");
+

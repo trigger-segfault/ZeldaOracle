@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ConscriptDesigner.Control;
 using ConscriptDesigner.WinForms;
 using ZeldaOracle.Common.Geometry;
 
@@ -35,11 +36,13 @@ namespace ConscriptDesigner.Anchorables {
 			this.host.Child = this.stylePreview;
 			this.suppressEvents = false;
 
+			DesignerControl.PreviewZoneChanged += OnPreviewZoneChanged;
+
 			OnHoverSpriteChanged();
 		}
 
 		private void OnHoverSpriteChanged(object sender = null, EventArgs e = null) {
-			StyleInfo hoverSprite = stylePreview.HoverSprite;
+			SpriteInfo hoverSprite = stylePreview.HoverSprite;
 			if (hoverSprite == null) {
 				statusSpriteStyle.Content = "";
 				statusSpriteInfo.Content = "";
@@ -49,11 +52,12 @@ namespace ConscriptDesigner.Anchorables {
 				if (hoverSprite.HasSubstrips)
 					info += ", Substrip: " + hoverSprite.SubstripIndex;
 				statusSpriteInfo.Content = info;
-				statusSpriteStyle.Content = hoverSprite.Style;
+				statusSpriteStyle.Content = hoverSprite.Name;
 			}
 		}
 
 		public void Dispose() {
+			DesignerControl.PreviewZoneChanged -= OnPreviewZoneChanged;
 			stylePreview.Dispose();
 		}
 
@@ -77,6 +81,8 @@ namespace ConscriptDesigner.Anchorables {
 					comboBoxStyleGroups.SelectedItem = item;
 				}
 			}
+			comboBoxZones.ItemsSource = DesignerControl.PreviewZones;
+			comboBoxZones.SelectedItem = DesignerControl.PreviewZoneID;
 			suppressEvents = false;
 		}
 
@@ -100,6 +106,17 @@ namespace ConscriptDesigner.Anchorables {
 
 		private void OnRestartAnimations(object sender, RoutedEventArgs e) {
 			stylePreview.RestartAnimations();
+		}
+
+		private void OnZoneChanged(object sender, SelectionChangedEventArgs e) {
+			DesignerControl.PreviewZoneID = (string) comboBoxZones.SelectedItem;
+		}
+
+		private void OnPreviewZoneChanged(object sender, EventArgs e) {
+			suppressEvents = true;
+			comboBoxZones.SelectedItem = DesignerControl.PreviewZoneID;
+			suppressEvents = false;
+			stylePreview.Invalidate();
 		}
 	}
 }

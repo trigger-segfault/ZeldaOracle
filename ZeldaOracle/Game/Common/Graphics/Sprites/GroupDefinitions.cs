@@ -108,6 +108,12 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		/// <summary>An empty collection of group definitions.</summary>
 		public static readonly ColorDefinitions Empty = new ColorDefinitions();
 
+		/// <summary>Constructs a new collection of color definitions.</summary>
+		public ColorDefinitions() { }
+
+		/// <summary>Constructs a copy of the collection of color definitions.</summary>
+		public ColorDefinitions(StyleDefinitions copy) : base(copy) { }
+
 		/// <summary>Returns a color definition collection with all groups set to the same definition.</summary>
 		public static ColorDefinitions All(string definition) {
 			ColorDefinitions definitions = new ColorDefinitions();
@@ -128,6 +134,12 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 	/// <summary>A collection of style definitions for what styles to use.</summary>
 	public class StyleDefinitions : GroupDefinitions {
+
+		/// <summary>Constructs a new collection of style definitions.</summary>
+		public StyleDefinitions() { }
+
+		/// <summary>Constructs a copy of the collection of style definitions.</summary>
+		public StyleDefinitions(StyleDefinitions copy) : base(copy) { }
 
 		/// <summary>An empty collection of group definitions.</summary>
 		public static readonly StyleDefinitions Empty = new StyleDefinitions();

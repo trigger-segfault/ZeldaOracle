@@ -39,6 +39,7 @@ namespace ConscriptDesigner {
 		private SpriteSourceBrowser spriteSourceBrowser;
 		private StyleBrowser styleBrowser;
 		private TileDataBrowser tileDataBrowser;
+		private TilesetBrowser tilesetBrowser;
 
 		private FindReplaceWindow findReplaceWindow;
 		private PlaybackWindow playbackWindow;
@@ -185,6 +186,8 @@ namespace ConscriptDesigner {
 				styleBrowser.RefreshList();
 			if (tileDataBrowser != null)
 				tileDataBrowser.RefreshList();
+			if (tilesetBrowser != null)
+				tilesetBrowser.RefreshList();
 		}
 
 		private void OnResourcesUnloaded(object sender, EventArgs e) {
@@ -196,11 +199,12 @@ namespace ConscriptDesigner {
 				styleBrowser.ClearList();
 			if (tileDataBrowser != null)
 				tileDataBrowser.ClearList();
+			if (tilesetBrowser != null)
+				tilesetBrowser.ClearList();
 		}
 
 		private void OnFinishedBuilding(object sender, EventArgs e) {
-			//if (spriteBrowser != null)
-			//	spriteBrowser.RefreshList();
+			
 		}
 		
 		private void OnActiveAnchorableChanged(object sender = null, EventArgs e = null) {
@@ -231,6 +235,8 @@ namespace ConscriptDesigner {
 				styleBrowser = null;
 			else if (anchorable is TileDataBrowser)
 				tileDataBrowser = null;
+			else if (anchorable is TilesetBrowser)
+				tilesetBrowser = null;
 			CommandManager.InvalidateRequerySuggested();
 		}
 
@@ -273,6 +279,10 @@ namespace ConscriptDesigner {
 
 		public void OpenTileDataBrowser() {
 			OnTileDataBrowserCommand();
+		}
+
+		public void OpenTilesetBrowser() {
+			OnTilesetBrowserCommand();
 		}
 
 		public void DockDocument(RequestCloseDocument anchorable) {
@@ -525,6 +535,21 @@ namespace ConscriptDesigner {
 			}
 		}
 
+		private void OnTilesetBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
+			if (tilesetBrowser == null) {
+				tilesetBrowser = new TilesetBrowser();
+				tilesetBrowser.Closed += OnAnchorableClosed;
+				tilesetBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
+				var pane = tilesetBrowser.Parent as LayoutAnchorablePane;
+				pane.DockWidth = new GridLength(250);
+				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
+					tilesetBrowser.RefreshList();
+			}
+			else {
+				tilesetBrowser.IsActive = true;
+			}
+		}
+
 		private void OnRunConscriptsCommand(object sender, ExecutedRoutedEventArgs e) {
 			DesignerControl.RunConscripts();
 		}
@@ -628,6 +653,11 @@ namespace ConscriptDesigner {
 		public TileDataBrowser TileDataBrowser {
 			get { return tileDataBrowser; }
 			set { tileDataBrowser = value; }
+		}
+
+		public TilesetBrowser TilesetBrowser {
+			get { return tilesetBrowser; }
+			set { tilesetBrowser = value; }
 		}
 
 		public IRequestCloseAnchorable ActiveAnchorable {

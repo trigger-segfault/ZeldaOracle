@@ -7,7 +7,6 @@ SPRITESHEET "temp_sheet_chests"					"Tiles/Styles/chests"					(16, 16), (1, 1), 
 SPRITESHEET "temp_sheet_buttons"				"Tiles/Styles/buttons"					(16, 16), (1, 1), (18, 18); END;
 SPRITESHEET "temp_sheet_minecart_tracks"		"Tiles/Styles/minecart_tracks"			(16, 16), (1, 1), (18, 18); END;
 SPRITESHEET "temp_sheet_traps"					"Tiles/Styles/traps"					(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET "temp_sheet_tile_monsters"			"Tiles/Styles/tile_monsters"			(16, 16), (1, 1), (18, 18); END;
 SPRITESHEET "temp_sheet_puzzle_objects"			"Tiles/Styles/puzzle_objects"			(16, 16), (1, 1), (18, 18); END;
 SPRITESHEET "temp_sheet_puzzle_color_tiles"		"Tiles/Styles/puzzle_color_tiles"		(16, 16), (1, 1), (18, 18); END;
 SPRITESHEET "temp_sheet_puzzle_entity_tiles"	"Tiles/Styles/puzzle_entity_tiles"		(16, 16), (1, 1), (18, 18); END;
@@ -22,7 +21,7 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 # Chests ======================================================
 
-MAPPEDCOLORS	"present", ("chest");
+MAPPEDCOLORS	"tiles_default", ("chest");
 
 SOURCE "temp_sheet_chests";
 SPRITESET "set_chests", (2, 1);
@@ -35,7 +34,7 @@ END;
 
 # Buttons =====================================================
 
-MAPPEDCOLORS	"present", ("button");
+MAPPEDCOLORS	"tiles_default", ("button");
 
 SOURCE "temp_sheet_buttons";
 SPRITESET "set_buttons", (2, 1);
@@ -47,7 +46,7 @@ END;
 
 # Minecart Tracks =============================================
 
-MAPPEDCOLORS	"present", ("minecart_track");
+MAPPEDCOLORS	"tiles_default", ("minecart_track");
 
 SOURCE "temp_sheet_minecart_tracks";
 SPRITESET "set_minecart_tracks", (2, 4);
@@ -57,77 +56,69 @@ END;
 # Traps =======================================================
 
 SOURCE "temp_sheet_traps";
-SPRITESET "set_traps", (5, 4);
+SPRITESET "set_traps", (6, 4);
 
-	MAPPEDCOLORS	"present", ("hole");
+	MAPPEDCOLORS	"tiles_default", ("hole");
 	MULTIPLE BASIC (0, 0), (0, 0), (2, 4); END;
 	
-	MAPPEDCOLORS	"present", ("arrow_shooter");
+	MAPPEDCOLORS	"tiles_default", ("arrow_shooter");
 	MULTIPLE BASIC (2, 0), (2, 0), (2, 2); END;
 	
-	MAPPEDCOLORS	"present", ("fire_shooter");
+	MAPPEDCOLORS	"tiles_default", ("fire_shooter");
 	MULTIPLE BASIC (2, 2), (2, 2), (2, 2); END;
 	
-	MAPPEDCOLORS	"present", ("floor_spikes");
+	MAPPEDCOLORS	"tiles_default", ("floor_spikes");
 	MULTIPLE BASIC (4, 0), (4, 0), (1, 4); END;
-END;
-
-# Monster Tiles ===============================================
-
-MAPPEDCOLORS	"present", ("tile_monster");
-
-SOURCE "temp_sheet_tile_monsters";
-SPRITESET "set_tile_monsters" (1, 1);
-	SINGLE STYLE "tile_monster", (0, 0);
-		ADD "ages"			(0, 0);
-		ADD "seasons"		(0, 1);
+	
+	MAPPEDCOLORS	"tiles_default", ("tile_monster");
+	SINGLE STYLE "tile_monster", (5, 0);
+		ADD "ages"			(5, 0);
+		ADD "seasons"		(5, 1);
 		END;
 END;
 
 # Puzzle Objects ==============================================
 
-MAPPEDCOLORS	"present", ("puzzle_red", "puzzle_blue", "floor");
-
 SOURCE "temp_sheet_puzzle_objects";
 SPRITESET "set_puzzle_objects", (10, 4);
 
-	MAPPEDCOLORS	"present", ("lava_mouth");
+	MAPPEDCOLORS	"tiles_default", ("lava_mouth");
 	MULTIPLE BASIC (0, 0), (0, 0), (4, 2); END;
 	
-	MAPPEDCOLORS	"present", ("floor");
+	MAPPEDCOLORS	"tiles_default", ("floor");
 	MULTIPLE BASIC (4, 0), (4, 0), (2, 2); END;
 	
-	MAPPEDCOLORS	"present", ("wall", "web");
+	MAPPEDCOLORS	"tiles_default", ("wall", "web");
 	MULTIPLE BASIC (0, 2), (0, 2), (6, 2); END;
 	
-	MAPPEDCOLORS	"present", ("lever");
+	MAPPEDCOLORS	"tiles_default", ("lever");
 	MULTIPLE BASIC (6, 0), (6, 0), (2, 1); END;
 	
 	CHUNKSIZE		(8, 8);
-	MAPPEDCOLORS	"present", ("bridge");
+	MAPPEDCOLORS	"tiles_default", ("bridge");
 	SINGLE BASIC (8, 0); SIZE (8, 16); END;
 	SINGLE BASIC (9, 0); SIZE (16, 8); END;
 	CHUNKSIZE		none;
 	
-	MAPPEDCOLORS	"present", ("locked_block");
+	MAPPEDCOLORS	"tiles_default", ("locked_block");
 	SINGLE BASIC	(6, 1); END;
 	
-	MAPPEDCOLORS	"present", ("ice_crystal_pit");
+	MAPPEDCOLORS	"tiles_default", ("ice_crystal_pit");
 	SINGLE BASIC	(7, 1); END;
 	
-	MAPPEDCOLORS	"present", ("eye_statue");
+	MAPPEDCOLORS	"tiles_default", ("eye_statue");
 	MULTIPLE BASIC	(6, 2), (6, 2), (2, 1); END;
 	
-	MAPPEDCOLORS	"present", ("plaque");
+	MAPPEDCOLORS	"tiles_default", ("plaque");
 	SINGLE BASIC	(6, 3); END;
 	
-	MAPPEDCOLORS	"present", ("essense_statue");
+	MAPPEDCOLORS	"tiles_default", ("essense_statue");
 	SINGLE BASIC	(7, 3); END;
 END;
 
 # Puzzle Color Tiles ==========================================
 
-MAPPEDCOLORS	"present", ("puzzle_red", "puzzle_blue", "floor");
+MAPPEDCOLORS	"tiles_default", ("puzzle_red", "puzzle_blue", "floor");
 
 SOURCE "temp_sheet_puzzle_color_tiles";
 SPRITESET "set_puzzle_color_tiles", (5, 2);
@@ -219,11 +210,7 @@ ANIMATION "tile_floor_spikes";
 	ADD strip, 15, 4, (4, 0), relative: (0, 1);
 	ADD frame, 15, (4, 2); ADD frame, 15, (4, 1); END;
 	
-
-# Tile Monsters ===============================================
-
-SOURCE "set_tile_monsters";
-NAME "tile_tile_monster"					(0, 0);
+NAME "tile_tile_monster"					(5, 0);
 
 # Puzzle Objects ==============================================
 

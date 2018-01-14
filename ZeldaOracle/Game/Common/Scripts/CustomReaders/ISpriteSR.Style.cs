@@ -25,7 +25,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				spriteName = parameters.GetString(0);
 				sprite = new StyleSprite(styleGroup);
 				AddResource<ISprite>(spriteName, sprite);
-				Resources.RegisterStyleGroup(styleGroup);
+				Resources.RegisterStyleGroup(styleGroup, StyleSprite);
 
 				Mode |= Modes.StyleSprite;
 			});
@@ -51,10 +51,13 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 				for (int x = 0; x < editingSetDimensions.X; x++) {
 					for (int y = 0; y < editingSetDimensions.Y; y++) {
-						editingSpriteSet.SetSprite(editingSetStart + new Point2I(x, y), new StyleSprite(styleGroup));
+						Point2I point = new Point2I(x, y);
+						StyleSprite styleSprite = new StyleSprite(styleGroup);
+						editingSpriteSet.SetSprite(editingSetStart + point, styleSprite);
+						if (point.IsZero)
+							Resources.RegisterStyleGroup(styleGroup, styleSprite);
 					}
 				}
-				Resources.RegisterStyleGroup(styleGroup);
 
 				singular = false;
 				Mode |= Modes.StyleSprite;
@@ -87,7 +90,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 				sprite = new StyleSprite(styleGroup);
 				editingSpriteSet.SetSprite(editingSetStart, sprite);
-				Resources.RegisterStyleGroup(styleGroup);
+				Resources.RegisterStyleGroup(styleGroup, StyleSprite);
 
 				singular = true;
 				Mode |= Modes.StyleSprite;
@@ -113,7 +116,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				string style = parameters.GetString(0);
 				ISprite styledSprite = GetSpriteFromParams(parameters, 1);
 				StyleSprite.Add(style, styledSprite);
-				Resources.RegisterStylePreview(StyleSprite.Group, style, styledSprite);
+				Resources.RegisterStyle(StyleSprite.Group, style);
 			});
 			//=====================================================================================
 			AddCommand("REPLACE", (int) Modes.StyleSprite,
@@ -145,21 +148,12 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						ISprite styledSprite = GetSprite(source, sourceIndex + point);
 						styleSprite.Add(style, styledSprite);
 						if (point.IsZero)
-							Resources.RegisterStylePreview(styleSprite.Group, style, styledSprite);
+							Resources.RegisterStyle(styleSprite.Group, style);
 					}
 				}
 			});
 			//=====================================================================================
 			// Style Preview
-			//=====================================================================================
-			AddCommand("STYLEPREVIEW", (int) Modes.Root,
-				"string styleGroup, string style, Sprite sprite",
-			delegate (CommandParam parameters) {
-				string styleGroup = parameters.GetString(0);
-				string style = parameters.GetString(1);
-				ISprite preview = GetSpriteFromParams(parameters, 2);
-				Resources.SetStylePreview(styleGroup, style, preview);
-			});
 			//=====================================================================================
 			AddCommand("STYLEPREVIEW", (int) Modes.Root,
 				"string styleGroup, Sprite sprite",

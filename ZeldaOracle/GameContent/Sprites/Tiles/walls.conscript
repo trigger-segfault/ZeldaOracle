@@ -16,7 +16,7 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 SOURCE "temp_sheet_walls";
 SPRITESET "set_walls", (20, 2);
-	MAPPEDCOLORS "present", ("wall");
+	MAPPEDCOLORS	"tiles_default", ("wall");
 	MULTIPLE STYLE "wall", (0, 0), (16, 1);
 		ADD "dungeon_spirits_grave"			(0, 0);
 		ADD "dungeon_wing_dungeon"			(0, 1);
@@ -50,7 +50,7 @@ SPRITESET "set_walls", (20, 2);
 		END;
 		
 		
-	MAPPEDCOLORS "present", ("wall_alt");
+	MAPPEDCOLORS	"tiles_default", ("wall_alt");
 	MULTIPLE STYLE "wall_alt", (0, 1), (16, 1);
 		ADD "dungeon_spirits_grave"			(0, 0);
 		ADD "dungeon_wing_dungeon"			(0, 1);
@@ -91,7 +91,7 @@ END;
 
 SOURCE "temp_sheet_ceilings";
 SPRITESET "set_ceilings", (1, 2);
-	MAPPEDCOLORS "present", ("wall");
+	MAPPEDCOLORS	"tiles_default", ("wall");
 	SINGLE STYLE "ceiling", (0, 0);
 		ADD "light"			(0, 0);
 		ADD "medium"		(0, 1);
@@ -99,7 +99,7 @@ SPRITESET "set_ceilings", (1, 2);
 		ADD "black"			(0, 3);
 		END;
 		
-	MAPPEDCOLORS "present", ("wall_alt");
+	MAPPEDCOLORS	"tiles_default", ("wall_alt");
 	SINGLE STYLE "ceiling_alt", (0, 1);
 		ADD "light"			(0, 0);
 		ADD "medium"		(0, 1);
@@ -108,7 +108,7 @@ SPRITESET "set_ceilings", (1, 2);
 		END;
 END;
 
-MAPPEDCOLORS "present", ("wall");
+MAPPEDCOLORS	"tiles_default", ("wall");
 	
 SOURCE "temp_sheet_walls_jabu_jabu";
 SPRITESET "set_walls_jabu_jabu", (16, 4);

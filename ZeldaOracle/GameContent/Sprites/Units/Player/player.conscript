@@ -14,7 +14,7 @@ PALETTEDICTIONARY "entity_dictionary";
 
 SOURCE "player";
 
-MAPPEDCOLORS "entities_default", ("green");
+MAPPEDCOLORS	"entities_default", ("green");
 
 SPRITESET "set_player" (8, 30);
 	MULTIPLE COLOR "", ("green", "red", "blue", "hurt"), (0, 0); END;
@@ -26,7 +26,7 @@ SPRITESET "set_player" (8, 30);
 	APPEND (5, 20), (6, 20), (0, -16);
 END;
 
-MAPPEDCOLORS "entities_default",
+MAPPEDCOLORS	"entities_default",
 	("green", "red", "blue", "orange", "shaded_red", "shaded_blue");
 
 SOURCE "player_items";

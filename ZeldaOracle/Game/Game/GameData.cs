@@ -44,8 +44,8 @@ namespace ZeldaOracle.Game {
 			Console.WriteLine("Loading Shaders");
 			LoadShaders();
 
-			Console.WriteLine("Loading Zones");
-			LoadZones();
+			Console.WriteLine("Pre-Loading Zones");
+			LoadZonesPreTileData();
 
 			Console.WriteLine("Loading Images");
 			LoadImages();
@@ -76,6 +76,9 @@ namespace ZeldaOracle.Game {
 
 			Console.WriteLine("Loading Tilesets");
 			LoadTilesets();
+
+			Console.WriteLine("Loading Zones");
+			LoadZonesPostTileData();
 
 			//Resources.LoadScript("Palettes/dungeon_ages_1_converter.conscript", new PaletteConverterSR());
 		}
@@ -185,7 +188,7 @@ namespace ZeldaOracle.Game {
 		// Zone Loading
 		//-----------------------------------------------------------------------------
 
-		private static void LoadZones() {
+		private static void LoadZonesOld() {
 			TileData ground = Resources.GetResource<TileData>("ground");
 			TileData floor  = Resources.GetResource<TileData>("floor");
 			//TileData background  = Resources.GetResource<TileData>("default_background");
@@ -230,6 +233,18 @@ namespace ZeldaOracle.Game {
 			Resources.AddResource("ages_dungeon_4", ZONE_AGES_DUNGEON_4);
 			Resources.AddResource("sidescroll_ages_dungeon_1", ZONE_SIDESCROLL_AGES_DUNGEON_1);
 			Resources.AddResource("underwater_present", ZONE_UNDERWATER_PRESENT);
+		}
+
+		private static void LoadZonesPreTileData() {
+			Resources.LoadZones("Zones/zones.conscript", false);
+			IntegrateResources<Zone>("ZONE_");
+			ZONE_DEFAULT = Resources.GetResource<Zone>("", true);
+		}
+
+		private static void LoadZonesPostTileData() {
+			Resources.LoadZones("Zones/zones.conscript", true);
+			IntegrateResources<Zone>("ZONE_");
+			ZONE_DEFAULT = Resources.GetResource<Zone>("", true);
 		}
 
 		//-----------------------------------------------------------------------------

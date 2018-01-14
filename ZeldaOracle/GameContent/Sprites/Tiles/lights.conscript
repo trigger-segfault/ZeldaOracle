@@ -13,7 +13,7 @@ PALETTEDICTIONARY	"tile_dictionary";
 
 IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
-MAPPEDCOLORS	"present", ("lantern_light", "lantern_base");
+MAPPEDCOLORS	"tiles_default", ("lantern_light", "lantern_base");
 
 SOURCE "temp_sheet_lanterns";
 SPRITESET "set_lanterns", (6, 1);
@@ -25,7 +25,7 @@ SPRITESET "set_lanterns", (6, 1);
 		END;
 END;
 
-MAPPEDCOLORS	"present", ("torch_light", "torch_base");
+MAPPEDCOLORS	"tiles_default", ("wall_torch_light", "wall_torch_base");
 SOURCE "temp_sheet_torches";
 SPRITESET "set_torches", (4, 2);
 	MULTIPLE BASIC (0, 0), (0, 0), (4, 1); END;

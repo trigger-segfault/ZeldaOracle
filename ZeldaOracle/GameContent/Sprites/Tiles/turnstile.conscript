@@ -13,7 +13,7 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 SOURCE "temp_sheet_turnstile";
 SPRITESET "set_turnstile" (15, 4);
 	PALETTEDICTIONARY	"tile_dictionary";
-	MAPPEDCOLORS	"present", ("railings", "turnstile");
+	MAPPEDCOLORS	"tiles_default", ("railing", "turnstile");
 	CHUNKSIZE		(8, 8);
 	MULTIPLE BASIC	(0, 0), (0, 0), (3, 3); END;
 	CHUNKSIZE		none;

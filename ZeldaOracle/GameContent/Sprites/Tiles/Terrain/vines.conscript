@@ -12,7 +12,7 @@ PALETTEDICTIONARY	"tile_dictionary";
 
 IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
-MAPPEDCOLORS "present", ("cliff", "vines_light", "vines_dark", "vines_base");
+MAPPEDCOLORS	"tiles_default", ("cliff", "vines_light", "vines_dark", "vines_base");
 
 SOURCE "sheet_vines";
 SPRITESET "set_vines" (3, 6);
@@ -70,6 +70,21 @@ COMPOSITE "tile_cliff_ladder_bottom";
 	ADD "temp_8x16_cliff_ladder" (0, 0);
 	ADD "temp_8x16_cliff_ladder_bottom" (0, 8); END;
 	
+COMPOSITE "tile_vine_cliff_top_spaced_ground";
+	COMBINE "tile_ground"; REMOVE 3; REMOVE 2;
+	ADD "temp_8x16_vine_cliff_top" (0, 8); END;
+COMPOSITE "tile_vine_cliff_top_spaced_dirt";
+	COMBINE "tile_dirt"; REMOVE 3; REMOVE 2;
+	ADD "temp_8x16_vine_cliff_top" (0, 8); END;
+COMPOSITE "tile_vine_cliff_top_spaced_sand";
+	COMBINE "tile_sand"; REMOVE 3; REMOVE 2;
+	ADD "temp_8x16_vine_cliff_top" (0, 8); END;
+COMPOSITE "tile_vine_cliff_top_dirt_dark";
+	COMBINE "tile_dirt_dark"; REMOVE 3; REMOVE 2;
+	ADD "temp_8x16_vine_cliff_top_dirt" (0, 8); END;
+COMPOSITE "tile_vine_cliff_top_dirt_dark_rough";
+	COMBINE "tile_dirt_dark_rough"; REMOVE 3; REMOVE 2;
+	ADD "temp_8x16_vine_cliff_top_dirt" (0, 8); END;
 	
 COMPOSITE "tile_vine_cliff_top";
 	ADD "temp_8x16_vine_cliff_top" (0, 0);
@@ -120,6 +135,23 @@ COMPOSITE "tile_vines_top";
 	ADD "temp_8x16_vines_top" (0, 0);
 	ADD "temp_8x16_vines_2" (0, 8); END;
 	
+	
+COMPOSITE "tile_vines_top_ground";
+	COMBINE "tile_ground"; REMOVE 3; REMOVE 2;
+	ADD "temp_8x16_vines_top" (0, 8); END;
+COMPOSITE "tile_vines_top_dirt";
+	COMBINE "tile_dirt"; REMOVE 3; REMOVE 2;
+	ADD "temp_8x16_vines_top" (0, 8); END;
+COMPOSITE "tile_vines_top_dirt_dark";
+	COMBINE "tile_dirt_dark"; REMOVE 3; REMOVE 2;
+	ADD "temp_8x16_vines_top" (0, 8); END;
+COMPOSITE "tile_vines_top_dirt_dark_rough";
+	COMBINE "tile_dirt_dark_rough"; REMOVE 3; REMOVE 2;
+	ADD "temp_8x16_vines_top" (0, 8); END;
+COMPOSITE "tile_vines_top_sand";
+	COMBINE "tile_sand"; REMOVE 3; REMOVE 2;
+	ADD "temp_8x16_vines_top" (0, 8); END;
+	
 COMPOSITE "tile_vines";
 	ADD "temp_8x16_vines_1" (0, 0);
 	ADD "temp_8x16_vines_2" (0, 8); END;
@@ -141,6 +173,28 @@ COMPOSITE "temp_preview_vines_style";
 	ADD "temp_8x16_vines_1", (0, 16); ADD "temp_8x16_vines_bottom" (0, 24);
 	ADD "temp_8x16_vines_base" (0, 32); END;
 	
+	
+COMPOSITE "tile_vines_base_ground";
+	COMBINE "tile_ground"; REMOVE 1; REMOVE 0;
+	ADD "temp_8x16_vines_base";
+	END;
+COMPOSITE "tile_vines_base_dirt";
+	COMBINE "tile_dirt"; REMOVE 1; REMOVE 0;
+	ADD "temp_8x16_vines_base";
+	END;
+COMPOSITE "tile_vines_base_dirt_dark";
+	COMBINE "tile_dirt_dark"; REMOVE 1; REMOVE 0;
+	ADD "temp_8x16_vines_base";
+	END;
+COMPOSITE "tile_vines_base_dirt_dark_rough";
+	COMBINE "tile_dirt_dark_rough"; REMOVE 1; REMOVE 0;
+	ADD "temp_8x16_vines_base";
+	END;
+COMPOSITE "tile_vines_base_sand";
+	COMBINE "tile_sand"; REMOVE 1; REMOVE 0;
+	ADD "temp_8x16_vines_base";
+	END;
+
 STYLEPREVIEW "vines", "temp_preview_vines_style";
 
 COMPOSITE "temp_preview_vine_cliff_style";

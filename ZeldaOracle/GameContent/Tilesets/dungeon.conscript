@@ -68,6 +68,70 @@ TILE "wall_torch_left"; SAMESPRITE; SOLID block; END;
 TILE "wall_torch_right"; SAMESPRITE; SOLID block; END;
 TILE "armos_statue"; SPRITE "tile_armos"; SPRITEOBJ "tile_armos_asobject"; SOLID block; END;
 
+TILE "railing_square"; SAMESPRITE; HALFSOLID block; END;
+TILE "floor_railing_outside_nw"; SAMESPRITE; HALFSOLID corner_nw; END;
+TILE "floor_railing_n"; SAMESPRITE; HALFSOLID edge_n; END;
+TILE "floor_railing_outside_ne"; SAMESPRITE; HALFSOLID corner_ne; END;
+TILE "floor_railing_w"; SAMESPRITE; HALFSOLID edge_w; END;
+TILE "floor_railing_e"; SAMESPRITE; HALFSOLID edge_e; END;
+TILE "floor_railing_outside_sw"; SAMESPRITE; HALFSOLID corner_sw; END;
+TILE "floor_railing_s"; SAMESPRITE; HALFSOLID edge_s; END;
+TILE "floor_railing_outside_se"; SAMESPRITE; HALFSOLID corner_se; END;
+TILE "floor_railing_inside_nw"; SAMESPRITE; HALFSOLID inside_corner_se; END;
+TILE "floor_railing_inside_ne"; SAMESPRITE; HALFSOLID inside_corner_sw; END;
+TILE "floor_railing_inside_sw"; SAMESPRITE; HALFSOLID inside_corner_ne; END;
+TILE "floor_railing_inside_se"; SAMESPRITE; HALFSOLID inside_corner_nw; END;
+
+TILE "fancy_tile_1_railing_outside_nw"; SAMESPRITE; HALFSOLID corner_nw; END;
+TILE "fancy_tile_1_railing_n"; SAMESPRITE; HALFSOLID edge_n; END;
+TILE "fancy_tile_1_railing_outside_ne"; SAMESPRITE; HALFSOLID corner_ne; END;
+TILE "fancy_tile_1_railing_w"; SAMESPRITE; HALFSOLID edge_w; END;
+TILE "fancy_tile_1_railing_e"; SAMESPRITE; HALFSOLID edge_e; END;
+TILE "fancy_tile_1_railing_outside_sw"; SAMESPRITE; HALFSOLID corner_sw; END;
+TILE "fancy_tile_1_railing_s"; SAMESPRITE; HALFSOLID edge_s; END;
+TILE "fancy_tile_1_railing_outside_se"; SAMESPRITE; HALFSOLID corner_se; END;
+TILE "fancy_tile_1_railing_inside_nw"; SAMESPRITE; HALFSOLID inside_corner_se; END;
+TILE "fancy_tile_1_railing_inside_ne"; SAMESPRITE; HALFSOLID inside_corner_sw; END;
+TILE "fancy_tile_1_railing_inside_sw"; SAMESPRITE; HALFSOLID inside_corner_ne; END;
+TILE "fancy_tile_1_railing_inside_se"; SAMESPRITE; HALFSOLID inside_corner_nw; END;
+
+TILE "essense_brick"; SAMESPRITE; END;
+TILE "essense_brick_outside_nw"; SAMESPRITE; HALFSOLID corner_nw; END;
+TILE "essense_brick_n"; SAMESPRITE; HALFSOLID edge_n; END;
+TILE "essense_brick_outside_ne"; SAMESPRITE; HALFSOLID corner_ne; END;
+TILE "essense_brick_w"; SAMESPRITE; HALFSOLID edge_w; END;
+TILE "essense_brick_e"; SAMESPRITE; HALFSOLID edge_e; END;
+TILE "essense_brick_outside_sw"; SAMESPRITE; HALFSOLID corner_sw; END;
+TILE "essense_brick_s"; SAMESPRITE; HALFSOLID edge_s; END;
+TILE "essense_brick_outside_se"; SAMESPRITE; HALFSOLID corner_se; END;
+TILE "essense_brick_inside_nw"; SAMESPRITE; HALFSOLID inside_corner_se; END;
+TILE "essense_brick_inside_ne"; SAMESPRITE; HALFSOLID inside_corner_sw; END;
+TILE "essense_brick_inside_sw"; SAMESPRITE; HALFSOLID inside_corner_ne; END;
+TILE "essense_brick_inside_se"; SAMESPRITE; HALFSOLID inside_corner_nw; END;
+
+TILE "entrance_brick_left"; SAMESPRITE; END;
+TILE "entrance_brick_mid"; SAMESPRITE; END;
+TILE "entrance_brick_right"; SAMESPRITE; END;
+TILE "entrance_brick_column_left"; SAMESPRITE; SOLID edge_s; END;
+TILE "entrance_brick_column_right"; SAMESPRITE; SOLID edge_s; END;
+TILE "entrance_brick_light"; SAMESPRITE; END;
+TILE "entrance_brick_light_back"; SAMESPRITE; END;
+
+TILE "entrance_column_top_down"; SAMESPRITE; SOLID block; END;
+TILE "entrance_column_top_up"; SAMESPRITE; SOLID block; END;
+TILE "entrance_column_top_left"; SAMESPRITE; SOLID block; END;
+TILE "entrance_column_top_right"; SAMESPRITE; SOLID block; END;
+
+TILE "floor_entrance_column_bottom_down"; SAMESPRITE; SOLID block; END;
+TILE "floor_entrance_column_bottom_up"; SAMESPRITE; SOLID block; END;
+TILE "floor_entrance_column_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "floor_entrance_column_bottom_right"; SAMESPRITE; SOLID block; END;
+
+TILE "tunnel_down"; SAMESPRITE; END;
+TILE "tunnel_up"; SAMESPRITE; END;
+TILE "tunnel_left"; SAMESPRITE; END;
+TILE "tunnel_right"; SAMESPRITE; END;
+
 #==============================================================
 # Tilesets
 #==============================================================
@@ -107,6 +171,8 @@ SETTILE (2, 4), "stairs_left";
 SETTILE (0, 5), "wall_inside_sw";
 SETTILE (1, 5), "stairs_up";
 SETTILE (2, 5), "wall_inside_se";
+
+SETTILE (3, 0), "dirt";
 
 SETTILE (4, 0), "fancy_tile_1";
 SETTILE (5, 0), "fancy_tile_2";
@@ -161,10 +227,15 @@ TILE (2, 13); LEDGE block, right; END;
 TILE (1, 14); LEDGE block, down; END;
 
 # Irregular Collision Models
-TILE (0, 7); SOLID edge_s; END;
-TILE (2, 7); SOLID edge_s; END;
-#TILE (5, 3); SOLID doorway; END;
-#TILE (6, 3); SOLID doorway; END;
+SETTILE (0, 6), "entrance_brick_left";
+SETTILE (1, 6), "entrance_brick_mid";
+SETTILE (2, 6), "entrance_brick_right";
+SETTILE (0, 7), "entrance_brick_column_left";
+SETTILE (1, 7), "entrance_brick_light";
+SETTILE (2, 7), "entrance_brick_column_right";
+SETTILE (0, 8), "entrance_column_top_up";
+SETTILE (1, 8), "entrance_brick_light_back";
+SETTILE (2, 8), "entrance_column_top_up";
 
 # Wall Torches
 #TILE (5, 5); SOLID block; SPRITE tile_wall_torch_up; END;
@@ -173,32 +244,34 @@ TILE (2, 7); SOLID edge_s; END;
 #TILE (6, 6); SOLID block; SPRITE tile_wall_torch_right; END;
 
 # Railings 1
-TILE ( 9, 0); HALFSOLID corner_nw; END;
-TILE (10, 0); HALFSOLID edge_n; END;
-TILE (11, 0); HALFSOLID corner_ne; END;
-TILE ( 9, 1); HALFSOLID edge_w; END;
-TILE (11, 1); HALFSOLID edge_e; END;
-TILE ( 9, 2); HALFSOLID corner_sw; END;
-TILE (10, 2); HALFSOLID edge_s; END;
-TILE (11, 2); HALFSOLID corner_se; END;
-TILE ( 7, 2); HALFSOLID inside_corner_nw; END;
-TILE ( 8, 2); HALFSOLID inside_corner_ne; END;
-TILE ( 7, 3); HALFSOLID inside_corner_sw; END;
-TILE ( 8, 3); HALFSOLID inside_corner_se; END;
+SETTILE (9, 0), "floor_railing_outside_nw";
+SETTILE (10, 0), "floor_railing_n";
+SETTILE (11, 0), "floor_railing_outside_ne";
+SETTILE (9, 1), "floor_railing_w";
+SETTILE (10, 1), "railing_square";
+SETTILE (11, 1), "floor_railing_e";
+SETTILE (9, 2), "floor_railing_outside_sw";
+SETTILE (10, 2), "floor_railing_s";
+SETTILE (11, 2), "floor_railing_outside_se";
+SETTILE (7, 2), "floor_railing_inside_se";
+SETTILE (8, 2), "floor_railing_inside_sw";
+SETTILE (7, 3), "floor_railing_inside_ne";
+SETTILE (8, 3), "floor_railing_inside_nw";
 
 # Railings 2
-TILE ( 9, 3); HALFSOLID corner_nw; END;
-TILE (10, 3); HALFSOLID edge_n; END;
-TILE (11, 3); HALFSOLID corner_ne; END;
-TILE ( 9, 4); HALFSOLID edge_w; END;
-TILE (11, 4); HALFSOLID edge_e; END;
-TILE ( 9, 5); HALFSOLID corner_sw; END;
-TILE (10, 5); HALFSOLID edge_s; END;
-TILE (11, 5); HALFSOLID corner_se; END;
-TILE ( 7, 4); HALFSOLID inside_corner_nw; END;
-TILE ( 8, 4); HALFSOLID inside_corner_ne; END;
-TILE ( 7, 5); HALFSOLID inside_corner_sw; END;
-TILE ( 8, 5); HALFSOLID inside_corner_se; END;
+SETTILE (9, 3), "essense_brick_outside_nw";
+SETTILE (10, 3), "essense_brick_n";
+SETTILE (11, 3), "essense_brick_outside_ne";
+SETTILE (9, 4), "essense_brick_w";
+SETTILE (10, 4), "essense_brick";
+SETTILE (11, 4), "essense_brick_e";
+SETTILE (9, 5), "essense_brick_outside_sw";
+SETTILE (10, 5), "essense_brick_s";
+SETTILE (11, 5), "essense_brick_outside_se";
+SETTILE (7, 4), "essense_brick_inside_se";
+SETTILE (8, 4), "essense_brick_inside_sw";
+SETTILE (7, 5), "essense_brick_inside_ne";
+SETTILE (8, 5), "essense_brick_inside_nw";
 
 # Color Blocks
 SETTILE ( 9, 6), "color_block_red";

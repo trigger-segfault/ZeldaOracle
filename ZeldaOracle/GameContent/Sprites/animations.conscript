@@ -175,32 +175,32 @@ SOURCE "zoneset_large";
 	
 # FOUNTAINS
 
-ANIM tile_fountain_path_nw; SUBSTRIP repeat;
-	ADD frame, 1, (10, 14); ADD emptyframe, 1;
-	REPEAT 2, 2;
-	ADD frame, 1, (10, 15); ADD emptyframe, 1;
-	REPEAT 2, 2;
-	REPEAT 12, 3;
-	INSERT strip, 0, 12, 4, (12, 14), (0, 0), -1; END;
-ANIM tile_fountain_path_ne; SUBSTRIP repeat;
-	ADD frame, 1, (11, 14); ADD emptyframe, 1;
-	REPEAT 2, 2;
-	ADD frame, 1, (11, 15); ADD emptyframe, 1;
-	REPEAT 2, 2;
-	REPEAT 12, 3;
-	INSERT strip, 0, 12, 4, (12, 15), (0, 0), -1; END;
-ANIM tile_fountain_path_sw; SUBSTRIP repeat;
-	ADD strip, 12, 4, (12, 16); END;
-ANIM tile_fountain_path_se; SUBSTRIP repeat;
-	ADD strip, 12, 4, (12, 17); END;
-ANIM tile_fountain_dirt_nw; SUBSTRIP repeat;
-	CLONE tile_fountain_path_nw; END;
-ANIM tile_fountain_dirt_ne; SUBSTRIP repeat;
-	CLONE tile_fountain_path_ne; END;
-ANIM tile_fountain_dirt_sw; SUBSTRIP repeat;
-	CLONE tile_fountain_path_sw; END;
-ANIM tile_fountain_dirt_se; SUBSTRIP repeat;
-	CLONE tile_fountain_path_se; END;
+#ANIM tile_fountain_path_nw; SUBSTRIP repeat;
+#	ADD frame, 1, (10, 14); ADD emptyframe, 1;
+#	REPEAT 2, 2;
+#	ADD frame, 1, (10, 15); ADD emptyframe, 1;
+#	REPEAT 2, 2;
+#	REPEAT 12, 3;
+#	INSERT strip, 0, 12, 4, (12, 14), (0, 0), -1; END;
+#ANIM tile_fountain_path_ne; SUBSTRIP repeat;
+#	ADD frame, 1, (11, 14); ADD emptyframe, 1;
+#	REPEAT 2, 2;
+#	ADD frame, 1, (11, 15); ADD emptyframe, 1;
+#	REPEAT 2, 2;
+#	REPEAT 12, 3;
+#	INSERT strip, 0, 12, 4, (12, 15), (0, 0), -1; END;
+#ANIM tile_fountain_path_sw; SUBSTRIP repeat;
+#	ADD strip, 12, 4, (12, 16); END;
+#ANIM tile_fountain_path_se; SUBSTRIP repeat;
+#	ADD strip, 12, 4, (12, 17); END;
+#ANIM tile_fountain_dirt_nw; SUBSTRIP repeat;
+#	CLONE tile_fountain_path_nw; END;
+#ANIM tile_fountain_dirt_ne; SUBSTRIP repeat;
+#	CLONE tile_fountain_path_ne; END;
+#ANIM tile_fountain_dirt_sw; SUBSTRIP repeat;
+#	CLONE tile_fountain_path_sw; END;
+#ANIM tile_fountain_dirt_se; SUBSTRIP repeat;
+#	CLONE tile_fountain_path_se; END;
 
 
 #==============================================================

@@ -13,7 +13,7 @@ PALETTEDICTIONARY	"tile_dictionary";
 
 IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
-MAPPEDCOLORS	"present", ("sand", "grave");
+MAPPEDCOLORS	"tiles_default", ("sand", "grave");
 
 SOURCE "temp_sheet_obstacles";
 SPRITESET "set_obstacles", (3, 5);
@@ -24,7 +24,7 @@ SPRITESET "set_obstacles", (3, 5);
 	MULTIPLE BASIC (0, 2), (0, 2), (2, 3); END;
 END;
 
-MAPPEDCOLORS	"present", ("water", "water_vegetation", "poison_bubble");
+MAPPEDCOLORS	"tiles_default", ("water", "water_vegetation", "poison_bubble");
 
 SOURCE "temp_sheet_water_obstacles";
 SPRITESET "set_water_obstacles", (6, 5);

@@ -1,0 +1,125 @@
+﻿
+ZONE "default";
+	NAME "(none)";
+	IMAGEVARIANT "NONE";
+	DEFAULTTILE "ground";
+	PALETTE "tiles_default";
+END;
+
+ZONE "summer";
+	NAME "Summer";
+	IMAGEVARIANT "SUMMER";
+	DEFAULTTILE "ground";
+	PALETTE "present";
+END;
+
+ZONE "forest";
+	NAME "Forest";
+	IMAGEVARIANT "FOREST";
+	DEFAULTTILE "ground";
+	PALETTE "present";
+END;
+
+ZONE "graveyard";
+	NAME "Graveyard";
+	IMAGEVARIANT "GRAVEYARD";
+	DEFAULTTILE "ground";
+	PALETTE "present";
+END;
+
+ZONE "present";
+	NAME "Present";
+	IMAGEVARIANT "PRESENT";
+	DEFAULTTILE "ground";
+	PALETTE "present";
+	SETSTYLE "cliff", "past";
+	SETSTYLE "cliff_railing", "past";
+	SETSTYLE "fancy_tile_1", "overworld_diamond";
+	SETSTYLE "fancy_tile_2", "overworld_brick";
+	SETSTYLE "fancy_tile_3", "square_tiles_1";
+	SETSTYLE "fancy_tile_4", "square_tiles_2";
+	SETSTYLE "fancy_tile_5", "bricks_deep_northwest";
+	SETSTYLE "fancy_tile_6", "overworld_diamond";
+	SETSTYLE "fancy_tile_7", "overworld_brick";
+	SETSTYLE "fancy_tile_8", "square_tiles_1";
+	SETSTYLE "fancy_tile_9", "square_tiles_2";
+	SETSTYLE "fancy_tile_10", "bricks_deep_northwest";
+	SETSTYLE "fence_post", "fancy";
+	SETSTYLE "bridge", "present";
+	SETSTYLE "fountain_jet", "continuous";
+	SETSTYLE "staircase", "natural";
+END;
+
+ZONE "interior";
+	NAME "Interior";
+	IMAGEVARIANT "INTERIOR";
+	DEFAULTTILE "floor";
+	PALETTE "present";
+END;
+
+ZONE "interior_present";
+	NAME "Interior Present";
+	IMAGEVARIANT "INTERIOR_PRESENT";
+	DEFAULTTILE "floor";
+	PALETTE "present";
+END;
+
+ZONE "ages_dungeon_1";
+	NAME "Ages Dungeon 1";
+	IMAGEVARIANT "AGES_DUNGEON_1";
+	DEFAULTTILE "floor";
+	PALETTE "dungeon_ages_1";
+	SETSTYLE "railing", "dungeon";
+	SETSTYLE "floor", "dungeon_spirits_grave";
+	SETSTYLE "staircase", "interior";
+	SETSTYLE "fancy_tile_1", "bright_pattern_7";
+	SETSTYLE "fancy_tile_2", "square_pattern_6";
+	SETSTYLE "fancy_tile_3", "square_pattern_2";
+	SETSTYLE "fancy_tile_4", "bright_pattern_6";
+	SETSTYLE "fancy_tile_5", "square_pattern_4";
+	SETSTYLE "wall_torch", "dungeon";
+	SETSTYLE "button", "flat";
+	SETSTYLE "armos", "floor";
+	SETSTYLE "bush", "inside";
+	SETSTYLE "chest", "flat";
+	SETSTYLE "dirt", "interior";
+	SETSTYLE "ceiling", "light";
+	SETSTYLE "block", "dungeon";
+	SETSTYLE "cracked_floor", "pattern_1";
+	SETSTYLE "door", "dungeon";
+	SETSTYLE "hole", "normal";
+	SETSTYLE "lantern", "dungeon";
+	SETSTYLE "magnet_stone", "normal";
+	SETSTYLE "pot", "normal";
+	SETSTYLE "switch_rock", "normal";
+	SETSTYLE "sign", "normal";
+	SETSTYLE "stairs", "dungeon";
+	SETSTYLE "tunnel", "tunnel_4";
+	SETSTYLE "water", "interior";
+END;
+
+ZONE "ages_dungeon_4";
+	CLONE "ages_dungeon_1";
+	NAME "Ages Dungeon 4";
+	IMAGEVARIANT "AGES_DUNGEON_4";
+	DEFAULTTILE "floor";
+	PALETTE "dungeon_ages_1";
+END;
+
+ZONE "sidescroll_ages_dungeon_1";
+	CLONE "ages_dungeon_1";
+	NAME "Sidescroll Ages Dungeon 1";
+	IMAGEVARIANT "AGES_DUNGEON_1";
+	DEFAULTTILE "floor";
+	PALETTE "dungeon_ages_1";
+	SIDESCROLLING true;
+END;
+
+ZONE "underwater_present";
+	NAME "Underwater Present";
+	IMAGEVARIANT "UNDERWATER_PRESENT";
+	DEFAULTTILE "ground";
+	PALETTE "present";
+	UNDERWATER true;
+END;
+	

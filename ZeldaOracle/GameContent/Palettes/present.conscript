@@ -6,10 +6,9 @@ CLONE	"tiles_default";
 # Structure
 #==============================================================
 
-LOOKUP	floor, all			cliff, all;
-LOOKUP	wall, all			cliff, all;
-LOOKUP	wall_alt, all			cliff, all;
-LOOKUP	ceiling, all		cliff, light;
+#LOOKUP	floor, all			cliff, all;
+#LOOKUP	wall, all			cliff, all;
+#LOOKUP	wall_alt, all		cliff, all;
 
 COLOR	stairs, light		(248,208,136);
 COLOR	stairs, medium		(232,  8, 24);
@@ -18,12 +17,12 @@ COLOR	stairs, dark		(104,  8, 40);
 LOOKUP	floor_staircase, all	cliff, all;
 LOOKUP	wall_staircase, all		cliff, all;
 
-COLOR	railings, light		(248,248,192);
-COLOR	railings, medium	( 32,176,248);
-COLOR	railings, dark		(  0, 80,176);
+COLOR	railing, light		(248,248,192);
+COLOR	railing, medium		( 32,176,248);
+COLOR	railing, dark		(  0, 80,176);
 
-LOOKUP	torch_base, all		railings, all;
-LOOKUP	torch_light, all	chest, all;
+LOOKUP	wall_torch_base, all		railing, all;
+LOOKUP	wall_torch_light, all	chest, all;
 
 LOOKUP	statue, all			water, all;
 LOOKUP	statue_alt, all		grave, all;
@@ -31,6 +30,9 @@ LOOKUP	statue_alt, all		grave, all;
 LOOKUP	eye_statue, all			statue, all;
 LOOKUP	essense_statue, all		statue, all;
 LOOKUP	plaque, all				statue, all;
+
+LOOKUP	tiled, all			cliff, all;
+LOOKUP	tiled_alt, all		grave, all;
 
 #==============================================================
 # Objects
@@ -65,12 +67,10 @@ LOOKUP	armos, all				cliff, all;
 LOOKUP	armos_alt, all			grave, all;
 LOOKUP	dirt_pile, all			cliff, all;
 
+#LOOKUP	bush, all				grass_field, all;
+#LOOKUP	bush_asobject, all		bush, all;
+#COLOR	bush_asobject, light	(0, 0, 0, 0);
 
-LOOKUP	bush, all				grass_field, all;
-LOOKUP	bush_asobject, all		bush, all;
-COLOR	bush_asobject, light	(0, 0, 0, 0);
-
-LOOKUP	regrowable_bush, all		bush, all;
 LOOKUP	grass, all				grass_field, all;
 LOOKUP	leaves, all				grass_field, all;
 
@@ -220,8 +220,15 @@ LOOKUP	snow_entrance, dark		snow, black;
 
 LOOKUP	jump_flower, all		grass_field, all;
 
-LOOKUP	thicK_brush, all		grass_field, all;
+LOOKUP	thick_brush, all		grass_field, all;
 LOOKUP	hedges, all				grass_field, all;
+
+#==============================================================
+# Interior
+#==============================================================
+
+LOOKUP	shop_side_railing, all	grass_field, all;
+LOOKUP	shop_front_railing, all	water, all;
 
 #==============================================================
 # Town
@@ -234,20 +241,21 @@ LOOKUP	witch_hut, all			stairs, all;
 #==============================================================
 
 LOOKUP	entrance_column, all	cliff, all;
-LOOKUP	entrance_brick, all		cliff, all;
-LOOKUP	entrance_tile, all		cliff, all;
-LOOKUP	essense_brick, all		cliff, all;
-LOOKUP	essense_tile, all		cliff, all;
+LOOKUP	entrance_brick, all		water, all;
+LOOKUP	entrance_tile, all		stairs, all;
+LOOKUP	essense_brick, all		stairs, all;
+LOOKUP	essense_tile, all		water, all;
+LOOKUP	entrance_light, all		water, all;
 
-LOOKUP	fancy_tile_1, all		pot, all;
-LOOKUP	fancy_tile_2, all		railings, all;
-LOOKUP	fancy_tile_3, all		pot, all;
-LOOKUP	fancy_tile_4, all		floor, all;
-LOOKUP	fancy_tile_5, all		door, all;
-LOOKUP	fancy_tile_6, all		dirt_alt, all;
-LOOKUP	fancy_tile_7, all		cliff, all;
-LOOKUP	fancy_tile_8, all		cliff, all;
-LOOKUP	fancy_tile_9, all		cliff, all;
-LOOKUP	fancy_tile_10, all		cliff, all;
+LOOKUP	fancy_tile_1, all		cliff, all;
+LOOKUP	fancy_tile_2, all		cliff, all;
+LOOKUP	fancy_tile_3, all		cliff, all;
+LOOKUP	fancy_tile_4, all		cliff, all;
+LOOKUP	fancy_tile_5, all		cliff, all;
+LOOKUP	fancy_tile_6, all		statue_block, all;
+LOOKUP	fancy_tile_7, all		statue_block, all;
+LOOKUP	fancy_tile_8, all		statue_block, all;
+LOOKUP	fancy_tile_9, all		statue_block, all;
+LOOKUP	fancy_tile_10, all		statue_block, all;
 
 END;
