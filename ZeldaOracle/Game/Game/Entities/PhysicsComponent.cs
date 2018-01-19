@@ -36,7 +36,11 @@ namespace ZeldaOracle.Game.Entities {
 
 
 		CheckRadialCollisions	= 0x80000,
-		OnGroundOverride		= 0x100000,	// If this is set, IsOnGround will be true.
+
+		// This was added for player ladder climbing in a side-scrolling room,
+		// because when climbing a ladder, it is like the player is on the ground
+		// even though he is not.
+		OnGroundOverride		= 0x100000,	// If this is set, IsOnGround will always be true.
 	}
 
 	public enum CollisionBoxType {

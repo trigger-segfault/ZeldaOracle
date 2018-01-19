@@ -149,7 +149,7 @@ namespace ZeldaOracle.Game.Control {
 				ResolveMovementCollisions(entity);
 				
 				// Check the player's side-scrolling ladder collisions.
-				if (roomControl.IsSideScrolling && (entity is Player))
+				if (entity is Player)
 					CheckPlayerLadderClimbing((Player) entity);
 
 				// Set the entity's collision info.
@@ -902,7 +902,11 @@ namespace ZeldaOracle.Game.Control {
 		// Check the player's side-scrolling ladder collisions.
 		private void CheckPlayerLadderClimbing(Player player) {
 			if (!roomControl.IsSideScrolling)
+			{
+				if (player.Movement.IsOnSideScrollLadder)
+					player.Movement.IsOnSideScrollLadder = false;
 				return;
+			}
 
 			bool onLadderPrev = player.Movement.IsOnSideScrollLadder;
 

@@ -257,20 +257,17 @@ namespace ZeldaOracle.Game.Debug {
 				showTileCursor = true;
 			else
 				showTileCursor = false;
-
-			if (ctrl && Mouse.IsButtonPressed(MouseButtons.Left))
-			{
-				//RoomControl.SpawnTile(
-				//monster_beamos
-
-				TileData tileData = new TileData(typeof(TileMonsterBeamos), TileFlags.None);
+			
+			if (ctrl && Mouse.IsButtonPressed(MouseButtons.Left)) {
+				TileData tileData = new TileData(typeof(TileMonsterBeamos),
+					TileFlags.None);
 				tileData.CollisionModel = GameData.MODEL_BLOCK;
 				tileData.SolidType = TileSolidType.Solid;
 				RoomControl.SpawnTile(new TileDataInstance(tileData, 
 					mouseLocation.X, mouseLocation.Y, 2), false);
 			}
 		}
-
+		
 		public static World CreateTestWorld() {
 			// Create the world.
 			World world = new World();
