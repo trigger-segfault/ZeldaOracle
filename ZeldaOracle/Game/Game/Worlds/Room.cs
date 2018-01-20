@@ -384,11 +384,11 @@ namespace ZeldaOracle.Game.Worlds {
 					return zone;
 				return level.Zone;
 			}
-			set {/*
+			set {
 				if (value != null)
 					properties.Set("zone", value.ID);
 				else
-					properties.Set("zone", "");*/
+					properties.Set("zone", "");
 			}
 		}
 

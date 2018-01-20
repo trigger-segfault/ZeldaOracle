@@ -47,7 +47,7 @@ namespace ZeldaOracle.Game.Tiles {
 			base.Draw(g);
 
 			if (flameAnimation != null) {
-				g.DrawISprite(flameAnimation, new SpriteDrawSettings((float) GameControl.RoomTicks),
+				g.DrawSprite(flameAnimation, new SpriteDrawSettings((float) GameControl.RoomTicks),
 					Center - new Vector2F(0, 9), Graphics.DepthLayer);
 			}
 		}

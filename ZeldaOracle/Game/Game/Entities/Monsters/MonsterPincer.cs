@@ -146,7 +146,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					Vector2F segmentPosition = holePosition +
 						((position - holePosition) *
 						(i / (GameSettings.MONSTER_PINCER_BODY_SEGMENT_COUNT + 1.0f)));
-					g.DrawISprite(GameData.SPR_MONSTER_PINCER_BODY_SEGMENT,
+					g.DrawSprite(GameData.SPR_MONSTER_PINCER_BODY_SEGMENT,
 						segmentPosition, Graphics.DepthLayer);
 				}
 			}

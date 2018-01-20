@@ -121,7 +121,7 @@ namespace ZeldaOracle.Game.Tiles {
 						
 			// Draw the tile's as-object sprite.
 			if (tile.IsMoving && tile.SpriteAsObject != null) {
-				g.DrawISprite(tile.SpriteAsObject, new SpriteDrawSettings(imageVariant,
+				g.DrawSprite(tile.SpriteAsObject, new SpriteDrawSettings(imageVariant,
 					tile.RoomControl.GameControl.RoomTicks),
 					drawPosition, depthLayer, tile.Position);
 			}
@@ -157,7 +157,7 @@ namespace ZeldaOracle.Game.Tiles {
 					absoluteDrawPosition : tile.Position);
 				drawPosition += (raisedDrawOffset + drawOffset);
 
-				g.DrawISprite(tile.TileData.TileData.SpriteAbove,
+				g.DrawSprite(tile.TileData.TileData.SpriteAbove,
 					new SpriteDrawSettings(imageVariant,
 						tile.RoomControl.GameControl.RoomTicks),
 						drawPosition, DepthLayer.TileAbove, tile.Position);

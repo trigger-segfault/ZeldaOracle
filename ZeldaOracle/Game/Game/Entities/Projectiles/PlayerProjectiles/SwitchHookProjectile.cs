@@ -226,7 +226,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			int linkIndex = (GameControl.RoomTicks % 3) + 1;
 			float percent = (linkIndex / 4.0f);
 			Vector2F linkPos = Vector2F.Lerp(hookStartPos, position, percent);
-			g.DrawISprite(GameData.SPR_SWITCH_HOOK_LINK,
+			g.DrawSprite(GameData.SPR_SWITCH_HOOK_LINK,
 				linkPos - new Vector2F(0, zPosition), Graphics.DepthLayer);
 
 			// Draw collectible over hook.

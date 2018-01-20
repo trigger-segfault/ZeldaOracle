@@ -123,6 +123,13 @@ namespace ZeldaOracle.Game.Debug {
 				ChangeRooms(Directions.Right);
 			if (ctrl && shift && Keyboard.IsKeyPressed(Keys.Left))
 				ChangeRooms(Directions.Left);
+			// Ctrl+Y: Cycle current room's zone
+			if (ctrl && Keyboard.IsKeyPressed(Keys.Y)) {
+				List<string> zoneNames = Resources.GetResourceKeyList<Zone>();
+				int index = zoneNames.IndexOf(RoomControl.Room.Zone.ID);
+				index = (index + 1) % zoneNames.Count;
+				RoomControl.Room.Zone = Resources.GetResource<Zone>(zoneNames[index]);
+			}
 
 			// L: Level-up item in menu
 			if (Keyboard.IsKeyPressed(Keys.L)) {

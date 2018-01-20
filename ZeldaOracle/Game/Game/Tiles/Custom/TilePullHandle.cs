@@ -146,7 +146,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 				for (float length = 0.0f; length < extendDistance; length += GameSettings.TILE_SIZE) {
 					Vector2F drawPos = Position - Offset + (Directions.ToVector(direction) * (length + 8.0f));
-					g.DrawISprite(spr, drawPos, DepthLayer.TileLayer1);
+					g.DrawSprite(spr, drawPos, DepthLayer.TileLayer1);
 				}
 			}
 			

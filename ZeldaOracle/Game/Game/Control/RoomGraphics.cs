@@ -168,28 +168,28 @@ namespace ZeldaOracle.Game.Entities {
 		// Draw an animation player.
 		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, int imageVariant, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
 
-			DrawISprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(imageVariant, animationPlayer.PlaybackTime), position, depth, depthOrigin);
+			DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(imageVariant, animationPlayer.PlaybackTime), position, depth, depthOrigin);
 		}
 
 		// Draw an animation player at the given time.
 		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, int imageVariant, float time, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
 
-			DrawISprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(imageVariant, time), position, depth, depthOrigin);
+			DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(imageVariant, time), position, depth, depthOrigin);
 		}
 
-		public void DrawISprite(ISprite sprite, Vector2F position, DepthLayer depth) {
-			DrawISprite(sprite, SpriteDrawSettings.Default, position, depth, Vector2F.Zero);
+		public void DrawSprite(ISprite sprite, Vector2F position, DepthLayer depth) {
+			DrawSprite(sprite, SpriteDrawSettings.Default, position, depth, Vector2F.Zero);
 		}
 
-		public void DrawISprite(ISprite sprite, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
-			DrawISprite(sprite, SpriteDrawSettings.Default, position, depth, depthOrigin);
+		public void DrawSprite(ISprite sprite, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+			DrawSprite(sprite, SpriteDrawSettings.Default, position, depth, depthOrigin);
 		}
 
-		public void DrawISprite(ISprite sprite, SpriteDrawSettings settings, Vector2F position, DepthLayer depth) {
-			DrawISprite(sprite, settings, position, depth, Vector2F.Zero);
+		public void DrawSprite(ISprite sprite, SpriteDrawSettings settings, Vector2F position, DepthLayer depth) {
+			DrawSprite(sprite, settings, position, depth, Vector2F.Zero);
 		}
 
-		public void DrawISprite(ISprite sprite, SpriteDrawSettings settings, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+		public void DrawSprite(ISprite sprite, SpriteDrawSettings settings, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
 			if (sprite == null)
 				return;
 
