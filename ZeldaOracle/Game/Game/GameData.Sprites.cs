@@ -60,6 +60,8 @@ namespace ZeldaOracle.Game {
 		public static ISprite SPR_MINECART_HORIZONTAL;
 		
 		// Monsters
+		public static ISprite SPR_MONSTER_MINI_MOLDORM_BODY_SEGMENT_LARGE;
+		public static ISprite SPR_MONSTER_MINI_MOLDORM_BODY_SEGMENT_SMALL;
 		public static ISprite SPR_MONSTER_PINCER_BODY_SEGMENT;
 
 		// Object tiles

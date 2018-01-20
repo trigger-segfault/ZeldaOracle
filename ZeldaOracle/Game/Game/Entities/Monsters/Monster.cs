@@ -272,10 +272,22 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		
 		public void ChooseImageVariant() {
 			switch (color) {
-				case MonsterColor.Red:		Graphics.ImageVariant = GameData.VARIANT_RED;		break;
-				case MonsterColor.Blue:		Graphics.ImageVariant = GameData.VARIANT_BLUE;		break;
-				case MonsterColor.Green:	Graphics.ImageVariant = GameData.VARIANT_GREEN;		break;
-				case MonsterColor.Orange:	Graphics.ImageVariant = GameData.VARIANT_ORANGE;	break;
+				case MonsterColor.Red:
+					Graphics.ImageVariant = GameData.VARIANT_RED;
+					Graphics.ColorDefinitions.SetAll("red");
+					break;
+				case MonsterColor.Blue:
+					Graphics.ImageVariant = GameData.VARIANT_BLUE;
+					Graphics.ColorDefinitions.SetAll("blue");
+					break;
+				case MonsterColor.Green:
+					Graphics.ImageVariant = GameData.VARIANT_GREEN;
+					Graphics.ColorDefinitions.SetAll("green");
+					break;
+				case MonsterColor.Orange:
+					Graphics.ImageVariant = GameData.VARIANT_ORANGE;
+					Graphics.ColorDefinitions.SetAll("orange");
+					break;
 			}
 		}
 

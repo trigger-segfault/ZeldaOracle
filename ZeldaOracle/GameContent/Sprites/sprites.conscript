@@ -31,6 +31,7 @@ LOAD "Tiles/SideScrolling/sidescrolling.conscript", false;
 LOAD "Tiles/color_cube.conscript" ,false;
 LOAD "Tiles/tile_previews.conscript", false;
 LOAD "Units/units.conscript", false;
+LOAD "Units/Monsters/monsters.conscript", false;
 #LOAD "Units/Player/player.conscript" false;
 
 #==============================================================
@@ -60,12 +61,8 @@ SPRITESHEET "Tiles/general_tiles",	(16, 16), (1, 1), (18, 18); END;
 SPRITESHEET "Tiles/zoneset_large", "zoneset_new", (16, 16), (1, 1), (18, 18); END;
 SPRITESHEET "Tiles/zoneset_small", "zoneset_new", (8, 8), (1, 1), (18, 341); END;
 
-SPRITESHEET "basic_monsters",			(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET "color_monsters",			(16, 16), (1, 1), (18, 18); END;
-
 SPRITESHEET "Effects/basic_effects",	(16, 16), (1, 1), (0, 0); END;
 SPRITESHEET "Effects/color_effects",	(16, 16), (1, 1), (0, 0); END;
-SPRITESHEET "monster_items" "Units/Monsters/monster_items", (16, 16), (1, 1), (0, 0); END;
 
 SPRITESHEET "npcs",						(16, 16), (1, 1), (18, 18); END;
 
@@ -73,14 +70,7 @@ SPRITESHEET "event_tiles", "Tiles/event_tiles"		(16, 16), (1, 1), (18, 18); END;
 
 #SPRITESHEET "color_cube", "Tiles/color_cube"		(16, 16), (1, 1), (18, 18); END;
 
-#==============================================================
-# Monsters
-#==============================================================
-
-SOURCE "color_monsters";
-
-BASIC monster_pincer_body_segment, (8, 4), (-8, -8); END;
-
+SPRITESHEET "monster_items" "Units/Monsters/monster_items", (16, 16), (1, 1), (0, 0); END;
 
 #==============================================================
 # Player Items

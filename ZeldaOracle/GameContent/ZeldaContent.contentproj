@@ -338,6 +338,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>monster_previews</Name>
     </None>
+    <None Include="Sprites\Units\Monsters\monsters.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>monsters</Name>
+    </None>
     <None Include="Sprites\Units\Player\player.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>player</Name>

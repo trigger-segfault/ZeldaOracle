@@ -35,21 +35,6 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			this.direction = direction;
 		}
 		
-
-		//-----------------------------------------------------------------------------
-		// Internal drawing
-		//-----------------------------------------------------------------------------
-
-		private void DrawRooms(Graphics2D g) {
-			// Determine room draw positions.
-			Point2I panOld = Directions.ToPoint(direction) * (-distance);
-			Point2I panNew = Directions.ToPoint(direction) * (GameSettings.VIEW_SIZE - distance);
-
-			// Draw the old and new rooms.
-			OldRoomControl.DrawRoom(g, new Vector2F(0, 16) + panOld);
-			NewRoomControl.DrawRoom(g, new Vector2F(0, 16) + panNew);
-		}
-
 		
 		//-----------------------------------------------------------------------------
 		// Overridden methods
@@ -108,7 +93,6 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 					isWaitingForView = false;
 					return;
 				}
-				return;
 			}
 
 			// Update HUD.
@@ -134,36 +118,15 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		public override void Draw(Graphics2D g) {
 			Zone zoneOld = OldRoomControl.Room.Zone;
 			Zone zoneNew = NewRoomControl.Room.Zone;
+			
+			// Determine room draw positions.
+			Point2I panOld = Directions.ToPoint(direction) * (-distance);
+			Point2I panNew = Directions.ToPoint(direction) *
+				(GameSettings.VIEW_SIZE - distance);
 
-			if (zoneOld == zoneNew) {
-				// Draw the rooms normally.
-				DrawRooms(g);
-			}
-			else {
-				// Fade between different zones.
-
-				// Switch to the temp render target to draw the new zone.
-				g.End();
-				g.SetRenderTarget(GameData.RenderTargetGameTemp);
-				g.Begin(GameSettings.DRAW_MODE_DEFAULT);
-				OldRoomControl.Room.Zone = zoneNew;
-				DrawRooms(g);
-				OldRoomControl.Room.Zone = zoneOld;
-
-				// Switch to main render target to draw the old zone.
-				g.End();
-				g.SetRenderTarget(GameData.RenderTargetGame);
-				g.Begin(GameSettings.DRAW_MODE_DEFAULT);
-				NewRoomControl.Room.Zone = zoneOld;
-				DrawRooms(g);
-				NewRoomControl.Room.Zone = zoneNew;
-
-				// Draw the temp render target (with the new zone) at an opacity.
-				float opacity = (float) distance / (float) maxDistance;
-				Color color = Color.White * opacity;
-				g.DrawImage(GameData.RenderTargetGameTemp, Vector2F.Zero,
-					Vector2F.Zero, Vector2F.One, 0.0, color);
-			}
+			// Draw the old and new rooms.
+			OldRoomControl.DrawRoom(g, new Vector2F(0, 16) + panOld);
+			NewRoomControl.DrawRoom(g, new Vector2F(0, 16) + panNew);
 			
 			// Draw the HUD.
 			GameControl.HUD.Draw(g, false);

@@ -188,7 +188,7 @@ namespace ZeldaOracle.Game.Entities
 			if (isGrassEffectVisible && entity.Physics.IsEnabled && entity.Physics.IsInGrass) {
 				g.DrawSprite(GameData.ANIM_EFFECT_GRASS,
 					new SpriteDrawSettings((float) grassAnimationTicks), entity.Position +
-					grassDrawOffset, layer, entity.Position);
+					grassDrawOffset, layer, entity.Position + new Vector2F(0, 1));
 			}
 		}
 
@@ -323,6 +323,16 @@ namespace ZeldaOracle.Game.Entities
 		public ColorDefinitions ColorDefinitions {
 			get { return colorDefinitions; }
 			set { colorDefinitions = null; }
+		}
+		
+		public ColorDefinitions ModifiedColorDefinitions {
+			get {
+				// Change color if hurting.
+				if (isHurting && entity.GameControl.RoomTicks % 8 >= 4)
+					return ColorDefinitions.All("hurt");
+				else
+					return colorDefinitions;
+			}
 		}
 	}
 }
