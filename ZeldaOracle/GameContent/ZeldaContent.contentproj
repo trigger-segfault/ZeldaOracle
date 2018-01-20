@@ -122,10 +122,6 @@
       <Name>tile_dictionary</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Palettes\dungeon_ages_1.conscript">
-      <Name>dungeon_ages_1</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Palettes\dungeon_skull_dungeon.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>dungeon_skull_dungeon</Name>
@@ -158,21 +154,21 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>palettes</Name>
     </None>
-    <None Include="Palettes\underwater_present.conscript">
+    <None Include="Palettes\present.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>underwater_present</Name>
+      <Name>present</Name>
     </None>
     <None Include="Palettes\summer.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>summer</Name>
     </None>
-    <None Include="Palettes\present.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>present</Name>
-    </None>
     <None Include="Palettes\tiles_default.conscript">
       <Name>tiles_default</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\underwater_present.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>underwater_present</Name>
     </None>
     <None Include="Sounds\sounds.conscript">
       <Name>sounds</Name>

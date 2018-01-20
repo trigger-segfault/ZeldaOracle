@@ -639,7 +639,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			get { return source as SpriteSet; }
 		}
 
-		/// <summary>The mode of the ISprite script reader.</summary>
+		/// <summary>The mode of the TileData script reader.</summary>
 		private new Modes Mode {
 			get { return (Modes) base.Mode; }
 			set { base.Mode = (int) value; }

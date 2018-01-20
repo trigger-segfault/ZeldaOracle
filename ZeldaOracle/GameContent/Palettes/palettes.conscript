@@ -2,10 +2,9 @@
 
 LOAD "tiles_default.conscript", false;
 LOAD "present.conscript", false;
-LOAD "underwater_present.conscript" false;
-LOAD "summer.conscript" false;
+LOAD "underwater_present.conscript", false;
+LOAD "summer.conscript", false;
 LOAD "interior_present.conscript", false;
-LOAD "dungeon_ages_1.conscript", false;
 LOAD "dungeon_skull_dungeon.conscript", false;
 LOAD "dungeon_spirits_grave.conscript", false;
 

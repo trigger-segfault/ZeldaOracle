@@ -78,7 +78,7 @@ namespace ZeldaOracle.Game.Worlds {
 
 		private List<string>						strings;
 		private List<ResourceInfo<Zone>>			zones;
-		private List<ResourceInfo<ITileset>>		tilesets;
+		private List<ResourceInfo<Tileset>>			tilesets;
 		private List<ResourceInfo<Type>>			tileTypes;
 		private List<ResourceInfo<CollisionModel>>	collisionModels;
 		private List<ResourceInfo<ISprite>>			sprites;
@@ -118,7 +118,7 @@ namespace ZeldaOracle.Game.Worlds {
 			strings			= new List<string>();
 			tileTypes		= new List<ResourceInfo<Type>>();
 			zones			= new List<ResourceInfo<Zone>>();
-			tilesets		= new List<ResourceInfo<ITileset>>();
+			tilesets		= new List<ResourceInfo<Tileset>>();
 			collisionModels	= new List<ResourceInfo<CollisionModel>>();
 			sprites			= new List<ResourceInfo<ISprite>>();
 			animations		= new List<ResourceInfo<Animation>>();
@@ -364,7 +364,7 @@ namespace ZeldaOracle.Game.Worlds {
 				return null;
 			
 			TileDataInstance tile = new TileDataInstance();
-			ITileset tileset = null;
+			Tileset tileset = null;
 			if (tilesetIndex >= 0)
 				tileset = tilesets[tilesetIndex].Resource;
 

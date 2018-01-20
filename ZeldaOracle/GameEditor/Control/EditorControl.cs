@@ -62,7 +62,7 @@ namespace ZeldaEditor.Control {
 		/// modified because a resource was located.</summary>
 		private bool                worldFileLocatedResource;
 		private Level               level;
-		private ITileset            tileset;
+		private Tileset				tileset;
 		private Zone                zone;
 		private RewardManager       rewardManager;
 		private Inventory           inventory;
@@ -101,9 +101,10 @@ namespace ZeldaEditor.Control {
 		private bool            showGrid;
 		private bool            showModified;
 		private bool            highlightMouseTile;
-		private Point2I         selectedRoom;
-		private Point2I         selectedTilesetTile;
-		private BaseTileData    selectedTilesetTileData;
+		private Tileset			selectedTileset;
+		private Point2I			selectedTilesetLocation;
+		private BaseTileData	selectedTileData;
+		private string			tileSearchFilter;
 		private bool            playerPlaceMode;
 		private bool            showEvents;
 
@@ -172,9 +173,10 @@ namespace ZeldaEditor.Control {
 			this.showModified               = false;
 			this.showEvents                 = false;
 			this.highlightMouseTile         = true;
-			this.selectedRoom               = -Point2I.One;
-			this.selectedTilesetTile        = Point2I.Zero;
-			this.selectedTilesetTileData    = null;
+			this.selectedTileset            = null;
+			this.selectedTilesetLocation	= Point2I.Zero;
+			this.selectedTileData			= null;
+			this.tileSearchFilter			= "";
 			this.playerPlaceMode            = false;
 
 		}
@@ -198,9 +200,9 @@ namespace ZeldaEditor.Control {
 			this.ticks          = 0;
 			this.roomSpacing    = 1;
 			this.playAnimations = false;
-			this.tileset        = GameData.TILESET_CLIFFS;
-			this.zone           = GameData.ZONE_PRESENT;
-			this.selectedTilesetTileData = this.tileset.GetTileData(0, 0);
+			this.tileset        = null;
+			this.zone           = GameData.ZONE_DEFAULT;
+			this.selectedTileData = null;// this.tileset.GetTileData(0, 0);
 			this.eventMode      = false;
 
 			GameData.LoadInventory(inventory);
@@ -293,13 +295,15 @@ namespace ZeldaEditor.Control {
 		private void UpdateTilesets() {
 			int index = 0;
 			List<string> tilesets = new List<string>();
-			foreach (var pair in Resources.GetResourceDictionary<ITileset>()) {
+			tilesets.Add("<Tile List>");
+			foreach (var pair in Resources.GetResourceDictionary<Tileset>()) {
 				tilesets.Add(pair.Key);
-				if (pair.Key == tileset.ID)
+				if (tileset != null && pair.Key == tileset.ID)
 					index = tilesets.Count - 1;
 			}
 
 			editorWindow.SetTilesetsItemsSource(tilesets, index);
+			UpdateTileSearch(tileSearchFilter);
 		}
 
 		private void UpdateZones() {
@@ -437,16 +441,22 @@ namespace ZeldaEditor.Control {
 		}
 
 		public void ChangeTileset(string name) {
-			if (Resources.ContainsResource<ITileset>(name))
-				tileset = Resources.GetResource<ITileset>(name);
+			if (name == "<Tile List>") {
+				tileset = null;
+				UpdateTileSearch(tileSearchFilter);
+			}
+			else {
+				if (Resources.ContainsResource<Tileset>(name))
+					tileset = Resources.GetResource<Tileset>(name);
+
+				editorWindow.TileDisplay.UpdateTileset();
+				//editorWindow.TileDisplay.UpdateZone();
+			}
 
 			//if (tileset.SpriteSheet != null) {
 				// Setup zone combo box for the new tileset.
 			//	UpdateZones();
 			//}
-
-			editorWindow.TileDisplay.UpdateTileset();
-			editorWindow.TileDisplay.UpdateZone();
 		}
 
 		public void ChangeZone(string name) {
@@ -454,6 +464,18 @@ namespace ZeldaEditor.Control {
 				zone = Resources.GetResource<Zone>(name);
 				editorWindow.TileDisplay.UpdateZone();
 			}
+		}
+
+		public void UpdateTileSearch(string filter) {
+			tileset = null;
+			tileSearchFilter = filter;
+			List<BaseTileData> filteredTileData = new List<BaseTileData>();
+			foreach (var pair in Resources.GetResourceDictionary<BaseTileData>()) {
+				if (pair.Key.Contains(filter)) {
+					filteredTileData.Add(pair.Value);
+				}
+			}
+			editorWindow.TileDisplay.UpdateTileset(filteredTileData);
 		}
 
 		// Open the properties for the given tile in the property grid.
@@ -533,9 +555,6 @@ namespace ZeldaEditor.Control {
 				tools[currentToolIndex].End();
 
 				currentToolIndex = toolIndex;
-				if (currentToolIndex != 0) {
-					selectedRoom = -Point2I.One;
-				}
 
 				editorWindow.UpdateCurrentTool();
 				tools[currentToolIndex].Begin();
@@ -969,7 +988,7 @@ namespace ZeldaEditor.Control {
 			get { return (world != null && level != null); }
 		}
 
-		public ITileset Tileset {
+		public Tileset Tileset {
 			get { return tileset; }
 		}
 
@@ -994,7 +1013,7 @@ namespace ZeldaEditor.Control {
 		}
 
 		public bool EventMode {
-			get { return (eventMode || (selectedTilesetTileData is EventTileData)); }
+			get { return (eventMode || (selectedTileData is EventTileData)); }
 			set {
 				if (value != eventMode) {
 					eventMode = value;
@@ -1003,26 +1022,26 @@ namespace ZeldaEditor.Control {
 			}
 		}
 
-		public Point2I SelectedRoom {
-			get { return selectedRoom; }
-			set { selectedRoom = value; }
+		public Tileset SelectedTileset {
+			get { return selectedTileset; }
+			set { selectedTileset = value; }
 		}
 
-		public Point2I SelectedTilesetTile {
-			get { return selectedTilesetTile; }
-			set { selectedTilesetTile = value; }
+		public Point2I SelectedTilesetLocation {
+			get { return selectedTilesetLocation; }
+			set { selectedTilesetLocation = value; }
 		}
 
-		public BaseTileData SelectedTilesetTileData {
-			get { return selectedTilesetTileData; }
+		public BaseTileData SelectedTileData {
+			get { return selectedTileData; }
 			set {
-				selectedTilesetTileData = value;
+				selectedTileData = value;
 				editorWindow.TileDisplay.Invalidate();
 			}
 		}
 
 		public bool IsSelectedTileAnEvent {
-			get { return (selectedTilesetTileData is EventTileData); }
+			get { return (selectedTileData is EventTileData); }
 		}
 
 		// Tools ----------------------------------------------------------------------
@@ -1125,7 +1144,7 @@ namespace ZeldaEditor.Control {
 		}
 		
 		public bool ShouldDrawEvents {
-			get { return (showEvents || eventMode || (selectedTilesetTileData is EventTileData) || (tileset is EventTileset)); }
+			get { return (showEvents || eventMode || selectedTileData is EventTileData); }
 		}
 		
 		public bool HighlightMouseTile {

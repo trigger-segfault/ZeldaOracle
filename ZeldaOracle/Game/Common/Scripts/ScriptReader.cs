@@ -346,7 +346,7 @@ namespace ZeldaOracle.Common.Scripts {
 			// Throw an error because the command was not found.
 			if (matchingFormats.Count > 0) {
 				Console.WriteLine(CommandParamParser.ToString(parameters));
-				string msg = "No matching overload found for the command " + commandName + "\n";
+				string msg = "No matching overload found for the command " + commandName + ". Did you forget a semicolon?\n";
 				msg += "Possible overloads include:\n";
 				for (int i = 0; i < matchingFormats.Count; i++) {
 					msg += "  * " + matchingFormats[i];
@@ -356,7 +356,7 @@ namespace ZeldaOracle.Common.Scripts {
 				ThrowCommandParseError(msg);
 			}
 			else {
-				ThrowCommandParseError(commandName + " is not a valid command");
+				ThrowCommandParseError(commandName + " is not a valid command. Did you forget an 'END'?");
 			}
 
 			return false;

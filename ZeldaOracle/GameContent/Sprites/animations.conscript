@@ -18,7 +18,7 @@ ANIMATION "ui_map_cursor_link"; SUBSTRIP repeat;
 # Large Tile Animations
 #==============================================================
 
-SOURCE "zoneset_large";
+#SOURCE "zoneset_large";
 
 #ANIMATION tile_lantern; SUBSTRIP repeat;
 	#ADD strip, 16, 4, (1, 8); END;
@@ -207,7 +207,7 @@ SOURCE "zoneset_large";
 # General Tile Animations
 #==============================================================
 
-SOURCE "general_tiles";
+#SOURCE "general_tiles";
 
 #ANIMATION tile_trampoline_bounce; SUBSTRIP clamp;
 #	ADD frame, 12, (4, 3);
@@ -360,7 +360,7 @@ SOURCE "general_tiles";
 # Small Tile Animations
 #==============================================================
 
-SOURCE "zoneset_small";
+#SOURCE "zoneset_small";
 
 # Flowers
 
@@ -707,7 +707,7 @@ SOURCE "monster_items";
 ANIMATION "projectile_monster_arrow"; SUBSTRIP repeat;
 	ADD frame, 1, (0, 0), (-8, -8);
 	MAKEDYNAMIC 4, (1, 0); END;
-ANIM "projectile_monster_beam";
+ANIMATION "projectile_monster_beam";
 	SUBSTRIP repeat; ADD frame, 1, (1, 3), (-8, -8);
 	SUBSTRIP repeat; ADD frame, 1, (2, 3), (-8, -8);
 	SUBSTRIP repeat; ADD frame, 1, (3, 3), (-8, -8);
@@ -716,7 +716,7 @@ ANIM "projectile_monster_beam";
 	SUBSTRIP repeat; ADD frame, 1, (2, 3), (-8, -8);
 	SUBSTRIP repeat; ADD frame, 1, (3, 3), (-8, -8);
 	SUBSTRIP repeat; ADD frame, 1, (4, 3), (-8, -8); END;
-ANIM "projectile_monster_arrow_crash"; SUBSTRIP reset;
+ANIMATION "projectile_monster_arrow_crash"; SUBSTRIP reset;
 	ADD strip, 6, 4, (0, 0), (-8, -8); END;
 ANIMATION "projectile_monster_spear"; SUBSTRIP repeat;
 	ADD strip, 4, 2, (0, 1), (-8, -8);
@@ -953,15 +953,15 @@ ANIMATION "monster_shrouded_stalfos"; SUBSTRIP repeat;
 ANIMATION "monster_arm_mimic"; SUBSTRIP repeat;
 	ADD strip, 8, 2, (8, 2);
 	MAKEDYNAMIC 4, (2, 0); END;
-ANIM "monster_beamos"; SUBSTRIP repeat;
+ANIMATION "monster_beamos"; SUBSTRIP repeat;
 	ADD frame, 15, (0, 3);
 	MAKEDYNAMIC 8, (1, 0); END;
 ANIMATION "monster_pincer_head"; SUBSTRIP repeat;
 	ADD frame, 8, (0, 4);
 	MAKEDYNAMIC 8, (1, 0); END;
-ANIM "monster_pincer_eyes"; SUBSTRIP repeat;
+ANIMATION "monster_pincer_eyes"; SUBSTRIP repeat;
 	ADD frame, 1, (9, 4); END;
-ANIM "monster_mini_moldorm_head"; SUBSTRIP repeat;
+ANIMATION "monster_mini_moldorm_head"; SUBSTRIP repeat;
 	ADD frame, 8, (0, 5);
 	MAKEDYNAMIC 8, (1, 0); END;
 ANIMATION "monster_iron_mask"; SUBSTRIP repeat;
