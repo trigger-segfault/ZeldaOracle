@@ -33,15 +33,19 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.IsStateControlled			= true;
 			player.IsPassable					= true;
 			player.Physics.CollideWithWorld		= false;
+			player.Physics.CollideWithEntities	= false;
 			player.Physics.MovesWithPlatforms	= false;
 			player.Physics.HasGravity			= false;
+			player.KnockbackVelocity			= Vector2F.Zero;
 			player.Movement.StopMotion();
+			player.Physics.ZVelocity = 0.0f;
 		}
 		
 		public override void OnEnd(PlayerState newState) {
 			player.IsStateControlled			= false;
 			player.IsPassable					= false;
 			player.Physics.CollideWithWorld		= true;
+			player.Physics.CollideWithEntities	= true;
 			player.Physics.MovesWithPlatforms	= true;
 			player.Physics.HasGravity			= true;
 		}

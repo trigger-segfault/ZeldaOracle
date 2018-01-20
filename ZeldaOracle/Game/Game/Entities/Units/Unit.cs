@@ -322,6 +322,11 @@ namespace ZeldaOracle.Game.Entities.Units {
 			get { return (health == healthMax); }
 		}
 
+		public Vector2F KnockbackVelocity {
+			get { return knockbackVelocity; }
+			set { knockbackVelocity = value; }
+		}
+
 		public bool IsKnockbackable {
 			get { return isKnockbackable; }
 			set { isKnockbackable = value; }

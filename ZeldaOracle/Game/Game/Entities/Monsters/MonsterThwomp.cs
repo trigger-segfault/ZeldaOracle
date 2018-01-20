@@ -30,11 +30,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			Physics.HasGravity = false;
 
-			centerOffset = Point2I.Zero;
-			Graphics.DrawOffset = new Point2I(-8, -8);
-			Physics.CollisionBox = new Rectangle2F(-8, -8, 32, 32);
-			Physics.SoftCollisionBox = Physics.CollisionBox.Inflated(-2, -2);
-			Physics.IsSolid = true;
+			centerOffset				= Point2I.Zero;
+			Graphics.DrawOffset			= new Point2I(-8, -8);
+			Physics.CollisionBox		= new Rectangle2F(-8, -8, 32, 32);
+			Physics.SoftCollisionBox	= new Rectangle2F(-8, -8, 32, 32).Inflated(-2, -2);
+			Physics.IsSolid				= true;
 
 			// Interactions (Tools)
 			SetReaction(InteractionType.Sword,			SenderReactions.Bump, Reactions.ClingEffect);
