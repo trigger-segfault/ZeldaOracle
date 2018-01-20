@@ -407,6 +407,7 @@
     <Compile Include="Game\GameStates\StateDummy.cs" />
     <Compile Include="Game\GameStates\Transitions\MenuTransitionPush.cs" />
     <Compile Include="Game\GameStates\Transitions\RoomEnterExitState.cs" />
+    <Compile Include="Game\GameStates\Transitions\RoomTransitionInstant.cs" />
     <Compile Include="Game\GameStates\Transitions\RoomTransitionSplit.cs" />
     <Compile Include="Game\GameStates\Transitions\RoomTransitionFade.cs" />
     <Compile Include="Game\GameStates\Transitions\TransitionFade.cs" />

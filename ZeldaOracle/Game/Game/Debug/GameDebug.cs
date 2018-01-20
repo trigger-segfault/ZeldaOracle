@@ -114,6 +114,16 @@ namespace ZeldaOracle.Game.Debug {
 			if (ctrl && Keyboard.IsKeyPressed(Keys.U))
 				RoomControl.IsUnderwater = !RoomControl.IsUnderwater;
 
+			// Ctrl+Shift+Arrows: Instantly change rooms.
+			if (ctrl && shift && Keyboard.IsKeyPressed(Keys.Up))
+				ChangeRooms(Directions.Up);
+			if (ctrl && shift && Keyboard.IsKeyPressed(Keys.Down))
+				ChangeRooms(Directions.Down);
+			if (ctrl && shift && Keyboard.IsKeyPressed(Keys.Right))
+				ChangeRooms(Directions.Right);
+			if (ctrl && shift && Keyboard.IsKeyPressed(Keys.Left))
+				ChangeRooms(Directions.Left);
+
 			// L: Level-up item in menu
 			if (Keyboard.IsKeyPressed(Keys.L)) {
 				if (GameManager.CurrentGameState is InventoryMenu) {
@@ -268,6 +278,17 @@ namespace ZeldaOracle.Game.Debug {
 			}
 		}
 		
+		private static void ChangeRooms(int direction) {
+
+			Point2I roomLocation = RoomControl.RoomLocation;
+			Point2I adjacentRoomLocation = roomLocation + Directions.ToPoint(direction);
+			if (RoomControl.Level.ContainsRoom(adjacentRoomLocation))
+			{
+				Room adjacentRoom = RoomControl.Level.GetRoomAt(adjacentRoomLocation);
+				RoomControl.TransitionToRoom(adjacentRoom, new RoomTransitionInstant());
+			}
+		}
+
 		public static World CreateTestWorld() {
 			// Create the world.
 			World world = new World();
