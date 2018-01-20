@@ -38,3 +38,8 @@ MONSTER "monster_zol_green",			"monster_zol",					MonsterZolGreen,		green;	END;
 MONSTER "monster_thwomp",				"monster_thwomp",				MonsterThwomp,			blue;	PREVIEW "preview_monster_thwomp"; SIZE (2, 2); END;
 MONSTER "monster_thwimp",				"monster_thwimp",				MonsterThwomp,			blue;	END;
 MONSTER "monster_buzz_blob",			"monster_buzz_blob",			MonsterBuzzBlob,		green;	END;
+
+TILE "monster_beamos";
+	SOLID		block;
+	FLAGS		AbsorbSeeds;
+END;
