@@ -279,6 +279,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			}
 		}
 
+		protected void FacePlayer() {
+			Vector2F lookVector = RoomControl.Player.Center - Center;
+			direction = Directions.NearestFromVector(lookVector);
+		}
+		
 		
 		//-----------------------------------------------------------------------------
 		// Overridden Methods

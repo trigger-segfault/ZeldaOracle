@@ -303,6 +303,7 @@
     <Compile Include="Game\Entities\Monsters\JumpMonsters\MonsterZolGreen.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterBuzzBlob.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterBeetle.cs" />
+    <Compile Include="Game\Entities\Monsters\MonsterLeever.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterHardhatBeetle.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterPincer.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterThwomp.cs" />
