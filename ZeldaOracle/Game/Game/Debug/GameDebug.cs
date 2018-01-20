@@ -127,8 +127,13 @@ namespace ZeldaOracle.Game.Debug {
 			if (ctrl && Keyboard.IsKeyPressed(Keys.Y)) {
 				List<string> zoneNames = Resources.GetResourceKeyList<Zone>();
 				int index = zoneNames.IndexOf(RoomControl.Room.Zone.ID);
-				index = (index + 1) % zoneNames.Count;
+				if (shift)
+					index = (index + zoneNames.Count - 1) % zoneNames.Count;
+				else
+					index = (index + 1) % zoneNames.Count;
 				RoomControl.Room.Zone = Resources.GetResource<Zone>(zoneNames[index]);
+				GameData.PaletteShader.TilePalette = RoomControl.Zone.Palette;
+				Console.WriteLine("Changed to zone '" + RoomControl.Zone.ID + "'");
 			}
 
 			// L: Level-up item in menu
@@ -278,7 +283,7 @@ namespace ZeldaOracle.Game.Debug {
 			if (ctrl && Mouse.IsButtonPressed(MouseButtons.Left)) {
 				Vector2F spawnPosition = mouseLocation * GameSettings.TILE_SIZE;
 				spawnPosition += new Vector2F(8, 8);
-				RoomControl.SpawnEntity(new MonsterLeever(), spawnPosition);
+				RoomControl.SpawnEntity(new MonsterBuzzBlob(), spawnPosition);
 
 				//TileData tileData = new TileData(typeof(TileMonsterBeamos),
 				//	TileFlags.None);

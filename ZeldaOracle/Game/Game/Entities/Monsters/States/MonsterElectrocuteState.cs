@@ -44,6 +44,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 
 		public override void OnEnd(MonsterState newState) {
 			monster.Graphics.PlayAnimation(resumeAnimation);
+			GameData.PaletteShader.TilePalette = monster.RoomControl.Zone.Palette;
 			//monster.EnablePhysics();
 		}
 
@@ -56,14 +57,17 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 			// There are 3 screen flashes.
 			if (timer >= 5) {
 				int flashIndex = ((timer - 5) / 8);
-
+				
 				if (flashIndex % 2 == 0 && flashIndex <= 4) {
-					if (GRandom.NextBool()) {
+					GameData.PaletteShader.TilePalette = GameData.PAL_TILES_ELECTROCUTED;
+					//if (GRandom.NextBool()) {
 						monster.RoomControl.ViewControl.ShakeOffset = new Vector2F(
 							(float) GRandom.NextInt(-2, 2),
 							(float) GRandom.NextInt(-2, 2));
-					}
+					//}
 				}
+				else
+					GameData.PaletteShader.TilePalette = monster.RoomControl.Zone.Palette;
 			}
 
 			if (timer == freezePlayerDuration) {
