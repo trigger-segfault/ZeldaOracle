@@ -44,22 +44,25 @@ namespace ZeldaOracle.Game {
 		// Sprites
 		//-----------------------------------------------------------------------------
 
-		// Effects.
+		// Effects
 		public static ISprite SPR_SHADOW;
 
-		// Special Background tiles.
+		// Special Background tiles
 		public static ISprite SPR_TILE_DEFAULT;	// The default ground background tile.
 		public static ISprite SPR_TILE_DUG;		// A hole in the ground created by a shovel.
 	
-		// Player sprites.
+		// Player sprites
 		public static ISprite SPR_PLAYER_FORWARD;
 
-		// Entities.
+		// Entities
 		public static ISprite SPR_SWITCH_HOOK_LINK;
 		public static ISprite SPR_MINECART_VERTICAL;
 		public static ISprite SPR_MINECART_HORIZONTAL;
+		
+		// Monsters
+		public static ISprite SPR_MONSTER_PINCER_BODY_SEGMENT;
 
-		// Object tiles.
+		// Object tiles
 		public static ISprite SPR_TILE_BUSH;
 		public static ISprite SPR_TILE_BUSH_ASOBJECT;
 		public static ISprite SPR_TILE_CRYSTAL;
@@ -134,7 +137,7 @@ namespace ZeldaOracle.Game {
 
 		public static ISprite[] SPR_COLOR_CUBE_ORIENTATIONS;
 
-		// Item Icons.
+		// Item Icons
 		public static ISprite SPR_ITEM_SEED_EMBER;
 		public static ISprite SPR_ITEM_SEED_SCENT;
 		public static ISprite SPR_ITEM_SEED_PEGASUS;
@@ -193,7 +196,7 @@ namespace ZeldaOracle.Game {
 		public static ISprite SPR_ITEM_ICON_ESSENCE_7;
 		public static ISprite SPR_ITEM_ICON_ESSENCE_8;
 
-		// Reward Icons.
+		// Reward Icons
 		public static ISprite SPR_REWARD_RUPEE_SMALL_GREEN;
 		public static ISprite SPR_REWARD_RUPEE_SMALL_RED;
 		public static ISprite SPR_REWARD_RUPEE_SMALL_BLUE;
@@ -216,7 +219,7 @@ namespace ZeldaOracle.Game {
 		public static ISprite SPR_REWARD_MAP;
 		public static ISprite SPR_REWARD_COMPASS;
 	
-		// HUD Sprites.
+		// HUD Sprites
 		public static ISprite SPR_HUD_BACKGROUND;
 		public static ISprite SPR_HUD_BRACKET_LEFT;
 		public static ISprite SPR_HUD_BRACKET_LEFT_A;
@@ -277,7 +280,7 @@ namespace ZeldaOracle.Game {
 		public static ISprite SPR_UI_MAP_ROOM_DOWN_LEFT_UP;
 		public static ISprite SPR_UI_MAP_ROOM_DOWN_LEFT_UP_RIGHT;
 
-		// Event tiles.
+		// Event tiles
 		public static ISprite SPR_EVENT_TILE_WARP_STAIRS;
 		public static ISprite SPR_EVENT_TILE_WARP_TUNNEL;
 		public static ISprite SPR_EVENT_TILE_WARP_ENTRANCE;

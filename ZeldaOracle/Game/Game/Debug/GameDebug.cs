@@ -269,12 +269,16 @@ namespace ZeldaOracle.Game.Debug {
 				showTileCursor = false;
 			
 			if (ctrl && Mouse.IsButtonPressed(MouseButtons.Left)) {
-				TileData tileData = new TileData(typeof(TileMonsterBeamos),
-					TileFlags.None);
-				tileData.CollisionModel = GameData.MODEL_BLOCK;
-				tileData.SolidType = TileSolidType.Solid;
-				RoomControl.SpawnTile(new TileDataInstance(tileData, 
-					mouseLocation.X, mouseLocation.Y, 2), false);
+				Vector2F spawnPosition = mouseLocation * GameSettings.TILE_SIZE;
+				spawnPosition += new Vector2F(8, 8);
+				RoomControl.SpawnEntity(new MonsterPincer(), spawnPosition);
+
+				//TileData tileData = new TileData(typeof(TileMonsterBeamos),
+				//	TileFlags.None);
+				//tileData.CollisionModel = GameData.MODEL_BLOCK;
+				//tileData.SolidType = TileSolidType.Solid;
+				//RoomControl.SpawnTile(new TileDataInstance(tileData, 
+				//	mouseLocation.X, mouseLocation.Y, 2), false);
 			}
 		}
 		

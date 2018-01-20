@@ -65,6 +65,14 @@ SPRITESHEET "event_tiles", "Tiles/event_tiles"		(16, 16), (1, 1), (18, 18); END;
 
 #SPRITESHEET "color_cube", "Tiles/color_cube"		(16, 16), (1, 1), (18, 18); END;
 
+#==============================================================
+# Monsters
+#==============================================================
+
+SOURCE "color_monsters";
+
+BASIC monster_pincer_body_segment, (8, 4), (-8, -8); END;
+
 
 #==============================================================
 # Player Items

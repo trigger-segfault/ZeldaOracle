@@ -122,6 +122,14 @@ namespace ZeldaOracle.Game {
 		public const int				MONSTER_THWOMP_HIT_WAIT_DURATION		= 46 + 16;
 		public const float				MONSTER_BEAMOS_SHOOT_SPEED				= 8.0f;
 		public const int				MONSTER_BEAMOS_SHOOT_ANGLE_COUNT		= 24;
+		public const float				MONSTER_PINCER_STRIKE_SPEED				= 2.0f;
+		public const float				MONSTER_PINCER_RETURN_SPEED				= 1.0f;
+		public const float				MONSTER_PINCER_STRIKE_DISTANCE			= 32.0f;	// Distance to extend when striking
+		public const float				MONSTER_PINCER_PEEK_RANGE				= 40.0f;	// Min distance to player to start peeking
+		public const int				MONSTER_PINCER_PEEK_DURATION			= 35;		// Peek duration before striking
+		public const int				MONSTER_PINCER_PEEK_DELAY				= 30;		// Delay before can peek again after returning
+		public const int				MONSTER_PINCER_RETURN_DELAY				= 8;		// Delay before return starts after strike completes
+		public const int				MONSTER_PINCER_BODY_SEGMENT_COUNT		= 4;
 
 		// Tiles
 		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.

@@ -959,6 +959,8 @@ ANIM monster_beamos; SUBSTRIP repeat;
 ANIM monster_pincer_head; SUBSTRIP repeat;
 	ADD frame, 8, (0, 4);
 	MAKEDYNAMIC 8, (1, 0); END;
+ANIM monster_pincer_eyes; SUBSTRIP repeat;
+	ADD frame, 1, (9, 4); END;
 ANIM monster_mini_moldorm_head; SUBSTRIP repeat;
 	ADD frame, 8, (0, 5);
 	MAKEDYNAMIC 8, (1, 0); END;
