@@ -166,7 +166,7 @@ namespace ZeldaEditor.WinForms {
 							spr = ((Animation) spr).GetSubstrip(substripIndex);
 						}
 
-						g.DrawISprite(spr, new SpriteDrawSettings(Zone.StyleDefinitions, imageVariantID), drawPos, Color.White);*/
+						g.DrawSprite(spr, new SpriteDrawSettings(Zone.StyleDefinitions, imageVariantID), drawPos, Color.White);*/
 
 						TileDataDrawing.DrawTilePreview(g, tileData, drawPos, Zone);
 					}

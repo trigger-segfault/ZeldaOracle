@@ -61,7 +61,7 @@ namespace ZeldaOracle.Game.Tiles {
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
 			int angle = args.Properties.GetInteger("angle", 0);
-			g.DrawISprite(
+			g.DrawSprite(
 				GameData.ANIM_TILE_SEED_BOUNCER.GetSubstrip(angle),
 				args.SpriteDrawSettings,
 				args.Position,

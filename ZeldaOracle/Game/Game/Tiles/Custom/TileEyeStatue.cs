@@ -67,7 +67,7 @@ namespace ZeldaOracle.Game.Tiles {
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
 			Tile.DrawTileData(g, args);
-			g.DrawISprite(
+			g.DrawSprite(
 					GameData.SPR_TILE_STATUE_EYE,
 					args.SpriteDrawSettings,
 					args.Position,

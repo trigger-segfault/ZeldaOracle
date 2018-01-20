@@ -648,7 +648,7 @@ namespace ZeldaOracle.Game.Tiles {
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
-				g.DrawISprite(
+				g.DrawSprite(
 					sprite,
 					args.SpriteDrawSettings,
 					args.Position,
@@ -664,7 +664,7 @@ namespace ZeldaOracle.Game.Tiles {
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
-				g.DrawISprite(
+				g.DrawSprite(
 					sprite,
 					args.SpriteDrawSettings,
 					args.Position + offset,
@@ -683,7 +683,7 @@ namespace ZeldaOracle.Game.Tiles {
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
-				g.DrawISprite(
+				g.DrawSprite(
 					sprite,
 					args.SpriteDrawSettings,
 					args.Position,
@@ -694,7 +694,7 @@ namespace ZeldaOracle.Game.Tiles {
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public static void DrawTileDataAbove(Graphics2D g, TileDataDrawArgs args) {
 			if (args.Tile.SpriteAbove != null) {
-				g.DrawISprite(
+				g.DrawSprite(
 					args.Tile.SpriteAbove,
 					args.SpriteDrawSettings,
 					args.Position,

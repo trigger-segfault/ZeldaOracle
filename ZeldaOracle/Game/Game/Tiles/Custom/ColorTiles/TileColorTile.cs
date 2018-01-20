@@ -53,7 +53,7 @@ namespace ZeldaOracle.Game.Tiles {
 			else if (tileColor == PuzzleColor.Blue)
 				sprite = GameData.SPR_TILE_COLOR_TILE_BLUE;
 			if (sprite != null) {
-				g.DrawISprite(
+				g.DrawSprite(
 					sprite,
 					args.SpriteDrawSettings,
 					args.Position,

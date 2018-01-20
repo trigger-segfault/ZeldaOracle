@@ -144,11 +144,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				direction = moveAngleIndex;
 		}
 
-		protected void FacePlayer() {
-			Vector2F lookVector = RoomControl.Player.Center - Center;
-			direction = Directions.NearestFromVector(lookVector);
-		}
-
 		protected void StartMoving() {
 			isMoving = true;
 			speed = moveSpeed;

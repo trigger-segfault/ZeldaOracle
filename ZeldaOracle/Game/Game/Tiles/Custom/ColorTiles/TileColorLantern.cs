@@ -69,7 +69,7 @@ namespace ZeldaOracle.Game.Tiles {
 			else if (color == PuzzleColor.Yellow)
 				flameAnimation = GameData.ANIM_EFFECT_COLOR_FLAME_YELLOW;
 			if (flameAnimation != null) {
-				g.DrawISprite(
+				g.DrawSprite(
 					flameAnimation,
 					args.SpriteDrawSettings,
 					args.Position + new Point2I(8, -1),

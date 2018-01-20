@@ -80,7 +80,7 @@ namespace ZeldaOracle.Game.Entities {
 				DrawingInstruction instruction = layerHeads[i];
 
 				while (instruction != null) {
-					g.DrawISprite(instruction.sprite, instruction.settings, instruction.position);
+					g.DrawSprite(instruction.sprite, instruction.settings, instruction.position);
 					instruction = instruction.next;
 				}
 			}

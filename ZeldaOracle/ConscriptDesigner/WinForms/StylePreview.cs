@@ -104,7 +104,7 @@ namespace ConscriptDesigner.WinForms {
 				int x = 1 + column * (spriteSize.X + 1);
 				int y = 1 + row * (spriteSize.Y + 1);
 				settings.Styles.Set(styleGroup, sprite.Name);
-				g.DrawISprite(sprite.Sprite, settings, new Vector2F(x, y) - sprite.Bounds.Point);
+				g.DrawSprite(sprite.Sprite, settings, new Vector2F(x, y) - sprite.Bounds.Point);
 			}
 
 			if (originalStyle != null)

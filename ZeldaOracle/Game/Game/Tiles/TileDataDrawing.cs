@@ -133,7 +133,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		private static void DrawPreview(Graphics2D g, BaseTileData baseTileData, Point2I position, Zone zone, Color color) {
-			g.DrawISprite(
+			g.DrawSprite(
 				baseTileData.PreviewSprite,
 				new SpriteDrawSettings(zone.StyleDefinitions, zone.ImageVariantID, PlaybackTime),
 				position,

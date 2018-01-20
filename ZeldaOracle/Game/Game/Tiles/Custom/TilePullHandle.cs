@@ -170,7 +170,7 @@ namespace ZeldaOracle.Game.Tiles {
 				sprite = GameData.SPR_TILE_PULL_HANDLE_LEFT;
 			else if (direction == Directions.Down)
 				sprite = GameData.SPR_TILE_PULL_HANDLE_DOWN;
-			g.DrawISprite(
+			g.DrawSprite(
 				sprite,
 				args.SpriteDrawSettings,
 				args.Position,

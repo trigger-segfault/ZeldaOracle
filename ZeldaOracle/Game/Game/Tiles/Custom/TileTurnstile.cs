@@ -205,12 +205,12 @@ namespace ZeldaOracle.Game.Tiles {
 				arrowAnimation = GameData.ANIM_TURNSTILE_ARROWS_COUNTERCLOCKWISE;
 				turnstileAnimation = GameData.ANIM_TURNSTILE_ROTATE_COUNTERCLOCKWISE;
 			}
-			g.DrawISprite(
+			g.DrawSprite(
 				arrowAnimation,//.GetSubstrip(clockwise ? 0 : 1),
 				args.SpriteDrawSettings,
 				args.Position,
 				args.Color);
-			g.DrawISprite(
+			g.DrawSprite(
 				turnstileAnimation,//.GetSubstrip(clockwise ? 0 : 1),
 				new SpriteDrawSettings(args.Zone.StyleDefinitions, args.Zone.ImageVariantID, 16f),
 				args.Position,

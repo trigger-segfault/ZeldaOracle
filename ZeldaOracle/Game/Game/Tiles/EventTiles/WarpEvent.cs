@@ -201,7 +201,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			else if (warpType == WarpType.Stairs)
 				sprite = GameData.SPR_EVENT_TILE_WARP_STAIRS;
 			if (sprite != null) {
-				g.DrawISprite(
+				g.DrawSprite(
 					sprite,
 					args.SpriteDrawSettings,
 					args.Position,

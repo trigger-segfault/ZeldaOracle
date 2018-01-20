@@ -306,7 +306,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		// Draw an animation during at the given time stamp and position.
 		public void DrawAnimation(Animation animation, int variantID, float time, float x, float y, float depth = 0.0f) {
-			DrawISprite(animation, new SpriteDrawSettings(variantID, time), new Vector2F(x, y), depth);
+			DrawSprite(animation, new SpriteDrawSettings(variantID, time), new Vector2F(x, y), depth);
 
 			/*if (animation.LoopMode == LoopMode.Repeat) {
 				if (animation.Duration == 0)
@@ -327,11 +327,11 @@ namespace ZeldaOracle.Common.Graphics {
 		}
 
 		public void DrawAnimation(AnimationPlayer animationPlayer, Vector2F position, float depth = 0.0f) {
-			DrawISprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(animationPlayer.PlaybackTime), position, depth);
+			DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(animationPlayer.PlaybackTime), position, depth);
 		}
 
 		public void DrawAnimation(AnimationPlayer animationPlayer, int variantID, Vector2F position, float depth = 0.0f) {
-			DrawISprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(variantID, animationPlayer.PlaybackTime), position, depth);
+			DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(variantID, animationPlayer.PlaybackTime), position, depth);
 		}
 
 
@@ -352,7 +352,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		// Draw an animation during at the given time stamp and position.
 		public void DrawAnimation(Animation animation, int variantID, float time, float x, float y, Color color, float depth = 0.0f) {
-			DrawISprite(animation, new SpriteDrawSettings(variantID, time), new Vector2F(x, y), color, depth);
+			DrawSprite(animation, new SpriteDrawSettings(variantID, time), new Vector2F(x, y), color, depth);
 
 			/*if (animation.LoopMode == LoopMode.Repeat) {
 				if (animation.Duration == 0)
@@ -381,19 +381,19 @@ namespace ZeldaOracle.Common.Graphics {
 		// ISprite drawing
 		//-----------------------------------------------------------------------------
 		
-		public void DrawISprite(ISprite sprite, SpriteDrawSettings settings, float x, float y, float depth = 0.0f) {
-			DrawISprite(sprite, settings, new Vector2F(x, y), Color.White, depth);
+		public void DrawSprite(ISprite sprite, SpriteDrawSettings settings, float x, float y, float depth = 0.0f) {
+			DrawSprite(sprite, settings, new Vector2F(x, y), Color.White, depth);
 		}
 
-		public void DrawISprite(ISprite sprite, SpriteDrawSettings settings, Vector2F position, float depth = 0.0f) {
-			DrawISprite(sprite, settings, position, Color.White, depth);
+		public void DrawSprite(ISprite sprite, SpriteDrawSettings settings, Vector2F position, float depth = 0.0f) {
+			DrawSprite(sprite, settings, position, Color.White, depth);
 		}
 
-		public void DrawISprite(ISprite sprite, SpriteDrawSettings settings, float x, float y, Color color, float depth = 0.0f) {
-			DrawISprite(sprite, settings, new Vector2F(x, y), color, depth);
+		public void DrawSprite(ISprite sprite, SpriteDrawSettings settings, float x, float y, Color color, float depth = 0.0f) {
+			DrawSprite(sprite, settings, new Vector2F(x, y), color, depth);
 		}
 
-		public void DrawISprite(ISprite sprite, SpriteDrawSettings settings, Vector2F position, Color color, float depth = 0.0f) {
+		public void DrawSprite(ISprite sprite, SpriteDrawSettings settings, Vector2F position, Color color, float depth = 0.0f) {
 			if (sprite == null) return;
 			foreach (SpritePart part in sprite.GetParts(settings)) {
 				Image image = part.Image.GetVariant(settings.VariantID);
@@ -404,7 +404,7 @@ namespace ZeldaOracle.Common.Graphics {
 			}
 		}
 		
-		public void DrawISprite(ISprite sprite, SpriteDrawSettings settings, Rectangle2F destination, Color color, float depth = 0.0f) {
+		public void DrawSprite(ISprite sprite, SpriteDrawSettings settings, Rectangle2F destination, Color color, float depth = 0.0f) {
 			if (sprite == null) return;
 			foreach (SpritePart part in sprite.GetParts(settings)) {
 				Image image = part.Image.GetVariant(settings.VariantID);

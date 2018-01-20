@@ -377,7 +377,7 @@ namespace ZeldaOracle.Game.Worlds {
 					if (baseTileData is TileData)
 						tile.TileData = (TileData) baseTileData;
 				}
-				catch (Exception e) { }
+				catch (Exception) { }
 			}
 			else {
 				// Create tile from a TileData resource.

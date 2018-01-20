@@ -97,7 +97,7 @@ namespace ZeldaOracle.Game.Tiles {
 			else
 				animation = GameData.ANIM_TILE_CROSSING_GATE_RAISE;
 			if (animation != null) {
-				g.DrawISprite(
+				g.DrawSprite(
 					animation.GetSubstrip(faceLeft ? 1 : 0),
 					new SpriteDrawSettings(args.Zone.StyleDefinitions, args.Zone.ImageVariantID, 0f),
 					args.Position,

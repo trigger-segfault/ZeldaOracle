@@ -135,7 +135,7 @@ namespace ZeldaOracle.Game.Tiles {
 			case MinecartTrackOrientation.DownRight: sprite = GameData.SPR_TILE_MINECART_TRACK_DOWN_RIGHT; break;
 			}
 			if (sprite != null) {
-				g.DrawISprite(
+				g.DrawSprite(
 					sprite,
 					args.SpriteDrawSettings,
 					args.Position,

@@ -136,7 +136,7 @@ namespace ZeldaEditor.WinForms {
 					delegate { Invalidate(); },
 					System.Windows.Application.Current.Dispatcher);
 			}
-			catch (Exception e) {
+			catch (Exception) {
 				//throw e;
 			}
 		}
@@ -364,163 +364,163 @@ namespace ZeldaEditor.WinForms {
 				return;
 
 			TileDataDrawing.DrawTile(g, tile, position, room.Zone, drawColor);
-			return;
-
-			ISprite sprite = null;
-			float playbackTime = editorControl.Ticks;
-			int substripIndex =  tile.Properties.GetInteger("substrip_index", 0);
 			
-			//-----------------------------------------------------------------------------
-			// Platform.
-			if (tile.Type == typeof(TilePlatform)) {
-				ISprite currentSprite = tile.CurrentSprite;
-				if (currentSprite != null) {
-					// Draw the tile once per point within its size.
-					for (int y = 0; y < tile.Size.Y; y++) {
-						for (int x = 0; x < tile.Size.X; x++) {
-							Point2I drawPos = position +
-								(new Point2I(x, y) * GameSettings.TILE_SIZE);
-							g.DrawISprite(currentSprite,
-								new SpriteDrawSettings(room.Zone.ImageVariantID,
-								editorControl.Ticks), drawPos, drawColor);
-						}
-					}
-				}
-				return;
-			}
-			//-----------------------------------------------------------------------------
-			// Color Jump Pad.
-			else if (tile.Type == typeof(TileColorJumpPad)) {
-				PuzzleColor tileColor = (PuzzleColor)tile.Properties.GetInteger("color", 0);
-				if (tileColor == PuzzleColor.Red)
-					sprite = GameData.SPR_TILE_COLOR_JUMP_PAD_RED;
-				else if (tileColor == PuzzleColor.Yellow)
-					sprite = GameData.SPR_TILE_COLOR_JUMP_PAD_YELLOW;
-				else if (tileColor == PuzzleColor.Blue)
-					sprite = GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE;
-			}
-			//-----------------------------------------------------------------------------
-			// Color Cube
-			else if (tile.Type == typeof(TileColorCube)) {
-				int orientationIndex = tile.Properties.GetInteger("orientation", 0);
-				sprite = GameData.SPR_COLOR_CUBE_ORIENTATIONS[orientationIndex];
-			}
-			//-----------------------------------------------------------------------------
-			// Crossing Gate.
-			else if (tile.Type == typeof(TileCrossingGate)) {
-				if (tile.Properties.GetBoolean("raised", false))
-					sprite = GameData.ANIM_TILE_CROSSING_GATE_LOWER;
-				else
-					sprite = GameData.ANIM_TILE_CROSSING_GATE_RAISE;
-				substripIndex = (tile.Properties.GetBoolean("face_left", false) ? 1 : 0);
-				playbackTime = 0.0f;
-			}
-			//-----------------------------------------------------------------------------
-			// Lantern.
-			else if (tile.Type == typeof(TileLantern)) {
-				if (tile.Properties.GetBoolean("lit", true))
-					sprite = GameData.ANIM_TILE_LANTERN;
-				else
-					sprite = GameData.SPR_TILE_LANTERN_UNLIT;
-			}
-			//-----------------------------------------------------------------------------
-			// Chest.
-			else if (tile.Type == typeof(TileChest)) {
-				bool isLooted = tile.Properties.GetBoolean("looted", false);
-				sprite = tile.SpriteList[isLooted ? 1 : 0];
-			}
-			//-----------------------------------------------------------------------------
-			// Pull Handle.
-			else if (tile.Type == typeof(TilePullHandle)) {
-				int direction = tile.Properties.GetInteger("direction", Directions.Down);
-				if (direction == Directions.Right)
-					sprite = GameData.SPR_TILE_PULL_HANDLE_RIGHT;
-				else if (direction == Directions.Up)
-					sprite = GameData.SPR_TILE_PULL_HANDLE_UP;
-				else if (direction == Directions.Left)
-					sprite = GameData.SPR_TILE_PULL_HANDLE_LEFT;
-				else if (direction == Directions.Down)
-					sprite = GameData.SPR_TILE_PULL_HANDLE_DOWN;
-			}
-			//-----------------------------------------------------------------------------
-			// Minecart Track.
-			else if (tile.Type == typeof(TileMinecartTrack)) {
-				MinecartTrackOrientation orientation = (MinecartTrackOrientation)tile.Properties.GetInteger("track_orientation", 0);
-				switch (orientation) {
-				case MinecartTrackOrientation.Horizontal: sprite = GameData.SPR_TILE_MINECART_TRACK_HORIZONTAL; break;
-				case MinecartTrackOrientation.Vertical: sprite = GameData.SPR_TILE_MINECART_TRACK_VERTICAL; break;
-				case MinecartTrackOrientation.UpRight: sprite = GameData.SPR_TILE_MINECART_TRACK_UP_RIGHT; break;
-				case MinecartTrackOrientation.UpLeft: sprite = GameData.SPR_TILE_MINECART_TRACK_UP_LEFT; break;
-				case MinecartTrackOrientation.DownLeft: sprite = GameData.SPR_TILE_MINECART_TRACK_DOWN_LEFT; break;
-				case MinecartTrackOrientation.DownRight: sprite = GameData.SPR_TILE_MINECART_TRACK_DOWN_RIGHT; break;
-				}
-			}
-			//-----------------------------------------------------------------------------
-			// Color Lantern.
-			/*else if (tile.Type == typeof(TileColorLantern)) {
-				PuzzleColor color = (PuzzleColor) tile.Properties.GetInteger("color", -1);
-				if (color == PuzzleColor.Red)
-					animation = GameData.ANIM_EFFECT_COLOR_FLAME_RED;
-				else if (color == PuzzleColor.Yellow)
-					animation = GameData.ANIM_EFFECT_COLOR_FLAME_YELLOW;
-				else if (color == PuzzleColor.Blue)
-					animation = GameData.ANIM_EFFECT_COLOR_FLAME_BLUE;
-			}*/
-			//-----------------------------------------------------------------------------
+			// Old DrawTile Code:
+			//ISprite sprite = null;
+			//float playbackTime = editorControl.Ticks;
+			//int substripIndex =  tile.Properties.GetInteger("substrip_index", 0);
+			
+			////-----------------------------------------------------------------------------
+			//// Platform.
+			//if (tile.Type == typeof(TilePlatform)) {
+			//	ISprite currentSprite = tile.CurrentSprite;
+			//	if (currentSprite != null) {
+			//		// Draw the tile once per point within its size.
+			//		for (int y = 0; y < tile.Size.Y; y++) {
+			//			for (int x = 0; x < tile.Size.X; x++) {
+			//				Point2I drawPos = position +
+			//					(new Point2I(x, y) * GameSettings.TILE_SIZE);
+			//				g.DrawSprite(currentSprite,
+			//					new SpriteDrawSettings(room.Zone.ImageVariantID,
+			//					editorControl.Ticks), drawPos, drawColor);
+			//			}
+			//		}
+			//	}
+			//	return;
+			//}
+			////-----------------------------------------------------------------------------
+			//// Color Jump Pad.
+			//else if (tile.Type == typeof(TileColorJumpPad)) {
+			//	PuzzleColor tileColor = (PuzzleColor)tile.Properties.GetInteger("color", 0);
+			//	if (tileColor == PuzzleColor.Red)
+			//		sprite = GameData.SPR_TILE_COLOR_JUMP_PAD_RED;
+			//	else if (tileColor == PuzzleColor.Yellow)
+			//		sprite = GameData.SPR_TILE_COLOR_JUMP_PAD_YELLOW;
+			//	else if (tileColor == PuzzleColor.Blue)
+			//		sprite = GameData.SPR_TILE_COLOR_JUMP_PAD_BLUE;
+			//}
+			////-----------------------------------------------------------------------------
+			//// Color Cube
+			//else if (tile.Type == typeof(TileColorCube)) {
+			//	int orientationIndex = tile.Properties.GetInteger("orientation", 0);
+			//	sprite = GameData.SPR_COLOR_CUBE_ORIENTATIONS[orientationIndex];
+			//}
+			////-----------------------------------------------------------------------------
+			//// Crossing Gate.
+			//else if (tile.Type == typeof(TileCrossingGate)) {
+			//	if (tile.Properties.GetBoolean("raised", false))
+			//		sprite = GameData.ANIM_TILE_CROSSING_GATE_LOWER;
+			//	else
+			//		sprite = GameData.ANIM_TILE_CROSSING_GATE_RAISE;
+			//	substripIndex = (tile.Properties.GetBoolean("face_left", false) ? 1 : 0);
+			//	playbackTime = 0.0f;
+			//}
+			////-----------------------------------------------------------------------------
+			//// Lantern.
+			//else if (tile.Type == typeof(TileLantern)) {
+			//	if (tile.Properties.GetBoolean("lit", true))
+			//		sprite = GameData.ANIM_TILE_LANTERN;
+			//	else
+			//		sprite = GameData.SPR_TILE_LANTERN_UNLIT;
+			//}
+			////-----------------------------------------------------------------------------
+			//// Chest.
+			//else if (tile.Type == typeof(TileChest)) {
+			//	bool isLooted = tile.Properties.GetBoolean("looted", false);
+			//	sprite = tile.SpriteList[isLooted ? 1 : 0];
+			//}
+			////-----------------------------------------------------------------------------
+			//// Pull Handle.
+			//else if (tile.Type == typeof(TilePullHandle)) {
+			//	int direction = tile.Properties.GetInteger("direction", Directions.Down);
+			//	if (direction == Directions.Right)
+			//		sprite = GameData.SPR_TILE_PULL_HANDLE_RIGHT;
+			//	else if (direction == Directions.Up)
+			//		sprite = GameData.SPR_TILE_PULL_HANDLE_UP;
+			//	else if (direction == Directions.Left)
+			//		sprite = GameData.SPR_TILE_PULL_HANDLE_LEFT;
+			//	else if (direction == Directions.Down)
+			//		sprite = GameData.SPR_TILE_PULL_HANDLE_DOWN;
+			//}
+			////-----------------------------------------------------------------------------
+			//// Minecart Track.
+			//else if (tile.Type == typeof(TileMinecartTrack)) {
+			//	MinecartTrackOrientation orientation = (MinecartTrackOrientation)tile.Properties.GetInteger("track_orientation", 0);
+			//	switch (orientation) {
+			//	case MinecartTrackOrientation.Horizontal: sprite = GameData.SPR_TILE_MINECART_TRACK_HORIZONTAL; break;
+			//	case MinecartTrackOrientation.Vertical: sprite = GameData.SPR_TILE_MINECART_TRACK_VERTICAL; break;
+			//	case MinecartTrackOrientation.UpRight: sprite = GameData.SPR_TILE_MINECART_TRACK_UP_RIGHT; break;
+			//	case MinecartTrackOrientation.UpLeft: sprite = GameData.SPR_TILE_MINECART_TRACK_UP_LEFT; break;
+			//	case MinecartTrackOrientation.DownLeft: sprite = GameData.SPR_TILE_MINECART_TRACK_DOWN_LEFT; break;
+			//	case MinecartTrackOrientation.DownRight: sprite = GameData.SPR_TILE_MINECART_TRACK_DOWN_RIGHT; break;
+			//	}
+			//}
+			////-----------------------------------------------------------------------------
+			//// Color Lantern.
+			///*else if (tile.Type == typeof(TileColorLantern)) {
+			//	PuzzleColor color = (PuzzleColor) tile.Properties.GetInteger("color", -1);
+			//	if (color == PuzzleColor.Red)
+			//		animation = GameData.ANIM_EFFECT_COLOR_FLAME_RED;
+			//	else if (color == PuzzleColor.Yellow)
+			//		animation = GameData.ANIM_EFFECT_COLOR_FLAME_YELLOW;
+			//	else if (color == PuzzleColor.Blue)
+			//		animation = GameData.ANIM_EFFECT_COLOR_FLAME_BLUE;
+			//}*/
+			////-----------------------------------------------------------------------------
 
-			if (sprite == null) {
-				sprite = tile.CurrentSprite;
-			}
-			/*if (animation == null && sprite == null && tile.CurrentSprite.IsAnimation)
-				animation = tile.CurrentSprite.Animation;
-			if (animation == null && sprite == null && tile.CurrentSprite.IsSprite)
-				sprite = tile.CurrentSprite.Sprite;*/
+			//if (sprite == null) {
+			//	sprite = tile.CurrentSprite;
+			//}
+			///*if (animation == null && sprite == null && tile.CurrentSprite.IsAnimation)
+			//	animation = tile.CurrentSprite.Animation;
+			//if (animation == null && sprite == null && tile.CurrentSprite.IsSprite)
+			//	sprite = tile.CurrentSprite.Sprite;*/
 
-			// Draw the custom sprite/animation
-			if (sprite is Animation) {
-				g.DrawISprite(((Animation) sprite).GetSubstrip(substripIndex),
-					new SpriteDrawSettings(room.Zone.StyleDefinitions, room.Zone.ImageVariantID, playbackTime),
-					position, drawColor);
-			}
-			else if (sprite != null) {
-				g.DrawISprite(sprite, new SpriteDrawSettings(room.Zone.StyleDefinitions,
-					room.Zone.ImageVariantID), position, drawColor);
-			}
+			//// Draw the custom sprite/animation
+			//if (sprite is Animation) {
+			//	g.DrawSprite(((Animation) sprite).GetSubstrip(substripIndex),
+			//		new SpriteDrawSettings(room.Zone.StyleDefinitions, room.Zone.ImageVariantID, playbackTime),
+			//		position, drawColor);
+			//}
+			//else if (sprite != null) {
+			//	g.DrawSprite(sprite, new SpriteDrawSettings(room.Zone.StyleDefinitions,
+			//		room.Zone.ImageVariantID), position, drawColor);
+			//}
 
 
-			//-----------------------------------------------------------------------------
-			// Turnstile arrows.
-			if (tile.Type == typeof(TileTurnstile)) {
-				bool clockwise = tile.Properties.GetBoolean("clockwise", false);
-				Animation arrowAnimation, turnstileAnimation;
-				if (clockwise) {
-					arrowAnimation = GameData.ANIM_TURNSTILE_ARROWS_CLOCKWISE;
-					turnstileAnimation = GameData.ANIM_TURNSTILE_ROTATE_CLOCKWISE;
-				}
-				else {
-					arrowAnimation = GameData.ANIM_TURNSTILE_ARROWS_COUNTERCLOCKWISE;
-					turnstileAnimation = GameData.ANIM_TURNSTILE_ROTATE_COUNTERCLOCKWISE;
-				}
-				g.DrawISprite(arrowAnimation.GetSubstrip(substripIndex),
-					new SpriteDrawSettings(room.Zone.StyleDefinitions, room.Zone.ImageVariantID, playbackTime), position, drawColor);
-				g.DrawISprite(turnstileAnimation.GetSubstrip(clockwise ? 0 : 1),
-					new SpriteDrawSettings(room.Zone.StyleDefinitions,  room.Zone.ImageVariantID, 16f), position, drawColor);
-			}
-			//-----------------------------------------------------------------------------
+			////-----------------------------------------------------------------------------
+			//// Turnstile arrows.
+			//if (tile.Type == typeof(TileTurnstile)) {
+			//	bool clockwise = tile.Properties.GetBoolean("clockwise", false);
+			//	Animation arrowAnimation, turnstileAnimation;
+			//	if (clockwise) {
+			//		arrowAnimation = GameData.ANIM_TURNSTILE_ARROWS_CLOCKWISE;
+			//		turnstileAnimation = GameData.ANIM_TURNSTILE_ROTATE_CLOCKWISE;
+			//	}
+			//	else {
+			//		arrowAnimation = GameData.ANIM_TURNSTILE_ARROWS_COUNTERCLOCKWISE;
+			//		turnstileAnimation = GameData.ANIM_TURNSTILE_ROTATE_COUNTERCLOCKWISE;
+			//	}
+			//	g.DrawSprite(arrowAnimation.GetSubstrip(substripIndex),
+			//		new SpriteDrawSettings(room.Zone.StyleDefinitions, room.Zone.ImageVariantID, playbackTime), position, drawColor);
+			//	g.DrawSprite(turnstileAnimation.GetSubstrip(clockwise ? 0 : 1),
+			//		new SpriteDrawSettings(room.Zone.StyleDefinitions,  room.Zone.ImageVariantID, 16f), position, drawColor);
+			//}
+			////-----------------------------------------------------------------------------
 
-			/*else if (!tile.CurrentSprite.IsNull) {
-				g.DrawAnimation(tile.CurrentSprite,
-					room.Zone.ImageVariantID, editorControl.Ticks, position, drawColor);
-			}*/
+			///*else if (!tile.CurrentSprite.IsNull) {
+			//	g.DrawAnimation(tile.CurrentSprite,
+			//		room.Zone.ImageVariantID, editorControl.Ticks, position, drawColor);
+			//}*/
 
-			// Draw rewards.
-			if (editorControl.ShowRewards && tile.Properties.Contains("reward") &&
-				editorControl.RewardManager.HasReward(tile.Properties.GetString("reward")))
-			{
-				sprite = editorControl.RewardManager.GetReward(tile.Properties.GetString("reward")).Sprite;
-				g.DrawISprite(sprite, new SpriteDrawSettings(room.Zone.StyleDefinitions,
-					(float)editorControl.Ticks), position, drawColor);
-			}
+			//// Draw rewards.
+			//if (editorControl.ShowRewards && tile.Properties.Contains("reward") &&
+			//	editorControl.RewardManager.HasReward(tile.Properties.GetString("reward")))
+			//{
+			//	sprite = editorControl.RewardManager.GetReward(tile.Properties.GetString("reward")).Sprite;
+			//	g.DrawSprite(sprite, new SpriteDrawSettings(room.Zone.StyleDefinitions,
+			//		(float)editorControl.Ticks), position, drawColor);
+			//}
 		}
 
 		// Draw an event tile.
@@ -529,42 +529,42 @@ namespace ZeldaEditor.WinForms {
 				return;
 
 			TileDataDrawing.DrawTile(g, eventTile, position, room.Zone, drawColor);
-			return;
 
-			ISprite sprite = eventTile.CurrentSprite;
-			int imageVariantID = eventTile.Properties.GetInteger("image_variant");
-			if (imageVariantID < 0)
-				imageVariantID = room.Zone.ImageVariantID;
+			// Old DrawEventTile code:
+			//ISprite sprite = eventTile.CurrentSprite;
+			//int imageVariantID = eventTile.Properties.GetInteger("image_variant");
+			//if (imageVariantID < 0)
+			//	imageVariantID = room.Zone.ImageVariantID;
 			
-			// Select different sprites for certain events.
-			if (eventTile.Type == typeof(NPCEvent)) {
-				eventTile.SubStripIndex = eventTile.Properties.GetInteger("direction", 0);
-			}
-			else if (eventTile.Type == typeof(WarpEvent)) {
-				WarpType warpType = eventTile.Properties.GetEnum<WarpType>("warp_type", WarpType.Tunnel);
-				if (warpType == WarpType.Entrance)
-					sprite = GameData.SPR_EVENT_TILE_WARP_ENTRANCE;
-				else if (warpType == WarpType.Tunnel)
-					sprite = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
-				else if (warpType == WarpType.Stairs)
-					sprite = GameData.SPR_EVENT_TILE_WARP_STAIRS;
-			}
+			//// Select different sprites for certain events.
+			//if (eventTile.Type == typeof(NPCEvent)) {
+			//	eventTile.SubStripIndex = eventTile.Properties.GetInteger("direction", 0);
+			//}
+			//else if (eventTile.Type == typeof(WarpEvent)) {
+			//	WarpType warpType = eventTile.Properties.GetEnum<WarpType>("warp_type", WarpType.Tunnel);
+			//	if (warpType == WarpType.Entrance)
+			//		sprite = GameData.SPR_EVENT_TILE_WARP_ENTRANCE;
+			//	else if (warpType == WarpType.Tunnel)
+			//		sprite = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
+			//	else if (warpType == WarpType.Stairs)
+			//		sprite = GameData.SPR_EVENT_TILE_WARP_STAIRS;
+			//}
 
-			// Draw the sprite.
-			if (sprite is Animation) {
-				g.DrawISprite(((Animation) sprite).GetSubstrip(eventTile.SubStripIndex),
-					new SpriteDrawSettings(room.Zone.StyleDefinitions, room.Zone.ImageVariantID,
-					(float) editorControl.Ticks), position, drawColor);
-			}
-			else if (sprite != null) {
-				g.DrawISprite(sprite, new SpriteDrawSettings(
-					room.Zone.StyleDefinitions, imageVariantID, (float) editorControl.Ticks),
-					position, drawColor);
-			}
-			else {
-				Rectangle2I r = new Rectangle2I(position, eventTile.Size * GameSettings.TILE_SIZE);
-				g.FillRectangle(r, Color.Blue);
-			}
+			//// Draw the sprite.
+			//if (sprite is Animation) {
+			//	g.DrawSprite(((Animation) sprite).GetSubstrip(eventTile.SubStripIndex),
+			//		new SpriteDrawSettings(room.Zone.StyleDefinitions, room.Zone.ImageVariantID,
+			//		(float) editorControl.Ticks), position, drawColor);
+			//}
+			//else if (sprite != null) {
+			//	g.DrawSprite(sprite, new SpriteDrawSettings(
+			//		room.Zone.StyleDefinitions, imageVariantID, (float) editorControl.Ticks),
+			//		position, drawColor);
+			//}
+			//else {
+			//	Rectangle2I r = new Rectangle2I(position, eventTile.Size * GameSettings.TILE_SIZE);
+			//	g.FillRectangle(r, Color.Blue);
+			//}
 		}
 		
 		// Draw an entire room.

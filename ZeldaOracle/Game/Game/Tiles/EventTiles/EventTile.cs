@@ -116,7 +116,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 				int imageVariantID = args.Properties.GetInteger("image_variant");
 				if (imageVariantID < 0)
 					imageVariantID = args.Zone.ImageVariantID;
-				g.DrawISprite(
+				g.DrawSprite(
 					sprite,
 					new SpriteDrawSettings(args.Zone.StyleDefinitions, imageVariantID, args.Time),
 					args.Position,
@@ -139,7 +139,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 				int imageVariantID = args.Properties.GetInteger("image_variant");
 				if (imageVariantID < 0)
 					imageVariantID = args.Zone.ImageVariantID;
-				g.DrawISprite(
+				g.DrawSprite(
 					sprite,
 					new SpriteDrawSettings(args.Zone.StyleDefinitions, imageVariantID, args.Time),
 					args.Position,
@@ -163,7 +163,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 				int imageVariantID = args.Properties.GetInteger("image_variant");
 				if (imageVariantID < 0)
 					imageVariantID = args.Zone.ImageVariantID;
-				g.DrawISprite(
+				g.DrawSprite(
 					sprite,
 					new SpriteDrawSettings(args.Zone.StyleDefinitions, imageVariantID, args.Time),
 					args.Position,

@@ -65,7 +65,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			if (args.Extras) {
 				Reward reward = args.RewardManager.GetReward(args.Properties.GetString("reward"));
 				if (reward != null) {
-					g.DrawISprite(
+					g.DrawSprite(
 						reward.Sprite,
 						args.SpriteDrawSettings,
 						args.Position,

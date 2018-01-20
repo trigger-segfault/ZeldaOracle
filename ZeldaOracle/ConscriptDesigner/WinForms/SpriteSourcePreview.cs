@@ -94,7 +94,7 @@ namespace ConscriptDesigner.WinForms {
 					if (sprite != null) {
 						int x = 1 + indexX * (spriteSize.X + 1);
 						int y = 1 + indexY * (spriteSize.Y + 1);
-						g.DrawISprite(sprite.Sprite, settings, new Vector2F(x, y) - sprite.Bounds.Point);
+						g.DrawSprite(sprite.Sprite, settings, new Vector2F(x, y) - sprite.Bounds.Point);
 					}
 				}
 			}

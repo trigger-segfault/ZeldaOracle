@@ -104,7 +104,7 @@ namespace ZeldaOracle.Game.Tiles {
 			//if (switchState)
 			//	sprite = GameData.SPR_TILE_COLOR_SWITCH_BLUE;
 			DrawTileDataIndex(g, args, switchState ? 1 : 0);
-			/*g.DrawISprite(
+			/*g.DrawSprite(
 				sprite,
 				args.SpriteDrawSettings,
 				args.Position,

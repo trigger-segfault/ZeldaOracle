@@ -71,7 +71,7 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
 			Reward reward = args.RewardManager.GetReward(args.Properties.GetString("reward"));
 			if (reward != null) {
-				g.DrawISprite(
+				g.DrawSprite(
 					reward.Sprite,
 					args.SpriteDrawSettings,
 					args.Position,
