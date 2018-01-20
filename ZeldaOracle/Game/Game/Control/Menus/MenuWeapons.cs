@@ -172,8 +172,8 @@ namespace ZeldaOracle.Game.Control.Menus {
 			}
 		}
 
-		public override void Draw(Graphics2D g) {
-			base.Draw(g);
+		protected override void DrawMenu(Graphics2D g) {
+			base.DrawMenu(g);
 			if (inSubMenu) {
 				Point2I maxSize = new Point2I(ammoSlotGroup.NumSlots * 24 + 8, 32);
 				Point2I menuPos = new Point2I((160 - (ammoSlotGroup.NumSlots * 24 + 8)) / 2 + (maxSize.X - ammoMenuSize.X) / 2, DrawAmmoMenuAtTop ? 16 : 56);

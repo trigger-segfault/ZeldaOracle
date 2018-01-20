@@ -469,17 +469,17 @@ namespace ZeldaOracle.Game.Debug {
 					byte tilesetIndex = bin.ReadByte();
 
 					if (tilesetIndex > 0) {
-						Tileset tileset = GameData.TILESET_OVERWORLD;
+						ITileset tileset = GameData.TILESET_OVERWORLD;
 						if (tilesetIndex == 2)
 							tileset = GameData.TILESET_INTERIOR;
 						byte tilesetSourceX = bin.ReadByte();
 						byte tilesetSourceY = bin.ReadByte();
-						room.CreateTile(tileset.TileData[tilesetSourceX, tilesetSourceY], x, y, 0);
+						room.CreateTile((TileData) tileset.GetTileData(tilesetSourceX, tilesetSourceY), x, y, 0);
 					}
 					else {
 						// Only use default tiles on bottom layer.
-						Tileset tileset = GameData.TILESET_OVERWORLD;
-						room.CreateTile(tileset.TileData[tileset.DefaultTile.X, tileset.DefaultTile.Y], x, y, 0);
+						ITileset tileset = GameData.TILESET_OVERWORLD;
+						room.CreateTile((TileData) tileset.GetTileData(((Tileset) tileset).DefaultTile), x, y, 0);
 					}
 					
 				}

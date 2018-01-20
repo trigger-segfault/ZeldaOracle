@@ -199,16 +199,16 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 								if (!scannedColors.Contains(color)) {
 									scannedColors.Add(color);
 									Dictionary<int, ColorGroupSubtypePair> dict;
-									if (args.ColorMapping.TryGetValue(color, out dict)) {
+									if (args.IgnoreColors.Contains(color)) {
+										ignoredColors.Add(color);
+										// Carry on
+									}
+									else if (args.ColorMapping.TryGetValue(color, out dict)) {
 										possibleGroups.RemoveWhere(s => !dict.ContainsKey(s));
 										if (color.A != 0)
 											transparentOnly = false;
 										if (!possibleGroups.Any())
 											throw new NoMatchingColorGroupsException(scannedColors);
-									}
-									else if (args.IgnoreColors.Contains(color)) {
-										ignoredColors.Add(color);
-										// Carry on
 									}
 									else if (color == Color.Black) {
 										// All groups are valid here
@@ -259,16 +259,19 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 							if (!blackDefined)
 								finalColorMapping.Add(Color.Black, args.Dictionary.GetMappedColor(finalColorGroup, LookupSubtypes.Black));
 
-							for (int x = 0; x < chunkSize.X; x++) {
-								int ix = chunkX * chunkSize.X + x;
-								if (ix >= rectSize.X) break;
-								for (int y = 0; y < chunkSize.Y; y++) {
-									int iy = chunkY * chunkSize.Y + y;
-									if (iy >= rectSize.Y) break;
+							for (int y = 0; y < chunkSize.Y; y++) {
+								int iy = chunkY * chunkSize.Y + y;
+								if (iy >= rectSize.Y) break;
+								for (int x = 0; x < chunkSize.X; x++) {
+									int ix = chunkX * chunkSize.X + x;
+									if (ix >= rectSize.X) break;
 									int index = ix + iy * rectSize.X;
-									// Don't palette ignored colors
-									if (finalColorMapping.ContainsKey((Color) colorData[index]))
-										colorData[index] = finalColorMapping[(Color) colorData[index]];
+									// Don't palette ignored colors or transparency
+									Color color = (Color) colorData[index];
+									if (color.A == 0)
+										colorData[index] = Color.Transparent;
+									else if (finalColorMapping.ContainsKey(color))
+										colorData[index] = finalColorMapping[color];
 								}
 							}
 						}

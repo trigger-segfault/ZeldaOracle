@@ -1,4 +1,4 @@
-PALETTE		entity_dictionary, entities_menu;
+PALETTE "entity_dictionary", "entities_menu";
 
 CLONE	"entities_default";
 

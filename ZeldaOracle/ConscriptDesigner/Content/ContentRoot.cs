@@ -831,7 +831,7 @@ namespace ConscriptDesigner.Content {
 			if (result == MessageBoxResult.Yes) {
 				try {
 					ContentFile file = Get(path);
-					file.Close();
+					file.Close(true);
 					string filePath = file.FilePath;
 					file.Parent.Files.Remove(file.Name);
 					file.Parent.TreeViewItem.Items.Remove(file.TreeViewItem);

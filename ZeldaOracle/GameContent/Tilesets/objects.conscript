@@ -1,666 +1,43 @@
-﻿
-#==============================================================================
-# Sprite Sheets
-#==============================================================================
-
-SPRITESHEET "tileset_objects",					(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET "tileset_objects_extras_16x16",		(16, 16), (1, 1), (18, 18); END;
-
-
-#==============================================================================
-# Tiles
-#==============================================================================
-
-# Default zone tile for digable ground (for overworlds)
-TILE ground; SAMESPRITE; FLAGS Digable; END;
-
-# Default zone tile for a hard floor (for dungeons or interiors)
-TILE floor; SAMESPRITE; END;
-
-
-# ---- Bush -------------------------------------------------------------------
-
-TILE bush;
-	SOLID		block;
-	FLAGS		Pickupable, Bombable, Burnable, Switchable, Cuttable, AbsorbSeeds, Boomerangable;
-	SAMESPRITE; SAMESPRITEOBJ;
-	BREAKANIM	effect_leaves;
-	BREAKSOUND	leaves;
-END;
-
-TILE regrowable_bush;
-	TYPE		TileRegrowableBush;
-	MODEL		block;
-	FLAGS		Cuttable, Bombable;
-	SAMESPRITE;
-	BREAKANIM	effect_leaves;
-	BREAKSOUND	leaves;
-END;
-
-TILE flowers_red;
-	SOLID		block;
-	FLAGS		Cuttable, Boomerangable;
-	SAMESPRITE;
-	BREAKANIM	effect_leaves;
-	BREAKSOUND	leaves;
-END;
-
-TILE flowers_blue;
-	SOLID		block;
-	FLAGS		Cuttable, Boomerangable;
-	SAMESPRITE;
-	BREAKANIM	effect_leaves;
-	BREAKSOUND	leaves;
-END;
-
-TILE flowers_pink;
-	SOLID		block;
-	FLAGS		Cuttable, Boomerangable;
-	SAMESPRITE;
-	BREAKANIM	effect_leaves;
-	BREAKSOUND	leaves;
-END;
-
-TILE flower;
-	SOLID		block;
-	FLAGS		Cuttable, Boomerangable;
-	SAMESPRITE;
-	BREAKANIM	effect_leaves;
-	BREAKSOUND	leaves;
-END;
-
-TILE water_flower;
-	SOLID		block;
-	FLAGS		Cuttable, Boomerangable;
-	SAMESPRITE;
-	BREAKANIM	effect_leaves;
-	BREAKSOUND	leaves;
-END;
-
-TILE mushroom;
-	SOLID		block;
-	FLAGS		Pickupable;
-	SAMESPRITE; SAMESPRITEOBJ;
-END;
-
-TILE seedling;
-	SOLID		block;
-	FLAGS		Pickupable, Cuttable, Switchable, Movable;
-	SAMESPRITE;
-	BREAKANIM	effect_rock_break;
-	BREAKSOUND	rock_shatter;
-END;
-
-TILE burnable_tree;
-	SOLID		block;
-	SAMESPRITE;
-	FLAGS		Burnable, AbsorbSeeds;
-END;
-
-TILE grass;
-	FLAGS		Cuttable, Burnable, Bombable, Boomerangable;
-	ENVTYPE		Grass;
-	SAMESPRITE;
-	BREAKANIM	effect_grass_leaves;
-	BREAKSOUND	leaves;
-END;
-
-TILE leaves;
-	FLAGS		Cuttable, Burnable, Bombable, Boomerangable;
-	SAMESPRITE;
-	BREAKANIM	effect_grass_leaves;
-	BREAKSOUND	leaves;
-END;
-
-TILE bracelet_rock;
-	SOLID		block;
-	FLAGS		Pickupable;
-	SAMESPRITE; SAMESPRITEOBJ;
-	BREAKANIM	effect_rock_break;
-	BREAKSOUND	rock_shatter;
-END;
-
-TILE switch_rock;
-	SOLID		block;
-	FLAGS		Switchable, SwitchStays;
-	SAMESPRITE; SAMESPRITEOBJ;
-	BREAKANIM	effect_rock_break;
-	BREAKSOUND	rock_shatter;
-END;
-
-TILE crystal_rock;
-	SOLID		block;
-	FLAGS		Cuttable;
-	SAMESPRITE; SAMESPRITEOBJ;
-	BREAKANIM	effect_rock_break;
-	BREAKSOUND	rock_shatter;
-END;
-
-TILE pot;
-	SOLID		block;
-	FLAGS		Cuttable, Movable, Pickupable, Switchable;
-	SAMESPRITE; SAMESPRITEOBJ;
-	BREAKANIM	effect_rock_break;
-	BREAKSOUND	rock_shatter;
-	PROPERTIES	(integer, cuttable_sword_level, 1),
-				(boolean, raised_on_buttons, true);
-END;
-
-TILE dirt_pile;
-	SOLID		block;
-	FLAGS		Digable;
-	SAMESPRITE;
-END;
-
-# This tile is used by Cracked floors
-TILE hole;
-	ENVTYPE		Hole;
-	SAMESPRITE;
-END;
-
-# This tile is used by the Shovel.
-TILE dug; SAMESPRITE; END;
-
-TILE cracked_floor;
-	TYPE		TileCrackedFloor;
-	SAMESPRITE;
-END;
-
-TILE floor_spikes;
-	TYPE		TileSpikedFloor;
-	SAMESPRITE;
-END;
-
-TILE cactus;
-	FLAGS		HurtPlayer;
-	SOLID		edge_e;
-	SAMESPRITE;
-	HURT		1, (4, -1, 13, 18);
-END;
-
-# ---- Bridges ----------------------------------------------------------------
-
-TILE bridge;
-	TYPE		TileBridge;
-	SPRITE		tile_bridge_horizontal;
-	PROPERTIES	(boolean, vertical, false, "Vertical", "", "Bridge", "True if the bridge is vertical."),
-				(integer, bridge_direction, -1, "Bridge Direction", "direction", "Bridge", "Direction the bridge is in.");
-END;
-
-TILE bridge_horizontal;
-	CLONE		bridge;
-	SAMESPRITE;
-	PROPERTIES	(boolean, vertical, false),
-				(integer, bridge_direction, 0);
-END;
-
-TILE bridge_vertical;
-	CLONE		bridge;
-	SAMESPRITE;
-	PROPERTIES	(boolean, vertical, true),
-				(integer, bridge_direction, 3);
-END;
-
-# ---- Moving Platform --------------------------------------------------------
-
-TILE moving_platform;
-	TYPE		TilePlatform;
-	SAMESPRITE;
-END;
-
-# ---- Lantern ----------------------------------------------------------------
-
-TILE lantern;
-	TYPE		TileLantern;
-	SOLID		block;
-	SPRITEINDEX	0, animation,	tile_lantern_lit;
-	SPRITEINDEX	1, sprite,		tile_lantern_unlit;
-	PROPERTIES	(boolean, lit, true, "Lit", "", "", "Whether the lantern starts lit or not.", false);
-	EVENT		light, "Light", "Lanturn", "Occurs when the lantern is lighted.", (Lantern, lantern);
-	EVENT		put_out, "Put Out", "Lanturn", "Occurs when the lantern is put out.", (Lantern, lantern);
-END;
-
-# ---- Signs ------------------------------------------------------------------
-
-TILE sign;
-	TYPE		TileSign;
-	SOLID		block;
-	FLAGS		Pickupable, Burnable, Cuttable, Switchable, Boomerangable;
-	SAMESPRITE; SAMESPRITEOBJ;
-	BREAKANIM	effect_sign_break;
-	BREAKSOUND	rock_shatter;
-	PROPERTIES
-		(integer, cuttable_sword_level, 1),
-		(string, text, "Hello World!",
-			"Text", "text_message", "Sign",
-			"The text to display when the sign is read from the front.", false);
-END;
-
-#TILE sign_alt;
-#	CLONE		sign;
-#	SPRITE		tile_sign_alt;
-#	SPRITEOBJ	tile_sign_alt_asobject;
-#END;
-
-# ---- Movable Blocks ---------------------------------------------------------
-
-TILE movable_block;
-	SOLID		block;
-	FLAGS		Movable;
-	SAMESPRITE; SAMESPRITEOBJ;
-	PROPERTIES	(boolean, move_once, true);
-END;
-
-TILE armos;
-	CLONE		movable_block;
-	SAMESPRITE; SAMESPRITEOBJ;
-END;
-
-TILE armos_alt;
-	CLONE		armos;
-	SAMESPRITE; SAMESPRITEOBJ;
-END;
-
-TILE grave;
-	CLONE		movable_block;
-	SAMESPRITE; SAMESPRITEOBJ;
-END;
-
-#TILE tombstone_alt;
-#	CLONE		tombstone;
-#	SPRITE		tile_grave_alt;
-#	SPRITEOBJ	tile_grave_alt_asobject;
-#END;
-
-#TILE fairy_statue;
-#	CLONE		movable_block;
-#	SPRITE		tile_fairy_statue;
-#	SPRITEOBJ	tile_fairy_statue_asobject;
-#END;
-
-TILE ice_block;
-	CLONE		movable_block;
-	SAMESPRITE; SAMESPRITEOBJ;
-END;
-
-# ---- Bombable Block ---------------------------------------------------------
-
-TILE bombable_block;
-	SOLID		block;
-	FLAGS		Bombable;
-	SAMESPRITE;
-	BREAKANIM	effect_rock_break;
-	BREAKSOUND	rock_shatter;
-END;
-
-
-# ---- Color Jump Pad ---------------------------------------------------------
-
-TILE color_jump_pad;
-	TYPE		TileColorJumpPad;
-	SPRITEINDEX	0, tile_color_jump_pad_red;
-	SPRITEINDEX 1, tile_color_jump_pad_yellow;
-	SPRITEINDEX 1, tile_color_jump_pad_blue;
-	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the jump pad.");
-	EVENT		color_change, "Color Change", "Color", "Occurs when the pad's color changes.", (ColorJumpPad, tile, Color, color);
-END;
-
-TILE color_jump_pad_red;
-	CLONE		color_jump_pad;
-	PROPERTIES	(integer, color, 0), (integer, sprite_index, 0);
-END;
-
-TILE color_jump_pad_yellow;
-	CLONE		color_jump_pad;
-	PROPERTIES	(integer, color, 1), (integer, sprite_index, 1);
-END;
-
-TILE color_jump_pad_blue;
-	CLONE		color_jump_pad;
-	PROPERTIES	(integer, color, 2), (integer, sprite_index, 2);
-END;
-
-# ---- Color Tile -------------------------------------------------------------
-
-TILE color_tile;
-	TYPE		TileColorTile;
-	SPRITEINDEX	0, tile_color_tile_red;
-	SPRITEINDEX 1, tile_color_tile_yellow;
-	SPRITEINDEX 1, tile_color_tile_blue;
-	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the tile.");
-END;
-
-TILE color_tile_red;
-	CLONE		color_tile;
-	PROPERTIES	(integer, color, 0), (integer, sprite_index, 0);
-END;
-
-TILE color_tile_yellow;
-	CLONE		color_tile;
-	PROPERTIES	(integer, color, 1), (integer, sprite_index, 1);
-END;
-
-TILE color_tile_blue;
-	CLONE		color_tile;
-	PROPERTIES	(integer, color, 2), (integer, sprite_index, 2);
-END;
-
-# ---- Color Barrier ----------------------------------------------------------
-
-TILE color_barrier;
-	TYPE		TileColorBarrier;
-	HALFSOLID	block;
-	SPRITE		tile_color_barrier_red_raised;
-	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the barrier (red or blue).");
-END;
-
-TILE color_barrier_blue;
-	CLONE		color_barrier;
-	SPRITE		tile_color_barrier_red_lowered;
-	PROPERTIES	(integer, color, 0);
-END;
-
-TILE color_barrier_red;
-	CLONE		color_barrier;
-	SPRITE		tile_color_barrier_blue_raised;
-	PROPERTIES	(integer, color, 2);
-END;
-
-# ---- Color Statue -----------------------------------------------------------
-
-TILE color_statue;
-	TYPE		TileColorStatue;
-	SOLID		block;
-	FLAGS		Movable;
-	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the statue.");
-END;
-
-TILE color_statue_red;
-	CLONE		color_statue;
-	SPRITE		tile_color_statue_red;
-	PROPERTIES	(integer, color, 0);
-END;
-
-TILE color_statue_yellow;
-	CLONE		color_statue;
-	SPRITE		tile_color_statue_yellow;
-	PROPERTIES	(integer, color, 1);
-END;
-
-TILE color_statue_blue;
-	CLONE		color_statue;
-	SPRITE		tile_color_statue_blue;
-	PROPERTIES	(integer, color, 2);
-END;
-
-# ---- Color Block -----------------------------------------------------------
-
-TILE color_block;
-	TYPE		TileColorBlock;
-	SOLID		block;
-	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the block.");
-END;
-
-TILE color_block_red;
-	CLONE		color_block;
-	SPRITE		tile_color_block_red;
-	PROPERTIES	(integer, color, 0);
-END;
-
-TILE color_block_yellow;
-	CLONE		color_block;
-	SPRITE		tile_color_block_yellow;
-	PROPERTIES	(integer, color, 1);
-END;
-
-TILE color_block_blue;
-	CLONE		color_block;
-	SPRITE		tile_color_block_blue;
-	PROPERTIES	(integer, color, 2);
-END;
-
-# ---- Color Cube Slot --------------------------------------------------------
-
-TILE color_cube_slot;
-	TYPE		TileColorCubeSlot;
-	SPRITE		tile_color_cube_slot;
-	EVENT		color_change, "Color Change", "Color", "Occurs when the slot's color changes.", (ColorCubeSlot, tile, Color, color);
-END;
-
-# ---- Color Lantern ----------------------------------------------------------
-
-TILE color_lantern;
-	TYPE		TileColorLantern;
-	SOLID		block;
-	SPRITE		tile_color_lantern;
-	EVENT		color_change, "Color Change", "Color", "Occurs when the lantern's flame color changes.", (ColorLantern, tile, Color, color);
-END;
-
-# ---- Button -----------------------------------------------------------------
-
-TILE button;
-	TYPE		TileButton;
-	SPRITEINDEX	0, tile_button_up;
-	SPRITEINDEX	1, tile_button_down;
-	PROPERTIES	(boolean, releasable,		true, "Releasable",			"", "Button", "Can the button only be pressed, and not released?"),
-				(boolean, pressed,			false, "Pressed",			"", "Button", "Is the button pressed");
-	EVENT		press, "Press", "Switch", "Occurs when the button is pressed.", (Button button);
-	EVENT		release, "Release", "Switch", "Occurs when the button is released.", (Button button);
-END;
-
-# ---- Lever ------------------------------------------------------------------
-
-TILE lever;
-	TYPE		TileLever;
-	HALFSOLID	block;
-	FLAGS		AbsorbSeeds;
-	SPRITEINDEX	0, tile_lever_left;
-	SPRITEINDEX	1, tile_lever_right;
-	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "Lever", "Can the lever only be switched once?"),
-				(boolean, switch_state,		false,	"Switch State",		"", "Lever", "True if the lever is facing left.");
-	EVENT		toggle, "Toggle", "Switch", "Occurs when the lever is toggled.", (Lever, lever);
-END;
-
-# ---- Doors ------------------------------------------------------------------
-
-TILE door;
-	TYPE			TileDoor;
-	SOLID			block;
-	SPRITEINDEX	0,	tile_door_closed;
-	SPRITEINDEX	1,	tile_door_open;
-	SPRITEINDEX	2,	tile_door_close;
-	PROPERTIES		(boolean, open, false, "Open", "", "Door", "True if the door open."),
-					(integer, direction, 0, "Direction", "direction", "Door", "The direction the door is facing.", false);
-END;
-
-TILE door_right;	CLONE door; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
-TILE door_up;		CLONE door; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
-TILE door_left;		CLONE door; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
-TILE door_down;		CLONE door; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
-
-
-TILE small_key_door;
-	CLONE			door;
-	TYPE			TileSmallKeyDoor;
-	RESETWHEN		Never;
-	SPRITEINDEX	0,	tile_small_key_door_closed;
-	SPRITEINDEX	1,	tile_small_key_door_open;
-	SPRITEINDEX	2,	tile_small_key_door_close;
-END;
-
-TILE small_key_door_right;	CLONE small_key_door; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
-TILE small_key_door_up;		CLONE small_key_door; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
-TILE small_key_door_left;	CLONE small_key_door; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
-TILE small_key_door_down;	CLONE small_key_door; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
-
-TILE boss_key_door;
-	CLONE			door;
-	TYPE			TileBossKeyDoor;
-	RESETWHEN		Never;
-	SPRITEINDEX	0,	tile_boss_key_door_closed;
-	SPRITEINDEX	1,	tile_boss_key_door_open;
-	SPRITEINDEX	2,	tile_boss_key_door_close;
-END;
-
-TILE boss_key_door_right;	CLONE boss_key_door; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
-TILE boss_key_door_up;		CLONE boss_key_door; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
-TILE boss_key_door_left;	CLONE boss_key_door; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
-TILE boss_key_door_down;	CLONE boss_key_door; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
-
-TILE minecart_door;
-	CLONE		door;
-	SPRITEINDEX	0, tile_minecart_door_closed;
-	SPRITEINDEX	1, tile_minecart_door_open;
-	SPRITEINDEX	2, tile_minecart_door_close;
-	TYPE		TileMinecartDoor;
-END;
-
-TILE minecart_door_right;	CLONE minecart_door; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
-TILE minecart_door_up;		CLONE minecart_door; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
-TILE minecart_door_left;	CLONE minecart_door; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
-TILE minecart_door_down;	CLONE minecart_door; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
-
-TILE eye_statue;
-	TYPE		TileEyeStatue;
-	SOLID		block;
-	SPRITE		tile_eye_statue;
-END;
-
-TILE locked_block;
-	TYPE		TileLockedBlock;
-	SOLID		block;
-	RESETWHEN	Never;
-	SAMESPRITE;
-END;
-
-TILE wall_webbed;
-	SOLID		block;
-	FLAGS		Burnable;
-	PROPERTIES	(boolean, disable_on_destroy, true);
-END;
-
-TILE wall_webbed_right;	CLONE wall_webbed; SPRITE tile_wall_webbed_right; END;
-TILE wall_webbed_up;	CLONE wall_webbed; SPRITE tile_wall_webbed_up; END;
-TILE wall_webbed_left;	CLONE wall_webbed; SPRITE tile_wall_webbed_left; END;
-TILE wall_webbed_down;	CLONE wall_webbed; SPRITE tile_wall_webbed_down; END;
-
-TILE wall_bombable;
-	SOLID		block;
-	FLAGS		Burnable;
-	PROPERTIES	(boolean, disable_on_destroy, true);
-END;
-
-TILE wall_bombable_right;	CLONE wall_bombable; SPRITE tile_wall_bombable_right; END;
-TILE wall_bombable_up;		CLONE wall_bombable; SPRITE tile_wall_bombable_up; END;
-TILE wall_bombable_left;	CLONE wall_bombable; SPRITE tile_wall_bombable_left; END;
-TILE wall_bombable_down;	CLONE wall_bombable; SPRITE tile_wall_bombable_down; END;
-
-# ---- Minecart Tracks --------------------------------------------------------
-
-TILE minecart_track;
-	TYPE		TileMinecartTrack;
-	FLAGS		NotCoverable;
-	RESETWHEN	LeaveArea;
-	SPRITEINDEX	0, tile_minecart_track_horizontal;	# Horizontal
-	SPRITEINDEX	1, tile_minecart_track_vertical;	# Vertical
-	SPRITEINDEX	2, tile_minecart_track_up_right;	# Right/Up
-	SPRITEINDEX	3, tile_minecart_track_up_left;		# Up/Left
-	SPRITEINDEX	4, tile_minecart_track_down_left;	# Left/Down
-	SPRITEINDEX	5, tile_minecart_track_down_right;	# Down/Right
-	PROPERTIES	(boolean, minecart, false, "Has Minecart", "", "Minecart", "Does this track currently have a minecart on it?"),
-				(integer, switched_track_orientation, 0, "Switched Track Orientation", ("enum", "MinecartTrackOrientation"), "Minecart", ""),
-				(integer, track_orientation, 0, "Track Orientation", ("enum", "MinecartTrackOrientation"), "Minecart", "");
-END;
-
-TILE minecart_track_corner_northwest;
-	CLONE		minecart_track;
-	PROPERTIES	(integer, track_orientation, 5);
-END;
-TILE minecart_track_corner_northeast;
-	CLONE		minecart_track;
-	PROPERTIES	(integer, track_orientation, 4);
-END;
-TILE minecart_track_corner_southwest;
-	CLONE		minecart_track;
-	PROPERTIES	(integer, track_orientation, 2);
-END;
-TILE minecart_track_corner_southeast;
-	CLONE		minecart_track;
-	PROPERTIES	(integer, track_orientation, 3);
-END;
-TILE minecart_track_horizontal;
-	CLONE		minecart_track;
-	PROPERTIES	(integer, track_orientation, 0);
-END;
-TILE minecart_track_vertical;
-	CLONE		minecart_track;
-	PROPERTIES	(integer, track_orientation, 1);
-END;
-TILE minecart_track_stop;
-	TYPE	TileMinecartStop;
-	FLAGS	NotCoverable;
-	SPRITE	tile_minecart_track_stop;
-END;
-
-
-# ---- Turnstile --------------------------------------------------------------
-
-TILE turnstile;
-	TYPE		TileTurnstile;
-	SOLID       turnstile;
-	SAMESPRITE;
-	RESETWHEN	LeaveArea;
-	SIZE		(3, 3);
-	PROPERTIES	(boolean, clockwise, false, "Clockwise", "", "Turnstile", "True if the turnstile is in clockwise mode.");
-END;
-
-# ---- Monsters ---------------------------------------------------------------
-
-TILE monster_beamos;
-	SOLID		block;
-	FLAGS		Burnable, AbsorbSeeds;
-END;
-
-#==============================================================
+﻿#==============================================================
 # Tilesets
 #==============================================================
 
-TILESET objects, tileset_objects, (12, 13);
-DEFAULT (0, 3);
+TILESET "objects", (12, 13);
 
-SETTILE ( 0, 0), bush;
-SETTILE ( 1, 0), regrowable_bush;
-SETTILE ( 2, 0), flowers_red;
-SETTILE ( 3, 0), flowers_blue;
-SETTILE ( 4, 0), flowers_pink;
-SETTILE ( 5, 0), flower;
-SETTILE ( 6, 0), water_flower;
-SETTILE ( 7, 0), mushroom;
-SETTILE ( 8, 0), seedling;
-SETTILE ( 9, 0), burnable_tree;
-SETTILE (10, 0), grass;
-SETTILE (11, 0), leaves;
 
-SETTILE ( 0, 1), bracelet_rock;
-SETTILE ( 1, 1), switch_rock;
-SETTILE ( 2, 1), crystal_rock;
-SETTILE ( 3, 1), pot;
-SETTILE ( 4, 1), sign;
-#SETTILE ( 5, 1), sign_alt;
-SETTILE ( 6, 1), movable_block;
-SETTILE ( 7, 1), bombable_block;
-SETTILE ( 8, 1), armos;
-SETTILE ( 9, 1), grave;
-#SETTILE (10, 1), fairy_statue;
-SETTILE (11, 1), ice_block;
+ADDTILE ( 0, 0), bush;
+ADDTILE ( 1, 0), regrowable_bush;
+ADDTILE ( 2, 0), flowers_red;
+ADDTILE ( 3, 0), flowers_blue;
+ADDTILE ( 4, 0), flowers_pink;
+ADDTILE ( 5, 0), flower;
+ADDTILE ( 6, 0), water_flower;
+ADDTILE ( 7, 0), mushroom;
+ADDTILE ( 8, 0), seedling;
+ADDTILE ( 9, 0), burnable_tree;
+ADDTILE (10, 0), grass;
+ADDTILE (11, 0), leaves;
 
-SETTILE ( 0, 2), dirt_pile;
-SETTILE ( 1, 2), dug;
-SETTILE ( 2, 2), hole;
-SETTILE ( 3, 2), cracked_floor;
+ADDTILE ( 0, 1), bracelet_rock;
+ADDTILE ( 1, 1), switch_rock;
+ADDTILE ( 2, 1), crystal_rock;
+ADDTILE ( 3, 1), pot;
+ADDTILE ( 4, 1), sign;
+ADDTILE ( 5, 1), sign;
+ADDTILE ( 6, 1), movable_block;
+ADDTILE ( 7, 1), bombable_block;
+ADDTILE ( 8, 1), armos;
+ADDTILE ( 9, 1), grave;
+#ADDTILE (10, 1), fairy_statue;
+ADDTILE (11, 1), ice_block;
+
+ADDTILE ( 0, 2), dirt_pile;
+ADDTILE ( 1, 2), dug;
+ADDTILE ( 2, 2), hole;
+ADDTILE ( 3, 2), cracked_floor;
 # Soft soil
 # Portal
-SETTILE ( 6, 2), cactus;
+ADDTILE ( 6, 2), cactus;
 # Unknown leaf thing
 # Magnet north
 # Magnet south
@@ -670,90 +47,125 @@ SETTILE ( 6, 2), cactus;
 # Key rock
 # Key stone
 # Movable thingy
-SETTILE (3, 3), turnstile; # Blue crystal
+ADDTILE (3, 3), turnstile; # Blue crystal
 # Blue crystal hole
 # Floor tile monster
 # Armos monster red
 # Armos monster blue
-SETTILE ( 8, 3), color_statue_red;
-SETTILE ( 9, 3), color_statue_blue;
-SETTILE (10, 3), color_statue_yellow;
+ADDTILE ( 8, 3), color_statue_red;
+ADDTILE ( 9, 3), color_statue_blue;
+ADDTILE (10, 3), color_statue_yellow;
 
-SETTILE ( 0, 5), lantern;
-SETTILE ( 1, 5), lever;
-SETTILE ( 2, 5), button;
-SETTILE ( 3, 5), color_cube_slot;
-SETTILE ( 4, 5), color_lantern;
-SETTILE ( 5, 5), color_jump_pad_red;
-SETTILE ( 6, 5), color_tile_blue;
-SETTILE ( 7, 5), color_tile_red;
-SETTILE ( 8, 5), color_barrier_blue;
-SETTILE ( 9, 5), color_barrier_red;
-SETTILE (10, 5), moving_platform;
+ADDTILE ( 0, 5), lantern;
+ADDTILE ( 1, 5), lever;
+ADDTILE ( 2, 5), button;
+ADDTILE ( 3, 5), color_cube_slot;
+ADDTILE ( 4, 5), color_lantern;
+ADDTILE ( 5, 5), color_jump_pad_red;
+ADDTILE ( 6, 5), color_tile_blue;
+ADDTILE ( 7, 5), color_tile_red;
+ADDTILE ( 8, 5), color_barrier_blue;
+ADDTILE ( 9, 5), color_barrier_red;
+ADDTILE (10, 5), moving_platform;
 # Hardened lava
 
-SETTILE ( 0, 7), door_up;
-SETTILE ( 1, 7), door_left;
-SETTILE ( 2, 7), minecart_door_up;
-SETTILE ( 3, 7), minecart_door_left;
-SETTILE ( 4, 7), small_key_door_up;
-SETTILE ( 5, 7), small_key_door_left;
-SETTILE ( 6, 7), boss_key_door_up;
-SETTILE ( 7, 7), boss_key_door_left;
+ADDTILE ( 0, 7), door_up;
+ADDTILE ( 1, 7), door_left;
+ADDTILE ( 2, 7), minecart_door_up;
+ADDTILE ( 3, 7), minecart_door_left;
+ADDTILE ( 4, 7), small_key_door_up;
+ADDTILE ( 5, 7), small_key_door_left;
+ADDTILE ( 6, 7), boss_key_door_up;
+ADDTILE ( 7, 7), boss_key_door_left;
 # Wall arrow slot up
 # Wall arrow slot left
 # Wall slate hole up
 # Wall slate hole left
 
-SETTILE ( 0, 8), door_down;
-SETTILE ( 1, 8), door_right;
-SETTILE ( 2, 8), minecart_door_down;
-SETTILE ( 3, 8), minecart_door_right;
-SETTILE ( 4, 8), small_key_door_down;
-SETTILE ( 5, 8), small_key_door_right;
-SETTILE ( 6, 8), boss_key_door_down;
-SETTILE ( 7, 8), boss_key_door_right;
+ADDTILE ( 0, 8), door_down;
+ADDTILE ( 1, 8), door_right;
+ADDTILE ( 2, 8), minecart_door_down;
+ADDTILE ( 3, 8), minecart_door_right;
+ADDTILE ( 4, 8), small_key_door_down;
+ADDTILE ( 5, 8), small_key_door_right;
+ADDTILE ( 6, 8), boss_key_door_down;
+ADDTILE ( 7, 8), boss_key_door_right;
 # Wall arrow slot down
 # Wall arrow slot right
 # Wall slate hole down
 # Wall slate hole right
 
-SETTILE ( 0, 9), wall_webbed_up;
-SETTILE ( 1, 9), wall_webbed_left;
-SETTILE ( 2, 9), wall_bombable_up;
-SETTILE ( 3, 9), wall_bombable_left;
+ADDTILE ( 0, 9), wall_webbed_up;
+ADDTILE ( 1, 9), wall_webbed_left;
+ADDTILE ( 2, 9), wall_bombable_up;
+ADDTILE ( 3, 9), wall_bombable_left;
 # Wall up
 # Wall left
 # Keyhole wall up
 # Keyhole wall left
 # Wall tunnel up
 # Wall tunnel left
-SETTILE (10, 9), minecart_track_corner_northwest;
-SETTILE (11, 9), minecart_track_corner_northeast;
+ADDTILE (10, 9), minecart_track_corner_down_right;
+ADDTILE (11, 9), minecart_track_corner_down_left;
 
-SETTILE ( 0, 10), wall_webbed_down;
-SETTILE ( 1, 10), wall_webbed_right;
-SETTILE ( 2, 10), wall_bombable_down;
-SETTILE ( 3, 10), wall_bombable_right;
+ADDTILE ( 0, 10), wall_webbed_down;
+ADDTILE ( 1, 10), wall_webbed_right;
+ADDTILE ( 2, 10), wall_bombable_down;
+ADDTILE ( 3, 10), wall_bombable_right;
+
+ADDTILE (6, 9), "tunnel_up_keyhole";
+ADDTILE (6, 10), "tunnel_down_keyhole";
+ADDTILE (7, 9), "tunnel_left_keyhole";
+ADDTILE (7, 10), "tunnel_right_keyhole";
 # Wall down
 # Wall right
 # Keyhole wall down
 # Keyhole wall right
 # Wall tunnel down
 # Wall tunnel right
-SETTILE (10, 10), minecart_track_corner_southwest;
-SETTILE (11, 10), minecart_track_corner_southeast;
+ADDTILE (10, 10), minecart_track_corner_up_right;
+ADDTILE (11, 10), minecart_track_corner_up_left;
 
-SETTILE ( 0, 11), eye_statue;
+ADDTILE ( 0, 11), eye_statue;
 # Slate thing
-SETTILE ( 2, 11), locked_block;
-SETTILE ( 3, 11), floor_spikes;
-SETTILE ( 4, 11), bridge_horizontal;
-SETTILE ( 5, 11), bridge_vertical;
+ADDTILE ( 2, 11), locked_block;
+ADDTILE ( 3, 11), floor_spikes;
+ADDTILE ( 4, 11), bridge_horizontal;
+ADDTILE ( 5, 11), bridge_vertical;
 
-SETTILE (10, 11), minecart_track_horizontal;
-SETTILE (11, 11), minecart_track_vertical;
-SETTILE (11, 12), minecart_track_stop;
+ADDTILE (10, 11), minecart_track_horizontal;
+ADDTILE (11, 11), minecart_track_vertical;
+ADDTILE (11, 12), minecart_track_stop;
 
+ADDTILE (10, 1), "movable_block";
+ADDTILE (4, 2), "soft_soil";
+ADDTILE (5, 2), "ages_portal";
+ADDTILE (7, 2), "jump_flower";
+ADDTILE (8, 2), "magnet_stone_north";
+ADDTILE (9, 2), "magnet_stone_south";
+
+ADDTILE (2, 3), "water_block";
+ADDTILE (4, 3), "ice_crystal_pit";
+ADDTILE (5, 3), "flying_tile";
+
+
+ADDTILE (11, 5), "hardened_lava";
+
+ADDTILE (8, 7), "arrow_shooter_up";
+ADDTILE (8, 8), "arrow_shooter_down";
+ADDTILE (9, 7), "arrow_shooter_left";
+ADDTILE (9, 8), "arrow_shooter_right";
+
+ADDTILE (10, 7), "tablet_slot_up";
+ADDTILE (10, 8), "tablet_slot_down";
+ADDTILE (11, 7), "tablet_slot_left";
+ADDTILE (11, 8), "tablet_slot_right";
+
+ADDTILE (8, 9), "tunnel_up";
+ADDTILE (8, 10), "tunnel_down";
+ADDTILE (9, 9), "tunnel_left";
+ADDTILE (9, 10), "tunnel_right";
+
+ADDTILE (1, 11), "plaque";
 
 END;

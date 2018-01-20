@@ -1,0 +1,234 @@
+﻿#==============================================================
+# Tiles
+#==============================================================
+
+# Large Bricks
+
+TILE "ss_bricks"; SAMESPRITE; SOLID block; END;
+TILE "ss_bricks_ceiling"; SAMESPRITE; SOLID block; END;
+TILE "ss_bricks_background"; SAMESPRITE; SOLID block; END;
+TILE "ss_bricks_mixed"; SAMESPRITE; SOLID block; END;
+
+TILE "ss_brick_pillar_left_dark"; SAMESPRITE; SOLID block; END;
+TILE "ss_brick_pillar_right_light"; SAMESPRITE; SOLID block; END;
+TILE "ss_brick_pillar_left_light"; SAMESPRITE; SOLID block; END;
+TILE "ss_brick_pillar_right_dark"; SAMESPRITE; SOLID block; END;
+
+# Small Bricks
+
+TILE "ss_small_bricks"; SAMESPRITE; SOLID block; END;
+TILE "ss_small_bricks_alt"; SAMESPRITE; SOLID block; END;
+TILE "ss_small_bricks_surface_1"; SAMESPRITE; SOLID block; END;
+TILE "ss_small_bricks_surface_2"; SAMESPRITE; SOLID block; END;
+TILE "ss_small_bricks_surface_3"; SAMESPRITE; SOLID block; END;
+TILE "ss_small_bricks_surface_4"; SAMESPRITE; SOLID block; END;
+
+# Pipes
+
+TILE "ss_pipe"; SAMESPRITE; SOLID block; END;
+TILE "ss_pipe_alt"; SAMESPRITE; SOLID block; END;
+TILE "ss_pipe_horizontal"; SAMESPRITE; SOLID block; END;
+
+# Ice
+
+TILE "ss_ice_bricks"; SAMESPRITE; SOLID block; ENVTYPE Ice; END;
+TILE "ss_ice_block"; SAMESPRITE; SOLID block; ENVTYPE Ice; END;
+TILE "ss_ice_background"; SAMESPRITE; SOLID block; ENVTYPE Ice; END;
+
+# Cave Wall
+
+TILE "ss_cave_wall_top_left"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_top_mid"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_top_right"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_side_left"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_side_right"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_bottom_mid"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_bottom_right"; SAMESPRITE; SOLID block; END;
+
+TILE "ss_cave_wall_top_both"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_side_both"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_bottom_both"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_bottom_both_mirrored"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_single"; SAMESPRITE; SOLID block; END;
+
+TILE "ss_cave_wall_top_left_underwater"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_top_mid_underwater"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_top_right_underwater"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_bottom_left_underwater"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_bottom_mid_underwater"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_bottom_right_underwater"; SAMESPRITE; SOLID block; END;
+
+TILE "ss_cave_wall_top_both_underwater"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_bottom_both_underwater"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_bottom_both_mirrored_underwater"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_single_underwater"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_single_underwater_bottom"; SAMESPRITE; SOLID block; END;
+
+TILE "ss_cave_wall_moss_top_left"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_moss_top_mid"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_moss_top_right"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_moss_top_both"; SAMESPRITE; SOLID block; END;
+
+TILE "ss_cave_wall_inside_se"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_inside_sw"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_inside_ne"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_inside_nw"; SAMESPRITE; SOLID block; END;
+
+TILE "ss_cave_wall_side_both_inside_se"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_side_both_inside_sw"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_side_both_inside_ne"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_side_both_inside_nw"; SAMESPRITE; SOLID block; END;
+
+TILE "ss_cave_wall_inside_sew"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_inside_new"; SAMESPRITE; SOLID block; END;
+
+# Cave Wall Alt
+
+TILE "ss_cave_wall_alt_top_left"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_alt_top_right"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_alt_top_mid"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_alt_top_both"; SAMESPRITE; SOLID block; END;
+
+TILE "ss_cave_wall_alt_side_left"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_alt_side_right"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_alt_left"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_alt_right"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_alt_side_both"; SAMESPRITE; SOLID block; END;
+
+TILE "ss_cave_wall_alt_bottom_both"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_alt_inside_nw"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_alt_inside_ne"; SAMESPRITE; SOLID block; END;
+
+TILE "ss_cave_wall_alt_single"; SAMESPRITE; SOLID block; END;
+TILE "ss_cave_wall_alt_single_underwater"; SAMESPRITE; SOLID block; END;
+
+# General
+
+TILE "ss_background"; SAMESPRITE; END;
+TILE "ss_water_surface"; SAMESPRITE; ENVTYPE Water; END;
+TILE "ss_water"; SAMESPRITE; ENVTYPE Water; END;
+TILE "ss_lava_surface_1"; SPRITE "tile_ss_background"; SAMESPRITEABOVE; ENVTYPE Lava; END;
+TILE "ss_lava_surface_2"; SPRITE "tile_ss_background"; SAMESPRITEABOVE; ENVTYPE Lava; END;
+TILE "ss_lava"; SPRITE "tile_ss_background"; SAMESPRITEABOVE; ENVTYPE Lava; END;
+
+TILE "ss_spikes";
+	SAMESPRITE;
+	#HURT
+END;
+TILE "ss_spikes_underwater"; CLONE "ss_spikes"; SAMESPRITE; ENVTYPE Water; END;
+
+TILE "ss_pot";
+	SAMESPRITE; SAMESPRITEOBJ;
+	SOLID block;
+	FLAGS		Cuttable, Movable, Pickupable, Switchable;
+	BREAKANIM	"effect_rock_break";
+	BREAKSOUND	"rock_shatter";
+	PROPERTIES	(integer, cuttable_sword_level, 1);
+END;
+TILE "ss_pot_underwater"; CLONE "ss_pot"; SAMESPRITE; END;
+
+TILE "ss_switch_rock";
+	SAMESPRITE; SAMESPRITEOBJ;
+	SOLID block;
+	FLAGS		Switchable, SwitchStays;
+	BREAKANIM	"effect_rock_break";
+	BREAKSOUND	"rock_shatter";
+END;
+TILE "ss_switch_rock_underwater"; CLONE "ss_switch_rock"; SAMESPRITE; END;
+
+TILE "ss_statue"; SAMESPRITE; SOLID block; END;
+TILE "ss_statue_underwater"; SAMESPRITE; SOLID block; END;
+TILE "ss_pipe_above"; SAMESPRITEABOVE; SOLID block; END;
+TILE "ss_pulse_shooter_left";
+	SAMESPRITE;
+	SOLID block;
+	#TYPE	TilePulseShooter
+	#PROPERTIES left
+END;
+TILE "ss_pulse_shooter_right";
+	CLONE "ss_pulse_shooter_left";
+	SAMESPRITE;
+	#PROPERTIES right
+END;
+
+TILE "ss_coral_top_short"; SAMESPRITE; ENVTYPE Water; END;
+TILE "ss_coral_top"; SAMESPRITE; ENVTYPE Water; END;
+TILE "ss_coral_mid"; SAMESPRITE; ENVTYPE Water; END;
+
+TILE "ss_bombable_block";
+	SAMESPRITE;
+	SOLID block;
+	FLAGS		Bombable;
+	BREAKANIM	"effect_rock_break";
+	BREAKSOUND	"rock_shatter";
+END;
+TILE "ss_bombable_block_underwater"; CLONE "ss_bombable_block"; SAMESPRITE; END;
+TILE "ss_block"; SAMESPRITE; SOLID block; END;
+TILE "ss_block_underwater"; SAMESPRITE; SOLID block; END;
+
+TILE "ss_fish_statue_left_closed"; SAMESPRITE; SOLID block; END;
+TILE "ss_fish_statue_right_closed"; SAMESPRITE; SOLID block; END;
+TILE "ss_fish_statue_left_open"; SAMESPRITE; SOLID block; END;
+TILE "ss_fish_statue_right_open"; SAMESPRITE; SOLID block; END;
+TILE "ss_fish_statue_left_closed_underwater"; SAMESPRITE; SOLID block; END;
+TILE "ss_fish_statue_right_closed_underwater"; SAMESPRITE; SOLID block; END;
+TILE "ss_fish_statue_left_open_underwater"; SAMESPRITE; SOLID block; END;
+TILE "ss_fish_statue_right_open_underwater"; SAMESPRITE; SOLID block; END;
+
+TILE "ss_ladder_bars"; SAMESPRITE; ENVTYPE Ladder; END;
+TILE "ss_ladder"; SAMESPRITE; ENVTYPE Ladder; END;
+TILE "ss_ladder_underwater"; SAMESPRITE; ENVTYPE Ladder; END;
+TILE "ss_magnet_stone_north";
+	SAMESPRITE;
+	SOLID block;
+END;
+TILE "ss_magnet_stone_south";
+	CLONE "ss_magnet_stone_north";
+	SAMESPRITE;
+END;
+TILE "ss_prison_bars"; SAMESPRITE; SOLID block; END;
+TILE "ss_grass_flowers"; SAMESPRITE; END;
+TILE "ss_grass"; SAMESPRITE; END;
+TILE "ss_stalactite_top"; SAMESPRITE; END;
+TILE "ss_stalactite_bottom"; SAMESPRITE; END;
+
+TILE "ss_torch_light_top_left"; SAMESPRITE; END;
+TILE "ss_torch_light_top_mid"; SAMESPRITE; END;
+TILE "ss_torch_light_top_right"; SAMESPRITE; END;
+TILE "ss_torch_light_side_left"; SAMESPRITE; END;
+
+TILE "ss_torch"; SAMESPRITE; END;
+
+TILE "ss_torch_light_side_right"; SAMESPRITE; END;
+TILE "ss_torch_light_bottom_left"; SAMESPRITE; END;
+TILE "ss_torch_light_bottom_mid"; SAMESPRITE; END;
+TILE "ss_torch_light_bottom_right"; SAMESPRITE; END;
+
+TILE "ss_faint_light_top_left"; SAMESPRITE; END;
+TILE "ss_faint_light_top_right"; SAMESPRITE; END;
+TILE "ss_faint_light_bottom_left"; SAMESPRITE; END;
+TILE "ss_faint_light_bottom_right"; SAMESPRITE; END;
+
+TILE "ss_moving_platform"; SAMESPRITE; SOLID block; END;
+TILE "ss_disappearing_platform"; SAMESPRITE; SOLID block; END;
+TILE "ss_rotating_platform"; SAMESPRITE; SOLID block; END;
+
+TILE "ss_conveyor_belt_east";
+	SPRITEINDEX		0, "tile_ss_conveyor_belt_east_both";
+	SPRITEINDEX		1, "tile_ss_conveyor_belt_east_left";
+	SPRITEINDEX		2, "tile_ss_conveyor_belt_east_right";
+	SPRITEINDEX		3, "tile_ss_conveyor_belt_east_mid";
+	SOLID block;
+	#CONVEYOR
+END;
+
+TILE "ss_conveyor_belt_west";
+	SPRITEINDEX		0, "tile_ss_conveyor_belt_west_both";
+	SPRITEINDEX		1, "tile_ss_conveyor_belt_west_left";
+	SPRITEINDEX		2, "tile_ss_conveyor_belt_west_right";
+	SPRITEINDEX		3, "tile_ss_conveyor_belt_west_mid";
+	SOLID block;
+	#CONVEYOR
+END;

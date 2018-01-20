@@ -53,18 +53,10 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				LookupSubtypes subtype = ParseSubtype(parameters.GetString(1));
 
 				CommandParam colorParam = parameters.GetParam(2);
-				int a = 255;
-				if (colorParam.ChildCount == 4) {
-					a = colorParam.GetInt(3);
-					if (a != 255 && a != 0)
-						ThrowCommandParseError("Color alpha must be either 0 or 255!");
-				}
-				Color color = new Color(
-					colorParam.GetInt(0),
-					colorParam.GetInt(1),
-					colorParam.GetInt(2),
-					a);
-
+				Color color = parameters.GetColor(2);
+				if (color.A != 255 && color.A != 0)
+					ThrowCommandParseError("Color alpha must be either 0 or 255!");
+				
 				palette.SetColor(parameters.GetString(0), subtype, color);
 			});
 			//=====================================================================================
@@ -79,12 +71,29 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					parameters.GetString(2), lookupSubtype);
 			});
 			//=====================================================================================
+			AddCommand("COPY", 1,
+				"string name, string subtype, string lookupName, string lookupSubtype",
+			delegate (CommandParam parameters) {
+				LookupSubtypes subtype = ParseSubtype(parameters.GetString(1));
+				LookupSubtypes lookupSubtype = ParseSubtype(parameters.GetString(3));
+
+				palette.CopyLookup(
+					parameters.GetString(0), subtype,
+					parameters.GetString(2), lookupSubtype);
+			});
+			//=====================================================================================
 			AddCommand("RESET", 1,
 				"string name, string subtype",
 			delegate (CommandParam parameters) {
 				LookupSubtypes subtype = ParseSubtype(parameters.GetString(1));
 
 				palette.Reset(parameters.GetString(0), subtype);
+			});
+			//=====================================================================================
+			AddCommand("CONST", 1,
+				"string name",
+			delegate (CommandParam parameters) {
+				palette.AddConst(parameters.GetString(0));
 			});
 			//=====================================================================================
 			// CLONING

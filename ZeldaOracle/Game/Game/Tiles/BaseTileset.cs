@@ -21,12 +21,14 @@ namespace ZeldaOracle.Game.Tiles {
 		protected T[,]			tileData;
 		// The coordinate in the tile data grid of the default tile.
 		protected Point2I		defaultTile;
+		/// <summary>True if the existing 16x16 preview sprites are used to display tiles.</summary>
+		protected bool			usePreviewSprites;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
-		
+
 		public BaseTileset(string id, SpriteSheet sheet, Point2I size) :
 			this(id, sheet, size.X, size.Y)
 		{
@@ -38,7 +40,8 @@ namespace ZeldaOracle.Game.Tiles {
 			this.size			= new Point2I(width, height);
 			this.defaultTile	= Point2I.Zero;
 			this.tileData		= new T[width, height];
-			
+			this.usePreviewSprites = true;
+
 			// Create default tile data.
 			Point2I location;
 			for (location.X = 0; location.X < size.X; location.X++) {
@@ -87,7 +90,7 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return tileData[defaultTile.X, defaultTile.Y]; }
 		}
 		
-		public Point2I Size {
+		public Point2I Dimensions {
 			get { return size; }
 			set { size = value; }
 		}
@@ -126,6 +129,11 @@ namespace ZeldaOracle.Game.Tiles {
 					return new Point2I(1, 1);
 				return sheet.Spacing;
 			}
+		}
+
+		public bool UsePreviewSprites {
+			get { return usePreviewSprites; }
+			set { usePreviewSprites = value; }
 		}
 	}
 }

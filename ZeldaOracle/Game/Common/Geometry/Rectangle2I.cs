@@ -273,6 +273,11 @@ namespace ZeldaOracle.Common.Geometry {
 			get { return Point + Size / 2; }
 		}
 
+		/// <summary>Gets the floating point center of the rectangle.</summary>
+		public Vector2F CenterF {
+			get { return (Vector2F) Size / 2f + Point; }
+		}
+
 		/// <summary>Gets the bounding box of the rectangle.</summary>
 		public Rectangle2I Bounds {
 			get { return this; }

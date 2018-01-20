@@ -67,16 +67,15 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 
 			Point2I panNew = -(Directions.ToPoint(direction) * distance);
 			Point2I panOld = Directions.ToPoint(direction) * GameSettings.VIEW_SIZE;
-
-			g.Translate(panNew);
-			menuOld.Draw(g);
-			g.ResetTranslation();
 			
-			g.Translate(panNew);
-			g.Translate(panOld);
+			g.PushTranslation(panNew);
+			menuOld.Draw(g);
+			g.PopTranslation();
+			
+			g.PushTranslation(panNew + panOld);
 			menuNew.Draw(g);
-
-			g.ResetTranslation();
+			g.PopTranslation();
+			
 			GameControl.HUD.Draw(g, true);
 		}
 

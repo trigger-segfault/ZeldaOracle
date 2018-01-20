@@ -123,9 +123,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			AddCommand("SOURCE", "string name",
 			delegate (CommandParam parameters) {
-				if (parameters.HasPrefix()) {
-					ThrowCommandParseError("Invalid use of prefix");
-				}
 				source = GetResource<ISpriteSource>(parameters.GetString(0));
 			});
 			//=====================================================================================
@@ -135,9 +132,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string path, Point cellSize, Point spacing, Point offset",
 				"string name, string path, Point cellSize, Point spacing, Point offset",
 			delegate (CommandParam parameters) {
-				if (parameters.HasPrefix()) {
-					ThrowCommandParseError("Invalid use of prefix");
-				}
 				int i = 1;
 				// Create a new sprite sheet.
 				Image image = null;
@@ -207,17 +201,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			AddCommand("APPEND", (int) Modes.SpriteSet,
 				"Point insertIndex, Sprite sprite, Point drawOffset = (0, 0)",
-				/*"(int insertX, int insertY), string spriteName, (int drawOffsetX, int drawOffsettY) = (0, 0)",
-				// Int needs to go before string as int/float defaults to string.
-				"(int insertX, int insertY), (int indexX, int indexY), (int drawOffsetX, int drawOffsettY) = (0, 0)",
-				"(int insertX, int insertY), (string spriteName, string definition), (int drawOffsetX, int drawOffsettY) = (0, 0)",
-				"(int insertX, int insertY), ((int indexX, int indexY), string definition), (int drawOffsetX, int drawOffsettY) = (0, 0)",
-				"(int insertX, int insertY), (string sourceName, (int indexX, int indexY)), (int drawOffsetX, int drawOffsettY) = (0, 0)",
-				"(int insertX, int insertY), (string sourceName, (int indexX, int indexY), string definition), (int drawOffsetX, int drawOffsettY) = (0, 0)",*/
 			delegate (CommandParam parameters) {
-				if (parameters.HasPrefix()) {
-					ThrowCommandParseError("Invalid use of prefix");
-				}
 				Point2I editPoint = parameters.GetPoint(0);
 				Point2I drawOffset = parameters.GetPoint(2);
 				ISprite editSprite = editingSpriteSet.GetSprite(editPoint);
@@ -239,9 +223,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			AddCommand("PALETTEDICTIONARY", "string name",
 			delegate (CommandParam parameters) {
-				if (parameters.HasPrefix()) {
-					ThrowCommandParseError("Invalid use of prefix");
-				}
 				paletteArgs.Dictionary = GetResource<PaletteDictionary>(parameters.GetString(0));
 				animationBuilder.PaletteArgs = paletteArgs;
 			});
@@ -250,9 +231,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"(string colorGroup, (string subtype, Color color)...)...",
 				"string palette, (string colorGroups...)",
 			delegate (CommandParam parameters) {
-				if (parameters.HasPrefix()) {
-					ThrowCommandParseError("Invalid use of prefix");
-				}
 				paletteArgs.ColorMapping.Clear();
 				if (parameters.GetParam(0).Type == CommandParamType.Array) {
 					int count = parameters.ChildCount;
@@ -308,7 +286,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 							else {
 								subMapping = paletteArgs.ColorMapping[color];
 							}
-							subMapping.Add(i, new ColorGroupSubtypePair(colorGroup, subtype, paletteArgs.Dictionary));
+							if (!subMapping.ContainsKey(i))
+								subMapping.Add(i, new ColorGroupSubtypePair(colorGroup, subtype, paletteArgs.Dictionary));
 						}
 						paletteArgs.IndexedPossibleColorGroups[i] = i;
 						paletteArgs.PossibleColorGroups[i] = colorGroup;
@@ -319,18 +298,12 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			AddCommand("IGNORECOLORS", "const none", "const null",
 			delegate (CommandParam parameters) {
-				if (parameters.HasPrefix()) {
-					ThrowCommandParseError("Invalid use of prefix");
-				}
 				paletteArgs.IgnoreColors.Clear();
 				animationBuilder.PaletteArgs = paletteArgs;
 			});
 			//=====================================================================================
 			AddCommand("IGNORECOLORS", "(Color colors...)",
 			delegate (CommandParam parameters) {
-				if (parameters.HasPrefix()) {
-					ThrowCommandParseError("Invalid use of prefix");
-				}
 				paletteArgs.IgnoreColors.Clear();
 				var colorParams = parameters.GetParam(0);
 				for (int i = 0; i < colorParams.ChildCount; i++) {
@@ -342,18 +315,12 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			AddCommand("CHUNKSIZE", "const none", "const null",
 			delegate (CommandParam parameters) {
-				if (parameters.HasPrefix()) {
-					ThrowCommandParseError("Invalid use of prefix");
-				}
 				paletteArgs.ChunkSize = Point2I.Zero;
 				animationBuilder.PaletteArgs = paletteArgs;
 			});
 			//=====================================================================================
 			AddCommand("CHUNKSIZE", "Point chunkSize",
 			delegate (CommandParam parameters) {
-				if (parameters.HasPrefix()) {
-					ThrowCommandParseError("Invalid use of prefix");
-				}
 				paletteArgs.ChunkSize = parameters.GetPoint(0);
 				animationBuilder.PaletteArgs = paletteArgs;
 			});
@@ -362,9 +329,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			AddCommand("END", "",
 			delegate (CommandParam parameters) {
-				if (parameters.HasPrefix()) {
-					ThrowCommandParseError("Invalid use of prefix");
-				}
 				if (Mode != Modes.Root) {
 					if ((Mode & Modes.SpriteMask) != 0) {
 						if (Mode.HasFlag(Modes.SpriteSet)) {
@@ -496,13 +460,13 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				return Rotation.None;
 
 			Rotation rotation = Rotation.None;
-			if (rotStr.StartsWith("cc", StringComparison.OrdinalIgnoreCase)) {
+			if (rotStr.EndsWith("ccw", StringComparison.OrdinalIgnoreCase)) {
 				rotStr = rotStr.Substring(2);
 				if (!Enum.TryParse("Counter" + rotStr, out rotation))
 					ThrowCommandParseError("Invalid rotation specified!");
 			}
 			else {
-				if (rotStr.StartsWith("c"))
+				if (rotStr.EndsWith("cw"))
 					rotStr = rotStr.Substring(1);
 				if (!Enum.TryParse("Clockwise" + rotStr, out rotation))
 					ThrowCommandParseError("Invalid rotation specified!");
@@ -531,9 +495,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 		/// <summary>Gets a sprite.</summary>
 		private ISprite GetSprite(ISpriteSource source, Point2I index) {
-			if (SourceMode == SourceModes.None)
-				ThrowCommandParseError("Cannot get sprite from source with no sprite sheet source!");
-			if (SourceMode == SourceModes.SpriteSheet && paletteArgs.Dictionary != null) {
+			if (source == null)
+				ThrowCommandParseError("Cannot get sprite from source with no sprite source!");
+			if (source is SpriteSheet && paletteArgs.Dictionary != null) {
 				paletteArgs.Image = SpriteSheet.Image;
 				paletteArgs.SourceRect = SpriteSheet.GetSourceRect(index);
 				return Resources.PalettedSpriteDatabase.AddSprite(paletteArgs);
@@ -615,7 +579,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				// Overload 2:
 				source = this.source;
 				index = param.GetPoint(startIndex);
-				return GetSprite(this.source, index);
+				return GetSprite(source, index);
 			}
 			else if (param0.GetParam(0).IsValidType(CommandParamType.String)) {
 				if (param0.GetParam(1).IsValidType(CommandParamType.Integer)) {
@@ -630,7 +594,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					// Overload 6:
 					source = GetResource<ISpriteSource>(param0.GetString(0));
 					index = param0.GetPoint(1);
-					return GetSprite(this.source, index);
+					return GetSprite(source, index);
 				}
 				else {
 					// Overload 7:
@@ -645,7 +609,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				source = this.source;
 				index = param0.GetPoint(0);
 				definition = param0.GetString(1);
-				return GetDefinedSprite(this.source, index, definition);
+				return GetDefinedSprite(source, index, definition);
 			}
 		}
 

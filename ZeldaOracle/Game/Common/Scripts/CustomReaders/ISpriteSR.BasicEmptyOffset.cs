@@ -21,9 +21,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("EMPTY", (int) Modes.Root,
 				"string name",
 			delegate (CommandParam parameters) {
-				if (parameters.HasPrefix()) {
-					ThrowCommandParseError("Invalid use of prefix");
-				}
 				spriteName = parameters.GetString(0);
 				sprite = new EmptySprite();
 				AddResource<ISprite>(spriteName, sprite);
@@ -91,10 +88,11 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string name, Sprite sprite",
 			delegate (CommandParam parameters) {
 				spriteName = parameters.GetString(0);
-				sprite = GetSpriteFromParams(parameters) as BasicSprite;
-				if (sprite == null) {
+				BasicSprite basicSprite = GetSpriteFromParams(parameters, 1) as BasicSprite;
+				if (basicSprite == null) {
 					ThrowCommandParseError("Sprite is not a BasicSprite!");
 				}
+				sprite = new BasicSprite(basicSprite);
 				AddResource<ISprite>(spriteName, sprite);
 
 				Mode |= Modes.BasicSprite;
@@ -232,7 +230,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			// OFFSET SETUP
 			//=====================================================================================
 			AddCommand("OFFSET", (int) Modes.Root, new string[] {
-				"string name, Sprite sprite, Point drawOffset = (0, 0), string flip = none, string rotation = none",
+				"string name, Sprite sprite, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1), string flip = none, string rotation = none",
 				// Int needs to go before string as int/float defaults to string.
 				/*"string name, (int indexX, int indexY), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
 				"string name, (string spriteName, string definition), drawOffset (int x, int y) = (0, 0), string flip = none, string rotation = none",
@@ -243,10 +241,13 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			}, delegate (CommandParam parameters) {
 				spriteName = parameters.GetString(0);
 				Point2I drawOffset = parameters.GetPoint(2);
-				Flip flip = ParseFlip(parameters.GetString(3));
-				Rotation rotation = ParseRotation(parameters.GetString(4));
+				Rectangle2I? clipping = parameters.GetRectangle(3);
+				if (clipping.Value.Size == -Point2I.One)
+					clipping = null;
+				Flip flip = ParseFlip(parameters.GetString(4));
+				Rotation rotation = ParseRotation(parameters.GetString(5));
 				ISprite spriteToOffset = GetSpriteFromParams(parameters, 1);
-				sprite = new OffsetSprite(spriteToOffset, drawOffset, flip, rotation);
+				sprite = new OffsetSprite(spriteToOffset, drawOffset, clipping, flip, rotation);
 				AddResource<ISprite>(spriteName, sprite);
 				Mode |= Modes.OffsetSprite;
 			});
@@ -278,11 +279,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("SOURCERECT", (int) Modes.BasicSprite,
-				"Point point, Point size",
+				"Rectangle sourceRect",
 			delegate (CommandParam parameters) {
-				BasicSprite.SourceRect = new Rectangle2I(
-					BasicSprite.SourceRect.Point + parameters.GetPoint(0),
-					parameters.GetPoint(1));
+				BasicSprite.SourceRect = parameters.GetRectangle(0) + BasicSprite.SourceRect.Point;
 			});
 			//=====================================================================================
 			AddCommand("DRAWOFFSET", (int) Modes.BasicSprite,
@@ -305,15 +304,13 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("SOURCERECT", (int) (Modes.SpriteSet | Modes.BasicSprite),
-				"Point point, Point size",
+				"Rectangle sourceRect",
 			delegate (CommandParam parameters) {
 				for (int x = 0; x < editingSetDimensions.X; x++) {
 					for (int y = 0; y <  editingSetDimensions.Y; y++) {
 						Point2I point = new Point2I(x, y);
 						BasicSprite basicSprite = GetSprite<BasicSprite>(editingSpriteSet, editingSetStart + point);
-						basicSprite.SourceRect = new Rectangle2I(
-							basicSprite.SourceRect.Point + parameters.GetPoint(0),
-							parameters.GetPoint(1));
+						basicSprite.SourceRect = parameters.GetRectangle(0) + basicSprite.SourceRect.Point;
 					}
 				}
 			});

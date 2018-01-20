@@ -126,7 +126,7 @@ LOOKUP	lever, all				chest, all;
 LOOKUP	locked_block, all		water, all;
 LOOKUP	minecart_track, all		floor, all;
 LOOKUP	output, all				cliff, all;
-LOOKUP	tile_monster, all		cliff, all;
+LOOKUP	flying_tile, all		cliff, all;
 LOOKUP	turnstile, all			grave, all;
 LOOKUP	web, all				grave, all;
 LOOKUP	web, light				stairs, light;
@@ -212,7 +212,7 @@ LOOKUP	snow_entrance, dark		snow, black;
 LOOKUP	jump_flower, all		grass_field, all;
 
 LOOKUP	thick_brush, all		grass_field, all;
-LOOKUP	hedges, all				grass_field, all;
+LOOKUP	hedge, all				grass_field, all;
 
 #==============================================================
 # Interior
@@ -236,7 +236,9 @@ LOOKUP	entrance_brick, all		water, all;
 LOOKUP	entrance_tile, all		stairs, all;
 LOOKUP	essense_brick, all		stairs, all;
 LOOKUP	essense_tile, all		water, all;
-LOOKUP	entrance_light, all		water, all;
+LOOKUP	entrance_light_dirt, all			dirt, all;
+LOOKUP	entrance_light_floor, all			floor, all;
+LOOKUP	entrance_light_fancy_tile_1, all	fancy_tile_1, all;
 
 LOOKUP	fancy_tile_1, all		cliff, all;
 LOOKUP	fancy_tile_2, all		cliff, all;

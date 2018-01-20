@@ -116,7 +116,7 @@ COMPOSITE "tile_vines_top_cave";
 	ADD "temp_8x16_vines_2" (0, 8); END;
 	
 COMPOSITE "tile_vines_top_cave_left";
-	COMBINE "temp_cliff_hole_corner_alt_left" (0, 0);
+	COMBINE "temp_cliff_cave_alt_left" (0, 0);
 	ADD "temp_8x16_vines_top_cave" (0, 8); END;
 	
 COMPOSITE "tile_vines_top_cave_mid";
@@ -124,11 +124,11 @@ COMPOSITE "tile_vines_top_cave_mid";
 	ADD "temp_8x16_vines_top_cave" (0, 8); END;
 	
 COMPOSITE "tile_vines_top_cave_right";
-	COMBINE "temp_cliff_hole_corner_alt_right" (0, 0);
+	COMBINE "temp_cliff_cave_alt_right" (0, 0);
 	ADD "temp_8x16_vines_top_cave" (0, 8); END;
 	
 COMPOSITE "tile_vines_top_cave_both";
-	COMBINE "temp_cliff_hole_corner_alt_both" (0, 0);
+	COMBINE "temp_cliff_cave_alt_both" (0, 0);
 	ADD "temp_8x16_vines_top_cave" (0, 8); END;
 	
 COMPOSITE "tile_vines_top";

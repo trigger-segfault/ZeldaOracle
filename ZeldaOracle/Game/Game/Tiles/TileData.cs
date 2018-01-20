@@ -16,6 +16,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 
 		private ISprite[]			spriteList;
+		private ISprite             spriteAbove;
 		private ISprite				spriteAsObject;
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
 		private Sound				breakSound;
@@ -28,7 +29,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public TileData() {
 			spriteList			= new ISprite[0];
-			spriteAsObject      = null;
+			spriteAbove			= null;
+			spriteAsObject		= null;
 			breakAnimation		= null;
 
 			// General.
@@ -102,6 +104,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public TileData(TileData copy) : base(copy) {
 			//size				= copy.size;
+			spriteAbove			= copy.spriteAbove;
 			spriteAsObject		= copy.spriteAsObject;
 			breakAnimation		= copy.breakAnimation;
 			spriteList			= new ISprite[copy.spriteList.Length];
@@ -115,6 +118,7 @@ namespace ZeldaOracle.Game.Tiles {
 			if (copy is TileData) {
 				TileData copyTileData = (TileData) copy;
 				//size				= copyTileData.size;
+				spriteAbove			= copyTileData.spriteAbove;
 				spriteAsObject		= copyTileData.spriteAsObject;
 				breakAnimation		= copyTileData.breakAnimation;
 				breakSound			= copyTileData.breakSound;
@@ -160,6 +164,11 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
+		public override Point2I Size {
+			get { return properties.Get<Point2I>("size"); }
+			set { properties.SetGeneric("size", value); }
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -170,16 +179,14 @@ namespace ZeldaOracle.Game.Tiles {
 			set { spriteList = value; }
 		}
 
-		public Point2I Size {
-			get { return properties.Get<Point2I>("size"); }
-			set { properties.SetGeneric("size", value); }
-			//get { return size; }
-			//set { size = value; }
-		}
-
 		public TileFlags Flags {
 			get { return (TileFlags) properties.GetInteger("flags", 0); }
 			set { properties.Set("flags", (int) value); }
+		}
+
+		public ISprite SpriteAbove {
+			get { return spriteAbove; }
+			set { spriteAbove = value; }
 		}
 
 		public ISprite SpriteAsObject {

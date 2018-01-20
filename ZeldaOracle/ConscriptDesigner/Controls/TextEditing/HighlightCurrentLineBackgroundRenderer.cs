@@ -69,7 +69,7 @@ namespace ConscriptDesigner.Controls.TextEditing {
 				foreach (var rect in BackgroundGeometryBuilder.GetRectsForSegment(textView, currentLine)) {
 					Point point = new Point(Math.Round(rect.X + 2), Math.Round(rect.Y));
 					Size size = new Size(
-						Math.Round(editor.TextArea.TextView.ActualWidth - 5),
+						Math.Round(Math.Max(0, editor.TextArea.TextView.ActualWidth - 5)),
 						Math.Round(rect.Height));
 					drawingContext.DrawRectangle(null, pen, new Rect(point, size));
 				}

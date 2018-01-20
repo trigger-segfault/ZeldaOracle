@@ -14,24 +14,160 @@ SPRITESHEET "tileset_sidescroll", (16, 16), (1, 1), (18, 18);
 # Tilesets
 #==============================================================
 
-TILESET sidescroll, tileset_sidescroll, (12, 14);
-DEFAULT (0, 7);
+TILESET "sidescroll", (12, 14);
 
-CONFIG;
-SSSSSSSSSS..
-SSSSSSSSSS..
-SSSSSSSSSSSS
-SSSSSSSSSSSS
-SSSSSSSSSSSS
-SSSSSSSSS...
-SSSSSSSS....
-...SSSSSD...
-.SSSSSSSD...
-WWWWWSSSD...
-.S...SSSD...
-.....S..D...
-END;
 
-SETTILE (2, 7), pot;
+SETTILE (0, 0), "ss_bricks";
+SETTILE (1, 0), "ss_bricks_ceiling";
+SETTILE (2, 0), "ss_bricks_background";
+SETTILE (4, 0), "ss_bricks_mixed";
+
+SETTILE (0, 1), "ss_ice_bricks";
+SETTILE (1, 1), "ss_ice_block";
+SETTILE (2, 1), "ss_ice_background";
+
+SETTILE (3, 0), "ss_pipe";
+SETTILE (3, 1), "ss_pipe_alt";
+SETTILE (4, 1), "ss_pipe_horizontal";
+
+SETTILE (5, 0), "ss_small_bricks";
+SETTILE (5, 1), "ss_small_bricks_alt";
+SETTILE (6, 0), "ss_small_bricks_surface_1";
+SETTILE (7, 0), "ss_small_bricks_surface_2";
+SETTILE (6, 1), "ss_small_bricks_surface_3";
+SETTILE (7, 1), "ss_small_bricks_surface_4";
+
+SETTILE (8, 0), "ss_brick_pillar_left_dark";
+SETTILE (9, 0), "ss_brick_pillar_right_light";
+SETTILE (8, 1), "ss_brick_pillar_left_light";
+SETTILE (9, 1), "ss_brick_pillar_right_dark";
+
+SETTILE (0, 2), "ss_cave_wall_top_left";
+SETTILE (1, 2), "ss_cave_wall_top_mid";
+SETTILE (2, 2), "ss_cave_wall_top_right";
+SETTILE (0, 3), "ss_cave_wall_side_left";
+SETTILE (1, 3), "ss_cave_wall";
+SETTILE (2, 3), "ss_cave_wall_side_right";
+SETTILE (0, 4), "ss_cave_wall_bottom_left";
+SETTILE (1, 4), "ss_cave_wall_bottom_mid";
+SETTILE (2, 4), "ss_cave_wall_bottom_right";
+
+SETTILE (0, 5), "ss_cave_wall_top_left_underwater";
+SETTILE (1, 5), "ss_cave_wall_top_mid_underwater";
+SETTILE (2, 5), "ss_cave_wall_top_right_underwater";
+SETTILE (0, 6), "ss_cave_wall_bottom_left_underwater";
+SETTILE (1, 6), "ss_cave_wall_bottom_mid_underwater";
+SETTILE (2, 6), "ss_cave_wall_bottom_right_underwater";
+
+SETTILE (3, 2), "ss_cave_wall_moss_top_left";
+SETTILE (4, 2), "ss_cave_wall_moss_top_mid";
+SETTILE (5, 2), "ss_cave_wall_moss_top_right";
+SETTILE (6, 2), "ss_cave_wall_moss_top_both";
+
+SETTILE (3, 3), "ss_cave_wall_inside_se";
+SETTILE (4, 3), "ss_cave_wall_inside_sw";
+SETTILE (3, 4), "ss_cave_wall_inside_ne";
+SETTILE (4, 4), "ss_cave_wall_inside_nw";
+
+SETTILE (5, 3), "ss_cave_wall_side_both_inside_se";
+SETTILE (6, 3), "ss_cave_wall_side_both_inside_sw";
+SETTILE (5, 4), "ss_cave_wall_side_both_inside_ne";
+SETTILE (6, 4), "ss_cave_wall_side_both_inside_nw";
+
+SETTILE (7, 2), "ss_cave_wall_side_both";
+SETTILE (7, 3), "ss_cave_wall_inside_sew";
+SETTILE (7, 4), "ss_cave_wall_inside_new";
+
+SETTILE (3, 5), "ss_cave_wall_top_both_underwater";
+SETTILE (3, 6), "ss_cave_wall_bottom_both_underwater";
+SETTILE (4, 6), "ss_cave_wall_bottom_both_mirrored_underwater";
+SETTILE (4, 5), "ss_cave_wall_single_underwater";
+SETTILE (5, 5), "ss_cave_wall_alt_single_underwater";
+SETTILE (5, 6), "ss_cave_wall_single_underwater_bottom";
+
+
+SETTILE (6, 5), "ss_cave_wall_top_both";
+SETTILE (6, 6), "ss_cave_wall_bottom_both";
+SETTILE (7, 6), "ss_cave_wall_bottom_both_mirrored";
+SETTILE (7, 5), "ss_cave_wall_single";
+SETTILE (8, 5), "ss_cave_wall_alt_single";
+
+SETTILE (8, 2), "ss_cave_wall_alt_top_left";
+SETTILE (9, 2), "ss_cave_wall_alt_top_right";
+SETTILE (10, 2), "ss_cave_wall_alt_top_mid";
+SETTILE (11, 2), "ss_cave_wall_alt_top_both";
+SETTILE (8, 3), "ss_cave_wall_alt_bottom_both";
+SETTILE (9, 3), "ss_cave_wall_alt_side_both";
+SETTILE (10, 3), "ss_cave_wall_alt_inside_nw";
+SETTILE (11, 3), "ss_cave_wall_alt_inside_ne";
+SETTILE (8, 4), "ss_cave_wall_alt_side_left";
+SETTILE (9, 4), "ss_cave_wall_alt_left";
+SETTILE (10, 4), "ss_cave_wall_alt_right";
+SETTILE (11, 4), "ss_cave_wall_alt_side_right";
+
+SETTILE (9, 5), "ss_lava";
+SETTILE (10, 5), "ss_lava_surface_1";
+SETTILE (11, 5), "ss_lava_surface_1";
+
+SETTILE (0, 7), "ss_background";
+SETTILE (0, 8), "ss_spikes";
+SETTILE (0, 9), "ss_water";
+SETTILE (0, 10), "ss_spikes_underwater";
+SETTILE (1, 7), "ss_switch_rock";
+SETTILE (1, 8), "ss_statue";
+SETTILE (1, 9), "ss_water_surface";
+SETTILE (1, 10), "ss_statue_underwater";
+SETTILE (2, 7), "ss_pot";
+SETTILE (3, 7), "ss_pipe_above";
+SETTILE (2, 8), "ss_pulse_shooter_left";
+SETTILE (3, 8), "ss_pulse_shooter_right";
+SETTILE (4, 7), "ss_magnet_stone_north";
+SETTILE (4, 8), "ss_magnet_stone_south";
+SETTILE (2, 9), "ss_coral_top";
+SETTILE (3, 9), "ss_coral_top_short";
+SETTILE (4, 9), "ss_coral_mid";
+
+SETTILE (5, 7), "ss_bombable_block";
+SETTILE (5, 8), "ss_block";
+SETTILE (5, 9), "ss_bombable_block_underwater";
+SETTILE (5, 10), "ss_block_underwater";
+SETTILE (5, 11), "ss_prison_bars";
+
+SETTILE (6, 7), "ss_fish_statue_left_closed";
+SETTILE (7, 7), "ss_fish_statue_right_closed";
+SETTILE (6, 8), "ss_fish_statue_left_open";
+SETTILE (7, 8), "ss_fish_statue_right_open";
+SETTILE (6, 9), "ss_fish_statue_left_closed_underwater";
+SETTILE (7, 9), "ss_fish_statue_right_closed_underwater";
+SETTILE (6, 10), "ss_fish_statue_left_open_underwater";
+SETTILE (7, 10), "ss_fish_statue_right_open_underwater";
+
+SETTILE (6, 11), "ss_grass_flowers";
+SETTILE (7, 11), "ss_grass";
+
+SETTILE (8, 7), "ss_ladder_bars";
+SETTILE (8, 8), "ss_ladder_bars";
+SETTILE (8, 9), "ss_ladder";
+SETTILE (8, 10), "ss_ladder";
+SETTILE (8, 11), "ss_ladder_underwater";
+
+SETTILE (9, 10), "ss_stalactite_top";
+SETTILE (9, 11), "ss_stalactite_bottom";
+
+SETTILE (9, 7), "ss_torch_light_top_left";
+SETTILE (10, 7), "ss_torch_light_top_mid";
+SETTILE (11, 7), "ss_torch_light_top_right";
+SETTILE (9, 8), "ss_torch_light_side_left";
+SETTILE (10, 8), "ss_torch";
+SETTILE (11, 8), "ss_torch_light_side_right";
+SETTILE (9, 9), "ss_torch_light_bottom_left";
+SETTILE (10, 9), "ss_torch_light_bottom_mid";
+SETTILE (11, 9), "ss_torch_light_bottom_right";
+
+SETTILE (10, 10), "ss_faint_light_top_left";
+SETTILE (11, 10), "ss_faint_light_top_right";
+SETTILE (10, 11), "ss_faint_light_bottom_left";
+SETTILE (11, 11), "ss_faint_light_bottom_right";
+
 
 END;

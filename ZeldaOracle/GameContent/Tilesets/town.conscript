@@ -1,467 +1,197 @@
-
-#==============================================================
-# Sprite Sheets
-#==============================================================
-
-SPRITESHEET "tileset_town",					(16, 16), (1, 1), (18, 18);
-SPRITESHEET "tileset_town_extras_16x16",		(16, 16), (1, 1), (18, 18);
-
-
-#==============================================================
-# Tiles
-#==============================================================
-
-
-TILE "roof_brown_top_left_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_brown_top_left_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_brown_top_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_brown_top_right_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_brown_top_right_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_brown_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "roof_brown_bottom_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_brown_bottom_right"; SAMESPRITE; SOLID block; END;
-
-TILE "roof_tiled_red_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_tiled_red_right"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_top_left_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_top_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_top_right_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_bottom_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_bottom_right"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_both_left_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_both_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_both_right_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_both_both_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_top_left_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_top_right_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_both_left_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_both_right_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_both_both_light"; SAMESPRITE; SOLID block; END;
-
-TILE "roof_red_clock_top_left_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_clock_top_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_clock_top_right_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_clock_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_clock_bottom_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_clock_bottom_right"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_clock_top_left_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_clock_top_right_light"; SAMESPRITE; SOLID block; END;
-
-TILE "roof_red_boxing_top_left_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_boxing_top_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_boxing_top_right_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_boxing_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_boxing_bottom_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_boxing_bottom_right"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_boxing_top_left_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_boxing_top_right_light"; SAMESPRITE; SOLID block; END;
-
-TILE "roof_red_mask_both_left_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_mask_both_right_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_mask_both_left_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_mask_both_right_light"; SAMESPRITE; SOLID block; END;
-
-TILE "roof_red_bottom_mid_shop_left"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_bottom_mid_shop_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_bottom_mid_shop_right"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_bottom_left_shop_left"; SAMESPRITE; SOLID block; END;
-TILE "roof_red_bottom_right_shop_right"; SAMESPRITE; SOLID block; END;
-
-
-TILE "roof_tiled_blue_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_tiled_blue_right"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_top_left_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_top_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_top_right_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_bottom_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_bottom_right"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_both_left_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_both_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_both_right_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_both_both_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_top_left_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_top_right_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_both_left_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_both_right_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_both_both_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_top_left_water"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_top_right_water"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_both_left_water"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_both_right_water"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_both_both_water"; SAMESPRITE; SOLID block; END;
-
-TILE "roof_blue_clock_top_left_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_clock_top_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_clock_top_right_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_clock_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_clock_bottom_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_clock_bottom_right"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_clock_top_left_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_clock_top_right_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_clock_top_left_water"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_clock_top_right_water"; SAMESPRITE; SOLID block; END;
-
-TILE "roof_blue_boxing_top_left_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_boxing_top_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_boxing_top_right_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_boxing_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_boxing_bottom_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_boxing_bottom_right"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_boxing_top_left_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_boxing_top_right_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_boxing_top_left_water"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_boxing_top_right_water"; SAMESPRITE; SOLID block; END;
-
-TILE "roof_blue_mask_both_left_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_mask_both_right_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_mask_both_left_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_mask_both_right_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_mask_both_left_water"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_mask_both_right_water"; SAMESPRITE; SOLID block; END;
-
-TILE "roof_blue_bottom_mid_shop_left"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_bottom_mid_shop_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_bottom_mid_shop_right"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_bottom_left_shop_left"; SAMESPRITE; SOLID block; END;
-TILE "roof_blue_bottom_right_shop_right"; SAMESPRITE; SOLID block; END;
-
-
-
-TILE "roof_tiled_green_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_tiled_green_right"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_top_left_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_top_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_top_right_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_bottom_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_bottom_right"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_both_left_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_both_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_both_right_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_both_both_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_top_left_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_top_right_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_both_left_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_both_right_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_both_both_light"; SAMESPRITE; SOLID block; END;
-
-TILE "roof_green_clock_top_left_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_clock_top_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_clock_top_right_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_clock_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_clock_bottom_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_clock_bottom_right"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_clock_top_left_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_clock_top_right_light"; SAMESPRITE; SOLID block; END;
-
-TILE "roof_green_boxing_top_left_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_boxing_top_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_boxing_top_right_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_boxing_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_boxing_bottom_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_boxing_bottom_right"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_boxing_top_left_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_boxing_top_right_light"; SAMESPRITE; SOLID block; END;
-
-TILE "roof_green_mask_both_left_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_mask_both_right_dark"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_mask_both_left_light"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_mask_both_right_light"; SAMESPRITE; SOLID block; END;
-
-TILE "roof_green_bottom_mid_shop_left"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_bottom_mid_shop_mid"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_bottom_mid_shop_right"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_bottom_left_shop_left"; SAMESPRITE; SOLID block; END;
-TILE "roof_green_bottom_right_shop_right"; SAMESPRITE; SOLID block; END;
-
-
-TILE "house_wall"; SAMESPRITE; SOLID block; END;
-TILE "house_wall_door_right"; SAMESPRITE; SOLID doorway_half_right; END;
-TILE "house_wall_door_left"; SAMESPRITE; SOLID doorway_half_left; END;
-TILE "house_door"; SAMESPRITE; SOLID doorway; END;
-TILE "house_door_locked"; SAMESPRITE; SOLID block; END;
-
-TILE "water_house_wall"; SAMESPRITE; SOLID block; END;
-TILE "water_house_wall_door_right"; SAMESPRITE; SOLID doorway_half_right; END;
-TILE "water_house_wall_door_left"; SAMESPRITE; SOLID doorway_half_left; END;
-TILE "water_house_door"; SAMESPRITE; SOLID doorway; END;
-TILE "water_house_door_locked"; SAMESPRITE; SOLID block; END;
-
-TILE "plank_fence_left"; SAMESPRITE; SOLID block; END;
-TILE "plank_fence_mid"; SAMESPRITE; SOLID block; END;
-TILE "plank_fence_right"; SAMESPRITE; SOLID block; END;
-TILE "plank_fence_sand"; SAMESPRITE; SOLID block; END;
-TILE "fence_post"; SAMESPRITE; SOLID block; END;
-
-TILE "statue_block_lined_up"; SAMESPRITE; SOLID block; END;
-TILE "statue_block"; SAMESPRITE; SOLID block; END;
-TILE "statue_block_water"; SAMESPRITE; SOLID block; END;
-TILE "stone_block_lined_up"; SAMESPRITE; SOLID block; END;
-TILE "stone_block"; SAMESPRITE; SOLID block; END;
-TILE "stone_block_water"; SAMESPRITE; SOLID block; END;
-TILE "brick_block_lined_up"; SAMESPRITE; SOLID block; END;
-TILE "brick_block"; SAMESPRITE; SOLID block; END;
-TILE "planter_lined_up"; SAMESPRITE; SOLID block; END;
-TILE "planter"; SAMESPRITE; SOLID block; END;
-
-TILE "planter_flower_red"; SAMESPRITE; SOLID block; END;
-TILE "planter_flower_blue"; SAMESPRITE; SOLID block; END;
-TILE "planter_lined_up_flowers_red"; SAMESPRITE; SOLID block; END;
-TILE "planter_lined_up_flowers_blue"; SAMESPRITE; SOLID block; END;
-TILE "planter_lined_up_flowers_red_blue"; SAMESPRITE; SOLID block; END;
-TILE "planter_lined_up_flowers_blue_red"; SAMESPRITE; SOLID block; END;
-
-TILE "gate_top"; SAMESPRITE; SOLID block; END;
-TILE "gate"; SAMESPRITE; SOLID block; END;
-TILE "vasu_sign"; SAMESPRITE; SOLID block; END;
-TILE "chimney"; SAMESPRITE; SOLID block; END;
-
-TILE "water_statue_mermaid_nw"; SAMESPRITE; SOLID block; END;
-TILE "water_statue_mermaid_ne"; SAMESPRITE; SOLID block; END;
-TILE "water_statue_mermaid_sw"; SAMESPRITE; SOLID block; END;
-TILE "water_statue_mermaid_se"; SAMESPRITE; SOLID block; END;
-TILE "water_statue_base_nw"; SAMESPRITE; SOLID block; END;
-TILE "water_statue_base_ne"; SAMESPRITE; SOLID block; END;
-TILE "water_statue_base_sw"; SAMESPRITE; SOLID block; END;
-TILE "water_statue_base_se"; SAMESPRITE; SOLID block; END;
-
-TILE "fountain_dirt_nw"; SAMESPRITE; SOLID block; END;
-TILE "fountain_dirt_ne"; SAMESPRITE; SOLID block; END;
-TILE "fountain_dirt_sw"; SAMESPRITE; SOLID block; END;
-TILE "fountain_dirt_se"; SAMESPRITE; SOLID block; END;
-TILE "fountain_path_nw"; SAMESPRITE; SOLID block; END;
-TILE "fountain_path_ne"; SAMESPRITE; SOLID block; END;
-TILE "fountain_path_sw"; SAMESPRITE; SOLID block; END;
-TILE "fountain_path_se"; SAMESPRITE; SOLID block; END;
-
-TILE "bridge_vertical_left"; SAMESPRITE; SOLID bridge_v_left; END;
-TILE "bridge_vertical_mid"; SAMESPRITE; END;
-TILE "bridge_vertical_right"; SAMESPRITE; SOLID bridge_v_right; END;
-TILE "bridge_vertical_both"; SAMESPRITE; SOLID bridge_v; END;
-TILE "bridge_horizontal_top"; SAMESPRITE; SOLID bridge_h_top; END;
-TILE "bridge_horizontal_mid"; SAMESPRITE; END;
-TILE "bridge_horizontal_bottom"; SAMESPRITE; SOLID bridge_h_bottom; END;
-TILE "bridge_horizontal_both"; SAMESPRITE; SOLID bridge_h; END;
-
-TILE "tombstone_hole_left"; SAMESPRITE; SOLID block; END;
-TILE "tombstone_hole_right"; SAMESPRITE; SOLID block; END;
-TILE "grave_stationary"; SPRITE "tile_grave"; SOLID block; END;
-
 #==============================================================
 # Tilesets
 #==============================================================
 
-TILESET town, tileset_town, (12, 14);
-DEFAULT (4, 11);
+TILESET "town", (12, 14);
 
-CONFIG;
-SSSSSSSSSSSS
-SSSSSSSSSSSS
-SSSSSSSSS.SS
-SSSSSSSSSSSS
-SSSSSSSSSSSS
-SSSSSSSSSS.S
-SSSSSSS..S.S
-SSSSSSSSSS.S
-SSS.....SSSS
-SSS....SSSSS
-.......SSSSS
-SSSS....SSSS
-SSSS........
-SSSSSSSSS...
-END;
 
-# DOORWAY TILES
+ADDTILE (0, 0), "roof_red_top_left_dark";
+ADDTILE (1, 0), "roof_red_top_mid";
+ADDTILE (2, 0), "roof_red_top_right_dark";
+ADDTILE (0, 1), "roof_red_bottom_left";
+ADDTILE (1, 1), "roof_red_bottom_mid";
+ADDTILE (2, 1), "roof_red_bottom_right";
+ADDTILE (0, 2), "roof_red_both_left_dark";
+ADDTILE (1, 2), "roof_red_both_mid";
+ADDTILE (2, 2), "roof_red_both_right_dark";
+ADDTILE (0, 3), "roof_red_both_both_dark";
+ADDTILE (1, 3), "roof_red_both_left_light";
+ADDTILE (2, 3), "roof_red_both_right_light";
+ADDTILE (0, 4), "roof_red_both_both_light";
+ADDTILE (1, 4), "roof_red_top_left_light";
+ADDTILE (2, 4), "roof_red_top_right_light";
 
-SETTILE (0, 0), "roof_red_top_left_dark";
-SETTILE (1, 0), "roof_red_top_mid";
-SETTILE (2, 0), "roof_red_top_right_dark";
-SETTILE (0, 1), "roof_red_bottom_left";
-SETTILE (1, 1), "roof_red_bottom_mid";
-SETTILE (2, 1), "roof_red_bottom_right";
-SETTILE (0, 2), "roof_red_both_left_dark";
-SETTILE (1, 2), "roof_red_both_mid";
-SETTILE (2, 2), "roof_red_both_right_dark";
-SETTILE (0, 3), "roof_red_both_both_dark";
-SETTILE (1, 3), "roof_red_both_left_light";
-SETTILE (2, 3), "roof_red_both_right_light";
-SETTILE (0, 4), "roof_red_both_both_light";
-SETTILE (1, 4), "roof_red_top_left_light";
-SETTILE (2, 4), "roof_red_top_right_light";
+ADDTILE (3, 0), "roof_green_top_left_dark";
+ADDTILE (4, 0), "roof_green_top_mid";
+ADDTILE (5, 0), "roof_green_top_right_dark";
+ADDTILE (3, 1), "roof_green_bottom_left";
+ADDTILE (4, 1), "roof_green_bottom_mid";
+ADDTILE (5, 1), "roof_green_bottom_right";
+ADDTILE (3, 2), "roof_green_both_left_dark";
+ADDTILE (4, 2), "roof_green_both_mid";
+ADDTILE (5, 2), "roof_green_both_right_dark";
+ADDTILE (3, 3), "roof_green_both_both_dark";
+ADDTILE (4, 3), "roof_green_both_left_light";
+ADDTILE (5, 3), "roof_green_both_right_light";
+ADDTILE (3, 4), "roof_green_both_both_light";
+ADDTILE (4, 4), "roof_green_top_left_light";
+ADDTILE (5, 4), "roof_green_top_right_light";
 
-SETTILE (3, 0), "roof_green_top_left_dark";
-SETTILE (4, 0), "roof_green_top_mid";
-SETTILE (5, 0), "roof_green_top_right_dark";
-SETTILE (3, 1), "roof_green_bottom_left";
-SETTILE (4, 1), "roof_green_bottom_mid";
-SETTILE (5, 1), "roof_green_bottom_right";
-SETTILE (3, 2), "roof_green_both_left_dark";
-SETTILE (4, 2), "roof_green_both_mid";
-SETTILE (5, 2), "roof_green_both_right_dark";
-SETTILE (3, 3), "roof_green_both_both_dark";
-SETTILE (4, 3), "roof_green_both_left_light";
-SETTILE (5, 3), "roof_green_both_right_light";
-SETTILE (3, 4), "roof_green_both_both_light";
-SETTILE (4, 4), "roof_green_top_left_light";
-SETTILE (5, 4), "roof_green_top_right_light";
+ADDTILE (6, 0), "roof_blue_top_left_dark";
+ADDTILE (7, 0), "roof_blue_top_mid";
+ADDTILE (8, 0), "roof_blue_top_right_dark";
+ADDTILE (6, 1), "roof_blue_bottom_left";
+ADDTILE (7, 1), "roof_blue_bottom_mid";
+ADDTILE (8, 1), "roof_blue_bottom_right";
+ADDTILE (6, 2), "roof_blue_both_left_dark";
+ADDTILE (7, 2), "roof_blue_both_mid";
+ADDTILE (8, 2), "roof_blue_both_right_dark";
+ADDTILE (6, 3), "roof_blue_both_both_dark";
+ADDTILE (7, 3), "roof_blue_both_left_light";
+ADDTILE (8, 3), "roof_blue_both_right_light";
+ADDTILE (6, 4), "roof_blue_both_both_light";
+ADDTILE (7, 4), "roof_blue_top_left_light";
+ADDTILE (8, 4), "roof_blue_top_right_light";
 
-SETTILE (6, 0), "roof_blue_top_left_dark";
-SETTILE (7, 0), "roof_blue_top_mid";
-SETTILE (8, 0), "roof_blue_top_right_dark";
-SETTILE (6, 1), "roof_blue_bottom_left";
-SETTILE (7, 1), "roof_blue_bottom_mid";
-SETTILE (8, 1), "roof_blue_bottom_right";
-SETTILE (6, 2), "roof_blue_both_left_dark";
-SETTILE (7, 2), "roof_blue_both_mid";
-SETTILE (8, 2), "roof_blue_both_right_dark";
-SETTILE (6, 3), "roof_blue_both_both_dark";
-SETTILE (7, 3), "roof_blue_both_left_light";
-SETTILE (8, 3), "roof_blue_both_right_light";
-SETTILE (6, 4), "roof_blue_both_both_light";
-SETTILE (7, 4), "roof_blue_top_left_light";
-SETTILE (8, 4), "roof_blue_top_right_light";
+ADDTILE (6, 5), "roof_blue_bottom_left_shop_left";
+ADDTILE (6, 6), "roof_blue_bottom_right_shop_right";
+ADDTILE (6, 7), "roof_blue_bottom_mid_shop_left";
+ADDTILE (7, 7), "roof_blue_bottom_mid_shop_mid";
+ADDTILE (8, 7), "roof_blue_bottom_mid_shop_right";
 
-SETTILE (6, 5), "roof_blue_bottom_left_shop_left";
-SETTILE (6, 6), "roof_blue_bottom_right_shop_right";
-SETTILE (6, 7), "roof_blue_bottom_mid_shop_left";
-SETTILE (7, 7), "roof_blue_bottom_mid_shop_mid";
-SETTILE (8, 7), "roof_blue_bottom_mid_shop_right";
+ADDTILE (7, 5), "roof_blue_mask_both_left_dark";
+ADDTILE (8, 5), "roof_blue_mask_both_right_dark";
+ADDTILE (7, 6), "house_wall_door_right";
+ADDTILE (8, 6), "house_wall_door_left";
 
-SETTILE (7, 5), "roof_blue_mask_both_left_dark";
-SETTILE (8, 5), "roof_blue_mask_both_right_dark";
-SETTILE (7, 6), "house_wall_door_right";
-SETTILE (8, 6), "house_wall_door_left";
+ADDTILE (0, 5), "roof_red_clock_top_left_light";
+ADDTILE (1, 5), "roof_red_clock_top_mid";
+ADDTILE (2, 5), "roof_red_clock_top_right_light";
+ADDTILE (0, 6), "roof_red_clock_bottom_left";
+ADDTILE (1, 6), "roof_red_clock_bottom_mid";
+ADDTILE (2, 6), "roof_red_clock_bottom_right";
 
-SETTILE (0, 5), "roof_red_clock_top_left_light";
-SETTILE (1, 5), "roof_red_clock_top_mid";
-SETTILE (2, 5), "roof_red_clock_top_right_light";
-SETTILE (0, 6), "roof_red_clock_bottom_left";
-SETTILE (1, 6), "roof_red_clock_bottom_mid";
-SETTILE (2, 6), "roof_red_clock_bottom_right";
+ADDTILE (3, 5), "roof_red_boxing_top_left_light";
+ADDTILE (4, 5), "roof_red_boxing_top_mid";
+ADDTILE (5, 5), "roof_red_boxing_top_right_light";
+ADDTILE (3, 6), "roof_red_boxing_bottom_left";
+ADDTILE (4, 6), "roof_red_boxing_bottom_mid";
+ADDTILE (5, 6), "roof_red_boxing_bottom_right";
 
-SETTILE (3, 5), "roof_red_boxing_top_left_light";
-SETTILE (4, 5), "roof_red_boxing_top_mid";
-SETTILE (5, 5), "roof_red_boxing_top_right_light";
-SETTILE (3, 6), "roof_red_boxing_bottom_left";
-SETTILE (4, 6), "roof_red_boxing_bottom_mid";
-SETTILE (5, 6), "roof_red_boxing_bottom_right";
+ADDTILE (9, 0), "roof_brown_top_left_dark";
+ADDTILE (10, 0), "roof_brown_top_mid";
+ADDTILE (11, 0), "roof_brown_top_right_dark";
+ADDTILE (9, 1), "roof_brown_bottom_left";
+ADDTILE (10, 1), "roof_brown_bottom_mid";
+ADDTILE (11, 1), "roof_brown_bottom_right";
+ADDTILE (10, 2), "roof_brown_top_left_light";
+ADDTILE (11, 2), "roof_brown_top_right_light";
 
-SETTILE (9, 0), "roof_brown_top_left_dark";
-SETTILE (10, 0), "roof_brown_top_mid";
-SETTILE (11, 0), "roof_brown_top_right_dark";
-SETTILE (9, 1), "roof_brown_bottom_left";
-SETTILE (10, 1), "roof_brown_bottom_mid";
-SETTILE (11, 1), "roof_brown_bottom_right";
-SETTILE (10, 2), "roof_brown_top_left_light";
-SETTILE (11, 2), "roof_brown_top_right_light";
+ADDTILE (9, 2), "chimney";
 
-SETTILE (9, 2), "chimney";
+ADDTILE (9, 3), "roof_tiled_red_mid";
+ADDTILE (10, 3), "roof_tiled_green_mid";
+ADDTILE (11, 3), "roof_tiled_blue_mid";
+ADDTILE (9, 4), "roof_tiled_red_mid";
+ADDTILE (10, 4), "roof_tiled_green_mid";
+ADDTILE (11, 4), "roof_tiled_blue_mid";
 
-SETTILE (9, 3), "roof_tiled_red_mid";
-SETTILE (10, 3), "roof_tiled_green_mid";
-SETTILE (11, 3), "roof_tiled_blue_mid";
-SETTILE (9, 4), "roof_tiled_red_mid";
-SETTILE (10, 4), "roof_tiled_green_mid";
-SETTILE (11, 4), "roof_tiled_blue_mid";
+ADDTILE (9, 5), "house_wall";
+ADDTILE (9, 6), "house_wall";
+ADDTILE (9, 7), "house_wall";
+ADDTILE (10, 5), "house_door";
+ADDTILE (10, 6), "house_door";
+ADDTILE (10, 7), "house_door";
+ADDTILE (11, 5), "house_door_locked";
+ADDTILE (11, 6), "house_door_locked";
+ADDTILE (11, 7), "house_door_locked";
 
-SETTILE (9, 5), "house_wall";
-SETTILE (9, 6), "house_wall";
-SETTILE (9, 7), "house_wall";
-SETTILE (10, 5), "house_door";
-SETTILE (10, 6), "house_door";
-SETTILE (10, 7), "house_door";
-SETTILE (11, 5), "house_door_locked";
-SETTILE (11, 6), "house_door_locked";
-SETTILE (11, 7), "house_door_locked";
+ADDTILE (3, 7), "vasu_sign";
+ADDTILE (4, 7), "vasu_sign";
+ADDTILE (5, 7), "vasu_sign";
 
-SETTILE (3, 7), "vasu_sign";
-SETTILE (4, 7), "vasu_sign";
-SETTILE (5, 7), "vasu_sign";
+ADDTILE (0, 7), "water_statue_mermaid_nw";
+ADDTILE (1, 7), "water_statue_mermaid_ne";
+ADDTILE (0, 8), "water_statue_mermaid_sw";
+ADDTILE (1, 8), "water_statue_mermaid_se";
+ADDTILE (2, 7), "gate_top";
+ADDTILE (2, 8), "gate";
 
-SETTILE (0, 7), "water_statue_mermaid_nw";
-SETTILE (1, 7), "water_statue_mermaid_ne";
-SETTILE (0, 8), "water_statue_mermaid_sw";
-SETTILE (1, 8), "water_statue_mermaid_se";
-SETTILE (2, 7), "gate_top";
-SETTILE (2, 8), "gate";
+ADDTILE (0, 9), "plank_fence_left";
+ADDTILE (1, 9), "plank_fence_mid";
+ADDTILE (2, 9), "plank_fence_right";
 
-SETTILE (0, 9), "plank_fence_left";
-SETTILE (1, 9), "plank_fence_mid";
-SETTILE (2, 9), "plank_fence_right";
+ADDTILE (0, 10), "bridge_vertical_left";
+ADDTILE (1, 10), "bridge_vertical_mid";
+ADDTILE (2, 10), "bridge_vertical_right";
+ADDTILE (3, 8), "bridge_horizontal_top";
+ADDTILE (3, 9), "bridge_horizontal_mid";
+ADDTILE (3, 10), "bridge_horizontal_bottom";
+ADDTILE (4, 8), "bridge_horizontal_top";
+ADDTILE (4, 9), "bridge_horizontal_mid";
+ADDTILE (4, 10), "bridge_horizontal_bottom";
+ADDTILE (5, 8), "bridge_vertical_left";
+ADDTILE (6, 8), "bridge_vertical_mid";
+ADDTILE (7, 8), "bridge_vertical_right";
+ADDTILE (5, 9), "bridge_horizontal_both";
+ADDTILE (6, 9), "bridge_vertical_both";
+ADDTILE (6, 10), "bridge_horizontal_both";
+ADDTILE (5, 10), "bridge_vertical_both";
 
-SETTILE (0, 10), "bridge_vertical_left";
-SETTILE (1, 10), "bridge_vertical_mid";
-SETTILE (2, 10), "bridge_vertical_right";
-SETTILE (3, 8), "bridge_horizontal_top";
-SETTILE (3, 9), "bridge_horizontal_mid";
-SETTILE (3, 10), "bridge_horizontal_bottom";
-SETTILE (4, 8), "bridge_horizontal_top";
-SETTILE (4, 9), "bridge_horizontal_mid";
-SETTILE (4, 10), "bridge_horizontal_bottom";
-SETTILE (5, 8), "bridge_vertical_left";
-SETTILE (6, 8), "bridge_vertical_mid";
-SETTILE (7, 8), "bridge_vertical_right";
-SETTILE (5, 9), "bridge_horizontal_both";
-SETTILE (6, 9), "bridge_vertical_both";
-SETTILE (6, 10), "bridge_horizontal_both";
-SETTILE (5, 10), "bridge_vertical_both";
+ADDTILE (7, 9), "fence_post";
+ADDTILE (7, 10), "fence_post";
 
-SETTILE (7, 9), "fence_post";
-SETTILE (7, 10), "fence_post";
+ADDTILE (8, 8), "planter_lined_up";
+ADDTILE (8, 9), "planter";
+ADDTILE (9, 8), "planter_lined_up_flowers_blue";
+ADDTILE (9, 9), "planter_flower_blue";
+ADDTILE (10, 8), "planter_lined_up_flowers_red";
+ADDTILE (10, 9), "planter_flower_red";
+ADDTILE (11, 8), "planter_lined_up_flowers_red_blue";
+ADDTILE (11, 9), "planter_lined_up_flowers_blue_red";
 
-SETTILE (8, 8), "planter_lined_up";
-SETTILE (8, 9), "planter";
-SETTILE (9, 8), "planter_lined_up_flowers_blue";
-SETTILE (9, 9), "planter_flower_blue";
-SETTILE (10, 8), "planter_lined_up_flowers_red";
-SETTILE (10, 9), "planter_flower_red";
-SETTILE (11, 8), "planter_lined_up_flowers_red_blue";
-SETTILE (11, 9), "planter_lined_up_flowers_blue_red";
+ADDTILE (8, 10), "brick_block_lined_up";
+ADDTILE (8, 11), "brick_block";
+ADDTILE (9, 10), "statue_block_lined_up";
+ADDTILE (9, 11), "statue_block";
+ADDTILE (10, 10), "statue_block_water";
+ADDTILE (10, 11), "stone_block_water";
+ADDTILE (11, 10), "stone_block_lined_up";
+ADDTILE (11, 11), "stone_block";
 
-SETTILE (8, 10), "brick_block_lined_up";
-SETTILE (8, 11), "brick_block";
-SETTILE (9, 10), "statue_block_lined_up";
-SETTILE (9, 11), "statue_block";
-SETTILE (10, 10), "statue_block_water";
-SETTILE (10, 11), "stone_block_water";
-SETTILE (11, 10), "stone_block_lined_up";
-SETTILE (11, 11), "stone_block";
+ADDTILE (10, 12), "floor_staircase_down";
+ADDTILE (11, 12), "floor_staircase_up";
 
-SETTILE (10, 12), "floor_staircase_down";
-SETTILE (11, 12), "floor_staircase_up";
+ADDTILE (0, 11), "fountain_dirt_nw";
+ADDTILE (1, 11), "fountain_dirt_ne";
+ADDTILE (0, 12), "fountain_dirt_sw";
+ADDTILE (1, 12), "fountain_dirt_se";
+ADDTILE (2, 11), "fountain_path_nw";
+ADDTILE (3, 11), "fountain_path_ne";
+ADDTILE (2, 12), "fountain_path_sw";
+ADDTILE (3, 12), "fountain_path_se";
 
-SETTILE (0, 11), "fountain_dirt_nw";
-SETTILE (1, 11), "fountain_dirt_ne";
-SETTILE (0, 12), "fountain_dirt_sw";
-SETTILE (1, 12), "fountain_dirt_se";
-SETTILE (2, 11), "fountain_path_nw";
-SETTILE (3, 11), "fountain_path_ne";
-SETTILE (2, 12), "fountain_path_sw";
-SETTILE (3, 12), "fountain_path_se";
+ADDTILE (4, 11), "fancy_tile_1";
+ADDTILE (5, 11), "fancy_tile_2";
+ADDTILE (6, 11), "fancy_tile_3";
+ADDTILE (7, 11), "fancy_tile_4";
+ADDTILE (8, 12), "fancy_tile_5";
+ADDTILE (4, 12), "fancy_tile_6";
+ADDTILE (5, 12), "fancy_tile_7";
+ADDTILE (6, 12), "fancy_tile_8";
+ADDTILE (7, 12), "fancy_tile_9";
+ADDTILE (9, 12), "fancy_tile_10";
 
-SETTILE (4, 11), "fancy_tile_1";
-SETTILE (5, 11), "fancy_tile_2";
-SETTILE (6, 11), "fancy_tile_3";
-SETTILE (7, 11), "fancy_tile_4";
-SETTILE (8, 12), "fancy_tile_5";
-SETTILE (4, 12), "fancy_tile_6";
-SETTILE (5, 12), "fancy_tile_7";
-SETTILE (6, 12), "fancy_tile_8";
-SETTILE (7, 12), "fancy_tile_9";
-SETTILE (9, 12), "fancy_tile_10";
+ADDTILE (0, 13), "roof_tiled_red_mid";
+ADDTILE (1, 13), "roof_tiled_red_right";
+ADDTILE (2, 13), "roof_tiled_green_mid";
+ADDTILE (3, 13), "roof_tiled_green_right";
+ADDTILE (4, 13), "roof_tiled_blue_mid";
+ADDTILE (5, 13), "roof_tiled_blue_right";
 
-SETTILE (0, 13), "roof_tiled_red_mid";
-SETTILE (1, 13), "roof_tiled_red_right";
-SETTILE (2, 13), "roof_tiled_green_mid";
-SETTILE (3, 13), "roof_tiled_green_right";
-SETTILE (4, 13), "roof_tiled_blue_mid";
-SETTILE (5, 13), "roof_tiled_blue_right";
-
-SETTILE (6, 13), "tombstone_hole_left";
-SETTILE (7, 13), "tombstone_hole_right";
-SETTILE (8, 13), "grave_stationary";
+ADDTILE (6, 13), "tombstone_hole_left";
+ADDTILE (7, 13), "tombstone_hole_right";
+ADDTILE (8, 13), "grave_stationary";
 
 #TILE (10, 5); SOLID doorway; END;
 #TILE (10, 6); SOLID doorway; END;

@@ -1,0 +1,29 @@
+﻿#==============================================================
+# Sprite Sheets
+#==============================================================
+
+SPRITESHEET "temp_sheet_monster_previews",	"Units/Monsters/monster_previews"	(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY "entity_dictionary";
+
+
+MAPPEDCOLORS	"entities_default", ("shaded_blue", "orange");
+
+SOURCE "temp_sheet_monster_previews";
+SPRITESET "set_monster_previews" (2, 1);
+	SINGLE COLOR "", ("shaded_blue"), (0, 0); END;
+	SINGLE COLOR "", ("orange", "red", "green", "blue"), (1, 0); END;
+
+END;
+
+#==============================================================
+# Sprites
+#==============================================================
+
+SOURCE "set_monster_previews";
+NAME "preview_monster_thwomp"				(0, 0);
+NAME "preview_monster_giant_blade_trap"		(1, 0);

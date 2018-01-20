@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using ZeldaOracle.Common.Geometry;
 
 namespace ZeldaOracle.Common.Graphics.Sprites {
+	/// <summary>The end result of all sprites. These are what Graphics2D uses to draw.
+	/// Sprite parts are returned from GetParts() in ISprite.</summary>
 	public struct SpritePart {
 		/// <summary>The image used by the sprite.</summary>
 		private Image image;
@@ -17,35 +19,73 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		private Flip flipEffects;
 		/// <summary>The number of 90-degree rotations for the sprite.</summary>
 		private Rotation rotation;
+		/// <summary>The origin of the sprite used for rotation and flipping only.</summary>
+		private Vector2F origin;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public SpritePart(Image image, Rectangle2I sourceRect, Point2I drawOffset, Flip flip, Rotation rotation) {
+		/// <summary>Constructs the sprite part. For use with BasicSprite.</summary>
+		public SpritePart(Image image, Rectangle2I sourceRect, Point2I drawOffset,
+			Flip flip, Rotation rotation)
+		{
+			this.image			= image;
+			this.sourceRect		= sourceRect;
+			this.drawOffset		= drawOffset;
+			this.flipEffects	= flip;
+			this.rotation		= rotation;
+			this.origin         = (Vector2F) sourceRect.Size / 2f + drawOffset;
+		}
+
+		/// <summary>Constructs a sprite part with added flipping, rotation, and clipping.</summary>
+		/*public SpritePart(Image image, Rectangle2I sourceRect, Point2I drawOffset,
+			Rectangle2I? clipping, Flip flip, Rotation rotation)
+		{
 			this.image          = image;
 			this.sourceRect     = sourceRect;
 			this.drawOffset     = drawOffset;
 			this.flipEffects    = flip;
 			this.rotation		= rotation;
-		}
+			if (clipping.HasValue) {
+				Clip(clipping.Value, Point2I.Zero);
+				this.drawOffset += clipping.Value.Point;
+			}
+		}*/
 
-		public SpritePart(SpritePart part, Point2I addDrawOffset, Flip addFlip, Rotation addRotation) {
+		/// <summary>Constructs a sprite part with added flipping and rotation around (0, 0).</summary>
+		/*public SpritePart(SpritePart part, Point2I addDrawOffset, Rectangle2I? clipping,
+			Flip addFlip, Rotation addRotation)
+		{
 			this.image			= part.image;
 			this.sourceRect		= part.sourceRect;
 			this.drawOffset		= part.drawOffset + addDrawOffset;
 			this.flipEffects    = Flipping.Add(part.flipEffects, addFlip);
 			this.rotation		= Rotating.Add(part.rotation, addRotation);
-		}
+			if (clipping.HasValue) {
+				Clip(clipping.Value, part.DrawOffset);
+				this.drawOffset += clipping.Value.Point;
+			}
+		}*/
 
-		public SpritePart(SpritePart part, Point2I addDrawOffset, Flip addFlip, Rotation addRotation, Rectangle2I bounds) {
+		/// <summary>Constructs an offset sprite part. For use with OffsetSprite.</summary>
+		public SpritePart(SpritePart part, Point2I addDrawOffset, Rectangle2I? clipping,
+			Flip addFlip, Rotation addRotation, Rectangle2I bounds)
+		{
 			this.image          = part.image;
 			this.sourceRect     = part.sourceRect;
-			// Completely flip and rotate composite sprites and animations
-			this.drawOffset     = GMath.FlipAndRotate(part.drawOffset + addDrawOffset, addFlip, addRotation, this.sourceRect.Size, bounds);
+			this.drawOffset		= part.drawOffset + addDrawOffset;
 			this.flipEffects    = Flipping.Add(part.flipEffects, addFlip);
 			this.rotation       = Rotating.Add(part.rotation, addRotation);
+			this.origin			= Vector2F.Zero; // Reassign after clipping is applied
+			if (clipping.HasValue) {
+				Clip(clipping.Value, part.DrawOffset);
+				this.drawOffset += clipping.Value.Point;
+			}
+			this.origin			= (Vector2F) sourceRect.Size / 2f + this.drawOffset;
+			// Completely flip and rotate composite sprites and animations
+			this.drawOffset     = GMath.FlipAndRotate(this.drawOffset, addFlip, addRotation, this.origin);// this.sourceRect.Size, bounds);
 		}
 
 
@@ -59,10 +99,9 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				flipEffects.GetHashCode() + rotation.GetHashCode();
 		}
 
-		public override bool Equals(object obj)
-		{
-			return (obj is SpritePart && 
-				(this == (SpritePart) obj));
+		/// <summary>Returns true if the object is a sprite part with the same settings.</summary>
+		public override bool Equals(object obj) {
+			return (obj is SpritePart && (this == (SpritePart) obj));
 		}
 
 
@@ -74,6 +113,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			return (part1.image == part2.image) &&
 					(part1.sourceRect == part2.sourceRect) &&
 					(part1.drawOffset == part2.drawOffset) &&
+					(part1.flipEffects == part2.flipEffects) &&
 					(part1.flipEffects == part2.flipEffects) &&
 					(part1.rotation == part2.rotation);
 		}
@@ -88,9 +128,21 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 
 		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Clips the sprite part's source rectangle.</summary>
+		/// <param name="drawOffset">The original draw offset of the sprite
+		/// before the final OffsetSprite's draw offset is applied.</param>
+		private void Clip(Rectangle2I clipping, Point2I drawOffset) {
+			sourceRect = Rectangle2I.Intersect(sourceRect + drawOffset, clipping + sourceRect.Point) - drawOffset;
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
+
 		/// <summary>Gets or sets the image used by the sprite.</summary>
 		public Image Image {
 			get { return image; }
@@ -121,6 +173,12 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			set { rotation = value; }
 		}
 
+		/// <summary>Gets or sets the origin of the sprite used for rotation and flipping only.</summary>
+		public Vector2F Origin {
+			get { return origin; }
+			set { origin = value; }
+		}
+
 		// Helpers --------------------------------------------------------------------
 
 		/// <summary>Gets the rotation of the sprite in radians.</summary>
@@ -128,14 +186,24 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			get { return rotation.ToRadians(); }
 		}
 
+		/// <summary>Gets the size of the sprite part.</summary>
+		public Point2I Size {
+			get { return sourceRect.Size; }
+		}
+
 		/// <summary>Gets the center of the sprite in size only.</summary>
 		public Vector2F Center {
-			get { return (Vector2F)sourceRect.Size / 2f; }
+			get { return (Vector2F) sourceRect.Size / 2f; }
 		}
 
 		/// <summary>Gets the center of the sprite in size only combined with the draw offset.</summary>
 		public Vector2F CenterDrawOffset {
 			get { return (Vector2F) sourceRect.Size / 2f + drawOffset; }
+		}
+
+		/// <summary>Returns true if the sprite part is empty and should be skipped.</summary>
+		public bool IsEmpty {
+			get { return sourceRect.IsEmpty; }
 		}
 	}
 }

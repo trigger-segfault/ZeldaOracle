@@ -94,14 +94,28 @@ namespace ZeldaOracle.Game.Control {
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
-		public void Update() {
+
+		public virtual void Update() {
 			timer += 1;
 		}
 
-		public void Render(Graphics2D g, RenderTarget2D roomImage, Vector2F position) {
-			
-			g.Translate(position);
-			
+		public virtual void Begin(Graphics2D g, Vector2F position) {
+			g.End();
+			g.PushTranslation(-position);
+			g.SetRenderTarget(GameData.RenderTargetGameTemp);
+			g.Clear(Color.Transparent);
+			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+		}
+
+		public virtual void End(Graphics2D g, Vector2F position) {
+			g.End();
+			g.PopTranslation(); // -position
+			g.SetRenderTarget(GameData.RenderTargetGame);
+			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+			Render(g, GameData.RenderTargetGameTemp);
+		}
+
+		public virtual void Render(Graphics2D g, RenderTarget2D roomImage) {
 			int y = 0;
 			y = GameSettings.VIEW_HEIGHT -
 				(timer % GameSettings.VIEW_HEIGHT);

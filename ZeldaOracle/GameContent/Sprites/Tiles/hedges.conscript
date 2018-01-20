@@ -1,0 +1,268 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_hedges"					"Tiles/Styles/hedges"					(8, 8), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+MAPPEDCOLORS	"tiles_default", ("tree_trunk", "tree_leaves", "tree_trunk_leaves", "snow", "snow_entrance", "witch_hut");
+CHUNKSIZE		(8, 8);
+
+SOURCE "temp_sheet_hedges";
+SPRITESET "set_hedges", (6, 6);
+	MAPPEDCOLORS	"tiles_default", ("hedge");
+	MULTIPLE BASIC (0, 0), (0, 0), (6, 3); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("thick_brush");
+	MULTIPLE BASIC (0, 3), (0, 3), (6, 3); END;
+END;
+
+#==============================================================
+# Temporary
+#==============================================================
+
+NAME "temp_8x8_hedge_outside_nw"			(0, 0);
+NAME "temp_8x8_hedge_outside_ne"			(3, 0);
+NAME "temp_8x8_hedge_outside_sw"			(0, 2);
+NAME "temp_8x8_hedge_outside_se"			(3, 2);
+NAME "temp_8x8_hedge_n_1"					(1, 0);
+NAME "temp_8x8_hedge_n_2"					(2, 0);
+NAME "temp_8x8_hedge_s_1"					(1, 2);
+NAME "temp_8x8_hedge_s_2"					(2, 2);
+NAME "temp_8x8_hedge_w"						(0, 1);
+NAME "temp_8x8_hedge_e"						(3, 1);
+NAME "temp_8x8_hedge_1"						(1, 1);
+NAME "temp_8x8_hedge_2"						(2, 1);
+NAME "temp_8x8_hedge_inside_se"				(4, 0);
+NAME "temp_8x8_hedge_inside_sw"				(5, 0);
+NAME "temp_8x8_hedge_inside_ne"				(4, 1);
+NAME "temp_8x8_hedge_inside_nw"				(5, 1);
+
+NAME "temp_8x8_thick_brush_outside_nw"		(0, 3);
+NAME "temp_8x8_thick_brush_outside_ne"		(2, 3);
+NAME "temp_8x8_thick_brush_outside_sw"		(0, 5);
+NAME "temp_8x8_thick_brush_outside_se"		(2, 5);
+NAME "temp_8x8_thick_brush_n"				(1, 3);
+NAME "temp_8x8_thick_brush_s"				(1, 5);
+NAME "temp_8x8_thick_brush_w"				(0, 4);
+NAME "temp_8x8_thick_brush_e"				(2, 4);
+NAME "temp_8x8_thick_brush_1"				(1, 4);
+NAME "temp_8x8_thick_brush_2"				(3, 3);
+NAME "temp_8x8_thick_brush_inside_se"		(4, 3);
+NAME "temp_8x8_thick_brush_inside_sw"		(5, 3);
+NAME "temp_8x8_thick_brush_inside_ne"		(4, 4);
+NAME "temp_8x8_thick_brush_inside_nw"		(5, 4);
+
+
+#==============================================================
+# Tiles
+#==============================================================
+
+COMPOSITE "tile_hedge";
+	ADD "temp_8x8_hedge_1", (0, 0); ADD "temp_8x8_hedge_2", (8, 0);
+	ADD "temp_8x8_hedge_1", (0, 8); ADD "temp_8x8_hedge_1", (8, 8); END;
+
+COMPOSITE "tile_hedge_outside_nw";
+	COMBINE "tile_hedge"; REMOVE 2; REMOVE 1; REMOVE 0;
+	ADD "temp_8x8_hedge_outside_nw", (0, 0);
+	ADD "temp_8x8_hedge_n_1", (8, 0);
+	ADD "temp_8x8_hedge_w", (0, 8); END;
+COMPOSITE "tile_hedge_n";
+	COMBINE "tile_hedge"; REMOVE 1; REMOVE 0;
+	ADD "temp_8x8_hedge_n_1", (0, 0);
+	ADD "temp_8x8_hedge_n_1", (8, 0); END;
+COMPOSITE "tile_hedge_outside_ne";
+	COMBINE "tile_hedge"; REMOVE 3; REMOVE 1; REMOVE 0;
+	ADD "temp_8x8_hedge_outside_ne", (8, 0);
+	ADD "temp_8x8_hedge_n_2", (0, 0);
+	ADD "temp_8x8_hedge_e", (8, 8); END;
+	
+COMPOSITE "tile_hedge_w";
+	COMBINE "tile_hedge"; REMOVE 2; REMOVE 0;
+	ADD "temp_8x8_hedge_w", (0, 0);
+	ADD "temp_8x8_hedge_w", (0, 8); END;
+COMPOSITE "tile_hedge_e";
+	COMBINE "tile_hedge"; REMOVE 3; REMOVE 1;
+	ADD "temp_8x8_hedge_e", (8, 0);
+	ADD "temp_8x8_hedge_e", (8, 8); END;
+	
+COMPOSITE "tile_hedge_outside_sw";
+	COMBINE "tile_hedge"; REMOVE 3; REMOVE 2; REMOVE 0;
+	ADD "temp_8x8_hedge_outside_sw", (0, 8);
+	ADD "temp_8x8_hedge_s_1", (8, 8);
+	ADD "temp_8x8_hedge_w", (0, 0); END;
+COMPOSITE "tile_hedge_s";
+	COMBINE "tile_hedge"; REMOVE 3; REMOVE 2;
+	ADD "temp_8x8_hedge_s_1", (0, 8);
+	ADD "temp_8x8_hedge_s_1", (8, 8); END;
+COMPOSITE "tile_hedge_outside_se";
+	COMBINE "tile_hedge"; REMOVE 3; REMOVE 2; REMOVE 1;
+	ADD "temp_8x8_hedge_outside_se", (8, 8);
+	ADD "temp_8x8_hedge_s_2", (0, 8);
+	ADD "temp_8x8_hedge_e", (8, 0); END;
+	
+COMPOSITE "tile_hedge_inside_se";
+	COMBINE "tile_hedge"; REMOVE 3;
+	ADD "temp_8x8_hedge_inside_se", (8, 8); END;
+COMPOSITE "tile_hedge_inside_sw";
+	COMBINE "tile_hedge"; REMOVE 2;
+	ADD "temp_8x8_hedge_inside_sw", (0, 8); END;
+COMPOSITE "tile_hedge_inside_ne";
+	COMBINE "tile_hedge"; REMOVE 1;
+	ADD "temp_8x8_hedge_inside_ne", (8, 0); END;
+COMPOSITE "tile_hedge_inside_nw";
+	COMBINE "tile_hedge"; REMOVE 0;
+	ADD "temp_8x8_hedge_inside_nw", (0, 0); END;
+	
+COMPOSITE "tile_hedge_outside_nsw";
+	ADD "temp_8x8_hedge_outside_nw", (0, 0);
+	ADD "temp_8x8_hedge_n_1", (8, 0);
+	ADD "temp_8x8_hedge_outside_sw", (0, 8);
+	ADD "temp_8x8_hedge_s_1", (8, 8); END;
+COMPOSITE "tile_hedge_outside_ns";
+	ADD "temp_8x8_hedge_n_1", (0, 0);
+	ADD "temp_8x8_hedge_n_1", (8, 0);
+	ADD "temp_8x8_hedge_s_1", (0, 8);
+	ADD "temp_8x8_hedge_s_1", (8, 8); END;
+COMPOSITE "tile_hedge_outside_nse";
+	ADD "temp_8x8_hedge_n_2", (0, 0);
+	ADD "temp_8x8_hedge_outside_ne", (8, 0);
+	ADD "temp_8x8_hedge_s_2", (0, 8);
+	ADD "temp_8x8_hedge_outside_se", (8, 8); END;
+	
+COMPOSITE "tile_hedge_outside_new";
+	ADD "temp_8x8_hedge_outside_nw", (0, 0);
+	ADD "temp_8x8_hedge_outside_ne", (8, 0);
+	ADD "temp_8x8_hedge_w", (0, 8);
+	ADD "temp_8x8_hedge_e", (8, 8); END;
+COMPOSITE "tile_hedge_outside_ew";
+	ADD "temp_8x8_hedge_w", (0, 0);
+	ADD "temp_8x8_hedge_e", (8, 0);
+	ADD "temp_8x8_hedge_w", (0, 8);
+	ADD "temp_8x8_hedge_e", (8, 8); END;
+COMPOSITE "tile_hedge_outside_sew";
+	ADD "temp_8x8_hedge_w", (0, 0);
+	ADD "temp_8x8_hedge_e", (8, 0);
+	ADD "temp_8x8_hedge_outside_sw", (0, 8);
+	ADD "temp_8x8_hedge_outside_se", (8, 8); END;
+	
+COMPOSITE "tile_hedge_outside_nsew";
+	ADD "temp_8x8_hedge_outside_nw", (0, 0);
+	ADD "temp_8x8_hedge_outside_ne", (8, 0);
+	ADD "temp_8x8_hedge_outside_sw", (0, 8);
+	ADD "temp_8x8_hedge_outside_se", (8, 8); END;
+	
+	
+COMPOSITE "tile_thick_brush";
+	ADD "temp_8x8_thick_brush_1", (0, 0); ADD "temp_8x8_thick_brush_2", (8, 0);
+	ADD "temp_8x8_thick_brush_2", (0, 8); ADD "temp_8x8_thick_brush_1", (8, 8); END;
+
+COMPOSITE "tile_thick_brush_outside_nw";
+	COMBINE "tile_thick_brush"; REMOVE 2; REMOVE 1; REMOVE 0;
+	ADD "temp_8x8_thick_brush_outside_nw", (0, 0);
+	ADD "temp_8x8_thick_brush_n", (8, 0);
+	ADD "temp_8x8_thick_brush_w", (0, 8); END;
+COMPOSITE "tile_thick_brush_n";
+	COMBINE "tile_thick_brush"; REMOVE 1; REMOVE 0;
+	ADD "temp_8x8_thick_brush_n", (0, 0);
+	ADD "temp_8x8_thick_brush_n", (8, 0); END;
+COMPOSITE "tile_thick_brush_outside_ne";
+	COMBINE "tile_thick_brush"; REMOVE 3; REMOVE 1; REMOVE 0;
+	ADD "temp_8x8_thick_brush_outside_ne", (8, 0);
+	ADD "temp_8x8_thick_brush_n", (0, 0);
+	ADD "temp_8x8_thick_brush_e", (8, 8); END;
+	
+COMPOSITE "tile_thick_brush_w";
+	COMBINE "tile_thick_brush"; REMOVE 2; REMOVE 0;
+	ADD "temp_8x8_thick_brush_w", (0, 0);
+	ADD "temp_8x8_thick_brush_w", (0, 8); END;
+COMPOSITE "tile_thick_brush_e";
+	COMBINE "tile_thick_brush"; REMOVE 3; REMOVE 1;
+	ADD "temp_8x8_thick_brush_e", (8, 0);
+	ADD "temp_8x8_thick_brush_e", (8, 8); END;
+	
+COMPOSITE "tile_thick_brush_outside_sw";
+	COMBINE "tile_thick_brush"; REMOVE 3; REMOVE 2; REMOVE 0;
+	ADD "temp_8x8_thick_brush_outside_sw", (0, 8);
+	ADD "temp_8x8_thick_brush_s", (8, 8);
+	ADD "temp_8x8_thick_brush_w", (0, 0); END;
+COMPOSITE "tile_thick_brush_s";
+	COMBINE "tile_thick_brush"; REMOVE 3; REMOVE 2;
+	ADD "temp_8x8_thick_brush_s", (0, 8);
+	ADD "temp_8x8_thick_brush_s", (8, 8); END;
+COMPOSITE "tile_thick_brush_outside_se";
+	COMBINE "tile_thick_brush"; REMOVE 3; REMOVE 2; REMOVE 1;
+	ADD "temp_8x8_thick_brush_outside_se", (8, 8);
+	ADD "temp_8x8_thick_brush_s", (0, 8);
+	ADD "temp_8x8_thick_brush_e", (8, 0); END;
+	
+COMPOSITE "tile_thick_brush_inside_se";
+	COMBINE "tile_thick_brush"; REMOVE 3;
+	ADD "temp_8x8_thick_brush_inside_se", (8, 8); END;
+COMPOSITE "tile_thick_brush_inside_sw";
+	COMBINE "tile_thick_brush"; REMOVE 2;
+	ADD "temp_8x8_thick_brush_inside_sw", (0, 8); END;
+COMPOSITE "tile_thick_brush_inside_ne";
+	COMBINE "tile_thick_brush"; REMOVE 1;
+	ADD "temp_8x8_thick_brush_inside_ne", (8, 0); END;
+COMPOSITE "tile_thick_brush_inside_nw";
+	COMBINE "tile_thick_brush"; REMOVE 0;
+	ADD "temp_8x8_thick_brush_inside_nw", (0, 0); END;
+	
+COMPOSITE "tile_thick_brush_outside_nsw";
+	ADD "temp_8x8_thick_brush_outside_nw", (0, 0);
+	ADD "temp_8x8_thick_brush_n", (8, 0);
+	ADD "temp_8x8_thick_brush_outside_sw", (0, 8);
+	ADD "temp_8x8_thick_brush_s", (8, 8); END;
+COMPOSITE "tile_thick_brush_outside_ns";
+	ADD "temp_8x8_thick_brush_n", (0, 0);
+	ADD "temp_8x8_thick_brush_n", (8, 0);
+	ADD "temp_8x8_thick_brush_s", (0, 8);
+	ADD "temp_8x8_thick_brush_s", (8, 8); END;
+COMPOSITE "tile_thick_brush_outside_nse";
+	ADD "temp_8x8_thick_brush_n", (0, 0);
+	ADD "temp_8x8_thick_brush_outside_ne", (8, 0);
+	ADD "temp_8x8_thick_brush_s", (0, 8);
+	ADD "temp_8x8_thick_brush_outside_se", (8, 8); END;
+	
+COMPOSITE "tile_thick_brush_outside_new";
+	ADD "temp_8x8_thick_brush_outside_nw", (0, 0);
+	ADD "temp_8x8_thick_brush_outside_ne", (8, 0);
+	ADD "temp_8x8_thick_brush_w", (0, 8);
+	ADD "temp_8x8_thick_brush_e", (8, 8); END;
+COMPOSITE "tile_thick_brush_outside_ew";
+	ADD "temp_8x8_thick_brush_w", (0, 0);
+	ADD "temp_8x8_thick_brush_e", (8, 0);
+	ADD "temp_8x8_thick_brush_w", (0, 8);
+	ADD "temp_8x8_thick_brush_e", (8, 8); END;
+COMPOSITE "tile_thick_brush_outside_sew";
+	ADD "temp_8x8_thick_brush_w", (0, 0);
+	ADD "temp_8x8_thick_brush_e", (8, 0);
+	ADD "temp_8x8_thick_brush_outside_sw", (0, 8);
+	ADD "temp_8x8_thick_brush_outside_se", (8, 8); END;
+	
+COMPOSITE "tile_thick_brush_outside_nsew";
+	ADD "temp_8x8_thick_brush_outside_nw", (0, 0);
+	ADD "temp_8x8_thick_brush_outside_ne", (8, 0);
+	ADD "temp_8x8_thick_brush_outside_sw", (0, 8);
+	ADD "temp_8x8_thick_brush_outside_se", (8, 8); END;
+	
+#COMPOSITE "tile_thick_brush_outside_nw_inside_se";
+#	COMBINE "tile_thick_brush_outside_nw"; REMOVE 0;
+#	ADD "temp_8x8_thick_brush_inside_se", (8, 8); END;
+#COMPOSITE "tile_thick_brush_outside_ne_inside_sw";
+#	COMBINE "tile_thick_brush_outside_ne"; REMOVE 0;
+#	ADD "temp_8x8_thick_brush_inside_sw", (0, 8); END;
+#COMPOSITE "tile_thick_brush_outside_sw_inside_ne";
+#	COMBINE "tile_thick_brush_outside_sw"; REMOVE 0;
+#	ADD "temp_8x8_thick_brush_inside_ne", (8, 0); END;
+#COMPOSITE "tile_thick_brush_outside_se_inside_nw";
+#	COMBINE "tile_thick_brush_outside_se"; REMOVE 0;
+#	ADD "temp_8x8_thick_brush_inside_nw", (0, 0); END;

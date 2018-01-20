@@ -53,9 +53,9 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			Rectangle2I bounds = Rectangle2I.Zero;
 			foreach (OffsetSprite sprite in sprites) {
 				if (bounds.IsEmpty)
-					bounds = sprite.Sprite.GetBounds(settings) + sprite.DrawOffset;
+					bounds = sprite.GetBounds(settings);
 				else
-					bounds = Rectangle2I.Union(bounds, sprite.Sprite.GetBounds(settings) + sprite.DrawOffset);
+					bounds = Rectangle2I.Union(bounds, sprite.GetBounds(settings));
 			}
 			return bounds;
 		}
@@ -66,9 +66,9 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				Rectangle2I bounds = Rectangle2I.Zero;
 				foreach (OffsetSprite sprite in sprites) {
 					if (bounds.IsEmpty)
-						bounds = sprite.Sprite.Bounds + sprite.DrawOffset;
+						bounds = sprite.Bounds;
 					else
-						bounds = Rectangle2I.Union(bounds, sprite.Sprite.Bounds + sprite.DrawOffset);
+						bounds = Rectangle2I.Union(bounds, sprite.Bounds);
 				}
 				return bounds;
 			}
@@ -106,35 +106,54 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			sprites.Clear();
 		}
 
-		public void AddSprite(ISprite sprite, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
-			sprites.Add(new OffsetSprite(sprite, flip, rotation));
+		public void AddOffsetSprite(OffsetSprite sprite) {
+			sprites.Add(new OffsetSprite(sprite));
 		}
 
-		public void AddSprite(ISprite sprite, Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
-			sprites.Add(new OffsetSprite(sprite, drawOffset, flip, rotation));
+		public void AddSprite(ISprite sprite, Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
+			sprites.Add(new OffsetSprite(sprite, clipping, flip, rotation));
 		}
 
-		public void InsertSprite(int index, ISprite sprite, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
-			sprites.Insert(index, new OffsetSprite(sprite, flip, rotation));
+		public void AddSprite(ISprite sprite, Point2I drawOffset, Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
+			sprites.Add(new OffsetSprite(sprite, drawOffset, clipping, flip, rotation));
 		}
 
-		public void InsertSprite(int index, ISprite sprite, Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
-			sprites.Insert(index, new OffsetSprite(sprite, drawOffset, flip, rotation));
+		public void InsertOffsetSprite(int index, OffsetSprite sprite) {
+			sprites.Insert(index, new OffsetSprite(sprite));
+		}
+
+		public void InsertSprite(int index, ISprite sprite, Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
+			sprites.Insert(index, new OffsetSprite(sprite, clipping, flip, rotation));
+		}
+
+		public void InsertSprite(int index, ISprite sprite, Point2I drawOffset, Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
+			sprites.Insert(index, new OffsetSprite(sprite, drawOffset, clipping, flip, rotation));
 		}
 
 		public void ReplaceSprite(int index, ISprite sprite) {
 			sprites[index].Sprite = sprite;
 		}
 
-		public void ReplaceSprite(int index, ISprite sprite, Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
+		public void ReplaceSprite(int index, ISprite sprite, Point2I drawOffset, Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
 			sprites[index].Sprite = sprite;
 			sprites[index].DrawOffset = drawOffset;
+			sprites[index].Clipping = clipping;
 			sprites[index].FlipEffects = flip;
 			sprites[index].Rotation = rotation;
 		}
 
 		public void RemoveSprite(int index) {
 			sprites.RemoveAt(index);
+		}
+
+		public void ClipSprite(int index, Rectangle2I clipping) {
+			sprites[index].Clip(clipping);
+		}
+
+		public void Clip(Rectangle2I clipping) {
+			foreach (OffsetSprite sprite in sprites) {
+				sprite.Clip(clipping);
+			}
 		}
 
 

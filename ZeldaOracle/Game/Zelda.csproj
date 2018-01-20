@@ -235,6 +235,7 @@
     <None Include="Common\Scripts\CustomReaders\PaletteConverterSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\PaletteDictionarySR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\PaletteSR.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\TileDataSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ZoneSR.cs" />
     <Compile Include="Common\Scripts\ScriptReader.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ImageSR.cs" />
@@ -472,6 +473,7 @@
     <Compile Include="Game\Control\Controls.cs" />
     <Compile Include="Game\Items\Weapons\SeedBasedItem.cs" />
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterBeamos.cs" />
+    <Compile Include="Game\Tiles\NewTileset.cs" />
     <Compile Include="Game\Tiles\TileDataDrawing.cs" />
     <Compile Include="Game\UserSettings.cs" />
     <Compile Include="Game\Main\GameBase.cs" />
@@ -482,7 +484,7 @@
     <Compile Include="Game\Entities\Players\Player.cs" />
     <Compile Include="Common\Content\ResourceBuilders\AnimationBuilder.cs" />
     <None Include="Common\Content\ResourceBuilders\SpriteBuilder.cs" />
-    <Compile Include="Common\Content\ResourceBuilders\TilesetBuilder.cs" />
+    <None Include="Common\Content\ResourceBuilders\TilesetBuilder.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\IColoredTile.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorBarrier.cs" />
     <Compile Include="Game\Tiles\Custom\ColorTiles\TileColorBlock.cs" />

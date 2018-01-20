@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using ConscriptDesigner.Control;
 using ConscriptDesigner.Util;
 using ConscriptDesigner.WinForms;
+using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaResources = ZeldaOracle.Common.Content.Resources;
 
@@ -24,32 +25,143 @@ namespace ConscriptDesigner.Anchorables {
 	/// </summary>
 	public partial class SpriteSourceBrowserControl : UserControl {
 
-		private SpriteSourcePreview spriteSourcePreview;
+		private SpriteSourcePreview preview;
+		
+		private List<KeyValuePair<string, ISpriteSource>> sources;
+		private SpriteInfo[,] spriteGrid;
+		private ISpriteSource source;
+		private Point2I spriteSize;
+		private string sourceName;
 
 		private bool suppressEvents;
 
-		private string sourceName;
 
-		private List<KeyValuePair<string, ISpriteSource>> sources;
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
 
+		/// <summary>Constructs the sprite source browser control.</summary>
 		public SpriteSourceBrowserControl() {
-			InitializeComponent(); this.suppressEvents = true;
+			this.suppressEvents = true;
 			InitializeComponent();
 
-			this.spriteSourcePreview = new SpriteSourcePreview();
-			this.spriteSourcePreview.HoverSpriteChanged += OnHoverSpriteChanged;
-			this.host.Child = this.spriteSourcePreview;
-			this.suppressEvents = false;
+			this.preview = new SpriteSourcePreview();
+			this.preview.HoverChanged += OnHoverChanged;
+			this.host.Child = this.preview;
 			this.sources = new List<KeyValuePair<string, ISpriteSource>>();
+			this.spriteGrid = new SpriteInfo[0, 0];
+			this.spriteSize = Point2I.One;
 			this.sourceName = "";
+			
+			DesignerControl.ResourcesLoaded += OnResourcesLoaded;
+			DesignerControl.ResourcesUnloaded += OnResourcesUnloaded;
+			DesignerControl.PreviewInvalidated += OnPreviewInvalidated;
+			DesignerControl.PreviewScaleChanged += OnPreviewScaleChanged;
 
-			DesignerControl.PreviewZoneChanged += OnPreviewZoneChanged;
+			OnHoverChanged();
 
-			OnHoverSpriteChanged();
+			this.suppressEvents = false;
 		}
 
-		private void OnHoverSpriteChanged(object sender = null, EventArgs e = null) {
-			SpriteInfo hoverSprite = spriteSourcePreview.HoverSprite;
+
+		//-----------------------------------------------------------------------------
+		// Loading
+		//-----------------------------------------------------------------------------
+
+		public void Dispose() {
+			DesignerControl.ResourcesLoaded -= OnResourcesLoaded;
+			DesignerControl.ResourcesUnloaded -= OnResourcesUnloaded;
+			DesignerControl.PreviewInvalidated -= OnPreviewInvalidated;
+			DesignerControl.PreviewScaleChanged -= OnPreviewScaleChanged;
+			preview.Dispose();
+		}
+
+		public void Reload() {
+			suppressEvents = true;
+
+			sources.Clear();
+			spriteGrid = new SpriteInfo[0, 0];
+
+			foreach (var pair in ZeldaResources.GetResourceDictionary<ISpriteSource>()) {
+				sources.Add(pair);
+			}
+			sources.Sort((a, b) => AlphanumComparator.Compare(a.Key, b.Key, true));
+
+			comboBoxSpriteSources.Items.Clear();
+			foreach (var pair in sources) {
+				ComboBoxItem item = new ComboBoxItem();
+				item.Content = pair.Key;
+				item.Tag = pair.Key;
+				comboBoxSpriteSources.Items.Add(item);
+			}
+			source = ZeldaResources.GetResource<ISpriteSource>(sourceName);
+			if (sources.Any() && source == null) {
+				sourceName = sources[0].Key;
+				source = sources[0].Value;
+			}
+			comboBoxSpriteSources.SelectedIndex = sources.IndexOf(
+				new KeyValuePair<string, ISpriteSource>(sourceName, source));
+
+			UpdateSource();
+
+			OnHoverChanged();
+
+			suppressEvents = false;
+		}
+
+		public void Unload() {
+			preview.Unload();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Sprites Setup
+		//-----------------------------------------------------------------------------
+
+		private void UpdateSource() {
+			spriteSize = Point2I.One;
+			if (source != null) {
+				spriteGrid = new SpriteInfo[source.Width, source.Height];
+				for (int x = 0; x < source.Width; x++) {
+					for (int y = 0; y < source.Height; y++) {
+						ISprite sprite = source.GetSprite(x, y);
+						if (sprite != null) {
+							spriteGrid[x, y] = new SpriteInfo("", sprite);
+							spriteSize = GMath.Max(spriteSize, spriteGrid[x, y].Bounds.Size);
+						}
+					}
+				}
+				preview.UpdateList(spriteGrid, source, spriteSize);
+			}
+			else {
+				spriteGrid = new SpriteInfo[0, 0];
+				preview.Unload();
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Event Handlers
+		//-----------------------------------------------------------------------------
+
+		private void OnResourcesLoaded(object sender = null, EventArgs e = null) {
+			Reload();
+		}
+
+		private void OnResourcesUnloaded(object sender = null, EventArgs e = null) {
+			Unload();
+		}
+
+		private void OnPreviewInvalidated(object sender = null, EventArgs e = null) {
+			preview.Invalidate();
+		}
+
+		private void OnPreviewScaleChanged(object sender = null, EventArgs e = null) {
+			preview.UpdateScale();
+		}
+
+		private void OnHoverChanged(object sender = null, EventArgs e = null) {
+			SpriteInfo hoverSprite = preview.HoverSprite;
 			if (hoverSprite == null) {
 				statusSpriteInfo.Content = "";
 			}
@@ -59,70 +171,21 @@ namespace ConscriptDesigner.Anchorables {
 					info += ", Substrip: " + hoverSprite.SubstripIndex;
 				statusSpriteInfo.Content = info;
 			}
-		}
 
-		public void Dispose() {
-			DesignerControl.PreviewZoneChanged -= OnPreviewZoneChanged;
-			spriteSourcePreview.Dispose();
-		}
-
-		public void RefreshList() {
-			suppressEvents = true;
-			sources.Clear();
-			comboBoxSpriteSources.Items.Clear();
-			foreach (var pair in ZeldaResources.GetResourceDictionary<ISpriteSource>()) {
-				sources.Add(pair);
-			}
-			sources.Sort((a, b) => AlphanumComparator.Compare(a.Key, b.Key, true));
-			foreach (var pair in sources) {
-				comboBoxSpriteSources.Items.Add(pair.Key);
-			}
-			var source = ZeldaResources.GetResource<ISpriteSource>(sourceName);
-			if (sources.Any()) {
-				if (source == null) {
-					sourceName = sources[0].Key;
-					source = sources[0].Value;
-				}
-				comboBoxSpriteSources.SelectedItem = sourceName;
-				spriteSourcePreview.UpdateSpriteSource(sourceName, source);
-			}
-			comboBoxZones.ItemsSource = DesignerControl.PreviewZones;
-			comboBoxZones.SelectedItem = DesignerControl.PreviewZoneID;
-			suppressEvents = false;
-		}
-
-		public void ClearList() {
-			sources.Clear();
-			spriteSourcePreview.ClearSpriteSource();
-		}
-
-		private void OnToggleAnimations(object sender, RoutedEventArgs e) {
-			spriteSourcePreview.Animating = !spriteSourcePreview.Animating;
-			buttonRestartAnimations.IsEnabled = spriteSourcePreview.Animating;
-		}
-
-		private void OnRestartAnimations(object sender, RoutedEventArgs e) {
-			spriteSourcePreview.RestartAnimations();
+			Point2I hoverPoint = preview.HoverPoint;
+			if (hoverPoint == -Point2I.One)
+				statusHoverIndex.Content = "(?, ?)";
+			else
+				statusHoverIndex.Content = hoverPoint.ToString();
 		}
 
 		private void OnSpriteSourceChanged(object sender, SelectionChangedEventArgs e) {
 			if (suppressEvents) return;
 			if (comboBoxSpriteSources.SelectedIndex != -1) {
-				sourceName = (string) comboBoxSpriteSources.SelectedItem;
-				var source = ZeldaResources.GetResource<ISpriteSource>(sourceName);
-				spriteSourcePreview.UpdateSpriteSource(sourceName, source);
+				sourceName = (string) ((ComboBoxItem) comboBoxSpriteSources.SelectedItem).Tag;
+				source = ZeldaResources.GetResource<ISpriteSource>(sourceName);
+				UpdateSource();
 			}
-		}
-
-		private void OnZoneChanged(object sender, SelectionChangedEventArgs e) {
-			DesignerControl.PreviewZoneID = (string) comboBoxZones.SelectedItem;
-		}
-
-		private void OnPreviewZoneChanged(object sender, EventArgs e) {
-			suppressEvents = true;
-			comboBoxZones.SelectedItem = DesignerControl.PreviewZoneID;
-			suppressEvents = false;
-			spriteSourcePreview.Invalidate();
 		}
 	}
 }

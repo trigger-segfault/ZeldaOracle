@@ -28,7 +28,6 @@ namespace ZeldaOracle.Common.Scripts {
 		private CommandParam	parameter;
 		private CommandParam	parameterParent;
 		private CommandParam	parameterRoot;
-		private string			commandPrefix;
 
 		private string          parameterName;
 		private CommandParam    namedParameter;
@@ -50,7 +49,6 @@ namespace ZeldaOracle.Common.Scripts {
 		public ScriptReader() {
 			parameter		= null;
 			parameterRoot	= null;
-			commandPrefix   = null;
 			commands		= new List<ScriptCommand>();
 			lines			= new List<string>();
 			tempResources   = new TemporaryResources();
@@ -70,6 +68,12 @@ namespace ZeldaOracle.Common.Scripts {
 			);
 			AddType("Vector",
 				"(float x, float y)"
+			);
+			AddType("Rectangle",
+				"(int x, int y, int width, int height)"
+			);
+			AddType("RectangleF",
+				"(float x, float y, float width, float height)"
 			);
 			//=====================================================================================
 			AddCommand("LOAD",
@@ -308,7 +312,7 @@ namespace ZeldaOracle.Common.Scripts {
 		protected virtual void EndReading() {}
 
 		/// <summary>Reads a line in the script as a command.</summary>
-		protected virtual bool PerformCommand(string commandName, CommandParam parameters, string commandPrefix) {
+		protected virtual bool PerformCommand(string commandName, CommandParam parameters) {
 			List<string> matchingFormats = new List<string>();
 			CommandParam newParams = null;
 
@@ -318,7 +322,6 @@ namespace ZeldaOracle.Common.Scripts {
 				if (command.HasName(commandName, parameters) && MatchesMode(mode, command.Modes)) {
 					if (command.HasParameters(parameters, out newParams, typeDefinitions)) {
 						// Run the command.
-						newParams.Prefix = commandPrefix ?? "";
 						try {
 							command.Action(newParams);
 						}
@@ -439,7 +442,7 @@ namespace ZeldaOracle.Common.Scripts {
 				parameterRoot.ChildCount--;
 				
 				// Attempt to perform the command.
-				PerformCommand(commandName, parameterRoot, commandPrefix);
+				PerformCommand(commandName, parameterRoot);
 			}
 
 			// Reset the parameter list.
@@ -448,7 +451,6 @@ namespace ZeldaOracle.Common.Scripts {
 			parameterRoot	= parameterParent;
 			parameter		= null;
 			namedParameter  = null;
-			commandPrefix   = null;
 		}
 
 		/// <summary>Add a new command parameter child to the current parent parameter.</summary>

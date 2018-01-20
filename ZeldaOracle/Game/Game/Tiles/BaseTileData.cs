@@ -74,6 +74,8 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public abstract ISprite Sprite { get; set; }
 
+		public abstract Point2I Size { get; set; }
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -99,7 +101,7 @@ namespace ZeldaOracle.Game.Tiles {
 				spriteList = new SpriteAnimation[] { value };
 			}
 		}*/
-		
+
 		public Tileset Tileset {
 			get { return tileset; }
 			set { tileset = value; }

@@ -54,88 +54,89 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 		//-----------------------------------------------------------------------------
 
 		public AnimationBuilder InsertFrameStrip(int time, int duration, ISpriteSource source,
-			Point2I index, string definition, int length, Point2I drawOffset, Flip flip,
-			Rotation rotation, int depth, Point2I relative) {
+			Point2I index, string definition, int length, Point2I drawOffset, Rectangle2I? clipping,
+			Flip flip, Rotation rotation, int depth, Point2I relative)
+		{
 			//if (relative.IsZero)
 			//	relative = new Point2I(1, 0);
 			for (int i = 0; i < length; ++i) {
 				InsertFrame(time + (duration * i), duration, source, index + (i * relative),
-					definition, drawOffset, flip, rotation, depth);
+					definition, drawOffset, clipping, flip, rotation, depth);
 			}
 			return this;
 		}
 
 		public AnimationBuilder AddFrameStrip(int duration, ISpriteSource source, Point2I index,
-			string definition, int length, Point2I drawOffset, Flip flip, Rotation rotation,
-			int depth, Point2I relative)
+			string definition, int length, Point2I drawOffset, Rectangle2I? clipping, Flip flip,
+			Rotation rotation, int depth, Point2I relative)
 		{
 			return InsertFrameStrip(animation.Duration, duration, source, index, definition, length,
-				drawOffset, flip, rotation, depth, relative);
+				drawOffset, clipping, flip, rotation, depth, relative);
 		}
 
 		public AnimationBuilder AddFrame(int duration, ISpriteSource source, Point2I index,
-			string definition, Point2I drawOffset, Flip flip, Rotation rotation, int depth)
+			string definition, Point2I drawOffset, Rectangle2I? clipping, Flip flip, Rotation rotation, int depth)
 		{
-			return InsertFrame(animation.Duration, duration, source, index, definition, drawOffset,
+			return InsertFrame(animation.Duration, duration, source, index, definition, drawOffset, clipping,
 				flip, rotation, depth);
 		}
 
-		public AnimationBuilder AddFrame(int duration, ISprite sprite, Point2I drawOffset, Flip flip,
-			Rotation rotation, int depth)
+		public AnimationBuilder AddFrame(int duration, ISprite sprite, Point2I drawOffset, Rectangle2I? clipping,
+			Flip flip, Rotation rotation, int depth)
 		{
-			return InsertFrame(animation.Duration, duration, sprite, drawOffset, flip, rotation, depth);
+			return InsertFrame(animation.Duration, duration, sprite, drawOffset, clipping, flip, rotation, depth);
 		}
 		
 		public AnimationBuilder AddPart(int duration, ISpriteSource source, Point2I index, string definition,
-			Point2I drawOffset, Flip flip, Rotation rotation, int depth)
+			Point2I drawOffset, Rectangle2I? clipping, Flip flip, Rotation rotation, int depth)
 		{
 			AnimationFrame prevFrame = animation.LastFrame();
-			return InsertFrame(prevFrame.StartTime, prevFrame.Duration, source, index, definition, drawOffset, flip, rotation, depth);
+			return InsertFrame(prevFrame.StartTime, prevFrame.Duration, source, index, definition, drawOffset, clipping, flip, rotation, depth);
 		}
 
-		public AnimationBuilder AddPart(int duration, ISprite sprite, Point2I drawOffset, Flip flip,
-			Rotation rotation, int depth)
+		public AnimationBuilder AddPart(int duration, ISprite sprite, Point2I drawOffset, Rectangle2I? clipping,
+			Flip flip, Rotation rotation, int depth)
 		{
 			AnimationFrame prevFrame = animation.LastFrame();
-			return InsertFrame(prevFrame.StartTime, duration, sprite, drawOffset, flip, rotation, depth);
+			return InsertFrame(prevFrame.StartTime, duration, sprite, drawOffset, clipping, flip, rotation, depth);
 		}
 		
 		public AnimationBuilder AddStatic(ISpriteSource source, Point2I index, string definition,
-			Point2I drawOffset, Flip flip, Rotation rotation, int depth)
+			Point2I drawOffset, Rectangle2I? clipping, Flip flip, Rotation rotation, int depth)
 		{
-			return InsertFrame(0, animation.Duration, source, index, definition, drawOffset, flip, rotation, depth);
+			return InsertFrame(0, animation.Duration, source, index, definition, drawOffset, clipping, flip, rotation, depth);
 		}
 
-		public AnimationBuilder AddStatic(ISprite sprite, Point2I drawOffset, Flip flip,
+		public AnimationBuilder AddStatic(ISprite sprite, Point2I drawOffset, Rectangle2I? clipping, Flip flip,
 			Rotation rotation, int depth)
 		{
-			return InsertFrame(0, animation.Duration, sprite, drawOffset, flip, rotation, depth);
+			return InsertFrame(0, animation.Duration, sprite, drawOffset, clipping, flip, rotation, depth);
 		}
 
 		public AnimationBuilder AddEmptyFrame(int duration) {
-			return InsertFrame(animation.Duration, duration, new EmptySprite(), Point2I.Zero, Flip.None, Rotation.None, 0);
+			return InsertFrame(animation.Duration, duration, new EmptySprite(), Point2I.Zero, null, Flip.None, Rotation.None, 0);
 		}
 
 		public AnimationBuilder InsertFrame(int time, int duration, ISpriteSource source, Point2I index,
-			string definition, Point2I drawOffset, Flip flip, Rotation rotation, int depth)
+			string definition, Point2I drawOffset, Rectangle2I? clipping, Flip flip, Rotation rotation, int depth)
 		{
 			if (paletteArgs.Dictionary != null && source is SpriteSheet) {
 				SpriteSheet spriteSheet = (SpriteSheet) source;
 				paletteArgs.Image = spriteSheet.Image;
 				paletteArgs.SourceRect = spriteSheet.GetSourceRect(index);
 				ISprite sprite = Resources.PalettedSpriteDatabase.AddSprite(paletteArgs);
-				return InsertFrame(time, duration, sprite, drawOffset, flip, rotation, depth);
+				return InsertFrame(time, duration, sprite, drawOffset, clipping, flip, rotation, depth);
 			}
 			else {
-				animation.AddFrame(time, duration, source, index, definition, drawOffset, flip, rotation, depth);
+				animation.AddFrame(time, duration, source, index, definition, drawOffset, clipping, flip, rotation, depth);
 				return this;
 			}
 		}
 
 		public AnimationBuilder InsertFrame(int time, int duration, ISprite sprite, Point2I drawOffset,
-			Flip flip, Rotation rotation, int depth)
+			Rectangle2I? clipping, Flip flip, Rotation rotation, int depth)
 		{
-			animation.AddFrame(time, duration, sprite, drawOffset, Flip.None, Rotation.None, depth);
+			animation.AddFrame(time, duration, sprite, drawOffset, clipping, Flip.None, Rotation.None, depth);
 			return this;
 		}
 
@@ -160,17 +161,22 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 			return this;
 		}
 
-		public AnimationBuilder Combine(Animation combineAnim, int substrip, int timeOffset, Point2I drawOffset, int depthOffset) {
+		public AnimationBuilder Combine(Animation combineAnim, int substrip, int timeOffset, Point2I drawOffset,
+			Rectangle2I? clipping, int depthOffset)
+		{
 			combineAnim = combineAnim.GetSubstrip(substrip);
 			foreach (AnimationFrame frame in combineAnim.GetFrames()) {
 				AnimationFrame newFrame = new AnimationFrame(frame);
 				newFrame.Depth      += depthOffset;
 				newFrame.DrawOffset += drawOffset;
 				newFrame.StartTime  += timeOffset;
+				if (clipping.HasValue)
+					newFrame.Clip(clipping.Value);
 				animation.AddFrame(newFrame);
 			}
 			return this;
 		}
+
 		
 		//-----------------------------------------------------------------------------
 		// Midifications
@@ -297,6 +303,14 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 				}
 			}
 			animation = subStrip;
+			return this;
+		}
+
+		public AnimationBuilder Clip(Rectangle2I clipping) {
+			for (Animation anim = animation; anim != null; anim = anim.NextStrip) {
+				for (int i = 0; i < anim.FrameCount; i++)
+					anim.GetFrameAt(i).Clip(clipping);
+			}
 			return this;
 		}
 

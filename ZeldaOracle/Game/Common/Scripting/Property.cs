@@ -68,8 +68,8 @@ namespace ZeldaOracle.Common.Scripting {
 			this.baseProperty	= null;
 
 			// Add the property action.
-			if (Resources.ContainsResource<PropertyAction>(name))
-				this.action = Resources.GetResource<PropertyAction>(name);
+			//if (Resources.ContainsResource<PropertyAction>(name))
+			//	this.action = Resources.GetResource<PropertyAction>(name);
 		}
 
 		/// <summary>Construct a property as a copy of another.</summary>

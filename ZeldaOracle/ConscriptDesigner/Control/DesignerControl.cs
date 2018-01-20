@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -49,7 +50,13 @@ namespace ConscriptDesigner.Control {
 
 		private static Zone previewZone;
 		private static string previewZoneID;
-		private static List<string> previewZones;
+		private static ObservableCollection<string> previewZones;
+		private static Stopwatch animationWatch;
+		private static int previewScale;
+		private static DispatcherTimer animationTimer;
+
+		private static string resourceAutoCompleteType;
+		private static bool playAnimations;
 
 
 		//-----------------------------------------------------------------------------
@@ -65,12 +72,17 @@ namespace ConscriptDesigner.Control {
 			};
 			openAnchorables = new List<IRequestCloseAnchorable>();
 			closingAnchorables = new List<IRequestCloseAnchorable>();
-			updateTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.05), DispatcherPriority.ApplicationIdle, delegate { Update(); }, Application.Current.Dispatcher);
+			updateTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.05), DispatcherPriority.Render, Update, Application.Current.Dispatcher);
 			modifiedTimer = new DispatcherTimer(TimeSpan.FromSeconds(3), DispatcherPriority.ApplicationIdle, delegate { CheckForOutdatedFiles(); }, Application.Current.Dispatcher);
+			animationTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.05), DispatcherPriority.Render, Update, Application.Current.Dispatcher);
 
 			previewZone = null;
-			previewZoneID = "";
-			previewZones = new List<string>();
+			previewZoneID = "default";
+			previewZones = new ObservableCollection<string>();
+			resourceAutoCompleteType = "";
+			playAnimations = false;
+			animationWatch = Stopwatch.StartNew();
+			previewScale = 1;
 		}
 
 		public static void SetGraphics(GraphicsDevice graphicsDevice, ContentManager contentManager) {
@@ -94,7 +106,8 @@ namespace ConscriptDesigner.Control {
 
 		public static event EventHandler ActiveAnchorableChanged;
 
-		public static event EventHandler PreviewZoneChanged;
+		public static event EventHandler PreviewScaleChanged;
+		public static event EventHandler PreviewInvalidated;
 
 		//-----------------------------------------------------------------------------
 		// Anchorables
@@ -151,7 +164,7 @@ namespace ConscriptDesigner.Control {
 		// Updating
 		//-----------------------------------------------------------------------------
 
-		public static void Update() {
+		private static void Update(object sender, EventArgs e) {
 			if (busyTask != null) {
 				if (busyTask.IsCompleted) {
 					if (busyTaskIsConscripts)
@@ -384,10 +397,15 @@ namespace ConscriptDesigner.Control {
 		}
 		
 		private static void LoadPreviewZones() {
+			List<string> sortedList = new List<string>();
 			foreach (var pair in Resources.GetResourceDictionary<Zone>()) {
-				previewZones.Add(pair.Key);
+				sortedList.Add(pair.Key);
 			}
-			previewZones.Sort((a, b) => AlphanumComparator.Compare(a, b, true));
+			sortedList.Sort((a, b) => AlphanumComparator.Compare(a, b, true));
+			previewZones.Clear();
+			foreach (string zone in sortedList) {
+				previewZones.Add(zone);
+			}
 			if (!Resources.ContainsResource<Zone>(previewZoneID)) {
 				if (previewZones.Any())
 					previewZoneID = previewZones[0];
@@ -627,6 +645,22 @@ namespace ConscriptDesigner.Control {
 			mainWindow.PlaySound(sound);
 		}
 
+		public static void RestartAnimations() {
+			animationWatch.Restart();
+			if (PreviewInvalidated != null)
+				PreviewInvalidated(null, EventArgs.Empty);
+		}
+
+		public static void LaunchGame() {
+			UpdateContentFolder(project);
+			Process.Start("ZeldaOracle.exe", "\"../../../../WorldFiles/temp_world.zwd\"");
+		}
+
+		public static void LaunchEditor() {
+			UpdateContentFolder(project);
+			Process.Start("ZeldaEditor.exe");
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Command Properties
@@ -706,24 +740,56 @@ namespace ConscriptDesigner.Control {
 			get { return rewardManager; }
 		}
 
-		public static IEnumerable<string> PreviewZones {
+		public static ObservableCollection<string> PreviewZones {
 			get { return previewZones; }
 		}
 
 		public static string PreviewZoneID {
 			get { return previewZoneID; }
 			set {
-				if (previewZoneID != value) {
+				if (previewZoneID != value && value != null) {
 					previewZoneID = value;
 					previewZone = Resources.GetResource<Zone>(previewZoneID);
-					if (PreviewZoneChanged != null)
-						PreviewZoneChanged(null, EventArgs.Empty);
+					if (PreviewInvalidated != null)
+						PreviewInvalidated(null, EventArgs.Empty);
 				}
 			}
 		}
 
 		public static Zone PreviewZone {
 			get { return previewZone; }
+		}
+
+		public static bool PlayAnimations {
+			get { return playAnimations; }
+			set {
+				if (playAnimations != value) {
+					playAnimations = value;
+					if (value)
+						animationWatch.Restart();
+					else if (PreviewInvalidated != null)
+						PreviewInvalidated(null, EventArgs.Empty);
+				}
+			}
+		}
+
+		public static float PlaybackTime {
+			get {
+				if (playAnimations)
+					return (float) (animationWatch.Elapsed.TotalSeconds * 60.0);
+				return 0f;
+			}
+		}
+
+		public static int PreviewScale {
+			get { return previewScale; }
+			set {
+				if (previewScale != value) {
+					previewScale = value;
+					if (PreviewScaleChanged != null)
+						PreviewScaleChanged(null, EventArgs.Empty);
+				}
+			}
 		}
 	}
 }

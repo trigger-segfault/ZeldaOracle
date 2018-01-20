@@ -126,8 +126,15 @@ namespace ZeldaOracle.Game.Main {
 			GameData.Initialize();
 
 			// Setup the render targets
-			GameData.RenderTargetGame = new RenderTarget2D(gameBase.GraphicsDevice, GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT);
-			GameData.RenderTargetGameTemp = new RenderTarget2D(gameBase.GraphicsDevice, GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT);
+			// Preserve contents is needed in order to draw to this
+			// render target after setting it multiple times.
+			GameData.RenderTargetGame = new RenderTarget2D(gameBase.GraphicsDevice,
+				GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT,
+				false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
+
+			GameData.RenderTargetGameTemp = new RenderTarget2D(gameBase.GraphicsDevice,
+				GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT,
+				false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
 		}
 
 		/// <summary>Called to unload game manager content.</summary>
@@ -274,7 +281,7 @@ namespace ZeldaOracle.Game.Main {
 
 			// Draw the buffer to the screen scaled.
 			g.SetRenderTarget(null);
-			g.ResetTranslation();
+			//g.ResetTranslation();
 			g.Begin(GameSettings.DRAW_MODE_DEFAULT);
 			g.DrawImage(GameData.RenderTargetGame, Vector2F.Zero, Vector2F.Zero, new Vector2F(gameScale, gameScale), 0.0);
 			g.End();
