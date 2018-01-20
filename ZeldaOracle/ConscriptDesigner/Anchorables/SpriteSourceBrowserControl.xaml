@@ -23,23 +23,14 @@
             </ToolBar.Resources>
             <ComboBox x:Name="comboBoxSpriteSources" HorizontalAlignment="Stretch" Margin="0,1" SelectionChanged="OnSpriteSourceChanged" VerticalAlignment="Center"/>
         </ToolBar>
-        <ToolBar DockPanel.Dock="Top">
-            <ToolBar.Resources>
-                <Style TargetType="{x:Type ToolBarPanel}">
-                    <Setter Property="Orientation" Value="Vertical"/>
-                </Style>
-            </ToolBar.Resources>
-            <ComboBox x:Name="comboBoxZones" HorizontalAlignment="Stretch" Margin="0,1" SelectionChanged="OnZoneChanged" VerticalAlignment="Center"/>
-        </ToolBar>
-        <ToolBar DockPanel.Dock="Top">
-            <local:ImageToggleButton x:Name="buttonShowAnimations" Source="/ConscriptDesigner;component/Resources/Icons/ShowAnimations.png" Click="OnToggleAnimations" Focusable="False" IsTabStop="False" />
-            <local:ImageButton x:Name="buttonRestartAnimations" Source="/ConscriptDesigner;component/Resources/Icons/PlayAnimations.png" Click="OnRestartAnimations" IsEnabled="False" Focusable="False" IsTabStop="False"/>
-        </ToolBar>
         <!--<StatusBar DockPanel.Dock="Bottom" Background="#FFF0F0F0">
             <StatusBarItem Height="44" VerticalContentAlignment="Top">
                 <TextBlock x:Name="textBlockSpriteName" TextWrapping="Wrap" Text="tile_cliff_corner_outside_ne_railing_corner_inside_ne" TextTrimming="CharacterEllipsis"/>
             </StatusBarItem>
         </StatusBar>-->
+        <StatusBar DockPanel.Dock="Bottom" Background="#FFF0F0F0">
+            <StatusBarItem x:Name="statusHoverIndex" Content="(0, 0)"/>
+        </StatusBar>
         <StatusBar DockPanel.Dock="Bottom" Background="#FFF0F0F0">
             <StatusBarItem x:Name="statusSpriteInfo" Content="Type: CompositeSprite"/>
         </StatusBar>

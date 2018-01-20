@@ -59,6 +59,8 @@ namespace ZeldaOracle.Game.Entities {
 		EffectPegasusDust,
 		EffectBombExplosion,
 
+		TileAbove,
+
 		Count,
 	}
 }

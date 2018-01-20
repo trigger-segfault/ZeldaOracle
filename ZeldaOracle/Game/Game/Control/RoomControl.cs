@@ -546,15 +546,7 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public void DrawRoom(Graphics2D g, Vector2F position) {
-			// If drawing a visual effect over the room, then
-			// begin rendering to the temp render target.
-			if (visualEffect != null && !disableVisualEffect) {
-				g.End();
-				g.SetRenderTarget(GameData.RenderTargetGameTemp);
-				g.Begin(GameSettings.DRAW_MODE_DEFAULT);
-			}
-			else
-				g.Translate(position);
+			g.PushTranslation(position);
 
 			// Draw background (in the color of the HUD.
 			Rectangle2I viewRect = new Rectangle2I(0, 0, GameSettings.VIEW_WIDTH, GameSettings.VIEW_HEIGHT);
@@ -562,20 +554,16 @@ namespace ZeldaOracle.Game.Control {
 
 			Vector2F viewTranslation = -GMath.Round(viewControl.ViewPosition);
 
-			g.Translate(viewTranslation);
-			
+			g.PushTranslation(viewTranslation);
+
+			StartVisualEffect(g, position);
+
 			// Draw tiles.
 			roomGraphics.Clear();
 			tileManager.DrawTiles(roomGraphics);
 			roomGraphics.DrawAll(g);
-			
-			// Now render the visual effect.
-			if (visualEffect != null && !disableVisualEffect) {
-				g.End();
-				g.SetRenderTarget(GameData.RenderTargetGame);
-				g.Begin(GameSettings.DRAW_MODE_DEFAULT);
-				visualEffect.Render(g, GameData.RenderTargetGameTemp, position);
-			}
+
+			EndVisualEffect(g, position);
 
 			// DEBUG: Draw debug information over tiles.
 			GameDebug.DrawRoomTiles(g, this);
@@ -591,16 +579,51 @@ namespace ZeldaOracle.Game.Control {
 			for (int i = eventTiles.Count - 1; i >= 0; i--)
 				eventTiles[i].Draw(g);
 
+			// Draw the tile parts that display above the player and all entities
+			StartVisualEffect(g, position);
+
+			// Draw above tiles.
+			roomGraphics.Clear();
+			tileManager.DrawTilesAbove(roomGraphics);
+			roomGraphics.DrawAll(g);
+
+			EndVisualEffect(g, position);
+
 			// DEBUG: Draw debug information.
 			GameDebug.DrawRoom(g, this);
-			
-			g.Translate(-(position + viewTranslation));
+
+			g.PopTranslation(2); // position + viewTranslation
 		}
 
 		public override void Draw(Graphics2D g) {
-			DrawRoom(g, new Vector2F(0, 16));	// Draw the room (offset to make room for the HUD).
+			DrawRoom(g, new Vector2F(0, GameSettings.HUD_HEIGHT));	// Draw the room (offset to make room for the HUD).
 			GameControl.HUD.Draw(g, false);		// Draw the HUD.
 			GameControl.DrawRoomState(g);		// Draw the current room state.
+		}
+
+		private void StartVisualEffect(Graphics2D g, Vector2F position) {
+			// If drawing a visual effect over the room, then
+			// begin rendering to the temp render target.
+			if (visualEffect != null && !disableVisualEffect) {
+				visualEffect.Begin(g, position);
+				//g.End();
+				//g.PopTranslation();
+				//g.SetRenderTarget(GameData.RenderTargetGameTemp);
+				//g.Clear(Color.Transparent);
+				//g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+			}
+		}
+
+		private void EndVisualEffect(Graphics2D g, Vector2F position) {
+			// Now render the visual effect.
+			if (visualEffect != null && !disableVisualEffect) {
+				visualEffect.End(g, position);
+				//g.End();
+				//g.PushTranslation(position);
+				//g.SetRenderTarget(GameData.RenderTargetGame);
+				//g.Begin(GameSettings.DRAW_MODE_DEFAULT);
+				//visualEffect.Render(g, GameData.RenderTargetGameTemp);
+			}
 		}
 		
 		

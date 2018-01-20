@@ -626,18 +626,19 @@ namespace ZeldaEditor.WinForms {
 		// Draw an entire level.
 		public void DrawLevel(Graphics2D g) {
 			g.Clear(new Color(175, 175, 180)); // Gray background.
-
-			Palette lastPalette = null;
-
+			
 			// Draw the level if it is open.
 			if (editorControl.IsLevelOpen) {
+				Palette lastPalette = null;
+
+				g.PushTranslation(-ScrollPosition);
+
 				// Draw the rooms.
 				for (int x = 0; x < Level.Width; x++) {
 					for (int y = 0; y < Level.Height; y++) {
 						Point2I roomPosition = GetRoomDrawPosition(new Point2I(x, y)) - new Point2I(HorizontalScroll.Value, VerticalScroll.Value);
 						if (roomPosition + (Level.RoomSize * GameSettings.TILE_SIZE) >= Point2I.Zero && roomPosition < new Point2I(ClientSize.Width, ClientSize.Height)) {
-							g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
-							g.Translate((Vector2F)(new Point2I(x, y) * ((Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing)));
+							g.PushTranslation((Vector2F)(new Point2I(x, y) * ((Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing)));
 							Room room = Level.GetRoomAt(x, y);
 							Palette newPalette = room.Zone.Palette;
 							if (lastPalette != newPalette) {
@@ -648,16 +649,13 @@ namespace ZeldaEditor.WinForms {
 							}
 							lastPalette = newPalette;
 							DrawRoom(g, room);
-							g.ResetTranslation();
+							g.PopTranslation();
 						}
 					}
 				}
-
-				g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
+				
 				CurrentTool.DrawEventTiles(g);
-				g.ResetTranslation();
-
-				g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
+				
 				Point2I span = Level.Span;
 				Point2I drawSpan = GetRoomDrawPosition(Level.Dimensions);
 				// Draw the tile grid.
@@ -703,12 +701,9 @@ namespace ZeldaEditor.WinForms {
 						}
 					}
 				}
-				g.ResetTranslation();
 
 				
 				if (!selectionBox.IsEmpty) {
-					g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
-
 					// Draw the selection box.
 					Point2I start = GetLevelPixelDrawPosition(selectionBox.TopLeft);
 					Point2I end   = GetLevelPixelDrawPosition(selectionBox.BottomRight);
@@ -717,24 +712,22 @@ namespace ZeldaEditor.WinForms {
 					g.DrawRectangle(box, 1, Color.White);
 					g.DrawRectangle(box.Inflated(1, 1), 1, Color.Black);
 					g.DrawRectangle(box.Inflated(-1, -1), 1, Color.Black);
-
-					g.ResetTranslation();
 				}
 
 				// Draw the highlight box.
 				if (editorControl.HighlightMouseTile && cursorHalfTileLocation >= Point2I.Zero) {
-					g.Translate(new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
 					Rectangle2I box = new Rectangle2I(GetLevelHalfTileCoordDrawPosition(cursorHalfTileLocation), cursorTileSize * 16);
 					g.DrawRectangle(box.Inflated(1, 1), 1, Color.White);
-					g.ResetTranslation();
 				}
 
 				// Draw player sprite for 'Test At Position'
 				Point2I roomSize = (Level.RoomSize * GameSettings.TILE_SIZE) + editorControl.RoomSpacing;
 				Point2I tilePoint = highlightedRoom * roomSize + highlightedTile * GameSettings.TILE_SIZE;
 				if (editorControl.PlayerPlaceMode && highlightedTile >= Point2I.Zero) {
-					g.DrawSprite(GameData.SPR_PLAYER_FORWARD, tilePoint + new Vector2F(-HorizontalScroll.Value, -VerticalScroll.Value));
+					g.DrawSprite(GameData.SPR_PLAYER_FORWARD, tilePoint);
 				}
+
+				g.PopTranslation();
 			}
 		}
 

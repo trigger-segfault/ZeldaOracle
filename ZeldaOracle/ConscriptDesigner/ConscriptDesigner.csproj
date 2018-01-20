@@ -121,6 +121,7 @@
     <Compile Include="Anchorables\SpriteBrowserControl.xaml.cs">
       <DependentUpon>SpriteBrowserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WinForms\SpriteInfo.cs" />
     <Compile Include="Anchorables\SpriteSourceBrowser.cs" />
     <Compile Include="Anchorables\SpriteSourceBrowserControl.xaml.cs">
       <DependentUpon>SpriteSourceBrowserControl.xaml</DependentUpon>
@@ -201,7 +202,9 @@
     <Compile Include="WinForms\GraphicsDeviceService.cs" />
     <Compile Include="WinForms\MouseWheelMessageFilter.cs" />
     <Compile Include="WinForms\ServiceContainer.cs" />
-    <Compile Include="WinForms\SpritePreview.cs" />
+    <Compile Include="WinForms\SpritePreview.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WinForms\SpriteSourcePreview.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -212,6 +215,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="WinForms\TilesetPreview.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WinForms\ZeldaGraphicsDeviceControl.cs">
       <SubType>Component</SubType>
     </Compile>
     <Page Include="Anchorables\SpriteBrowserControl.xaml">
@@ -346,6 +352,10 @@
       <Project>{72e591d6-8f83-4d8c-8f67-9c325e623234}</Project>
       <Name>Xceed.Wpf.Toolkit</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GameEditor\ZeldaEditor.csproj">
+      <Project>{ab05c473-9789-441a-b32f-e86154b91c09}</Project>
+      <Name>ZeldaEditor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Game\Zelda.csproj">
       <Project>{899daec0-cf01-4b30-a6e4-a0db613978bd}</Project>
       <Name>Zelda</Name>
@@ -421,6 +431,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\Loop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\LaunchEditor.png" />
+    <Resource Include="Resources\Icons\LaunchGame.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Common.Scripting {
 
@@ -241,9 +242,10 @@ namespace ZeldaOracle.Common.Scripting {
 		/// <summary>Get a resource property value with a default value fallback.</summary>
 		public T GetResource<T>(string name, T defaultValue) where T : class {
 			Property p = GetProperty(name, true);
+			T result = null;
 			if (p != null && p.StringValue.Length > 0)
-				return Resources.GetResource<T>(p.StringValue);
-			return defaultValue;
+				result = Resources.GetResource<T>(p.StringValue);
+			return result ?? defaultValue;
 		}
 
 		/// <summary>Get an enum property value with a default value fallback.</summary>

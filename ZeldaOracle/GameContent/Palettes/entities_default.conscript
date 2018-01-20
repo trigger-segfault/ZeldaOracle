@@ -1,4 +1,4 @@
-PALETTE entity_dictionary, entities_default;
+PALETTE "entity_dictionary", "entities_default";
 
 #==============================================================
 # Standard

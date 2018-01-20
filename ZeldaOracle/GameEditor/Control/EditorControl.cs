@@ -293,14 +293,9 @@ namespace ZeldaEditor.Control {
 		private void UpdateTilesets() {
 			int index = 0;
 			List<string> tilesets = new List<string>();
-			foreach (KeyValuePair<string, Tileset> entry in Resources.GetResourceDictionary<Tileset>()) {
-				tilesets.Add(entry.Key);
-				if (entry.Key == tileset.ID)
-					index = tilesets.Count - 1;
-			}
-			foreach (KeyValuePair<string, EventTileset> entry in Resources.GetResourceDictionary<EventTileset>()) {
-				tilesets.Add(entry.Key);
-				if (entry.Key == tileset.ID)
+			foreach (var pair in Resources.GetResourceDictionary<ITileset>()) {
+				tilesets.Add(pair.Key);
+				if (pair.Key == tileset.ID)
 					index = tilesets.Count - 1;
 			}
 
@@ -308,20 +303,12 @@ namespace ZeldaEditor.Control {
 		}
 
 		private void UpdateZones() {
-			if (!tileset.SpriteSheet.Image.HasVariant(zone.ID)) {
-				zone = Resources.GetResource<Zone>(tileset.SpriteSheet.Image.VariantName);
-				if (zone == null)
-					zone = GameData.ZONE_DEFAULT;
-			}
-
 			int index = -1;
 			List<string> zones = new List<string>();
-			foreach (KeyValuePair<string, Zone> entry in Resources.GetResourceDictionary<Zone>()) {
-				if (tileset.SpriteSheet.Image.HasVariant(entry.Key)) {
-					zones.Add(entry.Key);
-					if (entry.Key == zone.ID)
-						index = zones.Count - 1;
-				}
+			foreach (var pair in Resources.GetResourceDictionary<Zone>()) {
+				zones.Add(pair.Key);
+				if (pair.Key == zone.ID)
+					index = zones.Count - 1;
 			}
 
 			editorWindow.SetZonesItemsSource(zones, index);
@@ -450,15 +437,13 @@ namespace ZeldaEditor.Control {
 		}
 
 		public void ChangeTileset(string name) {
-			if (Resources.ContainsResource<Tileset>(name))
-				tileset = Resources.GetResource<Tileset>(name);
-			else if (Resources.ContainsResource<EventTileset>(name))
-				tileset = Resources.GetResource<EventTileset>(name);
+			if (Resources.ContainsResource<ITileset>(name))
+				tileset = Resources.GetResource<ITileset>(name);
 
-			if (tileset.SpriteSheet != null) {
+			//if (tileset.SpriteSheet != null) {
 				// Setup zone combo box for the new tileset.
-				UpdateZones();
-			}
+			//	UpdateZones();
+			//}
 
 			editorWindow.TileDisplay.UpdateTileset();
 			editorWindow.TileDisplay.UpdateZone();

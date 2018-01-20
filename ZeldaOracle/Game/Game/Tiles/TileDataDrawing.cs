@@ -106,8 +106,38 @@ namespace ZeldaOracle.Game.Tiles {
 			DrawTile(g, baseTileData.BaseData, baseTileData.Properties, position, zone, color);
 		}
 
-		public static void DrawPreviewSprite(Graphics2D g, BaseTileData baseTileData, Point2I position, Zone zone, Color color) {
+		public static void DrawTilePreview(Graphics2D g, BaseTileData baseTileData, Point2I position, Zone zone) {
+			DrawTilePreview(g, baseTileData, position, zone, Color.White);
+		}
 
+		public static void DrawTilePreview(Graphics2D g, BaseTileData baseTileData, Point2I position, Zone zone, Color color) {
+			if (baseTileData.HasPreviewSprite) {
+				DrawPreview(g, baseTileData, position, zone, color);
+			}
+			else {
+				DrawTile(g, baseTileData, baseTileData.Properties, position, zone, color);
+			}
+		}
+
+		public static void DrawTilePreview(Graphics2D g, BaseTileDataInstance baseTileData, Point2I position, Zone zone) {
+			DrawTilePreview(g, baseTileData, position, zone, Color.White);
+		}
+
+		public static void DrawTilePreview(Graphics2D g, BaseTileDataInstance baseTileData, Point2I position, Zone zone, Color color) {
+			if (baseTileData.HasPreviewSprite) {
+				DrawPreview(g, baseTileData.BaseData, position, zone, color);
+			}
+			else {
+				DrawTile(g, baseTileData.BaseData, baseTileData.Properties, position, zone, color);
+			}
+		}
+
+		private static void DrawPreview(Graphics2D g, BaseTileData baseTileData, Point2I position, Zone zone, Color color) {
+			g.DrawISprite(
+				baseTileData.PreviewSprite,
+				new SpriteDrawSettings(zone.StyleDefinitions, zone.ImageVariantID, PlaybackTime),
+				position,
+				color);
 		}
 
 
@@ -123,7 +153,9 @@ namespace ZeldaOracle.Game.Tiles {
 						drawFunc = ReflectionHelper.GetFunction<TileDrawFunction>(methodInfo);
 					tileDrawFunctions.Add(type, drawFunc);
 				}
-				drawFunc(g, new TileDataDrawArgs(tile, properties, position, zone, Level, PlaybackTime, color, Extras, RewardManager));
+				var args = new TileDataDrawArgs(tile, properties, position, zone, Level, PlaybackTime, color, Extras, RewardManager);
+				drawFunc(g, args);
+				Tile.DrawTileDataAbove(g, args);
 			}
 			else if (baseTileData is EventTileData) {
 				EventTileData eventTile = (EventTileData) baseTileData;

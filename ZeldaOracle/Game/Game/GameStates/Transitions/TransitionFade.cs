@@ -62,7 +62,7 @@ namespace ZeldaOracle.Game.GameStates {
 			gameState.Draw(g);
 
 
-			g.ResetTranslation();
+			//g.ResetTranslation();
 			g.FillRectangle(GameSettings.SCREEN_BOUNDS, c);
 		}
 	}

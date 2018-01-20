@@ -359,16 +359,16 @@ ANIMATION "tile_waterfall_down_rocks"; SUBSTRIP repeat;
 	
 ANIMATION "tile_waterfall_down_start_cave_left"; SUBSTRIP repeat;
 	COMBINE "waterfall_start_16x8", (0, 8);
-	ADD static, "temp_cliff_hole_corner_alt_left" (0, 0); END;
+	ADD static, "temp_cliff_cave_alt_left" (0, 0); END;
 ANIMATION "tile_waterfall_down_start_cave_mid"; SUBSTRIP repeat;
 	COMBINE "waterfall_start_16x8", (0, 8);
 	ADD static, "temp_cliff_cave_mid" (0, 0); END;
 ANIMATION "tile_waterfall_down_start_cave_right"; SUBSTRIP repeat;
 	COMBINE "waterfall_start_16x8", (0, 8);
-	ADD static, "temp_cliff_hole_corner_alt_right" (0, 0); END;
+	ADD static, "temp_cliff_cave_alt_right" (0, 0); END;
 ANIMATION "tile_waterfall_down_start_cave_both"; SUBSTRIP repeat;
 	COMBINE "waterfall_start_16x8", (0, 8);
-	ADD static, "temp_cliff_hole_corner_alt_both" (0, 0); END;
+	ADD static, "temp_cliff_cave_alt_both" (0, 0); END;
 	
 ANIMATION "tile_lavafall_right"; SUBSTRIP repeat;
 	COMBINE ("lavafall_8x8", 0); MAKEQUAD; END;
@@ -405,16 +405,16 @@ ANIMATION "tile_lavafall_down_rocks"; SUBSTRIP repeat;
 	
 ANIMATION "tile_lavafall_down_start_cave_left"; SUBSTRIP repeat;
 	COMBINE "lavafall_start_16x8", (0, 8);
-	ADD static, "temp_cliff_hole_corner_alt_left" (0, 0); END;
+	ADD static, "temp_cliff_cave_alt_left" (0, 0); END;
 ANIMATION "tile_lavafall_down_start_cave_mid"; SUBSTRIP repeat;
 	COMBINE "lavafall_start_16x8", (0, 8);
 	ADD static, "temp_cliff_cave_mid" (0, 0); END;
 ANIMATION "tile_lavafall_down_start_cave_right"; SUBSTRIP repeat;
 	COMBINE "lavafall_start_16x8", (0, 8);
-	ADD static, "temp_cliff_hole_corner_alt_right" (0, 0); END;
+	ADD static, "temp_cliff_cave_alt_right" (0, 0); END;
 ANIMATION "tile_lavafall_down_start_cave_both"; SUBSTRIP repeat;
 	COMBINE "lavafall_start_16x8", (0, 8);
-	ADD static, "temp_cliff_hole_corner_alt_both" (0, 0); END;
+	ADD static, "temp_cliff_cave_alt_both" (0, 0); END;
 	
 COMPOSITE "tile_hardened_lava";
 	ADD "temp_8x8_hardened_lava", (0, 0); ADD "temp_8x8_hardened_lava", (8, 0);

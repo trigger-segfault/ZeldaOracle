@@ -81,6 +81,10 @@ END;
 SOURCE "set_ground";
 NAME "ground_8x8"				(6, 6);
 NAME "green_8x8"				(6, 7);
+NAME "leaf_ground_right_8x8"	(0, 1);
+NAME "leaf_ground_left_8x8"		(1, 1);
+NAME "leaf_green_right_8x8"		(2, 1);
+NAME "leaf_green_left_8x8"		(3, 1);
 
 NAME "dirt_8x8"				((9, 6), "dirt");
 NAME "dirt_dark_8x8"			((9, 7), "dirt");
@@ -122,10 +126,10 @@ NAME "temp_8x8_grass_border_outside_sw"			((4, 2), "grass_border");
 NAME "temp_8x8_grass_border_s"					((5, 2), "grass_border");
 NAME "temp_8x8_grass_border_outside_se"			((6, 2), "grass_border");
 
-NAME "temp_8x8_grass_border_inside_nw"			((4, 6), "grass_border");
-NAME "temp_8x8_grass_border_inside_ne"			((5, 6), "grass_border");
-NAME "temp_8x8_grass_border_inside_sw"			((4, 7), "grass_border");
-NAME "temp_8x8_grass_border_inside_se"			((5, 7), "grass_border");
+NAME "temp_8x8_grass_border_inside_se"			((4, 6), "grass_border");
+NAME "temp_8x8_grass_border_inside_sw"			((5, 6), "grass_border");
+NAME "temp_8x8_grass_border_inside_ne"			((4, 7), "grass_border");
+NAME "temp_8x8_grass_border_inside_nw"			((5, 7), "grass_border");
 
 NAME "temp_8x8_grass_field_nw"					(4, 3);
 NAME "temp_8x8_grass_field_n"					(5, 3);
@@ -168,10 +172,10 @@ NAME "temp_8x8_dirt_sw"							((7, 5), "dirt");
 NAME "temp_8x8_dirt_s"							((8, 5), "dirt");
 NAME "temp_8x8_dirt_se"							((9, 5), "dirt");
 
-NAME "temp_8x8_dirt_border_inside_nw"			((7, 6), "dirt");
-NAME "temp_8x8_dirt_border_inside_ne"			((8, 6), "dirt");
-NAME "temp_8x8_dirt_border_inside_sw"			((7, 7), "dirt");
-NAME "temp_8x8_dirt_border_inside_se"			((8, 7), "dirt");
+NAME "temp_8x8_dirt_border_inside_se"			((7, 6), "dirt");
+NAME "temp_8x8_dirt_border_inside_sw"			((8, 6), "dirt");
+NAME "temp_8x8_dirt_border_inside_ne"			((7, 7), "dirt");
+NAME "temp_8x8_dirt_border_inside_nw"			((8, 7), "dirt");
 
 NAME "temp_8x8_dirt_alt_border_outside_nw"			((7, 0), "dirt_alt");
 NAME "temp_8x8_dirt_alt_border_n"					((8, 0), "dirt_alt");
@@ -191,10 +195,10 @@ NAME "temp_8x8_dirt_alt_sw"							((7, 5), "dirt_alt");
 NAME "temp_8x8_dirt_alt_s"							((8, 5), "dirt_alt");
 NAME "temp_8x8_dirt_alt_se"							((9, 5), "dirt_alt");
 
-NAME "temp_8x8_dirt_alt_border_inside_nw"			((7, 6), "dirt_alt");
-NAME "temp_8x8_dirt_alt_border_inside_ne"			((8, 6), "dirt_alt");
-NAME "temp_8x8_dirt_alt_border_inside_sw"			((7, 7), "dirt_alt");
-NAME "temp_8x8_dirt_alt_border_inside_se"			((8, 7), "dirt_alt");
+NAME "temp_8x8_dirt_alt_border_inside_se"			((7, 6), "dirt_alt");
+NAME "temp_8x8_dirt_alt_border_inside_sw"			((8, 6), "dirt_alt");
+NAME "temp_8x8_dirt_alt_border_inside_ne"			((7, 7), "dirt_alt");
+NAME "temp_8x8_dirt_alt_border_inside_nw"			((8, 7), "dirt_alt");
 
 #==============================================================
 # Tiles
@@ -207,6 +211,12 @@ COMPOSITE "tile_ground";
 COMPOSITE "tile_ground_blank";
 	ADD "ground_8x8", (0, 0); ADD "ground_8x8", (8, 0);
 	ADD "ground_8x8", (0, 8); ADD "ground_8x8", (8, 8); END;
+	
+COMPOSITE "tile_ground_leaves";
+	COMBINE "tile_ground";
+	REPLACE 0, "leaf_ground_right_8x8";
+	REPLACE 3, "leaf_ground_left_8x8";
+	END;
 	
 COMPOSITE "tile_grass_field";
 	ADD "green_8x8", (0, 0); ADD "grass_green_8x8_right", (8, 0);
@@ -808,24 +818,24 @@ COMPOSITE "tile_grass_border_nsew";
 	ADD "temp_8x8_grass_border_outside_se", (8, 8);
 	END;
 	
-COMPOSITE "tile_grass_border_inside_nw";
+COMPOSITE "tile_grass_border_inside_se";
 	COMBINE "tile_ground";
-	REPLACE 3, "temp_8x8_grass_border_inside_nw";
-	END;
-	
-COMPOSITE "tile_grass_border_inside_ne";
-	COMBINE "tile_ground";
-	REPLACE 2, "temp_8x8_grass_border_inside_ne";
+	REPLACE 3, "temp_8x8_grass_border_inside_se";
 	END;
 	
 COMPOSITE "tile_grass_border_inside_sw";
 	COMBINE "tile_ground";
-	REPLACE 1, "temp_8x8_grass_border_inside_sw";
+	REPLACE 2, "temp_8x8_grass_border_inside_sw";
 	END;
 	
-COMPOSITE "tile_grass_border_inside_se";
+COMPOSITE "tile_grass_border_inside_ne";
 	COMBINE "tile_ground";
-	REPLACE 0, "temp_8x8_grass_border_inside_se";
+	REPLACE 1, "temp_8x8_grass_border_inside_ne";
+	END;
+	
+COMPOSITE "tile_grass_border_inside_nw";
+	COMBINE "tile_ground";
+	REPLACE 0, "temp_8x8_grass_border_inside_nw";
 	END;
 	
 	
@@ -883,24 +893,24 @@ COMPOSITE "tile_dirt_border_outside_se";
 	REPLACE 3, "temp_8x8_dirt_border_outside_se";
 	END;
 	
-COMPOSITE "tile_dirt_border_inside_nw";
+COMPOSITE "tile_dirt_border_inside_se";
 	COMBINE "tile_dirt_dark";
-	REPLACE 3, "temp_8x8_dirt_border_inside_nw";
-	END;
-	
-COMPOSITE "tile_dirt_border_inside_ne";
-	COMBINE "tile_dirt_dark";
-	REPLACE 2, "temp_8x8_dirt_border_inside_ne";
+	REPLACE 3, "temp_8x8_dirt_border_inside_se";
 	END;
 	
 COMPOSITE "tile_dirt_border_inside_sw";
 	COMBINE "tile_dirt_dark";
-	REPLACE 1, "temp_8x8_dirt_border_inside_sw";
+	REPLACE 2, "temp_8x8_dirt_border_inside_sw";
 	END;
 	
-COMPOSITE "tile_dirt_border_inside_se";
+COMPOSITE "tile_dirt_border_inside_ne";
 	COMBINE "tile_dirt_dark";
-	REPLACE 0, "temp_8x8_dirt_border_inside_se";
+	REPLACE 1, "temp_8x8_dirt_border_inside_ne";
+	END;
+	
+COMPOSITE "tile_dirt_border_inside_nw";
+	COMBINE "tile_dirt_dark";
+	REPLACE 0, "temp_8x8_dirt_border_inside_nw";
 	END;
 	
 
@@ -942,15 +952,9 @@ COMPOSITE "tile_dirt_rough_border_outside_se";
 	COMBINE "tile_dirt_border_outside_se";
 	END;
 	
-COMPOSITE "tile_dirt_rough_border_inside_nw";
-	COMBINE "tile_dirt_border_inside_nw";
+COMPOSITE "tile_dirt_rough_border_inside_se";
+	COMBINE "tile_dirt_border_inside_se";
 	REPLACE 0, "dirt_dark_rough_1_8x8";
-	END;
-	
-COMPOSITE "tile_dirt_rough_border_inside_ne";
-	COMBINE "tile_dirt_border_inside_ne";
-	REPLACE 0, "dirt_dark_rough_1_8x8";
-	REPLACE 3, "dirt_dark_rough_4_8x8";
 	END;
 	
 COMPOSITE "tile_dirt_rough_border_inside_sw";
@@ -959,8 +963,14 @@ COMPOSITE "tile_dirt_rough_border_inside_sw";
 	REPLACE 3, "dirt_dark_rough_4_8x8";
 	END;
 	
-COMPOSITE "tile_dirt_rough_border_inside_se";
-	COMBINE "tile_dirt_border_inside_se";
+COMPOSITE "tile_dirt_rough_border_inside_ne";
+	COMBINE "tile_dirt_border_inside_ne";
+	REPLACE 0, "dirt_dark_rough_1_8x8";
+	REPLACE 3, "dirt_dark_rough_4_8x8";
+	END;
+	
+COMPOSITE "tile_dirt_rough_border_inside_nw";
+	COMBINE "tile_dirt_border_inside_nw";
 	REPLACE 3, "dirt_dark_rough_4_8x8";
 	END;
 	
@@ -1066,24 +1076,24 @@ COMPOSITE "tile_dirt_alt_border_outside_se";
 	REPLACE 3, "temp_8x8_dirt_alt_border_outside_se";
 	END;
 	
-COMPOSITE "tile_dirt_alt_border_inside_nw";
+COMPOSITE "tile_dirt_alt_border_inside_se";
 	COMBINE "tile_dirt_alt_dark";
-	REPLACE 3, "temp_8x8_dirt_alt_border_inside_nw";
-	END;
-	
-COMPOSITE "tile_dirt_alt_border_inside_ne";
-	COMBINE "tile_dirt_alt_dark";
-	REPLACE 2, "temp_8x8_dirt_alt_border_inside_ne";
+	REPLACE 3, "temp_8x8_dirt_alt_border_inside_se";
 	END;
 	
 COMPOSITE "tile_dirt_alt_border_inside_sw";
 	COMBINE "tile_dirt_alt_dark";
-	REPLACE 1, "temp_8x8_dirt_alt_border_inside_sw";
+	REPLACE 2, "temp_8x8_dirt_alt_border_inside_sw";
 	END;
 	
-COMPOSITE "tile_dirt_alt_border_inside_se";
+COMPOSITE "tile_dirt_alt_border_inside_ne";
 	COMBINE "tile_dirt_alt_dark";
-	REPLACE 0, "temp_8x8_dirt_alt_border_inside_se";
+	REPLACE 1, "temp_8x8_dirt_alt_border_inside_ne";
+	END;
+	
+COMPOSITE "tile_dirt_alt_border_inside_nw";
+	COMBINE "tile_dirt_alt_dark";
+	REPLACE 0, "temp_8x8_dirt_alt_border_inside_nw";
 	END;
 	
 
@@ -1125,15 +1135,9 @@ COMPOSITE "tile_dirt_alt_rough_border_outside_se";
 	COMBINE "tile_dirt_alt_border_outside_se";
 	END;
 	
-COMPOSITE "tile_dirt_alt_rough_border_inside_nw";
-	COMBINE "tile_dirt_alt_border_inside_nw";
+COMPOSITE "tile_dirt_alt_rough_border_inside_se";
+	COMBINE "tile_dirt_alt_border_inside_se";
 	REPLACE 0, "dirt_alt_dark_rough_1_8x8";
-	END;
-	
-COMPOSITE "tile_dirt_alt_rough_border_inside_ne";
-	COMBINE "tile_dirt_alt_border_inside_ne";
-	REPLACE 0, "dirt_alt_dark_rough_1_8x8";
-	REPLACE 3, "dirt_alt_dark_rough_4_8x8";
 	END;
 	
 COMPOSITE "tile_dirt_alt_rough_border_inside_sw";
@@ -1142,8 +1146,14 @@ COMPOSITE "tile_dirt_alt_rough_border_inside_sw";
 	REPLACE 3, "dirt_alt_dark_rough_4_8x8";
 	END;
 	
-COMPOSITE "tile_dirt_alt_rough_border_inside_se";
-	COMBINE "tile_dirt_alt_border_inside_se";
+COMPOSITE "tile_dirt_alt_rough_border_inside_ne";
+	COMBINE "tile_dirt_alt_border_inside_ne";
+	REPLACE 0, "dirt_alt_dark_rough_1_8x8";
+	REPLACE 3, "dirt_alt_dark_rough_4_8x8";
+	END;
+	
+COMPOSITE "tile_dirt_alt_rough_border_inside_nw";
+	COMBINE "tile_dirt_alt_border_inside_nw";
 	REPLACE 3, "dirt_alt_dark_rough_4_8x8";
 	END;
 	
@@ -1208,98 +1218,98 @@ STYLEPREVIEW "ground_border", "temp_preview_ground_border";
 
 COMPOSITE "tile_cliff_face_n_ground";
 	COMBINE "tile_ground";
-	REPLACE 0, "temp_8x8_cliff_face_1_n";
-	REPLACE 1, "temp_8x8_cliff_face_2_n";
+	REPLACE 0, "temp_8x8_cliff_face_n_1";
+	REPLACE 1, "temp_8x8_cliff_face_n_2";
 	END;
 	
 COMPOSITE "tile_cliff_face_n_grass_field";
 	COMBINE "tile_grass_field";
-	REPLACE 0, "temp_8x8_cliff_face_1_n";
-	REPLACE 1, "temp_8x8_cliff_face_2_n";
+	REPLACE 0, "temp_8x8_cliff_face_n_1";
+	REPLACE 1, "temp_8x8_cliff_face_n_2";
 	END;
 	
 COMPOSITE "tile_cliff_face_n_dirt";
 	COMBINE "tile_dirt";
-	REPLACE 0, "temp_8x8_cliff_face_1_n";
-	REPLACE 1, "temp_8x8_cliff_face_2_n";
+	REPLACE 0, "temp_8x8_cliff_face_n_1";
+	REPLACE 1, "temp_8x8_cliff_face_n_2";
 	END;
 	
 COMPOSITE "tile_cliff_face_n_dirt_alt";
 	COMBINE "tile_dirt_alt";
-	REPLACE 0, "temp_8x8_cliff_face_1_n";
-	REPLACE 1, "temp_8x8_cliff_face_2_n";
+	REPLACE 0, "temp_8x8_cliff_face_n_1";
+	REPLACE 1, "temp_8x8_cliff_face_n_2";
 	END;
 	
 COMPOSITE "tile_cliff_face_n_dirt_dark";
 	COMBINE "tile_dirt_dark";
-	REPLACE 0, "temp_8x8_cliff_face_1_n";
-	REPLACE 1, "temp_8x8_cliff_face_2_n";
+	REPLACE 0, "temp_8x8_cliff_face_n_1";
+	REPLACE 1, "temp_8x8_cliff_face_n_2";
 	END;
 	
 COMPOSITE "tile_cliff_face_n_dirt_dark_rough";
 	COMBINE "tile_dirt_rough_border_n";
-	REPLACE 0, "temp_8x8_cliff_face_1_n";
-	REPLACE 1, "temp_8x8_cliff_face_2_n";
+	REPLACE 0, "temp_8x8_cliff_face_n_1";
+	REPLACE 1, "temp_8x8_cliff_face_n_2";
 	END;
 	
 COMPOSITE "tile_cliff_face_n_dirt_alt_dark";
 	COMBINE "tile_dirt_alt_dark";
-	REPLACE 0, "temp_8x8_cliff_face_1_n";
-	REPLACE 1, "temp_8x8_cliff_face_2_n";
+	REPLACE 0, "temp_8x8_cliff_face_n_1";
+	REPLACE 1, "temp_8x8_cliff_face_n_2";
 	END;
 	
 COMPOSITE "tile_cliff_face_n_dirt_alt_dark_rough";
 	COMBINE "tile_dirt_alt_rough_border_n";
-	REPLACE 0, "temp_8x8_cliff_face_1_n";
-	REPLACE 1, "temp_8x8_cliff_face_2_n";
+	REPLACE 0, "temp_8x8_cliff_face_n_1";
+	REPLACE 1, "temp_8x8_cliff_face_n_2";
 	END;
 	
 COMPOSITE "tile_cliff_face_s_ground";
 	COMBINE "tile_ground";
-	REPLACE 2, "cliff_face_1_s_8x8";
-	REPLACE 3, "cliff_face_2_s_8x8";
+	REPLACE 2, "cliff_face_s_1_8x8";
+	REPLACE 3, "cliff_face_s_2_8x8";
 	END;
 	
 COMPOSITE "tile_cliff_face_s_grass_field";
 	COMBINE "tile_grass_field";
-	REPLACE 2, "cliff_face_1_s_8x8";
-	REPLACE 3, "cliff_face_2_s_8x8";
+	REPLACE 2, "cliff_face_s_1_8x8";
+	REPLACE 3, "cliff_face_s_2_8x8";
 	END;
 	
 COMPOSITE "tile_cliff_face_s_dirt";
 	COMBINE "tile_dirt";
-	REPLACE 2, "cliff_face_1_s_8x8";
-	REPLACE 3, "cliff_face_2_s_8x8";
+	REPLACE 2, "cliff_face_s_1_8x8";
+	REPLACE 3, "cliff_face_s_2_8x8";
 	END;
 	
 COMPOSITE "tile_cliff_face_s_dirt_alt";
 	COMBINE "tile_dirt_alt";
-	REPLACE 2, "cliff_face_1_s_8x8";
-	REPLACE 3, "cliff_face_2_s_8x8";
+	REPLACE 2, "cliff_face_s_1_8x8";
+	REPLACE 3, "cliff_face_s_2_8x8";
 	END;
 	
 COMPOSITE "tile_cliff_face_s_dirt_dark";
 	COMBINE "tile_dirt_dark";
-	REPLACE 2, "cliff_face_1_s_8x8";
-	REPLACE 3, "cliff_face_2_s_8x8";
+	REPLACE 2, "cliff_face_s_1_8x8";
+	REPLACE 3, "cliff_face_s_2_8x8";
 	END;
 	
 COMPOSITE "tile_cliff_face_s_dirt_dark_rough";
 	COMBINE "tile_dirt_rough_border_s";
-	REPLACE 2, "cliff_face_1_s_8x8";
-	REPLACE 3, "cliff_face_2_s_8x8";
+	REPLACE 2, "cliff_face_s_1_8x8";
+	REPLACE 3, "cliff_face_s_2_8x8";
 	END;
 	
 COMPOSITE "tile_cliff_face_s_dirt_alt_dark";
 	COMBINE "tile_dirt_alt_dark";
-	REPLACE 2, "cliff_face_1_s_8x8";
-	REPLACE 3, "cliff_face_2_s_8x8";
+	REPLACE 2, "cliff_face_s_1_8x8";
+	REPLACE 3, "cliff_face_s_2_8x8";
 	END;
 	
 COMPOSITE "tile_cliff_face_s_dirt_alt_dark_rough";
 	COMBINE "tile_dirt_alt_rough_border_s";
-	REPLACE 2, "cliff_face_1_s_8x8";
-	REPLACE 3, "cliff_face_2_s_8x8";
+	REPLACE 2, "cliff_face_s_1_8x8";
+	REPLACE 3, "cliff_face_s_2_8x8";
 	END;
 	
 COMPOSITE "tile_cliff_face_w_ground";

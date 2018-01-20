@@ -1,0 +1,30 @@
+﻿#==============================================================
+# Tiles
+#==============================================================
+
+
+TILE "statue"; SAMESPRITE; SOLID block; END;
+TILE "eye_statue_broken"; SAMESPRITE; SOLID block; END;
+TILE "essense_statue"; SAMESPRITE; SOLID block; END;
+TILE "block"; SPRITE "tile_movable_block"; SOLID block; END;
+
+TILE "jump_ledge_down"; SAMESPRITE; SOLID bridge_h_bottom; END;
+TILE "jump_ledge_up"; SAMESPRITE; SOLID bridge_h_top; END;
+TILE "jump_ledge_left"; SAMESPRITE; SOLID bridge_v_left; END;
+TILE "jump_ledge_right"; SAMESPRITE; SOLID bridge_v_right; END;
+
+TILE "pit_top"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "pit_mid"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "pit_bottom"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "pit_both"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "hole_top"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "hole_mid"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "hole_bottom"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "hole_both"; SAMESPRITE; ENVTYPE Hole; END;
+
+TILE "wall_staircase_up"; SAMESPRITE; SOLID doorway; END;
+TILE "wall_staircase_down"; SAMESPRITE; SOLID doorway; END;
+TILE "floor_staircase_up"; SAMESPRITE; END;
+TILE "floor_staircase_down"; SAMESPRITE; END;
+
+TILE "armos_statue"; SPRITE "tile_armos"; SPRITEOBJ "tile_armos_asobject"; SOLID block; END;

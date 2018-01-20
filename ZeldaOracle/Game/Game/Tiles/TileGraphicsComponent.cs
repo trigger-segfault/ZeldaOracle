@@ -136,6 +136,32 @@ namespace ZeldaOracle.Game.Tiles {
 				g.DrawAnimationPlayer(animationPlayer, imageVariant,
 					playbackTime, drawPosition, depthLayer, tile.Position);
 			}
+
+		}
+
+		public void DrawAbove(RoomGraphics g) {
+			if (!isVisible)
+				return;
+
+			if (tile.TileData.TileData.SpriteAbove != null) {
+				// Determine the depth layer based on the tile grid layer.
+				if (tile.Layer == 0)
+					depthLayer = DepthLayer.TileLayer1;
+				else if (tile.Layer == 1)
+					depthLayer = DepthLayer.TileLayer2;
+				else if (tile.Layer == 2)
+					depthLayer = DepthLayer.TileLayer3;
+
+				// Determine draw position.
+				Vector2F drawPosition = (useAbsoluteDrawPosition ?
+					absoluteDrawPosition : tile.Position);
+				drawPosition += (raisedDrawOffset + drawOffset);
+
+				g.DrawISprite(tile.TileData.TileData.SpriteAbove,
+					new SpriteDrawSettings(imageVariant,
+						tile.RoomControl.GameControl.RoomTicks),
+						drawPosition, DepthLayer.TileAbove, tile.Position);
+			}
 		}
 
 

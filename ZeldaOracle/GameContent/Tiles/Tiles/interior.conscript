@@ -1,0 +1,94 @@
+﻿#==============================================================
+# Tiles
+#==============================================================
+
+TILE "wardrobe_top"; SAMESPRITE; SOLID block; END;
+TILE "wardrobe_bottom_floor"; SAMESPRITE; SOLID edge_n; END;
+TILE "wardrobe_bottom_fancy_tile_1"; SAMESPRITE; SOLID edge_n; END;
+TILE "bookshelf_top"; SAMESPRITE; SOLID block; END;
+TILE "bookshelf_bottom_floor"; SAMESPRITE; SOLID edge_n; END;
+TILE "bookshelf_bottom_fancy_tile_1"; SAMESPRITE; SOLID edge_n; END;
+TILE "bookshelf_bottom_hole"; SAMESPRITE; SOLID edge_n; END;
+TILE "shelf_top"; SAMESPRITE; SOLID block; END;
+TILE "shelf_bottom_floor"; SAMESPRITE; SOLID edge_n; END;
+TILE "shelf_bottom_fancy_tile_1"; SAMESPRITE; SOLID edge_n; END;
+TILE "wardrobe_alt_top"; SAMESPRITE; SOLID block; END;
+TILE "wardrobe_alt_bottom_floor"; SAMESPRITE; SOLID edge_n; END;
+TILE "wardrobe_alt_bottom_fancy_tile_1"; SAMESPRITE; SOLID edge_n; END;
+TILE "fireplace_column_top"; SAMESPRITE; SOLID block; END;
+TILE "fireplace_column_bottom_floor"; SAMESPRITE; SOLID edge_n; END;
+TILE "fireplace_column_bottom_fancy_tile_1"; SAMESPRITE; SOLID edge_n; END;
+TILE "fireplace_top"; SAMESPRITE; SOLID edge_n; END;
+TILE "fireplace_bottom_floor"; SAMESPRITE; END;
+TILE "fireplace_bottom_fancy_tile_1"; SAMESPRITE; END;
+
+TILE "pillar_top"; SAMESPRITE; SOLID block; END;
+TILE "pillar_bottom"; SAMESPRITE; SOLID block; END;
+
+TILE "shop_register_left"; SAMESPRITE; SOLID block; END;
+TILE "shop_register_right"; SAMESPRITE; SOLID block; END;
+TILE "chair"; SAMESPRITE; SOLID block; END;
+TILE "rope"; SAMESPRITE; SOLID block; END;
+TILE "wood_palette"; SAMESPRITE; SOLID block; END;
+TILE "wood_planks"; SAMESPRITE; SOLID block; END;
+TILE "bed_top"; SAMESPRITE; SOLID block; END;
+TILE "bed_bottom"; SAMESPRITE; SOLID block; END;
+
+TILE "brick_table_green_left"; SAMESPRITE; SOLID block; END;
+TILE "brick_table_green_mid"; SAMESPRITE; SOLID block; END;
+TILE "brick_table_green_right"; SAMESPRITE; SOLID block; END;
+TILE "brick_table_green_both"; SAMESPRITE; SOLID block; END;
+TILE "brick_surface_green_left"; SAMESPRITE; SOLID block; END;
+TILE "brick_surface_green_right"; SAMESPRITE; SOLID block; END;
+TILE "brick_surface_green_both"; SAMESPRITE; SOLID block; END;
+TILE "brick_stand_green_both"; SAMESPRITE; SOLID block; END;
+
+TILE "brick_table_blue_left"; SAMESPRITE; SOLID block; END;
+TILE "brick_table_blue_mid"; SAMESPRITE; SOLID block; END;
+TILE "brick_table_blue_right"; SAMESPRITE; SOLID block; END;
+TILE "brick_table_blue_both"; SAMESPRITE; SOLID block; END;
+TILE "brick_surface_blue_left"; SAMESPRITE; SOLID block; END;
+TILE "brick_surface_blue_right"; SAMESPRITE; SOLID block; END;
+TILE "brick_surface_blue_both"; SAMESPRITE; SOLID block; END;
+TILE "brick_stand_blue_both"; SAMESPRITE; SOLID block; END;
+
+TILE "table_left"; SAMESPRITE; SOLID block; END;
+TILE "table_mid"; SAMESPRITE; SOLID block; END;
+TILE "table_right"; SAMESPRITE; SOLID block; END;
+TILE "table_both"; SAMESPRITE; SOLID block; END;
+
+TILE "wall_fireplace_column_left"; SAMESPRITE; SOLID block; END;
+TILE "wall_fireplace_column_right"; SAMESPRITE; SOLID block; END;
+TILE "wall_clock"; SAMESPRITE; SOLID block; END;
+TILE "wall_masks"; SAMESPRITE; SOLID block; END;
+
+TILE "pitcher_left"; SAMESPRITE; SOLID edge_e; END;
+TILE "pitcher_right"; SAMESPRITE; SOLID edge_w; END;
+
+TILE "shades"; SAMESPRITE; SAMESPRITEABOVE; END;
+
+TILE "soil"; SAMESPRITE; END;
+TILE "soil_sprout"; SAMESPRITE; END;
+
+TILE "ceiling_pattern_border_nw"; SAMESPRITE; SOLID block; END;
+TILE "ceiling_pattern_border_n"; SAMESPRITE; SOLID block; END;
+TILE "ceiling_pattern_border_ne"; SAMESPRITE; SOLID block; END;
+TILE "ceiling_pattern_border_w"; SAMESPRITE; SOLID block; END;
+TILE "ceiling_pattern"; SAMESPRITE; SOLID block; END;
+TILE "ceiling_pattern_border_e"; SAMESPRITE; SOLID block; END;
+TILE "ceiling_pattern_border_sw"; SAMESPRITE; SOLID block; END;
+TILE "ceiling_pattern_border_s"; SAMESPRITE; SOLID block; END;
+TILE "ceiling_pattern_border_se"; SAMESPRITE; SOLID block; END;
+
+TILE "waterfall_top_outlet"; SAMESPRITE; SOLID block; END;
+
+TILE "shop_background"; SAMESPRITE; SOLID block; END;
+TILE "black_background"; SAMESPRITE; SOLID block; END;
+
+TILE "fairy_block_statue"; SAMESPRITE; SOLID block; END;
+TILE "fairy_block"; SAMESPRITE; SOLID block; END;
+TILE "imp_block_statue"; SAMESPRITE; SOLID block; END;
+TILE "imp_block"; SAMESPRITE; SOLID block; END;
+
+TILE "shop_front_railing"; SAMESPRITE; SOLID edge_n; END;
+TILE "shop_side_railing"; SAMESPRITE; SOLID block; END;

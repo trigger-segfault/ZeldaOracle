@@ -39,7 +39,9 @@ namespace ConscriptDesigner.WinForms {
 
 		/// <summary>The message filter for capturing scroll focus.</summary>
 		private WinFormsMouseWheelMessageFilter messageFilter;
-		
+
+		/// <summary>True if an exception occurred while resetting the graphics device.</summary>
+		private bool resetError;
 
 		#endregion
 
@@ -65,10 +67,24 @@ namespace ConscriptDesigner.WinForms {
 			get { return isMouseOver; }
 		}
 
+		/// <summary>True if an exception occurred while resetting the graphics device.</summary>
+		public bool ResetError {
+			get { return resetError; }
+			set { resetError = false; }
+		}
 
 		/// <summary>The IServiceProvider containing our IGraphicsDeviceService.</summary>
 		private ServiceContainer services = new ServiceContainer();
 
+
+		#endregion
+
+		#region Events
+
+		/// <summary>Called just before resetting the graphics device.</summary>
+		public event EventHandler PreviewReset;
+		/// <summary>Called just after resetting the graphics device.</summary>
+		public event EventHandler PostReset;
 
 		#endregion
 
@@ -225,12 +241,17 @@ namespace ConscriptDesigner.WinForms {
 			// Do we need to reset the device?
 			if (deviceNeedsReset) {
 				try {
+					if (PreviewReset != null)
+						PreviewReset(this, EventArgs.Empty);
 					graphicsDeviceService.ResetDevice(ClientSize.Width,
 													  ClientSize.Height);
 				}
 				catch (Exception e) {
+					resetError = true;
 					return "Graphics device reset failed\n\n" + e;
 				}
+				if (PostReset != null)
+					PostReset(this, EventArgs.Empty);
 			}
 
 			return null;

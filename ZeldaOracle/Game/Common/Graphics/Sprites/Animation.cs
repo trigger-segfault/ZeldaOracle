@@ -105,19 +105,14 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		/// <summary>Gets the draw boundaries of the sprite.</summary>
 		public Rectangle2I GetBounds(SpriteDrawSettings settings) {
 			Rectangle2I bounds = Rectangle2I.Zero;
-			float time = settings.PlaybackTime;
-			for (int i = 0; i < frames.Count; ++i) {
-				AnimationFrame frame = frames[i];
+			// Bounds is based on the entire duration of the animation
+			foreach (AnimationFrame frame in frames) {
 				if (frame.Sprite == null)
 					continue;
-				//if (time < frame.StartTime)
-				//	return bounds;
-				if (time >= frame.StartTime && (time < frame.EndTime || (time >= duration && frame.StartTime + frame.Duration == duration))) {
-					if (bounds.IsEmpty)
-						bounds = frame.Sprite.GetBounds(settings) + frame.DrawOffset;
-					else
-						bounds = Rectangle2I.Union(bounds, frame.Sprite.GetBounds(settings) + frame.DrawOffset);
-				}
+				if (bounds.IsEmpty)
+					bounds = frame.OffsetSprite.GetBounds(settings);
+				else
+					bounds = Rectangle2I.Union(bounds, frame.OffsetSprite.GetBounds(settings));
 			}
 			return bounds;
 		}
@@ -126,13 +121,14 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public Rectangle2I Bounds {
 			get {
 				Rectangle2I bounds = Rectangle2I.Zero;
+				// Bounds is based on the entire duration of the animation
 				foreach (AnimationFrame frame in frames) {
 					if (frame.Sprite == null)
 						continue;
 					if (bounds.IsEmpty)
-						bounds = frame.Sprite.Bounds + frame.DrawOffset;
+						bounds = frame.OffsetSprite.Bounds;
 					else
-						bounds = Rectangle2I.Union(bounds, frame.Sprite.Bounds + frame.DrawOffset);
+						bounds = Rectangle2I.Union(bounds, frame.OffsetSprite.Bounds);
 				}
 				return bounds;
 			}
@@ -187,41 +183,43 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			duration = Math.Max(duration, frame.EndTime);
 		}
 
-		public void AddFrame(int startTime, int duration, ISprite sprite, Flip flip = Flip.None,
-			Rotation rotation = Rotation.None, int depth = 0)
+		public void AddFrame(int startTime, int duration, ISprite sprite, Rectangle2I? clipping = null,
+			Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0)
 		{
-			AddFrame(new AnimationFrame(startTime, duration, sprite, flip, rotation, depth));
+			AddFrame(new AnimationFrame(startTime, duration, sprite, clipping, flip, rotation, depth));
 		}
 
 		public void AddFrame(int startTime, int duration, ISprite sprite, Point2I drawOffset,
-			Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0)
+			Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0)
 		{
-			AddFrame(new AnimationFrame(startTime, duration, sprite, drawOffset, flip, rotation, depth));
+			AddFrame(new AnimationFrame(startTime, duration, sprite, drawOffset, clipping, flip, rotation, depth));
 		}
 
 		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index,
-			Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0)
+			Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0)
 		{
-			AddFrame(new AnimationFrame(startTime, duration, source, index, flip, rotation, depth));
+			AddFrame(new AnimationFrame(startTime, duration, source, index, clipping, flip, rotation, depth));
 		}
 
 		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index,
-			string definition, Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0)
-		{
-			AddFrame(new AnimationFrame(startTime, duration, source, index, definition, flip, rotation, depth));
-		}
-
-		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index,
-			Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0)
-		{
-			AddFrame(new AnimationFrame(startTime, duration, source, index, drawOffset, flip, rotation, depth));
-		}
-
-		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index,
-			string definition, Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None,
+			string definition, Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None,
 			int depth = 0)
 		{
-			AddFrame(new AnimationFrame(startTime, duration, source, index, definition, drawOffset, flip, rotation, depth));
+			AddFrame(new AnimationFrame(startTime, duration, source, index, definition, clipping, flip, rotation, depth));
+		}
+
+		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index,
+			Point2I drawOffset, Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None,
+			int depth = 0)
+		{
+			AddFrame(new AnimationFrame(startTime, duration, source, index, drawOffset, clipping, flip, rotation, depth));
+		}
+
+		public void AddFrame(int startTime, int duration, ISpriteSource source, Point2I index,
+			string definition, Point2I drawOffset, Rectangle2I? clipping = null, Flip flip = Flip.None,
+			Rotation rotation = Rotation.None, int depth = 0)
+		{
+			AddFrame(new AnimationFrame(startTime, duration, source, index, definition, drawOffset, clipping, flip, rotation, depth));
 		}
 
 		public void RemoveFrameAt(int index) {

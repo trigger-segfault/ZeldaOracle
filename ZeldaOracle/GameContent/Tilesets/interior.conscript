@@ -1,118 +1,196 @@
-
-#==============================================================
-# Sprite Sheets
-#==============================================================
-
-SPRITESHEET "tileset_interior", (16, 16), (1, 1), (18, 18);
-
-
 #==============================================================
 # Tilesets
 #==============================================================
 
-TILESET interior, tileset_interior, (12, 19);
-DEFAULT (4, 10);
+TILESET "interior", (12, 19);
 
-CONFIG;
-SSSSSSSS....
-SSS.......S.
-SSS.........
-SRS.........
-R.R.......S.
-SRSSSSSSS...
-SSSSSSSSS...
-SSSSSSSSS.S.
-SSSSSSSSS...
-SSSSSSSSSS..
-S.SS.SSSSS..
-SSS.........
-SSSSSSS.....
-SS..SSS.....
-SSSSSS......
-END;
+ADDTILE (0, 0), "wall_outside_nw";
+ADDTILE (1, 0), "wall_up";
+ADDTILE (2, 0), "wall_outside_ne";
+ADDTILE (0, 1), "wall_left";
+ADDTILE (1, 1), "ceiling";
+ADDTILE (2, 1), "wall_right";
+ADDTILE (0, 2), "wall_outside_sw";
+ADDTILE (1, 2), "wall_down";
+ADDTILE (2, 2), "wall_outside_se";
 
-# Ledges
-TILE (1, 0); LEDGE block, up; END;
-TILE (0, 1); LEDGE block, left; END;
-TILE (2, 1); LEDGE block, right; END;
-TILE (1, 2); LEDGE block, down; END;
+ADDTILE (0, 3), "wall_inside_se";
+ADDTILE (1, 3), "stairs_down";
+ADDTILE (2, 3), "wall_inside_sw";
+ADDTILE (0, 4), "stairs_right";
+ADDTILE (1, 4), "floor";
+ADDTILE (2, 4), "stairs_left";
+ADDTILE (0, 5), "wall_inside_ne";
+ADDTILE (1, 5), "stairs_up";
+ADDTILE (2, 5), "wall_inside_nw";
 
-TILE (1, 9); LEDGE block, up; END;
-TILE (0, 10); LEDGE block, left; END;
-TILE (2, 10); LEDGE block, right; END;
-TILE (1, 11); LEDGE block, down; END;
+ADDTILE (0, 6), "ceiling_pattern_border_nw";
+ADDTILE (1, 6), "ceiling_pattern_border_n";
+ADDTILE (2, 6), "ceiling_pattern_border_ne";
+ADDTILE (0, 7), "ceiling_pattern_border_w";
+ADDTILE (1, 7), "ceiling_pattern";
+ADDTILE (2, 7), "ceiling_pattern_border_e";
+ADDTILE (0, 8), "ceiling_pattern_border_sw";
+ADDTILE (1, 8), "ceiling_pattern_border_s";
+ADDTILE (2, 8), "ceiling_pattern_border_se";
 
-# Irregular Collision Models
-TILE (8, 0); SOLID doorway; END;
-TILE (8, 11); SOLID doorway; END;
-TILE (9, 11); SOLID doorway; END;
-TILE (3, 1); SOLID edge_n; END;
-TILE (4, 1); SOLID edge_n; END;
-TILE (5, 1); SOLID edge_n; END;
-TILE (6, 1); SOLID edge_n; END;
-TILE (7, 1); SOLID edge_n; END;
-TILE (3, 2); SOLID edge_n; END;
-TILE (4, 2); SOLID edge_n; END;
-TILE (5, 2); SOLID edge_n; END;
-TILE (6, 2); SOLID edge_n; END;
-TILE (7, 2); SOLID edge_n; END;
-TILE (3, 11); SOLID edge_w; END;
-TILE (4, 11); SOLID edge_e; END;
+ADDTILE (0, 9), "wall_alt_outside_nw";
+ADDTILE (1, 9), "wall_alt_up";
+ADDTILE (2, 9), "wall_alt_outside_ne";
+ADDTILE (0, 10), "wall_alt_left";
+ADDTILE (1, 10), "ceiling_alt";
+ADDTILE (2, 10), "wall_alt_right";
+ADDTILE (0, 11), "wall_alt_outside_sw";
+ADDTILE (1, 11), "wall_alt_down";
+ADDTILE (2, 11), "wall_alt_outside_se";
+ADDTILE (0, 12), "wall_alt_inside_se";
+ADDTILE (1, 12), "wall_alt_inside_sw";
+ADDTILE (0, 13), "wall_alt_inside_ne";
+ADDTILE (1, 13), "wall_alt_inside_nw";
 
-# Barriers
-TILE (9, 0); SOLID corner_nw; END;
-TILE (10, 0); SOLID edge_n; END;
-TILE (11, 0); SOLID corner_ne; END;
-TILE (9, 1); SOLID edge_w; END;
-TILE (11, 1); SOLID edge_e; END;
-TILE (9, 2); SOLID corner_sw; END;
-TILE (10, 2); SOLID edge_s; END;
-TILE (11, 2); SOLID corner_se; END;
+ADDTILE (0, 14), "wall_fireplace_column_left";
+ADDTILE (1, 14), "wall_fireplace_column_right";
+ADDTILE (2, 14), "shop_background";
+ADDTILE (3, 14), "black_background";
+ADDTILE (4, 14), "wall_clock";
+ADDTILE (5, 14), "wall_masks";
 
-TILE (10, 9); SOLID inside_corner_nw; END;
-TILE (11, 9); SOLID inside_corner_ne; END;
-TILE (10, 10); SOLID inside_corner_sw; END;
-TILE (11, 10); SOLID inside_corner_se; END;
+ADDTILE (2, 13), "pitcher_left";
+ADDTILE (3, 13), "pitcher_right";
+ADDTILE (2, 12), "wall_up_column_left";
+ADDTILE (3, 12), "wall_up_column_right";
+ADDTILE (3, 10), "wall_up_column_left";
+ADDTILE (4, 10), "entrance_light_floor_up";
+ADDTILE (5, 10), "wall_up_column_right";
 
+ADDTILE (4, 12), "pillar_top";
+ADDTILE (4, 13), "pillar_bottom";
+ADDTILE (5, 12), "fairy_block_statue";
+ADDTILE (5, 13), "fairy_block";
+ADDTILE (6, 12), "imp_block_statue";
+ADDTILE (6, 13), "imp_block";
 
-TILE (9, 3); SOLID corner_nw; END;
-TILE (10, 3); SOLID edge_n; END;
-TILE (11, 3); SOLID corner_ne; END;
-TILE (9, 4); SOLID edge_w; END;
-TILE (11, 4); SOLID edge_e; END;
-TILE (9, 5); SOLID corner_sw; END;
-TILE (10, 5); SOLID edge_s; END;
-TILE (11, 5); SOLID corner_se; END;
+ADDTILE (7, 12), "pit_both";
+ADDTILE (8, 12), "pit_top";
+ADDTILE (8, 13), "pit_mid";
+ADDTILE (8, 14), "pit_bottom";
+ADDTILE (7, 13), "hole_both";
+ADDTILE (9, 12), "hole_top";
+ADDTILE (9, 13), "hole_mid";
+ADDTILE (9, 14), "hole_bottom";
 
-TILE (10, 11); SOLID inside_corner_nw; END;
-TILE (11, 11); SOLID inside_corner_ne; END;
-TILE (10, 12); SOLID inside_corner_sw; END;
-TILE (11, 12); SOLID inside_corner_se; END;
+ADDTILE (5, 11), "shades";
+ADDTILE (6, 11), "floor_staircase_down";
+ADDTILE (7, 11), "floor_staircase_up";
+ADDTILE (8, 11), "wall_staircase_down";
+ADDTILE (9, 11), "wall_staircase_up";
 
+ADDTILE (6, 10), "wall_torch_down";
+ADDTILE (7, 10), "wall_torch_up";
+ADDTILE (8, 10), "wall_torch_right";
+ADDTILE (9, 10), "wall_torch_left";
 
-TILE (9, 6); SOLID corner_nw; END;
-TILE (10, 6); SOLID edge_n; END;
-TILE (11, 6); SOLID corner_ne; END;
-TILE (9, 7); SOLID edge_w; END;
-TILE (11, 7); SOLID edge_e; END;
-TILE (9, 8); SOLID corner_sw; END;
-TILE (10, 8); SOLID edge_s; END;
-TILE (11, 8); SOLID corner_se; END;
+ADDTILE (3, 0), "wardrobe_top";
+ADDTILE (3, 1), "wardrobe_bottom_floor";
+ADDTILE (3, 2), "wardrobe_bottom_fancy_tile_1";
+ADDTILE (4, 0), "bookshelf_top";
+ADDTILE (4, 1), "bookshelf_bottom_floor";
+ADDTILE (4, 2), "bookshelf_bottom_fancy_tile_1";
+ADDTILE (5, 0), "shelf_top";
+ADDTILE (5, 1), "shelf_bottom_floor";
+ADDTILE (5, 2), "shelf_bottom_fancy_tile_1";
+ADDTILE (6, 0), "wardrobe_alt_top";
+ADDTILE (6, 1), "wardrobe_alt_bottom_floor";
+ADDTILE (6, 2), "wardrobe_alt_bottom_fancy_tile_1";
+ADDTILE (7, 0), "fireplace_column_top";
+ADDTILE (7, 1), "fireplace_column_bottom_floor";
+ADDTILE (7, 2), "fireplace_column_bottom_fancy_tile_1";
+ADDTILE (8, 0), "fireplace_top";
+ADDTILE (8, 1), "fireplace_bottom_floor";
+ADDTILE (8, 2), "fireplace_bottom_fancy_tile_1";
 
-TILE (10, 13); SOLID inside_corner_nw; END;
-TILE (11, 13); SOLID inside_corner_ne; END;
-TILE (10, 14); SOLID inside_corner_sw; END;
-TILE (11, 14); SOLID inside_corner_se; END;
+ADDTILE (3, 3), "fancy_tile_1";
+ADDTILE (4, 3), "fancy_tile_2";
+ADDTILE (5, 3), "fancy_tile_3";
+ADDTILE (6, 3), "fancy_tile_4";
+ADDTILE (7, 3), "fancy_tile_5";
+ADDTILE (8, 3), "fancy_tile_6";
+ADDTILE (3, 4), "fancy_tile_7";
+ADDTILE (4, 4), "fancy_tile_8";
+ADDTILE (5, 4), "fancy_tile_9";
+ADDTILE (6, 4), "fancy_tile_10";
 
-# Holes
-TILE (7, 12); ENVTYPE HOLE; END;
-TILE (7, 13); ENVTYPE HOLE; END;
-TILE (8, 12); ENVTYPE HOLE; END;
-TILE (8, 13); ENVTYPE HOLE; END;
-TILE (8, 14); ENVTYPE HOLE; END;
-TILE (9, 12); ENVTYPE HOLE; END;
-TILE (9, 13); ENVTYPE HOLE; END;
-TILE (9, 14); ENVTYPE HOLE; END;
+ADDTILE (7, 4), "soil_sprout";
+ADDTILE (8, 4), "soil";
+
+ADDTILE (3, 5), "brick_table_green_left";
+ADDTILE (4, 5), "brick_table_green_mid";
+ADDTILE (5, 5), "brick_table_green_right";
+ADDTILE (6, 5), "brick_table_green_both";
+ADDTILE (3, 6), "brick_surface_green_left";
+ADDTILE (4, 6), "brick_surface_green_right";
+ADDTILE (5, 6), "brick_surface_green_both";
+ADDTILE (6, 6), "brick_stand_green_both";
+
+ADDTILE (3, 7), "brick_table_blue_left";
+ADDTILE (4, 7), "brick_table_blue_mid";
+ADDTILE (5, 7), "brick_table_blue_right";
+ADDTILE (6, 7), "brick_table_blue_both";
+ADDTILE (3, 8), "brick_surface_blue_left";
+ADDTILE (4, 8), "brick_surface_blue_right";
+ADDTILE (5, 8), "brick_surface_blue_both";
+ADDTILE (6, 8), "brick_stand_blue_both";
+
+ADDTILE (3, 9), "table_left";
+ADDTILE (4, 9), "table_mid";
+ADDTILE (5, 9), "table_right";
+ADDTILE (6, 9), "table_both";
+
+ADDTILE (7, 5), "bed_top";
+ADDTILE (7, 6), "bed_bottom";
+ADDTILE (8, 5), "bed_top";
+ADDTILE (8, 6), "bed_bottom";
+ADDTILE (7, 7), "shop_register_left";
+ADDTILE (8, 7), "shop_register_right";
+ADDTILE (7, 8), "chair";
+ADDTILE (8, 8), "fence_post";
+ADDTILE (7, 9), "wood_palette";
+ADDTILE (8, 9), "wood_planks";
+ADDTILE (9, 9), "rope";
+
+ADDTILE (10, 0), "shop_front_railing";
+
+ADDTILE (9, 3), "floor_railing_outside_nw";
+ADDTILE (10, 3), "floor_railing_n";
+ADDTILE (11, 3), "floor_railing_outside_ne";
+ADDTILE (9, 4), "floor_railing_w";
+ADDTILE (10, 4), "railing_square";
+ADDTILE (11, 4), "floor_railing_e";
+ADDTILE (9, 5), "floor_railing_outside_sw";
+ADDTILE (10, 5), "floor_railing_s";
+ADDTILE (11, 5), "floor_railing_outside_se";
+
+ADDTILE (9, 6), "floor_railing_outside_nw";
+ADDTILE (10, 6), "floor_railing_n";
+ADDTILE (11, 6), "floor_railing_outside_ne";
+ADDTILE (9, 7), "floor_railing_w";
+ADDTILE (10, 7), "shop_side_railing";
+ADDTILE (11, 7), "floor_railing_e";
+ADDTILE (9, 8), "floor_railing_outside_sw";
+ADDTILE (10, 8), "floor_railing_s";
+ADDTILE (11, 8), "floor_railing_outside_se";
+
+ADDTILE (10, 11), "floor_railing_inside_nw";
+ADDTILE (11, 11), "floor_railing_inside_ne";
+ADDTILE (10, 12), "floor_railing_inside_sw";
+ADDTILE (11, 12), "floor_railing_inside_se";
+ADDTILE (10, 13), "floor_railing_inside_nw";
+ADDTILE (11, 13), "floor_railing_inside_ne";
+ADDTILE (10, 14), "floor_railing_inside_sw";
+ADDTILE (11, 14), "floor_railing_inside_se";
+
+ADDTILE (3, 11), "wall_up_column_left_entrance_light_floor";
+ADDTILE (4, 11), "wall_up_column_right_entrance_light_floor";
 
 
 END;

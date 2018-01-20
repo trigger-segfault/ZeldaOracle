@@ -92,8 +92,8 @@ namespace ZeldaOracle.Game.Control.Menus {
 			}
 		}
 
-		public override void Draw(Graphics2D g) {
-			base.Draw(g);
+		protected override void DrawMenu(Graphics2D g) {
+			base.DrawMenu(g);
 			DrawHeartPieces(g);
 		}
 

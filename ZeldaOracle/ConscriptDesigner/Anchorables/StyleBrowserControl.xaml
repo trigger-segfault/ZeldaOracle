@@ -16,18 +16,12 @@
     </UserControl.Resources>
     <DockPanel>
         <ToolBar DockPanel.Dock="Top">
-            <ComboBox x:Name="comboBoxStyleGroups" HorizontalAlignment="Left" Width="140" Margin="0,1" SelectionChanged="OnStyleGroupChanged" VerticalAlignment="Center"/>
-            <Separator/>
-            <local:ImageToggleButton x:Name="buttonShowAnimations" Source="/ConscriptDesigner;component/Resources/Icons/ShowAnimations.png" Click="OnToggleAnimations" IsTabStop="False" Focusable="False" />
-            <local:ImageButton x:Name="buttonRestartAnimations" Source="/ConscriptDesigner;component/Resources/Icons/PlayAnimations.png" Click="OnRestartAnimations" IsEnabled="False" Focusable="False" IsTabStop="False"/>
-        </ToolBar>
-        <ToolBar DockPanel.Dock="Top">
             <ToolBar.Resources>
                 <Style TargetType="{x:Type ToolBarPanel}">
                     <Setter Property="Orientation" Value="Vertical"/>
                 </Style>
             </ToolBar.Resources>
-            <ComboBox x:Name="comboBoxZones" HorizontalAlignment="Stretch" Margin="0,1" SelectionChanged="OnZoneChanged" VerticalAlignment="Center"/>
+            <ComboBox x:Name="comboBoxStyleGroups" HorizontalAlignment="Stretch" Margin="0,1" SelectionChanged="OnStyleGroupChanged" VerticalAlignment="Center"/>
         </ToolBar>
         <ToolBar DockPanel.Dock="Top">
             <ToolBar.Resources>

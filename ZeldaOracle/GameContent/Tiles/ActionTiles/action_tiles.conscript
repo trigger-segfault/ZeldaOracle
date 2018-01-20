@@ -1,0 +1,3 @@
+﻿
+LOAD "general.conscript", true;
+LOAD "monsters.conscript", true;

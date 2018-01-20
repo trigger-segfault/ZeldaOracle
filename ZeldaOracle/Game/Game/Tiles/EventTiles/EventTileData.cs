@@ -48,19 +48,19 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			set { sprite = value; }
 		}
 
+		public override Point2I Size {
+			get { return size; }
+			set { size = value; }
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
+
 		public Point2I Position {
 			get { return position; }
 			set { position = value; }
-		}
-		
-		public Point2I Size {
-			get { return size; }
-			set { size = value; }
 		}
 	}
 }

@@ -16,6 +16,7 @@ using ZeldaOracle.Common.Audio;
 using ZeldaEditor.Control;
 using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 using ZeldaOracle.Common.Graphics.Sprites;
+using System.Windows.Threading;
 
 namespace ZeldaEditor.WinForms {
 
@@ -26,6 +27,8 @@ namespace ZeldaEditor.WinForms {
 
 		private EditorWindow	editorWindow;
 		private EditorControl	editorControl;
+
+		private DispatcherTimer dispatcherTimer;
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -46,8 +49,14 @@ namespace ZeldaEditor.WinForms {
 			// Start the timer to refresh the panel.
 			//Application.Idle += delegate { Invalidate(); };
 			this.ResizeRedraw = true;
-			
+
 			//UpdateTileset();
+
+			dispatcherTimer = new DispatcherTimer(
+				TimeSpan.FromMilliseconds(15),
+				DispatcherPriority.Render,
+				delegate { Invalidate(); },
+				System.Windows.Application.Current.Dispatcher);
 		}
 
 		protected override void Dispose(bool disposing) {
@@ -64,7 +73,7 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 
 		public Point2I GetTileCoord(Point2I point) {
-			return (point / (Tileset.CellSize + Tileset.Spacing));
+			return (point / (GameSettings.TILE_SIZE + Tileset.Spacing));
 		}
 
 		public Point2I GetSelectedTileLocation() {
@@ -88,7 +97,7 @@ namespace ZeldaEditor.WinForms {
 			Point2I mousePos = ScrollPosition + e.Location;
 			Point2I newSelectedTile = GetTileCoord(mousePos);
 
-			if (newSelectedTile >= Point2I.Zero && newSelectedTile < Tileset.Size) {
+			if (newSelectedTile >= Point2I.Zero && newSelectedTile < Tileset.Dimensions) {
 				BaseTileData tileData = Tileset.GetTileData(newSelectedTile);
 
 				if (tileData != null) {
@@ -112,7 +121,7 @@ namespace ZeldaEditor.WinForms {
 		}
 
 		public void UpdateTileset() {
-			this.AutoScrollMinSize = Tileset.Size * (Tileset.CellSize + Tileset.Spacing);
+			this.AutoScrollMinSize = Tileset.Dimensions * (GameSettings.TILE_SIZE + Tileset.Spacing);
 			Invalidate();
 		}
 
@@ -136,47 +145,46 @@ namespace ZeldaEditor.WinForms {
 
 			// Draw the tileset.
 			g.Clear(Color.White);
-			g.Translate(-this.HorizontalScroll.Value, -this.VerticalScroll.Value);
-			//if (Tileset.SpriteSheet == null) {
-				// Draw each tile's sprite seperately.
-				for (int y = 0; y < Tileset.Height; y++) {
-					for (int x = 0; x < Tileset.Width; x++) {
-						BaseTileData tileData = Tileset.GetTileData(x, y);
-						if (tileData != null) {
-							int spacing = 1;
-							Vector2F drawPos = new Vector2F(x, y) * (Tileset.CellSize + spacing);
-							ISprite spr = tileData.Sprite;
+			g.PushTranslation(-ScrollPosition);
+			for (int y = 0; y < Tileset.Height; y++) {
+				for (int x = 0; x < Tileset.Width; x++) {
+					BaseTileData tileData = Tileset.GetTileData(x, y);
+					if (tileData != null) {
+						TileDataDrawing.RewardManager = editorControl.RewardManager;
+						TileDataDrawing.Level = editorControl.Level;
+						TileDataDrawing.Extras = false;
+						TileDataDrawing.PlaybackTime = editorControl.Ticks;
+						int spacing = 1;
+						Point2I drawPos = new Point2I(x, y) * (GameSettings.TILE_SIZE + spacing) + spacing;
+						/*ISprite spr = tileData.Sprite;
 
-							int imageVariantID = tileData.Properties.GetInteger("image_variant", Zone.ImageVariantID);
-							if (imageVariantID < 0)
-								imageVariantID = Zone.ImageVariantID;
-							if (spr is Animation) {
-								int substripIndex = tileData.Properties.GetInteger("substrip_index", 0);
-								spr = ((Animation) spr).GetSubstrip(substripIndex);
-							}
-
-							g.DrawISprite(spr, new SpriteDrawSettings(Zone.StyleDefinitions, imageVariantID), drawPos, Color.White);
+						int imageVariantID = tileData.Properties.GetInteger("image_variant", Zone.ImageVariantID);
+						if (imageVariantID < 0)
+							imageVariantID = Zone.ImageVariantID;
+						if (spr is Animation) {
+							int substripIndex = tileData.Properties.GetInteger("substrip_index", 0);
+							spr = ((Animation) spr).GetSubstrip(substripIndex);
 						}
+
+						g.DrawISprite(spr, new SpriteDrawSettings(Zone.StyleDefinitions, imageVariantID), drawPos, Color.White);*/
+
+						TileDataDrawing.DrawTilePreview(g, tileData, drawPos, Zone);
 					}
 				}
-			//}
-			/*else {
-				// Draw the spritesheet's image.
-				g.Translate(-Tileset.SpriteSheet.Offset);
-				g.DrawImage(Tileset.SpriteSheet.Image.GetVariant(Zone.ImageVariantID), Point2I.Zero);
-				g.ResetTranslation();
-			}*/
+			}
 
 
 			// Draw the selection box.
 			if (selectedTileLocation >= Point2I.Zero) {
-				Point2I tilePoint = selectedTileLocation * (Tileset.CellSize + Tileset.Spacing);
-				g.Translate(-this.HorizontalScroll.Value, -this.VerticalScroll.Value);
-				g.DrawRectangle(new Rectangle2I(tilePoint, Tileset.CellSize + 1), 1, Color.White);
-				g.DrawRectangle(new Rectangle2I(tilePoint + 1, Tileset.CellSize - 1), 1, Color.Black);
-				g.DrawRectangle(new Rectangle2I(tilePoint - 1, Tileset.CellSize + 3), 1, Color.Black);
-				g.ResetTranslation();
+				Point2I tilePoint = selectedTileLocation * (GameSettings.TILE_SIZE + Tileset.Spacing);
+				//g.Translate(-this.HorizontalScroll.Value, -this.VerticalScroll.Value);
+				g.DrawRectangle(new Rectangle2I(tilePoint, (Point2I) GameSettings.TILE_SIZE + 1), 1, Color.White);
+				g.DrawRectangle(new Rectangle2I(tilePoint + 1, (Point2I) GameSettings.TILE_SIZE - 1), 1, Color.Black);
+				g.DrawRectangle(new Rectangle2I(tilePoint - 1, (Point2I) GameSettings.TILE_SIZE + 3), 1, Color.Black);
+				//g.ResetTranslation();
 			}
+
+			g.PopTranslation();
 
 			g.End();
 		}
@@ -201,7 +209,7 @@ namespace ZeldaEditor.WinForms {
 		}
 
 		public Zone Zone {
-			get { return editorControl.Zone; }
+			get { return editorControl.Zone ?? GameData.ZONE_DEFAULT; }
 		}
 
 		public Point2I SelectedTile {

@@ -1,4 +1,4 @@
-PALETTEDICTIONARY entity, entity_dictionary;
+PALETTEDICTIONARY entity, "entity_dictionary";
 
 #==============================================================
 # Standard

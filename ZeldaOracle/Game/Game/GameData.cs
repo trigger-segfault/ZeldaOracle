@@ -74,6 +74,9 @@ namespace ZeldaOracle.Game {
 				LoadRewards(rewardManager);
 			}
 
+			Console.WriteLine("Loading Tiles");
+			LoadTiles();
+
 			Console.WriteLine("Loading Tilesets");
 			LoadTilesets();
 
@@ -238,13 +241,11 @@ namespace ZeldaOracle.Game {
 		private static void LoadZonesPreTileData() {
 			Resources.LoadZones("Zones/zones.conscript", false);
 			IntegrateResources<Zone>("ZONE_");
-			ZONE_DEFAULT = Resources.GetResource<Zone>("", true);
 		}
 
 		private static void LoadZonesPostTileData() {
 			Resources.LoadZones("Zones/zones.conscript", true);
 			IntegrateResources<Zone>("ZONE_");
-			ZONE_DEFAULT = Resources.GetResource<Zone>("", true);
 		}
 
 		//-----------------------------------------------------------------------------
@@ -273,7 +274,11 @@ namespace ZeldaOracle.Game {
 			//Resources.LoadTilesets("Tilesets/overworld.conscript");
 			//Resources.LoadTilesets("Tilesets/interior2.conscript");
 
-			IntegrateResources<Tileset>("TILESET_");
+			IntegrateResources<ITileset>("TILESET_");
+		}
+
+		private static void LoadTiles() {
+			Resources.LoadTiles("Tiles/tiles.conscript");
 		}
 		/*
 		private static EventTileData CreateMonsterEvent(int sx, int sy, string id, string animation, Type monsterType, MonsterColor color) {
@@ -364,9 +369,9 @@ namespace ZeldaOracle.Game {
 		// Tilesets
 		//-----------------------------------------------------------------------------
 
-		public static Tileset TILESET_OVERWORLD;
-		public static Tileset TILESET_INTERIOR;
-		public static Tileset TILESET_CLIFFS;
+		public static ITileset TILESET_OVERWORLD;
+		public static ITileset TILESET_INTERIOR;
+		public static ITileset TILESET_CLIFFS;
 
 
 		//-----------------------------------------------------------------------------

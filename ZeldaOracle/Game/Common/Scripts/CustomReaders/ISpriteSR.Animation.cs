@@ -89,8 +89,10 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("ADD strip", (int) Modes.Animation,
-				"int duration, int stripLength, Point sourceIndex, Point drawOffset = (0, 0), int depth = 0, Point relative = (1, 0)",
-				"int duration, int stripLength, (Point sourceIndex, string definition), Point drawOffset = (0, 0), int depth = 0, Point relative = (1, 0)",
+				"int duration, int stripLength, Point sourceIndex, Point drawOffset = (0, 0), " +
+					"Rectangle clipping = (0, 0, -1, -1), int depth = 0, Point relative = (1, 0)",
+				"int duration, int stripLength, (Point sourceIndex, string definition), Point drawOffset = (0, 0), " +
+					"Rectangle clipping = (0, 0, -1, -1), int depth = 0, Point relative = (1, 0)",
 			delegate (CommandParam parameters) {
 				Point2I sourceIndex;
 				string definition = null;
@@ -102,6 +104,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				else {
 					sourceIndex = parameters.GetPoint(2);
 				}
+				Rectangle2I? clipping = parameters.GetRectangle(4);
+				if (clipping.Value.Size == -Point2I.One)
+					clipping = null;
 				animationBuilder.AddFrameStrip(
 					parameters.GetInt(0),
 					source,
@@ -109,18 +114,22 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					definition,
 					parameters.GetInt(1),
 					parameters.GetPoint(3),
+					clipping,
 					Flip.None,
 					Rotation.None,
-					parameters.GetInt(4),
-					parameters.GetPoint(5));
+					parameters.GetInt(5),
+					parameters.GetPoint(6));
 			});
 			//=====================================================================================
 			AddCommand("ADD frame", (int) Modes.Animation,
-				"int duration, Sprite sprite, Point drawOffset = (0, 0), int depth = 0",
+				"int duration, Sprite sprite, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1), int depth = 0",
 			delegate (CommandParam parameters) {
 				ISpriteSource source;
 				Point2I index;
 				string definition;
+				Rectangle2I? clipping = parameters.GetRectangle(3);
+				if (clipping.Value.Size == -Point2I.One)
+					clipping = null;
 				ISprite addSprite = GetSpriteFromParams(parameters, 1, out source, out index, out definition);
 				if (source != null) {
 					animationBuilder.AddFrame(
@@ -129,27 +138,32 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						index,
 						definition,
 						parameters.GetPoint(2),
+						clipping,
 						Flip.None,
 						Rotation.None,
-						parameters.GetInt(3));
+						parameters.GetInt(4));
 				}
 				else {
 					animationBuilder.AddFrame(
 						parameters.GetInt(0),
 						addSprite,
 						parameters.GetPoint(2),
+						clipping,
 						Flip.None,
 						Rotation.None,
-						parameters.GetInt(3));
+						parameters.GetInt(4));
 				}
 			});
 			//=====================================================================================
 			AddCommand("ADD part", (int) Modes.Animation,
-				"int duration, Sprite sprite, Point drawOffset = (0, 0), int depth = 0",
+				"int duration, Sprite sprite, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1), int depth = 0",
 			delegate (CommandParam parameters) {
 				ISpriteSource source;
 				Point2I index;
 				string definition;
+				Rectangle2I? clipping = parameters.GetRectangle(3);
+				if (clipping.Value.Size == -Point2I.One)
+					clipping = null;
 				ISprite addSprite = GetSpriteFromParams(parameters, 1, out source, out index, out definition);
 				if (source != null) {
 					animationBuilder.AddPart(
@@ -158,27 +172,32 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						index,
 						definition,
 						parameters.GetPoint(2),
+						clipping,
 						Flip.None,
 						Rotation.None,
-						parameters.GetInt(3));
+						parameters.GetInt(4));
 				}
 				else {
 					animationBuilder.AddPart(
 						parameters.GetInt(0),
 						addSprite,
 						parameters.GetPoint(2),
+						clipping,
 						Flip.None,
 						Rotation.None,
-						parameters.GetInt(3));
+						parameters.GetInt(4));
 				}
 			});
 			//=====================================================================================
 			AddCommand("ADD static", (int) Modes.Animation,
-				"Sprite sprite, Point drawOffset = (0, 0), int depth = 0",
+				"Sprite sprite, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1), int depth = 0",
 			delegate (CommandParam parameters) {
 				ISpriteSource source;
 				Point2I index;
 				string definition;
+				Rectangle2I? clipping = parameters.GetRectangle(2);
+				if (clipping.Value.Size == -Point2I.One)
+					clipping = null;
 				ISprite addSprite = GetSpriteFromParams(parameters, 0, out source, out index, out definition);
 				if (source != null) {
 					animationBuilder.AddStatic(
@@ -186,23 +205,27 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						index,
 						definition,
 						parameters.GetPoint(1),
+						clipping,
 						Flip.None,
 						Rotation.None,
-						parameters.GetInt(2));
+						parameters.GetInt(3));
 				}
 				else {
 					animationBuilder.AddStatic(
 						addSprite,
 						parameters.GetPoint(1),
+						clipping,
 						Flip.None,
 						Rotation.None,
-						parameters.GetInt(2));
+						parameters.GetInt(3));
 				}
 			});
 			//=====================================================================================
 			AddCommand("INSERT strip", (int) Modes.Animation,
-				"int time, int duration, int stripLength, Point sourceIndex, Point drawOffset = (0, 0), int depth = 0, Point relative = (1, 0)",
-				"int time, int duration, int stripLength, (Point sourceIndex, string definition), Point drawOffset = (0, 0), int depth = 0, Point relative = (1, 0)",
+				"int time, int duration, int stripLength, Point sourceIndex, Point drawOffset = (0, 0), " +
+					"Rectangle clipping = (0, 0, -1, -1), int depth = 0, Point relative = (1, 0)",
+				"int time, int duration, int stripLength, (Point sourceIndex, string definition), " +
+					"Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1), int depth = 0, Point relative = (1, 0)",
 			delegate (CommandParam parameters) {
 				Point2I index;
 				string definition = null;
@@ -214,6 +237,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				else {
 					index = parameters.GetPoint(3);
 				}
+				Rectangle2I? clipping = parameters.GetRectangle(5);
+				if (clipping.Value.Size == -Point2I.One)
+					clipping = null;
 				animationBuilder.InsertFrameStrip(
 					parameters.GetInt(0),
 					parameters.GetInt(1),
@@ -222,18 +248,22 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					definition,
 					parameters.GetInt(2),
 					parameters.GetPoint(4),
+					clipping,
 					Flip.None,
 					Rotation.None,
-					parameters.GetInt(5),
-					parameters.GetPoint(6, new Point2I(1, 0)));
+					parameters.GetInt(6),
+					parameters.GetPoint(7));
 			});
 			//=====================================================================================
 			AddCommand("INSERT frame", (int) Modes.Animation,
-				"int time, int duration, Sprite sprite, Point drawOffset = (0, 0), int depth = 0",
+				"int time, int duration, Sprite sprite, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1), int depth = 0",
 			delegate (CommandParam parameters) {
 				ISpriteSource source;
 				Point2I index;
 				string definition;
+				Rectangle2I? clipping = parameters.GetRectangle(4);
+				if (clipping.Value.Size == -Point2I.One)
+					clipping = null;
 				ISprite addSprite = GetSpriteFromParams(parameters, 2, out source, out index, out definition);
 				if (source != null) {
 					animationBuilder.InsertFrame(
@@ -243,9 +273,10 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						index,
 						definition,
 						parameters.GetPoint(3),
+						clipping,
 						Flip.None,
 						Rotation.None,
-						parameters.GetInt(4));
+						parameters.GetInt(5));
 				}
 				else {
 					animationBuilder.InsertFrame(
@@ -253,17 +284,22 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						parameters.GetInt(1),
 						addSprite,
 						parameters.GetPoint(3),
+						clipping,
 						Flip.None,
 						Rotation.None,
-						parameters.GetInt(4));
+						parameters.GetInt(5));
 				}
 			});
 			//=====================================================================================
 			AddCommand("COMBINE", (int) Modes.Animation,
-				"string animationName, Point drawOffset = (0, 0), int depthOffset = 0",
-				"(string animationName, int substrip), Point drawOffset = (0, 0), int depthOffset = 0",
-				"int timeOffset, string animationName, Point drawOffset = (0, 0), int depthOffset = 0",
-				"int timeOffset, (string animationName, int substrip), Point drawOffset = (0, 0), int depthOffset = 0",
+				"string animationName, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1), " +
+					"int depthOffset = 0",
+				"(string animationName, int substrip), Point drawOffset = (0, 0), " +
+					"Rectangle clipping = (0, 0, -1, -1), int depthOffset = 0",
+				"int timeOffset, string animationName, Point drawOffset = (0, 0), " +
+					"Rectangle clipping = (0, 0, -1, -1), int depthOffset = 0",
+				"int timeOffset, (string animationName, int substrip), Point drawOffset = (0, 0), " +
+					"Rectangle clipping = (0, 0, -1, -1), int depthOffset = 0",
 			delegate (CommandParam parameters) {
 				int paramOffset = 0;
 				int timeOffset = 0;
@@ -282,9 +318,12 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					substrip = subParam.GetInt(1);
 				}
 				Point2I drawOffset = parameters.GetPoint(paramOffset + 1);
-				int depthOffset = parameters.GetInt(paramOffset + 2);
+				Rectangle2I? clipping = parameters.GetRectangle(paramOffset + 2);
+				if (clipping.Value.Size == -Point2I.One)
+					clipping = null;
+				int depthOffset = parameters.GetInt(paramOffset + 3);
 				Animation combineAnim = GetSprite<Animation>(animationName);
-				animationBuilder.Combine(combineAnim, substrip, timeOffset, drawOffset, depthOffset);
+				animationBuilder.Combine(combineAnim, substrip, timeOffset, drawOffset, clipping, depthOffset);
 				combineAnim = combineAnim.GetSubstrip(substrip);
 			});
 			//=====================================================================================
@@ -367,6 +406,12 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				string oldDefinition = parameters.GetString(0);
 				string definition = parameters.GetString(1);
 				animationBuilder.ChangeDefinition(oldDefinition, definition, false);
+			});
+			//=====================================================================================
+			AddCommand("CLIP", (int) Modes.Animation,
+				"Rectangle clipping",
+			delegate (CommandParam parameters) {
+				animationBuilder.Clip(parameters.GetRectangle(0));
 			});
 			//=====================================================================================
 		}

@@ -12,6 +12,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		private ISprite sprite;
 		/// <summary>The draw offset for this offset sprite.</summary>
 		private Point2I drawOffset;
+		/// <summary>The clipping of the sprite.</summary>
+		public Rectangle2I? clipping;
 		/// <summary>The flipping applied to the sprite.</summary>
 		private Flip flipEffects;
 		/// <summary>The number of 90-degree rotations for the sprite.</summary>
@@ -26,21 +28,29 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public OffsetSprite() {
 			this.sprite			= null;
 			this.drawOffset		= Point2I.Zero;
-			this.flipEffects    = Flip.None;
+			this.clipping		= null;
+			this.flipEffects	= Flip.None;
+			this.rotation		= Rotation.None;
 		}
 
-		/// <summary>Constructs an offset sprite with the specified sprite.</summary>
-		public OffsetSprite(ISprite sprite, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
+		/// <summary>Constructs an offset sprite with the specified sprite and settings.</summary>
+		public OffsetSprite(ISprite sprite, Rectangle2I? clipping = null, Flip flip = Flip.None,
+			Rotation rotation = Rotation.None)
+		{
 			this.sprite			= sprite;
 			this.drawOffset		= Point2I.Zero;
-			this.flipEffects    = flip;
+			this.clipping		= clipping;
+			this.flipEffects	= flip;
 			this.rotation		= rotation;
 		}
 
-		/// <summary>Constructs an offset sprite with the specified sprite and offset.</summary>
-		public OffsetSprite(ISprite sprite, Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
+		/// <summary>Constructs an offset sprite with the specified sprite and settings.</summary>
+		public OffsetSprite(ISprite sprite, Point2I drawOffset, Rectangle2I? clipping = null,
+			Flip flip = Flip.None, Rotation rotation = Rotation.None)
+		{
 			this.sprite			= sprite;
 			this.drawOffset		= drawOffset;
+			this.clipping		= clipping;
 			this.flipEffects	= flip;
 			this.rotation		= rotation;
 		}
@@ -49,7 +59,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public OffsetSprite(OffsetSprite copy) {
 			this.sprite			= copy.sprite;
 			this.drawOffset		= copy.drawOffset;
-			this.flipEffects    = copy.flipEffects;
+			this.clipping		= copy.clipping;
+			this.flipEffects	= copy.flipEffects;
 			this.rotation		= copy.rotation;
 		}
 
@@ -60,11 +71,11 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
 		public IEnumerable<SpritePart> GetParts(SpriteDrawSettings settings) {
-			Rectangle2I bounds = Bounds;
+			Rectangle2I bounds = GetBounds(settings);
 			if (sprite == null)
 				yield break;
 			foreach (SpritePart part in sprite.GetParts(settings)) {
-				yield return new SpritePart(part, drawOffset, flipEffects, rotation, bounds);
+				yield return new SpritePart(part, drawOffset, clipping, flipEffects, rotation, bounds);
 			}
 		}
 
@@ -77,7 +88,10 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public Rectangle2I GetBounds(SpriteDrawSettings settings) {
 			if (sprite == null)
 				return Rectangle2I.Zero;
-			return sprite.GetBounds(settings) + drawOffset;
+			Rectangle2I bounds = sprite.GetBounds(settings);
+			if (clipping.HasValue)
+				return Rectangle2I.Intersect(bounds, clipping.Value) + drawOffset;
+			return bounds + drawOffset;
 		}
 
 		/// <summary>Gets the draw boundaries of the sprite.</summary>
@@ -85,9 +99,25 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			get {
 				if (sprite == null)
 					return Rectangle2I.Zero;
-				return sprite.Bounds + drawOffset;
+				Rectangle2I bounds = sprite.Bounds;
+				if (clipping.HasValue)
+					return Rectangle2I.Intersect(bounds, clipping.Value) + drawOffset;
+				return bounds + drawOffset;
 			}
 		}
+
+		//-----------------------------------------------------------------------------
+		// Mutators
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Adds the clipping to the sprite and insersects with the previous clipping.</summary>
+		public void Clip(Rectangle2I clipping) {
+			if (this.clipping.HasValue)
+				this.clipping = Rectangle2I.Intersect(this.clipping.Value, clipping);
+			else
+				this.clipping = clipping;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -103,6 +133,12 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public Point2I DrawOffset {
 			get { return drawOffset; }
 			set { drawOffset = value; }
+		}
+
+		/// <summary>Gets or sets the clipping of the sprite.</summary>
+		public Rectangle2I? Clipping {
+			get { return clipping; }
+			set { clipping = value; }
 		}
 
 		/// <summary>Gets or sets the extra flipping applied to the offset sprite.</summary>

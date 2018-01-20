@@ -577,6 +577,10 @@ namespace ZeldaOracle.Game.Tiles {
 			graphics.Draw(g);
 		}
 
+		public virtual void DrawAbove(RoomGraphics g) {
+			graphics.DrawAbove(g);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Static Methods
@@ -681,6 +685,17 @@ namespace ZeldaOracle.Game.Tiles {
 			if (sprite != null) {
 				g.DrawISprite(
 					sprite,
+					args.SpriteDrawSettings,
+					args.Position,
+					args.Color);
+			}
+		}
+
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public static void DrawTileDataAbove(Graphics2D g, TileDataDrawArgs args) {
+			if (args.Tile.SpriteAbove != null) {
+				g.DrawISprite(
+					args.Tile.SpriteAbove,
 					args.SpriteDrawSettings,
 					args.Position,
 					args.Color);

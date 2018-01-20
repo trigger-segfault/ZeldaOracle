@@ -16,6 +16,7 @@ using ConscriptDesigner.Control;
 using ConscriptDesigner.WinForms;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Tiles;
+using ZeldaResources = ZeldaOracle.Common.Content.Resources;
 
 namespace ConscriptDesigner.Anchorables {
 	/// <summary>
@@ -23,28 +24,114 @@ namespace ConscriptDesigner.Anchorables {
 	/// </summary>
 	public partial class TileDataBrowserControl : UserControl {
 
-		private TileDataPreview tileDataPreview;
-
+		private TileDataPreview preview;
+		
+		private List<BaseTileData> tileData;
+		private List<BaseTileData> filteredTileData;
+		
 		private bool suppressEvents;
 
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Constructs the tile data browser control.</summary>
 		public TileDataBrowserControl() {
 			this.suppressEvents = true;
 			InitializeComponent();
+			
+			this.preview = new TileDataPreview();
+			this.preview.HoverChanged += OnHoverChanged;
+			this.host.Child = this.preview;
+			this.tileData = new List<BaseTileData>();
+			this.filteredTileData = new List<BaseTileData>();
 
-			this.buttonShowAnimations.IsChecked = false;
-			this.tileDataPreview = new TileDataPreview();
-			this.tileDataPreview.Refreshed += OnSpritePreviewRefreshed;
-			this.tileDataPreview.HoverTileDataChanged += OnHoverTileDataChanged;
-			this.host.Child = this.tileDataPreview;
+			DesignerControl.ResourcesLoaded += OnResourcesLoaded;
+			DesignerControl.ResourcesUnloaded += OnResourcesUnloaded;
+			DesignerControl.PreviewInvalidated += OnPreviewInvalidated;
+			DesignerControl.PreviewScaleChanged += OnPreviewScaleChanged;
+
+			OnHoverChanged();
+
 			this.suppressEvents = false;
-
-			DesignerControl.PreviewZoneChanged += OnPreviewZoneChanged;
-
-			OnHoverTileDataChanged();
 		}
 
-		private void OnHoverTileDataChanged(object sender = null, EventArgs e = null) {
-			BaseTileData hoverTileData = tileDataPreview.HoverTileData;
+
+		//-----------------------------------------------------------------------------
+		// Loading
+		//-----------------------------------------------------------------------------
+
+		public void Dispose() {
+			DesignerControl.ResourcesLoaded -= OnResourcesLoaded;
+			DesignerControl.ResourcesUnloaded -= OnResourcesUnloaded;
+			DesignerControl.PreviewInvalidated -= OnPreviewInvalidated;
+			DesignerControl.PreviewScaleChanged -= OnPreviewScaleChanged;
+			preview.Dispose();
+		}
+
+		public void Reload() {
+			suppressEvents = true;
+
+			tileData.Clear();
+			filteredTileData.Clear();
+			foreach (var pair in ZeldaResources.GetResourceDictionary<BaseTileData>()) {
+				tileData.Add(pair.Value);
+			}
+
+			UpdateFilter();
+			OnHoverChanged();
+
+			suppressEvents = false;
+		}
+
+		public void Unload() {
+			preview.Unload();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Sprites Setup
+		//-----------------------------------------------------------------------------
+		
+		private void UpdateFilter() {
+			string filter = textBoxSearch.Text;
+			filteredTileData = new List<BaseTileData>();
+			if (!string.IsNullOrEmpty(filter)) {
+				foreach (var tile in tileData) {
+					if (tile.Name.Contains(filter)) {
+						filteredTileData.Add(tile);
+					}
+				}
+			}
+			else {
+				filteredTileData = tileData;
+			}
+			preview.UpdateList(filteredTileData);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Event Handlers
+		//-----------------------------------------------------------------------------
+
+		private void OnResourcesLoaded(object sender = null, EventArgs e = null) {
+			Reload();
+		}
+
+		private void OnResourcesUnloaded(object sender = null, EventArgs e = null) {
+			Unload();
+		}
+
+		private void OnPreviewInvalidated(object sender = null, EventArgs e = null) {
+			preview.Invalidate();
+		}
+
+		private void OnPreviewScaleChanged(object sender = null, EventArgs e = null) {
+			preview.UpdateScale();
+		}
+
+		private void OnHoverChanged(object sender = null, EventArgs e = null) {
+			BaseTileData hoverTileData = preview.HoverTileData;
 			if (hoverTileData == null) {
 				textBlockTileName.Text = "";
 				statusTileInfo.Content = "";
@@ -63,59 +150,9 @@ namespace ConscriptDesigner.Anchorables {
 			}
 		}
 
-		public void Dispose() {
-			DesignerControl.PreviewZoneChanged -= OnPreviewZoneChanged;
-			tileDataPreview.Dispose();
-		}
-
-		public void RefreshList() {
-			comboBoxZones.ItemsSource = DesignerControl.PreviewZones;
-			comboBoxZones.SelectedItem = DesignerControl.PreviewZoneID;
-			tileDataPreview.RefreshList();
-		}
-
-		public void ClearList() {
-			tileDataPreview.ClearList();
-		}
-
-		private void OnSpritePreviewRefreshed(object sender, EventArgs e) {
-			/*suppressEvents = true;
-			comboBoxSpriteSizes.Items.Clear();
-			foreach (Point2I point in tileDataPreview.GetSpriteSizes()) {
-				ComboBoxItem item = new ComboBoxItem();
-				item.Content = point.X + " x " + point.Y;
-				item.Tag = point;
-				comboBoxSpriteSizes.Items.Add(item);
-				if (point == tileDataPreview.SpriteSize) {
-					comboBoxSpriteSizes.SelectedItem = item;
-				}
-			}
-			suppressEvents = false;*/
-		}
-
 		private void OnSearchTextChanged(object sender, TextChangedEventArgs e) {
 			if (suppressEvents) return;
-			tileDataPreview.UpdateFilter(textBoxSearch.Text);
-		}
-
-		private void OnToggleAnimations(object sender, RoutedEventArgs e) {
-			tileDataPreview.Animating = !tileDataPreview.Animating;
-			buttonRestartAnimations.IsEnabled = tileDataPreview.Animating;
-		}
-
-		private void OnRestartAnimations(object sender, RoutedEventArgs e) {
-			tileDataPreview.RestartAnimations();
-		}
-
-		private void OnZoneChanged(object sender, SelectionChangedEventArgs e) {
-			DesignerControl.PreviewZoneID = (string) comboBoxZones.SelectedItem;
-		}
-
-		private void OnPreviewZoneChanged(object sender, EventArgs e) {
-			suppressEvents = true;
-			comboBoxZones.SelectedItem = DesignerControl.PreviewZoneID;
-			suppressEvents = false;
-			tileDataPreview.Invalidate();
+			UpdateFilter();
 		}
 	}
 }

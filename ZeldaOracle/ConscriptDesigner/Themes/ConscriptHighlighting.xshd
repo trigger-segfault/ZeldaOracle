@@ -20,7 +20,7 @@
     </Keywords>
   </RuleSet>
 
-  <RuleSet ignoreCase="true">
+  <RuleSet>
     <Span color="Comment" ruleSet="CommentMarkerSet">
       <Begin>\#</Begin>
     </Span>
@@ -58,11 +58,8 @@
 
     <!--ISpriteSR Clone Prefix-->
     <Rule color="Prefixes">
-      \bCLONE\s+BASIC\b
-      |
-      (	\bCLONE\s+MULTIPLE\b
+      \bCLONE\s+MULTIPLE\b
       | \bCLONE\s+SINGLE\b
-      )
     </Rule>
 
     <!--ScriptReader-->
@@ -109,6 +106,7 @@
       <Word>REWIND</Word>
       <Word>SHIFTSOURCE</Word>
       <Word>CHANGEDEFINITION</Word>
+      <Word>CLIP</Word>
     </Keywords>
       
     <!--ISpriteSR Keywords-->
@@ -129,6 +127,8 @@
       <Word>black</Word>
       <Word>transparent</Word>
       <Word>all</Word>
+      <Word>tile</Word>
+      <Word>entity</Word>
     </Keywords>
 
     <!--ISpriteSR.BasicEmptyOffset-->
@@ -139,6 +139,7 @@
       <Word>SIZE</Word>
       <Word>SOURCERECT</Word>
       <Word>DRAWOFFSET</Word>
+      <Word>CLIP</Word>
     </Keywords>
 
     <!--ISpriteSR.Color-->
@@ -158,6 +159,7 @@
       <Word>COMBINE</Word>
       <Word>SIZE</Word>
       <Word>OFFSET</Word>
+      <Word>CLIP</Word>
     </Keywords>
 
     <!--ISpriteSR.Style-->
@@ -218,6 +220,8 @@
       <Word>LOOKUP</Word>
       <Word>CLONE</Word>
       <Word>RESET</Word>
+      <Word>CONST</Word>
+      <Word>COPY</Word>
     </Keywords>
 
     <!--SoundSR-->
@@ -228,14 +232,16 @@
     <!--TilesetSR-->
     <Keywords color="Commands">
       <Word>TILESET</Word>
-      <Word>EVENTTILESET</Word>
+      <Word>ACTIONTILESET</Word>
       <Word>TILE</Word>
-      <Word>EVENTTILE</Word>
+      <Word>ACTIONTILE</Word>
       <Word>MONSTER</Word>
       <Word>END</Word>
       <Word>DEFAULT</Word>
       <Word>CONFIG</Word>
+      <Word>ADDTILE</Word>
       <Word>SETTILE</Word>
+      <Word>REMOVETILE</Word>
       <Word>TYPE</Word>
       <Word>FLAGS</Word>
       <Word>ENVTYPE</Word>
@@ -245,6 +251,7 @@
       <Word>EVENT</Word>
       <Word>SPRITE</Word>
       <Word>SAMESPRITE</Word>
+      <Word>SAMESPRITEABOVE</Word>
       <Word>SAMESPRITEOBJ</Word>
       <Word>SIZE</Word>
       <Word>SPRITEINDEX</Word>
@@ -259,6 +266,7 @@
       <Word>HURT</Word>
       <Word>CLONE</Word>
       <Word>SPRITESHEET</Word>
+      <Word>PREVIEW</Word>
     </Keywords>
 
     <!--ZoneSR-->

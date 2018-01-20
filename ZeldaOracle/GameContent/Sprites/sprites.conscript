@@ -2,28 +2,36 @@
 SPRITESHEET "temp_sheet_black_8x8",	"Tiles/Styles/black_8x8"	(8, 8), (0, 0), (0, 0); END;
 
 SOURCE "temp_sheet_black_8x8";
+PALETTEDICTIONARY	"tile_dictionary";
+MAPPEDCOLORS	"tiles_default", ("default");
 BASIC "black_8x8" (0, 0); END;
+PALETTEDICTIONARY	none;
 
-LOAD "Tiles/terrain.conscript" false;
-LOAD "Tiles/trees.conscript" false;
-LOAD "Tiles/stairs_tiles.conscript" false;
-LOAD "Tiles/objects_tiles.conscript" false;
-LOAD "Tiles/puzzle_objects_tiles.conscript" false;
-LOAD "Tiles/doors.conscript" false;
-LOAD "Tiles/floors_tiles.conscript" false;
-LOAD "Tiles/tiled.conscript" false;
-LOAD "Tiles/railings.conscript" false;
-LOAD "Tiles/entrances.conscript" false;
-LOAD "Tiles/walls.conscript" false;
-LOAD "Tiles/tunnels.conscript" false;
-LOAD "Tiles/turnstile.conscript" false;
-LOAD "Tiles/holes.conscript" false;
-LOAD "Tiles/snow_mounds.conscript" false;
-LOAD "Tiles/town.conscript" false;
-LOAD "Tiles/bridges.conscript" false;
-LOAD "Tiles/lights.conscript" false;
-LOAD "Tiles/color_cube.conscript" false;
-LOAD "Units/Player/player.conscript" false;
+LOAD "Tiles/terrain.conscript", false;
+LOAD "Tiles/trees.conscript", false;
+LOAD "Tiles/hedges.conscript", false;
+LOAD "Tiles/stairs_tiles.conscript", false;
+LOAD "Tiles/objects_tiles.conscript", false;
+LOAD "Tiles/puzzle_objects_tiles.conscript", false;
+LOAD "Tiles/doors.conscript", false;
+LOAD "Tiles/floors_tiles.conscript", false;
+LOAD "Tiles/tiled.conscript", false;
+LOAD "Tiles/railings.conscript", false;
+LOAD "Tiles/walls.conscript", false;
+LOAD "Tiles/entrances.conscript", false;
+LOAD "Tiles/tunnels.conscript", false;
+LOAD "Tiles/turnstile.conscript", false;
+LOAD "Tiles/holes.conscript", false;
+LOAD "Tiles/snow_mounds.conscript", false;
+LOAD "Tiles/town.conscript", false;
+LOAD "Tiles/bridges.conscript", false;
+LOAD "Tiles/lights.conscript", false;
+LOAD "Tiles/interior.conscript", false;
+LOAD "Tiles/SideScrolling/sidescrolling.conscript", false;
+LOAD "Tiles/color_cube.conscript" ,false;
+LOAD "Tiles/tile_previews.conscript", false;
+LOAD "Units/units.conscript", false;
+#LOAD "Units/Player/player.conscript" false;
 
 #==============================================================
 # Sprite Sheets
@@ -226,7 +234,7 @@ SOURCE "zoneset_large";
 #BASIC tile_minecart_track_up_right,	(11, 8); END;
 #BASIC tile_minecart_track_up_left,		(12, 8); END;
 
-#BASIC tile_floor_tile_monster,			( 8, 9); END;
+#BASIC tile_floor_flying_tile,			( 8, 9); END;
 #BASIC tile_moving_platform,				( 9, 9); END;
 #BASIC tile_minecart_track_stop,			(10, 9); END;
 #BASIC tile_minecart_track_horizontal,	(11, 9); END;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -68,6 +69,15 @@ namespace ConscriptDesigner {
 
 			Application.Current.Activated += OnApplicationActivated;
 
+			for (int i = 1; i <= 3; i++) {
+				ComboBoxItem item = new ComboBoxItem();
+				item.Content = "x" + i + " Scale";
+				item.Tag = i;
+				comboBoxScales.Items.Add(item);
+			}
+			comboBoxScales.SelectedIndex = 0;
+
+
 			this.checkOutdatedTimer = new DispatcherTimer(TimeSpan.FromSeconds(0.1),
 				DispatcherPriority.ApplicationIdle, delegate {
 					DesignerControl.CheckForOutdatedFiles(true);
@@ -88,6 +98,9 @@ namespace ConscriptDesigner {
 			string[] args = Environment.GetCommandLineArgs();
 			if (args.Length > 1) {
 				DesignerControl.OpenProject(args[1]);
+			}
+			else {
+				ProjectUserSettings.LoadDefaults();
 			}
 
 			Visibility = Visibility.Collapsed;
@@ -179,28 +192,34 @@ namespace ConscriptDesigner {
 
 		private void OnResourcesLoaded(object sender, EventArgs e) {
 			if (spriteBrowser != null)
-				spriteBrowser.RefreshList();
+				spriteBrowser.Reload();
 			if (spriteSourceBrowser != null)
-				spriteSourceBrowser.RefreshList();
+				spriteSourceBrowser.Reload();
 			if (styleBrowser != null)
-				styleBrowser.RefreshList();
+				styleBrowser.Reload();
 			if (tileDataBrowser != null)
-				tileDataBrowser.RefreshList();
+				tileDataBrowser.Reload();
 			if (tilesetBrowser != null)
-				tilesetBrowser.RefreshList();
+				tilesetBrowser.Reload();
+			comboBoxZones.ItemsSource = DesignerControl.PreviewZones;
+			comboBoxZones.SelectedItem = DesignerControl.PreviewZoneID;
 		}
 
 		private void OnResourcesUnloaded(object sender, EventArgs e) {
 			if (spriteBrowser != null)
-				spriteBrowser.ClearList();
+				spriteBrowser.Unload();
 			if (spriteSourceBrowser != null)
-				spriteSourceBrowser.ClearList();
+				spriteSourceBrowser.Unload();
 			if (styleBrowser != null)
-				styleBrowser.ClearList();
+				styleBrowser.Unload();
 			if (tileDataBrowser != null)
-				tileDataBrowser.ClearList();
+				tileDataBrowser.Unload();
 			if (tilesetBrowser != null)
-				tilesetBrowser.ClearList();
+				tilesetBrowser.Unload();
+			supressEvents = true;
+			comboBoxZones.ItemsSource = null;
+			comboBoxZones.Items.Clear();
+			supressEvents = false;
 		}
 
 		private void OnFinishedBuilding(object sender, EventArgs e) {
@@ -483,11 +502,9 @@ namespace ConscriptDesigner {
 				var pane = spriteBrowser.Parent as LayoutAnchorablePane;
 				pane.DockWidth = new GridLength(250);
 				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
-					spriteBrowser.RefreshList();
+					spriteBrowser.Reload();
 			}
-			else {
-				spriteBrowser.IsActive = true;
-			}
+			spriteBrowser.IsActive = true;
 		}
 
 		private void OnSpriteSourceBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
@@ -498,11 +515,9 @@ namespace ConscriptDesigner {
 				var pane = spriteSourceBrowser.Parent as LayoutAnchorablePane;
 				pane.DockWidth = new GridLength(250);
 				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
-					spriteSourceBrowser.RefreshList();
+					spriteSourceBrowser.Reload();
 			}
-			else {
-				spriteSourceBrowser.IsActive = true;
-			}
+			spriteSourceBrowser.IsActive = true;
 		}
 
 		private void OnStyleBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
@@ -513,11 +528,9 @@ namespace ConscriptDesigner {
 				var pane = styleBrowser.Parent as LayoutAnchorablePane;
 				pane.DockWidth = new GridLength(250);
 				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
-					styleBrowser.RefreshList();
+					styleBrowser.Reload();
 			}
-			else {
-				styleBrowser.IsActive = true;
-			}
+			styleBrowser.IsActive = true;
 		}
 
 		private void OnTileDataBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
@@ -528,11 +541,9 @@ namespace ConscriptDesigner {
 				var pane = tileDataBrowser.Parent as LayoutAnchorablePane;
 				pane.DockWidth = new GridLength(250);
 				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
-					tileDataBrowser.RefreshList();
+					tileDataBrowser.Reload();
 			}
-			else {
-				tileDataBrowser.IsActive = true;
-			}
+			tileDataBrowser.IsActive = true;
 		}
 
 		private void OnTilesetBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
@@ -543,11 +554,17 @@ namespace ConscriptDesigner {
 				var pane = tilesetBrowser.Parent as LayoutAnchorablePane;
 				pane.DockWidth = new GridLength(250);
 				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
-					tilesetBrowser.RefreshList();
+					tilesetBrowser.Reload();
 			}
-			else {
-				tilesetBrowser.IsActive = true;
-			}
+			tilesetBrowser.IsActive = true;
+		}
+
+		private void OnLaunchGameCommand(object sender, ExecutedRoutedEventArgs e) {
+			DesignerControl.LaunchGame();
+		}
+
+		private void OnLaunchEditorCommand(object sender, ExecutedRoutedEventArgs e) {
+			DesignerControl.LaunchEditor();
 		}
 
 		private void OnRunConscriptsCommand(object sender, ExecutedRoutedEventArgs e) {
@@ -666,6 +683,25 @@ namespace ConscriptDesigner {
 
 		public FindReplaceWindow FindAndReplaceWindow {
 			get { return findReplaceWindow; }
+		}
+
+		private void OnScaleChanged(object sender, SelectionChangedEventArgs e) {
+			if (supressEvents) return;
+			DesignerControl.PreviewScale = (int) ((FrameworkElement) comboBoxScales.SelectedItem).Tag;
+		}
+
+		private void OnZoneChanged(object sender, SelectionChangedEventArgs e) {
+			if (supressEvents) return;
+			DesignerControl.PreviewZoneID = (string) comboBoxZones.SelectedItem;
+		}
+
+		private void OnPlayAnimations(object sender, RoutedEventArgs e) {
+			DesignerControl.PlayAnimations = buttonPlayAnimations.IsChecked.Value;
+			buttonRestartAnimations.IsEnabled = DesignerControl.PlayAnimations;
+		}
+
+		private void OnRestartAnimations(object sender, RoutedEventArgs e) {
+			DesignerControl.RestartAnimations();
 		}
 	}
 }

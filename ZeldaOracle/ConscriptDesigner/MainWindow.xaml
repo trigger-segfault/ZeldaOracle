@@ -25,6 +25,8 @@
         <CommandBinding Command="cmd:Commands.Exit" CanExecute="CanAlwaysExecute" Executed="OnExitCommand"/>
         <CommandBinding Command="cmd:Commands.RedoSecondary" CanExecute="CanRedo" Executed="OnRedoCommand"/>
 
+        <CommandBinding Command="cmd:Commands.LaunchGame" CanExecute="CanExecuteIsBusy" Executed="OnLaunchGameCommand"/>
+        <CommandBinding Command="cmd:Commands.LaunchEditor" CanExecute="CanExecuteIsBusy" Executed="OnLaunchEditorCommand"/>
         <CommandBinding Command="cmd:Commands.RunConscripts" CanExecute="CanExecuteIsBusy" Executed="OnRunConscriptsCommand"/>
         <CommandBinding Command="cmd:Commands.CompileContent" CanExecute="CanExecuteIsBusy" Executed="OnCompileContentCommand"/>
         <CommandBinding Command="cmd:Commands.CancelBuild" CanExecute="CanExecuteIsBuilding" Executed="OnCancelBuildCommand"/>
@@ -88,6 +90,9 @@
                     <local:ImageMenuItem Header="Tileset Browser" Source="/Resources/Icons/Tile.png" Command="cmd:Commands.TilesetBrowser"/>
                 </MenuItem>
                 <MenuItem Header="_Project">
+                    <local:ImageMenuItem Header="Launch Game" Source="/Resources/Icons/LaunchGame.png" Command="cmd:Commands.LaunchGame"/>
+                    <local:ImageMenuItem Header="Launch Editor" Source="/Resources/Icons/LaunchEditor.png" Command="cmd:Commands.LaunchEditor"/>
+                    <Separator/>
                     <local:ImageMenuItem Header="Run Conscripts" Source="/Resources/Icons/Build.png" Command="cmd:Commands.RunConscripts"/>
                     <local:ImageMenuItem Header="Compile Content" Source="/Resources/Icons/Compile.png" Command="cmd:Commands.CompileContent"/>
                     <Separator/>
@@ -100,6 +105,7 @@
                 
                 </MenuItem>
             </Menu>
+            
             <ToolBar DockPanel.Dock="Top">
                 <local:ImageButton Source="Resources/Icons/Save.png" ToolTip="Save File (Ctrl+S)" Command="Save"/>
                 <local:ImageButton Source="Resources/Icons/SaveAll.png" ToolTip="Save All Files (Ctrl+Shift+S)" Command="cmd:Commands.SaveAll"/>
@@ -110,8 +116,22 @@
                 <local:ImageButton Source="Resources/Icons/Build.png" Content="Run Conscripts" Command="cmd:Commands.RunConscripts" ToolTip="Run Conscripts (F5)"/>
                 <local:ImageButton Source="Resources/Icons/Compile.png" Content="Compile Content" Command="cmd:Commands.CompileContent" ToolTip="Compile Content (Shift+F5)" />
                 <Separator/>
-                <local:ImageButton Source="Resources/Icons/ErrorGoto.png" Content="Go To Error" Command="cmd:Commands.GotoError" />
+                <local:ImageButton Source="Resources/Icons/ErrorGoto.png" Content="Go To Error" Command="cmd:Commands.GotoError" ToolTip="Go To Error (F8)" />
             </ToolBar>
+            <DockPanel DockPanel.Dock="Top">
+                <ToolBar DockPanel.Dock="Right" HorizontalAlignment="Right">
+                    <TextBlock Text="Scale" VerticalAlignment="Center" Margin="0" Padding="5,0"/>
+                    <ComboBox x:Name="comboBoxScales" Width="70" SelectionChanged="OnScaleChanged" Padding="4,0,0,0" />
+                    <Separator/>
+                    <TextBlock Text="Zone" VerticalAlignment="Center" Margin="0" Padding="5,0"/>
+                    <ComboBox x:Name="comboBoxZones" Width="140" SelectionChanged="OnZoneChanged" />
+                    <Separator/>
+                    <TextBlock Text="Animation" VerticalAlignment="Center" Margin="0" Padding="5,0"/>
+                    <local:ImageToggleButton x:Name="buttonPlayAnimations" Source="/Resources/Icons/ShowAnimations.png" Click="OnPlayAnimations" ToolTip="Play Animations" Focusable="False" IsTabStop="False" />
+                    <local:ImageButton x:Name="buttonRestartAnimations" Source="/Resources/Icons/PlayAnimations.png" Click="OnRestartAnimations" ToolTip="Restart Animations" IsEnabled="False" Focusable="False" IsTabStop="False"/>
+                </ToolBar>
+                <ToolBar/>
+            </DockPanel>
             <avalonDock:DockingManager x:Name="dockingManager" ActiveContentChanged="OnActiveAnchorableChanged" UseLayoutRounding="True" AllowMixedOrientation="True">
                 <avalonDock:DockingManager.Theme>
                     <avalonDock:VS2010Theme/>

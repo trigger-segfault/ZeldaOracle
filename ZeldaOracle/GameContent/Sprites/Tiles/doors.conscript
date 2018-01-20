@@ -23,22 +23,22 @@ SPRITESET "set_doors", (8, 6);
 	# Door raising
 	SOURCE "set_doors";
 	CLONE MULTIPLE BASIC (0, 1), (4, 1), (1, 5);
-		SOURCERECT (0, 8), (16, 8);
+		SOURCERECT (0, 8, 16, 8);
 		DRAWOFFSET (0, 0);
 		END;
 		
 	CLONE MULTIPLE BASIC (1, 1), (5, 1), (1, 5);
-		SOURCERECT (0, 0), (16, 8);
+		SOURCERECT (0, 0, 16, 8);
 		DRAWOFFSET (0, 8);
 		END;
 		
 	CLONE MULTIPLE BASIC (2, 1), (6, 1), (1, 5);
-		SOURCERECT (0, 0), (8, 16);
+		SOURCERECT (0, 0, 8, 16);
 		DRAWOFFSET (8, 0);
 		END;
 		
 	CLONE MULTIPLE BASIC (3, 1), (7, 1), (1, 5);
-		SOURCERECT (8, 0), (8, 16);
+		SOURCERECT (8, 0, 8, 16);
 		DRAWOFFSET (0, 0);
 		END;
 		

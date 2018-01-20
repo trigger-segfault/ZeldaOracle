@@ -122,6 +122,7 @@ namespace ZeldaOracle.Common.Graphics {
 		private PaletteDictionary dictionary;
 		private Texture2D paletteTexture;
 		private Dictionary<string, PaletteColor[]> colorGroups;
+		private Dictionary<string, PaletteColor[]> constColorGroups;
 		private Dictionary<string, LookupPair[]> lookupGroups;
 
 
@@ -135,7 +136,8 @@ namespace ZeldaOracle.Common.Graphics {
 
 			this.paletteTexture		= new Texture2D(graphicsDevice, Dimensions.X, Dimensions.Y);
 			this.colorGroups		= new Dictionary<string, PaletteColor[]>();
-			this.lookupGroups       = new Dictionary<string, LookupPair[]>();
+			this.constColorGroups	= new Dictionary<string, PaletteColor[]>();
+			this.lookupGroups		= new Dictionary<string, LookupPair[]>();
 			
 			if (dictionary.PaletteType == PaletteTypes.Tile)
 				colorGroups.Add("default", ColorGroupToPaletteGroup(DefaultTile));
@@ -149,9 +151,12 @@ namespace ZeldaOracle.Common.Graphics {
 
 			this.paletteTexture		= new Texture2D(copy.paletteTexture.GraphicsDevice, Dimensions.X, Dimensions.Y);
 			this.colorGroups		= new Dictionary<string, PaletteColor[]>();
+			this.constColorGroups	= new Dictionary<string, PaletteColor[]>();
 			this.lookupGroups       = new Dictionary<string, LookupPair[]>();
 			foreach (var pair in copy.colorGroups)
 				this.colorGroups.Add(pair.Key, (PaletteColor[]) pair.Value.Clone());
+			foreach (var pair in copy.constColorGroups)
+				this.constColorGroups.Add(pair.Key, (PaletteColor[]) pair.Value.Clone());
 			foreach (var pair in copy.lookupGroups)
 				this.lookupGroups.Add(pair.Key, (LookupPair[]) pair.Value.Clone());
 		}
@@ -187,7 +192,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>Looks up the color with the specified name and subtype.</summary>
 		public Color LookupColor(string name, LookupSubtypes subtype) {
-			if (!dictionary.Contains(name))
+			if (!dictionary.Contains(name) && !constColorGroups.ContainsKey(name))
 				throw new ArgumentException("Unknown color group '" + name + "'!");
 			while (lookupGroups.ContainsKey(name)) {
 				LookupPair lookupPair = lookupGroups[name][(int) subtype];
@@ -200,7 +205,12 @@ namespace ZeldaOracle.Common.Graphics {
 				}
 			}
 			PaletteColor[] colorGroup;
-			if (colorGroups.TryGetValue(name, out colorGroup)) {
+			if (constColorGroups.TryGetValue(name, out colorGroup)) {
+				PaletteColor color = colorGroup[(int) subtype];
+				if (!color.IsUndefined)
+					return color.Color;
+			}
+			else if (colorGroups.TryGetValue(name, out colorGroup)) {
 				PaletteColor color = colorGroup[(int) subtype];
 				if (!color.IsUndefined)
 					return color.Color;
@@ -214,7 +224,7 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Sets the name and subtype to a lookup.</summary>
-		public LookupResult SetLookup(string name, LookupSubtypes subtype, string lookupName,
+		public void SetLookup(string name, LookupSubtypes subtype, string lookupName,
 			LookupSubtypes lookupSubtype)
 		{
 			if (subtype != LookupSubtypes.All && lookupSubtype == LookupSubtypes.All)
@@ -223,10 +233,12 @@ namespace ZeldaOracle.Common.Graphics {
 				throw new ArgumentException("Infinite loop detected in color lookup!");
 			if (!dictionary.Contains(name))
 				throw new ArgumentException("Unknown color group '" + name + "'!");
+			if (constColorGroups.ContainsKey(name))
+				throw new ArgumentException("Cannot set lookup for const color group '" + name + "'!");
 
 			// Do a for loop only if lookupSubtype is All
 			LookupSubtypes i = (lookupSubtype == LookupSubtypes.All ? LookupSubtypes.Light : lookupSubtype);
-			for (i = 0; i < LookupSubtypes.All; i++) {
+			for (; i < LookupSubtypes.All; i++) {
 				string nextName = lookupName;
 				LookupSubtypes nextSubtype = i;
 				int depth = 0;
@@ -271,7 +283,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 					for (int j = 0; j < PaletteDictionary.ColorGroupSize; j++) {
 						if (lookupGroup[j].IsUndefined) // Nope, end the function here
-							return LookupResult.Success;
+							return;
 					}
 
 					colorGroups.Remove(name);
@@ -291,15 +303,71 @@ namespace ZeldaOracle.Common.Graphics {
 				}
 			}
 
-			return LookupResult.Success;
+			return;
+		}
+
+		/// <summary>Sets the name and subtype to a lookup.</summary>
+		public void CopyLookup(string name, LookupSubtypes subtype, string lookupName,
+			LookupSubtypes lookupSubtype)
+		{
+			if (subtype != LookupSubtypes.All && lookupSubtype == LookupSubtypes.All)
+				throw new ArgumentException("Mismatch, cannot assign a single color to a lookup subtype of all.");
+			if (name == lookupName && (subtype == lookupSubtype || subtype == LookupSubtypes.All))
+				throw new ArgumentException("Infinite loop detected in color copy!");
+			bool isConst = constColorGroups.ContainsKey(name);
+			if (!dictionary.Contains(name) && !isConst)
+				throw new ArgumentException("Unknown color group '" + name + "'!");
+
+			LookupPair[] lookupGroup;
+			PaletteColor[] colorGroup = null;
+			if (isConst) {
+				colorGroup = constColorGroups[name];
+			}
+			else if (!colorGroups.TryGetValue(name, out colorGroup)) {
+				colorGroup = new PaletteColor[PaletteDictionary.ColorGroupSize];
+				colorGroups[name] = colorGroup;
+			}
+			lookupGroups.TryGetValue(name, out lookupGroup);
+			if (subtype != LookupSubtypes.All) {
+				colorGroup[(int) subtype].Color = LookupColor(lookupName, lookupSubtype);
+
+				// Check if lookup group is unreferenced and we can remove it
+				if (lookupGroup != null) {
+					lookupGroup[(int) subtype] = LookupPair.Undefined;
+
+					for (int j = 0; j < PaletteDictionary.ColorGroupSize; j++) {
+						if (!lookupGroup[j].IsUndefined) // Nope, end the function here
+							return;
+					}
+
+					lookupGroups.Remove(name);
+				}
+			}
+			else {
+				for (LookupSubtypes j = 0; j < LookupSubtypes.All; j++) {
+					if (lookupSubtype == LookupSubtypes.All)
+						colorGroup[(int) j].Color = LookupColor(lookupName, j);
+					else
+						colorGroup[(int) j].Color = LookupColor(lookupName, lookupSubtype);
+				}
+
+				// Remove the unreferenced lookup group
+				if (lookupGroup != null) {
+					lookupGroups.Remove(name);
+				}
+			}
+
+			return;
 		}
 
 		/// <summary>Sets the name and subtype to a color.</summary>
 		public void SetColor(string name, LookupSubtypes subtype, Color color) {
-			if (!dictionary.Contains(name))
+			if (!dictionary.Contains(name) && !constColorGroups.ContainsKey(name))
 				throw new ArgumentException("Unknown color group '" + name + "'!");
 			PaletteColor[] colorGroup;
-			if (!colorGroups.TryGetValue(name, out colorGroup)) {
+			if (!constColorGroups.TryGetValue(name, out colorGroup) &&
+				!colorGroups.TryGetValue(name, out colorGroup))
+			{
 				colorGroup = new PaletteColor[PaletteDictionary.ColorGroupSize];
 				colorGroups[name] = colorGroup;
 			}
@@ -308,8 +376,16 @@ namespace ZeldaOracle.Common.Graphics {
 
 			if (subtype != LookupSubtypes.All) {
 				colorGroup[(int) subtype].Color = color;
-				if (lookupGroup != null)
+				if (lookupGroup != null) {
 					lookupGroup[(int) subtype] = LookupPair.Undefined;
+
+					for (int j = 0; j < PaletteDictionary.ColorGroupSize; j++) {
+						if (!lookupGroup[j].IsUndefined) // Nope, end the function here
+							return;
+					}
+
+					lookupGroups.Remove(name);
+				}
 			}
 			else {
 				for (int i = 0; i < PaletteDictionary.ColorGroupSize; i++) {
@@ -324,6 +400,8 @@ namespace ZeldaOracle.Common.Graphics {
 		public void Reset(string name, LookupSubtypes subtype) {
 			if (!dictionary.Contains(name))
 				throw new ArgumentException("Unknown color group '" + name + "'!");
+			if (constColorGroups.ContainsKey(name))
+				throw new ArgumentException("Cannot reset const color group '" + name + "'!");
 			LookupPair[] lookupGroup;
 			if (lookupGroups.TryGetValue(name, out lookupGroup)) {
 				if (subtype == LookupSubtypes.All) {
@@ -335,6 +413,15 @@ namespace ZeldaOracle.Common.Graphics {
 				}
 			}
 		}
+
+		/// <summary>Adds a custom constant color group.</summary>
+		public void AddConst(string name) {
+			if (dictionary.Contains(name))
+				throw new ArgumentException("Color group '" + name + "' already exists!");
+			if (!constColorGroups.ContainsKey(name))
+				constColorGroups.Add(name, new PaletteColor[PaletteDictionary.ColorGroupSize]);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Internal Methods

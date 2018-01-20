@@ -36,7 +36,6 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 		private int					count;
 		private string				stringValue;
 		private object				value;
-		private string              commandPrefix;
 
 		private int					lineIndex;	// Line index where this parameter is specified.
 		private int					charIndex;	// Character index within the line this parameter is specified.
@@ -65,7 +64,6 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 			this.value			= null;
 			this.charIndex		= -1;
 			this.lineIndex		= -1;
-			this.commandPrefix  = null;
 
 			this.namedChildren	= null;
 			this.namedCount		= 0;
@@ -86,7 +84,6 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 			this.stringValue	= copy.stringValue;
 			this.charIndex		= copy.charIndex;
 			this.lineIndex		= copy.lineIndex;
-			this.commandPrefix  = copy.commandPrefix;
 
 			// Copy array children.
 			this.count = 0;
@@ -205,18 +202,6 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 
 
 		//-----------------------------------------------------------------------------
-		// Prefix
-		//-----------------------------------------------------------------------------
-
-		public bool HasPrefix(string prefix = null) {
-			if (prefix == null)
-				return !string.IsNullOrEmpty(commandPrefix);
-			else
-				return string.Compare(commandPrefix, prefix, true) == 0;
-		}
-
-
-		//-----------------------------------------------------------------------------
 		// Array Methods
 		//-----------------------------------------------------------------------------
 
@@ -293,7 +278,23 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 				return new Vector2F(p.GetFloat(0), p.GetFloat(1));
 			return Vector2F.Zero;
 		}
-		
+
+		// Get an indexed child's Rectangle value.
+		public Rectangle2I GetRectangle(int index) {
+			CommandParam p = GetParam(index);
+			if (p.type == CommandParamType.Array && p.ChildCount == 4)
+				return new Rectangle2I(p.GetInt(0), p.GetInt(1), p.GetInt(2), p.GetInt(3));
+			return Rectangle2I.Zero;
+		}
+
+		// Get an indexed child's Rectangle value.
+		public Rectangle2F GetRectangleF(int index) {
+			CommandParam p = GetParam(index);
+			if (p.type == CommandParamType.Array && p.ChildCount == 4)
+				return new Rectangle2F(p.GetFloat(0), p.GetFloat(1), p.GetFloat(2), p.GetFloat(3));
+			return Rectangle2F.Zero;
+		}
+
 		// Get an indexed child's Point value, with a default if the child doesn't exist.
 		public Point2I GetPoint(int index, Point2I defaultValue) {
 			if (index >= count)
@@ -312,6 +313,26 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 			if (p.type == CommandParamType.Array && p.ChildCount == 2)
 				return new Vector2F(p.GetFloat(0), p.GetFloat(1));
 			return Vector2F.Zero;
+		}
+
+		// Get an indexed child's Rectangle value, with a default if the child doesn't exist.
+		public Rectangle2I GetRectangle(int index, Rectangle2I defaultValue) {
+			if (index >= count)
+				return defaultValue;
+			CommandParam p = GetParam(index);
+			if (p.type == CommandParamType.Array && p.ChildCount == 4)
+				return new Rectangle2I(p.GetInt(0), p.GetInt(1), p.GetInt(2), p.GetInt(3));
+			return Rectangle2I.Zero;
+		}
+
+		// Get an indexed child's Rectangle value, with a default if the child doesn't exist.
+		public Rectangle2F GetRectangleF(int index, Rectangle2F defaultValue) {
+			if (index >= count)
+				return defaultValue;
+			CommandParam p = GetParam(index);
+			if (p.type == CommandParamType.Array && p.ChildCount == 4)
+				return new Rectangle2F(p.GetFloat(0), p.GetFloat(1), p.GetFloat(2), p.GetFloat(3));
+			return Rectangle2F.Zero;
 		}
 
 		public Color GetColor(int index) {
@@ -369,11 +390,6 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 		public string Name {
 			get { return name; }
 			set { name = value; }
-		}
-
-		public string Prefix {
-			get { return commandPrefix; }
-			set { commandPrefix = value; }
 		}
 
 		// Arrays ---------------------------------------------------------------------
