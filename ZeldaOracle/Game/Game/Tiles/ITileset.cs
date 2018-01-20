@@ -17,15 +17,15 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Return the tile data at the given location.</summary>
 		BaseTileData GetTileData(Point2I location);
-
-		/// <summary>The dimensions of the tileset.</summary>
-		Point2I Size { get; }
-
+		
 		/// <summary>The size of an individual tile cell.</summary>
-		Point2I CellSize { get; }
+		//Point2I CellSize { get; }
 
 		/// <summary>The amount of spacing between tiles.</summary>
 		Point2I Spacing { get; }
+
+		/// <summary>The dimensions of the tileset.</summary>
+		Point2I Dimensions { get; }
 
 		/// <summary>Get the width of the tileset.</summary>
 		int Width { get; }
@@ -34,6 +34,9 @@ namespace ZeldaOracle.Game.Tiles {
 		int Height { get; }
 
 		/// <summary>The sprite sheet that represents the tileset.</summary>
-		SpriteSheet SpriteSheet { get; }
+		//SpriteSheet SpriteSheet { get; }
+
+		/// <summary>Gets or sets if the existing 16x16 preview sprites are used to display tiles.</summary>
+		bool UsePreviewSprites { get; }
 	}
 }

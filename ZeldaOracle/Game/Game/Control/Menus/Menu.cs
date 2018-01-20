@@ -48,12 +48,21 @@ namespace ZeldaOracle.Game.Control.Menus {
 			}
 			UpdateSlotTraversal();
 		}
-		
-		public override void Draw(Graphics2D g) {
+
+		public sealed override void Draw(Graphics2D g) {
 			if (drawHUD) {
 				GameControl.HUD.Draw(g, true);
-				g.Translate(0, 16);
+				g.PushTranslation(0, GameSettings.HUD_HEIGHT);
 			}
+
+			DrawMenu(g);
+
+			if (drawHUD) {
+				g.PopTranslation();
+			}
+		}
+
+		protected virtual void DrawMenu(Graphics2D g) {
 			g.DrawImage(backgroundSprite, Point2I.Zero);
 			if (currentSlotGroup != null)
 				DrawSlotCursor(g, currentSlotGroup.CurrentSlot);

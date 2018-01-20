@@ -33,7 +33,11 @@ SOURCE "set_turnstile";
 COMPOSITE "tile_turnstile";
 	ADD (0, 0), (0, 0); ADD (1, 0), (16, 0); ADD (2, 0), (32, 0);
 	ADD (0, 1), (0, 16); ADD (1, 1), (16, 16); ADD (2, 1), (32, 16);
-	ADD (0, 2), (0, 32); ADD (1, 2), (16, 32); ADD (2, 2), (32, 32); END;
+	ADD (0, 2), (0, 32); ADD (1, 2), (16, 32); ADD (2, 2), (32, 32);
+	# Railings
+	ADD "railing_8x8", (0, 0); ADD "railing_8x8", (40, 0);
+	ADD "railing_8x8", (0, 40); ADD "railing_8x8", (40, 40);
+	END;
 	
 	
 #==============================================================

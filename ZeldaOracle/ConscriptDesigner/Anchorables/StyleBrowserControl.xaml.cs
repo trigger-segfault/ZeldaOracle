@@ -13,8 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ConscriptDesigner.Control;
+using ConscriptDesigner.Util;
 using ConscriptDesigner.WinForms;
+using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaResources = ZeldaOracle.Common.Content.Resources;
 
 namespace ConscriptDesigner.Anchorables {
 	/// <summary>
@@ -22,27 +26,163 @@ namespace ConscriptDesigner.Anchorables {
 	/// </summary>
 	public partial class StyleBrowserControl : UserControl {
 
-		private StylePreview stylePreview;
+		private StylePreview preview;
+		
+		private string styleGroup;
+		private Point2I spriteSize;
+		private Dictionary<string, List<SpriteInfo>> styleGroups;
+		private List<string> orderedStyleGroups;
+		private List<SpriteInfo> filteredSprites;
 
 		private bool suppressEvents;
 
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Constructs the style browser control.</summary>
 		public StyleBrowserControl() {
 			this.suppressEvents = true;
 			InitializeComponent();
 
-			this.stylePreview = new StylePreview();
-			this.stylePreview.Refreshed += OnStylePreviewRefreshed;
-			this.stylePreview.HoverSpriteChanged += OnHoverSpriteChanged;
-			this.host.Child = this.stylePreview;
+			this.preview = new StylePreview();
+			this.preview.HoverChanged += OnHoverChanged;
+			this.host.Child = this.preview;
+			this.styleGroup = "";
+			this.spriteSize = Point2I.One;
+			this.styleGroups = new Dictionary<string, List<SpriteInfo>>();
+			this.orderedStyleGroups = new List<string>();
+			this.filteredSprites = new List<SpriteInfo>();
+
+			DesignerControl.ResourcesLoaded += OnResourcesLoaded;
+			DesignerControl.ResourcesUnloaded += OnResourcesUnloaded;
+			DesignerControl.PreviewInvalidated += OnPreviewInvalidated;
+			DesignerControl.PreviewScaleChanged += OnPreviewScaleChanged;
+			
 			this.suppressEvents = false;
-
-			DesignerControl.PreviewZoneChanged += OnPreviewZoneChanged;
-
-			OnHoverSpriteChanged();
 		}
 
-		private void OnHoverSpriteChanged(object sender = null, EventArgs e = null) {
-			SpriteInfo hoverSprite = stylePreview.HoverSprite;
+
+		//-----------------------------------------------------------------------------
+		// Loading
+		//-----------------------------------------------------------------------------
+
+		public void Dispose() {
+			DesignerControl.ResourcesLoaded -= OnResourcesLoaded;
+			DesignerControl.ResourcesUnloaded -= OnResourcesUnloaded;
+			DesignerControl.PreviewInvalidated -= OnPreviewInvalidated;
+			DesignerControl.PreviewScaleChanged -= OnPreviewScaleChanged;
+			preview.Dispose();
+		}
+
+		public void Reload() {
+			suppressEvents = true;
+
+			styleGroups.Clear();
+			orderedStyleGroups.Clear();
+			foreach (StyleGroupCollection collection in ZeldaResources.GetRegisteredStyles()) {
+				AddStyleGroup(collection.Group);
+				foreach (string style in collection.Styles) {
+					AddStyle(collection.Group, style, collection.Preview);
+				}
+			}
+			orderedStyleGroups.Sort((a, b) => AlphanumComparator.Compare(a, b, true));
+			if (!styleGroups.ContainsKey(styleGroup) && orderedStyleGroups.Any()) {
+				styleGroup = orderedStyleGroups[0];
+			}
+
+			comboBoxStyleGroups.Items.Clear();
+			foreach (string styleGroup in orderedStyleGroups) {
+				ComboBoxItem item = new ComboBoxItem();
+				item.Content = styleGroup;
+				item.Tag = styleGroup;
+				comboBoxStyleGroups.Items.Add(item);
+			}
+			comboBoxStyleGroups.SelectedIndex = orderedStyleGroups.IndexOf(styleGroup);
+
+			UpdateStyleGroup();
+			OnHoverChanged();
+
+			suppressEvents = false;
+		}
+
+		public void Unload() {
+			preview.Unload();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Sprites Setup
+		//-----------------------------------------------------------------------------
+
+		private void UpdateStyleGroup() {
+			spriteSize = Point2I.One;
+			List<SpriteInfo> styles;
+			if (styleGroups.TryGetValue(styleGroup, out styles)) {
+				foreach (SpriteInfo style in styles) {
+					spriteSize = GMath.Max(spriteSize, style.Bounds.Size);
+				}
+			}
+			UpdateFilter();
+		}
+
+		private void UpdateFilter() {
+			string filter = textBoxSearch.Text;
+			filteredSprites = new List<SpriteInfo>();
+			if (!string.IsNullOrEmpty(filter)) {
+				foreach (var spr in GetStyleList()) {
+					if (spr.Name.Contains(filter)) {
+						filteredSprites.Add(spr);
+					}
+				}
+			}
+			else {
+				filteredSprites = GetStyleList();
+			}
+			preview.UpdateList(filteredSprites, spriteSize, styleGroup);
+		}
+
+		private void AddStyleGroup(string styleGroup) {
+			if (!styleGroups.ContainsKey(styleGroup)) {
+				styleGroups.Add(styleGroup, new List<SpriteInfo>());
+				orderedStyleGroups.Add(styleGroup);
+			}
+		}
+
+		private void AddStyle(string styleGroup, string style, ISprite sprite) {
+			SpriteInfo spr = new SpriteInfo(style, sprite);
+			styleGroups[styleGroup].Add(spr);
+		}
+
+		private List<SpriteInfo> GetStyleList() {
+			if (styleGroups.ContainsKey(styleGroup))
+				return styleGroups[styleGroup];
+			return new List<SpriteInfo>();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Event Handlers
+		//-----------------------------------------------------------------------------
+
+		private void OnResourcesLoaded(object sender = null, EventArgs e = null) {
+			Reload();
+		}
+
+		private void OnResourcesUnloaded(object sender = null, EventArgs e = null) {
+			Unload();
+		}
+
+		private void OnPreviewInvalidated(object sender = null, EventArgs e = null) {
+			preview.Invalidate();
+		}
+
+		private void OnPreviewScaleChanged(object sender = null, EventArgs e = null) {
+			preview.UpdateScale();
+		}
+
+		private void OnHoverChanged(object sender = null, EventArgs e = null) {
+			SpriteInfo hoverSprite = preview.HoverSprite;
 			if (hoverSprite == null) {
 				statusSpriteStyle.Content = "";
 				statusSpriteInfo.Content = "";
@@ -56,67 +196,18 @@ namespace ConscriptDesigner.Anchorables {
 			}
 		}
 
-		public void Dispose() {
-			DesignerControl.PreviewZoneChanged -= OnPreviewZoneChanged;
-			stylePreview.Dispose();
-		}
-
-		public void RefreshList() {
-			stylePreview.RefreshList();
-		}
-
-		public void ClearList() {
-			stylePreview.ClearList();
-		}
-
-		private void OnStylePreviewRefreshed(object sender, EventArgs e) {
-			suppressEvents = true;
-			comboBoxStyleGroups.Items.Clear();
-			foreach (string styleGroup in stylePreview.GetStyleGroups()) {
-				ComboBoxItem item = new ComboBoxItem();
-				item.Content = styleGroup;
-				item.Tag = styleGroup;
-				comboBoxStyleGroups.Items.Add(item);
-				if (styleGroup == stylePreview.StyleGroup) {
-					comboBoxStyleGroups.SelectedItem = item;
-				}
-			}
-			comboBoxZones.ItemsSource = DesignerControl.PreviewZones;
-			comboBoxZones.SelectedItem = DesignerControl.PreviewZoneID;
-			suppressEvents = false;
-		}
-
 		private void OnSearchTextChanged(object sender, TextChangedEventArgs e) {
 			if (suppressEvents) return;
-			stylePreview.UpdateFilter(textBoxSearch.Text);
+			UpdateFilter();
 		}
 
 		private void OnStyleGroupChanged(object sender, SelectionChangedEventArgs e) {
 			if (suppressEvents) return;
 			if (comboBoxStyleGroups.SelectedIndex != -1) {
-				string styleGroup = (string) ((ComboBoxItem) comboBoxStyleGroups.SelectedItem).Tag;
-				stylePreview.UpdateStyleGroup(styleGroup);
+				styleGroup = (string) ((ComboBoxItem) comboBoxStyleGroups.SelectedItem).Tag;
+				UpdateStyleGroup();
+				UpdateFilter();
 			}
-		}
-
-		private void OnToggleAnimations(object sender, RoutedEventArgs e) {
-			stylePreview.Animating = !stylePreview.Animating;
-			buttonRestartAnimations.IsEnabled = stylePreview.Animating;
-		}
-
-		private void OnRestartAnimations(object sender, RoutedEventArgs e) {
-			stylePreview.RestartAnimations();
-		}
-
-		private void OnZoneChanged(object sender, SelectionChangedEventArgs e) {
-			DesignerControl.PreviewZoneID = (string) comboBoxZones.SelectedItem;
-		}
-
-		private void OnPreviewZoneChanged(object sender, EventArgs e) {
-			suppressEvents = true;
-			comboBoxZones.SelectedItem = DesignerControl.PreviewZoneID;
-			suppressEvents = false;
-			stylePreview.Invalidate();
 		}
 	}
 }

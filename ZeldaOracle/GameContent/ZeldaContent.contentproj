@@ -88,7 +88,6 @@
   </Target>
   -->
   <ItemGroup>
-    <Folder Include="Animations\" />
     <Folder Include="Images\Editor\" />
     <Folder Include="Languages\" />
     <Folder Include="Particles\" />
@@ -127,13 +126,21 @@
       <Name>dungeon_ages_1</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Palettes\dungeon_ages_1_converter.conscript">
-      <Name>dungeon_ages_1_converter</Name>
+    <None Include="Palettes\dungeon_skull_dungeon.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>dungeon_skull_dungeon</Name>
+    </None>
+    <None Include="Palettes\dungeon_spirits_grave.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>dungeon_spirits_grave</Name>
     </None>
     <None Include="Palettes\electrocuted.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>electrocuted</Name>
+    </None>
+    <None Include="Palettes\empty.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>empty</Name>
     </None>
     <None Include="Palettes\entities_default.conscript">
       <Name>entities_default</Name>
@@ -142,6 +149,10 @@
     <None Include="Palettes\entities_menu.conscript">
       <Name>entities_menu</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\interior_present.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>interior_present</Name>
     </None>
     <None Include="Palettes\palettes.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -195,9 +206,17 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>floors_tiles</Name>
     </None>
+    <None Include="Sprites\Tiles\hedges.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>hedges</Name>
+    </None>
     <None Include="Sprites\Tiles\holes.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>holes</Name>
+    </None>
+    <None Include="Sprites\Tiles\interior.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>interior</Name>
     </None>
     <None Include="Sprites\Tiles\lights.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -214,6 +233,26 @@
     <None Include="Sprites\Tiles\railings.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>railings</Name>
+    </None>
+    <None Include="Sprites\Tiles\SideScrolling\animations.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>animations</Name>
+    </None>
+    <None Include="Sprites\Tiles\SideScrolling\entity_objects.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>entity_objects</Name>
+    </None>
+    <None Include="Sprites\Tiles\SideScrolling\general.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>general</Name>
+    </None>
+    <None Include="Sprites\Tiles\SideScrolling\sidescrolling.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>sidescrolling</Name>
+    </None>
+    <None Include="Sprites\Tiles\SideScrolling\walls.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>walls</Name>
     </None>
     <None Include="Sprites\Tiles\snow_mounds.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -263,6 +302,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>vines</Name>
     </None>
+    <None Include="Sprites\Tiles\tile_previews.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>tile_previews</Name>
+    </None>
     <None Include="Sprites\Tiles\tiled.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>tiled</Name>
@@ -291,9 +334,93 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>walls</Name>
     </None>
+    <None Include="Sprites\Units\Monsters\monster_previews.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>monster_previews</Name>
+    </None>
     <None Include="Sprites\Units\Player\player.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>player</Name>
+    </None>
+    <None Include="Sprites\Units\units.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>units</Name>
+    </None>
+    <None Include="Tiles\ActionTiles\action_tiles.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>action_tiles</Name>
+    </None>
+    <None Include="Tiles\ActionTiles\general.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>general</Name>
+    </None>
+    <None Include="Tiles\ActionTiles\monsters.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>monsters</Name>
+    </None>
+    <None Include="Tiles\tiles.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>tiles</Name>
+    </None>
+    <None Include="Tiles\Tiles\cliff_walls.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>cliff_walls</Name>
+    </None>
+    <None Include="Tiles\Tiles\cliffs.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>cliffs</Name>
+    </None>
+    <None Include="Tiles\Tiles\dungeon.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>dungeon</Name>
+    </None>
+    <None Include="Tiles\Tiles\ground.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>ground</Name>
+    </None>
+    <None Include="Tiles\Tiles\hedges.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>hedges</Name>
+    </None>
+    <None Include="Tiles\Tiles\interior.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>interior</Name>
+    </None>
+    <None Include="Tiles\Tiles\natural_objects.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>natural_objects</Name>
+    </None>
+    <None Include="Tiles\Tiles\puzzle_objects.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>puzzle_objects</Name>
+    </None>
+    <None Include="Tiles\Tiles\sidescrolling.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>sidescrolling</Name>
+    </None>
+    <None Include="Tiles\Tiles\tiles.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>tiles</Name>
+    </None>
+    <None Include="Tiles\Tiles\town.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>town</Name>
+    </None>
+    <None Include="Tiles\Tiles\trees.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>trees</Name>
+    </None>
+    <None Include="Tiles\Tiles\walls_and_floors.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>walls_and_floors</Name>
+    </None>
+    <None Include="Tiles\Tiles\water.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>water</Name>
+    </None>
+    <None Include="Tilesets\action_tile_data.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>action_tile_data</Name>
     </None>
     <None Include="Tilesets\cliffs.conscript">
       <Name>cliffs</Name>
@@ -302,10 +429,6 @@
     <None Include="Tilesets\dungeon.conscript">
       <Name>dungeon</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Tilesets\event_tile_data.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>event_tile_data</Name>
     </None>
     <None Include="Tilesets\forest.conscript">
       <Name>forest</Name>
@@ -338,10 +461,6 @@
     <None Include="Tilesets\sidescroll.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>sidescroll</Name>
-    </None>
-    <None Include="Tilesets\tile_data.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>tile_data</Name>
     </None>
     <None Include="Tilesets\tilesets.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -566,10 +685,20 @@
       <Processor>TextureProcessor</Processor>
       <Name>graves</Name>
     </Compile>
+    <Compile Include="Images\Tiles\Styles\hedges.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>hedges</Name>
+    </Compile>
     <Compile Include="Images\Tiles\Styles\holes.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Name>holes</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\interior.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>interior</Name>
     </Compile>
     <Compile Include="Images\Tiles\Styles\lanterns.png">
       <Name>lanterns</Name>
@@ -625,6 +754,26 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Name>snow_mounds</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\ss_animations.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>ss_animations</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\ss_entity_objects.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>ss_entity_objects</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\ss_general.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>ss_general</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Styles\ss_walls.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>ss_walls</Name>
     </Compile>
     <Compile Include="Images\Tiles\Styles\staircases.png">
       <Importer>TextureImporter</Importer>
@@ -686,6 +835,11 @@
       <Processor>TextureProcessor</Processor>
       <Name>terrain_water_obstacles</Name>
     </Compile>
+    <Compile Include="Images\Tiles\Styles\tile_previews.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>tile_previews</Name>
+    </Compile>
     <Compile Include="Images\Tiles\Styles\torches.png">
       <Name>torches</Name>
       <Importer>TextureImporter</Importer>
@@ -736,10 +890,10 @@
       <Processor>TextureProcessor</Processor>
       <Name>turnstile</Name>
     </Compile>
-    <Compile Include="Images\Tiles\Styles\wall_mini_columns.png">
+    <Compile Include="Images\Tiles\Styles\wall_columns.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-      <Name>wall_mini_columns</Name>
+      <Name>wall_columns</Name>
     </Compile>
     <Compile Include="Images\Tiles\Styles\walls.png">
       <Importer>TextureImporter</Importer>
@@ -750,11 +904,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Name>walls_jabu_jabu</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\water_rocks.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>water_rocks</Name>
     </Compile>
     <Compile Include="Images\Tiles\tileset.png">
       <Name>tileset</Name>
@@ -1045,6 +1194,11 @@
       <Name>monster_items</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Units\Monsters\monster_previews.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>monster_previews</Name>
     </Compile>
     <Compile Include="Images\Units\Monsters\monsters.png">
       <Name>monsters</Name>

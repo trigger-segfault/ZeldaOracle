@@ -22,6 +22,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		//private Rotation rotation;
 		/// <summary>The source of the sprite.</summary>
 		private ISpriteSource source;
+		/// <summary>The source of the definition.</summary>
+		//private DefinitionSprite definitionSprite;
 		/// <summary>The source index of the sprite.</summary>
 		private Point2I sourceIndex;
 		/// <summary>The definition used for the source.</summary>
@@ -44,18 +46,18 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			this.depth			= 0;
 		}
 
-		public AnimationFrame(int startTime, int duration, ISprite sprite, Flip flip = Flip.None,
-			Rotation rotation = Rotation.None, int depth = 0) :
-			this(startTime, duration, sprite, Point2I.Zero, flip, rotation, depth)
+		public AnimationFrame(int startTime, int duration, ISprite sprite, Rectangle2I? clipping = null,
+			Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0) :
+			this(startTime, duration, sprite, Point2I.Zero, clipping, flip, rotation, depth)
 		{
 		}
 
 		public AnimationFrame(int startTime, int duration, ISprite sprite, Point2I drawOffset,
-			Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0)
+			Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0)
 		{
 			this.startTime		= startTime;
 			this.duration		= duration;
-			this.sprite			= new OffsetSprite(sprite, drawOffset, flip, rotation);
+			this.sprite			= new OffsetSprite(sprite, drawOffset, clipping, flip, rotation);
 			this.source			= null;
 			this.sourceIndex	= Point2I.Zero;
 			this.sourceDefinition = null;
@@ -63,30 +65,31 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		}
 
 		public AnimationFrame(int startTime, int duration, ISpriteSource source, Point2I sourceIndex,
-			Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0) :
-			this(startTime, duration, source, sourceIndex, null, Point2I.Zero, flip, rotation, depth)
+			Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0) :
+			this(startTime, duration, source, sourceIndex, null, Point2I.Zero, clipping, flip, rotation, depth)
 		{
 		}
 
 		public AnimationFrame(int startTime, int duration, ISpriteSource source, Point2I sourceIndex,
-			string sourceDefinition, Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0) :
-			this(startTime, duration, source, sourceIndex, sourceDefinition, Point2I.Zero, flip, rotation, depth)
+			string sourceDefinition, Rectangle2I? clipping = null, Flip flip = Flip.None,
+			Rotation rotation = Rotation.None, int depth = 0) :
+			this(startTime, duration, source, sourceIndex, sourceDefinition, Point2I.Zero, clipping, flip, rotation, depth)
 		{
 		}
 
 		public AnimationFrame(int startTime, int duration, ISpriteSource source, Point2I sourceIndex,
-			Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0) :
-			this(startTime, duration, source, sourceIndex, null, drawOffset, flip, rotation, depth)
+			Point2I drawOffset, Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None, int depth = 0) :
+			this(startTime, duration, source, sourceIndex, null, drawOffset, clipping, flip, rotation, depth)
 		{
 		}
 
 		public AnimationFrame(int startTime, int duration, ISpriteSource source, Point2I sourceIndex,
-			string sourceDefinition, Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None,
+			string sourceDefinition, Point2I drawOffset, Rectangle2I? clipping = null, Flip flip = Flip.None, Rotation rotation = Rotation.None,
 			int depth = 0)
 		{
 			this.startTime		= startTime;
 			this.duration		= duration;
-			this.sprite			= new OffsetSprite(null, drawOffset, flip, rotation);
+			this.sprite			= new OffsetSprite(null, drawOffset, clipping, flip, rotation);
 			this.source			= source;
 			this.sourceIndex	= sourceIndex;
 			this.sourceDefinition = sourceDefinition;
@@ -103,6 +106,16 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			this.sourceDefinition = copy.sourceDefinition;
 			this.depth          = copy.depth;
 		}
+
+		//-----------------------------------------------------------------------------
+		// Mutators
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Adds the clipping to the sprite and insersects with the previous clipping.</summary>
+		public void Clip(Rectangle2I clipping) {
+			sprite.Clip(clipping);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Internal methods
@@ -157,6 +170,12 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public Point2I DrawOffset {
 			get { return sprite.DrawOffset; }
 			set { sprite.DrawOffset = value; }
+		}
+
+		/// <summary>Gets or sets the clipping of the sprite.</summary>
+		public Rectangle2I? Clipping {
+			get { return sprite.Clipping; }
+			set { sprite.Clipping = value; }
 		}
 
 		/// <summary>Gets or sets the flipping applied to the frame.</summary>

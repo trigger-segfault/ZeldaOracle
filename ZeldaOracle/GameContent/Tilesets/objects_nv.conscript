@@ -1,235 +1,33 @@
-
-#==============================================================
-# Sprite Sheets
-#==============================================================
-
-SPRITESHEET "tileset_objects_nv",				"Tiles/tileset_objects_nv",					(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET "tileset_objects_nv_extras_16x16",	"Tiles/tileset_objects_nv_extras_16x16",	(16, 16), (1, 1), (18, 18); END;
-
-
-#==============================================================
-# Tiles
-#==============================================================
-
-
-# ---- Chests -----------------------------------------------------------------
-
-TILE chest;
-	TYPE		TileChest;
-	SOLID		block;
-	RESETWHEN	Never;
-	SPRITEINDEX		0, tile_chest;
-	SPRITEINDEX		1, tile_chest_opened;
-	PROPERTIES
-		(integer, spawn_delay_after_poof, 16),
-		(string, reward, "rupees_1",
-			"Reward", "reward", "Chest",
-			 "The reward contained inside the chest.", false),
-		(boolean, looted, "false",
-			"Looted", "", "Chest",
-			"True if the item has been taken from the chest.", false);
-END;
-
-#TILE chest_curved;
-#	CLONE			chest;
-#	SPRITEINDEX		0, tile_chest_curved;
-#	SPRITEINDEX		1, tile_chest_curved_opened;
-#END;
-
-#TILE chest_flat;
-#	CLONE			chest;
-#	SPRITEINDEX		0, tile_chest_flat;
-#	SPRITEINDEX		1, tile_chest_flat_opened;
-#END;
-
-#TILE chest_ornate;
-#	CLONE			chest;
-#	SPRITEINDEX		0, tile_chest_ornate;
-#	SPRITEINDEX		1, tile_chest_ornate_opened;
-#END;
-
-# ---- Reward -----------------------------------------------------------------
-
-TILE reward;
-	TYPE			TileReward;
-	MODEL			center;
-	RESETWHEN		Never;
-	##SPRITE		reward_heart_piece;
-	PROPERTIES
-		(string, reward, "heart_piece",
-			"Reward", "reward", "Reward",
-			 "The reward to spawn.", false),
-		(boolean, looted, "false",
-			"Looted", "", "Reward",
-			"True if the item has been taken.", false);
-END;
-
-# ---- Color Switch -----------------------------------------------------------
-
-TILE color_switch;
-	TYPE		TileColorSwitch;
-	HALFSOLID	block;
-	FLAGS		AbsorbSeeds;
-	SPRITEINDEX	0, tile_color_switch_blue;
-	SPRITEINDEX	1, tile_color_switch_red;
-	PROPERTIES	(boolean, switch_once,			false,	"Switch Once",			"", "", "Can the color switch only be switched once?"),
-				(boolean, switch_state,			false,	"Switch State",			"", "", "The switch state of the color switch (false = blue, true = red)."),
-				(boolean, sync_with_dungeon,	false,	"Sync With Dungeon",	"", "", "Will the color switch's state be syncronized with other color switches in the dungeon?");
-	EVENT		toggle, "Toggle", "Switch", "Occurs when the Color Switch changes color.", (ColorSwitch, colorSwitch);
-END;
-
-TILE color_switch_blue;
-	CLONE		color_switch;
-	PROPERTIES	(boolean, switch_state, false),
-				(integer, sprite_index, 0);
-END;
-
-TILE color_switch_red;
-	CLONE		color_switch;
-	PROPERTIES	(boolean, switch_state, true),
-				(integer, sprite_index, 1);
-END;
-
-# ---- Trampoline -------------------------------------------------------------
-
-TILE trampoline;
-	FLAGS		Movable;
-	SOLID		block;
-	SPRITEINDEX	0, tile_trampoline;
-	SPRITEINDEX	1, tile_trampoline_bounce;
-END;
-
-# ---- Owl --------------------------------------------------------------------
-
-TILE owl;
-	TYPE		TileOwl;
-	FLAGS		AbsorbSeeds;
-	SOLID		block;
-
-	SPRITEINDEX	0, tile_owl;
-	SPRITEINDEX	1, tile_owl_activated;
-
-	PROPERTIES
-		(string, text, "<red>undefined<red>",
-			"Text", "text_message", "Owl",
-			"The text to display when the owl is activated.", false);
-END;
-
-# ---- Color Cube -------------------------------------------------------------
-
-TILE color_cube;
-	TYPE			TileColorCube;
-	FLAGS			movable;
-	SOLID			block;
-	SPRITEINDEX		0, "color_cube", (0, 0);
-	SPRITEINDEX		1, "color_cube", (1, 0);
-	SPRITEINDEX		2, "color_cube", (2, 0);
-	SPRITEINDEX		3, "color_cube", (3, 0);
-	SPRITEINDEX		4, "color_cube", (4, 0);
-	SPRITEINDEX		5, "color_cube", (5, 0);
-	PROPERTIES		(integer, orientation, 0, "Orientation", ("enum", "ColorCubeOrientation"), "Color Cube", "The orientation index of the color cube.");
-END;
-
-# ---- Roller -----------------------------------------------------------------
-
-TILE temp_roller;
-	TYPE		TileRoller;
-	FLAGS		movable, notgrabbable;
-	SOLID		block;
-	PROPERTIES
-		(boolean, vertical, "false",
-			"Vertical", "", "Roller",
-			"The roller rolls vertically", true),
-		(boolean, first_roller, "false",
-			"First Roller", "", "Roller",
-			"This is the top left roller of a group. Any rollers before this won't be connected.", false);
-END;
-
-TILE roller_horizontal;
-	CLONE		temp_roller;
-	SPRITEINDEX	0, tile_roller_horizontal;
-	SPRITEINDEX	1, tile_roller_horizontal_roll;
-	PROPERTIES	(boolean, vertical, "false"),
-				(boolean, first_roller, "false");
-END;
-
-TILE roller_vertical;
-	CLONE		temp_roller;
-	SPRITEINDEX	0, tile_roller_vertical;
-	SPRITEINDEX	1, tile_roller_vertical_roll;
-	PROPERTIES	(boolean, vertical, "true"),
-				(boolean, first_roller, "false");
-END;
-
-# ---- Crossing Gate ----------------------------------------------------------
-
-TILE crossing_grate;
-	TYPE		TileCrossingGate;
-	SOLID		edge_w;
-	PROPERTIES	(boolean, raised,    false, "Raised",      "", "Crossing Gate", "True if the gate is raised."),
-				(boolean, face_left, false, "Facing Left", "", "Crossing Gate", "True if the crossing gate is facing left."),
-				(boolean, cling_on_stab, false);
-END;
-
-TILE crossing_grate_right;
-	CLONE		crossing_grate;
-	PROPERTIES (boolean, face_left, false);
-END;
-
-TILE crossing_grate_left;
-	CLONE crossing_grate;
-	PROPERTIES (boolean, face_left, true);
-END;
-
-TILE platform;
-	TYPE	TilePlatform;
-	SPRITE	tile_moving_platform;
-END;
-
-TILE pull_handle;
-	TYPE		TilePullHandle;
-	SPRITE		tile_pull_handle_down;
-	PROPERTIES	(integer, direction, 3, "Direction", "direction", "Handle", "The direction the handle extends in.");
-	EVENT		retracting, "Retracting", "Pull Handle", "Occurs every step that the pull handle is retracting into the wall.", (PullHandle, pullHandle);
-	EVENT		extending, "Extending", "Pull Handle", "Occurs every step that the pull handle is extending from the wall.", (PullHandle, pullHandle);
-	EVENT		fully_retract, "Fully Retracted", "Pull Handle", "Occurs when the handle is fully retracted into the wall.", (PullHandle, pullHandle);
-	EVENT		fully_extend, "Fully Extended", "Pull Handle", "Occurs when the handle is fully extended from the wall.", (PullHandle, pullHandle);
-END;
-
-TILE seed_bouncer;
-	TYPE		TileSeedBouncer;
-	SPRITE		tile_seed_bouncer;
-	HALFSOLID	block;
-	PROPERTIES	(integer, angle, 0, "Angle", "angle", "Seed Bouncer", "The angle the seed bouncer is facing."),
-				(boolean, cling_on_stab, false);
-END;
-
-
 #==============================================================
 # Tilesets
 #==============================================================
 
-TILESET objects_nv, tileset_objects_nv, (12, 2);
-DEFAULT (0, 0);
+TILESET "objects_nv", (12, 2);
 
 # Rewards
 
-SETTILE ( 0, 0), chest;
-SETTILE ( 1, 0), chest;
-SETTILE ( 2, 0), chest;
-SETTILE ( 3, 0), reward;
-SETTILE ( 4, 0), color_switch_blue;
-SETTILE ( 5, 0), pull_handle;			## TEMP: should be blue crystal
-SETTILE ( 6, 0), trampoline;
-SETTILE ( 7, 0), roller_horizontal;
-SETTILE ( 8, 0), roller_vertical;
-SETTILE ( 9, 0), owl;
-SETTILE (10, 0), color_cube;
-SETTILE (11, 0), platform;
+ADDTILE ( 0, 0), "chest";
+ADDTILE ( 1, 0), "chest";
+ADDTILE ( 2, 0), "chest";
+ADDTILE ( 3, 0), "reward";
+ADDTILE ( 4, 0), "color_switch_blue";
+ADDTILE ( 5, 0), "pull_handle";
+ADDTILE ( 6, 0), "trampoline";
+ADDTILE ( 7, 0), "roller_horizontal";
+ADDTILE ( 8, 0), "roller_vertical";
+ADDTILE ( 9, 0), "owl";
+ADDTILE (10, 0), "color_cube";
+ADDTILE (11, 0), "platform";
 
-SETTILE ( 0, 1), crossing_grate_right;
-SETTILE ( 1, 1), crossing_grate_left;
+ADDTILE ( 0, 1), "crossing_grate_right";
+ADDTILE ( 1, 1), "crossing_grate_left";
+#ADDTILE (2, 1), "minecart";
 
-SETTILE ( 5, 1), seed_bouncer; ## TEMP: invisible on sprite sheet.
+ADDTILE (3, 1), "arrow_cannon_left";
+ADDTILE (4, 1), "arrow_cannon_right";
+
+ADDTILE ( 5, 1), "seed_bouncer";
+
+ADDTILE (6, 1), "shatter_crystal";
 
 END;

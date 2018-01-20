@@ -1,0 +1,113 @@
+﻿PALETTE "tile_dictionary", "dungeon_spirits_grave";
+
+CLONE	"dungeon_skull_dungeon";
+
+#==============================================================
+# Structure
+#==============================================================
+
+CONST	dungeon_color_1;
+COLOR	dungeon_color_1, light			(144,128, 88);
+COLOR	dungeon_color_1, medium			(208,168, 56);
+COLOR	dungeon_color_1, dark			(144, 72, 40);
+
+CONST	dungeon_color_2;
+COLOR	dungeon_color_2, light			(232,160, 72);
+COLOR	dungeon_color_2, medium			(200, 72,  0);
+COLOR	dungeon_color_2, dark			(104,  0,  0);
+
+CONST	dungeon_color_3;
+COLOR	dungeon_color_3, light			(248,248,136);
+COLOR	dungeon_color_3, medium			( 88,136,184);
+COLOR	dungeon_color_3, dark			(  0, 64,128);
+
+#==============================================================
+# Structure
+#==============================================================
+
+COLOR	floor, light					(144,128, 88);
+COLOR	floor, medium					(112, 80, 56);
+COLOR	floor, dark						( 80, 56, 32);
+
+COLOR	wall, light						(168,136,136);
+COLOR	wall, medium					(120, 88, 88);
+COLOR	wall, dark						( 88, 56, 56);
+
+LOOKUP	stairs, all						dungeon_color_1, all;
+
+LOOKUP	railing, all					dungeon_color_2, all;
+
+LOOKUP	wall_torch_base, all			dungeon_color_2, all;
+
+LOOKUP	statue, all						dungeon_color_3, all;
+LOOKUP	statue_alt, all					dungeon_color_2, all;
+
+
+#==============================================================
+# Objects
+#==============================================================
+
+LOOKUP	block, all						dungeon_color_2, all;
+LOOKUP	armos, all						object, all;
+LOOKUP	armos_alt, all					object, all;
+LOOKUP	grave, all						object, all;
+
+#==============================================================
+# Puzzle
+#==============================================================
+
+LOOKUP	puzzle_blue, all				dungeon_color_3, all;
+
+LOOKUP	door, all						dungeon_color_3, all;
+LOOKUP	locked_block, all				dungeon_color_2, all;
+
+LOOKUP	turnstile, all					dungeon_color_1, all;
+LOOKUP	lever, all						dungeon_color_3, all;
+LOOKUP	button, all						floor, all;
+LOOKUP	bridge, all						floor, all;
+
+LOOKUP	hardened_lava, all				dungeon_color_1, all;
+LOOKUP	flying_tile, all				dungeon_color_1, all;
+LOOKUP	floor_spikes, all				dungeon_color_2, all;
+LOOKUP	arrow_shooter, all				dungeon_color_2, all;
+LOOKUP	fire_shooter, all				dungeon_color_2, all;
+LOOKUP	lava_mouth, all					dungeon_color_2, all;
+
+LOOKUP	web, all						floor, all;
+LOOKUP	bridge, all						floor, all;
+LOOKUP	minecart_track, all				floor, all;
+LOOKUP	output, all						floor, all;
+
+
+#==============================================================
+# Decoration
+#==============================================================
+
+LOOKUP	entrance_column, all	wall, all;
+LOOKUP	entrance_brick, all		dungeon_color_3, all;
+LOOKUP	entrance_tile, all		dungeon_color_2, all;
+LOOKUP	essense_brick, all		dungeon_color_1, all;
+LOOKUP	essense_tile, all		dungeon_color_3, all;
+
+LOOKUP	fancy_tile_1, all		dungeon_color_1, all;
+LOOKUP	fancy_tile_2, all		dungeon_color_2, all;
+LOOKUP	fancy_tile_3, all		dungeon_color_1, all;
+LOOKUP	fancy_tile_4, all		floor, all;
+LOOKUP	fancy_tile_5, all		dungeon_color_3, all;
+
+
+#==============================================================
+# Constants
+#==============================================================
+
+COPY	grass_green, light				floor, light;
+COPY	tree_green, light				floor, light;
+
+COPY	object, all						dungeon_color_1, all;
+
+COPY	brown, all						floor, all;
+
+
+#==============================================================
+
+END;

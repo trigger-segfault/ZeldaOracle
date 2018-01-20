@@ -2,7 +2,7 @@
 # Tiles Default
 #==============================================================
 
-PALETTE tile_dictionary, tiles_electrocuted;
+PALETTE "tile_dictionary", "tiles_electrocuted";
 
 COLOR	default, light		(248,248,248);
 COLOR	default, medium		( 16, 32, 48);
@@ -15,7 +15,7 @@ END;
 # Entities Default
 #==============================================================
 
-PALETTE entity_dictionary, entities_electrocuted;
+PALETTE "entity_dictionary", "entities_electrocuted";
 
 COLOR	default, light		(248,248,248);
 COLOR	default, dark		(248,248,120);

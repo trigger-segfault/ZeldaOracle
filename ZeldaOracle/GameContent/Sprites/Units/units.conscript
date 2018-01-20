@@ -1,0 +1,3 @@
+﻿
+LOAD "Player/player.conscript", true;
+LOAD "Monsters/monster_previews.conscript", true;

@@ -55,8 +55,8 @@ NAME "tile_boulder_alt"					((0, 0), "dirt_alt");
 NAME "tile_boulder_alt_interior"		((1, 0), "dirt_alt");
 NAME "tile_boulder_alt_dungeon"			((2, 0), "dirt_alt");
 
-NAME "tile_coconut_northwest"			(0, 1);
-NAME "tile_coconut_northeast"			(1, 1);
+NAME "tile_coconut_left"				(0, 1);
+NAME "tile_coconut_right"				(1, 1);
 NAME "tile_tombstone_hole_right"		(0, 2);
 NAME "tile_tombstone_hole_left"			(1, 2);
 NAME "tile_tombstone_filled_right"		(0, 3);

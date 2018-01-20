@@ -1,0 +1,74 @@
+﻿#==============================================================
+# Sprite Sheets
+#==============================================================
+
+SPRITESHEET	"temp_sheet_ss_animations"	"Tiles/Styles/ss_animations"			(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+
+SOURCE "temp_sheet_ss_animations";
+SPRITESET "set_ss_animations", (9, 9);
+	MAPPEDCOLORS	"tiles_default", ("ss_torch_light", "ss_torch_base");
+	CHUNKSIZE		(16, 8);
+	MULTIPLE BASIC (0, 0), (0, 0), (9, 3); END;
+	CHUNKSIZE		none;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_faint_light");
+	MULTIPLE BASIC (0, 3), (0, 3), (6, 2); END;
+	
+	IGNORECOLORS	((0, 0, 0, 0));
+	MAPPEDCOLORS	"tiles_default", ("ss_water", "ss_lava");
+	MULTIPLE BASIC (0, 5), (0, 5), (4, 4); END;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_ss_animations";
+
+ANIMATION "tile_ss_torch_light_top_left"; SUBSTRIP repeat;
+	ADD strip, 30, 3, (0, 0), relative: (3, 0); ADD frame, 30, (3, 0); END;
+ANIMATION "tile_ss_torch_light_top_mid";
+	CLONE "tile_ss_torch_light_top_left"; SHIFTSOURCE (1, 0); END;
+ANIMATION "tile_ss_torch_light_top_right";
+	CLONE "tile_ss_torch_light_top_left"; SHIFTSOURCE (2, 0); END;
+ANIMATION "tile_ss_torch_light_side_left";
+	CLONE "tile_ss_torch_light_top_left"; SHIFTSOURCE (0, 1); END;
+	
+ANIMATION "tile_ss_torch";
+	CLONE "tile_ss_torch_light_top_left"; SHIFTSOURCE (1, 1); END;
+	
+ANIMATION "tile_ss_torch_light_side_right";
+	CLONE "tile_ss_torch_light_top_left"; SHIFTSOURCE (2, 1); END;
+ANIMATION "tile_ss_torch_light_bottom_left";
+	CLONE "tile_ss_torch_light_top_left"; SHIFTSOURCE (0, 2); END;
+ANIMATION "tile_ss_torch_light_bottom_mid";
+	CLONE "tile_ss_torch_light_top_left"; SHIFTSOURCE (1, 2); END;
+ANIMATION "tile_ss_torch_light_bottom_right";
+	CLONE "tile_ss_torch_light_top_left"; SHIFTSOURCE (2, 2); END;
+	
+ANIMATION "tile_ss_faint_light_top_left"; SUBSTRIP repeat;
+	ADD strip, 30, 3, (0, 3), relative: (2, 0); ADD frame, 30, (2, 3); END;
+ANIMATION "tile_ss_faint_light_top_right";
+	CLONE "tile_ss_faint_light_top_left"; SHIFTSOURCE (1, 0); END;
+ANIMATION "tile_ss_faint_light_bottom_left";
+	CLONE "tile_ss_faint_light_top_left"; SHIFTSOURCE (0, 1); END;
+ANIMATION "tile_ss_faint_light_bottom_right";
+	CLONE "tile_ss_faint_light_top_left"; SHIFTSOURCE (1, 1); END;
+	
+ANIMATION "tile_ss_water_surface"; SUBSTRIP repeat;
+	ADD strip, 30, 4, (0, 5); END;
+ANIMATION "tile_ss_lava_surface_1_above";
+	CLONE "tile_ss_water_surface"; SHIFTSOURCE (0, 1); END;
+ANIMATION "tile_ss_lava_surface_2_above";
+	CLONE "tile_ss_water_surface"; SHIFTSOURCE (0, 2); END;
+ANIMATION "tile_ss_lava_above";
+	CLONE "tile_ss_water_surface"; SHIFTSOURCE (0, 3); END;

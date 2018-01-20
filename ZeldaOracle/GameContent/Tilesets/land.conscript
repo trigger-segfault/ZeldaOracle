@@ -1,514 +1,250 @@
-
-#==============================================================
-# Sprite Sheets
-#==============================================================
-
-SPRITESHEET "tileset_land",					(16, 16), (1, 1), (18, 18);
-SPRITESHEET "tileset_land_extras_8x8",		(8, 8), (1, 1), (18, 18);
-
-
-#==============================================================
-# Tiles
-#==============================================================
-
-TILE "ground_blank"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_field"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_field_blank"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_flowers"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_flowers_alt"; SAMESPRITE; FLAGS Digable; END;
-
-TILE "dirt"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_dark"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_dark_rough"; SAMESPRITE; FLAGS Digable; END;
-
-TILE "dirt_alt"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_dark"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_dark_rough"; SAMESPRITE; FLAGS Digable; END;
-
-TILE "sand"; SAMESPRITE; FLAGS Digable; END;
-
-TILE "grass_field_nw"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_field_n"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_field_ne"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_field_w"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_field_e"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_field_sw"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_field_s"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_field_se"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_field_nsw"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_field_ns"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_field_nse"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_field_new"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_field_ew"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_field_sew"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_field_nsew"; SAMESPRITE; FLAGS Digable; END;
-
-TILE "dirt_nw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_n"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_ne"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_w"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_e"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_sw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_s"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_se"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_nw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_n"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_ne"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_w"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_e"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_sw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_s"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_se"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_nsw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_ns"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_nse"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_new"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_ew"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_sew"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_nsew"; SAMESPRITE; FLAGS Digable; END;
-
-TILE "dirt_alt_nw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_n"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_ne"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_w"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_e"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_sw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_s"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_se"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_nw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_n"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_ne"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_w"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_e"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_sw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_s"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_se"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_nsw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_ns"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_nse"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_new"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_ew"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_sew"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_nsew"; SAMESPRITE; FLAGS Digable; END;
-
-TILE "sand_fade_nw"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_fade_n"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_fade_ne"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_fade_w"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_fade_e"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_fade_sw"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_fade_s"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_fade_se"; SAMESPRITE; FLAGS Digable; END;
-
-TILE "grass_border_outside_nw"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_border_n"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_border_outside_ne"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_border_w"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_border_e"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_border_outside_sw"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_border_s"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_border_outside_se"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_border_outside_nsw"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_border_ns"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_border_outside_nse"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_border_outside_new"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_border_ew"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_border_outside_sew"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_border_nsew"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_border_inside_nw"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_border_inside_ne"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_border_inside_sw"; SAMESPRITE; FLAGS Digable; END;
-TILE "grass_border_inside_se"; SAMESPRITE; FLAGS Digable; END;
-
-TILE "dirt_border_outside_nw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_border_n"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_border_outside_ne"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_border_w"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_border_e"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_border_outside_sw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_border_s"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_border_outside_se"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_border_outside_nsw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_border_ns"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_border_outside_nse"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_border_outside_new"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_border_ew"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_border_outside_sew"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_border_nsew"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_border_inside_nw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_border_inside_ne"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_border_inside_sw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_border_inside_se"; SAMESPRITE; FLAGS Digable; END;
-
-TILE "dirt_rough_border_outside_nw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_border_n"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_border_outside_ne"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_border_w"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_border_e"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_border_outside_sw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_border_s"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_border_outside_se"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_border_inside_nw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_border_inside_ne"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_border_inside_sw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_rough_border_inside_se"; SAMESPRITE; FLAGS Digable; END;
-
-TILE "dirt_alt_border_outside_nw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_border_n"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_border_outside_ne"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_border_w"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_border_e"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_border_outside_sw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_border_s"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_border_outside_se"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_border_outside_nsw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_border_ns"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_border_outside_nse"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_border_outside_new"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_border_ew"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_border_outside_sew"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_border_nsew"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_border_inside_nw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_border_inside_ne"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_border_inside_sw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_border_inside_se"; SAMESPRITE; FLAGS Digable; END;
-
-TILE "dirt_alt_rough_border_outside_nw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_border_n"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_border_outside_ne"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_border_w"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_border_e"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_border_outside_sw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_border_s"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_border_outside_se"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_border_inside_nw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_border_inside_ne"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_border_inside_sw"; SAMESPRITE; FLAGS Digable; END;
-TILE "dirt_alt_rough_border_inside_se"; SAMESPRITE; FLAGS Digable; END;
-
-TILE "sand_border_outside_nw"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_border_n"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_border_outside_ne"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_border_w"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_border_e"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_border_outside_sw"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_border_s"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_border_outside_se"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_border_outside_nsw"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_border_ns"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_border_outside_nse"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_border_outside_new"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_border_ew"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_border_outside_sew"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_border_nsew"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_border_inside_nw"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_border_inside_ne"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_border_inside_sw"; SAMESPRITE; FLAGS Digable; END;
-TILE "sand_border_inside_se"; SAMESPRITE; FLAGS Digable; END;
-
-TILE "boulder"; SAMESPRITE; SOLID block; END;
-TILE "boulder_alt"; SAMESPRITE; SOLID block; END;
-TILE "coconut_northwest"; SAMESPRITE; SOLID block; END;
-TILE "coconut_northeast"; SAMESPRITE; SOLID block; END;
-
-TILE "cliff_face_n_ground"; LEDGE edge_n, up; SAMESPRITE; END;
-TILE "cliff_face_n_grass_field"; LEDGE edge_n, up; SAMESPRITE; END;
-TILE "cliff_face_n_dirt"; LEDGE edge_n, up; SAMESPRITE; END;
-TILE "cliff_face_n_dirt_dark"; LEDGE edge_n, up; SAMESPRITE; END;
-TILE "cliff_face_n_dirt_dark_rough"; LEDGE edge_n, up; SAMESPRITE; END;
-TILE "cliff_face_n_dirt_alt"; LEDGE edge_n, up; SAMESPRITE; END;
-TILE "cliff_face_n_dirt_alt_dark"; LEDGE edge_n, up; SAMESPRITE; END;
-TILE "cliff_face_n_dirt_alt_dark_rough"; LEDGE edge_n, up; SAMESPRITE; END;
-
-TILE "cliff_face_s_ground"; LEDGE edge_s, down; SAMESPRITE; END;
-TILE "cliff_face_s_grass_field"; LEDGE edge_s, down; SAMESPRITE; END;
-TILE "cliff_face_s_dirt"; LEDGE edge_s, down; SAMESPRITE; END;
-TILE "cliff_face_s_dirt_dark"; LEDGE edge_s, down; SAMESPRITE; END;
-TILE "cliff_face_s_dirt_dark_rough"; LEDGE edge_s, down; SAMESPRITE; END;
-TILE "cliff_face_s_dirt_alt"; LEDGE edge_s, down; SAMESPRITE; END;
-TILE "cliff_face_s_dirt_alt_dark"; LEDGE edge_s, down; SAMESPRITE; END;
-TILE "cliff_face_s_dirt_alt_dark_rough"; LEDGE edge_s, down; SAMESPRITE; END;
-
-TILE "cliff_face_w_ground"; LEDGE edge_w, left; SAMESPRITE; END;
-TILE "cliff_face_w_grass_field"; LEDGE edge_w, left; SAMESPRITE; END;
-TILE "cliff_face_w_dirt"; LEDGE edge_w, left; SAMESPRITE; END;
-TILE "cliff_face_w_dirt_dark"; LEDGE edge_w, left; SAMESPRITE; END;
-TILE "cliff_face_w_dirt_dark_rough"; LEDGE edge_w, left; SAMESPRITE; END;
-TILE "cliff_face_w_dirt_alt"; LEDGE edge_w, left; SAMESPRITE; END;
-TILE "cliff_face_w_dirt_alt_dark"; LEDGE edge_w, left; SAMESPRITE; END;
-TILE "cliff_face_w_dirt_alt_dark_rough"; LEDGE edge_w, left; SAMESPRITE; END;
-
-TILE "cliff_face_e_ground"; LEDGE edge_e, right; SAMESPRITE; END;
-TILE "cliff_face_e_grass_field"; LEDGE edge_e, right; SAMESPRITE; END;
-TILE "cliff_face_e_dirt"; LEDGE edge_e, right; SAMESPRITE; END;
-TILE "cliff_face_e_dirt_dark"; LEDGE edge_e, right; SAMESPRITE; END;
-TILE "cliff_face_e_dirt_dark_rough"; LEDGE edge_e, right; SAMESPRITE; END;
-TILE "cliff_face_e_dirt_alt"; LEDGE edge_e, right; SAMESPRITE; END;
-TILE "cliff_face_e_dirt_alt_dark"; LEDGE edge_e, right; SAMESPRITE; END;
-TILE "cliff_face_e_dirt_alt_dark_rough"; LEDGE edge_e, right; SAMESPRITE; END;
-
-
 #==============================================================
 # Tilesets
 #==============================================================
 
-TILESET land, tileset_land, (12, 19);
-DEFAULT (4, 10);
-
-CONFIG;
-............
-............
-............
-............
-............
-..G..G..G..G
-..G..G..G..G
-SGGGGGSGGSGG
-GGGGGGGGGGGG
-GGGGGGGGGGGG
-GGGGGGGGGGGG
-GGGGGGGGGGGG
-GGGGGGGGGGGG
-GSGGGGGGGGGG
-GGGGGGGGGGGG
-..GGGGGGGGGG
-..GGGGGGGGGG
-.GGGGGGGGGGG
-.GGGGGGGGGGG
-END;
+TILESET "land", (12, 19);
 
 # LEDGE TILES
 
-TILE (0, 0); SOLID corner_nw; END;
-SETTILE (1, 0), "cliff_face_n_grass_field";
-TILE (2, 0); SOLID corner_ne; END;
-TILE (3, 0); SOLID corner_nw; END;
-SETTILE (4, 0), "cliff_face_n_ground";
-TILE (5, 0); SOLID corner_ne; END;
-TILE (6, 0); SOLID corner_nw; END;
-SETTILE (7, 0), "cliff_face_n_dirt_dark";
-TILE (8, 0); SOLID corner_ne; END;
-TILE (9, 0); SOLID corner_nw; END;
-SETTILE (10, 0), "cliff_face_n_dirt_alt_dark";
-TILE (11, 0); SOLID corner_ne; END;
+#TILE (0, 0); SOLID corner_nw; END;
+ADDTILE (1, 0), "cliff_face_n_grass_field";
+#TILE (2, 0); SOLID corner_ne; END;
+#TILE (3, 0); SOLID corner_nw; END;
+ADDTILE (4, 0), "cliff_face_n_ground";
+#TILE (5, 0); SOLID corner_ne; END;
+#TILE (6, 0); SOLID corner_nw; END;
+ADDTILE (7, 0), "cliff_face_n_dirt_dark";
+#TILE (8, 0); SOLID corner_ne; END;
+#TILE (9, 0); SOLID corner_nw; END;
+ADDTILE (10, 0), "cliff_face_n_dirt_alt_dark";
+#TILE (11, 0); SOLID corner_ne; END;
 
-SETTILE (0, 1), "cliff_face_w_grass_field";
-SETTILE (2, 1), "cliff_face_e_grass_field";
-SETTILE (3, 1), "cliff_face_w_ground";
-SETTILE (5, 1), "cliff_face_e_ground";
-SETTILE (6, 1), "cliff_face_w_dirt_dark";
-SETTILE (8, 1), "cliff_face_e_dirt_dark";
-SETTILE (9, 1), "cliff_face_w_dirt_alt_dark";
-SETTILE (11, 1), "cliff_face_e_dirt_alt_dark";
+ADDTILE (0, 1), "cliff_face_w_grass_field";
+ADDTILE (2, 1), "cliff_face_e_grass_field";
+ADDTILE (3, 1), "cliff_face_w_ground";
+ADDTILE (5, 1), "cliff_face_e_ground";
+ADDTILE (6, 1), "cliff_face_w_dirt_dark";
+ADDTILE (8, 1), "cliff_face_e_dirt_dark";
+ADDTILE (9, 1), "cliff_face_w_dirt_alt_dark";
+ADDTILE (11, 1), "cliff_face_e_dirt_alt_dark";
 
-TILE (0, 2); SOLID corner_sw; END;
-SETTILE (1, 2), "cliff_face_s_grass_field";
-TILE (2, 2); SOLID corner_se; END;
-TILE (3, 2); SOLID corner_sw; END;
-SETTILE (4, 2), "cliff_face_s_ground";
-TILE (5, 2); SOLID corner_se; END;
-TILE (6, 2); SOLID corner_sw; END;
-SETTILE (7, 2), "cliff_face_s_dirt_dark";
-TILE (8, 2); SOLID corner_se; END;
-TILE (9, 2); SOLID corner_sw; END;
-SETTILE (10, 2), "cliff_face_s_dirt_alt_dark";
-TILE (11, 2); SOLID corner_se; END;
+#TILE (0, 2); SOLID corner_sw; END;
+ADDTILE (1, 2), "cliff_face_s_grass_field";
+#TILE (2, 2); SOLID corner_se; END;
+#TILE (3, 2); SOLID corner_sw; END;
+ADDTILE (4, 2), "cliff_face_s_ground";
+#TILE (5, 2); SOLID corner_se; END;
+#TILE (6, 2); SOLID corner_sw; END;
+ADDTILE (7, 2), "cliff_face_s_dirt_dark";
+#TILE (8, 2); SOLID corner_se; END;
+#TILE (9, 2); SOLID corner_sw; END;
+ADDTILE (10, 2), "cliff_face_s_dirt_alt_dark";
+#TILE (11, 2); SOLID corner_se; END;
 
-TILE (0, 3); SOLID corner_nw; END;
-TILE (1, 3); SOLID corner_ne; END;
-TILE (2, 3); SOLID edge_e; END;
-TILE (3, 3); SOLID corner_nw; END;
-TILE (4, 3); SOLID corner_ne; END;
-TILE (5, 3); SOLID edge_e; END;
-TILE (6, 3); SOLID corner_nw; END;
-TILE (7, 3); SOLID corner_ne; END;
-TILE (8, 3); SOLID edge_e; END;
-TILE (9, 3); SOLID corner_nw; END;
-TILE (10, 3); SOLID corner_ne; END;
-TILE (11, 3); SOLID edge_e; END;
+#TILE (0, 3); SOLID corner_nw; END;
+#TILE (1, 3); SOLID corner_ne; END;
+#TILE (2, 3); SOLID edge_e; END;
+#TILE (3, 3); SOLID corner_nw; END;
+#TILE (4, 3); SOLID corner_ne; END;
+#TILE (5, 3); SOLID edge_e; END;
+#TILE (6, 3); SOLID corner_nw; END;
+#TILE (7, 3); SOLID corner_ne; END;
+#TILE (8, 3); SOLID edge_e; END;
+#TILE (9, 3); SOLID corner_nw; END;
+#TILE (10, 3); SOLID corner_ne; END;
+#TILE (11, 3); SOLID edge_e; END;
 
-TILE (0, 4); SOLID corner_sw; END;
-TILE (1, 4); SOLID corner_se; END;
-TILE (2, 4); SOLID edge_w; END;
-TILE (3, 4); SOLID corner_sw; END;
-TILE (4, 4); SOLID corner_se; END;
-TILE (5, 4); SOLID edge_w; END;
-TILE (6, 4); SOLID corner_sw; END;
-TILE (7, 4); SOLID corner_se; END;
-TILE (8, 4); SOLID edge_w; END;
-TILE (9, 4); SOLID corner_sw; END;
-TILE (10, 4); SOLID corner_se; END;
-TILE (11, 4); SOLID edge_w; END;
+#TILE (0, 4); SOLID corner_sw; END;
+#TILE (1, 4); SOLID corner_se; END;
+#TILE (2, 4); SOLID edge_w; END;
+#TILE (3, 4); SOLID corner_sw; END;
+#TILE (4, 4); SOLID corner_se; END;
+#TILE (5, 4); SOLID edge_w; END;
+#TILE (6, 4); SOLID corner_sw; END;
+#TILE (7, 4); SOLID corner_se; END;
+#TILE (8, 4); SOLID edge_w; END;
+#TILE (9, 4); SOLID corner_sw; END;
+#TILE (10, 4); SOLID corner_se; END;
+#TILE (11, 4); SOLID edge_w; END;
 
-TILE (0, 5); SOLID inside_corner_se; END;
-TILE (1, 5); SOLID inside_corner_sw; END;
-TILE (3, 5); SOLID inside_corner_se; END;
-TILE (4, 5); SOLID inside_corner_sw; END;
-TILE (6, 5); SOLID inside_corner_se; END;
-TILE (7, 5); SOLID inside_corner_sw; END;
-TILE (9, 5); SOLID inside_corner_se; END;
-TILE (10, 5); SOLID inside_corner_sw; END;
+#TILE (0, 5); SOLID inside_corner_se; END;
+#TILE (1, 5); SOLID inside_corner_sw; END;
+#TILE (3, 5); SOLID inside_corner_se; END;
+#TILE (4, 5); SOLID inside_corner_sw; END;
+#TILE (6, 5); SOLID inside_corner_se; END;
+#TILE (7, 5); SOLID inside_corner_sw; END;
+#TILE (9, 5); SOLID inside_corner_se; END;
+#TILE (10, 5); SOLID inside_corner_sw; END;
 
-SETTILE (2, 5), "sand_border_outside_new";
-SETTILE (5, 5), "grass_border_outside_new";
-SETTILE (8, 5), "dirt_border_outside_new";
-SETTILE (11, 5), "dirt_alt_border_outside_new";
-SETTILE (2, 6), "sand_border_ew";
-SETTILE (5, 6), "grass_border_ew";
-SETTILE (8, 6), "dirt_border_ew";
-SETTILE (11, 6), "dirt_alt_border_ew";
-SETTILE (2, 7), "sand_border_outside_sew";
-SETTILE (5, 7), "grass_border_outside_sew";
-SETTILE (8, 7), "dirt_border_outside_sew";
-SETTILE (11, 7), "dirt_alt_border_outside_sew";
-SETTILE (1, 7), "sand_border_nsew";
-SETTILE (4, 7), "grass_border_nsew";
-SETTILE (7, 7), "dirt_border_nsew";
-SETTILE (10, 7), "dirt_alt_border_nsew";
+ADDTILE (2, 5), "sand_border_outside_new";
+ADDTILE (5, 5), "grass_border_outside_new";
+ADDTILE (8, 5), "dirt_border_outside_new";
+ADDTILE (11, 5), "dirt_alt_border_outside_new";
+ADDTILE (2, 6), "sand_border_ew";
+ADDTILE (5, 6), "grass_border_ew";
+ADDTILE (8, 6), "dirt_border_ew";
+ADDTILE (11, 6), "dirt_alt_border_ew";
+ADDTILE (2, 7), "sand_border_outside_sew";
+ADDTILE (5, 7), "grass_border_outside_sew";
+ADDTILE (8, 7), "dirt_border_outside_sew";
+ADDTILE (11, 7), "dirt_alt_border_outside_sew";
+ADDTILE (1, 7), "sand_border_nsew";
+ADDTILE (4, 7), "grass_border_nsew";
+ADDTILE (7, 7), "dirt_border_nsew";
+ADDTILE (10, 7), "dirt_alt_border_nsew";
 
-SETTILE (0, 7), "coconut_northeast";
-SETTILE (6, 7), "boulder";
-SETTILE (9, 7), "boulder_alt";
+ADDTILE (0, 7), "coconut_right";
+ADDTILE (3, 7), "ground_leaves";
+ADDTILE (6, 7), "boulder";
+ADDTILE (9, 7), "boulder_alt";
 
-SETTILE (0, 8), "sand_border_outside_nsw";
-SETTILE (1, 8), "sand_border_ns";
-SETTILE (2, 8), "sand_border_outside_nse";
-SETTILE (3, 8), "grass_border_outside_nsw";
-SETTILE (4, 8), "grass_border_ns";
-SETTILE (5, 8), "grass_border_outside_nse";
-SETTILE (6, 8), "dirt_border_outside_nsw";
-SETTILE (7, 8), "dirt_border_ns";
-SETTILE (8, 8), "dirt_border_outside_nse";
-SETTILE (9, 8), "dirt_alt_border_outside_nsw";
-SETTILE (10, 8), "dirt_alt_border_ns";
-SETTILE (11, 8), "dirt_alt_border_outside_nse";
+ADDTILE (0, 8), "sand_border_outside_nsw";
+ADDTILE (1, 8), "sand_border_ns";
+ADDTILE (2, 8), "sand_border_outside_nse";
+ADDTILE (3, 8), "grass_border_outside_nsw";
+ADDTILE (4, 8), "grass_border_ns";
+ADDTILE (5, 8), "grass_border_outside_nse";
+ADDTILE (6, 8), "dirt_border_outside_nsw";
+ADDTILE (7, 8), "dirt_border_ns";
+ADDTILE (8, 8), "dirt_border_outside_nse";
+ADDTILE (9, 8), "dirt_alt_border_outside_nsw";
+ADDTILE (10, 8), "dirt_alt_border_ns";
+ADDTILE (11, 8), "dirt_alt_border_outside_nse";
 
-SETTILE (0, 9), "sand_border_outside_nw";
-SETTILE (1, 9), "sand_border_n";
-SETTILE (2, 9), "sand_border_outside_ne";
-SETTILE (0, 10), "sand_border_w";
-SETTILE (1, 10), "sand";
-SETTILE (2, 10), "sand_border_e";
-SETTILE (0, 11), "sand_border_outside_sw";
-SETTILE (1, 11), "sand_border_s";
-SETTILE (2, 11), "sand_border_outside_se";
+ADDTILE (0, 9), "sand_border_outside_nw";
+ADDTILE (1, 9), "sand_border_n";
+ADDTILE (2, 9), "sand_border_outside_ne";
+ADDTILE (0, 10), "sand_border_w";
+ADDTILE (1, 10), "sand";
+ADDTILE (2, 10), "sand_border_e";
+ADDTILE (0, 11), "sand_border_outside_sw";
+ADDTILE (1, 11), "sand_border_s";
+ADDTILE (2, 11), "sand_border_outside_se";
 
-SETTILE (3, 9), "grass_border_outside_nw";
-SETTILE (4, 9), "grass_border_n";
-SETTILE (5, 9), "grass_border_outside_ne";
-SETTILE (3, 10), "grass_border_w";
-SETTILE (4, 10), "ground";
-SETTILE (5, 10), "grass_border_e";
-SETTILE (3, 11), "grass_border_outside_sw";
-SETTILE (4, 11), "grass_border_s";
-SETTILE (5, 11), "grass_border_outside_se";
+ADDTILE (3, 9), "grass_border_outside_nw";
+ADDTILE (4, 9), "grass_border_n";
+ADDTILE (5, 9), "grass_border_outside_ne";
+ADDTILE (3, 10), "grass_border_w";
+ADDTILE (4, 10), "ground";
+ADDTILE (5, 10), "grass_border_e";
+ADDTILE (3, 11), "grass_border_outside_sw";
+ADDTILE (4, 11), "grass_border_s";
+ADDTILE (5, 11), "grass_border_outside_se";
 
-SETTILE (6, 9), "dirt_border_outside_nw";
-SETTILE (7, 9), "dirt_border_n";
-SETTILE (8, 9), "dirt_border_outside_ne";
-SETTILE (6, 10), "dirt_border_w";
-SETTILE (7, 10), "dirt_dark";
-SETTILE (8, 10), "dirt_border_e";
-SETTILE (6, 11), "dirt_border_outside_sw";
-SETTILE (7, 11), "dirt_border_s";
-SETTILE (8, 11), "dirt_border_outside_se";
+ADDTILE (6, 9), "dirt_border_outside_nw";
+ADDTILE (7, 9), "dirt_border_n";
+ADDTILE (8, 9), "dirt_border_outside_ne";
+ADDTILE (6, 10), "dirt_border_w";
+ADDTILE (7, 10), "dirt_dark";
+ADDTILE (8, 10), "dirt_border_e";
+ADDTILE (6, 11), "dirt_border_outside_sw";
+ADDTILE (7, 11), "dirt_border_s";
+ADDTILE (8, 11), "dirt_border_outside_se";
 
-SETTILE (9, 9), "dirt_alt_border_outside_nw";
-SETTILE (10, 9), "dirt_alt_border_n";
-SETTILE (11, 9), "dirt_alt_border_outside_ne";
-SETTILE (9, 10), "dirt_alt_border_w";
-SETTILE (10, 10), "dirt_alt_dark";
-SETTILE (11, 10), "dirt_alt_border_e";
-SETTILE (9, 11), "dirt_alt_border_outside_sw";
-SETTILE (10, 11), "dirt_alt_border_s";
-SETTILE (11, 11), "dirt_alt_border_outside_se";
+ADDTILE (9, 9), "dirt_alt_border_outside_nw";
+ADDTILE (10, 9), "dirt_alt_border_n";
+ADDTILE (11, 9), "dirt_alt_border_outside_ne";
+ADDTILE (9, 10), "dirt_alt_border_w";
+ADDTILE (10, 10), "dirt_alt_dark";
+ADDTILE (11, 10), "dirt_alt_border_e";
+ADDTILE (9, 11), "dirt_alt_border_outside_sw";
+ADDTILE (10, 11), "dirt_alt_border_s";
+ADDTILE (11, 11), "dirt_alt_border_outside_se";
 
-SETTILE (3, 12), "grass_field_nw";
-SETTILE (4, 12), "grass_field_n";
-SETTILE (5, 12), "grass_field_ne";
-SETTILE (3, 13), "grass_field_w";
-SETTILE (4, 13), "grass_field";
-SETTILE (5, 13), "grass_field_e";
-SETTILE (3, 14), "grass_field_sw";
-SETTILE (4, 14), "grass_field_s";
-SETTILE (5, 14), "grass_field_se";
+ADDTILE (3, 12), "grass_field_nw";
+ADDTILE (4, 12), "grass_field_n";
+ADDTILE (5, 12), "grass_field_ne";
+ADDTILE (3, 13), "grass_field_w";
+ADDTILE (4, 13), "grass_field";
+ADDTILE (5, 13), "grass_field_e";
+ADDTILE (3, 14), "grass_field_sw";
+ADDTILE (4, 14), "grass_field_s";
+ADDTILE (5, 14), "grass_field_se";
 
-SETTILE (6, 12), "dirt_nw";
-SETTILE (7, 12), "dirt_n";
-SETTILE (8, 12), "dirt_ne";
-SETTILE (6, 13), "dirt_w";
-SETTILE (7, 13), "dirt_dark_rough";
-SETTILE (8, 13), "dirt_e";
-SETTILE (6, 14), "dirt_sw";
-SETTILE (7, 14), "dirt_s";
-SETTILE (8, 14), "dirt_se";
+ADDTILE (6, 12), "dirt_nw";
+ADDTILE (7, 12), "dirt_n";
+ADDTILE (8, 12), "dirt_ne";
+ADDTILE (6, 13), "dirt_w";
+ADDTILE (7, 13), "dirt_dark_rough";
+ADDTILE (8, 13), "dirt_e";
+ADDTILE (6, 14), "dirt_sw";
+ADDTILE (7, 14), "dirt_s";
+ADDTILE (8, 14), "dirt_se";
 
-SETTILE (9, 12), "dirt_alt_nw";
-SETTILE (10, 12), "dirt_alt_n";
-SETTILE (11, 12), "dirt_alt_ne";
-SETTILE (9, 13), "dirt_alt_w";
-SETTILE (10, 13), "dirt_alt_dark_rough";
-SETTILE (11, 13), "dirt_alt_e";
-SETTILE (9, 14), "dirt_alt_sw";
-SETTILE (10, 14), "dirt_alt_s";
-SETTILE (11, 14), "dirt_alt_se";
+ADDTILE (9, 12), "dirt_alt_nw";
+ADDTILE (10, 12), "dirt_alt_n";
+ADDTILE (11, 12), "dirt_alt_ne";
+ADDTILE (9, 13), "dirt_alt_w";
+ADDTILE (10, 13), "dirt_alt_dark_rough";
+ADDTILE (11, 13), "dirt_alt_e";
+ADDTILE (9, 14), "dirt_alt_sw";
+ADDTILE (10, 14), "dirt_alt_s";
+ADDTILE (11, 14), "dirt_alt_se";
 
-SETTILE (2, 15), "grass_flowers";
-SETTILE (2, 16), "ground_blank";
-SETTILE (1, 17), "sand_border_inside_nw";
-SETTILE (2, 17), "sand_border_inside_ne";
-SETTILE (1, 18), "sand_border_inside_sw";
-SETTILE (2, 18), "sand_border_inside_se";
+ADDTILE (2, 15), "grass_flowers";
+ADDTILE (2, 16), "ground_blank";
+ADDTILE (1, 17), "sand_border_inside_nw";
+ADDTILE (2, 17), "sand_border_inside_ne";
+ADDTILE (1, 18), "sand_border_inside_sw";
+ADDTILE (2, 18), "sand_border_inside_se";
 
-SETTILE (3, 15), "grass_field_nsw";
-SETTILE (4, 15), "grass_field_ns";
-SETTILE (5, 15), "grass_field_nse";
-SETTILE (3, 16), "grass_field_new";
-SETTILE (3, 17), "grass_field_ew";
-SETTILE (3, 18), "grass_field_sew";
-SETTILE (4, 16), "grass_field_nsew";
-SETTILE (5, 16), "grass_field_blank";
-SETTILE (4, 17), "grass_border_inside_nw";
-SETTILE (5, 17), "grass_border_inside_ne";
-SETTILE (4, 18), "grass_border_inside_sw";
-SETTILE (5, 18), "grass_border_inside_se";
+ADDTILE (3, 15), "grass_field_nsw";
+ADDTILE (4, 15), "grass_field_ns";
+ADDTILE (5, 15), "grass_field_nse";
+ADDTILE (3, 16), "grass_field_new";
+ADDTILE (3, 17), "grass_field_ew";
+ADDTILE (3, 18), "grass_field_sew";
+ADDTILE (4, 16), "grass_field_nsew";
+ADDTILE (5, 16), "grass_field_blank";
+ADDTILE (4, 17), "grass_border_inside_se";
+ADDTILE (5, 17), "grass_border_inside_sw";
+ADDTILE (4, 18), "grass_border_inside_ne";
+ADDTILE (5, 18), "grass_border_inside_nw";
 
-SETTILE (6, 15), "dirt_nsw";
-SETTILE (7, 15), "dirt_ns";
-SETTILE (8, 15), "dirt_nse";
-SETTILE (6, 16), "dirt_new";
-SETTILE (6, 17), "dirt_ew";
-SETTILE (6, 18), "dirt_sew";
-SETTILE (7, 16), "dirt_nsew";
-SETTILE (8, 16), "dirt";
-SETTILE (7, 17), "dirt_border_inside_nw";
-SETTILE (8, 17), "dirt_border_inside_ne";
-SETTILE (7, 18), "dirt_border_inside_sw";
-SETTILE (8, 18), "dirt_border_inside_se";
+ADDTILE (6, 15), "dirt_nsw";
+ADDTILE (7, 15), "dirt_ns";
+ADDTILE (8, 15), "dirt_nse";
+ADDTILE (6, 16), "dirt_new";
+ADDTILE (6, 17), "dirt_ew";
+ADDTILE (6, 18), "dirt_sew";
+ADDTILE (7, 16), "dirt_nsew";
+ADDTILE (8, 16), "dirt";
+ADDTILE (7, 17), "dirt_border_inside_se";
+ADDTILE (8, 17), "dirt_border_inside_sw";
+ADDTILE (7, 18), "dirt_border_inside_ne";
+ADDTILE (8, 18), "dirt_border_inside_nw";
 
-SETTILE (9, 15), "dirt_alt_nsw";
-SETTILE (10, 15), "dirt_alt_ns";
-SETTILE (11, 15), "dirt_alt_nse";
-SETTILE (9, 16), "dirt_alt_new";
-SETTILE (9, 17), "dirt_alt_ew";
-SETTILE (9, 18), "dirt_alt_sew";
-SETTILE (10, 16), "dirt_alt_nsew";
-SETTILE (11, 16), "dirt_alt";
-SETTILE (10, 17), "dirt_alt_border_inside_nw";
-SETTILE (11, 17), "dirt_alt_border_inside_ne";
-SETTILE (10, 18), "dirt_alt_border_inside_sw";
-SETTILE (11, 18), "dirt_alt_border_inside_se";
+ADDTILE (9, 15), "dirt_alt_nsw";
+ADDTILE (10, 15), "dirt_alt_ns";
+ADDTILE (11, 15), "dirt_alt_nse";
+ADDTILE (9, 16), "dirt_alt_new";
+ADDTILE (9, 17), "dirt_alt_ew";
+ADDTILE (9, 18), "dirt_alt_sew";
+ADDTILE (10, 16), "dirt_alt_nsew";
+ADDTILE (11, 16), "dirt_alt";
+ADDTILE (10, 17), "dirt_rough_border_inside_se";
+ADDTILE (11, 17), "dirt_rough_border_inside_sw";
+ADDTILE (10, 18), "dirt_alt_border_inside_ne";
+ADDTILE (11, 18), "dirt_rough_border_inside_nw";
 
-TILE (0, 6); SOLID inside_corner_ne; END;
-TILE (1, 6); SOLID inside_corner_nw; END;
-TILE (3, 6); SOLID inside_corner_ne; END;
-TILE (4, 6); SOLID inside_corner_nw; END;
-TILE (6, 6); SOLID inside_corner_ne; END;
-TILE (7, 6); SOLID inside_corner_nw; END;
-TILE (9, 6); SOLID inside_corner_ne; END;
-TILE (10, 6); SOLID inside_corner_nw; END;
+ADDTILE (0, 12), "sand_fade_nw";
+ADDTILE (1, 12), "sand_fade_n";
+ADDTILE (2, 12), "sand_fade_ne";
+ADDTILE (0, 13), "sand_fade_w";
+ADDTILE (1, 13), "coconut_left";
+ADDTILE (2, 13), "sand_fade_e";
+ADDTILE (0, 14), "sand_fade_sw";
+ADDTILE (1, 14), "sand_fade_s";
+ADDTILE (2, 14), "sand_fade_se";
+
+#TILE (0, 6); SOLID inside_corner_ne; END;
+#TILE (1, 6); SOLID inside_corner_nw; END;
+#TILE (3, 6); SOLID inside_corner_ne; END;
+#TILE (4, 6); SOLID inside_corner_nw; END;
+#TILE (6, 6); SOLID inside_corner_ne; END;
+#TILE (7, 6); SOLID inside_corner_nw; END;
+#TILE (9, 6); SOLID inside_corner_ne; END;
+#TILE (10, 6); SOLID inside_corner_nw; END;
 
 
 # FLOWERS TILE

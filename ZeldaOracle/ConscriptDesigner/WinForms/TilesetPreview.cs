@@ -17,196 +17,137 @@ using ConscriptDesigner.Control;
 using ZeldaOracle.Game.Worlds;
 
 namespace ConscriptDesigner.WinForms {
-	public class TilesetPreview : GraphicsDeviceControl {
+	public class TilesetPreview : ZeldaGraphicsDeviceControl {
 
-		private DispatcherTimer dispatcherTimer;
-		private float ticks;
-		private bool animating;
-		private SpriteBatch spriteBatch;
-
-		private int columns;
-
-		Stopwatch watch = new Stopwatch();
-		double lastSeconds;
-
-		private BaseTileData hoverTileData;
-		private Point2I hoverIndex;
 		private ITileset tileset;
-		private string tilesetName;
 
-		private Point2I mouse;
+
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
 
 		public TilesetPreview() {
-			this.spriteBatch = null;
 			this.tileset = null;
-			this.columns = 1;
-			this.ResizeRedraw = true;
-			this.ticks = 0;
-			this.animating = false;
-			this.mouse = -Point2I.One;
-			this.hoverIndex = -Point2I.One;
-
-			MouseMove += OnMouseMove;
-			MouseLeave += OnMouseLeave;
-
-			watch = Stopwatch.StartNew();
-			lastSeconds = 0;
-		}
-
-		private void OnMouseLeave(object sender, EventArgs e) {
-			mouse = -Point2I.One;
-			UpdateHoverTileData();
-		}
-
-		public event EventHandler Refreshed;
-		public event EventHandler HoverTileDataChanged;
-		
-		private void OnMouseMove(object sender, System.Windows.Forms.MouseEventArgs e) {
-			mouse = new Point2I(e.X + HorizontalScroll.Value, e.Y + VerticalScroll.Value);
-			UpdateHoverTileData();
-		}
-
-		private void UpdateHoverTileData() {
-			int indexX = mouse.X / (GameSettings.TILE_SIZE + 1);
-			int indexY = mouse.Y / (GameSettings.TILE_SIZE + 1);
-			hoverIndex = new Point2I(indexX, indexY);
-			BaseTileData newHoverTileData = null;
-			if (tileset != null && mouse >= Point2I.Zero && hoverIndex < tileset.Size)
-				newHoverTileData = tileset.GetTileData(hoverIndex);
-			if (newHoverTileData != hoverTileData) {
-				hoverTileData = newHoverTileData;
-				if (newHoverTileData == null)
-					hoverIndex = -Point2I.One;
-				if (HoverTileDataChanged != null)
-					HoverTileDataChanged(this, EventArgs.Empty);
-				if (!animating)
-					Invalidate();
-			}
 		}
 
 		protected override void Initialize() {
-			this.spriteBatch = new SpriteBatch(GraphicsDevice);
-
-
-			this.dispatcherTimer = new DispatcherTimer(
-				TimeSpan.FromMilliseconds(15),
-				DispatcherPriority.Render,
-				delegate { if (animating) Invalidate(); },
-				System.Windows.Application.Current.Dispatcher);
+			base.Initialize();
 		}
 
-		public void ClearTileset() {
-			tileset = null;
-			this.AutoScrollMinSize = new Size(1, 1);
-			this.HorizontalScroll.Value = 0;
-			this.VerticalScroll.Value = 0;
-			if (Refreshed != null)
-				Refreshed(this, EventArgs.Empty);
-			UpdateHoverTileData();
-		}
 
-		public void UpdateTileset(string name, ITileset tileset) {
-			this.tilesetName = name;
+		//-----------------------------------------------------------------------------
+		// Loading/Updating
+		//-----------------------------------------------------------------------------
+
+		public void UpdateList(ITileset tileset) {
 			this.tileset = tileset;
-			this.AutoScrollMinSize = new Size(
-				(GameSettings.TILE_SIZE + 1) * tileset.Width + 1,
-				(GameSettings.TILE_SIZE + 1) * tileset.Height + 1);
-			this.HorizontalScroll.Value = 0;
-			this.VerticalScroll.Value = 0;
-
-			if (GameData.PaletteShader != null && !GameData.PaletteShader.Effect.IsDisposed) {
-				GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
-				GameData.PaletteShader.TilePalette = GameData.PAL_PRESENT;
-				GameData.PaletteShader.ApplyPalettes();
-			}
-			if (!animating)
-				Invalidate();
+			UpdateHeight();
 		}
 
-		private Point2I RoundSize(Point2I size) {
-			return ((size + 7) / 8) * 8;
+		public void UpdateScale() {
+			UpdateHeight();
 		}
 
-
-		public bool Animating {
-			get { return animating; }
-			set {
-				if (animating != value) {
-					animating = value;
-					ticks = 0;
-					if (!animating)
-						Invalidate();
-				}
-			}
+		public void Unload() {
+			tileset = null;
+			UpdateSize(Point2I.One);
 		}
 
-		public void RestartAnimations() {
-			ticks = 0;
+		
+		//-----------------------------------------------------------------------------
+		// Override Methods
+		//-----------------------------------------------------------------------------
+
+		protected override void TimerUpdate() {
+			base.TimerUpdate();
 		}
 
-		public BaseTileData HoverTileData {
-			get { return hoverTileData; }
-		}
-		public Point2I HoverIndex {
-			get { return hoverIndex; }
-		}
-
-		protected override void Draw() {
-			if (animating) {
-				ticks += (float) ((watch.Elapsed.TotalSeconds - lastSeconds) * 60.0);
-			}
-			lastSeconds = watch.Elapsed.TotalSeconds;
-			
-			SpriteDrawSettings settings = new SpriteDrawSettings((float)ticks);
-			Graphics2D g = new Graphics2D(spriteBatch);
-			g.Clear(Color.White);
-			Point2I hover = -Point2I.One;
+		protected override void UpdateHeight() {
 			if (tileset != null) {
-				TileDataDrawing.Extras = false;
-				TileDataDrawing.Level = null;
-				TileDataDrawing.PlaybackTime = ticks;
-				TileDataDrawing.RewardManager = DesignerControl.RewardManager;
+				columns = tileset.Width;
+				UpdateSize(tileset.Dimensions * (BaseSpriteSize + 1) + 1);
+			}
+			else {
+				columns = 1;
+				UpdateSize(Point2I.One);
+			}
+		}
 
-				if (GameData.PaletteShader != null && !GameData.PaletteShader.Effect.IsDisposed) {
-					GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
-					GameData.PaletteShader.TilePalette = GameData.PAL_TILES_DEFAULT;
-					if (DesignerControl.PreviewZone != null && DesignerControl.PreviewZone.Palette != null)
-						GameData.PaletteShader.TilePalette = DesignerControl.PreviewZone.Palette;
-					GameData.PaletteShader.ApplyPalettes();
+		protected override bool IsValidHoverPoint(ref Point2I point, out Point2I hoverSize) {
+			hoverSize = Point2I.One;
+			if (tileset != null && point < tileset.Dimensions) {
+				if (tileset is NewTileset) {
+					Point2I origin = NewTileset.GetTileDataOrigin(point);
+					if (origin != -Point2I.One) {
+						if (!tileset.UsePreviewSprites)
+							hoverSize = NewTileset.GetTileDataAtOrigin(origin).Size;
+						point = origin;
+					}
 				}
+				return true;
+			}
+			return false;
+		}
 
-				Zone zone = (DesignerControl.PreviewZone ?? new Zone());
+		protected override void Draw(Graphics2D g, SpriteDrawSettings settings, Zone zone) {
+			if (tileset == null)
+				return;
+			TileDataDrawing.Extras = false;
+			TileDataDrawing.Level = null;
+			TileDataDrawing.PlaybackTime = DesignerControl.PlaybackTime;
+			TileDataDrawing.RewardManager = DesignerControl.RewardManager;
 
-				g.Begin(GameSettings.DRAW_MODE_DEFAULT);
-				g.Translate(-HorizontalScroll.Value, -VerticalScroll.Value);
-				int startRow = (VerticalScroll.Value + 1) / (GameSettings.TILE_SIZE + 1);
-				int startIndex = startRow * columns;
-				int endRow = (VerticalScroll.Value + ClientSize.Height + 1 + GameSettings.TILE_SIZE) / (GameSettings.TILE_SIZE + 1);
-				int endIndex = (endRow + 1) * columns;
-				for (int tx = 0; tx < tileset.Width; tx++) {
-					for (int ty = startRow; ty < endRow && ty < tileset.Height; ty++) {
-						BaseTileData tile = tileset.GetTileData(tx, ty);
-						int x = 1 + tx * (GameSettings.TILE_SIZE + 1);
-						int y = 1 + ty * (GameSettings.TILE_SIZE + 1);
+			for (int indexX = 0; indexX < tileset.Width; indexX++) {
+				for (int indexY = 0; indexY < tileset.Height; indexY++) {
+					BaseTileData tile = tileset.GetTileData(indexX, indexY);
+					if (tileset is NewTileset)
+						tile = NewTileset.GetTileDataAtOrigin(indexX, indexY);
+					if (tile != null) {
+						int x = 1 + indexX * (BaseSpriteSize.X + 1);
+						int y = 1 + indexY * (BaseSpriteSize.Y + 1);
 
 						try {
-							TileDataDrawing.DrawTile(g, tile, new Point2I(x, y), zone);
+							if (tileset.UsePreviewSprites)
+								TileDataDrawing.DrawTilePreview(g, tile, new Point2I(x, y), zone);
+							else
+								TileDataDrawing.DrawTile(g, tile, new Point2I(x, y), zone);
 						}
 						catch (Exception) {
 
 						}
-						if (tile == hoverTileData) {
-							hover = new Point2I(x, y);
-						}
 					}
 				}
-				if (hover != -Point2I.One) {
-					Rectangle2I selectRect = new Rectangle2I(hover - 1, (Point2I)GameSettings.TILE_SIZE + 2);
-					g.DrawRectangle(selectRect, 1, Color.Black);
-					g.DrawRectangle(selectRect.Inflated(1, 1), 1, Color.White);
-					g.DrawRectangle(selectRect.Inflated(2, 2), 1, Color.Black);
-				}
-				g.End();
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Override Properties
+		//-----------------------------------------------------------------------------
+
+		protected override Point2I BaseSpriteSize {
+			get { return new Point2I(GameSettings.TILE_SIZE); }
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Internal Properties
+		//-----------------------------------------------------------------------------
+
+		private NewTileset NewTileset {
+			get { return tileset as NewTileset; }
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public BaseTileData HoverTileData {
+			get {
+				if (hoverPoint == -Point2I.One)
+					return null;
+				return tileset.GetTileData(hoverPoint.X, hoverPoint.Y);
 			}
 		}
 	}

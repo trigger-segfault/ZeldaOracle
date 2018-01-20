@@ -251,6 +251,8 @@ namespace ZeldaOracle.Common.Scripts.Commands {
 							Name        = data.Tokens[1],
 							IsVariadic  = isVariadic
 						};
+						if (refChild.Type == CommandParamType.Unknown)
+							throw new Exception("Unknown parameter type '" + data.Tokens[0] + "'!");
 						if (data.TypeDefinitions.Contains(data.Tokens[0]))
 							refChild.CustomTypeName = data.Tokens[0];
 						data.RefParamStack.Peek().AddChild(refChild);

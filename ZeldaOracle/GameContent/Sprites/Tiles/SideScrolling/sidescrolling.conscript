@@ -1,0 +1,5 @@
+﻿
+LOAD "walls.conscript", true;
+LOAD "general.conscript", true;
+LOAD "animations.conscript", true;
+LOAD "entity_objects.conscript", true;

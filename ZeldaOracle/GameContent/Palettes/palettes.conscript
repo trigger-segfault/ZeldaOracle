@@ -1,12 +1,16 @@
 
 
-LOAD "tiles_default.conscript" false;
-LOAD "present.conscript" false;
+LOAD "tiles_default.conscript", false;
+LOAD "present.conscript", false;
 LOAD "underwater_present.conscript" false;
 LOAD "summer.conscript" false;
-LOAD "dungeon_ages_1.conscript" false;
+LOAD "interior_present.conscript", false;
+LOAD "dungeon_ages_1.conscript", false;
+LOAD "dungeon_skull_dungeon.conscript", false;
+LOAD "dungeon_spirits_grave.conscript", false;
 
-LOAD "entities_default.conscript" false;
-LOAD "entities_menu.conscript" false;
+LOAD "entities_default.conscript", false;
+LOAD "entities_menu.conscript", false;
 
-LOAD "electrocuted.conscript" false;
+LOAD "electrocuted.conscript", false;
+LOAD "empty.conscript", false;

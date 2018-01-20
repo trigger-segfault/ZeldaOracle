@@ -1,0 +1,45 @@
+﻿#==============================================================
+# Tiles
+#==============================================================
+
+TILE "hedge"; SAMESPRITE; SOLID block; END;
+TILE "hedge_outside_nw"; SAMESPRITE; SOLID block; END;
+TILE "hedge_n"; SAMESPRITE; SOLID block; END;
+TILE "hedge_outside_ne"; SAMESPRITE; SOLID block; END;
+TILE "hedge_w"; SAMESPRITE; SOLID block; END;
+TILE "hedge_e"; SAMESPRITE; SOLID block; END;
+TILE "hedge_outside_sw"; SAMESPRITE; SOLID block; END;
+TILE "hedge_s"; SAMESPRITE; SOLID block; END;
+TILE "hedge_outside_se"; SAMESPRITE; SOLID block; END;
+TILE "hedge_inside_se"; SAMESPRITE; SOLID block; END;
+TILE "hedge_inside_sw"; SAMESPRITE; SOLID block; END;
+TILE "hedge_inside_ne"; SAMESPRITE; SOLID block; END;
+TILE "hedge_inside_nw"; SAMESPRITE; SOLID block; END;
+TILE "hedge_outside_nsw"; SAMESPRITE; SOLID block; END;
+TILE "hedge_outside_ns"; SAMESPRITE; SOLID block; END;
+TILE "hedge_outside_nse"; SAMESPRITE; SOLID block; END;
+TILE "hedge_outside_new"; SAMESPRITE; SOLID block; END;
+TILE "hedge_outside_ew"; SAMESPRITE; SOLID block; END;
+TILE "hedge_outside_sew"; SAMESPRITE; SOLID block; END;
+TILE "hedge_outside_nsew"; SAMESPRITE; SOLID block; END;
+
+TILE "thick_brush"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_outside_nw"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_n"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_outside_ne"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_w"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_e"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_outside_sw"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_s"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_outside_se"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_inside_se"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_inside_sw"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_inside_ne"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_inside_nw"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_outside_nsw"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_outside_ns"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_outside_nse"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_outside_new"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_outside_ew"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_outside_sew"; SAMESPRITE; SOLID block; END;
+TILE "thick_brush_outside_nsew"; SAMESPRITE; SOLID block; END;

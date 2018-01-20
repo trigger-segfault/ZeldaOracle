@@ -1,6 +1,11 @@
-﻿PALETTE		tile_dictionary, dungeon_ages_1;
+﻿PALETTE "tile_dictionary", "dungeon_ages_1";
 
 CLONE	"tiles_default";
+
+#==============================================================
+# Constants
+#==============================================================
+
 
 #==============================================================
 # Structure
@@ -85,7 +90,7 @@ LOOKUP	turnstile, all		pot, all;
 LOOKUP	lever, all			statue, all;
 LOOKUP	button, all			floor, all;
 LOOKUP	hardened_lava, all	pot, all;
-LOOKUP	tile_monster, all	railing, all;
+LOOKUP	flying_tile, all	railing, all;
 LOOKUP	floor_spikes, all			railing, all;
 LOOKUP	arrow_shooter, all	railing, all;
 LOOKUP	minecart_track, all	floor, all;
@@ -124,5 +129,19 @@ LOOKUP	fancy_tile_3, all		pot, all;
 LOOKUP	fancy_tile_4, all		floor, all;
 LOOKUP	fancy_tile_5, all		door, all;
 
+#==============================================================
+# Constants
+#==============================================================
+
+COPY	grass_green, light			floor, light;
+COLOR	grass_green, medium			(128,192,  0);
+COLOR	grass_green, dark			( 64,112,  0);
+
+COPY	tree_green, light			floor, light;
+COLOR	tree_green, medium			(128,192,  0);
+COLOR	tree_green, dark			( 64,112,  0);
+
+COPY	brown, all					floor, all;
+COPY	gray, all					wall, all;
 
 END;

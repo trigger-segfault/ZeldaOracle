@@ -17,6 +17,8 @@ namespace ZeldaOracle.Game {
 		public const int					DEFAULT_TILE_LAYER_COUNT	= 3;
 
 		// Display
+		public const int					HUD_HEIGHT				= 16;
+		public static readonly Point2I		HUD_OFFSET				= new Point2I(0, HUD_HEIGHT);
 		public const int					SCREEN_WIDTH			= 160;
 		public const int					SCREEN_HEIGHT			= 144;
 		public const int					VIEW_WIDTH				= 160;

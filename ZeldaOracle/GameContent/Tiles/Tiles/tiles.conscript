@@ -1,0 +1,14 @@
+﻿
+LOAD "cliffs.conscript", true;
+LOAD "cliff_walls.conscript", true;
+LOAD "ground.conscript", true;
+LOAD "trees.conscript", true;
+LOAD "hedges.conscript", true;
+LOAD "town.conscript", true;
+LOAD "water.conscript", true;
+LOAD "walls_and_floors.conscript", true;
+LOAD "dungeon.conscript", true;
+LOAD "interior.conscript", true;
+LOAD "sidescrolling.conscript", true;
+LOAD "natural_objects.conscript", true;
+LOAD "puzzle_objects.conscript", true;

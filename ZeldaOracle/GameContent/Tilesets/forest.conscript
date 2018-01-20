@@ -1,299 +1,149 @@
-
-#==============================================================
-# Sprite Sheets
-#==============================================================
-
-SPRITESHEET "tileset_forest",		(16, 16), (1, 1), (18, 18);
-
-#==============================================================
-# Tiles
-#==============================================================
-
-
-TILE "tree_top_left"; SAMESPRITE; SOLID block; END;
-TILE "tree_top_right"; SAMESPRITE; SOLID block; END;
-TILE "tree_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "tree_bottom_right"; SAMESPRITE; SOLID block; END;
-TILE "tree_dirt_top_left"; SAMESPRITE; SOLID block; END;
-TILE "tree_dirt_top_right"; SAMESPRITE; SOLID block; END;
-TILE "tree_dirt_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "tree_dirt_bottom_right"; SAMESPRITE; SOLID block; END;
-TILE "tree_top_left_behind"; SAMESPRITE; SOLID block; END;
-TILE "tree_top_right_behind"; SAMESPRITE; SOLID block; END;
-
-TILE "tree_house_top_left"; SAMESPRITE; SOLID block; END;
-TILE "tree_house_top_right"; SAMESPRITE; SOLID block; END;
-TILE "tree_dirt_house_top_left"; SAMESPRITE; SOLID block; END;
-TILE "tree_dirt_house_top_right"; SAMESPRITE; SOLID block; END;
-TILE "tree_house_top_left_behind"; SAMESPRITE; SOLID block; END;
-TILE "tree_house_top_right_behind"; SAMESPRITE; SOLID block; END;
-TILE "tree_house_top_mid"; SAMESPRITE; SOLID block; END;
-TILE "tree_house_entrance"; SAMESPRITE; SOLID doorway; END;
-
-TILE "tree_horizon_left"; SAMESPRITE; SOLID block; END;
-TILE "tree_horizon_right"; SAMESPRITE; SOLID block; END;
-
-TILE "tree_alt_top_left"; SAMESPRITE; SOLID block; END;
-TILE "tree_alt_top_right"; SAMESPRITE; SOLID block; END;
-TILE "tree_alt_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "tree_alt_bottom_right"; SAMESPRITE; SOLID block; END;
-TILE "tree_alt_dirt_top_left"; SAMESPRITE; SOLID block; END;
-TILE "tree_alt_dirt_top_right"; SAMESPRITE; SOLID block; END;
-TILE "tree_alt_dirt_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "tree_alt_dirt_bottom_right"; SAMESPRITE; SOLID block; END;
-TILE "tree_alt_top_left_behind"; SAMESPRITE; SOLID block; END;
-TILE "tree_alt_top_right_behind"; SAMESPRITE; SOLID block; END;
-
-TILE "tree_alt_house_top_left"; SAMESPRITE; SOLID block; END;
-TILE "tree_alt_house_top_right"; SAMESPRITE; SOLID block; END;
-TILE "tree_alt_dirt_house_top_left"; SAMESPRITE; SOLID block; END;
-TILE "tree_alt_dirt_house_top_right"; SAMESPRITE; SOLID block; END;
-TILE "tree_alt_house_top_left_behind"; SAMESPRITE; SOLID block; END;
-TILE "tree_alt_house_top_right_behind"; SAMESPRITE; SOLID block; END;
-TILE "tree_alt_house_top_mid"; SAMESPRITE; SOLID block; END;
-TILE "tree_alt_house_entrance"; SAMESPRITE; SOLID doorway; END;
-
-TILE "tree_alt_horizon_left"; SAMESPRITE; SOLID block; END;
-TILE "tree_alt_horizon_right"; SAMESPRITE; SOLID block; END;
-
-
-TILE "thin_tree_top_left"; SAMESPRITE; SOLID block; END;
-TILE "thin_tree_top_right"; SAMESPRITE; SOLID block; END;
-TILE "thin_tree_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "thin_tree_bottom_right"; SAMESPRITE; SOLID block; END;
-TILE "thin_tree_top_left_behind"; SAMESPRITE; SOLID block; END;
-TILE "thin_tree_top_right_behind"; SAMESPRITE; SOLID block; END;
-
-TILE "palm_tree_top_left"; SAMESPRITE; SOLID block; END;
-TILE "palm_tree_top_right"; SAMESPRITE; SOLID block; END;
-TILE "palm_tree_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "palm_tree_bottom_right"; SAMESPRITE; SOLID block; END;
-TILE "palm_tree_dirt_top_left"; SAMESPRITE; SOLID block; END;
-TILE "palm_tree_dirt_top_right"; SAMESPRITE; SOLID block; END;
-TILE "palm_tree_dirt_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "palm_tree_dirt_bottom_right"; SAMESPRITE; SOLID block; END;
-TILE "palm_tree_sand_top_left"; SAMESPRITE; SOLID block; END;
-TILE "palm_tree_sand_top_right"; SAMESPRITE; SOLID block; END;
-TILE "palm_tree_sand_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "palm_tree_sand_bottom_right"; SAMESPRITE; SOLID block; END;
-TILE "palm_tree_top_left_behind"; SAMESPRITE; SOLID block; END;
-TILE "palm_tree_top_right_behind"; SAMESPRITE; SOLID block; END;
-
-
-TILE "ember_tree_top_left"; SAMESPRITE; SOLID block; END;
-TILE "ember_tree_top_right"; SAMESPRITE; SOLID block; END;
-TILE "ember_tree_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "ember_tree_bottom_right"; SAMESPRITE; SOLID block; END;
-
-TILE "scent_tree_top_left"; SAMESPRITE; SOLID block; END;
-TILE "scent_tree_top_right"; SAMESPRITE; SOLID block; END;
-TILE "scent_tree_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "scent_tree_bottom_right"; SAMESPRITE; SOLID block; END;
-
-TILE "gale_tree_top_left"; SAMESPRITE; SOLID block; END;
-TILE "gale_tree_top_right"; SAMESPRITE; SOLID block; END;
-TILE "gale_tree_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "gale_tree_bottom_right"; SAMESPRITE; SOLID block; END;
-
-TILE "pegasus_tree_top_left"; SAMESPRITE; SOLID block; END;
-TILE "pegasus_tree_top_right"; SAMESPRITE; SOLID block; END;
-TILE "pegasus_tree_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "pegasus_tree_bottom_right"; SAMESPRITE; SOLID block; END;
-
-TILE "mystery_tree_top_left"; SAMESPRITE; SOLID block; END;
-TILE "mystery_tree_top_right"; SAMESPRITE; SOLID block; END;
-TILE "mystery_tree_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "mystery_tree_bottom_right"; SAMESPRITE; SOLID block; END;
-
-TILE "gasha_tree_top_left"; SAMESPRITE; SOLID block; END;
-TILE "gasha_tree_top_right"; SAMESPRITE; SOLID block; END;
-TILE "gasha_tree_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "gasha_tree_bottom_right"; SAMESPRITE; SOLID block; END;
-
-
-TILE "dead_tree_top_left"; SAMESPRITE; SOLID block; END;
-TILE "dead_tree_top_right"; SAMESPRITE; SOLID block; END;
-TILE "dead_tree_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "dead_tree_bottom_right"; SAMESPRITE; SOLID block; END;
-
-TILE "spooky_tree_top_left"; SAMESPRITE; SOLID block; END;
-TILE "spooky_tree_top_right"; SAMESPRITE; SOLID block; END;
-TILE "spooky_tree_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "spooky_tree_bottom_right"; SAMESPRITE; SOLID block; END;
-
-TILE "weeping_tree_right_top_left"; SAMESPRITE; SOLID block; END;
-TILE "weeping_tree_right_top_right"; SAMESPRITE; SOLID block; END;
-TILE "weeping_tree_right_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "weeping_tree_right_bottom_right"; SAMESPRITE; SOLID block; END;
-TILE "weeping_tree_left_top_left"; SAMESPRITE; SOLID block; END;
-TILE "weeping_tree_left_top_right"; SAMESPRITE; SOLID block; END;
-TILE "weeping_tree_left_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "weeping_tree_left_bottom_right"; SAMESPRITE; SOLID block; END;
-
-TILE "dead_thin_tree_top_left"; SAMESPRITE; END;
-TILE "dead_thin_tree_top_right"; SAMESPRITE; SOLID block; END;
-TILE "dead_thin_tree_bottom"; SAMESPRITE; SOLID block; END;
-
-TILE "stump_small"; SAMESPRITE; SOLID block; END;
-
-TILE "stump_top_left"; SAMESPRITE; END;
-TILE "stump_top_mid"; SAMESPRITE; SOLID block; END;
-TILE "stump_top_right"; SAMESPRITE; END;
-TILE "stump_bottom_left"; SAMESPRITE; SOLID inside_corner_ne; END;
-TILE "stump_bottom_mid"; SAMESPRITE; SOLID edge_n; END;
-TILE "stump_bottom_right"; SAMESPRITE; SOLID inside_corner_nw; END;
-
-TILE "stump_dirt_top_left"; SAMESPRITE; END;
-TILE "stump_dirt_top_mid"; SAMESPRITE; SOLID block; END;
-TILE "stump_dirt_top_right"; SAMESPRITE; END;
-TILE "stump_dirt_bottom_left"; SAMESPRITE; SOLID inside_corner_ne; END;
-TILE "stump_dirt_bottom_mid"; SAMESPRITE; SOLID edge_n; END;
-TILE "stump_dirt_bottom_right"; SAMESPRITE; SOLID inside_corner_nw; END;
-
-TILE "witch_hut_top_left"; SAMESPRITE; SOLID block; END;
-TILE "witch_hut_top_mid"; SAMESPRITE; SOLID block; END;
-TILE "witch_hut_top_right"; SAMESPRITE; SOLID block; END;
-TILE "witch_hut_bottom_left"; SAMESPRITE; SOLID block; END;
-TILE "witch_hut_entrance"; SAMESPRITE; SOLID doorway; END;
-TILE "witch_hut_bottom_right"; SAMESPRITE; SOLID block; END;
-
-TILE "rock_flower_left"; SAMESPRITE; SOLID block; END;
-TILE "rock_flower_dirt_left"; SAMESPRITE; SOLID block; END;
-TILE "rock_flower_right"; SAMESPRITE; SOLID block; END;
-TILE "rock_flower_dirt_right"; SAMESPRITE; SOLID block; END;
-TILE "rock_jump_flower"; SAMESPRITE; SOLID block; END;
-TILE "rock_jump_flower_dirt"; SAMESPRITE; SOLID block; END;
-TILE "rock_mushroom"; SAMESPRITE; SOLID block; END;
-TILE "rock_mushroom_dirt"; SAMESPRITE; SOLID block; END;
-
 #==============================================================
 # Tilesets
 #==============================================================
 
-TILESET forest, tileset_forest, (12, 12);
-DEFAULT (0, 0);
+TILESET "forest", (12, 12);
 
-CONFIG;
-SSSSSSSSSSSS
-SSSSSSSSSSSS
-SSSSSSSSSSSS
-SSSSSSSSSSSS
-SSSSSSS.S.S.
-SSSSS..SS...
-SSSSSSSSSSSS
-SSSSSSSSSSSS
-SSSSSSSSSSSS
-SSSSSSSSSSS.
-SSSS........
-SSSS........
-END;
+ADDTILE (0, 0), "tree_top_left";
+ADDTILE (1, 0), "tree_top_right";
+ADDTILE (0, 1), "tree_bottom_left";
+ADDTILE (1, 1), "tree_bottom_right";
+ADDTILE (2, 0), "scent_tree_top_left";
+ADDTILE (3, 0), "scent_tree_top_right";
+ADDTILE (2, 1), "scent_tree_bottom_left";
+ADDTILE (3, 1), "scent_tree_bottom_right";
+ADDTILE (4, 0), "gale_tree_top_left";
+ADDTILE (5, 0), "gale_tree_top_right";
+ADDTILE (4, 1), "gale_tree_bottom_left";
+ADDTILE (5, 1), "gale_tree_bottom_right";
+ADDTILE (6, 0), "pegasus_tree_top_left";
+ADDTILE (7, 0), "pegasus_tree_top_right";
+ADDTILE (6, 1), "pegasus_tree_bottom_left";
+ADDTILE (7, 1), "pegasus_tree_bottom_right";
+ADDTILE (8, 0), "mystery_tree_top_left";
+ADDTILE (9, 0), "mystery_tree_top_right";
+ADDTILE (8, 1), "mystery_tree_bottom_left";
+ADDTILE (9, 1), "mystery_tree_bottom_right";
+ADDTILE (10, 0), "gasha_tree_top_left";
+ADDTILE (11, 0), "gasha_tree_top_right";
+ADDTILE (10, 1), "gasha_tree_bottom_left";
+ADDTILE (11, 1), "gasha_tree_bottom_right";
 
-# SPECIAL TILES
+ADDTILE (0, 2), "tree_top_left";
+ADDTILE (1, 2), "tree_top_right";
+ADDTILE (0, 3), "tree_bottom_left";
+ADDTILE (1, 3), "tree_bottom_right";
+ADDTILE (2, 2), "tree_alt_top_left";
+ADDTILE (3, 2), "tree_alt_top_right";
+ADDTILE (2, 3), "tree_alt_bottom_left";
+ADDTILE (3, 3), "tree_alt_bottom_right";
+ADDTILE (4, 2), "thin_tree_top_left";
+ADDTILE (5, 2), "thin_tree_top_right";
+ADDTILE (4, 3), "thin_tree_bottom_left";
+ADDTILE (5, 3), "thin_tree_bottom_right";
+ADDTILE (6, 2), "palm_tree_sand_top_left";
+ADDTILE (7, 2), "palm_tree_sand_top_right";
+ADDTILE (6, 3), "palm_tree_sand_bottom_left";
+ADDTILE (7, 3), "palm_tree_sand_bottom_right";
+ADDTILE (8, 2), "palm_tree_top_left";
+ADDTILE (9, 2), "palm_tree_top_right";
+ADDTILE (8, 3), "palm_tree_bottom_left";
+ADDTILE (9, 3), "palm_tree_bottom_right";
+ADDTILE (10, 2), "dead_tree_top_left";
+ADDTILE (11, 2), "dead_tree_top_right";
+ADDTILE (10, 3), "dead_tree_bottom_left";
+ADDTILE (11, 3), "dead_tree_bottom_right";
 
-TILE (5, 5); SOLID doorway; END;
-TILE (6, 5); SOLID doorway; END;
+ADDTILE (0, 4), "tree_top_left_behind";
+ADDTILE (1, 4), "tree_top_right_behind";
+ADDTILE (2, 4), "tree_alt_top_left_behind";
+ADDTILE (3, 4), "tree_alt_top_right_behind";
+ADDTILE (0, 5), "thin_tree_top_left_behind";
+ADDTILE (1, 5), "thin_tree_top_right_behind";
+ADDTILE (2, 5), "palm_tree_top_left_behind";
+ADDTILE (3, 5), "palm_tree_top_right_behind";
 
-SETTILE (0, 0), "tree_top_left";
-SETTILE (1, 0), "tree_top_right";
-SETTILE (0, 1), "tree_bottom_left";
-SETTILE (1, 1), "tree_bottom_right";
-SETTILE (2, 0), "scent_tree_top_left";
-SETTILE (3, 0), "scent_tree_top_right";
-SETTILE (2, 1), "scent_tree_bottom_left";
-SETTILE (3, 1), "scent_tree_bottom_right";
-SETTILE (4, 0), "gale_tree_top_left";
-SETTILE (5, 0), "gale_tree_top_right";
-SETTILE (4, 1), "gale_tree_bottom_left";
-SETTILE (5, 1), "gale_tree_bottom_right";
-SETTILE (6, 0), "pegasus_tree_top_left";
-SETTILE (7, 0), "pegasus_tree_top_right";
-SETTILE (6, 1), "pegasus_tree_bottom_left";
-SETTILE (7, 1), "pegasus_tree_bottom_right";
-SETTILE (8, 0), "mystery_tree_top_left";
-SETTILE (9, 0), "mystery_tree_top_right";
-SETTILE (8, 1), "mystery_tree_bottom_left";
-SETTILE (9, 1), "mystery_tree_bottom_right";
-SETTILE (10, 0), "gasha_tree_top_left";
-SETTILE (11, 0), "gasha_tree_top_right";
-SETTILE (10, 1), "gasha_tree_bottom_left";
-SETTILE (11, 1), "gasha_tree_bottom_right";
+ADDTILE (4, 4), "tree_house_top_left";
+ADDTILE (4, 5), "tree_house_top_right";
+ADDTILE (5, 4), "tree_house_top_mid";
+ADDTILE (5, 5), "tree_house_entrance";
+ADDTILE (6, 4), "tree_alt_house_top_mid";
+ADDTILE (6, 5), "tree_alt_house_entrance";
 
-SETTILE (0, 2), "tree_top_left";
-SETTILE (1, 2), "tree_top_right";
-SETTILE (0, 3), "tree_bottom_left";
-SETTILE (1, 3), "tree_bottom_right";
-SETTILE (2, 2), "tree_alt_top_left";
-SETTILE (3, 2), "tree_alt_top_right";
-SETTILE (2, 3), "tree_alt_bottom_left";
-SETTILE (3, 3), "tree_alt_bottom_right";
-SETTILE (4, 2), "thin_tree_top_left";
-SETTILE (5, 2), "thin_tree_top_right";
-SETTILE (4, 3), "thin_tree_bottom_left";
-SETTILE (5, 3), "thin_tree_bottom_right";
-SETTILE (6, 2), "palm_tree_sand_top_left";
-SETTILE (7, 2), "palm_tree_sand_top_right";
-SETTILE (6, 3), "palm_tree_sand_bottom_left";
-SETTILE (7, 3), "palm_tree_sand_bottom_right";
-SETTILE (8, 2), "palm_tree_top_left";
-SETTILE (9, 2), "palm_tree_top_right";
-SETTILE (8, 3), "palm_tree_bottom_left";
-SETTILE (9, 3), "palm_tree_bottom_right";
-SETTILE (10, 2), "dead_tree_top_left";
-SETTILE (11, 2), "dead_tree_top_right";
-SETTILE (10, 3), "dead_tree_bottom_left";
-SETTILE (11, 3), "dead_tree_bottom_right";
+ADDTILE (7, 4), "dead_thin_tree_left_top_left";
+ADDTILE (8, 4), "dead_thin_tree_left_top_right";
+ADDTILE (8, 5), "dead_thin_tree_left_bottom";
+ADDTILE (7, 5), "stump_small";
 
-SETTILE (0, 4), "tree_top_left_behind";
-SETTILE (1, 4), "tree_top_right_behind";
-SETTILE (2, 4), "tree_alt_top_left_behind";
-SETTILE (3, 4), "tree_alt_top_right_behind";
-SETTILE (0, 5), "thin_tree_top_left_behind";
-SETTILE (1, 5), "thin_tree_top_right_behind";
-SETTILE (2, 5), "palm_tree_top_left_behind";
-SETTILE (3, 5), "palm_tree_top_right_behind";
+ADDTILE (9, 4), "stump_top_left";
+ADDTILE (10, 4), "stump_top_mid";
+ADDTILE (11, 4), "stump_top_right";
+ADDTILE (9, 5), "stump_bottom_left";
+ADDTILE (10, 5), "stump_bottom_mid";
+ADDTILE (11, 5), "stump_bottom_right";
 
-SETTILE (4, 4), "tree_house_top_left";
-SETTILE (4, 5), "tree_house_top_right";
-SETTILE (5, 4), "tree_house_top_mid";
-SETTILE (5, 5), "tree_house_entrance";
-SETTILE (6, 4), "tree_alt_house_top_mid";
-SETTILE (6, 5), "tree_alt_house_entrance";
+ADDTILE (8, 6), "weeping_tree_left_top_left";
+ADDTILE (9, 6), "weeping_tree_left_top_right";
+ADDTILE (8, 7), "weeping_tree_left_bottom_left";
+ADDTILE (9, 7), "weeping_tree_left_bottom_right";
+ADDTILE (10, 6), "weeping_tree_right_top_left";
+ADDTILE (11, 6), "weeping_tree_right_top_right";
+ADDTILE (10, 7), "weeping_tree_right_bottom_left";
+ADDTILE (11, 7), "weeping_tree_right_bottom_right";
 
-SETTILE (7, 4), "dead_thin_tree_top_left";
-SETTILE (8, 4), "dead_thin_tree_top_right";
-SETTILE (8, 5), "dead_thin_tree_bottom";
-SETTILE (7, 5), "stump_small";
+ADDTILE (8, 8), "spooky_tree_top_left";
+ADDTILE (9, 8), "spooky_tree_top_right";
+ADDTILE (8, 9), "spooky_tree_bottom_left";
+ADDTILE (9, 9), "spooky_tree_bottom_right";
+ADDTILE (10, 8), "rock_mushroom";
+ADDTILE (11, 8), "rock_flower_left";
+ADDTILE (10, 9), "witch_hut_top_mid";
 
-SETTILE (9, 4), "stump_top_left";
-SETTILE (10, 4), "stump_top_mid";
-SETTILE (11, 4), "stump_top_right";
-SETTILE (9, 5), "stump_bottom_left";
-SETTILE (10, 5), "stump_bottom_mid";
-SETTILE (11, 5), "stump_bottom_right";
 
-SETTILE (8, 6), "weeping_tree_left_top_left";
-SETTILE (9, 6), "weeping_tree_left_top_right";
-SETTILE (8, 7), "weeping_tree_left_bottom_left";
-SETTILE (9, 7), "weeping_tree_left_bottom_right";
-SETTILE (10, 6), "weeping_tree_right_top_left";
-SETTILE (11, 6), "weeping_tree_right_top_right";
-SETTILE (10, 7), "weeping_tree_right_bottom_left";
-SETTILE (11, 7), "weeping_tree_right_bottom_right";
+ADDTILE (0, 6), "thick_brush_outside_nw";
+ADDTILE (1, 6), "thick_brush_n";
+ADDTILE (2, 6), "thick_brush_outside_ne";
+ADDTILE (0, 7), "thick_brush_w";
+ADDTILE (1, 7), "thick_brush";
+ADDTILE (2, 7), "thick_brush_e";
+ADDTILE (0, 8), "thick_brush_outside_sw";
+ADDTILE (1, 8), "thick_brush_s";
+ADDTILE (2, 8), "thick_brush_outside_se";
+ADDTILE (3, 6), "thick_brush_outside_new";
+ADDTILE (3, 7), "thick_brush_outside_ew";
+ADDTILE (3, 8), "thick_brush_outside_sew";
+ADDTILE (0, 9), "thick_brush_outside_nsw";
+ADDTILE (1, 9), "thick_brush_outside_ns";
+ADDTILE (2, 9), "thick_brush_outside_nse";
+ADDTILE (3, 9), "thick_brush_outside_nsew";
 
-SETTILE (8, 8), "spooky_tree_top_left";
-SETTILE (9, 8), "spooky_tree_top_right";
-SETTILE (8, 9), "spooky_tree_bottom_left";
-SETTILE (9, 9), "spooky_tree_bottom_right";
-SETTILE (10, 8), "rock_mushroom";
-SETTILE (11, 8), "rock_flower_left";
-SETTILE (10, 9), "witch_hut_top_mid";
-# Overhead tile
-#TILE (4, 7); END;
+ADDTILE (0, 10), "thick_brush_inside_se";
+ADDTILE (1, 10), "thick_brush_inside_sw";
+ADDTILE (0, 11), "thick_brush_inside_ne";
+ADDTILE (1, 11), "thick_brush_inside_nw";
 
-# Stump top tile
-#TILE (10, 4); END;
 
-# Stump small tile
-#TILE (7, 5); END;
+ADDTILE (4, 6), "hedge_outside_nw";
+ADDTILE (5, 6), "hedge_n";
+ADDTILE (6, 6), "hedge_outside_ne";
+ADDTILE (4, 7), "hedge_w";
+ADDTILE (5, 7), "hedge";
+ADDTILE (6, 7), "hedge_e";
+ADDTILE (4, 8), "hedge_outside_sw";
+ADDTILE (5, 8), "hedge_s";
+ADDTILE (6, 8), "hedge_outside_se";
+ADDTILE (7, 6), "hedge_outside_new";
+ADDTILE (7, 7), "hedge_outside_ew";
+ADDTILE (7, 8), "hedge_outside_sew";
+ADDTILE (4, 9), "hedge_outside_nsw";
+ADDTILE (5, 9), "hedge_outside_ns";
+ADDTILE (6, 9), "hedge_outside_nse";
+ADDTILE (7, 9), "hedge_outside_nsew";
+
+ADDTILE (2, 10), "hedge_inside_se";
+ADDTILE (3, 10), "hedge_inside_sw";
+ADDTILE (2, 11), "hedge_inside_ne";
+ADDTILE (3, 11), "hedge_inside_nw";
+
 
 END;

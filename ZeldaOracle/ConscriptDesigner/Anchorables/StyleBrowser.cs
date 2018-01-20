@@ -34,12 +34,12 @@ namespace ConscriptDesigner.Anchorables {
 		// Control
 		//-----------------------------------------------------------------------------
 
-		public void RefreshList() {
-			browser.RefreshList();
+		public void Reload() {
+			browser.Reload();
 		}
 
-		public void ClearList() {
-			browser.ClearList();
+		public void Unload() {
+			browser.Unload();
 		}
 
 

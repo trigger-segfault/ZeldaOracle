@@ -93,7 +93,7 @@ namespace ZeldaEditor {
 			Point2I mousePos = ScrollPosition + e.Location;
 			Point2I newSelectedTile = GetTileCoord(mousePos);
 
-			if (newSelectedTile >= Point2I.Zero && newSelectedTile < Tileset.Size) {
+			if (newSelectedTile >= Point2I.Zero && newSelectedTile < Tileset.Dimensions) {
 				BaseTileData tileData = Tileset.GetTileData(newSelectedTile);
 
 				if (tileData != null) {
@@ -117,7 +117,7 @@ namespace ZeldaEditor {
 		}
 
 		public void UpdateTileset() {
-			this.AutoScrollMinSize = Tileset.Size * (Tileset.CellSize + Tileset.Spacing);
+			this.AutoScrollMinSize = Tileset.Dimensions * (Tileset.CellSize + Tileset.Spacing);
 			Invalidate();
 		}
 
@@ -139,7 +139,7 @@ namespace ZeldaEditor {
 
 			// Draw the tileset.
 			g.Clear(Color.White);
-			g.Translate(-this.HorizontalScroll.Value, -this.VerticalScroll.Value);
+			g.PushTranslation(-ScrollPosition);
 			if (Tileset.SpriteSheet == null) {
 				// Draw each tile's sprite seperately.
 				for (int y = 0; y < Tileset.Height; y++) {
@@ -165,22 +165,21 @@ namespace ZeldaEditor {
 			}
 			else {
 				// Draw the spritesheet's image.
-				g.Translate(-Tileset.SpriteSheet.Offset);
+				g.PushTranslation(-Tileset.SpriteSheet.Offset);
 				g.DrawImage(Tileset.SpriteSheet.Image.GetVariant(Zone.ImageVariantID), Point2I.Zero);
-				g.ResetTranslation();
+				g.PopTranslation();
 			}
 
 
 			// Draw the selection box.
 			if (selectedTileLocation >= Point2I.Zero) {
 				Point2I tilePoint = selectedTileLocation * (Tileset.CellSize + Tileset.Spacing);
-				g.Translate(-this.HorizontalScroll.Value, -this.VerticalScroll.Value);
 				g.DrawRectangle(new Rectangle2I(tilePoint, Tileset.CellSize + 1), 1, Color.White);
 				g.DrawRectangle(new Rectangle2I(tilePoint + 1, Tileset.CellSize - 1), 1, Color.Black);
 				g.DrawRectangle(new Rectangle2I(tilePoint - 1, Tileset.CellSize + 3), 1, Color.Black);
-				g.ResetTranslation();
 			}
 
+			g.PopTranslation();
 			g.End();
 		}
 

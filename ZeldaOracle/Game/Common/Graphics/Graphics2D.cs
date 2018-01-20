@@ -18,26 +18,26 @@ namespace ZeldaOracle.Common.Graphics {
 	public class Graphics2D {
 
 		// Containment:
-		// The sprite batch of the graphics object.
+		/// <summary>The sprite batch of the graphics object.</summary>
 		private SpriteBatch spriteBatch;
-		// The previous render targets of the graphics object.
+		/// <summary>The previous render targets of the graphics object.</summary>
 		private Stack<RenderTargetBinding[]> preivousRenderTargets;
 
 		// Drawing Settings:
-		// The current translated position of the graphics object.
+		/// <summary>The current translated position of the graphics object.</summary>
 		private Vector2F translation;
-		// True if the graphics translation will be taken into account.
+		/// <summary>The stack of translations deviating from (0, 0).</summary>
+		private Stack<Vector2F> translationStack;
+		/// <summary>True if the graphics translation will be taken into account.</summary>
 		private bool useTranslation;
-		// True if all draws will use integer precision.
+		/// <summary>True if all draws will use integer precision.</summary>
 		private bool useIntPrecision;
 
 		// Vector Graphics:
-		// A white 1x1 texture used for drawing vector graphics.
+		/// <summary>A white 1x1 texture used for drawing vector graphics.</summary>
 		private Texture2D white1x1;
-		// A white 2x2 texture used for drawing vector graphics.
+		/// <summary>A white 2x2 texture used for drawing vector graphics.</summary>
 		private Texture2D white2x2;
-
-		private XnaColor drawingColor;
 
 	
 		//-----------------------------------------------------------------------------
@@ -52,16 +52,15 @@ namespace ZeldaOracle.Common.Graphics {
 
 			// Drawing Settings
 			this.translation			= Vector2F.Zero;
+			this.translationStack		= new Stack<Vector2F>();
 			this.useTranslation			= true;
 			this.useIntPrecision		= false;
 
 			// Vector Graphics
 			this.white1x1				= new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
 			this.white2x2				= new Texture2D(spriteBatch.GraphicsDevice, 2, 2);
-			this.white1x1.SetData(new Color[] { Color.White });
-			this.white2x2.SetData(new Color[] { Color.White, Color.White, Color.White, Color.White });
-		
-			this.drawingColor			= XnaColor.White;
+			this.white1x1.SetData(new XnaColor[] { XnaColor.White });
+			this.white2x2.SetData(new XnaColor[] { XnaColor.White, XnaColor.White, XnaColor.White, XnaColor.White });
 		}
 	
 
@@ -74,57 +73,57 @@ namespace ZeldaOracle.Common.Graphics {
 			return graphics.spriteBatch;
 		}
 
-	
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 
 		// Containment.
 
-		// Gets the sprite batch of the graphics object.
+		/// <summary>Gets the sprite batch of the graphics object.</summary>
 		public SpriteBatch SpriteBatch {
 			get { return spriteBatch; }
 		}
-		// Gets the graphics device of the graphics object.
+		/// <summary>Gets the graphics device of the graphics object.</summary>
 		public GraphicsDevice GraphicsDevice {
 			get { return spriteBatch.GraphicsDevice; }
 		}
-		// Returns true if the sprite batch has been disposed.
+		/// <summary>Returns true if the sprite batch has been disposed.</summary>
 		public bool IsDisposed {
 			get { return spriteBatch.IsDisposed; }
 		}
 
 		//Drawing Settings.
 
-		// Gets the current translation of the graphics object.
+		/// <summary>Gets the current translation of the graphics object.</summary>
 		public Vector2F Translation {
 			get { return translation; }
 		}
-		// Gets or sets if the translation is used.
+		/// <summary>Gets or sets if the translation is used.</summary>
 		public bool UseTranslation {
 			get { return useTranslation; }
 			set { useTranslation = value; }
 		}
-		// Gets or sets if integer precision is used with translations.
+		/// <summary>Gets or sets if integer precision is used with translations.</summary>
 		public bool UseIntegerPrecision {
 			get { return useIntPrecision; }
 			set { useIntPrecision = value; }
 		}
 
-	
+
 		//-----------------------------------------------------------------------------
 		// Drawing Internal
 		//-----------------------------------------------------------------------------
 
-		// Translates the position based on the translation and precision settings.
+		/// <summary>Translates the position based on the translation and precision settings.</summary>
 		private Vector2 NewPos(Vector2F position) {
 			if (useTranslation)
 				return (UseIntegerPrecision ? (Vector2) GMath.Round(position + translation) : (Vector2)(position + translation));
 			else
-				return (Vector2)position;
+				return (Vector2) position;
 		}
 
-		// Translates the position of the string based on the translation and precision settings.
+		/// <summary>Translates the position of the string based on the translation and precision settings.</summary>
 		private Vector2 NewStringPos(Vector2F position, SpriteFont font, string text, Align alignment) {
 			Vector2F stringSize = font.MeasureString(text);
 			bool intAlign = (alignment & Align.Int) != 0;
@@ -138,61 +137,54 @@ namespace ZeldaOracle.Common.Graphics {
 				position.Y -= stringSize.Y;
 
 			if (useTranslation)
-				return (UseIntegerPrecision ? (Vector2)GMath.Floor(position + translation) : (Vector2)(position + translation));
+				return (UseIntegerPrecision ? (Vector2) GMath.Floor(position + translation) : (Vector2) (position + translation));
 			else
-				return (Vector2)position;
-		}
-		// Translates the rectangle based on the translation and precision settings.
-		private Rectangle NewRect(Rectangle2F destinationRect) {
-			if (useTranslation)
-				return (UseIntegerPrecision ? (Rectangle)new Rectangle2F(GMath.Round(destinationRect.Point + translation), GMath.Round(destinationRect.Size)) : (Rectangle)(destinationRect + translation));
-			else
-				return (Rectangle)destinationRect;
-		}
-		// Translates the rectangle based on the translation and precision settings.
-		private Rectangle NewRect(Vector2F position, Vector2F size) {
-			Rectangle2F destinationRect = new Rectangle2F(position, size);
-			if (useTranslation)
-				return (UseIntegerPrecision ? (Rectangle)new Rectangle2F(GMath.Round(destinationRect.Point + translation), GMath.Round(destinationRect.Size + translation)) : (Rectangle)(destinationRect + translation));
-			else
-				return (Rectangle)destinationRect;
+				return (Vector2) position;
 		}
 
-	
+		/// <summary>Translates the rectangle based on the translation and precision settings.</summary>
+		private Rectangle NewRect(Rectangle2F destinationRect) {
+			if (useTranslation)
+				return (UseIntegerPrecision ? (Rectangle) new Rectangle2F(GMath.Round(destinationRect.Point + translation), GMath.Round(destinationRect.Size)) : (Rectangle) (destinationRect + translation));
+			else
+				return (Rectangle) destinationRect;
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Image Drawing
 		//-----------------------------------------------------------------------------
 
-		// Draws the image at the specified position.
+		/// <summary>Draws the image at the specified position.</summary>
 		public void DrawImage(Texture2D texture, Vector2F position) {
 			spriteBatch.Draw(texture, NewPos(position), XnaColor.White);
 		}
-		// Draws the image at the specified position.
+		/// <summary>Draws the image at the specified position.</summary>
 		public void DrawImage(Texture2D texture, Vector2F position, Color color, double depth = 0.0) {
 			spriteBatch.Draw(texture, NewPos(position), null, color, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, (float)depth);
 		}
-		// Draws the image at the specified position.
+		/// <summary>Draws the image at the specified position.</summary>
 		public void DrawImage(Texture2D texture, Vector2F position, Vector2F origin, Vector2F scale, double rotation, Color? color = null, Flip flip = Flip.None, double depth = 0.0) {
 			spriteBatch.Draw(texture, NewPos(position), null, color ?? XnaColor.White, (float)GMath.ConvertToRadians(rotation), (Vector2)origin, (Vector2)scale, (SpriteEffects) flip, (float)depth);
 		}
-		// Draws the image at the specified region.
+		/// <summary>Draws the image at the specified region.</summary>
 		public void DrawImage(Texture2D texture, Rectangle2F destinationRect, Vector2F origin, double rotation, Color? color = null, Flip flip = Flip.None, double depth = 0.0) {
 			spriteBatch.Draw(texture, NewRect(destinationRect), null, color ?? XnaColor.White, (float)GMath.ConvertToRadians(rotation), (Vector2)origin, (SpriteEffects) flip, (float)depth);
 		}
 
-		// Draws part of the image at the specified position.
+		/// <summary>Draws part of the image at the specified position.</summary>
 		public void DrawImage(Texture2D texture, Vector2F position, Rectangle2F sourceRect) {
 			spriteBatch.Draw(texture, NewPos(position), (Rectangle)sourceRect, XnaColor.White);
 		}
-		// Draws part of the image at the specified position.
+		/// <summary>Draws part of the image at the specified position.</summary>
 		public void DrawImage(Texture2D texture, Vector2F position, Rectangle2F sourceRect, Color color, double depth = 0.0) {
 			spriteBatch.Draw(texture, NewPos(position), (Rectangle)sourceRect, color, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, (float)depth);
 		}
-		// Draws part of the image at the specified position.
+		/// <summary>Draws part of the image at the specified position.</summary>
 		public void DrawImage(Texture2D texture, Vector2F position, Rectangle2F sourceRect, Vector2F origin, Vector2F scale, double rotation, Color? color = null, Flip flip = Flip.None, double depth = 0.0) {
 			spriteBatch.Draw(texture, NewPos(position), (Rectangle)sourceRect, color ?? XnaColor.White, (float)GMath.ConvertToRadians(rotation), (Vector2)origin, (Vector2)scale, (SpriteEffects) flip, (float)depth);
 		}
-		// Draws part of the image at the specified region.
+		// Draws part of the image at the specified region.</summary>
 		public void DrawImage(Texture2D texture, Rectangle2F destinationRect, Rectangle2F sourceRect, Vector2F origin, double rotation, Color? color = null, Flip flip = Flip.None, double depth = 0.0) {
 			spriteBatch.Draw(texture, NewRect(destinationRect), (Rectangle)sourceRect, color ?? XnaColor.White, (float)GMath.ConvertToRadians(rotation), (Vector2)origin, (SpriteEffects) flip, (float)depth);
 		}
@@ -550,20 +542,47 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 
 		// Translates the origin of the graphics object.
-		public void Translate(float x, float y) {
+		/*public void Translate(float x, float y) {
 			translation += new Vector2F(x, y);
-		}
+		}*/
 
 		// Translates the origin of the graphics object.
-		public void Translate(Vector2F distance) {
+		/*public void Translate(Vector2F distance) {
 			translation += distance;
+		}*/
+
+		/// <summary>Pushes the new translation onto the translation stack.</summary>
+		public void PushTranslation(float x, float y) {
+			translation += new Vector2F(x, y);
+			translationStack.Push(translation);
 		}
 
-		// Resets the translation of the graphics object.
+		/// <summary>Pushes the new translation onto the translation stack.</summary>
+		public void PushTranslation(Vector2F distance) {
+			translation += distance;
+			translationStack.Push(translation);
+		}
+
+		/// <summary>Pops the current translation from the translation stack.</summary>
+		public void PopTranslation() {
+			translationStack.Pop();
+			translation = (translationStack.Any() ? translationStack.Peek() : Vector2F.Zero);
+		}
+
+		/// <summary>Pops the current translation from the translation stack.</summary>
+		public void PopTranslation(int popCount) {
+			for (int i = 0; i < popCount; i++) {
+				translationStack.Pop();
+			}
+			translation = (translationStack.Any() ? translationStack.Peek() : Vector2F.Zero);
+		}
+
+		/// <summary>Resets the translation of the graphics object and clears the translation stack.</summary>
 		public void ResetTranslation() {
 			translation = Vector2F.Zero;
+			translationStack.Clear();
 		}
-	
+
 
 		//-----------------------------------------------------------------------------
 		// Begin/End

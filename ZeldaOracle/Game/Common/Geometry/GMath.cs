@@ -1307,6 +1307,8 @@ namespace ZeldaOracle.Common.Geometry {
 		}
 
 		public static Point2I FlipAndRotate(Point2I drawOffset, Flip flip, Rotation rotation, Vector2F origin) {
+			if (flip == Flip.None && rotation == Rotation.None)
+				return drawOffset;
 			Vector2F tempDrawOffset = drawOffset - origin;
 			switch (rotation) {
 			case Rotation.Clockwise90:

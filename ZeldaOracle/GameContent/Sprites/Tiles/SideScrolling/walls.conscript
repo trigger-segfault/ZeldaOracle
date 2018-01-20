@@ -1,0 +1,152 @@
+﻿#==============================================================
+# Sprite Sheets
+#==============================================================
+
+SPRITESHEET	"temp_sheet_ss_walls"	"Tiles/Styles/ss_walls"			(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+
+SOURCE "temp_sheet_ss_walls";
+SPRITESET "set_ss_walls", (12, 7);
+	MAPPEDCOLORS	"tiles_default", ("ss_brick", "ss_torch_base");
+	MULTIPLE BASIC (0, 0), (0, 0), (2, 1); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_brick_background");
+	SINGLE BASIC (2, 0), (2, 0); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_brick", "ss_brick_alt");
+	CHUNKSIZE		(16, 8);
+	SINGLE BASIC (3, 0), (3, 0); END;
+	SINGLE COLOR "", ("ss_brick", "ss_brick_alt"), (3, 1), (3, 1); END;
+	MULTIPLE BASIC (4, 0), (4, 0), (4, 2); END;
+	CHUNKSIZE		none;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_pipe", "ss_pipe_horizontal");
+	SINGLE COLOR "", ("ss_pipe", "ss_pipe_alt"), (8, 0), (8, 0); END;
+	SINGLE BASIC (8, 1), (8, 1); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_ice");
+	MULTIPLE BASIC (0, 1), (0, 1), (3, 1); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_cave_wall", "ss_cave_wall_moss");
+	CHUNKSIZE		(16, 8);
+	MULTIPLE BASIC (0, 2), (0, 2), (12, 3); END;
+	CHUNKSIZE		none;
+	MULTIPLE BASIC (0, 5), (0, 5), (9, 1); END;
+	MULTIPLE BASIC (0, 6), (0, 6), (8, 1); END;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_ss_walls";
+
+# Large Bricks
+
+NAME "tile_ss_bricks"						(0, 0);
+NAME "tile_ss_bricks_ceiling"				(1, 0);
+NAME "tile_ss_bricks_background"			(2, 0);
+NAME "tile_ss_bricks_mixed"					(3, 0);
+
+NAME "tile_ss_brick_pillar_left_dark"		(6, 0);
+NAME "tile_ss_brick_pillar_right_light"		(7, 0);
+NAME "tile_ss_brick_pillar_left_light"		(6, 1);
+NAME "tile_ss_brick_pillar_right_dark"		(7, 1);
+
+# Small Bricks
+
+NAME "tile_ss_small_bricks"					((3, 1), "ss_brick");
+NAME "tile_ss_small_bricks_alt"				((3, 1), "ss_brick_alt");
+NAME "tile_ss_small_bricks_surface_1"		(4, 0);
+NAME "tile_ss_small_bricks_surface_2"		(5, 0);
+NAME "tile_ss_small_bricks_surface_3"		(4, 1);
+NAME "tile_ss_small_bricks_surface_4"		(5, 1);
+
+# Pipes
+
+NAME "tile_ss_pipe"							((8, 0), "ss_pipe");
+NAME "tile_ss_pipe_alt"						((8, 0), "ss_pipe_alt");
+NAME "tile_ss_pipe_horizontal"				(8, 1);
+
+# Ice
+
+NAME "tile_ss_ice_bricks"					(0, 1);
+NAME "tile_ss_ice_block"					(1, 1);
+NAME "tile_ss_ice_background"				(2, 1);
+
+# Cave Wall
+
+NAME "tile_ss_cave_wall_top_left"					(0, 2);
+NAME "tile_ss_cave_wall_top_mid"					(1, 2);
+NAME "tile_ss_cave_wall_top_right"					(2, 2);
+NAME "tile_ss_cave_wall_side_left"					(0, 3);
+NAME "tile_ss_cave_wall"							(1, 3);
+NAME "tile_ss_cave_wall_side_right"					(2, 3);
+NAME "tile_ss_cave_wall_bottom_left"				(0, 4);
+NAME "tile_ss_cave_wall_bottom_mid"					(1, 4);
+NAME "tile_ss_cave_wall_bottom_right"				(2, 4);
+
+NAME "tile_ss_cave_wall_top_both"					(6, 5);
+NAME "tile_ss_cave_wall_side_both"					(7, 2);
+NAME "tile_ss_cave_wall_bottom_both"				(6, 6);
+NAME "tile_ss_cave_wall_bottom_both_mirrored"		(7, 6);
+NAME "tile_ss_cave_wall_single"						(7, 5);
+
+NAME "tile_ss_cave_wall_top_left_underwater"				(0, 5);
+NAME "tile_ss_cave_wall_top_mid_underwater"					(1, 5);
+NAME "tile_ss_cave_wall_top_right_underwater"				(2, 5);
+NAME "tile_ss_cave_wall_bottom_left_underwater"				(0, 6);
+NAME "tile_ss_cave_wall_bottom_mid_underwater"				(1, 6);
+NAME "tile_ss_cave_wall_bottom_right_underwater"			(2, 6);
+
+NAME "tile_ss_cave_wall_top_both_underwater"				(3, 5);
+NAME "tile_ss_cave_wall_bottom_both_underwater"				(3, 6);
+NAME "tile_ss_cave_wall_bottom_both_mirrored_underwater"	(4, 6);
+NAME "tile_ss_cave_wall_single_underwater"					(4, 5);
+NAME "tile_ss_cave_wall_single_underwater_bottom"			(5, 6);
+
+NAME "tile_ss_cave_wall_moss_top_left"				(3, 2);
+NAME "tile_ss_cave_wall_moss_top_mid"				(4, 2);
+NAME "tile_ss_cave_wall_moss_top_right"				(5, 2);
+NAME "tile_ss_cave_wall_moss_top_both"				(6, 2);
+
+NAME "tile_ss_cave_wall_inside_se"					(3, 3);
+NAME "tile_ss_cave_wall_inside_sw"					(4, 3);
+NAME "tile_ss_cave_wall_inside_ne"					(3, 4);
+NAME "tile_ss_cave_wall_inside_nw"					(4, 4);
+
+NAME "tile_ss_cave_wall_side_both_inside_se"		(5, 3);
+NAME "tile_ss_cave_wall_side_both_inside_sw"		(6, 3);
+NAME "tile_ss_cave_wall_side_both_inside_ne"		(5, 4);
+NAME "tile_ss_cave_wall_side_both_inside_nw"		(6, 4);
+
+NAME "tile_ss_cave_wall_inside_sew"					(7, 3);
+NAME "tile_ss_cave_wall_inside_new"					(7, 4);
+
+# Cave Wall Alt
+
+NAME "tile_ss_cave_wall_alt_top_left"				(8, 2);
+NAME "tile_ss_cave_wall_alt_top_right"				(9, 2);
+NAME "tile_ss_cave_wall_alt_top_mid"				(10, 2);
+NAME "tile_ss_cave_wall_alt_top_both"				(11, 2);
+
+NAME "tile_ss_cave_wall_alt_side_left"				(8, 4);
+NAME "tile_ss_cave_wall_alt_side_right"				(11, 4);
+NAME "tile_ss_cave_wall_alt_left"					(9, 4);
+NAME "tile_ss_cave_wall_alt_right"					(10, 4);
+NAME "tile_ss_cave_wall_alt_side_both"				(9, 3);
+
+NAME "tile_ss_cave_wall_alt_bottom_both"			(8, 3);
+NAME "tile_ss_cave_wall_alt_inside_nw"				(10, 3);
+NAME "tile_ss_cave_wall_alt_inside_ne"				(11, 3);
+
+NAME "tile_ss_cave_wall_alt_single"							(8, 5);
+NAME "tile_ss_cave_wall_alt_single_underwater"				(5, 5);

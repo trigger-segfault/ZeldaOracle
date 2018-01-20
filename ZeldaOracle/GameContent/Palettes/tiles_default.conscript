@@ -1,38 +1,72 @@
-﻿PALETTE tile_dictionary, tiles_default;
+﻿PALETTE "tile_dictionary", "tiles_default";
+
+#==============================================================
+# Constants
+#==============================================================
+
+CONST	brown;
+COLOR	brown, light					(248,224, 16);
+COLOR	brown, medium					(200,136,  8);
+COLOR	brown, dark						(128, 80,  0);
+
+CONST	gray;
+COPY	gray, light						brown, light;
+COLOR	gray, medium					(176,152,104);
+COLOR	gray, dark						(112, 72, 72);
+
+CONST	red;
+COLOR	red, light						(248,208,136);
+COLOR	red, medium						(232,  8, 24);
+COLOR	red, dark						(104,  8, 40);
+
+CONST	blue;
+COLOR	blue, light						(248,248,192);
+COLOR	blue, medium					( 32,176,248);
+COLOR	blue, dark						(  0, 80,176);
+
+CONST	grass_green;
+COLOR	grass_green, light				(248,224, 16);
+COLOR	grass_green, medium				(128,224, 16);
+COLOR	grass_green, dark				( 48,136,  0);
+
+CONST	tree_green;
+COLOR	tree_green, light				(248,224, 16);
+COLOR	tree_green, medium				(128,224, 16);
+COLOR	tree_green, dark				( 48,136,  0);
+
+CONST	object;
+COPY	object, all						brown, all;
 
 #==============================================================
 # Structure
 #==============================================================
 
-COLOR	floor, light					(248,224, 16);
-COLOR	floor, medium					(200,136,  8);
-COLOR	floor, dark						(128, 80,  0);
+LOOKUP	floor, all						brown, all;
 
 LOOKUP	wall, all						floor, all;
 LOOKUP	wall_alt, all					wall, all;
 LOOKUP	wall_column, all				wall, all;
 
-COLOR	stairs, light					(248,208,136);
-COLOR	stairs, medium					(232,  8, 24);
-COLOR	stairs, dark					(104,  8, 40);
+LOOKUP	stairs, all						red, all;
 
 LOOKUP	floor_staircase, all			floor, all;
 LOOKUP	wall_staircase, all				wall, all;
 
-COLOR	railing, light					(248,248,192);
-COLOR	railing, medium					( 32,176,248);
-COLOR	railing, dark					(  0, 80,176);
+LOOKUP	railing, all					blue, all;
 
-LOOKUP	wall_torch_base, all			railing, all;
+LOOKUP	wall_torch_base, all			blue, all;
 LOOKUP	wall_torch_light, all			chest, all;
 
-LOOKUP	statue, all						railing, all;
+LOOKUP	statue, all						blue, all;
 LOOKUP	statue_alt, all					statue, all;
 LOOKUP	eye_statue, all					statue, all;
 LOOKUP	essense_statue, all				statue, all;
 LOOKUP	plaque, all						statue, all;
 
-LOOKUP	tunnel_light, all				chest, all;
+LOOKUP	tunnel_light, all					chest, all;
+LOOKUP	entrance_light_dirt, all			dirt, all;
+LOOKUP	entrance_light_floor, all			floor, all;
+LOOKUP	entrance_light_fancy_tile_1, all	fancy_tile_1, all;
 
 LOOKUP	tiled, all						floor, all;
 LOOKUP	tiled_alt, all					floor, all;
@@ -40,35 +74,36 @@ LOOKUP	tiled_alt, all					floor, all;
 LOOKUP	hole, all						floor, all;
 LOOKUP	hole_alt, all					floor, all;
 
+
 #==============================================================
 # Objects
 #==============================================================
 
-LOOKUP	pot, all						floor, all;
+LOOKUP	pot, all						object, all;
 LOOKUP	pot_asobject, all				pot, all;
 COLOR	pot_asobject, light				(0, 0, 0, 0);
 
-LOOKUP	sign, all						pot, all;
+LOOKUP	sign, all						object, all;
 LOOKUP	sign_asobject, all				sign, all;
 COLOR	sign_asobject, light			(0, 0, 0, 0);
 
-LOOKUP	bracelet_rock, all				pot, all;
+LOOKUP	bracelet_rock, all				object, all;
 LOOKUP	bracelet_rock_asobject, all		bracelet_rock, all;
 COLOR	bracelet_rock_asobject, light	(0, 0, 0, 0);
 
-LOOKUP	switch_rock, all	pot, all;
+LOOKUP	switch_rock, all				object, all;
 LOOKUP	switch_rock_asobject, all		switch_rock, all;
 COLOR	switch_rock_asobject, light		(0, 0, 0, 0);
 
-LOOKUP	crystal_rock, all	pot, all;
+LOOKUP	crystal_rock, all				object, all;
 LOOKUP	crystal_rock_asobject, all		crystal_rock, all;
 COLOR	crystal_rock_asobject, light	(0, 0, 0, 0);
 
-LOOKUP	block, all						railing, all;
+LOOKUP	block, all						blue, all;
 LOOKUP	block_asobject, all				block, all;
 COLOR	block_asobject, light			(0, 0, 0, 0);
 
-LOOKUP	armos, all						pot, all;
+LOOKUP	armos, all						object, all;
 LOOKUP	armos_asobject, all				armos, all;
 COLOR	armos_asobject, light			(0, 0, 0, 0);
 
@@ -76,20 +111,16 @@ LOOKUP	armos_alt, all					armos, all;
 LOOKUP	armos_alt_asobject, all			armos_alt, all;
 COLOR	armos_alt_asobject, light		(0, 0, 0, 0);
 
-LOOKUP	grave, light					floor, light;
-COLOR	grave, medium					(176,152,104);
-COLOR	grave, dark						(112, 72, 72);
+LOOKUP	grave, all						gray, all;
 LOOKUP	grave_asobject, all				grave, all;
 COLOR	grave_asobject, light			(0, 0, 0, 0);
 
-LOOKUP	magnet_stone, all				pot, all;
+LOOKUP	magnet_stone, all				object, all;
 LOOKUP	dirt_pile, all					dirt, all;
-LOOKUP	grass, all						bush, all;
-LOOKUP	leaves, all						grass, all;
+LOOKUP	grass, all						grass_green, all;
+LOOKUP	leaves, all						tree_green, all;
 
-LOOKUP	bush, light						floor, light;
-COLOR	bush, medium					(128,224, 16);
-COLOR	bush, dark						( 48,136,  0);
+LOOKUP	bush, all						tree_green, all;
 LOOKUP	bush_asobject, all				bush, all;
 COLOR	bush_asobject, light			(0, 0, 0, 0);
 LOOKUP	regrowable_bush, all			bush, all;
@@ -110,14 +141,14 @@ COLOR	flower_blue, dark				(  0,168,248);
 LOOKUP	flower_pink, all				flower_red, all;
 COLOR	flower_pink, dark				(240, 40,160);
 
-LOOKUP	water_flower, light				water, light;
-LOOKUP	water_flower, medium			water, medium;
+LOOKUP	water_flower, all				water, all;
 LOOKUP	water_flower, dark				flower_pink, dark;
 
 LOOKUP	ages_portal, all				floor, all;
 LOOKUP	soft_soil, all					tree_trunk, all;
 LOOKUP	soft_soil_sprout, all			tree_trunk_leaves, all;
-LOOKUP	cactus, all						bush, all;
+LOOKUP	cactus, all						grass_green, all;
+
 
 #==============================================================
 # Puzzle
@@ -138,30 +169,29 @@ COLOR	puzzle_yellow, dark				(144, 72, 40);
 COLOR	chest, light					(248,208,136);
 COLOR	chest, medium					(232,  8, 24);
 COLOR	chest, dark						(104,  8, 40);
+COLOR	chest, black					(  0,  0,  0);
 
 LOOKUP	lantern_light, all				chest, all;
 LOOKUP	lantern_base, light				lantern_light, light;
 COLOR	lantern_base, medium			(144, 96,208);
 COLOR	lantern_base, dark				(104, 48,136);
 
-LOOKUP	door, all						railing, all;
-LOOKUP	locked_block, all				railing, all;
+LOOKUP	door, all						blue, all;
+LOOKUP	locked_block, all				blue, all;
 
 LOOKUP	turnstile, light				floor, light;
-COLOR	turnstile, medium				(176,152,104);
-COLOR	turnstile, dark					(112, 72, 72);
+LOOKUP	turnstile, medium				gray, medium;
+LOOKUP	turnstile, dark					gray, dark;
 
-LOOKUP	lever, all						stairs, all;
-LOOKUP	button, all						railing, all;
-LOOKUP	bridge, all						floor, all;
+LOOKUP	lever, all						red, all;
+LOOKUP	button, all						blue, all;
 
 LOOKUP	hardened_lava, all				floor, all;
-LOOKUP	tile_monster, all				floor, all;
+LOOKUP	flying_tile, all				floor, all;
 LOOKUP	floor_spikes, all				floor, all;
-LOOKUP	arrow_shooter, all				stairs, all;
-LOOKUP	fire_shooter, all				stairs, all;
-LOOKUP	lava_mouth, all					stairs, all;
-LOOKUP	lava_mouth, all					stairs, all;
+LOOKUP	arrow_shooter, all				red, all;
+LOOKUP	fire_shooter, all				red, all;
+LOOKUP	lava_mouth, all					red, all;
 
 COLOR	ice_crystal_pit, light			(248,208,136);
 COLOR	ice_crystal_pit, medium			(232,  8, 24);
@@ -171,6 +201,7 @@ LOOKUP	web, all						floor, all;
 LOOKUP	bridge, all						floor, all;
 LOOKUP	minecart_track, all				floor, all;
 LOOKUP	output, all						floor, all;
+
 
 #==============================================================
 # Fluids
@@ -190,22 +221,20 @@ COLOR	poison_bubble, medium			( 56,144,128);
 COLOR	poison_bubble, dark				( 72, 32,128);
 COLOR	poison_bubble, black			(  0, 40, 40);
 
+
 #==============================================================
 # Nature
 #==============================================================
 
+LOOKUP	grass_field, all				grass_green, all;
+LOOKUP	grass_border, all				grass_green, all;
+LOOKUP	dirt, all						brown, all;
+LOOKUP	dirt_alt, all					gray, all;
 
-LOOKUP	grass_field, all				bush, all;
-LOOKUP	grass_border, all				grass_field, all;
-LOOKUP	dirt, all						floor, all;
-LOOKUP	dirt_alt, light					dirt, light;
-COLOR	dirt_alt, medium				(176,152,104);
-COLOR	dirt_alt, dark					(112, 72, 72);
-
-LOOKUP	cliff, all						wall, all;
-LOOKUP	tree_trunk, all					floor, all;
-LOOKUP	tree_leaves, all				bush, all;
-LOOKUP	tree_trunk_leaves, light		tree_trunk, medium;
+LOOKUP	cliff, all						brown, all;
+LOOKUP	tree_trunk, all					brown, all;
+LOOKUP	tree_leaves, all				tree_green, all;
+LOOKUP	tree_trunk_leaves, light		brown, medium;
 LOOKUP	tree_trunk_leaves, medium		tree_leaves, medium;
 LOOKUP	tree_trunk_leaves, dark			tree_leaves, dark;
 
@@ -215,21 +244,18 @@ LOOKUP	vines_light, dark				cliff, dark;
 LOOKUP	vines_dark, light				vines_light, light;
 COLOR	vines_dark, medium				(216,152,  0);
 LOOKUP	vines_dark, dark				cliff, dark;
-LOOKUP	vines_base, all					grass_field, all;
+LOOKUP	vines_base, all					grass_green, all;
 
-LOOKUP	hole, all						floor, all;
-LOOKUP	hole_alt, all					hole, all;
-
-LOOKUP	grass_flower, all				grass_field, all;
+LOOKUP	grass_flower, all				grass_green, all;
 LOOKUP	grass_flower_alt, light			water, light;
 LOOKUP	grass_flower_alt, medium		grass_flower, medium;
 LOOKUP	grass_flower_alt, dark			flower_pink, dark;
 
-LOOKUP	seedling_sprout, all			grass_field, all;
-LOOKUP	jump_flower, all				grass_field, all;
+LOOKUP	seedling_sprout, all			grass_green, all;
+LOOKUP	jump_flower, all				grass_green, all;
 
-LOOKUP	thick_brush, all				tree_leaves, all;
-LOOKUP	hedges, all						grass_field, all;
+LOOKUP	thick_brush, all				tree_green, all;
+LOOKUP	hedge, all						grass_green, all;
 
 COLOR	snow, light						(248,240,248);
 COLOR	snow, medium					(144,128,248);
@@ -239,6 +265,7 @@ COLOR	snow, black						(  8, 48,104);
 LOOKUP	snow_entrance, light			snow, light;
 LOOKUP	snow_entrance, medium			snow, dark;
 LOOKUP	snow_entrance, dark				snow, black;
+
 
 #==============================================================
 # Sea
@@ -261,18 +288,50 @@ COLOR	shop_front_railing, light		(224,224,240);
 COLOR	shop_front_railing, medium		( 88,128,160);
 COLOR	shop_front_railing, dark		( 40, 80,120);
 
+COLOR	shop_background, light			(248,248,136);
+
+COLOR	ceiling_pattern, light			(224,200,120);
+COLOR	ceiling_pattern, medium			(136,128, 72);
+LOOKUP	ceiling_pattern_border, light	ceiling_pattern, light;
+COLOR	ceiling_pattern_border, medium	(120,144,  8);
+COLOR	ceiling_pattern_border, dark	( 40, 64,  0);
+
+COLOR	soil_sprout, light				(248,248,136);
+COLOR	soil_sprout, medium				(136, 88,200);
+COLOR	soil_sprout, dark				( 16,168, 64);
+
+LOOKUP	bed_backboard, all,				wall, all;
+COLOR	bed_sheets, light				(224,224,240);
+COLOR	bed_sheets, medium				( 88,128,160);
+COLOR	bed_sheets, dark				( 40, 80,120);
+
+LOOKUP	brick_table_green, all			ceiling_pattern_border, all;
+LOOKUP	brick_table_blue, all			bed_sheets, all;
+
+LOOKUP	table, all						wall, all;
+LOOKUP	planks, all						wall, all;
+
+COLOR	furniture, light				(136,136, 72);
+COLOR	furniture, medium				(224,144,  0);
+COLOR	furniture, dark					(128, 64, 16);
+
+LOOKUP	fairy_block, all				bed_sheets, all;
+LOOKUP	imp_block, light				soil_sprout, light;
+LOOKUP	imp_block, medium				soil_sprout, medium;
+COLOR	imp_block, dark					( 96, 40,128);
+
 
 #==============================================================
 # Town
 #==============================================================
 
-LOOKUP	roof_brown, all					cliff, all;
-LOOKUP	roof_red, all					stairs, all;
-LOOKUP	roof_blue, all					water, all;
-LOOKUP	roof_green, all					grass_field, all;
+LOOKUP	roof_brown, all					brown, all;
+LOOKUP	roof_red, all					red, all;
+LOOKUP	roof_blue, all					blue, all;
+LOOKUP	roof_green, all					grass_green, all;
+LOOKUP	house_wall, all					brown, all;
 LOOKUP	chimney, all					house_wall, all;
-LOOKUP	house_wall, all					cliff, all;
-LOOKUP	witch_hut, all					stairs, all;
+LOOKUP	witch_hut, all					red, all;
 
 COLOR	statue_block, light				(208,184,160);
 COLOR	statue_block, medium			(120,144,160);
@@ -294,30 +353,31 @@ LOOKUP	gate, all						house_wall, all;
 LOOKUP	fence, all						house_wall, all;
 
 LOOKUP	fountain, all					floor, all;
-COLOR	fountain_water, light			(0, 0, 0, 0);
-COLOR	fountain_water, medium			(224,248,248);
+COLOR	fountain_water, light			(224,248,248);
+COLOR	fountain_water, medium			(0, 0, 0, 0);
 COLOR	fountain_water, dark			(104,176,248);
 COLOR	fountain_water, black			( 24, 80,248);
 
 LOOKUP	shop_sign, all					house_wall, all;
 LOOKUP	vasu_sign, all					roof_red, all;
 
-LOOKUP	planter, all					house_wall, all;
+LOOKUP	planter, all					floor, all;
 LOOKUP	planter_flower_red, light		floor, light;
 COLOR	planter_flower_red, medium		( 56,160, 96);
-COLOR	planter_flower_red, dark		(248,  0,  0);
+LOOKUP	planter_flower_red, dark		flower_red, dark;
 LOOKUP	planter_flower_blue, all		planter_flower_red, all;
-COLOR	planter_flower_blue, dark		(  0,168,248);
+LOOKUP	planter_flower_blue, dark		flower_blue, dark;
+
 
 #==============================================================
 # Decoration
 #==============================================================
 
 LOOKUP	entrance_column, all			wall, all;
-LOOKUP	entrance_brick, all				railing, all;
-LOOKUP	entrance_tile, all				stairs, all;
-LOOKUP	essense_brick, all				stairs, all;
-LOOKUP	essense_tile, all				railing, all;
+LOOKUP	entrance_brick, all				blue, all;
+LOOKUP	entrance_tile, all				red, all;
+LOOKUP	essense_brick, all				red, all;
+LOOKUP	essense_tile, all				blue, all;
 
 LOOKUP	fancy_tile_1, all				floor, all;
 LOOKUP	fancy_tile_2, all				floor, all;
@@ -329,6 +389,86 @@ LOOKUP	fancy_tile_7, all				floor, all;
 LOOKUP	fancy_tile_8, all				floor, all;
 LOOKUP	fancy_tile_9, all				floor, all;
 LOOKUP	fancy_tile_10, all				floor, all;
+
+
+#==============================================================
+# Side Scrolling
+#==============================================================
+
+CONST	ss_water_dark;
+COLOR	ss_water_dark, dark				( 24, 56, 48);
+
+
+COLOR	ss_brick, light					(168,192,  0);
+COLOR	ss_brick, medium				( 80,104, 56);
+COLOR	ss_brick, dark					( 24, 56, 48);
+COLOR	ss_brick_alt, light				( 80, 96,136);
+COLOR	ss_brick_alt, medium			(144,160,192);
+COLOR	ss_brick_alt, dark				( 24, 56, 48);
+LOOKUP	ss_brick_background, all		ss_brick, all;
+COLOR	ss_ice, light					(152,192,224);
+COLOR	ss_ice, medium					(  0,120,184);
+COLOR	ss_ice, dark					(  0, 56,112);
+LOOKUP	ss_pipe, all					ss_brick, all;
+COLOR	ss_pipe_alt, light				(232,168,  0);
+COLOR	ss_pipe_alt, medium				( 96, 64, 40);
+LOOKUP	ss_pipe_alt, dark				ss_brick, dark;
+LOOKUP	ss_pipe_horizontal, all			ss_brick_alt, all;
+LOOKUP	ss_cave_wall, all				ss_brick_alt, all;
+LOOKUP	ss_cave_wall, dark				ss_water_dark, dark;
+LOOKUP	ss_cave_wall_moss, all			ss_brick, all;
+
+COLOR	ss_torch_light, light			(248,216,  0);
+COLOR	ss_torch_light, medium			(232, 96,  0);
+COLOR	ss_torch_light, dark			(136, 32,  0);
+LOOKUP	ss_torch_base, all				ss_brick, all;
+LOOKUP	ss_faint_light, all				ss_brick_alt, all;
+
+LOOKUP	ss_water, all					ss_brick, all;
+LOOKUP	ss_water, dark					ss_water_dark, dark;
+COLOR	ss_lava, light					(248,216,  0);
+COLOR	ss_lava, medium					(232, 96,  0);
+COLOR	ss_lava, dark					(136, 32,  0);
+
+COLOR	ss_statue, light				(112,136, 88);
+COLOR	ss_statue, medium				( 80,104, 56);
+COLOR	ss_statue, dark					( 48, 72, 24);
+COLOR	ss_statue_underwater, light		(128,112,144);
+COLOR	ss_statue_underwater, medium	( 96, 80,112);
+LOOKUP	ss_statue_underwater, dark		ss_water_dark, dark;
+LOOKUP	ss_pulse_shooter, all		ss_statue_underwater, all;
+LOOKUP	ss_fish_statue, all				ss_statue_underwater, all;
+
+LOOKUP	ss_spikes, all					ss_brick, all;
+LOOKUP	ss_spikes_underwater, all		ss_brick, all;
+LOOKUP	ss_spikes_underwater, dark		ss_water_dark, dark;
+LOOKUP	ss_coral, all					ss_statue_underwater, all;
+LOOKUP	ss_pipe_above, all				ss_brick, all;
+LOOKUP	ss_pot, all						ss_statue, all;
+LOOKUP	ss_pot_underwater, light		ss_pot, medium;
+LOOKUP	ss_pot_underwater, medium		ss_pot, dark;
+LOOKUP	ss_pot_underwater, dark			ss_water_dark, dark;
+LOOKUP	ss_pot_asobject, all			ss_pot, all;
+COLOR	ss_pot_asobject, light			(0, 0, 0, 0);
+LOOKUP	ss_switch_rock, all				ss_torch_light, all;
+LOOKUP	ss_switch_rock_underwater, light	ss_switch_rock, medium;
+LOOKUP	ss_switch_rock_underwater, medium	ss_switch_rock, dark;
+LOOKUP	ss_switch_rock_underwater, dark		ss_water_dark, dark;
+LOOKUP	ss_switch_rock_asobject, all	ss_switch_rock, all;
+COLOR	ss_switch_rock_asobject, light	(0, 0, 0, 0);
+LOOKUP	ss_magnet_stone, all			ss_statue_underwater, all;
+COLOR	ss_bombable_block, light		(232,168,  0);
+COLOR	ss_bombable_block, medium		( 96, 64, 40);
+LOOKUP	ss_bombable_block, dark			ss_water_dark, dark;
+LOOKUP	ss_block, all					ss_brick, all;
+LOOKUP	ss_block, dark					ss_water_dark, dark;
+LOOKUP	ss_grass, all					ss_statue_underwater, all;
+LOOKUP	ss_ladder_bars, all				ss_statue_underwater, all;
+LOOKUP	ss_ladder, all					ss_statue, all;
+LOOKUP	ss_ladder_underwater, all		ss_statue, all;
+LOOKUP	ss_ladder_underwater, dark		ss_water_dark, dark;
+LOOKUP	ss_prison_bars, all				ss_bombable_block, all;
+
 
 #==============================================================
 

@@ -42,12 +42,14 @@ SPRITESET "set_trees", (16, 18);
 	MULTIPLE BASIC (0, 10), (0, 10), (16, 4); END;
 	
 	MULTIPLE STYLE "sandflow", (0, 14), (2, 2);
-		ADD "northwest"			(0, 14);
-		ADD "northeast"			(0, 16);
+		ADD "left"				(0, 14);
+		ADD "right"				(0, 16);
 		END;
 		
+	IGNORECOLORS ((0, 0, 0, 0));
 	MULTIPLE BASIC (2, 14), (2, 14), (14, 2); END;
-	MULTIPLE BASIC (2, 16), (2, 16), (13, 2); END;
+	MULTIPLE BASIC (2, 16), (2, 16), (14, 2); END;
+	SINGLE BASIC (0, 18), (0, 16); END;
 END;
 
 #==============================================================
@@ -177,42 +179,52 @@ NAME "tile_gasha_tree_dirt_top_right"		(15, 12);
 NAME "tile_gasha_tree_dirt_bottom_left"		(14, 13);
 NAME "tile_gasha_tree_dirt_bottom_right"	(15, 13);
 
-COMPOSITE "tile_dead_thin_tree_top_left";
-	COMBINE "tile_ground"; REMOVE 3; REMOVE 1; ADD (4, 14); END;
-NAME "tile_dead_thin_tree_top_right"		(5, 14);
-NAME "tile_dead_thin_tree_bottom"			(5, 15);
-NAME "tile_stump_small"						(4, 15);
+COMPOSITE "tile_dead_thin_tree_left_top_left";
+	COMBINE "tile_ground"; REMOVE 3; REMOVE 1; ADD (10, 16); END;
+NAME "tile_dead_thin_tree_left_top_left_above"		(8, 17);
+NAME "tile_dead_thin_tree_left_top_right_above"		(8, 16);
+NAME "tile_dead_thin_tree_left_top_right"			(9, 16);
+NAME "tile_dead_thin_tree_left_bottom"				(9, 17);
+
+NAME "tile_dead_thin_tree_right_bottom"				(11, 17);
+NAME "tile_dead_thin_tree_right_top_left"			(11, 16);
+NAME "tile_dead_thin_tree_right_top_left_above"		(12, 16);
+NAME "tile_dead_thin_tree_right_top_right_above"	(12, 17);
+COMPOSITE "tile_dead_thin_tree_right_top_right";
+	COMBINE "tile_ground"; REMOVE 2; REMOVE 0; ADD (10, 17); END;
+
+NAME "tile_stump_small"						(0, 16);
 
 COMPOSITE "tile_stump_top_left";
-	COMBINE "tile_ground"; REMOVE 3; REMOVE 1; ADD (6, 14); END;
+	COMBINE "tile_ground"; REMOVE 3; REMOVE 1; ADD (2, 16); END;
 COMPOSITE "tile_stump_bottom_left";
-	COMBINE "tile_ground"; REMOVE 1; ADD (6, 15); END;
-NAME "tile_stump_top_mid"					(7, 14);
-NAME "tile_stump_bottom_mid"				(7, 15);
+	COMBINE "tile_ground"; REMOVE 1; ADD (2, 17); END;
+NAME "tile_stump_top_mid"					(3, 16);
+NAME "tile_stump_bottom_mid"				(3, 17);
 COMPOSITE "tile_stump_top_right";
-	COMBINE "tile_ground"; REMOVE 2; REMOVE 0; ADD (8, 14); END;
+	COMBINE "tile_ground"; REMOVE 2; REMOVE 0; ADD (4, 16); END;
 COMPOSITE "tile_stump_bottom_right";
-	COMBINE "tile_ground"; REMOVE 0; ADD (8, 15); END;
+	COMBINE "tile_ground"; REMOVE 0; ADD (4, 17); END;
 	
 COMPOSITE "tile_stump_dirt_top_left";
 	COMBINE "tile_dirt_dark";
 	REPLACE 0, "dirt_dark_rough_1_8x8";
-	REMOVE 3; REMOVE 1; ADD (9, 14); END;
+	REMOVE 3; REMOVE 1; ADD (5, 16); END;
 COMPOSITE "tile_stump_dirt_bottom_left";
 	COMBINE "tile_dirt_dark";
 	REPLACE 0, "dirt_dark_rough_1_8x8";
 	REPLACE 3, "dirt_dark_rough_4_8x8";
-	REMOVE 1; ADD (9, 15); END;
-NAME "tile_stump_dirt_top_mid"					(10, 14);
-NAME "tile_stump_dirt_bottom_mid"				(10, 15);
+	REMOVE 1; ADD (5, 17); END;
+NAME "tile_stump_dirt_top_mid"					(6, 16);
+NAME "tile_stump_dirt_bottom_mid"				(6, 17);
 COMPOSITE "tile_stump_dirt_top_right";
 	COMBINE "tile_dirt_dark";
 	REPLACE 3, "dirt_dark_rough_4_8x8";
-	REMOVE 2; REMOVE 0; ADD (11, 14); END;
+	REMOVE 2; REMOVE 0; ADD (7, 16); END;
 COMPOSITE "tile_stump_dirt_bottom_right";
 	COMBINE "tile_dirt_dark";
 	REPLACE 3, "dirt_dark_rough_4_8x8";
-	REMOVE 0; ADD (11, 15); END;
+	REMOVE 0; ADD (7, 17); END;
 	
 NAME "tile_rock_flower_left"					(12, 14);
 NAME "tile_rock_flower_dirt_left"				(12, 15);
@@ -224,32 +236,32 @@ NAME "tile_rock_mushroom"						(15, 14);
 NAME "tile_rock_mushroom_dirt"					(15, 15);
 
 COMPOSITE "tile_weeping_tree_right_top_left";
-	COMBINE "tile_ground"; REMOVE 3; REMOVE 2; REMOVE 1; ADD (2, 16); END;
+	COMBINE "tile_ground"; REMOVE 3; REMOVE 2; REMOVE 1; ADD (8, 14); END;
+NAME "tile_weeping_tree_right_top_right"		(9, 14);
+NAME "tile_weeping_tree_right_bottom_left"		(8, 15);
+NAME "tile_weeping_tree_right_bottom_right"		(9, 15);
+
+NAME "tile_weeping_tree_left_top_left"			(10, 14);
 COMPOSITE "tile_weeping_tree_left_top_right";
-	COMBINE "tile_ground"; REMOVE 3; REMOVE 2; REMOVE 0; ADD (5, 16); END;
+	COMBINE "tile_ground"; REMOVE 3; REMOVE 2; REMOVE 0; ADD (11, 14); END;
+NAME "tile_weeping_tree_left_bottom_left"		(10, 15);
+NAME "tile_weeping_tree_left_bottom_right"		(11, 15);
 
-NAME "tile_weeping_tree_right_top_right"		(3, 16);
-NAME "tile_weeping_tree_right_bottom_left"		(2, 17);
-NAME "tile_weeping_tree_right_bottom_right"		(3, 17);
-NAME "tile_weeping_tree_left_top_left"			(4, 16);
-NAME "tile_weeping_tree_left_bottom_left"		(4, 17);
-NAME "tile_weeping_tree_left_bottom_right"		(5, 17);
+NAME "tile_dead_tree_top_left"					(4, 14);
+NAME "tile_dead_tree_top_right"					(5, 14);
+NAME "tile_dead_tree_bottom_left"				(4, 15);
+NAME "tile_dead_tree_bottom_right"				(5, 15);
+NAME "tile_spooky_tree_top_left"				(6, 14);
+NAME "tile_spooky_tree_top_right"				(7, 14);
+NAME "tile_spooky_tree_bottom_left"				(6, 15);
+NAME "tile_spooky_tree_bottom_right"			(7, 15);
 
-NAME "tile_dead_tree_top_left"					(6, 16);
-NAME "tile_dead_tree_top_right"					(7, 16);
-NAME "tile_dead_tree_bottom_left"				(6, 17);
-NAME "tile_dead_tree_bottom_right"				(7, 17);
-NAME "tile_spooky_tree_top_left"				(8, 16);
-NAME "tile_spooky_tree_top_right"				(9, 16);
-NAME "tile_spooky_tree_bottom_left"				(8, 17);
-NAME "tile_spooky_tree_bottom_right"			(9, 17);
-
-NAME "tile_witch_hut_top_left"					(10, 16);
-NAME "tile_witch_hut_bottom_left"				(10, 17);
-NAME "tile_witch_hut_top_mid"					(11, 16);
-NAME "tile_witch_hut_entrance"					(11, 17);
-NAME "tile_witch_hut_top_right"					(12, 16);
-NAME "tile_witch_hut_bottom_right"				(12, 17);
+NAME "tile_witch_hut_top_left"					(13, 16);
+NAME "tile_witch_hut_bottom_left"				(13, 17);
+NAME "tile_witch_hut_top_mid"					(14, 16);
+NAME "tile_witch_hut_entrance"					(14, 17);
+NAME "tile_witch_hut_top_right"					(15, 16);
+NAME "tile_witch_hut_bottom_right"				(15, 17);
 
 COMPOSITE "temp_preview_tree_style";
 	ADD "tile_tree_top_left", (0, 0);

@@ -1,4 +1,4 @@
-PALETTEDICTIONARY tile, tile_dictionary;
+PALETTEDICTIONARY tile, "tile_dictionary";
 
 #==============================================================
 # Structure
@@ -24,7 +24,9 @@ TILE	essense_statue;
 TILE	vertical_wall;
 
 TILE	tunnel_light;
-TILE	entrance_light;
+TILE	entrance_light_dirt;
+TILE	entrance_light_floor;
+TILE	entrance_light_fancy_tile_1;
 
 TILE	tiled;
 TILE	tiled_alt;
@@ -91,7 +93,7 @@ TILE	turnstile;
 TILE	lever;
 TILE	button;
 TILE	hardened_lava;
-TILE	tile_monster;
+TILE	flying_tile;
 TILE	floor_spikes;
 TILE	arrow_shooter;
 TILE	fire_shooter;
@@ -142,7 +144,7 @@ TILE	snow_entrance; # Single use for tree-house
 
 TILE	jump_flower;
 TILE	thick_brush;
-TILE	hedges;
+TILE	hedge;
 
 #==============================================================
 # Sea
@@ -156,6 +158,19 @@ TILE	coral;
 
 TILE	shop_side_railing;
 TILE	shop_front_railing;
+TILE	shop_background;
+TILE	ceiling_pattern;
+TILE	ceiling_pattern_border;
+TILE	soil_sprout;
+TILE	bed_backboard;
+TILE	bed_sheets;
+TILE	brick_table_green;
+TILE	brick_table_blue;
+TILE	table;
+TILE	planks;
+TILE	furniture;
+TILE	fairy_block;
+TILE	imp_block;
 
 #==============================================================
 # Town
@@ -165,8 +180,8 @@ TILE	roof_brown;
 TILE	roof_red;
 TILE	roof_blue;
 TILE	roof_green;
-TILE	chimney;
 TILE	house_wall;
+TILE	chimney;
 TILE	witch_hut;
 
 TILE	library;
@@ -206,5 +221,53 @@ TILE	fancy_tile_7;
 TILE	fancy_tile_8;
 TILE	fancy_tile_9;
 TILE	fancy_tile_10;
+
+#==============================================================
+# Side Scrolling
+#==============================================================
+
+TILE	ss_brick;
+TILE	ss_brick_alt;
+TILE	ss_brick_background;
+TILE	ss_ice;
+TILE	ss_pipe;
+TILE	ss_pipe_alt;
+TILE	ss_pipe_horizontal;
+TILE	ss_cave_wall;
+TILE	ss_cave_wall_underwater;
+TILE	ss_cave_wall_moss;
+
+TILE	ss_torch_light;
+TILE	ss_torch_base;
+TILE	ss_faint_light;
+
+TILE	ss_water;
+TILE	ss_lava;
+
+TILE	ss_statue;
+TILE	ss_statue_underwater;
+TILE	ss_pulse_shooter;
+TILE	ss_fish_statue;
+
+TILE	ss_spikes;
+TILE	ss_spikes_underwater;
+TILE	ss_coral;
+TILE	ss_pipe_above;
+TILE	ss_pot;
+TILE	ss_pot_underwater;
+TILE	ss_pot_asobject;
+TILE	ss_switch_rock;
+TILE	ss_switch_rock_underwater;
+TILE	ss_switch_rock_asobject;
+TILE	ss_magnet_stone;
+TILE	ss_bombable_block;
+TILE	ss_block;
+TILE	ss_grass;
+TILE	ss_ladder_bars;
+TILE	ss_ladder;
+TILE	ss_ladder_underwater;
+TILE	ss_prison_bars;
+
+#==============================================================
 
 END;

@@ -54,32 +54,32 @@ END;
 
 SOURCE "set_cliffs";
 
-NAME "cliff_face_1_s_8x8"							(2, 3);
-NAME "cliff_face_2_s_8x8"							(3, 3);
+NAME "cliff_face_s_1_8x8"							(2, 3);
+NAME "cliff_face_s_2_8x8"							(3, 3);
 
 #==============================================================
 # Temporary
 #==============================================================
 
 
-NAME "temp_8x8_cliff_corner_outside_ground_nw"		(0, 0);
-NAME "temp_8x8_cliff_corner_outside_ground_ne"		(1, 0);
-NAME "temp_8x8_cliff_corner_outside_ground_sw"		(0, 1);
-NAME "temp_8x8_cliff_corner_outside_ground_se"		(1, 1);
-NAME "temp_8x8_cliff_corner_outside_nw"				(0, 2);
-NAME "temp_8x8_cliff_corner_outside_ne"				(1, 2);
-NAME "temp_8x8_cliff_corner_outside_sw"				(0, 3);
-NAME "temp_8x8_cliff_corner_outside_se"				(1, 3);
-NAME "temp_8x8_cliff_corner_inside_nw"				(2, 0);
-NAME "temp_8x8_cliff_corner_inside_ne"				(3, 0);
-NAME "temp_8x8_cliff_corner_inside_sw"				(2, 1);
-NAME "temp_8x8_cliff_corner_inside_se"				(3, 1);
-NAME "temp_8x8_cliff_face_1_n"						(2, 2);
-NAME "temp_8x8_cliff_face_2_n"						(3, 2);
+NAME "temp_8x8_cliff_top_light_left"				(0, 0);
+NAME "temp_8x8_cliff_top_light_right"				(1, 0);
+NAME "temp_8x8_cliff_bottom_light_left"				(0, 1);
+NAME "temp_8x8_cliff_bottom_light_right"			(1, 1);
+NAME "temp_8x8_cliff_top_dark_left"					(0, 2);
+NAME "temp_8x8_cliff_top_dark_right"				(1, 2);
+NAME "temp_8x8_cliff_bottom_dark_left"				(0, 3);
+NAME "temp_8x8_cliff_bottom_dark_right"				(1, 3);
+NAME "temp_8x8_cliff_inside_se"						(2, 0);
+NAME "temp_8x8_cliff_inside_sw"						(3, 0);
+NAME "temp_8x8_cliff_inside_ne"						(2, 1);
+NAME "temp_8x8_cliff_inside_nw"						(3, 1);
+NAME "temp_8x8_cliff_face_n_1"						(2, 2);
+NAME "temp_8x8_cliff_face_n_2"						(3, 2);
 NAME "temp_8x8_cliff_face_e"						(4, 0);
 NAME "temp_8x8_cliff_face_w"						(4, 2);
-NAME "temp_8x8_cliff_face_corner_right"				(4, 1);
-NAME "temp_8x8_cliff_face_corner_left"				(4, 3);
+NAME "temp_8x8_cliff_vertical_right"				(4, 1);
+NAME "temp_8x8_cliff_vertical_left"					(4, 3);
 
 NAME "temp_8x8_cliff_wall_corner_outside_ground_nw"	(5, 0);
 NAME "temp_8x8_cliff_wall_corner_outside_ground_ne"	(6, 0);
@@ -104,10 +104,10 @@ NAME "temp_8x8_cliff_wall_face_2_w"					(9, 3);
 
 SOURCE "set_cliff_parts";
 
-NAME "temp_8x8_cliff_hole_corner_left"			(0, 0);
-NAME "temp_8x8_cliff_hole_corner_right"			(1, 0);
-NAME "temp_8x8_cliff_hole_corner_alt_left"		(0, 1);
-NAME "temp_8x8_cliff_hole_corner_alt_right"		(1, 1);
+NAME "temp_8x8_cliff_cave_left"						(0, 0);
+NAME "temp_8x8_cliff_cave_right"					(1, 0);
+NAME "temp_8x8_cliff_cave_alt_left"					(0, 1);
+NAME "temp_8x8_cliff_cave_alt_right"				(1, 1);
 
 NAME "temp_8x8_cliff_sea_nw"					(0, 2);
 NAME "temp_8x8_cliff_sea_ne"					(1, 2);
@@ -120,18 +120,18 @@ NAME "temp_8x8_cliff_sea_border_se"				(1, 5);
 
 SOURCE "set_cliff_railings";
 
-NAME "temp_8x8_railing_corner_inside_nw"		(0, 0);
-NAME "temp_8x8_railing_corner_inside_ne"		(1, 0);
-NAME "temp_8x8_railing_corner_inside_sw"		(0, 1);
-NAME "temp_8x8_railing_corner_inside_se"		(1, 1);
-NAME "temp_8x8_railing_corner_outside_nw"		(2, 0);
-NAME "temp_8x8_railing_corner_outside_ne"		(3, 0);
-NAME "temp_8x8_railing_corner_outside_sw"		(2, 1);
-NAME "temp_8x8_railing_corner_outside_se"		(3, 1);
+NAME "temp_8x8_railing_outside_nw"				(0, 0);
+NAME "temp_8x8_railing_outside_ne"				(1, 0);
+NAME "temp_8x8_railing_outside_sw"				(0, 1);
+NAME "temp_8x8_railing_outside_se"				(1, 1);
+NAME "temp_8x8_railing_inside_nw"				(2, 0);
+NAME "temp_8x8_railing_inside_ne"				(3, 0);
+NAME "temp_8x8_railing_inside_sw"				(2, 1);
+NAME "temp_8x8_railing_inside_se"				(3, 1);
 NAME "temp_8x8_railing_horizontal_cap_w"		(0, 2);
 NAME "temp_8x8_railing_horizontal"				(1, 2);
 NAME "temp_8x8_railing_horizontal_cap_e"		(2, 2);
 NAME "temp_8x8_railing_vertical_cap_n"			(4, 0);
 NAME "temp_8x8_railing_vertical"				(4, 1);
 NAME "temp_8x8_railing_vertical_cap_s"			(4, 2);
-NAME "temp_8x8_railing_cap"						(4, 2);
+NAME "temp_8x8_railing_cap_both"						(4, 2);

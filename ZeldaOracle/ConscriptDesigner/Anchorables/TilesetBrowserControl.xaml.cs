@@ -27,37 +27,126 @@ namespace ConscriptDesigner.Anchorables {
 	/// </summary>
 	public partial class TilesetBrowserControl : UserControl {
 
-		private TilesetPreview tilesetPreview;
+		private TilesetPreview preview;
+
+		private List<KeyValuePair<string, ITileset>> tilesets;
+		private ITileset tileset;
+		private string tilesetName;
 
 		private bool suppressEvents;
 
-		private string tilesetName;
 
-		private List<KeyValuePair<string, ITileset>> tilesets;
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
 
+		/// <summary>Constructs the tileset browser control.</summary>
 		public TilesetBrowserControl() {
-			InitializeComponent(); this.suppressEvents = true;
+			this.suppressEvents = true;
 			InitializeComponent();
 
-			this.tilesetPreview = new TilesetPreview();
-			this.tilesetPreview.HoverTileDataChanged += OnHoverTileDataChanged;
-			this.host.Child = this.tilesetPreview;
+			this.preview = new TilesetPreview();
+			this.preview.HoverChanged += OnHoverChanged;
+			this.host.Child = this.preview;
 			this.suppressEvents = false;
 			this.tilesets = new List<KeyValuePair<string, ITileset>>();
+			this.tileset = null;
 			this.tilesetName = "";
 
-			DesignerControl.PreviewZoneChanged += OnPreviewZoneChanged;
+			DesignerControl.ResourcesLoaded += OnResourcesLoaded;
+			DesignerControl.ResourcesUnloaded += OnResourcesUnloaded;
+			DesignerControl.PreviewInvalidated += OnPreviewInvalidated;
+			DesignerControl.PreviewScaleChanged += OnPreviewScaleChanged;
 
-			OnHoverTileDataChanged();
+			OnHoverChanged();
+
+			this.suppressEvents = false;
 		}
 
-		private void OnHoverTileDataChanged(object sender = null, EventArgs e = null) {
-			BaseTileData hoverTileData = tilesetPreview.HoverTileData;
-			Point2I hoverIndex = tilesetPreview.HoverIndex;
-			if (hoverIndex == -Point2I.One)
-				statusHoverIndex.Content = "(?, ?)";
+
+
+		//-----------------------------------------------------------------------------
+		// Loading
+		//-----------------------------------------------------------------------------
+
+		public void Dispose() {
+			DesignerControl.ResourcesLoaded -= OnResourcesLoaded;
+			DesignerControl.ResourcesUnloaded -= OnResourcesUnloaded;
+			DesignerControl.PreviewInvalidated -= OnPreviewInvalidated;
+			DesignerControl.PreviewScaleChanged -= OnPreviewScaleChanged;
+			preview.Dispose();
+		}
+
+		public void Reload() {
+			suppressEvents = true;
+
+			tilesets.Clear();
+
+			foreach (var pair in ZeldaResources.GetResourceDictionary<ITileset>()) {
+				tilesets.Add(new KeyValuePair<string, ITileset>(pair.Key, pair.Value));
+			}
+			tilesets.Sort((a, b) => AlphanumComparator.Compare(a.Key, b.Key, true));
+
+			comboBoxTilesets.Items.Clear();
+			foreach (var pair in tilesets) {
+				ComboBoxItem item = new ComboBoxItem();
+				item.Content = pair.Key;
+				item.Tag = pair.Key;
+				comboBoxTilesets.Items.Add(item);
+			}
+			tileset = ZeldaResources.GetResource<ITileset>(tilesetName);
+			if (tilesets.Any() && tileset == null) {
+				tilesetName = tilesets[0].Key;
+				tileset = tilesets[0].Value;
+			}
+			comboBoxTilesets.SelectedIndex = tilesets.IndexOf(
+				new KeyValuePair<string, ITileset>(tilesetName, tileset));
+
+			UpdateTileset();
+			OnHoverChanged();
+
+			suppressEvents = false;
+		}
+
+		public void Unload() {
+			preview.Unload();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Sprites Setup
+		//-----------------------------------------------------------------------------
+
+		private void UpdateTileset() {
+			if (tileset != null)
+				preview.UpdateList(tileset);
 			else
-				statusHoverIndex.Content = hoverIndex.ToString();
+				preview.Unload();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Event Handlers
+		//-----------------------------------------------------------------------------
+
+		private void OnResourcesLoaded(object sender = null, EventArgs e = null) {
+			Reload();
+		}
+
+		private void OnResourcesUnloaded(object sender = null, EventArgs e = null) {
+			Unload();
+		}
+
+		private void OnPreviewInvalidated(object sender = null, EventArgs e = null) {
+			preview.Invalidate();
+		}
+
+		private void OnPreviewScaleChanged(object sender = null, EventArgs e = null) {
+			preview.UpdateScale();
+		}
+
+		private void OnHoverChanged(object sender = null, EventArgs e = null) {
+			BaseTileData hoverTileData = preview.HoverTileData;
 			if (hoverTileData == null) {
 				textBlockTileName.Text = "";
 				statusTileInfo.Content = "";
@@ -74,77 +163,21 @@ namespace ConscriptDesigner.Anchorables {
 					statusTileInfo.Content = "Type: " + hoverTileData.Type.Name;
 				}
 			}
-		}
 
-		public void Dispose() {
-			DesignerControl.PreviewZoneChanged -= OnPreviewZoneChanged;
-			tilesetPreview.Dispose();
-		}
-
-		public void RefreshList() {
-			suppressEvents = true;
-			tilesets.Clear();
-			comboBoxTilesets.Items.Clear();
-			foreach (var pair in ZeldaResources.GetResourceDictionary<Tileset>()) {
-				tilesets.Add(new KeyValuePair<string, ITileset>(pair.Key, pair.Value));
-			}
-			foreach (var pair in ZeldaResources.GetResourceDictionary<EventTileset>()) {
-				tilesets.Add(new KeyValuePair<string, ITileset>(pair.Key, pair.Value));
-			}
-			tilesets.Sort((a, b) => AlphanumComparator.Compare(a.Key, b.Key, true));
-			foreach (var pair in tilesets) {
-				comboBoxTilesets.Items.Add(pair.Key);
-			}
-			ITileset tileset = ZeldaResources.GetResource<Tileset>(tilesetName);
-			if (tileset == null)
-				tileset = ZeldaResources.GetResource<EventTileset>(tilesetName);
-			if (tilesets.Any()) {
-				if (tileset == null) {
-					tilesetName = tilesets[0].Key;
-					tileset = tilesets[0].Value;
-				}
-				comboBoxTilesets.SelectedItem = tilesetName;
-				tilesetPreview.UpdateTileset(tilesetName, tileset);
-			}
-			comboBoxZones.ItemsSource = DesignerControl.PreviewZones;
-			comboBoxZones.SelectedItem = DesignerControl.PreviewZoneID;
-			suppressEvents = false;
-		}
-
-		public void ClearList() {
-			tilesets.Clear();
-			tilesetPreview.ClearTileset();
-		}
-
-		private void OnToggleAnimations(object sender, RoutedEventArgs e) {
-			tilesetPreview.Animating = !tilesetPreview.Animating;
-			buttonRestartAnimations.IsEnabled = tilesetPreview.Animating;
-		}
-
-		private void OnRestartAnimations(object sender, RoutedEventArgs e) {
-			tilesetPreview.RestartAnimations();
+			Point2I hoverPoint = preview.HoverPoint;
+			if (hoverPoint == -Point2I.One)
+				statusHoverIndex.Content = "(?, ?)";
+			else
+				statusHoverIndex.Content = hoverPoint.ToString();
 		}
 
 		private void OnTilesetChanged(object sender, SelectionChangedEventArgs e) {
 			if (suppressEvents) return;
 			if (comboBoxTilesets.SelectedIndex != -1) {
-				tilesetName = (string) comboBoxTilesets.SelectedItem;
-				ITileset tileset = ZeldaResources.GetResource<Tileset>(tilesetName);
-				if (tileset == null)
-					tileset = ZeldaResources.GetResource<EventTileset>(tilesetName);
-				tilesetPreview.UpdateTileset(tilesetName, tileset);
+				tilesetName = (string) ((ComboBoxItem) comboBoxTilesets.SelectedItem).Tag;
+				tileset = ZeldaResources.GetResource<ITileset>(tilesetName);
+				UpdateTileset();
 			}
-		}
-
-		private void OnZoneChanged(object sender, SelectionChangedEventArgs e) {
-			DesignerControl.PreviewZoneID = (string) comboBoxZones.SelectedItem;
-		}
-
-		private void OnPreviewZoneChanged(object sender, EventArgs e) {
-			suppressEvents = true;
-			comboBoxZones.SelectedItem = DesignerControl.PreviewZoneID;
-			suppressEvents = false;
-			tilesetPreview.Invalidate();
 		}
 	}
 }

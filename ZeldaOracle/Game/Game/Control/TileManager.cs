@@ -417,12 +417,27 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 		}
-		
+
+		// Draw all tiles in the grid.
+		public void DrawTilesAbove(RoomGraphics g) {
+			for (int i = 0; i < layerCount; i++) {
+				for (int y = 0; y < GridHeight; y++) {
+					for (int x = 0; x < GridWidth; x++) {
+						Tile t = tiles[x, y, i];
+
+						if (t != null && IsTileAtGridLocation(t, x, y)) {
+							t.DrawAbove(g);
+						}
+					}
+				}
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Internal Methods
 		//-----------------------------------------------------------------------------
-		
+
 		private bool IsTileAtGridLocation(Tile tile, Point2I gridLocation) {
 			return (tile.TileGridArea.Point == gridLocation);
 		}

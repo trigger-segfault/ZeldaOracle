@@ -62,12 +62,12 @@ namespace ZeldaOracle.Game.Tiles {
 			base.SetSwitchState(switchState);
 
 			if (switchState) {
-				color = PuzzleColor.Blue;
-				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_SWITCH_BLUE);
+				color = PuzzleColor.Red;
+				Graphics.PlayAnimation(SpriteList[1]);
 			}
 			else {
-				color = PuzzleColor.Red;
-				Graphics.PlayAnimation(GameData.SPR_TILE_COLOR_SWITCH_RED);
+				color = PuzzleColor.Blue;
+				Graphics.PlayAnimation(SpriteList[0]);
 			}
 		}
 
@@ -100,14 +100,15 @@ namespace ZeldaOracle.Game.Tiles {
 				if (dungeon != null)
 					switchState = dungeon.ColorSwitchColor == PuzzleColor.Blue;
 			}
-			ISprite sprite = GameData.SPR_TILE_COLOR_SWITCH_RED;
-			if (switchState)
-				sprite = GameData.SPR_TILE_COLOR_SWITCH_BLUE;
-			g.DrawISprite(
+			//ISprite sprite = GameData.SPR_TILE_COLOR_SWITCH_RED;
+			//if (switchState)
+			//	sprite = GameData.SPR_TILE_COLOR_SWITCH_BLUE;
+			DrawTileDataIndex(g, args, switchState ? 1 : 0);
+			/*g.DrawISprite(
 				sprite,
 				args.SpriteDrawSettings,
 				args.Position,
-				args.Color);
+				args.Color);*/
 		}
 
 

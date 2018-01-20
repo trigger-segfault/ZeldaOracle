@@ -36,6 +36,19 @@ namespace ConscriptDesigner {
 
 
 		//-----------------------------------------------------------------------------
+		// Launching
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The command to launch the game.</summary>
+		public static readonly RoutedUICommand LaunchGame = new RoutedUICommand(
+			"LaunchGame", "Launch Game", typeof(Commands));
+
+		/// <summary>The command to launch the editor.</summary>
+		public static readonly RoutedUICommand LaunchEditor = new RoutedUICommand(
+			"LaunchEditor", "Launch Editor", typeof(Commands));
+
+
+		//-----------------------------------------------------------------------------
 		// Edit
 		//-----------------------------------------------------------------------------
 
@@ -127,6 +140,8 @@ namespace ConscriptDesigner {
 
 		/// <summary>The command to view the location of the last error.</summary>
 		public static readonly RoutedUICommand GotoError = new RoutedUICommand(
-			"GotoError", "Go To Error", typeof(Commands));
+			"GotoError", "Go To Error", typeof(Commands),
+			new InputGestureCollection() {
+				new KeyGesture(Key.F8) });
 	}
 }
