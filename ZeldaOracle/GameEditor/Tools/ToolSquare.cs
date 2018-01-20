@@ -90,7 +90,7 @@ namespace ZeldaEditor.Tools {
 				Point2I maxCoord  = GMath.Min(GMath.Max(dragBeginTileCoord, levelTileCoord), totalSize - 1);
 				square = new Rectangle2I(minCoord, maxCoord - minCoord + 1);
 
-				TileData tileData = EditorControl.SelectedTilesetTileData as TileData;
+				TileData tileData = EditorControl.SelectedTileData as TileData;
 				if (e.Button == MouseButtons.Right)
 					tileData = null;
 				ActionSquare action = new ActionSquare(Level, EditorControl.CurrentLayer, square, tileData);
@@ -164,7 +164,7 @@ namespace ZeldaEditor.Tools {
 		}
 
 		private TileData GetTileData() {
-			return EditorControl.SelectedTilesetTileData as TileData;
+			return EditorControl.SelectedTileData as TileData;
 		}
 	}
 }

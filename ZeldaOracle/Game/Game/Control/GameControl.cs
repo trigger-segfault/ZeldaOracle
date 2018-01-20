@@ -202,12 +202,6 @@ namespace ZeldaOracle.Game.Control {
 					roomControl.BeginRoom(world.StartRoom);
 				}
 			}
-			else {
-				LoadWorld(GameDebug.CreateTestWorld(), false);
-				player.SetPositionByCenter(world.StartTileLocation * GameSettings.TILE_SIZE + new Point2I(8, 8));
-				player.MarkRespawn();
-				roomControl.BeginRoom(world.StartRoom);
-			}
 			GameData.PaletteShader.TilePalette = roomControl.Zone.Palette;
 			GameData.PaletteShader.TileRatio = 0f;
 			roomStateStack = new RoomStateStack(new RoomStateNormal());

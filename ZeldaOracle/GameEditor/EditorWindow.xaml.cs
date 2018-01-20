@@ -263,7 +263,14 @@ namespace ZeldaEditor {
 		private void OnTilesetChanged(object sender, SelectionChangedEventArgs e) {
 			if (!suppressEvents) return;
 			if (comboBoxTilesets.SelectedIndex != -1) {
-				editorControl.ChangeTileset(comboBoxTilesets.SelectedItem as string);
+				if (comboBoxTilesets.SelectedIndex == 0) {
+					toolbarTileSearch.Visibility = Visibility.Visible;
+					editorControl.UpdateTileSearch(textBoxTileSearch.Text);
+				}
+				else {
+					toolbarTileSearch.Visibility = Visibility.Collapsed;
+					editorControl.ChangeTileset(comboBoxTilesets.SelectedItem as string);
+				}
 			}
 			levelDisplay.Focus();
 		}
@@ -274,6 +281,10 @@ namespace ZeldaEditor {
 				editorControl.ChangeZone(comboBoxZones.SelectedItem as string);
 			}
 			levelDisplay.Focus();
+		}
+
+		private void OnTileSearchTextChanged(object sender, TextChangedEventArgs e) {
+			editorControl.UpdateTileSearch(textBoxTileSearch.Text);
 		}
 
 		private string SurroundID(string id) {

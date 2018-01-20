@@ -19,7 +19,7 @@ using ZeldaOracle.Game.Worlds;
 namespace ConscriptDesigner.WinForms {
 	public class TilesetPreview : ZeldaGraphicsDeviceControl {
 
-		private ITileset tileset;
+		private Tileset tileset;
 
 
 		//-----------------------------------------------------------------------------
@@ -39,7 +39,7 @@ namespace ConscriptDesigner.WinForms {
 		// Loading/Updating
 		//-----------------------------------------------------------------------------
 
-		public void UpdateList(ITileset tileset) {
+		public void UpdateList(Tileset tileset) {
 			this.tileset = tileset;
 			UpdateHeight();
 		}
@@ -76,13 +76,11 @@ namespace ConscriptDesigner.WinForms {
 		protected override bool IsValidHoverPoint(ref Point2I point, out Point2I hoverSize) {
 			hoverSize = Point2I.One;
 			if (tileset != null && point < tileset.Dimensions) {
-				if (tileset is NewTileset) {
-					Point2I origin = NewTileset.GetTileDataOrigin(point);
-					if (origin != -Point2I.One) {
-						if (!tileset.UsePreviewSprites)
-							hoverSize = NewTileset.GetTileDataAtOrigin(origin).Size;
-						point = origin;
-					}
+				Point2I origin = tileset.GetTileDataOrigin(point);
+				if (origin != -Point2I.One) {
+					if (!tileset.UsePreviewSprites)
+						hoverSize = tileset.GetTileDataAtOrigin(origin).Size;
+					point = origin;
 				}
 				return true;
 			}
@@ -99,9 +97,7 @@ namespace ConscriptDesigner.WinForms {
 
 			for (int indexX = 0; indexX < tileset.Width; indexX++) {
 				for (int indexY = 0; indexY < tileset.Height; indexY++) {
-					BaseTileData tile = tileset.GetTileData(indexX, indexY);
-					if (tileset is NewTileset)
-						tile = NewTileset.GetTileDataAtOrigin(indexX, indexY);
+					BaseTileData tile = tileset.GetTileDataAtOrigin(indexX, indexY);
 					if (tile != null) {
 						int x = 1 + indexX * (BaseSpriteSize.X + 1);
 						int y = 1 + indexY * (BaseSpriteSize.Y + 1);
@@ -128,17 +124,7 @@ namespace ConscriptDesigner.WinForms {
 		protected override Point2I BaseSpriteSize {
 			get { return new Point2I(GameSettings.TILE_SIZE); }
 		}
-
-
-		//-----------------------------------------------------------------------------
-		// Internal Properties
-		//-----------------------------------------------------------------------------
-
-		private NewTileset NewTileset {
-			get { return tileset as NewTileset; }
-		}
-
-
+		
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------

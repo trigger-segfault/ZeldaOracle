@@ -191,11 +191,11 @@ namespace ZeldaEditor.Tools {
 		}
 
 		private TileData GetTileData() {
-			return EditorControl.SelectedTilesetTileData as TileData;
+			return EditorControl.SelectedTileData as TileData;
 		}
 
 		private EventTileData GetEventTileData() {
-			return EditorControl.SelectedTilesetTileData as EventTileData;
+			return EditorControl.SelectedTileData as EventTileData;
 		}
 	}
 }
