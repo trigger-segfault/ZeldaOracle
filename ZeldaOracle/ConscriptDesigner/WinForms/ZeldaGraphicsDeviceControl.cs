@@ -182,6 +182,8 @@ namespace ConscriptDesigner.WinForms {
 		protected sealed override void Draw() {
 			SpriteDrawSettings settings = new SpriteDrawSettings(DesignerControl.PlaybackTime);
 			Zone zone = DesignerControl.PreviewZone ?? defaultZone;
+			Graphics2D g = new Graphics2D(spriteBatch);
+
 			if (GameData.PaletteShader != null && !GameData.PaletteShader.Effect.IsDisposed) {
 				GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
 				GameData.PaletteShader.TilePalette = GameData.PAL_TILES_DEFAULT;
@@ -189,12 +191,16 @@ namespace ConscriptDesigner.WinForms {
 					GameData.PaletteShader.TilePalette = zone.Palette;
 				GameData.PaletteShader.ApplyPalettes();
 			}
+			else {
+				g.Clear(Color.White);
+				return;
+			}
+
 			if (zone != null) {
 				settings.VariantID = zone.ImageVariantID;
 				settings.Styles = zone.StyleDefinitions;
 			}
 
-			Graphics2D g = new Graphics2D(spriteBatch);
 			if (DesignerControl.PreviewScale > 1) {
 				g.SetRenderTarget(renderTarget);
 			}
