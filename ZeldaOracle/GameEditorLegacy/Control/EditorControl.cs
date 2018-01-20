@@ -139,7 +139,7 @@ namespace ZeldaEditor.Control {
 
 				// Create tileset combo box.
 				editorForm.ComboBoxTilesets.Items.Clear();
-				foreach (KeyValuePair<string, Tileset> entry in Resources.GetResourceDictionary<Tileset>()) {
+				foreach (KeyValuePair<string, TilesetOld> entry in Resources.GetResourceDictionary<TilesetOld>()) {
 					editorForm.ComboBoxTilesets.Items.Add(entry.Key);
 				}
 				foreach (KeyValuePair<string, EventTileset> entry in Resources.GetResourceDictionary<EventTileset>()) {
@@ -321,8 +321,8 @@ namespace ZeldaEditor.Control {
 		}
 
 		public void ChangeTileset(string name) {
-			if (Resources.ContainsResource<Tileset>(name))
-				tileset = Resources.GetResource<Tileset>(name);
+			if (Resources.ContainsResource<TilesetOld>(name))
+				tileset = Resources.GetResource<TilesetOld>(name);
 			else if (Resources.ContainsResource<EventTileset>(name))
 				tileset = Resources.GetResource<EventTileset>(name);
 			

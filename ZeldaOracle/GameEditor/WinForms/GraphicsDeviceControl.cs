@@ -26,7 +26,7 @@ namespace ZeldaEditor.WinForms {
 	/// a Windows Form. Derived classes can override the Initialize and Draw
 	/// methods to add their own drawing code.
 	/// </summary>
-	public class GraphicsDeviceControl : ScrollableControl {
+	public class GraphicsDeviceControl : Panel {
 		#region Fields
 
 
@@ -39,7 +39,9 @@ namespace ZeldaEditor.WinForms {
 
 		/// <summary>The message filter for capturing scroll focus.</summary>
 		private WinFormsMouseWheelMessageFilter messageFilter;
-		
+
+		/// <summary>True if an exception occurred while resetting the graphics device.</summary>
+		private bool resetError;
 
 		#endregion
 
@@ -50,7 +52,7 @@ namespace ZeldaEditor.WinForms {
 		public GraphicsDevice GraphicsDevice {
 			get { return graphicsDeviceService.GraphicsDevice; }
 		}
-		
+
 		/// <summary>
 		/// Gets an IServiceProvider containing our IGraphicsDeviceService.
 		/// This can be used with components such as the ContentManager,
@@ -65,10 +67,24 @@ namespace ZeldaEditor.WinForms {
 			get { return isMouseOver; }
 		}
 
+		/// <summary>True if an exception occurred while resetting the graphics device.</summary>
+		public bool ResetError {
+			get { return resetError; }
+			set { resetError = false; }
+		}
 
 		/// <summary>The IServiceProvider containing our IGraphicsDeviceService.</summary>
 		private ServiceContainer services = new ServiceContainer();
 
+
+		#endregion
+
+		#region Events
+
+		/// <summary>Called just before resetting the graphics device.</summary>
+		public event EventHandler PreviewReset;
+		/// <summary>Called just after resetting the graphics device.</summary>
+		public event EventHandler PostReset;
 
 		#endregion
 
@@ -218,19 +234,24 @@ namespace ZeldaEditor.WinForms {
 				PresentationParameters pp = GraphicsDevice.PresentationParameters;
 
 				deviceNeedsReset = (ClientSize.Width > pp.BackBufferWidth) ||
-                                       (ClientSize.Height > pp.BackBufferHeight);
+									   (ClientSize.Height > pp.BackBufferHeight);
 				break;
 			}
 
 			// Do we need to reset the device?
 			if (deviceNeedsReset) {
 				try {
+					if (PreviewReset != null)
+						PreviewReset(this, EventArgs.Empty);
 					graphicsDeviceService.ResetDevice(ClientSize.Width,
 													  ClientSize.Height);
 				}
 				catch (Exception e) {
+					resetError = true;
 					return "Graphics device reset failed\n\n" + e;
 				}
+				if (PostReset != null)
+					PostReset(this, EventArgs.Empty);
 			}
 
 			return null;

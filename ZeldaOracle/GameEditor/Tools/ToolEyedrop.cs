@@ -87,8 +87,8 @@ namespace ZeldaEditor.Tools {
 				if (!EditorControl.EventMode) {
 					TileDataInstance tile = LevelDisplay.SampleTile(mousePos, EditorControl.CurrentLayer);
 					if (tile != null) {
-						EditorControl.SelectedTilesetTile = -Point2I.One;
-						EditorControl.SelectedTilesetTileData = tile.TileData;
+						EditorControl.SelectedTilesetLocation = -Point2I.One;
+						EditorControl.SelectedTileData = tile.TileData;
 					}
 				}
 				else {

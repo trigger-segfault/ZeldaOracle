@@ -56,7 +56,7 @@ namespace ZeldaEditor.Tools {
 			if (!EditorControl.EventMode && e.Button.IsLeftOrRight()) {
 				if ((EditorControl.CurrentLayer == 0 || GetTileAt(target) != null)) {
 					// Fill tiles.
-					TileData fillData = EditorControl.SelectedTilesetTileData as TileData;
+					TileData fillData = EditorControl.SelectedTileData as TileData;
 					if (fillData != null) {
 						if (e.Button == MouseButtons.Right)
 							fillData = null;
@@ -181,7 +181,7 @@ namespace ZeldaEditor.Tools {
 			return null;
 		}
 		private TileData GetTileData() {
-			return EditorControl.SelectedTilesetTileData as TileData;
+			return EditorControl.SelectedTileData as TileData;
 		}
 
 	}

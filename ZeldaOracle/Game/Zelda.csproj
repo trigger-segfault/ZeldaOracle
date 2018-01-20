@@ -474,7 +474,7 @@
     <Compile Include="Game\Control\Controls.cs" />
     <Compile Include="Game\Items\Weapons\SeedBasedItem.cs" />
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterBeamos.cs" />
-    <Compile Include="Game\Tiles\NewTileset.cs" />
+    <Compile Include="Game\Tiles\Tileset.cs" />
     <Compile Include="Game\Tiles\TileDataDrawing.cs" />
     <Compile Include="Game\UserSettings.cs" />
     <Compile Include="Game\Main\GameBase.cs" />
@@ -517,10 +517,10 @@
     <Compile Include="Game\Tiles\EventTiles\Puzzles\EventColorTilePuzzle.cs" />
     <Compile Include="Game\Tiles\Internal\AppearingTile.cs" />
     <Compile Include="Game\Tiles\Internal\PlaceHolderTile.cs" />
-    <Compile Include="Game\Tiles\ITileset.cs" />
+    <None Include="Game\Tiles\ITileset.cs" />
     <Compile Include="Game\Tiles\Custom\TileSomariaBlock.cs" />
-    <Compile Include="Game\Tiles\BaseTileset.cs" />
-    <Compile Include="Game\Tiles\EventTiles\EventTileset.cs" />
+    <None Include="Game\Tiles\BaseTileset.cs" />
+    <None Include="Game\Tiles\EventTiles\EventTileset.cs" />
     <Compile Include="Game\Tiles\TileGraphicsComponent.cs" />
     <Compile Include="Game\Tiles\TilePath.cs" />
     <Compile Include="Game\Tiles\Custom\TileRoller.cs" />
@@ -542,7 +542,7 @@
     <Compile Include="Game\Tiles\BaseTileDataInstance.cs" />
     <Compile Include="Game\Tiles\TileDataInstance.cs" />
     <Compile Include="Game\Tiles\TileFlags.cs" />
-    <Compile Include="Game\Tiles\Tileset.cs" />
+    <None Include="Game\Tiles\TilesetOld.cs" />
     <Compile Include="Game\Tiles\Custom\TileSign.cs" />
     <Compile Include="Common\Scripting\IPropertyObject.cs" />
     <Compile Include="Game\Worlds\Dungeon.cs" />

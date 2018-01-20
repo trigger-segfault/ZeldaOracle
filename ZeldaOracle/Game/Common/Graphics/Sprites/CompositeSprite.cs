@@ -35,7 +35,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
 		public IEnumerable<SpritePart> GetParts(SpriteDrawSettings settings) {
-			Rectangle2I bounds = Bounds;
+			//Rectangle2I bounds = Bounds;
 			foreach (OffsetSprite sprite in sprites) {
 				foreach (SpritePart part in sprite.GetParts(settings)) {
 					yield return part;

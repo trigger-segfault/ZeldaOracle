@@ -52,14 +52,14 @@ SPRITESHEET "items_small_light",	"Items/items_small_light"	(8, 16), (1, 1), (18,
 SPRITESHEET "items_large_light",	"Items/items_large_light"	(16, 16), (1, 1), (18, 18); END;
 
 
-SPRITESHEET "tileset_overworld",	(16, 16), (1, 1), (0, 0); END;
-SPRITESHEET "tileset_interior2",	(16, 16), (1, 1), (0, 0); END;
-SPRITESHEET "Tiles/general_tiles",	(16, 16), (1, 1), (18, 18); END;
+#SPRITESHEET "tileset_overworld",	(16, 16), (1, 1), (0, 0); END;
+#SPRITESHEET "tileset_interior2",	(16, 16), (1, 1), (0, 0); END;
+#SPRITESHEET "Tiles/general_tiles",	(16, 16), (1, 1), (18, 18); END;
 #SPRITESHEET "Tiles/zoneset_large", "zoneset", (16, 16), (1, 1), (0, 0); END;
 #SPRITESHEET "Tiles/zoneset_small", "zoneset", (8, 8), (1, 1), (187, 0); END;
 
-SPRITESHEET "Tiles/zoneset_large", "zoneset_new", (16, 16), (1, 1), (18, 18); END;
-SPRITESHEET "Tiles/zoneset_small", "zoneset_new", (8, 8), (1, 1), (18, 341); END;
+#SPRITESHEET "Tiles/zoneset_large", "zoneset_new", (16, 16), (1, 1), (18, 18); END;
+#SPRITESHEET "Tiles/zoneset_small", "zoneset_new", (8, 8), (1, 1), (18, 341); END;
 
 SPRITESHEET "Effects/basic_effects",	(16, 16), (1, 1), (0, 0); END;
 SPRITESHEET "Effects/color_effects",	(16, 16), (1, 1), (0, 0); END;
@@ -111,7 +111,7 @@ BASIC event_tile_tile_path_puzzle,		(3, 1); END;
 #BASIC color_cube_red_yellow,		(5, 0); END;
 
 
-SOURCE "zoneset_large";
+#SOURCE "zoneset_large";
 
 #BASIC tile_bush,					( 0, 0); END;
 #BASIC tile_flowers_red,				( 1, 0); END;
@@ -264,8 +264,8 @@ SOURCE "zoneset_large";
 #BASIC tile_wall_bombable_left,		( 5, 12); END;
 #BASIC tile_wall_tunnel_up,			( 6, 12); END;
 #BASIC tile_wall_tunnel_left,		( 7, 12); END;
-BASIC tile_wall_keyhole_up,			( 8, 12); END;
-BASIC tile_wall_keyhole_left,		( 9, 12); END;
+#BASIC tile_wall_keyhole_up,			( 8, 12); END;
+#BASIC tile_wall_keyhole_left,		( 9, 12); END;
 
 #BASIC tile_wall_down,				( 0, 13); END;
 #BASIC tile_wall_right,				( 1, 13); END;
@@ -275,8 +275,8 @@ BASIC tile_wall_keyhole_left,		( 9, 12); END;
 #BASIC tile_wall_bombable_right,		( 5, 13); END;
 #BASIC tile_wall_tunnel_down,		( 6, 13); END;
 #BASIC tile_wall_tunnel_right,		( 7, 13); END;
-BASIC tile_wall_keyhole_down,		( 8, 13); END;
-BASIC tile_wall_keyhole_right,		( 9, 13); END;
+#BASIC tile_wall_keyhole_down,		( 8, 13); END;
+#BASIC tile_wall_keyhole_right,		( 9, 13); END;
 
 #BASIC tile_whirlpool_1,			( 0, 14); END;
 #BASIC tile_whirlpool_2,			( 1, 14); END;
@@ -289,21 +289,21 @@ BASIC tile_wall_keyhole_right,		( 9, 13); END;
 #BASIC tile_poison_bubble_3,		( 2, 15); END;
 #BASIC tile_poison_bubble_4,		( 3, 15); END;
 
-COMPOSITE tile_fountain_water_pillar_low;
-	ADD (10, 14); ADD (11, 14), (16, 0); END;
-COMPOSITE tile_fountain_water_pillar_high;
-	ADD (10, 15); ADD (11, 15), (16, 0); END;
-COMPOSITE tile_fountain_1;
-	ADD (12, 14); ADD (12, 15), (16, 0); ADD (12, 16), (0, 16); ADD (12, 17), (16, 16); END;
-COMPOSITE tile_fountain_2;
-	ADD (13, 14); ADD (13, 15), (16, 0); ADD (13, 16), (0, 16); ADD (13, 17), (16, 16); END;
-COMPOSITE tile_fountain_3;
-	ADD (14, 14); ADD (14, 15), (16, 0); ADD (14, 16), (0, 16); ADD (14, 17), (16, 16); END;
-COMPOSITE tile_fountain_4;
-	ADD (15, 14); ADD (15, 15), (16, 0); ADD (15, 16), (0, 16); ADD (15, 17), (16, 16); END;
+#COMPOSITE tile_fountain_water_pillar_low;
+#	ADD (10, 14); ADD (11, 14), (16, 0); END;
+#COMPOSITE tile_fountain_water_pillar_high;
+#	ADD (10, 15); ADD (11, 15), (16, 0); END;
+#COMPOSITE tile_fountain_1;
+#	ADD (12, 14); ADD (12, 15), (16, 0); ADD (12, 16), (0, 16); ADD (12, 17), (16, 16); END;
+#OMPOSITE tile_fountain_2;
+#	ADD (13, 14); ADD (13, 15), (16, 0); ADD (13, 16), (0, 16); ADD (13, 17), (16, 16); END;
+#COMPOSITE tile_fountain_3;
+#	ADD (14, 14); ADD (14, 15), (16, 0); ADD (14, 16), (0, 16); ADD (14, 17), (16, 16); END;
+#COMPOSITE tile_fountain_4;
+#	ADD (15, 14); ADD (15, 15), (16, 0); ADD (15, 16), (0, 16); ADD (15, 17), (16, 16); END;
 
 
-SOURCE "zoneset_small";
+#SOURCE "zoneset_small";
 
 #BASIC tile8x8_black,			(0, 0); END;
 #BASIC tile8x8_puddle_1,			(1, 0); END;
@@ -366,7 +366,7 @@ SOURCE "zoneset_small";
 # General Tiles
 #==============================================================
 
-SOURCE "general_tiles";
+#SOURCE "general_tiles";
 
 #BASIC tile_owl,							( 0, 0); END;
 #COMPOSITE tile_owl_activated;			ADD ( 1, 0), (-8, 0); ADD (2, 0), (8, 0); END;

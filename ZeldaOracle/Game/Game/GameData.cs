@@ -274,7 +274,7 @@ namespace ZeldaOracle.Game {
 			//Resources.LoadTilesets("Tilesets/overworld.conscript");
 			//Resources.LoadTilesets("Tilesets/interior2.conscript");
 
-			IntegrateResources<ITileset>("TILESET_");
+			IntegrateResources<Tileset>("TILESET_");
 		}
 
 		private static void LoadTiles() {
@@ -369,9 +369,9 @@ namespace ZeldaOracle.Game {
 		// Tilesets
 		//-----------------------------------------------------------------------------
 
-		public static ITileset TILESET_OVERWORLD;
-		public static ITileset TILESET_INTERIOR;
-		public static ITileset TILESET_CLIFFS;
+		public static Tileset TILESET_OVERWORLD;
+		public static Tileset TILESET_INTERIOR;
+		public static Tileset TILESET_CLIFFS;
 
 
 		//-----------------------------------------------------------------------------

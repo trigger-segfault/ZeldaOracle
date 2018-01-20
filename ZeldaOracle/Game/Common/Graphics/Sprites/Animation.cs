@@ -77,7 +77,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
 		public IEnumerable<SpritePart> GetParts(SpriteDrawSettings settings) {
-			Rectangle2I bounds = Bounds;
+			//Rectangle2I bounds = Bounds;
 			float time = settings.PlaybackTime;
 			if (loopMode == LoopMode.Repeat) {
 				if (duration == 0)
@@ -95,6 +95,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 					}
 				}
 			}
+			yield break;
 		}
 
 		/// <summary>Clones the sprite.</summary>

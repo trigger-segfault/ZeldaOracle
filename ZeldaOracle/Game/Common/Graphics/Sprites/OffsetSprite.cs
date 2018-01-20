@@ -71,7 +71,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
 		public IEnumerable<SpritePart> GetParts(SpriteDrawSettings settings) {
-			Rectangle2I bounds = GetBounds(settings);
+			Rectangle2I bounds = Rectangle2I.Zero; //GetBounds(settings);
 			if (sprite == null)
 				yield break;
 			foreach (SpritePart part in sprite.GetParts(settings)) {
