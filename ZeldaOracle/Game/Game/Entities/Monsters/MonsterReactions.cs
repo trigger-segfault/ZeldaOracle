@@ -189,8 +189,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Bump the monster.
 			public static void Bump(Monster monster, Entity sender, EventArgs args) {
-				AudioSystem.PlaySound(GameData.SOUND_BOMB_BOUNCE);
-				monster.Bump(sender.Center);
+				if (!monster.IsBeingKnockedBack) {
+					monster.Bump(sender.Center);
+				}
 			}
 
 			// Bump the monster and sender.
@@ -363,8 +364,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			}
 			
 			public static void Bump(Monster monster, Entity sender, EventArgs args) {
-				if (sender is Unit)
+				if (sender is Unit && !(sender as Unit).IsBeingKnockedBack) {
+					AudioSystem.PlaySound(GameData.SOUND_BOMB_BOUNCE);
 					(sender as Unit).Bump(monster.Center);
+				}
 			}
 			
 			public static void Damage(Monster monster, Entity sender, EventArgs args) {
