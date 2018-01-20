@@ -147,6 +147,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>palettes</Name>
     </None>
+    <None Include="Palettes\underwater_present.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>underwater_present</Name>
+    </None>
+    <None Include="Palettes\summer.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>summer</Name>
+    </None>
     <None Include="Palettes\present.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>present</Name>

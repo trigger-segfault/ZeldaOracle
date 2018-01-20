@@ -10,7 +10,18 @@ ZONE "summer";
 	NAME "Summer";
 	IMAGEVARIANT "SUMMER";
 	DEFAULTTILE "ground";
-	PALETTE "present";
+	PALETTE "summer";
+	SETSTYLE "cliff", "past";
+	SETSTYLE "cliff_railing", "past";
+	SETSTYLE "grass", "seasons";
+	SETSTYLE "grass_ground", "groomed";
+	SETSTYLE "grass_green", "groomed";
+	SETSTYLE "tree", "seasons";
+	
+	SETSTYLE "fence_post", "wooden";
+	SETSTYLE "bridge", "past";
+	SETSTYLE "fountain_jet", "continuous";
+	SETSTYLE "staircase", "natural";
 END;
 
 ZONE "forest";
@@ -119,7 +130,8 @@ ZONE "underwater_present";
 	NAME "Underwater Present";
 	IMAGEVARIANT "UNDERWATER_PRESENT";
 	DEFAULTTILE "ground";
-	PALETTE "present";
+	PALETTE "underwater_present";
 	UNDERWATER true;
+	SETSTYLE "tree", "sea_present";
 END;
 	

@@ -196,7 +196,7 @@ namespace ZeldaOracle.Game {
 			ZONE_DEFAULT			= new Zone("",					"(none)",			VARIANT_NONE,				ground);
 			ZONE_DEFAULT.PaletteID = "present";
 			ZONE_SUMMER				= new Zone("summer",			"Summer",			VARIANT_SUMMER,				ground);
-			ZONE_SUMMER.PaletteID = "present";
+			ZONE_SUMMER.PaletteID = "summer";
 			ZONE_FOREST				= new Zone("forest",			"Forest",			VARIANT_FOREST,				ground);
 			ZONE_FOREST.PaletteID = "present";
 			ZONE_GRAVEYARD			= new Zone("graveyard",			"Graveyard",		VARIANT_GRAVEYARD,			ground);
@@ -463,6 +463,7 @@ namespace ZeldaOracle.Game {
 
 		public static Palette PAL_TILES_DEFAULT;
 		public static Palette PAL_PRESENT;
+		public static Palette PAL_SUMMER;
 		public static Palette PAL_DUNGEON_AGES_1;
 		public static Palette PAL_TILES_ELECTROCUTED;
 
