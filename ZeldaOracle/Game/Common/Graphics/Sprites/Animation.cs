@@ -76,8 +76,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
-		public IEnumerable<SpritePart> GetParts(SpriteDrawSettings settings) {
-			//Rectangle2I bounds = Bounds;
+		public SpritePart GetParts(SpriteDrawSettings settings) {
 			float time = settings.PlaybackTime;
 			if (loopMode == LoopMode.Repeat) {
 				if (duration == 0)
@@ -85,17 +84,25 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				else
 					time %= duration;
 			}
+			SpritePart firstPart = null;
+			SpritePart nextParts = null;
+
 			for (int i = 0; i < frames.Count; ++i) {
 				AnimationFrame frame = frames[i];
-				if (frame.Sprite == null)
-					continue;
 				if (time >= frame.StartTime && (time < frame.EndTime || (time >= duration && frame.StartTime + frame.Duration == duration))) {
-					foreach (SpritePart part in frame.OffsetSprite.GetParts(settings)) {
-						yield return part;
+					nextParts = frame.OffsetSprite.GetParts(settings);
+					if (nextParts != null) {
+						if (firstPart == null) {
+							firstPart = nextParts;
+						}
+						else {
+							firstPart.TailPart.NextPart = nextParts;
+							firstPart.TailPart = nextParts.TailPart;
+						}
 					}
 				}
 			}
-			yield break;
+			return firstPart;
 		}
 
 		/// <summary>Clones the sprite.</summary>

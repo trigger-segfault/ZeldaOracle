@@ -94,9 +94,9 @@ namespace ZeldaEditor.Control {
 			/*for (ZeldaSprite part = sprite; part != null; part = part.NextPart) {
 				canvas.Children.Add(GetSpritePart(part, variantID));
 			}*/
-			foreach (SpritePart part in sprite.GetParts(new SpriteDrawSettings(styleDefinitions, variantID))) {
+			/*foreach (SpritePart part in sprite.GetParts(new SpriteDrawSettings(styleDefinitions, variantID))) {
 				canvas.Children.Add(GetSpritePart(part, variantID));
-			}
+			}*/
 			return canvas;
 		}
 		// Get a bitmap from an image resource name.

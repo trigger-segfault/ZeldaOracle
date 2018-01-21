@@ -78,8 +78,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
-		public IEnumerable<SpritePart> GetParts(SpriteDrawSettings settings) {
-			yield return new SpritePart(image, sourceRect, drawOffset, flipEffects, rotation);
+		public SpritePart GetParts(SpriteDrawSettings settings) {
+			return new SpritePart(image, sourceRect, drawOffset/*, flipEffects, rotation*/);
 		}
 
 		/// <summary>Clones the sprite.</summary>

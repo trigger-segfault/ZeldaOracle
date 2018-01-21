@@ -197,12 +197,12 @@ namespace ZeldaOracle.Common.Graphics {
 
 		public void DrawSprite(ISprite sprite, int variantID, Vector2F position, float depth = 0.0f) {
 			if (sprite == null) return;
-			foreach (SpritePart part in sprite.GetParts(new SpriteDrawSettings(variantID))) {
+			SpritePart part = sprite.GetParts(new SpriteDrawSettings(variantID));
+			while (part != null) {
 				Image image = part.Image.GetVariant(variantID);
-				if (image.Texture.IsDisposed)
-					Console.Write("");
-				spriteBatch.Draw(image, NewPos(position) + (Vector2) part.CenterDrawOffset, (Rectangle) part.SourceRect,
-					XnaColor.White, part.RotationRadians, (Vector2) part.Center, 1.0f, (SpriteEffects) part.FlipEffects, depth);
+				spriteBatch.Draw(image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
+					XnaColor.White, 0.0F, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
+				part = part.NextPart;
 			}
 		}
 
@@ -216,11 +216,11 @@ namespace ZeldaOracle.Common.Graphics {
 
 		public void DrawSprite(ISprite sprite, Vector2F position, float depth = 0.0f) {
 			if (sprite == null) return;
-			foreach (SpritePart part in sprite.GetParts(SpriteDrawSettings.Default)) {
-				if (part.Image.Texture.IsDisposed)
-					Console.Write("");
-				spriteBatch.Draw(part.Image, NewPos(position) + (Vector2) part.CenterDrawOffset, (Rectangle) part.SourceRect,
-					XnaColor.White, part.RotationRadians, (Vector2) part.Center, 1.0f, (SpriteEffects) part.FlipEffects, depth);
+			SpritePart part = sprite.GetParts(SpriteDrawSettings.Default);
+			while (part != null) {
+				spriteBatch.Draw(part.Image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
+					XnaColor.White, 0.0F, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
+				part = part.NextPart;
 			}
 		}
 
@@ -230,24 +230,24 @@ namespace ZeldaOracle.Common.Graphics {
 
 		public void DrawSprite(ISprite sprite, int variantID, Rectangle2F destination, float depth = 0.0f) {
 			if (sprite == null) return;
-			foreach (SpritePart part in sprite.GetParts(new SpriteDrawSettings(variantID))) {
+			SpritePart part = sprite.GetParts(new SpriteDrawSettings(variantID));
+			while (part != null) {
 				Image image = part.Image.GetVariant(variantID);
-				if (image.Texture.IsDisposed)
-					Console.Write("");
 				destination.Point = NewPos(destination.Point) + (Vector2F) part.DrawOffset;
 				spriteBatch.Draw(image, (Rectangle) destination, (Rectangle) part.SourceRect,
 					XnaColor.White, 0.0f, Vector2.Zero, SpriteEffects.None, depth);
+				part = part.NextPart;
 			}
 		}
 
 		public void DrawSprite(ISprite sprite, int variantID, Vector2F position, Color color, float depth = 0.0f) {
 			if (sprite == null) return;
-			foreach (SpritePart part in sprite.GetParts(new SpriteDrawSettings(variantID))) {
+			SpritePart part = sprite.GetParts(new SpriteDrawSettings(variantID));
+			while (part != null) {
 				Image image = part.Image.GetVariant(variantID);
-				if (image.Texture.IsDisposed)
-					Console.Write("");
-				spriteBatch.Draw(image, NewPos(position) + (Vector2) part.CenterDrawOffset, (Rectangle) part.SourceRect,
-					(XnaColor) color, part.RotationRadians, (Vector2) part.Center, 1.0f, (SpriteEffects) part.FlipEffects, depth);
+				spriteBatch.Draw(image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
+					(XnaColor) color, 0.0F, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
+				part = part.NextPart;
 			}
 		}
 
@@ -261,11 +261,11 @@ namespace ZeldaOracle.Common.Graphics {
 
 		public void DrawSprite(ISprite sprite, Vector2F position, Color color, float depth = 0.0f) {
 			if (sprite == null) return;
-			foreach (SpritePart part in sprite.GetParts(SpriteDrawSettings.Default)) {
-				if (part.Image.Texture.IsDisposed)
-					Console.Write("");
-				spriteBatch.Draw(part.Image, NewPos(position) + (Vector2) part.CenterDrawOffset, (Rectangle)part.SourceRect,
-					(XnaColor)color, part.RotationRadians, (Vector2) part.Center, 1.0f, (SpriteEffects) part.FlipEffects, depth);
+			SpritePart part = sprite.GetParts(SpriteDrawSettings.Default);
+			while (part != null) {
+				spriteBatch.Draw(part.Image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
+					(XnaColor) color, 0.0f, Vector2.Zero, 0.0f, SpriteEffects.None, depth);
+				part = part.NextPart;
 			}
 		}
 
@@ -275,13 +275,13 @@ namespace ZeldaOracle.Common.Graphics {
 
 		public void DrawSprite(ISprite sprite, int variantID, Rectangle2F destination, Color color, float depth = 0.0f) {
 			if (sprite == null) return;
-			foreach (SpritePart part in sprite.GetParts(new SpriteDrawSettings(variantID))) {
+			SpritePart part = sprite.GetParts(new SpriteDrawSettings(variantID));
+			while (part != null) {
 				Image image = part.Image.GetVariant(variantID);
-				destination.Point = NewPos(destination.Point) + (Vector2F)part.DrawOffset;
-				if (image.Texture.IsDisposed)
-					Console.Write("");
-				spriteBatch.Draw(image, (Rectangle)destination, (Rectangle)part.SourceRect,
+				destination.Point = NewPos(destination.Point) + (Vector2F) part.DrawOffset;
+				spriteBatch.Draw(image, (Rectangle) destination, (Rectangle) part.SourceRect,
 					(XnaColor) color, 0.0f, Vector2.Zero, SpriteEffects.None, depth);
+				part = part.NextPart;
 			}
 		}
 
@@ -395,24 +395,24 @@ namespace ZeldaOracle.Common.Graphics {
 
 		public void DrawSprite(ISprite sprite, SpriteDrawSettings settings, Vector2F position, Color color, float depth = 0.0f) {
 			if (sprite == null) return;
-			foreach (SpritePart part in sprite.GetParts(settings)) {
+			SpritePart part = sprite.GetParts(settings);
+			while (part != null) {
 				Image image = part.Image.GetVariant(settings.VariantID);
-				if (image.Texture.IsDisposed)
-					Console.Write("");
-				spriteBatch.Draw(image, NewPos(position) + (Vector2) part.CenterDrawOffset, (Rectangle) part.SourceRect,
-					(XnaColor) color, part.RotationRadians, (Vector2) part.Center, 1.0f, (SpriteEffects) part.FlipEffects, depth);
+				spriteBatch.Draw(image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
+					(XnaColor) color, 0.0F, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
+				part = part.NextPart;
 			}
 		}
 		
 		public void DrawSprite(ISprite sprite, SpriteDrawSettings settings, Rectangle2F destination, Color color, float depth = 0.0f) {
 			if (sprite == null) return;
-			foreach (SpritePart part in sprite.GetParts(settings)) {
+			SpritePart part = sprite.GetParts(settings);
+			while (part != null) {
 				Image image = part.Image.GetVariant(settings.VariantID);
-				if (image.Texture.IsDisposed)
-					Console.Write("");
-				destination.Point = NewPos(destination.Point) + part.CenterDrawOffset;
+				destination.Point = NewPos(destination.Point) + (Vector2) part.DrawOffset;
 				spriteBatch.Draw(image, (Rectangle) destination, (Rectangle) part.SourceRect,
-					(XnaColor) color, part.RotationRadians, (Vector2) part.Center, (SpriteEffects) part.FlipEffects, depth);
+					(XnaColor) color, 0.0F, Vector2.Zero, SpriteEffects.None, depth);
+				part = part.NextPart;
 			}
 		}
 

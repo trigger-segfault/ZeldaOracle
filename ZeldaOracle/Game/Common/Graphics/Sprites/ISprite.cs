@@ -8,8 +8,8 @@ using ZeldaOracle.Common.Geometry;
 namespace ZeldaOracle.Common.Graphics.Sprites {
 	/// <summary>An interface for a drawable sprite.</summary>
 	public interface ISprite {
-		/// <summary>Gets the drawable parts of the sprite.</summary>
-		IEnumerable<SpritePart> GetParts(SpriteDrawSettings settings);
+		/// <summary>Gets the linked list of drawable parts of the sprite.</summary>
+		SpritePart GetParts(SpriteDrawSettings settings);
 
 		/// <summary>Clones the sprite.</summary>
 		ISprite Clone();

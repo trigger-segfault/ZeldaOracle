@@ -11,7 +11,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 	public class PaletteSR : ScriptReader {
 		
 		private Palette palette;
-		private string assetName;
+		private string paletteName;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -25,21 +25,15 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("PALETTE", 0,
 				"string dictionary, string name",
 			delegate (CommandParam parameters) {
-				if (palette != null)
-					ThrowCommandParseError("Must end previous PALETTE!");
-
 				PaletteDictionary dictionary = Resources.GetPaletteDictionary(parameters.GetString(0));
 				palette = new Palette(Resources.GraphicsDevice, dictionary);
-				assetName = parameters.GetString(1);
-				AddResource<Palette>(assetName, palette);
+				paletteName = parameters.GetString(1);
+				AddResource<Palette>(paletteName, palette);
 				Mode = 1;
 			});
 			//=====================================================================================
 			AddCommand("END", 1,
 			delegate (CommandParam parameters) {
-				if (palette == null)
-					ThrowCommandParseError("Must start a PALETTE before calling end!");
-
 				palette.UpdatePalette();
 				palette = null;
 				Mode = 0;
@@ -102,7 +96,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string paletteName",
 			delegate (CommandParam parameters) {
 				palette = new Palette(GetResource<Palette>(parameters.GetString(0)));
-				SetResource<Palette>(assetName, palette);
+				SetResource<Palette>(paletteName, palette);
 			});
 			//=====================================================================================
 		}
@@ -134,7 +128,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		/// <summary>Begins reading the script.</summary>
 		protected override void BeginReading() {
 			palette			= null;
-			assetName		= "";
+			paletteName		= "";
 		}
 
 		/// <summary>Ends reading the script.</summary>

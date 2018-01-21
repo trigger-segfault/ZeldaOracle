@@ -64,7 +64,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
-		public IEnumerable<SpritePart> GetParts(SpriteDrawSettings settings) {
+		public SpritePart GetParts(SpriteDrawSettings settings) {
 			string definition = GetDefinition(settings);
 			if (definition != null) {
 				ISprite sprite;
@@ -74,7 +74,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 			}
 			if (defaultSprite != null)
 				return defaultSprite.GetParts(settings);
-			return Enumerable.Empty<SpritePart>();
+			return null;
 		}
 
 		/// <summary>Clones the sprite.</summary>
