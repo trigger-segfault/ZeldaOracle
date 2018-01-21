@@ -23,6 +23,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 			stopAnimation	= GameData.ANIM_MONSTER_TEKTIKE;
 			jumpAnimation	= GameData.ANIM_MONSTER_TEKTIKE_JUMP;
 		}
+
 		
 		//-----------------------------------------------------------------------------
 		// Overridden Methods

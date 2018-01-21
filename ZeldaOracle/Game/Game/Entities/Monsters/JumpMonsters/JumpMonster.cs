@@ -27,6 +27,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		protected RangeF	jumpSpeed;
 		protected int		stopTimer;
 		protected bool		isJumping;
+		protected Sound		jumpSound;
 
 
 		//-----------------------------------------------------------------------------
@@ -43,6 +44,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			jumpSpeed		= new RangeF(3, 3);
 			stopAnimation	= GameData.ANIM_MONSTER_ZOL;
 			jumpAnimation	= GameData.ANIM_MONSTER_ZOL_JUMP;
+			jumpSound		= GameData.SOUND_MONSTER_JUMP;
 
 			syncAnimationWithDirection = false;
 		}
@@ -59,21 +61,25 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		public void Jump() {
-			isJumping	= true;
-			Graphics.PlayAnimation(jumpAnimation);
+			isJumping = true;
 
+			// Jump towards the player
 			Physics.ZVelocity = GRandom.NextFloat(jumpSpeed.Min, jumpSpeed.Max);
-			Physics.Velocity = (RoomControl.Player.Center - Center).Normalized * moveSpeed;
+			Physics.Velocity = (RoomControl.Player.Center -
+				Center).Normalized * moveSpeed;
 
-			AudioSystem.PlaySound(GameData.SOUND_MONSTER_JUMP);
+			if (jumpAnimation != null)
+				Graphics.PlayAnimation(jumpAnimation);
+			if (jumpSound != null)
+				AudioSystem.PlaySound(jumpSound);
 
 			OnJump();
 		}
 
 		public void EndJump() {
 			Physics.Velocity = Vector2F.Zero;
-			isJumping	= false;
-			stopTimer	= GRandom.NextInt(stopTime.Min, stopTime.Max);
+			isJumping = false;
+			stopTimer = GRandom.NextInt(stopTime.Min, stopTime.Max);
 			Graphics.PlayAnimation(stopAnimation);
 
 			OnEndJump();

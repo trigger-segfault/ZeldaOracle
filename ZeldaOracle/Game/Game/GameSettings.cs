@@ -140,6 +140,9 @@ namespace ZeldaOracle.Game {
 		public const float				MONSTER_SPINNING_BLADE_TRAP_FAST_SPEED		= 0.75f;
 		public const int				MONSTER_SPINNING_BLADE_TRAP_SPEED_UP_DELAY	= 20;
 		public const float				MONSTER_SPINNING_BLADE_TRAP_AGGRO_RANGE		= 14.0f;
+		public const int				MONSTER_POLS_VOICE_SEEK_PLAYER_ODDS				= 10;	// Odds to jump toward player
+		public const float				MONSTER_POLS_VOICE_SEEK_MOVE_SPEED_MULTIPLIER	= 1.7f;	// movement speed scale when jumping toward player
+		public const float				MONSTER_POLS_VOICE_SEEK_JUMP_SPEED_MULTIPLIER	= 1.3f;	// jump speed scale when jumping toward player
 
 		// Tiles
 		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.
