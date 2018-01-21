@@ -1,0 +1,16 @@
+﻿
+LOAD "Overworld/cliffs.conscript", true;
+LOAD "Overworld/cliffs_temp.conscript", true;
+LOAD "Overworld/cliffs_tiles.conscript", true;
+LOAD "Overworld/cliffs_walls.conscript", true;
+LOAD "Overworld/ground.conscript", true;
+LOAD "Overworld/sand.conscript", true;
+LOAD "Overworld/vines.conscript", true;
+LOAD "Overworld/water.conscript", true;
+LOAD "Overworld/obstacles.conscript", true;
+LOAD "Overworld/trees.conscript", true;
+LOAD "Overworld/hedges.conscript", true;
+LOAD "Overworld/snow_mounds.conscript", true;
+LOAD "Overworld/town.conscript", true;
+LOAD "Overworld/bridges.conscript", true;
+LOAD "Overworld/holes.conscript", true;

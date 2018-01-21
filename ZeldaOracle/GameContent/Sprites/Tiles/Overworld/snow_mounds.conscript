@@ -1,0 +1,48 @@
+﻿#==============================================================
+# Sprite Sheets
+#==============================================================
+
+SPRITESHEET	"temp_sheet_snow_mounds"		"Tiles/Overworld/snow_mounds"		(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+MAPPEDCOLORS	"tiles_default" ("snow");
+
+SOURCE "temp_sheet_snow_mounds";
+SPRITESET "set_snow_mounds", (4, 5);
+	MULTIPLE BASIC (0, 0); END;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_snow_mounds";
+
+NAME "tile_snow_mound_top_both"				(0, 0);
+NAME "tile_snow_mound_top_left"				(1, 0);
+NAME "tile_snow_mound_top_mid"				(2, 0);
+NAME "tile_snow_mound_top_right"			(3, 0);
+NAME "tile_snow_mound_side_both"			(0, 1);
+NAME "tile_snow_mound_side_left"			(1, 1);
+NAME "tile_snow_mound"						(2, 1);
+NAME "tile_snow_mound_side_right"			(3, 1);
+NAME "tile_snow_mound_bottom_both"			(0, 2);
+NAME "tile_snow_mound_bottom_left"			(1, 2);
+NAME "tile_snow_mound_bottom_mid"			(2, 2);
+NAME "tile_snow_mound_bottom_right"			(3, 2);
+
+NAME "tile_snow_mound_path_top_column"		(0, 3);
+NAME "tile_snow_mound_path_top_left"		(1, 3);
+NAME "tile_snow_mound_path_top_mid"			(2, 3);
+NAME "tile_snow_mound_path_top_right"		(3, 3);
+NAME "tile_snow_mound_path_side_column"		(0, 4);
+NAME "tile_snow_mound_path_side_left"		(1, 4);
+NAME "tile_snow_mound_path"					(2, 4);
+NAME "tile_snow_mound_path_side_right"		(3, 4);

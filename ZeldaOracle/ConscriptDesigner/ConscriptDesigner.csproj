@@ -111,6 +111,7 @@
     <Compile Include="Anchorables\ConscriptEditor.cs" />
     <Compile Include="Anchorables\Base\ContentFileDocument.cs" />
     <Compile Include="Anchorables\Base\IContentFileContainer.cs" />
+    <Compile Include="Anchorables\Base\ICommandAnchorable.cs" />
     <Compile Include="Anchorables\ImageDisplay.cs" />
     <Compile Include="Anchorables\Base\IRequestCloseAnchorable.cs" />
     <Compile Include="Anchorables\OutputConsole.cs" />
@@ -120,6 +121,10 @@
     <Compile Include="Anchorables\SpriteBrowser.cs" />
     <Compile Include="Anchorables\SpriteBrowserControl.xaml.cs">
       <DependentUpon>SpriteBrowserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Anchorables\TileBrowser.cs" />
+    <Compile Include="Anchorables\TileBrowserControl.xaml.cs">
+      <DependentUpon>TileBrowserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="WinForms\SpriteInfo.cs" />
     <Compile Include="Anchorables\SpriteSourceBrowser.cs" />
@@ -214,6 +219,9 @@
     <Compile Include="WinForms\TileDataPreview.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="WinForms\TilePreview.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WinForms\TilesetPreview.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -229,6 +237,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Anchorables\StyleBrowserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Anchorables\TileBrowserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

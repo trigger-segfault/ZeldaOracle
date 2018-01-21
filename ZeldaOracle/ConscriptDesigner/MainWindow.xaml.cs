@@ -41,6 +41,7 @@ namespace ConscriptDesigner {
 		private StyleBrowser styleBrowser;
 		private TileDataBrowser tileDataBrowser;
 		private TilesetBrowser tilesetBrowser;
+		private TileBrowser tileBrowser;
 
 		private FindReplaceWindow findReplaceWindow;
 		private PlaybackWindow playbackWindow;
@@ -201,6 +202,8 @@ namespace ConscriptDesigner {
 				tileDataBrowser.Reload();
 			if (tilesetBrowser != null)
 				tilesetBrowser.Reload();
+			if (tileBrowser != null)
+				tileBrowser.Reload();
 			comboBoxZones.ItemsSource = DesignerControl.PreviewZones;
 			comboBoxZones.SelectedItem = DesignerControl.PreviewZoneID;
 		}
@@ -216,6 +219,8 @@ namespace ConscriptDesigner {
 				tileDataBrowser.Unload();
 			if (tilesetBrowser != null)
 				tilesetBrowser.Unload();
+			if (tileBrowser != null)
+				tileBrowser.Unload();
 			supressEvents = true;
 			comboBoxZones.ItemsSource = null;
 			comboBoxZones.Items.Clear();
@@ -256,6 +261,8 @@ namespace ConscriptDesigner {
 				tileDataBrowser = null;
 			else if (anchorable is TilesetBrowser)
 				tilesetBrowser = null;
+			else if (anchorable is TileBrowser)
+				tileBrowser = null;
 			CommandManager.InvalidateRequerySuggested();
 		}
 
@@ -302,6 +309,10 @@ namespace ConscriptDesigner {
 
 		public void OpenTilesetBrowser() {
 			OnTilesetBrowserCommand();
+		}
+
+		public void OpenTileBrowser() {
+			OnTileBrowserCommand();
 		}
 
 		public void DockDocument(RequestCloseDocument anchorable) {
@@ -433,6 +444,22 @@ namespace ConscriptDesigner {
 			DesignerControl.Redo();
 		}
 
+		private void OnCutCommand(object sender, ExecutedRoutedEventArgs e) {
+			DesignerControl.Cut();
+		}
+
+		private void OnCopyCommand(object sender, ExecutedRoutedEventArgs e) {
+			DesignerControl.Copy();
+		}
+
+		private void OnPasteCommand(object sender, ExecutedRoutedEventArgs e) {
+			DesignerControl.Paste();
+		}
+
+		private void OnDeleteCommand(object sender, ExecutedRoutedEventArgs e) {
+			DesignerControl.Delete();
+		}
+
 		private void OnFindCommand(object sender, ExecutedRoutedEventArgs e) {
 			if (findReplaceWindow == null) {
 				findReplaceWindow = FindReplaceWindow.Show(this, false, OnWindowClosed);
@@ -559,6 +586,19 @@ namespace ConscriptDesigner {
 			tilesetBrowser.IsActive = true;
 		}
 
+		private void OnTileBrowserCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
+			if (tileBrowser == null) {
+				tileBrowser = new TileBrowser();
+				tileBrowser.Closed += OnAnchorableClosed;
+				tileBrowser.AddToLayout(dockingManager, AnchorableShowStrategy.Right);
+				var pane = tileBrowser.Parent as LayoutAnchorablePane;
+				pane.DockWidth = new GridLength(250);
+				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
+					tileBrowser.Reload();
+			}
+			tileBrowser.IsActive = true;
+		}
+
 		private void OnLaunchGameCommand(object sender, ExecutedRoutedEventArgs e) {
 			DesignerControl.LaunchGame();
 		}
@@ -607,6 +647,26 @@ namespace ConscriptDesigner {
 			e.CanExecute = DesignerControl.CanRedo;
 		}
 
+		private void CanCut(object sender, CanExecuteRoutedEventArgs e) {
+			if (supressEvents) return;
+			e.CanExecute = DesignerControl.CanCut;
+		}
+
+		private void CanCopy(object sender, CanExecuteRoutedEventArgs e) {
+			if (supressEvents) return;
+			e.CanExecute = DesignerControl.CanCopy;
+		}
+
+		private void CanPaste(object sender, CanExecuteRoutedEventArgs e) {
+			if (supressEvents) return;
+			e.CanExecute = DesignerControl.CanPaste;
+		}
+
+		private void CanDelete(object sender, CanExecuteRoutedEventArgs e) {
+			if (supressEvents) return;
+			e.CanExecute = DesignerControl.CanDelete;
+		}
+
 		private void CanExecuteIsBusy(object sender, CanExecuteRoutedEventArgs e) {
 			if (supressEvents) return;
 			e.CanExecute = !DesignerControl.IsBusy && DesignerControl.IsProjectOpen;
@@ -624,7 +684,7 @@ namespace ConscriptDesigner {
 
 		private void CanExecuteIsBuilding(object sender, CanExecuteRoutedEventArgs e) {
 			if (supressEvents) return;
-			e.CanExecute = DesignerControl.IsBusy;
+			e.CanExecute = !DesignerControl.IsBusy;
 		}
 
 		private void CanExecuteHasError(object sender, CanExecuteRoutedEventArgs e) {
@@ -675,6 +735,11 @@ namespace ConscriptDesigner {
 		public TilesetBrowser TilesetBrowser {
 			get { return tilesetBrowser; }
 			set { tilesetBrowser = value; }
+		}
+
+		public TileBrowser TileBrowser {
+			get { return tileBrowser; }
+			set { tileBrowser = value; }
 		}
 
 		public IRequestCloseAnchorable ActiveAnchorable {

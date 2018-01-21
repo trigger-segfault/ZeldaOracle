@@ -114,7 +114,7 @@ namespace ConscriptDesigner.Anchorables {
 
 
 		//-----------------------------------------------------------------------------
-		// Sprites Setup
+		// Tile Setup
 		//-----------------------------------------------------------------------------
 
 		private void UpdateTileset() {

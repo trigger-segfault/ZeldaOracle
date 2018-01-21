@@ -26,9 +26,10 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				CommandParam colorStyleParams = parameters.GetParam(1);
 				for (int i = 0; i < colorStyleParams.ChildCount; i++) {
 					CommandParam colorStyle = colorStyleParams.GetParam(i);
-					editingColorStyleGroups.Add(new ColorStyleGroup(
-						colorStyle.GetString(0), colorStyle.GetString(1)));
-					Resources.RegisterStyleGroup(colorStyle.GetString(0), null);
+					string styleGroup = colorStyle.GetString(0);
+					string colorGroup = colorStyle.GetString(1);
+					editingColorStyleGroups.Add(new ColorStyleGroup(styleGroup, colorGroup));
+					Resources.RegisterStyleGroup(styleGroup, null);
 				}
 
 				spriteName = parameters.GetString(0);
@@ -96,8 +97,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						editingSpriteSet.SetSprite(editingSetStart + new Point2I(x, y), new ColorSprite(""));
 					}
 				}
-
-				singular = false;
+				
 				Mode |= Modes.ColorSprite | Modes.StyleSprite | Modes.MultiStyle;
 			});
 			//=====================================================================================
@@ -148,8 +148,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						GetSprite<ColorSprite>(editingSpriteSet, editingSetStart + new Point2I(x, y));
 					}
 				}
-
-				singular = false;
+				
 				Mode |= Modes.ColorSprite | Modes.StyleSprite | Modes.MultiStyle;
 			});
 			//=====================================================================================
@@ -206,8 +205,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 							definition.Definition, ColorSprite, Point2I.Zero, defaultMappings);
 					}
 				}
-
-				singular = true;
+				
 				Mode |= Modes.ColorSprite | Modes.StyleSprite | Modes.MultiStyle;
 			});
 			//=====================================================================================

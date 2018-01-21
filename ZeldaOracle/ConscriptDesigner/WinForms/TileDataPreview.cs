@@ -115,10 +115,10 @@ namespace ConscriptDesigner.WinForms {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
+		
 		public BaseTileData HoverTileData {
 			get {
-				if (hoverPoint == -Point2I.One)
+				if (hoverPoint == -Point2I.One || tileData == null)
 					return null;
 				int index = (hoverPoint.Y * columns) + hoverPoint.X;
 				return tileData[index];

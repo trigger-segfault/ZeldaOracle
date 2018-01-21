@@ -34,6 +34,8 @@ namespace ConscriptDesigner.Content {
 		private ContentFile cutFile;
 		/// <summary>True if the current files were directly copied from the project explorer.</summary>
 		private bool copiedFromExplorer;
+		/// <summary>The list of copied files from within the explorer.</summary>
+		private List<string> copyFiles;
 		/// <summary>The loaded XML document for the project file.</summary>
 		private XmlDocument xmlDoc;
 		/// <summary>The loaded XML project file root element.</summary>
@@ -54,6 +56,7 @@ namespace ConscriptDesigner.Content {
 			this.contentFile = "";
 			this.cutFile = null;
 			this.copiedFromExplorer = false;
+			this.copyFiles = new List<string>();
 
 			this.xmlDoc = null;
 			this.xmlProject = null;
@@ -308,6 +311,7 @@ namespace ConscriptDesigner.Content {
 					cutFile.IsCut = false;
 				cutFile = null;
 				copiedFromExplorer = false;
+				copyFiles.Clear();
 			}
 		}
 		
@@ -532,6 +536,7 @@ namespace ConscriptDesigner.Content {
 
 		/// <summary>Copies the file.</summary>
 		public void Copy(string path) {
+			Clipboard.Clear();
 			if (cutFile != null)
 				cutFile.IsCut = false;
 			string name = IOPath.GetFileName(path);
@@ -540,7 +545,9 @@ namespace ConscriptDesigner.Content {
 				throw new FileDoesNotExistException(name);
 			StringCollection files = new StringCollection();
 			files.Add(file.FilePath);
-			Clipboard.SetFileDropList(files);
+			copyFiles.Clear();
+			copyFiles.Add(file.FilePath);
+			//Clipboard.SetFileDropList(files);
 			copiedFromExplorer = true;
 			CommandManager.InvalidateRequerySuggested();
 		}
@@ -694,6 +701,9 @@ namespace ConscriptDesigner.Content {
 				cutFile.IsCut = false;
 				cutFile = null;
 				projectModified = true;
+			}
+			else if (copiedFromExplorer) {
+				RequestDrop(copyFiles, directory);
 			}
 			else if (Clipboard.ContainsData(DataFormats.FileDrop)) {
 				var files = Clipboard.GetFileDropList();
@@ -1005,7 +1015,7 @@ namespace ConscriptDesigner.Content {
 
 		/// <summary>Returns true if paste can be used in the project explorer.</summary>
 		public bool CanPaste {
-			get { return Clipboard.ContainsFileDropList() || cutFile != null; }
+			get { return Clipboard.ContainsFileDropList() || cutFile != null || copiedFromExplorer; }
 		}
 
 		/// <summary>Gets the currently cut file.</summary>

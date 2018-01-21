@@ -283,10 +283,10 @@ namespace ZeldaOracle.Game {
 		public static ISprite SPR_UI_MAP_ROOM_DOWN_LEFT_UP_RIGHT;
 
 		// Event tiles
-		public static ISprite SPR_EVENT_TILE_WARP_STAIRS;
-		public static ISprite SPR_EVENT_TILE_WARP_TUNNEL;
-		public static ISprite SPR_EVENT_TILE_WARP_ENTRANCE;
-		public static ISprite SPR_EVENT_TILE_TRACK_INTERSECTION;
+		public static ISprite SPR_ACTION_TILE_WARP_STAIRS;
+		public static ISprite SPR_ACTION_TILE_WARP_TUNNEL;
+		public static ISprite SPR_ACTION_TILE_WARP_ENTRANCE;
+		public static ISprite SPR_ACTION_TILE_TRACK_INTERSECTION;
 
 		public static ISprite SPR_TURNSTILE_BARS_CLOCKWISE;
 		public static ISprite SPR_TURNSTILE_BARS_COUNTERCLOCKWISE;

@@ -1,0 +1,114 @@
+﻿#==============================================================
+# Sprite Sheets
+#==============================================================
+
+SPRITESHEET	"temp_sheet_ss_general"		"Tiles/SideScroll/ss_general"			(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+
+SOURCE "temp_sheet_ss_general";
+SPRITESET "set_ss_general", (8, 5);
+	MAPPEDCOLORS	"tiles_default", ("default");
+	SINGLE BASIC (0, 0); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_spikes");
+	SINGLE BASIC (0, 1); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_water");
+	SINGLE BASIC (0, 2); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_spikes_underwater");
+	SINGLE BASIC (0, 3); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_pot", "ss_pot_underwater",
+						"ss_switch_rock", "ss_switch_rock_underwater");
+	MULTIPLE BASIC (1, 0), (1, 0), (1, 4); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_pot_asobject", "ss_switch_rock_asobject");
+	MULTIPLE BASIC (0, 4), (0, 4), (2, 1); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_pulse_shooter");
+	MULTIPLE BASIC (2, 0), (2, 0), (2, 1); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_statue", "ss_statue_underwater");
+	MULTIPLE BASIC (2, 1), (2, 1), (1, 2); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_pipe_above", "ss_coral");
+	MULTIPLE BASIC (3, 1), (3, 1), (1, 3); END;
+	SINGLE BASIC (2, 3); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_magnet_stone");
+	MULTIPLE BASIC (2, 4), (2, 4), (2, 1); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_bombable_block", "ss_block");
+	MULTIPLE BASIC (4, 0), (4, 0), (1, 4); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_fish_statue");
+	MULTIPLE BASIC (5, 0), (5, 0), (2, 4); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_ladder_bars", "ss_ladder", "ss_ladder_underwater");
+	MULTIPLE BASIC (7, 0), (7, 0), (1, 3); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_prison_bars");
+	SINGLE BASIC (4, 4); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_grass");
+	MULTIPLE BASIC (5, 4), (5, 4), (2, 1); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ss_cave_wall");
+	MULTIPLE BASIC (7, 3), (7, 3), (1, 2); END;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_ss_general";
+
+NAME "tile_ss_background"					(0, 0);
+NAME "tile_ss_water"						(0, 2);
+NAME "tile_ss_spikes"						(0, 1);
+NAME "tile_ss_spikes_underwater"			(0, 3);
+NAME "tile_ss_pot"							(1, 0);
+NAME "tile_ss_pot_underwater"				(1, 2);
+NAME "tile_ss_pot_asobject"					(0, 4);
+NAME "tile_ss_switch_rock"					(1, 1);
+NAME "tile_ss_switch_rock_underwater"		(1, 3);
+NAME "tile_ss_switch_rock_asobject"			(1, 4);
+NAME "tile_ss_statue"						(2, 1);
+NAME "tile_ss_statue_underwater"			(2, 2);
+NAME "tile_ss_pipe_above_above"				(3, 1);
+NAME "tile_ss_pulse_shooter_left"			(2, 0);
+NAME "tile_ss_pulse_shooter_right"			(3, 0);
+NAME "tile_ss_coral_top_short"				(2, 3);
+NAME "tile_ss_coral_top"					(3, 2);
+NAME "tile_ss_coral_mid"					(3, 3);
+NAME "tile_ss_bombable_block"				(4, 0);
+NAME "tile_ss_bombable_block_underwater"	(4, 2);
+NAME "tile_ss_block"						(4, 1);
+NAME "tile_ss_block_underwater"				(4, 3);
+NAME "tile_ss_fish_statue_left_closed"				(5, 0);
+NAME "tile_ss_fish_statue_right_closed"				(6, 0);
+NAME "tile_ss_fish_statue_left_open"				(5, 1);
+NAME "tile_ss_fish_statue_right_open"				(6, 1);
+NAME "tile_ss_fish_statue_left_closed_underwater"	(5, 2);
+NAME "tile_ss_fish_statue_right_closed_underwater"	(6, 2);
+NAME "tile_ss_fish_statue_left_open_underwater"		(5, 3);
+NAME "tile_ss_fish_statue_right_open_underwater"	(6, 3);
+NAME "tile_ss_ladder_bars"					(7, 0);
+NAME "tile_ss_ladder"						(7, 1);
+NAME "tile_ss_ladder_underwater"			(7, 2);
+NAME "tile_ss_magnet_stone_north"			(2, 4);
+NAME "tile_ss_magnet_stone_south"			(3, 4);
+NAME "tile_ss_prison_bars"					(4, 4);
+NAME "tile_ss_grass_flowers"				(5, 4);
+NAME "tile_ss_grass"						(6, 4);
+NAME "tile_ss_stalactite_top"				(7, 3);
+NAME "tile_ss_stalactite_bottom"			(7, 4);

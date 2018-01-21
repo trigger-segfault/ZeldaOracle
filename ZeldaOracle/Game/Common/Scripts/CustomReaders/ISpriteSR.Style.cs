@@ -58,8 +58,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 							Resources.RegisterStyleGroup(styleGroup, styleSprite);
 					}
 				}
-
-				singular = false;
+				
 				Mode |= Modes.StyleSprite;
 			});
 			//=====================================================================================
@@ -76,8 +75,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						GetSprite<StyleSprite>(editingSpriteSet, editingSetStart + new Point2I(x, y));
 					}
 				}
-
-				singular = false;
+				
 				Mode |= Modes.StyleSprite;
 			});
 			//=====================================================================================
@@ -91,8 +89,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				sprite = new StyleSprite(styleGroup);
 				editingSpriteSet.SetSprite(editingSetStart, sprite);
 				Resources.RegisterStyleGroup(styleGroup, StyleSprite);
-
-				singular = true;
+				
 				Mode |= Modes.StyleSprite;
 			});
 			//=====================================================================================
@@ -103,8 +100,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				editingSetDimensions = Point2I.One;
 				
 				sprite = GetSprite<StyleSprite>(editingSpriteSet, editingSetStart);
-
-				singular = true;
+				
 				Mode |= Modes.StyleSprite;
 			});
 			//=====================================================================================

@@ -19,7 +19,7 @@ using ICSharpCode.AvalonEdit.Indentation;
 using ICSharpCode.NRefactory;
 
 namespace ConscriptDesigner.Anchorables {
-	public class ConscriptEditor : ContentFileDocument {
+	public class ConscriptEditor : ContentFileDocument, ICommandAnchorable {
 
 		//-----------------------------------------------------------------------------
 		// Static Members
@@ -195,6 +195,26 @@ namespace ConscriptDesigner.Anchorables {
 			UpdateTitle();
 		}
 
+		/// <summary>Performs the cut command.</summary>
+		public void Cut() {
+			// Handled by text editor
+		}
+
+		/// <summary>Performs the copy command.</summary>
+		public void Copy() {
+			// Handled by text editor
+		}
+
+		/// <summary>Performs the paste command.</summary>
+		public void Paste() {
+			// Handled by text editor
+		}
+
+		/// <summary>Performs the delete command.</summary>
+		public void Delete() {
+			// Handled by text editor
+		}
+
 		/// <summary>Undoes the last action in the editor.</summary>
 		public void Undo() {
 			editor.Undo();
@@ -211,6 +231,7 @@ namespace ConscriptDesigner.Anchorables {
 		public void FocusEditor() {
 			editor.Focus();
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Internal Methods
@@ -230,6 +251,7 @@ namespace ConscriptDesigner.Anchorables {
 				}, Dispatcher);
 		}
 
+		
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
@@ -237,6 +259,30 @@ namespace ConscriptDesigner.Anchorables {
 		/// <summary>Returns true if the editor considers the text to be modified.</summary>
 		public bool IsModified {
 			get { return editor.IsModified; }
+		}
+
+		/// <summary>Returns true if the editor can cut.</summary>
+		public bool CanCut {
+			// Handled by text editor
+			get { return false; }
+		}
+
+		/// <summary>Returns true if the editor can copy.</summary>
+		public bool CanCopy {
+			// Handled by text editor
+			get { return false; }
+		}
+
+		/// <summary>Returns true if the editor can paste.</summary>
+		public bool CanPaste {
+			// Handled by text editor
+			get { return false; }
+		}
+
+		/// <summary>Returns true if the editor can delete.</summary>
+		public bool CanDelete {
+			// Handled by text editor
+			get { return false; }
 		}
 
 		/// <summary>Returns true if the editor can undo.</summary>

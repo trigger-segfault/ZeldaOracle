@@ -1,4 +1,7 @@
 ﻿
 
-LOAD "Tiles/tiles.conscript", true;
+LOAD "Tiles/overworld.conscript", true;
+LOAD "Tiles/indoors.conscript", true;
+LOAD "Tiles/sidescroll.conscript", true;
+LOAD "Tiles/objects.conscript", true;
 LOAD "ActionTiles/action_tiles.conscript", true;

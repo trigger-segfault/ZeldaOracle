@@ -73,8 +73,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		private ISpriteSource source;
 		private ISprite sprite;
 
-		private bool singular;
-
 		//-----------------------------------------------------------------------------
 		// Override
 		//-----------------------------------------------------------------------------

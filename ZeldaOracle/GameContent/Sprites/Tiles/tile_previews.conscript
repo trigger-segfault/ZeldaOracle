@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET "temp_sheet_tile_previews",	"Tiles/Styles/tile_previews"	(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_tile_previews",	"Tiles/tile_previews"	(16, 16), (1, 1), (18, 18); END;
 
 #==============================================================
 # Sprite Sets
