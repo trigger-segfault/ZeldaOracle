@@ -136,9 +136,9 @@ namespace ZeldaOracle.Game {
 		public const float				MONSTER_BLADE_TRAP_MAX_SPEED				= 0.75f;
 		public const float				MONSTER_BLADE_TRAP_ACCELERATION				= 0.2f;
 		public const float				MONSTER_BLADE_TRAP_AGGRO_RANGE				= 14.0f;
-		public const float				MONSTER_SPINNING_BLADE_TRAP_INITIAL_SPEED	= 0.25f;
-		public const float				MONSTER_SPINNING_BLADE_TRAP_MAX_SPEED		= 0.75f;
-		public const float				MONSTER_SPINNING_BLADE_TRAP_ACCELERATION	= 0.01f;
+		public const float				MONSTER_SPINNING_BLADE_TRAP_SLOW_SPEED		= 0.35f;
+		public const float				MONSTER_SPINNING_BLADE_TRAP_FAST_SPEED		= 0.75f;
+		public const int				MONSTER_SPINNING_BLADE_TRAP_SPEED_UP_DELAY	= 20;
 		public const float				MONSTER_SPINNING_BLADE_TRAP_AGGRO_RANGE		= 14.0f;
 
 		// Tiles
