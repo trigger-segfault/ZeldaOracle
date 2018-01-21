@@ -14,8 +14,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
-		public IEnumerable<SpritePart> GetParts(SpriteDrawSettings settings) {
-			yield break;
+		public SpritePart GetParts(SpriteDrawSettings settings) {
+			return null;
 		}
 
 		/// <summary>Clones the sprite.</summary>

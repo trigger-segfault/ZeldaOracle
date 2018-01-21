@@ -70,13 +70,16 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
-		public IEnumerable<SpritePart> GetParts(SpriteDrawSettings settings) {
-			Rectangle2I bounds = Rectangle2I.Zero; //GetBounds(settings);
+		public SpritePart GetParts(SpriteDrawSettings settings) {
 			if (sprite == null)
-				yield break;
-			foreach (SpritePart part in sprite.GetParts(settings)) {
-				yield return new SpritePart(part, drawOffset, clipping, flipEffects, rotation, bounds);
+				return null;
+			SpritePart firstPart = sprite.GetParts(settings);
+			SpritePart parts = firstPart;
+			while (parts != null) {
+				parts.AddOffset(drawOffset, clipping/*, flipEffects, rotation*/);
+				parts = parts.NextPart;
 			}
+			return firstPart;
 		}
 
 		/// <summary>Clones the sprite.</summary>

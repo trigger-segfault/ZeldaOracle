@@ -34,13 +34,22 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Gets the drawable parts for the sprite.</summary>
-		public IEnumerable<SpritePart> GetParts(SpriteDrawSettings settings) {
-			//Rectangle2I bounds = Bounds;
+		public SpritePart GetParts(SpriteDrawSettings settings) {
+			SpritePart firstPart = null;
+			SpritePart nextParts = null;
 			foreach (OffsetSprite sprite in sprites) {
-				foreach (SpritePart part in sprite.GetParts(settings)) {
-					yield return part;
+				nextParts = sprite.GetParts(settings);
+				if (nextParts != null) {
+					if (firstPart == null) {
+						firstPart = nextParts;
+					}
+					else {
+						firstPart.TailPart.NextPart = nextParts;
+						firstPart.TailPart = nextParts.TailPart;
+					}
 				}
 			}
+			return firstPart;
 		}
 
 		/// <summary>Clones the sprite.</summary>
