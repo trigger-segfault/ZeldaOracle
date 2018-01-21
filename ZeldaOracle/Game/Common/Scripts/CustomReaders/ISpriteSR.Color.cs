@@ -69,8 +69,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						editingSpriteSet.SetSprite(editingSetStart + point, colorSprite);
 					}
 				}
-
-				singular = false;
+				
 				Mode |= Modes.ColorSprite;
 			});
 			//=====================================================================================
@@ -91,8 +90,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						defaultMappings = ColorizeColorSprite(colorSprite, colorParams, Point2I.Zero, defaultMappings);
 					}
 				}
-
-				singular = false;
+				
 				Mode |= Modes.ColorSprite;
 			});
 			//=====================================================================================
@@ -109,8 +107,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				sprite = new ColorSprite(colorationGroup);
 				ColorizeColorSprite(ColorSprite, colorParams, sourceIndex);
 				editingSpriteSet.SetSprite(editingSetStart, ColorSprite);
-
-				singular = true;
+				
 				Mode |= Modes.ColorSprite;
 			});
 			//=====================================================================================
@@ -124,8 +121,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 				sprite = GetSprite<ColorSprite>(editingSpriteSet, editingSetStart);
 				ColorizeColorSprite(ColorSprite, colorParams, Point2I.Zero);
-
-				singular = true;
+				
 				Mode |= Modes.ColorSprite;
 			});
 			//=====================================================================================

@@ -26,15 +26,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 namespace ZeldaOracle.Game.Tiles {
 
 	public class Tile : IEventObject, ZeldaAPI.Tile {
-
-		//-----------------------------------------------------------------------------
-		// Static Members
-		//-----------------------------------------------------------------------------
-
-		private static Dictionary<Type, TileDrawFunction> drawFunctions;
-
-
-
+		
 		//-----------------------------------------------------------------------------
 		// Members
 		//-----------------------------------------------------------------------------
@@ -105,7 +97,7 @@ namespace ZeldaOracle.Game.Tiles {
 			isMoving			= false;
 			pushDelay			= 20;
 			properties			= new Properties(this);
-			tileData			= null;
+			tileData            = new TileDataInstance(new TileData());
 			moveDirection		= Point2I.Zero; 
 			dropList			= null;
 			hasMoved			= false;

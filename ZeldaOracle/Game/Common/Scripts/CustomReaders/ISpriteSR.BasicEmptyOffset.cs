@@ -41,8 +41,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						editingSpriteSet.SetSprite(editingSetStart + new Point2I(x, y), emptySprite);
 					}
 				}
-
-				singular = false;
+				
 				Mode |= Modes.EmptySprite;
 			});
 			//=====================================================================================
@@ -54,8 +53,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 				sprite = new EmptySprite();
 				editingSpriteSet.SetSprite(editingSetStart, sprite);
-
-				singular = false;
+				
 				Mode |= Modes.EmptySprite;
 			});
 			//=====================================================================================
@@ -124,8 +122,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						editingSpriteSet.SetSprite(editingSetStart + point, basicSprite);
 					}
 				}
-
-				singular = false;
+				
 				Mode |= Modes.BasicSprite;
 			});
 			//=====================================================================================
@@ -142,8 +139,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						GetSprite<BasicSprite>(editingSpriteSet, editingSetStart + new Point2I(x, y));
 					}
 				}
-
-				singular = false;
+				
 				Mode |= Modes.BasicSprite;
 			});
 			//=====================================================================================
@@ -164,8 +160,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						editingSpriteSet.SetSprite(editingSetStart + point, basicSprite);
 					}
 				}
-
-				singular = false;
+				
 				Mode |= Modes.BasicSprite;
 			});
 			//=====================================================================================
@@ -196,8 +191,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 							Point2I.Zero);
 				}
 				editingSpriteSet.SetSprite(editingSetStart, sprite);
-
-				singular = true;
+				
 				Mode |= Modes.BasicSprite;
 			});
 			//=====================================================================================
@@ -208,8 +202,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				editingSetDimensions = Point2I.One;
 
 				sprite = GetSprite<BasicSprite>(editingSpriteSet, editingSetStart);
-
-				singular = true;
+				
 				Mode |= Modes.BasicSprite;
 			});
 			//=====================================================================================
@@ -222,8 +215,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 				sprite = GetSprite<BasicSprite>(source, sourceIndex);
 				editingSpriteSet.SetSprite(editingSetStart, sprite);
-
-				singular = true;
+				
 				Mode |= Modes.BasicSprite;
 			});
 			//=====================================================================================

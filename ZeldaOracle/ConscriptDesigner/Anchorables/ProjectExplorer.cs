@@ -19,7 +19,7 @@ namespace ConscriptDesigner.Anchorables {
 		}
 	}
 
-	public class ProjectExplorer : RequestCloseAnchorable {
+	public class ProjectExplorer : RequestCloseAnchorable, ICommandAnchorable {
 		
 		/// <summary>The tree view to display the content project files.</summary>
 		private DraggableImageTreeView treeView;
@@ -134,6 +134,124 @@ namespace ConscriptDesigner.Anchorables {
 				}
 				project = value;
 			}
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Command Overrides
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Cuts the selected file.</summary>
+		public void Cut() {
+			FrameworkElement selectedItem = treeView.SelectedItem as FrameworkElement;
+			if (selectedItem != null) {
+				ContentFile file = selectedItem.Tag as ContentFile;
+				if (file != null)
+					project.Cut(file.Path);
+			}
+		}
+
+		/// <summary>Copies the selected file.</summary>
+		public void Copy() {
+			FrameworkElement selectedItem = treeView.SelectedItem as FrameworkElement;
+			if (selectedItem != null) {
+				ContentFile file = selectedItem.Tag as ContentFile;
+				if (file != null)
+					project.Copy(file.Path);
+			}
+		}
+
+		/// <summary>Pastes from the clipboard into the selected directory.</summary>
+		public void Paste() {
+			FrameworkElement selectedItem = treeView.SelectedItem as FrameworkElement;
+			if (selectedItem != null) {
+				ContentFile file = selectedItem.Tag as ContentFile;
+				if (file != null) {
+					if (!file.IsFolder)
+						file = file.Parent;
+					project.RequestPaste(file.Path);
+				}
+			}
+		}
+
+		/// <summary>Performs the delete command.</summary>
+		public void Delete() {
+			FrameworkElement selectedItem = treeView.SelectedItem as FrameworkElement;
+			if (selectedItem != null) {
+				ContentFile file = selectedItem.Tag as ContentFile;
+				if (file != null && !file.IsRoot) {
+					project.RequestDelete(file.Path);
+				}
+			}
+		}
+
+		/// <summary>Performs the undo command.</summary>
+		public void Undo() {
+
+		}
+
+		/// <summary>Performs the redo command.</summary>
+		public void Redo() {
+
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Override Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns true if the project explorer can cut.</summary>
+		public bool CanCut {
+			// Handled by text editor
+			get {
+				FrameworkElement selectedItem = treeView.SelectedItem as FrameworkElement;
+				if (selectedItem == null) return false;
+				ContentFile file = selectedItem.Tag as ContentFile;
+				return (file != null ? !file.IsRoot : false);
+			}
+		}
+
+		/// <summary>Returns true if the project explorer can copy.</summary>
+		public bool CanCopy {
+			// Handled by text editor
+			get {
+				FrameworkElement selectedItem = treeView.SelectedItem as FrameworkElement;
+				if (selectedItem == null) return false;
+				ContentFile file = selectedItem.Tag as ContentFile;
+				return (file != null ? !file.IsRoot : false);
+			}
+		}
+
+		/// <summary>Returns true if the project explorer can paste.</summary>
+		public bool CanPaste {
+			// Handled by text editor
+			get {
+				FrameworkElement selectedItem = treeView.SelectedItem as FrameworkElement;
+				if (selectedItem == null) return false;
+				ContentFile file = selectedItem.Tag as ContentFile;
+				return (file != null && project.CanPaste);
+			}
+		}
+
+		/// <summary>Returns true if the project explorer can delete.</summary>
+		public bool CanDelete {
+			// Handled by text editor
+			get {
+				FrameworkElement selectedItem = treeView.SelectedItem as FrameworkElement;
+				if (selectedItem == null) return false;
+				ContentFile file = selectedItem.Tag as ContentFile;
+				return (file != null ? !file.IsRoot : false);
+			}
+		}
+
+		/// <summary>Returns true if the project explorer can undo.</summary>
+		public bool CanUndo {
+			get { return false; }
+		}
+
+		/// <summary>Returns true if the project explorer can redo.</summary>
+		public bool CanRedo {
+			get { return false; }
 		}
 	}
 }

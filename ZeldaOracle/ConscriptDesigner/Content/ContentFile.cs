@@ -498,10 +498,14 @@ namespace ConscriptDesigner.Content {
 		/// Used for when copied to the designer's content folder.</summary>
 		public string OutputFilePath {
 			get {
-				if (parent != null)
-					return IOPath.Combine(DesignerControl.DesignerContentDirectory, parent.Path, OutputFileName);
-				else if (IsRoot)
+				if (parent != null) {
+					string outptutFileName = OutputFileName;
+					if (outptutFileName != null)
+						return IOPath.Combine(DesignerControl.DesignerContentDirectory, parent.Path, outptutFileName);
+				}
+				else if (IsRoot) {
 					return DesignerControl.DesignerContentDirectory;
+				}
 				return null;
 			}
 		}

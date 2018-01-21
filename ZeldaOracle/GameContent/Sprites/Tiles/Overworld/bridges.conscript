@@ -1,0 +1,59 @@
+﻿#==============================================================
+# Sprite Sheets
+#==============================================================
+
+SPRITESHEET	"temp_sheet_bridges"			"Tiles/Overworld/bridges"			(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS	((255, 0, 0), (1, 1, 1));
+
+MAPPEDCOLORS	"tiles_default", ("bridge");
+
+SOURCE "temp_sheet_bridges";
+SPRITESET "set_bridges" (4, 2);
+	MULTIPLE STYLE "bridge";
+		ADD "present"			(0, 0);
+		ADD "past"				(0, 2);
+		ADD "subrosia"			(0, 4);
+		END;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_bridges";
+NAME "tile_bridge_vertical_left"			(0, 0);
+NAME "tile_bridge_vertical_mid"				(1, 0);
+NAME "tile_bridge_vertical_right"			(2, 0);
+NAME "tile_bridge_vertical_both"			(3, 0);
+NAME "tile_bridge_horizontal_top"			(0, 1);
+NAME "tile_bridge_horizontal_mid"			(1, 1);
+NAME "tile_bridge_horizontal_bottom"		(2, 1);
+NAME "tile_bridge_horizontal_both"			(3, 1);
+
+COMPOSITE "temp_preview_bridge_style";
+	ADD "tile_bridge_horizontal_top", (0, 0);
+	ADD "tile_bridge_horizontal_top", (16, 0);
+	ADD "tile_bridge_horizontal_bottom", (0, 16);
+	ADD "tile_bridge_horizontal_bottom", (16, 16);
+	ADD "tile_grass_border_w", (32, 0);
+	ADD "tile_ground", (48, 0);
+	ADD "tile_grass_border_outside_sw", (32, 16);
+	ADD "tile_grass_border_s", (48, 16);
+	ADD "tile_bridge_vertical_left", (32, 32);
+	ADD "tile_bridge_vertical_right", (48, 32);
+	ADD "tile_bridge_vertical_left", (32, 48);
+	ADD "tile_bridge_vertical_right", (48, 48);
+	ADD "tile_water", (0, 32);
+	ADD "tile_water", (16, 32);
+	ADD "tile_water", (0, 48);
+	ADD "tile_water", (16, 48);
+	END;
+	
+STYLEPREVIEW "bridge", "temp_preview_bridge_style";

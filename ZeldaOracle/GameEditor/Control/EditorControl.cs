@@ -34,6 +34,7 @@ using ZeldaEditor.Undo;
 using ZeldaEditor.Windows;
 using ZeldaEditor.WinForms;
 using ZeldaOracle.Common.Graphics;
+using ZeldaEditor.Util;
 
 namespace ZeldaEditor.Control {
 
@@ -295,12 +296,14 @@ namespace ZeldaEditor.Control {
 		private void UpdateTilesets() {
 			int index = 0;
 			List<string> tilesets = new List<string>();
-			tilesets.Add("<Tile List>");
 			foreach (var pair in Resources.GetResourceDictionary<Tileset>()) {
 				tilesets.Add(pair.Key);
 				if (tileset != null && pair.Key == tileset.ID)
-					index = tilesets.Count - 1;
+					index = tilesets.Count; // No -1 because "<Tiel List>" is added after sorting to the front
 			}
+			tilesets.Sort((a, b) => AlphanumComparator.Compare(a, b, true));
+
+			tilesets.Insert(0, "<Tile List>");
 
 			editorWindow.SetTilesetsItemsSource(tilesets, index);
 			UpdateTileSearch(tileSearchFilter);
@@ -314,6 +317,7 @@ namespace ZeldaEditor.Control {
 				if (pair.Key == zone.ID)
 					index = zones.Count - 1;
 			}
+			zones.Sort((a, b) => AlphanumComparator.Compare(a, b, true));
 
 			editorWindow.SetZonesItemsSource(zones, index);
 		}

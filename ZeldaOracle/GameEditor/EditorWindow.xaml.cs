@@ -85,6 +85,7 @@ namespace ZeldaEditor {
 			tileDisplay.Name            = "tileDisplay";
 			tileDisplay.Dock            = System.Windows.Forms.DockStyle.Fill;
 			tileDisplay.EditorWindow    = this;
+			tileDisplay.HoverChanged    += OnTileDisplayHoverChanged;
 			hostTileDisplay.Child = tileDisplay;
 
 			statusTask.Content = "";
@@ -117,7 +118,7 @@ namespace ZeldaEditor {
 		//-----------------------------------------------------------------------------
 		// Methods
 		//-----------------------------------------------------------------------------
-		
+
 		private void Update() {
 			statusFPS.Content = "FPS " + levelDisplay.FPS.ToString("0.0");
 		}
@@ -285,6 +286,14 @@ namespace ZeldaEditor {
 
 		private void OnTileSearchTextChanged(object sender, TextChangedEventArgs e) {
 			editorControl.UpdateTileSearch(textBoxTileSearch.Text);
+		}
+
+		private void OnTileDisplayHoverChanged(object sender, EventArgs e) {
+			BaseTileData tileData = tileDisplay.HoverTileData;
+			if (tileData == null)
+				textBlockTileName.Text = "";
+			else
+				textBlockTileName.Text = tileData.Name;
 		}
 
 		private string SurroundID(string id) {

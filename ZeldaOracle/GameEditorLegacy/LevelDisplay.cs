@@ -558,11 +558,11 @@ namespace ZeldaEditor {
 				string warpTypeStr = eventTile.Properties.GetString("warp_type", "tunnel");
 				WarpType warpType = (WarpType) Enum.Parse(typeof(WarpType), warpTypeStr, true);
 				if (warpType == WarpType.Entrance)
-					spr = GameData.SPR_EVENT_TILE_WARP_ENTRANCE;
+					spr = GameData.SPR_ACTION_TILE_WARP_ENTRANCE;
 				else if (warpType == WarpType.Tunnel)
-					spr = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
+					spr = GameData.SPR_ACTION_TILE_WARP_TUNNEL;
 				else if (warpType == WarpType.Stairs)
-					spr = GameData.SPR_EVENT_TILE_WARP_STAIRS;
+					spr = GameData.SPR_ACTION_TILE_WARP_STAIRS;
 			}
 
 			// Draw the sprite.

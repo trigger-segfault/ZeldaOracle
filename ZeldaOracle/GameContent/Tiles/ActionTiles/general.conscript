@@ -1,7 +1,7 @@
 ﻿
 ACTIONTILE warp;
 	TYPE		WarpEvent;
-	SPRITE		event_tile_warp_tunnel;
+	SPRITE		action_tile_warp_tunnel;
 	PROPERTIES	(string,  warp_type,				"tunnel",	"Warp Type", ("enum", "WarpType"), "Warp", "The type of warp point."),
 				(string,  destination_level,		"",			"Destination Level", "level", "Warp", "The level where the destination point is in."),
 				(string,  destination_warp_point,	"",			"Destination Warp Point", ("warp", "destination_level"), "Warp", "The id of the warp point destination."),
@@ -10,7 +10,7 @@ END;
 
 ACTIONTILE color_tile_puzzle;
 	TYPE		EventColorTilePuzzle;
-	SPRITE		event_tile_color_tile_puzzle;
+	SPRITE		action_tile_color_tile_puzzle;
 	PROPERTIES	(boolean, solve_once, false, "Solve Once", "", "Puzzle", "Can the puzzle only be solved once and not unsolved?");
 	EVENT		solved, "Solved", "Puzzle", "Occurs when the puzzle is solved.";
 	EVENT		unsolve, "Unsolve", "Puzzle", "Occurs when the puzzle is unsolved (is no longer considered solved).";

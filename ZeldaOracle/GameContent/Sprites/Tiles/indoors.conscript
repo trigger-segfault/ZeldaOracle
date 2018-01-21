@@ -1,0 +1,11 @@
+﻿
+LOAD "Indoors/floors.conscript", true;
+LOAD "Indoors/cracked_floors.conscript", true;
+LOAD "Indoors/tiled.conscript", true;
+LOAD "Indoors/walls.conscript", true;
+LOAD "Indoors/tunnels.conscript", true;
+LOAD "Indoors/railings.conscript", true;
+LOAD "Indoors/entrances.conscript", true;
+LOAD "Indoors/stairs.conscript", true;
+LOAD "Indoors/lights.conscript", true;
+LOAD "Indoors/interior.conscript", true;

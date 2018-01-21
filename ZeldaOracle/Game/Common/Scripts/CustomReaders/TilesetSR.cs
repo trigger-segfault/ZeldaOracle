@@ -33,11 +33,11 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		}
 
 		//private TilesetOld				tileset;
-		private Tileset			newTileset;
+		private Tileset				tileset;
 		//private EventTileset		eventTileset;
-		private BaseTileData		baseTileData;
-		private TileData			tileData;
-		private EventTileData		eventTileData;
+		//private BaseTileData		baseTileData;
+		//private TileData			tileData;
+		//private EventTileData		eventTileData;
 		//private LoadingModes		loadingMode;
 		private ISpriteSource		source;
 		private string				tilesetName;
@@ -111,9 +111,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string name, Point size, bool usePreviewSprites = true",
 			delegate (CommandParam parameters) {
 				tilesetName = parameters.GetString(0);
-				newTileset = new Tileset(tilesetName,
+				tileset = new Tileset(tilesetName,
 					parameters.GetPoint(1), parameters.GetBool(2));
-				AddResource<Tileset>(newTileset.ID, newTileset);
+				AddResource<Tileset>(tileset.ID, tileset);
 				Mode = Modes.Tileset;
 			});
 			//=====================================================================================
@@ -121,14 +121,14 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string name",
 			delegate (CommandParam parameters) {
 				tilesetName = parameters.GetString(0);
-				newTileset = GetResource<Tileset>(tilesetName);
+				tileset = GetResource<Tileset>(tilesetName);
 				Mode = Modes.Tileset;
 			});
 			//=====================================================================================
 			AddCommand("END", (int) Modes.Tileset,
 				"",
 			delegate (CommandParam parameters) {
-				newTileset = null;
+				tileset = null;
 				tilesetName = "";
 				Mode = Modes.Root;
 			});
@@ -139,15 +139,15 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"string tileset",
 			delegate (CommandParam parameters) {
 				Tileset cloneTileset = GetResource<Tileset>(parameters.GetString(0));
-				newTileset = new Tileset(cloneTileset);
-				newTileset.ID = tilesetName;
-				SetResource<Tileset>(tilesetName, newTileset);
+				tileset = new Tileset(cloneTileset);
+				tileset.ID = tilesetName;
+				SetResource<Tileset>(tilesetName, tileset);
 			});
 			//=====================================================================================
 			AddCommand("RESIZE", (int) Modes.Tileset,
 				"Point newDimensions",
 			delegate (CommandParam parameters) {
-				newTileset.Resize(parameters.GetPoint(0));
+				tileset.Resize(parameters.GetPoint(0));
 			});
 			//=====================================================================================
 			// TILESET BUILDING
@@ -156,7 +156,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"Point sourceIndex, string tileName",
 			delegate (CommandParam parameters) {
 				Point2I location = parameters.GetPoint(0);
-				newTileset.AddTileData(location,
+				tileset.AddTileData(location,
 					GetResource<BaseTileData>(parameters.GetString(1)));
 			});
 			//=====================================================================================
@@ -164,7 +164,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"Point sourceIndex, string tileName",
 			delegate (CommandParam parameters) {
 				Point2I location = parameters.GetPoint(0);
-				newTileset.SetTileData(location,
+				tileset.SetTileData(location,
 					GetResource<BaseTileData>(parameters.GetString(1)));
 			});
 			//=====================================================================================
@@ -172,7 +172,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"Point sourceIndex",
 			delegate (CommandParam parameters) {
 				Point2I location = parameters.GetPoint(0);
-				newTileset.RemoveTileData(location);
+				tileset.RemoveTileData(location);
 			});
 			//=====================================================================================
 			/*AddCommand("ACTIONTILESET", "string name, Point size",
@@ -767,9 +767,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		protected override void BeginReading() {
 			//loadingMode	= LoadingModes.Tilesets;
 			//tileset			= null;
-			newTileset		= null;
-			tileData		= null;
-			eventTileData	= null;
+			tileset		= null;
 		}
 
 		/// <summary>Ends reading the script.</summary>

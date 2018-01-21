@@ -7,7 +7,7 @@
 # Event Tileset
 #==============================================================================
 
-TILESET "events", (13, 13), false;
+TILESET "actions", (13, 13), false;
 
 ADDTILE ( 0, 0), warp;
 ADDTILE ( 1, 0), npc;
