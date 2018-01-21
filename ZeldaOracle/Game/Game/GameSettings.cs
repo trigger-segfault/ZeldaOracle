@@ -132,6 +132,14 @@ namespace ZeldaOracle.Game {
 		public const int				MONSTER_PINCER_PEEK_DELAY				= 30;		// Delay before can peek again after returning
 		public const int				MONSTER_PINCER_RETURN_DELAY				= 8;		// Delay before return starts after strike completes
 		public const int				MONSTER_PINCER_BODY_SEGMENT_COUNT		= 4;
+		public const float				MONSTER_BLADE_TRAP_INITIAL_SPEED			= 0.75f;
+		public const float				MONSTER_BLADE_TRAP_MAX_SPEED				= 0.75f;
+		public const float				MONSTER_BLADE_TRAP_ACCELERATION				= 0.2f;
+		public const float				MONSTER_BLADE_TRAP_AGGRO_RANGE				= 14.0f;
+		public const float				MONSTER_SPINNING_BLADE_TRAP_INITIAL_SPEED	= 0.25f;
+		public const float				MONSTER_SPINNING_BLADE_TRAP_MAX_SPEED		= 0.75f;
+		public const float				MONSTER_SPINNING_BLADE_TRAP_ACCELERATION	= 0.01f;
+		public const float				MONSTER_SPINNING_BLADE_TRAP_AGGRO_RANGE		= 14.0f;
 
 		// Tiles
 		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.

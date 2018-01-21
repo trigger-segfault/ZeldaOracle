@@ -283,7 +283,9 @@ namespace ZeldaOracle.Game.Debug {
 			if (ctrl && Mouse.IsButtonPressed(MouseButtons.Left)) {
 				Vector2F spawnPosition = mouseLocation * GameSettings.TILE_SIZE;
 				spawnPosition += new Vector2F(8, 8);
-				RoomControl.SpawnEntity(new MonsterMiniMoldorm(), spawnPosition);
+				Monster monster = new MonsterSpinningBladeTrap();
+				monster.SetPositionByCenter(spawnPosition);
+				RoomControl.SpawnEntity(monster);
 
 				//TileData tileData = new TileData(typeof(TileMonsterBeamos),
 				//	TileFlags.None);

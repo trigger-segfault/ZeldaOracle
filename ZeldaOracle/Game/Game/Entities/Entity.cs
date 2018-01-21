@@ -206,7 +206,7 @@ namespace ZeldaOracle.Game.Entities {
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
-		public static bool AreEntitiesAligned(Entity a, Entity b, int direction, int threshold) {
+		public static bool AreEntitiesAligned(Entity a, Entity b, int direction, float threshold) {
 			return ((Directions.IsVertical(direction) && Math.Abs(a.Center.X - b.Center.X) <= threshold) ||
 				(Directions.IsHorizontal(direction) && Math.Abs(a.Center.Y - b.Center.Y) <= threshold));
 		}
