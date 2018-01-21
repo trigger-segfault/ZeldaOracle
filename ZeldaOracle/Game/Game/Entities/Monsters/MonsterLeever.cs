@@ -6,7 +6,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 	
 	public class MonsterLeever : Monster {
 		
-		private enum LeeverState {
+		private enum BurrowState {
 			Burrowed,
 			Burrowing,
 			Unburrowing,
@@ -16,7 +16,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		private float moveSpeed;
 		private int timer;
 		private int duration;
-		private LeeverState leeverState;
+		private BurrowState burrowState;
 		
 
 		//-----------------------------------------------------------------------------
@@ -70,7 +70,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		private void Burrow() {
-			leeverState = LeeverState.Burrowing;
+			burrowState = BurrowState.Burrowing;
 			duration	= 100;
 			timer		= 0;
 			IsPassable	= true;
@@ -123,7 +123,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				RoomControl.Player.Center - Center);
 			Graphics.IsVisible = true;
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_LEEVER_UNBURROW);
-			leeverState = LeeverState.Unburrowing;
+			burrowState = BurrowState.Unburrowing;
 			return true;
 		}
 
@@ -136,7 +136,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			base.Initialize();
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_LEEVER);
 						
-			leeverState = LeeverState.Burrowed;
+			burrowState = BurrowState.Burrowed;
 			timer = 0;
 			duration = 100;
 			IsPassable = true;
@@ -146,20 +146,20 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public override void UpdateAI() {
 			timer++;
 
-			if (leeverState == LeeverState.Burrowing) {
+			if (burrowState == BurrowState.Burrowing) {
 				if (Graphics.IsAnimationDone) {
 					Graphics.IsVisible = false;
-					leeverState = LeeverState.Burrowed;
+					burrowState = BurrowState.Burrowed;
 				}
 			}
-			else if (leeverState == LeeverState.Unburrowing) {
+			else if (burrowState == BurrowState.Unburrowing) {
 				if (Graphics.IsAnimationDone) {
 					IsPassable = false;
 					Graphics.PlayAnimation(GameData.ANIM_MONSTER_LEEVER);
-					leeverState = LeeverState.Unburrowed;
+					burrowState = BurrowState.Unburrowed;
 				}
 			}
-			else if (leeverState == LeeverState.Burrowed) {
+			else if (burrowState == BurrowState.Burrowed) {
 				if (timer > duration) {
 					Unburrow();
 				}

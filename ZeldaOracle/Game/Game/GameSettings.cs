@@ -143,6 +143,10 @@ namespace ZeldaOracle.Game {
 		public const int				MONSTER_POLS_VOICE_SEEK_PLAYER_ODDS				= 10;	// Odds to jump toward player
 		public const float				MONSTER_POLS_VOICE_SEEK_MOVE_SPEED_MULTIPLIER	= 1.7f;	// movement speed scale when jumping toward player
 		public const float				MONSTER_POLS_VOICE_SEEK_JUMP_SPEED_MULTIPLIER	= 1.3f;	// jump speed scale when jumping toward player
+		public const float				MONSTER_ZOL_GREEN_UNBURROW_RANGE	= 48;	// min distance to player to unburrow
+		public const int				MONSTER_ZOL_GREEN_JUMP_COUNT		= 3;	// number of jumps before burrowing
+		public const int				MONSTER_ZOL_GREEN_UNBURROW_DELAY	= 50;	// delay after burrowing before unburrowing
+		public const int				MONSTER_GEL_ATTACH_TIME				= 120;
 
 		// Tiles
 		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.

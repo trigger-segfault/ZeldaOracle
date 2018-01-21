@@ -140,10 +140,15 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_MONSTER_GOPONGA_FLOWER;
 		public static Animation ANIM_MONSTER_PEAHAT;
 		public static Animation ANIM_MONSTER_GEL;
+		public static Animation ANIM_MONSTER_GEL_PREPARE_JUMP;
+		public static Animation ANIM_MONSTER_GEL_JUMP;
+		public static Animation ANIM_MONSTER_GEL_ATTACH;
 		public static Animation ANIM_MONSTER_ZOL;
 		public static Animation ANIM_MONSTER_ZOL_JUMP;
 		public static Animation ANIM_MONSTER_ZOL_BURROW;
 		public static Animation ANIM_MONSTER_ZOL_UNBURROW;
+		public static Animation ANIM_MONSTER_ZOL_RED;
+		public static Animation ANIM_MONSTER_ZOL_RED_PREPARE_JUMP;
 		public static Animation ANIM_MONSTER_COLOR_GEL_BODY;
 		public static Animation ANIM_MONSTER_COLOR_GEL_HIGHLIGHT;
 		public static Animation ANIM_MONSTER_COLOR_GEL_EYES;

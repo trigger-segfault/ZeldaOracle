@@ -302,7 +302,9 @@
     <Compile Include="Game\Entities\Monsters\BasicMonster - Copy.cs" />
     <Compile Include="Game\Entities\Monsters\BasicMonster.cs" />
     <Compile Include="Game\Entities\Monsters\JumpMonsters\MonsterPolsVoice.cs" />
+    <Compile Include="Game\Entities\Monsters\JumpMonsters\MonsterGel.cs" />
     <Compile Include="Game\Entities\Monsters\JumpMonsters\MonsterTektike.cs" />
+    <Compile Include="Game\Entities\Monsters\JumpMonsters\MonsterZolRed.cs" />
     <Compile Include="Game\Entities\Monsters\JumpMonsters\MonsterZolGreen.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterSpinningBladeTrap.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterBuzzBlob.cs" />

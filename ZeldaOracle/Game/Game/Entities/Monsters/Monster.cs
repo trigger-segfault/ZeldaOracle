@@ -204,7 +204,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			return false;
 		}
 
-		public void OnTouchPlayer(Entity sender, EventArgs args) {
+		public virtual void OnTouchPlayer(Entity sender, EventArgs args) {
 			Player player = (Player) sender;
 			player.Hurt(contactDamage, Center);
 		}
@@ -315,8 +315,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			previousState = state;
 		}
 
-		public override void Die(){
-			Effect explosion = new Effect(GameData.ANIM_EFFECT_MONSTER_EXPLOSION, DepthLayer.EffectMonsterExplosion);
+		public override void Die() {
+			Effect explosion = new Effect(
+				GameData.ANIM_EFFECT_MONSTER_EXPLOSION,
+				DepthLayer.EffectMonsterExplosion);
 			AudioSystem.PlaySound(GameData.SOUND_MONSTER_DIE);
 			RoomControl.SpawnEntity(explosion, Center);
 			if (!softKill)
@@ -458,5 +460,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			get { return state; }
 		}
 
+		public MonsterColor Color {
+			get { return color; }
+			set { color = value; }
+		}
 	}
 }

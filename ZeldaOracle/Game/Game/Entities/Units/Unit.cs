@@ -157,6 +157,8 @@ namespace ZeldaOracle.Game.Entities.Units {
 		// Virtual methods
 		//-----------------------------------------------------------------------------
 		
+		public virtual void OnDie() {}
+
 		public virtual void OnHurt(DamageInfo damage) { }
 		
 		public void Kill() {
@@ -217,14 +219,10 @@ namespace ZeldaOracle.Game.Entities.Units {
 			OnHurt(damage);
 		}
 
-		public virtual void Death() {
-
-		}
-
 		public virtual void Die() {
+			OnDie();
 			Destroy();
 		}
-
 
 		public virtual void OnKnockbackEnd() {
 			if (IsOnGround)

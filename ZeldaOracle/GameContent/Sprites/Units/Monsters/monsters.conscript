@@ -3,8 +3,8 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET "basic_monsters",			(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET "color_monsters", "Units/Monsters/color_monsters_blue",	(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "monsters", (16, 16), (1, 1), (18, 18); END;
+
 
 #==============================================================
 # Sprite Sets
@@ -12,7 +12,7 @@ SPRITESHEET "color_monsters", "Units/Monsters/color_monsters_blue",	(16, 16), (1
 
 PALETTEDICTIONARY "entity_dictionary";
 
-SOURCE "color_monsters";
+SOURCE "monsters";
 
 # Color groups found in the source image file 
 MAPPEDCOLORS	"entities_default", ("red", "green", "blue", "orange", "shaded_red", "shaded_blue", "hurt");
@@ -141,6 +141,15 @@ ANIMATION "monster_peahat"; SUBSTRIP repeat;
 	ADD strip, 8, 2, (14, 8); END;
 ANIMATION "monster_gel"; SUBSTRIP repeat;
 	ADD strip, 8, 2, (0, 9); END;
+ANIMATION "monster_gel_prepare_jump"; SUBSTRIP repeat;
+	ADD strip, 4, 2, (0, 9); END;
+ANIMATION "monster_gel_jump"; SUBSTRIP repeat;
+	ADD frame, 1, (0, 9); END;
+ANIMATION "monster_gel_attach"; SUBSTRIP repeat;
+	ADD frame, 4, (0, 9), (-2, -2);
+	ADD frame, 4, (0, 9), ( 2,  2);
+	ADD frame, 4, (0, 9), ( 2, -2);
+	ADD frame, 4, (0, 9), (-2,  2); END;
 ANIMATION "monster_zol"; SUBSTRIP repeat;
 	ADD frame, 1, (2, 9); END;
 ANIMATION "monster_zol_jump"; SUBSTRIP repeat;
@@ -152,6 +161,11 @@ ANIMATION "monster_zol_burrow"; SUBSTRIP reset;
 ANIMATION "monster_zol_unburrow"; SUBSTRIP reset;
 	ADD frame, 16, (0, 9);
 	ADD frame, 16, (3, 9); END;
+ANIMATION "monster_zol_red"; SUBSTRIP repeat;
+	ADD frame, 24, (2, 9);
+	ADD frame, 12, (3, 9); END;
+ANIMATION "monster_zol_red_prepare_jump"; SUBSTRIP repeat;
+	ADD frame, 1, (2, 9); END;
 ANIMATION "monster_color_gel"; SUBSTRIP repeat;
 	ADD strip, 8, 2, (0, 10); END;
 ANIMATION "monster_color_gel_peek"; SUBSTRIP repeat;
@@ -252,9 +266,9 @@ ANIMATION "monster_ghini"; SUBSTRIP repeat;
 ANIMATION "monster_anti_fairy"; SUBSTRIP repeat;
 	ADD strip, 6, 2, (14, 14); END;
 ANIMATION "monster_spark"; SUBSTRIP repeat;
-	ADD strip, 4, 2, (14, 15); END;
+	ADD strip, 4, 2, (12, 14); END;
 ANIMATION "monster_keese"; SUBSTRIP repeat;
-	ADD strip, 8, 2, (8, 14); END;
+	ADD strip, 8, 2, (0, 12); END;
 
 
 
