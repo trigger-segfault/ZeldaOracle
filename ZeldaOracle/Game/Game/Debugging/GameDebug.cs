@@ -27,6 +27,7 @@ using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.GameStates.RoomStates;
 using ZeldaOracle.Game.Entities.Collisions;
+using ZeldaOracle.Game.Entities.Monsters.JumpMonsters;
 
 namespace ZeldaOracle.Game.Debug {
 	public class GameDebug {
@@ -283,7 +284,7 @@ namespace ZeldaOracle.Game.Debug {
 			if (ctrl && Mouse.IsButtonPressed(MouseButtons.Left)) {
 				Vector2F spawnPosition = mouseLocation * GameSettings.TILE_SIZE;
 				spawnPosition += new Vector2F(8, 8);
-				Monster monster = new MonsterSpinningBladeTrap();
+				Monster monster = new MonsterTektike();
 				monster.SetPositionByCenter(spawnPosition);
 				RoomControl.SpawnEntity(monster);
 
