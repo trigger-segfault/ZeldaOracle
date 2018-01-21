@@ -149,5 +149,5 @@ IMAGE npcs;
 	VARIANT red		"Units/NPCs/npcs_red";
 	END;
 
-IMAGE monsters, "Units/Monsters/color_monsters_blue"; END;
+IMAGE monsters, "Units/Monsters/monsters"; END;
 

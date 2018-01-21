@@ -1165,28 +1165,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Units\Monsters\color_monsters_blue.png">
-      <Name>color_monsters_blue</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Units\Monsters\color_monsters_green.png">
-      <Name>color_monsters_green</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Units\Monsters\color_monsters_hurt.png">
-      <Name>color_monsters_hurt</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Units\Monsters\color_monsters_orange.png">
-      <Name>color_monsters_orange</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Units\Monsters\color_monsters_red.png">
-      <Name>color_monsters_red</Name>
+    <Compile Include="Images\Units\Monsters\monsters.png">
+      <Name>monsters</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -1199,16 +1179,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Name>monster_previews</Name>
-    </Compile>
-    <Compile Include="Images\Units\Monsters\monsters.png">
-      <Name>monsters</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Units\Monsters\monsters_hurt.png">
-      <Name>monsters_hurt</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
     </Compile>
     <Compile Include="Images\Units\NPCs\npcs_red.png">
       <Name>npcs_red</Name>
