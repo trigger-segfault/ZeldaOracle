@@ -24,7 +24,7 @@ using ZeldaOracle.Common.Content;
 using System.IO;
 //using ParticleGame.Project.Particles;
 
-namespace GameFramework.MyGame.Debug {
+namespace GameFramework.MyGame.Debugging {
 	/// <summary>The controller for game debugging.</summary>
 	public class DebugController : DebugControllerBase {
 

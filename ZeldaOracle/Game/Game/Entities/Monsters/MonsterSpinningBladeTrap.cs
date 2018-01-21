@@ -51,7 +51,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				return false;
 
 			Tile tile = RoomControl.GetTopTile(nextTileLocation);
-			if (tile != null && tile.IsSolid)
+			if (tile != null && (tile.IsSolid || tile.IsHoleWaterOrLava))
 				return false;
 
 			return true;

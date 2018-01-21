@@ -12,7 +12,7 @@ using ZeldaOracle.Common.Input;
 using ZeldaOracle.Common.Input.Controls;
 using Keyboard		= ZeldaOracle.Common.Input.Keyboard;
 
-namespace ZeldaOracle.Common.Debug {
+namespace ZeldaOracle.Common.Debugging {
 	/// <summary>The base controller for game debugging.</summary>
 	public class DebugControllerBase {
 

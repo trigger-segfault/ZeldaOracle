@@ -126,11 +126,11 @@
     <Compile Include="Common\Content\TemporaryResources.cs" />
     <Compile Include="Common\Content\TextureLoader.cs" />
     <None Include="app.config" />
-    <None Include="Common\Debug\DebugControllerBase.cs" />
-    <None Include="Common\Debug\DebugMenu.cs" />
-    <None Include="Common\Debug\DebugMenuItem.cs" />
-    <None Include="Common\Debug\RadioButtonMenuItem.cs" />
-    <None Include="Common\Debug\ToggleMenuItem.cs" />
+    <None Include="Common\Debugging\DebugControllerBase.cs" />
+    <None Include="Common\Debugging\DebugMenu.cs" />
+    <None Include="Common\Debugging\DebugMenuItem.cs" />
+    <None Include="Common\Debugging\RadioButtonMenuItem.cs" />
+    <None Include="Common\Debugging\ToggleMenuItem.cs" />
     <None Include="Common\Graphics\Obsolete\AnimationOld.cs" />
     <None Include="Common\Graphics\Obsolete\AnimationFrameOld.cs" />
     <Compile Include="Common\Graphics\Flipping.cs" />
@@ -276,8 +276,8 @@
     <Compile Include="Game\Control\Scripting\ScriptManager.cs" />
     <Compile Include="Game\Control\Scripting\ScriptRunner.cs" />
     <Compile Include="Game\Control\TileManager.cs" />
-    <Compile Include="Game\Debug\DevSettings.cs" />
-    <Compile Include="Game\Debug\GameDebug.cs" />
+    <Compile Include="Game\Debugging\DevSettings.cs" />
+    <Compile Include="Game\Debugging\GameDebug.cs" />
     <Compile Include="Game\Entities\Collectibles\CollectibleReward.cs" />
     <Compile Include="Game\Entities\Collectibles\CollectibleFairy.cs" />
     <Compile Include="Game\Entities\Collectibles\Collectible.cs" />
@@ -330,7 +330,7 @@
     <Compile Include="Game\Entities\Monsters\States\MonsterStunState.cs" />
     <Compile Include="Game\Entities\Monsters\States\MonsterBurnState.cs" />
     <Compile Include="Game\Entities\Monsters\States\MonsterState.cs" />
-    <Compile Include="Game\Debug\TestMonster.cs" />
+    <Compile Include="Game\Debugging\TestMonster.cs" />
     <Compile Include="Game\Entities\Monsters\Monster.cs" />
     <Compile Include="Game\Entities\Monsters\Tools\MonsterToolSword.cs" />
     <Compile Include="Game\Entities\NPC.cs" />
@@ -401,7 +401,7 @@
     <Compile Include="Game\GameStates\RoomStates\RoomStateTextReader.cs" />
     <Compile Include="Game\Control\ViewControl.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.Composite.cs" />
-    <None Include="Game\Debug\DebugController.cs" />
+    <None Include="Game\Debugging\DebugController.cs" />
     <Compile Include="Game\Entities\Effects\Effect.cs" />
     <Compile Include="Game\Entities\Entity.cs" />
     <Compile Include="Game\Entities\PhysicsComponent.cs" />
