@@ -1,12 +1,12 @@
 ﻿
-LOAD "objects_nv.conscript", true;
-LOAD "objects.conscript", true;
-LOAD "land.conscript", true;
-LOAD "forest.conscript", true;
-LOAD "water.conscript", true;
-LOAD "dungeon.conscript", true;
-LOAD "cliffs.conscript", true;
-LOAD "town.conscript", true;
-LOAD "interior.conscript", true;
-LOAD "sidescroll.conscript", true;
-LOAD "action_tile_data.conscript", true;
+LOAD "Actions/action_tile_data.conscript", true;
+LOAD "Objects/objects_nv.conscript", true;
+LOAD "Objects/objects.conscript", true;
+LOAD "Overworld/land.conscript", true;
+LOAD "Overworld/forest.conscript", true;
+LOAD "Overworld/water.conscript", true;
+LOAD "Indoors/dungeon.conscript", true;
+LOAD "Overworld/cliffs.conscript", true;
+LOAD "Overworld/town.conscript", true;
+LOAD "Indoors/interior.conscript", true;
+LOAD "SideScroll/sidescroll.conscript", true;

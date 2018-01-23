@@ -202,7 +202,10 @@ namespace ConscriptDesigner.Control {
 				List<ContentFile> needsSaving = new List<ContentFile>();
 				List<string> needsSavingFiles = new List<string>();
 				bool activeClosing = false;
+				bool tilesetEditorNeedsSaving = false;
+				List<IRequestCloseAnchorable> newClosingAnchorables = new List<IRequestCloseAnchorable>();
 				foreach (IRequestCloseAnchorable anchorable in closingAnchorables) {
+					newClosingAnchorables.Add(anchorable);
 					if (anchorable.IsActive)
 						activeClosing = true;
 					if (anchorable is IContentFileContainer) {
@@ -212,14 +215,29 @@ namespace ConscriptDesigner.Control {
 							needsSavingFiles.Add(content.File.Path);
 						}
 					}
+					else if (anchorable is TilesetEditor) {
+						TilesetEditor editor = (TilesetEditor) anchorable;
+						if (editor.IsModified) {
+							needsSavingFiles.Add("Tileset Editor");
+							tilesetEditorNeedsSaving = true;
+						}
+					}
 				}
+				// Clear this now so that this doesn't get called again while in a dialog
+				closingAnchorables.Clear();
+
 				MessageBoxResult result = MessageBoxResult.Yes;
 				bool errorOccurred = false;
-				if (needsSaving.Any()) {
+				if (needsSavingFiles.Any()) {
 					result = SaveChangesWindow.Show(mainWindow, needsSavingFiles, false);
 					if (result == MessageBoxResult.Yes) {
 						foreach (ContentFile file in needsSaving) {
 							if (!file.Save(true))
+								errorOccurred = true;
+						}
+
+						if (tilesetEditorNeedsSaving) {
+							if (!mainWindow.TilesetEditor.Save(true))
 								errorOccurred = true;
 						}
 					}
@@ -232,14 +250,13 @@ namespace ConscriptDesigner.Control {
 						result = MessageBoxResult.Cancel;
 				}
 				if (result != MessageBoxResult.Cancel) {
-					foreach (IRequestCloseAnchorable anchorable in closingAnchorables) {
+					foreach (IRequestCloseAnchorable anchorable in newClosingAnchorables) {
 						anchorable.ForceClose();
 					}
 					if (activeClosing) {
 						mainWindow.InvalidateActiveAnchorable();
 					}
 				}
-				closingAnchorables.Clear();
 				CommandManager.InvalidateRequerySuggested();
 			}
 		}
@@ -435,6 +452,11 @@ namespace ConscriptDesigner.Control {
 		// Commands
 		//-----------------------------------------------------------------------------
 
+		public static void InvalidatePreview() {
+			if (PreviewInvalidated != null)
+				PreviewInvalidated(null, EventArgs.Empty);
+		}
+
 		public static bool RequestSaveAll(out bool errorOccurred) {
 			List<ContentFile> needsSaving = new List<ContentFile>();
 			List<string> needsSavingFiles = new List<string>();
@@ -443,6 +465,9 @@ namespace ConscriptDesigner.Control {
 			foreach (ContentFile file in GetModifiedContentFiles()) {
 				needsSaving.Add(file);
 				needsSavingFiles.Add(file.Path);
+			}
+			if (mainWindow.TilesetEditor != null && mainWindow.TilesetEditor.IsModified) {
+				needsSavingFiles.Add("Tileset Editor");
 			}
 			MessageBoxResult result = MessageBoxResult.Yes;
 			errorOccurred = false;
@@ -469,6 +494,10 @@ namespace ConscriptDesigner.Control {
 								break;
 							}
 						}
+					}
+					if (mainWindow.TilesetEditor != null && mainWindow.TilesetEditor.IsModified) {
+						if (!mainWindow.TilesetEditor.Save(true))
+							errorOccurred = true;
 					}
 				}
 			}
@@ -603,7 +632,15 @@ namespace ConscriptDesigner.Control {
 		public static void Save() {
 			var file = GetActiveContentFile();
 			try {
-				if (file != null) file.Save(false);
+				if (file != null) {
+					file.Save(false);
+				}
+				else {
+					var anchorable = GetActiveAnchorable();
+					if (anchorable is TilesetEditor) {
+						mainWindow.TilesetEditor.Save(false);
+					}
+				}
 			}
 			catch (Exception ex) {
 				ShowExceptionMessage(ex, "save", file.Name);
@@ -615,6 +652,10 @@ namespace ConscriptDesigner.Control {
 			bool errorOccurred = false;
 			foreach (var file in GetModifiedContentFiles()) {
 				if (!file.Save(true))
+					errorOccurred = true;
+			}
+			if (mainWindow.TilesetEditor != null) {
+				if (!mainWindow.TilesetEditor.Save(true))
 					errorOccurred = true;
 			}
 			try {
@@ -716,7 +757,14 @@ namespace ConscriptDesigner.Control {
 		public static bool CanSave {
 			get {
 				var content = GetActiveContentFile();
-				return (content != null ? content.IsModified : false);
+				if (content != null) {
+					return content.IsModified;
+				}
+				var anchorable = GetActiveAnchorable();
+				if (anchorable is TilesetEditor) {
+					return mainWindow.TilesetEditor.IsModified;
+				}
+				return false;
 			}
 		}
 

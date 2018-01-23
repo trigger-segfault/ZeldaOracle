@@ -27,7 +27,7 @@ namespace ConscriptDesigner.WinForms {
 		//-----------------------------------------------------------------------------
 
 		public TilePreview() {
-			this.tileData = new List<BaseTileData>();
+			this.tileData = null;
 			this.tileset = null;
 			this.MouseDown += OnMouseDown;
 		}
@@ -74,7 +74,7 @@ namespace ConscriptDesigner.WinForms {
 		}
 
 		public void Unload() {
-			tileData.Clear();
+			tileData = null;
 			tileset = null;
 			UpdateSize(Point2I.One);
 		}
@@ -93,6 +93,7 @@ namespace ConscriptDesigner.WinForms {
 		protected override bool IsValidHoverPoint(ref Point2I point, out Point2I hoverSize) {
 			hoverSize = Point2I.One;
 			if (TileListMode) {
+				if (tileData == null) return false;
 				int index = (point.Y * columns) + point.X;
 				return index < tileData.Count;
 			}
@@ -110,6 +111,7 @@ namespace ConscriptDesigner.WinForms {
 
 		protected override void UpdateHeight() {
 			if (TileListMode) {
+				if (tileData == null) return;
 				columns = Math.Max(1, (UnscaledClientSize.X - 1) / (BaseSpriteSize.X + 1));
 				int height = 1 + ((tileData.Count + columns - 1) / columns) * (BaseSpriteSize.Y + 1);
 
@@ -133,7 +135,7 @@ namespace ConscriptDesigner.WinForms {
 
 			Point2I selectionPoint = -Point2I.One;
 
-			if (TileListMode) {
+			if (TileListMode && tileData != null) {
 				int startRow = (UnscaledScrollPosition.Y + 1) / (GameSettings.TILE_SIZE + 1);
 				int startIndex = startRow * columns;
 				int endRow = (UnscaledScrollPosition.Y + ClientSize.Height + 1 + GameSettings.TILE_SIZE) / (GameSettings.TILE_SIZE + 1);

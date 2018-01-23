@@ -25,22 +25,11 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			Root,
 			Tileset
 		}
-
-		private enum LoadingModes {
-			Tilesets,
-			Animations,
-			Sprites
-		}
-
-		//private TilesetOld				tileset;
+		
 		private Tileset				tileset;
-		//private EventTileset		eventTileset;
-		//private BaseTileData		baseTileData;
-		//private TileData			tileData;
-		//private EventTileData		eventTileData;
-		//private LoadingModes		loadingMode;
 		private ISpriteSource		source;
 		private string				tilesetName;
+		private bool                tilesetEnded;
 
 
 		//-----------------------------------------------------------------------------
@@ -49,27 +38,12 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 		public TilesetSR() {
 
-			//this.loadingMode	= LoadingModes.Tilesets;
+			tilesetEnded = false;
 
-			//=====================================================================================
-			// LOADING MODE 
-			//=====================================================================================
-			//AddCommand("Load", "string resourceType",
-			//delegate(CommandParam parameters) {
-			/*string loadType = parameters.GetString(0).ToLower();
-			if (loadType == "tilesets")
-				loadingMode = LoadingModes.Tilesets;
-			else if (loadType == "animations")
-				loadingMode = LoadingModes.Animations;
-			else if (loadType == "sprites")
-				loadingMode = LoadingModes.Sprites;
-			else
-				ThrowParseError("Invalid Load type", true);*/
-			//});
 			//=====================================================================================
 			// Type Definitions
 			//=====================================================================================
-			AddType("Sprite",
+			/*AddType("Sprite",
 				"string spriteName",
 				// Int needs to go before string as int/float defaults to string.
 				"Point sourceIndex",
@@ -78,11 +52,11 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				"(Point sourceIndex, string definition)",
 				"(string sourceName, Point sourceIndex)",
 				"(string sourceName, Point sourceIndex, string definition)"
-			);
+			);*/
 			//=====================================================================================
 			// SOURCE
 			//=====================================================================================
-			AddCommand("SOURCE", "string name",
+			/*AddCommand("SOURCE", "string name",
 			delegate (CommandParam parameters) {
 				string name = parameters.GetString(0);
 				if (name.ToLower() == "none") {
@@ -93,7 +67,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					ThrowCommandParseError("No sprite source with the name '" + name + "' exists in resources!");
 				}
 				source = Resources.GetResource<ISpriteSource>(name);
-			});
+			});*/
 			//=====================================================================================
 			// TILE/TILESET BEGIN/END 
 			//=====================================================================================
@@ -108,22 +82,25 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});*/
 			//=====================================================================================
 			AddCommand("TILESET", (int) Modes.Root,
-				"string name, Point size, bool usePreviewSprites = true",
+				"string name, Point dimensions, bool usePreviewSprites = true",
 			delegate (CommandParam parameters) {
+				if (tilesetEnded)
+					ThrowCommandParseError("Can only make one tileset per .conscript file!");
 				tilesetName = parameters.GetString(0);
 				tileset = new Tileset(tilesetName,
 					parameters.GetPoint(1), parameters.GetBool(2));
+				tileset.ConscriptPath = FileName;
 				AddResource<Tileset>(tileset.ID, tileset);
 				Mode = Modes.Tileset;
 			});
 			//=====================================================================================
-			AddCommand("CONTINUE TILESET", (int) Modes.Root,
+			/*AddCommand("CONTINUE TILESET", (int) Modes.Root,
 				"string name",
 			delegate (CommandParam parameters) {
 				tilesetName = parameters.GetString(0);
 				tileset = GetResource<Tileset>(tilesetName);
 				Mode = Modes.Tileset;
-			});
+			});*/
 			//=====================================================================================
 			AddCommand("END", (int) Modes.Tileset,
 				"",
@@ -131,6 +108,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				tileset = null;
 				tilesetName = "";
 				Mode = Modes.Root;
+				tilesetEnded = true;
 			});
 			//=====================================================================================
 			// TILESET SETUP
@@ -141,6 +119,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				Tileset cloneTileset = GetResource<Tileset>(parameters.GetString(0));
 				tileset = new Tileset(cloneTileset);
 				tileset.ID = tilesetName;
+				tileset.ConscriptPath = FileName;
 				SetResource<Tileset>(tilesetName, tileset);
 			});
 			//=====================================================================================
@@ -153,7 +132,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			// TILESET BUILDING
 			//=====================================================================================
 			AddCommand("ADDTILE", (int) Modes.Tileset,
-				"Point sourceIndex, string tileName",
+				"Point tilesetIndex, string tileName",
 			delegate (CommandParam parameters) {
 				Point2I location = parameters.GetPoint(0);
 				tileset.AddTileData(location,
@@ -161,7 +140,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("SETTILE", (int) Modes.Tileset,
-				"Point sourceIndex, string tileName",
+				"Point tilesetIndex, string tileName",
 			delegate (CommandParam parameters) {
 				Point2I location = parameters.GetPoint(0);
 				tileset.SetTileData(location,
@@ -169,7 +148,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("REMOVETILE", (int) Modes.Tileset,
-				"Point sourceIndex",
+				"Point tilesetIndex",
 			delegate (CommandParam parameters) {
 				Point2I location = parameters.GetPoint(0);
 				tileset.RemoveTileData(location);

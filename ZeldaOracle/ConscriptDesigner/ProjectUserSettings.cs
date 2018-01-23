@@ -138,10 +138,6 @@ namespace ConscriptDesigner {
 							DesignerControl.MainWindow.OpenSpriteSourceBrowser();
 						if (anchorables.SelectSingleNode("StyleBrowser") != null)
 							DesignerControl.MainWindow.OpenStyleBrowser();
-						if (anchorables.SelectSingleNode("TileDataBrowser") != null)
-							DesignerControl.MainWindow.OpenTileDataBrowser();
-						if (anchorables.SelectSingleNode("TilesetBrowser") != null)
-							DesignerControl.MainWindow.OpenTilesetBrowser();
 						if (anchorables.SelectSingleNode("TileBrowser") != null)
 							DesignerControl.MainWindow.OpenTileBrowser();
 					}
@@ -263,10 +259,6 @@ namespace ConscriptDesigner {
 					anchorables.AppendChild(doc.CreateElement("SpriteSourceBrowser"));
 				if (DesignerControl.MainWindow.StyleBrowser != null)
 					anchorables.AppendChild(doc.CreateElement("StyleBrowser"));
-				if (DesignerControl.MainWindow.TileDataBrowser != null)
-					anchorables.AppendChild(doc.CreateElement("TileDataBrowser"));
-				if (DesignerControl.MainWindow.TilesetBrowser != null)
-					anchorables.AppendChild(doc.CreateElement("TilesetBrowser"));
 				if (DesignerControl.MainWindow.TileBrowser != null)
 					anchorables.AppendChild(doc.CreateElement("TileBrowser"));
 

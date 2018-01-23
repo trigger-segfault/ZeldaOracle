@@ -177,8 +177,8 @@ namespace ConscriptDesigner.Content {
 			try {
 				if (IsOpen) {
 					OnReload();
-					if (IsOpen)
-						document.IsActive = true;
+					//if (IsOpen)
+					//	document.IsActive = true;
 					UpdateLastModified();
 					modifiedOverride = false;
 					return true;

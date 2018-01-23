@@ -6,6 +6,7 @@ using System.Text;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Monsters;
@@ -73,7 +74,23 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 
 		/// <summary>Draws the event tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, EventTileDataDrawArgs args) {
-			EventTile.DrawTileData(g, args);
+			ColorDefinitions colorDefinitions = new ColorDefinitions();
+			MonsterColor color = (MonsterColor) args.Properties.GetInteger("color", 0);
+			switch (color) {
+			case MonsterColor.Red:
+				colorDefinitions.SetAll("red");
+				break;
+			case MonsterColor.Blue:
+				colorDefinitions.SetAll("blue");
+				break;
+			case MonsterColor.Green:
+				colorDefinitions.SetAll("green");
+				break;
+			case MonsterColor.Orange:
+				colorDefinitions.SetAll("orange");
+				break;
+			}
+			EventTile.DrawTileData(g, args, colorDefinitions);
 		}
 
 
