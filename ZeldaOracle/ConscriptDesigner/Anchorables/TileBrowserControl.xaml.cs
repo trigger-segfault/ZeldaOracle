@@ -93,6 +93,7 @@ namespace ConscriptDesigner.Anchorables {
 				tileData.Add(pair.Value);
 			}
 
+			tilesets.Clear();
 			foreach (var pair in ZeldaResources.GetResourceDictionary<Tileset>()) {
 				tilesets.Add(new KeyValuePair<string, Tileset>(pair.Key, pair.Value));
 			}

@@ -90,6 +90,7 @@ namespace ConscriptDesigner.WinForms {
 		protected override void Draw(Graphics2D g, SpriteDrawSettings settings, Zone zone) {
 			if (tileset == null)
 				return;
+
 			TileDataDrawing.Extras = false;
 			TileDataDrawing.Level = null;
 			TileDataDrawing.PlaybackTime = DesignerControl.PlaybackTime;

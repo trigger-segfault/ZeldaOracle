@@ -445,61 +445,53 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>sidescroll</Name>
     </None>
-    <None Include="Tilesets\action_tile_data.conscript">
+    <None Include="Tilesets\Actions\action_tile_data.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>action_tile_data</Name>
     </None>
-    <None Include="Tilesets\cliffs.conscript">
-      <Name>cliffs</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Tilesets\dungeon.conscript">
+    <None Include="Tilesets\Indoors\dungeon.conscript">
       <Name>dungeon</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Tilesets\forest.conscript">
-      <Name>forest</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Tilesets\interior2.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>interior2</Name>
-    </None>
-    <None Include="Tilesets\interior.conscript">
+    <None Include="Tilesets\Indoors\interior.conscript">
       <Name>interior</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Tilesets\land.conscript">
-      <Name>land</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Tilesets\objects.conscript">
+    <None Include="Tilesets\Objects\objects.conscript">
       <Name>objects</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Tilesets\objects_nv.conscript">
+    <None Include="Tilesets\Objects\objects_nv.conscript">
       <Name>objects_nv</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Tilesets\overworld.conscript">
-      <Name>overworld</Name>
+    <None Include="Tilesets\Overworld\cliffs.conscript">
+      <Name>cliffs</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Tilesets\sidescroll.conscript">
+    <None Include="Tilesets\Overworld\forest.conscript">
+      <Name>forest</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tilesets\Overworld\land.conscript">
+      <Name>land</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tilesets\Overworld\town.conscript">
+      <Name>town</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tilesets\Overworld\water.conscript">
+      <Name>water</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tilesets\SideScroll\sidescroll.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>sidescroll</Name>
     </None>
     <None Include="Tilesets\tilesets.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>tilesets</Name>
-    </None>
-    <None Include="Tilesets\town.conscript">
-      <Name>town</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Tilesets\water.conscript">
-      <Name>water</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Zones\zones.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -972,11 +964,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Units\Monsters\monsters.png">
-      <Name>monsters</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Units\Monsters\monster_items.png">
       <Name>monster_items</Name>
       <Importer>TextureImporter</Importer>
@@ -986,6 +973,11 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Name>monster_previews</Name>
+    </Compile>
+    <Compile Include="Images\Units\Monsters\monsters.png">
+      <Name>monsters</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
     <Compile Include="Images\Units\NPCs\npcs_red.png">
       <Name>npcs_red</Name>

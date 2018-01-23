@@ -104,7 +104,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			
 			return tile;
 		}
-		
+
 		/// <summary>Draws the event tile data to display in the editor.</summary>
 		public static void DrawTileData(Graphics2D g, EventTileDataDrawArgs args) {
 			ISprite sprite = args.EventTile.Sprite;
@@ -116,9 +116,35 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 				int imageVariantID = args.Properties.GetInteger("image_variant");
 				if (imageVariantID < 0)
 					imageVariantID = args.Zone.ImageVariantID;
+				SpriteDrawSettings settings = new SpriteDrawSettings(args.Zone.StyleDefinitions, imageVariantID, args.Time);
 				g.DrawSprite(
 					sprite,
-					new SpriteDrawSettings(args.Zone.StyleDefinitions, imageVariantID, args.Time),
+					settings,
+					args.Position,
+					args.Color);
+			}
+			else {
+				Rectangle2I r = new Rectangle2I(args.Position, args.EventTile.Size * GameSettings.TILE_SIZE);
+				g.FillRectangle(r, Color.Blue);
+			}
+		}
+
+		/// <summary>Draws the event tile data to display in the editor.</summary>
+		public static void DrawTileData(Graphics2D g, EventTileDataDrawArgs args, ColorDefinitions colorDefinitions) {
+			ISprite sprite = args.EventTile.Sprite;
+			if (sprite is Animation) {
+				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
+				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
+			}
+			if (sprite != null) {
+				int imageVariantID = args.Properties.GetInteger("image_variant");
+				if (imageVariantID < 0)
+					imageVariantID = args.Zone.ImageVariantID;
+				SpriteDrawSettings settings = new SpriteDrawSettings(args.Zone.StyleDefinitions,
+					colorDefinitions, imageVariantID, args.Time);
+				g.DrawSprite(
+					sprite,
+					settings,
 					args.Position,
 					args.Color);
 			}
@@ -152,7 +178,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		}
 
 		/// <summary>Draws the event tile data to display in the editor with the specified sprite index.</summary>
-		public static void DrawTileDataIndex(Graphics2D g, EventTileDataDrawArgs args, int substripIndex = -1) {
+		public static void DrawTileDataIndex(Graphics2D g, EventTileDataDrawArgs args, int substripIndex = -1, ColorDefinitions colorDefinitions = null) {
 			ISprite sprite = args.EventTile.Sprite;
 			if (sprite is Animation) {
 				if (substripIndex == -1)
@@ -163,9 +189,12 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 				int imageVariantID = args.Properties.GetInteger("image_variant");
 				if (imageVariantID < 0)
 					imageVariantID = args.Zone.ImageVariantID;
+				SpriteDrawSettings settings = new SpriteDrawSettings(args.Zone.StyleDefinitions, imageVariantID, args.Time);
+				if (colorDefinitions != null)
+					settings.Colors = colorDefinitions;
 				g.DrawSprite(
 					sprite,
-					new SpriteDrawSettings(args.Zone.StyleDefinitions, imageVariantID, args.Time),
+					settings,
 					args.Position,
 					args.Color);
 			}

@@ -32,7 +32,7 @@ namespace ConscriptDesigner {
 	/// </summary>
 	public partial class MainWindow : Window {
 
-		private bool supressEvents;
+		private bool suppressEvents;
 
 		private ProjectExplorer projectExplorer;
 		private OutputConsole outputConsole;
@@ -42,6 +42,7 @@ namespace ConscriptDesigner {
 		private TileDataBrowser tileDataBrowser;
 		private TilesetBrowser tilesetBrowser;
 		private TileBrowser tileBrowser;
+		private TilesetEditor tilesetEditor;
 
 		private FindReplaceWindow findReplaceWindow;
 		private PlaybackWindow playbackWindow;
@@ -58,7 +59,7 @@ namespace ConscriptDesigner {
 		//-----------------------------------------------------------------------------
 
 		public MainWindow() {
-			supressEvents = true;
+			suppressEvents = true;
 			InitializeComponent();
 
 			// Splash window mode
@@ -150,7 +151,7 @@ namespace ConscriptDesigner {
 			DesignerControl.ProjectClosed += OnProjectClosed;
 			DesignerControl.ResourcesLoaded += OnResourcesLoaded;
 			DesignerControl.ResourcesUnloaded += OnResourcesUnloaded;
-			supressEvents = false;
+			suppressEvents = false;
 
 			OnOutputConsoleCommand();
 			OnProjectExplorerCommand();
@@ -204,6 +205,8 @@ namespace ConscriptDesigner {
 				tilesetBrowser.Reload();
 			if (tileBrowser != null)
 				tileBrowser.Reload();
+			if (tilesetEditor != null)
+				tilesetEditor.Reload();
 			comboBoxZones.ItemsSource = DesignerControl.PreviewZones;
 			comboBoxZones.SelectedItem = DesignerControl.PreviewZoneID;
 		}
@@ -221,10 +224,12 @@ namespace ConscriptDesigner {
 				tilesetBrowser.Unload();
 			if (tileBrowser != null)
 				tileBrowser.Unload();
-			supressEvents = true;
+			if (tilesetEditor != null)
+				tilesetEditor.Unload();
+			suppressEvents = true;
 			comboBoxZones.ItemsSource = null;
 			comboBoxZones.Items.Clear();
-			supressEvents = false;
+			suppressEvents = false;
 		}
 
 		private void OnFinishedBuilding(object sender, EventArgs e) {
@@ -263,6 +268,8 @@ namespace ConscriptDesigner {
 				tilesetBrowser = null;
 			else if (anchorable is TileBrowser)
 				tileBrowser = null;
+			else if (anchorable is TilesetEditor)
+				tilesetEditor = null;
 			CommandManager.InvalidateRequerySuggested();
 		}
 
@@ -315,7 +322,18 @@ namespace ConscriptDesigner {
 			OnTileBrowserCommand();
 		}
 
+		public void OpenTilesetEditor() {
+			OnTilesetEditorCommand();
+		}
+
 		public void DockDocument(RequestCloseDocument anchorable) {
+			//dockingManager.Layout.RootPanel.Children.Add(anchorable);
+			LayoutDocumentPane docPane = dockingManager.Layout.Descendents().FirstOrDefault(l => l is LayoutDocumentPane) as LayoutDocumentPane;
+			if (docPane != null)
+				docPane.Children.Add(anchorable);
+		}
+
+		public void DockDocument(RequestCloseAnchorable anchorable) {
 			//dockingManager.Layout.RootPanel.Children.Add(anchorable);
 			LayoutDocumentPane docPane = dockingManager.Layout.Descendents().FirstOrDefault(l => l is LayoutDocumentPane) as LayoutDocumentPane;
 			if (docPane != null)
@@ -599,6 +617,17 @@ namespace ConscriptDesigner {
 			tileBrowser.IsActive = true;
 		}
 
+		private void OnTilesetEditorCommand(object sender = null, ExecutedRoutedEventArgs e = null) {
+			if (tilesetEditor == null) {
+				tilesetEditor = new TilesetEditor();
+				tilesetEditor.Closed += OnAnchorableClosed;
+				DockDocument(tilesetEditor);
+				if (DesignerControl.IsProjectOpen && ZeldaResources.IsLoaded)
+					tilesetEditor.Reload();
+			}
+			tilesetEditor.IsActive = true;
+		}
+
 		private void OnLaunchGameCommand(object sender, ExecutedRoutedEventArgs e) {
 			DesignerControl.LaunchGame();
 		}
@@ -633,67 +662,67 @@ namespace ConscriptDesigner {
 		}
 
 		private void CanSave(object sender, CanExecuteRoutedEventArgs e) {
-			if (supressEvents) return;
+			if (suppressEvents) return;
 			e.CanExecute = DesignerControl.CanSave;
 		}
 
 		private void CanUndo(object sender, CanExecuteRoutedEventArgs e) {
-			if (supressEvents) return;
+			if (suppressEvents) return;
 			e.CanExecute = DesignerControl.CanUndo;
 		}
 
 		private void CanRedo(object sender, CanExecuteRoutedEventArgs e) {
-			if (supressEvents) return;
+			if (suppressEvents) return;
 			e.CanExecute = DesignerControl.CanRedo;
 		}
 
 		private void CanCut(object sender, CanExecuteRoutedEventArgs e) {
-			if (supressEvents) return;
+			if (suppressEvents) return;
 			e.CanExecute = DesignerControl.CanCut;
 		}
 
 		private void CanCopy(object sender, CanExecuteRoutedEventArgs e) {
-			if (supressEvents) return;
+			if (suppressEvents) return;
 			e.CanExecute = DesignerControl.CanCopy;
 		}
 
 		private void CanPaste(object sender, CanExecuteRoutedEventArgs e) {
-			if (supressEvents) return;
+			if (suppressEvents) return;
 			e.CanExecute = DesignerControl.CanPaste;
 		}
 
 		private void CanDelete(object sender, CanExecuteRoutedEventArgs e) {
-			if (supressEvents) return;
+			if (suppressEvents) return;
 			e.CanExecute = DesignerControl.CanDelete;
 		}
 
 		private void CanExecuteIsBusy(object sender, CanExecuteRoutedEventArgs e) {
-			if (supressEvents) return;
+			if (suppressEvents) return;
 			e.CanExecute = !DesignerControl.IsBusy && DesignerControl.IsProjectOpen;
 		}
 
 		private void CanExecuteIsInTextEditor(object sender, CanExecuteRoutedEventArgs e) {
-			if (supressEvents) return;
+			if (suppressEvents) return;
 			e.CanExecute = DesignerControl.IsInTextEditor;
 		}
 
 		private void CanExecuteIsProjectOpen(object sender, CanExecuteRoutedEventArgs e) {
-			if (supressEvents) return;
+			if (suppressEvents) return;
 			e.CanExecute = DesignerControl.IsProjectOpen;
 		}
 
 		private void CanExecuteIsBuilding(object sender, CanExecuteRoutedEventArgs e) {
-			if (supressEvents) return;
+			if (suppressEvents) return;
 			e.CanExecute = !DesignerControl.IsBusy;
 		}
 
 		private void CanExecuteHasError(object sender, CanExecuteRoutedEventArgs e) {
-			if (supressEvents) return;
+			if (suppressEvents) return;
 			e.CanExecute = DesignerControl.HasError;
 		}
 
 		private void CanExecuteIsFindAndReplaceOpen(object sender, CanExecuteRoutedEventArgs e) {
-			if (supressEvents) return;
+			if (suppressEvents) return;
 			e.CanExecute = findReplaceWindow != null;
 		}
 
@@ -742,6 +771,11 @@ namespace ConscriptDesigner {
 			set { tileBrowser = value; }
 		}
 
+		public TilesetEditor TilesetEditor {
+			get { return tilesetEditor; }
+			set { tilesetEditor = value; }
+		}
+
 		public IRequestCloseAnchorable ActiveAnchorable {
 			get { return activeAnchorable; }
 		}
@@ -751,12 +785,12 @@ namespace ConscriptDesigner {
 		}
 
 		private void OnScaleChanged(object sender, SelectionChangedEventArgs e) {
-			if (supressEvents) return;
+			if (suppressEvents) return;
 			DesignerControl.PreviewScale = (int) ((FrameworkElement) comboBoxScales.SelectedItem).Tag;
 		}
 
 		private void OnZoneChanged(object sender, SelectionChangedEventArgs e) {
-			if (supressEvents) return;
+			if (suppressEvents) return;
 			DesignerControl.PreviewZoneID = (string) comboBoxZones.SelectedItem;
 		}
 

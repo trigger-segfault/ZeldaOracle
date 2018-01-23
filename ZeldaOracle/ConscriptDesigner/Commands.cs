@@ -119,6 +119,10 @@ namespace ConscriptDesigner {
 		public static readonly RoutedUICommand TileBrowser = new RoutedUICommand(
 			"TileBrowser", "Tile Browser", typeof(Commands));
 
+		/// <summary>The command to toggle the tileset editor window.</summary>
+		public static readonly RoutedUICommand TilesetEditor = new RoutedUICommand(
+			"TilesetEditor", "Tileset Editor", typeof(Commands));
+
 
 		//-----------------------------------------------------------------------------
 		// Project

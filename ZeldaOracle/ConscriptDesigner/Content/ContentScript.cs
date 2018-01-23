@@ -50,6 +50,11 @@ namespace ConscriptDesigner.Content {
 			}
 		}
 
+		/// <summary>Cleras the file text in the cache.</summary>
+		public void UnloadText() {
+			cachedText = null;
+		}
+
 		/// <summary>Navigates to the location in the file.</summary>
 		public void GotoLocation(int line, int column) {
 			if (!IsOpen) {
@@ -99,6 +104,7 @@ namespace ConscriptDesigner.Content {
 			}
 			else if (cachedText != null) {
 				File.WriteAllText(FilePath, cachedText, Encoding.UTF8);
+				cachedText = null;
 			}
 		}
 
