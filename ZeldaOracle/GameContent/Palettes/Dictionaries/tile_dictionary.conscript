@@ -109,7 +109,7 @@ TILE	output;
 #==============================================================
 
 TILE	ice;
-TILE	ice_cracked;
+TILE	cracked_ice;
 TILE	water;
 TILE	water_vegetation;
 TILE	lava;

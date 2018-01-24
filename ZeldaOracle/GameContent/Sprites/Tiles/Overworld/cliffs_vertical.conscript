@@ -713,7 +713,7 @@ COMPOSITE "tile_cliff_top_mid_sea";
 	ADD "temp_8x8_cliff_sea_border_sw" (0, 8);
 	ADD "temp_8x8_cliff_sea_border_se" (8, 8); END;
 	
-COMPOSITE "tile_cliff_top_dark_right_seaa";
+COMPOSITE "tile_cliff_top_dark_right_sea";
 	COMBINE "temp_cliff_top_dark_right";
 	ADD "temp_8x8_cliff_sea_border_sw" (0, 8); END;
 	

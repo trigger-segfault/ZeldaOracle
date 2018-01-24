@@ -237,6 +237,10 @@
       <Name>doors</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Sprites\Tiles\Objects\holes.conscript">
+      <Name>holes</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Sprites\Tiles\Objects\objects.conscript">
       <Name>objects</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -261,17 +265,25 @@
       <Name>cliffs</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Sprites\Tiles\Overworld\cliffs_railings_temp.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>cliffs_railings_temp</Name>
+    </None>
     <None Include="Sprites\Tiles\Overworld\cliffs_temp.conscript">
       <Name>cliffs_temp</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sprites\Tiles\Overworld\cliffs_tiles.conscript">
-      <Name>cliffs_tiles</Name>
+    <None Include="Sprites\Tiles\Overworld\cliffs_vertical.conscript">
+      <Name>cliffs_vertical</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sprites\Tiles\Overworld\cliffs_walls.conscript">
       <Name>cliffs_walls</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\cliffs_walls_temp.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>cliffs_walls_temp</Name>
     </None>
     <None Include="Sprites\Tiles\Overworld\ground.conscript">
       <Name>ground</Name>
@@ -279,10 +291,6 @@
     </None>
     <None Include="Sprites\Tiles\Overworld\hedges.conscript">
       <Name>hedges</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Sprites\Tiles\Overworld\holes.conscript">
-      <Name>holes</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sprites\Tiles\Overworld\obstacles.conscript">
@@ -381,6 +389,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>dungeon</Name>
     </None>
+    <None Include="Tiles\Tiles\Indoors\entrances.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>entrances</Name>
+    </None>
     <None Include="Tiles\Tiles\Indoors\interior.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>interior</Name>
@@ -420,6 +432,10 @@
     <None Include="Tiles\Tiles\Overworld\hedges.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>hedges</Name>
+    </None>
+    <None Include="Tiles\Tiles\Overworld\snow_mounds.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>snow_mounds</Name>
     </None>
     <None Include="Tiles\Tiles\Overworld\town.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

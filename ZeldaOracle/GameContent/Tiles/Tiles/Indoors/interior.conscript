@@ -29,6 +29,7 @@ TILE "shop_register_left"; SAMESPRITE; SOLID block; END;
 TILE "shop_register_right"; SAMESPRITE; SOLID block; END;
 TILE "chair"; SAMESPRITE; SOLID block; END;
 TILE "rope"; SAMESPRITE; SOLID block; END;
+TILE "interior_fence"; SAMESPRITE; SOLID block; END;
 TILE "wood_palette"; SAMESPRITE; SOLID block; END;
 TILE "wood_planks"; SAMESPRITE; SOLID block; END;
 TILE "bed_top"; SAMESPRITE; SOLID block; END;

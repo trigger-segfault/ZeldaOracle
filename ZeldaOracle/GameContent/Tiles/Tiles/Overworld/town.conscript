@@ -238,4 +238,8 @@ TILE "bridge_horizontal_both"; SAMESPRITE; SOLID bridge_h; END;
 
 TILE "tombstone_hole_left"; SAMESPRITE; SOLID block; END;
 TILE "tombstone_hole_right"; SAMESPRITE; SOLID block; END;
+TILE "tombstone_filled_left"; SAMESPRITE; SOLID block; END;
+TILE "tombstone_filled_right"; SAMESPRITE; SOLID block; END;
+TILE "tombstone_subrosia"; SAMESPRITE; SOLID block; END;
+TILE "tombstone_subrosia_dirt"; SAMESPRITE; SOLID block; END;
 TILE "grave_stationary"; SPRITE "tile_grave"; SOLID block; END;
