@@ -53,6 +53,9 @@ SPRITESET "set_interior", (7, 9);
 		ADD "checkered"			(6, 4);
 		END;
 	CHUNKSIZE	none;
+	
+	MAPPEDCOLORS	"tiles_default", ("furniture");
+	SINGLE BASIC (5, 8); END;
 END;
 
 #==============================================================
@@ -111,6 +114,7 @@ NAME "tile_shop_register_left"					(0, 2);
 NAME "tile_shop_register_right"					(1, 2);
 NAME "tile_chair"							(2, 2);
 NAME "tile_rope"							(3, 2);
+NAME "tile_interior_fence"					(5, 8);
 NAME "tile_wood_palette"					(4, 2);
 NAME "tile_wood_planks"						(5, 2);
 

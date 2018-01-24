@@ -1,0 +1,97 @@
+﻿
+TILE "entrance_column_top_down"; SAMESPRITE; SOLID block; END;
+TILE "entrance_column_top_up"; SAMESPRITE; SOLID block; END;
+TILE "entrance_column_top_left"; SAMESPRITE; SOLID block; END;
+TILE "entrance_column_top_right"; SAMESPRITE; SOLID block; END;
+
+TILE "floor_entrance_column_bottom_down"; SAMESPRITE; SOLID block; END;
+TILE "floor_entrance_column_bottom_up"; SAMESPRITE; SOLID block; END;
+TILE "floor_entrance_column_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "floor_entrance_column_bottom_right"; SAMESPRITE; SOLID block; END;
+
+TILE "entrance_brick_left"; SAMESPRITE; END;
+TILE "entrance_brick_mid"; SAMESPRITE; END;
+TILE "entrance_brick_right"; SAMESPRITE; END;
+TILE "entrance_brick_column_left"; SAMESPRITE; SOLID edge_s; END;
+TILE "entrance_brick_column_right"; SAMESPRITE; SOLID edge_s; END;
+
+
+TILE "entrance_light_brick_down"; SAMESPRITE; END;
+TILE "entrance_light_brick_up"; SAMESPRITE; END;
+TILE "entrance_light_brick_left"; SAMESPRITE; END;
+TILE "entrance_light_brick_right"; SAMESPRITE; END;
+TILE "entrance_light_brick_back"; SAMESPRITE; END;
+TILE "wall_up_column_left_entrance_light_brick"; SAMESPRITE; SOLID edge_w; END;
+TILE "wall_up_column_right_entrance_light_brick"; SAMESPRITE; SOLID edge_e; END;
+TILE "wall_down_column_left_entrance_light_brick"; SAMESPRITE; SOLID edge_w; END;
+TILE "wall_down_column_right_entrance_light_brick"; SAMESPRITE; SOLID edge_e; END;
+TILE "wall_left_column_top_entrance_light_brick"; SAMESPRITE; SOLID edge_n; END;
+TILE "wall_left_column_bottom_entrance_light_brick"; SAMESPRITE; SOLID edge_s; END;
+TILE "wall_right_column_top_entrance_light_brick"; SAMESPRITE; SOLID edge_n; END;
+TILE "wall_right_column_bottom_entrance_light_brick"; SAMESPRITE; SOLID edge_s; END;
+
+TILE "wall_up_corner_left_entrance_light_brick"; SAMESPRITE; SOLID edge_w; END;
+TILE "wall_up_corner_right_entrance_light_brick"; SAMESPRITE; SOLID edge_w; END;
+
+TILE "entrance_light_dirt_down"; SAMESPRITE; END;
+TILE "entrance_light_dirt_up"; SAMESPRITE; END;
+TILE "entrance_light_dirt_left"; SAMESPRITE; END;
+TILE "entrance_light_dirt_right"; SAMESPRITE; END;
+TILE "entrance_light_dirt_back"; SAMESPRITE; END;
+TILE "wall_up_column_left_entrance_light_dirt"; SAMESPRITE; SOLID edge_w; END;
+TILE "wall_up_column_right_entrance_light_dirt"; SAMESPRITE; SOLID edge_e; END;
+TILE "wall_down_column_left_entrance_light_dirt"; SAMESPRITE; SOLID edge_w; END;
+TILE "wall_down_column_right_entrance_light_dirt"; SAMESPRITE; SOLID edge_e; END;
+TILE "wall_left_column_top_entrance_light_dirt"; SAMESPRITE; SOLID edge_n; END;
+TILE "wall_left_column_bottom_entrance_light_dirt"; SAMESPRITE; SOLID edge_s; END;
+TILE "wall_right_column_top_entrance_light_dirt"; SAMESPRITE; SOLID edge_n; END;
+TILE "wall_right_column_bottom_entrance_light_dirt"; SAMESPRITE; SOLID edge_s; END;
+
+TILE "wall_up_corner_left_entrance_light_dirt"; SAMESPRITE; SOLID edge_w; END;
+TILE "wall_up_corner_right_entrance_light_dirt"; SAMESPRITE; SOLID edge_w; END;
+
+TILE "entrance_light_floor_down"; SAMESPRITE; END;
+TILE "entrance_light_floor_up"; SAMESPRITE; END;
+TILE "entrance_light_floor_left"; SAMESPRITE; END;
+TILE "entrance_light_floor_right"; SAMESPRITE; END;
+TILE "entrance_light_floor_back"; SAMESPRITE; END;
+TILE "wall_up_column_left_entrance_light_floor"; SAMESPRITE; SOLID edge_w; END;
+TILE "wall_up_column_right_entrance_light_floor"; SAMESPRITE; SOLID edge_e; END;
+TILE "wall_down_column_left_entrance_light_floor"; SAMESPRITE; SOLID edge_w; END;
+TILE "wall_down_column_right_entrance_light_floor"; SAMESPRITE; SOLID edge_e; END;
+TILE "wall_left_column_top_entrance_light_floor"; SAMESPRITE; SOLID edge_n; END;
+TILE "wall_left_column_bottom_entrance_light_floor"; SAMESPRITE; SOLID edge_s; END;
+TILE "wall_right_column_top_entrance_light_floor"; SAMESPRITE; SOLID edge_n; END;
+TILE "wall_right_column_bottom_entrance_light_floor"; SAMESPRITE; SOLID edge_s; END;
+
+TILE "wall_up_corner_left_entrance_light_floor"; SAMESPRITE; SOLID edge_w; END;
+TILE "wall_up_corner_right_entrance_light_floor"; SAMESPRITE; SOLID edge_w; END;
+
+TILE "entrance_light_fancy_tile_1_down"; SAMESPRITE; END;
+TILE "entrance_light_fancy_tile_1_up"; SAMESPRITE; END;
+TILE "entrance_light_fancy_tile_1_left"; SAMESPRITE; END;
+TILE "entrance_light_fancy_tile_1_right"; SAMESPRITE; END;
+TILE "entrance_light_fancy_tile_1_back"; SAMESPRITE; END;
+TILE "wall_up_column_left_entrance_light_fancy_tile_1"; SAMESPRITE; SOLID edge_w; END;
+TILE "wall_up_column_right_entrance_light_fancy_tile_1"; SAMESPRITE; SOLID edge_e; END;
+TILE "wall_down_column_left_entrance_light_fancy_tile_1"; SAMESPRITE; SOLID edge_w; END;
+TILE "wall_down_column_right_entrance_light_fancy_tile_1"; SAMESPRITE; SOLID edge_e; END;
+TILE "wall_left_column_top_entrance_light_fancy_tile_1"; SAMESPRITE; SOLID edge_n; END;
+TILE "wall_left_column_bottom_entrance_light_fancy_tile_1"; SAMESPRITE; SOLID edge_s; END;
+TILE "wall_right_column_top_entrance_light_fancy_tile_1"; SAMESPRITE; SOLID edge_n; END;
+TILE "wall_right_column_bottom_entrance_light_fancy_tile_1"; SAMESPRITE; SOLID edge_s; END;
+
+TILE "wall_up_corner_left_entrance_light_fancy_tile_1"; SAMESPRITE; SOLID edge_w; END;
+TILE "wall_up_corner_right_entrance_light_fancy_tile_1"; SAMESPRITE; SOLID edge_w; END;
+
+TILE "wall_down_column_left"; SAMESPRITE; SOLID block; END;
+TILE "wall_down_column_right"; SAMESPRITE; SOLID block; END;
+TILE "wall_up_column_left"; SAMESPRITE; SOLID block; END;
+TILE "wall_up_column_right"; SAMESPRITE; SOLID block; END;
+TILE "wall_left_column_top"; SAMESPRITE; SOLID block; END;
+TILE "wall_left_column_bottom"; SAMESPRITE; SOLID block; END;
+TILE "wall_right_column_top"; SAMESPRITE; SOLID block; END;
+TILE "wall_right_column_bottom"; SAMESPRITE; SOLID block; END;
+
+TILE "wall_up_corner_left_entrance"; SAMESPRITE; SOLID block; END;
+TILE "wall_up_corner_right_entrance"; SAMESPRITE; SOLID block; END;

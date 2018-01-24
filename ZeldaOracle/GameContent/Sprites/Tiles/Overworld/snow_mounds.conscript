@@ -38,11 +38,11 @@ NAME "tile_snow_mound_bottom_left"			(1, 2);
 NAME "tile_snow_mound_bottom_mid"			(2, 2);
 NAME "tile_snow_mound_bottom_right"			(3, 2);
 
-NAME "tile_snow_mound_path_top_column"		(0, 3);
+NAME "tile_snow_mound_path_top_both"		(0, 3);
 NAME "tile_snow_mound_path_top_left"		(1, 3);
 NAME "tile_snow_mound_path_top_mid"			(2, 3);
 NAME "tile_snow_mound_path_top_right"		(3, 3);
-NAME "tile_snow_mound_path_side_column"		(0, 4);
+NAME "tile_snow_mound_path_side_both"		(0, 4);
 NAME "tile_snow_mound_path_side_left"		(1, 4);
 NAME "tile_snow_mound_path"					(2, 4);
 NAME "tile_snow_mound_path_side_right"		(3, 4);

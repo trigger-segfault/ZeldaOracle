@@ -5,5 +5,6 @@ LOAD "Overworld/vines.conscript", true;
 LOAD "Overworld/ground.conscript", true;
 LOAD "Overworld/trees.conscript", true;
 LOAD "Overworld/hedges.conscript", true;
+LOAD "Overworld/snow_mounds.conscript", true;
 LOAD "Overworld/town.conscript", true;
 LOAD "Overworld/water.conscript", true;

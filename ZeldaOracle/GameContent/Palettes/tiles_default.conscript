@@ -208,7 +208,7 @@ LOOKUP	output, all						floor, all;
 #==============================================================
 
 LOOKUP	ice, all						water, all;
-LOOKUP	ice_cracked, all				snow, all;
+LOOKUP	cracked_ice, all				snow, all;
 
 LOOKUP	water, all						puzzle_blue, all;
 LOOKUP	water_vegetation, all			water, all;

@@ -1,0 +1,91 @@
+﻿
+TILE "cliff_wall_down"; SAMESPRITE; LEDGE block, down; END;
+TILE "cliff_wall_up"; SAMESPRITE; LEDGE block, up; END;
+TILE "cliff_wall_left"; SAMESPRITE; LEDGE block, left; END;
+TILE "cliff_wall_right"; SAMESPRITE; LEDGE block, right; END;
+
+TILE "cliff_wall_outside_light_nw"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_light_ne"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_light_sw"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_light_se"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_wall_outside_nw"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_ne"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_sw"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_se"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_wall_inside_se"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_inside_sw"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_inside_ne"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_inside_nw"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_wall_up_railing_horizontal_long_cap_w"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_up_railing_horizontal_long"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_up_railing_horizontal_long_cap_e"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_up_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_wall_down_railing_horizontal_long_cap_w"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_down_railing_horizontal_long"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_down_railing_horizontal_long_cap_e"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_down_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_wall_left_railing_vertical_long_cap_n"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_left_railing_vertical_long"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_left_railing_vertical_long_cap_s"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_left_railing_vertical_long_cap_both"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_wall_right_railing_vertical_long_cap_n"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_right_railing_vertical_long"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_right_railing_vertical_long_cap_s"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_right_railing_vertical_long_cap_both"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_wall_outside_light_nw_railing_outside_nw"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_light_ne_railing_outside_ne"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_light_sw_railing_outside_sw"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_light_se_railing_outside_se"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_wall_outside_nw_railing_outside_nw"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_ne_railing_outside_ne"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_sw_railing_outside_sw"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_se_railing_outside_se"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_wall_outside_light_nw_railing_vertical_cap_n"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_light_ne_railing_vertical_cap_n"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_light_sw_railing_vertical_cap_s"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_light_se_railing_vertical_cap_s"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_wall_outside_nw_railing_vertical_cap_n"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_ne_railing_vertical_cap_n"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_sw_railing_vertical_cap_s"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_se_railing_vertical_cap_s"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_wall_outside_light_nw_railing_horizontal_cap_w"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_light_ne_railing_horizontal_cap_e"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_light_sw_railing_horizontal_cap_w"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_light_se_railing_horizontal_cap_e"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_wall_outside_nw_railing_horizontal_cap_w"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_ne_railing_horizontal_cap_e"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_sw_railing_horizontal_cap_w"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_outside_se_railing_horizontal_cap_e"; SAMESPRITE; SOLID block; END;
+
+
+TILE "cliff_wall_inside_se_railing_inside_se"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_inside_sw_railing_inside_sw"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_inside_ne_railing_inside_ne"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_inside_nw_railing_inside_nw"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_wall_inside_se_railing_inside_se_cap_s"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_inside_sw_railing_inside_sw_cap_s"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_inside_ne_railing_inside_ne_cap_n"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_inside_nw_railing_inside_nw_cap_n"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_wall_inside_se_railing_inside_se_cap_e"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_inside_sw_railing_inside_sw_cap_w"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_inside_ne_railing_inside_ne_cap_e"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_inside_nw_railing_inside_nw_cap_w"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_wall_inside_se_railing_inside_se_cap_both"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_inside_sw_railing_inside_sw_cap_both"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_inside_ne_railing_inside_ne_cap_both"; SAMESPRITE; SOLID block; END;
+TILE "cliff_wall_inside_nw_railing_inside_nw_cap_both"; SAMESPRITE; SOLID block; END;

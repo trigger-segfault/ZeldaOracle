@@ -5,11 +5,12 @@
 # GENERAL WATER TILES
 
 TILE "puddle"; SAMESPRITE; ENVTYPE Puddle; END;
-TILE "water"; SAMESPRITE; ENVTYPE Water;END;
-TILE "ice"; SAMESPRITE; ENVTYPE Ice;END;
-TILE "deep_water"; SAMESPRITE; ENVTYPE DeepWater;END;
-TILE "ocean_shore"; SAMESPRITE; ENVTYPE Puddle;END;
-TILE "ocean"; SAMESPRITE; ENVTYPE Ocean;END;
+TILE "water"; SAMESPRITE; ENVTYPE Water; END;
+TILE "ice"; SAMESPRITE; ENVTYPE Ice; END;
+TILE "cracked_ice"; SAMESPRITE; ENVTYPE Ice; END;
+TILE "deep_water"; SAMESPRITE; ENVTYPE DeepWater; END;
+TILE "ocean_shore"; SAMESPRITE; ENVTYPE Puddle; END;
+TILE "ocean"; SAMESPRITE; ENVTYPE Ocean; END;
 
 TILE "lava_1"; SAMESPRITE; ENVTYPE Lava; END;
 TILE "lava_2"; SAMESPRITE; ENVTYPE Lava; END;
@@ -38,13 +39,25 @@ END;
 TILE "waterfall_down_start"; SAMESPRITE; ENVTYPE Waterfall; LEDGE edge_s, down; END;
 TILE "waterfall_down_rocks"; SAMESPRITE; SOLID block; END;
 TILE "waterfall_down"; SAMESPRITE; ENVTYPE Waterfall; LEDGE block, down; END;
+TILE "waterfall_up"; SAMESPRITE; ENVTYPE Waterfall; LEDGE block, up; END;
+TILE "waterfall_left"; SAMESPRITE; ENVTYPE Waterfall; LEDGE block, left; END;
+TILE "waterfall_right"; SAMESPRITE; ENVTYPE Waterfall; LEDGE block, right; END;
 TILE "waterfall_down_finish"; SAMESPRITE; ENVTYPE Waterfall; LEDGE block, down; END;
+TILE "waterfall_up_finish"; SAMESPRITE; ENVTYPE Waterfall; LEDGE block, up; END;
+TILE "waterfall_left_finish"; SAMESPRITE; ENVTYPE Waterfall; LEDGE block, left; END;
+TILE "waterfall_right_finish"; SAMESPRITE; ENVTYPE Waterfall; LEDGE block, right; END;
 TILE "waterfall_down_rocks_finish"; SAMESPRITE; ENVTYPE Waterfall; SOLID block; END;
 
 TILE "lavafall_down_start"; SAMESPRITE; ENVTYPE Lavafall; LEDGE edge_s, down; END;
 TILE "lavafall_down_rocks"; SAMESPRITE; ENVTYPE Lavafall; SOLID block; END;
 TILE "lavafall_down"; SAMESPRITE; ENVTYPE Lavafall; LEDGE block, down; END;
+TILE "lavafall_up"; SAMESPRITE; ENVTYPE Lavafall; LEDGE block, up; END;
+TILE "lavafall_left"; SAMESPRITE; ENVTYPE Lavafall; LEDGE block, left; END;
+TILE "lavafall_right"; SAMESPRITE; ENVTYPE Lavafall; LEDGE block, right; END;
 TILE "lavafall_down_finish"; SAMESPRITE; ENVTYPE Lavafall; LEDGE block, down; END;
+TILE "lavafall_up_finish"; SAMESPRITE; ENVTYPE Lavafall; LEDGE block, up; END;
+TILE "lavafall_left_finish"; SAMESPRITE; ENVTYPE Lavafall; LEDGE block, left; END;
+TILE "lavafall_right_finish"; SAMESPRITE; ENVTYPE Lavafall; LEDGE block, right; END;
 TILE "lavafall_down_rocks_finish"; SAMESPRITE; ENVTYPE Lavafall; SOLID block; END;
 
 TILE "waterfall_down_start_cave_left"; SAMESPRITE; END;

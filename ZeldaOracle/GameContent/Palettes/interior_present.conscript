@@ -71,7 +71,7 @@ LOOKUP	sign, all						object, all;
 LOOKUP	bracelet_rock, all				object, all;
 LOOKUP	switch_rock, all				object, all;
 LOOKUP	crystal_rock, all				object, all;
-LOOKUP	block, all						grass_green, all;
+LOOKUP	block, all						furniture, all;
 LOOKUP	armos, all						object, all;
 LOOKUP	armos_alt, all					gray, all;
 LOOKUP	grave, all						gray, all;
@@ -80,6 +80,9 @@ LOOKUP	dirt_pile, all					dirt, all;
 LOOKUP	grass, all						grass_green, all;
 LOOKUP	leaves, all						tree_green, all;
 LOOKUP	bush, all						tree_green, all;
+LOOKUP	bush, light						floor, medium;
+COLOR	bush, medium					( 16,168, 64);
+COLOR	bush, dark						(248,184,136);
 
 LOOKUP	mushroom, light					floor, light;
 LOOKUP	mushroom, medium				flower_red, dark;
@@ -141,7 +144,7 @@ LOOKUP	water, all						blue, all;
 COLOR	water_vegetation, dark			( 48,136,112);
 
 LOOKUP	ice, all						water, all;
-LOOKUP	ice_cracked, all				snow, all;
+LOOKUP	cracked_ice, all				snow, all;
 LOOKUP	lava, all						puzzle_red, all;
 LOOKUP	sand, all						dirt, all;
 
@@ -215,13 +218,11 @@ COPY	grass_green, light				floor, light;
 COLOR	grass_green, medium				(128,192,  0);
 COLOR	grass_green, dark				( 64,112,  0);
 
-COPY	tree_green, light				floor, medium;
-COLOR	tree_green, medium				( 16,168, 64);
-COLOR	tree_green, dark				(248,184,136);
+COPY	tree_green, all					grass_green, all;
 
-COPY	object, light					floor, medium;
-COLOR	object, medium					(224,144,  0);
-COLOR	object, dark					(128, 64, 16);
+COPY	object, all						furniture, all;
+#COLOR	object, medium					(224,144,  0);
+#COLOR	object, dark					(128, 64, 16);
 
 
 #==============================================================

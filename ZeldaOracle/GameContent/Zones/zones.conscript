@@ -143,7 +143,7 @@ ZONE "interior_present";
 	SETSTYLE "bush", "inside";
 	SETSTYLE "ceiling", "medium";
 	SETSTYLE "ceiling_alt", "medium";
-	SETSTYLE "block", "shell";
+	SETSTYLE "block", "angel";
 	SETSTYLE "cracked_floor", "interior";
 	SETSTYLE "door", "interior";
 	SETSTYLE "pot", "normal";

@@ -1,0 +1,109 @@
+﻿
+#==============================================================
+# Temporary Railing Composites
+#==============================================================
+
+COMPOSITE "temp_railing_vertical_long";
+	ADD "temp_8x8_railing_vertical" (0, 0);
+	ADD "temp_8x8_railing_vertical" (0, 8); END;
+	
+COMPOSITE "temp_railing_vertical_long_cap_n";
+	ADD "temp_8x8_railing_vertical_cap_n" (0, 0);
+	ADD "temp_8x8_railing_vertical" (0, 8); END;
+
+COMPOSITE "temp_railing_vertical_long_cap_s";
+	ADD "temp_8x8_railing_vertical" (0, 0);
+	ADD "temp_8x8_railing_vertical_cap_s" (0, 8); END;
+
+COMPOSITE "temp_railing_vertical_long_cap_both";
+	ADD "temp_8x8_railing_vertical_cap_n" (0, 0);
+	ADD "temp_8x8_railing_vertical_cap_s" (0, 8); END;
+	
+COMPOSITE "temp_railing_horizontal_long";
+	ADD "temp_8x8_railing_horizontal" (0, 0);
+	ADD "temp_8x8_railing_horizontal" (8, 0); END;
+	
+COMPOSITE "temp_railing_horizontal_long_cap_w";
+	ADD "temp_8x8_railing_horizontal_cap_w" (0, 0);
+	ADD "temp_8x8_railing_horizontal" (8, 0); END;
+
+COMPOSITE "temp_railing_horizontal_long_cap_e";
+	ADD "temp_8x8_railing_horizontal" (0, 0);
+	ADD "temp_8x8_railing_horizontal_cap_e" (8, 0); END;
+
+COMPOSITE "temp_railing_horizontal_long_cap_both";
+	ADD "temp_8x8_railing_horizontal_cap_w" (0, 0);
+	ADD "temp_8x8_railing_horizontal_cap_e" (8, 0); END;
+	
+COMPOSITE "temp_railing_inside_se";
+	ADD "temp_8x8_railing_inside_nw", (0, 0);
+	ADD "temp_8x8_railing_horizontal", (8, 0);
+	ADD "temp_8x8_railing_vertical", (0, 8); END;
+COMPOSITE "temp_railing_inside_sw";
+	ADD "temp_8x8_railing_inside_ne", (8, 0);
+	ADD "temp_8x8_railing_horizontal", (0, 0);
+	ADD "temp_8x8_railing_vertical", (8, 8); END;
+	
+COMPOSITE "temp_railing_inside_se_cap_s";
+	ADD "temp_8x8_railing_inside_nw", (0, 0);
+	ADD "temp_8x8_railing_horizontal", (8, 0);
+	ADD "temp_8x8_railing_vertical_cap_s", (0, 8); END;
+COMPOSITE "temp_railing_inside_sw_cap_s";
+	ADD "temp_8x8_railing_inside_ne", (8, 0);
+	ADD "temp_8x8_railing_horizontal", (0, 0);
+	ADD "temp_8x8_railing_vertical_cap_s", (8, 8); END;
+	
+COMPOSITE "temp_railing_inside_se_cap_e";
+	ADD "temp_8x8_railing_inside_nw", (0, 0);
+	ADD "temp_8x8_railing_horizontal_cap_e", (8, 0);
+	ADD "temp_8x8_railing_vertical", (0, 8); END;
+COMPOSITE "temp_railing_inside_sw_cap_w";
+	ADD "temp_8x8_railing_inside_ne", (8, 0);
+	ADD "temp_8x8_railing_horizontal_cap_w", (0, 0);
+	ADD "temp_8x8_railing_vertical", (8, 8); END;
+	
+COMPOSITE "temp_railing_inside_se_cap_both";
+	ADD "temp_8x8_railing_inside_nw", (0, 0);
+	ADD "temp_8x8_railing_horizontal_cap_e", (8, 0);
+	ADD "temp_8x8_railing_vertical_cap_s", (0, 8); END;
+COMPOSITE "temp_railing_inside_sw_cap_both";
+	ADD "temp_8x8_railing_inside_ne", (8, 0);
+	ADD "temp_8x8_railing_horizontal_cap_w", (0, 0);
+	ADD "temp_8x8_railing_vertical_cap_s", (8, 8); END;
+	
+	
+COMPOSITE "temp_railing_inside_ne";
+	ADD "temp_8x8_railing_inside_sw", (0, 8);
+	ADD "temp_8x8_railing_horizontal", (8, 8);
+	ADD "temp_8x8_railing_vertical", (0, 0); END;
+COMPOSITE "temp_railing_inside_nw";
+	ADD "temp_8x8_railing_inside_se", (8, 8);
+	ADD "temp_8x8_railing_horizontal", (0, 8);
+	ADD "temp_8x8_railing_vertical", (8, 0); END;
+	
+COMPOSITE "temp_railing_inside_ne_cap_n";
+	ADD "temp_8x8_railing_inside_sw", (0, 8);
+	ADD "temp_8x8_railing_horizontal", (8, 8);
+	ADD "temp_8x8_railing_vertical_cap_n", (0, 0); END;
+COMPOSITE "temp_railing_inside_nw_cap_n";
+	ADD "temp_8x8_railing_inside_se", (8, 8);
+	ADD "temp_8x8_railing_horizontal", (0, 8);
+	ADD "temp_8x8_railing_vertical_cap_n", (8, 0); END;
+	
+COMPOSITE "temp_railing_inside_ne_cap_e";
+	ADD "temp_8x8_railing_inside_sw", (0, 8);
+	ADD "temp_8x8_railing_horizontal_cap_e", (8, 8);
+	ADD "temp_8x8_railing_vertical", (0, 0); END;
+COMPOSITE "temp_railing_inside_nw_cap_w";
+	ADD "temp_8x8_railing_inside_se", (8, 8);
+	ADD "temp_8x8_railing_horizontal_cap_w", (0, 8);
+	ADD "temp_8x8_railing_vertical", (8, 0); END;
+	
+COMPOSITE "temp_railing_inside_ne_cap_both";
+	ADD "temp_8x8_railing_inside_sw", (0, 8);
+	ADD "temp_8x8_railing_horizontal_cap_e", (8, 8);
+	ADD "temp_8x8_railing_vertical_cap_n", (0, 0); END;
+COMPOSITE "temp_railing_inside_nw_cap_both";
+	ADD "temp_8x8_railing_inside_se", (8, 8);
+	ADD "temp_8x8_railing_horizontal_cap_w", (0, 8);
+	ADD "temp_8x8_railing_vertical_cap_n", (8, 0); END;
