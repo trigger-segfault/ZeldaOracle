@@ -1,0 +1,60 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_temple_of_seasons"		"Tiles/Special/temple_of_seasons"	(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+MAPPEDCOLORS	"tiles_default", ("vertical_wall", "fancy_tile_1");
+CHUNKSIZE		(8, 8);
+
+SOURCE "temp_sheet_temple_of_seasons";
+SPRITESET "set_temple_of_seasons", (16, 12);
+
+	MULTIPLE BASIC (0, 0), (0, 0), (10, 4); END;
+	MULTIPLE BASIC (2, 4), (2, 4), (8, 2); END;
+	
+	MULTIPLE BASIC (0, 6), (0, 6), (10, 4); END;
+	MULTIPLE BASIC (2, 10), (2, 10), (8, 2); END;
+	
+	MAPPEDCOLORS	"tiles_default",
+		("temple_spring_roof", "temple_summer_roof", "temple_autumn_roof", "temple_winter_roof");
+		
+	MULTIPLE BASIC (10, 0), (10, 0), (6, 6); END;
+END;
+
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_temple_of_seasons";
+
+COMPOSITE "tile_temple_of_seasons_subrosia_back";
+	ADDTILED (0, 0), (10, 4), (16, 16); END;
+COMPOSITE "tile_temple_of_seasons_subrosia_front";
+	ADDTILED (2, 4), (6, 2), (16, 16); END;
+	
+COMPOSITE "tile_temple_of_seasons_overworld_back";
+	ADDTILED (0, 6), (10, 4), (16, 16); END;
+COMPOSITE "tile_temple_of_seasons_overworld_front";
+	ADDTILED (2, 10), (6, 2), (16, 16); END;
+
+COMPOSITE "tile_temple_roof_spring";
+	ADDTILED (10, 3), (3, 3), (16, 16); END;
+	
+COMPOSITE "tile_temple_roof_summer";
+	ADDTILED (10, 0), (3, 3), (16, 16); END;
+	
+COMPOSITE "tile_temple_roof_autumn";
+	ADDTILED (13, 0), (3, 3), (16, 16); END;
+	
+COMPOSITE "tile_temple_roof_winter";
+	ADDTILED (13, 3), (3, 3), (16, 16); END;

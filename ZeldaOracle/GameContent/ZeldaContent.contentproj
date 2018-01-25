@@ -317,6 +317,10 @@
       <Name>trees</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Sprites\Tiles\Overworld\vertical_walls.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>vertical_walls</Name>
+    </None>
     <None Include="Sprites\Tiles\Overworld\vines.conscript">
       <Name>vines</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -344,6 +348,14 @@
     <None Include="Sprites\Tiles\SideScroll\walls.conscript">
       <Name>walls</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\special.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>special</Name>
+    </None>
+    <None Include="Sprites\Tiles\Special\temple_of_seasons.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>temple_of_seasons</Name>
     </None>
     <None Include="Sprites\Tiles\tile_previews.conscript">
       <Name>tile_previews</Name>
@@ -460,6 +472,14 @@
     <None Include="Tiles\Tiles\SideScroll\sidescroll.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>sidescroll</Name>
+    </None>
+    <None Include="Tiles\Tiles\special.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>special</Name>
+    </None>
+    <None Include="Tiles\Tiles\Special\temple_of_seasons.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>temple_of_seasons</Name>
     </None>
     <None Include="Tilesets\Actions\action_tile_data.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -885,6 +905,11 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="Images\Tiles\Overworld\vertical_walls.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>vertical_walls</Name>
+    </Compile>
     <Compile Include="Images\Tiles\Overworld\vines.png">
       <Name>vines</Name>
       <Importer>TextureImporter</Importer>
@@ -919,6 +944,11 @@
       <Name>ss_walls</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Special\temple_of_seasons.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>temple_of_seasons</Name>
     </Compile>
     <Compile Include="Images\Tiles\tile_previews.png">
       <Name>tile_previews</Name>
