@@ -50,6 +50,25 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				CompositeSprite.AddSprite(addSprite, drawOffset, clipping, flip, rotation);
 			});
 			//=====================================================================================
+			AddCommand("ADDTILED", (int) Modes.CompositeSprite,
+				"Point sourceIndex, Point range, Point spacing, Point drawOffset = (0, 0)",
+			delegate (CommandParam parameters) {
+				if (SourceMode == SourceModes.None) {
+					ThrowCommandParseError("Cannot add tiled sprites without a sprite source!");
+				}
+				Point2I sourceIndex = parameters.GetPoint(0);
+				Point2I range = parameters.GetPoint(1);
+				Point2I spacing = parameters.GetPoint(2);
+				Point2I drawOffset = parameters.GetPoint(3);
+				for (int x = 0; x < range.X; x++) {
+					for (int y = 0; y < range.Y; y++) {
+						Point2I point = new Point2I(x, y);
+						ISprite addSprite = GetSprite(source, sourceIndex + point);
+						CompositeSprite.AddSprite(addSprite, drawOffset + (spacing * point));
+					}
+				}
+			});
+			//=====================================================================================
 			AddCommand("INSERT", (int) Modes.CompositeSprite,
 				"int index, Sprite sprite, Point drawOffset = (0, 0), Rectangle clipping = (0, 0, -1, -1), string flip = none, string rotation = none",
 			delegate (CommandParam parameters) {

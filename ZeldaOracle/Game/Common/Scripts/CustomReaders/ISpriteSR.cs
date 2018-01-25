@@ -217,6 +217,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("PALETTEDICTIONARY", "const none", "const null",
 			delegate (CommandParam parameters) {
 				paletteArgs.Dictionary = null;
+				animationBuilder.PaletteArgs = paletteArgs;
 			});
 			//=====================================================================================
 			AddCommand("PALETTEDICTIONARY", "string name",

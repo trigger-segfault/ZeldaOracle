@@ -12,6 +12,7 @@ LOAD "Tiles/indoors.conscript", false;
 LOAD "Tiles/sidescroll.conscript", false;
 LOAD "Tiles/objects.conscript", false;
 LOAD "Tiles/tile_previews.conscript", false;
+LOAD "Tiles/special.conscript", false;
 
 #LOAD "Tiles/terrain.conscript", false;
 #LOAD "Tiles/trees.conscript", false;
