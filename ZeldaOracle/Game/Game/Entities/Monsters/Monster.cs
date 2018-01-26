@@ -14,6 +14,7 @@ using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Game.Entities.Monsters.States;
 using ZeldaOracle.Game.Entities.Projectiles.Seeds;
+using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 
@@ -254,6 +255,17 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			for (int i = 0; i < reactions.Length; i++)
 				handler.Add(reactions[i]);
 		}
+		
+		protected void SetReaction(InteractionType type,
+			InteractionStaticDelegate staticReaction,
+			params InteractionMemberDelegate[] memberReactions)
+		{
+			InteractionHandler handler = GetInteraction(type);
+			handler.Clear();
+			handler.Add(staticReaction);
+			for (int i = 0; i < memberReactions.Length; i++)
+				handler.Add(memberReactions[i]);
+		}
 
 		
 		//-----------------------------------------------------------------------------
@@ -284,6 +296,32 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		protected virtual void FacePlayer() {
 			Vector2F lookVector = RoomControl.Player.Center - Center;
 			direction = Directions.NearestFromVector(lookVector);
+		}
+
+		protected virtual Vector2F GetRandomSpawnLocation() {
+
+			List<Vector2F> locations = new List<Vector2F>();
+
+			for (int x = 0; x < RoomControl.Room.Width; x++) {
+				for (int y = 0; y < RoomControl.Room.Height; y++) {
+					Tile t = RoomControl.GetTopTile(x, y);
+					Vector2F spawnPosition = 
+						(new Point2I(x, y) * GameSettings.TILE_SIZE) +
+						new Vector2F(8, 8) - centerOffset;
+
+					if (t != null && (t.IsSolid || t.IsHoleWaterOrLava))
+						continue;
+
+					if (Physics.IsPlaceMeetingEntity(spawnPosition, RoomControl.Player, CollisionBoxType.Soft))
+						continue;
+
+					locations.Add(spawnPosition);
+				}
+			}
+
+			if (locations.Count == 0)
+				return position;
+			return GRandom.Choose(locations);
 		}
 		
 		

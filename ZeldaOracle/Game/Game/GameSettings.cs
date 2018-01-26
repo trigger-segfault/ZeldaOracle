@@ -149,6 +149,17 @@ namespace ZeldaOracle.Game {
 		public const int				MONSTER_GEL_ATTACH_TIME				= 120;
 		public const float				MONSTER_KEESE_ACCELERATION			= 0.05f;
 		public const float				MONSTER_KEESE_DECELERATION			= 0.015f;
+		public const float				MONSTER_WIZZROBE_SHOOT_SPEED					= 2.0f;
+		public const int				MONSTER_WIZZROBE_GREEN_PEEK_DURATION			= 75;
+		public const int				MONSTER_WIZZROBE_GREEN_PEEK_FLICKER_DURATION	= 30;
+		public const int				MONSTER_WIZZROBE_GREEN_APPEAR_DURATION			= 72;
+		public const int				MONSTER_WIZZROBE_GREEN_SHOOT_DELAY				= 20;
+		public const int				MONSTER_WIZZROBE_RED_PEEK_DURATION				= 58;
+		public const int				MONSTER_WIZZROBE_RED_SHOOT_DELAY				= 20;
+		public const int				MONSTER_WIZZROBE_RED_APPEAR_DURATION			= 30;
+		public const int				MONSTER_WIZZROBE_BLUE_FLICKER_DURATION			= 238;
+		public const int				MONSTER_WIZZROBE_BLUE_APPEAR_DURATION			= 36;
+		public const int				MONSTER_WIZZROBE_BLUE_MOVE_DELAY				= 8;
 
 		// Tiles
 		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.

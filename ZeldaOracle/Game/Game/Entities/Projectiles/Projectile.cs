@@ -18,6 +18,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 	public enum ProjectileType {
 		Physical = 0,	// Can always be deflected
+		Magic,			// Can only be deflected by shields
 		Beam,			// Can only be deflected by the Mirror Shield
 		NotDeflectable	// Can NEVER be deflected.
 	}
@@ -56,8 +57,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			angle			= 0;
 			direction		= 0;
 
-			crashAnimation	= null;
-			bounceOnCrash	= false;
+			crashAnimation		= null;
+			bounceOnCrash		= false;
 
 			projectileType = ProjectileType.Physical;
 		}
@@ -204,6 +205,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			if (owner is Player) {
 				// Collide with monster tools.
 				foreach (Monster monster in RoomControl.GetEntitiesOfType<Monster>()) {
+					if (monster.IsPassable)
+						continue;
 					foreach (UnitTool tool in monster.EquippedTools) {
 						if (Physics.PositionedCollisionBox.Intersects(tool.PositionedCollisionBox)) {
 							tool.OnHitProjectile(this);
@@ -215,6 +218,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 				// Collide with monsters.
 				foreach (Monster monster in Physics.GetEntitiesMeeting<Monster>(CollisionBoxType.Soft)) {
+					if (monster.IsPassable)
+						continue;
 					OnCollideMonster(monster);
 					if (IsDestroyed)
 						return;

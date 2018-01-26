@@ -1,18 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Input;
-using ZeldaOracle.Common.Scripting;
-using ZeldaOracle.Game.Entities.Players;
-using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Monsters.Tools;
-using ZeldaOracle.Game.Entities.Projectiles;
-using ZeldaOracle.Game.Items;
-using ZeldaOracle.Game.Items.Weapons;
-using ZeldaOracle.Game.Entities.Projectiles.MagicProjectiles;
+﻿using ZeldaOracle.Game.Entities.Projectiles.MagicProjectiles;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 
@@ -76,7 +62,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				ContactDamage	= 1;
 				aimType			= AimType.Forward;
 			}
-			else if (color == MonsterColor.Red) {
+			else if (color == MonsterColor.Blue) {
 				MaxHealth		= 2;
 				ContactDamage	= 2;
 				aimType			= AimType.FacePlayer;

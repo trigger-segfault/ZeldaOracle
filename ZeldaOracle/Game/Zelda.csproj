@@ -306,6 +306,8 @@
     <Compile Include="Game\Entities\Monsters\JumpMonsters\MonsterTektike.cs" />
     <Compile Include="Game\Entities\Monsters\JumpMonsters\MonsterZolRed.cs" />
     <Compile Include="Game\Entities\Monsters\JumpMonsters\MonsterZolGreen.cs" />
+    <Compile Include="Game\Entities\Monsters\MonsterMovingWizzrobe.cs" />
+    <Compile Include="Game\Entities\Monsters\MonsterWizzrobe.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterStalfos.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterKeese.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterCukeman.cs" />

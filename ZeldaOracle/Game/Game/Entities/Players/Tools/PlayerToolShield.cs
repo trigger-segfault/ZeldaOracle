@@ -54,6 +54,7 @@ namespace ZeldaOracle.Game.Entities.Players.Tools {
 
 		public override void OnHitProjectile(Projectile projectile) {
 			if (projectile.ProjectileType == ProjectileType.Physical ||
+				projectile.ProjectileType == ProjectileType.Magic ||
 				(projectile.ProjectileType == ProjectileType.Beam && itemShield.Level == Item.Level3))
 			{
 				projectile.Intercept();

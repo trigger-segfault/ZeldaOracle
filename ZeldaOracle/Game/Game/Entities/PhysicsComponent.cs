@@ -296,6 +296,16 @@ namespace ZeldaOracle.Game.Entities {
 			}
 			return false;
 		}
+
+		// Return true if the entity would collide with a tile if it were at the given position.
+		public bool IsPlaceMeetingEntity(Vector2F position, Entity entity, CollisionBoxType collisionBoxType, float maxZDistance = 10) {
+			if (CanCollideWithEntity(entity)) {
+				return CollisionTest.PerformCollisionTest(entity, entity,
+					new CollisionTestSettings(null, collisionBoxType,
+					collisionBoxType, maxZDistance)).IsColliding;
+			}
+			return false;
+		}
 				
 		// Return the closest solid tile positioned directly in front of the entity (if there is one).
 		public Tile GetFacingSolidTile(int direction, float distance = 1.0f) { // TODO: return closest tile.

@@ -18,10 +18,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MagicProjectiles {
 		//-----------------------------------------------------------------------------
 
 		public MagicProjectile() {
-			// General.
+			// General
 			syncAnimationWithDirection = true;
-
-			// Physics.
+			projectileType = ProjectileType.Magic;
+			
+			// Physics
 			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 1);
 			Physics.SoftCollisionBox	= new Rectangle2F(-1, -1, 2, 1);
 			EnablePhysics(
@@ -30,7 +31,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MagicProjectiles {
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.DestroyedOutsideRoom);
 
-			// Graphics.
+			// Graphics
 			Graphics.DepthLayer = DepthLayer.ProjectileArrow;
 		}
 
@@ -54,7 +55,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MagicProjectiles {
 		}
 
 		public override void OnCollidePlayer(Player player) {
-			player.Hurt(1, position);
+			player.Hurt(3, position);
 			Destroy();
 		}
 	}
