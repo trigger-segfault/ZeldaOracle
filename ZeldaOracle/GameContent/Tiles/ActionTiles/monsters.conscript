@@ -13,6 +13,7 @@ ACTIONTILE "monster";
 	EVENT		die, "Die", "Monster", "Occurs when the monster dies.", (Monster, monster);
 END;
 
+# MONSTER (string name, string sprite, string type, string color) 
 MONSTER "monster_octorok_red",			"monster_octorok",				MonsterOctorok,			red;	END;
 MONSTER "monster_octorok_blue",			"monster_octorok",				MonsterOctorok,			blue;	END;
 MONSTER "monster_moblin_red",			"monster_moblin",				MonsterMoblin,			red;	END;
@@ -35,9 +36,29 @@ MONSTER "monster_sand_crab",			"monster_sand_crab",			MonsterSandCrab,		orange;	
 MONSTER "monster_shrouded_stalfos",		"monster_shrouded_stalfos",		MonsterShroudedStalfos,	green;	END;
 MONSTER "monster_ghini",				"monster_ghini",				MonsterGhini,			red;	END;
 MONSTER "monster_zol_green",			"monster_zol",					MonsterZolGreen,		green;	END;
+MONSTER "monster_zol_red",				"monster_zol",					MonsterZolRed,			red;	END;
 MONSTER "monster_thwomp",				"monster_thwomp",				MonsterThwomp,			blue;	PREVIEW "preview_monster_thwomp"; SIZE (2, 2); END;
 MONSTER "monster_thwimp",				"monster_thwimp",				MonsterThwomp,			blue;	END;
 MONSTER "monster_buzz_blob",			"monster_buzz_blob",			MonsterBuzzBlob,		green;	END;
+MONSTER "monster_cukeman",				"monster_cukeman",				MonsterCukeman,			green;	END;
+MONSTER "monster_keese",				"monster_keese",				MonsterKeese,			green;	END;
+MONSTER "monster_stalfos_blue",			"monster_stalfos",				MonsterStalfos,			blue;	END;
+MONSTER "monster_stalfos_green",		"monster_stalfos",				MonsterStalfos,			green;	END;
+MONSTER "monster_stalfos_red",			"monster_stalfos",				MonsterStalfos,			red;	END;
+MONSTER "monster_stalfos_orange",		"monster_stalfos",				MonsterStalfos,			orange;	END;
+MONSTER "monster_mini_moldorm",			"monster_mini_moldorm_head",	MonsterMiniMoldorm,		green;	END;
+MONSTER "monster_pincer",				"monster_pincer_head",			MonsterPincer,			red;	END;
+MONSTER "monster_tektike_orange",		"monster_tektike",				MonsterTektike,			orange;	END;
+MONSTER "monster_tektike_blue",			"monster_tektike",				MonsterTektike,			blue;	END;
+MONSTER "monster_pols_voice",			"monster_pols_voice",			MonsterPolsVoice,		orange;	END;
+MONSTER "monster_wizzrobe_green",		"monster_wizzrobe",				MonsterWizzrobe,		green;	END;
+MONSTER "monster_wizzrobe_red",			"monster_wizzrobe",				MonsterWizzrobe,		red;	END;
+MONSTER "monster_wizzrobe_blue",		"monster_wizzrobe",				MonsterMovingWizzrobe,	blue;	END;
+MONSTER "monster_hardhat_beetle",		"monster_hardhat_beetle",		MonsterHardhatBeetle,	orange;	END;
+MONSTER "monster_leever_red",			"monster_leever",				MonsterLeever,			red;	END;
+MONSTER "monster_leever_blue",			"monster_leever",				MonsterLeever,			blue;	END;
+MONSTER "monster_leever_orange",		"monster_leever",				MonsterLeever,			orange;	END;
+MONSTER "monster_spinning_blade_trap",	"monster_spinning_blade_trap",	MonsterSpinningBladeTrap,	red;	END;
 
 TILE "monster_beamos";
 	SOLID		block;

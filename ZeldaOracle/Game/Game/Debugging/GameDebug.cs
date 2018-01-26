@@ -284,8 +284,8 @@ namespace ZeldaOracle.Game.Debug {
 			if (ctrl && Mouse.IsButtonPressed(MouseButtons.Left)) {
 				Vector2F spawnPosition = mouseLocation * GameSettings.TILE_SIZE;
 				spawnPosition += new Vector2F(8, 8);
-				Monster monster = new MonsterMovingWizzrobe() {
-					Color = MonsterColor.Blue
+				Monster monster = new MonsterBuzzBlob() {
+					//Color = MonsterColor.Blue
 				};
 				monster.SetPositionByCenter(spawnPosition);
 				RoomControl.SpawnEntity(monster);

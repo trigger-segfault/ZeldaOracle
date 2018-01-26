@@ -24,39 +24,123 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 	public enum InteractionType {
 		None = -1,
-
-		EmberSeed = 0,			// Hit by an ember seed.
-		ScentSeed,				// Hit by a scent seed.
-		PegasusSeed,			// Hit by a pegasus seed.
-		GaleSeed,				// Hit by a gale seed.
-		MysterySeed,			// Hit by a mystery seed.
-		Fire,					// Touches fire.
-		Gale,					// Touches gale.
-		Arrow,					// Hit by an arrow.
-		SwordBeam,				// Hit by a sword beam projectile.
-		RodFire,				// Hit by a projectile from the fire-rod.
-		Sword,					// Hit by a sword.
-		SwordSpin,				// Hit by a spinning sword.
-		BiggoronSword,			// Hit by a biggoron sword.
-		Boomerang,				// Hit by a boomerang.
-		BombExplosion,			// Hit by a bomb explosion.
-		Shield,					// Hit by a shield.
-		SwitchHook,				// Hit by the switch hook.
-		Shovel,					// Hit by a shovel being used.
-		Pickup,					// Attempt to use the bracelet to pickup.
-		ButtonAction,			// The A button is pressed while colliding.
 		
+		
+		//-----------------------------------------------------------------------------
+		// Weapon Interactions
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Hit by a sword.
+		/// <para/>Default = SenderReactions.Intercept,
+		/// Reactions.DamageByLevel(1, 2, 3)</summary>
+		Sword,
+		/// <summary>Hit by a spinning sword.
+		/// <para/>Default = Reactions.Damage2</summary>
+		SwordSpin,
+		/// <summary>Hit by a biggoron sword.
+		/// <para/>Default = Reactions.Damage3</summary>
+		BiggoronSword,
+		/// <summary>Hit by a shield.
+		/// <para/>Default = SenderReactions.Bump, Reactions.Bump</summary>
+		Shield,
+		/// <summary>Hit by a shovel being used.
+		/// <para/>Default = Reactions.Bump</summary>
+		Shovel,
+		/// <summary>TODO.
+		/// <para/>Default = Reactions.None</summary>
 		Parry,
+		/// <summary>Attempt to use the bracelet to pickup.
+		/// <para/>Default = Reactions.None</summary>
+		Pickup,
+		
+		//-----------------------------------------------------------------------------
+		// Seed Interactions
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Hit by an ember seed.
+		/// <para/>Default = SenderReactions.Intercept</summary>
+		EmberSeed = 0,
+		/// <summary>Hit by a scent seed.
+		/// <para/>Default = SenderReactions.Intercept, Reactions.Damage</summary>
+		ScentSeed,
+		/// <summary>Hit by a pegasus seed.
+		/// <para/>Default = SenderReactions.Intercept, Reactions.Stun</summary>
+		PegasusSeed,
+		/// <summary>Hit by a gale seed.
+		/// <para/>Default = SenderReactions.Intercept</summary>
+		GaleSeed,
+		/// <summary>Hit by a mystery seed.
+		/// <para/>Default = Reactions.MysterySeed</summary>
+		MysterySeed,
+		
+		
+		//-----------------------------------------------------------------------------
+		// Projectile Interactions
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Hit by an arrow.
+		/// <para/>Default = SenderReactions.Intercept, Reactions.Damage</summary>
+		Arrow,
+		/// <summary>Hit by a sword beam projectile.
+		/// <para/>Default = SenderReactions.Destroy, Reactions.Damage</summary>
+		SwordBeam,
+		/// <summary>Hit by a projectile from the fire-rod.
+		/// <para/>Default = SenderReactions.Intercept</summary>
+		RodFire,
+		/// <summary>Hit by a boomerang.
+		/// <para/>Default = SenderReactions.Intercept, Reactions.Stun</summary>
+		Boomerang,
+		/// <summary>Hit by the switch hook.
+		/// <para/>Default = SenderReactions.Intercept, Reactions.SwitchHook</summary>
+		SwitchHook,
+
+		
+		//-----------------------------------------------------------------------------
+		// Player Interactions
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The player presses the 'A' button when facing the monster.
+		/// <para/>Default = Reactions.None</summary>
+		ButtonAction,
+		/// <summary>Collides with the player.
+		/// <para/>Default = OnTouchPlayer</summary>
 		PlayerContact,
+		
 
-		ThrownObject,			// Hit by a thrown object (thrown tiles, not bombs).
-		MineCart,				// Hit by a minecart.
-		Block,					// Hit by a block (either moving or spawned on top of).
+		//-----------------------------------------------------------------------------
+		// Environment
+		//-----------------------------------------------------------------------------
+		
+		/// <summary>Touches fire.
+		/// <para/>Default = Reactions.Burn</summary>
+		Fire,
+		/// <summary>Touches gale.
+		/// <para/>Default = Reactions.Gale</summary>
+		Gale,
+		/// <summary>Hit by a bomb explosion.
+		/// <para/>Default = Reactions.Damage</summary>
+		BombExplosion,
+		/// <summary>Hit by a thrown object (thrown tiles, not bombs).
+		/// <para/>Default = Reactions.Damage</summary>
+		ThrownObject,
+		/// <summary>Hit by a minecart.</summary>
+		/// <para/>Default = Reactions.SoftKill</summary>
+		MineCart,
+		/// <summary>Hit by a block (either moving or spawned on top of).
+		/// <para/>Default = Reactions.Damage</summary>
+		Block,
 
+
+		//-----------------------------------------------------------------------------
 		// UNUSED:
+		//-----------------------------------------------------------------------------
+
 		SwordHitShield,			// Their sword hits my shield.
 		BiggoronSwordHitShield,	// Their biggoron sword hits my shield.
 		ShieldHitShield,		// Their shield hits my shield.
+
+
+		//-----------------------------------------------------------------------------
 
 		Count,
 	};
@@ -91,11 +175,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		// Interaction Delegates
 		//-----------------------------------------------------------------------------
 
-		public delegate void InteractionMemberDelegate(Entity sender, EventArgs args);
+		public delegate void InteractionMemberDelegate(
+			Entity sender, EventArgs args);
 
-		public delegate void InteractionStaticDelegate(Monster monster, Entity sender, EventArgs args);
+		public delegate void InteractionStaticDelegate(
+			Monster monster, Entity sender, EventArgs args);
 		
-		private static InteractionStaticDelegate ToStaticInteractionDelegate(InteractionMemberDelegate memberDelegate) {
+		private static InteractionStaticDelegate ToStaticInteractionDelegate(
+			InteractionMemberDelegate memberDelegate)
+		{
 			return delegate(Monster monster, Entity sender, EventArgs args) {
 				memberDelegate.Invoke(sender, args);
 			};
@@ -150,51 +238,52 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public static class Reactions {
 			
 			
-			//-----------------------------------------------------------------------------
+			//-------------------------------------------------------------------------
 			// Basic Monster Reactions
-			//-----------------------------------------------------------------------------
+			//-------------------------------------------------------------------------
 
-			// Do nothing.
+			/// <summary>No reaction.</summary>
 			public const InteractionStaticDelegate None = null;
 
-			// Instantly kill the monster.
+			/// <summary>Instantly kill the monster.</summary>
 			public static void Kill(Monster monster, Entity sender, EventArgs args) {
 				monster.Kill();
 			}
 			
-			// Instantly kill the monster.
+			/// <summary>Instantly kill the monster, softly, meaning it will respawn upon
+			/// re-entering the room.</summary>
 			public static void SoftKill(Monster monster, Entity sender, EventArgs args) {
 				monster.SoftKill();
 			}
 
-			// Damage the monster for 1 damage.
+			/// <summary>Damage the monster for 1 damage.</summary>
 			public static void Damage(Monster monster, Entity sender, EventArgs args) {
 				monster.Hurt(1, sender.Center);
 			}
 			
-			// Damage the monster for 2 damage.
+			/// <summary>Damage the monster for 2 damage.</summary>
 			public static void Damage2(Monster monster, Entity sender, EventArgs args) {
 				monster.Hurt(2, sender.Center);
 			}
 			
-			// Damage the monster for 3 damage.
+			/// <summary>Damage the monster for 3 damage.</summary>
 			public static void Damage3(Monster monster, Entity sender, EventArgs args) {
 				monster.Hurt(3, sender.Center);
 			}
 			
-			// Damage the monster for 4 damage.
+			/// <summary>Damage the monster for 4 damage.</summary>
 			public static void Damage4(Monster monster, Entity sender, EventArgs args) {
 				monster.Hurt(4, sender.Center);
 			}
 
-			// Bump the monster.
+			/// <summary>Bump the monster.</summary>
 			public static void Bump(Monster monster, Entity sender, EventArgs args) {
 				if (!monster.IsBeingKnockedBack) {
 					monster.Bump(sender.Center);
 				}
 			}
 
-			// Bump the monster and sender.
+			/// <summary>Bump the monster and sender.</summary>
 			public static void Parry(Monster monster, Entity sender, EventArgs args) {
 				monster.Bump(sender.Center);
 				Unit unitSender = sender as Unit;
@@ -205,12 +294,16 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				}
 			}
 
-			// Bump the monster and sender.
-			public static void ParryWithClingEffect(Monster monster, Entity sender, EventArgs args) {
+			/// <summary>Bump the monster and sender.</summary>
+			public static void ParryWithClingEffect(Monster monster, Entity sender,
+				EventArgs args)
+			{
 				monster.Bump(sender.Center);
 				Unit unitSender = sender as Unit;
 
-				if (unitSender != null && !unitSender.IsBeingKnockedBack && !monster.IsBeingKnockedBack) {
+				if (unitSender != null && !unitSender.IsBeingKnockedBack &&
+					!monster.IsBeingKnockedBack)
+				{
 					unitSender.Bump(monster.Center);
 					AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 					
@@ -222,25 +315,27 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				}
 			}
 			
-			// Burn the monster for 1 damage.
+			/// <summary>Burn the monster for 1 damage.</summary>
 			public static void Burn(Monster monster, Entity sender, EventArgs args) {
 				monster.Burn(1);
 				if (sender is Fire)
 					sender.Destroy();
 			}
 			
-			// Stun the monster.
+			// <summary>Stun the monster.</summary>
 			public static void Stun(Monster monster, Entity sender, EventArgs args) {
 				monster.Stun();
 			}
 			
-			// Send the monster in a gale.
+			/// <summary>Send the monster in a gale.</summary>
 			public static void Gale(Monster monster, Entity sender, EventArgs args) {
 				monster.EnterGale((EffectGale) sender);
 			}
 			
-			// Trigger a random seed effect.
-			public static void MysterySeed(Monster monster, Entity sender, EventArgs args) {
+			/// <summary>Trigger a random seed effect.</summary>
+			public static void MysterySeed(Monster monster, Entity sender,
+				EventArgs args)
+			{
 				SeedType seedType;
 
 				// Random: burn, stun, damage, gale
@@ -256,18 +351,25 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 				((SeedEntity) sender).SeedType = seedType;
 
-				monster.TriggerInteraction(Monster.GetSeedInteractionType(seedType), sender, args);
+				monster.TriggerInteraction(
+					Monster.GetSeedInteractionType(seedType),
+					sender, args);
 			}
 			
-			// Switch places with the monster (Only for switch-hook interactions).
-			public static void SwitchHook(Monster monster, Entity sender, EventArgs args) {
+			/// <summary>Switch places with the monster (Only for switch-hook
+			/// interactions).</summary>
+			public static void SwitchHook(Monster monster, Entity sender,
+				EventArgs args)
+			{
 				SwitchHookProjectile hook = sender as SwitchHookProjectile;
 				hook.SwitchWithEntity(monster);
 				monster.BeginState(new MonsterBusyState(20));
 			}
 			
-			// Stun the monster.
-			public static void ClingEffect(Monster monster, Entity sender, EventArgs args) {
+			/// <summary>Create a cling effect with sound.</summary>
+			public static void ClingEffect(Monster monster, Entity sender,
+				EventArgs args)
+			{
 				Effect effect = new EffectCling();
 				
 				Vector2F effectPos = (monster.Center + sender.Center) * 0.5f;
@@ -278,34 +380,40 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 			}
 
-			// Damage the monster for 1 damage.
-			public static void Electrocute(Monster monster, Entity sender, EventArgs args) {
-				// TODO: electrocute
-				Console.WriteLine("ELECTROCUTE");
+			/// <summary>Electrocute the player.</summary>
+			public static void Electrocute(Monster monster, Entity sender,
+				EventArgs args)
+			{
+				if (!(monster.CurrentState is MonsterElectrocuteState)) {
 
-				MonsterBuzzBlob buzzBlob = monster as MonsterBuzzBlob;
+					// Hurt the player
+					monster.RoomControl.Player.Hurt(new DamageInfo(4, monster.Center) {
+						Flicker = false
+					});
 
-				buzzBlob.OnElectrocute();
-
-				// Buzzblob animates for 60 frames
-				// Player is frozen for 45 frames (screen effect cuts off at same point)
-
+					// Begin the electrocute state
+					monster.BeginState(new MonsterElectrocuteState(null));
+					monster.OnElectrocute();
+				}
 			}
 			
 
-			//-----------------------------------------------------------------------------
+			//-------------------------------------------------------------------------
 			// Customizable Monster Reactions
-			//-----------------------------------------------------------------------------
+			//-------------------------------------------------------------------------
 
-			// Damage the monster for the given amount.
+			/// <summary>Damage the monster for the given amount.</summary>
 			public static InteractionStaticDelegate Damage(int amount) {
 				return delegate(Monster monster, Entity sender, EventArgs args) {
 					monster.Hurt(amount, sender.Center);
 				};
 			}
 
-			// Damage the monster for the given amount based on the used item's level.
-			public static InteractionStaticDelegate DamageByLevel(int amountLevel1, int amountLevel2, int amountLevel3) {
+			/// <summary>Damage the monster for the given amount based on the used item's
+			/// level.</summary>
+			public static InteractionStaticDelegate DamageByLevel(
+				int amountLevel1, int amountLevel2, int amountLevel3)
+			{
 				return delegate(Monster monster, Entity sender, EventArgs args) {
 					int level = (args as WeaponInteractionEventArgs).Weapon.Level;
 					int amount = 0;
@@ -323,14 +431,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				return delegate(Monster monster, Entity sender, EventArgs args) {
 					Effect clonedEffect = effect.Clone();
 					InteractionArgs interactionArgs = args as InteractionArgs;
-					monster.RoomControl.SpawnEntity(clonedEffect, interactionArgs.ContactPoint);
+					monster.RoomControl.SpawnEntity(clonedEffect,
+						interactionArgs.ContactPoint);
 				};
 			}
 			
 
-			//-----------------------------------------------------------------------------
+			//-------------------------------------------------------------------------
 			// Conditions
-			//-----------------------------------------------------------------------------
+			//-------------------------------------------------------------------------
 			/*
 			// Damage the monster for the given amount based on the used item's level.
 			public static InteractionDelegate IfLevel(int level) {
@@ -348,23 +457,28 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public static class SenderReactions {
 
-			// Do nothing.
+			/// <summary>No reaction.</summary>
 			public const Delegate None = null;
 
 			
-			//-----------------------------------------------------------------------------
+			//-------------------------------------------------------------------------
 			// Basic Sender Reactions
-			//-----------------------------------------------------------------------------
+			//-------------------------------------------------------------------------
 
+			/// <summary>Destroy the sender.</summary>
 			public static void Destroy(Monster monster, Entity sender, EventArgs args) {
 				sender.Destroy();
 			}
 
+			/// <summary>Intercept the sender if it implements IInterceptable. Typically,
+			/// this is used for projectiles to cause them to crash or be destroyed.
+			/// </summary>
 			public static void Intercept(Monster monster, Entity sender, EventArgs args) {
 				if (sender is IInterceptable)
 					(sender as IInterceptable).Intercept();
 			}
 			
+			/// <summary>Bump the sender if it is a unit.</summary>
 			public static void Bump(Monster monster, Entity sender, EventArgs args) {
 				if (sender is Unit && !(sender as Unit).IsBeingKnockedBack) {
 					AudioSystem.PlaySound(GameData.SOUND_BOMB_BOUNCE);
@@ -372,11 +486,14 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				}
 			}
 			
+			/// <summary>Damage the sender by 1 if it is a unit.</summary>
 			public static void Damage(Monster monster, Entity sender, EventArgs args) {
 				if (sender is Unit)
 					(sender as Unit).Hurt(1, monster.Center);
 			}
 
+			/// <summary>Kill the sender if it is a unit, otherwise destroy it instead.
+			/// </summary>
 			public static void Kill(Monster monster, Entity sender, EventArgs args) {
 				if (sender is Unit)
 					(sender as Unit).Kill();
@@ -384,9 +501,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					sender.Destroy();
 			}
 
-			//-----------------------------------------------------------------------------
+
+			//-------------------------------------------------------------------------
 			// Customizable Sender Reactions
-			//-----------------------------------------------------------------------------
+			//-------------------------------------------------------------------------
 
 		}
 	}

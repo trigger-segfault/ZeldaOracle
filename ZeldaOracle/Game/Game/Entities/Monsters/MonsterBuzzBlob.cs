@@ -37,13 +37,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			//syncAnimationWithDirection	= true;
 			
 			// Interactions (Tools)
-			SetReaction(InteractionType.Sword,			SenderReactions.Damage, Reactions.Electrocute);
-			SetReaction(InteractionType.SwordSpin,		SenderReactions.Damage, Reactions.Electrocute);
-			SetReaction(InteractionType.BiggoronSword,	SenderReactions.Damage, Reactions.Electrocute);
+			SetReaction(InteractionType.Sword,			Reactions.Electrocute);
+			SetReaction(InteractionType.SwordSpin,		Reactions.Electrocute);
+			SetReaction(InteractionType.BiggoronSword,	Reactions.Electrocute);
 			// Interactions (Projectiles)
 			SetReaction(InteractionType.Arrow,			SenderReactions.Intercept, Reactions.Damage);
 			SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Kill);
-			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, SenderReactions.Damage, Reactions.Electrocute);
+			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Electrocute);
 			SetReaction(InteractionType.MysterySeed,	SenderReactions.Intercept, TransformIntoCukeman);
 		}
 
@@ -52,7 +52,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			electrocuteDelayTimer = 0;
 		}
 
-		private void TransformIntoCukeman(Monster monster, Entity sender, EventArgs args) {
+		private void TransformIntoCukeman(Entity sender, EventArgs args) {
 			MonsterCukeman cukeman = new MonsterCukeman() {
 				Position = position,
 				ZPosition = ZPosition,
@@ -61,33 +61,21 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			RoomControl.SpawnEntity(cukeman);
 		}
 
-		public void OnElectrocute() {
-			if (electrocuteDelayTimer == 0) {
-				BeginState(new MonsterElectrocuteState(
-					GameData.ANIM_MONSTER_BUZZ_BLOB_ELECTROCUTE));
-				electrocuteDelayTimer = 40;
-			}
-			//electrocuteTimer = 0;
-			//isElectrocuting = true;
-			//Graphics.PlayAnimation(GameData.ANIM_MONSTER_BUZZ_BLOB_ELECTROCUTE);
-			//isPassable = true;
-			//StopMoving();
+		public override void OnElectrocute() {
+			Graphics.PlayAnimation(GameData.ANIM_MONSTER_BUZZ_BLOB_ELECTROCUTE);
+		}
+
+		public override void OnElectrocuteComplete() {
+			StartMoving();
 		}
 
 		public override void UpdateAI() {
 			base.UpdateAI();
 
-			if (!(CurrentState is MonsterElectrocuteState) &&
-				electrocuteDelayTimer > 0)
-			{
-				electrocuteDelayTimer--;
-			}
-
-			//electrocuteTimer++;
-			//if (electrocuteTimer > 60) {
-			//	isElectrocuting = false;
-			//	Graphics.PlayAnimation(GameData.ANIM_MONSTER_BUZZ_BLOB);
-			//	isPassable = false;
+			//if (!(CurrentState is MonsterElectrocuteState) &&
+			//	electrocuteDelayTimer > 0)
+			//{
+			//	electrocuteDelayTimer--;
 			//}
 		}
 	}

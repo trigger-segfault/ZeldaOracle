@@ -36,15 +36,19 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 			timer = 0;
 
 			monster.Physics.Velocity = Vector2F.Zero;
-			resumeAnimation = monster.Graphics.Animation;//monster.Graphics.PauseAnimation();
-			monster.Graphics.PlayAnimation(monsterAnimation);
+			if (monsterAnimation != null) {
+				resumeAnimation = monster.Graphics.Animation;//monster.Graphics.PauseAnimation();
+				monster.Graphics.PlayAnimation(monsterAnimation);
+			}
 			monster.RoomControl.Player.Freeze();
 			//monster.DisablePhysics();
 		}
 
 		public override void OnEnd(MonsterState newState) {
-			monster.Graphics.PlayAnimation(resumeAnimation);
+			if (monsterAnimation != null)
+				monster.Graphics.PlayAnimation(resumeAnimation);
 			GameData.PaletteShader.TilePalette = monster.RoomControl.Zone.Palette;
+			monster.OnElectrocuteComplete();
 			//monster.EnablePhysics();
 		}
 

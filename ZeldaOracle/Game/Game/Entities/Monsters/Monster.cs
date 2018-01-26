@@ -114,6 +114,14 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		protected void SetDefaultReactions() {
+			// Weapons
+			SetReaction(InteractionType.Sword,			SenderReactions.Intercept, Reactions.DamageByLevel(1, 2, 3));
+			SetReaction(InteractionType.SwordSpin,		Reactions.Damage2);
+			SetReaction(InteractionType.BiggoronSword,	Reactions.Damage3);
+			SetReaction(InteractionType.Shield,			SenderReactions.Bump, Reactions.Bump);
+			SetReaction(InteractionType.Shovel,			Reactions.Bump);
+			SetReaction(InteractionType.Parry,			Reactions.Parry);
+			SetReaction(InteractionType.Pickup,			Reactions.None);
 			// Seeds
 			SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept);
 			SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept,	Reactions.Damage);
@@ -133,15 +141,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.ThrownObject,	Reactions.Damage);
 			SetReaction(InteractionType.MineCart,		Reactions.SoftKill);
 			SetReaction(InteractionType.Block,			Reactions.Damage);
-			// Tools
-			SetReaction(InteractionType.Sword,			SenderReactions.Intercept, Reactions.DamageByLevel(1, 2, 3));
-			SetReaction(InteractionType.SwordSpin,		Reactions.Damage2);
-			SetReaction(InteractionType.BiggoronSword,	Reactions.Damage3);
-			SetReaction(InteractionType.Shield,			SenderReactions.Bump, Reactions.Bump);
-			SetReaction(InteractionType.Shovel,			Reactions.Bump);
-			SetReaction(InteractionType.Parry,			Reactions.Parry);
 			// Player
-			SetReaction(InteractionType.Pickup,			Reactions.None);
 			SetReaction(InteractionType.ButtonAction,	Reactions.None);
 			SetReaction(InteractionType.PlayerContact,	OnTouchPlayer);
 		}
@@ -213,6 +213,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			player.Hurt(contactDamage, Center);
 		}
 
+		public virtual void OnElectrocute() {
+		}
+
+		public virtual void OnElectrocuteComplete() {
+
+		}
+
 		public virtual void OnSeedHit(SeedEntity seed) {
 			seed.TriggerMonsterReaction(this);
 		}
@@ -263,6 +270,34 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			InteractionHandler handler = GetInteraction(type);
 			handler.Clear();
 			handler.Add(staticReaction);
+			for (int i = 0; i < memberReactions.Length; i++)
+				handler.Add(memberReactions[i]);
+		}
+		
+		protected void SetReaction(InteractionType type,
+			InteractionStaticDelegate staticReaction1,
+			InteractionStaticDelegate staticReaction2,
+			params InteractionMemberDelegate[] memberReactions)
+		{
+			InteractionHandler handler = GetInteraction(type);
+			handler.Clear();
+			handler.Add(staticReaction1);
+			handler.Add(staticReaction2);
+			for (int i = 0; i < memberReactions.Length; i++)
+				handler.Add(memberReactions[i]);
+		}
+		
+		protected void SetReaction(InteractionType type,
+			InteractionStaticDelegate staticReaction1,
+			InteractionStaticDelegate staticReaction2,
+			InteractionStaticDelegate staticReaction3,
+			params InteractionMemberDelegate[] memberReactions)
+		{
+			InteractionHandler handler = GetInteraction(type);
+			handler.Clear();
+			handler.Add(staticReaction1);
+			handler.Add(staticReaction2);
+			handler.Add(staticReaction3);
 			for (int i = 0; i < memberReactions.Length; i++)
 				handler.Add(memberReactions[i]);
 		}

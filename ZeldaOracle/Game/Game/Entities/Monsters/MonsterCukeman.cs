@@ -52,13 +52,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			syncAnimationWithDirection	= false;
 
 			// Weapon interactions
-			SetReaction(InteractionType.Sword,			SenderReactions.Damage, Reactions.Electrocute);
-			SetReaction(InteractionType.SwordSpin,		SenderReactions.Damage, Reactions.Electrocute);
-			SetReaction(InteractionType.BiggoronSword,	SenderReactions.Damage, Reactions.Electrocute);
+			SetReaction(InteractionType.Sword,			Reactions.Electrocute);
+			SetReaction(InteractionType.SwordSpin,		Reactions.Electrocute);
+			SetReaction(InteractionType.BiggoronSword,	Reactions.Electrocute);
 			// Projectile interactions
 			SetReaction(InteractionType.Arrow,			SenderReactions.Intercept, Reactions.Damage);
 			SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Kill);
-			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, SenderReactions.Damage, Reactions.Electrocute);
+			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Electrocute);
 			SetReaction(InteractionType.MysterySeed,	SenderReactions.Intercept);
 			// Player
 			SetReaction(InteractionType.ButtonAction,	SayCatchPhrase);

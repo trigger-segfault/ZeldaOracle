@@ -1,48 +1,57 @@
+TILESET "actions", (13, 13), False;
 
-#	PROPERTIES	(type, name, value);
-#	PROPERTIES	(type, name, value, readable_name, editor_type, category, description);
-#	PROPERTIES	(type, name, value, readable_name, (editor_type, editor_subtype), category, description);
+SETTILE (0, 0), "warp";
+SETTILE (1, 0), "npc";
+SETTILE (2, 0), "monster_octorok_red";
+SETTILE (3, 0), "monster_octorok_blue";
+SETTILE (4, 0), "monster_ghini";
+SETTILE (5, 0), "monster_shrouded_stalfos";
+SETTILE (6, 0), "monster_gibdo";
+SETTILE (7, 0), "monster_rope";
+SETTILE (8, 0), "monster_beetle";
+SETTILE (9, 0), "monster_keese";
+SETTILE (10, 0), "monster_pols_voice";
+SETTILE (11, 0), "monster_blade_trap_red";
 
-#==============================================================================
-# Event Tileset
-#==============================================================================
+SETTILE (0, 1), "color_tile_puzzle";
+SETTILE (2, 1), "monster_moblin_red";
+SETTILE (3, 1), "monster_moblin_blue";
+SETTILE (4, 1), "monster_zol_green";
+SETTILE (5, 1), "monster_zol_red";
+SETTILE (6, 1), "monster_cukeman";
+SETTILE (7, 1), "monster_buzz_blob";
+SETTILE (8, 1), "monster_mini_moldorm";
+SETTILE (9, 1), "monster_pincer";
+SETTILE (10, 1), "monster_spiked_beetle";
+SETTILE (11, 1), "monster_blade_trap_blue";
 
-TILESET "actions", (13, 13), false;
+SETTILE (2, 2), "monster_pig_moblin_red";
+SETTILE (3, 2), "monster_pig_moblin_blue";
+SETTILE (4, 2), "monster_tektike_orange";
+SETTILE (5, 2), "monster_tektike_blue";
+SETTILE (6, 2), "monster_leever_red";
+SETTILE (7, 2), "monster_leever_blue";
+SETTILE (8, 2), "monster_leever_orange";
+SETTILE (9, 2), "monster_hardhat_beetle";
+SETTILE (10, 2), "monster_sand_crab";
+SETTILE (11, 2), "monster_blade_trap_green";
 
-ADDTILE ( 0, 0), warp;
-ADDTILE ( 1, 0), npc;
+SETTILE (2, 3), "monster_darknut_red";
+SETTILE (3, 3), "monster_darknut_blue";
+SETTILE (6, 3), "monster_stalfos_blue";
+SETTILE (7, 3), "monster_stalfos_green";
+SETTILE (8, 3), "monster_stalfos_red";
+SETTILE (9, 3), "monster_stalfos_orange";
+SETTILE (10, 3), "monster_thwimp";
+SETTILE (11, 3), "monster_blade_trap_orange";
 
-ADDTILE ( 0, 1), color_tile_puzzle;
+SETTILE (2, 4), "monster_lynel_red";
+SETTILE (3, 4), "monster_lynel_blue";
+SETTILE (6, 4), "monster_spinning_blade_trap";
+SETTILE (7, 4), "monster_wizzrobe_blue";
+SETTILE (8, 4), "monster_wizzrobe_green";
+SETTILE (9, 4), "monster_wizzrobe_red";
+SETTILE (10, 4), "monster_thwomp";
 
-ADDTILE ( 2, 0), monster_octorok_red;
-ADDTILE ( 3, 0), monster_octorok_blue;
-ADDTILE ( 2, 1), monster_moblin_red;
-ADDTILE ( 3, 1), monster_moblin_blue;
-ADDTILE ( 2, 2), monster_pig_moblin_red;
-ADDTILE ( 3, 2), monster_pig_moblin_blue;
-ADDTILE ( 2, 3), monster_darknut_red;
-ADDTILE ( 3, 3), monster_darknut_blue;
-ADDTILE ( 2, 4), monster_lynel_red;
-ADDTILE ( 3, 4), monster_lynel_blue;
-
-ADDTILE ( 4, 1), monster_zol_green;
-
-ADDTILE ( 4, 0), monster_ghini;
-ADDTILE ( 5, 0), monster_shrouded_stalfos;
-ADDTILE ( 6, 0), monster_gibdo;
-ADDTILE ( 7, 0), monster_rope;
-ADDTILE (10, 0), monster_beetle;
-ADDTILE (10, 1), monster_spiked_beetle;
-ADDTILE (10, 2), monster_sand_crab;
-
-ADDTILE (11, 0), monster_blade_trap_red;
-ADDTILE (11, 1), monster_blade_trap_blue;
-ADDTILE (11, 2), monster_blade_trap_green;
-ADDTILE (11, 3), monster_blade_trap_orange;
-ADDTILE (10, 4), monster_thwomp;
-ADDTILE (10, 3), monster_thwimp;
-ADDTILE ( 9, 4), monster_buzz_blob;
 
 END;
-
-
