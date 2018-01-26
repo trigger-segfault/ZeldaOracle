@@ -197,7 +197,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		public bool Burn(int damage) {
-			if (!IsInvincible && isBurnable && ((state is MonsterNormalState) || (state is MonsterStunState))) {
+			if (!IsInvincible && isBurnable &&
+				((state is MonsterNormalState) || (state is MonsterStunState)))
+			{
 				BeginState(new MonsterBurnState(damage));
 				return true;
 			}
@@ -210,19 +212,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		public virtual void OnSeedHit(SeedEntity seed) {
-			// For mystery seeds, create the effect for another random seed type.
-			if (seed.SeedType == SeedType.Mystery) {
-				int rand = GRandom.NextInt(4);
-				if (rand == 0)
-					seed.SeedType = SeedType.Ember;
-				else if (rand == 1)
-					seed.SeedType = SeedType.Scent;
-				else if (rand == 2)
-					seed.SeedType = SeedType.Pegasus;
-				else
-					seed.SeedType = SeedType.Gale;
-			}
-
 			seed.TriggerMonsterReaction(this);
 		}
 

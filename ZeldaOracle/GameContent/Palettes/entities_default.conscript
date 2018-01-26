@@ -16,6 +16,9 @@ COLOR	red, dark		(248,  8, 40);
 LOOKUP	orange, light	green, light;
 COLOR	orange, dark	(248,120,  8);
 
+COLOR	gold, dark		(248,176, 48);
+LOOKUP	gold, light		green, light;
+
 COLOR	shaded_red, light	(248,176, 48);
 COLOR	shaded_red, dark	(216,  0,  0);
 

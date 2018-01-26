@@ -28,7 +28,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 	
 	public class PlayerMoveComponent {
 		
-		// Settings.
+		// Settings
 		private bool				autoAccelerate;			// Should the player still accelerate without holding down a movement key?
 		private float				moveSpeedScale;			// Scales the movement speed to create the actual top-speed.
 		private PlayerMoveCondition	moveCondition;			// What are the conditions in which the player can move?
@@ -64,10 +64,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private bool				isOnSideScrollLadder;
 		private Rectangle2F			climbCollisionBox;		// Used for checking if on a ladder in side-scroll mode.
 
-		// Movement modes.
+		// Movement modes
 		private PlayerMotionType	mode;
 		private PlayerMotionType	moveModeNormal;		// For regular walking.
-		private PlayerMotionType	moveModeSlow;		// For climbing ladders and stairs, or when in grass.
+		private PlayerMotionType	moveModeSlow;		// For climbing ladders and stairs.
 		private PlayerMotionType	moveModeGrass;		// For walking in grass.
 		private PlayerMotionType	moveModeIce;		// For walking on ice.
 		private PlayerMotionType	moveModeAir;		// For jumping

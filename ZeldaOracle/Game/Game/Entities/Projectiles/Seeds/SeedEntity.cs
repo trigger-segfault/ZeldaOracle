@@ -46,15 +46,19 @@ namespace ZeldaOracle.Game.Entities.Projectiles.Seeds {
 		
 		public void TriggerMonsterReaction(Monster monster) {
 			// Destroy the seed and create the effect.
-			Entity effect = DestroyWithEffect();
+			//Entity effect = DestroyWithEffect();
 
 			// Trigger the immediate seed effect actions.
-			if (type == SeedType.Scent)
-				monster.TriggerInteraction(InteractionType.ScentSeed, effect);
+			if (type == SeedType.Ember)
+				monster.TriggerInteraction(InteractionType.EmberSeed, this);
+			else if (type == SeedType.Scent)
+				monster.TriggerInteraction(InteractionType.ScentSeed, this);
+			else if (type == SeedType.Gale)
+				monster.TriggerInteraction(InteractionType.GaleSeed, this);
 			else if (type == SeedType.Pegasus)
-				monster.TriggerInteraction(InteractionType.PegasusSeed, effect);
+				monster.TriggerInteraction(InteractionType.PegasusSeed, this);
 			else if (type == SeedType.Mystery)
-				monster.TriggerInteraction(InteractionType.MysterySeed, effect);
+				monster.TriggerInteraction(InteractionType.MysterySeed, this);
 		}
 
 		// Destroy the seed and spawn its regular effect.

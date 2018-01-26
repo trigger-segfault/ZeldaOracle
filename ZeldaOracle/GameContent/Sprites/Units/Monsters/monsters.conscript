@@ -15,7 +15,7 @@ PALETTEDICTIONARY "entity_dictionary";
 SOURCE "monsters";
 
 # Color groups found in the source image file 
-MAPPEDCOLORS	"entities_default", ("red", "green", "blue", "orange", "shaded_red", "shaded_blue", "hurt");
+MAPPEDCOLORS	"entities_default", ("red", "green", "blue", "orange", "gold", "shaded_red", "shaded_blue", "hurt");
 
 SPRITESET "set_monster" (16, 16);
 	MULTIPLE COLOR "", ("red", "green", "blue", "orange", "shaded_red", "shaded_blue", "hurt"), (0, 0); END;

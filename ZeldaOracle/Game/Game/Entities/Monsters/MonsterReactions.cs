@@ -241,20 +241,22 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			
 			// Trigger a random seed effect.
 			public static void MysterySeed(Monster monster, Entity sender, EventArgs args) {
+				SeedType seedType;
+
 				// Random: burn, stun, damage, gale
 				int rand = GRandom.NextInt(4);
-				SeedEntity seed = (SeedEntity) sender;
-
 				if (rand == 0)
-					seed.SeedType = SeedType.Ember;
+					seedType = SeedType.Ember;
 				else if (rand == 1)
-					seed.SeedType = SeedType.Scent;
+					seedType = SeedType.Scent;
 				else if (rand == 2)
-					seed.SeedType = SeedType.Pegasus;
+					seedType = SeedType.Pegasus;
 				else
-					seed.SeedType = SeedType.Gale;
+					seedType = SeedType.Gale;
 
-				monster.TriggerInteraction(Monster.GetSeedInteractionType(seed.SeedType), sender, args);
+				((SeedEntity) sender).SeedType = seedType;
+
+				monster.TriggerInteraction(Monster.GetSeedInteractionType(seedType), sender, args);
 			}
 			
 			// Switch places with the monster (Only for switch-hook interactions).

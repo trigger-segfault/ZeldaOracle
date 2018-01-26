@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities.Monsters.States;
-using ZeldaOracle.Game.Entities.Units;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
+
 	public class MonsterBuzzBlob : BasicMonster {
 
-		int electrocuteDelayTimer;
+		private int electrocuteDelayTimer;
 
 		public MonsterBuzzBlob() {
 			// General.
@@ -47,14 +44,21 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.Arrow,			SenderReactions.Intercept, Reactions.Damage);
 			SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Kill);
 			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, SenderReactions.Damage, Reactions.Electrocute);
-
-			//SetReaction(InteractionType.MysterySeed,	SenderReactions.Intercept, TODO);
-			// TODO: Mystery seed interaction = Transform into Cukeman
+			SetReaction(InteractionType.MysterySeed,	SenderReactions.Intercept, TransformIntoCukeman);
 		}
 
 		public override void Initialize() {
 			base.Initialize();
 			electrocuteDelayTimer = 0;
+		}
+
+		private void TransformIntoCukeman(Monster monster, Entity sender, EventArgs args) {
+			MonsterCukeman cukeman = new MonsterCukeman() {
+				Position = position,
+				ZPosition = ZPosition,
+			};
+			DestroyAndTransform(cukeman);
+			RoomControl.SpawnEntity(cukeman);
 		}
 
 		public void OnElectrocute() {

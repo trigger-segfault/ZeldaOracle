@@ -65,7 +65,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 			Physics.Velocity			= Vector2F.Zero;
 			physics.ZVelocity			= 0.0f;
 			position					= RoomControl.Player.Position;
-			zPosition					= RoomControl.Player.ZPosition;
+			zPosition					= 0;
 			IsPassable					= true;
 			Graphics.DepthLayer			= DepthLayer.PlayerAndNPCs;
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_GEL_ATTACH);
@@ -135,7 +135,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 				Player player = RoomControl.Player;
 				attachTimer++;
 				position = player.Position;
-				zPosition = player.ZPosition;
+				zPosition = 0;
 				if (attachTimer > GameSettings.MONSTER_GEL_ATTACH_TIME)
 					Detach();
 				//else if (player.CurrentState != player.DisarmedState)
