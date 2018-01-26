@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace ZeldaOracle.Game.Entities.Monsters {
 	
 	public class MonsterGibdo : BasicMonster {
+
 		public MonsterGibdo() {
 			MaxHealth		= 4;
 			ContactDamage	= 2;
@@ -16,6 +13,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			syncAnimationWithDirection = false;
 			stopTime.Set(0, 0);
 			moveTime.Set(50, 90);
+
+			// TODO: Burn to turn into stalfos
 		}
 	}
 }
