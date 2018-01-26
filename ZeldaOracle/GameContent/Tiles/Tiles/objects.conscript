@@ -1,0 +1,3 @@
+﻿
+LOAD "Objects/natural_objects.conscript", true;
+LOAD "Objects/puzzle_objects.conscript", true;

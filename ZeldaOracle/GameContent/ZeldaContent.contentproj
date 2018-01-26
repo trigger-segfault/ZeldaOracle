@@ -91,7 +91,6 @@
     <Folder Include="Images\Editor\" />
     <Folder Include="Languages\" />
     <Folder Include="Particles\" />
-    <Folder Include="Sprites\Tiles\Styles\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\collision_models.conscript">
@@ -182,153 +181,185 @@
       <Name>sprites</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sprites\Tiles\bridges.conscript">
+    <None Include="Sprites\Tiles\indoors.conscript">
+      <Name>indoors</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>bridges</Name>
     </None>
-    <None Include="Sprites\Tiles\color_cube.conscript">
+    <None Include="Sprites\Tiles\Indoors\cracked_floors.conscript">
+      <Name>cracked_floors</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>color_cube</Name>
     </None>
-    <None Include="Sprites\Tiles\doors.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>doors</Name>
-    </None>
-    <None Include="Sprites\Tiles\entrances.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Include="Sprites\Tiles\Indoors\entrances.conscript">
       <Name>entrances</Name>
-    </None>
-    <None Include="Sprites\Tiles\floors_tiles.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>floors_tiles</Name>
     </None>
-    <None Include="Sprites\Tiles\hedges.conscript">
+    <None Include="Sprites\Tiles\Indoors\floors.conscript">
+      <Name>floors</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>hedges</Name>
     </None>
-    <None Include="Sprites\Tiles\holes.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>holes</Name>
-    </None>
-    <None Include="Sprites\Tiles\interior.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Include="Sprites\Tiles\Indoors\interior.conscript">
       <Name>interior</Name>
-    </None>
-    <None Include="Sprites\Tiles\lights.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Indoors\lights.conscript">
       <Name>lights</Name>
-    </None>
-    <None Include="Sprites\Tiles\objects_tiles.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>objects_tiles</Name>
     </None>
-    <None Include="Sprites\Tiles\puzzle_objects_tiles.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>puzzle_objects_tiles</Name>
-    </None>
-    <None Include="Sprites\Tiles\railings.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Include="Sprites\Tiles\Indoors\railings.conscript">
       <Name>railings</Name>
-    </None>
-    <None Include="Sprites\Tiles\SideScrolling\animations.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>animations</Name>
     </None>
-    <None Include="Sprites\Tiles\SideScrolling\entity_objects.conscript">
+    <None Include="Sprites\Tiles\Indoors\stairs.conscript">
+      <Name>stairs</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>entity_objects</Name>
     </None>
-    <None Include="Sprites\Tiles\SideScrolling\general.conscript">
+    <None Include="Sprites\Tiles\Indoors\tiled.conscript">
+      <Name>tiled</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>general</Name>
     </None>
-    <None Include="Sprites\Tiles\SideScrolling\sidescrolling.conscript">
+    <None Include="Sprites\Tiles\Indoors\tunnels.conscript">
+      <Name>tunnels</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>sidescrolling</Name>
     </None>
-    <None Include="Sprites\Tiles\SideScrolling\walls.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Include="Sprites\Tiles\Indoors\walls.conscript">
       <Name>walls</Name>
-    </None>
-    <None Include="Sprites\Tiles\snow_mounds.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>snow_mounds</Name>
     </None>
-    <None Include="Sprites\Tiles\stairs_tiles.conscript">
+    <None Include="Sprites\Tiles\objects.conscript">
+      <Name>objects</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>stairs_tiles</Name>
     </None>
-    <None Include="Sprites\Tiles\terrain.conscript">
+    <None Include="Sprites\Tiles\Objects\color_cube.conscript">
+      <Name>color_cube</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>terrain</Name>
     </None>
-    <None Include="Sprites\Tiles\Terrain\cliffs.conscript">
+    <None Include="Sprites\Tiles\Objects\doors.conscript">
+      <Name>doors</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Objects\holes.conscript">
+      <Name>holes</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Objects\objects.conscript">
+      <Name>objects</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Objects\puzzle_objects.conscript">
+      <Name>puzzle_objects</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Objects\turnstile.conscript">
+      <Name>turnstile</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\overworld.conscript">
+      <Name>overworld</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\bridges.conscript">
+      <Name>bridges</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\cliffs.conscript">
       <Name>cliffs</Name>
-    </None>
-    <None Include="Sprites\Tiles\Terrain\cliffs_temp.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\cliffs_railings_temp.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>cliffs_railings_temp</Name>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\cliffs_temp.conscript">
       <Name>cliffs_temp</Name>
-    </None>
-    <None Include="Sprites\Tiles\Terrain\cliffs_tiles.conscript">
-      <Name>cliffs_tiles</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sprites\Tiles\Terrain\cliffs_walls.conscript">
+    <None Include="Sprites\Tiles\Overworld\cliffs_vertical.conscript">
+      <Name>cliffs_vertical</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\cliffs_walls.conscript">
       <Name>cliffs_walls</Name>
-    </None>
-    <None Include="Sprites\Tiles\Terrain\fluids.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>fluids</Name>
     </None>
-    <None Include="Sprites\Tiles\Terrain\ground.conscript">
+    <None Include="Sprites\Tiles\Overworld\cliffs_walls_temp.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>cliffs_walls_temp</Name>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\ground.conscript">
       <Name>ground</Name>
-    </None>
-    <None Include="Sprites\Tiles\Terrain\obstacles.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\hedges.conscript">
+      <Name>hedges</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\obstacles.conscript">
       <Name>obstacles</Name>
-    </None>
-    <None Include="Sprites\Tiles\Terrain\sand.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\sand.conscript">
       <Name>sand</Name>
-    </None>
-    <None Include="Sprites\Tiles\Terrain\vines.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\snow_mounds.conscript">
+      <Name>snow_mounds</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\town.conscript">
+      <Name>town</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\town_roofs.conscript">
+      <Name>town_roofs</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\trees.conscript">
+      <Name>trees</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\vertical_walls.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>vertical_walls</Name>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\vines.conscript">
       <Name>vines</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\water.conscript">
+      <Name>water</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\sidescroll.conscript">
+      <Name>sidescroll</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\SideScroll\animations.conscript">
+      <Name>animations</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\SideScroll\entity_objects.conscript">
+      <Name>entity_objects</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\SideScroll\general.conscript">
+      <Name>general</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\SideScroll\walls.conscript">
+      <Name>walls</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\special.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>special</Name>
+    </None>
+    <None Include="Sprites\Tiles\Special\temple_of_seasons.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>temple_of_seasons</Name>
     </None>
     <None Include="Sprites\Tiles\tile_previews.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>tile_previews</Name>
-    </None>
-    <None Include="Sprites\Tiles\tiled.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>tiled</Name>
-    </None>
-    <None Include="Sprites\Tiles\town.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>town</Name>
-    </None>
-    <None Include="Sprites\Tiles\town_roofs.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>town_roofs</Name>
-    </None>
-    <None Include="Sprites\Tiles\trees.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>trees</Name>
-    </None>
-    <None Include="Sprites\Tiles\tunnels.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>tunnels</Name>
-    </None>
-    <None Include="Sprites\Tiles\turnstile.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>turnstile</Name>
-    </None>
-    <None Include="Sprites\Tiles\walls.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>walls</Name>
     </None>
     <None Include="Sprites\Units\Monsters\monster_previews.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -362,117 +393,141 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>tiles</Name>
     </None>
-    <None Include="Tiles\Tiles\cliff_walls.conscript">
+    <None Include="Tiles\Tiles\indoors.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>cliff_walls</Name>
+      <Name>indoors</Name>
     </None>
-    <None Include="Tiles\Tiles\cliffs.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>cliffs</Name>
-    </None>
-    <None Include="Tiles\Tiles\dungeon.conscript">
+    <None Include="Tiles\Tiles\Indoors\dungeon.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>dungeon</Name>
     </None>
-    <None Include="Tiles\Tiles\ground.conscript">
+    <None Include="Tiles\Tiles\Indoors\entrances.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>ground</Name>
+      <Name>entrances</Name>
     </None>
-    <None Include="Tiles\Tiles\hedges.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>hedges</Name>
-    </None>
-    <None Include="Tiles\Tiles\interior.conscript">
+    <None Include="Tiles\Tiles\Indoors\interior.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>interior</Name>
     </None>
-    <None Include="Tiles\Tiles\natural_objects.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>natural_objects</Name>
-    </None>
-    <None Include="Tiles\Tiles\puzzle_objects.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>puzzle_objects</Name>
-    </None>
-    <None Include="Tiles\Tiles\sidescrolling.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>sidescrolling</Name>
-    </None>
-    <None Include="Tiles\Tiles\tiles.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>tiles</Name>
-    </None>
-    <None Include="Tiles\Tiles\town.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>town</Name>
-    </None>
-    <None Include="Tiles\Tiles\trees.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>trees</Name>
-    </None>
-    <None Include="Tiles\Tiles\walls_and_floors.conscript">
+    <None Include="Tiles\Tiles\Indoors\walls_and_floors.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>walls_and_floors</Name>
     </None>
-    <None Include="Tiles\Tiles\water.conscript">
+    <None Include="Tiles\Tiles\objects.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>objects</Name>
+    </None>
+    <None Include="Tiles\Tiles\Objects\natural_objects.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>natural_objects</Name>
+    </None>
+    <None Include="Tiles\Tiles\Objects\puzzle_objects.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>puzzle_objects</Name>
+    </None>
+    <None Include="Tiles\Tiles\overworld.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>overworld</Name>
+    </None>
+    <None Include="Tiles\Tiles\Overworld\cliff_walls.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>cliff_walls</Name>
+    </None>
+    <None Include="Tiles\Tiles\Overworld\cliffs.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>cliffs</Name>
+    </None>
+    <None Include="Tiles\Tiles\Overworld\ground.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>ground</Name>
+    </None>
+    <None Include="Tiles\Tiles\Overworld\hedges.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>hedges</Name>
+    </None>
+    <None Include="Tiles\Tiles\Overworld\snow_mounds.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>snow_mounds</Name>
+    </None>
+    <None Include="Tiles\Tiles\Overworld\town.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>town</Name>
+    </None>
+    <None Include="Tiles\Tiles\Overworld\trees.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>trees</Name>
+    </None>
+    <None Include="Tiles\Tiles\Overworld\vines.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>vines</Name>
+    </None>
+    <None Include="Tiles\Tiles\Overworld\water.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>water</Name>
     </None>
-    <None Include="Tilesets\action_tile_data.conscript">
+    <None Include="Tiles\Tiles\sidescroll.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>sidescroll</Name>
+    </None>
+    <None Include="Tiles\Tiles\SideScroll\sidescroll.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>sidescroll</Name>
+    </None>
+    <None Include="Tiles\Tiles\special.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>special</Name>
+    </None>
+    <None Include="Tiles\Tiles\Special\temple_of_seasons.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>temple_of_seasons</Name>
+    </None>
+    <None Include="Tilesets\Actions\action_tile_data.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>action_tile_data</Name>
     </None>
-    <None Include="Tilesets\cliffs.conscript">
-      <Name>cliffs</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Tilesets\dungeon.conscript">
+    <None Include="Tilesets\Indoors\dungeon.conscript">
       <Name>dungeon</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Tilesets\forest.conscript">
-      <Name>forest</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Tilesets\interior2.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>interior2</Name>
-    </None>
-    <None Include="Tilesets\interior.conscript">
+    <None Include="Tilesets\Indoors\interior.conscript">
       <Name>interior</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Tilesets\land.conscript">
-      <Name>land</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Tilesets\objects.conscript">
+    <None Include="Tilesets\Objects\objects.conscript">
       <Name>objects</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Tilesets\objects_nv.conscript">
+    <None Include="Tilesets\Objects\objects_nv.conscript">
       <Name>objects_nv</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Tilesets\overworld.conscript">
-      <Name>overworld</Name>
+    <None Include="Tilesets\Overworld\cliffs.conscript">
+      <Name>cliffs</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Tilesets\sidescroll.conscript">
+    <None Include="Tilesets\Overworld\forest.conscript">
+      <Name>forest</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tilesets\Overworld\land.conscript">
+      <Name>land</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tilesets\Overworld\town.conscript">
+      <Name>town</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tilesets\Overworld\water.conscript">
+      <Name>water</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tilesets\SideScroll\sidescroll.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>sidescroll</Name>
     </None>
     <None Include="Tilesets\tilesets.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>tilesets</Name>
-    </None>
-    <None Include="Tilesets\town.conscript">
-      <Name>town</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Tilesets\water.conscript">
-      <Name>water</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Zones\zones.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -545,568 +600,358 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\color_cube.png">
-      <Name>color_cube</Name>
+    <Compile Include="Images\Tiles\action_tiles.png">
+      <Name>action_tiles</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\event_tiles.png">
-      <Name>event_tiles</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\general_tiles.png">
-      <Name>general_tiles</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\overworld_forest.png">
-      <Name>overworld_forest</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\overworld_graveyard.png">
-      <Name>overworld_graveyard</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\armos.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>armos</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\black_8x8.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
+    <Compile Include="Images\Tiles\black_8x8.png">
       <Name>black_8x8</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\blocks.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-      <Name>blocks</Name>
     </Compile>
-    <Compile Include="Images\Tiles\Styles\bridges.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>bridges</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\bushes.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>bushes</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\buttons.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>buttons</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\ceilings.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
+    <Compile Include="Images\Tiles\Indoors\ceilings.png">
       <Name>ceilings</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\chests.png">
-      <Name>chests</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Styles\cracked_floors.png">
+    <Compile Include="Images\Tiles\Indoors\cracked_floors.png">
       <Name>cracked_floors</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Styles\doors.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>doors</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\entrance_columns.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
+    <Compile Include="Images\Tiles\Indoors\entrance_columns.png">
       <Name>entrance_columns</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\entrance_lights.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Indoors\entrance_lights.png">
       <Name>entrance_lights</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\floors_bricks.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Indoors\floors_bricks.png">
       <Name>floors_bricks</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\floors_bright_patterns.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Indoors\floors_bright_patterns.png">
       <Name>floors_bright_patterns</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\floors_dungeon.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Indoors\floors_dungeon.png">
       <Name>floors_dungeon</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\floors_interior.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Indoors\floors_interior.png">
       <Name>floors_interior</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\floors_misc_patterns.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Indoors\floors_misc_patterns.png">
       <Name>floors_misc_patterns</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\floors_overworld.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Indoors\floors_overworld.png">
       <Name>floors_overworld</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\floors_square_patterns.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Indoors\floors_square_patterns.png">
       <Name>floors_square_patterns</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\floors_square_tiles.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Indoors\floors_square_tiles.png">
       <Name>floors_square_tiles</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\floors_square_tiles_8x8.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Indoors\floors_square_tiles_8x8.png">
       <Name>floors_square_tiles_8x8</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\grasses.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-      <Name>grasses</Name>
     </Compile>
-    <Compile Include="Images\Tiles\Styles\graves.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>graves</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\hedges.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>hedges</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\holes.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>holes</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\interior.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
+    <Compile Include="Images\Tiles\Indoors\interior.png">
       <Name>interior</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Styles\lanterns.png">
+    <Compile Include="Images\Tiles\Indoors\lanterns.png">
       <Name>lanterns</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Styles\magnet_stones.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>magnet_stones</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\minecart_tracks.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>minecart_tracks</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\natural_objects.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>natural_objects</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\pots.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>pots</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\puzzle_color_tiles.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>puzzle_color_tiles</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\puzzle_entity_tiles.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>puzzle_entity_tiles</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\puzzle_objects.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>puzzle_objects</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\railings.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
+    <Compile Include="Images\Tiles\Indoors\railings.png">
       <Name>railings</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\signs.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-      <Name>signs</Name>
     </Compile>
-    <Compile Include="Images\Tiles\Styles\snow_mounds.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>snow_mounds</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\ss_animations.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>ss_animations</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\ss_entity_objects.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>ss_entity_objects</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\ss_general.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>ss_general</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\ss_walls.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>ss_walls</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\staircases.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
+    <Compile Include="Images\Tiles\Indoors\staircases.png">
       <Name>staircases</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Styles\stairs.png">
+    <Compile Include="Images\Tiles\Indoors\stairs.png">
       <Name>stairs</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Styles\switch_rocks.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>switch_rocks</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\terrain_cliff_parts.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>terrain_cliff_parts</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\terrain_cliff_railings.png">
-      <Name>terrain_cliff_railings</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\terrain_cliffs.png">
-      <Name>terrain_cliffs</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\terrain_fluids.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>terrain_fluids</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\terrain_ground.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>terrain_ground</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\terrain_obstacles.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>terrain_obstacles</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\terrain_sand.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>terrain_sand</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\terrain_vines.png">
-      <Name>terrain_vines</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\terrain_water_obstacles.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>terrain_water_obstacles</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\tile_previews.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>tile_previews</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\torches.png">
+    <Compile Include="Images\Tiles\Indoors\torches.png">
       <Name>torches</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Styles\town_8x8.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>town_8x8</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\town_fountain.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>town_fountain</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\town_house_walls.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>town_house_walls</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\town_misc.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>town_misc</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\town_roofs.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>town_roofs</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\traps.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>traps</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\trees.png">
-      <Name>trees</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\tunnels.png">
+    <Compile Include="Images\Tiles\Indoors\tunnels.png">
       <Name>tunnels</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Styles\turnstile.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Name>turnstile</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\wall_columns.png">
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
+    <Compile Include="Images\Tiles\Indoors\wall_columns.png">
       <Name>wall_columns</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\walls.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Indoors\walls.png">
       <Name>walls</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\Styles\walls_jabu_jabu.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Indoors\walls_jabu_jabu.png">
       <Name>walls_jabu_jabu</Name>
-    </Compile>
-    <Compile Include="Images\Tiles\tileset.png">
-      <Name>tileset</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_cliffs_present.png">
-      <Name>tileset_cliffs_present</Name>
+    <Compile Include="Images\Tiles\Objects\armos.png">
+      <Name>armos</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_dungeon_ages_dungeon_1.png">
-      <Name>tileset_dungeon_ages_dungeon_1</Name>
+    <Compile Include="Images\Tiles\Objects\blocks.png">
+      <Name>blocks</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_dungeon_ages_dungeon_4.png">
-      <Name>tileset_dungeon_ages_dungeon_4</Name>
+    <Compile Include="Images\Tiles\Objects\bushes.png">
+      <Name>bushes</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_forest_present.png">
-      <Name>tileset_forest_present</Name>
+    <Compile Include="Images\Tiles\Objects\buttons.png">
+      <Name>buttons</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_interior.png">
-      <Name>tileset_interior</Name>
+    <Compile Include="Images\Tiles\Objects\chests.png">
+      <Name>chests</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_interior_interior_present.png">
-      <Name>tileset_interior_interior_present</Name>
+    <Compile Include="Images\Tiles\Objects\color_cube.png">
+      <Name>color_cube</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_land_present.png">
-      <Name>tileset_land_present</Name>
+    <Compile Include="Images\Tiles\Objects\doors.png">
+      <Name>doors</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_land_present_extras_8x8.png">
-      <Name>tileset_land_present_extras_8x8</Name>
+    <Compile Include="Images\Tiles\Objects\entity_tiles.png">
+      <Name>entity_tiles</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_objects_ages_dungeon_1.png">
-      <Name>tileset_objects_ages_dungeon_1</Name>
+    <Compile Include="Images\Tiles\Objects\grasses.png">
+      <Name>grasses</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_objects_ages_dungeon_1_extras_16x16.png">
-      <Name>tileset_objects_ages_dungeon_1_extras_16x16</Name>
+    <Compile Include="Images\Tiles\Objects\graves.png">
+      <Name>graves</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_objects_interior_present.png">
-      <Name>tileset_objects_interior_present</Name>
+    <Compile Include="Images\Tiles\Objects\magnet_stones.png">
+      <Name>magnet_stones</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_objects_interior_present_extras_16x16.png">
-      <Name>tileset_objects_interior_present_extras_16x16</Name>
+    <Compile Include="Images\Tiles\Objects\minecart_tracks.png">
+      <Name>minecart_tracks</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_objects_nv.png">
-      <Name>tileset_objects_nv</Name>
+    <Compile Include="Images\Tiles\Objects\natural_objects.png">
+      <Name>natural_objects</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_objects_nv_extras_16x16.png">
-      <Name>tileset_objects_nv_extras_16x16</Name>
+    <Compile Include="Images\Tiles\Objects\pots.png">
+      <Name>pots</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_objects_present.png">
-      <Name>tileset_objects_present</Name>
+    <Compile Include="Images\Tiles\Objects\puzzle_color_tiles.png">
+      <Name>puzzle_color_tiles</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_objects_present_extras_16x16.png">
-      <Name>tileset_objects_present_extras_16x16</Name>
+    <Compile Include="Images\Tiles\Objects\puzzle_objects.png">
+      <Name>puzzle_objects</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_sidescroll_ages_dungeon_1.png">
-      <Name>tileset_sidescroll_ages_dungeon_1</Name>
+    <Compile Include="Images\Tiles\Objects\signs.png">
+      <Name>signs</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_town_present.png">
-      <Name>tileset_town_present</Name>
+    <Compile Include="Images\Tiles\Objects\switch_rocks.png">
+      <Name>switch_rocks</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_town_present_extras_16x16.png">
-      <Name>tileset_town_present_extras_16x16</Name>
+    <Compile Include="Images\Tiles\Objects\traps.png">
+      <Name>traps</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_water_ages_dungeon_1.png">
-      <Name>tileset_water_ages_dungeon_1</Name>
+    <Compile Include="Images\Tiles\Objects\turnstile.png">
+      <Name>turnstile</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_water_ages_dungeon_1_extras_8x8.png">
-      <Name>tileset_water_ages_dungeon_1_extras_8x8</Name>
+    <Compile Include="Images\Tiles\Overworld\bridges.png">
+      <Name>bridges</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_water_ages_dungeon_1_extras_16x16.png">
-      <Name>tileset_water_ages_dungeon_1_extras_16x16</Name>
+    <Compile Include="Images\Tiles\Overworld\cliff_parts.png">
+      <Name>cliff_parts</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_water_interior_present.png">
-      <Name>tileset_water_interior_present</Name>
+    <Compile Include="Images\Tiles\Overworld\cliff_railings.png">
+      <Name>cliff_railings</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_water_interior_present_extras_8x8.png">
-      <Name>tileset_water_interior_present_extras_8x8</Name>
+    <Compile Include="Images\Tiles\Overworld\cliffs.png">
+      <Name>cliffs</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_water_interior_present_extras_16x16.png">
-      <Name>tileset_water_interior_present_extras_16x16</Name>
+    <Compile Include="Images\Tiles\Overworld\ground.png">
+      <Name>ground</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_water_present.png">
-      <Name>tileset_water_present</Name>
+    <Compile Include="Images\Tiles\Overworld\hedges.png">
+      <Name>hedges</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_water_present_extras_8x8.png">
-      <Name>tileset_water_present_extras_8x8</Name>
+    <Compile Include="Images\Tiles\Overworld\holes.png">
+      <Name>holes</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\tileset_water_present_extras_16x16.png">
-      <Name>tileset_water_present_extras_16x16</Name>
+    <Compile Include="Images\Tiles\Overworld\obstacles.png">
+      <Name>obstacles</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\zoneset.png">
-      <Name>zoneset</Name>
+    <Compile Include="Images\Tiles\Overworld\sand.png">
+      <Name>sand</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\zoneset_ages_dungeon_1.png">
-      <Name>zoneset_ages_dungeon_1</Name>
+    <Compile Include="Images\Tiles\Overworld\snow_mounds.png">
+      <Name>snow_mounds</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\zoneset_ages_dungeon_4.png">
-      <Name>zoneset_ages_dungeon_4</Name>
+    <Compile Include="Images\Tiles\Overworld\town_8x8.png">
+      <Name>town_8x8</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\zoneset_forest.png">
-      <Name>zoneset_forest</Name>
+    <Compile Include="Images\Tiles\Overworld\town_fountain.png">
+      <Name>town_fountain</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\zoneset_graveyard.png">
-      <Name>zoneset_graveyard</Name>
+    <Compile Include="Images\Tiles\Overworld\town_house_walls.png">
+      <Name>town_house_walls</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\zoneset_interior.png">
-      <Name>zoneset_interior</Name>
+    <Compile Include="Images\Tiles\Overworld\town_misc.png">
+      <Name>town_misc</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\zoneset_interior_present.png">
-      <Name>zoneset_interior_present</Name>
+    <Compile Include="Images\Tiles\Overworld\town_roofs.png">
+      <Name>town_roofs</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\zoneset_present.png">
-      <Name>zoneset_present</Name>
+    <Compile Include="Images\Tiles\Overworld\trees.png">
+      <Name>trees</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Zonesets\zoneset_ages_dungeon_1.png">
-      <Name>zoneset_ages_dungeon_1</Name>
+    <Compile Include="Images\Tiles\Overworld\vertical_walls.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>vertical_walls</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Overworld\vines.png">
+      <Name>vines</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Zonesets\zoneset_ages_dungeon_4.png">
-      <Name>zoneset_ages_dungeon_4</Name>
+    <Compile Include="Images\Tiles\Overworld\water.png">
+      <Name>water</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Zonesets\zoneset_interior_present.png">
-      <Name>zoneset_interior_present</Name>
+    <Compile Include="Images\Tiles\Overworld\water_obstacles.png">
+      <Name>water_obstacles</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Zonesets\zoneset_present.png">
-      <Name>zoneset_present</Name>
+    <Compile Include="Images\Tiles\SideScroll\ss_animations.png">
+      <Name>ss_animations</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\SideScroll\ss_entity_objects.png">
+      <Name>ss_entity_objects</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\SideScroll\ss_general.png">
+      <Name>ss_general</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\SideScroll\ss_walls.png">
+      <Name>ss_walls</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Special\temple_of_seasons.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>temple_of_seasons</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\tile_previews.png">
+      <Name>tile_previews</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -1165,11 +1010,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Units\Monsters\monsters.png">
-      <Name>monsters</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Units\Monsters\monster_items.png">
       <Name>monster_items</Name>
       <Importer>TextureImporter</Importer>
@@ -1179,6 +1019,11 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Name>monster_previews</Name>
+    </Compile>
+    <Compile Include="Images\Units\Monsters\monsters.png">
+      <Name>monsters</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
     <Compile Include="Images\Units\NPCs\npcs_red.png">
       <Name>npcs_red</Name>

@@ -667,5 +667,11 @@ namespace ZeldaOracle.Common.Scripts {
 			get { return mode; }
 			set { mode = value; }
 		}
+
+		/// <summary>Gets the file path for this conscript.</summary>
+		public string FileName {
+			get { return fileName; }
+		}
 	}
 }
+

@@ -157,7 +157,7 @@ LOOKUP	water_vegetation, all	water, all;
 COLOR	water_vegetation, dark	( 48,136,112);
 
 LOOKUP	ice, all			water, all;
-LOOKUP	ice_cracked, all	snow, all;
+LOOKUP	cracked_ice, all	snow, all;
 LOOKUP	lava, all			puzzle_red, all;
 LOOKUP	sand, all			cliff, all;
 

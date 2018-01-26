@@ -200,8 +200,9 @@ namespace ZeldaOracle.Common.Graphics {
 			SpritePart part = sprite.GetParts(new SpriteDrawSettings(variantID));
 			while (part != null) {
 				Image image = part.Image.GetVariant(variantID);
-				spriteBatch.Draw(image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
-					XnaColor.White, 0.0F, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
+				if (!image.IsDisposed)
+					spriteBatch.Draw(image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
+						XnaColor.White, 0.0F, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
 				part = part.NextPart;
 			}
 		}
@@ -218,8 +219,9 @@ namespace ZeldaOracle.Common.Graphics {
 			if (sprite == null) return;
 			SpritePart part = sprite.GetParts(SpriteDrawSettings.Default);
 			while (part != null) {
-				spriteBatch.Draw(part.Image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
-					XnaColor.White, 0.0F, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
+				if (!part.Image.IsDisposed)
+					spriteBatch.Draw(part.Image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
+						XnaColor.White, 0.0F, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
 				part = part.NextPart;
 			}
 		}
@@ -234,8 +236,9 @@ namespace ZeldaOracle.Common.Graphics {
 			while (part != null) {
 				Image image = part.Image.GetVariant(variantID);
 				destination.Point = NewPos(destination.Point) + (Vector2F) part.DrawOffset;
-				spriteBatch.Draw(image, (Rectangle) destination, (Rectangle) part.SourceRect,
-					XnaColor.White, 0.0f, Vector2.Zero, SpriteEffects.None, depth);
+				if (!image.IsDisposed)
+					spriteBatch.Draw(image, (Rectangle) destination, (Rectangle) part.SourceRect,
+						XnaColor.White, 0.0f, Vector2.Zero, SpriteEffects.None, depth);
 				part = part.NextPart;
 			}
 		}
@@ -245,8 +248,9 @@ namespace ZeldaOracle.Common.Graphics {
 			SpritePart part = sprite.GetParts(new SpriteDrawSettings(variantID));
 			while (part != null) {
 				Image image = part.Image.GetVariant(variantID);
-				spriteBatch.Draw(image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
-					(XnaColor) color, 0.0F, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
+				if (!image.IsDisposed)
+					spriteBatch.Draw(image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
+						(XnaColor) color, 0.0F, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
 				part = part.NextPart;
 			}
 		}
@@ -263,8 +267,9 @@ namespace ZeldaOracle.Common.Graphics {
 			if (sprite == null) return;
 			SpritePart part = sprite.GetParts(SpriteDrawSettings.Default);
 			while (part != null) {
-				spriteBatch.Draw(part.Image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
-					(XnaColor) color, 0.0f, Vector2.Zero, 0.0f, SpriteEffects.None, depth);
+				if (!part.Image.IsDisposed)
+					spriteBatch.Draw(part.Image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
+						(XnaColor) color, 0.0f, Vector2.Zero, 0.0f, SpriteEffects.None, depth);
 				part = part.NextPart;
 			}
 		}
@@ -279,8 +284,9 @@ namespace ZeldaOracle.Common.Graphics {
 			while (part != null) {
 				Image image = part.Image.GetVariant(variantID);
 				destination.Point = NewPos(destination.Point) + (Vector2F) part.DrawOffset;
-				spriteBatch.Draw(image, (Rectangle) destination, (Rectangle) part.SourceRect,
-					(XnaColor) color, 0.0f, Vector2.Zero, SpriteEffects.None, depth);
+				if (!part.Image.IsDisposed)
+					spriteBatch.Draw(image, (Rectangle) destination, (Rectangle) part.SourceRect,
+						(XnaColor) color, 0.0f, Vector2.Zero, SpriteEffects.None, depth);
 				part = part.NextPart;
 			}
 		}
@@ -398,8 +404,9 @@ namespace ZeldaOracle.Common.Graphics {
 			SpritePart part = sprite.GetParts(settings);
 			while (part != null) {
 				Image image = part.Image.GetVariant(settings.VariantID);
-				spriteBatch.Draw(image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
-					(XnaColor) color, 0.0F, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
+				if (!image.IsDisposed)
+					spriteBatch.Draw(image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
+						(XnaColor) color, 0.0F, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
 				part = part.NextPart;
 			}
 		}
@@ -410,8 +417,9 @@ namespace ZeldaOracle.Common.Graphics {
 			while (part != null) {
 				Image image = part.Image.GetVariant(settings.VariantID);
 				destination.Point = NewPos(destination.Point) + (Vector2) part.DrawOffset;
-				spriteBatch.Draw(image, (Rectangle) destination, (Rectangle) part.SourceRect,
-					(XnaColor) color, 0.0F, Vector2.Zero, SpriteEffects.None, depth);
+				if (!image.IsDisposed)
+					spriteBatch.Draw(image, (Rectangle) destination, (Rectangle) part.SourceRect,
+						(XnaColor) color, 0.0F, Vector2.Zero, SpriteEffects.None, depth);
 				part = part.NextPart;
 			}
 		}

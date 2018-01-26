@@ -1,0 +1,305 @@
+﻿#==============================================================
+# Sprite Sheets
+#==============================================================
+
+SPRITESHEET	"temp_sheet_town_8x8"			"Tiles/Overworld/town_8x8"			(8, 8), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_town_fountain"		"Tiles/Overworld/town_fountain"	(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_town_house_walls"	"Tiles/Overworld/town_house_walls"	(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_town_misc"			"Tiles/Overworld/town_misc"		(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_town_roofs"			"Tiles/Overworld/town_roofs"		(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS	((255, 0, 0), (1, 1, 1));
+
+MAPPEDCOLORS	"tiles_default", ("roof_red", "shop_sign");
+
+SOURCE "temp_sheet_town_8x8";
+SPRITESET "set_town_8x8" (4, 2);
+	MULTIPLE COLOR "", ("roof_red", "roof_blue", "roof_green"), (0, 0), (0, 0), (4, 1); END;
+	MULTIPLE BASIC (0, 1), (0, 1), (4, 1); END;
+END;
+
+IGNORECOLORS	((0, 0, 0, 0));
+
+MAPPEDCOLORS	"tiles_default", ("fountain", "fountain_water");
+SOURCE "temp_sheet_town_fountain";
+SPRITESET "set_town_fountain", (4, 8);
+	MULTIPLE BASIC (0, 0), (0, 0), (2, 6); END;
+	MULTIPLE BASIC (2, 0), (2, 0), (2, 8); END;
+END;
+
+IGNORECOLORS	((255, 0, 0), (1, 1, 1));
+
+MAPPEDCOLORS	"tiles_default", ("water", "house_wall");
+
+SOURCE "temp_sheet_town_house_walls";
+SPRITESET "set_town_house_walls", (5, 2);
+	MULTIPLE STYLE "house_wall";
+		ADD "present"		(0, 0);
+		ADD "seasons"		(0, 2);
+		ADD "past"			(0, 4);
+		END;
+END;
+
+SOURCE "temp_sheet_town_roofs";
+SPRITESET "set_town_roofs", (11, 4);
+	MAPPEDCOLORS	"tiles_default", ("roof_red");
+	MULTIPLE COLOR "", ("roof_red", "roof_blue", "roof_green"), (0, 0), (0, 0), (6, 4); END;
+	
+	MULTIPLE COLORSTYLE "roof_tiled", "", ("roof_red", "roof_blue", "roof_green"), (6, 0), (2, 1);
+		ADD "present"			(6, 0);
+		ADD "past"				(6, 1);
+		ADD "seasons"			(6, 2);
+		ADD "subrosia"			(6, 3);
+		END;
+	
+	MAPPEDCOLORS	"tiles_default", ("roof_brown");
+	MULTIPLE BASIC (8, 0), (8, 0), (3, 2); END;
+	MULTIPLE BASIC (9, 2), (9, 2), (2, 1); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("chimney");
+	SINGLE BASIC (8, 2); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("vasu_sign");
+	SINGLE BASIC (8, 3); END;
+END;
+
+
+SOURCE "temp_sheet_town_misc";
+SPRITESET "set_town_misc", (7, 5);
+	MAPPEDCOLORS	"tiles_default", ("fence");
+	MULTIPLE BASIC (0, 0), (0, 0), (3, 1); END;
+	SINGLE STYLE "fence_post", (0, 1);
+		ADD "fancy",			(0, 1);
+		ADD "wooden"			(1, 1);
+		ADD "dungeon"			(2, 1);
+		ADD "interior"			(3, 1);
+		END;
+	
+	MAPPEDCOLORS	"tiles_default", ("sand");
+	SINGLE BASIC (3, 0); END;
+	
+	MAPPEDCOLORS	"tiles_default",
+		("statue_block", "stone_block", "brick_block", "planter", "planter_flower_red");
+		
+	MULTIPLE BASIC (0, 2), (0, 2), (4, 2); END;
+	MULTIPLE BASIC (0, 4), (0, 4), (2, 1); END;
+	
+	MULTIPLE COLOR "", ("planter_flower_red", "planter_flower_blue"), (2, 4), (2, 4), (2, 1); END;
+	
+	CHUNKSIZE	(8, 8);
+	MULTIPLE BASIC (4, 0), (4, 0), (2, 4); END;
+	CHUNKSIZE	none;
+	
+	MAPPEDCOLORS	"tiles_default", ("gate");
+	MULTIPLE BASIC (6, 0), (6, 0), (1, 2); END;
+END;
+
+
+#==============================================================
+# 8x8s
+#==============================================================
+
+SOURCE "set_town_8x8";
+COMPOSITE "temp_roof_red_left_light";
+	ADD ((0, 0), "roof_red"), (0, 0); END;
+COMPOSITE "temp_roof_red_right_light";
+	ADD ((1, 0), "roof_red"), (8, 0); END;
+COMPOSITE "temp_roof_blue_left_light";
+	ADD ((0, 0), "roof_blue"), (0, 0); END;
+COMPOSITE "temp_roof_blue_right_light";
+	ADD ((1, 0), "roof_blue"), (8, 0); END;
+COMPOSITE "temp_roof_green_left_light";
+	ADD ((0, 0), "roof_green"), (0, 0); END;
+COMPOSITE "temp_roof_green_right_light";
+	ADD ((1, 0), "roof_green"), (8, 0); END;
+	
+COMPOSITE "temp_roof_blue_left_water";
+	ADD ((2, 0), "roof_blue"), (0, 0); END;
+COMPOSITE "temp_roof_blue_right_water";
+	ADD ((3, 0), "roof_blue"), (8, 0); END;
+
+COMPOSITE "temp_shop_sign_left";
+	ADD (0, 1), (8, 8); END;
+COMPOSITE "temp_shop_sign_mid";
+	ADD (1, 1), (0, 8); ADD (2, 1), (8, 8); END;
+COMPOSITE "temp_shop_sign_right";
+	ADD (3, 1), (0, 8); END;
+	
+SOURCE "set_town_misc";
+NAME "temp_planter_flower_top_red"			((2, 4), "planter_flower_red");
+NAME "temp_planter_flower_top_blue"			((2, 4), "planter_flower_blue");
+NAME "temp_planter_flower_bottom_red"		((3, 4), "planter_flower_red");
+NAME "temp_planter_flower_bottom_blue"		((3, 4), "planter_flower_blue");
+
+#==============================================================
+# Tiles
+#==============================================================
+
+LOAD "town_roofs.conscript", true;
+
+SOURCE "set_town_house_walls";
+NAME "tile_house_wall"						(0, 0);
+NAME "tile_house_wall_door_right"			(1, 0);
+NAME "tile_house_wall_door_left"			(2, 0);
+NAME "tile_house_door"						(3, 0);
+NAME "tile_house_door_locked"				(4, 0);
+
+NAME "tile_water_house_wall"				(0, 1);
+NAME "tile_water_house_wall_door_right"		(1, 1);
+NAME "tile_water_house_wall_door_left"		(2, 1);
+NAME "tile_water_house_door"				(3, 1);
+NAME "tile_water_house_door_locked"			(4, 1);
+
+COMPOSITE "temp_preview_house_wall_style";
+	ADD "tile_roof_green_top_left_light", (0, 0);
+	ADD "tile_roof_green_top_mid", (16, 0);
+	ADD "tile_chimney", (32, 0);
+	ADD "tile_roof_green_top_right_light", (48, 0);
+	ADD "tile_roof_green_bottom_left", (0, 16);
+	ADD "tile_roof_green_bottom_mid", (16, 16);
+	ADD "tile_roof_green_bottom_mid", (32, 16);
+	ADD "tile_roof_green_bottom_right", (48, 16);
+	ADD "tile_house_wall", (0, 32);
+	ADD "tile_house_door", (16, 32);
+	ADD "tile_house_door_locked", (32, 32);
+	ADD "tile_house_wall", (48, 32);
+	END;
+	
+STYLEPREVIEW "house_wall", "temp_preview_house_wall_style";
+
+SOURCE "set_town_misc";
+NAME "tile_plank_fence_left"				(0, 0);
+NAME "tile_plank_fence_mid"					(1, 0);
+NAME "tile_plank_fence_right"				(2, 0);
+NAME "tile_plank_fence_sand"				(3, 0);
+NAME "tile_fence_post"						(0, 1);
+
+NAME "tile_statue_block_lined_up"			(0, 2);
+NAME "tile_statue_block"					(0, 3);
+NAME "tile_statue_block_water"				(0, 4);
+NAME "tile_stone_block_lined_up"			(1, 2);
+NAME "tile_stone_block"						(1, 3);
+NAME "tile_stone_block_water"				(1, 4);
+NAME "tile_brick_block_lined_up"			(2, 2);
+NAME "tile_brick_block"						(2, 3);
+NAME "tile_planter_lined_up"				(3, 2);
+NAME "tile_planter"							(3, 3);
+
+COMPOSITE "tile_planter_flower_red";
+	ADD "tile_planter"; ADD "temp_planter_flower_top_red"; END;
+COMPOSITE "tile_planter_flower_blue";
+	ADD "tile_planter"; ADD "temp_planter_flower_top_blue"; END;
+COMPOSITE "tile_planter_lined_up_flowers_red";
+	ADD "tile_planter_lined_up";
+	ADD "temp_planter_flower_top_red";
+	ADD "temp_planter_flower_bottom_red"; END;
+COMPOSITE "tile_planter_lined_up_flowers_blue";
+	ADD "tile_planter_lined_up";
+	ADD "temp_planter_flower_top_blue";
+	ADD "temp_planter_flower_bottom_blue"; END;
+COMPOSITE "tile_planter_lined_up_flowers_red_blue";
+	ADD "tile_planter_lined_up";
+	ADD "temp_planter_flower_top_red";
+	ADD "temp_planter_flower_bottom_blue"; END;
+COMPOSITE "tile_planter_lined_up_flowers_blue_red";
+	ADD "tile_planter_lined_up";
+	ADD "temp_planter_flower_top_blue";
+	ADD "temp_planter_flower_bottom_red"; END;
+	
+NAME "tile_gate_top"						(6, 0);
+NAME "tile_gate"							(6, 1);
+
+
+COMPOSITE "tile_water_statue_mermaid_nw";
+	ADD (4, 0); ADD "water_rock_1_8x8", (0, 0); END;
+COMPOSITE "tile_water_statue_mermaid_ne";
+	ADD (5, 0); ADD "water_rock_3_8x8", (8, 0); END;
+NAME "tile_water_statue_mermaid_sw"			(4, 1);
+NAME "tile_water_statue_mermaid_se"			(5, 1);
+
+COMPOSITE "tile_water_statue_base_nw";
+	ADD (4, 2); ADD "water_rock_1_8x8", (0, 0); ADD "water_rock_3_8x8", (8, 0); END;
+COMPOSITE "tile_water_statue_base_ne";
+	ADD (5, 2); ADD "water_rock_1_8x8", (0, 0); ADD "water_rock_3_8x8", (8, 0); END;
+NAME "tile_water_statue_base_sw"			(4, 3);
+NAME "tile_water_statue_base_se"			(5, 3);
+
+SOURCE "set_town_fountain";
+ANIMATION "temp_fountain_jet_left_continuous"; SUBSTRIP repeat;
+	ADD frame, 6, (0, 4); ADD frame, 6, (0, 5); END;
+
+ANIMATION "temp_fountain_jet_right_continuous";
+	CLONE "temp_fountain_jet_left_continuous";
+	SHIFTSOURCE (1, 0); END;
+	
+ANIMATION "temp_fountain_jet_left_flicker";
+	CLONE "temp_fountain_jet_left_continuous";
+	FLICKER 1, on; END;
+	
+ANIMATION "temp_fountain_jet_right_flicker";
+	CLONE "temp_fountain_jet_left_flicker";
+	SHIFTSOURCE (1, 0); END;
+
+STYLE "temp_fountain_jet_left", "fountain_jet";
+	ADD "continuous"		"temp_fountain_jet_left_continuous";
+	ADD "flicker"			"temp_fountain_jet_left_flicker";
+	END;
+	
+STYLE "temp_fountain_jet_right", "fountain_jet";
+	ADD "continuous"		"temp_fountain_jet_right_continuous";
+	ADD "flicker"			"temp_fountain_jet_right_flicker";
+	END;
+	
+ANIMATION "temp_fountain_water_nw"; SUBSTRIP repeat;
+	ADD strip, 12, 4, (2, 0), relative: (0, 2); END;
+ANIMATION "temp_fountain_water_ne";
+	CLONE "temp_fountain_water_nw"; SHIFTSOURCE (1, 0); END;
+ANIMATION "temp_fountain_water_sw";
+	CLONE "temp_fountain_water_nw"; SHIFTSOURCE (0, 1); END;
+ANIMATION "temp_fountain_water_se";
+	CLONE "temp_fountain_water_nw"; SHIFTSOURCE (1, 1); END;
+	
+ANIMATION "tile_fountain_dirt_nw"; SUBSTRIP repeat;
+	COMBINE "temp_fountain_water_nw";
+	ADD static, "temp_fountain_jet_left", depth: 1;
+	ADD static, (0, 0), depth: -1; END;
+ANIMATION "tile_fountain_dirt_ne"; SUBSTRIP repeat;
+	COMBINE "temp_fountain_water_ne";
+	ADD static, "temp_fountain_jet_right", depth: 1;
+	ADD static, (1, 0), depth: -1; END;
+ANIMATION "tile_fountain_dirt_sw"; SUBSTRIP repeat;
+	COMBINE "temp_fountain_water_sw";
+	ADD static, (0, 1), depth: -1; END;
+ANIMATION "tile_fountain_dirt_se"; SUBSTRIP repeat;
+	COMBINE "temp_fountain_water_se";
+	ADD static, (1, 1), depth: -1; END;
+	
+ANIMATION "tile_fountain_path_nw"; SUBSTRIP repeat;
+	COMBINE "temp_fountain_water_nw";
+	ADD static, "temp_fountain_jet_left", depth: 1;
+	ADD static, (0, 2), depth: -1; END;
+ANIMATION "tile_fountain_path_ne"; SUBSTRIP repeat;
+	COMBINE "temp_fountain_water_ne";
+	ADD static, "temp_fountain_jet_right", depth: 1;
+	ADD static, (1, 2), depth: -1; END;
+ANIMATION "tile_fountain_path_sw"; SUBSTRIP repeat;
+	COMBINE "temp_fountain_water_sw";
+	ADD static, (0, 3), depth: -1; END;
+ANIMATION "tile_fountain_path_se"; SUBSTRIP repeat;
+	COMBINE "temp_fountain_water_se";
+	ADD static, (1, 3), depth: -1; END;
+	
+ANIMATION "temp_preview_fountain_jet_style";
+	COMBINE "tile_fountain_dirt_nw", (0, 0);
+	COMBINE "tile_fountain_dirt_ne", (16, 0);
+	COMBINE "tile_fountain_dirt_sw", (0, 16);
+	COMBINE "tile_fountain_dirt_se", (16, 16);
+	END;
+	
+STYLEPREVIEW "fountain_jet", "temp_preview_fountain_jet_style";

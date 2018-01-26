@@ -46,6 +46,7 @@ namespace ConscriptDesigner.Anchorables {
 			this.tileData = new List<BaseTileData>();
 			this.filteredTileData = new List<BaseTileData>();
 
+
 			DesignerControl.ResourcesLoaded += OnResourcesLoaded;
 			DesignerControl.ResourcesUnloaded += OnResourcesUnloaded;
 			DesignerControl.PreviewInvalidated += OnPreviewInvalidated;
@@ -85,6 +86,7 @@ namespace ConscriptDesigner.Anchorables {
 		}
 
 		public void Unload() {
+			tileData.Clear();
 			preview.Unload();
 		}
 

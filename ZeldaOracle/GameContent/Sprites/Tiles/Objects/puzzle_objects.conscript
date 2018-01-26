@@ -1,0 +1,480 @@
+﻿
+#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_chests"					"Tiles/Objects/chests"					(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_buttons"				"Tiles/Objects/buttons"					(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_minecart_tracks"		"Tiles/Objects/minecart_tracks"			(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_traps"					"Tiles/Objects/traps"					(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_puzzle_objects"			"Tiles/Objects/puzzle_objects"			(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_puzzle_color_tiles"		"Tiles/Objects/puzzle_color_tiles"		(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_entity_tiles"			"Tiles/Objects/entity_tiles"			(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+# Chests ======================================================
+
+MAPPEDCOLORS	"tiles_default", ("chest");
+
+SOURCE "temp_sheet_chests";
+SPRITESET "set_chests", (2, 1);
+	MULTIPLE STYLE "chest";
+		ADD "flat"		(0, 0);
+		ADD "curved"	(0, 1);
+		ADD "ornate"	(0, 2);
+		END;
+END;
+
+# Buttons =====================================================
+
+MAPPEDCOLORS	"tiles_default", ("button");
+
+SOURCE "temp_sheet_buttons";
+SPRITESET "set_buttons", (2, 1);
+	MULTIPLE STYLE "button";
+		ADD "flat"		(0, 0);
+		ADD "raised"	(0, 1);
+		END;
+END;
+
+# Minecart Tracks =============================================
+
+MAPPEDCOLORS	"tiles_default", ("minecart_track");
+
+SOURCE "temp_sheet_minecart_tracks";
+SPRITESET "set_minecart_tracks", (2, 4);
+	MULTIPLE BASIC (0, 0); END;
+END;
+
+# Traps =======================================================
+
+SOURCE "temp_sheet_traps";
+SPRITESET "set_traps", (6, 4);
+
+	MAPPEDCOLORS	"tiles_default", ("hole");
+	MULTIPLE BASIC (0, 0), (0, 0), (2, 4); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("arrow_shooter");
+	MULTIPLE BASIC (2, 0), (2, 0), (2, 2); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("fire_shooter");
+	MULTIPLE BASIC (2, 2), (2, 2), (2, 2); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("floor_spikes");
+	MULTIPLE BASIC (4, 0), (4, 0), (1, 4); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("flying_tile");
+	SINGLE STYLE "flying_tile", (5, 0);
+		ADD "ages"			(5, 0);
+		ADD "seasons"		(5, 1);
+		END;
+END;
+
+# Puzzle Objects ==============================================
+
+SOURCE "temp_sheet_puzzle_objects";
+SPRITESET "set_puzzle_objects", (10, 4);
+
+	MAPPEDCOLORS	"tiles_default", ("lava_mouth");
+	MULTIPLE BASIC (0, 0), (0, 0), (4, 2); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("floor");
+	MULTIPLE BASIC (4, 0), (4, 0), (2, 2); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("wall";
+	MULTIPLE BASIC (0, 2), (0, 2), (4, 2); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("web");
+	MULTIPLE BASIC (4, 2), (4, 2), (2, 2); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("lever");
+	MULTIPLE BASIC (6, 0), (6, 0), (2, 1); END;
+	
+	CHUNKSIZE		(8, 8);
+	MAPPEDCOLORS	"tiles_default", ("bridge");
+	SINGLE BASIC (8, 0); SIZE (8, 16); END;
+	SINGLE BASIC (9, 0); SIZE (16, 8); END;
+	CHUNKSIZE		none;
+	
+	MAPPEDCOLORS	"tiles_default", ("locked_block");
+	SINGLE BASIC	(6, 1); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("ice_crystal_pit");
+	SINGLE BASIC	(7, 1); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("eye_statue");
+	MULTIPLE BASIC	(6, 2), (6, 2), (2, 1); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("plaque");
+	SINGLE BASIC	(6, 3); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("essense_statue");
+	SINGLE BASIC	(7, 3); END;
+END;
+
+# Puzzle Color Tiles ==========================================
+
+MAPPEDCOLORS	"tiles_default", ("puzzle_red", "puzzle_blue", "floor");
+
+SOURCE "temp_sheet_puzzle_color_tiles";
+SPRITESET "set_puzzle_color_tiles", (5, 2);
+	MULTIPLE COLOR "puzzle_color", ("puzzle_red", "puzzle_yellow", "puzzle_blue"), (0, 0), (0, 0), (3, 1); END;
+	SINGLE COLOR "puzzle_color", ("puzzle_red", "puzzle_yellow", "puzzle_blue", "statue", "statue_alt"), (3, 0); END;
+	MULTIPLE COLOR "puzzle_color", ("puzzle_red", "puzzle_blue"), (0, 1), (0, 1), (3, 1); END;
+	SINGLE BASIC (4, 0); END;
+	SINGLE BASIC (4, 1); END;
+END;
+
+# Puzzle Entity Tiles =========================================
+
+PALETTEDICTIONARY	"entity_dictionary";
+
+MAPPEDCOLORS	"entities_default", ("orange", "red", "blue", "green", "shaded_blue", "shaded_red");
+
+SOURCE "temp_sheet_entity_tiles";
+SPRITESET "set_entity_tiles", (13, 6);
+	MULTIPLE BASIC (0, 0), (0, 0), (12, 2); END;
+	SINGLE BASIC (12, 1), (12, 1); END;
+	SINGLE COLOR "color_switch", ("blue", "red"), (12, 0); END;
+	
+	MULTIPLE BASIC (0, 2), (0, 2), (2, 2), drawOffset: (0, -3); END;
+	MULTIPLE BASIC (2, 2), (2, 2), (11, 2); END;
+	
+	MULTIPLE COLOR "trampoline", ("blue", "red"), (0, 4), (0, 4), (3, 1); END;
+	MULTIPLE BASIC (3, 4), (3, 4), (10, 1); END;
+	MULTIPLE BASIC (0, 5), (0, 5), (11, 1); END;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+# Chests ======================================================
+
+SOURCE "set_chests";
+NAME "tile_chest"				(0, 0);
+NAME "tile_chest_opened"		(1, 0);
+
+COMPOSITE "temp_preview_chest_style";
+	ADD "tile_chest", (0, 0); ADD "tile_chest_opened", (16, 0); END;
+
+STYLEPREVIEW "chest", "temp_preview_chest_style";
+
+# Buttons =====================================================
+
+SOURCE "set_buttons";
+NAME "tile_button_up"			(0, 0);
+NAME "tile_button_down"			(1, 0);
+
+COMPOSITE "temp_preview_button_style";
+	ADD "tile_button_up", (0, 0); ADD "tile_button_down", (16, 0); END;
+
+STYLEPREVIEW "button", "temp_preview_button_style";
+
+# Minecart Tracks =============================================
+
+SOURCE "set_minecart_tracks";
+NAME "tile_minecart_track_down_right"		(0, 0);
+NAME "tile_minecart_track_down_left"		(1, 0);
+NAME "tile_minecart_track_up_right"			(0, 1);
+NAME "tile_minecart_track_up_left"			(1, 1);
+NAME "tile_minecart_track_horizontal"		(0, 2);
+NAME "tile_minecart_track_vertical"			(1, 2);
+NAME "tile_minecart_track_stop"				(0, 3);
+
+# Traps =======================================================
+
+SOURCE "set_traps";
+NAME "tile_pit_top"							(0, 0);
+NAME "tile_pit_mid"							(0, 1);
+NAME "tile_pit_bottom"						(0, 2);
+NAME "tile_pit_both"						(0, 3);
+NAME "tile_hole_top"						(1, 0);
+NAME "tile_hole_mid"						(1, 1);
+NAME "tile_hole_bottom"						(1, 2);
+NAME "tile_hole_both"						(1, 3);
+
+NAME "tile_arrow_shooter_up"				(2, 0);
+NAME "tile_arrow_shooter_down"				(2, 1);
+NAME "tile_arrow_shooter_left"				(3, 0);
+NAME "tile_arrow_shooter_right"				(3, 1);
+
+NAME "tile_fire_shooter_up"					(2, 2);
+NAME "tile_fire_shooter_down"				(2, 3);
+NAME "tile_fire_shooter_left"				(3, 2);
+NAME "tile_fire_shooter_right"				(3, 3);
+
+ANIMATION "tile_floor_spikes";
+	ADD strip, 15, 4, (4, 0), relative: (0, 1);
+	ADD frame, 15, (4, 2); ADD frame, 15, (4, 1); END;
+	
+NAME "tile_flying_tile"					(5, 0);
+
+# Puzzle Objects ==============================================
+
+SOURCE "set_puzzle_objects";
+NAME "tile_lava_mouth_up"					(0, 0);
+NAME "tile_lava_mouth_down"					(0, 1);
+NAME "tile_lava_mouth_left"					(1, 0);
+NAME "tile_lava_mouth_right"				(1, 1);
+NAME "tile_lava_mouth_closed_up"			(2, 0);
+NAME "tile_lava_mouth_closed_down"			(2, 1);
+NAME "tile_lava_mouth_closed_left"			(3, 0);
+NAME "tile_lava_mouth_closed_right"			(3, 1);
+NAME "tile_jump_ledge_up"					(4, 0);
+NAME "tile_jump_ledge_down"					(4, 1);
+NAME "tile_jump_ledge_left"					(5, 0);
+NAME "tile_jump_ledge_right"				(5, 1);
+
+NAME "tile_lever_left"						(6, 0);
+NAME "tile_lever_right"						(7, 0);
+
+NAME "tile_bridge_left"						(8, 0);
+NAME "tile_bridge_up"						(9, 0);
+
+OFFSET "tile_bridge_right", "tile_bridge_left" (8, 0); END;
+OFFSET "tile_bridge_down", "tile_bridge_up" (0, 8); END;
+	
+COMPOSITE "tile_bridge_horizontal";
+	ADD "tile_bridge_left", (0, 0);
+	ADD "tile_bridge_left", (8, 0); END;
+COMPOSITE "tile_bridge_vertical";
+	ADD "tile_bridge_up", (0, 0);
+	ADD "tile_bridge_up", (0, 8); END;
+
+NAME "tile_locked_block"					(6, 1);
+NAME "tile_ice_crystal_pit"					(7, 1);
+
+NAME "tile_tablet_slot_up"					(0, 2);
+NAME "tile_tablet_slot_down"				(0, 3);
+NAME "tile_tablet_slot_left"				(1, 2);
+NAME "tile_tablet_slot_right"				(1, 3);
+
+NAME "tile_tablet_slot_placed_up"			(2, 2);
+NAME "tile_tablet_slot_placed_down"			(2, 3);
+NAME "tile_tablet_slot_placed_left"			(3, 2);
+NAME "tile_tablet_slot_placed_right"		(3, 3);
+
+NAME "tile_wall_webbed_up"					(4, 2);
+NAME "tile_wall_webbed_down"				(4, 3);
+NAME "tile_wall_webbed_left"				(5, 2);
+NAME "tile_wall_webbed_right"				(5, 3);
+
+NAME "tile_eye_statue"						(6, 2);
+NAME "tile_eye_statue_broken"				(7, 2);
+NAME "tile_plaque"							(6, 3);
+NAME "tile_essense_statue"					(7, 3);
+
+# Puzzle Color Tiles ==========================================
+
+SOURCE "set_puzzle_color_tiles";
+NAME "temp_color_tile"						(0, 0);
+NAME "tile_color_tile_red"					("temp_color_tile", "puzzle_red");
+NAME "tile_color_tile_yellow"				("temp_color_tile", "puzzle_yellow");
+NAME "tile_color_tile_blue"					("temp_color_tile", "puzzle_blue");
+NAME "temp_color_jump_pad"					(1, 0);
+NAME "tile_color_jump_pad_red"				("temp_color_jump_pad", "puzzle_red");
+NAME "tile_color_jump_pad_yellow"			("temp_color_jump_pad", "puzzle_yellow");
+NAME "tile_color_jump_pad_blue"				("temp_color_jump_pad", "puzzle_blue");
+NAME "temp_color_block"						(2, 0);
+NAME "tile_color_block_red"					("temp_color_block", "puzzle_red");
+NAME "tile_color_block_yellow"				("temp_color_block", "puzzle_yellow");
+NAME "tile_color_block_blue"				("temp_color_block", "puzzle_blue");
+NAME "temp_color_statue"					(3, 0);
+NAME "tile_color_statue_red"				("temp_color_statue", "puzzle_red");
+NAME "tile_color_statue_yellow"				("temp_color_statue", "puzzle_yellow");
+NAME "tile_color_statue_blue"				("temp_color_statue", "puzzle_blue");
+NAME "tile_statue"							("temp_color_statue", "statue");
+NAME "tile_statue_alt"						("temp_color_statue", "statue_alt");
+
+NAME "temp_color_barrier_raised"			(0, 1);
+NAME "tile_color_barrier_red_raised"		("temp_color_barrier_raised", "puzzle_red");
+NAME "tile_color_barrier_blue_raised"		("temp_color_barrier_raised", "puzzle_blue");
+NAME "temp_color_barrier_halfway"			(1, 1);
+NAME "tile_color_barrier_red_halfway"		("temp_color_barrier_halfway", "puzzle_red");
+NAME "tile_color_barrier_blue_halfway"		("temp_color_barrier_halfway", "puzzle_blue");
+NAME "temp_color_barrier_lowered"			(2, 1);
+NAME "tile_color_barrier_red_lowered"		("temp_color_barrier_lowered", "puzzle_red");
+NAME "tile_color_barrier_blue_lowered"		("temp_color_barrier_lowered", "puzzle_blue");
+
+ANIMATION "tile_color_barrier_blue_raise"; SUBSTRIP clamp;
+	ADD frame, 2, "tile_color_barrier_blue_lowered";
+	ADD frame, 6, "tile_color_barrier_blue_halfway";
+	ADD frame, 1, "tile_color_barrier_blue_raised"; END;
+ANIMATION "tile_color_barrier_blue_lower"; SUBSTRIP clamp;
+	ADD frame, 2, "tile_color_barrier_blue_raised";
+	ADD frame, 6, "tile_color_barrier_blue_halfway";
+	ADD frame, 1, "tile_color_barrier_blue_lowered"; END;
+ANIMATION "tile_color_barrier_red_raise"; SUBSTRIP clamp;
+	ADD frame, 2, "tile_color_barrier_red_lowered";
+	ADD frame, 6, "tile_color_barrier_red_halfway";
+	ADD frame, 1, "tile_color_barrier_red_raised"; END;
+ANIMATION "tile_color_barrier_red_lower"; SUBSTRIP clamp;
+	ADD frame, 2, "tile_color_barrier_red_raised";
+	ADD frame, 6, "tile_color_barrier_red_halfway";
+	ADD frame, 1, "tile_color_barrier_red_lowered"; END;
+
+NAME "tile_color_lantern"					(4, 0);
+NAME "tile_color_cube_slot"					(4, 1);
+
+
+# Puzzle Entity Tiles =========================================
+
+SOURCE "set_entity_tiles";
+
+NAME "tile_roller_horizontal"				(0, 0);
+NAME "tile_roller_vertical"					(0, 1);
+
+ANIMATION "tile_roller_horizontal_roll";
+	SUBSTRIP clamp; ADD frame, 9, (0, 0); ADD frame, 12, (1, 0); ADD frame, 10, (2, 0); ADD frame, 1, (0, 0);
+	SUBSTRIP clamp; ADD frame, 9, (0, 0); ADD frame, 12, (2, 0); ADD frame, 10, (1, 0); ADD frame, 1, (0, 0); END;
+ANIMATION "tile_roller_vertical_roll";
+	SUBSTRIP clamp; ADD frame, 9, (0, 1); ADD frame, 12, (2, 1); ADD frame, 10, (1, 1); ADD frame, 1, (0, 1);
+	SUBSTRIP clamp; ADD frame, 9, (0, 1); ADD frame, 12, (1, 1); ADD frame, 10, (2, 1); ADD frame, 1, (0, 1); END;
+
+ANIMATION "tile_spike_roller_horizontal_both"; SUBSTRIP repeat;
+	ADD frame, 8, (6, 0); ADD frame, 8, (6, 1); END;
+ANIMATION "tile_spike_roller_horizontal_top"; SUBSTRIP repeat;
+	ADD frame, 8, (3, 0); ADD frame, 8, (3, 1); END;
+ANIMATION "tile_spike_roller_horizontal_mid"; SUBSTRIP repeat;
+	ADD frame, 8, (4, 0); ADD frame, 8, (4, 1); END;
+ANIMATION "tile_spike_roller_horizontal_bottom"; SUBSTRIP repeat;
+	ADD frame, 8, (5, 0); ADD frame, 8, (5, 1); END;
+
+ANIMATION "tile_spike_roller_vertical_both"; SUBSTRIP repeat;
+	ADD frame, 8, (10, 0); ADD frame, 8, (10, 1); END;
+ANIMATION "tile_spike_roller_vertical_top"; SUBSTRIP repeat;
+	ADD frame, 8, (7, 0); ADD frame, 8, (7, 1); END;
+ANIMATION "tile_spike_roller_vertical_mid"; SUBSTRIP repeat;
+	ADD frame, 8, (8, 0); ADD frame, 8, (8, 1); END;
+ANIMATION "tile_spike_roller_vertical_bottom"; SUBSTRIP repeat;
+	ADD frame, 8, (9, 0); ADD frame, 8, (9, 1); END;
+	
+NAME "tile_arrow_cannon_left"				(12, 2);
+NAME "tile_arrow_cannon_right"				(12, 3);
+
+NAME "tile_owl",							(11, 0); END;
+COMPOSITE "tile_owl_activated";		ADD (11, 1), (-8, 0); ADD (12, 1), (8, 0); END;
+
+NAME "temp_color_switch"					(12, 0);
+NAME "tile_color_switch_blue"				("temp_color_switch", "blue");
+NAME "tile_color_switch_red"				("temp_color_switch", "red");
+
+NAME "tile_moving_platform"					(12, 4);
+NAME "tile_statue_eye"						(10, 5);
+	
+	
+COMPOSITE "temp_crossing_gate_right_raised";
+	ADD (2, 2), (0, -16); ADD (2, 3), (0, 0); END;
+COMPOSITE "temp_crossing_gate_left_raised";
+	ADD (4, 2), (0, -16); ADD (4, 3), (0, 0); END;
+COMPOSITE "temp_crossing_gate_right_transition";
+	ADD (3, 2), (0, -16); ADD (3, 3), (0, 0); ADD (6, 2), (16, -16); ADD (6, 3), (16, 0); END;
+COMPOSITE "temp_crossing_gate_left_transition";
+	ADD (5, 2), (0, -16); ADD (5, 3), (0, 0); ADD (7, 2), (-16, -16); ADD (7, 3), (-16, 0); END;
+COMPOSITE "temp_crossing_gate_right_lowered";
+	ADD (3, 2), (0, -16); ADD (3, 3), (0, 0); ADD (8, 2), (16, 0); END;
+COMPOSITE "temp_crossing_gate_left_lowered";
+	ADD (5, 2), (0, -16); ADD (5, 3), (0, 0); ADD (8, 3), (-16, 0); END;
+	
+	
+ANIMATION "tile_crossing_gate_lower";
+	SUBSTRIP clamp; ## right
+		ADD frame, 8, "temp_crossing_gate_right_raised";
+		ADD frame, 8, "temp_crossing_gate_right_transition";
+		ADD frame, 8, "temp_crossing_gate_right_lowered";
+	SUBSTRIP clamp; ## left
+		ADD frame, 8, "temp_crossing_gate_left_raised";
+		ADD frame, 8, "temp_crossing_gate_left_transition";
+		ADD frame, 8, "temp_crossing_gate_left_lowered";
+	END;
+
+ANIMATION "tile_crossing_gate_raise";
+	SUBSTRIP clamp; ## right
+		ADD frame, 8, "temp_crossing_gate_right_lowered";
+		ADD frame, 8, "temp_crossing_gate_right_transition";
+		ADD frame, 8, "temp_crossing_gate_right_raised";
+	SUBSTRIP clamp; ## left
+		ADD frame, 8, "temp_crossing_gate_left_lowered";
+		ADD frame, 8, "temp_crossing_gate_left_transition";
+		ADD frame, 8, "temp_crossing_gate_left_raised";
+	END;
+	
+NAME "tile_pull_handle_bar_horizontal"		(9, 2);
+NAME "tile_pull_handle_bar_vertical"		(9, 3);
+NAME "tile_pull_handle_up"					(10, 2);
+NAME "tile_pull_handle_left"				(11, 2);
+NAME "tile_pull_handle_down"				(10, 3);
+NAME "tile_pull_handle_right"				(11, 3);
+
+ANIMATION "tile_pull_handle";
+	SUBSTRIP repeat; ADD frame, 1, "tile_pull_handle_right";
+	SUBSTRIP repeat; ADD frame, 1, "tile_pull_handle_up";
+	SUBSTRIP repeat; ADD frame, 1, "tile_pull_handle_left";
+	SUBSTRIP repeat; ADD frame, 1, "tile_pull_handle_down"; END;
+
+NAME "temp_trampoline",						(0, 4);
+NAME "tile_trampoline"						("temp_trampoline", "blue");
+NAME "tile_super_trampoline"				("temp_trampoline", "red");
+
+ANIMATION "tile_trampoline_bounce"; SUBSTRIP clamp;
+	ADD frame, 12, (1, 4); ADD frame,  2, (0, 4);
+	ADD frame,  8, (2, 4); ADD frame,  1, (0, 4);
+	CHANGEDEFINITION all, "blue"; END;
+		
+ANIMATION "tile_super_trampoline_bounce";
+	CLONE "tile_trampoline_bounce"; CHANGEDEFINITION all, "red"; END;
+		
+NAME "tile_shatter_crystal"					(3, 4);
+NAME "tile_shatter_crystal_broken"			(4, 4);
+NAME "tile_ice_crystal"						(5, 4);
+NAME "tile_water_block"						(6, 4);
+NAME "tile_seedling"						(7, 4);
+
+NAME "tile_seed_bouncer_horizontal"			(8, 4);
+NAME "tile_seed_bouncer_northeast"			(9, 4);
+NAME "tile_seed_bouncer_vertical"			(10, 4);
+NAME "tile_seed_bouncer_northwest"			(11, 4);
+	
+ANIMATION "tile_seed_bouncer";
+	SUBSTRIP repeat; ADD frame, 1, "tile_seed_bouncer_horizontal";
+	SUBSTRIP repeat; ADD frame, 1, "tile_seed_bouncer_northeast";
+	SUBSTRIP repeat; ADD frame, 1, "tile_seed_bouncer_vertical";
+	SUBSTRIP repeat; ADD frame, 1, "tile_seed_bouncer_northwest";
+	SUBSTRIP repeat; ADD frame, 1, "tile_seed_bouncer_horizontal";
+	SUBSTRIP repeat; ADD frame, 1, "tile_seed_bouncer_northeast";
+	SUBSTRIP repeat; ADD frame, 1, "tile_seed_bouncer_vertical";
+	SUBSTRIP repeat; ADD frame, 1, "tile_seed_bouncer_northwest"; END;
+
+ANIMATION "tile_magnet_spinner_north";
+	SUBSTRIP repeat; # Clockwise
+		ADD frame, 31, (0, 5); ADD frame, 15, (1, 5);
+		ADD frame, 4, (2, 5); ADD frame, 3, (3, 5);
+	SUBSTRIP repeat; # Counter-Clockwise
+		ADD frame, 31, (0, 5); ADD frame, 15, (3, 5);
+		ADD frame, 4, (2, 5); ADD frame, 3, (1, 5);
+	END;
+	
+ANIMATION "tile_magnet_spinner_south";
+	CLONE "tile_magnet_spinner_north"; SHIFTSOURCE (4, 0); END;
+
+#==============================================================
+# Entities
+#==============================================================
+
+NAME "minecart_horizontal"					(0, 2);
+NAME "minecart_vertical"					(0, 3);
+
+ANIMATION "minecart";
+	SUBSTRIP repeat; ADD frame, 6, (0, 2); ADD frame, 6, (1, 2); # horizontal
+	SUBSTRIP repeat; ADD frame, 6, (0, 3); ADD frame, 6, (1, 3); END; # vertical
+	
+NAME "magnet_ball_north"					(8, 5);
+NAME "magnet_ball_south"					(9, 5);

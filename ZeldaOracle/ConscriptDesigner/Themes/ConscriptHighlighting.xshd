@@ -153,6 +153,7 @@
     <Keywords color="Commands">
       <Word>COMPOSITE</Word>
       <Word>ADD</Word>
+      <Word>ADDTILED</Word>
       <Word>INSERT</Word>
       <Word>REPLACE</Word>
       <Word>REMOVE</Word>

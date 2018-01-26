@@ -18,7 +18,7 @@ SOURCE "monsters";
 MAPPEDCOLORS	"entities_default", ("red", "green", "blue", "orange", "gold", "shaded_red", "shaded_blue", "hurt");
 
 SPRITESET "set_monster" (16, 16);
-	MULTIPLE COLOR "", ("red", "green", "blue", "orange", "shaded_red", "shaded_blue", "hurt"), (0, 0); END;
+	MULTIPLE COLOR "", ("red", "green", "blue", "orange", "shaded_red", "shaded_blue", "inverse_red", "inverse_blue", "hurt"), (0, 0); END;
 END;
 
 PALETTEDICTIONARY none;

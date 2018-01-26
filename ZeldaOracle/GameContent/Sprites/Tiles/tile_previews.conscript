@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET "temp_sheet_tile_previews",	"Tiles/Styles/tile_previews"	(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_tile_previews",	"Tiles/tile_previews"	(16, 16), (1, 1), (18, 18); END;
 
 #==============================================================
 # Sprite Sets
@@ -11,7 +11,7 @@ SPRITESHEET "temp_sheet_tile_previews",	"Tiles/Styles/tile_previews"	(16, 16), (
 IGNORECOLORS	((0, 0, 0, 0));
 
 SOURCE "temp_sheet_tile_previews";
-SPRITESET "set_tile_previews" (2, 5);
+SPRITESET "set_tile_previews" (4, 5);
 	PALETTEDICTIONARY "tile_dictionary";
 	MAPPEDCOLORS	"tiles_default", ("turnstile", "railing");
 	MULTIPLE BASIC (0, 0), (0, 0), (2, 1); END;
@@ -21,6 +21,13 @@ SPRITESET "set_tile_previews" (2, 5);
 	MAPPEDCOLORS	"entities_default", ("shaded_blue", "shaded_red");
 	MULTIPLE BASIC (0, 1), (0, 1), (2, 4); END;
 
+	PALETTEDICTIONARY "tile_dictionary";
+	MAPPEDCOLORS	"tiles_default", ("vertical_wall");
+	SINGLE BASIC (2, 0); END;
+
+	MAPPEDCOLORS	"tiles_default",
+		("temple_spring_roof", "temple_summer_roof", "temple_autumn_roof", "temple_winter_roof");
+	MULTIPLE BASIC (2, 1), (2, 1), (2, 2); END;
 END;
 
 #==============================================================
@@ -35,3 +42,9 @@ ANIMATION "preview_turnstile_counterclockwise"; SUBSTRIP repeat;
 ANIMATION "preview_turnstile_clockwise"; SUBSTRIP repeat;
 	ADD strip, 12, 4, (1, 1), relative: (0, 1);
 	ADD static, (0, 0), depth: -2; ADD static, (1, 0), depth: -1;END;
+	
+NAME "preview_temple_of_seasons"		(2, 0);
+NAME "preview_temple_roof_spring"		(2, 2);
+NAME "preview_temple_roof_summer"		(2, 1);
+NAME "preview_temple_roof_autumn"		(3, 1);
+NAME "preview_temple_roof_winter"		(3, 2);

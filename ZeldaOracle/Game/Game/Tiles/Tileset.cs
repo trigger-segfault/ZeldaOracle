@@ -18,6 +18,9 @@ namespace ZeldaOracle.Game.Tiles {
 		private Point2I				spacing;
 		/// <summary>The number of non-null tiles in the grid.</summary>
 		private int					count;
+		/// <summary>The path to the conscript file that loaded this tileset.
+		/// Used for the Conscript Designer's tileset editor.</summary>
+		private string				conscriptPath;
 
 
 		//-----------------------------------------------------------------------------
@@ -31,6 +34,7 @@ namespace ZeldaOracle.Game.Tiles {
 			this.usePreviewSprites	= true;
 			this.spacing			= Point2I.One;
 			this.count				= 0;
+			this.conscriptPath		= "";
 		}
 
 		/// <summary>Constructs a new tileset with the specified ID and dimensions.</summary>
@@ -40,6 +44,7 @@ namespace ZeldaOracle.Game.Tiles {
 			this.usePreviewSprites	= usePreviewSprites;
 			this.spacing			= Point2I.One;
 			this.count				= 0;
+			this.conscriptPath		= "";
 		}
 
 		/// <summary>Constructs a new tileset with the specified ID and dimensions.</summary>
@@ -49,6 +54,7 @@ namespace ZeldaOracle.Game.Tiles {
 			this.usePreviewSprites	= usePreviewSprites;
 			this.spacing			= Point2I.One;
 			this.count				= 0;
+			this.conscriptPath		= "";
 		}
 
 		/// <summary>Constructs a copy of the tileset.</summary>
@@ -58,6 +64,7 @@ namespace ZeldaOracle.Game.Tiles {
 			this.usePreviewSprites	= copy.usePreviewSprites;
 			this.spacing			= copy.spacing;
 			this.count				= copy.count;
+			this.conscriptPath		= copy.conscriptPath;
 
 			for (int x = 0; x < Width; x++) {
 				for (int y = 0; y < Height; y++) {
@@ -274,6 +281,13 @@ namespace ZeldaOracle.Game.Tiles {
 		/// <summary>Gets the number of non-null tiles present in the tileset.</summary>
 		public int Count {
 			get { return count; }
+		}
+
+		/// <summary>Gets or sets the  path to the conscript file that loaded this tileset.
+		/// Used for the Conscript Designer's tileset editor.</summary>
+		public string ConscriptPath {
+			get { return conscriptPath; }
+			set { conscriptPath = value; }
 		}
 	}
 }

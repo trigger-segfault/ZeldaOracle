@@ -1,0 +1,24 @@
+﻿
+TILE "snow_mound_top_both"; SAMESPRITE; SOLID block; END;
+TILE "snow_mound_top_left"; SAMESPRITE; SOLID block; END;
+TILE "snow_mound_top_mid"; SAMESPRITE; SOLID block; END;
+TILE "snow_mound_top_right"; SAMESPRITE; SOLID block; END;
+TILE "snow_mound_side_both"; SAMESPRITE; SOLID block; END;
+TILE "snow_mound_side_left"; SAMESPRITE; SOLID block; END;
+TILE "snow_mound"; SAMESPRITE; SOLID block; END;
+TILE "snow_mound_side_right"; SAMESPRITE; SOLID block; END;
+
+TILE "snow_mound_bottom_both"; SAMESPRITE; LEDGE block, down; END;
+TILE "snow_mound_bottom_left"; SAMESPRITE; LEDGE block, down; END;
+TILE "snow_mound_bottom_mid"; SAMESPRITE; LEDGE block, down; END;
+TILE "snow_mound_bottom_right"; SAMESPRITE; LEDGE block, down; END;
+
+
+TILE "snow_mound_path_top_both"; SAMESPRITE; END;
+TILE "snow_mound_path_top_left"; SAMESPRITE; END;
+TILE "snow_mound_path_top_mid"; SAMESPRITE; END;
+TILE "snow_mound_path_top_right"; SAMESPRITE; END;
+TILE "snow_mound_path_side_both"; SAMESPRITE; END;
+TILE "snow_mound_path_side_left"; SAMESPRITE; END;
+TILE "snow_mound_path"; SAMESPRITE; END;
+TILE "snow_mound_path_side_right"; SAMESPRITE; END;

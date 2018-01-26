@@ -21,9 +21,11 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Xceed.Wpf.AvalonDock.Layout;
 using ZeldaOracle.Common.Content;
+using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Items.Rewards;
+using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Worlds;
 
 namespace ConscriptDesigner.Control {
@@ -58,6 +60,10 @@ namespace ConscriptDesigner.Control {
 		private static string resourceAutoCompleteType;
 		private static bool playAnimations;
 
+		private static Tileset selectedTileset;
+		private static BaseTileData selectedTileData;
+		private static Point2I selectedTileLocation;
+
 
 		//-----------------------------------------------------------------------------
 		// Initialization
@@ -83,6 +89,9 @@ namespace ConscriptDesigner.Control {
 			playAnimations = false;
 			animationWatch = Stopwatch.StartNew();
 			previewScale = 1;
+			selectedTileset = null;
+			selectedTileData = null;
+			selectedTileLocation = -Point2I.One;
 		}
 
 		public static void SetGraphics(GraphicsDevice graphicsDevice, ContentManager contentManager) {
@@ -125,6 +134,14 @@ namespace ConscriptDesigner.Control {
 			IRequestCloseAnchorable anchorable = mainWindow.ActiveAnchorable;
 			if (anchorable is IContentFileContainer) {
 				return ((IContentFileContainer) anchorable).File;
+			}
+			return null;
+		}
+
+		public static ICommandAnchorable GetActiveCommandAnchorable() {
+			IRequestCloseAnchorable anchorable = mainWindow.ActiveAnchorable;
+			if (anchorable is ICommandAnchorable) {
+				return (ICommandAnchorable) anchorable;
 			}
 			return null;
 		}
@@ -185,7 +202,10 @@ namespace ConscriptDesigner.Control {
 				List<ContentFile> needsSaving = new List<ContentFile>();
 				List<string> needsSavingFiles = new List<string>();
 				bool activeClosing = false;
+				bool tilesetEditorNeedsSaving = false;
+				List<IRequestCloseAnchorable> newClosingAnchorables = new List<IRequestCloseAnchorable>();
 				foreach (IRequestCloseAnchorable anchorable in closingAnchorables) {
+					newClosingAnchorables.Add(anchorable);
 					if (anchorable.IsActive)
 						activeClosing = true;
 					if (anchorable is IContentFileContainer) {
@@ -195,14 +215,29 @@ namespace ConscriptDesigner.Control {
 							needsSavingFiles.Add(content.File.Path);
 						}
 					}
+					else if (anchorable is TilesetEditor) {
+						TilesetEditor editor = (TilesetEditor) anchorable;
+						if (editor.IsModified) {
+							needsSavingFiles.Add("Tileset Editor");
+							tilesetEditorNeedsSaving = true;
+						}
+					}
 				}
+				// Clear this now so that this doesn't get called again while in a dialog
+				closingAnchorables.Clear();
+
 				MessageBoxResult result = MessageBoxResult.Yes;
 				bool errorOccurred = false;
-				if (needsSaving.Any()) {
+				if (needsSavingFiles.Any()) {
 					result = SaveChangesWindow.Show(mainWindow, needsSavingFiles, false);
 					if (result == MessageBoxResult.Yes) {
 						foreach (ContentFile file in needsSaving) {
 							if (!file.Save(true))
+								errorOccurred = true;
+						}
+
+						if (tilesetEditorNeedsSaving) {
+							if (!mainWindow.TilesetEditor.Save(true))
 								errorOccurred = true;
 						}
 					}
@@ -215,14 +250,13 @@ namespace ConscriptDesigner.Control {
 						result = MessageBoxResult.Cancel;
 				}
 				if (result != MessageBoxResult.Cancel) {
-					foreach (IRequestCloseAnchorable anchorable in closingAnchorables) {
+					foreach (IRequestCloseAnchorable anchorable in newClosingAnchorables) {
 						anchorable.ForceClose();
 					}
 					if (activeClosing) {
 						mainWindow.InvalidateActiveAnchorable();
 					}
 				}
-				closingAnchorables.Clear();
 				CommandManager.InvalidateRequerySuggested();
 			}
 		}
@@ -418,6 +452,11 @@ namespace ConscriptDesigner.Control {
 		// Commands
 		//-----------------------------------------------------------------------------
 
+		public static void InvalidatePreview() {
+			if (PreviewInvalidated != null)
+				PreviewInvalidated(null, EventArgs.Empty);
+		}
+
 		public static bool RequestSaveAll(out bool errorOccurred) {
 			List<ContentFile> needsSaving = new List<ContentFile>();
 			List<string> needsSavingFiles = new List<string>();
@@ -426,6 +465,9 @@ namespace ConscriptDesigner.Control {
 			foreach (ContentFile file in GetModifiedContentFiles()) {
 				needsSaving.Add(file);
 				needsSavingFiles.Add(file.Path);
+			}
+			if (mainWindow.TilesetEditor != null && mainWindow.TilesetEditor.IsModified) {
+				needsSavingFiles.Add("Tileset Editor");
 			}
 			MessageBoxResult result = MessageBoxResult.Yes;
 			errorOccurred = false;
@@ -453,6 +495,10 @@ namespace ConscriptDesigner.Control {
 							}
 						}
 					}
+					if (mainWindow.TilesetEditor != null && mainWindow.TilesetEditor.IsModified) {
+						if (!mainWindow.TilesetEditor.Save(true))
+							errorOccurred = true;
+					}
 				}
 			}
 			return (result != MessageBoxResult.Cancel);
@@ -473,14 +519,38 @@ namespace ConscriptDesigner.Control {
 		}
 
 		public static void Undo() {
-			var file = GetActiveContentFile();
-			if (file != null) file.Undo();
+			var anchorable = GetActiveCommandAnchorable();
+			if (anchorable != null) anchorable.Undo();
 			CommandManager.InvalidateRequerySuggested();
 		}
 
 		public static void Redo() {
-			var file = GetActiveContentFile();
-			if (file != null) file.Redo();
+			var anchorable = GetActiveCommandAnchorable();
+			if (anchorable != null) anchorable.Redo();
+			CommandManager.InvalidateRequerySuggested();
+		}
+
+		public static void Cut() {
+			var anchorable = GetActiveCommandAnchorable();
+			if (anchorable != null) anchorable.Cut();
+			CommandManager.InvalidateRequerySuggested();
+		}
+
+		public static void Copy() {
+			var anchorable = GetActiveCommandAnchorable();
+			if (anchorable != null) anchorable.Copy();
+			CommandManager.InvalidateRequerySuggested();
+		}
+
+		public static void Paste() {
+			var anchorable = GetActiveCommandAnchorable();
+			if (anchorable != null) anchorable.Paste();
+			CommandManager.InvalidateRequerySuggested();
+		}
+
+		public static void Delete() {
+			var anchorable = GetActiveCommandAnchorable();
+			if (anchorable != null) anchorable.Delete();
 			CommandManager.InvalidateRequerySuggested();
 		}
 
@@ -510,6 +580,9 @@ namespace ConscriptDesigner.Control {
 					if (ProjectClosed != null)
 						ProjectClosed(null, EventArgs.Empty);
 					Resources.Uninitialize();
+					selectedTileset = null;
+					selectedTileData = null;
+					selectedTileLocation = -Point2I.One;
 					CommandManager.InvalidateRequerySuggested();
 				}
 			}
@@ -559,7 +632,15 @@ namespace ConscriptDesigner.Control {
 		public static void Save() {
 			var file = GetActiveContentFile();
 			try {
-				if (file != null) file.Save(false);
+				if (file != null) {
+					file.Save(false);
+				}
+				else {
+					var anchorable = GetActiveAnchorable();
+					if (anchorable is TilesetEditor) {
+						mainWindow.TilesetEditor.Save(false);
+					}
+				}
 			}
 			catch (Exception ex) {
 				ShowExceptionMessage(ex, "save", file.Name);
@@ -571,6 +652,10 @@ namespace ConscriptDesigner.Control {
 			bool errorOccurred = false;
 			foreach (var file in GetModifiedContentFiles()) {
 				if (!file.Save(true))
+					errorOccurred = true;
+			}
+			if (mainWindow.TilesetEditor != null) {
+				if (!mainWindow.TilesetEditor.Save(true))
 					errorOccurred = true;
 			}
 			try {
@@ -594,6 +679,9 @@ namespace ConscriptDesigner.Control {
 					ResourcesUnloaded(null, EventArgs.Empty);
 				previewZones.Clear();
 				previewZone = null;
+				selectedTileset = null;
+				selectedTileData = null;
+				selectedTileLocation = -Point2I.One;
 				busyTask = Task.Run(() => RunConscriptsTask());
 				CommandManager.InvalidateRequerySuggested();
 			}
@@ -669,7 +757,14 @@ namespace ConscriptDesigner.Control {
 		public static bool CanSave {
 			get {
 				var content = GetActiveContentFile();
-				return (content != null ? content.IsModified : false);
+				if (content != null) {
+					return content.IsModified;
+				}
+				var anchorable = GetActiveAnchorable();
+				if (anchorable is TilesetEditor) {
+					return mainWindow.TilesetEditor.IsModified;
+				}
+				return false;
 			}
 		}
 
@@ -687,11 +782,39 @@ namespace ConscriptDesigner.Control {
 			}
 		}
 
+		public static bool CanCut {
+			get {
+				var anchorable = GetActiveCommandAnchorable();
+				return (anchorable != null ? anchorable.CanCut : false);
+			}
+		}
+
+		public static bool CanCopy {
+			get {
+				var anchorable = GetActiveCommandAnchorable();
+				return (anchorable != null ? anchorable.CanCopy : false);
+			}
+		}
+
+		public static bool CanPaste {
+			get {
+				var anchorable = GetActiveCommandAnchorable();
+				return (anchorable != null ? anchorable.CanPaste : false);
+			}
+		}
+
+		public static bool CanDelete {
+			get {
+				var anchorable = GetActiveCommandAnchorable();
+				return (anchorable != null ? anchorable.CanDelete : false);
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-		
+
 		public static string DesignerContentDirectory {
 			get { return Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), contentManager.RootDirectory); }
 		}
@@ -790,6 +913,21 @@ namespace ConscriptDesigner.Control {
 						PreviewScaleChanged(null, EventArgs.Empty);
 				}
 			}
+		}
+
+		public static Tileset SelectedTileset {
+			get { return selectedTileset; }
+			set { selectedTileset = value; }
+		}
+
+		public static BaseTileData SelectedTileData {
+			get { return selectedTileData; }
+			set { selectedTileData = value; }
+		}
+
+		public static Point2I SelectedTileLocation {
+			get { return selectedTileLocation; }
+			set { selectedTileLocation = value; }
 		}
 	}
 }

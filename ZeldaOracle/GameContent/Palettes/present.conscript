@@ -164,7 +164,7 @@ LOOKUP	water, all						blue, all;
 COLOR	water_vegetation, dark			( 48,136,112);
 
 LOOKUP	ice, all						water, all;
-LOOKUP	ice_cracked, all				snow, all;
+LOOKUP	cracked_ice, all				snow, all;
 LOOKUP	lava, all						puzzle_red, all;
 LOOKUP	sand, all						dirt, all;
 
@@ -257,7 +257,7 @@ COLOR	fountain_water, dark			(104,176,248);
 COLOR	fountain_water, black			( 24, 80,248);
 
 LOOKUP	shop_sign, all					house_wall, all;
-LOOKUP	vasu_sign, all					roof_red, all;
+LOOKUP	vasu_sign, all					roof_blue, all;
 
 LOOKUP	planter, all					floor, all;
 LOOKUP	planter_flower_red, light		floor, light;

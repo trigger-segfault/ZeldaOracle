@@ -18,12 +18,17 @@
         </ResourceDictionary>
     </Window.Resources>
     <Window.CommandBindings>
-        <CommandBinding Command="Open" CanExecute="CanAlwaysExecute" Executed="OnOpenCommand"/>
+        <CommandBinding Command="Open" CanExecute="CanExecuteIsBuilding" Executed="OnOpenCommand"/>
         <CommandBinding Command="Save" CanExecute="CanSave" Executed="OnSaveCommand"/>
         <CommandBinding Command="cmd:Commands.SaveAll" CanExecute="CanExecuteIsProjectOpen" Executed="OnSaveAllCommand"/>
-        <CommandBinding Command="cmd:Commands.Close" CanExecute="CanExecuteIsProjectOpen" Executed="OnCloseCommand"/>
+        <CommandBinding Command="cmd:Commands.Close" CanExecute="CanExecuteIsBusy" Executed="OnCloseCommand"/>
         <CommandBinding Command="cmd:Commands.Exit" CanExecute="CanAlwaysExecute" Executed="OnExitCommand"/>
         <CommandBinding Command="cmd:Commands.RedoSecondary" CanExecute="CanRedo" Executed="OnRedoCommand"/>
+
+        <CommandBinding Command="Cut" CanExecute="CanCut" Executed="OnCutCommand"/>
+        <CommandBinding Command="Copy" CanExecute="CanCopy" Executed="OnCopyCommand"/>
+        <CommandBinding Command="Paste" CanExecute="CanPaste" Executed="OnPasteCommand"/>
+        <CommandBinding Command="Delete" CanExecute="CanDelete" Executed="OnDeleteCommand"/>
 
         <CommandBinding Command="cmd:Commands.LaunchGame" CanExecute="CanExecuteIsBusy" Executed="OnLaunchGameCommand"/>
         <CommandBinding Command="cmd:Commands.LaunchEditor" CanExecute="CanExecuteIsBusy" Executed="OnLaunchEditorCommand"/>
@@ -46,6 +51,8 @@
         <CommandBinding Command="cmd:Commands.StyleBrowser" CanExecute="CanAlwaysExecute" Executed="OnStyleBrowserCommand"/>
         <CommandBinding Command="cmd:Commands.TileDataBrowser" CanExecute="CanAlwaysExecute" Executed="OnTileDataBrowserCommand"/>
         <CommandBinding Command="cmd:Commands.TilesetBrowser" CanExecute="CanAlwaysExecute" Executed="OnTilesetBrowserCommand"/>
+        <CommandBinding Command="cmd:Commands.TileBrowser" CanExecute="CanAlwaysExecute" Executed="OnTileBrowserCommand"/>
+        <CommandBinding Command="cmd:Commands.TilesetEditor" CanExecute="CanAlwaysExecute" Executed="OnTilesetEditorCommand"/>
     </Window.CommandBindings>
     <Grid>
         <StackPanel VerticalAlignment="Center" x:Name="splash">
@@ -85,9 +92,9 @@
                     <Separator/>
                     <local:ImageMenuItem Header="Sprite Browser" Source="/Resources/Icons/Sprite.png" Command="cmd:Commands.SpriteBrowser"/>
                     <local:ImageMenuItem Header="Sprite Source Browser" Source="/Resources/Icons/SpriteSource.png" Command="cmd:Commands.SpriteSourceBrowser"/>
-                    <local:ImageMenuItem Header="Style Browser" Source="/Resources/Icons/SpriteSource.png" Command="cmd:Commands.StyleBrowser"/>
-                    <local:ImageMenuItem Header="Tile Data Browser" Source="/Resources/Icons/Tile.png" Command="cmd:Commands.TileDataBrowser"/>
-                    <local:ImageMenuItem Header="Tileset Browser" Source="/Resources/Icons/Tile.png" Command="cmd:Commands.TilesetBrowser"/>
+                    <local:ImageMenuItem Header="Style Browser" Source="/Resources/Icons/SpriteStyle.png" Command="cmd:Commands.StyleBrowser"/>
+                    <local:ImageMenuItem Header="Tile Browser" Source="/Resources/Icons/Tile.png" Command="cmd:Commands.TileBrowser"/>
+                    <local:ImageMenuItem Header="Tileset Editor" Source="/Resources/Icons/Tileset.png" Command="cmd:Commands.TilesetEditor"/>
                 </MenuItem>
                 <MenuItem Header="_Project">
                     <local:ImageMenuItem Header="Launch Game" Source="/Resources/Icons/LaunchGame.png" Command="cmd:Commands.LaunchGame"/>

@@ -1,0 +1,49 @@
+﻿#==============================================================
+# Sprite Sheets
+#==============================================================
+
+SPRITESHEET	"temp_sheet_ss_entity_objects"	"Tiles/SideScroll/ss_entity_objects"			(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"entity_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+
+SOURCE "temp_sheet_ss_entity_objects";
+SPRITESET "set_ss_entity_objects", (5, 4);
+	MAPPEDCOLORS	"entities_default", ("shaded_red", "green", "blue");
+	MULTIPLE BASIC (0, 0), (0, 0), (4, 4); END;
+	MULTIPLE BASIC (4, 0), (4, 0), (1, 3); END;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_ss_entity_objects";
+
+NAME "tile_ss_moving_platform"			(4, 0);
+NAME "tile_ss_disappearing_platform"	(4, 1);
+NAME "tile_ss_rotating_platform"		(4, 2);
+
+ANIMATION "tile_ss_conveyor_belt_east_left"; SUBSTRIP repeat;
+	ADD strip, 8, 4, (0, 3), relative: (0, -1); END;
+ANIMATION "tile_ss_conveyor_belt_east_mid";
+	CLONE "tile_ss_conveyor_belt_east_left"; SHIFTSOURCE (1, 0); END;
+ANIMATION "tile_ss_conveyor_belt_east_right";
+	CLONE "tile_ss_conveyor_belt_east_left"; SHIFTSOURCE (2, 0); END;
+ANIMATION "tile_ss_conveyor_belt_east_both";
+	CLONE "tile_ss_conveyor_belt_east_left"; SHIFTSOURCE (3, 0); END;
+	
+ANIMATION "tile_ss_conveyor_belt_west_left"; SUBSTRIP repeat;
+	ADD strip, 8, 4, (0, 0), relative: (0, 1); END;
+ANIMATION "tile_ss_conveyor_belt_west_mid";
+	CLONE "tile_ss_conveyor_belt_west_left"; SHIFTSOURCE (1, 0); END;
+ANIMATION "tile_ss_conveyor_belt_west_right";
+	CLONE "tile_ss_conveyor_belt_west_left"; SHIFTSOURCE (2, 0); END;
+ANIMATION "tile_ss_conveyor_belt_west_both";
+	CLONE "tile_ss_conveyor_belt_west_left"; SHIFTSOURCE (3, 0); END;

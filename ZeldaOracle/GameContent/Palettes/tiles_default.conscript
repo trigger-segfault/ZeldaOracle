@@ -74,6 +74,8 @@ LOOKUP	tiled_alt, all					floor, all;
 LOOKUP	hole, all						floor, all;
 LOOKUP	hole_alt, all					floor, all;
 
+LOOKUP	vertical_wall, all				statue_block, all;
+
 
 #==============================================================
 # Objects
@@ -208,7 +210,7 @@ LOOKUP	output, all						floor, all;
 #==============================================================
 
 LOOKUP	ice, all						water, all;
-LOOKUP	ice_cracked, all				snow, all;
+LOOKUP	cracked_ice, all				snow, all;
 
 LOOKUP	water, all						puzzle_blue, all;
 LOOKUP	water_vegetation, all			water, all;
@@ -469,6 +471,26 @@ LOOKUP	ss_ladder_underwater, all		ss_statue, all;
 LOOKUP	ss_ladder_underwater, dark		ss_water_dark, dark;
 LOOKUP	ss_prison_bars, all				ss_bombable_block, all;
 
+
+#==============================================================
+# Special
+#==============================================================
+
+COLOR	temple_spring_roof, light		( 96,240,  0);
+COLOR	temple_spring_roof, medium		( 32,168,  0);
+COLOR	temple_spring_roof, dark		( 16, 88,  0);
+
+COLOR	temple_summer_roof, light		(248,192,  0);
+COLOR	temple_summer_roof, medium		(248, 88,  0);
+COLOR	temple_summer_roof, dark		(128,  0,  0);
+
+COLOR	temple_autumn_roof, light		(248,216,  0);
+COLOR	temple_autumn_roof, medium		(176,120,  0);
+COLOR	temple_autumn_roof, dark		(104, 64,  0);
+
+COLOR	temple_winter_roof, light		(160, 48,248);
+COLOR	temple_winter_roof, medium		( 80,  0,160);
+COLOR	temple_winter_roof, dark		( 48,  0,112);
 
 #==============================================================
 

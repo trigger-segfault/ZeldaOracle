@@ -1,0 +1,82 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_tunnels"				"Tiles/Indoors/tunnels"				(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+MAPPEDCOLORS	"tiles_default", ("wall");
+	
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+SOURCE "temp_sheet_tunnels";
+SPRITESET "set_tunnels" (12, 1);
+	MULTIPLE STYLE "tunnel";
+		ADD "tunnel_1"			(0, 0);
+		ADD "tunnel_2"			(0, 1);
+		ADD "tunnel_3"			(0, 2);
+		ADD "tunnel_4"			(0, 3);
+		ADD "tunnel_5"			(0, 4);
+		ADD "tunnel_6"			(0, 5);
+		ADD "tunnel_7"			(0, 6);
+		ADD "tunnel_8"			(0, 7);
+		ADD "tunnel_9"			(0, 8);
+		ADD "tunnel_10"			(0, 9);
+		END;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_tunnels";
+NAME "tile_tunnel_down"				(0, 0);
+NAME "tile_tunnel_up"				(1, 0);
+NAME "tile_tunnel_left"				(2, 0);
+NAME "tile_tunnel_right"			(3, 0);
+NAME "tile_tunnel_down_keyhole"		(4, 0);
+NAME "tile_tunnel_up_keyhole"		(5, 0);
+NAME "tile_tunnel_left_keyhole"		(6, 0);
+NAME "tile_tunnel_right_keyhole"	(7, 0);
+NAME "tile_tunnel_down_wide_mid"	(8, 0);
+NAME "tile_tunnel_up_wide_mid"		(9, 0);
+NAME "tile_tunnel_left_wide_mid"	(10, 0);
+NAME "tile_tunnel_right_wide_mid"	(11, 0);
+
+COMPOSITE "tile_tunnel_down_wide_left";
+	ADD "tile_tunnel_down", clipping: (0, 0, 8, 16);
+	ADD "tile_tunnel_down_wide_mid", clipping: (8, 0, 8, 16); END;
+COMPOSITE "tile_tunnel_down_wide_right";
+	ADD "tile_tunnel_down", clipping: (8, 0, 8, 16);
+	ADD "tile_tunnel_down_wide_mid", clipping: (0, 0, 8, 16); END;
+
+COMPOSITE "tile_tunnel_up_wide_left";
+	ADD "tile_tunnel_up", clipping: (0, 0, 8, 16);
+	ADD "tile_tunnel_up_wide_mid", clipping: (8, 0, 8, 16); END;
+COMPOSITE "tile_tunnel_up_wide_right";
+	ADD "tile_tunnel_up", clipping: (8, 0, 8, 16);
+	ADD "tile_tunnel_up_wide_mid", clipping: (0, 0, 8, 16); END;
+	
+COMPOSITE "tile_tunnel_left_wide_top";
+	ADD "tile_tunnel_left", clipping: (0, 0, 16, 8);
+	ADD "tile_tunnel_left_wide_mid", clipping: (0, 8, 16, 8); END;
+COMPOSITE "tile_tunnel_left_wide_bottom";
+	ADD "tile_tunnel_left", clipping: (0, 8, 16, 8);
+	ADD "tile_tunnel_left_wide_mid", clipping: (0, 0, 16, 8); END;
+	
+COMPOSITE "tile_tunnel_right_wide_top";
+	ADD "tile_tunnel_right", clipping: (0, 0, 16, 8);
+	ADD "tile_tunnel_right_wide_mid", clipping: (0, 8, 16, 8); END;
+COMPOSITE "tile_tunnel_right_wide_bottom";
+	ADD "tile_tunnel_right", clipping: (0, 8, 16, 8);
+	ADD "tile_tunnel_right_wide_mid", clipping: (0, 0, 16, 8); END;
+
+
+COMPOSITE "temp_preview_tunnel_style";
+	ADD "tile_tunnel_down", (0, 0); ADD "tile_tunnel_right", (16, 0); END;
+	
+STYLEPREVIEW "tunnel", "temp_preview_tunnel_style";

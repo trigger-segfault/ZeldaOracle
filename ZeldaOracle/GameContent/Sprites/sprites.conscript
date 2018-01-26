@@ -1,5 +1,5 @@
 
-SPRITESHEET "temp_sheet_black_8x8",	"Tiles/Styles/black_8x8"	(8, 8), (0, 0), (0, 0); END;
+SPRITESHEET "temp_sheet_black_8x8",	"Tiles/black_8x8"	(8, 8), (0, 0), (0, 0); END;
 
 SOURCE "temp_sheet_black_8x8";
 PALETTEDICTIONARY	"tile_dictionary";
@@ -7,29 +7,35 @@ MAPPEDCOLORS	"tiles_default", ("default");
 BASIC "black_8x8" (0, 0); END;
 PALETTEDICTIONARY	none;
 
-LOAD "Tiles/terrain.conscript", false;
-LOAD "Tiles/trees.conscript", false;
-LOAD "Tiles/hedges.conscript", false;
-LOAD "Tiles/stairs_tiles.conscript", false;
-LOAD "Tiles/objects_tiles.conscript", false;
-LOAD "Tiles/puzzle_objects_tiles.conscript", false;
-LOAD "Tiles/doors.conscript", false;
-LOAD "Tiles/floors_tiles.conscript", false;
-LOAD "Tiles/tiled.conscript", false;
-LOAD "Tiles/railings.conscript", false;
-LOAD "Tiles/walls.conscript", false;
-LOAD "Tiles/entrances.conscript", false;
-LOAD "Tiles/tunnels.conscript", false;
-LOAD "Tiles/turnstile.conscript", false;
-LOAD "Tiles/holes.conscript", false;
-LOAD "Tiles/snow_mounds.conscript", false;
-LOAD "Tiles/town.conscript", false;
-LOAD "Tiles/bridges.conscript", false;
-LOAD "Tiles/lights.conscript", false;
-LOAD "Tiles/interior.conscript", false;
-LOAD "Tiles/SideScrolling/sidescrolling.conscript", false;
-LOAD "Tiles/color_cube.conscript" ,false;
+LOAD "Tiles/overworld.conscript", false;
+LOAD "Tiles/indoors.conscript", false;
+LOAD "Tiles/sidescroll.conscript", false;
+LOAD "Tiles/objects.conscript", false;
 LOAD "Tiles/tile_previews.conscript", false;
+LOAD "Tiles/special.conscript", false;
+
+#LOAD "Tiles/terrain.conscript", false;
+#LOAD "Tiles/trees.conscript", false;
+#LOAD "Tiles/hedges.conscript", false;
+#LOAD "Tiles/stairs_tiles.conscript", false;
+#LOAD "Tiles/objects_tiles.conscript", false;
+#LOAD "Tiles/puzzle_objects_tiles.conscript", false;
+#LOAD "Tiles/doors.conscript", false;
+#LOAD "Tiles/floors_tiles.conscript", false;
+#LOAD "Tiles/tiled.conscript", false;
+#LOAD "Tiles/railings.conscript", false;
+#LOAD "Tiles/walls.conscript", false;
+#LOAD "Tiles/entrances.conscript", false;
+#LOAD "Tiles/tunnels.conscript", false;
+#LOAD "Tiles/turnstile.conscript", false;
+#LOAD "Tiles/holes.conscript", false;
+#LOAD "Tiles/snow_mounds.conscript", false;
+#LOAD "Tiles/town.conscript", false;
+#LOAD "Tiles/bridges.conscript", false;
+#LOAD "Tiles/lights.conscript", false;
+#LOAD "Tiles/interior.conscript", false;
+#LOAD "Tiles/SideScrolling/sidescrolling.conscript", false;
+#LOAD "Tiles/color_cube.conscript" ,false;
 LOAD "Units/units.conscript", false;
 LOAD "Units/Monsters/monsters.conscript", false;
 #LOAD "Units/Player/player.conscript" false;
@@ -66,7 +72,7 @@ SPRITESHEET "Effects/color_effects",	(16, 16), (1, 1), (0, 0); END;
 
 SPRITESHEET "npcs",						(16, 16), (1, 1), (18, 18); END;
 
-SPRITESHEET "event_tiles", "Tiles/event_tiles"		(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "action_tiles", "Tiles/action_tiles"		(16, 16), (1, 1), (18, 18); END;
 
 #SPRITESHEET "color_cube", "Tiles/color_cube"		(16, 16), (1, 1), (18, 18); END;
 
@@ -78,23 +84,23 @@ SPRITESHEET "monster_items" "Units/Monsters/monster_items", (16, 16), (1, 1), (0
 
 SOURCE "color_effects";
 
-OFFSET switch_hook_link, (5, 4), (-8, -8); END;
+OFFSET "switch_hook_link", (5, 4), (-8, -8); END;
 
 
 #==============================================================
 # Event Tile Sprites (Editor Only)
 #==============================================================
 
-SOURCE "event_tiles";
+SOURCE "action_tiles";
 
-BASIC event_tile_warp_entrance,			(0, 0); END;
-BASIC event_tile_warp_stairs,			(1, 0); END;
-BASIC event_tile_warp_tunnel,			(2, 0); END;
-BASIC event_tile_track_intersection,	(3, 0); END;
-BASIC event_tile_colored_gel,			(0, 1); END;
-BASIC event_tile_color_tile_puzzle,		(1, 1); END;
-BASIC event_tile_lava_harden,			(2, 1); END;
-BASIC event_tile_tile_path_puzzle,		(3, 1); END;
+BASIC "action_tile_warp_entrance",		(0, 0); END;
+BASIC "action_tile_warp_stairs",		(1, 0); END;
+BASIC "action_tile_warp_tunnel",		(2, 0); END;
+BASIC "action_tile_track_intersection",	(3, 0); END;
+BASIC "action_tile_colored_gel",		(0, 1); END;
+BASIC "action_tile_color_tile_puzzle",	(1, 1); END;
+BASIC "action_tile_lava_harden",		(2, 1); END;
+BASIC "action_tile_tile_path_puzzle",	(3, 1); END;
 
 
 #==============================================================

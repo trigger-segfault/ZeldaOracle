@@ -21,8 +21,6 @@ TILE	eye_statue;
 TILE	plaque;
 TILE	essense_statue;
 
-TILE	vertical_wall;
-
 TILE	tunnel_light;
 TILE	entrance_light_dirt;
 TILE	entrance_light_floor;
@@ -33,6 +31,8 @@ TILE	tiled_alt;
 
 TILE	hole;
 TILE	hole_alt;
+
+TILE	vertical_wall;
 
 #==============================================================
 # Objects
@@ -109,7 +109,7 @@ TILE	output;
 #==============================================================
 
 TILE	ice;
-TILE	ice_cracked;
+TILE	cracked_ice;
 TILE	water;
 TILE	water_vegetation;
 TILE	lava;
@@ -267,6 +267,15 @@ TILE	ss_ladder_bars;
 TILE	ss_ladder;
 TILE	ss_ladder_underwater;
 TILE	ss_prison_bars;
+
+#==============================================================
+# Special
+#==============================================================
+
+TILE	temple_spring_roof;
+TILE	temple_summer_roof;
+TILE	temple_autumn_roof;
+TILE	temple_winter_roof;
 
 #==============================================================
 

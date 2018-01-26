@@ -73,8 +73,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		private ISpriteSource source;
 		private ISprite sprite;
 
-		private bool singular;
-
 		//-----------------------------------------------------------------------------
 		// Override
 		//-----------------------------------------------------------------------------
@@ -219,6 +217,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("PALETTEDICTIONARY", "const none", "const null",
 			delegate (CommandParam parameters) {
 				paletteArgs.Dictionary = null;
+				animationBuilder.PaletteArgs = paletteArgs;
 			});
 			//=====================================================================================
 			AddCommand("PALETTEDICTIONARY", "string name",

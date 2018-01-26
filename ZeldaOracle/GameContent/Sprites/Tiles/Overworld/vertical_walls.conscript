@@ -1,0 +1,137 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_vertical_walls"		"Tiles/Overworld/vertical_walls"	(16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+MAPPEDCOLORS	"tiles_default", ("vertical_wall", "tunnel_light", "cliff");
+CHUNKSIZE		(8, 8);
+
+SOURCE "temp_sheet_vertical_walls";
+SPRITESET "set_vertical_walls", (8, 14);
+	MULTIPLE STYLE "vertical_wall_top", (0, 0), (4, 4);
+		ADD "ages"				(0, 0);
+		ADD "seasons"			(4, 0);
+		END;
+		
+	MULTIPLE BASIC (0, 4), (0, 4), (7, 10); END;
+	MULTIPLE BASIC (7, 12), (7, 12), (1, 2); END;
+END;
+
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_vertical_walls";
+NAME "tile_vertical_wall_top_nw"				(0, 0);
+NAME "tile_vertical_wall_top_n"					(1, 0);
+NAME "tile_vertical_wall_top_ne"				(2, 0);
+NAME "tile_vertical_wall_top_new"				(3, 0);
+NAME "tile_vertical_wall_top_w"					(0, 1);
+NAME "tile_vertical_wall_top"					(1, 1);
+NAME "tile_vertical_wall_top_e"					(2, 1);
+NAME "tile_vertical_wall_top_ew"				(3, 1);
+NAME "tile_vertical_wall_top_sw"				(0, 2);
+NAME "tile_vertical_wall_top_s"					(1, 2);
+NAME "tile_vertical_wall_top_se"				(2, 2);
+NAME "tile_vertical_wall_top_sew"				(3, 2);
+NAME "tile_vertical_wall_top_nsw"				(0, 3);
+NAME "tile_vertical_wall_top_ns"				(1, 3);
+NAME "tile_vertical_wall_top_nse"				(2, 3);
+NAME "tile_vertical_wall_top_nsew"				(3, 3);
+
+NAME "tile_vertical_brick_wall_left"			(0, 4);
+NAME "tile_vertical_brick_wall"					(1, 4);
+NAME "tile_vertical_brick_wall_right"			(2, 4);
+NAME "tile_vertical_brick_wall_both"			(3, 4);
+NAME "tile_vertical_brick_wall_bottom_left"		(0, 5);
+NAME "tile_vertical_brick_wall_bottom"			(1, 5);
+NAME "tile_vertical_brick_wall_bottom_right"	(2, 5);
+NAME "tile_vertical_brick_wall_bottom_both"		(3, 5);
+
+NAME "tile_vertical_brick_wall_bottom_entrance_left"		(4, 4);
+NAME "tile_vertical_brick_wall_bottom_entrance_mid"			(5, 4);
+NAME "tile_vertical_brick_wall_bottom_entrance_right"		(6, 4);
+NAME "tile_vertical_brick_wall_bottom_left_entrance_left"	(4, 5);
+NAME "tile_vertical_brick_wall_bottom_right_entrance_right"	(6, 5);
+
+NAME "tile_vertical_brick_wall_left_cracked_right"			(0, 6);
+NAME "tile_vertical_brick_wall_cracked_right"				(1, 6);
+NAME "tile_vertical_brick_wall_cracked_left"				(2, 6);
+NAME "tile_vertical_brick_wall_right_cracked_left"			(3, 6);
+NAME "tile_vertical_brick_wall_bottom_left_cracked_right"	(0, 7);
+NAME "tile_vertical_brick_wall_bottom_cracked_right"		(1, 7);
+NAME "tile_vertical_brick_wall_bottom_cracked_left"			(2, 7);
+NAME "tile_vertical_brick_wall_bottom_right_cracked_left"	(3, 7);
+
+NAME "tile_vertical_brick_wall_bombable"					(4, 6);
+NAME "tile_vertical_brick_wall_hole"						(5, 6);
+NAME "tile_vertical_brick_wall_doorway"						(6, 6);
+NAME "tile_vertical_brick_wall_cliff_1"						(4, 7);
+NAME "tile_vertical_brick_wall_cliff_2"						(5, 7);
+NAME "tile_vertical_brick_wall_keyhole"						(6, 7);
+
+NAME "tile_vertical_brick_wall_alt_left"			(0, 8);
+NAME "tile_vertical_brick_wall_alt"					(1, 8);
+NAME "tile_vertical_brick_wall_alt_right"			(2, 8);
+NAME "tile_vertical_brick_wall_alt_both"			(3, 8);
+NAME "tile_vertical_brick_wall_alt_bottom_left"		(0, 9);
+NAME "tile_vertical_brick_wall_alt_bottom"			(1, 9);
+NAME "tile_vertical_brick_wall_alt_bottom_right"	(2, 9);
+NAME "tile_vertical_brick_wall_alt_bottom_both"		(3, 9);
+
+NAME "tile_vertical_brick_wall_alt_bottom_entrance_left"		(4, 8);
+NAME "tile_vertical_brick_wall_alt_bottom_entrance_mid"			(5, 8);
+NAME "tile_vertical_brick_wall_alt_bottom_entrance_right"		(6, 8);
+NAME "tile_vertical_brick_wall_alt_bottom_left_entrance_left"	(4, 9);
+NAME "tile_vertical_brick_wall_alt_bottom_right_entrance_right"	(6, 9);
+
+NAME "tile_vertical_palace_wall_left"				(0, 10);
+NAME "tile_vertical_palace_wall"					(1, 10);
+NAME "tile_vertical_palace_wall_right"				(2, 10);
+NAME "tile_vertical_palace_wall_both"				(3, 10);
+NAME "tile_vertical_palace_wall_bottom_left"		(0, 11);
+NAME "tile_vertical_palace_wall_bottom"				(1, 11);
+NAME "tile_vertical_palace_wall_bottom_right"		(2, 11);
+NAME "tile_vertical_palace_wall_bottom_both"		(3, 11);
+
+NAME "tile_vertical_palace_wall_entrance_left"					(4, 10);
+NAME "tile_vertical_palace_wall_entrance_mid"					(5, 10);
+NAME "tile_vertical_palace_wall_entrance_right"					(6, 10);
+NAME "tile_vertical_palace_wall_bottom_entrance_left"			(4, 11);
+NAME "tile_vertical_palace_wall_bottom_entrance_mid"			(5, 11);
+NAME "tile_vertical_palace_wall_bottom_entrance_right"			(6, 11);
+
+NAME "tile_vertical_palace_wall_left_entrance_left"				(4, 12);
+NAME "tile_vertical_palace_wall_right_entrance_right"			(6, 12);
+NAME "tile_vertical_palace_wall_bottom_left_entrance_left"		(4, 13);
+NAME "tile_vertical_palace_wall_bottom_right_entrance_right"	(6, 13);
+NAME "tile_vertical_palace_wall_bottom_entrance_wide_left"		(5, 12);
+NAME "tile_vertical_palace_wall_bottom_entrance_wide_right"		(5, 13);
+
+NAME "tile_queen_statue_light"				(7, 12);
+NAME "tile_queen_statue_dark"				(7, 13);
+
+
+NAME "tile_vertical_stone_wall_left"			(0, 12);
+NAME "tile_vertical_stone_wall"					(1, 12);
+NAME "tile_vertical_stone_wall_right"			(2, 12);
+NAME "tile_vertical_stone_wall_both"			(3, 12);
+NAME "tile_vertical_stone_wall_bottom_left"		(0, 13);
+NAME "tile_vertical_stone_wall_bottom"			(1, 13);
+NAME "tile_vertical_stone_wall_bottom_right"	(2, 13);
+NAME "tile_vertical_stone_wall_bottom_both"		(3, 13);
+
+COMPOSITE "temp_preview_vertical_wall_top_style";
+	ADDTILED (0, 0), (4, 4), (16, 16); END;
+	
+STYLEPREVIEW "vertical_wall_top", "temp_preview_vertical_wall_top_style";

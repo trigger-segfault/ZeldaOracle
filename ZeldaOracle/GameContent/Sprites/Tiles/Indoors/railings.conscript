@@ -1,0 +1,150 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_railings"		"Tiles/Indoors/railings"		(8, 8), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+MAPPEDCOLORS	"tiles_default", ("railing");
+CHUNKSIZE		(8, 8);
+
+SOURCE "temp_sheet_railings";
+SPRITESET "set_railings", (1, 2);
+	SINGLE COLORSTYLE "railing", "", ("railing", "shop_side_railing"), (0, 0);
+		ADD "dungeon"			(0, 0);
+		ADD "interior"			(0, 1);
+		ADD "subrosia"			(0, 2);
+		END;
+	
+	SINGLE COLOR "", ("shop_front_railing", "essense_tile", "entrance_tile"), (0, 3), (0, 1); END;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_railings";
+NAME "railing_8x8"				((0, 0), "railing");
+#NAME "essense_tile_8x8"			((0, 1), "essense_tile");
+#NAME "entrance_tile_8x8"		((0, 1), "entrance_tile");
+
+COMPOSITE "tile_shop_side_railing";
+	ADD ((0, 0), "shop_side_railing"), (0, 0); ADD ((0, 0), "shop_side_railing"), (8, 0);
+	ADD ((0, 0), "shop_side_railing"), (0, 8); ADD ((0, 0), "shop_side_railing"), (8, 8); END;
+	
+COMPOSITE "tile_shop_front_railing";
+	ADD "tile_floor";
+	ADD ((0, 1), "shop_front_railing"), (0, 0); ADD ((0, 1), "shop_front_railing"), (8, 0); END;
+	
+COMPOSITE "tile_railing_square";
+	ADD "railing_8x8", (0, 0); ADD "railing_8x8", (8, 0);
+	ADD "railing_8x8", (0, 8); ADD "railing_8x8", (8, 8); END;
+	
+COMPOSITE "tile_floor_railing_outside_nw";
+	ADD "tile_floor";
+	ADD "railing_8x8", (0, 0); ADD "railing_8x8", (8, 0); ADD "railing_8x8", (0, 8); END;
+COMPOSITE "tile_floor_railing_n";
+	ADD "tile_floor";
+	ADD "railing_8x8", (0, 0); ADD "railing_8x8", (8, 0); END;
+COMPOSITE "tile_floor_railing_outside_ne";
+	ADD "tile_floor";
+	ADD "railing_8x8", (0, 0); ADD "railing_8x8", (8, 0); ADD "railing_8x8", (8, 8); END;
+	
+COMPOSITE "tile_floor_railing_w";
+	ADD "tile_floor";
+	ADD "railing_8x8", (0, 0); ADD "railing_8x8", (0, 8); END;
+COMPOSITE "tile_floor_railing_e";
+	ADD "tile_floor";
+	ADD "railing_8x8", (8, 0); ADD "railing_8x8", (8, 8); END;
+	
+COMPOSITE "tile_floor_railing_outside_sw";
+	ADD "tile_floor";
+	ADD "railing_8x8", (0, 0); ADD "railing_8x8", (0, 8); ADD "railing_8x8", (8, 8); END;
+COMPOSITE "tile_floor_railing_s";
+	ADD "tile_floor";
+	ADD "railing_8x8", (0, 8); ADD "railing_8x8", (8, 8); END;
+COMPOSITE "tile_floor_railing_outside_se";
+	ADD "tile_floor";
+	ADD "railing_8x8", (8, 0); ADD "railing_8x8", (0, 8); ADD "railing_8x8", (8, 8); END;
+	
+COMPOSITE "tile_floor_railing_inside_se";
+	ADD "tile_floor";
+	ADD "railing_8x8", (8, 8); END;
+COMPOSITE "tile_floor_railing_inside_sw";
+	ADD "tile_floor";
+	ADD "railing_8x8", (0, 8); END;
+COMPOSITE "tile_floor_railing_inside_ne";
+	ADD "tile_floor";
+	ADD "railing_8x8", (8, 0); END;
+COMPOSITE "tile_floor_railing_inside_nw";
+	ADD "tile_floor";
+	ADD "railing_8x8", (0, 0); END;
+	
+COMPOSITE "tile_floor_railing_diagonal_left";
+	ADD "tile_floor";
+	ADD "railing_8x8", (0, 0); ADD "railing_8x8", (8, 8); END;
+COMPOSITE "tile_floor_railing_diagonal_right";
+	ADD "tile_floor";
+	ADD "railing_8x8", (8, 0); ADD "railing_8x8", (0, 8); END;
+	
+
+COMPOSITE "tile_fancy_tile_1_railing_outside_nw";
+	ADD "tile_fancy_tile_1";
+	ADD "railing_8x8", (0, 0); ADD "railing_8x8", (8, 0); ADD "railing_8x8", (0, 8); END;
+COMPOSITE "tile_fancy_tile_1_railing_n";
+	ADD "tile_fancy_tile_1";
+	ADD "railing_8x8", (0, 0); ADD "railing_8x8", (8, 0); END;
+COMPOSITE "tile_fancy_tile_1_railing_outside_ne";
+	ADD "tile_fancy_tile_1";
+	ADD "railing_8x8", (0, 0); ADD "railing_8x8", (8, 0); ADD "railing_8x8", (8, 8); END;
+	
+COMPOSITE "tile_fancy_tile_1_railing_w";
+	ADD "tile_fancy_tile_1";
+	ADD "railing_8x8", (0, 0); ADD "railing_8x8", (0, 8); END;
+COMPOSITE "tile_fancy_tile_1_railing_e";
+	ADD "tile_fancy_tile_1";
+	ADD "railing_8x8", (8, 0); ADD "railing_8x8", (8, 8); END;
+	
+COMPOSITE "tile_fancy_tile_1_railing_outside_sw";
+	ADD "tile_fancy_tile_1";
+	ADD "railing_8x8", (0, 0); ADD "railing_8x8", (0, 8); ADD "railing_8x8", (8, 8); END;
+COMPOSITE "tile_fancy_tile_1_railing_s";
+	ADD "tile_fancy_tile_1";
+	ADD "railing_8x8", (0, 8); ADD "railing_8x8", (8, 8); END;
+COMPOSITE "tile_fancy_tile_1_railing_outside_se";
+	ADD "tile_fancy_tile_1";
+	ADD "railing_8x8", (8, 0); ADD "railing_8x8", (0, 8); ADD "railing_8x8", (8, 8); END;
+	
+COMPOSITE "tile_fancy_tile_1_railing_inside_se";
+	ADD "tile_fancy_tile_1";
+	ADD "railing_8x8", (8, 8); END;
+COMPOSITE "tile_fancy_tile_1_railing_inside_sw";
+	ADD "tile_fancy_tile_1";
+	ADD "railing_8x8", (0, 8); END;
+COMPOSITE "tile_fancy_tile_1_railing_inside_ne";
+	ADD "tile_fancy_tile_1";
+	ADD "railing_8x8", (8, 0); END;
+COMPOSITE "tile_fancy_tile_1_railing_inside_nw";
+	ADD "tile_fancy_tile_1";
+	ADD "railing_8x8", (0, 0); END;
+	
+COMPOSITE "tile_fancy_tile_1_railing_diagonal_left";
+	ADD "tile_fancy_tile_1";
+	ADD "railing_8x8", (0, 0); ADD "railing_8x8", (8, 8); END;
+COMPOSITE "tile_fancy_tile_1_railing_diagonal_right";
+	ADD "tile_fancy_tile_1";
+	ADD "railing_8x8", (8, 0); ADD "railing_8x8", (0, 8); END;
+	
+COMPOSITE "temp_preview_railing_style";
+	ADD "tile_floor_railing_outside_nw", (0, 0); ADD "tile_floor_railing_n", (16, 0); ADD "tile_floor_railing_outside_ne", (32, 0);
+	ADD "tile_floor_railing_w", (0, 16); ADD "tile_railing_square", (16, 16); ADD "tile_floor_railing_e", (32, 16);
+	ADD "tile_floor_railing_outside_sw", (0, 32); ADD "tile_floor_railing_s", (16, 32); ADD "tile_floor_railing_outside_se", (32, 32); END;
+	
+STYLEPREVIEW "railing", "temp_preview_railing_style";

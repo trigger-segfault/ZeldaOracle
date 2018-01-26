@@ -111,6 +111,7 @@
     <Compile Include="Anchorables\ConscriptEditor.cs" />
     <Compile Include="Anchorables\Base\ContentFileDocument.cs" />
     <Compile Include="Anchorables\Base\IContentFileContainer.cs" />
+    <Compile Include="Anchorables\Base\ICommandAnchorable.cs" />
     <Compile Include="Anchorables\ImageDisplay.cs" />
     <Compile Include="Anchorables\Base\IRequestCloseAnchorable.cs" />
     <Compile Include="Anchorables\OutputConsole.cs" />
@@ -120,6 +121,21 @@
     <Compile Include="Anchorables\SpriteBrowser.cs" />
     <Compile Include="Anchorables\SpriteBrowserControl.xaml.cs">
       <DependentUpon>SpriteBrowserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Anchorables\TileBrowser.cs" />
+    <Compile Include="Anchorables\TileBrowserControl.xaml.cs">
+      <DependentUpon>TileBrowserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Anchorables\TilesetEditor.cs" />
+    <Compile Include="Anchorables\TilesetEditorControl.xaml.cs">
+      <DependentUpon>TilesetEditorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Anchorables\TilesetEditorTools\TilesetEditorTool.cs" />
+    <Compile Include="Anchorables\TilesetEditorTools\ToolEyedrop.cs" />
+    <Compile Include="Anchorables\TilesetEditorTools\ToolPlace.cs" />
+    <Compile Include="Anchorables\TilesetEditorTools\ToolSelection.cs" />
+    <Compile Include="Windows\ResizeTilesetWindow.xaml.cs">
+      <DependentUpon>ResizeTilesetWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WinForms\SpriteInfo.cs" />
     <Compile Include="Anchorables\SpriteSourceBrowser.cs" />
@@ -214,10 +230,19 @@
     <Compile Include="WinForms\TileDataPreview.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="WinForms\TilePreview.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WinForms\TilesetEditorDisplay.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WinForms\TilesetPreview.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="WinForms\ZeldaGraphicsDeviceControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WinForms\ZeldaUniqueGraphicsControl.cs">
       <SubType>Component</SubType>
     </Compile>
     <Page Include="Anchorables\SpriteBrowserControl.xaml">
@@ -232,11 +257,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Anchorables\TileBrowserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Anchorables\TileDataBrowserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Anchorables\TilesetBrowserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Anchorables\TilesetEditorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -277,6 +310,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\RenameFileWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\ResizeTilesetWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -435,6 +472,39 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\LaunchEditor.png" />
     <Resource Include="Resources\Icons\LaunchGame.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ToolEyedropper.png" />
+    <Resource Include="Resources\Icons\ToolPan.png" />
+    <Resource Include="Resources\Icons\ToolPlace.png" />
+    <Resource Include="Resources\Icons\ToolPointer.png" />
+    <Resource Include="Resources\Icons\ToolSelection.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cursors\EyedropperCursor.cur" />
+    <Resource Include="Resources\Cursors\HandClosedCursor.cur" />
+    <Resource Include="Resources\Cursors\HandOpenCursor.cur" />
+    <Resource Include="Resources\Cursors\PencilCursor.cur" />
+    <Resource Include="Resources\Cursors\SelectionCursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\SpriteStyle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Tileset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\TilesetResize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\CancelChanges.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\UsePreviewSprites.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Merge.png" />
+    <Resource Include="Resources\Icons\Overwrite.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

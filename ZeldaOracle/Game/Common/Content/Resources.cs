@@ -38,22 +38,32 @@ namespace ZeldaOracle.Common.Content {
 		}
 	}
 
+	/// <summary>A class for storing information about a style group.</summary>
 	public class StyleGroupCollection {
+		/// <summary>The style group for the contained styles.</summary>
 		public string Group { get; }
+		/// <summary>The collection of styles for the style group.</summary>
 		public HashSet<string> Styles { get; }
+		/// <summary>The default style for the styleGroup.</summary>
+		public string DefaultStyle { get; set; }
+		/// <summary>The preview for the style group.</summary>
 		public ISprite Preview { get; set; }
 
+		/// <summary>Gets if the style group has a preview.</summary>
 		public bool HasPreview {
 			get { return Preview != null; }
 		}
+		/// <summary>Gets if the style group has any styles.</summary>
 		public bool HasStyles {
 			get { return Styles.Any(); }
 		}
 
+		/// <summary>Constructs the style group collection.</summary>
 		public StyleGroupCollection(string group, StyleSprite preview) {
-			this.Group		= group;
-			this.Styles		= new HashSet<string>();
-			this.Preview	= preview;
+			this.Group			= group;
+			this.Styles			= new HashSet<string>();
+			this.DefaultStyle	= "";
+			this.Preview		= preview;
 		}
 	}
 
@@ -762,6 +772,8 @@ namespace ZeldaOracle.Common.Content {
 		public static void RegisterStyle(string styleGroup, string style) {
 			StyleGroupCollection collection;
 			if (registeredStyles.TryGetValue(styleGroup, out collection)) {
+				if (string.IsNullOrEmpty(collection.DefaultStyle))
+					collection.DefaultStyle = style;
 				if (!collection.Styles.Contains(style))
 					collection.Styles.Add(style);
 			}

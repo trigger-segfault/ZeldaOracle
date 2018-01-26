@@ -68,7 +68,7 @@ namespace ZeldaEditor.WinForms {
 			dispatcherTimer = new DispatcherTimer(
 				TimeSpan.FromMilliseconds(15),
 				DispatcherPriority.Render,
-				delegate { Invalidate(); },
+				delegate { TimerUpdate(); },
 				System.Windows.Application.Current.Dispatcher);
 		}
 
@@ -166,7 +166,7 @@ namespace ZeldaEditor.WinForms {
 				columns = Math.Max(1, (ClientSize.Width - 1) / (GameSettings.TILE_SIZE + 1));
 				if (filteredTileData != null)
 					size.Y = 1 + ((filteredTileData.Count + columns - 1) / columns) * (GameSettings.TILE_SIZE + 1);
-				size.X = 1 + columns * (GameSettings.TILE_SIZE + 1);
+				size.X = ClientSize.Width;
 			}
 			else {
 				size = Tileset.Dimensions * (GameSettings.TILE_SIZE + 1) + Point2I.One;
@@ -317,6 +317,8 @@ namespace ZeldaEditor.WinForms {
 
 			if (selectionPoint != -Point2I.One) {
 				Point2I selectedSize = SelectedTileData.Size;
+				if (Tileset == null || Tileset.UsePreviewSprites)
+					selectedSize = Point2I.One;
 				Rectangle2I selectRect = new Rectangle2I(
 					selectionPoint * (GameSettings.TILE_SIZE + 1),
 					selectedSize * GameSettings.TILE_SIZE + 2);

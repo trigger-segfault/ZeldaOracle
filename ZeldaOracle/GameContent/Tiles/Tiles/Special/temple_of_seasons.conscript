@@ -1,0 +1,11 @@
+﻿
+
+TILE "temple_of_seasons_subrosia_back"; SAMESPRITE; PREVIEW "preview_temple_of_seasons"; SOLID block; END;
+TILE "temple_of_seasons_subrosia_front"; SAMESPRITE; PREVIEW "preview_temple_of_seasons"; SOLID block; END;
+TILE "temple_of_seasons_overworld_back"; SAMESPRITE; PREVIEW "preview_temple_of_seasons"; SOLID block; END;
+TILE "temple_of_seasons_overworld_front"; SAMESPRITE; PREVIEW "preview_temple_of_seasons"; SOLID block; END;
+
+TILE "temple_roof_spring"; SAMESPRITE; PREVIEW "preview_temple_roof_spring"; SOLID block; END;
+TILE "temple_roof_summer"; SAMESPRITE; PREVIEW "preview_temple_roof_summer"; SOLID block; END;
+TILE "temple_roof_autumn"; SAMESPRITE; PREVIEW "preview_temple_roof_autumn"; SOLID block; END;
+TILE "temple_roof_winter"; SAMESPRITE; PREVIEW "preview_temple_roof_winter"; SOLID block; END;

@@ -8,6 +8,8 @@ using ConscriptDesigner.Util;
 
 namespace ConscriptDesigner.Control {
 	public static class DesignerImages {
+		public static readonly BitmapSource Merge			= LoadIcon("Merge");
+		public static readonly BitmapSource Overwrite		= LoadIcon("Overwrite");
 		public static readonly BitmapSource FolderOpen		= LoadIcon("FolderOpen");
 		public static readonly BitmapSource FolderClosed	= LoadIcon("FolderClosed");
 		public static readonly BitmapSource FolderAdd		= LoadIcon("FolderClosed");

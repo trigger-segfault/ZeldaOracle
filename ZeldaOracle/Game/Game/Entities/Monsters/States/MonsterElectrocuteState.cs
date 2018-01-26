@@ -57,17 +57,20 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 			// There are 3 screen flashes.
 			if (timer >= 5) {
 				int flashIndex = ((timer - 5) / 8);
-				
+
 				if (flashIndex % 2 == 0 && flashIndex <= 4) {
 					GameData.PaletteShader.TilePalette = GameData.PAL_TILES_ELECTROCUTED;
+					GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_ELECTROCUTED;
 					//if (GRandom.NextBool()) {
-						monster.RoomControl.ViewControl.ShakeOffset = new Vector2F(
+					monster.RoomControl.ViewControl.ShakeOffset = new Vector2F(
 							(float) GRandom.NextInt(-2, 2),
 							(float) GRandom.NextInt(-2, 2));
 					//}
 				}
-				else
+				else {
 					GameData.PaletteShader.TilePalette = monster.RoomControl.Zone.Palette;
+					GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
+				}
 			}
 
 			if (timer == freezePlayerDuration) {
