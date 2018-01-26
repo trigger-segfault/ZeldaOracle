@@ -147,6 +147,8 @@ namespace ZeldaOracle.Game {
 		public const int				MONSTER_ZOL_GREEN_JUMP_COUNT		= 3;	// number of jumps before burrowing
 		public const int				MONSTER_ZOL_GREEN_UNBURROW_DELAY	= 50;	// delay after burrowing before unburrowing
 		public const int				MONSTER_GEL_ATTACH_TIME				= 120;
+		public const float				MONSTER_KEESE_ACCELERATION			= 0.05f;
+		public const float				MONSTER_KEESE_DECELERATION			= 0.015f;
 
 		// Tiles
 		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.

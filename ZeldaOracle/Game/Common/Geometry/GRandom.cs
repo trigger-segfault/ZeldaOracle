@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-
-using Microsoft.Xna.Framework;
 
 namespace ZeldaOracle.Common.Geometry {
+
 	/// <summary>A static class for advanced random number generation.</summary>
 	public static class GRandom {
 		
@@ -213,5 +211,14 @@ namespace ZeldaOracle.Common.Geometry {
 			return bounds.Point + new Point2I(random.Next(bounds.Size.X), random.Next(bounds.Size.Y));
 		}
 
+		// Containers -----------------------------------------------------------------
+
+		/// <summary>Choose a random element from a list.</summary>
+		public static T Choose<T>(List<T> list) {
+			if (list.Count == 0)
+				throw new IndexOutOfRangeException();
+			return list[NextInt(list.Count)];
+		}
+
 	}
-} // End namespace
+}

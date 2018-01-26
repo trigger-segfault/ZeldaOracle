@@ -29,7 +29,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public enum AimType {
 			Forward,				// Aim in the current forward direction.
 			FacePlayer,				// Face toward the player and shoot in that direction.
-			//FaceRandom,				// Face toward a random direction to shoot in.
+			FaceRandom,				// Face toward a random direction to shoot in.
 			//SeekPlayer,				// Shoot toward the player.
 			//SeekPlayerByDirection,	// Shoot toward the player in the nearest direction.
 			//SeekPlayerByAngle,		// Shoot toward the player in the nearest angle.
@@ -42,7 +42,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			ChargeForDuration,		// Charge for a certain amount of time.
 		}
 		
-		// Movement.
+		// Movement
 		protected float		moveSpeed;
 		protected bool		changeDirectionsOnCollide;
 		protected RangeI	stopTime;
@@ -51,25 +51,25 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		protected int		facePlayerOdds;
 		protected int		numMoveAngles;
 
-		// Charging.
+		// Charging
 		protected ChargeType chargeType;
 		protected float		chargeSpeed;
 		protected float		chargeAcceleration;
 		protected int		chargeMinAlignment;
 		protected RangeI	chargeDuration;
 
-		// Chasing.
+		// Chasing
 		protected float		chaseSpeed;
 		protected int		chasePauseDuration;
 
-		// Graphics.
+		// Graphics
 		// Animation: horizontal? vertical? scale with speed? only play when moving?
 		protected Animation	animationMove;
 		protected bool		scaleAnimationSpeed;
 		protected bool		playAnimationOnlyWhenMoving;
 		protected bool		isAnimationHorizontal;
 
-		// Projectile.
+		// Projectile
 		protected ShootType	shootType;
 		protected AimType	aimType;
 		protected Type		projectileType;
@@ -78,7 +78,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		protected int		shootPauseDuration;
 		protected Sound		shootSound;
 				
-		// States.
+		// States
 		protected bool		isPaused;
 		protected int		pauseTimer;
 		protected bool		isChasingPlayer;
@@ -87,6 +87,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		protected float		speed;
 		protected bool		isCharging;
 		protected bool		isShooting;
+		protected int		moveAngle;
 		
 		// Movement states:
 		//  - moving
@@ -131,43 +132,50 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			shootPauseDuration	= 30;
 			shootSound			= null;
 		}
+
+
+		//-----------------------------------------------------------------------------
+		// Behavior
+		//-----------------------------------------------------------------------------
 		
 		protected void ChangeDirection() {
 			
+			// Face the player every so often
 			if (facePlayerOdds > 0 && GRandom.NextInt(facePlayerOdds) == 0) {
 				FacePlayer();
 				return;
 			}
 
-			direction = (direction + 1 + GRandom.NextInt(numMoveAngles - 1)) % numMoveAngles;
-
-			List<int> possibleDirections = new List<int>();
-
+			// Create a list of obstruction-free move angles
+			List<int> possibleAngles = new List<int>();
 			for (int i = 0; i < numMoveAngles; i++) {
-				Vector2F v = Orientations.ToVector(i, orientationStyle);
-
-				if (!Physics.IsPlaceMeetingSolid(position +
-					(v * moveSpeed), Physics.CollisionBox))
+				Vector2F v = GetMovementVelocity(i, moveSpeed);
+				if (!Physics.IsPlaceMeetingSolid(position + v) &&
+					!Physics.IsPlaceMeetingRoomEdge(position + v))
 				{
-					possibleDirections.Add(i);
+					possibleAngles.Add(i);
 				}
 			}
 
-			if (possibleDirections.Count == 0)
-				direction = GRandom.NextInt(numMoveAngles);
-			else
-				direction = possibleDirections[GRandom.NextInt(possibleDirections.Count)];
+			if (possibleAngles.Count == 0) {
+				// No collision-free angles, so face a new random angle
+				MoveAngle = (moveAngle + 1 +
+					GRandom.NextInt(numMoveAngles - 1)) % numMoveAngles;
+			}
+			else {
+				MoveAngle = GRandom.Choose(possibleAngles);
+			}
 		}
 		
 		protected void FaceRandomDirection() {
-			direction = GRandom.NextInt(numMoveAngles);
+			MoveAngle = GRandom.NextInt(numMoveAngles);
 		}
 
 		protected void StartMoving() {
-			isMoving = true;
-			speed = moveSpeed;
-			moveTimer = GRandom.NextInt(moveTime.Min, moveTime.Max);
-			Physics.Velocity = Orientations.ToVector(direction, orientationStyle) * speed;
+			isMoving	= true;
+			speed		= moveSpeed;
+			moveTimer	= GRandom.NextInt(moveTime.Min, moveTime.Max);
+			Physics.Velocity = GetMovementVelocity(moveAngle, speed);
 
 			ChangeDirection();
 
@@ -180,8 +188,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isMoving = false;
 			Physics.Velocity = Vector2F.Zero;
 			
-			// Shoot.
-			if (shootType == ShootType.OnStop && projectileType != null && GRandom.NextInt(projectileShootOdds) == 0) {
+			// Shoot
+			if (shootType == ShootType.OnStop && projectileType != null &&
+				GRandom.NextInt(projectileShootOdds) == 0)
+			{
 				StartShooting();
 			}
 			else if (moveTimer == 0) {
@@ -198,8 +208,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			
 			if (aimType == AimType.FacePlayer)
 				FacePlayer();
-			//else if (aimType == AimType.FaceRandom)
-				//FaceRandomDirection();
+			else if (aimType == AimType.FaceRandom)
+				FaceRandomDirection();
 		}
 
 		protected void Shoot() {
@@ -245,7 +255,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		protected void UpdateChargingState() {
 			speed = Math.Min(chargeSpeed, speed + chargeAcceleration);
 			
-			Physics.Velocity = Directions.ToVector(direction) * speed;
+			Physics.Velocity = GetMovementVelocity(moveAngle, speed);
 
 			if (chargeType == ChargeType.ChargeForDuration) {
 				if (moveTimer <= 0) {
@@ -264,7 +274,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		protected void UpdateMovingState() {
-			Physics.Velocity = Orientations.ToVector(direction, orientationStyle) * speed;
+			Physics.Velocity = GetMovementVelocity(moveAngle, speed);
 			
 			// Stop moving after a duration.
 			if (moveTimer <= 0) {
@@ -278,11 +288,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				ChangeDirection();
 			}
 			
-			// Shoot.
-			if (shootType == ShootType.WhileMoving && projectileType != null && GRandom.NextInt(projectileShootOdds) == 0) {
+			// Shoot while moving
+			if (shootType == ShootType.WhileMoving && projectileType != null &&
+				GRandom.NextInt(projectileShootOdds) == 0)
+			{
 				isMoving = false;
 				StartShooting();
-				//Shoot();
 			}
 
 			moveTimer--;
@@ -300,6 +311,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			moveTimer--;
 		}
 
+		protected Vector2F GetMovementVelocity(int moveAngle, float speed) {
+			float radians = ((float) moveAngle / (float) numMoveAngles) * GMath.TwoPi;
+			return new Vector2F(
+				(float) Math.Cos(radians) * speed,
+				(float) -Math.Sin(radians) * speed);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Overridden Methods
@@ -315,6 +333,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					Graphics.SubStripIndex = direction;
 				}
 			}
+		}
+
+		protected override void FacePlayer() {
+			Vector2F lookVector = RoomControl.Player.Center - Center;
+			MoveAngle = Orientations.NearestFromVector(lookVector, numMoveAngles);
 		}
 
 		public override void Initialize() {
@@ -362,8 +385,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				else {
 					// Check for charging.
 					if (chargeType != ChargeType.None) {
-						int directionToPlayer = Directions.NearestFromVector(RoomControl.Player.Center - Center);
-						if (Entity.AreEntitiesAligned(this, RoomControl.Player, directionToPlayer, chargeMinAlignment)) {
+						int directionToPlayer = Directions.NearestFromVector(
+							RoomControl.Player.Center - Center);
+						if (Entity.AreEntitiesAligned(this, RoomControl.Player,
+							directionToPlayer, chargeMinAlignment))
+						{
 							StartCharging(directionToPlayer);
 							return;
 						}
@@ -379,5 +405,25 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			}
 		}
 
+
+		
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public int MoveAngle {
+			get { return moveAngle; }
+			set {
+				if (value != moveAngle) {
+					moveAngle = value;
+					
+					// Update direction/angle
+					if (orientationStyle == OrientationStyle.Direction)
+						Direction = (moveAngle * Directions.Count) / numMoveAngles;
+					else 
+						Angle = (moveAngle * Angles.AngleCount) / numMoveAngles;
+				}
+			}
+		}
 	}
 }

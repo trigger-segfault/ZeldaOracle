@@ -37,6 +37,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			
 			// Movement
 			moveSpeed		= 1.0f;
+			isFlying		= true;
 			Physics.Flags |=
 				PhysicsFlags.ReboundSolid |
 				PhysicsFlags.ReboundRoomEdge;
@@ -67,10 +68,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
-
-		public override void OnFallInHole() {
-			// Do not fall in holes
-		}
 
 		public override void Initialize() {
 			base.Initialize();

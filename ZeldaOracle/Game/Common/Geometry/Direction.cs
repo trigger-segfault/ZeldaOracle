@@ -93,6 +93,17 @@ namespace ZeldaOracle.Common.Geometry {
 				return Angles.ToVector(orientation);
 			return Vector2F.Zero;
 		}
+		
+
+		public static int RoundFromRadians(float radians, int numAngles) {
+			int angle = (int) GMath.Round((radians * numAngles) / GMath.TwoPi);
+			return GMath.Wrap(angle, numAngles);
+		}
+
+		public static int NearestFromVector(Vector2F vector, int numAngles) {
+			float radians = (float) Math.Atan2((double) -vector.Y, (double) vector.X);
+			return RoundFromRadians(radians, numAngles);
+		}
 	}
 
 

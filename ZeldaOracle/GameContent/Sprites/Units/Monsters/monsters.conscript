@@ -268,7 +268,14 @@ ANIMATION "monster_anti_fairy"; SUBSTRIP repeat;
 ANIMATION "monster_spark"; SUBSTRIP repeat;
 	ADD strip, 4, 2, (12, 14); END;
 ANIMATION "monster_keese"; SUBSTRIP repeat;
-	ADD strip, 8, 2, (0, 12); END;
+	ADD strip, 4, 2, (0, 12); END;
+ANIMATION "monster_keese_stop"; SUBSTRIP repeat;
+	ADD frame, 1, (1, 12); END;
+ANIMATION "monster_keese_flap"; SUBSTRIP clamp;
+	ADD frame, 16, (1, 12);
+	ADD strip, 4, 2, (0, 12);
+	ADD strip, 4, 2, (0, 12);
+	ADD frame, 1, (1, 12); END;
 
 
 

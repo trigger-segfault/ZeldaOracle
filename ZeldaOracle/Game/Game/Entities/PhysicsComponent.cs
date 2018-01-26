@@ -243,6 +243,12 @@ namespace ZeldaOracle.Game.Entities {
 		
 		// Return true if the entity would collide with a solid object using the
 		// given collision box if it were placed at the given position.
+		public bool IsPlaceMeetingSolid(Vector2F position) {
+			return IsPlaceMeetingSolid(position, collisionBox);
+		}
+		
+		// Return true if the entity would collide with a solid object using the
+		// given collision box if it were placed at the given position.
 		public bool IsPlaceMeetingSolid(Vector2F position, Rectangle2F collisionBox) {
 			Room room = entity.RoomControl.Room;
 			
@@ -272,6 +278,15 @@ namespace ZeldaOracle.Game.Entities {
 			}
 
 			return false;
+		}
+		
+		
+		/// <summary>Return true if the entity would collide with the room edge if it
+		/// were placed at the given position.</summary>
+		public bool IsPlaceMeetingRoomEdge(Vector2F position) {
+			Room room = entity.RoomControl.Room;
+			Rectangle2F bounds = entity.RoomControl.RoomBounds;
+			return !bounds.Contains(collisionBox + position);
 		}
 
 		// Return true if the entity would collide with a tile if it were at the given position.

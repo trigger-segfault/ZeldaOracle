@@ -53,6 +53,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		protected bool isBurnable;
 		protected bool isGaleable;
 		protected bool isStunnable;
+		protected bool isFlying;
 
 		// States.
 		/*private MonsterBurnState		stateBurn;
@@ -71,11 +72,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// - Top: 4 overlap
 			// - Bottom: 3 overlap?
 			// - Sides: 3 overlap	
-
+			
 			color = MonsterColor.Red;
 			properties = new Properties();
 
-			// Physics.
+			// Physics
 			Physics.CollisionBox		= new Rectangle2I(-5, -9, 10, 10);
 			Physics.SoftCollisionBox	= new Rectangle2I(-6, -11, 12, 11);
 			Physics.CollideWithWorld	= true;
@@ -84,13 +85,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Physics.HasGravity			= true;
 			Physics.IsDestroyedInHoles	= true;
 
-			// Graphics.
+			// Graphics
 			Graphics.DepthLayer			= DepthLayer.Monsters;
 			Graphics.DepthLayerInAir	= DepthLayer.InAirMonsters;
 			Graphics.DrawOffset			= new Point2I(-8, -14);
 			centerOffset				= new Point2I(0, -6);
 
-			// Monster & unit settings.
+			// Monster & unit settings
 			knockbackSpeed			= GameSettings.MONSTER_KNOCKBACK_SPEED;
 			hurtKnockbackDuration	= GameSettings.MONSTER_HURT_KNOCKBACK_DURATION;
 			bumpKnockbackDuration	= GameSettings.MONSTER_BUMP_KNOCKBACK_DURATION;
@@ -101,8 +102,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isBurnable				= true;
 			isStunnable				= true;
 			isKnockbackable			= true;
-
-			softKill = false;
+			isFlying				= false;
+			softKill				= false;
 			
 			// Setup default interactions.
 			interactionHandlers = new InteractionHandler[(int) InteractionType.Count];
@@ -280,7 +281,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			}
 		}
 
-		protected void FacePlayer() {
+		protected virtual void FacePlayer() {
 			Vector2F lookVector = RoomControl.Player.Center - Center;
 			direction = Directions.NearestFromVector(lookVector);
 		}
@@ -325,9 +326,19 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public override void OnFallInHole() {
 			// Begin the fall-in-hole state (slipping into a hole).
-			if (state is MonsterNormalState) {
+			if (!isFlying && state is MonsterNormalState) {
 				BeginState(new MonsterFallInHoleState());
 			}
+		}
+
+		public override void OnFallInWater() {
+			if (!isFlying)
+				base.OnFallInWater();
+		}
+
+		public override void OnFallInLava() {
+			if (!isFlying)
+				base.OnFallInLava();
 		}
 
 		public override void UpdateGraphics() {
