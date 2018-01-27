@@ -60,6 +60,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Kill);
 			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Electrocute);
 			SetReaction(InteractionType.MysterySeed,	SenderReactions.Intercept);
+			SetReaction(InteractionType.BombExplosion,	Reactions.Kill);
 			// Player
 			SetReaction(InteractionType.ButtonAction,	SayCatchPhrase);
 		}

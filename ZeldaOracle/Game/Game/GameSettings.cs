@@ -172,6 +172,11 @@ namespace ZeldaOracle.Game {
 		public const float				MONSTER_WATER_TEKTIKE_ACCELERATION				= 0.0375f;
 		public const float				MONSTER_WATER_TEKTIKE_DECELERATION				= 0.075f;
 		public const int				MONSTER_WATER_TEKTIKE_DECELERATION_TIME			= 20;
+		public const int				MONSTER_RIVER_ZORA_SUBMERGED_DURATION			= 29;
+		public const int				MONSTER_RIVER_ZORA_RESURFACE_DURATION			= 48;
+		public const int				MONSTER_RIVER_ZORA_SURFACED_DURATION			= 88;
+		public const int				MONSTER_RIVER_ZORA_SHOOT_DELAY					= 9;
+		public const int				MONSTER_RIVER_ZORA_SUBMERGE_DELAY				= 9;
 
 		// Tiles
 		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.

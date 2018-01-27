@@ -47,6 +47,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.SwordBeam,		SenderReactions.Intercept, Reactions.Kill);
 			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Electrocute);
 			SetReaction(InteractionType.MysterySeed,	SenderReactions.Intercept, TransformIntoCukeman);
+			SetReaction(InteractionType.BombExplosion,	Reactions.Kill);
 		}
 
 
