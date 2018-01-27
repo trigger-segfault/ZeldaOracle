@@ -4,14 +4,14 @@ using ZeldaOracle.Common.Audio;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 
-	public enum CrushState {
-		Idle,	// Waiting for player to come near
-		Crush,	// Accelearting down to the ground
-		Hit,	// Hit the ground, screen is shaking
-		Raise,	// Moving up back to idle positio.
-	}
-
 	public class MonsterThwomp : Monster {
+
+		private enum CrushState {
+			Idle,	// Waiting for player to come near
+			Crush,	// Accelearting down to the ground
+			Hit,	// Hit the ground, screen is shaking
+			Raise,	// Moving up back to idle positio.
+		}
 
 		private CrushState crushState;
 		private Vector2F hoverPosition;
@@ -19,9 +19,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		int hitWaitTimer;
 		int eyeAngle;
 
+
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
+
 		public MonsterThwomp() {
 			// General.
 			ContactDamage	= 4;
+			Color			= MonsterColor.DarkBlue;
 			isDamageable	= false;
 			isBurnable		= false;
 			isStunnable		= false;
@@ -53,6 +59,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.Shovel,			Reactions.ClingEffect);
 		}
 
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
+		
 		public override void Initialize() {
 			base.Initialize();
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_THWOMP);

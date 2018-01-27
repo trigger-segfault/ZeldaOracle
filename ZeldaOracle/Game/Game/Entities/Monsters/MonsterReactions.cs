@@ -59,7 +59,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		/// <summary>Hit by an ember seed.
 		/// <para/>Default = SenderReactions.Intercept</summary>
-		EmberSeed = 0,
+		EmberSeed,
 		/// <summary>Hit by a scent seed.
 		/// <para/>Default = SenderReactions.Intercept, Reactions.Damage</summary>
 		ScentSeed,

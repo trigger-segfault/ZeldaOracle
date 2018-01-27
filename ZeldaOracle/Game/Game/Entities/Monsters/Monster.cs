@@ -25,10 +25,13 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 	}
 
 	public enum MonsterColor {
-		Red		= 0,
-		Blue	= 1,
-		Green	= 2,
-		Orange	= 3,
+		Red			= 0,
+		Blue		= 1,
+		Green		= 2,
+		Orange		= 3,
+		Gold		= 4,
+		DarkRed		= 5,
+		DarkBlue	= 6,
 	}
 
 	// MonsterState:
@@ -114,7 +117,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		protected void SetDefaultReactions() {
-			// Weapons
+			// Weapon interations
 			SetReaction(InteractionType.Sword,			SenderReactions.Intercept, Reactions.DamageByLevel(1, 2, 3));
 			SetReaction(InteractionType.SwordSpin,		Reactions.Damage2);
 			SetReaction(InteractionType.BiggoronSword,	Reactions.Damage3);
@@ -122,26 +125,26 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.Shovel,			Reactions.Bump);
 			SetReaction(InteractionType.Parry,			Reactions.Parry);
 			SetReaction(InteractionType.Pickup,			Reactions.None);
-			// Seeds
+			// Seed interations
 			SetReaction(InteractionType.EmberSeed,		SenderReactions.Intercept);
 			SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept,	Reactions.Damage);
 			SetReaction(InteractionType.PegasusSeed,	SenderReactions.Intercept,	Reactions.Stun);
 			SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept);
 			SetReaction(InteractionType.MysterySeed,	Reactions.MysterySeed);
-			// Projectiles
+			// Projectile interations
 			SetReaction(InteractionType.Arrow,			SenderReactions.Destroy,	Reactions.Damage);
 			SetReaction(InteractionType.SwordBeam,		SenderReactions.Destroy,	Reactions.Damage);
 			SetReaction(InteractionType.RodFire,		SenderReactions.Intercept);
 			SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept,	Reactions.Stun);
 			SetReaction(InteractionType.SwitchHook,		Reactions.SwitchHook);
-			// Environment
+			// Environment interations
 			SetReaction(InteractionType.Fire,			Reactions.Burn);
 			SetReaction(InteractionType.Gale,			Reactions.Gale);
 			SetReaction(InteractionType.BombExplosion,	Reactions.Damage);
 			SetReaction(InteractionType.ThrownObject,	Reactions.Damage);
 			SetReaction(InteractionType.MineCart,		Reactions.SoftKill);
 			SetReaction(InteractionType.Block,			Reactions.Damage);
-			// Player
+			// Player interations
 			SetReaction(InteractionType.ButtonAction,	Reactions.None);
 			SetReaction(InteractionType.PlayerContact,	OnTouchPlayer);
 		}
@@ -325,6 +328,18 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					Graphics.ImageVariant = GameData.VARIANT_ORANGE;
 					Graphics.ColorDefinitions.SetAll("orange");
 					break;
+				case MonsterColor.DarkBlue:
+					Graphics.ImageVariant = GameData.VARIANT_BLUE;
+					Graphics.ColorDefinitions.SetAll("shaded_blue");
+					break;
+				case MonsterColor.DarkRed:
+					Graphics.ImageVariant = GameData.VARIANT_RED;
+					Graphics.ColorDefinitions.SetAll("shaded_red");
+					break;
+				case MonsterColor.Gold:
+					Graphics.ImageVariant = GameData.VARIANT_ORANGE;
+					Graphics.ColorDefinitions.SetAll("gold");
+					break;
 			}
 		}
 
@@ -358,6 +373,14 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				return position;
 			return GRandom.Choose(locations);
 		}
+
+		public virtual void CreateDeathEffect() {
+			Effect explosion = new Effect(
+				GameData.ANIM_EFFECT_MONSTER_EXPLOSION,
+				DepthLayer.EffectMonsterExplosion);
+			AudioSystem.PlaySound(GameData.SOUND_MONSTER_DIE);
+			RoomControl.SpawnEntity(explosion, Center);
+		}
 		
 		
 		//-----------------------------------------------------------------------------
@@ -379,11 +402,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		public override void Die() {
-			Effect explosion = new Effect(
-				GameData.ANIM_EFFECT_MONSTER_EXPLOSION,
-				DepthLayer.EffectMonsterExplosion);
-			AudioSystem.PlaySound(GameData.SOUND_MONSTER_DIE);
-			RoomControl.SpawnEntity(explosion, Center);
+			CreateDeathEffect();
 			if (!softKill)
 				Properties.Set("dead", true);
 			base.Die();

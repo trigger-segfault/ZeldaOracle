@@ -5,8 +5,10 @@ using ZeldaOracle.Game.Entities.Monsters.States;
 namespace ZeldaOracle.Game.Entities.Monsters {
 
 	public class MonsterBuzzBlob : BasicMonster {
-
-		private int electrocuteDelayTimer;
+		
+		//-----------------------------------------------------------------------------
+		// Constructor
+		//-----------------------------------------------------------------------------
 
 		public MonsterBuzzBlob() {
 			// General.
@@ -47,10 +49,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			SetReaction(InteractionType.MysterySeed,	SenderReactions.Intercept, TransformIntoCukeman);
 		}
 
-		public override void Initialize() {
-			base.Initialize();
-			electrocuteDelayTimer = 0;
-		}
+
+		//-----------------------------------------------------------------------------
+		// Overridden Methods
+		//-----------------------------------------------------------------------------
 
 		private void TransformIntoCukeman(Entity sender, EventArgs args) {
 			MonsterCukeman cukeman = new MonsterCukeman() {
@@ -67,16 +69,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public override void OnElectrocuteComplete() {
 			StartMoving();
-		}
-
-		public override void UpdateAI() {
-			base.UpdateAI();
-
-			//if (!(CurrentState is MonsterElectrocuteState) &&
-			//	electrocuteDelayTimer > 0)
-			//{
-			//	electrocuteDelayTimer--;
-			//}
 		}
 	}
 }

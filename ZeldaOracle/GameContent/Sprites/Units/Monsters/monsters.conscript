@@ -18,7 +18,7 @@ SOURCE "monsters";
 MAPPEDCOLORS	"entities_default", ("red", "green", "blue", "orange", "gold", "shaded_red", "shaded_blue", "hurt");
 
 SPRITESET "set_monster" (16, 16);
-	MULTIPLE COLOR "", ("red", "green", "blue", "orange", "shaded_red", "shaded_blue", "inverse_red", "inverse_blue", "hurt"), (0, 0); END;
+	MULTIPLE COLOR "", ("red", "green", "blue", "orange", "gold", "shaded_red", "shaded_blue", "inverse_red", "inverse_blue", "hurt"), (0, 0); END;
 END;
 
 PALETTEDICTIONARY none;
@@ -268,7 +268,7 @@ ANIMATION "monster_ghini"; SUBSTRIP repeat;
 ANIMATION "monster_anti_fairy"; SUBSTRIP repeat;
 	ADD strip, 6, 2, (14, 14); END;
 ANIMATION "monster_spark"; SUBSTRIP repeat;
-	ADD strip, 4, 2, (12, 14); END;
+	ADD strip, 6, 2, (12, 14); END;
 ANIMATION "monster_keese"; SUBSTRIP repeat;
 	ADD strip, 4, 2, (0, 12); END;
 ANIMATION "monster_keese_stop"; SUBSTRIP repeat;
@@ -278,7 +278,6 @@ ANIMATION "monster_keese_flap"; SUBSTRIP clamp;
 	ADD strip, 4, 2, (0, 12);
 	ADD strip, 4, 2, (0, 12);
 	ADD frame, 1, (1, 12); END;
-
 
 
 ANIMATION "monster_sword_hold";
