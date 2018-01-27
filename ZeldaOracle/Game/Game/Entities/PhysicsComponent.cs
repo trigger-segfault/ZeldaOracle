@@ -133,7 +133,7 @@ namespace ZeldaOracle.Game.Entities {
 		// Custom Collision Setup
 		//-----------------------------------------------------------------------------
 
-		public Rectangle2F GetCollisionBox(CollisionBoxType type) {
+		public virtual Rectangle2F GetCollisionBox(CollisionBoxType type) {
 			if (type == CollisionBoxType.Hard)
 				return collisionBox;
 			return softCollisionBox;
@@ -183,9 +183,10 @@ namespace ZeldaOracle.Game.Entities {
 			Rectangle2I area = entity.RoomControl.GetTileAreaFromRect(myBox, 1);
 			
 			// Iterate the tiles in the area.
-			foreach (Tile t in entity.RoomControl.GetTilesInArea(area)) {
+			foreach (Tile t in entity.RoomControl.GetTopTilesInArea(area)) {
 				if (t.CollisionModel != null &&
-					CollisionModel.Intersecting(t.CollisionModel, t.Position, collisionBox, position))
+					CollisionModel.Intersecting(t.CollisionModel, t.Position,
+					GetCollisionBox(collisionBoxType), position))
 				{
 					yield return t;
 				}
@@ -654,16 +655,11 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsInHole {
-			get { return IsOnGround &&
-				topTile != null && topTile.EnvironmentType == TileEnvironmentType.Hole ||
-				topTile != null && topTile.EnvironmentType == TileEnvironmentType.Whirlpool; }
+			get { return IsOnGround && topTile != null && topTile.IsHole; }
 		}
 
 		public bool IsInWater {
-			get { return IsOnGround && (
-				topTile != null && topTile.EnvironmentType == TileEnvironmentType.Water ||
-				topTile != null && topTile.EnvironmentType == TileEnvironmentType.Ocean ||
-				topTile != null && topTile.EnvironmentType == TileEnvironmentType.DeepWater); }
+			get { return IsOnGround && topTile != null && topTile.IsWater; }
 		}
 
 		public bool IsInOcean {
@@ -671,7 +667,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsInLava {
-			get { return IsOnGround && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Lava; }
+			get { return IsOnGround && topTile != null && topTile.IsLava; }
 		}
 
 		public bool IsOnIce {

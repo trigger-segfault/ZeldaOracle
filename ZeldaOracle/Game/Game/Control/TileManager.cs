@@ -130,6 +130,26 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 		}
+		
+		// Return an enumerable list of tiles contained within the given tile grid area.
+		public IEnumerable<Tile> GetTopTilesInArea(Rectangle2I area) {
+			Rectangle2I clippedArea = Rectangle2I.Intersect(area,
+				new Rectangle2I(Point2I.Zero, gridDimensions));
+			for (int y = clippedArea.Top; y < clippedArea.Bottom; y++) {
+				for (int x = clippedArea.Left; x < clippedArea.Right; x++) {
+					Tile tile = GetTopTile(x, y);
+					if (tile != null) {
+						// If this tile is larger than 1x1, then make sure
+						// we don't return it twice
+						Point2I loc = tile.TileGridArea.Point;
+						if (!clippedArea.Contains(loc))
+							loc = Point2I.Clamp(loc, clippedArea);
+						if (x == loc.X && y == loc.Y)
+							yield return tile;
+					}
+				}
+			}
+		}
 
 		// Return an enumerable list of all tiles.
 		public IEnumerable<Tile> GetTiles(TileLayerOrder layerOrder = TileLayerOrder.LowestToHighest) {

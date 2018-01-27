@@ -22,12 +22,12 @@ namespace ZeldaOracle.Game.Tiles {
 		Grass,
 		Hole,
 		Water,
-		DeepWater,	// (+water)
-		Ocean,		// (+water)
+		DeepWater,	// (+Water)
+		Ocean,		// (+Water)
 		Waterfall,
 		Lava,
 		Lavafall,
-		Whirlpool,	// (+water +hole)
+		Whirlpool,	// (+Water +Hole)
 	}
 
 	public enum TileResetCondition {

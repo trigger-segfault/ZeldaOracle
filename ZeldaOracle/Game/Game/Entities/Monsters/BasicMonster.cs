@@ -1,20 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
-using ZeldaOracle.Common.Input;
 using ZeldaOracle.Common.Scripting;
-using ZeldaOracle.Game.Entities.Players;
-using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Monsters.Tools;
 using ZeldaOracle.Game.Entities.Projectiles;
-using ZeldaOracle.Game.Items;
-using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Graphics.Sprites;
-using ZeldaOracle.Game.Entities.Units;
+using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 
@@ -50,6 +42,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		protected bool		movesInAir;
 		protected int		facePlayerOdds;
 		protected int		numMoveAngles;
+		protected bool		avoidHazardTiles;
 
 		// Charging
 		protected ChargeType chargeType;
@@ -111,6 +104,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			moveSpeed					= 0.5f;
 			changeDirectionsOnCollide	= true;
+			avoidHazardTiles			= true;
 			syncAnimationWithDirection	= true;
 			movesInAir					= false;
 			facePlayerOdds				= 4;
@@ -137,22 +131,40 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		//-----------------------------------------------------------------------------
 		// Behavior
 		//-----------------------------------------------------------------------------
-		
+	
+		protected virtual bool CanMoveInAngle(int moveAngle) {
+			Vector2F v = GetMovementVelocity(moveAngle, moveSpeed);
+			Vector2F testPosition = position + (v * 1.1f);
+			if (Physics.IsPlaceMeetingSolid(testPosition) ||
+				Physics.IsPlaceMeetingRoomEdge(testPosition))
+			{
+				return false;
+			}
+			
+			if (Physics.GetTilesMeeting(testPosition, CollisionBoxType.Hard)
+				.Any(t => t.IsHoleWaterOrLava))
+				return false;
+
+			return true;
+		}
+
 		protected void ChangeDirection() {
 			
 			// Face the player every so often
 			if (facePlayerOdds > 0 && GRandom.NextInt(facePlayerOdds) == 0) {
-				FacePlayer();
-				return;
+				Vector2F lookVector = RoomControl.Player.Center - Center;
+				int facePlayerAngle = Orientations.NearestFromVector(
+					lookVector, numMoveAngles);
+				if (CanMoveInAngle(facePlayerAngle)) {
+					MoveAngle = facePlayerAngle;
+					return;
+				}
 			}
 
 			// Create a list of obstruction-free move angles
 			List<int> possibleAngles = new List<int>();
 			for (int i = 0; i < numMoveAngles; i++) {
-				Vector2F v = GetMovementVelocity(i, moveSpeed);
-				if (!Physics.IsPlaceMeetingSolid(position + v) &&
-					!Physics.IsPlaceMeetingRoomEdge(position + v))
-				{
+				if (CanMoveInAngle(i)) {
 					possibleAngles.Add(i);
 				}
 			}
@@ -175,9 +187,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isMoving	= true;
 			speed		= moveSpeed;
 			moveTimer	= GRandom.NextInt(moveTime.Min, moveTime.Max);
-			Physics.Velocity = GetMovementVelocity(moveAngle, speed);
 
 			ChangeDirection();
+
+			Physics.Velocity = GetMovementVelocity(moveAngle, speed);
 
 			if (!Graphics.IsAnimationPlaying || Graphics.Animation != animationMove)
 				Graphics.PlayAnimation(animationMove);
@@ -199,7 +212,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				return;
 			}
 
-			Graphics.StopAnimation();
+			if (playAnimationOnlyWhenMoving)
+				Graphics.StopAnimation();
 		}
 
 		protected void StartShooting() {
@@ -276,16 +290,30 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		protected void UpdateMovingState() {
 			Physics.Velocity = GetMovementVelocity(moveAngle, speed);
 			
-			// Stop moving after a duration.
+			// Stop moving after a duration
 			if (moveTimer <= 0) {
 				StopMoving();
 				return;
 			}
 
-			// Change direction on collisions.
+			// Change direction on collisions
 			if (changeDirectionsOnCollide && physics.IsColliding)
 			{
 				ChangeDirection();
+				Physics.Velocity = GetMovementVelocity(moveAngle, speed);
+			}
+			else if (avoidHazardTiles)
+			{
+				// Avoid moving into a hazardous tile
+				foreach (Tile tile in Physics.GetTilesMeeting(
+					position + physics.Velocity * 1.1f, CollisionBoxType.Hard))
+				{
+					if (tile.IsHoleWaterOrLava) {
+						ChangeDirection();
+						Physics.Velocity = GetMovementVelocity(moveAngle, speed);
+						break;
+					}
+				}
 			}
 			
 			// Shoot while moving
@@ -344,7 +372,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			base.Initialize();
 
 			Graphics.PlayAnimation(animationMove);
-			Graphics.StopAnimation();
+			if (playAnimationOnlyWhenMoving)
+				Graphics.StopAnimation();
 			
 			isMoving		= false;
 			moveTimer		= GRandom.NextInt(stopTime.Min, stopTime.Max);
@@ -406,7 +435,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 
-		
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------

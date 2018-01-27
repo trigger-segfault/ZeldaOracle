@@ -98,6 +98,11 @@ namespace ZeldaOracle.Game.Control {
 			return tileManager.GetTilesInArea(area);
 		}
 		
+		// Return an enumerable list of top tiles in the given grid based area.
+		public IEnumerable<Tile> GetTopTilesInArea(Rectangle2I area) {
+			return tileManager.GetTopTilesInArea(area);
+		}
+		
 		// Return the tile at the given location (can return null).
 		public Tile GetTile(Point2I location, int layer) {
 			return tileManager.GetTile(location, layer);

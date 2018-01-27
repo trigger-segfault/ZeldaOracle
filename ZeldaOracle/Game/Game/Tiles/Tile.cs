@@ -110,6 +110,7 @@ namespace ZeldaOracle.Game.Tiles {
 			surfaceTile			= null;
 			collisionStyle		= CollisionStyle.Rectangular;
 			graphics			= new TileGraphicsComponent(this);
+
 		}
 
 
@@ -603,6 +604,9 @@ namespace ZeldaOracle.Game.Tiles {
 			tile.breakSound			= data.BreakSound;
 			tile.collisionModel		= data.CollisionModel;
 			tile.size				= data.Size;
+
+			if (tile.collisionModel == null)
+				tile.collisionModel = GameData.MODEL_BLOCK;
 			
 			if (data.SpriteList.Length > 0)
 				tile.graphics.PlayAnimation(data.SpriteList[0]);
@@ -887,7 +891,10 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 		
 		public bool IsWater {
-			get { return EnvironmentType == TileEnvironmentType.Water; }
+			get { return EnvironmentType == TileEnvironmentType.Water ||
+						 EnvironmentType == TileEnvironmentType.Ocean ||
+						 EnvironmentType == TileEnvironmentType.Whirlpool ||
+						 EnvironmentType == TileEnvironmentType.DeepWater; }
 		}
 		
 		public bool IsLava {
