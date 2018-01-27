@@ -114,9 +114,9 @@ NAME "tile_vertical_palace_wall_bottom_entrance_right"			(6, 11);
 NAME "tile_vertical_palace_wall_left_entrance_left"				(4, 12);
 NAME "tile_vertical_palace_wall_right_entrance_right"			(6, 12);
 NAME "tile_vertical_palace_wall_bottom_left_entrance_left"		(4, 13);
-NAME "tile_vertical_palace_wall_bottom_right_entrance_right"	(6, 13);
 NAME "tile_vertical_palace_wall_bottom_entrance_wide_left"		(5, 12);
 NAME "tile_vertical_palace_wall_bottom_entrance_wide_right"		(5, 13);
+NAME "tile_vertical_palace_wall_bottom_right_entrance_right"	(6, 13);
 
 NAME "tile_queen_statue_light"				(7, 12);
 NAME "tile_queen_statue_dark"				(7, 13);

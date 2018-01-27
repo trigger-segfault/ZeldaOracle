@@ -70,18 +70,18 @@ COMPOSITE "tile_floor_tiled_outside_se";
 	ADD "tiled_8x8", (8, 0);
 	ADD "tiled_8x8", (0, 8); ADD "tiled_8x8", (8, 8); END;
 	
-COMPOSITE "tile_floor_tiled_inside_nw";
-	ADD "tile_floor";
-	ADD "tiled_8x8", (0, 0); END;
-COMPOSITE "tile_floor_tiled_inside_ne";
-	ADD "tile_floor";
-	ADD "tiled_8x8", (8, 0); END;
-COMPOSITE "tile_floor_tiled_inside_sw";
-	ADD "tile_floor";
-	ADD "tiled_8x8", (0, 8); END;
 COMPOSITE "tile_floor_tiled_inside_se";
 	ADD "tile_floor";
 	ADD "tiled_8x8", (8, 8); END;
+COMPOSITE "tile_floor_tiled_inside_sw";
+	ADD "tile_floor";
+	ADD "tiled_8x8", (0, 8); END;
+COMPOSITE "tile_floor_tiled_inside_ne";
+	ADD "tile_floor";
+	ADD "tiled_8x8", (8, 0); END;
+COMPOSITE "tile_floor_tiled_inside_nw";
+	ADD "tile_floor";
+	ADD "tiled_8x8", (0, 0); END;
 	
 COMPOSITE "tile_floor_tiled_diagonal_left";
 	ADD "tile_floor";

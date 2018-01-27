@@ -58,3 +58,17 @@ COMPOSITE "tile_temple_roof_autumn";
 	
 COMPOSITE "tile_temple_roof_winter";
 	ADDTILED (13, 3), (3, 3), (16, 16); END;
+	
+NAME "tile_temple_subrosia_column_top_left"					(8, 4);
+NAME "tile_temple_subrosia_column_top_right"				(9, 4);
+NAME "tile_temple_subrosia_column_bottom_left"				(8, 5);
+NAME "tile_temple_subrosia_column_bottom_right"				(9, 5);
+OFFSET "tile_temple_subrosia_column_bottom_spaced_left"		(8, 5), drawOffset: (0, -8), clipping: (8, 8, 8, 8); END;
+OFFSET "tile_temple_subrosia_column_bottom_spaced_right"	(9, 5), drawOffset: (0, -8), clipping: (0, 8, 8, 8); END;
+
+NAME "tile_temple_overworld_column_top_left"				(8, 10);
+NAME "tile_temple_overworld_column_top_right"				(9, 10);
+NAME "tile_temple_overworld_column_bottom_left"				(8, 11);
+NAME "tile_temple_overworld_column_bottom_right"			(9, 11);
+OFFSET "tile_temple_overworld_column_bottom_spaced_left"	(8, 11), drawOffset: (0, -8), clipping: (8, 8, 8, 8); END;
+OFFSET "tile_temple_overworld_column_bottom_spaced_right"	(9, 11), drawOffset: (0, -8), clipping: (0, 8, 8, 8); END;

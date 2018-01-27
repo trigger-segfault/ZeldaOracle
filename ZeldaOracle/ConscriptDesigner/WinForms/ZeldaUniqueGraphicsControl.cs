@@ -15,6 +15,7 @@ using System.Diagnostics;
 using ZeldaOracle.Game.Worlds;
 using ConscriptDesigner.Control;
 using Microsoft.Xna.Framework.Graphics;
+using System.Windows.Forms;
 
 namespace ConscriptDesigner.WinForms {
 
@@ -62,6 +63,7 @@ namespace ConscriptDesigner.WinForms {
 
 			MouseMove += OnMouseMove;
 			MouseLeave += OnMouseLeave;
+			MouseWheel += OnMouseWheel;
 			PreviewReset += OnPreviewReset;
 			PostReset += OnPostReset;
 		}
@@ -88,7 +90,23 @@ namespace ConscriptDesigner.WinForms {
 		//-----------------------------------------------------------------------------
 
 		public event EventHandler HoverChanged;
+		public event EventHandler ScaleChanged;
 
+
+		//-----------------------------------------------------------------------------
+		// WndProc Override
+		//-----------------------------------------------------------------------------
+
+		protected override void WndProc(ref Message m) {
+			Point2I scrollPositionBefore = ScrollPosition;
+			base.WndProc(ref m);
+			// 0x115 and 0x20a both tell the control to scroll. If either one comes 
+			// through, you can handle the scrolling before any repaints take place
+			if (ModifierKeys.HasFlag(Keys.Control) && (m.Msg == 0x115 || m.Msg == 0x20a)) {
+				ScrollPosition = scrollPositionBefore;
+			}
+		}
+		
 
 		//-----------------------------------------------------------------------------
 		// Event Handlers
@@ -102,6 +120,15 @@ namespace ConscriptDesigner.WinForms {
 		private void OnMouseLeave(object sender, EventArgs e) {
 			mouse = -Point2I.One;
 			UpdateHoverSprite();
+		}
+
+		private void OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e) {
+			if (ModifierKeys.HasFlag(Keys.Control)) {
+				if (e.Delta > 0 && scale < 3)
+					UpdateScale(scale + 1);
+				else if (e.Delta < 0 && scale > 1)
+					UpdateScale(scale - 1);
+			}
 		}
 
 		private void OnPreviewReset(object sender, EventArgs e) {
@@ -183,6 +210,8 @@ namespace ConscriptDesigner.WinForms {
 		public void UpdateScale(int scale) {
 			this.scale = scale;
 			UpdateHeight();
+			if (ScaleChanged != null)
+				ScaleChanged(this, EventArgs.Empty);
 		}
 
 

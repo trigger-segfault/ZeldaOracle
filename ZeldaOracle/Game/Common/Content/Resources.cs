@@ -254,13 +254,18 @@ namespace ZeldaOracle.Common.Content {
 			zones = null;
 			propertyActions = null;
 			paletteDictionaries = null;
+			foreach (var pair in palettes) {
+				pair.Value.Dispose();
+			}
 			palettes = null;
 			resourceDictionaries = null;
+			palettedSpriteDatabase.Dispose();
 			palettedSpriteDatabase = null;
 			textureLoader = null;
 
 			registeredStyles = null;
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Generic Resource Methods

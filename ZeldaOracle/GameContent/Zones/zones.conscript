@@ -20,38 +20,6 @@ ZONE "electrocuted";
 	PALETTE "tiles_electrocuted";
 END;
 
-ZONE "summer";
-	NAME "Summer";
-	IMAGEVARIANT "SUMMER";
-	DEFAULTTILE "ground";
-	PALETTE "summer";
-	SETSTYLE "cliff", "past";
-	SETSTYLE "cliff_railing", "past";
-	SETSTYLE "grass", "seasons";
-	SETSTYLE "grass_ground", "groomed";
-	SETSTYLE "grass_green", "groomed";
-	SETSTYLE "tree", "seasons";
-	
-	SETSTYLE "fence_post", "wooden";
-	SETSTYLE "bridge", "past";
-	SETSTYLE "fountain_jet", "continuous";
-	SETSTYLE "staircase", "natural";
-END;
-
-ZONE "forest";
-	NAME "Forest";
-	IMAGEVARIANT "FOREST";
-	DEFAULTTILE "ground";
-	PALETTE "present";
-END;
-
-ZONE "graveyard";
-	NAME "Graveyard";
-	IMAGEVARIANT "GRAVEYARD";
-	DEFAULTTILE "ground";
-	PALETTE "present";
-END;
-
 ZONE "present";
 	NAME "Present";
 	IMAGEVARIANT "PRESENT";
@@ -105,7 +73,66 @@ ZONE "present";
 	SETSTYLE "bush", "overworld";
 	SETSTYLE "block", "shell";
 	SETSTYLE "armos", "dirt";
+	SETSTYLE "vertical_wall_top", "ages";
 	
+END;
+
+ZONE "summer";
+	CLONE "present";
+	NAME "Summer";
+	IMAGEVARIANT "SUMMER";
+	DEFAULTTILE "ground";
+	PALETTE "summer";
+	
+	SETSTYLE "cliff", "seasons";
+	SETSTYLE "cliff_railing", "seasons";
+	SETSTYLE "grass", "seasons";
+	SETSTYLE "grass_ground", "groomed";
+	SETSTYLE "grass_green", "groomed";
+	SETSTYLE "tree", "seasons";
+	
+	SETSTYLE "roof_tiled", "past";
+	SETSTYLE "fence_post", "wooden";
+	SETSTYLE "bridge", "past";
+	SETSTYLE "fountain_jet", "continuous";
+	SETSTYLE "vines", "seasons";
+	SETSTYLE "vine_cliff", "seasons";
+	SETSTYLE "water_rocks", "seasons";
+	SETSTYLE "dirt_rough", "seasons";
+	SETSTYLE "flying_tile", "seasons";
+	SETSTYLE "hardened_lava", "seasons";
+	SETSTYLE "house_wall", "seasons";
+	SETSTYLE "vertical_wall_top", "seasons";
+END;
+
+ZONE "summer_temple_of_seasons";
+	CLONE "summer";
+	NAME "Summer";
+	IMAGEVARIANT "SUMMER";
+	DEFAULTTILE "ground";
+	PALETTE "summer_temple_of_seasons";
+	
+	SETSTYLE "vines", "vertical_wall";
+	SETSTYLE "vine_cliff", "seasons_alt";
+	SETSTYLE "fancy_tile_1", "overworld_diamond";
+	SETSTYLE "fancy_tile_2", "square_tiles_1";
+	SETSTYLE "fancy_tile_3", "bricks_deep_northeast";
+	SETSTYLE "fancy_tile_4", "bricks_deep_northwest";
+	SETSTYLE "staircase", "natural_dark";
+END;
+
+ZONE "forest";
+	NAME "Forest";
+	IMAGEVARIANT "FOREST";
+	DEFAULTTILE "ground";
+	PALETTE "present";
+END;
+
+ZONE "graveyard";
+	NAME "Graveyard";
+	IMAGEVARIANT "GRAVEYARD";
+	DEFAULTTILE "ground";
+	PALETTE "present";
 END;
 
 ZONE "interior";
@@ -146,8 +173,6 @@ ZONE "interior_present";
 	SETSTYLE "block", "angel";
 	SETSTYLE "cracked_floor", "interior";
 	SETSTYLE "door", "interior";
-	SETSTYLE "pot", "normal";
-	SETSTYLE "switch_rock", "normal";
 	SETSTYLE "sign", "normal";
 	SETSTYLE "tunnel", "tunnel_2";
 	SETSTYLE "water", "interior";
@@ -184,8 +209,6 @@ END;
 #	SETSTYLE "hole", "normal";
 #	SETSTYLE "lantern", "dungeon";
 #	SETSTYLE "magnet_stone", "normal";
-#	SETSTYLE "pot", "normal";
-#	SETSTYLE "switch_rock", "normal";
 #	SETSTYLE "sign", "normal";
 #	SETSTYLE "stairs", "dungeon";
 #	SETSTYLE "tunnel", "tunnel_4";
@@ -261,9 +284,6 @@ ZONE "sidescroll_ages_dungeon_1";
 	DEFAULTTILE "floor";
 	PALETTE "dungeon_spirits_grave";
 	SIDESCROLLING true;
-	SETSTYLE "pot", "sidescroll";
-	SETSTYLE "switch_rock", "sidescroll";
-	SETSTYLE "magnet_stone", "sidescroll";
 END;
 
 ZONE "underwater_present";

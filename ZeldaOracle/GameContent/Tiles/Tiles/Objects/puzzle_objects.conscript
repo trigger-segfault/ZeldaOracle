@@ -573,7 +573,7 @@ TILE "wall_webbed_down";	CLONE "temp_wall_webbed"; SAMESPRITE; END;
 
 TILE "temp_wall_bombable";
 	SOLID		block;
-	FLAGS		Burnable;
+	FLAGS		Bombable;
 	PROPERTIES	(boolean, disable_on_destroy, true);
 END;
 

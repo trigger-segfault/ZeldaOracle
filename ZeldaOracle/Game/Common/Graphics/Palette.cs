@@ -160,7 +160,18 @@ namespace ZeldaOracle.Common.Graphics {
 			foreach (var pair in copy.lookupGroups)
 				this.lookupGroups.Add(pair.Key, (LookupPair[]) pair.Value.Clone());
 		}
-		
+
+
+		//-----------------------------------------------------------------------------
+		// Disposing
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Disposes of the palette's texture.</summary>
+		public void Dispose() {
+			if (paletteTexture != null)
+				paletteTexture.Dispose();
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Initialization

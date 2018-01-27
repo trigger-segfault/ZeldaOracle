@@ -122,3 +122,51 @@ TILE "essense_brick_inside_se"; SAMESPRITE; HALFSOLID inside_corner_se; END;
 TILE "essense_brick_inside_sw"; SAMESPRITE; HALFSOLID inside_corner_sw; END;
 TILE "essense_brick_inside_ne"; SAMESPRITE; HALFSOLID inside_corner_ne; END;
 TILE "essense_brick_inside_nw"; SAMESPRITE; HALFSOLID inside_corner_nw; END;
+
+
+TILE "tiled_square"; SAMESPRITE; END;
+
+TILE "floor_tiled_outside_nw"; SAMESPRITE; END;
+TILE "floor_tiled_n"; SAMESPRITE; END;
+TILE "floor_tiled_outside_ne"; SAMESPRITE; END;
+TILE "floor_tiled_w"; SAMESPRITE; END;
+TILE "floor_tiled_e"; SAMESPRITE; END;
+TILE "floor_tiled_outside_sw"; SAMESPRITE; END;
+TILE "floor_tiled_s"; SAMESPRITE; END;
+TILE "floor_tiled_outside_se"; SAMESPRITE; END;
+TILE "floor_tiled_inside_se"; SAMESPRITE; END;
+TILE "floor_tiled_inside_sw"; SAMESPRITE; END;
+TILE "floor_tiled_inside_ne"; SAMESPRITE; END;
+TILE "floor_tiled_inside_nw"; SAMESPRITE; END;
+TILE "floor_tiled_diagonal_left"; SAMESPRITE; END;
+TILE "floor_tiled_diagonal_right"; SAMESPRITE; END;
+
+TILE "ground_tiled_outside_nw"; SAMESPRITE; END;
+TILE "ground_tiled_n"; SAMESPRITE; END;
+TILE "ground_tiled_outside_ne"; SAMESPRITE; END;
+TILE "ground_tiled_w"; SAMESPRITE; END;
+TILE "ground_tiled_e"; SAMESPRITE; END;
+TILE "ground_tiled_outside_sw"; SAMESPRITE; END;
+TILE "ground_tiled_s"; SAMESPRITE; END;
+TILE "ground_tiled_outside_se"; SAMESPRITE; END;
+TILE "ground_tiled_inside_se"; SAMESPRITE; END;
+TILE "ground_tiled_inside_sw"; SAMESPRITE; END;
+TILE "ground_tiled_inside_ne"; SAMESPRITE; END;
+TILE "ground_tiled_inside_nw"; SAMESPRITE; END;
+TILE "ground_tiled_diagonal_left"; SAMESPRITE; END;
+TILE "ground_tiled_diagonal_right"; SAMESPRITE; END;
+
+TILE "dirt_tiled_outside_nw"; SAMESPRITE; END;
+TILE "dirt_tiled_n"; SAMESPRITE; END;
+TILE "dirt_tiled_outside_ne"; SAMESPRITE; END;
+TILE "dirt_tiled_w"; SAMESPRITE; END;
+TILE "dirt_tiled_e"; SAMESPRITE; END;
+TILE "dirt_tiled_outside_sw"; SAMESPRITE; END;
+TILE "dirt_tiled_s"; SAMESPRITE; END;
+TILE "dirt_tiled_outside_se"; SAMESPRITE; END;
+TILE "dirt_tiled_inside_se"; SAMESPRITE; END;
+TILE "dirt_tiled_inside_sw"; SAMESPRITE; END;
+TILE "dirt_tiled_inside_ne"; SAMESPRITE; END;
+TILE "dirt_tiled_inside_nw"; SAMESPRITE; END;
+TILE "dirt_tiled_diagonal_left"; SAMESPRITE; END;
+TILE "dirt_tiled_diagonal_right"; SAMESPRITE; END;

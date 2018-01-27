@@ -1,0 +1,68 @@
+﻿PALETTE "tile_dictionary", "summer_temple_of_seasons";
+
+CLONE	"summer";
+
+#==============================================================
+# Constants
+#==============================================================
+
+CONST	brown;
+COLOR	brown, light					(240,248, 56);
+COLOR	brown, medium					(192,136, 32);
+COLOR	brown, dark						(112, 72, 32);
+
+CONST	gray;
+COLOR	gray, light						(248,248,176);
+COLOR	gray, medium					(168,160,136);
+COLOR	gray, dark						( 96, 96, 72);
+
+CONST	red;
+COLOR	red, light						(248,208,136);
+COLOR	red, medium						(232,  8, 24);
+COLOR	red, dark						(104,  8, 40);
+
+CONST	blue;
+COLOR	blue, light						(248,248,176);
+COLOR	blue, medium					( 24, 96,248);
+COLOR	blue, dark						(  0, 24,136);
+
+CONST	grass_green;
+COPY	grass_green, light				brown, light;
+COLOR	grass_green, medium				( 32,192,  0);
+COLOR	grass_green, dark				(  0,120,  0);
+
+CONST	tree_green;
+COPY	tree_green, light				brown, light;
+COLOR	tree_green, medium				(  8,200, 80);
+COLOR	tree_green, dark				(  8, 96, 24);
+
+COPY	object, all						brown, all;
+
+
+#==============================================================
+# Structure
+#==============================================================
+
+
+#==============================================================
+# Decoration
+#==============================================================
+
+
+LOOKUP	fancy_tile_1, all				gray, all;
+LOOKUP	fancy_tile_2, all				gray, all;
+LOOKUP	fancy_tile_3, all				gray, all;
+LOOKUP	fancy_tile_4, all				gray, all;
+LOOKUP	fancy_tile_5, all				gray, all;
+LOOKUP	fancy_tile_6, all				brown, all;
+LOOKUP	fancy_tile_7, all				brown, all;
+LOOKUP	fancy_tile_8, all				brown, all;
+LOOKUP	fancy_tile_9, all				brown, all;
+LOOKUP	fancy_tile_10, all				brown, all;
+
+LOOKUP	floor_staircase, all			gray, all;
+
+
+#==============================================================
+
+END;

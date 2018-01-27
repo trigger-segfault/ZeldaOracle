@@ -740,11 +740,13 @@ namespace ConscriptDesigner.Control {
 		}
 
 		public static void LaunchGame() {
+			SaveAll();
 			UpdateContentFolder(project);
-			Process.Start("ZeldaOracle.exe", "\"../../../../WorldFiles/temp_world.zwd\"");
+			Process.Start("ZeldaOracle.exe", "-dev");
 		}
 
 		public static void LaunchEditor() {
+			SaveAll();
 			UpdateContentFolder(project);
 			Process.Start("ZeldaEditor.exe");
 		}

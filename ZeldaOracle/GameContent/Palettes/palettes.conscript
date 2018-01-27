@@ -4,6 +4,7 @@ LOAD "tiles_default.conscript", false;
 LOAD "present.conscript", false;
 LOAD "underwater_present.conscript", false;
 LOAD "summer.conscript", false;
+LOAD "Special/summer_temple_of_seasons.conscript", false;
 LOAD "interior_present.conscript", false;
 LOAD "dungeon_skull_dungeon.conscript", false;
 LOAD "dungeon_spirits_grave.conscript", false;
