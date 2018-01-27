@@ -137,7 +137,8 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_MONSTER_GIBDO;
 		public static Animation ANIM_MONSTER_SAND_CRAB;
 		public static Animation ANIM_MONSTER_WATER_TEKTIKE;
-		public static Animation ANIM_MONSTER_GOPONGA_FLOWER;
+		public static Animation ANIM_MONSTER_GOPONGA_FLOWER_CLOSED;
+		public static Animation ANIM_MONSTER_GOPONGA_FLOWER_OPEN;
 		public static Animation ANIM_MONSTER_PEAHAT;
 		public static Animation ANIM_MONSTER_GEL;
 		public static Animation ANIM_MONSTER_GEL_PREPARE_JUMP;

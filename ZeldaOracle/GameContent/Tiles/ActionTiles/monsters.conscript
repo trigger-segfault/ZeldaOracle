@@ -58,7 +58,8 @@ MONSTER "monster_hardhat_beetle",		"monster_hardhat_beetle",		MonsterHardhatBeet
 MONSTER "monster_leever_red",			"monster_leever",				MonsterLeever,			red;	END;
 MONSTER "monster_leever_blue",			"monster_leever",				MonsterLeever,			blue;	END;
 MONSTER "monster_leever_orange",		"monster_leever",				MonsterLeever,			orange;	END;
-MONSTER "monster_spinning_blade_trap",	"monster_spinning_blade_trap",	MonsterSpinningBladeTrap,	red;	END;
+MONSTER "monster_spinning_blade_trap",	"monster_spinning_blade_trap",	MonsterSpinningBladeTrap, red;	END;
+MONSTER "monster_goponga_flower",		"monster_goponga_flower_open",	MonsterGopongaFlower,	red;	END;
 
 TILE "monster_beamos";
 	SOLID		block;
