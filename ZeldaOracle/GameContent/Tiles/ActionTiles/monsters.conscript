@@ -37,7 +37,7 @@ MONSTER "monster_shrouded_stalfos",		"monster_shrouded_stalfos",		MonsterShroude
 MONSTER "monster_ghini",				"monster_ghini",				MonsterGhini,			red;	END;
 MONSTER "monster_zol_green",			"monster_zol",					MonsterZolGreen,		green;	END;
 MONSTER "monster_zol_red",				"monster_zol",					MonsterZolRed,			red;	END;
-MONSTER "monster_thwomp",				"monster_thwomp",				MonsterThwomp,			blue;	PREVIEW "preview_monster_thwomp"; SIZE (2, 2); END;
+MONSTER "monster_thwomp",				"monster_thwomp",				MonsterThwomp,			darkBlue;	PREVIEW "preview_monster_thwomp"; SIZE (2, 2); END;
 MONSTER "monster_thwimp",				"monster_thwimp",				MonsterThwomp,			blue;	END;
 MONSTER "monster_buzz_blob",			"monster_buzz_blob",			MonsterBuzzBlob,		green;	END;
 MONSTER "monster_cukeman",				"monster_cukeman",				MonsterCukeman,			green;	END;
@@ -60,6 +60,7 @@ MONSTER "monster_leever_blue",			"monster_leever",				MonsterLeever,			blue;	END
 MONSTER "monster_leever_orange",		"monster_leever",				MonsterLeever,			orange;	END;
 MONSTER "monster_spinning_blade_trap",	"monster_spinning_blade_trap",	MonsterSpinningBladeTrap, red;	END;
 MONSTER "monster_goponga_flower",		"monster_goponga_flower_open",	MonsterGopongaFlower,	red;	END;
+MONSTER "monster_anti_fairy",			"monster_anti_fairy",			MonsterAntiFairy,		gold;	END;
 
 TILE "monster_beamos";
 	SOLID		block;

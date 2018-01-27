@@ -168,6 +168,10 @@ namespace ZeldaOracle.Game {
 		public const float				MONSTER_GOPONGA_FLOWER_SHOOT_SPEED				= 1.5f;
 		public const int				MONSTER_GOPONGA_FLOWER_SHOOT_ODDS				= 6;
 		public const float				MONSTER_ANTI_FAIRY_MOVE_SPEED					= 0.75f;
+		public const float				MONSTER_WATER_TEKTIKE_MOVE_SPEED				= 1.5f;
+		public const float				MONSTER_WATER_TEKTIKE_ACCELERATION				= 0.0375f;
+		public const float				MONSTER_WATER_TEKTIKE_DECELERATION				= 0.075f;
+		public const int				MONSTER_WATER_TEKTIKE_DECELERATION_TIME			= 20;
 
 		// Tiles
 		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.

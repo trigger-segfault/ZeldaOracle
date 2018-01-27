@@ -144,7 +144,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			Physics.IsCrushable				= true;
 			Physics.EdgeClipAmount			= 1;
 			Physics.CrushMaxGapSize			= 4;
-			Physics.CustomTileCollisionCondition = delegate(Tile tile) {
+			Physics.CustomTileIsNotSolidCondition = delegate(Tile tile) {
 				if (movement.IsOnColorBarrier && (tile is TileColorBarrier)) {
 					return false;
 				}

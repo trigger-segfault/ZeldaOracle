@@ -300,7 +300,12 @@ namespace ZeldaOracle.Game.Control {
 		
 		// Returns true if the entity is able to collide with a tile.
 		private bool CanCollideWithTile(Entity entity, Tile checkTile) {
-			if (checkTile.CollisionModel == null || !checkTile.IsSolid ||
+			if (checkTile.CollisionModel == null)
+				return false;
+			if (entity.Physics.CustomTileIsSolidCondition != null && 
+				entity.Physics.CustomTileIsSolidCondition(checkTile))
+				return true;
+			if (!checkTile.IsSolid ||
 				(checkTile.IsHalfSolid && entity.Physics.PassOverHalfSolids))
 				return false;
 			if (checkTile.IsLedge && entity.Physics.PassOverLedges) {
@@ -309,8 +314,8 @@ namespace ZeldaOracle.Game.Control {
 					IsMovingDownLedge(entity, checkTile))
 					return false;
 			}
-			if (entity.Physics.CustomTileCollisionCondition != null)
-				return entity.Physics.CustomTileCollisionCondition(checkTile);
+			if (entity.Physics.CustomTileIsNotSolidCondition != null)
+				return entity.Physics.CustomTileIsNotSolidCondition(checkTile);
 			return true;
 		}
 		

@@ -38,7 +38,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 				PhysicsFlags.LedgePassable |
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.DestroyedOutsideRoom);
-			Physics.CustomTileCollisionCondition = delegate(Tile tile) {
+			Physics.CustomTileIsNotSolidCondition = delegate(Tile tile) {
 				// Disable collisions with the source tile.
 				return (tile != source);
 			};

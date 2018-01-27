@@ -65,7 +65,8 @@ namespace ZeldaOracle.Game.Entities {
 		// Collision settings.
 		private Rectangle2F				collisionBox;		// The "hard" collision box, used to collide with solid entities/tiles.
 		private Rectangle2F				softCollisionBox;	// The "soft" collision box, used to collide with items, monsters, room edges, etc.
-		private TileCollisionCondition	customTileCollisionCondition;
+		private TileCollisionCondition	customTileIsSolidCondition;
+		private TileCollisionCondition	customTileIsNotSolidCondition;
 		private CollisionBoxType		roomEdgeCollisionBoxType;
 		private int						autoDodgeDistance;	// The maximum distance allowed to dodge collisions.
 		private float					autoDodgeSpeed;		// The speed to move at when dodging collisions.
@@ -111,6 +112,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.ledgeAltitude		= 0;
 			this.ledgeTileLocation	= new Point2I(-1, -1);
 			this.roomEdgeCollisionBoxType = CollisionBoxType.Hard;
+			this.customTileIsSolidCondition = null;
 
 			this.crushMaxGapSize	= 0;
 			this.edgeClipAmount		= 1;
@@ -230,8 +232,8 @@ namespace ZeldaOracle.Game.Entities {
 					IsMovingDownLedge(tile))
 					return false;
 			}
-			if (customTileCollisionCondition != null)
-				return customTileCollisionCondition(tile);
+			if (customTileIsNotSolidCondition != null)
+				return customTileIsNotSolidCondition(tile);
 			return true;
 		}
 
@@ -613,9 +615,14 @@ namespace ZeldaOracle.Game.Entities {
 			get { return Rectangle2F.Translate(softCollisionBox, entity.Position); }
 		}
 
-		public TileCollisionCondition CustomTileCollisionCondition {
-			get { return customTileCollisionCondition; }
-			set { customTileCollisionCondition = value; }
+		public TileCollisionCondition CustomTileIsSolidCondition {
+			get { return customTileIsSolidCondition; }
+			set { customTileIsSolidCondition = value; }
+		}
+
+		public TileCollisionCondition CustomTileIsNotSolidCondition {
+			get { return customTileIsNotSolidCondition; }
+			set { customTileIsNotSolidCondition = value; }
 		}
 		
 		public CollisionInfo[] CollisionInfo {

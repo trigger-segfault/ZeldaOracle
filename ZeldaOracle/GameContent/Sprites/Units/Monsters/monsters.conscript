@@ -134,7 +134,7 @@ ANIMATION "monster_gibdo"; SUBSTRIP repeat;
 ANIMATION "monster_sand_crab"; SUBSTRIP repeat;
 	ADD strip, 8, 2, (8, 8); END;
 ANIMATION "monster_water_tektike"; SUBSTRIP repeat;
-	ADD strip, 12, 2, (10, 8); END;
+	ADD strip, 16, 2, (10, 8); END;
 ANIMATION "monster_goponga_flower_closed"; SUBSTRIP repeat;
 	ADD frame, 1, (12, 8); END;
 ANIMATION "monster_goponga_flower_open"; SUBSTRIP repeat;

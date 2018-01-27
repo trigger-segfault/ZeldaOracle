@@ -17,7 +17,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		
 		public MonsterAntiFairy() {
 			// General
-			MaxHealth		= 1;
 			ContactDamage	= 2;
 			color			= MonsterColor.Gold;
 			isDamageable	= false;
@@ -53,6 +52,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		public override void CreateDeathEffect() {
+			// Create vanish effect
 			Effect explosion = new Effect(
 				GameData.ANIM_EFFECT_BLOCK_POOF,
 				DepthLayer.EffectMonsterExplosion);

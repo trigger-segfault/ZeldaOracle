@@ -33,7 +33,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 			returnDelay	= GameSettings.PROJECTILE_BOOMERANG_RETURN_DELAYS[itemBoomerang.Level];
 
 			if (itemBoomerang.Level == Item.Level2) {
-				physics.CustomTileCollisionCondition = delegate(Tile tile) {
+				physics.CustomTileIsNotSolidCondition = delegate(Tile tile) {
+					// Don't collide with boomerangable tiles, but instead break them
+					// as we pass over them.
 					return !tile.IsBoomerangable;
 				};
 			}
