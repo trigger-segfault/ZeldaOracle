@@ -157,9 +157,17 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>present</Name>
     </None>
+    <None Include="Palettes\Special\summer_temple_of_seasons.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>summer_temple_of_seasons</Name>
+    </None>
     <None Include="Palettes\summer.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>summer</Name>
+    </None>
+    <None Include="Palettes\summer_old.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>summer_old</Name>
     </None>
     <None Include="Palettes\tiles_default.conscript">
       <Name>tiles_default</Name>
@@ -292,6 +300,10 @@
     <None Include="Sprites\Tiles\Overworld\hedges.conscript">
       <Name>hedges</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\horizon.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>horizon</Name>
     </None>
     <None Include="Sprites\Tiles\Overworld\obstacles.conscript">
       <Name>obstacles</Name>
@@ -445,6 +457,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>hedges</Name>
     </None>
+    <None Include="Tiles\Tiles\Overworld\horizon.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>horizon</Name>
+    </None>
     <None Include="Tiles\Tiles\Overworld\snow_mounds.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>snow_mounds</Name>
@@ -456,6 +472,10 @@
     <None Include="Tiles\Tiles\Overworld\trees.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>trees</Name>
+    </None>
+    <None Include="Tiles\Tiles\Overworld\vertical_walls.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>vertical_walls</Name>
     </None>
     <None Include="Tiles\Tiles\Overworld\vines.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -859,6 +879,11 @@
       <Name>holes</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Overworld\horizon.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>horizon</Name>
     </Compile>
     <Compile Include="Images\Tiles\Overworld\obstacles.png">
       <Name>obstacles</Name>

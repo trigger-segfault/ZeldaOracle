@@ -11,6 +11,11 @@ COLOR	brown, light					(248,224, 16);
 COLOR	brown, medium					(200,136,  8);
 COLOR	brown, dark						(128, 80,  0);
 
+CONST	gray;
+COPY	gray, light						brown, light;
+COLOR	gray, medium					(176,152,104);
+COLOR	gray, dark						(112, 72, 72);
+
 CONST	red;
 COLOR	red, light						(248,208,136);
 COLOR	red, medium						(232,  8, 24);
@@ -218,6 +223,19 @@ LOOKUP	snow_entrance, light			snow, light;
 LOOKUP	snow_entrance, medium			snow, dark;
 LOOKUP	snow_entrance, dark				snow, black;
 
+#==============================================================
+# Horizon
+#==============================================================
+
+COLOR	blue_sky, light					(248,248,192);
+COLOR	blue_sky, medium				( 32,176,248);
+COLOR	blue_sky, dark					(  0, 80,176);
+COLOR	blue_sky, black					(160,232,232);
+COLOR	dark_sky, light					( 96, 48,152);
+COLOR	dark_sky, medium				( 64, 32,120);
+COLOR	dark_sky, dark					( 40, 16, 96);
+COLOR	dark_sky, black					( 16,  0, 48);
+
 
 #==============================================================
 # Town
@@ -226,7 +244,7 @@ LOOKUP	snow_entrance, dark				snow, black;
 LOOKUP	roof_brown, all					brown, all;
 LOOKUP	roof_red, all					red, all;
 LOOKUP	roof_blue, all					blue, all;
-LOOKUP	roof_green, all					grass_green, all;
+LOOKUP	roof_green, all					tree_green, all;
 LOOKUP	house_wall, all					brown, all;
 LOOKUP	chimney, all					house_wall, all;
 LOOKUP	witch_hut, all					red, all;

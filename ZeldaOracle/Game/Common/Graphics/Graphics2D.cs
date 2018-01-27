@@ -35,9 +35,9 @@ namespace ZeldaOracle.Common.Graphics {
 
 		// Vector Graphics:
 		/// <summary>A white 1x1 texture used for drawing vector graphics.</summary>
-		private Texture2D white1x1;
+		private static Texture2D white1x1;
 		/// <summary>A white 2x2 texture used for drawing vector graphics.</summary>
-		private Texture2D white2x2;
+		private static Texture2D white2x2;
 
 	
 		//-----------------------------------------------------------------------------
@@ -57,10 +57,12 @@ namespace ZeldaOracle.Common.Graphics {
 			this.useIntPrecision		= false;
 
 			// Vector Graphics
-			this.white1x1				= new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
-			this.white2x2				= new Texture2D(spriteBatch.GraphicsDevice, 2, 2);
-			this.white1x1.SetData(new XnaColor[] { XnaColor.White });
-			this.white2x2.SetData(new XnaColor[] { XnaColor.White, XnaColor.White, XnaColor.White, XnaColor.White });
+			if (white1x1 == null) {
+				white1x1               = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
+				white2x2               = new Texture2D(spriteBatch.GraphicsDevice, 2, 2);
+				white1x1.SetData(new XnaColor[] { XnaColor.White });
+				white2x2.SetData(new XnaColor[] { XnaColor.White, XnaColor.White, XnaColor.White, XnaColor.White });
+			}
 		}
 	
 

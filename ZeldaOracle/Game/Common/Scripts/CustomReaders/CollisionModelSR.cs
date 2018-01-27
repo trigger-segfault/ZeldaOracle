@@ -25,13 +25,13 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			this.resources	= resources;
 			
 			//=====================================================================================
-			AddCommand("Model", "string name",
+			AddCommand("MODEL", "string name",
 			delegate(CommandParam parameters) {
 				modelName = parameters.GetString(0);
 				model = new CollisionModel();
 			});
 			//=====================================================================================
-			AddCommand("End", "",
+			AddCommand("END", "",
 			delegate(CommandParam parameters) {
 				if (model != null) {
 					Resources.AddResource(modelName, model);
@@ -39,7 +39,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				}
 			});
 			//=====================================================================================
-			AddCommand("Add", "int x, int y, int width, int height",
+			AddCommand("ADD", "int x, int y, int width, int height",
 			delegate(CommandParam parameters) {
 				model.AddBox(
 					parameters.GetInt(0),

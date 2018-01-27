@@ -40,3 +40,11 @@ MODEL turnstile;			ADD  0,  0,  8,  8; ADD  8,  8,  8,  8;
 							ADD  0, 40,  8,  8; ADD  8, 32,  8,  8;
 							ADD 40, 40,  8,  8; ADD 32, 32,  8,  8;
 							ADD 16, 16, 16, 16; END;
+
+MODEL model_temple_of_seasons_back;
+	ADD 0, 0, 160, 56; ADD 32, 56, 32, 8; ADD 96, 56, 32, 8; END;
+MODEL model_temple_of_seasons_front;
+	ADD 0, 0, 32, 24; ADD 64, 0, 32, 24; END;
+	
+MODEL model_temple_roof;
+	ADD 0, 0, 48, 48; END;

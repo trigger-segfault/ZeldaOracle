@@ -289,6 +289,12 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				return sprite;
 			}
 
+			public void Dispose() {
+				foreach (Image image in images) {
+					image.Dispose();
+				}
+			}
+
 			private int IndeciesPerImage {
 				get { return dimensions.X * dimensions.Y; }
 			}
@@ -331,6 +337,12 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				spriteImages[args.SourceRect.Size] = databaseImage;
 			}
 			return databaseImage.RepaletteSprite(originalSprite, args);
+		}
+
+		public void Dispose() {
+			foreach (var pair in spriteImages) {
+				pair.Value.Dispose();
+			}
 		}
 	}
 }

@@ -24,9 +24,11 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		private enum Modes {
 			Root,
 			Tile,
-			ActionTile
+			ActionTile,
+			Model
 		}
-		
+
+		private CollisionModel      model;
 		private BaseTileData        baseTileData;
 		private TileData            tileData;
 		private EventTileData       actionTileData;
@@ -410,6 +412,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			delegate (CommandParam parameters) {
 				baseTileData.PreviewSprite = GetSpriteFromParams(parameters);
 			});
+			//=====================================================================================
 		}
 
 

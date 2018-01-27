@@ -1,0 +1,55 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_horizon", "Tiles/Overworld/horizon", (16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+MAPPEDCOLORS	"tiles_default", ("blue_sky", "dark_sky");
+
+SOURCE "temp_sheet_horizon";
+SPRITESET "set_horizon", (6, 6);
+	MULTIPLE BASIC (0, 0), (0, 0), (4, 4); END;
+	MULTIPLE BASIC (4, 0), (4, 0), (2, 3); END;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_horizon";
+
+# Seasons (Excluding _sky and _clouds)
+NAME "tile_horizon_sky"							(3, 0);
+NAME "tile_horizon_clouds_bottom_left"			(0, 0);
+NAME "tile_horizon_clouds_bottom_right"			(1, 0);
+NAME "tile_horizon_clouds_bottom_mid"			(2, 0);
+NAME "tile_horizon_clouds_left"					(0, 1);
+NAME "tile_horizon_clouds_right"				(1, 1);
+NAME "tile_horizon_clouds_left_right"			(2, 1);
+NAME "tile_horizon_clouds"						(3, 1);
+NAME "tile_horizon_mountain_left"				(0, 2);
+NAME "tile_horizon_mountain_mid"				(1, 2);
+NAME "tile_horizon_mountain_right"				(2, 2);
+NAME "tile_horizon_mountain"					(3, 2);
+
+# Ages
+NAME "tile_horizon_big_clouds_bottom_left"		(0, 3);
+NAME "tile_horizon_big_clouds_bottom_right"		(1, 3);
+NAME "tile_horizon_big_clouds_left"				(2, 3);
+NAME "tile_horizon_big_clouds_right"			(3, 3);
+
+# Black Tower/Onox' Castle
+NAME "tile_horizon_dark_clouds_top"				(4, 2);
+NAME "tile_horizon_dark_clouds_mid_1"			(4, 0);
+NAME "tile_horizon_dark_clouds_mid_2"			(5, 0);
+NAME "tile_horizon_dark_clouds_bottom_1"		(4, 1);
+NAME "tile_horizon_dark_clouds_bottom_2"		(5, 1);
+NAME "tile_horizon_dark_sky"					(5, 2);

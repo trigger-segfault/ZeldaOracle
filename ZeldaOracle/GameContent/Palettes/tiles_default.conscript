@@ -268,6 +268,18 @@ LOOKUP	snow_entrance, light			snow, light;
 LOOKUP	snow_entrance, medium			snow, dark;
 LOOKUP	snow_entrance, dark				snow, black;
 
+#==============================================================
+# Horizon
+#==============================================================
+
+COLOR	blue_sky, light					(248,248,192);
+COLOR	blue_sky, medium				( 32,176,248);
+COLOR	blue_sky, dark					(  0, 80,176);
+COLOR	blue_sky, black					(160,232,232);
+COLOR	dark_sky, light					( 96, 48,152);
+COLOR	dark_sky, medium				( 64, 32,120);
+COLOR	dark_sky, dark					( 40, 16, 96);
+COLOR	dark_sky, black					( 16,  0, 48);
 
 #==============================================================
 # Sea
