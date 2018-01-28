@@ -63,6 +63,7 @@ TILE	grass;
 TILE	leaves;
 
 TILE	bush;
+TILE	bush_dark;
 TILE	bush_asobject;
 TILE	regrowable_bush;
 TILE	mushroom;
@@ -283,6 +284,15 @@ TILE	temple_spring_roof;
 TILE	temple_summer_roof;
 TILE	temple_autumn_roof;
 TILE	temple_winter_roof;
+
+#==============================================================
+# NPCs
+#==============================================================
+
+TILE	biggoron;
+TILE	biggoron_top;
+TILE	biggoron_chin;
+TILE	biggoron_hands;
 
 #==============================================================
 

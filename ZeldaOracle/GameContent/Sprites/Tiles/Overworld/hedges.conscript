@@ -28,6 +28,7 @@ END;
 # Temporary
 #==============================================================
 
+SOURCE "set_hedges";
 NAME "temp_8x8_hedge_outside_nw"			(0, 0);
 NAME "temp_8x8_hedge_outside_ne"			(3, 0);
 NAME "temp_8x8_hedge_outside_sw"			(0, 2);

@@ -5,6 +5,7 @@ LOAD "Objects/objects.conscript", true;
 LOAD "Overworld/land.conscript", true;
 LOAD "Overworld/forest.conscript", true;
 LOAD "Overworld/water.conscript", true;
+LOAD "Overworld/horizon.conscript", true;
 LOAD "Indoors/dungeon.conscript", true;
 LOAD "Overworld/cliffs.conscript", true;
 LOAD "Overworld/town.conscript", true;

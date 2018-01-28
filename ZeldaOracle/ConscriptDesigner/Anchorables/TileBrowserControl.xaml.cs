@@ -197,6 +197,12 @@ namespace ConscriptDesigner.Anchorables {
 					statusTileInfo.Content = "Type: " + hoverTileData.Type.Name;
 				}
 			}
+
+			Point2I hoverPoint = preview.HoverPoint;
+			if (hoverPoint == -Point2I.One)
+				statusHoverIndex.Content = "(?, ?)";
+			else
+				statusHoverIndex.Content = hoverPoint.ToString();
 		}
 
 		private void OnSearchTextChanged(object sender, TextChangedEventArgs e) {

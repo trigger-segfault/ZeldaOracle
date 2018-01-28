@@ -123,6 +123,8 @@ LOOKUP	grass, all						grass_green, all;
 LOOKUP	leaves, all						tree_green, all;
 
 LOOKUP	bush, all						tree_green, all;
+LOOKUP	bush_dark, all					bush, all;
+LOOKUP	bush_dark, light				floor, medium;
 LOOKUP	bush_asobject, all				bush, all;
 COLOR	bush_asobject, light			(0, 0, 0, 0);
 LOOKUP	regrowable_bush, all			bush, all;
@@ -503,6 +505,22 @@ COLOR	temple_autumn_roof, dark		(104, 64,  0);
 COLOR	temple_winter_roof, light		(160, 48,248);
 COLOR	temple_winter_roof, medium		( 80,  0,160);
 COLOR	temple_winter_roof, dark		( 48,  0,112);
+
+
+#==============================================================
+# NPCs
+#==============================================================
+
+COLOR	biggoron, light					(240,208,112);
+COLOR	biggoron, medium				(192,152, 72);
+COLOR	biggoron, dark					(120, 80, 56);
+LOOKUP	biggoron_top, all				biggoron, all;
+COLOR	biggoron_top, dark				(104,160, 24);
+LOOKUP	biggoron_chin, all				biggoron, all;
+COLOR	biggoron_chin, light			( 72,120, 64);
+LOOKUP	biggoron_hands, all				biggoron, all;
+COLOR	biggoron_hands, light			( 72, 48, 48);
+LOOKUP	biggoron_hands, medium			dirt, medium;
 
 #==============================================================
 

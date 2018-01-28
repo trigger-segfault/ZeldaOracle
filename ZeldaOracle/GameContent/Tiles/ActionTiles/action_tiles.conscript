@@ -1,3 +1,4 @@
 ﻿
+LOAD "biggoron.conscript", true;
 LOAD "general.conscript", true;
 LOAD "monsters.conscript", true;

@@ -157,8 +157,10 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public CollisionModel CollisionModel {
-			get { return properties.GetResource<CollisionModel>("collision_model", null); }
-			set { properties.SetAsResource<CollisionModel>("collision_model", value); }
+			get { return TileData.CollisionModel; }
+			set { TileData.CollisionModel = value; }
+			//get { return properties.GetResource<CollisionModel>("collision_model", null); }
+			//set { properties.SetAsResource<CollisionModel>("collision_model", value); }
 		}
 
 		public TileSpawnOptions SpawnOptions {

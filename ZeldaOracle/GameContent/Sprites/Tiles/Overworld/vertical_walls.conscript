@@ -16,7 +16,7 @@ MAPPEDCOLORS	"tiles_default", ("vertical_wall", "tunnel_light", "cliff");
 CHUNKSIZE		(8, 8);
 
 SOURCE "temp_sheet_vertical_walls";
-SPRITESET "set_vertical_walls", (8, 14);
+SPRITESET "set_vertical_walls", (8, 16);
 	MULTIPLE STYLE "vertical_wall_top", (0, 0), (4, 4);
 		ADD "ages"				(0, 0);
 		ADD "seasons"			(4, 0);
@@ -24,6 +24,7 @@ SPRITESET "set_vertical_walls", (8, 14);
 		
 	MULTIPLE BASIC (0, 4), (0, 4), (7, 10); END;
 	MULTIPLE BASIC (7, 12), (7, 12), (1, 2); END;
+	MULTIPLE BASIC (0, 14), (0, 14), (4, 2); END;
 END;
 
 
@@ -130,6 +131,16 @@ NAME "tile_vertical_stone_wall_bottom_left"		(0, 13);
 NAME "tile_vertical_stone_wall_bottom"			(1, 13);
 NAME "tile_vertical_stone_wall_bottom_right"	(2, 13);
 NAME "tile_vertical_stone_wall_bottom_both"		(3, 13);
+
+
+NAME "tile_vertical_onox_wall_left"				(0, 14);
+NAME "tile_vertical_onox_wall"					(1, 14);
+NAME "tile_vertical_onox_wall_right"			(2, 14);
+NAME "tile_vertical_onox_wall_both"				(3, 14);
+NAME "tile_vertical_onox_wall_bottom_left"		(0, 15);
+NAME "tile_vertical_onox_wall_bottom"			(1, 15);
+NAME "tile_vertical_onox_wall_bottom_right"		(2, 15);
+NAME "tile_vertical_onox_wall_bottom_both"		(3, 15);
 
 COMPOSITE "temp_preview_vertical_wall_top_style";
 	ADDTILED (0, 0), (4, 4), (16, 16); END;

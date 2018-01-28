@@ -1,4 +1,4 @@
-﻿PALETTE "tile_dictionary", "summer_temple_of_seasons";
+﻿PALETTE "tile_dictionary", "summer_onoxs_castle";
 
 CLONE	"summer";
 
@@ -38,29 +38,20 @@ COLOR	tree_green, dark				(  8, 96, 24);
 
 COPY	object, all						brown, all;
 
-
 #==============================================================
 # Structure
 #==============================================================
 
+LOOKUP	stairs, all						vertical_wall, all;
 
 #==============================================================
 # Decoration
 #==============================================================
 
 
-LOOKUP	fancy_tile_1, all				gray, all;
-LOOKUP	fancy_tile_2, all				gray, all;
-LOOKUP	fancy_tile_3, all				gray, all;
-LOOKUP	fancy_tile_4, all				gray, all;
-LOOKUP	fancy_tile_5, all				gray, all;
-LOOKUP	fancy_tile_6, all				brown, all;
-LOOKUP	fancy_tile_7, all				brown, all;
-LOOKUP	fancy_tile_8, all				brown, all;
-LOOKUP	fancy_tile_9, all				brown, all;
-LOOKUP	fancy_tile_10, all				brown, all;
-
-LOOKUP	floor_staircase, all			gray, all;
+LOOKUP	fancy_tile_1, all				vertical_wall, all;
+LOOKUP	fancy_tile_2, all				vertical_wall, all;
+LOOKUP	fancy_tile_3, all				vertical_wall, all;
 
 
 #==============================================================

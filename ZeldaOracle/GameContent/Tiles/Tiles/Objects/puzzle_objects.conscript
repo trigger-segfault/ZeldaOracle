@@ -12,10 +12,10 @@ TILE "chest";
 		(integer, spawn_delay_after_poof, 16),
 		(string, reward, "rupees_1",
 			"Reward", "reward", "Chest",
-			 "The reward contained inside the chest.", false),
+			 "The reward contained inside the chest."),
 		(boolean, looted, "false",
 			"Looted", "", "Chest",
-			"True if the item has been taken from the chest.", false);
+			"True if the item has been taken from the chest.");
 END;
 
 # ---- Reward -----------------------------------------------------------------
@@ -27,10 +27,10 @@ TILE "reward";
 	PROPERTIES
 		(string, reward, "heart_piece",
 			"Reward", "reward", "Reward",
-			 "The reward to spawn.", false),
+			 "The reward to spawn."),
 		(boolean, looted, "false",
 			"Looted", "", "Reward",
-			"True if the item has been taken.", false);
+			"True if the item has been taken.");
 END;
 
 # ---- Color Switch -----------------------------------------------------------
@@ -89,7 +89,7 @@ TILE "owl";
 	PROPERTIES
 		(string, text, "<red>undefined<red>",
 			"Text", "text_message", "Owl",
-			"The text to display when the owl is activated.", false);
+			"The text to display when the owl is activated.");
 END;
 
 # ---- Color Cube -------------------------------------------------------------
@@ -119,7 +119,7 @@ TILE "temp_roller";
 			"The roller rolls vertically", true),
 		(boolean, first_roller, "false",
 			"First Roller", "", "Roller",
-			"This is the top left roller of a group. Any rollers before this won't be connected.", false);
+			"This is the top left roller of a group. Any rollers before this won't be connected.");
 END;
 
 TILE "roller_horizontal";
@@ -232,7 +232,7 @@ TILE "lantern";
 	SOLID		block;
 	SPRITEINDEX	0, "tile_lantern_lit";
 	SPRITEINDEX	1, "tile_lantern_unlit";
-	PROPERTIES	(boolean, lit, true, "Lit", "", "", "Whether the lantern starts lit or not.", false);
+	PROPERTIES	(boolean, lit, true, "Lit", "", "", "Whether the lantern starts lit or not.");
 	EVENT		light, "Light", "Lanturn", "Occurs when the lantern is lighted.", (Lantern, lantern);
 	EVENT		put_out, "Put Out", "Lanturn", "Occurs when the lantern is put out.", (Lantern, lantern);
 END;
@@ -250,7 +250,7 @@ TILE "sign";
 		(integer, cuttable_sword_level, 1),
 		(string, text, "Hello World!",
 			"Text", "text_message", "Sign",
-			"The text to display when the sign is read from the front.", false);
+			"The text to display when the sign is read from the front.");
 END;
 
 #TILE sign_alt;
@@ -550,7 +550,7 @@ TILE "plaque";
 	PROPERTIES
 		(string, text, "Hello World!",
 			"Text", "text_message", "Sign",
-			"The text to display when the sign is read from the front.", false);
+			"The text to display when the sign is read from the front.");
 END;
 
 TILE "locked_block";

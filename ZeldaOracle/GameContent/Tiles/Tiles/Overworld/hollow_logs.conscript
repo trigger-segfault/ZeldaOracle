@@ -1,0 +1,18 @@
+﻿
+#==============================================================
+# Collision Models
+#==============================================================
+
+MODEL temp_hollow_log_vertical;
+	ADD (0, 0, 4, 16); ADD (12, 0, 4, 12); END;
+MODEL temp_hollow_log_horizontal;
+	ADD (0, 0, 16, 4); ADD (0, 12, 16, 4); END;
+	
+#==============================================================
+# Tiles
+#==============================================================
+
+TILE "hollow_log_up"; SAMESPRITEABOVE; SOLID temp_hollow_log_vertical; END;
+TILE "hollow_log_down"; SAMESPRITEABOVE; SOLID temp_hollow_log_vertical; END;
+TILE "hollow_log_left"; SAMESPRITEABOVE; SOLID temp_hollow_log_horizontal; END;
+TILE "hollow_log_right"; SAMESPRITEABOVE; SOLID temp_hollow_log_horizontal; END;

@@ -17,3 +17,4 @@ LOAD "Overworld/town.conscript", true;
 LOAD "Overworld/bridges.conscript", true;
 LOAD "Overworld/vertical_walls.conscript", true;
 LOAD "Overworld/horizon.conscript", true;
+LOAD "Overworld/hollow_logs.conscript", true;

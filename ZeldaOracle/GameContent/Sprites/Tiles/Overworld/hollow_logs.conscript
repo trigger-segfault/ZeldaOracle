@@ -1,0 +1,34 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_hollow_logs", "Tiles/Overworld/hollow_logs", (16, 16), (1, 1), (18, 18); END;
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"entity_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+MAPPEDCOLORS	"entities_default", ("orange");
+
+SOURCE "temp_sheet_hollow_logs";
+SPRITESET "set_hollow_logs", (4, 2);
+	MULTIPLE BASIC (0, 0); END;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "set_hollow_logs";
+COMPOSITE "tile_hollow_log_up_above";
+	ADD (0, 0), (-8, 0); ADD (1, 0), (8, 0); END;
+COMPOSITE "tile_hollow_log_down_above";
+	ADD (0, 1), (-8, 0); ADD (1, 1), (8, 0); END;
+COMPOSITE "tile_hollow_log_left_above";
+	ADD (2, 0), (0, -8); ADD (2, 1), (0, 8); END;
+COMPOSITE "tile_hollow_log_right_above";
+	ADD (3, 0), (0, -8); ADD (3, 1), (0, 8); END;

@@ -16,8 +16,8 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 MAPPEDCOLORS	"tiles_default", ("sand", "grave");
 
 SOURCE "temp_sheet_obstacles";
-SPRITESET "set_obstacles", (3, 5);
-	MULTIPLE COLOR "", ("dirt", "dirt_alt"), (0, 0), (0, 0), (3, 1); END;
+SPRITESET "set_obstacles", (4, 5);
+	MULTIPLE COLOR "", ("dirt", "dirt_alt"), (0, 0), (0, 0), (4, 1); END;
 	
 	MULTIPLE BASIC (0, 1), (0, 1), (2, 1); END;
 	
@@ -49,11 +49,13 @@ END;
 
 SOURCE "set_obstacles";
 NAME "tile_boulder"						((0, 0), "dirt");
-NAME "tile_boulder_interior"			((1, 0), "dirt");
-NAME "tile_boulder_dungeon"				((2, 0), "dirt");
+NAME "tile_boulder_dark"				((1, 0), "dirt");
+NAME "tile_boulder_interior"			((2, 0), "dirt");
+NAME "tile_boulder_dungeon"				((3, 0), "dirt");
 NAME "tile_boulder_alt"					((0, 0), "dirt_alt");
-NAME "tile_boulder_alt_interior"		((1, 0), "dirt_alt");
-NAME "tile_boulder_alt_dungeon"			((2, 0), "dirt_alt");
+NAME "tile_boulder_alt_dark"			((1, 0), "dirt_alt");
+NAME "tile_boulder_alt_interior"		((2, 0), "dirt_alt");
+NAME "tile_boulder_alt_dungeon"			((3, 0), "dirt_alt");
 
 NAME "tile_coconut_left"				(0, 1);
 NAME "tile_coconut_right"				(1, 1);
