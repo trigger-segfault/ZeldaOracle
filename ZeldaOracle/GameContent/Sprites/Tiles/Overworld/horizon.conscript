@@ -18,6 +18,9 @@ SOURCE "temp_sheet_horizon";
 SPRITESET "set_horizon", (6, 6);
 	MULTIPLE BASIC (0, 0), (0, 0), (4, 4); END;
 	MULTIPLE BASIC (4, 0), (4, 0), (2, 3); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("dirt");
+	SINGLE BASIC (4, 3); END;
 END;
 
 #==============================================================
@@ -53,3 +56,5 @@ NAME "tile_horizon_dark_clouds_mid_2"			(5, 0);
 NAME "tile_horizon_dark_clouds_bottom_1"		(4, 1);
 NAME "tile_horizon_dark_clouds_bottom_2"		(5, 1);
 NAME "tile_horizon_dark_sky"					(5, 2);
+
+NAME "tile_horizon_edge_dirt_rough"				(4, 3);

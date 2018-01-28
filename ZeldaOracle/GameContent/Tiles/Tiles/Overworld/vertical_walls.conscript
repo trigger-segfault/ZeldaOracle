@@ -39,7 +39,6 @@ TILE "vertical_brick_wall_bottom_left_cracked_right"; SAMESPRITE; SOLID block; E
 TILE "vertical_brick_wall_bottom_cracked_right"; SAMESPRITE; LEDGE block, down; END;
 TILE "vertical_brick_wall_bottom_cracked_left"; SAMESPRITE; LEDGE block, down; END;
 TILE "vertical_brick_wall_bottom_right_cracked_left"; SAMESPRITE; SOLID block; END;
-
 TILE "vertical_brick_wall_bombable"; 
 	SAMESPRITE;
 	SOLID		block;
@@ -48,8 +47,10 @@ TILE "vertical_brick_wall_bombable";
 END;
 TILE "vertical_brick_wall_hole"; SAMESPRITE; SOLID doorway; END;
 TILE "vertical_brick_wall_doorway"; SAMESPRITE; SOLID doorway; END;
+TILE "vertical_brick_wall_keyhole"; SAMESPRITE; SOLID block; END;
 TILE "vertical_brick_wall_cliff_1"; SAMESPRITE; LEDGE block, down; END;
 TILE "vertical_brick_wall_cliff_2"; SAMESPRITE; LEDGE block, down; END;
+
 
 TILE "vertical_palace_wall_left"; SAMESPRITE; SOLID block; END;
 TILE "vertical_palace_wall"; SAMESPRITE; LEDGE block, down; END;
@@ -86,3 +87,12 @@ TILE "vertical_stone_wall_bottom_left"; SAMESPRITE; SOLID block; END;
 TILE "vertical_stone_wall_bottom"; SAMESPRITE; LEDGE block, down; END;
 TILE "vertical_stone_wall_bottom_right"; SAMESPRITE; SOLID block; END;
 TILE "vertical_stone_wall_bottom_both"; SAMESPRITE; SOLID block; END;
+
+TILE "vertical_onox_wall_left"; SAMESPRITE; SOLID block; END;
+TILE "vertical_onox_wall"; SAMESPRITE; LEDGE block, down; END;
+TILE "vertical_onox_wall_right"; SAMESPRITE; SOLID block; END;
+TILE "vertical_onox_wall_both"; SAMESPRITE; SOLID block; END;
+TILE "vertical_onox_wall_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "vertical_onox_wall_bottom"; SAMESPRITE; LEDGE block, down; END;
+TILE "vertical_onox_wall_bottom_right"; SAMESPRITE; SOLID block; END;
+TILE "vertical_onox_wall_bottom_both"; SAMESPRITE; SOLID block; END;

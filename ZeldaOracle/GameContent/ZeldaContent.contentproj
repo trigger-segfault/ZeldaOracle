@@ -121,11 +121,11 @@
       <Name>tile_dictionary</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Palettes\dungeon_skull_dungeon.conscript">
+    <None Include="Palettes\Dungeon\dungeon_skull_dungeon.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>dungeon_skull_dungeon</Name>
     </None>
-    <None Include="Palettes\dungeon_spirits_grave.conscript">
+    <None Include="Palettes\Dungeon\dungeon_spirits_grave.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>dungeon_spirits_grave</Name>
     </None>
@@ -145,37 +145,45 @@
       <Name>entities_menu</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Palettes\interior_present.conscript">
+    <None Include="Palettes\Interior\interior_present.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>interior_present</Name>
+    </None>
+    <None Include="Palettes\Overworld\present.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>present</Name>
+    </None>
+    <None Include="Palettes\Overworld\Special\summer_onoxs_castle.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>summer_onoxs_castle</Name>
+    </None>
+    <None Include="Palettes\Overworld\Special\summer_temple_of_seasons.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>summer_temple_of_seasons</Name>
+    </None>
+    <None Include="Palettes\Overworld\spring_forest.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>spring_forest</Name>
+    </None>
+    <None Include="Palettes\Overworld\summer.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>summer</Name>
+    </None>
+    <None Include="Palettes\Overworld\summer_forest.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>summer_forest</Name>
+    </None>
+    <None Include="Palettes\Overworld\underwater_present.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>underwater_present</Name>
     </None>
     <None Include="Palettes\palettes.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>palettes</Name>
     </None>
-    <None Include="Palettes\present.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>present</Name>
-    </None>
-    <None Include="Palettes\Special\summer_temple_of_seasons.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>summer_temple_of_seasons</Name>
-    </None>
-    <None Include="Palettes\summer.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>summer</Name>
-    </None>
-    <None Include="Palettes\summer_old.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>summer_old</Name>
-    </None>
     <None Include="Palettes\tiles_default.conscript">
       <Name>tiles_default</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Palettes\underwater_present.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>underwater_present</Name>
     </None>
     <None Include="Sounds\sounds.conscript">
       <Name>sounds</Name>
@@ -301,6 +309,10 @@
       <Name>hedges</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Sprites\Tiles\Overworld\hollow_logs.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>hollow_logs</Name>
+    </None>
     <None Include="Sprites\Tiles\Overworld\horizon.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>horizon</Name>
@@ -365,6 +377,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>special</Name>
     </None>
+    <None Include="Sprites\Tiles\Special\ancient_ruins.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>ancient_ruins</Name>
+    </None>
+    <None Include="Sprites\Tiles\Special\onoxs_castle.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>onoxs_castle</Name>
+    </None>
     <None Include="Sprites\Tiles\Special\temple_of_seasons.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>temple_of_seasons</Name>
@@ -381,6 +401,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>monsters</Name>
     </None>
+    <None Include="Sprites\Units\NPCs\biggoron.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>biggoron</Name>
+    </None>
     <None Include="Sprites\Units\Player\player.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>player</Name>
@@ -392,6 +416,10 @@
     <None Include="Tiles\ActionTiles\action_tiles.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>action_tiles</Name>
+    </None>
+    <None Include="Tiles\ActionTiles\biggoron.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>biggoron</Name>
     </None>
     <None Include="Tiles\ActionTiles\general.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -457,6 +485,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>hedges</Name>
     </None>
+    <None Include="Tiles\Tiles\Overworld\hollow_logs.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>hollow_logs</Name>
+    </None>
     <None Include="Tiles\Tiles\Overworld\horizon.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>horizon</Name>
@@ -497,6 +529,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>special</Name>
     </None>
+    <None Include="Tiles\Tiles\Special\ancient_ruins.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>ancient_ruins</Name>
+    </None>
+    <None Include="Tiles\Tiles\Special\biggoron.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>biggoron</Name>
+    </None>
+    <None Include="Tiles\Tiles\Special\onoxs_castle.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>onoxs_castle</Name>
+    </None>
     <None Include="Tiles\Tiles\Special\temple_of_seasons.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>temple_of_seasons</Name>
@@ -529,6 +573,10 @@
       <Name>forest</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Tilesets\Overworld\horizon.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>horizon</Name>
+    </None>
     <None Include="Tilesets\Overworld\land.conscript">
       <Name>land</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -548,6 +596,22 @@
     <None Include="Tilesets\tilesets.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>tilesets</Name>
+    </None>
+    <None Include="Zones\Dungeons\dungeons.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>dungeons</Name>
+    </None>
+    <None Include="Zones\Interior\interior.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>interior</Name>
+    </None>
+    <None Include="Zones\Overworld\overworld.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>overworld</Name>
+    </None>
+    <None Include="Zones\Overworld\special.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>special</Name>
     </None>
     <None Include="Zones\zones.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -880,6 +944,11 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="Images\Tiles\Overworld\hollow_logs.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>hollow_logs</Name>
+    </Compile>
     <Compile Include="Images\Tiles\Overworld\horizon.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -970,6 +1039,21 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="Images\Tiles\Special\ancient_ruins.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>ancient_ruins</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Special\forest_entrance.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>forest_entrance</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Special\onoxs_castle.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>onoxs_castle</Name>
+    </Compile>
     <Compile Include="Images\Tiles\Special\temple_of_seasons.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -1049,6 +1133,16 @@
       <Name>monsters</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Units\NPCs\biggoron.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>biggoron</Name>
+    </Compile>
+    <Compile Include="Images\Units\NPCs\biggoron_eyes.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>biggoron_eyes</Name>
     </Compile>
     <Compile Include="Images\Units\NPCs\npcs_red.png">
       <Name>npcs_red</Name>

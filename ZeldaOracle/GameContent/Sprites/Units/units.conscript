@@ -1,3 +1,4 @@
 ﻿
 LOAD "Player/player.conscript", true;
+LOAD "NPCs/biggoron.conscript", true;
 LOAD "Monsters/monster_previews.conscript", true;

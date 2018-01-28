@@ -1,0 +1,5 @@
+﻿
+#ACTIONTILE "biggoron";
+#	SPRITE "biggoron_eyes";
+#	SIZE (6, 5);
+#END;

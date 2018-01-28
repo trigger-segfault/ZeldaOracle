@@ -413,6 +413,38 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				baseTileData.PreviewSprite = GetSpriteFromParams(parameters);
 			});
 			//=====================================================================================
+			AddCommand("MODEL", (int) Modes.Root,
+				"string modeName",
+			delegate (CommandParam parameters) {
+				string modelName = parameters.GetString(0);
+				if (!modelName.StartsWith("temp_"))
+					ThrowCommandParseError("Model names defined in Tile Data scripts must be temporary and prefixed with \"temp_\"!");
+				model = new CollisionModel();
+				AddResource(modelName, model);
+				Mode = Modes.Model;
+			});
+			//=====================================================================================
+			AddCommand("END", (int) Modes.Model,
+				"",
+			delegate (CommandParam parameters) {
+				model = null;
+				Mode = Modes.Root;
+			});
+			//=====================================================================================
+			AddCommand("ADD", (int) Modes.Model,
+				"Rectangle box",
+			delegate (CommandParam parameters) {
+				model.AddBox(parameters.GetRectangle(0));
+			});
+			//=====================================================================================
+			AddCommand("COMBINE", (int) Modes.Model,
+				"string modelName, Point offset = (0, 0)",
+			delegate (CommandParam parameters) {
+				model.Combine(
+					GetResource<CollisionModel>(parameters.GetString(0)),
+					parameters.GetPoint(1));
+			});
+			//=====================================================================================
 		}
 
 
