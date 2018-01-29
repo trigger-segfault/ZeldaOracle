@@ -10,7 +10,7 @@ using Xceed.Wpf.Toolkit.PropertyGrid;
 using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 using ZeldaEditor.Control;
 using ZeldaOracle.Common.Scripting;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaEditor.PropertiesEditor.CustomEditors {
@@ -44,9 +44,9 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 			warps.Add("(none)");
 			if (level != null) {
 				foreach (Room room in level.Rooms) {
-					foreach (var eventTile in room.EventData) {
-						string id = eventTile.ID;
-						if (eventTile.Type == typeof(WarpEvent) && id != "" && !warps.Contains(id)) {
+					foreach (var actionTile in room.ActionData) {
+						string id = actionTile.ID;
+						if (actionTile.Type == typeof(WarpAction) && id != "" && !warps.Contains(id)) {
 							warps.Add(id);
 						}
 					}

@@ -67,7 +67,7 @@ namespace ZeldaEditor.Tools {
 
 		protected override void OnMouseDragBegin(MouseEventArgs e) {
 			// Draw a new selecion box.
-			if (DragButton.IsLeftOrRight() && !EditorControl.EventMode) {
+			if (DragButton.IsLeftOrRight() && !EditorControl.ActionMode && GetTileDataSize() == Point2I.One) {
 				IsDrawing = true;
 
 				if (DragButton == MouseButtons.Left)
@@ -139,7 +139,7 @@ namespace ZeldaEditor.Tools {
 		}
 
 		public override void DrawTile(Graphics2D g, Room room, Point2I position, Point2I levelCoord, int layer) {
-			if (!EditorControl.EventMode && layer == EditorControl.CurrentLayer) {
+			if (!EditorControl.ActionMode && layer == EditorControl.CurrentLayer) {
 				if (!IsDrawing && levelCoord == LevelDisplay.CursorTileLocation) {
 					TileDataInstance tile = CreateDrawTile();
 					if (tile != null) {
@@ -165,6 +165,12 @@ namespace ZeldaEditor.Tools {
 
 		private TileData GetTileData() {
 			return EditorControl.SelectedTileData as TileData;
+		}
+
+		private Point2I GetTileDataSize() {
+			if (GetTileData() != null)
+				return GMath.Max(Point2I.One, GetTileData().Size);
+			return Point2I.One;
 		}
 	}
 }

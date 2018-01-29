@@ -23,7 +23,7 @@ using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Tiles.Custom;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles.Internal;
 
@@ -36,7 +36,7 @@ namespace ZeldaOracle.Game.Control {
 		private Point2I				roomLocation;
 		private Dungeon				dungeon;
 		private List<Entity>		entities;
-		private List<EventTile>		eventTiles;
+		private List<ActionTile>	actionTiles;
 		private ViewControl			viewControl;
 		private int					requestedTransitionDirection;
 		private int					entityCount;
@@ -64,7 +64,7 @@ namespace ZeldaOracle.Game.Control {
 			dungeon					= null;
 			roomLocation			= Point2I.Zero;
 			entities				= new List<Entity>();
-			eventTiles				= new List<EventTile>();
+			actionTiles				= new List<ActionTile>();
 			viewControl				= new ViewControl();
 			tileManager				= new TileManager(this);
 			roomGraphics			= new RoomGraphics(this);
@@ -138,10 +138,10 @@ namespace ZeldaOracle.Game.Control {
 			return tileManager.GetTileAreaFromRect(rect, inflateAmount);
 		}
 
-		public EventTile FindEventTile(EventTileDataInstance data) {
-			for (int i = 0; i < eventTiles.Count; i++) {
-				if (eventTiles[i].EventData == data)
-					return eventTiles[i];
+		public ActionTile FindActionTile(ActionTileDataInstance data) {
+			for (int i = 0; i < actionTiles.Count; i++) {
+				if (actionTiles[i].ActionData == data)
+					return actionTiles[i];
 			}
 			return null;
 		}
@@ -150,8 +150,8 @@ namespace ZeldaOracle.Game.Control {
 			return GetTiles().Any(t => t.TileDataOwner == tileDataInstance);
 		}
 
-		public bool IsEventTileSpawned(EventTileDataInstance eventTileDataInstance) {
-			return eventTiles.Any(t => t.EventData == eventTileDataInstance);
+		public bool IsActionTileSpawned(ActionTileDataInstance actionTileDataInstance) {
+			return actionTiles.Any(t => t.ActionData == actionTileDataInstance);
 		}
 		
 
@@ -196,14 +196,14 @@ namespace ZeldaOracle.Game.Control {
 				tileData.Properties.Set("enabled", true);
 		}
 		
-		// Spawn an event tile if it isn't already spawned.
-		public void SpawnEventTile(EventTileDataInstance eventTileData, bool staySpawned) {
-			if (!IsEventTileSpawned(eventTileData)) {
-				EventTile tile = EventTile.CreateEvent(eventTileData);
-				AddEventTile(tile);
+		// Spawn an action tile if it isn't already spawned.
+		public void SpawnActionTile(ActionTileDataInstance actionTileData, bool staySpawned) {
+			if (!IsActionTileSpawned(actionTileData)) {
+				ActionTile tile = ActionTile.CreateAction(actionTileData);
+				AddActionTile(tile);
 			}
 			if (staySpawned)
-				eventTileData.Properties.Set("enabled", true);
+				actionTileData.Properties.Set("enabled", true);
 		}
 		
 		// Place a tile in the tile grid at the given location and layer.
@@ -227,10 +227,10 @@ namespace ZeldaOracle.Game.Control {
 			tileManager.RemoveTile(tile);
 		}
 
-		// Put an event tile into the room.
-		public void AddEventTile(EventTile eventTile) {
-			eventTile.Initialize(this);
-			eventTiles.Add(eventTile);
+		// Put an action tile into the room.
+		public void AddActionTile(ActionTile actionTile) {
+			actionTile.Initialize(this);
+			actionTiles.Add(actionTile);
 		}
 
 		// Move the given tile to a new location.
@@ -262,8 +262,8 @@ namespace ZeldaOracle.Game.Control {
 			room.IsDiscovered = true;
 			room.Level.IsDiscovered = true;
 
-			// Clear event tiles.
-			eventTiles.Clear();
+			// Clear action tiles.
+			actionTiles.Clear();
 
 			// Clear all entities from the old room (except for the player).
 			entities.Clear();
@@ -291,22 +291,22 @@ namespace ZeldaOracle.Game.Control {
 				}
 			}
 
-			// Create the event tiles.
-			eventTiles.Capacity = room.EventData.Count;
-			for (int i = 0; i < room.EventData.Count; i++) {
-				EventTileDataInstance data  = room.EventData[i];
+			// Create the action tiles.
+			actionTiles.Capacity = room.ActionData.Count;
+			for (int i = 0; i < room.ActionData.Count; i++) {
+				ActionTileDataInstance data  = room.ActionData[i];
 				if (data.Properties.GetBoolean("enabled", true)) {
-					EventTile eventTile = EventTile.CreateEvent(data);
-					eventTiles.Add(eventTile);
+					ActionTile actionTile = ActionTile.CreateAction(data);
+					actionTiles.Add(actionTile);
 				}
 			}
 			
 			// Initialize the tiles.
 			tileManager.InitializeTiles();
 			
-			// Initialize the event tiles.
-			for (int i = 0; i < eventTiles.Count; i++) {
-				eventTiles[i].Initialize(this);
+			// Initialize the action tiles.
+			for (int i = 0; i < actionTiles.Count; i++) {
+				actionTiles[i].Initialize(this);
 			}
 			
 			tileManager.PostInitializeTiles();
@@ -355,7 +355,7 @@ namespace ZeldaOracle.Game.Control {
 		}
 		
 		// Transition to another room through warp points.
-		public void Warp(WarpEvent startPoint, EventTileDataInstance endPoint) {
+		public void Warp(WarpAction startPoint, ActionTileDataInstance endPoint) {
 			TransitionToRoom(endPoint.Room, 
 				startPoint.CreateTransition(endPoint),
 				startPoint.CreateExitState(),
@@ -374,7 +374,7 @@ namespace ZeldaOracle.Game.Control {
 		}
 		
 		public void TransitionToRoom(Room nextRoom, RoomTransition transition,
-			GameState exitState, GameState enterState, EventTileDataInstance warpTile)
+			GameState exitState, GameState enterState, ActionTileDataInstance warpTile)
 		{
 			// Create the new room control.
 			RoomControl newControl = new RoomControl();
@@ -393,11 +393,11 @@ namespace ZeldaOracle.Game.Control {
 				gameManager.PopGameState(); // Pop the queue state.
 				gameManager.PushGameState(newControl); // Push the new room control state.
 
-				// Find the warp event were warping to and grab its enter-state.
+				// Find the warp action were warping to and grab its enter-state.
 				if (warpTile != null) {
-					WarpEvent eventTile = newControl.FindEventTile(warpTile) as WarpEvent;
-					if (eventTile != null)
-						enterState = eventTile.CreateEnterState();
+					WarpAction actionTile = newControl.FindActionTile(warpTile) as WarpAction;
+					if (actionTile != null)
+						enterState = actionTile.CreateEnterState();
 				}
 				if (enterState != null)
 					gameManager.PushGameState(enterState); // Push the enter state.
@@ -407,15 +407,15 @@ namespace ZeldaOracle.Game.Control {
 				gameManager.PopGameState(); // Pop the queue state.
 				gameManager.PopGameState(); // Pop the room control state.
 				gameManager.PushGameState(new GameStateQueue(transition, postTransitionState));
-				newControl.FindEventTile(warpTile);
+				newControl.FindActionTile(warpTile);
 			});
 
 			if (warpTile != null) {
 				transition.NewRoomSetup += delegate(RoomControl roomControl) {
-					// Find the warp event were warping to.
-					WarpEvent eventTile = newControl.FindEventTile(warpTile) as WarpEvent;
-					if (eventTile != null)
-						eventTile.SetupPlayerInRoom();
+					// Find the warp action were warping to.
+					WarpAction actionTile = newControl.FindActionTile(warpTile) as WarpAction;
+					if (actionTile != null)
+						actionTile.SetupPlayerInRoom();
 				};
 			}
 
@@ -483,9 +483,9 @@ namespace ZeldaOracle.Game.Control {
 			// Update tiles.
 			tileManager.UpdateTiles();
 
-			// Update the event tiles.
-			for (int i = 0; i < eventTiles.Count; i++) {
-				eventTiles[i].Update();
+			// Update the action tiles.
+			for (int i = 0; i < actionTiles.Count; i++) {
+				actionTiles[i].Update();
 			}
 			
 			// Process Physics.
@@ -513,7 +513,7 @@ namespace ZeldaOracle.Game.Control {
 			if (visualEffect != null && !disableVisualEffect)
 				visualEffect.Update();
 			
-			// Update entities, tiles, and event tiles.
+			// Update entities, tiles, and action tiles.
 			UpdateObjects();
 
 			// Update view to follow player.
@@ -580,9 +580,9 @@ namespace ZeldaOracle.Game.Control {
 			roomGraphics.SortDepthLayer(DepthLayer.PlayerAndNPCs); // Sort dynamic depth layers.
 			roomGraphics.DrawAll(g);
 			
-			// Draw event tiles in reverse order.
-			for (int i = eventTiles.Count - 1; i >= 0; i--)
-				eventTiles[i].Draw(g);
+			// Draw action tiles in reverse order.
+			for (int i = actionTiles.Count - 1; i >= 0; i--)
+				actionTiles[i].Draw(g);
 
 			// Draw the tile parts that display above the player and all entities
 			StartVisualEffect(g, position);
@@ -665,8 +665,8 @@ namespace ZeldaOracle.Game.Control {
 		public void SpawnTile(string id, bool staySpawned = false) {
 			foreach (TileDataInstance tileData in Room.GetTiles(id))
 				SpawnTile(tileData, staySpawned);
-			foreach (EventTileDataInstance eventTileData in Room.EventData)
-				SpawnEventTile(eventTileData, staySpawned);
+			foreach (ActionTileDataInstance actionTileData in Room.ActionData)
+				SpawnActionTile(actionTileData, staySpawned);
 		}
 		
 		public ZeldaAPI.Tile GetTileById(string id) {

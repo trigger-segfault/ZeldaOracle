@@ -56,6 +56,7 @@ TILE	armos_alt;
 TILE	armos_alt_asobject;
 TILE	grave;
 TILE	grave_asobject;
+TILE	tombstone;
 
 TILE	magnet_stone;
 TILE	dirt_pile;

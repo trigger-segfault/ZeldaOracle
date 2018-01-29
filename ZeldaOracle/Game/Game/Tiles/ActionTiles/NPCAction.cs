@@ -10,15 +10,15 @@ using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Worlds;
 
-namespace ZeldaOracle.Game.Tiles.EventTiles {
+namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
-	public class NPCEvent : EventTile {
+	public class NPCAction : ActionTile {
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public NPCEvent() {
+		public NPCAction() {
 		}
 
 
@@ -44,10 +44,10 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Draws the event tile data to display in the editor.</summary>
-		public new static void DrawTileData(Graphics2D g, EventTileDataDrawArgs args) {
+		/// <summary>Draws the action tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, ActionTileDataDrawArgs args) {
 			int direction = args.Properties.GetInteger("direction", 0);
-			EventTile.DrawTileDataIndex(g, args, substripIndex: direction);
+			ActionTile.DrawTileDataIndex(g, args, substripIndex: direction);
 		}
 
 

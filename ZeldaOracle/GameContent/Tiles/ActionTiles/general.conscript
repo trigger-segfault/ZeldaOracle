@@ -1,6 +1,6 @@
 ﻿
 ACTIONTILE warp;
-	TYPE		WarpEvent;
+	TYPE		WarpAction;
 	SPRITE		action_tile_warp_tunnel;
 	PROPERTIES	(string,  warp_type,				"tunnel",	"Warp Type", ("enum", "WarpType"), "Warp", "The type of warp point."),
 				(string,  destination_level,		"",			"Destination Level", "level", "Warp", "The level where the destination point is in."),
@@ -9,7 +9,7 @@ ACTIONTILE warp;
 END;
 
 ACTIONTILE color_tile_puzzle;
-	TYPE		EventColorTilePuzzle;
+	TYPE		ActionColorTilePuzzle;
 	SPRITE		action_tile_color_tile_puzzle;
 	PROPERTIES	(boolean, solve_once, false, "Solve Once", "", "Puzzle", "Can the puzzle only be solved once and not unsolved?");
 	EVENT		solved, "Solved", "Puzzle", "Occurs when the puzzle is solved.";
@@ -17,7 +17,7 @@ ACTIONTILE color_tile_puzzle;
 END;
 
 ACTIONTILE npc;
-	TYPE		NPCEvent;
+	TYPE		NPCAction;
 	SPRITE		npc_shopkeeper;
 	PROPERTIES	(integer, npc_flags,		6, "NPC Options", ("enum_flags", "NPCFlags"), "NPC", "The options for the NPC."),
 				(integer, direction,		0, "Direction", "direction", "NPC", "The default direction the NPC faces."),

@@ -193,6 +193,10 @@
       <Name>animations</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Sprites\Items\items.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>items</Name>
+    </None>
     <None Include="Sprites\sprites.conscript">
       <Name>sprites</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

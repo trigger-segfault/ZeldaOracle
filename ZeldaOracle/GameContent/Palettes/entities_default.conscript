@@ -85,8 +85,10 @@ LOOKUP	color_cube_blue_yellow, dark	shaded_red, light;
 # Unique
 #==============================================================
 
-COLOR	maku_seed, light				(216,128,160);
-COLOR	maku_seed, dark					(160,  0, 88);
+COLOR	maku_seed_ages, light				(136,192, 88);
+COLOR	maku_seed_ages, dark				( 72,120, 40);
+COLOR	maku_seed_seasons, light			(216,128,160);
+COLOR	maku_seed_seasons, dark				(160,  0, 88);
 
 COLOR	biggoron_eyes, light			(224,176,248);
 COLOR	biggoron_eyes, dark				(120, 40, 96);

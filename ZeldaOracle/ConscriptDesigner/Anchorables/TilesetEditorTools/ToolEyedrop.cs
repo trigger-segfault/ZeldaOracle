@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using Key = System.Windows.Input.Key;
 using ConscriptDesigner.Control;
 

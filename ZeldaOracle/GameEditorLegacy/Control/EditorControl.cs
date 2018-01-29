@@ -17,7 +17,7 @@ using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 using ZeldaEditor.Tools;
 using ZeldaEditor.Scripting;
@@ -601,11 +601,11 @@ namespace ZeldaEditor.Control {
 		}
 		
 		public bool ShouldDrawEvents {
-			get { return (showEvents || eventMode || (selectedTilesetTileData is EventTileData) || (tileset is EventTileset)); }
+			get { return (showEvents || eventMode || (selectedTilesetTileData is ActionTileData) || (tileset is EventTileset)); }
 		}
 
 		public bool EventMode {
-			get { return (eventMode || (selectedTilesetTileData is EventTileData)); }
+			get { return (eventMode || (selectedTilesetTileData is ActionTileData)); }
 			set { eventMode = value; }
 		}
 
@@ -652,7 +652,7 @@ namespace ZeldaEditor.Control {
 		}
 
 		public bool IsSelectedTileAnEvent {
-			get { return (selectedTilesetTileData is EventTileData); }
+			get { return (selectedTilesetTileData is ActionTileData); }
 		}
 
 		public bool NeedsRecompiling {

@@ -14,7 +14,7 @@ using ZeldaOracle.Common.Scripts.Commands;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
@@ -154,12 +154,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				tileset.RemoveTileData(location);
 			});
 			//=====================================================================================
-			/*AddCommand("ACTIONTILESET", "string name, Point size",
-			delegate(CommandParam parameters) {
-				eventTileset = new EventTileset(parameters.GetString(0),
-					null, parameters.GetPoint(1));
-			});*/
-			//=====================================================================================
 			/*AddCommand("TILE",
 				"Point sourceIndex",
 			delegate(CommandParam parameters) {
@@ -170,27 +164,27 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			/*AddCommand("ACTIONTILE", "string name",
 			delegate (CommandParam parameters) {
-				eventTileData = new EventTileData();
-				eventTileData.Name = parameters.GetString(0);
-				baseTileData = eventTileData;
+				actionTileData = new ActionTileData();
+				actionTileData.Name = parameters.GetString(0);
+				baseTileData = actionTileData;
 			});
 			//=====================================================================================
 			AddCommand("MONSTER", "string name, string sprite, string monsterType, string monsterColor",
 			delegate(CommandParam parameters) {
-				eventTileData = new EventTileData();
-				eventTileData.Clone(GetResource<EventTileData>("monster"));
-				eventTileData.Name = parameters.GetString(0);
-				baseTileData = eventTileData;
+				actionTileData = new ActionTileData();
+				actionTileData.Clone(GetResource<ActionTileData>("monster"));
+				actionTileData.Name = parameters.GetString(0);
+				baseTileData = actionTileData;
 								
 				if (parameters.ChildCount > 1)
-					eventTileData.Sprite = GetResource<ISprite>(parameters.GetString(1));
+					actionTileData.Sprite = GetResource<ISprite>(parameters.GetString(1));
 				if (parameters.ChildCount > 2)
-					eventTileData.Properties.Set("monster_type", parameters.GetString(2));
+					actionTileData.Properties.Set("monster_type", parameters.GetString(2));
 				if (parameters.ChildCount > 3) {
 					MonsterColor color;
 					if (!Enum.TryParse<MonsterColor>(parameters.GetString(3), true, out color))
 						ThrowParseError("Invalid monster color: \"" + parameters.GetString(3) + "\"!");
-					eventTileData.Properties.Set("color", (int) color);
+					actionTileData.Properties.Set("color", (int) color);
 					int imageVariantID = GameData.VARIANT_RED;
 					if (color == MonsterColor.Red)
 						imageVariantID = GameData.VARIANT_RED;
@@ -200,7 +194,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						imageVariantID = GameData.VARIANT_GREEN;
 					else if (color == MonsterColor.Orange)
 						imageVariantID = GameData.VARIANT_ORANGE;
-					eventTileData.Properties.Set("image_variant", imageVariantID);
+					actionTileData.Properties.Set("image_variant", imageVariantID);
 				}
 			});*/
 			//=====================================================================================
@@ -494,8 +488,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			delegate(CommandParam parameters) {
 				if (tileData != null)
 					tileData.Clone(GetResource<TileData>(parameters.GetString(0)));
-				else if (eventTileData != null)
-					eventTileData.Clone(GetResource<EventTileData>(parameters.GetString(0)));
+				else if (actionTileData != null)
+					actionTileData.Clone(GetResource<ActionTileData>(parameters.GetString(0)));
 			});
 			//=====================================================================================
 			AddCommand("PREVIEW",

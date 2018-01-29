@@ -9,9 +9,9 @@ using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Graphics.Sprites;
 
-namespace ZeldaOracle.Game.Tiles.EventTiles {
+namespace ZeldaOracle.Game.Tiles.ActionTiles {
 	
-	public class EventTileDataInstance : BaseTileDataInstance {
+	public class ActionTileDataInstance : BaseTileDataInstance {
 
 		private Point2I			position;
 		private ISprite			sprite;
@@ -21,38 +21,38 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		// Constructors
 		//-----------------------------------------------------------------------------
 		
-		public EventTileDataInstance() {
+		public ActionTileDataInstance() {
 
 		}
 
-		public EventTileDataInstance(EventTileData tileData) :
+		public ActionTileDataInstance(ActionTileData tileData) :
 			base(tileData)
 		{
 			this.sprite		= tileData.Sprite;
 		}
 
-		public EventTileDataInstance(EventTileData tileData, Point2I position) :
+		public ActionTileDataInstance(ActionTileData tileData, Point2I position) :
 			base(tileData) {
 			this.position   = position;
 			this.sprite     = (tileData != null ? tileData.Sprite : null);
 		}
 
-		public EventTileDataInstance(EventTileDataInstance eventTile) :
+		public ActionTileDataInstance(ActionTileDataInstance actionTile) :
 			this()
 		{
-			Clone(eventTile);
+			Clone(actionTile);
 		}
 
 		public override void Clone(BaseTileDataInstance copy) {
 			base.Clone(copy);
-			if (copy is EventTileDataInstance) {
-				this.position	= ((EventTileDataInstance) copy).position;
-				this.sprite		= ((EventTileDataInstance) copy).sprite;
+			if (copy is ActionTileDataInstance) {
+				this.position	= ((ActionTileDataInstance) copy).position;
+				this.sprite		= ((ActionTileDataInstance) copy).sprite;
 			}
 		}
 		
 		public override BaseTileDataInstance Duplicate() {
-			EventTileDataInstance copy = new EventTileDataInstance();
+			ActionTileDataInstance copy = new ActionTileDataInstance();
 			copy.Clone(this);
 			return copy;
 		}
@@ -92,8 +92,8 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		// Properties
 		//-----------------------------------------------------------------------------
 		
-		public EventTileData EventTileData {
-			get { return (EventTileData) tileData; }
+		public ActionTileData ActionTileData {
+			get { return (ActionTileData) tileData; }
 			set { base.BaseData = value; }
 		}
 
@@ -103,7 +103,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		}
 
 		public Point2I Size {
-			get { return EventTileData.Size; }
+			get { return ActionTileData.Size; }
 		}
 
 		public int SubStripIndex {

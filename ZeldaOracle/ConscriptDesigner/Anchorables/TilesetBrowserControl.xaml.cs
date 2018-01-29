@@ -18,7 +18,7 @@ using ConscriptDesigner.WinForms;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaResources = ZeldaOracle.Common.Content.Resources;
 
 namespace ConscriptDesigner.Anchorables {

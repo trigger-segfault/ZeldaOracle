@@ -11,7 +11,7 @@ using ZeldaEditor.Control;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaEditor.DevTools {
@@ -127,7 +127,7 @@ namespace ZeldaEditor.DevTools {
 				yield return entry.Value;
 
 			// Search event tile data.
-			foreach (KeyValuePair<string, EventTileData> entry in Resources.GetResourceDictionary<EventTileData>())
+			foreach (KeyValuePair<string, ActionTileData> entry in Resources.GetResourceDictionary<ActionTileData>())
 				yield return entry.Value;
 
 			// Search placed tiles.
@@ -152,7 +152,7 @@ namespace ZeldaEditor.DevTools {
 			foreach (Room room in level.GetRooms()) {
 				foreach (TileDataInstance tile in room.GetTiles())
 					yield return tile;
-				foreach (EventTileDataInstance tile in room.EventData)
+				foreach (ActionTileDataInstance tile in room.ActionData)
 					yield return tile;
 			}
 		}

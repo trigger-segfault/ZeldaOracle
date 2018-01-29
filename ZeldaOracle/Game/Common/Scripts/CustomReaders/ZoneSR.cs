@@ -14,7 +14,7 @@ using ZeldaOracle.Common.Scripts.Commands;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {

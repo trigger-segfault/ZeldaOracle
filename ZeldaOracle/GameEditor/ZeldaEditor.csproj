@@ -149,7 +149,7 @@
     <Compile Include="Undo\ActionDeleteLevel.cs" />
     <Compile Include="Undo\ActionDuplicateDungeon.cs" />
     <Compile Include="Undo\ActionDuplicateLevel.cs" />
-    <Compile Include="Undo\ActionEventTile.cs" />
+    <Compile Include="Undo\ActionPlaceAction.cs" />
     <Compile Include="Undo\ActionMoveDungeon.cs" />
     <Compile Include="Undo\ActionMoveLevel.cs" />
     <Compile Include="Undo\ActionNewWorld.cs" />

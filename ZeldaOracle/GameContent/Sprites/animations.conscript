@@ -933,10 +933,10 @@ ANIMATION "npc_shopkeeper"; SUBSTRIP repeat;
 # Collectible Animations
 #==============================================================
 
-SOURCE "items_small";
+#SOURCE "items_small";
 
-ANIMATION "collectible_fairy";
-	SUBSTRIP repeat; ADD frame, 1, (14, 3), (-4, -8);
-	SUBSTRIP repeat; ADD frame, 1, (15, 3), (-4, -8);
-	END;
+#ANIMATION "collectible_fairy";
+#	SUBSTRIP repeat; ADD frame, 1, (14, 3), (-4, -8);
+#	SUBSTRIP repeat; ADD frame, 1, (15, 3), (-4, -8);
+#	END;
 

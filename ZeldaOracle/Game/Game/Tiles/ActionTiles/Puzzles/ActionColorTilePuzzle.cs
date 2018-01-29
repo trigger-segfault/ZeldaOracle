@@ -7,9 +7,9 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Control;
 
-namespace ZeldaOracle.Game.Tiles.EventTiles.Puzzles {
+namespace ZeldaOracle.Game.Tiles.ActionTiles.Puzzles {
 
-	public class EventColorTilePuzzle : EventTile {
+	public class ActionColorTilePuzzle : ActionTile {
 
 		private PuzzleColor[,] solution;
 		private Rectangle2I solutionReferenceArea;
@@ -22,7 +22,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles.Puzzles {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public EventColorTilePuzzle() {
+		public ActionColorTilePuzzle() {
 
 		}
 
@@ -111,9 +111,9 @@ namespace ZeldaOracle.Game.Tiles.EventTiles.Puzzles {
 		// Static Methods
 		//-----------------------------------------------------------------------------
 		
-		/// <summary>Draws the event tile data to display in the editor.</summary>
-		public new static void DrawTileData(Graphics2D g, EventTileDataDrawArgs args) {
-			EventTile.DrawTileData(g, args);
+		/// <summary>Draws the action tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, ActionTileDataDrawArgs args) {
+			ActionTile.DrawTileData(g, args);
 		}
 	}
 }

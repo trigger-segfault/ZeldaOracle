@@ -12,15 +12,15 @@ using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Worlds;
 
-namespace ZeldaOracle.Game.Tiles.EventTiles {
+namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
-	public class MonsterEvent : EventTile {
+	public class MonsterAction : ActionTile {
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public MonsterEvent() {
+		public MonsterAction() {
 		}
 
 
@@ -72,8 +72,8 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Draws the event tile data to display in the editor.</summary>
-		public new static void DrawTileData(Graphics2D g, EventTileDataDrawArgs args) {
+		/// <summary>Draws the action tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, ActionTileDataDrawArgs args) {
 			ColorDefinitions colorDefinitions = new ColorDefinitions();
 			MonsterColor color = (MonsterColor) args.Properties.GetInteger("color", 0);
 			switch (color) {
@@ -89,8 +89,17 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			case MonsterColor.Orange:
 				colorDefinitions.SetAll("orange");
 				break;
+			case MonsterColor.Gold:
+				colorDefinitions.SetAll("gold");
+				break;
+			case MonsterColor.DarkRed:
+				colorDefinitions.SetAll("shaded_red");
+				break;
+			case MonsterColor.DarkBlue:
+				colorDefinitions.SetAll("shaded_blue");
+				break;
 			}
-			EventTile.DrawTileData(g, args, colorDefinitions);
+			ActionTile.DrawTileData(g, args, colorDefinitions);
 		}
 
 

@@ -44,7 +44,8 @@ ENTITY	color_cube_blue_yellow;
 # Unique
 #==============================================================
 
-ENTITY	maku_seed;
+ENTITY	maku_seed_ages;
+ENTITY	maku_seed_seasons;
 ENTITY	biggoron_eyes;
 
 #==============================================================

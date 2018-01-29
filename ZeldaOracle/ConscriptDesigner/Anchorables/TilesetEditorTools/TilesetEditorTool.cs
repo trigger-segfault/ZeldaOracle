@@ -14,7 +14,7 @@ using System.Resources;
 using ConscriptDesigner.Util;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using Key = System.Windows.Input.Key;
 using ZeldaOracle.Game;
 

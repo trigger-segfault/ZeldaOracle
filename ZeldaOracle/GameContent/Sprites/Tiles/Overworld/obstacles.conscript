@@ -21,7 +21,10 @@ SPRITESET "set_obstacles", (4, 5);
 	
 	MULTIPLE BASIC (0, 1), (0, 1), (2, 1); END;
 	
-	MULTIPLE BASIC (0, 2), (0, 2), (2, 3); END;
+	MAPPEDCOLORS	"tiles_default", ("tombstone");
+	MULTIPLE BASIC (0, 2), (0, 2), (2, 2); END;
+	MAPPEDCOLORS	"tiles_default", ("grave");
+	MULTIPLE BASIC (0, 4), (0, 4), (2, 1); END;
 END;
 
 MAPPEDCOLORS	"tiles_default", ("water", "water_vegetation", "poison_bubble");

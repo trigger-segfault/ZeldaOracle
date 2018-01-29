@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Tiles.Custom;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Audio;
@@ -17,7 +17,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private Level							level;		// The level this room is in.
 		private Point2I							location;	// Location within the level.
 		private TileDataInstance[,,]			tileData;	// 3D grid of tile data (x, y, layer)
-		private List<EventTileDataInstance>		eventData;
+		private List<ActionTileDataInstance>		actionData;
 		//private Zone							zone;
 		private Properties						properties;
 		private EventCollection					events;
@@ -28,10 +28,10 @@ namespace ZeldaOracle.Game.Worlds {
 		//-----------------------------------------------------------------------------
 
 		public Room() {
-			this.level      = null;
-			this.location   = Point2I.Zero;
-			this.tileData   = new TileDataInstance[0, 0, 0];
-			this.eventData  = new List<EventTileDataInstance>();
+			this.level		= null;
+			this.location	= Point2I.Zero;
+			this.tileData	= new TileDataInstance[0, 0, 0];
+			this.actionData	= new List<ActionTileDataInstance>();
 
 			this.events     = new EventCollection(this);
 			this.properties = new Properties(this);
@@ -99,8 +99,8 @@ namespace ZeldaOracle.Game.Worlds {
 					}
 				}
 			}
-			foreach (EventTileDataInstance eventTile in copy.eventData) {
-				AddEventTile(new EventTileDataInstance(eventTile));
+			foreach (ActionTileDataInstance actionTile in copy.actionData) {
+				AddActionTile(new ActionTileDataInstance(actionTile));
 			}
 		}
 
@@ -119,8 +119,8 @@ namespace ZeldaOracle.Game.Worlds {
 					}
 				}
 			}
-			foreach (EventTileDataInstance eventTile in eventData) {
-				yield return eventTile;
+			foreach (ActionTileDataInstance actionTile in actionData) {
+				yield return actionTile;
 			}
 		}
 
@@ -135,8 +135,8 @@ namespace ZeldaOracle.Game.Worlds {
 					}
 				}
 			}
-			foreach (EventTileDataInstance eventTile in eventData) {
-				yield return eventTile;
+			foreach (ActionTileDataInstance actionTile in actionData) {
+				yield return actionTile;
 			}
 		}
 
@@ -153,8 +153,8 @@ namespace ZeldaOracle.Game.Worlds {
 			return tileData[x, y, layer];
 		}
 
-		public EventTileDataInstance FindEventTileByID(string eventTileID) {
-			return eventData.Find(eventTile => eventTile.ID == eventTileID);
+		public ActionTileDataInstance FindActionTileByID(string actionTileID) {
+			return actionData.Find(actionTile => actionTile.ID == actionTileID);
 		}
 
 		public IEnumerable<TileDataInstance> GetTiles(string tileID) {
@@ -249,8 +249,8 @@ namespace ZeldaOracle.Game.Worlds {
 		public void Remove(BaseTileDataInstance tile) {
 			if (tile is TileDataInstance)
 				RemoveTile((TileDataInstance) tile);
-			else if (tile is EventTileDataInstance)
-				RemoveEventTile((EventTileDataInstance) tile);
+			else if (tile is ActionTileDataInstance)
+				RemoveActionTile((ActionTileDataInstance) tile);
 		}
 
 		public TileDataInstance CreateTile(TileData data, Point2I location, int layer) {
@@ -267,23 +267,23 @@ namespace ZeldaOracle.Game.Worlds {
 			return dataInstance;
 		}
 
-		public EventTileDataInstance CreateEventTile(EventTileData data, int x, int y) {
-			return CreateEventTile(data, new Point2I(x, y));
+		public ActionTileDataInstance CreateActionTile(ActionTileData data, int x, int y) {
+			return CreateActionTile(data, new Point2I(x, y));
 		}
 
-		public EventTileDataInstance CreateEventTile(EventTileData data, Point2I position) {
-			EventTileDataInstance dataInstance = new EventTileDataInstance(data, position);
-			AddEventTile(dataInstance);
+		public ActionTileDataInstance CreateActionTile(ActionTileData data, Point2I position) {
+			ActionTileDataInstance dataInstance = new ActionTileDataInstance(data, position);
+			AddActionTile(dataInstance);
 			return dataInstance;
 		}
 		
-		public void AddEventTile(EventTileDataInstance eventTile) {
-			eventData.Add(eventTile);
-			eventTile.Room = this;
+		public void AddActionTile(ActionTileDataInstance actionTile) {
+			actionData.Add(actionTile);
+			actionTile.Room = this;
 		}
 		
-		public void RemoveEventTile(EventTileDataInstance eventTile) {
-			eventData.Remove(eventTile);
+		public void RemoveActionTile(ActionTileDataInstance actionTile) {
+			actionData.Remove(actionTile);
 		}
 
 		internal void ResizeLayerCount(int newLayerCount) {
@@ -310,7 +310,7 @@ namespace ZeldaOracle.Game.Worlds {
 					tile.ResetState();
 			}
 
-			// TODO: Reset event tile states.
+			// TODO: Reset action tile states.
 		}
 
 		public void RespawnMonsters() {
@@ -320,9 +320,9 @@ namespace ZeldaOracle.Game.Worlds {
 					tile.ResetState();
 			}
 
-			// Reset event tile states.
-			foreach (EventTileDataInstance tile in eventData) {
-				if (tile.Type == typeof(MonsterEvent)) {
+			// Reset action tile states.
+			foreach (ActionTileDataInstance tile in actionData) {
+				if (tile.Type == typeof(MonsterAction)) {
 					tile.Properties.Set("dead", false);
 				}
 			}
@@ -338,9 +338,9 @@ namespace ZeldaOracle.Game.Worlds {
 			set { tileData = value; }
 		}
 
-		public List<EventTileDataInstance> EventData {
-			get { return eventData; }
-			set { eventData = value; }
+		public List<ActionTileDataInstance> ActionData {
+			get { return actionData; }
+			set { actionData = value; }
 		}
 
 		public Level Level {

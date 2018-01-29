@@ -7,7 +7,7 @@ using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 
 namespace ZeldaOracle.Game.Worlds {
 
@@ -214,10 +214,10 @@ namespace ZeldaOracle.Game.Worlds {
 					tileGrid.PlaceTile(tile, location, tile.Layer);
 
 				}
-				else if (baseTile is EventTileDataInstance) {
-					EventTileDataInstance eventTile = (EventTileDataInstance) baseTile;
-					Point2I position = (eventTile.Room.Location * roomSize - area.Point) * GameSettings.TILE_SIZE;
-					tileGrid.PlaceEventTile(eventTile, position + eventTile.Position);
+				else if (baseTile is ActionTileDataInstance) {
+					ActionTileDataInstance actionTile = (ActionTileDataInstance) baseTile;
+					Point2I position = (actionTile.Room.Location * roomSize - area.Point) * GameSettings.TILE_SIZE;
+					tileGrid.PlaceActionTile(actionTile, position + actionTile.Position);
 				}
 			}
 
@@ -241,14 +241,14 @@ namespace ZeldaOracle.Game.Worlds {
 				}
 			}
 
-			// Place event tiles
-			foreach (EventTileDataInstance eventTile in tileGrid.GetEventTilesAtPosition()) {
-				eventTile.Position += (Point2I) location * GameSettings.TILE_SIZE;
-				Point2I roomLocation = eventTile.Position / (roomSize * GameSettings.TILE_SIZE);
+			// Place action tiles
+			foreach (ActionTileDataInstance actionTile in tileGrid.GetActionTilesAtPosition()) {
+				actionTile.Position += (Point2I) location * GameSettings.TILE_SIZE;
+				Point2I roomLocation = actionTile.Position / (roomSize * GameSettings.TILE_SIZE);
 				Room room = GetRoomAt(roomLocation);
 				if (room != null) {
-					eventTile.Position -= roomLocation * roomSize * GameSettings.TILE_SIZE;
-					room.AddEventTile(eventTile);
+					actionTile.Position -= roomLocation * roomSize * GameSettings.TILE_SIZE;
+					room.AddActionTile(actionTile);
 				}
 			}
 		}
@@ -271,9 +271,9 @@ namespace ZeldaOracle.Game.Worlds {
 			area = Rectangle2I.Intersect(area,
 				new Rectangle2I(Point2I.Zero, roomSize * dimensions));
 
-			// Iterate the tile grid.
-			for (int x = 0; x < area.Width; x++) {
-				for (int y = 0; y < area.Height; y++) {
+			// Iterate the tile grid. (Backwards to prevent large tiles from getting overwritten
+			for (int x = area.Width - 1; x >= 0; x--) {
+				for (int y = area.Height - 1; y >= 0; y--) {
 					LevelTileCoord coord = (LevelTileCoord) (area.Point + new Point2I(x, y));
 					Room room = GetRoom(coord);
 					if (room != null) {
@@ -287,7 +287,7 @@ namespace ZeldaOracle.Game.Worlds {
 				}
 			}
 
-			// Determine the collection of rooms that will contain the event tiles.
+			// Determine the collection of rooms that will contain the action tiles.
 			Point2I roomAreaMin = GetRoomLocation((LevelTileCoord) area.Min);
 			Point2I roomAreaMax = GetRoomLocation((LevelTileCoord) area.Max);
 			Rectangle2I roomArea = new Rectangle2I(roomAreaMin, roomAreaMax - roomAreaMin + Point2I.One);
@@ -296,16 +296,16 @@ namespace ZeldaOracle.Game.Worlds {
 				area.Point * GameSettings.TILE_SIZE,
 				area.Size  * GameSettings.TILE_SIZE);
 
-			// Iterate event tiles.
+			// Iterate action tiles.
 			for (int x = roomArea.Left; x < roomArea.Right; x++) {
 				for (int y = roomArea.Top; y < roomArea.Bottom; y++) {
 					Room room = rooms[x, y];
-					for (int i = 0; i < room.EventData.Count; i++) {
-						EventTileDataInstance eventTile = room.EventData[i];
-						Rectangle2I tileBounds = eventTile.GetBounds();
+					for (int i = 0; i < room.ActionData.Count; i++) {
+						ActionTileDataInstance actionTile = room.ActionData[i];
+						Rectangle2I tileBounds = actionTile.GetBounds();
 						tileBounds.Point += room.Location * roomSize * GameSettings.TILE_SIZE;
 						if (pixelArea.Contains(tileBounds.Point))
-							yield return eventTile;
+							yield return actionTile;
 					}
 				}
 			}
@@ -338,12 +338,12 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
-		public EventTileDataInstance FindEventTileByID(string id) {
+		public ActionTileDataInstance FindActionTileByID(string id) {
 			for (int x = 0; x < dimensions.X; x++) {
 				for (int y = 0; y < dimensions.Y; y++) {
-					EventTileDataInstance eventTile = rooms[x, y].FindEventTileByID(id);
-					if (eventTile != null)
-						return eventTile;
+					ActionTileDataInstance actionTile = rooms[x, y].FindActionTileByID(id);
+					if (actionTile != null)
+						return actionTile;
 				}
 			}
 			return null;
