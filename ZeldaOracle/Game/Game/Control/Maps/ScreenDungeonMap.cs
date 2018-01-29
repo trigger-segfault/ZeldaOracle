@@ -141,6 +141,7 @@ namespace ZeldaOracle.Game.Control.Maps {
 		}
 
 		public override void OnBegin() {
+
 		}
 		
 		public override void Update() {

@@ -255,24 +255,6 @@ namespace ZeldaOracle.Game {
 		private static void LoadTilesets() {
 			// Load tilesets and tile data.
 			Resources.LoadTilesets("Tilesets/tilesets.conscript");
-			/*Resources.LoadTilesets("Tilesets/cliffs.conscript");
-
-			Resources.LoadTilesets("Tilesets/objects_nv.conscript");
-			Resources.LoadTilesets("Tilesets/objects.conscript");
-
-			Resources.LoadTilesets("Tilesets/land.conscript");
-			Resources.LoadTilesets("Tilesets/forest.conscript");
-			Resources.LoadTilesets("Tilesets/water.conscript");
-			Resources.LoadTilesets("Tilesets/town.conscript");
-			Resources.LoadTilesets("Tilesets/interior.conscript");
-			Resources.LoadTilesets("Tilesets/dungeon.conscript");
-			Resources.LoadTilesets("Tilesets/sidescroll.conscript");
-			
-			Resources.LoadTilesets("Tilesets/event_tile_data.conscript");*/
-			// OLD Tilesets:
-			//Resources.LoadTilesets("Tilesets/tile_data.conscript");
-			//Resources.LoadTilesets("Tilesets/overworld.conscript");
-			//Resources.LoadTilesets("Tilesets/interior2.conscript");
 
 			IntegrateResources<Tileset>("TILESET_");
 		}
@@ -281,8 +263,8 @@ namespace ZeldaOracle.Game {
 			Resources.LoadTiles("Tiles/tiles.conscript");
 		}
 		/*
-		private static EventTileData CreateMonsterEvent(int sx, int sy, string id, string animation, Type monsterType, MonsterColor color) {
-			EventTileData etd = new EventTileData(typeof(MonsterEvent));
+		private static ActionTileData CreateMonsterAction(int sx, int sy, string id, string animation, Type monsterType, MonsterColor color) {
+			ActionTileData etd = new ActionTileData(typeof(MonsterAction));
 			etd.Sprite = Resources.GetAnimation(animation);
 
 			etd.Properties.Set("color", (int) color)
@@ -309,8 +291,6 @@ namespace ZeldaOracle.Game {
 				etd.Properties.Set("image_variant", GameData.VARIANT_ORANGE);
 
 			Resources.AddResource(id, etd);
-			EventTileset eventTileset = Resources.GetResource<EventTileset>("events");
-			eventTileset.TileData[sx, sy] = etd;
 			return etd;
 		}*/
 
@@ -341,6 +321,29 @@ namespace ZeldaOracle.Game {
 		// Loads the palettes.
 		private static void LoadPalettes() {
 			Resources.LoadPalettes("Palettes/palettes.conscript");
+
+			// Menu palette is made programatically as it's just a 16 unit offset (Maxes at 248)
+			Palette entitiesMenu = new Palette(Resources.GetResource<Palette>("entities_default"));
+			foreach (var pair in entitiesMenu.GetDefinedConsts()) {
+				for (int i = 0; i < PaletteDictionary.ColorGroupSize; i++) {
+					Color color = pair.Value[i].Color;
+					color.R = (byte) GMath.Min(248, color.R + 16);
+					color.G = (byte) GMath.Min(248, color.G + 16);
+					color.B = (byte) GMath.Min(248, color.B + 16);
+					pair.Value[i].Color = color;
+				}
+			}
+			foreach (var pair in entitiesMenu.GetDefinedColors()) {
+				for (int i = 0; i < PaletteDictionary.ColorGroupSize; i++) {
+					Color color = pair.Value[i].Color;
+					color.R = (byte) GMath.Min(248, color.R + 16);
+					color.G = (byte) GMath.Min(248, color.G + 16);
+					color.B = (byte) GMath.Min(248, color.B + 16);
+					pair.Value[i].Color = color;
+				}
+			}
+			entitiesMenu.UpdatePalette();
+			Resources.AddResource<Palette>("entities_menu", entitiesMenu);
 
 			IntegrateResources<Palette>("PAL_");
 		}

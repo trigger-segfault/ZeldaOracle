@@ -32,7 +32,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaEditor {
@@ -242,16 +242,16 @@ namespace ZeldaEditor {
 		}
 
 		private void OnShowEventsChecked(object sender, RoutedEventArgs e) {
-			editorControl.ShowEvents = dropDownItemShowEvents.IsChecked;
+			editorControl.ShowActions = dropDownItemShowEvents.IsChecked;
 		}
 
 		private void OnLayerChanged(object sender, SelectionChangedEventArgs e) {
 			if (!suppressEvents) return;
 			if (comboBoxLayers.SelectedIndex == comboBoxLayers.Items.Count - 1) {
-				editorControl.EventMode = true;
+				editorControl.ActionMode = true;
 			}
 			else {
-				editorControl.EventMode = false;
+				editorControl.ActionMode = false;
 				editorControl.CurrentLayer = comboBoxLayers.SelectedIndex;
 			}
 			levelDisplay.Focus();
@@ -349,8 +349,8 @@ namespace ZeldaEditor {
 				string typeName = (tile.Type != null ? tile.Type.Name : "Tile");
 				propertyPreviewName.Text = typeName + SurroundID(tile.ID);
 			}
-			else if (obj is EventTileDataInstance) {
-				EventTileDataInstance tile = obj as EventTileDataInstance;
+			else if (obj is ActionTileDataInstance) {
+				ActionTileDataInstance tile = obj as ActionTileDataInstance;
 				ISprite currentSprite = tile.CurrentSprite;
 				if (currentSprite != null)
 					canvas = EditorResources.GetSprite(currentSprite, tile.Room.Zone.ImageVariantID,
@@ -361,7 +361,7 @@ namespace ZeldaEditor {
 					canvas.MaxWidth = 32;
 				}
 				propertyPreviewImage.Content = canvas;
-				string typeName = (tile.Type != null ? tile.Type.Name : "EventTile");
+				string typeName = (tile.Type != null ? tile.Type.Name : "ActionTile");
 				propertyPreviewName.Text = typeName + SurroundID(tile.ID);
 			}
 			else {
@@ -514,11 +514,11 @@ namespace ZeldaEditor {
 		}
 		private void CanExecuteCycleLayerUp(object sender, CanExecuteRoutedEventArgs e) {
 			if (!suppressEvents) return;
-			e.CanExecute = editorControl.IsLevelOpen && (editorControl.CurrentLayer + 1 < editorControl.Level.RoomLayerCount || !editorControl.EventMode);
+			e.CanExecute = editorControl.IsLevelOpen && (/*editorControl.CurrentLayer + 1 < editorControl.Level.RoomLayerCount && */!editorControl.ActionLayer);
 		}
 		private void CanExecuteCycleLayerDown(object sender, CanExecuteRoutedEventArgs e) {
 			if (!suppressEvents) return;
-			e.CanExecute = editorControl.IsLevelOpen && (editorControl.CurrentLayer > 0 || editorControl.EventMode);
+			e.CanExecute = editorControl.IsLevelOpen && (editorControl.CurrentLayer > 0 || editorControl.ActionLayer);
 		}
 
 		private void OnCycleLayerUpCommand(object sender, ExecutedRoutedEventArgs e) {

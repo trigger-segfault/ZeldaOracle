@@ -97,6 +97,7 @@ LOOKUP	armos, all						object, all;
 LOOKUP	armos_alt, all					gray, all;
 
 LOOKUP	grave, all						gray, all;
+LOOKUP	tombstone, all					grave, all;
 
 LOOKUP	magnet_stone, all				object, all;
 LOOKUP	dirt_pile, all					dirt, all;

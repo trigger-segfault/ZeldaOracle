@@ -6,7 +6,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 
 namespace ZeldaOracle.Common.Content {
 	public class TemporaryResources {
@@ -31,8 +31,8 @@ namespace ZeldaOracle.Common.Content {
 		private Dictionary<string, BaseTileData> baseTileData;
 		// The collection of loaded tile data strucures.
 		private Dictionary<string, TileData> tileData;
-		// The collection of loaded event tile data strucures.
-		private Dictionary<string, EventTileData> eventTileData;
+		// The collection of loaded action tile data strucures.
+		private Dictionary<string, ActionTileData> actionTileData;
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -46,7 +46,7 @@ namespace ZeldaOracle.Common.Content {
 			this.collisionModels	= new Dictionary<string, CollisionModel>();
 			this.baseTileData       = new Dictionary<string, BaseTileData>();
 			this.tileData			= new Dictionary<string, TileData>();
-			this.eventTileData		= new Dictionary<string, EventTileData>();
+			this.actionTileData		= new Dictionary<string, ActionTileData>();
 
 			// Setup the resource dictionary lookup map.
 			this.resourceDictionaries = new Dictionary<Type, object>();
@@ -57,7 +57,7 @@ namespace ZeldaOracle.Common.Content {
 			this.resourceDictionaries[typeof(CollisionModel)]	= collisionModels;
 			this.resourceDictionaries[typeof(BaseTileData)]		= baseTileData;
 			this.resourceDictionaries[typeof(TileData)]			= tileData;
-			this.resourceDictionaries[typeof(EventTileData)]	= eventTileData;
+			this.resourceDictionaries[typeof(ActionTileData)]	= actionTileData;
 		}
 
 

@@ -12,7 +12,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Worlds;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Audio;
 using ZeldaEditor.Control;
@@ -330,13 +330,13 @@ namespace ZeldaEditor {
 		}
 		
 		// Sample an event tile at the given point.
-		public EventTileDataInstance SampleEventTile(Point2I point) {
+		public ActionTileDataInstance SampleEventTile(Point2I point) {
 			Room room = SampleRoom(point);
 			if (room == null)
 				return null;
 			Point2I roomOffset = GetRoomDrawPosition(room);
-			for (int i = 0; i < room.EventData.Count; i++) {
-				EventTileDataInstance eventTile = room.EventData[i];
+			for (int i = 0; i < room.ActionData.Count; i++) {
+				ActionTileDataInstance eventTile = room.ActionData[i];
 				Rectangle2I tileRect = new Rectangle2I(eventTile.Position + roomOffset, eventTile.Size * GameSettings.TILE_SIZE);
 				if (tileRect.Contains(point))
 					return eventTile;
@@ -544,17 +544,17 @@ namespace ZeldaEditor {
 		}
 
 		// Draw an event tile.
-		private void DrawEventTile(Graphics2D g, EventTileDataInstance eventTile, Point2I position, Color drawColor) {
+		private void DrawEventTile(Graphics2D g, ActionTileDataInstance eventTile, Point2I position, Color drawColor) {
 			SpriteAnimation spr = eventTile.CurrentSprite;
 			int imageVariantID = eventTile.Properties.GetInteger("image_variant");
 			if (imageVariantID < 0)
 				imageVariantID = eventTile.Room.Zone.ImageVariantID;
 			
 			// Select different sprites for certain events.
-			if (eventTile.Type == typeof(NPCEvent)) {
+			if (eventTile.Type == typeof(NPCAction)) {
 				eventTile.SubStripIndex = eventTile.Properties.GetInteger("direction", 0);
 			}
-			else if (eventTile.Type == typeof(WarpEvent)) {
+			else if (eventTile.Type == typeof(WarpAction)) {
 				string warpTypeStr = eventTile.Properties.GetString("warp_type", "tunnel");
 				WarpType warpType = (WarpType) Enum.Parse(typeof(WarpType), warpTypeStr, true);
 				if (warpType == WarpType.Entrance)
@@ -625,8 +625,8 @@ namespace ZeldaEditor {
 
 			// Draw event tiles.
 			if (editorControl.ShowEvents || editorControl.ShouldDrawEvents) {
-				for (int i = 0; i < room.EventData.Count; i++)
-					DrawEventTile(g, room.EventData[i], room.EventData[i].Position, Color.White);
+				for (int i = 0; i < room.ActionData.Count; i++)
+					DrawEventTile(g, room.ActionData[i], room.ActionData[i].Position, Color.White);
 			}
 
 			// Draw the spacing lines between rooms.
@@ -683,7 +683,7 @@ namespace ZeldaEditor {
 						}
 						// Draw event tiles.
 						if (editorControl.ShowEvents || editorControl.ShouldDrawEvents) {
-							foreach (EventTileDataInstance eventTile in selectionGrid.GetEventTiles()) {
+							foreach (ActionTileDataInstance eventTile in selectionGrid.GetActionTiles()) {
 								Point2I position = GetLevelPixelDrawPosition(selectionGridArea.Point * GameSettings.TILE_SIZE + eventTile.Position);
 								DrawEventTile(g, eventTile, position, Color.White);
 							}

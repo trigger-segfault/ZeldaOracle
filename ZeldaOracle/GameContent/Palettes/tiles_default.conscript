@@ -116,6 +116,7 @@ COLOR	armos_alt_asobject, light		(0, 0, 0, 0);
 LOOKUP	grave, all						gray, all;
 LOOKUP	grave_asobject, all				grave, all;
 COLOR	grave_asobject, light			(0, 0, 0, 0);
+LOOKUP	tombstone, all					grave, all;
 
 LOOKUP	magnet_stone, all				object, all;
 LOOKUP	dirt_pile, all					dirt, all;

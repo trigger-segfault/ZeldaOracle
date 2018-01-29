@@ -11,7 +11,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Worlds;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Common.Audio;
 using ZeldaEditor.Control;
@@ -232,21 +232,34 @@ namespace ZeldaEditor.WinForms {
 			return room.GetTile(tileCoord.X, tileCoord.Y, layer);
 		}
 		
-		// Sample an event tile at the given point.
-		public EventTileDataInstance SampleEventTile(Point2I point) {
+		// Sample an action tile at the given point.
+		public ActionTileDataInstance SampleActionTile(Point2I point) {
 			Room room = SampleRoom(point);
 			if (room == null)
 				return null;
 			Point2I roomOffset = GetRoomDrawPosition(room);
-			for (int i = 0; i < room.EventData.Count; i++) {
-				EventTileDataInstance eventTile = room.EventData[i];
-				Rectangle2I tileRect = new Rectangle2I(eventTile.Position + roomOffset, eventTile.Size * GameSettings.TILE_SIZE);
+			for (int i = 0; i < room.ActionData.Count; i++) {
+				ActionTileDataInstance actionTile = room.ActionData[i];
+				Rectangle2I tileRect = new Rectangle2I(actionTile.Position + roomOffset, actionTile.Size * GameSettings.TILE_SIZE);
 				if (tileRect.Contains(point))
-					return eventTile;
+					return actionTile;
 			}
 			return null;
 		}
-		
+
+		//-----------------------------------------------------------------------------
+		// Get Tile
+		//-----------------------------------------------------------------------------
+
+		public TileDataInstance GetTile(Point2I levelTileCoord, int layer) {
+			Point2I roomLocation = levelTileCoord / Level.RoomSize;
+			Point2I roomCoord = GMath.Wrap(levelTileCoord, Level.RoomSize);
+			if (roomLocation >= Point2I.Zero && roomLocation < Level.Dimensions) {
+				return Level.GetRoomAt(roomLocation).GetTile(roomCoord, layer);
+			}
+			return null;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Coordinates Conversion
@@ -523,56 +536,16 @@ namespace ZeldaEditor.WinForms {
 			//}
 		}
 
-		// Draw an event tile.
-		public void DrawEventTile(Graphics2D g, Room room, EventTileDataInstance eventTile, Point2I position, Color drawColor) {
-			if (editorControl.ShowModified && !eventTile.HasModifiedProperties && !eventTile.HasDefinedEvents)
+		// Draw an action tile.
+		public void DrawActionTile(Graphics2D g, Room room, ActionTileDataInstance action, Point2I position, Color drawColor) {
+			if (editorControl.ShowModified && !action.HasModifiedProperties && !action.HasDefinedEvents)
 				return;
 
-			TileDataDrawing.DrawTile(g, eventTile, position, room.Zone, drawColor);
-
-			// Old DrawEventTile code:
-			//ISprite sprite = eventTile.CurrentSprite;
-			//int imageVariantID = eventTile.Properties.GetInteger("image_variant");
-			//if (imageVariantID < 0)
-			//	imageVariantID = room.Zone.ImageVariantID;
-			
-			//// Select different sprites for certain events.
-			//if (eventTile.Type == typeof(NPCEvent)) {
-			//	eventTile.SubStripIndex = eventTile.Properties.GetInteger("direction", 0);
-			//}
-			//else if (eventTile.Type == typeof(WarpEvent)) {
-			//	WarpType warpType = eventTile.Properties.GetEnum<WarpType>("warp_type", WarpType.Tunnel);
-			//	if (warpType == WarpType.Entrance)
-			//		sprite = GameData.SPR_EVENT_TILE_WARP_ENTRANCE;
-			//	else if (warpType == WarpType.Tunnel)
-			//		sprite = GameData.SPR_EVENT_TILE_WARP_TUNNEL;
-			//	else if (warpType == WarpType.Stairs)
-			//		sprite = GameData.SPR_EVENT_TILE_WARP_STAIRS;
-			//}
-
-			//// Draw the sprite.
-			//if (sprite is Animation) {
-			//	g.DrawSprite(((Animation) sprite).GetSubstrip(eventTile.SubStripIndex),
-			//		new SpriteDrawSettings(room.Zone.StyleDefinitions, room.Zone.ImageVariantID,
-			//		(float) editorControl.Ticks), position, drawColor);
-			//}
-			//else if (sprite != null) {
-			//	g.DrawSprite(sprite, new SpriteDrawSettings(
-			//		room.Zone.StyleDefinitions, imageVariantID, (float) editorControl.Ticks),
-			//		position, drawColor);
-			//}
-			//else {
-			//	Rectangle2I r = new Rectangle2I(position, eventTile.Size * GameSettings.TILE_SIZE);
-			//	g.FillRectangle(r, Color.Blue);
-			//}
+			TileDataDrawing.DrawTile(g, action, position, room.Zone, drawColor);
 		}
 		
 		// Draw an entire room.
 		private void DrawRoom(Graphics2D g, Room room) {
-			//Color belowFade = new Color(150, 150, 150, 150);
-			//Color aboveFade = new Color(100, 100, 100, 100);
-			//Color hide = Color.Transparent;
-			//Color normal = Color.White;
 			Point2I roomStartTile = room.Location * Level.RoomSize;
 			Point2I roomStartPixel = roomStartTile * GameSettings.TILE_SIZE;
 
@@ -583,7 +556,7 @@ namespace ZeldaEditor.WinForms {
 			for (int layer = 0; layer < room.LayerCount; layer++) {
 				// Determine color/transparency for layer based on layer visibility.
 				Color color = NormalColor;
-				if (!editorControl.EventMode) {
+				if (!editorControl.ActionMode) {
 					if (editorControl.CurrentLayer > layer) {
 						if (editorControl.BelowTileDrawMode == TileDrawModes.Hide)
 							continue; //color = HideColor;
@@ -608,16 +581,26 @@ namespace ZeldaEditor.WinForms {
 							DrawTile(g, room, tile, position, color);
 						}
 
+						//CurrentTool.DrawTile(g, room, position, levelCoord, layer);
+					}
+				}
+
+				// Draw the tile grid for this layer.
+				for (int x = 0; x < room.Width; x++) {
+					for (int y = 0; y < room.Height; y++) {
+						Point2I position = new Point2I(x, y) * GameSettings.TILE_SIZE;
+						Point2I levelCoord = roomStartTile + new Point2I(x, y);
+
 						CurrentTool.DrawTile(g, room, position, levelCoord, layer);
 					}
 				}
 			}
 
-			// Draw event tiles.
-			if (editorControl.ShowEvents || editorControl.ShouldDrawEvents) {
-				for (int i = 0; i < room.EventData.Count; i++) {
-					if (!CurrentTool.DrawHideEventTile(room.EventData[i], room, roomStartPixel + room.EventData[i].Position)) {
-						DrawEventTile(g, room, room.EventData[i], room.EventData[i].Position, Color.White);
+			// Draw action tiles.
+			if (editorControl.ShowActions || editorControl.ShouldDrawActions) {
+				for (int i = 0; i < room.ActionData.Count; i++) {
+					if (!CurrentTool.DrawHideActionTile(room.ActionData[i], room, roomStartPixel + room.ActionData[i].Position)) {
+						DrawActionTile(g, room, room.ActionData[i], room.ActionData[i].Position, Color.White);
 					}
 				}
 			}
@@ -654,7 +637,7 @@ namespace ZeldaEditor.WinForms {
 					}
 				}
 				
-				CurrentTool.DrawEventTiles(g);
+				CurrentTool.DrawActionTiles(g);
 				
 				Point2I span = Level.Span;
 				Point2I drawSpan = GetRoomDrawPosition(Level.Dimensions);
@@ -809,7 +792,7 @@ namespace ZeldaEditor.WinForms {
 				cursorTileSize = Point2I.One;
 
 				// Find the highlighted room/tile coordinates.
-				if (editorControl.EventMode)
+				if (editorControl.ActionMode)
 					cursorHalfTileLocation  = SampleLevelHalfTileCoordinates(mousePos);
 				else
 					cursorHalfTileLocation  = SampleLevelTileCoordinates(mousePos) * 2;

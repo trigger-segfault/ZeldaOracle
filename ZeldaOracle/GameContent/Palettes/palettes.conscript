@@ -12,7 +12,7 @@ LOAD "Dungeon/dungeon_skull_dungeon.conscript", false;
 LOAD "Dungeon/dungeon_spirits_grave.conscript", false;
 
 LOAD "entities_default.conscript", false;
-LOAD "entities_menu.conscript", false;
+#LOAD "entities_menu.conscript", false;
 
 LOAD "electrocuted.conscript", false;
 LOAD "empty.conscript", false;

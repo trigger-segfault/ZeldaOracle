@@ -54,8 +54,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 	public class NoMatchingColorGroupsException : Exception {
 		public HashSet<Color> Colors { get; set; }
 
-		public NoMatchingColorGroupsException(HashSet<Color> colors) :
-			base("No matching color group with the following colors: " + ListColors(colors) + "!")
+		public NoMatchingColorGroupsException(HashSet<Color> colors, Point2I point) :
+			base("No matching color group with the following colors: " + ListColors(colors) + " at the point " + point + "!")
 		{
 			this.Colors = colors;
 		}
@@ -208,7 +208,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 										if (color.A != 0)
 											transparentOnly = false;
 										if (!possibleGroups.Any())
-											throw new NoMatchingColorGroupsException(scannedColors);
+											throw new NoMatchingColorGroupsException(scannedColors, args.SourceRect.Point + new Point2I(ix, iy));
 									}
 									else if (color == Color.Black) {
 										// All groups are valid here

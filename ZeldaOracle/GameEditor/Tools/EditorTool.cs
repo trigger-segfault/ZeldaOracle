@@ -14,7 +14,7 @@ using System.Resources;
 using ZeldaEditor.Util;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using Key = System.Windows.Input.Key;
 
 namespace ZeldaEditor.Tools {
@@ -94,7 +94,7 @@ namespace ZeldaEditor.Tools {
 			isDragging = false;
 		}
 
-		// Called when the current layer is changed (or switched to events).
+		// Called when the current layer is changed (or switched to actions).
 		public virtual void LayerChanged() {
 			if (CancelOnLayerChange)
 				Cancel();
@@ -117,8 +117,8 @@ namespace ZeldaEditor.Tools {
 			if (!IsDrawing && e.Button == MouseButtons.Middle) {
 				BaseTileDataInstance selectedTile = null;
 
-				if (editorControl.EventMode)
-					selectedTile = LevelDisplay.SampleEventTile(e.MousePos());
+				if (editorControl.ActionMode)
+					selectedTile = LevelDisplay.SampleActionTile(e.MousePos());
 				else
 					selectedTile = LevelDisplay.SampleTile(e.MousePos(),
 						editorControl.CurrentLayer);
@@ -219,13 +219,13 @@ namespace ZeldaEditor.Tools {
 		public virtual bool DrawHideTile(TileDataInstance tile, Room room, Point2I levelCoord, int layer) {
 			return false;
 		}
-		public virtual bool DrawHideEventTile(EventTileDataInstance eventTile, Room room, Point2I levelPosition) {
+		public virtual bool DrawHideActionTile(ActionTileDataInstance actionTile, Room room, Point2I levelPosition) {
 			return false;
 		}
 
 		public virtual void DrawTile(Graphics2D g, Room room, Point2I position, Point2I levelCoord, int layer) { }
 
-		public virtual void DrawEventTiles(Graphics2D g) { }
+		public virtual void DrawActionTiles(Graphics2D g) { }
 		
 
 		//-----------------------------------------------------------------------------

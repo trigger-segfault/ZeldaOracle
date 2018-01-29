@@ -15,7 +15,7 @@ using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Common.Scripts.CustomReaders;
 using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 using Song = ZeldaOracle.Common.Audio.Song;
 using XnaSong = Microsoft.Xna.Framework.Media.Song;
@@ -111,7 +111,7 @@ namespace ZeldaOracle.Common.Content {
 		private static Dictionary<string, CollisionModel> collisionModels;
 		private static Dictionary<string, BaseTileData> baseTileData;
 		private static Dictionary<string, TileData> tileData;
-		private static Dictionary<string, EventTileData> eventTileData;
+		private static Dictionary<string, ActionTileData> actionTileData;
 		private static Dictionary<string, Tileset> tilesets;
 		private static Dictionary<string, Zone> zones;
 		private static Dictionary<string, PropertyAction> propertyActions;
@@ -197,7 +197,7 @@ namespace ZeldaOracle.Common.Content {
 			collisionModels		= new Dictionary<string, CollisionModel>();
 			baseTileData        = new Dictionary<string, BaseTileData>();
 			tileData			= new Dictionary<string, TileData>();
-			eventTileData		= new Dictionary<string, EventTileData>();
+			actionTileData		= new Dictionary<string, ActionTileData>();
 			tilesets			= new Dictionary<string, Tileset>();
 			zones				= new Dictionary<string, Zone>();
 
@@ -223,7 +223,7 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries[typeof(CollisionModel)]	= collisionModels;
 			resourceDictionaries[typeof(BaseTileData)]		= baseTileData;
 			resourceDictionaries[typeof(TileData)]			= tileData;
-			resourceDictionaries[typeof(EventTileData)]		= eventTileData;
+			resourceDictionaries[typeof(ActionTileData)]		= actionTileData;
 			resourceDictionaries[typeof(Tileset)]			= tilesets;
 			resourceDictionaries[typeof(Zone)]				= zones;
 			resourceDictionaries[typeof(PropertyAction)]	= propertyActions;
@@ -249,7 +249,7 @@ namespace ZeldaOracle.Common.Content {
 			collisionModels = null;
 			baseTileData = null;
 			tileData = null;
-			eventTileData = null;
+			actionTileData = null;
 			tilesets = null;
 			zones = null;
 			propertyActions = null;
@@ -343,8 +343,8 @@ namespace ZeldaOracle.Common.Content {
 				return GetResourceKeyList<BaseTileData>();
 			if (type == typeof(TileData))
 				return GetResourceKeyList<TileData>();
-			if (type == typeof(EventTileData))
-				return GetResourceKeyList<EventTileData>();
+			if (type == typeof(ActionTileData))
+				return GetResourceKeyList<ActionTileData>();
 			if (type == typeof(Tileset))
 				return GetResourceKeyList<Tileset>();
 			if (type == typeof(Zone))

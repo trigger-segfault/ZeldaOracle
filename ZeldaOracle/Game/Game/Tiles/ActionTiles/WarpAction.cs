@@ -14,7 +14,7 @@ using ZeldaOracle.Common.Audio;
 using System.ComponentModel;
 using ZeldaOracle.Common.Graphics.Sprites;
 
-namespace ZeldaOracle.Game.Tiles.EventTiles {
+namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
 	public enum WarpType {
 		Tunnel		= 0,
@@ -26,7 +26,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		Count		= 3,
 	}
 
-	public class WarpEvent : EventTile {
+	public class WarpAction : ActionTile {
 
 		public WarpType warpType;
 		public bool warpEnabled;
@@ -37,16 +37,16 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public WarpEvent() {
+		public WarpAction() {
 		}
-		
-		
+
+
 		//-----------------------------------------------------------------------------
 		// Warp Accessors
 		//-----------------------------------------------------------------------------
 
-		// Find the event tile for the this warp point's destination.
-		public EventTileDataInstance FindDestinationPoint() {
+		// Find the action tile for the this warp point's destination.
+		public ActionTileDataInstance FindDestinationPoint() {
 			string warpID = properties.GetString("destination_warp_point", "?");
 			string warpLevelID = Properties.GetString("destination_level", RoomControl.Level.Properties.GetString("id"));
 			if (warpID.Length == 0 || warpLevelID.Length == 0)
@@ -54,7 +54,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			Level warpLevel = RoomControl.GameControl.World.GetLevel(warpLevelID);
 			if (warpLevel == null)
 				return null;
-			return warpLevel.FindEventTileByID(warpID);
+			return warpLevel.FindActionTileByID(warpID);
 		}
 
 
@@ -107,7 +107,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		}
 
 		// Create the room transition state for this warp point.
-		public RoomTransition CreateTransition(EventTileDataInstance destination) {
+		public RoomTransition CreateTransition(ActionTileDataInstance destination) {
 			int dir = destination.Properties.GetInteger("face_direction", Directions.Down);
 			if (warpType == WarpType.Stairs)
 				return new RoomTransitionFade();
@@ -116,7 +116,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 
 		// Warp to the destination point.
 		public void Warp(int warpDirection) {
-			EventTileDataInstance destination = FindDestinationPoint();
+			ActionTileDataInstance destination = FindDestinationPoint();
 
 			if (destination != null) {
 				AudioSystem.PlaySound(GameData.SOUND_ROOM_EXIT);
@@ -190,8 +190,8 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
-		/// <summary>Draws the event tile data to display in the editor.</summary>
-		public new static void DrawTileData(Graphics2D g, EventTileDataDrawArgs args) {
+		/// <summary>Draws the action tile data to display in the editor.</summary>
+		public new static void DrawTileData(Graphics2D g, ActionTileDataDrawArgs args) {
 			WarpType warpType = args.Properties.GetEnum<WarpType>("warp_type", WarpType.Tunnel);
 			ISprite sprite = null;
 			if (warpType == WarpType.Entrance)

@@ -16,7 +16,7 @@ using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Tiles.Custom;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Control.Menus;

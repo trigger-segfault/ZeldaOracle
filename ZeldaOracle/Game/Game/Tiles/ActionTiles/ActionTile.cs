@@ -12,12 +12,12 @@ using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Graphics.Sprites;
 
-namespace ZeldaOracle.Game.Tiles.EventTiles {
+namespace ZeldaOracle.Game.Tiles.ActionTiles {
 
-	public class EventTile : IEventObject {
+	public class ActionTile : IEventObject {
 		
 		private RoomControl				roomControl;
-		private	EventTileDataInstance	eventData;
+		private	ActionTileDataInstance	actionData;
 		protected Vector2F				position;
 		protected Point2I				size;
 		protected Properties			properties;
@@ -29,9 +29,9 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public EventTile() {
+		public ActionTile() {
 			roomControl		= null;
-			eventData		= null;
+			actionData		= null;
 			position		= Vector2F.Zero;
 			size			= Point2I.One;
 			properties		= new Properties();
@@ -85,18 +85,18 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 		// Static methods
 		//-----------------------------------------------------------------------------
 
-		// Instantiate an event tile from the given event-data.
-		public static EventTile CreateEvent(EventTileDataInstance data) {
-			EventTile tile;
+		// Instantiate an action tile from the given action-data.
+		public static ActionTile CreateAction(ActionTileDataInstance data) {
+			ActionTile tile;
 			
 			// Construct the tile.
 			if (data.Type == null)
-				tile = new EventTile();
+				tile = new ActionTile();
 			else
-				tile = (EventTile) data.Type.GetConstructor(Type.EmptyTypes).Invoke(null);
+				tile = (ActionTile) data.Type.GetConstructor(Type.EmptyTypes).Invoke(null);
 			
 			tile.position	= data.Position;
-			tile.eventData	= data;
+			tile.actionData	= data;
 			tile.size		= data.Size;
 			tile.properties.SetAll(data.BaseProperties);
 			tile.properties.SetAll(data.Properties);
@@ -105,9 +105,9 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			return tile;
 		}
 
-		/// <summary>Draws the event tile data to display in the editor.</summary>
-		public static void DrawTileData(Graphics2D g, EventTileDataDrawArgs args) {
-			ISprite sprite = args.EventTile.Sprite;
+		/// <summary>Draws the action tile data to display in the editor.</summary>
+		public static void DrawTileData(Graphics2D g, ActionTileDataDrawArgs args) {
+			ISprite sprite = args.ActionTile.Sprite;
 			if (sprite is Animation) {
 				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
@@ -124,14 +124,14 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 					args.Color);
 			}
 			else {
-				Rectangle2I r = new Rectangle2I(args.Position, args.EventTile.Size * GameSettings.TILE_SIZE);
+				Rectangle2I r = new Rectangle2I(args.Position, args.ActionTile.Size * GameSettings.TILE_SIZE);
 				g.FillRectangle(r, Color.Blue);
 			}
 		}
 
-		/// <summary>Draws the event tile data to display in the editor.</summary>
-		public static void DrawTileData(Graphics2D g, EventTileDataDrawArgs args, ColorDefinitions colorDefinitions) {
-			ISprite sprite = args.EventTile.Sprite;
+		/// <summary>Draws the action tile data to display in the editor.</summary>
+		public static void DrawTileData(Graphics2D g, ActionTileDataDrawArgs args, ColorDefinitions colorDefinitions) {
+			ISprite sprite = args.ActionTile.Sprite;
 			if (sprite is Animation) {
 				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
@@ -149,14 +149,14 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 					args.Color);
 			}
 			else {
-				Rectangle2I r = new Rectangle2I(args.Position, args.EventTile.Size * GameSettings.TILE_SIZE);
+				Rectangle2I r = new Rectangle2I(args.Position, args.ActionTile.Size * GameSettings.TILE_SIZE);
 				g.FillRectangle(r, Color.Blue);
 			}
 		}
 
-		/// <summary>Draws the event tile data to display in the editor.</summary>
-		public static void DrawTileDataWithOffset(Graphics2D g, EventTileDataDrawArgs args, Point2I offset) {
-			ISprite sprite = args.EventTile.Sprite;
+		/// <summary>Draws the action tile data to display in the editor.</summary>
+		public static void DrawTileDataWithOffset(Graphics2D g, ActionTileDataDrawArgs args, Point2I offset) {
+			ISprite sprite = args.ActionTile.Sprite;
 			if (sprite is Animation) {
 				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
@@ -172,14 +172,14 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 					args.Color);
 			}
 			else {
-				Rectangle2I r = new Rectangle2I(args.Position, args.EventTile.Size * GameSettings.TILE_SIZE);
+				Rectangle2I r = new Rectangle2I(args.Position, args.ActionTile.Size * GameSettings.TILE_SIZE);
 				g.FillRectangle(r, Color.Blue);
 			}
 		}
 
-		/// <summary>Draws the event tile data to display in the editor with the specified sprite index.</summary>
-		public static void DrawTileDataIndex(Graphics2D g, EventTileDataDrawArgs args, int substripIndex = -1, ColorDefinitions colorDefinitions = null) {
-			ISprite sprite = args.EventTile.Sprite;
+		/// <summary>Draws the action tile data to display in the editor with the specified sprite index.</summary>
+		public static void DrawTileDataIndex(Graphics2D g, ActionTileDataDrawArgs args, int substripIndex = -1, ColorDefinitions colorDefinitions = null) {
+			ISprite sprite = args.ActionTile.Sprite;
 			if (sprite is Animation) {
 				if (substripIndex == -1)
 					substripIndex = args.Properties.GetInteger("substrip_index", 0);
@@ -199,7 +199,7 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 					args.Color);
 			}
 			else {
-				Rectangle2I r = new Rectangle2I(args.Position, args.EventTile.Size * GameSettings.TILE_SIZE);
+				Rectangle2I r = new Rectangle2I(args.Position, args.ActionTile.Size * GameSettings.TILE_SIZE);
 				g.FillRectangle(r, Color.Blue);
 			}
 		}
@@ -212,19 +212,19 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			get { return new Rectangle2F(collisionBox.Point + position, collisionBox.Size); }
 		}
 		
-		// Get the room control this event belongs to.
+		// Get the room control this action belongs to.
 		public RoomControl RoomControl {
 			get { return roomControl; }
 			set { roomControl = value; }
 		}
 
 
-		public EventTileDataInstance EventData {
-			get { return eventData; }
-			set { eventData = value; }
+		public ActionTileDataInstance ActionData {
+			get { return actionData; }
+			set { actionData = value; }
 		}
 		
-		// Get the position of this event.
+		// Get the position of this action.
 		public Vector2F Position {
 			get { return position; }
 			set { position = value; }
@@ -235,13 +235,13 @@ namespace ZeldaOracle.Game.Tiles.EventTiles {
 			set { size = value; }
 		}
 		
-		// Get the properties for this event.
+		// Get the properties for this action.
 		public Properties Properties {
 			get { return properties; }
 		}
 
 		public EventCollection Events {
-			get { return eventData.Events; }
+			get { return actionData.Events; }
 		}
 	}
 }

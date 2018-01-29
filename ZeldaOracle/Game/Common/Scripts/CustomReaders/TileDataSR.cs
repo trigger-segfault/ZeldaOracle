@@ -14,7 +14,7 @@ using ZeldaOracle.Common.Scripts.Commands;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
@@ -31,7 +31,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		private CollisionModel      model;
 		private BaseTileData        baseTileData;
 		private TileData            tileData;
-		private EventTileData       actionTileData;
+		private ActionTileData       actionTileData;
 		//private LoadingModes		loadingMode;
 		private ISpriteSource source;
 
@@ -92,7 +92,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("ACTIONTILE", (int) Modes.Root,
 				"string name",
 			delegate (CommandParam parameters) {
-				actionTileData = new EventTileData();
+				actionTileData = new ActionTileData();
 				actionTileData.Name = parameters.GetString(0);
 				baseTileData = actionTileData;
 				Mode = Modes.ActionTile;
@@ -101,8 +101,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("MONSTER", (int) Modes.Root,
 				"string name, string sprite, string monsterType, string monsterColor",
 			delegate (CommandParam parameters) {
-				actionTileData = new EventTileData();
-				actionTileData.Clone(GetResource<EventTileData>("monster"));
+				actionTileData = new ActionTileData();
+				actionTileData.Clone(GetResource<ActionTileData>("monster"));
 				actionTileData.Name = parameters.GetString(0);
 				baseTileData = actionTileData;
 
@@ -143,7 +143,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				else if (actionTileData != null) {
 					if (actionTileData.Tileset == null) {
 						AddResource<BaseTileData>(actionTileData.Name, actionTileData);
-						AddResource<EventTileData>(actionTileData.Name, actionTileData);
+						AddResource<ActionTileData>(actionTileData.Name, actionTileData);
 					}
 					actionTileData = null;
 					baseTileData = null;
@@ -404,7 +404,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				if (tileData != null)
 					tileData.Clone(GetResource<TileData>(parameters.GetString(0)));
 				else if (actionTileData != null)
-					actionTileData.Clone(GetResource<EventTileData>(parameters.GetString(0)));
+					actionTileData.Clone(GetResource<ActionTileData>(parameters.GetString(0)));
 			});
 			//=====================================================================================
 			AddCommand("PREVIEW", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },

@@ -24,7 +24,7 @@ using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 
 using ZeldaEditor.PropertiesEditor;
@@ -74,7 +74,7 @@ namespace ZeldaEditor.Control {
 
 		// Settings
 		private bool                playAnimations;
-		private bool                eventMode;
+		private bool                actionMode;
 
 		// Debug
 		private bool                debugConsole;
@@ -107,7 +107,7 @@ namespace ZeldaEditor.Control {
 		private BaseTileData	selectedTileData;
 		private string			tileSearchFilter;
 		private bool            playerPlaceMode;
-		private bool            showEvents;
+		private bool            showActions;
 
 		private DispatcherTimer             updateTimer;
 
@@ -172,7 +172,7 @@ namespace ZeldaEditor.Control {
 			this.showRewards                = true;
 			this.showGrid                   = false;
 			this.showModified               = false;
-			this.showEvents                 = false;
+			this.showActions                 = false;
 			this.highlightMouseTile         = true;
 			this.selectedTileset            = null;
 			this.selectedTilesetLocation	= Point2I.Zero;
@@ -204,7 +204,7 @@ namespace ZeldaEditor.Control {
 			this.tileset        = null;
 			this.zone           = GameData.ZONE_DEFAULT;
 			this.selectedTileData = null;// this.tileset.GetTileData(0, 0);
-			this.eventMode      = false;
+			this.actionMode      = false;
 
 			GameData.LoadInventory(inventory);
 			GameData.LoadRewards(rewardManager);
@@ -277,7 +277,7 @@ namespace ZeldaEditor.Control {
 					layers.Add("Events");
 				}
 				int index = 0;
-				if (eventMode) {
+				if (actionMode) {
 					index = layers.Count - 1;
 					currentLayer = layers.Count - 2;
 				}
@@ -1016,11 +1016,21 @@ namespace ZeldaEditor.Control {
 			}
 		}
 
-		public bool EventMode {
-			get { return (eventMode || (selectedTileData is EventTileData)); }
+		public bool ActionLayer {
+			get { return actionMode; }
 			set {
-				if (value != eventMode) {
-					eventMode = value;
+				if (value != actionMode) {
+					actionMode = value;
+					CurrentTool.LayerChanged();
+				}
+			}
+		}
+
+		public bool ActionMode {
+			get { return (actionMode || (selectedTileData is ActionTileData)); }
+			set {
+				if (value != actionMode) {
+					actionMode = value;
 					CurrentTool.LayerChanged();
 				}
 			}
@@ -1045,7 +1055,7 @@ namespace ZeldaEditor.Control {
 		}
 
 		public bool IsSelectedTileAnEvent {
-			get { return (selectedTileData is EventTileData); }
+			get { return (selectedTileData is ActionTileData); }
 		}
 
 		// Tools ----------------------------------------------------------------------
@@ -1132,9 +1142,9 @@ namespace ZeldaEditor.Control {
 			set { showRewards = value; }
 		}
 
-		public bool ShowEvents {
-			get { return showEvents; }
-			set { showEvents = value; }
+		public bool ShowActions {
+			get { return showActions; }
+			set { showActions = value; }
 		}
 
 		public bool ShowGrid {
@@ -1147,8 +1157,8 @@ namespace ZeldaEditor.Control {
 			set { playAnimations = value; }
 		}
 		
-		public bool ShouldDrawEvents {
-			get { return (showEvents || eventMode || selectedTileData is EventTileData); }
+		public bool ShouldDrawActions {
+			get { return (showActions || actionMode || selectedTileData is ActionTileData); }
 		}
 		
 		public bool HighlightMouseTile {
