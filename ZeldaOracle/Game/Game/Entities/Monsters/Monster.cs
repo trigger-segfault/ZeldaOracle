@@ -348,24 +348,35 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			direction = Directions.NearestFromVector(lookVector);
 		}
 
-		protected virtual Vector2F GetRandomSpawnLocation() {
+		public virtual bool CanSpawnAtLocation(Point2I location) {
+			Vector2F spawnPosition = 
+				(location * GameSettings.TILE_SIZE) +
+				new Vector2F(8, 8) - centerOffset;
+
+			// Check for solid tiles
+			Tile tile = RoomControl.GetTopTile(location);
+			if (tile != null && (tile.IsSolid || tile.IsHoleWaterOrLava))
+				return false;
+
+			// Check for touching the player
+			if (Physics.IsPlaceMeetingEntity(spawnPosition,
+				RoomControl.Player, CollisionBoxType.Soft))
+				return false;
+
+			return true;
+		}
+
+		public virtual Vector2F GetRandomSpawnLocation() {
 
 			List<Vector2F> locations = new List<Vector2F>();
 
 			for (int x = 0; x < RoomControl.Room.Width; x++) {
 				for (int y = 0; y < RoomControl.Room.Height; y++) {
-					Tile t = RoomControl.GetTopTile(x, y);
 					Vector2F spawnPosition = 
 						(new Point2I(x, y) * GameSettings.TILE_SIZE) +
 						new Vector2F(8, 8) - centerOffset;
-
-					if (t != null && (t.IsSolid || t.IsHoleWaterOrLava))
-						continue;
-
-					if (Physics.IsPlaceMeetingEntity(spawnPosition, RoomControl.Player, CollisionBoxType.Soft))
-						continue;
-
-					locations.Add(spawnPosition);
+					if (CanSpawnAtLocation(new Point2I(x, y)))
+						locations.Add(spawnPosition);
 				}
 			}
 
