@@ -16,3 +16,6 @@ LOAD "entities_default.conscript", false;
 
 LOAD "electrocuted.conscript", false;
 LOAD "empty.conscript", false;
+
+LOAD "UI/dungeon_map_default.conscript", false;
+LOAD "UI/menu_default.conscript", false;

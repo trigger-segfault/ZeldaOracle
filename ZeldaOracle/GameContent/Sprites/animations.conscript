@@ -4,14 +4,14 @@
 # UI Animations
 #==============================================================
 
-SOURCE "menu_small";
+#SOURCE "menu_small";
 
-ANIMATION "ui_map_cursor_link"; SUBSTRIP repeat;
-	INSERT frame 0, 32, (10, 4), (-4, -4);
-	INSERT frame 0, 32, (11, 4), ( 4, -4);
-	INSERT frame 0, 32, (10, 5), (-4,  4);
-	INSERT frame 0, 32, (11, 5), ( 4,  4);
-	ADD frame, 32, (10, 2); END;
+#ANIMATION "ui_map_cursor_link"; SUBSTRIP repeat;
+#	INSERT frame 0, 32, (10, 4), (-4, -4);
+#	INSERT frame 0, 32, (11, 4), ( 4, -4);
+#	INSERT frame 0, 32, (10, 5), (-4,  4);
+#	INSERT frame 0, 32, (11, 5), ( 4,  4);
+#	ADD frame, 32, (10, 2); END;
 
 
 #==============================================================

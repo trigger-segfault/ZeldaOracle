@@ -21,7 +21,7 @@ using Size = System.Drawing.Size;
 
 namespace ZeldaEditor.WinForms {
 
-	public class TileDisplay : GraphicsDeviceControl {
+	public class TilesetDisplay : GraphicsDeviceControl {
 
 		private static ContentManager content;
 		private static SpriteBatch spriteBatch;

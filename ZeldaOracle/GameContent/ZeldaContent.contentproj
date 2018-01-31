@@ -121,6 +121,14 @@
       <Name>tile_dictionary</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Palettes\Dictionaries\UI\dungeon_map_dictionary.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>dungeon_map_dictionary</Name>
+    </None>
+    <None Include="Palettes\Dictionaries\UI\menu_dictionary.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>menu_dictionary</Name>
+    </None>
     <None Include="Palettes\Dungeon\dungeon_skull_dungeon.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>dungeon_skull_dungeon</Name>
@@ -184,6 +192,14 @@
     <None Include="Palettes\tiles_default.conscript">
       <Name>tiles_default</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\UI\dungeon_map_default.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>dungeon_map_default</Name>
+    </None>
+    <None Include="Palettes\UI\menu_default.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>menu_default</Name>
     </None>
     <None Include="Sounds\sounds.conscript">
       <Name>sounds</Name>
@@ -396,6 +412,18 @@
     <None Include="Sprites\Tiles\tile_previews.conscript">
       <Name>tile_previews</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\UI\backgrounds.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>backgrounds</Name>
+    </None>
+    <None Include="Sprites\UI\ui.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>ui</Name>
+    </None>
+    <None Include="Sprites\UI\ui_sprites.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>ui_sprites</Name>
     </None>
     <None Include="Sprites\Units\Monsters\monster_previews.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1068,53 +1096,33 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\UI\menu_essences_a.png">
-      <Name>menu_essences_a</Name>
+    <Compile Include="Images\UI\menu_essences.png">
+      <Name>menu_essences</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\UI\menu_essences_b.png">
-      <Name>menu_essences_b</Name>
+    <Compile Include="Images\UI\menu_essences_fancy.png">
+      <Name>menu_essences_fancy</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\UI\menu_key_items_a.png">
-      <Name>menu_key_items_a</Name>
+    <Compile Include="Images\UI\menu_key_items.png">
+      <Name>menu_key_items</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\UI\menu_key_items_b.png">
-      <Name>menu_key_items_b</Name>
+    <Compile Include="Images\UI\menu_key_items_fancy.png">
+      <Name>menu_key_items_fancy</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\UI\menu_large.png">
-      <Name>menu_large</Name>
+    <Compile Include="Images\UI\menu_weapons.png">
+      <Name>menu_weapons</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\UI\menu_large_light.png">
-      <Name>menu_large_light</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\UI\menu_small.png">
-      <Name>menu_small</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\UI\menu_small_light.png">
-      <Name>menu_small_light</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\UI\menu_weapons_a.png">
-      <Name>menu_weapons_a</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\UI\menu_weapons_b.png">
-      <Name>menu_weapons_b</Name>
+    <Compile Include="Images\UI\menu_weapons_fancy.png">
+      <Name>menu_weapons_fancy</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -1122,6 +1130,26 @@
       <Name>screen_dungeon_map</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\UI\ui_dungeon_map_small.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>ui_dungeon_map_small</Name>
+    </Compile>
+    <Compile Include="Images\UI\ui_large.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>ui_large</Name>
+    </Compile>
+    <Compile Include="Images\UI\ui_small.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>ui_small</Name>
+    </Compile>
+    <Compile Include="Images\UI\ui_world_map_small.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>ui_world_map_small</Name>
     </Compile>
     <Compile Include="Images\Units\Monsters\monster_items.png">
       <Name>monster_items</Name>

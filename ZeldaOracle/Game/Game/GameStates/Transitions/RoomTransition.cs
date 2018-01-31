@@ -75,8 +75,8 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		//-----------------------------------------------------------------------------
 
 		private void SetupNewRoomPalette() {
-			GameData.PaletteShader.TilePalette = NewRoomControl.Zone.Palette;
-			GameData.PaletteShader.TileRatio = 0f;
+			//GameData.PaletteShader.TilePalette = NewRoomControl.Zone.Palette;
+			//GameData.PaletteShader.TileRatio = 0f;
 		}
 		
 

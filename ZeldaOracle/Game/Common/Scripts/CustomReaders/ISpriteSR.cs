@@ -612,13 +612,13 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			}
 		}
 
-		/// <summary>Builds a basic sprite and palettizes it if possible.</summary>
+		/// <summary>Builds a basic sprite from a spritesheet and palettizes it if possible.</summary>
 		private BasicSprite BuildBasicSprite(ISpriteSource source, Point2I index, Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
 			if (!(source is SpriteSheet)) {
 				ThrowCommandParseError("SOURCE must be specified as a sprite sheet when building a BASIC sprite!");
 			}
 			if (paletteArgs.Dictionary != null) {
-				paletteArgs.Image = SpriteSheet.Image;
+				paletteArgs.Image = ((SpriteSheet) source).Image;
 				paletteArgs.SourceRect = ((SpriteSheet) source).GetSourceRect(index);
 				BasicSprite sprite = Resources.PalettedSpriteDatabase.AddSprite(paletteArgs);
 				sprite.DrawOffset = drawOffset;
@@ -634,6 +634,18 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					flip,
 					rotation);
 			}
+		}
+
+		/// <summary>Builds a basic sprite from an image and palettizes it if possible.</summary>
+		private BasicSprite BuildBasicSprite(string imagePath, Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
+			Image image;
+			if (Resources.ContainsImage(imagePath))
+				image = GetResource<Image>(imagePath);
+			else
+				image = Resources.LoadImage(Resources.ImageDirectory + imagePath);
+
+			SpriteSheet tempSheet = new SpriteSheet(image);
+			return BuildBasicSprite(tempSheet, Point2I.Zero, drawOffset, flip, rotation);
 		}
 
 

@@ -41,9 +41,10 @@ namespace ZeldaEditor {
 	/// </summary>
 	public partial class EditorWindow : Window {
 
-		private LevelDisplay        levelDisplay;
-		private TileDisplay         tileDisplay;
-		private EditorControl       editorControl;
+		private LevelDisplay		levelDisplay;
+		private TilesetDisplay		tilesetDisplay;
+		private TilePreview         tilePreview;
+		private EditorControl		editorControl;
 
 		private ToggleButton[]      toolButtons;
 
@@ -72,21 +73,29 @@ namespace ZeldaEditor {
 			ScriptEditor.Initialize();
 
 			// Create the level display.
-			levelDisplay                = new LevelDisplay();
-			levelDisplay.EditorControl  = editorControl;
-			levelDisplay.Name           = "levelDisplay";
-			levelDisplay.Dock           = System.Windows.Forms.DockStyle.Fill;
-			levelDisplay.EditorWindow   = this;
-			hostLevelDisplay.Child = levelDisplay;
-			
+			levelDisplay					= new LevelDisplay();
+			levelDisplay.EditorControl		= editorControl;
+			levelDisplay.Name				= "levelDisplay";
+			levelDisplay.Dock				= System.Windows.Forms.DockStyle.Fill;
+			levelDisplay.EditorWindow		= this;
+			hostLevelDisplay.Child			= levelDisplay;
+
 			// Create the tileset display.
-			tileDisplay                 = new TileDisplay();
-			tileDisplay.EditorControl   = editorControl;
-			tileDisplay.Name            = "tileDisplay";
-			tileDisplay.Dock            = System.Windows.Forms.DockStyle.Fill;
-			tileDisplay.EditorWindow    = this;
-			tileDisplay.HoverChanged    += OnTileDisplayHoverChanged;
-			hostTileDisplay.Child = tileDisplay;
+			tilesetDisplay					= new TilesetDisplay();
+			tilesetDisplay.EditorControl	= editorControl;
+			tilesetDisplay.Name				= "tilesetDisplay";
+			tilesetDisplay.Dock				= System.Windows.Forms.DockStyle.Fill;
+			tilesetDisplay.EditorWindow		= this;
+			tilesetDisplay.HoverChanged		+= OnTilesetDisplayHoverChanged;
+			hostTilesetDisplay.Child		= tilesetDisplay;
+
+			// Create the tile preview
+			tilePreview						= new TilePreview();
+			tilePreview.EditorControl		= editorControl;
+			tilePreview.Name				= "tilePreview";
+			tilePreview.Dock				= System.Windows.Forms.DockStyle.Fill;
+			hostTilePreview.Child			= tilePreview;
+
 
 			statusTask.Content = "";
 
@@ -288,19 +297,12 @@ namespace ZeldaEditor {
 			editorControl.UpdateTileSearch(textBoxTileSearch.Text);
 		}
 
-		private void OnTileDisplayHoverChanged(object sender, EventArgs e) {
-			BaseTileData tileData = tileDisplay.HoverTileData;
+		private void OnTilesetDisplayHoverChanged(object sender, EventArgs e) {
+			BaseTileData tileData = tilesetDisplay.HoverTileData;
 			if (tileData == null)
 				textBlockTileName.Text = "";
 			else
 				textBlockTileName.Text = tileData.Name;
-		}
-
-		private string SurroundID(string id) {
-			if (string.IsNullOrWhiteSpace(id))
-				return "";
-			else
-				return " \"" + id + "\"";
 		}
 
 		public void UpdatePropertyPreview(IPropertyObject obj) {
@@ -308,61 +310,40 @@ namespace ZeldaEditor {
 			image.Stretch = Stretch.None;
 			image.HorizontalAlignment = HorizontalAlignment.Left;
 			image.VerticalAlignment = VerticalAlignment.Top;
-			Canvas canvas = null;
+			tilePreview.UpdateTile(null);
+			hostTilePreview.Visibility = Visibility.Hidden;
 			if (obj is Room) {
+				Room room = obj as Room;
 				image.Source = EditorImages.Room;
 				propertyPreviewImage.Content = image;
-				propertyPreviewName.Text = "Room" + SurroundID((obj as Room).ID);
+				propertyPreviewName.Text = "Room[" + room.Location.X + ", " + room.Location.Y + "]";
 			}
 			else if (obj is Level) {
 				image.Source = EditorImages.Level;
 				propertyPreviewImage.Content = image;
-				propertyPreviewName.Text = "Level" + SurroundID((obj as Level).ID);
+				propertyPreviewName.Text = (obj as Level).ID;
 			}
 			else if (obj is Dungeon) {
 				image.Source = EditorImages.Dungeon;
 				propertyPreviewImage.Content = image;
-				propertyPreviewName.Text = "Dungeon" + SurroundID((obj as Dungeon).ID);
+				propertyPreviewName.Text = (obj as Dungeon).ID;
 			}
 			else if (obj is World) {
 				image.Source = EditorImages.World;
 				propertyPreviewImage.Content = image;
-				propertyPreviewName.Text = "World" + SurroundID((obj as World).ID);
+				propertyPreviewName.Text = (obj as World).ID;
 			}
 			else if (obj is Zone) {
 				image.Source = null;
 				propertyPreviewImage.Content = image;
-				propertyPreviewName.Text = "Zone" + SurroundID((obj as Zone).ID);
+				propertyPreviewName.Text = (obj as Zone).ID;
 			}
-			else if (obj is TileDataInstance) {
-				TileDataInstance tile = obj as TileDataInstance;
-				ISprite currentSprite = tile.CurrentSprite;
-				if (currentSprite != null)
-					canvas = EditorResources.GetSprite(currentSprite, tile.Room.Zone.ImageVariantID,
-						tile.Room.Zone.StyleDefinitions);
-				if (canvas != null) {
-					canvas.Height = 16;
-					canvas.MinWidth = 16;
-					canvas.MaxWidth = 32;
-				}
-				propertyPreviewImage.Content = canvas;
-				string typeName = (tile.Type != null ? tile.Type.Name : "Tile");
-				propertyPreviewName.Text = typeName + SurroundID(tile.ID);
-			}
-			else if (obj is ActionTileDataInstance) {
-				ActionTileDataInstance tile = obj as ActionTileDataInstance;
-				ISprite currentSprite = tile.CurrentSprite;
-				if (currentSprite != null)
-					canvas = EditorResources.GetSprite(currentSprite, tile.Room.Zone.ImageVariantID,
-						tile.Room.Zone.StyleDefinitions);
-				if (canvas != null) {
-					canvas.Height = 16;
-					canvas.MinWidth = 16;
-					canvas.MaxWidth = 32;
-				}
-				propertyPreviewImage.Content = canvas;
-				string typeName = (tile.Type != null ? tile.Type.Name : "ActionTile");
-				propertyPreviewName.Text = typeName + SurroundID(tile.ID);
+			else if (obj is BaseTileDataInstance) {
+				hostTilePreview.Visibility = Visibility.Visible;
+				BaseTileDataInstance tile = obj as BaseTileDataInstance;
+				tilePreview.UpdateTile(tile);
+				propertyPreviewImage.Content = null;
+				propertyPreviewName.Text = tile.BaseData.Name;
 			}
 			else {
 				propertyPreviewImage.Content = null;
@@ -756,8 +737,8 @@ namespace ZeldaEditor {
 			get { return levelDisplay; }
 		}
 
-		public TileDisplay TileDisplay {
-			get { return tileDisplay; }
+		public TilesetDisplay TilesetDisplay {
+			get { return tilesetDisplay; }
 		}
 
 		public WorldTreeView WorldTreeView {

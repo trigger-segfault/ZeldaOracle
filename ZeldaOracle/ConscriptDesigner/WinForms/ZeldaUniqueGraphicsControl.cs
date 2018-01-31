@@ -225,10 +225,12 @@ namespace ConscriptDesigner.WinForms {
 			Graphics2D g = new Graphics2D(spriteBatch);
 
 			if (GameData.PaletteShader != null && !GameData.PaletteShader.Effect.IsDisposed) {
-				GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
-				GameData.PaletteShader.TilePalette = GameData.PAL_TILES_DEFAULT;
-				if (zone.Palette != null)
-					GameData.PaletteShader.TilePalette = zone.Palette;
+				//GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
+				//GameData.PaletteShader.TilePalette = GameData.PAL_TILES_DEFAULT;
+				//if (zone.Palette != null)
+				//	GameData.PaletteShader.TilePalette = zone.Palette;
+				GameData.PaletteShader.TilePalette = DesignerControl.PreviewTilePalette;
+				GameData.PaletteShader.EntityPalette = DesignerControl.PreviewEntityPalette;
 				GameData.PaletteShader.ApplyPalettes();
 			}
 			else {

@@ -25,7 +25,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 		public SpriteSheet(Image image) {
 			this.image		= image;
-			this.cellSize	= Point2I.Zero;
+			this.cellSize	= image.Size;
 			this.offset		= Point2I.Zero;
 			this.spacing	= Point2I.Zero;
 		}

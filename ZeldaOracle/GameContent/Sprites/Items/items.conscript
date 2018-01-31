@@ -12,8 +12,6 @@ SPRITESHEET "temp_sheet_items_large", "Items/items_large",		(16, 16), (1, 1), (1
 
 PALETTEDICTIONARY "entity_dictionary";
 
-SOURCE "player";
-
 MAPPEDCOLORS	"entities_default",
 	("green", "blue", "red", "orange", "shaded_red", "shaded_blue",
 	"maku_seed_ages", "maku_seed_seasons");

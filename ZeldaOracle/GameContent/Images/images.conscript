@@ -4,7 +4,7 @@
 # Screens
 #==============================================================
 
-IMAGE screen_dungeon_map, "UI/screen_dungeon_map"; END;
+#IMAGE screen_dungeon_map, "UI/screen_dungeon_map"; END;
 
 
 
@@ -12,27 +12,27 @@ IMAGE screen_dungeon_map, "UI/screen_dungeon_map"; END;
 # Menu
 #==============================================================
 
-IMAGE menu_small;
-	VARIANT dark  "UI/menu_small";
-	VARIANT light "UI/menu_small_light";
-	END;
-IMAGE menu_large;
-	VARIANT dark  "UI/menu_large";
-	VARIANT light "UI/menu_large_light";
-	END;
+#IMAGE menu_small;
+#	VARIANT dark  "UI/menu_small";
+#	VARIANT light "UI/menu_small_light";
+#	END;
+#IMAGE menu_large;
+#	VARIANT dark  "UI/menu_large";
+#	VARIANT light "UI/menu_large_light";
+#	END;
 
 #==============================================================
 # Items
 #==============================================================
 
-IMAGE items_small;
-	VARIANT dark  "Items/items_small";
-	VARIANT light "Items/items_small_light";
-	END;
-IMAGE items_large;
-	VARIANT dark  "Items/items_large";
-	VARIANT light "Items/items_large_light";
-	END;
+#IMAGE items_small;
+#	VARIANT dark  "Items/items_small";
+#	VARIANT light "Items/items_small_light";
+#	END;
+#IMAGE items_large;
+#	VARIANT dark  "Items/items_large";
+#	VARIANT light "Items/items_large_light";
+#	END;
 	
 
 #==============================================================
@@ -44,16 +44,16 @@ IMAGE items_large;
 # Entities
 #==============================================================
 
-IMAGE player;
-	VARIANT green	"Units/Player/player";
-	VARIANT red		"Units/Player/player_red";
-	VARIANT blue	"Units/Player/player_blue";
-	VARIANT hurt	"Units/Player/player_hurt";
-	END;
+#IMAGE player;
+#	VARIANT green	"Units/Player/player";
+#	VARIANT red		"Units/Player/player_red";
+#	VARIANT blue	"Units/Player/player_blue";
+#	VARIANT hurt	"Units/Player/player_hurt";
+#	END;
 	
-IMAGE npcs;
-	VARIANT red		"Units/NPCs/npcs_red";
-	END;
+#IMAGE npcs;
+#	VARIANT red		"Units/NPCs/npcs_red";
+#	END;
 
-IMAGE monsters, "Units/Monsters/monsters"; END;
+#IMAGE monsters, "Units/Monsters/monsters"; END;
 

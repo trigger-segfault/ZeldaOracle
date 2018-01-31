@@ -53,6 +53,10 @@ namespace ZeldaOracle.Game.GameStates {
 				End();
 		}
 
+		public override void AssignPalettes() {
+			gameState.AssignPalettes();
+		}
+
 		public override void Draw(Graphics2D g) {
 			float opacity = (float)timer / (float)duration;
 			if (type == FadeType.FadeIn)

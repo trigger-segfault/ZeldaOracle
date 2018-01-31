@@ -88,6 +88,12 @@ namespace ZeldaEditor.Tools {
 			OnEnd();
 		}
 
+		public void Finish() {
+			OnFinish();
+			isDrawing = false;
+			isDragging = false;
+		}
+
 		public void Cancel() {
 			OnCancel();
 			isDrawing = false;
@@ -178,6 +184,8 @@ namespace ZeldaEditor.Tools {
 		protected virtual void OnEnd() { }
 
 		protected virtual void OnCancel() { }
+
+		protected virtual void OnFinish() { }
 
 		
 		//-----------------------------------------------------------------------------
