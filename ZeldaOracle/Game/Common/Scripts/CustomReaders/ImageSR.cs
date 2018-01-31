@@ -50,18 +50,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				}
 			});
 			//=====================================================================================
-			AddCommand("Variant", "string name, string filePath",
-			delegate(CommandParam parameters) {
-				Image variant = Resources.LoadImage(Resources.ImageDirectory + parameters.GetString(1), false);
-				variant.VariantName	= parameters.GetString(0);
-
-				if (imageTail != null)
-					imageTail.NextVariant = variant;
-				else
-					image = variant;
-				imageTail = variant;
-			});
-			//=====================================================================================
 		}
 
 

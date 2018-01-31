@@ -113,7 +113,6 @@
     <Compile Include="Controls\PropertyGridEditorWindowButton.cs" />
     <Compile Include="Controls\TreeViewLineConverter.cs" />
     <Compile Include="Control\EditorControl.cs" />
-    <None Include="Control\EditorGraphics.cs" />
     <Compile Include="Control\EditorImages.cs" />
     <Compile Include="Control\EditorResources.cs" />
     <Compile Include="Controls\PropertyGridEditorCheckComboBox.cs" />
@@ -191,6 +190,9 @@
       <DependentUpon>ShiftLevelWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WinForms\MouseWheelMessageFilter.cs" />
+    <Compile Include="WinForms\SpritePreview.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WinForms\TilePreview.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -113,10 +113,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
-				int imageVariantID = args.Properties.GetInteger("image_variant");
-				if (imageVariantID < 0)
-					imageVariantID = args.Zone.ImageVariantID;
-				SpriteDrawSettings settings = new SpriteDrawSettings(args.Zone.StyleDefinitions, imageVariantID, args.Time);
+				SpriteDrawSettings settings = new SpriteDrawSettings(args.Zone.StyleDefinitions, args.Time);
 				g.DrawSprite(
 					sprite,
 					settings,
@@ -130,18 +127,15 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 		}
 
 		/// <summary>Draws the action tile data to display in the editor.</summary>
-		public static void DrawTileData(Graphics2D g, ActionTileDataDrawArgs args, ColorDefinitions colorDefinitions) {
+		public static void DrawTileDataColors(Graphics2D g, ActionTileDataDrawArgs args, ColorDefinitions colorDefinitions) {
 			ISprite sprite = args.ActionTile.Sprite;
 			if (sprite is Animation) {
 				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
-				int imageVariantID = args.Properties.GetInteger("image_variant");
-				if (imageVariantID < 0)
-					imageVariantID = args.Zone.ImageVariantID;
 				SpriteDrawSettings settings = new SpriteDrawSettings(args.Zone.StyleDefinitions,
-					colorDefinitions, imageVariantID, args.Time);
+					colorDefinitions, args.Time);
 				g.DrawSprite(
 					sprite,
 					settings,
@@ -162,12 +156,9 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
-				int imageVariantID = args.Properties.GetInteger("image_variant");
-				if (imageVariantID < 0)
-					imageVariantID = args.Zone.ImageVariantID;
 				g.DrawSprite(
 					sprite,
-					new SpriteDrawSettings(args.Zone.StyleDefinitions, imageVariantID, args.Time),
+					new SpriteDrawSettings(args.Zone.StyleDefinitions, args.Time),
 					args.Position,
 					args.Color);
 			}
@@ -186,10 +177,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
 			}
 			if (sprite != null) {
-				int imageVariantID = args.Properties.GetInteger("image_variant");
-				if (imageVariantID < 0)
-					imageVariantID = args.Zone.ImageVariantID;
-				SpriteDrawSettings settings = new SpriteDrawSettings(args.Zone.StyleDefinitions, imageVariantID, args.Time);
+				SpriteDrawSettings settings = new SpriteDrawSettings(args.Zone.StyleDefinitions, args.Time);
 				if (colorDefinitions != null)
 					settings.Colors = colorDefinitions;
 				g.DrawSprite(

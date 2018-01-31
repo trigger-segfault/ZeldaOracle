@@ -52,12 +52,12 @@ namespace ZeldaOracle.Game.Control.Menus {
 
 		public override void AssignPalettes() {
 			GameData.PaletteShader.TilePalette = GameData.PAL_MENU_DEFAULT;
-			GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
+			GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_MENU;
 		}
 
 		public sealed override void Draw(Graphics2D g) {
 			if (drawHUD) {
-				GameControl.HUD.Draw(g, true);
+				GameControl.HUD.Draw(g);
 				g.PushTranslation(0, GameSettings.HUD_HEIGHT);
 			}
 

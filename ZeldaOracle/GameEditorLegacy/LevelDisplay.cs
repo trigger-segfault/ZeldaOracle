@@ -454,8 +454,8 @@ namespace ZeldaEditor {
 						for (int x = 0; x < tile.Size.X; x++) {
 							Point2I drawPos = position +
 								(new Point2I(x, y) * GameSettings.TILE_SIZE);
-							g.DrawISprite(tile.CurrentSprite,
-								new SpriteDrawSettings(tile.Room.Zone.ImageVariantID, editorControl.Ticks),
+							g.DrawSprite(tile.CurrentSprite,
+								new SpriteDrawSettings((float)editorControl.Ticks),
 								position, drawColor);
 						}
 					}
@@ -524,10 +524,10 @@ namespace ZeldaEditor {
 			// Draw the custom sprite/animation
 			if (animation != null) {
 				g.DrawAnimation(animation.GetSubstrip(substripIndex),
-					tile.Room.Zone.ImageVariantID, playbackTime, position, drawColor);
+					playbackTime, position, drawColor);
 			}
 			else if (sprite != null) {
-				g.DrawSprite(sprite, tile.Room.Zone.ImageVariantID, position, drawColor);
+				g.DrawSprite(sprite, position, drawColor);
 			}
 			/*else if (!tile.CurrentSprite.IsNull) {
 				g.DrawAnimation(tile.CurrentSprite,
@@ -546,9 +546,6 @@ namespace ZeldaEditor {
 		// Draw an event tile.
 		private void DrawEventTile(Graphics2D g, ActionTileDataInstance eventTile, Point2I position, Color drawColor) {
 			SpriteAnimation spr = eventTile.CurrentSprite;
-			int imageVariantID = eventTile.Properties.GetInteger("image_variant");
-			if (imageVariantID < 0)
-				imageVariantID = eventTile.Room.Zone.ImageVariantID;
 			
 			// Select different sprites for certain events.
 			if (eventTile.Type == typeof(NPCAction)) {
@@ -567,7 +564,7 @@ namespace ZeldaEditor {
 
 			// Draw the sprite.
 			if (!spr.IsNull) {
-				g.DrawAnimation(spr, imageVariantID, editorControl.Ticks, position, drawColor);
+				g.DrawAnimation(spr, editorControl.Ticks, position, drawColor);
 			}
 			else {
 				Rectangle2I r = new Rectangle2I(position, eventTile.Size * GameSettings.TILE_SIZE);

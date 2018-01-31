@@ -34,7 +34,7 @@ namespace ZeldaOracle.Common.Translation {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>The list of color codes.</summary>
-		private static Dictionary<string, Color> colorCodes;
+		private static Dictionary<string, ColorOrPalette> colorCodes;
 		/// <summary>The list of string codes.</summary>
 		private static Dictionary<string, string> stringCodes;
 
@@ -46,13 +46,13 @@ namespace ZeldaOracle.Common.Translation {
 		/// <summary>Initializes the format codes.</summary>
 		public static void Initialize() {
 
-			FormatCodes.colorCodes			= new Dictionary<string, Color>();
+			FormatCodes.colorCodes			= new Dictionary<string, ColorOrPalette>();
 			FormatCodes.stringCodes			= new Dictionary<string, string>();
 
-			FormatCodes.colorCodes.Add("red", new Color(248, 8, 40)); //#FFF80828
-			FormatCodes.colorCodes.Add("green", new Color(16, 168, 64)); //#FF10A840
-			FormatCodes.colorCodes.Add("blue", new Color(24, 128, 248)); //#FF1880F8
-			FormatCodes.colorCodes.Add("orange", new Color(248, 120, 8)); //#FFF87808
+			FormatCodes.colorCodes.Add("red", EntityColors.Red); //#FFF80828
+			FormatCodes.colorCodes.Add("green", EntityColors.Green); //#FF10A840
+			FormatCodes.colorCodes.Add("blue", EntityColors.Blue); //#FF1880F8
+			FormatCodes.colorCodes.Add("orange", EntityColors.Orange); //#FFF87808
 
 			FormatCodes.stringCodes.Add("triangle", "" + (char)1);
 			FormatCodes.stringCodes.Add("square", "" + (char)2);
@@ -116,7 +116,7 @@ namespace ZeldaOracle.Common.Translation {
 		}
 
 		/// <summary>Gets the color of the color code.</summary>
-		public static Color GetFormatCodeColor(string code) {
+		public static ColorOrPalette GetFormatCodeColor(string code) {
 			if (colorCodes.ContainsKey(code)) {
 				return colorCodes[code];
 			}
@@ -138,7 +138,7 @@ namespace ZeldaOracle.Common.Translation {
 		public static LetterString FormatString(string text, ref int caretPosition) {
 			int originalCaretPosition = caretPosition;
 			int currentCharacter = 0;
-			Color currentColor = Letter.DefaultColor;
+			ColorOrPalette currentColor = Letter.DefaultColor;
 			LetterString letterString = new LetterString();
 
 			bool inCode = false;
@@ -160,7 +160,7 @@ namespace ZeldaOracle.Common.Translation {
 							letterString.AddRange(stringCode, currentColor);
 						}
 						else if (codeType == FormatCodeType.Color) {
-							Color colorCode = FormatCodes.GetFormatCodeColor(currentCode);
+							ColorOrPalette colorCode = FormatCodes.GetFormatCodeColor(currentCode);
 							if (colorCode == currentColor)
 								currentColor = Letter.DefaultColor;
 							else
@@ -188,7 +188,7 @@ namespace ZeldaOracle.Common.Translation {
 		}
 
 		/// <summary>Gets the enumeration of color codes.</summary>
-		public static IEnumerable<KeyValuePair<string, Color>> GetColorCodes() {
+		public static IEnumerable<KeyValuePair<string, ColorOrPalette>> GetColorCodes() {
 			foreach (var pair in colorCodes) {
 				yield return pair;
 			}

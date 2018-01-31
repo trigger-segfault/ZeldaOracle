@@ -101,9 +101,9 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>The default color group for enitities.</summary>
 		public static readonly Color[] DefaultEntity = new Color[PaletteDictionary.ColorGroupSize] {
-			Color.ToGBCColor(0.66f, 0.66f, 0.66f),
+			Color.ToGBCColor(Color.White),
 			Color.Transparent,
-			Color.ToGBCColor(0.33f, 0.33f, 0.33f),
+			Color.ToGBCColor(0.5f, 0.5f, 0.5f),
 			Color.Black
 		};
 

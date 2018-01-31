@@ -701,21 +701,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\player_items.png">
-      <Name>player_items</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\sheet_icons_thin.png">
-      <Name>sheet_icons_thin</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\sheet_menu_small.png">
-      <Name>sheet_menu_small</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Tiles\action_tiles.png">
       <Name>action_tiles</Name>
       <Importer>TextureImporter</Importer>

@@ -13,6 +13,10 @@ static const float3 IMAGE_SIZE_M_1 = float3(255, 255, 255);
 
 float4 PixelShaderFunction(float4 colorize: COLOR0, float2 texCoord : TEXCOORD0) : COLOR0 {
 	float4 color = tex2D(RenderTarget, texCoord);
+	if (color.r == 1.0 && color.g == 1.0 && color.b == 1.0 && color.a == 1.0) {
+		color = colorize;
+		colorize = float4(1.0, 1.0, 1.0, 1.0);
+	}
 	int a = color.a * 255;
 	if (a == 254) {
 		color.rgb *= IMAGE_SIZE_M_1;

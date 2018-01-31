@@ -80,83 +80,80 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		// Draws the HUD.
-		public void Draw(Graphics2D g, bool light) {
-			int lightDark = (light ? GameData.VARIANT_LIGHT : GameData.VARIANT_DARK);
-
+		public void Draw(Graphics2D g) {
 			Rectangle2I r = new Rectangle2I(0, 0, GameSettings.SCREEN_WIDTH, 16);
-			g.DrawSprite(GameData.SPR_HUD_BACKGROUND, lightDark, r);
+			g.DrawSprite(GameData.SPR_HUD_BACKGROUND, r);
 			
-			DrawItems(g, lightDark);
-			DrawRupees(g, lightDark);
-			DrawHearts(g, lightDark);
+			DrawItems(g);
+			DrawRupees(g);
+			DrawHearts(g);
 		}
 
 		// Draws the equipped usable items.
-		private void DrawItems(Graphics2D g, int lightDark) {
+		private void DrawItems(Graphics2D g) {
 			if (Inventory.IsTwoHandedEquipped) {
 				// B bracket side
-				g.DrawSprite(GameData.SPR_HUD_BRACKET_LEFT_B, lightDark, new Point2I(8, 0));
+				g.DrawSprite(GameData.SPR_HUD_BRACKET_LEFT_B, new Point2I(8, 0));
 				// A bracket side
-				g.DrawSprite(GameData.SPR_HUD_BRACKET_RIGHT_A, lightDark, new Point2I(56, 0));
+				g.DrawSprite(GameData.SPR_HUD_BRACKET_RIGHT_A, new Point2I(56, 0));
 
-				Inventory.EquippedWeapons[0].DrawSlot(g, new Point2I(16, 0), lightDark);
+				Inventory.EquippedWeapons[0].DrawSlot(g, new Point2I(16, 0));
 			}
 			else if (!gameControl.IsAdvancedGame) {
 				// B bracket
-				g.DrawSprite(GameData.SPR_HUD_BRACKET_LEFT_B, lightDark, new Point2I(0, 0));
-				g.DrawSprite(GameData.SPR_HUD_BRACKET_RIGHT, lightDark, new Point2I(32, 0));
+				g.DrawSprite(GameData.SPR_HUD_BRACKET_LEFT_B, new Point2I(0, 0));
+				g.DrawSprite(GameData.SPR_HUD_BRACKET_RIGHT, new Point2I(32, 0));
 				// A bracket
-				g.DrawSprite(GameData.SPR_HUD_BRACKET_LEFT_A, lightDark, new Point2I(40, 0));
-				g.DrawSprite(GameData.SPR_HUD_BRACKET_RIGHT, lightDark, new Point2I(72, 0));
+				g.DrawSprite(GameData.SPR_HUD_BRACKET_LEFT_A, new Point2I(40, 0));
+				g.DrawSprite(GameData.SPR_HUD_BRACKET_RIGHT, new Point2I(72, 0));
 
 				if (Inventory.EquippedWeapons[1] != null)
-					Inventory.EquippedWeapons[1].DrawSlot(g, new Point2I(8, 0), lightDark);
+					Inventory.EquippedWeapons[1].DrawSlot(g, new Point2I(8, 0));
 				if (Inventory.EquippedWeapons[0] != null)
-					Inventory.EquippedWeapons[0].DrawSlot(g, new Point2I(48, 0), lightDark);
+					Inventory.EquippedWeapons[0].DrawSlot(g, new Point2I(48, 0));
 			}
 			else {
 				// B bracket side
-				g.DrawSprite(GameData.SPR_HUD_BRACKET_LEFT_B, lightDark, new Point2I(0, 0));
+				g.DrawSprite(GameData.SPR_HUD_BRACKET_LEFT_B, new Point2I(0, 0));
 				// Both bracket side
-				g.DrawSprite(GameData.SPR_HUD_BRACKET_LEFT_RIGHT, lightDark, new Point2I(32, 0));
+				g.DrawSprite(GameData.SPR_HUD_BRACKET_LEFT_RIGHT, new Point2I(32, 0));
 				// A bracket side
-				g.DrawSprite(GameData.SPR_HUD_BRACKET_RIGHT_A, lightDark, new Point2I(64, 0));
+				g.DrawSprite(GameData.SPR_HUD_BRACKET_RIGHT_A, new Point2I(64, 0));
 
 				if (Inventory.EquippedWeapons[1] != null)
-					Inventory.EquippedWeapons[1].DrawSlot(g, new Point2I(8, 0), lightDark);
+					Inventory.EquippedWeapons[1].DrawSlot(g, new Point2I(8, 0));
 				if (Inventory.EquippedWeapons[0] != null)
-					Inventory.EquippedWeapons[0].DrawSlot(g, new Point2I(40, 0), lightDark);
+					Inventory.EquippedWeapons[0].DrawSlot(g, new Point2I(40, 0));
 			}
 		}
 
 		// Draws the ruppes and dungeon keys.
-		private void DrawRupees(Graphics2D g, int lightDark) {
-			Color black = (lightDark == GameData.VARIANT_LIGHT ? new Color(16, 16, 16) : Color.Black);
+		private void DrawRupees(Graphics2D g) {
 			int advancedOffset = (gameControl.IsAdvancedGame ? 8 : 0);
 			Dungeon dungeon = gameControl.RoomControl.Dungeon;
 
 			if (dungeon != null) {
 				// Display the small key count.
-				g.DrawSprite(GameData.SPR_HUD_KEY, lightDark, new Point2I(80 - advancedOffset, 0));
-				g.DrawSprite(GameData.SPR_HUD_X, lightDark, new Point2I(88 - advancedOffset, 0));
-				g.DrawString(GameData.FONT_SMALL, dungeon.NumSmallKeys.ToString(), new Point2I(96 - advancedOffset, 0), black);
+				g.DrawSprite(GameData.SPR_HUD_KEY, new Point2I(80 - advancedOffset, 0));
+				g.DrawSprite(GameData.SPR_HUD_X, new Point2I(88 - advancedOffset, 0));
+				g.DrawString(GameData.FONT_SMALL, dungeon.NumSmallKeys.ToString(), new Point2I(96 - advancedOffset, 0), EntityColors.Black);
 			}
 			else {
 				// Display rupee icon.
-				g.DrawSprite(GameData.SPR_HUD_RUPEE, lightDark, new Point2I(80 - advancedOffset, 0));
+				g.DrawSprite(GameData.SPR_HUD_RUPEE, new Point2I(80 - advancedOffset, 0));
 			}
 
-			g.DrawString(GameData.FONT_SMALL, dynamicRupees.ToString("000"), new Point2I(80 - advancedOffset, 8), black);
+			g.DrawString(GameData.FONT_SMALL, dynamicRupees.ToString("000"), new Point2I(80 - advancedOffset, 8), EntityColors.Black);
 		}
 
 		// Draws the player's life.
-		private void DrawHearts(Graphics2D g, int lightDark) {
+		private void DrawHearts(Graphics2D g) {
 			for (int i = 0; i < gameControl.Player.MaxHealth / 4; i++) {
 				int fullness = GMath.Clamp(dynamicHealth - i * 4, 0, 4);
 				if (!gameControl.IsAdvancedGame)
-					g.DrawSprite(GameData.SPR_HUD_HEARTS[fullness], lightDark, new Point2I(104 + (i % 7) * 8, (i / 7) * 8));
+					g.DrawSprite(GameData.SPR_HUD_HEARTS[fullness], new Point2I(104 + (i % 7) * 8, (i / 7) * 8));
 				else
-					g.DrawSprite(GameData.SPR_HUD_HEARTS[fullness], lightDark, new Point2I(96 + (i % 8) * 8, (i / 8) * 8));
+					g.DrawSprite(GameData.SPR_HUD_HEARTS[fullness], new Point2I(96 + (i % 8) * 8, (i / 8) * 8));
 			}
 		}
 

@@ -139,16 +139,15 @@ namespace ZeldaOracle.Game.Items {
 		// Overridden methods
 		//-----------------------------------------------------------------------------
 
-		protected virtual void DrawAmmo(Graphics2D g, Point2I position, int lightOrDark) {
-			Color color = (lightOrDark == GameData.VARIANT_LIGHT ? new Color(16, 16, 16) : Color.Black);
-			g.DrawString(GameData.FONT_SMALL, ammo[currentAmmo].Amount.ToString("00"), position + new Point2I(8, 8), color);
+		protected virtual void DrawAmmo(Graphics2D g, Point2I position) {
+			g.DrawString(GameData.FONT_SMALL, ammo[currentAmmo].Amount.ToString("00"), position + new Point2I(8, 8), EntityColors.Black);
 		}
 		
 		// Draws the item inside the inventory.
-		public override void DrawSlot(Graphics2D g, Point2I position, int lightOrDark) {
-			DrawSprite(g, position, lightOrDark);
+		public override void DrawSlot(Graphics2D g, Point2I position) {
+			DrawSprite(g, position);
 			if (maxLevel > Item.Level1)
-				DrawLevel(g, position, lightOrDark);
+				DrawLevel(g, position);
 		}
 
 

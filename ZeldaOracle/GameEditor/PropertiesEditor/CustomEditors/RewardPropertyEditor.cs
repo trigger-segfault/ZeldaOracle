@@ -52,7 +52,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 				Reward reward = rewardPair.Value;
 
 				if (reward != null && reward.Sprite != null) {
-					canvasSprite = EditorResources.GetSprite(reward.Sprite);
+					canvasSprite = EditorResources.UnmapSprite(reward.Sprite);
 				}
 
 				rewardItems[index] = CreateListItem(canvasSprite, reward.ID);

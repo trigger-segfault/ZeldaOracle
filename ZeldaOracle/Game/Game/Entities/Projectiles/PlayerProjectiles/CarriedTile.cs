@@ -61,13 +61,13 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 
 		public override void Initialize() {
 			base.Initialize();
-			
-			Graphics.ImageVariant = tile.Graphics.ImageVariant;
-			
+			Graphics.IsUnmapped = true;
+			Graphics.UnmappedPalette = RoomControl.Zone.Palette;
 			if (tile.SpriteAsObject != null)
 				Graphics.PlayAnimation(tile.SpriteAsObject);
 			else
 				Graphics.PlayAnimation(tile.Graphics.AnimationPlayer.SpriteOrSubStrip);
+			Graphics.CreateUnmappedSprite();
 		}
 
 		public override void OnLand() {

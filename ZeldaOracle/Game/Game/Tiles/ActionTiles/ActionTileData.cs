@@ -27,9 +27,10 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 			position		= Point2I.Zero;
 			size			= Point2I.One;
 			
-			properties.Set("image_variant", 0)
+			// TODO: Switch this to color
+			/*properties.Set("image_variant", 0)
 				.SetDocumentation("Image Variant ID", "", "", "Internal",
-				"The image variant to draw the sprtie with.", true, false);
+				"The image variant to draw the sprtie with.", true, false);*/
 		}
 		
 		public ActionTileData(Type type) :

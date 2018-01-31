@@ -239,7 +239,6 @@ namespace ConscriptDesigner.WinForms {
 			}
 
 			if (zone != null) {
-				settings.VariantID = zone.ImageVariantID;
 				settings.Styles = zone.StyleDefinitions;
 			}
 

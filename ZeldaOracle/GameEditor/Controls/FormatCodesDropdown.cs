@@ -14,6 +14,8 @@ using ZeldaEditor.Control;
 using ZeldaEditor.Util;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Translation;
+using ZeldaOracle.Game;
+using ZeldaColor = ZeldaOracle.Common.Graphics.Color;
 
 namespace ZeldaEditor.Controls {
 
@@ -97,7 +99,8 @@ namespace ZeldaEditor.Controls {
 						button.Tag = code;
 						button.Style = ToolBarButtonStyle;
 						button.HorizontalAlignment = HorizontalAlignment.Stretch;
-						button.Foreground = new SolidColorBrush(Color.FromRgb(pair.Value.R, pair.Value.G, pair.Value.B));
+						ZeldaColor color = pair.Value.GetUnmappedColor(GameData.PAL_TILES_DEFAULT, GameData.PAL_ENTITIES_DEFAULT);
+						button.Foreground = new SolidColorBrush(Color.FromRgb(color.R, color.G, color.B));
 						button.Click += OnFormatCodeSelected;
 						part_wrapPanel.Children.Add(button);
 					}

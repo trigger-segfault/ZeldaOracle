@@ -136,37 +136,6 @@ namespace ZeldaOracle.Game {
 		// Loads the images.
 		private static void LoadImages() {
 			Resources.LoadImagesFromScript("Images/images.conscript");
-
-			// Set the variant IDs for images with variants.
-			/*string prefix = "VARIANT_";
-			IEnumerable<FieldInfo> fields = typeof(GameData).GetFields()
-				.Where(field =>
-					field.Name.StartsWith(prefix) &&
-					field.FieldType == typeof(int) &&
-					field.IsStatic);
-			
-			// Generate image variant IDs.
-			int variantIndex = 0;
-			foreach (FieldInfo field in fields)
-				field.SetValue(null, variantIndex++);
-			
-			// Link image variants with their variant IDs
-			Dictionary<string, Image> dictionary = Resources.GetResourceDictionary<Image>();
-			foreach (Image image in dictionary.Values.Where(img => img.HasVariants)) {
-				// Loop through the image's variants.
-				for (Image subimg = image; subimg != null; subimg = subimg.NextVariant) {
-					// Find the field with this name.
-					string name = prefix.ToLower() + subimg.VariantName;
-					FieldInfo matchingField = fields.FirstOrDefault(
-						field => string.Compare(field.Name, name, true) == 0);
-						
-					// Set the image's variant ID to the field's value.
-					if (matchingField != null)
-						subimg.VariantID = (int) matchingField.GetValue(null);
-					else
-						Console.WriteLine("** WARNING: Unknown variant \"" + subimg.VariantName + "\".");
-				}
-			}*/
 		}
 
 
@@ -184,53 +153,6 @@ namespace ZeldaOracle.Game {
 		// Zone Loading
 		//-----------------------------------------------------------------------------
 
-		private static void LoadZonesOld() {
-			TileData ground = Resources.GetResource<TileData>("ground");
-			TileData floor  = Resources.GetResource<TileData>("floor");
-			//TileData background  = Resources.GetResource<TileData>("default_background");
-
-			ZONE_DEFAULT			= new Zone("",					"(none)",			VARIANT_NONE,				ground);
-			ZONE_DEFAULT.PaletteID = "present";
-			ZONE_SUMMER				= new Zone("summer",			"Summer",			VARIANT_SUMMER,				ground);
-			ZONE_SUMMER.PaletteID = "summer";
-			ZONE_FOREST				= new Zone("forest",			"Forest",			VARIANT_FOREST,				ground);
-			ZONE_FOREST.PaletteID = "present";
-			ZONE_GRAVEYARD			= new Zone("graveyard",			"Graveyard",		VARIANT_GRAVEYARD,			ground);
-			ZONE_GRAVEYARD.PaletteID = "present";
-			ZONE_INTERIOR			= new Zone("interior",			"Interior",			VARIANT_INTERIOR,			floor);
-			ZONE_INTERIOR.PaletteID = "dungeon_ages_1";
-			ZONE_PRESENT			= new Zone("present",			"Present",			VARIANT_PRESENT,			floor);
-			ZONE_PRESENT.StyleDefinitions.Set(StyleGroups.Cliffs, "past");
-			ZONE_PRESENT.StyleDefinitions.Set(StyleGroups.Railings, "past");
-			ZONE_PRESENT.PaletteID	= "present";
-			ZONE_INTERIOR_PRESENT	= new Zone("interior_present",	"Interior Present",	VARIANT_INTERIOR_PRESENT,	floor);
-			ZONE_INTERIOR_PRESENT.PaletteID = "dungeon_ages_1";
-			ZONE_AGES_DUNGEON_1		= new Zone("ages_dungeon_1",	"Ages Dungeon 1",	VARIANT_AGES_DUNGEON_1,		floor);
-			ZONE_AGES_DUNGEON_1.PaletteID = "dungeon_ages_1";
-			ZONE_AGES_DUNGEON_4		= new Zone("ages_dungeon_4",	"Ages Dungeon 4",	VARIANT_AGES_DUNGEON_4,		floor);
-			ZONE_AGES_DUNGEON_4.PaletteID = "dungeon_ages_1";
-
-			ZONE_SIDESCROLL_AGES_DUNGEON_1	= new Zone("sidescroll_ages_dungeon_1",	"Ages Dungeon 1", VARIANT_AGES_DUNGEON_1, floor);
-			ZONE_SIDESCROLL_AGES_DUNGEON_1.IsSideScrolling = true;
-			ZONE_SIDESCROLL_AGES_DUNGEON_1.PaletteID = "dungeon_ages_1";
-
-			ZONE_UNDERWATER_PRESENT	= new Zone("underwater_present", "Underwater Present", VARIANT_UNDERWATER_PRESENT, ground);
-			ZONE_UNDERWATER_PRESENT.IsUnderwater = true;
-			ZONE_UNDERWATER_PRESENT.PaletteID = "present";
-
-			Resources.AddResource("default",	ZONE_DEFAULT);
-			Resources.AddResource("summer",		ZONE_SUMMER);
-			Resources.AddResource("forest",		ZONE_FOREST);
-			Resources.AddResource("graveyard",	ZONE_GRAVEYARD);
-			Resources.AddResource("interior",	ZONE_INTERIOR);
-			Resources.AddResource("present",	ZONE_PRESENT);
-			Resources.AddResource("interior_present", ZONE_INTERIOR_PRESENT);
-			Resources.AddResource("ages_dungeon_1", ZONE_AGES_DUNGEON_1);
-			Resources.AddResource("ages_dungeon_4", ZONE_AGES_DUNGEON_4);
-			Resources.AddResource("sidescroll_ages_dungeon_1", ZONE_SIDESCROLL_AGES_DUNGEON_1);
-			Resources.AddResource("underwater_present", ZONE_UNDERWATER_PRESENT);
-		}
-
 		private static void LoadZonesPreTileData() {
 			Resources.LoadZones("Zones/zones.conscript", false);
 			IntegrateResources<Zone>("ZONE_");
@@ -240,6 +162,7 @@ namespace ZeldaOracle.Game {
 			Resources.LoadZones("Zones/zones.conscript", true);
 			IntegrateResources<Zone>("ZONE_");
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Tliesets Loading
@@ -274,14 +197,6 @@ namespace ZeldaOracle.Game {
 
 
 			etd.Properties.Set("substrip_index", Directions.Down);
-			if (color == MonsterColor.Red)
-				etd.Properties.Set("image_variant", GameData.VARIANT_RED);
-			else if (color == MonsterColor.Blue)
-				etd.Properties.Set("image_variant", GameData.VARIANT_BLUE);
-			else if (color == MonsterColor.Green)
-				etd.Properties.Set("image_variant", GameData.VARIANT_GREEN);
-			else if (color == MonsterColor.Orange)
-				etd.Properties.Set("image_variant", GameData.VARIANT_ORANGE);
 
 			Resources.AddResource(id, etd);
 			return etd;
@@ -364,41 +279,6 @@ namespace ZeldaOracle.Game {
 
 		public static Effect PALETTE_SHADER;
 		public static Effect PALETTE_LERP_SHADER;
-
-		//-----------------------------------------------------------------------------
-		// Tilesets
-		//-----------------------------------------------------------------------------
-
-		public static Tileset TILESET_OVERWORLD;
-		public static Tileset TILESET_INTERIOR;
-		public static Tileset TILESET_CLIFFS;
-
-
-		//-----------------------------------------------------------------------------
-		// Image Variants
-		//-----------------------------------------------------------------------------
-
-		public static int VARIANT_NONE;
-		public static int VARIANT_NORMAL;
-		public static int VARIANT_DARK;
-		public static int VARIANT_LIGHT;
-		public static int VARIANT_RED;
-		public static int VARIANT_BLUE;
-		public static int VARIANT_GREEN;
-		public static int VARIANT_YELLOW;
-		public static int VARIANT_ORANGE;
-		public static int VARIANT_HURT;
-		public static int VARIANT_SUMMER;
-		public static int VARIANT_FOREST;
-		public static int VARIANT_GRAVEYARD;
-		public static int VARIANT_INTERIOR;
-		public static int VARIANT_PRESENT;
-		public static int VARIANT_INTERIOR_PRESENT;
-		public static int VARIANT_UNDERWATER_PRESENT;
-		public static int VARIANT_AGES_DUNGEON_1;
-		public static int VARIANT_AGES_DUNGEON_2;
-		public static int VARIANT_AGES_DUNGEON_3;
-		public static int VARIANT_AGES_DUNGEON_4;
 		
 
 		//-----------------------------------------------------------------------------

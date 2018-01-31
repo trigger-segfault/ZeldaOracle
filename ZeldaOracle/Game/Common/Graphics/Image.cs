@@ -14,16 +14,10 @@ namespace ZeldaOracle.Common.Graphics {
 	/// <summary>An image containing a texture.</summary>
 	public class Image {
 
-		// The texture of the image.
+		/// <summary>The texture of the image.</summary>
 		private Texture2D texture;
-		// The file path of the image.
+		/// <summary>The file path of the image.</summary>
 		private string filePath;
-		// The name of this particular image variant.
-		private string variantName;
-		// The id of this particular image variant.
-		private int variantID;
-		// A pointer to the next variant for the image.
-		private Image nextVariant;
 
 
 		//-----------------------------------------------------------------------------
@@ -33,18 +27,12 @@ namespace ZeldaOracle.Common.Graphics {
 		public Image() {
 			this.texture		= null;
 			this.filePath		= "";
-			this.variantName	= "";
-			this.variantID		= 0;
-			this.nextVariant	= null;
 		}
 
 		// Constructs an image with the specified texture.
 		public Image(Texture2D texture, string filePath = "") {
 			this.texture		= texture;
 			this.filePath		= filePath;
-			this.variantName	= "";
-			this.variantID		= 0;
-			this.nextVariant	= null;
 		}
 
 		// Load an image from the specified file path.
@@ -54,101 +42,33 @@ namespace ZeldaOracle.Common.Graphics {
 			else
 				this.texture	= null;
 			this.filePath		= filePath;
-			this.variantName	= "";
-			this.variantID		= 0;
-			this.nextVariant	= null;
 		}
 
 		// Constructs an new image with the specified texture information.
 		public Image(GraphicsDevice graphicsDevice, int width, int height) {
 			this.texture		= new Texture2D(graphicsDevice, width, height);
 			this.filePath		= "";
-			this.variantName	= "";
-			this.variantID		= 0;
-			this.nextVariant	= null;
 		}
 
 		// Constructs an new image with the specified texture information.
 		public Image(GraphicsDevice graphicsDevice, Point2I size) {
 			this.texture		= new Texture2D(graphicsDevice, size.X, size.Y);
 			this.filePath		= "";
-			this.variantName	= "";
-			this.variantID		= 0;
-			this.nextVariant	= null;
 		}
 
 		// Constructs an new image with the specified texture information.
 		public Image(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format) {
 			this.texture		= new Texture2D(graphicsDevice, width, height, mipMap, format);
 			this.filePath		= "";
-			this.variantName	= "";
-			this.variantID		= 0;
-			this.nextVariant	= null;
 		}
 
 		// Constructs an new image with the specified texture information.
 		public Image(GraphicsDevice graphicsDevice, Point2I size, bool mipMap, SurfaceFormat format) {
 			this.texture		= new Texture2D(graphicsDevice, size.X, size.Y, mipMap, format);
 			this.filePath		= "";
-			this.variantName	= "";
-			this.variantID		= 0;
-			this.nextVariant	= null;
 		}
 
-
-		//-----------------------------------------------------------------------------
-		// Accessors
-		//-----------------------------------------------------------------------------
 		
-		// Return the variant for this image with the given id.
-		public Image GetVariant(int variantID) {
-			if (variantID == 0)
-				return this;
-			Image image = this;
-			while (image != null) {
-				if (image.variantID == variantID)
-					return image;
-				image = image.nextVariant;
-			}
-			return this;
-		}
-
-		// Return the variant for this image with the given name.
-		public Image GetVariant(string variantName) {
-			Image image = this;
-			while (image != null) {
-				if (image.variantName == variantName)
-					return image;
-				image = image.nextVariant;
-			}
-			return this;
-		}
-
-		// Returns if the variant with the specified ID exists.
-		public bool HasVariant(int variantID) {
-			if (variantID == 0)
-				return true;
-			Image image = this;
-			while (image != null) {
-				if (image.variantID == variantID)
-					return true;
-				image = image.nextVariant;
-			}
-			return false;
-		}
-
-		// Returns if the variant with the specified name exists.
-		public bool HasVariant(string variantName) {
-			Image image = this;
-			while (image != null) {
-				if (image.variantName == variantName)
-					return true;
-				image = image.nextVariant;
-			}
-			return false;
-		}
-
-
 		//-----------------------------------------------------------------------------
 		// Management
 		//-----------------------------------------------------------------------------
@@ -213,29 +133,6 @@ namespace ZeldaOracle.Common.Graphics {
 		public string FilePath {
 			get { return filePath; }
 			set { filePath = value; }
-		}
-
-		// Gets the name of this particular image variant.
-		public string VariantName {
-			get { return variantName; }
-			set { variantName = value; }
-		}
-
-		// Gets the id of this particular image variant.
-		public int VariantID {
-			get { return variantID; }
-			set { variantID = value; }
-		}
-
-		// Gets the next varient for this image.
-		public Image NextVariant {
-			get { return nextVariant; }
-			set { nextVariant = value; }
-		}
-
-		// Does this image have varaints?
-		public bool HasVariants {
-			get  { return (nextVariant != null); }
 		}
 
 		// Gets the format of the image.

@@ -11,7 +11,6 @@ using ZeldaOracle.Game.Tiles;
 namespace ZeldaOracle.Game.Worlds {
 	public class Zone : IPropertyObject, IIDObject {
 		
-		private int			imageVariantID;
 		private TileData	defaultTileData;
 		private Properties  properties;
 
@@ -47,10 +46,9 @@ namespace ZeldaOracle.Game.Worlds {
 			properties.Set("name", name);
 		}
 
-		public Zone(string id, string name, int imageVariantID, TileData defaultTileData) :
+		public Zone(string id, string name, TileData defaultTileData) :
 			this()
 		{
-			this.imageVariantID		= imageVariantID;
 			this.defaultTileData	= defaultTileData;
 
 			properties.Set("id", id);
@@ -60,7 +58,6 @@ namespace ZeldaOracle.Game.Worlds {
 		public Zone(Zone copy) :
 			this()
 		{
-			this.imageVariantID		= copy.imageVariantID;
 			this.defaultTileData    = copy.defaultTileData;
 			this.styles             = new StyleDefinitions(copy.styles);
 			this.properties.SetAll(copy.properties);
@@ -84,11 +81,6 @@ namespace ZeldaOracle.Game.Worlds {
 		public string Name {
 			get { return properties.GetString("name"); }
 			set { properties.Set("name", value); }
-		}
-		
-		public int ImageVariantID {
-			get { return imageVariantID; }
-			set { imageVariantID = value; }
 		}
 		
 		public TileData DefaultTileData {

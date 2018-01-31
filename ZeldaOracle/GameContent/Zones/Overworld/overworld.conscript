@@ -2,7 +2,6 @@
 
 ZONE "present";
 	NAME "Present";
-	IMAGEVARIANT "PRESENT";
 	DEFAULTTILE "ground";
 	PALETTE "present";
 	SETSTYLE "cliff", "present";
@@ -60,7 +59,6 @@ END;
 ZONE "summer";
 	CLONE "present";
 	NAME "Summer";
-	IMAGEVARIANT "SUMMER";
 	DEFAULTTILE "ground";
 	PALETTE "summer";
 	
@@ -88,7 +86,6 @@ END;
 ZONE "summer_forest";
 	CLONE "summer";
 	NAME "Summer (Forest)";
-	IMAGEVARIANT "FOREST";
 	DEFAULTTILE "ground";
 	PALETTE "summer_forest";
 	
@@ -97,14 +94,12 @@ END;
 
 #ZONE "graveyard";
 #	NAME "Graveyard";
-#	IMAGEVARIANT "GRAVEYARD";
 #	DEFAULTTILE "ground";
 #	PALETTE "present";
 #END;
 
 ZONE "underwater_present";
 	NAME "Underwater Present";
-	IMAGEVARIANT "UNDERWATER_PRESENT";
 	DEFAULTTILE "ground";
 	PALETTE "underwater_present";
 	UNDERWATER true;

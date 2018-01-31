@@ -182,17 +182,17 @@ namespace ZeldaEditor.Control {
 
 		}
 
-		public void SetGraphics(GraphicsDevice graphicsDevice, ContentManager contentManager) {
+		public void SetGraphics(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, ContentManager contentManager) {
 			if (!isInitialized) {
 				isInitialized = true;
-				Resources.Initialize(contentManager, graphicsDevice);
+				Resources.Initialize(spriteBatch, graphicsDevice, contentManager);
 			}
 		}
 
 		public void Initialize() {
 			GameData.Initialize();
-			EditorResources.Initialize();
 			FormatCodes.Initialize();
+			EditorResources.Initialize(this);
 			paletteShader = new PaletteShader(GameData.PALETTE_LERP_SHADER);
 
 			this.inventory      = new Inventory(null);

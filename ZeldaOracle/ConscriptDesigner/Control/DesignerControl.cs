@@ -40,6 +40,7 @@ namespace ConscriptDesigner.Control {
 		private static ContentRoot project;
 		private static GraphicsDevice graphicsDevice;
 		private static ContentManager contentManager;
+		private static SpriteBatch spriteBatch;
 		private static Task<ScriptReaderException> busyTask;
 		private static Thread busyThread;
 		private static bool busyTaskIsConscripts;
@@ -107,9 +108,10 @@ namespace ConscriptDesigner.Control {
 			selectedTileLocation = -Point2I.One;
 		}
 
-		public static void SetGraphics(GraphicsDevice graphicsDevice, ContentManager contentManager) {
-			DesignerControl.graphicsDevice = graphicsDevice;
-			DesignerControl.contentManager = contentManager;
+		public static void SetGraphics(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, ContentManager contentManager) {
+			DesignerControl.spriteBatch		= spriteBatch;
+			DesignerControl.graphicsDevice	= graphicsDevice;
+			DesignerControl.contentManager	= contentManager;
 			if (IsProjectOpen) {
 				RunConscripts();
 			}
@@ -390,7 +392,7 @@ namespace ConscriptDesigner.Control {
 				Stopwatch watch = Stopwatch.StartNew();
 				UpdateContentFolder(project);
 
-				Resources.Initialize(contentManager, graphicsDevice);
+				Resources.Initialize(spriteBatch, graphicsDevice, contentManager);
 				rewardManager = new RewardManager(null);
 				GameData.Initialize(rewardManager);
 
@@ -898,6 +900,10 @@ namespace ConscriptDesigner.Control {
 
 		public static ContentManager ContentManager {
 			get { return contentManager; }
+		}
+
+		public static SpriteBatch SpriteBatch {
+			get { return spriteBatch; }
 		}
 
 		public static bool IsBusy {

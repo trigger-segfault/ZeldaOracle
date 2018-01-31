@@ -1,7 +1,6 @@
 ﻿
 ZONE "dungeon_skull_dungeon";
 	NAME "Skull Dungeon";
-	IMAGEVARIANT "NONE";
 	DEFAULTTILE "floor";
 	PALETTE "dungeon_skull_dungeon";
 	SETSTYLE "railing", "dungeon";
@@ -55,7 +54,6 @@ END;
 ZONE "sidescroll_ages_dungeon_1";
 	CLONE "dungeon_spirits_grave";
 	NAME "Sidescroll Ages Dungeon 1";
-	IMAGEVARIANT "AGES_DUNGEON_1";
 	DEFAULTTILE "floor";
 	PALETTE "dungeon_spirits_grave";
 	SIDESCROLLING true;

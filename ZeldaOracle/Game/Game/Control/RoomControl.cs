@@ -569,7 +569,7 @@ namespace ZeldaOracle.Game.Control {
 			if (roomDrawing.HasFlag(RoomDrawing.DrawBelow)) {
 				// Draw background (in the color of the HUD).
 				Rectangle2I viewRect = new Rectangle2I(0, 0, GameSettings.VIEW_WIDTH, GameSettings.VIEW_HEIGHT);
-				g.DrawSprite(GameData.SPR_HUD_BACKGROUND, GameData.VARIANT_DARK, viewRect);
+				g.DrawSprite(GameData.SPR_HUD_BACKGROUND, viewRect);
 			}
 
 			Vector2F viewTranslation = -GMath.Round(viewControl.ViewPosition);
@@ -630,7 +630,7 @@ namespace ZeldaOracle.Game.Control {
 
 		public override void Draw(Graphics2D g) {
 			DrawRoom(g, new Vector2F(0, GameSettings.HUD_HEIGHT), RoomDrawing.DrawAll);	// Draw the room (offset to make room for the HUD).
-			GameControl.HUD.Draw(g, false);		// Draw the HUD.
+			GameControl.HUD.Draw(g);			// Draw the HUD.
 			GameControl.DrawRoomState(g);		// Draw the current room state.
 		}
 

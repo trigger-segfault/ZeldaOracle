@@ -113,7 +113,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 					g.DrawSprite(GameData.SPR_HUD_HEART_PIECES_EMPTY[i], new Point2I(112, 8));
 			}
 
-			g.DrawString(GameData.FONT_SMALL, GameControl.Inventory.PiecesOfHeart.ToString() + "/4", new Point2I(120, 40), new Color(16, 16, 16));
+			g.DrawString(GameData.FONT_SMALL, GameControl.Inventory.PiecesOfHeart.ToString() + "/4", new Point2I(120, 40), EntityColors.Black);
 		}
 
 		//-----------------------------------------------------------------------------

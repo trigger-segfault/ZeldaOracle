@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Entities.Effects;
@@ -50,7 +51,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		private void EndShoot() {
-			Graphics.ImageVariant = GameData.VARIANT_BLUE;
+			Graphics.Colors.SetAll("blue");
 			shooting = false;
 			canShoot = 3; // Must rotate 3 times before shooting again
 		}
@@ -87,7 +88,7 @@ namespace ZeldaOracle.Game.Tiles {
 			angle		= Angles.Up;
 			rotateTimer	= 15;
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_BEAMOS);
-			Graphics.ImageVariant = GameData.VARIANT_BLUE;
+			Graphics.Colors.SetAll("blue");
 			Graphics.SubStripIndex = angle;
 		}
 
@@ -117,9 +118,9 @@ namespace ZeldaOracle.Game.Tiles {
 
 					if (flashIndex < 4) {
 						if (flashIndex % 2 == 0)
-							Graphics.ImageVariant = GameData.VARIANT_HURT;
+							Graphics.Colors.SetAll("inverse_red");
 						else
-							Graphics.ImageVariant = GameData.VARIANT_BLUE;
+							Graphics.Colors.SetAll("blue");
 					}
 					else
 						EndShoot();
@@ -151,7 +152,23 @@ namespace ZeldaOracle.Game.Tiles {
 
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
-			Tile.DrawTileData(g, args);
+			int spriteIndex = args.Properties.GetInteger("sprite_index", 0);
+			ISprite sprite = args.Tile.GetSpriteIndex(spriteIndex);
+			if (sprite is Animation) {
+				int substripIndex = ((int)args.Time / 15) % 8;
+				if (substripIndex == -1)
+					substripIndex = args.Properties.GetInteger("substrip_index", 0);
+				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
+			}
+			if (sprite != null) {
+				SpriteDrawSettings settings = new SpriteDrawSettings(args.Zone.StyleDefinitions,
+					ColorDefinitions.All("blue"), args.Time);
+				g.DrawSprite(
+					sprite,
+					settings,
+					args.Position,
+					args.Color);
+			}
 		}
 	}
 }

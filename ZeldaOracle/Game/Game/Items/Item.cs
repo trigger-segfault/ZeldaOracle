@@ -78,8 +78,8 @@ namespace ZeldaOracle.Game.Items {
 		public virtual void OnReturned() { }
 
 		// Draws the item inside the inventory.
-		public virtual void DrawSlot(Graphics2D g, Point2I position, int lightOrDark) {
-			DrawSprite(g, position, lightOrDark);
+		public virtual void DrawSlot(Graphics2D g, Point2I position) {
+			DrawSprite(g, position);
 		}
 
 
@@ -87,14 +87,13 @@ namespace ZeldaOracle.Game.Items {
 		// Drawing
 		//-----------------------------------------------------------------------------
 
-		protected virtual void DrawSprite(Graphics2D g, Point2I position, int lightOrDark) {
-			g.DrawSprite(sprite[level], lightOrDark, position);
+		protected virtual void DrawSprite(Graphics2D g, Point2I position) {
+			g.DrawSprite(sprite[level], position);
 		}
 
-		protected virtual void DrawLevel(Graphics2D g, Point2I position, int lightOrDark) {
-			Color color = (lightOrDark == GameData.VARIANT_LIGHT ? new Color(16, 16, 16) : Color.Black);
-			g.DrawSprite(GameData.SPR_HUD_LEVEL, lightOrDark, position + new Point2I(8, 8));
-			g.DrawString(GameData.FONT_SMALL, (level + 1).ToString(), position + new Point2I(16, 8), color);
+		protected virtual void DrawLevel(Graphics2D g, Point2I position) {
+			g.DrawSprite(GameData.SPR_HUD_LEVEL, position + new Point2I(8, 8));
+			g.DrawString(GameData.FONT_SMALL, (level + 1).ToString(), position + new Point2I(16, 8), EntityColors.Black);
 		}
 
 		//-----------------------------------------------------------------------------

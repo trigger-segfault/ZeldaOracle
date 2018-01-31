@@ -151,8 +151,6 @@ namespace ZeldaOracle.Game.Debug {
 				else
 					UnequipTool(toolSword);
 			}
-			
-			toolSword.ImageVariantID = Graphics.ImageVariant;
 		}
 	}
 }

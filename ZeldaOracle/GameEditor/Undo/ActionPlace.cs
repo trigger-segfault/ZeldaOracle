@@ -71,6 +71,6 @@ namespace ZeldaEditor.Undo {
 			editorControl.NeedsNewEventCache = true;
 		}
 
-		public override bool IgnoreAction { get { return !overwrittenTiles.Any(); } }
+		public override bool IgnoreAction { get { return !placedTiles.Any() && !overwrittenTiles.Any(); } }
 	}
 }

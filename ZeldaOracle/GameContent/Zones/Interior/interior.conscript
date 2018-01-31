@@ -9,7 +9,6 @@
 
 ZONE "interior_present";
 	NAME "Interior Present";
-	IMAGEVARIANT "INTERIOR_PRESENT";
 	DEFAULTTILE "floor";
 	PALETTE "interior_present";
 	SETSTYLE "floor", "interior_wood";

@@ -63,6 +63,8 @@ MONSTER "monster_goponga_flower",		"monster_goponga_flower_open",	MonsterGoponga
 MONSTER "monster_anti_fairy",			"monster_anti_fairy",			MonsterAntiFairy,		gold;	END;
 
 TILE "monster_beamos";
+	TYPE		TileMonsterBeamos;
 	SOLID		block;
 	FLAGS		AbsorbSeeds;
+	SPRITE		"monster_beamos";
 END;

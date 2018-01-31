@@ -134,6 +134,8 @@
     <None Include="Common\Graphics\Obsolete\AnimationOld.cs" />
     <None Include="Common\Graphics\Obsolete\AnimationFrameOld.cs" />
     <Compile Include="Common\Graphics\Flipping.cs" />
+    <Compile Include="Common\Graphics\MappedColors.cs" />
+    <Compile Include="Common\Graphics\PaletteColors.cs" />
     <Compile Include="Common\Graphics\Rotating.cs" />
     <Compile Include="Common\Graphics\Sprites\ColorationGroups.cs" />
     <Compile Include="Common\Graphics\Sprites\GroupDefinitions.cs" />
@@ -152,6 +154,8 @@
     <Compile Include="Common\Graphics\Palette.cs" />
     <Compile Include="Common\Graphics\PaletteDictionary.cs" />
     <Compile Include="Common\Graphics\PaletteShader.cs" />
+    <Compile Include="Common\Graphics\Sprites\UnmappedSprite.cs" />
+    <Compile Include="Common\Graphics\Unmapping.cs" />
     <Compile Include="Common\Ini\IniDocument.cs" />
     <Compile Include="Common\Ini\IniEnums.cs" />
     <Compile Include="Common\Ini\IniSection.cs" />
@@ -232,7 +236,6 @@
     <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.Style.cs" />
     <Compile Include="Common\Scripts\CustomReaders\MusicSR.cs" />
-    <None Include="Common\Scripts\CustomReaders\PaletteConverterSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\PaletteDictionarySR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\PaletteSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\TileDataSR.cs" />
