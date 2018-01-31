@@ -3,7 +3,6 @@
 ZONE "summer_temple_of_seasons";
 	CLONE "summer";
 	NAME "Summer (Temple of Seasons)";
-	IMAGEVARIANT "SUMMER";
 	DEFAULTTILE "ground";
 	PALETTE "summer_temple_of_seasons";
 	
@@ -20,7 +19,6 @@ END;
 ZONE "summer_onoxs_castle";
 	CLONE "summer";
 	NAME "Summer (Onox's Castle)";
-	IMAGEVARIANT "SUMMER";
 	DEFAULTTILE "ground";
 	PALETTE "summer_onoxs_castle";
 	

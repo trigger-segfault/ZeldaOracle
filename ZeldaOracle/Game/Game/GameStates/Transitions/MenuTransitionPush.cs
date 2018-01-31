@@ -64,7 +64,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 
 		public override void AssignPalettes() {
 			GameData.PaletteShader.TilePalette = GameData.PAL_MENU_DEFAULT;
-			GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
+			GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_MENU;
 		}
 
 		public override void Draw(Graphics2D g) {
@@ -80,7 +80,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			menuNew.Draw(g);
 			g.PopTranslation();
 			
-			GameControl.HUD.Draw(g, true);
+			GameControl.HUD.Draw(g);
 		}
 
 	}

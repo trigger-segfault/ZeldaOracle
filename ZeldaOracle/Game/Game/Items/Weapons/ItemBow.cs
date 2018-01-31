@@ -78,9 +78,9 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		}
 
 		// Draws the item inside the inventory.
-		public override void DrawSlot(Graphics2D g, Point2I position, int lightOrDark) {
-			DrawSprite(g, position, lightOrDark);
-			DrawAmmo(g, position, lightOrDark);
+		public override void DrawSlot(Graphics2D g, Point2I position) {
+			DrawSprite(g, position);
+			DrawAmmo(g, position);
 		}
 
 		// Called when the item's level is changed.

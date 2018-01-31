@@ -24,9 +24,9 @@ namespace ZeldaOracle.Game.Items.Ammos {
 		//-----------------------------------------------------------------------------
 
 		// Draws the item inside the inventory.
-		public override void DrawSlot(Graphics2D g, Point2I position, int lightOrDark) {
+		public override void DrawSlot(Graphics2D g, Point2I position) {
 			g.DrawSprite(sprite, position + new Point2I(4, 0));
-			g.DrawString(GameData.FONT_SMALL, Amount.ToString("00"), position + new Point2I(0, 12), new Color(248, 248, 248));
+			g.DrawString(GameData.FONT_SMALL, Amount.ToString("00"), position + new Point2I(0, 12), TileColors.MenuWhite);
 		}
 	}
 }

@@ -160,7 +160,7 @@ namespace ZeldaOracle.Game.Main {
 				spriteBatch = new SpriteBatch(GraphicsDevice);
 
 				AudioSystem.Initialize();
-				Resources.Initialize(Content, GraphicsDevice);
+				Resources.Initialize(spriteBatch, GraphicsDevice, Content);
 				
 				game.LoadContent(Content);
 

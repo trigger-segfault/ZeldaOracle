@@ -310,34 +310,27 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		// Internal Methods
 		//-----------------------------------------------------------------------------
 		
-		public void ChooseImageVariant() {
+		public void ChooseColor() {
 			switch (color) {
 				case MonsterColor.Red:
-					Graphics.ImageVariant = GameData.VARIANT_RED;
 					Graphics.ColorDefinitions.SetAll("red");
 					break;
 				case MonsterColor.Blue:
-					Graphics.ImageVariant = GameData.VARIANT_BLUE;
 					Graphics.ColorDefinitions.SetAll("blue");
 					break;
 				case MonsterColor.Green:
-					Graphics.ImageVariant = GameData.VARIANT_GREEN;
 					Graphics.ColorDefinitions.SetAll("green");
 					break;
 				case MonsterColor.Orange:
-					Graphics.ImageVariant = GameData.VARIANT_ORANGE;
 					Graphics.ColorDefinitions.SetAll("orange");
 					break;
 				case MonsterColor.DarkBlue:
-					Graphics.ImageVariant = GameData.VARIANT_BLUE;
 					Graphics.ColorDefinitions.SetAll("shaded_blue");
 					break;
 				case MonsterColor.DarkRed:
-					Graphics.ImageVariant = GameData.VARIANT_RED;
 					Graphics.ColorDefinitions.SetAll("shaded_red");
 					break;
 				case MonsterColor.Gold:
-					Graphics.ImageVariant = GameData.VARIANT_ORANGE;
 					Graphics.ColorDefinitions.SetAll("gold");
 					break;
 			}
@@ -394,7 +387,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			health = healthMax;
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_OCTOROK);
-			ChooseImageVariant();
+			ChooseColor();
 			
 			// Begin the default monster state.
 			BeginNormalState();
@@ -434,7 +427,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		public override void UpdateGraphics() {
-			ChooseImageVariant();
+			ChooseColor();
 			base.UpdateGraphics();
 		}
 

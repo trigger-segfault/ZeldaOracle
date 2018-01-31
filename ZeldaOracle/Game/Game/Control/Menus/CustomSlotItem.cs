@@ -28,7 +28,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 		// Drawing
 		//-----------------------------------------------------------------------------
 
-		public void DrawSlot(Graphics2D g, Point2I position, int lightOrDark) {
+		public void DrawSlot(Graphics2D g, Point2I position) {
 			if (sprite != null)
 				g.DrawSprite(sprite, position);
 		}

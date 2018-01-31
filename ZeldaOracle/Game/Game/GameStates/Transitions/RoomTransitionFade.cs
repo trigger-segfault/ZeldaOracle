@@ -27,7 +27,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		//-----------------------------------------------------------------------------
 
 		public RoomTransitionFade() {
-			fadeColor = Color.White;
+			fadeColor = Color.ToGBCColor(Color.White);
 		}
 		
 		public RoomTransitionFade(Color fadeColor) {

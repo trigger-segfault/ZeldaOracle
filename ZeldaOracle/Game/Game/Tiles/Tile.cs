@@ -126,8 +126,6 @@ namespace ZeldaOracle.Game.Tiles {
 				isInitialized	= true;
 				hasMoved		= false;
 				velocity		= Vector2F.Zero;
-				
-				graphics.ImageVariant = roomControl.Room.Zone.ImageVariantID;
 
 				// Begin a path if there is one.
 				string pathString = properties.GetString("path", "");
@@ -693,6 +691,25 @@ namespace ZeldaOracle.Game.Tiles {
 				g.DrawSprite(
 					args.Tile.SpriteAbove,
 					args.SpriteDrawSettings,
+					args.Position,
+					args.Color);
+			}
+		}
+
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public static void DrawTileDataColors(Graphics2D g, TileDataDrawArgs args, ColorDefinitions colorDefinitions) {
+			int spriteIndex = args.Properties.GetInteger("sprite_index", 0);
+			ISprite sprite = args.Tile.GetSpriteIndex(spriteIndex);
+			if (sprite is Animation) {
+				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
+				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
+			}
+			if (sprite != null) {
+				SpriteDrawSettings settings = new SpriteDrawSettings(args.Zone.StyleDefinitions,
+					colorDefinitions, args.Time);
+				g.DrawSprite(
+					sprite,
+					settings,
 					args.Position,
 					args.Color);
 			}

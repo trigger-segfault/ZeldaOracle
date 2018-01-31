@@ -86,7 +86,6 @@
     <Keywords color="Commands">
       <Word>IMAGE</Word>
       <Word>END</Word>
-      <Word>VARIANT</Word>
     </Keywords>
 
     <!--ISpriteSR.Animations-->
@@ -279,7 +278,6 @@
       <Word>SIDESCROLLING</Word>
       <Word>UNDERWATER</Word>
       <Word>DEFAULTTILE</Word>
-      <Word>IMAGEVARIANT</Word>
       <Word>PALETTE</Word>
       <Word>SETSTYLE</Word>
     </Keywords>

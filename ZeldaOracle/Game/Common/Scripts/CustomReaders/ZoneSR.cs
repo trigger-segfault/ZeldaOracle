@@ -104,19 +104,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				}
 			});
 			//=====================================================================================
-			AddCommand("IMAGEVARIANT", (int) Modes.Zone,
-				"string variantName",
-			delegate (CommandParam parameters) {
-				string name = parameters.GetString(0);
-				foreach (var field in typeof(GameData).GetFields(BindingFlags.Static | BindingFlags.Public)) {
-					if (field.Name == ("VARIANT_" + name.ToUpper())) {
-						zone.ImageVariantID = (int) field.GetValue(null);
-						return;
-					}
-				}
-				ThrowCommandParseError("No image variant with the name '" + name + "'!");
-			});
-			//=====================================================================================
 			AddCommand("PALETTE", (int) Modes.Zone,
 				"string tilePaletteName",
 			delegate (CommandParam parameters) {

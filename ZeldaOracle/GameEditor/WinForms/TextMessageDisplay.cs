@@ -174,7 +174,7 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 
 		// The default color used by the text reader.
-		private readonly Color TextColor = new Color(248, 208, 136);
+		private readonly ColorOrPalette TextColor = EntityColors.Tan;
 
 		private void Update(int count) {
 			for (int i = 0; i < count; i++) {
@@ -292,7 +292,7 @@ namespace ZeldaEditor.WinForms {
 			Rectangle2I bounds = BoxBounds;
 			bounds.Point += pos;
 
-			g.FillRectangle(bounds, Color.Black);
+			g.FillRectangle(bounds, EntityColors.Black);
 
 			// Draw the finished writting lines.
 			for (int i = 0; i < windowLine; i++) {

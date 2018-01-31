@@ -79,7 +79,7 @@ namespace ZeldaEditor.WinForms {
 			content     = new ContentManager(Services, "Content");
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 			
-			editorControl.SetGraphics(GraphicsDevice, content);
+			editorControl.SetGraphics(spriteBatch, GraphicsDevice, content);
 				
 			// Wire the events.
 			MouseEnter          += OnMouseEnter;

@@ -99,7 +99,7 @@ namespace ZeldaOracle.Game.Tiles.ActionTiles {
 				colorDefinitions.SetAll("shaded_blue");
 				break;
 			}
-			ActionTile.DrawTileData(g, args, colorDefinitions);
+			ActionTile.DrawTileDataColors(g, args, colorDefinitions);
 		}
 
 

@@ -150,15 +150,12 @@ namespace ZeldaEditor {
 							Vector2F drawPos = new Vector2F(x, y) * (Tileset.CellSize + spacing);
 							ISprite spr = tileData.Sprite;
 							
-							int imageVariantID = tileData.Properties.GetInteger("image_variant", Zone.ImageVariantID);
-							if (imageVariantID < 0)
-								imageVariantID = Zone.ImageVariantID;
 							if (spr is Animation) {
 								int substripIndex = tileData.Properties.GetInteger("substrip_index", 0);
 								spr = ((Animation) spr).GetSubstrip(substripIndex);
 							}
 
-							g.DrawISprite(spr, new SpriteDrawSettings(Zone.StyleDefinitions, Zone.ImageVariantID), drawPos, Color.White);
+							g.DrawISprite(spr, new SpriteDrawSettings(Zone.StyleDefinitions), drawPos, Color.White);
 						}
 					}
 				}
@@ -166,7 +163,7 @@ namespace ZeldaEditor {
 			else {
 				// Draw the spritesheet's image.
 				g.PushTranslation(-Tileset.SpriteSheet.Offset);
-				g.DrawImage(Tileset.SpriteSheet.Image.GetVariant(Zone.ImageVariantID), Point2I.Zero);
+				g.DrawImage(Tileset.SpriteSheet.Image, Point2I.Zero);
 				g.PopTranslation();
 			}
 

@@ -1,28 +1,24 @@
 ﻿
 ZONE "default";
 	NAME "(none)";
-	IMAGEVARIANT "NONE";
 	DEFAULTTILE "ground";
 	PALETTE "tiles_default";
 END;
 
 #ZONE "empty";
 #	NAME "Empty";
-#	IMAGEVARIANT "NONE";
 #	DEFAULTTILE "ground";
 #	PALETTE "tiles_empty";
 #END;
 
 #ZONE "electrocuted";
 #	NAME "Electrocuted";
-#	IMAGEVARIANT "NONE";
 #	DEFAULTTILE "ground";
 #	PALETTE "tiles_electrocuted";
 #END;
 
 #ZONE "ages_dungeon_1";
 #	NAME "Ages Dungeon 1";
-#	IMAGEVARIANT "AGES_DUNGEON_1";
 #	DEFAULTTILE "floor";
 #	PALETTE "dungeon_ages_1";
 #	SETSTYLE "railing", "dungeon";
@@ -56,7 +52,6 @@ END;
 #ZONE "ages_dungeon_4";
 #	CLONE "ages_dungeon_1";
 #	NAME "Ages Dungeon 4";
-#	IMAGEVARIANT "AGES_DUNGEON_4";
 #	DEFAULTTILE "floor";
 #	PALETTE "dungeon_ages_1";
 #END;

@@ -115,16 +115,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					if (!Enum.TryParse<MonsterColor>(parameters.GetString(3), true, out color))
 						ThrowParseError("Invalid monster color: \"" + parameters.GetString(3) + "\"!");
 					actionTileData.Properties.Set("color", (int) color);
-					int imageVariantID = GameData.VARIANT_RED;
-					if (color == MonsterColor.Red)
-						imageVariantID = GameData.VARIANT_RED;
-					else if (color == MonsterColor.Blue)
-						imageVariantID = GameData.VARIANT_BLUE;
-					else if (color == MonsterColor.Green)
-						imageVariantID = GameData.VARIANT_GREEN;
-					else if (color == MonsterColor.Orange)
-						imageVariantID = GameData.VARIANT_ORANGE;
-					actionTileData.Properties.Set("image_variant", imageVariantID);
 				}
 				Mode = Modes.ActionTile;
 			});

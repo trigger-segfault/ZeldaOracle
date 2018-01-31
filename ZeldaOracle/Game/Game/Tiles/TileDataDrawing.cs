@@ -27,7 +27,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public RewardManager RewardManager { get; }
 
 		public SpriteDrawSettings SpriteDrawSettings {
-			get { return new SpriteDrawSettings(Zone.StyleDefinitions, Zone.ImageVariantID, Time); }
+			get { return new SpriteDrawSettings(Zone.StyleDefinitions, Time); }
 		}
 
 		public TileDataDrawArgs(TileData tile, Properties properties, Point2I position, Zone zone, Level level, float time, Color color, bool extras, RewardManager rewardManager) {
@@ -55,7 +55,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public RewardManager RewardManager { get; }
 
 		public SpriteDrawSettings SpriteDrawSettings {
-			get { return new SpriteDrawSettings(Zone.StyleDefinitions, Zone.ImageVariantID, Time); }
+			get { return new SpriteDrawSettings(Zone.StyleDefinitions, Time); }
 		}
 
 		public ActionTileDataDrawArgs(ActionTileData actionTile, Properties properties, Point2I position, Zone zone, Level level, float time, Color color, bool extras, RewardManager rewardManager) {
@@ -135,7 +135,7 @@ namespace ZeldaOracle.Game.Tiles {
 		private static void DrawPreview(Graphics2D g, BaseTileData baseTileData, Point2I position, Zone zone, Color color) {
 			g.DrawSprite(
 				baseTileData.PreviewSprite,
-				new SpriteDrawSettings(zone.StyleDefinitions, zone.ImageVariantID, PlaybackTime),
+				new SpriteDrawSettings(zone.StyleDefinitions, PlaybackTime),
 				position,
 				color);
 		}

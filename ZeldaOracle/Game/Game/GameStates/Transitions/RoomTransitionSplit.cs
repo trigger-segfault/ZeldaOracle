@@ -18,10 +18,10 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		private const int TRANSITION_SPLIT_MOVE_DELAY	= 7;
 		private const int TRANSITION_SPLIT_END_DELAY	= 14;
 		
-		private Color	splitColor;
-		private int[]	sideWidths;
-		private int		timer;
-		private int		endTimer;
+		private ColorOrPalette	splitColor;
+		private int[]			sideWidths;
+		private int				timer;
+		private int				endTimer;
 
 
 		//-----------------------------------------------------------------------------
@@ -30,7 +30,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 
 		public RoomTransitionSplit() {
 			this.sideWidths		= new int[2];
-			this.splitColor		= new Color(248, 208, 136);
+			this.splitColor     = EntityColors.Tan;
 		}
 
 		

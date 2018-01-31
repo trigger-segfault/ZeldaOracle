@@ -79,6 +79,8 @@ namespace ZeldaOracle.Common.Content {
 		private static ContentManager contentManager;
 		/// <summary>The game's graphics device.</summary>
 		private static GraphicsDevice graphicsDevice;
+		/// <summary>The game's sprite batch for drawing.</summary>
+		private static SpriteBatch spriteBatch;
 		/// <summary>A map of the resource dictionaries by resource type.</summary>
 		private static Dictionary<Type, object> resourceDictionaries;
 
@@ -169,10 +171,11 @@ namespace ZeldaOracle.Common.Content {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Initializes the resource manager.</summary>
-		public static void Initialize(ContentManager contentManager, GraphicsDevice graphicsDevice) {
+		public static void Initialize(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, ContentManager contentManager) {
 			// Containment
-			Resources.contentManager	= contentManager;
+			Resources.spriteBatch		= spriteBatch;
 			Resources.graphicsDevice	= graphicsDevice;
+			Resources.contentManager	= contentManager;
 
 			// Graphics
 			images				= new Dictionary<string, Image>();
@@ -852,6 +855,10 @@ namespace ZeldaOracle.Common.Content {
 
 		public static GraphicsDevice GraphicsDevice {
 			get { return graphicsDevice; }
+		}
+
+		public static SpriteBatch SpriteBatch {
+			get { return spriteBatch; }
 		}
 
 		public static PalettedSpriteDatabase PalettedSpriteDatabase {

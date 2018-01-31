@@ -146,7 +146,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			OldRoomControl.DrawRoom(g, new Vector2F(0, 16) + panOld, RoomDrawing.DrawAbove);
 
 			// Draw the HUD.
-			GameControl.HUD.Draw(g, false);
+			GameControl.HUD.Draw(g);
 		}
 
 

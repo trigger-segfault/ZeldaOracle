@@ -11,18 +11,18 @@ namespace ZeldaOracle.Game.Tiles {
 
 	public class TileGraphicsComponent {
 		
-		private Tile			tile;						// The tile this component belongs to.
-		private AnimationPlayer	animationPlayer;
+		private Tile				tile;						// The tile this component belongs to.
+		private AnimationPlayer		animationPlayer;
 
-		private	bool			isVisible;
-		private DepthLayer		depthLayer;
-		private int				imageVariant;
-		private Point2I			drawOffset;
-		private Point2I			raisedDrawOffset;			// Offset to draw tiles that are slightly raised (EX: pushing pots onto a button)
-		private	bool			syncPlaybackWithRoomTicks;
-		private bool			isAnimatedWhenPaused;		// True if the tile updates its graphics while the room is paused.
-		private Vector2F		absoluteDrawPosition;
-		private bool			useAbsoluteDrawPosition;
+		private	bool				isVisible;
+		private DepthLayer			depthLayer;
+		private Point2I				drawOffset;
+		private Point2I				raisedDrawOffset;			// Offset to draw tiles that are slightly raised (EX: pushing pots onto a button)
+		private	bool				syncPlaybackWithRoomTicks;
+		private bool				isAnimatedWhenPaused;		// True if the tile updates its graphics while the room is paused.
+		private Vector2F			absoluteDrawPosition;
+		private bool				useAbsoluteDrawPosition;
+		private ColorDefinitions	colors;
 
 
 		//-----------------------------------------------------------------------------
@@ -34,13 +34,13 @@ namespace ZeldaOracle.Game.Tiles {
 			this.animationPlayer			= new AnimationPlayer();
 			this.isVisible					= true;
 			this.depthLayer					= DepthLayer.TileLayer1;
-			this.imageVariant				= 0;
 			this.raisedDrawOffset			= Point2I.Zero;
 			this.drawOffset					= Point2I.Zero;
 			this.syncPlaybackWithRoomTicks	= true;
 			this.isAnimatedWhenPaused		= false;
 			this.absoluteDrawPosition		= Vector2F.Zero;
 			this.useAbsoluteDrawPosition	= false;
+			this.colors                     = new ColorDefinitions();
 		}
 
 		
@@ -121,9 +121,8 @@ namespace ZeldaOracle.Game.Tiles {
 						
 			// Draw the tile's as-object sprite.
 			if (tile.IsMoving && tile.SpriteAsObject != null) {
-				g.DrawSprite(tile.SpriteAsObject, new SpriteDrawSettings(imageVariant,
-					tile.RoomControl.GameControl.RoomTicks),
-					drawPosition, depthLayer, tile.Position);
+				g.DrawSprite(tile.SpriteAsObject, new SpriteDrawSettings(colors,
+					tile.RoomControl.GameControl.RoomTicks), drawPosition, depthLayer, tile.Position);
 			}
 			// Draw the animation player.
 			else {
@@ -133,8 +132,8 @@ namespace ZeldaOracle.Game.Tiles {
 				else
 					playbackTime = animationPlayer.PlaybackTime;
 				
-				g.DrawAnimationPlayer(animationPlayer, imageVariant,
-					playbackTime, drawPosition, depthLayer, tile.Position);
+				g.DrawAnimationPlayer(animationPlayer, playbackTime,
+					new SpriteDrawSettings(colors), drawPosition, depthLayer, tile.Position);
 			}
 
 		}
@@ -158,7 +157,7 @@ namespace ZeldaOracle.Game.Tiles {
 				drawPosition += (raisedDrawOffset + drawOffset);
 
 				g.DrawSprite(tile.TileData.TileData.SpriteAbove,
-					new SpriteDrawSettings(imageVariant,
+					new SpriteDrawSettings(colors,
 						tile.RoomControl.GameControl.RoomTicks),
 						drawPosition, DepthLayer.TileAbove, tile.Position);
 			}
@@ -200,11 +199,6 @@ namespace ZeldaOracle.Game.Tiles {
 			set { depthLayer = value; }
 		}
 
-		public int ImageVariant {
-			get { return imageVariant; }
-			set { imageVariant = value; }
-		}
-
 		public Point2I DrawOffset {
 			get { return drawOffset; }
 			set { drawOffset = value; }
@@ -233,6 +227,10 @@ namespace ZeldaOracle.Game.Tiles {
 		public bool SyncPlaybackWithRoomTicks {
 			get { return syncPlaybackWithRoomTicks; }
 			set { syncPlaybackWithRoomTicks = value; }
+		}
+
+		public ColorDefinitions Colors {
+			get { return colors; }
 		}
 	}
 }

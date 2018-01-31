@@ -13,7 +13,7 @@ namespace ZeldaOracle.Common.Translation {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>The default color of a letter.</summary>
-		public static readonly Color DefaultColor = Color.White;
+		public static readonly Color DefaultColor = ZeldaOracle.Common.Graphics.Color.White;
 
 
 		//-----------------------------------------------------------------------------
@@ -22,8 +22,8 @@ namespace ZeldaOracle.Common.Translation {
 
 		/// <summary>The character of the letter.</summary>
 		public char Char { get; private set; }
-		/// <summary>The color of the letter.</summary>
-		public Color Color { get; private set; }
+		/// <summary>The color or paletted color of the letter.</summary>
+		public ColorOrPalette Color { get; private set; }
 
 
 		//-----------------------------------------------------------------------------
@@ -35,9 +35,9 @@ namespace ZeldaOracle.Common.Translation {
 			this.Char = character;
 			this.Color = DefaultColor;
 		}
-
+		
 		/// <summary>Constructs a letter with the specified character and color.</summary>
-		public Letter(char character, Color color) {
+		public Letter(char character, ColorOrPalette color) {
 			this.Char = character;
 			this.Color = color;
 		}
@@ -70,7 +70,7 @@ namespace ZeldaOracle.Common.Translation {
 		/// <summary>Returns true if the specified letter is equal to the letter.</summary>
 		public override bool Equals(object obj) {
 			if (obj is Letter)
-				return (Char == ((Letter)obj).Char && Color == ((Letter)obj).Color);
+				return (Char == ((Letter) obj).Char && Color == ((Letter) obj).Color);
 			return false;
 		}
 
@@ -78,6 +78,7 @@ namespace ZeldaOracle.Common.Translation {
 		public override int GetHashCode() {
 			return base.GetHashCode();
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Operators
@@ -89,6 +90,36 @@ namespace ZeldaOracle.Common.Translation {
 
 		public static bool operator !=(Letter l1, Letter l2) {
 			return (l1.Char != l2.Char) || (l1.Color != l2.Color);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Accessors
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the final (mapped) color with the chosen tile and entity palette.</summary>
+		public Color GetMappedColor(Palette tilePalette, Palette entityPalette) {
+			return Color.GetMappedColor(tilePalette, entityPalette);
+		}
+
+		/// <summary>Gets the final (unmapped) color with the chosen tile and entity palette.</summary>
+		public Color GetUnmappedColor(Palette tilePalette, Palette entityPalette) {
+			return Color.GetUnmappedColor(tilePalette, entityPalette);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the final (mapped) color of the letter based on if it's using a palette or not.</summary>
+		public Color MappedColor {
+			get { return Color.MappedColor; }
+		}
+
+		/// <summary>Gets the final (unmapped) color of the letter based on if it's using a palette or not.</summary>
+		public Color UnmappedColor {
+			get { return Color.MappedColor; }
 		}
 	}
 
@@ -129,7 +160,7 @@ namespace ZeldaOracle.Common.Translation {
 		}
 
 		/// <summary>Constructs a letter string from a colored string.</summary>
-		public LetterString(string text, Color color) {
+		public LetterString(string text, ColorOrPalette color) {
 			this.letters = new List<Letter>();
 			for (int i = 0; i < text.Length; i++) {
 				this.letters.Add(new Letter(text[i], color));
@@ -187,7 +218,7 @@ namespace ZeldaOracle.Common.Translation {
 		/// letter string.</summary>
 		public override bool Equals(object obj) {
 			if (obj is LetterString) {
-				LetterString ls = (LetterString)obj;
+				LetterString ls = (LetterString) obj;
 				if (letters.Count == ls.letters.Count) {
 					for (int i = 0; i < letters.Count; i++) {
 						if (letters[i] != ls.letters[i])
@@ -237,7 +268,7 @@ namespace ZeldaOracle.Common.Translation {
 		}
 
 		/// <summary>Adds a colored string to the letter string.</summary>
-		public void AddRange(string text, Color color) {
+		public void AddRange(string text, ColorOrPalette color) {
 			for (int i = 0; i < text.Length; i++) {
 				letters.Add(new Letter(text[i], color));
 			}
@@ -266,7 +297,7 @@ namespace ZeldaOracle.Common.Translation {
 		}
 
 		/// <summary>Inserts a colored string into the letter string.</summary>
-		public void InsertRange(int index, string text, Color color) {
+		public void InsertRange(int index, string text, ColorOrPalette color) {
 			for (int i = index; i < text.Length; i++) {
 				letters.Insert(i, new Letter(text[i], color));
 			}
@@ -445,9 +476,9 @@ namespace ZeldaOracle.Common.Translation {
 		}
 
 		/// <summary>Gets the colors of the letter string.</summary>
-		public Color[] Colors {
+		public ColorOrPalette[] Colors {
 			get {
-				Color[] colors = new Color[letters.Count];
+				ColorOrPalette[] colors = new ColorOrPalette[letters.Count];
 				for (int i = 0; i < letters.Count; i++) {
 					colors[i] = letters[i].Color;
 				}

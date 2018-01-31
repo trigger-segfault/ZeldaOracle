@@ -122,71 +122,78 @@ namespace ZeldaOracle.Game.Entities {
 		
 		
 		//-----------------------------------------------------------------------------
-		// Entity Drawing Functions (no variants, no depth origin)
+		// Animation Player Drawing Functions (no depth origin)
 		//-----------------------------------------------------------------------------
 
 		// Draw an animation player.
 		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, Vector2F position, DepthLayer depth) {
-			DrawAnimationPlayer(animationPlayer, 0, position, depth, Vector2F.Zero);
+			DrawAnimationPlayer(animationPlayer, animationPlayer.PlaybackTime, position, depth, Vector2F.Zero);
 		}
 		
 		// Draw an animation player at the given playback time.
 		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, float time, Vector2F position, DepthLayer depth) {
-			DrawAnimationPlayer(animationPlayer, 0, time, position, depth, Vector2F.Zero);
+			DrawAnimationPlayer(animationPlayer, time, position, depth, Vector2F.Zero);
 		}
 
-		
-		//-----------------------------------------------------------------------------
-		// Entity Drawing Functions (with variants, no depth origin)
-		//-----------------------------------------------------------------------------
-		
 		// Draw an animation player.
-		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, int imageVariant, Vector2F position, DepthLayer depth) {
-			DrawAnimationPlayer(animationPlayer, imageVariant, position, depth, Vector2F.Zero);
-		}
-		
-		// Draw an animation player at the given playback time.
-		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, int imageVariant, float time, Vector2F position, DepthLayer depth) {
-			DrawAnimationPlayer(animationPlayer, imageVariant, time, position, depth, Vector2F.Zero);
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, SpriteDrawSettings settings, Vector2F position, DepthLayer depth) {
+			DrawAnimationPlayer(animationPlayer, settings, position, depth, Vector2F.Zero);
 		}
 
-		
+		// Draw an animation player at the given playback time.
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, float time, SpriteDrawSettings settings, Vector2F position, DepthLayer depth) {
+			DrawAnimationPlayer(animationPlayer, time, settings, position, depth, Vector2F.Zero);
+		}
+
+
 		//-----------------------------------------------------------------------------
-		// Entity Drawing Functions (no variants, with depth origin)
+		// Animation Player Drawing Functions (with depth origin)
 		//-----------------------------------------------------------------------------
-		
+
 		// Draw an animation player.
 		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
-			DrawAnimationPlayer(animationPlayer, 0, position, depth, depthOrigin);
-		}
 
-		
-		//-----------------------------------------------------------------------------
-		// Entity Drawing Functions (with variants, with depth origin)
-		//-----------------------------------------------------------------------------
-		
-		// Draw an animation player.
-		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, int imageVariant, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
-
-			DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(imageVariant, animationPlayer.PlaybackTime), position, depth, depthOrigin);
+			DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(animationPlayer.PlaybackTime), position, depth, depthOrigin);
 		}
 
 		// Draw an animation player at the given time.
-		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, int imageVariant, float time, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, float time, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
 
-			DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(imageVariant, time), position, depth, depthOrigin);
+			DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(time), position, depth, depthOrigin);
 		}
+
+		// Draw an animation player.
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, SpriteDrawSettings settings, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+			settings.PlaybackTime = animationPlayer.PlaybackTime;
+			DrawSprite(animationPlayer.SpriteOrSubStrip, settings, position, depth, depthOrigin);
+		}
+
+		// Draw an animation player at the given time.
+		public void DrawAnimationPlayer(AnimationPlayer animationPlayer, float time, SpriteDrawSettings settings, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+			settings.PlaybackTime = time;
+			DrawSprite(animationPlayer.SpriteOrSubStrip, settings, position, depth, depthOrigin);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Sprite Drawing Functions (no depth origin)
+		//-----------------------------------------------------------------------------
 
 		public void DrawSprite(ISprite sprite, Vector2F position, DepthLayer depth) {
 			DrawSprite(sprite, SpriteDrawSettings.Default, position, depth, Vector2F.Zero);
 		}
 
-		public void DrawSprite(ISprite sprite, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
-			DrawSprite(sprite, SpriteDrawSettings.Default, position, depth, depthOrigin);
-		}
-
 		public void DrawSprite(ISprite sprite, SpriteDrawSettings settings, Vector2F position, DepthLayer depth) {
 			DrawSprite(sprite, settings, position, depth, Vector2F.Zero);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Sprite Drawing Functions (with depth origin)
+		//-----------------------------------------------------------------------------
+
+		public void DrawSprite(ISprite sprite, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {
+			DrawSprite(sprite, SpriteDrawSettings.Default, position, depth, depthOrigin);
 		}
 
 		public void DrawSprite(ISprite sprite, SpriteDrawSettings settings, Vector2F position, DepthLayer depth, Vector2F depthOrigin) {

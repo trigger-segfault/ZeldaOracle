@@ -94,7 +94,7 @@ namespace ZeldaEditor.Tools {
 					EditorControl.PushAction(actionAction, ActionExecution.PostExecute);
 					actionAction = null;
 				}
-				else if (size >= Point2I.One) {
+				else if (size >= Point2I.One && size != Point2I.One) {
 					tileAction = ActionPlace.CreatePlaceAction(Level, EditorControl.CurrentLayer, GetTileData());
 
 					Point2I levelTileCoord = LevelDisplay.SampleLevelTileCoordinates(mousePos);

@@ -53,7 +53,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		//-----------------------------------------------------------------------------
 
 		// The default color used by the text reader.
-		private readonly Color TextColor = new Color(248, 208, 136);
+		private readonly ColorOrPalette TextColor = EntityColors.Tan;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -186,7 +186,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			if (GameControl.Player.Y < ((GameSettings.VIEW_HEIGHT) / 2 + 8))
 				pos.Y = 96;
 			// TODO: Apply Player position based on view
-			g.FillRectangle(new Rectangle2I(pos, new Point2I(144, 8 + 16 * linesPerWindow)), Color.Black);
+			g.FillRectangle(new Rectangle2I(pos, new Point2I(144, 8 + 16 * linesPerWindow)), EntityColors.Black);
 
 			// Draw the finished writting lines.
 			for (int i = 0; i < windowLine; i++) {

@@ -51,7 +51,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			this.throwDuration			= 2;
 			this.pickupFrame1Duration	= 6;
 			this.pickupFrame2Duration	= 4;
-			this.carryObject.Graphics.ImageVariant = carryTile.Zone.ImageVariantID;
 		}
 
 		
@@ -66,7 +65,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				this.throwDuration			= 2;
 				this.pickupFrame1Duration	= 6;
 				this.pickupFrame2Duration	= 4;
-				this.carryObject.Graphics.ImageVariant = carryTile.Zone.ImageVariantID;
 			}
 			else if (carryObject is Entity) {
 				this.carryObject			= (Entity) carryObject;
@@ -216,6 +214,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 						DropObject();
 				}
 			}
+			carryObject.Graphics.Update();
 		}
 		
 		public override void DrawOver(RoomGraphics g) {
