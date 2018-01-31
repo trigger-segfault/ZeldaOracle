@@ -2,3 +2,5 @@
 
 LOAD "tile_dictionary.conscript" false;
 LOAD "entity_dictionary.conscript" false;
+LOAD "UI/dungeon_map_dictionary.conscript" false;
+LOAD "UI/menu_dictionary.conscript" false;

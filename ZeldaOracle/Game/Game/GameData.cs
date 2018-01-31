@@ -137,15 +137,8 @@ namespace ZeldaOracle.Game {
 		private static void LoadImages() {
 			Resources.LoadImagesFromScript("Images/images.conscript");
 
-			Resources.LoadImage("Images/UI/menu_weapons_a");
-			Resources.LoadImage("Images/UI/menu_weapons_b");
-			Resources.LoadImage("Images/UI/menu_key_items_a");
-			Resources.LoadImage("Images/UI/menu_key_items_b");
-			Resources.LoadImage("Images/UI/menu_essences_a");
-			Resources.LoadImage("Images/UI/menu_essences_b");
-
 			// Set the variant IDs for images with variants.
-			string prefix = "VARIANT_";
+			/*string prefix = "VARIANT_";
 			IEnumerable<FieldInfo> fields = typeof(GameData).GetFields()
 				.Where(field =>
 					field.Name.StartsWith(prefix) &&
@@ -173,7 +166,7 @@ namespace ZeldaOracle.Game {
 					else
 						Console.WriteLine("** WARNING: Unknown variant \"" + subimg.VariantName + "\".");
 				}
-			}
+			}*/
 		}
 
 
@@ -326,6 +319,8 @@ namespace ZeldaOracle.Game {
 			Palette entitiesMenu = new Palette(Resources.GetResource<Palette>("entities_default"));
 			foreach (var pair in entitiesMenu.GetDefinedConsts()) {
 				for (int i = 0; i < PaletteDictionary.ColorGroupSize; i++) {
+					if (pair.Value[i].IsUndefined)
+						continue;
 					Color color = pair.Value[i].Color;
 					color.R = (byte) GMath.Min(248, color.R + 16);
 					color.G = (byte) GMath.Min(248, color.G + 16);
@@ -335,6 +330,8 @@ namespace ZeldaOracle.Game {
 			}
 			foreach (var pair in entitiesMenu.GetDefinedColors()) {
 				for (int i = 0; i < PaletteDictionary.ColorGroupSize; i++) {
+					if (pair.Value[i].IsUndefined)
+						continue;
 					Color color = pair.Value[i].Color;
 					color.R = (byte) GMath.Min(248, color.R + 16);
 					color.G = (byte) GMath.Min(248, color.G + 16);
@@ -470,10 +467,10 @@ namespace ZeldaOracle.Game {
 		public static Palette PAL_ENTITIES_ELECTROCUTED;
 
 		public static Palette PAL_TILES_DEFAULT;
-		public static Palette PAL_PRESENT;
-		public static Palette PAL_SUMMER;
-		public static Palette PAL_DUNGEON_AGES_1;
 		public static Palette PAL_TILES_ELECTROCUTED;
+
+		public static Palette PAL_DUNGEON_MAP_DEFAULT;
+		public static Palette PAL_MENU_DEFAULT;
 
 
 		//-----------------------------------------------------------------------------

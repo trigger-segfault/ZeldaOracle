@@ -99,10 +99,7 @@ namespace ZeldaEditor.PropertiesEditor {
 					events = (propertyObject as IEventObject).Events;
 				}
 				propertiesContainer.Set(propertyObject.Properties, events);
-				Stopwatch watch = new Stopwatch();
-				watch.Start();
 				UpdateContainerHelper();
-				Console.WriteLine(watch.ElapsedMilliseconds);
 			}
 		}
 

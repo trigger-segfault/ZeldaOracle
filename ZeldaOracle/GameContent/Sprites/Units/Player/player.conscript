@@ -3,8 +3,8 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET "player",						(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET "Units/Player/player_items",	(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_player", "Units/Player/player", (16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_player_items", "Units/Player/player_items", (16, 16), (1, 1), (18, 18); END;
 
 #==============================================================
 # Sprite Sets
@@ -12,7 +12,7 @@ SPRITESHEET "Units/Player/player_items",	(16, 16), (1, 1), (18, 18); END;
 
 PALETTEDICTIONARY "entity_dictionary";
 
-SOURCE "player";
+SOURCE "temp_sheet_player";
 
 MAPPEDCOLORS	"entities_default", ("green");
 
@@ -29,15 +29,11 @@ END;
 MAPPEDCOLORS	"entities_default",
 	("green", "red", "blue", "orange", "shaded_red", "shaded_blue");
 
-SOURCE "player_items";
+SOURCE "temp_sheet_player_items";
 
 SPRITESET "set_player_items" (8, 12);
 	MULTIPLE COLOR "", ("green", "red", "blue", "inverse_red"), (0, 0), (0, 0), (8, 1); END;
 	MULTIPLE COLOR "", ("shaded_blue", "shaded_red"), (0, 1), (0, 1), (4, 1); END;
-
-
-
-
 
 	MULTIPLE BASIC (0, 2), (0, 2), (8, 4); END;
 
@@ -71,7 +67,7 @@ PALETTEDICTIONARY none;
 
 SOURCE "set_player_items";
 
-NAME tile_somaria_block, (7, 6); END;
+NAME "tile_somaria_block", (7, 6);
 
 
 #==============================================================
@@ -79,6 +75,8 @@ NAME tile_somaria_block, (7, 6); END;
 #==============================================================
 
 SOURCE "set_player";
+
+NAME "player_forward",	(6, 0); END;
 
 ANIMATION "player_default"; SUBSTRIP repeat;
 	ADD frame, 2, (0, 0); ADD frame, 6, (1, 0); ADD frame, 4, (0, 0);

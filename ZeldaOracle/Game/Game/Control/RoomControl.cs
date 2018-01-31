@@ -29,6 +29,14 @@ using ZeldaOracle.Game.Tiles.Internal;
 
 namespace ZeldaOracle.Game.Control {
 
+	[Flags]
+	public enum RoomDrawing {
+		None = 0,
+		DrawBelow = 0x1,
+		DrawAbove = 0x2,
+		DrawAll = 0x3
+	}
+
 	// Handles the main Zelda gameplay within a room.
 	public class RoomControl : GameState, ZeldaAPI.Room {
 
@@ -54,6 +62,9 @@ namespace ZeldaOracle.Game.Control {
 		private event Action<Player>	eventPlayerRespawn;
 		private event Action<int>		eventRoomTransitioning;
 
+		private Palette				tilePaletteOverride;
+		private Palette				entityPaletteOverride;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -78,6 +89,8 @@ namespace ZeldaOracle.Game.Control {
 			isUnderwater			= true;
 			visualEffect			= null;
 			disableVisualEffect		= false;
+			tilePaletteOverride		= null;
+			entityPaletteOverride	= null;
 
 			visualEffectUnderwater	= new RoomVisualEffect();
 			visualEffectUnderwater.RoomControl = this;
@@ -550,49 +563,54 @@ namespace ZeldaOracle.Game.Control {
 			}
 		}
 
-		public void DrawRoom(Graphics2D g, Vector2F position) {
+		public void DrawRoom(Graphics2D g, Vector2F position, RoomDrawing roomDrawing) {
 			g.PushTranslation(position);
 
-			// Draw background (in the color of the HUD.
-			Rectangle2I viewRect = new Rectangle2I(0, 0, GameSettings.VIEW_WIDTH, GameSettings.VIEW_HEIGHT);
-			g.DrawSprite(GameData.SPR_HUD_BACKGROUND, GameData.VARIANT_DARK, viewRect);
+			if (roomDrawing.HasFlag(RoomDrawing.DrawBelow)) {
+				// Draw background (in the color of the HUD).
+				Rectangle2I viewRect = new Rectangle2I(0, 0, GameSettings.VIEW_WIDTH, GameSettings.VIEW_HEIGHT);
+				g.DrawSprite(GameData.SPR_HUD_BACKGROUND, GameData.VARIANT_DARK, viewRect);
+			}
 
 			Vector2F viewTranslation = -GMath.Round(viewControl.ViewPosition);
 
 			g.PushTranslation(viewTranslation);
 
-			StartVisualEffect(g, position);
+			if (roomDrawing.HasFlag(RoomDrawing.DrawBelow)) {
+				StartVisualEffect(g, position);
 
-			// Draw tiles.
-			roomGraphics.Clear();
-			tileManager.DrawTiles(roomGraphics);
-			roomGraphics.DrawAll(g);
+				// Draw tiles.
+				roomGraphics.Clear();
+				tileManager.DrawTiles(roomGraphics);
+				roomGraphics.DrawAll(g);
 
-			EndVisualEffect(g, position);
+				EndVisualEffect(g, position);
 
-			// DEBUG: Draw debug information over tiles.
-			GameDebug.DrawRoomTiles(g, this);
-			
-			// Draw entities in reverse order (because newer entities are drawn below older ones).
-			roomGraphics.Clear();
-			for (int i = entities.Count - 1; i >= 0; i--)
-				entities[i].Draw(roomGraphics);
-			roomGraphics.SortDepthLayer(DepthLayer.PlayerAndNPCs); // Sort dynamic depth layers.
-			roomGraphics.DrawAll(g);
-			
-			// Draw action tiles in reverse order.
-			for (int i = actionTiles.Count - 1; i >= 0; i--)
-				actionTiles[i].Draw(g);
+				// DEBUG: Draw debug information over tiles.
+				GameDebug.DrawRoomTiles(g, this);
 
-			// Draw the tile parts that display above the player and all entities
-			StartVisualEffect(g, position);
+				// Draw entities in reverse order (because newer entities are drawn below older ones).
+				roomGraphics.Clear();
+				for (int i = entities.Count - 1; i >= 0; i--)
+					entities[i].Draw(roomGraphics);
+				roomGraphics.SortDepthLayer(DepthLayer.PlayerAndNPCs); // Sort dynamic depth layers.
+				roomGraphics.DrawAll(g);
 
-			// Draw above tiles.
-			roomGraphics.Clear();
-			tileManager.DrawTilesAbove(roomGraphics);
-			roomGraphics.DrawAll(g);
+				// Draw action tiles in reverse order.
+				for (int i = actionTiles.Count - 1; i >= 0; i--)
+					actionTiles[i].Draw(g);
+			}
+			if (roomDrawing.HasFlag(RoomDrawing.DrawAbove)) {
+				// Draw the tile parts that display above the player and all entities
+				StartVisualEffect(g, position);
 
-			EndVisualEffect(g, position);
+				// Draw above tiles.
+				roomGraphics.Clear();
+				tileManager.DrawTilesAbove(roomGraphics);
+				roomGraphics.DrawAll(g);
+
+				EndVisualEffect(g, position);
+			}
 
 			// DEBUG: Draw debug information.
 			GameDebug.DrawRoom(g, this);
@@ -600,8 +618,18 @@ namespace ZeldaOracle.Game.Control {
 			g.PopTranslation(2); // position + viewTranslation
 		}
 
+		public override void AssignPalettes() {
+			GameData.PaletteShader.TilePalette = TilePalette;
+			GameData.PaletteShader.EntityPalette = EntityPalette;
+		}
+
+		public void AssignLerpPalettes() {
+			GameData.PaletteShader.LerpTilePalette = TilePalette;
+			GameData.PaletteShader.LerpEntityPalette = EntityPalette;
+		}
+
 		public override void Draw(Graphics2D g) {
-			DrawRoom(g, new Vector2F(0, GameSettings.HUD_HEIGHT));	// Draw the room (offset to make room for the HUD).
+			DrawRoom(g, new Vector2F(0, GameSettings.HUD_HEIGHT), RoomDrawing.DrawAll);	// Draw the room (offset to make room for the HUD).
 			GameControl.HUD.Draw(g, false);		// Draw the HUD.
 			GameControl.DrawRoomState(g);		// Draw the current room state.
 		}
@@ -777,6 +805,32 @@ namespace ZeldaOracle.Game.Control {
 
 		public Zone Zone {
 			get { return room.Zone; }
+		}
+
+		public Palette TilePalette {
+			get { return tilePaletteOverride ?? Zone.Palette; }
+		}
+
+		public Palette EntityPalette {
+			get { return entityPaletteOverride ?? GameData.PAL_ENTITIES_DEFAULT; }
+		}
+
+		public Palette TilePaletteOverride {
+			get { return tilePaletteOverride; }
+			set {
+				tilePaletteOverride = value;
+				if (tilePaletteOverride != null && tilePaletteOverride.PaletteType != PaletteTypes.Tile)
+					throw new ArgumentException("Palette is not a tile palette!");
+			}
+		}
+
+		public Palette EntityPaletteOverride {
+			get { return entityPaletteOverride; }
+			set {
+				entityPaletteOverride = value;
+				if (entityPaletteOverride != null && entityPaletteOverride.PaletteType != PaletteTypes.Entity)
+					throw new ArgumentException("Palette is not an entity palette!");
+			}
 		}
 	}
 }

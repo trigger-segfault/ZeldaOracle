@@ -13,31 +13,31 @@ namespace ZeldaOracle.Game {
 		// Sprite Sheets
 		//-----------------------------------------------------------------------------
 
-		public static ISpriteSource SHEET_MENU_SMALL;
-		public static ISpriteSource SHEET_MENU_LARGE;
-		public static ISpriteSource SHEET_MENU_SMALL_LIGHT;
-		public static ISpriteSource SHEET_MENU_LARGE_LIGHT;
-		public static ISpriteSource SHEET_ITEMS_SMALL;
-		public static ISpriteSource SHEET_ITEMS_LARGE;
-		public static ISpriteSource SHEET_ITEMS_SMALL_LIGHT;
-		public static ISpriteSource SHEET_ITEMS_LARGE_LIGHT;
+		//public static ISpriteSource SHEET_MENU_SMALL;
+		//public static ISpriteSource SHEET_MENU_LARGE;
+		//public static ISpriteSource SHEET_MENU_SMALL_LIGHT;
+		//public static ISpriteSource SHEET_MENU_LARGE_LIGHT;
+		//public static ISpriteSource SHEET_ITEMS_SMALL;
+		//public static ISpriteSource SHEET_ITEMS_LARGE;
+		//public static ISpriteSource SHEET_ITEMS_SMALL_LIGHT;
+		//public static ISpriteSource SHEET_ITEMS_LARGE_LIGHT;
 
-		public static ISpriteSource SHEET_BASIC_EFFECTS;
+		//public static ISpriteSource SHEET_BASIC_EFFECTS;
 		public static ISpriteSource SHEET_COLOR_EFFECTS;
 
-		public static ISpriteSource SHEET_PLAYER;
-		public static ISpriteSource SHEET_PLAYER_RED;
-		public static ISpriteSource SHEET_PLAYER_BLUE;
-		public static ISpriteSource SHEET_PLAYER_HURT;
+		//public static ISpriteSource SHEET_PLAYER;
+		//public static ISpriteSource SHEET_PLAYER_RED;
+		//public static ISpriteSource SHEET_PLAYER_BLUE;
+		//public static ISpriteSource SHEET_PLAYER_HURT;
 		//public static ISpriteSheet SHEET_MONSTERS;
 		//public static ISpriteSheet SHEET_MONSTERS_HURT;
-		public static ISpriteSource SHEET_PLAYER_ITEMS;
+		//public static ISpriteSource SHEET_PLAYER_ITEMS;
 	
-		public static ISpriteSource SHEET_ZONESET_LARGE;
-		public static ISpriteSource SHEET_ZONESET_SMALL;
-		public static ISpriteSource SHEET_TILESET_OVERWORLD;
-		public static ISpriteSource SHEET_TILESET_INTERIOR;
-		public static ISpriteSource SHEET_GENERAL_TILES;
+		//public static ISpriteSource SHEET_ZONESET_LARGE;
+		//public static ISpriteSource SHEET_ZONESET_SMALL;
+		//public static ISpriteSource SHEET_TILESET_OVERWORLD;
+		//public static ISpriteSource SHEET_TILESET_INTERIOR;
+		//public static ISpriteSource SHEET_GENERAL_TILES;
 
 
 		//-----------------------------------------------------------------------------
@@ -241,6 +241,9 @@ namespace ZeldaOracle.Game {
 		public static ISprite SPR_HUD_X;
 		public static ISprite SPR_HUD_LEVEL;
 		public static ISprite SPR_HUD_TEXT_NEXT_ARROW;
+		public static ISprite SPR_HUD_AMMO_SELECT_ARROW;
+		public static ISprite SPR_HUD_AMMO_SELECT_BACKGROUND;
+		public static ISprite SPR_HUD_AMMO_SELECT_BACKGROUND_FANCY;
 		public static ISprite SPR_HUD_HEART_PIECES_EMPTY_TOP_LEFT;
 		public static ISprite SPR_HUD_HEART_PIECES_EMPTY_TOP_RIGHT;
 		public static ISprite SPR_HUD_HEART_PIECES_EMPTY_BOTTOM_LEFT;
@@ -249,12 +252,19 @@ namespace ZeldaOracle.Game {
 		public static ISprite SPR_HUD_HEART_PIECES_FULL_TOP_RIGHT;
 		public static ISprite SPR_HUD_HEART_PIECES_FULL_BOTTOM_LEFT;
 		public static ISprite SPR_HUD_HEART_PIECES_FULL_BOTTOM_RIGHT;
+		public static ISprite SPR_HUD_HEART_PIECES_EMPTY_FANCY_TOP_LEFT;
+		public static ISprite SPR_HUD_HEART_PIECES_EMPTY_FANCY_TOP_RIGHT;
+		public static ISprite SPR_HUD_HEART_PIECES_EMPTY_FANCY_BOTTOM_LEFT;
+		public static ISprite SPR_HUD_HEART_PIECES_EMPTY_FANCY_BOTTOM_RIGHT;
+		public static ISprite SPR_HUD_HEART_PIECES_FULL_FANCY_TOP_LEFT;
+		public static ISprite SPR_HUD_HEART_PIECES_FULL_FANCY_TOP_RIGHT;
+		public static ISprite SPR_HUD_HEART_PIECES_FULL_FANCY_BOTTOM_LEFT;
+		public static ISprite SPR_HUD_HEART_PIECES_FULL_FANCY_BOTTOM_RIGHT;
 		public static ISprite SPR_HUD_SAVE_BUTTON;
 		public static ISprite[] SPR_HUD_HEARTS;
 		public static ISprite[] SPR_HUD_HEART_PIECES_EMPTY;
 		public static ISprite[] SPR_HUD_HEART_PIECES_FULL;
-		public static ISprite SPR_UI_MAP_FLOOR_BOX_LEFT;
-		public static ISprite SPR_UI_MAP_FLOOR_BOX_RIGHT;
+		public static ISprite SPR_UI_MAP_FLOOR_BOX;
 		public static ISprite SPR_UI_MAP_PLAYER;
 		public static ISprite SPR_UI_MAP_BOSS_ROOM;
 		public static ISprite SPR_UI_MAP_TREASURE_ROOM;
@@ -281,6 +291,11 @@ namespace ZeldaOracle.Game {
 		public static ISprite SPR_UI_MAP_ROOM_DOWN_LEFT_RIGHT;
 		public static ISprite SPR_UI_MAP_ROOM_DOWN_LEFT_UP;
 		public static ISprite SPR_UI_MAP_ROOM_DOWN_LEFT_UP_RIGHT;
+
+		public static ISprite SPR_BACKGROUND_MENU_WEAPONS;
+		public static ISprite SPR_BACKGROUND_MENU_KEY_ITEMS;
+		public static ISprite SPR_BACKGROUND_MENU_ESSENCES;
+		public static ISprite SPR_BACKGROUND_SCREEN_DUNGEON_MAP;
 
 		// Action tiles
 		public static ISprite SPR_ACTION_TILE_WARP_STAIRS;

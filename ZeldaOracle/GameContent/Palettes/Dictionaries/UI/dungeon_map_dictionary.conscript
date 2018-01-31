@@ -1,0 +1,15 @@
+﻿PALETTEDICTIONARY tile, "dungeon_map_dictionary";
+
+#==============================================================
+# Map
+#==============================================================
+
+TILE	background;
+TILE	background_alt;
+TILE	room;
+TILE	chest;
+TILE	boss;
+
+#==============================================================
+
+END;

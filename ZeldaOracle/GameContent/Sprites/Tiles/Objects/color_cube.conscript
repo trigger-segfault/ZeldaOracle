@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET "color_cube", "Tiles/Objects/color_cube"		(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_color_cube", "Tiles/Objects/color_cube", (16, 16), (1, 1), (18, 18); END;
 
 #==============================================================
 # Sprite Sets
@@ -10,7 +10,7 @@ SPRITESHEET "color_cube", "Tiles/Objects/color_cube"		(16, 16), (1, 1), (18, 18)
 
 PALETTEDICTIONARY "entity_dictionary";
 
-SOURCE "color_cube";
+SOURCE "temp_sheet_color_cube";
 
 MAPPEDCOLORS	"entities_default",
 	("color_cube_yellow_red", "color_cube_red_blue", "color_cube_blue_yellow");

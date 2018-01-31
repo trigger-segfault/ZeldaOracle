@@ -64,6 +64,13 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			}
 		}
 
+		public override void AssignPalettes() {
+			if (timer < TRANSITION_SPLIT_BEGIN_DELAY)
+				OldRoomControl.AssignPalettes();
+			else
+				NewRoomControl.AssignPalettes();
+		}
+
 		public override void Draw(Graphics2D g) {
 			//g.ResetTranslation();
 

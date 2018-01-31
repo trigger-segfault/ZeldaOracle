@@ -283,7 +283,6 @@ namespace ZeldaOracle.Game.Control {
 			gameManager.PopGameState();
 			gameManager.QueueGameStates(
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, currentMenu),
-				new TransitionEntityPalette(GameData.PAL_ENTITIES_MENU),
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, menu),
 				menu
 			);
@@ -293,7 +292,6 @@ namespace ZeldaOracle.Game.Control {
 			AudioSystem.PlaySound(GameData.SOUND_MENU_OPEN);
 			gameManager.QueueGameStates(
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, roomControl),
-				new TransitionEntityPalette(GameData.PAL_ENTITIES_MENU),
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, menu),
 				menu
 			);
@@ -307,7 +305,6 @@ namespace ZeldaOracle.Game.Control {
 			gameManager.PopGameState();
 			gameManager.QueueGameStates(
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, menu),
-				new TransitionEntityPalette(GameData.PAL_ENTITIES_DEFAULT),
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, roomControl),
 				roomControl
 			);
@@ -322,7 +319,6 @@ namespace ZeldaOracle.Game.Control {
 				AudioSystem.PlaySound(GameData.SOUND_MENU_OPEN);
 				gameManager.QueueGameStates(
 					new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, roomControl),
-					new TransitionEntityPalette(GameData.PAL_ENTITIES_MENU),
 					new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, mapScreen),
 					mapScreen
 				);
@@ -336,7 +332,6 @@ namespace ZeldaOracle.Game.Control {
 			gameManager.PopGameState();
 			gameManager.QueueGameStates(
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeOut, mapScreen),
-				new TransitionEntityPalette(GameData.PAL_ENTITIES_DEFAULT),
 				new TransitionFade(new Color(248, 248, 248), 20, FadeType.FadeIn, roomControl),
 				roomControl
 			);

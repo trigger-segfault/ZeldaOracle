@@ -133,7 +133,7 @@ namespace ZeldaOracle.Game.Debug {
 				else
 					index = (index + 1) % zoneNames.Count;
 				RoomControl.Room.Zone = Resources.GetResource<Zone>(zoneNames[index]);
-				GameData.PaletteShader.TilePalette = RoomControl.Zone.Palette;
+				//GameData.PaletteShader.TilePalette = RoomControl.Zone.Palette;
 				Console.WriteLine("Changed to zone '" + RoomControl.Zone.ID + "'");
 			}
 

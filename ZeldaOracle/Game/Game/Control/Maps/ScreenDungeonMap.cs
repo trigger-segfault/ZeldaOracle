@@ -17,7 +17,8 @@ namespace ZeldaOracle.Game.Control.Maps {
 
 	public class ScreenDungeonMap : GameState {
 
-		private Image	backgroundImage;
+		//private Image	backgroundImage;
+		private ISprite background;
 		private Dungeon	dungeon;
 		private int		viewFloorIndex;		// Which floor wer are currently viewing.
 		private DungeonMapFloor viewFloor;
@@ -39,7 +40,8 @@ namespace ZeldaOracle.Game.Control.Maps {
 
 		public ScreenDungeonMap(GameManager gameManager) {
 			this.gameManager		= gameManager;
-			this.backgroundImage	= Resources.GetImage("screen_dungeon_map");
+			//this.backgroundImage	= Resources.GetImage("screen_dungeon_map");
+			this.background         = GameData.SPR_BACKGROUND_SCREEN_DUNGEON_MAP;
 			this.dungeon			= null;
 			this.floors				= new List<DungeonMapFloor>();
 			this.discoveredFloors	= new List<DungeonMapFloor>();
@@ -181,13 +183,18 @@ namespace ZeldaOracle.Game.Control.Maps {
 					isChangingFloors = false;
 			}
 		}
-		
+
+		public override void AssignPalettes() {
+			GameData.PaletteShader.TilePalette = GameData.PAL_DUNGEON_MAP_DEFAULT;
+			GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
+		}
+
 		public override void Draw(Graphics2D g) {
 			if (dungeon == null)
 				return;
 			
 			// Draw the background.
-			g.DrawImage(backgroundImage, Point2I.Zero);
+			g.DrawSprite(background, Point2I.Zero);
 
 			// TODO: Draw the dungeon name panel.
 
@@ -207,8 +214,7 @@ namespace ZeldaOracle.Game.Control.Maps {
 					string floorName = floor.FloorNumberText;
 					g.DrawString(GameData.FONT_SMALL, floorName, floorPos, new Color(248, 248, 216)); // drop shadow
 					g.DrawString(GameData.FONT_SMALL, floorName, floorPos + new Point2I(0, -1), new Color(56, 32, 16));
-					g.DrawSprite(GameData.SPR_UI_MAP_FLOOR_BOX_LEFT, GameData.VARIANT_LIGHT, floorPos + new Point2I(32, 0));
-					g.DrawSprite(GameData.SPR_UI_MAP_FLOOR_BOX_RIGHT, GameData.VARIANT_LIGHT, floorPos + new Point2I(40, 0));
+					g.DrawSprite(GameData.SPR_UI_MAP_FLOOR_BOX, GameData.VARIANT_LIGHT, floorPos + new Point2I(32, 0));
 
 					// Draw the icons around the name box.
 					if (viewFloor == floor)

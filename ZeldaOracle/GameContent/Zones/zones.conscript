@@ -6,19 +6,19 @@ ZONE "default";
 	PALETTE "tiles_default";
 END;
 
-ZONE "empty";
-	NAME "Empty";
-	IMAGEVARIANT "NONE";
-	DEFAULTTILE "ground";
-	PALETTE "tiles_empty";
-END;
+#ZONE "empty";
+#	NAME "Empty";
+#	IMAGEVARIANT "NONE";
+#	DEFAULTTILE "ground";
+#	PALETTE "tiles_empty";
+#END;
 
-ZONE "electrocuted";
-	NAME "Electrocuted";
-	IMAGEVARIANT "NONE";
-	DEFAULTTILE "ground";
-	PALETTE "tiles_electrocuted";
-END;
+#ZONE "electrocuted";
+#	NAME "Electrocuted";
+#	IMAGEVARIANT "NONE";
+#	DEFAULTTILE "ground";
+#	PALETTE "tiles_electrocuted";
+#END;
 
 #ZONE "ages_dungeon_1";
 #	NAME "Ages Dungeon 1";

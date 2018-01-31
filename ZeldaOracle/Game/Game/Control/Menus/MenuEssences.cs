@@ -20,8 +20,10 @@ namespace ZeldaOracle.Game.Control.Menus {
 		//-----------------------------------------------------------------------------
 
 		public MenuEssences(GameManager gameManager)
-			: base(gameManager) {
-			this.backgroundSprite = Resources.GetImage("UI/menu_essences_a");
+			: base(gameManager)
+		{
+			//this.backgroundSprite = Resources.GetImage("UI/menu_essences_a");
+			this.background = GameData.SPR_BACKGROUND_MENU_ESSENCES;
 
 			SlotGroup group1 = new SlotGroup();
 			SlotGroup group2 = new SlotGroup();

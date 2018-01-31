@@ -52,7 +52,8 @@ ENTITY	biggoron_eyes;
 # UI elements that are colored as tiles in-game
 #==============================================================
 
-ENTITY	ui_hud;
+ENTITY	ui_red;
+ENTITY	ui_dungeon_map_red;
 
 #==============================================================
 

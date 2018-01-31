@@ -34,6 +34,9 @@ namespace ZeldaOracle.Game.GameStates {
 
 		public virtual void Update() {}
 
+		// So far, only used to assign palettes, can be renamed to PreDraw in the future
+		public virtual void AssignPalettes() {}
+
 		public virtual void Draw(Graphics2D g) {}
 
 

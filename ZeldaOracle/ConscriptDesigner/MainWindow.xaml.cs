@@ -209,6 +209,10 @@ namespace ConscriptDesigner {
 				tilesetEditor.Reload();
 			comboBoxZones.ItemsSource = DesignerControl.PreviewZones;
 			comboBoxZones.SelectedItem = DesignerControl.PreviewZoneID;
+			comboBoxTilePalettes.ItemsSource = DesignerControl.PreviewTilePalettes;
+			comboBoxTilePalettes.SelectedItem = DesignerControl.PreviewTilePaletteID;
+			comboBoxEntityPalettes.ItemsSource = DesignerControl.PreviewEntityPalettes;
+			comboBoxEntityPalettes.SelectedItem = DesignerControl.PreviewEntityPaletteID;
 		}
 
 		private void OnResourcesUnloaded(object sender, EventArgs e) {
@@ -229,6 +233,10 @@ namespace ConscriptDesigner {
 			suppressEvents = true;
 			comboBoxZones.ItemsSource = null;
 			comboBoxZones.Items.Clear();
+			comboBoxTilePalettes.ItemsSource = null;
+			comboBoxTilePalettes.Items.Clear();
+			comboBoxEntityPalettes.ItemsSource = null;
+			comboBoxEntityPalettes.Items.Clear();
 			suppressEvents = false;
 		}
 
@@ -792,6 +800,16 @@ namespace ConscriptDesigner {
 		private void OnZoneChanged(object sender, SelectionChangedEventArgs e) {
 			if (suppressEvents) return;
 			DesignerControl.PreviewZoneID = (string) comboBoxZones.SelectedItem;
+		}
+
+		private void OnTilePaletteChanged(object sender, SelectionChangedEventArgs e) {
+			if (suppressEvents) return;
+			DesignerControl.PreviewTilePaletteID = (string) comboBoxTilePalettes.SelectedItem;
+		}
+
+		private void OnEntityPaletteChanged(object sender, SelectionChangedEventArgs e) {
+			if (suppressEvents) return;
+			DesignerControl.PreviewEntityPaletteID = (string) comboBoxEntityPalettes.SelectedItem;
 		}
 
 		private void OnPlayAnimations(object sender, RoutedEventArgs e) {

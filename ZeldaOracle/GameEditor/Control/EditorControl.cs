@@ -274,7 +274,7 @@ namespace ZeldaEditor.Control {
 					for (int i = 0; i < level.RoomLayerCount; i++) {
 						layers.Add("Layer " + (i + 1));
 					}
-					layers.Add("Events");
+					layers.Add("Actions");
 				}
 				int index = 0;
 				if (actionMode) {
@@ -336,6 +336,7 @@ namespace ZeldaEditor.Control {
 		// Save the world file to the current filename.
 		public void SaveWorld() {
 			if (IsWorldOpen) {
+				CurrentTool.Finish();
 				WorldFile saveFile = new WorldFile();
 				saveFile.Save(worldFilePath, world, true);
 				IsModified  = false;
@@ -345,6 +346,7 @@ namespace ZeldaEditor.Control {
 		// Save the world file to the given filename.
 		public void SaveWorldAs(string fileName) {
 			if (IsWorldOpen) {
+				CurrentTool.Finish();
 				WorldFile saveFile = new WorldFile();
 				saveFile.Save(fileName, world, true);
 				worldFilePath   = fileName;
@@ -393,12 +395,11 @@ namespace ZeldaEditor.Control {
 		// Close the world file.
 		public void CloseWorld() {
 			if (IsWorldOpen) {
-				CurrentTool.End();
-				CurrentTool.Begin();
+				CurrentTool.Finish();
 				PropertyGrid.CloseProperties();
 				world           = null;
 				level           = null;
-				LevelDisplay.UpdateLevel();
+				LevelDisplay.ChangeLevel();
 				worldFilePath   = "";
 				IsModified      = false;
 				eventCache.Clear();
@@ -411,6 +412,7 @@ namespace ZeldaEditor.Control {
 		// Test/play the world.
 		public void TestWorld() {
 			if (IsWorldOpen) {
+				CurrentTool.Finish();
 				string worldPath = Path.Combine(Path.GetDirectoryName(
 					Assembly.GetExecutingAssembly().Location), "testing.zwd");
 				WorldFile worldFile = new WorldFile();
@@ -427,6 +429,7 @@ namespace ZeldaEditor.Control {
 		// Test/play the world with the player placed at the given room and point.
 		public void TestWorld(Point2I roomCoord, Point2I playerCoord) {
 			if (IsWorldOpen) {
+				CurrentTool.Finish();
 				playerPlaceMode = false;
 				int levelIndex = world.IndexOfLevel(level);
 				string worldPath = Path.Combine(Path.GetDirectoryName(
@@ -453,8 +456,8 @@ namespace ZeldaEditor.Control {
 				if (Resources.ContainsResource<Tileset>(name))
 					tileset = Resources.GetResource<Tileset>(name);
 
-				editorWindow.TileDisplay.UpdateTileset();
-				//editorWindow.TileDisplay.UpdateZone();
+				editorWindow.TilesetDisplay.UpdateTileset();
+				//editorWindow.TilesetDisplay.UpdateZone();
 			}
 
 			//if (tileset.SpriteSheet != null) {
@@ -466,7 +469,7 @@ namespace ZeldaEditor.Control {
 		public void ChangeZone(string name) {
 			if (name != "(none)") {
 				zone = Resources.GetResource<Zone>(name);
-				editorWindow.TileDisplay.UpdateZone();
+				editorWindow.TilesetDisplay.UpdateZone();
 			}
 		}
 
@@ -479,7 +482,7 @@ namespace ZeldaEditor.Control {
 					filteredTileData.Add(pair.Value);
 				}
 			}
-			editorWindow.TileDisplay.UpdateTileset(filteredTileData);
+			editorWindow.TilesetDisplay.UpdateTileset(filteredTileData);
 		}
 
 		// Open the properties for the given tile in the property grid.
@@ -500,9 +503,8 @@ namespace ZeldaEditor.Control {
 		public void OpenLevel(Level level) {
 			if (this.level != level) {
 				this.level = level;
-				CurrentTool.End();
-				CurrentTool.Begin();
-				LevelDisplay.UpdateLevel();
+				CurrentTool.Finish();
+				LevelDisplay.ChangeLevel();
 				UpdateWindowTitle();
 				PropertyGrid.OpenProperties(level);
 				if (currentLayer >= level.RoomLayerCount)
@@ -519,9 +521,8 @@ namespace ZeldaEditor.Control {
 
 		public void CloseLevel() {
 			level = null;
-			LevelDisplay.UpdateLevel();
-			CurrentTool.End();
-			CurrentTool.Begin();
+			LevelDisplay.ChangeLevel();
+			CurrentTool.Finish();
 			UpdateWindowTitle();
 			UpdateLayers();
 		}
@@ -1050,7 +1051,7 @@ namespace ZeldaEditor.Control {
 			get { return selectedTileData; }
 			set {
 				selectedTileData = value;
-				editorWindow.TileDisplay.Invalidate();
+				editorWindow.TilesetDisplay.Invalidate();
 			}
 		}
 

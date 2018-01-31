@@ -35,6 +35,13 @@ namespace ZeldaOracle.Common.Graphics {
 			shader.CurrentTechnique.Passes[0].Apply();
 		}
 
+		public void ResetLerp() {
+			tilePaletteLerp = null;
+			entityPaletteLerp = null;
+			TileRatio = 0f;
+			EntityRatio = 0f;
+		}
+
 		public Effect Effect {
 			get { return shader; }
 		}
@@ -58,7 +65,7 @@ namespace ZeldaOracle.Common.Graphics {
 		public Palette LerpTilePalette {
 			get { return tilePaletteLerp; }
 			set {
-				if (value.PaletteType != PaletteTypes.Tile)
+				if (value != null && value.PaletteType != PaletteTypes.Tile)
 					throw new ArgumentException("Cannot set tile palette using a non-tile palette!");
 				tilePaletteLerp = value;
 			}
@@ -66,7 +73,7 @@ namespace ZeldaOracle.Common.Graphics {
 		public Palette LerpEntityPalette {
 			get { return entityPaletteLerp; }
 			set {
-				if (value.PaletteType != PaletteTypes.Entity)
+				if (value != null && value.PaletteType != PaletteTypes.Entity)
 					throw new ArgumentException("Cannot set entity palette using a non-entity palette!");
 				entityPaletteLerp = value;
 			}
