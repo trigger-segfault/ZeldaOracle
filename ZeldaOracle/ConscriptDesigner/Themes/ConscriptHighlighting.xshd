@@ -104,7 +104,8 @@
       <Word>REPEAT</Word>
       <Word>REWIND</Word>
       <Word>SHIFTSOURCE</Word>
-      <Word>CHANGEDEFINITION</Word>
+      <Word>CHANGESTYLE</Word>
+      <Word>CHANGECOLOR</Word>
       <Word>CLIP</Word>
     </Keywords>
       
@@ -146,6 +147,7 @@
       <Word>COLOR</Word>
       <Word>COLORSTYLE</Word>
       <Word>COLORMULTISTYLE</Word>
+      <Word>STYLECOLOR</Word>
     </Keywords>
 
     <!--ISpriteSR.Composite-->

@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET	"temp_sheet_bridges"			"Tiles/Overworld/bridges"			(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_bridges"			"Tiles/Overworld/bridges"			(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -15,7 +15,7 @@ IGNORECOLORS	((255, 0, 0), (1, 1, 1));
 MAPPEDCOLORS	"tiles_default", ("bridge");
 
 SOURCE "temp_sheet_bridges";
-SPRITESET "set_bridges" (4, 2);
+SPRITESET "tiles_bridges", (4, 2);
 	MULTIPLE STYLE "bridge";
 		ADD "present"			(0, 0);
 		ADD "past"				(0, 2);
@@ -27,7 +27,7 @@ END;
 # Tiles
 #==============================================================
 
-SOURCE "set_bridges";
+SOURCE "tiles_bridges";
 NAME "tile_bridge_vertical_left"			(0, 0);
 NAME "tile_bridge_vertical_mid"				(1, 0);
 NAME "tile_bridge_vertical_right"			(2, 0);

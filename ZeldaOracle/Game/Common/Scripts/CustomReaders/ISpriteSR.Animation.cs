@@ -391,21 +391,38 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					parameters.GetPoint(0));
 			});
 			//=====================================================================================
-			// Changes the definition for all definition sprites
-			AddCommand("CHANGEDEFINITION", (int) Modes.Animation,
-				"const all, string newDefinition",
+			// Changes the definition for all style sprites
+			AddCommand("CHANGESTYLE", (int) Modes.Animation,
+				"const all, string newStyle",
 			delegate (CommandParam parameters) {
-				string definition = parameters.GetString(1);
-				animationBuilder.ChangeDefinition(null, definition, true);
+				string style = parameters.GetString(1);
+				animationBuilder.ChangeStyle(null, style, true);
 			});
 			//=====================================================================================
-			// Changes the definition for all definition sprites
-			AddCommand("CHANGEDEFINITION", (int) Modes.Animation,
-				"string oldDefinition, string newDefinition",
+			// Changes the definition for all style sprites
+			AddCommand("CHANGESTYLE", (int) Modes.Animation,
+				"string oldStyle, string newStyle",
 			delegate (CommandParam parameters) {
-				string oldDefinition = parameters.GetString(0);
-				string definition = parameters.GetString(1);
-				animationBuilder.ChangeDefinition(oldDefinition, definition, false);
+				string oldStyle = parameters.GetString(0);
+				string style = parameters.GetString(1);
+				animationBuilder.ChangeStyle(oldStyle, style, false);
+			});
+			//=====================================================================================
+			// Changes the definition for all color sprites
+			AddCommand("CHANGECOLOR", (int) Modes.Animation,
+				"const all, string newColor",
+			delegate (CommandParam parameters) {
+				string color = parameters.GetString(1);
+				animationBuilder.ChangeColor(null, color, true);
+			});
+			//=====================================================================================
+			// Changes the definition for all color sprites
+			AddCommand("CHANGECOLOR", (int) Modes.Animation,
+				"string oldColor, string newColor",
+			delegate (CommandParam parameters) {
+				string oldColor = parameters.GetString(0);
+				string color = parameters.GetString(1);
+				animationBuilder.ChangeColor(oldColor, color, false);
 			});
 			//=====================================================================================
 			AddCommand("CLIP", (int) Modes.Animation,

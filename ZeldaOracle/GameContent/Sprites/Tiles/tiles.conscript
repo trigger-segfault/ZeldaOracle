@@ -1,0 +1,21 @@
+﻿#==============================================================
+# Black 8x8
+#==============================================================
+
+# Used by numerous tiles
+
+PALETTEDICTIONARY	"tile_dictionary";
+MAPPEDCOLORS	"tiles_default", ("default");
+BASIC "black_8x8", "Tiles/black_8x8"; END;
+PALETTEDICTIONARY	none;
+
+#==============================================================
+# Loading
+#==============================================================
+
+LOAD "overworld.conscript", false;
+LOAD "indoors.conscript", false;
+LOAD "sidescroll.conscript", false;
+LOAD "objects.conscript", false;
+LOAD "tile_previews.conscript", false;
+LOAD "special.conscript", false;

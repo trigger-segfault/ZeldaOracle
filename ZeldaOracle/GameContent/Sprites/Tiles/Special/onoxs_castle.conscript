@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_onoxs_castle"		"Tiles/Special/onoxs_castle"	(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_onoxs_castle"		"Tiles/Special/onoxs_castle"	(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -16,7 +16,7 @@ MAPPEDCOLORS	"tiles_default", ("vertical_wall", "tunnel_light", "armos");
 CHUNKSIZE		(8, 8);
 
 SOURCE "temp_sheet_onoxs_castle";
-SPRITESET "set_onoxs_castle", (5, 7);
+SPRITESET "tiles_onoxs_castle", (5, 7);
 	MULTIPLE BASIC (0, 0), (0, 0), (5, 6); END;
 	SINGLE BASIC (3, 6); END;
 	SINGLE BASIC (0, 6); END;
@@ -27,7 +27,7 @@ END;
 # Tiles
 #==============================================================
 
-SOURCE "set_onoxs_castle";
+SOURCE "tiles_onoxs_castle";
 
 COMPOSITE "tile_onoxs_castle";
 	ADDTILED (0, 0), (4, 4), (16, 16); END;

@@ -49,7 +49,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 			for (int y = 0; y < Height; y++) {
 				for (int x = 0; x < Width; x++) {
-					g.DrawSprite(GameData.SPR_TILE_MOVING_PLATFORM,
+					g.DrawSprite(Graphics.AnimationPlayer.SpriteOrSubStrip,
 						Position + new Point2I(x, y) * GameSettings.TILE_SIZE, DepthLayer.TileLayer1);
 				}
 			}

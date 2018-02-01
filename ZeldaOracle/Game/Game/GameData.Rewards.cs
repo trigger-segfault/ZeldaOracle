@@ -66,7 +66,8 @@ namespace ZeldaOracle.Game {
 				new ItemSlingshot(),
 				
 				// Key items:
-				new ItemWallet(),
+				// Keep this as level 3 unless the game has wallet limitations
+				new ItemWallet(Item.Level3),
 				new ItemMembersCard(),
 				new ItemMagicPotion(),
 				new ItemEssenceSeed(),

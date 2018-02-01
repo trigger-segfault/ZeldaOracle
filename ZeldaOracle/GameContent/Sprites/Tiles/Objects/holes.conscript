@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_holes"					"Tiles/Overworld/holes"					(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_holes"					"Tiles/Overworld/holes"					(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -13,7 +13,7 @@ PALETTEDICTIONARY	"tile_dictionary";
 IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 
-SPRITESET "set_holes", (2, 1);
+SPRITESET "tiles_holes", (2, 1);
 	SOURCE "temp_sheet_holes";
 	MAPPEDCOLORS	"tiles_default", ("hole");
 	MULTIPLE COLORSTYLE "hole", "", ("hole", "hole_alt"), (0, 0), (2, 1);
@@ -27,7 +27,7 @@ END;
 # Tiles
 #==============================================================
 
-SOURCE "set_holes";
+SOURCE "tiles_holes";
 NAME "tile_dug"					(0, 0);
 NAME "tile_hole"				(1, 0);
 

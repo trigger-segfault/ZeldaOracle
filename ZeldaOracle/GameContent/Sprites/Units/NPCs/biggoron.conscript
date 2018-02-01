@@ -2,8 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_biggoron", "Units/NPCs/biggoron", (160, 112), (0, 0), (1, 1); END;
-SPRITESHEET "temp_sheet_biggoron_eyes", "Units/NPCs/biggoron_eyes", (16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_biggoron_eyes", "Units/NPCs/biggoron_eyes", (16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -16,7 +15,7 @@ MAPPEDCOLORS	"entities_default", ("biggoron_eyes");
 CHUNKSIZE		none;
 
 SOURCE "temp_sheet_biggoron_eyes";
-SPRITESET "set_biggoron_eyes", (4, 2);
+SPRITESET "units_biggoron_eyes", (4, 2);
 	MULTIPLE BASIC (0, 0); END;
 END;
 
@@ -28,14 +27,13 @@ PALETTEDICTIONARY	"tile_dictionary";
 MAPPEDCOLORS	"tiles_default", ("biggoron", "biggoron_hands", "biggoron_top", "biggoron_chin");
 CHUNKSIZE		(8, 8);
 
-SOURCE "temp_sheet_biggoron";
-BASIC "temp_biggoron_body", (0, 0); END;
+BASIC "temp_biggoron_body", "Units/NPCs/biggoron"; END;
 
 #==============================================================
 # ENTITIES
 #==============================================================
 
-SOURCE "set_biggoron_eyes";
+SOURCE "units_biggoron_eyes";
 
 COMPOSITE "biggoron_eyes";
 	ADDTILED (0, 0), (2, 2), (16, 16), (0, 8);

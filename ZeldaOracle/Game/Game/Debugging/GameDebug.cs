@@ -138,7 +138,7 @@ namespace ZeldaOracle.Game.Debug {
 			}
 
 			// L: Level-up item in menu
-			if (Keyboard.IsKeyPressed(Keys.L)) {
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.L)) {
 				if (GameManager.CurrentGameState is InventoryMenu) {
 					InventoryMenu menu = ((InventoryMenu) GameManager.CurrentGameState);
 					ISlotItem slotItem = menu.CurrentSlotGroup.CurrentSlot.SlotItem;
@@ -149,6 +149,17 @@ namespace ZeldaOracle.Game.Debug {
 						if (item.Level != oldLevel)
 							menu.ResetDescription();
 					}
+				}
+			}
+			// Ctrl+L: Level-up all obtained items to max level
+			if (ctrl && Keyboard.IsKeyPressed(Keys.L)) {
+				foreach (Item item in GameControl.Inventory.GetItems()) {
+					if (item.IsObtained)
+						item.Level = item.MaxLevel;
+				}
+				if (GameManager.CurrentGameState is InventoryMenu) {
+					InventoryMenu menu = ((InventoryMenu) GameManager.CurrentGameState);
+					menu.ResetDescription();
 				}
 			}
 

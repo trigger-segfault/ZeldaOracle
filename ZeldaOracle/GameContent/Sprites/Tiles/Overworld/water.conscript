@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET	"temp_sheet_water"	"Tiles/Overworld/water"			(8, 8), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_water"	"Tiles/Overworld/water"			(8, 8), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -14,7 +14,7 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 
 SOURCE "temp_sheet_water";
-SPRITESET "set_water", (30, 12);
+SPRITESET "tiles_water", (30, 12);
 	MAPPEDCOLORS	"tiles_default", ("water", "lava");
 	MULTIPLE BASIC (1, 0), (1, 0), (3, 1); END;
 	
@@ -87,7 +87,7 @@ END;
 # Temporary
 #==============================================================
 
-SOURCE "set_water";
+SOURCE "tiles_water";
 
 NAME "temp_8x8_hardened_lava"		(12, 8);
 

@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_doors"					"Tiles/Objects/doors"					(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_doors"					"Tiles/Objects/doors"					(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -17,11 +17,11 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 MAPPEDCOLORS	"tiles_default", ("door");
 
 SOURCE "temp_sheet_doors";
-SPRITESET "set_doors", (8, 6);
+SPRITESET "tiles_doors", (8, 6);
 	MULTIPLE BASIC (0, 0) (0, 1), (4, 5); END;
 	
 	# Door raising
-	SOURCE "set_doors";
+	SOURCE "tiles_doors";
 	CLONE MULTIPLE BASIC (0, 1), (4, 1), (1, 5);
 		SOURCERECT (0, 8, 16, 8);
 		DRAWOFFSET (0, 0);
@@ -52,7 +52,7 @@ END;
 # Tiles
 #==============================================================
 
-SOURCE "set_doors";
+SOURCE "tiles_doors";
 ANIMATION "tile_door_closed";
 	SUBSTRIP repeat; ADD frame, 1, (3, 0);
 	SUBSTRIP repeat; ADD frame, 1, (1, 0);

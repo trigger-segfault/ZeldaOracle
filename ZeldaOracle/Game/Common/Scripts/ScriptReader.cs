@@ -474,7 +474,7 @@ namespace ZeldaOracle.Common.Scripts {
 				parameterParent.NamedChildCount++;
 			}
 			else if (parameter != null && !string.IsNullOrEmpty(parameter.Name)) {
-				ThrowParseError("All parameters after the first named parameter must be named!");
+				ThrowParseError("All parameters after the first named parameter must be named! Did you accidentally use a ':' instead of a ';'?");
 			}
 			newParam.Parent = parameterParent;
 			parameter = newParam;

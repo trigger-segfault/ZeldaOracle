@@ -1,11 +1,6 @@
-﻿
-
-#ZONE "interior";
-#	NAME "Interior";
-#	IMAGEVARIANT "INTERIOR";
-#	DEFAULTTILE "floor";
-#	PALETTE "present";
-#END;
+﻿#==============================================================
+# Zones
+#==============================================================
 
 ZONE "interior_present";
 	NAME "Interior Present";

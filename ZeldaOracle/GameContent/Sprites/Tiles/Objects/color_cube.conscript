@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET "temp_sheet_color_cube", "Tiles/Objects/color_cube", (16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_color_cube", "Tiles/Objects/color_cube", (16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -17,12 +17,12 @@ MAPPEDCOLORS	"entities_default",
 
 CHUNKSIZE (8, 16);
 
-SPRITESET "set_color_cube" (12, 4);
+SPRITESET "tiles_color_cube" (12, 4);
 	MULTIPLE BASIC (0, 0); END;
 
 	# Append the top tips of the color cube to the rolling sprites
 	
-	SOURCE "set_color_cube";
+	SOURCE "tiles_color_cube";
 
 	APPEND (0, 1), (6, 0), (0, -16);
 	APPEND (0, 2), (6, 0), (0, -16);
@@ -52,7 +52,7 @@ CHUNKSIZE none;
 # Color Cube Animations
 #==============================================================
 
-SOURCE "set_color_cube";
+SOURCE "tiles_color_cube";
 
 # Left & Right Color Cube Animations
 

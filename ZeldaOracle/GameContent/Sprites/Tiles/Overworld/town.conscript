@@ -2,11 +2,11 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET	"temp_sheet_town_8x8"			"Tiles/Overworld/town_8x8"			(8, 8), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_town_fountain"		"Tiles/Overworld/town_fountain"	(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_town_house_walls"	"Tiles/Overworld/town_house_walls"	(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_town_misc"			"Tiles/Overworld/town_misc"		(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_town_roofs"			"Tiles/Overworld/town_roofs"		(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_town_8x8"			"Tiles/Overworld/town_8x8"			(8, 8), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_town_fountain"		"Tiles/Overworld/town_fountain"	(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_town_house_walls"	"Tiles/Overworld/town_house_walls"	(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_town_misc"			"Tiles/Overworld/town_misc"		(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_town_roofs"			"Tiles/Overworld/town_roofs"		(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -19,7 +19,7 @@ IGNORECOLORS	((255, 0, 0), (1, 1, 1));
 MAPPEDCOLORS	"tiles_default", ("roof_red", "shop_sign");
 
 SOURCE "temp_sheet_town_8x8";
-SPRITESET "set_town_8x8" (4, 2);
+SPRITESET "tiles_town_8x8" (4, 2);
 	MULTIPLE COLOR "", ("roof_red", "roof_blue", "roof_green"), (0, 0), (0, 0), (4, 1); END;
 	MULTIPLE BASIC (0, 1), (0, 1), (4, 1); END;
 END;
@@ -28,7 +28,7 @@ IGNORECOLORS	((0, 0, 0, 0));
 
 MAPPEDCOLORS	"tiles_default", ("fountain", "fountain_water");
 SOURCE "temp_sheet_town_fountain";
-SPRITESET "set_town_fountain", (4, 8);
+SPRITESET "tiles_town_fountain", (4, 8);
 	MULTIPLE BASIC (0, 0); END;
 END;
 
@@ -37,7 +37,7 @@ IGNORECOLORS	((255, 0, 0), (1, 1, 1));
 MAPPEDCOLORS	"tiles_default", ("water", "house_wall");
 
 SOURCE "temp_sheet_town_house_walls";
-SPRITESET "set_town_house_walls", (5, 2);
+SPRITESET "tiles_town_house_walls", (5, 2);
 	MULTIPLE STYLE "house_wall";
 		ADD "present"		(0, 0);
 		ADD "seasons"		(0, 2);
@@ -46,7 +46,7 @@ SPRITESET "set_town_house_walls", (5, 2);
 END;
 
 SOURCE "temp_sheet_town_roofs";
-SPRITESET "set_town_roofs", (11, 4);
+SPRITESET "tiles_town_roofs", (11, 4);
 	MAPPEDCOLORS	"tiles_default", ("roof_red");
 	MULTIPLE COLOR "", ("roof_red", "roof_blue", "roof_green"), (0, 0), (0, 0), (6, 4); END;
 	
@@ -70,7 +70,7 @@ END;
 
 
 SOURCE "temp_sheet_town_misc";
-SPRITESET "set_town_misc", (7, 6);
+SPRITESET "tiles_town_misc", (7, 6);
 	MAPPEDCOLORS	"tiles_default", ("fence");
 	MULTIPLE BASIC (0, 0), (0, 0), (3, 1); END;
 	MULTIPLE STYLE "fence_post", (0, 1), (1, 2);
@@ -103,7 +103,7 @@ END;
 # 8x8s
 #==============================================================
 
-SOURCE "set_town_8x8";
+SOURCE "tiles_town_8x8";
 COMPOSITE "temp_roof_red_left_light";
 	ADD ((0, 0), "roof_red"), (0, 0); END;
 COMPOSITE "temp_roof_red_right_light";
@@ -129,7 +129,7 @@ COMPOSITE "temp_shop_sign_mid";
 COMPOSITE "temp_shop_sign_right";
 	ADD (3, 1), (0, 8); END;
 	
-SOURCE "set_town_misc";
+SOURCE "tiles_town_misc";
 NAME "temp_planter_flower_top_red"			((2, 5), "planter_flower_red");
 NAME "temp_planter_flower_top_blue"			((2, 5), "planter_flower_blue");
 NAME "temp_planter_flower_bottom_red"		((3, 5), "planter_flower_red");
@@ -141,7 +141,7 @@ NAME "temp_planter_flower_bottom_blue"		((3, 5), "planter_flower_blue");
 
 LOAD "town_roofs.conscript", true;
 
-SOURCE "set_town_house_walls";
+SOURCE "tiles_town_house_walls";
 NAME "tile_house_wall"						(0, 0);
 NAME "tile_house_wall_door_right"			(1, 0);
 NAME "tile_house_wall_door_left"			(2, 0);
@@ -171,7 +171,7 @@ COMPOSITE "temp_preview_house_wall_style";
 	
 STYLEPREVIEW "house_wall", "temp_preview_house_wall_style";
 
-SOURCE "set_town_misc";
+SOURCE "tiles_town_misc";
 NAME "tile_plank_fence_left"				(0, 0);
 NAME "tile_plank_fence_mid"					(1, 0);
 NAME "tile_plank_fence_right"				(2, 0);
@@ -229,7 +229,7 @@ COMPOSITE "tile_water_statue_base_ne";
 NAME "tile_water_statue_base_sw"			(4, 3);
 NAME "tile_water_statue_base_se"			(5, 3);
 
-SOURCE "set_town_fountain";
+SOURCE "tiles_town_fountain";
 ANIMATION "temp_fountain_jet_left_continuous"; SUBSTRIP repeat;
 	ADD frame, 6, (0, 6); ADD frame, 6, (0, 7); END;
 

@@ -205,9 +205,25 @@
       <Name>sounds</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Sprites\ActionTiles\action_tiles.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>action_tiles</Name>
+    </None>
     <None Include="Sprites\animations.conscript">
       <Name>animations</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Effects\basic_effects.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>basic_effects</Name>
+    </None>
+    <None Include="Sprites\Effects\color_effects.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>color_effects</Name>
+    </None>
+    <None Include="Sprites\Effects\effects.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>effects</Name>
     </None>
     <None Include="Sprites\Items\items.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -413,6 +429,10 @@
       <Name>tile_previews</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Sprites\Tiles\tiles.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>tiles</Name>
+    </None>
     <None Include="Sprites\UI\backgrounds.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>backgrounds</Name>
@@ -424,6 +444,10 @@
     <None Include="Sprites\UI\ui_sprites.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>ui_sprites</Name>
+    </None>
+    <None Include="Sprites\Units\Monsters\monster_items.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>monster_items</Name>
     </None>
     <None Include="Sprites\Units\Monsters\monster_previews.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -437,9 +461,17 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>biggoron</Name>
     </None>
+    <None Include="Sprites\Units\NPCs\npcs.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>npcs</Name>
+    </None>
     <None Include="Sprites\Units\Player\player.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>player</Name>
+    </None>
+    <None Include="Sprites\Units\Player\player_items.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>player_items</Name>
     </None>
     <None Include="Sprites\Units\units.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -662,14 +694,14 @@
       <Processor>FontTextureProcessor</Processor>
     </Compile>
     <Compile Include="Images\Effects\basic_effects.png">
-      <Name>basic_effects</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <Name>basic_effects</Name>
     </Compile>
     <Compile Include="Images\Effects\color_effects.png">
-      <Name>color_effects</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <Name>color_effects</Name>
     </Compile>
     <Compile Include="Images\Fonts\font_large.png">
       <Name>font_large</Name>
@@ -686,18 +718,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Items\items_large_light.png">
-      <Name>items_large_light</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Items\items_small.png">
       <Name>items_small</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Items\items_small_light.png">
-      <Name>items_small_light</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -1141,6 +1163,11 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="Images\Units\Monsters\monster_items_old.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>monster_items_old</Name>
+    </Compile>
     <Compile Include="Images\Units\Monsters\monster_previews.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -1171,23 +1198,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Units\Player\player_blue.png">
-      <Name>player_blue</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Units\Player\player_hurt.png">
-      <Name>player_hurt</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Units\Player\player_items.png">
       <Name>player_items</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Units\Player\player_red.png">
-      <Name>player_red</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -1212,6 +1224,11 @@
       <Name>effect_cling</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Effects\electrocute.wav">
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Name>electrocute</Name>
     </Compile>
     <Compile Include="Sounds\Effects\fire.wav">
       <Name>fire</Name>
@@ -1462,6 +1479,11 @@
       <Name>player_wade</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Projectiles\laser.wav">
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Name>laser</Name>
     </Compile>
     <Compile Include="Sounds\Tiles\barrier.wav">
       <Name>barrier</Name>

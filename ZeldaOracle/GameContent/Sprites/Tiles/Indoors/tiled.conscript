@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_floors_square_tiles_8x8"	"Tiles/Indoors/floors_square_tiles_8x8"	(8, 8), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_floors_square_tiles_8x8"	"Tiles/Indoors/floors_square_tiles_8x8"	(8, 8), (1, 1), (18, 18);
 
 #==============================================================
 # 8x8
@@ -14,6 +14,7 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 MAPPEDCOLORS	"tiles_default", ("tiled");
 
+SOURCE "temp_sheet_floors_square_tiles_8x8";
 COLORSTYLE "temp_tiled", "tiled", "", ("tiled", "tiled_alt");
 	ADD "square_tiles_1"			(0, 0);
 	ADD "square_tiles_2"			(1, 0);

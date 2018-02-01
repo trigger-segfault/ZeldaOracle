@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_ancient_ruins"		"Tiles/Special/ancient_ruins"	(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_ancient_ruins"		"Tiles/Special/ancient_ruins"	(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -13,7 +13,7 @@ PALETTEDICTIONARY	"tile_dictionary";
 IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 SOURCE "temp_sheet_ancient_ruins";
-SPRITESET "set_ancient_ruins", (4, 5);
+SPRITESET "tiles_ancient_ruins", (4, 5);
 	MAPPEDCOLORS	"tiles_default", ("cliff");
 	MULTIPLE BASIC (0, 0), (0, 0), (1, 4); END;
 	
@@ -27,7 +27,7 @@ END;
 # Tiles
 #==============================================================
 
-SOURCE "set_ancient_ruins";
+SOURCE "tiles_ancient_ruins";
 
 NAME "tile_ancient_ruins_statue_top"					(0, 0);
 NAME "tile_ancient_ruins_statue_bottom"					(0, 1);

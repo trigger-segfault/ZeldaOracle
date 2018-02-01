@@ -1,4 +1,6 @@
-﻿
+﻿#==============================================================
+# Zones
+#==============================================================
 
 ZONE "present";
 	NAME "Present";
@@ -91,12 +93,6 @@ ZONE "summer_forest";
 	
 	SETSTYLE "tiled", "square_tiles_4";
 END;
-
-#ZONE "graveyard";
-#	NAME "Graveyard";
-#	DEFAULTTILE "ground";
-#	PALETTE "present";
-#END;
 
 ZONE "underwater_present";
 	NAME "Underwater Present";

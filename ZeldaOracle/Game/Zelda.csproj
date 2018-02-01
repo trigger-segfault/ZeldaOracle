@@ -223,7 +223,6 @@
     <None Include="Common\Scripting\ZeldaObject.cs" />
     <Compile Include="Common\Scripts\Commands\CommandParamDefinition.cs" />
     <Compile Include="Common\Scripts\Commands\CommandReferenceParam.cs" />
-    <None Include="Common\Scripts\CustomReaders\AnimationSR.cs" />
     <Compile Include="Common\Scripts\Commands\CommandParam.cs" />
     <Compile Include="Common\Scripts\Commands\CommandParamParser.cs" />
     <Compile Include="Common\Scripts\CustomReaders\GameFontSR.cs" />
@@ -235,6 +234,7 @@
     <Compile Include="Common\Scripts\CustomReaders\ISPriteSR.ColorStyle.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.Style.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\ISPriteSR.StyleColor.cs" />
     <Compile Include="Common\Scripts\CustomReaders\MusicSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\PaletteDictionarySR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\PaletteSR.cs" />
@@ -245,7 +245,6 @@
     <Compile Include="Common\Scripts\Commands\ScriptCommand.cs" />
     <Compile Include="Common\Scripts\CustomReaders\SoundSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\TilesetSR.cs" />
-    <None Include="Common\Scripts\CustomReaders\SpritesSR.cs" />
     <Compile Include="Common\Scripts\ScriptReaderException.cs" />
     <Compile Include="Common\Translation\Language.cs" />
     <Compile Include="Common\Translation\LetterString.cs" />

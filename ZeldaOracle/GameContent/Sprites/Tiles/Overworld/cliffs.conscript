@@ -2,9 +2,9 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET "temp_sheet_cliffs"			"Tiles/Overworld/cliffs"			( 8,  8), (1, 1), (18, 18); END;
-SPRITESHEET "temp_sheet_cliff_parts"	"Tiles/Overworld/cliff_parts"		( 8,  8), (1, 1), (18, 18); END;
-SPRITESHEET "temp_sheet_cliff_railings"	"Tiles/Overworld/cliff_railings"	( 8,  8), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_cliffs",		"Tiles/Overworld/cliffs",			(8, 8), (1, 1), (18, 18);
+SPRITESHEET "temp_sheet_cliff_parts",	"Tiles/Overworld/cliff_parts",		(8, 8), (1, 1), (18, 18);
+SPRITESHEET "temp_sheet_cliff_railings","Tiles/Overworld/cliff_railings",	(8, 8), (1, 1), (18, 18);
 
 
 #==============================================================
@@ -20,7 +20,7 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 MAPPEDCOLORS	"tiles_default", ("cliff");
 
 SOURCE "temp_sheet_cliffs";
-SPRITESET "set_cliffs" (10, 4);
+SPRITESET "tiles_cliffs" (10, 4);
 	MULTIPLE STYLE "cliff", (0, 0), (10, 4);
 		ADD "present"	(0, 0);
 		ADD "seasons"	(0, 4);
@@ -29,7 +29,7 @@ SPRITESET "set_cliffs" (10, 4);
 END;
 
 SOURCE "temp_sheet_cliff_parts";
-SPRITESET "set_cliff_parts" (2, 6);
+SPRITESET "tiles_cliff_parts" (2, 6);
 	MULTIPLE BASIC (0, 0); END;
 END;
 
@@ -40,7 +40,7 @@ END;
 MAPPEDCOLORS	"tiles_default", ("railing");
 		
 SOURCE "temp_sheet_cliff_railings";
-SPRITESET "set_cliff_railings" (5, 3);
+SPRITESET "tiles_cliff_railings" (5, 3);
 	MULTIPLE STYLE "cliff_railing", (0, 0), (5, 3);
 		ADD "present"	(0, 0);
 		ADD "seasons"	(0, 3);
@@ -52,7 +52,7 @@ END;
 # 8x8s
 #==============================================================
 
-SOURCE "set_cliffs";
+SOURCE "tiles_cliffs";
 
 NAME "cliff_face_s_1_8x8"							(2, 3);
 NAME "cliff_face_s_2_8x8"							(3, 3);
@@ -102,7 +102,7 @@ NAME "temp_8x8_cliff_wall_face_e_2"					(9, 1);
 NAME "temp_8x8_cliff_wall_face_w_1"					(9, 2);
 NAME "temp_8x8_cliff_wall_face_w_2"					(9, 3);
 
-SOURCE "set_cliff_parts";
+SOURCE "tiles_cliff_parts";
 
 NAME "temp_8x8_cliff_cave_left"						(0, 0);
 NAME "temp_8x8_cliff_cave_right"					(1, 0);
@@ -118,7 +118,7 @@ NAME "temp_8x8_cliff_sea_border_ne"				(1, 4);
 NAME "temp_8x8_cliff_sea_border_sw"				(0, 5);
 NAME "temp_8x8_cliff_sea_border_se"				(1, 5);
 
-SOURCE "set_cliff_railings";
+SOURCE "tiles_cliff_railings";
 
 NAME "temp_8x8_railing_outside_nw"				(0, 0);
 NAME "temp_8x8_railing_outside_ne"				(1, 0);

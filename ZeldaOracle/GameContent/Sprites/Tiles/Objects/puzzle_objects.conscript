@@ -3,13 +3,13 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_chests"					"Tiles/Objects/chests"					(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET "temp_sheet_buttons"				"Tiles/Objects/buttons"					(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET "temp_sheet_minecart_tracks"		"Tiles/Objects/minecart_tracks"			(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET "temp_sheet_traps"					"Tiles/Objects/traps"					(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET "temp_sheet_puzzle_objects"			"Tiles/Objects/puzzle_objects"			(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET "temp_sheet_puzzle_color_tiles"		"Tiles/Objects/puzzle_color_tiles"		(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET "temp_sheet_entity_tiles"			"Tiles/Objects/entity_tiles"			(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_chests"					"Tiles/Objects/chests"					(16, 16), (1, 1), (18, 18);
+SPRITESHEET "temp_sheet_buttons"				"Tiles/Objects/buttons"					(16, 16), (1, 1), (18, 18);
+SPRITESHEET "temp_sheet_minecart_tracks"		"Tiles/Objects/minecart_tracks"			(16, 16), (1, 1), (18, 18);
+SPRITESHEET "temp_sheet_traps"					"Tiles/Objects/traps"					(16, 16), (1, 1), (18, 18);
+SPRITESHEET "temp_sheet_puzzle_objects"			"Tiles/Objects/puzzle_objects"			(16, 16), (1, 1), (18, 18);
+SPRITESHEET "temp_sheet_puzzle_color_tiles"		"Tiles/Objects/puzzle_color_tiles"		(16, 16), (1, 1), (18, 18);
+SPRITESHEET "temp_sheet_entity_tiles"			"Tiles/Objects/entity_tiles"			(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -24,7 +24,7 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 MAPPEDCOLORS	"tiles_default", ("chest");
 
 SOURCE "temp_sheet_chests";
-SPRITESET "set_chests", (2, 1);
+SPRITESET "tiles_chests", (2, 1);
 	MULTIPLE STYLE "chest";
 		ADD "flat"		(0, 0);
 		ADD "curved"	(0, 1);
@@ -37,7 +37,7 @@ END;
 MAPPEDCOLORS	"tiles_default", ("button");
 
 SOURCE "temp_sheet_buttons";
-SPRITESET "set_buttons", (2, 1);
+SPRITESET "tiles_buttons", (2, 1);
 	MULTIPLE STYLE "button";
 		ADD "flat"		(0, 0);
 		ADD "raised"	(0, 1);
@@ -49,14 +49,14 @@ END;
 MAPPEDCOLORS	"tiles_default", ("minecart_track");
 
 SOURCE "temp_sheet_minecart_tracks";
-SPRITESET "set_minecart_tracks", (2, 4);
+SPRITESET "tiles_minecart_tracks", (2, 4);
 	MULTIPLE BASIC (0, 0); END;
 END;
 
 # Traps =======================================================
 
 SOURCE "temp_sheet_traps";
-SPRITESET "set_traps", (6, 4);
+SPRITESET "tiles_traps", (6, 4);
 
 	MAPPEDCOLORS	"tiles_default", ("hole");
 	MULTIPLE BASIC (0, 0), (0, 0), (2, 4); END;
@@ -80,7 +80,7 @@ END;
 # Puzzle Objects ==============================================
 
 SOURCE "temp_sheet_puzzle_objects";
-SPRITESET "set_puzzle_objects", (10, 4);
+SPRITESET "tiles_puzzle_objects", (10, 4);
 
 	MAPPEDCOLORS	"tiles_default", ("lava_mouth");
 	MULTIPLE BASIC (0, 0), (0, 0), (4, 2); END;
@@ -124,7 +124,7 @@ END;
 MAPPEDCOLORS	"tiles_default", ("puzzle_red", "puzzle_blue", "floor");
 
 SOURCE "temp_sheet_puzzle_color_tiles";
-SPRITESET "set_puzzle_color_tiles", (5, 2);
+SPRITESET "tiles_puzzle_color_tiles", (5, 2);
 	MULTIPLE COLOR "puzzle_color", ("puzzle_red", "puzzle_yellow", "puzzle_blue"), (0, 0), (0, 0), (3, 1); END;
 	SINGLE COLOR "puzzle_color", ("puzzle_red", "puzzle_yellow", "puzzle_blue", "statue", "statue_alt"), (3, 0); END;
 	MULTIPLE COLOR "puzzle_color", ("puzzle_red", "puzzle_blue"), (0, 1), (0, 1), (3, 1); END;
@@ -139,7 +139,7 @@ PALETTEDICTIONARY	"entity_dictionary";
 MAPPEDCOLORS	"entities_default", ("orange", "red", "blue", "green", "shaded_blue", "shaded_red");
 
 SOURCE "temp_sheet_entity_tiles";
-SPRITESET "set_entity_tiles", (13, 6);
+SPRITESET "tiles_entity_tiles", (13, 6);
 	MULTIPLE BASIC (0, 0), (0, 0), (12, 2); END;
 	SINGLE BASIC (12, 1), (12, 1); END;
 	SINGLE COLOR "color_switch", ("blue", "red"), (12, 0); END;
@@ -149,7 +149,7 @@ SPRITESET "set_entity_tiles", (13, 6);
 	
 	MULTIPLE COLOR "trampoline", ("blue", "red"), (0, 4), (0, 4), (3, 1); END;
 	MULTIPLE BASIC (3, 4), (3, 4), (10, 1); END;
-	MULTIPLE BASIC (0, 5), (0, 5), (11, 1); END;
+	MULTIPLE BASIC (0, 5), (0, 5), (13, 1); END;
 END;
 
 #==============================================================
@@ -158,7 +158,7 @@ END;
 
 # Chests ======================================================
 
-SOURCE "set_chests";
+SOURCE "tiles_chests";
 NAME "tile_chest"				(0, 0);
 NAME "tile_chest_opened"		(1, 0);
 
@@ -169,7 +169,7 @@ STYLEPREVIEW "chest", "temp_preview_chest_style";
 
 # Buttons =====================================================
 
-SOURCE "set_buttons";
+SOURCE "tiles_buttons";
 NAME "tile_button_up"			(0, 0);
 NAME "tile_button_down"			(1, 0);
 
@@ -180,7 +180,7 @@ STYLEPREVIEW "button", "temp_preview_button_style";
 
 # Minecart Tracks =============================================
 
-SOURCE "set_minecart_tracks";
+SOURCE "tiles_minecart_tracks";
 NAME "tile_minecart_track_down_right"		(0, 0);
 NAME "tile_minecart_track_down_left"		(1, 0);
 NAME "tile_minecart_track_up_right"			(0, 1);
@@ -191,7 +191,7 @@ NAME "tile_minecart_track_stop"				(0, 3);
 
 # Traps =======================================================
 
-SOURCE "set_traps";
+SOURCE "tiles_traps";
 NAME "tile_pit_top"							(0, 0);
 NAME "tile_pit_mid"							(0, 1);
 NAME "tile_pit_bottom"						(0, 2);
@@ -219,7 +219,7 @@ NAME "tile_flying_tile"					(5, 0);
 
 # Puzzle Objects ==============================================
 
-SOURCE "set_puzzle_objects";
+SOURCE "tiles_puzzle_objects";
 NAME "tile_lava_mouth_up"					(0, 0);
 NAME "tile_lava_mouth_down"					(0, 1);
 NAME "tile_lava_mouth_left"					(1, 0);
@@ -274,7 +274,7 @@ NAME "tile_essense_statue"					(7, 3);
 
 # Puzzle Color Tiles ==========================================
 
-SOURCE "set_puzzle_color_tiles";
+SOURCE "tiles_puzzle_color_tiles";
 NAME "temp_color_tile"						(0, 0);
 NAME "tile_color_tile_red"					("temp_color_tile", "puzzle_red");
 NAME "tile_color_tile_yellow"				("temp_color_tile", "puzzle_yellow");
@@ -327,7 +327,7 @@ NAME "tile_color_cube_slot"					(4, 1);
 
 # Puzzle Entity Tiles =========================================
 
-SOURCE "set_entity_tiles";
+SOURCE "tiles_entity_tiles";
 
 NAME "tile_roller_horizontal"				(0, 0);
 NAME "tile_roller_vertical"					(0, 1);
@@ -360,14 +360,18 @@ ANIMATION "tile_spike_roller_vertical_bottom"; SUBSTRIP repeat;
 NAME "tile_arrow_cannon_left"				(12, 2);
 NAME "tile_arrow_cannon_right"				(12, 3);
 
-NAME "tile_owl",							(11, 0); END;
+NAME "tile_owl",							(11, 0);
 COMPOSITE "tile_owl_activated";		ADD (11, 1), (-8, 0); ADD (12, 1), (8, 0); END;
 
 NAME "temp_color_switch"					(12, 0);
 NAME "tile_color_switch_blue"				("temp_color_switch", "blue");
 NAME "tile_color_switch_red"				("temp_color_switch", "red");
 
-NAME "tile_moving_platform"					(12, 4);
+NAME "tile_moving_platform"					(11, 5);
+COMPOSITE "tile_sarcophagus";
+	ADD (12, 4), (0, 0); ADD (12, 5), (0, 16); END;
+OFFSET "tile_sarcophagus_asobject"			"tile_sarcophagus", (0, -8); END;
+NAME "preview_sarcophagus"					(12, 4);
 NAME "tile_statue_eye"						(10, 5);
 	
 	
@@ -427,10 +431,10 @@ NAME "tile_super_trampoline"				("temp_trampoline", "red");
 ANIMATION "tile_trampoline_bounce"; SUBSTRIP clamp;
 	ADD frame, 12, (1, 4); ADD frame,  2, (0, 4);
 	ADD frame,  8, (2, 4); ADD frame,  1, (0, 4);
-	CHANGEDEFINITION all, "blue"; END;
+	CHANGECOLOR all, "blue"; END;
 		
 ANIMATION "tile_super_trampoline_bounce";
-	CLONE "tile_trampoline_bounce"; CHANGEDEFINITION all, "red"; END;
+	CLONE "tile_trampoline_bounce"; CHANGECOLOR all, "red"; END;
 		
 NAME "tile_shatter_crystal"					(3, 4);
 NAME "tile_shatter_crystal_broken"			(4, 4);

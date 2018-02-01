@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
@@ -75,6 +76,7 @@ namespace ZeldaOracle.Game.Tiles {
 			projectile.Physics.Velocity	= shootVector *
 				GameSettings.MONSTER_BEAMOS_SHOOT_SPEED;
 			RoomControl.SpawnEntity(projectile, Center);
+			AudioSystem.PlaySound(GameData.SOUND_LASER);
 		}
 
 

@@ -1,4 +1,4 @@
-TILESET "actions", (13, 13), False;
+TILESET "actions", (13, 13), false;
 
 SETTILE (0, 0), "warp";
 SETTILE (1, 0), "npc";

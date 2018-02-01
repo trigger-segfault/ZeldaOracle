@@ -3,8 +3,8 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET "temp_sheet_items_small", "Items/items_small",		(8, 16), (1, 1), (18, 18); END;
-SPRITESHEET "temp_sheet_items_large", "Items/items_large",		(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_items_small", "Items/items_small",		(8, 16), (1, 1), (18, 18);
+SPRITESHEET "temp_sheet_items_large", "Items/items_large",		(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -17,7 +17,7 @@ MAPPEDCOLORS	"entities_default",
 	"maku_seed_ages", "maku_seed_seasons");
 
 SOURCE "temp_sheet_items_small";
-SPRITESET "set_items_small", (16, 6);
+SPRITESET "items_small", (16, 6);
 	MULTIPLE BASIC (0, 0), (0, 0), (16, 2); END;
 	SINGLE BASIC (0, 2); END;
 	MULTIPLE BASIC (0, 3), (0, 3), (8, 1); END;
@@ -29,7 +29,7 @@ END;
 CHUNKSIZE	(16, 8);
 
 SOURCE "temp_sheet_items_large";
-SPRITESET "set_items_large", (12, 10);
+SPRITESET "items_large", (12, 10);
 	MULTIPLE BASIC (0, 0), (0, 0), (12, 1); END;
 	MULTIPLE BASIC (0, 1), (0, 1), (3, 1); END;
 	MULTIPLE BASIC (6, 1), (6, 1), (5, 1); END;
@@ -43,7 +43,7 @@ END;
 # Sprites
 #==============================================================
 
-SOURCE "set_items_small";
+SOURCE "items_small";
 NAME "item_icon_sword_1",					( 0, 0);
 NAME "item_icon_sword_2",					( 1, 0);
 NAME "item_icon_sword_3",					( 2, 0);
@@ -101,9 +101,9 @@ ANIMATION "collectible_fairy";
 	SUBSTRIP repeat; ADD frame, 1, (15, 3), (-4, -8);
 	END;
 	
-SOURCE "set_items_large";
+SOURCE "items_large";
 
-NAME "item_icon_biggoron_sword",				(8, 0); END;
+NAME "item_icon_biggoron_sword",				(8, 0);
 COMPOSITE "item_icon_biggoron_sword_equipped";	ADD (9, 0); ADD (10, 0), (16, 0); END;
 
 NAME "item_icon_flippers_1",				(6, 1);

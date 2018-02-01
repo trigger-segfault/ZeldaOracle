@@ -15,6 +15,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			Root,
 			Model
 		}
+
 		private CollisionModel model;
 		private string	modelName;
 		private TemporaryResources resources;
@@ -87,7 +88,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		// Internal Properties
 		//-----------------------------------------------------------------------------
 
-		/// <summary>The mode of the Zone script reader.</summary>
+		/// <summary>The mode of the Collision Model script reader.</summary>
 		private new Modes Mode {
 			get { return (Modes) base.Mode; }
 			set { base.Mode = (int) value; }

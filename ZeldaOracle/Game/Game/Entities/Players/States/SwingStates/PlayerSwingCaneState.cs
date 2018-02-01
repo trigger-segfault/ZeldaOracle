@@ -48,6 +48,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 			// Break any existing somaria block.
 			if (itemCane.SomariaBlockTile != null) {
+				itemCane.SomariaBlockTile.CancelBreakSound = true;
 				itemCane.SomariaBlockTile.Break(false);
 				itemCane.SomariaBlockTile = null;
 			}

@@ -230,5 +230,15 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 					UpdateSource();
 			}
 		}
+
+		/// <summary>Gets the sprite acting as the source that can be
+		/// shifted or have definitions changed.</summary>
+		public ISprite SourceSprite {
+			get {
+				if (source != null)
+					return source.GetSprite(sourceIndex);
+				return null;
+			}
+		}
 	}
 }

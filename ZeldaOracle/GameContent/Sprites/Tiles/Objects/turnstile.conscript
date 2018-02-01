@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_turnstile"				"Tiles/Objects/turnstile"				(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_turnstile"				"Tiles/Objects/turnstile"				(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -11,7 +11,7 @@ SPRITESHEET "temp_sheet_turnstile"				"Tiles/Objects/turnstile"				(16, 16), (1,
 IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 SOURCE "temp_sheet_turnstile";
-SPRITESET "set_turnstile" (15, 4);
+SPRITESET "tiles_turnstile" (15, 4);
 	PALETTEDICTIONARY	"tile_dictionary";
 	MAPPEDCOLORS	"tiles_default", ("railing", "turnstile");
 	CHUNKSIZE		(8, 8);
@@ -29,7 +29,7 @@ END;
 # Tiles
 #==============================================================
 
-SOURCE "set_turnstile";
+SOURCE "tiles_turnstile";
 COMPOSITE "tile_turnstile";
 	ADD (0, 0), (0, 0); ADD (1, 0), (16, 0); ADD (2, 0), (32, 0);
 	ADD (0, 1), (0, 16); ADD (1, 1), (16, 16); ADD (2, 1), (32, 16);

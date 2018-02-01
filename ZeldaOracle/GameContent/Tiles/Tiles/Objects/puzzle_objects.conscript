@@ -77,6 +77,21 @@ TILE "super_trampoline";
 END;
 
 # ---- Owl --------------------------------------------------------------------
+# ---- Sarcophagus ------------------------------------------------------------
+
+TILE "sarcophagus";
+	SOLID		block_1x2;
+	FLAGS		Pickupable, InstantPickup;
+	SIZE		(1, 2);
+	SAMESPRITE; SAMESPRITEOBJ;
+	PREVIEW		"preview_sarcophagus";
+	BREAKANIM	"effect_blue_brick_break";
+	BREAKSOUND	"monster_die";
+	PROPERTIES
+		(integer, pickupable_bracelet_level, 1);
+END;
+
+# ---- Owl --------------------------------------------------------------------
 
 TILE "owl";
 	TYPE		TileOwl;
@@ -98,12 +113,12 @@ TILE "color_cube";
 	TYPE			TileColorCube;
 	FLAGS			Movable;
 	SOLID			block;
-	SPRITEINDEX		0, ("set_color_cube", (0, 0));
-	SPRITEINDEX		1, ("set_color_cube", (1, 0));
-	SPRITEINDEX		2, ("set_color_cube", (2, 0));
-	SPRITEINDEX		3, ("set_color_cube", (3, 0));
-	SPRITEINDEX		4, ("set_color_cube", (4, 0));
-	SPRITEINDEX		5, ("set_color_cube", (5, 0));
+	SPRITEINDEX		0, ("tiles_color_cube", (0, 0));
+	SPRITEINDEX		1, ("tiles_color_cube", (1, 0));
+	SPRITEINDEX		2, ("tiles_color_cube", (2, 0));
+	SPRITEINDEX		3, ("tiles_color_cube", (3, 0));
+	SPRITEINDEX		4, ("tiles_color_cube", (4, 0));
+	SPRITEINDEX		5, ("tiles_color_cube", (5, 0));
 	PROPERTIES		(integer, orientation, 0, "Orientation", ("enum", "ColorCubeOrientation"), "Color Cube", "The orientation index of the color cube.");
 END;
 
@@ -244,7 +259,7 @@ TILE "sign";
 	SOLID		block;
 	FLAGS		Pickupable, Burnable, Cuttable, Switchable, Boomerangable;
 	SAMESPRITE; SAMESPRITEOBJ;
-	BREAKANIM	"effect_sign_break";
+	BREAKANIM	"effect_red_brick_break";
 	BREAKSOUND	"rock_shatter";
 	PROPERTIES
 		(integer, cuttable_sword_level, 1),

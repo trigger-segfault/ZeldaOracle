@@ -575,13 +575,6 @@ namespace ZeldaOracle.Common.Content {
 			LoadScript(assetName, new ImageSR());
 		}
 
-		/// <summary>Loads the game font with the specified asset name.</summary>
-		public static GameFont LoadGameFont(string assetName) {
-			GameFontSR script = new GameFontSR();
-			LoadScript(assetName, script);
-			return script.Font;
-		}
-
 		/// <summary>Loads/compiles game fonts from a script file.</summary>
 		public static void LoadGameFonts(string assetName) {
 			LoadScript(assetName, new GameFontSR());

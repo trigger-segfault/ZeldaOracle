@@ -44,12 +44,13 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			OffsetSprite	= 1 << 4,
 			StyleSprite		= 1 << 5,
 			ColorSprite		= 1 << 6,
-			CompositeSprite	= 1 << 7,
-			Animation		= 1 << 8,
-			MultiStyle		= 1 << 9,
+			StyleColorSprite= 1 << 7,
+			CompositeSprite	= 1 << 8,
+			Animation		= 1 << 9,
+			MultiStyle		= 1 << 10,
 			SpriteMask		= EmptySprite | BasicSprite | OffsetSprite |
-							  StyleSprite | ColorSprite | CompositeSprite |
-							  Animation | MultiStyle
+							  StyleSprite | ColorSprite | StyleColorSprite |
+							  CompositeSprite | Animation | MultiStyle
 		}
 
 		//-----------------------------------------------------------------------------
@@ -154,7 +155,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						parameters.GetPoint(i + 2),
 						parameters.GetPoint(i + 1));
 				AddResource<ISpriteSource>(sheetName, sheet);
-				source = sheet;
 			});
 			//=====================================================================================
 			// SPRITE SET
@@ -344,6 +344,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						Mode = Modes.Root;
 					}
 				}
+				else {
+					ThrowCommandParseError("Nothing to end!");
+				}
 			});
 			//=====================================================================================
 			// ADD NAME
@@ -360,6 +363,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddColorCommands();
 			AddColorStyleCommands();
 			AddColorMultiStyleCommands();
+			AddStyleColorCommands();
 			AddAnimationCommands();
 			//=====================================================================================
 		}
