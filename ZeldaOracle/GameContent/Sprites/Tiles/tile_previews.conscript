@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET "temp_sheet_tile_previews",	"Tiles/tile_previews"	(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_tile_previews",	"Tiles/tile_previews"	(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -11,7 +11,7 @@ SPRITESHEET "temp_sheet_tile_previews",	"Tiles/tile_previews"	(16, 16), (1, 1), 
 IGNORECOLORS	((0, 0, 0, 0));
 
 SOURCE "temp_sheet_tile_previews";
-SPRITESET "set_tile_previews" (5, 5);
+SPRITESET "tiles_tile_previews" (5, 5);
 	PALETTEDICTIONARY "tile_dictionary";
 	MAPPEDCOLORS	"tiles_default", ("turnstile", "railing");
 	MULTIPLE BASIC (0, 0), (0, 0), (2, 1); END;
@@ -35,7 +35,7 @@ END;
 # Sprites
 #==============================================================
 
-SOURCE "set_tile_previews";
+SOURCE "tiles_tile_previews";
 
 ANIMATION "preview_turnstile_counterclockwise"; SUBSTRIP repeat;
 	ADD strip, 12, 4, (0, 1), relative: (0, 1);

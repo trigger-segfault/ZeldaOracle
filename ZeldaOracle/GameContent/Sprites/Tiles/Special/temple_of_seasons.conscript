@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_temple_of_seasons"		"Tiles/Special/temple_of_seasons"	(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_temple_of_seasons"		"Tiles/Special/temple_of_seasons"	(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -16,7 +16,7 @@ MAPPEDCOLORS	"tiles_default", ("vertical_wall", "fancy_tile_1");
 CHUNKSIZE		(8, 8);
 
 SOURCE "temp_sheet_temple_of_seasons";
-SPRITESET "set_temple_of_seasons", (16, 13);
+SPRITESET "tiles_temple_of_seasons", (16, 13);
 
 	MULTIPLE BASIC (0, 0), (0, 0), (10, 4); END;
 	MULTIPLE BASIC (2, 4), (2, 4), (8, 2); END;
@@ -35,7 +35,7 @@ END;
 # Tiles
 #==============================================================
 
-SOURCE "set_temple_of_seasons";
+SOURCE "tiles_temple_of_seasons";
 
 COMPOSITE "tile_temple_of_seasons_subrosia_back";
 	ADDTILED (0, 0), (10, 4), (16, 16); END;

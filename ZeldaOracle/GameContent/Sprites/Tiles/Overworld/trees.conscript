@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_trees"					"Tiles/Overworld/trees"					(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_trees"					"Tiles/Overworld/trees"					(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -16,7 +16,7 @@ MAPPEDCOLORS	"tiles_default", ("tree_trunk", "tree_leaves", "tree_trunk_leaves",
 CHUNKSIZE		(8, 8);
 
 SOURCE "temp_sheet_trees";
-SPRITESET "set_trees", (16, 18);
+SPRITESET "tiles_trees", (16, 18);
 	MULTIPLE STYLE "tree", (0, 0), (2, 10);
 		ADD "present"			(0, 0);
 		ADD "past"				(2, 0);
@@ -56,7 +56,7 @@ END;
 # Tiles
 #==============================================================
 
-SOURCE "set_trees";
+SOURCE "tiles_trees";
 NAME "tile_tree_top_left"					(0, 0);
 NAME "tile_tree_top_right"					(1, 0);
 NAME "tile_tree_bottom_left"				(0, 1);

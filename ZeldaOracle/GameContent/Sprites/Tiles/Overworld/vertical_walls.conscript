@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_vertical_walls"		"Tiles/Overworld/vertical_walls"	(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_vertical_walls"		"Tiles/Overworld/vertical_walls"	(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -16,7 +16,7 @@ MAPPEDCOLORS	"tiles_default", ("vertical_wall", "tunnel_light", "cliff");
 CHUNKSIZE		(8, 8);
 
 SOURCE "temp_sheet_vertical_walls";
-SPRITESET "set_vertical_walls", (8, 16);
+SPRITESET "tiles_vertical_walls", (8, 16);
 	MULTIPLE STYLE "vertical_wall_top", (0, 0), (4, 4);
 		ADD "ages"				(0, 0);
 		ADD "seasons"			(4, 0);
@@ -32,7 +32,7 @@ END;
 # Tiles
 #==============================================================
 
-SOURCE "set_vertical_walls";
+SOURCE "tiles_vertical_walls";
 NAME "tile_vertical_wall_top_nw"				(0, 0);
 NAME "tile_vertical_wall_top_n"					(1, 0);
 NAME "tile_vertical_wall_top_ne"				(2, 0);

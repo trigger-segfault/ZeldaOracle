@@ -219,13 +219,24 @@ namespace ZeldaOracle.Common.Content.ResourceBuilders {
 			}
 			return this;
 		}
-		
-		public AnimationBuilder ChangeDefinition(string oldDefinition, string definition, bool all) {
+
+		public AnimationBuilder ChangeStyle(string oldStyle, string style, bool all) {
 			for (Animation anim = animation; anim != null; anim = anim.NextStrip) {
 				for (int i = 0; i < anim.FrameCount; i++) {
 					AnimationFrame frame = anim.GetFrameAt(i);
-					if (all || frame.SourceDefinition == oldDefinition)
-						frame.SourceDefinition = definition;
+					if ((all || frame.SourceDefinition == oldStyle) && frame.SourceSprite is StyleSprite)
+						frame.SourceDefinition = style;
+				}
+			}
+			return this;
+		}
+
+		public AnimationBuilder ChangeColor(string oldColor, string color, bool all) {
+			for (Animation anim = animation; anim != null; anim = anim.NextStrip) {
+				for (int i = 0; i < anim.FrameCount; i++) {
+					AnimationFrame frame = anim.GetFrameAt(i);
+					if ((all || frame.SourceDefinition == oldColor) && frame.SourceSprite is ColorSprite)
+						frame.SourceDefinition = color;
 				}
 			}
 			return this;

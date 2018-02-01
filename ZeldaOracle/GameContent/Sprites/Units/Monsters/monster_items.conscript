@@ -1,0 +1,60 @@
+﻿#==============================================================
+# Sprite Sheets
+#==============================================================
+
+SPRITESHEET "temp_sheet_monster_items",	"Units/Monsters/monster_items"	(16, 16), (1, 1), (18, 18);
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY "entity_dictionary";
+
+IGNORECOLORS	((255, 0, 0), (1, 1, 1));
+
+MAPPEDCOLORS	"entities_default", ("red", "green", "orange", "shaded_red", "shaded_blue");
+
+SOURCE "temp_sheet_monster_items";
+SPRITESET "units_monster_items" (8, 3);
+	MULTIPLE BASIC (0, 0), (0, 0), (8, 1); END;
+	MULTIPLE COLOR "", ("inverse_red", "red"), (0, 1), (0, 1), (4, 1); END;
+	MULTIPLE BASIC (4, 1), (4, 1), (4, 1); END;
+	MULTIPLE BASIC (0, 2), (0, 2), (7, 1); END;
+	SINGLE COLOR "", ("red", "inverse_red"), (7, 2); END;
+END;
+
+#==============================================================
+# Sprites
+#==============================================================
+
+SOURCE "units_monster_items";
+
+ANIMATION "projectile_monster_arrow"; SUBSTRIP repeat;
+	ADD frame, 1, (0, 0), (-8, -8);
+	MAKEDYNAMIC 4, (1, 0); END;
+ANIMATION "projectile_monster_beam";
+	SUBSTRIP repeat; ADD frame, 1, (0, 2), (-8, -8);
+	SUBSTRIP repeat; ADD frame, 1, (1, 2), (-8, -8);
+	SUBSTRIP repeat; ADD frame, 1, (2, 2), (-8, -8);
+	SUBSTRIP repeat; ADD frame, 1, (3, 2), (-8, -8);
+	SUBSTRIP repeat; ADD frame, 1, (0, 2), (-8, -8);
+	SUBSTRIP repeat; ADD frame, 1, (1, 2), (-8, -8);
+	SUBSTRIP repeat; ADD frame, 1, (2, 2), (-8, -8);
+	SUBSTRIP repeat; ADD frame, 1, (3, 2), (-8, -8); END;
+ANIMATION "projectile_monster_arrow_crash"; SUBSTRIP reset;
+	ADD strip, 6, 4, (0, 0), (-8, -8); END;
+ANIMATION "projectile_monster_spear"; SUBSTRIP repeat;
+	ADD frame, 4, ((0, 1), "inverse_red"), (-8, -8); ADD frame, 4, ((0, 1), "red"), (-8, -8);
+	MAKEDYNAMIC 4, (1, 0); END;
+ANIMATION "projectile_monster_boomerang"; SUBSTRIP repeat;
+	ADD strip, 2, 4, (4, 0), (-8, -8); END;
+ANIMATION "projectile_monster_magic"; SUBSTRIP repeat;
+	ADD frame, 1, (4, 1), (-8, -8);
+	MAKEDYNAMIC 4, (1, 0); END;
+ANIMATION "projectile_monster_fireball"; SUBSTRIP repeat;
+	ADD frame, 4, ((7, 2), "red"), (-8, -8); ADD frame, 4, ((7, 2), "inverse_red"), (-8, -8); END;
+ANIMATION "projectile_monster_bone"; SUBSTRIP repeat;
+	ADD strip, 4, 2, (4, 2), (-8, -8); END;
+ANIMATION "projectile_monster_rock"; SUBSTRIP repeat;
+	ADD frame, 1, (6, 2), (-8, -8); END;
+

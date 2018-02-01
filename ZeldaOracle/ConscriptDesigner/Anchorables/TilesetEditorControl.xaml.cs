@@ -203,7 +203,8 @@ namespace ConscriptDesigner.Anchorables {
 			}
 			else {
 				StringBuilder text = new StringBuilder();
-				text.AppendLine("TILESET \"" + tileset.ID + "\", " + tileset.Dimensions + ", " + tileset.UsePreviewSprites + ";");
+				text.AppendLine("TILESET \"" + tileset.ID + "\", " + tileset.Dimensions + ", " +
+					tileset.UsePreviewSprites.ToString().ToLower() + ";");
 				bool lastRowEmpty = false;
 				for (int y = 0; y < tileset.Height; y++) {
 					if (!lastRowEmpty)

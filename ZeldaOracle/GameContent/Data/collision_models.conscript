@@ -1,4 +1,3 @@
-
 #==============================================================
 # Collision Models
 #==============================================================
@@ -6,6 +5,7 @@
 MODEL block;				ADD ( 0,  0, 16, 16); END;
 MODEL block_2x2;			ADD ( 0,  0, 32, 32); END;
 MODEL block_2x1;			ADD ( 0,  0, 32, 16); END;
+MODEL block_1x2;			ADD ( 0,  0, 16, 32); END;
 MODEL block_3x3;			ADD ( 0,  0, 48, 48); END;
 MODEL block_4x4;			ADD ( 0,  0, 64, 64); END;
 MODEL edge_e;				ADD ( 8,  0,  8, 16); END;

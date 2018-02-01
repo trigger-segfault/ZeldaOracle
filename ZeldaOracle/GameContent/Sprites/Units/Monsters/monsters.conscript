@@ -3,7 +3,7 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET "temp_sheet_monsters", "Units/Monsters/monsters", (16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_monsters", "Units/Monsters/monsters", (16, 16), (1, 1), (18, 18);
 
 
 #==============================================================
@@ -17,7 +17,7 @@ SOURCE "temp_sheet_monsters";
 # Color groups found in the source image file 
 MAPPEDCOLORS	"entities_default", ("red", "green", "blue", "orange", "gold", "shaded_red", "shaded_blue", "hurt");
 
-SPRITESET "set_monster" (16, 16);
+SPRITESET "units_monsters" (16, 16);
 	MULTIPLE COLOR "", ("red", "green", "blue", "orange", "gold", "shaded_red", "shaded_blue", "inverse_red", "inverse_blue", "hurt"), (0, 0); END;
 END;
 
@@ -34,7 +34,7 @@ PALETTEDICTIONARY none;
 # Monster Sprites
 #==============================================================
 
-SOURCE "set_monster";
+SOURCE "units_monsters";
 
 OFFSET monster_pincer_body_segment, (8, 4), (-8, -8); END;
 OFFSET monster_mini_moldorm_body_segment_large, (8, 5), (-8, -8); END;
@@ -45,7 +45,7 @@ OFFSET monster_mini_moldorm_body_segment_small, (9, 5), (-8, -8); END;
 # Monster Animations
 #==============================================================
 
-SOURCE "set_monster";
+SOURCE "units_monsters";
 
 ANIMATION "monster_octorok"; SUBSTRIP repeat;
 	ADD strip, 8, 2, (0, 0);

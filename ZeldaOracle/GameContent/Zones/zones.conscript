@@ -1,63 +1,20 @@
-﻿
+﻿#==============================================================
+# Default
+#==============================================================
+
 ZONE "default";
 	NAME "(none)";
 	DEFAULTTILE "ground";
 	PALETTE "tiles_default";
 END;
 
-#ZONE "empty";
-#	NAME "Empty";
-#	DEFAULTTILE "ground";
-#	PALETTE "tiles_empty";
-#END;
-
-#ZONE "electrocuted";
-#	NAME "Electrocuted";
-#	DEFAULTTILE "ground";
-#	PALETTE "tiles_electrocuted";
-#END;
-
-#ZONE "ages_dungeon_1";
-#	NAME "Ages Dungeon 1";
-#	DEFAULTTILE "floor";
-#	PALETTE "dungeon_ages_1";
-#	SETSTYLE "railing", "dungeon";
-#	SETSTYLE "floor", "dungeon_spirits_grave";
-#	SETSTYLE "staircase", "interior";
-#	SETSTYLE "fancy_tile_1", "bright_pattern_7";
-#	SETSTYLE "fancy_tile_2", "square_pattern_6";
-#	SETSTYLE "fancy_tile_3", "square_pattern_2";
-#	SETSTYLE "fancy_tile_4", "bright_pattern_6";
-#	SETSTYLE "fancy_tile_5", "square_pattern_4";
-#	SETSTYLE "wall_torch", "dungeon";
-#	SETSTYLE "button", "flat";
-#	SETSTYLE "armos", "floor";
-#	SETSTYLE "bush", "inside";
-#	SETSTYLE "chest", "flat";
-#	SETSTYLE "dirt", "interior";
-#	SETSTYLE "ceiling", "light";
-#	SETSTYLE "block", "dungeon";
-#	SETSTYLE "cracked_floor", "pattern_1";
-#	SETSTYLE "door", "dungeon";
-#	SETSTYLE "hole", "normal";
-#	SETSTYLE "lantern", "dungeon";
-#	SETSTYLE "magnet_stone", "normal";
-#	SETSTYLE "sign", "normal";
-#	SETSTYLE "stairs", "dungeon";
-#	SETSTYLE "tunnel", "tunnel_4";
-#	SETSTYLE "water", "interior";
-#END;
-
-
-#ZONE "ages_dungeon_4";
-#	CLONE "ages_dungeon_1";
-#	NAME "Ages Dungeon 4";
-#	DEFAULTTILE "floor";
-#	PALETTE "dungeon_ages_1";
-#END;
+#==============================================================
+# Loading
+#==============================================================
 
 LOAD "Overworld/overworld.conscript", false;
 LOAD "Overworld/special.conscript", false;
 LOAD "Dungeons/dungeons.conscript", false;
 LOAD "Interior/interior.conscript", false;
-	
+
+#==============================================================	

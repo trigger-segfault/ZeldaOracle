@@ -211,8 +211,10 @@ namespace ZeldaOracle.Game {
 		private static void LoadFonts() {
 			Resources.LoadGameFonts("Fonts/fonts.conscript");
 
-			FONT_LARGE = Resources.GetGameFont("Fonts/font_large");
-			FONT_SMALL = Resources.GetGameFont("Fonts/font_small");
+			IntegrateResources<GameFont>("FONT_");
+
+			//FONT_LARGE = Resources.GetGameFont("Fonts/font_large");
+			//FONT_SMALL = Resources.GetGameFont("Fonts/font_small");
 		}
 
 		//-----------------------------------------------------------------------------

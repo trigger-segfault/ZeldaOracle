@@ -1,10 +1,13 @@
+#==============================================================================
+# Game Fonts
+#==============================================================================
 
-FONT "Fonts/font_large";
+FONT "large", "Fonts/font_large";
 	GRID (8, 12), (1, 1), (1, 1);
 	SPACING 0, 16, 16;
 END;
 
-FONT "Fonts/font_small";
+FONT "small", "Fonts/font_small";
 	GRID (8, 8), (1, 1), (1, 1);
 	SPACING 0, 12, 16;
 END;

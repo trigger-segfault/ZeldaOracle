@@ -2,16 +2,16 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET	"temp_sheet_armos"				"Tiles/Objects/armos"			(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_blocks"				"Tiles/Objects/blocks"			(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_bushes"				"Tiles/Objects/bushes"			(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_grasses"			"Tiles/Objects/grasses"			(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_graves"				"Tiles/Objects/graves"			(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_magnet_stones"		"Tiles/Objects/magnet_stones"	(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_pots"				"Tiles/Objects/pots"			(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_signs"				"Tiles/Objects/signs"			(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_switch_rocks"		"Tiles/Objects/switch_rocks"	(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET "temp_sheet_natural_objects"	"Tiles/Objects/natural_objects"	(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_armos"				"Tiles/Objects/armos"			(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_blocks"				"Tiles/Objects/blocks"			(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_bushes"				"Tiles/Objects/bushes"			(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_grasses"			"Tiles/Objects/grasses"			(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_graves"				"Tiles/Objects/graves"			(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_magnet_stones"		"Tiles/Objects/magnet_stones"	(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_pots"				"Tiles/Objects/pots"			(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_signs"				"Tiles/Objects/signs"			(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_switch_rocks"		"Tiles/Objects/switch_rocks"	(16, 16), (1, 1), (18, 18);
+SPRITESHEET "temp_sheet_natural_objects"	"Tiles/Objects/natural_objects"	(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -27,7 +27,7 @@ SOURCE "temp_sheet_armos";
 
 MAPPEDCOLORS	"tiles_default", ("armos", "armos_asobject");
 
-SPRITESET "set_armos_colors" (2, 1);
+SPRITESET "tiles_armos_colors" (2, 1);
 	SINGLE COLORSTYLE "armos", "", ("armos", "armos_alt"), (0, 0);
 		ADD "dirt"		(0, 0);
 		ADD "floor"		(0, 1);
@@ -44,7 +44,7 @@ SOURCE "temp_sheet_blocks";
 
 MAPPEDCOLORS	"tiles_default", ("block", "block_asobject");
 
-SPRITESET "set_blocks" (3, 1);
+SPRITESET "tiles_blocks" (3, 1);
 	MULTIPLE STYLE "block";
 		ADD "dungeon"		(0, 0);
 		ADD "shell"			(0, 1);
@@ -57,7 +57,7 @@ END;
 
 SOURCE "temp_sheet_bushes";
 
-SPRITESET "set_bushes" (3, 2);
+SPRITESET "tiles_bushes" (3, 2);
 	MAPPEDCOLORS	"tiles_default", ("regrowable_bush");
 	MULTIPLE BASIC (0, 0), (0, 0), (3, 1); END;
 	
@@ -77,7 +77,7 @@ END;
 
 SOURCE "temp_sheet_grasses";
 
-SPRITESET "set_grasses" (1, 2);
+SPRITESET "tiles_grasses" (1, 2);
 	MAPPEDCOLORS	"tiles_default", ("leaves");
 	SINGLE BASIC (0, 0); END;
 	
@@ -96,7 +96,7 @@ SOURCE "temp_sheet_graves";
 
 MAPPEDCOLORS	"tiles_default", ("grave", "grave_asobject");
 
-SPRITESET "set_graves" (2, 1);
+SPRITESET "tiles_graves" (2, 1);
 	MULTIPLE STYLE "grave";
 		ADD "normal"		(0, 0);
 		ADD "subrosia_dirt"	(0, 1);
@@ -110,11 +110,10 @@ SOURCE "temp_sheet_magnet_stones";
 
 MAPPEDCOLORS	"tiles_default", ("magnet_stone");
 
-SPRITESET "set_magnet_stones" (2, 1);
+SPRITESET "tiles_magnet_stones" (2, 1);
 	MULTIPLE STYLE "magnet_stone";
 		ADD "normal"		(0, 0);
 		ADD "subrosia"		(0, 1);
-		ADD	"sidescroll"	(0, 2);
 		END;
 END;
 
@@ -124,11 +123,8 @@ SOURCE "temp_sheet_pots";
 
 MAPPEDCOLORS	"tiles_default", ("pot", "pot_asobject");
 
-SPRITESET "set_pots" (2, 1);
-	MULTIPLE STYLE "pot";
-		ADD "normal"		(0, 0);
-		ADD	"sidescroll"	(0, 1);
-		END;
+SPRITESET "tiles_pots" (2, 1);
+	MULTIPLE BASIC (0, 0); END;
 END;
 
 # Signs =======================================================
@@ -137,7 +133,7 @@ SOURCE "temp_sheet_signs";
 
 MAPPEDCOLORS	"tiles_default", ("sign", "sign_asobject");
 
-SPRITESET "set_signs" (2, 1);
+SPRITESET "tiles_signs" (2, 1);
 	MULTIPLE STYLE "sign";
 		ADD "normal"	(0, 0);
 		ADD "past"		(0, 1);
@@ -151,17 +147,14 @@ SOURCE "temp_sheet_switch_rocks";
 
 MAPPEDCOLORS	"tiles_default", ("switch_rock", "switch_rock_asobject");
 
-SPRITESET "set_switch_rocks" (2, 1);
-	MULTIPLE STYLE "switch_rock";
-		ADD "normal"		(0, 0);
-		ADD	"sidescroll"	(0, 1);
-		END;
+SPRITESET "tiles_switch_rocks" (2, 1);
+	MULTIPLE BASIC (0, 0); END;
 END;
 
 # Natural Objects =============================================
 
 SOURCE "temp_sheet_natural_objects";
-SPRITESET "set_natural_objects" (5, 5);
+SPRITESET "tiles_natural_objects" (5, 5);
 	MAPPEDCOLORS	"tiles_default", ("bracelet_rock");
 	MULTIPLE BASIC	(0, 0), (0, 0), (2, 1); END;
 	
@@ -206,7 +199,7 @@ END;
 
 # Armos =======================================================
 
-SOURCE "set_armos_colors";
+SOURCE "tiles_armos_colors";
 NAME "tile_armos"				((0, 0), "armos");
 NAME "tile_armos_asobject"		((1, 0), "armos_asobject");
 NAME "tile_armos_alt"			((0, 0), "armos_alt");
@@ -214,7 +207,7 @@ NAME "tile_armos_alt_asobject"	((1, 0), "armos_alt_asobject");
 
 # Blocks ======================================================
 
-SOURCE "set_blocks";
+SOURCE "tiles_blocks";
 NAME "tile_movable_block"			(0, 0);
 NAME "tile_movable_block_asobject"	(1, 0);
 NAME "tile_bombable_block"			(2, 0);
@@ -229,7 +222,7 @@ STYLEPREVIEW "block", "temp_preview_block_style";
 
 # Bushes ======================================================
 
-SOURCE "set_bushes";
+SOURCE "tiles_bushes";
 NAME "tile_regrowable_bush"			(0, 0);
 NAME "tile_regrowable_bush_growing"	(1, 0);
 NAME "tile_regrowable_bush_cut"		(2, 0);
@@ -244,19 +237,19 @@ ANIMATION "tile_regrowable_bush_regrow";
 
 # Grasses =====================================================
 
-SOURCE "set_grasses";
+SOURCE "tiles_grasses";
 NAME "tile_leaves"				(0, 0);
 NAME "tile_grass"				(0, 1);
 
 # Graves ======================================================
 
-SOURCE "set_graves";
+SOURCE "tiles_graves";
 NAME "tile_grave"					(0, 0);
 NAME "tile_grave_asobject"			(1, 0);
 
 # Magnet Stones ===============================================
 
-SOURCE "set_magnet_stones";
+SOURCE "tiles_magnet_stones";
 NAME "tile_magnet_stone_north"		(0, 0);
 NAME "tile_magnet_stone_south"		(1, 0);
 
@@ -267,25 +260,25 @@ STYLEPREVIEW "magnet_stone", "temp_preview_magnet_stone_style";
 
 # Pots ========================================================
 
-SOURCE "set_pots";
+SOURCE "tiles_pots";
 NAME "tile_pot"						(0, 0);
 NAME "tile_pot_asobject"			(1, 0);
 
 # Signs =======================================================
 
-SOURCE "set_signs";
+SOURCE "tiles_signs";
 NAME "tile_sign"					(0, 0);
 NAME "tile_sign_asobject"			(1, 0);
 
 # Switch Rocks ================================================
 
-SOURCE "set_switch_rocks";
+SOURCE "tiles_switch_rocks";
 NAME "tile_switch_rock"				(0, 0);
 NAME "tile_switch_rock_asobject"	(1, 0);
 
 # Natural Objects =============================================
 
-SOURCE "set_natural_objects";
+SOURCE "tiles_natural_objects";
 NAME "tile_bracelet_rock"			(0, 0);
 NAME "tile_bracelet_rock_asobject"	(1, 0);
 NAME "tile_crystal_rock"			(0, 1);

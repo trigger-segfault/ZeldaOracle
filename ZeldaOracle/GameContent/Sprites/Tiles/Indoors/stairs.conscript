@@ -2,8 +2,8 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET	"temp_sheet_stairs"		"Tiles/Indoors/stairs"			(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_staircases"	"Tiles/Indoors/staircases"		(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_stairs"		"Tiles/Indoors/stairs"			(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_staircases"	"Tiles/Indoors/staircases"		(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -14,7 +14,7 @@ PALETTEDICTIONARY	"tile_dictionary";
 IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 
-SPRITESET "set_stairs" (4, 2);
+SPRITESET "tiles_stairs" (4, 2);
 	SOURCE "temp_sheet_stairs";
 	MAPPEDCOLORS	"tiles_default", ("stairs");
 	MULTIPLE STYLE "stairs", (0, 0), (4, 1);
@@ -47,7 +47,7 @@ END;
 # Tiles
 #==============================================================
 
-SOURCE "set_stairs";
+SOURCE "tiles_stairs";
 
 NAME "tile_stairs_down"				(0, 0);
 NAME "tile_stairs_up"				(1, 0);

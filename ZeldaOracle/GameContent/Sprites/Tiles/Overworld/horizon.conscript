@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_horizon", "Tiles/Overworld/horizon", (16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_horizon", "Tiles/Overworld/horizon", (16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -15,7 +15,7 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 MAPPEDCOLORS	"tiles_default", ("blue_sky", "dark_sky");
 
 SOURCE "temp_sheet_horizon";
-SPRITESET "set_horizon", (6, 6);
+SPRITESET "tiles_horizon", (6, 6);
 	MULTIPLE BASIC (0, 0), (0, 0), (4, 4); END;
 	MULTIPLE BASIC (4, 0), (4, 0), (2, 3); END;
 	
@@ -27,7 +27,7 @@ END;
 # Tiles
 #==============================================================
 
-SOURCE "set_horizon";
+SOURCE "tiles_horizon";
 
 # Seasons (Excluding _sky and _clouds)
 NAME "tile_horizon_sky"							(3, 0);

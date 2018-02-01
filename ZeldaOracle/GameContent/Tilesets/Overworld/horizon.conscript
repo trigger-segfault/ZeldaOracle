@@ -1,4 +1,4 @@
-TILESET "horizon", (6, 5), True;
+TILESET "horizon", (6, 5), true;
 
 SETTILE (0, 0), "horizon_big_clouds_bottom_left";
 SETTILE (1, 0), "horizon_big_clouds_bottom_right";

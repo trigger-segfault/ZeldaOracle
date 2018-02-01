@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_tunnels"				"Tiles/Indoors/tunnels"				(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_tunnels"				"Tiles/Indoors/tunnels"				(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -14,7 +14,7 @@ MAPPEDCOLORS	"tiles_default", ("wall");
 IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 SOURCE "temp_sheet_tunnels";
-SPRITESET "set_tunnels" (12, 1);
+SPRITESET "tiles_tunnels" (12, 1);
 	MULTIPLE STYLE "tunnel";
 		ADD "tunnel_1"			(0, 0);
 		ADD "tunnel_2"			(0, 1);
@@ -33,7 +33,7 @@ END;
 # Tiles
 #==============================================================
 
-SOURCE "set_tunnels";
+SOURCE "tiles_tunnels";
 NAME "tile_tunnel_down"				(0, 0);
 NAME "tile_tunnel_up"				(1, 0);
 NAME "tile_tunnel_left"				(2, 0);

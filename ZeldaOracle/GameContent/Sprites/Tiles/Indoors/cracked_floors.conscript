@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_cracked_floors"			"Tiles/Indoors/cracked_floors"			(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_cracked_floors"			"Tiles/Indoors/cracked_floors"			(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Tiles

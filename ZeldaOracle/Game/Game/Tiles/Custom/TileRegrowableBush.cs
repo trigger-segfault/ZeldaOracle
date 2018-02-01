@@ -54,10 +54,13 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public override void Break(bool spawnDrops) {
 			if (isGrown) {
-				// Spawn the leaves effect and spawn drops.
-				Effect effect = new Effect(GameData.ANIM_EFFECT_LEAVES, DepthLayer.EffectTileBreak, true);
-				RoomControl.SpawnEntity(effect, Center);
-				AudioSystem.PlaySound(GameData.SOUND_LEAVES);
+				if (BreakAnimation != null && !CancelBreakEffect) {
+					// Spawn the leaves effect and spawn drops.
+					Effect effect = new Effect(BreakAnimation, DepthLayer.EffectTileBreak, true);
+					RoomControl.SpawnEntity(effect, Center);
+				}
+				if (BreakSound != null && !CancelBreakSound)
+					AudioSystem.PlaySound(BreakSound);
 
 				if (spawnDrops)
 					SpawnDrop();

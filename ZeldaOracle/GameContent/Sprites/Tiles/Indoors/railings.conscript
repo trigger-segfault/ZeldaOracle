@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_railings"		"Tiles/Indoors/railings"		(8, 8), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_railings"		"Tiles/Indoors/railings"		(8, 8), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -16,7 +16,7 @@ MAPPEDCOLORS	"tiles_default", ("railing");
 CHUNKSIZE		(8, 8);
 
 SOURCE "temp_sheet_railings";
-SPRITESET "set_railings", (1, 2);
+SPRITESET "tiles_railings", (1, 2);
 	SINGLE COLORSTYLE "railing", "", ("railing", "shop_side_railing"), (0, 0);
 		ADD "dungeon"			(0, 0);
 		ADD "interior"			(0, 1);
@@ -30,7 +30,7 @@ END;
 # Tiles
 #==============================================================
 
-SOURCE "set_railings";
+SOURCE "tiles_railings";
 NAME "railing_8x8"				((0, 0), "railing");
 #NAME "essense_tile_8x8"			((0, 1), "essense_tile");
 #NAME "entrance_tile_8x8"		((0, 1), "entrance_tile");

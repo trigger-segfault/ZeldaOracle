@@ -1,0 +1,111 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_basic_effects", "Effects/basic_effects", (16, 16), (1, 1), (18, 18);
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"entity_dictionary";
+
+IGNORECOLORS	((255, 0, 0), (1, 1, 1));
+
+MAPPEDCOLORS	"entities_default", ("default", "blue", "green", "orange", "shaded_red");
+
+SOURCE "temp_sheet_basic_effects";
+SPRITESET "effects_basic_effects", (8, 4);
+	MULTIPLE BASIC (0, 0), (0, 0), (3, 1); END;
+	SINGLE COLOR "", ("shaded_red", "shaded_blue"), (3, 0); END;
+	MULTIPLE BASIC (4, 0), (4, 0), (4, 1); END;
+	
+	MULTIPLE STYLECOLOR "grass_color", ("green", "orange"), (0, 1), (0, 1), (6, 1); END;
+	MULTIPLE COLOR "", ("red"), (0, 1), (0, 2), (4, 1); END;
+	MULTIPLE BASIC (6, 1), (6, 1), (2, 1); END;
+	MULTIPLE BASIC (0, 2), (0, 3), (5, 1); END;
+END;
+
+#==============================================================
+# Effects
+#==============================================================
+
+SOURCE "effects_basic_effects";
+
+OFFSET "shadow", (0, 0), (-8, -8); END;
+
+ANIMATION "effect_dirt";
+	SUBSTRIP reset;  ADD frame, 1, (5, 0), (-12,  -9); ADD part, 1, (5, 0), ( -8,  -3); # right
+	SUBSTRIP reset;  ADD frame, 1, (4, 0), ( -8,  -8); ADD part, 1, (5, 0), ( -8,  -6); # up
+	SUBSTRIP reset;  ADD frame, 1, (4, 0), ( -2,  -9); ADD part, 1, (4, 0), (  0,  -2); # left
+	SUBSTRIP reset;  ADD frame, 1, (4, 0), ( -8,  -6); ADD part, 1, (5, 0), ( -8,  -8); # down
+	END;
+	
+ANIMATION "effect_water_splash"; SUBSTRIP reset;
+	ADD frame, 4, (6,0), ( -8, -11); ADD part, 4, (7, 0), ( -8, -11);
+	ADD frame, 4, (6,0), (-10, -13); ADD part, 4, (7, 0), ( -6, -13);
+	ADD frame, 4, (6,0), (-12, -15); ADD part, 4, (7, 0), ( -4, -15);
+	END;
+	
+ANIMATION "effect_ripples"; SUBSTRIP repeat;
+	ADD frame, 8, (6,1), ( -5,  -5); ADD part, 8, (7, 1), (-11,  -5);
+	ADD frame, 8, (6,1), ( -6,  -5); ADD part, 8, (7, 1), (-10,  -5);
+	ADD frame, 8, (6,1), ( -7,  -4); ADD part, 8, (7, 1), ( -9,  -4);
+	ADD frame, 8, (6,1), ( -8,  -3); ADD part, 8, (7, 1), ( -8,  -3);
+	OFFSET (0, -6); END;
+	
+ANIMATION "effect_grass"; SUBSTRIP repeat;
+	ADD frame, 6, (4,1), ( -4,   1); ADD part, 6, (4, 1), (  2,   1);
+	ADD frame, 6, (5,1), ( -4,   1); ADD part, 6, (5, 1), (  2,   1);
+	OFFSET (-8, -14); END;
+	
+ANIMATION "effect_rock_break"; SUBSTRIP reset;
+	ADD frame, 4, (2,0), ( -4,  -5); ADD part, 4, (2, 0), (  5,  -6); ADD part, 4, (2, 0), ( -6,   4); ADD part, 4, (2, 0), (  4,   3);
+	ADD frame, 4, (2,0), ( -6,  -6); ADD part, 4, (2, 0), (  7,  -7); ADD part, 4, (2, 0), ( -7,   5); ADD part, 4, (2, 0), (  6,   4);
+	ADD frame, 4, (2,0), ( -7,  -7); ADD part, 4, (2, 0), (  9,  -8); ADD part, 4, (2, 0), ( -9,   6); ADD part, 4, (2, 0), (  8,   5);
+	ADD frame, 4, (2,0), ( -9,  -5); ADD part, 4, (2, 0), ( 11,  -6); ADD part, 4, (2, 0), (-11,   8); ADD part, 4, (2, 0), ( 10,   7);
+	OFFSET (-8, -8); END;
+	
+ANIMATION "effect_red_brick_break";
+	CLONE "effect_rock_break";
+	SHIFTSOURCE (1, 0); CHANGECOLOR all, "shaded_red"; END;
+ANIMATION "effect_blue_brick_break";
+	CLONE "effect_red_brick_break";
+	CHANGECOLOR all, "shaded_blue"; END;
+	
+ANIMATION "effect_leaves"; SUBSTRIP reset;
+	ADD frame, 4, (2, 1), (-16, -12); ADD part, 4, (3, 1), ( -2, -13); ADD part, 4, (1, 1), ( -9, -11); ADD part, 4, (2, 1), ( -6,  -9);
+	ADD frame, 4, (2, 1), (-13, -13); ADD part, 4, (3, 1), ( -5, -12); ADD part, 4, (1, 1), ( -8, -13); ADD part, 4, (2, 1), ( -6,  -6);
+	ADD frame, 4, (3, 1), (-12, -14); ADD part, 4, (3, 1), ( -8, -10); ADD part, 4, (1, 1), (-10, -14); ADD part, 4, (3, 1), ( -5,  -4);
+	ADD frame, 4, (3, 1), (-11, -16); ADD part, 4, (3, 1), ( -7, -10); ADD part, 4, (1, 1), (-11,  -2); ADD part, 4, (3, 1), ( -5,  -2);
+	ADD frame, 4, (3, 1), (-12, -17); ADD part, 4, (3, 1), ( -4,  -6); ADD part, 4, (1, 1), (-14,  -2); ADD part, 4, (3, 1), ( -3,   0);
+	ADD frame, 4, (2, 1), (-13, -18); ADD part, 4, (3, 1), ( -3,  -6); ADD part, 4, (0, 1), (-18,  -2); ADD part, 4, (2, 1), ( -2,   1);
+	ADD frame, 4, (2, 1), (-14, -19); ADD part, 4, (2, 1), (  0,  -6); ADD part, 4, (0, 1), (-19,  -3); ADD part, 4, (2, 1), ( -1,   3);
+	ADD frame, 4, (2, 1), (-15, -20); ADD part, 4, (2, 1), (  1,  -5); ADD part, 4, (0, 1), (-21,  -5); ADD part, 4, (2, 1), (  0,   1);
+	END;
+	
+ANIMATION "effect_grass_leaves";
+	CLONE "effect_leaves";
+	FLICKER 1, on; END;
+	
+ANIMATION "effect_leaves_red"; SUBSTRIP reset;
+	ADD frame, 4, (2, 1), (-16, -12); ADD part, 4, (3, 2), ( -2, -13); ADD part, 4, (1, 2), ( -9, -11); ADD part, 4, (2, 1), ( -6,  -9);
+	ADD frame, 4, (2, 1), (-13, -13); ADD part, 4, (3, 2), ( -5, -12); ADD part, 4, (1, 2), ( -8, -13); ADD part, 4, (2, 1), ( -6,  -6);
+	ADD frame, 4, (3, 1), (-12, -14); ADD part, 4, (3, 2), ( -8, -10); ADD part, 4, (1, 2), (-10, -14); ADD part, 4, (3, 1), ( -5,  -4);
+	ADD frame, 4, (3, 1), (-11, -16); ADD part, 4, (3, 2), ( -7, -10); ADD part, 4, (1, 2), (-11,  -2); ADD part, 4, (3, 1), ( -5,  -2);
+	ADD frame, 4, (3, 1), (-12, -17); ADD part, 4, (3, 2), ( -4,  -6); ADD part, 4, (1, 2), (-14,  -2); ADD part, 4, (3, 1), ( -3,   0);
+	ADD frame, 4, (2, 1), (-13, -18); ADD part, 4, (3, 2), ( -3,  -6); ADD part, 4, (0, 2), (-18,  -2); ADD part, 4, (2, 1), ( -2,   1);
+	ADD frame, 4, (2, 1), (-14, -19); ADD part, 4, (2, 2), (  0,  -6); ADD part, 4, (0, 2), (-19,  -3); ADD part, 4, (2, 1), ( -1,   3);
+	ADD frame, 4, (2, 1), (-15, -20); ADD part, 4, (2, 2), (  1,  -5); ADD part, 4, (0, 2), (-21,  -5); ADD part, 4, (2, 1), (  0,   1);
+	END;
+	
+ANIMATION "item_scent_pod"; SUBSTRIP repeat;
+	ADD frame, 8, (0, 3);
+	ADD frame, 8, (1, 3);
+	END;
+	
+COMPOSITE "temp_preview_grass_color_style";
+	ADD "effect_leaves";
+	ADD "effect_grass", (28, 0); END;
+	
+STYLEPREVIEW "grass_color", "temp_preview_grass_color_style";

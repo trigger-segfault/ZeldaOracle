@@ -3,6 +3,7 @@
 # Effects ---------------------------------------------------------------------
 
 SOUND appear_vanish,			"Effects/appear_vanish";	# Oracle_AppearVanish
+SOUND electrocute,				"Effects/electrocute";		# Oracle_Link_Shock
 SOUND effect_cling,				"Effects/effect_cling";		# Oracle_Sword_Tap
 SOUND fire,						"Effects/fire";				# Oracle_EmberSeed
 SOUND gale_seed,				"Effects/gale_seed";		# Oracle_GaleSeed
@@ -69,6 +70,10 @@ SOUND player_pickup,			"Player/player_pickup";		# Oracle_Link_PickUp
 SOUND player_swim,				"Player/player_swim";		# Oracle_Link_Swim
 SOUND player_throw,				"Player/player_throw";		# Oracle_Link_Throw
 SOUND player_wade,				"Player/player_wade";		# Oracle_Link_Wade
+
+# Projectiles -----------------------------------------------------------------
+
+SOUND laser,					"Projectiles/laser";		# Oracle_Laser
 
 # Tiles -----------------------------------------------------------------------
 

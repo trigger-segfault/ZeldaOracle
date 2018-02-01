@@ -2,8 +2,8 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_lanterns"				"Tiles/Indoors/lanterns"					(16, 8), (1, 1), (18, 18); END;
-SPRITESHEET "temp_sheet_torches"				"Tiles/Indoors/torches"					(8, 8), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_lanterns"				"Tiles/Indoors/lanterns"					(16, 8), (1, 1), (18, 18);
+SPRITESHEET "temp_sheet_torches"				"Tiles/Indoors/torches"					(8, 8), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -16,7 +16,7 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 MAPPEDCOLORS	"tiles_default", ("lantern_light", "lantern_base");
 
 SOURCE "temp_sheet_lanterns";
-SPRITESET "set_lanterns", (6, 1);
+SPRITESET "tiles_lanterns", (6, 1);
 	MULTIPLE STYLE "lantern";
 		ADD "overworld"		(0, 0);
 		ADD "dungeon"		(0, 1);
@@ -27,7 +27,7 @@ END;
 
 MAPPEDCOLORS	"tiles_default", ("wall_torch_light", "wall_torch_base");
 SOURCE "temp_sheet_torches";
-SPRITESET "set_torches", (4, 2);
+SPRITESET "tiles_wall_torches", (4, 2);
 	MULTIPLE BASIC (0, 0), (0, 0), (4, 1); END;
 
 	MULTIPLE STYLE "wall_torch", (0, 1), (4, 1);
@@ -42,7 +42,7 @@ END;
 # 8x8's
 #==============================================================
 
-SOURCE "set_torches";
+SOURCE "tiles_wall_torches";
 ANIMATION "torch_light_8x8"; SUBSTRIP repeat;
 	ADD strip, 16, 4, (0, 0), (0, 0);
 	ADD frame, 16,    (2, 0), (0, 0);
@@ -52,7 +52,7 @@ ANIMATION "torch_light_8x8"; SUBSTRIP repeat;
 # Tiles
 #==============================================================
 
-SOURCE "set_lanterns";
+SOURCE "tiles_lanterns";
 COMPOSITE "tile_lantern_unlit";
 	ADD (0, 0), (0, 0);
 	ADD (5, 0), (0, 8);
@@ -70,7 +70,7 @@ ANIMATION "temp_preview_lantern_style"; SUBSTRIP repeat;
 	
 STYLEPREVIEW "lantern", "temp_preview_lantern_style";
 
-SOURCE "set_torches";
+SOURCE "tiles_wall_torches";
 ANIMATION "tile_wall_torch_down"; SUBSTRIP repeat;
 	COMBINE "torch_light_8x8", (0, 0); ADD static, (0, 1), (0, 8);
 	COMBINE "torch_light_8x8", (8, 0); ADD static, (0, 1), (8, 8); END;

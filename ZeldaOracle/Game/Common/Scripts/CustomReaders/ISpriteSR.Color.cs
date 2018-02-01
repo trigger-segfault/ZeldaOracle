@@ -74,12 +74,11 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("CONTINUE MULTIPLE COLOR", (int) Modes.SpriteSet,
-				"string colorationGroup, (string colorGroups...), Point start = (0, 0), Point dimensions = (0, 0)",
+				"(string colorGroups...), Point start = (0, 0), Point dimensions = (0, 0)",
 			delegate (CommandParam parameters) {
-				string colorationGroup = parameters.GetString(0);
-				var colorParams = parameters.GetParam(1);
-				editingSetStart = parameters.GetPoint(3);
-				editingSetDimensions = parameters.GetPoint(4);
+				var colorParams = parameters.GetParam(0);
+				editingSetStart = parameters.GetPoint(1);
+				editingSetDimensions = parameters.GetPoint(2);
 				if (editingSetDimensions.X == 0) editingSetDimensions.X = editingSpriteSet.Width;
 				if (editingSetDimensions.Y == 0) editingSetDimensions.Y = editingSpriteSet.Height;
 
@@ -112,11 +111,10 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			});
 			//=====================================================================================
 			AddCommand("CONTINUE SINGLE COLOR", (int) Modes.SpriteSet,
-				"string colorationGroup, (string colorGroups...), Point setIndex",
+				"(string colorGroups...), Point setIndex",
 			delegate (CommandParam parameters) {
-				string colorationGroup = parameters.GetString(0);
-				var colorParams = parameters.GetParam(1);
-				editingSetStart = parameters.GetPoint(2);
+				var colorParams = parameters.GetParam(0);
+				editingSetStart = parameters.GetPoint(1);
 				editingSetDimensions = Point2I.One;
 
 				sprite = GetSprite<ColorSprite>(editingSpriteSet, editingSetStart);

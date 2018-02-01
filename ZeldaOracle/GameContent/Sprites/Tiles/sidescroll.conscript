@@ -1,5 +1,10 @@
-﻿
+﻿#==============================================================
+# Loading
+#==============================================================
+
 LOAD "SideScroll/walls.conscript", true;
 LOAD "SideScroll/general.conscript", true;
 LOAD "SideScroll/animations.conscript", true;
 LOAD "SideScroll/entity_objects.conscript", true;
+
+#==============================================================

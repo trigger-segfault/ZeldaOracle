@@ -40,15 +40,16 @@ END;
 TILE "flowers_pink";
 	CLONE		"flowers_red";
 	SAMESPRITE;
+	BREAKANIM	"effect_leaves_red";
 END;
 
 TILE "flower";
-	CLONE		"flowers_red";
+	CLONE		"flowers_pink";
 	SAMESPRITE;
 END;
 
 TILE "water_flower";
-	CLONE		"flowers_red";
+	CLONE		"flowers_pink";
 	SAMESPRITE;
 END;
 

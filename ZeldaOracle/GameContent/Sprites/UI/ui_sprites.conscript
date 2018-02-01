@@ -3,9 +3,9 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET "temp_sheet_ui_small", "UI/ui_small", (8, 8), (1, 1), (18, 18); END;
-SPRITESHEET "temp_sheet_ui_large", "UI/ui_large", (16, 16), (1, 1), (18, 18); END;
-SPRITESHEET "temp_sheet_ui_dungeon_map_small", "UI/ui_dungeon_map_small", (8, 8), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_ui_small", "UI/ui_small", (8, 8), (1, 1), (18, 18);
+SPRITESHEET "temp_sheet_ui_large", "UI/ui_large", (16, 16), (1, 1), (18, 18);
+SPRITESHEET "temp_sheet_ui_dungeon_map_small", "UI/ui_dungeon_map_small", (8, 8), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -13,7 +13,7 @@ SPRITESHEET "temp_sheet_ui_dungeon_map_small", "UI/ui_dungeon_map_small", (8, 8)
 
 
 SOURCE "temp_sheet_ui_small";
-SPRITESET "set_ui_small", (12, 4);
+SPRITESET "ui_small", (12, 4);
 	PALETTEDICTIONARY "entity_dictionary";
 	MAPPEDCOLORS	"entities_default",
 		("default", "green", "blue", "red", "orange", "shaded_red", "shaded_blue", "ui_red");
@@ -29,7 +29,7 @@ SPRITESET "set_ui_small", (12, 4);
 END;
 
 SOURCE "temp_sheet_ui_large";
-SPRITESET "set_ui_large", (8, 4);
+SPRITESET "ui_large", (8, 4);
 	
 	MULTIPLE BASIC (2, 0), (2, 0), (2, 2); END;
 	
@@ -44,7 +44,7 @@ SPRITESET "set_ui_large", (8, 4);
 END;
 
 SOURCE "temp_sheet_ui_dungeon_map_small";
-SPRITESET "set_ui_dungeon_map_small", (12, 4);
+SPRITESET "ui_dungeon_map_small", (12, 4);
 	PALETTEDICTIONARY "entity_dictionary";
 	MAPPEDCOLORS	"entities_default",
 		("default", "green", "blue", "red", "orange", "shaded_red", "shaded_blue", "ui_dungeon_map_red");
@@ -63,7 +63,7 @@ END;
 # Sprites
 #==============================================================
 
-SOURCE "set_ui_small";
+SOURCE "ui_small";
 
 NAME "hud_background",				(4, 3);
 NAME "hud_background_inventory",	(4, 3);
@@ -91,7 +91,7 @@ NAME "hud_ammo_select_arrow",		(6, 3);
 NAME "hud_ammo_select_background",	(8, 2);
 NAME "hud_ammo_select_background_fancy",	(7, 3);
 
-SOURCE "set_ui_large";
+SOURCE "ui_large";
 
 NAME "hud_heart_pieces_empty_top_left",			(0, 0);
 OFFSET "hud_heart_pieces_empty_top_right",		(1, 0), (16, 0); END;
@@ -113,7 +113,7 @@ COMPOSITE "hud_heart_pieces_fancy_full_bottom_right";	ADD (3, 1), (16, 16); ADD 
 
 COMPOSITE "hud_save_button";			ADD (4, 2); ADD (5, 2), (16, 0); END;
 
-SOURCE "set_ui_dungeon_map_small";
+SOURCE "ui_dungeon_map_small";
 
 NAME "ui_map_room_down_right"				(0, 0);
 NAME "ui_map_room_down_left_right"			(1, 0);

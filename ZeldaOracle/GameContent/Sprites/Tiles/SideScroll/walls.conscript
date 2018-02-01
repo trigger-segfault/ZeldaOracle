@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET	"temp_sheet_ss_walls"	"Tiles/SideScroll/ss_walls"			(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_ss_walls"	"Tiles/SideScroll/ss_walls"			(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -14,7 +14,7 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 
 SOURCE "temp_sheet_ss_walls";
-SPRITESET "set_ss_walls", (12, 7);
+SPRITESET "tiles_ss_walls", (12, 7);
 	MAPPEDCOLORS	"tiles_default", ("ss_brick", "ss_torch_base");
 	MULTIPLE BASIC (0, 0), (0, 0), (2, 1); END;
 	
@@ -47,7 +47,7 @@ END;
 # Tiles
 #==============================================================
 
-SOURCE "set_ss_walls";
+SOURCE "tiles_ss_walls";
 
 # Large Bricks
 

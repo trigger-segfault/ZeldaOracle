@@ -1,69 +1,66 @@
+#==============================================================
+# Loading
+#==============================================================
 
-SPRITESHEET "temp_sheet_black_8x8",	"Tiles/black_8x8"	(8, 8), (0, 0), (0, 0); END;
-
-SOURCE "temp_sheet_black_8x8";
-PALETTEDICTIONARY	"tile_dictionary";
-MAPPEDCOLORS	"tiles_default", ("default");
-BASIC "black_8x8" (0, 0); END;
-PALETTEDICTIONARY	none;
-
-LOAD "Tiles/overworld.conscript", false;
-LOAD "Tiles/indoors.conscript", false;
-LOAD "Tiles/sidescroll.conscript", false;
-LOAD "Tiles/objects.conscript", false;
-LOAD "Tiles/tile_previews.conscript", false;
-LOAD "Tiles/special.conscript", false;
-
-LOAD "UI/ui.conscript", false;
+LOAD "Tiles/tiles.conscript", false;
 LOAD "Units/units.conscript", false;
-LOAD "Units/Monsters/monsters.conscript", false;
 LOAD "Items/items.conscript", false;
+LOAD "Effects/effects.conscript", false;
+LOAD "ActionTiles/action_tiles.conscript", false;
+LOAD "UI/ui.conscript", false;
+
+#==============================================================
+
+# Everything below has been completely phased out
+# | |
+# V V
+
+#LOAD "animations.conscript", false;
 
 #==============================================================
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET "Effects/basic_effects", (16, 16), (1, 1), (0, 0); END;
-SPRITESHEET "Effects/color_effects", (16, 16), (1, 1), (0, 0); END;
+#SPRITESHEET "Effects/basic_effects", (16, 16), (1, 1), (0, 0); END;
+#SPRITESHEET "color_effects", "Effects/color_effects_old", (16, 16), (1, 1), (18, 18);
 
-SPRITESHEET "npcs", "Units/NPCS/npcs_red", (16, 16), (1, 1), (18, 18); END;
+#SPRITESHEET "npcs", "Units/NPCS/npcs_red", (16, 16), (1, 1), (18, 18);
 
-SPRITESHEET "action_tiles", "Tiles/action_tiles", (16, 16), (1, 1), (18, 18); END;
+#SPRITESHEET "action_tiles", "Tiles/action_tiles", (16, 16), (1, 1), (18, 18);
 
-SPRITESHEET "monster_items" "Units/Monsters/monster_items", (16, 16), (1, 1), (0, 0); END;
+#SPRITESHEET "monster_items" "Units/Monsters/monster_items_old", (16, 16), (1, 1), (0, 0); END;
 
 #==============================================================
 # Player Items
 #==============================================================
 
-SOURCE "color_effects";
+#SOURCE "color_effects";
 
-OFFSET "switch_hook_link", (5, 4), (-8, -8); END;
+#OFFSET "switch_hook_link", (5, 4), (-8, -8); END;
 
 
 #==============================================================
 # Event Tile Sprites (Editor Only)
 #==============================================================
 
-SOURCE "action_tiles";
+#SOURCE "action_tiles";
 
-BASIC "action_tile_warp_entrance",		(0, 0); END;
-BASIC "action_tile_warp_stairs",		(1, 0); END;
-BASIC "action_tile_warp_tunnel",		(2, 0); END;
-BASIC "action_tile_track_intersection",	(3, 0); END;
-BASIC "action_tile_colored_gel",		(0, 1); END;
-BASIC "action_tile_color_tile_puzzle",	(1, 1); END;
-BASIC "action_tile_lava_harden",		(2, 1); END;
-BASIC "action_tile_tile_path_puzzle",	(3, 1); END;
+#BASIC "action_tile_warp_entrance",		(0, 0); END;
+#BASIC "action_tile_warp_stairs",		(1, 0); END;
+#BASIC "action_tile_warp_tunnel",		(2, 0); END;
+#BASIC "action_tile_track_intersection",	(3, 0); END;
+#BASIC "action_tile_colored_gel",		(0, 1); END;
+#BASIC "action_tile_color_tile_puzzle",	(1, 1); END;
+#BASIC "action_tile_lava_harden",		(2, 1); END;
+#BASIC "action_tile_tile_path_puzzle",	(3, 1); END;
 
 
 #==============================================================
 # Effects
 #==============================================================
 
-SOURCE "basic_effects";
+#SOURCE "basic_effects";
 
-BASIC "shadow", (0, 0), (-8, -8); END;
 
 #==============================================================
 # Tile Sprites
@@ -532,4 +529,3 @@ BASIC "shadow", (0, 0), (-8, -8); END;
 #COMPOSITE "hud_save_button";			ADD (5, 2); ADD (6, 2), (16, 0); END;
 
 
-LOAD "animations.conscript" false;

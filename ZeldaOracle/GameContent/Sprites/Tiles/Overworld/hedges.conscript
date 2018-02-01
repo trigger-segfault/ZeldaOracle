@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_hedges"					"Tiles/Overworld/hedges"					(8, 8), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_hedges"					"Tiles/Overworld/hedges"					(8, 8), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -16,7 +16,7 @@ MAPPEDCOLORS	"tiles_default", ("tree_trunk", "tree_leaves", "tree_trunk_leaves",
 CHUNKSIZE		(8, 8);
 
 SOURCE "temp_sheet_hedges";
-SPRITESET "set_hedges", (6, 6);
+SPRITESET "tiles_hedges", (6, 6);
 	MAPPEDCOLORS	"tiles_default", ("hedge");
 	MULTIPLE BASIC (0, 0), (0, 0), (6, 3); END;
 	
@@ -28,7 +28,7 @@ END;
 # Temporary
 #==============================================================
 
-SOURCE "set_hedges";
+SOURCE "tiles_hedges";
 NAME "temp_8x8_hedge_outside_nw"			(0, 0);
 NAME "temp_8x8_hedge_outside_ne"			(3, 0);
 NAME "temp_8x8_hedge_outside_sw"			(0, 2);

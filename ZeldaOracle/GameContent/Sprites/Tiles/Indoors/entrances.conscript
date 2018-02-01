@@ -2,11 +2,10 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_entrance_columns"			"Tiles/Indoors/entrance_columns"		(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET "temp_sheet_entrance_lights"			"Tiles/Indoors/entrance_lights"			(8, 8), (1, 1), (18, 18); END;
-#SPRITESHEET "temp_sheet_floors_square_tiles_8x8"	"Tiles/Indoors/floors_square_tiles_8x8"	(8, 8), (1, 1), (18, 18); END;
-SPRITESHEET "temp_sheet_wall_columns_v"				"Tiles/Indoors/wall_columns"			(8, 16), (1, 2), (18, 18); END;
-SPRITESHEET "temp_sheet_wall_columns_h"				"Tiles/Indoors/wall_columns"			(16, 8), (2, 1), (71, 18); END;
+SPRITESHEET "temp_sheet_entrance_columns"			"Tiles/Indoors/entrance_columns"		(16, 16), (1, 1), (18, 18);
+SPRITESHEET "temp_sheet_entrance_lights"			"Tiles/Indoors/entrance_lights"			(8, 8), (1, 1), (18, 18);
+SPRITESHEET "temp_sheet_wall_columns_v"				"Tiles/Indoors/wall_columns"			(8, 16), (1, 2), (18, 18);
+SPRITESHEET "temp_sheet_wall_columns_h"				"Tiles/Indoors/wall_columns"			(16, 8), (2, 1), (71, 18);
 
 #==============================================================
 # Sprite Sets
@@ -20,13 +19,13 @@ MAPPEDCOLORS	"tiles_default", ("entrance_column");
 CHUNKSIZE		(8, 8);
 
 SOURCE "temp_sheet_entrance_columns";
-SPRITESET "set_entrance_columns", (4, 2);
+SPRITESET "tiles_entrance_columns", (4, 2);
 	MULTIPLE BASIC (0, 0); END;
 END;
 
 MAPPEDCOLORS	"tiles_default", ("entrance_brick");
 SOURCE "temp_sheet_entrance_lights";
-SPRITESET "set_entrance_lights", (5, 4);
+SPRITESET "tiles_entrance_lights", (5, 4);
 	MULTIPLE COLOR "",
 		("entrance_brick", "entrance_light_dirt", "entrance_light_floor",
 		"entrance_light_fancy_tile_1"), (0, 0); END;
@@ -34,12 +33,12 @@ END;
 
 MAPPEDCOLORS	"tiles_default", ("floor");
 SOURCE "temp_sheet_floors_square_tiles_8x8";
-SPRITESET "set_floors_square_tiles_8x8", (4, 4);
+SPRITESET "tiles_floors_square_tiles_8x8", (4, 4);
 	SINGLE COLOR "", ("entrance_tile", "essense_tile"), (0, 0); END;
 END;
 
 MAPPEDCOLORS	"tiles_default", ("entrance_column");
-SPRITESET "set_wall_columns", (6, 10);
+SPRITESET "tiles_wall_columns", (6, 10);
 	SOURCE "temp_sheet_wall_columns_v";
 	MULTIPLE STYLE "wall_column", (0, 0), (4, 1);
 		ADD "cave"				(0, 0);
@@ -63,7 +62,7 @@ END;
 # Bases
 #==============================================================
 
-SOURCE "set_wall_columns";
+SOURCE "tiles_wall_columns";
 NAME "wall_down_column_left"				(0, 0);
 NAME "wall_down_column_right"				(1, 0);
 NAME "wall_up_column_left"					(2, 0);
@@ -77,7 +76,7 @@ NAME "wall_right_column_bottom"				(5, 1);
 # Tiles
 #==============================================================
 
-SOURCE "set_entrance_columns";
+SOURCE "tiles_entrance_columns";
 
 NAME "entrance_column_bottom_down"			(0, 1);
 NAME "entrance_column_bottom_up"			(1, 0);
@@ -98,7 +97,7 @@ COMPOSITE "tile_floor_entrance_column_bottom_left";
 COMPOSITE "tile_floor_entrance_column_bottom_right";
 	ADD "tile_floor"; ADD "entrance_column_bottom_right"; END;
 
-SOURCE "set_entrance_lights";
+SOURCE "tiles_entrance_lights";
 NAME "entrance_light_up_left_8x8"			(0, 0);
 NAME "entrance_light_up_right_8x8"			(1, 0);
 NAME "entrance_light_down_left_8x8"			(0, 1);
@@ -387,22 +386,19 @@ COMPOSITE "temp_preview_wall_column_style";
 	
 STYLEPREVIEW "wall_column", "temp_preview_wall_column_style";
 
-SOURCE "set_floors_square_tiles_8x8";
+SOURCE "tiles_floors_square_tiles_8x8";
 NAME "entrance_tile_8x8"					((0, 0), "entrance_tile");
 NAME "essense_tile_8x8"						((0, 0), "essense_tile");
 
 COMPOSITE "tile_entrance_brick_left";
 	ADD "entrance_brick_left"; ADD "entrance_tile_8x8", (0, 0);
 	ADD "entrance_tile_8x8", (8, 0); ADD "entrance_tile_8x8", (0, 8); END;
-	END;
 COMPOSITE "tile_entrance_brick_mid";
 	ADD "entrance_brick_mid";
-	ADD "entrance_tile_8x8", (0, 0); ADD "entrance_tile_8x8", (8, 0);
-	END;
+	ADD "entrance_tile_8x8", (0, 0); ADD "entrance_tile_8x8", (8, 0); END;
 COMPOSITE "tile_entrance_brick_right";
 	ADD "entrance_brick_right"; ADD "entrance_tile_8x8", (0, 0);
 	ADD "entrance_tile_8x8", (8, 0); ADD "entrance_tile_8x8", (8, 8); END;
-	END;
 	
 COMPOSITE "tile_entrance_brick_column_left";
 	ADD "entrance_brick_left";

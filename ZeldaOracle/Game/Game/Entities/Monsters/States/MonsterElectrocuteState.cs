@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
@@ -42,6 +43,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 			}
 			monster.RoomControl.Player.Freeze();
 			//monster.DisablePhysics();
+			AudioSystem.PlaySound(GameData.SOUND_ELECTROCUTE);
 		}
 
 		public override void OnEnd(MonsterState newState) {

@@ -125,7 +125,7 @@ namespace ZeldaOracle.Game.Tiles {
 		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
 			MinecartTrackOrientation orientation = args.Properties.GetEnum("track_orientation", MinecartTrackOrientation.Horizontal);
-			ISprite sprite = null;
+			/*ISprite sprite = null;
 			switch (orientation) {
 			case MinecartTrackOrientation.Horizontal: sprite = GameData.SPR_TILE_MINECART_TRACK_HORIZONTAL; break;
 			case MinecartTrackOrientation.Vertical: sprite = GameData.SPR_TILE_MINECART_TRACK_VERTICAL; break;
@@ -140,7 +140,8 @@ namespace ZeldaOracle.Game.Tiles {
 					args.SpriteDrawSettings,
 					args.Position,
 					args.Color);
-			}
+			}*/
+			DrawTileDataIndex(g, args, (int) orientation);
 		}
 
 
