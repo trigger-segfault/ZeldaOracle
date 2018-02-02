@@ -26,7 +26,7 @@ ADDTILE ( 4, 1), sign;
 ADDTILE ( 5, 1), sign;
 ADDTILE ( 6, 1), movable_block;
 ADDTILE ( 7, 1), bombable_block;
-ADDTILE ( 8, 1), armos;
+ADDTILE ( 8, 1), movable_armos;
 ADDTILE ( 9, 1), grave;
 #ADDTILE (10, 1), fairy_statue;
 ADDTILE (11, 1), ice_block;
@@ -113,10 +113,10 @@ ADDTILE ( 1, 10), wall_webbed_right;
 ADDTILE ( 2, 10), wall_bombable_down;
 ADDTILE ( 3, 10), wall_bombable_right;
 
-ADDTILE (6, 9), "tunnel_up_keyhole";
-ADDTILE (6, 10), "tunnel_down_keyhole";
-ADDTILE (7, 9), "tunnel_left_keyhole";
-ADDTILE (7, 10), "tunnel_right_keyhole";
+ADDTILE (6, 9), "wall_tunnel_up_keyhole";
+ADDTILE (6, 10), "wall_tunnel_down_keyhole";
+ADDTILE (7, 9), "wall_tunnel_left_keyhole";
+ADDTILE (7, 10), "wall_tunnel_right_keyhole";
 # Wall down
 # Wall right
 # Keyhole wall down
@@ -161,10 +161,10 @@ ADDTILE (10, 8), "tablet_slot_down";
 ADDTILE (11, 7), "tablet_slot_left";
 ADDTILE (11, 8), "tablet_slot_right";
 
-ADDTILE (8, 9), "tunnel_up";
-ADDTILE (8, 10), "tunnel_down";
-ADDTILE (9, 9), "tunnel_left";
-ADDTILE (9, 10), "tunnel_right";
+ADDTILE (8, 9), "wall_tunnel_up";
+ADDTILE (8, 10), "wall_tunnel_down";
+ADDTILE (9, 9), "wall_tunnel_left";
+ADDTILE (9, 10), "wall_tunnel_right";
 
 ADDTILE (1, 11), "plaque";
 

@@ -93,6 +93,62 @@ COMPOSITE "tile_floor_tiled_diagonal_right";
 	ADD "tiled_8x8", (8, 0);
 	ADD "tiled_8x8", (0, 8); END;
 	
+COMPOSITE "tile_fancy_tile_1_tiled_outside_nw";
+	ADD "tile_fancy_tile_1";
+	ADD "tiled_8x8", (0, 0); ADD "tiled_8x8", (8, 0);
+	ADD "tiled_8x8", (0, 8); END;
+COMPOSITE "tile_fancy_tile_1_tiled_n";
+	ADD "tile_fancy_tile_1";
+	ADD "tiled_8x8", (0, 0); ADD "tiled_8x8", (8, 0); END;
+COMPOSITE "tile_fancy_tile_1_tiled_outside_ne";
+	ADD "tile_fancy_tile_1";
+	ADD "tiled_8x8", (0, 0); ADD "tiled_8x8", (8, 0);
+	ADD "tiled_8x8", (8, 8); END;
+	
+COMPOSITE "tile_fancy_tile_1_tiled_w";
+	ADD "tile_fancy_tile_1";
+	ADD "tiled_8x8", (0, 0);
+	ADD "tiled_8x8", (0, 8); END;
+COMPOSITE "tile_fancy_tile_1_tiled_e";
+	ADD "tile_fancy_tile_1";
+	ADD "tiled_8x8", (8, 0);
+	ADD "tiled_8x8", (8, 8); END;
+	
+COMPOSITE "tile_fancy_tile_1_tiled_outside_sw";
+	ADD "tile_fancy_tile_1";
+	ADD "tiled_8x8", (0, 0);
+	ADD "tiled_8x8", (0, 8); ADD "tiled_8x8", (8, 8); END;
+COMPOSITE "tile_fancy_tile_1_tiled_s";
+	ADD "tile_fancy_tile_1";
+	ADD "tiled_8x8", (0, 8); ADD "tiled_8x8", (8, 8); END;
+COMPOSITE "tile_fancy_tile_1_tiled_outside_se";
+	ADD "tile_fancy_tile_1";
+	ADD "tiled_8x8", (8, 0);
+	ADD "tiled_8x8", (0, 8); ADD "tiled_8x8", (8, 8); END;
+	
+COMPOSITE "tile_fancy_tile_1_tiled_inside_se";
+	ADD "tile_fancy_tile_1";
+	ADD "tiled_8x8", (8, 8); END;
+COMPOSITE "tile_fancy_tile_1_tiled_inside_sw";
+	ADD "tile_fancy_tile_1";
+	ADD "tiled_8x8", (0, 8); END;
+COMPOSITE "tile_fancy_tile_1_tiled_inside_ne";
+	ADD "tile_fancy_tile_1";
+	ADD "tiled_8x8", (8, 0); END;
+COMPOSITE "tile_fancy_tile_1_tiled_inside_nw";
+	ADD "tile_fancy_tile_1";
+	ADD "tiled_8x8", (0, 0); END;
+	
+COMPOSITE "tile_fancy_tile_1_tiled_diagonal_left";
+	ADD "tile_fancy_tile_1";
+	ADD "tiled_8x8", (0, 0);
+	ADD "tiled_8x8", (8, 8); END;
+COMPOSITE "tile_fancy_tile_1_tiled_diagonal_right";
+	ADD "tile_fancy_tile_1";
+	ADD "tiled_8x8", (8, 0);
+	ADD "tiled_8x8", (0, 8); END;
+	
+	
 COMPOSITE "tile_ground_tiled_outside_nw";
 	COMBINE "tile_ground";
 	REPLACE 0, "tiled_8x8"; REPLACE 1, "tiled_8x8";

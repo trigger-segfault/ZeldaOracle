@@ -312,6 +312,14 @@ LOOKUP	fancy_tile_9, all				statue_block, all;
 LOOKUP	fancy_tile_10, all				statue_block, all;
 
 
+
+#==============================================================
+# Special
+#==============================================================
+
+LOOKUP	forest_entrance, all			brown, all;
+
+
 #==============================================================
 
 END;

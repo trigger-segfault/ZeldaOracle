@@ -22,7 +22,7 @@ ADDTILE (3, 2), "water_roots_left";
 ADDTILE (2, 3), "water_roots_alt_right";
 ADDTILE (3, 3), "water_roots_alt_left";
 ADDTILE (0, 4), "armos_sunk_deep";
-ADDTILE (1, 4), "armos_sunk_shallow";
+ADDTILE (1, 4), "armos_sunk_shallow_solid";
 ADDTILE (2, 4), "lilypad_right";
 ADDTILE (3, 4), "lilypad_left";
 

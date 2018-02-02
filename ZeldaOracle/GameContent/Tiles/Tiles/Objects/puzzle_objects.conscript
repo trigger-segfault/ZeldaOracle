@@ -283,13 +283,13 @@ TILE "movable_block";
 	PROPERTIES	(boolean, move_once, true);
 END;
 
-TILE "armos";
+TILE "movable_armos";
 	CLONE		"movable_block";
 	SAMESPRITE; SAMESPRITEOBJ;
 END;
 
-TILE "armos_alt";
-	CLONE		"armos";
+TILE "movable_armos_alt";
+	CLONE		"movable_block";
 	SAMESPRITE; SAMESPRITEOBJ;
 END;
 
@@ -586,16 +586,6 @@ TILE "wall_webbed_up";		CLONE "temp_wall_webbed"; SAMESPRITE; END;
 TILE "wall_webbed_left";	CLONE "temp_wall_webbed"; SAMESPRITE; END;
 TILE "wall_webbed_down";	CLONE "temp_wall_webbed"; SAMESPRITE; END;
 
-TILE "temp_wall_bombable";
-	SOLID		block;
-	FLAGS		Bombable;
-	PROPERTIES	(boolean, disable_on_destroy, true);
-END;
-
-TILE "wall_bombable_right";	CLONE "temp_wall_bombable"; SAMESPRITE; END;
-TILE "wall_bombable_up";	CLONE "temp_wall_bombable"; SAMESPRITE; END;
-TILE "wall_bombable_left";	CLONE "temp_wall_bombable"; SAMESPRITE; END;
-TILE "wall_bombable_down";	CLONE "temp_wall_bombable"; SAMESPRITE; END;
 
 # ---- Minecart Tracks --------------------------------------------------------
 

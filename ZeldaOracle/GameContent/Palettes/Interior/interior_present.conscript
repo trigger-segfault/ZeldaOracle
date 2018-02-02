@@ -55,7 +55,7 @@ LOOKUP	plaque, all						statue, all;
 
 LOOKUP	tunnel_light, all					chest, all;
 LOOKUP	entrance_light_dirt, all			dirt, all;
-LOOKUP	entrance_light_floor, all			floor, all;
+LOOKUP	entrance_light_floor, all			wall, all;
 LOOKUP	entrance_light_fancy_tile_1, all	fancy_tile_1, all;
 
 LOOKUP	tiled, all						purple, all;

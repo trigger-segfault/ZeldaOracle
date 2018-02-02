@@ -289,17 +289,17 @@
       <Name>doors</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sprites\Tiles\Objects\holes.conscript">
-      <Name>holes</Name>
+    <None Include="Sprites\Tiles\Objects\entity_objects.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>entity_objects</Name>
     </None>
-    <None Include="Sprites\Tiles\Objects\objects.conscript">
-      <Name>objects</Name>
+    <None Include="Sprites\Tiles\Objects\general_objects.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>general_objects</Name>
     </None>
     <None Include="Sprites\Tiles\Objects\puzzle_objects.conscript">
-      <Name>puzzle_objects</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>puzzle_objects</Name>
     </None>
     <None Include="Sprites\Tiles\Objects\turnstile.conscript">
       <Name>turnstile</Name>
@@ -416,6 +416,10 @@
     <None Include="Sprites\Tiles\Special\ancient_ruins.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>ancient_ruins</Name>
+    </None>
+    <None Include="Sprites\Tiles\Special\graveyard.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>graveyard</Name>
     </None>
     <None Include="Sprites\Tiles\Special\onoxs_castle.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -733,11 +737,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Indoors\ceilings.png">
-      <Name>ceilings</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Tiles\Indoors\cracked_floors.png">
       <Name>cracked_floors</Name>
       <Importer>TextureImporter</Importer>
@@ -813,11 +812,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Indoors\staircases.png">
-      <Name>staircases</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Tiles\Indoors\stairs.png">
       <Name>stairs</Name>
       <Importer>TextureImporter</Importer>
@@ -848,31 +842,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Objects\armos.png">
-      <Name>armos</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\blocks.png">
-      <Name>blocks</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\bushes.png">
-      <Name>bushes</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\buttons.png">
-      <Name>buttons</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\chests.png">
-      <Name>chests</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Tiles\Objects\color_cube.png">
       <Name>color_cube</Name>
       <Importer>TextureImporter</Importer>
@@ -883,65 +852,20 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Objects\entity_tiles.png">
-      <Name>entity_tiles</Name>
+    <Compile Include="Images\Tiles\Objects\entity_objects.png">
+      <Name>entity_objects</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Objects\grasses.png">
-      <Name>grasses</Name>
+    <Compile Include="Images\Tiles\Objects\general_objects.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\graves.png">
-      <Name>graves</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\magnet_stones.png">
-      <Name>magnet_stones</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\minecart_tracks.png">
-      <Name>minecart_tracks</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\natural_objects.png">
-      <Name>natural_objects</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\pots.png">
-      <Name>pots</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\puzzle_color_tiles.png">
-      <Name>puzzle_color_tiles</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
+      <Name>general_objects</Name>
     </Compile>
     <Compile Include="Images\Tiles\Objects\puzzle_objects.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
       <Name>puzzle_objects</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\signs.png">
-      <Name>signs</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\switch_rocks.png">
-      <Name>switch_rocks</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\traps.png">
-      <Name>traps</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
     </Compile>
     <Compile Include="Images\Tiles\Objects\turnstile.png">
       <Name>turnstile</Name>
@@ -1087,6 +1011,11 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Name>forest_entrance</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Special\graveyard.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>graveyard</Name>
     </Compile>
     <Compile Include="Images\Tiles\Special\onoxs_castle.png">
       <Importer>TextureImporter</Importer>

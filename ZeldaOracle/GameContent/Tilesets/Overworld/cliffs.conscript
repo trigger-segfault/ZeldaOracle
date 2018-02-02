@@ -5,9 +5,9 @@
 TILESET "cliffs", (12, 15);
 
 
-ADDTILE (0, 5), "tunnel_down_wide_left";
-ADDTILE (1, 5), "tunnel_down_wide_mid";
-ADDTILE (2, 5), "tunnel_down_wide_right";
+ADDTILE (0, 5), "cliff_tunnel_down_wide_left";
+ADDTILE (1, 5), "cliff_tunnel_down_wide_mid";
+ADDTILE (2, 5), "cliff_tunnel_down_wide_right";
 
 ADDTILE (0,0), "cliff_top_dark_left_railing_outside_nw";
 ADDTILE (1,0), "cliff_top_mid_railing_horizontal_long";
@@ -214,7 +214,7 @@ ADDTILE (9,12), "stairs_left";
 ADDTILE (10,12), "stairs_up";
 ADDTILE (11,12), "stairs_right";
 
-ADDTILE (1,4), "tunnel_down";
+ADDTILE (1,4), "cliff_tunnel_down";
 ADDTILE (1,1), "cliff_railing_square";
 
 END;

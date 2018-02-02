@@ -101,32 +101,32 @@ ANIMATION "color_cube_red_yellow_left"; SUBSTRIP clamp;
 # Up & Down Color Cube Animations
 
 ANIMATION "color_cube_blue_yellow_up"; SUBSTRIP clamp;
-	ADD frame, 4, (11, 2), (0, -4);	ADD frame, 4, (10, 2), (0, -8); ADD frame, 4, (9, 2), (0, -12);   ADD frame, 1, (3, 0), (0, -16); END;
+	ADD frame, 4, (11, 2), (0, -4);	ADD frame, 4, (10, 2), (0, -8); ADD frame, 4, (9, 2), (0, -12); ADD frame, 1, (3, 0), (0, -16); END;
 ANIMATION "color_cube_blue_yellow_down"; SUBSTRIP clamp;
-	ADD frame, 4, (3, 1), (0, 4); ADD frame, 4, (4, 1), (0, 8); ADD frame, 4, (5, 1), (0, 12);   ADD frame, 1, (3, 0), (0, 16); END;
+	ADD frame, 4, (3, 1), (0, 4); ADD frame, 4, (4, 1), (0, 8); ADD frame, 4, (5, 1), (0, 12); ADD frame, 1, (3, 0), (0, 16); END;
 	
 ANIMATION "color_cube_blue_red_up"; SUBSTRIP clamp;
-	ADD frame, 4, (5, 3), (0, -4); ADD frame, 4, (4, 3), (0, -8); ADD frame, 4, (3, 3), (0, -12);   ADD frame, 1, (4, 0), (0, -16); END;
+	ADD frame, 4, (5, 3), (0, -4); ADD frame, 4, (4, 3), (0, -8); ADD frame, 4, (3, 3), (0, -12); ADD frame, 1, (4, 0), (0, -16); END;
 ANIMATION "color_cube_blue_red_down"; SUBSTRIP clamp;
-	ADD frame, 4, (9, 1), (0, 4); ADD frame, 4, (10, 1), (0, 8); ADD frame, 4, (11, 1), (0, 12);   ADD frame, 1, (4, 0), (0, 16); END;
+	ADD frame, 4, (9, 1), (0, 4); ADD frame, 4, (10, 1), (0, 8); ADD frame, 4, (11, 1), (0, 12); ADD frame, 1, (4, 0), (0, 16); END;
 	
 ANIMATION "color_cube_yellow_red_up"; SUBSTRIP clamp;
-	ADD frame, 4, (11, 3), (0, -4); ADD frame, 4, (10, 3), (0, -8); ADD frame, 4, (9, 3), (0, -12);   ADD frame, 1, (5, 0), (0, -16); END;
+	ADD frame, 4, (11, 3), (0, -4); ADD frame, 4, (10, 3), (0, -8); ADD frame, 4, (9, 3), (0, -12); ADD frame, 1, (5, 0), (0, -16); END;
 ANIMATION "color_cube_yellow_red_down"; SUBSTRIP clamp;
-	ADD frame, 4, (3, 2), (0, 4); ADD frame, 4, (4, 2), (0, 8); ADD frame, 4, (5, 2), (0, 12);   ADD frame, 1, (5, 0), (0, 16); END;
+	ADD frame, 4, (3, 2), (0, 4); ADD frame, 4, (4, 2), (0, 8); ADD frame, 4, (5, 2), (0, 12); ADD frame, 1, (5, 0), (0, 16); END;
 	
 ANIMATION "color_cube_yellow_blue_up"; SUBSTRIP clamp;
-	ADD frame, 4, (5, 1), (0, -4); ADD frame, 4, (4, 1), (0, -8); ADD frame, 4, (3, 1), (0, -12);   ADD frame, 1, (0, 0), (0, -16); END;
+	ADD frame, 4, (5, 1), (0, -4); ADD frame, 4, (4, 1), (0, -8); ADD frame, 4, (3, 1), (0, -12); ADD frame, 1, (0, 0), (0, -16); END;
 ANIMATION "color_cube_yellow_blue_down"; SUBSTRIP clamp;
-	ADD frame, 4, (9, 2), (0, 4); ADD frame, 4, (10, 2), (0, 8); ADD frame, 4, (11, 2), (0, 12);   ADD frame, 1, (0, 0), (0, 16); END;
+	ADD frame, 4, (9, 2), (0, 4); ADD frame, 4, (10, 2), (0, 8); ADD frame, 4, (11, 2), (0, 12); ADD frame, 1, (0, 0), (0, 16); END;
 	
 ANIMATION "color_cube_red_blue_up"; SUBSTRIP clamp;
-	ADD frame, 4, (11, 1), (0, -4); ADD frame, 4, (10, 1), (0, -8); ADD frame, 4, (9, 1), (0, -12);   ADD frame, 1, (1, 0), (0, -16); END;
+	ADD frame, 4, (11, 1), (0, -4); ADD frame, 4, (10, 1), (0, -8); ADD frame, 4, (9, 1), (0, -12); ADD frame, 1, (1, 0), (0, -16); END;
 ANIMATION "color_cube_red_blue_down"; SUBSTRIP clamp;
-	ADD frame, 4, (3, 3), (0, 4); ADD frame, 4, (4, 3), (0, 8); ADD frame, 4, (5, 3), (0, 12);   ADD frame, 1, (1, 0), (0, 16); END;
+	ADD frame, 4, (3, 3), (0, 4); ADD frame, 4, (4, 3), (0, 8); ADD frame, 4, (5, 3), (0, 12); ADD frame, 1, (1, 0), (0, 16); END;
 	
 ANIMATION "color_cube_red_yellow_up"; SUBSTRIP clamp;
-	ADD frame, 4, (5, 2), (0, -4); ADD frame, 4, (4, 2), (0, -8); ADD frame, 4, (3, 2), (0, -12);   ADD frame, 1, (2, 0), (0, -16); END;
+	ADD frame, 4, (5, 2), (0, -4); ADD frame, 4, (4, 2), (0, -8); ADD frame, 4, (3, 2), (0, -12); ADD frame, 1, (2, 0), (0, -16); END;
 ANIMATION "color_cube_red_yellow_down"; SUBSTRIP clamp;
-	ADD frame, 4, (9, 3), (0, 4); ADD frame, 4, (10, 3), (0, 8); ADD frame, 4, (11, 3), (0, 12);   ADD frame, 1, (2, 0), (0, 16); END;
+	ADD frame, 4, (9, 3), (0, 4); ADD frame, 4, (10, 3), (0, 8); ADD frame, 4, (11, 3), (0, 12); ADD frame, 1, (2, 0), (0, 16); END;
 
