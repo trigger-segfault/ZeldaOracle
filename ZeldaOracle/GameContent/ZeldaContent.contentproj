@@ -812,11 +812,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Indoors\staircases.png">
-      <Name>staircases</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Tiles\Indoors\stairs.png">
       <Name>stairs</Name>
       <Importer>TextureImporter</Importer>
