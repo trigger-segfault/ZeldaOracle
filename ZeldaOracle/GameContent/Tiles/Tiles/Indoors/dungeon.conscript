@@ -3,10 +3,10 @@
 #==============================================================
 
 
-TILE "statue"; SAMESPRITE; SOLID block; END;
+TILE "statue_stationary"; SAMESPRITE; SOLID block; END;
 TILE "eye_statue_broken"; SAMESPRITE; SOLID block; END;
 TILE "essense_statue"; SAMESPRITE; SOLID block; END;
-TILE "block"; SPRITE "tile_movable_block"; SOLID block; END;
+TILE "block_stationary"; SAMESPRITE; SOLID block; END;
 
 TILE "jump_ledge_down"; SAMESPRITE; SOLID bridge_h_bottom; END;
 TILE "jump_ledge_up"; SAMESPRITE; SOLID bridge_h_top; END;
@@ -27,4 +27,4 @@ TILE "wall_staircase_down"; SAMESPRITE; SOLID doorway; END;
 TILE "floor_staircase_up"; SAMESPRITE; END;
 TILE "floor_staircase_down"; SAMESPRITE; END;
 
-TILE "armos_statue"; SPRITE "tile_armos"; SPRITEOBJ "tile_armos_asobject"; SOLID block; END;
+TILE "armos_stationary"; SAMESPRITE; SOLID block; END;

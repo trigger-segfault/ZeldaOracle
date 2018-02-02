@@ -70,7 +70,7 @@ SPRITESET "tiles_ground", (10, 12);
 	SINGLE COLOR "", ("dirt", "dirt_alt") (9, 11), (9, 7); END;
 	SINGLE COLORSTYLE "dirt", "", ("dirt", "dirt_alt"), (9, 6);
 		ADD "overworld"				(9, 9);
-		ADD "interior"				(9, 10);
+		ADD "indoors"				(9, 10);
 		END;
 END;
 

@@ -50,6 +50,7 @@ LOOKUP	wall_column, all				wall, all;
 LOOKUP	stairs, all						red, all;
 
 LOOKUP	floor_staircase, all			floor, all;
+LOOKUP	floor_stairwell, all			floor, all;
 LOOKUP	wall_staircase, all				wall, all;
 
 LOOKUP	railing, all					blue, all;
@@ -116,7 +117,6 @@ COLOR	armos_alt_asobject, light		(0, 0, 0, 0);
 LOOKUP	grave, all						gray, all;
 LOOKUP	grave_asobject, all				grave, all;
 COLOR	grave_asobject, light			(0, 0, 0, 0);
-LOOKUP	tombstone, all					grave, all;
 
 LOOKUP	magnet_stone, all				object, all;
 LOOKUP	dirt_pile, all					dirt, all;
@@ -507,6 +507,17 @@ COLOR	temple_winter_roof, light		(160, 48,248);
 COLOR	temple_winter_roof, medium		( 80,  0,160);
 COLOR	temple_winter_roof, dark		( 48,  0,112);
 
+
+LOOKUP	graveyard_wall, all				gray, all;
+LOOKUP	graveyard_gate, all				brown, all;
+LOOKUP	graveyard_tomb, all				brown, all;
+LOOKUP	tombstone, all					grave, all;
+
+COLOR	moblin_castle, light			(216,112,232);
+COLOR	moblin_castle, medium			(160,  0,192);
+COLOR	moblin_castle, dark				( 80,  0,128);
+
+LOOKUP	forest_entrance, all			brown, all;
 
 #==============================================================
 # NPCs

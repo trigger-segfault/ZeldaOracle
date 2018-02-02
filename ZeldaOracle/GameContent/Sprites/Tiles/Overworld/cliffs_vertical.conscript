@@ -1,56 +1,12 @@
 
-
-
-COMPOSITE "tile_cliff_top_dark_left_railing_outside_nw";
-	COMBINE "temp_cliff_top_dark_left";
-	ADD "temp_8x8_railing_outside_nw" (8, 8); END;
-
-COMPOSITE "tile_cliff_top_mid_railing_horizontal_long";
-	COMBINE "temp_cliff_face_n";
-	ADD "temp_8x8_railing_horizontal" (0, 8);
-	ADD "temp_8x8_railing_horizontal" (8, 8); END;
 	
-COMPOSITE "tile_cliff_top_dark_right_railing_outside_ne";
-	COMBINE "temp_cliff_top_dark_right";
-	ADD "temp_8x8_railing_outside_ne" (0, 8); END;
+COMPOSITE "tile_cliff_railing_square";
+	ADD "temp_8x8_railing_inside_nw", (0, 0);
+	ADD "temp_8x8_railing_inside_ne", (8, 0);
+	ADD "temp_8x8_railing_inside_sw", (0, 8);
+	ADD "temp_8x8_railing_inside_se", (8, 8); END;
 
-COMPOSITE "tile_cliff_side_left_railing_vertical_long";
-	COMBINE "temp_cliff_face_w";
-	ADD "temp_8x8_railing_vertical" (8, 0);
-	ADD "temp_8x8_railing_vertical" (8, 8); END;
 
-COMPOSITE "tile_cliff_side_right_railing_vertical_long";
-	COMBINE "temp_cliff_face_e";
-	ADD "temp_8x8_railing_vertical" (0, 0);
-	ADD "temp_8x8_railing_vertical" (0, 8); END;
-	
-COMPOSITE "tile_cliff_vertical_left_top_railing_outside_sw";
-	COMBINE "temp_cliff_vertical_left_top";
-	ADD "temp_8x8_railing_outside_sw" (8, 0); END;
-
-COMPOSITE "tile_cliff_bottom_mid_railing_horizontal_long";
-	COMBINE "temp_cliff_face_s";
-	ADD "temp_8x8_railing_horizontal" (0, 0);
-	ADD "temp_8x8_railing_horizontal" (8, 0); END;
-	
-COMPOSITE "tile_cliff_vertical_right_top_railing_outside_se";
-	COMBINE "temp_cliff_vertical_right_top";
-	ADD "temp_8x8_railing_outside_se" (0, 0); END;
-
-COMPOSITE "tile_cliff_vertical_left";
-	COMBINE "temp_cliff_vertical_left_top_bottom_half";
-	ADD "temp_8x8_cliff_vertical_left" (0, 0);
-	ADD "cliff_face_s_2_8x8" (8, 0); END;
-	
-COMPOSITE "tile_cliff_vertical_mid";
-	COMBINE "temp_cliff_face_s";
-	ADD "cliff_face_s_1_8x8" (0, 0);
-	ADD "cliff_face_s_2_8x8" (8, 0); END;
-
-COMPOSITE "tile_cliff_vertical_right";
-	COMBINE "temp_cliff_vertical_right_top_bottom_half";
-	ADD "cliff_face_s_1_8x8" (0, 0);
-	ADD "temp_8x8_cliff_vertical_right" (8, 0); END;
 
 COMPOSITE "tile_cliff_vertical_left_bottom_light";
 	COMBINE "temp_cliff_bottom_light_left_bottom_half";
@@ -72,53 +28,22 @@ COMPOSITE "tile_cliff_vertical_right_bottom_dark";
 	COMBINE "temp_cliff_bottom_dark_right_bottom_half";
 	ADD "cliff_face_s_1_8x8" (0, 0);
 	ADD "temp_8x8_cliff_vertical_right" (8, 0); END;
-
-
 	
-
-COMPOSITE "tile_cliff_top_light_left_railing_outside_nw";
-	COMBINE "temp_cliff_top_light_left";
-	ADD "temp_8x8_railing_outside_nw" (8, 8); END;
-	
-COMPOSITE "tile_cliff_top_light_right_railing_outside_ne";
-	COMBINE "temp_cliff_top_light_right";
-	ADD "temp_8x8_railing_outside_ne" (0, 8); END;
-	
-COMPOSITE "tile_cliff_bottom_light_left_railing_outside_sw";
-	COMBINE "temp_cliff_bottom_light_left";
-	ADD "temp_8x8_railing_outside_sw" (8, 0); END;
-	
-COMPOSITE "tile_cliff_bottom_light_right_railing_outside_se";
-	COMBINE "temp_cliff_bottom_light_right";
-	ADD "temp_8x8_railing_outside_se" (0, 0); END;
-	
-	
-COMPOSITE "tile_cliff_bottom_dark_left_railing_outside_sw";
-	COMBINE "temp_cliff_bottom_dark_left";
-	ADD "temp_8x8_railing_outside_sw" (8, 0); END;
-	
-COMPOSITE "tile_cliff_bottom_dark_right_railing_outside_se";
-	COMBINE "temp_cliff_bottom_dark_right";
-	ADD "temp_8x8_railing_outside_se" (0, 0); END;
-
-
-COMPOSITE "tile_cliff_top_dark_both";
-	COMBINE "temp_cliff_top_dark_left_left_half";
-	COMBINE "temp_cliff_top_dark_right_right_half"; END;
-
-COMPOSITE "tile_cliff_side_both";
-	COMBINE "temp_cliff_face_w";
-	COMBINE "temp_cliff_face_e"; END;
-
-COMPOSITE "tile_cliff_vertical_both_top";
-	COMBINE "temp_cliff_vertical_left_top_left_half";
-	COMBINE "temp_cliff_vertical_right_top_right_half"; END;
-
-COMPOSITE "tile_cliff_vertical_both";
+COMPOSITE "tile_cliff_vertical_left";
+	COMBINE "temp_cliff_vertical_left_top_bottom_half";
 	ADD "temp_8x8_cliff_vertical_left" (0, 0);
-	ADD "temp_8x8_cliff_vertical_left" (0, 8);
-	ADD "temp_8x8_cliff_vertical_right" (8, 0);
-	ADD "temp_8x8_cliff_vertical_right" (8, 8); END;
+	ADD "cliff_face_s_2_8x8" (8, 0); END;
+	
+COMPOSITE "tile_cliff_vertical_mid";
+	COMBINE "temp_cliff_face_s";
+	ADD "cliff_face_s_1_8x8" (0, 0);
+	ADD "cliff_face_s_2_8x8" (8, 0); END;
+
+COMPOSITE "tile_cliff_vertical_right";
+	COMBINE "temp_cliff_vertical_right_top_bottom_half";
+	ADD "cliff_face_s_1_8x8" (0, 0);
+	ADD "temp_8x8_cliff_vertical_right" (8, 0); END;
+
 	
 COMPOSITE "tile_cliff_vertical_both_bottom_light";
 	ADD "temp_8x8_cliff_vertical_left" (0, 0);
@@ -131,23 +56,72 @@ COMPOSITE "tile_cliff_vertical_both_bottom_dark";
 	REPLACE 1 "temp_8x8_cliff_bottom_dark_left";
 	REPLACE 3 "temp_8x8_cliff_bottom_dark_right"; END;
 
+COMPOSITE "tile_cliff_vertical_both";
+	ADD "temp_8x8_cliff_vertical_left" (0, 0);
+	ADD "temp_8x8_cliff_vertical_left" (0, 8);
+	ADD "temp_8x8_cliff_vertical_right" (8, 0);
+	ADD "temp_8x8_cliff_vertical_right" (8, 8); END;
 
-COMPOSITE "tile_cliff_top_dark_left_railing_vertical_cap_n";
+COMPOSITE "tile_cliff_vertical_both_top";
+	COMBINE "temp_cliff_vertical_left_top_left_half";
+	COMBINE "temp_cliff_vertical_right_top_right_half"; END;
+
+COMPOSITE "tile_cliff_side_both";
+	COMBINE "temp_cliff_face_w";
+	COMBINE "temp_cliff_face_e"; END;
+	
+COMPOSITE "tile_cliff_top_light_both";
+	COMBINE "temp_cliff_top_light_left_left_half";
+	COMBINE "temp_cliff_top_light_right_right_half"; END;
+
+COMPOSITE "tile_cliff_top_dark_both";
+	COMBINE "temp_cliff_top_dark_left_left_half";
+	COMBINE "temp_cliff_top_dark_right_right_half"; END;
+	
+	
+
+COMPOSITE "tile_cliff_top_light_left_railing_outside_nw";
+	COMBINE "temp_cliff_top_light_left";
+	ADD "temp_8x8_railing_outside_nw" (8, 8); END;
+	
+COMPOSITE "tile_cliff_top_light_right_railing_outside_ne";
+	COMBINE "temp_cliff_top_light_right";
+	ADD "temp_8x8_railing_outside_ne" (0, 8); END;
+	
+COMPOSITE "tile_cliff_top_dark_left_railing_outside_nw";
 	COMBINE "temp_cliff_top_dark_left";
-	ADD "temp_8x8_railing_vertical_cap_n" (8, 8); END;
-
-COMPOSITE "tile_cliff_top_dark_right_railing_vertical_cap_n";
+	ADD "temp_8x8_railing_outside_nw" (8, 8); END;
+	
+COMPOSITE "tile_cliff_top_dark_right_railing_outside_ne";
 	COMBINE "temp_cliff_top_dark_right";
-	ADD "temp_8x8_railing_vertical_cap_n" (0, 8); END;
-
-COMPOSITE "tile_cliff_bottom_dark_left_railing_vertical_cap_s";
+	ADD "temp_8x8_railing_outside_ne" (0, 8); END;
+	
+	
+COMPOSITE "tile_cliff_bottom_light_left_railing_outside_sw";
+	COMBINE "temp_cliff_bottom_light_left";
+	ADD "temp_8x8_railing_outside_sw" (8, 0); END;
+	
+COMPOSITE "tile_cliff_bottom_light_right_railing_outside_se";
+	COMBINE "temp_cliff_bottom_light_right";
+	ADD "temp_8x8_railing_outside_se" (0, 0); END;
+	
+COMPOSITE "tile_cliff_bottom_dark_left_railing_outside_sw";
 	COMBINE "temp_cliff_bottom_dark_left";
-	ADD "temp_8x8_railing_vertical_cap_s" (8, 0); END;
-
-COMPOSITE "tile_cliff_bottom_dark_right_railing_vertical_cap_s";
+	ADD "temp_8x8_railing_outside_sw" (8, 0); END;
+	
+COMPOSITE "tile_cliff_bottom_dark_right_railing_outside_se";
 	COMBINE "temp_cliff_bottom_dark_right";
-	ADD "temp_8x8_railing_vertical_cap_s" (0, 0); END;
-
+	ADD "temp_8x8_railing_outside_se" (0, 0); END;
+	
+COMPOSITE "tile_cliff_vertical_left_top_railing_outside_sw";
+	COMBINE "temp_cliff_vertical_left_top";
+	ADD "temp_8x8_railing_outside_sw" (8, 0); END;
+	
+COMPOSITE "tile_cliff_vertical_right_top_railing_outside_se";
+	COMBINE "temp_cliff_vertical_right_top";
+	ADD "temp_8x8_railing_outside_se" (0, 0); END;
+	
+	
 
 COMPOSITE "tile_cliff_top_light_left_railing_vertical_cap_n";
 	COMBINE "temp_cliff_top_light_left";
@@ -157,6 +131,15 @@ COMPOSITE "tile_cliff_top_light_right_railing_vertical_cap_n";
 	COMBINE "temp_cliff_top_light_right";
 	ADD "temp_8x8_railing_vertical_cap_n" (0, 8); END;
 
+COMPOSITE "tile_cliff_top_dark_left_railing_vertical_cap_n";
+	COMBINE "temp_cliff_top_dark_left";
+	ADD "temp_8x8_railing_vertical_cap_n" (8, 8); END;
+
+COMPOSITE "tile_cliff_top_dark_right_railing_vertical_cap_n";
+	COMBINE "temp_cliff_top_dark_right";
+	ADD "temp_8x8_railing_vertical_cap_n" (0, 8); END;
+	
+
 COMPOSITE "tile_cliff_bottom_light_left_railing_vertical_cap_s";
 	COMBINE "temp_cliff_bottom_light_left";
 	ADD "temp_8x8_railing_vertical_cap_s" (8, 0); END;
@@ -165,6 +148,13 @@ COMPOSITE "tile_cliff_bottom_light_right_railing_vertical_cap_s";
 	COMBINE "temp_cliff_bottom_light_right";
 	ADD "temp_8x8_railing_vertical_cap_s" (0, 0); END;
 
+COMPOSITE "tile_cliff_bottom_dark_left_railing_vertical_cap_s";
+	COMBINE "temp_cliff_bottom_dark_left";
+	ADD "temp_8x8_railing_vertical_cap_s" (8, 0); END;
+
+COMPOSITE "tile_cliff_bottom_dark_right_railing_vertical_cap_s";
+	COMBINE "temp_cliff_bottom_dark_right";
+	ADD "temp_8x8_railing_vertical_cap_s" (0, 0); END;
 
 COMPOSITE "tile_cliff_vertical_left_top_railing_vertical_cap_s";
 	COMBINE "temp_cliff_vertical_left_top";
@@ -173,24 +163,7 @@ COMPOSITE "tile_cliff_vertical_left_top_railing_vertical_cap_s";
 COMPOSITE "tile_cliff_vertical_right_top_railing_vertical_cap_s";
 	COMBINE "temp_cliff_vertical_right_top";
 	ADD "temp_8x8_railing_vertical_cap_s" (0, 0); END;
-
-
 	
-COMPOSITE "tile_cliff_top_dark_left_railing_horizontal_cap_w";
-	COMBINE "temp_cliff_top_dark_left";
-	ADD "temp_8x8_railing_horizontal_cap_w" (8, 8); END;
-
-COMPOSITE "tile_cliff_top_dark_right_railing_horizontal_cap_e";
-	COMBINE "temp_cliff_top_dark_right";
-	ADD "temp_8x8_railing_horizontal_cap_e" (0, 8); END;
-	
-COMPOSITE "tile_cliff_bottom_dark_left_railing_horizontal_cap_w";
-	COMBINE "temp_cliff_bottom_dark_left";
-	ADD "temp_8x8_railing_horizontal_cap_w" (8, 0); END;
-
-COMPOSITE "tile_cliff_bottom_dark_right_railing_horizontal_cap_e";
-	COMBINE "temp_cliff_bottom_dark_right";
-	ADD "temp_8x8_railing_horizontal_cap_e" (0, 0); END;
 
 
 COMPOSITE "tile_cliff_top_light_left_railing_horizontal_cap_w";
@@ -200,7 +173,16 @@ COMPOSITE "tile_cliff_top_light_left_railing_horizontal_cap_w";
 COMPOSITE "tile_cliff_top_light_right_railing_horizontal_cap_e";
 	COMBINE "temp_cliff_top_light_right";
 	ADD "temp_8x8_railing_horizontal_cap_e" (0, 8); END;
+	
+COMPOSITE "tile_cliff_top_dark_left_railing_horizontal_cap_w";
+	COMBINE "temp_cliff_top_dark_left";
+	ADD "temp_8x8_railing_horizontal_cap_w" (8, 8); END;
 
+COMPOSITE "tile_cliff_top_dark_right_railing_horizontal_cap_e";
+	COMBINE "temp_cliff_top_dark_right";
+	ADD "temp_8x8_railing_horizontal_cap_e" (0, 8); END;
+	
+	
 COMPOSITE "tile_cliff_bottom_light_left_railing_horizontal_cap_w";
 	COMBINE "temp_cliff_bottom_light_left";
 	ADD "temp_8x8_railing_horizontal_cap_w" (8, 0); END;
@@ -209,6 +191,13 @@ COMPOSITE "tile_cliff_bottom_light_right_railing_horizontal_cap_e";
 	COMBINE "temp_cliff_bottom_light_right";
 	ADD "temp_8x8_railing_horizontal_cap_e" (0, 0); END;
 	
+COMPOSITE "tile_cliff_bottom_dark_left_railing_horizontal_cap_w";
+	COMBINE "temp_cliff_bottom_dark_left";
+	ADD "temp_8x8_railing_horizontal_cap_w" (8, 0); END;
+
+COMPOSITE "tile_cliff_bottom_dark_right_railing_horizontal_cap_e";
+	COMBINE "temp_cliff_bottom_dark_right";
+	ADD "temp_8x8_railing_horizontal_cap_e" (0, 0); END;
 	
 COMPOSITE "tile_cliff_vertical_left_top_railing_horizontal_cap_w";
 	COMBINE "temp_cliff_vertical_left_top";
@@ -217,8 +206,15 @@ COMPOSITE "tile_cliff_vertical_left_top_railing_horizontal_cap_w";
 COMPOSITE "tile_cliff_vertical_right_top_railing_horizontal_cap_e";
 	COMBINE "temp_cliff_vertical_right_top";
 	ADD "temp_8x8_railing_horizontal_cap_e" (0, 0); END;
+	
+	
+COMPOSITE "tile_cliff_top_light_left_railing_vertical_long_cap_n";
+	COMBINE "temp_cliff_top_light_left_left_half";
+	COMBINE "temp_railing_vertical_long_cap_n" (8, 0); END;
 
-
+COMPOSITE "tile_cliff_top_light_right_railing_vertical_long_cap_n";
+	COMBINE "temp_cliff_top_light_right_right_half";
+	COMBINE "temp_railing_vertical_long_cap_n" (0, 0); END;
 
 COMPOSITE "tile_cliff_top_dark_left_railing_vertical_long_cap_n";
 	COMBINE "temp_cliff_top_dark_left_left_half";
@@ -228,22 +224,22 @@ COMPOSITE "tile_cliff_top_dark_right_railing_vertical_long_cap_n";
 	COMBINE "temp_cliff_top_dark_right_right_half";
 	COMBINE "temp_railing_vertical_long_cap_n" (0, 0); END;
 	
-COMPOSITE "tile_cliff_bottom_dark_left_railing_vertical_long_cap_s";
-	COMBINE "temp_cliff_bottom_dark_left_left_half";
-	COMBINE "temp_railing_vertical_long_cap_s" (8, 0); END;
-
-COMPOSITE "tile_cliff_bottom_dark_right_railing_vertical_long_cap_s";
-	COMBINE "temp_cliff_bottom_dark_right_right_half";
-	COMBINE "temp_railing_vertical_long_cap_s" (0, 0); END;
-
-
-COMPOSITE "tile_cliff_top_light_left_railing_vertical_long_cap_n";
+COMPOSITE "tile_cliff_top_light_left_railing_vertical_long_cap_both";
 	COMBINE "temp_cliff_top_light_left_left_half";
-	COMBINE "temp_railing_vertical_long_cap_n" (8, 0); END;
+	COMBINE "temp_railing_vertical_long_cap_both" (8, 0); END;
 
-COMPOSITE "tile_cliff_top_light_right_railing_vertical_long_cap_n";
+COMPOSITE "tile_cliff_top_light_right_railing_vertical_long_cap_both";
 	COMBINE "temp_cliff_top_light_right_right_half";
-	COMBINE "temp_railing_vertical_long_cap_n" (0, 0); END;
+	COMBINE "temp_railing_vertical_long_cap_both" (0, 0); END;
+
+COMPOSITE "tile_cliff_top_dark_left_railing_vertical_long_cap_both";
+	COMBINE "temp_cliff_top_dark_left_left_half";
+	COMBINE "temp_railing_vertical_long_cap_both" (8, 0); END;
+
+COMPOSITE "tile_cliff_top_dark_right_railing_vertical_long_cap_both";
+	COMBINE "temp_cliff_top_dark_right_right_half";
+	COMBINE "temp_railing_vertical_long_cap_both" (0, 0); END;
+
 
 COMPOSITE "tile_cliff_bottom_light_left_railing_vertical_long_cap_s";
 	COMBINE "temp_cliff_bottom_light_left_left_half";
@@ -253,6 +249,14 @@ COMPOSITE "tile_cliff_bottom_light_right_railing_vertical_long_cap_s";
 	COMBINE "temp_cliff_bottom_light_right_right_half";
 	COMBINE "temp_railing_vertical_long_cap_s" (0, 0); END;
 	
+	
+COMPOSITE "tile_cliff_bottom_dark_left_railing_vertical_long_cap_s";
+	COMBINE "temp_cliff_bottom_dark_left_left_half";
+	COMBINE "temp_railing_vertical_long_cap_s" (8, 0); END;
+
+COMPOSITE "tile_cliff_bottom_dark_right_railing_vertical_long_cap_s";
+	COMBINE "temp_cliff_bottom_dark_right_right_half";
+	COMBINE "temp_railing_vertical_long_cap_s" (0, 0); END;
 
 COMPOSITE "tile_cliff_vertical_left_top_railing_vertical_long_cap_s";
 	COMBINE "temp_cliff_vertical_left_top_left_half";
@@ -262,13 +266,12 @@ COMPOSITE "tile_cliff_vertical_right_top_railing_vertical_long_cap_s";
 	COMBINE "temp_cliff_vertical_right_top_right_half";
 	COMBINE "temp_railing_vertical_long_cap_s" (0, 0); END;
 	
-
-COMPOSITE "tile_cliff_top_dark_left_railing_vertical_long_cap_both";
-	COMBINE "temp_cliff_top_dark_left_left_half";
+COMPOSITE "tile_cliff_bottom_light_left_railing_vertical_long_cap_both";
+	COMBINE "temp_cliff_bottom_light_left_left_half";
 	COMBINE "temp_railing_vertical_long_cap_both" (8, 0); END;
 
-COMPOSITE "tile_cliff_top_dark_right_railing_vertical_long_cap_both";
-	COMBINE "temp_cliff_top_dark_right_right_half";
+COMPOSITE "tile_cliff_bottom_light_right_railing_vertical_long_cap_both";
+	COMBINE "temp_cliff_bottom_light_right_right_half";
 	COMBINE "temp_railing_vertical_long_cap_both" (0, 0); END;
 
 COMPOSITE "tile_cliff_bottom_dark_left_railing_vertical_long_cap_both";
@@ -279,24 +282,6 @@ COMPOSITE "tile_cliff_bottom_dark_right_railing_vertical_long_cap_both";
 	COMBINE "temp_cliff_bottom_dark_right_right_half";
 	COMBINE "temp_railing_vertical_long_cap_both" (0, 0); END;
 	
-
-COMPOSITE "tile_cliff_top_light_left_railing_vertical_long_cap_both";
-	COMBINE "temp_cliff_top_light_left_left_half";
-	COMBINE "temp_railing_vertical_long_cap_both" (8, 0); END;
-
-COMPOSITE "tile_cliff_top_light_right_railing_vertical_long_cap_both";
-	COMBINE "temp_cliff_top_light_right_right_half";
-	COMBINE "temp_railing_vertical_long_cap_both" (0, 0); END;
-
-COMPOSITE "tile_cliff_bottom_light_left_railing_vertical_long_cap_both";
-	COMBINE "temp_cliff_bottom_light_left_left_half";
-	COMBINE "temp_railing_vertical_long_cap_both" (8, 0); END;
-
-COMPOSITE "tile_cliff_bottom_light_right_railing_vertical_long_cap_both";
-	COMBINE "temp_cliff_bottom_light_right_right_half";
-	COMBINE "temp_railing_vertical_long_cap_both" (0, 0); END;
-	
-
 COMPOSITE "tile_cliff_vertical_left_top_railing_vertical_long_cap_both";
 	COMBINE "temp_cliff_vertical_left_top_left_half";
 	COMBINE "temp_railing_vertical_long_cap_both" (8, 0); END;
@@ -304,24 +289,6 @@ COMPOSITE "tile_cliff_vertical_left_top_railing_vertical_long_cap_both";
 COMPOSITE "tile_cliff_vertical_right_top_railing_vertical_long_cap_both";
 	COMBINE "temp_cliff_vertical_right_top_right_half";
 	COMBINE "temp_railing_vertical_long_cap_both" (0, 0); END;
-
-
-
-COMPOSITE "tile_cliff_top_dark_left_railing_horizontal_long_cap_w";
-	COMBINE "temp_cliff_top_dark_left_top_half";
-	COMBINE "temp_railing_horizontal_long_cap_w" (0, 8); END;
-	
-COMPOSITE "tile_cliff_top_dark_right_railing_horizontal_long_cap_e";
-	COMBINE "temp_cliff_top_dark_right_top_half";
-	COMBINE "temp_railing_horizontal_long_cap_e" (0, 8); END;
-
-COMPOSITE "tile_cliff_bottom_dark_left_railing_horizontal_long_cap_w";
-	COMBINE "temp_cliff_bottom_dark_left_bottom_half";
-	COMBINE "temp_railing_horizontal_long_cap_w" (0, 0); END;
-	
-COMPOSITE "tile_cliff_bottom_dark_right_railing_horizontal_long_cap_e";
-	COMBINE "temp_cliff_bottom_dark_right_bottom_half";
-	COMBINE "temp_railing_horizontal_long_cap_e" (0, 0); END;
 
 
 COMPOSITE "tile_cliff_top_light_left_railing_horizontal_long_cap_w";
@@ -332,6 +299,31 @@ COMPOSITE "tile_cliff_top_light_right_railing_horizontal_long_cap_e";
 	COMBINE "temp_cliff_top_light_right_top_half";
 	COMBINE "temp_railing_horizontal_long_cap_e" (0, 8); END;
 
+COMPOSITE "tile_cliff_top_dark_left_railing_horizontal_long_cap_w";
+	COMBINE "temp_cliff_top_dark_left_top_half";
+	COMBINE "temp_railing_horizontal_long_cap_w" (0, 8); END;
+	
+COMPOSITE "tile_cliff_top_dark_right_railing_horizontal_long_cap_e";
+	COMBINE "temp_cliff_top_dark_right_top_half";
+	COMBINE "temp_railing_horizontal_long_cap_e" (0, 8); END;
+	
+COMPOSITE "tile_cliff_top_light_left_railing_horizontal_long_cap_both";
+	COMBINE "temp_cliff_top_light_left_top_half";
+	COMBINE "temp_railing_horizontal_long_cap_both" (0, 8); END;
+	
+COMPOSITE "tile_cliff_top_light_right_railing_horizontal_long_cap_both";
+	COMBINE "temp_cliff_top_light_right_top_half";
+	COMBINE "temp_railing_horizontal_long_cap_both" (0, 8); END;
+
+COMPOSITE "tile_cliff_top_dark_left_railing_horizontal_long_cap_both";
+	COMBINE "temp_cliff_top_dark_left_top_half";
+	COMBINE "temp_railing_horizontal_long_cap_both" (0, 8); END;
+	
+COMPOSITE "tile_cliff_top_dark_right_railing_horizontal_long_cap_both";
+	COMBINE "temp_cliff_top_dark_right_top_half";
+	COMBINE "temp_railing_horizontal_long_cap_both" (0, 8); END;
+	
+	
 COMPOSITE "tile_cliff_bottom_light_left_railing_horizontal_long_cap_w";
 	COMBINE "temp_cliff_bottom_light_left_bottom_half";
 	COMBINE "temp_railing_horizontal_long_cap_w" (0, 0); END;
@@ -340,6 +332,13 @@ COMPOSITE "tile_cliff_bottom_light_right_railing_horizontal_long_cap_e";
 	COMBINE "temp_cliff_bottom_light_right_bottom_half";
 	COMBINE "temp_railing_horizontal_long_cap_e" (0, 0); END;
 	
+COMPOSITE "tile_cliff_bottom_dark_left_railing_horizontal_long_cap_w";
+	COMBINE "temp_cliff_bottom_dark_left_bottom_half";
+	COMBINE "temp_railing_horizontal_long_cap_w" (0, 0); END;
+	
+COMPOSITE "tile_cliff_bottom_dark_right_railing_horizontal_long_cap_e";
+	COMBINE "temp_cliff_bottom_dark_right_bottom_half";
+	COMBINE "temp_railing_horizontal_long_cap_e" (0, 0); END;
 
 COMPOSITE "tile_cliff_vertical_left_top_railing_horizontal_long_cap_w";
 	COMBINE "temp_cliff_vertical_left_top_bottom_half";
@@ -349,15 +348,13 @@ COMPOSITE "tile_cliff_vertical_right_top_railing_horizontal_long_cap_e";
 	COMBINE "temp_cliff_vertical_right_top_bottom_half";
 	COMBINE "temp_railing_horizontal_long_cap_e" (0, 0); END;
 	
+COMPOSITE "tile_cliff_bottom_light_left_railing_horizontal_long_cap_both";
+	COMBINE "temp_cliff_bottom_light_left_bottom_half";
+	COMBINE "temp_railing_horizontal_long_cap_both" (0, 0); END;
 	
-
-COMPOSITE "tile_cliff_top_dark_left_railing_horizontal_long_cap_both";
-	COMBINE "temp_cliff_top_dark_left_top_half";
-	COMBINE "temp_railing_horizontal_long_cap_both" (0, 8); END;
-	
-COMPOSITE "tile_cliff_top_dark_right_railing_horizontal_long_cap_both";
-	COMBINE "temp_cliff_top_dark_right_top_half";
-	COMBINE "temp_railing_horizontal_long_cap_both" (0, 8); END;
+COMPOSITE "tile_cliff_bottom_light_right_railing_horizontal_long_cap_both";
+	COMBINE "temp_cliff_bottom_light_right_bottom_half";
+	COMBINE "temp_railing_horizontal_long_cap_both" (0, 0); END;
 
 COMPOSITE "tile_cliff_bottom_dark_left_railing_horizontal_long_cap_both";
 	COMBINE "temp_cliff_bottom_dark_left_bottom_half";
@@ -367,24 +364,6 @@ COMPOSITE "tile_cliff_bottom_dark_right_railing_horizontal_long_cap_both";
 	COMBINE "temp_cliff_bottom_dark_right_bottom_half";
 	COMBINE "temp_railing_horizontal_long_cap_both" (0, 0); END;
 
-
-COMPOSITE "tile_cliff_top_light_left_railing_horizontal_long_cap_both";
-	COMBINE "temp_cliff_top_light_left_top_half";
-	COMBINE "temp_railing_horizontal_long_cap_both" (0, 8); END;
-	
-COMPOSITE "tile_cliff_top_light_right_railing_horizontal_long_cap_both";
-	COMBINE "temp_cliff_top_light_right_top_half";
-	COMBINE "temp_railing_horizontal_long_cap_both" (0, 8); END;
-
-COMPOSITE "tile_cliff_bottom_light_left_railing_horizontal_long_cap_both";
-	COMBINE "temp_cliff_bottom_light_left_bottom_half";
-	COMBINE "temp_railing_horizontal_long_cap_both" (0, 0); END;
-	
-COMPOSITE "tile_cliff_bottom_light_right_railing_horizontal_long_cap_both";
-	COMBINE "temp_cliff_bottom_light_right_bottom_half";
-	COMBINE "temp_railing_horizontal_long_cap_both" (0, 0); END;
-	
-
 COMPOSITE "tile_cliff_vertical_left_top_railing_horizontal_long_cap_both";
 	COMBINE "temp_cliff_vertical_left_top_bottom_half";
 	COMBINE "temp_railing_horizontal_long_cap_both" (0, 0); END;
@@ -392,8 +371,19 @@ COMPOSITE "tile_cliff_vertical_left_top_railing_horizontal_long_cap_both";
 COMPOSITE "tile_cliff_vertical_right_top_railing_horizontal_long_cap_both";
 	COMBINE "temp_cliff_vertical_right_top_bottom_half";
 	COMBINE "temp_railing_horizontal_long_cap_both" (0, 0); END;
+
+
 	
 	
+COMPOSITE "tile_cliff_top_light_both_railing_vertical_cap_n_right";
+	COMBINE "temp_cliff_top_light_left_left_half";
+	ADD "temp_8x8_cliff_top_light_right" (8, 0);
+	ADD "temp_8x8_railing_vertical_cap_n" (8, 8); END;
+	
+COMPOSITE "tile_cliff_top_light_both_railing_vertical_cap_n_left";
+	COMBINE "temp_cliff_top_light_right_right_half";
+	ADD "temp_8x8_cliff_top_light_left" (0, 0);
+	ADD "temp_8x8_railing_vertical_cap_n" (0, 8); END;
 
 COMPOSITE "tile_cliff_top_dark_both_railing_vertical_cap_n_right";
 	COMBINE "temp_cliff_top_dark_left_left_half";
@@ -404,28 +394,8 @@ COMPOSITE "tile_cliff_top_dark_both_railing_vertical_cap_n_left";
 	COMBINE "temp_cliff_top_dark_right_right_half";
 	ADD "temp_8x8_cliff_top_dark_left" (0, 0);
 	ADD "temp_8x8_railing_vertical_cap_n" (0, 8); END;
-	
-COMPOSITE "tile_cliff_bottom_dark_both_railing_vertical_cap_s_right";
-	COMBINE "temp_cliff_bottom_dark_left_left_half";
-	ADD "temp_8x8_cliff_bottom_dark_right" (8, 8);
-	ADD "temp_8x8_railing_vertical_cap_s" (8, 0); END;
-	
-COMPOSITE "tile_cliff_bottom_dark_both_railing_vertical_cap_s_left";
-	COMBINE "temp_cliff_bottom_dark_right_right_half";
-	ADD "temp_8x8_cliff_bottom_dark_left" (0, 8);
-	ADD "temp_8x8_railing_vertical_cap_s" (0, 0); END;
-	
 
-COMPOSITE "tile_cliff_top_light_both_railing_vertical_cap_n_right";
-	COMBINE "temp_cliff_top_light_left_left_half";
-	ADD "temp_8x8_cliff_top_light_right" (8, 0);
-	ADD "temp_8x8_railing_vertical_cap_n" (8, 8); END;
-	
-COMPOSITE "tile_cliff_top_light_both_railing_vertical_cap_n_left";
-	COMBINE "temp_cliff_top_light_right_right_half";
-	ADD "temp_8x8_cliff_top_light_left" (0, 0);
-	ADD "temp_8x8_railing_vertical_cap_n" (0, 8); END;
-	
+
 COMPOSITE "tile_cliff_bottom_light_both_railing_vertical_cap_s_right";
 	COMBINE "temp_cliff_bottom_light_left_left_half";
 	ADD "temp_8x8_cliff_bottom_light_right" (8, 8);
@@ -436,6 +406,15 @@ COMPOSITE "tile_cliff_bottom_light_both_railing_vertical_cap_s_left";
 	ADD "temp_8x8_cliff_bottom_light_left" (0, 8);
 	ADD "temp_8x8_railing_vertical_cap_s" (0, 0); END;
 	
+COMPOSITE "tile_cliff_bottom_dark_both_railing_vertical_cap_s_right";
+	COMBINE "temp_cliff_bottom_dark_left_left_half";
+	ADD "temp_8x8_cliff_bottom_dark_right" (8, 8);
+	ADD "temp_8x8_railing_vertical_cap_s" (8, 0); END;
+	
+COMPOSITE "tile_cliff_bottom_dark_both_railing_vertical_cap_s_left";
+	COMBINE "temp_cliff_bottom_dark_right_right_half";
+	ADD "temp_8x8_cliff_bottom_dark_left" (0, 8);
+	ADD "temp_8x8_railing_vertical_cap_s" (0, 0); END;
 	
 COMPOSITE "tile_cliff_vertical_both_top_railing_vertical_cap_s_right";
 	COMBINE "temp_cliff_vertical_left_top_left_half";
@@ -449,33 +428,34 @@ COMPOSITE "tile_cliff_vertical_both_top_railing_vertical_cap_s_left";
 	
 
 	
-
-COMPOSITE "tile_cliff_top_dark_both_railing_horizontal_long_cap_both";
-	ADD "temp_8x8_cliff_top_dark_left" (0, 0);
-	ADD "temp_8x8_cliff_top_dark_right" (8, 0);
-	COMBINE "temp_railing_horizontal_long_cap_both" (0, 8); END;
-
-COMPOSITE "tile_cliff_bottom_dark_both_railing_horizontal_long_cap_both";
-	ADD "temp_8x8_cliff_bottom_dark_left" (0, 8);
-	ADD "temp_8x8_cliff_bottom_dark_right" (8, 8);
-	COMBINE "temp_railing_horizontal_long_cap_both" (0, 0); END;
 	
 	
 COMPOSITE "tile_cliff_top_light_both_railing_horizontal_long_cap_both";
 	ADD "temp_8x8_cliff_top_light_left" (0, 0);
 	ADD "temp_8x8_cliff_top_light_right" (8, 0);
 	COMBINE "temp_railing_horizontal_long_cap_both" (0, 8); END;
+
+COMPOSITE "tile_cliff_top_dark_both_railing_horizontal_long_cap_both";
+	ADD "temp_8x8_cliff_top_dark_left" (0, 0);
+	ADD "temp_8x8_cliff_top_dark_right" (8, 0);
+	COMBINE "temp_railing_horizontal_long_cap_both" (0, 8); END;
+	
 	
 COMPOSITE "tile_cliff_bottom_light_both_railing_horizontal_long_cap_both";
 	ADD "temp_8x8_cliff_bottom_light_left" (0, 8);
 	ADD "temp_8x8_cliff_bottom_light_right" (8, 8);
 	COMBINE "temp_railing_horizontal_long_cap_both" (0, 0); END;
-	
+
+COMPOSITE "tile_cliff_bottom_dark_both_railing_horizontal_long_cap_both";
+	ADD "temp_8x8_cliff_bottom_dark_left" (0, 8);
+	ADD "temp_8x8_cliff_bottom_dark_right" (8, 8);
+	COMBINE "temp_railing_horizontal_long_cap_both" (0, 0); END;
 	
 COMPOSITE "tile_cliff_vertical_both_top_railing_horizontal_long_cap_both";
 	ADD "temp_8x8_cliff_vertical_left" (0, 8);
 	ADD "temp_8x8_cliff_vertical_right" (8, 8);
 	COMBINE "temp_railing_horizontal_long_cap_both" (0, 0); END;
+	
 	
 
 COMPOSITE "tile_cliff_side_left_railing_vertical_long_cap_n";
@@ -485,6 +465,16 @@ COMPOSITE "tile_cliff_side_left_railing_vertical_long_cap_n";
 COMPOSITE "tile_cliff_side_right_railing_vertical_long_cap_n";
 	COMBINE	"temp_cliff_face_e";
 	COMBINE "temp_railing_vertical_long_cap_n" (0, 0); END;
+
+COMPOSITE "tile_cliff_side_left_railing_vertical_long";
+	COMBINE "temp_cliff_face_w";
+	ADD "temp_8x8_railing_vertical" (8, 0);
+	ADD "temp_8x8_railing_vertical" (8, 8); END;
+	
+COMPOSITE "tile_cliff_side_right_railing_vertical_long";
+	COMBINE "temp_cliff_face_e";
+	ADD "temp_8x8_railing_vertical" (0, 0);
+	ADD "temp_8x8_railing_vertical" (0, 8); END;
 
 COMPOSITE "tile_cliff_side_left_railing_vertical_long_cap_s";
 	COMBINE	"temp_cliff_face_w";
@@ -507,26 +497,40 @@ COMPOSITE "tile_cliff_top_mid_railing_horizontal_long_cap_w";
 	COMBINE	"temp_cliff_face_n";
 	COMBINE "temp_railing_horizontal_long_cap_w" (0, 8); END;
 	
-COMPOSITE "tile_cliff_bottom_mid_railing_horizontal_long_cap_w";
-	COMBINE	"temp_cliff_face_s";
-	COMBINE "temp_railing_horizontal_long_cap_w" (0, 0); END;
+COMPOSITE "tile_cliff_top_mid_railing_horizontal_long";
+	COMBINE "temp_cliff_face_n";
+	ADD "temp_8x8_railing_horizontal" (0, 8);
+	ADD "temp_8x8_railing_horizontal" (8, 8); END;
 
 COMPOSITE "tile_cliff_top_mid_railing_horizontal_long_cap_e";
 	COMBINE	"temp_cliff_face_n";
 	COMBINE "temp_railing_horizontal_long_cap_e" (0, 8); END;
-	
-COMPOSITE "tile_cliff_bottom_mid_railing_horizontal_long_cap_e";
-	COMBINE	"temp_cliff_face_s";
-	COMBINE "temp_railing_horizontal_long_cap_e" (0, 0); END;
 
 COMPOSITE "tile_cliff_top_mid_railing_horizontal_long_cap_both";
 	COMBINE	"temp_cliff_face_n";
 	COMBINE "temp_railing_horizontal_long_cap_both" (0, 8); END;
 	
+COMPOSITE "tile_cliff_bottom_mid_railing_horizontal_long_cap_w";
+	COMBINE	"temp_cliff_face_s";
+	COMBINE "temp_railing_horizontal_long_cap_w" (0, 0); END;
+	
+COMPOSITE "tile_cliff_bottom_mid_railing_horizontal_long";
+	COMBINE "temp_cliff_face_s";
+	ADD "temp_8x8_railing_horizontal" (0, 0);
+	ADD "temp_8x8_railing_horizontal" (8, 0); END;
+	
+COMPOSITE "tile_cliff_bottom_mid_railing_horizontal_long_cap_e";
+	COMBINE	"temp_cliff_face_s";
+	COMBINE "temp_railing_horizontal_long_cap_e" (0, 0); END;
+	
 COMPOSITE "tile_cliff_bottom_mid_railing_horizontal_long_cap_both";
 	COMBINE	"temp_cliff_face_s";
 	COMBINE "temp_railing_horizontal_long_cap_both" (0, 0); END;
 
+
+
+
+	
 
 COMPOSITE "tile_cliff_side_left_inside_railing_vertical_long_cap_n";
 	COMBINE "temp_cliff_face_inside_se";
@@ -556,10 +560,6 @@ COMPOSITE "tile_cliff_side_both_inside_both";
 	COMBINE "temp_cliff_face_inside_sw";
 	COMBINE "temp_cliff_face_inside_se"; END;
 
-COMPOSITE "tile_cliff_top_light_both";
-	COMBINE "temp_cliff_top_light_left_left_half";
-	COMBINE "temp_cliff_top_light_right_right_half"; END;
-
 
 COMPOSITE "tile_cliff_inside_se_railing_inside_nw";
 	ADD "temp_8x8_cliff_inside_se" (8, 8);
@@ -573,19 +573,6 @@ COMPOSITE "tile_cliff_inside_sw_railing_inside_ne";
 	ADD "temp_8x8_railing_horizontal" (0, 0);
 	ADD "temp_8x8_railing_vertical" (8, 8); END;
 
-COMPOSITE "tile_cliff_inside_ne_railing_inside_sw";
-	ADD "temp_8x8_cliff_inside_ne" (8, 0);
-	ADD "temp_8x8_railing_inside_sw" (0, 8);
-	ADD "temp_8x8_railing_horizontal" (8, 8);
-	ADD "temp_8x8_railing_vertical" (0, 0); END;
-	
-COMPOSITE "tile_cliff_inside_nw_railing_inside_se";
-	ADD "temp_8x8_cliff_inside_nw" (0, 0);
-	ADD "temp_8x8_railing_inside_se" (8, 8);
-	ADD "temp_8x8_railing_horizontal" (0, 8);
-	ADD "temp_8x8_railing_vertical" (8, 0); END;
-
-
 COMPOSITE "tile_cliff_inside_se_railing_inside_se_cap_s";
 	ADD "temp_8x8_cliff_inside_se" (8, 8);
 	ADD "temp_8x8_railing_inside_nw" (0, 0);
@@ -597,6 +584,43 @@ COMPOSITE "tile_cliff_inside_sw_railing_inside_sw_cap_s";
 	ADD "temp_8x8_railing_inside_ne" (8, 0);
 	ADD "temp_8x8_railing_horizontal" (0, 0);
 	ADD "temp_8x8_railing_vertical_cap_s" (8, 8); END;
+
+COMPOSITE "tile_cliff_inside_se_railing_inside_se_cap_e";
+	ADD "temp_8x8_cliff_inside_se" (8, 8);
+	ADD "temp_8x8_railing_inside_nw" (0, 0);
+	ADD "temp_8x8_railing_horizontal_cap_e" (8, 0);
+	ADD "temp_8x8_railing_vertical" (0, 8); END;
+	
+COMPOSITE "tile_cliff_inside_sw_railing_inside_sw_cap_w";
+	ADD "temp_8x8_cliff_inside_sw" (0, 8);
+	ADD "temp_8x8_railing_inside_ne" (8, 0);
+	ADD "temp_8x8_railing_horizontal_cap_w" (0, 0);
+	ADD "temp_8x8_railing_vertical" (8, 8); END;
+	
+COMPOSITE "tile_cliff_inside_se_railing_inside_se_cap_both";
+	ADD "temp_8x8_cliff_inside_se" (8, 8);
+	ADD "temp_8x8_railing_inside_nw" (0, 0);
+	ADD "temp_8x8_railing_horizontal_cap_e" (8, 0);
+	ADD "temp_8x8_railing_vertical_cap_s" (0, 8); END;
+	
+COMPOSITE "tile_cliff_inside_sw_railing_inside_sw_cap_both";
+	ADD "temp_8x8_cliff_inside_sw" (0, 8);
+	ADD "temp_8x8_railing_inside_ne" (8, 0);
+	ADD "temp_8x8_railing_horizontal_cap_w" (0, 0);
+	ADD "temp_8x8_railing_vertical_cap_s" (8, 8); END;
+	
+
+COMPOSITE "tile_cliff_inside_ne_railing_inside_sw";
+	ADD "temp_8x8_cliff_inside_ne" (8, 0);
+	ADD "temp_8x8_railing_inside_sw" (0, 8);
+	ADD "temp_8x8_railing_horizontal" (8, 8);
+	ADD "temp_8x8_railing_vertical" (0, 0); END;
+	
+COMPOSITE "tile_cliff_inside_nw_railing_inside_se";
+	ADD "temp_8x8_cliff_inside_nw" (0, 0);
+	ADD "temp_8x8_railing_inside_se" (8, 8);
+	ADD "temp_8x8_railing_horizontal" (0, 8);
+	ADD "temp_8x8_railing_vertical" (8, 0); END;
 
 COMPOSITE "tile_cliff_inside_ne_railing_inside_ne_cap_n";
 	ADD "temp_8x8_cliff_inside_ne" (8, 0);
@@ -610,19 +634,6 @@ COMPOSITE "tile_cliff_inside_nw_railing_inside_nw_cap_n";
 	ADD "temp_8x8_railing_horizontal" (0, 8);
 	ADD "temp_8x8_railing_vertical_cap_n" (8, 0); END;
 
-
-COMPOSITE "tile_cliff_inside_se_railing_inside_se_cap_e";
-	ADD "temp_8x8_cliff_inside_se" (8, 8);
-	ADD "temp_8x8_railing_inside_nw" (0, 0);
-	ADD "temp_8x8_railing_horizontal_cap_e" (8, 0);
-	ADD "temp_8x8_railing_vertical" (0, 8); END;
-	
-COMPOSITE "tile_cliff_inside_sw_railing_inside_sw_cap_w";
-	ADD "temp_8x8_cliff_inside_sw" (0, 8);
-	ADD "temp_8x8_railing_inside_ne" (8, 0);
-	ADD "temp_8x8_railing_horizontal_cap_w" (0, 0);
-	ADD "temp_8x8_railing_vertical" (8, 8); END;
-
 COMPOSITE "tile_cliff_inside_ne_railing_inside_ne_cap_e";
 	ADD "temp_8x8_cliff_inside_ne" (8, 0);
 	ADD "temp_8x8_railing_inside_sw" (0, 8);
@@ -634,19 +645,6 @@ COMPOSITE "tile_cliff_inside_nw_railing_inside_nw_cap_w";
 	ADD "temp_8x8_railing_inside_se" (8, 8);
 	ADD "temp_8x8_railing_horizontal_cap_w" (0, 8);
 	ADD "temp_8x8_railing_vertical" (8, 0); END;
-
-
-COMPOSITE "tile_cliff_inside_se_railing_inside_se_cap_both";
-	ADD "temp_8x8_cliff_inside_se" (8, 8);
-	ADD "temp_8x8_railing_inside_nw" (0, 0);
-	ADD "temp_8x8_railing_horizontal_cap_e" (8, 0);
-	ADD "temp_8x8_railing_vertical_cap_s" (0, 8); END;
-	
-COMPOSITE "tile_cliff_inside_sw_railing_inside_sw_cap_both";
-	ADD "temp_8x8_cliff_inside_sw" (0, 8);
-	ADD "temp_8x8_railing_inside_ne" (8, 0);
-	ADD "temp_8x8_railing_horizontal_cap_w" (0, 0);
-	ADD "temp_8x8_railing_vertical_cap_s" (8, 8); END;
 
 COMPOSITE "tile_cliff_inside_ne_railing_inside_ne_cap_both";
 	ADD "temp_8x8_cliff_inside_ne" (8, 0);
@@ -660,11 +658,6 @@ COMPOSITE "tile_cliff_inside_nw_railing_inside_nw_cap_both";
 	ADD "temp_8x8_railing_horizontal_cap_w" (0, 8);
 	ADD "temp_8x8_railing_vertical_cap_n" (8, 0); END;
 	
-COMPOSITE "tile_cliff_railing_square";
-	ADD "temp_8x8_railing_inside_nw", (0, 0);
-	ADD "temp_8x8_railing_inside_ne", (8, 0);
-	ADD "temp_8x8_railing_inside_sw", (0, 8);
-	ADD "temp_8x8_railing_inside_se", (8, 8); END;
 	
 COMPOSITE "temp_preview_cliff_style";
 	ADD "tile_cliff_top_dark_left_railing_outside_nw", (0, 0);
@@ -704,18 +697,58 @@ COMPOSITE "tile_cliff_sea";
 	ADD "temp_8x8_cliff_sea_sw" (0, 8);
 	ADD "temp_8x8_cliff_sea_se" (8, 8); END;
 	
+	
+COMPOSITE "tile_cliff_top_light_left_sea";
+	COMBINE "temp_cliff_top_light_left";
+	ADD "temp_8x8_cliff_sea_border_se" (8, 8); END;
+	
+COMPOSITE "tile_cliff_top_light_right_sea";
+	COMBINE "temp_cliff_top_light_right";
+	ADD "temp_8x8_cliff_sea_border_sw" (0, 8); END;
+	
 COMPOSITE "tile_cliff_top_dark_left_sea";
 	COMBINE "temp_cliff_top_dark_left";
 	ADD "temp_8x8_cliff_sea_border_se" (8, 8); END;
+	
+COMPOSITE "tile_cliff_top_dark_right_sea";
+	COMBINE "temp_cliff_top_dark_right";
+	ADD "temp_8x8_cliff_sea_border_sw" (0, 8); END;
+	
+	
+COMPOSITE "tile_cliff_bottom_light_left_sea";
+	COMBINE "temp_cliff_bottom_light_left";
+	ADD "temp_8x8_cliff_sea_border_ne" (8, 0); END;
+	
+COMPOSITE "tile_cliff_bottom_light_right_sea";
+	COMBINE "temp_cliff_bottom_light_right";
+	ADD "temp_8x8_cliff_sea_border_nw" (0, 0); END;
+	
+COMPOSITE "tile_cliff_bottom_dark_left_sea";
+	COMBINE "temp_cliff_bottom_dark_left";
+	ADD "temp_8x8_cliff_sea_border_ne" (8, 0); END;
+	
+COMPOSITE "tile_cliff_bottom_dark_right_sea";
+	COMBINE "temp_cliff_bottom_dark_right";
+	ADD "temp_8x8_cliff_sea_border_nw" (0, 0); END;
+	
+COMPOSITE "tile_cliff_vertical_left_sea";
+	COMBINE "temp_cliff_vertical_left_top";
+	ADD "temp_8x8_cliff_sea_border_ne" (8, 0); END;
+	
+COMPOSITE "tile_cliff_vertical_right_sea";
+	COMBINE "temp_cliff_vertical_right_top";
+	ADD "temp_8x8_cliff_sea_border_nw" (0, 0); END;
+	
 	
 COMPOSITE "tile_cliff_top_mid_sea";
 	COMBINE "temp_cliff_face_n";
 	ADD "temp_8x8_cliff_sea_border_sw" (0, 8);
 	ADD "temp_8x8_cliff_sea_border_se" (8, 8); END;
 	
-COMPOSITE "tile_cliff_top_dark_right_sea";
-	COMBINE "temp_cliff_top_dark_right";
-	ADD "temp_8x8_cliff_sea_border_sw" (0, 8); END;
+COMPOSITE "tile_cliff_bottom_mid_sea";
+	COMBINE "temp_cliff_face_s";
+	ADD "temp_8x8_cliff_sea_nw" (0, 0);
+	ADD "temp_8x8_cliff_sea_ne" (8, 0); END;
 	
 COMPOSITE "tile_cliff_side_left_sea";
 	COMBINE "temp_cliff_face_w";
@@ -727,44 +760,6 @@ COMPOSITE "tile_cliff_side_right_sea";
 	ADD "temp_8x8_cliff_sea_border_nw" (0, 0);
 	ADD "temp_8x8_cliff_sea_border_sw" (0, 8); END;
 	
-COMPOSITE "tile_cliff_vertical_left_sea";
-	COMBINE "temp_cliff_vertical_left_top";
-	ADD "temp_8x8_cliff_sea_border_ne" (8, 0); END;
-	
-COMPOSITE "tile_cliff_bottom_mid_sea";
-	COMBINE "temp_cliff_face_s";
-	ADD "temp_8x8_cliff_sea_nw" (0, 0);
-	ADD "temp_8x8_cliff_sea_ne" (8, 0); END;
-	
-COMPOSITE "tile_cliff_vertical_right_sea";
-	COMBINE "temp_cliff_vertical_right_top";
-	ADD "temp_8x8_cliff_sea_border_nw" (0, 0); END;
-	
-	
-COMPOSITE "tile_cliff_top_light_left_sea";
-	COMBINE "temp_cliff_top_light_left";
-	ADD "temp_8x8_cliff_sea_border_se" (8, 8); END;
-	
-COMPOSITE "tile_cliff_top_light_right_sea";
-	COMBINE "temp_cliff_top_light_right";
-	ADD "temp_8x8_cliff_sea_border_sw" (0, 8); END;
-	
-COMPOSITE "tile_cliff_bottom_light_left_sea";
-	COMBINE "temp_cliff_bottom_light_left";
-	ADD "temp_8x8_cliff_sea_border_ne" (8, 0); END;
-	
-COMPOSITE "tile_cliff_bottom_light_right_sea";
-	COMBINE "temp_cliff_bottom_light_right";
-	ADD "temp_8x8_cliff_sea_border_nw" (0, 0); END;
-	
-	
-COMPOSITE "tile_cliff_bottom_dark_left_sea";
-	COMBINE "temp_cliff_bottom_dark_left";
-	ADD "temp_8x8_cliff_sea_border_ne" (8, 0); END;
-	
-COMPOSITE "tile_cliff_bottom_dark_right_sea";
-	COMBINE "temp_cliff_bottom_dark_right";
-	ADD "temp_8x8_cliff_sea_border_nw" (0, 0); END;
 	
 COMPOSITE "tile_cliff_inside_se_sea";
 	ADD "temp_8x8_cliff_inside_se" (8, 8);

@@ -124,13 +124,16 @@ TILE "output_lavafall_down_right";		SOLID block; SPRITELIST "tile_output_lavafal
 
 TILE "water_boulder"; SAMESPRITE; SOLID block; END;
 TILE "water_rocks"; SAMESPRITE; SOLID block; END;
-TILE "lilypad_right"; SAMESPRITE; SOLID block; END;
-TILE "lilypad_left"; SAMESPRITE; SOLID block; END;
-TILE "armos_sunk_deep"; SAMESPRITE; SOLID block; END;
-TILE "armos_sunk_shallow"; SAMESPRITE; SOLID block; END;
-
 TILE "water_roots_right"; SAMESPRITE; SOLID block; END;
 TILE "water_roots_left"; SAMESPRITE; SOLID block; END;
+TILE "water_roots_alt_right"; SAMESPRITE; SOLID block; END;
+TILE "water_roots_alt_left"; SAMESPRITE; SOLID block; END;
+TILE "lilypad_right"; SAMESPRITE; END;
+TILE "lilypad_left"; SAMESPRITE; END;
+TILE "armos_sunk_deep"; SAMESPRITE; SOLID block; END;
+TILE "armos_sunk_shallow_solid"; SAMESPRITE; SOLID block; END;
+TILE "armos_sunk_shallow_platform"; SAMESPRITE; END;
+
 TILE "water_tree_top_left_behind"; SAMESPRITE; SOLID block; END;
 TILE "water_tree_top_right_behind"; SAMESPRITE; SOLID block; END;
 TILE "water_tree_top_left"; SAMESPRITE; SOLID block; END;
@@ -138,11 +141,16 @@ TILE "water_tree_top_right"; SAMESPRITE; SOLID block; END;
 TILE "water_tree_bottom_left"; SAMESPRITE; SOLID block; END;
 TILE "water_tree_bottom_right"; SAMESPRITE; SOLID block; END;
 
-TILE "water_roots_alt_right"; SAMESPRITE; SOLID block; END;
-TILE "water_roots_alt_left"; SAMESPRITE; SOLID block; END;
 TILE "water_tree_alt_top_left_behind"; SAMESPRITE; SOLID block; END;
 TILE "water_tree_alt_top_right_behind"; SAMESPRITE; SOLID block; END;
 TILE "water_tree_alt_top_left"; SAMESPRITE; SOLID block; END;
 TILE "water_tree_alt_top_right"; SAMESPRITE; SOLID block; END;
 TILE "water_tree_alt_bottom_left"; SAMESPRITE; SOLID block; END;
 TILE "water_tree_alt_bottom_right"; SAMESPRITE; SOLID block; END;
+
+TILE "water_tree_leaves_top_left_behind"; SAMESPRITE; SOLID block; END;
+TILE "water_tree_leaves_top_right_behind"; SAMESPRITE; SOLID block; END;
+TILE "water_tree_leaves_top_left"; SAMESPRITE; SOLID block; END;
+TILE "water_tree_leaves_top_right"; SAMESPRITE; SOLID block; END;
+TILE "water_tree_leaves_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "water_tree_leaves_bottom_right"; SAMESPRITE; SOLID block; END;

@@ -6,150 +6,151 @@
 
 TILE "cliff_railing_square"; SAMESPRITE; SOLID block; END;
 
-TILE "cliff_top_light_left_railing_outside_nw"; SAMESPRITE; SOLID block; END;
-TILE "cliff_top_light_right_railing_outside_ne"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_light_left_railing_outside_sw"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_light_right_railing_outside_se"; SAMESPRITE; SOLID block; END;
-TILE "cliff_top_dark_left_railing_outside_nw"; SAMESPRITE; SOLID block; END;
-TILE "cliff_top_dark_right_railing_outside_ne"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_dark_left_railing_outside_sw"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_dark_right_railing_outside_se"; SAMESPRITE; SOLID block; END;
-
-TILE "cliff_vertical_left_top_railing_outside_sw"; SAMESPRITE; SOLID block; END;
-TILE "cliff_vertical_right_top_railing_outside_se"; SAMESPRITE; SOLID block; END;
-
-TILE "cliff_vertical_left"; SAMESPRITE; SOLID block; END;
-TILE "cliff_vertical_mid"; SAMESPRITE; LEDGE block, down; END;
-TILE "cliff_vertical_right"; SAMESPRITE; SOLID block; END;
 TILE "cliff_vertical_left_bottom_light"; SAMESPRITE; SOLID block; END;
 TILE "cliff_vertical_right_bottom_light"; SAMESPRITE; SOLID block; END;
 TILE "cliff_vertical_left_bottom_dark"; SAMESPRITE; SOLID block; END;
 TILE "cliff_vertical_right_bottom_dark"; SAMESPRITE; SOLID block; END;
+TILE "cliff_vertical_left"; SAMESPRITE; SOLID block; END;
+TILE "cliff_vertical_mid"; SAMESPRITE; LEDGE block, down; END;
+TILE "cliff_vertical_right"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_vertical_both_bottom_light"; SAMESPRITE; SOLID block; END;
+TILE "cliff_vertical_both_bottom_dark"; SAMESPRITE; SOLID block; END;
+TILE "cliff_vertical_both"; SAMESPRITE; SOLID block; END;
+TILE "cliff_vertical_both_top"; SAMESPRITE; SOLID block; END;
+TILE "cliff_side_both"; SAMESPRITE; SOLID block; END;
+TILE "cliff_top_light_both"; SAMESPRITE; SOLID block; END;
+TILE "cliff_top_dark_both"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_top_light_left_railing_outside_nw"; SAMESPRITE; SOLID block; END;
+TILE "cliff_top_light_right_railing_outside_ne"; SAMESPRITE; SOLID block; END;
+TILE "cliff_top_dark_left_railing_outside_nw"; SAMESPRITE; SOLID block; END;
+TILE "cliff_top_dark_right_railing_outside_ne"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_bottom_light_left_railing_outside_sw"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_light_right_railing_outside_se"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_dark_left_railing_outside_sw"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_dark_right_railing_outside_se"; SAMESPRITE; SOLID block; END;
+TILE "cliff_vertical_left_top_railing_outside_sw"; SAMESPRITE; SOLID block; END;
+TILE "cliff_vertical_right_top_railing_outside_se"; SAMESPRITE; SOLID block; END;
+
 
 TILE "cliff_top_light_left_railing_vertical_cap_n"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_light_right_railing_vertical_cap_n"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_light_left_railing_vertical_cap_s"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_light_right_railing_vertical_cap_s"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_dark_left_railing_vertical_cap_n"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_dark_right_railing_vertical_cap_n"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_bottom_light_left_railing_vertical_cap_s"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_light_right_railing_vertical_cap_s"; SAMESPRITE; SOLID block; END;
 TILE "cliff_bottom_dark_left_railing_vertical_cap_s"; SAMESPRITE; SOLID block; END;
 TILE "cliff_bottom_dark_right_railing_vertical_cap_s"; SAMESPRITE; SOLID block; END;
-
 TILE "cliff_vertical_left_top_railing_vertical_cap_s"; SAMESPRITE; SOLID block; END;
 TILE "cliff_vertical_right_top_railing_vertical_cap_s"; SAMESPRITE; SOLID block; END;
 
 
 
 
-TILE "cliff_top_light_both"; SAMESPRITE; SOLID block; END;
-TILE "cliff_top_dark_both"; SAMESPRITE; SOLID block; END;
-TILE "cliff_side_both"; SAMESPRITE; SOLID block; END;
-TILE "cliff_vertical_both_top"; SAMESPRITE; SOLID block; END;
-TILE "cliff_vertical_both"; SAMESPRITE; SOLID block; END;
-TILE "cliff_vertical_both_bottom_light"; SAMESPRITE; SOLID block; END;
-TILE "cliff_vertical_both_bottom_dark"; SAMESPRITE; SOLID block; END;
 
 
 TILE "cliff_top_light_left_railing_horizontal_cap_w"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_light_right_railing_horizontal_cap_e"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_light_left_railing_horizontal_cap_w"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_light_right_railing_horizontal_cap_e"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_dark_left_railing_horizontal_cap_w"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_dark_right_railing_horizontal_cap_e"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_bottom_light_left_railing_horizontal_cap_w"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_light_right_railing_horizontal_cap_e"; SAMESPRITE; SOLID block; END;
 TILE "cliff_bottom_dark_left_railing_horizontal_cap_w"; SAMESPRITE; SOLID block; END;
 TILE "cliff_bottom_dark_right_railing_horizontal_cap_e"; SAMESPRITE; SOLID block; END;
-
 TILE "cliff_vertical_left_top_railing_horizontal_cap_w"; SAMESPRITE; SOLID block; END;
 TILE "cliff_vertical_right_top_railing_horizontal_cap_e"; SAMESPRITE; SOLID block; END;
 
 
 TILE "cliff_top_light_left_railing_vertical_long_cap_n"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_light_right_railing_vertical_long_cap_n"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_light_left_railing_vertical_long_cap_s"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_light_right_railing_vertical_long_cap_s"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_dark_left_railing_vertical_long_cap_n"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_dark_right_railing_vertical_long_cap_n"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_dark_left_railing_vertical_long_cap_s"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_dark_right_railing_vertical_long_cap_s"; SAMESPRITE; SOLID block; END;
-
-TILE "cliff_vertical_left_top_railing_vertical_long_cap_s"; SAMESPRITE; SOLID block; END;
-TILE "cliff_vertical_right_top_railing_vertical_long_cap_s"; SAMESPRITE; SOLID block; END;
 
 TILE "cliff_top_light_left_railing_vertical_long_cap_both"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_light_right_railing_vertical_long_cap_both"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_light_left_railing_vertical_long_cap_both"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_light_right_railing_vertical_long_cap_both"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_dark_left_railing_vertical_long_cap_both"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_dark_right_railing_vertical_long_cap_both"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_bottom_light_left_railing_vertical_long_cap_s"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_light_right_railing_vertical_long_cap_s"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_dark_left_railing_vertical_long_cap_s"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_dark_right_railing_vertical_long_cap_s"; SAMESPRITE; SOLID block; END;
+TILE "cliff_vertical_left_top_railing_vertical_long_cap_s"; SAMESPRITE; SOLID block; END;
+TILE "cliff_vertical_right_top_railing_vertical_long_cap_s"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_bottom_light_left_railing_vertical_long_cap_both"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_light_right_railing_vertical_long_cap_both"; SAMESPRITE; SOLID block; END;
 TILE "cliff_bottom_dark_left_railing_vertical_long_cap_both"; SAMESPRITE; SOLID block; END;
 TILE "cliff_bottom_dark_right_railing_vertical_long_cap_both"; SAMESPRITE; SOLID block; END;
-
 TILE "cliff_vertical_left_top_railing_vertical_long_cap_both"; SAMESPRITE; SOLID block; END;
 TILE "cliff_vertical_right_top_railing_vertical_long_cap_both"; SAMESPRITE; SOLID block; END;
 
 TILE "cliff_top_light_left_railing_horizontal_long_cap_w"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_light_right_railing_horizontal_long_cap_e"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_light_left_railing_horizontal_long_cap_w"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_light_right_railing_horizontal_long_cap_e"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_dark_left_railing_horizontal_long_cap_w"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_dark_right_railing_horizontal_long_cap_e"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_dark_left_railing_horizontal_long_cap_w"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_dark_right_railing_horizontal_long_cap_e"; SAMESPRITE; SOLID block; END;
-
-TILE "cliff_vertical_left_top_railing_horizontal_long_cap_w"; SAMESPRITE; SOLID block; END;
-TILE "cliff_vertical_right_top_railing_horizontal_long_cap_e"; SAMESPRITE; SOLID block; END;
 
 TILE "cliff_top_light_left_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_light_right_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_light_left_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_light_right_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_dark_left_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_dark_right_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_bottom_light_left_railing_horizontal_long_cap_w"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_light_right_railing_horizontal_long_cap_e"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_dark_left_railing_horizontal_long_cap_w"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_dark_right_railing_horizontal_long_cap_e"; SAMESPRITE; SOLID block; END;
+TILE "cliff_vertical_left_top_railing_horizontal_long_cap_w"; SAMESPRITE; SOLID block; END;
+TILE "cliff_vertical_right_top_railing_horizontal_long_cap_e"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_bottom_light_left_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_light_right_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
 TILE "cliff_bottom_dark_left_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
 TILE "cliff_bottom_dark_right_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
-
 TILE "cliff_vertical_left_top_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
 TILE "cliff_vertical_right_top_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
 
 TILE "cliff_top_light_both_railing_vertical_cap_n_right"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_light_both_railing_vertical_cap_n_left"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_light_both_railing_vertical_cap_s_right"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_light_both_railing_vertical_cap_s_left"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_dark_both_railing_vertical_cap_n_right"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_dark_both_railing_vertical_cap_n_left"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_bottom_light_both_railing_vertical_cap_s_right"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_light_both_railing_vertical_cap_s_left"; SAMESPRITE; SOLID block; END;
 TILE "cliff_bottom_dark_both_railing_vertical_cap_s_right"; SAMESPRITE; SOLID block; END;
 TILE "cliff_bottom_dark_both_railing_vertical_cap_s_left"; SAMESPRITE; SOLID block; END;
-
 TILE "cliff_vertical_both_top_railing_vertical_cap_s_right"; SAMESPRITE; SOLID block; END;
 TILE "cliff_vertical_both_top_railing_vertical_cap_s_left"; SAMESPRITE; SOLID block; END;
 
 
 
 TILE "cliff_top_light_both_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_light_both_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_dark_both_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_dark_both_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
 
+TILE "cliff_bottom_light_both_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_dark_both_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
 TILE "cliff_vertical_both_top_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
 
 
-
-TILE "cliff_side_left_railing_vertical_long"; SAMESPRITE; SOLID block; END;
-TILE "cliff_side_right_railing_vertical_long"; SAMESPRITE; SOLID block; END;
 TILE "cliff_side_left_railing_vertical_long_cap_n"; SAMESPRITE; SOLID block; END;
 TILE "cliff_side_right_railing_vertical_long_cap_n"; SAMESPRITE; SOLID block; END;
+TILE "cliff_side_left_railing_vertical_long"; SAMESPRITE; SOLID block; END;
+TILE "cliff_side_right_railing_vertical_long"; SAMESPRITE; SOLID block; END;
 TILE "cliff_side_left_railing_vertical_long_cap_s"; SAMESPRITE; SOLID block; END;
 TILE "cliff_side_right_railing_vertical_long_cap_s"; SAMESPRITE; SOLID block; END;
 TILE "cliff_side_left_railing_vertical_long_cap_both"; SAMESPRITE; SOLID block; END;
 TILE "cliff_side_right_railing_vertical_long_cap_both"; SAMESPRITE; SOLID block; END;
 
-TILE "cliff_top_mid_railing_horizontal_long"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_mid_railing_horizontal_long"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_mid_railing_horizontal_long_cap_w"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_mid_railing_horizontal_long_cap_w"; SAMESPRITE; SOLID block; END;
+TILE "cliff_top_mid_railing_horizontal_long"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_mid_railing_horizontal_long_cap_e"; SAMESPRITE; SOLID block; END;
-TILE "cliff_bottom_mid_railing_horizontal_long_cap_e"; SAMESPRITE; SOLID block; END;
 TILE "cliff_top_mid_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_mid_railing_horizontal_long_cap_w"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_mid_railing_horizontal_long"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_mid_railing_horizontal_long_cap_e"; SAMESPRITE; SOLID block; END;
 TILE "cliff_bottom_mid_railing_horizontal_long_cap_both"; SAMESPRITE; SOLID block; END;
 
 TILE "cliff_side_left_inside_railing_vertical_long_cap_n"; SAMESPRITE; SOLID block; END;
@@ -163,21 +164,19 @@ TILE "cliff_side_both_inside_both"; SAMESPRITE; SOLID block; END;
 
 TILE "cliff_inside_se_railing_inside_nw"; SAMESPRITE; SOLID block; END;
 TILE "cliff_inside_sw_railing_inside_ne"; SAMESPRITE; SOLID block; END;
-TILE "cliff_inside_ne_railing_inside_sw"; SAMESPRITE; SOLID block; END;
-TILE "cliff_inside_nw_railing_inside_se"; SAMESPRITE; SOLID block; END;
-
 TILE "cliff_inside_se_railing_inside_se_cap_s"; SAMESPRITE; SOLID block; END;
 TILE "cliff_inside_sw_railing_inside_sw_cap_s"; SAMESPRITE; SOLID block; END;
-TILE "cliff_inside_ne_railing_inside_ne_cap_n"; SAMESPRITE; SOLID block; END;
-TILE "cliff_inside_nw_railing_inside_nw_cap_n"; SAMESPRITE; SOLID block; END;
-
 TILE "cliff_inside_se_railing_inside_se_cap_e"; SAMESPRITE; SOLID block; END;
 TILE "cliff_inside_sw_railing_inside_sw_cap_w"; SAMESPRITE; SOLID block; END;
-TILE "cliff_inside_ne_railing_inside_ne_cap_e"; SAMESPRITE; SOLID block; END;
-TILE "cliff_inside_nw_railing_inside_nw_cap_w"; SAMESPRITE; SOLID block; END;
-
 TILE "cliff_inside_se_railing_inside_se_cap_both"; SAMESPRITE; SOLID block; END;
 TILE "cliff_inside_sw_railing_inside_sw_cap_both"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_inside_ne_railing_inside_sw"; SAMESPRITE; SOLID block; END;
+TILE "cliff_inside_nw_railing_inside_se"; SAMESPRITE; SOLID block; END;
+TILE "cliff_inside_ne_railing_inside_ne_cap_n"; SAMESPRITE; SOLID block; END;
+TILE "cliff_inside_nw_railing_inside_nw_cap_n"; SAMESPRITE; SOLID block; END;
+TILE "cliff_inside_ne_railing_inside_ne_cap_e"; SAMESPRITE; SOLID block; END;
+TILE "cliff_inside_nw_railing_inside_nw_cap_w"; SAMESPRITE; SOLID block; END;
 TILE "cliff_inside_ne_railing_inside_ne_cap_both"; SAMESPRITE; SOLID block; END;
 TILE "cliff_inside_nw_railing_inside_nw_cap_both"; SAMESPRITE; SOLID block; END;
 
@@ -185,10 +184,11 @@ TILE "cliff_sea"; SAMESPRITE; END;
 
 TILE "cliff_top_light_left_sea"; SAMESPRITE; END;
 TILE "cliff_top_light_right_sea"; SAMESPRITE; END;
-TILE "cliff_bottom_light_left_sea"; SAMESPRITE; END;
-TILE "cliff_bottom_light_right_sea"; SAMESPRITE; END;
 TILE "cliff_top_dark_left_sea"; SAMESPRITE; END;
 TILE "cliff_top_dark_right_sea"; SAMESPRITE; END;
+
+TILE "cliff_bottom_light_left_sea"; SAMESPRITE; END;
+TILE "cliff_bottom_light_right_sea"; SAMESPRITE; END;
 TILE "cliff_bottom_dark_left_sea"; SAMESPRITE; END;
 TILE "cliff_bottom_dark_right_sea"; SAMESPRITE; END;
 TILE "cliff_vertical_left_sea"; SAMESPRITE; END;
@@ -231,3 +231,38 @@ TILE "cliff_cave_left_railing_cap_both"; SAMESPRITE; SOLID edge_n; END;
 TILE "cliff_cave_mid_railing_cap_both"; SAMESPRITE; SOLID edge_n; END;
 TILE "cliff_cave_right_railing_cap_both"; SAMESPRITE; SOLID edge_n; END;
 TILE "cliff_cave_both_railing_cap_both"; SAMESPRITE; SOLID edge_n; END;
+
+
+TILE "cliff_tunnel_down"; SAMESPRITE; SOLID doorway; END;
+TILE "cliff_tunnel_up"; SAMESPRITE; SOLID doorway_up; END;
+TILE "cliff_tunnel_left"; SAMESPRITE; SOLID doorway_left; END;
+TILE "cliff_tunnel_right"; SAMESPRITE; SOLID doorway_right; END;
+
+TILE "cliff_tunnel_down_keyhole"; SAMESPRITE; SOLID block; END;
+TILE "cliff_tunnel_up_keyhole"; SAMESPRITE; SOLID block; END;
+TILE "cliff_tunnel_left_keyhole"; SAMESPRITE; SOLID block; END;
+TILE "cliff_tunnel_right_keyhole"; SAMESPRITE; SOLID block; END;
+
+TILE "cliff_tunnel_down_wide_left"; SAMESPRITE; SOLID doorway; END;
+TILE "cliff_tunnel_down_wide_mid"; SAMESPRITE; SOLID doorway; END;
+TILE "cliff_tunnel_down_wide_right"; SAMESPRITE; SOLID doorway; END;
+TILE "cliff_tunnel_up_wide_left"; SAMESPRITE; SOLID doorway_up; END;
+TILE "cliff_tunnel_up_wide_mid"; SAMESPRITE; SOLID doorway_up; END;
+TILE "cliff_tunnel_up_wide_right"; SAMESPRITE; SOLID doorway_up; END;
+TILE "cliff_tunnel_left_wide_top"; SAMESPRITE; SOLID doorway_left; END;
+TILE "cliff_tunnel_left_wide_mid"; SAMESPRITE; SOLID doorway_left; END;
+TILE "cliff_tunnel_left_wide_bottom"; SAMESPRITE; SOLID doorway_left; END;
+TILE "cliff_tunnel_right_wide_top"; SAMESPRITE; SOLID doorway_right; END;
+TILE "cliff_tunnel_right_wide_mid"; SAMESPRITE; SOLID doorway_right; END;
+TILE "cliff_tunnel_right_wide_bottom"; SAMESPRITE; SOLID doorway_right; END;
+
+TILE "temp_cliff_bombable";
+	SOLID		block;
+	FLAGS		Bombable;
+	PROPERTIES	(boolean, disable_on_destroy, true);
+END;
+
+TILE "cliff_bombable_right";	CLONE "temp_cliff_bombable"; SAMESPRITE; END;
+TILE "cliff_bombable_up";		CLONE "temp_cliff_bombable"; SAMESPRITE; END;
+TILE "cliff_bombable_left";		CLONE "temp_cliff_bombable"; SAMESPRITE; END;
+TILE "cliff_bombable_down";		CLONE "temp_cliff_bombable"; SAMESPRITE; END;
