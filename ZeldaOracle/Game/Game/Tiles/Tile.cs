@@ -455,8 +455,6 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public virtual void Update() {
 			UpdateMovement();
-			if (!isMoving)
-				CheckSurfaceTile();
 
 			// Check if hurting the player.
 			if (HasFlag(TileFlags.HurtPlayer) && roomControl.Player.IsOnGround) {
