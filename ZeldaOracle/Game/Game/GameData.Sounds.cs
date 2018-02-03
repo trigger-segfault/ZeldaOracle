@@ -25,6 +25,7 @@ namespace ZeldaOracle.Game {
 
 		public static Sound SOUND_APPEAR_VANISH;
 		public static Sound SOUND_EFFECT_CLING;
+		public static Sound SOUND_ELECTROCUTE;
 		public static Sound SOUND_FIRE;
 		public static Sound SOUND_GALE_SEED;
 		public static Sound SOUND_LEAVES;
@@ -91,8 +92,12 @@ namespace ZeldaOracle.Game {
 		public static Sound SOUND_PLAYER_THROW;
 		public static Sound SOUND_PLAYER_WADE;
 
+		// Projectiles ----------------------------------------------------------------
+
+		public static Sound SOUND_LASER;
+
 		// Tiles ----------------------------------------------------------------------
-		
+
 		public static Sound SOUND_BARRIER;
 		public static Sound SOUND_BLOCK_PUSH;
 		public static Sound SOUND_BLUE_ROLLER;

@@ -1,0 +1,63 @@
+﻿#==============================================================
+# Zones
+#==============================================================
+
+ZONE "dungeon_skull_dungeon";
+	NAME "Skull Dungeon";
+	DEFAULTTILE "floor";
+	PALETTE "dungeon_skull_dungeon";
+	SETSTYLE "railing", "dungeon";
+	SETSTYLE "floor", "dungeon_skull_dungeon";
+	SETSTYLE "wall", "dungeon_skull_dungeon";
+	SETSTYLE "wall_alt", "dungeon_skull_dungeon";
+	SETSTYLE "ceiling", "medium";
+	SETSTYLE "ceiling_alt", "medium";
+	SETSTYLE "tunnel", "tunnel_8";
+	SETSTYLE "stairs", "dungeon";
+	SETSTYLE "cracked_floor", "pattern_5";
+	SETSTYLE "fancy_tile_1", "bright_pattern_7";
+	SETSTYLE "fancy_tile_2", "square_pattern_2";
+	SETSTYLE "fancy_tile_3", "square_pattern_12";
+	SETSTYLE "fancy_tile_4", "square_pattern_12";
+	SETSTYLE "hardened_lava", "ages";
+	SETSTYLE "staircase", "indoors";
+	SETSTYLE "block", "dungeon";
+	SETSTYLE "lantern", "dungeon";
+	SETSTYLE "magnet_stone", "normal";
+	SETSTYLE "sign", "normal";
+	SETSTYLE "water", "indoors";
+	SETSTYLE "dirt", "indoors";
+	SETSTYLE "hole", "normal";
+	SETSTYLE "wall_torch", "dungeon";
+	SETSTYLE "button", "flat";
+	SETSTYLE "armos", "floor";
+	SETSTYLE "bush", "indoors";
+	SETSTYLE "chest", "flat";
+	SETSTYLE "wall_column", "temple";
+	SETSTYLE "door", "dungeon";
+END;
+
+ZONE "dungeon_spirits_grave";
+	CLONE "dungeon_skull_dungeon";
+	PALETTE "dungeon_spirits_grave";
+	SETSTYLE "floor", "dungeon_spirits_grave";
+	SETSTYLE "wall", "dungeon_spirits_grave";
+	SETSTYLE "wall_alt", "dungeon_spirits_grave";
+	SETSTYLE "ceiling", "light";
+	SETSTYLE "ceiling_alt", "light";
+	SETSTYLE "cracked_floor", "pattern_1";
+	SETSTYLE "tunnel", "tunnel_4";
+	SETSTYLE "fancy_tile_1", "bright_pattern_7";
+	SETSTYLE "fancy_tile_2", "square_pattern_6";
+	SETSTYLE "fancy_tile_3", "square_pattern_2";
+	SETSTYLE "fancy_tile_4", "bright_pattern_6";
+	SETSTYLE "fancy_tile_5", "square_pattern_4";
+END;
+
+ZONE "sidescroll_ages_dungeon_1";
+	CLONE "dungeon_spirits_grave";
+	NAME "Sidescroll Ages Dungeon 1";
+	DEFAULTTILE "floor";
+	PALETTE "dungeon_spirits_grave";
+	SIDESCROLLING true;
+END;

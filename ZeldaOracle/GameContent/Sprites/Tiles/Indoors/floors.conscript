@@ -2,14 +2,14 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET	"temp_sheet_floors_overworld"		"Tiles/Indoors/floors_overworld"		(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_floors_square_tiles"	"Tiles/Indoors/floors_square_tiles"		(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_floors_interior"		"Tiles/Indoors/floors_interior"			(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_floors_dungeon"			"Tiles/Indoors/floors_dungeon"			(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_floors_bricks"			"Tiles/Indoors/floors_bricks"			(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_floors_square_patterns"	"Tiles/Indoors/floors_square_patterns"	(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_floors_bright_patterns"	"Tiles/Indoors/floors_bright_patterns"	(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_floors_misc_patterns"	"Tiles/Indoors/floors_misc_patterns"	(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_floors_overworld"		"Tiles/Indoors/floors_overworld"		(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_floors_square_tiles"	"Tiles/Indoors/floors_square_tiles"		(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_floors_interior"		"Tiles/Indoors/floors_interior"			(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_floors_dungeon"			"Tiles/Indoors/floors_dungeon"			(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_floors_bricks"			"Tiles/Indoors/floors_bricks"			(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_floors_square_patterns"	"Tiles/Indoors/floors_square_patterns"	(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_floors_bright_patterns"	"Tiles/Indoors/floors_bright_patterns"	(16, 16), (1, 1), (18, 18);
+SPRITESHEET	"temp_sheet_floors_misc_patterns"	"Tiles/Indoors/floors_misc_patterns"	(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Setup
@@ -178,11 +178,3 @@ NAME "entrance_brick_mid"			("temp_entrance_brick_mid", "entrance_brick");
 NAME "entrance_brick_light"			("temp_entrance_brick_light", "entrance_brick");
 NAME "tile_essense_brick"			("temp_essense_brick", "essense_brick");
 
-CLONE BASIC "entrance_brick_light_half_top", "entrance_brick_light";
-	SOURCERECT (0, 0, 16, 8); DRAWOFFSET (0, 8); END;
-CLONE BASIC "entrance_brick_light_half_bottom", "entrance_brick_light";
-	SOURCERECT (0, 8, 16, 8); DRAWOFFSET (0, 0); END;
-CLONE BASIC "entrance_brick_light_half_left", "entrance_brick_light";
-	SOURCERECT (0, 0, 8, 16); DRAWOFFSET (8, 0); END;
-CLONE BASIC "entrance_brick_light_half_right", "entrance_brick_light";
-	SOURCERECT (8, 0, 8, 16); DRAWOFFSET (0, 0); END;

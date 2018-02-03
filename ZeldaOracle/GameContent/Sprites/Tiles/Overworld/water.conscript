@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET	"temp_sheet_water"	"Tiles/Overworld/water"			(8, 8), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_water"	"Tiles/Overworld/water"			(8, 8), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -14,23 +14,23 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 
 SOURCE "temp_sheet_water";
-SPRITESET "set_water", (30, 12);
+SPRITESET "tiles_water", (30, 12);
 	MAPPEDCOLORS	"tiles_default", ("water", "lava");
 	MULTIPLE BASIC (1, 0), (1, 0), (3, 1); END;
 	
 	MULTIPLE STYLE "water", (0, 1), (4, 1);
 		ADD "overworld"			(0, 1);
-		ADD "interior"			(0, 2);
+		ADD "indoors"			(0, 2);
 		END;
 		
 	MULTIPLE STYLE "water", (0, 2), (4, 1);
 		ADD "overworld"			(0, 2);
-		ADD "interior"			(0, 3);
+		ADD "indoors"			(0, 3);
 		END;
 		
 	MULTIPLE STYLE "water", (4, 0), (4, 4);
 		ADD "overworld"			(4, 0);
-		ADD "interior"			(4, 4);
+		ADD "indoors"			(4, 4);
 		END;
 		
 	MULTIPLE BASIC (0, 4), (0, 4), (4, 4); END;
@@ -38,26 +38,26 @@ SPRITESET "set_water", (30, 12);
 	MULTIPLE BASIC (8, 4), (8, 4), (8, 4); END;
 	SINGLE STYLE "water", (13, 8);
 		ADD "overworld"			(13, 8);
-		ADD "interior"			(13, 9);
+		ADD "indoors"			(13, 9);
 		END;
 		
 	SINGLE COLOR "", ("lava"), (13, 9); END;
 	
 	MULTIPLE STYLE "water", (16, 0), (2, 4);
 		ADD "overworld"			(16, 0);
-		ADD "interior"			(16, 4);
+		ADD "indoors"			(16, 4);
 		END;
 		
 	MULTIPLE COLOR "", ("lava"), (16, 4), (16, 4), (2, 4); END;
 	
 	MULTIPLE STYLE "water", (18, 0), (8, 4);
 		ADD "overworld"			(18, 0);
-		ADD "interior"			(18, 4);
+		ADD "indoors"			(18, 4);
 		END;
 		
 	MULTIPLE COLORSTYLE "water", "", ("lava"), (18, 4), (4, 4);
 		ADD "overworld"			(18, 8);
-		ADD "interior"			(18, 4);
+		ADD "indoors"			(18, 4);
 		END;
 		
 	MULTIPLE COLOR "", ("lava"), (22, 4), (22, 4), (4, 4); END;
@@ -77,7 +77,7 @@ SPRITESET "set_water", (30, 12);
 	MULTIPLE BASIC (0, 8), (0, 8), (12, 2); END;
 	
 	MAPPEDCOLORS	"tiles_default", ("hardened_lava");
-	SINGLE STYLE "hardened_lava", (12, 8);
+	SINGLE COLORSTYLE "hardened_lava", "", ("hardened_lava"), (12, 8);
 		ADD "ages"				(12, 8);
 		ADD "seasons"			(12, 9);
 		END;
@@ -87,7 +87,7 @@ END;
 # Temporary
 #==============================================================
 
-SOURCE "set_water";
+SOURCE "tiles_water";
 
 NAME "temp_8x8_hardened_lava"		(12, 8);
 

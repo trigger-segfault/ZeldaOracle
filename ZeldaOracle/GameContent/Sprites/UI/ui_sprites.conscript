@@ -1,0 +1,152 @@
+﻿
+#==============================================================
+# Sprite Sheets
+#==============================================================
+
+SPRITESHEET "temp_sheet_ui_small", "UI/ui_small", (8, 8), (1, 1), (18, 18);
+SPRITESHEET "temp_sheet_ui_large", "UI/ui_large", (16, 16), (1, 1), (18, 18);
+SPRITESHEET "temp_sheet_ui_dungeon_map_small", "UI/ui_dungeon_map_small", (8, 8), (1, 1), (18, 18);
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+
+SOURCE "temp_sheet_ui_small";
+SPRITESET "ui_small", (12, 4);
+	PALETTEDICTIONARY "entity_dictionary";
+	MAPPEDCOLORS	"entities_default",
+		("default", "green", "blue", "red", "orange", "shaded_red", "shaded_blue", "ui_red");
+		
+	MULTIPLE BASIC (0, 0), (0, 0), (12, 2); END;
+	MULTIPLE BASIC (0, 2), (0, 2), (7, 2); END;
+	
+	PALETTEDICTIONARY "menu_dictionary";
+	MAPPEDCOLORS	"menu_default", ("background" "background_fancy_black");
+	
+	SINGLE BASIC (7, 3); END;
+	MULTIPLE BASIC (8, 2), (8, 2), (4, 2); END;
+END;
+
+SOURCE "temp_sheet_ui_large";
+SPRITESET "ui_large", (8, 4);
+	
+	MULTIPLE BASIC (2, 0), (2, 0), (2, 2); END;
+	
+	PALETTEDICTIONARY "entity_dictionary";
+	MAPPEDCOLORS	"entities_default",
+		("default", "green", "blue", "red", "orange", "shaded_red", "shaded_blue", "ui_red");
+		
+	MULTIPLE BASIC (0, 0), (0, 0), (2, 4); END;
+	MULTIPLE BASIC (2, 2), (2, 2), (2, 2); END;
+	MULTIPLE BASIC (4, 0), (4, 0), (2, 3); END;
+	MULTIPLE BASIC (6, 0), (6, 0), (2, 4); END;
+END;
+
+SOURCE "temp_sheet_ui_dungeon_map_small";
+SPRITESET "ui_dungeon_map_small", (12, 4);
+	PALETTEDICTIONARY "entity_dictionary";
+	MAPPEDCOLORS	"entities_default",
+		("default", "green", "blue", "red", "orange", "shaded_red", "shaded_blue", "ui_dungeon_map_red");
+		
+	MULTIPLE BASIC (6, 0), (6, 0), (2, 4); END;
+	SINGLE BASIC (5, 3); END;
+	
+	PALETTEDICTIONARY "dungeon_map_dictionary";
+	MAPPEDCOLORS	"dungeon_map_default", ("background", "background_alt", "room", "chest", "boss");
+	
+	MULTIPLE BASIC (0, 0), (0, 0), (5, 4); END;
+	MULTIPLE BASIC (5, 0), (5, 0), (1, 3); END;
+END;
+
+#==============================================================
+# Sprites
+#==============================================================
+
+SOURCE "ui_small";
+
+NAME "hud_background",				(4, 3);
+NAME "hud_background_inventory",	(4, 3);
+COMPOSITE "hud_bracket_left";		ADD (9, 0); ADD (9, 1), (0, 8); END;
+COMPOSITE "hud_bracket_right";		ADD (10, 0); ADD (10, 1), (0, 8); END;
+COMPOSITE "hud_bracket_left_right";	ADD (11, 0); ADD (11, 1), (0, 8); END;
+COMPOSITE "hud_bracket_left_a";		ADD (7, 0); ADD (9, 1), (0, 8); END;
+COMPOSITE "hud_bracket_left_b";		ADD (7, 1); ADD (9, 1), (0, 8); END;
+COMPOSITE "hud_bracket_right_a";	ADD (8, 0); ADD (10, 1), (0, 8); END;
+COMPOSITE "hud_bracket_right_b";	ADD (8, 1); ADD (10, 1), (0, 8); END;
+NAME "hud_heart_0",					(0, 0);
+NAME "hud_heart_1",					(1, 0);
+NAME "hud_heart_2",					(2, 0);
+NAME "hud_heart_3",					(3, 0);
+NAME "hud_heart_4",					(4, 0);
+NAME "hud_rupee",					(0, 2);
+NAME "hud_ore_chunk",				(1, 2);
+NAME "hud_key",						(0, 1);
+NAME "hud_x",						(1, 1);
+NAME "hud_level",					(2, 1);
+NAME "hud_north",					(3, 1);
+NAME "hud_south",					(4, 1);
+NAME "hud_text_next_arrow",			(6, 2);
+NAME "hud_ammo_select_arrow",		(6, 3);
+NAME "hud_ammo_select_background",	(8, 2);
+NAME "hud_ammo_select_background_fancy",	(7, 3);
+
+SOURCE "ui_large";
+
+NAME "hud_heart_pieces_empty_top_left",			(0, 0);
+OFFSET "hud_heart_pieces_empty_top_right",		(1, 0), (16, 0); END;
+OFFSET "hud_heart_pieces_empty_bottom_left",	(0, 1), (0, 16); END;
+OFFSET "hud_heart_pieces_empty_bottom_right",	(1, 1), (16, 16); END;
+NAME "hud_heart_pieces_full_top_left",			(0, 2);
+OFFSET "hud_heart_pieces_full_top_right",		(1, 2), (16, 0); END;
+OFFSET "hud_heart_pieces_full_bottom_left",		(0, 3), (0, 16); END;
+OFFSET "hud_heart_pieces_full_bottom_right",	(1, 3), (16, 16); END;
+
+NAME "hud_heart_pieces_fancy_empty_top_left",			(0, 0);
+OFFSET "hud_heart_pieces_fancy_empty_top_right",		(1, 0), (16, 0); END;
+OFFSET "hud_heart_pieces_fancy_empty_bottom_left",		(0, 1), (0, 16); END;
+OFFSET "hud_heart_pieces_fancy_empty_bottom_right",		(1, 1), (16, 16); END;
+COMPOSITE "hud_heart_pieces_fancy_full_top_left";		ADD (2, 0); ADD (2, 2); END;
+COMPOSITE "hud_heart_pieces_fancy_full_top_right";		ADD (3, 0), (16, 0); ADD (3, 2), (16, 0); END;
+COMPOSITE "hud_heart_pieces_fancy_full_bottom_left";	ADD (2, 1), (0, 16); ADD (2, 3), (0, 16); END;
+COMPOSITE "hud_heart_pieces_fancy_full_bottom_right";	ADD (3, 1), (16, 16); ADD (3, 3), (16, 16); END;
+
+COMPOSITE "hud_save_button";			ADD (4, 2); ADD (5, 2), (16, 0); END;
+
+SOURCE "ui_dungeon_map_small";
+
+NAME "ui_map_room_down_right"				(0, 0);
+NAME "ui_map_room_down_left_right"			(1, 0);
+NAME "ui_map_room_down_left"				(2, 0);
+NAME "ui_map_room_down"						(3, 0);
+NAME "ui_map_room_down_up_right"			(0, 1);
+NAME "ui_map_room_down_left_up_right"		(1, 1);
+NAME "ui_map_room_down_left_up"				(2, 1);
+NAME "ui_map_room_down_up"					(3, 1);
+NAME "ui_map_room_up_right"					(0, 2);
+NAME "ui_map_room_left_up_right"			(1, 2);
+NAME "ui_map_room_left_up"					(2, 2);
+NAME "ui_map_room_up"						(3, 2);
+NAME "ui_map_room_right"					(0, 3);
+NAME "ui_map_room_left_right"				(1, 3);
+NAME "ui_map_room_left"						(2, 3);
+NAME "ui_map_room_none"						(3, 3);
+
+COMPOSITE "ui_map_floor_box";				ADD (4, 0); ADD (5, 0), (8, 0); END;
+NAME "ui_map_player"						(6, 2);
+NAME "ui_map_boss_floor"					(7, 2);
+NAME "ui_map_treasure_room"					(4, 2);
+NAME "ui_map_boss_room"						(4, 3);
+NAME "ui_map_undiscovered_room"				(4, 1);
+NAME "ui_map_floor_background"				(5, 1);
+NAME "ui_map_floor_indicator"				(5, 3);
+NAME "ui_map_arrow_up"						(6, 3);
+NAME "ui_map_arrow_down"					(7, 3);
+COMPOSITE "ui_map_cursor";			ADD (6, 0), (-4, -4);
+									ADD (7, 0), ( 4, -4);
+									ADD (6, 1), (-4,  4);
+									ADD (7, 1), ( 4,  4); END;
+									
+ANIMATION "ui_map_cursor_link"; SUBSTRIP repeat;
+	ADD frame, 32, "ui_map_cursor";
+	ADD frame, 32, "ui_map_player"; END;

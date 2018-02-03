@@ -24,6 +24,8 @@ COLOR	default, dark		(248,248,120);
 # UI elements that are colored as tiles in-game
 #==============================================================
 
-COLOR	ui_hud, dark		( 16, 32, 48);
+COLOR	ui_red, dark		( 16, 32, 48);
+
+#==============================================================
 
 END;

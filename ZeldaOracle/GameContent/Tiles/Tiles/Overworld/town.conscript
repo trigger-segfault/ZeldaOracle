@@ -185,6 +185,7 @@ TILE "plank_fence_mid"; SAMESPRITE; SOLID block; END;
 TILE "plank_fence_right"; SAMESPRITE; SOLID block; END;
 TILE "plank_fence_sand"; SAMESPRITE; SOLID block; END;
 TILE "fence_post"; SAMESPRITE; SOLID block; END;
+TILE "fence_post_dark"; SAMESPRITE; SOLID block; END;
 
 TILE "statue_block_lined_up"; SAMESPRITE; SOLID block; END;
 TILE "statue_block"; SAMESPRITE; SOLID block; END;
@@ -226,6 +227,10 @@ TILE "fountain_path_nw"; SAMESPRITE; SOLID block; END;
 TILE "fountain_path_ne"; SAMESPRITE; SOLID block; END;
 TILE "fountain_path_sw"; SAMESPRITE; SOLID block; END;
 TILE "fountain_path_se"; SAMESPRITE; SOLID block; END;
+TILE "fountain_tile_nw"; SAMESPRITE; SOLID block; END;
+TILE "fountain_tile_ne"; SAMESPRITE; SOLID block; END;
+TILE "fountain_tile_sw"; SAMESPRITE; SOLID block; END;
+TILE "fountain_tile_se"; SAMESPRITE; SOLID block; END;
 
 TILE "bridge_vertical_left"; SAMESPRITE; SOLID bridge_v_left; END;
 TILE "bridge_vertical_mid"; SAMESPRITE; END;
@@ -241,5 +246,5 @@ TILE "tombstone_hole_right"; SAMESPRITE; SOLID block; END;
 TILE "tombstone_filled_left"; SAMESPRITE; SOLID block; END;
 TILE "tombstone_filled_right"; SAMESPRITE; SOLID block; END;
 TILE "tombstone_subrosia"; SAMESPRITE; SOLID block; END;
-TILE "tombstone_subrosia_dirt"; SAMESPRITE; SOLID block; END;
+TILE "tombstone_subrosia_dark"; SAMESPRITE; SOLID block; END;
 TILE "grave_stationary"; SPRITE "tile_grave"; SOLID block; END;

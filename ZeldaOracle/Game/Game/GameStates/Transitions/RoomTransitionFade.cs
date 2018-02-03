@@ -27,7 +27,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		//-----------------------------------------------------------------------------
 
 		public RoomTransitionFade() {
-			fadeColor = Color.White;
+			fadeColor = Color.ToGBCColor(Color.White);
 		}
 		
 		public RoomTransitionFade(Color fadeColor) {
@@ -60,6 +60,13 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 					EndTransition();
 				}
 			}
+		}
+
+		public override void AssignPalettes() {
+			if (isBeginningFade)
+				OldRoomControl.AssignPalettes();
+			else
+				NewRoomControl.AssignPalettes();
 		}
 
 		public override void Draw(Graphics2D g) {

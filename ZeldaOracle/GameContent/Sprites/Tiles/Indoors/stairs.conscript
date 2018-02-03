@@ -2,8 +2,8 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET	"temp_sheet_stairs"		"Tiles/Indoors/stairs"			(16, 16), (1, 1), (18, 18); END;
-SPRITESHEET	"temp_sheet_staircases"	"Tiles/Indoors/staircases"		(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_stairs"		"Tiles/Indoors/stairs"			(16, 16), (1, 1), (18, 18);
+#SPRITESHEET	"temp_sheet_staircases"	"Tiles/Indoors/staircases"		(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -14,7 +14,7 @@ PALETTEDICTIONARY	"tile_dictionary";
 IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 
-SPRITESET "set_stairs" (4, 2);
+SPRITESET "tiles_stairs" (4, 3);
 	SOURCE "temp_sheet_stairs";
 	MAPPEDCOLORS	"tiles_default", ("stairs");
 	MULTIPLE STYLE "stairs", (0, 0), (4, 1);
@@ -24,30 +24,33 @@ SPRITESET "set_stairs" (4, 2);
 		ADD "dungeon"		(0, 3);
 		END;
 	
-	SOURCE "temp_sheet_staircases";
+	#SOURCE "temp_sheet_staircases";
 	
 	MAPPEDCOLORS	"tiles_default", ("floor_staircase");
 	MULTIPLE STYLE "staircase" (0, 1), (2, 1);
-		ADD "interior"		(0, 0);
-		ADD	"natural"		(0, 1);
-		ADD "natural_dark"	(0, 2);
-		ADD "maku_tree"		(0, 3);
+		ADD "indoors"		(4, 0);
+		ADD	"natural"		(4, 1);
+		ADD "natural_dark"	(4, 2);
+		ADD "maku_tree"		(4, 3);
 		END;
 		
 	MAPPEDCOLORS	"tiles_default", ("wall_staircase");
 	MULTIPLE STYLE "staircase" (2, 1), (2, 1);
-		ADD "interior"		(2, 0);
-		ADD	"natural"		(2, 1);
-		ADD	"natural_dark"	(2, 2);
-		ADD "maku_tree"		(2, 3);
+		ADD "indoors"		(6, 0);
+		ADD	"natural"		(6, 1);
+		ADD	"natural_dark"	(6, 2);
+		ADD "maku_tree"		(6, 3);
 		END;
+		
+	MAPPEDCOLORS	"tiles_default", ("floor_stairwell");
+	SINGLE BASIC (8, 0), (0, 2); END;
 END;
 
 #==============================================================
 # Tiles
 #==============================================================
 
-SOURCE "set_stairs";
+SOURCE "tiles_stairs";
 
 NAME "tile_stairs_down"				(0, 0);
 NAME "tile_stairs_up"				(1, 0);
@@ -58,6 +61,8 @@ NAME "tile_floor_staircase_up"		(0, 1);
 NAME "tile_floor_staircase_down"	(1, 1);
 NAME "tile_wall_staircase_up"		(2, 1);
 NAME "tile_wall_staircase_down"		(3, 1);
+
+NAME "tile_floor_stairwell"			(0, 2);
 
 #==============================================================
 # Style Previews

@@ -15,7 +15,7 @@ using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Common.Scripts.CustomReaders;
 using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 using Song = ZeldaOracle.Common.Audio.Song;
 using XnaSong = Microsoft.Xna.Framework.Media.Song;
@@ -79,6 +79,8 @@ namespace ZeldaOracle.Common.Content {
 		private static ContentManager contentManager;
 		/// <summary>The game's graphics device.</summary>
 		private static GraphicsDevice graphicsDevice;
+		/// <summary>The game's sprite batch for drawing.</summary>
+		private static SpriteBatch spriteBatch;
 		/// <summary>A map of the resource dictionaries by resource type.</summary>
 		private static Dictionary<Type, object> resourceDictionaries;
 
@@ -111,7 +113,7 @@ namespace ZeldaOracle.Common.Content {
 		private static Dictionary<string, CollisionModel> collisionModels;
 		private static Dictionary<string, BaseTileData> baseTileData;
 		private static Dictionary<string, TileData> tileData;
-		private static Dictionary<string, EventTileData> eventTileData;
+		private static Dictionary<string, ActionTileData> actionTileData;
 		private static Dictionary<string, Tileset> tilesets;
 		private static Dictionary<string, Zone> zones;
 		private static Dictionary<string, PropertyAction> propertyActions;
@@ -169,10 +171,11 @@ namespace ZeldaOracle.Common.Content {
 		//-----------------------------------------------------------------------------
 
 		/// <summary>Initializes the resource manager.</summary>
-		public static void Initialize(ContentManager contentManager, GraphicsDevice graphicsDevice) {
+		public static void Initialize(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, ContentManager contentManager) {
 			// Containment
-			Resources.contentManager	= contentManager;
+			Resources.spriteBatch		= spriteBatch;
 			Resources.graphicsDevice	= graphicsDevice;
+			Resources.contentManager	= contentManager;
 
 			// Graphics
 			images				= new Dictionary<string, Image>();
@@ -197,7 +200,7 @@ namespace ZeldaOracle.Common.Content {
 			collisionModels		= new Dictionary<string, CollisionModel>();
 			baseTileData        = new Dictionary<string, BaseTileData>();
 			tileData			= new Dictionary<string, TileData>();
-			eventTileData		= new Dictionary<string, EventTileData>();
+			actionTileData		= new Dictionary<string, ActionTileData>();
 			tilesets			= new Dictionary<string, Tileset>();
 			zones				= new Dictionary<string, Zone>();
 
@@ -223,7 +226,7 @@ namespace ZeldaOracle.Common.Content {
 			resourceDictionaries[typeof(CollisionModel)]	= collisionModels;
 			resourceDictionaries[typeof(BaseTileData)]		= baseTileData;
 			resourceDictionaries[typeof(TileData)]			= tileData;
-			resourceDictionaries[typeof(EventTileData)]		= eventTileData;
+			resourceDictionaries[typeof(ActionTileData)]		= actionTileData;
 			resourceDictionaries[typeof(Tileset)]			= tilesets;
 			resourceDictionaries[typeof(Zone)]				= zones;
 			resourceDictionaries[typeof(PropertyAction)]	= propertyActions;
@@ -249,18 +252,23 @@ namespace ZeldaOracle.Common.Content {
 			collisionModels = null;
 			baseTileData = null;
 			tileData = null;
-			eventTileData = null;
+			actionTileData = null;
 			tilesets = null;
 			zones = null;
 			propertyActions = null;
 			paletteDictionaries = null;
+			foreach (var pair in palettes) {
+				pair.Value.Dispose();
+			}
 			palettes = null;
 			resourceDictionaries = null;
+			palettedSpriteDatabase.Dispose();
 			palettedSpriteDatabase = null;
 			textureLoader = null;
 
 			registeredStyles = null;
 		}
+
 
 		//-----------------------------------------------------------------------------
 		// Generic Resource Methods
@@ -338,8 +346,8 @@ namespace ZeldaOracle.Common.Content {
 				return GetResourceKeyList<BaseTileData>();
 			if (type == typeof(TileData))
 				return GetResourceKeyList<TileData>();
-			if (type == typeof(EventTileData))
-				return GetResourceKeyList<EventTileData>();
+			if (type == typeof(ActionTileData))
+				return GetResourceKeyList<ActionTileData>();
 			if (type == typeof(Tileset))
 				return GetResourceKeyList<Tileset>();
 			if (type == typeof(Zone))
@@ -565,13 +573,6 @@ namespace ZeldaOracle.Common.Content {
 		/// <summary>Loads/compiles images from a script file.</summary>
 		public static void LoadImagesFromScript(string assetName) {
 			LoadScript(assetName, new ImageSR());
-		}
-
-		/// <summary>Loads the game font with the specified asset name.</summary>
-		public static GameFont LoadGameFont(string assetName) {
-			GameFontSR script = new GameFontSR();
-			LoadScript(assetName, script);
-			return script.Font;
 		}
 
 		/// <summary>Loads/compiles game fonts from a script file.</summary>
@@ -847,6 +848,10 @@ namespace ZeldaOracle.Common.Content {
 
 		public static GraphicsDevice GraphicsDevice {
 			get { return graphicsDevice; }
+		}
+
+		public static SpriteBatch SpriteBatch {
+			get { return spriteBatch; }
 		}
 
 		public static PalettedSpriteDatabase PalettedSpriteDatabase {

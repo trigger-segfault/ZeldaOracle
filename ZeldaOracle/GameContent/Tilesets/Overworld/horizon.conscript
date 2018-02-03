@@ -1,0 +1,34 @@
+TILESET "horizon", (6, 5), true;
+
+SETTILE (0, 0), "horizon_big_clouds_bottom_left";
+SETTILE (1, 0), "horizon_big_clouds_bottom_right";
+SETTILE (2, 0), "horizon_big_clouds_left";
+SETTILE (3, 0), "horizon_big_clouds_right";
+SETTILE (4, 0), "horizon_dark_clouds_mid_1";
+SETTILE (5, 0), "horizon_dark_clouds_mid_2";
+
+SETTILE (0, 1), "horizon_clouds_bottom_left";
+SETTILE (1, 1), "horizon_clouds_bottom_right";
+SETTILE (2, 1), "horizon_clouds_bottom_mid";
+SETTILE (3, 1), "horizon_sky";
+SETTILE (4, 1), "horizon_dark_clouds_bottom_1";
+SETTILE (5, 1), "horizon_dark_clouds_bottom_2";
+
+SETTILE (0, 2), "horizon_clouds_left";
+SETTILE (1, 2), "horizon_clouds_right";
+SETTILE (2, 2), "horizon_clouds_left_right";
+SETTILE (3, 2), "horizon_clouds";
+SETTILE (4, 2), "horizon_dark_clouds_top";
+SETTILE (5, 2), "horizon_dark_sky";
+
+SETTILE (0, 3), "horizon_mountain_left";
+SETTILE (1, 3), "horizon_mountain_mid";
+SETTILE (2, 3), "horizon_mountain_right";
+SETTILE (3, 3), "horizon_mountain";
+
+SETTILE (0, 4), "tree_horizon_left";
+SETTILE (1, 4), "tree_horizon_right";
+SETTILE (2, 4), "tree_alt_horizon_left";
+SETTILE (3, 4), "tree_alt_horizon_right";
+
+END;

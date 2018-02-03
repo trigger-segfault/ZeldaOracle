@@ -10,7 +10,7 @@ using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Common.Util;
 using ZeldaOracle.Game.Items.Rewards;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles {
@@ -27,7 +27,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public RewardManager RewardManager { get; }
 
 		public SpriteDrawSettings SpriteDrawSettings {
-			get { return new SpriteDrawSettings(Zone.StyleDefinitions, Zone.ImageVariantID, Time); }
+			get { return new SpriteDrawSettings(Zone.StyleDefinitions, Time); }
 		}
 
 		public TileDataDrawArgs(TileData tile, Properties properties, Point2I position, Zone zone, Level level, float time, Color color, bool extras, RewardManager rewardManager) {
@@ -43,8 +43,8 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 	}
 
-	public struct EventTileDataDrawArgs {
-		public EventTileData EventTile { get; }
+	public struct ActionTileDataDrawArgs {
+		public ActionTileData ActionTile { get; }
 		public Properties Properties { get; }
 		public Point2I Position { get; }
 		public Zone Zone { get; }
@@ -55,11 +55,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public RewardManager RewardManager { get; }
 
 		public SpriteDrawSettings SpriteDrawSettings {
-			get { return new SpriteDrawSettings(Zone.StyleDefinitions, Zone.ImageVariantID, Time); }
+			get { return new SpriteDrawSettings(Zone.StyleDefinitions, Time); }
 		}
 
-		public EventTileDataDrawArgs(EventTileData eventTile, Properties properties, Point2I position, Zone zone, Level level, float time, Color color, bool extras, RewardManager rewardManager) {
-			this.EventTile		= eventTile;
+		public ActionTileDataDrawArgs(ActionTileData actionTile, Properties properties, Point2I position, Zone zone, Level level, float time, Color color, bool extras, RewardManager rewardManager) {
+			this.ActionTile		= actionTile;
 			this.Properties		= properties;
 			this.Position		= position;
 			this.Zone			= zone;
@@ -73,11 +73,11 @@ namespace ZeldaOracle.Game.Tiles {
 
 	public delegate void TileDrawFunction(Graphics2D g, TileDataDrawArgs args);
 
-	public delegate void EventTileDrawFunction(Graphics2D g, EventTileDataDrawArgs args);
+	public delegate void ActionTileDrawFunction(Graphics2D g, ActionTileDataDrawArgs args);
 
 	public static class TileDataDrawing {
 		private static Dictionary<Type, TileDrawFunction> tileDrawFunctions;
-		private static Dictionary<Type, EventTileDrawFunction> eventTileDrawFunctions;
+		private static Dictionary<Type, ActionTileDrawFunction> actionTileDrawFunctions;
 
 		public static RewardManager RewardManager { get; set; }
 		public static Level Level { get; set; }
@@ -87,7 +87,7 @@ namespace ZeldaOracle.Game.Tiles {
 
 		static TileDataDrawing() {
 			tileDrawFunctions = new Dictionary<Type, TileDrawFunction>();
-			eventTileDrawFunctions = new Dictionary<Type, EventTileDrawFunction>();
+			actionTileDrawFunctions = new Dictionary<Type, ActionTileDrawFunction>();
 		}
 
 		public static void DrawTile(Graphics2D g, BaseTileData baseTileData, Point2I position, Zone zone) {
@@ -135,7 +135,7 @@ namespace ZeldaOracle.Game.Tiles {
 		private static void DrawPreview(Graphics2D g, BaseTileData baseTileData, Point2I position, Zone zone, Color color) {
 			g.DrawSprite(
 				baseTileData.PreviewSprite,
-				new SpriteDrawSettings(zone.StyleDefinitions, zone.ImageVariantID, PlaybackTime),
+				new SpriteDrawSettings(zone.StyleDefinitions, PlaybackTime),
 				position,
 				color);
 		}
@@ -157,17 +157,17 @@ namespace ZeldaOracle.Game.Tiles {
 				drawFunc(g, args);
 				Tile.DrawTileDataAbove(g, args);
 			}
-			else if (baseTileData is EventTileData) {
-				EventTileData eventTile = (EventTileData) baseTileData;
-				Type type = eventTile.Type ?? typeof(EventTile);
-				EventTileDrawFunction drawFunc;
-				if (!eventTileDrawFunctions.TryGetValue(type, out drawFunc)) {
+			else if (baseTileData is ActionTileData) {
+				ActionTileData actionTile = (ActionTileData) baseTileData;
+				Type type = actionTile.Type ?? typeof(ActionTile);
+				ActionTileDrawFunction drawFunc;
+				if (!actionTileDrawFunctions.TryGetValue(type, out drawFunc)) {
 					MethodInfo methodInfo = type.GetMethod("DrawTileData", BindingFlags.Static | BindingFlags.Public);
 					if (methodInfo != null)
-						drawFunc = ReflectionHelper.GetFunction<EventTileDrawFunction>(methodInfo);
-					eventTileDrawFunctions.Add(type, drawFunc);
+						drawFunc = ReflectionHelper.GetFunction<ActionTileDrawFunction>(methodInfo);
+					actionTileDrawFunctions.Add(type, drawFunc);
 				}
-				drawFunc(g, new EventTileDataDrawArgs(eventTile, properties, position, zone, Level, PlaybackTime, color, Extras, RewardManager));
+				drawFunc(g, new ActionTileDataDrawArgs(actionTile, properties, position, zone, Level, PlaybackTime, color, Extras, RewardManager));
 			}
 		}
 	}

@@ -29,7 +29,8 @@ namespace ZeldaOracle.Game.Control.Menus {
 		public MenuWeapons(GameManager gameManager)
 			: base(gameManager)
 		{
-			this.backgroundSprite	= Resources.GetImage("UI/menu_weapons_a");
+			//this.backgroundSprite	= Resources.GetImage("UI/menu_weapons_a");
+			this.background = GameData.SPR_BACKGROUND_MENU_WEAPONS;
 
 			this.ammoSlot			= 0;
 			this.ammoMenuSize		= new Point2I(16, 8);
@@ -177,8 +178,8 @@ namespace ZeldaOracle.Game.Control.Menus {
 			if (inSubMenu) {
 				Point2I maxSize = new Point2I(ammoSlotGroup.NumSlots * 24 + 8, 32);
 				Point2I menuPos = new Point2I((160 - (ammoSlotGroup.NumSlots * 24 + 8)) / 2 + (maxSize.X - ammoMenuSize.X) / 2, DrawAmmoMenuAtTop ? 16 : 56);
-				ISprite ammoMenuSprite = GameData.SHEET_MENU_SMALL_LIGHT.GetSprite(1, 4);
-				g.DrawSprite(ammoMenuSprite, new Rectangle2I(menuPos, ammoMenuSize));
+				//ISprite ammoMenuSprite = GameData.SHEET_MENU_SMALL_LIGHT.GetSprite(1, 4);
+				g.DrawSprite(GameData.SPR_HUD_AMMO_SELECT_BACKGROUND, new Rectangle2I(menuPos, ammoMenuSize));
 				if (IsAmmoMenuFullyOpen) {
 					ammoSlotGroup.Draw(g);
 				}
@@ -193,8 +194,8 @@ namespace ZeldaOracle.Game.Control.Menus {
 				base.DrawSlotCursor(g, slot);
 			}
 			else if (IsAmmoMenuFullyOpen) {
-				ISprite arrowSprite = GameData.SHEET_MENU_SMALL_LIGHT.GetSprite(5, 5);
-				g.DrawSprite(arrowSprite, slot.Position + new Point2I(4, 20));
+				//ISprite arrowSprite = GameData.SHEET_MENU_SMALL_LIGHT.GetSprite(5, 5);
+				g.DrawSprite(GameData.SPR_HUD_AMMO_SELECT_ARROW, slot.Position + new Point2I(4, 20));
 			}
 		}
 

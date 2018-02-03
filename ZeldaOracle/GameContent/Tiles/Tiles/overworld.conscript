@@ -1,4 +1,7 @@
-﻿
+﻿#==============================================================
+# Loading
+#==============================================================
+
 LOAD "Overworld/cliffs.conscript", true;
 LOAD "Overworld/cliff_walls.conscript", true;
 LOAD "Overworld/vines.conscript", true;
@@ -7,4 +10,9 @@ LOAD "Overworld/trees.conscript", true;
 LOAD "Overworld/hedges.conscript", true;
 LOAD "Overworld/snow_mounds.conscript", true;
 LOAD "Overworld/town.conscript", true;
+LOAD "Overworld/vertical_walls.conscript", true;
 LOAD "Overworld/water.conscript", true;
+LOAD "Overworld/horizon.conscript", true;
+LOAD "Overworld/hollow_logs.conscript", true;
+
+#==============================================================

@@ -44,12 +44,17 @@ ENTITY	color_cube_blue_yellow;
 # Unique
 #==============================================================
 
-ENTITY	maku_seed;
+ENTITY	maku_seed_ages;
+ENTITY	maku_seed_seasons;
+ENTITY	biggoron_eyes;
 
 #==============================================================
 # UI elements that are colored as tiles in-game
 #==============================================================
 
-ENTITY	ui_hud;
+ENTITY	ui_red;
+ENTITY	ui_dungeon_map_red;
+
+#==============================================================
 
 END;

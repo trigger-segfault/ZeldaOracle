@@ -1,0 +1,304 @@
+﻿#==============================================================
+# Sprite Sheets
+#==============================================================
+
+SPRITESHEET "temp_sheet_general_objects", "Tiles/Objects/general_objects", (16, 16), (1, 1), (18, 18);
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+SOURCE "temp_sheet_general_objects";
+SPRITESET "tiles_general_objects" (13, 5);
+	
+	# Leaves/Grass
+
+	MAPPEDCOLORS	"tiles_default", ("leaves");
+	SINGLE BASIC	(0, 0); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("grass");
+	SINGLE STYLE "grass" (0, 1);
+		ADD "present"		(0, 1);
+		ADD "past"			(0, 2);
+		ADD "seasons"		(0, 3);
+		ADD "maku_tree"		(0, 4);
+		END;
+	
+	# Bushes
+	
+	MAPPEDCOLORS	"tiles_default", ("regrowable_bush");
+	MULTIPLE BASIC (1, 0), (1, 0), (3, 1); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("bush", "bush_asobject");
+	SINGLE COLORSTYLE "bush", "", ("bush", "bush_dark"), (1, 1);
+		ADD "overworld"		(1, 1);
+		ADD "indoors"		(1, 2);
+		END;
+		
+	SINGLE STYLE "bush", (2, 1);
+		ADD "overworld"		(2, 1);
+		ADD "indoors"		(2, 2);
+		END;
+		
+	# Flowers
+	
+	MAPPEDCOLORS	"tiles_default", ("flower_pink");
+	SINGLE COLOR	"", ("flower_red", "flower_blue", "flower_pink"), (3, 1); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("flower_pink", "water_flower");
+	MULTIPLE BASIC	(3, 2), (3, 2), (1, 2); END;
+		
+	# Mushroom
+	
+	MAPPEDCOLORS	"tiles_default", ("mushroom");
+	MULTIPLE BASIC	(1, 3), (1, 3), (2, 1); END;
+	
+	# Dirt Pile
+	
+	MAPPEDCOLORS	"tiles_default", ("dirt");
+	SINGLE BASIC	(1, 4); END;
+	
+	# Burnable Trees
+	
+	MAPPEDCOLORS	"tiles_default", ("tree_trunk", "tree_trunk_leaves");
+	CHUNKSIZE		(16, 8);
+	MULTIPLE BASIC	(2, 4), (2, 4), (2, 1); END;
+	CHUNKSIZE		none;
+	
+	# Bracelet Rock
+	
+	MAPPEDCOLORS	"tiles_default", ("bracelet_rock", "bracelet_rock_asobject");
+	MULTIPLE BASIC	(4, 0), (4, 0), (2, 1); END;
+		
+	# Switch Rock
+	
+	MAPPEDCOLORS	"tiles_default", ("switch_rock", "switch_rock_asobject");
+	MULTIPLE BASIC	(4, 1), (4, 1), (2, 1); END;
+		
+	# Crystal Rock
+	
+	MAPPEDCOLORS	"tiles_default", ("crystal_rock", "crystal_rock_asobject");
+	MULTIPLE BASIC	(4, 2), (4, 2), (2, 1); END;
+	
+	# Pot
+	
+	MAPPEDCOLORS	"tiles_default", ("pot", "pot_asobject");
+	MULTIPLE BASIC	(4, 3), (4, 3), (2, 1); END;
+	
+	# Grave
+	
+	MAPPEDCOLORS	"tiles_default", ("grave", "grave_asobject");
+	MULTIPLE BASIC	(4, 4), (4, 4), (2, 1); END;
+	
+	# Armos
+		
+	MAPPEDCOLORS	"tiles_default", ("armos", "armos_asobject");
+	SINGLE COLORSTYLE "armos", "", ("armos", "armos_alt"), (6, 0);
+		ADD "dirt"		(6, 0);
+		ADD "floor"		(6, 1);
+		END;
+	SINGLE COLORSTYLE "armos", "", ("armos_asobject", "armos_alt_asobject"), (7, 0);
+		ADD "dirt"		(7, 0);
+		ADD "floor"		(7, 1);
+		END;
+		
+	# Sign
+	
+	MAPPEDCOLORS	"tiles_default", ("sign", "sign_asobject");
+	MULTIPLE STYLE "sign", (6, 2), (2, 1);
+		ADD "normal"	(6, 2);
+		ADD "past"		(6, 3);
+		ADD	"subrosia"	(6, 4);
+		END;
+		
+	# Magnet Stones
+	
+	MAPPEDCOLORS	"tiles_default", ("magnet_stone");
+	MULTIPLE STYLE "magnet_stone", (8, 0), (2, 1);
+		ADD "normal"		(8, 0);
+		ADD "subrosia"		(8, 1);
+		END;
+		
+	# Soft Soil
+	
+	MAPPEDCOLORS	"tiles_default", ("soft_soil", "soft_soil_sprout");
+	MULTIPLE BASIC	(8, 2), (8, 2), (2, 1); END;
+	
+	# Cactus
+	
+	MAPPEDCOLORS	"tiles_default", ("cactus");
+	SINGLE BASIC	(8, 3); END;
+	
+	# Seedling Sprout
+	
+	MAPPEDCOLORS	"tiles_default", ("seedling_sprout");
+	SINGLE BASIC	(9, 3); END;
+	
+	# Jump Flower
+	
+	MAPPEDCOLORS	"tiles_default", ("jump_flower");
+	CHUNKSIZE		(16, 8);
+	SINGLE BASIC	(8, 4); END;
+	CHUNKSIZE		none;
+	
+	# Ages Portal
+	
+	MAPPEDCOLORS	"tiles_default", ("ages_portal");
+	SINGLE BASIC	(9, 4); END;
+	
+	# Blocks
+	
+	MAPPEDCOLORS	"tiles_default", ("block", "block_asobject");
+	MULTIPLE STYLE "block", (10, 0), (3, 1);
+		ADD "dungeon"		(10, 0);
+		ADD "shell"			(10, 1);
+		ADD	"sea"			(10, 2);
+		ADD	"angel"			(10, 3);
+		END;
+		
+	# Ice
+	
+	MAPPEDCOLORS	"tiles_default", ("ice", "cracked_ice");
+	MULTIPLE BASIC	(10, 4), (10, 4), (3, 1); END;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "tiles_general_objects";
+
+# Leaves/Grass
+
+NAME "tile_leaves"						(0, 0);
+NAME "tile_grass"						(0, 1);
+
+# Bushes
+
+NAME "tile_bush"						((1, 1), "bush");
+NAME "tile_bush_asobject"				(2, 1);
+NAME "tile_bush_dark"					((1, 1), "bush_dark");
+NAME "tile_bush_dark_asobject"			(2, 1);
+NAME "tile_regrowable_bush"				(1, 0);
+NAME "tile_regrowable_bush_growing"		(2, 0);
+NAME "tile_regrowable_bush_cut"			(3, 0);
+
+ANIMATION "tile_regrowable_bush_regrow";
+	SUBSTRIP clamp; ADD frame, 12, "tile_regrowable_bush_growing"; END;
+	
+# Flowers
+
+NAME "tile_flowers_red"					((3, 1), "flower_red");
+NAME "tile_flowers_blue"				((3, 1), "flower_blue");
+NAME "tile_flowers_pink"				((3, 1), "flower_pink");
+NAME "tile_flower"						(3, 2);
+NAME "tile_water_flower"				(3, 3);
+
+# Mushroom
+
+NAME "tile_mushroom"					(1, 3);
+NAME "tile_mushroom_asobject"			(2, 3);
+
+# Dirt Pile
+
+NAME "tile_dirt_pile"					(1, 4);
+
+# Burnable Trees
+
+NAME "tile_burnable_tree"				(2, 4);
+NAME "tile_burnable_tree_dark"			(3, 4);
+
+# Bracelet Rock
+
+NAME "tile_bracelet_rock"				(4, 0);
+NAME "tile_bracelet_rock_asobject"		(5, 0);
+
+# Switch Rock
+
+NAME "tile_switch_rock"					(4, 1);
+NAME "tile_switch_rock_asobject"		(5, 1);
+
+# Crystal Rock
+
+NAME "tile_crystal_rock"				(4, 2);
+NAME "tile_crystal_rock_asobject"		(5, 2);
+
+# Pot
+
+NAME "tile_pot"							(4, 3);
+NAME "tile_pot_asobject"				(5, 3);
+
+# Grave
+
+NAME "tile_grave_stationary"			(4, 4);
+NAME "tile_grave"						(4, 4);
+NAME "tile_grave_asobject"				(5, 4);
+
+# Armos
+
+NAME "tile_movable_armos"				((6, 0), "armos");
+NAME "tile_movable_armos_asobject"		((7, 0), "armos_asobject");
+NAME "tile_movable_armos_alt"			((6, 0), "armos_alt");
+NAME "tile_movable_armos_alt_asobject"	((7, 0), "armos_alt_asobject");
+NAME "tile_armos_stationary"			((6, 0), "armos");
+NAME "tile_armos_alt_stationary"		((6, 0), "armos_alt");
+
+# Sign
+
+NAME "tile_sign"						(6, 2);
+NAME "tile_sign_asobject"				(7, 2);
+
+# Magnet Stones
+
+NAME "tile_magnet_stone_north"			(8, 0);
+NAME "tile_magnet_stone_south"			(9, 0);
+
+COMPOSITE "temp_preview_magnet_stone_style";
+	ADD "tile_magnet_stone_north", (0, 0); ADD "tile_magnet_stone_south", (16, 0); END;
+	
+STYLEPREVIEW "magnet_stone", "temp_preview_magnet_stone_style";
+
+# Soft Soil
+
+NAME "tile_soft_soil"					(8, 2);
+NAME "tile_soft_soil_sprout"			(9, 2);
+
+# Cactus
+
+NAME "tile_cactus"						(8, 3);
+
+# Seedling Sprout
+
+NAME "tile_seedling_sprout"				(9, 3);
+
+# Jump Flower
+
+COMPOSITE "tile_jump_flower";
+	COMBINE "tile_ground"; REMOVE 3; REMOVE 2; ADD (8, 4); END;
+	
+# Ages Portal
+
+NAME "tile_ages_portal"					(9, 4);
+
+# Blocks
+
+NAME "tile_block_stationary"			(10, 0);
+NAME "tile_movable_block"				(10, 0);
+NAME "tile_movable_block_asobject"		(11, 0);
+NAME "tile_bombable_block"				(12, 0);
+
+COMPOSITE "temp_preview_block_style";
+	ADD "tile_movable_block", (0, 0); ADD "tile_bombable_block", (16, 0); END;
+
+STYLEPREVIEW "block", "temp_preview_block_style";
+
+# Ice
+
+NAME "tile_ice_block"					(10, 4);
+NAME "tile_ice_block_asobject"			(10, 4);
+NAME "tile_ice"							(11, 4);
+NAME "tile_cracked_ice"					(12, 4);

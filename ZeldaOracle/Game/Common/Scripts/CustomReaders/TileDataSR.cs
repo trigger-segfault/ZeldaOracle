@@ -14,7 +14,7 @@ using ZeldaOracle.Common.Scripts.Commands;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
@@ -24,12 +24,14 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		private enum Modes {
 			Root,
 			Tile,
-			ActionTile
+			ActionTile,
+			Model
 		}
-		
+
+		private CollisionModel      model;
 		private BaseTileData        baseTileData;
 		private TileData            tileData;
-		private EventTileData       actionTileData;
+		private ActionTileData       actionTileData;
 		//private LoadingModes		loadingMode;
 		private ISpriteSource source;
 
@@ -90,7 +92,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("ACTIONTILE", (int) Modes.Root,
 				"string name",
 			delegate (CommandParam parameters) {
-				actionTileData = new EventTileData();
+				actionTileData = new ActionTileData();
 				actionTileData.Name = parameters.GetString(0);
 				baseTileData = actionTileData;
 				Mode = Modes.ActionTile;
@@ -99,8 +101,8 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddCommand("MONSTER", (int) Modes.Root,
 				"string name, string sprite, string monsterType, string monsterColor",
 			delegate (CommandParam parameters) {
-				actionTileData = new EventTileData();
-				actionTileData.Clone(GetResource<EventTileData>("monster"));
+				actionTileData = new ActionTileData();
+				actionTileData.Clone(GetResource<ActionTileData>("monster"));
 				actionTileData.Name = parameters.GetString(0);
 				baseTileData = actionTileData;
 
@@ -113,16 +115,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					if (!Enum.TryParse<MonsterColor>(parameters.GetString(3), true, out color))
 						ThrowParseError("Invalid monster color: \"" + parameters.GetString(3) + "\"!");
 					actionTileData.Properties.Set("color", (int) color);
-					int imageVariantID = GameData.VARIANT_RED;
-					if (color == MonsterColor.Red)
-						imageVariantID = GameData.VARIANT_RED;
-					else if (color == MonsterColor.Blue)
-						imageVariantID = GameData.VARIANT_BLUE;
-					else if (color == MonsterColor.Green)
-						imageVariantID = GameData.VARIANT_GREEN;
-					else if (color == MonsterColor.Orange)
-						imageVariantID = GameData.VARIANT_ORANGE;
-					actionTileData.Properties.Set("image_variant", imageVariantID);
 				}
 				Mode = Modes.ActionTile;
 			});
@@ -141,7 +133,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				else if (actionTileData != null) {
 					if (actionTileData.Tileset == null) {
 						AddResource<BaseTileData>(actionTileData.Name, actionTileData);
-						AddResource<EventTileData>(actionTileData.Name, actionTileData);
+						AddResource<ActionTileData>(actionTileData.Name, actionTileData);
 					}
 					actionTileData = null;
 					baseTileData = null;
@@ -402,7 +394,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				if (tileData != null)
 					tileData.Clone(GetResource<TileData>(parameters.GetString(0)));
 				else if (actionTileData != null)
-					actionTileData.Clone(GetResource<EventTileData>(parameters.GetString(0)));
+					actionTileData.Clone(GetResource<ActionTileData>(parameters.GetString(0)));
 			});
 			//=====================================================================================
 			AddCommand("PREVIEW", new int[] { (int) Modes.Tile, (int) Modes.ActionTile },
@@ -410,6 +402,39 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			delegate (CommandParam parameters) {
 				baseTileData.PreviewSprite = GetSpriteFromParams(parameters);
 			});
+			//=====================================================================================
+			AddCommand("MODEL", (int) Modes.Root,
+				"string modeName",
+			delegate (CommandParam parameters) {
+				string modelName = parameters.GetString(0);
+				if (!modelName.StartsWith("temp_"))
+					ThrowCommandParseError("Model names defined in Tile Data scripts must be temporary and prefixed with \"temp_\"!");
+				model = new CollisionModel();
+				AddResource(modelName, model);
+				Mode = Modes.Model;
+			});
+			//=====================================================================================
+			AddCommand("END", (int) Modes.Model,
+				"",
+			delegate (CommandParam parameters) {
+				model = null;
+				Mode = Modes.Root;
+			});
+			//=====================================================================================
+			AddCommand("ADD", (int) Modes.Model,
+				"Rectangle box",
+			delegate (CommandParam parameters) {
+				model.AddBox(parameters.GetRectangle(0));
+			});
+			//=====================================================================================
+			AddCommand("COMBINE", (int) Modes.Model,
+				"string modelName, Point offset = (0, 0)",
+			delegate (CommandParam parameters) {
+				model.Combine(
+					GetResource<CollisionModel>(parameters.GetString(0)),
+					parameters.GetPoint(1));
+			});
+			//=====================================================================================
 		}
 
 

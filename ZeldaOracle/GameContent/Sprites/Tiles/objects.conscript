@@ -1,7 +1,12 @@
-﻿
+﻿#==============================================================
+# Loading
+#==============================================================
+
+LOAD "Objects/general_objects.conscript", true;
 LOAD "Objects/doors.conscript", true;
-LOAD "Objects/holes.conscript", true;
-LOAD "Objects/objects.conscript", true;
 LOAD "Objects/puzzle_objects.conscript", true;
 LOAD "Objects/turnstile.conscript", true;
+LOAD "Objects/entity_objects.conscript", true;
 LOAD "Objects/color_cube.conscript", true;
+
+#==============================================================

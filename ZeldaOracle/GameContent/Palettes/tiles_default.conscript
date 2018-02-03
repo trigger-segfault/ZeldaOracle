@@ -50,6 +50,7 @@ LOOKUP	wall_column, all				wall, all;
 LOOKUP	stairs, all						red, all;
 
 LOOKUP	floor_staircase, all			floor, all;
+LOOKUP	floor_stairwell, all			floor, all;
 LOOKUP	wall_staircase, all				wall, all;
 
 LOOKUP	railing, all					blue, all;
@@ -123,6 +124,8 @@ LOOKUP	grass, all						grass_green, all;
 LOOKUP	leaves, all						tree_green, all;
 
 LOOKUP	bush, all						tree_green, all;
+LOOKUP	bush_dark, all					bush, all;
+LOOKUP	bush_dark, light				floor, medium;
 LOOKUP	bush_asobject, all				bush, all;
 COLOR	bush_asobject, light			(0, 0, 0, 0);
 LOOKUP	regrowable_bush, all			bush, all;
@@ -268,6 +271,18 @@ LOOKUP	snow_entrance, light			snow, light;
 LOOKUP	snow_entrance, medium			snow, dark;
 LOOKUP	snow_entrance, dark				snow, black;
 
+#==============================================================
+# Horizon
+#==============================================================
+
+COLOR	blue_sky, light					(248,248,192);
+COLOR	blue_sky, medium				( 32,176,248);
+COLOR	blue_sky, dark					(  0, 80,176);
+COLOR	blue_sky, black					(160,232,232);
+COLOR	dark_sky, light					( 96, 48,152);
+COLOR	dark_sky, medium				( 64, 32,120);
+COLOR	dark_sky, dark					( 40, 16, 96);
+COLOR	dark_sky, black					( 16,  0, 48);
 
 #==============================================================
 # Sea
@@ -491,6 +506,33 @@ COLOR	temple_autumn_roof, dark		(104, 64,  0);
 COLOR	temple_winter_roof, light		(160, 48,248);
 COLOR	temple_winter_roof, medium		( 80,  0,160);
 COLOR	temple_winter_roof, dark		( 48,  0,112);
+
+
+LOOKUP	graveyard_wall, all				gray, all;
+LOOKUP	graveyard_gate, all				brown, all;
+LOOKUP	graveyard_tomb, all				brown, all;
+LOOKUP	tombstone, all					grave, all;
+
+COLOR	moblin_castle, light			(216,112,232);
+COLOR	moblin_castle, medium			(160,  0,192);
+COLOR	moblin_castle, dark				( 80,  0,128);
+
+LOOKUP	forest_entrance, all			brown, all;
+
+#==============================================================
+# NPCs
+#==============================================================
+
+COLOR	biggoron, light					(240,208,112);
+COLOR	biggoron, medium				(192,152, 72);
+COLOR	biggoron, dark					(120, 80, 56);
+LOOKUP	biggoron_top, all				biggoron, all;
+COLOR	biggoron_top, dark				(104,160, 24);
+LOOKUP	biggoron_chin, all				biggoron, all;
+COLOR	biggoron_chin, light			( 72,120, 64);
+LOOKUP	biggoron_hands, all				biggoron, all;
+COLOR	biggoron_hands, light			( 72, 48, 48);
+LOOKUP	biggoron_hands, medium			dirt, medium;
 
 #==============================================================
 

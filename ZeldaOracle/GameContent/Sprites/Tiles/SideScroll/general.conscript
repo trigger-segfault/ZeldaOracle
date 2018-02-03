@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET	"temp_sheet_ss_general"		"Tiles/SideScroll/ss_general"			(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_ss_general"		"Tiles/SideScroll/ss_general"			(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -14,7 +14,7 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 
 SOURCE "temp_sheet_ss_general";
-SPRITESET "set_ss_general", (8, 5);
+SPRITESET "tiles_ss_general", (8, 5);
 	MAPPEDCOLORS	"tiles_default", ("default");
 	SINGLE BASIC (0, 0); END;
 	
@@ -70,7 +70,7 @@ END;
 # Tiles
 #==============================================================
 
-SOURCE "set_ss_general";
+SOURCE "tiles_ss_general";
 
 NAME "tile_ss_background"					(0, 0);
 NAME "tile_ss_water"						(0, 2);

@@ -113,9 +113,16 @@ namespace ZeldaOracle.Game.GameStates {
 			states.Last().Update();
 
 			DeleteInactiveStates();
-        }
+		}
 
-        public override void Draw(Graphics2D g) {
+		public override void AssignPalettes() {
+			// PreDraw all states from the bottom up.
+			for (int i = 0; i < states.Count; ++i) {
+				states[i].AssignPalettes();
+			}
+		}
+
+		public override void Draw(Graphics2D g) {
 			// Draw all states from the bottom up.
             for (int i = 0; i < states.Count; ++i) {
 				states[i].Draw(g);

@@ -43,9 +43,9 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		public override void OnBegin() {
 			base.OnBegin();
 
-			if (IsChangingPalette) {
+			/*if (IsChangingTilePalette) {
 				GameData.PaletteShader.LerpTilePalette = NewRoomControl.Zone.Palette;
-			}
+			}*/
 
 			isWaitingForView	= true;
 			timer				= 0;
@@ -103,8 +103,6 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 				distance += TRANSITION_SPEED;
 				Player.Position += (Vector2F) Directions.ToPoint(direction) * playerSpeed;
 
-				if (IsChangingPalette)
-					GameData.PaletteShader.TileRatio = (float) distance / maxDistance;
 
 				// Check if we are done panning.
 				if (distance >= maxDistance) {
@@ -113,6 +111,24 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 					NewRoomControl.DisableVisualEffect = false;
 				}
 			}
+		}
+
+		public override void AssignPalettes() {
+
+			OldRoomControl.AssignPalettes();
+			NewRoomControl.AssignLerpPalettes();
+			float ratio = GMath.Min(1f, (float) distance / maxDistance);
+			GameData.PaletteShader.TileRatio = ratio;
+			GameData.PaletteShader.EntityRatio = ratio;
+
+			/*GameData.PaletteShader.TilePalette = OldRoomControl.TilePalette;
+			GameData.PaletteShader.EntityPalette = OldRoomControl.EntityPalette;
+			if (IsChangingTilePalette) {
+				GameData.PaletteShader.LerpTilePalette = NewRoomControl.TilePalette;
+			}
+			if (IsChangingEntityPalette) {
+				GameData.PaletteShader.LerpEntityPalette = NewRoomControl.EntityPalette;
+			}*/
 		}
 
 		public override void Draw(Graphics2D g) {
@@ -125,11 +141,12 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 				(GameSettings.VIEW_SIZE - distance);
 
 			// Draw the old and new rooms.
-			OldRoomControl.DrawRoom(g, new Vector2F(0, 16) + panOld);
-			NewRoomControl.DrawRoom(g, new Vector2F(0, 16) + panNew);
-			
+			OldRoomControl.DrawRoom(g, new Vector2F(0, 16) + panOld, RoomDrawing.DrawBelow);
+			NewRoomControl.DrawRoom(g, new Vector2F(0, 16) + panNew, RoomDrawing.DrawAll);
+			OldRoomControl.DrawRoom(g, new Vector2F(0, 16) + panOld, RoomDrawing.DrawAbove);
+
 			// Draw the HUD.
-			GameControl.HUD.Draw(g, false);
+			GameControl.HUD.Draw(g);
 		}
 
 
@@ -137,8 +154,11 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		// Internal Properties
 		//-----------------------------------------------------------------------------
 
-		private bool IsChangingPalette {
-			get { return OldRoomControl.Zone.PaletteID != NewRoomControl.Zone.PaletteID; }
+		private bool IsChangingTilePalette {
+			get { return OldRoomControl.TilePalette != NewRoomControl.TilePalette; }
+		}
+		private bool IsChangingEntityPalette {
+			get { return OldRoomControl.EntityPalette != NewRoomControl.EntityPalette; }
 		}
 	}
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Graphics.Sprites;
@@ -42,12 +43,14 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 			}
 			monster.RoomControl.Player.Freeze();
 			//monster.DisablePhysics();
+			AudioSystem.PlaySound(GameData.SOUND_ELECTROCUTE);
 		}
 
 		public override void OnEnd(MonsterState newState) {
 			if (monsterAnimation != null)
 				monster.Graphics.PlayAnimation(resumeAnimation);
-			GameData.PaletteShader.TilePalette = monster.RoomControl.Zone.Palette;
+			monster.RoomControl.TilePaletteOverride = null;
+			monster.RoomControl.EntityPaletteOverride = null;
 			monster.OnElectrocuteComplete();
 			//monster.EnablePhysics();
 		}
@@ -63,8 +66,8 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 				int flashIndex = ((timer - 5) / 8);
 
 				if (flashIndex % 2 == 0 && flashIndex <= 4) {
-					GameData.PaletteShader.TilePalette = GameData.PAL_TILES_ELECTROCUTED;
-					GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_ELECTROCUTED;
+					monster.RoomControl.TilePaletteOverride = GameData.PAL_TILES_ELECTROCUTED;
+					monster.RoomControl.EntityPaletteOverride = GameData.PAL_ENTITIES_ELECTROCUTED;
 					//if (GRandom.NextBool()) {
 					monster.RoomControl.ViewControl.ShakeOffset = new Vector2F(
 							(float) GRandom.NextInt(-2, 2),
@@ -72,8 +75,8 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 					//}
 				}
 				else {
-					GameData.PaletteShader.TilePalette = monster.RoomControl.Zone.Palette;
-					GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
+					monster.RoomControl.TilePaletteOverride = null;
+					monster.RoomControl.EntityPaletteOverride = null;
 				}
 			}
 

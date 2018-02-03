@@ -10,6 +10,11 @@ TILE "bush";
 	BREAKSOUND	"leaves";
 END;
 
+TILE "bush_dark";
+	CLONE "bush";
+	SAMESPRITE; SAMESPRITEOBJ;
+END;
+
 TILE "regrowable_bush";
 	TYPE		TileRegrowableBush;
 	MODEL		block;
@@ -35,15 +40,16 @@ END;
 TILE "flowers_pink";
 	CLONE		"flowers_red";
 	SAMESPRITE;
+	BREAKANIM	"effect_leaves_red";
 END;
 
 TILE "flower";
-	CLONE		"flowers_red";
+	CLONE		"flowers_pink";
 	SAMESPRITE;
 END;
 
 TILE "water_flower";
-	CLONE		"flowers_red";
+	CLONE		"flowers_pink";
 	SAMESPRITE;
 END;
 
@@ -78,7 +84,7 @@ TILE "burnable_tree";
 	FLAGS		Burnable, AbsorbSeeds;
 END;
 
-TILE "burnable_tree_dirt";
+TILE "burnable_tree_dark";
 	CLONE "burnable_tree";
 	SOLID		block;
 	SAMESPRITE;

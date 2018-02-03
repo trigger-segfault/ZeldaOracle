@@ -22,6 +22,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Xceed.Wpf.AvalonDock.Layout;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Geometry;
+using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripts;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Items.Rewards;
@@ -39,6 +40,7 @@ namespace ConscriptDesigner.Control {
 		private static ContentRoot project;
 		private static GraphicsDevice graphicsDevice;
 		private static ContentManager contentManager;
+		private static SpriteBatch spriteBatch;
 		private static Task<ScriptReaderException> busyTask;
 		private static Thread busyThread;
 		private static bool busyTaskIsConscripts;
@@ -53,11 +55,17 @@ namespace ConscriptDesigner.Control {
 		private static Zone previewZone;
 		private static string previewZoneID;
 		private static ObservableCollection<string> previewZones;
+		private static Palette previewTilePalette;
+		private static string previewTilePaletteID;
+		private static ObservableCollection<string> previewTilePalettes;
+		private static Palette previewEntityPalette;
+		private static string previewEntityPaletteID;
+		private static ObservableCollection<string> previewEntityPalettes;
 		private static Stopwatch animationWatch;
 		private static int previewScale;
 		private static DispatcherTimer animationTimer;
 
-		private static string resourceAutoCompleteType;
+		//private static string resourceAutoCompleteType;
 		private static bool playAnimations;
 
 		private static Tileset selectedTileset;
@@ -85,7 +93,13 @@ namespace ConscriptDesigner.Control {
 			previewZone = null;
 			previewZoneID = "default";
 			previewZones = new ObservableCollection<string>();
-			resourceAutoCompleteType = "";
+			previewTilePalette = null;
+			previewTilePaletteID = "";
+			previewTilePalettes = new ObservableCollection<string>();
+			previewEntityPalette = null;
+			previewEntityPaletteID = "";
+			previewEntityPalettes = new ObservableCollection<string>();
+			//resourceAutoCompleteType = "";
 			playAnimations = false;
 			animationWatch = Stopwatch.StartNew();
 			previewScale = 1;
@@ -94,9 +108,10 @@ namespace ConscriptDesigner.Control {
 			selectedTileLocation = -Point2I.One;
 		}
 
-		public static void SetGraphics(GraphicsDevice graphicsDevice, ContentManager contentManager) {
-			DesignerControl.graphicsDevice = graphicsDevice;
-			DesignerControl.contentManager = contentManager;
+		public static void SetGraphics(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, ContentManager contentManager) {
+			DesignerControl.spriteBatch		= spriteBatch;
+			DesignerControl.graphicsDevice	= graphicsDevice;
+			DesignerControl.contentManager	= contentManager;
 			if (IsProjectOpen) {
 				RunConscripts();
 			}
@@ -181,6 +196,25 @@ namespace ConscriptDesigner.Control {
 		// Updating
 		//-----------------------------------------------------------------------------
 
+		private static void LoadResources() {
+			LoadPreviewZones();
+			LoadPalettes();
+			if (ResourcesLoaded != null)
+				ResourcesLoaded(null, EventArgs.Empty);
+		}
+
+		private static void UnloadResources() {
+			previewZones.Clear();
+			previewZone = null;
+			previewTilePalettes.Clear();
+			previewTilePalette = null;
+			previewEntityPalettes.Clear();
+			previewEntityPalette = null;
+			selectedTileset = null;
+			selectedTileData = null;
+			selectedTileLocation = -Point2I.One;
+		}
+
 		private static void Update(object sender, EventArgs e) {
 			if (busyTask != null) {
 				if (busyTask.IsCompleted) {
@@ -191,11 +225,8 @@ namespace ConscriptDesigner.Control {
 					CommandManager.InvalidateRequerySuggested();
 					if (FinishedBuilding != null)
 						FinishedBuilding(null, EventArgs.Empty);
-					if (busyTaskIsConscripts) {
-						LoadPreviewZones();
-						if (ResourcesLoaded != null)
-							ResourcesLoaded(null, EventArgs.Empty);
-					}
+					if (busyTaskIsConscripts)
+						LoadResources();
 				}
 			}
 			if (closingAnchorables.Any()) {
@@ -361,7 +392,7 @@ namespace ConscriptDesigner.Control {
 				Stopwatch watch = Stopwatch.StartNew();
 				UpdateContentFolder(project);
 
-				Resources.Initialize(contentManager, graphicsDevice);
+				Resources.Initialize(spriteBatch, graphicsDevice, contentManager);
 				rewardManager = new RewardManager(null);
 				GameData.Initialize(rewardManager);
 
@@ -445,6 +476,44 @@ namespace ConscriptDesigner.Control {
 					previewZoneID = previewZones[0];
 			}
 			previewZone = Resources.GetResource<Zone>(previewZoneID);
+		}
+
+		private static void LoadPalettes() {
+			List<string> sortedTileList = new List<string>();
+			List<string> sortedEntityList = new List<string>();
+			sortedTileList.Add("(default)");
+			sortedEntityList.Add("(default)");
+			foreach (var pair in Resources.GetResourceDictionary<Palette>()) {
+				if (pair.Value.PaletteType == PaletteTypes.Tile)
+					sortedTileList.Add(pair.Key);
+				else if (pair.Value.PaletteType == PaletteTypes.Entity)
+					sortedEntityList.Add(pair.Key);
+			}
+			sortedTileList.Sort((a, b) => AlphanumComparator.Compare(a, b, true));
+			previewTilePalettes.Clear();
+			foreach (string palette in sortedTileList) {
+				previewTilePalettes.Add(palette);
+			}
+			if (!Resources.ContainsResource<Palette>(previewTilePaletteID)) {
+				if (previewTilePalettes.Any())
+					previewTilePaletteID = previewTilePalettes[0];
+			}
+			previewTilePalette = Resources.GetResource<Palette>(previewTilePaletteID);
+			if (previewTilePalette != null && previewTilePalette.PaletteType != PaletteTypes.Tile)
+				previewTilePalette = null;
+
+			sortedEntityList.Sort((a, b) => AlphanumComparator.Compare(a, b, true));
+			previewEntityPalettes.Clear();
+			foreach (string palette in sortedEntityList) {
+				previewEntityPalettes.Add(palette);
+			}
+			if (!Resources.ContainsResource<Palette>(previewEntityPaletteID)) {
+				if (previewEntityPalettes.Any())
+					previewEntityPaletteID = previewEntityPalettes[0];
+			}
+			previewEntityPalette = Resources.GetResource<Palette>(previewEntityPaletteID);
+			if (previewEntityPalette != null && previewEntityPalette.PaletteType != PaletteTypes.Entity)
+				previewEntityPalette = null;
 		}
 
 
@@ -677,11 +746,7 @@ namespace ConscriptDesigner.Control {
 				busyTaskIsConscripts = true;
 				if (ResourcesUnloaded != null)
 					ResourcesUnloaded(null, EventArgs.Empty);
-				previewZones.Clear();
-				previewZone = null;
-				selectedTileset = null;
-				selectedTileData = null;
-				selectedTileLocation = -Point2I.One;
+				UnloadResources();
 				busyTask = Task.Run(() => RunConscriptsTask());
 				CommandManager.InvalidateRequerySuggested();
 			}
@@ -740,11 +805,13 @@ namespace ConscriptDesigner.Control {
 		}
 
 		public static void LaunchGame() {
+			SaveAll();
 			UpdateContentFolder(project);
-			Process.Start("ZeldaOracle.exe", "\"../../../../WorldFiles/temp_world.zwd\"");
+			Process.Start("ZeldaOracle.exe", "-dev");
 		}
 
 		public static void LaunchEditor() {
+			SaveAll();
 			UpdateContentFolder(project);
 			Process.Start("ZeldaEditor.exe");
 		}
@@ -835,6 +902,10 @@ namespace ConscriptDesigner.Control {
 			get { return contentManager; }
 		}
 
+		public static SpriteBatch SpriteBatch {
+			get { return spriteBatch; }
+		}
+
 		public static bool IsBusy {
 			get { return busyTask != null; }
 		}
@@ -881,6 +952,60 @@ namespace ConscriptDesigner.Control {
 
 		public static Zone PreviewZone {
 			get { return previewZone; }
+		}
+
+		public static ObservableCollection<string> PreviewTilePalettes {
+			get { return previewTilePalettes; }
+		}
+
+		public static string PreviewTilePaletteID {
+			get { return previewTilePaletteID; }
+			set {
+				if (previewTilePaletteID != value && value != null) {
+					previewTilePaletteID = value;
+					previewTilePalette = Resources.GetResource<Palette>(previewTilePaletteID);
+					if (previewTilePalette != null && previewTilePalette.PaletteType != PaletteTypes.Tile)
+						previewTilePalette = null;
+					if (PreviewInvalidated != null)
+						PreviewInvalidated(null, EventArgs.Empty);
+				}
+			}
+		}
+
+		public static Palette PreviewTilePalette {
+			get {
+				if (previewTilePalette != null)
+					return previewTilePalette;
+				else if (previewZone != null && previewZone.Palette != null)
+					return previewZone.Palette;
+				return GameData.PAL_TILES_DEFAULT;
+			}
+		}
+
+		public static ObservableCollection<string> PreviewEntityPalettes {
+			get { return previewEntityPalettes; }
+		}
+
+		public static string PreviewEntityPaletteID {
+			get { return previewEntityPaletteID; }
+			set {
+				if (previewEntityPaletteID != value && value != null) {
+					previewEntityPaletteID = value;
+					previewEntityPalette = Resources.GetResource<Palette>(previewEntityPaletteID);
+					if (previewEntityPalette != null && previewEntityPalette.PaletteType != PaletteTypes.Entity)
+						previewEntityPalette = null;
+					if (PreviewInvalidated != null)
+						PreviewInvalidated(null, EventArgs.Empty);
+				}
+			}
+		}
+
+		public static Palette PreviewEntityPalette {
+			get {
+				if (previewEntityPalette != null)
+					return previewEntityPalette;
+				return GameData.PAL_ENTITIES_DEFAULT;
+			}
 		}
 
 		public static bool PlayAnimations {

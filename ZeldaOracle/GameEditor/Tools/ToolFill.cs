@@ -9,7 +9,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaEditor.Undo;
 using ZeldaOracle.Common.Graphics;
 using Key = System.Windows.Input.Key;
@@ -53,8 +53,8 @@ namespace ZeldaEditor.Tools {
 			Point2I tileCoord	= LevelDisplay.SampleTileCoordinates(mousePos);
 			Point2I target		= LevelDisplay.SampleLevelTileCoordinates(mousePos);
 			
-			if (!EditorControl.EventMode && e.Button.IsLeftOrRight()) {
-				if ((EditorControl.CurrentLayer == 0 || GetTileAt(target) != null)) {
+			if (!EditorControl.ActionMode && e.Button.IsLeftOrRight()) {
+				if ((EditorControl.CurrentLayer == 0 || GetTileAt(target) != null) && GetTileDataSize() == Point2I.One) {
 					// Fill tiles.
 					TileData fillData = EditorControl.SelectedTileData as TileData;
 					if (fillData != null) {
@@ -75,7 +75,7 @@ namespace ZeldaEditor.Tools {
 		//-----------------------------------------------------------------------------
 
 		public override void DrawTile(Graphics2D g, Room room, Point2I position, Point2I levelCoord, int layer) {
-			if (!EditorControl.EventMode && layer == EditorControl.CurrentLayer) {
+			if (!EditorControl.ActionMode && layer == EditorControl.CurrentLayer) {
 				if (levelCoord == LevelDisplay.CursorTileLocation) {
 					TileDataInstance tile = CreateDrawTile();
 					if (tile != null)
@@ -182,6 +182,12 @@ namespace ZeldaEditor.Tools {
 		}
 		private TileData GetTileData() {
 			return EditorControl.SelectedTileData as TileData;
+		}
+
+		private Point2I GetTileDataSize() {
+			if (GetTileData() != null)
+				return GMath.Max(Point2I.One, GetTileData().Size);
+			return Point2I.One;
 		}
 
 	}

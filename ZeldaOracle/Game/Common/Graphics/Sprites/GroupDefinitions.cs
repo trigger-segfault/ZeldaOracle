@@ -112,7 +112,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 		public ColorDefinitions() { }
 
 		/// <summary>Constructs a copy of the collection of color definitions.</summary>
-		public ColorDefinitions(StyleDefinitions copy) : base(copy) { }
+		public ColorDefinitions(ColorDefinitions copy) : base(copy) { }
 
 		/// <summary>Returns a color definition collection with all groups set to the same definition.</summary>
 		public static ColorDefinitions All(string definition) {

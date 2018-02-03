@@ -55,6 +55,7 @@ namespace ConscriptDesigner.Anchorables {
 			this.display.HoverChanged += OnHoverChanged;
 			this.display.Modified += OnModified;
 			this.display.ToolChanged += OnDisplayToolChanged;
+			this.display.ScaleChanged += OnDisplayScaleChanged;
 			this.host.Child = this.display;
 			this.suppressEvents = false;
 			this.tilesets = new List<KeyValuePair<string, Tileset>>();
@@ -202,7 +203,8 @@ namespace ConscriptDesigner.Anchorables {
 			}
 			else {
 				StringBuilder text = new StringBuilder();
-				text.AppendLine("TILESET \"" + tileset.ID + "\", " + tileset.Dimensions + ", " + tileset.UsePreviewSprites + ";");
+				text.AppendLine("TILESET \"" + tileset.ID + "\", " + tileset.Dimensions + ", " +
+					tileset.UsePreviewSprites.ToString().ToLower() + ";");
 				bool lastRowEmpty = false;
 				for (int y = 0; y < tileset.Height; y++) {
 					if (!lastRowEmpty)
@@ -354,6 +356,12 @@ namespace ConscriptDesigner.Anchorables {
 		private void OnScaleChanged(object sender, SelectionChangedEventArgs e) {
 			if (suppressEvents) return;
 			display.UpdateScale((int) ((FrameworkElement) comboBoxScales.SelectedItem).Tag);
+		}
+
+		private void OnDisplayScaleChanged(object sender, EventArgs e) {
+			suppressEvents = true;
+			comboBoxScales.SelectedIndex = display.Scale - 1;
+			suppressEvents = false;
 		}
 
 		private void OnDisplayToolChanged(object sender, EventArgs e) {

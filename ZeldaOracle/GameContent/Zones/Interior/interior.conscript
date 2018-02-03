@@ -1,0 +1,42 @@
+﻿#==============================================================
+# Zones
+#==============================================================
+
+ZONE "interior_present";
+	NAME "Interior Present";
+	DEFAULTTILE "floor";
+	PALETTE "interior_present";
+	SETSTYLE "floor", "interior_wood";
+	SETSTYLE "fancy_tile_1", "interior_fancy";
+	SETSTYLE "fancy_tile_2", "square_pattern_7";
+	SETSTYLE "fancy_tile_3", "interior_fancy";
+	SETSTYLE "fancy_tile_4", "square_pattern_7";
+	SETSTYLE "fancy_tile_5", "square_pattern_6";
+	SETSTYLE "fancy_tile_6", "square_pattern_10";
+	SETSTYLE "fancy_tile_7", "bright_pattern_5";
+	SETSTYLE "fancy_tile_8", "interior_wood_alt";
+	SETSTYLE "fancy_tile_9", "interior_board_cover";
+	SETSTYLE "fancy_tile_10", "square_tiles_1";
+	SETSTYLE "wall_column", "interior";
+	SETSTYLE "railing", "interior";
+	SETSTYLE "wall_torch", "interior";
+	SETSTYLE "staircase", "indoors";
+	SETSTYLE "stairs", "interior";
+	SETSTYLE "dirt", "indoors";
+	SETSTYLE "button", "flat";
+	SETSTYLE "armos", "floor";
+	SETSTYLE "bush", "indoors";
+	SETSTYLE "ceiling", "medium";
+	SETSTYLE "ceiling_alt", "medium";
+	SETSTYLE "block", "angel";
+	SETSTYLE "cracked_floor", "interior";
+	SETSTYLE "door", "interior";
+	SETSTYLE "sign", "normal";
+	SETSTYLE "tunnel", "tunnel_2";
+	SETSTYLE "water", "indoors";
+	SETSTYLE "chest", "flat";
+	SETSTYLE "lantern", "interior";
+	SETSTYLE "tiled", "square_tiles_1";
+	SETSTYLE "wall", "interior";
+	SETSTYLE "wall_alt", "interior_past";
+END;

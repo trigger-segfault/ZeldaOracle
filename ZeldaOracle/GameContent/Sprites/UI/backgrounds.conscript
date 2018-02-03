@@ -1,0 +1,33 @@
+﻿
+#==============================================================
+# Sprite Sheets
+#==============================================================
+
+#SPRITESHEET "temp_sheet_menu_weapons", "UI/menu_weapons_a", (160, 128), (0, 0), (0, 0); END;
+#SPRITESHEET "temp_sheet_menu_key_Items", "UI/menu_key_Items_a", (160, 128), (0, 0), (0, 0); END;
+#SPRITESHEET "temp_sheet_menu_essences", "UI/menu_essences_a", (160, 128), (0, 0), (0, 0); END;
+#SPRITESHEET "temp_sheet_menu_weapons_fancy", "UI/menu_weapons_b", (160, 128), (0, 0), (0, 0); END;
+#SPRITESHEET "temp_sheet_menu_key_Items_fancy", "UI/menu_key_Items_b", (160, 128), (0, 0), (0, 0); END;
+#SPRITESHEET "temp_sheet_menu_essences_fancy", "UI/menu_essences_b", (160, 128), (0, 0), (0, 0); END;
+#SPRITESHEET "temp_sheet_screen_dungeon_map", "UI/screen_dungeon_map", (160, 144), (0, 0), (0, 0); END;
+
+#==============================================================
+# Sprites
+#==============================================================
+
+PALETTEDICTIONARY "menu_dictionary";
+MAPPEDCOLORS	"menu_default", ("background", "background_fancy_white");
+
+BASIC "background_menu_weapons", "UI/menu_weapons"; END;
+BASIC "background_menu_key_items", "UI/menu_key_Items"; END;
+BASIC "background_menu_essences", "UI/menu_essences"; END;
+BASIC "background_menu_weapons_fancy", "UI/menu_weapons_fancy"; END;
+BASIC "background_menu_key_items_fancy", "UI/menu_key_Items_fancy"; END;
+BASIC "background_menu_essences_fancy", "UI/menu_essences_fancy"; END;
+
+
+PALETTEDICTIONARY "dungeon_map_dictionary";
+MAPPEDCOLORS	"dungeon_map_default", ("background", "background_alt");
+CHUNKSIZE		(8, 8);
+
+BASIC "background_screen_dungeon_map", "UI/screen_dungeon_map"; END;

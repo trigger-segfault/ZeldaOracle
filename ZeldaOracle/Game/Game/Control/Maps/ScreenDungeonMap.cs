@@ -17,7 +17,8 @@ namespace ZeldaOracle.Game.Control.Maps {
 
 	public class ScreenDungeonMap : GameState {
 
-		private Image	backgroundImage;
+		//private Image	backgroundImage;
+		private ISprite background;
 		private Dungeon	dungeon;
 		private int		viewFloorIndex;		// Which floor wer are currently viewing.
 		private DungeonMapFloor viewFloor;
@@ -39,7 +40,8 @@ namespace ZeldaOracle.Game.Control.Maps {
 
 		public ScreenDungeonMap(GameManager gameManager) {
 			this.gameManager		= gameManager;
-			this.backgroundImage	= Resources.GetImage("screen_dungeon_map");
+			//this.backgroundImage	= Resources.GetImage("screen_dungeon_map");
+			this.background         = GameData.SPR_BACKGROUND_SCREEN_DUNGEON_MAP;
 			this.dungeon			= null;
 			this.floors				= new List<DungeonMapFloor>();
 			this.discoveredFloors	= new List<DungeonMapFloor>();
@@ -77,15 +79,14 @@ namespace ZeldaOracle.Game.Control.Maps {
 
 			// Draw the two sprites.
 			if (sprite != null)
-				g.DrawSprite(sprite, GameData.VARIANT_LIGHT, position);
+				g.DrawSprite(sprite, position);
 			if (extraSprite != null)
-				g.DrawSprite(extraSprite, GameData.VARIANT_LIGHT, position);
+				g.DrawSprite(extraSprite, position);
 		}
 
 		private void DrawFloor(Graphics2D g, DungeonMapFloor floor, Point2I position) {
 			// Draw the floor background rectangle.
-			g.DrawSprite(GameData.SPR_UI_MAP_FLOOR_BACKGROUND,
-				GameData.VARIANT_LIGHT, new Rectangle2I(position, new Point2I(64, 64)));
+			g.DrawSprite(GameData.SPR_UI_MAP_FLOOR_BACKGROUND, new Rectangle2I(position, new Point2I(64, 64)));
 			
 			// Draw the rooms.
 			for (int x = 0; x < floor.Width; x++) {
@@ -141,6 +142,7 @@ namespace ZeldaOracle.Game.Control.Maps {
 		}
 
 		public override void OnBegin() {
+
 		}
 		
 		public override void Update() {
@@ -180,13 +182,18 @@ namespace ZeldaOracle.Game.Control.Maps {
 					isChangingFloors = false;
 			}
 		}
-		
+
+		public override void AssignPalettes() {
+			GameData.PaletteShader.TilePalette = GameData.PAL_DUNGEON_MAP_DEFAULT;
+			GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_MENU;
+		}
+
 		public override void Draw(Graphics2D g) {
 			if (dungeon == null)
 				return;
 			
 			// Draw the background.
-			g.DrawImage(backgroundImage, Point2I.Zero);
+			g.DrawSprite(background, Point2I.Zero);
 
 			// TODO: Draw the dungeon name panel.
 
@@ -204,18 +211,17 @@ namespace ZeldaOracle.Game.Control.Maps {
 					// Draw the floor's label box on the left side of the screen.
 					Point2I floorPos = floorBasePos - new Point2I(0, i * 8);
 					string floorName = floor.FloorNumberText;
-					g.DrawString(GameData.FONT_SMALL, floorName, floorPos, new Color(248, 248, 216)); // drop shadow
-					g.DrawString(GameData.FONT_SMALL, floorName, floorPos + new Point2I(0, -1), new Color(56, 32, 16));
-					g.DrawSprite(GameData.SPR_UI_MAP_FLOOR_BOX_LEFT, GameData.VARIANT_LIGHT, floorPos + new Point2I(32, 0));
-					g.DrawSprite(GameData.SPR_UI_MAP_FLOOR_BOX_RIGHT, GameData.VARIANT_LIGHT, floorPos + new Point2I(40, 0));
+					g.DrawString(GameData.FONT_SMALL, floorName, floorPos, TileColors.DungeonMapFloorTextShadow); // drop shadow
+					g.DrawString(GameData.FONT_SMALL, floorName, floorPos + new Point2I(0, -1), TileColors.DungeonMapFloorText);
+					g.DrawSprite(GameData.SPR_UI_MAP_FLOOR_BOX, floorPos + new Point2I(32, 0));
 
 					// Draw the icons around the name box.
 					if (viewFloor == floor)
-						g.DrawSprite(GameData.SPR_UI_MAP_FLOOR_INDICATOR, GameData.VARIANT_LIGHT, floorPos + new Point2I(24, 0));
+						g.DrawSprite(GameData.SPR_UI_MAP_FLOOR_INDICATOR, floorPos + new Point2I(24, 0));
 					if (playerFloorNumber == floor.FloorNumber)
-						g.DrawSprite(GameData.SPR_UI_MAP_PLAYER, GameData.VARIANT_LIGHT, floorPos + new Point2I(36, 0));
+						g.DrawSprite(GameData.SPR_UI_MAP_PLAYER, floorPos + new Point2I(36, 0));
 					if (floor.IsBossFloor && dungeon.HasCompass)
-						g.DrawSprite(GameData.SPR_UI_MAP_BOSS_FLOOR, GameData.VARIANT_LIGHT, floorPos + new Point2I(48, 0));
+						g.DrawSprite(GameData.SPR_UI_MAP_BOSS_FLOOR, floorPos + new Point2I(48, 0));
 					
 					// Draw the floor's room display on the right side of the screen.
 					int discoveredFloorIndex = discoveredFloors.IndexOf(floor);
@@ -226,7 +232,7 @@ namespace ZeldaOracle.Game.Control.Maps {
 					// Draw room display cursor.
 					if (!isChangingFloors && viewFloor == floor && cursorTimer < 32) {
 						Point2I drawPos = floorRoomDisplayPos + (playerRoomLocation * 8);
-						g.DrawSprite(GameData.SPR_UI_MAP_CURSOR, GameData.VARIANT_LIGHT, drawPos);
+						g.DrawSprite(GameData.SPR_UI_MAP_CURSOR, drawPos);
 					}
 				}
 			}
@@ -234,22 +240,22 @@ namespace ZeldaOracle.Game.Control.Maps {
 			// Draw floor view traversal arrows.
 			if (!isChangingFloors) {
     			if (viewFloorIndex > 0)
-    				g.DrawSprite(GameData.SPR_UI_MAP_ARROW_DOWN, GameData.VARIANT_LIGHT, 108, 108);
+    				g.DrawSprite(GameData.SPR_UI_MAP_ARROW_DOWN, 108, 108);
     			if (viewFloorIndex < discoveredFloors.Count - 1)
-    				g.DrawSprite(GameData.SPR_UI_MAP_ARROW_UP, GameData.VARIANT_LIGHT, 108, 28);
+    				g.DrawSprite(GameData.SPR_UI_MAP_ARROW_UP, 108, 28);
 			}
 
 			// Draw the items panel.
 			if (dungeon.HasMap)
-				g.DrawSprite(GameData.SPR_REWARD_MAP, GameData.VARIANT_LIGHT, 8, 110);
+				g.DrawSprite(GameData.SPR_REWARD_MAP, 8, 110);
 			if (dungeon.HasCompass)
-				g.DrawSprite(GameData.SPR_REWARD_COMPASS, GameData.VARIANT_LIGHT, 32, 110);
+				g.DrawSprite(GameData.SPR_REWARD_COMPASS, 32, 110);
 			if (dungeon.HasBossKey)
-				g.DrawSprite(GameData.SPR_REWARD_BOSS_KEY, GameData.VARIANT_LIGHT, 8, 128);
+				g.DrawSprite(GameData.SPR_REWARD_BOSS_KEY, 8, 128);
 			if (dungeon.NumSmallKeys > 0) {
-				g.DrawSprite(GameData.SPR_REWARD_SMALL_KEY, GameData.VARIANT_LIGHT, 32, 128);
-				g.DrawString(GameData.FONT_SMALL, "X" + dungeon.NumSmallKeys.ToString(), new Point2I(40, 136), new Color(144, 136, 16)); // drop shadow
-				g.DrawString(GameData.FONT_SMALL, "X" + dungeon.NumSmallKeys.ToString(), new Point2I(40, 136 - 1), new Color(32, 24, 16));
+				g.DrawSprite(GameData.SPR_REWARD_SMALL_KEY, 32, 128);
+				g.DrawString(GameData.FONT_SMALL, "X" + dungeon.NumSmallKeys.ToString(), new Point2I(40, 136), TileColors.DungeonMapKeyTextShadow); // drop shadow
+				g.DrawString(GameData.FONT_SMALL, "X" + dungeon.NumSmallKeys.ToString(), new Point2I(40, 136 - 1), TileColors.DungeonMapKeyText);
 			}
 		}
 	}

@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_trees"					"Tiles/Overworld/trees"					(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_trees"					"Tiles/Overworld/trees"					(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -16,7 +16,7 @@ MAPPEDCOLORS	"tiles_default", ("tree_trunk", "tree_leaves", "tree_trunk_leaves",
 CHUNKSIZE		(8, 8);
 
 SOURCE "temp_sheet_trees";
-SPRITESET "set_trees", (16, 18);
+SPRITESET "tiles_trees", (16, 18);
 	MULTIPLE STYLE "tree", (0, 0), (2, 10);
 		ADD "present"			(0, 0);
 		ADD "past"				(2, 0);
@@ -56,19 +56,19 @@ END;
 # Tiles
 #==============================================================
 
-SOURCE "set_trees";
+SOURCE "tiles_trees";
 NAME "tile_tree_top_left"					(0, 0);
 NAME "tile_tree_top_right"					(1, 0);
 NAME "tile_tree_bottom_left"				(0, 1);
 NAME "tile_tree_bottom_right"				(1, 1);
 NAME "tile_tree_house_top_left"				(0, 2);
 NAME "tile_tree_house_top_right"			(1, 2);
-NAME "tile_tree_dirt_top_left"				(0, 3);
-NAME "tile_tree_dirt_top_right"				(1, 3);
-NAME "tile_tree_dirt_bottom_left"			(0, 4);
-NAME "tile_tree_dirt_bottom_right"			(1, 4);
-NAME "tile_tree_dirt_house_top_left"		(0, 5);
-NAME "tile_tree_dirt_house_top_right"		(1, 5);
+NAME "tile_tree_dark_top_left"				(0, 3);
+NAME "tile_tree_dark_top_right"				(1, 3);
+NAME "tile_tree_dark_bottom_left"			(0, 4);
+NAME "tile_tree_dark_bottom_right"			(1, 4);
+NAME "tile_tree_dark_house_top_left"		(0, 5);
+NAME "tile_tree_dark_house_top_right"		(1, 5);
 NAME "tile_tree_top_left_behind"			(0, 6);
 NAME "tile_tree_top_right_behind"			(1, 6);
 NAME "tile_tree_house_top_left_behind"		(0, 7);
@@ -84,12 +84,12 @@ NAME "tile_tree_alt_bottom_left"			(2, 1);
 NAME "tile_tree_alt_bottom_right"			(3, 1);
 NAME "tile_tree_alt_house_top_left"			(2, 2);
 NAME "tile_tree_alt_house_top_right"		(3, 2);
-NAME "tile_tree_alt_dirt_top_left"			(2, 3);
-NAME "tile_tree_alt_dirt_top_right"			(3, 3);
-NAME "tile_tree_alt_dirt_bottom_left"		(2, 4);
-NAME "tile_tree_alt_dirt_bottom_right"		(3, 4);
-NAME "tile_tree_alt_dirt_house_top_left"	(2, 5);
-NAME "tile_tree_alt_dirt_house_top_right"	(3, 5);
+NAME "tile_tree_alt_dark_top_left"			(2, 3);
+NAME "tile_tree_alt_dark_top_right"			(3, 3);
+NAME "tile_tree_alt_dark_bottom_left"		(2, 4);
+NAME "tile_tree_alt_dark_bottom_right"		(3, 4);
+NAME "tile_tree_alt_dark_house_top_left"	(2, 5);
+NAME "tile_tree_alt_dark_house_top_right"	(3, 5);
 NAME "tile_tree_alt_top_left_behind"		(2, 6);
 NAME "tile_tree_alt_top_right_behind"		(3, 6);
 NAME "tile_tree_alt_house_top_left_behind"	(2, 7);
@@ -103,10 +103,10 @@ NAME "tile_palm_tree_top_left"				(0, 10);
 NAME "tile_palm_tree_top_right"				(1, 10);
 NAME "tile_palm_tree_bottom_left"			(0, 11);
 NAME "tile_palm_tree_bottom_right"			(1, 11);
-NAME "tile_palm_tree_dirt_top_left"			(0, 12);
-NAME "tile_palm_tree_dirt_top_right"		(1, 12);
-NAME "tile_palm_tree_dirt_bottom_left"		(0, 13);
-NAME "tile_palm_tree_dirt_bottom_right"		(1, 13);
+NAME "tile_palm_tree_dark_top_left"			(0, 12);
+NAME "tile_palm_tree_dark_top_right"		(1, 12);
+NAME "tile_palm_tree_dark_bottom_left"		(0, 13);
+NAME "tile_palm_tree_dark_bottom_right"		(1, 13);
 NAME "tile_palm_tree_sand_top_left"			(0, 14);
 NAME "tile_palm_tree_sand_top_right"		(1, 14);
 NAME "tile_palm_tree_sand_bottom_left"		(0, 15);
@@ -118,10 +118,10 @@ NAME "tile_thin_tree_top_left"				(2, 10);
 NAME "tile_thin_tree_top_right"				(3, 10);
 NAME "tile_thin_tree_bottom_left"			(2, 11);
 NAME "tile_thin_tree_bottom_right"			(3, 11);
-NAME "tile_thin_tree_dirt_top_left"			(2, 12);
-NAME "tile_thin_tree_dirt_top_right"		(3, 12);
-NAME "tile_thin_tree_dirt_bottom_left"		(2, 13);
-NAME "tile_thin_tree_dirt_bottom_right"		(3, 13);
+NAME "tile_thin_tree_dark_top_left"			(2, 12);
+NAME "tile_thin_tree_dark_top_right"		(3, 12);
+NAME "tile_thin_tree_dark_bottom_left"		(2, 13);
+NAME "tile_thin_tree_dark_bottom_right"		(3, 13);
 NAME "tile_thin_tree_top_left_behind"		(2, 14);
 NAME "tile_thin_tree_top_right_behind"		(3, 14);
 
@@ -129,55 +129,55 @@ NAME "tile_ember_tree_top_left"				(4, 10);
 NAME "tile_ember_tree_top_right"			(5, 10);
 NAME "tile_ember_tree_bottom_left"			(4, 11);
 NAME "tile_ember_tree_bottom_right"			(5, 11);
-NAME "tile_ember_tree_dirt_top_left"		(4, 12);
-NAME "tile_ember_tree_dirt_top_right"		(5, 12);
-NAME "tile_ember_tree_dirt_bottom_left"		(4, 13);
-NAME "tile_ember_tree_dirt_bottom_right"	(5, 13);
+NAME "tile_ember_tree_dark_top_left"		(4, 12);
+NAME "tile_ember_tree_dark_top_right"		(5, 12);
+NAME "tile_ember_tree_dark_bottom_left"		(4, 13);
+NAME "tile_ember_tree_dark_bottom_right"	(5, 13);
 
 NAME "tile_scent_tree_top_left"				(6, 10);
 NAME "tile_scent_tree_top_right"			(7, 10);
 NAME "tile_scent_tree_bottom_left"			(6, 11);
 NAME "tile_scent_tree_bottom_right"			(7, 11);
-NAME "tile_scent_tree_dirt_top_left"		(6, 12);
-NAME "tile_scent_tree_dirt_top_right"		(7, 12);
-NAME "tile_scent_tree_dirt_bottom_left"		(6, 13);
-NAME "tile_scent_tree_dirt_bottom_right"	(7, 13);
+NAME "tile_scent_tree_dark_top_left"		(6, 12);
+NAME "tile_scent_tree_dark_top_right"		(7, 12);
+NAME "tile_scent_tree_dark_bottom_left"		(6, 13);
+NAME "tile_scent_tree_dark_bottom_right"	(7, 13);
 
 NAME "tile_gale_tree_top_left"				(8, 10);
 NAME "tile_gale_tree_top_right"				(9, 10);
 NAME "tile_gale_tree_bottom_left"			(8, 11);
 NAME "tile_gale_tree_bottom_right"			(9, 11);
-NAME "tile_gale_tree_dirt_top_left"			(8, 12);
-NAME "tile_gale_tree_dirt_top_right"		(9, 12);
-NAME "tile_gale_tree_dirt_bottom_left"		(8, 13);
-NAME "tile_gale_tree_dirt_bottom_right"		(9, 13);
+NAME "tile_gale_tree_dark_top_left"			(8, 12);
+NAME "tile_gale_tree_dark_top_right"		(9, 12);
+NAME "tile_gale_tree_dark_bottom_left"		(8, 13);
+NAME "tile_gale_tree_dark_bottom_right"		(9, 13);
 
 NAME "tile_pegasus_tree_top_left"			(10, 10);
 NAME "tile_pegasus_tree_top_right"			(11, 10);
 NAME "tile_pegasus_tree_bottom_left"		(10, 11);
 NAME "tile_pegasus_tree_bottom_right"		(11, 11);
-NAME "tile_pegasus_tree_dirt_top_left"		(10, 12);
-NAME "tile_pegasus_tree_dirt_top_right"		(11, 12);
-NAME "tile_pegasus_tree_dirt_bottom_left"	(10, 13);
-NAME "tile_pegasus_tree_dirt_bottom_right"	(11, 13);
+NAME "tile_pegasus_tree_dark_top_left"		(10, 12);
+NAME "tile_pegasus_tree_dark_top_right"		(11, 12);
+NAME "tile_pegasus_tree_dark_bottom_left"	(10, 13);
+NAME "tile_pegasus_tree_dark_bottom_right"	(11, 13);
 
 NAME "tile_mystery_tree_top_left"			(12, 10);
 NAME "tile_mystery_tree_top_right"			(13, 10);
 NAME "tile_mystery_tree_bottom_left"		(12, 11);
 NAME "tile_mystery_tree_bottom_right"		(13, 11);
-NAME "tile_mystery_tree_dirt_top_left"		(12, 12);
-NAME "tile_mystery_tree_dirt_top_right"		(13, 12);
-NAME "tile_mystery_tree_dirt_bottom_left"	(12, 13);
-NAME "tile_mystery_tree_dirt_bottom_right"	(13, 13);
+NAME "tile_mystery_tree_dark_top_left"		(12, 12);
+NAME "tile_mystery_tree_dark_top_right"		(13, 12);
+NAME "tile_mystery_tree_dark_bottom_left"	(12, 13);
+NAME "tile_mystery_tree_dark_bottom_right"	(13, 13);
 
 NAME "tile_gasha_tree_top_left"				(14, 10);
 NAME "tile_gasha_tree_top_right"			(15, 10);
 NAME "tile_gasha_tree_bottom_left"			(14, 11);
 NAME "tile_gasha_tree_bottom_right"			(15, 11);
-NAME "tile_gasha_tree_dirt_top_left"		(14, 12);
-NAME "tile_gasha_tree_dirt_top_right"		(15, 12);
-NAME "tile_gasha_tree_dirt_bottom_left"		(14, 13);
-NAME "tile_gasha_tree_dirt_bottom_right"	(15, 13);
+NAME "tile_gasha_tree_dark_top_left"		(14, 12);
+NAME "tile_gasha_tree_dark_top_right"		(15, 12);
+NAME "tile_gasha_tree_dark_bottom_left"		(14, 13);
+NAME "tile_gasha_tree_dark_bottom_right"	(15, 13);
 
 COMPOSITE "tile_dead_thin_tree_left_top_left";
 	COMBINE "tile_ground"; REMOVE 3; REMOVE 1; ADD (10, 16); END;
@@ -206,34 +206,34 @@ COMPOSITE "tile_stump_top_right";
 COMPOSITE "tile_stump_bottom_right";
 	COMBINE "tile_ground"; REMOVE 0; ADD (4, 17); END;
 	
-COMPOSITE "tile_stump_dirt_top_left";
+COMPOSITE "tile_stump_dark_top_left";
 	COMBINE "tile_dirt_dark";
 	REPLACE 0, "dirt_dark_rough_1_8x8";
 	REMOVE 3; REMOVE 1; ADD (5, 16); END;
-COMPOSITE "tile_stump_dirt_bottom_left";
+COMPOSITE "tile_stump_dark_bottom_left";
 	COMBINE "tile_dirt_dark";
 	REPLACE 0, "dirt_dark_rough_1_8x8";
 	REPLACE 3, "dirt_dark_rough_4_8x8";
 	REMOVE 1; ADD (5, 17); END;
-NAME "tile_stump_dirt_top_mid"					(6, 16);
-NAME "tile_stump_dirt_bottom_mid"				(6, 17);
-COMPOSITE "tile_stump_dirt_top_right";
+NAME "tile_stump_dark_top_mid"					(6, 16);
+NAME "tile_stump_dark_bottom_mid"				(6, 17);
+COMPOSITE "tile_stump_dark_top_right";
 	COMBINE "tile_dirt_dark";
 	REPLACE 3, "dirt_dark_rough_4_8x8";
 	REMOVE 2; REMOVE 0; ADD (7, 16); END;
-COMPOSITE "tile_stump_dirt_bottom_right";
+COMPOSITE "tile_stump_dark_bottom_right";
 	COMBINE "tile_dirt_dark";
 	REPLACE 3, "dirt_dark_rough_4_8x8";
 	REMOVE 0; ADD (7, 17); END;
 	
 NAME "tile_rock_flower_left"					(12, 14);
-NAME "tile_rock_flower_dirt_left"				(12, 15);
+NAME "tile_rock_flower_dark_left"				(12, 15);
 NAME "tile_rock_flower_right"					(13, 14);
-NAME "tile_rock_flower_dirt_right"				(13, 15);
+NAME "tile_rock_flower_dark_right"				(13, 15);
 NAME "tile_rock_jump_flower"					(14, 14);
-NAME "tile_rock_jump_flower_dirt"				(14, 15);
+NAME "tile_rock_jump_flower_dark"				(14, 15);
 NAME "tile_rock_mushroom"						(15, 14);
-NAME "tile_rock_mushroom_dirt"					(15, 15);
+NAME "tile_rock_mushroom_dark"					(15, 15);
 
 COMPOSITE "tile_weeping_tree_right_top_left";
 	COMBINE "tile_ground"; REMOVE 3; REMOVE 2; REMOVE 1; ADD (8, 14); END;

@@ -10,6 +10,7 @@ TILE	wall_alt;
 TILE	wall_column;
 TILE	stairs;
 TILE	floor_staircase;
+TILE	floor_stairwell;
 TILE	wall_staircase;
 TILE	railing;
 TILE	wall_torch_base;
@@ -63,6 +64,7 @@ TILE	grass;
 TILE	leaves;
 
 TILE	bush;
+TILE	bush_dark;
 TILE	bush_asobject;
 TILE	regrowable_bush;
 TILE	mushroom;
@@ -145,6 +147,13 @@ TILE	snow_entrance; # Single use for tree-house
 TILE	jump_flower;
 TILE	thick_brush;
 TILE	hedge;
+
+#==============================================================
+# Horizon
+#==============================================================
+
+TILE	blue_sky;
+TILE	dark_sky;
 
 #==============================================================
 # Sea
@@ -276,6 +285,24 @@ TILE	temple_spring_roof;
 TILE	temple_summer_roof;
 TILE	temple_autumn_roof;
 TILE	temple_winter_roof;
+
+TILE	graveyard_wall;
+TILE	graveyard_gate;
+TILE	graveyard_tomb;
+TILE	tombstone;
+
+TILE	moblin_castle;
+
+TILE	forest_entrance;
+
+#==============================================================
+# NPCs
+#==============================================================
+
+TILE	biggoron;
+TILE	biggoron_top;
+TILE	biggoron_chin;
+TILE	biggoron_hands;
 
 #==============================================================
 

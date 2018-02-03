@@ -1,11 +1,66 @@
 ﻿
+#==============================================================
+# Collision Models
+#==============================================================
 
-TILE "temple_of_seasons_subrosia_back"; SAMESPRITE; PREVIEW "preview_temple_of_seasons"; SOLID block; END;
-TILE "temple_of_seasons_subrosia_front"; SAMESPRITE; PREVIEW "preview_temple_of_seasons"; SOLID block; END;
-TILE "temple_of_seasons_overworld_back"; SAMESPRITE; PREVIEW "preview_temple_of_seasons"; SOLID block; END;
-TILE "temple_of_seasons_overworld_front"; SAMESPRITE; PREVIEW "preview_temple_of_seasons"; SOLID block; END;
+MODEL temp_temple_of_seasons_back;
+	ADD (0, 0, 160, 56); ADD (32, 56, 32, 8); ADD (96, 56, 32, 8);
+	COMBINE doorway, (64, 56); COMBINE doorway, (80, 56); END;
+MODEL temp_temple_of_seasons_overworld_back;
+	ADD (0, 0, 160, 72); ADD (32, 72, 32, 8); ADD (96, 72, 32, 8);
+	COMBINE doorway, (64, 72); COMBINE doorway, (80, 72); END;
+MODEL temp_temple_of_seasons_front;
+	ADD (0, 0, 32, 24); ADD (64, 0, 32, 24); END;
+	
+#==============================================================
+# Tiles
+#==============================================================
 
-TILE "temple_roof_spring"; SAMESPRITE; PREVIEW "preview_temple_roof_spring"; SOLID block; END;
-TILE "temple_roof_summer"; SAMESPRITE; PREVIEW "preview_temple_roof_summer"; SOLID block; END;
-TILE "temple_roof_autumn"; SAMESPRITE; PREVIEW "preview_temple_roof_autumn"; SOLID block; END;
-TILE "temple_roof_winter"; SAMESPRITE; PREVIEW "preview_temple_roof_winter"; SOLID block; END;
+
+TILE "temple_of_seasons_subrosia_back";
+	SAMESPRITE; PREVIEW "preview_temple_of_seasons"; SOLID temp_temple_of_seasons_back;
+	SIZE (10, 4);
+	END;
+TILE "temple_of_seasons_subrosia_front";
+	SAMESPRITE; PREVIEW "preview_temple_of_seasons"; SOLID temp_temple_of_seasons_front;
+	SIZE (6, 2);
+	END;
+TILE "temple_of_seasons_overworld_back";
+	SIZE (10, 5);
+	SAMESPRITE; PREVIEW "preview_temple_of_seasons"; SOLID temp_temple_of_seasons_overworld_back;
+	END;
+TILE "temple_of_seasons_overworld_front";
+	SIZE (6, 2);
+	SAMESPRITE; PREVIEW "preview_temple_of_seasons"; SOLID temp_temple_of_seasons_front;
+	END;
+
+TILE "temple_roof_spring";
+	SAMESPRITE; PREVIEW "preview_temple_roof_spring"; SOLID block_3x3;
+	SIZE (3, 3);
+	END;
+TILE "temple_roof_summer";
+	SAMESPRITE; PREVIEW "preview_temple_roof_summer"; SOLID block_3x3;
+	SIZE (3, 3);
+	END;
+TILE "temple_roof_autumn";
+	SAMESPRITE; PREVIEW "preview_temple_roof_autumn"; SOLID block_3x3;
+	SIZE (3, 3);
+	END;
+TILE "temple_roof_winter";
+	SAMESPRITE; PREVIEW "preview_temple_roof_winter"; SOLID block_3x3;
+	SIZE (3, 3);
+	END;
+
+TILE "temple_subrosia_column_top_left"; SAMESPRITE; SOLID edge_e; END;
+TILE "temple_subrosia_column_top_right"; SAMESPRITE; SOLID edge_w; END;
+TILE "temple_subrosia_column_bottom_left"; SAMESPRITE; SOLID edge_e; END;
+TILE "temple_subrosia_column_bottom_right"; SAMESPRITE; SOLID edge_w; END;
+TILE "temple_subrosia_column_bottom_spaced_left"; SAMESPRITE; SOLID inside_corner_ne; END;
+TILE "temple_subrosia_column_bottom_spaced_right"; SAMESPRITE; SOLID inside_corner_nw; END;
+
+TILE "temple_overworld_column_top_left"; SAMESPRITE; SOLID edge_e; END;
+TILE "temple_overworld_column_top_right"; SAMESPRITE; SOLID edge_w; END;
+TILE "temple_overworld_column_bottom_left"; SAMESPRITE; SOLID edge_e; END;
+TILE "temple_overworld_column_bottom_right"; SAMESPRITE; SOLID edge_w; END;
+#TILE "temple_overworld_column_bottom_spaced_left"; SAMESPRITE; SOLID inside_corner_ne; END;
+#TILE "temple_overworld_column_bottom_spaced_right"; SAMESPRITE; SOLID inside_corner_nw; END;

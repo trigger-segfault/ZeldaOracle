@@ -14,7 +14,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 using ZeldaEditor.ObjectsEditor.CustomControls;
 using ZeldaOracle.Game.Tiles.Custom;
@@ -141,7 +141,7 @@ namespace ZeldaEditor.ObjectsEditor {
 			string baseTypeName = "Object";
 			if (propertyObject is TileDataInstance)
 				baseTypeName = "Tile";
-			else if (propertyObject is EventTileDataInstance)
+			else if (propertyObject is ActionTileDataInstance)
 				baseTypeName = "Event Tile";
 			else if (propertyObject is Room)
 				baseTypeName = "Room";
@@ -163,10 +163,10 @@ namespace ZeldaEditor.ObjectsEditor {
 				if (tileType == null)
 					tileType = typeof(Tile);
 			}
-			else if (propertyObject is EventTileDataInstance) {
-				tileType = ((EventTileDataInstance) propertyObject).Type;
+			else if (propertyObject is ActionTileDataInstance) {
+				tileType = ((ActionTileDataInstance) propertyObject).Type;
 				if (tileType == null)
-					tileType = typeof(EventTile);
+					tileType = typeof(ActionTile);
 			}
 			
 			// Only show Tile Interactions tab page for tiles.

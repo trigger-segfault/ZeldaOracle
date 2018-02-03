@@ -39,7 +39,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\x86\Debug</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -51,7 +51,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\x86\Release</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -134,6 +134,8 @@
     <None Include="Common\Graphics\Obsolete\AnimationOld.cs" />
     <None Include="Common\Graphics\Obsolete\AnimationFrameOld.cs" />
     <Compile Include="Common\Graphics\Flipping.cs" />
+    <Compile Include="Common\Graphics\MappedColors.cs" />
+    <Compile Include="Common\Graphics\PaletteColors.cs" />
     <Compile Include="Common\Graphics\Rotating.cs" />
     <Compile Include="Common\Graphics\Sprites\ColorationGroups.cs" />
     <Compile Include="Common\Graphics\Sprites\GroupDefinitions.cs" />
@@ -152,6 +154,8 @@
     <Compile Include="Common\Graphics\Palette.cs" />
     <Compile Include="Common\Graphics\PaletteDictionary.cs" />
     <Compile Include="Common\Graphics\PaletteShader.cs" />
+    <Compile Include="Common\Graphics\Sprites\UnmappedSprite.cs" />
+    <Compile Include="Common\Graphics\Unmapping.cs" />
     <Compile Include="Common\Ini\IniDocument.cs" />
     <Compile Include="Common\Ini\IniEnums.cs" />
     <Compile Include="Common\Ini\IniSection.cs" />
@@ -219,7 +223,6 @@
     <None Include="Common\Scripting\ZeldaObject.cs" />
     <Compile Include="Common\Scripts\Commands\CommandParamDefinition.cs" />
     <Compile Include="Common\Scripts\Commands\CommandReferenceParam.cs" />
-    <None Include="Common\Scripts\CustomReaders\AnimationSR.cs" />
     <Compile Include="Common\Scripts\Commands\CommandParam.cs" />
     <Compile Include="Common\Scripts\Commands\CommandParamParser.cs" />
     <Compile Include="Common\Scripts\CustomReaders\GameFontSR.cs" />
@@ -231,8 +234,8 @@
     <Compile Include="Common\Scripts\CustomReaders\ISPriteSR.ColorStyle.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\ISpriteSR.Style.cs" />
+    <Compile Include="Common\Scripts\CustomReaders\ISPriteSR.StyleColor.cs" />
     <Compile Include="Common\Scripts\CustomReaders\MusicSR.cs" />
-    <None Include="Common\Scripts\CustomReaders\PaletteConverterSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\PaletteDictionarySR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\PaletteSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\TileDataSR.cs" />
@@ -242,7 +245,6 @@
     <Compile Include="Common\Scripts\Commands\ScriptCommand.cs" />
     <Compile Include="Common\Scripts\CustomReaders\SoundSR.cs" />
     <Compile Include="Common\Scripts\CustomReaders\TilesetSR.cs" />
-    <None Include="Common\Scripts\CustomReaders\SpritesSR.cs" />
     <Compile Include="Common\Scripts\ScriptReaderException.cs" />
     <Compile Include="Common\Translation\Language.cs" />
     <Compile Include="Common\Translation\LetterString.cs" />
@@ -530,13 +532,10 @@
     <Compile Include="Game\Tiles\Custom\TileLockedBlock.cs" />
     <Compile Include="Game\Tiles\Custom\Doors\TileDoor.cs" />
     <Compile Include="Game\Tiles\Custom\TileButton.cs" />
-    <Compile Include="Game\Tiles\EventTiles\Puzzles\EventColorTilePuzzle.cs" />
+    <Compile Include="Game\Tiles\ActionTiles\Puzzles\ActionColorTilePuzzle.cs" />
     <Compile Include="Game\Tiles\Internal\AppearingTile.cs" />
     <Compile Include="Game\Tiles\Internal\PlaceHolderTile.cs" />
-    <None Include="Game\Tiles\ITileset.cs" />
     <Compile Include="Game\Tiles\Custom\TileSomariaBlock.cs" />
-    <None Include="Game\Tiles\BaseTileset.cs" />
-    <None Include="Game\Tiles\EventTiles\EventTileset.cs" />
     <Compile Include="Game\Tiles\TileGraphicsComponent.cs" />
     <Compile Include="Game\Tiles\TilePath.cs" />
     <Compile Include="Game\Tiles\Custom\TileRoller.cs" />
@@ -547,18 +546,17 @@
     <Compile Include="Game\Tiles\Custom\TileOwl.cs" />
     <Compile Include="Game\Tiles\Custom\TileLantern.cs" />
     <Compile Include="Game\Tiles\BaseTileData.cs" />
-    <Compile Include="Game\Tiles\EventTiles\EventTile.cs" />
-    <Compile Include="Game\Tiles\EventTiles\EventTileDataInstance.cs" />
-    <Compile Include="Game\Tiles\EventTiles\EventTileData.cs" />
-    <Compile Include="Game\Tiles\EventTiles\MonsterEvent.cs" />
-    <Compile Include="Game\Tiles\EventTiles\NPCEvent.cs" />
-    <Compile Include="Game\Tiles\EventTiles\WarpEvent.cs" />
+    <Compile Include="Game\Tiles\ActionTiles\ActionTile.cs" />
+    <Compile Include="Game\Tiles\ActionTiles\ActionTileDataInstance.cs" />
+    <Compile Include="Game\Tiles\ActionTiles\ActionTileData.cs" />
+    <Compile Include="Game\Tiles\ActionTiles\MonsterAction.cs" />
+    <Compile Include="Game\Tiles\ActionTiles\NPCAction.cs" />
+    <Compile Include="Game\Tiles\ActionTiles\WarpAction.cs" />
     <Compile Include="Game\Tiles\Tile.cs" />
     <Compile Include="Game\Tiles\TileData.cs" />
     <Compile Include="Game\Tiles\BaseTileDataInstance.cs" />
     <Compile Include="Game\Tiles\TileDataInstance.cs" />
     <Compile Include="Game\Tiles\TileFlags.cs" />
-    <None Include="Game\Tiles\TilesetOld.cs" />
     <Compile Include="Game\Tiles\Custom\TileSign.cs" />
     <Compile Include="Common\Scripting\IPropertyObject.cs" />
     <Compile Include="Game\Worlds\Dungeon.cs" />

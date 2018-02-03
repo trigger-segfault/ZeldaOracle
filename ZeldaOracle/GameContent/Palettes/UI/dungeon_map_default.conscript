@@ -1,0 +1,34 @@
+﻿PALETTE "dungeon_map_dictionary", "dungeon_map_default";
+
+#==============================================================
+# Map
+#==============================================================
+
+COLOR	default, black					(16, 16, 16);
+
+COLOR	background, light				(176,168, 16);
+COLOR	background, medium				(144,136, 16);
+COLOR	background, dark				( 96, 88, 16);
+COLOR	background, black				( 32, 24, 16);
+
+COLOR	background_alt, light			(184,152, 32);
+COLOR	background_alt, medium			(104, 88, 16);
+COLOR	background_alt, dark			( 56, 48, 16);
+
+COLOR	room, light						(208,192,160);
+COLOR	room, medium					( 16,248,248);
+COLOR	room, dark						( 16,104,128);
+COLOR	room, black						( 56, 32, 16);
+
+LOOKUP	chest, light					background_alt, light;
+COLOR	chest, medium					(248,248,216);
+COLOR	chest, dark						(248, 24, 56);
+LOOKUP	chest, black					room, black;
+
+COLOR	boss, light						(248,224,152);
+COLOR	boss, medium					(128, 24, 40);
+COLOR	boss, dark						(120, 24, 56);
+
+#==============================================================
+
+END;

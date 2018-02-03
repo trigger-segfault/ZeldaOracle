@@ -13,7 +13,7 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripting;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Common.Graphics.Sprites;
 
 namespace ZeldaOracle.Game.Worlds {
@@ -84,7 +84,7 @@ namespace ZeldaOracle.Game.Worlds {
 		private List<ResourceInfo<ISprite>>			sprites;
 		private List<ResourceInfo<Animation>>		animations;
 		private List<ResourceInfo<TileData>>		tileData;
-		private List<ResourceInfo<EventTileData>>	eventTileData;
+		private List<ResourceInfo<ActionTileData>>	actionTileData;
 		
 		private string errorMessage;
 		private Exception exception;
@@ -123,7 +123,7 @@ namespace ZeldaOracle.Game.Worlds {
 			sprites			= new List<ResourceInfo<ISprite>>();
 			animations		= new List<ResourceInfo<Animation>>();
 			tileData		= new List<ResourceInfo<TileData>>();
-			eventTileData	= new List<ResourceInfo<EventTileData>>();
+			actionTileData	= new List<ResourceInfo<ActionTileData>>();
 		}
 
 
@@ -140,7 +140,7 @@ namespace ZeldaOracle.Game.Worlds {
 			sprites.Clear();
 			animations.Clear();
 			tileData.Clear();
-			eventTileData.Clear();
+			actionTileData.Clear();
 		}
 
 		//-----------------------------------------------------------------------------
@@ -177,7 +177,7 @@ namespace ZeldaOracle.Game.Worlds {
 				ReadResourceList(reader, sprites);
 				ReadResourceList(reader, animations);
 				ReadResourceList(reader, tileData);
-				ReadResourceList(reader, eventTileData);
+				ReadResourceList(reader, actionTileData);
 
 				// Read the world data.
 				ReadWorld(reader, world);
@@ -349,12 +349,12 @@ namespace ZeldaOracle.Game.Worlds {
 					room.PlaceTile(tile, new Point2I(x, y), layer);
 			}
 
-			// Read event tile data.
-			int eventTileDataCount = reader.ReadInt32();
-			for (int i = 0; i < eventTileDataCount; i++) {
-				EventTileDataInstance eventTileData = ReadEventTileData(reader, world);
-				if (eventTileData != null)
-					room.AddEventTile(eventTileData);
+			// Read action tile data.
+			int actionTileDataCount = reader.ReadInt32();
+			for (int i = 0; i < actionTileDataCount; i++) {
+				ActionTileDataInstance actionTileData = ReadActionTileData(reader, world);
+				if (actionTileData != null)
+					room.AddActionTile(actionTileData);
 			}
 		}
 
@@ -394,21 +394,21 @@ namespace ZeldaOracle.Game.Worlds {
 			return (tile.TileData != null ? tile : null);
 		}
 
-		private EventTileDataInstance ReadEventTileData(BinaryReader reader, World world) {
-			EventTileData tileData = ReadResource(reader, eventTileData);
+		private ActionTileDataInstance ReadActionTileData(BinaryReader reader, World world) {
+			ActionTileData tileData = ReadResource(reader, actionTileData);
 			if (tileData == null)
 				return null;
 			Point2I position = new Point2I(
 				reader.ReadInt32(), reader.ReadInt32());
 
-			EventTileDataInstance eventTile = new EventTileDataInstance(tileData, position);
-			ReadProperties(reader, eventTile.Properties);
-			ReadEvents(reader, eventTile.Events, world);
-			eventTile.Properties.PropertyObject = eventTile;
+			ActionTileDataInstance actionTileTile = new ActionTileDataInstance(tileData, position);
+			ReadProperties(reader, actionTileTile.Properties);
+			ReadEvents(reader, actionTileTile.Events, world);
+			actionTileTile.Properties.PropertyObject = actionTileTile;
 			if (tileData != null)
-				eventTile.Properties.BaseProperties = eventTile.EventTileData.Properties;
+				actionTileTile.Properties.BaseProperties = actionTileTile.ActionTileData.Properties;
 
-			return (eventTile.EventTileData != null ? eventTile : null);
+			return (actionTileTile.ActionTileData != null ? actionTileTile : null);
 		}
 
 		private void ReadEvents(BinaryReader reader, EventCollection events, World world) {
@@ -591,7 +591,7 @@ namespace ZeldaOracle.Game.Worlds {
 			WriteResourceList(writer, sprites);
 			WriteResourceList(writer, animations);
 			WriteResourceList(writer, tileData);
-			WriteResourceList(writer, eventTileData);
+			WriteResourceList(writer, actionTileData);
 
 			// Write the world data.
 			writer.Write(worldData, 0, levelDataSize);
@@ -822,11 +822,11 @@ namespace ZeldaOracle.Game.Worlds {
 				}
 			}
 
-			// Write event tile data.
-			writer.Write(room.EventData.Count);
-			for (int i = 0; i < room.EventData.Count; i++) {
-				EventTileDataInstance eventTile = room.EventData[i];
-				WriteEventTileData(writer, eventTile);
+			// Write action tile data.
+			writer.Write(room.ActionData.Count);
+			for (int i = 0; i < room.ActionData.Count; i++) {
+				ActionTileDataInstance actionTile = room.ActionData[i];
+				WriteActionTileData(writer, actionTile);
 			}
 		}
 
@@ -855,12 +855,12 @@ namespace ZeldaOracle.Game.Worlds {
 			}
 		}
 
-		private void WriteEventTileData(BinaryWriter writer, EventTileDataInstance eventTile) {
-			WriteResource(writer, eventTile.EventTileData, eventTileData);
-			writer.Write(eventTile.Position.X);
-			writer.Write(eventTile.Position.Y);
-			WriteProperties(writer, eventTile.Properties);
-			WriteEvents(writer, eventTile.Events);
+		private void WriteActionTileData(BinaryWriter writer, ActionTileDataInstance actionTileTile) {
+			WriteResource(writer, actionTileTile.ActionTileData, actionTileData);
+			writer.Write(actionTileTile.Position.X);
+			writer.Write(actionTileTile.Position.Y);
+			WriteProperties(writer, actionTileTile.Properties);
+			WriteEvents(writer, actionTileTile.Events);
 		}
 
 		private void WriteEvents(BinaryWriter writer, EventCollection events) {

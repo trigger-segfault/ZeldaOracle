@@ -124,6 +124,13 @@ namespace ZeldaOracle.Game.Items {
 			return item;
 		}
 
+		/// <summary>Gets all existing items in the game.</summary>
+		public IEnumerable<Item> GetItems() {
+			foreach (Item item in items) {
+				yield return item;
+			}
+		}
+
 		// Gets the item at the specified index
 		public Item GetItem(int index) {
 			return items[index];

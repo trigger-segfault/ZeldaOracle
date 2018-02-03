@@ -44,12 +44,13 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			OffsetSprite	= 1 << 4,
 			StyleSprite		= 1 << 5,
 			ColorSprite		= 1 << 6,
-			CompositeSprite	= 1 << 7,
-			Animation		= 1 << 8,
-			MultiStyle		= 1 << 9,
+			StyleColorSprite= 1 << 7,
+			CompositeSprite	= 1 << 8,
+			Animation		= 1 << 9,
+			MultiStyle		= 1 << 10,
 			SpriteMask		= EmptySprite | BasicSprite | OffsetSprite |
-							  StyleSprite | ColorSprite | CompositeSprite |
-							  Animation | MultiStyle
+							  StyleSprite | ColorSprite | StyleColorSprite |
+							  CompositeSprite | Animation | MultiStyle
 		}
 
 		//-----------------------------------------------------------------------------
@@ -154,7 +155,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						parameters.GetPoint(i + 2),
 						parameters.GetPoint(i + 1));
 				AddResource<ISpriteSource>(sheetName, sheet);
-				source = sheet;
 			});
 			//=====================================================================================
 			// SPRITE SET
@@ -344,6 +344,9 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 						Mode = Modes.Root;
 					}
 				}
+				else {
+					ThrowCommandParseError("Nothing to end!");
+				}
 			});
 			//=====================================================================================
 			// ADD NAME
@@ -360,6 +363,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			AddColorCommands();
 			AddColorStyleCommands();
 			AddColorMultiStyleCommands();
+			AddStyleColorCommands();
 			AddAnimationCommands();
 			//=====================================================================================
 		}
@@ -612,13 +616,13 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			}
 		}
 
-		/// <summary>Builds a basic sprite and palettizes it if possible.</summary>
+		/// <summary>Builds a basic sprite from a spritesheet and palettizes it if possible.</summary>
 		private BasicSprite BuildBasicSprite(ISpriteSource source, Point2I index, Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
 			if (!(source is SpriteSheet)) {
 				ThrowCommandParseError("SOURCE must be specified as a sprite sheet when building a BASIC sprite!");
 			}
 			if (paletteArgs.Dictionary != null) {
-				paletteArgs.Image = SpriteSheet.Image;
+				paletteArgs.Image = ((SpriteSheet) source).Image;
 				paletteArgs.SourceRect = ((SpriteSheet) source).GetSourceRect(index);
 				BasicSprite sprite = Resources.PalettedSpriteDatabase.AddSprite(paletteArgs);
 				sprite.DrawOffset = drawOffset;
@@ -634,6 +638,18 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					flip,
 					rotation);
 			}
+		}
+
+		/// <summary>Builds a basic sprite from an image and palettizes it if possible.</summary>
+		private BasicSprite BuildBasicSprite(string imagePath, Point2I drawOffset, Flip flip = Flip.None, Rotation rotation = Rotation.None) {
+			Image image;
+			if (Resources.ContainsImage(imagePath))
+				image = GetResource<Image>(imagePath);
+			else
+				image = Resources.LoadImage(Resources.ImageDirectory + imagePath);
+
+			SpriteSheet tempSheet = new SpriteSheet(image);
+			return BuildBasicSprite(tempSheet, Point2I.Zero, drawOffset, flip, rotation);
 		}
 
 

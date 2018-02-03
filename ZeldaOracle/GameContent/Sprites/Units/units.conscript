@@ -1,3 +1,13 @@
-﻿
+﻿#==============================================================
+# Loading
+#==============================================================
+
 LOAD "Player/player.conscript", true;
+LOAD "Player/player_items.conscript", true;
+LOAD "NPCs/npcs.conscript", true;
+LOAD "NPCs/biggoron.conscript", true;
+LOAD "Monsters/monsters.conscript", false;
+LOAD "Monsters/monster_items.conscript", true;
 LOAD "Monsters/monster_previews.conscript", true;
+
+#==============================================================

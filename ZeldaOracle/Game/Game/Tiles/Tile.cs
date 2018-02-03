@@ -75,6 +75,9 @@ namespace ZeldaOracle.Game.Tiles {
 		private bool				isSolid;
 		private CollisionModel		collisionModel;
 		private CollisionStyle		collisionStyle;
+
+		private bool				cancelBreakSound;
+		private bool				cancelBreakEffect;
 		
 		public bool IsUpdated { get; set; } // This is to make sure tiles are only updated once per frame.
 
@@ -110,7 +113,8 @@ namespace ZeldaOracle.Game.Tiles {
 			surfaceTile			= null;
 			collisionStyle		= CollisionStyle.Rectangular;
 			graphics			= new TileGraphicsComponent(this);
-
+			cancelBreakSound	= false;
+			cancelBreakEffect	= false;
 		}
 
 
@@ -126,8 +130,6 @@ namespace ZeldaOracle.Game.Tiles {
 				isInitialized	= true;
 				hasMoved		= false;
 				velocity		= Vector2F.Zero;
-				
-				graphics.ImageVariant = roomControl.Room.Zone.ImageVariantID;
 
 				// Begin a path if there is one.
 				string pathString = properties.GetString("path", "");
@@ -275,7 +277,7 @@ namespace ZeldaOracle.Game.Tiles {
 				SpawnDrop();
 				roomControl.RemoveTile(this);
 				if (properties.GetBoolean("disable_on_destroy", false))
-					Properties.Set("enabled", false); // TODO: this won't exactly work anymore.
+					IsEnabled = false; // TODO: this won't exactly work anymore.
 			}
 		}
 
@@ -323,14 +325,14 @@ namespace ZeldaOracle.Game.Tiles {
 				TileData data = Resources.GetResource<TileData>("dug");
 				Tile dugTile = Tile.CreateTile(data);
 				roomControl.PlaceTile(dugTile, location, layer);
-				Graphics.PlayAnimation(GameData.SPR_TILE_DUG);
+				//Graphics.PlayAnimation(GameData.SPR_TILE_DUG);
 			}
 			else {
 				roomControl.RemoveTile(this);
 			}
 
 			if (properties.GetBoolean("disable_on_destroy", false))
-				Properties.Set("enabled", false); // TODO: this won't exactly work anymore.
+				IsEnabled = false; // TODO: this won't exactly work anymore.
 
 			// Spawn drops.
 			Entity dropEntity = SpawnDrop();
@@ -404,21 +406,21 @@ namespace ZeldaOracle.Game.Tiles {
 		// Break the tile, destroying it.
 		public virtual void Break(bool spawnDrops) {
 			// Spawn the break effect.
-			if (breakAnimation != null) {
+			if (breakAnimation != null && !CancelBreakEffect) {
 				Effect breakEffect = new Effect(breakAnimation, DepthLayer.EffectTileBreak, true);
 				RoomControl.SpawnEntity(breakEffect, Center);
 			}
 
-			if (breakSound != null)
+			if (breakSound != null && !CancelBreakSound)
 				AudioSystem.PlaySound(breakSound);
 
 			// Spawn drops.
 			if (spawnDrops)
 				SpawnDrop();
-			
+
 			// Destroy the tile.
 			if (properties.GetBoolean("disable_on_destroy", false))
-				Properties.Set("enabled", false); // TODO: this won't exactly work anymore.
+				IsEnabled = false; // TODO: this won't exactly work anymore.
 			RoomControl.RemoveTile(this);
 		}
 
@@ -698,6 +700,25 @@ namespace ZeldaOracle.Game.Tiles {
 			}
 		}
 
+		/// <summary>Draws the tile data to display in the editor.</summary>
+		public static void DrawTileDataColors(Graphics2D g, TileDataDrawArgs args, ColorDefinitions colorDefinitions) {
+			int spriteIndex = args.Properties.GetInteger("sprite_index", 0);
+			ISprite sprite = args.Tile.GetSpriteIndex(spriteIndex);
+			if (sprite is Animation) {
+				int substripIndex = args.Properties.GetInteger("substrip_index", 0);
+				sprite = ((Animation) sprite).GetSubstrip(substripIndex);
+			}
+			if (sprite != null) {
+				SpriteDrawSettings settings = new SpriteDrawSettings(args.Zone.StyleDefinitions,
+					colorDefinitions, args.Time);
+				g.DrawSprite(
+					sprite,
+					settings,
+					args.Position,
+					args.Color);
+			}
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Properties
@@ -848,6 +869,20 @@ namespace ZeldaOracle.Game.Tiles {
 			set { dropList = value; }
 		}
 
+		public bool IsEnabled {
+			get { return Properties.GetBoolean("enabled"); }
+			set { Properties.Set("enabled", value); }
+		}
+
+		public bool CancelBreakSound {
+			get { return cancelBreakSound; }
+			set { cancelBreakSound = value; }
+		}
+
+		public bool CancelBreakEffect {
+			get { return cancelBreakEffect; }
+			set { cancelBreakEffect = value; }
+		}
 
 		//-----------------------------------------------------------------------------
 		// Flag Properties

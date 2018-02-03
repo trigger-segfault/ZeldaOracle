@@ -11,6 +11,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Game;
 
 namespace ZeldaOracle.Common.Graphics {
 
@@ -35,9 +36,9 @@ namespace ZeldaOracle.Common.Graphics {
 
 		// Vector Graphics:
 		/// <summary>A white 1x1 texture used for drawing vector graphics.</summary>
-		private Texture2D white1x1;
+		private static Texture2D white1x1;
 		/// <summary>A white 2x2 texture used for drawing vector graphics.</summary>
-		private Texture2D white2x2;
+		private static Texture2D white2x2;
 
 	
 		//-----------------------------------------------------------------------------
@@ -57,10 +58,12 @@ namespace ZeldaOracle.Common.Graphics {
 			this.useIntPrecision		= false;
 
 			// Vector Graphics
-			this.white1x1				= new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
-			this.white2x2				= new Texture2D(spriteBatch.GraphicsDevice, 2, 2);
-			this.white1x1.SetData(new XnaColor[] { XnaColor.White });
-			this.white2x2.SetData(new XnaColor[] { XnaColor.White, XnaColor.White, XnaColor.White, XnaColor.White });
+			if (white1x1 == null) {
+				white1x1               = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
+				white2x2               = new Texture2D(spriteBatch.GraphicsDevice, 2, 2);
+				white1x1.SetData(new XnaColor[] { XnaColor.White });
+				white2x2.SetData(new XnaColor[] { XnaColor.White, XnaColor.White, XnaColor.White, XnaColor.White });
+			}
 		}
 	
 
@@ -84,10 +87,12 @@ namespace ZeldaOracle.Common.Graphics {
 		public SpriteBatch SpriteBatch {
 			get { return spriteBatch; }
 		}
+
 		/// <summary>Gets the graphics device of the graphics object.</summary>
 		public GraphicsDevice GraphicsDevice {
 			get { return spriteBatch.GraphicsDevice; }
 		}
+
 		/// <summary>Returns true if the sprite batch has been disposed.</summary>
 		public bool IsDisposed {
 			get { return spriteBatch.IsDisposed; }
@@ -99,11 +104,13 @@ namespace ZeldaOracle.Common.Graphics {
 		public Vector2F Translation {
 			get { return translation; }
 		}
+
 		/// <summary>Gets or sets if the translation is used.</summary>
 		public bool UseTranslation {
 			get { return useTranslation; }
 			set { useTranslation = value; }
 		}
+
 		/// <summary>Gets or sets if integer precision is used with translations.</summary>
 		public bool UseIntegerPrecision {
 			get { return useIntPrecision; }
@@ -159,14 +166,17 @@ namespace ZeldaOracle.Common.Graphics {
 		public void DrawImage(Texture2D texture, Vector2F position) {
 			spriteBatch.Draw(texture, NewPos(position), XnaColor.White);
 		}
+
 		/// <summary>Draws the image at the specified position.</summary>
 		public void DrawImage(Texture2D texture, Vector2F position, Color color, double depth = 0.0) {
 			spriteBatch.Draw(texture, NewPos(position), null, color, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, (float)depth);
 		}
+
 		/// <summary>Draws the image at the specified position.</summary>
 		public void DrawImage(Texture2D texture, Vector2F position, Vector2F origin, Vector2F scale, double rotation, Color? color = null, Flip flip = Flip.None, double depth = 0.0) {
 			spriteBatch.Draw(texture, NewPos(position), null, color ?? XnaColor.White, (float)GMath.ConvertToRadians(rotation), (Vector2)origin, (Vector2)scale, (SpriteEffects) flip, (float)depth);
 		}
+
 		/// <summary>Draws the image at the specified region.</summary>
 		public void DrawImage(Texture2D texture, Rectangle2F destinationRect, Vector2F origin, double rotation, Color? color = null, Flip flip = Flip.None, double depth = 0.0) {
 			spriteBatch.Draw(texture, NewRect(destinationRect), null, color ?? XnaColor.White, (float)GMath.ConvertToRadians(rotation), (Vector2)origin, (SpriteEffects) flip, (float)depth);
@@ -176,14 +186,17 @@ namespace ZeldaOracle.Common.Graphics {
 		public void DrawImage(Texture2D texture, Vector2F position, Rectangle2F sourceRect) {
 			spriteBatch.Draw(texture, NewPos(position), (Rectangle)sourceRect, XnaColor.White);
 		}
+
 		/// <summary>Draws part of the image at the specified position.</summary>
 		public void DrawImage(Texture2D texture, Vector2F position, Rectangle2F sourceRect, Color color, double depth = 0.0) {
 			spriteBatch.Draw(texture, NewPos(position), (Rectangle)sourceRect, color, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, (float)depth);
 		}
+
 		/// <summary>Draws part of the image at the specified position.</summary>
 		public void DrawImage(Texture2D texture, Vector2F position, Rectangle2F sourceRect, Vector2F origin, Vector2F scale, double rotation, Color? color = null, Flip flip = Flip.None, double depth = 0.0) {
 			spriteBatch.Draw(texture, NewPos(position), (Rectangle)sourceRect, color ?? XnaColor.White, (float)GMath.ConvertToRadians(rotation), (Vector2)origin, (Vector2)scale, (SpriteEffects) flip, (float)depth);
 		}
+
 		// Draws part of the image at the specified region.</summary>
 		public void DrawImage(Texture2D texture, Rectangle2F destinationRect, Rectangle2F sourceRect, Vector2F origin, double rotation, Color? color = null, Flip flip = Flip.None, double depth = 0.0) {
 			spriteBatch.Draw(texture, NewRect(destinationRect), (Rectangle)sourceRect, color ?? XnaColor.White, (float)GMath.ConvertToRadians(rotation), (Vector2)origin, (SpriteEffects) flip, (float)depth);
@@ -193,102 +206,29 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 		// Sprite drawing
 		//-----------------------------------------------------------------------------
-	
-
-		public void DrawSprite(ISprite sprite, int variantID, Vector2F position, float depth = 0.0f) {
-			if (sprite == null) return;
-			SpritePart part = sprite.GetParts(new SpriteDrawSettings(variantID));
-			while (part != null) {
-				Image image = part.Image.GetVariant(variantID);
-				if (!image.IsDisposed)
-					spriteBatch.Draw(image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
-						XnaColor.White, 0.0F, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
-				part = part.NextPart;
-			}
-		}
 
 		public void DrawSprite(ISprite sprite, float x, float y, float depth = 0.0f) {
-			DrawSprite(sprite, new Vector2F(x, y), depth);
-		}
-
-		public void DrawSprite(ISprite sprite, int variantID, float x, float y, float depth = 0.0f) {
-			DrawSprite(sprite, variantID, new Vector2F(x, y), depth);
+			DrawSprite(sprite, SpriteDrawSettings.Default, new Vector2F(x, y), depth);
 		}
 
 		public void DrawSprite(ISprite sprite, Vector2F position, float depth = 0.0f) {
-			if (sprite == null) return;
-			SpritePart part = sprite.GetParts(SpriteDrawSettings.Default);
-			while (part != null) {
-				if (!part.Image.IsDisposed)
-					spriteBatch.Draw(part.Image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
-						XnaColor.White, 0.0F, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
-				part = part.NextPart;
-			}
+			DrawSprite(sprite, SpriteDrawSettings.Default, position, depth);
 		}
 
 		public void DrawSprite(ISprite sprite, Rectangle2F destination, float depth = 0.0f) {
-			DrawSprite(sprite, 0, destination, depth);
-		}
-
-		public void DrawSprite(ISprite sprite, int variantID, Rectangle2F destination, float depth = 0.0f) {
-			if (sprite == null) return;
-			SpritePart part = sprite.GetParts(new SpriteDrawSettings(variantID));
-			while (part != null) {
-				Image image = part.Image.GetVariant(variantID);
-				destination.Point = NewPos(destination.Point) + (Vector2F) part.DrawOffset;
-				if (!image.IsDisposed)
-					spriteBatch.Draw(image, (Rectangle) destination, (Rectangle) part.SourceRect,
-						XnaColor.White, 0.0f, Vector2.Zero, SpriteEffects.None, depth);
-				part = part.NextPart;
-			}
-		}
-
-		public void DrawSprite(ISprite sprite, int variantID, Vector2F position, Color color, float depth = 0.0f) {
-			if (sprite == null) return;
-			SpritePart part = sprite.GetParts(new SpriteDrawSettings(variantID));
-			while (part != null) {
-				Image image = part.Image.GetVariant(variantID);
-				if (!image.IsDisposed)
-					spriteBatch.Draw(image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
-						(XnaColor) color, 0.0F, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
-				part = part.NextPart;
-			}
+			DrawSprite(sprite, SpriteDrawSettings.Default, destination, depth);
 		}
 
 		public void DrawSprite(ISprite sprite, float x, float y, Color color, float depth = 0.0f) {
-			DrawSprite(sprite, new Vector2F(x, y), color, depth);
-		}
-
-		public void DrawSprite(ISprite sprite, int variantID, float x, float y, Color color, float depth = 0.0f) {
-			DrawSprite(sprite, variantID, new Vector2F(x, y), color, depth);
+			DrawSprite(sprite, SpriteDrawSettings.Default, new Vector2F(x, y), color, depth);
 		}
 
 		public void DrawSprite(ISprite sprite, Vector2F position, Color color, float depth = 0.0f) {
-			if (sprite == null) return;
-			SpritePart part = sprite.GetParts(SpriteDrawSettings.Default);
-			while (part != null) {
-				if (!part.Image.IsDisposed)
-					spriteBatch.Draw(part.Image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
-						(XnaColor) color, 0.0f, Vector2.Zero, 0.0f, SpriteEffects.None, depth);
-				part = part.NextPart;
-			}
+			DrawSprite(sprite, SpriteDrawSettings.Default, position, color, depth);
 		}
 
 		public void DrawSprite(ISprite sprite, Rectangle2F destination, Color color, float depth = 0.0f) {
-			DrawSprite(sprite, 0, destination, color, depth);
-		}
-
-		public void DrawSprite(ISprite sprite, int variantID, Rectangle2F destination, Color color, float depth = 0.0f) {
-			if (sprite == null) return;
-			SpritePart part = sprite.GetParts(new SpriteDrawSettings(variantID));
-			while (part != null) {
-				Image image = part.Image.GetVariant(variantID);
-				destination.Point = NewPos(destination.Point) + (Vector2F) part.DrawOffset;
-				if (!part.Image.IsDisposed)
-					spriteBatch.Draw(image, (Rectangle) destination, (Rectangle) part.SourceRect,
-						(XnaColor) color, 0.0f, Vector2.Zero, SpriteEffects.None, depth);
-				part = part.NextPart;
-			}
+			DrawSprite(sprite, SpriteDrawSettings.Default, destination, color, depth);
 		}
 
 		//-----------------------------------------------------------------------------
@@ -302,80 +242,22 @@ namespace ZeldaOracle.Common.Graphics {
 
 		// Draw an animation during at the given time stamp and position.
 		public void DrawAnimation(Animation animation, float time, float x, float y, float depth = 0.0f) {
-			DrawAnimation(animation, 0, time, x, y, depth);
-		}
-	
-		// Draw an animation during at the given time stamp and position.
-		public void DrawAnimation(Animation animation, int variantID, float time, Vector2F position, float depth = 0.0f) {
-			DrawAnimation(animation, variantID, time, position.X, position.Y, depth);
-		}
-
-		// Draw an animation during at the given time stamp and position.
-		public void DrawAnimation(Animation animation, int variantID, float time, float x, float y, float depth = 0.0f) {
-			DrawSprite(animation, new SpriteDrawSettings(variantID, time), new Vector2F(x, y), depth);
-
-			/*if (animation.LoopMode == LoopMode.Repeat) {
-				if (animation.Duration == 0)
-					time = 0;
-				else
-					time %= animation.Duration;
-			}
-			x = GMath.Round(x); 
-			y = GMath.Round(y);
-
-			for (int i = 0; i < animation.FrameCount; ++i) {
-				AnimationFrameOld frame = animation.Frames[i];
-				if (time < frame.StartTime)
-					return;
-				if (time < frame.StartTime + frame.Duration || (time >= animation.Duration && frame.StartTime + frame.Duration == animation.Duration))
-					DrawSprite(frame.Sprite, variantID, x, y, depth);
-			}*/
+			DrawSprite(animation, new SpriteDrawSettings(time), new Vector2F(x, y), depth);
 		}
 
 		public void DrawAnimation(AnimationPlayer animationPlayer, Vector2F position, float depth = 0.0f) {
 			DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(animationPlayer.PlaybackTime), position, depth);
 		}
 
-		public void DrawAnimation(AnimationPlayer animationPlayer, int variantID, Vector2F position, float depth = 0.0f) {
-			DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(variantID, animationPlayer.PlaybackTime), position, depth);
-		}
-
 
 		// Draw an animation during at the given time stamp and position.
 		public void DrawAnimation(Animation animation, float time, Vector2F position, Color color, float depth = 0.0f) {
-			DrawAnimation(animation, time, position.X, position.Y, color, depth);
+			DrawSprite(animation, new SpriteDrawSettings(time), position, color, depth);
 		}
 
 		// Draw an animation during at the given time stamp and position.
 		public void DrawAnimation(Animation animation, float time, float x, float y, Color color, float depth = 0.0f) {
-			DrawAnimation(animation, 0, time, x, y, color, depth);
-		}
-
-		// Draw an animation during at the given time stamp and position.
-		public void DrawAnimation(Animation animation, int variantID, float time, Vector2F position, Color color, float depth = 0.0f) {
-			DrawAnimation(animation, variantID, time, position.X, position.Y, color, depth);
-		}
-
-		// Draw an animation during at the given time stamp and position.
-		public void DrawAnimation(Animation animation, int variantID, float time, float x, float y, Color color, float depth = 0.0f) {
-			DrawSprite(animation, new SpriteDrawSettings(variantID, time), new Vector2F(x, y), color, depth);
-
-			/*if (animation.LoopMode == LoopMode.Repeat) {
-				if (animation.Duration == 0)
-					time = 0;
-				else
-					time %= animation.Duration;
-			}
-			x = GMath.Round(x);
-			y = GMath.Round(y);
-
-			for (int i = 0; i < animation.FrameCount; ++i) {
-				AnimationFrameOld frame = animation.Frames[i];
-				if (time < frame.StartTime)
-					return;
-				if (time < frame.StartTime + frame.Duration || (time >= animation.Duration && frame.StartTime + frame.Duration == animation.Duration))
-					DrawSprite(frame.Sprite, variantID, x, y, color, depth);
-			}*/
+			DrawSprite(animation, new SpriteDrawSettings(time), new Vector2F(x, y), color, depth);
 		}
 
 		public void DrawAnimation(AnimationPlayer animationPlayer, Vector2F position, Color color, float depth = 0.0f) {
@@ -384,7 +266,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 
 		//-----------------------------------------------------------------------------
-		// ISprite drawing
+		// SpriteDrawSettings drawing
 		//-----------------------------------------------------------------------------
 		
 		public void DrawSprite(ISprite sprite, SpriteDrawSettings settings, float x, float y, float depth = 0.0f) {
@@ -395,6 +277,11 @@ namespace ZeldaOracle.Common.Graphics {
 			DrawSprite(sprite, settings, position, Color.White, depth);
 		}
 
+		public void DrawSprite(ISprite sprite, SpriteDrawSettings settings, Rectangle2F destination, float depth = 0.0f) {
+			DrawSprite(sprite, settings, destination, Color.White, depth);
+		}
+
+
 		public void DrawSprite(ISprite sprite, SpriteDrawSettings settings, float x, float y, Color color, float depth = 0.0f) {
 			DrawSprite(sprite, settings, new Vector2F(x, y), color, depth);
 		}
@@ -403,9 +290,8 @@ namespace ZeldaOracle.Common.Graphics {
 			if (sprite == null) return;
 			SpritePart part = sprite.GetParts(settings);
 			while (part != null) {
-				Image image = part.Image.GetVariant(settings.VariantID);
-				if (!image.IsDisposed)
-					spriteBatch.Draw(image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
+				if (!part.Image.IsDisposed)
+					spriteBatch.Draw(part.Image, NewPos(position) + (Vector2) part.DrawOffset, (Rectangle) part.SourceRect,
 						(XnaColor) color, 0.0F, Vector2.Zero, 1.0f, SpriteEffects.None, depth);
 				part = part.NextPart;
 			}
@@ -415,10 +301,9 @@ namespace ZeldaOracle.Common.Graphics {
 			if (sprite == null) return;
 			SpritePart part = sprite.GetParts(settings);
 			while (part != null) {
-				Image image = part.Image.GetVariant(settings.VariantID);
 				destination.Point = NewPos(destination.Point) + (Vector2) part.DrawOffset;
-				if (!image.IsDisposed)
-					spriteBatch.Draw(image, (Rectangle) destination, (Rectangle) part.SourceRect,
+				if (!part.Image.IsDisposed)
+					spriteBatch.Draw(part.Image, (Rectangle) destination, (Rectangle) part.SourceRect,
 						(XnaColor) color, 0.0F, Vector2.Zero, SpriteEffects.None, depth);
 				part = part.NextPart;
 			}
@@ -429,12 +314,12 @@ namespace ZeldaOracle.Common.Graphics {
 		// Text Drawing
 		//-----------------------------------------------------------------------------
 
-		// Draws the string at the specified position.
+		/// <summary>Draws the string at the specified position.</summary>
 		public void DrawRealString(SpriteFont font, string text, Vector2F position, Align alignment, Color color) {
 			spriteBatch.DrawString(font, text, NewStringPos(position, font, text, alignment), (XnaColor)color);
 		}
 
-		// Draws the string at the specified position.
+		/// <summary>Draws the string at the specified position.</summary>
 		public void DrawRealString(SpriteFont font, string text, Vector2F position, Align alignment,
 			Color color, Vector2F origin, double rotation, double scale, SpriteEffects flipEffect = SpriteEffects.None, float depth = 0.0f)
 		{
@@ -442,7 +327,7 @@ namespace ZeldaOracle.Common.Graphics {
 				(XnaColor)color, (float)rotation, (Vector2)origin, (float)scale, flipEffect, depth);
 		}
 
-		// Draws the string at the specified position.
+		/// <summary>Draws the string at the specified position.</summary>
 		public void DrawRealString(SpriteFont font, string text, Vector2F position, Align alignment,
 				Color color, Vector2F origin, double rotation, Vector2F scale,
 				SpriteEffects flipEffect = SpriteEffects.None, float depth = 0.0f)
@@ -450,12 +335,13 @@ namespace ZeldaOracle.Common.Graphics {
 			spriteBatch.DrawString(font, text, NewStringPos(position, font, text, alignment), (XnaColor)color, (float)rotation, (Vector2)origin, (Vector2)scale, flipEffect, depth);
 		}
 
-		// Draws a game string at the specified position
-		public void DrawString(GameFont font, string text, Point2I position, Color color, float depth = 0.0f) {
+		/// <summary>Draws a game string at the specified position.</summary>
+		public void DrawString(GameFont font, string text, Point2I position, ColorOrPalette color, float depth = 0.0f) {
 			DrawLetterString(font, FormatCodes.FormatString(text), position, color, depth);
 		}
-		// Draws a formatted game string at the specified position
-		public void DrawLetterString(GameFont font, LetterString letterString, Point2I position, Color color, float depth = 0.0f) {
+
+		/// <summary>Draws a formatted game string at the specified position.</summary>
+		public void DrawLetterString(GameFont font, LetterString letterString, Point2I position, ColorOrPalette color, float depth = 0.0f) {
 			for (int i = 0; i < letterString.Length; i++) {
 				spriteBatch.Draw(
 					font.SpriteSheet.Image,
@@ -471,16 +357,18 @@ namespace ZeldaOracle.Common.Graphics {
 						font.SpriteSheet.CellSize.X,
 						font.SpriteSheet.CellSize.Y
 					),
-					(letterString[i].Color == Letter.DefaultColor ? color : letterString[i].Color), 0.0f, Vector2.Zero, SpriteEffects.None, depth
+					(letterString[i].Color == Letter.DefaultColor ? color.MappedColor : letterString[i].MappedColor), 0.0f, Vector2.Zero, SpriteEffects.None, depth
 				);
 			}
 		}
-		// Draws a wrapped game string at the specified position
-		public void DrawWrappedString(GameFont font, string text, int width, Point2I position, Color color, float depth = 0.0f) {
+
+		/// <summary>Draws a wrapped game string at the specified position.</summary>
+		public void DrawWrappedString(GameFont font, string text, int width, Point2I position, ColorOrPalette color, float depth = 0.0f) {
 			DrawWrappedLetterString(font, font.WrapString(text, width), width, position, color, depth);
 		}
-		// Draws a formatted wrapped game string at the specified position
-		public void DrawWrappedLetterString(GameFont font, WrappedLetterString wrappedString, int width, Point2I position, Color color, float depth = 0.0f) {
+
+		/// <summary>Draws a formatted wrapped game string at the specified position.</summary>
+		public void DrawWrappedLetterString(GameFont font, WrappedLetterString wrappedString, int width, Point2I position, ColorOrPalette color, float depth = 0.0f) {
 			for (int i = 0; i < wrappedString.Lines.Length; i++) {
 				DrawLetterString(font, wrappedString.Lines[i], position + new Point2I(0, font.LineSpacing * i), color, depth);
 			}
@@ -492,30 +380,25 @@ namespace ZeldaOracle.Common.Graphics {
 		//-----------------------------------------------------------------------------
 
 		// Draws the specified line.
-		public void DrawLine(Line2F line, float thickness, Color color, float depth = 0.0f) {
+		public void DrawLine(Line2F line, float thickness, ColorOrPalette color, float depth = 0.0f) {
 			DrawImage(white1x1, line.Center + new Vector2F(0.5f, 0.5f), new Vector2F(0.5f, 0.5f),
 				new Vector2F((line.Length + thickness), thickness),
-				line.Direction, color, Flip.None, depth);
+				line.Direction, color.MappedColor, Flip.None, depth);
 		}
 
 		// Draws the specified rectangle.
-		public void DrawRectangle(Rectangle2F rect, float thickness, Color color, float depth = 0.0f) {
+		public void DrawRectangle(Rectangle2F rect, float thickness, ColorOrPalette color, float depth = 0.0f) {
 			FillRectangle(new Rectangle2F(rect.Left, rect.Top, rect.Width, 1.0f), color, depth);
 			FillRectangle(new Rectangle2F(rect.Left, rect.Bottom - 1, rect.Width, 1.0f), color, depth);
 			FillRectangle(new Rectangle2F(rect.Left, rect.Top + 1, 1.0f, rect.Height - 2), color, depth);
 			FillRectangle(new Rectangle2F(rect.Right - 1, rect.Top + 1, 1.0f, rect.Height - 2), color, depth);
-			//DrawLine(new Line2F(rect.Point, rect.Point + new Vector2F(rect.Width - 1, 0.0f)), thickness, color, depth);
-			//DrawLine(new Line2F(rect.Point, rect.Point + new Vector2F(0.0f, rect.Height - 1)), thickness, color, depth);
-			//DrawLine(new Line2F(rect.Point + rect.Size - Vector2F.One, rect.Point + new Vector2F(rect.Width - 1, 0.0f)), thickness, color, depth);
-			//DrawLine(new Line2F(rect.Point + rect.Size - Vector2F.One, rect.Point + new Vector2F(0.0f, rect.Height - 1)), thickness, color, depth);
 		}
 
 		// Draws the specified filled rectangle.
-		public void FillRectangle(Rectangle2F rect, Color color, double depth = 0.0) {
+		public void FillRectangle(Rectangle2F rect, ColorOrPalette color, double depth = 0.0) {
 			rect.X = GMath.Round(rect.X);
 			rect.Y = GMath.Round(rect.Y);
-			DrawImage(white1x1, rect, Vector2F.Zero, 0.0, color, Flip.None, depth);
-			//DrawImage(white1x1, rect.Center + 0.5, new Vector2D(0.5, 0.5), rect.Size, 0, color, SpriteEffects.None, depth);
+			DrawImage(white1x1, rect, Vector2F.Zero, 0.0, color.MappedColor, Flip.None, depth);
 		}
 	
 
@@ -540,8 +423,8 @@ namespace ZeldaOracle.Common.Graphics {
 		}
 
 		// Clears the render target.
-		public void Clear(Color color) {
-			spriteBatch.GraphicsDevice.Clear(color);
+		public void Clear(ColorOrPalette color) {
+			spriteBatch.GraphicsDevice.Clear(color.MappedColor);
 		}
 
 

@@ -3,7 +3,7 @@
 #==============================================================================
 
 ACTIONTILE "monster";
-	TYPE		MonsterEvent;
+	TYPE		MonsterAction;
 	SPRITE		"monster_octorok";
 	PROPERTIES	(integer, color,		0, "Color", ("enum", "MonsterColor"), "Monster", "The color of the monster."),
 				(integer, respawn_type,	0, "Respawn Type", ("enum", "MonsterRespawnType"), "Monster", "How a monster respawns."),
@@ -63,6 +63,8 @@ MONSTER "monster_goponga_flower",		"monster_goponga_flower_open",	MonsterGoponga
 MONSTER "monster_anti_fairy",			"monster_anti_fairy",			MonsterAntiFairy,		gold;	END;
 
 TILE "monster_beamos";
+	TYPE		TileMonsterBeamos;
 	SOLID		block;
 	FLAGS		AbsorbSeeds;
+	SPRITE		"monster_beamos";
 END;

@@ -1,0 +1,36 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_npcs", "Units/NPCS/npcs_red", (16, 16), (1, 1), (18, 18);
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+PALETTEDICTIONARY	"entity_dictionary";
+MAPPEDCOLORS	"entities_default", ("blue", "green", "orange", "red", "shaded_blue", "shaded_red");
+
+SOURCE "temp_sheet_npcs";
+SPRITESET "units_npcs", (18, 26);
+	MULTIPLE BASIC (0, 0); END;
+END;
+
+#==============================================================
+# NPCs
+#==============================================================
+
+SOURCE "units_npcs";
+
+ANIMATION "npc_1"; SUBSTRIP repeat; ADD strip, 16, 2, (0, 0); MAKEDYNAMIC 4, (2, 0); END;
+ANIMATION "npc_2"; SUBSTRIP repeat; ADD strip, 16, 2, (0, 1); MAKEDYNAMIC 4, (2, 0); END;
+ANIMATION "npc_3"; SUBSTRIP repeat; ADD strip, 16, 2, (0, 2); MAKEDYNAMIC 4, (2, 0); END;
+ANIMATION "npc_4"; SUBSTRIP repeat; ADD strip, 16, 2, (0, 3); MAKEDYNAMIC 4, (2, 0); END;
+ANIMATION "npc_5"; SUBSTRIP repeat; ADD strip, 16, 2, (0, 4); MAKEDYNAMIC 4, (2, 0); END;
+
+ANIMATION "npc_shopkeeper"; SUBSTRIP repeat;
+	ADD frame, 16, (0, 22), (0, 0); ADD part, 16, (0, 21), (0, -16);
+	ADD frame, 16, (1, 22), (0, 0); ADD part, 16, (1, 21), (0, -16);
+	MAKEDYNAMIC 4, (2, 0); END;

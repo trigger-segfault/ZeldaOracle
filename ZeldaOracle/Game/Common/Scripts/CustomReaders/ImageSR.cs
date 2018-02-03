@@ -13,53 +13,29 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 	public class ImageSR : ScriptReader {
 
-		private Image	image;
-		private Image	imageTail;
-		private string imageName;
-		private TemporaryResources resources;
-
+		private enum Modes {
+			Root,
+			Image
+		}
 
 		//-----------------------------------------------------------------------------
 		// Override
 		//-----------------------------------------------------------------------------
 
-		public ImageSR(TemporaryResources resources = null) {
-
-			this.resources	= resources;
+		public ImageSR() {
 			
 			//=====================================================================================
-			AddCommand("Image", 
-				"string name",
+			AddCommand("IMAGE", (int) Modes.Root,
+				"string filePath",
 				"string name, string filePath",
 			delegate(CommandParam parameters) {
-				imageName	= parameters.GetString(0);
-				image		= null;
-				imageTail	= null;
+				string imageName = parameters.GetString(0);
+				string imagePath = imageName;
+				if (parameters.ChildCount == 2)
+					imagePath = parameters.GetString(1);
 
-				if (parameters.ChildCount == 2) {
-					image = Resources.LoadImage(Resources.ImageDirectory + parameters.GetString(1), false);
-					imageTail = image;
-				}
-			});
-			//=====================================================================================
-			AddCommand("End", "",
-			delegate(CommandParam parameters) {
-				if (image != null) {
-					Resources.AddImage(imageName, image);
-					image = null;
-				}
-			});
-			//=====================================================================================
-			AddCommand("Variant", "string name, string filePath",
-			delegate(CommandParam parameters) {
-				Image variant = Resources.LoadImage(Resources.ImageDirectory + parameters.GetString(1), false);
-				variant.VariantName	= parameters.GetString(0);
-
-				if (imageTail != null)
-					imageTail.NextVariant = variant;
-				else
-					image = variant;
-				imageTail = variant;
+				Image image = Resources.LoadImage(Resources.ImageDirectory + imagePath, false);
+				AddResource<Image>(imageName, image);
 			});
 			//=====================================================================================
 		}
@@ -71,9 +47,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 		/// <summary>Begins reading the script.</summary>
 		protected override void BeginReading() {
-			imageName	= "";
-			image		= null;
-			imageTail	= null;
+			
 		}
 
 		/// <summary>Ends reading the script.</summary>
@@ -84,6 +58,17 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		/// <summary>Creates a new script reader of the derived type.</summary>
 		protected override ScriptReader CreateNew() {
 			return new ImageSR();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Internal Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The mode of the Image script reader.</summary>
+		private new Modes Mode {
+			get { return (Modes) base.Mode; }
+			set { base.Mode = (int) value; }
 		}
 	}
 }

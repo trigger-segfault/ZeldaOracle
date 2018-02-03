@@ -1,106 +1,65 @@
+#==============================================================
+# Loading
+#==============================================================
 
-SPRITESHEET "temp_sheet_black_8x8",	"Tiles/black_8x8"	(8, 8), (0, 0), (0, 0); END;
-
-SOURCE "temp_sheet_black_8x8";
-PALETTEDICTIONARY	"tile_dictionary";
-MAPPEDCOLORS	"tiles_default", ("default");
-BASIC "black_8x8" (0, 0); END;
-PALETTEDICTIONARY	none;
-
-LOAD "Tiles/overworld.conscript", false;
-LOAD "Tiles/indoors.conscript", false;
-LOAD "Tiles/sidescroll.conscript", false;
-LOAD "Tiles/objects.conscript", false;
-LOAD "Tiles/tile_previews.conscript", false;
-LOAD "Tiles/special.conscript", false;
-
-#LOAD "Tiles/terrain.conscript", false;
-#LOAD "Tiles/trees.conscript", false;
-#LOAD "Tiles/hedges.conscript", false;
-#LOAD "Tiles/stairs_tiles.conscript", false;
-#LOAD "Tiles/objects_tiles.conscript", false;
-#LOAD "Tiles/puzzle_objects_tiles.conscript", false;
-#LOAD "Tiles/doors.conscript", false;
-#LOAD "Tiles/floors_tiles.conscript", false;
-#LOAD "Tiles/tiled.conscript", false;
-#LOAD "Tiles/railings.conscript", false;
-#LOAD "Tiles/walls.conscript", false;
-#LOAD "Tiles/entrances.conscript", false;
-#LOAD "Tiles/tunnels.conscript", false;
-#LOAD "Tiles/turnstile.conscript", false;
-#LOAD "Tiles/holes.conscript", false;
-#LOAD "Tiles/snow_mounds.conscript", false;
-#LOAD "Tiles/town.conscript", false;
-#LOAD "Tiles/bridges.conscript", false;
-#LOAD "Tiles/lights.conscript", false;
-#LOAD "Tiles/interior.conscript", false;
-#LOAD "Tiles/SideScrolling/sidescrolling.conscript", false;
-#LOAD "Tiles/color_cube.conscript" ,false;
+LOAD "Tiles/tiles.conscript", false;
 LOAD "Units/units.conscript", false;
-LOAD "Units/Monsters/monsters.conscript", false;
-#LOAD "Units/Player/player.conscript" false;
+LOAD "Items/items.conscript", false;
+LOAD "Effects/effects.conscript", false;
+LOAD "ActionTiles/action_tiles.conscript", false;
+LOAD "UI/ui.conscript", false;
+
+#==============================================================
+
+# Everything below has been completely phased out
+# | |
+# V V
+
+#LOAD "animations.conscript", false;
 
 #==============================================================
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET "menu_small",		(8, 8), (1, 1), (18, 18); END;
-SPRITESHEET "menu_large",		(16, 16), (1, 1), (18, 18); END;
+#SPRITESHEET "Effects/basic_effects", (16, 16), (1, 1), (0, 0); END;
+#SPRITESHEET "color_effects", "Effects/color_effects_old", (16, 16), (1, 1), (18, 18);
 
-SPRITESHEET "items_small",		(8, 16), (1, 1), (18, 18); END;
-SPRITESHEET "items_large",		(16, 16), (1, 1), (18, 18); END;
+#SPRITESHEET "npcs", "Units/NPCS/npcs_red", (16, 16), (1, 1), (18, 18);
 
+#SPRITESHEET "action_tiles", "Tiles/action_tiles", (16, 16), (1, 1), (18, 18);
 
-SPRITESHEET "menu_small_light",	"UI/menu_small_light"		(8, 8), (1, 1), (18, 18); END;
-SPRITESHEET "menu_large_light",	"UI/menu_large_light"		(16, 16), (1, 1), (18, 18); END;
-
-SPRITESHEET "items_small_light",	"Items/items_small_light"	(8, 16), (1, 1), (18, 18); END;
-SPRITESHEET "items_large_light",	"Items/items_large_light"	(16, 16), (1, 1), (18, 18); END;
-
-
-#SPRITESHEET "tileset_overworld",	(16, 16), (1, 1), (0, 0); END;
-#SPRITESHEET "tileset_interior2",	(16, 16), (1, 1), (0, 0); END;
-#SPRITESHEET "Tiles/general_tiles",	(16, 16), (1, 1), (18, 18); END;
-#SPRITESHEET "Tiles/zoneset_large", "zoneset", (16, 16), (1, 1), (0, 0); END;
-#SPRITESHEET "Tiles/zoneset_small", "zoneset", (8, 8), (1, 1), (187, 0); END;
-
-#SPRITESHEET "Tiles/zoneset_large", "zoneset_new", (16, 16), (1, 1), (18, 18); END;
-#SPRITESHEET "Tiles/zoneset_small", "zoneset_new", (8, 8), (1, 1), (18, 341); END;
-
-SPRITESHEET "Effects/basic_effects",	(16, 16), (1, 1), (0, 0); END;
-SPRITESHEET "Effects/color_effects",	(16, 16), (1, 1), (0, 0); END;
-
-SPRITESHEET "npcs",						(16, 16), (1, 1), (18, 18); END;
-
-SPRITESHEET "action_tiles", "Tiles/action_tiles"		(16, 16), (1, 1), (18, 18); END;
-
-#SPRITESHEET "color_cube", "Tiles/color_cube"		(16, 16), (1, 1), (18, 18); END;
-
-SPRITESHEET "monster_items" "Units/Monsters/monster_items", (16, 16), (1, 1), (0, 0); END;
+#SPRITESHEET "monster_items" "Units/Monsters/monster_items_old", (16, 16), (1, 1), (0, 0); END;
 
 #==============================================================
 # Player Items
 #==============================================================
 
-SOURCE "color_effects";
+#SOURCE "color_effects";
 
-OFFSET "switch_hook_link", (5, 4), (-8, -8); END;
+#OFFSET "switch_hook_link", (5, 4), (-8, -8); END;
 
 
 #==============================================================
 # Event Tile Sprites (Editor Only)
 #==============================================================
 
-SOURCE "action_tiles";
+#SOURCE "action_tiles";
 
-BASIC "action_tile_warp_entrance",		(0, 0); END;
-BASIC "action_tile_warp_stairs",		(1, 0); END;
-BASIC "action_tile_warp_tunnel",		(2, 0); END;
-BASIC "action_tile_track_intersection",	(3, 0); END;
-BASIC "action_tile_colored_gel",		(0, 1); END;
-BASIC "action_tile_color_tile_puzzle",	(1, 1); END;
-BASIC "action_tile_lava_harden",		(2, 1); END;
-BASIC "action_tile_tile_path_puzzle",	(3, 1); END;
+#BASIC "action_tile_warp_entrance",		(0, 0); END;
+#BASIC "action_tile_warp_stairs",		(1, 0); END;
+#BASIC "action_tile_warp_tunnel",		(2, 0); END;
+#BASIC "action_tile_track_intersection",	(3, 0); END;
+#BASIC "action_tile_colored_gel",		(0, 1); END;
+#BASIC "action_tile_color_tile_puzzle",	(1, 1); END;
+#BASIC "action_tile_lava_harden",		(2, 1); END;
+#BASIC "action_tile_tile_path_puzzle",	(3, 1); END;
+
+
+#==============================================================
+# Effects
+#==============================================================
+
+#SOURCE "basic_effects";
 
 
 #==============================================================
@@ -484,183 +443,89 @@ BASIC "action_tile_tile_path_puzzle",	(3, 1); END;
 #		ADD	( 9, 11), ( 0, 16); ADD (10, 11), (16, 16); ADD (11, 11), (32, 16);
 #		ADD	( 9, 12), ( 0, 32); ADD (10, 12), (16, 32); ADD (11, 12), (32, 32); END;
 
-#==============================================================
-# Effects
-#==============================================================
-
-SOURCE "basic_effects";
-
-BASIC shadow, (0, 0), (-8, -8); END;
 
 #==============================================================
 # Player Sprites
 #==============================================================
-
-SOURCE "set_player";
-
-NAME player_forward,	(6, 0); END;
 
 
 #==============================================================
 # Item Sprites
 #==============================================================
 
-SOURCE "items_small";
-
-BASIC item_icon_sword_1,					( 0, 0); END;
-BASIC item_icon_sword_2,					( 1, 0); END;
-BASIC item_icon_sword_3,					( 2, 0); END;
-BASIC item_icon_shield_1,					( 3, 0); END;
-BASIC item_icon_shield_2,					( 4, 0); END;
-BASIC item_icon_shield_3,					( 5, 0); END;
-BASIC item_icon_satchel_equipped,			( 6, 0); END;
-BASIC item_icon_satchel,					( 7, 0); END;
-BASIC item_icon_seed_shooter_equipped,		( 8, 0); END;
-BASIC item_icon_seed_shooter,				( 9, 0); END;
-BASIC item_icon_slingshot_1,				(10, 0); END;
-BASIC item_icon_slingshot_2_equipped,		(11, 0); END;
-BASIC item_icon_slingshot_2,				(12, 0); END;
-BASIC item_icon_bomb,						(13, 0); END;
-BASIC item_icon_bombchew,					(14, 0); END;
-BASIC item_icon_shovel,						(15, 0); END;
-BASIC item_icon_bracelet,					( 0, 1); END;
-BASIC item_icon_power_gloves,				( 1, 1); END;
-BASIC item_icon_feather,					( 2, 1); END;
-BASIC item_icon_cape,						( 3, 1); END;
-BASIC item_icon_boomerang_1,				( 4, 1); END;
-BASIC item_icon_boomerang_2,				( 5, 1); END;
-BASIC item_icon_switch_hook,				( 6, 1); END;
-BASIC item_icon_hook_shot,					( 7, 1); END;
-BASIC item_icon_magnet_gloves_blue,			( 8, 1); END;
-BASIC item_icon_magnet_gloves_red,			( 9, 1); END;
-BASIC item_icon_cane,						(10, 1); END;
-BASIC item_icon_rod_of_essences,			(11, 1); END;
-BASIC item_icon_ocarina,					(12, 1); END;
-BASIC item_icon_bow,						(13, 1); END;
-BASIC item_icon_magic_rod,					( 0, 2); END;
-BASIC item_seed_ember,						( 0, 3); SIZE (8, 8); END;
-BASIC item_seed_scent,						( 1, 3); SIZE (8, 8); END;
-BASIC item_seed_pegasus,					( 2, 3); SIZE (8, 8); END;
-BASIC item_seed_gale,						( 3, 3); SIZE (8, 8); END;
-BASIC item_seed_mystery,					( 4, 3); SIZE (8, 8); END;
-BASIC item_ammo_arrow,						(15, 1); END;
-BASIC item_ammo_bomb,						(13, 0); END;
-BASIC reward_seed_ember,					( 0, 3), (4, 7); END;
-BASIC reward_seed_scent,					( 1, 3), (4, 7); END;
-BASIC reward_seed_pegasus,					( 2, 3), (4, 7); END;
-BASIC reward_seed_gale,						( 3, 3), (4, 7); END;
-BASIC reward_seed_mystery,					( 4, 3), (4, 7); END;
-BASIC reward_rupee_small_green,				( 5, 3), (4, 0); END;
-BASIC reward_rupee_red,						( 6, 3), (4, 0); END;
-BASIC reward_rupee_blue,					( 7, 3), (4, 0); END;
-BASIC reward_heart,							(13, 3), (4, 1); END;
-COMPOSITE reward_hearts_3;					ADD (13, 3), (4, 0); ADD (13, 3), (0, 4); ADD (13, 3), (8, 4); END;
-BASIC reward_small_key,						( 0, 4); END;
-BASIC reward_rupee_small_blue,				( 7, 5), (4, 0); END;
-BASIC reward_rupee_small_red,				( 7, 6), (4, 0); END;
-
-SOURCE "items_large";
-
-BASIC item_icon_biggoron_sword,				(8, 0); END;
-COMPOSITE item_icon_biggoron_sword_equipped;	ADD (9, 0); ADD (10, 0), (16, 0); END;
-
-BASIC item_icon_flippers_1,					(6, 1); END;
-BASIC item_icon_flippers_2,					(7, 1); END;
-BASIC item_icon_magic_potion,				(6, 3); END;
-BASIC item_icon_members_card,				(7, 7); END;
-BASIC item_icon_essence_seed,				(0, 9); END;
-BASIC item_icon_essence_1,					(8, 7); END;
-BASIC item_icon_essence_2,					(9, 7); END;
-BASIC item_icon_essence_3,					(10, 7); END;
-BASIC item_icon_essence_4,					(11, 7); END;
-BASIC item_icon_essence_5,					(0, 8); END;
-BASIC item_icon_essence_6,					(1, 8); END;
-BASIC item_icon_essence_7,					(2, 8); END;
-BASIC item_icon_essence_8,					(3, 8); END;
-
-BASIC reward_rupee_big_blue,				(0, 3); END;
-BASIC reward_rupee_big_red,					(1, 3); END;
-BASIC reward_heart_piece,					(4, 3); END;
-BASIC reward_heart_container,				(5, 3); END;
-BASIC reward_harp,							(0, 0), (3, 0); END;
-BASIC reward_map,							(8, 3); END;
-BASIC reward_compass,						(9, 3); END;
-BASIC reward_boss_key,						(10, 3); END;
-
 
 #==============================================================
 # HUD Sprites
 #==============================================================
 
-SOURCE "menu_small";
+#SOURCE "menu_small";
 
-BASIC hud_background,				(2, 4); END;
-BASIC hud_background_inventory,		(2, 4); END;
-COMPOSITE hud_bracket_left;			ADD (9, 0); ADD (9, 1), (0, 8); END;
-COMPOSITE hud_bracket_right;		ADD (10, 0); ADD (10, 1), (0, 8); END;
-COMPOSITE hud_bracket_left_right;	ADD (11, 0); ADD (11, 1), (0, 8); END;
-COMPOSITE hud_bracket_left_a;		ADD (7, 0); ADD (9, 1), (0, 8); END;
-COMPOSITE hud_bracket_left_b;		ADD (7, 1); ADD (9, 1), (0, 8); END;
-COMPOSITE hud_bracket_right_a;		ADD (8, 0); ADD (10, 1), (0, 8); END;
-COMPOSITE hud_bracket_right_b;		ADD (8, 1); ADD (10, 1), (0, 8); END;
-BASIC hud_heart_0,					(0, 0); END;
-BASIC hud_heart_1,					(1, 0); END;
-BASIC hud_heart_2,					(2, 0); END;
-BASIC hud_heart_3,					(3, 0); END;
-BASIC hud_heart_4,					(4, 0); END;
-BASIC hud_rupee,					(0, 2); END;
-BASIC hud_ore_chunk,				(1, 2); END;
-BASIC hud_key,						(0, 1); END;
-BASIC hud_x,						(1, 1); END;
-BASIC hud_level,					(2, 1); END;
-BASIC hud_text_next_arrow,			(4, 4); END;
+#BASIC "hud_background",				(2, 4); END;
+#BASIC "hud_background_inventory",		(2, 4); END;
+#COMPOSITE "hud_bracket_left";			ADD (9, 0); ADD (9, 1), (0, 8); END;
+#COMPOSITE "hud_bracket_right";		ADD (10, 0); ADD (10, 1), (0, 8); END;
+#COMPOSITE "hud_bracket_left_right";	ADD (11, 0); ADD (11, 1), (0, 8); END;
+#COMPOSITE "hud_bracket_left_a";		ADD (7, 0); ADD (9, 1), (0, 8); END;
+#COMPOSITE "hud_bracket_left_b";		ADD (7, 1); ADD (9, 1), (0, 8); END;
+#COMPOSITE "hud_bracket_right_a";		ADD (8, 0); ADD (10, 1), (0, 8); END;
+#COMPOSITE "hud_bracket_right_b";		ADD (8, 1); ADD (10, 1), (0, 8); END;
+#BASIC "hud_heart_0",					(0, 0); END;
+#BASIC "hud_heart_1",					(1, 0); END;
+#BASIC "hud_heart_2",					(2, 0); END;
+#BASIC "hud_heart_3",					(3, 0); END;
+#BASIC "hud_heart_4",					(4, 0); END;
+#BASIC "hud_rupee",					(0, 2); END;
+#BASIC "hud_ore_chunk",				(1, 2); END;
+#BASIC "hud_key",						(0, 1); END;
+#BASIC "hud_x",						(1, 1); END;
+#BASIC "hud_level",					(2, 1); END;
+#BASIC "hud_text_next_arrow",			(4, 4); END;
 
-BASIC ui_map_floor_box_left				(6, 6); END;
-BASIC ui_map_floor_box_right			(7, 6); END;
-BASIC ui_map_player						(10, 2); END;
-BASIC ui_map_boss_floor					(11, 2); END;
-BASIC ui_map_treasure_room				(10, 3); END;
-BASIC ui_map_boss_room					(11, 3); END;
-BASIC ui_map_undiscovered_room			(8, 6); END;
-BASIC ui_map_floor_background			(9, 6); END;
-BASIC ui_map_floor_indicator			(11, 6); END;
-BASIC ui_map_arrow_down					(4, 4); END;
-BASIC ui_map_arrow_up					(5, 4); END;
-COMPOSITE ui_map_cursor;			ADD (10, 4), (-4, -4);
-									ADD (11, 4), ( 4, -4);
-									ADD (10, 5), (-4,  4);
-									ADD (11, 5), ( 4,  4); END;
+#BASIC "ui_map_floor_box_left"				(6, 6); END;
+#BASIC "ui_map_floor_box_right"			(7, 6); END;
+#BASIC "ui_map_player"						(10, 2); END;
+#BASIC "ui_map_boss_floor"					(11, 2); END;
+#BASIC "ui_map_treasure_room"				(10, 3); END;
+#BASIC "ui_map_boss_room"					(11, 3); END;
+#BASIC "ui_map_undiscovered_room"			(8, 6); END;
+#BASIC "ui_map_floor_background"			(9, 6); END;
+#BASIC "ui_map_floor_indicator"			(11, 6); END;
+#BASIC "ui_map_arrow_down"					(4, 4); END;
+#BASIC "ui_map_arrow_up"					(5, 4); END;
+#COMPOSITE "ui_map_cursor";			ADD (10, 4), (-4, -4);
+#									ADD (11, 4), ( 4, -4);
+#									ADD (10, 5), (-4,  4);
+#									ADD (11, 5), ( 4,  4); END;
 
-BASIC ui_map_room_down_right			(6, 2); END;
-BASIC ui_map_room_down_left_right		(7, 2); END;
-BASIC ui_map_room_down_left				(8, 2); END;
-BASIC ui_map_room_down					(9, 2); END;
-BASIC ui_map_room_down_up_right			(6, 3); END;
-BASIC ui_map_room_down_left_up_right	(7, 3); END;
-BASIC ui_map_room_down_left_up			(8, 3); END;
-BASIC ui_map_room_down_up				(9, 3); END;
-BASIC ui_map_room_up_right				(6, 4); END;
-BASIC ui_map_room_left_up_right			(7, 4); END;
-BASIC ui_map_room_left_up				(8, 4); END;
-BASIC ui_map_room_up					(9, 4); END;
-BASIC ui_map_room_right					(6, 5); END;
-BASIC ui_map_room_left_right			(7, 5); END;
-BASIC ui_map_room_left					(8, 5); END;
-BASIC ui_map_room_none					(9, 5); END;
-
-
-SOURCE "menu_large";
-
-BASIC hud_heart_pieces_empty_top_left,			(0, 0); END;
-BASIC hud_heart_pieces_empty_top_right,			(1, 0), (16, 0); END;
-BASIC hud_heart_pieces_empty_bottom_left,		(0, 1), (0, 16); END;
-BASIC hud_heart_pieces_empty_bottom_right,		(1, 1), (16, 16); END;
-BASIC hud_heart_pieces_full_top_left,			(0, 2); END;
-BASIC hud_heart_pieces_full_top_right,			(1, 2), (16, 0); END;
-BASIC hud_heart_pieces_full_bottom_left,		(0, 3), (0, 16); END;
-BASIC hud_heart_pieces_full_bottom_right,		(1, 3), (16, 16); END;
-
-COMPOSITE hud_save_button;			ADD (5, 2); ADD (6, 2), (16, 0); END;
+#BASIC "ui_map_room_down_right"			(6, 2); END;
+#BASIC "ui_map_room_down_left_right"		(7, 2); END;
+#BASIC "ui_map_room_down_left"				(8, 2); END;
+#BASIC "ui_map_room_down"					(9, 2); END;
+#BASIC "ui_map_room_down_up_right"			(6, 3); END;
+#BASIC "ui_map_room_down_left_up_right"	(7, 3); END;
+#BASIC "ui_map_room_down_left_up"			(8, 3); END;
+#BASIC "ui_map_room_down_up"				(9, 3); END;
+#BASIC "ui_map_room_up_right"				(6, 4); END;
+#BASIC "ui_map_room_left_up_right"			(7, 4); END;
+#BASIC "ui_map_room_left_up"				(8, 4); END;
+#BASIC "ui_map_room_up"					(9, 4); END;
+#BASIC "ui_map_room_right"					(6, 5); END;
+#BASIC "ui_map_room_left_right"			(7, 5); END;
+#BASIC "ui_map_room_left"					(8, 5); END;
+#BASIC "ui_map_room_none"					(9, 5); END;
 
 
-LOAD "animations.conscript" false;
+#SOURCE "menu_large";
+
+#BASIC "hud_heart_pieces_empty_top_left",			(0, 0); END;
+#BASIC "hud_heart_pieces_empty_top_right",			(1, 0), (16, 0); END;
+#BASIC "hud_heart_pieces_empty_bottom_left",		(0, 1), (0, 16); END;
+#BASIC "hud_heart_pieces_empty_bottom_right",		(1, 1), (16, 16); END;
+#BASIC "hud_heart_pieces_full_top_left",			(0, 2); END;
+#BASIC "hud_heart_pieces_full_top_right",			(1, 2), (16, 0); END;
+#BASIC "hud_heart_pieces_full_bottom_left",		(0, 3), (0, 16); END;
+#BASIC "hud_heart_pieces_full_bottom_right",		(1, 3), (16, 16); END;
+
+#COMPOSITE "hud_save_button";			ADD (5, 2); ADD (6, 2), (16, 0); END;
+
+

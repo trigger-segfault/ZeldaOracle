@@ -20,6 +20,8 @@ Project Started: 9/10/2015
 
 [Google Doc](https://docs.google.com/document/d/1ttofVFRGUmLg7y79PeAXAQOPG_dDkfcC45kMf8m9Qls/edit)
 
-## Preview
+## Previews
 
 ![Editor Preview](https://i.imgur.com/1PO7zBv.png)
+
+![Temple of Seasons Restored](https://i.imgur.com/heQ9a1p.png)

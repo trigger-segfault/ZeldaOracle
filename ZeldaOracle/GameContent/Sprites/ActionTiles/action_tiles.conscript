@@ -1,0 +1,21 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "actions_action_tiles", "Tiles/action_tiles", (16, 16), (1, 1), (18, 18);
+
+#==============================================================
+# TILES
+#==============================================================
+
+SOURCE "actions_action_tiles";
+
+BASIC "action_tile_warp_entrance",		(0, 0); END;
+BASIC "action_tile_warp_stairs",		(1, 0); END;
+BASIC "action_tile_warp_tunnel",		(2, 0); END;
+BASIC "action_tile_track_intersection",	(3, 0); END;
+BASIC "action_tile_colored_gel",		(0, 1); END;
+BASIC "action_tile_color_tile_puzzle",	(1, 1); END;
+BASIC "action_tile_lava_harden",		(2, 1); END;
+BASIC "action_tile_tile_path_puzzle",	(3, 1); END;
+

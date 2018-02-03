@@ -1,0 +1,30 @@
+﻿#==============================================================
+# Zones
+#==============================================================
+
+ZONE "summer_temple_of_seasons";
+	CLONE "summer";
+	NAME "Summer (Temple of Seasons)";
+	DEFAULTTILE "ground";
+	PALETTE "summer_temple_of_seasons";
+	
+	SETSTYLE "vines", "vertical_wall";
+	SETSTYLE "vine_cliff", "seasons_alt";
+	SETSTYLE "fancy_tile_1", "overworld_diamond";
+	SETSTYLE "fancy_tile_2", "square_tiles_1";
+	SETSTYLE "fancy_tile_3", "bricks_deep_northeast";
+	SETSTYLE "fancy_tile_4", "bricks_deep_northwest";
+	SETSTYLE "staircase", "natural_dark";
+	SETSTYLE "tiled", "square_tiles_5";
+END;
+
+ZONE "summer_onoxs_castle";
+	CLONE "summer";
+	NAME "Summer (Onox's Castle)";
+	DEFAULTTILE "ground";
+	PALETTE "summer_onoxs_castle";
+	
+	SETSTYLE "fancy_tile_1", "square_tiles_6";
+	SETSTYLE "fancy_tile_2", "bricks_deep_northeast";
+	SETSTYLE "fancy_tile_3", "bricks_deep_northwest";
+END;

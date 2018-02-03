@@ -2,7 +2,7 @@
 # Tiles
 #==============================================================
 
-SOURCE "set_town_roofs";
+SOURCE "tiles_town_roofs";
 NAME "tile_roof_brown_top_left_dark"			(8, 0);
 NAME "tile_roof_brown_top_left_light"			(9, 2);
 NAME "tile_roof_brown_top_mid"					(9, 0);

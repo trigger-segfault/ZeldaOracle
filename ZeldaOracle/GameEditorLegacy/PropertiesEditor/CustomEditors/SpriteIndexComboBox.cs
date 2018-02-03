@@ -50,7 +50,7 @@ namespace ZeldaEditor.PropertiesEditor.CustomEditors {
 			if (PropertyGrid.PropertyObject is TileDataInstance) {
 				TileDataInstance tile = (TileDataInstance) PropertyGrid.PropertyObject;
 				EditorGraphics.DrawSprite(e.Graphics, tile.SpriteList[e.Index],
-					tile.Room.Zone.ImageVariantID, (Point2I) (e.Bounds.Location) +
+					(Point2I) (e.Bounds.Location) +
 					new Point2I(2, 2), new Point2I(16, 16));
 			}
 

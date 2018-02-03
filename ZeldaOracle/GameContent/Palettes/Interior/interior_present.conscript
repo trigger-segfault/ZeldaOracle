@@ -1,0 +1,230 @@
+﻿PALETTE "tile_dictionary", "interior_present";
+
+CLONE	"tiles_default";
+
+#==============================================================
+# Constants
+#==============================================================
+
+CONST	green;
+COLOR	green, light					(224,200,120);
+COLOR	green, medium					(120,144,  8);
+COLOR	green, dark						( 40, 64,  0);
+
+CONST	blue;
+COLOR	blue, light						(224,224,240);
+COLOR	blue, medium					( 80,128,160);
+COLOR	blue, dark						( 48, 80,120);
+
+CONST	purple;
+COLOR	purple, light					(248,248,136);
+COLOR	purple, medium					(136, 88,200);
+COLOR	purple, dark					( 96, 40,120);
+
+COLOR	gray, light						(224,200,120);
+COLOR	gray, medium					(136,128, 72);
+COLOR	gray, dark						( 64, 80, 48);
+
+COLOR	brown, light					(224,200,120);
+COLOR	brown, medium					(152,104, 48);
+COLOR	brown, dark						( 80, 56,  0);
+
+
+#==============================================================
+# Structure
+#==============================================================
+
+LOOKUP	floor, all						gray, all;
+
+LOOKUP	wall, all						brown, all;
+
+LOOKUP	stairs, all						floor, all;
+
+LOOKUP	floor_staircase, all			floor, all;
+LOOKUP	wall_staircase, all				wall, all;
+
+LOOKUP	railing, all					purple, all;
+
+LOOKUP	wall_torch_base, all			purple, all;
+
+LOOKUP	statue, all						blue, all;
+LOOKUP	statue_alt, all					purple, all;
+LOOKUP	eye_statue, all					statue, all;
+LOOKUP	essense_statue, all				statue, all;
+LOOKUP	plaque, all						statue, all;
+
+LOOKUP	tunnel_light, all					chest, all;
+LOOKUP	entrance_light_dirt, all			dirt, all;
+LOOKUP	entrance_light_floor, all			wall, all;
+LOOKUP	entrance_light_fancy_tile_1, all	fancy_tile_1, all;
+
+LOOKUP	tiled, all						purple, all;
+LOOKUP	tiled_alt, all					blue, all;
+
+
+#==============================================================
+# Objects
+#==============================================================
+
+LOOKUP	pot, all						object, all;
+LOOKUP	sign, all						object, all;
+LOOKUP	bracelet_rock, all				object, all;
+LOOKUP	switch_rock, all				object, all;
+LOOKUP	crystal_rock, all				object, all;
+LOOKUP	block, all						furniture, all;
+LOOKUP	armos, all						object, all;
+LOOKUP	armos_alt, all					gray, all;
+LOOKUP	grave, all						gray, all;
+LOOKUP	magnet_stone, all				object, all;
+LOOKUP	dirt_pile, all					dirt, all;
+LOOKUP	grass, all						grass_green, all;
+LOOKUP	leaves, all						tree_green, all;
+LOOKUP	bush, all						tree_green, all;
+LOOKUP	bush, light						floor, medium;
+COLOR	bush, medium					( 16,168, 64);
+COLOR	bush, dark						(248,184,136);
+
+LOOKUP	mushroom, light					floor, light;
+LOOKUP	mushroom, medium				flower_red, dark;
+LOOKUP	mushroom, dark					bush, medium;
+
+LOOKUP	flower_red, light				bush, light;
+LOOKUP	flower_red, medium				bush, medium;
+COLOR	flower_red, dark				(248,  0,  0);
+
+LOOKUP	flower_blue, all				flower_red, all;
+COLOR	flower_blue, dark				(  0,168,248);
+
+LOOKUP	flower_pink, all				flower_red, all;
+COLOR	flower_pink, dark				(240, 40,160);
+
+LOOKUP	water_flower, all				water, all;
+LOOKUP	water_flower, dark				flower_pink, dark;
+
+LOOKUP	ages_portal, all				floor, all;
+LOOKUP	soft_soil, all					tree_trunk, all;
+LOOKUP	soft_soil_sprout, all			tree_trunk_leaves, all;
+LOOKUP	cactus, all						grass_green, all;
+
+
+#==============================================================
+# Puzzle
+#==============================================================
+
+COLOR	lantern_base, light				(248,248,136);
+COLOR	lantern_base, medium			(136, 88,200);
+COLOR	lantern_base, dark				( 96, 40,128);
+
+LOOKUP	door, all						purple, all;
+LOOKUP	locked_block, all				purple, all;
+
+LOOKUP	turnstile, all					object, all;
+LOOKUP	lever, all						green, all;
+LOOKUP	button, all						floor, all;
+LOOKUP	bridge, all						floor, all;
+
+LOOKUP	hardened_lava, all				wall, all;
+LOOKUP	flying_tile, all				floor, all;
+LOOKUP	floor_spikes, all				purple, all;
+LOOKUP	arrow_shooter, all				purple, all;
+LOOKUP	fire_shooter, all				purple, all;
+LOOKUP	lava_mouth, all					purple, all;
+
+LOOKUP	web, all						wall, all;
+LOOKUP	bridge, all						floor, all;
+LOOKUP	minecart_track, all				floor, all;
+LOOKUP	output, all						wall, all;
+
+
+#==============================================================
+# Fluids
+#==============================================================
+
+LOOKUP	water, all						blue, all;
+COLOR	water_vegetation, dark			( 48,136,112);
+
+LOOKUP	ice, all						water, all;
+LOOKUP	cracked_ice, all				snow, all;
+LOOKUP	lava, all						puzzle_red, all;
+LOOKUP	sand, all						dirt, all;
+
+
+#==============================================================
+# Interior
+#==============================================================
+
+LOOKUP	shop_side_railing, all			green, all;
+LOOKUP	shop_front_railing, all			blue, all;
+COLOR	shop_background, all			(248, 248, 136);
+
+LOOKUP	ceiling_pattern, all			floor, all;
+LOOKUP	ceiling_pattern_border, all		green, all;
+
+LOOKUP	soil_sprout, all				purple, all;
+COLOR	soil_sprout, dark				( 16,168, 64);
+
+LOOKUP	bed_backboard, all,				wall, all;
+LOOKUP	bed_sheets, all					blue, all;
+LOOKUP	brick_table_green, all			green, all;
+LOOKUP	brick_table_blue, all			blue, all;
+
+LOOKUP	table, all						wall, all;
+LOOKUP	planks, all						wall, all;
+
+COLOR	furniture, light				(136,136, 72);
+COLOR	furniture, medium				(224,144,  0);
+COLOR	furniture, dark					(128, 64, 16);
+
+LOOKUP	fairy_block, all				blue, all;
+LOOKUP	imp_block, all					purple, all;
+
+
+#==============================================================
+# Nature
+#==============================================================
+
+LOOKUP	dirt, all						brown, all;
+LOOKUP	dirt_alt, all					gray, all;
+
+
+#==============================================================
+# Decoration
+#==============================================================
+
+LOOKUP	entrance_column, all			wall, all;
+LOOKUP	entrance_brick, all				blue, all;
+LOOKUP	entrance_tile, all				purple, all;
+LOOKUP	essense_brick, all				purple, all;
+LOOKUP	essense_tile, all				green, all;
+
+LOOKUP	fancy_tile_1, all				floor, all;
+LOOKUP	fancy_tile_2, all				floor, all;
+LOOKUP	fancy_tile_3, all				green, all;
+LOOKUP	fancy_tile_4, all				green, all;
+LOOKUP	fancy_tile_5, all				purple, all;
+LOOKUP	fancy_tile_6, all				blue, all;
+LOOKUP	fancy_tile_7, light				floor, medium;
+LOOKUP	fancy_tile_7, medium			floor, dark;
+LOOKUP	fancy_tile_8, all				floor, all;
+LOOKUP	fancy_tile_9, all				floor, all;
+LOOKUP	fancy_tile_10, all				wall_alt, all;
+
+
+#==============================================================
+# Constants
+#==============================================================
+
+COPY	grass_green, light				floor, light;
+COLOR	grass_green, medium				(128,192,  0);
+COLOR	grass_green, dark				( 64,112,  0);
+
+COPY	tree_green, all					grass_green, all;
+
+COPY	object, all						furniture, all;
+#COLOR	object, medium					(224,144,  0);
+#COLOR	object, dark					(128, 64, 16);
+
+
+#==============================================================
+
+END;

@@ -113,7 +113,6 @@
     <Compile Include="Controls\PropertyGridEditorWindowButton.cs" />
     <Compile Include="Controls\TreeViewLineConverter.cs" />
     <Compile Include="Control\EditorControl.cs" />
-    <Compile Include="Control\EditorGraphics.cs" />
     <Compile Include="Control\EditorImages.cs" />
     <Compile Include="Control\EditorResources.cs" />
     <Compile Include="Controls\PropertyGridEditorCheckComboBox.cs" />
@@ -149,7 +148,7 @@
     <Compile Include="Undo\ActionDeleteLevel.cs" />
     <Compile Include="Undo\ActionDuplicateDungeon.cs" />
     <Compile Include="Undo\ActionDuplicateLevel.cs" />
-    <Compile Include="Undo\ActionEventTile.cs" />
+    <Compile Include="Undo\ActionPlaceAction.cs" />
     <Compile Include="Undo\ActionMoveDungeon.cs" />
     <Compile Include="Undo\ActionMoveLevel.cs" />
     <Compile Include="Undo\ActionNewWorld.cs" />
@@ -191,10 +190,16 @@
       <DependentUpon>ShiftLevelWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WinForms\MouseWheelMessageFilter.cs" />
+    <Compile Include="WinForms\SpritePreview.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WinForms\TilePreview.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WinForms\TextMessageDisplay.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WinForms\TileDisplay.cs">
+    <Compile Include="WinForms\TilesetDisplay.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Tools\EditorTool.cs" />

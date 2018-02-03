@@ -54,8 +54,8 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 	public class NoMatchingColorGroupsException : Exception {
 		public HashSet<Color> Colors { get; set; }
 
-		public NoMatchingColorGroupsException(HashSet<Color> colors) :
-			base("No matching color group with the following colors: " + ListColors(colors) + "!")
+		public NoMatchingColorGroupsException(HashSet<Color> colors, Point2I point) :
+			base("No matching color group with the following colors: " + ListColors(colors) + " at the point " + point + "!")
 		{
 			this.Colors = colors;
 		}
@@ -208,7 +208,7 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 										if (color.A != 0)
 											transparentOnly = false;
 										if (!possibleGroups.Any())
-											throw new NoMatchingColorGroupsException(scannedColors);
+											throw new NoMatchingColorGroupsException(scannedColors, args.SourceRect.Point + new Point2I(ix, iy));
 									}
 									else if (color == Color.Black) {
 										// All groups are valid here
@@ -289,6 +289,12 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				return sprite;
 			}
 
+			public void Dispose() {
+				foreach (Image image in images) {
+					image.Dispose();
+				}
+			}
+
 			private int IndeciesPerImage {
 				get { return dimensions.X * dimensions.Y; }
 			}
@@ -331,6 +337,12 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 				spriteImages[args.SourceRect.Size] = databaseImage;
 			}
 			return databaseImage.RepaletteSprite(originalSprite, args);
+		}
+
+		public void Dispose() {
+			foreach (var pair in spriteImages) {
+				pair.Value.Dispose();
+			}
 		}
 	}
 }

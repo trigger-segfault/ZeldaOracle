@@ -9,7 +9,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 
 namespace ZeldaEditor.Tools {
 	public class ToolFill : EditorTool {
@@ -166,7 +166,7 @@ namespace ZeldaEditor.Tools {
 			else {
 				if (e.Button == MouseButtons.Middle) {
 					// Select events.
-					EventTileDataInstance selectedEventTile = LevelDisplayControl.SampleEventTile(mousePos);
+					ActionTileDataInstance selectedEventTile = LevelDisplayControl.SampleEventTile(mousePos);
 
 					if (selectedEventTile != null) {
 						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);

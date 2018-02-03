@@ -1,0 +1,13 @@
+﻿PALETTEDICTIONARY tile, "menu_dictionary";
+
+#==============================================================
+# Map
+#==============================================================
+
+TILE	background;
+TILE	background_fancy_white;
+TILE	background_fancy_black;
+
+#==============================================================
+
+END;

@@ -1,59 +1,9 @@
-
-
 #==============================================================
-# Screens
+# Images
 #==============================================================
 
-IMAGE screen_dungeon_map, "UI/screen_dungeon_map"; END;
+# Images can still be loaded here.
 
-
-
-#==============================================================
-# Menu
-#==============================================================
-
-IMAGE menu_small;
-	VARIANT dark  "UI/menu_small";
-	VARIANT light "UI/menu_small_light";
-	END;
-IMAGE menu_large;
-	VARIANT dark  "UI/menu_large";
-	VARIANT light "UI/menu_large_light";
-	END;
-
-#==============================================================
-# Items
-#==============================================================
-
-IMAGE items_small;
-	VARIANT dark  "Items/items_small";
-	VARIANT light "Items/items_small_light";
-	END;
-IMAGE items_large;
-	VARIANT dark  "Items/items_large";
-	VARIANT light "Items/items_large_light";
-	END;
-	
-
-#==============================================================
-# Tilesets
-#==============================================================
-
-
-#==============================================================
-# Entities
-#==============================================================
-
-IMAGE player;
-	VARIANT green	"Units/Player/player";
-	VARIANT red		"Units/Player/player_red";
-	VARIANT blue	"Units/Player/player_blue";
-	VARIANT hurt	"Units/Player/player_hurt";
-	END;
-	
-IMAGE npcs;
-	VARIANT red		"Units/NPCs/npcs_red";
-	END;
-
-IMAGE monsters, "Units/Monsters/monsters"; END;
-
+# But at the moment there's less need to load them here
+# as images can be loaded directly into BasicSprites AND
+# paletted at the same time if desired.

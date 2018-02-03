@@ -59,7 +59,20 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			// BASIC SETUP
 			//=====================================================================================
-			AddCommand("BASIC", (int)Modes.Root,
+			AddCommand("BASIC", (int) Modes.Root,
+				"string name, string imagePath, Point drawOffset = (0, 0), string flip = none, string rotation = none",
+			delegate (CommandParam parameters) {
+				spriteName = parameters.GetString(0);
+				sprite = BuildBasicSprite(
+					parameters.GetString(1),
+					parameters.GetPoint(2),
+					ParseFlip(parameters.GetString(3)),
+					ParseRotation(parameters.GetString(4)));
+				AddResource<ISprite>(spriteName, sprite);
+				Mode |= Modes.BasicSprite;
+			});
+			//=====================================================================================
+			AddCommand("BASIC", (int) Modes.Root,
 				"string name, Point sourceIndex, Point drawOffset = (0, 0), string flip = none, string rotation = none",
 			delegate (CommandParam parameters) {
 				spriteName = parameters.GetString(0);

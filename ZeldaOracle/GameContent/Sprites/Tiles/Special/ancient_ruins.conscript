@@ -1,0 +1,46 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_ancient_ruins"		"Tiles/Special/ancient_ruins"	(16, 16), (1, 1), (18, 18);
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1));
+
+SOURCE "temp_sheet_ancient_ruins";
+SPRITESET "tiles_ancient_ruins", (4, 5);
+	MAPPEDCOLORS	"tiles_default", ("cliff");
+	MULTIPLE BASIC (0, 0), (0, 0), (1, 4); END;
+	
+	MAPPEDCOLORS	"tiles_default", ("fancy_tile_1");
+	MULTIPLE BASIC (1, 0), (1, 0), (1, 4); END;
+	MULTIPLE BASIC (2, 0), (2, 0), (2, 3); END;
+END;
+
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "tiles_ancient_ruins";
+
+NAME "tile_ancient_ruins_statue_top"					(0, 0);
+NAME "tile_ancient_ruins_statue_bottom"					(0, 1);
+NAME "tile_ancient_ruins_cliff_top"						(0, 2);
+NAME "tile_ancient_ruins_cliff_bottom"					(0, 3);
+
+NAME "tile_ancient_ruins_tiles_nw"						(1, 0);
+NAME "tile_ancient_ruins_tiles_n"						(2, 0);
+NAME "tile_ancient_ruins_tiles_ne"						(3, 0);
+NAME "tile_ancient_ruins_tiles_w"						(1, 1);
+NAME "tile_ancient_ruins_tiles"							(2, 1);
+NAME "tile_ancient_ruins_tiles_e"						(3, 1);
+NAME "tile_ancient_ruins_tiles_sw"						(1, 2);
+NAME "tile_ancient_ruins_tiles_s"						(2, 2);
+NAME "tile_ancient_ruins_tiles_se"						(3, 2);
+NAME "tile_ancient_ruins_tiles_cracked"					(1, 3);

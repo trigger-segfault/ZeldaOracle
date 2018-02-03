@@ -16,7 +16,7 @@ using ZeldaOracle.Game.Main;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Tiles.Custom;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Control.Menus;
@@ -133,12 +133,12 @@ namespace ZeldaOracle.Game.Debug {
 				else
 					index = (index + 1) % zoneNames.Count;
 				RoomControl.Room.Zone = Resources.GetResource<Zone>(zoneNames[index]);
-				GameData.PaletteShader.TilePalette = RoomControl.Zone.Palette;
+				//GameData.PaletteShader.TilePalette = RoomControl.Zone.Palette;
 				Console.WriteLine("Changed to zone '" + RoomControl.Zone.ID + "'");
 			}
 
 			// L: Level-up item in menu
-			if (Keyboard.IsKeyPressed(Keys.L)) {
+			if (!ctrl && Keyboard.IsKeyPressed(Keys.L)) {
 				if (GameManager.CurrentGameState is InventoryMenu) {
 					InventoryMenu menu = ((InventoryMenu) GameManager.CurrentGameState);
 					ISlotItem slotItem = menu.CurrentSlotGroup.CurrentSlot.SlotItem;
@@ -149,6 +149,17 @@ namespace ZeldaOracle.Game.Debug {
 						if (item.Level != oldLevel)
 							menu.ResetDescription();
 					}
+				}
+			}
+			// Ctrl+L: Level-up all obtained items to max level
+			if (ctrl && Keyboard.IsKeyPressed(Keys.L)) {
+				foreach (Item item in GameControl.Inventory.GetItems()) {
+					if (item.IsObtained)
+						item.Level = item.MaxLevel;
+				}
+				if (GameManager.CurrentGameState is InventoryMenu) {
+					InventoryMenu menu = ((InventoryMenu) GameManager.CurrentGameState);
+					menu.ResetDescription();
 				}
 			}
 

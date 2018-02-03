@@ -11,6 +11,11 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 
 	public class CollisionModelSR : ScriptReader {
 
+		private enum Modes {
+			Root,
+			Model
+		}
+
 		private CollisionModel model;
 		private string	modelName;
 		private TemporaryResources resources;
@@ -25,27 +30,34 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			this.resources	= resources;
 			
 			//=====================================================================================
-			AddCommand("Model", "string name",
+			AddCommand("MODEL", (int) Modes.Root,
+				"string name",
 			delegate(CommandParam parameters) {
 				modelName = parameters.GetString(0);
 				model = new CollisionModel();
+				AddResource(modelName, model);
+				Mode = Modes.Model;
 			});
 			//=====================================================================================
-			AddCommand("End", "",
+			AddCommand("END", (int) Modes.Model,
+				"",
 			delegate(CommandParam parameters) {
-				if (model != null) {
-					Resources.AddResource(modelName, model);
-					model = null;
-				}
+				model = null;
+				Mode = Modes.Root;
 			});
 			//=====================================================================================
-			AddCommand("Add", "int x, int y, int width, int height",
+			AddCommand("ADD", (int) Modes.Model,
+				"Rectangle box",
 			delegate(CommandParam parameters) {
-				model.AddBox(
-					parameters.GetInt(0),
-					parameters.GetInt(1),
-					parameters.GetInt(2),
-					parameters.GetInt(3));
+				model.AddBox(parameters.GetRectangle(0));
+			});
+			//=====================================================================================
+			AddCommand("COMBINE", (int) Modes.Model,
+				"string modelName, Point offset = (0, 0)",
+			delegate (CommandParam parameters) {
+				model.Combine(
+					GetResource<CollisionModel>(parameters.GetString(0)),
+					parameters.GetPoint(1));
 			});
 			//=====================================================================================
 		}
@@ -69,6 +81,17 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		/// <summary>Creates a new script reader of the derived type.</summary>
 		protected override ScriptReader CreateNew() {
 			return new CollisionModelSR();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Internal Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The mode of the Collision Model script reader.</summary>
+		private new Modes Mode {
+			get { return (Modes) base.Mode; }
+			set { base.Mode = (int) value; }
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 
 		string Description { get; }
 
-		void DrawSlot(Graphics2D g, Point2I position, int lightOrDark);
+		void DrawSlot(Graphics2D g, Point2I position);
 
 		//void Select(int button);
 

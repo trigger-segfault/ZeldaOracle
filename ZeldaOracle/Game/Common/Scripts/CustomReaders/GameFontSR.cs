@@ -10,30 +10,15 @@ using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Common.Scripts.Commands;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
-	/*
-	 * FORMAT:
-	 *
-	 * @font [name]
-	 * @grid [char_width] [char_height] [char_spacing_x] [char_spacing_y] [offset_x] [offset_y]
-	 * @spacing [char_spacing] [line_spacing] [chars_per_row]
-	 * @end
-	 */
 	public class GameFontSR : ScriptReader {
+
+		private enum Modes {
+			Root,
+			Font
+		}
 
 		// The current font being created.
 		private GameFont font;
-		// The last loaded font.
-		private GameFont finalFont;
-
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-
-		// Gets the last loaded font.
-		public GameFont Font {
-			get { return finalFont; }
-		}
-
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -42,43 +27,44 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		public GameFontSR() {
 			
 			//=====================================================================================
-			AddCommand("Font", "string name",
+			AddCommand("FONT", (int) Modes.Root,
+				"string sheetPath",
+				"string name, string sheetPath",
 			delegate(CommandParam parameters) {
-				string path = parameters.GetString(0);
-
-				Image image = null;
-				if (path.EndsWith(".png")) {
-					image = Resources.LoadImageFromFile(Resources.ImageDirectory + path);
-					path = path.Substring(0, path.LastIndexOf('.'));
-				}
-				else {
-					image = Resources.LoadImage(Resources.ImageDirectory + path);
-				}
+				string fontName = parameters.GetString(0);
+				string fontPath = fontName;
+				if (parameters.ChildCount == 2)
+					fontPath = parameters.GetString(1);
+				
+				Image image = Resources.LoadImage(Resources.ImageDirectory + fontPath);
 
 				SpriteSheet sheet = new SpriteSheet(image, Point2I.One, Point2I.Zero, Point2I.Zero);
 				font = new GameFont(sheet, 1, 0, 1);
-				finalFont = font;
-				Resources.AddSpriteSheet(path, sheet);
-				Resources.AddGameFont(path, font);
+				AddResource<GameFont>(fontName, font);
+				Mode = Modes.Font;
 			});
 			//=====================================================================================
-			AddCommand("Grid", "(int charWidth, int charHeight), (int charSpacingX, int charSpacingY), (int offsetX, int offsetY)",
+			AddCommand("GRID", (int) Modes.Font,
+				"Point charSize, Point charSpacing, Point offset",
 			delegate(CommandParam parameters) {
 				font.SpriteSheet.CellSize	= parameters.GetPoint(0);
 				font.SpriteSheet.Spacing	= parameters.GetPoint(1);
 				font.SpriteSheet.Offset		= parameters.GetPoint(2);
 			});
 			//=====================================================================================
-			AddCommand("Spacing", "int charSpacing, int lineSpacing, int charsPerRow",
+			AddCommand("SPACING", (int) Modes.Font,
+				"int charSpacing, int lineSpacing, int charsPerRow",
 			delegate(CommandParam parameters) {
 				font.CharacterSpacing	= parameters.GetInt(0);
 				font.LineSpacing		= parameters.GetInt(1);
 				font.CharactersPerRow	= parameters.GetInt(2);
 			});
 			//=====================================================================================
-			AddCommand("End", "",
+			AddCommand("END", (int) Modes.Font,
+				"",
 			delegate(CommandParam parameters) {
 				font = null;
+				Mode = Modes.Root;
 			});
 			//=====================================================================================
 		}
@@ -91,7 +77,6 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		/// <summary>Begins reading the script.</summary>
 		protected override void BeginReading() {
 			font		= null;
-			finalFont	= null;
 		}
 
 		/// <summary>Ends reading the script.</summary>
@@ -102,6 +87,17 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		/// <summary>Creates a new script reader of the derived type.</summary>
 		protected override ScriptReader CreateNew() {
 			return new GameFontSR();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Internal Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The mode of the Game Font script reader.</summary>
+		private new Modes Mode {
+			get { return (Modes) base.Mode; }
+			set { base.Mode = (int) value; }
 		}
 	}
 }

@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET	"temp_sheet_ss_animations"	"Tiles/SideScroll/ss_animations"			(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET	"temp_sheet_ss_animations"	"Tiles/SideScroll/ss_animations"			(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -14,7 +14,7 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 
 SOURCE "temp_sheet_ss_animations";
-SPRITESET "set_ss_animations", (9, 9);
+SPRITESET "tiles_ss_animations", (9, 9);
 	MAPPEDCOLORS	"tiles_default", ("ss_torch_light", "ss_torch_base");
 	CHUNKSIZE		(16, 8);
 	MULTIPLE BASIC (0, 0), (0, 0), (9, 3); END;
@@ -32,7 +32,7 @@ END;
 # Tiles
 #==============================================================
 
-SOURCE "set_ss_animations";
+SOURCE "tiles_ss_animations";
 
 ANIMATION "tile_ss_torch_light_top_left"; SUBSTRIP repeat;
 	ADD strip, 30, 3, (0, 0), relative: (3, 0); ADD frame, 30, (3, 0); END;

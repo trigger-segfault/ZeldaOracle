@@ -165,9 +165,9 @@ namespace ZeldaOracle.Game.Control.Menus {
 			LetterString text = description.Substring(startIndex, endIndex - startIndex);
 
 			if (position < 0)
-				g.DrawLetterString(GameData.FONT_LARGE, text, new Point2I(16 - (position / 8) * 8, 108), new Color(16, 40, 88));
+				g.DrawLetterString(GameData.FONT_LARGE, text, new Point2I(16 - (position / 8) * 8, 108), TileColors.MenuDark);
 			else
-				g.DrawLetterString(GameData.FONT_LARGE, text, new Point2I(16, 108), new Color(16, 40, 88));
+				g.DrawLetterString(GameData.FONT_LARGE, text, new Point2I(16, 108), TileColors.MenuDark);
 		}
 
 

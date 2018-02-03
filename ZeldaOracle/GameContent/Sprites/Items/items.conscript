@@ -1,0 +1,131 @@
+﻿
+#==============================================================
+# Sprite Sheets
+#==============================================================
+
+SPRITESHEET "temp_sheet_items_small", "Items/items_small",		(8, 16), (1, 1), (18, 18);
+SPRITESHEET "temp_sheet_items_large", "Items/items_large",		(16, 16), (1, 1), (18, 18);
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY "entity_dictionary";
+
+MAPPEDCOLORS	"entities_default",
+	("green", "blue", "red", "orange", "shaded_red", "shaded_blue",
+	"maku_seed_ages", "maku_seed_seasons");
+
+SOURCE "temp_sheet_items_small";
+SPRITESET "items_small", (16, 6);
+	MULTIPLE BASIC (0, 0), (0, 0), (16, 2); END;
+	SINGLE BASIC (0, 2); END;
+	MULTIPLE BASIC (0, 3), (0, 3), (8, 1); END;
+	MULTIPLE BASIC (9, 3), (9, 3), (7, 1); END;
+	MULTIPLE BASIC (0, 4), (0, 4), (16, 1); END;
+	MULTIPLE BASIC (0, 5), (0, 5), (9, 1); END;
+END;
+
+CHUNKSIZE	(16, 8);
+
+SOURCE "temp_sheet_items_large";
+SPRITESET "items_large", (12, 10);
+	MULTIPLE BASIC (0, 0), (0, 0), (12, 1); END;
+	MULTIPLE BASIC (0, 1), (0, 1), (3, 1); END;
+	MULTIPLE BASIC (6, 1), (6, 1), (5, 1); END;
+	MULTIPLE BASIC (0, 3), (0, 3), (11, 1); END;
+	MULTIPLE BASIC (0, 4), (0, 4), (12, 5); END;
+	MULTIPLE BASIC (0, 9), (0, 9), (4, 1); END;
+END;
+
+
+#==============================================================
+# Sprites
+#==============================================================
+
+SOURCE "items_small";
+NAME "item_icon_sword_1",					( 0, 0);
+NAME "item_icon_sword_2",					( 1, 0);
+NAME "item_icon_sword_3",					( 2, 0);
+NAME "item_icon_shield_1",					( 3, 0);
+NAME "item_icon_shield_2",					( 4, 0);
+NAME "item_icon_shield_3",					( 5, 0);
+NAME "item_icon_satchel_equipped",			( 6, 0);
+NAME "item_icon_satchel",					( 7, 0);
+NAME "item_icon_seed_shooter_equipped",		( 8, 0);
+NAME "item_icon_seed_shooter",				( 9, 0);
+NAME "item_icon_slingshot_1",				(10, 0);
+NAME "item_icon_slingshot_2_equipped",		(11, 0);
+NAME "item_icon_slingshot_2",				(12, 0);
+NAME "item_icon_bomb",						(13, 0);
+NAME "item_icon_bombchew",					(14, 0);
+NAME "item_icon_shovel",					(15, 0);
+NAME "item_icon_bracelet",					( 0, 1);
+NAME "item_icon_power_gloves",				( 1, 1);
+NAME "item_icon_feather",					( 2, 1);
+NAME "item_icon_cape",						( 3, 1);
+NAME "item_icon_boomerang_1",				( 4, 1);
+NAME "item_icon_boomerang_2",				( 5, 1);
+NAME "item_icon_switch_hook",				( 6, 1);
+NAME "item_icon_hook_shot",					( 7, 1);
+NAME "item_icon_magnet_gloves_blue",		( 8, 1);
+NAME "item_icon_magnet_gloves_red",			( 9, 1);
+NAME "item_icon_cane",						(10, 1);
+NAME "item_icon_rod_of_essences",			(11, 1);
+NAME "item_icon_ocarina",					(12, 1);
+NAME "item_icon_bow",						(13, 1);
+NAME "item_icon_magic_rod",					( 0, 2);
+OFFSET "item_seed_ember",					( 0, 3), clipping: (0, 0, 8, 8); END;
+OFFSET "item_seed_scent",					( 1, 3), clipping: (0, 0, 8, 8); END;
+OFFSET "item_seed_pegasus",					( 2, 3), clipping: (0, 0, 8, 8); END;
+OFFSET "item_seed_gale",					( 3, 3), clipping: (0, 0, 8, 8); END;
+OFFSET "item_seed_mystery",					( 4, 3), clipping: (0, 0, 8, 8); END;
+NAME "item_ammo_arrow",						(15, 1);
+NAME "item_ammo_bomb",						(13, 0);
+OFFSET "reward_seed_ember",					( 0, 3), (4, 7); END;
+OFFSET "reward_seed_scent",					( 1, 3), (4, 7); END;
+OFFSET "reward_seed_pegasus",				( 2, 3), (4, 7); END;
+OFFSET "reward_seed_gale",					( 3, 3), (4, 7); END;
+OFFSET "reward_seed_mystery",				( 4, 3), (4, 7); END;
+OFFSET "reward_rupee_small_green",			( 5, 3), (4, 0); END;
+OFFSET "reward_rupee_red",					( 6, 3), (4, 0); END;
+OFFSET "reward_rupee_blue",					( 7, 3), (4, 0); END;
+OFFSET "reward_heart",						(13, 3), (4, 1); END;
+COMPOSITE "reward_hearts_3";				ADD (13, 3), (4, 0); ADD (13, 3), (0, 4); ADD (13, 3), (8, 4); END;
+NAME "reward_small_key",					( 0, 4);
+OFFSET "reward_rupee_small_blue",			( 7, 5), (4, 0); END;
+OFFSET "reward_rupee_small_red",			( 8, 5), (4, 0); END;
+
+ANIMATION "collectible_fairy";
+	SUBSTRIP repeat; ADD frame, 1, (14, 3), (-4, -8);
+	SUBSTRIP repeat; ADD frame, 1, (15, 3), (-4, -8);
+	END;
+	
+SOURCE "items_large";
+
+NAME "item_icon_biggoron_sword",				(8, 0);
+COMPOSITE "item_icon_biggoron_sword_equipped";	ADD (9, 0); ADD (10, 0), (16, 0); END;
+
+NAME "item_icon_flippers_1",				(6, 1);
+NAME "item_icon_flippers_2",				(7, 1);
+NAME "item_icon_magic_potion",				(6, 3);
+NAME "item_icon_members_card",				(7, 7);
+COMPOSITE "item_icon_essence_seed";
+	ADD (0, 9); ADD (1, 9); END;
+NAME "item_icon_essence_1",					(8, 7);
+NAME "item_icon_essence_2",					(9, 7);
+NAME "item_icon_essence_3",					(10, 7);
+NAME "item_icon_essence_4",					(11, 7);
+NAME "item_icon_essence_5",					(0, 8);
+NAME "item_icon_essence_6",					(1, 8);
+NAME "item_icon_essence_7",					(2, 8);
+NAME "item_icon_essence_8",					(3, 8);
+
+NAME "reward_rupee_big_blue",				(0, 3);
+NAME "reward_rupee_big_red",				(1, 3);
+NAME "reward_heart_piece",					(4, 3);
+NAME "reward_heart_container",				(5, 3);
+OFFSET "reward_harp",						(0, 0), (3, 0); END;
+NAME "reward_map",							(8, 3);
+NAME "reward_compass",						(9, 3);
+NAME "reward_boss_key",						(10, 3);

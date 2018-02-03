@@ -71,7 +71,12 @@ namespace ZeldaOracle.Game.GameStates {
                 End();
         }
 
-        public override void Draw(Graphics2D g) {
+		public override void AssignPalettes() {
+			if (CurrentState != null)
+				CurrentState.AssignPalettes();
+		}
+
+		public override void Draw(Graphics2D g) {
 			if (CurrentState != null)
 				CurrentState.Draw(g);
         }

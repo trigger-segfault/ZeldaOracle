@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using Key = System.Windows.Input.Key;
 
 namespace ZeldaEditor.Tools {
@@ -44,21 +44,21 @@ namespace ZeldaEditor.Tools {
 		protected override void OnMouseMove(MouseEventArgs e) {
 			Point2I mousePos = e.MousePos();
 
-			if (!EditorControl.EventMode) {
+			if (!EditorControl.ActionMode) {
 				// Highlight tiles.
 				TileDataInstance tile = LevelDisplay.SampleTile(mousePos, EditorControl.CurrentLayer);
 				EditorControl.HighlightMouseTile = (tile != null);
 				LevelDisplay.CursorTileSize = (tile != null ? tile.Size : Point2I.One);
 			}
 			else {
-				// Highlight event tiles.
-				EventTileDataInstance eventTile = LevelDisplay.SampleEventTile(mousePos);
-				EditorControl.HighlightMouseTile = (eventTile != null);
-				if (eventTile != null) {
+				// Highlight action tiles.
+				ActionTileDataInstance actionTile = LevelDisplay.SampleActionTile(mousePos);
+				EditorControl.HighlightMouseTile = (actionTile != null);
+				if (actionTile != null) {
 					LevelDisplay.CursorHalfTileLocation =
 						LevelDisplay.SampleLevelHalfTileCoordinates(
-							LevelDisplay.GetRoomDrawPosition(eventTile.Room) + eventTile.Position);
-					LevelDisplay.CursorTileSize = eventTile.Size;
+							LevelDisplay.GetRoomDrawPosition(actionTile.Room) + actionTile.Position);
+					LevelDisplay.CursorTileSize = actionTile.Size;
 				}
 			}
 		}
@@ -84,15 +84,21 @@ namespace ZeldaEditor.Tools {
 
 			if (DragButton == MouseButtons.Left) {
 				// Sample the tile.
-				if (!EditorControl.EventMode) {
+				if (!EditorControl.ActionMode) {
 					TileDataInstance tile = LevelDisplay.SampleTile(mousePos, EditorControl.CurrentLayer);
 					if (tile != null) {
 						EditorControl.SelectedTilesetLocation = -Point2I.One;
+						EditorControl.SelectedTileset = null;
 						EditorControl.SelectedTileData = tile.TileData;
 					}
 				}
 				else {
-					EventTileDataInstance eventTile = LevelDisplay.SampleEventTile(mousePos);
+					ActionTileDataInstance actionTile = LevelDisplay.SampleActionTile(mousePos);
+					if (actionTile != null) {
+						EditorControl.SelectedTilesetLocation = -Point2I.One;
+						EditorControl.SelectedTileset = null;
+						EditorControl.SelectedTileData = actionTile.ActionTileData;
+					}
 				}
 			}
 		}

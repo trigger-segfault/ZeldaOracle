@@ -86,7 +86,6 @@
     <Keywords color="Commands">
       <Word>IMAGE</Word>
       <Word>END</Word>
-      <Word>VARIANT</Word>
     </Keywords>
 
     <!--ISpriteSR.Animations-->
@@ -105,7 +104,8 @@
       <Word>REPEAT</Word>
       <Word>REWIND</Word>
       <Word>SHIFTSOURCE</Word>
-      <Word>CHANGEDEFINITION</Word>
+      <Word>CHANGESTYLE</Word>
+      <Word>CHANGECOLOR</Word>
       <Word>CLIP</Word>
     </Keywords>
       
@@ -147,6 +147,7 @@
       <Word>COLOR</Word>
       <Word>COLORSTYLE</Word>
       <Word>COLORMULTISTYLE</Word>
+      <Word>STYLECOLOR</Word>
     </Keywords>
 
     <!--ISpriteSR.Composite-->
@@ -279,7 +280,6 @@
       <Word>SIDESCROLLING</Word>
       <Word>UNDERWATER</Word>
       <Word>DEFAULTTILE</Word>
-      <Word>IMAGEVARIANT</Word>
       <Word>PALETTE</Word>
       <Word>SETSTYLE</Word>
     </Keywords>

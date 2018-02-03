@@ -281,13 +281,14 @@ namespace ZeldaOracle.Game {
 
 		public static void LoadAnimations() {
 			// Create gale effect animation.
-			ANIM_EFFECT_SEED_GALE = new Animation();
+			/*ANIM_EFFECT_SEED_GALE = new Animation();
 			for (int i = 0; i < 12; i++) {
 				int y = 1 + (((5 - (i % 4)) % 4) * 4);
+				int x = ;
 				ANIM_EFFECT_SEED_GALE.AddFrame(i, 1, 
 					((SpriteSheet) GameData.SHEET_COLOR_EFFECTS).GetSprite(((i % 6) < 3 ? 4 : 5), y, -8, -8));
 			}
-			Resources.SetResource("effect_seed_gale", ANIM_EFFECT_SEED_GALE);
+			Resources.SetResource("effect_seed_gale", ANIM_EFFECT_SEED_GALE);*/
 
 			ANIM_COLOR_CUBE_ROLLING_ORIENTATIONS = new Animation[6, 4];
 			string[] orientations = { "blue_yellow", "blue_red", "yellow_red", "yellow_blue", "red_blue", "red_yellow" };

@@ -1,0 +1,16 @@
+﻿
+TILE "ancient_ruins_statue_top"; SAMESPRITE; SOLID block; END;
+TILE "ancient_ruins_statue_bottom"; SAMESPRITE; SOLID block; END;
+TILE "ancient_ruins_cliff_top"; SAMESPRITE; SOLID block; END;
+TILE "ancient_ruins_cliff_bottom"; SAMESPRITE; SOLID block; END;
+
+TILE "ancient_ruins_tiles_nw"; SAMESPRITE; END;
+TILE "ancient_ruins_tiles_n"; SAMESPRITE; END;
+TILE "ancient_ruins_tiles_ne"; SAMESPRITE; END;
+TILE "ancient_ruins_tiles_w"; SAMESPRITE; END;
+TILE "ancient_ruins_tiles"; SAMESPRITE; END;
+TILE "ancient_ruins_tiles_e"; SAMESPRITE; END;
+TILE "ancient_ruins_tiles_sw"; SAMESPRITE; END;
+TILE "ancient_ruins_tiles_s"; SAMESPRITE; END;
+TILE "ancient_ruins_tiles_se"; SAMESPRITE; END;
+TILE "ancient_ruins_tiles_cracked"; SAMESPRITE; END;

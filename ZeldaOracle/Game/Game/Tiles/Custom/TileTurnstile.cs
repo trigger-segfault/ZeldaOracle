@@ -182,8 +182,8 @@ namespace ZeldaOracle.Game.Tiles {
 		public override void Draw(RoomGraphics g) {
 			base.Draw(g);
 
-			g.DrawAnimationPlayer(arrowsAnimationPlayer, Zone.ImageVariantID, Position, Graphics.DepthLayer);
-			g.DrawAnimationPlayer(turnstileAnimationPlayer, Zone.ImageVariantID, Position, Graphics.DepthLayer);
+			g.DrawAnimationPlayer(arrowsAnimationPlayer, Position, Graphics.DepthLayer);
+			g.DrawAnimationPlayer(turnstileAnimationPlayer, Position, Graphics.DepthLayer);
 		}
 
 
@@ -212,7 +212,7 @@ namespace ZeldaOracle.Game.Tiles {
 				args.Color);
 			g.DrawSprite(
 				turnstileAnimation,//.GetSubstrip(clockwise ? 0 : 1),
-				new SpriteDrawSettings(args.Zone.StyleDefinitions, args.Zone.ImageVariantID, 16f),
+				new SpriteDrawSettings(args.Zone.StyleDefinitions, 16f),
 				args.Position,
 				args.Color);
 		}

@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using ZeldaEditor.Control;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaEditor.Control {
@@ -68,8 +68,8 @@ namespace ZeldaEditor.Control {
 		}
 		
 		// Delete an already-placed event tile.
-		public void DeleteEventTile(EventTileDataInstance eventTile) {
-			eventTile.Room.RemoveEventTile(eventTile);
+		public void DeleteEventTile(ActionTileDataInstance eventTile) {
+			eventTile.Room.RemoveActionTile(eventTile);
 			editorControl.OnDeleteObject(eventTile);
 		}
 

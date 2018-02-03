@@ -1,0 +1,73 @@
+﻿#==============================================================================
+# Sprite Sheets
+#==============================================================================
+
+SPRITESHEET "temp_sheet_onoxs_castle"		"Tiles/Special/onoxs_castle"	(16, 16), (1, 1), (18, 18);
+
+#==============================================================
+# Sprite Sets
+#==============================================================
+
+PALETTEDICTIONARY	"tile_dictionary";
+
+IGNORECOLORS ((255, 0, 0), (1, 1, 1), (0, 0, 0, 0));
+
+MAPPEDCOLORS	"tiles_default", ("vertical_wall", "tunnel_light", "armos");
+CHUNKSIZE		(8, 8);
+
+SOURCE "temp_sheet_onoxs_castle";
+SPRITESET "tiles_onoxs_castle", (5, 7);
+	MULTIPLE BASIC (0, 0), (0, 0), (5, 6); END;
+	SINGLE BASIC (3, 6); END;
+	SINGLE BASIC (0, 6); END;
+END;
+
+
+#==============================================================
+# Tiles
+#==============================================================
+
+SOURCE "tiles_onoxs_castle";
+
+COMPOSITE "tile_onoxs_castle";
+	ADDTILED (0, 0), (4, 4), (16, 16); END;
+	
+NAME "tile_onox_pillar_top_sphere"						(4, 0);
+NAME "tile_onox_pillar_top"								(4, 1);
+NAME "tile_onox_pillar_mid"								(4, 2);
+NAME "tile_onox_pillar_bottom"							(4, 3);
+
+NAME "tile_onox_front_vertical_wall_top_sw"				(0, 4);
+NAME "tile_onox_front_vertical_wall_top_nse"			(1, 4);
+NAME "tile_onox_front_vertical_wall_top_nsw"			(2, 4);
+NAME "tile_onox_front_vertical_wall_top_se"				(3, 4);
+#NAME "tile_onox_front_vertical_wall_top_ew"				(4, 4);
+
+NAME "tile_onox_front_vertical_wall_top_pillar_left"	(0, 5);
+NAME "tile_onox_front_vertical_wall_top_pillar_right"	(1, 5);
+
+
+NAME "tile_onox_overhang_vertical_wall_top_sw_above"	(0, 4);
+#NAME "tile_onox_overhang_vertical_wall_top_nse_above"	(1, 4);
+#NAME "tile_onox_overhang_vertical_wall_top_nsw_above"	(2, 4);
+NAME "tile_onox_overhang_vertical_wall_top_se_above"	(3, 4);
+NAME "tile_onox_overhang_vertical_wall_top_ew_above"	(4, 4);
+NAME "tile_onox_overhang_vertical_wall_top_ns"			(3, 6);
+NAME "tile_onox_overhang_vertical_wall_top_ns_above"	(3, 5);
+
+NAME "tile_onox_overhang_fancy_tile_1"					"tile_fancy_tile_1";
+NAME "tile_onox_overhang_fancy_tile_2"					"tile_fancy_tile_2";
+NAME "tile_onox_overhang_fancy_tile_3"					"tile_fancy_tile_3";
+NAME "tile_onox_overhang_fancy_tile_1_above"			(4, 5);
+NAME "tile_onox_overhang_fancy_tile_2_above"			(4, 5);
+NAME "tile_onox_overhang_fancy_tile_3_above"			(4, 5);
+
+OFFSET "tile_onox_overhang_vertical_wall_top_pillar_left", (0, 5), clipping: (0, 8, 16, 8); END;
+OFFSET "tile_onox_overhang_vertical_wall_top_pillar_left_above", (0, 5), clipping: (0, 0, 16, 8); END;
+OFFSET "tile_onox_overhang_vertical_wall_top_pillar_mid", (2, 5), clipping: (0, 8, 16, 8); END;
+OFFSET "tile_onox_overhang_vertical_wall_top_pillar_mid_above", (2, 5), clipping: (0, 0, 16, 8); END;
+OFFSET "tile_onox_overhang_vertical_wall_top_pillar_right", (1, 5), clipping: (0, 8, 16, 8); END;
+OFFSET "tile_onox_overhang_vertical_wall_top_pillar_right_above", (1, 5), clipping: (0, 0, 16, 8); END;
+
+
+NAME "tile_onox_statue"									(0, 6);

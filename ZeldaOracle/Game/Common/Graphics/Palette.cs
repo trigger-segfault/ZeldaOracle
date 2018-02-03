@@ -38,10 +38,42 @@ namespace ZeldaOracle.Common.Graphics {
 		All
 	}
 
-	public enum LookupResult {
-		Success,
-		InfiniteLoop,
-		MaxLookupDepth
+	public struct PaletteColor {
+		public static readonly PaletteColor Undefined = new PaletteColor();
+
+		private Color? color;
+
+		public PaletteColor(Color color) {
+			this.color      = color;
+		}
+
+		public bool IsUndefined {
+			get { return !color.HasValue; }
+		}
+		public Color Color {
+			get {
+				if (color.HasValue)
+					return color.Value;
+				return Color.Black;
+			}
+			set { color = value; }
+		}
+	}
+
+	public struct LookupPair {
+		public static readonly LookupPair Undefined = new LookupPair();
+
+		public string Name { get; set; }
+		public LookupSubtypes Subtype { get; set; }
+
+		public LookupPair(string name, LookupSubtypes subtype) {
+			this.Name       = name;
+			this.Subtype    = subtype;
+		}
+
+		public bool IsUndefined {
+			get { return Name == null; }
+		}
 	}
 
 	public class Palette {
@@ -50,43 +82,6 @@ namespace ZeldaOracle.Common.Graphics {
 		// Classes
 		//-----------------------------------------------------------------------------
 		
-		private struct PaletteColor {
-			public static readonly PaletteColor Undefined = new PaletteColor();
-
-			private Color? color;
-
-			public PaletteColor(Color color) {
-				this.color      = color;
-			}
-
-			public bool IsUndefined {
-				get { return !color.HasValue; }
-			}
-			public Color Color {
-				get {
-					if (color.HasValue)
-						return color.Value;
-					return Color.Black;
-				}
-				set { color = value; }
-			}
-		}
-
-		private struct LookupPair {
-			public static readonly LookupPair Undefined = new LookupPair();
-
-			public string Name { get; set; }
-			public LookupSubtypes Subtype { get; set; }
-
-			public LookupPair(string name, LookupSubtypes subtype) {
-				this.Name       = name;
-				this.Subtype    = subtype;
-			}
-
-			public bool IsUndefined {
-				get { return Name == null; }
-			}
-		}
 
 
 		//-----------------------------------------------------------------------------
@@ -106,9 +101,9 @@ namespace ZeldaOracle.Common.Graphics {
 
 		/// <summary>The default color group for enitities.</summary>
 		public static readonly Color[] DefaultEntity = new Color[PaletteDictionary.ColorGroupSize] {
-			Color.ToGBCColor(0.66f, 0.66f, 0.66f),
+			Color.ToGBCColor(Color.White),
 			Color.Transparent,
-			Color.ToGBCColor(0.33f, 0.33f, 0.33f),
+			Color.ToGBCColor(0.5f, 0.5f, 0.5f),
 			Color.Black
 		};
 
@@ -160,7 +155,18 @@ namespace ZeldaOracle.Common.Graphics {
 			foreach (var pair in copy.lookupGroups)
 				this.lookupGroups.Add(pair.Key, (LookupPair[]) pair.Value.Clone());
 		}
-		
+
+
+		//-----------------------------------------------------------------------------
+		// Disposing
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Disposes of the palette's texture.</summary>
+		public void Dispose() {
+			if (paletteTexture != null)
+				paletteTexture.Dispose();
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Initialization
@@ -216,6 +222,27 @@ namespace ZeldaOracle.Common.Graphics {
 					return color.Color;
 			}
 			return colorGroups["default"][(int) subtype].Color;
+		}
+
+		/// <summary>Gets the collection of defined constant colors.</summary>
+		public IEnumerable<KeyValuePair<string, PaletteColor[]>> GetDefinedConsts() {
+			foreach (var pair in constColorGroups) {
+				yield return pair;
+			}
+		}
+
+		/// <summary>Gets the collection of defined colors.</summary>
+		public IEnumerable<KeyValuePair<string, PaletteColor[]>> GetDefinedColors() {
+			foreach (var pair in colorGroups) {
+				yield return pair;
+			}
+		}
+
+		/// <summary>Gets the collection of defined color lookups.</summary>
+		public IEnumerable<KeyValuePair<string, LookupPair[]>> GetDefinedLookups() {
+			foreach (var pair in lookupGroups) {
+				yield return pair;
+			}
 		}
 
 

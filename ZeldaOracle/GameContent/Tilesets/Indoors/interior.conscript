@@ -1,4 +1,4 @@
-TILESET "interior", (12, 19), True;
+TILESET "interior", (12, 19), true;
 
 SETTILE (0, 0), "wall_outside_nw";
 SETTILE (1, 0), "wall_up";

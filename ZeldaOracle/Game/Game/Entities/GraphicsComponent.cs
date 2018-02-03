@@ -19,7 +19,6 @@ namespace ZeldaOracle.Game.Entities
 		private	bool			isVisible;
 		private DepthLayer		depthLayer;
 		private DepthLayer		depthLayerInAir;
-		private int				imageVariant;
 		private	Point2I			drawOffset;
 		private bool			isGrassEffectVisible;
 		private bool			isRipplesEffectVisible;
@@ -35,6 +34,9 @@ namespace ZeldaOracle.Game.Entities
 		private bool			isAnimatedWhenPaused;
 		private bool			isHurting;
 		private ColorDefinitions colorDefinitions;
+		private bool            unmapped;
+		private UnmappedSprite	unmappedSprite;
+		private Palette			unmappedPalette;
 
 
 		//-----------------------------------------------------------------------------
@@ -59,16 +61,29 @@ namespace ZeldaOracle.Game.Entities
 			this.flickerAlternateDelay	= 2;
 			this.flickerTimer			= 0;
 			this.flickerIsVisible		= true;
-			this.imageVariant			= GameData.VARIANT_NONE;
 			this.isAnimatedWhenPaused	= false;
 			this.isHurting				= false;
-			this.colorDefinitions       = new ColorDefinitions();
+			this.colorDefinitions		= new ColorDefinitions();
+			this.unmapped				= false;
+			this.unmappedSprite			= null;
+			this.unmappedPalette		= null;
 		}
-		
+
 
 		//-----------------------------------------------------------------------------
 		// Animation & Sprite Interface
 		//-----------------------------------------------------------------------------
+
+		public void CreateUnmappedSprite() {
+			Palette palette = unmappedPalette;
+			if (palette == null)
+				palette = Entity.RoomControl.Zone.Palette;
+
+			Graphics2D g2d = new Graphics2D(Resources.SpriteBatch);
+			unmappedSprite = Unmapping.UnmapSprite(g2d, animationPlayer.SpriteOrSubStrip,
+				new SpriteDrawSettings(colorDefinitions, animationPlayer.PlaybackTime),
+				palette, Entity.RoomControl.EntityPalette);
+		}
 
 		public void PlayAnimation() {
 			animationPlayer.Play();
@@ -138,6 +153,22 @@ namespace ZeldaOracle.Game.Entities
 					grassAnimationTicks += 1;
 				}
 			}
+
+			if (unmapped) {
+				ColorDefinitions finalColorDefinitions = colorDefinitions;
+
+				// Change the color if hurting.
+				if (isHurting && entity.GameControl.RoomTicks % 8 >= 4) {
+					finalColorDefinitions = ColorDefinitions.All("hurt");
+				}
+
+				Palette palette = Entity.RoomControl.TilePaletteOverride ?? unmappedPalette;
+
+				Graphics2D g2d = new Graphics2D(Resources.SpriteBatch);
+				unmappedSprite = Unmapping.UnmapSprite(g2d, animationPlayer.SpriteOrSubStrip,
+					new SpriteDrawSettings(finalColorDefinitions, animationPlayer.PlaybackTime),
+					palette, Entity.RoomControl.EntityPalette);
+			}
 		}
 
 		// Draw the entity's graphics,
@@ -162,20 +193,22 @@ namespace ZeldaOracle.Game.Entities
 
 			ColorDefinitions finalColorDefinitions = colorDefinitions;
 
-			// Change the variant if hurting.
-			int newImageVariant = imageVariant;
+			// Change the color if hurting.
 			if (isHurting && entity.GameControl.RoomTicks % 8 >= 4) {
-				newImageVariant = GameData.VARIANT_HURT;
 				finalColorDefinitions = ColorDefinitions.All("hurt");
 			}
 
 			// Draw the sprite/animation.
 			Vector2F drawPosition = Entity.Position - new Vector2F(0, Entity.ZPosition);
-			//g.DrawAnimationPlayer(animationPlayer, newImageVariant,
-			//	drawPosition + drawOffset, layer, entity.Position);
-			g.DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(
-				finalColorDefinitions, newImageVariant, animationPlayer.PlaybackTime),
-				drawPosition + drawOffset, layer, entity.Position);
+			if (unmapped) {
+				if (unmappedSprite != null)
+					g.DrawSprite(unmappedSprite, drawPosition + drawOffset, layer, entity.Position);
+			}
+			else {
+				g.DrawSprite(animationPlayer.SpriteOrSubStrip, new SpriteDrawSettings(
+					finalColorDefinitions, animationPlayer.PlaybackTime),
+					drawPosition + drawOffset, layer, entity.Position);
+			}
 
 			// Draw the ripples effect.
 			if (isRipplesEffectVisible && entity.Physics.IsEnabled && entity.Physics.IsInPuddle) {
@@ -292,11 +325,6 @@ namespace ZeldaOracle.Game.Entities
 			set { drawOffset = value; }
 		}
 
-		public int ImageVariant {
-			get { return imageVariant; }
-			set { imageVariant = value; }
-		}
-
 		public bool IsHurting {
 			get { return isHurting; }
 			set { isHurting = value; }
@@ -318,6 +346,21 @@ namespace ZeldaOracle.Game.Entities
 					return depthLayerInAir;
 				return depthLayer;
 			}
+		}
+
+		public bool IsUnmapped {
+			get { return unmapped; }
+			set { unmapped = value; }
+		}
+
+		/*public UnmappedSprite UnmappedSprite {
+			get { return unmappedSprite; }
+			set { unmappedSprite = value; }
+		}*/
+
+		public Palette UnmappedPalette {
+			get { return unmappedPalette; }
+			set { unmappedPalette = value; }
 		}
 
 		public ColorDefinitions ColorDefinitions {

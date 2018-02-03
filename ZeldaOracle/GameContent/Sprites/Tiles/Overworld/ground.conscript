@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_ground"				"Tiles/Overworld/ground"					(8, 8), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_ground", "Tiles/Overworld/ground", (8, 8), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -13,7 +13,7 @@ PALETTEDICTIONARY	"tile_dictionary";
 IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 SOURCE "temp_sheet_ground";
-SPRITESET "set_ground", (10, 12);
+SPRITESET "tiles_ground", (10, 12);
 	MAPPEDCOLORS	"tiles_default", ("grass_flower");
 	MULTIPLE COLOR "", ("grass_flower", "grass_flower_alt"), (0, 0), (0, 0), (4, 1); END;
 	
@@ -70,7 +70,7 @@ SPRITESET "set_ground", (10, 12);
 	SINGLE COLOR "", ("dirt", "dirt_alt") (9, 11), (9, 7); END;
 	SINGLE COLORSTYLE "dirt", "", ("dirt", "dirt_alt"), (9, 6);
 		ADD "overworld"				(9, 9);
-		ADD "interior"				(9, 10);
+		ADD "indoors"				(9, 10);
 		END;
 END;
 
@@ -78,7 +78,7 @@ END;
 # 8x8s
 #==============================================================
 
-SOURCE "set_ground";
+SOURCE "tiles_ground";
 NAME "ground_8x8"				(6, 6);
 NAME "green_8x8"				(6, 7);
 NAME "leaf_ground_right_8x8"	(0, 1);
@@ -238,7 +238,7 @@ ANIMATION "tile_grass_flowers"; SUBSTRIP repeat;
 	
 ANIMATION "tile_grass_flowers_alt";
 	CLONE "tile_grass_flowers";
-	CHANGEDEFINITION "grass_flower", "grass_flower_alt";
+	CHANGECOLOR "grass_flower", "grass_flower_alt";
 	END;
 	
 	

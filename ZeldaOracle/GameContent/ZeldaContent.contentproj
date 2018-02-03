@@ -121,11 +121,19 @@
       <Name>tile_dictionary</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Palettes\dungeon_skull_dungeon.conscript">
+    <None Include="Palettes\Dictionaries\UI\dungeon_map_dictionary.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>dungeon_map_dictionary</Name>
+    </None>
+    <None Include="Palettes\Dictionaries\UI\menu_dictionary.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>menu_dictionary</Name>
+    </None>
+    <None Include="Palettes\Dungeon\dungeon_skull_dungeon.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>dungeon_skull_dungeon</Name>
     </None>
-    <None Include="Palettes\dungeon_spirits_grave.conscript">
+    <None Include="Palettes\Dungeon\dungeon_spirits_grave.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>dungeon_spirits_grave</Name>
     </None>
@@ -145,37 +153,81 @@
       <Name>entities_menu</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Palettes\interior_present.conscript">
+    <None Include="Palettes\Interior\interior_present.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>interior_present</Name>
+    </None>
+    <None Include="Palettes\Overworld\present.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>present</Name>
+    </None>
+    <None Include="Palettes\Overworld\Special\summer_onoxs_castle.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>summer_onoxs_castle</Name>
+    </None>
+    <None Include="Palettes\Overworld\Special\summer_temple_of_seasons.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>summer_temple_of_seasons</Name>
+    </None>
+    <None Include="Palettes\Overworld\spring_forest.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>spring_forest</Name>
+    </None>
+    <None Include="Palettes\Overworld\summer.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>summer</Name>
+    </None>
+    <None Include="Palettes\Overworld\summer_forest.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>summer_forest</Name>
+    </None>
+    <None Include="Palettes\Overworld\underwater_present.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>underwater_present</Name>
     </None>
     <None Include="Palettes\palettes.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>palettes</Name>
     </None>
-    <None Include="Palettes\present.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>present</Name>
-    </None>
-    <None Include="Palettes\summer.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>summer</Name>
-    </None>
     <None Include="Palettes\tiles_default.conscript">
       <Name>tiles_default</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Palettes\underwater_present.conscript">
+    <None Include="Palettes\UI\dungeon_map_default.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>underwater_present</Name>
+      <Name>dungeon_map_default</Name>
+    </None>
+    <None Include="Palettes\UI\menu_default.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>menu_default</Name>
     </None>
     <None Include="Sounds\sounds.conscript">
       <Name>sounds</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Sprites\ActionTiles\action_tiles.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>action_tiles</Name>
+    </None>
     <None Include="Sprites\animations.conscript">
       <Name>animations</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Effects\basic_effects.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>basic_effects</Name>
+    </None>
+    <None Include="Sprites\Effects\color_effects.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>color_effects</Name>
+    </None>
+    <None Include="Sprites\Effects\effects.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>effects</Name>
+    </None>
+    <None Include="Sprites\Items\items.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>items</Name>
     </None>
     <None Include="Sprites\sprites.conscript">
       <Name>sprites</Name>
@@ -237,17 +289,17 @@
       <Name>doors</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Sprites\Tiles\Objects\holes.conscript">
-      <Name>holes</Name>
+    <None Include="Sprites\Tiles\Objects\entity_objects.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>entity_objects</Name>
     </None>
-    <None Include="Sprites\Tiles\Objects\objects.conscript">
-      <Name>objects</Name>
+    <None Include="Sprites\Tiles\Objects\general_objects.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>general_objects</Name>
     </None>
     <None Include="Sprites\Tiles\Objects\puzzle_objects.conscript">
-      <Name>puzzle_objects</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>puzzle_objects</Name>
     </None>
     <None Include="Sprites\Tiles\Objects\turnstile.conscript">
       <Name>turnstile</Name>
@@ -292,6 +344,14 @@
     <None Include="Sprites\Tiles\Overworld\hedges.conscript">
       <Name>hedges</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\hollow_logs.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>hollow_logs</Name>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\horizon.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>horizon</Name>
     </None>
     <None Include="Sprites\Tiles\Overworld\obstacles.conscript">
       <Name>obstacles</Name>
@@ -353,6 +413,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>special</Name>
     </None>
+    <None Include="Sprites\Tiles\Special\ancient_ruins.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>ancient_ruins</Name>
+    </None>
+    <None Include="Sprites\Tiles\Special\graveyard.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>graveyard</Name>
+    </None>
+    <None Include="Sprites\Tiles\Special\onoxs_castle.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>onoxs_castle</Name>
+    </None>
     <None Include="Sprites\Tiles\Special\temple_of_seasons.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>temple_of_seasons</Name>
@@ -360,6 +432,26 @@
     <None Include="Sprites\Tiles\tile_previews.conscript">
       <Name>tile_previews</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\tiles.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>tiles</Name>
+    </None>
+    <None Include="Sprites\UI\backgrounds.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>backgrounds</Name>
+    </None>
+    <None Include="Sprites\UI\ui.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>ui</Name>
+    </None>
+    <None Include="Sprites\UI\ui_sprites.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>ui_sprites</Name>
+    </None>
+    <None Include="Sprites\Units\Monsters\monster_items.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>monster_items</Name>
     </None>
     <None Include="Sprites\Units\Monsters\monster_previews.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -369,9 +461,21 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>monsters</Name>
     </None>
+    <None Include="Sprites\Units\NPCs\biggoron.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>biggoron</Name>
+    </None>
+    <None Include="Sprites\Units\NPCs\npcs.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>npcs</Name>
+    </None>
     <None Include="Sprites\Units\Player\player.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>player</Name>
+    </None>
+    <None Include="Sprites\Units\Player\player_items.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>player_items</Name>
     </None>
     <None Include="Sprites\Units\units.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -380,6 +484,10 @@
     <None Include="Tiles\ActionTiles\action_tiles.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>action_tiles</Name>
+    </None>
+    <None Include="Tiles\ActionTiles\biggoron.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>biggoron</Name>
     </None>
     <None Include="Tiles\ActionTiles\general.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -445,6 +553,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>hedges</Name>
     </None>
+    <None Include="Tiles\Tiles\Overworld\hollow_logs.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>hollow_logs</Name>
+    </None>
+    <None Include="Tiles\Tiles\Overworld\horizon.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>horizon</Name>
+    </None>
     <None Include="Tiles\Tiles\Overworld\snow_mounds.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>snow_mounds</Name>
@@ -456,6 +572,10 @@
     <None Include="Tiles\Tiles\Overworld\trees.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>trees</Name>
+    </None>
+    <None Include="Tiles\Tiles\Overworld\vertical_walls.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>vertical_walls</Name>
     </None>
     <None Include="Tiles\Tiles\Overworld\vines.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -476,6 +596,18 @@
     <None Include="Tiles\Tiles\special.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>special</Name>
+    </None>
+    <None Include="Tiles\Tiles\Special\ancient_ruins.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>ancient_ruins</Name>
+    </None>
+    <None Include="Tiles\Tiles\Special\biggoron.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>biggoron</Name>
+    </None>
+    <None Include="Tiles\Tiles\Special\onoxs_castle.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>onoxs_castle</Name>
     </None>
     <None Include="Tiles\Tiles\Special\temple_of_seasons.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -509,6 +641,10 @@
       <Name>forest</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Tilesets\Overworld\horizon.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>horizon</Name>
+    </None>
     <None Include="Tilesets\Overworld\land.conscript">
       <Name>land</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -529,6 +665,22 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>tilesets</Name>
     </None>
+    <None Include="Zones\Dungeons\dungeons.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>dungeons</Name>
+    </None>
+    <None Include="Zones\Interior\interior.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>interior</Name>
+    </None>
+    <None Include="Zones\Overworld\overworld.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>overworld</Name>
+    </None>
+    <None Include="Zones\Overworld\special.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>special</Name>
+    </None>
     <None Include="Zones\zones.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>zones</Name>
@@ -546,14 +698,14 @@
       <Processor>FontTextureProcessor</Processor>
     </Compile>
     <Compile Include="Images\Effects\basic_effects.png">
-      <Name>basic_effects</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <Name>basic_effects</Name>
     </Compile>
     <Compile Include="Images\Effects\color_effects.png">
-      <Name>color_effects</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <Name>color_effects</Name>
     </Compile>
     <Compile Include="Images\Fonts\font_large.png">
       <Name>font_large</Name>
@@ -570,33 +722,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Items\items_large_light.png">
-      <Name>items_large_light</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Items\items_small.png">
       <Name>items_small</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Items\items_small_light.png">
-      <Name>items_small_light</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\player_items.png">
-      <Name>player_items</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\sheet_icons_thin.png">
-      <Name>sheet_icons_thin</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\sheet_menu_small.png">
-      <Name>sheet_menu_small</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -607,11 +734,6 @@
     </Compile>
     <Compile Include="Images\Tiles\black_8x8.png">
       <Name>black_8x8</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Indoors\ceilings.png">
-      <Name>ceilings</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -690,11 +812,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Indoors\staircases.png">
-      <Name>staircases</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Tiles\Indoors\stairs.png">
       <Name>stairs</Name>
       <Importer>TextureImporter</Importer>
@@ -725,31 +842,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Objects\armos.png">
-      <Name>armos</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\blocks.png">
-      <Name>blocks</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\bushes.png">
-      <Name>bushes</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\buttons.png">
-      <Name>buttons</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\chests.png">
-      <Name>chests</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Tiles\Objects\color_cube.png">
       <Name>color_cube</Name>
       <Importer>TextureImporter</Importer>
@@ -760,65 +852,20 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Objects\entity_tiles.png">
-      <Name>entity_tiles</Name>
+    <Compile Include="Images\Tiles\Objects\entity_objects.png">
+      <Name>entity_objects</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Objects\grasses.png">
-      <Name>grasses</Name>
+    <Compile Include="Images\Tiles\Objects\general_objects.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\graves.png">
-      <Name>graves</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\magnet_stones.png">
-      <Name>magnet_stones</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\minecart_tracks.png">
-      <Name>minecart_tracks</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\natural_objects.png">
-      <Name>natural_objects</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\pots.png">
-      <Name>pots</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\puzzle_color_tiles.png">
-      <Name>puzzle_color_tiles</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
+      <Name>general_objects</Name>
     </Compile>
     <Compile Include="Images\Tiles\Objects\puzzle_objects.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
       <Name>puzzle_objects</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\signs.png">
-      <Name>signs</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\switch_rocks.png">
-      <Name>switch_rocks</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Objects\traps.png">
-      <Name>traps</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
     </Compile>
     <Compile Include="Images\Tiles\Objects\turnstile.png">
       <Name>turnstile</Name>
@@ -859,6 +906,16 @@
       <Name>holes</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Tiles\Overworld\hollow_logs.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>hollow_logs</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Overworld\horizon.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>horizon</Name>
     </Compile>
     <Compile Include="Images\Tiles\Overworld\obstacles.png">
       <Name>obstacles</Name>
@@ -945,6 +1002,26 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="Images\Tiles\Special\ancient_ruins.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>ancient_ruins</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Special\forest_entrance.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>forest_entrance</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Special\graveyard.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>graveyard</Name>
+    </Compile>
+    <Compile Include="Images\Tiles\Special\onoxs_castle.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>onoxs_castle</Name>
+    </Compile>
     <Compile Include="Images\Tiles\Special\temple_of_seasons.png">
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -955,53 +1032,33 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\UI\menu_essences_a.png">
-      <Name>menu_essences_a</Name>
+    <Compile Include="Images\UI\menu_essences.png">
+      <Name>menu_essences</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\UI\menu_essences_b.png">
-      <Name>menu_essences_b</Name>
+    <Compile Include="Images\UI\menu_essences_fancy.png">
+      <Name>menu_essences_fancy</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\UI\menu_key_items_a.png">
-      <Name>menu_key_items_a</Name>
+    <Compile Include="Images\UI\menu_key_items.png">
+      <Name>menu_key_items</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\UI\menu_key_items_b.png">
-      <Name>menu_key_items_b</Name>
+    <Compile Include="Images\UI\menu_key_items_fancy.png">
+      <Name>menu_key_items_fancy</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\UI\menu_large.png">
-      <Name>menu_large</Name>
+    <Compile Include="Images\UI\menu_weapons.png">
+      <Name>menu_weapons</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\UI\menu_large_light.png">
-      <Name>menu_large_light</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\UI\menu_small.png">
-      <Name>menu_small</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\UI\menu_small_light.png">
-      <Name>menu_small_light</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\UI\menu_weapons_a.png">
-      <Name>menu_weapons_a</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\UI\menu_weapons_b.png">
-      <Name>menu_weapons_b</Name>
+    <Compile Include="Images\UI\menu_weapons_fancy.png">
+      <Name>menu_weapons_fancy</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -1010,10 +1067,35 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="Images\UI\ui_dungeon_map_small.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>ui_dungeon_map_small</Name>
+    </Compile>
+    <Compile Include="Images\UI\ui_large.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>ui_large</Name>
+    </Compile>
+    <Compile Include="Images\UI\ui_small.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>ui_small</Name>
+    </Compile>
+    <Compile Include="Images\UI\ui_world_map_small.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>ui_world_map_small</Name>
+    </Compile>
     <Compile Include="Images\Units\Monsters\monster_items.png">
       <Name>monster_items</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Units\Monsters\monster_items_old.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>monster_items_old</Name>
     </Compile>
     <Compile Include="Images\Units\Monsters\monster_previews.png">
       <Importer>TextureImporter</Importer>
@@ -1025,6 +1107,16 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="Images\Units\NPCs\biggoron.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>biggoron</Name>
+    </Compile>
+    <Compile Include="Images\Units\NPCs\biggoron_eyes.png">
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Name>biggoron_eyes</Name>
+    </Compile>
     <Compile Include="Images\Units\NPCs\npcs_red.png">
       <Name>npcs_red</Name>
       <Importer>TextureImporter</Importer>
@@ -1035,23 +1127,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Units\Player\player_blue.png">
-      <Name>player_blue</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Units\Player\player_hurt.png">
-      <Name>player_hurt</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Units\Player\player_items.png">
       <Name>player_items</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Units\Player\player_red.png">
-      <Name>player_red</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -1076,6 +1153,11 @@
       <Name>effect_cling</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Effects\electrocute.wav">
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Name>electrocute</Name>
     </Compile>
     <Compile Include="Sounds\Effects\fire.wav">
       <Name>fire</Name>
@@ -1326,6 +1408,11 @@
       <Name>player_wade</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\Projectiles\laser.wav">
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Name>laser</Name>
     </Compile>
     <Compile Include="Sounds\Tiles\barrier.wav">
       <Name>barrier</Name>

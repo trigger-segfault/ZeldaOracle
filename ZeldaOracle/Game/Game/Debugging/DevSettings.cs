@@ -52,7 +52,7 @@ namespace ZeldaOracle.Game {
 		//-----------------------------------------------------------------------------
 
 		public class StartLocationSection {
-			[DefaultValue("../../../../../WorldFiles/temp_world.zwd")]
+			[DefaultValue("../../../../WorldFiles/temp_world.zwd")]
 			public string WorldFile { get; set; }
 			[DefaultValue("default")]
 			public string Level { get; set; }

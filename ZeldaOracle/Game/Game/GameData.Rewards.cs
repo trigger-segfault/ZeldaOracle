@@ -28,19 +28,19 @@ namespace ZeldaOracle.Game {
 			// Add ammos.
 			inventory.AddAmmos(false,
 				new AmmoSatchelSeeds("ammo_ember_seeds", "Ember Seeds", "A burst of fire!",
-					GameData.SHEET_ITEMS_SMALL.GetSprite(0, 3), 0, 20),
+					GameData.SPR_ITEM_SEED_EMBER, 0, 20),
 				new AmmoSatchelSeeds("ammo_scent_seeds", "Scent Seeds", "An aromatic blast!",
-					GameData.SHEET_ITEMS_SMALL.GetSprite(1, 3), 0, 20),
+					GameData.SPR_ITEM_SEED_SCENT, 0, 20),
 				new AmmoSatchelSeeds("ammo_pegasus_seeds", "Pegasus Seeds", "Steals speed?",
-					GameData.SHEET_ITEMS_SMALL.GetSprite(2, 3), 0, 20),
+					GameData.SPR_ITEM_SEED_PEGASUS, 0, 20),
 				new AmmoSatchelSeeds("ammo_gale_seeds", "Gale Seeds", "A mighty blow!",
-					GameData.SHEET_ITEMS_SMALL.GetSprite(3, 3), 0, 20),
+					GameData.SPR_ITEM_SEED_GALE, 0, 20),
 				new AmmoSatchelSeeds("ammo_mystery_seeds", "Mystery Seeds", "A producer of unknown effects.",
-					GameData.SHEET_ITEMS_SMALL.GetSprite(4, 3), 0, 20),
+					GameData.SPR_ITEM_SEED_MYSTERY, 0, 20),
 				new Ammo("ammo_bombs", "Bombs", "Very explosive.",
-					GameData.SHEET_ITEMS_SMALL.GetSprite(13, 0), 0, 10),
+					GameData.SPR_ITEM_AMMO_BOMB, 0, 10),
 				new Ammo("ammo_arrows", "Arrows", "A standard arrow.",
-					GameData.SHEET_ITEMS_SMALL.GetSprite(15, 1), 0, 30)
+					GameData.SPR_ITEM_AMMO_ARROW, 0, 30)
 			);
 
 			// Add weapons.
@@ -66,7 +66,8 @@ namespace ZeldaOracle.Game {
 				new ItemSlingshot(),
 				
 				// Key items:
-				new ItemWallet(),
+				// Keep this as level 3 unless the game has wallet limitations
+				new ItemWallet(Item.Level3),
 				new ItemMembersCard(),
 				new ItemMagicPotion(),
 				new ItemEssenceSeed(),

@@ -48,11 +48,29 @@ namespace ZeldaOracle.Common.Geometry {
 			return this;
 		}
 
+		// Add the collision model to the collision model.
+		public CollisionModel Combine(CollisionModel model) {
+			foreach (Rectangle2I box in model.boxes) {
+				AddBox(box);
+			}
+			CalcBounds();
+			return this;
+		}
+
+		// Add the collision model with an offset to the collision model.
+		public CollisionModel Combine(CollisionModel model, Point2I offset) {
+			foreach (Rectangle2I box in model.boxes) {
+				AddBox(box + offset);
+			}
+			CalcBounds();
+			return this;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Internal
 		//-----------------------------------------------------------------------------
-		
+
 		// Calculate the bounds rectangle that contains all the boxes.
 		private void CalcBounds() {
 			if (boxes.Count == 0) {

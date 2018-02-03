@@ -24,7 +24,7 @@ using ZeldaOracle.Game.Control.Scripting;
 using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Rewards;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 
 using ZeldaEditor.PropertiesEditor;
@@ -74,7 +74,7 @@ namespace ZeldaEditor.Control {
 
 		// Settings
 		private bool                playAnimations;
-		private bool                eventMode;
+		private bool                actionMode;
 
 		// Debug
 		private bool                debugConsole;
@@ -107,7 +107,7 @@ namespace ZeldaEditor.Control {
 		private BaseTileData	selectedTileData;
 		private string			tileSearchFilter;
 		private bool            playerPlaceMode;
-		private bool            showEvents;
+		private bool            showActions;
 
 		private DispatcherTimer             updateTimer;
 
@@ -172,7 +172,7 @@ namespace ZeldaEditor.Control {
 			this.showRewards                = true;
 			this.showGrid                   = false;
 			this.showModified               = false;
-			this.showEvents                 = false;
+			this.showActions                 = false;
 			this.highlightMouseTile         = true;
 			this.selectedTileset            = null;
 			this.selectedTilesetLocation	= Point2I.Zero;
@@ -182,17 +182,17 @@ namespace ZeldaEditor.Control {
 
 		}
 
-		public void SetGraphics(GraphicsDevice graphicsDevice, ContentManager contentManager) {
+		public void SetGraphics(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, ContentManager contentManager) {
 			if (!isInitialized) {
 				isInitialized = true;
-				Resources.Initialize(contentManager, graphicsDevice);
+				Resources.Initialize(spriteBatch, graphicsDevice, contentManager);
 			}
 		}
 
 		public void Initialize() {
 			GameData.Initialize();
-			EditorResources.Initialize();
 			FormatCodes.Initialize();
+			EditorResources.Initialize(this);
 			paletteShader = new PaletteShader(GameData.PALETTE_LERP_SHADER);
 
 			this.inventory      = new Inventory(null);
@@ -204,7 +204,7 @@ namespace ZeldaEditor.Control {
 			this.tileset        = null;
 			this.zone           = GameData.ZONE_DEFAULT;
 			this.selectedTileData = null;// this.tileset.GetTileData(0, 0);
-			this.eventMode      = false;
+			this.actionMode      = false;
 
 			GameData.LoadInventory(inventory);
 			GameData.LoadRewards(rewardManager);
@@ -274,10 +274,10 @@ namespace ZeldaEditor.Control {
 					for (int i = 0; i < level.RoomLayerCount; i++) {
 						layers.Add("Layer " + (i + 1));
 					}
-					layers.Add("Events");
+					layers.Add("Actions");
 				}
 				int index = 0;
-				if (eventMode) {
+				if (actionMode) {
 					index = layers.Count - 1;
 					currentLayer = layers.Count - 2;
 				}
@@ -336,6 +336,7 @@ namespace ZeldaEditor.Control {
 		// Save the world file to the current filename.
 		public void SaveWorld() {
 			if (IsWorldOpen) {
+				CurrentTool.Finish();
 				WorldFile saveFile = new WorldFile();
 				saveFile.Save(worldFilePath, world, true);
 				IsModified  = false;
@@ -345,6 +346,7 @@ namespace ZeldaEditor.Control {
 		// Save the world file to the given filename.
 		public void SaveWorldAs(string fileName) {
 			if (IsWorldOpen) {
+				CurrentTool.Finish();
 				WorldFile saveFile = new WorldFile();
 				saveFile.Save(fileName, world, true);
 				worldFilePath   = fileName;
@@ -393,12 +395,11 @@ namespace ZeldaEditor.Control {
 		// Close the world file.
 		public void CloseWorld() {
 			if (IsWorldOpen) {
-				CurrentTool.End();
-				CurrentTool.Begin();
+				CurrentTool.Finish();
 				PropertyGrid.CloseProperties();
 				world           = null;
 				level           = null;
-				LevelDisplay.UpdateLevel();
+				LevelDisplay.ChangeLevel();
 				worldFilePath   = "";
 				IsModified      = false;
 				eventCache.Clear();
@@ -411,6 +412,7 @@ namespace ZeldaEditor.Control {
 		// Test/play the world.
 		public void TestWorld() {
 			if (IsWorldOpen) {
+				CurrentTool.Finish();
 				string worldPath = Path.Combine(Path.GetDirectoryName(
 					Assembly.GetExecutingAssembly().Location), "testing.zwd");
 				WorldFile worldFile = new WorldFile();
@@ -427,6 +429,7 @@ namespace ZeldaEditor.Control {
 		// Test/play the world with the player placed at the given room and point.
 		public void TestWorld(Point2I roomCoord, Point2I playerCoord) {
 			if (IsWorldOpen) {
+				CurrentTool.Finish();
 				playerPlaceMode = false;
 				int levelIndex = world.IndexOfLevel(level);
 				string worldPath = Path.Combine(Path.GetDirectoryName(
@@ -453,8 +456,8 @@ namespace ZeldaEditor.Control {
 				if (Resources.ContainsResource<Tileset>(name))
 					tileset = Resources.GetResource<Tileset>(name);
 
-				editorWindow.TileDisplay.UpdateTileset();
-				//editorWindow.TileDisplay.UpdateZone();
+				editorWindow.TilesetDisplay.UpdateTileset();
+				//editorWindow.TilesetDisplay.UpdateZone();
 			}
 
 			//if (tileset.SpriteSheet != null) {
@@ -466,7 +469,7 @@ namespace ZeldaEditor.Control {
 		public void ChangeZone(string name) {
 			if (name != "(none)") {
 				zone = Resources.GetResource<Zone>(name);
-				editorWindow.TileDisplay.UpdateZone();
+				editorWindow.TilesetDisplay.UpdateZone();
 			}
 		}
 
@@ -479,7 +482,7 @@ namespace ZeldaEditor.Control {
 					filteredTileData.Add(pair.Value);
 				}
 			}
-			editorWindow.TileDisplay.UpdateTileset(filteredTileData);
+			editorWindow.TilesetDisplay.UpdateTileset(filteredTileData);
 		}
 
 		// Open the properties for the given tile in the property grid.
@@ -500,9 +503,8 @@ namespace ZeldaEditor.Control {
 		public void OpenLevel(Level level) {
 			if (this.level != level) {
 				this.level = level;
-				CurrentTool.End();
-				CurrentTool.Begin();
-				LevelDisplay.UpdateLevel();
+				CurrentTool.Finish();
+				LevelDisplay.ChangeLevel();
 				UpdateWindowTitle();
 				PropertyGrid.OpenProperties(level);
 				if (currentLayer >= level.RoomLayerCount)
@@ -519,9 +521,8 @@ namespace ZeldaEditor.Control {
 
 		public void CloseLevel() {
 			level = null;
-			LevelDisplay.UpdateLevel();
-			CurrentTool.End();
-			CurrentTool.Begin();
+			LevelDisplay.ChangeLevel();
+			CurrentTool.Finish();
 			UpdateWindowTitle();
 			UpdateLayers();
 		}
@@ -1016,11 +1017,21 @@ namespace ZeldaEditor.Control {
 			}
 		}
 
-		public bool EventMode {
-			get { return (eventMode || (selectedTileData is EventTileData)); }
+		public bool ActionLayer {
+			get { return actionMode; }
 			set {
-				if (value != eventMode) {
-					eventMode = value;
+				if (value != actionMode) {
+					actionMode = value;
+					CurrentTool.LayerChanged();
+				}
+			}
+		}
+
+		public bool ActionMode {
+			get { return (actionMode || (selectedTileData is ActionTileData)); }
+			set {
+				if (value != actionMode) {
+					actionMode = value;
 					CurrentTool.LayerChanged();
 				}
 			}
@@ -1040,12 +1051,12 @@ namespace ZeldaEditor.Control {
 			get { return selectedTileData; }
 			set {
 				selectedTileData = value;
-				editorWindow.TileDisplay.Invalidate();
+				editorWindow.TilesetDisplay.Invalidate();
 			}
 		}
 
 		public bool IsSelectedTileAnEvent {
-			get { return (selectedTileData is EventTileData); }
+			get { return (selectedTileData is ActionTileData); }
 		}
 
 		// Tools ----------------------------------------------------------------------
@@ -1132,9 +1143,9 @@ namespace ZeldaEditor.Control {
 			set { showRewards = value; }
 		}
 
-		public bool ShowEvents {
-			get { return showEvents; }
-			set { showEvents = value; }
+		public bool ShowActions {
+			get { return showActions; }
+			set { showActions = value; }
 		}
 
 		public bool ShowGrid {
@@ -1147,8 +1158,8 @@ namespace ZeldaEditor.Control {
 			set { playAnimations = value; }
 		}
 		
-		public bool ShouldDrawEvents {
-			get { return (showEvents || eventMode || selectedTileData is EventTileData); }
+		public bool ShouldDrawActions {
+			get { return (showActions || actionMode || selectedTileData is ActionTileData); }
 		}
 		
 		public bool HighlightMouseTile {

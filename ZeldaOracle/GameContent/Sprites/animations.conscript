@@ -4,14 +4,14 @@
 # UI Animations
 #==============================================================
 
-SOURCE "menu_small";
+#SOURCE "menu_small";
 
-ANIMATION "ui_map_cursor_link"; SUBSTRIP repeat;
-	INSERT frame 0, 32, (10, 4), (-4, -4);
-	INSERT frame 0, 32, (11, 4), ( 4, -4);
-	INSERT frame 0, 32, (10, 5), (-4,  4);
-	INSERT frame 0, 32, (11, 5), ( 4,  4);
-	ADD frame, 32, (10, 2); END;
+#ANIMATION "ui_map_cursor_link"; SUBSTRIP repeat;
+#	INSERT frame 0, 32, (10, 4), (-4, -4);
+#	INSERT frame 0, 32, (11, 4), ( 4, -4);
+#	INSERT frame 0, 32, (10, 5), (-4,  4);
+#	INSERT frame 0, 32, (11, 5), ( 4,  4);
+#	ADD frame, 32, (10, 2); END;
 
 
 #==============================================================
@@ -702,241 +702,241 @@ ANIMATION "ui_map_cursor_link"; SUBSTRIP repeat;
 # Monster Items & Projectiles
 #==============================================================
 	
-SOURCE "monster_items";
+#SOURCE "monster_items";
 
-ANIMATION "projectile_monster_arrow"; SUBSTRIP repeat;
-	ADD frame, 1, (0, 0), (-8, -8);
-	MAKEDYNAMIC 4, (1, 0); END;
-ANIMATION "projectile_monster_beam";
-	SUBSTRIP repeat; ADD frame, 1, (1, 3), (-8, -8);
-	SUBSTRIP repeat; ADD frame, 1, (2, 3), (-8, -8);
-	SUBSTRIP repeat; ADD frame, 1, (3, 3), (-8, -8);
-	SUBSTRIP repeat; ADD frame, 1, (4, 3), (-8, -8);
-	SUBSTRIP repeat; ADD frame, 1, (1, 3), (-8, -8);
-	SUBSTRIP repeat; ADD frame, 1, (2, 3), (-8, -8);
-	SUBSTRIP repeat; ADD frame, 1, (3, 3), (-8, -8);
-	SUBSTRIP repeat; ADD frame, 1, (4, 3), (-8, -8); END;
-ANIMATION "projectile_monster_arrow_crash"; SUBSTRIP reset;
-	ADD strip, 6, 4, (0, 0), (-8, -8); END;
-ANIMATION "projectile_monster_spear"; SUBSTRIP repeat;
-	ADD strip, 4, 2, (0, 1), (-8, -8);
-	MAKEDYNAMIC 4, (2, 0); END;
-ANIMATION "projectile_monster_boomerang"; SUBSTRIP repeat;
-	ADD strip, 2, 4, (0, 9), (-8, -8); END;
-ANIMATION "projectile_monster_magic"; SUBSTRIP repeat;
-	ADD frame, 1, (0, 2), (-8, -8);
-	MAKEDYNAMIC 4, (1, 0); END;
-ANIMATION "projectile_monster_fireball"; SUBSTRIP repeat;
-	ADD strip, 4, 2, (4, 2), (-8, -8); END;
-ANIMATION "projectile_monster_bone"; SUBSTRIP repeat;
-	ADD strip, 4, 2, (6, 2), (-8, -8); END;
-ANIMATION "projectile_monster_rock"; SUBSTRIP repeat;
-	ADD frame, 1, (0, 3), (-8, -8); END;
+#ANIMATION "projectile_monster_arrow"; SUBSTRIP repeat;
+#	ADD frame, 1, (0, 0), (-8, -8);
+#	MAKEDYNAMIC 4, (1, 0); END;
+#ANIMATION "projectile_monster_beam";
+#	SUBSTRIP repeat; ADD frame, 1, (1, 3), (-8, -8);
+#	SUBSTRIP repeat; ADD frame, 1, (2, 3), (-8, -8);
+#	SUBSTRIP repeat; ADD frame, 1, (3, 3), (-8, -8);
+#	SUBSTRIP repeat; ADD frame, 1, (4, 3), (-8, -8);
+#	SUBSTRIP repeat; ADD frame, 1, (1, 3), (-8, -8);
+#	SUBSTRIP repeat; ADD frame, 1, (2, 3), (-8, -8);
+#	SUBSTRIP repeat; ADD frame, 1, (3, 3), (-8, -8);
+#	SUBSTRIP repeat; ADD frame, 1, (4, 3), (-8, -8); END;
+#ANIMATION "projectile_monster_arrow_crash"; SUBSTRIP reset;
+#	ADD strip, 6, 4, (0, 0), (-8, -8); END;
+#ANIMATION "projectile_monster_spear"; SUBSTRIP repeat;
+#	ADD strip, 4, 2, (0, 1), (-8, -8);
+#	MAKEDYNAMIC 4, (2, 0); END;
+#ANIMATION "projectile_monster_boomerang"; SUBSTRIP repeat;
+#	ADD strip, 2, 4, (0, 9), (-8, -8); END;
+#ANIMATION "projectile_monster_magic"; SUBSTRIP repeat;
+#	ADD frame, 1, (0, 2), (-8, -8);
+#	MAKEDYNAMIC 4, (1, 0); END;
+#ANIMATION "projectile_monster_fireball"; SUBSTRIP repeat;
+#	ADD strip, 4, 2, (4, 2), (-8, -8); END;
+#ANIMATION "projectile_monster_bone"; SUBSTRIP repeat;
+#	ADD strip, 4, 2, (6, 2), (-8, -8); END;
+#ANIMATION "projectile_monster_rock"; SUBSTRIP repeat;
+#	ADD frame, 1, (0, 3), (-8, -8); END;
 
 
 #==============================================================
 # Effect Animations
 #==============================================================
 
-SOURCE "basic_effects";
+#SOURCE "basic_effects";
 
-ANIMATION "effect_dirt";
-	SUBSTRIP reset;  ADD frame, 1, (5, 0), (-12,  -9); ADD part, 1, (5, 0), ( -8,  -3); # right
-	SUBSTRIP reset;  ADD frame, 1, (4, 0), ( -8,  -8); ADD part, 1, (5, 0), ( -8,  -6); # up
-	SUBSTRIP reset;  ADD frame, 1, (4, 0), ( -2,  -9); ADD part, 1, (4, 0), (  0,  -2); # left
-	SUBSTRIP reset;  ADD frame, 1, (4, 0), ( -8,  -6); ADD part, 1, (5, 0), ( -8,  -8); # down
-	END;
-ANIMATION "effect_water_splash"; SUBSTRIP reset;
-	ADD frame, 4, (2,2), ( -8, -11); ADD part, 4, (3, 2), ( -8, -11);
-	ADD frame, 4, (2,2), (-10, -13); ADD part, 4, (3, 2), ( -6, -13);
-	ADD frame, 4, (2,2), (-12, -15); ADD part, 4, (3, 2), ( -4, -15);
-	END;
-ANIMATION "effect_ripples"; SUBSTRIP repeat;
-	ADD frame, 8, (4,2), ( -5,  -5); ADD part, 8, (5, 2), (-11,  -5);
-	ADD frame, 8, (4,2), ( -6,  -5); ADD part, 8, (5, 2), (-10,  -5);
-	ADD frame, 8, (4,2), ( -7,  -4); ADD part, 8, (5, 2), ( -9,  -4);
-	ADD frame, 8, (4,2), ( -8,  -3); ADD part, 8, (5, 2), ( -8,  -3);
-	OFFSET (0, -6); END;
-ANIMATION "effect_grass"; SUBSTRIP repeat;
-	ADD frame, 6, (6,0), ( -4,   1); ADD part, 6, (6, 0), (  2,   1);
-	ADD frame, 6, (7,0), ( -4,   1); ADD part, 6, (7, 0), (  2,   1);
-	OFFSET (-8, -14); END;
-ANIMATION "effect_rock_break"; SUBSTRIP reset;
-	ADD frame, 4, (2,0), ( -4,   5); ADD part, 4, (2, 0), (  5,  -6); ADD part, 4, (2, 0), ( -6,   4); ADD part, 4, (2, 0), (  4,   3);
-	ADD frame, 4, (2,0), ( -6,  -6); ADD part, 4, (2, 0), (  7,  -7); ADD part, 4, (2, 0), ( -7,   5); ADD part, 4, (2, 0), (  6,   4);
-	ADD frame, 4, (2,0), ( -7,  -7); ADD part, 4, (2, 0), (  9,  -8); ADD part, 4, (2, 0), ( -9,   6); ADD part, 4, (2, 0), (  8,   5);
-	ADD frame, 4, (2,0), ( -9,  -5); ADD part, 4, (2, 0), ( 11,  -6); ADD part, 4, (2, 0), (-11,   8); ADD part, 4, (2, 0), ( 10,   7);
-	OFFSET (-8, -8); END;
-ANIMATION "effect_sign_break"; SUBSTRIP reset;
-	ADD frame, 4, (3,0), ( -4,   5); ADD part, 4, (3, 0), (  5,  -6); ADD part, 4, (3, 0), ( -6,   4); ADD part, 4, (3, 0), (  4,   3);
-	ADD frame, 4, (3,0), ( -6,  -6); ADD part, 4, (3, 0), (  7,  -7); ADD part, 4, (3, 0), ( -7,   5); ADD part, 4, (3, 0), (  6,   4);
-	ADD frame, 4, (3,0), ( -7,  -7); ADD part, 4, (3, 0), (  9,  -8); ADD part, 4, (3, 0), ( -9,   6); ADD part, 4, (3, 0), (  8,   5);
-	ADD frame, 4, (3,0), ( -9,  -5); ADD part, 4, (3, 0), ( 11,  -6); ADD part, 4, (3, 0), (-11,   8); ADD part, 4, (3, 0), ( 10,   7);
-	OFFSET (-8, -8); END;
-ANIMATION "effect_leaves"; SUBSTRIP reset;
-	ADD frame, 4, (2, 1), (-16, -12); ADD part, 4, (3, 1), ( -2, -13); ADD part, 4, (1, 1), ( -9, -11); ADD part, 4, (2, 1), ( -6,  -9);
-	ADD frame, 4, (2, 1), (-13, -13); ADD part, 4, (3, 1), ( -5, -12); ADD part, 4, (1, 1), ( -8, -13); ADD part, 4, (2, 1), ( -6,  -6);
-	ADD frame, 4, (3, 1), (-12, -14); ADD part, 4, (3, 1), ( -8, -10); ADD part, 4, (1, 1), (-10, -14); ADD part, 4, (3, 1), ( -5,  -4);
-	ADD frame, 4, (3, 1), (-11, -16); ADD part, 4, (3, 1), ( -7, -10); ADD part, 4, (1, 1), (-11,  -2); ADD part, 4, (3, 1), ( -5,  -2);
-	ADD frame, 4, (3, 1), (-12, -17); ADD part, 4, (3, 1), ( -4,  -6); ADD part, 4, (1, 1), (-14,  -2); ADD part, 4, (3, 1), ( -3,   0);
-	ADD frame, 4, (2, 1), (-13, -18); ADD part, 4, (3, 1), ( -3,  -6); ADD part, 4, (0, 1), (-18,  -2); ADD part, 4, (2, 1), ( -2,   1);
-	ADD frame, 4, (2, 1), (-14, -19); ADD part, 4, (2, 1), (  0,  -6); ADD part, 4, (0, 1), (-19,  -3); ADD part, 4, (2, 1), ( -1,   3);
-	ADD frame, 4, (2, 1), (-15, -20); ADD part, 4, (2, 1), (  1,  -5); ADD part, 4, (0, 1), (-21,  -5); ADD part, 4, (2, 1), (  0,   1);
-	END;
-ANIMATION "effect_grass_leaves";
-	CLONE effect_leaves;
-	FLICKER 1, on;
-	END;
-ANIMATION "item_scent_pod"; SUBSTRIP repeat;
-	ADD frame, 8, (0, 2);
-	ADD frame, 8, (1, 2);
-	END;
+#ANIMATION "effect_dirt";
+#	SUBSTRIP reset;  ADD frame, 1, (5, 0), (-12,  -9); ADD part, 1, (5, 0), ( -8,  -3); # right
+#	SUBSTRIP reset;  ADD frame, 1, (4, 0), ( -8,  -8); ADD part, 1, (5, 0), ( -8,  -6); # up
+#	SUBSTRIP reset;  ADD frame, 1, (4, 0), ( -2,  -9); ADD part, 1, (4, 0), (  0,  -2); # left
+#	SUBSTRIP reset;  ADD frame, 1, (4, 0), ( -8,  -6); ADD part, 1, (5, 0), ( -8,  -8); # down
+#	END;
+#ANIMATION "effect_water_splash"; SUBSTRIP reset;
+#	ADD frame, 4, (2,2), ( -8, -11); ADD part, 4, (3, 2), ( -8, -11);
+#	ADD frame, 4, (2,2), (-10, -13); ADD part, 4, (3, 2), ( -6, -13);
+#	ADD frame, 4, (2,2), (-12, -15); ADD part, 4, (3, 2), ( -4, -15);
+#	END;
+#ANIMATION "effect_ripples"; SUBSTRIP repeat;
+#	ADD frame, 8, (4,2), ( -5,  -5); ADD part, 8, (5, 2), (-11,  -5);
+#	ADD frame, 8, (4,2), ( -6,  -5); ADD part, 8, (5, 2), (-10,  -5);
+#	ADD frame, 8, (4,2), ( -7,  -4); ADD part, 8, (5, 2), ( -9,  -4);
+#	ADD frame, 8, (4,2), ( -8,  -3); ADD part, 8, (5, 2), ( -8,  -3);
+#	OFFSET (0, -6); END;
+#ANIMATION "effect_grass"; SUBSTRIP repeat;
+#	ADD frame, 6, (6,0), ( -4,   1); ADD part, 6, (6, 0), (  2,   1);
+#	ADD frame, 6, (7,0), ( -4,   1); ADD part, 6, (7, 0), (  2,   1);
+#	OFFSET (-8, -14); END;
+#ANIMATION "effect_rock_break"; SUBSTRIP reset;
+#	ADD frame, 4, (2,0), ( -4,   5); ADD part, 4, (2, 0), (  5,  -6); ADD part, 4, (2, 0), ( -6,   4); ADD part, 4, (2, 0), (  4,   3);
+#	ADD frame, 4, (2,0), ( -6,  -6); ADD part, 4, (2, 0), (  7,  -7); ADD part, 4, (2, 0), ( -7,   5); ADD part, 4, (2, 0), (  6,   4);
+#	ADD frame, 4, (2,0), ( -7,  -7); ADD part, 4, (2, 0), (  9,  -8); ADD part, 4, (2, 0), ( -9,   6); ADD part, 4, (2, 0), (  8,   5);
+#	ADD frame, 4, (2,0), ( -9,  -5); ADD part, 4, (2, 0), ( 11,  -6); ADD part, 4, (2, 0), (-11,   8); ADD part, 4, (2, 0), ( 10,   7);
+#	OFFSET (-8, -8); END;
+#ANIMATION "effect_sign_break"; SUBSTRIP reset;
+#	ADD frame, 4, (3,0), ( -4,   5); ADD part, 4, (3, 0), (  5,  -6); ADD part, 4, (3, 0), ( -6,   4); ADD part, 4, (3, 0), (  4,   3);
+#	ADD frame, 4, (3,0), ( -6,  -6); ADD part, 4, (3, 0), (  7,  -7); ADD part, 4, (3, 0), ( -7,   5); ADD part, 4, (3, 0), (  6,   4);
+#	ADD frame, 4, (3,0), ( -7,  -7); ADD part, 4, (3, 0), (  9,  -8); ADD part, 4, (3, 0), ( -9,   6); ADD part, 4, (3, 0), (  8,   5);
+#	ADD frame, 4, (3,0), ( -9,  -5); ADD part, 4, (3, 0), ( 11,  -6); ADD part, 4, (3, 0), (-11,   8); ADD part, 4, (3, 0), ( 10,   7);
+#	OFFSET (-8, -8); END;
+#ANIMATION "effect_leaves"; SUBSTRIP reset;
+#	ADD frame, 4, (2, 1), (-16, -12); ADD part, 4, (3, 1), ( -2, -13); ADD part, 4, (1, 1), ( -9, -11); ADD part, 4, (2, 1), ( -6,  -9);
+#	ADD frame, 4, (2, 1), (-13, -13); ADD part, 4, (3, 1), ( -5, -12); ADD part, 4, (1, 1), ( -8, -13); ADD part, 4, (2, 1), ( -6,  -6);
+#	ADD frame, 4, (3, 1), (-12, -14); ADD part, 4, (3, 1), ( -8, -10); ADD part, 4, (1, 1), (-10, -14); ADD part, 4, (3, 1), ( -5,  -4);
+#	ADD frame, 4, (3, 1), (-11, -16); ADD part, 4, (3, 1), ( -7, -10); ADD part, 4, (1, 1), (-11,  -2); ADD part, 4, (3, 1), ( -5,  -2);
+#	ADD frame, 4, (3, 1), (-12, -17); ADD part, 4, (3, 1), ( -4,  -6); ADD part, 4, (1, 1), (-14,  -2); ADD part, 4, (3, 1), ( -3,   0);
+#	ADD frame, 4, (2, 1), (-13, -18); ADD part, 4, (3, 1), ( -3,  -6); ADD part, 4, (0, 1), (-18,  -2); ADD part, 4, (2, 1), ( -2,   1);
+#	ADD frame, 4, (2, 1), (-14, -19); ADD part, 4, (2, 1), (  0,  -6); ADD part, 4, (0, 1), (-19,  -3); ADD part, 4, (2, 1), ( -1,   3);
+#	ADD frame, 4, (2, 1), (-15, -20); ADD part, 4, (2, 1), (  1,  -5); ADD part, 4, (0, 1), (-21,  -5); ADD part, 4, (2, 1), (  0,   1);
+#	END;
+#ANIMATION "effect_grass_leaves";
+#	CLONE "effect_leaves";
+#	FLICKER 1, on;
+#	END;
+#ANIMATION "item_scent_pod"; SUBSTRIP repeat;
+#	ADD frame, 8, (0, 2);
+#	ADD frame, 8, (1, 2);
+#	END;
 
 
 #==============================================================
 # Color effects Animations
 #==============================================================
 
-SOURCE "color_effects";
+#SOURCE "color_effects";
 
-ANIMATION "effect_lava_splash"; SUBSTRIP reset;
-	ADD frame, 2, (4,  3), (-7, -13); ADD part, 2, (4,  3), ( -9, -13);
-	ADD frame, 2, (4, 15), (-6, -14); ADD part, 2, (4, 15), (-10, -14);
-	ADD frame, 2, (4, 19), (-5, -15); ADD part, 2, (4, 19), (-11, -15);
-	ADD frame, 2, (4,  3), (-4, -16); ADD part, 2, (4,  3), (-12, -16);
-	ADD frame, 2, (4, 15), (-3, -17); ADD part, 2, (4, 15), (-13, -17);
-	ADD frame, 2, (4, 19), (-2, -16); ADD part, 2, (4, 19), (-14, -16);
-	ADD frame, 2, (4,  3), (-1, -15); ADD part, 2, (4,  3), (-15, -15);
-	ADD frame, 2, (4, 15), ( 0, -14); ADD part, 2, (4, 15), (-16, -14);
-	ADD frame, 2, (4, 19), ( 1, -13); ADD part, 2, (4, 19), (-17, -13);
-	ADD frame, 3, (4,  3), ( 2, -11); ADD part, 3, (4,  3), (-18, -11); END;
-ANIMATION "effect_bomb_explosion"; SUBSTRIP reset;
-	ADD frame, 4, (0,  0);
-	ADD frame, 4, (0, 16);
-	ADD frame, 3, (0,  0);
-	ADD frame, 7, (0,  0), (-6, -6); ADD part, 7, (0,0), (6, -6); ADD part, 7, (0, 0), (-6, 2); ADD part, 7, (0, 0), (6, 2);
-	ADD frame, 8, (6,  1), (-8, -8); ADD part, 8, (7,1), (8, -8); ADD part, 8, (6, 2), (-8, 8); ADD part, 8, (7, 2), (8, 8);
-	ADD frame, 9, (1,  0), (-8, -8); ADD part, 9, (1,0), (8, -8); ADD part, 9, (1, 0), (-8, 8); ADD part, 9, (1, 0), (8, 8);
-	OFFSET (-8, -8); END;
-ANIMATION "effect_monster_explosion"; SUBSTRIP reset;
-	ADD frame, 5, (0,  0), ( -4, -14); ADD part, 5, (0, 0), (-12, -2);
-	ADD frame, 2, (6,  8), (-16, -16); ADD part, 2, (6, 8), (0, 0);
-	ADD frame, 2, (6,  4), (-16, -16); ADD part, 2, (6, 4), (0, 0);
-	ADD frame, 2, (6,  8), (-16, -16); ADD part, 2, (6, 8), (0, 0);
-	ADD frame, 2, (6,  4), (-16, -16); ADD part, 2, (6, 4), (0, 0);
-	ADD frame, 2, (6, 12), ( -8,  -8);
-	ADD frame, 2, (6,  0), ( -8,  -8);
-	ADD frame, 2, (7, 12), ( -8,  -8); END;
-ANIMATION "effect_seed_scent"; SUBSTRIP reset;
-	ADD frame, 3, (8, 12);
-	ADD frame, 3, (6, 12);
-	ADD frame, 3, (7, 12);
-	OFFSET (-8, -8); END;
-ANIMATION "effect_seed_pegasus"; SUBSTRIP reset;
-	ADD frame, 3, (3, 4);
-	ADD frame, 3, (0, 4);
-	ADD frame, 3, (1, 4);
-	OFFSET (-8, -8); END;
-ANIMATION "effect_seed_mystery"; SUBSTRIP reset; ### PegasusSeedEffect.ShiftSourcePositions(0, 4);
-	ADD frame, 3, (3, 8);
-	ADD frame, 3, (0, 8);
-	ADD frame, 3, (1, 8);
-	OFFSET (-8, -8); END;
-ANIMATION "effect_seed_ember"; SUBSTRIP reset;
-	ADD frame, 2, (1, 3);
-	ADD frame, 2, (1, 2); ADD frame, 2, (1, 17); ADD frame, 2, (1, 1); REPEAT 3, 9;
-	ADD frame, 2, (1, 2);
-	OFFSET (-8, -8); END;
+#ANIMATION "effect_lava_splash"; SUBSTRIP reset;
+#	ADD frame, 2, (4,  3), (-7, -13); ADD part, 2, (4,  3), ( -9, -13);
+#	ADD frame, 2, (4, 15), (-6, -14); ADD part, 2, (4, 15), (-10, -14);
+#	ADD frame, 2, (4, 19), (-5, -15); ADD part, 2, (4, 19), (-11, -15);
+#	ADD frame, 2, (4,  3), (-4, -16); ADD part, 2, (4,  3), (-12, -16);
+#	ADD frame, 2, (4, 15), (-3, -17); ADD part, 2, (4, 15), (-13, -17);
+#	ADD frame, 2, (4, 19), (-2, -16); ADD part, 2, (4, 19), (-14, -16);
+#	ADD frame, 2, (4,  3), (-1, -15); ADD part, 2, (4,  3), (-15, -15);
+#	ADD frame, 2, (4, 15), ( 0, -14); ADD part, 2, (4, 15), (-16, -14);
+#	ADD frame, 2, (4, 19), ( 1, -13); ADD part, 2, (4, 19), (-17, -13);
+#	ADD frame, 3, (4,  3), ( 2, -11); ADD part, 3, (4,  3), (-18, -11); END;
+#ANIMATION "effect_bomb_explosion"; SUBSTRIP reset;
+#	ADD frame, 4, (0,  0);
+#	ADD frame, 4, (0, 16);
+#	ADD frame, 3, (0,  0);
+#	ADD frame, 7, (0,  0), (-6, -6); ADD part, 7, (0,0), (6, -6); ADD part, 7, (0, 0), (-6, 2); ADD part, 7, (0, 0), (6, 2);
+#	ADD frame, 8, (6,  1), (-8, -8); ADD part, 8, (7,1), (8, -8); ADD part, 8, (6, 2), (-8, 8); ADD part, 8, (7, 2), (8, 8);
+#	ADD frame, 9, (1,  0), (-8, -8); ADD part, 9, (1,0), (8, -8); ADD part, 9, (1, 0), (-8, 8); ADD part, 9, (1, 0), (8, 8);
+#	OFFSET (-8, -8); END;
+#ANIMATION "effect_monster_explosion"; SUBSTRIP reset;
+#	ADD frame, 5, (0,  0), ( -4, -14); ADD part, 5, (0, 0), (-12, -2);
+#	ADD frame, 2, (6,  8), (-16, -16); ADD part, 2, (6, 8), (0, 0);
+#	ADD frame, 2, (6,  4), (-16, -16); ADD part, 2, (6, 4), (0, 0);
+#	ADD frame, 2, (6,  8), (-16, -16); ADD part, 2, (6, 8), (0, 0);
+#	ADD frame, 2, (6,  4), (-16, -16); ADD part, 2, (6, 4), (0, 0);
+#	ADD frame, 2, (6, 12), ( -8,  -8);
+#	ADD frame, 2, (6,  0), ( -8,  -8);
+#	ADD frame, 2, (7, 12), ( -8,  -8); END;
+#ANIMATION "effect_seed_scent"; SUBSTRIP reset;
+#	ADD frame, 3, (8, 12);
+#	ADD frame, 3, (6, 12);
+#	ADD frame, 3, (7, 12);
+#	OFFSET (-8, -8); END;
+#ANIMATION "effect_seed_pegasus"; SUBSTRIP reset;
+#	ADD frame, 3, (3, 4);
+#	ADD frame, 3, (0, 4);
+#	ADD frame, 3, (1, 4);
+#	OFFSET (-8, -8); END;
+#ANIMATION "effect_seed_mystery"; SUBSTRIP reset; ### PegasusSeedEffect.ShiftSourcePositions(0, 4);
+#	ADD frame, 3, (3, 8);
+#	ADD frame, 3, (0, 8);
+#	ADD frame, 3, (1, 8);
+#	OFFSET (-8, -8); END;
+#ANIMATION "effect_seed_ember"; SUBSTRIP reset;
+#	ADD frame, 2, (1, 3);
+#	ADD frame, 2, (1, 2); ADD frame, 2, (1, 17); ADD frame, 2, (1, 1); REPEAT 3, 9;
+#	ADD frame, 2, (1, 2);
+#	OFFSET (-8, -8); END;
 
 ## TODO: effect_seed_gale
 
-ANIMATION "effect_pegasus_dust"; SUBSTRIP reset;
-	ADD frame, 1, (5, 12), (-12, -10); ADD part, 1, (5, 12),  (-4, -10);
-	ADD frame, 1, (8,  9), (-14,  -7); ADD part, 1, (8, 10), (-10, -11); ADD part, 1, (8,  9), (-1, -7); ADD part, 1, (8, 10), (-5, -11);
-	ADD frame, 1, (8,  6), (-14,  -7); ADD part, 1, (8,  5), (-10, -11); ADD part, 1, (8,  6), (-1, -7); ADD part, 1, (8,  5), (-5, -11);
-	ADD frame, 1, (8,  1), (-13,  -7); ADD part, 1, (8,  2), (-10, -11); ADD part, 1, (8,  1), (-1, -7); ADD part, 1, (8,  2), (-6, -11);
-	ADD frame, 1, (8, 14), (-17,  -5); ADD part, 1, (8, 13), (-12,  -9); ADD part, 1, (8, 14), ( 2, -5); ADD part, 1, (8, 13), (-3,  -9);
-	ADD frame, 1, (8,  9), (-17,  -5); ADD part, 1, (8, 10), (-12,  -9); ADD part  1, (8,  9), (-4, -5); ADD part, 1, (8, 10), (-3,  -9); END;
-ANIMATION "effect_sprint_puff"; SUBSTRIP reset;
-	ADD frame, 2, (3, 12);
-	ADD frame, 4, (4, 12);
-	ADD frame, 3, (5, 12);
-	OFFSET (-8, -8);
-	FLICKER 1, on; END;
-ANIMATION "effect_owl_sparkle"; SUBSTRIP reset;
-	ADD frame,  9, (9,  8);
-	ADD frame, 18, (9,  9);
-	ADD frame,  9, (9, 10);
-	ADD frame,  9, (9, 11);
-	OFFSET (-8, -8); END;
-ANIMATION "effect_falling_object"; SUBSTRIP reset;
-	ADD frame,  8, (3, 12);
-	ADD frame, 12, (4, 12);
-	ADD frame, 13, (5, 12);
-	OFFSET (-8, -8); END;
-ANIMATION "effect_cling"; SUBSTRIP reset;
-	ADD frame, 4, (6, 4); ADD frame, 5, (7, 4);
-	OFFSET (-8, -8); END;
-ANIMATION "effect_cling_light";
-	CLONE effect_cling;
-	FLICKER 1, on; END;
-ANIMATION "effect_burn"; SUBSTRIP repeat;
-	ADD frame, 1, (1, 2);
-	ADD frame, 2, (1, 14);
-	ADD frame, 2, (1, 18);
-	ADD frame, 3, (1, 1); ADD frame, 3, (1, 13); ADD frame, 3, (1, 17); REPEAT 3, 6;
-	OFFSET (-8, -8); END;
-ANIMATION "effect_block_poof"; SUBSTRIP reset;
-	ADD frame, 6, (0, 12);
-	ADD frame, 8, (1, 12);
-	ADD frame, 5, (5, 12);
-	OFFSET (-8, -8); END;
-ANIMATION "effect_somaria_block_create"; SUBSTRIP reset;
-	ADD frame, 3, (3, 12);
-	ADD frame, 3, (0, 12);
-	ADD frame, 3, (1, 12);
-	OFFSET (-8, -8); END;
-ANIMATION "effect_somaria_block_destroy";
-	CLONE effect_block_poof; END;
-ANIMATION "effect_color_flame_red"; SUBSTRIP repeat;
-	ADD strip, 8, 4, (5, 3);
-	OFFSET ( -8, -8); END;
-ANIMATION "effect_color_flame_blue"; SUBSTRIP repeat;
-	ADD strip, 8, 4, (5, 7);
-	OFFSET ( -8, -8); END;
-ANIMATION "effect_color_flame_green"; SUBSTRIP repeat;
-	ADD strip, 8, 4, (5, 11);
-	OFFSET ( -8, -8); END;
-ANIMATION "effect_color_flame_yellow"; SUBSTRIP repeat;
-	ADD strip, 8, 4, (5, 15);
-	OFFSET ( -8, -8); END;
+#ANIMATION "effect_pegasus_dust"; SUBSTRIP reset;
+#	ADD frame, 1, (5, 12), (-12, -10); ADD part, 1, (5, 12),  (-4, -10);
+#	ADD frame, 1, (8,  9), (-14,  -7); ADD part, 1, (8, 10), (-10, -11); ADD part, 1, (8,  9), (-1, -7); ADD part, 1, (8, 10), (-5, -11);
+#	ADD frame, 1, (8,  6), (-14,  -7); ADD part, 1, (8,  5), (-10, -11); ADD part, 1, (8,  6), (-1, -7); ADD part, 1, (8,  5), (-5, -11);
+#	ADD frame, 1, (8,  1), (-13,  -7); ADD part, 1, (8,  2), (-10, -11); ADD part, 1, (8,  1), (-1, -7); ADD part, 1, (8,  2), (-6, -11);
+#	ADD frame, 1, (8, 14), (-17,  -5); ADD part, 1, (8, 13), (-12,  -9); ADD part, 1, (8, 14), ( 2, -5); ADD part, 1, (8, 13), (-3,  -9);
+#	ADD frame, 1, (8,  9), (-17,  -5); ADD part, 1, (8, 10), (-12,  -9); ADD part  1, (8,  9), (-4, -5); ADD part, 1, (8, 10), (-3,  -9); END;
+#ANIMATION "effect_sprint_puff"; SUBSTRIP reset;
+#	ADD frame, 2, (3, 12);
+#	ADD frame, 4, (4, 12);
+#	ADD frame, 3, (5, 12);
+#	OFFSET (-8, -8);
+#	FLICKER 1, on; END;
+#ANIMATION "effect_owl_sparkle"; SUBSTRIP reset;
+#	ADD frame,  9, (9,  8);
+#	ADD frame, 18, (9,  9);
+#	ADD frame,  9, (9, 10);
+#	ADD frame,  9, (9, 11);
+#	OFFSET (-8, -8); END;
+#ANIMATION "effect_falling_object"; SUBSTRIP reset;
+#	ADD frame,  8, (3, 12);
+#	ADD frame, 12, (4, 12);
+#	ADD frame, 13, (5, 12);
+#	OFFSET (-8, -8); END;
+#ANIMATION "effect_cling"; SUBSTRIP reset;
+#	ADD frame, 4, (6, 4); ADD frame, 5, (7, 4);
+#	OFFSET (-8, -8); END;
+#ANIMATION "effect_cling_light";
+#	CLONE "effect_cling";
+#	FLICKER 1, on; END;
+#ANIMATION "effect_burn"; SUBSTRIP repeat;
+#	ADD frame, 1, (1, 2);
+#	ADD frame, 2, (1, 14);
+#	ADD frame, 2, (1, 18);
+#	ADD frame, 3, (1, 1); ADD frame, 3, (1, 13); ADD frame, 3, (1, 17); REPEAT 3, 6;
+#	OFFSET (-8, -8); END;
+#ANIMATION "effect_block_poof"; SUBSTRIP reset;
+#	ADD frame, 6, (0, 12);
+#	ADD frame, 8, (1, 12);
+#	ADD frame, 5, (5, 12);
+#	OFFSET (-8, -8); END;
+#ANIMATION "effect_somaria_block_create"; SUBSTRIP reset;
+#	ADD frame, 3, (3, 12);
+#	ADD frame, 3, (0, 12);
+#	ADD frame, 3, (1, 12);
+#	OFFSET (-8, -8); END;
+#ANIMATION "effect_somaria_block_destroy";
+#	CLONE "effect_block_poof"; END;
+#ANIMATION "effect_color_flame_red"; SUBSTRIP repeat;
+#	ADD strip, 8, 4, (5, 3);
+#	OFFSET ( -8, -8); END;
+#ANIMATION "effect_color_flame_blue"; SUBSTRIP repeat;
+#	ADD strip, 8, 4, (5, 7);
+#	OFFSET ( -8, -8); END;
+#ANIMATION "effect_color_flame_green"; SUBSTRIP repeat;
+#	ADD strip, 8, 4, (5, 11);
+#	OFFSET ( -8, -8); END;
+#ANIMATION "effect_color_flame_yellow"; SUBSTRIP repeat;
+#	ADD strip, 8, 4, (5, 15);
+#	OFFSET ( -8, -8); END;
 
 #==============================================================
 # NPC Animations
 #==============================================================
 
-SOURCE "npcs";
+#SOURCE "npcs";
 
-ANIMATION "npc_1"; SUBSTRIP repeat; ADD strip, 16, 2, (0, 0); MAKEDYNAMIC 4, (2, 0); END;
-ANIMATION "npc_2"; SUBSTRIP repeat; ADD strip, 16, 2, (0, 1); MAKEDYNAMIC 4, (2, 0); END;
-ANIMATION "npc_3"; SUBSTRIP repeat; ADD strip, 16, 2, (0, 2); MAKEDYNAMIC 4, (2, 0); END;
-ANIMATION "npc_4"; SUBSTRIP repeat; ADD strip, 16, 2, (0, 3); MAKEDYNAMIC 4, (2, 0); END;
-ANIMATION "npc_5"; SUBSTRIP repeat; ADD strip, 16, 2, (0, 4); MAKEDYNAMIC 4, (2, 0); END;
+#ANIMATION "npc_1"; SUBSTRIP repeat; ADD strip, 16, 2, (0, 0); MAKEDYNAMIC 4, (2, 0); END;
+#ANIMATION "npc_2"; SUBSTRIP repeat; ADD strip, 16, 2, (0, 1); MAKEDYNAMIC 4, (2, 0); END;
+#ANIMATION "npc_3"; SUBSTRIP repeat; ADD strip, 16, 2, (0, 2); MAKEDYNAMIC 4, (2, 0); END;
+#ANIMATION "npc_4"; SUBSTRIP repeat; ADD strip, 16, 2, (0, 3); MAKEDYNAMIC 4, (2, 0); END;
+#ANIMATION "npc_5"; SUBSTRIP repeat; ADD strip, 16, 2, (0, 4); MAKEDYNAMIC 4, (2, 0); END;
 
-ANIMATION "npc_shopkeeper"; SUBSTRIP repeat;
-	ADD frame, 16, (0, 22), (0, 0); ADD part, 16, (0, 21), (0, -16);
-	ADD frame, 16, (1, 22), (0, 0); ADD part, 16, (1, 21), (0, -16);
-	MAKEDYNAMIC 4, (2, 0); END;
+#ANIMATION "npc_shopkeeper"; SUBSTRIP repeat;
+#	ADD frame, 16, (0, 22), (0, 0); ADD part, 16, (0, 21), (0, -16);
+#	ADD frame, 16, (1, 22), (0, 0); ADD part, 16, (1, 21), (0, -16);
+#	MAKEDYNAMIC 4, (2, 0); END;
 
 
 #==============================================================
 # Collectible Animations
 #==============================================================
 
-SOURCE "items_small";
+#SOURCE "items_small";
 
-ANIMATION "collectible_fairy";
-	SUBSTRIP repeat; ADD frame, 1, (14, 3), (-4, -8);
-	SUBSTRIP repeat; ADD frame, 1, (15, 3), (-4, -8);
-	END;
+#ANIMATION "collectible_fairy";
+#	SUBSTRIP repeat; ADD frame, 1, (14, 3), (-4, -8);
+#	SUBSTRIP repeat; ADD frame, 1, (15, 3), (-4, -8);
+#	END;
 

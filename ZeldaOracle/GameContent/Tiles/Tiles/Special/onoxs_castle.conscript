@@ -1,0 +1,47 @@
+﻿
+#==============================================================
+# Collision Models
+#==============================================================
+
+MODEL temp_onoxs_castle;
+	ADD (0, 0, 64, 48); ADD (0, 48, 16, 16); ADD (48, 48, 16, 16);
+	COMBINE doorway, (16, 48); COMBINE doorway, (32, 48); END;
+
+MODEL temp_overhang_pillar_mid;
+	ADD (0, 4, 16, 12); END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+
+TILE "onoxs_castle"; SAMESPRITE; PREVIEW "preview_onoxs_castle"; SOLID temp_onoxs_castle; SIZE (4, 4); END;
+
+TILE "onox_pillar_top_sphere"; SAMESPRITE; SOLID block; END;
+TILE "onox_pillar_top"; SAMESPRITE; SOLID block; END;
+TILE "onox_pillar_mid"; SAMESPRITE; SOLID block; END;
+TILE "onox_pillar_bottom"; SAMESPRITE; SOLID block; END;
+
+TILE "onox_front_vertical_wall_top_sw"; SAMESPRITE; SOLID block; END;
+TILE "onox_front_vertical_wall_top_nse"; SAMESPRITE; SOLID block; END;
+TILE "onox_front_vertical_wall_top_nsw"; SAMESPRITE; SOLID block; END;
+TILE "onox_front_vertical_wall_top_se"; SAMESPRITE; SOLID block; END;
+#TILE "onox_front_vertical_wall_top_ew"; SAMESPRITE; SOLID block; END;
+
+TILE "onox_front_vertical_wall_top_pillar_left"; SAMESPRITE; SOLID block; END;
+TILE "onox_front_vertical_wall_top_pillar_right"; SAMESPRITE; SOLID block; END;
+
+TILE "onox_overhang_vertical_wall_top_sw"; SAMESPRITEABOVE; SOLID block; END;
+TILE "onox_overhang_vertical_wall_top_se"; SAMESPRITEABOVE; SOLID block; END;
+TILE "onox_overhang_vertical_wall_top_ew"; SAMESPRITEABOVE; SOLID block; END;
+TILE "onox_overhang_vertical_wall_top_ns"; SAMESPRITE; SAMESPRITEABOVE; END;
+
+TILE "onox_overhang_fancy_tile_1"; SAMESPRITE; SAMESPRITEABOVE; END;
+TILE "onox_overhang_fancy_tile_2"; SAMESPRITE; SAMESPRITEABOVE; END;
+TILE "onox_overhang_fancy_tile_3"; SAMESPRITE; SAMESPRITEABOVE; END;
+
+TILE "onox_overhang_vertical_wall_top_pillar_left"; SAMESPRITE; SAMESPRITEABOVE; SAMESPRITE; SOLID block; END;
+TILE "onox_overhang_vertical_wall_top_pillar_mid"; SAMESPRITE; SAMESPRITEABOVE; SAMESPRITE; SOLID block; END;
+TILE "onox_overhang_vertical_wall_top_pillar_right"; SAMESPRITE; SAMESPRITEABOVE; SAMESPRITE; SOLID block; END;
+
+TILE "onox_statue"; SAMESPRITE; SOLID block; END;

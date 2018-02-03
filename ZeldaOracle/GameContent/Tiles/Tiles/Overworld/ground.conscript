@@ -204,7 +204,9 @@ TILE "sand_border_inside_sw"; SAMESPRITE; FLAGS Digable; END;
 TILE "sand_border_inside_se"; SAMESPRITE; FLAGS Digable; END;
 
 TILE "boulder"; SAMESPRITE; SOLID block; END;
+TILE "boulder_dark"; SAMESPRITE; SOLID block; END;
 TILE "boulder_alt"; SAMESPRITE; SOLID block; END;
+TILE "boulder_alt_dark"; SAMESPRITE; SOLID block; END;
 TILE "coconut_left"; SAMESPRITE; SOLID block; END;
 TILE "coconut_right"; SAMESPRITE; SOLID block; END;
 

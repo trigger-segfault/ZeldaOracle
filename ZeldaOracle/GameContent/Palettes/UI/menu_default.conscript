@@ -1,0 +1,25 @@
+﻿PALETTE "menu_dictionary", "menu_default";
+
+#==============================================================
+# Map
+#==============================================================
+
+COLOR	default, black					(16, 16, 16);
+
+COLOR	background, light				(248,248,248);
+COLOR	background, medium				( 72,128,200);
+COLOR	background, dark				( 16, 64, 96);
+COLOR	background, black				( 16, 40, 88);
+
+LOOKUP	background_fancy_white, light	background, light;
+COLOR	background_fancy_white, medium	(176,168, 16);
+COLOR	background_fancy_white, dark	(144,136, 16);
+COLOR	background_fancy_white, black	( 96, 88, 16);
+
+COLOR	background_fancy_black, light	(176,168, 16);
+COLOR	background_fancy_black, medium	(144,136, 16);
+COLOR	background_fancy_black, dark	( 96, 88, 16);
+
+#==============================================================
+
+END;

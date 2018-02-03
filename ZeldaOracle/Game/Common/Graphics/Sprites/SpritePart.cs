@@ -93,6 +93,50 @@ namespace ZeldaOracle.Common.Graphics.Sprites {
 
 
 		//-----------------------------------------------------------------------------
+		// General
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the hashcode for the sprite part.</summary>
+		public override int GetHashCode() {
+			return image.GetHashCode() ^ sourceRect.GetHashCode() ^ drawOffset.GetHashCode();
+		}
+
+		/// <summary>Returns true if the object is a sprite part and equal to this sprite part.</summary>
+		public override bool Equals(object obj) {
+			if (obj is SpritePart) {
+				SpritePart b = (SpritePart) obj;
+				return image == b.image &&
+					sourceRect == b.sourceRect &&
+					drawOffset == b.drawOffset;
+			}
+			return false;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Operators
+		//-----------------------------------------------------------------------------
+
+		/*public static bool operator ==(SpritePart a, SpritePart b) {
+			if (a != null && b != null) {
+				return a.image == b.image &&
+					a.sourceRect == b.sourceRect &&
+					a.drawOffset == b.drawOffset;
+			}
+			return (a == b);
+		}
+
+		public static bool operator !=(SpritePart a, SpritePart b) {
+			if (a != null && b != null) {
+				return a.image != b.image ||
+					a.sourceRect != b.sourceRect ||
+					a.drawOffset != b.drawOffset;
+			}
+			return (a != b);
+		}*/
+
+
+		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
 

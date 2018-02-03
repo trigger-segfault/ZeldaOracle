@@ -20,6 +20,7 @@ namespace ZeldaOracle.Game.Tiles {
 		private ISprite				spriteAsObject;
 		private Animation			breakAnimation;	// The animation to play when the tile is broken.
 		private Sound				breakSound;
+		private CollisionModel		model;
 
 
 		//-----------------------------------------------------------------------------
@@ -32,6 +33,7 @@ namespace ZeldaOracle.Game.Tiles {
 			spriteAbove			= null;
 			spriteAsObject		= null;
 			breakAnimation		= null;
+			model               = null;
 
 			// General.
 			properties.Set("size", Point2I.One)
@@ -42,8 +44,8 @@ namespace ZeldaOracle.Game.Tiles {
 				.SetDocumentation("Solid Type", "enum", "TileSolidType", "General", "");
 			properties.Set("ledge_direction", Directions.Down)
 				.SetDocumentation("Ledge Direction", "direction", "", "General", "");
-			properties.Set("collision_model", "")
-				.SetDocumentation("Collision Model", "collision_model", "", "General", "");
+			//properties.Set("collision_model", "")
+			//	.SetDocumentation("Collision Model", "collision_model", "", "General", "");
 			properties.Set("environment_type", (int) TileEnvironmentType.Normal)
 				.SetDocumentation("Environment Type", "enum", "TileEnvironmentType", "General", "");
 			properties.Set("reset_condition", (int) TileResetCondition.LeaveRoom)
@@ -108,6 +110,7 @@ namespace ZeldaOracle.Game.Tiles {
 			spriteAsObject		= copy.spriteAsObject;
 			breakAnimation		= copy.breakAnimation;
 			spriteList			= new ISprite[copy.spriteList.Length];
+			model				= copy.model;
 			
 			for (int i = 0; i < spriteList.Length; i++)
 				spriteList[i] = copy.spriteList[i];
@@ -122,7 +125,7 @@ namespace ZeldaOracle.Game.Tiles {
 				spriteAsObject		= copyTileData.spriteAsObject;
 				breakAnimation		= copyTileData.breakAnimation;
 				breakSound			= copyTileData.breakSound;
-				//events				= new EventCollection(copyTileData.events);
+				model				= copyTileData.model;
 
 				if (copyTileData.spriteList.Length > 0) {
 					spriteList = new ISprite[copyTileData.spriteList.Length];
@@ -210,8 +213,10 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public CollisionModel CollisionModel {
-			get { return properties.GetResource<CollisionModel>("collision_model", null); }
-			set { properties.SetAsResource<CollisionModel>("collision_model", value); }
+			get { return model; }
+			set { model = value; }
+			//get { return properties.GetResource<CollisionModel>("collision_model", null); }
+			//set { properties.SetAsResource<CollisionModel>("collision_model", value); }
 		}
 
 		public TileEnvironmentType EnvironmentType {

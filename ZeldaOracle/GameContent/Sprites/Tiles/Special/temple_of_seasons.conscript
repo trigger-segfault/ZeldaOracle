@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_temple_of_seasons"		"Tiles/Special/temple_of_seasons"	(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_temple_of_seasons"		"Tiles/Special/temple_of_seasons"	(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -16,13 +16,13 @@ MAPPEDCOLORS	"tiles_default", ("vertical_wall", "fancy_tile_1");
 CHUNKSIZE		(8, 8);
 
 SOURCE "temp_sheet_temple_of_seasons";
-SPRITESET "set_temple_of_seasons", (16, 12);
+SPRITESET "tiles_temple_of_seasons", (16, 13);
 
 	MULTIPLE BASIC (0, 0), (0, 0), (10, 4); END;
 	MULTIPLE BASIC (2, 4), (2, 4), (8, 2); END;
 	
-	MULTIPLE BASIC (0, 6), (0, 6), (10, 4); END;
-	MULTIPLE BASIC (2, 10), (2, 10), (8, 2); END;
+	MULTIPLE BASIC (0, 6), (0, 6), (10, 5); END;
+	MULTIPLE BASIC (2, 11), (2, 11), (8, 2); END;
 	
 	MAPPEDCOLORS	"tiles_default",
 		("temple_spring_roof", "temple_summer_roof", "temple_autumn_roof", "temple_winter_roof");
@@ -35,7 +35,7 @@ END;
 # Tiles
 #==============================================================
 
-SOURCE "set_temple_of_seasons";
+SOURCE "tiles_temple_of_seasons";
 
 COMPOSITE "tile_temple_of_seasons_subrosia_back";
 	ADDTILED (0, 0), (10, 4), (16, 16); END;
@@ -43,9 +43,9 @@ COMPOSITE "tile_temple_of_seasons_subrosia_front";
 	ADDTILED (2, 4), (6, 2), (16, 16); END;
 	
 COMPOSITE "tile_temple_of_seasons_overworld_back";
-	ADDTILED (0, 6), (10, 4), (16, 16); END;
+	ADDTILED (0, 6), (10, 5), (16, 16); END;
 COMPOSITE "tile_temple_of_seasons_overworld_front";
-	ADDTILED (2, 10), (6, 2), (16, 16); END;
+	ADDTILED (2, 11), (6, 2), (16, 16); END;
 
 COMPOSITE "tile_temple_roof_spring";
 	ADDTILED (10, 3), (3, 3), (16, 16); END;
@@ -58,3 +58,17 @@ COMPOSITE "tile_temple_roof_autumn";
 	
 COMPOSITE "tile_temple_roof_winter";
 	ADDTILED (13, 3), (3, 3), (16, 16); END;
+	
+NAME "tile_temple_subrosia_column_top_left"					(8, 4);
+NAME "tile_temple_subrosia_column_top_right"				(9, 4);
+NAME "tile_temple_subrosia_column_bottom_left"				(8, 5);
+NAME "tile_temple_subrosia_column_bottom_right"				(9, 5);
+OFFSET "tile_temple_subrosia_column_bottom_spaced_left"		(8, 5), drawOffset: (0, -8), clipping: (8, 8, 8, 8); END;
+OFFSET "tile_temple_subrosia_column_bottom_spaced_right"	(9, 5), drawOffset: (0, -8), clipping: (0, 8, 8, 8); END;
+
+NAME "tile_temple_overworld_column_top_left"				(8, 11);
+NAME "tile_temple_overworld_column_top_right"				(9, 11);
+NAME "tile_temple_overworld_column_bottom_left"				(8, 12);
+NAME "tile_temple_overworld_column_bottom_right"			(9, 12);
+OFFSET "tile_temple_overworld_column_bottom_spaced_left"	(8, 12), drawOffset: (0, -8), clipping: (8, 8, 8, 8); END;
+OFFSET "tile_temple_overworld_column_bottom_spaced_right"	(9, 12), drawOffset: (0, -8), clipping: (0, 8, 8, 8); END;

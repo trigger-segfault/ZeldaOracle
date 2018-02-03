@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================================
 
-SPRITESHEET "temp_sheet_interior"				"Tiles/Indoors/interior"					(16, 16), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_interior"				"Tiles/Indoors/interior"					(16, 16), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -13,7 +13,7 @@ PALETTEDICTIONARY	"tile_dictionary";
 IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 SOURCE "temp_sheet_interior";
-SPRITESET "set_interior", (7, 9);
+SPRITESET "tiles_interior", (7, 9);
 	MAPPEDCOLORS	"tiles_default",
 		("furniture", "wall", "brick_table_green", "soil_sprout");
 
@@ -62,7 +62,7 @@ END;
 # Temp
 #==============================================================
 
-SOURCE "set_interior";
+SOURCE "tiles_interior";
 NAME "temp_wardrobe_bottom"				(0, 1);
 NAME "temp_bookshelf_bottom"			(1, 1);
 NAME "temp_shelf_bottom"				(2, 1);

@@ -2,7 +2,7 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET "temp_sheet_vines"			"Tiles/Overworld/vines"			(16,  8), (1, 1), (18, 18); END;
+SPRITESHEET "temp_sheet_vines", "Tiles/Overworld/vines", (16, 8), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -15,18 +15,18 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 MAPPEDCOLORS	"tiles_default", ("cliff", "vines_light", "vines_dark", "vines_base");
 
 SOURCE "temp_sheet_vines";
-SPRITESET "set_vines" (3, 6);
+SPRITESET "tiles_vines" (3, 6);
 	MULTIPLE STYLE "vines" (0, 0), (1, 6);
-		ADD "ages"			(0, 0);
-		ADD "seasons"		(1, 0);
-		ADD "vertical_wall"	(2, 0);
-		ADD "maku_tree"		(3, 0);
-		ADD "deku_tree"		(4, 0);
+		ADD "ages"				(0, 0);
+		ADD "seasons"			(1, 0);
+		ADD "vertical_wall"		(2, 0);
+		ADD "maku_tree_ages"	(3, 0);
+		ADD "maku_tree_seasons"	(4, 0);
 		END;
 	MULTIPLE STYLE "vine_cliff" (1, 0), (1, 5);
-		ADD "ages"			(5, 0);
-		ADD	"seasons"		(6, 0);
-		ADD "seasons_alt"	(7, 0);
+		ADD "ages"				(5, 0);
+		ADD	"seasons"			(6, 0);
+		ADD "seasons_alt"		(7, 0);
 		END;
 	MULTIPLE BASIC (8, 0), (2, 0), (1, 3); END;
 END;
@@ -35,7 +35,7 @@ END;
 # Temporary
 #==============================================================
 
-SOURCE "set_vines";
+SOURCE "tiles_vines";
 
 NAME "temp_8x16_vines_top_cave"					(0, 0);
 NAME "temp_8x16_vines_top"						(0, 1);

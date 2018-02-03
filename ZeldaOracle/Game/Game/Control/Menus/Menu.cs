@@ -14,7 +14,8 @@ namespace ZeldaOracle.Game.Control.Menus {
 	public class Menu : GameState {
 
 		// The background image used in the menu.
-		protected Image backgroundSprite;
+		//protected Image backgroundSprite;
+		protected ISprite background;
 
 		protected SlotGroup currentSlotGroup;
 		protected List<SlotGroup> slotGroups;
@@ -28,7 +29,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 
 		public Menu(GameManager gameManager) {
 			this.gameManager = gameManager;
-			this.backgroundSprite = null;
+			this.background = null;
 			this.currentSlotGroup = null;
 			this.slotGroups = new List<SlotGroup>();
 			this.drawHUD = false;
@@ -49,9 +50,14 @@ namespace ZeldaOracle.Game.Control.Menus {
 			UpdateSlotTraversal();
 		}
 
+		public override void AssignPalettes() {
+			GameData.PaletteShader.TilePalette = GameData.PAL_MENU_DEFAULT;
+			GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_MENU;
+		}
+
 		public sealed override void Draw(Graphics2D g) {
 			if (drawHUD) {
-				GameControl.HUD.Draw(g, true);
+				GameControl.HUD.Draw(g);
 				g.PushTranslation(0, GameSettings.HUD_HEIGHT);
 			}
 
@@ -63,7 +69,7 @@ namespace ZeldaOracle.Game.Control.Menus {
 		}
 
 		protected virtual void DrawMenu(Graphics2D g) {
-			g.DrawImage(backgroundSprite, Point2I.Zero);
+			g.DrawSprite(background, Point2I.Zero);
 			if (currentSlotGroup != null)
 				DrawSlotCursor(g, currentSlotGroup.CurrentSlot);
 			for (int i = 0; i < slotGroups.Count; i++) {
@@ -77,16 +83,8 @@ namespace ZeldaOracle.Game.Control.Menus {
 		//-----------------------------------------------------------------------------
 
 		public virtual void DrawSlotCursor(Graphics2D g, Slot slot) {
-			ISprite tR = GameData.SHEET_MENU_SMALL_LIGHT.GetSprite(9, 0);
-			ISprite bR = GameData.SHEET_MENU_SMALL_LIGHT.GetSprite(9, 1);
-			ISprite tL = GameData.SHEET_MENU_SMALL_LIGHT.GetSprite(10, 0);
-			ISprite bL = GameData.SHEET_MENU_SMALL_LIGHT.GetSprite(10, 1);
-
-			g.DrawSprite(tR, slot.Position + new Point2I(-8, 0));
-			g.DrawSprite(bR, slot.Position + new Point2I(-8, 8));
-
-			g.DrawSprite(tL, slot.Position + new Point2I(slot.Width, 0));
-			g.DrawSprite(bL, slot.Position + new Point2I(slot.Width, 8));
+			g.DrawSprite(GameData.SPR_HUD_BRACKET_LEFT, slot.Position + new Point2I(-8, 0));
+			g.DrawSprite(GameData.SPR_HUD_BRACKET_RIGHT, slot.Position + new Point2I(slot.Width, 0));
 		}
 
 		public void UpdateSlotTraversal() {

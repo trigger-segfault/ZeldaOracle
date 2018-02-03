@@ -130,6 +130,10 @@
                     <TextBlock Text="Scale" VerticalAlignment="Center" Margin="0" Padding="5,0"/>
                     <ComboBox x:Name="comboBoxScales" Width="70" SelectionChanged="OnScaleChanged" Padding="4,0,0,0" />
                     <Separator/>
+                    <TextBlock Text="Palettes" VerticalAlignment="Center" Margin="0" Padding="5,0"/>
+                    <ComboBox x:Name="comboBoxTilePalettes" Width="120" SelectionChanged="OnTilePaletteChanged" Margin="1,0,6,0"/>
+                    <ComboBox x:Name="comboBoxEntityPalettes" Width="120" SelectionChanged="OnEntityPaletteChanged" />
+                    <Separator/>
                     <TextBlock Text="Zone" VerticalAlignment="Center" Margin="0" Padding="5,0"/>
                     <ComboBox x:Name="comboBoxZones" Width="140" SelectionChanged="OnZoneChanged" />
                     <Separator/>

@@ -1,0 +1,32 @@
+﻿
+
+# Seasons (Excluding _sky and _clouds)
+TILE "horizon_sky"; SAMESPRITE; SOLID block; END;
+TILE "horizon_clouds_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "horizon_clouds_bottom_right"; SAMESPRITE; SOLID block; END;
+TILE "horizon_clouds_bottom_mid"; SAMESPRITE; SOLID block; END;
+TILE "horizon_clouds_left"; SAMESPRITE; SOLID block; END;
+TILE "horizon_clouds_right"; SAMESPRITE; SOLID block; END;
+TILE "horizon_clouds_left_right"; SAMESPRITE; SOLID block; END;
+TILE "horizon_clouds"; SAMESPRITE; SOLID block; END;
+TILE "horizon_mountain_left"; SAMESPRITE; SOLID block; END;
+TILE "horizon_mountain_mid"; SAMESPRITE; SOLID block; END;
+TILE "horizon_mountain_right"; SAMESPRITE; SOLID block; END;
+TILE "horizon_mountain"; SAMESPRITE; SOLID block; END;
+
+# Ages
+TILE "horizon_big_clouds_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "horizon_big_clouds_bottom_right"; SAMESPRITE; SOLID block; END;
+TILE "horizon_big_clouds_left"; SAMESPRITE; SOLID block; END;
+TILE "horizon_big_clouds_right"; SAMESPRITE; SOLID block; END;
+
+# Black Tower/Onox' Castle
+TILE "horizon_dark_clouds_top"; SAMESPRITE; SOLID block; END;
+TILE "horizon_dark_clouds_mid_1"; SAMESPRITE; SOLID block; END;
+TILE "horizon_dark_clouds_mid_2"; SAMESPRITE; SOLID block; END;
+TILE "horizon_dark_clouds_bottom_1"; SAMESPRITE; SOLID block; END;
+TILE "horizon_dark_clouds_bottom_2"; SAMESPRITE; SOLID block; END;
+TILE "horizon_dark_sky"; SAMESPRITE; SOLID block; END;
+
+# Biggoron
+TILE "horizon_edge_dirt_rough"; SAMESPRITE; FLAGS Digable; END;

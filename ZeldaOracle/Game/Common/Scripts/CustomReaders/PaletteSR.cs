@@ -9,7 +9,12 @@ using ZeldaOracle.Common.Scripts.Commands;
 
 namespace ZeldaOracle.Common.Scripts.CustomReaders {
 	public class PaletteSR : ScriptReader {
-		
+
+		private enum Modes {
+			Root,
+			Palette
+		}
+
 		private Palette palette;
 		private string paletteName;
 
@@ -22,26 +27,26 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			// BEGIN/END
 			//=====================================================================================
-			AddCommand("PALETTE", 0,
+			AddCommand("PALETTE", (int) Modes.Root,
 				"string dictionary, string name",
 			delegate (CommandParam parameters) {
 				PaletteDictionary dictionary = Resources.GetPaletteDictionary(parameters.GetString(0));
 				palette = new Palette(Resources.GraphicsDevice, dictionary);
 				paletteName = parameters.GetString(1);
 				AddResource<Palette>(paletteName, palette);
-				Mode = 1;
+				Mode = Modes.Palette;
 			});
 			//=====================================================================================
-			AddCommand("END", 1,
+			AddCommand("END", (int) Modes.Palette,
 			delegate (CommandParam parameters) {
 				palette.UpdatePalette();
 				palette = null;
-				Mode = 0;
+				Mode = Modes.Root;
 			});
 			//=====================================================================================
 			// BUILDING
 			//=====================================================================================
-			AddCommand("COLOR", 1,
+			AddCommand("COLOR", (int) Modes.Palette,
 				"string name, string subtype, Color color",
 			delegate (CommandParam parameters) {
 				LookupSubtypes subtype = ParseSubtype(parameters.GetString(1));
@@ -54,7 +59,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				palette.SetColor(parameters.GetString(0), subtype, color);
 			});
 			//=====================================================================================
-			AddCommand("LOOKUP", 1,
+			AddCommand("LOOKUP", (int) Modes.Palette,
 				"string name, string subtype, string lookupName, string lookupSubtype",
 			delegate (CommandParam parameters) {
 				LookupSubtypes subtype = ParseSubtype(parameters.GetString(1));
@@ -65,7 +70,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					parameters.GetString(2), lookupSubtype);
 			});
 			//=====================================================================================
-			AddCommand("COPY", 1,
+			AddCommand("COPY", (int) Modes.Palette,
 				"string name, string subtype, string lookupName, string lookupSubtype",
 			delegate (CommandParam parameters) {
 				LookupSubtypes subtype = ParseSubtype(parameters.GetString(1));
@@ -76,7 +81,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 					parameters.GetString(2), lookupSubtype);
 			});
 			//=====================================================================================
-			AddCommand("RESET", 1,
+			AddCommand("RESET", (int) Modes.Palette,
 				"string name, string subtype",
 			delegate (CommandParam parameters) {
 				LookupSubtypes subtype = ParseSubtype(parameters.GetString(1));
@@ -84,7 +89,7 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				palette.Reset(parameters.GetString(0), subtype);
 			});
 			//=====================================================================================
-			AddCommand("CONST", 1,
+			AddCommand("CONST", (int) Modes.Palette,
 				"string name",
 			delegate (CommandParam parameters) {
 				palette.AddConst(parameters.GetString(0));
@@ -92,11 +97,40 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 			//=====================================================================================
 			// CLONING
 			//=====================================================================================
-			AddCommand("CLONE", 1,
+			AddCommand("CLONE", (int) Modes.Palette,
 				"string paletteName",
 			delegate (CommandParam parameters) {
 				palette = new Palette(GetResource<Palette>(parameters.GetString(0)));
 				SetResource<Palette>(paletteName, palette);
+			});
+			//=====================================================================================
+			AddCommand("COMBINE", (int) Modes.Palette,
+				"string paletteName",
+			delegate (CommandParam parameters) {
+				Palette combinePalette = GetResource<Palette>(parameters.GetString(0));
+				if (combinePalette.PaletteType != palette.PaletteType)
+					ThrowCommandParseError("Palette type combine mismatch!");
+				foreach (var pair in palette.GetDefinedConsts()) {
+					for (int i = 0; i < PaletteDictionary.ColorGroupSize; i++) {
+						if (pair.Value[i].IsUndefined)
+							continue;
+						palette.SetColor(pair.Key, (LookupSubtypes) i, pair.Value[i].Color);
+					}
+				}
+				foreach (var pair in palette.GetDefinedColors()) {
+					for (int i = 0; i < PaletteDictionary.ColorGroupSize; i++) {
+						if (pair.Value[i].IsUndefined)
+							continue;
+						palette.SetColor(pair.Key, (LookupSubtypes) i, pair.Value[i].Color);
+					}
+				}
+				foreach (var pair in palette.GetDefinedLookups()) {
+					for (int i = 0; i < PaletteDictionary.ColorGroupSize; i++) {
+						if (pair.Value[i].IsUndefined)
+							continue;
+						palette.SetLookup(pair.Key, (LookupSubtypes) i, pair.Value[i].Name, pair.Value[i].Subtype);
+					}
+				}
 			});
 			//=====================================================================================
 		}
@@ -139,6 +173,17 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		/// <summary>Creates a new script reader of the derived type.</summary>
 		protected override ScriptReader CreateNew() {
 			return new PaletteSR();
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Internal Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The mode of the Palette script reader.</summary>
+		private new Modes Mode {
+			get { return (Modes) base.Mode; }
+			set { base.Mode = (int) value; }
 		}
 	}
 }

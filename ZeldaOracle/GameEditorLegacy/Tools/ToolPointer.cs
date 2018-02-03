@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 using FormsControl = System.Windows.Forms.Control;
 using ZeldaOracle.Game;
 
@@ -145,7 +145,7 @@ namespace ZeldaEditor.Tools {
 			}
 			else {
 				// Highlight event tiles.
-				EventTileDataInstance eventTile = LevelDisplayControl.SampleEventTile(mousePos);
+				ActionTileDataInstance eventTile = LevelDisplayControl.SampleEventTile(mousePos);
 				EditorControl.HighlightMouseTile = (eventTile != null);
 			}
 		}

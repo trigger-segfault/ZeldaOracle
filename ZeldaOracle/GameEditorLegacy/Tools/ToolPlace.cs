@@ -9,7 +9,7 @@ using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles;
-using ZeldaOracle.Game.Tiles.EventTiles;
+using ZeldaOracle.Game.Tiles.ActionTiles;
 
 namespace ZeldaEditor.Tools {
 	public class ToolPlace : EditorTool {
@@ -103,26 +103,26 @@ namespace ZeldaEditor.Tools {
 
 			if (editorControl.EventMode) {
 				if (EditorControl.EventMode && e.Button == MouseButtons.Left) {
-					EventTileData eventTile = editorControl.SelectedTilesetTileData as EventTileData;
+					ActionTileData eventTile = editorControl.SelectedTilesetTileData as ActionTileData;
 
 					if (room != null && eventTile != null) {
 						Point2I roomPos = LevelDisplayControl.GetRoomDrawPosition(room);
 						Point2I pos = (mousePos - roomPos) / 8;
 						pos *= 8;
 						//Point2I tileCoord = LevelDisplayControl.SampleTileCoordinates(mousePos);
-						room.CreateEventTile(eventTile, pos);
+						room.CreateActionTile(eventTile, pos);
 					}
 				}
 				else if (EditorControl.EventMode && e.Button == MouseButtons.Right) {
-					EventTileDataInstance eventTile = LevelDisplayControl.SampleEventTile(new Point2I(e.X, e.Y));
+					ActionTileDataInstance eventTile = LevelDisplayControl.SampleEventTile(new Point2I(e.X, e.Y));
 					if (eventTile != null) {
-						eventTile.Room.RemoveEventTile(eventTile);
+						eventTile.Room.RemoveActionTile(eventTile);
 						editorControl.OnDeleteObject(eventTile);
 					}
 				}
 				else if (e.Button == MouseButtons.Middle) {
 					// Select events.
-					EventTileDataInstance selectedEventTile = LevelDisplayControl.SampleEventTile(mousePos);
+					ActionTileDataInstance selectedEventTile = LevelDisplayControl.SampleEventTile(mousePos);
 
 					if (selectedEventTile != null) {
 						Point2I levelTileCoord = LevelDisplayControl.ToLevelTileCoordinates(room, tileCoord);

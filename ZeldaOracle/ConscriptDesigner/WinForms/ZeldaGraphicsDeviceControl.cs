@@ -15,6 +15,7 @@ using System.Diagnostics;
 using ZeldaOracle.Game.Worlds;
 using ConscriptDesigner.Control;
 using Microsoft.Xna.Framework.Graphics;
+using System.Windows.Forms;
 
 namespace ConscriptDesigner.WinForms {
 	
@@ -54,6 +55,7 @@ namespace ConscriptDesigner.WinForms {
 
 			MouseMove += OnMouseMove;
 			MouseLeave += OnMouseLeave;
+			MouseWheel += OnMouseWheel;
 			//ClientSizeChanged += OnClientSizeChanged;
 			PreviewReset += OnPreviewReset;
 			PostReset += OnPostReset;
@@ -84,6 +86,21 @@ namespace ConscriptDesigner.WinForms {
 
 
 		//-----------------------------------------------------------------------------
+		// WndProc Override
+		//-----------------------------------------------------------------------------
+
+		protected override void WndProc(ref Message m) {
+			Point2I scrollPositionBefore = ScrollPosition;
+			base.WndProc(ref m);
+			// 0x115 and 0x20a both tell the control to scroll. If either one comes 
+			// through, you can handle the scrolling before any repaints take place
+			if (ModifierKeys.HasFlag(Keys.Control) && (m.Msg == 0x115 || m.Msg == 0x20a)) {
+				ScrollPosition = scrollPositionBefore;
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Event Handlers
 		//-----------------------------------------------------------------------------
 
@@ -95,6 +112,15 @@ namespace ConscriptDesigner.WinForms {
 		private void OnMouseLeave(object sender, EventArgs e) {
 			mouse = -Point2I.One;
 			UpdateHoverSprite();
+		}
+
+		private void OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e) {
+			if (ModifierKeys.HasFlag(Keys.Control)) {
+				if (e.Delta > 0 && DesignerControl.PreviewScale < 3)
+					DesignerControl.PreviewScale++;
+				else if (e.Delta < 0 && DesignerControl.PreviewScale > 1)
+					DesignerControl.PreviewScale--;
+			}
 		}
 
 		/*private void OnClientSizeChanged(object sender, EventArgs e) {
@@ -185,10 +211,12 @@ namespace ConscriptDesigner.WinForms {
 			Graphics2D g = new Graphics2D(spriteBatch);
 
 			if (GameData.PaletteShader != null && !GameData.PaletteShader.Effect.IsDisposed) {
-				GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
-				GameData.PaletteShader.TilePalette = GameData.PAL_TILES_DEFAULT;
-				if (zone.Palette != null)
-					GameData.PaletteShader.TilePalette = zone.Palette;
+				//GameData.PaletteShader.EntityPalette = GameData.PAL_ENTITIES_DEFAULT;
+				//GameData.PaletteShader.TilePalette = GameData.PAL_TILES_DEFAULT;
+				//if (zone.Palette != null)
+				//	GameData.PaletteShader.TilePalette = zone.Palette;
+				GameData.PaletteShader.TilePalette = DesignerControl.PreviewTilePalette;
+				GameData.PaletteShader.EntityPalette = DesignerControl.PreviewEntityPalette;
 				GameData.PaletteShader.ApplyPalettes();
 			}
 			else {
@@ -197,7 +225,6 @@ namespace ConscriptDesigner.WinForms {
 			}
 
 			if (zone != null) {
-				settings.VariantID = zone.ImageVariantID;
 				settings.Styles = zone.StyleDefinitions;
 			}
 
