@@ -561,6 +561,7 @@ END;
 
 TILE "reward";
 	TYPE		TileReward;
+	FLAGS		NotCoverable;
 	MODEL		center;
 	RESETWHEN	Never;
 	PROPERTIES
