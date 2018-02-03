@@ -884,6 +884,11 @@ namespace ZeldaOracle.Game.Tiles {
 			set { cancelBreakEffect = value; }
 		}
 
+		public bool DrawAsEntity {
+			get { return TileData.DrawAsEntity; }
+			set { TileData.DrawAsEntity = value; }
+		}
+
 		//-----------------------------------------------------------------------------
 		// Flag Properties
 		//-----------------------------------------------------------------------------

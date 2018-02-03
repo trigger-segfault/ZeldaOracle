@@ -49,6 +49,7 @@ END;
 TILE "temp_crossing_grate";
 	TYPE		TileCrossingGate;
 	SOLID		edge_w;
+	ENTITYDRAW	true;
 	PROPERTIES	(boolean, raised,    false, "Raised",      "", "Crossing Gate", "True if the gate is raised."),
 				(boolean, face_left, false, "Facing Left", "", "Crossing Gate", "True if the crossing gate is facing left."),
 				(boolean, cling_on_stab, false);
