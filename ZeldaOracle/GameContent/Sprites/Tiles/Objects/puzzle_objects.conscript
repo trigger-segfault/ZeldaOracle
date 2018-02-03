@@ -16,47 +16,47 @@ IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 SOURCE "temp_sheet_puzzle_objects";
 SPRITESET "tiles_puzzle_objects" (12, 8);
 	
-	# Lava Mouth
+	# Lava Mouth --------------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("lava_mouth");
 	MULTIPLE BASIC	(0, 0), (0, 0), (2, 4); END;
 	
-	# Arrow Shooters
+	# Arrow Shooters ----------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("arrow_shooter");
 	MULTIPLE BASIC	(2, 0), (2, 0), (2, 2); END;
 	
-	# Fire Shooters
+	# Fire Shooters -----------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("fire_shooter");
 	MULTIPLE BASIC	(2, 2), (2, 2), (2, 2); END;
 	
-	# Tablet Slots
+	# Tablet Slots ------------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("wall");
 	MULTIPLE BASIC	(4, 0), (4, 0), (2, 4); END;
 	
-	# Jump Ledges
+	# Jump Ledges -------------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("floor");
 	MULTIPLE BASIC	(6, 0), (6, 0), (2, 2); END;
 	
-	# Webbed Walls
+	# Webbed Walls ------------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("web");
 	MULTIPLE BASIC	(6, 2), (6, 2), (2, 2); END;
 	
-	# Holes
+	# Holes -------------------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("hole");
 	MULTIPLE BASIC	(8, 0), (8, 0), (2, 4); END;
 	
-	# Floor Spikes
+	# Floor Spikes ------------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("floor_spikes");
 	MULTIPLE BASIC	(10, 0), (10, 0), (1, 4); END;
 	
-	# Flying Tile
+	# Flying Tile -------------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("flying_tile");
 	SINGLE STYLE	"flying_tile", (11, 0);
@@ -64,7 +64,7 @@ SPRITESET "tiles_puzzle_objects" (12, 8);
 		ADD "seasons"		(11, 1);
 		END;
 	
-	# Bridges
+	# Bridges -----------------------------------------------------
 		
 	MAPPEDCOLORS	"tiles_default", ("bridge");
 	CHUNKSIZE		(8, 8);
@@ -72,22 +72,22 @@ SPRITESET "tiles_puzzle_objects" (12, 8);
 	SINGLE BASIC	(11, 3); SIZE (16, 8); END;
 	CHUNKSIZE		none;
 	
-	# Locked Block
+	# Locked Block ------------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("locked_block");
 	SINGLE BASIC	(0, 4); END;
 	
-	# Ice Crystal Pit
+	# Ice Crystal Pit ---------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("ice_crystal_pit");
 	SINGLE BASIC	(1, 4); END;
 	
-	# Lever
+	# Lever -------------------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("lever");
 	MULTIPLE BASIC	(0, 5), (0, 5), (2, 1); END;
 	
-	# Button
+	# Button ------------------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("button");
 	MULTIPLE STYLE	"button", (2, 4), (2, 1);
@@ -95,7 +95,7 @@ SPRITESET "tiles_puzzle_objects" (12, 8);
 		ADD "raised"	(2, 5);
 		END;
 		
-	# Color Tiles
+	# Color Tiles -------------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("puzzle_red", "puzzle_blue", "floor");
 	MULTIPLE COLOR	"puzzle_color", ("puzzle_red", "puzzle_yellow", "puzzle_blue"), (4, 4), (4, 4), (3, 1); END;
@@ -103,15 +103,15 @@ SPRITESET "tiles_puzzle_objects" (12, 8);
 	MULTIPLE COLOR	"puzzle_color", ("puzzle_red", "puzzle_blue"), (7, 4), (7, 4), (3, 1); END;
 	MULTIPLE BASIC	(7, 5), (7, 5), (2, 1); END;
 	
-	# TODO: Shrines (4, 5) & (5, 5)
+	# TODO: Shrines (4, 5) & (5, 5) -------------------------------
 	
-	# Minecart Tracks
+	# Minecart Tracks ---------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("minecart_track");
 	MULTIPLE BASIC	(10, 4), (10, 4), (2, 3); END;
 	SINGLE BASIC	(9, 5); END;
 	
-	# Statues
+	# Statues -----------------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("eye_statue");
 	MULTIPLE BASIC	(0, 6), (0, 6), (2, 1); END;
@@ -122,7 +122,7 @@ SPRITESET "tiles_puzzle_objects" (12, 8);
 	MAPPEDCOLORS	"tiles_default", ("plaque");
 	SINGLE BASIC	(3, 6); END;
 	
-	# Holes (Small)
+	# Holes (Small) -----------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("dirt");
 	SINGLE STYLE	"hole", (4, 6);
@@ -138,7 +138,7 @@ SPRITESET "tiles_puzzle_objects" (12, 8);
 		ADD "maku_tree"		(9, 6);
 		END;
 		
-	# Chests
+	# Chest -------------------------------------------------------
 	
 	MAPPEDCOLORS	"tiles_default", ("chest");
 	MULTIPLE STYLE	"chest", (0, 7), (2, 1);
@@ -154,7 +154,7 @@ END;
 
 SOURCE "tiles_puzzle_objects";
 
-# Lava Mouth
+# Lava Mouth --------------------------------------------------
 
 NAME "tile_lava_mouth_up"					(0, 0);
 NAME "tile_lava_mouth_down"					(0, 1);
@@ -165,21 +165,21 @@ NAME "tile_lava_mouth_closed_down"			(0, 3);
 NAME "tile_lava_mouth_closed_left"			(1, 2);
 NAME "tile_lava_mouth_closed_right"			(1, 3);
 
-# Arrow Shooter
+# Arrow Shooter -----------------------------------------------
 
 NAME "tile_arrow_shooter_up"				(2, 0);
 NAME "tile_arrow_shooter_down"				(2, 1);
 NAME "tile_arrow_shooter_left"				(3, 0);
 NAME "tile_arrow_shooter_right"				(3, 1);
 
-# Fire Shooter
+# Fire Shooter ------------------------------------------------
 
 NAME "tile_fire_shooter_up"					(2, 2);
 NAME "tile_fire_shooter_down"				(2, 3);
 NAME "tile_fire_shooter_left"				(3, 2);
 NAME "tile_fire_shooter_right"				(3, 3);
 
-# Tablet Slot
+# Tablet Slot -------------------------------------------------
 
 NAME "tile_tablet_slot_up"					(4, 0);
 NAME "tile_tablet_slot_down"				(5, 1);
@@ -191,21 +191,21 @@ NAME "tile_tablet_slot_placed_down"			(5, 3);
 NAME "tile_tablet_slot_placed_left"			(4, 2);
 NAME "tile_tablet_slot_placed_right"		(5, 3);
 
-# Jump Ledge
+# Jump Ledge --------------------------------------------------
 
 NAME "tile_jump_ledge_up"					(6, 0);
 NAME "tile_jump_ledge_down"					(6, 1);
 NAME "tile_jump_ledge_left"					(7, 0);
 NAME "tile_jump_ledge_right"				(7, 1);
 
-# Webbed Wall
+# Webbed Wall -------------------------------------------------
 
 NAME "tile_wall_webbed_up"					(6, 2);
 NAME "tile_wall_webbed_down"				(6, 3);
 NAME "tile_wall_webbed_left"				(7, 2);
 NAME "tile_wall_webbed_right"				(7, 3);
 
-# Holes
+# Holes -------------------------------------------------------
 
 NAME "tile_pit_top"							(8, 0);
 NAME "tile_pit_mid"							(8, 1);
@@ -225,17 +225,17 @@ COMPOSITE "temp_preview_hole_style";
 	
 STYLEPREVIEW "hole", "temp_preview_hole_style";
 
-# Floor Spikes
+# Floor Spikes ------------------------------------------------
 
 ANIMATION "tile_floor_spikes";
 	ADD strip, 15, 4, (10, 0), relative: (0, 1);
 	ADD frame, 15, (10, 2); ADD frame, 15, (10, 1); END;
 
-# Flying Tile
+# Flying Tile -------------------------------------------------
 
-NAME "tile_flying_tile"						(11, 0);
+NAME "tile_monster_flying_tile"				(11, 0);
 
-# Bridge
+# Bridge ------------------------------------------------------
 
 NAME "tile_bridge_left"						(11, 2);
 NAME "tile_bridge_up"						(11, 3);
@@ -250,25 +250,25 @@ COMPOSITE "tile_bridge_vertical";
 	ADD "tile_bridge_up", (0, 0);
 	ADD "tile_bridge_up", (0, 8); END;
 	
-# Locked Block
+# Locked Block ------------------------------------------------
 
 NAME "tile_locked_block"					(0, 4);
 
-# Ice Crystal Pit
+# Ice Crystal Pit ---------------------------------------------
 
 NAME "tile_ice_crystal_pit"					(1, 4);
 
-# Lever
+# Lever -------------------------------------------------------
 
 NAME "tile_lever_left"						(0, 5);
 NAME "tile_lever_right"						(1, 5);
 
-# Button
+# Button ------------------------------------------------------
 
 NAME "tile_button_up"						(2, 4);
 NAME "tile_button_down"						(3, 4);
 
-# Color Tiles
+# Color Tiles -------------------------------------------------
 
 NAME "temp_color_tile"						(4, 4);
 NAME "tile_color_tile_red"					("temp_color_tile", "puzzle_red");
@@ -289,9 +289,7 @@ NAME "tile_color_statue_blue"				("temp_color_statue", "puzzle_blue");
 NAME "tile_statue_stationary"				("temp_color_statue", "statue");
 NAME "tile_statue_alt_stationary"			("temp_color_statue", "statue_alt");
 NAME "tile_movable_statue"					("temp_color_statue", "statue");
-NAME "tile_movable_statue_asobject"			("temp_color_statue", "statue");
 NAME "tile_movable_statue_alt"				("temp_color_statue", "statue_alt");
-NAME "tile_movable_statue_alt_asobject"		("temp_color_statue", "statue_alt");
 
 NAME "temp_color_barrier_raised"			(7, 4);
 NAME "tile_color_barrier_red_raised"		("temp_color_barrier_raised", "puzzle_red");
@@ -323,9 +321,9 @@ ANIMATION "tile_color_barrier_red_lower"; SUBSTRIP clamp;
 NAME "tile_color_lantern"					(7, 5);
 NAME "tile_color_cube_slot"					(8, 5);
 
-# TODO: Shrines (4, 5) & (5, 5)
+# TODO: Shrines (4, 5) & (5, 5) -------------------------------
 
-# Minecart Tracks
+# Minecart Tracks ---------------------------------------------
 
 NAME "tile_minecart_track_down_right"		(10, 4);
 NAME "tile_minecart_track_down_left"		(11, 4);
@@ -335,14 +333,14 @@ NAME "tile_minecart_track_horizontal"		(10, 6);
 NAME "tile_minecart_track_vertical"			(11, 6);
 NAME "tile_minecart_track_stop"				(9, 5);
 
-# Statues
+# Statues -----------------------------------------------------
 
 NAME "tile_eye_statue"						(0, 6);
 NAME "tile_eye_statue_broken"				(1, 6);
 NAME "tile_essense_statue"					(2, 6);
 NAME "tile_plaque"							(3, 6);
 
-# Chest
+# Chest -------------------------------------------------------
 
 NAME "tile_chest"							(0, 7);
 NAME "tile_chest_opened"					(1, 7);

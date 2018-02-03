@@ -4,7 +4,6 @@
 
 LOAD "Indoors/walls_and_floors.conscript", true;
 LOAD "Indoors/entrances.conscript", true;
-LOAD "Indoors/dungeon.conscript", true;
 LOAD "Indoors/interior.conscript", true;
 
 #==============================================================

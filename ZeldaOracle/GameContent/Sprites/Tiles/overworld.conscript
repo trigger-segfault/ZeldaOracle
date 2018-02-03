@@ -3,8 +3,8 @@
 #==============================================================
 
 LOAD "Overworld/cliffs.conscript", true;
-LOAD "Overworld/cliffs_temp.conscript", true;
 LOAD "Overworld/cliffs_railings_temp.conscript", true;
+LOAD "Overworld/cliffs_vertical_temp.conscript", true;
 LOAD "Overworld/cliffs_vertical.conscript", true;
 LOAD "Overworld/cliffs_walls_temp.conscript", true;
 LOAD "Overworld/cliffs_walls.conscript", true;

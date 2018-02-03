@@ -1,0 +1,266 @@
+﻿#==============================================================
+# Temp
+#==============================================================
+
+# Roller ------------------------------------------------------
+
+TILE "temp_roller";
+	TYPE		TileRoller;
+	FLAGS		Movable, NotGrabbable;
+	SOLID		block;
+	PROPERTIES
+		(boolean, vertical, "false",
+			"Vertical", "", "Roller",
+			"The roller rolls vertically", true),
+		(boolean, first_roller, "false",
+			"First Roller", "", "Roller",
+			"This is the top left roller of a group. Any rollers before this won't be connected.");
+END;
+
+# Spike Roller ------------------------------------------------
+
+TILE "temp_spike_roller";
+	#TYPE		TileSpikeRoller;
+END;
+
+# Spike Roller ------------------------------------------------
+
+TILE "temp_arrow_cannon";
+	#TYPE		TileArrowCannon;
+	SOLID		block;
+END;
+
+# Color Switch ------------------------------------------------
+
+TILE "temp_color_switch";
+	TYPE		TileColorSwitch;
+	HALFSOLID	block;
+	FLAGS		AbsorbSeeds;
+	SPRITEINDEX	0, "tile_color_switch_blue";
+	SPRITEINDEX	1, "tile_color_switch_red";
+	PROPERTIES	(boolean, switch_once,			false,	"Switch Once",			"", "", "Can the color switch only be switched once?"),
+				(boolean, switch_state,			false,	"Switch State",			"", "", "The switch state of the color switch (false = blue, true = red)."),
+				(boolean, sync_with_dungeon,	false,	"Sync With Dungeon",	"", "", "Will the color switch's state be syncronized with other color switches in the dungeon?");
+	EVENT		toggle, "Toggle", "Switch", "Occurs when the Color Switch changes color.", (ColorSwitch, colorSwitch);
+END;
+
+# Crossing Gate -----------------------------------------------
+
+TILE "temp_crossing_grate";
+	TYPE		TileCrossingGate;
+	SOLID		edge_w;
+	PROPERTIES	(boolean, raised,    false, "Raised",      "", "Crossing Gate", "True if the gate is raised."),
+				(boolean, face_left, false, "Facing Left", "", "Crossing Gate", "True if the crossing gate is facing left."),
+				(boolean, cling_on_stab, false);
+END;
+
+# Trampoline --------------------------------------------------
+
+TILE "temp_trampoline";
+	#TYPE		TileTrampoline;
+	HALFSOLID	block;
+	FLAGS		Movable;
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+# Color Cube --------------------------------------------------
+
+TILE "color_cube";
+	TYPE			TileColorCube;
+	FLAGS			Movable;
+	SOLID			block;
+	SPRITEINDEX		0, "color_cube_blue_yellow";
+	SPRITEINDEX		1, "color_cube_blue_red";
+	SPRITEINDEX		2, "color_cube_red_yellow";
+	SPRITEINDEX		3, "color_cube_yellow_blue";
+	SPRITEINDEX		4, "color_cube_red_blue";
+	SPRITEINDEX		5, "color_cube_yellow_red";
+	PROPERTIES		(integer, orientation, 0, "Orientation", ("enum", "ColorCubeOrientation"), "Color Cube", "The orientation index of the color cube.");
+END;
+
+# Roller ------------------------------------------------------
+
+TILE "roller_horizontal";
+	CLONE		"temp_roller";
+	SPRITEINDEX	0, "tile_roller_horizontal";
+	SPRITEINDEX	1, "tile_roller_horizontal_roll";
+	PROPERTIES	(boolean, vertical, "false"),
+				(boolean, first_roller, "false");
+END;
+TILE "roller_vertical";
+	CLONE		"temp_roller";
+	SPRITEINDEX	0, "tile_roller_vertical";
+	SPRITEINDEX	1, "tile_roller_vertical_roll";
+	PROPERTIES	(boolean, vertical, "true"),
+				(boolean, first_roller, "false");
+END;
+
+# Spike Roller ------------------------------------------------
+
+TILE "spike_roller_horizontal";
+	CLONE		"temp_spike_roller";
+	SPRITEINDEX 0, "tile_spike_roller_horizontal_both";
+	SPRITEINDEX 1, "tile_spike_roller_horizontal_top";
+	SPRITEINDEX 2, "tile_spike_roller_horizontal_mid";
+	SPRITEINDEX 3, "tile_spike_roller_horizontal_bottom";
+	# horizontal
+END;
+TILE "spike_roller_vertical";
+	CLONE		"temp_spike_roller";
+	SPRITEINDEX 0, "tile_spike_roller_vertical_both";
+	SPRITEINDEX 1, "tile_spike_roller_vertical_left";
+	SPRITEINDEX 2, "tile_spike_roller_vertical_mid";
+	SPRITEINDEX 3, "tile_spike_roller_vertical_right";
+	# vertical
+END;
+
+# Arrow Cannon ------------------------------------------------
+
+TILE "arrow_cannon_left";
+	CLONE		"temp_arrow_cannon";
+	SAMESPRITE;
+	# left
+END;
+TILE "arrow_cannon_right";
+	CLONE		"temp_arrow_cannon";
+	SAMESPRITE;
+	# right
+END;
+
+# Owl ---------------------------------------------------------
+
+TILE "owl";
+	TYPE		TileOwl;
+	FLAGS		AbsorbSeeds;
+	SOLID		block;
+	SPRITEINDEX	0, "tile_owl";
+	SPRITEINDEX	1, "tile_owl_activated";
+	PROPERTIES
+		(string, text, "<red>undefined<red>",
+			"Text", "text_message", "Owl",
+			"The text to display when the owl is activated.");
+END;
+
+# Color Switch ------------------------------------------------
+
+TILE "color_switch_blue";
+	CLONE		"temp_color_switch";
+	PROPERTIES	(boolean, switch_state, false),
+				(integer, sprite_index, 0);
+END;
+TILE "color_switch_red";
+	CLONE		"temp_color_switch";
+	PROPERTIES	(boolean, switch_state, true),
+				(integer, sprite_index, 1);
+END;
+
+# Crossing Gate -----------------------------------------------
+
+TILE "crossing_grate_right";
+	CLONE		"temp_crossing_grate";
+	PROPERTIES (boolean, face_left, false);
+END;
+TILE "crossing_grate_left";
+	CLONE		"temp_crossing_grate";
+	PROPERTIES (boolean, face_left, true);
+END;
+
+# Moving Platform ---------------------------------------------
+
+TILE "moving_platform";
+	TYPE		TilePlatform;
+	SAMESPRITE;
+END;
+
+# Sarcophagus -------------------------------------------------
+
+TILE "sarcophagus";
+	SOLID		block_1x2;
+	FLAGS		Pickupable, InstantPickup;
+	SIZE		(1, 2);
+	SAMESPRITE; SAMESPRITEOBJ;
+	PREVIEW		"preview_sarcophagus";
+	BREAKANIM	"effect_blue_brick_break";
+	BREAKSOUND	"monster_die";
+	PROPERTIES
+		(integer, pickupable_bracelet_level, 1);
+END;
+
+# Pull Handle -------------------------------------------------
+
+TILE "pull_handle";
+	TYPE		TilePullHandle;
+	SPRITE		"tile_pull_handle_down";
+	PROPERTIES	(integer, direction, 3, "Direction", "direction", "Handle", "The direction the handle extends in.");
+	EVENT		retracting, "Retracting", "Pull Handle", "Occurs every step that the pull handle is retracting into the wall.", (PullHandle, pullHandle);
+	EVENT		extending, "Extending", "Pull Handle", "Occurs every step that the pull handle is extending from the wall.", (PullHandle, pullHandle);
+	EVENT		fully_retract, "Fully Retracted", "Pull Handle", "Occurs when the handle is fully retracted into the wall.", (PullHandle, pullHandle);
+	EVENT		fully_extend, "Fully Extended", "Pull Handle", "Occurs when the handle is fully extended from the wall.", (PullHandle, pullHandle);
+END;
+
+# Seed Bouncer ------------------------------------------------
+
+TILE "seed_bouncer";
+	TYPE		TileSeedBouncer;
+	SPRITE		"tile_seed_bouncer";
+	HALFSOLID	block;
+	PROPERTIES	(integer, angle, 0, "Angle", "angle", "Seed Bouncer", "The angle the seed bouncer is facing."),
+				(boolean, cling_on_stab, false);
+END;
+
+# Trampolines -------------------------------------------------
+
+TILE "trampoline";
+	CLONE		"temp_trampoline";
+	SPRITEINDEX	0, "tile_trampoline";
+	SPRITEINDEX	1, "tile_trampoline_bounce";
+	# Height: 1 level
+END;
+TILE "super_trampoline";
+	CLONE		"temp_trampoline";
+	SPRITEINDEX	0, "tile_super_trampoline";
+	SPRITEINDEX	1, "tile_super_trampoline_bounce";
+	# Height: 2 levels
+END;
+
+# Shatter Crystal ---------------------------------------------
+
+TILE "shatter_crystal";
+	#TYPE		TileShatterCrystal;
+	FLAGS		Cuttable;
+	RESETWHEN	Never;
+	SOLID		block;
+	SPRITEINDEX 0, "tile_shatter_crystal";
+	SPRITEINDEX 1, "tile_shatter_crystal_broken";
+	BREAKANIM	"effect_rock_break";
+	BREAKSOUND	"rock_shatter";
+END;
+
+# Ice Crystal -------------------------------------------------
+
+TILE "ice_crystal";
+	#TYPE		TileIceCrystal;
+	FLAGS		Pickupable;
+	SAMESPRITE;
+END;
+
+# Water Block -------------------------------------------------
+
+TILE "water_block";
+	SOLID block;
+	FLAGS Movable;
+	SAMESPRITE;
+END;
+
+# Seedling ----------------------------------------------------
+
+TILE "seedling";
+	SOLID		block;
+	FLAGS		Pickupable, Cuttable, Switchable, Movable;
+	SAMESPRITE;
+	BREAKANIM	"effect_rock_break";
+	BREAKSOUND	"rock_shatter";
+END;

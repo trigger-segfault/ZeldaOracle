@@ -189,9 +189,9 @@ ADDTILE (3, 13), "roof_tiled_green_right";
 ADDTILE (4, 13), "roof_tiled_blue_mid";
 ADDTILE (5, 13), "roof_tiled_blue_right";
 
-ADDTILE (6, 13), "tombstone_hole_left";
-ADDTILE (7, 13), "tombstone_hole_right";
-ADDTILE (8, 13), "grave_stationary";
+#ADDTILE (6, 13), "tombstone_hole_left";
+#ADDTILE (7, 13), "tombstone_hole_right";
+#ADDTILE (8, 13), "grave_stationary";
 
 #TILE (10, 5); SOLID doorway; END;
 #TILE (10, 6); SOLID doorway; END;

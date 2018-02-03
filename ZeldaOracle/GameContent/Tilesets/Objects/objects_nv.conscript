@@ -17,7 +17,7 @@ ADDTILE ( 7, 0), "roller_horizontal";
 ADDTILE ( 8, 0), "roller_vertical";
 ADDTILE ( 9, 0), "owl";
 ADDTILE (10, 0), "color_cube";
-ADDTILE (11, 0), "platform";
+ADDTILE (11, 0), "moving_platform";
 
 ADDTILE ( 0, 1), "crossing_grate_right";
 ADDTILE ( 1, 1), "crossing_grate_left";

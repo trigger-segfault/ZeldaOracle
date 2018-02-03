@@ -58,6 +58,14 @@ NAME "temp_8x8_sand_fade_inside_s_2"			(6, 3);
 NAME "temp_8x8_sand_fade_inside_se"				(7, 3);
 
 #==============================================================
+# Temp
+#==============================================================
+	
+COMPOSITE "temp_sand_blank";
+	ADD "sand_8x8", (0, 0); ADD "sand_8x8", (8, 0);
+	ADD "sand_8x8", (0, 8); ADD "sand_8x8", (8, 8); END;
+	
+#==============================================================
 # Tiles
 #==============================================================
 	
@@ -69,46 +77,46 @@ COMPOSITE "tile_sand";
 	END;
 	
 COMPOSITE "tile_sand_fade_nw";
-	COMBINE "tile_ground_blank";
+	COMBINE "temp_sand_blank";
 	REPLACE 3, "temp_8x8_sand_fade_nw";
 	END;
 	
 COMPOSITE "tile_sand_fade_n";
-	COMBINE "tile_ground_blank";
+	COMBINE "temp_sand_blank";
 	REPLACE 2, "temp_8x8_sand_fade_n_1";
 	REPLACE 3, "temp_8x8_sand_fade_n_2";
 	END;
 	
 COMPOSITE "tile_sand_fade_ne";
-	COMBINE "tile_ground_blank";
+	COMBINE "temp_sand_blank";
 	REPLACE 2, "temp_8x8_sand_fade_ne";
 	END;
 	
 COMPOSITE "tile_sand_fade_w";
-	COMBINE "tile_ground_blank";
+	COMBINE "temp_sand_blank";
 	REPLACE 1, "temp_8x8_sand_fade_w_1";
 	REPLACE 3, "temp_8x8_sand_fade_w_2";
 	END;
 	
 COMPOSITE "tile_sand_fade_e";
-	COMBINE "tile_ground_blank";
+	COMBINE "temp_sand_blank";
 	REPLACE 0, "temp_8x8_sand_fade_e_1";
 	REPLACE 2, "temp_8x8_sand_fade_e_2";
 	END;
 	
 COMPOSITE "tile_sand_fade_sw";
-	COMBINE "tile_ground_blank";
+	COMBINE "temp_sand_blank";
 	REPLACE 1, "temp_8x8_sand_fade_sw";
 	END;
 	
 COMPOSITE "tile_sand_fade_s";
-	COMBINE "tile_ground_blank";
+	COMBINE "temp_sand_blank";
 	REPLACE 0, "temp_8x8_sand_fade_s_1";
 	REPLACE 1, "temp_8x8_sand_fade_s_2";
 	END;
 	
 COMPOSITE "tile_sand_fade_se";
-	COMBINE "tile_ground_blank";
+	COMBINE "temp_sand_blank";
 	REPLACE 0, "temp_8x8_sand_fade_se";
 	END;
 	

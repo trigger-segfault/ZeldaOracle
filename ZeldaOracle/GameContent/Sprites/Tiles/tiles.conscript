@@ -16,6 +16,6 @@ PALETTEDICTIONARY	none;
 LOAD "overworld.conscript", false;
 LOAD "indoors.conscript", false;
 LOAD "sidescroll.conscript", false;
+LOAD "special.conscript", false;
 LOAD "objects.conscript", false;
 LOAD "tile_previews.conscript", false;
-LOAD "special.conscript", false;

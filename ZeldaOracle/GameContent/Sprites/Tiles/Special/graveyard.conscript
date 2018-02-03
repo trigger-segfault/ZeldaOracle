@@ -54,18 +54,18 @@ NAME "tile_graveyard_stone_wall_down_left"	(4, 2);
 NAME "tile_graveyard_stone_wall_down_right"	(6, 2);
 NAME "tile_graveyard_stone_wall_se"			(7, 2);
 
-COMPOSITE "tile_graveyard_gate_top";
-	COMBINE "tile_ground"; REMOVE 3; REMOVE 2; ADD (5, 2); END;
-NAME "tile_graveyard_gate_left"				(4, 3);
-NAME "tile_graveyard_gate_keyhole"			(5, 3);
-NAME "tile_graveyard_gate_right"			(6, 3);
-
 NAME "tile_sprits_tomb_top_left"			(4, 0);
 NAME "tile_sprits_tomb_top_mid"				(5, 0);
 NAME "tile_sprits_tomb_top_right"			(6, 0);
 NAME "tile_sprits_tomb_bottom_left"			(4, 1);
 NAME "tile_sprits_tomb_entrance"			(5, 1);
 NAME "tile_sprits_tomb_bottom_right"		(6, 1);
+
+COMPOSITE "tile_graveyard_gate_top";
+	COMBINE "tile_ground"; REMOVE 3; REMOVE 2; ADD (5, 2); END;
+NAME "tile_graveyard_gate_left"				(4, 3);
+NAME "tile_graveyard_gate_keyhole"			(5, 3);
+NAME "tile_graveyard_gate_right"			(6, 3);
 
 NAME "tile_explorers_crypt_statue"			(1, 1);
 
