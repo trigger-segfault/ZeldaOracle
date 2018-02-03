@@ -591,6 +591,7 @@ namespace ZeldaOracle.Game.Control {
 
 				// Draw entities in reverse order (because newer entities are drawn below older ones).
 				roomGraphics.Clear();
+				tileManager.DrawEntityTiles(roomGraphics);
 				for (int i = entities.Count - 1; i >= 0; i--)
 					entities[i].Draw(roomGraphics);
 				roomGraphics.SortDepthLayer(DepthLayer.PlayerAndNPCs); // Sort dynamic depth layers.

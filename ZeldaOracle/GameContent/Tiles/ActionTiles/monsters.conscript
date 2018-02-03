@@ -67,6 +67,7 @@ TILE "monster_beamos";
 	SOLID		block;
 	FLAGS		AbsorbSeeds;
 	SPRITE		"monster_beamos";
+	ENTITYDRAW	true;
 END;
 
 TILE "monster_flying_tile";

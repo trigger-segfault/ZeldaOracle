@@ -88,6 +88,10 @@ namespace ZeldaOracle.Game.Tiles {
 			properties.Set("spawn_delay_after_poof", 31)
 				.SetDocumentation("Spawn Delay after Poof", "Spawning", "");
 
+			// Drawing
+			properties.Set("draw_as_entity", false)
+				.SetDocumentation("Draw as Entity", "", "", "Drawing", "", true, false);
+
 			// Events.
 			/*properties.Set("on_move", "")
 				.SetDocumentation("On Move", "script", "", "Events",
@@ -264,6 +268,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public int HurtDamage {
 			get { return properties.GetInteger("hurt_damage", 0); }
 			set { properties.Set("hurt_damage", value); }
+		}
+
+		public bool DrawAsEntity {
+			get { return properties.GetBoolean("draw_as_entity", false); }
+			set { properties.Set("draw_as_entity", value); }
 		}
 	}
 }

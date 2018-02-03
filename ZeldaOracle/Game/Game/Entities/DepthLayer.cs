@@ -24,6 +24,12 @@ namespace ZeldaOracle.Game.Entities {
 		EffectSeed,
 		EffectGale,
 
+		// Used by crossing gate.
+		// Draws above player/monsters when player is above and vice-versa.
+		DynamicDepthBelowTileLayer2,
+		DynamicDepthBelowTileLayer3,
+		DynamicDepthBelowEntity,
+
 		Monsters,
 
 		EffectMonsterExplosion,
@@ -38,6 +44,11 @@ namespace ZeldaOracle.Game.Entities {
 
 		PlayerSwingItem,
 		PlayerAndNPCs,
+		// Used by crossing gate.
+		// Draws above player/monsters when player is above and vice-versa.
+		DynamicDepthAboveTileLayer2,
+		DynamicDepthAboveTileLayer3,
+		DynamicDepthAboveEntity,
 		RisingTile,
 		
 		InAirSeed,

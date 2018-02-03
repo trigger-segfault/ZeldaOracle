@@ -191,5 +191,10 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return properties.GetFloat("conveyor_speed", 0.0f); }
 			set { properties.Set("conveyor_speed", value); }
 		}
+
+		public bool DrawAsEntity {
+			get { return TileData.DrawAsEntity; }
+			set { TileData.DrawAsEntity = value; }
+		}
 	}
 }

@@ -403,6 +403,12 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 				baseTileData.PreviewSprite = GetSpriteFromParams(parameters);
 			});
 			//=====================================================================================
+			AddCommand("ENTITYDRAW", (int) Modes.Tile,
+				"bool drawAsEntity",
+			delegate (CommandParam parameters) {
+				tileData.DrawAsEntity = parameters.GetBool(0);
+			});
+			//=====================================================================================
 			AddCommand("MODEL", (int) Modes.Root,
 				"string modeName",
 			delegate (CommandParam parameters) {
