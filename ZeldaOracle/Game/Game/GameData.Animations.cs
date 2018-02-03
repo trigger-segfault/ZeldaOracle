@@ -194,6 +194,12 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_MONSTER_KEESE_FLAP;
 		public static Animation ANIM_MONSTER_ANTI_FAIRY;
 		public static Animation ANIM_MONSTER_SPARK;
+		public static Animation ANIM_MONSTER_POKEY_HEAD;
+		public static Animation ANIM_MONSTER_POKEY_HEAD_WIGGLE_SLOW;
+		public static Animation ANIM_MONSTER_POKEY_HEAD_WIGGLE_FAST;
+		public static Animation ANIM_MONSTER_POKEY_BODY;
+		public static Animation ANIM_MONSTER_POKEY_BODY_WIGGLE_SLOW;
+		public static Animation ANIM_MONSTER_POKEY_BODY_WIGGLE_FAST;
 
 		// Monster items.
 		public static Animation ANIM_MONSTER_SWORD_HOLD;

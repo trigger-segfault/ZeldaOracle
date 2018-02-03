@@ -139,11 +139,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public override void Draw(RoomGraphics g) {
 			// Draw body segments
+			SpriteDrawSettings drawSettings = new SpriteDrawSettings() {
+				Colors = Graphics.ModifiedColorDefinitions
+			};
 			for (int i = NUM_BODY_PARTS - 1; i >= 0; i--) {
-				SpriteDrawSettings drawSettings = new SpriteDrawSettings() {
-					Colors = Graphics.ModifiedColorDefinitions
-				};
-				g.DrawSprite(bodySprites[i], drawSettings, bodyPositions[i], Graphics.DepthLayer);
+				g.DrawSprite(bodySprites[i], drawSettings,
+					bodyPositions[i], Graphics.DepthLayer);
 			}
 
 			// Draw head/eyes

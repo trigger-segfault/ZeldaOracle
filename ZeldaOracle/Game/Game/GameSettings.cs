@@ -177,6 +177,7 @@ namespace ZeldaOracle.Game {
 		public const int				MONSTER_RIVER_ZORA_SURFACED_DURATION			= 88;
 		public const int				MONSTER_RIVER_ZORA_SHOOT_DELAY					= 9;
 		public const int				MONSTER_RIVER_ZORA_SUBMERGE_DELAY				= 9;
+		public const int				MONSTER_POKEY_BODY_SEPARATION					= 12;
 
 		// Tiles
 		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.
