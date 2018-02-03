@@ -59,6 +59,18 @@ TILE "roof_red_bottom_mid_shop_right"; SAMESPRITE; SOLID block; END;
 TILE "roof_red_bottom_left_shop_left"; SAMESPRITE; SOLID block; END;
 TILE "roof_red_bottom_right_shop_right"; SAMESPRITE; SOLID block; END;
 
+TILE "roof_red_cracked_top_left_dark"; SAMESPRITE; SOLID block; END;
+TILE "roof_red_cracked_top_right_dark"; SAMESPRITE; SOLID block; END;
+TILE "roof_red_cracked_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "roof_red_cracked_bottom_mid"; SAMESPRITE; SOLID block; END;
+TILE "roof_red_cracked_bottom_right"; SAMESPRITE; SOLID block; END;
+
+TILE "roof_red_cracked_alt_top_right_dark"; SAMESPRITE; SOLID block; END;
+TILE "roof_red_cracked_alt_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "roof_red_cracked_alt_bottom_mid"; SAMESPRITE; SOLID block; END;
+TILE "roof_red_cracked_alt_bottom_right"; SAMESPRITE; SOLID block; END;
+TILE "roof_red_cracked_alt_top_right_light"; SAMESPRITE; SOLID block; END;
+
 
 TILE "roof_tiled_blue_mid"; SAMESPRITE; SOLID block; END;
 TILE "roof_tiled_blue_right"; SAMESPRITE; SOLID block; END;
@@ -118,6 +130,18 @@ TILE "roof_blue_bottom_mid_shop_right"; SAMESPRITE; SOLID block; END;
 TILE "roof_blue_bottom_left_shop_left"; SAMESPRITE; SOLID block; END;
 TILE "roof_blue_bottom_right_shop_right"; SAMESPRITE; SOLID block; END;
 
+TILE "roof_blue_cracked_top_left_dark"; SAMESPRITE; SOLID block; END;
+TILE "roof_blue_cracked_top_right_dark"; SAMESPRITE; SOLID block; END;
+TILE "roof_blue_cracked_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "roof_blue_cracked_bottom_mid"; SAMESPRITE; SOLID block; END;
+TILE "roof_blue_cracked_bottom_right"; SAMESPRITE; SOLID block; END;
+
+TILE "roof_blue_cracked_alt_top_right_dark"; SAMESPRITE; SOLID block; END;
+TILE "roof_blue_cracked_alt_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "roof_blue_cracked_alt_bottom_mid"; SAMESPRITE; SOLID block; END;
+TILE "roof_blue_cracked_alt_bottom_right"; SAMESPRITE; SOLID block; END;
+TILE "roof_blue_cracked_alt_top_right_light"; SAMESPRITE; SOLID block; END;
+TILE "roof_blue_cracked_alt_top_right_water"; SAMESPRITE; SOLID block; END;
 
 
 TILE "roof_tiled_green_mid"; SAMESPRITE; SOLID block; END;
@@ -167,18 +191,35 @@ TILE "roof_green_bottom_mid_shop_right"; SAMESPRITE; SOLID block; END;
 TILE "roof_green_bottom_left_shop_left"; SAMESPRITE; SOLID block; END;
 TILE "roof_green_bottom_right_shop_right"; SAMESPRITE; SOLID block; END;
 
+TILE "roof_green_cracked_top_left_dark"; SAMESPRITE; SOLID block; END;
+TILE "roof_green_cracked_top_right_dark"; SAMESPRITE; SOLID block; END;
+TILE "roof_green_cracked_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "roof_green_cracked_bottom_mid"; SAMESPRITE; SOLID block; END;
+TILE "roof_green_cracked_bottom_right"; SAMESPRITE; SOLID block; END;
+
+TILE "roof_green_cracked_alt_top_right_dark"; SAMESPRITE; SOLID block; END;
+TILE "roof_green_cracked_alt_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "roof_green_cracked_alt_bottom_mid"; SAMESPRITE; SOLID block; END;
+TILE "roof_green_cracked_alt_bottom_right"; SAMESPRITE; SOLID block; END;
+TILE "roof_green_cracked_alt_top_right_light"; SAMESPRITE; SOLID block; END;
+
+
 
 TILE "house_wall"; SAMESPRITE; SOLID block; END;
 TILE "house_wall_door_right"; SAMESPRITE; SOLID doorway_half_right; END;
 TILE "house_wall_door_left"; SAMESPRITE; SOLID doorway_half_left; END;
 TILE "house_door"; SAMESPRITE; SOLID doorway; END;
 TILE "house_door_locked"; SAMESPRITE; SOLID block; END;
+TILE "house_wall_cracked"; SAMESPRITE; SOLID block; END;
+TILE "house_door_cracked"; SAMESPRITE; SOLID block; END;
 
 TILE "water_house_wall"; SAMESPRITE; SOLID block; END;
 TILE "water_house_wall_door_right"; SAMESPRITE; SOLID doorway_half_right; END;
 TILE "water_house_wall_door_left"; SAMESPRITE; SOLID doorway_half_left; END;
 TILE "water_house_door"; SAMESPRITE; SOLID doorway; END;
 TILE "water_house_door_locked"; SAMESPRITE; SOLID block; END;
+TILE "water_house_wall_cracked_left"; SAMESPRITE; SOLID block; END;
+TILE "water_house_wall_cracked_right"; SAMESPRITE; SOLID block; END;
 
 TILE "plank_fence_left"; SAMESPRITE; SOLID block; END;
 TILE "plank_fence_mid"; SAMESPRITE; SOLID block; END;
@@ -209,6 +250,7 @@ TILE "gate_top"; SAMESPRITE; SOLID block; END;
 TILE "gate"; SAMESPRITE; SOLID block; END;
 TILE "vasu_sign"; SAMESPRITE; SOLID block; END;
 TILE "chimney"; SAMESPRITE; SOLID block; END;
+TILE "chimney_cracked"; SAMESPRITE; SOLID block; END;
 
 TILE "water_statue_mermaid_nw"; SAMESPRITE; SOLID block; END;
 TILE "water_statue_mermaid_ne"; SAMESPRITE; SOLID block; END;
@@ -240,11 +282,3 @@ TILE "bridge_horizontal_top"; SAMESPRITE; SOLID bridge_h_top; END;
 TILE "bridge_horizontal_mid"; SAMESPRITE; END;
 TILE "bridge_horizontal_bottom"; SAMESPRITE; SOLID bridge_h_bottom; END;
 TILE "bridge_horizontal_both"; SAMESPRITE; SOLID bridge_h; END;
-
-TILE "tombstone_hole_left"; SAMESPRITE; SOLID block; END;
-TILE "tombstone_hole_right"; SAMESPRITE; SOLID block; END;
-TILE "tombstone_filled_left"; SAMESPRITE; SOLID block; END;
-TILE "tombstone_filled_right"; SAMESPRITE; SOLID block; END;
-TILE "tombstone_subrosia"; SAMESPRITE; SOLID block; END;
-TILE "tombstone_subrosia_dark"; SAMESPRITE; SOLID block; END;
-TILE "grave_stationary"; SPRITE "tile_grave"; SOLID block; END;

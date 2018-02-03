@@ -27,7 +27,7 @@ ADDTILE ( 5, 1), sign;
 ADDTILE ( 6, 1), movable_block;
 ADDTILE ( 7, 1), bombable_block;
 ADDTILE ( 8, 1), movable_armos;
-ADDTILE ( 9, 1), grave;
+ADDTILE ( 9, 1), movable_grave;
 #ADDTILE (10, 1), fairy_statue;
 ADDTILE (11, 1), ice_block;
 
@@ -146,7 +146,7 @@ ADDTILE (9, 2), "magnet_stone_south";
 
 ADDTILE (2, 3), "water_block";
 ADDTILE (4, 3), "ice_crystal_pit";
-ADDTILE (5, 3), "flying_tile";
+ADDTILE (5, 3), "monster_flying_tile";
 
 
 ADDTILE (11, 5), "hardened_lava";

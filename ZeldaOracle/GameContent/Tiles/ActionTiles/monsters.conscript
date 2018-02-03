@@ -68,3 +68,8 @@ TILE "monster_beamos";
 	FLAGS		AbsorbSeeds;
 	SPRITE		"monster_beamos";
 END;
+
+TILE "monster_flying_tile";
+	#TYPE		TileFlyingTile;
+	SAMESPRITE;
+END;

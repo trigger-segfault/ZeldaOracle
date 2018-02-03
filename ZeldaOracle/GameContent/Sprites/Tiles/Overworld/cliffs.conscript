@@ -2,10 +2,7 @@
 # Sprite Sheets
 #==============================================================
 
-SPRITESHEET "temp_sheet_cliffs",		"Tiles/Overworld/cliffs",			(8, 8), (1, 1), (18, 18);
-SPRITESHEET "temp_sheet_cliff_parts",	"Tiles/Overworld/cliff_parts",		(8, 8), (1, 1), (18, 18);
-SPRITESHEET "temp_sheet_cliff_railings","Tiles/Overworld/cliff_railings",	(8, 8), (1, 1), (18, 18);
-
+SPRITESHEET "temp_sheet_cliffs", "Tiles/Overworld/cliffs", (8, 8), (1, 1), (18, 18);
 
 #==============================================================
 # Sprite Sets
@@ -15,36 +12,22 @@ PALETTEDICTIONARY	"tile_dictionary";
 
 IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
-# Cliffs ======================================================			
-
-MAPPEDCOLORS	"tiles_default", ("cliff");
+MAPPEDCOLORS	"tiles_default", ("cliff", "railing");
 
 SOURCE "temp_sheet_cliffs";
-SPRITESET "tiles_cliffs" (10, 4);
+SPRITESET "tiles_cliffs" (16, 5);
 	MULTIPLE STYLE "cliff", (0, 0), (10, 4);
 		ADD "present"	(0, 0);
 		ADD "seasons"	(0, 4);
 		ADD "past"		(0, 8);
 		END;
-END;
-
-SOURCE "temp_sheet_cliff_parts";
-SPRITESET "tiles_cliff_parts" (2, 6);
-	MULTIPLE BASIC (0, 0); END;
-END;
-
-
-
-# Railings ====================================================
-
-MAPPEDCOLORS	"tiles_default", ("railing");
 		
-SOURCE "temp_sheet_cliff_railings";
-SPRITESET "tiles_cliff_railings" (5, 3);
-	MULTIPLE STYLE "cliff_railing", (0, 0), (5, 3);
-		ADD "present"	(0, 0);
-		ADD "seasons"	(0, 3);
-		ADD "past"		(0, 6);
+	MULTIPLE BASIC (10, 0), (10, 0), (6, 2); END;
+	
+	MULTIPLE STYLE "cliff_railing", (10, 2), (5, 3);
+		ADD "present"	(10, 2);
+		ADD "seasons"	(10, 5);
+		ADD "past"		(10, 8);
 		END;
 END;
 
@@ -102,36 +85,36 @@ NAME "temp_8x8_cliff_wall_face_e_2"					(9, 1);
 NAME "temp_8x8_cliff_wall_face_w_1"					(9, 2);
 NAME "temp_8x8_cliff_wall_face_w_2"					(9, 3);
 
-SOURCE "tiles_cliff_parts";
+#SOURCE "tiles_cliff_parts";
 
-NAME "temp_8x8_cliff_cave_left"						(0, 0);
-NAME "temp_8x8_cliff_cave_right"					(1, 0);
-NAME "temp_8x8_cliff_cave_alt_left"					(0, 1);
-NAME "temp_8x8_cliff_cave_alt_right"				(1, 1);
+NAME "temp_8x8_cliff_cave_left"						(10, 0);
+NAME "temp_8x8_cliff_cave_right"					(11, 0);
+NAME "temp_8x8_cliff_cave_alt_left"					(10, 1);
+NAME "temp_8x8_cliff_cave_alt_right"				(11, 1);
 
-NAME "temp_8x8_cliff_sea_nw"					(0, 2);
-NAME "temp_8x8_cliff_sea_ne"					(1, 2);
-NAME "temp_8x8_cliff_sea_sw"					(0, 3);
-NAME "temp_8x8_cliff_sea_se"					(1, 3);
-NAME "temp_8x8_cliff_sea_border_nw"				(0, 4);
-NAME "temp_8x8_cliff_sea_border_ne"				(1, 4);
-NAME "temp_8x8_cliff_sea_border_sw"				(0, 5);
-NAME "temp_8x8_cliff_sea_border_se"				(1, 5);
+NAME "temp_8x8_cliff_sea_nw"					(12, 0);
+NAME "temp_8x8_cliff_sea_ne"					(13, 0);
+NAME "temp_8x8_cliff_sea_sw"					(12, 1);
+NAME "temp_8x8_cliff_sea_se"					(13, 1);
+NAME "temp_8x8_cliff_sea_border_nw"				(14, 0);
+NAME "temp_8x8_cliff_sea_border_ne"				(15, 0);
+NAME "temp_8x8_cliff_sea_border_sw"				(14, 1);
+NAME "temp_8x8_cliff_sea_border_se"				(15, 1);
 
-SOURCE "tiles_cliff_railings";
+#SOURCE "tiles_cliff_railings";
 
-NAME "temp_8x8_railing_outside_nw"				(0, 0);
-NAME "temp_8x8_railing_outside_ne"				(1, 0);
-NAME "temp_8x8_railing_outside_sw"				(0, 1);
-NAME "temp_8x8_railing_outside_se"				(1, 1);
-NAME "temp_8x8_railing_inside_nw"				(2, 0);
-NAME "temp_8x8_railing_inside_ne"				(3, 0);
-NAME "temp_8x8_railing_inside_sw"				(2, 1);
-NAME "temp_8x8_railing_inside_se"				(3, 1);
-NAME "temp_8x8_railing_horizontal_cap_w"		(0, 2);
-NAME "temp_8x8_railing_horizontal"				(1, 2);
-NAME "temp_8x8_railing_horizontal_cap_e"		(2, 2);
-NAME "temp_8x8_railing_vertical_cap_n"			(4, 0);
-NAME "temp_8x8_railing_vertical"				(4, 1);
-NAME "temp_8x8_railing_vertical_cap_s"			(4, 2);
-NAME "temp_8x8_railing_cap_both"						(4, 2);
+NAME "temp_8x8_railing_outside_nw"				(10, 2);
+NAME "temp_8x8_railing_outside_ne"				(11, 2);
+NAME "temp_8x8_railing_outside_sw"				(10, 3);
+NAME "temp_8x8_railing_outside_se"				(11, 3);
+NAME "temp_8x8_railing_inside_nw"				(12, 2);
+NAME "temp_8x8_railing_inside_ne"				(13, 2);
+NAME "temp_8x8_railing_inside_sw"				(12, 3);
+NAME "temp_8x8_railing_inside_se"				(13, 3);
+NAME "temp_8x8_railing_horizontal_cap_w"		(10, 4);
+NAME "temp_8x8_railing_horizontal"				(11, 4);
+NAME "temp_8x8_railing_horizontal_cap_e"		(12, 4);
+NAME "temp_8x8_railing_vertical_cap_n"			(14, 2);
+NAME "temp_8x8_railing_vertical"				(14, 3);
+NAME "temp_8x8_railing_vertical_cap_s"			(14, 4);
+NAME "temp_8x8_railing_cap_both"				(13, 4);

@@ -79,7 +79,8 @@ END;
 #==============================================================
 
 SOURCE "tiles_ground";
-NAME "ground_8x8"				(6, 6);
+NAME "ground_8x8"				((6, 6), "grass_field");
+NAME "sand_8x8"					((6, 6), "sand");
 NAME "green_8x8"				(6, 7);
 NAME "leaf_ground_right_8x8"	(0, 1);
 NAME "leaf_ground_left_8x8"		(1, 1);

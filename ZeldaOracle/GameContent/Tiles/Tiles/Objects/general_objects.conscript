@@ -1,0 +1,263 @@
+﻿#==============================================================
+# Temp
+#==============================================================
+
+# Movable Tiles -----------------------------------------------
+
+TILE "temp_movable_block";
+	FLAGS		Movable;
+	SOLID		block;
+	PROPERTIES	(boolean, move_once, true);
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+# Leaves ------------------------------------------------------
+
+TILE "leaves";
+	FLAGS		Cuttable, Burnable, Bombable, Boomerangable;
+	SAMESPRITE;
+	BREAKANIM	"effect_grass_leaves";
+	BREAKSOUND	"leaves";
+END;
+
+# Grass -------------------------------------------------------
+
+TILE "grass";
+	FLAGS		Cuttable, Burnable, Bombable, Boomerangable;
+	ENVTYPE		Grass;
+	SAMESPRITE;
+	BREAKANIM	"effect_grass_leaves";
+	BREAKSOUND	"leaves";
+END;
+
+# Bushes ------------------------------------------------------
+
+TILE "regrowable_bush";
+	TYPE		TileRegrowableBush;
+	MODEL		block;
+	FLAGS		Cuttable, Bombable;
+	SAMESPRITE;
+	BREAKANIM	"effect_leaves";
+	BREAKSOUND	"leaves";
+END;
+TILE "bush";
+	SOLID		block;
+	FLAGS		Pickupable, Bombable, Burnable, Switchable, Cuttable, AbsorbSeeds, Boomerangable;
+	SAMESPRITE; SAMESPRITEOBJ;
+	BREAKANIM	"effect_leaves";
+	BREAKSOUND	"leaves";
+END;
+TILE "bush_dark";
+	CLONE "bush";
+	SAMESPRITE; SAMESPRITEOBJ;
+END;
+
+# Flowers -----------------------------------------------------
+
+TILE "flowers_red";
+	SOLID		block;
+	FLAGS		Cuttable, Boomerangable;
+	SAMESPRITE;
+	BREAKANIM	"effect_leaves";
+	BREAKSOUND	"leaves";
+END;
+TILE "flowers_blue";
+	CLONE		"flowers_red";
+	SAMESPRITE;
+END;
+TILE "flowers_pink";
+	CLONE		"flowers_red";
+	SAMESPRITE;
+	BREAKANIM	"effect_leaves_red";
+END;
+TILE "flower";
+	CLONE		"flowers_pink";
+	SAMESPRITE;
+END;
+TILE "water_flower";
+	CLONE		"flowers_pink";
+	SAMESPRITE;
+END;
+
+# Mushroom ----------------------------------------------------
+
+TILE "mushroom";
+	SOLID		block;
+	FLAGS		Pickupable;
+	SAMESPRITE; SAMESPRITEOBJ;
+END;
+
+# Dirt Pile ---------------------------------------------------
+
+TILE "dirt_pile";
+	SOLID		block;
+	FLAGS		Digable;
+	SAMESPRITE;
+END;
+
+# Burnable Tree -----------------------------------------------
+
+TILE "burnable_tree";
+	FLAGS		Burnable, AbsorbSeeds;
+	SOLID		block;
+	SAMESPRITE;
+END;
+TILE "burnable_tree_dark";
+	CLONE "burnable_tree";
+	SAMESPRITE;
+END;
+
+# Bracelet Rock -----------------------------------------------
+
+TILE "bracelet_rock";
+	SOLID		block;
+	FLAGS		Pickupable;
+	SAMESPRITE; SAMESPRITEOBJ;
+	BREAKANIM	"effect_rock_break";
+	BREAKSOUND	"rock_shatter";
+END;
+
+# Switch Rock -------------------------------------------------
+
+TILE "switch_rock";
+	SOLID		block;
+	FLAGS		Switchable, SwitchStays;
+	SAMESPRITE; SAMESPRITEOBJ;
+	BREAKANIM	"effect_rock_break";
+	BREAKSOUND	"rock_shatter";
+END;
+
+# Crystal Rock ------------------------------------------------
+
+TILE "crystal_rock";
+	SOLID		block;
+	FLAGS		Cuttable;
+	SAMESPRITE; SAMESPRITEOBJ;
+	BREAKANIM	"effect_rock_break";
+	BREAKSOUND	"rock_shatter";
+END;
+
+# Pot ---------------------------------------------------------
+
+TILE "pot";
+	SOLID		block;
+	FLAGS		Cuttable, Movable, Pickupable, Switchable;
+	SAMESPRITE; SAMESPRITEOBJ;
+	BREAKANIM	"effect_rock_break";
+	BREAKSOUND	"rock_shatter";
+	PROPERTIES	(integer, cuttable_sword_level, 1),
+				(boolean, raised_on_buttons, true);
+END;
+
+# Sign --------------------------------------------------------
+
+TILE "sign";
+	TYPE		TileSign;
+	SOLID		block;
+	FLAGS		Pickupable, Burnable, Cuttable, Switchable, Boomerangable;
+	SAMESPRITE; SAMESPRITEOBJ;
+	BREAKANIM	"effect_red_brick_break";
+	BREAKSOUND	"rock_shatter";
+	PROPERTIES
+		(integer, cuttable_sword_level, 1),
+		(string, text, "Hello World!",
+			"Text", "text_message", "Sign",
+			"The text to display when the sign is read from the front.");
+END;
+
+# Grave -------------------------------------------------------
+
+TILE "grave_stationary"; SAMESPRITE; SOLID block; END;
+TILE "movable_grave";
+	CLONE		"temp_movable_block";
+	SAMESPRITE; SAMESPRITEOBJ;
+END;
+
+# Armos -------------------------------------------------------
+
+TILE "armos_stationary"; SAMESPRITE; SOLID block; END;
+TILE "armos_alt_stationary"; SAMESPRITE; SOLID block; END;
+TILE "movable_armos";
+	CLONE		"temp_movable_block";
+	SAMESPRITE; SAMESPRITEOBJ;
+END;
+TILE "movable_armos_alt";
+	CLONE		"temp_movable_block";
+	SAMESPRITE; SAMESPRITEOBJ;
+END;
+
+# Magnet Stones -----------------------------------------------
+
+TILE "temp_magnet_stone";
+	#TYPE		TileMagnetStone
+	SOLID block;
+END;
+TILE "magnet_stone_north";
+	CLONE "temp_magnet_stone";
+	SAMESPRITE;
+	# North
+END;
+TILE "magnet_stone_south";
+	CLONE "temp_magnet_stone";
+	SAMESPRITE;
+	# South
+END;
+
+# Soft Soil ---------------------------------------------------
+
+TILE "soft_soil";
+	#TYPE		TileSoftSoil;
+	SAMESPRITE;
+END;
+
+# Cactus ------------------------------------------------------
+
+TILE "cactus";
+	FLAGS		HurtPlayer;
+	SOLID		edge_e;
+	SAMESPRITE;
+	HURT		1, (4, -1, 13, 18);
+END;
+
+# Seedling Sprout ---------------------------------------------
+
+TILE "seedling_sprout"; SAMESPRITE; END;
+
+# Jump Flower -------------------------------------------------
+
+TILE "jump_flower";
+	#TYPE		TileJumpFlower;
+	SAMESPRITE;
+END;
+
+# Ages Portal -------------------------------------------------
+
+TILE "ages_portal";
+	#TYPE		TileAgesPortal;
+	SAMESPRITE;
+END;
+
+# Blocks ------------------------------------------------------
+
+TILE "block_stationary"; SAMESPRITE; SOLID block; END;
+TILE "movable_block";
+	CLONE		"temp_movable_block";
+	SAMESPRITE; SAMESPRITEOBJ;
+END;
+TILE "bombable_block";
+	FLAGS		Bombable;
+	SOLID		block;
+	SAMESPRITE;
+	BREAKANIM	"effect_rock_break";
+	BREAKSOUND	"rock_shatter";
+END;
+
+# Ice ---------------------------------------------------------
+
+TILE "ice_block";
+	CLONE		"temp_movable_block";
+	SAMESPRITE; SAMESPRITEOBJ;
+END;

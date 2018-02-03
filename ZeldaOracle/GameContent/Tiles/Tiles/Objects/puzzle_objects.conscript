@@ -1,499 +1,8 @@
-﻿
-
-# ---- Chests -----------------------------------------------------------------
-
-TILE "chest";
-	TYPE		TileChest;
-	SOLID		block;
-	RESETWHEN	Never;
-	SPRITEINDEX		0, "tile_chest";
-	SPRITEINDEX		1, "tile_chest_opened";
-	PROPERTIES
-		(integer, spawn_delay_after_poof, 16),
-		(string, reward, "rupees_1",
-			"Reward", "reward", "Chest",
-			 "The reward contained inside the chest."),
-		(boolean, looted, "false",
-			"Looted", "", "Chest",
-			"True if the item has been taken from the chest.");
-END;
-
-# ---- Reward -----------------------------------------------------------------
-
-TILE "reward";
-	TYPE			TileReward;
-	MODEL			center;
-	RESETWHEN		Never;
-	PROPERTIES
-		(string, reward, "heart_piece",
-			"Reward", "reward", "Reward",
-			 "The reward to spawn."),
-		(boolean, looted, "false",
-			"Looted", "", "Reward",
-			"True if the item has been taken.");
-END;
-
-# ---- Color Switch -----------------------------------------------------------
-
-TILE "temp_color_switch";
-	TYPE		TileColorSwitch;
-	HALFSOLID	block;
-	FLAGS		AbsorbSeeds;
-	SPRITEINDEX	0, "tile_color_switch_blue";
-	SPRITEINDEX	1, "tile_color_switch_red";
-	PROPERTIES	(boolean, switch_once,			false,	"Switch Once",			"", "", "Can the color switch only be switched once?"),
-				(boolean, switch_state,			false,	"Switch State",			"", "", "The switch state of the color switch (false = blue, true = red)."),
-				(boolean, sync_with_dungeon,	false,	"Sync With Dungeon",	"", "", "Will the color switch's state be syncronized with other color switches in the dungeon?");
-	EVENT		toggle, "Toggle", "Switch", "Occurs when the Color Switch changes color.", (ColorSwitch, colorSwitch);
-END;
-
-TILE "color_switch_blue";
-	CLONE		"temp_color_switch";
-	PROPERTIES	(boolean, switch_state, false),
-				(integer, sprite_index, 0);
-END;
-
-TILE "color_switch_red";
-	CLONE		"temp_color_switch";
-	PROPERTIES	(boolean, switch_state, true),
-				(integer, sprite_index, 1);
-END;
-
-# ---- Trampoline -------------------------------------------------------------
-
-TILE "trampoline";
-	FLAGS		Movable;
-	SOLID		block;
-	SPRITEINDEX	0, "tile_trampoline";
-	SPRITEINDEX	1, "tile_trampoline_bounce";
-END;
-
-TILE "super_trampoline";
-	CLONE "trampoline";
-	FLAGS		Movable;
-	SOLID		block;
-	SPRITEINDEX	0, "tile_super_trampoline";
-	SPRITEINDEX	1, "tile_super_trampoline_bounce";
-END;
-
-# ---- Owl --------------------------------------------------------------------
-# ---- Sarcophagus ------------------------------------------------------------
-
-TILE "sarcophagus";
-	SOLID		block_1x2;
-	FLAGS		Pickupable, InstantPickup;
-	SIZE		(1, 2);
-	SAMESPRITE; SAMESPRITEOBJ;
-	PREVIEW		"preview_sarcophagus";
-	BREAKANIM	"effect_blue_brick_break";
-	BREAKSOUND	"monster_die";
-	PROPERTIES
-		(integer, pickupable_bracelet_level, 1);
-END;
-
-# ---- Owl --------------------------------------------------------------------
-
-TILE "owl";
-	TYPE		TileOwl;
-	FLAGS		AbsorbSeeds;
-	SOLID		block;
-
-	SPRITEINDEX	0, "tile_owl";
-	SPRITEINDEX	1, "tile_owl_activated";
-
-	PROPERTIES
-		(string, text, "<red>undefined<red>",
-			"Text", "text_message", "Owl",
-			"The text to display when the owl is activated.");
-END;
-
-# ---- Color Cube -------------------------------------------------------------
-
-TILE "color_cube";
-	TYPE			TileColorCube;
-	FLAGS			Movable;
-	SOLID			block;
-	SPRITEINDEX		0, ("tiles_color_cube", (0, 0));
-	SPRITEINDEX		1, ("tiles_color_cube", (1, 0));
-	SPRITEINDEX		2, ("tiles_color_cube", (2, 0));
-	SPRITEINDEX		3, ("tiles_color_cube", (3, 0));
-	SPRITEINDEX		4, ("tiles_color_cube", (4, 0));
-	SPRITEINDEX		5, ("tiles_color_cube", (5, 0));
-	PROPERTIES		(integer, orientation, 0, "Orientation", ("enum", "ColorCubeOrientation"), "Color Cube", "The orientation index of the color cube.");
-END;
-
-# ---- Roller -----------------------------------------------------------------
-
-TILE "temp_roller";
-	TYPE		TileRoller;
-	FLAGS		Movable, NotGrabbable;
-	SOLID		block;
-	PROPERTIES
-		(boolean, vertical, "false",
-			"Vertical", "", "Roller",
-			"The roller rolls vertically", true),
-		(boolean, first_roller, "false",
-			"First Roller", "", "Roller",
-			"This is the top left roller of a group. Any rollers before this won't be connected.");
-END;
-
-TILE "roller_horizontal";
-	CLONE		"temp_roller";
-	SPRITEINDEX	0, "tile_roller_horizontal";
-	SPRITEINDEX	1, "tile_roller_horizontal_roll";
-	PROPERTIES	(boolean, vertical, "false"),
-				(boolean, first_roller, "false");
-END;
-
-TILE "roller_vertical";
-	CLONE		"temp_roller";
-	SPRITEINDEX	0, "tile_roller_vertical";
-	SPRITEINDEX	1, "tile_roller_vertical_roll";
-	PROPERTIES	(boolean, vertical, "true"),
-				(boolean, first_roller, "false");
-END;
-
-# ---- Crossing Gate ----------------------------------------------------------
-
-TILE "temp_crossing_grate";
-	TYPE		TileCrossingGate;
-	SOLID		edge_w;
-	PROPERTIES	(boolean, raised,    false, "Raised",      "", "Crossing Gate", "True if the gate is raised."),
-				(boolean, face_left, false, "Facing Left", "", "Crossing Gate", "True if the crossing gate is facing left."),
-				(boolean, cling_on_stab, false);
-END;
-
-TILE "crossing_grate_right";
-	CLONE		"temp_crossing_grate";
-	PROPERTIES (boolean, face_left, false);
-END;
-
-TILE "crossing_grate_left";
-	CLONE "temp_crossing_grate";
-	PROPERTIES (boolean, face_left, true);
-END;
-
-TILE "platform";
-	TYPE	TilePlatform;
-	SPRITE	"tile_moving_platform";
-END;
-
-TILE "pull_handle";
-	TYPE		TilePullHandle;
-	SPRITE		"tile_pull_handle_down";
-	PROPERTIES	(integer, direction, 3, "Direction", "direction", "Handle", "The direction the handle extends in.");
-	EVENT		retracting, "Retracting", "Pull Handle", "Occurs every step that the pull handle is retracting into the wall.", (PullHandle, pullHandle);
-	EVENT		extending, "Extending", "Pull Handle", "Occurs every step that the pull handle is extending from the wall.", (PullHandle, pullHandle);
-	EVENT		fully_retract, "Fully Retracted", "Pull Handle", "Occurs when the handle is fully retracted into the wall.", (PullHandle, pullHandle);
-	EVENT		fully_extend, "Fully Extended", "Pull Handle", "Occurs when the handle is fully extended from the wall.", (PullHandle, pullHandle);
-END;
-
-TILE "seed_bouncer";
-	TYPE		TileSeedBouncer;
-	SPRITE		"tile_seed_bouncer";
-	HALFSOLID	block;
-	PROPERTIES	(integer, angle, 0, "Angle", "angle", "Seed Bouncer", "The angle the seed bouncer is facing."),
-				(boolean, cling_on_stab, false);
-END;
-
-
-
-
-
-TILE "cracked_floor";
-	TYPE		TileCrackedFloor;
-	SAMESPRITE;
-END;
-
-TILE "floor_spikes";
-	TYPE		TileSpikedFloor;
-	SAMESPRITE;
-END;
-
-# ---- Bridges ----------------------------------------------------------------
-
-TILE "temp_bridge";
-	TYPE		TileBridge;
-	SPRITE		"tile_bridge_horizontal";
-	PROPERTIES	(boolean, vertical, false, "Vertical", "", "Bridge", "True if the bridge is vertical."),
-				(integer, bridge_direction, -1, "Bridge Direction", "direction", "Bridge", "Direction the bridge is in.");
-END;
-
-TILE "bridge_horizontal";
-	CLONE		"temp_bridge";
-	SAMESPRITE;
-	PROPERTIES	(boolean, vertical, false),
-				(integer, bridge_direction, 0);
-END;
-
-TILE "bridge_vertical";
-	CLONE		"temp_bridge";
-	SAMESPRITE;
-	PROPERTIES	(boolean, vertical, true),
-				(integer, bridge_direction, 3);
-END;
-
-# ---- Moving Platform --------------------------------------------------------
-
-TILE "moving_platform";
-	TYPE		TilePlatform;
-	SAMESPRITE;
-END;
-
-# ---- Lantern ----------------------------------------------------------------
-
-TILE "lantern";
-	TYPE		TileLantern;
-	SOLID		block;
-	SPRITEINDEX	0, "tile_lantern_lit";
-	SPRITEINDEX	1, "tile_lantern_unlit";
-	PROPERTIES	(boolean, lit, true, "Lit", "", "", "Whether the lantern starts lit or not.");
-	EVENT		light, "Light", "Lanturn", "Occurs when the lantern is lighted.", (Lantern, lantern);
-	EVENT		put_out, "Put Out", "Lanturn", "Occurs when the lantern is put out.", (Lantern, lantern);
-END;
-
-# ---- Signs ------------------------------------------------------------------
-
-TILE "sign";
-	TYPE		TileSign;
-	SOLID		block;
-	FLAGS		Pickupable, Burnable, Cuttable, Switchable, Boomerangable;
-	SAMESPRITE; SAMESPRITEOBJ;
-	BREAKANIM	"effect_red_brick_break";
-	BREAKSOUND	"rock_shatter";
-	PROPERTIES
-		(integer, cuttable_sword_level, 1),
-		(string, text, "Hello World!",
-			"Text", "text_message", "Sign",
-			"The text to display when the sign is read from the front.");
-END;
-
-#TILE sign_alt;
-#	CLONE		sign;
-#	SPRITE		tile_sign_alt;
-#	SPRITEOBJ	tile_sign_alt_asobject;
-#END;
-
-# ---- Movable Blocks ---------------------------------------------------------
-
-TILE "movable_block";
-	SOLID		block;
-	FLAGS		Movable;
-	SAMESPRITE; SAMESPRITEOBJ;
-	PROPERTIES	(boolean, move_once, true);
-END;
-
-TILE "movable_armos";
-	CLONE		"movable_block";
-	SAMESPRITE; SAMESPRITEOBJ;
-END;
-
-TILE "movable_armos_alt";
-	CLONE		"movable_block";
-	SAMESPRITE; SAMESPRITEOBJ;
-END;
-
-TILE "grave";
-	CLONE		"movable_block";
-	SAMESPRITE; SAMESPRITEOBJ;
-END;
-
-#TILE tombstone_alt;
-#	CLONE		tombstone;
-#	SPRITE		tile_grave_alt;
-#	SPRITEOBJ	tile_grave_alt_asobject;
-#END;
-
-#TILE fairy_statue;
-#	CLONE		movable_block;
-#	SPRITE		tile_fairy_statue;
-#	SPRITEOBJ	tile_fairy_statue_asobject;
-#END;
-
-TILE "ice_block";
-	CLONE		"movable_block";
-	SAMESPRITE; SAMESPRITEOBJ;
-END;
-
-# ---- Bombable Block ---------------------------------------------------------
-
-TILE "bombable_block";
-	SOLID		block;
-	FLAGS		Bombable;
-	SAMESPRITE;
-	BREAKANIM	"effect_rock_break";
-	BREAKSOUND	"rock_shatter";
-END;
-
-
-# ---- Color Jump Pad ---------------------------------------------------------
-
-TILE "temp_color_jump_pad";
-	TYPE		TileColorJumpPad;
-	SPRITEINDEX	0, "tile_color_jump_pad_red";
-	SPRITEINDEX 1, "tile_color_jump_pad_yellow";
-	SPRITEINDEX 2, "tile_color_jump_pad_blue";
-	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the jump pad.");
-	EVENT		color_change, "Color Change", "Color", "Occurs when the pad's color changes.", (ColorJumpPad, tile, Color, color);
-END;
-
-TILE "color_jump_pad_red";
-	CLONE		"temp_color_jump_pad";
-	PROPERTIES	(integer, color, 0), (integer, sprite_index, 0);
-END;
-
-TILE "color_jump_pad_yellow";
-	CLONE		"temp_color_jump_pad";
-	PROPERTIES	(integer, color, 1), (integer, sprite_index, 1);
-END;
-
-TILE "color_jump_pad_blue";
-	CLONE		"temp_color_jump_pad";
-	PROPERTIES	(integer, color, 2), (integer, sprite_index, 2);
-END;
-
-# ---- Color Tile -------------------------------------------------------------
-
-TILE "temp_color_tile";
-	TYPE		TileColorTile;
-	SPRITEINDEX	0, "tile_color_tile_red";
-	SPRITEINDEX 1, "tile_color_tile_yellow";
-	SPRITEINDEX 2, "tile_color_tile_blue";
-	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the tile.");
-END;
-
-TILE "color_tile_red";
-	CLONE		"temp_color_tile";
-	PROPERTIES	(integer, color, 0), (integer, sprite_index, 0);
-END;
-
-TILE "color_tile_yellow";
-	CLONE		"temp_color_tile";
-	PROPERTIES	(integer, color, 1), (integer, sprite_index, 1);
-END;
-
-TILE "color_tile_blue";
-	CLONE		"temp_color_tile";
-	PROPERTIES	(integer, color, 2), (integer, sprite_index, 2);
-END;
-
-# ---- Color Barrier ----------------------------------------------------------
-
-TILE "temp_color_barrier";
-	TYPE		TileColorBarrier;
-	HALFSOLID	block;
-	SPRITE		tile_color_barrier_red_raised;
-	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the barrier (red or blue).");
-END;
-
-TILE "color_barrier_red";
-	CLONE		"temp_color_barrier";
-	SPRITE		tile_color_barrier_red_lowered;
-	PROPERTIES	(integer, color, 0);
-END;
-
-TILE "color_barrier_blue";
-	CLONE		"temp_color_barrier";
-	SPRITE		tile_color_barrier_blue_raised;
-	PROPERTIES	(integer, color, 2);
-END;
-
-# ---- Color Statue -----------------------------------------------------------
-
-TILE "temp_color_statue";
-	TYPE		TileColorStatue;
-	SOLID		block;
-	FLAGS		Movable;
-	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the statue.");
-END;
-
-TILE "color_statue_red";
-	CLONE		"temp_color_statue";
-	SAMESPRITE;
-	PROPERTIES	(integer, color, 0);
-END;
-
-TILE "color_statue_yellow";
-	CLONE		"temp_color_statue";
-	SAMESPRITE;
-	PROPERTIES	(integer, color, 1);
-END;
-
-TILE "color_statue_blue";
-	CLONE		"temp_color_statue";
-	SAMESPRITE;
-	PROPERTIES	(integer, color, 2);
-END;
-
-# ---- Color Block -----------------------------------------------------------
-
-TILE "temp_color_block";
-	TYPE		TileColorBlock;
-	SOLID		block;
-	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the block.");
-END;
-
-TILE "color_block_red";
-	CLONE		"temp_color_block";
-	SAMESPRITE;
-	PROPERTIES	(integer, color, 0);
-END;
-
-TILE "color_block_yellow";
-	CLONE		"temp_color_block";
-	SAMESPRITE;
-	PROPERTIES	(integer, color, 1);
-END;
-
-TILE "color_block_blue";
-	CLONE		"temp_color_block";
-	SAMESPRITE;
-	PROPERTIES	(integer, color, 2);
-END;
-
-# ---- Color Cube Slot --------------------------------------------------------
-
-TILE "color_cube_slot";
-	TYPE		TileColorCubeSlot;
-	SAMESPRITE;
-	EVENT		color_change, "Color Change", "Color", "Occurs when the slot's color changes.", (ColorCubeSlot, tile, Color, color);
-END;
-
-# ---- Color Lantern ----------------------------------------------------------
-
-TILE "color_lantern";
-	TYPE		TileColorLantern;
-	SOLID		block;
-	SAMESPRITE;
-	EVENT		color_change, "Color Change", "Color", "Occurs when the lantern's flame color changes.", (ColorLantern, tile, Color, color);
-END;
-
-# ---- Button -----------------------------------------------------------------
-
-TILE "button";
-	TYPE		TileButton;
-	SPRITEINDEX	0, "tile_button_up";
-	SPRITEINDEX	1, "tile_button_down";
-	PROPERTIES	(boolean, releasable,		true, "Releasable",			"", "Button", "Can the button only be pressed, and not released?"),
-				(boolean, pressed,			false, "Pressed",			"", "Button", "Is the button pressed");
-	EVENT		press, "Press", "Switch", "Occurs when the button is pressed.", (Button button);
-	EVENT		release, "Release", "Switch", "Occurs when the button is released.", (Button button);
-END;
-
-# ---- Lever ------------------------------------------------------------------
-
-TILE "lever";
-	TYPE		TileLever;
-	HALFSOLID	block;
-	FLAGS		AbsorbSeeds;
-	SPRITEINDEX	0, "tile_lever_left";
-	SPRITEINDEX	1, "tile_lever_right";
-	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "Lever", "Can the lever only be switched once?"),
-				(boolean, switch_state,		false,	"Switch State",		"", "Lever", "True if the lever is facing left.");
-	EVENT		toggle, "Toggle", "Switch", "Occurs when the lever is toggled.", (Lever, lever);
-END;
-
-# ---- Doors ------------------------------------------------------------------
+﻿#==============================================================
+# Temp
+#==============================================================
+
+# Doors -------------------------------------------------------
 
 TILE "temp_door";
 	TYPE			TileDoor;
@@ -504,13 +13,6 @@ TILE "temp_door";
 	PROPERTIES		(boolean, open, false, "Open", "", "Door", "True if the door open."),
 					(integer, direction, 0, "Direction", "direction", "Door", "The direction the door is facing.", false);
 END;
-
-TILE "door_right";	CLONE "temp_door"; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
-TILE "door_up";		CLONE "temp_door"; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
-TILE "door_left";	CLONE "temp_door"; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
-TILE "door_down";	CLONE "temp_door"; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
-
-
 TILE "temp_small_key_door";
 	CLONE			"temp_door";
 	TYPE			TileSmallKeyDoor;
@@ -519,12 +21,6 @@ TILE "temp_small_key_door";
 	SPRITEINDEX	1,	"tile_small_key_door_open";
 	SPRITEINDEX	2,	"tile_small_key_door_close";
 END;
-
-TILE "small_key_door_right";	CLONE "temp_small_key_door"; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
-TILE "small_key_door_up";		CLONE "temp_small_key_door"; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
-TILE "small_key_door_left";		CLONE "temp_small_key_door"; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
-TILE "small_key_door_down";		CLONE "temp_small_key_door"; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
-
 TILE "temp_boss_key_door";
 	CLONE			"temp_door";
 	TYPE			TileBossKeyDoor;
@@ -533,12 +29,6 @@ TILE "temp_boss_key_door";
 	SPRITEINDEX	1,	"tile_boss_key_door_open";
 	SPRITEINDEX	2,	"tile_boss_key_door_close";
 END;
-
-TILE "boss_key_door_right";	CLONE "temp_boss_key_door"; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
-TILE "boss_key_door_up";	CLONE "temp_boss_key_door"; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
-TILE "boss_key_door_left";	CLONE "temp_boss_key_door"; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
-TILE "boss_key_door_down";	CLONE "temp_boss_key_door"; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
-
 TILE "temp_minecart_door";
 	CLONE		"temp_door";
 	SPRITEINDEX	0, "tile_minecart_door_closed";
@@ -547,47 +37,42 @@ TILE "temp_minecart_door";
 	TYPE		TileMinecartDoor;
 END;
 
-TILE "minecart_door_right";	CLONE "temp_minecart_door"; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
-TILE "minecart_door_up";	CLONE "temp_minecart_door"; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
-TILE "minecart_door_left";	CLONE "temp_minecart_door"; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
-TILE "minecart_door_down";	CLONE "temp_minecart_door"; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
+# Color Tiles -------------------------------------------------
 
-TILE "eye_statue";
-	TYPE		TileEyeStatue;
+TILE "temp_color_jump_pad";
+	TYPE		TileColorJumpPad;
+	SPRITEINDEX	0, "tile_color_jump_pad_red";
+	SPRITEINDEX 1, "tile_color_jump_pad_yellow";
+	SPRITEINDEX 2, "tile_color_jump_pad_blue";
+	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the jump pad.");
+	EVENT		color_change, "Color Change", "Color", "Occurs when the pad's color changes.", (ColorJumpPad, tile, Color, color);
+END;
+TILE "temp_color_tile";
+	TYPE		TileColorTile;
+	SPRITEINDEX	0, "tile_color_tile_red";
+	SPRITEINDEX 1, "tile_color_tile_yellow";
+	SPRITEINDEX 2, "tile_color_tile_blue";
+	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the tile.");
+END;
+TILE "temp_color_barrier";
+	TYPE		TileColorBarrier;
+	HALFSOLID	block;
+	SPRITE		tile_color_barrier_red_raised;
+	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the barrier (red or blue).");
+END;
+TILE "temp_color_statue";
+	TYPE		TileColorStatue;
 	SOLID		block;
-	SAMESPRITE;
+	FLAGS		Movable;
+	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the statue.");
+END;
+TILE "temp_color_block";
+	TYPE		TileColorBlock;
+	SOLID		block;
+	PROPERTIES	(integer, color, 0, "Color", ("enum", "PuzzleColor"), "Color", "The color of the block.");
 END;
 
-TILE "plaque";
-	TYPE		TileSign;
-	SOLID		block;
-	SAMESPRITE;
-	PROPERTIES
-		(string, text, "Hello World!",
-			"Text", "text_message", "Sign",
-			"The text to display when the sign is read from the front.");
-END;
-
-TILE "locked_block";
-	TYPE		TileLockedBlock;
-	SOLID		block;
-	RESETWHEN	Never;
-	SAMESPRITE;
-END;
-
-TILE "temp_wall_webbed";
-	SOLID		block;
-	FLAGS		Burnable;
-	PROPERTIES	(boolean, disable_on_destroy, true);
-END;
-
-TILE "wall_webbed_right";	CLONE "temp_wall_webbed"; SAMESPRITE; END;
-TILE "wall_webbed_up";		CLONE "temp_wall_webbed"; SAMESPRITE; END;
-TILE "wall_webbed_left";	CLONE "temp_wall_webbed"; SAMESPRITE; END;
-TILE "wall_webbed_down";	CLONE "temp_wall_webbed"; SAMESPRITE; END;
-
-
-# ---- Minecart Tracks --------------------------------------------------------
+# Minecart Tracks ---------------------------------------------
 
 TILE "temp_minecart_track";
 	TYPE		TileMinecartTrack;
@@ -603,6 +88,254 @@ TILE "temp_minecart_track";
 				(integer, switched_track_orientation, 0, "Switched Track Orientation", ("enum", "MinecartTrackOrientation"), "Minecart", ""),
 				(integer, track_orientation, 0, "Track Orientation", ("enum", "MinecartTrackOrientation"), "Minecart", "");
 END;
+
+# Lava Mouth --------------------------------------------------
+
+TILE "temp_lava_mouth";
+	#TYPE		TileLavaMouth
+	SOLID		block;
+	RESETWHEN	Never;
+END;
+
+# Arrow Shooter -----------------------------------------------
+
+TILE "temp_arrow_shooter";
+	#Type		TileArrowShooter;
+	SOLID		block;
+END;
+
+# Fire Shooter ------------------------------------------------
+
+TILE "temp_fire_shooter";
+	#Type		TileFireShooter;
+	SOLID		block;
+END;
+
+# Tablet Slot -------------------------------------------------
+
+TILE "temp_tablet_slot";
+	#Type		TileTabletSlot;
+	SOLID		block;
+	RESETWHEN	Never;
+END;
+
+# Webbed Wall -------------------------------------------------
+
+TILE "temp_wall_webbed";
+	FLAGS		Burnable;
+	SOLID		block;
+	RESETWHEN	Never;
+	PROPERTIES	(boolean, disable_on_destroy, true);
+END;
+
+# Bridge ------------------------------------------------------
+
+TILE "temp_bridge";
+	TYPE		TileBridge;
+	SPRITE		"tile_bridge_horizontal";
+	PROPERTIES	(boolean, vertical, false, "Vertical", "", "Bridge", "True if the bridge is vertical."),
+				(integer, bridge_direction, -1, "Bridge Direction", "direction", "Bridge", "Direction the bridge is in.");
+END;
+
+#==============================================================
+# Tiles
+#==============================================================
+
+# Doors -------------------------------------------------------
+
+TILE "door_right";	CLONE "temp_door"; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
+TILE "door_up";		CLONE "temp_door"; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
+TILE "door_left";	CLONE "temp_door"; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
+TILE "door_down";	CLONE "temp_door"; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
+
+TILE "small_key_door_right";	CLONE "temp_small_key_door"; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
+TILE "small_key_door_up";		CLONE "temp_small_key_door"; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
+TILE "small_key_door_left";		CLONE "temp_small_key_door"; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
+TILE "small_key_door_down";		CLONE "temp_small_key_door"; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
+
+TILE "boss_key_door_right";	CLONE "temp_boss_key_door"; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
+TILE "boss_key_door_up";	CLONE "temp_boss_key_door"; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
+TILE "boss_key_door_left";	CLONE "temp_boss_key_door"; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
+TILE "boss_key_door_down";	CLONE "temp_boss_key_door"; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
+
+TILE "minecart_door_right";	CLONE "temp_minecart_door"; PROPERTIES (integer, direction, 0), (integer, substrip_index, 0); END;
+TILE "minecart_door_up";	CLONE "temp_minecart_door"; PROPERTIES (integer, direction, 1), (integer, substrip_index, 1); END;
+TILE "minecart_door_left";	CLONE "temp_minecart_door"; PROPERTIES (integer, direction, 2), (integer, substrip_index, 2); END;
+TILE "minecart_door_down";	CLONE "temp_minecart_door"; PROPERTIES (integer, direction, 3), (integer, substrip_index, 3); END;
+
+# Locked Block ------------------------------------------------
+
+TILE "locked_block";
+	TYPE		TileLockedBlock;
+	SOLID		block;
+	RESETWHEN	Never;
+	SAMESPRITE;
+END;
+
+# Statues -----------------------------------------------------
+
+TILE "statue_stationary"; SAMESPRITE; SOLID block; END;
+TILE "statue_alt_stationary"; SAMESPRITE; SOLID block; END;
+TILE "movable_statue";
+	CLONE		"temp_movable_block";
+	SAMESPRITE;
+END;
+TILE "movable_statue_alt";
+	CLONE		"temp_movable_block";
+	SAMESPRITE;
+END;
+TILE "eye_statue";
+	TYPE		TileEyeStatue;
+	SOLID		block;
+	SAMESPRITE;
+END;
+TILE "eye_statue_broken"; SAMESPRITE; SOLID block; END;
+TILE "essense_statue"; SAMESPRITE; SOLID block; END;
+TILE "plaque";
+	TYPE		TileSign;
+	SOLID		block;
+	SAMESPRITE;
+	PROPERTIES
+		(string, text, "Hello World!",
+			"Text", "text_message", "Sign",
+			"The text to display when the plaque is read from the front.");
+END;
+
+# Button ------------------------------------------------------
+
+TILE "button";
+
+	TYPE		TileButton;
+	SPRITEINDEX	0, "tile_button_up";
+	SPRITEINDEX	1, "tile_button_down";
+	PROPERTIES	(boolean, releasable,		true, "Releasable",			"", "Button", "Can the button only be pressed, and not released?"),
+				(boolean, pressed,			false, "Pressed",			"", "Button", "Is the button pressed");
+	EVENT		press, "Press", "Switch", "Occurs when the button is pressed.", (Button button);
+	EVENT		release, "Release", "Switch", "Occurs when the button is released.", (Button button);
+END;
+
+# Lever -------------------------------------------------------
+
+TILE "lever";
+	TYPE		TileLever;
+	HALFSOLID	block;
+	FLAGS		AbsorbSeeds;
+	SPRITEINDEX	0, "tile_lever_left";
+	SPRITEINDEX	1, "tile_lever_right";
+	PROPERTIES	(boolean, switch_once,		false,	"Switch Once",		"", "Lever", "Can the lever only be switched once?"),
+				(boolean, switch_state,		false,	"Switch State",		"", "Lever", "True if the lever is facing left.");
+	EVENT		toggle, "Toggle", "Switch", "Occurs when the lever is toggled.", (Lever, lever);
+END;
+
+# Lantern -----------------------------------------------------
+
+TILE "lantern";
+	TYPE		TileLantern;
+	SOLID		block;
+	SPRITEINDEX	0, "tile_lantern_lit";
+	SPRITEINDEX	1, "tile_lantern_unlit";
+	PROPERTIES	(boolean, lit, true, "Lit", "", "", "Whether the lantern starts lit or not.");
+	EVENT		light, "Light", "Lanturn", "Occurs when the lantern is lighted.", (Lantern, lantern);
+	EVENT		put_out, "Put Out", "Lanturn", "Occurs when the lantern is put out.", (Lantern, lantern);
+END;
+
+# Color Jump Pad ----------------------------------------------
+
+TILE "color_jump_pad_red";
+	CLONE		"temp_color_jump_pad";
+	PROPERTIES	(integer, color, 0), (integer, sprite_index, 0);
+END;
+TILE "color_jump_pad_yellow";
+	CLONE		"temp_color_jump_pad";
+	PROPERTIES	(integer, color, 1), (integer, sprite_index, 1);
+END;
+TILE "color_jump_pad_blue";
+	CLONE		"temp_color_jump_pad";
+	PROPERTIES	(integer, color, 2), (integer, sprite_index, 2);
+END;
+
+# Color Tile --------------------------------------------------
+
+TILE "color_tile_red";
+	CLONE		"temp_color_tile";
+	PROPERTIES	(integer, color, 0), (integer, sprite_index, 0);
+END;
+TILE "color_tile_yellow";
+	CLONE		"temp_color_tile";
+	PROPERTIES	(integer, color, 1), (integer, sprite_index, 1);
+END;
+TILE "color_tile_blue";
+	CLONE		"temp_color_tile";
+	PROPERTIES	(integer, color, 2), (integer, sprite_index, 2);
+END;
+
+# Color Barrier -----------------------------------------------
+
+TILE "color_barrier_red";
+	CLONE		"temp_color_barrier";
+	SPRITE		tile_color_barrier_red_lowered;
+	PROPERTIES	(integer, color, 0);
+END;
+TILE "color_barrier_blue";
+	CLONE		"temp_color_barrier";
+	SPRITE		tile_color_barrier_blue_raised;
+	PROPERTIES	(integer, color, 2);
+END;
+
+# Color Statue ------------------------------------------------
+
+TILE "color_statue_red";
+	CLONE		"temp_color_statue";
+	SAMESPRITE;
+	PROPERTIES	(integer, color, 0);
+END;
+TILE "color_statue_yellow";
+	CLONE		"temp_color_statue";
+	SAMESPRITE;
+	PROPERTIES	(integer, color, 1);
+END;
+TILE "color_statue_blue";
+	CLONE		"temp_color_statue";
+	SAMESPRITE;
+	PROPERTIES	(integer, color, 2);
+END;
+
+# Color Block -------------------------------------------------
+
+TILE "color_block_red";
+	CLONE		"temp_color_block";
+	SAMESPRITE;
+	PROPERTIES	(integer, color, 0);
+END;
+TILE "color_block_yellow";
+	CLONE		"temp_color_block";
+	SAMESPRITE;
+	PROPERTIES	(integer, color, 1);
+END;
+TILE "color_block_blue";
+	CLONE		"temp_color_block";
+	SAMESPRITE;
+	PROPERTIES	(integer, color, 2);
+END;
+
+# Color Lantern -----------------------------------------------
+
+TILE "color_lantern";
+	TYPE		TileColorLantern;
+	SOLID		block;
+	SAMESPRITE;
+	EVENT		color_change, "Color Change", "Color", "Occurs when the lantern's flame color changes.", (ColorLantern, tile, Color, color);
+END;
+
+# Color Cube Slot ---------------------------------------------
+
+TILE "color_cube_slot";
+	TYPE		TileColorCubeSlot;
+	SAMESPRITE;
+	EVENT		color_change, "Color Change", "Color", "Occurs when the slot's color changes.", (ColorCubeSlot, tile, Color, color);
+END;
+
+# Minecart Tracks ---------------------------------------------
 
 TILE "minecart_track_horizontal";
 	CLONE		"temp_minecart_track";
@@ -634,8 +367,167 @@ TILE "minecart_track_stop";
 	SAMESPRITE;
 END;
 
+# Lava Mouth --------------------------------------------------
 
-# ---- Turnstile --------------------------------------------------------------
+TILE "lava_mouth_left";
+	CLONE		"temp_lava_mouth";
+	SAMESPRITE;
+	SPRITEINDEX 1, "tile_lava_mouth_closed_left";
+END;
+TILE "lava_mouth_up";
+	CLONE		"temp_lava_mouth";
+	SAMESPRITE;
+	SPRITEINDEX 1, "tile_lava_mouth_closed_up";
+END;
+TILE "lava_mouth_down";
+	CLONE		"temp_lava_mouth";
+	SAMESPRITE;
+	SPRITEINDEX 1, "tile_lava_mouth_closed_down";
+END;
+TILE "lava_mouth_right";
+	CLONE		"temp_lava_mouth";
+	SAMESPRITE;
+	SPRITEINDEX 1, "tile_lava_mouth_closed_right";
+END;
+
+# Arrow Shooter -----------------------------------------------
+
+TILE "arrow_shooter_left";
+	CLONE		"temp_arrow_shooter";
+	SAMESPRITE;
+	# left
+END;
+TILE "arrow_shooter_up";
+	CLONE		"temp_arrow_shooter";
+	SAMESPRITE;
+	# up
+END;
+TILE "arrow_shooter_right";
+	CLONE		"temp_arrow_shooter";
+	SAMESPRITE;
+	# right
+END;
+TILE "arrow_shooter_down";
+	CLONE		"temp_arrow_shooter";
+	SAMESPRITE;
+	# down
+END;
+
+# Fire Shooter ------------------------------------------------
+
+TILE "fire_shooter_left";
+	CLONE		"temp_fire_shooter";
+	SAMESPRITE;
+	# left
+END;
+TILE "fire_shooter_up";
+	CLONE		"temp_fire_shooter";
+	SAMESPRITE;
+	# up
+END;
+TILE "fire_shooter_right";
+	CLONE		"temp_fire_shooter";
+	SAMESPRITE;
+	# right
+END;
+TILE "fire_shooter_down";
+	CLONE		"temp_fire_shooter";
+	SAMESPRITE;
+	# down
+END;
+
+# Tablet Slot -------------------------------------------------
+
+TILE "tablet_slot_left";
+	CLONE		"temp_tablet_slot";
+	SAMESPRITE;
+	SPRITEINDEX 1, "tile_tablet_slot_placed_left";
+END;
+TILE "tablet_slot_up";
+	CLONE		"temp_tablet_slot";
+	SAMESPRITE;
+	SPRITEINDEX 1, "tile_tablet_slot_placed_up";
+END;
+TILE "tablet_slot_down";
+	CLONE		"temp_tablet_slot";
+	SAMESPRITE;
+	SPRITEINDEX 1, "tile_tablet_slot_placed_down";
+END;
+TILE "tablet_slot_right";
+	CLONE		"temp_tablet_slot";
+	SAMESPRITE;
+	SPRITEINDEX 1, "tile_tablet_slot_placed_right";
+END;
+
+# Jump Ledge --------------------------------------------------
+
+TILE "jump_ledge_left"; SAMESPRITE; SOLID bridge_v_left; END;
+TILE "jump_ledge_up"; SAMESPRITE; SOLID bridge_h_top; END;
+TILE "jump_ledge_right"; SAMESPRITE; SOLID bridge_v_right; END;
+TILE "jump_ledge_down"; SAMESPRITE; SOLID bridge_h_bottom; END;
+
+# Webbed Wall -------------------------------------------------
+
+TILE "wall_webbed_right";	CLONE "temp_wall_webbed"; SAMESPRITE; END;
+TILE "wall_webbed_up";		CLONE "temp_wall_webbed"; SAMESPRITE; END;
+TILE "wall_webbed_left";	CLONE "temp_wall_webbed"; SAMESPRITE; END;
+TILE "wall_webbed_down";	CLONE "temp_wall_webbed"; SAMESPRITE; END;
+
+# Holes -------------------------------------------------------
+
+TILE "pit_top"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "pit_mid"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "pit_bottom"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "pit_both"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "hole_top"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "hole_mid"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "hole_bottom"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "hole_both"; SAMESPRITE; ENVTYPE Hole; END;
+
+TILE "hole"; SAMESPRITE; ENVTYPE Hole; END;
+TILE "hole_alt"; SAMESPRITE; ENVTYPE Hole; END;
+
+TILE "cracked_floor";
+	TYPE		TileCrackedFloor;
+	SAMESPRITE;
+END;
+
+TILE "dug"; SAMESPRITE; END;
+
+# Hardened Lava -----------------------------------------------
+
+TILE "hardened_lava"; SAMESPRITE; END;
+
+# Floor Spikes ------------------------------------------------
+
+TILE "floor_spikes";
+	TYPE		TileSpikedFloor;
+	SAMESPRITE;
+END;
+
+# Bridge ------------------------------------------------------
+
+TILE "bridge_horizontal";
+	CLONE		"temp_bridge";
+	SAMESPRITE;
+	PROPERTIES	(boolean, vertical, false),
+				(integer, bridge_direction, 0);
+END;
+TILE "bridge_vertical";
+	CLONE		"temp_bridge";
+	SAMESPRITE;
+	PROPERTIES	(boolean, vertical, true),
+				(integer, bridge_direction, 3);
+END;
+
+# Ice Crystal Pit ---------------------------------------------
+
+TILE "ice_crystal_pit";
+	#TYPE		TileIceCrystalPit;
+	SAMESPRITE;
+END;
+
+# Turnstile ---------------------------------------------------
 
 TILE "turnstile";
 	TYPE		TileTurnstile;
@@ -647,63 +539,35 @@ TILE "turnstile";
 	PROPERTIES	(boolean, clockwise, false, "Clockwise", "", "Turnstile", "True if the turnstile is in clockwise mode.");
 END;
 
-TILE "water_block";
-	SOLID block;
-	FLAGS Movable;
-	SAMESPRITE;
+# Chest -------------------------------------------------------
+
+TILE "chest";
+	TYPE		TileChest;
+	SOLID		block;
+	RESETWHEN	Never;
+	SPRITEINDEX		0, "tile_chest";
+	SPRITEINDEX		1, "tile_chest_opened";
+	PROPERTIES
+		(integer, spawn_delay_after_poof, 16),
+		(string, reward, "rupees_1",
+			"Reward", "reward", "Chest",
+			 "The reward contained inside the chest."),
+		(boolean, looted, "false",
+			"Looted", "", "Chest",
+			"True if the item has been taken from the chest.");
 END;
 
-TILE "flying_tile"; SAMESPRITE; END;
+# Reward ------------------------------------------------------
 
-TILE "temp_tablet_slot"; SOLID block; END;
-TILE "tablet_slot_right";
-	CLONE "temp_tablet_slot";
-	SPRITEINDEX 0, "tile_tablet_slot_right";
-	SPRITEINDEX 1, "tile_tablet_slot_placed_right";
+TILE "reward";
+	TYPE		TileReward;
+	MODEL		center;
+	RESETWHEN	Never;
+	PROPERTIES
+		(string, reward, "heart_piece",
+			"Reward", "reward", "Reward",
+			 "The reward to spawn."),
+		(boolean, looted, "false",
+			"Looted", "", "Reward",
+			"True if the item has been taken.");
 END;
-TILE "tablet_slot_up";
-	CLONE "temp_tablet_slot";
-	SPRITEINDEX 0, "tile_tablet_slot_up";
-	SPRITEINDEX 1, "tile_tablet_slot_placed_up";
-END;
-TILE "tablet_slot_left";
-	CLONE "temp_tablet_slot";
-	SPRITEINDEX 0, "tile_tablet_slot_left";
-	SPRITEINDEX 1, "tile_tablet_slot_placed_left";
-END;
-TILE "tablet_slot_down";
-	CLONE "temp_tablet_slot";
-	SPRITEINDEX 0, "tile_tablet_slot_down";
-	SPRITEINDEX 1, "tile_tablet_slot_placed_down";
-END;
-
-TILE "ice_crystal_pit"; SAMESPRITE; END;
-TILE "shatter_crystal";
-	SPRITEINDEX 0, "tile_shatter_crystal";
-	SPRITEINDEX 1, "tile_shatter_crystal_broken";
-	SOLID block;
-	FLAGS		Cuttable;
-	BREAKANIM	"effect_rock_break";
-	BREAKSOUND	"rock_shatter";
-END;
-
-TILE "ice_crystal";
-	FLAGS	Pickupable;
-	SAMESPRITE;
-END;
-
-TILE "temp_arrow_shooter";	SOLID block; END;
-TILE "arrow_shooter_right";	CLONE "temp_arrow_shooter"; SAMESPRITE; END;
-TILE "arrow_shooter_up";	CLONE "temp_arrow_shooter"; SAMESPRITE; END;
-TILE "arrow_shooter_left";	CLONE "temp_arrow_shooter"; SAMESPRITE; END;
-TILE "arrow_shooter_down";	CLONE "temp_arrow_shooter"; SAMESPRITE; END;
-
-TILE "temp_fire_shooter";	SOLID block; END;
-TILE "fire_shooter_right";	CLONE "temp_fire_shooter"; SAMESPRITE; END;
-TILE "fire_shooter_up";		CLONE "temp_fire_shooter"; SAMESPRITE; END;
-TILE "fire_shooter_left";	CLONE "temp_fire_shooter"; SAMESPRITE; END;
-TILE "fire_shooter_down";	CLONE "temp_fire_shooter"; SAMESPRITE; END;
-
-TILE "temp_arrow_cannon"; SOLID block; END;
-TILE "arrow_cannon_left";	CLONE "temp_arrow_cannon"; SAMESPRITE; END;
-TILE "arrow_cannon_right";	CLONE "temp_arrow_cannon"; SAMESPRITE; END;
