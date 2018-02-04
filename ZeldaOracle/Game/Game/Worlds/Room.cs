@@ -45,11 +45,14 @@ namespace ZeldaOracle.Game.Worlds {
 				.SetDocumentation("Zone", "zone", "", "General", "The zone type for this room.");
 
 			properties.BaseProperties.Set("discovered", false)
-				.SetDocumentation("Discovered", "", "", "Progress", "True if the room has been visited at least once.");
+				.SetDocumentation("Discovered", "Progress", "True if the room has been visited at least once.");
 			properties.BaseProperties.Set("hidden_from_map", false)
-				.SetDocumentation("Hidden From Map", "", "", "Dungeon", "True if this room does not appear on the map even when visited.");
+				.SetDocumentation("Hidden From Map", "Dungeon", "True if this room does not appear on the map even when visited.");
 			properties.BaseProperties.Set("boss_room", false)
-				.SetDocumentation("Is Boss Room", "", "", "Dungeon", "True if this room is shown as the boss room in the dungeon map.");
+				.SetDocumentation("Is Boss Room", "Dungeon", "True if this room is shown as the boss room in the dungeon map.");
+
+			properties.BaseProperties.Set("death_by_falling", false)
+				.SetDocumentation("Death by Falling", "Side-Scrolling", "True if the player takes damage and respawns when falling off the edge of the map.");
 
 
 			events.AddEvent("room_start", "Room Start", "Transition", "Occurs when the room begins.");
@@ -157,7 +160,20 @@ namespace ZeldaOracle.Game.Worlds {
 			return actionData.Find(actionTile => actionTile.ID == actionTileID);
 		}
 
-		public IEnumerable<TileDataInstance> GetTiles(string tileID) {
+		public TileDataInstance FindTileByID(string tileID) {
+			for (int layer = 0; layer < LayerCount; layer++) {
+				for (int x = 0; x < Width; x++) {
+					for (int y = 0; y < Height; y++) {
+						TileDataInstance tile = tileData[x, y, layer];
+						if (tile != null && tile.IsAtLocation(x, y) && tile.ID == tileID)
+							return tile;
+					}
+				}
+			}
+			return null;
+		}
+
+		public IEnumerable<TileDataInstance> FindTilesByID(string tileID) {
 			for (int layer = 0; layer < LayerCount; layer++) {
 				for (int x = 0; x < Width; x++) {
 					for (int y = 0; y < Height; y++) {
@@ -427,6 +443,11 @@ namespace ZeldaOracle.Game.Worlds {
 		public bool IsBossRoom {
 			get { return properties.GetBoolean("boss_room", false); }
 			set { properties.Set("boss_room", value); }
+		}
+
+		public bool DeathByFalling {
+			get { return properties.GetBoolean("death_by_falling", false); }
+			set { properties.Set("death_by_falling", value); }
 		}
 	}
 }

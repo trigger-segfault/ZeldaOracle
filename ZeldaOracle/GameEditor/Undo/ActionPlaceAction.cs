@@ -40,6 +40,7 @@ namespace ZeldaEditor.Undo {
 			this.placedRoom = room;
 			this.overwrittenActionTiles = new List<ActionTileInfo>();
 		}
+
 		public ActionPlaceAction(Level level) :
 			this(level, null, null, Point2I.Zero) {
 		}

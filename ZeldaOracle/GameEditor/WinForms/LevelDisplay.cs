@@ -356,6 +356,7 @@ namespace ZeldaEditor.WinForms {
 		
 		// Draw an entire room.
 		private void DrawRoom(Graphics2D g, Room room) {
+			TileDataDrawing.Room = room;
 			Point2I roomStartTile = room.Location * Level.RoomSize;
 			Point2I roomStartPixel = roomStartTile * GameSettings.TILE_SIZE;
 
