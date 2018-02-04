@@ -10,9 +10,11 @@ We have had a history of recreating the Oracle game engine ever since we were ki
 
 Project Started: 9/10/2015
 
+### [Images and Videos](https://github.com/trigger-death/ZeldaOracle/wiki/Media)
+
 ## Demo
 
-[Download Link](http://www.mediafire.com/download/ke7ny7zuh487xir/Zelda+Oracle+Engine+Demo+3.zip) (2/15/2016)
+[Download Link](http://www.mediafire.com/download/ke7ny7zuh487xir/Zelda+Oracle+Engine+Demo+3.zip) (2/15/2016 **REALLY OUTDATED**)
 
 <sup>ZeldaOracle.exe can only be launched from the command line or from within the editor.</sup>
 
