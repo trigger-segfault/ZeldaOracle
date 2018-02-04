@@ -123,6 +123,7 @@ namespace ZeldaOracle.Game {
 		public const int				MONSTER_STUN_DURATION					= 400;	// How long a monster gets stunned for (by boomerang/pegasus seeds).
 		public const int				MONSTER_STUN_SHAKE_DURATION				= 60;	// How long the monster shakes at the end of being stunned.
 		public const int				MONSTER_BOOMERANG_DAMAGE				= 1;
+		public const int				MONSTER_PROJECTILE_BONE_DAMAGE			= 2;
 		public const int				MONSTER_ELECTROCUTE_FREEZE_DURATION		= 45;
 		public const int				MONSTER_ELECTROCUTE_ANIMATE_DURATION	= 60;
 
@@ -200,6 +201,10 @@ namespace ZeldaOracle.Game {
 		public static int[]				MONSTER_BARI_ELECTROCUTE_DELAYS					= { 90, 120, 150 };
 		public const int				MONSTER_BARI_ELECTROCUTE_DURATION				= 60;
 		//public const int				MONSTER_BARI_HOVER_DELAY						= 16; // 16, 16, 16: low, mid, high,
+		public const float				MONSTER_STALFOS_ORANGE_JUMP_MOVE_SPEED			= 1.0f;
+		public const float				MONSTER_STALFOS_ORANGE_JUMP_SPEED				= 2.25f;
+		public const float				MONSTER_STALFOS_ORANGE_JUMP_RANGE				= 48;
+		public const int				MONSTER_STALFOS_ORANGE_JUMP_RECHARGE_DELAY		= 0;
 
 		// Tiles
 		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.

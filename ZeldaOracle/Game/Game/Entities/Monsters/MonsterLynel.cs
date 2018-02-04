@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ZeldaOracle.Game.Entities.Effects;
 using ZeldaOracle.Game.Entities.Projectiles;
-using ZeldaOracle.Game.Entities.Projectiles.MagicProjectiles;
+using ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles;
 
 namespace ZeldaOracle.Game.Entities.Monsters {
 	

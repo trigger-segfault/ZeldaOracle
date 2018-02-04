@@ -49,6 +49,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.States {
 		public override void OnEnd(MonsterState newState) {
 			monster.Graphics.ResumeAnimation();
 			monster.IsPassable = false;
+			monster.OnBurnComplete();
 		}
 
 		public override void Update() {

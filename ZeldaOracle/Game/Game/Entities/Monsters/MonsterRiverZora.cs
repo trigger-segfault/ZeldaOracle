@@ -2,7 +2,7 @@
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Game.Entities.Effects;
-using ZeldaOracle.Game.Entities.Projectiles.MagicProjectiles;
+using ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles;
 using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Monsters {

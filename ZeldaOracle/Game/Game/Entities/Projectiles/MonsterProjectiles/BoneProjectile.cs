@@ -1,37 +1,32 @@
-﻿
-using ZeldaOracle.Game.Entities.Players;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
-
-	public class FireballProjectile : Projectile {
-		
-		private int damage;
-
+	
+	public class BoneProjectile : Arrow {
 
 		//-----------------------------------------------------------------------------
 		// Constructors
 		//-----------------------------------------------------------------------------
 
-		public FireballProjectile() {
-			projectileType	= ProjectileType.Magic;
-			crashAnimation	= null;
-			damage			= 2;
-			Graphics.DepthLayer = DepthLayer.ProjectileBeam;
+		public BoneProjectile() {
+			projectileType				= ProjectileType.Physical;
+			crashAnimation				= GameData.ANIM_PROJECTILE_MONSTER_BONE;
+			damage						= GameSettings.MONSTER_PROJECTILE_BONE_DAMAGE;
+			syncAnimationWithAngle		= false;
+			syncAnimationWithDirection	= false;
 		}
 
-
+		
 		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
-		
+
 		public override void Initialize() {
 			base.Initialize();
-			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_MONSTER_FIREBALL);
-		}
-
-		public override void OnCollidePlayer(Player player) {
-			player.Hurt(damage, position);
-			Destroy();
+			Graphics.PlayAnimation(GameData.ANIM_PROJECTILE_MONSTER_BONE);
 		}
 	}
 }

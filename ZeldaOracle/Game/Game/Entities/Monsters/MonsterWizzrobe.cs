@@ -2,7 +2,7 @@
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Entities.Monsters.States;
-using ZeldaOracle.Game.Entities.Projectiles.MagicProjectiles;
+using ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles;
 using ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles;
 
 namespace ZeldaOracle.Game.Entities.Monsters {

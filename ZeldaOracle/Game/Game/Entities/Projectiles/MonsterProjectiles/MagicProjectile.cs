@@ -9,7 +9,7 @@ using ZeldaOracle.Game.Entities.Monsters;
 using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Tiles;
 
-namespace ZeldaOracle.Game.Entities.Projectiles.MagicProjectiles {
+namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 	
 	public class MagicProjectile : Projectile {
 		

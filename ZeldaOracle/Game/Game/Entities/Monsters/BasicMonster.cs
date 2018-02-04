@@ -22,7 +22,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Forward,				// Aim in the current forward direction.
 			FacePlayer,				// Face toward the player and shoot in that direction.
 			FaceRandom,				// Face toward a random direction to shoot in.
-			//SeekPlayer,				// Shoot toward the player.
+			SeekPlayer,				// Shoot toward the player.
 			//SeekPlayerByDirection,	// Shoot toward the player in the nearest direction.
 			//SeekPlayerByAngle,		// Shoot toward the player in the nearest angle.
 		}
@@ -217,39 +217,46 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		protected void StartShooting() {
-			isShooting = true;
 			pauseTimer = shootPauseDuration;
 			
 			if (aimType == AimType.FacePlayer)
 				FacePlayer();
 			else if (aimType == AimType.FaceRandom)
 				FaceRandomDirection();
+			
+			if (pauseTimer == 0) {
+				Shoot();
+			}
+			else {
+				isShooting = true;
+				isMoving = false;
+			}
 		}
 
 		protected void Shoot() {
-			Projectile projectile = (Projectile) projectileType.GetConstructor(Type.EmptyTypes).Invoke(null);
-			Vector2F vectorToPlayer = (RoomControl.Player.Center - Center).Normalized * shootSpeed;
-			/*
-			if (aimType == AimType.SeekPlayer) {
-				ShootProjectile(projectile, vectorToPlayer.Normalized * shootSpeed);
-			}
-			else if (aimType == AimType.SeekPlayerByDirection) {
-				int shootDirection = Directions.NearestFromVector(vectorToPlayer);
-				ShootFromDirection(projectile, shootDirection, shootSpeed);
-			}
-			else if (aimType == AimType.SeekPlayerByAngle) {
-				int shootAngle = Angles.NearestFromVector(vectorToPlayer);
-				ShootFromAngle(projectile, shootAngle, shootSpeed);
-			}
-			else {
-				ShootFromDirection(projectile, direction, shootSpeed);
-			}*/
 			if (shootSound != null)
 				AudioSystem.PlaySound(shootSound);
+			
+			// Construct the projectile
+			Projectile projectile = (Projectile) projectileType
+				.GetConstructor(Type.EmptyTypes).Invoke(null);
 
-			ShootFromDirection(projectile, direction, shootSpeed, Directions.ToVector(direction) * 8.0f);
-
-			//Pause(shootPauseDuration);
+			// Determine projectile velocity
+			Vector2F projectileUnitVelocity = 
+				Directions.ToVector(direction);
+			if (aimType == AimType.SeekPlayer) {
+				Vector2F vectorToPlayer = RoomControl.Player.Center - Center;
+				projectileUnitVelocity = vectorToPlayer.Normalized;
+			}
+			Vector2F projectileVelocity = projectileUnitVelocity * shootSpeed;
+			
+			// Spawn the projectile
+			projectile.Owner = this;
+			projectile.Direction = direction;
+			projectile.Physics.Velocity = projectileVelocity;
+			RoomControl.SpawnEntity(projectile,
+				Center + (projectileUnitVelocity * 8.0f),
+				zPosition);
 		}
 
 		protected void Pause(int duration) {
@@ -320,7 +327,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			if (shootType == ShootType.WhileMoving && projectileType != null &&
 				GRandom.NextInt(projectileShootOdds) == 0)
 			{
-				isMoving = false;
 				StartShooting();
 			}
 

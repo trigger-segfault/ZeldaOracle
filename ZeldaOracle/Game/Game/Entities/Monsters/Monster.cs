@@ -186,6 +186,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public virtual void OnBurn() {}
 
+		public virtual void OnBurnComplete() {}
+
 		public virtual void OnElectrocute() {}
 
 		public virtual void OnElectrocuteComplete() {}
