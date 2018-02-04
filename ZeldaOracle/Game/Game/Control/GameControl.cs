@@ -257,7 +257,7 @@ namespace ZeldaOracle.Game.Control {
 		//-----------------------------------------------------------------------------
 
 		public void DisplayMessage(Message message) {
-			PushRoomState(new RoomStateTextReader(message));
+			PushRoomState(new RoomStateTextReader(message, piecesOfHeart: inventory.PiecesOfHeart));
 		}
 
 		public void DisplayMessage(string text) {
@@ -266,14 +266,24 @@ namespace ZeldaOracle.Game.Control {
 		
 		public void DisplayMessage(Message message, Action completeAction) {
 			PushRoomState(new RoomStateQueue(
-				new RoomStateTextReader(message),
+				new RoomStateTextReader(message, piecesOfHeart: inventory.PiecesOfHeart),
 				new RoomStateAction(completeAction)));
 		}
 
 		public void DisplayMessage(string text, Action completeAction) {
 			DisplayMessage(new Message(text), completeAction);
 		}
-		
+
+		public void DisplayMessage(Message message, params RoomState[] completeStates) {
+			var queue = new RoomStateQueue(new RoomStateTextReader(message, piecesOfHeart: inventory.PiecesOfHeart));
+			queue.AddRange(completeStates);
+			PushRoomState(queue);
+		}
+
+		public void DisplayMessage(string text, params RoomState[] completeStates) {
+			DisplayMessage(new Message(text), completeStates);
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Menu

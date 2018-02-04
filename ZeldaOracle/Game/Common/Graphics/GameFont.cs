@@ -121,7 +121,8 @@ namespace ZeldaOracle.Common.Graphics {
 
 					do {
 						if (currentCharacter >= letterString.Length || letterString[currentCharacter].Char == ' ' ||
-							letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter || letterString[currentCharacter].Char == '\n') {
+							letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter || letterString[currentCharacter].Char == '\n' ||
+							letterString[currentCharacter].Char == FormatCodes.HeartPieceCharacter) {
 							if (wordLineCount > 0)
 								lines[currentLine].Add(' ');
 							lines[currentLine].AddRange(word);
@@ -132,8 +133,11 @@ namespace ZeldaOracle.Common.Graphics {
 							wordStart = currentCharacter + 1;
 							word.Clear();
 							if (currentCharacter < letterString.Length &&
-								(letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter || letterString[currentCharacter].Char == '\n')) {
-								if (letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter)
+								(letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter || letterString[currentCharacter].Char == '\n' ||
+								letterString[currentCharacter].Char == FormatCodes.HeartPieceCharacter))
+							{
+								if (letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter ||
+									letterString[currentCharacter].Char == FormatCodes.HeartPieceCharacter)
 									lines[currentLine].Add(letterString[currentCharacter]);
 								if (currentCharacter == caretPosition)
 									caretLine = currentLine;// + (letterString[currentCharacter].Char == '\n' ? 1 : 0);
@@ -159,7 +163,8 @@ namespace ZeldaOracle.Common.Graphics {
 					if (lineLengths[currentLine] + wordLength + characterSpacing + spriteSheet.CellSize.X > width && wordLineCount == 0) {
 						// Finish the word if it lasted the length if the line
 						if (currentCharacter >= letterString.Length || letterString[currentCharacter].Char == ' ' ||
-							letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter || letterString[currentCharacter].Char == '\n') {
+							letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter || letterString[currentCharacter].Char == '\n' ||
+							letterString[currentCharacter].Char == FormatCodes.HeartPieceCharacter) {
 							if (wordLineCount > 0)
 								lines[currentLine].Add(' ');
 							lines[currentLine].AddRange(word);

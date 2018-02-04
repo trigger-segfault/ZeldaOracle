@@ -80,6 +80,7 @@ namespace ZeldaOracle.Game {
 		public static Sound SOUND_GET_ITEM;
 		public static Sound SOUND_GET_RUPEE;
 		public static Sound SOUND_GET_RUPEE_LOOP;
+		public static Sound SOUND_HEART_CONTAINER;
 
 		// Player ---------------------------------------------------------------------
 

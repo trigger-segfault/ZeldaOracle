@@ -5,6 +5,7 @@ using System.Text;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Common.Translation;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Game.GameStates;
@@ -21,6 +22,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			PushingLine,
 			PressToContinue,
 			PressToEndParagraph,
+			HeartPieceDelay,
 			Finished
 		}
 
@@ -46,6 +48,11 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		private int arrowTimer;
 
 		private int wordIndex;
+		/// <summary>True if the heart piece UI is being displayed.</summary>
+		private bool heartPieceDisplay;
+		/// <summary>The internal counter used to display
+		/// the pieces of heart before and after.</summary>
+		private int piecesOfHeart;
 
 
 		//-----------------------------------------------------------------------------
@@ -54,13 +61,17 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 
 		// The default color used by the text reader.
 		private readonly ColorOrPalette TextColor = EntityColors.Tan;
+		/// <summary>The delay before the heart piece increments.</summary>
+		private const int HeartPieceDelay = 30;
+		/// <summary>The delay after the heart piece increments.</summary>
+		private const int HeartPieceParagraphDelay = 2;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
 		// Constructs a text reader with the specified message
-		public RoomStateTextReader(Message message, int linesPerWindow = 2) {
+		public RoomStateTextReader(Message message, int linesPerWindow = 2, int piecesOfHeart = 0) {
 			this.updateRoom			= false;
 			this.animateRoom		= true;
 
@@ -75,7 +86,15 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			this.currentLine		= 0;
 			this.currentChar		= 0;
 			this.state				= TextReaderState.WritingLine;
+
+			this.heartPieceDisplay	= false;
+			this.piecesOfHeart	= piecesOfHeart;
 		}
+
+		// Constructs a text reader with the specified message text
+		public RoomStateTextReader(string text, int linesPerWindow = 2, int piecesOfHeart = 0) 
+			: this(new Message(text), linesPerWindow, piecesOfHeart) { }
+		
 
 		//-----------------------------------------------------------------------------
 		// Overridden methods
@@ -89,24 +108,25 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 		}
 
 		public override void Update() {
-			if (timer > 0 && (state != TextReaderState.WritingLine || (!Controls.A.IsPressed() && !Controls.B.IsPressed()))) {
+			if (timer > 0 && (state != TextReaderState.WritingLine ||
+				(!heartPieceDisplay && !Controls.A.IsPressed() && !Controls.B.IsPressed())))
+			{
 				timer -= 1;
 			}
 			else {
 				switch (state) {
 				case TextReaderState.WritingLine:
-						
 
-						char c = wrappedString.Lines[currentLine][currentChar].Char;
-						bool isLetter = (c != ' ');
-						if (AudioSystem.IsSoundPlaying(GameData.SOUND_TEXT_CONTINUE))
-							wordIndex = 0;
-						else {
-							if (isLetter && (wordIndex % 2) == 0)
-								AudioSystem.PlaySound(GameData.SOUND_TEXT_LETTER);
-							if (isLetter)
-								wordIndex++;
-						}
+					char c = wrappedString.Lines[currentLine][currentChar].Char;
+					bool isLetter = (c != ' ');
+					if (AudioSystem.IsSoundPlaying(GameData.SOUND_TEXT_CONTINUE))
+						wordIndex = 0;
+					else {
+						if (isLetter && (wordIndex % 2) == 0)
+							AudioSystem.PlaySound(GameData.SOUND_TEXT_LETTER);
+						if (isLetter)
+							wordIndex++;
+					}
 
 					currentChar++;
 					if (Controls.A.IsPressed() || Controls.B.IsPressed())
@@ -120,6 +140,11 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 						else if (wrappedString.Lines[currentLine].EndsWith(FormatCodes.ParagraphCharacter)) {
 							state = TextReaderState.PressToEndParagraph;
 							arrowTimer = 0;
+						}
+						else if (wrappedString.Lines[currentLine].EndsWith(FormatCodes.HeartPieceCharacter)) {
+							state = TextReaderState.HeartPieceDelay;
+							heartPieceDisplay = true;
+							timer = HeartPieceDelay;
 						}
 						else if (windowLinesLeft == 0) {
 							state = TextReaderState.PressToContinue;
@@ -142,6 +167,18 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 					}
 					break;
 
+				case TextReaderState.HeartPieceDelay:
+					AudioSystem.PlaySound(GameData.SOUND_TEXT_CONTINUE);
+					piecesOfHeart++;
+					timer = 2;
+					if (currentLine + 1 == wrappedString.LineCount) {
+						state = TextReaderState.Finished;
+					}
+					else {
+						state = TextReaderState.PressToEndParagraph;
+					}
+					break;
+
 				case TextReaderState.PushingLine:
 					state = TextReaderState.WritingLine;
 					break;
@@ -156,6 +193,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 						windowLinesLeft = linesPerWindow;
 						currentChar = 0;
 						currentLine++;
+						heartPieceDisplay = false;
 						AudioSystem.PlaySound(GameData.SOUND_TEXT_CONTINUE);
 					}
 					break;
@@ -169,13 +207,17 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 						currentChar = 0;
 						windowLine = 0;
 						currentLine++;
+						heartPieceDisplay = false;
 					}
 					break;
 				case TextReaderState.Finished:
 					// TODO: Switch to any key
 					if (Controls.A.IsPressed() || Controls.B.IsPressed() ||
 						Controls.Start.IsPressed() || Controls.Select.IsPressed())
+					{
+						heartPieceDisplay = false;
 						End();
+					}
 					break;
 				}
 			}
@@ -199,8 +241,18 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			g.DrawLetterString(GameData.FONT_LARGE, wrappedString.Lines[currentLine].Substring(0, currentChar), pos + new Point2I(8, 6 + 16 * windowLine), TextColor);
 
 			// Draw the next line arrow.
-			if ((state == TextReaderState.PressToContinue || state ==  TextReaderState.PressToEndParagraph) && arrowTimer >= 16)
+			if ((state == TextReaderState.PressToContinue || state ==  TextReaderState.PressToEndParagraph) && arrowTimer >= 16 && timer == 0)
 				g.DrawSprite(GameData.SPR_HUD_TEXT_NEXT_ARROW, pos + new Point2I(136, 16 * linesPerWindow));
+
+			if (heartPieceDisplay) {
+				Point2I heartPiecePos = pos + new Point2I(144 - 24, 8);
+				for (int i = 0; i < 4; i++) {
+					ISprite sprite = GameData.SPR_HUD_MESSAGE_HEART_PIECES_EMPTY[i];
+					if (piecesOfHeart > i)
+						sprite = GameData.SPR_HUD_MESSAGE_HEART_PIECES_FULL[i];
+					g.DrawSprite(sprite, heartPiecePos);
+				}
+			}
 		}
 
 	}

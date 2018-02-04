@@ -66,7 +66,8 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			timer++;
 			if (timer == (useChest ? RaiseDuration : NonChestDuration)) {
 				AudioSystem.PlaySound(GameData.SOUND_FANFARE_ITEM);
-				GameControl.DisplayMessage(new Message(reward.Message));
+				reward.OnDisplayMessage(GameControl);
+				//GameControl.DisplayMessage(new Message(reward.Message));
 
 				if (reward.HoldType == RewardHoldTypes.OneHand) {
 					GameControl.Player.BeginBusyState(1);
@@ -78,8 +79,9 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 				}
 			}
 			else if (timer == (useChest ? RaiseDuration : NonChestDuration) + 1) {
-				reward.OnCollect(GameControl);
+				// Pop before incase the OnCollect pushes a new game state
 				gameControl.PopRoomState();
+				reward.OnCollect(GameControl);
 				return;
 			}
 		}

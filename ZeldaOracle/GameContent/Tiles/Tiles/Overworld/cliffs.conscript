@@ -180,29 +180,29 @@ TILE "cliff_inside_nw_railing_inside_nw_cap_w"; SAMESPRITE; SOLID block; END;
 TILE "cliff_inside_ne_railing_inside_ne_cap_both"; SAMESPRITE; SOLID block; END;
 TILE "cliff_inside_nw_railing_inside_nw_cap_both"; SAMESPRITE; SOLID block; END;
 
-TILE "cliff_sea"; SAMESPRITE; END;
+TILE "cliff_sea"; SAMESPRITE; SOLID block; END;
 
-TILE "cliff_top_light_left_sea"; SAMESPRITE; END;
-TILE "cliff_top_light_right_sea"; SAMESPRITE; END;
-TILE "cliff_top_dark_left_sea"; SAMESPRITE; END;
-TILE "cliff_top_dark_right_sea"; SAMESPRITE; END;
+TILE "cliff_top_light_left_sea"; SAMESPRITE; SOLID block; END;
+TILE "cliff_top_light_right_sea"; SAMESPRITE; SOLID block; END;
+TILE "cliff_top_dark_left_sea"; SAMESPRITE; SOLID block; END;
+TILE "cliff_top_dark_right_sea"; SAMESPRITE; SOLID block; END;
 
-TILE "cliff_bottom_light_left_sea"; SAMESPRITE; END;
-TILE "cliff_bottom_light_right_sea"; SAMESPRITE; END;
-TILE "cliff_bottom_dark_left_sea"; SAMESPRITE; END;
-TILE "cliff_bottom_dark_right_sea"; SAMESPRITE; END;
-TILE "cliff_vertical_left_sea"; SAMESPRITE; END;
-TILE "cliff_vertical_right_sea"; SAMESPRITE; END;
+TILE "cliff_bottom_light_left_sea"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_light_right_sea"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_dark_left_sea"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_dark_right_sea"; SAMESPRITE; SOLID block; END;
+TILE "cliff_vertical_left_sea"; SAMESPRITE; SOLID block; END;
+TILE "cliff_vertical_right_sea"; SAMESPRITE; SOLID block; END;
 
-TILE "cliff_top_mid_sea"; SAMESPRITE; END;
-TILE "cliff_bottom_mid_sea"; SAMESPRITE; END;
-TILE "cliff_side_left_sea"; SAMESPRITE; END;
-TILE "cliff_side_right_sea"; SAMESPRITE; END;
+TILE "cliff_top_mid_sea"; SAMESPRITE; SOLID block; END;
+TILE "cliff_bottom_mid_sea"; SAMESPRITE; SOLID block; END;
+TILE "cliff_side_left_sea"; SAMESPRITE; SOLID block; END;
+TILE "cliff_side_right_sea"; SAMESPRITE; SOLID block; END;
 
-TILE "cliff_inside_se_sea"; SAMESPRITE; END;
-TILE "cliff_inside_sw_sea"; SAMESPRITE; END;
-TILE "cliff_inside_ne_sea"; SAMESPRITE; END;
-TILE "cliff_inside_nw_sea"; SAMESPRITE; END;
+TILE "cliff_inside_se_sea"; SAMESPRITE; SOLID block; END;
+TILE "cliff_inside_sw_sea"; SAMESPRITE; SOLID block; END;
+TILE "cliff_inside_ne_sea"; SAMESPRITE; SOLID block; END;
+TILE "cliff_inside_nw_sea"; SAMESPRITE; SOLID block; END;
 
 
 TILE "cliff_cave_left"; SAMESPRITE; END;
