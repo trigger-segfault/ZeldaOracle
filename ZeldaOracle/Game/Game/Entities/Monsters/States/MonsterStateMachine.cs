@@ -48,7 +48,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			public RangeI Duration { get; set; }
 			public IDType NextState { get; set; }
 			private List<Tuple<int, StateEventDelegate>> timedEvents;
-			private float activeDuration;
+			private int activeDuration;
 
 			public TimedState() {
 				timedEvents = new List<Tuple<int, StateEventDelegate>>();
@@ -121,6 +121,16 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					}
 				}
 			}
+
+			public int Timer {
+				get { return timer; }
+				set { timer = value; }
+			}
+
+			public int ActiveDuration {
+				get { return activeDuration; }
+				set { activeDuration = value; }
+			}
 		}
 		
 
@@ -161,6 +171,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			};
 			states[id] = state;
 			return state;
+		}
+
+		public TimedState GetState(IDType id) {
+			return states[id] as TimedState;
 		}
 
 		

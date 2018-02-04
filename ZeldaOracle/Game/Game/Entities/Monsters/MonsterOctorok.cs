@@ -8,7 +8,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// General.
 			MaxHealth		= 1;
 			ContactDamage	= 1;
-			color			= MonsterColor.Blue;
+			Color			= MonsterColor.Blue;
 			animationMove	= GameData.ANIM_MONSTER_OCTOROK;
 			
 			// Movement.
@@ -57,17 +57,17 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public override void Initialize() {
 			base.Initialize();
 
-			if (color == MonsterColor.Red) {
+			if (Color == MonsterColor.Red) {
 				MaxHealth		= 1;
 				ContactDamage	= 1;
 				aimType			= AimType.Forward;
 			}
-			else if (color == MonsterColor.Blue) {
+			else if (Color == MonsterColor.Blue) {
 				MaxHealth		= 2;
 				ContactDamage	= 2;
 				aimType			= AimType.FacePlayer;
 			}
-			else if (color == MonsterColor.Orange) {
+			else if (Color == MonsterColor.Orange) {
 				// Gold.
 				MaxHealth		= 25; // Observations: 25 hits sword level 1, 11 hits with sword level 3.
 				ContactDamage	= 4;

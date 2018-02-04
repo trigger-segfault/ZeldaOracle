@@ -11,7 +11,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// General.
 			MaxHealth		= 5;
 			ContactDamage	= 2;
-			color			= MonsterColor.Red;
+			Color			= MonsterColor.Red;
 			animationMove	= GameData.ANIM_MONSTER_GHINI;
 			movesInAir		= true;
 

@@ -27,7 +27,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// General
 			MaxHealth		= 2;
 			ContactDamage	= 2;
-			color			= MonsterColor.Red;
+			Color			= MonsterColor.Red;
 			isGaleable		= false;
 			isKnockbackable	= false;
 			isFlying		= true;

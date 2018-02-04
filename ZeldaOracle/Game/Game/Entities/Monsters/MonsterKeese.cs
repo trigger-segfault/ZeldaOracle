@@ -28,7 +28,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// General
 			MaxHealth		= 1;
 			ContactDamage	= 1;
-			color			= MonsterColor.Green;
+			Color			= MonsterColor.Green;
 			
 			// Keese
 			flyStopTime = new RangeI(60, 180);

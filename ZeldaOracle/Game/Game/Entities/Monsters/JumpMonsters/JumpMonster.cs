@@ -42,7 +42,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			syncAnimationWithDirection = false;
 
 			// Monster
-			color			= MonsterColor.Red;
+			Color			= MonsterColor.Red;
 			MaxHealth		= 1;
 			ContactDamage	= 1;
 

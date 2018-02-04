@@ -27,7 +27,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// General
 			MaxHealth		= 3;
 			ContactDamage	= 2;
-			color			= MonsterColor.Red;
+			Color			= MonsterColor.Red;
 			
 			// Graphics
 			Graphics.DrawOffset			= new Point2I(-8, -8);

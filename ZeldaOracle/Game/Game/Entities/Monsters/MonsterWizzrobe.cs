@@ -29,7 +29,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// General
 			MaxHealth		= 1;
 			ContactDamage	= 1;
-			color			= MonsterColor.Blue;
+			Color			= MonsterColor.Blue;
 			
 			// Movement
 			syncAnimationWithDirection	= true;
@@ -52,11 +52,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public override void Initialize() {
 			base.Initialize();
 
-			if (color == MonsterColor.Green) {
+			if (Color == MonsterColor.Green) {
 				MaxHealth		= 2;
 				ContactDamage	= 2;
 			}
-			else if (color == MonsterColor.Red) {
+			else if (Color == MonsterColor.Red) {
 				MaxHealth		= 4;
 				ContactDamage	= 2;
 			}
@@ -92,7 +92,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					graphics.PlayAnimation(appearAnimation);
 					wizzrobeState = WizzrobeState.Appearing;
 
-					if (color == MonsterColor.Red) {
+					if (Color == MonsterColor.Red) {
 						// Appear at a random location
 						position = GetRandomSpawnLocation();
 					}

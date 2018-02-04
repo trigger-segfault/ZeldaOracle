@@ -20,7 +20,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Graphics
 			syncAnimationWithDirection	= false;
-			color						= MonsterColor.Orange;
+			Color						= MonsterColor.Orange;
 
 			// Movement
 			moveSpeed = 0.375f;

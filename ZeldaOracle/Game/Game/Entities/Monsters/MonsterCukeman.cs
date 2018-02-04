@@ -21,7 +21,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// General
 			MaxHealth		= 1;
 			ContactDamage	= 2;
-			color			= MonsterColor.Green;
+			Color			= MonsterColor.Green;
 			
 			catchPhrases = new string[] {
 				"Feel my cold, steely gaze!!!",

@@ -67,7 +67,7 @@ namespace ZeldaOracle.Game.Debug {
 			syncAnimationWithDirection = true;
 			MaxHealth = 10;
 			
-			color = MonsterColor.Orange;
+			Color = MonsterColor.Orange;
 		}
 		
 		

@@ -9,7 +9,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 		//-----------------------------------------------------------------------------
 
 		public MonsterZolRed() {
-			color			= MonsterColor.Red;
+			Color			= MonsterColor.Red;
 			MaxHealth		= 1;
 			ContactDamage	= 1;
 

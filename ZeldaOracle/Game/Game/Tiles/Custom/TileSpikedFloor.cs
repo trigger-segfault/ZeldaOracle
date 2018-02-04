@@ -20,7 +20,7 @@ namespace ZeldaOracle.Game.Tiles {
 			Player player = RoomControl.Player;
 			
 			// Hurt the player if he is standing on this tile.
-			if (player.IsOnGround && !player.IsInvincible && player.Physics.TopTile == this) {
+			if (player.IsOnGround && !player.IsInvincible && player.IsDamageable && player.Physics.TopTile == this) {
 				DamageInfo damage = new DamageInfo(2) {
 					ApplyKnockBack		= true,
 					KnockbackDuration	= 9,

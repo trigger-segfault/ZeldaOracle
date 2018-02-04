@@ -6,7 +6,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public MonsterGibdo() {
 			MaxHealth		= 4;
 			ContactDamage	= 2;
-			color			= MonsterColor.Red;
+			Color			= MonsterColor.Red;
 			animationMove	= GameData.ANIM_MONSTER_GIBDO;
 			IsKnockbackable	= false;
 			moveSpeed		= 0.375f;

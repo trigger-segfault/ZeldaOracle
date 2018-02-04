@@ -30,7 +30,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			// Graphics
 			syncAnimationWithDirection	= false;
-			color						= MonsterColor.Red;
+			Color						= MonsterColor.Red;
 
 			// Movement
 			moveSpeed = 0.5f;
@@ -79,7 +79,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		private bool Unburrow() {
-			if (color == MonsterColor.Red) {
+			if (Color == MonsterColor.Red) {
 				// Unborrow between 3 to 5 tiles in front of the player
 				// First create a list of the possibly locations to unburrow
 				List<Point2I> possibleLocations = new List<Point2I>();
@@ -104,7 +104,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					return false;
 				}
 			}
-			else if (color == MonsterColor.Blue) {
+			else if (Color == MonsterColor.Blue) {
 				// Unburrow at a random location in the room
 				Point2I location;
 				if (GetRandomLocation(out location)) {
@@ -166,15 +166,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			}
 			else {
 				if (timer > duration || (Physics.IsColliding &&
-					color != MonsterColor.Orange))
+					Color != MonsterColor.Orange))
 				{
 					// Burrow after a delay or upon hitting a wall
 					Burrow();
 				}
-				else if (color == MonsterColor.Red) {
+				else if (Color == MonsterColor.Red) {
 					physics.Velocity = Directions.ToVector(Direction) * moveSpeed;
 				}
-				else if (color == MonsterColor.Blue) {
+				else if (Color == MonsterColor.Blue) {
 					// Re-face player regularly.
 					if (timer % 30 == 0) {
 						Direction = Directions.NearestFromVector(
@@ -182,7 +182,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 					}
 					physics.Velocity = Directions.ToVector(Direction) * moveSpeed;
 				}
-				else if (color == MonsterColor.Orange) {
+				else if (Color == MonsterColor.Orange) {
 					// Chase player
 					Vector2F vectorToPlayer = RoomControl.Player.Center - Center;
 					physics.Velocity = vectorToPlayer.Normalized * moveSpeed;

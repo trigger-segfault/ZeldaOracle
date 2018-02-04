@@ -12,6 +12,7 @@ using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Common.Scripts.CustomReaders;
 using ZeldaOracle.Common.Graphics.Sprites;
 using ZeldaOracle.Game.Items.Rewards;
+using ZeldaOracle.Game.Entities.Monsters;
 
 namespace ZeldaOracle.Game {
 	
@@ -260,6 +261,16 @@ namespace ZeldaOracle.Game {
 			Resources.AddResource<Palette>("entities_menu", entitiesMenu);
 
 			IntegrateResources<Palette>("PAL_");
+			
+			// Map monster colors to color definitions
+			MONSTER_COLOR_DEFINITION_MAP = new string[(int) MonsterColor.Count];
+			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.Red]		= "red";
+			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.Blue]		= "blue";
+			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.Orange]	= "orange";
+			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.Green]		= "green";
+			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.DarkBlue]	= "shaded_blue";
+			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.DarkRed]	= "shaded_red";
+			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.Gold]		= "gold";
 		}
 
 		//-----------------------------------------------------------------------------
@@ -284,7 +295,7 @@ namespace ZeldaOracle.Game {
 		
 
 		//-----------------------------------------------------------------------------
-		// Collision Models.
+		// Collision Models
 		//-----------------------------------------------------------------------------
 
 		public static CollisionModel MODEL_BLOCK;
@@ -353,6 +364,8 @@ namespace ZeldaOracle.Game {
 
 		public static Palette PAL_DUNGEON_MAP_DEFAULT;
 		public static Palette PAL_MENU_DEFAULT;
+
+		public static string[] MONSTER_COLOR_DEFINITION_MAP;
 
 
 		//-----------------------------------------------------------------------------

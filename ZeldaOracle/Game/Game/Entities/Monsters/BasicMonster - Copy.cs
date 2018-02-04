@@ -100,7 +100,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		//-----------------------------------------------------------------------------
 		
 		public BasicMonsterOld() {
-			color			= MonsterColor.Red;
+			Color			= MonsterColor.Red;
 			MaxHealth		= 1;
 			ContactDamage	= 1;
 

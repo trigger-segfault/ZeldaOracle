@@ -12,7 +12,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// General.
 			MaxHealth		= 2;
 			ContactDamage	= 4;
-			color			= MonsterColor.Red;
+			Color			= MonsterColor.Red;
 			animationMove	= GameData.ANIM_MONSTER_DARKNUT;
 			
 			// Movement.
@@ -36,10 +36,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public override void Initialize() {
 			base.Initialize();
 
-			if (color == MonsterColor.Red) {
+			if (Color == MonsterColor.Red) {
 				MaxHealth = 3;
 			}
-			else if (color == MonsterColor.Blue) {
+			else if (Color == MonsterColor.Blue) {
 				MaxHealth = 5;
 			}
 		}

@@ -189,7 +189,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 		}
 
 		public void Hurt(DamageInfo damage) {
-			if (IsInvincible || IsBeingKnockedBack)
+			if (IsInvincible || !IsDamageable || IsBeingKnockedBack)
 				return;
 
 			// Knockback.
@@ -339,8 +339,14 @@ namespace ZeldaOracle.Game.Entities.Units {
 			get { return (knockbackTimer > 0); }
 		}
 		
+		public bool IsDamageable {
+			get { return isDamageable; }
+			set { isDamageable = value; }
+		}
+
+		/// <summary></summary>
 		public bool IsInvincible {
-			get { return (!isDamageable || (invincibleTimer > 0)); }
+			get { return (invincibleTimer > 0); }
 		}
 		
 		public bool IsHurtFlickering {

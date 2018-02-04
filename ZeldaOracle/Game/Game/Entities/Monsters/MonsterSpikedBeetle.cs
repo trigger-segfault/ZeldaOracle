@@ -31,7 +31,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// General.
 			MaxHealth		= 1;
 			ContactDamage	= 2;
-			color			= MonsterColor.Blue;
+			Color			= MonsterColor.Blue;
 			animationMove	= GameData.ANIM_MONSTER_SPIKED_BEETLE;
 			
 			// Movement.

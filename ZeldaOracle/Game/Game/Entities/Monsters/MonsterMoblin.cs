@@ -12,7 +12,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// General.
 			MaxHealth		= 2;
 			ContactDamage	= 2;
-			color			= MonsterColor.Red;
+			Color			= MonsterColor.Red;
 			animationMove	= GameData.ANIM_MONSTER_MOBLIN;
 			
 			// Movement.
@@ -34,10 +34,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public override void Initialize() {
 			base.Initialize();
 
-			if (color == MonsterColor.Red) {
+			if (Color == MonsterColor.Red) {
 				MaxHealth = 2;
 			}
-			else if (color == MonsterColor.Blue) {
+			else if (Color == MonsterColor.Blue) {
 				MaxHealth = 3;
 			}
 		}
@@ -48,7 +48,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// General.
 			MaxHealth		= 2;
 			ContactDamage	= 2;
-			color			= MonsterColor.Red;
+			Color			= MonsterColor.Red;
 			animationMove	= GameData.ANIM_MONSTER_PIG_MOBLIN;
 			
 			// Movement.
@@ -70,10 +70,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public override void Initialize() {
 			base.Initialize();
 
-			if (color == MonsterColor.Red) {
+			if (Color == MonsterColor.Red) {
 				MaxHealth = 1;
 			}
-			else if (color == MonsterColor.Blue) {
+			else if (Color == MonsterColor.Blue) {
 				MaxHealth = 2;
 			}
 		}

@@ -140,7 +140,7 @@ ANIMATION "monster_goponga_flower_closed"; SUBSTRIP repeat;
 ANIMATION "monster_goponga_flower_open"; SUBSTRIP repeat;
 	ADD frame, 1, (13, 8); END;
 ANIMATION "monster_peahat"; SUBSTRIP repeat;
-	ADD strip, 8, 2, (14, 8); END;
+	ADD strip, 4, 2, (14, 8); END;
 ANIMATION "monster_gel"; SUBSTRIP repeat;
 	ADD strip, 8, 2, (0, 9); END;
 ANIMATION "monster_gel_prepare_jump"; SUBSTRIP repeat;

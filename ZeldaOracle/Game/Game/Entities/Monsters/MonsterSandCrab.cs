@@ -9,7 +9,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public MonsterSandCrab() {
 			MaxHealth		= 4;
 			ContactDamage	= 2;
-			color			= MonsterColor.Orange;
+			Color			= MonsterColor.Orange;
 			animationMove	= GameData.ANIM_MONSTER_SAND_CRAB;
 			moveSpeed		= 0.375f;
 			syncAnimationWithDirection = false;

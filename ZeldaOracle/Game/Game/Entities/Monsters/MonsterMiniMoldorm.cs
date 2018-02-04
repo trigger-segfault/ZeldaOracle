@@ -33,7 +33,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// General
 			MaxHealth		= 4;
 			ContactDamage	= 2;
-			color			= MonsterColor.Green;
+			Color			= MonsterColor.Green;
 			
 			// Movement
 			moveSpeed		= 1.0f;

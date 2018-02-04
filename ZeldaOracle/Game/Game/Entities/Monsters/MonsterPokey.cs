@@ -22,7 +22,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// General
 			MaxHealth		= 3;
 			ContactDamage	= 2;
-			color			= MonsterColor.Green;
+			Color			= MonsterColor.Green;
 			isBurnable		= false;
 			isKnockbackable	= false;
 

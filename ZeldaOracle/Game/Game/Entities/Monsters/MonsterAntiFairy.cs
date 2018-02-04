@@ -18,7 +18,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public MonsterAntiFairy() {
 			// General
 			ContactDamage	= 2;
-			color			= MonsterColor.Gold;
+			Color			= MonsterColor.Gold;
 			isDamageable	= false;
 			isKnockbackable	= false;
 			isGaleable		= false;

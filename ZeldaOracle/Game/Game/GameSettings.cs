@@ -178,6 +178,12 @@ namespace ZeldaOracle.Game {
 		public const int				MONSTER_RIVER_ZORA_SHOOT_DELAY					= 9;
 		public const int				MONSTER_RIVER_ZORA_SUBMERGE_DELAY				= 9;
 		public const int				MONSTER_POKEY_BODY_SEPARATION					= 12;
+		public static RangeI			MONSTER_PEAHAT_FLY_DURATION						= new RangeI(476);
+		public static RangeI			MONSTER_PEAHAT_STOP_DURATION					= new RangeI(15, 150);
+		public const float				MONSTER_PEAHAT_FLY_SPEED						= 0.75f;
+		public const float				MONSTER_PEAHAT_ACCELERATION						= 0.0125f; // 60 frames
+		public const float				MONSTER_PEAHAT_DECELERATION						= 0.0125f;
+		public const float				MONSTER_PEAHAT_FLY_ALTITUDE						= 5;
 
 		// Tiles
 		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.

@@ -94,7 +94,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		//-----------------------------------------------------------------------------
 		
 		public BasicMonster() {
-			color			= MonsterColor.Red;
+			Color			= MonsterColor.Red;
 			MaxHealth		= 1;
 			ContactDamage	= 1;
 
@@ -382,7 +382,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			pauseTimer		= 0;
 			isShooting		= false;
 			
-			color = (MonsterColor) Properties.GetInteger("color", (int) color);
+			Color = (MonsterColor) Properties.GetInteger("color", (int) Color);
 
 			FaceRandomDirection();
 		}

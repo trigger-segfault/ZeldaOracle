@@ -32,6 +32,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		Gold		= 4,
 		DarkRed		= 5,
 		DarkBlue	= 6,
+
+		Count
 	}
 
 	// MonsterState:
@@ -47,7 +49,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		private Properties properties;
 		private int contactDamage;
 		private InteractionHandler[] interactionHandlers;
-		protected MonsterColor color;
+		private MonsterColor color;
 		
 		// The current monster state.
 		private MonsterState state;
@@ -151,7 +153,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		
 		
 		//-----------------------------------------------------------------------------
-		// Monster States
+		// Monster States and Behavior
 		//-----------------------------------------------------------------------------
 				
 		// Begin the given monster state.
@@ -179,6 +181,14 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		// Monster Reactions
 		//-----------------------------------------------------------------------------
 
+		public virtual void OnStun() {}
+
+		public virtual void OnBurn() {}
+
+		public virtual void OnElectrocute() {}
+
+		public virtual void OnElectrocuteComplete() {}
+
 		public void SoftKill() {
 			softKill = true;
 			Kill();
@@ -186,6 +196,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public bool Stun() {
 			if (isStunnable && ((state is MonsterNormalState) || (state is MonsterStunState))) {
+				OnStun();
 				AudioSystem.PlaySound(GameData.SOUND_MONSTER_HURT);
 				BeginState(new MonsterStunState(GameSettings.MONSTER_STUN_DURATION));
 				return true;
@@ -201,10 +212,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			return false;
 		}
 
-		public bool Burn(int damage) {
+		public virtual bool Burn(int damage) {
 			if (!IsInvincible && isBurnable &&
 				((state is MonsterNormalState) || (state is MonsterStunState)))
 			{
+				OnBurn();
 				BeginState(new MonsterBurnState(damage));
 				return true;
 			}
@@ -214,13 +226,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		public virtual void OnTouchPlayer(Entity sender, EventArgs args) {
 			Player player = (Player) sender;
 			player.Hurt(contactDamage, Center);
-		}
-
-		public virtual void OnElectrocute() {
-		}
-
-		public virtual void OnElectrocuteComplete() {
-
 		}
 
 		public virtual void OnSeedHit(SeedEntity seed) {
@@ -310,32 +315,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		// Internal Methods
 		//-----------------------------------------------------------------------------
 		
-		public void ChooseColor() {
-			switch (color) {
-				case MonsterColor.Red:
-					Graphics.ColorDefinitions.SetAll("red");
-					break;
-				case MonsterColor.Blue:
-					Graphics.ColorDefinitions.SetAll("blue");
-					break;
-				case MonsterColor.Green:
-					Graphics.ColorDefinitions.SetAll("green");
-					break;
-				case MonsterColor.Orange:
-					Graphics.ColorDefinitions.SetAll("orange");
-					break;
-				case MonsterColor.DarkBlue:
-					Graphics.ColorDefinitions.SetAll("shaded_blue");
-					break;
-				case MonsterColor.DarkRed:
-					Graphics.ColorDefinitions.SetAll("shaded_red");
-					break;
-				case MonsterColor.Gold:
-					Graphics.ColorDefinitions.SetAll("gold");
-					break;
-			}
-		}
-
 		protected virtual void FacePlayer() {
 			Vector2F lookVector = RoomControl.Player.Center - Center;
 			direction = Directions.NearestFromVector(lookVector);
@@ -398,9 +377,8 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			health = healthMax;
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_OCTOROK);
-			ChooseColor();
 			
-			// Begin the default monster state.
+			// Begin the default monster state
 			BeginNormalState();
 			previousState = state;
 		}
@@ -412,16 +390,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			base.Die();
 		}
 
-		public override void OnKnockbackEnd() {
-			base.OnKnockbackEnd();
-		}
-
 		public override void OnHurt(DamageInfo damage) {
 			AudioSystem.PlaySound(GameData.SOUND_MONSTER_HURT);
 		}
 
 		public override void OnFallInHole() {
-			// Begin the fall-in-hole state (slipping into a hole).
+			// Begin the fall-in-hole state (slipping into a hole)
 			if (!isFlying && state is MonsterNormalState) {
 				BeginState(new MonsterFallInHoleState());
 			}
@@ -437,15 +411,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				base.OnFallInLava();
 		}
 
-		public override void UpdateGraphics() {
-			ChooseColor();
-			base.UpdateGraphics();
-		}
-
 		private void CollideMonsterAndPlayer() {
 			Player player = RoomControl.Player;
 
-			// Check for minecart interactions.
+			// Check for minecart interactions
 			if (!isPassable && player.IsInMinecart &&
 				physics.IsCollidingWith(player, CollisionBoxType.Soft))
 			{
@@ -465,7 +434,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			// 4. (M-1) PlayerTools to Monster
 			// 2. (1-1) Monster to Player
 
-			// Collide my tools with player's tools.
+			// Collide my tools with the player's tools
 			if (!IsStunned) {
 				foreach (UnitTool monsterTool in monsterTools) {
 					foreach (UnitTool playerTool in playerTools) {
@@ -488,9 +457,9 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				}
 			}
 
-			// Collide my tools with the player.
+			// Collide my tools with the player
 			bool parry = false;
-			if (!player.IsInvincible && !IsStunned) {
+			if (!player.IsInvincible && player.IsDamageable && !IsStunned) {
 				foreach (UnitTool tool in monsterTools) {
 					if (player.Physics.PositionedSoftCollisionBox.Intersects(tool.PositionedCollisionBox)) {
 						player.Hurt(contactDamage, Center);
@@ -500,7 +469,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				}
 			}
 
-			// Collide with the player's tools.
+			// Collide with the player's tools
 			foreach (UnitTool tool in playerTools) {
 				if (Physics.PositionedSoftCollisionBox.Intersects(tool.PositionedCollisionBox)) {
 					tool.OnHitMonster(this);
@@ -509,7 +478,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				}
 			}
 
-			// Check collisions with player.
+			// Check collisions with player
 			if (!parry && !IsStunned &&
 				physics.IsCollidingWith(player, CollisionBoxType.Soft))
 			{
@@ -518,10 +487,10 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		public override void Update() {
-			// Update the current monster state.
+			// Update the current monster state
 			state.Update();
 
-			// Collide player and monster and their tools.
+			// Collide player and monster and their tools
 			CollideMonsterAndPlayer();
 
 			base.Update();
@@ -558,7 +527,11 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 		public MonsterColor Color {
 			get { return color; }
-			set { color = value; }
+			set {
+				color = value;
+				Graphics.ColorDefinitions.SetAll(
+					GameData.MONSTER_COLOR_DEFINITION_MAP[(int) color]);
+			}
 		}
 	}
 }

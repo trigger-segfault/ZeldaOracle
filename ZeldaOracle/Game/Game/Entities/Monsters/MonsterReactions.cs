@@ -315,14 +315,14 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 				}
 			}
 			
-			/// <summary>Burn the monster for 1 damage.</summary>
+			/// <summary>Burn the monster for 2 damage.</summary>
 			public static void Burn(Monster monster, Entity sender, EventArgs args) {
-				monster.Burn(1);
+				monster.Burn(2);
 				if (sender is Fire)
 					sender.Destroy();
 			}
 			
-			// <summary>Stun the monster.</summary>
+			/// <summary>Stun the monster.</summary>
 			public static void Stun(Monster monster, Entity sender, EventArgs args) {
 				monster.Stun();
 			}

@@ -61,6 +61,9 @@ MONSTER "monster_leever_orange",		"monster_leever",				MonsterLeever,			orange;	
 MONSTER "monster_spinning_blade_trap",	"monster_spinning_blade_trap",	MonsterSpinningBladeTrap, red;	END;
 MONSTER "monster_goponga_flower",		"monster_goponga_flower_open",	MonsterGopongaFlower,	red;	END;
 MONSTER "monster_anti_fairy",			"monster_anti_fairy",			MonsterAntiFairy,		gold;	END;
+MONSTER "monster_river_zora",			"monster_river_zora",			MonsterRiverZora,		red;	END;
+MONSTER "monster_pokey",				"monster_pokey_head",			MonsterPokey,			green;	END;
+MONSTER "monster_peahat",				"monster_peahat",				MonsterPeahat,			red;	END;
 
 TILE "monster_beamos";
 	TYPE		TileMonsterBeamos;

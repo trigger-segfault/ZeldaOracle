@@ -9,7 +9,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 		//-----------------------------------------------------------------------------
 
 		public MonsterTektike() {
-			color			= MonsterColor.Orange;
+			Color			= MonsterColor.Orange;
 			MaxHealth		= 1;
 			ContactDamage	= 2;
 
@@ -29,7 +29,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 		public override void Initialize() {
 			base.Initialize();
 			
-			if (color == MonsterColor.Orange) {
+			if (Color == MonsterColor.Orange) {
 				MaxHealth = 1;
 			}
 			else {
