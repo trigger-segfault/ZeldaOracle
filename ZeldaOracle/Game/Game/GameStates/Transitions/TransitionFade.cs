@@ -62,7 +62,6 @@ namespace ZeldaOracle.Game.GameStates {
 			if (type == FadeType.FadeIn)
 				opacity = 1.0f - opacity;
 			Color c = color * opacity;
-			//c.A = (byte) (255.0f * opacity);
 			gameState.Draw(g);
 
 

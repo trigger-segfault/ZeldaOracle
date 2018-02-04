@@ -25,6 +25,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		private int maxDistance;
 		private float playerSpeed;
 		private bool isWaitingForView;
+		private float lerpRatio;
 
 
 		//-----------------------------------------------------------------------------
@@ -42,11 +43,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 
 		public override void OnBegin() {
 			base.OnBegin();
-
-			/*if (IsChangingTilePalette) {
-				GameData.PaletteShader.LerpTilePalette = NewRoomControl.Zone.Palette;
-			}*/
-
+			
 			isWaitingForView	= true;
 			timer				= 0;
 			distance			= 0;
@@ -111,24 +108,20 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 					NewRoomControl.DisableVisualEffect = false;
 				}
 			}
+
+			if (timer % 2 == 1) {
+				lerpRatio = GMath.Min(1f, (float) distance / maxDistance);
+			}
 		}
 
 		public override void AssignPalettes() {
-
 			OldRoomControl.AssignPalettes();
 			NewRoomControl.AssignLerpPalettes();
-			float ratio = GMath.Min(1f, (float) distance / maxDistance);
-			GameData.PaletteShader.TileRatio = ratio;
-			GameData.PaletteShader.EntityRatio = ratio;
-
-			/*GameData.PaletteShader.TilePalette = OldRoomControl.TilePalette;
-			GameData.PaletteShader.EntityPalette = OldRoomControl.EntityPalette;
-			if (IsChangingTilePalette) {
-				GameData.PaletteShader.LerpTilePalette = NewRoomControl.TilePalette;
-			}
-			if (IsChangingEntityPalette) {
-				GameData.PaletteShader.LerpEntityPalette = NewRoomControl.EntityPalette;
-			}*/
+			//float ratio = GMath.Min(1f, (float) distance / maxDistance);
+			//GameData.PaletteShader.TileRatio = ratio;
+			//GameData.PaletteShader.EntityRatio = ratio;
+			GameData.PaletteShader.TileRatio = lerpRatio;
+			GameData.PaletteShader.EntityRatio = lerpRatio;
 		}
 
 		public override void Draw(Graphics2D g) {
@@ -148,17 +141,6 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			// Draw the HUD.
 			GameControl.HUD.Draw(g);
 		}
-
-
-		//-----------------------------------------------------------------------------
-		// Internal Properties
-		//-----------------------------------------------------------------------------
-
-		private bool IsChangingTilePalette {
-			get { return OldRoomControl.TilePalette != NewRoomControl.TilePalette; }
-		}
-		private bool IsChangingEntityPalette {
-			get { return OldRoomControl.EntityPalette != NewRoomControl.EntityPalette; }
-		}
+		
 	}
 }
