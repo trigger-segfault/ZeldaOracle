@@ -34,12 +34,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		//-----------------------------------------------------------------------------
 
 		protected void EndTransition() {
-			//gameManager.PopGameState(); // Pop this state
-			//gameManager.PushGameState(roomNew);
 			End();
-
-			// Call this now incase it hasn't been called yet. (Like in push transition)
-			SetupNewRoomPalette();
 		}
 
 		protected void DestroyOldRoom() {
@@ -63,23 +58,9 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 			Player.MarkRespawn();
 
 			Player.OnEnterRoom();
-
-			if (setupPalette) {
-				SetupNewRoomPalette();
-			}
 		}
 
-
-		//-----------------------------------------------------------------------------
-		// Internal Methods
-		//-----------------------------------------------------------------------------
-
-		private void SetupNewRoomPalette() {
-			//GameData.PaletteShader.TilePalette = NewRoomControl.Zone.Palette;
-			//GameData.PaletteShader.TileRatio = 0f;
-		}
 		
-
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
