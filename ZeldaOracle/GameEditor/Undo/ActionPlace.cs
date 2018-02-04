@@ -51,6 +51,12 @@ namespace ZeldaEditor.Undo {
 
 		public override void Undo(EditorControl editorControl) {
 			editorControl.OpenLevel(level);
+			foreach (var point in placedTiles) {
+				Point2I roomLocation = point / level.RoomSize;
+				Point2I tileLocation = point % level.RoomSize;
+				Room room = level.GetRoomAt(roomLocation);
+				room.RemoveTile(tileLocation, layer);
+			}
 			foreach (var pair in overwrittenTiles) {
 				Point2I roomLocation = pair.Key / level.RoomSize;
 				Point2I tileLocation = pair.Key % level.RoomSize;

@@ -40,7 +40,15 @@ namespace ZeldaOracle.Game.Items.Rewards {
 		// Virtual Methods
 		//-----------------------------------------------------------------------------
 
-		public virtual void OnCollect(GameControl gameControl) {}
+		public virtual void OnCollect(GameControl gameControl) { }
+
+		public virtual void OnCollectNoMessage(GameControl gameControl) {
+			OnCollect(gameControl);
+		}
+
+		public virtual void OnDisplayMessage(GameControl gameControl) {
+			gameControl.DisplayMessage(message);
+		}
 
 		public virtual bool IsAvailable(GameControl gameControl) {
 			return true;

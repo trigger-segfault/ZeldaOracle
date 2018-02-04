@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Control;
 
 namespace ZeldaOracle.Game {
 
@@ -30,6 +31,15 @@ namespace ZeldaOracle.Game {
 
 		// Properties
 		public const string				TEXT_UNDEFINED				= "<red>undefined<red>";
+
+		public const string				HEART_PIECE_TEXT			= "You got a <n> <red>Piece of " +
+																		"<n>Heart<red>!<heart-piece>" +
+																		"Collect four in all to get an " +
+																		"extra <red>Heart Container<red>! Check " +
+																		"them on the Item Screen.";
+
+		public const string				HEART_CONTAINER_TEXT		= "You got four <red>Pieces of Heart<red>! " +
+																		"That makes one <red>Heart Container<red>!";
 
 		// Physics
 		public const float				DEFAULT_GRAVITY				= 0.125f;	// Default gravity acceleration in pixels per frame^2

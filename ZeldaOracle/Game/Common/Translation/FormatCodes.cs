@@ -27,6 +27,8 @@ namespace ZeldaOracle.Common.Translation {
 
 		/// <summary>The character used to mark a new paragraph.</summary>
 		public const char ParagraphCharacter = (char)128;
+		/// <summary>The character used to mark a heart piece display.</summary>
+		public const char HeartPieceCharacter = (char)129;
 
 
 		//-----------------------------------------------------------------------------
@@ -86,6 +88,7 @@ namespace ZeldaOracle.Common.Translation {
 			FormatCodes.stringCodes.Add("<", "<");
 			FormatCodes.stringCodes.Add("n", "\n");
 			FormatCodes.stringCodes.Add("p", "" + ParagraphCharacter);
+			FormatCodes.stringCodes.Add("heart-piece", "" + HeartPieceCharacter);
 		}
 
 

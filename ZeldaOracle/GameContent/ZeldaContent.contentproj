@@ -1504,7 +1504,13 @@
       <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Sounds\Pickups\heart_container.wav">
+      <Name>heart_container</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
     <None Include="Worlds\big_interiors.zwd">
       <Name>big_interiors</Name>
