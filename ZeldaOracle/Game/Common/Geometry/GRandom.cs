@@ -219,6 +219,12 @@ namespace ZeldaOracle.Common.Geometry {
 				throw new IndexOutOfRangeException();
 			return list[NextInt(list.Count)];
 		}
-
+		
+		/// <summary>Choose a random element from a list.</summary>
+		public static T Choose<T>(params T[] options) {
+			if (options.Length == 0)
+				throw new IndexOutOfRangeException();
+			return options[NextInt(options.Length)];
+		}
 	}
 }

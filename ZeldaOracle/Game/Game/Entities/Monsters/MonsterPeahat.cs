@@ -87,16 +87,20 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			isStunnable = isVulnerable;
 
 			// Update deceleration
-			if (flyTimer <= 60) {
+			if (flyTimer <= GameSettings.MONSTER_PEAHAT_DECELERATE_DURATION) {
+				// Slow down animation
 				Graphics.AnimationPlayer.Speed = GMath.Max(0.0f,
-					Graphics.AnimationPlayer.Speed - 0.010f);
+					Graphics.AnimationPlayer.Speed - 0.01f);
 
 				if (moveSpeed > 0.0f || zPosition > 0.0f) {
+					// Slow down movement and lower to the ground
 					moveSpeed = GMath.Max(0.0f,
 						moveSpeed - GameSettings.MONSTER_PEAHAT_DECELERATION);
-					zPosition = GMath.Max(0.0f, zPosition - 0.1f);
+					zPosition = GMath.Max(0.0f, zPosition -
+						GameSettings.MONSTER_PEAHAT_LOWER_SPEED);
 				}
 				else if (Graphics.AnimationPlayer.Speed <= 0.0f) {
+					// Begin the stopped state once the animation has stopped
 					moveSpeed = 0.0f;
 					stateMachine.BeginState(FlyState.Stopped);
 					return;
@@ -104,13 +108,16 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			}
 			// Update acceleration
 			else {
+				// Speed up animation
 				Graphics.AnimationPlayer.Speed = GMath.Min(1.0f,
-					Graphics.AnimationPlayer.Speed + 0.010f);
+					Graphics.AnimationPlayer.Speed + 0.01f);
+
 				if (Graphics.AnimationPlayer.Speed > 0.5f) {
+					// Speed up movement and raise into the air
 					moveSpeed = GMath.Min(GameSettings.MONSTER_PEAHAT_FLY_SPEED,
 						moveSpeed + GameSettings.MONSTER_PEAHAT_ACCELERATION);
 					zPosition = GMath.Min(GameSettings.MONSTER_PEAHAT_FLY_ALTITUDE,
-						zPosition + 0.1f);
+						zPosition + GameSettings.MONSTER_PEAHAT_RAISE_SPEED);
 				}
 			}
 			

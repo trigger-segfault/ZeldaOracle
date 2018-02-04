@@ -93,7 +93,12 @@ namespace ZeldaOracle.Common.Geometry {
 				return Angles.ToVector(orientation);
 			return Vector2F.Zero;
 		}
-		
+
+		public static Vector2F ToVector(int angle, int numAngles) {
+			float radians = (angle / (float) numAngles) * GMath.TwoPi;
+			return new Vector2F((float) Math.Cos(radians),
+				(float) -Math.Sin(radians));
+		}
 
 		public static int RoundFromRadians(float radians, int numAngles) {
 			int angle = (int) GMath.Round((radians * numAngles) / GMath.TwoPi);
@@ -103,6 +108,56 @@ namespace ZeldaOracle.Common.Geometry {
 		public static int NearestFromVector(Vector2F vector, int numAngles) {
 			float radians = (float) Math.Atan2((double) -vector.Y, (double) vector.X);
 			return RoundFromRadians(radians, numAngles);
+		}
+		
+		public static int Add(int angle, int addAmount, WindingOrder windingOrder, int numAngles) {
+			if (windingOrder == WindingOrder.Clockwise)
+				angle -= addAmount;
+			else
+				angle += addAmount;
+			return GMath.Wrap(angle, numAngles);
+		}
+		
+		public static int Subtract(int angle, int subtractAmount,
+			WindingOrder windingOrder, int numAngles)
+		{
+			if (windingOrder == WindingOrder.Clockwise)
+				angle += subtractAmount;
+			else
+				angle -= subtractAmount;
+			return GMath.Wrap(angle, numAngles);
+		}
+
+		public static int Reverse(int angle, int numAngles) {
+			return ((angle + (numAngles / 2)) % numAngles);
+		}
+		
+		public static int GetNearestAngleDistance(int startAngle, int endAngle, int numAngles) {
+			int cwDist = GetAngleDistance(startAngle, endAngle, WindingOrder.Clockwise, numAngles);
+			int ccwDist = GetAngleDistance(startAngle, endAngle, WindingOrder.CounterClockwise, numAngles);
+			if (cwDist < ccwDist)
+				return -cwDist;
+			else
+				return ccwDist;
+		}
+
+		/// <summary>Return the modular distance from one angle to another using
+		/// the given winding order.</summary>
+		public static int GetAngleDistance(int startAngle, int endAngle,
+			WindingOrder windingOrder, int numAngles)
+		{
+			if (windingOrder == WindingOrder.Clockwise) {
+				if (endAngle > startAngle)
+					return (startAngle + numAngles - endAngle);
+				else
+					return (startAngle - endAngle);
+			}
+			else {
+				if (endAngle < startAngle)
+					return (endAngle + numAngles - startAngle);
+				else
+					return (endAngle - startAngle);
+			}
 		}
 	}
 

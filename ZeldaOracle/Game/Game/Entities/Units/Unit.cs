@@ -162,7 +162,8 @@ namespace ZeldaOracle.Game.Entities.Units {
 		public virtual void OnHurt(DamageInfo damage) { }
 		
 		public void Kill() {
-			Die();
+			if (!IsInvincible)
+				Die();
 		}
 
 		public virtual void Knockback(int duration, float speed, Vector2F sourcePosition) {
@@ -192,7 +193,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 			if (IsInvincible || !IsDamageable || IsBeingKnockedBack)
 				return;
 
-			// Knockback.
+			// Apply knockback
 			if (damage.ApplyKnockBack) {
 				Vector2F damageSourcePos = Center;
 				int duration = hurtKnockbackDuration;
@@ -203,7 +204,7 @@ namespace ZeldaOracle.Game.Entities.Units {
 				Knockback(duration, knockbackSpeed, damageSourcePos);
 			}
 
-			// Damage.
+			// Apply damage
 			if (damage.Amount > 0) {
 				health				= GMath.Max(0, health - damage.Amount);
 				invincibleTimer		= hurtInvincibleDuration;
@@ -217,6 +218,10 @@ namespace ZeldaOracle.Game.Entities.Units {
 				invincibleTimer = damage.InvincibleDuration;
 
 			OnHurt(damage);
+		}
+
+		public void GiveInvincibility(int duration) {
+			invincibleTimer = duration;
 		}
 
 		public virtual void Die() {
@@ -344,7 +349,6 @@ namespace ZeldaOracle.Game.Entities.Units {
 			set { isDamageable = value; }
 		}
 
-		/// <summary></summary>
 		public bool IsInvincible {
 			get { return (invincibleTimer > 0); }
 		}

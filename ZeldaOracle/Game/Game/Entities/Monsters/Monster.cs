@@ -32,6 +32,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		Gold		= 4,
 		DarkRed		= 5,
 		DarkBlue	= 6,
+		InverseBlue	= 7,
 
 		Count
 	}

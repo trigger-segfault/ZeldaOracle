@@ -264,13 +264,14 @@ namespace ZeldaOracle.Game {
 			
 			// Map monster colors to color definitions
 			MONSTER_COLOR_DEFINITION_MAP = new string[(int) MonsterColor.Count];
-			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.Red]		= "red";
-			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.Blue]		= "blue";
-			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.Orange]	= "orange";
-			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.Green]		= "green";
-			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.DarkBlue]	= "shaded_blue";
-			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.DarkRed]	= "shaded_red";
-			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.Gold]		= "gold";
+			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.Red]			= "red";
+			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.Blue]			= "blue";
+			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.Orange]			= "orange";
+			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.Green]			= "green";
+			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.DarkBlue]		= "shaded_blue";
+			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.DarkRed]		= "shaded_red";
+			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.Gold]			= "gold";
+			MONSTER_COLOR_DEFINITION_MAP[(int) MonsterColor.InverseBlue]	= "inverse_blue";
 		}
 
 		//-----------------------------------------------------------------------------

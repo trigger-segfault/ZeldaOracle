@@ -64,6 +64,8 @@ MONSTER "monster_anti_fairy",			"monster_anti_fairy",			MonsterAntiFairy,		gold;
 MONSTER "monster_river_zora",			"monster_river_zora",			MonsterRiverZora,		red;	END;
 MONSTER "monster_pokey",				"monster_pokey_head",			MonsterPokey,			green;	END;
 MONSTER "monster_peahat",				"monster_peahat",				MonsterPeahat,			red;	END;
+MONSTER "monster_bari",					"monster_bari",					MonsterBari,			blue;	END;
+MONSTER "monster_biri",					"monster_biri",					MonsterBiri,			blue;	END;
 
 TILE "monster_beamos";
 	TYPE		TileMonsterBeamos;

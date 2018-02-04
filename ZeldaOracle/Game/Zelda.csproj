@@ -308,6 +308,8 @@
     <Compile Include="Game\Entities\Monsters\JumpMonsters\MonsterTektike.cs" />
     <Compile Include="Game\Entities\Monsters\JumpMonsters\MonsterZolRed.cs" />
     <Compile Include="Game\Entities\Monsters\JumpMonsters\MonsterZolGreen.cs" />
+    <Compile Include="Game\Entities\Monsters\MonsterBiri.cs" />
+    <Compile Include="Game\Entities\Monsters\MonsterBari.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterPeahat.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterPokey.cs" />
     <Compile Include="Game\Entities\Monsters\MonsterRiverZora.cs" />

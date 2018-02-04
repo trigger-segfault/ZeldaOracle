@@ -178,7 +178,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		}
 
 		
-
 		//-----------------------------------------------------------------------------
 		// Operation
 		//-----------------------------------------------------------------------------
@@ -200,6 +199,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			int index = stateIds.IndexOf(currentState.ID);
 			index = (index + 1) % stateIds.Count;
 			BeginState(stateIds[index]);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		public IDType CurrentState {
+			get { return currentState.ID; }
 		}
 	}
 

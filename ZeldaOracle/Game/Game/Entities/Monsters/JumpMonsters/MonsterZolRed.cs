@@ -20,6 +20,7 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 			//   * 32 frames of shaking
 			//   * 26 frames after landing before moving again
 			//   * 19 frames after death before Gels spawn
+			//   - Once one Gel is dead, the Zol is considered Dead (wont respawn)
 			// Conclusion:
 			//   * stop time = 26
 			//   * crawl time = 16
@@ -51,21 +52,27 @@ namespace ZeldaOracle.Game.Entities.Monsters.JumpMonsters {
 
 
 		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+		
+		private void SpawnOffspring(Vector2F position) {
+			MonsterGel child = new MonsterGel();
+			child.Color = MonsterColor.Red;
+			RoomControl.SpawnEntity(child, position);
+		}
+
+		private void SpawnOffspring() {
+			SpawnOffspring(position + new Vector2F(4, 0));
+			SpawnOffspring(position - new Vector2F(4, 0));
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Overridden Methods
 		//-----------------------------------------------------------------------------
 
 		public override void OnDie() {
-			// Spawn gels
-			// TODO: These need to spawn 19 frames after death (they also need to
-			// start with a short invulnerable delay so they aren't immediatly killed)
-			RoomControl.SpawnEntity(new MonsterGel() {
-				Color = MonsterColor.Red,
-				Position = position - new Vector2F(4, 0),
-			});
-			RoomControl.SpawnEntity(new MonsterGel() {
-				Color = MonsterColor.Red,
-				Position = position + new Vector2F(4, 0),
-			});
+			RoomControl.ScheduleEvent(19, SpawnOffspring);
 		}
 	}
 }

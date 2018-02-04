@@ -18,7 +18,7 @@ SOURCE "temp_sheet_monsters";
 MAPPEDCOLORS	"entities_default", ("red", "green", "blue", "orange", "gold", "shaded_red", "shaded_blue", "hurt");
 
 SPRITESET "units_monsters" (16, 16);
-	MULTIPLE COLOR "", ("red", "green", "blue", "orange", "gold", "shaded_red", "shaded_blue", "inverse_red", "inverse_blue", "hurt"), (0, 0); END;
+	MULTIPLE COLOR "", ("red", "green", "blue", "orange", "gold", "shaded_red", "shaded_blue", "inverse_red", "hurt"), (0, 0); END;
 END;
 
 PALETTEDICTIONARY none;
@@ -126,9 +126,11 @@ ANIMATION "monster_wall_master_grab";
 ANIMATION "monster_biri"; SUBSTRIP repeat;
 	ADD strip, 8, 2, (0, 8); END;
 ANIMATION "monster_bari"; SUBSTRIP repeat;
-	ADD strip, 8, 2, (2, 8); END;
-ANIMATION "monster_bari_electrocute"; SUBSTRIP repeat;
-	ADD strip, 8, 2, (2, 8); END;
+	ADD strip, 24, 2, (2, 8); END;
+ANIMATION "monster_bari_electrocute_1"; SUBSTRIP repeat;
+	ADD frame, 4, (4, 8); END;
+ANIMATION "monster_bari_electrocute_2"; SUBSTRIP repeat;
+	ADD frame, 4, (15, 15); END;
 ANIMATION "monster_gibdo"; SUBSTRIP repeat;
 	ADD strip, 16, 2, (12, 9); END;
 ANIMATION "monster_sand_crab"; SUBSTRIP repeat;

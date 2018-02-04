@@ -191,9 +191,15 @@ namespace ZeldaOracle.Game {
 		public static RangeI			MONSTER_PEAHAT_FLY_DURATION						= new RangeI(476);
 		public static RangeI			MONSTER_PEAHAT_STOP_DURATION					= new RangeI(15, 150);
 		public const float				MONSTER_PEAHAT_FLY_SPEED						= 0.75f;
-		public const float				MONSTER_PEAHAT_ACCELERATION						= 0.0125f; // 60 frames
+		public const float				MONSTER_PEAHAT_ACCELERATION						= 0.0125f; // 60 frames from 0.00 to 0.75
 		public const float				MONSTER_PEAHAT_DECELERATION						= 0.0125f;
+		public const int				MONSTER_PEAHAT_DECELERATE_DURATION				= 60;
 		public const float				MONSTER_PEAHAT_FLY_ALTITUDE						= 5;
+		public const float				MONSTER_PEAHAT_RAISE_SPEED						= 0.1f;
+		public const float				MONSTER_PEAHAT_LOWER_SPEED						= 0.1f;
+		public static int[]				MONSTER_BARI_ELECTROCUTE_DELAYS					= { 90, 120, 150 };
+		public const int				MONSTER_BARI_ELECTROCUTE_DURATION				= 60;
+		//public const int				MONSTER_BARI_HOVER_DELAY						= 16; // 16, 16, 16: low, mid, high,
 
 		// Tiles
 		public const int				TILE_BUTTON_TILE_RAISE_AMOUNT			= 2;	// Pixels to raise certain tiles when pushed over a button.

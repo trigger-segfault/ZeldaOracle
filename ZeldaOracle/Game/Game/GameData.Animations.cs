@@ -133,7 +133,8 @@ namespace ZeldaOracle.Game {
 		public static Animation ANIM_MONSTER_WALL_MASTER_GRAB;
 		public static Animation ANIM_MONSTER_BIRI;
 		public static Animation ANIM_MONSTER_BARI;
-		public static Animation ANIM_MONSTER_BARI_ELECTROCUTE;
+		public static Animation ANIM_MONSTER_BARI_ELECTROCUTE_1;
+		public static Animation ANIM_MONSTER_BARI_ELECTROCUTE_2;
 		public static Animation ANIM_MONSTER_GIBDO;
 		public static Animation ANIM_MONSTER_SAND_CRAB;
 		public static Animation ANIM_MONSTER_WATER_TEKTIKE;
