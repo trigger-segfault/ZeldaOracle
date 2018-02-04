@@ -212,23 +212,41 @@ TILE "ss_faint_light_bottom_left"; SAMESPRITE; END;
 TILE "ss_faint_light_bottom_right"; SAMESPRITE; END;
 
 TILE "ss_moving_platform"; SAMESPRITE; SOLID block; END;
-TILE "ss_disappearing_platform"; SAMESPRITE; SOLID block; END;
+TILE "ss_disappearing_platform";
+	TYPE			TileDisappearingPlatform;
+	SOLID			block;
+	SAMESPRITE;
+	PREVIEW			"tile_ss_disappearing_platform";
+	PROPERTIES
+		(integer, appear_time, 0,
+			"Appear Time", "", "Disappearing",
+			"The time in frames when the block starts appearing."),
+		(integer, disappear_time, 90,
+			"Disappear Time", "", "Disappearing",
+			"The time in frames when the block starts disappearing."),
+		(integer, duration, 180,
+			"Total Duration", "", "Disappearing",
+			"The total duration of the time loop."),
+		(string, sync_with, "",
+			"Sync With", ("type", "TileDisappearingPlatform"), "Disappearing",
+			"Substitute the time properties with the specified platform.");
+	END;
 TILE "ss_rotating_platform"; SAMESPRITE; SOLID block; END;
 
-TILE "ss_conveyor_belt_east";
-	SPRITEINDEX		0, "tile_ss_conveyor_belt_east_both";
-	SPRITEINDEX		1, "tile_ss_conveyor_belt_east_left";
-	SPRITEINDEX		2, "tile_ss_conveyor_belt_east_right";
-	SPRITEINDEX		3, "tile_ss_conveyor_belt_east_mid";
-	SOLID block;
-	#CONVEYOR
+TILE "ss_conveyor_belt_right";
+	SPRITEINDEX		0, "tile_ss_conveyor_belt_right_both";
+	SPRITEINDEX		1, "tile_ss_conveyor_belt_right_left";
+	SPRITEINDEX		2, "tile_ss_conveyor_belt_right_right";
+	SPRITEINDEX		3, "tile_ss_conveyor_belt_right_mid";
+	SOLID			block;
+	CONVEYOR		Right,	0.5;
 END;
 
-TILE "ss_conveyor_belt_west";
-	SPRITEINDEX		0, "tile_ss_conveyor_belt_west_both";
-	SPRITEINDEX		1, "tile_ss_conveyor_belt_west_left";
-	SPRITEINDEX		2, "tile_ss_conveyor_belt_west_right";
-	SPRITEINDEX		3, "tile_ss_conveyor_belt_west_mid";
-	SOLID block;
-	#CONVEYOR
+TILE "ss_conveyor_belt_left";
+	SPRITEINDEX		0, "tile_ss_conveyor_belt_left_both";
+	SPRITEINDEX		1, "tile_ss_conveyor_belt_left_left";
+	SPRITEINDEX		2, "tile_ss_conveyor_belt_left_right";
+	SPRITEINDEX		3, "tile_ss_conveyor_belt_left_mid";
+	SOLID			block;
+	CONVEYOR		Left,	0.5;
 END;

@@ -497,6 +497,7 @@
     <Compile Include="Game\Control\Controls.cs" />
     <Compile Include="Game\Items\Weapons\SeedBasedItem.cs" />
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterBeamos.cs" />
+    <Compile Include="Game\Tiles\Custom\SideScroll\TileDisappearingPlatform.cs" />
     <Compile Include="Game\Tiles\Tileset.cs" />
     <Compile Include="Game\Tiles\TileDataDrawing.cs" />
     <Compile Include="Game\UserSettings.cs" />

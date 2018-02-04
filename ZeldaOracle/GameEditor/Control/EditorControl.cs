@@ -904,7 +904,7 @@ namespace ZeldaEditor.Control {
 		public void UpdateTicks() {
 			double time = timer.Elapsed.TotalSeconds;
 			if (playAnimations)
-				ticks++;// = (int)(time * 60.0);
+				ticks = (int)(time * 60.0);
 		}
 
 
@@ -1115,7 +1115,11 @@ namespace ZeldaEditor.Control {
 		// Drawing --------------------------------------------------------------------
 		
 		public int Ticks {
-			get { return ticks; }
+			get {
+				if (PlayAnimations)
+					return ticks;
+				return 0;
+			}
 		}
 
 		public TileDrawModes AboveTileDrawMode {

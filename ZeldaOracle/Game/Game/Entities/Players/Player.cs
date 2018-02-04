@@ -617,7 +617,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 			eventLand?.Invoke(this);
 
 			Physics.Gravity = GameSettings.DEFAULT_GRAVITY;
-			AudioSystem.PlaySound(GameData.SOUND_PLAYER_LAND);
+
+			if (RoomControl.DeathByFalling && Position.Y + 3 >= RoomControl.RoomBounds.Bottom) {
+				RespawnDeathInstantaneous();
+			}
+			else {
+				AudioSystem.PlaySound(GameData.SOUND_PLAYER_LAND);
+			}
 		}
 
 		public override void UpdateGraphics() {
