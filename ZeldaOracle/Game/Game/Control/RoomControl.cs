@@ -55,9 +55,11 @@ namespace ZeldaOracle.Game.Control {
 		private int					entityIndexCounter;
 		private bool				isSideScrolling;
 		private bool				isUnderwater;
+		private bool				deathByFalling;
 		private RoomVisualEffect	visualEffect;
 		private RoomVisualEffect	visualEffectUnderwater;
 		private bool				disableVisualEffect;
+		private int					currentRoomTicks;
 
 		private event Action<Player>	eventPlayerRespawn;
 		private event Action<int>		eventRoomTransitioning;
@@ -86,9 +88,11 @@ namespace ZeldaOracle.Game.Control {
 			entityCount				= 0;
 			entityIndexCounter		= 0;
 			isSideScrolling			= false;
-			isUnderwater			= true;
+			isUnderwater			= false;
+			deathByFalling			= false;
 			visualEffect			= null;
 			disableVisualEffect		= false;
+			currentRoomTicks		= 0;
 			tilePaletteOverride		= null;
 			entityPaletteOverride	= null;
 
@@ -266,6 +270,7 @@ namespace ZeldaOracle.Game.Control {
 			this.dungeon			= room.Dungeon;
 			this.isSideScrolling	= room.Zone.IsSideScrolling;
 			this.isUnderwater		= room.Zone.IsUnderwater;
+			this.deathByFalling		= room.DeathByFalling;
 			if (this.isUnderwater)
 				visualEffect = visualEffectUnderwater;
 			else
@@ -333,6 +338,8 @@ namespace ZeldaOracle.Game.Control {
 			GameControl.FireEvent(room, "room_start");
 
 			allMonstersDead = false;
+
+			currentRoomTicks = 0;
 		}
 
 		// Set all entities to destroyed (except the player).
@@ -515,6 +522,7 @@ namespace ZeldaOracle.Game.Control {
 
 		public override void Update() {
 			GameControl.RoomTicks++;
+			currentRoomTicks++;
 
 			RoomState roomState		= GameControl.CurrentRoomState;
 			GameControl.UpdateRoom	= roomState.UpdateRoom;
@@ -692,7 +700,7 @@ namespace ZeldaOracle.Game.Control {
 		}
 
 		public void SpawnTile(string id, bool staySpawned = false) {
-			foreach (TileDataInstance tileData in Room.GetTiles(id))
+			foreach (TileDataInstance tileData in Room.FindTilesByID(id))
 				SpawnTile(tileData, staySpawned);
 			foreach (ActionTileDataInstance actionTileData in Room.ActionData)
 				SpawnActionTile(actionTileData, staySpawned);
@@ -832,6 +840,15 @@ namespace ZeldaOracle.Game.Control {
 				if (entityPaletteOverride != null && entityPaletteOverride.PaletteType != PaletteTypes.Entity)
 					throw new ArgumentException("Palette is not an entity palette!");
 			}
+		}
+
+		public int CurrentRoomTicks {
+			get { return currentRoomTicks; }
+		}
+
+		public bool DeathByFalling {
+			get { return deathByFalling; }
+			set { deathByFalling = value; }
 		}
 	}
 }

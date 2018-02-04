@@ -233,12 +233,14 @@ namespace ZeldaEditor.WinForms {
 		//-----------------------------------------------------------------------------
 
 		protected override void Draw() {
+			editorControl.UpdateTicks();
 			Graphics2D g = new Graphics2D(spriteBatch);
 			//g.SetRenderTarget(GameData.RenderTargetGame);
 			GameData.PaletteShader.TilePalette = Zone.Palette;
 			GameData.PaletteShader.ApplyPalettes();
 			TileDataDrawing.RewardManager = editorControl.RewardManager;
 			TileDataDrawing.Level = editorControl.Level;
+			TileDataDrawing.Room = null;
 			TileDataDrawing.Extras = false;
 			TileDataDrawing.PlaybackTime = editorControl.Ticks;
 

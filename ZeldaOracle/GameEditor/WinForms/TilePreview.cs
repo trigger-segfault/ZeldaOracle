@@ -69,6 +69,7 @@ namespace ZeldaEditor.WinForms {
 			GameData.PaletteShader.ApplyPalettes();
 			TileDataDrawing.RewardManager = editorControl.RewardManager;
 			TileDataDrawing.Level = tile.Room.Level;
+			TileDataDrawing.Room = tile.Room;
 			TileDataDrawing.Extras = false;
 			TileDataDrawing.PlaybackTime = 0f;
 
