@@ -214,6 +214,8 @@ namespace ZeldaOracle.Game {
 		public const int				TILE_PULL_HANDLE_EXTEND_LENGTH			= 64;
 		public const int				TILE_PULL_HANDLE_WALL_OFFSET			= 8;
 
+		public const int                TILE_DISAPPEARING_PLATFORM_APPEAR_DURATION  = 30;
+
 
 
 		//-----------------------------------------------------------------------------

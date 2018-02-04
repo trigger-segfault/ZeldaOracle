@@ -432,7 +432,8 @@ namespace ZeldaEditor {
 		}
 
 		private void OnPreviewKeyDown(object sender, KeyEventArgs e) {
-			if (!(FocusManager.GetFocusedElement(this) is TextBox) && !(FocusManager.GetFocusedElement(propertyGrid) is TextBox)) {
+			if (!(Keyboard.FocusedElement is TextBox)) {
+				
 				if (Keyboard.Modifiers == ModifierKeys.None) {
 					foreach (EditorTool tool in editorControl.Tools) {
 						if (e.Key == tool.HotKey) {

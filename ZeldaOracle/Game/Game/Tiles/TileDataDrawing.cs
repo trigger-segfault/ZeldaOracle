@@ -21,6 +21,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public Point2I Position { get; }
 		public Zone Zone { get; }
 		public Level Level { get; }
+		public Room Room { get; }
 		public float Time { get; }
 		public Color Color { get; }
 		public bool Extras { get; }
@@ -30,12 +31,13 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return new SpriteDrawSettings(Zone.StyleDefinitions, Time); }
 		}
 
-		public TileDataDrawArgs(TileData tile, Properties properties, Point2I position, Zone zone, Level level, float time, Color color, bool extras, RewardManager rewardManager) {
+		public TileDataDrawArgs(TileData tile, Properties properties, Point2I position, Zone zone, Level level, Room room, float time, Color color, bool extras, RewardManager rewardManager) {
 			this.Tile			= tile;
 			this.Properties		= properties;
 			this.Position		= position;
 			this.Zone			= zone;
-			this.Level          = level;
+			this.Level			= level;
+			this.Room			= room;
 			this.Time			= time;
 			this.Color			= color;
 			this.Extras			= extras;
@@ -49,6 +51,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public Point2I Position { get; }
 		public Zone Zone { get; }
 		public Level Level { get; }
+		public Room Room { get; }
 		public float Time { get; }
 		public Color Color { get; }
 		public bool Extras { get; }
@@ -58,12 +61,13 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return new SpriteDrawSettings(Zone.StyleDefinitions, Time); }
 		}
 
-		public ActionTileDataDrawArgs(ActionTileData actionTile, Properties properties, Point2I position, Zone zone, Level level, float time, Color color, bool extras, RewardManager rewardManager) {
+		public ActionTileDataDrawArgs(ActionTileData actionTile, Properties properties, Point2I position, Zone zone, Level level, Room room, float time, Color color, bool extras, RewardManager rewardManager) {
 			this.ActionTile		= actionTile;
 			this.Properties		= properties;
 			this.Position		= position;
 			this.Zone			= zone;
-			this.Level          = level;
+			this.Level			= level;
+			this.Room			= room;
 			this.Time			= time;
 			this.Color			= color;
 			this.Extras			= extras;
@@ -83,6 +87,7 @@ namespace ZeldaOracle.Game.Tiles {
 		public static Level Level { get; set; }
 		public static float PlaybackTime { get; set; }
 		public static bool Extras { get; set; }
+		public static Room Room { get; set; }
 
 
 		static TileDataDrawing() {
@@ -153,7 +158,7 @@ namespace ZeldaOracle.Game.Tiles {
 						drawFunc = ReflectionHelper.GetFunction<TileDrawFunction>(methodInfo);
 					tileDrawFunctions.Add(type, drawFunc);
 				}
-				var args = new TileDataDrawArgs(tile, properties, position, zone, Level, PlaybackTime, color, Extras, RewardManager);
+				var args = new TileDataDrawArgs(tile, properties, position, zone, Level, Room, PlaybackTime, color, Extras, RewardManager);
 				drawFunc(g, args);
 				Tile.DrawTileDataAbove(g, args);
 			}
@@ -167,7 +172,7 @@ namespace ZeldaOracle.Game.Tiles {
 						drawFunc = ReflectionHelper.GetFunction<ActionTileDrawFunction>(methodInfo);
 					actionTileDrawFunctions.Add(type, drawFunc);
 				}
-				drawFunc(g, new ActionTileDataDrawArgs(actionTile, properties, position, zone, Level, PlaybackTime, color, Extras, RewardManager));
+				drawFunc(g, new ActionTileDataDrawArgs(actionTile, properties, position, zone, Level, Room, PlaybackTime, color, Extras, RewardManager));
 			}
 		}
 	}
