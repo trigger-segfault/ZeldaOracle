@@ -43,8 +43,11 @@ namespace ZeldaOracle.Game.Control {
 		private Room				room;
 		private Point2I				roomLocation;
 		private Dungeon				dungeon;
+
 		private List<Entity>		entities;
 		private List<ActionTile>	actionTiles;
+		private List<TimedEvent>	scheduledEvents;
+
 		private ViewControl			viewControl;
 		private int					requestedTransitionDirection;
 		private int					entityCount;
@@ -64,6 +67,12 @@ namespace ZeldaOracle.Game.Control {
 
 		private Palette				tilePaletteOverride;
 		private Palette				entityPaletteOverride;
+		
+	
+		private class TimedEvent {
+			public Action Action { get; set; }
+			public int Timer { get; set; }
+		}
 
 
 		//-----------------------------------------------------------------------------
@@ -76,6 +85,7 @@ namespace ZeldaOracle.Game.Control {
 			roomLocation			= Point2I.Zero;
 			entities				= new List<Entity>();
 			actionTiles				= new List<ActionTile>();
+			scheduledEvents			= new List<TimedEvent>();
 			viewControl				= new ViewControl();
 			tileManager				= new TileManager(this);
 			roomGraphics			= new RoomGraphics(this);
@@ -249,6 +259,13 @@ namespace ZeldaOracle.Game.Control {
 		// Move the given tile to a new location.
 		public void MoveTile(Tile tile, Point2I newLocation, int newLayer) {
 			tileManager.MoveTile(tile, newLocation, newLayer);
+		}
+
+		public void ScheduleEvent(int delay, Action action) {
+			scheduledEvents.Add(new TimedEvent() {
+				Timer = delay,
+				Action = action,
+			});
 		}
 
 
@@ -468,6 +485,17 @@ namespace ZeldaOracle.Game.Control {
 
 		private void UpdateObjects() {
 			requestedTransitionDirection = -1;
+
+			// Update event schedule
+			if (GameControl.UpdateRoom) {
+				for (int i = 0; i < scheduledEvents.Count; i++) {
+					scheduledEvents[i].Timer--;
+					if (scheduledEvents[i].Timer <= 0) {
+						scheduledEvents[i].Action?.Invoke();
+						scheduledEvents.RemoveAt(i--);
+					}
+				}
+			}
 
 			// Update entities.
 			entityCount = entities.Count;
