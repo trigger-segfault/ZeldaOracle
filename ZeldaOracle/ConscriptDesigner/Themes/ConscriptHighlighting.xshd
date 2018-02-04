@@ -269,6 +269,7 @@
       <Word>CLONE</Word>
       <Word>SPRITESHEET</Word>
       <Word>PREVIEW</Word>
+      <Word>ENTITYDRAW</Word>
     </Keywords>
 
     <!--ZoneSR-->

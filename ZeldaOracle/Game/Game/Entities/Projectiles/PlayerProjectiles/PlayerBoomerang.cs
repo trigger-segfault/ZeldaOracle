@@ -105,7 +105,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 				collectible.SetPositionByCenter(Center);
 				collectible.ZPosition = zPosition;
 				float percent = i / (float) collectibles.Count;
-				collectible.Graphics.Draw(g, Graphics.CurrentDepthLayer);
+				collectible.Graphics.Draw(g);
 			}
 		}
 	}

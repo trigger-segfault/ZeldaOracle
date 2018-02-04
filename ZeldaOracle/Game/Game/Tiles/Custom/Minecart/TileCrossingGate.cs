@@ -80,8 +80,10 @@ namespace ZeldaOracle.Game.Tiles {
 			dummySolidTile.SolidType		= TileSolidType.Solid;
 			dummySolidTile.IsSolid			= !IsRaised;
 			RoomControl.PlaceTile(dummySolidTile, trackLocation, Layer);
-		}
 
+			Graphics.UseDynamicDepth = true;
+			Graphics.DynamicOriginY = 2;
+		}
 
 		//-----------------------------------------------------------------------------
 		// Static Methods

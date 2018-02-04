@@ -399,14 +399,14 @@ namespace ZeldaOracle.Game.Control {
 			}
 		}
 		
-		// Draw all tiles in the grid.
+		// Draw all tiles in the grid that draw with entities
 		public void DrawTiles(RoomGraphics g) {
 			for (int i = 0; i < layerCount; i++) {
 				for (int y = 0; y < GridHeight; y++) {
 					for (int x = 0; x < GridWidth; x++) {
 						Tile t = tiles[x, y, i];
 
-						if (t != null && IsTileAtGridLocation(t, x, y)) {
+						if (t != null && IsTileAtGridLocation(t, x, y) && !t.DrawAsEntity) {
 							t.Draw(g);
 
 							/*
@@ -438,6 +438,21 @@ namespace ZeldaOracle.Game.Control {
 			}
 		}
 
+
+		// Draw all tiles in the grid that do not draw with entities
+		public void DrawEntityTiles(RoomGraphics g) {
+			for (int i = 0; i < layerCount; i++) {
+				for (int y = 0; y < GridHeight; y++) {
+					for (int x = 0; x < GridWidth; x++) {
+						Tile t = tiles[x, y, i];
+
+						if (t != null && IsTileAtGridLocation(t, x, y) && t.DrawAsEntity)
+							t.Draw(g);
+					}
+				}
+			}
+		}
+
 		// Draw all tiles in the grid.
 		public void DrawTilesAbove(RoomGraphics g) {
 			for (int i = 0; i < layerCount; i++) {
@@ -445,9 +460,8 @@ namespace ZeldaOracle.Game.Control {
 					for (int x = 0; x < GridWidth; x++) {
 						Tile t = tiles[x, y, i];
 
-						if (t != null && IsTileAtGridLocation(t, x, y)) {
+						if (t != null && IsTileAtGridLocation(t, x, y))
 							t.DrawAbove(g);
-						}
 					}
 				}
 			}

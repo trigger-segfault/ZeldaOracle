@@ -31,6 +31,10 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
             states.Add(state);
         }
 
+		public void AddRange(params RoomState[] states) {
+			this.states.AddRange(states);
+		}
+
 		public void NextState() {
             stateIndex++;
 

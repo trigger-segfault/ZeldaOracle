@@ -1,0 +1,39 @@
+﻿
+TILE "graveyard_brick_wall_nw"; SAMESPRITE; SOLID block; END;
+TILE "graveyard_brick_wall_up"; SAMESPRITE; LEDGE block, up; END;
+TILE "graveyard_brick_wall_ne"; SAMESPRITE; SOLID block; END;
+TILE "graveyard_brick_wall_left"; SAMESPRITE; LEDGE block, left; END;
+TILE "graveyard_brick_wall_right"; SAMESPRITE; LEDGE block, right; END;
+TILE "graveyard_brick_wall_sw"; SAMESPRITE; SOLID block; END;
+TILE "graveyard_brick_wall_down"; SAMESPRITE; SOLID block; END;
+TILE "graveyard_brick_wall_se"; SAMESPRITE; LEDGE block, down; END;
+
+TILE "graveyard_stone_wall_nw"; SAMESPRITE; SOLID block; END;
+TILE "graveyard_stone_wall_ne"; SAMESPRITE; SOLID block; END;
+TILE "graveyard_stone_wall_left"; SAMESPRITE; SOLID block; END;
+TILE "graveyard_stone_wall_right"; SAMESPRITE; SOLID block; END;
+TILE "graveyard_stone_wall_sw"; SAMESPRITE; SOLID block; END;
+TILE "graveyard_stone_wall_down_left"; SAMESPRITE; SOLID block; END;
+TILE "graveyard_stone_wall_down_right"; SAMESPRITE; SOLID block; END;
+TILE "graveyard_stone_wall_se"; SAMESPRITE; SOLID block; END;
+
+TILE "sprits_tomb_top_left"; SAMESPRITE; SOLID block; END;
+TILE "sprits_tomb_top_mid"; SAMESPRITE; SOLID block; END;
+TILE "sprits_tomb_top_right"; SAMESPRITE; SOLID block; END;
+TILE "sprits_tomb_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "sprits_tomb_entrance"; SAMESPRITE; SOLID doorway; END;
+TILE "sprits_tomb_bottom_right"; SAMESPRITE; SOLID block; END;
+
+TILE "graveyard_gate_top"; SAMESPRITE; SOLID edge_s; END;
+TILE "graveyard_gate_left"; SAMESPRITE; SOLID block; END;
+TILE "graveyard_gate_keyhole"; SAMESPRITE; SOLID block; END;
+TILE "graveyard_gate_right"; SAMESPRITE; SOLID block; END;
+
+TILE "explorers_crypt_statue"; SAMESPRITE; SOLID block; END;
+
+TILE "tombstone_hole_right"; SAMESPRITE; SOLID block; END;
+TILE "tombstone_hole_left"; SAMESPRITE; SOLID block; END;
+TILE "tombstone_filled_right"; SAMESPRITE; SOLID block; END;
+TILE "tombstone_filled_left"; SAMESPRITE; SOLID block; END;
+TILE "tombstone_subrosia"; SAMESPRITE; SOLID block; END;
+TILE "tombstone_subrosia_dark"; SAMESPRITE; SOLID block; END;

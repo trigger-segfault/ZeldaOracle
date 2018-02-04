@@ -77,31 +77,55 @@ TILE "ember_tree_top_left"; SAMESPRITE; SOLID block; END;
 TILE "ember_tree_top_right"; SAMESPRITE; SOLID block; END;
 TILE "ember_tree_bottom_left"; SAMESPRITE; SOLID block; END;
 TILE "ember_tree_bottom_right"; SAMESPRITE; SOLID block; END;
+TILE "ember_tree_dark_top_left"; SAMESPRITE; SOLID block; END;
+TILE "ember_tree_dark_top_right"; SAMESPRITE; SOLID block; END;
+TILE "ember_tree_dark_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "ember_tree_dark_bottom_right"; SAMESPRITE; SOLID block; END;
 
 TILE "scent_tree_top_left"; SAMESPRITE; SOLID block; END;
 TILE "scent_tree_top_right"; SAMESPRITE; SOLID block; END;
 TILE "scent_tree_bottom_left"; SAMESPRITE; SOLID block; END;
 TILE "scent_tree_bottom_right"; SAMESPRITE; SOLID block; END;
+TILE "scent_tree_dark_top_left"; SAMESPRITE; SOLID block; END;
+TILE "scent_tree_dark_top_right"; SAMESPRITE; SOLID block; END;
+TILE "scent_tree_dark_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "scent_tree_dark_bottom_right"; SAMESPRITE; SOLID block; END;
 
 TILE "gale_tree_top_left"; SAMESPRITE; SOLID block; END;
 TILE "gale_tree_top_right"; SAMESPRITE; SOLID block; END;
 TILE "gale_tree_bottom_left"; SAMESPRITE; SOLID block; END;
 TILE "gale_tree_bottom_right"; SAMESPRITE; SOLID block; END;
+TILE "gale_tree_dark_top_left"; SAMESPRITE; SOLID block; END;
+TILE "gale_tree_dark_top_right"; SAMESPRITE; SOLID block; END;
+TILE "gale_tree_dark_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "gale_tree_dark_bottom_right"; SAMESPRITE; SOLID block; END;
 
 TILE "pegasus_tree_top_left"; SAMESPRITE; SOLID block; END;
 TILE "pegasus_tree_top_right"; SAMESPRITE; SOLID block; END;
 TILE "pegasus_tree_bottom_left"; SAMESPRITE; SOLID block; END;
 TILE "pegasus_tree_bottom_right"; SAMESPRITE; SOLID block; END;
+TILE "pegasus_tree_dark_top_left"; SAMESPRITE; SOLID block; END;
+TILE "pegasus_tree_dark_top_right"; SAMESPRITE; SOLID block; END;
+TILE "pegasus_tree_dark_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "pegasus_tree_dark_bottom_right"; SAMESPRITE; SOLID block; END;
 
 TILE "mystery_tree_top_left"; SAMESPRITE; SOLID block; END;
 TILE "mystery_tree_top_right"; SAMESPRITE; SOLID block; END;
 TILE "mystery_tree_bottom_left"; SAMESPRITE; SOLID block; END;
 TILE "mystery_tree_bottom_right"; SAMESPRITE; SOLID block; END;
+TILE "mystery_tree_dark_top_left"; SAMESPRITE; SOLID block; END;
+TILE "mystery_tree_dark_top_right"; SAMESPRITE; SOLID block; END;
+TILE "mystery_tree_dark_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "mystery_tree_dark_bottom_right"; SAMESPRITE; SOLID block; END;
 
 TILE "gasha_tree_top_left"; SAMESPRITE; SOLID block; END;
 TILE "gasha_tree_top_right"; SAMESPRITE; SOLID block; END;
 TILE "gasha_tree_bottom_left"; SAMESPRITE; SOLID block; END;
 TILE "gasha_tree_bottom_right"; SAMESPRITE; SOLID block; END;
+TILE "gasha_tree_dark_top_left"; SAMESPRITE; SOLID block; END;
+TILE "gasha_tree_dark_top_right"; SAMESPRITE; SOLID block; END;
+TILE "gasha_tree_dark_bottom_left"; SAMESPRITE; SOLID block; END;
+TILE "gasha_tree_dark_bottom_right"; SAMESPRITE; SOLID block; END;
 
 
 TILE "dead_tree_top_left"; SAMESPRITE; SOLID block; END;

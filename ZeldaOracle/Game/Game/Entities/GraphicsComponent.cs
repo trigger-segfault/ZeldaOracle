@@ -37,6 +37,12 @@ namespace ZeldaOracle.Game.Entities
 		private bool            unmapped;
 		private UnmappedSprite	unmappedSprite;
 		private Palette			unmappedPalette;
+		/// <summary>Draws above the player/monsters when
+		/// the player is above and vice-versa.</summary>
+		private bool			useDynamicDepth;
+		/// <summary>The y offset from the position of the tile to the origin.
+		/// Only needed for dynamic depth.</summary>
+		private int                 dynamicOriginY;
 
 
 		//-----------------------------------------------------------------------------
@@ -67,6 +73,8 @@ namespace ZeldaOracle.Game.Entities
 			this.unmapped				= false;
 			this.unmappedSprite			= null;
 			this.unmappedPalette		= null;
+			this.useDynamicDepth		= false;
+			this.dynamicOriginY			= 0;
 		}
 
 
@@ -180,6 +188,14 @@ namespace ZeldaOracle.Game.Entities
 		public void Draw(RoomGraphics g, DepthLayer layer) {
 			if (!isVisible)
 				return;
+
+			if (layer == CurrentDepthLayer && useDynamicDepth) {
+				float playerY = Entity.RoomControl.Player.Position.Y;
+				if (Math.Round(playerY) < Math.Round(Entity.Position.Y + dynamicOriginY))
+					depthLayer = DepthLayer.DynamicDepthAboveEntity;
+				else
+					depthLayer = DepthLayer.DynamicDepthBelowEntity;
+			}
 
 			// Draw the shadow.
 			if (isShadowVisible && entity.ZPosition >= 1 &&
@@ -376,6 +392,20 @@ namespace ZeldaOracle.Game.Entities
 				else
 					return colorDefinitions;
 			}
+		}
+
+		/// <summary>Gets if the t draws above the player/monsters
+		/// when the player is above and vice-versa.</summary>
+		public bool UseDynamicDepth {
+			get { return useDynamicDepth; }
+			set { useDynamicDepth = value; }
+		}
+
+		/// <summary>The y offset from the position of the tile to the origin.
+		/// Only needed for dynamic depth.</summary>
+		public int DynamicOriginY {
+			get { return dynamicOriginY; }
+			set { dynamicOriginY = value; }
 		}
 	}
 }

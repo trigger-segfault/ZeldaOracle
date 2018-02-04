@@ -455,8 +455,6 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public virtual void Update() {
 			UpdateMovement();
-			if (!isMoving)
-				CheckSurfaceTile();
 
 			// Check if hurting the player.
 			if (HasFlag(TileFlags.HurtPlayer) && roomControl.Player.IsOnGround) {
@@ -882,6 +880,11 @@ namespace ZeldaOracle.Game.Tiles {
 		public bool CancelBreakEffect {
 			get { return cancelBreakEffect; }
 			set { cancelBreakEffect = value; }
+		}
+
+		public bool DrawAsEntity {
+			get { return TileData.DrawAsEntity; }
+			set { TileData.DrawAsEntity = value; }
 		}
 
 		//-----------------------------------------------------------------------------

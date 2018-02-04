@@ -34,6 +34,8 @@ END;
 
 SOURCE "tiles_entity_objects";
 
+# Roller ------------------------------------------------------
+
 NAME "tile_roller_horizontal"				(0, 0);
 NAME "tile_roller_vertical"					(0, 1);
 
@@ -43,6 +45,8 @@ ANIMATION "tile_roller_horizontal_roll";
 ANIMATION "tile_roller_vertical_roll";
 	SUBSTRIP clamp; ADD frame, 9, (0, 1); ADD frame, 12, (2, 1); ADD frame, 10, (1, 1); ADD frame, 1, (0, 1);
 	SUBSTRIP clamp; ADD frame, 9, (0, 1); ADD frame, 12, (1, 1); ADD frame, 10, (2, 1); ADD frame, 1, (0, 1); END;
+
+# Spike Roller ------------------------------------------------
 
 ANIMATION "tile_spike_roller_horizontal_both"; SUBSTRIP repeat;
 	ADD frame, 8, (6, 0); ADD frame, 8, (6, 1); END;
@@ -55,31 +59,26 @@ ANIMATION "tile_spike_roller_horizontal_bottom"; SUBSTRIP repeat;
 
 ANIMATION "tile_spike_roller_vertical_both"; SUBSTRIP repeat;
 	ADD frame, 8, (10, 0); ADD frame, 8, (10, 1); END;
-ANIMATION "tile_spike_roller_vertical_top"; SUBSTRIP repeat;
+ANIMATION "tile_spike_roller_vertical_left"; SUBSTRIP repeat;
 	ADD frame, 8, (7, 0); ADD frame, 8, (7, 1); END;
 ANIMATION "tile_spike_roller_vertical_mid"; SUBSTRIP repeat;
 	ADD frame, 8, (8, 0); ADD frame, 8, (8, 1); END;
-ANIMATION "tile_spike_roller_vertical_bottom"; SUBSTRIP repeat;
+ANIMATION "tile_spike_roller_vertical_right"; SUBSTRIP repeat;
 	ADD frame, 8, (9, 0); ADD frame, 8, (9, 1); END;
-	
-NAME "tile_arrow_cannon_left"				(12, 2);
-NAME "tile_arrow_cannon_right"				(12, 3);
+
+# Owl ---------------------------------------------------------
 
 NAME "tile_owl",							(11, 0);
 COMPOSITE "tile_owl_activated";		ADD (11, 1), (-8, 0); ADD (12, 1), (8, 0); END;
+
+# Color Switch ------------------------------------------------
 
 NAME "temp_color_switch"					(12, 0);
 NAME "tile_color_switch_blue"				("temp_color_switch", "blue");
 NAME "tile_color_switch_red"				("temp_color_switch", "red");
 
-NAME "tile_moving_platform"					(11, 5);
-COMPOSITE "tile_sarcophagus";
-	ADD (12, 4), (0, 0); ADD (12, 5), (0, 16); END;
-OFFSET "tile_sarcophagus_asobject"			"tile_sarcophagus", (0, -8); END;
-NAME "preview_sarcophagus"					(12, 4);
-NAME "tile_statue_eye"						(10, 5);
-	
-	
+# Crossing Gate -----------------------------------------------
+
 COMPOSITE "temp_crossing_gate_right_raised";
 	ADD (2, 2), (0, -16); ADD (2, 3), (0, 0); END;
 COMPOSITE "temp_crossing_gate_left_raised";
@@ -92,8 +91,7 @@ COMPOSITE "temp_crossing_gate_right_lowered";
 	ADD (3, 2), (0, -16); ADD (3, 3), (0, 0); ADD (8, 2), (16, 0); END;
 COMPOSITE "temp_crossing_gate_left_lowered";
 	ADD (5, 2), (0, -16); ADD (5, 3), (0, 0); ADD (8, 3), (-16, 0); END;
-	
-	
+
 ANIMATION "tile_crossing_gate_lower";
 	SUBSTRIP clamp; ## right
 		ADD frame, 8, "temp_crossing_gate_right_raised";
@@ -115,7 +113,9 @@ ANIMATION "tile_crossing_gate_raise";
 		ADD frame, 8, "temp_crossing_gate_left_transition";
 		ADD frame, 8, "temp_crossing_gate_left_raised";
 	END;
-	
+
+# Pull Handle -------------------------------------------------
+
 NAME "tile_pull_handle_bar_horizontal"		(9, 2);
 NAME "tile_pull_handle_bar_vertical"		(9, 3);
 NAME "tile_pull_handle_up"					(10, 2);
@@ -129,6 +129,13 @@ ANIMATION "tile_pull_handle";
 	SUBSTRIP repeat; ADD frame, 1, "tile_pull_handle_left";
 	SUBSTRIP repeat; ADD frame, 1, "tile_pull_handle_down"; END;
 
+# Arrow Cannon ------------------------------------------------
+
+NAME "tile_arrow_cannon_left"				(12, 2);
+NAME "tile_arrow_cannon_right"				(12, 3);
+
+# Trampoline --------------------------------------------------
+
 NAME "temp_trampoline",						(0, 4);
 NAME "tile_trampoline"						("temp_trampoline", "blue");
 NAME "tile_super_trampoline"				("temp_trampoline", "red");
@@ -140,12 +147,25 @@ ANIMATION "tile_trampoline_bounce"; SUBSTRIP clamp;
 		
 ANIMATION "tile_super_trampoline_bounce";
 	CLONE "tile_trampoline_bounce"; CHANGECOLOR all, "red"; END;
-		
+
+# Shatter Crystal ---------------------------------------------
+
 NAME "tile_shatter_crystal"					(3, 4);
 NAME "tile_shatter_crystal_broken"			(4, 4);
+
+# Ice Crystal -------------------------------------------------
+
 NAME "tile_ice_crystal"						(5, 4);
+
+# Water Block -------------------------------------------------
+
 NAME "tile_water_block"						(6, 4);
+
+# Seedling ----------------------------------------------------
+
 NAME "tile_seedling"						(7, 4);
+
+# Seed Bouncer ------------------------------------------------
 
 NAME "tile_seed_bouncer_horizontal"			(8, 4);
 NAME "tile_seed_bouncer_northeast"			(9, 4);
@@ -162,6 +182,15 @@ ANIMATION "tile_seed_bouncer";
 	SUBSTRIP repeat; ADD frame, 1, "tile_seed_bouncer_vertical";
 	SUBSTRIP repeat; ADD frame, 1, "tile_seed_bouncer_northwest"; END;
 
+# Sarcophagus -------------------------------------------------
+
+COMPOSITE "tile_sarcophagus";
+	ADD (12, 4), (0, 0); ADD (12, 5), (0, 16); END;
+OFFSET "tile_sarcophagus_asobject"			"tile_sarcophagus", (0, -8); END;
+NAME "preview_sarcophagus"					(12, 4);
+
+# Magnet Spinner ----------------------------------------------
+
 ANIMATION "tile_magnet_spinner_north";
 	SUBSTRIP repeat; # Clockwise
 		ADD frame, 31, (0, 5); ADD frame, 15, (1, 5);
@@ -170,13 +199,23 @@ ANIMATION "tile_magnet_spinner_north";
 		ADD frame, 31, (0, 5); ADD frame, 15, (3, 5);
 		ADD frame, 4, (2, 5); ADD frame, 3, (1, 5);
 	END;
-	
+
 ANIMATION "tile_magnet_spinner_south";
 	CLONE "tile_magnet_spinner_north"; SHIFTSOURCE (4, 0); END;
+
+# Eye Statue --------------------------------------------------
+
+NAME "tile_statue_eye"						(10, 5);
+
+# Moving Platform ---------------------------------------------
+
+NAME "tile_moving_platform"					(11, 5);
 
 #==============================================================
 # Entities
 #==============================================================
+
+# Minecart ----------------------------------------------------
 
 NAME "minecart_horizontal"					(0, 2);
 NAME "minecart_vertical"					(0, 3);
@@ -184,6 +223,8 @@ NAME "minecart_vertical"					(0, 3);
 ANIMATION "minecart";
 	SUBSTRIP repeat; ADD frame, 6, (0, 2); ADD frame, 6, (1, 2); # horizontal
 	SUBSTRIP repeat; ADD frame, 6, (0, 3); ADD frame, 6, (1, 3); END; # vertical
-	
+
+# Magnet Ball -------------------------------------------------
+
 NAME "magnet_ball_north"					(8, 5);
 NAME "magnet_ball_south"					(9, 5);

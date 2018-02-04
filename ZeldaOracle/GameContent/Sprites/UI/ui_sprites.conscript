@@ -13,7 +13,7 @@ SPRITESHEET "temp_sheet_ui_dungeon_map_small", "UI/ui_dungeon_map_small", (8, 8)
 
 
 SOURCE "temp_sheet_ui_small";
-SPRITESET "ui_small", (12, 4);
+SPRITESET "ui_small", (12, 6);
 	PALETTEDICTIONARY "entity_dictionary";
 	MAPPEDCOLORS	"entities_default",
 		("default", "green", "blue", "red", "orange", "shaded_red", "shaded_blue", "ui_red");
@@ -21,11 +21,14 @@ SPRITESET "ui_small", (12, 4);
 	MULTIPLE BASIC (0, 0), (0, 0), (12, 2); END;
 	MULTIPLE BASIC (0, 2), (0, 2), (7, 2); END;
 	
+	MULTIPLE BASIC (0, 4), (0, 4), (4, 2); END;
+	
 	PALETTEDICTIONARY "menu_dictionary";
 	MAPPEDCOLORS	"menu_default", ("background" "background_fancy_black");
 	
 	SINGLE BASIC (7, 3); END;
 	MULTIPLE BASIC (8, 2), (8, 2), (4, 2); END;
+	
 END;
 
 SOURCE "temp_sheet_ui_large";
@@ -90,6 +93,16 @@ NAME "hud_text_next_arrow",			(6, 2);
 NAME "hud_ammo_select_arrow",		(6, 3);
 NAME "hud_ammo_select_background",	(8, 2);
 NAME "hud_ammo_select_background_fancy",	(7, 3);
+
+
+NAME "hud_message_heart_pieces_empty_top_left"			(0, 4);
+OFFSET "hud_message_heart_pieces_empty_top_right",		(1, 4), (8, 0); END;
+OFFSET "hud_message_heart_pieces_empty_bottom_left",	(0, 5), (0, 8); END;
+OFFSET "hud_message_heart_pieces_empty_bottom_right",	(1, 5), (8, 8); END;
+NAME "hud_message_heart_pieces_full_top_left"			(2, 4);
+OFFSET "hud_message_heart_pieces_full_top_right",		(3, 4), (8, 0); END;
+OFFSET "hud_message_heart_pieces_full_bottom_left",		(2, 5), (0, 8); END;
+OFFSET "hud_message_heart_pieces_full_bottom_right",	(3, 5), (8, 8); END;
 
 SOURCE "ui_large";
 

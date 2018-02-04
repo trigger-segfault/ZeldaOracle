@@ -142,6 +142,12 @@ namespace ZeldaOracle.Game.Tiles {
 					args.Color);
 			}*/
 			DrawTileDataIndex(g, args, (int) orientation);
+			if (args.Properties.GetBoolean("minecart", false)) {
+				if (orientation.HasDirection(Directions.Left) || orientation.HasDirection(Directions.Right))
+					g.DrawSprite(GameData.SPR_MINECART_HORIZONTAL, args.SpriteDrawSettings, args.Position, args.Color);
+				else
+					g.DrawSprite(GameData.SPR_MINECART_VERTICAL, args.SpriteDrawSettings, args.Position, args.Color);
+			}
 		}
 
 

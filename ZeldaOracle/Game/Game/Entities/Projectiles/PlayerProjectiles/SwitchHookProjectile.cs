@@ -234,7 +234,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.PlayerProjectiles {
 				Vector2F pos = Center + Directions.ToVector(direction) * 4;
 				collectible.SetPositionByCenter(pos);
 				collectible.ZPosition = zPosition;
-				collectible.Graphics.Draw(g, Graphics.CurrentDepthLayer);
+				collectible.Graphics.Draw(g);
 			}
 		}
 

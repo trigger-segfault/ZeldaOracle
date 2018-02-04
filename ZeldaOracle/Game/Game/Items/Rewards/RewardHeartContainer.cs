@@ -23,18 +23,29 @@ namespace ZeldaOracle.Game.Items.Rewards {
 			this.holdType		= RewardHoldTypes.TwoHands;
 			this.isCollectibleWithItems	= false;
 		}
+		
 
 		//-----------------------------------------------------------------------------
 		// Virtual methods
 		//-----------------------------------------------------------------------------
 
-		public override void OnCollect(GameControl gameControl) {
-			gameControl.Inventory.PiecesOfHeart++;
-			if (gameControl.Inventory.PiecesOfHeart == 4) {
-				gameControl.Inventory.PiecesOfHeart = 0;
-				gameControl.Player.MaxHealth += 4;
-				gameControl.Player.Health += 4;
-			}
+		public override void OnDisplayMessage(GameControl gameControl) {
+			IncrementHeartContainers(gameControl);
+			gameControl.DisplayMessage(message);
+		}
+
+		public override void OnCollectNoMessage(GameControl gameControl) {
+			IncrementHeartContainers(gameControl);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Internal Methods
+		//-----------------------------------------------------------------------------
+
+		private void IncrementHeartContainers(GameControl gameControl) {
+			gameControl.Player.MaxHealth += 4;
+			gameControl.Player.Health = gameControl.Player.MaxHealth;
 		}
 	}
 }

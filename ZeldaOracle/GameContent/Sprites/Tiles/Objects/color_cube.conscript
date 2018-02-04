@@ -54,6 +54,13 @@ CHUNKSIZE none;
 
 SOURCE "tiles_color_cube";
 
+NAME "color_cube_blue_yellow"			(0, 0);
+NAME "color_cube_blue_red"				(1, 0);
+NAME "color_cube_red_yellow"			(2, 0);
+NAME "color_cube_yellow_blue"			(3, 0);
+NAME "color_cube_red_blue"				(4, 0);
+NAME "color_cube_yellow_red"			(5, 0);
+
 # Left & Right Color Cube Animations
 
 ANIMATION "color_cube_blue_yellow_right"; SUBSTRIP clamp;

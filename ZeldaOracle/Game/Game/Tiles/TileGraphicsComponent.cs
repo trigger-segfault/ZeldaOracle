@@ -23,6 +23,12 @@ namespace ZeldaOracle.Game.Tiles {
 		private Vector2F			absoluteDrawPosition;
 		private bool				useAbsoluteDrawPosition;
 		private ColorDefinitions	colors;
+		/// <summary>Draws above the player/monsters when
+		/// the player is above and vice-versa.</summary>
+		private bool				useDynamicDepth;
+		/// <summary>The y offset from the position of the tile to the origin.
+		/// Only needed for dynamic depth.</summary>
+		private int					dynamicOriginY;
 
 
 		//-----------------------------------------------------------------------------
@@ -41,6 +47,8 @@ namespace ZeldaOracle.Game.Tiles {
 			this.absoluteDrawPosition		= Vector2F.Zero;
 			this.useAbsoluteDrawPosition	= false;
 			this.colors                     = new ColorDefinitions();
+			this.useDynamicDepth			= false;
+			this.dynamicOriginY				= 0;
 		}
 
 		
@@ -106,19 +114,35 @@ namespace ZeldaOracle.Game.Tiles {
 			if (!isVisible)
 				return;
 
+			// Determine draw position.
+			Vector2F drawPosition = (useAbsoluteDrawPosition ?
+				absoluteDrawPosition : tile.Position);
+
 			// Determine the depth layer based on the tile grid layer.
-			if (tile.Layer == 0)
+			if (useDynamicDepth) {
+				float playerY = Tile.RoomControl.Player.Position.Y;
+				if (Math.Round(playerY) < Math.Round(drawPosition.Y + dynamicOriginY)) {
+					if (tile.Layer == 2)
+						depthLayer = DepthLayer.DynamicDepthAboveTileLayer3;
+					else
+						depthLayer = DepthLayer.DynamicDepthAboveTileLayer2;
+				}
+				else {
+					if (tile.Layer == 2)
+						depthLayer = DepthLayer.DynamicDepthBelowTileLayer3;
+					else
+						depthLayer = DepthLayer.DynamicDepthBelowTileLayer2;
+				}
+			}
+			else if (tile.Layer == 0)
 				depthLayer = DepthLayer.TileLayer1;
 			else if (tile.Layer == 1)
 				depthLayer = DepthLayer.TileLayer2;
 			else if (tile.Layer == 2)
 				depthLayer = DepthLayer.TileLayer3;
-			
-			// Determine draw position.
-			Vector2F drawPosition = (useAbsoluteDrawPosition ?
-				absoluteDrawPosition : tile.Position);
+
 			drawPosition += (raisedDrawOffset + drawOffset);
-						
+
 			// Draw the tile's as-object sprite.
 			if (tile.IsMoving && tile.SpriteAsObject != null) {
 				g.DrawSprite(tile.SpriteAsObject, new SpriteDrawSettings(colors,
@@ -231,6 +255,20 @@ namespace ZeldaOracle.Game.Tiles {
 
 		public ColorDefinitions Colors {
 			get { return colors; }
+		}
+
+		/// <summary>Gets if the t draws above the player/monsters
+		/// when the player is above and vice-versa.</summary>
+		public bool UseDynamicDepth {
+			get { return useDynamicDepth; }
+			set { useDynamicDepth = value; }
+		}
+
+		/// <summary>The y offset from the position of the tile to the origin.
+		/// Only needed for dynamic depth.</summary>
+		public int DynamicOriginY {
+			get { return dynamicOriginY; }
+			set { dynamicOriginY = value; }
 		}
 	}
 }

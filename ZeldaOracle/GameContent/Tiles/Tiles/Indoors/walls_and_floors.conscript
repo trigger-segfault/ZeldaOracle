@@ -73,6 +73,11 @@ TILE "wall_torch_up"; SAMESPRITE; SOLID block; END;
 TILE "wall_torch_left"; SAMESPRITE; SOLID block; END;
 TILE "wall_torch_right"; SAMESPRITE; SOLID block; END;
 
+TILE "wall_staircase_up"; SAMESPRITE; SOLID doorway; END;
+TILE "wall_staircase_down"; SAMESPRITE; SOLID doorway; END;
+TILE "floor_staircase_up"; SAMESPRITE; END;
+TILE "floor_staircase_down"; SAMESPRITE; END;
+TILE "floor_stairwell"; SAMESPRITE; END;
 
 # Default zone tile for a hard floor (for dungeons or interiors)
 TILE "floor"; SAMESPRITE; END;

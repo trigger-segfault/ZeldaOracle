@@ -55,7 +55,9 @@ namespace ZeldaOracle.Game.Entities {
 			if (showMessage) {
 				RoomControl.GameControl.PushRoomState(new RoomStateReward(reward));
 			}
-			reward.OnCollect(GameControl);
+			else {
+				reward.OnCollectNoMessage(GameControl);
+			}
 			base.Collect();
 		}
 

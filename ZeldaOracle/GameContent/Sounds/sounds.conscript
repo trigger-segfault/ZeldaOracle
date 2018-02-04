@@ -59,6 +59,7 @@ SOUND get_heart,				"Pickups/get_heart";		# Oracle_Get_Heart
 SOUND get_item,					"Pickups/get_item";			# Oracle_Get_Item
 SOUND get_rupee,				"Pickups/get_rupee";		# Oracle_Get_Rupee
 SOUND get_rupee_loop,			"Pickups/get_rupee_loop";	# ??
+SOUND heart_container,			"Pickups/heart_container";	# Oracle_HeartContainer
 
 # Player ----------------------------------------------------------------------
 

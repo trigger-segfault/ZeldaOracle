@@ -4,6 +4,7 @@
 
 LOAD "Special/biggoron.conscript", true;
 LOAD "Special/ancient_ruins.conscript", true;
+LOAD "Special/graveyard.conscript", true;
 LOAD "Special/onoxs_castle.conscript", true;
 LOAD "Special/temple_of_seasons.conscript", true;
 

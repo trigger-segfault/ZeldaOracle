@@ -321,12 +321,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>cliffs_railings_temp</Name>
     </None>
-    <None Include="Sprites\Tiles\Overworld\cliffs_temp.conscript">
-      <Name>cliffs_temp</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Sprites\Tiles\Overworld\cliffs_vertical.conscript">
       <Name>cliffs_vertical</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sprites\Tiles\Overworld\cliffs_vertical_temp.conscript">
+      <Name>cliffs_vertical_temp</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Sprites\Tiles\Overworld\cliffs_walls.conscript">
@@ -505,10 +505,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>indoors</Name>
     </None>
-    <None Include="Tiles\Tiles\Indoors\dungeon.conscript">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>dungeon</Name>
-    </None>
     <None Include="Tiles\Tiles\Indoors\entrances.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>entrances</Name>
@@ -525,13 +521,25 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>objects</Name>
     </None>
-    <None Include="Tiles\Tiles\Objects\natural_objects.conscript">
+    <None Include="Tiles\Tiles\Objects\entity_objects.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Name>natural_objects</Name>
+      <Name>entity_objects</Name>
+    </None>
+    <None Include="Tiles\Tiles\Objects\general_objects.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>general_objects</Name>
+    </None>
+    <None Include="Tiles\Tiles\Objects\natural_objects_old.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>natural_objects_old</Name>
     </None>
     <None Include="Tiles\Tiles\Objects\puzzle_objects.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>puzzle_objects</Name>
+    </None>
+    <None Include="Tiles\Tiles\Objects\puzzle_objects_old.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>puzzle_objects_old</Name>
     </None>
     <None Include="Tiles\Tiles\overworld.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -604,6 +612,10 @@
     <None Include="Tiles\Tiles\Special\biggoron.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>biggoron</Name>
+    </None>
+    <None Include="Tiles\Tiles\Special\graveyard.conscript">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>graveyard</Name>
     </None>
     <None Include="Tiles\Tiles\Special\onoxs_castle.conscript">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -877,16 +889,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Tiles\Overworld\cliff_parts.png">
-      <Name>cliff_parts</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Overworld\cliff_railings.png">
-      <Name>cliff_railings</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Tiles\Overworld\cliffs.png">
       <Name>cliffs</Name>
       <Importer>TextureImporter</Importer>
@@ -899,11 +901,6 @@
     </Compile>
     <Compile Include="Images\Tiles\Overworld\hedges.png">
       <Name>hedges</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Images\Tiles\Overworld\holes.png">
-      <Name>holes</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -1507,7 +1504,13 @@
       <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Sounds\Pickups\heart_container.wav">
+      <Name>heart_container</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
     <None Include="Worlds\big_interiors.zwd">
       <Name>big_interiors</Name>
