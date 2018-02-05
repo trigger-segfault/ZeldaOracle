@@ -1366,6 +1366,11 @@
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
+    <Compile Include="Sounds\Pickups\heart_container.wav">
+      <Name>heart_container</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
     <Compile Include="Sounds\Player\player_fall.wav">
       <Name>player_fall</Name>
       <Importer>WavImporter</Importer>
@@ -1504,13 +1509,7 @@
       <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\Pickups\heart_container.wav">
-      <Name>heart_container</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Worlds\big_interiors.zwd">
       <Name>big_interiors</Name>

@@ -127,7 +127,7 @@ namespace ZeldaOracle.Game {
 		public const int				MONSTER_ELECTROCUTE_FREEZE_DURATION		= 45;
 		public const int				MONSTER_ELECTROCUTE_ANIMATE_DURATION	= 60;
 
-		public const int				MONSTER_THWOMP_CRUSH_MIN_ALIGNMENT				= 5; // TODO
+		public const int				MONSTER_THWOMP_CRUSH_MIN_ALIGNMENT				= 20; // TODO: needs confirmation
 		public const float				MONSTER_THWOMP_CRUSH_ACCELERATION				= 0.2f;
 		public const float				MONSTER_THWOMP_CRUSH_INITIAL_SPEED				= 0.5f;
 		public const float				MONSTER_THWOMP_CRUSH_MAX_SPEED					= 2.5f;
