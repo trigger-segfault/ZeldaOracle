@@ -51,8 +51,8 @@ namespace ZeldaOracle.Game.Worlds {
 			properties.BaseProperties.Set("boss_room", false)
 				.SetDocumentation("Is Boss Room", "Dungeon", "True if this room is shown as the boss room in the dungeon map.");
 
-			properties.BaseProperties.Set("death_by_falling", false)
-				.SetDocumentation("Death by Falling", "Side-Scrolling", "True if the player takes damage and respawns when falling off the edge of the map.");
+			properties.BaseProperties.Set("death_out_of_bounds", false)
+				.SetDocumentation("Death out of Bounds", "Side-Scrolling", "True if the player dies and respawns when falling off the edge of the map.");
 
 
 			events.AddEvent("room_start", "Room Start", "Transition", "Occurs when the room begins.");
@@ -445,9 +445,9 @@ namespace ZeldaOracle.Game.Worlds {
 			set { properties.Set("boss_room", value); }
 		}
 
-		public bool DeathByFalling {
-			get { return properties.GetBoolean("death_by_falling", false); }
-			set { properties.Set("death_by_falling", value); }
+		public bool DeathOutOfBounds {
+			get { return properties.GetBoolean("death_out_of_bounds", false); }
+			set { properties.Set("death_out_of_bounds", value); }
 		}
 	}
 }

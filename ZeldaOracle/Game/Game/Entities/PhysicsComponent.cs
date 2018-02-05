@@ -681,6 +681,13 @@ namespace ZeldaOracle.Game.Entities {
 			get { return IsOnGround && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Ice; }
 		}
 
+		public bool IsOnSideScrollingIce {
+			get {
+				return IsOnGround && collisionInfo[Directions.Down].Tile != null &&
+					collisionInfo[Directions.Down].Tile.EnvironmentType == TileEnvironmentType.Ice;
+			}
+		}
+
 		public bool IsOnStairs {
 			get { return IsOnGround && topTile != null && topTile.EnvironmentType == TileEnvironmentType.Stairs; }
 		}

@@ -233,20 +233,25 @@ TILE "ss_disappearing_platform";
 	END;
 TILE "ss_rotating_platform"; SAMESPRITE; SOLID block; END;
 
+TILE "temp_ss_conveyor_belt";
+	TYPE			TileConveyorBelt;
+	SOLID			block;
+END;
+
 TILE "ss_conveyor_belt_right";
+	CLONE			"temp_ss_conveyor_belt";
 	SPRITEINDEX		0, "tile_ss_conveyor_belt_right_both";
 	SPRITEINDEX		1, "tile_ss_conveyor_belt_right_left";
-	SPRITEINDEX		2, "tile_ss_conveyor_belt_right_right";
-	SPRITEINDEX		3, "tile_ss_conveyor_belt_right_mid";
-	SOLID			block;
+	SPRITEINDEX		2, "tile_ss_conveyor_belt_right_mid";
+	SPRITEINDEX		3, "tile_ss_conveyor_belt_right_right";
 	CONVEYOR		Right,	0.5;
 END;
 
 TILE "ss_conveyor_belt_left";
+	CLONE			"temp_ss_conveyor_belt";
 	SPRITEINDEX		0, "tile_ss_conveyor_belt_left_both";
 	SPRITEINDEX		1, "tile_ss_conveyor_belt_left_left";
-	SPRITEINDEX		2, "tile_ss_conveyor_belt_left_right";
-	SPRITEINDEX		3, "tile_ss_conveyor_belt_left_mid";
-	SOLID			block;
+	SPRITEINDEX		2, "tile_ss_conveyor_belt_left_mid";
+	SPRITEINDEX		3, "tile_ss_conveyor_belt_left_right";
 	CONVEYOR		Left,	0.5;
 END;

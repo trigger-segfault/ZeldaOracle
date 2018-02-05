@@ -55,6 +55,8 @@ namespace ZeldaOracle.Game.Control {
 				Vector2F tileVelocity = entity.Physics.PreviousCollisionInfo[Directions.Down].Tile.Velocity;
 				entity.Y += tileVelocity.Y;
 				entity.Physics.VelocityX += tileVelocity.X;
+				if (entity.Physics.MovesWithConveyors)
+					entity.Physics.VelocityX += entity.Physics.PreviousCollisionInfo[Directions.Down].Tile.ConveyorVelocity.X;
 			}
 
 			// Check the surface tile beneath the entity.

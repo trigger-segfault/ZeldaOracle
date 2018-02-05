@@ -232,7 +232,7 @@ namespace ZeldaEditor.Tools {
 
 		protected override void OnMouseDown(MouseEventArgs e) {
 			if (e.Button == MouseButtons.Right) {
-				Finish();
+				OnFinish();
 				ClearSelection();
 			}
 		}
@@ -260,7 +260,7 @@ namespace ZeldaEditor.Tools {
 					if (System.Windows.Forms.Control.ModifierKeys.HasFlag(DuplicateModifier)) {
 						if (selectionGrid != null) {
 							TileGrid newSelectionGrid = selectionGrid.Duplicate();
-							Finish();
+							OnFinish();
 							selectionGrid = newSelectionGrid;
 						}
 						else {
@@ -276,7 +276,7 @@ namespace ZeldaEditor.Tools {
 					}
 				}
 				else {
-					Finish();
+					OnFinish();
 					IsDrawing = true;
 
 					// Create a new selection box.
@@ -361,7 +361,7 @@ namespace ZeldaEditor.Tools {
 				UpdateSelectionBox();
 			}
 			else if (e.Button == MouseButtons.Right) {
-				Finish();
+				OnFinish();
 			}
 		}
 
