@@ -131,6 +131,10 @@ namespace ZeldaOracle.Game.Tiles {
 				hasMoved		= false;
 				velocity		= Vector2F.Zero;
 
+				// Leap ledges use constant collision models to prevent any positioning issues.
+				if (IsLeapLedge)
+					collisionModel = GameData.MODEL_LEAP_LEDGES[LedgeDirection];
+
 				// Begin a path if there is one.
 				string pathString = properties.GetString("path", "");
 				TilePath p = TilePath.Parse(pathString);
@@ -905,6 +909,10 @@ namespace ZeldaOracle.Game.Tiles {
 			get { return flags.HasFlag(TileFlags.NotCoverable); }
 		}
 
+		public bool IsNotPushable {
+			get { return flags.HasFlag(TileFlags.NotPushable); }
+		}
+
 		public bool IsDigable {
 			get { return flags.HasFlag(TileFlags.Digable); }
 		}
@@ -973,7 +981,26 @@ namespace ZeldaOracle.Game.Tiles {
 		public bool IsLedge {
 			get { return (SolidType == TileSolidType.Ledge); }
 		}
-		
+
+		public bool IsLeapLedge {
+			get { return (SolidType == TileSolidType.LeapLedge); }
+		}
+
+		public bool IsAnyLedge {
+			get {
+				return (SolidType == TileSolidType.Ledge ||
+						SolidType == TileSolidType.LeapLedge);
+			}
+		}
+
+		public bool IsCrushable {
+			get {
+				// TODO: Check if any other criteria could be acceptable.
+				// Maybe make this its own flag.
+				return (Flags.HasFlag(TileFlags.Cuttable) || Flags.HasFlag(TileFlags.Switchable));
+			}
+		}
+
 		public bool IsStairs {
 			get { return EnvironmentType == TileEnvironmentType.Stairs; }
 		}

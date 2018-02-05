@@ -118,6 +118,11 @@ namespace ZeldaOracle.Game {
 		public const float				PLAYER_SPRINT_SPEED_SCALE			= 1.5f;
 		public const int				PLAYER_SPRINT_EFFECT_INTERVAL		= 10;
 		public const float				PLAYER_DEFAULT_PUSH_SPEED			= 0.5f;
+		public const int				PLAYER_LEAP_LEDGE_JUMP_DURATION		= 30;
+		public const float				PLAYER_LEAP_LEDGE_JUMP_DISTANCE		= 35;
+		// TODO: Perfect this value, it's only close to accurate
+		public const float              PLAYER_LEAP_LEDGE_JUMP_SPEED		= 1.75f;
+
 
 		// Monsters
 		public const int				MONSTER_STUN_DURATION					= 400;	// How long a monster gets stunned for (by boomerang/pegasus seeds).

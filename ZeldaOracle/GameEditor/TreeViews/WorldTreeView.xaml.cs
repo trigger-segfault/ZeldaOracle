@@ -44,7 +44,7 @@ namespace ZeldaEditor.TreeViews {
 		private ContextMenu contextMenuScript;
 		private ContextMenu contextMenuEvent;
 
-		private WpfMouseWheelMessageFilter messageFilter;
+		private WpfFocusMessageFilter messageFilter;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -98,7 +98,7 @@ namespace ZeldaEditor.TreeViews {
 
 			treeView.Items.Clear();
 
-			this.messageFilter = new WpfMouseWheelMessageFilter(treeView);
+			this.messageFilter = new WpfFocusMessageFilter(treeView);
 			this.messageFilter.AddFilter();
 		}
 

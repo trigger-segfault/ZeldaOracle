@@ -25,7 +25,7 @@ namespace ZeldaEditor.PropertiesEditor {
 		private IPropertyObject propertyObject;
 		private PropertiesContainer propertiesContainer;
 		//private Dictionary<string, CustomPropertyEditor> typeEditors;
-		private WpfMouseWheelMessageFilter messageFilter;
+		private WpfFocusMessageFilter messageFilter;
 
 		//-----------------------------------------------------------------------------
 		// Constructor
@@ -44,7 +44,7 @@ namespace ZeldaEditor.PropertiesEditor {
 			this.AdvancedOptionsMenu = null;
 			FocusManager.SetIsFocusScope(this, true);
 
-			this.messageFilter = new WpfMouseWheelMessageFilter(this);
+			this.messageFilter = new WpfFocusMessageFilter(this);
 			this.messageFilter.AddFilter();
 		}
 

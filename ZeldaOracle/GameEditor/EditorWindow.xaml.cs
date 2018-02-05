@@ -469,6 +469,24 @@ namespace ZeldaEditor {
 			}
 		}
 
+		private void OnPreviewMouseDown(object sender, MouseButtonEventArgs e) {
+			if (!IsDescendant(this, Keyboard.FocusedElement as DependencyObject)) {
+				Keyboard.Focus(this);
+			}
+		}
+
+		private bool IsDescendant(DependencyObject parent, DependencyObject element) {
+			if (element == null)
+				return false;
+			int count = VisualTreeHelper.GetChildrenCount(parent);
+			for (int i = 0; i < count; i++) {
+				var child = VisualTreeHelper.GetChild(parent, i);
+				if (child == element || IsDescendant(child, element))
+					return true;
+			}
+			return false;
+		}
+
 		private void OnWindowSizeChanged(object sender, SizeChangedEventArgs e) {
 			columnTreeView.MaxWidth = ActualWidth / 2 - 20;
 			columnProperties.MaxWidth = ActualWidth / 2 - 20;

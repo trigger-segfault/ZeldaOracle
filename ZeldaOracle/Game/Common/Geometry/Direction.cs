@@ -208,7 +208,16 @@ namespace ZeldaOracle.Common.Geometry {
 		public static bool IsVertical(int direction) {
 			return (direction % 2 == 1);
 		}
-		
+
+		/// <summary>Return the given direction flipped horizontally over the x and y axis.</summary>
+		public static int Flip(int direction) {
+			if (IsHorizontal(direction))
+				return FlipHorizontal(direction);
+			else if (IsVertical(direction))
+				return FlipVertical(direction);
+			return direction;
+		}
+
 		// Return the given direction flipped horizontally over the y-axis.
 		public static int FlipHorizontal(int direction) {
 			return (Directions.West + Directions.Count - direction) % Directions.Count;

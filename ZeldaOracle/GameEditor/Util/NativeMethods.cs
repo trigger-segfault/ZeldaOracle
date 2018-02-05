@@ -31,6 +31,9 @@ namespace ZeldaEditor.Util {
 		}
 
 		public const int WM_MOUSEWHEEL = 0x020A;
+		public const int WM_LBUTTONDOWN = 0x0201;
+		public const int WM_RBUTTONDOWN = 0x0204;
+		public const int WM_MBUTTONDOWN = 0x0207;
 
 		[DllImport("user32.dll")]
 		public static extern int SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);

@@ -37,6 +37,12 @@ namespace ZeldaAPI {
 		/// re-entering the room.</param>
 		void SpawnTile(string id, bool staySpawned = false);
 
+		/// <summary>Despawns a tile by ID if it's already spawned.</summary>
+		/// <param name="id">The ID of the tile in the room.</param>
+		/// <param name="stayDespawned">True if the tile should stay despawned even after
+		/// re-entering the room.</param>
+		void DespawnTile(string id, bool stayDespawned = false);
+
 		/// <summary>Get an enumerable list of all the room's entities of the
 		/// given type.</summary>
 		/// <typeparam name="T">The type of the entities to look for</typeparam>

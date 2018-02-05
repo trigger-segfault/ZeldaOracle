@@ -81,6 +81,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerSwimState				stateSwim;
 		private PlayerUnderwaterState		stateUnderwater;
 		private PlayerLedgeJumpState		stateLedgeJump;
+		private PlayerLeapLedgeJumpState	stateLeapLedgeJump;
 		private PlayerLadderState			stateLadder;
 		private PlayerSwingSwordState		stateSwingSword;
 		private PlayerSwingBigSwordState	stateSwingBigSword;
@@ -168,6 +169,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateUnderwater		= new PlayerUnderwaterState();
 			stateLadder			= new PlayerLadderState();
 			stateLedgeJump		= new PlayerLedgeJumpState();
+			stateLeapLedgeJump	= new PlayerLeapLedgeJumpState();
 			stateSwingSword		= new PlayerSwingSwordState();
 			stateSwingBigSword	= new PlayerSwingBigSwordState();
 			stateSwingMagicRod	= new PlayerSwingMagicRodState();
@@ -823,6 +825,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerLedgeJumpState LedgeJumpState {
 			get { return stateLedgeJump; }
+		}
+
+		public PlayerLeapLedgeJumpState LeapLedgeJumpState {
+			get { return stateLeapLedgeJump; }
 		}
 
 		public PlayerLadderState LadderState {

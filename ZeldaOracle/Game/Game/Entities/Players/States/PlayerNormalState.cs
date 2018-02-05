@@ -70,7 +70,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
 				
 				if (player.Movement.CanPush && actionTile != null && player.Movement.IsMoving &&
-					collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving)
+					collisionInfo.Type == CollisionType.Tile && !collisionInfo.Tile.IsMoving &&
+					!collisionInfo.Tile.IsNotPushable)
 				{
 					player.Graphics.SetAnimation(GameData.ANIM_PLAYER_PUSH);
 					pushTimer++;

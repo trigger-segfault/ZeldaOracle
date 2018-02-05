@@ -189,7 +189,7 @@
     <Compile Include="Windows\ShiftLevelWindow.xaml.cs">
       <DependentUpon>ShiftLevelWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\MouseWheelMessageFilter.cs" />
+    <Compile Include="WinForms\FocusMessageFilter.cs" />
     <Compile Include="WinForms\SpritePreview.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -101,6 +101,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			// The player can hold his sword while ledge jumping.
 
+			// TODO: Better way to keep sword equipped
 			if (!(previousState is PlayerLedgeJumpState))
 				chargeTimer = 0;
 
@@ -115,6 +116,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				player.EquipTool(player.ToolSword);
 
 				direction = Player.Direction;
+				// TODO: Better way to keep sword equipped
 				if (!(previousState is PlayerLedgeJumpState))
 					player.ToolSword.PlayAnimation(weaponAnimation);
 
@@ -130,6 +132,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.MoveCondition	= PlayerMoveCondition.FreeMovement;
 			
 			// The player can hold his sword while ledge jumping.
+			// TODO: Better way to keep sword equipped
 			if (!(newState is PlayerLedgeJumpState))
 				player.UnequipTool(player.ToolSword);
 		}

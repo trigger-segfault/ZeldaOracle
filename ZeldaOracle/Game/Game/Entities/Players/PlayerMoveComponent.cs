@@ -557,6 +557,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 				Tile tile = collisionInfo.Tile;
 				if (tile.IsLedge && moveDirection == tile.LedgeDirection && !tile.IsMoving)
 					TryLedgeJump(tile.LedgeDirection);
+				else if (tile.IsLeapLedge && moveDirection == tile.LedgeDirection && !tile.IsMoving)
+					TryLeapLedgeJump(tile.LedgeDirection, tile);
 			}
 			
 			// Check for walking on color barriers.
@@ -578,6 +580,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 		}
 
+		/// <summary>Try to perform a ledge jump if the path is clear.</summary>
 		private bool TryLedgeJump(int ledgeDirection) {
 			Rectangle2F entityBox = player.Physics.PositionedCollisionBox;
 			entityBox.Point += Directions.ToVector(ledgeDirection) * 1.0f;
@@ -611,7 +614,24 @@ namespace ZeldaOracle.Game.Entities.Players {
 			return true;
 		}
 
-		
+		/// <summary>Try to perform a leap ledge jump to the opposite leap ledge.</summary>
+		private bool TryLeapLedgeJump(int ledgeDirection, Tile startingTile) {
+			// Check if there is an opposite leap ledge for landing on in our trajectory
+			Tile landingTile = player.RoomControl.TileManager.GetTopTile(
+				startingTile.Location + Directions.ToPoint(ledgeDirection) * 2);
+			if (landingTile == null || !landingTile.IsLeapLedge ||
+				landingTile.LedgeDirection != Directions.Flip(ledgeDirection))
+			{
+				return false;
+			}
+
+			// Landing tile present: begin leap ledge jump!
+			player.LeapLedgeJumpState.LedgeJumpDirection = ledgeDirection;
+			player.BeginState(player.LeapLedgeJumpState);
+			return true;
+		}
+
+
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------

@@ -44,10 +44,10 @@ ADDTILE (4, 2), "statue_stationary";
 ADDTILE (5, 2), "essense_statue";
 ADDTILE (6, 2), "block_stationary";
 
-ADDTILE (3, 3), "jump_ledge_down";
-ADDTILE (3, 4), "jump_ledge_up";
-ADDTILE (4, 3), "jump_ledge_right";
-ADDTILE (4, 4), "jump_ledge_left";
+ADDTILE (3, 3), "leap_ledge_down";
+ADDTILE (3, 4), "leap_ledge_up";
+ADDTILE (4, 3), "leap_ledge_right";
+ADDTILE (4, 4), "leap_ledge_left";
 
 ADDTILE (5, 3), "wall_staircase_up";
 ADDTILE (6, 3), "wall_staircase_down";

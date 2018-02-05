@@ -311,7 +311,7 @@ namespace ZeldaOracle.Game.Control {
 			if (!checkTile.IsSolid ||
 				(checkTile.IsHalfSolid && entity.Physics.PassOverHalfSolids))
 				return false;
-			if (checkTile.IsLedge && entity.Physics.PassOverLedges) {
+			if (checkTile.IsAnyLedge && entity.Physics.PassOverLedges) {
 				if (entity.Physics.LedgeAltitude > 0 ||
 					entity.Physics.LedgeTileLocation == checkTile.Location ||
 					IsMovingDownLedge(entity, checkTile))
@@ -1293,8 +1293,8 @@ namespace ZeldaOracle.Game.Control {
 
 				if (entity.RoomControl.IsTileInBounds(location)) {
 					Tile tile = entity.RoomControl.GetTopTile(location);
-
-					if (tile != null && tile.IsLedge) {
+					
+					if (tile != null && tile.IsAnyLedge) {
 						entity.Physics.LedgeTileLocation = location;
 						// Adjust ledge altitude.
 						if (IsMovingUpLedge(entity, tile))

@@ -37,6 +37,13 @@ TILE "temp_minecart_door";
 	TYPE		TileMinecartDoor;
 END;
 
+# Movable Statue ----------------------------------------------
+
+TILE "temp_movable_statue";
+	FLAGS		Movable;
+	SOLID		block;
+END;
+
 # Color Tiles -------------------------------------------------
 
 TILE "temp_color_jump_pad";
@@ -119,6 +126,7 @@ TILE "temp_tablet_slot";
 	RESETWHEN	Never;
 END;
 
+
 # Webbed Wall -------------------------------------------------
 
 TILE "temp_wall_webbed";
@@ -177,11 +185,11 @@ END;
 TILE "statue_stationary"; SAMESPRITE; SOLID block; END;
 TILE "statue_alt_stationary"; SAMESPRITE; SOLID block; END;
 TILE "movable_statue";
-	CLONE		"temp_movable_block";
+	CLONE		"temp_movable_statue";
 	SAMESPRITE;
 END;
 TILE "movable_statue_alt";
-	CLONE		"temp_movable_block";
+	CLONE		"temp_movable_statue";
 	SAMESPRITE;
 END;
 TILE "eye_statue";
@@ -461,10 +469,10 @@ END;
 
 # Jump Ledge --------------------------------------------------
 
-TILE "jump_ledge_left"; SAMESPRITE; SOLID bridge_v_left; END;
-TILE "jump_ledge_up"; SAMESPRITE; SOLID bridge_h_top; END;
-TILE "jump_ledge_right"; SAMESPRITE; SOLID bridge_v_right; END;
-TILE "jump_ledge_down"; SAMESPRITE; SOLID bridge_h_bottom; END;
+TILE "leap_ledge_right";	FLAGS NotPushable, NotGrabbable; SAMESPRITE; LEAPLEDGE right; END;
+TILE "leap_ledge_up";		FLAGS NotPushable, NotGrabbable; SAMESPRITE; LEAPLEDGE up; END;
+TILE "leap_ledge_left";		FLAGS NotPushable, NotGrabbable; SAMESPRITE; LEAPLEDGE left; END;
+TILE "leap_ledge_down";		FLAGS NotPushable, NotGrabbable; SAMESPRITE; LEAPLEDGE down; END;
 
 # Webbed Wall -------------------------------------------------
 

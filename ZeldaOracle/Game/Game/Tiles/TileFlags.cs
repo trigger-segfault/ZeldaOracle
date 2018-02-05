@@ -11,6 +11,7 @@ namespace ZeldaOracle.Game.Tiles {
 		Solid,
 		HalfSolid,	// Not solid to units, and certain projectiles can pass over half solids. Half solids include railings.
 		Ledge,
+		LeapLedge,  // Specifically for dungeon leap ledges
 	}
 	
 	public enum TileEnvironmentType {
