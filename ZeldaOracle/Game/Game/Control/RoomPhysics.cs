@@ -30,34 +30,35 @@ namespace ZeldaOracle.Game.Control {
 		// Physics Update
 		//-----------------------------------------------------------------------------
 
+		/// <summary>Process all entity physics for the room</summary>
 		public void ProcessPhysics() {
-			// Process physics for all entities.
+			// Process physics for all entities (except the player)
 			for (int i = 0; i < roomControl.Entities.Count; i++) {
 				Entity entity = roomControl.Entities[i];
-				if (entity.Physics != null && entity.Physics.IsEnabled) {
+				if (entity != RoomControl.Player && entity.Physics != null &&
+					entity.Physics.IsEnabled)
+				{
 					ProcessEntityPhysics(entity);
 				}
 			}
+			
+			// Process physics for the player
+			if (roomControl.Player.Physics != null &&
+				roomControl.Player.Physics.IsEnabled)
+			{
+				ProcessEntityPhysics(roomControl.Player);
+			}
 		}
 		
-		// Process physics for a single entity.
+		/// <summary>Process physics for a single entity</summary>
 		public void ProcessEntityPhysics(Entity entity) {
 			bool startedOnGround = entity.IsOnGround;
 
 			// Update Z dynamics
 			UpdateEntityZPosition(entity);
 			
-			// Initialize the collision state for this frame.
+			// Initialize the collision state for this frame
 			InitPhysicsState(entity);
-
-			if (roomControl.IsSideScrolling && entity.Physics.PreviousCollisionInfo[Directions.Down].Tile != null) {
-				// NOTE: this needs some checks before execution.
-				Vector2F tileVelocity = entity.Physics.PreviousCollisionInfo[Directions.Down].Tile.Velocity;
-				entity.Y += tileVelocity.Y;
-				entity.Physics.VelocityX += tileVelocity.X;
-				if (entity.Physics.MovesWithConveyors)
-					entity.Physics.VelocityX += entity.Physics.PreviousCollisionInfo[Directions.Down].Tile.ConveyorVelocity.X;
-			}
 
 			// Check the surface tile beneath the entity.
 			CheckSurfaceTile(entity);
@@ -1221,13 +1222,37 @@ namespace ZeldaOracle.Game.Control {
 		// Surfaces
 		//-----------------------------------------------------------------------------
 		
-		// Check the surface tile beneath the entity.
+		// Check the surface tile beneath the entity
 		private void CheckSurfaceTile(Entity entity) {
-			// Find the surface tile underneath the entity.
+
+			// Find the surface tile underneath the entity
 			entity.Physics.TopTile = roomControl.TileManager
 				.GetSurfaceTileAtPosition(entity.Position, entity.Physics.MovesWithPlatforms);
+			
+			// Check for moving platforms in side scrolling mode
+			CollisionInfo surfaceCollision = entity.Physics
+				.PreviousCollisionInfo[Directions.Down];
+			if (roomControl.IsSideScrolling &&
+				(surfaceCollision.Tile != null || surfaceCollision.Entity != null))
+			{
+				// Get the velocity of the surface tile or entity
+				Vector2F surfaceVelocity;
+				if (surfaceCollision.Tile != null)
+					surfaceVelocity = surfaceCollision.Tile.Velocity;
+				else
+					surfaceVelocity = surfaceCollision.Entity.Physics.Velocity;
 
-			// Check if the surface is moving.
+				// Move with the surface
+				// NOTE: this really needs some checks before execution
+				entity.Y += surfaceVelocity.Y;
+				entity.Physics.VelocityX += surfaceVelocity.X;
+
+				// Move with conveyor tiles
+				if (surfaceCollision.Tile != null && entity.Physics.MovesWithConveyors)
+					entity.Physics.VelocityX += surfaceCollision.Tile.ConveyorVelocity.X;
+			}
+
+			// Check if the surface is moving
 			if (entity.Physics.TopTile != null) {
 				if (entity.Physics.MovesWithPlatforms)
 					entity.Physics.Velocity += entity.Physics.TopTile.Velocity;
@@ -1235,7 +1260,7 @@ namespace ZeldaOracle.Game.Control {
 					entity.Physics.Velocity += entity.Physics.TopTile.ConveyorVelocity;
 			}
 			
-			// Check if surface tile is a hazardous (water/lava/hole).
+			// Check if surface tile is a hazardous (water/lava/hole)
 			CheckHazardSurface(entity);
 		}
 		
