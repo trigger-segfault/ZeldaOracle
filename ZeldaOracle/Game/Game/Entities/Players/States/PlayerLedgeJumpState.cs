@@ -11,12 +11,12 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
 	public class PlayerLedgeJumpState : PlayerState {
-		
-		private Vector2F	velocity;
-		private bool		ledgeExtendsToNextRoom;
-		private bool		hasRoomChanged;
-		private int			direction;
-		private bool		isHoldingSword;
+
+		protected Vector2F	velocity;
+		protected bool		ledgeExtendsToNextRoom;
+		protected bool		hasRoomChanged;
+		protected int		direction;
+		protected bool		isHoldingSword;
 
 
 		//-----------------------------------------------------------------------------
@@ -24,6 +24,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerLedgeJumpState() {
+			ledgeExtendsToNextRoom = false;
 			isHoldingSword = false;
 		}
 

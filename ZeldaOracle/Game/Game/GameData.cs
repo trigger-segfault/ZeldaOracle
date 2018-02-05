@@ -147,6 +147,18 @@ namespace ZeldaOracle.Game {
 		private static void LoadCollisionModels() {
 			Resources.LoadCollisionModels("Data/collision_models.conscript");
 			IntegrateResources<CollisionModel>("MODEL_");
+
+			// Leap ledges' models must be constant to prevent any bugs
+			MODEL_LEAP_LEDGE_RIGHT	= new CollisionModel(new Rectangle2I(12, 0, 4, 16));
+			MODEL_LEAP_LEDGE_UP		= new CollisionModel(new Rectangle2I(0, 0, 16, 4));
+			MODEL_LEAP_LEDGE_LEFT	= new CollisionModel(new Rectangle2I(0, 0, 4, 16));
+			MODEL_LEAP_LEDGE_DOWN	= new CollisionModel(new Rectangle2I(0, 12, 16, 4));
+			MODEL_LEAP_LEDGES = new CollisionModel[Directions.Count] {
+				MODEL_LEAP_LEDGE_RIGHT,
+				MODEL_LEAP_LEDGE_UP,
+				MODEL_LEAP_LEDGE_LEFT,
+				MODEL_LEAP_LEDGE_DOWN
+			};
 		}
 
 
@@ -322,6 +334,12 @@ namespace ZeldaOracle.Game {
 		public static CollisionModel MODEL_BRIDGE_V_RIGHT;
 		public static CollisionModel MODEL_BRIDGE_V;
 		public static CollisionModel MODEL_CENTER;
+
+		public static CollisionModel MODEL_LEAP_LEDGE_RIGHT;
+		public static CollisionModel MODEL_LEAP_LEDGE_UP;
+		public static CollisionModel MODEL_LEAP_LEDGE_LEFT;
+		public static CollisionModel MODEL_LEAP_LEDGE_DOWN;
+		public static CollisionModel[] MODEL_LEAP_LEDGES;
 
 
 		//-----------------------------------------------------------------------------

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Microsoft.Xna.Framework.Graphics;
 using ZeldaOracle.Common.Input;
 using ZeldaOracle.Common.Content;
 using ZeldaOracle.Common.Audio;
@@ -26,6 +25,7 @@ using ZeldaOracle.Game.Tiles.Custom;
 using ZeldaOracle.Game.Tiles.ActionTiles;
 using ZeldaOracle.Game.Worlds;
 using ZeldaOracle.Game.Tiles.Internal;
+using ZeldaOracle.Game.Entities.Effects;
 
 namespace ZeldaOracle.Game.Control {
 
@@ -222,6 +222,29 @@ namespace ZeldaOracle.Game.Control {
 			if (staySpawned)
 				tileData.Properties.Set("enabled", true);
 		}
+
+		// Despawn a tile if it's already spawned.
+		public void DespawnTile(Tile tile, bool stayDespawned) {
+			if (IsTileSpawned(tile.TileData)) {
+				TileSpawnOptions spawnOptions = tile.TileData.SpawnOptions;
+				if (spawnOptions.PoofEffect) {
+					// Spawn the poof effect.
+					if (spawnOptions.PoofEffect) {
+						Point2I size = tile.Size;
+						for (int x = 0; x < size.X; x++) {
+							for (int y = 0; y < size.Y; y++) {
+								Effect effect = new Effect(GameData.ANIM_EFFECT_BLOCK_POOF,
+									DepthLayer.EffectSomariaBlockPoof);
+								Vector2F pos = (tile.Location + new Point2I(x, y) + new Vector2F(0.5f, 0.5f)) * GameSettings.TILE_SIZE;
+								SpawnEntity(effect, pos);
+							}
+						}
+						AudioSystem.PlaySound(GameData.SOUND_APPEAR_VANISH);
+					}
+				}
+				RemoveTile(tile);
+			}
+		}
 		
 		// Spawn an action tile if it isn't already spawned.
 		public void SpawnActionTile(ActionTileDataInstance actionTileData, bool staySpawned) {
@@ -232,7 +255,7 @@ namespace ZeldaOracle.Game.Control {
 			if (staySpawned)
 				actionTileData.Properties.Set("enabled", true);
 		}
-		
+
 		// Place a tile in the tile grid at the given location and layer.
 		public void PlaceTile(Tile tile, Point2I location, int layer) {
 			tileManager.PlaceTile(tile, location, layer);
@@ -733,7 +756,14 @@ namespace ZeldaOracle.Game.Control {
 			foreach (ActionTileDataInstance actionTileData in Room.ActionData)
 				SpawnActionTile(actionTileData, staySpawned);
 		}
-		
+
+		public void DespawnTile(string id, bool stayDespawned = false) {
+			foreach (Tile tile in TileManager.GetTiles()) {
+				if (tile.TileData.ID == id)
+					DespawnTile(tile, stayDespawned);
+			}
+		}
+
 		public ZeldaAPI.Tile GetTileById(string id) {
 			foreach (Tile tile in GetTiles()) {
 				if (tile.Properties.Get("id", "") == id)

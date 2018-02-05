@@ -38,7 +38,7 @@ namespace ZeldaEditor.WinForms {
 		private bool isMouseOver;
 
 		/// <summary>The message filter for capturing scroll focus.</summary>
-		private WinFormsMouseWheelMessageFilter messageFilter;
+		private WinFormsFocusMessageFilter messageFilter;
 
 		/// <summary>True if an exception occurred while resetting the graphics device.</summary>
 		private bool resetError;
@@ -106,7 +106,7 @@ namespace ZeldaEditor.WinForms {
 				Initialize();
 			}
 
-			messageFilter = new WinFormsMouseWheelMessageFilter(this);
+			messageFilter = new WinFormsFocusMessageFilter(this);
 			messageFilter.AddFilter();
 
 			base.OnCreateControl();

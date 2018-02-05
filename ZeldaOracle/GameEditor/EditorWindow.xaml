@@ -12,7 +12,7 @@
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Oracle Engine Editor" Width="1100" Height="640" SnapsToDevicePixels="True" UseLayoutRounding="True" Icon="Editor.ico" ResizeMode="CanResizeWithGrip" Loaded="OnWindowLoaded" PreviewKeyDown="OnPreviewKeyDown" SizeChanged="OnWindowSizeChanged" Closing="OnWindowClosing">
+        Title="Oracle Engine Editor" Width="1100" Height="640" SnapsToDevicePixels="True" UseLayoutRounding="True" Icon="Editor.ico" ResizeMode="CanResizeWithGrip" Loaded="OnWindowLoaded" PreviewKeyDown="OnPreviewKeyDown" SizeChanged="OnWindowSizeChanged" Closing="OnWindowClosing" PreviewMouseDown="OnPreviewMouseDown">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

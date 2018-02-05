@@ -193,10 +193,10 @@ NAME "tile_tablet_slot_placed_right"		(5, 3);
 
 # Jump Ledge --------------------------------------------------
 
-NAME "tile_jump_ledge_up"					(6, 0);
-NAME "tile_jump_ledge_down"					(6, 1);
-NAME "tile_jump_ledge_left"					(7, 0);
-NAME "tile_jump_ledge_right"				(7, 1);
+NAME "tile_leap_ledge_up"					(6, 0);
+NAME "tile_leap_ledge_down"					(6, 1);
+NAME "tile_leap_ledge_left"					(7, 0);
+NAME "tile_leap_ledge_right"				(7, 1);
 
 # Webbed Wall -------------------------------------------------
 

@@ -226,7 +226,7 @@ namespace ZeldaOracle.Game.Entities {
 				return false;
 			if (tile.IsHalfSolid && flags.HasFlag(PhysicsFlags.HalfSolidPassable))
 				return false;
-			if (tile.IsLedge && PassOverLedges) {
+			if (tile.IsAnyLedge && PassOverLedges) {
 				if (ledgeAltitude > 0 ||
 					ledgeTileLocation == tile.Location ||
 					IsMovingDownLedge(tile))
