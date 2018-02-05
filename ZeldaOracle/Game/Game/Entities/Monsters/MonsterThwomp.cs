@@ -10,7 +10,7 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Idle,	// Waiting for player to come near
 			Crush,	// Accelearting down to the ground
 			Hit,	// Hit the ground, screen is shaking. TODO: screen shake
-			Raise,	// Moving up back to idle positio
+			Raise,	// Moving up back to idle position
 		}
 
 		private MonsterStateMachine<CrushState> stateMachine;
@@ -35,10 +35,12 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 
 			centerOffset				= new Point2I(0, 0);
 			Graphics.DrawOffset			= new Point2I(-16, -16);
-			Physics.CollisionBox		= new Rectangle2F(-16, -16, 32, 32);
-			Physics.SoftCollisionBox	= new Rectangle2F(-16, -16, 32, 32).Inflated(-2, -2);
+			Physics.CollisionBox		= new Rectangle2F(-15, -16, 30, 8);
+			Physics.SoftCollisionBox	= new Rectangle2F(-16, -14, 32, 30);//.Inflated(-2, -2);
 			Physics.HasGravity			= false;
 			Physics.IsSolid				= true;
+			Physics.CollideWithWorld	= false;
+			Physics.CollideWithRoomEdge	= false;
 
 			// TODO: hard collision box should only apply to top, the Thwomp is not
 			// actually supposed to crush the player
@@ -101,8 +103,6 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 		private void OnBeginCrushState() {
 			crushSpeed = GameSettings.MONSTER_THWOMP_CRUSH_INITIAL_SPEED;
 			Graphics.PlayAnimation(GameData.ANIM_MONSTER_THWOMP_CRUSH);
-			Physics.CollideWithWorld = true;
-			Physics.CollideWithRoomEdge = true;
 		}
 
 		private void OnUpdateCrushState() {
@@ -117,16 +117,17 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			}
 
 			// Stop crushing upon hitting a solid tile
-			// TODO: this needs to be refined
-			if (Physics.CollisionInfo[Directions.Down].IsColliding)
+			// TODO: Properly snap position to be flush with surface.
+			// TODO: collide with room edge too
+			Rectangle2F crushBox = new Rectangle2F(-16, -16, 32, 32);
+			if (Physics.IsPlaceMeetingSolid(position, crushBox)) {
 				stateMachine.BeginState(CrushState.Hit);
+			}
 		}
 
 		private void OnBeginHitState() {
 			AudioSystem.PlaySound(GameData.SOUND_BARRIER);
 			physics.Velocity = Vector2F.Zero;
-			Physics.CollideWithWorld = false;
-			Physics.CollideWithRoomEdge = false;
 		}
 		
 		private void OnUpdateRaiseState() {
