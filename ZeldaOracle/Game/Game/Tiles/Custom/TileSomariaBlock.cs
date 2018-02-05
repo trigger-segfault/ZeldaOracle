@@ -12,11 +12,15 @@ namespace ZeldaOracle.Game.Tiles {
 
 
 		public TileSomariaBlock() {
-
+			// TODO: Break when getting crushed by Thwomp. (Only when moving)
 		}
 
 		public override void OnInitialize() {
 			DropList = null;
+			CancelBreakSound = true;
+			CheckSurfaceTile();
+			CancelBreakSound = false;
+			// TODO: Prevent spawning on top of entities
 		}
 
 		public override void OnFallInHole() {
@@ -28,6 +32,10 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 		
 		public override void OnFallInLava() {
+			Break(false);
+		}
+
+		public override void OnFloating() {
 			Break(false);
 		}
 

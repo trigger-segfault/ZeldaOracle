@@ -299,6 +299,8 @@ namespace ZeldaOracle.Game.Tiles {
 		public virtual bool OnPush(int direction, float movementSpeed) {
 			if (!HasFlag(TileFlags.Movable))
 				return false;
+			if (roomControl.IsSideScrolling && Directions.IsVertical(direction))
+				return false;
 			if (properties.GetBoolean("move_once", false) && hasMoved)
 				return false;
 			int moveDir = properties.GetInteger("move_direction", -1);
@@ -383,6 +385,9 @@ namespace ZeldaOracle.Game.Tiles {
 				RoomControl.RemoveTile(this);
 			}
 		}
+
+		/// <summary>Called when a tile is in mid-air in a side-scrolling room.</summary>
+		public virtual void OnFloating() { }
 
 		// Called when another tile covers this tile.
 		//public virtual void OnCover(Tile tile) { }
@@ -536,7 +541,7 @@ namespace ZeldaOracle.Game.Tiles {
 				velocity = Vector2F.Zero;
 		}
 
-		private void CheckSurfaceTile() {
+		protected void CheckSurfaceTile() {
 			// Find the surface tile (tile below this one).
 			Tile newSurfaceTile = null;
 			foreach (Tile tile in roomControl.TileManager
@@ -559,6 +564,11 @@ namespace ZeldaOracle.Game.Tiles {
 					else if (surfaceTile.IsHole)
 						OnFallInHole();
 				}
+			}
+
+			// Check for floating in side-scrolling
+			if (IsFloating) {
+				OnFloating();
 			}
 		}
 
@@ -859,7 +869,7 @@ namespace ZeldaOracle.Game.Tiles {
 		}
 
 		public bool IsCoverableByBlock {
-			get { return (!IsNotCoverable && !IsSolid && !IsStairs && !IsLadder); }
+			get { return (!IsNotCoverable && !IsSolid && !IsStairs && (!IsLadder || RoomControl.IsSideScrolling)); }
 		}
 
 		public DropList DropList {
@@ -1022,6 +1032,19 @@ namespace ZeldaOracle.Game.Tiles {
 		public CollisionStyle CollisionStyle {
 			get { return collisionStyle; }
 			set { collisionStyle = value; }
+		}
+
+		/// <summary>Determines if the block is floating in air
+		/// in a side-scrolling environment.</summary>
+		public bool IsFloating {
+			get {
+				if (roomControl.IsSideScrolling) {
+					Tile ssSurfaceTile = roomControl.TileManager.GetTopTile(Location + Directions.ToPoint(Directions.Down));
+					return (ssSurfaceTile == null || !ssSurfaceTile.IsSolid || ssSurfaceTile.IsInMotion);
+					// TODO: Check if collision box does not have a flat surface on top?
+				}
+				return false;
+			}
 		}
 
 
