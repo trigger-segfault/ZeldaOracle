@@ -90,8 +90,8 @@ namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 		private static Properties GetSyncedProperties(Properties properties, Room room) {
 			string syncName = properties.GetString("sync_with", "");
 			if (!string.IsNullOrWhiteSpace(syncName)) {
-				TileDataInstance tile = room.FindTileByID(syncName);
-				if (tile != null /*&& tile.Type == typeof(TileDisappearingPlatform)*/)
+				TileDataInstance tile = room.FindTileOfTypeByID<TileDisappearingPlatform>(syncName);
+				if (tile != null)
 					return tile.Properties;
 			}
 			return properties;
@@ -111,9 +111,6 @@ namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 			int timeDisappear = GMath.Wrap((int) time - disappearTime, GameSettings.TILE_DISAPPEARING_PLATFORM_APPEAR_DURATION);
 			int appearEnd = CalcAppearEnd(appearTime, disappearTime, duration);
 			int disappearEnd = CalcDisappearEnd(appearTime, disappearTime, duration);
-			if (duration == 331) {
-				//Console.WriteLine("AppearEnd: " + appearEnd + " - DisappearEnd: " + disappearEnd);
-			}
 			if (IsAppearing(time, appearTime, disappearTime, duration))
 				return timeAppear % 2 == 1;
 			else if (IsDisappearing(time, appearTime, disappearTime, duration))

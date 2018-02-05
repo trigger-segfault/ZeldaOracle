@@ -160,6 +160,20 @@ namespace ZeldaOracle.Game.Worlds {
 			return actionData.Find(actionTile => actionTile.ID == actionTileID);
 		}
 
+		public TileDataInstance FindTileOfTypeByID<TileType>(string tileID) {
+			for (int layer = 0; layer < LayerCount; layer++) {
+				for (int x = 0; x < Width; x++) {
+					for (int y = 0; y < Height; y++) {
+						TileDataInstance tile = tileData[x, y, layer];
+						if (tile != null && tile.IsAtLocation(x, y) &&
+							tile.ID == tileID && tile.Type.Equals(typeof(TileType)))
+							return tile;
+					}
+				}
+			}
+			return null;
+		}
+
 		public TileDataInstance FindTileByID(string tileID) {
 			for (int layer = 0; layer < LayerCount; layer++) {
 				for (int x = 0; x < Width; x++) {
