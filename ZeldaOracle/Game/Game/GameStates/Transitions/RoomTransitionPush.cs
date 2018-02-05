@@ -18,6 +18,7 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 		private const int	TRANSITION_SPEED			= 4;		// Pixels per tick
 		private const float	TRANSITION_PLAYER_HSPEED	= 0.38f;	// Pixels per tick
 		private const float	TRANSITION_PLAYER_VSPEED	= 0.5f;		// Pixels per tick
+		private const int	TRANSITION_LERP_FRAMES		= 27;
 		
 		private int timer;
 		private int distance;
@@ -109,17 +110,17 @@ namespace ZeldaOracle.Game.GameStates.Transitions {
 				}
 			}
 
+			// Although it seems strange, the number of frames to lerp for is the
+			// same for both horizontal and vertical transitions, even though the
+			// total number of frames for each transition are 40 and 32 respectively.
 			if (timer % 2 == 1) {
-				lerpRatio = GMath.Min(1f, (float) distance / maxDistance);
+				lerpRatio = GMath.Min(1f, (float) (timer - TRANSITION_DELAY) / TRANSITION_LERP_FRAMES);
 			}
 		}
 
 		public override void AssignPalettes() {
 			OldRoomControl.AssignPalettes();
 			NewRoomControl.AssignLerpPalettes();
-			//float ratio = GMath.Min(1f, (float) distance / maxDistance);
-			//GameData.PaletteShader.TileRatio = ratio;
-			//GameData.PaletteShader.EntityRatio = ratio;
 			GameData.PaletteShader.TileRatio = lerpRatio;
 			GameData.PaletteShader.EntityRatio = lerpRatio;
 		}
