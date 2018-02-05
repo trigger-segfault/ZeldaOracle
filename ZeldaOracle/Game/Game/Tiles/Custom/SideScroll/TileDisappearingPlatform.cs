@@ -11,13 +11,6 @@ using ZeldaOracle.Game.Worlds;
 
 namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 	public class TileDisappearingPlatform : Tile {
-
-		private enum States {
-			Appearing,
-			Visible,
-			Disappearing,
-			Hidden
-		}
 		
 		private int appearTime;
 		private int disappearTime;
@@ -45,10 +38,6 @@ namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 
 			IsSolid = IsPlatformSolid;
 			Graphics.IsVisible = IsPlatformVisible;
-
-			if (Time == appearTime) {
-				AudioSystem.PlaySound(GameData.SOUND_MYSTERY_SEED);
-			}
 		}
 		
 		public override void Update() {
@@ -56,6 +45,10 @@ namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 
 			IsSolid = IsPlatformSolid;
 			Graphics.IsVisible = IsPlatformVisible;
+
+			if (Time == appearTime && !AudioSystem.IsSoundPlaying(GameData.SOUND_MYSTERY_SEED)) {
+				AudioSystem.PlaySound(GameData.SOUND_MYSTERY_SEED);
+			}
 		}
 
 		//-----------------------------------------------------------------------------
@@ -64,22 +57,6 @@ namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 
 		public int Time {
 			get { return RoomControl.CurrentRoomTicks % duration; }
-		}
-
-		public int AppearStart {
-			get { return appearTime; }
-		}
-
-		public int AppearEnd {
-			get { return CalcAppearEnd(appearTime, disappearTime, duration); }
-		}
-
-		public int DisappearStart {
-			get { return disappearTime; }
-		}
-
-		public int DisappearEnd {
-			get { return CalcDisappearEnd(appearTime, disappearTime, duration); }
 		}
 
 		public bool IsPlatformSolid {
@@ -138,9 +115,9 @@ namespace ZeldaOracle.Game.Tiles.Custom.SideScroll {
 				//Console.WriteLine("AppearEnd: " + appearEnd + " - DisappearEnd: " + disappearEnd);
 			}
 			if (IsAppearing(time, appearTime, disappearTime, duration))
-				return timeAppear % 2 == 0;
+				return timeAppear % 2 == 1;
 			else if (IsDisappearing(time, appearTime, disappearTime, duration))
-				return timeDisappear % 2 == 1;
+				return timeDisappear % 2 == 0;
 			else if (disappearTime > appearEnd)
 				return (time >= appearEnd && time < disappearTime);
 			else

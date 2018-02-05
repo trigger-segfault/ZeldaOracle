@@ -618,7 +618,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			Physics.Gravity = GameSettings.DEFAULT_GRAVITY;
 
-			if (RoomControl.DeathByFalling && Position.Y + 3 >= RoomControl.RoomBounds.Bottom) {
+			if (RoomControl.DeathOutOfBounds && Position.Y + 3 >= RoomControl.RoomBounds.Bottom) {
 				RespawnDeathInstantaneous();
 			}
 			else {

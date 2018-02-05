@@ -58,7 +58,7 @@ namespace ZeldaOracle.Game.Control {
 		private int					entityIndexCounter;
 		private bool				isSideScrolling;
 		private bool				isUnderwater;
-		private bool				deathByFalling;
+		private bool				deathOutOfBounds;
 		private RoomVisualEffect	visualEffect;
 		private RoomVisualEffect	visualEffectUnderwater;
 		private bool				disableVisualEffect;
@@ -99,7 +99,7 @@ namespace ZeldaOracle.Game.Control {
 			entityIndexCounter		= 0;
 			isSideScrolling			= false;
 			isUnderwater			= false;
-			deathByFalling			= false;
+			deathOutOfBounds		= false;
 			visualEffect			= null;
 			disableVisualEffect		= false;
 			currentRoomTicks		= 0;
@@ -287,7 +287,7 @@ namespace ZeldaOracle.Game.Control {
 			this.dungeon			= room.Dungeon;
 			this.isSideScrolling	= room.Zone.IsSideScrolling;
 			this.isUnderwater		= room.Zone.IsUnderwater;
-			this.deathByFalling		= room.DeathByFalling;
+			this.deathOutOfBounds	= room.DeathOutOfBounds;
 			if (this.isUnderwater)
 				visualEffect = visualEffectUnderwater;
 			else
@@ -874,9 +874,9 @@ namespace ZeldaOracle.Game.Control {
 			get { return currentRoomTicks; }
 		}
 
-		public bool DeathByFalling {
-			get { return deathByFalling; }
-			set { deathByFalling = value; }
+		public bool DeathOutOfBounds {
+			get { return deathOutOfBounds; }
+			set { deathOutOfBounds = value; }
 		}
 	}
 }
