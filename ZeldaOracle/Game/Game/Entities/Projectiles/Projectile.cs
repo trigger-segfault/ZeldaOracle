@@ -28,6 +28,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		protected int		angle;
 		protected int		direction;
 		protected Entity	owner;
+		protected Tile      tileOwner;
 		protected bool		syncAnimationWithAngle;
 		protected bool		syncAnimationWithDirection;
 		protected Animation crashAnimation;
@@ -52,6 +53,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			syncAnimationWithDirection	= false;
 
 			owner			= null;
+			tileOwner		= null;
 			eventCollision	= null;
 			eventLand		= null;
 			angle			= 0;
@@ -61,6 +63,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			bounceOnCrash		= false;
 
 			projectileType = ProjectileType.Physical;
+			// TODO: Prevent collision snapping with tileOwner
 		}
 		
 		
@@ -115,7 +118,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			if (physics.IsPlaceMeetingSolid(position, physics.CollisionBox)) {
 				Point2I tileLocation = RoomControl.GetTileLocation(Position);
 				Tile tile = RoomControl.GetTopTile(tileLocation);
-				OnCollideTile(tile, true);
+				if (tile != TileOwner)
+					OnCollideTile(tile, true);
 			}
 		}
 
@@ -131,6 +135,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public virtual void OnCollideMonster(Monster monster) { }
 
 		public virtual void OnCollidePlayer(Player player) { }
+
+		public virtual void OnCollideSolidEntity(Entity entity) { }
 
 
 		//-----------------------------------------------------------------------------
@@ -173,7 +179,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 					break;
 				}
 
-				if (tile != null) {
+				if (tile != null && tile != TileOwner) {
 					if (owner == RoomControl.Player) {
 						tile.OnHitByProjectile(this);
 						if (IsDestroyed)
@@ -244,7 +250,16 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 						return;
 				}
 			}
+
+			// Collide with solid entities
+			foreach (Entity entity in Physics.GetSolidEntitiesMeeting<Entity>(CollisionBoxType.Hard)) {
+				OnCollideSolidEntity(entity);
+				if (IsDestroyed)
+					return;
+			}
 			
+
+
 			if (syncAnimationWithDirection)
 				Graphics.SubStripIndex = direction;
 			else if (syncAnimationWithAngle)
@@ -278,6 +293,11 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		public Entity Owner {
 			get { return owner; }
 			set { owner = value; }
+		}
+
+		public Tile TileOwner {
+			get { return tileOwner; }
+			set { tileOwner = value; }
 		}
 
 		public ProjectileType ProjectileType {

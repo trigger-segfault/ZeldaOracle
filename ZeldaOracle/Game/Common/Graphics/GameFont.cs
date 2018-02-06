@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using ZeldaOracle.Common.Geometry;
@@ -7,24 +8,25 @@ using ZeldaOracle.Common.Translation;
 
 namespace ZeldaOracle.Common.Graphics {
 
-	// A zelda sprite font
+	/// <summary>A monospaced sprite font.</summary>
 	public class GameFont {
 
-		// The sprite sheet of the font.
+		/// <summary>The sprite sheet of the font.</summary>
 		private SpriteSheet spriteSheet;
 
-		// The number of characters in each row in the sprite sheet.
+		/// <summary>The number of characters in each row in the sprite sheet.</summary>
 		private int charactersPerRow;
-		// The spacing between characters.
+		/// <summary>The spacing between characters.</summary>
 		private int characterSpacing;
-		// The spacing between lines.
+		/// <summary>The spacing between lines.</summary>
 		private int lineSpacing;
+
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		// Constructs a font with the specified sprite sheet.
+		/// <summary>Constructs a font with the specified sprite sheet.</summary>
 		public GameFont(SpriteSheet spriteSheet) {
 			this.spriteSheet		= spriteSheet;
 			this.charactersPerRow	= 0;
@@ -32,7 +34,7 @@ namespace ZeldaOracle.Common.Graphics {
 			this.lineSpacing		= 0;
 		}
 
-		// Constructs a font with the specified sprite sheet.
+		/// <summary>Constructs a font with the specified sprite sheet.</summary>
 		public GameFont(SpriteSheet spriteSheet, int charactersPerRow, int characterSpacing, int lineSpacing) {
 			this.spriteSheet		= spriteSheet;
 			this.charactersPerRow	= charactersPerRow;
@@ -40,41 +42,64 @@ namespace ZeldaOracle.Common.Graphics {
 			this.lineSpacing		= lineSpacing;
 		}
 
-		//-----------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------
-
-		// Gets the sprite sheet of the font.
-		public SpriteSheet SpriteSheet {
-			get { return spriteSheet; }
-		}
-		// Gets or sets the characters per row.
-		public int CharactersPerRow {
-			get { return charactersPerRow; }
-			set { charactersPerRow = value; }
-		}
-		// Gets or sets the spacing of the font characters.
-		public int CharacterSpacing {
-			get { return characterSpacing; }
-			set { characterSpacing = value; }
-		}
-		// Gets or sets the vertical distance (in pixels) between the base lines of two consecutive lines of text.
-		public int LineSpacing {
-			get { return lineSpacing; }
-			set { lineSpacing = value; }
-		}
 
 		//-----------------------------------------------------------------------------
-		// Strings
+		// Character Cell
 		//-----------------------------------------------------------------------------
 
-		// Returns the wrapped and formatted string of the text.
+		/// <summary>A helper method to get the source rect for the specified character.</summary>
+		public Rectangle2I GetCharacterCell(char character) {
+			int index = (int) character;
+			if (index < charactersPerRow * spriteSheet.Height)
+				return spriteSheet.GetSourceRect(index % charactersPerRow, index / charactersPerRow);
+			return spriteSheet.GetSourceRect(Point2I.Zero);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Measuring
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns the dimensions of any type of drawable string.</summary>
+		public Point2I MeasureString(DrawableString text) {
+			if (text.IsString) {
+				return new Point2I(
+					GMath.Max(0, text.String.Length * (CharacterWidth +
+						characterSpacing) - characterSpacing),
+					CharacterHeight);
+			}
+			else if (text.IsLetterString) {
+				return new Point2I(
+					GMath.Max(0, text.LetterString.Length * (CharacterWidth +
+						characterSpacing) - characterSpacing),
+					CharacterHeight);
+			}
+			else if (text.IsWrappedLetterString) {
+				WrappedLetterString wrapped = text.WrappedLetterString;
+				int maxLength = 0;
+				for (int i = 0; i < wrapped.LineCount; i++) {
+					maxLength = GMath.Max(maxLength, wrapped.LineLengths[i]);
+				}
+				return new Point2I(
+					maxLength,
+					GMath.Max(0, wrapped.LineCount * (CharacterHeight +
+						lineSpacing) - lineSpacing));
+			}
+			return Point2I.Zero;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Wrapping
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns the wrapped and formatted string of the text.</summary>
 		public WrappedLetterString WrapString(string text, int width) {
 			int caretLine = 0;
 			return WrapString(text, width, 0, out caretLine);
 		}
 
-		// Returns the wrapped and formatted string of the text.
+		/// <summary>Returns the wrapped and formatted string of the text.</summary>
 		public WrappedLetterString WrapString(string text, int width, int caretPosition, out int caretLine) {
 			try {
 				caretLine = -1;
@@ -97,7 +122,7 @@ namespace ZeldaOracle.Common.Graphics {
 
 				LetterString letterString = FormatCodes.FormatString(text, ref caretPosition);
 				string caret2Char = (caretPosition >= letterString.Length ? "end" : "" + letterString[caretPosition].Char);
-				Console.WriteLine("'" + caretChar + "' - '" + caret2Char + "'");
+				//Console.WriteLine("'" + caretChar + "' - '" + caret2Char + "'");
 
 				while (currentCharacter < letterString.Length) {
 					lines.Add(new LetterString());
@@ -126,7 +151,7 @@ namespace ZeldaOracle.Common.Graphics {
 							if (wordLineCount > 0)
 								lines[currentLine].Add(' ');
 							lines[currentLine].AddRange(word);
-							lineLengths[currentLine] += (wordLineCount > 0 ? (characterSpacing + spriteSheet.CellSize.X) : 0) + wordLength;
+							lineLengths[currentLine] += (wordLineCount > 0 ? (characterSpacing + CharacterWidth) : 0) + wordLength;
 
 							wordLineCount++;
 							wordLength = 0;
@@ -144,23 +169,25 @@ namespace ZeldaOracle.Common.Graphics {
 								currentCharacter++;
 								break;
 							}
+							if (currentCharacter >= letterString.Length)
+								break;
 						}
-						/*else if (lineLengths[currentLine] + wordLength + characterSpacing + spriteSheet.CellSize.X > width && wordStart == lineStart) {
+						/*else if (lineLengths[currentLine] + wordLength + characterSpacing + CharacterWidth > width && width >= CharacterWidth && wordStart == lineStart) {
 							// Cuttoff a word if it has continued since the beginning of the line
 							word[word.Length - 1] = new Letter('-', word[word.Length - 2].Color);
 							wordStart = currentCharacter - 1;
 						}*/
 						else {
 							word.Add(letterString[currentCharacter]);
-							wordLength += (firstChar ? 0 : characterSpacing) + spriteSheet.CellSize.X;
+							wordLength += (firstChar ? 0 : characterSpacing) + CharacterWidth;
 							firstChar = false;
 						}
 						if (currentCharacter == caretPosition)
 							caretLine = currentLine;
 						currentCharacter++;
-					} while (lineLengths[currentLine] + wordLength + characterSpacing + spriteSheet.CellSize.X <= width);
+					} while (lineLengths[currentLine] + wordLength + characterSpacing + CharacterWidth <= width || width < CharacterWidth);
 
-					if (lineLengths[currentLine] + wordLength + characterSpacing + spriteSheet.CellSize.X > width && wordLineCount == 0) {
+					if (lineLengths[currentLine] + wordLength + characterSpacing + CharacterWidth > width && width >= CharacterWidth && wordLineCount == 0) {
 						// Finish the word if it lasted the length if the line
 						if (currentCharacter >= letterString.Length || letterString[currentCharacter].Char == ' ' ||
 							letterString[currentCharacter].Char == FormatCodes.ParagraphCharacter || letterString[currentCharacter].Char == '\n' ||
@@ -168,7 +195,7 @@ namespace ZeldaOracle.Common.Graphics {
 							if (wordLineCount > 0)
 								lines[currentLine].Add(' ');
 							lines[currentLine].AddRange(word);
-							lineLengths[currentLine] += (wordLineCount > 0 ? (characterSpacing + spriteSheet.CellSize.X) : 0) + wordLength;
+							lineLengths[currentLine] += (wordLineCount > 0 ? (characterSpacing + CharacterWidth) : 0) + wordLength;
 
 							wordLineCount++;
 							wordLength = 0;
@@ -176,7 +203,7 @@ namespace ZeldaOracle.Common.Graphics {
 						}
 						else {
 							// Cuttoff a word if it has continued since the beginning of the line
-							word[word.Length - 1] = new Letter('-', word[word.Length - 2].Color);
+							word[word.Length - 1] = new Letter('-', word[word.Length - 1].Color);
 							wordStart = currentCharacter - 1;
 							lines[currentLine].AddRange(word);
 							lineLengths[currentLine] = wordLength;
@@ -194,13 +221,56 @@ namespace ZeldaOracle.Common.Graphics {
 				WrappedLetterString wrappedString = new WrappedLetterString();
 				wrappedString.Lines = lines.ToArray();
 				wrappedString.LineLengths = lineLengths.ToArray();
-				wrappedString.Bounds = new Rectangle2I(width, (lines.Count - 1) * lineSpacing + spriteSheet.CellSize.Y);
+				wrappedString.Bounds = new Rectangle2I(width, (lines.Count - 1) * lineSpacing + CharacterHeight);
 				return wrappedString;
 			}
 			catch (Exception e) {
 				throw e;
 			}
 		}
+		
+		
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
 
+		/// <summary>Gets the sprite sheet of the font.</summary>
+		public SpriteSheet SpriteSheet {
+			get { return spriteSheet; }
+		}
+
+		/// <summary>Gets or sets the characters per row.</summary>
+		public int CharactersPerRow {
+			get { return charactersPerRow; }
+			set { charactersPerRow = value; }
+		}
+
+		/// <summary>Gets or sets the spacing of the font characters.</summary>
+		public int CharacterSpacing {
+			get { return characterSpacing; }
+			set { characterSpacing = value; }
+		}
+
+		/// <summary>Gets or sets the vertical distance (in pixels) between the
+		/// base lines of two consecutive lines of text.</summary>
+		public int LineSpacing {
+			get { return lineSpacing; }
+			set { lineSpacing = value; }
+		}
+
+		/// <summary>Gets the size of a single character.</summary>
+		public Point2I CharacterSize {
+			get { return SpriteSheet.CellSize; }
+		}
+
+		/// <summary>Gets the width of a single character.</summary>
+		public int CharacterWidth {
+			get { return SpriteSheet.CellSize.X; }
+		}
+
+		/// <summary>Gets the height of a single character.</summary>
+		public int CharacterHeight {
+			get { return SpriteSheet.CellSize.Y; }
+		}
 	}
 }

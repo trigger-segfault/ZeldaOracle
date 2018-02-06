@@ -335,42 +335,104 @@ namespace ZeldaOracle.Common.Graphics {
 			spriteBatch.DrawString(font, text, NewStringPos(position, font, text, alignment), (XnaColor)color, (float)rotation, (Vector2)origin, (Vector2)scale, flipEffect, depth);
 		}
 
-		/// <summary>Draws a game string at the specified position.</summary>
-		public void DrawString(GameFont font, string text, Point2I position, ColorOrPalette color, float depth = 0.0f) {
-			DrawLetterString(font, FormatCodes.FormatString(text), position, color, depth);
+		/// <summary>Draws a game string of any type at the specified position.</summary>
+		public void DrawString(GameFont font, DrawableString text, Vector2F position, ColorOrPalette color, float depth = 0.0f) {
+			DrawString(font, text, position, color, Align.TopLeft, Vector2F.Zero, depth);
+		}
+
+		/// <summary>Draws a game string of any type at the specified position.</summary>
+		public void DrawString(GameFont font, DrawableString text, Vector2F position, ColorOrPalette color, Align alignment, float depth = 0.0f) {
+			DrawString(font, text, position, color, alignment, Vector2F.Zero, depth);
+		}
+
+		/// <summary>Draws a game string of any type at the specified position.</summary>
+		public void DrawString(GameFont font, DrawableString text, Vector2F position, ColorOrPalette color, Align alignment, Vector2F area, float depth = 0.0f) {
+			if (text.IsString)
+				DrawLetterString(font, FormatCodes.FormatString(text.String), position, color, alignment, area, depth);
+			else if (text.IsLetterString)
+				DrawLetterString(font, text.LetterString, position, color, alignment, area, depth);
+			else if (text.IsWrappedLetterString)
+				DrawWrappedLetterString(font, text.WrappedLetterString, position, color, alignment, area, depth);
 		}
 
 		/// <summary>Draws a formatted game string at the specified position.</summary>
-		public void DrawLetterString(GameFont font, LetterString letterString, Point2I position, ColorOrPalette color, float depth = 0.0f) {
+		public void DrawLetterString(GameFont font, LetterString letterString, Vector2F position, ColorOrPalette color, float depth = 0.0f) {
+			DrawLetterString(font, letterString, position, color, Align.TopLeft, Vector2F.Zero, depth);
+		}
+
+		/// <summary>Draws a formatted game string at the specified position.</summary>
+		public void DrawLetterString(GameFont font, LetterString letterString, Vector2F position, ColorOrPalette color, Align alignment, float depth = 0.0f) {
+			DrawLetterString(font, letterString, position, color, alignment, Vector2F.Zero, depth);
+		}
+
+		/// <summary>Draws a formatted game string at the specified position.</summary>
+		public void DrawLetterString(GameFont font, LetterString letterString, Vector2F position, ColorOrPalette color, Align alignment, Vector2F area, float depth = 0.0f) {
+			Vector2F size = font.MeasureString(letterString);
+			position = Alignment.AlignVector(position, area, size, alignment);
 			for (int i = 0; i < letterString.Length; i++) {
 				spriteBatch.Draw(
 					font.SpriteSheet.Image,
-					NewRect(new Rectangle2I(
-						position.X + i * (font.SpriteSheet.CellSize.X + font.CharacterSpacing),
+					NewRect(new Rectangle2F(
+						position.X + i * (font.CharacterWidth + font.CharacterSpacing),
 						position.Y,
-						font.SpriteSheet.CellSize.X,
-						font.SpriteSheet.CellSize.Y
+						font.CharacterSize
 					)),
-					(Rectangle)new Rectangle2I(
-						font.SpriteSheet.Offset.X + ((int)letterString[i].Char % font.CharactersPerRow) * (font.SpriteSheet.CellSize.X + font.SpriteSheet.Spacing.X),
-						font.SpriteSheet.Offset.Y + ((int)letterString[i].Char / font.CharactersPerRow) * (font.SpriteSheet.CellSize.Y + font.SpriteSheet.Spacing.Y),
-						font.SpriteSheet.CellSize.X,
-						font.SpriteSheet.CellSize.Y
-					),
+					(Rectangle) font.GetCharacterCell(letterString[i].Char),
 					(letterString[i].Color == Letter.DefaultColor ? color.MappedColor : letterString[i].MappedColor), 0.0f, Vector2.Zero, SpriteEffects.None, depth
 				);
 			}
 		}
 
-		/// <summary>Draws a wrapped game string at the specified position.</summary>
-		public void DrawWrappedString(GameFont font, string text, int width, Point2I position, ColorOrPalette color, float depth = 0.0f) {
-			DrawWrappedLetterString(font, font.WrapString(text, width), width, position, color, depth);
+		/// <summary>Draws a wrapped game string of any type at the specified position.</summary>
+		public void DrawWrappedString(GameFont font, DrawableString text, Vector2F position, ColorOrPalette color, float depth = 0.0f) {
+			DrawWrappedString(font, text, position, color, Align.TopLeft, Vector2F.Zero, depth);
+		}
+
+		/// <summary>Draws a wrapped game string of any type at the specified position.</summary>
+		public void DrawWrappedString(GameFont font, DrawableString text, Vector2F position, ColorOrPalette color, Align alignment, float depth = 0.0f) {
+			DrawWrappedString(font, text, position, color, alignment, Vector2F.Zero, depth);
+		}
+
+		/// <summary>Draws a wrapped game string of any type at the specified position.</summary>
+		public void DrawWrappedString(GameFont font, DrawableString text, Vector2F position, ColorOrPalette color, Align alignment, Vector2F area, float depth = 0.0f) {
+			//DrawWrappedLetterString(font, font.WrapString(text, width), position, color, depth);
+			if (text.IsString)
+				DrawWrappedLetterString(font, font.WrapString(text.String, (int) area.X), position, color, alignment, area, depth);
+			else if (text.IsLetterString)
+				DrawLetterString(font, text.LetterString, position, color, alignment, area, depth);
+			else if (text.IsWrappedLetterString)
+				DrawWrappedLetterString(font, text.WrappedLetterString, position, color, alignment, area, depth);
 		}
 
 		/// <summary>Draws a formatted wrapped game string at the specified position.</summary>
-		public void DrawWrappedLetterString(GameFont font, WrappedLetterString wrappedString, int width, Point2I position, ColorOrPalette color, float depth = 0.0f) {
-			for (int i = 0; i < wrappedString.Lines.Length; i++) {
-				DrawLetterString(font, wrappedString.Lines[i], position + new Point2I(0, font.LineSpacing * i), color, depth);
+		public void DrawWrappedLetterString(GameFont font, WrappedLetterString wrappedString, Vector2F position, ColorOrPalette color, float depth = 0.0f) {
+			DrawWrappedLetterString(font, wrappedString, position, color, Align.TopLeft, Vector2F.Zero, depth);
+		}
+
+		/// <summary>Draws a formatted wrapped game string at the specified position.</summary>
+		public void DrawWrappedLetterString(GameFont font, WrappedLetterString wrappedString, Vector2F position, ColorOrPalette color, Align alignment, float depth = 0.0f) {
+			DrawWrappedLetterString(font, wrappedString, position, color, alignment, Vector2F.Zero, depth);
+		}
+
+		/// <summary>Draws a formatted wrapped game string at the specified position.</summary>
+		public void DrawWrappedLetterString(GameFont font, WrappedLetterString wrappedString, Vector2F position, ColorOrPalette color, Align alignment, Vector2F area, float depth = 0.0f) {
+			Vector2F size = font.MeasureString(wrappedString);
+			Vector2F originalPosition = position;
+			for (int j = 0; j < wrappedString.LineCount; j++) {
+				LetterString letterString = wrappedString.Lines[j];
+				position = Alignment.AlignVector(originalPosition, area, new Vector2F(wrappedString.LineLengths[j], size.Y), alignment);
+				for (int i = 0; i < letterString.Length; i++) {
+					spriteBatch.Draw(
+						font.SpriteSheet.Image,
+						NewRect(new Rectangle2F(
+							position.X + i * (font.CharacterWidth + font.CharacterSpacing),
+							position.Y + j * (font.CharacterHeight + font.LineSpacing),
+							font.CharacterSize
+						)),
+						(Rectangle) font.GetCharacterCell(letterString[i].Char),
+						(letterString[i].Color == Letter.DefaultColor ? color.MappedColor : letterString[i].MappedColor), 0.0f, Vector2.Zero, SpriteEffects.None, depth
+					);
+				}
 			}
 		}
 

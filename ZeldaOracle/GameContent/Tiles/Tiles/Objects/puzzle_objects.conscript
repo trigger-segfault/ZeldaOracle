@@ -114,8 +114,12 @@ END;
 # Fire Shooter ------------------------------------------------
 
 TILE "temp_fire_shooter";
-	#Type		TileFireShooter;
+	Type		TileFireShooter;
 	SOLID		block;
+	PROPERTIES
+		(integer, direction, 0, "Direction", "direction",
+			"Fire Shooter", "The direction fire is shot in.", false);
+		
 END;
 
 # Tablet Slot -------------------------------------------------
@@ -426,22 +430,22 @@ END;
 TILE "fire_shooter_left";
 	CLONE		"temp_fire_shooter";
 	SAMESPRITE;
-	# left
+	PROPERTIES (integer, direction, 0);
 END;
 TILE "fire_shooter_up";
 	CLONE		"temp_fire_shooter";
 	SAMESPRITE;
-	# up
+	PROPERTIES (integer, direction, 1);
 END;
 TILE "fire_shooter_right";
 	CLONE		"temp_fire_shooter";
 	SAMESPRITE;
-	# right
+	PROPERTIES (integer, direction, 2);
 END;
 TILE "fire_shooter_down";
 	CLONE		"temp_fire_shooter";
 	SAMESPRITE;
-	# down
+	PROPERTIES (integer, direction, 3);
 END;
 
 # Tablet Slot -------------------------------------------------

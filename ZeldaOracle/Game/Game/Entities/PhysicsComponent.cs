@@ -195,6 +195,16 @@ namespace ZeldaOracle.Game.Entities {
 			}
 		}
 
+		// Return a list of solid entities colliding with this entity.
+		public IEnumerable<T> GetSolidEntitiesMeeting<T>(CollisionBoxType collisionBoxType, int maxZDistance = 10) where T : Entity {
+			CollisionTestSettings settings = new CollisionTestSettings(typeof(T), collisionBoxType, maxZDistance);
+			for (int i = 0; i < entity.RoomControl.Entities.Count; i++) {
+				T other = entity.RoomControl.Entities[i] as T;
+				if (other != null && other.Physics.IsSolid && CollisionTest.PerformCollisionTest(entity, other, settings).IsColliding)
+					yield return other;
+			}
+		}
+
 		// Return a list of entities colliding with this entity.
 		public IEnumerable<T> GetEntitiesMeeting<T>(CollisionBoxType collisionBoxType, int maxZDistance = 10) where T : Entity {
 			CollisionTestSettings settings = new CollisionTestSettings(typeof(T), collisionBoxType, maxZDistance);

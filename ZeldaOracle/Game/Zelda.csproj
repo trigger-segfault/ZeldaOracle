@@ -390,6 +390,7 @@
     <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\BeamProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\FireballProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\BoneProjectile.cs" />
+    <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\FireShooterProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\PlayerProjectiles\PlayerBoomerang.cs" />
     <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\MagicProjectile.cs" />
     <Compile Include="Game\Entities\Projectiles\MonsterProjectiles\MonsterBoomerang.cs" />
@@ -500,6 +501,7 @@
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterBeamos.cs" />
     <Compile Include="Game\Tiles\Custom\SideScroll\TileConveyorBelt.cs" />
     <Compile Include="Game\Tiles\Custom\SideScroll\TileDisappearingPlatform.cs" />
+    <Compile Include="Game\Tiles\Custom\TileFireShooter.cs" />
     <Compile Include="Game\Tiles\Tileset.cs" />
     <Compile Include="Game\Tiles\TileDataDrawing.cs" />
     <Compile Include="Game\UserSettings.cs" />

@@ -4,12 +4,12 @@
 
 FONT "large", "Fonts/font_large";
 	GRID (8, 12), (1, 1), (1, 1);
-	SPACING 0, 16, 16;
+	SPACING 0, 0, 16;
 END;
 
 FONT "small", "Fonts/font_small";
 	GRID (8, 8), (1, 1), (1, 1);
-	SPACING 0, 12, 16;
+	SPACING 0, 0, 16;
 END;
 
 
