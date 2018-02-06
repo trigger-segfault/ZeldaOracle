@@ -156,3 +156,22 @@ ANIMATION "effect_color_flame_green"; SUBSTRIP repeat;
 ANIMATION "effect_color_flame_yellow"; SUBSTRIP repeat;
 	CLONE "effect_color_flame";
 	CHANGECOLOR all, "orange"; END;
+	
+ANIMATION "projectile_tile_fire_shooter_small";
+	SUBSTRIP repeat;
+		ADD frame, 2, ((0, 3), "red"); ADD frame, 2, ((0, 3), "orange"); ADD frame, 2, ((0, 3), "inverse_red");
+	SUBSTRIP repeat;
+		ADD frame, 2, ((3, 3), "red"); ADD frame, 2, ((3, 3), "orange"); ADD frame, 2, ((3, 3), "inverse_red");
+	SUBSTRIP repeat;
+		ADD frame, 2, ((2, 3), "red"); ADD frame, 2, ((2, 3), "orange"); ADD frame, 2, ((2, 3), "inverse_red");
+	SUBSTRIP repeat;
+		ADD frame, 2, ((1, 3), "red"); ADD frame, 2, ((1, 3), "orange"); ADD frame, 2, ((1, 3), "inverse_red");
+	OFFSET (-8, -8); END;
+
+ANIMATION "projectile_tile_fire_shooter_medium";
+	CLONE "projectile_tile_fire_shooter_small";
+	SHIFTSOURCE (0, -1); END;
+
+ANIMATION "projectile_tile_fire_shooter_large";
+	CLONE "projectile_tile_fire_shooter_small";
+	SHIFTSOURCE (0, -2); END;

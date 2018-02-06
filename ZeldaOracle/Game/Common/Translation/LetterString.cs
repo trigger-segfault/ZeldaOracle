@@ -5,6 +5,149 @@ using System.Text;
 using ZeldaOracle.Common.Graphics;
 
 namespace ZeldaOracle.Common.Translation {
+
+	/// <summary>A structure that contains either a string, LetterString or WrappedLetterString.</summary>
+	public struct DrawableString {
+
+		//-----------------------------------------------------------------------------
+		// Constants
+		//-----------------------------------------------------------------------------
+
+		/// <summary>A null drawable string.</summary>
+		public static readonly DrawableString Null = new DrawableString((string) null);
+
+
+		//-----------------------------------------------------------------------------
+		// Members
+		//-----------------------------------------------------------------------------
+
+		/// <summary>The object storing either a string, LetterString, or WrappedLetterString.
+		/// This value can be null.</summary>
+		private object value;
+		
+
+		//-----------------------------------------------------------------------------
+		// Constructors
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Constructs a string.</summary>
+		public DrawableString(string text) {
+			value = text;
+		}
+
+		/// <summary>Constructs a LetterString.</summary>
+		public DrawableString(LetterString letterString) {
+			value = letterString;
+		}
+
+		/// <summary>Constructs a WrappedLetterString.</summary>
+		public DrawableString(WrappedLetterString letterString) {
+			value = letterString;
+		}
+
+		
+		//-----------------------------------------------------------------------------
+		// General
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Gets the hash code for the text.</summary>
+		public override int GetHashCode() {
+			return value.GetHashCode();
+		}
+
+		/// <summary>Returns true if the object is equal to the string,
+		/// LetterString, or WrappedString.</summary>
+		public override bool Equals(object obj) {
+			if (obj is string)
+				return (string) value == (string) obj;
+			else if (obj is LetterString)
+				return value == obj;
+			else if (obj is WrappedLetterString)
+				return value == obj;
+			else if (obj is DrawableString)
+				return this == ((DrawableString) obj);
+			else if (obj == null)
+				return value == null;
+			return false;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Operators
+		//-----------------------------------------------------------------------------
+
+		public static bool operator ==(DrawableString a, DrawableString b) {
+			if (a.value is string && b.value is string)
+				return (string) a.value == (string) b.value;
+			else
+				return a.value == b.value;
+		}
+
+		public static bool operator !=(DrawableString a, DrawableString b) {
+			if (a.value is string && b.value is string)
+				return (string) a.value != (string) b.value;
+			else
+				return a.value != b.value;
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Implicit Conversion
+		//-----------------------------------------------------------------------------
+
+		public static implicit operator DrawableString(string text) {
+			return new DrawableString(text);
+		}
+
+		public static implicit operator DrawableString(LetterString letterString) {
+			return new DrawableString(letterString);
+		}
+
+		public static implicit operator DrawableString(WrappedLetterString letterString) {
+			return new DrawableString(letterString);
+		}
+		
+
+		//-----------------------------------------------------------------------------
+		// Properties
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Returns true if the value is null.</summary>
+		public bool IsNull {
+			get { return value == null; }
+		}
+
+		/// <summary>Returns true if the value is a string.</summary>
+		public bool IsString {
+			get { return value is string; }
+		}
+
+		/// <summary>Gets the value as a string.</summary>
+		public string String {
+			get { return value as string; }
+		}
+
+		/// <summary>Returns true if the value is a LetterString.</summary>
+		public bool IsLetterString {
+			get { return value is LetterString; }
+		}
+
+		/// <summary>Gets the value as a LetterString.</summary>
+		public LetterString LetterString {
+			get { return value as LetterString; }
+		}
+
+		/// <summary>Returns true if the value is a WrappedLetterString.</summary>
+		public bool IsWrappedLetterString {
+			get { return value is WrappedLetterString; }
+		}
+
+		/// <summary>Gets the value as a WrappedLetterString.</summary>
+		public WrappedLetterString WrappedLetterString {
+			get { return value as WrappedLetterString; }
+		}
+	}
+
 	/// <summary>A formatted game letter with a color and character</summary>
 	public struct Letter {
 

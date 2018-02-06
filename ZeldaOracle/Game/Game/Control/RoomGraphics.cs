@@ -8,6 +8,7 @@ using ZeldaOracle.Game.Entities;
 using ZeldaOracle.Game.Tiles;
 using ZeldaOracle.Game.Control;
 using ZeldaOracle.Common.Graphics.Sprites;
+using ZeldaOracle.Common.Translation;
 
 namespace ZeldaOracle.Game.Entities {
 
@@ -21,18 +22,43 @@ namespace ZeldaOracle.Game.Entities {
 		//-----------------------------------------------------------------------------
 
 		private class DrawingInstruction {
+			// Sprite
 			public ISprite sprite;
-			public Vector2F position;
 			public SpriteDrawSettings settings;
+
+			// Text
+			public GameFont font;
+			public DrawableString text;
+			public ColorOrPalette color;
+			public Align alignment;
+			public Vector2F area;
+
+			// General
+			public Vector2F position;
 			public DrawingInstruction next;
 			public Vector2F depthOrigin;
 
-			public DrawingInstruction(ISprite sprite, SpriteDrawSettings settings, Vector2F position, Vector2F depthOrigin) {
+			public DrawingInstruction(ISprite sprite, SpriteDrawSettings settings,
+				Vector2F position, Vector2F depthOrigin)
+			{
 				this.sprite			= sprite;
 				this.position		= position;
 				this.settings		= settings;
-				this.next			= null;
 				this.depthOrigin	= depthOrigin;
+				this.next			= null;
+			}
+
+			public DrawingInstruction(GameFont font, DrawableString text, Vector2F position,
+				ColorOrPalette color, Align alignment, Vector2F area, Vector2F depthOrigin)
+			{
+				this.font			= font;
+				this.text			= text;
+				this.color			= color;
+				this.alignment		= alignment;
+				this.area			= area;
+				this.position		= position;
+				this.depthOrigin	= depthOrigin;
+				this.next			= null;
 			}
 		}
 
@@ -80,7 +106,15 @@ namespace ZeldaOracle.Game.Entities {
 				DrawingInstruction instruction = layerHeads[i];
 
 				while (instruction != null) {
-					g.DrawSprite(instruction.sprite, instruction.settings, instruction.position);
+					if (instruction.sprite != null) {
+						g.DrawSprite(instruction.sprite, instruction.settings,
+							instruction.position);
+					}
+					else if (instruction.font != null) {
+						g.DrawWrappedString(instruction.font, instruction.text,
+							(Point2I) instruction.position, instruction.color,
+							instruction.alignment, instruction.area);
+					}
 					instruction = instruction.next;
 				}
 			}
@@ -202,14 +236,77 @@ namespace ZeldaOracle.Game.Entities {
 
 			settings.Styles = StyleDefinitions;
 
-			// There's a bias of 0.001f to account for rounding inconsistancies with the value 0.5f.
-			position.X = GMath.Round(position.X + 0.001f);
-			position.Y = GMath.Round(position.Y + 0.001f);
+			position = RoundPosition(position);
 
 			DrawingInstruction instruction = new DrawingInstruction(
 					sprite, settings, position, depthOrigin);
 
 			// Add the instruction to the end of the linked list for its layer.
+			AddInstruction(instruction, depth);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// String Drawing Functions (without depth origin)
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws a formatted game string at the specified position.</summary>
+		public void DrawString(GameFont font, DrawableString text, Vector2F position, ColorOrPalette color, DepthLayer depth) {
+			DrawString(font, text, position, color, Align.TopLeft, Vector2F.Zero, depth, Vector2F.Zero);
+		}
+
+		/// <summary>Draws a formatted game string at the specified position.</summary>
+		public void DrawString(GameFont font, DrawableString text, Vector2F position, ColorOrPalette color, Align alignment, DepthLayer depth) {
+			DrawString(font, text, position, color, alignment, Vector2F.Zero, depth, Vector2F.Zero);
+		}
+
+		/// <summary>Draws a formatted game string at the specified position.</summary>
+		public void DrawString(GameFont font, DrawableString text, Vector2F position, ColorOrPalette color, Align alignment, Vector2F area, DepthLayer depth) {
+			DrawString(font, text, position, color, alignment, area, depth, Vector2F.Zero);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// String Drawing Functions (with depth origin)
+		//-----------------------------------------------------------------------------
+
+		/// <summary>Draws a formatted game string at the specified position.</summary>
+		public void DrawString(GameFont font, DrawableString text, Vector2F position, ColorOrPalette color, DepthLayer depth, Vector2F depthOrigin) {
+			DrawString(font, text, position, color, Align.TopLeft, Vector2F.Zero, depth, depthOrigin);
+		}
+
+		/// <summary>Draws a formatted game string at the specified position.</summary>
+		public void DrawString(GameFont font, DrawableString text, Vector2F position, ColorOrPalette color, Align alignment, DepthLayer depth, Vector2F depthOrigin) {
+			DrawString(font, text, position, color, alignment, Vector2F.Zero, depth, depthOrigin);
+		}
+
+		/// <summary>Draws a formatted game string at the specified position.</summary>
+		public void DrawString(GameFont font, DrawableString text, Vector2F position, ColorOrPalette color, Align alignment, Vector2F area, DepthLayer depth, Vector2F depthOrigin) {
+			if (font == null || text.IsNull)
+				return;
+			
+			position = RoundPosition(position);
+
+			DrawingInstruction instruction = new DrawingInstruction(font, text,
+				position, color, alignment, area, depthOrigin);
+
+			// Add the instruction to the end of the linked list for its layer.
+			AddInstruction(instruction, depth);
+		}
+
+
+		//-----------------------------------------------------------------------------
+		// Internal Drawing
+		//-----------------------------------------------------------------------------
+
+		/// <summary>There's a bias of 0.001f to account for rounding
+		/// inconsistancies with the value 0.5f.</summary>
+		private Vector2F RoundPosition(Vector2F position) {
+			return GMath.Round(position + 0.001f);
+		}
+
+		/// <summary>Add the instruction to the end of the linked list for its layer.</summary>
+		private void AddInstruction(DrawingInstruction instruction, DepthLayer depth) {
 			int layerIndex = (int) depth;
 			if (layerHeads[layerIndex] == null) {
 				layerHeads[layerIndex] = instruction;
