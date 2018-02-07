@@ -14,7 +14,7 @@ MAPPEDCOLORS	"tiles_default", ("wall");
 IGNORECOLORS ((255, 0, 0), (1, 1, 1));
 
 SOURCE "temp_sheet_tunnels";
-SPRITESET "tiles_tunnels" (12, 1);
+SPRITESET "tiles_tunnels" (12, 2);
 	MULTIPLE STYLE "tunnel";
 		ADD "tunnel_1"			(0, 0);
 		ADD "tunnel_2"			(0, 1);
@@ -27,6 +27,9 @@ SPRITESET "tiles_tunnels" (12, 1);
 		ADD "tunnel_9"			(0, 8);
 		ADD "tunnel_10"			(0, 9);
 		END;
+		
+	MAPPEDCOLORS	"tiles_default", ("cliff");
+	MULTIPLE BASIC (0, 0), (0, 1), (12, 1); END;
 END;
 
 #==============================================================
@@ -42,23 +45,19 @@ NAME "tile_wall_tunnel_down_keyhole"	(4, 0);
 NAME "tile_wall_tunnel_up_keyhole"		(5, 0);
 NAME "tile_wall_tunnel_left_keyhole"	(6, 0);
 NAME "tile_wall_tunnel_right_keyhole"	(7, 0);
-#NAME "tile_wall_tunnel_down_wide_mid"	(8, 0);
-#NAME "tile_wall_tunnel_up_wide_mid"	(9, 0);
-#NAME "tile_wall_tunnel_left_wide_mid"	(10, 0);
-#NAME "tile_wall_tunnel_right_wide_mid"	(11, 0);
 
-NAME "tile_cliff_tunnel_down"			((0, 0), "tunnel_1");
-NAME "tile_cliff_tunnel_up"				((1, 0), "tunnel_1");
-NAME "tile_cliff_tunnel_left"			((2, 0), "tunnel_1");
-NAME "tile_cliff_tunnel_right"			((3, 0), "tunnel_1");
-NAME "tile_cliff_tunnel_down_keyhole"	((4, 0), "tunnel_1");
-NAME "tile_cliff_tunnel_up_keyhole"		((5, 0), "tunnel_1");
-NAME "tile_cliff_tunnel_left_keyhole"	((6, 0), "tunnel_1");
-NAME "tile_cliff_tunnel_right_keyhole"	((7, 0), "tunnel_1");
-NAME "tile_cliff_tunnel_down_wide_mid"	((8, 0), "tunnel_1");
-NAME "tile_cliff_tunnel_up_wide_mid"	((9, 0), "tunnel_1");
-NAME "tile_cliff_tunnel_left_wide_mid"	((10, 0), "tunnel_1");
-NAME "tile_cliff_tunnel_right_wide_mid"	((11, 0), "tunnel_1");
+NAME "tile_cliff_tunnel_down"			(0, 1);
+NAME "tile_cliff_tunnel_up"				(1, 1);
+NAME "tile_cliff_tunnel_left"			(2, 1);
+NAME "tile_cliff_tunnel_right"			(3, 1);
+NAME "tile_cliff_tunnel_down_keyhole"	(4, 1);
+NAME "tile_cliff_tunnel_up_keyhole"		(5, 1);
+NAME "tile_cliff_tunnel_left_keyhole"	(6, 1);
+NAME "tile_cliff_tunnel_right_keyhole"	(7, 1);
+NAME "tile_cliff_tunnel_down_wide_mid"	(8, 1);
+NAME "tile_cliff_tunnel_up_wide_mid"	(9, 1);
+NAME "tile_cliff_tunnel_left_wide_mid"	(10, 1);
+NAME "tile_cliff_tunnel_right_wide_mid"	(11, 1);
 
 COMPOSITE "tile_cliff_tunnel_down_wide_left";
 	ADD "tile_cliff_tunnel_down", clipping: (0, 0, 8, 16);
