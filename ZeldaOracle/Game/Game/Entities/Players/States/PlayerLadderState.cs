@@ -24,7 +24,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerLadderState() {
-			isNaturalState = true;
+			IsNaturalState = true;
 		}
 
 

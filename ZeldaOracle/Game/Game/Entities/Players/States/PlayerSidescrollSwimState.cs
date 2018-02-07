@@ -12,7 +12,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerSidescrollSwimState() {
-			isNaturalState = true;
+			IsNaturalState = true;
 		}
 
 

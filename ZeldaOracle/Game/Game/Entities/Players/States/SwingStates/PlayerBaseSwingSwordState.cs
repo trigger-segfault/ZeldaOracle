@@ -59,7 +59,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		}
 
 		public override void OnSwingEnd() {
-			player.BeginNormalState();
+			End();
 		}
 
 		public override void OnSwingTilePeak(int angle, Vector2F hitPoint) {

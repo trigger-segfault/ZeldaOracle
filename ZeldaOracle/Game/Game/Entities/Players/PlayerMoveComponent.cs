@@ -220,8 +220,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 				player.OnJump();
 			}
 			else {
-				if (player.CurrentState is PlayerNormalState)
-					player.Graphics.PlayAnimation(player.MoveAnimation);
+				//if (player.CurrentState is PlayerNormalState)
+				//if (player.)
+				//if (moveCondition == PlayerMoveCondition.FreeMovement)
+					//player.Graphics.PlayAnimation(player.MoveAnimation);
 			}
 		}
 

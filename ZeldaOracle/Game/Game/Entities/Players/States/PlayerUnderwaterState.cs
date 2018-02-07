@@ -22,7 +22,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerUnderwaterState() {
-			isNaturalState = true;
+			IsNaturalState = true;
 		}
 		
 
@@ -91,17 +91,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.MoveAnimation			= GameData.ANIM_PLAYER_MERMAID_SWIM;
 			player.Graphics.PlayAnimation(player.MoveAnimation);
 
-			if (player.RoomControl.IsSideScrolling) {
-				player.Physics.HasGravity = false;
-
-				// Create a splash effect
-				Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH,
-					DepthLayer.EffectSplash, true);
-				splash.Position = player.Center + new Vector2F(0, 4);
-				player.RoomControl.SpawnEntity(splash);
-				AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
-			}
-
 			isResurfacing = false;
 		}
 		
@@ -111,20 +100,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			player.Movement.AutoAccelerate	= false;
 			player.Graphics.DepthLayer		= DepthLayer.PlayerAndNPCs;
 			player.MoveAnimation			= GameData.ANIM_PLAYER_DEFAULT;
-
-			if (player.RoomControl.IsSideScrolling) {
-				player.Physics.HasGravity = true;
-
-				if (!player.Movement.IsOnSideScrollLadder) {
-					// Jump out of the water, and create a splash effect
-					player.Physics.ZVelocity = 1.5f;
-					Effect splash = new Effect(GameData.ANIM_EFFECT_WATER_SPLASH,
-						DepthLayer.EffectSplash, true);
-					splash.Position = player.Center + new Vector2F(0, 4);
-					player.RoomControl.SpawnEntity(splash);
-					AudioSystem.PlaySound(GameData.SOUND_PLAYER_WADE);
-				}
-			}
 
 			isResurfacing = false;
 		}

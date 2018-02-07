@@ -79,11 +79,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				isObjectDropped = true;
 				player.RoomControl.SpawnEntity(carryObject, player.Position, 16);
 				if (enterBusyState) {
-					player.BeginBusyState(throwDuration);
+					//player.BeginBusyState(throwDuration);
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
+					StateMachine.BeginState(new PlayerBusyState(
+						throwDuration, GameData.ANIM_PLAYER_THROW));
 				}
 				else if (isPickingUp) {
-					player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
+					//player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
+					StateParameters.ProhibitMovementControl = false;
 					isPickingUp = false;
 				}
 				if (playSound)
@@ -120,18 +123,24 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			objectDrawOffset = Directions.ToPoint(player.Direction) * 8;
 			pickupTimer = 0;
 			isPickingUp = true;
-			player.Movement.CanJump			= false;
-			player.Movement.CanLedgeJump	= false;
-			player.Movement.CanUseWarpPoint	= false;
-			player.Movement.MoveCondition	= PlayerMoveCondition.NoControl;
+
+			StateParameters.ProhibitMovementControl	= true;
+			StateParameters.ProhibitJumping			= true;
+			StateParameters.ProhibitLedgeJumping	= true;
+			StateParameters.ProhibitWeaponUse		= true;
+
+			//player.Movement.CanJump			= false;
+			//player.Movement.CanLedgeJump	= false;
+			//player.Movement.CanUseWarpPoint	= false;
+			//player.Movement.MoveCondition	= PlayerMoveCondition.NoControl;
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
 			AudioSystem.PlaySound(GameData.SOUND_PLAYER_PICKUP);
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.Movement.CanJump			= true;
-			player.Movement.CanLedgeJump	= true;
-			player.Movement.CanUseWarpPoint	= true;
+			//player.Movement.CanJump			= true;
+			//player.Movement.CanLedgeJump	= true;
+			//player.Movement.CanUseWarpPoint	= true;
 
 			if (!isObjectDropped) {
 				DropObject(false, false);
@@ -154,7 +163,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				ThrowObject(false, false);
 			else
  				DropObject(false, false);
-			player.BeginNormalState();
+			//player.BeginNormalState();
+			End();
 		}
 
 		public override void Update() {
@@ -183,6 +193,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					objectZOffset		= 13;
 					isPickingUp = false;
 					player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
+					StateParameters.ProhibitMovementControl	= false;
 					if (player.IsInMinecart)
 						Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MINECART_CARRY);
 					else
@@ -198,7 +209,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				carryObject.ZPosition	= player.ZPosition + 16;
 				carryObject.UpdateCarrying();
 				if (carryObject.IsDestroyed) {
-					player.BeginNormalState();
+					//player.BeginNormalState();
+					End();
 					return;
 				}
 

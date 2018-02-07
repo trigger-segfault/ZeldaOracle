@@ -27,8 +27,18 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			this.duration	= 0;
 			this.actions	= new Dictionary<int,Action<PlayerState>>();
 			this.endAction	= null;
+			this.animation	= null;
+			this.animationInMinecart = null;
 		}
 		
+		public PlayerBusyState(int duration, Animation animation) {
+			this.timer		= 0;
+			this.duration	= duration;
+			this.actions	= new Dictionary<int,Action<PlayerState>>();
+			this.endAction	= null;
+			this.animation	= animation;
+			this.animationInMinecart = animation;
+		}
 
 		//-----------------------------------------------------------------------------
 		// Customization
@@ -48,7 +58,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			player.Movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
+			//player.Movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
+			StateParameters.ProhibitMovementControlOnGround = true;
 			timer = 0;
 			
 			if (actions.ContainsKey(0))
@@ -56,7 +67,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
+			//player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 			timer = 0;
 			duration = 0;
 			actions.Clear();
@@ -79,7 +90,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				actions[timer].Invoke(this);
 
 			if (timer >= duration) {
-				player.BeginNormalState();
+				End();
+				//player.BeginNormalState();
 			}
 		}
 

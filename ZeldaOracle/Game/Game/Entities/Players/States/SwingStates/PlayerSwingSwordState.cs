@@ -106,7 +106,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 			// Begin holding the sword after swinging.
 			if (!player.IsInMinecart && allowHold && Weapon.IsEquipped && Weapon.IsButtonDown()) {
 				player.HoldSwordState.Weapon = Weapon;
-				player.BeginState(player.HoldSwordState);
+				StateMachine.BeginState(player.HoldSwordState);
 			}
 			else
 				base.OnSwingEnd();

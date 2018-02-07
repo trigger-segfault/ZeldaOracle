@@ -61,7 +61,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public void Stab(bool continueHoldingSword) {
 			player.SwordStabState.Weapon = weapon;
 			player.SwordStabState.ContinueHoldingSword = continueHoldingSword;
-			player.BeginState(player.SwordStabState);
+			player.BeginWeaponState(player.SwordStabState);
 		}
 
 		private void StabTile(Tile tile) {
@@ -80,16 +80,16 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// Begin the player stab state.
 			player.SwordStabState.Weapon = weapon;
 			player.SwordStabState.ContinueHoldingSword = true;
-			player.BeginState(player.SwordStabState);
+			player.BeginWeaponState(player.SwordStabState);
 		}
 
 		private void OnStopHolding() {
 			if (chargeTimer >= ChargeTime) {
 				player.SpinSwordState.Weapon = weapon;
-				player.BeginState(player.SpinSwordState);
+				player.BeginWeaponState(player.SpinSwordState);
 			}
 			else
-				player.BeginNormalState();
+				End();
 		}
 
 
@@ -106,8 +106,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				chargeTimer = 0;
 
 			if (weapon.IsEquipped && weapon.IsButtonDown()) {
-				player.Movement.IsStrafing		= true;
-				player.Movement.MoveCondition	= PlayerMoveCondition.FreeMovement;
+				StateParameters.EnableStrafing = true;
+				//player.Movement.IsStrafing		= true;
+				//player.Movement.MoveCondition	= PlayerMoveCondition.FreeMovement;
+
 				if (player.RoomControl.IsUnderwater)
 					player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MERMAID_SWIM);
 				else
@@ -128,8 +130,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.Movement.IsStrafing		= false;
-			player.Movement.MoveCondition	= PlayerMoveCondition.FreeMovement;
+			//player.Movement.IsStrafing		= false;
+			//player.Movement.MoveCondition	= PlayerMoveCondition.FreeMovement;
 			
 			// The player can hold his sword while ledge jumping.
 			// TODO: Better way to keep sword equipped

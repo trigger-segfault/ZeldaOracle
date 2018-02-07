@@ -1,20 +1,78 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Players.States;
 
 namespace ZeldaOracle.Game.Entities.Players {
 	
+	public class PlayerStateParameters {
+
+		public bool ProhibitJumping { get; set; } = false;
+		public bool ProhibitLedgeJumping { get; set; } = false;
+		public bool ProhibitWarping { get; set; } = false;
+		public bool ProhibitMovementControlOnGround { get; set; } = false;
+		public bool ProhibitMovementControlInAir { get; set; } = false;
+		public bool ProhibitPushing { get; set; } = false;
+		public bool ProhibitWeaponUse { get; set; } = false;
+		public bool EnableStrafing { get; set; } = false;
+		//public bool AlwaysFaceRight { get; set; } = false;
+		public bool AlwaysFaceUp { get; set; } = false;
+		public bool AlwaysFaceLeftOrRight { get; set; } = false;
+		//public bool AlwaysFaceDown { get; set; } = false;
+		public bool EnableAutomaticRoomTransitions { get; set; } = false;
+		public bool DisableMovement { get; set; } = false;
+		public bool DisableAutomaticStateTransitions { get; set; } = false;
+		public bool DisableUpdateMethod { get; set; } = false;
+		public float MovementSpeedScale { get; set; } = 1.0f;
+		
+		public bool ProhibitMovementControl {
+			set {
+				ProhibitMovementControlOnGround = value;
+				ProhibitMovementControlInAir = value;
+			}
+		}
+
+		public static PlayerStateParameters operator |(PlayerStateParameters a, PlayerStateParameters b) {
+			return new PlayerStateParameters() {
+				ProhibitJumping = a.ProhibitJumping || b.ProhibitJumping,
+				ProhibitLedgeJumping = a.ProhibitLedgeJumping || b.ProhibitLedgeJumping,
+				ProhibitWarping = a.ProhibitWarping || b.ProhibitWarping,
+				ProhibitMovementControlOnGround = a.ProhibitMovementControlOnGround || b.ProhibitMovementControlOnGround,
+				ProhibitMovementControlInAir = a.ProhibitMovementControlInAir || b.ProhibitMovementControlInAir,
+				ProhibitPushing = a.ProhibitPushing || b.ProhibitPushing,
+				ProhibitWeaponUse = a.ProhibitWeaponUse || b.ProhibitWeaponUse,
+				EnableStrafing = a.EnableStrafing || b.EnableStrafing,
+				//AlwaysFaceRight = a.AlwaysFaceRight || b.AlwaysFaceRight,
+				AlwaysFaceUp = a.AlwaysFaceUp || b.AlwaysFaceUp,
+				//AlwaysFaceLeft = a.AlwaysFaceLeft || b.AlwaysFaceLeft,
+				//AlwaysFaceDown = a.AlwaysFaceDown || b.AlwaysFaceDown,
+				AlwaysFaceLeftOrRight = a.AlwaysFaceLeftOrRight || b.AlwaysFaceLeftOrRight,
+				EnableAutomaticRoomTransitions = a.EnableAutomaticRoomTransitions || b.EnableAutomaticRoomTransitions,
+				DisableMovement = a.DisableMovement || b.DisableMovement,
+				DisableAutomaticStateTransitions = a.DisableAutomaticStateTransitions || b.DisableAutomaticStateTransitions,
+				DisableUpdateMethod = a.DisableUpdateMethod || b.DisableUpdateMethod,
+				MovementSpeedScale = a.MovementSpeedScale * b.MovementSpeedScale,
+			};
+		}
+	}
+
 	public class PlayerState {
 
-		//public delegate void UpdateMethod();
-		//private event UpdateMethod updateMethod;
-		
-		private bool		isActive;
-		protected Player	player;
-		protected bool		isNaturalState; // Is this a state that is caused by the environment?
+		/// <summary> True if this state is currently active and being updated
+		/// </summary>
+		private bool isActive;
+
+		/// <summary> Reference to the player </summary>
+		protected Player player;
+
+		/// <summary> Reference to the state machine controlling this state </summary>
+		protected PlayerStateMachine stateMachine;
+
+		/// <summary> Is this a state that is caused by the environment? </summary>
+		private bool isNaturalState;
+
+		/// <summary> Player state parameters applied when this state is active
+		/// </summary>
+		private PlayerStateParameters stateParameters;
 
 
 		//-----------------------------------------------------------------------------
@@ -24,6 +82,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public PlayerState() {
 			isActive = false;
 			isNaturalState = false;
+			stateParameters = new PlayerStateParameters();
+			stateMachine = null;
 		}
 
 
@@ -88,10 +148,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public void Begin(Player player, PlayerState previousState) {
 			this.player = player;
 			this.isActive = true;
+			this.stateParameters = new PlayerStateParameters();
 			OnBegin(previousState);
 		}
 
-		public void End(PlayerState newState) {
+		public void End(PlayerState newState = null) {
 			this.isActive = false;
 			OnEnd(newState);
 		}
@@ -100,20 +161,37 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 		// Properties
 		//-----------------------------------------------------------------------------
-
+		
+		/// <summary> Reference to the player </summary>
 		public Player Player {
 			get { return player; }
 			set { player = value; }
 		}
-
+		
+		/// <summary> True if this state is currently active and being updated
+		/// </summary>
 		public bool IsActive {
 			get { return isActive; }
 			set { isActive = value; }
 		}
 
+		/// <summary> Is this a state that is caused by the environment? </summary>
 		public bool IsNaturalState {
 			get { return isNaturalState; }
 			set { isNaturalState = value; }
+		}
+		
+		/// <summary> Player state parameters applied when this state is active
+		/// </summary>
+		public PlayerStateParameters StateParameters {
+			get { return stateParameters; }
+			set { stateParameters = value; }
+		}
+
+		/// <summary> Reference to the state machine controlling this state </summary>
+		public PlayerStateMachine StateMachine {
+			get { return stateMachine; }
+			set { stateMachine = value; }
 		}
 	}
 }

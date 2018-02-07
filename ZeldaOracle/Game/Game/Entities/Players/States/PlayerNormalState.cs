@@ -26,7 +26,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public PlayerNormalState() {
-			isNaturalState	= true;
+			IsNaturalState	= true;
 			pushTimer		= 0;
 		}
 		
@@ -64,7 +64,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			if (player.IsInAir) {
 				// TODO: Play jump animation at remembering the frame?
 			}
-			else {
+			else if (player.Movement.MoveCondition == PlayerMoveCondition.FreeMovement) {
 				// Update pushing.
 				Tile actionTile = player.Physics.GetFacingSolidTile(player.Direction);
 				CollisionInfo collisionInfo = player.Physics.CollisionInfo[player.Direction];
@@ -90,6 +90,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					pushTimer = 0;
 					player.Graphics.SetAnimation(player.MoveAnimation);
 				}
+			}
+			else {
+				pushTimer = 0;
 			}
 		}
 

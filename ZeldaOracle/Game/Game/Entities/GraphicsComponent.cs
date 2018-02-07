@@ -104,10 +104,6 @@ namespace ZeldaOracle.Game.Entities
 		public void PlayAnimation(Animation animation) {
 			animationPlayer.Play(animation);
 		}
-		
-		/*public void PlayAnimation(string animationName) {
-			PlayAnimation(Resources.GetAnimation(animationName));
-		}*/
 
 		public void SetAnimation(Animation animation) {
 			animationPlayer.SetAnimation(animation);

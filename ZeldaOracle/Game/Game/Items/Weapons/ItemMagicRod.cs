@@ -38,7 +38,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Called when the items button is pressed (A or B).
 		public override void OnButtonPress() {
 			Player.SwingMagicRodState.Weapon = this;
-			Player.BeginState(Player.SwingMagicRodState);
+			Player.BeginWeaponState(Player.SwingMagicRodState);
 		}
 		
 

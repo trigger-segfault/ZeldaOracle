@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using ZeldaOracle.Common.Geometry;
-using ZeldaOracle.Common.Graphics;
 using ZeldaOracle.Game.Entities.Projectiles;
-using ZeldaOracle.Game.Items;
 using ZeldaOracle.Game.Items.Weapons;
 using ZeldaOracle.Game.Main;
-using ZeldaOracle.Game.Tiles;
 
 namespace ZeldaOracle.Game.Entities.Players.States {
+
 	public class PlayerMagicBoomerangState : PlayerState {
 
 		private const int SHOOT_WAIT_TIME = 12;
 
-		// The boomerang item.
+		// The boomerang item
 		private ItemBoomerang weapon;
-		// The boomerang entity.
+		// The boomerang entity
 		private Boomerang boomerang;
 
 		private float boomerangMotionDirection;
@@ -37,8 +32,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			player.Movement.CanJump			= false;
-			player.Movement.MoveCondition	= PlayerMoveCondition.NoControl;
+			StateParameters.ProhibitJumping = true;
+			StateParameters.ProhibitMovementControlInAir = true;
+			StateParameters.ProhibitMovementControlOnGround = true;
+
 			boomerangMotionDirection = boomerang.Angle * GMath.QuarterAngle * 0.5f;
 			
 			if (player.IsInMinecart)
@@ -50,35 +47,34 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnExitMinecart() {
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_THROW);
 		}
-
-		public override void OnEnd(PlayerState newState) {
-			player.Movement.CanJump			= true;
-			player.Movement.MoveCondition	= PlayerMoveCondition.FreeMovement;
-		}
-
+		
 		public override void Update() {
 			base.Update();
 			
-			// Check if we should stop controlling the boomerang.
-			if (!weapon.IsEquipped || !weapon.IsButtonDown() || boomerang.IsDestroyed || boomerang.IsReturning) {
-				Player.BeginBusyState(10);
+			// Check if we should stop controlling the boomerang
+			if (!weapon.IsEquipped || !weapon.IsButtonDown() ||
+				boomerang.IsDestroyed || boomerang.IsReturning)
+			{
+				stateMachine.BeginState(new PlayerBusyState(
+					10, Player.Graphics.Animation));
 			}
 			else {
-				// TODO: update move controls.
-				
-				// Poll movement keys.
+				// Poll movement keys
 				bool isArrowDown = false;
-				for (int dir = 0; dir < 4 && !isArrowDown; dir++) {
+				for (int dir = 0; dir < Directions.Count && !isArrowDown; dir++) {
 					if (Controls.Arrows[dir].IsDown())
 						isArrowDown = true;
 				}
 
+				// Update boomerang motion
 				if (isArrowDown) {
 					int useAngle = player.UseAngle;
-					float currentAngle	= boomerangMotionDirection;
-					float goalAngle		= player.UseAngle * GMath.QuarterAngle * 0.5f;
-					float distCW	= GMath.GetAngleDistance(currentAngle, goalAngle, WindingOrder.Clockwise);
-					float distCCW	= GMath.GetAngleDistance(currentAngle, goalAngle, WindingOrder.CounterClockwise);
+					float currentAngle = boomerangMotionDirection;
+					float goalAngle = player.UseAngle * GMath.QuarterAngle * 0.5f;
+					float distCW = GMath.GetAngleDistance(
+						currentAngle, goalAngle, WindingOrder.Clockwise);
+					float distCCW = GMath.GetAngleDistance(
+						currentAngle, goalAngle, WindingOrder.CounterClockwise);
 
 					if (distCW != 0.0f || distCCW != 0.0f) {
 						int sign = (distCW <= distCCW ? -1 : 1);
@@ -90,15 +86,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 					velocity.Y = -velocity.Y;
 					boomerang.Physics.Velocity = velocity;
 				}
-
-				// Determine direction 
-
-				// Apply motion.
-				//Vector2F keyMotion = ((Vector2F) keyMove).Normalized;
-
-				//boomerang.Physics.Velocity += keyMotion;
-				//int length = boomerang.Physics.Velocity.Length;
-
 			}
 		}
 

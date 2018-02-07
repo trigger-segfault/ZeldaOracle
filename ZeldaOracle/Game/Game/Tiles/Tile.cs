@@ -295,7 +295,8 @@ namespace ZeldaOracle.Game.Tiles {
 			if (!isMoving && !flags.HasFlag(TileFlags.NotGrabbable)) {
 				Player player = roomControl.Player;
 				player.GrabState.Bracelet = bracelet;
-				player.BeginState(player.GrabState);
+				//player.BeginState(player.GrabState);
+				player.BeginWeaponState(player.GrabState);
 			}
 		}
 		

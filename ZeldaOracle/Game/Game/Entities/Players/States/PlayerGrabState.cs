@@ -42,7 +42,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 				if (grabTile.HasFlag(TileFlags.Pickupable) && item.Level >= minLevel) {
 					player.CarryState.SetCarryObject(grabTile);
-					player.BeginState(player.CarryState);
+					//player.BeginState(player.CarryState);
+					player.BeginWeaponState(player.CarryState);
 					grabTile.SpawnDrop();
 					player.RoomControl.RemoveTile(grabTile);
 					return true;
@@ -58,8 +59,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			player.Movement.CanJump = false;
-			player.Movement.MoveCondition = PlayerMoveCondition.NoControl;
+			//player.Movement.CanJump = false;
+			//player.Movement.MoveCondition = PlayerMoveCondition.NoControl;
+
+			StateParameters.ProhibitMovementControl = true;
+			StateParameters.ProhibitJumping = true;
 
 			timer = 0;
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_GRAB);
@@ -76,13 +80,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.Movement.CanJump = true;
-			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
+			//player.Movement.CanJump = true;
+			//player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 		}
 		
 		public override void OnHurt(DamageInfo damage) {
 			base.OnHurt(damage);
-			player.BeginNormalState();
+			End();
+			//player.BeginNormalState();
 		}
 
 		public override void Update() {
@@ -92,7 +97,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			InputControl pullButton = Controls.Arrows[Directions.Reverse(player.Direction)];
 
 			if (!grabButton.IsDown()) {
-				player.BeginNormalState();
+				End();
+				//player.BeginNormalState();
 			}
 			else if (pullButton.IsDown()) {
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);

@@ -32,6 +32,32 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public Animation Default;
 	}
 
+	public enum PlayerStateParameterType {
+		ProhibitJumping = 0,
+		ProhibitLedgeJumping,
+		ProhibitWarping,
+		ProhibitMovementControlOnGround,
+		ProhibitMovementControlInAir,
+		ProhibitPushing,
+		ProhibitWeaponUse,
+		EnableStrafing,
+		AlwaysFaceRight,
+		AlwaysFaceUp,
+		AlwaysFaceLeft,
+		AlwaysFaceDown,
+		EnableAutomaticRoomTransitions,
+		DisableMovement,
+		DisableAutomaticStateTransitions,
+		DisableUpdateMethod,
+
+		MovementSpeedScale,
+
+		Boolean,
+		Float,
+
+		Count
+	}
+
 	public class Player : Unit {
 
 		// The current direction that the player wants to face to use items.
@@ -53,6 +79,12 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerState previousSpecialState;
 		// The movement component for the player.
 		private PlayerMoveComponent movement;
+
+		private PlayerStateMachine environmentStateMachine;
+		private PlayerStateMachine controlStateMachine;
+		private PlayerStateMachine weaponStateMachine;
+		private List<PlayerStateMachine> conditionStateMachines;
+		private PlayerStateParameters stateParameters;
 
 		private bool isFrozen;
 
@@ -116,9 +148,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 
 		public Player() {
-			movement = new PlayerMoveComponent(this);
-
-			// Unit properties.
+			// Unit properties
 			centerOffset			= new Point2I(0, -5);
 			MaxHealth               = 4 * 3;
 			Health					= 4 * 3;
@@ -129,7 +159,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			hurtKnockbackDuration	= GameSettings.PLAYER_HURT_KNOCKBACK_DURATION;
 			bumpKnockbackDuration	= GameSettings.PLAYER_BUMP_KNOCKBACK_DURATION;
 
-			// Physics.
+			// Physics
 			Physics.CollisionBox			= new Rectangle2F(-4, -10 + 3, 8, 9);
 			Physics.SoftCollisionBox		= new Rectangle2F(-6, -14 + 3, 12, 13);
 			Physics.CollideWithWorld		= true;
@@ -152,17 +182,27 @@ namespace ZeldaOracle.Game.Entities.Players {
 				return true;
 			};
 
-			// Graphics.
+			// Graphics
 			Graphics.DepthLayer			= DepthLayer.PlayerAndNPCs;
 			Graphics.DepthLayerInAir	= DepthLayer.InAirPlayer;
 			Graphics.DrawOffset			= new Point2I(-8, -13);
 
-			// Init tools.
+			// Tools
 			toolShield	= new PlayerToolShield();
 			toolSword	= new PlayerToolSword();
 			toolVisual	= new PlayerToolVisual();
+			
+			// Movement
+			movement = new PlayerMoveComponent(this);
 
-			// Create the basic player states.
+			// State machines
+			stateParameters			= new PlayerStateParameters();
+			environmentStateMachine	= new PlayerStateMachine(this);
+			controlStateMachine		= new PlayerStateMachine(this);
+			weaponStateMachine		= new PlayerStateMachine(this);
+			conditionStateMachines	= new List<PlayerStateMachine>();
+			
+			// Construct the basic player states
 			stateNormal			= new PlayerNormalState();
 			stateBusy			= new PlayerBusyState();
 			stateSwim			= new PlayerSwimState();
@@ -193,6 +233,15 @@ namespace ZeldaOracle.Game.Entities.Players {
 		//-----------------------------------------------------------------------------
 		// Player states
 		//-----------------------------------------------------------------------------
+
+		public void BeginConditionState(PlayerState state) {
+			PlayerStateMachine stateMachine = new PlayerStateMachine(this);
+			conditionStateMachines.Add(stateMachine);
+			stateMachine.BeginState(state);
+		}
+		public void BeginWeaponState(PlayerState weaponState) {
+			weaponStateMachine.BeginState(weaponState);
+		}
 
 		// Begin the given player state.
 		public void BeginState(PlayerState newState) {
@@ -559,6 +608,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			previousState	= stateNormal;
 			specialState	= null;
 			previousSpecialState = null;
+			stateParameters = new PlayerStateParameters();
 		}
 
 		public override void OnEnterRoom() {
@@ -567,9 +617,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 				.GetSurfaceTileAtPosition(position, Physics.MovesWithPlatforms);
 
 			// Notify the state.
-			if (specialState != null && specialState.IsActive)
-				specialState.OnEnterRoom();
-			state.OnEnterRoom();
+			//if (specialState != null && specialState.IsActive)
+				//specialState.OnEnterRoom();
+			//state.OnEnterRoom();
+			foreach (PlayerState state in ActiveStates)
+				state.OnEnterRoom();
 
 			// In side-scroll mode, the player samples the top-tile from his center
 			// postion opposed to his origin position
@@ -581,9 +633,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public override void OnLeaveRoom() {
 			// Notify the state.
-			if (specialState != null && specialState.IsActive)
-				specialState.OnLeaveRoom();
-			state.OnLeaveRoom();
+			//if (specialState != null && specialState.IsActive)
+				//specialState.OnLeaveRoom();
+			//state.OnLeaveRoom();
+			foreach (PlayerState state in ActiveStates)
+				state.OnLeaveRoom();
 
 			// Clear events.
 			eventJump = null;
@@ -662,6 +716,59 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 		}
 
+		private void IntegrateStateParameters() {
+			PlayerStateParameters stateParameters = new PlayerStateParameters();
+			foreach (PlayerState state in ActiveStates)
+				stateParameters |= state.StateParameters;
+
+			// Integrate the combined state parameters
+			if (stateParameters.ProhibitMovementControlInAir &&
+				stateParameters.ProhibitMovementControlOnGround)
+				movement.MoveCondition = PlayerMoveCondition.NoControl;
+			else if (stateParameters.ProhibitMovementControlOnGround)
+				movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
+			else
+				movement.MoveCondition = PlayerMoveCondition.FreeMovement;
+
+			movement.CanJump = !stateParameters.ProhibitJumping;
+			movement.CanLedgeJump = !stateParameters.ProhibitLedgeJumping;
+			movement.CanPush = !stateParameters.ProhibitPushing;
+			movement.IsStrafing = stateParameters.EnableStrafing;
+			movement.OnlyFaceLeftOrRight = stateParameters.AlwaysFaceLeftOrRight;
+		}
+
+		private void UpdateStates() {
+			IntegrateStateParameters();
+
+			// Update depricated state
+			// TODO: remove when ready
+			state.Update();
+
+			// Update depricated special state (minecart state)
+			// TODO: remove when ready
+			if (specialState != null && specialState.IsActive)
+				specialState.Update();
+
+			// Update the weapon state
+			weaponStateMachine.Update();
+
+			// Update the environment state
+			environmentStateMachine.Update();
+
+			// Update the control state
+			controlStateMachine.Update();
+
+			// Update the condition states
+			for (int i = 0; i < conditionStateMachines.Count; i++) {
+				conditionStateMachines[i].Update();
+				stateParameters |= conditionStateMachines[i].StateParameters;
+				if (!conditionStateMachines[i].IsActive)
+					conditionStateMachines.RemoveAt(i--);
+			}
+
+			IntegrateStateParameters();
+		}
+
 		public override void Update() {
 			if (!isFrozen) {
 
@@ -674,9 +781,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 				}
 			
 				// Update the current player states.
-				state.Update();
-				if (specialState != null && specialState.IsActive)
-					specialState.Update();
+				UpdateStates();
 
 				// Post-state update.
 				if (!isStateControlled) {
@@ -699,15 +804,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 
 		public override void Draw(RoomGraphics g) {
-			state.DrawUnder(g);
-			if (specialState != null && specialState.IsActive)
-				specialState.DrawUnder(g);
+			foreach (PlayerState state in ActiveStates)
+				state.DrawUnder(g);
 
 			base.Draw(g);
 
-			state.DrawOver(g);
-			if (specialState != null && specialState.IsActive)
-				specialState.DrawOver(g);
+			foreach (PlayerState state in ActiveStates)
+				state.DrawOver(g);
 		}
 
 		
@@ -815,6 +918,24 @@ namespace ZeldaOracle.Game.Entities.Players {
 		}
 		
 		// Player states
+
+		public IEnumerable<PlayerState> ActiveStates {
+			get {
+				if (controlStateMachine.IsActive)
+					yield return controlStateMachine.CurrentState;
+				if (specialState != null && specialState.IsActive)
+					yield return specialState; // TODO: remove this
+				yield return state; // TODO: remove this
+				if (weaponStateMachine.IsActive)
+					yield return weaponStateMachine.CurrentState;
+				if (environmentStateMachine.IsActive)
+					yield return environmentStateMachine.CurrentState;
+				foreach (PlayerStateMachine stateMachine in conditionStateMachines) {
+					if (stateMachine.IsActive)
+						yield return stateMachine.CurrentState;
+				}
+			}
+		}
 
 		public PlayerState CurrentState {
 			get { return state; }

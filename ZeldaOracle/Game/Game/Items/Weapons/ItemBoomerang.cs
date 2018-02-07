@@ -59,7 +59,8 @@ namespace ZeldaOracle.Game.Items.Weapons {
 				// Enter a player state to control the magic boomerang.
 				Player.MagicBoomerangState.Weapon = this;
 				Player.MagicBoomerangState.BoomerangEntity = boomerang;
-				Player.BeginState(Player.MagicBoomerangState);
+				//Player.BeginState(Player.MagicBoomerangState);
+				Player.BeginConditionState(Player.MagicBoomerangState);
 			}
 		}
 	}

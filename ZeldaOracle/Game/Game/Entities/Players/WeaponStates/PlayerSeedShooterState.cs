@@ -81,7 +81,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				shootTimer = 0;
 			}
 			else {
-				Player.BeginNormalState();
+				//Player.BeginNormalState();
+				End();
 			}
 		}
 
@@ -97,7 +98,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			returnDirection	= player.UseDirection;
 
 			player.SyncAnimationWithDirection = false;
-			player.Movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
+			//player.Movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
+
+			StateParameters.ProhibitMovementControlOnGround = true;
 
 			if (player.RoomControl.IsUnderwater)
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_MERMAID_AIM);
@@ -117,7 +120,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnEnd(PlayerState newState) {
 			player.UnequipTool(player.ToolVisual);
 			player.SyncAnimationWithDirection	= true;
-			player.Movement.MoveCondition		= PlayerMoveCondition.FreeMovement;
+			//player.Movement.MoveCondition		= PlayerMoveCondition.FreeMovement;
 		}
 
 		public override void OnExitMinecart() {
@@ -131,10 +134,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				shootTimer++;
 				if (shootTimer >= SHOOT_WAIT_TIME) {
 					player.Direction = returnDirection;
-					player.BeginNormalState();
+					//player.BeginNormalState();
+					End();
 				}
 			}
 			else {
+				// TODO: automatically aim when key is held down
+
 				// Update aiming controls.
 				for (int dir = 0; dir < 4; dir++) {
 					if (Controls.Arrows[dir].IsPressed()) {

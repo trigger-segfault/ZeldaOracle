@@ -53,15 +53,15 @@ namespace ZeldaOracle.Game.Entities.Monsters {
 			Physics.CollisionBox		= new Rectangle2F(-6, -6, 12, 12);
 			Physics.SoftCollisionBox	= Physics.CollisionBox.Inflated(-2, -2);
 
-			// Reactions
-			SetReaction(InteractionType.Gale, SenderReactions.Intercept, Reactions.None);
-			SetReaction(InteractionType.GaleSeed, SenderReactions.Intercept, Reactions.None);
-			SetReaction(InteractionType.PegasusSeed, SenderReactions.Intercept, Reactions.None);
-			SetReaction(InteractionType.ScentSeed, SenderReactions.Intercept, Reactions.None);
-			SetReaction(InteractionType.Fire, SenderReactions.Intercept, Reactions.None);
-			SetReaction(InteractionType.RodFire, SenderReactions.Intercept, Reactions.None);
-			SetReaction(InteractionType.Boomerang, SenderReactions.Intercept, Reactions.None);
-			SetReaction(InteractionType.SwitchHook, SenderReactions.Intercept, Reactions.Damage);
+			// Projectile Interactions
+			SetReaction(InteractionType.Gale,			SenderReactions.Intercept, Reactions.None);
+			SetReaction(InteractionType.GaleSeed,		SenderReactions.Intercept, Reactions.None);
+			SetReaction(InteractionType.PegasusSeed,	SenderReactions.Intercept, Reactions.None);
+			SetReaction(InteractionType.ScentSeed,		SenderReactions.Intercept, Reactions.None);
+			SetReaction(InteractionType.Fire,			SenderReactions.Intercept, Reactions.None);
+			SetReaction(InteractionType.RodFire,		SenderReactions.Intercept, Reactions.None);
+			SetReaction(InteractionType.Boomerang,		SenderReactions.Intercept, Reactions.ClingEffect);
+			SetReaction(InteractionType.SwitchHook,		SenderReactions.Intercept, Reactions.Damage);
 		}
 
 

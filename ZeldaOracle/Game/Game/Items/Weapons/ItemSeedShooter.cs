@@ -48,7 +48,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		public override void OnButtonPress() {
 			if (HasAmmo()) {
 				Player.SeedShooterState.Weapon = this;
-				Player.BeginState(Player.SeedShooterState);
+				Player.BeginWeaponState(Player.SeedShooterState);
 			}
 		}
 

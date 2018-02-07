@@ -90,7 +90,8 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		public override void OnSwingEnd() {
 			// Cut the center tile.
 			CutTilesAtPoint(player.Center);
-			player.BeginNormalState();
+			//player.BeginNormalState();
+			End();
 		}
 	}
 }

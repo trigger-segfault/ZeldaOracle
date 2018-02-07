@@ -30,7 +30,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 		// Called when the items button is pressed (A or B).
 		public override void OnButtonPress() {
 			Player.SwingBigSwordState.Weapon = this;
-			Player.BeginState(Player.SwingBigSwordState);
+			Player.BeginWeaponState(Player.SwingBigSwordState);
 		}
 	}
 }

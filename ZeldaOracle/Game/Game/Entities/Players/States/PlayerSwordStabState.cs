@@ -33,7 +33,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			player.Movement.MoveCondition = PlayerMoveCondition.NoControl; // TODO: allows sideways movement for stabbing when jumping.
+			// TODO: allows sideways movement for stabbing when jumping.
+			StateParameters.ProhibitMovementControl = true;
+			//player.Movement.MoveCondition = PlayerMoveCondition.NoControl;
 			player.EquipTool(player.ToolVisual);
 			player.ToolVisual.PlayAnimation(GameData.ANIM_SWORD_STAB);
 
@@ -46,8 +48,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
-			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
+			//player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
+			//player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
 			player.UnequipTool(player.ToolVisual);
 		}
 
@@ -56,13 +58,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			if (player.Graphics.IsAnimationDone) {
 				if (weapon.IsEquipped && continueHolding && weapon.IsButtonDown()) {
-					// Continue holding sword.
-					player.BeginState(Player.HoldSwordState);
+					// Continue holding sword
+					StateMachine.BeginState(Player.HoldSwordState);
 				}
 				else {
-					// Put sword away.
+					// Put sword away
 					player.UnequipTool(player.ToolVisual);
-					player.BeginNormalState();
+					End();
 				}
 			}
 		}
