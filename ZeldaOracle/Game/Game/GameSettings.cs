@@ -66,6 +66,7 @@ namespace ZeldaOracle.Game {
 		public static readonly int[]	PROJECTILE_BOOMERANG_RETURN_DELAYS		= { 41, 100 };
 		public static readonly float[]	PROJECTILE_SWITCH_HOOK_SPEEDS			= { 2.0f, 3.0f };
 		public static readonly int[]	PROJECTILE_SWITCH_HOOK_LENGTHS			= { 82, 112 };
+		public static readonly int[]    PROJECTILE_FIRE_SHOOTER_PHASE_DURATIONS	= new int[] { 10, 14 };
 		public const int				SWITCH_HOOK_LATCH_DURATION				= 20;
 		public const float				SWITCH_HOOK_LIFT_SPEED					= 1.0f;
 		public const int				SWITCH_HOOK_LIFT_HEIGHT					= 16;
@@ -225,6 +226,12 @@ namespace ZeldaOracle.Game {
 		public const int				TILE_PULL_HANDLE_WALL_OFFSET			= 8;
 
 		public const int                TILE_DISAPPEARING_PLATFORM_APPEAR_DURATION  = 30;
+
+		public static readonly int[]	TILE_ARROW_CANNON_SHOOT_STARTS			= new int[] { 16, 32 };
+		public static readonly int[]	TILE_ARROW_CANNON_SHOOT_INTERVALS		= new int[] { 32, 64, 96, 128 };
+		public const int				TILE_ARROW_SHOOTER_SHOOT_INTERVAL		= 33;
+		public const int				TILE_FIRE_SHOOTER_SHOOT_INVERVAL		= 16;
+		public const int                TILE_FIRE_SHOOTER_SHOOT_OFFSET			= 7;
 
 
 

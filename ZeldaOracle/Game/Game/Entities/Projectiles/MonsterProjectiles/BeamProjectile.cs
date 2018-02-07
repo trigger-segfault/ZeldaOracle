@@ -12,7 +12,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 
 		private int damage;
 		private bool flickers;
-		private object source;
 
 
 		//-----------------------------------------------------------------------------
@@ -28,7 +27,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 			syncAnimationWithAngle	= true;
 			damage					= 2;
 			flickers				= false;
-			source					= null;
 
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 1);
@@ -38,10 +36,6 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 				PhysicsFlags.LedgePassable |
 				PhysicsFlags.HalfSolidPassable |
 				PhysicsFlags.DestroyedOutsideRoom);
-			Physics.CustomTileIsNotSolidCondition = delegate(Tile tile) {
-				// Disable collisions with the source tile.
-				return (tile != source);
-			};
 
 			// Graphics.
 			Graphics.DepthLayer = DepthLayer.ProjectileBeam;
@@ -69,7 +63,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 
 		public override void OnCollideTile(Tile tile, bool isInitialCollision) {
 			// Disable collisions with the source tile.
-			if (tile != source)
+			if (tile != TileOwner)
 				Crash(isInitialCollision);
 		}
 
@@ -85,16 +79,9 @@ namespace ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles {
 		// Properties
 		//-----------------------------------------------------------------------------
 
-		public bool Flickers
-		{
+		public bool Flickers {
 			get { return flickers; }
 			set { flickers = value; }
-		}
-
-		public object Source
-		{
-			get { return source; }
-			set { source = value; }
 		}
 	}
 }

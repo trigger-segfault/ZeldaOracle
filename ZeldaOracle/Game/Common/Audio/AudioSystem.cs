@@ -304,9 +304,19 @@ namespace ZeldaOracle.Common.Audio {
 			return sound.Play(looped);
 		}
 
-		/// <summary>Plays the specified sound effect.</summary>
-		public static SoundInstance PlaySound(Sound sound, bool looped, float volume = 1.0f, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
+		/// <summary>Forces the specified sound effect to play.</summary>
+		public static SoundInstance ForcePlaySound(Sound sound, bool looped = false) {
+			return sound.ForcePlay(looped);
+		}
+
+		/// <summary>Forces the specified sound effect to play.</summary>
+		public static SoundInstance PlaySound(Sound sound, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
 			return sound.Play(looped, volume, pitch, pan, muted);
+		}
+
+		/// <summary>Plays the specified sound effect.</summary>
+		public static SoundInstance ForcePlaySound(Sound sound, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
+			return sound.ForcePlay(looped, volume, pitch, pan, muted);
 		}
 
 		/// <summary>Plays the sound effect with the specified name.</summary>
@@ -314,9 +324,19 @@ namespace ZeldaOracle.Common.Audio {
 			return PlaySound(Resources.GetSound(name), looped);
 		}
 
+		/// <summary>Forces the sound effect with the specified name to play.</summary>
+		public static SoundInstance ForcePlaySound(string name, bool looped = false) {
+			return ForcePlaySound(Resources.GetSound(name), looped);
+		}
+
 		/// <summary>Plays the sound effect with the specified name.</summary>
-		public static SoundInstance PlaySound(string name, bool looped, float volume = 1.0f, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
+		public static SoundInstance PlaySound(string name, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
 			return PlaySound(Resources.GetSound(name), looped, volume, pitch, pan, muted);
+		}
+
+		/// <summary>Forces the sound effect with the specified name to play.</summary>
+		public static SoundInstance ForcePlaySound(string name, bool looped, float volume, float pitch = 0.0f, float pan = 0.0f, bool muted = false) {
+			return ForcePlaySound(Resources.GetSound(name), looped, volume, pitch, pan, muted);
 		}
 
 		/// <summary>Plays the specified sound effect.</summary>
@@ -324,9 +344,19 @@ namespace ZeldaOracle.Common.Audio {
 			return PlaySound(soundList[GRandom.NextInt(soundList.Length)]);
 		}
 
+		/// <summary>Forces the specified sound effect to play.</summary>
+		public static SoundInstance ForcePlayRandomSound(params Sound[] soundList) {
+			return ForcePlaySound(soundList[GRandom.NextInt(soundList.Length)]);
+		}
+
 		/// <summary>Plays the specified sound effect.</summary>
 		public static SoundInstance PlayRandomSound(params string[] soundList) {
 			return PlaySound(soundList[GRandom.NextInt(soundList.Length)]);
+		}
+
+		/// <summary>Forces the specified sound effect to play.</summary>
+		public static SoundInstance ForcePlayRandomSound(params string[] soundList) {
+			return ForcePlaySound(soundList[GRandom.NextInt(soundList.Length)]);
 		}
 
 		/// <summary></summary>

@@ -15,17 +15,19 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 	public class Arrow : Projectile {
 		
 		protected int damage;
+		protected bool silent;
 
 
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
 
-		public Arrow() {
+		public Arrow(bool silent = false) {
 			// General.
 			syncAnimationWithAngle	= true;
 			projectileType			= ProjectileType.Physical;
 			damage					= GameSettings.PROJECTILE_ARROW_DAMAGE;
+			this.silent				= silent;
 
 			// Physics.
 			Physics.CollisionBox		= new Rectangle2F(-1, -1, 2, 1);
@@ -72,7 +74,8 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 
 		protected override void OnCrash() {
 			base.OnCrash();
-			AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
+			if (!silent)
+				AudioSystem.PlaySound(GameData.SOUND_EFFECT_CLING);
 		}
 	}
 }

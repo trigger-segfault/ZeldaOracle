@@ -70,12 +70,14 @@ namespace ZeldaOracle.Game.Tiles {
 			// Create the projectile
 			BeamProjectile projectile = new BeamProjectile();
 			projectile.Flickers	= flicker;
-			projectile.Owner	= null;
+			projectile.Angle	= angle;
+			ShootProjectile(projectile, shootVector * GameSettings.MONSTER_BEAMOS_SHOOT_SPEED);
+			/*projectile.Owner	= null;
 			projectile.Source	= this;
 			projectile.Angle	= angle;
 			projectile.Physics.Velocity	= shootVector *
 				GameSettings.MONSTER_BEAMOS_SHOOT_SPEED;
-			RoomControl.SpawnEntity(projectile, Center);
+			RoomControl.SpawnEntity(projectile, Center);*/
 			AudioSystem.PlaySound(GameData.SOUND_LASER);
 		}
 

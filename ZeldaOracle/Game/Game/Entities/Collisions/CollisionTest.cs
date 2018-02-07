@@ -155,6 +155,15 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 			this.maxZDistance		= maxZDistance;
 		}
 
+		public CollisionTestSettings(Type entityType, Rectangle2F myBox, CollisionBoxType otherBoxType) {
+			this.requiredType       = entityType;
+			this.collisionBox1      = myBox;
+			this.collisionBoxType1  = CollisionBoxType.Custom;
+			this.collisionBoxType2  = otherBoxType;
+			this.requiredFlags      = PhysicsFlags.None;
+			this.maxZDistance       = 0f;
+		}
+
 
 		//-----------------------------------------------------------------------------
 		// Accessors
@@ -239,6 +248,28 @@ namespace ZeldaOracle.Game.Entities.Collisions {
 				Rectangle2F cbox2 = settings.GetCollisionBox2(other);
 				cbox2.Point += other.Position;
 				
+				// Perform the collision test.
+				if (cbox1.Intersects(cbox2)) {
+					collisionInfo.SetEntityCollision(other, 0);
+				}
+			}
+
+			return collisionInfo;
+		}
+
+		// Perform a collision test between a collision box and an entity.
+		public static CollisionInfo PerformCollisionTest(Vector2F position, Entity other, CollisionTestSettings settings) {
+			CollisionInfo collisionInfo = new CollisionInfo();
+
+			// Check that the other entity meets the collision requirements.
+			if ((settings.RequiredType == null  || settings.RequiredType.IsAssignableFrom(other.GetType())) &&
+				(settings.RequiredFlags == 0    || other.Physics.Flags.HasFlag(settings.RequiredFlags))) {
+				// Setup the collision boxes.
+				Rectangle2F cbox1 = settings.CollisionBox1;
+				cbox1.Point += position;
+				Rectangle2F cbox2 = settings.GetCollisionBox2(other);
+				cbox2.Point += other.Position;
+
 				// Perform the collision test.
 				if (cbox1.Intersects(cbox2)) {
 					collisionInfo.SetEntityCollision(other, 0);

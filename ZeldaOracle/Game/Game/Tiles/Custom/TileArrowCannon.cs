@@ -6,30 +6,39 @@ using System.Threading.Tasks;
 using ZeldaOracle.Common.Audio;
 using ZeldaOracle.Common.Geometry;
 using ZeldaOracle.Common.Graphics;
+using ZeldaOracle.Game.Entities;
+using ZeldaOracle.Game.Entities.Collisions;
+using ZeldaOracle.Game.Entities.Players;
 using ZeldaOracle.Game.Entities.Projectiles;
 using ZeldaOracle.Game.Entities.Projectiles.MonsterProjectiles;
 
 namespace ZeldaOracle.Game.Tiles.Custom {
-	public class TileFireShooter : Tile {
+	public class TileArrowCannon : Tile {
+		
+		private int timer;
 		
 		//-----------------------------------------------------------------------------
 		// Overridden methods
 		//-----------------------------------------------------------------------------
-		
-		public override void Update() {
-			// Determine if it's time to shoot
-			int time = RoomControl.CurrentRoomTicks;
-			// Every other tile shoots at a slightly different time.
-			if (IsSecondaryTile)
-				time -= GameSettings.TILE_FIRE_SHOOTER_SHOOT_OFFSET;
-			time = GMath.Wrap(time, GameSettings.TILE_FIRE_SHOOTER_SHOOT_INVERVAL);
 
-			if (time == 0) {
-				// Shoot a fireball
-				FireShooterProjectile projectile = new FireShooterProjectile();
-				ShootFromDirection(projectile, Direction, 2f, Directions.ToVector(Direction) * 2f);
-				AudioSystem.PlaySound(GameData.SOUND_FIRE_SHOOTER);
+		public override void OnInitialize() {
+			// Set the initial time before the first shot
+			int startCount = GameSettings.TILE_ARROW_CANNON_SHOOT_STARTS.Length;
+			timer = GameSettings.TILE_ARROW_CANNON_SHOOT_STARTS[GRandom.NextInt(startCount)];
+		}
+
+		public override void Update() {
+			if (timer == 0) {
+				// Shoot an arrow
+				MonsterArrow projectile = new MonsterArrow(true);
+				ShootFromDirection(projectile, Direction, 2f, Directions.ToVector(Direction) * 6f);
+
+				// Set the duration before the next shot
+				int intervalCount = GameSettings.TILE_ARROW_CANNON_SHOOT_INTERVALS.Length;
+				timer = GameSettings.TILE_ARROW_CANNON_SHOOT_INTERVALS[GRandom.NextInt(intervalCount)];
 			}
+			
+			timer--;
 		}
 
 
@@ -41,16 +50,12 @@ namespace ZeldaOracle.Game.Tiles.Custom {
 			get { return Properties.GetInteger("direction", Directions.Down); }
 		}
 
-		public bool IsSecondaryTile {
-			get { return (Location.X + Location.Y) % 2 == 0; }
-		}
-
 
 		//-----------------------------------------------------------------------------
 		// Static Methods
 		//-----------------------------------------------------------------------------
 
-				/// <summary>Draws the tile data to display in the editor.</summary>
+		/// <summary>Draws the tile data to display in the editor.</summary>
 		public new static void DrawTileData(Graphics2D g, TileDataDrawArgs args) {
 			Tile.DrawTileData(g, args);
 		}

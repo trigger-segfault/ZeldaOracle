@@ -502,6 +502,8 @@
     <Compile Include="Game\Tiles\Custom\Monsters\TileMonsterBeamos.cs" />
     <Compile Include="Game\Tiles\Custom\SideScroll\TileConveyorBelt.cs" />
     <Compile Include="Game\Tiles\Custom\SideScroll\TileDisappearingPlatform.cs" />
+    <Compile Include="Game\Tiles\Custom\TileArrowCannon.cs" />
+    <Compile Include="Game\Tiles\Custom\TileArrowShooter.cs" />
     <Compile Include="Game\Tiles\Custom\TileFireShooter.cs" />
     <Compile Include="Game\Tiles\Tileset.cs" />
     <Compile Include="Game\Tiles\TileDataDrawing.cs" />
