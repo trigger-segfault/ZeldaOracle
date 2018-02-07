@@ -72,6 +72,7 @@ namespace ZeldaOracle.Game.Entities {
 		private float					autoDodgeSpeed;		// The speed to move at when dodging collisions.
 		private int						edgeClipAmount;
 		private int						crushMaxGapSize;
+		private Vector2F				topTilePointOffset;
 
 		// Internal physics state.
 		private Vector2F			previousVelocity;	// XY-Velocity before physics update is called.
@@ -104,6 +105,7 @@ namespace ZeldaOracle.Game.Entities {
 			this.collisionBox		= new Rectangle2F(-1, -1, 2, 2);
 			this.softCollisionBox	= new Rectangle2F(-1, -1, 2, 2);
 			this.topTile			= null;
+			this.topTilePointOffset	= Vector2F.Zero;
 			this.isColliding		= false;
 			this.autoDodgeDistance	= 6;
 			this.autoDodgeSpeed		= 1.0f;
@@ -661,6 +663,11 @@ namespace ZeldaOracle.Game.Entities {
 			set { topTile = value; }
 		}
 
+		public Vector2F TopTilePointOffset {
+			get { return topTilePointOffset; }
+			set { topTilePointOffset = value; }
+		}
+
 		// Tile Flags.
 
 		public bool IsInGrass {
@@ -676,7 +683,10 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public bool IsInWater {
-			get { return IsOnGround && topTile != null && topTile.IsWater; }
+			get {
+				return (IsOnGround || entity.RoomControl.IsSideScrolling) &&
+					topTile != null && topTile.IsWater;
+			}
 		}
 
 		public bool IsInOcean {

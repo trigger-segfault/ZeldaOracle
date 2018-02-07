@@ -1226,8 +1226,9 @@ namespace ZeldaOracle.Game.Control {
 		private void CheckSurfaceTile(Entity entity) {
 
 			// Find the surface tile underneath the entity
-			entity.Physics.TopTile = roomControl.TileManager
-				.GetSurfaceTileAtPosition(entity.Position, entity.Physics.MovesWithPlatforms);
+			entity.Physics.TopTile = roomControl.TileManager.GetSurfaceTileAtPosition(
+				entity.Position + entity.Physics.TopTilePointOffset,
+				entity.Physics.MovesWithPlatforms);
 			
 			// Check for moving platforms in side scrolling mode
 			CollisionInfo surfaceCollision = entity.Physics

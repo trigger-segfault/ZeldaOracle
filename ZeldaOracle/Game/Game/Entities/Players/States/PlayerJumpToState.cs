@@ -74,7 +74,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		public override void Update() {
-			base.Update();
+			base.Update();	
 
 			timer++;
 			float percent = Math.Min(1.0f, (float) timer / (float) jumpDuration);

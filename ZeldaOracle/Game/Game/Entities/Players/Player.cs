@@ -80,6 +80,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerBusyState				stateBusy;
 		private PlayerSwimState				stateSwim;
 		private PlayerUnderwaterState		stateUnderwater;
+		private PlayerSidescrollSwimState	stateSidescrollSwim;
 		private PlayerLedgeJumpState		stateLedgeJump;
 		private PlayerLeapLedgeJumpState	stateLeapLedgeJump;
 		private PlayerLadderState			stateLadder;
@@ -99,7 +100,6 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private PlayerRespawnDeathState		stateRespawnDeath;
 		private PlayerMinecartState			stateMinecart;
 		private PlayerJumpToState			stateJumpTo;
-
 
 		//-----------------------------------------------------------------------------
 		// Constants
@@ -167,6 +167,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			stateBusy			= new PlayerBusyState();
 			stateSwim			= new PlayerSwimState();
 			stateUnderwater		= new PlayerUnderwaterState();
+			stateSidescrollSwim	= new PlayerSidescrollSwimState();
 			stateLadder			= new PlayerLadderState();
 			stateLedgeJump		= new PlayerLedgeJumpState();
 			stateLeapLedgeJump	= new PlayerLeapLedgeJumpState();
@@ -219,14 +220,22 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		// Return the player state that the player wants to be in based on his current position.
 		public PlayerState GetDesiredNaturalState() {
-			if (physics.IsInWater || physics.IsInOcean || physics.IsInLava)
-				return stateSwim;
-			else if (physics.IsOnLadder && !RoomControl.IsSideScrolling) // Ladders behave differently in side-scrolling mode.
-				return stateLadder;
-			else if (RoomControl.IsUnderwater)
-				return stateUnderwater;
-			else
-				return stateNormal;
+			if (RoomControl.IsSideScrolling) {
+				if (physics.IsInWater || physics.IsInOcean || RoomControl.IsUnderwater)
+					return stateSidescrollSwim;
+				else 
+					return stateNormal;
+			}
+			else {
+				if (physics.IsInWater || physics.IsInOcean || physics.IsInLava)
+					return stateSwim;
+				else if (physics.IsOnLadder)
+					return stateLadder;
+				else if (RoomControl.IsUnderwater)
+					return stateUnderwater;
+				else
+					return stateNormal;
+			}
 		}
 
 		// Begin the busy state with the specified duration.
@@ -465,7 +474,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		// Custom collision function for colliding with room edges.
 		public void CheckRoomTransitions() {
-			if (!AllowRoomTransition || IsOnHazardTile() || IsInAir)
+			if (!AllowRoomTransition || IsOnHazardTile() ||
+				(IsInAir && (!IsSwimming && RoomControl.IsSideScrolling)))
 				return;
 
 			// Check for room edge collisions.
@@ -558,14 +568,21 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Notify the state.
 			if (specialState != null && specialState.IsActive)
-				stateMinecart.OnEnterRoom();
+				specialState.OnEnterRoom();
 			state.OnEnterRoom();
+
+			// In side-scroll mode, the player samples the top-tile from his center
+			// postion opposed to his origin position
+			if (RoomControl.IsSideScrolling)
+				Physics.TopTilePointOffset = CenterOffset;
+			else
+				Physics.TopTilePointOffset = Point2I.Zero;
 		}
 
 		public override void OnLeaveRoom() {
 			// Notify the state.
 			if (specialState != null && specialState.IsActive)
-				stateMinecart.OnLeaveRoom();
+				specialState.OnLeaveRoom();
 			state.OnLeaveRoom();
 
 			// Clear events.
@@ -897,6 +914,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		public PlayerJumpToState JumpToState {
 			get { return stateJumpTo; }
+		}
+
+		public bool IsSwimming {
+			get {
+				return (state == stateSwim || state == stateSidescrollSwim ||
+					state == stateUnderwater);
+			}
 		}
 
 		// Tools.

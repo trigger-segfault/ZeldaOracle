@@ -52,7 +52,8 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public virtual bool RequestStateChange(PlayerState newState) {
 			if (!isNaturalState &&
 				(newState is PlayerNormalState ||
-				newState is PlayerUnderwaterState)) // "normal" state for underwater rooms
+				newState is PlayerUnderwaterState || // "normal" state for underwater rooms
+				newState is PlayerSidescrollSwimState))
 			{
 				return false;
 			}

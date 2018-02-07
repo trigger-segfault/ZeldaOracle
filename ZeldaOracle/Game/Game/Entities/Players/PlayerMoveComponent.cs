@@ -37,6 +37,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 		private bool				canPush;
 		private bool				canUseWarpPoint;		// Can the player go through warp points?
 		private bool				isStrafing;
+		private bool				onlyFaceLeftOrRight;
 		private bool				isSprinting;
 		private int					sprintTimer;
 		private float				sprintSpeedScale;
@@ -90,6 +91,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			canPush					= true;
 			canUseWarpPoint			= true;
 			isStrafing				= false;
+			onlyFaceLeftOrRight		= false;
 			isSprinting				= false;
 			sprintTimer				= 0;
 			sprintSpeedScale		= 1.5f;
@@ -267,7 +269,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 			}
 
 			// Clip Y velocity if side scrolling and not climbing.
-			if (player.RoomControl.IsSideScrolling && !isOnSideScrollLadder) {
+			if (player.RoomControl.IsSideScrolling &&
+				!isOnSideScrollLadder && player.Physics.HasGravity)
+			{
 				if (analogMode)
 					moveVector = new Vector2F(Controls.AnalogMovement.Position.X, 0.0f);
 				else
@@ -293,11 +297,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (player.IsInMinecart)
 				allowMovementControl = true;
 
-			// Check movement input.
+			// Check movement input
 			Vector2F keyMoveVector = PollMovementKeys(allowMovementControl);
 			
 			// Don't affect the facing direction when strafing
-			if (!isStrafing && !mode.IsStrafing && isMoving)
+			if (!isStrafing && !mode.IsStrafing && isMoving &&
+				(!onlyFaceLeftOrRight || moveDirection == Directions.Left ||
+					moveDirection == Directions.Right))
 				player.Direction = moveDirection;
 
 			// Update movement or acceleration.
@@ -514,10 +520,10 @@ namespace ZeldaOracle.Game.Entities.Players {
 			// Determine movement mode.
 			if (player.RoomControl.IsSideScrolling && isOnSideScrollLadder)
 				mode = moveModeNormal;
-			else if (player.Physics.IsInAir)
-				mode = moveModeAir;
 			else if (player.Physics.IsInWater || player.RoomControl.IsUnderwater)
 				mode = moveModeWater;
+			else if (player.Physics.IsInAir)
+				mode = moveModeAir;
 			else if ((!player.RoomControl.IsSideScrolling && player.Physics.IsOnIce) ||
 				(player.RoomControl.IsSideScrolling && player.Physics.IsOnSideScrollingIce))
 				mode = moveModeIce;
@@ -528,6 +534,9 @@ namespace ZeldaOracle.Game.Entities.Players {
 			else
 				mode = moveModeNormal;
 
+			player.Physics.OnGroundOverride = isOnSideScrollLadder ||
+				(player.RoomControl.IsSideScrolling && player.Physics.IsInWater);
+
 			// Update movement.
 			UpdateMoveControls();
 			UpdateFallingInHoles();
@@ -537,7 +546,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 			if (isSprinting) {
 				// Create the sprint effect.
 				if (sprintTimer % GameSettings.PLAYER_SPRINT_EFFECT_INTERVAL == 0 &&
-					player.IsOnGround && player.CurrentState != player.SwimState)
+					player.IsOnGround && player.IsSwimming)
 				{
 					AudioSystem.PlaySound(GameData.SOUND_PLAYER_LAND);
 					Effect sprintEffect = new Effect(GameData.ANIM_EFFECT_SPRINT_PUFF, DepthLayer.EffectSprintPuff, true);
@@ -664,6 +673,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		public bool IsStrafing {
 			get { return isStrafing; }
 			set { isStrafing = value; }
+		}
+		
+		public bool OnlyFaceLeftOrRight {
+			get { return onlyFaceLeftOrRight; }
+			set { onlyFaceLeftOrRight = value; }
 		}
 		
 		public bool IsMoving {

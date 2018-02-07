@@ -99,6 +99,7 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		// Called when the entity enters the room.
+		// FIXME: this is never actually called for entities, but it is called for the player
 		public virtual void OnEnterRoom() {}
 
 		// Called when the entity leaves the room.

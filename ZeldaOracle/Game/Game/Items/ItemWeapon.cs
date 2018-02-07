@@ -100,7 +100,8 @@ namespace ZeldaOracle.Game.Items {
 			{
 				return true;
 			}
-			else if (Player.CurrentState is PlayerUnderwaterState)
+			else if (Player.CurrentState is PlayerUnderwaterState ||
+				Player.CurrentState is PlayerSidescrollSwimState)
 				return flags.HasFlag(ItemFlags.UsableUnderwater);
 			else
 				return (Player.CurrentState is PlayerNormalState);

@@ -179,7 +179,7 @@ TILE "ss_fish_statue_right_open_underwater"; SAMESPRITE; SOLID block; END;
 
 TILE "ss_ladder_bars"; SAMESPRITE; ENVTYPE Ladder; END;
 TILE "ss_ladder"; SAMESPRITE; ENVTYPE Ladder; END;
-TILE "ss_ladder_underwater"; SAMESPRITE; ENVTYPE Ladder; END;
+TILE "ss_ladder_underwater"; SAMESPRITE; ENVTYPE Water; END;
 TILE "ss_magnet_stone_north";
 	SAMESPRITE;
 	SOLID block;
