@@ -39,8 +39,7 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 		private event Action eventLand;
 		
 		private Point2I tileLocation;
-
-
+		
 
 		//-----------------------------------------------------------------------------
 		// Constructors
@@ -63,7 +62,10 @@ namespace ZeldaOracle.Game.Entities.Projectiles {
 			bounceOnCrash		= false;
 
 			projectileType = ProjectileType.Physical;
-			// TODO: Prevent collision snapping with tileOwner
+			// Prevent collision snapping from tile owner.
+			Physics.CustomTileIsNotSolidCondition = (Tile tile) => {
+				return (tile == null || tile != tileOwner);
+			};
 		}
 		
 		

@@ -107,8 +107,11 @@ END;
 # Arrow Shooter -----------------------------------------------
 
 TILE "temp_arrow_shooter";
-	#Type		TileArrowShooter;
+	Type		TileArrowShooter;
 	SOLID		block;
+	PROPERTIES
+		(integer, direction, 0, "Direction", "direction",
+			"Arrow Shooter", "The direction arrows are shot in.", false);
 END;
 
 # Fire Shooter ------------------------------------------------
@@ -404,30 +407,30 @@ END;
 
 # Arrow Shooter -----------------------------------------------
 
-TILE "arrow_shooter_left";
+TILE "arrow_shooter_right";
 	CLONE		"temp_arrow_shooter";
 	SAMESPRITE;
-	# left
+	PROPERTIES (integer, direction, 0);
 END;
 TILE "arrow_shooter_up";
 	CLONE		"temp_arrow_shooter";
 	SAMESPRITE;
-	# up
+	PROPERTIES (integer, direction, 1);
 END;
-TILE "arrow_shooter_right";
+TILE "arrow_shooter_left";
 	CLONE		"temp_arrow_shooter";
 	SAMESPRITE;
-	# right
+	PROPERTIES (integer, direction, 2);
 END;
 TILE "arrow_shooter_down";
 	CLONE		"temp_arrow_shooter";
 	SAMESPRITE;
-	# down
+	PROPERTIES (integer, direction, 3);
 END;
 
 # Fire Shooter ------------------------------------------------
 
-TILE "fire_shooter_left";
+TILE "fire_shooter_right";
 	CLONE		"temp_fire_shooter";
 	SAMESPRITE;
 	PROPERTIES (integer, direction, 0);
@@ -437,7 +440,7 @@ TILE "fire_shooter_up";
 	SAMESPRITE;
 	PROPERTIES (integer, direction, 1);
 END;
-TILE "fire_shooter_right";
+TILE "fire_shooter_left";
 	CLONE		"temp_fire_shooter";
 	SAMESPRITE;
 	PROPERTIES (integer, direction, 2);

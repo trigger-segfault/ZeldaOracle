@@ -16,23 +16,20 @@ namespace ZeldaOracle.Common.Scripts.CustomReaders {
 		//-----------------------------------------------------------------------------
 
 		public SoundSR() {
-			
-			// Sound <name> <path> <volume=1> <pitch=0> <pan=0> <muted=false>
-			AddCommand("Sound",
-				"string name, string path, float volume = 1, float pitch = 0, float pan = 0, bool muted = false",
+
+			// Sound <name> <path> [volume=1] [pitch=0] [pan=0] [muted=false] [instances=1]
+			AddCommand("SOUND",
+				"string name, string path, float volume = 1, float pitch = 0, float pan = 0, bool muted = false, int instances = 1",
 			delegate(CommandParam parameters) {
 				string name = parameters.GetString(0);
 				string path = parameters.GetString(1);
 				Sound sound	= Resources.LoadSound(name, Resources.SoundDirectory + path);
 				sound.name	= name;
-				if (parameters.ChildCount > 2)
-					sound.Volume = parameters.GetFloat(2);
-				if (parameters.ChildCount > 3)
-					sound.Pitch = parameters.GetFloat(3);
-				if (parameters.ChildCount > 4)
-					sound.Pan = parameters.GetFloat(4);
-				if (parameters.ChildCount > 5)
-					sound.IsMuted = parameters.GetBool(5);
+				sound.Volume = parameters.GetFloat(2);
+				sound.Pitch = parameters.GetFloat(3);
+				sound.Pan = parameters.GetFloat(4);
+				sound.IsMuted = parameters.GetBool(5);
+				sound.MaxInstances = parameters.GetInt(6);
 			});
 		}
 

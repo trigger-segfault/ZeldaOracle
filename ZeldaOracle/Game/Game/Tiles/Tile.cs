@@ -590,6 +590,46 @@ namespace ZeldaOracle.Game.Tiles {
 
 
 		//-----------------------------------------------------------------------------
+		// Projectiles
+		//-----------------------------------------------------------------------------
+
+		public Projectile ShootFromDirection(Projectile projectile, int direction, float speed) {
+			return ShootFromDirection(projectile, direction, speed, Vector2F.Zero, 0);
+		}
+
+		public Projectile ShootFromAngle(Projectile projectile, int angle, float speed) {
+			return ShootFromAngle(projectile, angle, speed, Vector2F.Zero, 0);
+		}
+
+		public Projectile ShootProjectile(Projectile projectile, Vector2F velocity) {
+			return ShootProjectile(projectile, velocity, Vector2F.Zero, 0);
+		}
+
+		public Projectile ShootFromDirection(Projectile projectile, int direction, float speed, Vector2F positionOffset, int zPositionOffset = 0) {
+			projectile.TileOwner	= this;
+			projectile.Direction	= direction;
+			projectile.Physics.Velocity = Directions.ToVector(direction) * speed;
+			RoomControl.SpawnEntity(projectile, Center + positionOffset, zPositionOffset);
+			return projectile;
+		}
+
+		public Projectile ShootFromAngle(Projectile projectile, int angle, float speed, Vector2F positionOffset, int zPositionOffset = 0) {
+			projectile.TileOwner	= this;
+			projectile.Angle		= angle;
+			projectile.Physics.Velocity = Angles.ToVector(angle, true) * speed;
+			RoomControl.SpawnEntity(projectile, Center + positionOffset, zPositionOffset);
+			return projectile;
+		}
+
+		public Projectile ShootProjectile(Projectile projectile, Vector2F velocity, Vector2F positionOffset, int zPositionOffset) {
+			projectile.TileOwner	= this;
+			projectile.Physics.Velocity = velocity;
+			RoomControl.SpawnEntity(projectile, Center + positionOffset, zPositionOffset);
+			return projectile;
+		}
+
+
+		//-----------------------------------------------------------------------------
 		// Static Methods
 		//-----------------------------------------------------------------------------
 

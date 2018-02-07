@@ -75,6 +75,7 @@ SOUND player_wade,				"Player/player_wade";		# Oracle_Link_Wade
 # Projectiles -----------------------------------------------------------------
 
 SOUND laser,					"Projectiles/laser";		# Oracle_Laser
+SOUND fire_shooter,				"Monster/monster_die", instances: 6;	# Oracle_Enemy_Die
 
 # Tiles -----------------------------------------------------------------------
 

@@ -23,11 +23,14 @@ TILE "temp_spike_roller";
 	#TYPE		TileSpikeRoller;
 END;
 
-# Spike Roller ------------------------------------------------
+# Arrow Cannon ------------------------------------------------
 
 TILE "temp_arrow_cannon";
-	#TYPE		TileArrowCannon;
+	TYPE		TileArrowCannon;
 	SOLID		block;
+	PROPERTIES
+		(integer, direction, 0, "Direction", "direction",
+			"Arrow Cannon", "The direction arrows are shot in.", false);
 END;
 
 # Color Switch ------------------------------------------------
@@ -120,15 +123,15 @@ END;
 
 # Arrow Cannon ------------------------------------------------
 
-TILE "arrow_cannon_left";
-	CLONE		"temp_arrow_cannon";
-	SAMESPRITE;
-	# left
-END;
 TILE "arrow_cannon_right";
 	CLONE		"temp_arrow_cannon";
 	SAMESPRITE;
-	# right
+	PROPERTIES (integer, direction, 0);
+END;
+TILE "arrow_cannon_left";
+	CLONE		"temp_arrow_cannon";
+	SAMESPRITE;
+	PROPERTIES (integer, direction, 2);
 END;
 
 # Owl ---------------------------------------------------------
