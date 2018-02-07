@@ -24,6 +24,7 @@ using ZeldaEditor.Scripting;
 using ZeldaEditor.Tools;
 using ZeldaEditor.TreeViews;
 using ZeldaEditor.Undo;
+using ZeldaEditor.Util;
 using ZeldaEditor.Windows;
 using ZeldaEditor.WinForms;
 using ZeldaOracle.Common.Geometry;
@@ -55,6 +56,10 @@ namespace ZeldaEditor {
 
 		private DispatcherTimer updateTimer;
 
+		private WpfFocusMessageFilter messageFilterLayers;
+		private WpfFocusMessageFilter messageFilterTilesets;
+		private WpfFocusMessageFilter messageFilterZones;
+
 		//-----------------------------------------------------------------------------
 		// Constructor
 		//-----------------------------------------------------------------------------
@@ -63,6 +68,15 @@ namespace ZeldaEditor {
 			InitializeComponent();
 			// Create the editor control instance.
 			editorControl = new EditorControl(this);
+
+			// Catch messages from popups over winforms
+			// controls before they can try to steal focus.
+			messageFilterLayers = new WpfFocusMessageFilter(comboBoxLayers);
+			messageFilterLayers.AddFilter();
+			messageFilterTilesets = new WpfFocusMessageFilter(comboBoxTilesets);
+			messageFilterTilesets.AddFilter();
+			messageFilterZones = new WpfFocusMessageFilter(comboBoxZones);
+			messageFilterZones.AddFilter();
 
 			// Initialize world tree view.
 			treeViewWorld.EditorControl = editorControl;
@@ -470,21 +484,9 @@ namespace ZeldaEditor {
 		}
 
 		private void OnPreviewMouseDown(object sender, MouseButtonEventArgs e) {
-			if (!IsDescendant(this, Keyboard.FocusedElement as DependencyObject)) {
+			if (!WpfHelper.IsDescendant(this, Keyboard.FocusedElement as DependencyObject)) {
 				Keyboard.Focus(this);
 			}
-		}
-
-		private bool IsDescendant(DependencyObject parent, DependencyObject element) {
-			if (element == null)
-				return false;
-			int count = VisualTreeHelper.GetChildrenCount(parent);
-			for (int i = 0; i < count; i++) {
-				var child = VisualTreeHelper.GetChild(parent, i);
-				if (child == element || IsDescendant(child, element))
-					return true;
-			}
-			return false;
 		}
 
 		private void OnWindowSizeChanged(object sender, SizeChangedEventArgs e) {

@@ -163,6 +163,7 @@
     <Compile Include="Undo\ActionPlace.cs" />
     <Compile Include="Undo\ActionRenameID.cs" />
     <Compile Include="Util\AlphanumComparatorFast.cs" />
+    <Compile Include="Util\WpfHelper.cs" />
     <Compile Include="Windows\AddNewDungeonWindow.xaml.cs">
       <DependentUpon>AddNewDungeonWindow.xaml</DependentUpon>
     </Compile>
