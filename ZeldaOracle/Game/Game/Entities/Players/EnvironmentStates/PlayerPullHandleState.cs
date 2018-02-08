@@ -38,8 +38,8 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			player.Movement.CanJump = false;
-			player.Movement.MoveCondition = PlayerMoveCondition.NoControl;
+			StateParameters.ProhibitJumping			= true;
+			StateParameters.ProhibitMovementControl	= true;
 
 			timer = 0;
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_GRAB);
@@ -52,8 +52,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.Movement.CanJump = true;
-			player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 			tileHandle.EndPull();
 		}
 
@@ -66,7 +64,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			timer--;
 
 			if (!grabButton.IsDown()) {
-				player.BeginNormalState();
+				End();
 			}
 			else if (isPulling) {
 				// Extend the handle.

@@ -43,14 +43,14 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
+			StateParameters.EnableAutomaticRoomTransitions	= true;
+			StateParameters.EnableStrafing					= true;
+			StateParameters.DisableSolidCollisions			= true;
+			StateParameters.DisableInteractionCollisions	= true;
+			StateParameters.DisablePlayerControl			= true;
 
-			// TODO: player.passable = true;
-			player.IsStateControlled		= true;
-			player.AutoRoomTransition		= true;
-			player.Movement.IsStrafing		= true;
-			player.Physics.CollideWithWorld = false;
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
-			
+
 			// The player can hold his sword while ledge jumping.
 			isHoldingSword = (previousState == player.HoldSwordState);
 
@@ -108,10 +108,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.IsStateControlled		= false;
-			player.AutoRoomTransition		= false;
-			player.Physics.CollideWithWorld = true;
-			player.Movement.IsStrafing		= false;
 		}
 
 		public override void OnEnterRoom() {
@@ -156,19 +152,16 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				isDone = CanLandAtPosition(player.Position);
 			}
 
-			// If done, return to the normal player state.
 			if (isDone) {
 				player.Physics.Velocity = Vector2F.Zero;
 
-				// TODO: break blocks in the way.
+				// If we landed on a tile, then break it
 				player.LandOnSurface();
 
 				if (ledgeExtendsToNextRoom)
 					player.MarkRespawn();
-				if (isHoldingSword)
-					player.BeginState(player.HoldSwordState);
-				else
-					player.BeginNormalState();
+
+				End();
 			}
 		}
 

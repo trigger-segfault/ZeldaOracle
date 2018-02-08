@@ -120,7 +120,7 @@ namespace ZeldaOracle.Game.Tiles {
 				Player player = RoomControl.Player;
 				player.PullHandleState.Bracelet			= bracelet;
 				player.PullHandleState.PullHandleTile	= this;
-				player.BeginState(player.PullHandleState);
+				player.BeginControlState(player.PullHandleState);
 				isBeingPulled = true;
 			}
 		}

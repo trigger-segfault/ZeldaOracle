@@ -81,7 +81,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				shootTimer = 0;
 			}
 			else {
-				//Player.BeginNormalState();
 				End();
 			}
 		}
@@ -134,7 +133,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				shootTimer++;
 				if (shootTimer >= SHOOT_WAIT_TIME) {
 					player.Direction = returnDirection;
-					//player.BeginNormalState();
 					End();
 				}
 			}

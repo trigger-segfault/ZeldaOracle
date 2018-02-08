@@ -42,7 +42,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 				if (grabTile.HasFlag(TileFlags.Pickupable) && item.Level >= minLevel) {
 					player.CarryState.SetCarryObject(grabTile);
-					//player.BeginState(player.CarryState);
 					player.BeginWeaponState(player.CarryState);
 					grabTile.SpawnDrop();
 					player.RoomControl.RemoveTile(grabTile);
@@ -87,7 +86,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		public override void OnHurt(DamageInfo damage) {
 			base.OnHurt(damage);
 			End();
-			//player.BeginNormalState();
 		}
 
 		public override void Update() {
@@ -98,7 +96,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			if (!grabButton.IsDown()) {
 				End();
-				//player.BeginNormalState();
 			}
 			else if (pullButton.IsDown()) {
 				player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);

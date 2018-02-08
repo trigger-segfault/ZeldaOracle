@@ -60,7 +60,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void Update() {
 			base.Update();
-
+			
+			if (player.IsOnGround &&
+				player.Movement.MoveCondition == PlayerMoveCondition.FreeMovement)
+			{
+				player.Graphics.SetAnimation(player.MoveAnimation);
+			}
+			/*
 			if (player.IsInAir) {
 				// TODO: Play jump animation at remembering the frame?
 			}
@@ -94,6 +100,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			else {
 				pushTimer = 0;
 			}
+			*/
 		}
 
 

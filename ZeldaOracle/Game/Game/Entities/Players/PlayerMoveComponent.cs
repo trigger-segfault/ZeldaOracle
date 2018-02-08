@@ -502,7 +502,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 					doomedToFallInHole	= false;
 				}
 			}
-			else if (player.Physics.IsInHole && player.CurrentState != player.RespawnDeathState) {
+			else if (player.Physics.IsInHole && player.ControlState != player.RespawnDeathState) {
 				// Start falling in a hole.
 				Point2I holeTileLoc = player.RoomControl.GetTileLocation(player.Position);
 				holeTile			= player.Physics.TopTile;
@@ -621,7 +621,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// No obstructions: begin ledge jump!
 			player.LedgeJumpState.LedgeJumpDirection = ledgeDirection;
-			player.BeginState(player.LedgeJumpState);
+			player.BeginControlState(player.LedgeJumpState);
 			return true;
 		}
 
@@ -638,7 +638,7 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 			// Landing tile present: begin leap ledge jump!
 			player.LeapLedgeJumpState.LedgeJumpDirection = ledgeDirection;
-			player.BeginState(player.LeapLedgeJumpState);
+			player.BeginControlState(player.LeapLedgeJumpState);
 			return true;
 		}
 

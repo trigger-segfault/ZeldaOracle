@@ -50,14 +50,15 @@ namespace ZeldaOracle.Game.Items {
 					Bomb bomb = new Bomb();
 					bombTracker.TrackEntity(bomb);
 					Player.CarryState.SetCarryObject(bomb);
-					Player.BeginState(Player.CarryState);
+					Player.BeginWeaponState(Player.CarryState);
 				}
 			}
 			else {
 				// Pickup a bomb from the ground.
 				Bomb bomb = bombTracker.GetEntity();
 				if (bomb != null && Player.Physics.IsSoftMeetingEntity(bomb)) {
-					Player.BeginState(new PlayerCarryState(bomb));
+					Player.CarryState.SetCarryObject(bomb);
+					Player.BeginWeaponState(Player.CarryState);
 					bomb.RemoveFromRoom();
 				}
 			}

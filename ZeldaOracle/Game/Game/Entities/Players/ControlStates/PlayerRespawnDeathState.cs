@@ -30,35 +30,32 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 		public override void OnBegin(PlayerState previousState) {
 			respawning = false;
-			player.IsStateControlled			= true;
-			player.IsPassable					= true;
-			player.Physics.CollideWithWorld		= false;
-			player.Physics.CollideWithEntities	= false;
-			player.Physics.MovesWithPlatforms	= false;
-			player.Physics.HasGravity			= false;
-			player.KnockbackVelocity			= Vector2F.Zero;
+			
+			StateParameters.EnableAutomaticRoomTransitions	= true;
+			StateParameters.EnableStrafing					= true;
+			StateParameters.DisableSolidCollisions			= true;
+			StateParameters.DisableInteractionCollisions	= true;
+			StateParameters.DisableGravity					= true;
+			StateParameters.DisablePlayerControl			= true;
+			StateParameters.DisablePlatformMovement			= true;
+
 			player.Movement.StopMotion();
 			player.Physics.ZVelocity = 0.0f;
+			player.KnockbackVelocity = Vector2F.Zero;
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.IsStateControlled			= false;
-			player.IsPassable					= false;
-			player.Physics.CollideWithWorld		= true;
-			player.Physics.CollideWithEntities	= true;
-			player.Physics.MovesWithPlatforms	= true;
-			player.Physics.HasGravity			= true;
 		}
 
 		public override void Update() {
 			base.Update();
 
 			if (respawning) {
-				// Wait for the view to pan to the player.
+				// Wait for the view to pan to the player
 				if (player.RoomControl.ViewControl.IsCenteredOnPosition(player.Center)) {
 					player.Graphics.IsVisible = true;
 					player.Hurt(new DamageInfo(2));
-					player.BeginNormalState();
+					End();
 				}
 			}
 			else if (!waitForAnimation || player.Graphics.IsAnimationDone) {

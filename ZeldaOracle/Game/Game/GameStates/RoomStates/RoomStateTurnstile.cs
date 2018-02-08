@@ -77,7 +77,7 @@ namespace ZeldaOracle.Game.GameStates.RoomStates {
 			
 			// Setup the player.
 			Player player = RoomControl.Player;
-			player.BeginNormalState();
+			player.InterruptItems();
 			player.SetPositionByCenter(turnstile.Center +
 				(Directions.ToVector(enterDirection) * PLAYER_ROTATE_OFFSETS[0]));
 			player.Direction = exitDirection;

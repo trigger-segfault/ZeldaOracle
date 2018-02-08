@@ -73,7 +73,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				// Change to standing animation and face downwards.
 				//player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_DEFAULT);
 				player.Direction = Directions.Down;
-				player.BeginState(player.NormalState);
+				End();
 			}
 		}
 

@@ -32,16 +32,16 @@ namespace ZeldaOracle.Game.Entities.Players {
 		// States
 		//-----------------------------------------------------------------------------
 
-		/// <summary> Transition to the given player state if it is not already active
+		/// <summary>Transition to the given player state if it is not already active
 		/// </summary>
 		public void BeginState(PlayerState newState) {
 			if (newState != state || !state.IsActive)
 				ForceBeginState(newState);
 		}
 
-		/// <summary> Transition to the given player state </summary>
+		/// <summary>Transition to the given player state</summary>
 		public void ForceBeginState(PlayerState newState) {
-			Console.WriteLine("Begin State: {0}", newState.GetType().Name);
+			//Console.WriteLine("Begin State: {0}", newState.GetType().Name);
 
 			// End the current state
 			previousState = state;
@@ -62,11 +62,13 @@ namespace ZeldaOracle.Game.Entities.Players {
 
 		/// <summary> Update the active state </summary>
 		public void Update() {
-			if (state != null) {
+			if (state != null && state.IsActive) {
 				state.Update();
 				if (!state.IsActive)
 					state = null;
 			}
+			else
+				state = null;
 		}
 
 
@@ -81,7 +83,11 @@ namespace ZeldaOracle.Game.Entities.Players {
 		
 		/// <summary> The currently active player state </summary>
 		public PlayerState CurrentState {
-			get { return (state.IsActive ? state : null); }
+			get {
+				if (state == null || !state.IsActive)
+					return null;
+				return state;
+			}
 			set { state = value; }
 		}
 

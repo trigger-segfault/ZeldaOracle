@@ -74,10 +74,9 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			}
 
 			// No other player states should change these variables while in a minecart.
-			player.AutoRoomTransition			= true;
-			player.IsPassable					= true;
-			player.Physics.CollideWithWorld		= false; 
-			player.Physics.CollideWithEntities	= false;
+			StateParameters.EnableAutomaticRoomTransitions	= true;
+			StateParameters.DisableInteractionCollisions	= true;
+			StateParameters.DisableSolidCollisions			= true;
 
 			// Play the animations.
 			player.MoveAnimation = GameData.ANIM_PLAYER_MINECART_IDLE;
@@ -93,25 +92,21 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			minecart.Destroy();
 			
 			// Notify the current player state we have entered a minecart.
-			if (player.CurrentState != null)
-				player.CurrentState.OnEnterMinecart();
+			foreach (PlayerState state in player.ActiveStates)
+				state.OnEnterMinecart();
 		}
 		
 		public override void OnEnd(PlayerState newState) {
 			// Reset changed player state variables.
-			player.AutoRoomTransition			= false;
-			player.IsPassable					= false;
-			player.Physics.CollideWithWorld		= true;
-			player.Physics.CollideWithEntities	= true;
-			player.ViewFocusOffset				= Vector2F.Zero;
+			player.ViewFocusOffset = Vector2F.Zero;
 			
 			// Revert to default player animation.
 			if (player.MoveAnimation == GameData.ANIM_PLAYER_MINECART_IDLE)
 				player.MoveAnimation = GameData.ANIM_PLAYER_DEFAULT;
 
 			// Notify the current player state we have exited the minecart.
-			if (player.CurrentState != null)
-				player.CurrentState.OnExitMinecart();
+			foreach (PlayerState state in player.ActiveStates)
+				state.OnExitMinecart();
 		}
 
 		public override void OnEnterRoom() {

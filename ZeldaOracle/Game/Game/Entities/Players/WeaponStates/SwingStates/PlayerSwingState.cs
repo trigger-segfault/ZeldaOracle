@@ -212,7 +212,6 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 		public virtual void OnSwingEnd() {
 			End();
-			//player.BeginNormalState();
 		}
 
 		public virtual void OnSwingTilePeak(int angle, Vector2F hitPoint) {
@@ -230,14 +229,12 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 
 		public override void OnBegin(PlayerState previousState) {
 			StateParameters.ProhibitMovementControlOnGround = true;
-			//player.Movement.MoveCondition = PlayerMoveCondition.OnlyInAir;
 			playerTool = player.ToolVisual;
 			playerTool.DrawAboveUnit = false;
 			Swing(player.UseDirection);
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			//player.Movement.MoveCondition = PlayerMoveCondition.FreeMovement;
 			player.UnequipTool(playerTool);
 			playerTool.DrawAboveUnit = true;
 		}
@@ -248,7 +245,7 @@ namespace ZeldaOracle.Game.Entities.Players.States.SwingStates {
 		}
 
 		public override void OnEnterMinecart() {
-			// Being in a minecart disables lunging.
+			// Being in a minecart disables lunging
 			if (player.Graphics.Animation == playerSwingAnimation ||
 				player.Graphics.Animation == playerSwingAnimationLunge)
 			{

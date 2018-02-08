@@ -87,7 +87,7 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 				// Change to standing animation and face downwards.
 				player.Direction = Directions.Down;
-				player.BeginState(player.UnderwaterState);
+				player.BeginEnvironmentState(player.UnderwaterState);
 			}
 		}
 

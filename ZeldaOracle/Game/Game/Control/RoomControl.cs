@@ -530,7 +530,9 @@ namespace ZeldaOracle.Game.Control {
 			// Update entities.
 			entityCount = entities.Count;
 			for (int i = 0; i < entities.Count; i++) {
-				if (entities[i].IsAlive && entities[i].IsInRoom && i < entityCount) {
+				if (entities[i] != Player && entities[i].IsAlive &&
+					entities[i].IsInRoom && i < entityCount)
+				{
 					if (GameControl.UpdateRoom)
 						entities[i].Update();
 					if (GameControl.AnimateRoom)
@@ -539,6 +541,14 @@ namespace ZeldaOracle.Game.Control {
 					if (requestedTransitionDirection >= 0)
 						break;
 				}
+			}
+
+			// Update the player last
+			if (Player.IsAlive && Player.IsInRoom) {
+				if (GameControl.UpdateRoom)
+					Player.Update();
+				if (GameControl.AnimateRoom)
+					Player.UpdateGraphics();
 			}
 
 			// Remove destroyed entities.

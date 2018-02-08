@@ -124,15 +124,13 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			pickupTimer = 0;
 			isPickingUp = true;
 
-			StateParameters.ProhibitMovementControl	= true;
-			StateParameters.ProhibitJumping			= true;
-			StateParameters.ProhibitLedgeJumping	= true;
-			StateParameters.ProhibitWeaponUse		= true;
+			StateParameters.ProhibitMovementControl		= true;
+			StateParameters.ProhibitJumping				= true;
+			StateParameters.ProhibitLedgeJumping		= true;
+			StateParameters.ProhibitWeaponUse			= true;
+			StateParameters.ProhibitEnteringMinecart	= true;
+			StateParameters.ProhibitWarping				= true;
 
-			//player.Movement.CanJump			= false;
-			//player.Movement.CanLedgeJump	= false;
-			//player.Movement.CanUseWarpPoint	= false;
-			//player.Movement.MoveCondition	= PlayerMoveCondition.NoControl;
 			Player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_PULL);
 			AudioSystem.PlaySound(GameData.SOUND_PLAYER_PICKUP);
 		}
@@ -163,7 +161,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				ThrowObject(false, false);
 			else
  				DropObject(false, false);
-			//player.BeginNormalState();
 			End();
 		}
 
@@ -209,7 +206,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 				carryObject.ZPosition	= player.ZPosition + 16;
 				carryObject.UpdateCarrying();
 				if (carryObject.IsDestroyed) {
-					//player.BeginNormalState();
 					End();
 					return;
 				}

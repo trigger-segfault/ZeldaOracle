@@ -50,7 +50,7 @@ namespace ZeldaOracle.Game.Items.Weapons {
 
 			// Begin the player state.
 			Player.SwitchHookState.Hook = hook;
-			Player.BeginState(Player.SwitchHookState);
+			Player.BeginWeaponState(Player.SwitchHookState);
 		}
 	}
 }

@@ -29,10 +29,12 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			// TODO: player.passable = true;
-			player.IsStateControlled        = true;
-			player.Movement.IsStrafing      = true;
-			player.Physics.CollideWithWorld = false;
+			StateParameters.EnableAutomaticRoomTransitions	= true;
+			StateParameters.EnableStrafing					= true;
+			StateParameters.DisableSolidCollisions			= true;
+			StateParameters.DisableInteractionCollisions	= true;
+			StateParameters.DisablePlayerControl			= true;
+
 			player.Graphics.PlayAnimation(GameData.ANIM_PLAYER_JUMP);
 
 			// The player can hold his sword while ledge jumping.
@@ -61,9 +63,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 
 		public override void OnEnd(PlayerState newState) {
-			player.IsStateControlled        = false;
-			player.Physics.CollideWithWorld = true;
-			player.Movement.IsStrafing      = false;
 		}
 
 		public override void OnEnterRoom() {
@@ -80,16 +79,10 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 			// Update velocity while checking we've reached the landing spot.
 			player.Physics.Velocity = velocity;
 
-			// If done, return to the normal player state.
 			if (timer == 0) {
 				player.Physics.Velocity = Vector2F.Zero;
-				
 				player.LandOnSurface();
-				
-				if (isHoldingSword)
-					player.BeginState(player.HoldSwordState);
-				else
-					player.BeginNormalState();
+				End();
 			}
 		}
 	}

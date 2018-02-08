@@ -45,10 +45,11 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		//-----------------------------------------------------------------------------
 
 		public override void OnBegin(PlayerState previousState) {
-			player.IsPassable					= true;
-			player.Physics.CollideWithWorld		= false;
-			player.Physics.CollideWithEntities	= false;
-			player.IsStateControlled			= true;
+			StateParameters.EnableAutomaticRoomTransitions	= true;
+			StateParameters.EnableStrafing					= true;
+			StateParameters.DisableSolidCollisions			= true;
+			StateParameters.DisableInteractionCollisions	= true;
+			StateParameters.DisablePlayerControl			= true;
 
 			player.Physics.ZVelocity = GameSettings.PLAYER_JUMP_SPEED;
 
@@ -67,10 +68,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 		}
 		
 		public override void OnEnd(PlayerState newState) {
-			player.IsPassable					= false;
-			player.Physics.CollideWithWorld		= true;
-			player.Physics.CollideWithEntities	= true;
-			player.IsStateControlled			= false;
 		}
 
 		public override void Update() {

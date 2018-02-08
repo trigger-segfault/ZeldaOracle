@@ -63,10 +63,11 @@ namespace ZeldaOracle.Game.Entities {
 		}
 
 		public override void Update() {
-			
 			Player player = RoomControl.Player;
-			if (player.CurrentState == player.NormalState ||
-				player.CurrentState == player.CarryState)
+
+			// TODO: better condition checking
+			if (player.IsOnGround && player.Movement.IsMoving &&
+				!player.StateParameters.ProhibitEnteringMinecart)
 			{
 				foreach (CollisionInfo collision in player.Physics.GetCollisions()) {
 					if (collision.Entity == this) {
@@ -75,6 +76,7 @@ namespace ZeldaOracle.Game.Entities {
 					}
 				}
 			}
+
 			base.Update();
 		}
 

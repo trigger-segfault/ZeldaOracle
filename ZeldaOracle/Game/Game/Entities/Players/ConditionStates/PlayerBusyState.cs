@@ -91,7 +91,6 @@ namespace ZeldaOracle.Game.Entities.Players.States {
 
 			if (timer >= duration) {
 				End();
-				//player.BeginNormalState();
 			}
 		}
 
